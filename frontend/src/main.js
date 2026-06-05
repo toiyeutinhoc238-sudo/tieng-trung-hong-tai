@@ -1512,6 +1512,11 @@ async function handleCredentialResponse(response) {
       localStorage.setItem('user', JSON.stringify(currentUser));
       renderUserProfile();
       showToast(`Chào mừng ${currentUser.name} đã quay lại! 👋`);
+      
+      // Migrate guest chat history to user account
+      if (typeof window.migrateGuestChatHistory === 'function') {
+        window.migrateGuestChatHistory();
+      }
     } else {
       throw new Error('Không nhận được dữ liệu người dùng');
     }
@@ -1555,6 +1560,11 @@ async function handleLogout(e) {
 
   renderUserProfile();
   showToast('Đã đăng xuất thành công.');
+  
+  // Reset Chatbot interface and threads on logout
+  if (typeof window.resetChatbotOnLogout === 'function') {
+    window.resetChatbotOnLogout();
+  }
 
   // Re-initialize Google Sign-In button since logged-out elements render again
   setTimeout(initGoogleSignIn, 100);
@@ -2786,6 +2796,45 @@ function initChatbot() {
 
   let chatHistory = [];
   let activeThreadId = null;
+
+  // Global callback to migrate guest chats when logged in
+  window.migrateGuestChatHistory = async function() {
+    if (chatHistory.length === 0) return;
+    try {
+      const response = await fetch(API_BASE_URL + '/api/chat/migrate', {
+        method: 'POST',
+        headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify({ messages: chatHistory }),
+        credentials: 'include'
+      });
+      if (response.ok) {
+        const data = await response.json();
+        if (data.threadId) {
+          activeThreadId = data.threadId;
+          sessionStorage.setItem('hongtai_active_thread_id', activeThreadId);
+          if (newBtn) newBtn.style.display = 'flex';
+          if (historyBtn) historyBtn.style.display = 'flex';
+          showToast('Đã đồng bộ cuộc hội thoại vào tài khoản của bạn! 💾');
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to migrate guest chat history:', e);
+    }
+  };
+
+  // Global callback to reset chatbot panel on logout
+  window.resetChatbotOnLogout = function() {
+    activeThreadId = null;
+    sessionStorage.removeItem('hongtai_active_thread_id');
+    chatHistory = [];
+    messagesContainer.innerHTML = `
+      <div class="chat-message bot">
+        Chào bạn! Tôi là **Trợ lý AI Hongtai** 🐼. Bạn cần tôi hỗ trợ giải nghĩa từ vựng HSK, sửa phát âm Pinyin hay luyện ngữ pháp tiếng Trung hôm nay không?
+      </div>
+    `;
+    if (newBtn) newBtn.style.display = 'none';
+    if (historyBtn) historyBtn.style.display = 'none';
+  };
 
   // Toggle header action buttons based on user authentication
   if (currentUser) {

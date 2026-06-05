@@ -714,6 +714,49 @@ app.delete('/api/chat/threads/:id', async (req, res) => {
   res.status(404).json({ error: 'Không tìm thấy cuộc trò chuyện để xóa.' });
 });
 
+// POST endpoint to migrate guest chat history to a new thread
+app.post('/api/chat/migrate', async (req, res) => {
+  const email = getLoggedInUserEmail(req);
+  if (!email) {
+    return res.status(401).json({ error: 'Chưa đăng nhập.' });
+  }
+
+  const { messages } = req.body;
+  if (!messages || !Array.isArray(messages) || messages.length === 0) {
+    return res.status(400).json({ error: 'Không có tin nhắn để đồng bộ.' });
+  }
+
+  try {
+    const userData = await readUserData();
+    if (!userData.chats) userData.chats = {};
+    if (!userData.chats[email]) userData.chats[email] = [];
+
+    // Create a new thread for this guest history
+    const threadId = 'thread_' + Date.now() + Math.random().toString(36).substring(2, 6);
+    const firstUserMsg = messages.find(m => m.role === 'user')?.content || 'Cuộc trò chuyện được đồng bộ';
+    const title = firstUserMsg.substring(0, 30) + (firstUserMsg.length > 30 ? '...' : '');
+
+    const thread = {
+      id: threadId,
+      title,
+      createdAt: new Date().toISOString(),
+      messages: messages.map(m => ({
+        role: m.role,
+        content: m.content,
+        timestamp: new Date().toISOString()
+      }))
+    };
+
+    userData.chats[email].push(thread);
+    await writeUserData(userData);
+
+    res.json({ success: true, threadId });
+  } catch (error) {
+    console.error('Migration error:', error);
+    res.status(500).json({ error: 'Có lỗi xảy ra khi đồng bộ lịch sử hội thoại.' });
+  }
+});
+
 // Thêm đoạn này để xử lý đường dẫn gốc
 app.get('/', (req, res) => {
   res.send('API Flashcard HSK đang hoạt động ngon lành!');
