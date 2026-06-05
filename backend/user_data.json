@@ -1,0 +1,60 @@
+{
+  "users": {
+    "phanphiphu04@gmail.com": {
+      "name": "Phú Phan",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocIebQJ8CFxQDSOgwYPsfuN9FJvtBWARLqdYN9fCo-3UBytEPmI=s96-c"
+    },
+    "nguyenngawork26@gmail.com": {
+      "name": "Thúy Nga Nguyễn",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocIN7wiM4sgIz7-Ixie7W_ngBFPpm4te18063mXjjBdErThB7g=s96-c"
+    }
+  },
+  "progress": {
+    "phanphiphu04@gmail.com": {
+      "275": {
+        "isMemorized": false,
+        "isStarred": false
+      },
+      "306": {
+        "isMemorized": false,
+        "isStarred": false
+      },
+      "384": {
+        "isMemorized": false,
+        "isStarred": false
+      },
+      "487": {
+        "isMemorized": false,
+        "isStarred": false
+      },
+      "2610": {
+        "isMemorized": false,
+        "isStarred": false
+      },
+      "3724": {
+        "isMemorized": false,
+        "isStarred": false
+      },
+      "3774": {
+        "isMemorized": false,
+        "isStarred": false
+      },
+      "4108": {
+        "isMemorized": false,
+        "isStarred": false
+      },
+      "4632": {
+        "isMemorized": false,
+        "isStarred": false
+      },
+      "5785": {
+        "isMemorized": false,
+        "isStarred": false
+      }
+    }
+  },
+  "customWords": {},
+  "sessions": {
+    "o4bo7lavtvhmpvdgg8m": "phanphiphu04@gmail.com"
+  }
+}
