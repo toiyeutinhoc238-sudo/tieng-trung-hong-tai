@@ -129,14 +129,72 @@
 
     <!-- Learning Section -->
     <section id="flashcard-section" class="workspace-section">
-      <div class="section-header" style="align-items: center;">
-        <div class="section-title-wrap">
-          <h2 class="section-title">Học Từ Vựng Qua Flashcard</h2>
-          <p class="section-desc">Lật thẻ để xem nghĩa và ví dụ, bấm loa để nghe phát âm giọng bản xứ.</p>
+      
+      <!-- DECK SELECTION VIEW -->
+      <div id="deck-selection-view">
+        <!-- Section Header for Decks -->
+        <div class="section-header" style="align-items: center; margin-bottom: 24px;">
+          <div class="section-title-wrap">
+            <h2 class="section-title">Bộ Sưu Tập Thẻ Ghi Nhớ</h2>
+            <p class="section-desc">Chọn một bộ từ vựng để bắt đầu học và theo dõi tiến độ ghi nhớ của bạn.</p>
+          </div>
         </div>
+
+        <!-- Review Banner (Panda styled) -->
+        <div class="review-banner-container" style="margin-bottom: 32px;">
+          <div class="review-banner">
+            <div class="review-banner-content">
+              <h1 class="review-banner-title" id="review-banner-count">+0</h1>
+              <p class="review-banner-text">từ vựng cần ôn tập</p>
+            </div>
+            <div class="review-banner-panda">
+              <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category: Personal -->
+        <div class="deck-category-section">
+          <h3 class="deck-category-title"><i class="fa-solid fa-user-gear text-primary"></i> Cá nhân</h3>
+          <div class="deck-grid" id="personal-decks-grid">
+            <!-- Dynamically populated personal cards -->
+          </div>
+        </div>
+
+        <!-- Category: Free -->
+        <div class="deck-category-section">
+          <h3 class="deck-category-title"><i class="fa-solid fa-circle-check text-success"></i> Miễn phí</h3>
+          <div class="deck-grid" id="free-decks-grid">
+            <!-- Dynamically populated HSK 1-6 cards -->
+          </div>
+        </div>
+
+        <!-- Category: Premium -->
+        <div class="deck-category-section" style="margin-bottom: 24px;">
+          <h3 class="deck-category-title"><i class="fa-solid fa-crown text-warning"></i> Cao cấp</h3>
+          <div class="deck-grid" id="premium-decks-grid">
+            <!-- Premium cards (locked) -->
+          </div>
+        </div>
+      </div>
+
+      <!-- FLASHCARD STUDY VIEW -->
+      <div id="flashcard-study-view" style="display: none;">
         
+        <!-- Back Navigation & Header -->
+        <div class="study-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+          <button id="back-to-decks-btn" class="btn btn-secondary" style="display: flex; align-items: center; gap: 8px; font-weight: 600; padding: 10px 16px; border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass);">
+            <i class="fa-solid fa-arrow-left"></i> Quay lại bộ sưu tập
+          </button>
+          
+          <div class="study-deck-title-wrap" style="text-align: right;">
+            <h2 class="section-title" id="study-deck-title" style="margin: 0; font-size: 1.6rem;">Học Từ Vựng HSK 1</h2>
+            <p class="section-desc" id="study-deck-desc" style="margin: 4px 0 0 0;">Đang ôn tập từ vựng cấp độ HSK 1</p>
+          </div>
+        </div>
+
         <!-- Quick Stats Widget -->
-        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+        <div class="stats-summary-container" style="margin-bottom: 24px;">
           <div class="stats-summary-widget">
             <div class="widget-item" data-status="all" title="Click để xem tất cả từ">
               <span class="widget-value" id="stats-total">0</span>
@@ -155,244 +213,248 @@
               <span class="widget-label">Đánh dấu sao</span>
             </div>
           </div>
-          <button id="toggle-detailed-stats" class="btn btn-secondary btn-sm" style="align-self: flex-end; font-size: 0.8rem; padding: 6px 12px; display: flex; align-items: center; gap: 6px; border-radius: var(--radius-sm);">
-            <i class="fa-solid fa-chart-simple"></i> Xem bảng thống kê chi tiết
-          </button>
-        </div>
-      </div>
-
-      <!-- Detailed Statistics Panel -->
-      <div id="detailed-stats-panel" class="glass-panel" style="display: none; padding: 24px; margin-bottom: 32px;">
-        <h3 style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; color: var(--text-primary);">
-          <i class="fa-solid fa-chart-pie text-primary"></i> Bảng thống kê chi tiết từ vựng HSK & Cá nhân
-        </h3>
-        <div style="overflow-x: auto;">
-          <table class="stats-table" style="width: 100%; border-collapse: collapse; text-align: center; font-size: 0.95rem; min-width: 500px;">
-            <thead>
-              <tr style="border-bottom: 2px solid var(--border-glass); font-weight: 600; color: var(--text-muted); font-family: var(--font-display);">
-                <th style="padding: 12px; text-align: left;">Cấp độ / Nhóm</th>
-                <th style="padding: 12px;">Tổng số từ</th>
-                <th style="padding: 12px; color: var(--success);">Đã thuộc</th>
-                <th style="padding: 12px; color: var(--danger);">Chưa thuộc</th>
-                <th style="padding: 12px; color: var(--warning);">Đánh dấu sao</th>
-              </tr>
-            </thead>
-            <tbody id="detailed-stats-rows">
-              <!-- Dynamically generated rows for HSK 1-6, Custom, and Total -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Controls Dashboard -->
-      <div class="controls-dashboard glass-panel">
-        
-        <!-- Level Filters -->
-        <div class="control-group">
-          <label class="control-label">Cấp độ HSK</label>
-          <div class="level-tabs" id="level-tabs">
-            <button class="level-tab active" data-level="all">Tất cả</button>
-            <button class="level-tab" data-level="1">HSK 1</button>
-            <button class="level-tab" data-level="2">HSK 2</button>
-            <button class="level-tab" data-level="3">HSK 3</button>
-            <button class="level-tab" data-level="4">HSK 4</button>
-            <button class="level-tab" data-level="5">HSK 5</button>
-            <button class="level-tab" data-level="6">HSK 6</button>
+          
+          <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+            <button id="toggle-detailed-stats" class="btn btn-secondary btn-sm" style="font-size: 0.8rem; padding: 6px 12px; display: flex; align-items: center; gap: 6px; border-radius: var(--radius-sm);">
+              <i class="fa-solid fa-chart-simple"></i> Xem bảng thống kê chi tiết
+            </button>
           </div>
         </div>
 
-        <!-- Word Status Filters -->
-        <div class="control-group">
-          <label class="control-label">Trạng thái từ</label>
-          <select id="status-filter" class="form-select">
-            <option value="all">Tất cả từ vựng</option>
-            <option value="unmemorized">Chưa thuộc (Cần ôn)</option>
-            <option value="memorized">Đã thuộc</option>
-            <option value="wrong">Từ vựng làm sai ❌</option>
-            <option value="starred">Đã đánh dấu sao ⭐</option>
-            <option value="custom">Từ tự thêm ✏️</option>
-          </select>
+        <!-- Detailed Statistics Panel -->
+        <div id="detailed-stats-panel" class="glass-panel" style="display: none; padding: 24px; margin-bottom: 24px;">
+          <h3 style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; color: var(--text-primary);">
+            <i class="fa-solid fa-chart-pie text-primary"></i> Bảng thống kê chi tiết từ vựng HSK & Cá nhân
+          </h3>
+          <div style="overflow-x: auto;">
+            <table class="stats-table" style="width: 100%; border-collapse: collapse; text-align: center; font-size: 0.95rem; min-width: 500px;">
+              <thead>
+                <tr style="border-bottom: 2px solid var(--border-glass); font-weight: 600; color: var(--text-muted); font-family: var(--font-display);">
+                  <th style="padding: 12px; text-align: left;">Cấp độ / Nhóm</th>
+                  <th style="padding: 12px;">Tổng số từ</th>
+                  <th style="padding: 12px; color: var(--success);">Đã thuộc</th>
+                  <th style="padding: 12px; color: var(--danger);">Chưa thuộc</th>
+                  <th style="padding: 12px; color: var(--warning);">Đánh dấu sao</th>
+                </tr>
+              </thead>
+              <tbody id="detailed-stats-rows">
+                <!-- Dynamically generated rows -->
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        <!-- Playback Settings -->
-        <div class="control-group inline-controls">
-          <div class="autoplay-wrap">
-            <button id="autoplay-btn" class="btn btn-secondary" title="Tự động lật và chuyển thẻ">
-              <i class="fa-solid fa-play"></i> Tự động chạy
-            </button>
-            <select id="autoplay-delay" class="form-select select-sm" title="Tốc độ chuyển thẻ">
-              <option value="3000">3 giây</option>
-              <option value="5000" selected>5 giây</option>
-              <option value="8000">8 giây</option>
+        <!-- Controls Dashboard -->
+        <div class="controls-dashboard glass-panel" style="margin-bottom: 24px;">
+          
+          <!-- Hidden filters kept in DOM to avoid JS null reference errors -->
+          <div class="control-group" style="display: none;">
+            <label class="control-label">Cấp độ HSK</label>
+            <div class="level-tabs" id="level-tabs">
+              <button class="level-tab active" data-level="all">Tất cả</button>
+              <button class="level-tab" data-level="1">HSK 1</button>
+              <button class="level-tab" data-level="2">HSK 2</button>
+              <button class="level-tab" data-level="3">HSK 3</button>
+              <button class="level-tab" data-level="4">HSK 4</button>
+              <button class="level-tab" data-level="5">HSK 5</button>
+              <button class="level-tab" data-level="6">HSK 6</button>
+            </div>
+          </div>
+
+          <div class="control-group" style="display: none;">
+            <label class="control-label">Trạng thái từ</label>
+            <select id="status-filter" class="form-select">
+              <option value="all">Tất cả từ vựng</option>
+              <option value="unmemorized">Chưa thuộc (Cần ôn)</option>
+              <option value="memorized">Đã thuộc</option>
+              <option value="wrong">Từ vựng làm sai ❌</option>
+              <option value="starred">Đã đánh dấu sao ⭐</option>
+              <option value="custom">Từ tự thêm ✏️</option>
             </select>
           </div>
+
+          <!-- Playback and Audio Settings -->
+          <div class="control-group" style="flex: 1; min-width: 200px;">
+            <label class="control-label">Chế độ tự động chạy</label>
+            <div class="autoplay-wrap">
+              <button id="autoplay-btn" class="btn btn-secondary" title="Tự động lật và chuyển thẻ" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <i class="fa-solid fa-play"></i> Tự động chạy
+              </button>
+              <select id="autoplay-delay" class="form-select" title="Tốc độ chuyển thẻ">
+                <option value="3000">3 giây</option>
+                <option value="5000" selected>5 giây</option>
+                <option value="8000">8 giây</option>
+              </select>
+            </div>
+          </div>
           
-          <div class="tts-voice-wrap">
-            <i class="fa-solid fa-microphone text-muted" title="Giọng đọc Trung Quốc"></i>
-            <select id="tts-voice-select" class="form-select select-sm select-voice" title="Chọn giọng đọc tiếng Trung">
-              <option value="default">Đang tải giọng đọc...</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <!-- Main Flashcard Workspace -->
-      <div class="flashcard-workspace">
-        
-        <!-- Search Bar -->
-        <div class="search-container">
-          <div class="search-box">
-            <i class="fa-solid fa-magnifying-glass search-icon"></i>
-            <input type="text" id="search-input" placeholder="Tìm kiếm từ Hán, Pinyin hoặc nghĩa tiếng Việt...">
-            <button id="clear-search-btn" class="clear-btn" style="display:none;"><i class="fa-solid fa-xmark"></i></button>
+          <div class="control-group" style="flex: 1; min-width: 200px;">
+            <label class="control-label">Giọng phát âm</label>
+            <div class="tts-voice-wrap" style="width: 100%;">
+              <select id="tts-voice-select" class="form-select select-voice" style="width: 100%;">
+                <option value="default">Đang tải giọng đọc...</option>
+              </select>
+            </div>
           </div>
         </div>
 
-        <!-- Study Mode Switcher -->
-        <div class="study-mode-container" style="margin-bottom: 20px; display: flex; justify-content: center;">
-          <div class="segmented-control glass-panel" style="display: flex; padding: 4px; border-radius: 50px; gap: 4px; width: 100%; max-width: 400px; justify-content: space-between;">
-            <button id="mode-flip-btn" class="btn active-mode" style="flex: 1; border-radius: 50px; font-size: 0.9rem; padding: 8px 16px; border: none; cursor: pointer; transition: all var(--transition-fast); background: var(--accent-blue); color: white; display: flex; align-items: center; justify-content: center; gap: 8px;">
-              <i class="fa-solid fa-clone"></i> Lật thẻ 3D
-            </button>
-            <button id="mode-type-btn" class="btn" style="flex: 1; border-radius: 50px; font-size: 0.9rem; padding: 8px 16px; border: none; cursor: pointer; transition: all var(--transition-fast); background: transparent; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; gap: 8px;">
-              <i class="fa-solid fa-keyboard"></i> Nhập tay / Gõ từ
-            </button>
-          </div>
-        </div>
-
-        <!-- Active Flashcard Viewport -->
-        <div class="card-viewport">
+        <!-- Main Flashcard Workspace -->
+        <div class="flashcard-workspace">
           
-          <!-- Progress Bar on top of card -->
-          <div class="progress-bar-container">
-            <div class="progress-bar-fill" id="learning-progress" style="width: 0%;"></div>
-            <span class="progress-text" id="progress-percentage">0%</span>
+          <!-- Search Bar -->
+          <div class="search-container">
+            <div class="search-box">
+              <i class="fa-solid fa-magnifying-glass search-icon"></i>
+              <input type="text" id="search-input" placeholder="Tìm kiếm từ Hán, Pinyin hoặc nghĩa tiếng Việt...">
+              <button id="clear-search-btn" class="clear-btn" style="display:none;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
           </div>
 
-          <!-- Empty state message -->
-          <div id="empty-state" class="empty-state glass-panel" style="display: none;">
-            <i class="fa-regular fa-folder-open empty-icon"></i>
-            <h3>Không tìm thấy từ vựng nào!</h3>
-            <p>Hãy thử đổi bộ lọc, xóa thanh tìm kiếm hoặc tự thêm từ vựng mới của riêng bạn ở bên dưới.</p>
-            <button id="reset-filters-btn" class="btn btn-primary btn-sm">Đặt lại bộ lọc</button>
+          <!-- Study Mode Switcher -->
+          <div class="study-mode-container" style="margin-bottom: 20px; display: flex; justify-content: center;">
+            <div class="segmented-control glass-panel" style="display: flex; padding: 4px; border-radius: 50px; gap: 4px; width: 100%; max-width: 400px; justify-content: space-between;">
+              <button id="mode-flip-btn" class="btn active-mode" style="flex: 1; border-radius: 50px; font-size: 0.9rem; padding: 8px 16px; border: none; cursor: pointer; transition: all var(--transition-fast); background: var(--accent-blue); color: white; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <i class="fa-solid fa-clone"></i> Lật thẻ 3D
+              </button>
+              <button id="mode-type-btn" class="btn" style="flex: 1; border-radius: 50px; font-size: 0.9rem; padding: 8px 16px; border: none; cursor: pointer; transition: all var(--transition-fast); background: transparent; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <i class="fa-solid fa-keyboard"></i> Nhập tay / Gõ từ
+              </button>
+            </div>
           </div>
 
-          <!-- The 3D Rotating Card Container -->
-          <div class="flashcard-card-container" id="flashcard-card-container" style="position: relative; width: 100%; height: 360px;">
-            <div class="flashcard-card" id="flashcard-card">
-              
-              <!-- Card Front Side -->
-              <div class="card-side card-front">
-                <div class="card-header-tags">
-                  <span class="badge badge-level" id="card-level-front">HSK 1</span>
-                  <span class="badge badge-category" id="card-category-front">Động từ</span>
-                </div>
-                
-                <div class="card-content-main">
-                  <h2 class="chinese-word" id="card-word-front">学习</h2>
-                </div>
-                
-                <div class="card-action-bar">
-                  <button id="speak-btn-front" class="speak-btn circle-btn" title="Nghe phát âm">
-                    <i class="fa-solid fa-volume-high"></i>
-                  </button>
-                  <span class="click-hint"><i class="fa-solid fa-rotate"></i> Click để lật mặt sau</span>
-                  <div class="placeholder-icon"></div>
-                </div>
-              </div>
+          <!-- Active Flashcard Viewport -->
+          <div class="card-viewport">
+            
+            <!-- Progress Bar -->
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill" id="learning-progress" style="width: 0%;"></div>
+              <span class="progress-text" id="progress-percentage">0%</span>
+            </div>
 
-              <!-- Card Back Side -->
-              <div class="card-side card-back">
-                <div class="card-header-tags">
-                  <span class="badge badge-level" id="card-level-back">HSK 1</span>
-                  <span class="badge badge-category" id="card-category-back">Động từ</span>
-                </div>
+            <!-- Empty state -->
+            <div id="empty-state" class="empty-state glass-panel" style="display: none;">
+              <i class="fa-regular fa-folder-open empty-icon"></i>
+              <h3>Không tìm thấy từ vựng nào!</h3>
+              <p>Hãy thử đổi bộ lọc, xóa thanh tìm kiếm hoặc tự thêm từ vựng mới của riêng bạn ở bên dưới.</p>
+              <button id="reset-filters-btn" class="btn btn-primary btn-sm">Đặt lại bộ lọc</button>
+            </div>
 
-                <div class="card-content-main">
-                  <div class="pinyin-text" id="card-pinyin-back">xuéxí</div>
-                  <div class="meaning-text" id="card-meaning-back">học tập, học hành</div>
+            <!-- Rotating Card Container -->
+            <div class="flashcard-card-container" id="flashcard-card-container" style="position: relative; width: 100%; height: 360px;">
+              <div class="flashcard-card" id="flashcard-card">
+                
+                <!-- Card Front Side -->
+                <div class="card-side card-front">
+                  <div class="card-header-tags">
+                    <span class="badge badge-level" id="card-level-front">HSK 1</span>
+                    <span class="badge badge-category" id="card-category-front">Động từ</span>
+                  </div>
                   
-                  <div class="example-box">
-                    <div class="example-title">Ví dụ:</div>
-                    <div class="example-zh">
-                      <span id="card-example-zh-back">我喜欢学习汉语。</span>
-                      <button id="speak-example-btn" class="speak-example-btn" title="Nghe câu ví dụ">
+                  <div class="card-content-main">
+                    <h2 class="chinese-word" id="card-word-front">学习</h2>
+                  </div>
+                  
+                  <div class="card-action-bar">
+                    <button id="speak-btn-front" class="speak-btn circle-btn" title="Nghe phát âm">
+                      <i class="fa-solid fa-volume-high"></i>
+                    </button>
+                    <span class="click-hint"><i class="fa-solid fa-rotate"></i> Click để lật mặt sau</span>
+                    <div class="placeholder-icon"></div>
+                  </div>
+                </div>
+
+                <!-- Card Back Side -->
+                <div class="card-side card-back">
+                  <div class="card-header-tags">
+                    <span class="badge badge-level" id="card-level-back">HSK 1</span>
+                    <span class="badge badge-category" id="card-category-back">Động từ</span>
+                  </div>
+
+                  <div class="card-content-main">
+                    <div class="pinyin-text" id="card-pinyin-back">xuéxí</div>
+                    <div class="meaning-text" id="card-meaning-back">học tập, học hành</div>
+                    
+                    <div class="example-box">
+                      <div class="example-title">Ví dụ:</div>
+                      <div class="example-zh">
+                        <span id="card-example-zh-back">我喜欢学习汉语。</span>
+                        <button id="speak-example-btn" class="speak-example-btn" title="Nghe câu ví dụ">
+                          <i class="fa-solid fa-volume-low"></i>
+                        </button>
+                      </div>
+                      <div class="example-vi" id="card-example-vi-back">tôi thích học tiếng trung.</div>
+                    </div>
+                  </div>
+
+                  <div class="card-action-bar">
+                    <span class="click-hint"><i class="fa-solid fa-rotate"></i> Click để lật mặt trước</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Typing Mode Container (Hidden by default) -->
+            <div class="typing-card-container glass-panel" id="typing-card-container" style="display: none; width: 100%; height: 100%; border-radius: var(--radius-xl); padding: 32px; flex-direction: column; justify-content: space-between; border: 1px solid var(--border-glass); background: var(--card-bg-front); box-sizing: border-box; position: absolute; top: 0; left: 0; z-index: 10;">
+              <div class="card-header-tags" style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+                <span class="badge badge-level" id="type-card-level">HSK 1</span>
+                <span class="badge badge-category" id="type-card-category">Động từ</span>
+              </div>
+              
+              <div class="card-content-main" style="width: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px; margin: 12px 0; flex-grow: 1; justify-content: center;">
+                <div>
+                  <div class="example-title" style="text-align: center; font-size: 0.75rem;">Nghĩa tiếng Việt:</div>
+                  <h2 class="meaning-prompt" id="type-card-meaning" style="font-family: var(--font-display); font-size: 1.65rem; font-weight: 700; color: var(--text-primary); margin-top: 4px;">tải từ vựng...</h2>
+                </div>
+                
+                <div class="attempts-indicator" style="display: flex; gap: 8px; align-items: center; margin: 4px 0;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">Lượt thử còn lại:</span>
+                  <span id="attempt-dot-1" class="attempt-dot active-dot" style="width: 10px; height: 10px; border-radius: 50%; background-color: var(--success); transition: background-color 0.2s;"></span>
+                  <span id="attempt-dot-2" class="attempt-dot active-dot" style="width: 10px; height: 10px; border-radius: 50%; background-color: var(--success); transition: background-color 0.2s;"></span>
+                  <span id="attempt-dot-3" class="attempt-dot active-dot" style="width: 10px; height: 10px; border-radius: 50%; background-color: var(--success); transition: background-color 0.2s;"></span>
+                </div>
+                
+                <div style="width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 8px; position: relative;">
+                  <input type="text" id="type-answer-input" placeholder="Gõ từ chữ Hán (ví dụ: 苹果)..." autocomplete="off" style="width: 100%; padding: 10px 14px; font-size: 1.2rem; font-family: var(--font-chinese); text-align: center; border-radius: var(--radius-md); border: 2px solid var(--border-glass); background: rgba(0, 0, 0, 0.2); color: var(--text-primary); outline: none; transition: border-color 0.2s;">
+                  <div id="type-feedback-msg" style="font-size: 0.85rem; font-weight: 600; min-height: 20px; transition: color 0.2s;"></div>
+                </div>
+                
+                <div id="type-revealed-details" style="display: none; width: 100%; max-width: 440px; margin-top: 4px; flex-direction: column; align-items: center;">
+                  <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                    <span id="type-revealed-word" style="font-family: var(--font-chinese); font-size: 1.8rem; font-weight: 700; color: var(--text-primary);">学习</span>
+                    <span id="type-revealed-pinyin" style="font-family: var(--font-display); font-size: 1.15rem; color: var(--accent-teal);">xuéxí</span>
+                    <button id="type-speak-btn" class="speak-btn circle-btn" style="width: 32px; height: 32px; font-size: 0.75rem;" title="Phát âm">
+                      <i class="fa-solid fa-volume-high"></i>
+                    </button>
+                  </div>
+                  <div class="example-box" id="type-revealed-example-box" style="display: none; padding: 10px 14px; width: 100%; max-width: 100%;">
+                    <div class="example-title" style="font-size: 0.7rem;">Ví dụ:</div>
+                    <div class="example-zh" style="font-size: 0.95rem; margin-bottom: 2px; width: 100%; display: flex; justify-content: space-between; align-items: center;">
+                      <span id="type-revealed-example-zh">我喜欢 học 汉语。</span>
+                      <button id="type-speak-example-btn" class="speak-example-btn" title="Nghe câu ví dụ">
                         <i class="fa-solid fa-volume-low"></i>
                       </button>
                     </div>
-                    <div class="example-vi" id="card-example-vi-back">tôi thích học tiếng trung.</div>
+                    <div class="example-vi" id="type-revealed-example-vi" style="font-size: 0.8rem;">tôi thích học tiếng trung.</div>
                   </div>
                 </div>
-
-                <div class="card-action-bar">
-                  <span class="click-hint"><i class="fa-solid fa-rotate"></i> Click để lật mặt trước</span>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- Typing Mode Container (Hidden by default) -->
-          <div class="typing-card-container glass-panel" id="typing-card-container" style="display: none; width: 100%; height: 100%; border-radius: var(--radius-xl); padding: 32px; flex-direction: column; justify-content: space-between; border: 1px solid var(--border-glass); background: var(--card-bg-front); box-sizing: border-box; position: absolute; top: 0; left: 0; z-index: 10;">
-            <div class="card-header-tags" style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
-              <span class="badge badge-level" id="type-card-level">HSK 1</span>
-              <span class="badge badge-category" id="type-card-category">Động từ</span>
-            </div>
-            
-            <div class="card-content-main" style="width: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px; margin: 12px 0; flex-grow: 1; justify-content: center;">
-              <div>
-                <div class="example-title" style="text-align: center; font-size: 0.75rem;">Nghĩa tiếng Việt:</div>
-                <h2 class="meaning-prompt" id="type-card-meaning" style="font-family: var(--font-display); font-size: 1.65rem; font-weight: 700; color: var(--text-primary); margin-top: 4px;">tải từ vựng...</h2>
               </div>
               
-              <div class="attempts-indicator" style="display: flex; gap: 8px; align-items: center; margin: 4px 0;">
-                <span style="font-size: 0.8rem; color: var(--text-secondary);">Lượt thử còn lại:</span>
-                <span id="attempt-dot-1" class="attempt-dot active-dot" style="width: 10px; height: 10px; border-radius: 50%; background-color: var(--success); transition: background-color 0.2s;"></span>
-                <span id="attempt-dot-2" class="attempt-dot active-dot" style="width: 10px; height: 10px; border-radius: 50%; background-color: var(--success); transition: background-color 0.2s;"></span>
-                <span id="attempt-dot-3" class="attempt-dot active-dot" style="width: 10px; height: 10px; border-radius: 50%; background-color: var(--success); transition: background-color 0.2s;"></span>
-              </div>
-              
-              <div style="width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 8px; position: relative;">
-                <input type="text" id="type-answer-input" placeholder="Gõ từ chữ Hán (ví dụ: 苹果)..." autocomplete="off" style="width: 100%; padding: 10px 14px; font-size: 1.2rem; font-family: var(--font-chinese); text-align: center; border-radius: var(--radius-md); border: 2px solid var(--border-glass); background: rgba(0, 0, 0, 0.2); color: var(--text-primary); outline: none; transition: border-color 0.2s;">
-                <div id="type-feedback-msg" style="font-size: 0.85rem; font-weight: 600; min-height: 20px; transition: color 0.2s;"></div>
-              </div>
-              
-              <div id="type-revealed-details" style="display: none; width: 100%; max-width: 440px; margin-top: 4px; flex-direction: column; align-items: center;">
-                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
-                  <span id="type-revealed-word" style="font-family: var(--font-chinese); font-size: 1.8rem; font-weight: 700; color: var(--text-primary);">学习</span>
-                  <span id="type-revealed-pinyin" style="font-family: var(--font-display); font-size: 1.15rem; color: var(--accent-teal);">xuéxí</span>
-                  <button id="type-speak-btn" class="speak-btn circle-btn" style="width: 32px; height: 32px; font-size: 0.75rem;" title="Phát âm">
-                    <i class="fa-solid fa-volume-high"></i>
+              <div class="card-action-bar" style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+                <button id="type-hint-pinyin-btn" class="btn btn-secondary btn-sm" style="font-size: 0.75rem; padding: 6px 12px;">
+                  <i class="fa-solid fa-eye"></i> Gợi ý Pinyin
+                </button>
+                <div style="display: flex; gap: 6px;">
+                  <button id="type-reveal-btn" class="btn btn-secondary btn-sm" style="font-size: 0.75rem; padding: 6px 12px; background: rgba(239, 68, 68, 0.1); color: var(--danger); border-color: rgba(239, 68, 68, 0.15);">
+                    Hiện đáp án
+                  </button>
+                  <button id="type-check-btn" class="btn btn-primary btn-sm" style="font-size: 0.75rem; padding: 6px 12px; background: var(--accent-blue); color: white;">
+                    Kiểm tra
                   </button>
                 </div>
-                <div class="example-box" id="type-revealed-example-box" style="display: none; padding: 10px 14px; width: 100%; max-width: 100%;">
-                  <div class="example-title" style="font-size: 0.7rem;">Ví dụ:</div>
-                  <div class="example-zh" style="font-size: 0.95rem; margin-bottom: 2px; width: 100%; display: flex; justify-content: space-between; align-items: center;">
-                    <span id="type-revealed-example-zh">我喜欢学习汉语。</span>
-                    <button id="type-speak-example-btn" class="speak-example-btn" title="Nghe câu ví dụ">
-                      <i class="fa-solid fa-volume-low"></i>
-                    </button>
-                  </div>
-                  <div class="example-vi" id="type-revealed-example-vi" style="font-size: 0.8rem;">tôi thích học tiếng trung.</div>
-                </div>
-              </div>
-            </div>
-            
-            <div class="card-action-bar" style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
-              <button id="type-hint-pinyin-btn" class="btn btn-secondary btn-sm" style="font-size: 0.75rem; padding: 6px 12px;">
-                <i class="fa-solid fa-eye"></i> Gợi ý Pinyin
-              </button>
-              <div style="display: flex; gap: 6px;">
-                <button id="type-reveal-btn" class="btn btn-secondary btn-sm" style="font-size: 0.75rem; padding: 6px 12px; background: rgba(239, 68, 68, 0.1); color: var(--danger); border-color: rgba(239, 68, 68, 0.15);">
-                  Hiện đáp án
-                </button>
-                <button id="type-check-btn" class="btn btn-primary btn-sm" style="font-size: 0.75rem; padding: 6px 12px; background: var(--accent-blue); color: white;">
-                  Kiểm tra
-                </button>
               </div>
             </div>
           </div>
-        </div>
 
           <!-- Bottom Action HUD -->
           <div class="card-hud-controls" id="card-hud-controls">
@@ -419,57 +481,6 @@
           </div>
 
         </div>
-      </div>
-
-      <!-- Filtered Vocabulary List View -->
-      <div id="filtered-words-list-container" class="glass-panel" style="margin-top: 32px; padding: 24px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
-          <div>
-            <h3 style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin: 0; display: flex; align-items: center; gap: 8px;">
-              <i class="fa-solid fa-list-check text-primary"></i> <span id="filtered-words-title">Danh sách từ vựng chi tiết đang học</span>
-            </h3>
-            <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 4px 0 0 0;">Nhấp vào nút loa để nghe phát âm, biểu tượng chiếc mũ để chuyển nhanh tới thẻ học tương ứng.</p>
-          </div>
-          <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600; background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-glass);">
-            Tìm thấy: <strong id="filtered-words-count" style="color: var(--accent-blue);">0</strong> từ
-          </span>
-        </div>
-        
-        <!-- Tabs Bar -->
-        <div style="display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border-glass); padding-bottom: 12px; flex-wrap: wrap;">
-          <button class="list-tab-btn" data-tab="memorized">
-            <i class="fa-solid fa-circle-check text-success"></i> Đã học thuộc (0)
-          </button>
-          <button class="list-tab-btn" data-tab="unmemorized">
-            <i class="fa-solid fa-circle-xmark text-danger"></i> Chưa thuộc (0)
-          </button>
-          <button class="list-tab-btn" data-tab="starred">
-            <i class="fa-solid fa-star text-warning"></i> Yêu thích (0)
-          </button>
-        </div>
-
-        <div class="filtered-words-table-wrapper" style="overflow-x: auto; max-height: 420px; overflow-y: auto; border: 1px solid var(--border-glass); border-radius: var(--radius-md);">
-          <table class="custom-words-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem;">
-            <thead>
-              <tr style="border-bottom: 2px solid var(--border-glass); font-weight: 600; color: var(--text-muted); font-family: var(--font-display); background: rgba(0,0,0,0.2);">
-                <th style="padding: 12px; width: 120px;">Chữ Hán</th>
-                <th style="padding: 12px; width: 130px;">Pinyin</th>
-                <th style="padding: 12px;">Nghĩa tiếng Việt</th>
-                <th style="padding: 12px; width: 100px;">Cấp độ</th>
-                <th style="padding: 12px; width: 180px; text-align: center;">Thao tác nhanh</th>
-              </tr>
-            </thead>
-            <tbody id="filtered-words-table-rows">
-              <!-- Dynamically populated rows -->
-            </tbody>
-          </table>
-        </div>
-        <div style="margin-top: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-          <span id="filtered-words-table-note" style="font-size: 0.8rem; color: var(--text-secondary); display: none;">
-            * Chỉ hiển thị tối đa 100 từ để tối ưu hiệu suất.
-          </span>
-          <button id="view-full-list-btn" class="btn btn-secondary btn-sm" style="font-size: 0.8rem; padding: 6px 12px; border-radius: var(--radius-sm); background: rgba(59, 130, 246, 0.12); color: var(--accent-blue); display: flex; align-items: center; gap: 6px; border: 1px solid rgba(59, 130, 246, 0.25);">
-            <i class="fa-solid fa-arrow-up-right-from-square"></i> Xem danh sách đầy đủ (Cửa sổ mới)
           </button>
         </div>
       </div>

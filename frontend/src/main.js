@@ -549,6 +549,15 @@ function updateStats() {
     levelList = vocabList.filter(w => w.level.toString() === activeLevel);
   }
 
+  // Adjust levelList if custom list or wrong/starred filter is active
+  if (activeStatus === 'custom' && studyCustomCategory) {
+    levelList = vocabList.filter(w => w.isCustom && w.category === studyCustomCategory);
+  } else if (activeStatus === 'wrong') {
+    levelList = vocabList.filter(w => w.isWrong);
+  } else if (activeStatus === 'starred') {
+    levelList = vocabList.filter(w => w.isStarred);
+  }
+
   const total = levelList.length;
   const memorized = levelList.filter(w => w.isMemorized).length;
   const unmemorized = total - memorized;
@@ -571,6 +580,203 @@ function updateStats() {
 
   // 3. Detailed Stats Grid Table
   renderDetailedStatsTable();
+
+  // 4. Render Deck Selection Grid view
+  renderDeckSelectionView();
+}
+
+function renderDeckSelectionView() {
+  const reviewCountEl = document.getElementById('review-banner-count');
+  const personalGrid = document.getElementById('personal-decks-grid');
+  const freeGrid = document.getElementById('free-decks-grid');
+  const premiumGrid = document.getElementById('premium-decks-grid');
+
+  if (!personalGrid || !freeGrid || !premiumGrid) return;
+
+  // Calculate unmemorized count for the review banner
+  const unmemorizedCount = vocabList.filter(w => !w.isMemorized).length;
+  if (reviewCountEl) {
+    reviewCountEl.textContent = `+${unmemorizedCount}`;
+  }
+
+  // --- 1. RENDER PERSONAL DECKS ---
+  personalGrid.innerHTML = '';
+  
+  // A. Wrong Words Deck
+  const wrongWords = vocabList.filter(w => w.isWrong);
+  const wrongCount = wrongWords.length;
+  const wrongCard = document.createElement('div');
+  wrongCard.className = 'deck-card personal-wrong';
+  wrongCard.innerHTML = `
+    <div class="deck-card-glow"></div>
+    <div class="deck-card-top">
+      <h4 class="deck-card-title">Sổ tay từ làm sai <i class="fa-solid fa-circle-exclamation text-danger"></i></h4>
+      <p class="deck-card-subtitle">${wrongCount} từ vựng trả lời sai</p>
+    </div>
+    <div class="deck-card-bottom">
+      <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;">Bấm ôn tập nhanh</span>
+    </div>
+  `;
+  wrongCard.addEventListener('click', () => {
+    startStudySession('wrong', 'all', 'Sổ tay từ làm sai', 'Ôn tập các từ vựng bạn đã trả lời sai');
+  });
+  personalGrid.appendChild(wrongCard);
+
+  // B. Starred Words Deck
+  const starredWords = vocabList.filter(w => w.isStarred);
+  const starredCount = starredWords.length;
+  const starredCard = document.createElement('div');
+  starredCard.className = 'deck-card personal-starred';
+  starredCard.innerHTML = `
+    <div class="deck-card-glow"></div>
+    <div class="deck-card-top">
+      <h4 class="deck-card-title">Từ vựng yêu thích <i class="fa-solid fa-star text-warning"></i></h4>
+      <p class="deck-card-subtitle">${starredCount} từ vựng đánh dấu sao</p>
+    </div>
+    <div class="deck-card-bottom">
+      <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;">Bấm để học bộ này</span>
+    </div>
+  `;
+  starredCard.addEventListener('click', () => {
+    startStudySession('starred', 'all', 'Thẻ Yêu Thích', 'Học các từ vựng được đánh dấu sao yêu thích');
+  });
+  personalGrid.appendChild(starredCard);
+
+  // C. Custom / Personal Decks
+  customLists.forEach(listName => {
+    const listWords = vocabList.filter(w => w.isCustom && w.category === listName);
+    const listCount = listWords.length;
+    const listMemorized = listWords.filter(w => w.isMemorized).length;
+    const listPercent = listCount > 0 ? Math.round((listMemorized / listCount) * 100) : 0;
+
+    const listCard = document.createElement('div');
+    listCard.className = 'deck-card personal-custom';
+    listCard.innerHTML = `
+      <div class="deck-card-glow"></div>
+      <div class="deck-card-top">
+        <h4 class="deck-card-title">${listName} <i class="fa-solid fa-pen-to-square text-success"></i></h4>
+        <p class="deck-card-subtitle">${listCount} từ tự biên soạn</p>
+      </div>
+      <div class="deck-card-bottom">
+        <div class="deck-progress-container">
+          <div class="deck-progress-bar-bg">
+            <div class="deck-progress-bar-fill" style="width: ${listPercent}%;"></div>
+          </div>
+          <div class="deck-progress-labels">
+            <span>Tiến độ</span>
+            <span>${listPercent}% (${listMemorized}/${listCount})</span>
+          </div>
+        </div>
+      </div>
+    `;
+    listCard.addEventListener('click', () => {
+      studyCustomCategory = listName;
+      startStudySession('custom', 'all', `Sổ tay: ${listName}`, `Đang học danh sách tự biên soạn: ${listName}`);
+    });
+    personalGrid.appendChild(listCard);
+  });
+
+  // --- 2. RENDER FREE HSK DECKS ---
+  freeGrid.innerHTML = '';
+  for (let lvl = 1; lvl <= 6; lvl++) {
+    const lvlWords = vocabList.filter(w => !w.isCustom && w.level === lvl);
+    const total = lvlWords.length;
+    const memorized = lvlWords.filter(w => w.isMemorized).length;
+    const percent = total > 0 ? Math.round((memorized / total) * 100) : 0;
+
+    const deckCard = document.createElement('div');
+    deckCard.className = `deck-card hsk-${lvl}`;
+    deckCard.innerHTML = `
+      <div class="deck-card-glow"></div>
+      <div class="deck-card-top">
+        <h4 class="deck-card-title">Từ vựng HSK ${lvl} <span style="font-size: 0.75rem; color: var(--text-muted);">Cấp ${lvl}</span></h4>
+        <p class="deck-card-subtitle">${total} từ vựng cốt lõi</p>
+      </div>
+      <div class="deck-card-bottom">
+        <div class="deck-progress-container">
+          <div class="deck-progress-bar-bg">
+            <div class="deck-progress-bar-fill" style="width: ${percent}%;"></div>
+          </div>
+          <div class="deck-progress-labels">
+            <span>Tiến độ</span>
+            <span>${percent}% (${memorized}/${total})</span>
+          </div>
+        </div>
+      </div>
+    `;
+    deckCard.addEventListener('click', () => {
+      startStudySession('unmemorized', lvl.toString(), `Học Từ Vựng HSK ${lvl}`, `Luyện ôn tập từ vựng chuẩn HSK Cấp ${lvl}`);
+    });
+    freeGrid.appendChild(deckCard);
+  }
+
+  // --- 3. RENDER PREMIUM DECKS ---
+  premiumGrid.innerHTML = '';
+  const premiumDecks = [
+    { title: 'Lượng từ', subtitle: 'Hơn 120 lượng từ phổ biến', tag: 'Mới' },
+    { title: 'Bưu điện', subtitle: 'Từ vựng hội thoại bưu điện', tag: 'Mới' },
+    { title: 'Chụp ảnh', subtitle: 'Thuật ngữ ngành nhiếp ảnh', tag: 'Mới' },
+    { title: 'Kinh doanh', subtitle: 'Tiếng Trung thương mại cơ bản', tag: '' },
+    { title: 'Du lịch', subtitle: 'Tiếng Trung giao tiếp du lịch', tag: '' }
+  ];
+
+  premiumDecks.forEach(deck => {
+    const card = document.createElement('div');
+    card.className = 'deck-card premium-locked';
+    const tagHtml = deck.tag ? `<span class="deck-new-badge">${deck.tag}</span>` : '';
+    card.innerHTML = `
+      <div class="deck-card-glow"></div>
+      <div class="deck-card-top">
+        <h4 class="deck-card-title">${deck.title} <span class="deck-lock-badge"><i class="fa-solid fa-lock"></i> VIP</span></h4>
+        <p class="deck-card-subtitle">${deck.subtitle}</p>
+      </div>
+      <div class="deck-card-bottom">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;">Bộ từ nâng cao</span>
+          ${tagHtml}
+        </div>
+      </div>
+    `;
+    card.addEventListener('click', () => {
+      showToast('Tính năng này dành cho tài khoản VIP Premium! 💎 Vui lòng nâng cấp để mở khóa bộ từ vựng.', true);
+    });
+    premiumGrid.appendChild(card);
+  });
+}
+
+function startStudySession(status, level, title, desc) {
+  // Set filters
+  activeStatus = status;
+  activeLevel = level;
+
+  // Sync inputs
+  const statusFilterSelect = document.getElementById('status-filter');
+  if (statusFilterSelect) statusFilterSelect.value = status;
+
+  // Toggle level tabs active state in controls
+  const levelTabsContainer = document.getElementById('level-tabs');
+  if (levelTabsContainer) {
+    levelTabsContainer.querySelectorAll('.level-tab').forEach(t => {
+      t.classList.toggle('active', t.getAttribute('data-level') === level);
+    });
+  }
+
+  // Update header text
+  const titleEl = document.getElementById('study-deck-title');
+  const descEl = document.getElementById('study-deck-desc');
+  if (titleEl) titleEl.textContent = title;
+  if (descEl) descEl.textContent = desc;
+
+  // Hide deck selector, show study workspace
+  document.getElementById('deck-selection-view').style.display = 'none';
+  document.getElementById('flashcard-study-view').style.display = 'block';
+
+  // Apply filters to load cards
+  applyFilters();
+
+  // Scroll smooth
+  const flashcardSection = document.getElementById('flashcard-section');
+  if (flashcardSection) flashcardSection.scrollIntoView({ behavior: 'smooth' });
 }
 
 function renderDetailedStatsTable() {
@@ -1002,6 +1208,18 @@ function showToast(message, isError = false) {
 // --- EVENT LISTENERS ---
 function setupEventListeners() {
 
+  // Back to Decks button click
+  const backToDecksBtn = document.getElementById('back-to-decks-btn');
+  if (backToDecksBtn) {
+    backToDecksBtn.addEventListener('click', () => {
+      stopAutoplay();
+      document.getElementById('flashcard-study-view').style.display = 'none';
+      document.getElementById('deck-selection-view').style.display = 'block';
+      const flashcardSection = document.getElementById('flashcard-section');
+      if (flashcardSection) flashcardSection.scrollIntoView({ behavior: 'smooth' });
+    });
+  }
+
   // Card Flip Click
   cardElement.addEventListener('click', (e) => {
     // Prevent flip if clicking a button inside card actions
@@ -1286,17 +1504,9 @@ function setupEventListeners() {
   const practiceMistakesBtn = document.getElementById('practice-mistakes-btn');
   if (practiceMistakesBtn) {
     practiceMistakesBtn.addEventListener('click', () => {
-      activeLevel = 'all';
-      levelTabsContainer.querySelectorAll('.level-tab').forEach(t => {
-        t.classList.toggle('active', t.getAttribute('data-level') === 'all');
-      });
-      activeStatus = 'wrong';
-      statusFilterSelect.value = 'wrong';
-      studyCustomCategory = null;
       stopAutoplay();
-      applyFilters();
-      const flashcardSection = document.getElementById('flashcard-section');
-      if (flashcardSection) flashcardSection.scrollIntoView({ behavior: 'smooth' });
+      studyCustomCategory = null;
+      startStudySession('wrong', 'all', 'Sổ tay từ làm sai', 'Ôn tập các từ vựng bạn đã trả lời sai');
       showToast('Đang tải danh sách từ vựng làm sai!');
     });
   }
@@ -2489,6 +2699,17 @@ function selectCustomList(name) {
 
 function studyCustomList(name) {
   studyCustomCategory = name;
+
+  // Toggle DOM views
+  const selectionView = document.getElementById('deck-selection-view');
+  const studyView = document.getElementById('flashcard-study-view');
+  if (selectionView) selectionView.style.display = 'none';
+  if (studyView) studyView.style.display = 'block';
+
+  const titleEl = document.getElementById('study-deck-title');
+  const descEl = document.getElementById('study-deck-desc');
+  if (titleEl) titleEl.textContent = `Sổ tay: ${name}`;
+  if (descEl) descEl.textContent = `Đang học danh sách tự biên soạn: ${name}`;
 
   // Clear level tabs active states
   const levelTabsContainer = document.getElementById('level-tabs');
