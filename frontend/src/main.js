@@ -2777,25 +2777,62 @@ function initChatbot() {
   const typingIndicator = document.getElementById('chatbot-typing');
   const badge = document.getElementById('chatbot-badge');
 
+  const newBtn = document.getElementById('chatbot-new-btn');
+  const historyBtn = document.getElementById('chatbot-history-btn');
+
   if (!toggleBtn || !panel || !closeBtn || !sendBtn || !input || !messagesContainer || !typingIndicator) {
     return;
   }
 
-  // Load chat history from localStorage to persist conversation
   let chatHistory = [];
-  try {
-    const saved = localStorage.getItem('hongtai_chat_history');
-    if (saved) {
-      chatHistory = JSON.parse(saved);
-      // Re-render history
-      chatHistory.forEach(msg => {
-        appendChatMessage(msg.role, msg.content);
-      });
-      // Hide badge if there is history already read
-      if (badge) badge.style.display = 'none';
+  let activeThreadId = null;
+
+  // Toggle header action buttons based on user authentication
+  if (currentUser) {
+    if (newBtn) newBtn.style.display = 'flex';
+    if (historyBtn) historyBtn.style.display = 'flex';
+    
+    // Load last active thread if stored in sessionStorage (tab-persistent)
+    activeThreadId = sessionStorage.getItem('hongtai_active_thread_id');
+    if (activeThreadId) {
+      loadActiveThread();
     }
-  } catch (e) {
-    console.warn('Failed to load chat history:', e);
+  } else {
+    if (newBtn) newBtn.style.display = 'none';
+    if (historyBtn) historyBtn.style.display = 'none';
+  }
+
+  // Load active thread messages from backend
+  async function loadActiveThread() {
+    try {
+      const response = await fetch(API_BASE_URL + `/api/chat/threads/${activeThreadId}`, {
+        headers: getAuthHeaders(),
+        credentials: 'include'
+      });
+      if (response.ok) {
+        const thread = await response.json();
+        messagesContainer.innerHTML = '';
+        
+        // Load messages history
+        chatHistory = (thread.messages || []).map(m => ({
+          role: m.role,
+          content: m.content
+        }));
+        
+        chatHistory.forEach(msg => {
+          appendChatMessage(msg.role, msg.content);
+        });
+        
+        if (badge) badge.style.display = 'none';
+        scrollChatToBottom();
+      } else {
+        // If thread has been deleted or is invalid, reset local state
+        sessionStorage.removeItem('hongtai_active_thread_id');
+        activeThreadId = null;
+      }
+    } catch (e) {
+      console.warn('Failed to load active chat thread:', e);
+    }
   }
 
   // Toggle Chat Panel visibility
@@ -2812,6 +2849,30 @@ function initChatbot() {
   closeBtn.addEventListener('click', () => {
     panel.style.display = 'none';
   });
+
+  // Header Actions listeners
+  if (newBtn) {
+    newBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      activeThreadId = null;
+      sessionStorage.removeItem('hongtai_active_thread_id');
+      chatHistory = [];
+      messagesContainer.innerHTML = `
+        <div class="chat-message bot">
+          Chào bạn! Tôi là **Trợ lý AI Hongtai** 🐼. Bạn cần tôi hỗ trợ giải nghĩa từ vựng HSK, sửa phát âm Pinyin hay luyện ngữ pháp tiếng Trung hôm nay không?
+        </div>
+      `;
+      showToast('Đã bắt đầu cuộc hội thoại mới.');
+      scrollChatToBottom();
+    });
+  }
+
+  if (historyBtn) {
+    historyBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      window.open('/chat-history.html', '_blank');
+    });
+  }
 
   // Send message events
   sendBtn.addEventListener('click', sendMessage);
@@ -2864,12 +2925,9 @@ function initChatbot() {
     // Clear input
     input.value = '';
 
-    // Append user message
+    // Append user message locally
     appendChatMessage('user', content);
     chatHistory.push({ role: 'user', content });
-
-    // Save to local storage
-    localStorage.setItem('hongtai_chat_history', JSON.stringify(chatHistory));
 
     scrollChatToBottom();
 
@@ -2878,12 +2936,18 @@ function initChatbot() {
     scrollChatToBottom();
 
     try {
+      const payload = {
+        messages: chatHistory
+      };
+      if (activeThreadId) {
+        payload.threadId = activeThreadId;
+      }
+
       const response = await fetch(API_BASE_URL + '/api/chat', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ messages: chatHistory })
+        headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify(payload),
+        credentials: 'include'
       });
 
       typingIndicator.style.display = 'none';
@@ -2895,7 +2959,12 @@ function initChatbot() {
 
       appendChatMessage('assistant', reply);
       chatHistory.push({ role: 'assistant', content: reply });
-      localStorage.setItem('hongtai_chat_history', JSON.stringify(chatHistory));
+      
+      // Save thread state if returned (persistent backend thread)
+      if (data.threadId) {
+        activeThreadId = data.threadId;
+        sessionStorage.setItem('hongtai_active_thread_id', activeThreadId);
+      }
 
     } catch (err) {
       typingIndicator.style.display = 'none';

@@ -833,9 +833,17 @@
             <span class="chatbot-status"><span class="status-dot"></span> Đang hoạt động</span>
           </div>
         </div>
-        <button class="chatbot-close-btn" id="chatbot-close-btn" title="Đóng">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
+        <div class="chatbot-header-actions" style="display: flex; gap: 10px; align-items: center;">
+          <button class="chatbot-header-action-btn" id="chatbot-new-btn" title="Cuộc trò chuyện mới" style="display: none;">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+          <button class="chatbot-header-action-btn" id="chatbot-history-btn" title="Lịch sử trò chuyện" style="display: none;">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+          </button>
+          <button class="chatbot-close-btn" id="chatbot-close-btn" title="Đóng">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
       </div>
 
       <!-- Chat Messages Area -->

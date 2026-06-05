@@ -15,7 +15,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: 'index.html',
-        detail: 'detail-list.html'
+        detail: 'detail-list.html',
+        history: 'chat-history.html'
       }
     }
   }

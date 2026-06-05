@@ -547,13 +547,16 @@ app.get('/api/tts', (req, res) => {
 
 // POST endpoint for AI Chatbot
 app.post('/api/chat', async (req, res) => {
-  const { messages } = req.body;
+  const { messages, threadId } = req.body;
   
   if (!messages || !Array.isArray(messages)) {
     return res.status(400).json({ error: 'Missing or invalid messages parameter' });
   }
 
   const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
+
+  // Get logged in user if any
+  const email = getLoggedInUserEmail(req);
 
   if (!GEMINI_API_KEY) {
     // Return friendly Demo / Setup instructions if API Key is not set
@@ -564,7 +567,6 @@ app.post('/api/chat', async (req, res) => {
 
   try {
     // Format messages for Gemini generateContent structure
-    // Gemini roles are: "user" and "model".
     const contents = messages.map(msg => ({
       role: msg.role === 'assistant' ? 'model' : 'user',
       parts: [{ text: msg.content }]
@@ -594,11 +596,122 @@ app.post('/api/chat', async (req, res) => {
     const data = await response.json();
     const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Xin lỗi bạn, tôi không thể xử lý yêu cầu lúc này. Vui lòng thử lại sau.';
     
-    res.json({ reply });
+    let returnedThreadId = null;
+
+    // If logged in, persist the messages into user_data.json
+    if (email) {
+      const userData = await readUserData();
+      if (!userData.chats) userData.chats = {};
+      if (!userData.chats[email]) userData.chats[email] = [];
+
+      let thread = null;
+      if (threadId) {
+        thread = userData.chats[email].find(t => t.id === threadId);
+      }
+
+      if (!thread) {
+        // Create new thread
+        returnedThreadId = 'thread_' + Date.now() + Math.random().toString(36).substring(2, 6);
+        const firstUserMsg = messages[messages.length - 1]?.content || 'Cuộc trò chuyện mới';
+        const title = firstUserMsg.substring(0, 30) + (firstUserMsg.length > 30 ? '...' : '');
+        thread = {
+          id: returnedThreadId,
+          title,
+          createdAt: new Date().toISOString(),
+          messages: []
+        };
+        userData.chats[email].push(thread);
+      } else {
+        returnedThreadId = thread.id;
+      }
+
+      // Save user prompt
+      const userContent = messages[messages.length - 1].content;
+      thread.messages.push({
+        role: 'user',
+        content: userContent,
+        timestamp: new Date().toISOString()
+      });
+
+      // Save assistant reply
+      thread.messages.push({
+        role: 'assistant',
+        content: reply,
+        timestamp: new Date().toISOString()
+      });
+
+      await writeUserData(userData);
+    }
+
+    res.json({ reply, threadId: returnedThreadId });
   } catch (error) {
     console.error('Chat error:', error);
     res.status(500).json({ error: 'Có lỗi xảy ra khi liên kết với AI Chatbot.' });
   }
+});
+
+// GET all chat threads for the current logged-in user
+app.get('/api/chat/threads', async (req, res) => {
+  const email = getLoggedInUserEmail(req);
+  if (!email) {
+    return res.status(401).json({ error: 'Chưa đăng nhập. Vui lòng đăng nhập trước.' });
+  }
+
+  const userData = await readUserData();
+  const userChats = (userData.chats && userData.chats[email]) || [];
+
+  // Sort by date descending
+  const sorted = [...userChats].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  // Return list of threads (metadata only)
+  const metadata = sorted.map(t => ({
+    id: t.id,
+    title: t.title,
+    createdAt: t.createdAt
+  }));
+
+  res.json(metadata);
+});
+
+// GET full chat messages in a specific thread
+app.get('/api/chat/threads/:id', async (req, res) => {
+  const email = getLoggedInUserEmail(req);
+  if (!email) {
+    return res.status(401).json({ error: 'Chưa đăng nhập. Vui lòng đăng nhập trước.' });
+  }
+
+  const { id } = req.params;
+  const userData = await readUserData();
+  const userChats = (userData.chats && userData.chats[email]) || [];
+
+  const thread = userChats.find(t => t.id === id);
+  if (!thread) {
+    return res.status(404).json({ error: 'Không tìm thấy cuộc trò chuyện.' });
+  }
+
+  res.json(thread);
+});
+
+// DELETE a specific chat thread
+app.delete('/api/chat/threads/:id', async (req, res) => {
+  const email = getLoggedInUserEmail(req);
+  if (!email) {
+    return res.status(401).json({ error: 'Chưa đăng nhập. Vui lòng đăng nhập trước.' });
+  }
+
+  const { id } = req.params;
+  const userData = await readUserData();
+
+  if (userData.chats && userData.chats[email]) {
+    const originalLength = userData.chats[email].length;
+    userData.chats[email] = userData.chats[email].filter(t => t.id !== id);
+    if (userData.chats[email].length < originalLength) {
+      await writeUserData(userData);
+      return res.json({ success: true, message: 'Đã xóa cuộc trò chuyện.' });
+    }
+  }
+
+  res.status(404).json({ error: 'Không tìm thấy cuộc trò chuyện để xóa.' });
 });
 
 // Thêm đoạn này để xử lý đường dẫn gốc
