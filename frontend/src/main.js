@@ -14,7 +14,7 @@ let chineseVoice = null;  // Reference to Web Speech Chinese voice object
 let currentUser = null;   // Active authenticated user profile
 const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === ''
   ? 'http://localhost:5000'
-  : 'https://webtiengtrung.onrender.com';
+  : 'https://tieng-trung-hong-tai.onrender.com';
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || 'your-google-client-id-here.apps.googleusercontent.com';
 
 // --- ENHANCEMENT STATE MANAGEMENT ---
@@ -236,7 +236,7 @@ async function fetchVocabulary() {
   } catch (error) {
     console.error('API Error:', error);
     showToast('Lỗi kết nối máy chủ backend!', true);
-    
+
     // Merge guest progress on fallback empty seed list if offline
     if (!currentUser) {
       const guestProgress = JSON.parse(localStorage.getItem('guest_progress') || '{}');
@@ -250,7 +250,7 @@ async function fetchVocabulary() {
         };
       });
     }
-    
+
     initCustomLists();
     renderCustomLists();
     updateStats();
@@ -297,7 +297,7 @@ async function toggleWordMemorized(id) {
       currentUser = null;
       renderUserProfile();
       showToast('Phiên làm việc đã hết hạn. Vui lòng đăng nhập lại.', true);
-      
+
       const guestProgress = JSON.parse(localStorage.getItem('guest_progress') || '{}');
       if (!guestProgress[id]) guestProgress[id] = {};
       guestProgress[id].isMemorized = !oldMemorized;
@@ -317,7 +317,7 @@ async function toggleWordMemorized(id) {
   } catch (error) {
     console.error('API Error:', error);
     showToast('Lỗi cập nhật trạng thái từ máy chủ!', true);
-    
+
     // Rollback state on error
     vocabList[index].isMemorized = oldMemorized;
     updateStats();
@@ -364,7 +364,7 @@ async function toggleWordStarred(id) {
       currentUser = null;
       renderUserProfile();
       showToast('Phiên làm việc đã hết hạn. Vui lòng đăng nhập lại.', true);
-      
+
       const guestProgress = JSON.parse(localStorage.getItem('guest_progress') || '{}');
       if (!guestProgress[id]) guestProgress[id] = {};
       guestProgress[id].isStarred = !oldStarred;
@@ -724,7 +724,7 @@ function applyFilters(preserveIndex = false) {
     // Keep the existing order, but filter out elements that are no longer valid
     const validIds = new Set(newList.map(w => w.id));
     filteredList = filteredList.filter(w => validIds.has(w.id));
-    
+
     // Add any new elements from newList that were not in filteredList
     const existingIds = new Set(filteredList.map(w => w.id));
     newList.forEach(w => {
@@ -758,7 +758,7 @@ function renderFilteredWordsTable() {
   const tbody = document.getElementById('filtered-words-table-rows');
   const countBadge = document.getElementById('filtered-words-count');
   const noteEl = document.getElementById('filtered-words-table-note');
-  
+
   if (!tbody || !countBadge) return;
 
   // Calculate base counts based on activeLevel and searchQuery (ignoring status)
@@ -818,7 +818,7 @@ function renderFilteredWordsTable() {
   // Cap display at 100 for maximum performance
   const displayLimit = 100;
   const listToDisplay = filteredList.slice(0, displayLimit);
-  
+
   if (noteEl) {
     noteEl.style.display = filteredList.length > displayLimit ? 'block' : 'none';
   }
@@ -1352,18 +1352,18 @@ function setupEventListeners() {
         studyCustomCategory = null; // Clear custom categories if studying quick stats
         stopAutoplay();
         applyFilters();
-        
+
         // Scroll to card interface
         const flashcardContainer = document.getElementById('flashcard-card');
         if (flashcardContainer) {
           flashcardContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
-        
+
         let label = 'Tất cả từ vựng HSK';
         if (status === 'memorized') label = 'Từ vựng đã thuộc 🎉';
         if (status === 'unmemorized') label = 'Từ vựng chưa thuộc 📝';
         if (status === 'starred') label = 'Từ vựng yêu thích ⭐';
-        
+
         showToast(`Đang học: ${label}`);
       }
     });
@@ -1392,7 +1392,7 @@ function setupEventListeners() {
       params.set('status', activeStatus);
       if (searchQuery) params.set('search', searchQuery);
       if (studyCustomCategory) params.set('customCategory', studyCustomCategory);
-      
+
       window.open(`detail-list.html?${params.toString()}`, '_blank');
     });
   }
@@ -1527,10 +1527,10 @@ async function handleLogout(e) {
   if (e) e.preventDefault();
 
   try {
-    await fetch(API_BASE_URL + '/api/auth/logout', { 
-      method: 'POST', 
+    await fetch(API_BASE_URL + '/api/auth/logout', {
+      method: 'POST',
       headers: getAuthHeaders(),
-      credentials: 'include' 
+      credentials: 'include'
     });
   } catch (err) {
     console.warn('Backend logout call failed, cleaning up client anyway:', err);
@@ -2499,10 +2499,10 @@ function deleteCustomList(name) {
   const wordsToMigrate = vocabList.filter(w => w.isCustom && w.category === name);
 
   Promise.all(wordsToMigrate.map(w => {
-    return fetch(API_BASE_URL + '/api/vocabulary/' + w.id, { 
-      method: 'DELETE', 
+    return fetch(API_BASE_URL + '/api/vocabulary/' + w.id, {
+      method: 'DELETE',
       headers: getAuthHeaders(),
-      credentials: 'include' 
+      credentials: 'include'
     })
       .catch(err => console.error("Error deleting word during list delete:", err));
   })).then(() => {
@@ -2713,12 +2713,12 @@ async function setWordWrong(id, isWrong) {
     const index = vocabList.findIndex(w => w.id === id);
     if (index !== -1) {
       vocabList[index].isWrong = isWrong;
-      
+
       const guestProgress = JSON.parse(localStorage.getItem('guest_progress') || '{}');
       if (!guestProgress[id]) guestProgress[id] = {};
       guestProgress[id].isWrong = isWrong;
       localStorage.setItem('guest_progress', JSON.stringify(guestProgress));
-      
+
       updateStats();
     }
     return;
@@ -2830,26 +2830,26 @@ function initChatbot() {
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;');
-    
+
     // Bold: **text** -> <strong>text</strong>
     escaped = escaped.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    
+
     // Line breaks: \n -> <br>
     escaped = escaped.replace(/\n/g, '<br>');
-    
+
     return escaped;
   }
 
   function appendChatMessage(role, content) {
     const msgDiv = document.createElement('div');
     msgDiv.className = `chat-message ${role === 'assistant' ? 'bot' : 'user'}`;
-    
+
     if (role === 'assistant') {
       msgDiv.innerHTML = formatMarkdown(content);
     } else {
       msgDiv.textContent = content;
     }
-    
+
     messagesContainer.appendChild(msgDiv);
   }
 
@@ -2867,7 +2867,7 @@ function initChatbot() {
     // Append user message
     appendChatMessage('user', content);
     chatHistory.push({ role: 'user', content });
-    
+
     // Save to local storage
     localStorage.setItem('hongtai_chat_history', JSON.stringify(chatHistory));
 
@@ -2892,11 +2892,11 @@ function initChatbot() {
 
       const data = await response.json();
       const reply = data.reply || 'Xin lỗi bạn, tôi không thể xử lý yêu cầu lúc này.';
-      
+
       appendChatMessage('assistant', reply);
       chatHistory.push({ role: 'assistant', content: reply });
       localStorage.setItem('hongtai_chat_history', JSON.stringify(chatHistory));
-      
+
     } catch (err) {
       typingIndicator.style.display = 'none';
       console.error('Chatbot error:', err);
