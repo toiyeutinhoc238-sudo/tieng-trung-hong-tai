@@ -459,6 +459,11 @@ html.dark .brand-logo-img {
 }
 
 .profile-dropdown-menu li a:hover {
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--accent-blue);
+}
+
+.profile-dropdown-menu li a.logout-link:hover {
   background: rgba(239, 68, 68, 0.08);
   color: var(--danger);
 }

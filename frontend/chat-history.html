@@ -328,6 +328,27 @@
       color: var(--danger);
       margin-bottom: 8px;
     }
+
+    .btn-new-chat {
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: var(--accent-blue);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all var(--transition-fast);
+    }
+
+    .btn-new-chat:hover {
+      background: var(--accent-blue);
+      color: white;
+      transform: scale(1.05);
+    }
   </style>
 </head>
 <body>
@@ -357,6 +378,9 @@
     <div class="threads-sidebar" id="threads-sidebar">
       <div class="sidebar-header">
         <h3><i class="fa-solid fa-clock-rotate-left text-primary"></i> Các cuộc hội thoại</h3>
+        <button id="new-thread-btn" class="btn-new-chat" title="Bắt đầu cuộc trò chuyện mới">
+          <i class="fa-solid fa-plus"></i>
+        </button>
       </div>
       <div class="threads-list" id="threads-list">
         <!-- Loading spinner -->
@@ -466,11 +490,17 @@
         return;
       }
       loadThreads();
-      
+
+      // Bind New Thread Button
+      const newThreadBtn = document.getElementById('new-thread-btn');
+      if (newThreadBtn) {
+        newThreadBtn.addEventListener('click', startNewThread);
+      }
+
       // Bind Send Controls
       const sendBtn = document.getElementById('history-chat-send-btn');
       const input = document.getElementById('history-chat-input');
-      
+
       if (sendBtn && input) {
         sendBtn.addEventListener('click', sendMessage);
         input.addEventListener('keydown', (e) => {
@@ -687,10 +717,36 @@
       }
     }
 
+    function startNewThread() {
+      activeThreadId = null;
+      activeThreadMessages = [];
+
+      // Update UI active states
+      document.querySelectorAll('.thread-item').forEach(item => item.classList.remove('active'));
+
+      // Show chat view panel and set title
+      document.getElementById('empty-chat-state').style.display = 'none';
+      const panel = document.getElementById('active-chat-panel');
+      panel.style.display = 'flex';
+
+      document.getElementById('active-thread-title').textContent = 'Cuộc trò chuyện mới';
+
+      const messagesContainer = document.getElementById('chat-messages-container');
+      messagesContainer.innerHTML = `
+        <div class="message-bubble bot">
+          Chào bạn! Tôi là **Trợ lý AI Hongtai** 🐼. Hãy đặt câu hỏi về từ vựng, ngữ pháp tiếng Trung của bạn để bắt đầu cuộc trò chuyện mới nhé!
+        </div>
+      `;
+
+      const input = document.getElementById('history-chat-input');
+      input.placeholder = 'Nhập tin nhắn để bắt đầu cuộc trò chuyện...';
+      input.focus();
+    }
+
     async function sendMessage() {
       const input = document.getElementById('history-chat-input');
       const content = input.value.trim();
-      if (!content || !activeThreadId) return;
+      if (!content) return;
 
       input.value = '';
 
@@ -723,12 +779,24 @@
         typingIndicator.style.display = 'none';
         if (!res.ok) throw new Error();
         const data = await res.json();
-        
+
         activeThreadMessages.push({
           role: 'assistant',
           content: data.reply || 'Có lỗi xảy ra.',
           timestamp: new Date().toISOString()
         });
+
+        // If a new thread was created, save the ID, reload threads list, and select it
+        if (data.threadId && !activeThreadId) {
+          activeThreadId = data.threadId;
+          sessionStorage.setItem('hongtai_active_thread_id', activeThreadId);
+          await loadThreads();
+
+          const newT = threads.find(t => t.id === activeThreadId);
+          if (newT) {
+            document.getElementById('active-thread-title').textContent = newT.title || 'Chi tiết cuộc trò chuyện';
+          }
+        }
 
         renderMessages();
       } catch (err) {

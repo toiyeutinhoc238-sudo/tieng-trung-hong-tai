@@ -1578,6 +1578,8 @@ function renderUserProfile() {
   const displayName = document.getElementById('user-display-name');
   const displayEmail = document.getElementById('user-display-email');
 
+  const navChatHistoryLi = document.getElementById('nav-chat-history-li');
+
   if (!authContainer) return;
 
   if (currentUser) {
@@ -1596,9 +1598,17 @@ function renderUserProfile() {
 
     displayName.textContent = currentUser.name || 'Học viên';
     displayEmail.textContent = currentUser.email || 'demo@tiengtrunghongtai.com';
+
+    if (navChatHistoryLi) navChatHistoryLi.style.display = 'block';
+
+    if (typeof window.updateChatbotOnLogin === 'function') {
+      window.updateChatbotOnLogin();
+    }
   } else {
     authContainer.classList.remove('logged-in');
     authContainer.classList.add('logged-out');
+
+    if (navChatHistoryLi) navChatHistoryLi.style.display = 'none';
   }
 
   // Refresh exam grid with current user's scores if papers screen is open
@@ -2796,6 +2806,12 @@ function initChatbot() {
 
   let chatHistory = [];
   let activeThreadId = null;
+
+  // Global callback to update chatbot buttons on login
+  window.updateChatbotOnLogin = function() {
+    if (newBtn) newBtn.style.display = 'flex';
+    if (historyBtn) historyBtn.style.display = 'flex';
+  };
 
   // Global callback to migrate guest chats when logged in
   window.migrateGuestChatHistory = async function() {
