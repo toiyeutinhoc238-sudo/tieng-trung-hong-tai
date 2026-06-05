@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HọcTiếngTrung.v3 - Ôn Tập Từ Vựng HSK</title>
+  <title>Tiếng Trung Hongtai - Ôn Tập Từ Vựng HSK</title>
   
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -25,13 +25,7 @@
   <nav class="navbar">
     <div class="nav-container">
       <div class="nav-brand">
-        <!-- SVG Chinese Dragon Icon -->
-        <span class="brand-icon">
-          <svg viewBox="0 0 100 100" width="30" height="30" fill="currentColor">
-            <path d="M50 5C25 5 5 25 5 50s20 45 45 45 45-20 45-45S75 5 50 5zm0 10c8 0 15 3 21 8L60 34c-2-2-6-4-10-4-11 0-20 9-20 20s9 20 20 20c4 0 8-2 10-4L71 77c-6 5-13 8-21 8-19 0-35-16-35-35S31 15 50 15z M65 42a5 5 0 1 1 0 10 5 5 0 0 1 0-10z"/>
-          </svg>
-        </span>
-        <span class="brand-text">HọcTiếngTrung<span class="brand-ver">.v3</span></span>
+        <img class="brand-logo-img" src="/src/assets/logo.png" alt="Tiếng Trung Hongtai Logo">
       </div>
       
       <ul class="nav-links">
@@ -65,8 +59,8 @@
               <img id="user-avatar-img" class="user-avatar-img" src="" alt="Avatar" style="display: none;">
               <div id="user-avatar-placeholder" class="user-avatar">HT</div>
               <div class="user-info">
-                <span class="user-name" id="user-display-name">Học Tiếng Trung</span>
-                <span class="user-role" id="user-display-email">demo@hoctiengtrung.v3</span>
+                <span class="user-name" id="user-display-name">Tiếng Trung Hongtai</span>
+                <span class="user-role" id="user-display-email">demo@tiengtrunghongtai.com</span>
               </div>
               <i class="fa-solid fa-chevron-down profile-chevron"></i>
             </div>
@@ -817,6 +811,56 @@
 
   <!-- Simple toast notification -->
   <div id="toast" class="toast">Đã lưu trạng thái!</div>
+
+  <!-- AI Chatbot Widget -->
+  <div class="chatbot-widget" id="chatbot-widget">
+    <!-- Chat Toggle Button -->
+    <button class="chatbot-toggle-btn" id="chatbot-toggle-btn" title="Trò chuyện với Trợ lý AI Hongtai">
+      <i class="fa-solid fa-comments"></i>
+      <span class="chatbot-badge" id="chatbot-badge">1</span>
+    </button>
+
+    <!-- Chat Window Panel -->
+    <div class="chatbot-panel glass-panel" id="chatbot-panel" style="display: none;">
+      <!-- Chat Header -->
+      <div class="chatbot-header">
+        <div class="chatbot-title-wrap">
+          <div class="chatbot-avatar">
+            <i class="fa-solid fa-robot"></i>
+          </div>
+          <div>
+            <h4 class="chatbot-name">Trợ lý AI Hongtai</h4>
+            <span class="chatbot-status"><span class="status-dot"></span> Đang hoạt động</span>
+          </div>
+        </div>
+        <button class="chatbot-close-btn" id="chatbot-close-btn" title="Đóng">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Chat Messages Area -->
+      <div class="chatbot-messages" id="chatbot-messages">
+        <div class="chat-message bot">
+          Chào bạn! Tôi là **Trợ lý AI Hongtai** 🐼. Bạn cần tôi hỗ trợ giải nghĩa từ vựng HSK, sửa phát âm Pinyin hay luyện ngữ pháp tiếng Trung hôm nay không?
+        </div>
+      </div>
+
+      <!-- Typing Indicator -->
+      <div class="chatbot-typing" id="chatbot-typing" style="display: none;">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+
+      <!-- Chat Input Area -->
+      <div class="chatbot-input-area">
+        <input type="text" id="chatbot-input" placeholder="Hỏi nghĩa từ, dịch thuật, ngữ pháp..." autocomplete="off">
+        <button id="chatbot-send-btn" title="Gửi tin nhắn">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- App Main Scripts -->
   <script type="module" src="/src/main.js"></script>

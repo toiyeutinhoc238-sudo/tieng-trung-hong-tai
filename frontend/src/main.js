@@ -80,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initAuth();
   setupEventListeners();
   initExams();
+  initChatbot();
 });
 
 // --- THEME MANAGEMENT ---
@@ -1584,7 +1585,7 @@ function renderUserProfile() {
     }
 
     displayName.textContent = currentUser.name || 'Học viên';
-    displayEmail.textContent = currentUser.email || 'demo@hoctiengtrung.v3';
+    displayEmail.textContent = currentUser.email || 'demo@tiengtrunghongtai.com';
   } else {
     authContainer.classList.remove('logged-in');
     authContainer.classList.add('logged-out');
@@ -2762,6 +2763,147 @@ async function setWordWrong(id, isWrong) {
       vocabList[index].isWrong = isWrong;
       updateStats();
     }
+  }
+}
+
+// --- AI CHATBOT CONTROLLER ---
+function initChatbot() {
+  const toggleBtn = document.getElementById('chatbot-toggle-btn');
+  const panel = document.getElementById('chatbot-panel');
+  const closeBtn = document.getElementById('chatbot-close-btn');
+  const sendBtn = document.getElementById('chatbot-send-btn');
+  const input = document.getElementById('chatbot-input');
+  const messagesContainer = document.getElementById('chatbot-messages');
+  const typingIndicator = document.getElementById('chatbot-typing');
+  const badge = document.getElementById('chatbot-badge');
+
+  if (!toggleBtn || !panel || !closeBtn || !sendBtn || !input || !messagesContainer || !typingIndicator) {
+    return;
+  }
+
+  // Load chat history from localStorage to persist conversation
+  let chatHistory = [];
+  try {
+    const saved = localStorage.getItem('hongtai_chat_history');
+    if (saved) {
+      chatHistory = JSON.parse(saved);
+      // Re-render history
+      chatHistory.forEach(msg => {
+        appendChatMessage(msg.role, msg.content);
+      });
+      // Hide badge if there is history already read
+      if (badge) badge.style.display = 'none';
+    }
+  } catch (e) {
+    console.warn('Failed to load chat history:', e);
+  }
+
+  // Toggle Chat Panel visibility
+  toggleBtn.addEventListener('click', () => {
+    const isHidden = panel.style.display === 'none';
+    panel.style.display = isHidden ? 'flex' : 'none';
+    if (isHidden) {
+      if (badge) badge.style.display = 'none';
+      input.focus();
+      scrollChatToBottom();
+    }
+  });
+
+  closeBtn.addEventListener('click', () => {
+    panel.style.display = 'none';
+  });
+
+  // Send message events
+  sendBtn.addEventListener('click', sendMessage);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  // Helper to format Markdown-like syntax to HTML
+  function formatMarkdown(text) {
+    if (!text) return '';
+    // Escape HTML to prevent XSS
+    let escaped = text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+    
+    // Bold: **text** -> <strong>text</strong>
+    escaped = escaped.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    
+    // Line breaks: \n -> <br>
+    escaped = escaped.replace(/\n/g, '<br>');
+    
+    return escaped;
+  }
+
+  function appendChatMessage(role, content) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `chat-message ${role === 'assistant' ? 'bot' : 'user'}`;
+    
+    if (role === 'assistant') {
+      msgDiv.innerHTML = formatMarkdown(content);
+    } else {
+      msgDiv.textContent = content;
+    }
+    
+    messagesContainer.appendChild(msgDiv);
+  }
+
+  function scrollChatToBottom() {
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+
+  async function sendMessage() {
+    const content = input.value.trim();
+    if (!content) return;
+
+    // Clear input
+    input.value = '';
+
+    // Append user message
+    appendChatMessage('user', content);
+    chatHistory.push({ role: 'user', content });
+    
+    // Save to local storage
+    localStorage.setItem('hongtai_chat_history', JSON.stringify(chatHistory));
+
+    scrollChatToBottom();
+
+    // Show typing indicator
+    typingIndicator.style.display = 'flex';
+    scrollChatToBottom();
+
+    try {
+      const response = await fetch(API_BASE_URL + '/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ messages: chatHistory })
+      });
+
+      typingIndicator.style.display = 'none';
+
+      if (!response.ok) throw new Error('API Error');
+
+      const data = await response.json();
+      const reply = data.reply || 'Xin lỗi bạn, tôi không thể xử lý yêu cầu lúc này.';
+      
+      appendChatMessage('assistant', reply);
+      chatHistory.push({ role: 'assistant', content: reply });
+      localStorage.setItem('hongtai_chat_history', JSON.stringify(chatHistory));
+      
+    } catch (err) {
+      typingIndicator.style.display = 'none';
+      console.error('Chatbot error:', err);
+      appendChatMessage('assistant', 'Có lỗi kết nối xảy ra. Vui lòng kiểm tra kết nối mạng hoặc thử lại sau!');
+    }
+
+    scrollChatToBottom();
   }
 }
 

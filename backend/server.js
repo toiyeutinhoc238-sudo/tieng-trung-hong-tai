@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import fs from 'fs/promises';
@@ -542,6 +543,62 @@ app.get('/api/tts', (req, res) => {
   }
 
   tryUrl(0);
+});
+
+// POST endpoint for AI Chatbot
+app.post('/api/chat', async (req, res) => {
+  const { messages } = req.body;
+  
+  if (!messages || !Array.isArray(messages)) {
+    return res.status(400).json({ error: 'Missing or invalid messages parameter' });
+  }
+
+  const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
+
+  if (!GEMINI_API_KEY) {
+    // Return friendly Demo / Setup instructions if API Key is not set
+    return res.json({
+      reply: 'Chào bạn! Tôi là **Trợ lý AI Hongtai** 🐼. Hiện tại, máy chủ chưa được cấu hình API Key cho Gemini.\n\nĐể kích hoạt đầy đủ tính năng hội thoại và giải thích tiếng Trung, vui lòng tạo biến môi trường `GEMINI_API_KEY` trong file cấu hình `.env` hoặc trên hệ thống của bạn!'
+    });
+  }
+
+  try {
+    // Format messages for Gemini generateContent structure
+    // Gemini roles are: "user" and "model".
+    const contents = messages.map(msg => ({
+      role: msg.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: msg.content }]
+    }));
+
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        contents,
+        systemInstruction: {
+          parts: [{
+            text: 'Bạn là trợ lý AI học tiếng Trung đắc lực của thương hiệu "Tiếng Trung Hongtai". Bạn có phong cách nói chuyện thân thiện, chuyên nghiệp, tận tâm và thông thái. Bạn giúp học viên giải thích từ vựng HSK, các quy tắc phát âm Pinyin, cấu trúc ngữ pháp tiếng Trung, dịch thuật Anh-Trung-Việt và luyện giao tiếp. Hãy sử dụng định dạng Markdown rõ ràng, thụt lề hợp lý, xuống dòng sạch sẽ. Khi nói về thương hiệu, luôn tự xưng là "Trợ lý AI Hongtai".'
+          }]
+        }
+      })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Gemini API error:', errorText);
+      throw new Error(`Gemini API returned status ${response.status}`);
+    }
+
+    const data = await response.json();
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Xin lỗi bạn, tôi không thể xử lý yêu cầu lúc này. Vui lòng thử lại sau.';
+    
+    res.json({ reply });
+  } catch (error) {
+    console.error('Chat error:', error);
+    res.status(500).json({ error: 'Có lỗi xảy ra khi liên kết với AI Chatbot.' });
+  }
 });
 
 // Thêm đoạn này để xử lý đường dẫn gốc
