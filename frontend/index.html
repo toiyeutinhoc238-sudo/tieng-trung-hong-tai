@@ -28,18 +28,7 @@
         <img class="brand-logo-img" src="/src/assets/logo.png" alt="Tiếng Trung Hongtai Logo">
       </div>
       
-      <ul class="nav-links">
-        <li><a href="#" class="nav-link active" id="nav-home-btn"><i class="fa-solid fa-house"></i> Trang chủ</a></li>
-        <li class="dropdown">
-          <a href="#" class="nav-link"><i class="fa-solid fa-book-open"></i> Nội dung học <i class="fa-solid fa-chevron-down nav-chevron"></i></a>
-          <ul class="dropdown-menu">
-            <li><a href="#flashcard-section">Thẻ ghi nhớ (Flashcard)</a></li>
-            <li><a href="#custom-section">Từ vựng của bạn</a></li>
-          </ul>
-        </li>
-        <li><a href="#" class="nav-link" id="nav-exams-btn"><i class="fa-solid fa-graduation-cap"></i> Luyện đề thi HSK</a></li>
-        <li id="nav-chat-history-li" style="display: none;"><a href="/chat-history.html" target="_blank" class="nav-link"><i class="fa-solid fa-clock-rotate-left"></i> Lịch sử trợ lý AI</a></li>
-      </ul>
+
       
       <div class="nav-right">
         <!-- Theme Toggle -->
@@ -86,94 +75,214 @@
   <!-- Main Content Layout -->
   <main class="main-layout">
     
-    <!-- Hero Banner (matching screenshot style but compact) -->
-    <header class="hero-banner">
-      <div class="hero-badge">Phiên bản 3.0 Modern</div>
-      <h1 class="hero-title">Chinh Phục Tiếng Trung</h1>
-      <p class="hero-subtitle">Hệ thống ôn từ vựng thông minh qua Flashcard 3D với trải nghiệm đột phá.</p>
-      <div class="hero-actions">
-        <a href="#flashcard-section" class="btn btn-primary btn-lg">Bắt đầu ngay</a>
-        <a href="#custom-section" class="btn btn-outline btn-lg">Tự thêm từ mới</a>
+    <!-- Premium Brand Header with Blocks -->
+    <!-- Dedicated Home View Section -->
+    <div id="home-view-section">
+      <!-- Premium Brand Header with Blocks -->
+      <div class="premium-brand-header">
+        <div class="brand-cap-text">
+          <i class="fa-solid fa-user-graduate"></i> Tiếng Trung
+        </div>
+        <div class="brand-blocks">
+          <div class="brand-block">H</div>
+          <div class="brand-block">O</div>
+          <div class="brand-block">N</div>
+          <div class="brand-block">G</div>
+          <div class="brand-block">T</div>
+          <div class="brand-block">A</div>
+          <div class="brand-block">i</div>
+        </div>
+        <div class="brand-slogan">Ngôn ngữ mới - Cơ hội mới</div>
       </div>
-    </header>
 
-    <!-- Quick Actions and Mistake Notebook Widget -->
-    <div class="quick-dashboard-cards" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
-      <!-- Mistake Notebook Card -->
-      <div id="mistake-notebook-widget" class="glass-panel" style="padding: 20px; display: flex; align-items: center; justify-content: space-between; border-left: 5px solid var(--danger);">
-        <div style="display: flex; align-items: center; gap: 16px;">
-          <div style="width: 44px; height: 44px; border-radius: 50%; background: var(--danger-bg); color: var(--danger); display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
-            <i class="fa-solid fa-circle-exclamation"></i>
-          </div>
-          <div>
-            <h3 style="font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; margin-bottom: 2px;">Sổ tay từ vựng làm sai</h3>
-            <p style="color: var(--text-secondary); font-size: 0.8rem; margin: 0;">Bạn có <strong id="mistake-count-badge" class="text-danger" style="font-size: 0.9rem;">0</strong> từ trả lời sai khi học.</p>
+      <!-- Premium Welcome Banner Card -->
+      <div class="premium-welcome-card">
+        <div class="welcome-content-left">
+          <span class="welcome-tag">Chào mừng bạn học bài mới!</span>
+          <h1 class="welcome-title">Chinh phục <span>tiếng Trung</span> cùng HONGTAI</h1>
+          <p class="welcome-desc">
+            “Ngôn ngữ mới - Cơ hội mới”. Hãy khởi đầu hành trình lý thú hôm nay cùng giáo trình chuẩn HSK cho định hướng sự nghiệp và YCT rực rỡ sắc màu dành riêng cho trẻ em!
+          </p>
+          <div class="welcome-actions">
+            <a href="#flashcard-section" class="btn btn-red-pill" id="banner-start-study-btn">
+              Vào học lớp HSK & YCT <i class="fa-solid fa-arrow-right-long"></i>
+            </a>
+            <a href="#custom-section" class="btn btn-outline-pill" id="banner-dictionary-btn">
+              Tra cứu từ điển ngay
+            </a>
           </div>
         </div>
-        <button id="practice-mistakes-btn" class="btn btn-hud" style="max-width: 130px; margin: 0; background-color: var(--danger-bg); color: var(--danger); border-color: var(--danger); font-size: 0.8rem; padding: 8px 12px; border-radius: var(--radius-sm);">
-          <i class="fa-solid fa-rotate-right"></i> Ôn tập ngay
-        </button>
+        <div class="welcome-stats-right">
+          <!-- Streak Card -->
+          <div class="welcome-stat-card">
+            <div class="welcome-stat-icon-wrapper orange">
+              <i class="fa-solid fa-fire"></i>
+            </div>
+            <div class="welcome-stat-info">
+              <span class="welcome-stat-label">Streak liên tục</span>
+              <span class="welcome-stat-value" id="welcome-streak-val">2 ngày</span>
+            </div>
+          </div>
+          <!-- Completed Card -->
+          <div class="welcome-stat-card">
+            <div class="welcome-stat-icon-wrapper pink">
+              <i class="fa-solid fa-award"></i>
+            </div>
+            <div class="welcome-stat-info">
+              <span class="welcome-stat-label">Đã hoàn thành</span>
+              <span class="welcome-stat-value" id="welcome-completed-val">0 bài</span>
+            </div>
+          </div>
+        </div>
       </div>
-      
-      <!-- Study Tip / Info Card -->
-      <div class="glass-panel" style="padding: 20px; display: flex; align-items: center; gap: 16px; border-left: 5px solid var(--accent-blue);">
-        <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
-          <i class="fa-solid fa-graduation-cap"></i>
+
+      <!-- Curriculum Selection Section -->
+      <div class="section-accent-header">Chọn Giáo trình Phù hợp</div>
+      <div class="curriculum-grid">
+        <div class="curriculum-card HSK-card" id="curriculum-hsk-card">
+          <div class="curriculum-card-header">
+            <span class="curriculum-badge red">HSK</span>
+            <span class="curriculum-desc-right">Khuyên dùng cho Người lớn</span>
+          </div>
+          <h3>Giáo trình Chuẩn HSK</h3>
         </div>
-        <div>
-          <h3 style="font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; margin-bottom: 2px;">Luyện gõ chữ tiếng Trung</h3>
-          <p style="color: var(--text-secondary); font-size: 0.8rem; margin: 0;">Chọn chế độ "Nhập tay" để học và nhớ từ lâu gấp 3 lần.</p>
+        <div class="curriculum-card YCT-card" id="curriculum-yct-card">
+          <div class="curriculum-card-header">
+            <span class="curriculum-badge green">YCT</span>
+            <span class="curriculum-desc-right">Dành riêng cho Thiếu nhi</span>
+          </div>
+          <h3>Giáo trình Sắc màu YCT</h3>
         </div>
       </div>
     </div>
 
-    <!-- Learning Section -->
-    <section id="flashcard-section" class="workspace-section">
+    <!-- Learning Section (Hidden by default, containing learning-specific cards) -->
+    <section id="flashcard-section" class="workspace-section" style="display: none;">
+      
+      <!-- Quick Actions and Mistake Notebook Widget -->
+      <div class="quick-dashboard-cards" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
+        <!-- Mistake Notebook Card -->
+        <div id="mistake-notebook-widget" class="glass-panel" style="padding: 20px; display: flex; align-items: center; justify-content: space-between; border-left: 5px solid var(--danger);">
+          <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="width: 44px; height: 44px; border-radius: 50%; background: var(--danger-bg); color: var(--danger); display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+              <i class="fa-solid fa-circle-exclamation"></i>
+            </div>
+            <div>
+              <h3 style="font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; margin-bottom: 2px;">Sổ tay từ vựng làm sai</h3>
+              <p style="color: var(--text-secondary); font-size: 0.8rem; margin: 0;">Bạn có <strong id="mistake-count-badge" class="text-danger" style="font-size: 0.9rem;">0</strong> từ trả lời sai khi học.</p>
+            </div>
+          </div>
+          <button id="practice-mistakes-btn" class="btn btn-hud" style="max-width: 130px; margin: 0; background-color: var(--danger-bg); color: var(--danger); border-color: var(--danger); font-size: 0.8rem; padding: 8px 12px; border-radius: var(--radius-sm);">
+            <i class="fa-solid fa-rotate-right"></i> Ôn tập ngay
+          </button>
+        </div>
+        
+        <!-- Study Tip / Info Card -->
+        <div class="glass-panel" style="padding: 20px; display: flex; align-items: center; gap: 16px; border-left: 5px solid var(--accent-blue);">
+          <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <div>
+            <h3 style="font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; margin-bottom: 2px;">Luyện gõ chữ tiếng Trung</h3>
+            <p style="color: var(--text-secondary); font-size: 0.8rem; margin: 0;">Chọn chế độ "Nhập tay" để học và nhớ từ lâu gấp 3 lần.</p>
+          </div>
+        </div>
+      </div>
       
       <!-- DECK SELECTION VIEW -->
       <div id="deck-selection-view">
-        <!-- Section Header for Decks -->
-        <div class="section-header" style="align-items: center; margin-bottom: 24px;">
-          <div class="section-title-wrap">
-            <h2 class="section-title">Bộ Sưu Tập Thẻ Ghi Nhớ</h2>
-            <p class="section-desc">Chọn một bộ từ vựng để bắt đầu học và theo dõi tiến độ ghi nhớ của bạn.</p>
+        <div class="smart-flashcard-config">
+          <!-- Title Header -->
+          <div class="config-header">
+            <h2 class="config-title">
+              <i class="fa-solid fa-layer-group title-icon"></i> Học Flashcards Thông Minh HONGTAI
+            </h2>
+            <p class="config-subtitle">
+              Nhớ từ vựng dễ dàng qua thẻ Flashcards lật kết hợp Chế độ nhập chữ tự chấm điểm, tự động phân tích và lưu trữ những từ bạn học sai 3 lần!
+            </p>
           </div>
-        </div>
 
-        <!-- Review Banner (Panda styled) -->
-        <div class="review-banner-container" style="margin-bottom: 32px;">
-          <div class="review-banner">
-            <div class="review-banner-content">
-              <h1 class="review-banner-title" id="review-banner-count">+0</h1>
-              <p class="review-banner-text">từ vựng cần ôn tập</p>
+          <div class="config-steps-grid">
+            <!-- Step 1: Chọn giáo trình học tập -->
+            <div class="config-step-section">
+              <h3 class="step-title">1. CHỌN GIÁ TRÌNH HỌC TẬP</h3>
+              <div class="curriculum-selection-row">
+                <div class="selection-card active" data-curriculum="hsk" id="smart-curriculum-hsk">
+                  <span class="selection-card-title">HSK</span>
+                  <span class="selection-card-subtitle">Học thuật học người lớn</span>
+                  <i class="fa-solid fa-circle-check check-badge"></i>
+                </div>
+                <div class="selection-card" data-curriculum="yct" id="smart-curriculum-yct">
+                  <span class="selection-card-title">YCT</span>
+                  <span class="selection-card-subtitle">Thiếu nhi sinh động</span>
+                  <i class="fa-solid fa-circle-check check-badge"></i>
+                </div>
+              </div>
             </div>
-            <div class="review-banner-panda">
-              <i class="fa-solid fa-graduation-cap"></i>
+
+            <!-- Step 2: Chọn cấp độ điểm mốc -->
+            <div class="config-step-section">
+              <h3 class="step-title">2. CHỌN CẤP ĐỘ ĐIỂM MỐC</h3>
+              <div class="level-selection-row" id="smart-level-row">
+                <button class="level-pill active" data-level="1">Cấp HSK 1</button>
+                <button class="level-pill" data-level="2">Cấp HSK 2</button>
+                <button class="level-pill" data-level="3">Cấp HSK 3</button>
+                <button class="level-pill" data-level="4">Cấp HSK 4</button>
+                <button class="level-pill" data-level="5">Cấp HSK 5</button>
+                <button class="level-pill" data-level="6">Cấp HSK 6</button>
+              </div>
+            </div>
+
+            <!-- Step 3: Chọn cách thức học tập & ôn tập -->
+            <div class="config-step-section">
+              <h3 class="step-title">3. CHỌN CÁCH THỨC HỌC TẬP & ÔN TẬP</h3>
+              <div class="mode-selection-row">
+                <div class="selection-card active" data-mode="flip" id="smart-mode-flip">
+                  <span class="selection-card-title">Thẻ Lật 3D Truyền thống</span>
+                  <span class="selection-card-subtitle">Nhìn Hán tự và click xoay lật xem nghĩa Pinyin</span>
+                  <i class="fa-solid fa-circle-check check-badge"></i>
+                </div>
+                <div class="selection-card" data-mode="type" id="smart-mode-type">
+                  <span class="selection-card-title">Luyện Gõ Tự Chấm Điểm ✍️</span>
+                  <span class="selection-card-subtitle">Được gõ trực tiếp chữ Hán hoặc dịch nghĩa Việt để kiểm tra</span>
+                  <i class="fa-solid fa-circle-check check-badge"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 4: Chọn phạm vi ôn tập -->
+            <div class="config-step-section">
+              <h3 class="step-title">4. CHỌN PHẠM VI ÔN TẬP (CÓ THỂ TÁCH HOẶC CHỌN NHIỀU BÀI HỌC)</h3>
+              <div class="range-selection-row">
+                <div class="selection-card active" data-range="all" id="smart-range-all-card">
+                  <span class="selection-card-title" id="smart-range-all-title">Toàn bộ từ vựng cấp HSK 1</span>
+                  <span class="selection-card-subtitle">Tự động gộp tất cả từ vựng trong tất cả các bài của cấp học này</span>
+                  <i class="fa-solid fa-circle-check check-badge"></i>
+                </div>
+                <div class="selection-card" data-range="custom" id="smart-range-custom-card">
+                  <span class="selection-card-title">Chọn học nhiều bài tùy biến</span>
+                  <span class="selection-card-subtitle">Tích chọn thủ công nhiều bài học chi tiết cụ thể bên dưới</span>
+                  <i class="fa-solid fa-circle-check check-badge"></i>
+                </div>
+              </div>
+
+              <!-- Custom deck list selection panel -->
+              <div class="smart-config-custom-picker" id="smart-custom-picker-container" style="margin-top: 18px;">
+                <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 12px; color: var(--text-primary);">
+                  Chọn bộ từ vựng / Sổ tay chi tiết:
+                </h4>
+                <div class="smart-custom-grid" id="smart-custom-decks-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px;">
+                  <!-- Dynamic decks populated by main.js (Wrong, Starred, Custom lists, HSK grids) -->
+                </div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- Category: Personal -->
-        <div class="deck-category-section">
-          <h3 class="deck-category-title"><i class="fa-solid fa-user-gear text-primary"></i> Cá nhân</h3>
-          <div class="deck-grid" id="personal-decks-grid">
-            <!-- Dynamically populated personal cards -->
-          </div>
-        </div>
-
-        <!-- Category: Free -->
-        <div class="deck-category-section">
-          <h3 class="deck-category-title"><i class="fa-solid fa-circle-check text-success"></i> Miễn phí</h3>
-          <div class="deck-grid" id="free-decks-grid">
-            <!-- Dynamically populated HSK 1-6 cards -->
-          </div>
-        </div>
-
-        <!-- Category: Premium -->
-        <div class="deck-category-section" style="margin-bottom: 24px;">
-          <h3 class="deck-category-title"><i class="fa-solid fa-crown text-warning"></i> Cao cấp</h3>
-          <div class="deck-grid" id="premium-decks-grid">
-            <!-- Premium cards (locked) -->
+          <!-- Start Action Button -->
+          <div class="config-action-container">
+            <button id="start-smart-study-btn" class="btn-start-smart">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> Bắt Đầu Ôn Tập Thẻ Từ Smart (Tất Cả Cấp Cứu)
+            </button>
           </div>
         </div>
       </div>
@@ -489,7 +598,273 @@
 
     <!-- Custom Cards Management Section -->
     <section id="custom-section" class="workspace-section">
-      <div class="custom-lists-container" style="display: grid; grid-template-columns: 280px 1fr; gap: 32px; align-items: start;">
+      <!-- Segmented Switcher for Dictionary tabs -->
+      <div class="dict-tab-container" style="display: flex; justify-content: center; margin-bottom: 32px;">
+        <div class="dict-segmented-control glass-panel" style="display: flex; padding: 4px; border-radius: 50px; gap: 4px; width: 100%; max-width: 700px; justify-content: space-between; border: 1px solid var(--border-glass);">
+          <button class="dict-tab-btn active" data-tab="search" style="flex: 1; border-radius: 50px; font-size: 0.9rem; padding: 10px 16px; border: none; cursor: pointer; transition: all var(--transition-fast); background: var(--accent-blue); color: white; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <i class="fa-solid fa-magnifying-glass"></i> Tra cứu nhanh
+          </button>
+          <button class="dict-tab-btn" data-tab="analyze" style="flex: 1; border-radius: 50px; font-size: 0.9rem; padding: 10px 16px; border: none; cursor: pointer; transition: all var(--transition-fast); background: transparent; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Dịch & Phân tích câu
+          </button>
+          <button class="dict-tab-btn" data-tab="tutor" style="flex: 1; border-radius: 50px; font-size: 0.9rem; padding: 10px 16px; border: none; cursor: pointer; transition: all var(--transition-fast); background: transparent; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <i class="fa-solid fa-user-tie"></i> Gia sư HONGTAI
+          </button>
+          <button class="dict-tab-btn" data-tab="notebook" style="flex: 1; border-radius: 50px; font-size: 0.9rem; padding: 10px 16px; border: none; cursor: pointer; transition: all var(--transition-fast); background: transparent; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <i class="fa-solid fa-folder"></i> Sổ tay cá nhân
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab View 1: Tra cứu nhanh (Search & Details side-by-side) -->
+      <div class="dict-tab-view active-view" id="dict-view-search" style="display: grid; grid-template-columns: 320px 1fr; gap: 32px; align-items: start;">
+        <!-- Left Side: Search & Popular list -->
+        <div class="glass-panel" style="padding: 24px; display: flex; flex-direction: column; gap: 16px; height: 550px;">
+          <h3 class="section-title" style="font-size: 1.15rem; margin-bottom: 4px; font-family: var(--font-display); font-weight: 700;">Tra cứu từ vựng</h3>
+          <div class="search-box" style="margin: 0; width: 100%;">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" id="dict-search-input" placeholder="Nhập chữ Hán, Pinyin, nghĩa..." style="width: 100%;">
+          </div>
+          <span style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); letter-spacing: 0.05em; text-transform: uppercase;">Từ vựng phổ biến</span>
+          
+          <!-- Scrollable list of words -->
+          <div id="dict-popular-list" style="flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 4px;">
+            <!-- Dynamically populated popular/filtered words list -->
+          </div>
+        </div>
+
+        <!-- Right Side: Details panel -->
+        <div class="glass-panel" id="dict-details-panel" style="padding: 32px; min-height: 550px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-sizing: border-box;">
+          <!-- Empty state -->
+          <div id="dict-details-empty" style="text-align: center; color: var(--text-muted);">
+            <i class="fa-solid fa-book-open" style="font-size: 3.5rem; color: rgba(255, 42, 95, 0.15); margin-bottom: 16px;"></i>
+            <p style="font-size: 0.95rem; line-height: 1.6; max-width: 320px; margin: 0 auto;">Vui lòng chọn hoặc tìm kiếm một từ vựng để bắt đầu hiển thị các chi tiết học thuật.</p>
+          </div>
+
+          <!-- Populated state -->
+          <div id="dict-details-content" style="display: none; width: 100%; text-align: left;">
+            <!-- Big word, Pinyin, play button, category, meaning -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border-glass); padding-bottom: 20px; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 16px;">
+                  <h2 id="dict-detail-word" style="font-family: var(--font-chinese); font-size: 3rem; margin: 0; color: var(--text-primary); line-height: 1.1;">我</h2>
+                  <span class="badge badge-level" id="dict-detail-level" style="margin: 0; font-size: 0.85rem; padding: 4px 10px;">HSK 1</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
+                  <span id="dict-detail-pinyin" style="font-family: var(--font-display); font-size: 1.3rem; color: var(--accent-teal); font-weight: 600;">wǒ</span>
+                  <button id="dict-detail-speak-btn" class="speak-btn circle-btn" style="width: 32px; height: 32px; font-size: 0.8rem; display: inline-flex; align-items: center; justify-content: center; background: rgba(59, 130, 246, 0.1); color: var(--accent-blue);" title="Phát âm"><i class="fa-solid fa-volume-high"></i></button>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+                <span id="dict-detail-category" class="badge badge-category" style="margin: 0; background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); font-weight: 700;">Đại từ</span>
+                <!-- Quick add to notebook dropdown selector -->
+                <div class="dict-quick-save-wrapper" style="position: relative;">
+                  <button id="dict-quick-save-btn" class="btn btn-outline btn-sm" style="font-size: 0.75rem; padding: 6px 12px; display: flex; align-items: center; gap: 6px; border-radius: 20px; border-color: var(--border-glass-hover);">
+                    <i class="fa-solid fa-folder-plus text-primary"></i> + Sổ tay
+                  </button>
+                  <div id="dict-quick-save-dropdown" class="glass-panel" style="display: none; position: absolute; right: 0; top: 110%; z-index: 100; min-width: 180px; padding: 8px; flex-direction: column; gap: 6px; background: var(--bg-card); border: 1px solid var(--border-glass); border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.3);">
+                    <!-- Dynamically rendered custom lists -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Meaning -->
+            <div style="margin-bottom: 24px;">
+              <h4 style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em;">Định nghĩa / Nghĩa tiếng Việt</h4>
+              <p id="dict-detail-meaning" style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin: 0;">tôi, tớ, tao, mình, bản thân...</p>
+            </div>
+
+            <!-- Example box -->
+            <div style="margin-bottom: 24px; background: rgba(0, 0, 0, 0.05); padding: 20px; border-radius: 12px; border-left: 4px solid var(--accent-teal);" id="dict-detail-example-box">
+              <h4 style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.05em;">Ví dụ minh họa</h4>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 10px;">
+                <span id="dict-detail-example-zh" style="font-family: var(--font-chinese); font-size: 1.3rem; font-weight: 600; color: var(--text-primary);">我是学生。</span>
+                <button id="dict-detail-speak-ex-btn" class="speak-example-btn" style="padding: 4px; background: transparent; border: none; color: var(--accent-blue); cursor: pointer;" title="Nghe câu ví dụ"><i class="fa-solid fa-volume-low"></i></button>
+              </div>
+              <p id="dict-detail-example-vi" style="font-size: 0.95rem; color: var(--text-secondary); margin: 0; text-transform: lowercase;">tôi là học sinh.</p>
+            </div>
+
+            <!-- Dynamic Chinese Stroke Writer & Speech Evaluator Section -->
+            <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 20px; margin-bottom: 24px;">
+              <!-- Left side: Hanzi Writer Canvas -->
+              <div class="glass-panel" style="padding: 16px; background: rgba(255,255,255,0.01); border-color: var(--border-glass); text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;">
+                <h5 style="align-self: flex-start; font-weight: 800; font-size: 0.8rem; color: var(--text-muted); margin: 0; display: flex; align-items: center; gap: 6px;"><i class="fa-solid fa-pen-nib text-primary"></i> Tập viết chữ Hán</h5>
+                <!-- Canvas target for Hanzi Writer -->
+                <div id="dict-stroke-writer-target" class="dict-stroke-writer-grid" style="width: 110px; height: 110px; border: 1px solid var(--border-glass); border-radius: 8px; background: rgba(255,255,255,0.02); display: flex; align-items: center; justify-content: center; position: relative;"></div>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap; justify-content: center;">
+                  <button id="dict-stroke-btn-animate" class="btn btn-secondary btn-sm" style="font-size: 0.7rem; padding: 4px 10px;">Chạy nét</button>
+                  <button id="dict-stroke-btn-quiz" class="btn btn-primary btn-sm" style="font-size: 0.7rem; padding: 4px 10px; background: var(--accent-blue); color: white;">Luyện viết</button>
+                  <button id="dict-stroke-btn-clear" class="btn btn-outline btn-sm" style="font-size: 0.7rem; padding: 4px 10px; display: none;">Xóa</button>
+                </div>
+              </div>
+
+              <!-- Right side: AI Speech Recognition Grader -->
+              <div class="glass-panel" style="padding: 16px; background: rgba(255,255,255,0.01); border-color: var(--border-glass); display: flex; flex-direction: column; justify-content: space-between; gap: 12px;">
+                <h5 style="font-weight: 800; font-size: 0.8rem; color: var(--text-muted); margin: 0; display: flex; align-items: center; gap: 6px;"><i class="fa-solid fa-microphone text-success"></i> Chấm điểm phát âm AI</h5>
+                <div style="display: flex; align-items: center; gap: 16px; margin: 10px 0;">
+                  <button id="dict-speech-mic-btn" class="speak-btn circle-btn" style="width: 50px; height: 50px; background: rgba(16, 185, 129, 0.1); color: var(--success); font-size: 1.3rem; flex-shrink: 0;" title="Nhấn để luyện đọc">
+                    <i class="fa-solid fa-microphone"></i>
+                  </button>
+                  <div style="flex-grow: 1;">
+                    <div id="dict-speech-status" style="font-size: 0.82rem; color: var(--text-secondary); font-weight: 600;">Nhấp vào Micro để bắt đầu luyện đọc từ này...</div>
+                    <div id="dict-speech-result" style="font-size: 0.75rem; color: var(--text-muted); font-style: italic; margin-top: 4px; display: none;">"Đang nghe..."</div>
+                  </div>
+                </div>
+                <!-- Accuracy grade badge -->
+                <div id="dict-speech-score-wrap" style="display: none; align-items: center; gap: 8px; background: rgba(16, 185, 129, 0.05); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.15);">
+                  <span style="font-size: 0.8rem; font-weight: 700; color: var(--success);">Độ chính xác:</span>
+                  <span id="dict-speech-score" style="font-size: 1rem; font-weight: 800; color: var(--success);">95%</span>
+                  <i class="fa-solid fa-circle-check text-success" style="margin-left: auto;"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cool academic AI expansion -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;" id="dict-detail-ai-expanded-info">
+              <!-- Character decomposition -->
+              <div class="glass-panel" style="padding: 16px; background: rgba(255,255,255,0.02); border-color: var(--border-glass);">
+                <h5 style="font-weight: 800; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;"><i class="fa-solid fa-microscope text-primary"></i> Giải phẫu chữ Hán</h5>
+                <p id="dict-detail-decomposition" style="font-size: 0.85rem; line-height: 1.5; color: var(--text-secondary); margin: 0;">Chữ đơn giản không thể phân tách sâu hơn. Thuộc bộ Thủ "Qua" (戈) - vũ khí cổ xưa, biểu thị bản ngã bảo vệ cá nhân.</p>
+              </div>
+              <!-- Memory tips -->
+              <div class="glass-panel" style="padding: 16px; background: rgba(255,255,255,0.02); border-color: var(--border-glass);">
+                <h5 style="font-weight: 800; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;"><i class="fa-solid fa-lightbulb text-warning"></i> Mẹo nhớ nhanh (AI)</h5>
+                <p id="dict-detail-mnemonics" style="font-size: 0.85rem; line-height: 1.5; color: var(--text-secondary); margin: 0;">Hình ảnh một người cầm vũ khí (戈) bảo vệ quyền lợi của bản thân chính là "Tôi" (我).</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab View 2: Dịch & Phân tích câu (AI Breakdown tool) -->
+      <div class="dict-tab-view" id="dict-view-analyze" style="display: none; max-width: 800px; margin: 0 auto;">
+        <div class="glass-panel" style="padding: 32px; display: flex; flex-direction: column; gap: 20px;">
+          <div style="text-align: center; margin-bottom: 12px;">
+            <h3 class="section-title" style="font-size: 1.5rem; margin-bottom: 8px; font-family: var(--font-display); font-weight: 700;"><i class="fa-solid fa-wand-magic-sparkles text-primary"></i> AI Phân Tích Cấu Trúc Câu</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0;">Nhập câu tiếng Trung bất kỳ, AI sẽ phân tích từ vựng, ngữ pháp và dịch nghĩa chi tiết cho bạn.</p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <textarea id="dict-analyze-input" rows="3" placeholder="Nhập câu tiếng Trung cần phân tích (ví dụ: 我非常喜欢学习汉语)..." style="width: 100%; padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-glass); background: rgba(0,0,0,0.15); color: var(--text-primary); font-size: 1.1rem; outline: none; resize: none; font-family: var(--font-chinese); box-sizing: border-box;"></textarea>
+          </div>
+
+          <button id="dict-analyze-btn" class="btn btn-primary" style="background: var(--accent-blue); font-weight: 700; padding: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 1rem; border-radius: var(--radius-md); cursor: pointer; border: none; color: white;">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Bắt đầu phân tích bằng AI
+          </button>
+
+          <!-- Loader -->
+          <div id="dict-analyze-loader" style="display: none; text-align: center; padding: 24px;">
+            <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 2rem; color: var(--accent-blue); margin-bottom: 12px;"></i>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0;">Trí tuệ nhân tạo HONGTAI đang bóc tách và phân tích câu của bạn...</p>
+          </div>
+
+          <!-- Analyze Results -->
+          <div id="dict-analyze-results" style="display: none; flex-direction: column; gap: 24px; border-top: 1px solid var(--border-glass); padding-top: 24px; text-align: left;">
+            <!-- Literal translation -->
+            <div>
+              <h4 style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em;">Bản dịch tiếng Việt</h4>
+              <p id="dict-analyze-result-translation" style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin: 0;"></p>
+            </div>
+            <!-- Grammar list -->
+            <div>
+              <h4 style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.05em;">Cấu trúc ngữ pháp trọng điểm</h4>
+              <div id="dict-analyze-result-grammar" style="display: flex; flex-direction: column; gap: 10px;">
+                <!-- Dynamically populated grammar details -->
+              </div>
+            </div>
+            <!-- Words list -->
+            <div>
+              <h4 style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.05em;">Phân tách từ vựng trong câu</h4>
+              <div style="overflow-x: auto;">
+                <table class="stats-table" style="width: 100%; border-collapse: collapse; font-size: 0.9rem; min-width: 500px; text-align: left;">
+                  <thead>
+                    <tr style="border-bottom: 1.5px solid var(--border-glass); color: var(--text-muted);">
+                      <th style="padding: 10px;">Từ vựng</th>
+                      <th style="padding: 10px;">Pinyin</th>
+                      <th style="padding: 10px;">Từ loại</th>
+                      <th style="padding: 10px;">Ý nghĩa</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dict-analyze-result-words">
+                    <!-- Populated word breakdown -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab View 3: Gia sư HONGTAI (Essay Corrector & AI Guide) -->
+      <div class="dict-tab-view" id="dict-view-tutor" style="display: none; max-width: 800px; margin: 0 auto;">
+        <div class="glass-panel" style="padding: 32px; display: flex; flex-direction: column; gap: 20px;">
+          <div style="text-align: center; margin-bottom: 12px;">
+            <h3 class="section-title" style="font-size: 1.5rem; margin-bottom: 8px; font-family: var(--font-display); font-weight: 700;"><i class="fa-solid fa-user-tie text-primary"></i> Trợ Lý Gia Sư Sửa Bài Viết</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0;">Soạn thảo đoạn văn chữ Hán của bạn, AI sẽ phát hiện các lỗi sai ngữ pháp, sửa lại và cung cấp gợi ý từ đồng nghĩa sang xịn mịn hơn.</p>
+          </div>
+
+          <!-- Suggested writing prompts -->
+          <div style="display: flex; flex-direction: column; gap: 8px; text-align: left; margin-bottom: 8px;">
+            <span style="font-size: 0.78rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Đề bài & Chủ đề gợi ý luyện viết</span>
+            <div id="dict-tutor-prompts-container" style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <!-- Populated dynamically via JS -->
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <textarea id="dict-tutor-input" rows="4" placeholder="Nhập đoạn văn/bài viết tiếng Trung bạn vừa soạn thảo để nhờ Gia sư chấm sửa..." style="width: 100%; padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-glass); background: rgba(0,0,0,0.15); color: var(--text-primary); font-size: 1.05rem; outline: none; resize: none; font-family: var(--font-chinese); box-sizing: border-box;"></textarea>
+          </div>
+
+          <button id="dict-tutor-btn" class="btn btn-primary" style="background: var(--accent-blue); font-weight: 700; padding: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 1rem; border-radius: var(--radius-md); cursor: pointer; border: none; color: white;">
+            <i class="fa-solid fa-user-tie"></i> Chấm bài & Sửa lỗi ngữ pháp
+          </button>
+
+          <!-- Loader -->
+          <div id="dict-tutor-loader" style="display: none; text-align: center; padding: 24px;">
+            <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 2rem; color: var(--accent-blue); margin-bottom: 12px;"></i>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0;">Gia sư AI HONGTAI đang đọc kỹ, chấm điểm và sửa lỗi chính tả, ngữ pháp bài viết của bạn...</p>
+          </div>
+
+          <!-- Tutor Results -->
+          <div id="dict-tutor-results" style="display: none; flex-direction: column; gap: 24px; border-top: 1px solid var(--border-glass); padding-top: 24px; text-align: left;">
+            <!-- Score & Review -->
+            <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+              <div style="width: 80px; height: 80px; border-radius: 50%; background: rgba(16, 185, 129, 0.1); border: 2px solid var(--success); color: var(--success); display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;">
+                <span style="font-size: 1.8rem; font-weight: 800; line-height: 1.1;" id="dict-tutor-score">A</span>
+                <span style="font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Điểm số</span>
+              </div>
+              <div style="flex: 1; min-width: 250px;">
+                <h4 style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.05em;">Đánh giá tổng quan</h4>
+                <p id="dict-tutor-comment" style="font-size: 0.95rem; color: var(--text-primary); margin: 0; line-height: 1.5;"></p>
+              </div>
+            </div>
+
+            <!-- Correction Box -->
+            <div class="grid-layout" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+              <div class="glass-panel" style="padding: 16px; border-color: rgba(239, 68, 68, 0.15); background: rgba(239, 68, 68, 0.02); text-align: left;">
+                <h5 style="color: var(--danger); font-weight: 800; font-size: 0.8rem; margin-bottom: 8px; margin-top: 0; display: flex; align-items: center; gap: 6px;"><i class="fa-solid fa-circle-xmark"></i> Bài viết ban đầu</h5>
+                <p id="dict-tutor-original-text" style="font-size: 0.95rem; line-height: 1.6; color: var(--text-secondary); margin: 0; font-family: var(--font-chinese);"></p>
+              </div>
+              <div class="glass-panel" style="padding: 16px; border-color: rgba(16, 185, 129, 0.15); background: rgba(16, 185, 129, 0.02); text-align: left;">
+                <h5 style="color: var(--success); font-weight: 800; font-size: 0.8rem; margin-bottom: 8px; margin-top: 0; display: flex; align-items: center; gap: 6px;"><i class="fa-solid fa-circle-check"></i> Bản sửa lỗi hoàn chỉnh</h5>
+                <p id="dict-tutor-corrected-text" style="font-size: 0.95rem; line-height: 1.6; color: var(--text-primary); margin: 0; font-family: var(--font-chinese); font-weight: 600;"></p>
+              </div>
+            </div>
+
+            <!-- Explanations -->
+            <div>
+              <h4 style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em;">Chi tiết lỗi ngữ pháp & Gợi ý cải tiến</h4>
+              <div id="dict-tutor-grammar-corrections" style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- Populated grammar details -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- original notebook container layout -->
+      <div class="custom-lists-container dict-tab-view" id="dict-view-notebook" style="display: none; grid-template-columns: 280px 1fr; gap: 32px; align-items: start;">
         <!-- Left Column: Lists Sidebar -->
         <div class="glass-panel" style="padding: 24px; display: flex; flex-direction: column; gap: 20px;">
           <div class="panel-header" style="margin-bottom: 0;">
@@ -604,6 +979,50 @@
 
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- Dedicated Lessons Tab Section -->
+    <section id="lessons-section" class="workspace-section" style="display: none;">
+      <!-- Curriculum Selection Banner Row -->
+      <div class="lessons-top-banner">
+        <span class="lessons-cap-title">GIÁ TRÌNH CHỦ CHỐT:</span>
+        <div class="lessons-curriculum-pills">
+          <button class="lessons-pill-btn active" id="lessons-curriculum-hsk-btn">Học HSK (Người lớn)</button>
+          <button class="lessons-pill-btn" id="lessons-curriculum-yct-btn">Học YCT (Trẻ em)</button>
+        </div>
+      </div>
+
+      <!-- Main Curriculum Header Card -->
+      <div class="lessons-header-card">
+        <div class="lessons-header-info">
+          <div style="display: flex; gap: 14px; align-items: flex-start;">
+            <div class="lessons-book-icon-wrapper">
+              <i class="fa-solid fa-book-open"></i>
+            </div>
+            <div>
+              <h2 class="lessons-header-title" id="lessons-header-title-val">Giáo trình chuẩn HSK</h2>
+              <p class="lessons-header-subtitle">Ghép nối kiến thức, luyện phát âm và ngữ pháp cùng giải pháp học tập AI đỉnh cao từ Tiếng Trung HONGTAI.</p>
+            </div>
+          </div>
+        </div>
+        <!-- Right selection pills (HSK 1, 2, 3) -->
+        <div class="lessons-level-pills" id="lessons-level-pills-container">
+          <button class="lessons-level-btn active" data-level="1">Cấp HSK 1</button>
+          <button class="lessons-level-btn" data-level="2">Cấp HSK 2</button>
+          <button class="lessons-level-btn" data-level="3">Cấp HSK 3</button>
+        </div>
+      </div>
+
+      <!-- Objectives Bar -->
+      <div class="lessons-objectives-bar">
+        <i class="fa-solid fa-circle-info info-icon"></i>
+        <span id="lessons-objectives-text">Mục tiêu: Sơ cấp dành cho người mới bắt đầu (150 từ vựng cơ bản)</span>
+      </div>
+
+      <!-- Lessons Cards Grid -->
+      <div class="lessons-grid" id="lessons-cards-grid">
+        <!-- Dynamically populated lessons cards -->
       </div>
     </section>
 
@@ -887,7 +1306,32 @@
     </div>
   </div>
 
+  <!-- Sticky Bottom Navigation Bar -->
+  <div class="bottom-nav-bar" id="bottom-nav-bar">
+    <div class="bottom-nav-item active" data-tab="home" id="bottom-nav-home">
+      <i class="fa-solid fa-house"></i>
+      <span>Trang chủ</span>
+    </div>
+    <div class="bottom-nav-item" data-tab="lessons" id="bottom-nav-lessons">
+      <i class="fa-solid fa-book-open"></i>
+      <span>Bài học</span>
+    </div>
+    <div class="bottom-nav-item" data-tab="exams" id="bottom-nav-exams">
+      <i class="fa-solid fa-graduation-cap"></i>
+      <span>Luyện đề HSK</span>
+    </div>
+    <div class="bottom-nav-item" data-tab="flashcards" id="bottom-nav-flashcards">
+      <i class="fa-solid fa-clone"></i>
+      <span>Flashcards</span>
+    </div>
+    <div class="bottom-nav-item" data-tab="dictionary" id="bottom-nav-dictionary">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <span>Từ điển AI</span>
+    </div>
+  </div>
+
   <!-- App Main Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
   <script type="module" src="/src/main.js"></script>
 </body>
 </html>

@@ -24,6 +24,8 @@ let isTypingAnswerFinished = false; // Whether current card has finished evaluat
 let activeCustomList = 'Mặc định'; // Active custom list selected in sidebar
 let customLists = ['Mặc định'];  // List of custom named lists
 let studyCustomCategory = null; // Filter for active custom list being studied
+let smartSelectedSubDeck = 'hsk-1'; // Currently selected sub-deck in smart range custom selector
+let smartSelectedRange = 'all';     // 'all' or 'custom'
 
 // --- DOM ELEMENTS CACHE ---
 const cardElement = document.getElementById('flashcard-card');
@@ -80,7 +82,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initAuth();
   setupEventListeners();
   initExams();
+  initLessonsView();
+  initDictionaryView();
   initChatbot();
+  showHomeView();
 });
 
 // --- THEME MANAGEMENT ---
@@ -586,162 +591,90 @@ function updateStats() {
 }
 
 function renderDeckSelectionView() {
-  const reviewCountEl = document.getElementById('review-banner-count');
-  const personalGrid = document.getElementById('personal-decks-grid');
-  const freeGrid = document.getElementById('free-decks-grid');
-  const premiumGrid = document.getElementById('premium-decks-grid');
+  const customGrid = document.getElementById('smart-custom-decks-grid');
+  if (!customGrid) return;
 
-  if (!personalGrid || !freeGrid || !premiumGrid) return;
+  customGrid.innerHTML = '';
 
-  // Calculate unmemorized count for the review banner
-  const unmemorizedCount = vocabList.filter(w => !w.isMemorized).length;
-  if (reviewCountEl) {
-    reviewCountEl.textContent = `+${unmemorizedCount}`;
-  }
-
-  // --- 1. RENDER PERSONAL DECKS ---
-  personalGrid.innerHTML = '';
-  
-  // A. Wrong Words Deck
+  // 1. Sổ tay từ làm sai
   const wrongWords = vocabList.filter(w => w.isWrong);
   const wrongCount = wrongWords.length;
   const wrongCard = document.createElement('div');
-  wrongCard.className = 'deck-card personal-wrong';
+  wrongCard.className = `smart-mini-deck-card ${smartSelectedSubDeck === 'wrong' ? 'active' : ''}`;
+  wrongCard.setAttribute('data-id', 'wrong');
   wrongCard.innerHTML = `
-    <div class="deck-card-glow"></div>
-    <div class="deck-card-top">
-      <h4 class="deck-card-title">Sổ tay từ làm sai <i class="fa-solid fa-circle-exclamation text-danger"></i></h4>
-      <p class="deck-card-subtitle">${wrongCount} từ vựng trả lời sai</p>
-    </div>
-    <div class="deck-card-bottom">
-      <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;">Bấm ôn tập nhanh</span>
-    </div>
+    <span class="smart-mini-deck-title"><i class="fa-solid fa-circle-exclamation text-danger" style="margin-right: 6px;"></i> Từ học sai</span>
+    <span class="smart-mini-deck-count">${wrongCount} từ</span>
   `;
   wrongCard.addEventListener('click', () => {
-    startStudySession('wrong', 'all', 'Sổ tay từ làm sai', 'Ôn tập các từ vựng bạn đã trả lời sai');
+    selectSmartSubDeck('wrong');
   });
-  personalGrid.appendChild(wrongCard);
+  customGrid.appendChild(wrongCard);
 
-  // B. Starred Words Deck
+  // 2. Từ vựng yêu thích
   const starredWords = vocabList.filter(w => w.isStarred);
   const starredCount = starredWords.length;
   const starredCard = document.createElement('div');
-  starredCard.className = 'deck-card personal-starred';
+  starredCard.className = `smart-mini-deck-card ${smartSelectedSubDeck === 'starred' ? 'active' : ''}`;
+  starredCard.setAttribute('data-id', 'starred');
   starredCard.innerHTML = `
-    <div class="deck-card-glow"></div>
-    <div class="deck-card-top">
-      <h4 class="deck-card-title">Từ vựng yêu thích <i class="fa-solid fa-star text-warning"></i></h4>
-      <p class="deck-card-subtitle">${starredCount} từ vựng đánh dấu sao</p>
-    </div>
-    <div class="deck-card-bottom">
-      <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;">Bấm để học bộ này</span>
-    </div>
+    <span class="smart-mini-deck-title"><i class="fa-solid fa-star text-warning" style="margin-right: 6px;"></i> Yêu thích</span>
+    <span class="smart-mini-deck-count">${starredCount} từ</span>
   `;
   starredCard.addEventListener('click', () => {
-    startStudySession('starred', 'all', 'Thẻ Yêu Thích', 'Học các từ vựng được đánh dấu sao yêu thích');
+    selectSmartSubDeck('starred');
   });
-  personalGrid.appendChild(starredCard);
+  customGrid.appendChild(starredCard);
 
-  // C. Custom / Personal Decks
+  // 3. Custom / Personal Lists
   customLists.forEach(listName => {
     const listWords = vocabList.filter(w => w.isCustom && w.category === listName);
     const listCount = listWords.length;
-    const listMemorized = listWords.filter(w => w.isMemorized).length;
-    const listPercent = listCount > 0 ? Math.round((listMemorized / listCount) * 100) : 0;
-
     const listCard = document.createElement('div');
-    listCard.className = 'deck-card personal-custom';
+    const subDeckId = `custom:${listName}`;
+    listCard.className = `smart-mini-deck-card ${smartSelectedSubDeck === subDeckId ? 'active' : ''}`;
+    listCard.setAttribute('data-id', subDeckId);
     listCard.innerHTML = `
-      <div class="deck-card-glow"></div>
-      <div class="deck-card-top">
-        <h4 class="deck-card-title">${listName} <i class="fa-solid fa-pen-to-square text-success"></i></h4>
-        <p class="deck-card-subtitle">${listCount} từ tự biên soạn</p>
-      </div>
-      <div class="deck-card-bottom">
-        <div class="deck-progress-container">
-          <div class="deck-progress-bar-bg">
-            <div class="deck-progress-bar-fill" style="width: ${listPercent}%;"></div>
-          </div>
-          <div class="deck-progress-labels">
-            <span>Tiến độ</span>
-            <span>${listPercent}% (${listMemorized}/${listCount})</span>
-          </div>
-        </div>
-      </div>
+      <span class="smart-mini-deck-title"><i class="fa-solid fa-folder text-primary" style="margin-right: 6px;"></i> ${listName}</span>
+      <span class="smart-mini-deck-count">${listCount} từ</span>
     `;
     listCard.addEventListener('click', () => {
-      studyCustomCategory = listName;
-      startStudySession('custom', 'all', `Sổ tay: ${listName}`, `Đang học danh sách tự biên soạn: ${listName}`);
+      selectSmartSubDeck(subDeckId);
     });
-    personalGrid.appendChild(listCard);
+    customGrid.appendChild(listCard);
   });
 
-  // --- 2. RENDER FREE HSK DECKS ---
-  freeGrid.innerHTML = '';
+  // 4. Free HSK Levels
   for (let lvl = 1; lvl <= 6; lvl++) {
     const lvlWords = vocabList.filter(w => !w.isCustom && w.level === lvl);
     const total = lvlWords.length;
-    const memorized = lvlWords.filter(w => w.isMemorized).length;
-    const percent = total > 0 ? Math.round((memorized / total) * 100) : 0;
-
-    const deckCard = document.createElement('div');
-    deckCard.className = `deck-card hsk-${lvl}`;
-    deckCard.innerHTML = `
-      <div class="deck-card-glow"></div>
-      <div class="deck-card-top">
-        <h4 class="deck-card-title">Từ vựng HSK ${lvl} <span style="font-size: 0.75rem; color: var(--text-muted);">Cấp ${lvl}</span></h4>
-        <p class="deck-card-subtitle">${total} từ vựng cốt lõi</p>
-      </div>
-      <div class="deck-card-bottom">
-        <div class="deck-progress-container">
-          <div class="deck-progress-bar-bg">
-            <div class="deck-progress-bar-fill" style="width: ${percent}%;"></div>
-          </div>
-          <div class="deck-progress-labels">
-            <span>Tiến độ</span>
-            <span>${percent}% (${memorized}/${total})</span>
-          </div>
-        </div>
-      </div>
+    const subDeckId = `hsk-${lvl}`;
+    const levelCard = document.createElement('div');
+    levelCard.className = `smart-mini-deck-card ${smartSelectedSubDeck === subDeckId ? 'active' : ''}`;
+    levelCard.setAttribute('data-id', subDeckId);
+    levelCard.innerHTML = `
+      <span class="smart-mini-deck-title"><i class="fa-solid fa-circle-check text-success" style="margin-right: 6px;"></i> HSK Cấp ${lvl}</span>
+      <span class="smart-mini-deck-count">${total} từ</span>
     `;
-    deckCard.addEventListener('click', () => {
-      startStudySession('unmemorized', lvl.toString(), `Học Từ Vựng HSK ${lvl}`, `Luyện ôn tập từ vựng chuẩn HSK Cấp ${lvl}`);
+    levelCard.addEventListener('click', () => {
+      selectSmartSubDeck(subDeckId);
     });
-    freeGrid.appendChild(deckCard);
+    customGrid.appendChild(levelCard);
   }
+}
 
-  // --- 3. RENDER PREMIUM DECKS ---
-  premiumGrid.innerHTML = '';
-  const premiumDecks = [
-    { title: 'Lượng từ', subtitle: 'Hơn 120 lượng từ phổ biến', tag: 'Mới' },
-    { title: 'Bưu điện', subtitle: 'Từ vựng hội thoại bưu điện', tag: 'Mới' },
-    { title: 'Chụp ảnh', subtitle: 'Thuật ngữ ngành nhiếp ảnh', tag: 'Mới' },
-    { title: 'Kinh doanh', subtitle: 'Tiếng Trung thương mại cơ bản', tag: '' },
-    { title: 'Du lịch', subtitle: 'Tiếng Trung giao tiếp du lịch', tag: '' }
-  ];
-
-  premiumDecks.forEach(deck => {
-    const card = document.createElement('div');
-    card.className = 'deck-card premium-locked';
-    const tagHtml = deck.tag ? `<span class="deck-new-badge">${deck.tag}</span>` : '';
-    card.innerHTML = `
-      <div class="deck-card-glow"></div>
-      <div class="deck-card-top">
-        <h4 class="deck-card-title">${deck.title} <span class="deck-lock-badge"><i class="fa-solid fa-lock"></i> VIP</span></h4>
-        <p class="deck-card-subtitle">${deck.subtitle}</p>
-      </div>
-      <div class="deck-card-bottom">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;">Bộ từ nâng cao</span>
-          ${tagHtml}
-        </div>
-      </div>
-    `;
-    card.addEventListener('click', () => {
-      showToast('Tính năng này dành cho tài khoản VIP Premium! 💎 Vui lòng nâng cấp để mở khóa bộ từ vựng.', true);
+function selectSmartSubDeck(subDeckId) {
+  smartSelectedSubDeck = subDeckId;
+  const customGrid = document.getElementById('smart-custom-decks-grid');
+  if (customGrid) {
+    customGrid.querySelectorAll('.smart-mini-deck-card').forEach(card => {
+      if (card.getAttribute('data-id') === subDeckId) {
+        card.classList.add('active');
+      } else {
+        card.classList.remove('active');
+      }
     });
-    premiumGrid.appendChild(card);
-  });
+  }
 }
 
 function startStudySession(status, level, title, desc) {
@@ -1207,6 +1140,161 @@ function showToast(message, isError = false) {
 
 // --- EVENT LISTENERS ---
 function setupEventListeners() {
+
+  // Bottom Navigation Bar Switcher
+  document.querySelectorAll('.bottom-nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const tabId = item.getAttribute('data-tab');
+      switchTab(tabId);
+    });
+  });
+
+  // Smart Configuration View Events
+  // 1. Step 1 Curriculum selector
+  const curriculumHsk = document.getElementById('smart-curriculum-hsk');
+  const curriculumYct = document.getElementById('smart-curriculum-yct');
+  let activeCurriculum = 'hsk';
+
+  if (curriculumHsk && curriculumYct) {
+    curriculumHsk.addEventListener('click', () => {
+      activeCurriculum = 'hsk';
+      curriculumHsk.classList.add('active');
+      curriculumYct.classList.remove('active');
+    });
+
+    curriculumYct.addEventListener('click', () => {
+      showToast('Nội dung giáo trình YCT đang được biên soạn! Vui lòng ôn tập HSK.', false);
+      activeCurriculum = 'yct';
+      curriculumYct.classList.add('active');
+      curriculumHsk.classList.remove('active');
+    });
+  }
+
+  // 2. Step 2 Level pills
+  const levelRow = document.getElementById('smart-level-row');
+  if (levelRow) {
+    levelRow.addEventListener('click', (e) => {
+      const pill = e.target.closest('.level-pill');
+      if (!pill) return;
+
+      levelRow.querySelectorAll('.level-pill').forEach(btn => btn.classList.remove('active'));
+      pill.classList.add('active');
+      activeLevel = pill.getAttribute('data-level');
+
+      // Update Step 4 range title
+      const rangeTitle = document.getElementById('smart-range-all-title');
+      if (rangeTitle) {
+        rangeTitle.textContent = `Toàn bộ từ vựng cấp HSK ${activeLevel}`;
+      }
+    });
+  }
+
+  // 3. Step 3 Mode selector
+  const modeFlip = document.getElementById('smart-mode-flip');
+  const modeType = document.getElementById('smart-mode-type');
+  if (modeFlip && modeType) {
+    modeFlip.addEventListener('click', () => {
+      studyMode = 'flip';
+      modeFlip.classList.add('active');
+      modeType.classList.remove('active');
+    });
+
+    modeType.addEventListener('click', () => {
+      studyMode = 'type';
+      modeType.classList.add('active');
+      modeFlip.classList.remove('active');
+    });
+  }
+
+  // 4. Step 4 Range selector
+  const rangeAllCard = document.getElementById('smart-range-all-card');
+  const rangeCustomCard = document.getElementById('smart-range-custom-card');
+  const customPickerContainer = document.getElementById('smart-custom-picker-container');
+
+  if (rangeAllCard && rangeCustomCard) {
+    rangeAllCard.addEventListener('click', () => {
+      smartSelectedRange = 'all';
+      rangeAllCard.classList.add('active');
+      rangeCustomCard.classList.remove('active');
+      if (customPickerContainer) customPickerContainer.style.display = 'none';
+    });
+
+    rangeCustomCard.addEventListener('click', () => {
+      smartSelectedRange = 'custom';
+      rangeCustomCard.classList.add('active');
+      rangeAllCard.classList.remove('active');
+      if (customPickerContainer) customPickerContainer.style.display = 'block';
+    });
+  }
+
+  // 5. Smart Study Start Button
+  const startSmartBtn = document.getElementById('start-smart-study-btn');
+  if (startSmartBtn) {
+    startSmartBtn.addEventListener('click', () => {
+      if (activeCurriculum === 'yct') {
+        showToast('Giáo trình YCT đang được biên soạn! Vui lòng ôn tập giáo trình HSK.', true);
+        return;
+      }
+
+      setStudyMode(studyMode);
+
+      if (smartSelectedRange === 'all') {
+        startStudySession('unmemorized', activeLevel, `Học Từ Vựng HSK ${activeLevel}`, `Luyện ôn tập từ vựng chuẩn HSK Cấp ${activeLevel}`);
+      } else {
+        // Custom sub-deck selection
+        if (smartSelectedSubDeck === 'wrong') {
+          studyCustomCategory = null;
+          startStudySession('wrong', 'all', 'Sổ tay từ làm sai', 'Ôn tập các từ vựng bạn đã trả lời sai');
+        } else if (smartSelectedSubDeck === 'starred') {
+          studyCustomCategory = null;
+          startStudySession('starred', 'all', 'Thẻ Yêu Thích', 'Học các từ vựng được đánh dấu sao yêu thích');
+        } else if (smartSelectedSubDeck.startsWith('custom:')) {
+          const listName = smartSelectedSubDeck.substring(7); // remove "custom:" prefix
+          studyCustomCategory = listName;
+          startStudySession('custom', 'all', `Sổ tay: ${listName}`, `Đang học danh sách tự biên soạn: ${listName}`);
+        } else if (smartSelectedSubDeck.startsWith('hsk-')) {
+          const lvl = smartSelectedSubDeck.substring(4); // remove "hsk-" prefix
+          studyCustomCategory = null;
+          startStudySession('unmemorized', lvl, `Học Từ Vựng HSK ${lvl}`, `Luyện ôn tập từ vựng chuẩn HSK Cấp ${lvl}`);
+        }
+      }
+    });
+  }
+
+  // Curriculum Cards Interaction
+  const hskCard = document.getElementById('curriculum-hsk-card');
+  if (hskCard) {
+    hskCard.addEventListener('click', () => {
+      switchTab('lessons');
+      // Go to level selection or auto select HSK level
+      document.getElementById('exam-level-selection').style.display = 'block';
+      document.getElementById('exam-papers-list').style.display = 'none';
+    });
+  }
+
+  const yctCard = document.getElementById('curriculum-yct-card');
+  if (yctCard) {
+    yctCard.addEventListener('click', () => {
+      showToast('Nội dung giáo trình YCT đang được biên soạn! Vui lòng quay lại sau.', false);
+    });
+  }
+
+  // Welcome Banner Actions
+  const bannerStartBtn = document.getElementById('banner-start-study-btn');
+  if (bannerStartBtn) {
+    bannerStartBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchTab('lessons');
+    });
+  }
+
+  const bannerDictBtn = document.getElementById('banner-dictionary-btn');
+  if (bannerDictBtn) {
+    bannerDictBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchTab('dictionary');
+    });
+  }
 
   // Back to Decks button click
   const backToDecksBtn = document.getElementById('back-to-decks-btn');
@@ -2050,39 +2138,107 @@ function generateExam(level, setNumber) {
   return questions;
 }
 
-function showHomeView() {
-  const hero = document.querySelector('.hero-banner');
-  if (hero) hero.style.display = 'block';
-
-  document.getElementById('flashcard-section').style.display = 'block';
-  document.getElementById('custom-section').style.display = 'block';
-  document.getElementById('hsk-exams-section').style.display = 'none';
-
-  document.getElementById('nav-home-btn').classList.add('active');
-  document.getElementById('nav-exams-btn').classList.remove('active');
-
-  // Stop autoplay if user navigated home
+function switchTab(tabId) {
+  // Stop flashcard autoplay
   stopAutoplay();
+
+  // 1. Update active states in bottom navigation bar
+  document.querySelectorAll('.bottom-nav-item').forEach(item => {
+    if (item.getAttribute('data-tab') === tabId) {
+      item.classList.add('active');
+    } else {
+      item.classList.remove('active');
+    }
+  });
+
+  // 2. Hide/Show main content blocks based on selected tab
+  const homeViewSec = document.getElementById('home-view-section');
+  const flashcardSec = document.getElementById('flashcard-section');
+  const customSec = document.getElementById('custom-section');
+  const examsSec = document.getElementById('hsk-exams-section');
+  const lessonsSec = document.getElementById('lessons-section');
+
+  // Helper function to set display
+  const setDisp = (el, val) => { if (el) el.style.display = val; };
+
+  if (tabId === 'home') {
+    // Show home page elements
+    setDisp(homeViewSec, 'block');
+
+    // Hide learning sections
+    setDisp(flashcardSec, 'none');
+    setDisp(customSec, 'none');
+    setDisp(examsSec, 'none');
+    setDisp(lessonsSec, 'none');
+  } 
+  else if (tabId === 'lessons') {
+    // Hide home elements
+    setDisp(homeViewSec, 'none');
+
+    // Show lessons section
+    setDisp(flashcardSec, 'none');
+    setDisp(customSec, 'none');
+    setDisp(examsSec, 'none');
+    setDisp(lessonsSec, 'block');
+
+    // Render lessons list
+    renderLessonsList();
+  } 
+  else if (tabId === 'exams') {
+    // Hide home elements
+    setDisp(homeViewSec, 'none');
+
+    // Show exams section
+    setDisp(flashcardSec, 'none');
+    setDisp(customSec, 'none');
+    setDisp(examsSec, 'block');
+    setDisp(lessonsSec, 'none');
+
+    // Ensure level selection is displayed first
+    setDisp(document.getElementById('exam-level-selection'), 'block');
+    setDisp(document.getElementById('exam-papers-list'), 'none');
+    setDisp(document.getElementById('exam-player'), 'none');
+    setDisp(document.getElementById('exam-result-view'), 'none');
+  }
+  else if (tabId === 'flashcards') {
+    // Hide home elements
+    setDisp(homeViewSec, 'none');
+
+    // Show flashcards section
+    setDisp(flashcardSec, 'block');
+    setDisp(customSec, 'none');
+    setDisp(examsSec, 'none');
+    setDisp(lessonsSec, 'none');
+  } 
+  else if (tabId === 'dictionary') {
+    // Hide home elements
+    setDisp(homeViewSec, 'none');
+
+    // Show custom/dictionary section
+    setDisp(flashcardSec, 'none');
+    setDisp(customSec, 'block');
+    setDisp(examsSec, 'none');
+    setDisp(lessonsSec, 'none');
+  }
+
+  // 3. Sync top navbar active state
+  const homeBtn = document.getElementById('nav-home-btn');
+  const flashcardsBtn = document.getElementById('nav-flashcards-btn');
+  const customBtn = document.getElementById('nav-custom-btn');
+  const examsBtn = document.getElementById('nav-exams-btn');
+
+  if (homeBtn) homeBtn.classList.toggle('active', tabId === 'home');
+  if (flashcardsBtn) flashcardsBtn.classList.toggle('active', tabId === 'flashcards');
+  if (customBtn) customBtn.classList.toggle('active', tabId === 'dictionary');
+  if (examsBtn) examsBtn.classList.toggle('active', tabId === 'lessons');
+}
+
+function showHomeView() {
+  switchTab('home');
 }
 
 function showExamsView() {
-  const hero = document.querySelector('.hero-banner');
-  if (hero) hero.style.display = 'none';
-
-  document.getElementById('flashcard-section').style.display = 'none';
-  document.getElementById('custom-section').style.display = 'none';
-  document.getElementById('hsk-exams-section').style.display = 'block';
-
-  document.getElementById('nav-home-btn').classList.remove('active');
-  document.getElementById('nav-exams-btn').classList.add('active');
-
-  document.getElementById('exam-level-selection').style.display = 'block';
-  document.getElementById('exam-papers-list').style.display = 'none';
-  document.getElementById('exam-player').style.display = 'none';
-  document.getElementById('exam-result-view').style.display = 'none';
-
-  // Stop flashcard autoplay
-  stopAutoplay();
+  switchTab('lessons');
 }
 
 function loadExamPapersList(level) {
@@ -2436,35 +2592,44 @@ function renderExamResults(correct, total, percentage, timeSpent, status) {
 
 function initExams() {
   const navHomeBtn = document.getElementById('nav-home-btn');
+  const navFlashcardsBtn = document.getElementById('nav-flashcards-btn');
+  const navCustomBtn = document.getElementById('nav-custom-btn');
   const navExamsBtn = document.getElementById('nav-exams-btn');
 
   if (navHomeBtn) {
     navHomeBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      showHomeView();
+      switchTab('home');
+    });
+  }
+
+  if (navFlashcardsBtn) {
+    navFlashcardsBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchTab('flashcards');
+    });
+  }
+
+  if (navCustomBtn) {
+    navCustomBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchTab('dictionary');
     });
   }
 
   if (navExamsBtn) {
     navExamsBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      showExamsView();
+      switchTab('lessons');
     });
   }
 
   const navBrand = document.querySelector('.nav-brand');
   if (navBrand) {
     navBrand.addEventListener('click', () => {
-      showHomeView();
+      switchTab('home');
     });
   }
-
-  const dropdownLinks = document.querySelectorAll('.dropdown-menu a');
-  dropdownLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      showHomeView();
-    });
-  });
 
   const levelCards = document.querySelectorAll('.level-card');
   levelCards.forEach(card => {
@@ -3032,6 +3197,12 @@ function initChatbot() {
   window.updateChatbotOnLogin = function() {
     if (newBtn) newBtn.style.display = 'flex';
     if (historyBtn) historyBtn.style.display = 'flex';
+    
+    // Attempt to reload active thread or populate chatbot widget with latest cached thread
+    activeThreadId = sessionStorage.getItem('hongtai_active_thread_id');
+    if (activeThreadId) {
+      loadActiveThread();
+    }
   };
 
   // Global callback to migrate guest chats when logged in
@@ -3111,13 +3282,36 @@ function initChatbot() {
         
         if (badge) badge.style.display = 'none';
         scrollChatToBottom();
+
+        // Cache messages for this thread
+        if (currentUser) {
+          localStorage.setItem('hongtai_thread_messages_cache_' + currentUser.email + '_' + activeThreadId, JSON.stringify(thread));
+        }
       } else {
-        // If thread has been deleted or is invalid, reset local state
-        sessionStorage.removeItem('hongtai_active_thread_id');
-        activeThreadId = null;
+        throw new Error('Failed to load active thread');
       }
     } catch (e) {
       console.warn('Failed to load active chat thread:', e);
+      if (currentUser) {
+        const cached = localStorage.getItem('hongtai_thread_messages_cache_' + currentUser.email + '_' + activeThreadId);
+        if (cached) {
+          const thread = JSON.parse(cached);
+          messagesContainer.innerHTML = '';
+          chatHistory = (thread.messages || []).map(m => ({
+            role: m.role,
+            content: m.content
+          }));
+          chatHistory.forEach(msg => {
+            appendChatMessage(msg.role, msg.content);
+          });
+          if (badge) badge.style.display = 'none';
+          scrollChatToBottom();
+          return;
+        }
+      }
+      // If thread has been deleted or is invalid, reset local state
+      sessionStorage.removeItem('hongtai_active_thread_id');
+      activeThreadId = null;
     }
   }
 
@@ -3250,6 +3444,32 @@ function initChatbot() {
       if (data.threadId) {
         activeThreadId = data.threadId;
         sessionStorage.setItem('hongtai_active_thread_id', activeThreadId);
+
+        // Cache messages!
+        if (currentUser) {
+          const threadData = {
+            id: activeThreadId,
+            messages: chatHistory.map(m => ({ role: m.role, content: m.content, timestamp: new Date().toISOString() }))
+          };
+          localStorage.setItem('hongtai_thread_messages_cache_' + currentUser.email + '_' + activeThreadId, JSON.stringify(threadData));
+          
+          let cachedThreads = [];
+          const rawCached = localStorage.getItem('hongtai_threads_cache_' + currentUser.email);
+          if (rawCached) {
+            cachedThreads = JSON.parse(rawCached);
+          }
+          const existingIdx = cachedThreads.findIndex(t => t.id === activeThreadId);
+          if (existingIdx !== -1) {
+            cachedThreads[existingIdx].title = chatHistory[0]?.content?.substring(0, 30) || 'Cuộc trò chuyện';
+          } else {
+            cachedThreads.unshift({
+              id: activeThreadId,
+              title: chatHistory[0]?.content?.substring(0, 30) || 'Cuộc trò chuyện',
+              createdAt: new Date().toISOString()
+            });
+          }
+          localStorage.setItem('hongtai_threads_cache_' + currentUser.email, JSON.stringify(cachedThreads));
+        }
       }
 
     } catch (err) {
@@ -3261,4 +3481,805 @@ function initChatbot() {
     scrollChatToBottom();
   }
 }
+
+// --- LESSONS VIEW CONTROLLER ---
+let activeLessonsLevel = 1;
+let activeLessonsCurriculum = 'hsk';
+
+const HSK_LESSONS_METADATA = {
+  1: [
+    { id: 1, title: 'Bài 1: Chào hỏi - 你好', desc: 'Học cách chào hỏi cơ bản, từ vựng thông dụng và cách nói lời xin lỗi.', startIdx: 0, endIdx: 15 },
+    { id: 2, title: 'Bài 2: Cảm ơn - 谢谢你', desc: 'Học cách bày tỏ lòng biết ơn, nói lời tạm biệt và các đại từ chỉ bạn bè.', startIdx: 15, endIdx: 30 },
+    { id: 3, title: 'Bài 3: Bạn tên là gì? - 你叫什么名字', desc: 'Học cách tự giới thiệu bản thân, quốc tịch, tên tuổi và nghề nghiệp.', startIdx: 30, endIdx: 45 },
+    { id: 4, title: 'Bài 4: Cô ấy là giáo viên của tôi - 她是我的老师', desc: 'Học cách nói về mối quan hệ, nghề nghiệp và giới thiệu người khác.', startIdx: 45, endIdx: 60 },
+    { id: 5, title: 'Bài 5: Gia đình tôi có 4 người - 我家有四口人', desc: 'Học cách đếm số, giới thiệu các thành viên trong gia đình.', startIdx: 60, endIdx: 75 },
+    { id: 6, title: 'Bài 6: Tôi biết nói tiếng Trung - 我会说汉语', desc: 'Nói về khả năng, kỹ năng và các ngôn ngữ phổ biến.', startIdx: 75, endIdx: 90 },
+    { id: 7, title: 'Bài 7: Hôm nay là thứ mấy? - 今天星期几', desc: 'Cách hỏi và trả lời về thời gian, ngày tháng trong tuần.', startIdx: 90, endIdx: 105 },
+    { id: 8, title: 'Bài 8: Tôi muốn mua quả táo - 我想买苹果', desc: 'Học cách mua sắm, hỏi giá tiền và các loại hoa quả cơ bản.', startIdx: 105, endIdx: 120 },
+    { id: 9, title: 'Bài 9: Thời tiết hôm nay thế nào? - 今天天气怎么样', desc: 'Mô tả thời tiết, nhiệt độ và các trạng thái tự nhiên.', startIdx: 120, endIdx: 135 },
+    { id: 10, title: 'Bài 10: Tôi đang xem phim - 我在看电影', desc: 'Diễn tả các hành động đang xảy ra và sở thích giải trí.', startIdx: 135, endIdx: 150 }
+  ],
+  2: [
+    { id: 1, title: 'Bài 1: Cuộc sống hàng ngày - 日常生活', desc: 'Học từ vựng mô tả thói quen sinh hoạt và ăn uống hàng ngày.', startIdx: 0, endIdx: 20 },
+    { id: 2, title: 'Bài 2: Thể thao và Sức khỏe - 运动与健康', desc: 'Từ vựng các môn thể thao, rèn luyện thân thể và cảm giác cơ thể.', startIdx: 20, endIdx: 40 },
+    { id: 3, title: 'Bài 3: Phương tiện giao thông - 交通工具', desc: 'Học từ vựng du lịch, các phương tiện đi lại như tàu hỏa, máy bay.', startIdx: 40, endIdx: 60 },
+    { id: 4, title: 'Bài 4: Sở thích và giải trí - 兴趣与娱乐', desc: 'Thảo luận về âm nhạc, phim ảnh, đọc sách và các hoạt động thư giãn.', startIdx: 60, endIdx: 80 }
+  ],
+  3: [
+    { id: 1, title: 'Bài 1: Giao tiếp văn phòng - 办公室', desc: 'Học từ vựng liên quan đến công việc, đồng nghiệp và công sở.', startIdx: 0, endIdx: 25 },
+    { id: 2, title: 'Bài 2: Kỳ nghỉ lý thú - 快乐假期', desc: 'Học từ vựng đi du lịch nước ngoài, hỏi đường và trải nghiệm văn hóa.', startIdx: 25, endIdx: 50 },
+    { id: 3, title: 'Bài 3: Mua sắm và Ẩm thực - 购物与美食', desc: 'Đặt món ăn tại nhà hàng, từ vựng các món ăn Trung Hoa nổi tiếng.', startIdx: 50, endIdx: 75 }
+  ]
+};
+
+function renderLessonsList() {
+  const grid = document.getElementById('lessons-cards-grid');
+  const objectivesText = document.getElementById('lessons-objectives-text');
+  const lessonsLevelContainer = document.getElementById('lessons-level-pills-container');
+
+  if (!grid) return;
+
+  grid.innerHTML = '';
+
+  if (activeLessonsCurriculum === 'yct') {
+    grid.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 48px 24px; color: var(--text-muted); font-style: italic;">
+        Giáo trình YCT (Trẻ em) đang được biên soạn! Vui lòng ôn tập giáo trình HSK.
+      </div>
+    `;
+    if (objectivesText) objectivesText.textContent = 'Mục tiêu: Đang cập nhật nội dung cho thiếu nhi...';
+    if (lessonsLevelContainer) lessonsLevelContainer.style.display = 'none';
+    return;
+  }
+
+  if (lessonsLevelContainer) lessonsLevelContainer.style.display = 'flex';
+
+  // Update objectives text
+  if (objectivesText) {
+    if (activeLessonsLevel === 1) objectivesText.textContent = 'Mục tiêu: Sơ cấp dành cho người mới bắt đầu (150 từ vựng cơ bản)';
+    else if (activeLessonsLevel === 2) objectivesText.textContent = 'Mục tiêu: Sơ cấp nâng cao, giao tiếp đời sống cơ bản (300 từ vựng)';
+    else if (activeLessonsLevel === 3) objectivesText.textContent = 'Mục tiêu: Trung cấp, giao tiếp tự tin các chủ đề học tập/công việc (600 từ vựng)';
+    else objectivesText.textContent = `Mục tiêu: Ôn tập từ vựng HSK Cấp ${activeLessonsLevel}`;
+  }
+
+  // Filter HSK level vocabulary
+  const levelVocabs = vocabList.filter(w => !w.isCustom && w.level === activeLessonsLevel);
+
+  // Fallback default list if empty (seeded)
+  const lessons = HSK_LESSONS_METADATA[activeLessonsLevel] || [
+    { id: 1, title: `Bài 1: Tổng hợp HSK ${activeLessonsLevel} - Phần 1`, desc: `Ôn tập từ vựng HSK Cấp ${activeLessonsLevel} phần đầu tiên.`, startIdx: 0, endIdx: Math.max(15, Math.round(levelVocabs.length / 2)) },
+    { id: 2, title: `Bài 2: Tổng hợp HSK ${activeLessonsLevel} - Phần 2`, desc: `Ôn tập từ vựng HSK Cấp ${activeLessonsLevel} phần tiếp theo.`, startIdx: Math.max(15, Math.round(levelVocabs.length / 2)), endIdx: levelVocabs.length }
+  ];
+
+  lessons.forEach(lesson => {
+    // Slice vocab array
+    const sliceWords = levelVocabs.slice(lesson.startIdx, lesson.endIdx);
+    const wordsCount = sliceWords.length;
+
+    const card = document.createElement('div');
+    card.className = 'lesson-card';
+    card.innerHTML = `
+      <div>
+        <span class="lesson-badge">HSK${activeLessonsLevel} - L${lesson.id}</span>
+        <h3 class="lesson-title">${lesson.title}</h3>
+        <p class="lesson-desc">${lesson.desc}</p>
+      </div>
+      <div class="lesson-footer">
+        <span class="lesson-words-indicator">
+          <i class="fa-solid fa-book-open"></i> ${wordsCount} từ vựng
+        </span>
+        <span class="lesson-detail-link">Chi tiết bài học <i class="fa-solid fa-chevron-right"></i></span>
+      </div>
+    `;
+
+    card.addEventListener('click', () => {
+      startLessonStudy(lesson, sliceWords);
+    });
+
+    grid.appendChild(card);
+  });
+}
+
+function startLessonStudy(lesson, sliceWords) {
+  if (sliceWords.length === 0) {
+    showToast('Danh sách từ vựng của bài học này đang được chuẩn bị!', true);
+    return;
+  }
+
+  // Filter flashcard study session directly to these words
+  filteredList = shuffleArray(sliceWords);
+  currentIndex = 0;
+  isFlipped = false;
+  
+  // Set title & description of flashcard study
+  const studyTitle = document.getElementById('study-deck-title');
+  const studyDesc = document.getElementById('study-deck-desc');
+  if (studyTitle) studyTitle.textContent = lesson.title;
+  if (studyDesc) studyDesc.textContent = `Ghép nối kiến thức & từ vựng bài học`;
+
+  // Sync mode flip/type
+  setStudyMode(studyMode);
+
+  // Jump to study screen directly
+  document.getElementById('deck-selection-view').style.display = 'none';
+  document.getElementById('flashcard-study-view').style.display = 'block';
+
+  // Render first card
+  renderActiveCard();
+
+  // Switch tab to flashcards
+  switchTab('flashcards');
+
+  // Scroll to workspace smoothly
+  const flashcardSec = document.getElementById('flashcard-section');
+  if (flashcardSec) flashcardSec.scrollIntoView({ behavior: 'smooth' });
+
+  showToast(`Đang học bài: ${lesson.title} 📖`);
+}
+
+// Setup event listeners for lessons curriculum pills
+function initLessonsView() {
+  const hskBtn = document.getElementById('lessons-curriculum-hsk-btn');
+  const yctBtn = document.getElementById('lessons-curriculum-yct-btn');
+  const levelPillsContainer = document.getElementById('lessons-level-pills-container');
+
+  if (hskBtn && yctBtn) {
+    hskBtn.addEventListener('click', () => {
+      activeLessonsCurriculum = 'hsk';
+      hskBtn.classList.add('active');
+      yctBtn.classList.remove('active');
+      renderLessonsList();
+    });
+
+    yctBtn.addEventListener('click', () => {
+      activeLessonsCurriculum = 'yct';
+      yctBtn.classList.add('active');
+      hskBtn.classList.remove('active');
+      renderLessonsList();
+    });
+  }
+
+  if (levelPillsContainer) {
+    levelPillsContainer.addEventListener('click', (e) => {
+      const btn = e.target.closest('.lessons-level-btn');
+      if (!btn) return;
+
+      levelPillsContainer.querySelectorAll('.lessons-level-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeLessonsLevel = parseInt(btn.getAttribute('data-level'));
+      renderLessonsList();
+    });
+  }
+}
+
+// --- AI DICTIONARY CONTROLLER ---
+let selectedDictWordId = null;
+let activeHanziWriter = null;
+let voiceRecognitionInstance = null;
+
+const WRITING_PROMPTS = [
+  { title: "Giới thiệu bản thân (HSK 1)", text: "你好！我叫小王。我是越南人。我学习汉语。很高兴认识你！" },
+  { title: "Một ngày của tôi (HSK 2)", text: "我每天早上七点半起床。吃早饭以后去上学。我下午六点回宿舍。" },
+  { title: "Sở thích của tôi (HSK 3)", text: "我的 hobby 是听音乐和看中国电影。我觉得写汉字很有意思，但是也很难。" },
+  { title: "Lợi ích đọc sách (HSK 4)", text: "读书的好处非常多。阅读不仅能让我们获得丰富的知识，还可以减轻生活压力。" }
+];
+
+function initDictionaryView() {
+  const tabButtons = document.querySelectorAll('.dict-tab-btn');
+  const tabViews = document.querySelectorAll('.dict-tab-view');
+
+  tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tabId = btn.getAttribute('data-tab');
+
+      // Update switcher active states
+      tabButtons.forEach(b => {
+        b.classList.remove('active');
+        b.style.background = 'transparent';
+        b.style.color = 'var(--text-secondary)';
+      });
+      btn.classList.add('active');
+      btn.style.background = 'var(--accent-blue)';
+      btn.style.color = 'white';
+
+      // Hide/Show tab views
+      tabViews.forEach(v => {
+        v.style.display = 'none';
+        v.classList.remove('active-view');
+      });
+
+      const activeView = document.getElementById(`dict-view-${tabId}`);
+      if (activeView) {
+        if (tabId === 'notebook') {
+          activeView.style.display = 'grid'; // Grid sidebar layout
+        } else if (tabId === 'search') {
+          activeView.style.display = 'grid';
+        } else {
+          activeView.style.display = 'block';
+        }
+        activeView.classList.add('active-view');
+      }
+    });
+  });
+
+  // Search input events
+  const searchInput = document.getElementById('dict-search-input');
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      renderDictPopularList(searchInput.value.trim());
+    });
+  }
+
+  // AI Sentence Analyzer click listener
+  const analyzeBtn = document.getElementById('dict-analyze-btn');
+  if (analyzeBtn) {
+    analyzeBtn.addEventListener('click', handleSentenceAnalysis);
+  }
+
+  // AI Essay Tutor click listener
+  const tutorBtn = document.getElementById('dict-tutor-btn');
+  if (tutorBtn) {
+    tutorBtn.addEventListener('click', handleEssayCorrection);
+  }
+
+  // Bind speak buttons inside Details content
+  const speakBtn = document.getElementById('dict-detail-speak-btn');
+  if (speakBtn) {
+    speakBtn.addEventListener('click', () => {
+      const word = document.getElementById('dict-detail-word').textContent;
+      speakText(word);
+    });
+  }
+
+  const speakExBtn = document.getElementById('dict-detail-speak-ex-btn');
+  if (speakExBtn) {
+    speakExBtn.addEventListener('click', () => {
+      const sentence = document.getElementById('dict-detail-example-zh').textContent;
+      speakText(sentence);
+    });
+  }
+
+  // Hanzi Writer visual controls
+  const btnAnimate = document.getElementById('dict-stroke-btn-animate');
+  if (btnAnimate) {
+    btnAnimate.addEventListener('click', () => {
+      if (activeHanziWriter) {
+        activeHanziWriter.animateCharacter();
+      }
+    });
+  }
+
+  const btnQuiz = document.getElementById('dict-stroke-btn-quiz');
+  const btnClear = document.getElementById('dict-stroke-btn-clear');
+  if (btnQuiz) {
+    btnQuiz.addEventListener('click', () => {
+      if (activeHanziWriter) {
+        if (btnClear) btnClear.style.display = 'inline-block';
+        activeHanziWriter.quiz();
+      }
+    });
+  }
+
+  if (btnClear) {
+    btnClear.addEventListener('click', () => {
+      if (activeHanziWriter) {
+        activeHanziWriter.cancelQuiz();
+        activeHanziWriter.quiz();
+      }
+    });
+  }
+
+  // Speech evaluation button
+  const micBtn = document.getElementById('dict-speech-mic-btn');
+  if (micBtn) {
+    micBtn.addEventListener('click', () => {
+      const targetWord = document.getElementById('dict-detail-word').textContent;
+      toggleSpeechRecognition(targetWord);
+    });
+  }
+
+  // Quick save to Notebook dropdown toggle
+  const quickSaveBtn = document.getElementById('dict-quick-save-btn');
+  const quickSaveDropdown = document.getElementById('dict-quick-save-dropdown');
+  if (quickSaveBtn && quickSaveDropdown) {
+    quickSaveBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isHidden = quickSaveDropdown.style.display === 'none';
+      quickSaveDropdown.style.display = isHidden ? 'flex' : 'none';
+    });
+
+    document.addEventListener('click', () => {
+      quickSaveDropdown.style.display = 'none';
+    });
+  }
+
+  // Render suggested writing prompts for the AI tutor
+  renderWritingPrompts();
+
+  // Initial render
+  renderDictPopularList();
+}
+
+function renderDictPopularList(query = '') {
+  const container = document.getElementById('dict-popular-list');
+  if (!container) return;
+
+  container.innerHTML = '';
+
+  let filtered = vocabList;
+  if (query) {
+    const q = query.toLowerCase();
+    filtered = vocabList.filter(w => 
+      w.word.includes(q) || 
+      w.pinyin.toLowerCase().includes(q) || 
+      w.meaning.toLowerCase().includes(q)
+    );
+  }
+
+  // Fallback if empty
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 24px; color: var(--text-muted); font-size: 0.85rem; font-style: italic;">
+        Không tìm thấy từ vựng nào!
+      </div>
+    `;
+    return;
+  }
+
+  // Slice to first 50
+  const list = filtered.slice(0, 50);
+
+  list.forEach(w => {
+    const item = document.createElement('div');
+    item.className = `dict-popular-item ${selectedDictWordId === w.id ? 'active' : ''}`;
+    item.setAttribute('data-id', w.id);
+    item.innerHTML = `
+      <div style="display: flex; align-items: baseline;">
+        <span class="dict-popular-word">${w.word}</span>
+        <span class="dict-popular-pinyin">[${w.pinyin}]</span>
+      </div>
+      <span class="dict-popular-meaning">${w.meaning}</span>
+    `;
+
+    item.addEventListener('click', () => {
+      selectDictWord(w);
+    });
+
+    container.appendChild(item);
+  });
+}
+
+function selectDictWord(w) {
+  selectedDictWordId = w.id;
+
+  // Update popular list active state
+  const container = document.getElementById('dict-popular-list');
+  if (container) {
+    container.querySelectorAll('.dict-popular-item').forEach(item => {
+      if (parseInt(item.getAttribute('data-id')) === w.id) {
+        item.classList.add('active');
+      } else {
+        item.classList.remove('active');
+      }
+    });
+  }
+
+  // Hide empty state, show content
+  const emptyState = document.getElementById('dict-details-empty');
+  const contentState = document.getElementById('dict-details-content');
+  if (emptyState) emptyState.style.display = 'none';
+  if (contentState) contentState.style.display = 'block';
+
+  // Fill in data
+  document.getElementById('dict-detail-word').textContent = w.word;
+  document.getElementById('dict-detail-level').textContent = w.isCustom ? 'Cá nhân' : `HSK ${w.level}`;
+  document.getElementById('dict-detail-pinyin').textContent = w.pinyin;
+  document.getElementById('dict-detail-category').textContent = w.category || 'Chưa phân loại';
+  document.getElementById('dict-detail-meaning').textContent = w.meaning;
+
+  const exBox = document.getElementById('dict-detail-example-box');
+  if (w.example_zh) {
+    document.getElementById('dict-detail-example-zh').textContent = w.example_zh;
+    document.getElementById('dict-detail-example-vi').textContent = w.example_vi || '';
+    if (exBox) exBox.style.display = 'block';
+  } else {
+    if (exBox) exBox.style.display = 'none';
+  }
+
+  // Dynamic AI mnemonic generation or fallback based on character
+  const decompText = document.getElementById('dict-detail-decomposition');
+  const mnemonicText = document.getElementById('dict-detail-mnemonics');
+
+  const mnemonics = {
+    '你好': { decomp: 'Chữ 你 (bộ Nhân đứng 亻 + Nhĩ 尔) ghép với chữ 好 (bộ Nữ 女 + Tử 子 - phụ nữ sinh con trai là điều tốt lành).', tip: 'Gặp nhau chào hỏi (你好) mong cầu những điều tốt lành và tử tế đến với đối phương.' },
+    '谢谢': { decomp: 'Chữ 谢 (bộ Ngôn 言 - lời nói + Thân 身 - cơ thể + Thốn 寸 - đo lường). Biểu đạt lời nói từ tận đáy lòng.', tip: 'Nói lời cảm ơn (谢谢) bằng sự chân thành từ tấm thân này.' },
+    '学习': { decomp: 'Chữ 学 (bộ Tử 子 - đứa trẻ dưới mái nhà) + 习 (bộ Vũ 羽 - lông chim bay nhiều lần thành quen).', tip: 'Trẻ con học tập dưới mái nhà, rèn luyện chăm chỉ như chim non tập bay nhiều lần để tự lập.' }
+  };
+
+  const seed = mnemonics[w.word];
+  if (seed) {
+    if (decompText) decompText.textContent = seed.decomp;
+    if (mnemonicText) mnemonicText.textContent = seed.tip;
+  } else {
+    if (decompText) decompText.textContent = `Chữ ghép cấu thành từ các nét vẽ tượng hình bộ thủ tiếng Trung cổ điển. Từ loại: ${w.category || "Chưa phân loại"}.`;
+    if (mnemonicText) mnemonicText.textContent = `Hãy kết hợp nhìn chữ viết "${w.word}", ghi nhớ cách đọc âm Pinyin [${w.pinyin}] và nhẩm lại ý nghĩa "${w.meaning}" nhiều lần để tạo phản xạ.`;
+  }
+
+  // Reset Speech grader
+  cleanupSpeechRecognition();
+  document.getElementById('dict-speech-status').textContent = 'Nhấp vào Micro để bắt đầu luyện đọc từ này...';
+  document.getElementById('dict-speech-result').style.display = 'none';
+  document.getElementById('dict-speech-score-wrap').style.display = 'none';
+
+  // Initialize Hanzi Writer
+  const writerTarget = document.getElementById('dict-stroke-writer-target');
+  if (writerTarget) {
+    writerTarget.innerHTML = '';
+    const charToDraw = w.word[0]; // Draw the first character of the word
+    const isDark = document.documentElement.classList.contains('dark');
+    if (window.HanziWriter) {
+      activeHanziWriter = HanziWriter.create('dict-stroke-writer-target', charToDraw, {
+        width: 100,
+        height: 100,
+        padding: 5,
+        strokeColor: isDark ? '#38bdf8' : '#3b82f6',
+        outlineColor: isDark ? '#374151' : '#e5e7eb',
+        drawingColor: '#10b981', // green for user drawing
+        showOutline: true
+      });
+      document.getElementById('dict-stroke-btn-clear').style.display = 'none';
+    }
+  }
+
+  // Render custom notebooks inside the quick add dropdown
+  renderQuickSaveDropdown(w);
+}
+
+function renderQuickSaveDropdown(w) {
+  const dropdown = document.getElementById('dict-quick-save-dropdown');
+  if (!dropdown) return;
+  dropdown.innerHTML = '';
+
+  customLists.forEach(listName => {
+    const item = document.createElement('div');
+    item.className = 'dict-quick-save-item';
+    item.innerHTML = `<i class="fa-regular fa-folder text-primary"></i> <span>${listName}</span>`;
+    item.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      dropdown.style.display = 'none';
+      await saveWordToCustomNotebook(w, listName);
+    });
+    dropdown.appendChild(item);
+  });
+}
+
+async function saveWordToCustomNotebook(w, listName) {
+  const exists = vocabList.some(item => item.isCustom && item.word === w.word && item.category === listName);
+  if (exists) {
+    showToast(`Từ "${w.word}" đã có sẵn trong sổ tay "${listName}"!`, true);
+    return;
+  }
+
+  const payload = {
+    word: w.word,
+    pinyin: w.pinyin,
+    meaning: w.meaning,
+    level: w.level || '1',
+    category: listName,
+    example_zh: w.example_zh || '',
+    example_vi: w.example_vi || ''
+  };
+
+  if (!currentUser) {
+    // Guest local save
+    const newWord = {
+      ...payload,
+      id: 100000 + Date.now() + Math.floor(Math.random() * 1000),
+      isCustom: true,
+      isMemorized: false,
+      isStarred: false,
+      isWrong: false
+    };
+    vocabList.push(newWord);
+
+    const guestCustom = JSON.parse(localStorage.getItem('guest_custom_words') || '[]');
+    guestCustom.push(newWord);
+    localStorage.setItem('guest_custom_words', JSON.stringify(guestCustom));
+
+    showToast(`Đã lưu "${w.word}" vào sổ tay "${listName}"! 📁`);
+    updateStats();
+    applyFilters();
+    renderCustomLists();
+    renderCustomWordsTable();
+    return;
+  }
+
+  try {
+    const response = await fetch(API_BASE_URL + '/api/vocabulary', {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(payload),
+      credentials: 'include'
+    });
+
+    if (response.ok) {
+      const newWord = await response.json();
+      vocabList.push({ ...newWord, isCustom: true });
+      showToast(`Đã lưu "${w.word}" vào sổ tay "${listName}"! 📁`);
+      updateStats();
+      applyFilters();
+      renderCustomLists();
+      renderCustomWordsTable();
+    } else {
+      throw new Error('Save failed');
+    }
+  } catch (err) {
+    console.error(err);
+    showToast('Không thể lưu từ vựng. Vui lòng thử lại!', true);
+  }
+}
+
+function toggleSpeechRecognition(targetWord) {
+  const micBtn = document.getElementById('dict-speech-mic-btn');
+  const statusText = document.getElementById('dict-speech-status');
+  const resultText = document.getElementById('dict-speech-result');
+  const scoreWrap = document.getElementById('dict-speech-score-wrap');
+  const scoreVal = document.getElementById('dict-speech-score');
+
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    showToast('Trình duyệt của bạn không hỗ trợ nhận diện giọng nói!', true);
+    return;
+  }
+
+  if (voiceRecognitionInstance) {
+    voiceRecognitionInstance.stop();
+    return;
+  }
+
+  voiceRecognitionInstance = new SpeechRecognition();
+  voiceRecognitionInstance.lang = 'zh-CN';
+  voiceRecognitionInstance.interimResults = false;
+  voiceRecognitionInstance.maxAlternatives = 1;
+
+  voiceRecognitionInstance.onstart = () => {
+    micBtn.classList.add('mic-recording-pulse');
+    statusText.textContent = `Đang nghe... Hãy đọc to: "${targetWord}"`;
+    resultText.style.display = 'block';
+    resultText.textContent = 'Đang nhận diện giọng nói...';
+    scoreWrap.style.display = 'none';
+  };
+
+  voiceRecognitionInstance.onerror = (e) => {
+    console.error(e);
+    cleanupSpeechRecognition();
+    statusText.textContent = 'Lỗi nhận diện hoặc không có âm thanh. Hãy nhấp Mic và thử lại!';
+  };
+
+  voiceRecognitionInstance.onend = () => {
+    cleanupSpeechRecognition();
+  };
+
+  voiceRecognitionInstance.onresult = (event) => {
+    const transcript = event.results[0][0].transcript.trim();
+    const confidence = event.results[0][0].confidence;
+    resultText.textContent = `Phát hiện: "${transcript}"`;
+
+    const cleanTarget = targetWord.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()？。，！]/g, "");
+    const cleanTranscript = transcript.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()？。，！]/g, "");
+
+    const isMatch = cleanTranscript === cleanTarget || cleanTranscript.includes(cleanTarget) || cleanTarget.includes(cleanTranscript);
+
+    scoreWrap.style.display = 'flex';
+    if (isMatch) {
+      const score = Math.round(confidence * 100);
+      scoreVal.textContent = `${score}%`;
+      scoreVal.style.color = 'var(--success)';
+      statusText.textContent = 'Phát âm hoàn hảo! Rất tuyệt.';
+      showToast('Tuyệt vời! Phát âm chuẩn xác. 🎉');
+    } else {
+      scoreVal.textContent = '0%';
+      scoreVal.style.color = 'var(--danger)';
+      statusText.textContent = 'Chưa khớp lắm, hãy thử phát âm lại rõ ràng hơn nhé!';
+    }
+  };
+
+  voiceRecognitionInstance.start();
+}
+
+function cleanupSpeechRecognition() {
+  const micBtn = document.getElementById('dict-speech-mic-btn');
+  if (micBtn) micBtn.classList.remove('mic-recording-pulse');
+  voiceRecognitionInstance = null;
+}
+
+function renderWritingPrompts() {
+  const container = document.getElementById('dict-tutor-prompts-container');
+  if (!container) return;
+  container.innerHTML = '';
+
+  WRITING_PROMPTS.forEach(prompt => {
+    const pill = document.createElement('button');
+    pill.className = 'dict-tutor-prompt-pill';
+    pill.textContent = prompt.title;
+    pill.addEventListener('click', () => {
+      const input = document.getElementById('dict-tutor-input');
+      if (input) {
+        input.value = prompt.text;
+        showToast(`Đã tải chủ đề: ${prompt.title}`);
+      }
+    });
+    container.appendChild(pill);
+  });
+}
+
+async function handleSentenceAnalysis() {
+  const textarea = document.getElementById('dict-analyze-input');
+  const loader = document.getElementById('dict-analyze-loader');
+  const results = document.getElementById('dict-analyze-results');
+
+  if (!textarea) return;
+  const sentence = textarea.value.trim();
+  if (!sentence) {
+    showToast('Vui lòng nhập câu cần phân tích!', true);
+    return;
+  }
+
+  if (loader) loader.style.display = 'block';
+  if (results) results.style.display = 'none';
+
+  const systemPrompt = `Hãy đóng vai trò là một chuyên gia phân tích ngữ pháp tiếng Trung. Hãy bóc tách, dịch và giải thích chi tiết cấu trúc ngữ pháp cho câu sau: "${sentence}".
+  Trả về KẾT QUẢ duy nhất dưới định dạng JSON có cấu trúc chính xác như sau (không kèm mã markdown \`\`\`json hay từ giải thích nào khác ngoài JSON):
+  {
+    "translation": "Bản dịch nghĩa tiếng Việt tự nhiên nhất.",
+    "grammar": [
+      { "structure": "Cấu trúc ngữ pháp trọng điểm 1", "explanation": "Giải thích chi tiết cách dùng..." },
+      { "structure": "Cấu trúc ngữ pháp trọng điểm 2", "explanation": "Giải thích..." }
+    ],
+    "words": [
+      { "word": "Từ Hán", "pinyin": "Pinyin", "category": "Từ loại", "meaning": "Ý nghĩa" }
+    ]
+  }`;
+
+  try {
+    const payload = {
+      messages: [{ role: 'user', content: systemPrompt }]
+    };
+
+    const response = await fetch(API_BASE_URL + '/api/chat', {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(payload),
+      credentials: 'include'
+    });
+
+    if (loader) loader.style.display = 'none';
+
+    if (!response.ok) throw new Error('Phân tích thất bại');
+
+    const data = await response.json();
+    const cleanReply = data.reply.replace(/```json/g, '').replace(/```/g, '').trim();
+    const parsed = JSON.parse(cleanReply);
+
+    document.getElementById('dict-analyze-result-translation').textContent = parsed.translation || '';
+    
+    const grammarContainer = document.getElementById('dict-analyze-result-grammar');
+    grammarContainer.innerHTML = '';
+    (parsed.grammar || []).forEach(g => {
+      const card = document.createElement('div');
+      card.className = 'dict-grammar-card';
+      card.innerHTML = `
+        <div class="dict-grammar-title"><i class="fa-solid fa-bookmark text-primary" style="margin-right: 6px;"></i> ${g.structure}</div>
+        <p class="dict-grammar-explain">${g.explanation}</p>
+      `;
+      grammarContainer.appendChild(card);
+    });
+
+    const wordsTable = document.getElementById('dict-analyze-result-words');
+    wordsTable.innerHTML = '';
+    (parsed.words || []).forEach(w => {
+      const tr = document.createElement('tr');
+      tr.style.borderBottom = '1px solid var(--border-glass)';
+      tr.innerHTML = `
+        <td style="padding: 10px; font-family: var(--font-chinese); font-size: 1.1rem; font-weight: 600;">${w.word}</td>
+        <td style="padding: 10px; font-family: var(--font-display); color: var(--accent-teal);">${w.pinyin}</td>
+        <td style="padding: 10px;"><span class="badge badge-level" style="margin:0;">${w.category}</span></td>
+        <td style="padding: 10px; color: var(--text-secondary);">${w.meaning}</td>
+      `;
+      wordsTable.appendChild(tr);
+    });
+
+    if (results) results.style.display = 'flex';
+  } catch (error) {
+    if (loader) loader.style.display = 'none';
+    console.error('Analysis error:', error);
+    showToast('Lỗi phân tích câu bằng AI. Vui lòng thử lại!', true);
+  }
+}
+
+async function handleEssayCorrection() {
+  const textarea = document.getElementById('dict-tutor-input');
+  const loader = document.getElementById('dict-tutor-loader');
+  const results = document.getElementById('dict-tutor-results');
+
+  if (!textarea) return;
+  const essay = textarea.value.trim();
+  if (!essay) {
+    showToast('Vui lòng nhập bài viết cần chấm sửa!', true);
+    return;
+  }
+
+  if (loader) loader.style.display = 'block';
+  if (results) results.style.display = 'none';
+
+  const systemPrompt = `Hãy đóng vai trò là một Gia sư tiếng Trung bản xứ HONGTAI. Hãy đọc kỹ, sửa lỗi chính tả, từ vựng và ngữ pháp cho đoạn văn sau của học sinh: "${essay}".
+  Trả về KẾT QUẢ duy nhất dưới định dạng JSON có cấu trúc chính xác như sau (không kèm mã markdown \`\`\`json hay từ giải thích nào khác ngoài JSON):
+  {
+    "score": "A / B / C / D / F",
+    "comment": "Nhận xét tổng quan bài viết của học sinh bằng tiếng Việt.",
+    "correctedText": "Đoạn văn sau khi đã sửa sạch hết các lỗi.",
+    "corrections": [
+      { "original": "Lỗi sai", "fixed": "Bản sửa lại đúng", "explanation": "Giải thích tại sao sai ngữ pháp và cách sửa lỗi này bằng tiếng Việt..." }
+    ]
+  }`;
+
+  try {
+    const payload = {
+      messages: [{ role: 'user', content: systemPrompt }]
+    };
+
+    const response = await fetch(API_BASE_URL + '/api/chat', {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(payload),
+      credentials: 'include'
+    });
+
+    if (loader) loader.style.display = 'none';
+
+    if (!response.ok) throw new Error('Chấm sửa bài viết thất bại');
+
+    const data = await response.json();
+    const cleanReply = data.reply.replace(/```json/g, '').replace(/```/g, '').trim();
+    const parsed = JSON.parse(cleanReply);
+
+    const scoreBadge = document.getElementById('dict-tutor-score');
+    scoreBadge.textContent = parsed.score || 'A';
+    
+    document.getElementById('dict-tutor-comment').textContent = parsed.comment || '';
+    document.getElementById('dict-tutor-original-text').textContent = essay;
+    document.getElementById('dict-tutor-corrected-text').textContent = parsed.correctedText || '';
+
+    const correctionsList = document.getElementById('dict-tutor-grammar-corrections');
+    correctionsList.innerHTML = '';
+
+    if (!parsed.corrections || parsed.corrections.length === 0) {
+      correctionsList.innerHTML = `
+        <div class="glass-panel" style="padding: 16px; border-color: var(--success-bg); background: rgba(16, 185, 129, 0.02); text-align: left; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-circle-check text-success" style="font-size: 1.25rem;"></i>
+          <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-primary);">Tuyệt vời! Gia sư không phát hiện lỗi sai ngữ pháp nào trong đoạn văn của bạn.</span>
+        </div>
+      `;
+    } else {
+      parsed.corrections.forEach(c => {
+        const item = document.createElement('div');
+        item.className = 'dict-correction-item';
+        item.innerHTML = `
+          <div class="dict-correction-header error">
+            <i class="fa-solid fa-circle-exclamation"></i> Phát hiện lỗi: <span class="dict-correction-original">${c.original}</span> <i class="fa-solid fa-arrow-right-long" style="color: var(--text-muted); font-size: 0.8rem;"></i> sửa thành <span class="dict-correction-fixed">${c.fixed}</span>
+          </div>
+          <p class="dict-correction-desc"><strong>Lý do sửa:</strong> ${c.explanation}</p>
+        `;
+        correctionsList.appendChild(item);
+      });
+    }
+
+    if (results) results.style.display = 'flex';
+  } catch (error) {
+    if (loader) loader.style.display = 'none';
+    console.error('Tutor correction error:', error);
+    showToast('Lỗi gia sư AI sửa bài. Vui lòng thử lại!', true);
+  }
+}
+
 

@@ -533,8 +533,21 @@
         if (!res.ok) throw new Error();
         threads = await res.json();
         renderThreadsList();
+        
+        // Cache threads list locally
+        if (currentUser) {
+          localStorage.setItem('hongtai_threads_cache_' + currentUser.email, JSON.stringify(threads));
+        }
       } catch (err) {
         console.error('Error loading threads:', err);
+        if (currentUser) {
+          const cached = localStorage.getItem('hongtai_threads_cache_' + currentUser.email);
+          if (cached) {
+            threads = JSON.parse(cached);
+            renderThreadsList();
+            return;
+          }
+        }
         const listContainer = document.getElementById('threads-list');
         listContainer.innerHTML = `
           <div style="text-align: center; color: var(--danger); padding: 20px 10px; font-size: 0.85rem;">
@@ -627,8 +640,23 @@
         activeThreadMessages = thread.messages || [];
         
         renderMessages();
+        
+        // Cache messages for this thread
+        if (currentUser) {
+          localStorage.setItem('hongtai_thread_messages_cache_' + currentUser.email + '_' + id, JSON.stringify(thread));
+        }
       } catch (err) {
         console.error(err);
+        if (currentUser) {
+          const cached = localStorage.getItem('hongtai_thread_messages_cache_' + currentUser.email + '_' + id);
+          if (cached) {
+            const thread = JSON.parse(cached);
+            document.getElementById('active-thread-title').textContent = thread.title || 'Chi tiết cuộc trò chuyện';
+            activeThreadMessages = thread.messages || [];
+            renderMessages();
+            return;
+          }
+        }
         messagesContainer.innerHTML = `
           <div style="text-align: center; color: var(--danger); padding: 48px;">
             Không thể tải nội dung cuộc trò chuyện này.
@@ -799,6 +827,33 @@
         }
 
         renderMessages();
+
+        // Update cache
+        if (activeThreadId && currentUser) {
+          const threadData = {
+            id: activeThreadId,
+            title: document.getElementById('active-thread-title').textContent,
+            messages: activeThreadMessages
+          };
+          localStorage.setItem('hongtai_thread_messages_cache_' + currentUser.email + '_' + activeThreadId, JSON.stringify(threadData));
+          
+          let cachedThreads = [];
+          const rawCached = localStorage.getItem('hongtai_threads_cache_' + currentUser.email);
+          if (rawCached) {
+            cachedThreads = JSON.parse(rawCached);
+          }
+          const existingIdx = cachedThreads.findIndex(t => t.id === activeThreadId);
+          if (existingIdx !== -1) {
+            cachedThreads[existingIdx].title = threadData.title;
+          } else {
+            cachedThreads.unshift({
+              id: activeThreadId,
+              title: threadData.title,
+              createdAt: new Date().toISOString()
+            });
+          }
+          localStorage.setItem('hongtai_threads_cache_' + currentUser.email, JSON.stringify(cachedThreads));
+        }
       } catch (err) {
         typingIndicator.style.display = 'none';
         console.error(err);
