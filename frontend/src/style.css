@@ -1472,7 +1472,7 @@ html.dark .brand-logo-img {
 .toast {
   position: fixed;
   bottom: 24px;
-  right: 24px;
+  left: 24px;
   background-color: var(--bg-secondary);
   color: var(--text-primary);
   border: 1px solid var(--border-glass);
@@ -3048,6 +3048,15 @@ html.dark .welcome-stat-icon-wrapper.orange {
 
 html.dark .welcome-stat-icon-wrapper.pink {
   background: rgba(255, 94, 126, 0.15);
+}
+
+.welcome-stat-icon-wrapper.blue {
+  background: #eff6ff;
+  color: #3b82f6;
+}
+
+html.dark .welcome-stat-icon-wrapper.blue {
+  background: rgba(59, 130, 246, 0.15);
 }
 
 .welcome-stat-info {

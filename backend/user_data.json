@@ -55,27 +55,9 @@
   },
   "customWords": {},
   "sessions": {
-    "zn9lt1w19dmq2jw6y5": "phanphiphu04@gmail.com"
+    "b7h67w50q7bmq3nqhdc": "phanphiphu04@gmail.com"
   },
   "chats": {
-    "phanphiphu04@gmail.com": [
-      {
-        "id": "thread_1780764568259ho99",
-        "title": "Hãy đóng vai trò là một chuyên...",
-        "createdAt": "2026-06-06T16:49:28.259Z",
-        "messages": [
-          {
-            "role": "user",
-            "content": "Hãy đóng vai trò là một chuyên gia phân tích ngữ pháp tiếng Trung. Hãy bóc tách, dịch và giải thích chi tiết cấu trúc ngữ pháp cho câu sau: \"nihao\".\n  Trả về KẾT QUẢ duy nhất dưới định dạng JSON có cấu trúc chính xác như sau (không kèm mã markdown ```json hay từ giải thích nào khác ngoài JSON):\n  {\n    \"translation\": \"Bản dịch nghĩa tiếng Việt tự nhiên nhất.\",\n    \"grammar\": [\n      { \"structure\": \"Cấu trúc ngữ pháp trọng điểm 1\", \"explanation\": \"Giải thích chi tiết cách dùng...\" },\n      { \"structure\": \"Cấu trúc ngữ pháp trọng điểm 2\", \"explanation\": \"Giải thích...\" }\n    ],\n    \"words\": [\n      { \"word\": \"Từ Hán\", \"pinyin\": \"Pinyin\", \"category\": \"Từ loại\", \"meaning\": \"Ý nghĩa\" }\n    ]\n  }",
-            "timestamp": "2026-06-06T16:49:28.259Z"
-          },
-          {
-            "role": "assistant",
-            "content": "```json\n{\n  \"translation\": \"Chào bạn; Xin chào\",\n  \"grammar\": [\n    {\n      \"structure\": \"Cấu tạo từ ghép và ý nghĩa tổng hợp\",\n      \"explanation\": \"Câu 'nihao' thực chất là một từ ghép đơn giản nhưng vô cùng phổ biến, được tạo thành từ hai Hán tự: '你' (nǐ) và '好' (hǎo). Mỗi Hán tự mang một ý nghĩa riêng: '你' là đại từ nhân xưng ngôi thứ hai số ít ('bạn', 'anh', 'chị'), và '好' là tính từ có nghĩa là 'tốt', 'khỏe', 'hay'. Khi ghép lại, chúng tạo thành một lời chào hỏi mang ý nghĩa chúc 'bạn tốt/khỏe', và được dùng rộng rãi như lời 'xin chào' hoặc 'chào bạn' trong tiếng Việt. Đây là một cách phổ biến để tạo từ mới trong tiếng Trung.\"\n    },\n    {\n      \"structure\": \"Biến điệu của thanh 3 (三声变调 - sānshēng biàndiào)\",\n      \"explanation\": \"Một điểm ngữ âm cực kỳ quan trọng trong 'nihao' là quy tắc biến điệu của thanh 3. Cả '你' (nǐ) và '好' (hǎo) đều mang thanh 3 (thanh thấp nhất trong tiếng Trung). Khi hai âm tiết mang thanh 3 đứng liền kề nhau, âm tiết đầu tiên sẽ được biến điệu thành thanh 2 (thanh đi lên). Do đó, 'nǐhǎo' được phát âm là 'ní hǎo'. Quy tắc này giúp việc phát âm trở nên trôi chảy và tự nhiên hơn, tránh việc giọng bị chìm quá sâu hai lần liên tiếp.\"\n    },\n    {\n      \"structure\": \"Chức năng giao tiếp cơ bản\",\n      \"explanation\": \"'Nihao' là lời chào hỏi cơ bản và phổ biến nhất trong tiếng Trung Quốc, phù hợp với hầu hết các tình huống giao tiếp thông thường, từ thân mật đến trung lập. Nó có thể được sử dụng khi gặp gỡ một người lần đầu hoặc gặp lại người quen. Mặc dù đơn giản, việc phát âm chuẩn xác (đặc biệt là quy tắc biến điệu thanh 3) là dấu hiệu của người học đã nắm vững những kiến thức nền tảng về Pinyin.\"\n    }\n  ],\n  \"words\": [\n    {\n      \"word\": \"你\",\n      \"pinyin\": \"nǐ\",\n      \"category\": \"Đại từ\",\n      \"meaning\": \"Bạn; anh; chị; cô; chú (ngôi thứ hai số ít)\"\n    },\n    {\n      \"word\": \"好\",\n      \"pinyin\": \"hǎo\",\n      \"category\": \"Tính từ\",\n      \"meaning\": \"Tốt; khỏe; hay; đẹp\"\n    }\n  ]\n}\n```",
-            "timestamp": "2026-06-06T16:49:28.259Z"
-          }
-        ]
-      }
-    ]
+    "phanphiphu04@gmail.com": []
   }
 }

@@ -201,6 +201,78 @@ app.post('/api/auth/logout', async (req, res) => {
   res.json({ success: true });
 });
 
+// GET endpoint to fetch user stats
+app.get('/api/user/stats', async (req, res) => {
+  const email = getLoggedInUserEmail(req);
+  if (!email) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  const userData = await readUserData();
+  const userRecord = userData.users[email];
+  if (!userRecord) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+
+  const stats = userRecord.stats || {
+    streak: 0,
+    studyTime: 0,
+    lastActiveDate: ''
+  };
+
+  res.json(stats);
+});
+
+// POST endpoint to update study time & calculate streak
+app.post('/api/user/stats/sync', async (req, res) => {
+  const email = getLoggedInUserEmail(req);
+  if (!email) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  const { incrementStudyTime, localDateStr } = req.body;
+  const userData = await readUserData();
+  const userRecord = userData.users[email];
+  if (!userRecord) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+
+  if (!userRecord.stats) {
+    userRecord.stats = {
+      streak: 0,
+      studyTime: 0,
+      lastActiveDate: ''
+    };
+  }
+
+  if (typeof incrementStudyTime === 'number') {
+    userRecord.stats.studyTime += incrementStudyTime;
+  }
+
+  const todayStr = localDateStr || new Date().toISOString().split('T')[0];
+  const lastActiveStr = userRecord.stats.lastActiveDate;
+
+  if (!lastActiveStr) {
+    userRecord.stats.streak = 1;
+    userRecord.stats.lastActiveDate = todayStr;
+  } else if (lastActiveStr !== todayStr) {
+    const today = new Date(todayStr);
+    const lastActive = new Date(lastActiveStr);
+    const diffTime = Math.abs(today - lastActive);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 1) {
+      userRecord.stats.streak += 1;
+    } else if (diffDays > 1) {
+      userRecord.stats.streak = 1;
+    }
+    userRecord.stats.lastActiveDate = todayStr;
+  }
+
+  await writeUserData(userData);
+  res.json(userRecord.stats);
+});
+
 // GET all vocabulary (merges built-in list with user-specific states and custom words)
 app.get('/api/vocabulary', async (req, res) => {
   const masterList = await readDatabase();

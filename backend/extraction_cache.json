@@ -1,0 +1,5617 @@
+{
+  "1_1": [
+    {
+      "word": "爱",
+      "pinyin": "ài",
+      "lesson": 15
+    },
+    {
+      "word": "八",
+      "pinyin": "bā",
+      "lesson": 4
+    },
+    {
+      "word": "爸爸",
+      "pinyin": "bàba",
+      "lesson": 4
+    },
+    {
+      "word": "吧",
+      "pinyin": "ba",
+      "lesson": 7
+    },
+    {
+      "word": "白天",
+      "pinyin": "báitiān",
+      "lesson": 9
+    },
+    {
+      "word": "百",
+      "pinyin": "bǎi",
+      "lesson": 4
+    }
+  ],
+  "2_1": [
+    {
+      "word": "阿姨",
+      "pinyin": "āyí",
+      "lesson": 10
+    },
+    {
+      "word": "啊",
+      "pinyin": "a",
+      "lesson": 1
+    },
+    {
+      "word": "矮",
+      "pinyin": "ǎi",
+      "lesson": 4
+    },
+    {
+      "word": "爱",
+      "pinyin": "ài",
+      "lesson": 6
+    }
+  ],
+  "1_2": [
+    {
+      "word": "办",
+      "pinyin": "bàn",
+      "lesson": 7
+    },
+    {
+      "word": "包子",
+      "pinyin": "bāozi",
+      "lesson": 6
+    },
+    {
+      "word": "杯",
+      "pinyin": "bēi",
+      "lesson": 13
+    },
+    {
+      "word": "杯子",
+      "pinyin": "bēizi",
+      "lesson": 10
+    },
+    {
+      "word": "本",
+      "pinyin": "běn",
+      "lesson": 9
+    },
+    {
+      "word": "边",
+      "pinyin": "biān/biàn",
+      "lesson": 9
+    },
+    {
+      "word": "病",
+      "pinyin": "bìng",
+      "lesson": 12
+    },
+    {
+      "word": "病人",
+      "pinyin": "bìngrén",
+      "lesson": 8
+    },
+    {
+      "word": "不客气",
+      "pinyin": "bú kèqi",
+      "lesson": 1
+    },
+    {
+      "word": "不要",
+      "pinyin": "búyào",
+      "lesson": 14
+    },
+    {
+      "word": "不",
+      "pinyin": "bù",
+      "lesson": 2
+    },
+    {
+      "word": "菜",
+      "pinyin": "cài",
+      "lesson": 5
+    },
+    {
+      "word": "菜",
+      "pinyin": "cài",
+      "lesson": 7
+    },
+    {
+      "word": "茶",
+      "pinyin": "chá",
+      "lesson": 13
+    },
+    {
+      "word": "唱",
+      "pinyin": "chàng",
+      "lesson": 9
+    },
+    {
+      "word": "超市",
+      "pinyin": "chāoshì",
+      "lesson": 6
+    },
+    {
+      "word": "车",
+      "pinyin": "chē",
+      "lesson": 11
+    },
+    {
+      "word": "吃",
+      "pinyin": "chī",
+      "lesson": 6
+    },
+    {
+      "word": "出租车",
+      "pinyin": "chūzūchē",
+      "lesson": 6
+    },
+    {
+      "word": "穿",
+      "pinyin": "chuān",
+      "lesson": 10
+    },
+    {
+      "word": "打电话",
+      "pinyin": "dǎ diànhuà",
+      "lesson": 13
+    },
+    {
+      "word": "大",
+      "pinyin": "dà",
+      "lesson": 4
+    },
+    {
+      "word": "大",
+      "pinyin": "dà",
+      "lesson": 8
+    },
+    {
+      "word": "大家",
+      "pinyin": "dàjiā",
+      "lesson": 1
+    },
+    {
+      "word": "大学",
+      "pinyin": "dàxué",
+      "lesson": 11
+    },
+    {
+      "word": "大学生",
+      "pinyin": "dàxuéshēng",
+      "lesson": 11
+    },
+    {
+      "word": "到",
+      "pinyin": "dào",
+      "lesson": 8
+    },
+    {
+      "word": "的",
+      "pinyin": "de",
+      "lesson": 3
+    },
+    {
+      "word": "弟弟",
+      "pinyin": "dìdi",
+      "lesson": 11
+    },
+    {
+      "word": "第",
+      "pinyin": "dì",
+      "lesson": 9
+    },
+    {
+      "word": "点",
+      "pinyin": "diǎn",
+      "lesson": 7
+    },
+    {
+      "word": "电话",
+      "pinyin": "diànhuà",
+      "lesson": 6
+    },
+    {
+      "word": "电脑",
+      "pinyin": "diànnǎo",
+      "lesson": 5
+    },
+    {
+      "word": "电视",
+      "pinyin": "diànshì",
+      "lesson": 9
+    },
+    {
+      "word": "电影",
+      "pinyin": "diànyǐng",
+      "lesson": 7
+    },
+    {
+      "word": "电影院",
+      "pinyin": "diànyǐngyuàn",
+      "lesson": 7
+    },
+    {
+      "word": "店",
+      "pinyin": "diàn",
+      "lesson": 7
+    },
+    {
+      "word": "东西",
+      "pinyin": "dōngxi",
+      "lesson": 6
+    },
+    {
+      "word": "都",
+      "pinyin": "dōu",
+      "lesson": 14
+    },
+    {
+      "word": "读",
+      "pinyin": "dú",
+      "lesson": 11
+    },
+    {
+      "word": "读书",
+      "pinyin": "dúshū",
+      "lesson": 9
+    },
+    {
+      "word": "对",
+      "pinyin": "duì",
+      "lesson": 3
+    },
+    {
+      "word": "对",
+      "pinyin": "duì",
+      "lesson": 11
+    },
+    {
+      "word": "对不起",
+      "pinyin": "duìbuqǐ",
+      "lesson": 2
+    },
+    {
+      "word": "多",
+      "pinyin": "duō",
+      "lesson": 4
+    },
+    {
+      "word": "多",
+      "pinyin": "duō",
+      "lesson": 8
+    },
+    {
+      "word": "多少",
+      "pinyin": "duōshao",
+      "lesson": 4
+    },
+    {
+      "word": "儿子",
+      "pinyin": "érzi",
+      "lesson": 4
+    },
+    {
+      "word": "二",
+      "pinyin": "èr",
+      "lesson": 4
+    },
+    {
+      "word": "饭",
+      "pinyin": "fàn",
+      "lesson": 8
+    },
+    {
+      "word": "饭店",
+      "pinyin": "fàndiàn",
+      "lesson": 11
+    },
+    {
+      "word": "房间",
+      "pinyin": "fángjiān",
+      "lesson": 8
+    },
+    {
+      "word": "飞机",
+      "pinyin": "fēijī",
+      "lesson": 15
+    },
+    {
+      "word": "非常",
+      "pinyin": "fēicháng",
+      "lesson": 6
+    },
+    {
+      "word": "分",
+      "pinyin": "fēn",
+      "lesson": 7
+    },
+    {
+      "word": "分钟",
+      "pinyin": "fēnzhōng",
+      "lesson": 7
+    },
+    {
+      "word": "服务员",
+      "pinyin": "fúwùyuán",
+      "lesson": 13
+    },
+    {
+      "word": "高兴",
+      "pinyin": "gāoxìng",
+      "lesson": 2
+    },
+    {
+      "word": "哥哥",
+      "pinyin": "gēge",
+      "lesson": 4
+    },
+    {
+      "word": "歌",
+      "pinyin": "gē",
+      "lesson": 9
+    },
+    {
+      "word": "个",
+      "pinyin": "gè",
+      "lesson": 4
+    },
+    {
+      "word": "给",
+      "pinyin": "gěi",
+      "lesson": 13
+    },
+    {
+      "word": "工作",
+      "pinyin": "gōngzuò",
+      "lesson": 3
+    },
+    {
+      "word": "工作",
+      "pinyin": "gōngzuò",
+      "lesson": 8
+    },
+    {
+      "word": "公司",
+      "pinyin": "gōngsī",
+      "lesson": 12
+    },
+    {
+      "word": "狗",
+      "pinyin": "gǒu",
+      "lesson": 9
+    }
+  ],
+  "1_3": [
+    {
+      "word": "贵",
+      "pinyin": "guì",
+      "lesson": [
+        10
+      ]
+    },
+    {
+      "word": "国",
+      "pinyin": "guó",
+      "lesson": [
+        3
+      ]
+    },
+    {
+      "word": "还",
+      "pinyin": "hái",
+      "lesson": [
+        3
+      ]
+    },
+    {
+      "word": "孩子",
+      "pinyin": "háizi",
+      "lesson": [
+        4
+      ]
+    },
+    {
+      "word": "好",
+      "pinyin": "hǎo",
+      "lesson": [
+        1
+      ]
+    },
+    {
+      "word": "好吃",
+      "pinyin": "hǎochī",
+      "lesson": [
+        6
+      ]
+    },
+    {
+      "word": "好看",
+      "pinyin": "hǎokàn",
+      "lesson": [
+        5
+      ]
+    },
+    {
+      "word": "好听",
+      "pinyin": "hǎotīng",
+      "lesson": [
+        9
+      ]
+    },
+    {
+      "word": "好玩儿",
+      "pinyin": "hǎowánr",
+      "lesson": [
+        15
+      ]
+    },
+    {
+      "word": "号",
+      "pinyin": "hào",
+      "lesson": [
+        5,
+        6
+      ]
+    },
+    {
+      "word": "喝",
+      "pinyin": "hē",
+      "lesson": [
+        12
+      ]
+    },
+    {
+      "word": "和",
+      "pinyin": "hé",
+      "lesson": [
+        4,
+        9
+      ]
+    },
+    {
+      "word": "很",
+      "pinyin": "hěn",
+      "lesson": [
+        2
+      ]
+    },
+    {
+      "word": "后",
+      "pinyin": "hòu",
+      "lesson": [
+        7
+      ]
+    },
+    {
+      "word": "回",
+      "pinyin": "huí",
+      "lesson": [
+        12
+      ]
+    },
+    {
+      "word": "会",
+      "pinyin": "huì",
+      "lesson": [
+        5
+      ]
+    },
+    {
+      "word": "火车",
+      "pinyin": "huǒchē",
+      "lesson": [
+        14
+      ]
+    },
+    {
+      "word": "机场",
+      "pinyin": "jīchǎng",
+      "lesson": [
+        15
+      ]
+    },
+    {
+      "word": "鸡蛋",
+      "pinyin": "jīdàn",
+      "lesson": [
+        13
+      ]
+    },
+    {
+      "word": "几",
+      "pinyin": "jǐ",
+      "lesson": [
+        4,
+        15
+      ]
+    },
+    {
+      "word": "家",
+      "pinyin": "jiā",
+      "lesson": [
+        4,
+        7,
+        9
+      ]
+    },
+    {
+      "word": "家人",
+      "pinyin": "jiārén",
+      "lesson": [
+        15
+      ]
+    },
+    {
+      "word": "见",
+      "pinyin": "jiàn",
+      "lesson": [
+        7
+      ]
+    },
+    {
+      "word": "件",
+      "pinyin": "jiàn",
+      "lesson": [
+        10
+      ]
+    },
+    {
+      "word": "饺子",
+      "pinyin": "jiǎozi",
+      "lesson": [
+        5
+      ]
+    },
+    {
+      "word": "叫",
+      "pinyin": "jiào",
+      "lesson": [
+        2
+      ]
+    },
+    {
+      "word": "接",
+      "pinyin": "jiē",
+      "lesson": [
+        15
+      ]
+    },
+    {
+      "word": "姐姐",
+      "pinyin": "jiějie",
+      "lesson": [
+        3
+      ]
+    },
+    {
+      "word": "斤",
+      "pinyin": "jīn",
+      "lesson": [
+        10
+      ]
+    },
+    {
+      "word": "今年",
+      "pinyin": "jīnnián",
+      "lesson": [
+        4
+      ]
+    },
+    {
+      "word": "今天",
+      "pinyin": "jīntiān",
+      "lesson": [
+        5
+      ]
+    },
+    {
+      "word": "九",
+      "pinyin": "jiǔ",
+      "lesson": [
+        4
+      ]
+    },
+    {
+      "word": "觉得",
+      "pinyin": "juéde",
+      "lesson": [
+        12
+      ]
+    },
+    {
+      "word": "开",
+      "pinyin": "kāi",
+      "lesson": [
+        14
+      ]
+    },
+    {
+      "word": "开车",
+      "pinyin": "kāichē",
+      "lesson": [
+        11
+      ]
+    },
+    {
+      "word": "看",
+      "pinyin": "kàn",
+      "lesson": [
+        7
+      ]
+    },
+    {
+      "word": "看病",
+      "pinyin": "kànbìng",
+      "lesson": [
+        12
+      ]
+    },
+    {
+      "word": "看见",
+      "pinyin": "kànjiàn",
+      "lesson": [
+        8
+      ]
+    },
+    {
+      "word": "可以",
+      "pinyin": "kěyǐ",
+      "lesson": [
+        13
+      ]
+    },
+    {
+      "word": "课",
+      "pinyin": "kè",
+      "lesson": [
+        7
+      ]
+    },
+    {
+      "word": "口",
+      "pinyin": "kǒu",
+      "lesson": [
+        4
+      ]
+    },
+    {
+      "word": "块",
+      "pinyin": "kuài",
+      "lesson": [
+        10
+      ]
+    },
+    {
+      "word": "来",
+      "pinyin": "lái",
+      "lesson": [
+        12
+      ]
+    },
+    {
+      "word": "老师",
+      "pinyin": "lǎoshī",
+      "lesson": [
+        1
+      ]
+    },
+    {
+      "word": "了",
+      "pinyin": "le",
+      "lesson": [
+        12,
+        14
+      ]
+    },
+    {
+      "word": "冷",
+      "pinyin": "lěng",
+      "lesson": [
+        12
+      ]
+    },
+    {
+      "word": "里",
+      "pinyin": "li/lǐ",
+      "lesson": [
+        7
+      ]
+    },
+    {
+      "word": "两",
+      "pinyin": "liǎng",
+      "lesson": [
+        4
+      ]
+    },
+    {
+      "word": "零",
+      "pinyin": "líng",
+      "lesson": [
+        4
+      ]
+    },
+    {
+      "word": "六",
+      "pinyin": "liù",
+      "lesson": [
+        4
+      ]
+    },
+    {
+      "word": "妈妈",
+      "pinyin": "māma",
+      "lesson": [
+        4
+      ]
+    },
+    {
+      "word": "吗",
+      "pinyin": "ma",
+      "lesson": [
+        3
+      ]
+    },
+    {
+      "word": "买",
+      "pinyin": "mǎi",
+      "lesson": [
+        6
+      ]
+    },
+    {
+      "word": "卖",
+      "pinyin": "mài",
+      "lesson": [
+        13
+      ]
+    },
+    {
+      "word": "忙",
+      "pinyin": "máng",
+      "lesson": [
+        3
+      ]
+    },
+    {
+      "word": "猫",
+      "pinyin": "māo",
+      "lesson": [
+        8
+      ]
+    },
+    {
+      "word": "没",
+      "pinyin": "méi",
+      "lesson": [
+        8
+      ]
+    },
+    {
+      "word": "没关系",
+      "pinyin": "méi guānxi",
+      "lesson": [
+        2
+      ]
+    },
+    {
+      "word": "没事",
+      "pinyin": "méishì",
+      "lesson": [
+        2
+      ]
+    },
+    {
+      "word": "没有",
+      "pinyin": "méiyǒu",
+      "lesson": [
+        4
+      ]
+    },
+    {
+      "word": "妹妹",
+      "pinyin": "mèimei",
+      "lesson": [
+        4
+      ]
+    },
+    {
+      "word": "们",
+      "pinyin": "men",
+      "lesson": [
+        1
+      ]
+    },
+    {
+      "word": "米饭",
+      "pinyin": "mǐfàn",
+      "lesson": [
+        6
+      ]
+    }
+  ],
+  "1_4": [
+    {
+      "word": "面包",
+      "pinyin": "miànbāo",
+      "lesson": 13
+    },
+    {
+      "word": "面条儿",
+      "pinyin": "miàntiáor",
+      "lesson": 5
+    },
+    {
+      "word": "名字",
+      "pinyin": "míngzi",
+      "lesson": 2
+    },
+    {
+      "word": "明年",
+      "pinyin": "míngnián",
+      "lesson": 14
+    },
+    {
+      "word": "明天",
+      "pinyin": "míngtiān",
+      "lesson": 6
+    },
+    {
+      "word": "哪",
+      "pinyin": "nǎ",
+      "lesson": 3
+    },
+    {
+      "word": "哪个",
+      "pinyin": "nǎge",
+      "lesson": 15
+    },
+    {
+      "word": "哪里",
+      "pinyin": "nǎlǐ",
+      "lesson": 11
+    },
+    {
+      "word": "哪儿",
+      "pinyin": "nǎr",
+      "lesson": 6
+    },
+    {
+      "word": "哪些",
+      "pinyin": "nǎxiē",
+      "lesson": 14
+    },
+    {
+      "word": "那",
+      "pinyin": "nà",
+      "lesson": 9
+    },
+    {
+      "word": "那",
+      "pinyin": "nà",
+      "lesson": 15
+    },
+    {
+      "word": "那边",
+      "pinyin": "nàbiān",
+      "lesson": 6
+    },
+    {
+      "word": "那个",
+      "pinyin": "nàge",
+      "lesson": 9
+    },
+    {
+      "word": "那里",
+      "pinyin": "nǎlǐ",
+      "lesson": 11
+    },
+    {
+      "word": "那儿",
+      "pinyin": "nàr",
+      "lesson": 10
+    },
+    {
+      "word": "那些",
+      "pinyin": "nàxiē",
+      "lesson": 10
+    },
+    {
+      "word": "男",
+      "pinyin": "nán",
+      "lesson": 10
+    },
+    {
+      "word": "男朋友",
+      "pinyin": "nánpéngyou",
+      "lesson": 15
+    },
+    {
+      "word": "呢",
+      "pinyin": "ne",
+      "lesson": 4
+    },
+    {
+      "word": "呢",
+      "pinyin": "ne",
+      "lesson": 7
+    },
+    {
+      "word": "能",
+      "pinyin": "néng",
+      "lesson": 8
+    },
+    {
+      "word": "你",
+      "pinyin": "nǐ",
+      "lesson": 2
+    },
+    {
+      "word": "你好",
+      "pinyin": "nǐ hǎo",
+      "lesson": 1
+    },
+    {
+      "word": "你们",
+      "pinyin": "nǐmen",
+      "lesson": 1
+    },
+    {
+      "word": "年",
+      "pinyin": "nián",
+      "lesson": 15
+    },
+    {
+      "word": "您",
+      "pinyin": "nín",
+      "lesson": 1
+    },
+    {
+      "word": "牛奶",
+      "pinyin": "niúnǎi",
+      "lesson": 6
+    },
+    {
+      "word": "女",
+      "pinyin": "nǚ",
+      "lesson": 10
+    },
+    {
+      "word": "女儿",
+      "pinyin": "nǚ'ér",
+      "lesson": 4
+    },
+    {
+      "word": "女朋友",
+      "pinyin": "nǚpéngyou",
+      "lesson": 3
+    },
+    {
+      "word": "女士",
+      "pinyin": "nǚshì",
+      "lesson": 13
+    },
+    {
+      "word": "朋友",
+      "pinyin": "péngyou",
+      "lesson": 9
+    },
+    {
+      "word": "便宜",
+      "pinyin": "piányi",
+      "lesson": 10
+    },
+    {
+      "word": "漂亮",
+      "pinyin": "piàoliang",
+      "lesson": 8
+    },
+    {
+      "word": "苹果",
+      "pinyin": "píngguǒ",
+      "lesson": 10
+    },
+    {
+      "word": "七",
+      "pinyin": "qī",
+      "lesson": 4
+    },
+    {
+      "word": "起床",
+      "pinyin": "qǐchuáng",
+      "lesson": 11
+    },
+    {
+      "word": "千",
+      "pinyin": "qiān",
+      "lesson": 4
+    },
+    {
+      "word": "前",
+      "pinyin": "qián",
+      "lesson": 8
+    },
+    {
+      "word": "前边",
+      "pinyin": "qiánbian",
+      "lesson": 9
+    },
+    {
+      "word": "钱",
+      "pinyin": "qián",
+      "lesson": 10
+    },
+    {
+      "word": "请",
+      "pinyin": "qǐng",
+      "lesson": 13
+    },
+    {
+      "word": "请问",
+      "pinyin": "qǐngwèn",
+      "lesson": 2
+    },
+    {
+      "word": "去",
+      "pinyin": "qù",
+      "lesson": 6
+    },
+    {
+      "word": "去年",
+      "pinyin": "qùnián",
+      "lesson": 15
+    },
+    {
+      "word": "热",
+      "pinyin": "rè",
+      "lesson": 12
+    },
+    {
+      "word": "人",
+      "pinyin": "rén",
+      "lesson": 3
+    },
+    {
+      "word": "认识",
+      "pinyin": "rènshi",
+      "lesson": 2
+    },
+    {
+      "word": "日",
+      "pinyin": "rì",
+      "lesson": 5
+    },
+    {
+      "word": "三",
+      "pinyin": "sān",
+      "lesson": 4
+    },
+    {
+      "word": "商店",
+      "pinyin": "shāngdiàn",
+      "lesson": 10
+    },
+    {
+      "word": "上",
+      "pinyin": "shang/shàng",
+      "lesson": 9
+    },
+    {
+      "word": "上",
+      "pinyin": "shang/shàng",
+      "lesson": 14
+    },
+    {
+      "word": "上班",
+      "pinyin": "shàngbān",
+      "lesson": 7
+    },
+    {
+      "word": "上课",
+      "pinyin": "shàngkè",
+      "lesson": 7
+    },
+    {
+      "word": "上午",
+      "pinyin": "shàngwǔ",
+      "lesson": 7
+    },
+    {
+      "word": "上学",
+      "pinyin": "shàngxué",
+      "lesson": 14
+    },
+    {
+      "word": "少",
+      "pinyin": "shǎo",
+      "lesson": 10
+    },
+    {
+      "word": "谁",
+      "pinyin": "shéi/shuí",
+      "lesson": 3
+    },
+    {
+      "word": "什么",
+      "pinyin": "shénme",
+      "lesson": 2
+    },
+    {
+      "word": "生病",
+      "pinyin": "shēngbìng",
+      "lesson": 12
+    },
+    {
+      "word": "十",
+      "pinyin": "shí",
+      "lesson": 4
+    },
+    {
+      "word": "时候",
+      "pinyin": "shíhou",
+      "lesson": 11
+    },
+    {
+      "word": "时间",
+      "pinyin": "shíjiān",
+      "lesson": 15
+    },
+    {
+      "word": "是",
+      "pinyin": "shì",
+      "lesson": 7
+    }
+  ],
+  "1_5": [
+    {
+      "word": "是",
+      "pinyin": "shì",
+      "lesson": 2
+    },
+    {
+      "word": "手机",
+      "pinyin": "shǒujī",
+      "lesson": 6
+    },
+    {
+      "word": "售货员",
+      "pinyin": "shòuhuòyuán",
+      "lesson": 10
+    },
+    {
+      "word": "书",
+      "pinyin": "shū",
+      "lesson": 9
+    },
+    {
+      "word": "书店",
+      "pinyin": "shūdiàn",
+      "lesson": 8
+    },
+    {
+      "word": "水",
+      "pinyin": "shuǐ",
+      "lesson": 12
+    },
+    {
+      "word": "水果",
+      "pinyin": "shuǐguǒ",
+      "lesson": 10
+    },
+    {
+      "word": "睡",
+      "pinyin": "shuì",
+      "lesson": 11
+    },
+    {
+      "word": "睡觉",
+      "pinyin": "shuìjiào",
+      "lesson": 11
+    },
+    {
+      "word": "说",
+      "pinyin": "shuō",
+      "lesson": 11
+    },
+    {
+      "word": "说话",
+      "pinyin": "shuōhuà",
+      "lesson": 14
+    },
+    {
+      "word": "四",
+      "pinyin": "sì",
+      "lesson": 4
+    },
+    {
+      "word": "岁",
+      "pinyin": "suì",
+      "lesson": 4
+    },
+    {
+      "word": "他",
+      "pinyin": "tā",
+      "lesson": 4
+    },
+    {
+      "word": "他们",
+      "pinyin": "tāmen",
+      "lesson": 14
+    },
+    {
+      "word": "它",
+      "pinyin": "tā",
+      "lesson": 5
+    },
+    {
+      "word": "它们",
+      "pinyin": "tāmen",
+      "lesson": 14
+    },
+    {
+      "word": "她",
+      "pinyin": "tā",
+      "lesson": 3
+    },
+    {
+      "word": "她们",
+      "pinyin": "tāmen",
+      "lesson": 14
+    },
+    {
+      "word": "太",
+      "pinyin": "tài",
+      "lesson": 3
+    },
+    {
+      "word": "天",
+      "pinyin": "tiān",
+      "lesson": 12
+    },
+    {
+      "word": "天气",
+      "pinyin": "tiānqì",
+      "lesson": 12
+    },
+    {
+      "word": "听",
+      "pinyin": "tīng",
+      "lesson": 14
+    },
+    {
+      "word": "听见",
+      "pinyin": "tīngjiàn",
+      "lesson": 14
+    },
+    {
+      "word": "同学",
+      "pinyin": "tóngxué",
+      "lesson": 1
+    },
+    {
+      "word": "外",
+      "pinyin": "wài",
+      "lesson": 8
+    },
+    {
+      "word": "外边",
+      "pinyin": "wàibian",
+      "lesson": 9
+    },
+    {
+      "word": "玩",
+      "pinyin": "wán",
+      "lesson": 9
+    },
+    {
+      "word": "晚",
+      "pinyin": "wǎn",
+      "lesson": 14
+    },
+    {
+      "word": "晚饭",
+      "pinyin": "wǎnfàn",
+      "lesson": 6
+    },
+    {
+      "word": "晚上",
+      "pinyin": "wǎnshang",
+      "lesson": 7
+    },
+    {
+      "word": "喂",
+      "pinyin": "wèi",
+      "lesson": 3
+    },
+    {
+      "word": "问",
+      "pinyin": "wèn",
+      "lesson": 11
+    },
+    {
+      "word": "问题",
+      "pinyin": "wèntí",
+      "lesson": 13
+    },
+    {
+      "word": "我",
+      "pinyin": "wǒ",
+      "lesson": 2
+    },
+    {
+      "word": "我们",
+      "pinyin": "wǒmen",
+      "lesson": 3
+    },
+    {
+      "word": "五",
+      "pinyin": "wǔ",
+      "lesson": 4
+    },
+    {
+      "word": "午饭",
+      "pinyin": "wǔfàn",
+      "lesson": 8
+    },
+    {
+      "word": "喜欢",
+      "pinyin": "xǐhuan",
+      "lesson": 5
+    },
+    {
+      "word": "下",
+      "pinyin": "xià",
+      "lesson": 8
+    },
+    {
+      "word": "下",
+      "pinyin": "xià",
+      "lesson": 12
+    },
+    {
+      "word": "下班",
+      "pinyin": "xiàbān",
+      "lesson": 5
+    },
+    {
+      "word": "下课",
+      "pinyin": "xiàkè",
+      "lesson": 7
+    },
+    {
+      "word": "下午",
+      "pinyin": "xiàwǔ",
+      "lesson": 7
+    },
+    {
+      "word": "下雨",
+      "pinyin": "xiàyǔ",
+      "lesson": 12
+    },
+    {
+      "word": "先生",
+      "pinyin": "xiānsheng",
+      "lesson": 13
+    },
+    {
+      "word": "现在",
+      "pinyin": "xiànzài",
+      "lesson": 7
+    },
+    {
+      "word": "想",
+      "pinyin": "xiǎng",
+      "lesson": 3
+    },
+    {
+      "word": "想",
+      "pinyin": "xiǎng",
+      "lesson": 6
+    },
+    {
+      "word": "小",
+      "pinyin": "xiǎo",
+      "lesson": 8
+    },
+    {
+      "word": "小朋友",
+      "pinyin": "xiǎopéngyou",
+      "lesson": 11
+    },
+    {
+      "word": "小时",
+      "pinyin": "xiǎoshí",
+      "lesson": 15
+    },
+    {
+      "word": "小学",
+      "pinyin": "xiǎoxué",
+      "lesson": 14
+    },
+    {
+      "word": "小学生",
+      "pinyin": "xiǎoxuéshēng",
+      "lesson": 14
+    },
+    {
+      "word": "些",
+      "pinyin": "xiē",
+      "lesson": 6
+    },
+    {
+      "word": "写",
+      "pinyin": "xiě",
+      "lesson": 14
+    },
+    {
+      "word": "谢谢",
+      "pinyin": "xièxie",
+      "lesson": 1
+    },
+    {
+      "word": "新",
+      "pinyin": "xīn",
+      "lesson": 5
+    },
+    {
+      "word": "星期",
+      "pinyin": "xingqī",
+      "lesson": 5
+    },
+    {
+      "word": "星期日",
+      "pinyin": "Xīngqīrì",
+      "lesson": 5
+    },
+    {
+      "word": "星期天",
+      "pinyin": "Xīngqītiān",
+      "lesson": 5
+    },
+    {
+      "word": "休息",
+      "pinyin": "xiūxi",
+      "lesson": 5
+    },
+    {
+      "word": "学",
+      "pinyin": "xué",
+      "lesson": 11
+    },
+    {
+      "word": "学生",
+      "pinyin": "xuéshēng",
+      "lesson": 1
+    },
+    {
+      "word": "学习",
+      "pinyin": "xuéxí",
+      "lesson": 9
+    }
+  ],
+  "1_6": [
+    {
+      "word": "学校",
+      "pinyin": "xuéxiào",
+      "lesson": [
+        8
+      ]
+    },
+    {
+      "word": "雪",
+      "pinyin": "xuě",
+      "lesson": [
+        12
+      ]
+    },
+    {
+      "word": "药",
+      "pinyin": "yào",
+      "lesson": [
+        12
+      ]
+    },
+    {
+      "word": "要",
+      "pinyin": "yào",
+      "lesson": [
+        11,
+        13,
+        15
+      ]
+    },
+    {
+      "word": "也",
+      "pinyin": "yě",
+      "lesson": [
+        2
+      ]
+    },
+    {
+      "word": "一",
+      "pinyin": "yī",
+      "lesson": [
+        4
+      ]
+    },
+    {
+      "word": "一半",
+      "pinyin": "yíbàn",
+      "lesson": [
+        13
+      ]
+    },
+    {
+      "word": "一下",
+      "pinyin": "yíxià",
+      "lesson": [
+        13
+      ]
+    },
+    {
+      "word": "一点儿",
+      "pinyin": "yìdiǎnr",
+      "lesson": [
+        12
+      ]
+    },
+    {
+      "word": "一些",
+      "pinyin": "yìxiē",
+      "lesson": [
+        5
+      ]
+    },
+    {
+      "word": "衣服",
+      "pinyin": "yīfu",
+      "lesson": [
+        10
+      ]
+    },
+    {
+      "word": "医",
+      "pinyin": "yī",
+      "lesson": [
+        11
+      ]
+    },
+    {
+      "word": "医生",
+      "pinyin": "yīshēng",
+      "lesson": [
+        8
+      ]
+    },
+    {
+      "word": "医院",
+      "pinyin": "yīyuàn",
+      "lesson": [
+        7
+      ]
+    },
+    {
+      "word": "椅子",
+      "pinyin": "yǐzi",
+      "lesson": [
+        9
+      ]
+    },
+    {
+      "word": "有",
+      "pinyin": "yǒu",
+      "lesson": [
+        4
+      ]
+    },
+    {
+      "word": "有的",
+      "pinyin": "yǒude",
+      "lesson": [
+        14
+      ]
+    },
+    {
+      "word": "有点儿",
+      "pinyin": "yǒudiǎnr",
+      "lesson": [
+        12
+      ]
+    },
+    {
+      "word": "有些",
+      "pinyin": "yǒuxiē",
+      "lesson": [
+        14
+      ]
+    },
+    {
+      "word": "雨",
+      "pinyin": "yǔ",
+      "lesson": [
+        12
+      ]
+    },
+    {
+      "word": "元",
+      "pinyin": "yuán",
+      "lesson": [
+        10
+      ]
+    },
+    {
+      "word": "月",
+      "pinyin": "yuè",
+      "lesson": [
+        5
+      ]
+    },
+    {
+      "word": "再",
+      "pinyin": "zài",
+      "lesson": [
+        12,
+        13
+      ]
+    },
+    {
+      "word": "再见",
+      "pinyin": "zàijiàn",
+      "lesson": [
+        1
+      ]
+    },
+    {
+      "word": "在",
+      "pinyin": "zài",
+      "lesson": [
+        7,
+        8,
+        11
+      ]
+    },
+    {
+      "word": "早",
+      "pinyin": "zǎo",
+      "lesson": [
+        15
+      ]
+    },
+    {
+      "word": "早饭",
+      "pinyin": "zǎofàn",
+      "lesson": [
+        13
+      ]
+    },
+    {
+      "word": "早上",
+      "pinyin": "zǎoshang",
+      "lesson": [
+        7
+      ]
+    },
+    {
+      "word": "怎么",
+      "pinyin": "zěnme",
+      "lesson": [
+        6
+      ]
+    },
+    {
+      "word": "怎么样",
+      "pinyin": "zěnmeyàng",
+      "lesson": [
+        10
+      ]
+    },
+    {
+      "word": "找",
+      "pinyin": "zhǎo",
+      "lesson": [
+        11
+      ]
+    },
+    {
+      "word": "这",
+      "pinyin": "zhè",
+      "lesson": [
+        3
+      ]
+    },
+    {
+      "word": "这边",
+      "pinyin": "zhèbiān",
+      "lesson": [
+        10
+      ]
+    },
+    {
+      "word": "这个",
+      "pinyin": "zhège",
+      "lesson": [
+        13
+      ]
+    },
+    {
+      "word": "这里",
+      "pinyin": "zhèlǐ",
+      "lesson": [
+        12
+      ]
+    },
+    {
+      "word": "这儿",
+      "pinyin": "zhèr",
+      "lesson": [
+        10
+      ]
+    },
+    {
+      "word": "这些",
+      "pinyin": "zhèxiē",
+      "lesson": [
+        10
+      ]
+    },
+    {
+      "word": "真",
+      "pinyin": "zhên",
+      "lesson": [
+        5
+      ]
+    },
+    {
+      "word": "正在",
+      "pinyin": "zhèngzài",
+      "lesson": [
+        11
+      ]
+    },
+    {
+      "word": "只",
+      "pinyin": "zhǐ",
+      "lesson": [
+        8
+      ]
+    },
+    {
+      "word": "知道",
+      "pinyin": "zhīdào",
+      "lesson": [
+        11
+      ]
+    },
+    {
+      "word": "中午",
+      "pinyin": "zhōngwǔ",
+      "lesson": [
+        14
+      ]
+    },
+    {
+      "word": "中学",
+      "pinyin": "zhōngxué",
+      "lesson": [
+        14
+      ]
+    },
+    {
+      "word": "中学生",
+      "pinyin": "zhōngxuéshēng",
+      "lesson": [
+        14
+      ]
+    },
+    {
+      "word": "住",
+      "pinyin": "zhù",
+      "lesson": [
+        15
+      ]
+    },
+    {
+      "word": "桌子",
+      "pinyin": "zhuōzi",
+      "lesson": [
+        8
+      ]
+    },
+    {
+      "word": "字",
+      "pinyin": "zì",
+      "lesson": [
+        14
+      ]
+    },
+    {
+      "word": "昨天",
+      "pinyin": "zuótiān",
+      "lesson": [
+        11
+      ]
+    },
+    {
+      "word": "坐",
+      "pinyin": "zuò",
+      "lesson": [
+        6,
+        13
+      ]
+    },
+    {
+      "word": "做",
+      "pinyin": "zuò",
+      "lesson": [
+        5,
+        9
+      ]
+    },
+    {
+      "word": "做饭",
+      "pinyin": "zuò fàn",
+      "lesson": [
+        5
+      ]
+    }
+  ],
+  "1_7": [
+    {
+      "word": "北京",
+      "pinyin": "Běijīng",
+      "lesson": 15
+    },
+    {
+      "word": "大兴机场",
+      "pinyin": "Dàxīng Jīchǎng",
+      "lesson": 15
+    },
+    {
+      "word": "法国",
+      "pinyin": "Fǎguó",
+      "lesson": 3
+    },
+    {
+      "word": "汉语",
+      "pinyin": "Hànyǔ",
+      "lesson": 14
+    },
+    {
+      "word": "汉字",
+      "pinyin": "Hànzì",
+      "lesson": 14
+    },
+    {
+      "word": "胡医生",
+      "pinyin": "Hú yīshēng",
+      "lesson": 8
+    },
+    {
+      "word": "泰国",
+      "pinyin": "Tàiguó",
+      "lesson": 3
+    },
+    {
+      "word": "王老师",
+      "pinyin": "Wáng lǎoshī",
+      "lesson": 1
+    },
+    {
+      "word": "西安",
+      "pinyin": "Xī'ān",
+      "lesson": 15
+    },
+    {
+      "word": "西安饭店",
+      "pinyin": "Xī'ān Fàndiàn",
+      "lesson": 6
+    },
+    {
+      "word": "中国",
+      "pinyin": "Zhōngguó",
+      "lesson": 3
+    },
+    {
+      "word": "中文",
+      "pinyin": "Zhōngwén",
+      "lesson": 3
+    }
+  ],
+  "2_2": [
+    {
+      "word": "班",
+      "pinyin": "bān",
+      "lesson": 13
+    },
+    {
+      "word": "帮",
+      "pinyin": "bāng",
+      "lesson": 10
+    },
+    {
+      "word": "帮忙",
+      "pinyin": "bāngmáng",
+      "lesson": 1
+    },
+    {
+      "word": "包",
+      "pinyin": "bāo",
+      "lesson": 14
+    },
+    {
+      "word": "本子",
+      "pinyin": "běnzi",
+      "lesson": 10
+    },
+    {
+      "word": "比",
+      "pinyin": "bǐ",
+      "lesson": 8
+    },
+    {
+      "word": "笔",
+      "pinyin": "bǐ",
+      "lesson": [
+        10,
+        13
+      ]
+    },
+    {
+      "word": "别",
+      "pinyin": "bié",
+      "lesson": 2
+    },
+    {
+      "word": "不错",
+      "pinyin": "búcuò",
+      "lesson": 3
+    },
+    {
+      "word": "不好意思",
+      "pinyin": "bù hǎoyìsi",
+      "lesson": 1
+    },
+    {
+      "word": "长",
+      "pinyin": "cháng",
+      "lesson": 6
+    },
+    {
+      "word": "车站",
+      "pinyin": "chēzhàn",
+      "lesson": 2
+    },
+    {
+      "word": "出国",
+      "pinyin": "chūguó",
+      "lesson": 15
+    },
+    {
+      "word": "出门",
+      "pinyin": "chūmén",
+      "lesson": 15
+    },
+    {
+      "word": "出去",
+      "pinyin": "chūqù",
+      "lesson": 3
+    },
+    {
+      "word": "床",
+      "pinyin": "chuáng",
+      "lesson": 6
+    },
+    {
+      "word": "词",
+      "pinyin": "cí",
+      "lesson": 10
+    },
+    {
+      "word": "次",
+      "pinyin": "cì",
+      "lesson": 1
+    },
+    {
+      "word": "从",
+      "pinyin": "cóng",
+      "lesson": 7
+    },
+    {
+      "word": "从小",
+      "pinyin": "cóngxiǎo",
+      "lesson": 12
+    },
+    {
+      "word": "错",
+      "pinyin": "cuò",
+      "lesson": 10
+    },
+    {
+      "word": "打",
+      "pinyin": "dǎ",
+      "lesson": 7
+    },
+    {
+      "word": "打车",
+      "pinyin": "dǎchē",
+      "lesson": 2
+    },
+    {
+      "word": "打开",
+      "pinyin": "dǎkāi",
+      "lesson": 6
+    },
+    {
+      "word": "但",
+      "pinyin": "dàn",
+      "lesson": 2
+    },
+    {
+      "word": "但是",
+      "pinyin": "dànshì",
+      "lesson": 8
+    },
+    {
+      "word": "蛋糕",
+      "pinyin": "dàngāo",
+      "lesson": 6
+    },
+    {
+      "word": "地",
+      "pinyin": "de",
+      "lesson": 6
+    },
+    {
+      "word": "得",
+      "pinyin": "de",
+      "lesson": 7
+    },
+    {
+      "word": "等",
+      "pinyin": "děng",
+      "lesson": 5
+    },
+    {
+      "word": "地铁",
+      "pinyin": "dìtiě",
+      "lesson": 12
+    },
+    {
+      "word": "点",
+      "pinyin": "diǎn",
+      "lesson": 8
+    },
+    {
+      "word": "懂",
+      "pinyin": "dǒng",
+      "lesson": 1
+    },
+    {
+      "word": "动",
+      "pinyin": "dòng",
+      "lesson": 11
+    },
+    {
+      "word": "饭馆",
+      "pinyin": "fànguǎn",
+      "lesson": 8
+    },
+    {
+      "word": "房子",
+      "pinyin": "fángzi",
+      "lesson": 14
+    },
+    {
+      "word": "飞",
+      "pinyin": "fēi",
+      "lesson": 15
+    },
+    {
+      "word": "高",
+      "pinyin": "gāo",
+      "lesson": 9
+    },
+    {
+      "word": "高中",
+      "pinyin": "gāozhōng",
+      "lesson": 15
+    },
+    {
+      "word": "告诉",
+      "pinyin": "gàosu",
+      "lesson": 13
+    },
+    {
+      "word": "个子",
+      "pinyin": "gèzi",
+      "lesson": 9
+    },
+    {
+      "word": "给",
+      "pinyin": "gěi",
+      "lesson": 1
+    },
+    {
+      "word": "跟",
+      "pinyin": "gēn",
+      "lesson": 5
+    },
+    {
+      "word": "更",
+      "pinyin": "gèng",
+      "lesson": 4
+    },
+    {
+      "word": "公交车",
+      "pinyin": "gōngjiāochē",
+      "lesson": 2
+    },
+    {
+      "word": "过",
+      "pinyin": "guò",
+      "lesson": 6
+    },
+    {
+      "word": "过来",
+      "pinyin": "guòlái",
+      "lesson": 2
+    },
+    {
+      "word": "过年",
+      "pinyin": "guònián",
+      "lesson": 14
+    },
+    {
+      "word": "过去",
+      "pinyin": "guòqù",
+      "lesson": 4
+    },
+    {
+      "word": "过",
+      "pinyin": "guo",
+      "lesson": 4
+    }
+  ],
+  "2_3": [
+    {
+      "word": "还是",
+      "pinyin": "háishi",
+      "lesson": [
+        2,
+        10
+      ]
+    },
+    {
+      "word": "好",
+      "pinyin": "hǎo",
+      "lesson": [
+        12
+      ]
+    },
+    {
+      "word": "好像",
+      "pinyin": "hǎoxiàng",
+      "lesson": [
+        15
+      ]
+    },
+    {
+      "word": "黑色",
+      "pinyin": "hēisè",
+      "lesson": [
+        4
+      ]
+    },
+    {
+      "word": "红色",
+      "pinyin": "hóngsè",
+      "lesson": [
+        4
+      ]
+    },
+    {
+      "word": "后面",
+      "pinyin": "hòumiàn",
+      "lesson": [
+        10
+      ]
+    },
+    {
+      "word": "花",
+      "pinyin": "huā",
+      "lesson": [
+        8,
+        13
+      ]
+    },
+    {
+      "word": "画",
+      "pinyin": "huà",
+      "lesson": [
+        6
+      ]
+    },
+    {
+      "word": "画笔",
+      "pinyin": "huàbǐ",
+      "lesson": [
+        6
+      ]
+    },
+    {
+      "word": "坏",
+      "pinyin": "huài",
+      "lesson": [
+        9
+      ]
+    },
+    {
+      "word": "回来",
+      "pinyin": "huílái",
+      "lesson": [
+        3
+      ]
+    },
+    {
+      "word": "回去",
+      "pinyin": "huíqù",
+      "lesson": [
+        3
+      ]
+    },
+    {
+      "word": "机场",
+      "pinyin": "jīchǎng",
+      "lesson": [
+        15
+      ]
+    },
+    {
+      "word": "机票",
+      "pinyin": "jīpiào",
+      "lesson": [
+        15
+      ]
+    },
+    {
+      "word": "记得",
+      "pinyin": "jìde",
+      "lesson": [
+        8
+      ]
+    },
+    {
+      "word": "间",
+      "pinyin": "jiān",
+      "lesson": [
+        2
+      ]
+    },
+    {
+      "word": "教",
+      "pinyin": "jiāo",
+      "lesson": [
+        13
+      ]
+    },
+    {
+      "word": "教室",
+      "pinyin": "jiàoshì",
+      "lesson": [
+        2
+      ]
+    },
+    {
+      "word": "接",
+      "pinyin": "jiē",
+      "lesson": [
+        1
+      ]
+    },
+    {
+      "word": "介绍",
+      "pinyin": "jièshào",
+      "lesson": [
+        1
+      ]
+    },
+    {
+      "word": "进",
+      "pinyin": "jìn",
+      "lesson": [
+        11
+      ]
+    },
+    {
+      "word": "进来",
+      "pinyin": "jìnlái",
+      "lesson": [
+        5
+      ]
+    },
+    {
+      "word": "进去",
+      "pinyin": "jìnqù",
+      "lesson": [
+        4
+      ]
+    },
+    {
+      "word": "近",
+      "pinyin": "jìn",
+      "lesson": [
+        9
+      ]
+    },
+    {
+      "word": "经常",
+      "pinyin": "jīngcháng",
+      "lesson": [
+        11
+      ]
+    },
+    {
+      "word": "酒店",
+      "pinyin": "jiǔdiàn",
+      "lesson": [
+        5
+      ]
+    },
+    {
+      "word": "就",
+      "pinyin": "jiù",
+      "lesson": [
+        1
+      ]
+    },
+    {
+      "word": "咖啡",
+      "pinyin": "kāfēi",
+      "lesson": [
+        9
+      ]
+    },
+    {
+      "word": "开始",
+      "pinyin": "kāishǐ",
+      "lesson": [
+        7
+      ]
+    },
+    {
+      "word": "开学",
+      "pinyin": "kāixué",
+      "lesson": [
+        10
+      ]
+    },
+    {
+      "word": "考",
+      "pinyin": "kǎo",
+      "lesson": [
+        10
+      ]
+    },
+    {
+      "word": "考试",
+      "pinyin": "kǎoshì",
+      "lesson": [
+        10
+      ]
+    },
+    {
+      "word": "可能",
+      "pinyin": "kěnéng",
+      "lesson": [
+        13
+      ]
+    },
+    {
+      "word": "裤子",
+      "pinyin": "kùzi",
+      "lesson": [
+        4
+      ]
+    },
+    {
+      "word": "快",
+      "pinyin": "kuài",
+      "lesson": [
+        5
+      ]
+    },
+    {
+      "word": "快乐",
+      "pinyin": "kuàilè",
+      "lesson": [
+        6
+      ]
+    },
+    {
+      "word": "快要",
+      "pinyin": "kuàiyào",
+      "lesson": [
+        10
+      ]
+    },
+    {
+      "word": "篮球",
+      "pinyin": "lánqiú",
+      "lesson": [
+        7
+      ]
+    },
+    {
+      "word": "累",
+      "pinyin": "lèi",
+      "lesson": [
+        3
+      ]
+    },
+    {
+      "word": "离",
+      "pinyin": "lí",
+      "lesson": [
+        9
+      ]
+    },
+    {
+      "word": "礼物",
+      "pinyin": "lǐwù",
+      "lesson": [
+        5
+      ]
+    },
+    {
+      "word": "里面",
+      "pinyin": "lǐmiàn",
+      "lesson": [
+        13
+      ]
+    },
+    {
+      "word": "楼",
+      "pinyin": "lóu",
+      "lesson": [
+        12
+      ]
+    },
+    {
+      "word": "路",
+      "pinyin": "lù",
+      "lesson": [
+        15
+      ]
+    },
+    {
+      "word": "路上",
+      "pinyin": "lùshang",
+      "lesson": [
+        11
+      ]
+    },
+    {
+      "word": "旅游",
+      "pinyin": "lǚyóu",
+      "lesson": [
+        1
+      ]
+    },
+    {
+      "word": "绿色",
+      "pinyin": "lǜsè",
+      "lesson": [
+        4
+      ]
+    },
+    {
+      "word": "慢",
+      "pinyin": "màn",
+      "lesson": [
+        11
+      ]
+    },
+    {
+      "word": "没意思",
+      "pinyin": "méi yìsi",
+      "lesson": [
+        14
+      ]
+    }
+  ],
+  "2_4": [
+    {
+      "word": "每",
+      "pinyin": "měi",
+      "lesson": 3
+    },
+    {
+      "word": "门",
+      "pinyin": "mén",
+      "lesson": 10
+    },
+    {
+      "word": "门口",
+      "pinyin": "ménkǒu",
+      "lesson": 9
+    },
+    {
+      "word": "门票",
+      "pinyin": "ménpiào",
+      "lesson": 15
+    },
+    {
+      "word": "面",
+      "pinyin": "miàn",
+      "lesson": 5
+    },
+    {
+      "word": "名",
+      "pinyin": "míng",
+      "lesson": 2
+    },
+    {
+      "word": "拿",
+      "pinyin": "ná",
+      "lesson": 3
+    },
+    {
+      "word": "那",
+      "pinyin": "nà",
+      "lesson": 1
+    },
+    {
+      "word": "那么",
+      "pinyin": "nàme",
+      "lesson": 9
+    },
+    {
+      "word": "那样",
+      "pinyin": "nàyàng",
+      "lesson": 13
+    },
+    {
+      "word": "奶茶",
+      "pinyin": "nǎichá",
+      "lesson": 5
+    },
+    {
+      "word": "奶奶",
+      "pinyin": "nǎinai",
+      "lesson": 5
+    },
+    {
+      "word": "男孩儿",
+      "pinyin": "nánháir",
+      "lesson": 9
+    },
+    {
+      "word": "鸟",
+      "pinyin": "niǎo",
+      "lesson": 15
+    },
+    {
+      "word": "女孩儿",
+      "pinyin": "nǚháir",
+      "lesson": 14
+    },
+    {
+      "word": "旁边",
+      "pinyin": "pángbiān",
+      "lesson": 9
+    },
+    {
+      "word": "跑",
+      "pinyin": "pǎo",
+      "lesson": 7
+    },
+    {
+      "word": "跑步",
+      "pinyin": "pǎobù",
+      "lesson": 7
+    },
+    {
+      "word": "票",
+      "pinyin": "piào",
+      "lesson": 2
+    },
+    {
+      "word": "妻子",
+      "pinyin": "qīzi",
+      "lesson": 8
+    },
+    {
+      "word": "前面",
+      "pinyin": "qiánmiàn",
+      "lesson": 14
+    },
+    {
+      "word": "晴",
+      "pinyin": "qíng",
+      "lesson": 12
+    },
+    {
+      "word": "球",
+      "pinyin": "qiú",
+      "lesson": 7
+    },
+    {
+      "word": "让",
+      "pinyin": "ràng",
+      "lesson": 1
+    },
+    {
+      "word": "肉",
+      "pinyin": "ròu",
+      "lesson": 6
+    },
+    {
+      "word": "商场",
+      "pinyin": "shāngchǎng",
+      "lesson": 4
+    },
+    {
+      "word": "上来",
+      "pinyin": "shànglái",
+      "lesson": 5
+    },
+    {
+      "word": "上面",
+      "pinyin": "shàngmiàn",
+      "lesson": 13
+    },
+    {
+      "word": "上去",
+      "pinyin": "shàngqù",
+      "lesson": 5
+    },
+    {
+      "word": "上网",
+      "pinyin": "shàngwǎng",
+      "lesson": 13
+    },
+    {
+      "word": "身体",
+      "pinyin": "shēntǐ",
+      "lesson": 11
+    },
+    {
+      "word": "生日",
+      "pinyin": "shēngrì",
+      "lesson": 6
+    },
+    {
+      "word": "时",
+      "pinyin": "shí",
+      "lesson": 11
+    },
+    {
+      "word": "事情",
+      "pinyin": "shìqing",
+      "lesson": 12
+    },
+    {
+      "word": "试",
+      "pinyin": "shì",
+      "lesson": 4
+    },
+    {
+      "word": "手",
+      "pinyin": "shǒu",
+      "lesson": 3
+    },
+    {
+      "word": "手表",
+      "pinyin": "shǒubiǎo",
+      "lesson": 8
+    },
+    {
+      "word": "书包",
+      "pinyin": "shūbāo",
+      "lesson": 4
+    },
+    {
+      "word": "舒服",
+      "pinyin": "shūfu",
+      "lesson": 6
+    },
+    {
+      "word": "送",
+      "pinyin": "sòng",
+      "lesson": 3
+    },
+    {
+      "word": "虽然",
+      "pinyin": "suīrán",
+      "lesson": 8
+    },
+    {
+      "word": "所以",
+      "pinyin": "suǒyǐ",
+      "lesson": 4
+    },
+    {
+      "word": "疼",
+      "pinyin": "téng",
+      "lesson": 11
+    },
+    {
+      "word": "踢",
+      "pinyin": "tī",
+      "lesson": 7
+    },
+    {
+      "word": "题",
+      "pinyin": "tí",
+      "lesson": 10
+    },
+    {
+      "word": "条",
+      "pinyin": "tiáo",
+      "lesson": 4
+    }
+  ],
+  "2_5": [
+    {
+      "word": "跳舞",
+      "pinyin": "tiàowǔ",
+      "lesson": 14
+    },
+    {
+      "word": "头",
+      "pinyin": "tóu",
+      "lesson": 11
+    },
+    {
+      "word": "外国",
+      "pinyin": "wàiguó",
+      "lesson": 2
+    },
+    {
+      "word": "外面",
+      "pinyin": "wàimiàn",
+      "lesson": 12
+    },
+    {
+      "word": "完",
+      "pinyin": "wán",
+      "lesson": 3
+    },
+    {
+      "word": "万",
+      "pinyin": "wàn",
+      "lesson": 2
+    },
+    {
+      "word": "网上",
+      "pinyin": "wǎngshang",
+      "lesson": 2
+    },
+    {
+      "word": "往",
+      "pinyin": "wǎng",
+      "lesson": 7
+    },
+    {
+      "word": "忘",
+      "pinyin": "wàng",
+      "lesson": 6
+    },
+    {
+      "word": "为什么",
+      "pinyin": "wèi shénme",
+      "lesson": 3
+    },
+    {
+      "word": "位",
+      "pinyin": "wèi",
+      "lesson": 14
+    },
+    {
+      "word": "希望",
+      "pinyin": "xīwàng",
+      "lesson": 13
+    },
+    {
+      "word": "洗",
+      "pinyin": "xǐ",
+      "lesson": 3
+    },
+    {
+      "word": "洗手间",
+      "pinyin": "xǐshǒujiān",
+      "lesson": 13
+    },
+    {
+      "word": "下来",
+      "pinyin": "xiàlái",
+      "lesson": 5
+    },
+    {
+      "word": "下面",
+      "pinyin": "xiàmian",
+      "lesson": 5
+    },
+    {
+      "word": "下去",
+      "pinyin": "xiàqù",
+      "lesson": 5
+    },
+    {
+      "word": "小孩儿",
+      "pinyin": "xiǎoháir",
+      "lesson": 14
+    },
+    {
+      "word": "小时候",
+      "pinyin": "xiǎoshíhou",
+      "lesson": 12
+    },
+    {
+      "word": "笑",
+      "pinyin": "xiào",
+      "lesson": 10
+    },
+    {
+      "word": "新年",
+      "pinyin": "xīnnián",
+      "lesson": 13
+    },
+    {
+      "word": "姓",
+      "pinyin": "xìng",
+      "lesson": 14
+    },
+    {
+      "word": "姓名",
+      "pinyin": "xìngmíng",
+      "lesson": 15
+    },
+    {
+      "word": "颜色",
+      "pinyin": "yánsè",
+      "lesson": 4
+    },
+    {
+      "word": "眼睛",
+      "pinyin": "yǎnjing",
+      "lesson": 14
+    },
+    {
+      "word": "药",
+      "pinyin": "yào",
+      "lesson": 11
+    },
+    {
+      "word": "药店",
+      "pinyin": "yàodiàn",
+      "lesson": 11
+    },
+    {
+      "word": "爷爷",
+      "pinyin": "yéye",
+      "lesson": 5
+    },
+    {
+      "word": "一会儿",
+      "pinyin": "yíhuìr",
+      "lesson": 5
+    },
+    {
+      "word": "一起",
+      "pinyin": "yìqǐ",
+      "lesson": 3
+    },
+    {
+      "word": "已经",
+      "pinyin": "yǐjīng",
+      "lesson": 1
+    },
+    {
+      "word": "意思",
+      "pinyin": "yìsi",
+      "lesson": 1
+    },
+    {
+      "word": "因为",
+      "pinyin": "yīnwèi",
+      "lesson": 4
+    },
+    {
+      "word": "阴",
+      "pinyin": "yīn",
+      "lesson": 12
+    },
+    {
+      "word": "游",
+      "pinyin": "yóu",
+      "lesson": 7
+    },
+    {
+      "word": "游泳",
+      "pinyin": "yóuyǒng",
+      "lesson": 7
+    },
+    {
+      "word": "有时",
+      "pinyin": "yǒushí",
+      "lesson": 1
+    },
+    {
+      "word": "有意思",
+      "pinyin": "yǒu yìsi",
+      "lesson": 8
+    },
+    {
+      "word": "右",
+      "pinyin": "yòu",
+      "lesson": 8
+    },
+    {
+      "word": "右边",
+      "pinyin": "yòubian",
+      "lesson": 8
+    },
+    {
+      "word": "鱼",
+      "pinyin": "yú",
+      "lesson": 6
+    },
+    {
+      "word": "远",
+      "pinyin": "yuǎn",
+      "lesson": 2
+    },
+    {
+      "word": "运动",
+      "pinyin": "yùndòng",
+      "lesson": 7
+    },
+    {
+      "word": "站",
+      "pinyin": "zhàn",
+      "lesson": 12
+    },
+    {
+      "word": "丈夫",
+      "pinyin": "zhàngfu",
+      "lesson": 8
+    },
+    {
+      "word": "这么",
+      "pinyin": "zhème",
+      "lesson": 3
+    },
+    {
+      "word": "这样",
+      "pinyin": "zhèyàng",
+      "lesson": 9
+    },
+    {
+      "word": "着",
+      "pinyin": "zhe",
+      "lesson": 11
+    },
+    {
+      "word": "正",
+      "pinyin": "zhèng",
+      "lesson": 12
+    },
+    {
+      "word": "周",
+      "pinyin": "zhōu",
+      "lesson": 9
+    }
+  ],
+  "2_6": [
+    {
+      "word": "准备",
+      "pinyin": "zhǔnbèi",
+      "lesson": 5
+    },
+    {
+      "word": "自己",
+      "pinyin": "zìjǐ",
+      "lesson": 3
+    },
+    {
+      "word": "走",
+      "pinyin": "zǒu",
+      "lesson": 5
+    },
+    {
+      "word": "走路",
+      "pinyin": "zǒulù",
+      "lesson": 9
+    },
+    {
+      "word": "足球",
+      "pinyin": "zúqiú",
+      "lesson": 7
+    },
+    {
+      "word": "最",
+      "pinyin": "zuì",
+      "lesson": 11
+    },
+    {
+      "word": "左",
+      "pinyin": "zuǒ",
+      "lesson": 8
+    },
+    {
+      "word": "左边",
+      "pinyin": "zuǒbian",
+      "lesson": 8
+    },
+    {
+      "word": "北京烤鸭",
+      "pinyin": "Běijīng Kǎoyā",
+      "lesson": 1
+    },
+    {
+      "word": "北京大学",
+      "pinyin": "Běijīng Dàxué",
+      "lesson": 2
+    },
+    {
+      "word": "颐和园",
+      "pinyin": "Yíhé Yuán",
+      "lesson": 15
+    }
+  ],
+  "3_1": [
+    {
+      "word": "阿姨",
+      "pinyin": "āyí",
+      "lesson": 18
+    },
+    {
+      "word": "矮",
+      "pinyin": "ǎi",
+      "lesson": 7
+    },
+    {
+      "word": "安静",
+      "pinyin": "ānjìng",
+      "lesson": 6
+    },
+    {
+      "word": "把",
+      "pinyin": "bǎ",
+      "lesson": [
+        10,
+        12
+      ]
+    },
+    {
+      "word": "班级",
+      "pinyin": "bānjí",
+      "lesson": 14
+    },
+    {
+      "word": "搬",
+      "pinyin": "bān",
+      "lesson": 3
+    }
+  ],
+  "3_2": [
+    {
+      "word": "搬家",
+      "pinyin": "bānjiā",
+      "lesson": 3
+    },
+    {
+      "word": "办",
+      "pinyin": "bàn",
+      "lesson": 3
+    },
+    {
+      "word": "办法",
+      "pinyin": "bànfǎ",
+      "lesson": 11
+    },
+    {
+      "word": "办公室",
+      "pinyin": "bàngōngshì",
+      "lesson": 10
+    },
+    {
+      "word": "半天",
+      "pinyin": "bàntiān",
+      "lesson": 16
+    },
+    {
+      "word": "帮助",
+      "pinyin": "bāngzhù",
+      "lesson": 1
+    },
+    {
+      "word": "包",
+      "pinyin": "bāo",
+      "lesson": 16
+    },
+    {
+      "word": "报纸",
+      "pinyin": "bàozhǐ",
+      "lesson": 14
+    },
+    {
+      "word": "北方",
+      "pinyin": "běifāng",
+      "lesson": 13
+    },
+    {
+      "word": "被",
+      "pinyin": "bèi",
+      "lesson": 14
+    },
+    {
+      "word": "比较",
+      "pinyin": "bǐjiào",
+      "lesson": 5
+    },
+    {
+      "word": "比如",
+      "pinyin": "bǐrú",
+      "lesson": 17
+    },
+    {
+      "word": "比赛",
+      "pinyin": "bǐsài",
+      "lesson": 9
+    },
+    {
+      "word": "笔记",
+      "pinyin": "bǐjì",
+      "lesson": 10
+    },
+    {
+      "word": "笔记本（电脑）",
+      "pinyin": "bǐjìběn (diànnǎo)",
+      "lesson": 11
+    },
+    {
+      "word": "必须",
+      "pinyin": "bìxū",
+      "lesson": 6
+    },
+    {
+      "word": "*毕业",
+      "pinyin": "bìyè",
+      "lesson": 18
+    },
+    {
+      "word": "变",
+      "pinyin": "biàn",
+      "lesson": 12
+    },
+    {
+      "word": "变成",
+      "pinyin": "biànchéng",
+      "lesson": 12
+    },
+    {
+      "word": "变化",
+      "pinyin": "biànhuà",
+      "lesson": 12
+    },
+    {
+      "word": "遍",
+      "pinyin": "biàn",
+      "lesson": 10
+    },
+    {
+      "word": "表演",
+      "pinyin": "biǎoyǎn",
+      "lesson": 14
+    },
+    {
+      "word": "别的",
+      "pinyin": "biéde",
+      "lesson": 4
+    },
+    {
+      "word": "别人",
+      "pinyin": "biérén",
+      "lesson": 11
+    },
+    {
+      "word": "宾馆",
+      "pinyin": "bīnguǎn",
+      "lesson": 4
+    },
+    {
+      "word": "*冰",
+      "pinyin": "bīng",
+      "lesson": 7
+    },
+    {
+      "word": "冰箱",
+      "pinyin": "bīngxiāng",
+      "lesson": 3
+    },
+    {
+      "word": "病人",
+      "pinyin": "bìngrén",
+      "lesson": 8
+    },
+    {
+      "word": "不但",
+      "pinyin": "búdàn",
+      "lesson": 7
+    },
+    {
+      "word": "不见",
+      "pinyin": "bújiàn",
+      "lesson": 1
+    },
+    {
+      "word": "不用",
+      "pinyin": "búyòng",
+      "lesson": 2
+    },
+    {
+      "word": "不久",
+      "pinyin": "bùjiǔ",
+      "lesson": 18
+    },
+    {
+      "word": "不同",
+      "pinyin": "bù tóng",
+      "lesson": 13
+    },
+    {
+      "word": "才",
+      "pinyin": "cái",
+      "lesson": 3
+    },
+    {
+      "word": "菜单",
+      "pinyin": "càidān",
+      "lesson": 2
+    },
+    {
+      "word": "参加",
+      "pinyin": "cānjiā",
+      "lesson": 9
+    },
+    {
+      "word": "草地",
+      "pinyin": "cǎodì",
+      "lesson": 15
+    },
+    {
+      "word": "*草原",
+      "pinyin": "cǎoyuán",
+      "lesson": 4
+    },
+    {
+      "word": "层",
+      "pinyin": "céng",
+      "lesson": 3
+    },
+    {
+      "word": "茶",
+      "pinyin": "chá",
+      "lesson": 17
+    },
+    {
+      "word": "差",
+      "pinyin": "chà",
+      "lesson": 10
+    },
+    {
+      "word": "差不多",
+      "pinyin": "chàbuduō",
+      "lesson": 8
+    },
+    {
+      "word": "尝",
+      "pinyin": "cháng",
+      "lesson": 2
+    },
+    {
+      "word": "常",
+      "pinyin": "cháng",
+      "lesson": 8
+    },
+    {
+      "word": "常常",
+      "pinyin": "chángcháng",
+      "lesson": 12
+    },
+    {
+      "word": "常见",
+      "pinyin": "cháng jiàn",
+      "lesson": 17
+    },
+    {
+      "word": "常用",
+      "pinyin": "cháng yòng",
+      "lesson": 6
+    },
+    {
+      "word": "成绩",
+      "pinyin": "chéngjì",
+      "lesson": 9
+    },
+    {
+      "word": "城市",
+      "pinyin": "chéngshì",
+      "lesson": 11
+    },
+    {
+      "word": "迟到",
+      "pinyin": "chídào",
+      "lesson": 6
+    },
+    {
+      "word": "*充电宝",
+      "pinyin": "chōngdiànbǎo",
+      "lesson": 6
+    },
+    {
+      "word": "出发",
+      "pinyin": "chūfā",
+      "lesson": 18
+    },
+    {
+      "word": "出生",
+      "pinyin": "chūshēng",
+      "lesson": 18
+    },
+    {
+      "word": "出院",
+      "pinyin": "chūyuàn",
+      "lesson": 8
+    },
+    {
+      "word": "初中",
+      "pinyin": "chūzhōng",
+      "lesson": 3
+    },
+    {
+      "word": "除了",
+      "pinyin": "chūle",
+      "lesson": 4
+    },
+    {
+      "word": "船",
+      "pinyin": "chuán",
+      "lesson": 12
+    },
+    {
+      "word": "春天",
+      "pinyin": "chūntiān",
+      "lesson": 12
+    },
+    {
+      "word": "词典",
+      "pinyin": "cídiǎn",
+      "lesson": 14
+    },
+    {
+      "word": "聪明",
+      "pinyin": "cōngmíng",
+      "lesson": 17
+    },
+    {
+      "word": "*错",
+      "pinyin": "cuò",
+      "lesson": 17
+    },
+    {
+      "word": "打扫",
+      "pinyin": "dǎsǎo",
+      "lesson": 3
+    },
+    {
+      "word": "打算",
+      "pinyin": "dǎsuàn",
+      "lesson": 6
+    },
+    {
+      "word": "大概",
+      "pinyin": "dàgài",
+      "lesson": 18
+    },
+    {
+      "word": "大人",
+      "pinyin": "dàrén",
+      "lesson": 16
+    }
+  ],
+  "3_3": [
+    {
+      "word": "大小",
+      "pinyin": "dàxiǎo",
+      "lesson": 7
+    },
+    {
+      "word": "大熊猫",
+      "pinyin": "dàxióngmāo",
+      "lesson": 16
+    },
+    {
+      "word": "大衣",
+      "pinyin": "dàyī",
+      "lesson": 5
+    },
+    {
+      "word": "带",
+      "pinyin": "dài",
+      "lesson": 1
+    },
+    {
+      "word": "担心",
+      "pinyin": "dānxīn",
+      "lesson": 8
+    },
+    {
+      "word": "蛋糕",
+      "pinyin": "dàngāo",
+      "lesson": 2
+    },
+    {
+      "word": "当然",
+      "pinyin": "dāngrán",
+      "lesson": 10
+    },
+    {
+      "word": "到处",
+      "pinyin": "dàochù",
+      "lesson": 17
+    },
+    {
+      "word": "的话",
+      "pinyin": "dehuà",
+      "lesson": 13
+    },
+    {
+      "word": "得到",
+      "pinyin": "dédào",
+      "lesson": 9
+    },
+    {
+      "word": "得分",
+      "pinyin": "défēn",
+      "lesson": 9
+    },
+    {
+      "word": "得",
+      "pinyin": "děi",
+      "lesson": 8
+    },
+    {
+      "word": "灯",
+      "pinyin": "dēng",
+      "lesson": 3
+    },
+    {
+      "word": "低",
+      "pinyin": "dī",
+      "lesson": 8
+    },
+    {
+      "word": "地点",
+      "pinyin": "dìdiǎn",
+      "lesson": 11
+    },
+    {
+      "word": "地方",
+      "pinyin": "dìfang",
+      "lesson": 12
+    },
+    {
+      "word": "地图",
+      "pinyin": "dìtú",
+      "lesson": 13
+    },
+    {
+      "word": "点",
+      "pinyin": "diǎn",
+      "lesson": 13
+    },
+    {
+      "word": "电",
+      "pinyin": "diàn",
+      "lesson": 5
+    },
+    {
+      "word": "电梯",
+      "pinyin": "diàntī",
+      "lesson": 6
+    },
+    {
+      "word": "电子书",
+      "pinyin": "diànzǐshū",
+      "lesson": 14
+    },
+    {
+      "word": "丢",
+      "pinyin": "diū",
+      "lesson": 1
+    },
+    {
+      "word": "东方",
+      "pinyin": "dōngfāng",
+      "lesson": 13
+    },
+    {
+      "word": "冬天",
+      "pinyin": "dōngtiān",
+      "lesson": 12
+    },
+    {
+      "word": "懂得",
+      "pinyin": "dǒngde",
+      "lesson": 18
+    },
+    {
+      "word": "动物",
+      "pinyin": "dòngwù",
+      "lesson": 16
+    },
+    {
+      "word": "动物园",
+      "pinyin": "dòngwùyuán",
+      "lesson": 16
+    },
+    {
+      "word": "短",
+      "pinyin": "duǎn",
+      "lesson": 1
+    },
+    {
+      "word": "短裤",
+      "pinyin": "duǎnkù",
+      "lesson": 7
+    },
+    {
+      "word": "段",
+      "pinyin": "duàn",
+      "lesson": 15
+    },
+    {
+      "word": "锻炼",
+      "pinyin": "duànliàn",
+      "lesson": 5
+    },
+    {
+      "word": "对话",
+      "pinyin": "duìhuà",
+      "lesson": 10
+    },
+    {
+      "word": "饿",
+      "pinyin": "è",
+      "lesson": 2
+    },
+    {
+      "word": "而且",
+      "pinyin": "érqiě",
+      "lesson": 7
+    },
+    {
+      "word": "耳朵",
+      "pinyin": "ěrduo",
+      "lesson": 8
+    },
+    {
+      "word": "耳机",
+      "pinyin": "ěrjī",
+      "lesson": 6
+    },
+    {
+      "word": "发",
+      "pinyin": "fā",
+      "lesson": 11
+    },
+    {
+      "word": "发烧",
+      "pinyin": "fāshāo",
+      "lesson": 8
+    },
+    {
+      "word": "发生",
+      "pinyin": "fāshēng",
+      "lesson": 18
+    },
+    {
+      "word": "发现",
+      "pinyin": "fāxiàn",
+      "lesson": 1
+    },
+    {
+      "word": "发展",
+      "pinyin": "fāzhǎn",
+      "lesson": 18
+    },
+    {
+      "word": "方便",
+      "pinyin": "fāngbiàn",
+      "lesson": 2
+    },
+    {
+      "word": "方便面",
+      "pinyin": "fāngbiànmiàn",
+      "lesson": 2
+    },
+    {
+      "word": "方法",
+      "pinyin": "fāngfǎ",
+      "lesson": 8
+    },
+    {
+      "word": "方向",
+      "pinyin": "fāngxiàng",
+      "lesson": 17
+    },
+    {
+      "word": "房子",
+      "pinyin": "fángzi",
+      "lesson": 3
+    },
+    {
+      "word": "放",
+      "pinyin": "fàng",
+      "lesson": 13
+    },
+    {
+      "word": "放假",
+      "pinyin": "fàngjià",
+      "lesson": 6
+    },
+    {
+      "word": "放心",
+      "pinyin": "fàngxīn",
+      "lesson": 13
+    },
+    {
+      "word": "放学",
+      "pinyin": "fàngxué",
+      "lesson": 15
+    },
+    {
+      "word": "分开",
+      "pinyin": "fēnkāi",
+      "lesson": 6
+    },
+    {
+      "word": "风",
+      "pinyin": "fēng",
+      "lesson": 12
+    },
+    {
+      "word": "封",
+      "pinyin": "fēng",
+      "lesson": 5
+    },
+    {
+      "word": "夫妻",
+      "pinyin": "fūqī",
+      "lesson": 13
+    },
+    {
+      "word": "服务",
+      "pinyin": "fúwù",
+      "lesson": 2
+    },
+    {
+      "word": "服务台",
+      "pinyin": "fúwùtái",
+      "lesson": 1
+    },
+    {
+      "word": "附近",
+      "pinyin": "fùjìn",
+      "lesson": 15
+    },
+    {
+      "word": "复习",
+      "pinyin": "fùxí",
+      "lesson": 10
+    },
+    {
+      "word": "该",
+      "pinyin": "gāi",
+      "lesson": 6
+    },
+    {
+      "word": "干净",
+      "pinyin": "gānjìng",
+      "lesson": 4
+    },
+    {
+      "word": "感到",
+      "pinyin": "gǎndào",
+      "lesson": 13
+    },
+    {
+      "word": "感冒",
+      "pinyin": "gǎnmào",
+      "lesson": 8
+    },
+    {
+      "word": "感兴趣",
+      "pinyin": "gǎn xìngqù",
+      "lesson": 5
+    },
+    {
+      "word": "干",
+      "pinyin": "gàn",
+      "lesson": 5
+    },
+    {
+      "word": "刚",
+      "pinyin": "gāng",
+      "lesson": 18
+    }
+  ],
+  "3_4": [
+    {
+      "word": "刚才",
+      "pinyin": "gāngcái",
+      "lesson": 12
+    },
+    {
+      "word": "刚刚",
+      "pinyin": "gānggāng",
+      "lesson": 18
+    },
+    {
+      "word": "高铁",
+      "pinyin": "gāotiě",
+      "lesson": 6
+    },
+    {
+      "word": "根据",
+      "pinyin": "gēnjù",
+      "lesson": 15
+    },
+    {
+      "word": "更",
+      "pinyin": "gèng",
+      "lesson": 7
+    },
+    {
+      "word": "工作日",
+      "pinyin": "gōngzuòrì",
+      "lesson": 12
+    },
+    {
+      "word": "公斤",
+      "pinyin": "gōngjīn",
+      "lesson": 7
+    },
+    {
+      "word": "公园",
+      "pinyin": "gōngyuán",
+      "lesson": 12
+    },
+    {
+      "word": "故事",
+      "pinyin": "gùshi",
+      "lesson": 14
+    },
+    {
+      "word": "刮",
+      "pinyin": "guā",
+      "lesson": 12
+    },
+    {
+      "word": "关",
+      "pinyin": "guān",
+      "lesson": 3
+    },
+    {
+      "word": "关机",
+      "pinyin": "guānjī",
+      "lesson": 17
+    },
+    {
+      "word": "关系",
+      "pinyin": "guānxì",
+      "lesson": 15
+    },
+    {
+      "word": "关心",
+      "pinyin": "guānxīn",
+      "lesson": 8
+    },
+    {
+      "word": "关于",
+      "pinyin": "guānyú",
+      "lesson": 16
+    },
+    {
+      "word": "关注",
+      "pinyin": "guānzhù",
+      "lesson": 12
+    },
+    {
+      "word": "国宝",
+      "pinyin": "guóbǎo",
+      "lesson": 16
+    },
+    {
+      "word": "国家",
+      "pinyin": "guójiā",
+      "lesson": 17
+    },
+    {
+      "word": "过节",
+      "pinyin": "guòjié",
+      "lesson": 18
+    },
+    {
+      "word": "过去",
+      "pinyin": "guòqù",
+      "lesson": 18
+    },
+    {
+      "word": "哈哈",
+      "pinyin": "hāhā",
+      "lesson": 5
+    },
+    {
+      "word": "海",
+      "pinyin": "hǎi",
+      "lesson": 4
+    },
+    {
+      "word": "害怕",
+      "pinyin": "hàipà",
+      "lesson": 17
+    },
+    {
+      "word": "好多",
+      "pinyin": "hǎoduō",
+      "lesson": 9
+    },
+    {
+      "word": "好久",
+      "pinyin": "hǎojiǔ",
+      "lesson": 2
+    },
+    {
+      "word": "好像",
+      "pinyin": "hǎoxiàng",
+      "lesson": [
+        1,
+        16
+      ]
+    },
+    {
+      "word": "号码",
+      "pinyin": "hàomǎ",
+      "lesson": 1
+    },
+    {
+      "word": "合适",
+      "pinyin": "héshì",
+      "lesson": 7
+    },
+    {
+      "word": "河",
+      "pinyin": "hé",
+      "lesson": 15
+    },
+    {
+      "word": "黑板",
+      "pinyin": "hēibǎn",
+      "lesson": 10
+    },
+    {
+      "word": "红绿灯",
+      "pinyin": "hóng-lùdēng",
+      "lesson": 6
+    },
+    {
+      "word": "后来",
+      "pinyin": "hòulái",
+      "lesson": 6
+    },
+    {
+      "word": "后年",
+      "pinyin": "hòunián",
+      "lesson": 10
+    },
+    {
+      "word": "后天",
+      "pinyin": "hòutiān",
+      "lesson": 11
+    },
+    {
+      "word": "护照",
+      "pinyin": "hùzhào",
+      "lesson": 1
+    },
+    {
+      "word": "花园",
+      "pinyin": "huāyuán",
+      "lesson": 3
+    },
+    {
+      "word": "画家",
+      "pinyin": "huàjiā",
+      "lesson": 13
+    },
+    {
+      "word": "欢迎",
+      "pinyin": "huānyíng",
+      "lesson": 4
+    },
+    {
+      "word": "还",
+      "pinyin": "huán",
+      "lesson": 3
+    },
+    {
+      "word": "环境",
+      "pinyin": "huánjìng",
+      "lesson": 3
+    },
+    {
+      "word": "换",
+      "pinyin": "huàn",
+      "lesson": 3
+    },
+    {
+      "word": "黄色",
+      "pinyin": "huángsè",
+      "lesson": 7
+    },
+    {
+      "word": "回",
+      "pinyin": "huí",
+      "lesson": 9
+    },
+    {
+      "word": "回答",
+      "pinyin": "huídá",
+      "lesson": 17
+    },
+    {
+      "word": "会",
+      "pinyin": "huì",
+      "lesson": 5
+    },
+    {
+      "word": "会议",
+      "pinyin": "huìyì",
+      "lesson": 11
+    },
+    {
+      "word": "或",
+      "pinyin": "huò",
+      "lesson": 11
+    },
+    {
+      "word": "或者",
+      "pinyin": "huòzhě",
+      "lesson": 11
+    },
+    {
+      "word": "几乎",
+      "pinyin": "jīhū",
+      "lesson": 9
+    },
+    {
+      "word": "机会",
+      "pinyin": "jīhuì",
+      "lesson": 11
+    },
+    {
+      "word": "鸡",
+      "pinyin": "jī",
+      "lesson": 2
+    },
+    {
+      "word": "极",
+      "pinyin": "jí",
+      "lesson": 7
+    },
+    {
+      "word": "急",
+      "pinyin": "jí",
+      "lesson": 6
+    },
+    {
+      "word": "记",
+      "pinyin": "jì",
+      "lesson": 2
+    },
+    {
+      "word": "季节",
+      "pinyin": "jìjié",
+      "lesson": 12
+    },
+    {
+      "word": "继续",
+      "pinyin": "jìxù",
+      "lesson": 17
+    },
+    {
+      "word": "加",
+      "pinyin": "jiā",
+      "lesson": 13
+    },
+    {
+      "word": "假期",
+      "pinyin": "jiàqī",
+      "lesson": 4
+    },
+    {
+      "word": "坚持",
+      "pinyin": "jiānchí",
+      "lesson": 18
+    },
+    {
+      "word": "检查",
+      "pinyin": "jiǎnchá",
+      "lesson": 6
+    },
+    {
+      "word": "检票",
+      "pinyin": "jiǎnpiào",
+      "lesson": 6
+    },
+    {
+      "word": "简单",
+      "pinyin": "jiǎndān",
+      "lesson": 2
+    },
+    {
+      "word": "见面",
+      "pinyin": "jiànmiàn",
+      "lesson": 18
+    },
+    {
+      "word": "健康",
+      "pinyin": "jiànkāng",
+      "lesson": 8
+    },
+    {
+      "word": "讲",
+      "pinyin": "jiǎng",
+      "lesson": 10
+    },
+    {
+      "word": "脚",
+      "pinyin": "jiǎo",
+      "lesson": 16
+    }
+  ],
+  "3_5": [
+    {
+      "word": "接",
+      "pinyin": "jiē",
+      "lesson": [
+        1
+      ]
+    },
+    {
+      "word": "街",
+      "pinyin": "jiē",
+      "lesson": [
+        12
+      ]
+    },
+    {
+      "word": "节",
+      "pinyin": "jié",
+      "lesson": [
+        14,
+        18
+      ]
+    },
+    {
+      "word": "节目",
+      "pinyin": "jiémù",
+      "lesson": [
+        14
+      ]
+    },
+    {
+      "word": "节日",
+      "pinyin": "jiérì",
+      "lesson": [
+        18
+      ]
+    },
+    {
+      "word": "结婚",
+      "pinyin": "jiéhūn",
+      "lesson": [
+        7
+      ]
+    },
+    {
+      "word": "结束",
+      "pinyin": "jiéshù",
+      "lesson": [
+        5
+      ]
+    },
+    {
+      "word": "解决",
+      "pinyin": "jiějué",
+      "lesson": [
+        11
+      ]
+    },
+    {
+      "word": "借",
+      "pinyin": "jiè",
+      "lesson": [
+        12
+      ]
+    },
+    {
+      "word": "斤",
+      "pinyin": "jīn",
+      "lesson": [
+        7
+      ]
+    },
+    {
+      "word": "紧张",
+      "pinyin": "jǐnzhāng",
+      "lesson": [
+        9
+      ]
+    },
+    {
+      "word": "经过",
+      "pinyin": "jīngguò",
+      "lesson": [
+        15
+      ]
+    },
+    {
+      "word": "经理",
+      "pinyin": "jīnglǐ",
+      "lesson": [
+        11
+      ]
+    },
+    {
+      "word": "景点",
+      "pinyin": "jǐngdiǎn",
+      "lesson": [
+        15
+      ]
+    },
+    {
+      "word": "久",
+      "pinyin": "jiǔ",
+      "lesson": [
+        4
+      ]
+    },
+    {
+      "word": "酒",
+      "pinyin": "jiǔ",
+      "lesson": [
+        13
+      ]
+    },
+    {
+      "word": "旧",
+      "pinyin": "jiù",
+      "lesson": [
+        7
+      ]
+    },
+    {
+      "word": "句",
+      "pinyin": "jù",
+      "lesson": [
+        10
+      ]
+    },
+    {
+      "word": "句子",
+      "pinyin": "jùzi",
+      "lesson": [
+        10
+      ]
+    },
+    {
+      "word": "决定",
+      "pinyin": "juédìng",
+      "lesson": [
+        7
+      ]
+    },
+    {
+      "word": "卡",
+      "pinyin": "kǎ",
+      "lesson": [
+        9
+      ]
+    },
+    {
+      "word": "开",
+      "pinyin": "kāi",
+      "lesson": [
+        8
+      ]
+    },
+    {
+      "word": "开花",
+      "pinyin": "kāihuā",
+      "lesson": [
+        12
+      ]
+    },
+    {
+      "word": "开会",
+      "pinyin": "kāihuì",
+      "lesson": [
+        11
+      ]
+    },
+    {
+      "word": "开机",
+      "pinyin": "kāijī",
+      "lesson": [
+        7
+      ]
+    },
+    {
+      "word": "开心",
+      "pinyin": "kāixīn",
+      "lesson": [
+        8
+      ]
+    },
+    {
+      "word": "看来",
+      "pinyin": "kànlái",
+      "lesson": [
+        11
+      ]
+    },
+    {
+      "word": "可",
+      "pinyin": "kě",
+      "lesson": [
+        17
+      ]
+    },
+    {
+      "word": "可爱",
+      "pinyin": "kě'ài",
+      "lesson": [
+        16
+      ]
+    },
+    {
+      "word": "可是",
+      "pinyin": "kěshì",
+      "lesson": [
+        15
+      ]
+    },
+    {
+      "word": "渴",
+      "pinyin": "kě",
+      "lesson": [
+        2
+      ]
+    },
+    {
+      "word": "刻",
+      "pinyin": "kè",
+      "lesson": [
+        4
+      ]
+    },
+    {
+      "word": "客气",
+      "pinyin": "kèqi",
+      "lesson": [
+        2
+      ]
+    },
+    {
+      "word": "客人",
+      "pinyin": "kèrén",
+      "lesson": [
+        13
+      ]
+    },
+    {
+      "word": "空调",
+      "pinyin": "kōngtiáo",
+      "lesson": [
+        3
+      ]
+    },
+    {
+      "word": "筷子",
+      "pinyin": "kuàizi",
+      "lesson": [
+        2
+      ]
+    },
+    {
+      "word": "矿泉水",
+      "pinyin": "kuàngquánshuǐ",
+      "lesson": [
+        18
+      ]
+    },
+    {
+      "word": "来自",
+      "pinyin": "láizì",
+      "lesson": [
+        13
+      ]
+    },
+    {
+      "word": "蓝",
+      "pinyin": "lán",
+      "lesson": [
+        15
+      ]
+    },
+    {
+      "word": "老人",
+      "pinyin": "lǎorén",
+      "lesson": [
+        15
+      ]
+    },
+    {
+      "word": "离开",
+      "pinyin": "líkāi",
+      "lesson": [
+        11
+      ]
+    },
+    {
+      "word": "礼物",
+      "pinyin": "lǐwù",
+      "lesson": [
+        13
+      ]
+    },
+    {
+      "word": "历史",
+      "pinyin": "lìshǐ",
+      "lesson": [
+        10
+      ]
+    },
+    {
+      "word": "联欢",
+      "pinyin": "liánhuān",
+      "lesson": [
+        18
+      ]
+    },
+    {
+      "word": "脸",
+      "pinyin": "liǎn",
+      "lesson": [
+        16
+      ]
+    },
+    {
+      "word": "练",
+      "pinyin": "liàn",
+      "lesson": [
+        9
+      ]
+    },
+    {
+      "word": "练习",
+      "pinyin": "liànxí",
+      "lesson": [
+        9
+      ]
+    },
+    {
+      "word": "凉快",
+      "pinyin": "liángkuai",
+      "lesson": [
+        12
+      ]
+    },
+    {
+      "word": "辆",
+      "pinyin": "liàng",
+      "lesson": [
+        7
+      ]
+    },
+    {
+      "word": "聊",
+      "pinyin": "liáo",
+      "lesson": [
+        15
+      ]
+    },
+    {
+      "word": "聊天儿",
+      "pinyin": "liáotiānr",
+      "lesson": [
+        13
+      ]
+    },
+    {
+      "word": "了解",
+      "pinyin": "liǎojiě",
+      "lesson": [
+        15
+      ]
+    },
+    {
+      "word": "邻居",
+      "pinyin": "línjū",
+      "lesson": [
+        13
+      ]
+    },
+    {
+      "word": "留学",
+      "pinyin": "liúxué",
+      "lesson": [
+        17
+      ]
+    },
+    {
+      "word": "留学生",
+      "pinyin": "liúxuésheng",
+      "lesson": [
+        14
+      ]
+    },
+    {
+      "word": "楼梯",
+      "pinyin": "lóutī",
+      "lesson": [
+        17
+      ]
+    },
+    {
+      "word": "路口",
+      "pinyin": "lùkǒu",
+      "lesson": [
+        6
+      ]
+    },
+    {
+      "word": "马",
+      "pinyin": "mǎ",
+      "lesson": [
+        4
+      ]
+    },
+    {
+      "word": "马路",
+      "pinyin": "mǎlù",
+      "lesson": [
+        15
+      ]
+    },
+    {
+      "word": "马上",
+      "pinyin": "mǎshàng",
+      "lesson": [
+        2
+      ]
+    },
+    {
+      "word": "满意",
+      "pinyin": "mǎnyì",
+      "lesson": [
+        4
+      ]
+    },
+    {
+      "word": "毛",
+      "pinyin": "máo",
+      "lesson": [
+        7
+      ]
+    },
+    {
+      "word": "米",
+      "pinyin": "mǐ",
+      "lesson": [
+        1
+      ]
+    },
+    {
+      "word": "面前",
+      "pinyin": "miànqián",
+      "lesson": [
+        14
+      ]
+    },
+    {
+      "word": "名人",
+      "pinyin": "míngrén",
+      "lesson": [
+        14
+      ]
+    }
+  ],
+  "3_6": [
+    {
+      "word": "明白",
+      "pinyin": "míngbai",
+      "lesson": 10
+    },
+    {
+      "word": "目标",
+      "pinyin": "mùbiāo",
+      "lesson": 18
+    },
+    {
+      "word": "男生",
+      "pinyin": "nánshēng",
+      "lesson": 9
+    },
+    {
+      "word": "南方",
+      "pinyin": "nánfāng",
+      "lesson": 13
+    },
+    {
+      "word": "难",
+      "pinyin": "nán",
+      "lesson": 10
+    },
+    {
+      "word": "难过",
+      "pinyin": "nánguò",
+      "lesson": 5
+    },
+    {
+      "word": "难看",
+      "pinyin": "nánkàn",
+      "lesson": 5
+    },
+    {
+      "word": "难题",
+      "pinyin": "nántí",
+      "lesson": 17
+    },
+    {
+      "word": "年级",
+      "pinyin": "niánjí",
+      "lesson": 10
+    },
+    {
+      "word": "年轻",
+      "pinyin": "niánqīng",
+      "lesson": 1
+    },
+    {
+      "word": "鸟",
+      "pinyin": "niǎo",
+      "lesson": 4
+    },
+    {
+      "word": "努力",
+      "pinyin": "nǔlì",
+      "lesson": 10
+    },
+    {
+      "word": "女生",
+      "pinyin": "nǚshēng",
+      "lesson": 14
+    },
+    {
+      "word": "爬",
+      "pinyin": "pá",
+      "lesson": 5
+    },
+    {
+      "word": "怕",
+      "pinyin": "pà",
+      "lesson": 11
+    },
+    {
+      "word": "拍照",
+      "pinyin": "pāizhào",
+      "lesson": 5
+    },
+    {
+      "word": "盘子",
+      "pinyin": "pánzi",
+      "lesson": 13
+    },
+    {
+      "word": "胖",
+      "pinyin": "pàng",
+      "lesson": 8
+    },
+    {
+      "word": "啤酒",
+      "pinyin": "píjiǔ",
+      "lesson": 9
+    },
+    {
+      "word": "平时",
+      "pinyin": "píngshí",
+      "lesson": 15
+    },
+    {
+      "word": "其实",
+      "pinyin": "qíshí",
+      "lesson": 16
+    },
+    {
+      "word": "其他",
+      "pinyin": "qítā",
+      "lesson": 8
+    },
+    {
+      "word": "奇怪",
+      "pinyin": "qíguài",
+      "lesson": 16
+    },
+    {
+      "word": "骑",
+      "pinyin": "qí",
+      "lesson": 4
+    },
+    {
+      "word": "起",
+      "pinyin": "qǐ",
+      "lesson": 18
+    },
+    {
+      "word": "起飞",
+      "pinyin": "qǐfēi",
+      "lesson": 4
+    },
+    {
+      "word": "前天",
+      "pinyin": "qiántiān",
+      "lesson": 17
+    },
+    {
+      "word": "清楚",
+      "pinyin": "qīngchu",
+      "lesson": 10
+    },
+    {
+      "word": "请假",
+      "pinyin": "qǐngjià",
+      "lesson": 11
+    },
+    {
+      "word": "请客",
+      "pinyin": "qǐngkè",
+      "lesson": 13
+    },
+    {
+      "word": "秋天",
+      "pinyin": "qiūtiān",
+      "lesson": 12
+    },
+    {
+      "word": "球场",
+      "pinyin": "qiúchǎng",
+      "lesson": 9
+    },
+    {
+      "word": "全",
+      "pinyin": "quán",
+      "lesson": 16
+    },
+    {
+      "word": "裙子",
+      "pinyin": "qúnzi",
+      "lesson": 7
+    },
+    {
+      "word": "然后",
+      "pinyin": "ránhòu",
+      "lesson": 14
+    },
+    {
+      "word": "热情",
+      "pinyin": "rèqíng",
+      "lesson": 2
+    },
+    {
+      "word": "认得",
+      "pinyin": "rènde",
+      "lesson": 16
+    },
+    {
+      "word": "认为",
+      "pinyin": "rènwéi",
+      "lesson": 17
+    },
+    {
+      "word": "认真",
+      "pinyin": "rènzhēn",
+      "lesson": 10
+    },
+    {
+      "word": "容易",
+      "pinyin": "róngyì",
+      "lesson": 17
+    },
+    {
+      "word": "如果",
+      "pinyin": "rúguǒ",
+      "lesson": 6
+    },
+    {
+      "word": "伞",
+      "pinyin": "sǎn",
+      "lesson": 12
+    },
+    {
+      "word": "沙发",
+      "pinyin": "shāfā",
+      "lesson": 6
+    },
+    {
+      "word": "山",
+      "pinyin": "shān",
+      "lesson": 5
+    },
+    {
+      "word": "勺子",
+      "pinyin": "sháozi",
+      "lesson": 2
+    },
+    {
+      "word": "身边",
+      "pinyin": "shēnbiān",
+      "lesson": 16
+    },
+    {
+      "word": "身高",
+      "pinyin": "shēngāo",
+      "lesson": 1
+    },
+    {
+      "word": "生活",
+      "pinyin": "shēnghuó",
+      "lesson": 11
+    },
+    {
+      "word": "生气",
+      "pinyin": "shēngqì",
+      "lesson": 17
+    },
+    {
+      "word": "声",
+      "pinyin": "shēng",
+      "lesson": 7
+    },
+    {
+      "word": "声音",
+      "pinyin": "shēngyīn",
+      "lesson": 11
+    },
+    {
+      "word": "世界",
+      "pinyin": "shìjiè",
+      "lesson": 9
+    },
+    {
+      "word": "试",
+      "pinyin": "shì",
+      "lesson": 7
+    },
+    {
+      "word": "视频",
+      "pinyin": "shìpín",
+      "lesson": 14
+    },
+    {
+      "word": "室",
+      "pinyin": "shì",
+      "lesson": 11
+    },
+    {
+      "word": "收",
+      "pinyin": "shōu",
+      "lesson": 18
+    },
+    {
+      "word": "收到",
+      "pinyin": "shōudào",
+      "lesson": 5
+    },
+    {
+      "word": "受到",
+      "pinyin": "shòudào",
+      "lesson": 9
+    },
+    {
+      "word": "瘦",
+      "pinyin": "shòu",
+      "lesson": 1
+    },
+    {
+      "word": "叔叔",
+      "pinyin": "shūshu",
+      "lesson": 18
+    },
+    {
+      "word": "树",
+      "pinyin": "shù",
+      "lesson": 5
+    },
+    {
+      "word": "数学",
+      "pinyin": "shùxué",
+      "lesson": 10
+    },
+    {
+      "word": "刷",
+      "pinyin": "shuā",
+      "lesson": 6
+    }
+  ],
+  "3_7": [
+    {
+      "word": "双",
+      "pinyin": "shuāng",
+      "lesson": 2
+    },
+    {
+      "word": "水平",
+      "pinyin": "shuǐpíng",
+      "lesson": 5
+    },
+    {
+      "word": "司机",
+      "pinyin": "sījī",
+      "lesson": 4
+    },
+    {
+      "word": "四季",
+      "pinyin": "sìjì",
+      "lesson": 12
+    },
+    {
+      "word": "太阳",
+      "pinyin": "tàiyáng",
+      "lesson": 5
+    },
+    {
+      "word": "特别",
+      "pinyin": "tèbié",
+      "lesson": 4
+    },
+    {
+      "word": "提高",
+      "pinyin": "tígāo",
+      "lesson": 10
+    },
+    {
+      "word": "体育",
+      "pinyin": "tǐyù",
+      "lesson": 9
+    },
+    {
+      "word": "体育馆",
+      "pinyin": "tǐyùguǎn",
+      "lesson": 8
+    },
+    {
+      "word": "甜",
+      "pinyin": "tián",
+      "lesson": 7
+    },
+    {
+      "word": "跳",
+      "pinyin": "tiào",
+      "lesson": 14
+    },
+    {
+      "word": "听说",
+      "pinyin": "tīngshuō",
+      "lesson": 3
+    },
+    {
+      "word": "挺",
+      "pinyin": "tǐng",
+      "lesson": 3
+    },
+    {
+      "word": "同事",
+      "pinyin": "tóngshì",
+      "lesson": 11
+    },
+    {
+      "word": "同意",
+      "pinyin": "tóngyì",
+      "lesson": 17
+    },
+    {
+      "word": "头发",
+      "pinyin": "tóufa",
+      "lesson": 1
+    },
+    {
+      "word": "突然",
+      "pinyin": "tūrán",
+      "lesson": 8
+    },
+    {
+      "word": "图书馆",
+      "pinyin": "túshūguǎn",
+      "lesson": 14
+    },
+    {
+      "word": "腿",
+      "pinyin": "tuǐ",
+      "lesson": 8
+    },
+    {
+      "word": "外地",
+      "pinyin": "wàidì",
+      "lesson": 15
+    },
+    {
+      "word": "外卖",
+      "pinyin": "wàimài",
+      "lesson": 2
+    },
+    {
+      "word": "外语",
+      "pinyin": "wàiyǔ",
+      "lesson": 10
+    },
+    {
+      "word": "完成",
+      "pinyin": "wánchéng",
+      "lesson": 18
+    },
+    {
+      "word": "晚点",
+      "pinyin": "wǎndiǎn",
+      "lesson": 4
+    },
+    {
+      "word": "晚会",
+      "pinyin": "wǎnhuì",
+      "lesson": 13
+    },
+    {
+      "word": "碗",
+      "pinyin": "wǎn",
+      "lesson": 2
+    },
+    {
+      "word": "网球",
+      "pinyin": "wǎngqiú",
+      "lesson": 9
+    },
+    {
+      "word": "网站",
+      "pinyin": "wǎngzhàn",
+      "lesson": 14
+    },
+    {
+      "word": "忘记",
+      "pinyin": "wàngjì",
+      "lesson": 14
+    },
+    {
+      "word": "卫生间",
+      "pinyin": "wèishēngjiān",
+      "lesson": 3
+    },
+    {
+      "word": "为",
+      "pinyin": "wèi",
+      "lesson": 11
+    },
+    {
+      "word": "为了",
+      "pinyin": "wèile",
+      "lesson": 9
+    },
+    {
+      "word": "文化",
+      "pinyin": "wénhuà",
+      "lesson": 13
+    },
+    {
+      "word": "屋子",
+      "pinyin": "wūzi",
+      "lesson": 17
+    },
+    {
+      "word": "西北",
+      "pinyin": "xīběi",
+      "lesson": 15
+    },
+    {
+      "word": "西瓜",
+      "pinyin": "xīguā",
+      "lesson": 7
+    },
+    {
+      "word": "习惯",
+      "pinyin": "xíguàn",
+      "lesson": 8
+    },
+    {
+      "word": "洗衣机",
+      "pinyin": "xǐyījī",
+      "lesson": 3
+    },
+    {
+      "word": "喜爱",
+      "pinyin": "xǐ'ài",
+      "lesson": 16
+    },
+    {
+      "word": "夏天",
+      "pinyin": "xiàtiān",
+      "lesson": 12
+    },
+    {
+      "word": "先",
+      "pinyin": "xiān",
+      "lesson": 4
+    },
+    {
+      "word": "相信",
+      "pinyin": "xiāngxìn",
+      "lesson": 14
+    },
+    {
+      "word": "香蕉",
+      "pinyin": "xiāngjiāo",
+      "lesson": 7
+    },
+    {
+      "word": "箱子",
+      "pinyin": "xiāngzi",
+      "lesson": 1
+    },
+    {
+      "word": "向",
+      "pinyin": "xiàng",
+      "lesson": 17
+    },
+    {
+      "word": "相机",
+      "pinyin": "xiàngjī",
+      "lesson": 4
+    },
+    {
+      "word": "像",
+      "pinyin": "xiàng",
+      "lesson": 1
+    },
+    {
+      "word": "小区",
+      "pinyin": "xiǎoqū",
+      "lesson": 3
+    },
+    {
+      "word": "小心",
+      "pinyin": "xiǎoxīn",
+      "lesson": 6
+    },
+    {
+      "word": "校园",
+      "pinyin": "xiàoyuán",
+      "lesson": 9
+    },
+    {
+      "word": "校长",
+      "pinyin": "xiàozhǎng",
+      "lesson": 14
+    },
+    {
+      "word": "鞋",
+      "pinyin": "xié",
+      "lesson": 5
+    },
+    {
+      "word": "心里",
+      "pinyin": "xīnlǐ",
+      "lesson": 8
+    },
+    {
+      "word": "新年",
+      "pinyin": "xīnnián",
+      "lesson": 14
+    },
+    {
+      "word": "新闻",
+      "pinyin": "xīnwén",
+      "lesson": 12
+    },
+    {
+      "word": "新鲜",
+      "pinyin": "xīnxiān",
+      "lesson": 7
+    },
+    {
+      "word": "信用卡",
+      "pinyin": "xìnyòngkǎ",
+      "lesson": 3
+    },
+    {
+      "word": "行",
+      "pinyin": "xíng",
+      "lesson": 6
+    },
+    {
+      "word": "行李",
+      "pinyin": "xíngli",
+      "lesson": 1
+    },
+    {
+      "word": "兴趣",
+      "pinyin": "xìngqù",
+      "lesson": 5
+    },
+    {
+      "word": "休假",
+      "pinyin": "xiūjià",
+      "lesson": 11
+    },
+    {
+      "word": "需要",
+      "pinyin": "xūyào",
+      "lesson": 3
+    },
+    {
+      "word": "选",
+      "pinyin": "xuǎn",
+      "lesson": 2
+    }
+  ],
+  "3_8": [
+    {
+      "word": "选择",
+      "pinyin": "xuǎnzé",
+      "lesson": 6
+    },
+    {
+      "word": "学期",
+      "pinyin": "xuéqī",
+      "lesson": 18
+    },
+    {
+      "word": "羊",
+      "pinyin": "yáng",
+      "lesson": 4
+    },
+    {
+      "word": "养",
+      "pinyin": "yǎng",
+      "lesson": 15
+    },
+    {
+      "word": "要求",
+      "pinyin": "yāoqiú",
+      "lesson": 10
+    },
+    {
+      "word": "野生",
+      "pinyin": "yěshēng",
+      "lesson": 16
+    },
+    {
+      "word": "叶子",
+      "pinyin": "yèzi",
+      "lesson": 12
+    },
+    {
+      "word": "页",
+      "pinyin": "yè",
+      "lesson": 10
+    },
+    {
+      "word": "一定",
+      "pinyin": "yīdìng",
+      "lesson": 4
+    },
+    {
+      "word": "一共",
+      "pinyin": "yígòng",
+      "lesson": 7
+    },
+    {
+      "word": "一会儿",
+      "pinyin": "yíhuir",
+      "lesson": 16
+    },
+    {
+      "word": "一块儿",
+      "pinyin": "yíkuàir",
+      "lesson": 14
+    },
+    {
+      "word": "一样",
+      "pinyin": "yíyàng",
+      "lesson": 4
+    },
+    {
+      "word": "以后",
+      "pinyin": "yǐhòu",
+      "lesson": 8
+    },
+    {
+      "word": "以前",
+      "pinyin": "yǐqián",
+      "lesson": 6
+    },
+    {
+      "word": "以上",
+      "pinyin": "yǐshàng",
+      "lesson": 15
+    },
+    {
+      "word": "以外",
+      "pinyin": "yǐwài",
+      "lesson": 4
+    },
+    {
+      "word": "以为",
+      "pinyin": "yǐwéi",
+      "lesson": 1
+    },
+    {
+      "word": "一般",
+      "pinyin": "yìbān",
+      "lesson": 10
+    },
+    {
+      "word": "一边",
+      "pinyin": "yìbiān",
+      "lesson": 13
+    },
+    {
+      "word": "一直",
+      "pinyin": "yìzhí",
+      "lesson": 4
+    },
+    {
+      "word": "音乐",
+      "pinyin": "yīnyuè",
+      "lesson": 5
+    },
+    {
+      "word": "银行",
+      "pinyin": "yínháng",
+      "lesson": 3
+    },
+    {
+      "word": "饮料",
+      "pinyin": "yǐnliào",
+      "lesson": 2
+    },
+    {
+      "word": "应该",
+      "pinyin": "yīnggāi",
+      "lesson": 1
+    },
+    {
+      "word": "影响",
+      "pinyin": "yǐngxiǎng",
+      "lesson": 9
+    },
+    {
+      "word": "用",
+      "pinyin": "yòng",
+      "lesson": 2
+    },
+    {
+      "word": "邮件",
+      "pinyin": "yóujiàn",
+      "lesson": 5
+    },
+    {
+      "word": "邮箱",
+      "pinyin": "yóuxiāng",
+      "lesson": 11
+    },
+    {
+      "word": "游客",
+      "pinyin": "yóukè",
+      "lesson": 15
+    },
+    {
+      "word": "游戏",
+      "pinyin": "yóuxì",
+      "lesson": 15
+    },
+    {
+      "word": "有关",
+      "pinyin": "yǒuguān",
+      "lesson": 17
+    },
+    {
+      "word": "有名",
+      "pinyin": "yǒumíng",
+      "lesson": 15
+    },
+    {
+      "word": "有些",
+      "pinyin": "yǒuxiē",
+      "lesson": 14
+    },
+    {
+      "word": "有用",
+      "pinyin": "yǒuyòng",
+      "lesson": 17
+    },
+    {
+      "word": "又",
+      "pinyin": "yòu",
+      "lesson": 2
+    },
+    {
+      "word": "羽毛球",
+      "pinyin": "yǔmáoqiú",
+      "lesson": 8
+    },
+    {
+      "word": "雨衣",
+      "pinyin": "yǔyī",
+      "lesson": 12
+    },
+    {
+      "word": "遇到",
+      "pinyin": "yùdào",
+      "lesson": 10
+    },
+    {
+      "word": "遇见",
+      "pinyin": "yùjiàn",
+      "lesson": 15
+    },
+    {
+      "word": "员",
+      "pinyin": "yuán",
+      "lesson": 2
+    },
+    {
+      "word": "愿意",
+      "pinyin": "yuànyì",
+      "lesson": 11
+    },
+    {
+      "word": "月亮",
+      "pinyin": "yuèliang",
+      "lesson": 4
+    },
+    {
+      "word": "越",
+      "pinyin": "yuè",
+      "lesson": 6
+    },
+    {
+      "word": "运动会",
+      "pinyin": "yùndònghuì",
+      "lesson": 9
+    },
+    {
+      "word": "运动员",
+      "pinyin": "yùndòngyuán",
+      "lesson": 9
+    },
+    {
+      "word": "咱们",
+      "pinyin": "zánmen",
+      "lesson": 3
+    },
+    {
+      "word": "脏",
+      "pinyin": "zāng",
+      "lesson": 16
+    },
+    {
+      "word": "怎么办",
+      "pinyin": "zěnme bàn",
+      "lesson": 14
+    },
+    {
+      "word": "怎样",
+      "pinyin": "zěnyàng",
+      "lesson": 18
+    },
+    {
+      "word": "站",
+      "pinyin": "zhàn",
+      "lesson": 1
+    },
+    {
+      "word": "张",
+      "pinyin": "zhāng",
+      "lesson": "2, 16"
+    },
+    {
+      "word": "长",
+      "pinyin": "zhǎng",
+      "lesson": 1
+    },
+    {
+      "word": "着急",
+      "pinyin": "zháojí",
+      "lesson": 1
+    },
+    {
+      "word": "照",
+      "pinyin": "zhào",
+      "lesson": 5
+    },
+    {
+      "word": "照顾",
+      "pinyin": "zhàogù",
+      "lesson": 16
+    },
+    {
+      "word": "照片",
+      "pinyin": "zhàopiàn",
+      "lesson": 1
+    },
+    {
+      "word": "照相",
+      "pinyin": "zhàoxiàng",
+      "lesson": 5
+    },
+    {
+      "word": "真正",
+      "pinyin": "zhēnzhèng",
+      "lesson": 17
+    },
+    {
+      "word": "直到",
+      "pinyin": "zhídào",
+      "lesson": 13
+    },
+    {
+      "word": "只",
+      "pinyin": "zhǐ",
+      "lesson": 2
+    },
+    {
+      "word": "只能",
+      "pinyin": "zhǐ néng",
+      "lesson": 11
+    },
+    {
+      "word": "只是",
+      "pinyin": "zhǐshì",
+      "lesson": 9
+    },
+    {
+      "word": "只要",
+      "pinyin": "zhǐyào",
+      "lesson": 18
+    },
+    {
+      "word": "只有",
+      "pinyin": "zhǐyǒu",
+      "lesson": 17
+    },
+    {
+      "word": "纸",
+      "pinyin": "zhǐ",
+      "lesson": 3
+    }
+  ],
+  "3_9": [
+    {
+      "word": "中间",
+      "pinyin": "zhōngjiān",
+      "lesson": 1
+    },
+    {
+      "word": "终于",
+      "pinyin": "zhōngyú",
+      "lesson": 5
+    },
+    {
+      "word": "种",
+      "pinyin": "zhǒng",
+      "lesson": 8
+    },
+    {
+      "word": "重要",
+      "pinyin": "zhòngyào",
+      "lesson": 1
+    },
+    {
+      "word": "周末",
+      "pinyin": "zhōumò",
+      "lesson": 16
+    },
+    {
+      "word": "*竹子",
+      "pinyin": "zhúzi",
+      "lesson": 16
+    },
+    {
+      "word": "主要",
+      "pinyin": "zhǔyào",
+      "lesson": 9
+    },
+    {
+      "word": "*主意",
+      "pinyin": "zhǔyi",
+      "lesson": 4
+    },
+    {
+      "word": "住院",
+      "pinyin": "zhùyuàn",
+      "lesson": 8
+    },
+    {
+      "word": "注意",
+      "pinyin": "zhùyì",
+      "lesson": 8
+    },
+    {
+      "word": "自行车",
+      "pinyin": "zìxíngchē",
+      "lesson": 7
+    },
+    {
+      "word": "总",
+      "pinyin": "zǒng",
+      "lesson": 18
+    },
+    {
+      "word": "总是",
+      "pinyin": "zǒngshì",
+      "lesson": 5
+    },
+    {
+      "word": "嘴",
+      "pinyin": "zuǐ",
+      "lesson": 16
+    },
+    {
+      "word": "最好",
+      "pinyin": "zuìhǎo",
+      "lesson": 14
+    },
+    {
+      "word": "最后",
+      "pinyin": "zuìhòu",
+      "lesson": 14
+    },
+    {
+      "word": "最近",
+      "pinyin": "zuìjìn",
+      "lesson": 8
+    },
+    {
+      "word": "作业",
+      "pinyin": "zuòyè",
+      "lesson": 10
+    },
+    {
+      "word": "*做法",
+      "pinyin": "zuòfǎ",
+      "lesson": 13
+    },
+    {
+      "word": "做客",
+      "pinyin": "zuòkè",
+      "lesson": 13
+    }
+  ]
+}

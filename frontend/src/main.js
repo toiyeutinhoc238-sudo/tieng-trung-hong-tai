@@ -238,6 +238,10 @@ async function fetchVocabulary() {
     updateStats();
     applyFilters();
     renderCustomWordsTable();
+
+    // Fetch initial stats and start timer
+    loadInitialStats();
+    startStudyTimer();
   } catch (error) {
     console.error('API Error:', error);
     showToast('Lỗi kết nối máy chủ backend!', true);
@@ -260,6 +264,10 @@ async function fetchVocabulary() {
     renderCustomLists();
     updateStats();
     applyFilters();
+
+    // Fetch initial stats and start timer
+    loadInitialStats();
+    startStudyTimer();
   }
 }
 
@@ -588,6 +596,11 @@ function updateStats() {
 
   // 4. Render Deck Selection Grid view
   renderDeckSelectionView();
+
+  // 5. Update dynamic welcome stat cards
+  if (typeof updateStatsUI === 'function') {
+    updateStatsUI();
+  }
 }
 
 function renderDeckSelectionView() {
@@ -645,7 +658,7 @@ function renderDeckSelectionView() {
   });
 
   // 4. Free HSK Levels
-  for (let lvl = 1; lvl <= 6; lvl++) {
+  for (let lvl = 1; lvl <= 3; lvl++) {
     const lvlWords = vocabList.filter(w => !w.isCustom && w.level === lvl);
     const total = lvlWords.length;
     const subDeckId = `hsk-${lvl}`;
@@ -719,8 +732,8 @@ function renderDetailedStatsTable() {
   tbody.innerHTML = '';
   const rowsData = [];
 
-  // HSK Levels 1-6
-  for (let lvl = 1; lvl <= 6; lvl++) {
+  // HSK Levels 1-3
+  for (let lvl = 1; lvl <= 3; lvl++) {
     const lvlWords = vocabList.filter(w => !w.isCustom && w.level === lvl);
     const total = lvlWords.length;
     const memorized = lvlWords.filter(w => w.isMemorized).length;
@@ -1815,6 +1828,9 @@ async function handleCredentialResponse(response) {
       if (typeof window.migrateGuestChatHistory === 'function') {
         window.migrateGuestChatHistory();
       }
+      
+      // Re-fetch vocabulary and reload user statistics
+      fetchVocabulary();
     } else {
       throw new Error('Không nhận được dữ liệu người dùng');
     }
@@ -1858,6 +1874,14 @@ async function handleLogout(e) {
 
   renderUserProfile();
   showToast('Đã đăng xuất thành công.');
+  
+  // Reset guest stats in-memory
+  guestStudyTime = 0;
+  guestStreak = 0;
+  guestLastActive = '';
+  
+  // Re-fetch vocabulary to load guest state
+  fetchVocabulary();
   
   // Reset Chatbot interface and threads on logout
   if (typeof window.resetChatbotOnLogout === 'function') {
@@ -3488,27 +3512,27 @@ let activeLessonsCurriculum = 'hsk';
 
 const HSK_LESSONS_METADATA = {
   1: [
-    { id: 1, title: 'Bài 1: Chào hỏi - 你好', desc: 'Học cách chào hỏi cơ bản, từ vựng thông dụng và cách nói lời xin lỗi.', startIdx: 0, endIdx: 15 },
-    { id: 2, title: 'Bài 2: Cảm ơn - 谢谢你', desc: 'Học cách bày tỏ lòng biết ơn, nói lời tạm biệt và các đại từ chỉ bạn bè.', startIdx: 15, endIdx: 30 },
-    { id: 3, title: 'Bài 3: Bạn tên là gì? - 你叫什么名字', desc: 'Học cách tự giới thiệu bản thân, quốc tịch, tên tuổi và nghề nghiệp.', startIdx: 30, endIdx: 45 },
-    { id: 4, title: 'Bài 4: Cô ấy là giáo viên của tôi - 她是我的老师', desc: 'Học cách nói về mối quan hệ, nghề nghiệp và giới thiệu người khác.', startIdx: 45, endIdx: 60 },
-    { id: 5, title: 'Bài 5: Gia đình tôi có 4 người - 我家有四口人', desc: 'Học cách đếm số, giới thiệu các thành viên trong gia đình.', startIdx: 60, endIdx: 75 },
-    { id: 6, title: 'Bài 6: Tôi biết nói tiếng Trung - 我会说汉语', desc: 'Nói về khả năng, kỹ năng và các ngôn ngữ phổ biến.', startIdx: 75, endIdx: 90 },
-    { id: 7, title: 'Bài 7: Hôm nay là thứ mấy? - 今天星期几', desc: 'Cách hỏi và trả lời về thời gian, ngày tháng trong tuần.', startIdx: 90, endIdx: 105 },
-    { id: 8, title: 'Bài 8: Tôi muốn mua quả táo - 我想买苹果', desc: 'Học cách mua sắm, hỏi giá tiền và các loại hoa quả cơ bản.', startIdx: 105, endIdx: 120 },
-    { id: 9, title: 'Bài 9: Thời tiết hôm nay thế nào? - 今天天气怎么样', desc: 'Mô tả thời tiết, nhiệt độ và các trạng thái tự nhiên.', startIdx: 120, endIdx: 135 },
-    { id: 10, title: 'Bài 10: Tôi đang xem phim - 我在看电影', desc: 'Diễn tả các hành động đang xảy ra và sở thích giải trí.', startIdx: 135, endIdx: 150 }
+    { id: 1, title: 'Bài 1: Chào hỏi - 你好', desc: 'Học cách chào hỏi cơ bản, từ vựng thông dụng và cách nói lời xin lỗi.' },
+    { id: 2, title: 'Bài 2: Cảm ơn - 谢谢 unit', desc: 'Học cách bày tỏ lòng biết ơn, nói lời tạm biệt và các đại từ chỉ bạn bè.' },
+    { id: 3, title: 'Bài 3: Bạn tên là gì? - 你叫什么名字', desc: 'Học cách tự giới thiệu bản thân, quốc tịch, tên tuổi và nghề nghiệp.' },
+    { id: 4, title: 'Bài 4: Cô ấy là giáo viên của tôi - 她是我的老师', desc: 'Học cách nói về mối quan hệ, nghề nghiệp và giới thiệu người khác.' },
+    { id: 5, title: 'Bài 5: Gia đình tôi có 4 người - 我家有四口人', desc: 'Học cách đếm số, giới thiệu các thành viên trong gia đình.' },
+    { id: 6, title: 'Bài 6: Tôi biết nói tiếng Trung - 我会说汉语', desc: 'Nói về khả năng, kỹ năng và các ngôn ngữ phổ biến.' },
+    { id: 7, title: 'Bài 7: Hôm nay là thứ mấy? - 今天星期几', desc: 'Cách hỏi và trả lời về thời gian, ngày tháng trong tuần.' },
+    { id: 8, title: 'Bài 8: Tôi muốn mua quả táo - 我想买苹果', desc: 'Học cách mua sắm, hỏi giá tiền và các loại hoa quả cơ bản.' },
+    { id: 9, title: 'Bài 9: Thời tiết hôm nay thế nào? - 今天天气怎么样', desc: 'Mô tả thời tiết, nhiệt độ và các trạng thái tự nhiên.' },
+    { id: 10, title: 'Bài 10: Tôi đang xem phim - 我在看电影', desc: 'Diễn tả các hành động đang xảy ra và sở thích giải trí.' }
   ],
   2: [
-    { id: 1, title: 'Bài 1: Cuộc sống hàng ngày - 日常生活', desc: 'Học từ vựng mô tả thói quen sinh hoạt và ăn uống hàng ngày.', startIdx: 0, endIdx: 20 },
-    { id: 2, title: 'Bài 2: Thể thao và Sức khỏe - 运动与健康', desc: 'Từ vựng các môn thể thao, rèn luyện thân thể và cảm giác cơ thể.', startIdx: 20, endIdx: 40 },
-    { id: 3, title: 'Bài 3: Phương tiện giao thông - 交通工具', desc: 'Học từ vựng du lịch, các phương tiện đi lại như tàu hỏa, máy bay.', startIdx: 40, endIdx: 60 },
-    { id: 4, title: 'Bài 4: Sở thích và giải trí - 兴趣与娱乐', desc: 'Thảo luận về âm nhạc, phim ảnh, đọc sách và các hoạt động thư giãn.', startIdx: 60, endIdx: 80 }
+    { id: 1, title: 'Bài 1: Cuộc sống hàng ngày - 日常生活', desc: 'Học từ vựng mô tả thói quen sinh hoạt và ăn uống hàng ngày.' },
+    { id: 2, title: 'Bài 2: Thể thao và Sức khỏe - 运动与健康', desc: 'Từ vựng các môn thể thao, rèn luyện thân thể và cảm giác cơ thể.' },
+    { id: 3, title: 'Bài 3: Phương tiện giao thông - 交通工具', desc: 'Học từ vựng du lịch, các phương tiện đi lại như tàu hỏa, máy bay.' },
+    { id: 4, title: 'Bài 4: Sở thích và giải trí - 兴趣与娱乐', desc: 'Thảo luận về âm nhạc, phim ảnh, đọc sách và các hoạt động thư giãn.' }
   ],
   3: [
-    { id: 1, title: 'Bài 1: Giao tiếp văn phòng - 办公室', desc: 'Học từ vựng liên quan đến công việc, đồng nghiệp và công sở.', startIdx: 0, endIdx: 25 },
-    { id: 2, title: 'Bài 2: Kỳ nghỉ lý thú - 快乐假期', desc: 'Học từ vựng đi du lịch nước ngoài, hỏi đường và trải nghiệm văn hóa.', startIdx: 25, endIdx: 50 },
-    { id: 3, title: 'Bài 3: Mua sắm và Ẩm thực - 购物与美食', desc: 'Đặt món ăn tại nhà hàng, từ vựng các món ăn Trung Hoa nổi tiếng.', startIdx: 50, endIdx: 75 }
+    { id: 1, title: 'Bài 1: Giao tiếp văn phòng - 办公室', desc: 'Học từ vựng liên quan đến công việc, đồng nghiệp và công sở.' },
+    { id: 2, title: 'Bài 2: Kỳ nghỉ lý thú - 快乐假期', desc: 'Học từ vựng đi du lịch nước ngoài, hỏi đường và trải nghiệm văn hóa.' },
+    { id: 3, title: 'Bài 3: Mua sắm và Ẩm thực - 购物与美食', desc: 'Đặt món ăn tại nhà hàng, từ vựng các món ăn Trung Hoa nổi tiếng.' }
   ]
 };
 
@@ -3545,24 +3569,32 @@ function renderLessonsList() {
   // Filter HSK level vocabulary
   const levelVocabs = vocabList.filter(w => !w.isCustom && w.level === activeLessonsLevel);
 
-  // Fallback default list if empty (seeded)
-  const lessons = HSK_LESSONS_METADATA[activeLessonsLevel] || [
-    { id: 1, title: `Bài 1: Tổng hợp HSK ${activeLessonsLevel} - Phần 1`, desc: `Ôn tập từ vựng HSK Cấp ${activeLessonsLevel} phần đầu tiên.`, startIdx: 0, endIdx: Math.max(15, Math.round(levelVocabs.length / 2)) },
-    { id: 2, title: `Bài 2: Tổng hợp HSK ${activeLessonsLevel} - Phần 2`, desc: `Ôn tập từ vựng HSK Cấp ${activeLessonsLevel} phần tiếp theo.`, startIdx: Math.max(15, Math.round(levelVocabs.length / 2)), endIdx: levelVocabs.length }
-  ];
+  // Group vocabulary dynamically by their lessonId field
+  const lessonGroups = {};
+  levelVocabs.forEach(w => {
+    const les = w.lessonId || 1;
+    if (!lessonGroups[les]) lessonGroups[les] = [];
+    lessonGroups[les].push(w);
+  });
 
-  lessons.forEach(lesson => {
-    // Slice vocab array
-    const sliceWords = levelVocabs.slice(lesson.startIdx, lesson.endIdx);
+  const uniqueLessonIds = Object.keys(lessonGroups).map(Number).sort((a, b) => a - b);
+
+  uniqueLessonIds.forEach(lessonId => {
+    const sliceWords = lessonGroups[lessonId] || [];
     const wordsCount = sliceWords.length;
+    if (wordsCount === 0) return;
+    
+    // Retrieve title and desc directly from the first word of the group
+    const title = sliceWords[0].lessonTitle || `Bài ${lessonId}`;
+    const desc = sliceWords[0].lessonDesc || `Ôn tập từ vựng bài học HSK Cấp ${activeLessonsLevel}`;
 
     const card = document.createElement('div');
     card.className = 'lesson-card';
     card.innerHTML = `
       <div>
-        <span class="lesson-badge">HSK${activeLessonsLevel} - L${lesson.id}</span>
-        <h3 class="lesson-title">${lesson.title}</h3>
-        <p class="lesson-desc">${lesson.desc}</p>
+        <span class="lesson-badge">HSK${activeLessonsLevel} - Bài ${lessonId}</span>
+        <h3 class="lesson-title">${title}</h3>
+        <p class="lesson-desc">${desc}</p>
       </div>
       <div class="lesson-footer">
         <span class="lesson-words-indicator">
@@ -3573,7 +3605,7 @@ function renderLessonsList() {
     `;
 
     card.addEventListener('click', () => {
-      startLessonStudy(lesson, sliceWords);
+      startLessonStudy({ id: lessonId, title }, sliceWords);
     });
 
     grid.appendChild(card);
@@ -3658,10 +3690,9 @@ let activeHanziWriter = null;
 let voiceRecognitionInstance = null;
 
 const WRITING_PROMPTS = [
-  { title: "Giới thiệu bản thân (HSK 1)", text: "你好！我叫小王。我是越南人。我学习汉语。很高兴认识你！" },
+  { title: "Giới thiệu bản thân (HSK 1)", text: "你好！我叫小王。我是越南人。我学习汉语。很高兴认识nǐ！" },
   { title: "Một ngày của tôi (HSK 2)", text: "我每天早上七点半起床。吃早饭以后去上学。我下午六点回宿舍。" },
-  { title: "Sở thích của tôi (HSK 3)", text: "我的 hobby 是听音乐和看中国电影。我觉得写汉字很有意思，但是也很难。" },
-  { title: "Lợi ích đọc sách (HSK 4)", text: "读书的好处非常多。阅读不仅能让我们获得丰富的知识，还可以减轻生活压力。" }
+  { title: "Sở thích của tôi (HSK 3)", text: "Sở thích của tôi là nghe nhạc và xem phim Trung Quốc. Tôi cảm thấy viết chữ Hán rất thú vị, nhưng cũng rất khó." }
 ];
 
 function initDictionaryView() {
@@ -4280,6 +4311,141 @@ async function handleEssayCorrection() {
     console.error('Tutor correction error:', error);
     showToast('Lỗi gia sư AI sửa bài. Vui lòng thử lại!', true);
   }
+}
+
+// --- STUDY TIME & PROGRESS TRACKING ---
+let sessionStudyTime = 0;
+let activeTimer = null;
+let userStreak = 0;
+let userStudyTime = 0; // cumulative study time in seconds
+
+// In-memory guest stats (will be lost on page reload)
+let guestStudyTime = 0;
+let guestStreak = 0;
+let guestLastActive = '';
+
+function startStudyTimer() {
+  if (activeTimer) clearInterval(activeTimer);
+  activeTimer = setInterval(() => {
+    if (document.hasFocus()) {
+      sessionStudyTime++;
+      
+      const totalSecs = userStudyTime + sessionStudyTime;
+      const totalMins = Math.floor(totalSecs / 60);
+      const studyTimeValEl = document.getElementById('welcome-study-time-val');
+      if (studyTimeValEl) {
+        studyTimeValEl.textContent = `${totalMins} phút`;
+      }
+
+      if (sessionStudyTime >= 15) {
+        syncStudyStats();
+      }
+    }
+  }, 1000);
+}
+
+async function syncStudyStats() {
+  const increment = sessionStudyTime;
+  sessionStudyTime = 0;
+  if (increment <= 0) return;
+
+  const todayStr = new Date().toLocaleDateString('sv'); // YYYY-MM-DD
+
+  if (currentUser) {
+    try {
+      const response = await fetch(API_BASE_URL + '/api/user/stats/sync', {
+        method: 'POST',
+        headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify({ incrementStudyTime: increment, localDateStr: todayStr }),
+        credentials: 'include'
+      });
+      if (response.ok) {
+        const stats = await response.json();
+        userStreak = stats.streak;
+        userStudyTime = stats.studyTime;
+        updateStatsUI();
+      }
+    } catch (err) {
+      console.error('Failed to sync study stats:', err);
+    }
+  } else {
+    // In-memory guest stats logic (no localStorage)
+    guestStudyTime += increment;
+    userStudyTime = guestStudyTime;
+
+    if (!guestLastActive) {
+      guestStreak = 1;
+      guestLastActive = todayStr;
+    } else if (guestLastActive !== todayStr) {
+      const today = new Date(todayStr);
+      const lastActive = new Date(guestLastActive);
+      const diffTime = Math.abs(today - lastActive);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+      if (diffDays === 1) {
+        guestStreak += 1;
+      } else if (diffDays > 1) {
+        guestStreak = 1;
+      }
+      guestLastActive = todayStr;
+    }
+    userStreak = guestStreak;
+    updateStatsUI();
+  }
+}
+
+function calculateCompletedLessons() {
+  const textbookGroups = {};
+  vocabList.forEach(w => {
+    if (w.isCustom || !w.level || !w.lessonId) return;
+    const key = `${w.level}_${w.lessonId}`;
+    if (!textbookGroups[key]) textbookGroups[key] = [];
+    textbookGroups[key].push(w);
+  });
+
+  let completedCount = 0;
+  Object.entries(textbookGroups).forEach(([key, words]) => {
+    if (words.length > 0 && words.every(w => w.isMemorized)) {
+      completedCount++;
+    }
+  });
+
+  return completedCount;
+}
+
+function updateStatsUI() {
+  const streakEl = document.getElementById('welcome-streak-val');
+  const completedEl = document.getElementById('welcome-completed-val');
+  const studyTimeEl = document.getElementById('welcome-study-time-val');
+
+  if (streakEl) streakEl.textContent = `${userStreak} ngày`;
+  if (studyTimeEl) studyTimeEl.textContent = `${Math.floor(userStudyTime / 60)} phút`;
+
+  const completedCount = calculateCompletedLessons();
+  if (completedEl) completedEl.textContent = `${completedCount} bài`;
+}
+
+async function loadInitialStats() {
+  if (currentUser) {
+    try {
+      const response = await fetch(API_BASE_URL + '/api/user/stats', {
+        headers: getAuthHeaders(),
+        credentials: 'include'
+      });
+      if (response.ok) {
+        const stats = await response.json();
+        userStreak = stats.streak;
+        userStudyTime = stats.studyTime;
+      }
+    } catch (err) {
+      console.error('Failed to load user stats:', err);
+    }
+  } else {
+    // Pure in-memory reset for guest on load (loses progress on reload)
+    userStudyTime = guestStudyTime;
+    userStreak = guestStreak;
+  }
+  updateStatsUI();
 }
 
 
