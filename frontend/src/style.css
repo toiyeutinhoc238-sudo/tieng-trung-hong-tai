@@ -4166,4 +4166,73 @@ html.light .dict-quick-save-item:hover {
   box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2);
 }
 
+/* --- TOPICS & DASHBOARD STYLES --- */
+.topic-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.topic-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent-blue) !important;
+  box-shadow: var(--shadow-lg), 0 0 15px rgba(59, 130, 246, 0.15) !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+}
+html.dark .topic-card:hover {
+  background: rgba(255, 255, 255, 0.02) !important;
+}
+
+/* Notebook dashboard buttons hover */
+#nb-start-flashcard-btn:hover {
+  border-color: var(--accent-blue) !important;
+  background: rgba(59, 130, 246, 0.06) !important;
+  transform: scale(1.01);
+}
+#nb-start-typing-btn:hover {
+  border-color: var(--success) !important;
+  background: rgba(16, 185, 129, 0.06) !important;
+  transform: scale(1.01);
+}
+#nb-start-quiz-btn:hover {
+  border-color: var(--warning) !important;
+  background: rgba(245, 158, 11, 0.06) !important;
+  transform: scale(1.01);
+}
+
+/* --- QUIZ GAME STYLES --- */
+.quiz-option-btn {
+  display: block;
+  width: 100%;
+  padding: 16px 24px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1.5px solid var(--border-glass);
+  border-radius: 12px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+  font-family: var(--font-sans);
+}
+.quiz-option-btn:hover:not([disabled]) {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--text-secondary);
+  transform: translateX(4px);
+}
+.quiz-option-btn.correct {
+  background: var(--success-bg) !important;
+  border-color: var(--success) !important;
+  color: var(--success) !important;
+  font-weight: 700;
+}
+.quiz-option-btn.incorrect {
+  background: var(--danger-bg) !important;
+  border-color: var(--danger) !important;
+  color: var(--danger) !important;
+  font-weight: 700;
+}
+.quiz-option-btn[disabled] {
+  cursor: not-allowed;
+}
+
 

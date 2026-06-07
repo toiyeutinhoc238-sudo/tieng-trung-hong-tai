@@ -191,94 +191,284 @@
       
       <!-- DECK SELECTION VIEW -->
       <div id="deck-selection-view">
-        <div class="smart-flashcard-config">
-          <!-- Title Header -->
-          <div class="config-header">
-            <h2 class="config-title">
-              <i class="fa-solid fa-layer-group title-icon"></i> Học Flashcards Thông Minh HONGTAI
+        
+        <!-- Screen 1: Main Topic Selection -->
+        <div id="flashcard-topics-view" class="smart-flashcard-config">
+          <div class="config-header" style="text-align: center; margin-bottom: 36px;">
+            <h2 class="config-title" style="font-size: 2rem;">
+              <i class="fa-solid fa-layer-group title-icon" style="color: #ff2a5f;"></i> Học Từ Vựng Thông Minh HONGTAI
             </h2>
             <p class="config-subtitle">
-              Nhớ từ vựng dễ dàng qua thẻ Flashcards lật kết hợp Chế độ nhập chữ tự chấm điểm, tự động phân tích và lưu trữ những từ bạn học sai 3 lần!
+              Chọn chủ đề học tập bên dưới để ôn tập bằng Flashcards, luyện gõ từ vựng và chơi game trắc nghiệm ghi nhớ!
             </p>
           </div>
 
-          <div class="config-steps-grid">
-            <!-- Step 1: Chọn giáo trình học tập -->
-            <div class="config-step-section">
-              <h3 class="step-title">1. CHỌN GIÁ TRÌNH HỌC TẬP</h3>
-              <div class="curriculum-selection-row">
-                <div class="selection-card active" data-curriculum="hsk" id="smart-curriculum-hsk">
-                  <span class="selection-card-title">HSK</span>
-                  <span class="selection-card-subtitle">Học thuật học người lớn</span>
-                  <i class="fa-solid fa-circle-check check-badge"></i>
-                </div>
-                <div class="selection-card" data-curriculum="yct" id="smart-curriculum-yct">
-                  <span class="selection-card-title">YCT</span>
-                  <span class="selection-card-subtitle">Thiếu nhi sinh động</span>
-                  <i class="fa-solid fa-circle-check check-badge"></i>
-                </div>
+          <div class="topics-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-bottom: 32px;">
+            <!-- Topic 1: Personal -->
+            <div class="topic-card glass-panel" id="topic-personal-btn" style="padding: 32px 24px; text-align: center; cursor: pointer; border-radius: var(--radius-lg); transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; border: 1.5px solid var(--border-glass);">
+              <div class="topic-icon-wrapper" style="width: 70px; height: 70px; border-radius: 50%; background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); display: flex; align-items: center; justify-content: center; font-size: 2.2rem;">
+                <i class="fa-solid fa-user-gear"></i>
               </div>
+              <h3 style="font-family: var(--font-display); font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin: 0;">Sổ tay Cá nhân</h3>
+              <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0; line-height: 1.5;">
+                Quản lý và ôn tập các từ bạn đã lưu, từ học sai, từ yêu thích và các danh sách tự biên soạn.
+              </p>
             </div>
 
-            <!-- Step 2: Chọn cấp độ điểm mốc -->
-            <div class="config-step-section">
-              <h3 class="step-title">2. CHỌN CẤP ĐỘ ĐIỂM MỐC</h3>
-              <div class="level-selection-row" id="smart-level-row">
-                <button class="level-pill active" data-level="1">Cấp HSK 1</button>
-                <button class="level-pill" data-level="2">Cấp HSK 2</button>
-                <button class="level-pill" data-level="3">Cấp HSK 3</button>
+            <!-- Topic 2: HSK Vocab -->
+            <div class="topic-card glass-panel" id="topic-hsk-btn" style="padding: 32px 24px; text-align: center; cursor: pointer; border-radius: var(--radius-lg); transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; border: 1.5px solid var(--border-glass);">
+              <div class="topic-icon-wrapper" style="width: 70px; height: 70px; border-radius: 50%; background: rgba(16, 185, 129, 0.15); color: var(--success); display: flex; align-items: center; justify-content: center; font-size: 2.2rem;">
+                <i class="fa-solid fa-graduation-cap"></i>
               </div>
+              <h3 style="font-family: var(--font-display); font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin: 0;">Từ vựng HSK</h3>
+              <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0; line-height: 1.5;">
+                Học từ vựng tiếng Trung học thuật phân chia từ HSK cấp 1 đến HSK cấp 3 đầy đủ.
+              </p>
             </div>
 
-            <!-- Step 3: Chọn cách thức học tập & ôn tập -->
-            <div class="config-step-section">
-              <h3 class="step-title">3. CHỌN CÁCH THỨC HỌC TẬP & ÔN TẬP</h3>
-              <div class="mode-selection-row">
-                <div class="selection-card active" data-mode="flip" id="smart-mode-flip">
-                  <span class="selection-card-title">Thẻ Lật 3D Truyền thống</span>
-                  <span class="selection-card-subtitle">Nhìn Hán tự và click xoay lật xem nghĩa Pinyin</span>
-                  <i class="fa-solid fa-circle-check check-badge"></i>
-                </div>
-                <div class="selection-card" data-mode="type" id="smart-mode-type">
-                  <span class="selection-card-title">Luyện Gõ Tự Chấm Điểm ✍️</span>
-                  <span class="selection-card-subtitle">Được gõ trực tiếp chữ Hán hoặc dịch nghĩa Việt để kiểm tra</span>
-                  <i class="fa-solid fa-circle-check check-badge"></i>
-                </div>
+            <!-- Topic 3: Premium Topics -->
+            <div class="topic-card glass-panel" id="topic-premium-btn" style="padding: 32px 24px; text-align: center; cursor: pointer; border-radius: var(--radius-lg); transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; border: 1.5px solid var(--border-glass);">
+              <div class="topic-icon-wrapper" style="width: 70px; height: 70px; border-radius: 50%; background: rgba(245, 158, 11, 0.15); color: var(--warning); display: flex; align-items: center; justify-content: center; font-size: 2.2rem;">
+                <i class="fa-solid fa-crown"></i>
               </div>
+              <h3 style="font-family: var(--font-display); font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin: 0;">Chủ đề Cao cấp</h3>
+              <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0; line-height: 1.5;">
+                Chủ đề từ vựng chuyên ngành sinh động: Du lịch, Giao tiếp công sở, Đàm phán thương mại.
+              </p>
             </div>
+          </div>
+        </div>
 
-            <!-- Step 4: Chọn phạm vi ôn tập -->
-            <div class="config-step-section">
-              <h3 class="step-title">4. CHỌN PHẠM VI ÔN TẬP (CÓ THỂ TÁCH HOẶC CHỌN NHIỀU BÀI HỌC)</h3>
-              <div class="range-selection-row">
-                <div class="selection-card active" data-range="all" id="smart-range-all-card">
-                  <span class="selection-card-title" id="smart-range-all-title">Toàn bộ từ vựng cấp HSK 1</span>
-                  <span class="selection-card-subtitle">Tự động gộp tất cả từ vựng trong tất cả các bài của cấp học này</span>
-                  <i class="fa-solid fa-circle-check check-badge"></i>
-                </div>
-                <div class="selection-card" data-range="custom" id="smart-range-custom-card">
-                  <span class="selection-card-title">Chọn học nhiều bài tùy biến</span>
-                  <span class="selection-card-subtitle">Tích chọn thủ công nhiều bài học chi tiết cụ thể bên dưới</span>
-                  <i class="fa-solid fa-circle-check check-badge"></i>
-                </div>
-              </div>
+        <!-- Screen 2: Sub-notebooks List -->
+        <div id="flashcard-subdecks-view" class="smart-flashcard-config" style="display: none;">
+          <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
+            <button id="back-to-topics-btn" class="btn btn-secondary" style="display: flex; align-items: center; gap: 8px; font-weight: 600; padding: 10px 16px; border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass);">
+              <i class="fa-solid fa-arrow-left"></i> Quay lại chủ đề chính
+            </button>
+            <h2 class="section-title" id="subdecks-category-title" style="margin: 0; font-size: 1.6rem;">Danh sách sổ tay</h2>
+          </div>
+          
+          <div class="smart-custom-grid" id="subdecks-list-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px;">
+            <!-- Dynamic subdecks loaded here -->
+          </div>
+        </div>
 
-              <!-- Custom deck list selection panel -->
-              <div class="smart-config-custom-picker" id="smart-custom-picker-container" style="margin-top: 18px;">
-                <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 12px; color: var(--text-primary);">
-                  Chọn bộ từ vựng / Sổ tay chi tiết:
-                </h4>
-                <div class="smart-custom-grid" id="smart-custom-decks-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px;">
-                  <!-- Dynamic decks populated by main.js (Wrong, Starred, Custom lists, HSK grids) -->
-                </div>
+        <!-- Screen 3: Notebook Dashboard -->
+        <div id="notebook-dashboard-view" class="smart-flashcard-config" style="display: none;">
+          <!-- Header and back button -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid var(--border-glass); padding-bottom: 16px;">
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <button id="back-to-subdecks-btn" class="btn btn-secondary" style="display: flex; align-items: center; gap: 8px; font-weight: 600; padding: 10px 16px; border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass);">
+                <i class="fa-solid fa-arrow-left"></i> Quay lại danh sách
+              </button>
+              <div>
+                <h2 class="section-title" id="dashboard-notebook-title" style="margin: 0; font-size: 1.8rem; font-family: var(--font-display); font-weight: 800;">Sổ tay khó nhớ</h2>
+                <p class="section-desc" id="dashboard-notebook-desc" style="margin: 2px 0 0 0; color: var(--text-secondary); font-size: 0.85rem;">Các từ vựng khó thuộc</p>
               </div>
             </div>
           </div>
 
-          <!-- Start Action Button -->
-          <div class="config-action-container">
-            <button id="start-smart-study-btn" class="btn-start-smart">
-              <i class="fa-solid fa-wand-magic-sparkles"></i> Bắt Đầu Ôn Tập Thẻ Từ Smart (Tất Cả Cấp Cứu)
+          <!-- Grid: Stats (left/top) and Practice Methods (right/top) -->
+          <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; margin-bottom: 24px; align-items: start;">
+            <!-- Stats Block -->
+            <div class="glass-panel" style="padding: 24px;">
+              <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 16px; color: var(--text-primary); font-family: var(--font-display); border-left: 4px solid var(--accent-blue); padding-left: 8px;">
+                Thống kê chi tiết sổ tay
+              </h3>
+              <div class="notebook-stats-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-glass); border-radius: 8px; padding: 12px; text-align: center;">
+                  <span style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); font-family: var(--font-display);" id="nb-stat-total">0</span>
+                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; text-transform: uppercase;">Tổng số từ</span>
+                </div>
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-glass); border-radius: 8px; padding: 12px; text-align: center;">
+                  <span style="font-size: 1.4rem; font-weight: 800; color: var(--success); font-family: var(--font-display);" id="nb-stat-memorized">0</span>
+                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; text-transform: uppercase;">Đã học thuộc</span>
+                </div>
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-glass); border-radius: 8px; padding: 12px; text-align: center;">
+                  <span style="font-size: 1.4rem; font-weight: 800; color: var(--danger); font-family: var(--font-display);" id="nb-stat-unmemorized">0</span>
+                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; text-transform: uppercase;">Chưa thuộc</span>
+                </div>
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-glass); border-radius: 8px; padding: 12px; text-align: center;">
+                  <span style="font-size: 1.4rem; font-weight: 800; color: var(--warning); font-family: var(--font-display);" id="nb-stat-starred">0</span>
+                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; text-transform: uppercase;">Yêu thích</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Study Modes Block -->
+            <div class="glass-panel" style="padding: 24px;">
+              <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 16px; color: var(--text-primary); font-family: var(--font-display); border-left: 4px solid var(--accent-primary); padding-left: 8px;">
+                Phương thức ôn tập của bạn
+              </h3>
+              <div style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- Flashcard button -->
+                <button type="button" id="nb-start-flashcard-btn" class="btn btn-outline" style="justify-content: flex-start; text-align: left; padding: 14px 18px; border-radius: 12px; border-color: rgba(255,255,255,0.08); background: rgba(255,255,255,0.02); color: var(--text-primary); width: 100%; transition: all var(--transition-fast);">
+                  <i class="fa-solid fa-clone text-primary" style="font-size: 1.25rem; margin-right: 12px; width: 24px;"></i>
+                  <div>
+                    <strong style="display: block; font-size: 0.95rem;">Thẻ Lật Flashcard</strong>
+                    <span style="font-size: 0.72rem; color: var(--text-secondary); font-weight: 400;">Học qua lật thẻ từ vựng truyền thống</span>
+                  </div>
+                </button>
+                
+                <!-- Typing button -->
+                <button type="button" id="nb-start-typing-btn" class="btn btn-outline" style="justify-content: flex-start; text-align: left; padding: 14px 18px; border-radius: 12px; border-color: rgba(255,255,255,0.08); background: rgba(255,255,255,0.02); color: var(--text-primary); width: 100%; transition: all var(--transition-fast);">
+                  <i class="fa-solid fa-keyboard text-success" style="font-size: 1.25rem; margin-right: 12px; width: 24px;"></i>
+                  <div>
+                    <strong style="display: block; font-size: 0.95rem;">Luyện Gõ Chữ & Nghĩa</strong>
+                    <span style="font-size: 0.72rem; color: var(--text-secondary); font-weight: 400;">Gõ chữ Hán hoặc điền nghĩa tự chấm điểm</span>
+                  </div>
+                </button>
+
+                <!-- Quiz button -->
+                <button type="button" id="nb-start-quiz-btn" class="btn btn-outline" style="justify-content: flex-start; text-align: left; padding: 14px 18px; border-radius: 12px; border-color: rgba(255,255,255,0.08); background: rgba(255,255,255,0.02); color: var(--text-primary); width: 100%; transition: all var(--transition-fast);">
+                  <i class="fa-solid fa-circle-question text-warning" style="font-size: 1.25rem; margin-right: 12px; width: 24px;"></i>
+                  <div>
+                    <strong style="display: block; font-size: 0.95rem;">Trò Chơi Trắc Nghiệm ✍️</strong>
+                    <span style="font-size: 0.72rem; color: var(--text-secondary); font-weight: 400;">Đố vui trắc nghiệm 10 câu ngẫu nhiên có tính điểm</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Add Word Form Block (Personal notebook only) -->
+          <div class="glass-panel" id="nb-add-word-form-container" style="padding: 24px; margin-bottom: 24px; display: none;">
+            <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 16px; color: var(--text-primary); font-family: var(--font-display); border-left: 4px solid var(--accent-teal); padding-left: 8px;">
+              Học thêm từ vựng mới vào sổ tay này
+            </h3>
+            <form id="nb-add-word-form" style="display: grid; grid-template-columns: repeat(3, 1fr) 1fr; gap: 16px; align-items: end;">
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">Chữ Hán (*)</label>
+                <input type="text" id="nb-add-word-zh" placeholder="Ví dụ: 学习" required style="width: 100%; padding: 10px 14px; font-size: 0.9rem; border-radius: var(--radius-md); border: 1px solid var(--border-glass); background: rgba(0,0,0,0.2); color: var(--text-primary); outline: none;">
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">Bính âm Pinyin (*)</label>
+                <input type="text" id="nb-add-word-pinyin" placeholder="Ví dụ: xuéxí" required style="width: 100%; padding: 10px 14px; font-size: 0.9rem; border-radius: var(--radius-md); border: 1px solid var(--border-glass); background: rgba(0,0,0,0.2); color: var(--text-primary); outline: none;">
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">Nghĩa tiếng Việt (*)</label>
+                <input type="text" id="nb-add-word-vi" placeholder="Ví dụ: học tập" required style="width: 100%; padding: 10px 14px; font-size: 0.9rem; border-radius: var(--radius-md); border: 1px solid var(--border-glass); background: rgba(0,0,0,0.2); color: var(--text-primary); outline: none;">
+              </div>
+              <button type="submit" class="btn btn-primary" style="background: var(--accent-teal); color: white; padding: 10px; font-weight: 700; border-radius: var(--radius-md); border: none; font-size: 0.88rem; width: 100%; height: 41px;">
+                <i class="fa-solid fa-plus"></i> Thêm từ vựng
+              </button>
+              
+              <!-- Optional row -->
+              <div style="grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                  <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">Giải nghĩa thêm (Không bắt buộc)</label>
+                  <input type="text" id="nb-add-word-desc" placeholder="Ví dụ: từ loại động từ, chỉ việc thu nhận kiến thức" style="width: 100%; padding: 8px 12px; font-size: 0.82rem; border-radius: var(--radius-md); border: 1px solid var(--border-glass); background: rgba(0,0,0,0.15); color: var(--text-primary); outline: none;">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                  <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">Ví dụ ngữ cảnh (Không bắt buộc) - Dùng ký hiệu '|' để tách câu Hoa | câu Việt</label>
+                  <input type="text" id="nb-add-word-example" placeholder="Ví dụ: 我喜欢学习汉语。 | Tôi thích học tiếng Trung." style="width: 100%; padding: 8px 12px; font-size: 0.82rem; border-radius: var(--radius-md); border: 1px solid var(--border-glass); background: rgba(0,0,0,0.15); color: var(--text-primary); outline: none;">
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- Vocabulary Table List Block -->
+          <div class="glass-panel" style="padding: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+              <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); font-family: var(--font-display); border-left: 4px solid var(--accent-purple); padding-left: 8px; margin: 0;">
+                Danh sách từ vựng trong sổ tay
+              </h3>
+              <div class="search-box" style="margin: 0; max-width: 280px; width: 100%;">
+                <i class="fa-solid fa-magnifying-glass search-icon" style="top: 50%; transform: translateY(-50%); font-size: 0.85rem; left: 12px;"></i>
+                <input type="text" id="nb-search-input" placeholder="Tìm nhanh trong sổ tay..." style="padding: 8px 10px 8px 32px; font-size: 0.82rem; border-radius: 6px;">
+              </div>
+            </div>
+
+            <!-- Table -->
+            <div style="overflow-x: auto; border: 1px solid var(--border-glass); border-radius: 8px;">
+              <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem;">
+                <thead>
+                  <tr style="border-bottom: 2px solid var(--border-glass); font-weight: 600; color: var(--text-muted); background: rgba(0,0,0,0.15);">
+                    <th style="padding: 10px; width: 120px;">Chữ Hán</th>
+                    <th style="padding: 10px; width: 120px;">Pinyin</th>
+                    <th style="padding: 10px;">Nghĩa Việt</th>
+                    <th style="padding: 10px; width: 150px; text-align: center;">Thao tác nhanh</th>
+                  </tr>
+                </thead>
+                <tbody id="nb-words-table-rows">
+                  <!-- Dynamic words populated here -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Table Pagination -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; flex-wrap: wrap; gap: 12px;">
+              <span id="nb-pagination-info" style="font-size: 0.78rem; color: var(--text-secondary);">Hiển thị 0 - 0 trong 0 từ</span>
+              <div id="nb-pagination-buttons" style="display: flex; gap: 4px;">
+                <!-- Pagination buttons -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- QUIZ STUDY VIEW -->
+      <div id="quiz-study-view" style="display: none; padding-top: 10px;">
+        <!-- Back Navigation & Header -->
+        <div class="study-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+          <button id="quiz-back-btn" class="btn btn-secondary" style="display: flex; align-items: center; gap: 8px; font-weight: 600; padding: 10px 16px; border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass);">
+            <i class="fa-solid fa-arrow-left"></i> Quay lại Dashboard
+          </button>
+          
+          <div class="study-deck-title-wrap" style="text-align: right;">
+            <h2 class="section-title" id="quiz-deck-title" style="margin: 0; font-size: 1.6rem;">Trắc Nghiệm Sổ Tay</h2>
+            <p class="section-desc" id="quiz-deck-desc" style="margin: 4px 0 0 0;">Luyện trí nhớ qua game chọn đáp án đúng</p>
+          </div>
+        </div>
+
+        <!-- Quiz Gameplay Panel -->
+        <div id="quiz-gameplay-panel" class="glass-panel" style="padding: 32px; text-align: center; max-width: 650px; margin: 0 auto;">
+          <!-- Question progress bar and score -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-weight: 600; font-size: 0.95rem;">
+            <span id="quiz-progress-text" style="color: var(--text-secondary);">Câu hỏi 1 / 10</span>
+            <span id="quiz-score-text" style="color: var(--warning);"><i class="fa-solid fa-star"></i> Điểm: 0</span>
+          </div>
+
+          <div class="progress-bar-container" style="margin-bottom: 32px; height: 6px;">
+            <div class="progress-bar-fill" id="quiz-progress-fill" style="width: 10%; background: var(--warning);"></div>
+          </div>
+
+          <!-- Prompt container -->
+          <div style="margin-bottom: 32px;">
+            <span id="quiz-question-type-badge" class="badge badge-level" style="background: rgba(245, 158, 11, 0.15); color: var(--warning); margin-bottom: 12px;">Đoán nghĩa của từ</span>
+            <h2 id="quiz-question-prompt" style="font-family: var(--font-chinese); font-size: 3.5rem; margin: 12px 0; line-height: 1.1; color: var(--text-primary);">学习</h2>
+            <p id="quiz-question-subprompt" style="font-family: var(--font-display); font-size: 1.25rem; color: var(--accent-teal); display: none;">xuéxí</p>
+          </div>
+
+          <!-- Multiple choice options (4 buttons) -->
+          <div id="quiz-options-grid" style="display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 24px;">
+            <!-- Buttons will go here dynamically -->
+          </div>
+
+          <!-- Feedback message -->
+          <div id="quiz-feedback" style="min-height: 36px; font-size: 1.05rem; font-weight: 700; margin-bottom: 12px; transition: all 0.2s;"></div>
+
+          <!-- Next question button -->
+          <button type="button" id="quiz-next-btn" class="btn btn-primary" style="display: none; background: var(--accent-blue); color: white; padding: 12px 28px; border-radius: 50px; font-weight: 700; margin: 0 auto; gap: 8px; align-items: center; justify-content: center;">
+            Tiếp theo <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+
+        <!-- Quiz Results Panel -->
+        <div id="quiz-result-panel" class="glass-panel" style="display: none; padding: 48px 32px; text-align: center; max-width: 550px; margin: 0 auto;">
+          <div style="font-size: 4rem; color: var(--warning); margin-bottom: 20px;">
+            <i class="fa-solid fa-trophy"></i>
+          </div>
+          <h2 style="font-family: var(--font-display); font-size: 1.8rem; font-weight: 800; margin-bottom: 12px;">Hoàn thành trắc nghiệm!</h2>
+          <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 28px;" id="quiz-result-message">Tuyệt vời! Bạn đã trả lời đúng 8/10 câu hỏi.</p>
+          
+          <div style="display: flex; gap: 14px; justify-content: center;">
+            <button type="button" id="quiz-retry-btn" class="btn btn-primary" style="background: var(--accent-blue); color: white; padding: 12px 24px; border-radius: 50px; font-weight: 700;">
+              Làm lại <i class="fa-solid fa-rotate-right"></i>
+            </button>
+            <button type="button" id="quiz-exit-btn" class="btn btn-secondary" style="padding: 12px 24px; border-radius: 50px; font-weight: 700;">
+              Quay lại Dashboard
             </button>
           </div>
         </div>
