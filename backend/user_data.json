@@ -2,7 +2,12 @@
   "users": {
     "phanphiphu04@gmail.com": {
       "name": "Phú Phan",
-      "picture": "https://lh3.googleusercontent.com/a/ACg8ocIebQJ8CFxQDSOgwYPsfuN9FJvtBWARLqdYN9fCo-3UBytEPmI=s96-c"
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocIebQJ8CFxQDSOgwYPsfuN9FJvtBWARLqdYN9fCo-3UBytEPmI=s96-c",
+      "stats": {
+        "streak": 1,
+        "studyTime": 45,
+        "lastActiveDate": "2026-06-08"
+      }
     },
     "nguyenngawork26@gmail.com": {
       "name": "Thúy Nga Nguyễn",
@@ -197,7 +202,19 @@
         "isWrong": false,
         "isStudied": true
       },
+      "161": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "165": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "169": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
@@ -310,6 +327,12 @@
         "isStarred": false,
         "isStudied": true
       },
+      "277": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "287": {
         "isMemorized": false,
         "isStarred": false,
@@ -329,6 +352,12 @@
         "isStarred": false
       },
       "915": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "944": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,

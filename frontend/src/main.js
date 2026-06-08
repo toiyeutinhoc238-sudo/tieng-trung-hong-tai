@@ -1230,6 +1230,13 @@ function showToast(message, isError = false) {
 
 // --- EVENT LISTENERS ---
 function setupEventListeners() {
+  // Handle browser back button to always return to Home view
+  window.history.pushState({ page: 'app' }, '', '');
+  window.addEventListener('popstate', (e) => {
+    showHomeView();
+    window.history.pushState({ page: 'app' }, '', '');
+  });
+
 
   // Bottom Navigation Bar Switcher
   document.querySelectorAll('.bottom-nav-item').forEach(item => {
@@ -1244,7 +1251,7 @@ function setupEventListeners() {
   if (exitQuizBtn) {
     exitQuizBtn.addEventListener('click', exitQuizMode);
   }
-  
+
   // Notebook Dashboard limit buttons
   const limitBtns = document.querySelectorAll('.limit-btn');
   limitBtns.forEach(btn => {
