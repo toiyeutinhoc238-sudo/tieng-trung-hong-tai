@@ -279,14 +279,14 @@ async function fetchVocabulary() {
     });
     if (!response.ok) throw new Error('Không thể tải từ vựng từ API');
     vocabList = await response.json();
-    
+
     // Clean up pinyin formatting anomalies
     vocabList.forEach(w => {
       if (w.pinyin) {
         w.pinyin = cleanPinyinText(w.pinyin);
       }
     });
-    
+
     // Merge premium topics mock data
     vocabList = [...vocabList, ...premiumMockData];
 
@@ -357,7 +357,7 @@ function markWordAsStudied(wordId) {
   const index = vocabList.findIndex(w => w.id === wordId);
   if (index === -1) return;
   if (vocabList[index].isStudied) return; // already studied
-  
+
   vocabList[index].isStudied = true;
   updateStats();
 
@@ -714,6 +714,12 @@ function updateStats() {
 }
 
 function renderDeckSelectionView() {
+  const studyView = document.getElementById('flashcard-study-view');
+  const quizView = document.getElementById('quiz-study-view');
+  if ((studyView && studyView.style.display === 'block') || (quizView && quizView.style.display === 'block')) {
+    return;
+  }
+
   if (activeNotebook) {
     showNotebookDashboardView(activeNotebook);
   } else if (activeSmartTopic) {
@@ -1264,7 +1270,7 @@ function setupEventListeners() {
       if (rangeTitle) {
         rangeTitle.textContent = `Toàn bộ từ vựng`;
       }
-      
+
       smartSelectedLessons = []; // Reset selected lessons when level changes
       renderDeckSelectionView();
     });
@@ -1352,12 +1358,12 @@ function setupEventListeners() {
         if (smartSelectedLessons.length > 0) {
           studySelectedLessons = [...smartSelectedLessons];
           studyCustomCategory = null;
-          
+
           const title = `Ôn Tập ${smartSelectedLessons.length} Bài Học HSK ${activeLevel}`;
           const sortedIds = [...smartSelectedLessons].sort((a, b) => a - b);
           const lessonNames = sortedIds.map(id => `Bài ${id}`).join(', ');
           const desc = `Đang ôn tập từ vựng các bài: ${lessonNames}`;
-          
+
           startStudySession('unmemorized', activeLevel, title, desc);
         } else {
           studySelectedLessons = null;
@@ -1898,12 +1904,12 @@ function setupEventListeners() {
         b.style.background = 'rgba(255, 255, 255, 0.02)';
         b.style.borderColor = 'var(--border-glass)';
       });
-      
+
       // Add active class and set background/border for clicked
       box.classList.add('active');
       const filter = box.getAttribute('data-filter');
       dashboardActiveFilter = filter;
-      
+
       if (filter === 'all') {
         box.style.background = 'rgba(59, 130, 246, 0.08)';
         box.style.borderColor = 'var(--accent-blue)';
@@ -1923,7 +1929,7 @@ function setupEventListeners() {
         box.style.background = 'rgba(245, 158, 11, 0.08)';
         box.style.borderColor = 'var(--warning)';
       }
-      
+
       currentNotebookPage = 1;
       renderNotebookWordsTable();
     });
@@ -2072,12 +2078,12 @@ async function handleCredentialResponse(response) {
       localStorage.setItem('user', JSON.stringify(currentUser));
       renderUserProfile();
       showToast(`Chào mừng ${currentUser.name} đã quay lại! 👋`);
-      
+
       // Migrate guest chat history to user account
       if (typeof window.migrateGuestChatHistory === 'function') {
         window.migrateGuestChatHistory();
       }
-      
+
       // Re-fetch vocabulary and reload user statistics
       fetchVocabulary();
     } else {
@@ -2123,15 +2129,15 @@ async function handleLogout(e) {
 
   renderUserProfile();
   showToast('Đã đăng xuất thành công.');
-  
+
   // Reset guest stats in-memory
   guestStudyTime = 0;
   guestStreak = 0;
   guestLastActive = '';
-  
+
   // Re-fetch vocabulary to load guest state
   fetchVocabulary();
-  
+
   // Reset Chatbot interface and threads on logout
   if (typeof window.resetChatbotOnLogout === 'function') {
     window.resetChatbotOnLogout();
@@ -2443,7 +2449,7 @@ function switchTab(tabId) {
     setDisp(customSec, 'none');
     setDisp(examsSec, 'none');
     setDisp(lessonsSec, 'none');
-  } 
+  }
   else if (tabId === 'lessons') {
     // Hide home elements
     setDisp(homeViewSec, 'none');
@@ -2456,7 +2462,7 @@ function switchTab(tabId) {
 
     // Render lessons list
     renderLessonsList();
-  } 
+  }
   else if (tabId === 'exams') {
     // Hide home elements
     setDisp(homeViewSec, 'none');
@@ -2485,7 +2491,7 @@ function switchTab(tabId) {
 
     // Always show the topics view menu first
     showTopicsView();
-  } 
+  }
   else if (tabId === 'dictionary') {
     // Hide home elements
     setDisp(homeViewSec, 'none');
@@ -3473,10 +3479,10 @@ function initChatbot() {
   let activeThreadId = null;
 
   // Global callback to update chatbot buttons on login
-  window.updateChatbotOnLogin = function() {
+  window.updateChatbotOnLogin = function () {
     if (newBtn) newBtn.style.display = 'flex';
     if (historyBtn) historyBtn.style.display = 'flex';
-    
+
     // Attempt to reload active thread or populate chatbot widget with latest cached thread
     activeThreadId = sessionStorage.getItem('hongtai_active_thread_id');
     if (activeThreadId) {
@@ -3485,7 +3491,7 @@ function initChatbot() {
   };
 
   // Global callback to migrate guest chats when logged in
-  window.migrateGuestChatHistory = async function() {
+  window.migrateGuestChatHistory = async function () {
     if (chatHistory.length === 0) return;
     try {
       const response = await fetch(API_BASE_URL + '/api/chat/migrate', {
@@ -3510,7 +3516,7 @@ function initChatbot() {
   };
 
   // Global callback to reset chatbot panel on logout
-  window.resetChatbotOnLogout = function() {
+  window.resetChatbotOnLogout = function () {
     activeThreadId = null;
     sessionStorage.removeItem('hongtai_active_thread_id');
     chatHistory = [];
@@ -3527,7 +3533,7 @@ function initChatbot() {
   if (currentUser) {
     if (newBtn) newBtn.style.display = 'flex';
     if (historyBtn) historyBtn.style.display = 'flex';
-    
+
     // Load last active thread if stored in sessionStorage (tab-persistent)
     activeThreadId = sessionStorage.getItem('hongtai_active_thread_id');
     if (activeThreadId) {
@@ -3548,17 +3554,17 @@ function initChatbot() {
       if (response.ok) {
         const thread = await response.json();
         messagesContainer.innerHTML = '';
-        
+
         // Load messages history
         chatHistory = (thread.messages || []).map(m => ({
           role: m.role,
           content: m.content
         }));
-        
+
         chatHistory.forEach(msg => {
           appendChatMessage(msg.role, msg.content);
         });
-        
+
         if (badge) badge.style.display = 'none';
         scrollChatToBottom();
 
@@ -3718,7 +3724,7 @@ function initChatbot() {
 
       appendChatMessage('assistant', reply);
       chatHistory.push({ role: 'assistant', content: reply });
-      
+
       // Save thread state if returned (persistent backend thread)
       if (data.threadId) {
         activeThreadId = data.threadId;
@@ -3731,7 +3737,7 @@ function initChatbot() {
             messages: chatHistory.map(m => ({ role: m.role, content: m.content, timestamp: new Date().toISOString() }))
           };
           localStorage.setItem('hongtai_thread_messages_cache_' + currentUser.email + '_' + activeThreadId, JSON.stringify(threadData));
-          
+
           let cachedThreads = [];
           const rawCached = localStorage.getItem('hongtai_threads_cache_' + currentUser.email);
           if (rawCached) {
@@ -3838,7 +3844,7 @@ function renderLessonsList() {
     const sliceWords = lessonGroups[lessonId] || [];
     const wordsCount = sliceWords.length;
     if (wordsCount === 0) return;
-    
+
     // Retrieve title and desc directly from the first word of the group
     const title = sliceWords[0].lessonTitle || `Bài ${lessonId}`;
     const desc = sliceWords[0].lessonDesc || `Ôn tập từ vựng bài học HSK Cấp ${activeLessonsLevel}`;
@@ -3877,7 +3883,7 @@ function startLessonStudy(lesson, sliceWords) {
   filteredList = shuffleArray(sliceWords);
   currentIndex = 0;
   isFlipped = false;
-  
+
   // Set title & description of flashcard study
   const studyTitle = document.getElementById('study-deck-title');
   const studyDesc = document.getElementById('study-deck-desc');
@@ -4095,9 +4101,9 @@ function renderDictPopularList(query = '') {
   let filtered = vocabList;
   if (query) {
     const q = query.toLowerCase();
-    filtered = vocabList.filter(w => 
-      w.word.includes(q) || 
-      w.pinyin.toLowerCase().includes(q) || 
+    filtered = vocabList.filter(w =>
+      w.word.includes(q) ||
+      w.pinyin.toLowerCase().includes(q) ||
       w.meaning.toLowerCase().includes(q)
     );
   }
@@ -4448,7 +4454,7 @@ async function handleSentenceAnalysis() {
     const parsed = JSON.parse(cleanReply);
 
     document.getElementById('dict-analyze-result-translation').textContent = parsed.translation || '';
-    
+
     const grammarContainer = document.getElementById('dict-analyze-result-grammar');
     grammarContainer.innerHTML = '';
     (parsed.grammar || []).forEach(g => {
@@ -4531,7 +4537,7 @@ async function handleEssayCorrection() {
 
     const scoreBadge = document.getElementById('dict-tutor-score');
     scoreBadge.textContent = parsed.score || 'A';
-    
+
     document.getElementById('dict-tutor-comment').textContent = parsed.comment || '';
     document.getElementById('dict-tutor-original-text').textContent = essay;
     document.getElementById('dict-tutor-corrected-text').textContent = parsed.correctedText || '';
@@ -4584,7 +4590,7 @@ function startStudyTimer() {
   activeTimer = setInterval(() => {
     if (document.hasFocus()) {
       sessionStudyTime++;
-      
+
       const totalSecs = userStudyTime + sessionStudyTime;
       const totalMins = Math.floor(totalSecs / 60);
       const studyTimeValEl = document.getElementById('welcome-study-time-val');
@@ -4830,14 +4836,14 @@ function renderSubdecksList() {
       const listWords = vocabList.filter(w => w.isCustom && w.category === listName);
       grid.appendChild(createSubdeckCard(listName, `custom:${listName}`, listWords.length, 'fa-folder', 'var(--accent-blue)'));
     });
-  } 
+  }
   else if (activeSmartTopic === 'hsk') {
     title.textContent = 'Danh sách Từ vựng HSK';
     for (let lvl = 1; lvl <= 3; lvl++) {
       const lvlWords = vocabList.filter(w => !w.isCustom && w.level.toString() === lvl.toString());
       grid.appendChild(createSubdeckCard(`HSK Cấp ${lvl}`, `hsk:${lvl}`, lvlWords.length, 'fa-graduation-cap', 'var(--success)'));
     }
-  } 
+  }
   else if (activeSmartTopic === 'premium') {
     title.textContent = 'Danh sách Chủ đề Cao cấp';
     const topics = [
@@ -4885,7 +4891,7 @@ function createSubdeckCard(name, id, count, icon, color) {
 function openNotebookDashboard(notebookId) {
   const titleEl = document.getElementById('dashboard-notebook-title');
   const descEl = document.getElementById('dashboard-notebook-desc');
-  
+
   let name = '';
   let desc = '';
   if (notebookId === 'wrong') {
@@ -4931,7 +4937,7 @@ function openNotebookDashboard(notebookId) {
 
   // Update Stats Widget
   const baseWords = getNotebookWords(notebookId);
-  
+
   // Render HSK Lesson Selector Block if applicable
   const lessonContainer = document.getElementById('nb-hsk-lesson-selector-container');
   if (lessonContainer) {
@@ -4940,7 +4946,7 @@ function openNotebookDashboard(notebookId) {
       const lessonsList = document.getElementById('nb-hsk-lessons-list');
       if (lessonsList) {
         lessonsList.innerHTML = '';
-        
+
         // Find unique lessons
         const uniqueLessons = {};
         baseWords.forEach(w => {
@@ -4948,9 +4954,9 @@ function openNotebookDashboard(notebookId) {
             uniqueLessons[w.lessonId] = w.lessonTitle || `Bài ${w.lessonId}`;
           }
         });
-        
-        const sortedLessonIds = Object.keys(uniqueLessons).map(Number).sort((a,b) => a-b);
-        
+
+        const sortedLessonIds = Object.keys(uniqueLessons).map(Number).sort((a, b) => a - b);
+
         // Add "All" button
         const allBtn = document.createElement('button');
         allBtn.className = `btn btn-sm ${selectedDashboardLessons.length === 0 ? 'btn-primary' : 'btn-outline'}`;
@@ -4964,7 +4970,7 @@ function openNotebookDashboard(notebookId) {
           openNotebookDashboard(notebookId); // Re-render
         });
         lessonsList.appendChild(allBtn);
-        
+
         // Add individual lesson buttons
         sortedLessonIds.forEach(lId => {
           const btn = document.createElement('button');
@@ -5031,7 +5037,7 @@ function renderNotebookWordsTable() {
   if (!tbody) return;
 
   tbody.innerHTML = '';
-  
+
   let words = getNotebookWords(activeNotebook);
 
   // Filter HSK dashboard lessons if selected
@@ -5056,7 +5062,7 @@ function renderNotebookWordsTable() {
   const searchInput = document.getElementById('nb-search-input');
   const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
   if (query) {
-    words = words.filter(w => 
+    words = words.filter(w =>
       w.word.toLowerCase().includes(query) ||
       w.pinyin.toLowerCase().includes(query) ||
       w.meaning.toLowerCase().includes(query)
@@ -5085,10 +5091,10 @@ function renderNotebookWordsTable() {
     const tr = document.createElement('tr');
     tr.style.borderBottom = '1px solid var(--border-glass)';
     tr.style.transition = 'background 0.2s';
-    
+
     const memorizedIcon = w.isMemorized ? 'fa-circle-check text-success' : 'fa-circle-check text-muted';
     const starredIcon = w.isStarred ? 'fa-star text-warning' : 'fa-star text-muted';
-    
+
     let deleteBtn = '';
     if (w.isCustom) {
       deleteBtn = `<button class="btn btn-icon-only text-danger" title="Xóa từ" onclick="handleNotebookWordDelete('${w.id}')"><i class="fa-solid fa-trash"></i></button>`;
@@ -5123,7 +5129,7 @@ function renderNotebookWordsTable() {
   // Render pagination buttons
   if (paginationButtons) {
     paginationButtons.innerHTML = '';
-    
+
     const prevBtn = document.createElement('button');
     prevBtn.className = 'btn btn-icon-only';
     prevBtn.style.padding = '4px 8px';
@@ -5175,23 +5181,23 @@ function renderNotebookWordsTable() {
 }
 
 // Window level functions for table actions so inline onclick works
-window.handleNotebookWordPlay = function(wordText) {
+window.handleNotebookWordPlay = function (wordText) {
   speakText(wordText);
 };
 
-window.handleNotebookWordToggleMemorized = async function(id) {
+window.handleNotebookWordToggleMemorized = async function (id) {
   const numericId = /^\d+$/.test(id) ? parseInt(id) : id;
   await toggleWordMemorized(numericId);
   openNotebookDashboard(activeNotebook);
 };
 
-window.handleNotebookWordToggleStarred = async function(id) {
+window.handleNotebookWordToggleStarred = async function (id) {
   const numericId = /^\d+$/.test(id) ? parseInt(id) : id;
   await toggleWordStarred(numericId);
   openNotebookDashboard(activeNotebook);
 };
 
-window.handleNotebookWordDelete = async function(id) {
+window.handleNotebookWordDelete = async function (id) {
   const numericId = /^\d+$/.test(id) ? parseInt(id) : id;
   await handleDeleteCustomWord(numericId);
   openNotebookDashboard(activeNotebook);
@@ -5200,19 +5206,19 @@ window.handleNotebookWordDelete = async function(id) {
 // 5. Add custom word form submission handler
 async function handleNotebookAddWordForm(e) {
   e.preventDefault();
-  
+
   if (!activeNotebook || !activeNotebook.startsWith('custom:')) {
     showToast('Chỉ có thể thêm từ vựng vào sổ tay tự chọn!', true);
     return;
   }
-  
+
   const listName = activeNotebook.substring(7);
   const word = document.getElementById('nb-add-word-zh').value.trim();
   const pinyin = document.getElementById('nb-add-word-pinyin').value.trim();
   const meaning = document.getElementById('nb-add-word-vi').value.trim();
   const explanation = document.getElementById('nb-add-word-desc').value.trim();
   const exampleInput = document.getElementById('nb-add-word-example').value.trim();
-  
+
   let example_zh = '';
   let example_vi = '';
   if (exampleInput && exampleInput.includes('|')) {
@@ -5284,7 +5290,7 @@ async function handleNotebookAddWordForm(e) {
 // 6. Start Study Session From Notebook
 function startStudySessionFromNotebook(mode) {
   if (!activeNotebook) return;
-  
+
   studyNotebookId = activeNotebook;
   studyMode = mode;
   setStudyMode(mode);
@@ -5403,7 +5409,7 @@ function renderQuizQuestion() {
   }
 
   const q = quizQuestions[currentQuizIndex];
-  
+
   const progressText = document.getElementById('quiz-progress-text');
   const progressFill = document.getElementById('quiz-progress-fill');
   const scoreText = document.getElementById('quiz-score-text');
@@ -5487,7 +5493,7 @@ function handleQuizAnswer(selectedBtn, selectedOption, correctOption) {
   const scoreText = document.getElementById('quiz-score-text');
 
   const q = quizQuestions[currentQuizIndex];
-  
+
   // Mark word as studied
   markWordAsStudied(q.word.id);
 
@@ -5500,7 +5506,7 @@ function handleQuizAnswer(selectedBtn, selectedOption, correctOption) {
     selectedBtn.style.color = 'var(--success)';
     selectedBtn.querySelector('i').className = 'fa-solid fa-circle-check';
     selectedBtn.querySelector('i').style.color = 'var(--success)';
-    
+
     if (feedback) {
       feedback.textContent = 'Chính xác! Cố gắng phát huy nhé. 🎉';
       feedback.style.color = 'var(--success)';
@@ -5540,7 +5546,7 @@ function markWordAsWrong(wordId) {
   const index = vocabList.findIndex(w => w.id === wordId);
   if (index === -1) return;
   vocabList[index].isWrong = true;
-  
+
   if (!currentUser) {
     const guestProgress = JSON.parse(localStorage.getItem('guest_progress') || '{}');
     if (!guestProgress[wordId]) guestProgress[wordId] = {};
