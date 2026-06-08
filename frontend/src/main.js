@@ -714,12 +714,6 @@ function updateStats() {
 }
 
 function renderDeckSelectionView() {
-  const studyView = document.getElementById('flashcard-study-view');
-  const quizView = document.getElementById('quiz-study-view');
-  if ((studyView && studyView.style.display === 'block') || (quizView && quizView.style.display === 'block')) {
-    return;
-  }
-
   if (activeNotebook) {
     showNotebookDashboardView(activeNotebook);
   } else if (activeSmartTopic) {
