@@ -66,6 +66,8 @@ let activeSmartTopic = 'personal'; // 'personal', 'hsk', 'premium'
 let activeNotebook = null;        // active notebook key/ID
 let studyNotebookId = null;       // active notebook filter being studied
 let currentNotebookPage = 1;      // active page in vocabulary table
+let dashboardActiveFilter = 'all';  // 'all', 'studied', 'unstudied', 'memorized', 'unmemorized', 'starred'
+let selectedDashboardLessons = [];  // lessons filtered in notebook dashboard
 const notebookPageSize = 10;      // 10 items per page
 let quizQuestions = [];           // array of quiz questions
 let currentQuizIndex = 0;         // current question index
@@ -253,6 +255,21 @@ function fallbackSpeakSpeechSynthesis(text) {
   }
 }
 
+function cleanPinyinText(str) {
+  if (!str) return '';
+  const parts = str.split(/[|/\\;]/);
+  let first = parts[0].trim();
+  if (!first && parts.length > 1) {
+    for (let i = 1; i < parts.length; i++) {
+      if (parts[i].trim()) {
+        first = parts[i].trim();
+        break;
+      }
+    }
+  }
+  return first.replace(/\s+/g, ' ');
+}
+
 // --- API ACTIONS ---
 async function fetchVocabulary() {
   try {
@@ -262,6 +279,13 @@ async function fetchVocabulary() {
     });
     if (!response.ok) throw new Error('Không thể tải từ vựng từ API');
     vocabList = await response.json();
+    
+    // Clean up pinyin formatting anomalies
+    vocabList.forEach(w => {
+      if (w.pinyin) {
+        w.pinyin = cleanPinyinText(w.pinyin);
+      }
+    });
     
     // Merge premium topics mock data
     vocabList = [...vocabList, ...premiumMockData];
@@ -275,7 +299,8 @@ async function fetchVocabulary() {
           ...w,
           isMemorized: state ? !!state.isMemorized : !!w.isMemorized,
           isStarred: state ? !!state.isStarred : !!w.isStarred,
-          isWrong: state ? !!state.isWrong : !!w.isWrong
+          isWrong: state ? !!state.isWrong : !!w.isWrong,
+          isStudied: state ? !!state.isStudied : !!w.isStudied
         };
       });
     }
@@ -296,6 +321,12 @@ async function fetchVocabulary() {
     // Merge premium topics mock data
     vocabList = [...vocabList, ...premiumMockData];
 
+    vocabList.forEach(w => {
+      if (w.pinyin) {
+        w.pinyin = cleanPinyinText(w.pinyin);
+      }
+    });
+
     // Merge guest progress on fallback empty seed list if offline
     if (!currentUser) {
       const guestProgress = JSON.parse(localStorage.getItem('guest_progress') || '{}');
@@ -305,7 +336,8 @@ async function fetchVocabulary() {
           ...w,
           isMemorized: state ? !!state.isMemorized : !!w.isMemorized,
           isStarred: state ? !!state.isStarred : !!w.isStarred,
-          isWrong: state ? !!state.isWrong : !!w.isWrong
+          isWrong: state ? !!state.isWrong : !!w.isWrong,
+          isStudied: state ? !!state.isStudied : !!w.isStudied
         };
       });
     }
@@ -318,6 +350,29 @@ async function fetchVocabulary() {
     // Fetch initial stats and start timer
     loadInitialStats();
     startStudyTimer();
+  }
+}
+
+function markWordAsStudied(wordId) {
+  const index = vocabList.findIndex(w => w.id === wordId);
+  if (index === -1) return;
+  if (vocabList[index].isStudied) return; // already studied
+  
+  vocabList[index].isStudied = true;
+  updateStats();
+
+  if (!currentUser) {
+    const guestProgress = JSON.parse(localStorage.getItem('guest_progress') || '{}');
+    if (!guestProgress[wordId]) guestProgress[wordId] = {};
+    guestProgress[wordId].isStudied = true;
+    localStorage.setItem('guest_progress', JSON.stringify(guestProgress));
+  } else {
+    fetch(API_BASE_URL + '/api/vocabulary/set-studied', {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ id: wordId, isStudied: true }),
+      credentials: 'include'
+    }).catch(err => console.warn('Failed to sync studied status:', err));
   }
 }
 
@@ -555,6 +610,9 @@ function renderActiveCard() {
   if (currentIndex < 0) currentIndex = filteredList.length - 1;
 
   const current = filteredList[currentIndex];
+
+  // Mark as studied
+  markWordAsStudied(current.id);
 
   if (studyMode === 'type') {
     renderActiveCardTyping(current);
@@ -1344,7 +1402,7 @@ function setupEventListeners() {
   if (bannerStartBtn) {
     bannerStartBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      switchTab('lessons');
+      switchTab('flashcards');
     });
   }
 
@@ -1830,6 +1888,46 @@ function setupEventListeners() {
       renderNotebookWordsTable();
     });
   }
+
+  // Bind interactive statistics boxes in handbook dashboard
+  document.querySelectorAll('#nb-stats-interactive-container .stat-box-interactive').forEach(box => {
+    box.addEventListener('click', () => {
+      // Remove active class and reset background from all
+      document.querySelectorAll('#nb-stats-interactive-container .stat-box-interactive').forEach(b => {
+        b.classList.remove('active');
+        b.style.background = 'rgba(255, 255, 255, 0.02)';
+        b.style.borderColor = 'var(--border-glass)';
+      });
+      
+      // Add active class and set background/border for clicked
+      box.classList.add('active');
+      const filter = box.getAttribute('data-filter');
+      dashboardActiveFilter = filter;
+      
+      if (filter === 'all') {
+        box.style.background = 'rgba(59, 130, 246, 0.08)';
+        box.style.borderColor = 'var(--accent-blue)';
+      } else if (filter === 'studied') {
+        box.style.background = 'rgba(139, 92, 246, 0.08)';
+        box.style.borderColor = 'var(--accent-purple)';
+      } else if (filter === 'unstudied') {
+        box.style.background = 'rgba(20, 184, 166, 0.08)';
+        box.style.borderColor = 'var(--accent-teal)';
+      } else if (filter === 'memorized') {
+        box.style.background = 'rgba(16, 185, 129, 0.08)';
+        box.style.borderColor = 'var(--success)';
+      } else if (filter === 'unmemorized') {
+        box.style.background = 'rgba(239, 68, 68, 0.08)';
+        box.style.borderColor = 'var(--danger)';
+      } else if (filter === 'starred') {
+        box.style.background = 'rgba(245, 158, 11, 0.08)';
+        box.style.borderColor = 'var(--warning)';
+      }
+      
+      currentNotebookPage = 1;
+      renderNotebookWordsTable();
+    });
+  });
 
   // Quiz Game Buttons
   const quizBackBtn = document.getElementById('quiz-back-btn');
@@ -2384,6 +2482,9 @@ function switchTab(tabId) {
     setDisp(customSec, 'none');
     setDisp(examsSec, 'none');
     setDisp(lessonsSec, 'none');
+
+    // Always show the topics view menu first
+    showTopicsView();
   } 
   else if (tabId === 'dictionary') {
     // Hide home elements
@@ -3124,6 +3225,9 @@ function updateCategorySelectOptions() {
 }
 
 function renderActiveCardTyping(current) {
+  // Mark as studied
+  markWordAsStudied(current.id);
+
   const typeLevel = document.getElementById('type-card-level');
   const typeCategory = document.getElementById('type-card-category');
   const typeMeaning = document.getElementById('type-card-meaning');
@@ -4654,6 +4758,26 @@ function showNotebookDashboardView(notebookId) {
   if (studyView) studyView.style.display = 'none';
   if (quizView) quizView.style.display = 'none';
 
+  // Reset filters
+  dashboardActiveFilter = 'all';
+  selectedDashboardLessons = [];
+
+  // Reset active classes/borders on interactive stats boxes
+  const interactiveBoxes = document.querySelectorAll('#nb-stats-interactive-container .stat-box-interactive');
+  if (interactiveBoxes.length > 0) {
+    interactiveBoxes.forEach(b => {
+      b.classList.remove('active');
+      b.style.background = 'rgba(255, 255, 255, 0.02)';
+      b.style.borderColor = 'var(--border-glass)';
+    });
+    const allBox = Array.from(interactiveBoxes).find(b => b.getAttribute('data-filter') === 'all');
+    if (allBox) {
+      allBox.classList.add('active');
+      allBox.style.background = 'rgba(59, 130, 246, 0.08)';
+      allBox.style.borderColor = 'var(--accent-blue)';
+    }
+  }
+
   activeNotebook = notebookId;
   openNotebookDashboard(notebookId);
 }
@@ -4806,21 +4930,94 @@ function openNotebookDashboard(notebookId) {
   }
 
   // Update Stats Widget
-  const words = getNotebookWords(notebookId);
-  const total = words.length;
-  const memorized = words.filter(w => w.isMemorized).length;
+  const baseWords = getNotebookWords(notebookId);
+  
+  // Render HSK Lesson Selector Block if applicable
+  const lessonContainer = document.getElementById('nb-hsk-lesson-selector-container');
+  if (lessonContainer) {
+    if (notebookId.startsWith('hsk:')) {
+      lessonContainer.style.display = 'block';
+      const lessonsList = document.getElementById('nb-hsk-lessons-list');
+      if (lessonsList) {
+        lessonsList.innerHTML = '';
+        
+        // Find unique lessons
+        const uniqueLessons = {};
+        baseWords.forEach(w => {
+          if (w.lessonId) {
+            uniqueLessons[w.lessonId] = w.lessonTitle || `Bài ${w.lessonId}`;
+          }
+        });
+        
+        const sortedLessonIds = Object.keys(uniqueLessons).map(Number).sort((a,b) => a-b);
+        
+        // Add "All" button
+        const allBtn = document.createElement('button');
+        allBtn.className = `btn btn-sm ${selectedDashboardLessons.length === 0 ? 'btn-primary' : 'btn-outline'}`;
+        allBtn.style.fontSize = '0.75rem';
+        allBtn.style.padding = '6px 12px';
+        allBtn.style.borderRadius = '50px';
+        allBtn.style.cursor = 'pointer';
+        allBtn.textContent = 'Tất cả bài học';
+        allBtn.addEventListener('click', () => {
+          selectedDashboardLessons = [];
+          openNotebookDashboard(notebookId); // Re-render
+        });
+        lessonsList.appendChild(allBtn);
+        
+        // Add individual lesson buttons
+        sortedLessonIds.forEach(lId => {
+          const btn = document.createElement('button');
+          const isSelected = selectedDashboardLessons.includes(lId);
+          btn.className = `btn btn-sm ${isSelected ? 'btn-primary' : 'btn-outline'}`;
+          btn.style.fontSize = '0.75rem';
+          btn.style.padding = '6px 12px';
+          btn.style.borderRadius = '50px';
+          btn.style.cursor = 'pointer';
+          btn.textContent = uniqueLessons[lId];
+          btn.addEventListener('click', () => {
+            if (isSelected) {
+              selectedDashboardLessons = selectedDashboardLessons.filter(id => id !== lId);
+            } else {
+              selectedDashboardLessons.push(lId);
+            }
+            openNotebookDashboard(notebookId); // Re-render
+          });
+          lessonsList.appendChild(btn);
+        });
+      }
+    } else {
+      lessonContainer.style.display = 'none';
+      selectedDashboardLessons = []; // Reset when leaving HSK notebook
+    }
+  }
+
+  // Filter baseWords for statistics if specific HSK lessons are selected
+  let wordsForStats = baseWords;
+  if (notebookId.startsWith('hsk:') && selectedDashboardLessons.length > 0) {
+    wordsForStats = baseWords.filter(w => w.lessonId && selectedDashboardLessons.includes(w.lessonId));
+  }
+
+  const total = wordsForStats.length;
+  const memorized = wordsForStats.filter(w => w.isMemorized).length;
   const unmemorized = total - memorized;
-  const starred = words.filter(w => w.isStarred).length;
+  const starred = wordsForStats.filter(w => w.isStarred).length;
+  const studied = wordsForStats.filter(w => w.isStudied).length;
+  const unstudied = total - studied;
 
   const nbStatTotal = document.getElementById('nb-stat-total');
   const nbStatMemorized = document.getElementById('nb-stat-memorized');
   const nbStatUnmemorized = document.getElementById('nb-stat-unmemorized');
   const nbStatStarred = document.getElementById('nb-stat-starred');
+  const nbStatStudied = document.getElementById('nb-stat-studied');
+  const nbStatUnstudied = document.getElementById('nb-stat-unstudied');
 
   if (nbStatTotal) nbStatTotal.textContent = total;
   if (nbStatMemorized) nbStatMemorized.textContent = memorized;
   if (nbStatUnmemorized) nbStatUnmemorized.textContent = unmemorized;
   if (nbStatStarred) nbStatStarred.textContent = starred;
+  if (nbStatStudied) nbStatStudied.textContent = studied;
+  if (nbStatUnstudied) nbStatUnstudied.textContent = unstudied;
 
   currentNotebookPage = 1;
   renderNotebookWordsTable();
@@ -4836,6 +5033,24 @@ function renderNotebookWordsTable() {
   tbody.innerHTML = '';
   
   let words = getNotebookWords(activeNotebook);
+
+  // Filter HSK dashboard lessons if selected
+  if (activeNotebook && activeNotebook.startsWith('hsk:') && selectedDashboardLessons.length > 0) {
+    words = words.filter(w => w.lessonId && selectedDashboardLessons.includes(w.lessonId));
+  }
+
+  // Filter by dashboard active filter
+  if (dashboardActiveFilter === 'studied') {
+    words = words.filter(w => w.isStudied);
+  } else if (dashboardActiveFilter === 'unstudied') {
+    words = words.filter(w => !w.isStudied);
+  } else if (dashboardActiveFilter === 'memorized') {
+    words = words.filter(w => w.isMemorized);
+  } else if (dashboardActiveFilter === 'unmemorized') {
+    words = words.filter(w => !w.isMemorized);
+  } else if (dashboardActiveFilter === 'starred') {
+    words = words.filter(w => w.isStarred);
+  }
 
   // Apply quick search
   const searchInput = document.getElementById('nb-search-input');
@@ -5077,14 +5292,41 @@ function startStudySessionFromNotebook(mode) {
   const notebookName = document.getElementById('dashboard-notebook-title').textContent;
   const notebookDesc = document.getElementById('dashboard-notebook-desc').textContent;
 
-  startStudySession('all', 'all', notebookName, notebookDesc);
+  // Pass HSK lesson selections if studying HSK
+  if (activeNotebook.startsWith('hsk:')) {
+    studySelectedLessons = selectedDashboardLessons.length > 0 ? [...selectedDashboardLessons] : null;
+  } else {
+    studySelectedLessons = null;
+  }
+
+  // Pass active filter to study session
+  startStudySession(dashboardActiveFilter, 'all', notebookName, notebookDesc);
 }
 
 // 7. MULTIPLE-CHOICE QUIZ GAME ENGINE
 function startQuizSession() {
-  const words = getNotebookWords(activeNotebook);
+  let words = getNotebookWords(activeNotebook);
+
+  // Apply HSK lesson filters if selected
+  if (activeNotebook.startsWith('hsk:') && selectedDashboardLessons.length > 0) {
+    words = words.filter(w => w.lessonId && selectedDashboardLessons.includes(w.lessonId));
+  }
+
+  // Filter by dashboard active filter
+  if (dashboardActiveFilter === 'studied') {
+    words = words.filter(w => w.isStudied);
+  } else if (dashboardActiveFilter === 'unstudied') {
+    words = words.filter(w => !w.isStudied);
+  } else if (dashboardActiveFilter === 'memorized') {
+    words = words.filter(w => w.isMemorized);
+  } else if (dashboardActiveFilter === 'unmemorized') {
+    words = words.filter(w => !w.isMemorized);
+  } else if (dashboardActiveFilter === 'starred') {
+    words = words.filter(w => w.isStarred);
+  }
+
   if (words.length < 4) {
-    showToast('Cần ít nhất 4 từ vựng trong sổ tay để chơi trắc nghiệm!', true);
+    showToast('Cần ít nhất 4 từ vựng thỏa mãn bộ lọc hiện tại để chơi trắc nghiệm!', true);
     return;
   }
 
@@ -5245,6 +5487,10 @@ function handleQuizAnswer(selectedBtn, selectedOption, correctOption) {
   const scoreText = document.getElementById('quiz-score-text');
 
   const q = quizQuestions[currentQuizIndex];
+  
+  // Mark word as studied
+  markWordAsStudied(q.word.id);
+
   const isCorrect = selectedOption === correctOption;
 
   if (isCorrect) {

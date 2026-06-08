@@ -15,10 +15,13 @@
   <link rel="stylesheet" href="/src/style.css">
   
   <style>
+    button, input, select, textarea {
+      font-family: inherit;
+    }
     body {
       background-color: #0b0f19;
       color: #f3f4f6;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Be Vietnam Pro', 'Inter', sans-serif;
       min-height: 100vh;
       padding: 32px 16px;
     }
@@ -434,6 +437,21 @@
       showToast('Đã xuất danh sách thành công! 📊');
     }
 
+    function cleanPinyinText(str) {
+      if (!str) return '';
+      const parts = str.split(/[|/\\;]/);
+      let first = parts[0].trim();
+      if (!first && parts.length > 1) {
+        for (let i = 1; i < parts.length; i++) {
+          if (parts[i].trim()) {
+            first = parts[i].trim();
+            break;
+          }
+        }
+      }
+      return first.replace(/\s+/g, ' ');
+    }
+
     async function fetchVocabulary() {
       try {
         const response = await fetch(API_BASE_URL + '/api/vocabulary', {
@@ -442,6 +460,13 @@
         });
         if (!response.ok) throw new Error('Không thể tải từ vựng');
         vocabList = await response.json();
+        
+        // Clean pinyin
+        vocabList.forEach(w => {
+          if (w.pinyin) {
+            w.pinyin = cleanPinyinText(w.pinyin);
+          }
+        });
         
         // Load guest progress if not logged in
         if (!currentUser) {
@@ -462,6 +487,13 @@
         console.error('Fetch error:', err);
         showToast('Lỗi tải dữ liệu từ máy chủ. Đang thử dùng dữ liệu dự phòng...', true);
         
+        // Clean pinyin in fallback as well
+        vocabList.forEach(w => {
+          if (w.pinyin) {
+            w.pinyin = cleanPinyinText(w.pinyin);
+          }
+        });
+
         // Offline fallback guest sync
         if (!currentUser) {
           const guestProgress = JSON.parse(localStorage.getItem('guest_progress') || '{}');

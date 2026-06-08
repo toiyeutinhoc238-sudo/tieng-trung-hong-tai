@@ -2,7 +2,12 @@
   "users": {
     "phanphiphu04@gmail.com": {
       "name": "Phú Phan",
-      "picture": "https://lh3.googleusercontent.com/a/ACg8ocIebQJ8CFxQDSOgwYPsfuN9FJvtBWARLqdYN9fCo-3UBytEPmI=s96-c"
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocIebQJ8CFxQDSOgwYPsfuN9FJvtBWARLqdYN9fCo-3UBytEPmI=s96-c",
+      "stats": {
+        "streak": 1,
+        "studyTime": 15,
+        "lastActiveDate": "2026-06-08"
+      }
     },
     "nguyenngawork26@gmail.com": {
       "name": "Thúy Nga Nguyễn",
@@ -11,9 +16,39 @@
   },
   "progress": {
     "phanphiphu04@gmail.com": {
+      "29": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "57": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "108": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "216": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "275": {
         "isMemorized": false,
         "isStarred": false
+      },
+      "287": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
       },
       "306": {
         "isMemorized": false,
@@ -55,7 +90,7 @@
   },
   "customWords": {},
   "sessions": {
-    "2vzx3ggrdn2mq3y0t0t": "phanphiphu04@gmail.com"
+    "m78atvdnnwmq4r41w9": "phanphiphu04@gmail.com"
   },
   "chats": {
     "phanphiphu04@gmail.com": []
