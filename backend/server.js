@@ -20,6 +20,14 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// Disable caching for all API routes
+app.use('/api', (req, res, next) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  res.set('Expires', '-1');
+  res.set('Pragma', 'no-cache');
+  next();
+});
+
 // Helper to read built-in database
 async function readDatabase() {
   try {

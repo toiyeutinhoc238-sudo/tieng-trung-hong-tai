@@ -2,12 +2,7 @@
   "users": {
     "phanphiphu04@gmail.com": {
       "name": "Phú Phan",
-      "picture": "https://lh3.googleusercontent.com/a/ACg8ocIebQJ8CFxQDSOgwYPsfuN9FJvtBWARLqdYN9fCo-3UBytEPmI=s96-c",
-      "stats": {
-        "streak": 1,
-        "studyTime": 2370,
-        "lastActiveDate": "2026-06-08"
-      }
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocIebQJ8CFxQDSOgwYPsfuN9FJvtBWARLqdYN9fCo-3UBytEPmI=s96-c"
     },
     "nguyenngawork26@gmail.com": {
       "name": "Thúy Nga Nguyễn",
@@ -22,7 +17,19 @@
         "isWrong": false,
         "isStudied": true
       },
+      "24": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "29": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "30": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
@@ -76,6 +83,12 @@
         "isWrong": false,
         "isStudied": true
       },
+      "65": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "71": {
         "isMemorized": false,
         "isStarred": false,
@@ -90,7 +103,7 @@
       },
       "90": {
         "isMemorized": false,
-        "isStarred": true,
+        "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
@@ -106,7 +119,25 @@
         "isWrong": false,
         "isStudied": true
       },
+      "103": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "105": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "108": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "109": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
@@ -114,7 +145,7 @@
       },
       "110": {
         "isMemorized": false,
-        "isStarred": true,
+        "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
@@ -131,6 +162,18 @@
         "isStudied": true
       },
       "132": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "136": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "138": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
@@ -156,12 +199,18 @@
       },
       "165": {
         "isMemorized": false,
-        "isStarred": true,
+        "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "188": {
         "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "189": {
+        "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -203,6 +252,12 @@
         "isStudied": true
       },
       "231": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "238": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
@@ -252,7 +307,8 @@
       },
       "275": {
         "isMemorized": false,
-        "isStarred": false
+        "isStarred": false,
+        "isStudied": true
       },
       "287": {
         "isMemorized": false,
@@ -280,7 +336,7 @@
       },
       "945": {
         "isMemorized": false,
-        "isStarred": true,
+        "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
@@ -302,6 +358,12 @@
         "isWrong": false,
         "isStudied": true
       },
+      "968": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "973": {
         "isMemorized": false,
         "isStarred": false,
@@ -310,7 +372,7 @@
       },
       "976": {
         "isMemorized": false,
-        "isStarred": true,
+        "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
@@ -354,8 +416,8 @@
   },
   "customWords": {},
   "sessions": {
-    "m78atvdnnwmq4r41w9": "phanphiphu04@gmail.com",
-    "gpbu9jjns1lmq55hgq9": "phanphiphu04@gmail.com"
+    "gpbu9jjns1lmq55hgq9": "phanphiphu04@gmail.com",
+    "o7dylo755nhmq5extwu": "phanphiphu04@gmail.com"
   },
   "chats": {
     "phanphiphu04@gmail.com": []

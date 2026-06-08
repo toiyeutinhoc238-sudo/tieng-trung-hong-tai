@@ -369,35 +369,58 @@
             </div>
 
             <!-- Right Column: Study Modes Block -->
-            <div class="glass-panel" style="padding: 24px;">
-              <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 16px; color: var(--text-primary); font-family: var(--font-display); border-left: 4px solid var(--accent-primary); padding-left: 8px;">
-                Phương thức ôn tập của bạn
-              </h3>
-              <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div class="glass-panel" style="padding: 24px; position: relative; overflow: hidden;">
+              <!-- Decorative Red Accent Bar -->
+              <div style="position: absolute; top: 24px; left: 0; width: 4px; height: 28px; background: #e11d48; border-radius: 0 4px 4px 0;"></div>
+              
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-primary); font-family: var(--font-display); padding-left: 12px; margin: 0;">
+                  Phương thức ôn tập của bạn
+                </h3>
+              </div>
+
+              <!-- Limit Selector -->
+              <div style="margin-bottom: 20px; padding-left: 12px;">
+                <label style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 8px;">Giới hạn số từ ôn tập:</label>
+                <div style="display: flex; gap: 8px;">
+                  <button type="button" class="btn btn-outline limit-btn active-limit" data-limit="10" style="padding: 6px 12px; border-radius: 8px; font-size: 0.85rem;">10 từ</button>
+                  <button type="button" class="btn btn-outline limit-btn" data-limit="20" style="padding: 6px 12px; border-radius: 8px; font-size: 0.85rem;">20 từ</button>
+                  <button type="button" class="btn btn-outline limit-btn" data-limit="50" style="padding: 6px 12px; border-radius: 8px; font-size: 0.85rem;">50 từ</button>
+                  <button type="button" class="btn btn-outline limit-btn" data-limit="all" style="padding: 6px 12px; border-radius: 8px; font-size: 0.85rem;">Tất cả</button>
+                </div>
+              </div>
+              
+              <div style="display: flex; flex-direction: column; gap: 16px; padding-left: 12px;">
                 <!-- Flashcard button -->
-                <button type="button" id="nb-start-flashcard-btn" class="btn btn-outline" style="justify-content: flex-start; text-align: left; padding: 14px 18px; border-radius: 12px; border-color: rgba(255,255,255,0.08); background: rgba(255,255,255,0.02); color: var(--text-primary); width: 100%; transition: all var(--transition-fast);">
-                  <i class="fa-solid fa-clone text-primary" style="font-size: 1.25rem; margin-right: 12px; width: 24px;"></i>
+                <button type="button" id="nb-start-flashcard-btn" class="study-method-card" style="display: flex; align-items: center; text-align: left; padding: 16px; border-radius: 12px; border: 1px solid var(--border-glass); background: transparent; cursor: pointer; transition: all 0.2s ease; width: 100%;">
+                  <div class="method-icon-wrap" style="width: 48px; height: 48px; min-width: 48px; border-radius: 12px; background: rgba(37, 99, 235, 0.1); color: #2563eb; display: flex; align-items: center; justify-content: center; margin-right: 16px; font-size: 1.4rem;">
+                    <i class="fa-solid fa-clone"></i>
+                  </div>
                   <div>
-                    <strong style="display: block; font-size: 0.95rem;">Thẻ Lật Flashcard</strong>
-                    <span style="font-size: 0.72rem; color: var(--text-secondary); font-weight: 400;">Học qua lật thẻ từ vựng truyền thống</span>
+                    <strong style="display: block; font-size: 1.05rem; font-family: var(--font-display); color: var(--text-primary); margin-bottom: 4px;">Thẻ Lật Flashcard</strong>
+                    <span style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">Học qua lật thẻ từ vựng truyền thống</span>
                   </div>
                 </button>
                 
                 <!-- Typing button -->
-                <button type="button" id="nb-start-typing-btn" class="btn btn-outline" style="justify-content: flex-start; text-align: left; padding: 14px 18px; border-radius: 12px; border-color: rgba(255,255,255,0.08); background: rgba(255,255,255,0.02); color: var(--text-primary); width: 100%; transition: all var(--transition-fast);">
-                  <i class="fa-solid fa-keyboard text-success" style="font-size: 1.25rem; margin-right: 12px; width: 24px;"></i>
+                <button type="button" id="nb-start-typing-btn" class="study-method-card" style="display: flex; align-items: center; text-align: left; padding: 16px; border-radius: 12px; border: 1px solid var(--border-glass); background: transparent; cursor: pointer; transition: all 0.2s ease; width: 100%;">
+                  <div class="method-icon-wrap" style="width: 48px; height: 48px; min-width: 48px; border-radius: 12px; background: rgba(16, 185, 129, 0.1); color: #10b981; display: flex; align-items: center; justify-content: center; margin-right: 16px; font-size: 1.4rem;">
+                    <i class="fa-solid fa-keyboard"></i>
+                  </div>
                   <div>
-                    <strong style="display: block; font-size: 0.95rem;">Luyện Gõ Chữ & Nghĩa</strong>
-                    <span style="font-size: 0.72rem; color: var(--text-secondary); font-weight: 400;">Gõ chữ Hán hoặc điền nghĩa tự chấm điểm</span>
+                    <strong style="display: block; font-size: 1.05rem; font-family: var(--font-display); color: var(--text-primary); margin-bottom: 4px;">Luyện Gõ Chữ & Nghĩa</strong>
+                    <span style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">Gõ chữ Hán hoặc điền nghĩa tự chấm điểm</span>
                   </div>
                 </button>
 
                 <!-- Quiz button -->
-                <button type="button" id="nb-start-quiz-btn" class="btn btn-outline" style="justify-content: flex-start; text-align: left; padding: 14px 18px; border-radius: 12px; border-color: rgba(255,255,255,0.08); background: rgba(255,255,255,0.02); color: var(--text-primary); width: 100%; transition: all var(--transition-fast);">
-                  <i class="fa-solid fa-circle-question text-warning" style="font-size: 1.25rem; margin-right: 12px; width: 24px;"></i>
+                <button type="button" id="nb-start-quiz-btn" class="study-method-card quiz-card" style="display: flex; align-items: center; text-align: left; padding: 16px; border-radius: 12px; border: 1.5px solid #f59e0b; background: rgba(245, 158, 11, 0.05); cursor: pointer; transition: all 0.2s ease; width: 100%;">
+                  <div class="method-icon-wrap" style="width: 48px; height: 48px; min-width: 48px; border-radius: 50%; background: #d97706; color: white; display: flex; align-items: center; justify-content: center; margin-right: 16px; font-size: 1.4rem;">
+                    <i class="fa-solid fa-question"></i>
+                  </div>
                   <div>
-                    <strong style="display: block; font-size: 0.95rem;">Trò Chơi Trắc Nghiệm ✍️</strong>
-                    <span style="font-size: 0.72rem; color: var(--text-secondary); font-weight: 400;">Đố vui trắc nghiệm 10 câu ngẫu nhiên có tính điểm</span>
+                    <strong style="display: block; font-size: 1.05rem; font-family: var(--font-display); color: var(--text-primary); margin-bottom: 4px;">Trò Chơi Trắc Nghiệm ✍️</strong>
+                    <span style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">Đố vui trắc nghiệm ngẫu nhiên có tính điểm</span>
                   </div>
                 </button>
               </div>
@@ -719,7 +742,17 @@
                     </div>
                   </div>
 
-                  <div class="card-action-bar">
+                  <div class="card-action-bar" style="justify-content: space-between; display: flex; width: 100%;">
+                    <!-- Quick add to notebook dropdown selector -->
+                    <div class="fc-quick-save-wrapper" style="position: relative;">
+                      <button id="fc-quick-save-btn" class="btn btn-outline btn-sm" style="font-size: 0.75rem; padding: 6px 12px; display: flex; align-items: center; gap: 6px; border-radius: 20px; border-color: var(--border-glass-hover);">
+                        <i class="fa-solid fa-folder-plus text-primary"></i> + Sổ tay
+                      </button>
+                      <div id="fc-quick-save-dropdown" class="glass-panel" style="display: none; position: absolute; left: 0; bottom: 110%; z-index: 100; min-width: 180px; padding: 8px; flex-direction: column; gap: 6px; background: var(--bg-card); border: 1px solid var(--border-glass); border-radius: 8px; box-shadow: 0 -4px 16px rgba(0,0,0,0.3);">
+                        <!-- Dynamically rendered custom lists -->
+                      </div>
+                    </div>
+
                     <span class="click-hint"><i class="fa-solid fa-rotate"></i> Click để lật mặt trước</span>
                   </div>
                 </div>

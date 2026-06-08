@@ -60,6 +60,7 @@ let smartSelectedSubDeck = 'wrong'; // Default to wrong, but can be customized
 let smartSelectedRange = 'all';     // 'all' or 'custom'
 let smartSelectedLessons = [];      // Array of selected HSK lesson IDs
 let studySelectedLessons = null;     // Array of lesson IDs being studied, or null
+let studyWordLimit = 10;            // Limit for number of words in a study session
 
 // --- NEW STATE VARIABLES FOR SMART TOPIC LAYOUT & QUIZ ---
 let activeSmartTopic = 'personal'; // 'personal', 'hsk', 'premium'
@@ -121,11 +122,11 @@ const resetFiltersBtn = document.getElementById('reset-filters-btn');
 const toastElement = document.getElementById('toast');
 
 // --- INITIALIZATION ---
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   initTheme();
   initVoices();
-  fetchVocabulary();
-  initAuth();
+  await initAuth();
+  await fetchVocabulary();
   setupEventListeners();
   initExams();
   initLessonsView();
@@ -275,7 +276,8 @@ async function fetchVocabulary() {
   try {
     const response = await fetch(API_BASE_URL + '/api/vocabulary', {
       headers: getAuthHeaders(),
-      credentials: 'include'
+      credentials: 'include',
+      cache: 'no-store'
     });
     if (!response.ok) throw new Error('Không thể tải từ vựng từ API');
     vocabList = await response.json();
@@ -934,6 +936,11 @@ function applyFilters(preserveIndex = false) {
   if (!preserveIndex) {
     // Shuffle the list for a new study session
     filteredList = shuffleArray(newList);
+
+    // Apply study word limit
+    if (studyWordLimit !== 'all' && filteredList.length > studyWordLimit) {
+      filteredList = filteredList.slice(0, studyWordLimit);
+    }
   } else {
     // Keep the existing order, but filter out elements that are no longer valid
     const validIds = new Set(newList.map(w => w.id));
@@ -946,6 +953,11 @@ function applyFilters(preserveIndex = false) {
         filteredList.push(w);
       }
     });
+
+    // Re-apply study word limit if we just shuffled
+    if (studyWordLimit !== 'all' && filteredList.length > studyWordLimit) {
+      filteredList = filteredList.slice(0, studyWordLimit);
+    }
   }
 
   // Handle Index Preservation
@@ -1226,6 +1238,41 @@ function setupEventListeners() {
       switchTab(tabId);
     });
   });
+
+  // Quiz mode exit
+  const exitQuizBtn = document.getElementById('exit-quiz-btn');
+  if (exitQuizBtn) {
+    exitQuizBtn.addEventListener('click', exitQuizMode);
+  }
+  
+  // Notebook Dashboard limit buttons
+  const limitBtns = document.querySelectorAll('.limit-btn');
+  limitBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      limitBtns.forEach(b => b.classList.remove('active-limit'));
+      btn.classList.add('active-limit');
+      const limitVal = btn.getAttribute('data-limit');
+      studyWordLimit = limitVal === 'all' ? 'all' : parseInt(limitVal, 10);
+    });
+  });
+
+  // Flashcard quick save dropdown toggle
+  const fcQuickSaveBtn = document.getElementById('fc-quick-save-btn');
+  const fcQuickSaveDropdown = document.getElementById('fc-quick-save-dropdown');
+  if (fcQuickSaveBtn && fcQuickSaveDropdown) {
+    fcQuickSaveBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isHidden = fcQuickSaveDropdown.style.display === 'none';
+      fcQuickSaveDropdown.style.display = isHidden ? 'flex' : 'none';
+      if (isHidden && filteredList[currentIndex]) {
+        renderFcQuickSaveDropdown(filteredList[currentIndex]);
+      }
+    });
+
+    document.addEventListener('click', () => {
+      fcQuickSaveDropdown.style.display = 'none';
+    });
+  }
 
   // Smart Configuration View Events
   // 1. Step 1 Curriculum selector
@@ -1720,6 +1767,7 @@ function setupEventListeners() {
     practiceMistakesBtn.addEventListener('click', () => {
       stopAutoplay();
       studyCustomCategory = null;
+      studySelectedLessons = null;
       startStudySession('wrong', 'all', 'Sổ tay từ làm sai', 'Ôn tập các từ vựng bạn đã trả lời sai');
       showToast('Đang tải danh sách từ vựng làm sai!');
     });
@@ -1774,6 +1822,7 @@ function setupEventListeners() {
         activeStatus = status;
         statusFilterSelect.value = status;
         studyCustomCategory = null; // Clear custom categories if studying quick stats
+        studySelectedLessons = null;
         stopAutoplay();
         applyFilters();
 
@@ -1801,6 +1850,7 @@ function setupEventListeners() {
         activeStatus = tab;
         statusFilterSelect.value = tab;
         studyCustomCategory = null;
+        studySelectedLessons = null;
         stopAutoplay();
         applyFilters();
       }
@@ -1976,7 +2026,8 @@ async function initAuth() {
   try {
     const res = await fetch(API_BASE_URL + '/api/auth/me', {
       headers: getAuthHeaders(),
-      credentials: 'include'
+      credentials: 'include',
+      cache: 'no-store'
     });
     if (res.ok) {
       const data = await res.json();
@@ -2078,8 +2129,12 @@ async function handleCredentialResponse(response) {
         window.migrateGuestChatHistory();
       }
 
+      // Clear guest progress so it doesn't merge
+      localStorage.removeItem('guest_progress');
+      localStorage.removeItem('guest_custom_words');
+
       // Re-fetch vocabulary and reload user statistics
-      fetchVocabulary();
+      await fetchVocabulary();
     } else {
       throw new Error('Không nhận được dữ liệu người dùng');
     }
@@ -2129,8 +2184,12 @@ async function handleLogout(e) {
   guestStreak = 0;
   guestLastActive = '';
 
+  // Clear guest progress in local storage just in case
+  localStorage.removeItem('guest_progress');
+  localStorage.removeItem('guest_custom_words');
+
   // Re-fetch vocabulary to load guest state
-  fetchVocabulary();
+  await fetchVocabulary();
 
   // Reset Chatbot interface and threads on logout
   if (typeof window.resetChatbotOnLogout === 'function') {
@@ -2859,7 +2918,7 @@ function renderExamResults(correct, total, percentage, timeSpent, status) {
       }
 
       optDiv.innerHTML = `${prefix}${String.fromCharCode(65 + optIdx)}. ${choice}`;
-      optionsGrid.appendChild(optDiv);
+      optGrid.appendChild(optDiv);
     });
 
     reviewContainer.appendChild(qItem);
@@ -4239,6 +4298,24 @@ function renderQuickSaveDropdown(w) {
   });
 }
 
+function renderFcQuickSaveDropdown(w) {
+  const dropdown = document.getElementById('fc-quick-save-dropdown');
+  if (!dropdown) return;
+  dropdown.innerHTML = '';
+
+  customLists.forEach(listName => {
+    const item = document.createElement('div');
+    item.className = 'dict-quick-save-item';
+    item.innerHTML = `<i class="fa-regular fa-folder text-primary"></i> <span>${listName}</span>`;
+    item.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      dropdown.style.display = 'none';
+      await saveWordToCustomNotebook(w, listName);
+    });
+    dropdown.appendChild(item);
+  });
+}
+
 async function saveWordToCustomNotebook(w, listName) {
   const exists = vocabList.some(item => item.isCustom && item.word === w.word && item.category === listName);
   if (exists) {
@@ -5330,9 +5407,10 @@ function startQuizSession() {
     return;
   }
 
-  // Pick up to 10 random words from notebook
+  // Pick random words based on limit
+  const limitCount = studyWordLimit === 'all' ? words.length : Math.min(studyWordLimit, words.length);
   const shuffledWords = shuffleArray([...words]);
-  const quizWords = shuffledWords.slice(0, 10);
+  const quizWords = shuffledWords.slice(0, limitCount);
 
   quizQuestions = quizWords.map(word => {
     const candidates = vocabList.filter(w => w.id !== word.id);

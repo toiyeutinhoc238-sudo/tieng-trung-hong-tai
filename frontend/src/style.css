@@ -4240,3 +4240,35 @@ html.dark .topic-card:hover {
 }
 
 
+
+/* --- Study Method Cards New UI --- */
+.study-method-card {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.study-method-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  border-color: var(--accent-blue);
+  background: var(--bg-card);
+}
+
+.study-method-card.quiz-card:hover {
+  border-color: #f59e0b;
+  box-shadow: 0 6px 16px rgba(245, 158, 11, 0.15);
+}
+
+/* Limit Button Toggle */
+.limit-btn {
+  background: transparent;
+  color: var(--text-secondary);
+  border-color: var(--border-glass);
+}
+.limit-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+.limit-btn.active-limit {
+  background: var(--accent-blue);
+  color: white;
+  border-color: var(--accent-blue);
+}
