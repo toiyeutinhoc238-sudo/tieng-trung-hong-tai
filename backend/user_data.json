@@ -4,9 +4,9 @@
       "name": "Phú Phan",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocIebQJ8CFxQDSOgwYPsfuN9FJvtBWARLqdYN9fCo-3UBytEPmI=s96-c",
       "stats": {
-        "streak": 1,
-        "studyTime": 45,
-        "lastActiveDate": "2026-06-08"
+        "streak": 2,
+        "studyTime": 75,
+        "lastActiveDate": "2026-06-09"
       }
     },
     "nguyenngawork26@gmail.com": {
@@ -17,6 +17,12 @@
   "progress": {
     "phanphiphu04@gmail.com": {
       "5": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "22": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
@@ -161,6 +167,12 @@
         "isStudied": true
       },
       "122": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "131": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,

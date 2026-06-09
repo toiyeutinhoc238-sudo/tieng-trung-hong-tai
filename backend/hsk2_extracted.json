@@ -1,0 +1,1735 @@
+{
+  "1": [
+    {
+      "word": "爱",
+      "pinyin": "ài",
+      "category": "động từ",
+      "meaning": "yêu, thích",
+      "lesson": 12
+    },
+    {
+      "word": "八",
+      "pinyin": "bā",
+      "category": "số từ",
+      "meaning": "số 8",
+      "lesson": 5
+    },
+    {
+      "word": "爸爸",
+      "pinyin": "bàba",
+      "category": "danh từ",
+      "meaning": "bố, cha",
+      "lesson": 9
+    },
+    {
+      "word": "杯子",
+      "pinyin": "bēizi",
+      "category": "danh từ",
+      "meaning": "ly, tách",
+      "lesson": 8
+    },
+    {
+      "word": "本",
+      "pinyin": "běn",
+      "category": "lượng từ",
+      "meaning": "quyển, cuốn",
+      "lesson": 10
+    },
+    {
+      "word": "不客气",
+      "pinyin": "bù kèqi",
+      "category": "",
+      "meaning": "đừng khách sáo",
+      "lesson": 2
+    },
+    {
+      "word": "不",
+      "pinyin": "bù",
+      "category": "phó từ",
+      "meaning": "không cần, không, đừng",
+      "lesson": 2
+    },
+    {
+      "word": "菜",
+      "pinyin": "cài",
+      "category": "danh từ",
+      "meaning": "món ăn, thức ăn",
+      "lesson": 6
+    },
+    {
+      "word": "茶",
+      "pinyin": "chá",
+      "category": "danh từ",
+      "meaning": "trà",
+      "lesson": 8
+    },
+    {
+      "word": "吃",
+      "pinyin": "chī",
+      "category": "động từ",
+      "meaning": "ăn",
+      "lesson": 8
+    },
+    {
+      "word": "出租车",
+      "pinyin": "chūzūchē",
+      "category": "danh từ",
+      "meaning": "taxi",
+      "lesson": 15
+    },
+    {
+      "word": "打电话",
+      "pinyin": "dǎ diànhuà",
+      "category": "",
+      "meaning": "gọi điện thoại",
+      "lesson": 13
+    },
+    {
+      "word": "大",
+      "pinyin": "dà",
+      "category": "tính từ",
+      "meaning": "lớn",
+      "lesson": 5
+    },
+    {
+      "word": "的",
+      "pinyin": "de",
+      "category": "trợ từ",
+      "meaning": "được dùng sau định ngữ",
+      "lesson": 4
+    },
+    {
+      "word": "点",
+      "pinyin": "diǎn",
+      "category": "lượng từ",
+      "meaning": "giờ",
+      "lesson": 11
+    },
+    {
+      "word": "电脑",
+      "pinyin": "diànnǎo",
+      "category": "dt.",
+      "meaning": "máy vi tính",
+      "lesson": 10
+    },
+    {
+      "word": "电视",
+      "pinyin": "diànshì",
+      "category": "dt.",
+      "meaning": "tivi",
+      "lesson": 13
+    },
+    {
+      "word": "电影",
+      "pinyin": "diànyǐng",
+      "category": "dt.",
+      "meaning": "phim",
+      "lesson": 11
+    },
+    {
+      "word": "东西",
+      "pinyin": "dōngxi",
+      "category": "dt.",
+      "meaning": "đồ, đồ đạc",
+      "lesson": 14
+    },
+    {
+      "word": "都",
+      "pinyin": "dōu",
+      "category": "phó.",
+      "meaning": "đều",
+      "lesson": 14
+    },
+    {
+      "word": "读",
+      "pinyin": "dú",
+      "category": "dgt.",
+      "meaning": "đọc",
+      "lesson": 6
+    },
+    {
+      "word": "对不起",
+      "pinyin": "duìbuqǐ",
+      "category": "dgt.",
+      "meaning": "xin lỗi",
+      "lesson": 1
+    },
+    {
+      "word": "多",
+      "pinyin": "duō",
+      "category": "phó.",
+      "meaning": "chỉ mức độ",
+      "lesson": 5
+    },
+    {
+      "word": "多少",
+      "pinyin": "duōshao",
+      "category": "dt.",
+      "meaning": "bao nhiêu",
+      "lesson": 8
+    },
+    {
+      "word": "儿子",
+      "pinyin": "érzi",
+      "category": "dt.",
+      "meaning": "con trai",
+      "lesson": 9
+    },
+    {
+      "word": "二",
+      "pinyin": "èr",
+      "category": "số.",
+      "meaning": "số 2",
+      "lesson": 5
+    },
+    {
+      "word": "饭店",
+      "pinyin": "fàndiàn",
+      "category": "dt.",
+      "meaning": "khách sạn, nhà hàng",
+      "lesson": 15
+    },
+    {
+      "word": "飞机",
+      "pinyin": "fēijī",
+      "category": "dt.",
+      "meaning": "máy bay",
+      "lesson": 15
+    },
+    {
+      "word": "分钟",
+      "pinyin": "fēnzhōng",
+      "category": "dt.",
+      "meaning": "phút",
+      "lesson": 14
+    },
+    {
+      "word": "高兴",
+      "pinyin": "gāoxìng",
+      "category": "tt.",
+      "meaning": "vui, phấn khởi",
+      "lesson": 15
+    },
+    {
+      "word": "个",
+      "pinyin": "gè",
+      "category": "lượng.",
+      "meaning": "cái",
+      "lesson": 8
+    },
+    {
+      "word": "工作",
+      "pinyin": "gōngzuò",
+      "category": "dgt./dt.",
+      "meaning": "làm việc; công việc",
+      "lesson": 9
+    },
+    {
+      "word": "狗",
+      "pinyin": "gǒu",
+      "category": "dt.",
+      "meaning": "chó",
+      "lesson": 9
+    },
+    {
+      "word": "汉语",
+      "pinyin": "Hànyǔ",
+      "category": "dt.",
+      "meaning": "tiếng Trung Quốc",
+      "lesson": 4
+    },
+    {
+      "word": "好",
+      "pinyin": "hǎo",
+      "category": "tt.",
+      "meaning": "khỏe, tốt",
+      "lesson": 1
+    },
+    {
+      "word": "号",
+      "pinyin": "hào",
+      "category": "dt.",
+      "meaning": "ngày",
+      "lesson": 7
+    },
+    {
+      "word": "喝",
+      "pinyin": "hē",
+      "category": "dgt.",
+      "meaning": "uống",
+      "lesson": 8
+    },
+    {
+      "word": "和",
+      "pinyin": "hé",
+      "category": "liên.",
+      "meaning": "và",
+      "lesson": 10
+    },
+    {
+      "word": "很",
+      "pinyin": "hěn",
+      "category": "phó.",
+      "meaning": "rất",
+      "lesson": 6
+    },
+    {
+      "word": "后面",
+      "pinyin": "hòumiàn",
+      "category": "dt.",
+      "meaning": "phía sau",
+      "lesson": 10
+    },
+    {
+      "word": "回",
+      "pinyin": "huí",
+      "category": "dgt.",
+      "meaning": "về, trở về",
+      "lesson": 11
+    },
+    {
+      "word": "会",
+      "pinyin": "huì",
+      "category": "dtnn.",
+      "meaning": "biết",
+      "lesson": 6
+    },
+    {
+      "word": "几",
+      "pinyin": "jǐ",
+      "category": "dt.",
+      "meaning": "mấy",
+      "lesson": 5
+    },
+    {
+      "word": "家",
+      "pinyin": "jiā",
+      "category": "dt.",
+      "meaning": "nhà",
+      "lesson": 5
+    },
+    {
+      "word": "叫",
+      "pinyin": "jiào",
+      "category": "dgt.",
+      "meaning": "tên (là)",
+      "lesson": 3
+    },
+    {
+      "word": "今天",
+      "pinyin": "jīntiān",
+      "category": "dt.",
+      "meaning": "hôm nay",
+      "lesson": 7
+    },
+    {
+      "word": "九",
+      "pinyin": "jiǔ",
+      "category": "số.",
+      "meaning": "số 9",
+      "lesson": 5
+    },
+    {
+      "word": "开",
+      "pinyin": "kāi",
+      "category": "động từ",
+      "meaning": "mở",
+      "lesson": 14
+    },
+    {
+      "word": "看",
+      "pinyin": "kàn",
+      "category": "động từ",
+      "meaning": "nhìn, xem",
+      "lesson": 7
+    },
+    {
+      "word": "看见",
+      "pinyin": "kàn jiàn",
+      "category": "động từ",
+      "meaning": "nhìn thấy",
+      "lesson": 14
+    },
+    {
+      "word": "块",
+      "pinyin": "kuài",
+      "category": "lượng từ",
+      "meaning": "đồng (đơn vị tiền tệ)",
+      "lesson": 8
+    },
+    {
+      "word": "来",
+      "pinyin": "lái",
+      "category": "động từ",
+      "meaning": "đến, tới",
+      "lesson": 12
+    },
+    {
+      "word": "老师",
+      "pinyin": "lǎoshi",
+      "category": "danh từ",
+      "meaning": "thầy/cô giáo",
+      "lesson": 3
+    },
+    {
+      "word": "了",
+      "pinyin": "le",
+      "category": "trợ từ",
+      "meaning": "được dùng ở giữa hay cuối câu để chỉ sự thay đổi hoặc tình huống mới",
+      "lesson": 5
+    },
+    {
+      "word": "冷",
+      "pinyin": "lěng",
+      "category": "tính từ",
+      "meaning": "lạnh",
+      "lesson": 12
+    },
+    {
+      "word": "里",
+      "pinyin": "lǐ",
+      "category": "danh từ",
+      "meaning": "trong, bên trong",
+      "lesson": 10
+    },
+    {
+      "word": "六",
+      "pinyin": "liù",
+      "category": "số từ",
+      "meaning": "số 6",
+      "lesson": 5
+    },
+    {
+      "word": "妈妈",
+      "pinyin": "māma",
+      "category": "danh từ",
+      "meaning": "mẹ",
+      "lesson": 6
+    },
+    {
+      "word": "吗",
+      "pinyin": "ma",
+      "category": "trợ từ",
+      "meaning": "được dùng ở cuối câu hỏi",
+      "lesson": 3
+    },
+    {
+      "word": "买",
+      "pinyin": "mǎi",
+      "category": "động từ",
+      "meaning": "mua",
+      "lesson": 8
+    },
+    {
+      "word": "猫",
+      "pinyin": "māo",
+      "category": "danh từ",
+      "meaning": "mèo",
+      "lesson": 9
+    },
+    {
+      "word": "没关系",
+      "pinyin": "méi guānxi",
+      "category": "",
+      "meaning": "không sao đâu, không có vấn đề gì đâu",
+      "lesson": 1
+    },
+    {
+      "word": "没有",
+      "pinyin": "méiyǒu",
+      "category": "phó từ",
+      "meaning": "không có",
+      "lesson": 10
+    },
+    {
+      "word": "米饭",
+      "pinyin": "mǐfàn",
+      "category": "danh từ",
+      "meaning": "cơm",
+      "lesson": 8
+    },
+    {
+      "word": "名字",
+      "pinyin": "míngzi",
+      "category": "danh từ",
+      "meaning": "tên",
+      "lesson": 3
+    },
+    {
+      "word": "明天",
+      "pinyin": "míngtiān",
+      "category": "danh từ",
+      "meaning": "ngày mai",
+      "lesson": 7
+    },
+    {
+      "word": "哪",
+      "pinyin": "nǎ",
+      "category": "đại từ",
+      "meaning": "nào",
+      "lesson": 4
+    },
+    {
+      "word": "哪儿",
+      "pinyin": "nǎr",
+      "category": "đại từ",
+      "meaning": "đâu",
+      "lesson": 9
+    },
+    {
+      "word": "那",
+      "pinyin": "nà",
+      "category": "đại từ",
+      "meaning": "kia, đó",
+      "lesson": 8
+    },
+    {
+      "word": "呢",
+      "pinyin": "ne",
+      "category": "trợ từ",
+      "meaning": "được dùng ở cuối câu hỏi",
+      "lesson": 4
+    },
+    {
+      "word": "能",
+      "pinyin": "néng",
+      "category": "động từ năng nguyện",
+      "meaning": "có thể",
+      "lesson": 10
+    },
+    {
+      "word": "你",
+      "pinyin": "nǐ",
+      "category": "đại từ",
+      "meaning": "(số ít) anh, chị, bạn...",
+      "lesson": 1
+    },
+    {
+      "word": "年",
+      "pinyin": "nián",
+      "category": "danh từ",
+      "meaning": "năm",
+      "lesson": 15
+    },
+    {
+      "word": "女儿",
+      "pinyin": "nǚ'ér",
+      "category": "danh từ",
+      "meaning": "con gái",
+      "lesson": 5
+    },
+    {
+      "word": "朋友",
+      "pinyin": "péngyou",
+      "category": "danh từ",
+      "meaning": "bạn",
+      "lesson": 4
+    },
+    {
+      "word": "漂亮",
+      "pinyin": "piàoliang",
+      "category": "tính từ",
+      "meaning": "đẹp",
+      "lesson": 14
+    },
+    {
+      "word": "苹果",
+      "pinyin": "píngguǒ",
+      "category": "danh từ",
+      "meaning": "táo",
+      "lesson": 14
+    },
+    {
+      "word": "七",
+      "pinyin": "qī",
+      "category": "số",
+      "meaning": "số 7",
+      "lesson": 5
+    },
+    {
+      "word": "前面",
+      "pinyin": "qiánmiàn",
+      "category": "dt",
+      "meaning": "phía trước",
+      "lesson": 10
+    },
+    {
+      "word": "钱",
+      "pinyin": "qián",
+      "category": "dt",
+      "meaning": "tiền",
+      "lesson": 8
+    },
+    {
+      "word": "请",
+      "pinyin": "qǐng",
+      "category": "dgt",
+      "meaning": "(lịch sự) mời, xin",
+      "lesson": 7
+    },
+    {
+      "word": "去",
+      "pinyin": "qù",
+      "category": "dgt",
+      "meaning": "đi, đi đến",
+      "lesson": 7
+    },
+    {
+      "word": "热",
+      "pinyin": "rè",
+      "category": "tt",
+      "meaning": "nóng",
+      "lesson": 12
+    },
+    {
+      "word": "人",
+      "pinyin": "rén",
+      "category": "dt",
+      "meaning": "người",
+      "lesson": 3
+    },
+    {
+      "word": "认识",
+      "pinyin": "rènshi",
+      "category": "dgt",
+      "meaning": "quen, biết",
+      "lesson": 15
+    },
+    {
+      "word": "三",
+      "pinyin": "sān",
+      "category": "số",
+      "meaning": "số 3",
+      "lesson": 5
+    },
+    {
+      "word": "商店",
+      "pinyin": "shāngdiàn",
+      "category": "dt",
+      "meaning": "cửa hàng",
+      "lesson": 8
+    },
+    {
+      "word": "上",
+      "pinyin": "shàng",
+      "category": "dt",
+      "meaning": "trên, phía trên",
+      "lesson": 10
+    },
+    {
+      "word": "上午",
+      "pinyin": "shàngwǔ",
+      "category": "dt",
+      "meaning": "buổi sáng",
+      "lesson": 13
+    },
+    {
+      "word": "少",
+      "pinyin": "shǎo",
+      "category": "tt",
+      "meaning": "ít",
+      "lesson": 14
+    },
+    {
+      "word": "谁",
+      "pinyin": "shéi",
+      "category": "đt",
+      "meaning": "ai",
+      "lesson": 4
+    },
+    {
+      "word": "什么",
+      "pinyin": "shénme",
+      "category": "dt",
+      "meaning": "gì, cái gì",
+      "lesson": 3
+    },
+    {
+      "word": "十",
+      "pinyin": "shí",
+      "category": "số",
+      "meaning": "số 10",
+      "lesson": 5
+    },
+    {
+      "word": "时候",
+      "pinyin": "shíhou",
+      "category": "dt",
+      "meaning": "lúc, khi",
+      "lesson": 11
+    },
+    {
+      "word": "是",
+      "pinyin": "shì",
+      "category": "dgt",
+      "meaning": "là",
+      "lesson": 3
+    },
+    {
+      "word": "书",
+      "pinyin": "shū",
+      "category": "dt",
+      "meaning": "sách",
+      "lesson": 7
+    },
+    {
+      "word": "水",
+      "pinyin": "shuǐ",
+      "category": "dt",
+      "meaning": "nước",
+      "lesson": 12
+    },
+    {
+      "word": "水果",
+      "pinyin": "shuǐguǒ",
+      "category": "dt",
+      "meaning": "trái cây",
+      "lesson": 12
+    },
+    {
+      "word": "睡觉",
+      "pinyin": "shuì jiào",
+      "category": "dgt",
+      "meaning": "ngủ",
+      "lesson": 13
+    },
+    {
+      "word": "说",
+      "pinyin": "shuō",
+      "category": "dgt",
+      "meaning": "nói",
+      "lesson": 6
+    },
+    {
+      "word": "四",
+      "pinyin": "sì",
+      "category": "số",
+      "meaning": "số 4",
+      "lesson": 5
+    },
+    {
+      "word": "岁",
+      "pinyin": "suì",
+      "category": "lượng.",
+      "meaning": "tuổi",
+      "lesson": 5
+    },
+    {
+      "word": "他",
+      "pinyin": "tā",
+      "category": "dt",
+      "meaning": "anh ấy, ông ấy...",
+      "lesson": 4
+    },
+    {
+      "word": "她",
+      "pinyin": "tā",
+      "category": "dt",
+      "meaning": "cô ấy, bà ấy...",
+      "lesson": 4
+    },
+    {
+      "word": "太",
+      "pinyin": "tài",
+      "category": "phó.",
+      "meaning": "quá, lắm",
+      "lesson": 12
+    },
+    {
+      "word": "天气",
+      "pinyin": "tiānqì",
+      "category": "dt",
+      "meaning": "thời tiết",
+      "lesson": 12
+    },
+    {
+      "word": "听",
+      "pinyin": "tīng",
+      "category": "dgt",
+      "meaning": "nghe",
+      "lesson": 15
+    },
+    {
+      "word": "同学",
+      "pinyin": "tóngxué",
+      "category": "dt",
+      "meaning": "bạn cùng lớp",
+      "lesson": 4
+    },
+    {
+      "word": "喂",
+      "pinyin": "wèi",
+      "category": "thán từ",
+      "meaning": "a lô, này",
+      "lesson": 13
+    },
+    {
+      "word": "我",
+      "pinyin": "wǒ",
+      "category": "đại từ",
+      "meaning": "tôi, ta, mình...",
+      "lesson": 3
+    },
+    {
+      "word": "我们",
+      "pinyin": "wǒmen",
+      "category": "đại từ",
+      "meaning": "chúng ta",
+      "lesson": 11
+    },
+    {
+      "word": "五",
+      "pinyin": "wǔ",
+      "category": "số từ",
+      "meaning": "số 5",
+      "lesson": null
+    },
+    {
+      "word": "喜欢",
+      "pinyin": "xǐhuan",
+      "category": "động từ",
+      "meaning": "thích",
+      "lesson": 13
+    },
+    {
+      "word": "下",
+      "pinyin": "xià",
+      "category": "đại từ/danh từ",
+      "meaning": "bên dưới, phía dưới",
+      "lesson": 9
+    },
+    {
+      "word": "下午",
+      "pinyin": "xiàwǔ",
+      "category": "danh từ",
+      "meaning": "buổi chiều",
+      "lesson": 8
+    },
+    {
+      "word": "下雨",
+      "pinyin": "xià yǔ",
+      "category": "",
+      "meaning": "có mưa, đổ mưa",
+      "lesson": 12
+    },
+    {
+      "word": "先生",
+      "pinyin": "xiānsheng",
+      "category": "danh từ",
+      "meaning": "ông, ngài",
+      "lesson": 14
+    },
+    {
+      "word": "现在",
+      "pinyin": "xiànzài",
+      "category": "danh từ",
+      "meaning": "bây giờ, hiện tại",
+      "lesson": 11
+    },
+    {
+      "word": "想",
+      "pinyin": "xiǎng",
+      "category": "động từ năng nguyện",
+      "meaning": "muốn",
+      "lesson": 8
+    },
+    {
+      "word": "小",
+      "pinyin": "xiǎo",
+      "category": "tính từ",
+      "meaning": "nhỏ, bé",
+      "lesson": 9
+    },
+    {
+      "word": "小姐",
+      "pinyin": "xiǎojiě",
+      "category": "danh từ",
+      "meaning": "cô",
+      "lesson": 12
+    },
+    {
+      "word": "些",
+      "pinyin": "xiē",
+      "category": "lượng từ",
+      "meaning": "một ít, một vài",
+      "lesson": 12
+    },
+    {
+      "word": "写",
+      "pinyin": "xiě",
+      "category": "động từ",
+      "meaning": "viết",
+      "lesson": 6
+    },
+    {
+      "word": "谢谢",
+      "pinyin": "xièxie",
+      "category": "động từ",
+      "meaning": "cảm ơn",
+      "lesson": 2
+    },
+    {
+      "word": "星期",
+      "pinyin": "xīngqī",
+      "category": "danh từ",
+      "meaning": "thứ, tuần",
+      "lesson": 7
+    },
+    {
+      "word": "学生",
+      "pinyin": "xuésheng",
+      "category": "danh từ",
+      "meaning": "học sinh",
+      "lesson": 3
+    },
+    {
+      "word": "学习",
+      "pinyin": "xuéxí",
+      "category": "động từ",
+      "meaning": "học",
+      "lesson": 13
+    },
+    {
+      "word": "学校",
+      "pinyin": "xuéxiào",
+      "category": "danh từ",
+      "meaning": "trường",
+      "lesson": 7
+    },
+    {
+      "word": "一",
+      "pinyin": "yī",
+      "category": "số từ",
+      "meaning": "số 1",
+      "lesson": null
+    },
+    {
+      "word": "衣服",
+      "pinyin": "yīfu",
+      "category": "danh từ",
+      "meaning": "quần áo",
+      "lesson": 14
+    },
+    {
+      "word": "医生",
+      "pinyin": "yīshēng",
+      "category": "danh từ",
+      "meaning": "bác sĩ",
+      "lesson": 9
+    },
+    {
+      "word": "医院",
+      "pinyin": "yīyuàn",
+      "category": "danh từ",
+      "meaning": "bệnh viện",
+      "lesson": 9
+    },
+    {
+      "word": "椅子",
+      "pinyin": "yǐzi",
+      "category": "danh từ",
+      "meaning": "ghế dựa",
+      "lesson": 9
+    },
+    {
+      "word": "一点儿",
+      "pinyin": "yìdiǎnr",
+      "category": "số lượng từ",
+      "meaning": "một ít, một chút",
+      "lesson": 14
+    },
+    {
+      "word": "有",
+      "pinyin": "yǒu",
+      "category": "động từ",
+      "meaning": "có",
+      "lesson": 5
+    },
+    {
+      "word": "月",
+      "pinyin": "yuè",
+      "category": "danh từ",
+      "meaning": "tháng",
+      "lesson": 7
+    },
+    {
+      "word": "再见",
+      "pinyin": "zàijiàn",
+      "category": "động từ",
+      "meaning": "tạm biệt",
+      "lesson": 2
+    },
+    {
+      "word": "在",
+      "pinyin": "zài",
+      "category": "động từ/giới từ",
+      "meaning": "ở, vào",
+      "lesson": 9
+    },
+    {
+      "word": "怎么",
+      "pinyin": "zěnme",
+      "category": "đại từ",
+      "meaning": "như thế nào",
+      "lesson": 6
+    },
+    {
+      "word": "怎么样",
+      "pinyin": "zěnmeyàng",
+      "category": "đại từ",
+      "meaning": "như thế nào",
+      "lesson": 12
+    },
+    {
+      "word": "这",
+      "pinyin": "zhè",
+      "category": "đại từ",
+      "meaning": "đây, này",
+      "lesson": 8
+    },
+    {
+      "word": "中午",
+      "pinyin": "zhōngwǔ",
+      "category": "đại từ",
+      "meaning": "buổi trưa",
+      "lesson": 11
+    },
+    {
+      "word": "住",
+      "pinyin": "zhù",
+      "category": "động từ",
+      "meaning": "ở",
+      "lesson": 11
+    },
+    {
+      "word": "桌子",
+      "pinyin": "zhuōzi",
+      "category": "đại từ",
+      "meaning": "bàn",
+      "lesson": 10
+    },
+    {
+      "word": "字",
+      "pinyin": "zì",
+      "category": "đại từ",
+      "meaning": "chữ",
+      "lesson": 6
+    },
+    {
+      "word": "昨天",
+      "pinyin": "zuótiān",
+      "category": "đại từ",
+      "meaning": "hôm qua",
+      "lesson": 7
+    },
+    {
+      "word": "坐",
+      "pinyin": "zuò",
+      "category": "động từ",
+      "meaning": "ngồi",
+      "lesson": 10
+    },
+    {
+      "word": "做",
+      "pinyin": "zuò",
+      "category": "động từ",
+      "meaning": "làm, nấu",
+      "lesson": 6
+    },
+    {
+      "word": "北京",
+      "pinyin": "Běijīng",
+      "category": "danh từ riêng",
+      "meaning": "Bắc Kinh (thủ đô của Trung Quốc)",
+      "lesson": 11
+    },
+    {
+      "word": "大卫",
+      "pinyin": "Dàwèi",
+      "category": "danh từ riêng",
+      "meaning": "David",
+      "lesson": 13
+    },
+    {
+      "word": "李月",
+      "pinyin": "Lǐ Yuè",
+      "category": "danh từ riêng",
+      "meaning": "Lý Nguyệt (tên người)",
+      "lesson": 3
+    },
+    {
+      "word": "美国",
+      "pinyin": "Měiguó",
+      "category": "danh từ riêng",
+      "meaning": "nước Mỹ",
+      "lesson": 3
+    },
+    {
+      "word": "王方",
+      "pinyin": "Wáng Fāng",
+      "category": "danh từ riêng",
+      "meaning": "Vương Phương (tên người)",
+      "lesson": 10
+    },
+    {
+      "word": "谢鹏",
+      "pinyin": "Xiè Péng",
+      "category": "danh từ riêng",
+      "meaning": "Tạ Bằng (tên người)",
+      "lesson": 10
+    },
+    {
+      "word": "张",
+      "pinyin": "Zhāng",
+      "category": "danh từ riêng",
+      "meaning": "Trương (họ của người Trung Quốc)",
+      "lesson": 14
+    },
+    {
+      "word": "中国",
+      "pinyin": "Zhōngguó",
+      "category": "danh từ riêng",
+      "meaning": "Trung Quốc",
+      "lesson": 3
+    },
+    {
+      "word": "啊",
+      "pinyin": "a",
+      "category": "trợ từ",
+      "meaning": "trợ từ ngữ khí (được dùng ở cuối câu để khẳng định hay biện hộ cho điều gì)",
+      "lesson": 14
+    },
+    {
+      "word": "吧",
+      "pinyin": "ba",
+      "category": "trợ từ",
+      "meaning": "trợ từ ngữ khí được dùng ở cuối câu để diễn tả sự thương lượng, lời đề nghị, thỉnh cầu hay mệnh lệnh",
+      "lesson": 13
+    },
+    {
+      "word": "给",
+      "pinyin": "gěi",
+      "category": "giới từ",
+      "meaning": "cho",
+      "lesson": 13
+    },
+    {
+      "word": "好吃",
+      "pinyin": "hǎochī",
+      "category": "tính từ",
+      "meaning": "ngon",
+      "lesson": 6
+    },
+    {
+      "word": "口",
+      "pinyin": "kǒu",
+      "category": "lượng từ",
+      "meaning": "lượng từ, dùng cho người",
+      "lesson": 5
+    },
+    {
+      "word": "您",
+      "pinyin": "nín",
+      "category": "đại từ",
+      "meaning": "(lịch sự) ông, bà, ngài...",
+      "lesson": 1
+    },
+    {
+      "word": "身体",
+      "pinyin": "shēntǐ",
+      "category": "danh từ",
+      "meaning": "sức khỏe, cơ thể",
+      "lesson": 12
+    },
+    {
+      "word": "问",
+      "pinyin": "wèn",
+      "category": "động từ",
+      "meaning": "hỏi",
+      "lesson": 7
+    },
+    {
+      "word": "也",
+      "pinyin": "yě",
+      "category": "phó từ",
+      "meaning": "cũng",
+      "lesson": 13
+    },
+    {
+      "word": "一起",
+      "pinyin": "yīqǐ",
+      "category": "phó từ",
+      "meaning": "cùng",
+      "lesson": 15
+    },
+    {
+      "word": "不少",
+      "pinyin": "bùshǎo",
+      "category": "tính từ",
+      "meaning": "nhiều",
+      "lesson": 14
+    },
+    {
+      "word": "车",
+      "pinyin": "chē",
+      "category": "danh từ",
+      "meaning": "xe",
+      "lesson": 14
+    },
+    {
+      "word": "吃饭",
+      "pinyin": "chī fàn",
+      "category": "động từ",
+      "meaning": "ăn cơm",
+      "lesson": 11
+    },
+    {
+      "word": "大学",
+      "pinyin": "dàxué",
+      "category": "danh từ",
+      "meaning": "đại học",
+      "lesson": 15
+    },
+    {
+      "word": "分",
+      "pinyin": "fēn",
+      "category": "lượng từ",
+      "meaning": "phút",
+      "lesson": 11
+    },
+    {
+      "word": "国",
+      "pinyin": "guó",
+      "category": "danh từ",
+      "meaning": "quốc gia, đất nước",
+      "lesson": 4
+    },
+    {
+      "word": "汉字",
+      "pinyin": "Hànzì",
+      "category": "danh từ",
+      "meaning": "chữ Hán",
+      "lesson": 6
+    },
+    {
+      "word": "后",
+      "pinyin": "hòu",
+      "category": "danh từ",
+      "meaning": "sau",
+      "lesson": 14
+    },
+    {
+      "word": "回来",
+      "pinyin": "huílai",
+      "category": "động từ",
+      "meaning": "quay về, trở lại",
+      "lesson": 14
+    },
+    {
+      "word": "今年",
+      "pinyin": "jīnnián",
+      "category": "danh từ",
+      "meaning": "năm nay",
+      "lesson": 5
+    },
+    {
+      "word": "没",
+      "pinyin": "méi",
+      "category": "phó từ",
+      "meaning": "không có",
+      "lesson": 10
+    },
+    {
+      "word": "那儿",
+      "pinyin": "nàr",
+      "category": "đại từ",
+      "meaning": "chỗ đó",
+      "lesson": 9
+    },
+    {
+      "word": "你们",
+      "pinyin": "nǐmen",
+      "category": "đại từ",
+      "meaning": "(số nhiều) các anh, các chị, các bạn...",
+      "lesson": 1
+    },
+    {
+      "word": "前",
+      "pinyin": "qián",
+      "category": "đại từ",
+      "meaning": "trước",
+      "lesson": 11
+    },
+    {
+      "word": "太……了",
+      "pinyin": "tài……le",
+      "category": "",
+      "meaning": "quá, lắm",
+      "lesson": 12
+    },
+    {
+      "word": "下",
+      "pinyin": "xià",
+      "category": "động từ",
+      "meaning": "(mưa, tuyết...) rơi",
+      "lesson": 12
+    },
+    {
+      "word": "下面",
+      "pinyin": "xiàmiàn",
+      "category": "đại từ",
+      "meaning": "bên dưới, phía dưới",
+      "lesson": 9
+    },
+    {
+      "word": "学",
+      "pinyin": "xué",
+      "category": "động từ",
+      "meaning": "học",
+      "lesson": 13
+    },
+    {
+      "word": "雨",
+      "pinyin": "yǔ",
+      "category": "đại từ",
+      "meaning": "mưa",
+      "lesson": 12
+    },
+    {
+      "word": "这儿",
+      "pinyin": "zhèr",
+      "category": "đại từ",
+      "meaning": "chỗ này, ở đây",
+      "lesson": 10
+    },
+    {
+      "word": "这些",
+      "pinyin": "zhèxiē",
+      "category": "đại từ",
+      "meaning": "những thứ này, những điều này",
+      "lesson": 14
+    },
+    {
+      "word": "一",
+      "pinyin": "yī",
+      "category": "số từ",
+      "meaning": "một",
+      "lesson": 1
+    },
+    {
+      "word": "二",
+      "pinyin": "èr",
+      "category": "số từ",
+      "meaning": "hai",
+      "lesson": 1
+    },
+    {
+      "word": "三",
+      "pinyin": "sān",
+      "category": "số từ",
+      "meaning": "ba",
+      "lesson": 1
+    },
+    {
+      "word": "十",
+      "pinyin": "shí",
+      "category": "số từ",
+      "meaning": "mười",
+      "lesson": 1
+    },
+    {
+      "word": "八",
+      "pinyin": "bā",
+      "category": "số từ",
+      "meaning": "tám",
+      "lesson": 1
+    },
+    {
+      "word": "六",
+      "pinyin": "liù",
+      "category": "số từ",
+      "meaning": "sáu",
+      "lesson": 1
+    },
+    {
+      "word": "口",
+      "pinyin": "kǒu",
+      "category": "danh từ",
+      "meaning": "miệng",
+      "lesson": 2
+    },
+    {
+      "word": "见",
+      "pinyin": "jiàn",
+      "category": "động từ",
+      "meaning": "thấy, gặp",
+      "lesson": 2
+    },
+    {
+      "word": "山",
+      "pinyin": "shān",
+      "category": "danh từ",
+      "meaning": "núi",
+      "lesson": 2
+    },
+    {
+      "word": "小",
+      "pinyin": "xiǎo",
+      "category": "tính từ",
+      "meaning": "nhỏ",
+      "lesson": 2
+    },
+    {
+      "word": "不",
+      "pinyin": "bù",
+      "category": "phó từ",
+      "meaning": "không",
+      "lesson": 2
+    },
+    {
+      "word": "月",
+      "pinyin": "yuè",
+      "category": "danh từ",
+      "meaning": "tháng, trăng",
+      "lesson": 3
+    },
+    {
+      "word": "心",
+      "pinyin": "xīn",
+      "category": "danh từ",
+      "meaning": "tim, lòng",
+      "lesson": 3
+    },
+    {
+      "word": "中",
+      "pinyin": "zhōng",
+      "category": "danh từ/phương vị từ",
+      "meaning": "giữa, trung tâm",
+      "lesson": 3
+    },
+    {
+      "word": "人",
+      "pinyin": "rén",
+      "category": "danh từ",
+      "meaning": "người",
+      "lesson": 3
+    },
+    {
+      "word": "七",
+      "pinyin": "qī",
+      "category": "số từ",
+      "meaning": "bảy",
+      "lesson": 4
+    },
+    {
+      "word": "儿",
+      "pinyin": "ér",
+      "category": "danh từ",
+      "meaning": "con, trẻ con",
+      "lesson": 4
+    },
+    {
+      "word": "几",
+      "pinyin": "jǐ",
+      "category": "đại từ nghi vấn",
+      "meaning": "mấy",
+      "lesson": 4
+    },
+    {
+      "word": "九",
+      "pinyin": "jiǔ",
+      "category": "số từ",
+      "meaning": "chín",
+      "lesson": 4
+    },
+    {
+      "word": "水",
+      "pinyin": "shuǐ",
+      "category": "danh từ",
+      "meaning": "nước",
+      "lesson": 5
+    },
+    {
+      "word": "女",
+      "pinyin": "nǚ",
+      "category": "danh từ",
+      "meaning": "nữ, phụ nữ",
+      "lesson": 5
+    },
+    {
+      "word": "了",
+      "pinyin": "le",
+      "category": "trợ từ",
+      "meaning": "rồi",
+      "lesson": 5
+    },
+    {
+      "word": "大",
+      "pinyin": "dà",
+      "category": "tính từ",
+      "meaning": "lớn",
+      "lesson": 5
+    },
+    {
+      "word": "东",
+      "pinyin": "dōng",
+      "category": "danh từ/phương vị từ",
+      "meaning": "phía đông",
+      "lesson": 6
+    },
+    {
+      "word": "我",
+      "pinyin": "wǒ",
+      "category": "đại từ",
+      "meaning": "tôi",
+      "lesson": 6
+    },
+    {
+      "word": "西",
+      "pinyin": "xī",
+      "category": "danh từ/phương vị từ",
+      "meaning": "phía tây",
+      "lesson": 6
+    },
+    {
+      "word": "四",
+      "pinyin": "sì",
+      "category": "số từ",
+      "meaning": "bốn",
+      "lesson": 7
+    },
+    {
+      "word": "五",
+      "pinyin": "wǔ",
+      "category": "số từ",
+      "meaning": "năm",
+      "lesson": 7
+    },
+    {
+      "word": "书",
+      "pinyin": "shū",
+      "category": "danh từ",
+      "meaning": "sách",
+      "lesson": 7
+    },
+    {
+      "word": "少",
+      "pinyin": "shǎo",
+      "category": "tính từ",
+      "meaning": "ít",
+      "lesson": 8
+    },
+    {
+      "word": "个",
+      "pinyin": "gè",
+      "category": "lượng từ",
+      "meaning": "cái, người",
+      "lesson": 8
+    },
+    {
+      "word": "在",
+      "pinyin": "zài",
+      "category": "động từ/giới từ",
+      "meaning": "ở",
+      "lesson": 9
+    },
+    {
+      "word": "子",
+      "pinyin": "zi",
+      "category": "danh từ",
+      "meaning": "con, đứa bé, hậu tố danh từ",
+      "lesson": 9
+    },
+    {
+      "word": "工",
+      "pinyin": "gōng",
+      "category": "danh từ",
+      "meaning": "công (việc)",
+      "lesson": 9
+    },
+    {
+      "word": "上",
+      "pinyin": "shàng",
+      "category": "danh từ/phương vị từ",
+      "meaning": "trên",
+      "lesson": 10
+    },
+    {
+      "word": "下",
+      "pinyin": "xià",
+      "category": "danh từ/phương vị từ",
+      "meaning": "dưới",
+      "lesson": 10
+    },
+    {
+      "word": "本",
+      "pinyin": "běn",
+      "category": "lượng từ/danh từ",
+      "meaning": "quyển, gốc",
+      "lesson": 10
+    },
+    {
+      "word": "末",
+      "pinyin": "mò",
+      "category": "danh từ",
+      "meaning": "cuối",
+      "lesson": 10
+    },
+    {
+      "word": "午",
+      "pinyin": "wǔ",
+      "category": "danh từ",
+      "meaning": "trưa",
+      "lesson": 11
+    },
+    {
+      "word": "电",
+      "pinyin": "diàn",
+      "category": "danh từ",
+      "meaning": "điện",
+      "lesson": 11
+    },
+    {
+      "word": "天",
+      "pinyin": "tiān",
+      "category": "danh từ",
+      "meaning": "trời, ngày",
+      "lesson": 12
+    },
+    {
+      "word": "气",
+      "pinyin": "qì",
+      "category": "danh từ",
+      "meaning": "khí",
+      "lesson": 12
+    },
+    {
+      "word": "雨",
+      "pinyin": "yǔ",
+      "category": "danh từ",
+      "meaning": "mưa",
+      "lesson": 12
+    },
+    {
+      "word": "日",
+      "pinyin": "rì",
+      "category": "danh từ",
+      "meaning": "ngày, mặt trời",
+      "lesson": 13
+    },
+    {
+      "word": "日",
+      "pinyin": "rì",
+      "category": "danh từ",
+      "meaning": "ngày, mặt trời",
+      "lesson": 13
+    },
+    {
+      "word": "习",
+      "pinyin": "xí",
+      "category": "động từ",
+      "meaning": "tập, học tập",
+      "lesson": 13
+    },
+    {
+      "word": "开",
+      "pinyin": "kāi",
+      "category": "động từ",
+      "meaning": "mở, lái",
+      "lesson": 14
+    },
+    {
+      "word": "车",
+      "pinyin": "chē",
+      "category": "danh từ",
+      "meaning": "xe",
+      "lesson": 14
+    },
+    {
+      "word": "回",
+      "pinyin": "huí",
+      "category": "động từ",
+      "meaning": "về",
+      "lesson": 14
+    },
+    {
+      "word": "年",
+      "pinyin": "nián",
+      "category": "danh từ",
+      "meaning": "năm",
+      "lesson": 15
+    },
+    {
+      "word": "出",
+      "pinyin": "chū",
+      "category": "động từ",
+      "meaning": "ra",
+      "lesson": 15
+    },
+    {
+      "word": "飞",
+      "pinyin": "fēi",
+      "category": "động từ",
+      "meaning": "bay",
+      "lesson": 15
+    },
+    {
+      "word": "车",
+      "pinyin": "chē",
+      "category": "bộ thủ",
+      "meaning": "bộ xa (xe)",
+      "lesson": 8
+    },
+    {
+      "word": "门",
+      "pinyin": "mén",
+      "category": "bộ thủ",
+      "meaning": "bộ môn (cửa)",
+      "lesson": 9
+    },
+    {
+      "word": "口",
+      "pinyin": "kǒu",
+      "category": "bộ thủ",
+      "meaning": "bộ khẩu (miệng)",
+      "lesson": 10
+    },
+    {
+      "word": "女",
+      "pinyin": "nǚ",
+      "category": "bộ thủ",
+      "meaning": "bộ nữ",
+      "lesson": 12
+    },
+    {
+      "word": "日",
+      "pinyin": "rì",
+      "category": "bộ thủ",
+      "meaning": "bộ nhật (mặt trời)",
+      "lesson": 13
+    },
+    {
+      "word": "目",
+      "pinyin": "mù",
+      "category": "bộ thủ",
+      "meaning": "bộ mục (mắt)",
+      "lesson": 13
+    },
+    {
+      "word": "月",
+      "pinyin": "yuè",
+      "category": "bộ thủ",
+      "meaning": "bộ nguyệt (mặt trăng)",
+      "lesson": 14
+    },
+    {
+      "word": "才",
+      "pinyin": "cái",
+      "category": "bộ thủ",
+      "meaning": "bộ tài",
+      "lesson": 14
+    }
+  ],
+  "2": [],
+  "3": []
+}
