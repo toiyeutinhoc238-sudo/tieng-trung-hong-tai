@@ -289,9 +289,6 @@ async function fetchVocabulary() {
       }
     });
 
-    // Merge premium topics mock data
-    vocabList = [...vocabList, ...premiumMockData];
-
     // If guest, merge guest progress from localStorage
     if (!currentUser) {
       const guestProgress = JSON.parse(localStorage.getItem('guest_progress') || '{}');
@@ -387,6 +384,7 @@ async function toggleWordMemorized(id) {
 
   // Optimistic update
   vocabList[index].isMemorized = nextState;
+  markWordAsStudied(id);
   updateStats();
   applyFilters(true);
   showToast(nextState ? 'Đã thuộc từ này! 🎉' : 'Đã chuyển về danh sách cần ôn tập.');
@@ -454,6 +452,7 @@ async function toggleWordStarred(id) {
 
   // Optimistic update
   vocabList[index].isStarred = nextState;
+  markWordAsStudied(id);
   updateStats();
   applyFilters(true);
   showToast(nextState ? 'Đã thêm vào yêu thích ⭐' : 'Đã bỏ yêu thích.');
@@ -613,9 +612,6 @@ function renderActiveCard() {
 
   const current = filteredList[currentIndex];
 
-  // Mark as studied
-  markWordAsStudied(current.id);
-
   if (studyMode === 'type') {
     renderActiveCardTyping(current);
     return;
@@ -716,6 +712,23 @@ function updateStats() {
 }
 
 function renderDeckSelectionView() {
+  // Check if there is an active study or quiz session currently displayed
+  const studyView = document.getElementById('flashcard-study-view');
+  const quizView = document.getElementById('quiz-study-view');
+  const isStudying = (studyView && studyView.style.display === 'block') || 
+                     (quizView && quizView.style.display === 'block');
+
+  if (isStudying) {
+    // Refresh the notebook data/statistics in the background without changing active view
+    if (activeNotebook) {
+      openNotebookDashboard(activeNotebook);
+    } else if (activeSmartTopic) {
+      renderSubdecksList();
+    }
+    return;
+  }
+
+  // Otherwise, handle screen visibility switching as normal
   if (activeNotebook) {
     showNotebookDashboardView(activeNotebook);
   } else if (activeSmartTopic) {
@@ -1209,6 +1222,9 @@ function flipCard() {
   if (filteredList.length === 0) return;
   isFlipped = !isFlipped;
   cardElement.classList.toggle('flipped', isFlipped);
+  if (isFlipped) {
+    markWordAsStudied(filteredList[currentIndex].id);
+  }
 }
 
 function resetCardOrientation() {
@@ -1523,6 +1539,7 @@ function setupEventListeners() {
     e.stopPropagation();
     if (filteredList.length > 0) {
       showToast("Đang tải phát âm từ vựng...", false);
+      markWordAsStudied(filteredList[currentIndex].id);
       speakText(filteredList[currentIndex].word);
     }
   });
@@ -1531,6 +1548,7 @@ function setupEventListeners() {
     e.stopPropagation();
     if (filteredList.length > 0 && filteredList[currentIndex].example_zh) {
       showToast("Đang tải phát âm ví dụ...", false);
+      markWordAsStudied(filteredList[currentIndex].id);
       speakText(filteredList[currentIndex].example_zh);
     }
   });
@@ -1672,6 +1690,7 @@ function setupEventListeners() {
       }
     } else if (key === 'v') {
       if (filteredList.length > 0) {
+        markWordAsStudied(filteredList[currentIndex].id);
         if (isFlipped && filteredList[currentIndex].example_zh) {
           speakText(filteredList[currentIndex].example_zh);
         } else {
@@ -1723,6 +1742,7 @@ function setupEventListeners() {
     typeHintBtn.addEventListener('click', () => {
       if (filteredList.length === 0) return;
       const current = filteredList[currentIndex];
+      markWordAsStudied(current.id);
       typeHintBtn.innerHTML = `<i class="fa-solid fa-eye"></i> Pinyin: ${current.pinyin}`;
       typeHintBtn.disabled = true;
     });
@@ -1733,6 +1753,7 @@ function setupEventListeners() {
     typeRevealBtn.addEventListener('click', () => {
       if (filteredList.length === 0) return;
       const current = filteredList[currentIndex];
+      markWordAsStudied(current.id);
       isTypingAnswerFinished = true;
       const input = document.getElementById('type-answer-input');
       if (input) {
@@ -1754,7 +1775,10 @@ function setupEventListeners() {
   if (typeSpeakBtn) {
     typeSpeakBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      if (filteredList.length > 0) speakText(filteredList[currentIndex].word);
+      if (filteredList.length > 0) {
+        markWordAsStudied(filteredList[currentIndex].id);
+        speakText(filteredList[currentIndex].word);
+      }
     });
   }
 
@@ -1763,6 +1787,7 @@ function setupEventListeners() {
     typeSpeakExBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       if (filteredList.length > 0 && filteredList[currentIndex].example_zh) {
+        markWordAsStudied(filteredList[currentIndex].id);
         speakText(filteredList[currentIndex].example_zh);
       }
     });
@@ -3291,9 +3316,6 @@ function updateCategorySelectOptions() {
 }
 
 function renderActiveCardTyping(current) {
-  // Mark as studied
-  markWordAsStudied(current.id);
-
   const typeLevel = document.getElementById('type-card-level');
   const typeCategory = document.getElementById('type-card-category');
   const typeMeaning = document.getElementById('type-card-meaning');
@@ -3367,6 +3389,8 @@ function handleTypingCheck() {
     feedback.style.color = 'var(--warning)';
     return;
   }
+
+  markWordAsStudied(current.id);
 
   if (answer === correctAnswer) {
     isTypingAnswerFinished = true;

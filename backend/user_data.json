@@ -4,461 +4,99 @@
       "name": "Phú Phan",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocIebQJ8CFxQDSOgwYPsfuN9FJvtBWARLqdYN9fCo-3UBytEPmI=s96-c",
       "stats": {
-        "streak": 2,
-        "studyTime": 75,
-        "lastActiveDate": "2026-06-09"
+        "streak": 0,
+        "studyTime": 0,
+        "lastActiveDate": ""
       }
     },
     "nguyenngawork26@gmail.com": {
       "name": "Thúy Nga Nguyễn",
-      "picture": "https://lh3.googleusercontent.com/a/ACg8ocIN7wiM4sgIz7-Ixie7W_ngBFPpm4te18063mXjjBdErThB7g=s96-c"
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocIN7wiM4sgIz7-Ixie7W_ngBFPpm4te18063mXjjBdErThB7g=s96-c",
+      "stats": {
+        "streak": 0,
+        "studyTime": 0,
+        "lastActiveDate": ""
+      }
+    },
+    "toiyeutinhoc238@gmail.com": {
+      "name": "Tin Học Tôi Yêu",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocLWmTibkR6zSwMBMRXRt2TUj-9fF82AJJJGfOM6D7sCxXByyw=s96-c",
+      "stats": {
+        "streak": 1,
+        "studyTime": 60,
+        "lastActiveDate": "2026-06-13"
+      }
     }
   },
   "progress": {
-    "phanphiphu04@gmail.com": {
-      "5": {
+    "toiyeutinhoc238@gmail.com": {
+      "544": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
-      "22": {
+      "684": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
-      "24": {
+      "704": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
-      "29": {
+      "836": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
-      "30": {
+      "1502": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
-      "35": {
+      "2017": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
-      "47": {
+      "2051": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
-      "49": {
+      "2131": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
-      "51": {
+      "2252": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
-      "53": {
+      "2335": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
-      },
-      "57": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "58": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "61": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "65": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "71": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "89": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "90": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "101": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "102": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "103": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "105": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "108": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "109": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "110": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "114": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "122": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "131": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "132": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "136": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "138": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "141": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "143": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "145": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "161": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "165": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "169": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "188": {
-        "isMemorized": true,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "189": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "194": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "195": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "197": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "216": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "224": {
-        "isMemorized": true,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "229": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "231": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "238": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "239": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "241": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "242": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "260": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "263": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "266": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "268": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "275": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isStudied": true
-      },
-      "277": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "287": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "306": {
-        "isMemorized": false,
-        "isStarred": false
-      },
-      "384": {
-        "isMemorized": false,
-        "isStarred": false
-      },
-      "487": {
-        "isMemorized": false,
-        "isStarred": false
-      },
-      "915": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "944": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "945": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "951": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "953": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "955": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "968": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "973": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "976": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "986": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "987": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "2610": {
-        "isMemorized": false,
-        "isStarred": false
-      },
-      "3724": {
-        "isMemorized": false,
-        "isStarred": false
-      },
-      "3774": {
-        "isMemorized": false,
-        "isStarred": false
-      },
-      "4108": {
-        "isMemorized": false,
-        "isStarred": false
-      },
-      "4632": {
-        "isMemorized": false,
-        "isStarred": false
-      },
-      "5785": {
-        "isMemorized": false,
-        "isStarred": false
       }
     }
   },
   "customWords": {},
   "sessions": {
     "gpbu9jjns1lmq55hgq9": "phanphiphu04@gmail.com",
-    "o7dylo755nhmq5extwu": "phanphiphu04@gmail.com"
+    "d5e6l1d3dpumqavyd95": "phanphiphu04@gmail.com",
+    "o3k8p5a7hp9mqbxnz7r": "toiyeutinhoc238@gmail.com"
   },
   "chats": {
     "phanphiphu04@gmail.com": []

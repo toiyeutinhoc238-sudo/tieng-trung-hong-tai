@@ -149,7 +149,17 @@ app.post('/api/auth/google', async (req, res) => {
 
   // Persist user record and session in user_data.json
   const userData = await readUserData();
-  userData.users[email] = { name, picture };
+  const existingUser = userData.users[email] || {};
+  userData.users[email] = {
+    ...existingUser,
+    name,
+    picture,
+    stats: existingUser.stats || {
+      streak: 0,
+      studyTime: 0,
+      lastActiveDate: ''
+    }
+  };
   if (!userData.sessions) {
     userData.sessions = {};
   }
