@@ -4,9 +4,9 @@
       "name": "Phú Phan",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocIebQJ8CFxQDSOgwYPsfuN9FJvtBWARLqdYN9fCo-3UBytEPmI=s96-c",
       "stats": {
-        "streak": 0,
-        "studyTime": 0,
-        "lastActiveDate": ""
+        "streak": 1,
+        "studyTime": 930,
+        "lastActiveDate": "2026-06-13"
       }
     },
     "nguyenngawork26@gmail.com": {
@@ -23,7 +23,7 @@
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocLWmTibkR6zSwMBMRXRt2TUj-9fF82AJJJGfOM6D7sCxXByyw=s96-c",
       "stats": {
         "streak": 1,
-        "studyTime": 60,
+        "studyTime": 315,
         "lastActiveDate": "2026-06-13"
       }
     }
@@ -86,6 +86,62 @@
       },
       "2335": {
         "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      }
+    },
+    "phanphiphu04@gmail.com": {
+      "1": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "2": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "3": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "4": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "5": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "6": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "7": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "8": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "9": {
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true

@@ -241,11 +241,17 @@
 
         <!-- Screen 2: Sub-notebooks List -->
         <div id="flashcard-subdecks-view" class="smart-flashcard-config" style="display: none;">
-          <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
-            <button id="back-to-topics-btn" class="btn btn-secondary" style="display: flex; align-items: center; gap: 8px; font-weight: 600; padding: 10px 16px; border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass);">
-              <i class="fa-solid fa-arrow-left"></i> Quay lại chủ đề chính
-            </button>
-            <h2 class="section-title" id="subdecks-category-title" style="margin: 0; font-size: 1.6rem;">Danh sách sổ tay</h2>
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <button id="back-to-topics-btn" class="btn btn-secondary" style="display: flex; align-items: center; gap: 8px; font-weight: 600; padding: 10px 16px; border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass);">
+                <i class="fa-solid fa-arrow-left"></i> Quay lại chủ đề chính
+              </button>
+              <h2 class="section-title" id="subdecks-category-title" style="margin: 0; font-size: 1.6rem;">Danh sách sổ tay</h2>
+            </div>
+            <div class="lessons-curriculum-pills" id="smart-hsk-version-selector-wrap" style="margin: 0; display: none;">
+              <button class="lessons-pill-btn active" id="smart-hsk-version-3-btn" data-version="3.0" style="padding: 6px 12px; font-size: 0.8rem; font-weight: 600;">HSK 3.0</button>
+              <button class="lessons-pill-btn" id="smart-hsk-version-2-btn" data-version="2.0" style="padding: 6px 12px; font-size: 0.8rem; font-weight: 600;">HSK 2.0</button>
+            </div>
           </div>
           
           <div class="smart-custom-grid" id="subdecks-list-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px;">
@@ -1239,11 +1245,20 @@
     <!-- Dedicated Lessons Tab Section -->
     <section id="lessons-section" class="workspace-section" style="display: none;">
       <!-- Curriculum Selection Banner Row -->
-      <div class="lessons-top-banner">
-        <span class="lessons-cap-title">GIÁ TRÌNH CHỦ CHỐT:</span>
-        <div class="lessons-curriculum-pills">
-          <button class="lessons-pill-btn active" id="lessons-curriculum-hsk-btn">Học HSK (Người lớn)</button>
-          <button class="lessons-pill-btn" id="lessons-curriculum-yct-btn">Học YCT (Trẻ em)</button>
+      <div class="lessons-top-banner" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <span class="lessons-cap-title">GIÁ TRÌNH CHỦ CHỐT:</span>
+          <div class="lessons-curriculum-pills">
+            <button class="lessons-pill-btn active" id="lessons-curriculum-hsk-btn">Học HSK (Người lớn)</button>
+            <button class="lessons-pill-btn" id="lessons-curriculum-yct-btn">Học YCT (Trẻ em)</button>
+          </div>
+        </div>
+        <div class="lessons-version-pills-wrap" id="lessons-version-selector-wrap" style="display: flex; align-items: center; gap: 8px;">
+          <span class="lessons-cap-title" style="font-size: 0.75rem; letter-spacing: 0.05em;">PHIÊN BẢN HSK:</span>
+          <div class="lessons-curriculum-pills" style="margin: 0;">
+            <button class="lessons-pill-btn active" id="lessons-version-3-btn" data-version="3.0">HSK 3.0</button>
+            <button class="lessons-pill-btn" id="lessons-version-2-btn" data-version="2.0">HSK 2.0</button>
+          </div>
         </div>
       </div>
 
@@ -1284,10 +1299,17 @@
     <section id="hsk-exams-section" class="workspace-section" style="display: none;">
       <!-- 1. HSK Levels Selection Screen -->
       <div id="exam-level-selection">
-        <div class="section-header">
+        <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
           <div class="section-title-wrap">
-            <h2 class="section-title"><i class="fa-solid fa-graduation-cap text-primary"></i> Luyện Đề Thi HSK 3.0</h2>
-            <p class="section-desc">Chọn cấp độ để làm các bộ đề thi thử trực tuyến bám sát cấu trúc HSK 9 cấp mới nhất.</p>
+            <h2 class="section-title" id="exams-section-title"><i class="fa-solid fa-graduation-cap text-primary"></i> Luyện Đề Thi HSK 3.0</h2>
+            <p class="section-desc" id="exams-section-desc">Chọn cấp độ để làm các bộ đề thi thử trực tuyến bám sát cấu trúc HSK 9 cấp mới nhất.</p>
+          </div>
+          <div class="lessons-version-pills-wrap" id="exams-version-selector-wrap" style="display: flex; align-items: center; gap: 8px;">
+            <span class="lessons-cap-title" style="font-size: 0.75rem; letter-spacing: 0.05em;">PHIÊN BẢN HSK:</span>
+            <div class="lessons-curriculum-pills" style="margin: 0;">
+              <button class="lessons-pill-btn active" id="exams-version-3-btn" data-version="3.0">HSK 3.0</button>
+              <button class="lessons-pill-btn" id="exams-version-2-btn" data-version="2.0">HSK 2.0</button>
+            </div>
           </div>
         </div>
         <div class="level-selector-grid">

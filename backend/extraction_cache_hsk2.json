@@ -1,5 +1,5 @@
 {
-  "1": [
+  "hsk2_level1_page1": [
     {
       "word": "爱",
       "pinyin": "ài",
@@ -10,9 +10,9 @@
     {
       "word": "八",
       "pinyin": "bā",
-      "category": null,
-      "meaning": null,
-      "lesson": 1
+      "category": "số từ",
+      "meaning": "số 8",
+      "lesson": 5
     },
     {
       "word": "爸爸",
@@ -31,8 +31,8 @@
     {
       "word": "本",
       "pinyin": "běn",
-      "category": null,
-      "meaning": null,
+      "category": "lượng từ",
+      "meaning": "quyển, cuốn",
       "lesson": 10
     },
     {
@@ -45,8 +45,8 @@
     {
       "word": "不",
       "pinyin": "bù",
-      "category": null,
-      "meaning": null,
+      "category": "phó từ",
+      "meaning": "không cần, không, đừng",
       "lesson": 2
     },
     {
@@ -87,8 +87,8 @@
     {
       "word": "大",
       "pinyin": "dà",
-      "category": null,
-      "meaning": null,
+      "category": "tính từ",
+      "meaning": "lớn",
       "lesson": 5
     },
     {
@@ -104,7 +104,9 @@
       "category": "lượng từ",
       "meaning": "giờ",
       "lesson": 11
-    },
+    }
+  ],
+  "hsk2_level1_page2": [
     {
       "word": "电脑",
       "pinyin": "diànnǎo",
@@ -178,9 +180,9 @@
     {
       "word": "二",
       "pinyin": "èr",
-      "category": null,
-      "meaning": null,
-      "lesson": 1
+      "category": "số từ",
+      "meaning": "số 2",
+      "lesson": 5
     },
     {
       "word": "饭店",
@@ -213,8 +215,8 @@
     {
       "word": "个",
       "pinyin": "gè",
-      "category": null,
-      "meaning": null,
+      "category": "lượng từ",
+      "meaning": "cái",
       "lesson": 8
     },
     {
@@ -283,9 +285,9 @@
     {
       "word": "回",
       "pinyin": "huí",
-      "category": null,
-      "meaning": null,
-      "lesson": 14
+      "category": "động từ",
+      "meaning": "về, trở về",
+      "lesson": 11
     },
     {
       "word": "会",
@@ -297,9 +299,9 @@
     {
       "word": "几",
       "pinyin": "jǐ",
-      "category": null,
-      "meaning": null,
-      "lesson": 4
+      "category": "danh từ",
+      "meaning": "mấy",
+      "lesson": 5
     },
     {
       "word": "家",
@@ -325,15 +327,17 @@
     {
       "word": "九",
       "pinyin": "jiǔ",
-      "category": null,
-      "meaning": null,
-      "lesson": 4
-    },
+      "category": "số từ",
+      "meaning": "số 9",
+      "lesson": 5
+    }
+  ],
+  "hsk2_level1_page3": [
     {
       "word": "开",
       "pinyin": "kāi",
-      "category": null,
-      "meaning": null,
+      "category": "động từ",
+      "meaning": "lái",
       "lesson": 14
     },
     {
@@ -374,8 +378,8 @@
     {
       "word": "了",
       "pinyin": "le",
-      "category": null,
-      "meaning": null,
+      "category": "trợ từ",
+      "meaning": "được dùng ở giữa hay cuối câu để chỉ sự thay đổi hoặc tình huống mới",
       "lesson": 5
     },
     {
@@ -395,9 +399,9 @@
     {
       "word": "六",
       "pinyin": "liù",
-      "category": null,
-      "meaning": null,
-      "lesson": 1
+      "category": "số từ",
+      "meaning": "số 6",
+      "lesson": 5
     },
     {
       "word": "妈妈",
@@ -507,8 +511,8 @@
     {
       "word": "年",
       "pinyin": "nián",
-      "category": null,
-      "meaning": null,
+      "category": "danh từ",
+      "meaning": "năm",
       "lesson": 15
     },
     {
@@ -538,13 +542,15 @@
       "category": "danh từ",
       "meaning": "táo",
       "lesson": 14
-    },
+    }
+  ],
+  "hsk2_level1_page4": [
     {
       "word": "七",
       "pinyin": "qī",
-      "category": null,
-      "meaning": null,
-      "lesson": 4
+      "category": "số từ",
+      "meaning": "số 7",
+      "lesson": 5
     },
     {
       "word": "前面",
@@ -584,8 +590,8 @@
     {
       "word": "人",
       "pinyin": "rén",
-      "category": null,
-      "meaning": null,
+      "category": "danh từ",
+      "meaning": "người",
       "lesson": 3
     },
     {
@@ -598,9 +604,9 @@
     {
       "word": "三",
       "pinyin": "sān",
-      "category": null,
-      "meaning": null,
-      "lesson": 1
+      "category": "số từ",
+      "meaning": "số 3",
+      "lesson": 5
     },
     {
       "word": "商店",
@@ -626,9 +632,9 @@
     {
       "word": "少",
       "pinyin": "shǎo",
-      "category": null,
-      "meaning": null,
-      "lesson": 8
+      "category": "tính từ",
+      "meaning": "ít",
+      "lesson": 14
     },
     {
       "word": "谁",
@@ -647,9 +653,9 @@
     {
       "word": "十",
       "pinyin": "shí",
-      "category": null,
-      "meaning": null,
-      "lesson": 1
+      "category": "số từ",
+      "meaning": "số 10",
+      "lesson": 5
     },
     {
       "word": "时候",
@@ -668,16 +674,16 @@
     {
       "word": "书",
       "pinyin": "shū",
-      "category": null,
-      "meaning": null,
+      "category": "danh từ",
+      "meaning": "sách",
       "lesson": 7
     },
     {
       "word": "水",
       "pinyin": "shuǐ",
-      "category": null,
-      "meaning": null,
-      "lesson": 5
+      "category": "danh từ",
+      "meaning": "nước",
+      "lesson": 12
     },
     {
       "word": "水果",
@@ -703,9 +709,9 @@
     {
       "word": "四",
       "pinyin": "sì",
-      "category": null,
-      "meaning": null,
-      "lesson": 7
+      "category": "số từ",
+      "meaning": "số 4",
+      "lesson": 5
     },
     {
       "word": "岁",
@@ -755,7 +761,9 @@
       "category": "danh từ",
       "meaning": "bạn cùng lớp",
       "lesson": 4
-    },
+    }
+  ],
+  "hsk2_level1_page5": [
     {
       "word": "喂",
       "pinyin": "wèi",
@@ -766,9 +774,9 @@
     {
       "word": "我",
       "pinyin": "wǒ",
-      "category": null,
-      "meaning": null,
-      "lesson": 6
+      "category": "danh từ",
+      "meaning": "tôi, ta, mình...",
+      "lesson": 3
     },
     {
       "word": "我们",
@@ -780,9 +788,9 @@
     {
       "word": "五",
       "pinyin": "wǔ",
-      "category": null,
-      "meaning": null,
-      "lesson": 7
+      "category": "số từ",
+      "meaning": "số 5",
+      "lesson": 5
     },
     {
       "word": "喜欢",
@@ -794,9 +802,9 @@
     {
       "word": "下",
       "pinyin": "xià",
-      "category": null,
-      "meaning": null,
-      "lesson": 10
+      "category": "danh từ",
+      "meaning": "bên dưới, phía dưới",
+      "lesson": 9
     },
     {
       "word": "下午",
@@ -836,9 +844,9 @@
     {
       "word": "小",
       "pinyin": "xiǎo",
-      "category": null,
-      "meaning": null,
-      "lesson": 2
+      "category": "tính từ",
+      "meaning": "nhỏ, bé",
+      "lesson": 9
     },
     {
       "word": "小姐",
@@ -899,9 +907,9 @@
     {
       "word": "一",
       "pinyin": "yī",
-      "category": null,
-      "meaning": null,
-      "lesson": 1
+      "category": "số từ",
+      "meaning": "số 1",
+      "lesson": 5
     },
     {
       "word": "衣服",
@@ -948,9 +956,9 @@
     {
       "word": "月",
       "pinyin": "yuè",
-      "category": null,
-      "meaning": "Bộ nguyệt",
-      "lesson": 14
+      "category": "danh từ",
+      "meaning": "tháng",
+      "lesson": 7
     },
     {
       "word": "再见",
@@ -962,8 +970,8 @@
     {
       "word": "在",
       "pinyin": "zài",
-      "category": null,
-      "meaning": null,
+      "category": "động từ/giới từ",
+      "meaning": "ở, ở, vào",
       "lesson": 9
     },
     {
@@ -979,7 +987,9 @@
       "category": "danh từ",
       "meaning": "(chỉ tính chất, tình trạng, cách thức...) như thế nào",
       "lesson": 12
-    },
+    }
+  ],
+  "hsk2_level1_page6": [
     {
       "word": "这",
       "pinyin": "zhè",
@@ -1035,7 +1045,9 @@
       "category": "động từ",
       "meaning": "làm, nấu",
       "lesson": 6
-    },
+    }
+  ],
+  "hsk2_level1_page7": [
     {
       "word": "给",
       "pinyin": "gěi",
@@ -1053,9 +1065,9 @@
     {
       "word": "口",
       "pinyin": "kǒu",
-      "category": null,
-      "meaning": "Bộ khẩu",
-      "lesson": 10
+      "category": "lượng từ",
+      "meaning": "lượng từ, dùng cho người",
+      "lesson": 5
     },
     {
       "word": "您",
@@ -1102,9 +1114,9 @@
     {
       "word": "车",
       "pinyin": "chē",
-      "category": null,
-      "meaning": "Bộ xa",
-      "lesson": 8
+      "category": "danh từ",
+      "meaning": "xe",
+      "lesson": 14
     },
     {
       "word": "吃饭",
@@ -1161,7 +1173,9 @@
       "category": "danh từ",
       "meaning": "năm nay",
       "lesson": 5
-    },
+    }
+  ],
+  "hsk2_level1_page8": [
     {
       "word": "没",
       "pinyin": "méi",
@@ -1198,6 +1212,13 @@
       "lesson": 12
     },
     {
+      "word": "下",
+      "pinyin": "xià",
+      "category": "động từ",
+      "meaning": "(mưa, tuyết...) rơi",
+      "lesson": 12
+    },
+    {
       "word": "下面",
       "pinyin": "xiàmiàn",
       "category": "danh từ",
@@ -1214,8 +1235,8 @@
     {
       "word": "雨",
       "pinyin": "yǔ",
-      "category": null,
-      "meaning": null,
+      "category": "danh từ",
+      "meaning": "mưa",
       "lesson": 12
     },
     {
@@ -1231,6 +1252,57 @@
       "category": "danh từ",
       "meaning": "những thứ này, những điều này",
       "lesson": 14
+    }
+  ],
+  "hsk2_level1_page9": [
+    {
+      "word": "一",
+      "pinyin": "yī",
+      "category": null,
+      "meaning": null,
+      "lesson": 1
+    },
+    {
+      "word": "二",
+      "pinyin": "èr",
+      "category": null,
+      "meaning": null,
+      "lesson": 1
+    },
+    {
+      "word": "三",
+      "pinyin": "sān",
+      "category": null,
+      "meaning": null,
+      "lesson": 1
+    },
+    {
+      "word": "十",
+      "pinyin": "shí",
+      "category": null,
+      "meaning": null,
+      "lesson": 1
+    },
+    {
+      "word": "八",
+      "pinyin": "bā",
+      "category": null,
+      "meaning": null,
+      "lesson": 1
+    },
+    {
+      "word": "六",
+      "pinyin": "liù",
+      "category": null,
+      "meaning": null,
+      "lesson": 1
+    },
+    {
+      "word": "口",
+      "pinyin": "kǒu",
+      "category": null,
+      "meaning": null,
+      "lesson": 2
     },
     {
       "word": "见",
@@ -1247,6 +1319,27 @@
       "lesson": 2
     },
     {
+      "word": "小",
+      "pinyin": "xiǎo",
+      "category": null,
+      "meaning": null,
+      "lesson": 2
+    },
+    {
+      "word": "不",
+      "pinyin": "bù",
+      "category": null,
+      "meaning": null,
+      "lesson": 2
+    },
+    {
+      "word": "月",
+      "pinyin": "yuè",
+      "category": null,
+      "meaning": null,
+      "lesson": 3
+    },
+    {
       "word": "心",
       "pinyin": "xīn",
       "category": null,
@@ -1261,6 +1354,20 @@
       "lesson": 3
     },
     {
+      "word": "人",
+      "pinyin": "rén",
+      "category": null,
+      "meaning": null,
+      "lesson": 3
+    },
+    {
+      "word": "七",
+      "pinyin": "qī",
+      "category": null,
+      "meaning": null,
+      "lesson": 4
+    },
+    {
       "word": "儿",
       "pinyin": "ér",
       "category": null,
@@ -1268,15 +1375,57 @@
       "lesson": 4
     },
     {
+      "word": "几",
+      "pinyin": "jǐ",
+      "category": null,
+      "meaning": null,
+      "lesson": 4
+    },
+    {
+      "word": "九",
+      "pinyin": "jiǔ",
+      "category": null,
+      "meaning": null,
+      "lesson": 4
+    },
+    {
+      "word": "水",
+      "pinyin": "shuǐ",
+      "category": null,
+      "meaning": null,
+      "lesson": 5
+    },
+    {
       "word": "女",
       "pinyin": "nǚ",
       "category": null,
-      "meaning": "Bộ nữ",
-      "lesson": 12
+      "meaning": null,
+      "lesson": 5
+    },
+    {
+      "word": "了",
+      "pinyin": "le",
+      "category": null,
+      "meaning": null,
+      "lesson": 5
+    },
+    {
+      "word": "大",
+      "pinyin": "dà",
+      "category": null,
+      "meaning": null,
+      "lesson": 5
     },
     {
       "word": "东",
       "pinyin": "dōng",
+      "category": null,
+      "meaning": null,
+      "lesson": 6
+    },
+    {
+      "word": "我",
+      "pinyin": "wǒ",
       "category": null,
       "meaning": null,
       "lesson": 6
@@ -1287,6 +1436,48 @@
       "category": null,
       "meaning": null,
       "lesson": 6
+    },
+    {
+      "word": "四",
+      "pinyin": "sì",
+      "category": null,
+      "meaning": null,
+      "lesson": 7
+    },
+    {
+      "word": "五",
+      "pinyin": "wǔ",
+      "category": null,
+      "meaning": null,
+      "lesson": 7
+    },
+    {
+      "word": "书",
+      "pinyin": "shū",
+      "category": null,
+      "meaning": null,
+      "lesson": 7
+    },
+    {
+      "word": "少",
+      "pinyin": "shǎo",
+      "category": null,
+      "meaning": null,
+      "lesson": 8
+    },
+    {
+      "word": "个",
+      "pinyin": "gè",
+      "category": null,
+      "meaning": null,
+      "lesson": 8
+    },
+    {
+      "word": "在",
+      "pinyin": "zài",
+      "category": null,
+      "meaning": null,
+      "lesson": 9
     },
     {
       "word": "子",
@@ -1305,6 +1496,20 @@
     {
       "word": "上",
       "pinyin": "shàng",
+      "category": null,
+      "meaning": null,
+      "lesson": 10
+    },
+    {
+      "word": "下",
+      "pinyin": "xià",
+      "category": null,
+      "meaning": null,
+      "lesson": 10
+    },
+    {
+      "word": "本",
+      "pinyin": "běn",
       "category": null,
       "meaning": null,
       "lesson": 10
@@ -1345,10 +1550,24 @@
       "lesson": 12
     },
     {
+      "word": "雨",
+      "pinyin": "yǔ",
+      "category": null,
+      "meaning": null,
+      "lesson": 12
+    },
+    {
       "word": "日",
       "pinyin": "rì",
       "category": null,
-      "meaning": "Bộ nhật",
+      "meaning": null,
+      "lesson": 13
+    },
+    {
+      "word": "日",
+      "pinyin": "rì",
+      "category": null,
+      "meaning": null,
       "lesson": 13
     },
     {
@@ -1357,6 +1576,34 @@
       "category": null,
       "meaning": null,
       "lesson": 13
+    },
+    {
+      "word": "开",
+      "pinyin": "kāi",
+      "category": null,
+      "meaning": null,
+      "lesson": 14
+    },
+    {
+      "word": "车",
+      "pinyin": "chē",
+      "category": null,
+      "meaning": null,
+      "lesson": 14
+    },
+    {
+      "word": "回",
+      "pinyin": "huí",
+      "category": null,
+      "meaning": null,
+      "lesson": 14
+    },
+    {
+      "word": "年",
+      "pinyin": "nián",
+      "category": null,
+      "meaning": null,
+      "lesson": 15
     },
     {
       "word": "出",
@@ -1371,7 +1618,9 @@
       "category": null,
       "meaning": null,
       "lesson": 15
-    },
+    }
+  ],
+  "hsk2_level1_page10": [
     {
       "word": "氵",
       "pinyin": null,
@@ -1385,6 +1634,13 @@
       "category": null,
       "meaning": "Bộ ngôn (giản thể)",
       "lesson": 7
+    },
+    {
+      "word": "车",
+      "pinyin": "chē",
+      "category": null,
+      "meaning": "Bộ xa",
+      "lesson": 8
     },
     {
       "word": "罒",
@@ -1408,6 +1664,13 @@
       "lesson": 9
     },
     {
+      "word": "口",
+      "pinyin": "kǒu",
+      "category": null,
+      "meaning": "Bộ khẩu",
+      "lesson": 10
+    },
+    {
       "word": "礻",
       "pinyin": null,
       "category": null,
@@ -1429,6 +1692,13 @@
       "lesson": 11
     },
     {
+      "word": "女",
+      "pinyin": "nǚ",
+      "category": null,
+      "meaning": "Bộ nữ",
+      "lesson": 12
+    },
+    {
       "word": "纟",
       "pinyin": null,
       "category": null,
@@ -1436,11 +1706,25 @@
       "lesson": 12
     },
     {
+      "word": "日",
+      "pinyin": "rì",
+      "category": null,
+      "meaning": "Bộ nhật",
+      "lesson": 13
+    },
+    {
       "word": "目",
       "pinyin": "mù",
       "category": null,
       "meaning": "Bộ mục",
       "lesson": 13
+    },
+    {
+      "word": "月",
+      "pinyin": "yuè",
+      "category": null,
+      "meaning": "Bộ nguyệt",
+      "lesson": 14
     },
     {
       "word": "才",
@@ -1464,7 +1748,7 @@
       "lesson": 15
     }
   ],
-  "2": [
+  "hsk2_level2_page1": [
     {
       "word": "吧",
       "pinyin": "ba",
@@ -1555,7 +1839,9 @@
       "category": "lượng từ",
       "meaning": "lần",
       "lesson": 14
-    },
+    }
+  ],
+  "hsk2_level2_page2": [
     {
       "word": "从",
       "pinyin": "cóng",
@@ -1779,7 +2065,9 @@
       "category": "động từ",
       "meaning": "cho rằng, nghĩ rằng",
       "lesson": 1
-    },
+    }
+  ],
+  "hsk2_level2_page3": [
     {
       "word": "教室",
       "pinyin": "jiàoshì",
@@ -2003,7 +2291,9 @@
       "category": "danh từ",
       "meaning": "vé",
       "lesson": 15
-    },
+    }
+  ],
+  "hsk2_level2_page4": [
     {
       "word": "妻子",
       "pinyin": "qīzi",
@@ -2227,7 +2517,9 @@
       "category": "danh từ",
       "meaning": "vấn đề, câu hỏi",
       "lesson": 9
-    },
+    }
+  ],
+  "hsk2_level2_page5": [
     {
       "word": "西瓜",
       "pinyin": "xīguā",
@@ -2458,7 +2750,9 @@
       "category": "phó từ",
       "meaning": "đang",
       "lesson": 10
-    },
+    }
+  ],
+  "hsk2_level2_page6": [
     {
       "word": "知道",
       "pinyin": "zhīdào",
@@ -2570,7 +2864,9 @@
       "category": "phó từ",
       "meaning": "thường xuyên",
       "lesson": 6
-    },
+    }
+  ],
+  "hsk2_level2_page7": [
     {
       "word": "米",
       "pinyin": "mǐ",
@@ -2682,7 +2978,9 @@
       "category": null,
       "meaning": "thú vị",
       "lesson": 14
-    },
+    }
+  ],
+  "hsk2_level2_page8": [
     {
       "word": "白色",
       "pinyin": "báisè",
@@ -2829,7 +3127,9 @@
       "category": null,
       "meaning": "phía này",
       "lesson": null
-    },
+    }
+  ],
+  "hsk2_level2_page9": [
     {
       "word": "也",
       "pinyin": null,
@@ -2929,7 +3229,7 @@
       "lesson": 7
     }
   ],
-  "3": [
+  "hsk2_level3_page1": [
     {
       "word": "阿姨",
       "pinyin": "āyí",
@@ -3027,7 +3327,9 @@
       "category": "tính từ",
       "meaning": "no",
       "lesson": 17
-    },
+    }
+  ],
+  "hsk2_level3_page2": [
     {
       "word": "北方",
       "pinyin": "běifāng",
@@ -3251,7 +3553,9 @@
       "category": "phó từ",
       "meaning": "đương nhiên, đi nhiên",
       "lesson": 5
-    },
+    }
+  ],
+  "hsk2_level3_page3": [
     {
       "word": "地",
       "pinyin": "de",
@@ -3409,6 +3713,13 @@
     {
       "word": "分",
       "pinyin": "fēn",
+      "category": "lượng từ",
+      "meaning": "(đơn vị tiền tệ) xu",
+      "lesson": 4
+    },
+    {
+      "word": "分",
+      "pinyin": "fēn",
       "category": "động từ",
       "meaning": "phân biệt",
       "lesson": 20
@@ -3468,7 +3779,9 @@
       "category": "giới từ",
       "meaning": "căn cứ vào, dựa vào",
       "lesson": 17
-    },
+    }
+  ],
+  "hsk2_level3_page4": [
     {
       "word": "跟",
       "pinyin": "gēn",
@@ -3598,6 +3911,13 @@
     {
       "word": "花",
       "pinyin": "huā",
+      "category": "danh từ",
+      "meaning": "hoa",
+      "lesson": 3
+    },
+    {
+      "word": "花",
+      "pinyin": "huā",
       "category": "động từ",
       "meaning": "tốn, tiêu tốn",
       "lesson": 15
@@ -3692,7 +4012,9 @@
       "category": "động từ",
       "meaning": "nhớ, còn nhớ",
       "lesson": 3
-    },
+    }
+  ],
+  "hsk2_level3_page5": [
     {
       "word": "季节",
       "pinyin": "jìjié",
@@ -3899,6 +4221,13 @@
     {
       "word": "口",
       "pinyin": "kǒu",
+      "category": "lượng từ",
+      "meaning": "miếng, ngụm, hớp",
+      "lesson": 11
+    },
+    {
+      "word": "口",
+      "pinyin": "kǒu",
       "category": "danh từ",
       "meaning": "miệng",
       "lesson": 17
@@ -3923,7 +4252,9 @@
       "category": "danh từ",
       "meaning": "đũa",
       "lesson": 11
-    },
+    }
+  ],
+  "hsk2_level3_page6": [
     {
       "word": "蓝",
       "pinyin": "lán",
@@ -4147,7 +4478,9 @@
       "category": "danh từ",
       "meaning": "đĩa, mâm",
       "lesson": 14
-    },
+    }
+  ],
+  "hsk2_level3_page7": [
     {
       "word": "胖",
       "pinyin": "pàng",
@@ -4378,7 +4711,9 @@
       "category": "lượng từ",
       "meaning": "đôi",
       "lesson": 11
-    },
+    }
+  ],
+  "hsk2_level3_page8": [
     {
       "word": "水平",
       "pinyin": "shuǐpíng",
@@ -4609,7 +4944,9 @@
       "category": "động từ",
       "meaning": "giống",
       "lesson": 14
-    },
+    }
+  ],
+  "hsk2_level3_page9": [
     {
       "word": "小心",
       "pinyin": "xiǎoxīn",
@@ -4840,7 +5177,9 @@
       "category": "phó từ",
       "meaning": "càng",
       "lesson": 5
-    },
+    }
+  ],
+  "hsk2_level3_page10": [
     {
       "word": "站",
       "pinyin": "zhàn",
@@ -5022,7 +5361,9 @@
       "category": "danh từ riêng",
       "meaning": "Hoàng Hà (con sông lớn thứ hai ở Trung Quốc)",
       "lesson": 19
-    },
+    }
+  ],
+  "hsk2_level3_page11": [
     {
       "word": "词语",
       "pinyin": "cíyǔ",
@@ -5085,7 +5426,9 @@
       "category": "danh từ",
       "meaning": "bà",
       "lesson": 2
-    },
+    }
+  ],
+  "hsk2_level3_page12": [
     {
       "word": "特点",
       "pinyin": "tèdiǎn",
@@ -5204,7 +5547,9 @@
       "category": "động từ",
       "meaning": "mở, nở",
       "lesson": 5
-    },
+    }
+  ],
+  "hsk2_level3_page13": [
     {
       "word": "每天",
       "pinyin": "měi tiān",
@@ -5337,7 +5682,9 @@
       "category": "danh từ",
       "meaning": "Tết Trung thu",
       "lesson": 15
-    },
+    }
+  ],
+  "hsk2_level3_page14": [
     {
       "word": "电子游戏",
       "pinyin": "diànzǐ yóuxì",

@@ -231,6 +231,11 @@
         </div>
         
         <div class="filter-controls" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+          <select id="detail-version-select" class="filter-select">
+            <option value="3.0">Phiên bản: HSK 3.0</option>
+            <option value="2.0">Phiên bản: HSK 2.0</option>
+          </select>
+
           <select id="detail-level-select" class="filter-select">
             <option value="all">Cấp độ: Tất cả HSK</option>
             <option value="1">Cấp độ: HSK 1</option>
@@ -331,6 +336,7 @@
     const urlParams = new URLSearchParams(window.location.search);
     let activeLevel = urlParams.get('level') || 'all';
     let activeStatus = urlParams.get('status') || 'all';
+    let activeHskVersion = urlParams.get('hskVersion') || '3.0';
     const initialSearch = urlParams.get('search') || '';
     const customCategory = urlParams.get('customCategory') || '';
     
@@ -344,6 +350,15 @@
       }
 
       // Initialize dropdown selections
+      const versionSelect = document.getElementById('detail-version-select');
+      if (versionSelect) {
+        versionSelect.value = activeHskVersion;
+        versionSelect.addEventListener('change', (e) => {
+          activeHskVersion = e.target.value;
+          applyFilters();
+        });
+      }
+
       const levelSelect = document.getElementById('detail-level-select');
       if (levelSelect) {
         levelSelect.value = activeLevel;
@@ -411,7 +426,7 @@
         const word = escapeCSV(w.word);
         const pinyin = escapeCSV(w.pinyin);
         const meaning = escapeCSV(w.meaning);
-        const level = escapeCSV(w.isCustom ? 'Cá nhân' : 'HSK ' + w.level);
+        const level = escapeCSV(w.isCustom ? 'Cá nhân' : (w.level === 'premium' ? 'Premium' : 'HSK ' + w.level + ' (v' + (w.hskVersion || '3.0') + ')'));
         const memorized = escapeCSV(w.isMemorized ? 'Đã thuộc' : 'Chưa thuộc');
         const starred = escapeCSV(w.isStarred ? 'Yêu thích' : 'Không');
 
@@ -426,6 +441,7 @@
       
       let fileName = 'danh_sach_tu_vung';
       if (activeLevel !== 'all') fileName += `_hsk${activeLevel}`;
+      fileName += `_v${activeHskVersion}`;
       if (activeStatus !== 'all') fileName += `_${activeStatus}`;
       fileName += '.csv';
       
@@ -523,6 +539,11 @@
         if (customCategory && (!w.isCustom || w.category !== customCategory)) {
           return false;
         }
+
+        // HSK Version filter
+        if (!w.isCustom && w.level !== 'premium' && (w.hskVersion || '3.0') !== activeHskVersion) {
+          return false;
+        }
         
         // HSK Level filter
         if (activeLevel !== 'all' && w.level.toString() !== activeLevel) {
@@ -588,7 +609,7 @@
           <td style="font-family: var(--font-chinese); font-size: 1.3rem; font-weight: 500; padding: 14px 12px;">${w.word}</td>
           <td style="font-family: var(--font-display); padding: 14px 12px; color: var(--accent-teal); font-weight: 500;">${w.pinyin}</td>
           <td style="padding: 14px 12px;">${w.meaning}</td>
-          <td style="padding: 14px 12px;"><span class="badge badge-level" style="margin: 0;">${w.isCustom ? 'Cá nhân ✏️' : 'HSK ' + w.level}</span></td>
+          <td style="padding: 14px 12px;"><span class="badge badge-level" style="margin: 0;">${w.isCustom ? 'Cá nhân ✏️' : (w.level === 'premium' ? 'Premium' : 'HSK ' + w.level + ' (v' + (w.hskVersion || '3.0') + ')')}</span></td>
           <td style="padding: 14px 12px; text-align: center;">
             <div style="display: flex; gap: 8px; justify-content: center; align-items: center;">
               <button class="circle-btn speak-row-btn" data-word="${w.word}" title="Nghe phát âm" style="width: 34px; height: 34px; font-size: 0.85rem; background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); display: flex; align-items: center; justify-content: center;">

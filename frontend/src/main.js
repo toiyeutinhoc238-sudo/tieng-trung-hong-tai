@@ -8,6 +8,7 @@ let isFlipped = false;    // Card orientation state
 let autoplayTimer = null; // Timer reference for autoplay loop
 let isAutoplayActive = false; // Autoplay state
 let activeLevel = '1';  // Level filter state: 'all', '1', '2', '3', '4'
+let activeHskVersion = localStorage.getItem('active_hsk_version') || '3.0';
 let activeStatus = 'all'; // Status filter state: 'all', 'unmemorized', 'memorized', 'starred', 'custom'
 let searchQuery = '';     // Search query string
 let chineseVoice = null;  // Reference to Web Speech Chinese voice object
@@ -617,15 +618,21 @@ function renderActiveCard() {
     return;
   }
 
+  const getLevelLabel = (w) => {
+    if (w.isCustom) return 'Cá nhân';
+    if (w.level === 'premium') return 'Premium';
+    return `HSK ${w.level} (v${w.hskVersion || '3.0'})`;
+  };
+
   // Render Front Face
   cardWordFront.textContent = current.word;
-  cardLevelFront.textContent = `HSK ${current.level}`;
+  cardLevelFront.textContent = getLevelLabel(current);
   cardCategoryFront.textContent = current.category || 'Chưa phân loại';
 
   // Render Back Face
   cardPinyinBack.textContent = current.pinyin;
   cardMeaningBack.textContent = current.meaning;
-  cardLevelBack.textContent = `HSK ${current.level}`;
+  cardLevelBack.textContent = getLevelLabel(current);
   cardCategoryBack.textContent = current.category || 'Chưa phân loại';
 
   if (current.example_zh) {
@@ -662,10 +669,21 @@ function renderActiveCard() {
 }
 
 function updateStats() {
-  // 1. Dynamic stats based on activeLevel
-  let levelList = vocabList;
+  // 1. Dynamic stats based on activeLevel and activeHskVersion
+  let levelList = vocabList.filter(w => {
+    if (w.isCustom) return true;
+    if (w.level === 'premium') return true;
+    return (w.hskVersion || '3.0') === activeHskVersion;
+  });
+
   if (activeLevel !== 'all') {
-    levelList = vocabList.filter(w => w.level.toString() === activeLevel);
+    levelList = levelList.filter(w => w.level.toString() === activeLevel);
+  }
+
+  if (studyNotebookId) {
+    const notebookWords = getNotebookWords(studyNotebookId);
+    const ids = new Set(notebookWords.map(x => x.id));
+    levelList = levelList.filter(w => ids.has(w.id));
   }
 
   // Adjust levelList if custom list or wrong/starred filter is active
@@ -674,9 +692,9 @@ function updateStats() {
   } else if (activeStatus === 'custom' && studyCustomCategory) {
     levelList = vocabList.filter(w => w.isCustom && w.category === studyCustomCategory);
   } else if (activeStatus === 'wrong') {
-    levelList = vocabList.filter(w => w.isWrong);
+    levelList = levelList.filter(w => w.isWrong);
   } else if (activeStatus === 'starred') {
-    levelList = vocabList.filter(w => w.isStarred);
+    levelList = levelList.filter(w => w.isStarred);
   }
 
   const total = levelList.length;
@@ -695,7 +713,7 @@ function updateStats() {
   if (statsStarred) statsStarred.textContent = starred;
 
   // 2. Mistake badge count
-  const mistakeCount = vocabList.filter(w => w.isWrong).length;
+  const mistakeCount = vocabList.filter(w => w.isWrong && (w.isCustom || w.level === 'premium' || (w.hskVersion || '3.0') === activeHskVersion)).length;
   const mistakeBadge = document.getElementById('mistake-count-badge');
   if (mistakeBadge) mistakeBadge.textContent = mistakeCount;
 
@@ -730,7 +748,7 @@ function renderDeckSelectionView() {
 
   // Otherwise, handle screen visibility switching as normal
   if (activeNotebook) {
-    showNotebookDashboardView(activeNotebook);
+    showNotebookDashboardView(activeNotebook, true);
   } else if (activeSmartTopic) {
     showSubdecksView();
   } else {
@@ -799,14 +817,14 @@ function renderDetailedStatsTable() {
 
   // HSK Levels 1-3
   for (let lvl = 1; lvl <= 3; lvl++) {
-    const lvlWords = vocabList.filter(w => !w.isCustom && w.level === lvl);
+    const lvlWords = vocabList.filter(w => !w.isCustom && w.level.toString() === lvl.toString() && (w.hskVersion || '3.0') === activeHskVersion);
     const total = lvlWords.length;
     const memorized = lvlWords.filter(w => w.isMemorized).length;
     const unmemorized = total - memorized;
     const starred = lvlWords.filter(w => w.isStarred).length;
 
     rowsData.push({
-      name: `HSK ${lvl}`,
+      name: `HSK ${lvl} (v${activeHskVersion})`,
       total, memorized, unmemorized, starred
     });
   }
@@ -822,11 +840,16 @@ function renderDetailedStatsTable() {
     total: cTotal, memorized: cMemorized, unmemorized: cUnmemorized, starred: cStarred
   });
 
-  // Total
-  const allTotal = vocabList.length;
-  const allMemorized = vocabList.filter(w => w.isMemorized).length;
+  // Total (active version + custom + premium)
+  const activeVersionWords = vocabList.filter(w => {
+    if (w.isCustom) return true;
+    if (w.level === 'premium') return true;
+    return (w.hskVersion || '3.0') === activeHskVersion;
+  });
+  const allTotal = activeVersionWords.length;
+  const allMemorized = activeVersionWords.filter(w => w.isMemorized).length;
   const allUnmemorized = allTotal - allMemorized;
-  const allStarred = vocabList.filter(w => w.isStarred).length;
+  const allStarred = activeVersionWords.filter(w => w.isStarred).length;
   rowsData.push({
     name: 'Tổng cộng',
     total: allTotal, memorized: allMemorized, unmemorized: allUnmemorized, starred: allStarred,
@@ -907,11 +930,21 @@ function applyFilters(preserveIndex = false) {
   const previousWordId = (filteredList.length > 0 && currentIndex < filteredList.length) ? filteredList[currentIndex].id : null;
 
   const newList = vocabList.filter(w => {
+    // Check HSK Version first for standard HSK words
+    if (!w.isCustom && w.level !== 'premium' && (w.hskVersion || '3.0') !== activeHskVersion) {
+      return false;
+    }
+
     // If studying a specific notebook
     if (studyNotebookId) {
       const notebookWords = getNotebookWords(studyNotebookId);
       const ids = new Set(notebookWords.map(x => x.id));
       if (!ids.has(w.id)) return false;
+
+      // Filter by studySelectedLessons if studying an HSK notebook
+      if (studyNotebookId.startsWith('hsk:') && studySelectedLessons && studySelectedLessons.length > 0) {
+        if (!w.lessonId || !studySelectedLessons.includes(w.lessonId)) return false;
+      }
     } else {
       // If studying a specific custom list, show only custom words in that list
       if (studyCustomCategory) {
@@ -1494,7 +1527,7 @@ function setupEventListeners() {
       document.getElementById('flashcard-study-view').style.display = 'none';
       document.getElementById('deck-selection-view').style.display = 'block';
       if (activeNotebook) {
-        showNotebookDashboardView(activeNotebook);
+        showNotebookDashboardView(activeNotebook, true);
       } else {
         showTopicsView();
       }
@@ -1898,10 +1931,43 @@ function setupEventListeners() {
       params.set('status', activeStatus);
       if (searchQuery) params.set('search', searchQuery);
       if (studyCustomCategory) params.set('customCategory', studyCustomCategory);
+      if (activeHskVersion) params.set('hskVersion', activeHskVersion);
 
       window.open(`detail-list.html?${params.toString()}`, '_blank');
     });
   }
+
+  // HSK Version Switcher click listeners
+  const lv3Btn = document.getElementById('lessons-version-3-btn');
+  const lv2Btn = document.getElementById('lessons-version-2-btn');
+  const sv3Btn = document.getElementById('smart-hsk-version-3-btn');
+  const sv2Btn = document.getElementById('smart-hsk-version-2-btn');
+  const ev3Btn = document.getElementById('exams-version-3-btn');
+  const ev2Btn = document.getElementById('exams-version-2-btn');
+
+  const setHskVersion = (version) => {
+    activeHskVersion = version;
+    localStorage.setItem('active_hsk_version', version);
+    updateVersionButtonsUI();
+    
+    // Refresh lists and stats dynamically
+    renderLessonsList();
+    renderSubdecksList();
+    updateStats();
+    applyFilters();
+    updateExamsVersionUI();
+  };
+
+  if (lv3Btn) lv3Btn.addEventListener('click', () => setHskVersion('3.0'));
+  if (lv2Btn) lv2Btn.addEventListener('click', () => setHskVersion('2.0'));
+  if (sv3Btn) sv3Btn.addEventListener('click', () => setHskVersion('3.0'));
+  if (sv2Btn) sv2Btn.addEventListener('click', () => setHskVersion('2.0'));
+  if (ev3Btn) ev3Btn.addEventListener('click', () => setHskVersion('3.0'));
+  if (ev2Btn) ev2Btn.addEventListener('click', () => setHskVersion('2.0'));
+
+  // Initialize version switcher buttons UI state on load
+  updateVersionButtonsUI();
+  updateExamsVersionUI();
 
   // --- NEW NOTEBOOK & QUIZ EVENT LISTENERS ---
   const topicPersonalBtn = document.getElementById('topic-personal-btn');
@@ -2019,7 +2085,7 @@ function setupEventListeners() {
 
   if (quizBackBtn) {
     quizBackBtn.addEventListener('click', () => {
-      showNotebookDashboardView(activeNotebook);
+      showNotebookDashboardView(activeNotebook, true);
     });
   }
   if (quizNextBtn) {
@@ -2035,7 +2101,7 @@ function setupEventListeners() {
   }
   if (quizExitBtn) {
     quizExitBtn.addEventListener('click', () => {
-      showNotebookDashboardView(activeNotebook);
+      showNotebookDashboardView(activeNotebook, true);
     });
   }
 }
@@ -2321,15 +2387,19 @@ function seededShuffle(arr, seed) {
 }
 
 function generateExam(level, setNumber) {
-  let levelVocabs = vocabList.filter(w => w.level === level);
+  let levelVocabs = vocabList.filter(w => {
+    if (w.isCustom) return false;
+    if (w.level === 'premium') return false;
+    return w.level.toString() === level.toString() && (w.hskVersion || '3.0') === activeHskVersion;
+  });
 
   if (levelVocabs.length === 0) {
-    levelVocabs = vocabList;
+    levelVocabs = vocabList.filter(w => (w.hskVersion || '3.0') === activeHskVersion);
   }
   if (levelVocabs.length === 0) {
     levelVocabs = [
       { word: "我", pinyin: "wǒ", meaning: "tôi", level: 1, category: "Đại từ", example_zh: "我是学生。", example_vi: "tôi là học sinh." },
-      { word: "你", pinyin: "nǐ", meaning: "bạn", level: 1, category: "Đại từ", example_zh: "你好吗？", example_vi: "bạn khỏe không?" },
+      { word: "nǐ", pinyin: "nǐ", meaning: "bạn", level: 1, category: "Đại từ", example_zh: "你好吗？", example_vi: "bạn khỏe không?" },
       { word: "他", pinyin: "tā", meaning: "anh ấy", level: 1, category: "Đại từ", example_zh: "他是老师。", example_vi: "anh ấy là giáo viên." },
       { word: "是", pinyin: "shì", meaning: "là", level: 1, category: "Động từ", example_zh: "我是学生。", example_vi: "tôi là học sinh." }
     ];
@@ -2610,13 +2680,13 @@ function showExamsView() {
 
 function loadExamPapersList(level) {
   currentExamLevel = parseInt(level);
-  document.getElementById('selected-level-title').textContent = `Đề Thi HSK Cấp ${currentExamLevel}`;
+  document.getElementById('selected-level-title').textContent = `Đề Thi HSK Cấp ${currentExamLevel} (v${activeHskVersion})`;
 
   const papersGrid = document.getElementById('exam-papers-grid');
   papersGrid.innerHTML = '';
 
   const userKey = currentUser ? currentUser.email : 'guest';
-  const progressKey = `hsk_exam_progress_${userKey}`;
+  const progressKey = `hsk_exam_progress_${activeHskVersion === '2.0' ? 'v2_' : ''}${userKey}`;
   const examProgress = JSON.parse(localStorage.getItem(progressKey) || '{}');
 
   const meta = HSK_LEVELS_METADATA[currentExamLevel] || { time: 45, questionsCount: 40 };
@@ -2665,8 +2735,8 @@ function startExam(level, setNumber) {
   currentExamAnswers = Array(currentExamQuestions.length).fill(null);
   activeQuestionIndex = 0;
 
-  document.getElementById('player-exam-title').textContent = `Đề Thi HSK ${level} - Đề số ${setNumber.toString().padStart(2, '0')}`;
-  document.getElementById('player-exam-level').textContent = `HSK ${level}`;
+  document.getElementById('player-exam-title').textContent = `Đề Thi HSK ${level} (v${activeHskVersion}) - Đề số ${setNumber.toString().padStart(2, '0')}`;
+  document.getElementById('player-exam-level').textContent = `HSK ${level} (v${activeHskVersion})`;
 
   const meta = HSK_LEVELS_METADATA[level] || { time: 45 };
   examTotalSeconds = meta.time * 60;
@@ -2865,7 +2935,7 @@ function submitExam(isAuto = false) {
   const status = percentage >= 60 ? 'PASS' : 'FAIL';
 
   const userKey = currentUser ? currentUser.email : 'guest';
-  const progressKey = `hsk_exam_progress_${userKey}`;
+  const progressKey = `hsk_exam_progress_${activeHskVersion === '2.0' ? 'v2_' : ''}${userKey}`;
   const examProgress = JSON.parse(localStorage.getItem(progressKey) || '{}');
   const paperId = `${currentExamLevel}_${currentExamSet}`;
 
@@ -3320,7 +3390,9 @@ function renderActiveCardTyping(current) {
   const typeCategory = document.getElementById('type-card-category');
   const typeMeaning = document.getElementById('type-card-meaning');
 
-  if (typeLevel) typeLevel.textContent = current.isCustom ? 'Cá nhân' : `HSK ${current.level}`;
+  if (typeLevel) {
+    typeLevel.textContent = current.isCustom ? 'Cá nhân' : (current.level === 'premium' ? 'Premium' : `HSK ${current.level} (v${current.hskVersion || '3.0'})`);
+  }
   if (typeCategory) typeCategory.textContent = current.category || 'Chưa phân loại';
   if (typeMeaning) typeMeaning.textContent = current.meaning;
 
@@ -3905,14 +3977,25 @@ function renderLessonsList() {
 
   // Update objectives text
   if (objectivesText) {
-    if (activeLessonsLevel === 1) objectivesText.textContent = 'Mục tiêu: Sơ cấp dành cho người mới bắt đầu (150 từ vựng cơ bản)';
-    else if (activeLessonsLevel === 2) objectivesText.textContent = 'Mục tiêu: Sơ cấp nâng cao, giao tiếp đời sống cơ bản (300 từ vựng)';
-    else if (activeLessonsLevel === 3) objectivesText.textContent = 'Mục tiêu: Trung cấp, giao tiếp tự tin các chủ đề học tập/công việc (600 từ vựng)';
-    else objectivesText.textContent = `Mục tiêu: Ôn tập từ vựng HSK Cấp ${activeLessonsLevel}`;
+    if (activeHskVersion === '2.0') {
+      if (activeLessonsLevel === 1) objectivesText.textContent = 'Mục tiêu: HSK 2.0 Cấp 1 - Sơ cấp dành cho người mới bắt đầu (150 từ vựng)';
+      else if (activeLessonsLevel === 2) objectivesText.textContent = 'Mục tiêu: HSK 2.0 Cấp 2 - Sơ cấp nâng cao, giao tiếp đời sống cơ bản (150 từ vựng mới, tổng 300)';
+      else if (activeLessonsLevel === 3) objectivesText.textContent = 'Mục tiêu: HSK 2.0 Cấp 3 - Trung cấp, giao tiếp tự tin các chủ đề học tập/công việc (300 từ vựng mới, tổng 600)';
+      else objectivesText.textContent = `Mục tiêu: Ôn tập từ vựng HSK Cấp ${activeLessonsLevel}`;
+    } else {
+      if (activeLessonsLevel === 1) objectivesText.textContent = 'Mục tiêu: HSK 3.0 Cấp 1 - Sơ cấp dành cho người mới bắt đầu (500 từ vựng)';
+      else if (activeLessonsLevel === 2) objectivesText.textContent = 'Mục tiêu: HSK 3.0 Cấp 2 - Sơ cấp nâng cao (772 từ vựng mới, tổng 1272)';
+      else if (activeLessonsLevel === 3) objectivesText.textContent = 'Mục tiêu: HSK 3.0 Cấp 3 - Sơ cấp hoàn chỉnh (973 từ vựng mới, tổng 2245)';
+      else objectivesText.textContent = `Mục tiêu: Ôn tập từ vựng HSK Cấp ${activeLessonsLevel}`;
+    }
   }
 
   // Filter HSK level vocabulary
-  const levelVocabs = vocabList.filter(w => !w.isCustom && w.level === activeLessonsLevel);
+  const levelVocabs = vocabList.filter(w => 
+    !w.isCustom && 
+    w.level.toString() === activeLessonsLevel.toString() && 
+    (w.hskVersion || '3.0') === activeHskVersion
+  );
 
   // Group vocabulary dynamically by their lessonId field
   const lessonGroups = {};
@@ -3963,35 +4046,23 @@ function startLessonStudy(lesson, sliceWords) {
     return;
   }
 
-  // Filter flashcard study session directly to these words
-  filteredList = shuffleArray(sliceWords);
-  currentIndex = 0;
-  isFlipped = false;
-
-  // Set title & description of flashcard study
-  const studyTitle = document.getElementById('study-deck-title');
-  const studyDesc = document.getElementById('study-deck-desc');
-  if (studyTitle) studyTitle.textContent = lesson.title;
-  if (studyDesc) studyDesc.textContent = `Ghép nối kiến thức & từ vựng bài học`;
-
-  // Sync mode flip/type
-  setStudyMode(studyMode);
-
-  // Jump to study screen directly
-  document.getElementById('deck-selection-view').style.display = 'none';
-  document.getElementById('flashcard-study-view').style.display = 'block';
-
-  // Render first card
-  renderActiveCard();
-
-  // Switch tab to flashcards
+  // Switch tab to flashcards first (so its default showTopicsView doesn't override our dashboard view)
   switchTab('flashcards');
+
+  // Set active smart topic to HSK
+  activeSmartTopic = 'hsk';
+
+  // Highlight/select only this lesson on the notebook dashboard
+  selectedDashboardLessons = [lesson.id];
+
+  // Open HSK Notebook Dashboard
+  showNotebookDashboardView(`hsk:${activeLessonsLevel}`, true);
 
   // Scroll to workspace smoothly
   const flashcardSec = document.getElementById('flashcard-section');
   if (flashcardSec) flashcardSec.scrollIntoView({ behavior: 'smooth' });
 
-  showToast(`Đang học bài: ${lesson.title} 📖`);
+  showToast(`Đang hiển thị chi tiết bài học: ${lesson.title} 📖`);
 }
 
 // Setup event listeners for lessons curriculum pills
@@ -4248,7 +4319,7 @@ function selectDictWord(w) {
 
   // Fill in data
   document.getElementById('dict-detail-word').textContent = w.word;
-  document.getElementById('dict-detail-level').textContent = w.isCustom ? 'Cá nhân' : `HSK ${w.level}`;
+  document.getElementById('dict-detail-level').textContent = w.isCustom ? 'Cá nhân' : (w.level === 'premium' ? 'Premium' : `HSK ${w.level} (v${w.hskVersion || '3.0'})`);
   document.getElementById('dict-detail-pinyin').textContent = w.pinyin;
   document.getElementById('dict-detail-category').textContent = w.category || 'Chưa phân loại';
   document.getElementById('dict-detail-meaning').textContent = w.meaning;
@@ -4848,10 +4919,19 @@ function showSubdecksView() {
   if (studyView) studyView.style.display = 'none';
   if (quizView) quizView.style.display = 'none';
 
+  // Toggle version selector based on activeSmartTopic
+  const versionSelector = document.getElementById('smart-hsk-version-selector-wrap');
+  if (versionSelector) {
+    versionSelector.style.display = activeSmartTopic === 'hsk' ? 'flex' : 'none';
+  }
+
+  activeNotebook = null;
+  studyNotebookId = null;
+
   renderSubdecksList();
 }
 
-function showNotebookDashboardView(notebookId) {
+function showNotebookDashboardView(notebookId, preserveLessons = false) {
   const selectionView = document.getElementById('deck-selection-view');
   const topicsView = document.getElementById('flashcard-topics-view');
   const subdecksView = document.getElementById('flashcard-subdecks-view');
@@ -4868,7 +4948,9 @@ function showNotebookDashboardView(notebookId) {
 
   // Reset filters
   dashboardActiveFilter = 'all';
-  selectedDashboardLessons = [];
+  if (!preserveLessons) {
+    selectedDashboardLessons = [];
+  }
 
   // Reset active classes/borders on interactive stats boxes
   const interactiveBoxes = document.querySelectorAll('#nb-stats-interactive-container .stat-box-interactive');
@@ -4902,7 +4984,7 @@ function getNotebookWords(notebookId) {
     return vocabList.filter(w => w.isCustom && w.category === listName);
   } else if (notebookId.startsWith('hsk:')) {
     const lvl = notebookId.substring(4);
-    return vocabList.filter(w => !w.isCustom && w.level.toString() === lvl);
+    return vocabList.filter(w => !w.isCustom && w.level.toString() === lvl && (w.hskVersion || '3.0') === activeHskVersion);
   } else if (notebookId.startsWith('premium:')) {
     const category = notebookId.substring(8);
     let catName = '';
@@ -4940,9 +5022,9 @@ function renderSubdecksList() {
     });
   }
   else if (activeSmartTopic === 'hsk') {
-    title.textContent = 'Danh sách Từ vựng HSK';
+    title.textContent = `Danh sách Từ vựng HSK ${activeHskVersion}`;
     for (let lvl = 1; lvl <= 3; lvl++) {
-      const lvlWords = vocabList.filter(w => !w.isCustom && w.level.toString() === lvl.toString());
+      const lvlWords = vocabList.filter(w => !w.isCustom && w.level.toString() === lvl.toString() && (w.hskVersion || '3.0') === activeHskVersion);
       grid.appendChild(createSubdeckCard(`HSK Cấp ${lvl}`, `hsk:${lvl}`, lvlWords.length, 'fa-graduation-cap', 'var(--success)'));
     }
   }
@@ -4989,10 +5071,11 @@ function createSubdeckCard(name, id, count, icon, color) {
   return card;
 }
 
-// 3. Open Notebook Dashboard and populate stats, options, and table
 function openNotebookDashboard(notebookId) {
   const titleEl = document.getElementById('dashboard-notebook-title');
   const descEl = document.getElementById('dashboard-notebook-desc');
+
+  const baseWords = getNotebookWords(notebookId);
 
   let name = '';
   let desc = '';
@@ -5008,8 +5091,21 @@ function openNotebookDashboard(notebookId) {
     desc = `Danh sách từ vựng tự biên soạn`;
   } else if (notebookId.startsWith('hsk:')) {
     const lvl = notebookId.substring(4);
-    name = `Từ vựng HSK Cấp ${lvl}`;
-    desc = `Toàn bộ từ vựng luyện thi HSK Cấp ${lvl}`;
+    if (selectedDashboardLessons && selectedDashboardLessons.length > 0) {
+      // Find unique lessons to get their titles
+      const uniqueLessons = {};
+      baseWords.forEach(w => {
+        if (w.lessonId) {
+          uniqueLessons[w.lessonId] = w.lessonTitle || `Bài ${w.lessonId}`;
+        }
+      });
+      const lessonNames = selectedDashboardLessons.map(id => uniqueLessons[id] || `Bài ${id}`).join(', ');
+      name = `Từ vựng HSK Cấp ${lvl} - ${lessonNames}`;
+      desc = `Các từ vựng thuộc ${lessonNames.toLowerCase()} của HSK Cấp ${lvl}`;
+    } else {
+      name = `Từ vựng HSK Cấp ${lvl}`;
+      desc = `Toàn bộ từ vựng luyện thi HSK Cấp ${lvl}`;
+    }
   } else if (notebookId.startsWith('premium:')) {
     const category = notebookId.substring(8);
     if (category === 'du-lich') {
@@ -5038,7 +5134,6 @@ function openNotebookDashboard(notebookId) {
   }
 
   // Update Stats Widget
-  const baseWords = getNotebookWords(notebookId);
 
   // Render HSK Lesson Selector Block if applicable
   const lessonContainer = document.getElementById('nb-hsk-lesson-selector-container');
@@ -5672,6 +5767,68 @@ function showQuizResult() {
   if (resultMsg) {
     const correctCount = quizScore / 10;
     resultMsg.textContent = `Chúc mừng! Bạn đã trả lời đúng ${correctCount}/${quizQuestions.length} câu hỏi. Tổng điểm: ${quizScore} điểm.`;
+  }
+}
+
+function updateVersionButtonsUI() {
+  const lv3Btn = document.getElementById('lessons-version-3-btn');
+  const lv2Btn = document.getElementById('lessons-version-2-btn');
+  const sv3Btn = document.getElementById('smart-hsk-version-3-btn');
+  const sv2Btn = document.getElementById('smart-hsk-version-2-btn');
+  const ev3Btn = document.getElementById('exams-version-3-btn');
+  const ev2Btn = document.getElementById('exams-version-2-btn');
+
+  if (lv3Btn && lv2Btn) {
+    if (activeHskVersion === '3.0') {
+      lv3Btn.classList.add('active');
+      lv2Btn.classList.remove('active');
+    } else {
+      lv2Btn.classList.add('active');
+      lv3Btn.classList.remove('active');
+    }
+  }
+
+  if (sv3Btn && sv2Btn) {
+    if (activeHskVersion === '3.0') {
+      sv3Btn.classList.add('active');
+      sv2Btn.classList.remove('active');
+    } else {
+      sv2Btn.classList.add('active');
+      sv3Btn.classList.remove('active');
+    }
+  }
+
+  if (ev3Btn && ev2Btn) {
+    if (activeHskVersion === '3.0') {
+      ev3Btn.classList.add('active');
+      ev2Btn.classList.remove('active');
+    } else {
+      ev2Btn.classList.add('active');
+      ev3Btn.classList.remove('active');
+    }
+  }
+}
+
+function updateExamsVersionUI() {
+  const titleEl = document.getElementById('exams-section-title');
+  const descEl = document.getElementById('exams-section-desc');
+  if (titleEl) {
+    titleEl.innerHTML = `<i class="fa-solid fa-graduation-cap text-primary"></i> Luyện Đề Thi HSK ${activeHskVersion}`;
+  }
+  if (descEl) {
+    if (activeHskVersion === '3.0') {
+      descEl.textContent = 'Chọn cấp độ để làm các bộ đề thi thử trực tuyến bám sát cấu trúc HSK 9 cấp mới nhất.';
+    } else {
+      descEl.textContent = 'Chọn cấp độ để làm các bộ đề thi thử trực tuyến bám sát cấu trúc HSK 6 cấp cũ.';
+    }
+  }
+
+  // If the papers list is open, reload it
+  const papersListScreen = document.getElementById('exam-papers-list');
+  if (papersListScreen && papersListScreen.style.display === 'block') {
+    if (currentExamLevel) {
+      loadExamPapersList(currentExamLevel);
+    }
   }
 }
 
