@@ -387,7 +387,9 @@ async function toggleWordMemorized(id) {
   vocabList[index].isMemorized = nextState;
   markWordAsStudied(id);
   updateStats();
-  applyFilters(true);
+  if (studyMode !== 'type') {
+    applyFilters(true);
+  }
   showToast(nextState ? 'Đã thuộc từ này! 🎉' : 'Đã chuyển về danh sách cần ôn tập.');
 
   if (!currentUser) {
@@ -409,7 +411,9 @@ async function toggleWordMemorized(id) {
       // Rollback optimistic state
       vocabList[index].isMemorized = oldMemorized;
       updateStats();
-      applyFilters(true);
+      if (studyMode !== 'type') {
+        applyFilters(true);
+      }
 
       localStorage.removeItem('user');
       localStorage.removeItem('session_token');
@@ -423,7 +427,9 @@ async function toggleWordMemorized(id) {
       vocabList[index].isMemorized = !oldMemorized;
       localStorage.setItem('guest_progress', JSON.stringify(guestProgress));
       updateStats();
-      applyFilters(true);
+      if (studyMode !== 'type') {
+        applyFilters(true);
+      }
       return;
     }
     if (!response.ok) throw new Error('Lỗi cập nhật trạng thái');
@@ -432,7 +438,9 @@ async function toggleWordMemorized(id) {
     // Confirm local state matches server
     Object.assign(vocabList[index], updatedWord);
     updateStats();
-    applyFilters(true);
+    if (studyMode !== 'type') {
+      applyFilters(true);
+    }
   } catch (error) {
     console.error('API Error:', error);
     showToast('Lỗi cập nhật trạng thái từ máy chủ!', true);
@@ -440,7 +448,9 @@ async function toggleWordMemorized(id) {
     // Rollback state on error
     vocabList[index].isMemorized = oldMemorized;
     updateStats();
-    applyFilters(true);
+    if (studyMode !== 'type') {
+      applyFilters(true);
+    }
   }
 }
 
@@ -613,6 +623,16 @@ function renderActiveCard() {
 
   const current = filteredList[currentIndex];
 
+  // Update Indicator & Progress Fill (do this before potential early return in typing mode)
+  if (currentCardNum) currentCardNum.textContent = currentIndex + 1;
+  if (totalCardNum) totalCardNum.textContent = filteredList.length;
+
+  if (filteredList.length > 0 && learningProgress && progressPercentage) {
+    const progressPercent = Math.round(((currentIndex + 1) / filteredList.length) * 100);
+    learningProgress.style.width = `${progressPercent}%`;
+    progressPercentage.textContent = `${progressPercent}%`;
+  }
+
   if (studyMode === 'type') {
     renderActiveCardTyping(current);
     return;
@@ -643,14 +663,7 @@ function renderActiveCard() {
     document.querySelector('.example-box').style.display = 'none';
   }
 
-  // Update Indicator
-  currentCardNum.textContent = currentIndex + 1;
-  totalCardNum.textContent = filteredList.length;
-
-  // Update Progress Fill
-  const progressPercent = Math.round(((currentIndex + 1) / filteredList.length) * 100);
-  learningProgress.style.width = `${progressPercent}%`;
-  progressPercentage.textContent = `${progressPercent}%`;
+  // (Indicator & Progress Fill updated at the start of renderActiveCard)
 
   // Update HUD Button States
   if (current.isMemorized) {
@@ -1241,8 +1254,22 @@ function runAutoplayCycle() {
 // --- NAVIGATION & INTERACTION ---
 function nextCard() {
   if (filteredList.length === 0) return;
-  currentIndex = (currentIndex + 1) % filteredList.length;
-  resetCardOrientation();
+
+  if (studyMode === 'type') {
+    const currentWord = filteredList[currentIndex];
+    applyFilters(true);
+
+    if (filteredList.length === 0) return;
+
+    const stillExists = filteredList.some(w => w.id === currentWord.id);
+    if (stillExists) {
+      currentIndex = (currentIndex + 1) % filteredList.length;
+      resetCardOrientation();
+    }
+  } else {
+    currentIndex = (currentIndex + 1) % filteredList.length;
+    resetCardOrientation();
+  }
 }
 
 function prevCard() {
@@ -1291,7 +1318,9 @@ function setupEventListeners() {
   document.querySelectorAll('.bottom-nav-item').forEach(item => {
     item.addEventListener('click', () => {
       const tabId = item.getAttribute('data-tab');
-      switchTab(tabId);
+      if (tabId) {
+        switchTab(tabId);
+      }
     });
   });
 
@@ -3474,9 +3503,6 @@ function handleTypingCheck() {
 
     speakText(current.word);
 
-    if (!current.isMemorized) {
-      toggleWordMemorized(current.id);
-    }
 
     if (current.isWrong) {
       setWordWrong(current.id, false);
