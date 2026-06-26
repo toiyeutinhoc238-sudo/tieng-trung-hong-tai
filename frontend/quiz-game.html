@@ -35,7 +35,7 @@
       --danger: #ef4444;
       
       --font-sans: 'Be Vietnam Pro', sans-serif;
-      --font-display: 'Outfit', sans-serif;
+      --font-display: 'Be Vietnam Pro', sans-serif;
       --font-chinese: 'Noto Sans SC', sans-serif;
     }
 
@@ -875,6 +875,7 @@
     let score = 0;
     let hearts = 3;
     let combo = 0;
+    let maxCombo = 0;
     let timer = 30;
     let maxTimer = 30;
     let timerInterval = null;
@@ -1005,6 +1006,7 @@
       score = 0;
       hearts = 3;
       combo = 0;
+      maxCombo = 0;
       updateHeartsUI();
       hudScore.textContent = score.toString().padStart(3, '0');
       
@@ -1183,6 +1185,9 @@
 
         // Calculate points
         combo++;
+        if (combo > maxCombo) {
+          maxCombo = combo;
+        }
         const speedBonus = Math.max(0, Math.floor(timer / 2));
         const pts = 10 + speedBonus + (combo > 3 ? 5 : 0);
         score += pts;
@@ -1252,12 +1257,39 @@
       clearInterval(timerInterval);
       playExplosionSound();
 
-      // Set high score
+      // Set high score locally
       const modeKey = `highscore_${selectedMode}_${selectedLevel}`;
       let highscore = parseInt(localStorage.getItem(modeKey) || '0');
       if (score > highscore) {
         highscore = score;
         localStorage.setItem(modeKey, score);
+      }
+
+      // Sync with backend if user is logged in
+      const token = localStorage.getItem('session_token');
+      if (token) {
+        fetch(API_BASE_URL + '/api/user/game-history', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+            'x-session-token': token
+          },
+          body: JSON.stringify({
+            score: score,
+            stage: currentStage,
+            level: selectedLevel,
+            mode: selectedMode,
+            combo: maxCombo
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+          console.log("Game history saved:", data);
+        })
+        .catch(err => {
+          console.error("Error saving game history:", err);
+        });
       }
 
       // Populate game over screen
@@ -1266,7 +1298,7 @@
       document.getElementById('stat-score').textContent = score.toString();
       document.getElementById('stat-stage').textContent = `Ải ${currentStage}`;
       document.getElementById('stat-highscore').textContent = highscore.toString();
-      document.getElementById('stat-combo').textContent = combo.toString();
+      document.getElementById('stat-combo').textContent = maxCombo.toString();
 
       // Change emoji icon
       document.getElementById('gameover-icon').textContent = hearts <= 0 ? '💥' : '🏆';
@@ -1298,6 +1330,30 @@
         window.speechSynthesis.getVoices();
       };
     }
+
+    // Load User Profile
+    function loadUserProfile() {
+      const userStr = localStorage.getItem('user');
+      if (userStr) {
+        try {
+          const user = JSON.parse(userStr);
+          const nameEl = document.querySelector('.player-info-meta h4');
+          const avatarEl = document.querySelector('.player-avatar');
+          
+          if (nameEl && user.name) {
+            nameEl.textContent = user.name;
+          }
+          if (avatarEl && user.picture) {
+            avatarEl.innerHTML = `<img src="${user.picture}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" alt="Avatar">`;
+          }
+        } catch (e) {
+          console.error("Error parsing user profile:", e);
+        }
+      }
+    }
+
+    // Load user profile
+    loadUserProfile();
 
     // Load vocabulary on startup
     loadVocabulary();

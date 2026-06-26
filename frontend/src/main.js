@@ -1699,6 +1699,103 @@ function setupEventListeners() {
     }
   });
 
+  // Game History Modal Triggers
+  const gameHistoryBtn = document.getElementById('game-history-btn');
+  const gameHistoryModal = document.getElementById('game-history-modal');
+  const closeHistoryBtn1 = document.getElementById('close-game-history');
+  const closeHistoryBtn2 = document.getElementById('close-game-history-btn');
+
+  if (gameHistoryBtn && gameHistoryModal) {
+    gameHistoryBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      
+      // Close dropdown
+      const activeDropdown = document.querySelector('.user-dropdown.show-menu');
+      if (activeDropdown) activeDropdown.classList.remove('show-menu');
+
+      // Show modal
+      gameHistoryModal.style.display = 'flex';
+
+      const tbody = document.getElementById('game-history-rows');
+      const emptyDiv = document.getElementById('game-history-empty');
+
+      if (tbody) tbody.innerHTML = '';
+      if (emptyDiv) emptyDiv.style.display = 'none';
+
+      const token = localStorage.getItem('session_token');
+      if (!token) {
+        if (emptyDiv) emptyDiv.style.display = 'block';
+        return;
+      }
+
+      fetch(API_BASE_URL + '/api/user/game-history', {
+        headers: getAuthHeaders()
+      })
+      .then(res => res.json())
+      .then(history => {
+        if (!history || history.length === 0) {
+          if (emptyDiv) emptyDiv.style.display = 'block';
+          return;
+        }
+
+        // Sort by newest played first
+        history.sort((a, b) => new Date(b.playedAt) - new Date(a.playedAt));
+
+        const modeNames = {
+          'zh-vi': 'Chữ Hán ➔ Việt',
+          'vi-zh': 'Việt ➔ Chữ Hán',
+          'zh-pinyin': 'Chữ Hán ➔ Pinyin',
+          'pinyin-zh': 'Pinyin ➔ Chữ Hán'
+        };
+
+        history.forEach(item => {
+          const tr = document.createElement('tr');
+          tr.style.borderBottom = '1px solid var(--border-glass)';
+          tr.style.transition = 'background 0.2s';
+          tr.onmouseover = () => tr.style.background = 'rgba(255,255,255,0.02)';
+          tr.onmouseout = () => tr.style.background = 'transparent';
+
+          const date = new Date(item.playedAt).toLocaleString('vi-VN', {
+            year: 'numeric', month: 'numeric', day: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+          });
+
+          const modeName = modeNames[item.mode] || item.mode;
+          const levelLabel = item.level === 'all' ? 'Tất cả' : `HSK ${item.level}`;
+
+          tr.innerHTML = `
+            <td style="padding: 12px 16px; color: var(--text-secondary);">${date}</td>
+            <td style="padding: 12px 16px; font-weight: 500;">${modeName}</td>
+            <td style="padding: 12px 16px; text-align: center; color: var(--accent-teal); font-weight: 600;">${levelLabel}</td>
+            <td style="padding: 12px 16px; text-align: center; color: #ffd700; font-weight: 700; font-size: 1.05rem;">${item.score}</td>
+            <td style="padding: 12px 16px; text-align: center;">Ải ${item.stage}</td>
+            <td style="padding: 12px 16px; text-align: center; color: var(--success); font-weight: 600;">${item.combo}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      })
+      .catch(err => {
+        console.error("Error loading game history:", err);
+        if (emptyDiv) {
+          emptyDiv.innerHTML = '<i class="fa-solid fa-circle-exclamation" style="font-size: 2.5rem; margin-bottom: 12px; color: var(--danger);"></i><p>Không thể tải lịch sử chơi game từ máy chủ.</p>';
+          emptyDiv.style.display = 'block';
+        }
+      });
+    });
+
+    const closeModal = () => {
+      gameHistoryModal.style.display = 'none';
+    };
+
+    if (closeHistoryBtn1) closeHistoryBtn1.addEventListener('click', closeModal);
+    if (closeHistoryBtn2) closeHistoryBtn2.addEventListener('click', closeModal);
+    gameHistoryModal.addEventListener('click', (e) => {
+      if (e.target === gameHistoryModal) {
+        closeModal();
+      }
+    });
+  }
+
   // Form submission
   addWordForm.addEventListener('submit', handleAddWordForm);
 

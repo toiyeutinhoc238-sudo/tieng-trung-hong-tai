@@ -291,6 +291,65 @@ app.post('/api/user/stats/sync', async (req, res) => {
   res.json(userRecord.stats);
 });
 
+// POST endpoint to save game history
+app.post('/api/user/game-history', async (req, res) => {
+  const email = getLoggedInUserEmail(req);
+  if (!email) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  const { score, stage, level, mode, combo } = req.body;
+  
+  if (typeof score !== 'number' || typeof stage !== 'number') {
+    return res.status(400).json({ error: 'Invalid score or stage' });
+  }
+
+  const userData = await readUserData();
+  const userRecord = userData.users[email];
+  if (!userRecord) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+
+  if (!userRecord.gameHistory) {
+    userRecord.gameHistory = [];
+  }
+
+  const newRecord = {
+    score,
+    stage,
+    level: level || 'all',
+    mode: mode || 'zh-vi',
+    combo: combo || 0,
+    playedAt: new Date().toISOString()
+  };
+
+  userRecord.gameHistory.push(newRecord);
+  
+  // Keep last 100 games
+  if (userRecord.gameHistory.length > 100) {
+    userRecord.gameHistory = userRecord.gameHistory.slice(-100);
+  }
+
+  await writeUserData(userData);
+  res.json({ success: true, record: newRecord });
+});
+
+// GET endpoint to retrieve game history
+app.get('/api/user/game-history', async (req, res) => {
+  const email = getLoggedInUserEmail(req);
+  if (!email) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  const userData = await readUserData();
+  const userRecord = userData.users[email];
+  if (!userRecord) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+
+  res.json(userRecord.gameHistory || []);
+});
+
 // GET all vocabulary (merges built-in list with user-specific states and custom words)
 app.get('/api/vocabulary', async (req, res) => {
   const masterList = await readDatabase();
