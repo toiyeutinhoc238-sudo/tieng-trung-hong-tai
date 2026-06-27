@@ -948,6 +948,24 @@
         console.warn("Could not fetch API vocabulary. Using fallback local database.", e);
         vocabData = fallbackVocab;
       }
+
+      // Check URL parameters for HSK level and auto-start
+      const urlParams = new URLSearchParams(window.location.search);
+      const levelParam = urlParams.get('level');
+      const autoStart = urlParams.get('start') === 'true';
+
+      if (levelParam && selectLevel) {
+        const optionExists = Array.from(selectLevel.options).some(opt => opt.value === levelParam);
+        if (optionExists) {
+          selectLevel.value = levelParam;
+        }
+      }
+
+      if (autoStart) {
+        selectedLevel = selectLevel.value;
+        initAudioContext();
+        startGame();
+      }
     }
 
     // --- SETUP EVENTS ---

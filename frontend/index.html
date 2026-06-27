@@ -434,6 +434,17 @@
                     <span style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">Đố vui trắc nghiệm ngẫu nhiên có tính điểm</span>
                   </div>
                 </button>
+
+                <!-- Game Arena button -->
+                <button type="button" id="nb-start-game-arena-btn" class="study-method-card game-arena-card" style="display: flex; align-items: center; text-align: left; padding: 16px; border-radius: 12px; border: 1.5px solid #ec4899; background: rgba(236, 72, 153, 0.05); cursor: pointer; transition: all 0.2s ease; width: 100%;">
+                  <div class="method-icon-wrap" style="width: 48px; height: 48px; min-width: 48px; border-radius: 50%; background: #db2777; color: white; display: flex; align-items: center; justify-content: center; margin-right: 16px; font-size: 1.4rem;">
+                    <i class="fa-solid fa-gamepad"></i>
+                  </div>
+                  <div>
+                    <strong style="display: block; font-size: 1.05rem; font-family: var(--font-display); color: var(--text-primary); margin-bottom: 4px;">Đấu Trường Từ Vựng 🎮</strong>
+                    <span style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">Trò chơi quả bom phản xạ từ vựng HSK</span>
+                  </div>
+                </button>
               </div>
             </div>
           </div>
@@ -541,7 +552,26 @@
             <button type="button" id="quiz-exit-btn" class="btn btn-secondary" style="padding: 12px 24px; border-radius: 50px; font-weight: 700;">
               Quay lại Dashboard
             </button>
+        </div>
+      </div>
+
+      <!-- GAME PLAY VIEW -->
+      <div id="game-play-view" style="display: none; padding-top: 10px;">
+        <!-- Back Navigation & Header -->
+        <div class="study-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+          <button id="game-play-back-btn" class="btn btn-secondary" style="display: flex; align-items: center; gap: 8px; font-weight: 600; padding: 10px 16px; border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass);">
+            <i class="fa-solid fa-arrow-left"></i> Quay lại Dashboard
+          </button>
+          
+          <div class="study-deck-title-wrap" style="text-align: right;">
+            <h2 class="section-title" style="margin: 0; font-size: 1.6rem;">Đấu Trường Từ Vựng HSK</h2>
+            <p class="section-desc" style="margin: 4px 0 0 0; color: var(--text-secondary); font-size: 0.85rem;">Ôn tập phản xạ từ vựng vui nhộn</p>
           </div>
+        </div>
+
+        <!-- Game Iframe Container -->
+        <div class="glass-panel" style="padding: 0; border-radius: 24px; overflow: hidden; height: 780px; position: relative; border: 1px solid var(--border-glass); background: #0b0f19;">
+          <iframe id="game-play-iframe" src="" style="width: 100%; height: 100%; border: none;"></iframe>
         </div>
       </div>
 
@@ -818,11 +848,11 @@
               </div>
               
               <div class="card-action-bar" style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
-                <button id="type-hint-pinyin-btn" class="btn btn-secondary btn-sm" style="font-size: 0.75rem; padding: 6px 12px;">
+                <button id="type-hint-pinyin-btn" class="btn btn-secondary btn-sm" style="font-size: 0.75rem; padding: 6px 12px; display: none;">
                   <i class="fa-solid fa-eye"></i> Gợi ý Pinyin
                 </button>
                 <div style="display: flex; gap: 6px;">
-                  <button id="type-reveal-btn" class="btn btn-secondary btn-sm" style="font-size: 0.75rem; padding: 6px 12px; background: rgba(239, 68, 68, 0.1); color: var(--danger); border-color: rgba(239, 68, 68, 0.15);">
+                  <button id="type-reveal-btn" class="btn btn-secondary btn-sm" style="font-size: 0.75rem; padding: 6px 12px; background: rgba(239, 68, 68, 0.1); color: var(--danger); border-color: rgba(239, 68, 68, 0.15); display: none;">
                     Hiện đáp án
                   </button>
                   <button id="type-check-btn" class="btn btn-primary btn-sm" style="font-size: 0.75rem; padding: 6px 12px; background: var(--accent-blue); color: white;">
@@ -841,6 +871,10 @@
 
             <button id="mark-memorized-btn" class="btn btn-hud mark-btn" title="Đánh dấu đã thuộc (Phím Enter)">
               <i class="fa-solid fa-circle-check"></i> <span id="mark-btn-text">Đã thuộc</span>
+            </button>
+
+            <button id="mark-unmemorized-btn" class="btn btn-hud unmark-btn" title="Đánh dấu chưa thuộc (Phím Q)">
+              <i class="fa-solid fa-circle-xmark"></i> <span>Chưa thuộc</span>
             </button>
             
             <button id="mark-starred-btn" class="btn btn-hud star-btn" title="Đánh dấu yêu thích (Phím S)">
@@ -1570,10 +1604,6 @@
       <i class="fa-solid fa-magnifying-glass"></i>
       <span>Từ điển AI</span>
     </div>
-    <a href="/quiz-game.html" target="_blank" class="bottom-nav-item" id="bottom-nav-game" style="text-decoration: none;">
-      <i class="fa-solid fa-gamepad"></i>
-      <span>Trò chơi</span>
-    </a>
   </div>
 
   <!-- Game History Modal -->

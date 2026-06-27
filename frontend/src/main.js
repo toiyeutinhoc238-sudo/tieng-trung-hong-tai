@@ -666,12 +666,16 @@ function renderActiveCard() {
   // (Indicator & Progress Fill updated at the start of renderActiveCard)
 
   // Update HUD Button States
+  const markUnmemorizedBtn = document.getElementById('mark-unmemorized-btn');
   if (current.isMemorized) {
     markMemorizedBtn.classList.add('active');
-    document.getElementById('mark-btn-text').textContent = 'Đã thuộc';
+    if (markUnmemorizedBtn) markUnmemorizedBtn.classList.remove('active');
+  } else if (current.isStudied) {
+    markMemorizedBtn.classList.remove('active');
+    if (markUnmemorizedBtn) markUnmemorizedBtn.classList.add('active');
   } else {
     markMemorizedBtn.classList.remove('active');
-    document.getElementById('mark-btn-text').textContent = 'Đã thuộc';
+    if (markUnmemorizedBtn) markUnmemorizedBtn.classList.remove('active');
   }
 
   if (current.isStarred) {
@@ -712,7 +716,7 @@ function updateStats() {
 
   const total = levelList.length;
   const memorized = levelList.filter(w => w.isMemorized).length;
-  const unmemorized = total - memorized;
+  const unmemorized = levelList.filter(w => w.isStudied && !w.isMemorized).length;
   const starred = levelList.filter(w => w.isStarred).length;
 
   const statsTotal = document.getElementById('stats-total');
@@ -815,6 +819,9 @@ function startStudySession(status, level, title, desc) {
 
   // Apply filters to load cards
   applyFilters();
+
+  // Explicitly ensure correct layout and HUD visibility for current studyMode
+  setStudyMode(studyMode);
 
   // Scroll smooth
   const flashcardSection = document.getElementById('flashcard-section');
@@ -975,7 +982,7 @@ function applyFilters(preserveIndex = false) {
 
     // 2. Status Filter
     if (activeStatus === 'memorized' && !w.isMemorized) return false;
-    if (activeStatus === 'unmemorized' && w.isMemorized) return false;
+    if (activeStatus === 'unmemorized' && (!w.isStudied || w.isMemorized)) return false;
     if (activeStatus === 'wrong' && !w.isWrong) return false;
     if (activeStatus === 'starred' && !w.isStarred) return false;
     if (activeStatus === 'custom' && !w.isCustom) return false;
@@ -1264,6 +1271,11 @@ function nextCard() {
     const stillExists = filteredList.some(w => w.id === currentWord.id);
     if (stillExists) {
       currentIndex = (currentIndex + 1) % filteredList.length;
+      resetCardOrientation();
+    } else {
+      if (currentIndex >= filteredList.length) {
+        currentIndex = 0;
+      }
       resetCardOrientation();
     }
   } else {
@@ -1843,6 +1855,17 @@ function setupEventListeners() {
       if (filteredList.length > 0) {
         toggleWordMemorized(filteredList[currentIndex].id);
       }
+    } else if (key === 'q') {
+      if (filteredList.length > 0) {
+        const current = filteredList[currentIndex];
+        if (current.isMemorized) {
+          toggleWordMemorized(current.id);
+        } else if (!current.isStudied) {
+          markWordAsStudied(current.id);
+          updateStats();
+          applyFilters(true);
+        }
+      }
     } else if (key === 's') {
       if (filteredList.length > 0) {
         toggleWordStarred(filteredList[currentIndex].id);
@@ -2228,6 +2251,50 @@ function setupEventListeners() {
   if (quizExitBtn) {
     quizExitBtn.addEventListener('click', () => {
       showNotebookDashboardView(activeNotebook, true);
+    });
+  }
+
+  // Click handler for mark-unmemorized-btn
+  const markUnmemorizedBtn = document.getElementById('mark-unmemorized-btn');
+  if (markUnmemorizedBtn) {
+    markUnmemorizedBtn.addEventListener('click', () => {
+      if (filteredList.length > 0) {
+        const current = filteredList[currentIndex];
+        if (current.isMemorized) {
+          toggleWordMemorized(current.id);
+        } else if (!current.isStudied) {
+          markWordAsStudied(current.id);
+          updateStats();
+          applyFilters(true);
+        }
+      }
+    });
+  }
+
+  // Click handler for game arena start button
+  const nbStartGameArenaBtn = document.getElementById('nb-start-game-arena-btn');
+  if (nbStartGameArenaBtn) {
+    nbStartGameArenaBtn.addEventListener('click', () => {
+      startGameArenaFromNotebook();
+    });
+  }
+
+  // Click handler for game arena back button
+  const gamePlayBackBtn = document.getElementById('game-play-back-btn');
+  if (gamePlayBackBtn) {
+    gamePlayBackBtn.addEventListener('click', () => {
+      const gamePlayView = document.getElementById('game-play-view');
+      if (gamePlayView) gamePlayView.style.display = 'none';
+
+      const deckSelectionView = document.getElementById('deck-selection-view');
+      if (deckSelectionView) deckSelectionView.style.display = 'block';
+
+      const iframe = document.getElementById('game-play-iframe');
+      if (iframe) iframe.src = '';
+
+      if (activeNotebook) {
+        openNotebookDashboard(activeNotebook);
+      }
     });
   }
 }
@@ -2784,6 +2851,18 @@ function switchTab(tabId) {
     setDisp(lessonsSec, 'none');
   }
 
+  // If navigating away from flashcards, stop game iframe to prevent audio leak
+  if (tabId !== 'flashcards') {
+    const gameIframe = document.getElementById('game-play-iframe');
+    if (gameIframe && gameIframe.src !== '') {
+      gameIframe.src = '';
+    }
+    const gamePlaySec = document.getElementById('game-play-view');
+    if (gamePlaySec) {
+      gamePlaySec.style.display = 'none';
+    }
+  }
+
   // 3. Sync top navbar active state
   const homeBtn = document.getElementById('nav-home-btn');
   const flashcardsBtn = document.getElementById('nav-flashcards-btn');
@@ -3294,6 +3373,30 @@ function setStudyMode(mode) {
     }
   }
 
+  // Explicitly hide hints and reveal button in typing mode as requested
+  const typeHintBtn = document.getElementById('type-hint-pinyin-btn');
+  const typeRevealBtn = document.getElementById('type-reveal-btn');
+  if (typeHintBtn) {
+    typeHintBtn.style.display = 'none';
+  }
+  if (typeRevealBtn) {
+    typeRevealBtn.style.display = 'none';
+  }
+
+  // Explicitly hide/show bottom HUD buttons based on studyMode
+  const markMemorizedBtn = document.getElementById('mark-memorized-btn');
+  const markUnmemorizedBtn = document.getElementById('mark-unmemorized-btn');
+  const markStarredBtn = document.getElementById('mark-starred-btn');
+  if (mode === 'type') {
+    if (markMemorizedBtn) markMemorizedBtn.style.display = 'none';
+    if (markUnmemorizedBtn) markUnmemorizedBtn.style.display = 'none';
+    if (markStarredBtn) markStarredBtn.style.display = 'none';
+  } else {
+    if (markMemorizedBtn) markMemorizedBtn.style.display = 'flex';
+    if (markUnmemorizedBtn) markUnmemorizedBtn.style.display = 'flex';
+    if (markStarredBtn) markStarredBtn.style.display = 'flex';
+  }
+
   if (modeFlipBtn && modeTypeBtn) {
     if (mode === 'flip') {
       modeFlipBtn.classList.add('active-mode');
@@ -3556,6 +3659,12 @@ function renderActiveCardTyping(current) {
   if (hintBtn) {
     hintBtn.innerHTML = '<i class="fa-solid fa-eye"></i> Gợi ý Pinyin';
     hintBtn.disabled = false;
+    hintBtn.style.display = 'none';
+  }
+
+  const typeRevealBtn = document.getElementById('type-reveal-btn');
+  if (typeRevealBtn) {
+    typeRevealBtn.style.display = 'none';
   }
 
   const checkBtn = document.getElementById('type-check-btn');
@@ -3564,7 +3673,7 @@ function renderActiveCardTyping(current) {
   }
 }
 
-function handleTypingCheck() {
+async function handleTypingCheck() {
   if (filteredList.length === 0) return;
   const current = filteredList[currentIndex];
 
@@ -3580,7 +3689,11 @@ function handleTypingCheck() {
   if (!input || !feedback) return;
 
   const answer = input.value.trim().toLowerCase();
-  const correctAnswer = current.word.trim();
+  
+  // Alternative Answers Validation: Split database word by |, /, ;, or commas
+  const correctAnswerStr = current.word.trim();
+  const acceptableAnswers = correctAnswerStr.split(/[\/|;；,，、]+/).map(ans => ans.trim().toLowerCase());
+  const isCorrect = acceptableAnswers.includes(answer);
 
   if (answer === '') {
     feedback.textContent = 'Vui lòng nhập câu trả lời!';
@@ -3590,7 +3703,7 @@ function handleTypingCheck() {
 
   markWordAsStudied(current.id);
 
-  if (answer === correctAnswer) {
+  if (isCorrect) {
     isTypingAnswerFinished = true;
     input.disabled = true;
     input.className = 'correct-glow';
@@ -3600,9 +3713,13 @@ function handleTypingCheck() {
 
     speakText(current.word);
 
-
     if (current.isWrong) {
       setWordWrong(current.id, false);
+    }
+
+    // Nhập đúng là thuộc:
+    if (!current.isMemorized) {
+      await toggleWordMemorized(current.id);
     }
 
     showRevealedDetails(current);
@@ -3638,8 +3755,9 @@ function handleTypingCheck() {
       feedback.textContent = `Sai rồi! Lượt học đã kết thúc.`;
       feedback.style.color = 'var(--danger)';
 
+      // Sai là không thuộc:
       if (current.isMemorized) {
-        toggleWordMemorized(current.id);
+        await toggleWordMemorized(current.id);
       }
 
       if (!current.isWrong) {
@@ -5326,7 +5444,7 @@ function openNotebookDashboard(notebookId) {
 
   const total = wordsForStats.length;
   const memorized = wordsForStats.filter(w => w.isMemorized).length;
-  const unmemorized = total - memorized;
+  const unmemorized = wordsForStats.filter(w => w.isStudied && !w.isMemorized).length;
   const starred = wordsForStats.filter(w => w.isStarred).length;
   const studied = wordsForStats.filter(w => w.isStudied).length;
   const unstudied = total - studied;
@@ -5373,7 +5491,7 @@ function renderNotebookWordsTable() {
   } else if (dashboardActiveFilter === 'memorized') {
     words = words.filter(w => w.isMemorized);
   } else if (dashboardActiveFilter === 'unmemorized') {
-    words = words.filter(w => !w.isMemorized);
+    words = words.filter(w => w.isStudied && !w.isMemorized);
   } else if (dashboardActiveFilter === 'starred') {
     words = words.filter(w => w.isStarred);
   }
@@ -5646,7 +5764,7 @@ function startQuizSession() {
   } else if (dashboardActiveFilter === 'memorized') {
     words = words.filter(w => w.isMemorized);
   } else if (dashboardActiveFilter === 'unmemorized') {
-    words = words.filter(w => !w.isMemorized);
+    words = words.filter(w => w.isStudied && !w.isMemorized);
   } else if (dashboardActiveFilter === 'starred') {
     words = words.filter(w => w.isStarred);
   }
@@ -5952,6 +6070,30 @@ function updateExamsVersionUI() {
     if (currentExamLevel) {
       loadExamPapersList(currentExamLevel);
     }
+  }
+}
+
+// 8. Launch Embedded game arena
+function startGameArenaFromNotebook() {
+  if (!activeNotebook) return;
+
+  let levelParam = 'all';
+  if (activeNotebook.startsWith('hsk:')) {
+    const levelStr = activeNotebook.split(':')[1];
+    if (levelStr && ['1', '2', '3', '4'].includes(levelStr)) {
+      levelParam = levelStr;
+    }
+  }
+
+  const deckSelectionView = document.getElementById('deck-selection-view');
+  if (deckSelectionView) deckSelectionView.style.display = 'none';
+
+  const gamePlayView = document.getElementById('game-play-view');
+  if (gamePlayView) gamePlayView.style.display = 'block';
+
+  const iframe = document.getElementById('game-play-iframe');
+  if (iframe) {
+    iframe.src = `/quiz-game.html?level=${levelParam}&start=true`;
   }
 }
 

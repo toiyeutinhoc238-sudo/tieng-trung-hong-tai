@@ -1230,6 +1230,19 @@ html.dark .brand-logo-img {
   color: white;
 }
 
+.unmark-btn.active {
+  background-color: var(--danger-bg);
+  border-color: var(--danger);
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.unmark-btn.active:hover {
+  background-color: var(--danger);
+  color: white;
+}
+
+
 .card-page-indicator {
   font-size: 0.85rem;
   color: var(--text-muted);
@@ -2207,6 +2220,7 @@ html:not(.dark) .list-pill:hover {
 }
 
 .card-viewport.typing-mode-active #mark-memorized-btn,
+.card-viewport.typing-mode-active #mark-unmemorized-btn,
 .card-viewport.typing-mode-active #mark-starred-btn {
   display: none !important;
 }
