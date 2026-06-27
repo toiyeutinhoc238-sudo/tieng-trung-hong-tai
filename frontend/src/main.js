@@ -6093,7 +6093,7 @@ function startGameArenaFromNotebook() {
 
   const iframe = document.getElementById('game-play-iframe');
   if (iframe) {
-    iframe.src = `/quiz-game.html?level=${levelParam}&start=true`;
+    iframe.src = `/quiz-game.html?level=${levelParam}`;
   }
 }
 
