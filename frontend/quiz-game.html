@@ -949,6 +949,16 @@
         vocabData = fallbackVocab;
       }
 
+      // Filter out any entries with empty/missing word, meaning or pinyin
+      if (Array.isArray(vocabData)) {
+        vocabData = vocabData.filter(w => 
+          w && 
+          w.word && w.word.trim() !== '' && 
+          w.meaning && w.meaning.trim() !== '' && 
+          w.pinyin && w.pinyin.trim() !== ''
+        );
+      }
+
       // Check URL parameters for HSK level and auto-start
       const urlParams = new URLSearchParams(window.location.search);
       const levelParam = urlParams.get('level');

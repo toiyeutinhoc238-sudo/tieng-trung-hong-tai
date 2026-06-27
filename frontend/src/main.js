@@ -283,6 +283,16 @@ async function fetchVocabulary() {
     if (!response.ok) throw new Error('Không thể tải từ vựng từ API');
     vocabList = await response.json();
 
+    // Filter out empty/incomplete database entries
+    if (Array.isArray(vocabList)) {
+      vocabList = vocabList.filter(w => 
+        w && 
+        w.word && w.word.trim() !== '' && 
+        w.meaning && w.meaning.trim() !== '' && 
+        w.pinyin && w.pinyin.trim() !== ''
+      );
+    }
+
     // Clean up pinyin formatting anomalies
     vocabList.forEach(w => {
       if (w.pinyin) {
