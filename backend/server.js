@@ -451,6 +451,64 @@ app.post('/api/vocabulary/toggle-memorized', async (req, res) => {
   }
 });
 
+// POST set memorized status directly
+app.post('/api/vocabulary/set-memorized', async (req, res) => {
+  const email = getLoggedInUserEmail(req);
+  if (!email) {
+    return res.status(401).json({ error: 'Unauthorized. Please login first.' });
+  }
+
+  const { id, isMemorized } = req.body;
+  if (!id) {
+    return res.status(400).json({ error: 'Missing word ID' });
+  }
+
+  const wordId = parseInt(id);
+  const userData = await readUserData();
+
+  if (wordId >= 100000) {
+    // Custom word progress set
+    const userCustomWords = userData.customWords[email] || [];
+    const wordIndex = userCustomWords.findIndex(w => w.id === wordId);
+    if (wordIndex === -1) {
+      return res.status(404).json({ error: 'Custom word not found' });
+    }
+
+    userCustomWords[wordIndex].isMemorized = !!isMemorized;
+    await writeUserData(userData);
+    return res.json(userCustomWords[wordIndex]);
+  } else {
+    // Built-in word progress set
+    const masterList = await readDatabase();
+    const wordIndex = masterList.findIndex(w => w.id === wordId);
+    if (wordIndex === -1) {
+      return res.status(404).json({ error: 'Word not found' });
+    }
+
+    if (!userData.progress[email]) {
+      userData.progress[email] = {};
+    }
+
+    const wordKey = wordId.toString();
+    const currentProgress = userData.progress[email][wordKey] || { isMemorized: false, isStarred: false };
+
+    userData.progress[email][wordKey] = {
+      ...currentProgress,
+      isMemorized: !!isMemorized
+    };
+
+    await writeUserData(userData);
+
+    res.json({
+      ...masterList[wordIndex],
+      isMemorized: userData.progress[email][wordKey].isMemorized,
+      isStarred: userData.progress[email][wordKey].isStarred,
+      isWrong: !!userData.progress[email][wordKey].isWrong,
+      isStudied: !!userData.progress[email][wordKey].isStudied
+    });
+  }
+});
+
 // POST toggle starred
 app.post('/api/vocabulary/toggle-starred', async (req, res) => {
   const email = getLoggedInUserEmail(req);

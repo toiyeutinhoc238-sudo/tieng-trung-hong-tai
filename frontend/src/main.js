@@ -2307,6 +2307,17 @@ function setupEventListeners() {
       }
     });
   }
+
+  // Handle messages sent from game iframe
+  window.addEventListener('message', async (event) => {
+    if (event.data && event.data.type === 'VOCAB_STATE_UPDATED') {
+      console.log('Real-time sync: Vocab state updated in game, refreshing data...');
+      await fetchVocabulary();
+      if (activeNotebook) {
+        openNotebookDashboard(activeNotebook);
+      }
+    }
+  });
 }
 
 function getAuthHeaders(customHeaders = {}) {
