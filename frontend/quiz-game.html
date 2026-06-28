@@ -1009,16 +1009,38 @@
       // Check URL parameters for HSK level and auto-start
       const urlParams = new URLSearchParams(window.location.search);
       const levelParam = urlParams.get('level');
+      const lessonParam = urlParams.get('lesson');
       const autoStart = urlParams.get('start') === 'true';
 
       if (levelParam && selectLevel) {
         const optionExists = Array.from(selectLevel.options).some(opt => opt.value === levelParam);
         if (optionExists) {
           selectLevel.value = levelParam;
+          // Hide level setting group if a specific HSK level is passed (i.e. not 'all')
+          if (levelParam !== 'all') {
+            const levelGroup = selectLevel.closest('.setting-group');
+            if (levelGroup) {
+              levelGroup.style.display = 'none';
+            }
+          }
         }
       }
 
       updateLessonSelector();
+
+      if (lessonParam && selectLesson) {
+        const optionExists = Array.from(selectLesson.options).some(opt => opt.value === lessonParam);
+        if (optionExists) {
+          selectLesson.value = lessonParam;
+          // Hide lesson setting group if a specific lesson is passed (i.e. not 'all' and not 'random')
+          if (lessonParam !== 'all' && lessonParam !== 'random') {
+            const lessonGroup = selectLesson.closest('.setting-group');
+            if (lessonGroup) {
+              lessonGroup.style.display = 'none';
+            }
+          }
+        }
+      }
 
       if (autoStart) {
         selectedLevel = selectLevel.value;

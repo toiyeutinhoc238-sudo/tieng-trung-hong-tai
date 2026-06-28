@@ -141,19 +141,21 @@ function initTheme() {
   const savedTheme = localStorage.getItem('theme') || 'dark';
   if (savedTheme === 'light') {
     document.documentElement.classList.remove('dark');
-    themeToggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+    if (themeToggleBtn) themeToggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
   } else {
     document.documentElement.classList.add('dark');
-    themeToggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+    if (themeToggleBtn) themeToggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
   }
 }
 
 function toggleTheme() {
   const isDark = document.documentElement.classList.toggle('dark');
   localStorage.setItem('theme', isDark ? 'dark' : 'light');
-  themeToggleBtn.innerHTML = isDark
-    ? '<i class="fa-solid fa-moon"></i>'
-    : '<i class="fa-solid fa-sun"></i>';
+  if (themeToggleBtn) {
+    themeToggleBtn.innerHTML = isDark
+      ? '<i class="fa-solid fa-moon"></i>'
+      : '<i class="fa-solid fa-sun"></i>';
+  }
   showToast(isDark ? 'Đã chuyển sang chế độ tối' : 'Đã chuyển sang chế độ sáng');
   if (!currentUser && typeof initGoogleSignIn === 'function') {
     initGoogleSignIn();
@@ -167,7 +169,9 @@ function initVoices() {
   const loadVoices = () => {
     const voices = speechSynthesis.getVoices();
     // Clear dropdown
-    ttsVoiceSelect.innerHTML = '';
+    if (ttsVoiceSelect) {
+      ttsVoiceSelect.innerHTML = '';
+    }
 
     // Look for Chinese voices (Chinese, Mandarin, zh-CN, zh-HK, zh-TW, etc.)
     const zhVoices = voices.filter(voice =>
@@ -186,14 +190,18 @@ function initVoices() {
           option.selected = true;
           chineseVoice = voice;
         }
-        ttsVoiceSelect.appendChild(option);
+        if (ttsVoiceSelect) {
+          ttsVoiceSelect.appendChild(option);
+        }
       });
       if (!chineseVoice) chineseVoice = zhVoices[0];
     } else {
       const option = document.createElement('option');
       option.value = 'none';
       option.textContent = 'Không tìm thấy giọng tiếng Trung (Dùng giọng mặc định)';
-      ttsVoiceSelect.appendChild(option);
+      if (ttsVoiceSelect) {
+        ttsVoiceSelect.appendChild(option);
+      }
     }
   };
 
@@ -202,11 +210,13 @@ function initVoices() {
     speechSynthesis.onvoiceschanged = loadVoices;
   }
 
-  ttsVoiceSelect.addEventListener('change', (e) => {
-    const selectedVoiceName = e.target.value;
-    const voices = speechSynthesis.getVoices();
-    chineseVoice = voices.find(v => v.name === selectedVoiceName) || null;
-  });
+  if (ttsVoiceSelect) {
+    ttsVoiceSelect.addEventListener('change', (e) => {
+      const selectedVoiceName = e.target.value;
+      const voices = speechSynthesis.getVoices();
+      chineseVoice = voices.find(v => v.name === selectedVoiceName) || null;
+    });
+  }
 }
 
 function speakText(text) {
@@ -1671,27 +1681,39 @@ function setupEventListeners() {
     applyFilters();
   });
 
-  resetFiltersBtn.addEventListener('click', () => {
-    // Reset all filter controls
-    studySelectedLessons = null;
-    levelTabsContainer.querySelectorAll('.level-tab').forEach(t => {
-      t.classList.toggle('active', t.getAttribute('data-level') === 'all');
+  if (resetFiltersBtn) {
+    resetFiltersBtn.addEventListener('click', () => {
+      // Reset all filter controls
+      studySelectedLessons = null;
+      if (levelTabsContainer) {
+        levelTabsContainer.querySelectorAll('.level-tab').forEach(t => {
+          t.classList.toggle('active', t.getAttribute('data-level') === 'all');
+        });
+      }
+      activeLevel = 'all';
+
+      if (statusFilterSelect) {
+        statusFilterSelect.value = 'all';
+      }
+      activeStatus = 'all';
+
+      if (searchInput) {
+        searchInput.value = '';
+      }
+      searchQuery = '';
+      if (clearSearchBtn) {
+        clearSearchBtn.style.display = 'none';
+      }
+
+      stopAutoplay();
+      applyFilters();
     });
-    activeLevel = 'all';
-
-    statusFilterSelect.value = 'all';
-    activeStatus = 'all';
-
-    searchInput.value = '';
-    searchQuery = '';
-    clearSearchBtn.style.display = 'none';
-
-    stopAutoplay();
-    applyFilters();
-  });
+  }
 
   // Autoplay
-  autoplayBtn.addEventListener('click', toggleAutoplay);
+  if (autoplayBtn) {
+    autoplayBtn.addEventListener('click', toggleAutoplay);
+  }
 
 
   // Logout
@@ -1701,7 +1723,9 @@ function setupEventListeners() {
   }
 
   // Theme Toggle
-  themeToggleBtn.addEventListener('click', toggleTheme);
+  if (themeToggleBtn) {
+    themeToggleBtn.addEventListener('click', toggleTheme);
+  }
 
   // User Profile Dropdown Toggle on Click
   const userProfile = document.querySelector('.user-profile');
@@ -6106,6 +6130,11 @@ function startGameArenaFromNotebook() {
     }
   }
 
+  let lessonParam = 'all';
+  if (selectedDashboardLessons && selectedDashboardLessons.length > 0) {
+    lessonParam = selectedDashboardLessons[0];
+  }
+
   const deckSelectionView = document.getElementById('deck-selection-view');
   if (deckSelectionView) deckSelectionView.style.display = 'none';
 
@@ -6114,7 +6143,7 @@ function startGameArenaFromNotebook() {
 
   const iframe = document.getElementById('game-play-iframe');
   if (iframe) {
-    iframe.src = `/quiz-game.html?level=${levelParam}`;
+    iframe.src = `/quiz-game.html?level=${levelParam}&lesson=${lessonParam}`;
   }
 }
 
