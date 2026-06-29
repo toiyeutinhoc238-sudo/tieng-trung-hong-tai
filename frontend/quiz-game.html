@@ -714,14 +714,7 @@
         </div>
         <div class="gameover-stat">
           <span class="gameover-lbl">Kỷ lục của bạn:</span>
-          <span style="display: flex; align-items: center; gap: 8px;">
-            <span class="gameover-val highlight" id="stat-highscore">000</span>
-            <button id="btn-reset-highscore" title="Xóa kỷ lục trên máy này"
-              style="background: transparent; border: none; color: var(--danger); cursor: pointer; font-size: 0.9rem; padding: 2px 4px; display: inline-flex; align-items: center; justify-content: center; outline: none; transition: transform 0.2s;"
-              onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">
-              <i class="fa-solid fa-trash-can"></i>
-            </button>
-          </span>
+          <span class="gameover-val highlight" id="stat-highscore">000</span>
         </div>
         <div class="gameover-stat">
           <span class="gameover-lbl">Số câu đúng liên tục:</span>
@@ -1173,21 +1166,6 @@
       btnGameOverExit.addEventListener('click', handleExit);
     }
 
-    const btnResetHighscore = document.getElementById('btn-reset-highscore');
-    if (btnResetHighscore) {
-      btnResetHighscore.addEventListener('click', () => {
-        if (confirm("Bạn có chắc chắn muốn đặt lại (xóa) kỷ lục điểm số cao nhất trên trình duyệt của máy này không?")) {
-          for (let i = localStorage.length - 1; i >= 0; i--) {
-            const key = localStorage.key(i);
-            if (key && key.startsWith('highscore_')) {
-              localStorage.removeItem(key);
-            }
-          }
-          document.getElementById('stat-highscore').textContent = score.toString();
-          showToast("Đã xóa kỷ lục trên máy này! 🗑️", true);
-        }
-      });
-    }
 
     btnSoundToggle.addEventListener('click', () => {
       soundEnabled = !soundEnabled;
