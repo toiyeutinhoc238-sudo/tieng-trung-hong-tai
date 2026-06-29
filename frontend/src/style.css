@@ -4286,3 +4286,19 @@ html.dark .topic-card:hover {
   color: white;
   border-color: var(--accent-blue);
 }
+
+/* Filter Button Toggle */
+.filter-btn {
+  background: transparent;
+  color: var(--text-secondary);
+  border-color: var(--border-glass);
+}
+.filter-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+.filter-btn.active-filter {
+  background: var(--accent-purple);
+  color: white;
+  border-color: var(--accent-purple);
+}
+

@@ -637,7 +637,7 @@
         </div>
 
         <div class="setting-group">
-          <label class="setting-label">Bài học (Chọn ải)</label>
+          <label class="setting-label">Bài học</label>
           <select id="select-lesson" class="setting-select">
             <option value="all">Tất cả các bài (Mặc định)</option>
             <option value="random">Random bài bất kì</option>
@@ -651,6 +651,7 @@
             <div class="mode-chip" data-mode="vi-zh">Tiếng Việt ➔ Hán</div>
             <div class="mode-chip" data-mode="zh-pinyin">Chữ Hán ➔ Pinyin</div>
             <div class="mode-chip" data-mode="pinyin-zh">Pinyin ➔ Chữ Hán</div>
+            <div class="mode-chip" data-mode="mix" style="grid-column: span 2;">Hỗn hợp (Ngẫu nhiên)</div>
           </div>
         </div>
 
@@ -670,8 +671,8 @@
           <span class="gameover-val highlight" id="stat-score">000</span>
         </div>
         <div class="gameover-stat">
-          <span class="gameover-lbl">Cửa cao nhất:</span>
-          <span class="gameover-val" id="stat-stage">Ải 1</span>
+          <span class="gameover-lbl">Số câu hoàn thành:</span>
+          <span class="gameover-val" id="stat-stage">0</span>
         </div>
         <div class="gameover-stat">
           <span class="gameover-lbl">Kỷ lục của bạn:</span>
@@ -703,7 +704,7 @@
         </div>
       </div>
 
-      <div class="stage-badge" id="hud-stage">ẢI 1</div>
+      <div class="stage-badge" id="hud-stage">CÂU 1</div>
 
       <div class="score-badge">
         <span class="score-label">Điểm số</span>
@@ -893,10 +894,17 @@
     // --- GAME VARIABLES ---
     let vocabData = [];
     let currentPool = [];
+    let remainingQuestions = [];
+    let totalQuestions = 0;
+    let distractorPool = [];
+    let currentQuestionMode = 'zh-vi';
     let activeQuestion = null;
     let selectedMode = 'zh-vi'; // Default
     let selectedLevel = 'all';
     let selectedLesson = 'all';
+    let selectedFilter = 'all';
+    let selectedLessonsList = [];
+    let selectedNotebook = 'all';
     let currentStage = 1;
     let score = 0;
     let hearts = 3;
@@ -1006,11 +1014,37 @@
         );
       }
 
+      // Merge guest progress from localStorage if guest
+      if (!token) {
+        const guestProgress = JSON.parse(localStorage.getItem('guest_progress') || '{}');
+        vocabData = vocabData.map(w => {
+          const state = guestProgress[w.id];
+          return {
+            ...w,
+            isMemorized: state ? !!state.isMemorized : !!w.isMemorized,
+            isStarred: state ? !!state.isStarred : !!w.isStarred,
+            isWrong: state ? !!state.isWrong : !!w.isWrong,
+            isStudied: state ? !!state.isStudied : !!w.isStudied
+          };
+        });
+      }
+
       // Check URL parameters for HSK level and auto-start
       const urlParams = new URLSearchParams(window.location.search);
       const levelParam = urlParams.get('level');
       const lessonParam = urlParams.get('lesson');
+      const lessonsParam = urlParams.get('lessons');
+      const filterParam = urlParams.get('filter') || 'all';
+      const notebookParam = urlParams.get('notebook') || 'all';
       const autoStart = urlParams.get('start') === 'true';
+
+      selectedFilter = filterParam;
+      selectedNotebook = notebookParam;
+      if (lessonsParam) {
+        selectedLessonsList = lessonsParam.split(',');
+      } else if (lessonParam) {
+        selectedLessonsList = [lessonParam];
+      }
 
       if (levelParam && selectLevel) {
         const optionExists = Array.from(selectLevel.options).some(opt => opt.value === levelParam);
@@ -1181,16 +1215,35 @@
     }
 
     function startGame() {
-      // 1. Filter by Level first
+      // 1. Filter by Notebook and Level first
       let tempPool = [];
-      if (selectedLevel === 'all') {
-        tempPool = [...vocabData];
+      if (selectedNotebook && selectedNotebook !== 'all') {
+        if (selectedNotebook.startsWith('custom:')) {
+          const cat = selectedNotebook.split(':')[1];
+          const slugify = (str) => str ? str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') : '';
+          if (cat === 'personal') {
+            tempPool = vocabData.filter(w => w.isCustom);
+          } else {
+            tempPool = vocabData.filter(w => w.level === 'premium' && slugify(w.category) === cat);
+          }
+        } else if (selectedNotebook.startsWith('hsk:')) {
+          const lvl = selectedNotebook.split(':')[1];
+          tempPool = vocabData.filter(w => !w.isCustom && w.level.toString() === lvl);
+        } else {
+          tempPool = [...vocabData];
+        }
       } else {
-        tempPool = vocabData.filter(w => w.level.toString() === selectedLevel);
+        if (selectedLevel === 'all') {
+          tempPool = [...vocabData];
+        } else {
+          tempPool = vocabData.filter(w => w.level.toString() === selectedLevel);
+        }
       }
 
-      // 2. Filter by Lesson
-      if (selectedLesson === 'random') {
+      // 2. Filter by Lesson (supports multiple selected lessons or single)
+      if (selectedLessonsList.length > 0 && !selectedLessonsList.includes('all') && !selectedLessonsList.includes('random')) {
+        currentPool = tempPool.filter(w => w.lessonId && selectedLessonsList.map(String).includes(w.lessonId.toString()));
+      } else if (selectedLesson === 'random') {
         const uniqueLessonIds = [...new Set(tempPool.map(w => w.lessonId).filter(Boolean))];
         if (uniqueLessonIds.length > 0) {
           const randomLessonId = uniqueLessonIds[Math.floor(Math.random() * uniqueLessonIds.length)];
@@ -1203,17 +1256,36 @@
         } else {
           currentPool = tempPool;
         }
-      } else if (selectedLesson !== 'all') {
+      } else if (selectedLesson !== 'all' && selectedLesson !== 'random') {
         const targetLessonId = parseInt(selectedLesson);
         currentPool = tempPool.filter(w => w.lessonId === targetLessonId);
       } else {
         currentPool = tempPool;
       }
 
-      // If pool is too small, fallback
-      if (currentPool.length < 4) {
-        currentPool = [...vocabData];
+      // 3. Filter by Study Status
+      if (selectedFilter === 'studied') {
+        currentPool = currentPool.filter(w => w.isStudied);
+      } else if (selectedFilter === 'unstudied') {
+        currentPool = currentPool.filter(w => !w.isStudied);
+      } else if (selectedFilter === 'memorized') {
+        currentPool = currentPool.filter(w => w.isMemorized);
+      } else if (selectedFilter === 'unmemorized') {
+        currentPool = currentPool.filter(w => w.isStudied && !w.isMemorized);
+      } else if (selectedFilter === 'starred') {
+        currentPool = currentPool.filter(w => w.isStarred);
       }
+
+      if (currentPool.length === 0) {
+        showToast("Không có từ vựng nào thỏa mãn bộ lọc hiện tại!", false);
+        return;
+      }
+
+      // Shuffle the pool and copy to remainingQuestions
+      currentPool.sort(() => 0.5 - Math.random());
+      remainingQuestions = [...currentPool];
+      totalQuestions = remainingQuestions.length;
+      distractorPool = vocabData.length >= 4 ? [...vocabData] : [...fallbackVocab];
 
       setupModal.style.display = 'none';
       currentStage = 1;
@@ -1228,6 +1300,11 @@
     }
 
     function loadNextQuestion() {
+      if (remainingQuestions.length === 0) {
+        endGame("CHIẾN THẮNG!", "Chúc mừng bạn đã hoàn thành xuất sắc tất cả câu hỏi trong bài học!");
+        return;
+      }
+
       questionAnswered = false;
       timer = 30;
       timerVal.textContent = timer;
@@ -1241,15 +1318,15 @@
         btn.disabled = false;
       });
 
-      // Get a random keyword from the pool
-      const correctWord = currentPool[Math.floor(Math.random() * currentPool.length)];
+      // Get next question (pop from the remaining list)
+      const correctWord = remainingQuestions.shift();
       activeQuestion = correctWord;
 
-      // Make 3 wrong alternatives
+      // Make 3 wrong alternatives from distractorPool
       const alternatives = [];
-      const tempPool = currentPool.filter(w => w.id !== correctWord.id);
+      const tempPool = distractorPool.filter(w => w.id !== correctWord.id);
       
-      // Shuffle helper
+      // Shuffle helper to pick 3 random distractors
       const shuffledTemp = tempPool.sort(() => 0.5 - Math.random());
       for (let i = 0; i < Math.min(3, shuffledTemp.length); i++) {
         alternatives.push(shuffledTemp[i]);
@@ -1266,21 +1343,29 @@
       // Prepare choices depending on Mode
       const choices = [correctWord, ...alternatives].sort(() => 0.5 - Math.random());
       
+      // Determine questionMode for this question
+      if (selectedMode === 'mix') {
+        const modes = ['zh-vi', 'vi-zh', 'zh-pinyin', 'pinyin-zh'];
+        currentQuestionMode = modes[Math.floor(Math.random() * modes.length)];
+      } else {
+        currentQuestionMode = selectedMode;
+      }
+
       // Build UI elements depending on Mode
       if (selectedLesson !== 'all' && selectedLesson !== 'random') {
-        hudStage.textContent = `BÀI ${selectedLesson} - ẢI ${currentStage}`;
+        hudStage.textContent = `BÀI ${selectedLesson} - CÂU ${currentStage}/${totalQuestions}`;
       } else {
-        hudStage.textContent = `ẢI ${currentStage}`;
+        hudStage.textContent = `CÂU ${currentStage}/${totalQuestions}`;
       }
       
       // Clear speak button if not showing Chinese in question
-      if (selectedMode === 'vi-zh' || selectedMode === 'pinyin-zh') {
+      if (currentQuestionMode === 'vi-zh' || currentQuestionMode === 'pinyin-zh') {
         btnSpeakQuestion.style.display = 'none';
       } else {
         btnSpeakQuestion.style.display = 'flex';
       }
 
-      if (selectedMode === 'zh-vi') {
+      if (currentQuestionMode === 'zh-vi') {
         questionPrompt.textContent = 'Tìm Nghĩa Của Từ';
         questionText.textContent = correctWord.word;
         questionText.className = 'question-content';
@@ -1290,7 +1375,7 @@
         optionC_Text.textContent = choices[2].meaning;
         optionD_Text.textContent = choices[3].meaning;
       }
-      else if (selectedMode === 'vi-zh') {
+      else if (currentQuestionMode === 'vi-zh') {
         questionPrompt.textContent = 'Chọn Từ Chữ Hán Thích Hợp';
         questionText.textContent = correctWord.meaning;
         questionText.className = 'question-content vi-word';
@@ -1300,7 +1385,7 @@
         optionC_Text.textContent = choices[2].word;
         optionD_Text.textContent = choices[3].word;
       }
-      else if (selectedMode === 'zh-pinyin') {
+      else if (currentQuestionMode === 'zh-pinyin') {
         questionPrompt.textContent = 'Chọn Phát Âm Pinyin Đúng';
         questionText.textContent = correctWord.word;
         questionText.className = 'question-content';
@@ -1310,7 +1395,7 @@
         optionC_Text.textContent = choices[2].pinyin;
         optionD_Text.textContent = choices[3].pinyin;
       }
-      else if (selectedMode === 'pinyin-zh') {
+      else if (currentQuestionMode === 'pinyin-zh') {
         questionPrompt.textContent = 'Từ Nào Có Phiên Âm Này?';
         questionText.textContent = correctWord.pinyin;
         questionText.className = 'question-content vi-word';
@@ -1327,7 +1412,7 @@
       activeQuestion.correctLetter = optionLetters[correctIdx];
 
       // Auto TTS if Chinese is in question
-      if (selectedMode === 'zh-vi' || selectedMode === 'zh-pinyin') {
+      if (currentQuestionMode === 'zh-vi' || currentQuestionMode === 'zh-pinyin') {
         setTimeout(() => speakChinese(correctWord.word), 300);
       }
 
@@ -1420,7 +1505,7 @@
         syncWordLearningState(activeQuestion.id, true);
 
         // Speak correct answer pronunciation if it was a choice
-        if (selectedMode === 'vi-zh' || selectedMode === 'pinyin-zh') {
+        if (currentQuestionMode === 'vi-zh' || currentQuestionMode === 'pinyin-zh') {
           speakChinese(activeQuestion.word);
         }
 
@@ -1523,7 +1608,7 @@
       document.getElementById('gameover-title').textContent = title;
       document.getElementById('gameover-desc').textContent = message;
       document.getElementById('stat-score').textContent = score.toString();
-      document.getElementById('stat-stage').textContent = `Ải ${currentStage}`;
+      document.getElementById('stat-stage').textContent = `${currentStage - 1} / ${totalQuestions}`;
       document.getElementById('stat-highscore').textContent = highscore.toString();
       document.getElementById('stat-combo').textContent = maxCombo.toString();
 

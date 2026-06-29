@@ -1006,6 +1006,8 @@ function applyFilters(preserveIndex = false) {
     if (activeStatus === 'wrong' && !w.isWrong) return false;
     if (activeStatus === 'starred' && !w.isStarred) return false;
     if (activeStatus === 'custom' && !w.isCustom) return false;
+    if (activeStatus === 'studied' && !w.isStudied) return false;
+    if (activeStatus === 'unstudied' && w.isStudied) return false;
 
     // 3. Search query
     if (searchQuery) {
@@ -1791,7 +1793,8 @@ function setupEventListeners() {
           'zh-vi': 'Chữ Hán ➔ Việt',
           'vi-zh': 'Việt ➔ Chữ Hán',
           'zh-pinyin': 'Chữ Hán ➔ Pinyin',
-          'pinyin-zh': 'Pinyin ➔ Chữ Hán'
+          'pinyin-zh': 'Pinyin ➔ Chữ Hán',
+          'mix': 'Hỗn hợp'
         };
 
         history.forEach(item => {
@@ -1814,7 +1817,7 @@ function setupEventListeners() {
             <td style="padding: 12px 16px; font-weight: 500;">${modeName}</td>
             <td style="padding: 12px 16px; text-align: center; color: var(--accent-teal); font-weight: 600;">${levelLabel}</td>
             <td style="padding: 12px 16px; text-align: center; color: #ffd700; font-weight: 700; font-size: 1.05rem;">${item.score}</td>
-            <td style="padding: 12px 16px; text-align: center;">Ải ${item.stage}</td>
+            <td style="padding: 12px 16px; text-align: center;">${item.stage} câu</td>
             <td style="padding: 12px 16px; text-align: center; color: var(--success); font-weight: 600;">${item.combo}</td>
           `;
           tbody.appendChild(tr);
@@ -2254,6 +2257,56 @@ function setupEventListeners() {
         box.style.background = 'rgba(245, 158, 11, 0.08)';
         box.style.borderColor = 'var(--warning)';
       }
+
+      // Sync the filter buttons under "Phương thức ôn tập"
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      filterBtns.forEach(b => {
+        b.classList.toggle('active-filter', b.getAttribute('data-filter') === filter);
+      });
+
+      currentNotebookPage = 1;
+      renderNotebookWordsTable();
+    });
+  });
+
+  // Notebook Dashboard filter buttons
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active-filter'));
+      btn.classList.add('active-filter');
+      const filterVal = btn.getAttribute('data-filter');
+      dashboardActiveFilter = filterVal;
+
+      // Update the active state in the top stats boxes to match this filter
+      document.querySelectorAll('#nb-stats-interactive-container .stat-box-interactive').forEach(b => {
+        b.classList.remove('active');
+        b.style.background = 'rgba(255, 255, 255, 0.02)';
+        b.style.borderColor = 'var(--border-glass)';
+        
+        if (b.getAttribute('data-filter') === filterVal) {
+          b.classList.add('active');
+          if (filterVal === 'all') {
+            b.style.background = 'rgba(59, 130, 246, 0.08)';
+            b.style.borderColor = 'var(--accent-blue)';
+          } else if (filterVal === 'studied') {
+            b.style.background = 'rgba(139, 92, 246, 0.08)';
+            b.style.borderColor = 'var(--accent-purple)';
+          } else if (filterVal === 'unstudied') {
+            b.style.background = 'rgba(20, 184, 166, 0.08)';
+            b.style.borderColor = 'var(--accent-teal)';
+          } else if (filterVal === 'memorized') {
+            b.style.background = 'rgba(16, 185, 129, 0.08)';
+            b.style.borderColor = 'var(--success)';
+          } else if (filterVal === 'unmemorized') {
+            b.style.background = 'rgba(239, 68, 68, 0.08)';
+            b.style.borderColor = 'var(--danger)';
+          } else if (filterVal === 'starred') {
+            b.style.background = 'rgba(245, 158, 11, 0.08)';
+            b.style.borderColor = 'var(--warning)';
+          }
+        }
+      });
 
       currentNotebookPage = 1;
       renderNotebookWordsTable();
@@ -6130,9 +6183,9 @@ function startGameArenaFromNotebook() {
     }
   }
 
-  let lessonParam = 'all';
+  let lessonsParam = 'all';
   if (selectedDashboardLessons && selectedDashboardLessons.length > 0) {
-    lessonParam = selectedDashboardLessons[0];
+    lessonsParam = selectedDashboardLessons.join(',');
   }
 
   const deckSelectionView = document.getElementById('deck-selection-view');
@@ -6143,7 +6196,7 @@ function startGameArenaFromNotebook() {
 
   const iframe = document.getElementById('game-play-iframe');
   if (iframe) {
-    iframe.src = `/quiz-game.html?level=${levelParam}&lesson=${lessonParam}`;
+    iframe.src = `/quiz-game.html?level=${levelParam}&lessons=${lessonsParam}&filter=${dashboardActiveFilter}&notebook=${activeNotebook}&start=true`;
   }
 }
 

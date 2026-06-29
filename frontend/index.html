@@ -390,6 +390,17 @@
                 </h3>
               </div>
 
+              <!-- Filter Selector -->
+              <div style="margin-bottom: 20px; padding-left: 12px;">
+                <label style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 8px;">Lọc trạng thái ôn tập:</label>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                  <button type="button" class="btn btn-outline filter-btn active-filter" data-filter="all" style="padding: 6px 12px; border-radius: 8px; font-size: 0.85rem;">Tất cả</button>
+                  <button type="button" class="btn btn-outline filter-btn" data-filter="unstudied" style="padding: 6px 12px; border-radius: 8px; font-size: 0.85rem;">Chưa học</button>
+                  <button type="button" class="btn btn-outline filter-btn" data-filter="unmemorized" style="padding: 6px 12px; border-radius: 8px; font-size: 0.85rem;">Chưa thuộc</button>
+                  <button type="button" class="btn btn-outline filter-btn" data-filter="starred" style="padding: 6px 12px; border-radius: 8px; font-size: 0.85rem;">Yêu thích ⭐</button>
+                </div>
+              </div>
+
               <!-- Limit Selector -->
               <div style="margin-bottom: 20px; padding-left: 12px;">
                 <label style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 8px;">Giới hạn số từ ôn tập:</label>
@@ -1628,7 +1639,7 @@
               <th style="padding: 12px 16px;">Chế độ</th>
               <th style="padding: 12px 16px; text-align: center;">Cấp độ</th>
               <th style="padding: 12px 16px; text-align: center;">Điểm số</th>
-              <th style="padding: 12px 16px; text-align: center;">Ải đạt</th>
+              <th style="padding: 12px 16px; text-align: center;">Số câu</th>
               <th style="padding: 12px 16px; text-align: center;">Combo</th>
             </tr>
           </thead>
