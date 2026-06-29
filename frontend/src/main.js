@@ -1848,7 +1848,7 @@ function setupEventListeners() {
   // Form submission
   addWordForm.addEventListener('submit', handleAddWordForm);
 
-  // Keyboard navigation hotkeys
+  // Keyboard navigation hotkeys (Only for HSK Exam Player)
   document.addEventListener('keydown', (e) => {
     // Ignore key bindings if user is typing in inputs or select boxes
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') {
@@ -1877,45 +1877,6 @@ function setupEventListeners() {
         }
       }
       return;
-    }
-
-    if (key === ' ' || e.code === 'Space') {
-      e.preventDefault();
-      flipCard();
-    } else if (key === 'arrowright' || key === 'd') {
-      stopAutoplay();
-      nextCard();
-    } else if (key === 'arrowleft' || key === 'a') {
-      stopAutoplay();
-      prevCard();
-    } else if (key === 'enter' || key === 'w') {
-      if (filteredList.length > 0) {
-        toggleWordMemorized(filteredList[currentIndex].id);
-      }
-    } else if (key === 'q') {
-      if (filteredList.length > 0) {
-        const current = filteredList[currentIndex];
-        if (current.isMemorized) {
-          toggleWordMemorized(current.id);
-        } else if (!current.isStudied) {
-          markWordAsStudied(current.id);
-          updateStats();
-          applyFilters(true);
-        }
-      }
-    } else if (key === 's') {
-      if (filteredList.length > 0) {
-        toggleWordStarred(filteredList[currentIndex].id);
-      }
-    } else if (key === 'v') {
-      if (filteredList.length > 0) {
-        markWordAsStudied(filteredList[currentIndex].id);
-        if (isFlipped && filteredList[currentIndex].example_zh) {
-          speakText(filteredList[currentIndex].example_zh);
-        } else {
-          speakText(filteredList[currentIndex].word);
-        }
-      }
     }
   });
 
