@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Đấu Trường Từ Vựng HSK - Tiếng Trung Hongtai</title>
+  <link rel="icon" type="image/png" href="/src/assets/logo.png">
 
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -1254,6 +1255,15 @@
       }
     }
 
+    function shuffleArray(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
     function startGame() {
       // 1. Filter by Notebook and Level first
       let tempPool = [];
@@ -1322,8 +1332,7 @@
       }
 
       // Shuffle the pool and copy to remainingQuestions
-      currentPool.sort(() => 0.5 - Math.random());
-      remainingQuestions = [...currentPool];
+      remainingQuestions = shuffleArray(currentPool);
       totalQuestions = remainingQuestions.length;
       distractorPool = vocabData.length >= 4 ? [...vocabData] : [...fallbackVocab];
 
@@ -1367,7 +1376,7 @@
       const tempPool = distractorPool.filter(w => w.id !== correctWord.id);
 
       // Shuffle helper to pick 3 random distractors
-      const shuffledTemp = tempPool.sort(() => 0.5 - Math.random());
+      const shuffledTemp = shuffleArray(tempPool);
       for (let i = 0; i < Math.min(3, shuffledTemp.length); i++) {
         alternatives.push(shuffledTemp[i]);
       }
@@ -1381,7 +1390,7 @@
       }
 
       // Prepare choices depending on Mode
-      const choices = [correctWord, ...alternatives].sort(() => 0.5 - Math.random());
+      const choices = shuffleArray([correctWord, ...alternatives]);
 
       // Determine questionMode for this question
       if (selectedMode === 'mix') {
