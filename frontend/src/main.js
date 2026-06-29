@@ -295,10 +295,10 @@ async function fetchVocabulary() {
 
     // Filter out empty/incomplete database entries
     if (Array.isArray(vocabList)) {
-      vocabList = vocabList.filter(w => 
-        w && 
-        w.word && w.word.trim() !== '' && 
-        w.meaning && w.meaning.trim() !== '' && 
+      vocabList = vocabList.filter(w =>
+        w &&
+        w.word && w.word.trim() !== '' &&
+        w.meaning && w.meaning.trim() !== '' &&
         w.pinyin && w.pinyin.trim() !== ''
       );
     }
@@ -770,8 +770,8 @@ function renderDeckSelectionView() {
   // Check if there is an active study or quiz session currently displayed
   const studyView = document.getElementById('flashcard-study-view');
   const quizView = document.getElementById('quiz-study-view');
-  const isStudying = (studyView && studyView.style.display === 'block') || 
-                     (quizView && quizView.style.display === 'block');
+  const isStudying = (studyView && studyView.style.display === 'block') ||
+    (quizView && quizView.style.display === 'block');
 
   if (isStudying) {
     // Refresh the notebook data/statistics in the background without changing active view
@@ -1756,7 +1756,7 @@ function setupEventListeners() {
   if (gameHistoryBtn && gameHistoryModal) {
     gameHistoryBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      
+
       // Close dropdown
       const activeDropdown = document.querySelector('.user-dropdown.show-menu');
       if (activeDropdown) activeDropdown.classList.remove('show-menu');
@@ -1779,40 +1779,40 @@ function setupEventListeners() {
       fetch(API_BASE_URL + '/api/user/game-history', {
         headers: getAuthHeaders()
       })
-      .then(res => res.json())
-      .then(history => {
-        if (!history || history.length === 0) {
-          if (emptyDiv) emptyDiv.style.display = 'block';
-          return;
-        }
+        .then(res => res.json())
+        .then(history => {
+          if (!history || history.length === 0) {
+            if (emptyDiv) emptyDiv.style.display = 'block';
+            return;
+          }
 
-        // Sort by newest played first
-        history.sort((a, b) => new Date(b.playedAt) - new Date(a.playedAt));
+          // Sort by newest played first
+          history.sort((a, b) => new Date(b.playedAt) - new Date(a.playedAt));
 
-        const modeNames = {
-          'zh-vi': 'Chữ Hán ➔ Việt',
-          'vi-zh': 'Việt ➔ Chữ Hán',
-          'zh-pinyin': 'Chữ Hán ➔ Pinyin',
-          'pinyin-zh': 'Pinyin ➔ Chữ Hán',
-          'mix': 'Hỗn hợp'
-        };
+          const modeNames = {
+            'zh-vi': 'Chữ Hán ➔ Việt',
+            'vi-zh': 'Việt ➔ Chữ Hán',
+            'zh-pinyin': 'Chữ Hán ➔ Pinyin',
+            'pinyin-zh': 'Pinyin ➔ Chữ Hán',
+            'mix': 'Hỗn hợp'
+          };
 
-        history.forEach(item => {
-          const tr = document.createElement('tr');
-          tr.style.borderBottom = '1px solid var(--border-glass)';
-          tr.style.transition = 'background 0.2s';
-          tr.onmouseover = () => tr.style.background = 'rgba(255,255,255,0.02)';
-          tr.onmouseout = () => tr.style.background = 'transparent';
+          history.forEach(item => {
+            const tr = document.createElement('tr');
+            tr.style.borderBottom = '1px solid var(--border-glass)';
+            tr.style.transition = 'background 0.2s';
+            tr.onmouseover = () => tr.style.background = 'rgba(255,255,255,0.02)';
+            tr.onmouseout = () => tr.style.background = 'transparent';
 
-          const date = new Date(item.playedAt).toLocaleString('vi-VN', {
-            year: 'numeric', month: 'numeric', day: 'numeric',
-            hour: '2-digit', minute: '2-digit'
-          });
+            const date = new Date(item.playedAt).toLocaleString('vi-VN', {
+              year: 'numeric', month: 'numeric', day: 'numeric',
+              hour: '2-digit', minute: '2-digit'
+            });
 
-          const modeName = modeNames[item.mode] || item.mode;
-          const levelLabel = item.level === 'all' ? 'Tất cả' : `HSK ${item.level}`;
+            const modeName = modeNames[item.mode] || item.mode;
+            const levelLabel = item.level === 'all' ? 'Tất cả' : `HSK ${item.level}`;
 
-          tr.innerHTML = `
+            tr.innerHTML = `
             <td style="padding: 12px 16px; color: var(--text-secondary);">${date}</td>
             <td style="padding: 12px 16px; font-weight: 500;">${modeName}</td>
             <td style="padding: 12px 16px; text-align: center; color: var(--accent-teal); font-weight: 600;">${levelLabel}</td>
@@ -1820,16 +1820,16 @@ function setupEventListeners() {
             <td style="padding: 12px 16px; text-align: center;">${item.stage} câu</td>
             <td style="padding: 12px 16px; text-align: center; color: var(--success); font-weight: 600;">${item.combo}</td>
           `;
-          tbody.appendChild(tr);
+            tbody.appendChild(tr);
+          });
+        })
+        .catch(err => {
+          console.error("Error loading game history:", err);
+          if (emptyDiv) {
+            emptyDiv.innerHTML = '<i class="fa-solid fa-circle-exclamation" style="font-size: 2.5rem; margin-bottom: 12px; color: var(--danger);"></i><p>Không thể tải lịch sử chơi game từ máy chủ.</p>';
+            emptyDiv.style.display = 'block';
+          }
         });
-      })
-      .catch(err => {
-        console.error("Error loading game history:", err);
-        if (emptyDiv) {
-          emptyDiv.innerHTML = '<i class="fa-solid fa-circle-exclamation" style="font-size: 2.5rem; margin-bottom: 12px; color: var(--danger);"></i><p>Không thể tải lịch sử chơi game từ máy chủ.</p>';
-          emptyDiv.style.display = 'block';
-        }
-      });
     });
 
     const closeModal = () => {
@@ -2096,7 +2096,7 @@ function setupEventListeners() {
     activeHskVersion = version;
     localStorage.setItem('active_hsk_version', version);
     updateVersionButtonsUI();
-    
+
     // Refresh lists and stats dynamically
     renderLessonsList();
     renderSubdecksList();
@@ -2244,7 +2244,7 @@ function setupEventListeners() {
         b.classList.remove('active');
         b.style.background = 'rgba(255, 255, 255, 0.02)';
         b.style.borderColor = 'var(--border-glass)';
-        
+
         if (b.getAttribute('data-filter') === filterVal) {
           b.classList.add('active');
           if (filterVal === 'all') {
@@ -3748,7 +3748,7 @@ async function handleTypingCheck() {
   if (!input || !feedback) return;
 
   const answer = input.value.trim().toLowerCase();
-  
+
   // Alternative Answers Validation: Split database word by |, /, ;, or commas
   const correctAnswerStr = current.word.trim();
   const acceptableAnswers = correctAnswerStr.split(/[\/|;；,，、]+/).map(ans => ans.trim().toLowerCase());
@@ -4291,9 +4291,9 @@ function renderLessonsList() {
   }
 
   // Filter HSK level vocabulary
-  const levelVocabs = vocabList.filter(w => 
-    !w.isCustom && 
-    w.level.toString() === activeLessonsLevel.toString() && 
+  const levelVocabs = vocabList.filter(w =>
+    !w.isCustom &&
+    w.level.toString() === activeLessonsLevel.toString() &&
     (w.hskVersion || '3.0') === activeHskVersion
   );
 
@@ -6157,7 +6157,7 @@ function startGameArenaFromNotebook() {
 
   const iframe = document.getElementById('game-play-iframe');
   if (iframe) {
-    iframe.src = `/quiz-game.html?level=${levelParam}&lessons=${lessonsParam}&filter=${dashboardActiveFilter}&notebook=${activeNotebook}&start=true`;
+    iframe.src = `quiz-game.html?level=${levelParam}&lessons=${lessonsParam}&filter=${dashboardActiveFilter}&notebook=${activeNotebook}&start=true`;
   }
 }
 
