@@ -5,11 +5,49 @@ import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import https from 'https';
+import mongoose from 'mongoose';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const DB_PATH = path.join(__dirname, 'database.json');
 const USER_DB_PATH = path.join(__dirname, 'user_data.json');
+
+// Connect to MongoDB Atlas
+const MONGODB_URI = process.env.MONGODB_URI;
+if (!MONGODB_URI) {
+  console.error("Warning: MONGODB_URI is not set in environment variables!");
+} else {
+  mongoose.connect(MONGODB_URI)
+    .then(() => console.log("MongoDB connected successfully."))
+    .catch(err => console.error("MongoDB connection error:", err));
+}
+
+// Define Schemas and Models
+const userSchema = new mongoose.Schema({
+  _id: String, // email
+  name: String,
+  picture: String,
+  stats: {
+    streak: { type: Number, default: 0 },
+    studyTime: { type: Number, default: 0 },
+    lastActiveDate: { type: String, default: "" }
+  },
+  gameHistory: { type: Array, default: [] },
+  progress: { type: Object, default: {} },
+  customWords: { type: Array, default: [] },
+  chats: { type: Array, default: [] }
+}, { minimize: false });
+const User = mongoose.model('User', userSchema);
+
+const sessionSchema = new mongoose.Schema({
+  _id: String, // sessionToken
+  email: String,
+  createdAt: { type: Date, default: Date.now, expires: '7d' }
+});
+const Session = mongoose.model('Session', sessionSchema);
+
+// In-memory Cache for User Data
+let cachedUserData = null;
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -41,24 +79,134 @@ async function readDatabase() {
 
 // Helper to read user_data.json
 async function readUserData() {
+  if (cachedUserData) {
+    return cachedUserData;
+  }
+
   try {
-    const data = await fs.readFile(USER_DB_PATH, 'utf-8');
-    return JSON.parse(data);
+    const usersList = await User.find({});
+    const sessionsList = await Session.find({});
+
+    const users = {};
+    const progress = {};
+    const customWords = {};
+    const chats = {};
+    const sessions = {};
+
+    usersList.forEach(u => {
+      users[u._id] = {
+        name: u.name,
+        picture: u.picture,
+        stats: u.stats,
+        gameHistory: u.gameHistory || []
+      };
+      progress[u._id] = u.progress || {};
+      customWords[u._id] = u.customWords || [];
+      chats[u._id] = u.chats || [];
+    });
+
+    sessionsList.forEach(s => {
+      sessions[s._id] = s.email;
+    });
+
+    cachedUserData = { users, progress, customWords, sessions, chats };
+
+    // If MongoDB is completely empty (no users), perform migration from user_data.json
+    if (usersList.length === 0) {
+      await performDataMigration();
+    }
+
+    return cachedUserData;
   } catch (error) {
-    console.error('Error reading user database, returning default skeleton:', error);
-    return { users: {}, progress: {}, customWords: {} };
+    console.error("Error reading database from MongoDB, returning skeleton:", error);
+    return { users: {}, progress: {}, customWords: {}, sessions: {}, chats: {} };
   }
 }
 
-// Helper to write to user_data.json
-async function writeUserData(data) {
+// Data Migration Helper
+async function performDataMigration() {
   try {
-    await fs.writeFile(USER_DB_PATH, JSON.stringify(data, null, 2), 'utf-8');
-    return true;
-  } catch (error) {
-    console.error('Error writing to user database:', error);
-    return false;
+    const fileExists = await fs.access(USER_DB_PATH).then(() => true).catch(() => false);
+    if (!fileExists) {
+      console.log("No user_data.json file found for migration.");
+      return;
+    }
+
+    const dataStr = await fs.readFile(USER_DB_PATH, 'utf-8');
+    const fileData = JSON.parse(dataStr);
+    if (!fileData || !fileData.users || Object.keys(fileData.users).length === 0) {
+      console.log("user_data.json is empty or invalid, skipping migration.");
+      return;
+    }
+
+    console.log("Starting data migration from user_data.json to MongoDB...");
+    
+    cachedUserData = {
+      users: fileData.users || {},
+      progress: fileData.progress || {},
+      customWords: fileData.customWords || {},
+      sessions: fileData.sessions || {},
+      chats: fileData.chats || {}
+    };
+
+    await persistToMongoDB(cachedUserData);
+    console.log("Data migration to MongoDB Atlas completed successfully!");
+  } catch (err) {
+    console.error("Data migration failed:", err);
   }
+}
+
+// Helper to write user data
+async function writeUserData(data) {
+  // Sync instantly to in-memory cache
+  cachedUserData = data;
+
+  // Persist asynchronously in the background
+  persistToMongoDB(data).catch(err => {
+    console.error("Background persistence to MongoDB failed:", err);
+  });
+
+  return true;
+}
+
+// Background MongoDB Persistence
+async function persistToMongoDB(data) {
+  const promises = [];
+  const emails = new Set([
+    ...Object.keys(data.users || {}),
+    ...Object.keys(data.progress || {}),
+    ...Object.keys(data.customWords || {}),
+    ...Object.keys(data.chats || {})
+  ]);
+
+  for (const email of emails) {
+    const u = data.users[email] || { name: "", picture: "", stats: { streak: 0, studyTime: 0, lastActiveDate: "" } };
+    promises.push(User.replaceOne(
+      { _id: email },
+      {
+        _id: email,
+        name: u.name,
+        picture: u.picture,
+        stats: u.stats,
+        gameHistory: u.gameHistory || [],
+        progress: data.progress[email] || {},
+        customWords: data.customWords[email] || [],
+        chats: data.chats[email] || []
+      },
+      { upsert: true }
+    ));
+  }
+
+  await Session.deleteMany({});
+  for (const token of Object.keys(data.sessions || {})) {
+    promises.push(Session.replaceOne(
+      { _id: token },
+      { _id: token, email: data.sessions[token] },
+      { upsert: true }
+    ));
+  }
+
+  await Promise.all(promises);
 }
 
 // Session store in memory: sessionToken -> userEmail
