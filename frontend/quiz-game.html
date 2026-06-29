@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html lang="vi" class="dark">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Đấu Trường Từ Vựng HSK - Tiếng Trung Hongtai</title>
-  
+
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+SC:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+SC:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
 
   <style>
     :root {
@@ -22,18 +25,22 @@
       --border-glass-hover: rgba(255, 255, 255, 0.15);
       --text-primary: #f8fafc;
       --text-secondary: #94a3b8;
-      
+
       /* Option Colors */
-      --option-a: #ef4444; /* Red */
-      --option-b: #10b981; /* Green */
-      --option-c: #f59e0b; /* Yellow */
-      --option-d: #3b82f6; /* Blue */
-      
+      --option-a: #ef4444;
+      /* Red */
+      --option-b: #10b981;
+      /* Green */
+      --option-c: #f59e0b;
+      /* Yellow */
+      --option-d: #3b82f6;
+      /* Blue */
+
       --accent-teal: #06b6d4;
       --accent-purple: #8b5cf6;
       --success: #10b981;
       --danger: #ef4444;
-      
+
       --font-sans: 'Be Vietnam Pro', sans-serif;
       --font-display: 'Be Vietnam Pro', sans-serif;
       --font-chinese: 'Noto Sans SC', sans-serif;
@@ -142,7 +149,9 @@
     }
 
     @keyframes heartbeat {
-      to { transform: scale(1.15); }
+      to {
+        transform: scale(1.15);
+      }
     }
 
     .stage-badge {
@@ -206,7 +215,7 @@
       font-weight: 700;
       font-family: var(--font-chinese);
       color: var(--text-primary);
-      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
       line-height: 1.3;
     }
 
@@ -235,7 +244,7 @@
       align-items: center;
       justify-content: center;
       position: relative;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
       transition: border-color 0.2s, box-shadow 0.2s;
     }
 
@@ -246,7 +255,9 @@
     }
 
     @keyframes pulse-danger {
-      to { box-shadow: 0 0 25px rgba(239, 68, 68, 0.9); }
+      to {
+        box-shadow: 0 0 25px rgba(239, 68, 68, 0.9);
+      }
     }
 
     .timer-svg {
@@ -321,10 +332,21 @@
     }
 
     /* Individual Color Accents for Badges */
-    .option-button[data-option="A"] .option-badge { background-color: var(--option-a); }
-    .option-button[data-option="B"] .option-badge { background-color: var(--option-b); }
-    .option-button[data-option="C"] .option-badge { background-color: var(--option-c); }
-    .option-button[data-option="D"] .option-badge { background-color: var(--option-d); }
+    .option-button[data-option="A"] .option-badge {
+      background-color: var(--option-a);
+    }
+
+    .option-button[data-option="B"] .option-badge {
+      background-color: var(--option-b);
+    }
+
+    .option-button[data-option="C"] .option-badge {
+      background-color: var(--option-c);
+    }
+
+    .option-button[data-option="D"] .option-badge {
+      background-color: var(--option-d);
+    }
 
     .option-text {
       font-size: 1rem;
@@ -339,6 +361,7 @@
       border-color: var(--success) !important;
       box-shadow: 0 0 15px rgba(16, 185, 129, 0.3) !important;
     }
+
     .option-button.correct .option-text {
       color: var(--success) !important;
       font-weight: 700;
@@ -350,14 +373,27 @@
       box-shadow: 0 0 15px rgba(239, 68, 68, 0.3) !important;
       animation: shake-anim 0.4s ease-in-out;
     }
+
     .option-button.incorrect .option-text {
       color: var(--danger) !important;
     }
 
     @keyframes shake-anim {
-      0%, 100% { transform: translateX(0); }
-      20%, 60% { transform: translateX(-6px); }
-      40%, 80% { transform: translateX(6px); }
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      20%,
+      60% {
+        transform: translateX(-6px);
+      }
+
+      40%,
+      80% {
+        transform: translateX(6px);
+      }
     }
 
     /* Control actions row */
@@ -412,7 +448,7 @@
       border: 1px solid var(--border-glass);
       border-radius: 20px;
       padding: 28px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
       text-align: center;
     }
 
@@ -448,7 +484,8 @@
       display: block;
     }
 
-    .setting-select, .setting-grid {
+    .setting-select,
+    .setting-grid {
       width: 100%;
     }
 
@@ -575,7 +612,7 @@
       border-radius: 20px;
       font-weight: 600;
       font-size: 0.85rem;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
       z-index: 50;
       opacity: 0;
       pointer-events: none;
@@ -611,10 +648,11 @@
     }
   </style>
 </head>
+
 <body>
 
   <div class="game-container">
-    
+
     <!-- Toast Popup notifications -->
     <div id="game-toast" class="game-toast">+10 Điểm!</div>
 
@@ -624,7 +662,7 @@
         <div class="icon-title-wrap">🐼</div>
         <h2 class="modal-title">Đấu Trường Từ Vựng</h2>
         <p class="modal-desc">Trắc nghiệm đố vui phản xạ từ vựng tiếng Trung HSK cực vui, cực bùng nổ!</p>
-        
+
         <div class="setting-group">
           <label class="setting-label">Cấp độ HSK</label>
           <select id="select-level" class="setting-select">
@@ -665,7 +703,7 @@
         <div class="icon-title-wrap" id="gameover-icon">💥</div>
         <h2 class="modal-title" id="gameover-title">Trò Chơi Kết Thúc!</h2>
         <p class="modal-desc" id="gameover-desc">Bom đã nổ vì bạn hết lượt thử. Hãy rèn luyện thêm nhé!</p>
-        
+
         <div class="gameover-stat">
           <span class="gameover-lbl">Điểm số đạt được:</span>
           <span class="gameover-val highlight" id="stat-score">000</span>
@@ -676,7 +714,14 @@
         </div>
         <div class="gameover-stat">
           <span class="gameover-lbl">Kỷ lục của bạn:</span>
-          <span class="gameover-val highlight" id="stat-highscore">000</span>
+          <span style="display: flex; align-items: center; gap: 8px;">
+            <span class="gameover-val highlight" id="stat-highscore">000</span>
+            <button id="btn-reset-highscore" title="Xóa kỷ lục trên máy này"
+              style="background: transparent; border: none; color: var(--danger); cursor: pointer; font-size: 0.9rem; padding: 2px 4px; display: inline-flex; align-items: center; justify-content: center; outline: none; transition: transform 0.2s;"
+              onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </span>
         </div>
         <div class="gameover-stat">
           <span class="gameover-lbl">Số câu đúng liên tục:</span>
@@ -685,7 +730,8 @@
 
         <div style="display: flex; gap: 12px; margin-top: 15px; width: 100%;">
           <button id="btn-restart" class="start-btn" style="margin-top: 0; flex: 1;">Thử Lại</button>
-          <button id="btn-gameover-exit" class="start-btn btn-exit-secondary" style="margin-top: 0; flex: 1;">Thoát</button>
+          <button id="btn-gameover-exit" class="start-btn btn-exit-secondary"
+            style="margin-top: 0; flex: 1;">Thoát</button>
         </div>
       </div>
     </div>
@@ -758,7 +804,7 @@
       <button class="hud-btn" id="btn-sound-toggle" title="Tắt/Bật âm thanh">
         <i class="fa-solid fa-volume-high"></i> <span>Âm thanh: Bật</span>
       </button>
-      
+
       <span style="font-size: 0.72rem; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
         <i class="fa-solid fa-circle-exclamation text-warning"></i> Cẩn thận! Chọn sai sẽ bị nổ bom và mất tim!
       </span>
@@ -871,7 +917,7 @@
         }
         const noise = audioCtx.createBufferSource();
         noise.buffer = buffer;
-        
+
         const filter = audioCtx.createBiquadFilter();
         filter.type = 'lowpass';
         filter.frequency.setValueAtTime(300, audioCtx.currentTime);
@@ -932,14 +978,14 @@
     const hudStage = document.getElementById('hud-stage');
     const hudScore = document.getElementById('hud-score');
     const heartsWrap = document.getElementById('hearts-wrap');
-    
+
     const timerBomb = document.getElementById('timer-bomb');
     const timerCircle = document.getElementById('timer-circle');
     const timerVal = document.getElementById('timer-val');
 
     const questionPrompt = document.getElementById('question-prompt');
     const questionText = document.getElementById('question-text');
-    
+
     const optionButtons = document.querySelectorAll('.option-button');
     const optionA_Text = document.getElementById('option-a-text');
     const optionB_Text = document.getElementById('option-b-text');
@@ -950,19 +996,19 @@
     function updateLessonSelector() {
       if (!selectLesson) return;
       const lvl = selectLevel.value;
-      
+
       selectLesson.innerHTML = `
         <option value="all">Tất cả các bài (Mặc định)</option>
         <option value="random">Random bài bất kì</option>
       `;
-      
+
       if (!Array.isArray(vocabData) || vocabData.length === 0) return;
-      
+
       // Filter words of selected level
       const levelWords = lvl === 'all'
         ? vocabData
         : vocabData.filter(w => w.level.toString() === lvl);
-        
+
       // Extract unique lessons (lessonId and lessonTitle)
       const lessonsMap = new Map();
       levelWords.forEach(w => {
@@ -970,10 +1016,10 @@
           lessonsMap.set(w.lessonId, w.lessonTitle);
         }
       });
-      
+
       // Sort lesson IDs ascending
       const sortedLessonIds = Array.from(lessonsMap.keys()).sort((a, b) => a - b);
-      
+
       sortedLessonIds.forEach(id => {
         const title = lessonsMap.get(id);
         const opt = document.createElement('option');
@@ -991,7 +1037,7 @@
         headers['Authorization'] = `Bearer ${token}`;
         headers['x-session-token'] = token;
       }
-      
+
       try {
         const response = await fetch(API_BASE_URL + '/api/vocabulary', { headers });
         if (!response.ok) throw new Error("API failed");
@@ -1006,10 +1052,10 @@
 
       // Filter out any entries with empty/missing word, meaning or pinyin
       if (Array.isArray(vocabData)) {
-        vocabData = vocabData.filter(w => 
-          w && 
-          w.word && w.word.trim() !== '' && 
-          w.meaning && w.meaning.trim() !== '' && 
+        vocabData = vocabData.filter(w =>
+          w &&
+          w.word && w.word.trim() !== '' &&
+          w.meaning && w.meaning.trim() !== '' &&
           w.pinyin && w.pinyin.trim() !== ''
         );
       }
@@ -1095,7 +1141,7 @@
       modeSelector.querySelectorAll('.mode-chip').forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
       selectedMode = chip.getAttribute('data-mode');
-      
+
       // Play audio select beep
       playBeep(600, 'sine', 0.08, 0.08);
     });
@@ -1125,6 +1171,22 @@
     btnQuit.addEventListener('click', handleExit);
     if (btnGameOverExit) {
       btnGameOverExit.addEventListener('click', handleExit);
+    }
+
+    const btnResetHighscore = document.getElementById('btn-reset-highscore');
+    if (btnResetHighscore) {
+      btnResetHighscore.addEventListener('click', () => {
+        if (confirm("Bạn có chắc chắn muốn đặt lại (xóa) kỷ lục điểm số cao nhất trên trình duyệt của máy này không?")) {
+          for (let i = localStorage.length - 1; i >= 0; i--) {
+            const key = localStorage.key(i);
+            if (key && key.startsWith('highscore_')) {
+              localStorage.removeItem(key);
+            }
+          }
+          document.getElementById('stat-highscore').textContent = score.toString();
+          showToast("Đã xóa kỷ lục trên máy này! 🗑️", true);
+        }
+      });
     }
 
     btnSoundToggle.addEventListener('click', () => {
@@ -1295,7 +1357,7 @@
       maxCombo = 0;
       updateHeartsUI();
       hudScore.textContent = score.toString().padStart(3, '0');
-      
+
       loadNextQuestion();
     }
 
@@ -1325,7 +1387,7 @@
       // Make 3 wrong alternatives from distractorPool
       const alternatives = [];
       const tempPool = distractorPool.filter(w => w.id !== correctWord.id);
-      
+
       // Shuffle helper to pick 3 random distractors
       const shuffledTemp = tempPool.sort(() => 0.5 - Math.random());
       for (let i = 0; i < Math.min(3, shuffledTemp.length); i++) {
@@ -1342,7 +1404,7 @@
 
       // Prepare choices depending on Mode
       const choices = [correctWord, ...alternatives].sort(() => 0.5 - Math.random());
-      
+
       // Determine questionMode for this question
       if (selectedMode === 'mix') {
         const modes = ['zh-vi', 'vi-zh', 'zh-pinyin', 'pinyin-zh'];
@@ -1357,7 +1419,7 @@
       } else {
         hudStage.textContent = `CÂU ${currentStage}/${totalQuestions}`;
       }
-      
+
       // Clear speak button if not showing Chinese in question
       if (currentQuestionMode === 'vi-zh' || currentQuestionMode === 'pinyin-zh') {
         btnSpeakQuestion.style.display = 'none';
@@ -1369,7 +1431,7 @@
         questionPrompt.textContent = 'Tìm Nghĩa Của Từ';
         questionText.textContent = correctWord.word;
         questionText.className = 'question-content';
-        
+
         optionA_Text.textContent = choices[0].meaning;
         optionB_Text.textContent = choices[1].meaning;
         optionC_Text.textContent = choices[2].meaning;
@@ -1379,7 +1441,7 @@
         questionPrompt.textContent = 'Chọn Từ Chữ Hán Thích Hợp';
         questionText.textContent = correctWord.meaning;
         questionText.className = 'question-content vi-word';
-        
+
         optionA_Text.textContent = choices[0].word;
         optionB_Text.textContent = choices[1].word;
         optionC_Text.textContent = choices[2].word;
@@ -1389,7 +1451,7 @@
         questionPrompt.textContent = 'Chọn Phát Âm Pinyin Đúng';
         questionText.textContent = correctWord.word;
         questionText.className = 'question-content';
-        
+
         optionA_Text.textContent = choices[0].pinyin;
         optionB_Text.textContent = choices[1].pinyin;
         optionC_Text.textContent = choices[2].pinyin;
@@ -1399,7 +1461,7 @@
         questionPrompt.textContent = 'Từ Nào Có Phiên Âm Này?';
         questionText.textContent = correctWord.pinyin;
         questionText.className = 'question-content vi-word';
-        
+
         optionA_Text.textContent = choices[0].word;
         optionB_Text.textContent = choices[1].word;
         optionC_Text.textContent = choices[2].word;
@@ -1448,7 +1510,7 @@
     function handleTimeout() {
       questionAnswered = true;
       playFailSound();
-      
+
       // Highlight the correct answer
       optionButtons.forEach(btn => {
         if (btn.getAttribute('data-option') === activeQuestion.correctLetter) {
@@ -1481,7 +1543,7 @@
       questionAnswered = true;
       clearInterval(timerInterval);
       const chosen = btn.getAttribute('data-option');
-      
+
       optionButtons.forEach(b => b.disabled = true);
 
       if (chosen === activeQuestion.correctLetter) {
@@ -1500,7 +1562,7 @@
         hudScore.textContent = score.toString().padStart(3, '0');
 
         showToast(`Chính xác! +${pts} Điểm ${combo > 3 ? '🔥 Combo ' + combo : ''}`, true);
-        
+
         // Sync progress - set memorized to true!
         syncWordLearningState(activeQuestion.id, true);
 
@@ -1595,13 +1657,13 @@
             combo: maxCombo
           })
         })
-        .then(res => res.json())
-        .then(data => {
-          console.log("Game history saved:", data);
-        })
-        .catch(err => {
-          console.error("Error saving game history:", err);
-        });
+          .then(res => res.json())
+          .then(data => {
+            console.log("Game history saved:", data);
+          })
+          .catch(err => {
+            console.error("Error saving game history:", err);
+          });
       }
 
       // Populate game over screen
@@ -1622,7 +1684,7 @@
     function speakChinese(text) {
       if (!window.speechSynthesis) return;
       window.speechSynthesis.cancel(); // Stop active voices
-      
+
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'zh-CN';
       utterance.rate = 0.85;
@@ -1651,7 +1713,7 @@
           const user = JSON.parse(userStr);
           const nameEl = document.querySelector('.player-info-meta h4');
           const avatarEl = document.querySelector('.player-avatar');
-          
+
           if (nameEl && user.name) {
             nameEl.textContent = user.name;
           }
@@ -1671,4 +1733,5 @@
     loadVocabulary();
   </script>
 </body>
+
 </html>
