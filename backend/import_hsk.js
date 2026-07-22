@@ -143,7 +143,7 @@ function splitIntoParts(array, maxChunkSize = 20, minChunkSize = 13) {
   if (N < 26) {
     return [array];
   }
-  
+
   let P = Math.ceil(N / maxChunkSize);
   // Ensure P doesn't create parts smaller than minChunkSize if we can avoid it
   if (P > 1 && Math.floor(N / P) < minChunkSize) {
@@ -151,7 +151,7 @@ function splitIntoParts(array, maxChunkSize = 20, minChunkSize = 13) {
       P = P - 1;
     }
   }
-  
+
   const result = [];
   const baseSize = Math.floor(N / P);
   const extra = N % P;
@@ -325,7 +325,7 @@ async function run() {
 
   parsedWords3.forEach(item => {
     const pdfInfo = getPdfLessonInfo(item.word);
-    
+
     if (pdfInfo) {
       const lvl = pdfInfo.level;
       const les = pdfInfo.lesson;
@@ -375,16 +375,16 @@ async function run() {
 
   for (let lvl = 1; lvl <= 3; lvl++) {
     const maxPdfLesson = lvl === 1 ? 15 : (lvl === 2 ? 15 : 18);
-    
+
     for (let les = 1; les <= maxPdfLesson; les++) {
       const words = textbookGroups3[lvl][les] || [];
       if (words.length === 0) continue;
-      
+
       const meta = (LESSONS_METADATA[lvl] && LESSONS_METADATA[lvl][les]) || { title: `Bài ${les}`, desc: `Từ vựng HSK ${lvl} Bài ${les}` };
-      
+
       // Split into parts of 13-20 words
       const parts = splitIntoParts(words, 20, 13);
-      
+
       if (parts.length === 1) {
         const lessonId = nextLessonIdForLevel3[lvl]++;
         parts[0].forEach(item => {
@@ -413,7 +413,7 @@ async function run() {
       const partNum = chunkIdx + 1;
       const title = `Từ vựng bổ sung - Phần ${partNum}`;
       const desc = `Ôn tập từ vựng mở rộng của HSK Cấp ${lvl} phần ${partNum}.`;
-      
+
       chunk.forEach(item => {
         appendWordToList(item, lvl, lessonId, title, desc, '3.0');
       });

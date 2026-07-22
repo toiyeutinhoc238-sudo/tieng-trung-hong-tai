@@ -747,17 +747,44 @@
       container.appendChild(nextBtn);
     }
 
+    let speechVoice = localStorage.getItem('speech_voice') || 'zh-CN-XiaoxiaoNeural';
+    let speechPlaybackRate = parseFloat(localStorage.getItem('speech_playback_rate') || '1.0');
+    let activeAudioElement = null;
+
     function speakText(text) {
       if (!text) return;
+      if (activeAudioElement) {
+        try {
+          activeAudioElement.pause();
+          activeAudioElement.currentTime = 0;
+          activeAudioElement.src = '';
+        } catch (e) {}
+        activeAudioElement = null;
+      }
       if (typeof speechSynthesis !== 'undefined') {
         speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'zh-CN';
-        utterance.rate = 0.85;
-        speechSynthesis.speak(utterance);
-      } else {
-        showToast('Thiết bị không hỗ trợ đọc âm thanh offline!', true);
       }
+
+      const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(speechVoice)}`;
+      const audio = new Audio(url);
+      audio.playbackRate = speechPlaybackRate;
+      activeAudioElement = audio;
+
+      audio.play().catch(err => {
+        console.warn("Edge TTS play failed, falling back to browser SpeechSynthesis:", err);
+        fallbackSpeakSpeechSynthesis(text);
+      });
+    }
+
+    function fallbackSpeakSpeechSynthesis(text) {
+      if (typeof speechSynthesis === 'undefined') {
+        showToast('Thiết bị không hỗ trợ đọc âm thanh!', true);
+        return;
+      }
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'zh-CN';
+      utterance.rate = speechPlaybackRate * 0.85;
+      speechSynthesis.speak(utterance);
     }
 
     async function toggleWordMemorized(id, btn) {

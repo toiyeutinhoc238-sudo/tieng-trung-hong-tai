@@ -6,9 +6,11 @@
   "type": "module",
   "scripts": {
     "dev": "node --watch server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "preload-tts": "node scripts/preload_tts_cache.js"
   },
   "dependencies": {
+    "@travisvn/edge-tts": "^1.0.2",
     "cors": "^2.8.5",
     "dotenv": "^17.4.2",
     "express": "^4.21.2",

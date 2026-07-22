@@ -871,10 +871,26 @@
           </div>
 
           <div class="control-group" style="flex: 1; min-width: 200px;">
-            <label class="control-label">Giọng phát âm</label>
+            <label class="control-label">Giọng phát âm AI</label>
             <div class="tts-voice-wrap" style="width: 100%;">
               <select id="tts-voice-select" class="form-select select-voice" style="width: 100%;">
-                <option value="default">Đang tải giọng đọc...</option>
+                <option value="zh-CN-XiaoxiaoNeural" selected>🔊 Xiaoxiao (Giọng nữ chuẩn AI)</option>
+                <option value="zh-CN-YunxiNeural">🔊 Yunxi (Giọng nam chuẩn AI)</option>
+                <option value="zh-CN-YunjianNeural">🔊 Yunjian (Giọng nam ấm áp)</option>
+                <option value="zh-CN-XiaoyiNeural">🔊 Xiaoyi (Giọng nữ nhẹ nhàng)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="control-group" style="flex: 0.7; min-width: 150px;">
+            <label class="control-label">Tốc độ phát âm</label>
+            <div class="tts-speed-wrap" style="width: 100%;">
+              <select id="tts-speed-select" class="form-select" style="width: 100%;">
+                <option value="0.5">0.5x (Rất chậm)</option>
+                <option value="0.75">0.75x (Chậm)</option>
+                <option value="1.0" selected>1.0x (Chuẩn)</option>
+                <option value="1.25">1.25x (Nhanh)</option>
+                <option value="1.5">1.5x (Rất nhanh)</option>
               </select>
             </div>
           </div>

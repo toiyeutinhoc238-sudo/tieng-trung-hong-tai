@@ -163,58 +163,27 @@ function toggleTheme() {
 }
 
 // --- TEXT TO SPEECH (TTS) SETUP ---
+let speechVoice = localStorage.getItem('speech_voice') || 'zh-CN-XiaoxiaoNeural';
+let speechPlaybackRate = parseFloat(localStorage.getItem('speech_playback_rate') || '1.0');
+let activeAudioElement = null;
+
 function initVoices() {
-  if (typeof speechSynthesis === 'undefined') return;
-
-  const loadVoices = () => {
-    const voices = speechSynthesis.getVoices();
-    // Clear dropdown
-    if (ttsVoiceSelect) {
-      ttsVoiceSelect.innerHTML = '';
-    }
-
-    // Look for Chinese voices (Chinese, Mandarin, zh-CN, zh-HK, zh-TW, etc.)
-    const zhVoices = voices.filter(voice =>
-      voice.lang.includes('zh') ||
-      voice.name.toLowerCase().includes('chinese') ||
-      voice.name.toLowerCase().includes('mandarin')
-    );
-
-    if (zhVoices.length > 0) {
-      zhVoices.forEach((voice, index) => {
-        const option = document.createElement('option');
-        option.value = voice.name;
-        option.textContent = `${voice.name} (${voice.lang})`;
-        // Default to Google 普通话 or Microsoft Yahei if possible
-        if (voice.name.includes('Google') || voice.lang === 'zh-CN') {
-          option.selected = true;
-          chineseVoice = voice;
-        }
-        if (ttsVoiceSelect) {
-          ttsVoiceSelect.appendChild(option);
-        }
-      });
-      if (!chineseVoice) chineseVoice = zhVoices[0];
-    } else {
-      const option = document.createElement('option');
-      option.value = 'none';
-      option.textContent = 'Không tìm thấy giọng tiếng Trung (Dùng giọng mặc định)';
-      if (ttsVoiceSelect) {
-        ttsVoiceSelect.appendChild(option);
-      }
-    }
-  };
-
-  loadVoices();
-  if (speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = loadVoices;
-  }
+  const ttsVoiceSelect = document.getElementById('tts-voice-select');
+  const ttsSpeedSelect = document.getElementById('tts-speed-select');
 
   if (ttsVoiceSelect) {
+    ttsVoiceSelect.value = speechVoice;
     ttsVoiceSelect.addEventListener('change', (e) => {
-      const selectedVoiceName = e.target.value;
-      const voices = speechSynthesis.getVoices();
-      chineseVoice = voices.find(v => v.name === selectedVoiceName) || null;
+      speechVoice = e.target.value;
+      localStorage.setItem('speech_voice', speechVoice);
+    });
+  }
+
+  if (ttsSpeedSelect) {
+    ttsSpeedSelect.value = speechPlaybackRate.toString();
+    ttsSpeedSelect.addEventListener('change', (e) => {
+      speechPlaybackRate = parseFloat(e.target.value) || 1.0;
+      localStorage.setItem('speech_playback_rate', speechPlaybackRate);
     });
   }
 }
@@ -222,27 +191,29 @@ function initVoices() {
 function speakText(text) {
   if (!text) return;
 
-  // Xóa luôn dòng showToast "Đang tải phát âm..." vì nó đọc ngay lập tức, không cần đợi tải
-
-  if (typeof speechSynthesis !== 'undefined') {
-    // Tắt ngay âm thanh cũ nếu đang đọc dở để các câu không bị đè lên nhau
-    speechSynthesis.cancel();
-
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'zh-CN'; // Ép đọc tiếng Trung
-    utterance.rate = 0.85;    // Tốc độ vừa phải cho dễ nghe
-
-    // Lấy danh sách giọng đọc trong máy, ưu tiên chọn giọng tiếng Trung chuẩn nhất
-    const voices = speechSynthesis.getVoices();
-    const chineseVoice = voices.find(voice => voice.lang.includes('zh') || voice.lang.includes('cmn'));
-    if (chineseVoice) {
-      utterance.voice = chineseVoice;
-    }
-
-    speechSynthesis.speak(utterance);
-  } else {
-    showToast("Trình duyệt của bạn không hỗ trợ đọc offline!", true);
+  // Stop any currently playing audio or speech synthesis immediately
+  if (activeAudioElement) {
+    try {
+      activeAudioElement.pause();
+      activeAudioElement.currentTime = 0;
+      activeAudioElement.src = '';
+    } catch (e) {}
+    activeAudioElement = null;
   }
+  if (typeof speechSynthesis !== 'undefined') {
+    speechSynthesis.cancel();
+  }
+
+  // Construct backend Edge Neural TTS URL
+  const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(speechVoice)}`;
+  const audio = new Audio(url);
+  audio.playbackRate = speechPlaybackRate;
+  activeAudioElement = audio;
+
+  audio.play().catch(err => {
+    console.warn("Edge TTS play failed, falling back to browser SpeechSynthesis:", err);
+    fallbackSpeakSpeechSynthesis(text);
+  });
 }
 
 function fallbackSpeakSpeechSynthesis(text) {

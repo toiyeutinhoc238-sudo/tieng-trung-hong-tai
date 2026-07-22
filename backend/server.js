@@ -6,11 +6,19 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import https from 'https';
 import mongoose from 'mongoose';
+import crypto from 'crypto';
+import { EdgeTTS } from '@travisvn/edge-tts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const DB_PATH = path.join(__dirname, 'database.json');
 const USER_DB_PATH = path.join(__dirname, 'user_data.json');
+const AUDIO_CACHE_DIR = path.join(__dirname, 'audio_cache');
+
+// Ensure audio cache directory exists
+fs.mkdir(AUDIO_CACHE_DIR, { recursive: true }).catch(err => {
+  console.error("Error creating audio_cache dir:", err);
+});
 
 // Connect to MongoDB Atlas
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -1171,6 +1179,46 @@ app.post('/api/chat/migrate', async (req, res) => {
   } catch (error) {
     console.error('Migration error:', error);
     res.status(500).json({ error: 'Có lỗi xảy ra khi đồng bộ lịch sử hội thoại.' });
+  }
+});
+
+// GET /api/tts - High quality Edge Neural TTS with caching
+app.get('/api/tts', async (req, res) => {
+  const { text, voice = 'zh-CN-XiaoxiaoNeural' } = req.query;
+  if (!text) {
+    return res.status(400).json({ error: 'Text parameter is required' });
+  }
+
+  try {
+    const safeVoice = String(voice);
+    const safeText = String(text).trim();
+    const hash = crypto.createHash('md5').update(`${safeVoice}_${safeText}`).digest('hex');
+    const fileName = `${hash}.mp3`;
+    const filePath = path.join(AUDIO_CACHE_DIR, fileName);
+
+    let fileExists = false;
+    try {
+      await fs.access(filePath);
+      fileExists = true;
+    } catch {
+      fileExists = false;
+    }
+
+    if (!fileExists) {
+      const tts = new EdgeTTS(safeText, safeVoice);
+      const result = await tts.synthesize();
+      const audioBuffer = Buffer.from(await result.audio.arrayBuffer());
+      await fs.writeFile(filePath, audioBuffer);
+    }
+
+    res.set({
+      'Content-Type': 'audio/mpeg',
+      'Cache-Control': 'public, max-age=31536000, immutable'
+    });
+    return res.sendFile(filePath);
+  } catch (error) {
+    console.error('Edge TTS Error:', error);
+    return res.status(500).json({ error: 'Failed to generate audio' });
   }
 });
 
