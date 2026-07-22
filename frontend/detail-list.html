@@ -747,27 +747,9 @@
       container.appendChild(nextBtn);
     }
 
-    let speechVoice = localStorage.getItem('speech_voice') || 'default';
+    let speechVoice = localStorage.getItem('speech_voice') || 'zh-CN-XiaoxiaoNeural';
     let speechPlaybackRate = parseFloat(localStorage.getItem('speech_playback_rate') || '1.0');
-    let chineseVoice = null;
     let activeAudioElement = null;
-
-    function populateVoices() {
-      if (typeof speechSynthesis === 'undefined') return;
-      const voices = speechSynthesis.getVoices();
-      if (!voices || voices.length === 0) return;
-      const zhVoices = voices.filter(v => v.lang.includes('zh') || v.lang.includes('cmn') || v.name.toLowerCase().includes('chinese') || v.name.toLowerCase().includes('mandarin'));
-      if (zhVoices.length > 0) {
-        chineseVoice = zhVoices.find(v => v.name === speechVoice || (speechVoice === 'default' && (v.name.includes('Google') || v.name.includes('Neural') || v.lang === 'zh-CN'))) || zhVoices[0];
-      }
-    }
-
-    if (typeof speechSynthesis !== 'undefined') {
-      populateVoices();
-      if (speechSynthesis.onvoiceschanged !== undefined) {
-        speechSynthesis.onvoiceschanged = populateVoices;
-      }
-    }
 
     function cleanFrontendSpeechText(text) {
       if (!text) return '';
@@ -797,25 +779,34 @@
 
       if (typeof speechSynthesis !== 'undefined') {
         speechSynthesis.cancel();
+      }
 
-        const utterance = new SpeechSynthesisUtterance(cleanText);
+      const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(speechVoice)}`;
+      const audio = new Audio(url);
+      audio.playbackRate = speechPlaybackRate;
+      activeAudioElement = audio;
+
+      audio.play().catch(err => {
+        console.warn("Edge TTS play failed, falling back to browser SpeechSynthesis:", err);
+        fallbackSpeakSpeechSynthesis(cleanText);
+      });
+    }
+
+    function fallbackSpeakSpeechSynthesis(text) {
+      if (typeof speechSynthesis === 'undefined') return;
+      try {
+        speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'zh-CN';
         utterance.rate = speechPlaybackRate;
-
-        if (!chineseVoice) {
-          populateVoices();
+        const voices = speechSynthesis.getVoices();
+        const zhVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('cmn'));
+        if (zhVoice) {
+          utterance.voice = zhVoice;
         }
-        if (chineseVoice) {
-          utterance.voice = chineseVoice;
-        }
-
         speechSynthesis.speak(utterance);
-      } else {
-        const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=zh-CN-XiaoxiaoNeural`;
-        const audio = new Audio(url);
-        audio.playbackRate = speechPlaybackRate;
-        activeAudioElement = audio;
-        audio.play().catch(e => console.warn("TTS Play error:", e));
+      } catch (e) {
+        console.error("Local SpeechSynthesis completely failed:", e);
       }
     }
 

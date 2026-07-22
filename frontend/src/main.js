@@ -163,54 +163,19 @@ function toggleTheme() {
 }
 
 // --- TEXT TO SPEECH (TTS) SETUP ---
-let speechVoice = localStorage.getItem('speech_voice') || 'default';
+let speechVoice = localStorage.getItem('speech_voice') || 'zh-CN-XiaoxiaoNeural';
 let speechPlaybackRate = parseFloat(localStorage.getItem('speech_playback_rate') || '1.0');
 let activeAudioElement = null;
 
-function populateVoices() {
-  if (typeof speechSynthesis === 'undefined') return;
-  const voices = speechSynthesis.getVoices();
-  if (!voices || voices.length === 0) return;
-
-  const ttsVoiceSelect = document.getElementById('tts-voice-select');
-  const zhVoices = voices.filter(v => v.lang.includes('zh') || v.lang.includes('cmn') || v.name.toLowerCase().includes('chinese') || v.name.toLowerCase().includes('mandarin'));
-
-  if (ttsVoiceSelect && zhVoices.length > 0) {
-    ttsVoiceSelect.innerHTML = '';
-    zhVoices.forEach(v => {
-      const opt = document.createElement('option');
-      opt.value = v.name;
-      opt.textContent = `${v.name} (${v.lang})`;
-      if (v.name === speechVoice || (speechVoice === 'default' && (v.name.includes('Google') || v.name.includes('Neural') || v.lang === 'zh-CN'))) {
-        opt.selected = true;
-        chineseVoice = v;
-      }
-      ttsVoiceSelect.appendChild(opt);
-    });
-  }
-
-  if (!chineseVoice && zhVoices.length > 0) {
-    chineseVoice = zhVoices[0];
-  }
-}
-
 function initVoices() {
-  populateVoices();
-  if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = populateVoices;
-  }
-
   const ttsVoiceSelect = document.getElementById('tts-voice-select');
   const ttsSpeedSelect = document.getElementById('tts-speed-select');
 
   if (ttsVoiceSelect) {
+    ttsVoiceSelect.value = speechVoice;
     ttsVoiceSelect.addEventListener('change', (e) => {
       speechVoice = e.target.value;
       localStorage.setItem('speech_voice', speechVoice);
-      if (typeof speechSynthesis !== 'undefined') {
-        const voices = speechSynthesis.getVoices();
-        chineseVoice = voices.find(v => v.name === speechVoice) || chineseVoice;
-      }
     });
   }
 
@@ -250,29 +215,40 @@ function speakText(text) {
     activeAudioElement = null;
   }
 
-  // 2. Play synchronously via Web Speech API if supported (0ms latency, zero cold-start delay)
+  // 2. Cancel any running Web Speech API
   if (typeof speechSynthesis !== 'undefined') {
     speechSynthesis.cancel();
+  }
 
-    const utterance = new SpeechSynthesisUtterance(cleanText);
+  // 3. Construct backend Edge Neural TTS URL
+  const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(speechVoice)}`;
+  const audio = new Audio(url);
+  audio.playbackRate = speechPlaybackRate;
+  activeAudioElement = audio;
+
+  audio.play().catch(err => {
+    console.warn("Edge TTS play failed, falling back to browser SpeechSynthesis:", err);
+    fallbackSpeakSpeechSynthesis(cleanText);
+  });
+}
+
+function fallbackSpeakSpeechSynthesis(text) {
+  if (typeof speechSynthesis === 'undefined') return;
+  try {
+    speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'zh-CN';
     utterance.rate = speechPlaybackRate;
 
-    if (!chineseVoice) {
-      populateVoices();
-    }
-    if (chineseVoice) {
-      utterance.voice = chineseVoice;
+    const voices = speechSynthesis.getVoices();
+    const zhVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('cmn'));
+    if (zhVoice) {
+      utterance.voice = zhVoice;
     }
 
     speechSynthesis.speak(utterance);
-  } else {
-    // Edge TTS Fallback if Web Speech API is completely unavailable
-    const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=zh-CN-XiaoxiaoNeural`;
-    const audio = new Audio(url);
-    audio.playbackRate = speechPlaybackRate;
-    activeAudioElement = audio;
-    audio.play().catch(e => console.warn("TTS Audio play error:", e));
+  } catch (e) {
+    console.error("Local SpeechSynthesis completely failed:", e);
   }
 }
 
