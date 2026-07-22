@@ -199,15 +199,28 @@ function cleanFrontendSpeechText(text) {
   return str;
 }
 
+let lastSpeakText = '';
+let lastSpeakTime = 0;
+
 function speakText(text) {
   if (!text) return;
 
   const cleanText = cleanFrontendSpeechText(text);
   if (!cleanText) return;
 
-  // Stop any currently playing audio or speech synthesis immediately
+  const now = Date.now();
+  // Prevent duplicate triggers for the exact same word within 400ms
+  if (cleanText === lastSpeakText && (now - lastSpeakTime) < 400) {
+    return;
+  }
+  lastSpeakText = cleanText;
+  lastSpeakTime = now;
+
+  // Cleanly stop any currently playing audio or speech synthesis
   if (activeAudioElement) {
     try {
+      activeAudioElement._cancelled = true;
+      activeAudioElement.onerror = null; // Detach handler so resetting src doesn't trigger fallback
       activeAudioElement.pause();
       activeAudioElement.currentTime = 0;
       activeAudioElement.src = '';
@@ -225,11 +238,13 @@ function speakText(text) {
   activeAudioElement = audio;
 
   audio.onerror = (e) => {
+    if (audio._cancelled) return;
     console.warn("Audio element failed to load TTS, trying fallback:", e);
     fallbackSpeakSpeechSynthesis(cleanText);
   };
 
   audio.play().catch(err => {
+    if (audio._cancelled || err.name === 'AbortError') return;
     console.warn("Edge TTS play failed, falling back to browser SpeechSynthesis:", err);
     fallbackSpeakSpeechSynthesis(cleanText);
   });

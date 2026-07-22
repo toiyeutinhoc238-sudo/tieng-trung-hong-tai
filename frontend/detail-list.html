@@ -762,13 +762,25 @@
       return str;
     }
 
+    let lastSpeakText = '';
+    let lastSpeakTime = 0;
+
     function speakText(text) {
       if (!text) return;
       const cleanText = cleanFrontendSpeechText(text);
       if (!cleanText) return;
 
+      const now = Date.now();
+      if (cleanText === lastSpeakText && (now - lastSpeakTime) < 400) {
+        return;
+      }
+      lastSpeakText = cleanText;
+      lastSpeakTime = now;
+
       if (activeAudioElement) {
         try {
+          activeAudioElement._cancelled = true;
+          activeAudioElement.onerror = null;
           activeAudioElement.pause();
           activeAudioElement.currentTime = 0;
           activeAudioElement.src = '';
@@ -785,11 +797,13 @@
       activeAudioElement = audio;
 
       audio.onerror = (e) => {
+        if (audio._cancelled) return;
         console.warn("Audio element failed to load TTS, trying fallback:", e);
         fallbackSpeakSpeechSynthesis(cleanText);
       };
 
       audio.play().catch(err => {
+        if (audio._cancelled || err.name === 'AbortError') return;
         console.warn("Edge TTS play failed, falling back to browser SpeechSynthesis:", err);
         fallbackSpeakSpeechSynthesis(cleanText);
       });
