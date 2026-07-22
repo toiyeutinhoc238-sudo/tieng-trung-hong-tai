@@ -163,19 +163,55 @@ function toggleTheme() {
 }
 
 // --- TEXT TO SPEECH (TTS) SETUP ---
-let speechVoice = localStorage.getItem('speech_voice') || 'zh-CN-XiaoxiaoNeural';
+let speechVoice = localStorage.getItem('speech_voice') || 'default';
 let speechPlaybackRate = parseFloat(localStorage.getItem('speech_playback_rate') || '1.0');
+let chineseVoice = null;
 let activeAudioElement = null;
 
+function populateVoices() {
+  if (typeof speechSynthesis === 'undefined') return;
+  const voices = speechSynthesis.getVoices();
+  if (!voices || voices.length === 0) return;
+
+  const ttsVoiceSelect = document.getElementById('tts-voice-select');
+  const zhVoices = voices.filter(v => v.lang.includes('zh') || v.lang.includes('cmn') || v.name.toLowerCase().includes('chinese') || v.name.toLowerCase().includes('mandarin'));
+
+  if (ttsVoiceSelect && zhVoices.length > 0) {
+    ttsVoiceSelect.innerHTML = '';
+    zhVoices.forEach(v => {
+      const opt = document.createElement('option');
+      opt.value = v.name;
+      opt.textContent = `${v.name} (${v.lang})`;
+      if (v.name === speechVoice || (speechVoice === 'default' && (v.name.includes('Google') || v.name.includes('Neural') || v.lang === 'zh-CN'))) {
+        opt.selected = true;
+        chineseVoice = v;
+      }
+      ttsVoiceSelect.appendChild(opt);
+    });
+  }
+
+  if (!chineseVoice && zhVoices.length > 0) {
+    chineseVoice = zhVoices[0];
+  }
+}
+
 function initVoices() {
+  populateVoices();
+  if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = populateVoices;
+  }
+
   const ttsVoiceSelect = document.getElementById('tts-voice-select');
   const ttsSpeedSelect = document.getElementById('tts-speed-select');
 
   if (ttsVoiceSelect) {
-    ttsVoiceSelect.value = speechVoice;
     ttsVoiceSelect.addEventListener('change', (e) => {
       speechVoice = e.target.value;
       localStorage.setItem('speech_voice', speechVoice);
+      if (typeof speechSynthesis !== 'undefined') {
+        const voices = speechSynthesis.getVoices();
+        chineseVoice = voices.find(v => v.name === speechVoice) || chineseVoice;
+      }
     });
   }
 
@@ -193,40 +229,21 @@ function cleanFrontendSpeechText(text) {
   let str = String(text).trim();
   str = str.replace(/<[^>]*>/g, '');
   str = str.replace(/([\u4e00-\u9fa5]+)\s*\([^\)]*\)/g, '$1');
+  str = str.replace(/^[A-Z]:\s*/gm, '').replace(/\n[A-Z]:\s*/g, '，');
   if (str.includes('/') && !str.includes('http')) {
     str = str.split('/')[0].trim();
   }
   return str;
 }
 
-let lastSpeakText = '';
-let lastSpeakTime = 0;
-
 function speakText(text) {
   if (!text) return;
-
   const cleanText = cleanFrontendSpeechText(text);
   if (!cleanText) return;
 
-  const now = Date.now();
-  // Prevent duplicate triggers for the exact same word within 400ms
-  if (cleanText === lastSpeakText && (now - lastSpeakTime) < 400) {
-    return;
-  }
-  lastSpeakText = cleanText;
-  lastSpeakTime = now;
-
-  // 1. Immediately cancel any running SpeechSynthesis
-  if (typeof speechSynthesis !== 'undefined') {
-    speechSynthesis.cancel();
-  }
-
-  // 2. Cleanly stop any currently playing HTML5 audio element
+  // 1. Immediately stop any active HTML5 audio element
   if (activeAudioElement) {
     try {
-      activeAudioElement._cancelled = true;
-      activeAudioElement.onerror = null;
-      activeAudioElement.onplay = null;
       activeAudioElement.pause();
       activeAudioElement.currentTime = 0;
       activeAudioElement.src = '';
@@ -234,73 +251,29 @@ function speakText(text) {
     activeAudioElement = null;
   }
 
-  // Construct backend Edge Neural TTS URL
-  const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(speechVoice)}`;
-  const audio = new Audio(url);
-  audio.playbackRate = speechPlaybackRate;
-  audio._cancelled = false;
-  audio.hasStarted = false;
-  let fallbackTriggered = false;
-  activeAudioElement = audio;
-
-  const triggerFallbackOnce = (reason) => {
-    if (audio._cancelled || audio.hasStarted || fallbackTriggered) return;
-    fallbackTriggered = true;
-    console.warn(`Edge TTS fallback triggered (${reason}).`);
-    fallbackSpeakSpeechSynthesis(cleanText);
-  };
-
-  // Timeout fallback if server takes > 3.5s to respond
-  const timeoutId = setTimeout(() => {
-    if (!audio.hasStarted && !audio._cancelled && !fallbackTriggered) {
-      triggerFallbackOnce('Server timeout');
-    }
-  }, 3500);
-
-  audio.onplay = () => {
-    audio.hasStarted = true;
-    clearTimeout(timeoutId);
-  };
-
-  audio.onerror = () => {
-    clearTimeout(timeoutId);
-    triggerFallbackOnce('Audio element error');
-  };
-
-  audio.play().catch(err => {
-    clearTimeout(timeoutId);
-    if (err.name === 'AbortError') return;
-    triggerFallbackOnce(err.message || 'Play rejected');
-  });
-}
-
-function fallbackSpeakSpeechSynthesis(text) {
-  if (typeof speechSynthesis === 'undefined') {
-    showToast("Thiết bị không hỗ trợ phát âm thanh!", true);
-    return;
-  }
-
-  try {
-    const cleanText = cleanFrontendSpeechText(text);
-    if (!cleanText) return;
-
+  // 2. Play synchronously via Web Speech API if supported (0ms latency, zero cold-start delay)
+  if (typeof speechSynthesis !== 'undefined') {
     speechSynthesis.cancel();
 
-    setTimeout(() => {
-      const utterance = new SpeechSynthesisUtterance(cleanText);
-      utterance.lang = 'zh-CN';
-      utterance.rate = speechPlaybackRate * 0.85;
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = 'zh-CN';
+    utterance.rate = speechPlaybackRate;
 
-      const voices = speechSynthesis.getVoices();
-      const zhVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('cmn'));
-      if (zhVoice) {
-        utterance.voice = zhVoice;
-      }
+    if (!chineseVoice) {
+      populateVoices();
+    }
+    if (chineseVoice) {
+      utterance.voice = chineseVoice;
+    }
 
-      speechSynthesis.speak(utterance);
-    }, 50);
-  } catch (e) {
-    console.error("Local SpeechSynthesis completely failed:", e);
+    speechSynthesis.speak(utterance);
+  } else {
+    // Edge TTS Fallback if Web Speech API is completely unavailable
+    const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=zh-CN-XiaoxiaoNeural`;
+    const audio = new Audio(url);
+    audio.playbackRate = speechPlaybackRate;
+    activeAudioElement = audio;
+    audio.play().catch(e => console.warn("TTS Audio play error:", e));
   }
 }
 
