@@ -216,10 +216,21 @@ function speakText(text) {
     activeAudioElement = null;
   }
 
-  // 2. Play Edge Neural TTS with selected voice (Xiaoxiao female, Yunxi male, Yunjian male, Xiaoyi female)
+  // 2. Apply distinct acoustic rate profiles for stark voice separation
+  let voiceRateMultiplier = 1.0;
+  if (speechVoice.includes('Yunyang')) {
+    voiceRateMultiplier = 0.88; // Deep, deliberate male anchor pace
+  } else if (speechVoice.includes('Yunxi')) {
+    voiceRateMultiplier = 1.12; // Energetic young male pace
+  } else if (speechVoice.includes('Xiaoxiao')) {
+    voiceRateMultiplier = 0.92; // Warm, gentle female pace
+  } else if (speechVoice.includes('Xiaoyi')) {
+    voiceRateMultiplier = 1.15; // Bright, lively female pace
+  }
+
   const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(speechVoice)}`;
   const audio = new Audio(url);
-  audio.playbackRate = speechPlaybackRate;
+  audio.playbackRate = speechPlaybackRate * voiceRateMultiplier;
   activeAudioElement = audio;
 
   audio.play().catch(err => {
@@ -236,25 +247,27 @@ function fallbackSpeakSpeechSynthesis(text) {
     utterance.lang = 'zh-CN';
 
     const voices = speechSynthesis.getVoices();
-    const isMale = speechVoice.includes('Yunyang') || speechVoice.includes('Yunjian') || speechVoice.includes('Yunxi');
 
-    let targetVoice = null;
-    if (isMale) {
-      targetVoice = voices.find(v => (v.lang.includes('zh') || v.lang.includes('cmn')) && (v.name.includes('Yunyang') || v.name.includes('Kangkang') || v.name.includes('Yunjian') || v.name.includes('Yunxi') || v.name.toLowerCase().includes('male')));
-      utterance.pitch = 0.45; // Ultra deep masculine pitch
-      utterance.rate = speechPlaybackRate * 0.85; // Slightly slower, authoritative male cadence
+    if (speechVoice.includes('Yunyang')) {
+      utterance.pitch = 0.35;
+      utterance.rate = speechPlaybackRate * 0.85;
+    } else if (speechVoice.includes('Yunxi')) {
+      utterance.pitch = 0.70;
+      utterance.rate = speechPlaybackRate * 1.12;
+    } else if (speechVoice.includes('Xiaoxiao')) {
+      utterance.pitch = 1.10;
+      utterance.rate = speechPlaybackRate * 0.92;
+    } else if (speechVoice.includes('Xiaoyi')) {
+      utterance.pitch = 1.45;
+      utterance.rate = speechPlaybackRate * 1.18;
     } else {
-      targetVoice = voices.find(v => (v.lang.includes('zh') || v.lang.includes('cmn')) && (v.name.includes('Xiaoxiao') || v.name.includes('Huihui') || v.name.includes('Xiaoyi') || v.name.toLowerCase().includes('female')));
-      utterance.pitch = 1.3; // Crisp feminine pitch
+      utterance.pitch = 1.0;
       utterance.rate = speechPlaybackRate;
     }
 
-    if (!targetVoice) {
-      targetVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('cmn'));
-    }
-
-    if (targetVoice) {
-      utterance.voice = targetVoice;
+    const zhVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('cmn'));
+    if (zhVoice) {
+      utterance.voice = zhVoice;
     }
 
     speechSynthesis.speak(utterance);
