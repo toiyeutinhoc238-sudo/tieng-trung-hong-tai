@@ -1146,6 +1146,7 @@ async function fetchElevenLabsTTS(text, voiceId, apiKey) {
   const body = JSON.stringify({
     text: text,
     model_id: 'eleven_multilingual_v2',
+    language_code: 'zh',
     voice_settings: {
       stability: 0.5,
       similarity_boost: 0.75
@@ -1182,9 +1183,36 @@ async function fetchElevenLabsTTS(text, voiceId, apiKey) {
   });
 }
 
-// GET /api/tts - 100% Pure ElevenLabs Multilingual v2 AI Speech Engine
+// Helper to fetch MP3 audio from Baidu TTS CDN (100% Native Beijing Mandarin Chinese)
+async function fetchBaiduTTS(text, speed = 3, pitch = 5) {
+  const url = `https://fanyi.baidu.com/gettts?lan=zh&text=${encodeURIComponent(text)}&spd=${speed}&source=web&pit=${pitch}`;
+  return new Promise((resolve, reject) => {
+    https.get(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Referer': 'https://fanyi.baidu.com/'
+      }
+    }, res => {
+      if (res.statusCode !== 200) {
+        return reject(new Error(`Baidu TTS status code: ${res.statusCode}`));
+      }
+      const chunks = [];
+      res.on('data', chunk => chunks.push(chunk));
+      res.on('end', () => {
+        const buffer = Buffer.concat(chunks);
+        if (buffer.length < 100) {
+          return reject(new Error('Baidu TTS returned invalid audio buffer'));
+        }
+        resolve(buffer);
+      });
+      res.on('error', err => reject(err));
+    }).on('error', err => reject(err));
+  });
+}
+
+// GET /api/tts - Native Chinese & ElevenLabs Multilingual AI Speech Engine
 app.get('/api/tts', async (req, res) => {
-  const { text, voice = 'elevenlabs-adam' } = req.query;
+  const { text, voice = 'baidu-female' } = req.query;
   if (!text) {
     return res.status(400).json({ error: 'Text parameter is required' });
   }
@@ -1194,7 +1222,7 @@ app.get('/api/tts', async (req, res) => {
     const rawText = String(text).trim();
     const cleanText = cleanTTSInput(rawText) || rawText;
 
-    const hash = crypto.createHash('md5').update(`v9_pure_${safeVoice}_${cleanText}`).digest('hex');
+    const hash = crypto.createHash('md5').update(`v10_${safeVoice}_${cleanText}`).digest('hex');
     const fileName = `${hash}.mp3`;
     const filePath = path.join(AUDIO_CACHE_DIR, fileName);
 
@@ -1207,23 +1235,37 @@ app.get('/api/tts', async (req, res) => {
     }
 
     if (!fileExists) {
-      const apiKey = process.env.ELEVENLABS_API_KEY || 'sk_51feae550df86c7bb9ab69706394130a8061ab0aef5dbf2e';
-      
-      let voiceId = 'pNInz6obpgDQGcFmaJgB'; // Adam Male
-      if (safeVoice === 'elevenlabs-antoni') {
-        voiceId = 'ErXwobaYiN019PkySvjV'; // Antoni Male
-      } else if (safeVoice === 'elevenlabs-bella') {
-        voiceId = 'EXAVITQu4vr4xnSDxMaL'; // Bella Female
-      } else if (safeVoice === 'elevenlabs-jessica') {
-        voiceId = 'cgSgspJ2msm6clMCkdW9'; // Jessica Female
+      let audioBuffer = null;
+      if (safeVoice === 'baidu-female') {
+        audioBuffer = await fetchBaiduTTS(cleanText, 3, 6);
+      } else if (safeVoice === 'baidu-male') {
+        audioBuffer = await fetchBaiduTTS(cleanText, 3, 1);
+      } else {
+        const apiKey = process.env.ELEVENLABS_API_KEY || 'sk_51feae550df86c7bb9ab69706394130a8061ab0aef5dbf2e';
+        let voiceId = 'pNInz6obpgDQGcFmaJgB'; // Adam (Nam 1)
+        if (safeVoice === 'elevenlabs-antoni') voiceId = 'ErXwobaYiN019PkySvjV';
+        else if (safeVoice === 'elevenlabs-arnold') voiceId = 'VR6AewLTigWG4xSOukaG';
+        else if (safeVoice === 'elevenlabs-charlie') voiceId = 'IKne3meq5aSn9XLyUdCD';
+        else if (safeVoice === 'elevenlabs-george') voiceId = 'JBFqnCBsd6RMkjVDRZzb';
+        else if (safeVoice === 'elevenlabs-daniel') voiceId = 'onwK4e9ZLuTAKqWW03F9';
+        else if (safeVoice === 'elevenlabs-chris') voiceId = 'iP95p4xoKVk53GoZ742B';
+        else if (safeVoice === 'elevenlabs-bella') voiceId = 'EXAVITQu4vr4xnSDxMaL';
+        else if (safeVoice === 'elevenlabs-jessica') voiceId = 'cgSgspJ2msm6clMCkdW9';
+        else if (safeVoice === 'elevenlabs-matilda') voiceId = 'XrExE9yKIg1WjnnlVkGX';
+        else if (safeVoice === 'elevenlabs-laura') voiceId = 'FGY2WhTYpPnrIDTdsKH5';
+
+        try {
+          audioBuffer = await fetchElevenLabsTTS(cleanText, voiceId, apiKey);
+        } catch (err) {
+          console.warn(`ElevenLabs TTS error for ${cleanText}, fallback to Baidu:`, err.message);
+          audioBuffer = await fetchBaiduTTS(cleanText, 3, 6);
+        }
       }
 
-      // 100% Pure ElevenLabs AI Voice
-      const audioBuffer = await fetchElevenLabsTTS(cleanText, voiceId, apiKey);
       if (audioBuffer && audioBuffer.length > 100) {
         await fs.writeFile(filePath, audioBuffer);
       } else {
-        throw new Error('Invalid ElevenLabs audio buffer');
+        throw new Error('Invalid audio buffer');
       }
     }
 

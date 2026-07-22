@@ -39,6 +39,7 @@ async function fetchElevenLabsTTS(text, voiceId) {
   const body = JSON.stringify({
     text: text,
     model_id: 'eleven_multilingual_v2',
+    language_code: 'zh',
     voice_settings: { stability: 0.5, similarity_boost: 0.75 }
   });
 
