@@ -797,15 +797,15 @@
         utterance.rate = speechPlaybackRate;
 
         const voices = speechSynthesis.getVoices();
-        const isMale = speechVoice.includes('Yunxi') || speechVoice.includes('Yunjian');
+        const isMale = speechVoice.includes('Yunyang') || speechVoice.includes('Yunjian') || speechVoice.includes('Yunxi');
 
         let targetVoice = null;
         if (isMale) {
-          targetVoice = voices.find(v => (v.lang.includes('zh') || v.lang.includes('cmn')) && (v.name.includes('Yunxi') || v.name.includes('Kangkang') || v.name.includes('Yunjian') || v.name.toLowerCase().includes('male')));
-          utterance.pitch = 0.75;
+          targetVoice = voices.find(v => (v.lang.includes('zh') || v.lang.includes('cmn')) && (v.name.includes('Yunyang') || v.name.includes('Kangkang') || v.name.includes('Yunjian') || v.name.includes('Yunxi') || v.name.toLowerCase().includes('male')));
+          utterance.pitch = 0.55;
         } else {
           targetVoice = voices.find(v => (v.lang.includes('zh') || v.lang.includes('cmn')) && (v.name.includes('Xiaoxiao') || v.name.includes('Huihui') || v.name.includes('Xiaoyi') || v.name.toLowerCase().includes('female')));
-          utterance.pitch = 1.15;
+          utterance.pitch = 1.25;
         }
 
         if (!targetVoice) {
