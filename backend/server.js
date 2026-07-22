@@ -1193,9 +1193,16 @@ function cleanTTSInput(str) {
     .trim();
 }
 
-// Helper to fetch MP3 audio from ElevenLabs Multilingual v2 API
+// Keep-Alive HTTPS Agent for zero-latency ElevenLabs API connection reuse
+const elevenKeepAliveAgent = new https.Agent({
+  keepAlive: true,
+  maxSockets: 50,
+  keepAliveMsecs: 60000
+});
+
+// Helper to fetch MP3 audio from ElevenLabs Multilingual v2 API (Ultra-low latency streaming)
 async function fetchElevenLabsTTS(text, voiceId, apiKey) {
-  const url = `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`;
+  const url = `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?optimize_streaming_latency=3`;
   const body = JSON.stringify({
     text: text,
     model_id: 'eleven_multilingual_v2',
@@ -1208,6 +1215,7 @@ async function fetchElevenLabsTTS(text, voiceId, apiKey) {
   return new Promise((resolve, reject) => {
     const req = https.request(url, {
       method: 'POST',
+      agent: elevenKeepAliveAgent,
       headers: {
         'Accept': 'audio/mpeg',
         'Content-Type': 'application/json',
@@ -1234,60 +1242,7 @@ async function fetchElevenLabsTTS(text, voiceId, apiKey) {
   });
 }
 
-// Helper to fetch MP3 audio from Baidu TTS CDN (Distinct Fallback Engine)
-async function fetchBaiduTTS(text, speed = 3, pitch = 5) {
-  const url = `https://fanyi.baidu.com/gettts?lan=zh&text=${encodeURIComponent(text)}&spd=${speed}&source=web&pit=${pitch}`;
-  return new Promise((resolve, reject) => {
-    https.get(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Referer': 'https://fanyi.baidu.com/'
-      }
-    }, res => {
-      if (res.statusCode !== 200) {
-        return reject(new Error(`Baidu TTS status code: ${res.statusCode}`));
-      }
-      const chunks = [];
-      res.on('data', chunk => chunks.push(chunk));
-      res.on('end', () => {
-        const buffer = Buffer.concat(chunks);
-        if (buffer.length < 100) {
-          return reject(new Error('Baidu TTS returned invalid audio buffer'));
-        }
-        resolve(buffer);
-      });
-      res.on('error', err => reject(err));
-    }).on('error', err => reject(err));
-  });
-}
-
-// Helper to fetch MP3 audio from Google Translate CDN (Emergency Network Fallback)
-async function fetchGoogleTTS(text) {
-  const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=zh-CN&client=tw-ob`;
-  return new Promise((resolve, reject) => {
-    https.get(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-      }
-    }, res => {
-      if (res.statusCode !== 200) {
-        return reject(new Error(`Google TTS status code: ${res.statusCode}`));
-      }
-      const chunks = [];
-      res.on('data', chunk => chunks.push(chunk));
-      res.on('end', () => {
-        const buffer = Buffer.concat(chunks);
-        if (buffer.length < 100) {
-          return reject(new Error('Google TTS returned invalid audio buffer'));
-        }
-        resolve(buffer);
-      });
-      res.on('error', err => reject(err));
-    }).on('error', err => reject(err));
-  });
-}
-
-// GET /api/tts - ElevenLabs Multilingual v2 AI Speech Engine
+// GET /api/tts - 100% Pure ElevenLabs Multilingual v2 AI Speech Engine
 app.get('/api/tts', async (req, res) => {
   const { text, voice = 'elevenlabs-adam' } = req.query;
   if (!text) {
@@ -1299,7 +1254,7 @@ app.get('/api/tts', async (req, res) => {
     const rawText = String(text).trim();
     const cleanText = cleanTTSInput(rawText) || rawText;
 
-    const hash = crypto.createHash('md5').update(`v8_eleven_${safeVoice}_${cleanText}`).digest('hex');
+    const hash = crypto.createHash('md5').update(`v9_pure_${safeVoice}_${cleanText}`).digest('hex');
     const fileName = `${hash}.mp3`;
     const filePath = path.join(AUDIO_CACHE_DIR, fileName);
 
@@ -1312,7 +1267,6 @@ app.get('/api/tts', async (req, res) => {
     }
 
     if (!fileExists) {
-      let audioBuffer = null;
       const apiKey = process.env.ELEVENLABS_API_KEY || 'sk_51feae550df86c7bb9ab69706394130a8061ab0aef5dbf2e';
       
       let voiceId = 'pNInz6obpgDQGcFmaJgB'; // Adam Male
@@ -1324,48 +1278,23 @@ app.get('/api/tts', async (req, res) => {
         voiceId = 'cgSgspJ2msm6clMCkdW9'; // Jessica Female
       }
 
-      try {
-        audioBuffer = await fetchElevenLabsTTS(cleanText, voiceId, apiKey);
-      } catch (err) {
-        console.warn(`ElevenLabs TTS failed for "${cleanText}" (${safeVoice}), retrying distinct fallback:`, err.message);
-        let fallbackPitch = 6;
-        let fallbackSpeed = 3;
-        if (safeVoice === 'elevenlabs-adam') {
-          fallbackPitch = 1;
-          fallbackSpeed = 2;
-        } else if (safeVoice === 'elevenlabs-antoni') {
-          fallbackPitch = 3;
-          fallbackSpeed = 4;
-        } else if (safeVoice === 'elevenlabs-bella') {
-          fallbackPitch = 6;
-          fallbackSpeed = 3;
-        } else if (safeVoice === 'elevenlabs-jessica') {
-          fallbackPitch = 8;
-          fallbackSpeed = 4;
-        }
-
-        try {
-          audioBuffer = await fetchBaiduTTS(cleanText, fallbackSpeed, fallbackPitch);
-        } catch {
-          audioBuffer = await fetchGoogleTTS(cleanText);
-        }
-      }
-
+      // 100% Pure ElevenLabs AI Voice
+      const audioBuffer = await fetchElevenLabsTTS(cleanText, voiceId, apiKey);
       if (audioBuffer && audioBuffer.length > 100) {
         await fs.writeFile(filePath, audioBuffer);
       } else {
-        throw new Error('Invalid audio buffer');
+        throw new Error('Invalid ElevenLabs audio buffer');
       }
     }
 
     res.set({
       'Content-Type': 'audio/mpeg',
-      'Cache-Control': 'no-cache, no-store, must-revalidate'
+      'Cache-Control': 'public, max-age=31536000, immutable'
     });
     return res.sendFile(filePath);
   } catch (error) {
-    console.error('ElevenLabs TTS Error:', error);
-    return res.status(500).json({ error: 'Failed to generate audio' });
+    console.error('ElevenLabs Pure TTS Error:', error);
+    return res.status(500).json({ error: 'Failed to generate ElevenLabs audio' });
   }
 });
 
