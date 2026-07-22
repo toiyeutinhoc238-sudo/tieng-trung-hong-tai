@@ -1195,6 +1195,32 @@ function cleanTTSInput(str) {
     .trim();
 }
 
+// Helper to fetch MP3 audio from Baidu TTS CDN (Native Mandarin Chinese)
+async function fetchBaiduTTS(text, speed = 3) {
+  const url = `https://fanyi.baidu.com/gettts?lan=zh&text=${encodeURIComponent(text)}&spd=${speed}&source=web`;
+  return new Promise((resolve, reject) => {
+    https.get(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+      }
+    }, res => {
+      if (res.statusCode !== 200) {
+        return reject(new Error(`Baidu TTS status code: ${res.statusCode}`));
+      }
+      const chunks = [];
+      res.on('data', chunk => chunks.push(chunk));
+      res.on('end', () => {
+        const buffer = Buffer.concat(chunks);
+        if (buffer.length < 100) {
+          return reject(new Error('Baidu TTS returned invalid audio buffer'));
+        }
+        resolve(buffer);
+      });
+      res.on('error', err => reject(err));
+    }).on('error', err => reject(err));
+  });
+}
+
 // Helper to generate MP3 audio using MsEdgeTTS
 async function generateEdgeAudio(text, voice) {
   const tts = new MsEdgeTTS();
@@ -1208,7 +1234,7 @@ async function generateEdgeAudio(text, voice) {
   });
 }
 
-// GET /api/tts - High quality Edge Neural TTS with caching
+// GET /api/tts - Native Baidu TTS & Edge Neural TTS with caching
 app.get('/api/tts', async (req, res) => {
   const { text, voice = 'zh-CN-XiaoxiaoNeural' } = req.query;
   if (!text) {
@@ -1220,7 +1246,7 @@ app.get('/api/tts', async (req, res) => {
     const rawText = String(text).trim();
     const cleanText = cleanTTSInput(rawText) || rawText;
 
-    const hash = crypto.createHash('md5').update(`${safeVoice}_${cleanText}`).digest('hex');
+    const hash = crypto.createHash('md5').update(`baidu_${safeVoice}_${cleanText}`).digest('hex');
     const fileName = `${hash}.mp3`;
     const filePath = path.join(AUDIO_CACHE_DIR, fileName);
 
@@ -1234,12 +1260,13 @@ app.get('/api/tts', async (req, res) => {
 
     if (!fileExists) {
       try {
-        const audioBuffer = await generateEdgeAudio(cleanText, safeVoice);
+        // Try Baidu TTS CDN first (Native Chinese, 0% blocking, ~30ms latency)
+        const spdParam = safeVoice.includes('Yunyang') ? 2 : 3;
+        const audioBuffer = await fetchBaiduTTS(cleanText, spdParam);
         await fs.writeFile(filePath, audioBuffer);
-      } catch (firstErr) {
-        console.warn(`msedge-tts failed for "${cleanText}" (${safeVoice}), retrying fallback...`, firstErr.message);
-        const fallbackText = cleanText.replace(/[^\u4e00-\u9fa5\u3000-\u303f\uff00-\uffef,!?]/g, ' ').trim() || cleanText;
-        const audioBuffer = await generateEdgeAudio(fallbackText, safeVoice);
+      } catch (baiduErr) {
+        console.warn(`Baidu TTS failed for "${cleanText}", retrying EdgeTTS fallback...`, baiduErr.message);
+        const audioBuffer = await generateEdgeAudio(cleanText, safeVoice);
         await fs.writeFile(filePath, audioBuffer);
       }
     }
@@ -1250,7 +1277,7 @@ app.get('/api/tts', async (req, res) => {
     });
     return res.sendFile(filePath);
   } catch (error) {
-    console.error('Edge TTS Error:', error);
+    console.error('TTS Generation Error:', error);
     return res.status(500).json({ error: 'Failed to generate audio' });
   }
 });
