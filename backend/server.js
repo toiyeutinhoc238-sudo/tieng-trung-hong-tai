@@ -1239,7 +1239,7 @@ app.get('/api/tts', async (req, res) => {
       } catch (firstErr) {
         console.warn(`msedge-tts failed for "${cleanText}" (${safeVoice}), retrying fallback...`, firstErr.message);
         const fallbackText = cleanText.replace(/[^\u4e00-\u9fa5\u3000-\u303f\uff00-\uffef,!?]/g, ' ').trim() || cleanText;
-        const audioBuffer = await generateEdgeAudio(fallbackText, 'zh-CN-XiaoxiaoNeural');
+        const audioBuffer = await generateEdgeAudio(fallbackText, safeVoice);
         await fs.writeFile(filePath, audioBuffer);
       }
     }

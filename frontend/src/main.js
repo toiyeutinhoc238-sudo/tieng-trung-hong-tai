@@ -234,11 +234,27 @@ function fallbackSpeakSpeechSynthesis(text) {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'zh-CN';
     utterance.rate = speechPlaybackRate;
+
     const voices = speechSynthesis.getVoices();
-    const zhVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('cmn'));
-    if (zhVoice) {
-      utterance.voice = zhVoice;
+    const isMale = speechVoice.includes('Yunxi') || speechVoice.includes('Yunjian');
+
+    let targetVoice = null;
+    if (isMale) {
+      targetVoice = voices.find(v => (v.lang.includes('zh') || v.lang.includes('cmn')) && (v.name.includes('Yunxi') || v.name.includes('Kangkang') || v.name.includes('Yunjian') || v.name.toLowerCase().includes('male')));
+      utterance.pitch = 0.75;
+    } else {
+      targetVoice = voices.find(v => (v.lang.includes('zh') || v.lang.includes('cmn')) && (v.name.includes('Xiaoxiao') || v.name.includes('Huihui') || v.name.includes('Xiaoyi') || v.name.toLowerCase().includes('female')));
+      utterance.pitch = 1.15;
     }
+
+    if (!targetVoice) {
+      targetVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('cmn'));
+    }
+
+    if (targetVoice) {
+      utterance.voice = targetVoice;
+    }
+
     speechSynthesis.speak(utterance);
   } catch (e) {
     console.error("Local SpeechSynthesis failed:", e);
