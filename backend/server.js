@@ -1182,6 +1182,19 @@ app.post('/api/chat/migrate', async (req, res) => {
   }
 });
 
+// Helper to sanitize text for TTS engine (removes HTML, dialogue markers, pinyin in parens, etc.)
+function cleanTTSInput(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/<[^>]*>/g, '')
+    .replace(/^[A-Z]:\s*/gm, '')
+    .replace(/\n[A-Z]:\s*/g, '，')
+    .replace(/_{2,}/g, ' ')
+    .replace(/[\r\n]+/g, '，')
+    .replace(/([\u4e00-\u9fa5]+)\s*\([^\)]*\)/g, '$1')
+    .trim();
+}
+
 // GET /api/tts - High quality Edge Neural TTS with caching
 app.get('/api/tts', async (req, res) => {
   const { text, voice = 'zh-CN-XiaoxiaoNeural' } = req.query;
@@ -1191,8 +1204,10 @@ app.get('/api/tts', async (req, res) => {
 
   try {
     const safeVoice = String(voice);
-    const safeText = String(text).trim();
-    const hash = crypto.createHash('md5').update(`${safeVoice}_${safeText}`).digest('hex');
+    const rawText = String(text).trim();
+    const cleanText = cleanTTSInput(rawText) || rawText;
+
+    const hash = crypto.createHash('md5').update(`${safeVoice}_${cleanText}`).digest('hex');
     const fileName = `${hash}.mp3`;
     const filePath = path.join(AUDIO_CACHE_DIR, fileName);
 
@@ -1205,10 +1220,19 @@ app.get('/api/tts', async (req, res) => {
     }
 
     if (!fileExists) {
-      const tts = new EdgeTTS(safeText, safeVoice);
-      const result = await tts.synthesize();
-      const audioBuffer = Buffer.from(await result.audio.arrayBuffer());
-      await fs.writeFile(filePath, audioBuffer);
+      try {
+        const tts = new EdgeTTS(cleanText, safeVoice);
+        const result = await tts.synthesize();
+        const audioBuffer = Buffer.from(await result.audio.arrayBuffer());
+        await fs.writeFile(filePath, audioBuffer);
+      } catch (firstErr) {
+        console.warn(`EdgeTTS failed for "${cleanText}" (${safeVoice}), retrying fallback...`, firstErr.message);
+        const fallbackText = cleanText.replace(/[^\u4e00-\u9fa5\u3000-\u303f\uff00-\uffef,!?]/g, ' ').trim() || cleanText;
+        const tts = new EdgeTTS(fallbackText, 'zh-CN-XiaoxiaoNeural');
+        const result = await tts.synthesize();
+        const audioBuffer = Buffer.from(await result.audio.arrayBuffer());
+        await fs.writeFile(filePath, audioBuffer);
+      }
     }
 
     res.set({

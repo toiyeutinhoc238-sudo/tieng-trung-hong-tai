@@ -188,8 +188,22 @@ function initVoices() {
   }
 }
 
+function cleanFrontendSpeechText(text) {
+  if (!text) return '';
+  let str = String(text).trim();
+  str = str.replace(/<[^>]*>/g, '');
+  str = str.replace(/([\u4e00-\u9fa5]+)\s*\([^\)]*\)/g, '$1');
+  if (str.includes('/') && !str.includes('http')) {
+    str = str.split('/')[0].trim();
+  }
+  return str;
+}
+
 function speakText(text) {
   if (!text) return;
+
+  const cleanText = cleanFrontendSpeechText(text);
+  if (!cleanText) return;
 
   // Stop any currently playing audio or speech synthesis immediately
   if (activeAudioElement) {
@@ -205,36 +219,43 @@ function speakText(text) {
   }
 
   // Construct backend Edge Neural TTS URL
-  const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(speechVoice)}`;
+  const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(speechVoice)}`;
   const audio = new Audio(url);
   audio.playbackRate = speechPlaybackRate;
   activeAudioElement = audio;
 
+  audio.onerror = (e) => {
+    console.warn("Audio element failed to load TTS, trying fallback:", e);
+    fallbackSpeakSpeechSynthesis(cleanText);
+  };
+
   audio.play().catch(err => {
     console.warn("Edge TTS play failed, falling back to browser SpeechSynthesis:", err);
-    fallbackSpeakSpeechSynthesis(text);
+    fallbackSpeakSpeechSynthesis(cleanText);
   });
 }
 
 function fallbackSpeakSpeechSynthesis(text) {
   if (typeof speechSynthesis === 'undefined') {
-    showToast("Thiết bị không hỗ trợ phát âm thanh trực tiếp hoặc gián tiếp!", true);
+    showToast("Thiết bị không hỗ trợ phát âm thanh!", true);
     return;
   }
 
   try {
-    showToast("Đang phát bằng giọng đọc hệ thống thiết bị...", false);
-    const utterance = new SpeechSynthesisUtterance(text);
-    if (chineseVoice) {
-      utterance.voice = chineseVoice;
-    } else {
-      utterance.lang = 'zh-CN';
+    const cleanText = cleanFrontendSpeechText(text);
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = 'zh-CN';
+    utterance.rate = speechPlaybackRate * 0.85;
+
+    const voices = speechSynthesis.getVoices();
+    const zhVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('cmn'));
+    if (zhVoice) {
+      utterance.voice = zhVoice;
     }
-    utterance.rate = 0.85;
+
     speechSynthesis.speak(utterance);
   } catch (e) {
     console.error("Local SpeechSynthesis completely failed:", e);
-    showToast("Không thể phát âm thanh bằng giọng đọc hệ thống!", true);
   }
 }
 

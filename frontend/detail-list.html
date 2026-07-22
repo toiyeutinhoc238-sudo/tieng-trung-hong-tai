@@ -751,8 +751,22 @@
     let speechPlaybackRate = parseFloat(localStorage.getItem('speech_playback_rate') || '1.0');
     let activeAudioElement = null;
 
+    function cleanFrontendSpeechText(text) {
+      if (!text) return '';
+      let str = String(text).trim();
+      str = str.replace(/<[^>]*>/g, '');
+      str = str.replace(/([\u4e00-\u9fa5]+)\s*\([^\)]*\)/g, '$1');
+      if (str.includes('/') && !str.includes('http')) {
+        str = str.split('/')[0].trim();
+      }
+      return str;
+    }
+
     function speakText(text) {
       if (!text) return;
+      const cleanText = cleanFrontendSpeechText(text);
+      if (!cleanText) return;
+
       if (activeAudioElement) {
         try {
           activeAudioElement.pause();
@@ -765,14 +779,19 @@
         speechSynthesis.cancel();
       }
 
-      const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(speechVoice)}`;
+      const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(speechVoice)}`;
       const audio = new Audio(url);
       audio.playbackRate = speechPlaybackRate;
       activeAudioElement = audio;
 
+      audio.onerror = (e) => {
+        console.warn("Audio element failed to load TTS, trying fallback:", e);
+        fallbackSpeakSpeechSynthesis(cleanText);
+      };
+
       audio.play().catch(err => {
         console.warn("Edge TTS play failed, falling back to browser SpeechSynthesis:", err);
-        fallbackSpeakSpeechSynthesis(text);
+        fallbackSpeakSpeechSynthesis(cleanText);
       });
     }
 
@@ -781,10 +800,20 @@
         showToast('Thiết bị không hỗ trợ đọc âm thanh!', true);
         return;
       }
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'zh-CN';
-      utterance.rate = speechPlaybackRate * 0.85;
-      speechSynthesis.speak(utterance);
+      try {
+        const cleanText = cleanFrontendSpeechText(text);
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        utterance.lang = 'zh-CN';
+        utterance.rate = speechPlaybackRate * 0.85;
+        const voices = speechSynthesis.getVoices();
+        const zhVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('cmn'));
+        if (zhVoice) {
+          utterance.voice = zhVoice;
+        }
+        speechSynthesis.speak(utterance);
+      } catch (e) {
+        console.error("Local SpeechSynthesis completely failed:", e);
+      }
     }
 
     async function toggleWordMemorized(id, btn) {
