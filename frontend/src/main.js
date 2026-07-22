@@ -192,12 +192,13 @@ function cleanFrontendSpeechText(text) {
   if (!text) return '';
   let str = String(text).trim();
   str = str.replace(/<[^>]*>/g, '');
-  str = str.replace(/([\u4e00-\u9fa5]+)\s*\([^\)]*\)/g, '$1');
+  // Strip both ASCII () and fullwidth Chinese （） parenthetical notes/parts of speech
+  str = str.replace(/[\(\uff08][^\)\uff09]*[\)\uff09]/g, '');
   str = str.replace(/^[A-Z]:\s*/gm, '').replace(/\n[A-Z]:\s*/g, '，');
   if (str.includes('/') && !str.includes('http')) {
     str = str.split('/')[0].trim();
   }
-  return str;
+  return str.trim();
 }
 
 function speakText(text) {
