@@ -1196,8 +1196,8 @@ function cleanTTSInput(str) {
 }
 
 // Helper to fetch MP3 audio from Baidu TTS CDN (Native Mandarin Chinese)
-async function fetchBaiduTTS(text, speed = 3) {
-  const url = `https://fanyi.baidu.com/gettts?lan=zh&text=${encodeURIComponent(text)}&spd=${speed}&source=web`;
+async function fetchBaiduTTS(text, speed = 3, pitch = 5) {
+  const url = `https://fanyi.baidu.com/gettts?lan=zh&text=${encodeURIComponent(text)}&spd=${speed}&source=web&pit=${pitch}`;
   return new Promise((resolve, reject) => {
     https.get(url, {
       headers: {
@@ -1261,7 +1261,7 @@ async function generateEdgeAudio(text, voice) {
   });
 }
 
-// GET /api/tts - Native Baidu TTS & Edge Neural TTS with caching
+// GET /api/tts - Authentic Baidu (Male/Female) & Edge Neural TTS with caching
 app.get('/api/tts', async (req, res) => {
   const { text, voice = 'baidu-female' } = req.query;
   if (!text) {
@@ -1273,7 +1273,8 @@ app.get('/api/tts', async (req, res) => {
     const rawText = String(text).trim();
     const cleanText = cleanTTSInput(rawText) || rawText;
 
-    const hash = crypto.createHash('md5').update(`v2_${safeVoice}_${cleanText}`).digest('hex');
+    // Cache prefix v4 to force fresh distinct Baidu male/female audio generation
+    const hash = crypto.createHash('md5').update(`v4_${safeVoice}_${cleanText}`).digest('hex');
     const fileName = `${hash}.mp3`;
     const filePath = path.join(AUDIO_CACHE_DIR, fileName);
 
@@ -1286,35 +1287,29 @@ app.get('/api/tts', async (req, res) => {
     }
 
     if (!fileExists) {
+      let audioBuffer = null;
       try {
-        let audioBuffer = null;
         if (safeVoice === 'baidu-male') {
-          audioBuffer = await fetchBaiduTTS(cleanText, 2);
+          audioBuffer = await fetchBaiduTTS(cleanText, 3, 1); // Pitch 1 = Deep Baidu Male
         } else if (safeVoice === 'baidu-female') {
-          audioBuffer = await fetchBaiduTTS(cleanText, 3);
-        } else if (safeVoice.includes('Yunyang') || safeVoice.includes('Yunxi')) {
-          try {
-            audioBuffer = await generateEdgeAudio(cleanText, safeVoice);
-          } catch {
-            audioBuffer = await fetchBaiduTTS(cleanText, 2);
-          }
+          audioBuffer = await fetchBaiduTTS(cleanText, 3, 6); // Pitch 6 = Crisp Baidu Female
         } else {
-          try {
-            audioBuffer = await generateEdgeAudio(cleanText, safeVoice);
-          } catch {
-            audioBuffer = await fetchBaiduTTS(cleanText, 3);
-          }
+          audioBuffer = await generateEdgeAudio(cleanText, safeVoice);
         }
+      } catch (err) {
+        console.warn(`Primary TTS failed for "${cleanText}" (${safeVoice}), retrying fallback:`, err.message);
+        try {
+          const pitParam = (safeVoice.includes('male') || safeVoice.includes('Yunyang')) ? 1 : 6;
+          audioBuffer = await fetchBaiduTTS(cleanText, 3, pitParam);
+        } catch {
+          audioBuffer = await fetchGoogleTTS(cleanText);
+        }
+      }
 
-        if (audioBuffer && audioBuffer.length > 100) {
-          await fs.writeFile(filePath, audioBuffer);
-        } else {
-          throw new Error('Invalid audio buffer generated');
-        }
-      } catch (firstErr) {
-        console.warn(`Primary TTS failed for "${cleanText}", trying Google TTS fallback...`, firstErr.message);
-        const fallbackBuffer = await fetchGoogleTTS(cleanText);
-        await fs.writeFile(filePath, fallbackBuffer);
+      if (audioBuffer && audioBuffer.length > 100) {
+        await fs.writeFile(filePath, audioBuffer);
+      } else {
+        throw new Error('Invalid audio buffer');
       }
     }
 

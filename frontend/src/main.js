@@ -163,7 +163,7 @@ function toggleTheme() {
 }
 
 // --- TEXT TO SPEECH (TTS) SETUP ---
-let speechVoice = localStorage.getItem('speech_voice') || 'baidu-female';
+let speechVoice = localStorage.getItem('speech_voice') || 'zh-CN-XiaoxiaoNeural';
 let speechPlaybackRate = parseFloat(localStorage.getItem('speech_playback_rate') || '1.0');
 let activeAudioElement = null;
 
@@ -218,10 +218,14 @@ function speakText(text) {
 
   // 2. Apply rate multiplier for voice separation
   let voiceRateMultiplier = 1.0;
-  if (speechVoice.includes('male') || speechVoice.includes('Yunyang')) {
+  if (speechVoice.includes('Yunyang')) {
     voiceRateMultiplier = 0.88;
-  } else {
+  } else if (speechVoice.includes('Yunjian')) {
+    voiceRateMultiplier = 0.95;
+  } else if (speechVoice.includes('Xiaoxiao')) {
     voiceRateMultiplier = 1.0;
+  } else if (speechVoice.includes('Xiaoyi')) {
+    voiceRateMultiplier = 1.15;
   }
 
   const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(speechVoice)}`;
