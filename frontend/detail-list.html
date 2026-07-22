@@ -747,9 +747,31 @@
       container.appendChild(nextBtn);
     }
 
-    let speechVoice = localStorage.getItem('speech_voice') || 'zh-CN-XiaoxiaoNeural';
+    let speechVoice = localStorage.getItem('speech_voice') || 'default';
     let speechPlaybackRate = parseFloat(localStorage.getItem('speech_playback_rate') || '1.0');
-    let activeAudioElement = null;
+    let chineseVoice = null;
+
+    function populateVoices() {
+      if (typeof speechSynthesis === 'undefined') return;
+      const voices = speechSynthesis.getVoices();
+      if (!voices || voices.length === 0) return;
+      const zhVoices = voices.filter(v => 
+        v.lang.includes('zh') || 
+        v.lang.includes('cmn') || 
+        v.name.toLowerCase().includes('chinese') || 
+        v.name.toLowerCase().includes('mandarin')
+      );
+      if (zhVoices.length > 0) {
+        chineseVoice = zhVoices.find(v => v.name === speechVoice || (speechVoice === 'default' && (v.name.includes('Google') || v.name.includes('Neural') || v.name.includes('Xiaoxiao') || v.lang === 'zh-CN'))) || zhVoices[0];
+      }
+    }
+
+    if (typeof speechSynthesis !== 'undefined') {
+      populateVoices();
+      if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = populateVoices;
+      }
+    }
 
     function cleanFrontendSpeechText(text) {
       if (!text) return '';
@@ -768,45 +790,21 @@
       const cleanText = cleanFrontendSpeechText(text);
       if (!cleanText) return;
 
-      if (activeAudioElement) {
-        try {
-          activeAudioElement.pause();
-          activeAudioElement.currentTime = 0;
-          activeAudioElement.src = '';
-        } catch (e) {}
-        activeAudioElement = null;
-      }
-
       if (typeof speechSynthesis !== 'undefined') {
         speechSynthesis.cancel();
-      }
 
-      const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(speechVoice)}`;
-      const audio = new Audio(url);
-      audio.playbackRate = speechPlaybackRate;
-      activeAudioElement = audio;
-
-      audio.play().catch(err => {
-        console.warn("Edge TTS play failed, falling back to browser SpeechSynthesis:", err);
-        fallbackSpeakSpeechSynthesis(cleanText);
-      });
-    }
-
-    function fallbackSpeakSpeechSynthesis(text) {
-      if (typeof speechSynthesis === 'undefined') return;
-      try {
-        speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
+        const utterance = new SpeechSynthesisUtterance(cleanText);
         utterance.lang = 'zh-CN';
         utterance.rate = speechPlaybackRate;
-        const voices = speechSynthesis.getVoices();
-        const zhVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('cmn'));
-        if (zhVoice) {
-          utterance.voice = zhVoice;
+
+        if (!chineseVoice) {
+          populateVoices();
         }
+        if (chineseVoice) {
+          utterance.voice = chineseVoice;
+        }
+
         speechSynthesis.speak(utterance);
-      } catch (e) {
-        console.error("Local SpeechSynthesis completely failed:", e);
       }
     }
 

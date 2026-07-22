@@ -163,19 +163,59 @@ function toggleTheme() {
 }
 
 // --- TEXT TO SPEECH (TTS) SETUP ---
-let speechVoice = localStorage.getItem('speech_voice') || 'zh-CN-XiaoxiaoNeural';
+let speechVoice = localStorage.getItem('speech_voice') || 'default';
 let speechPlaybackRate = parseFloat(localStorage.getItem('speech_playback_rate') || '1.0');
-let activeAudioElement = null;
+
+function populateVoices() {
+  if (typeof speechSynthesis === 'undefined') return;
+  const voices = speechSynthesis.getVoices();
+  if (!voices || voices.length === 0) return;
+
+  const zhVoices = voices.filter(v => 
+    v.lang.includes('zh') || 
+    v.lang.includes('cmn') || 
+    v.name.toLowerCase().includes('chinese') || 
+    v.name.toLowerCase().includes('mandarin')
+  );
+
+  if (!chineseVoice && zhVoices.length > 0) {
+    chineseVoice = zhVoices.find(v => v.name === speechVoice) ||
+      zhVoices.find(v => v.name.includes('Google') || v.name.includes('Neural') || v.name.includes('Xiaoxiao') || v.lang === 'zh-CN') ||
+      zhVoices[0];
+  }
+
+  const ttsVoiceSelect = document.getElementById('tts-voice-select');
+  if (ttsVoiceSelect && (ttsVoiceSelect.options.length <= 1 || ttsVoiceSelect.options[0].value === 'default')) {
+    ttsVoiceSelect.innerHTML = '';
+    zhVoices.forEach(v => {
+      const opt = document.createElement('option');
+      opt.value = v.name;
+      opt.textContent = `${v.name} (${v.lang})`;
+      if (v === chineseVoice || v.name === speechVoice) {
+        opt.selected = true;
+      }
+      ttsVoiceSelect.appendChild(opt);
+    });
+  }
+}
 
 function initVoices() {
+  populateVoices();
+  if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = populateVoices;
+  }
+
   const ttsVoiceSelect = document.getElementById('tts-voice-select');
   const ttsSpeedSelect = document.getElementById('tts-speed-select');
 
   if (ttsVoiceSelect) {
-    ttsVoiceSelect.value = speechVoice;
     ttsVoiceSelect.addEventListener('change', (e) => {
       speechVoice = e.target.value;
       localStorage.setItem('speech_voice', speechVoice);
+      if (typeof speechSynthesis !== 'undefined') {
+        const voices = speechSynthesis.getVoices();
+        chineseVoice = voices.find(v => v.name === speechVoice) || chineseVoice;
+      }
     });
   }
 
@@ -205,50 +245,21 @@ function speakText(text) {
   const cleanText = cleanFrontendSpeechText(text);
   if (!cleanText) return;
 
-  // 1. Immediately stop any active HTML5 audio element
-  if (activeAudioElement) {
-    try {
-      activeAudioElement.pause();
-      activeAudioElement.currentTime = 0;
-      activeAudioElement.src = '';
-    } catch (e) {}
-    activeAudioElement = null;
-  }
-
-  // 2. Cancel any running Web Speech API
   if (typeof speechSynthesis !== 'undefined') {
     speechSynthesis.cancel();
-  }
 
-  // 3. Construct backend Edge Neural TTS URL
-  const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(speechVoice)}`;
-  const audio = new Audio(url);
-  audio.playbackRate = speechPlaybackRate;
-  activeAudioElement = audio;
-
-  audio.play().catch(err => {
-    console.warn("Edge TTS play failed, falling back to browser SpeechSynthesis:", err);
-    fallbackSpeakSpeechSynthesis(cleanText);
-  });
-}
-
-function fallbackSpeakSpeechSynthesis(text) {
-  if (typeof speechSynthesis === 'undefined') return;
-  try {
-    speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
+    const utterance = new SpeechSynthesisUtterance(cleanText);
     utterance.lang = 'zh-CN';
     utterance.rate = speechPlaybackRate;
 
-    const voices = speechSynthesis.getVoices();
-    const zhVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('cmn'));
-    if (zhVoice) {
-      utterance.voice = zhVoice;
+    if (!chineseVoice) {
+      populateVoices();
+    }
+    if (chineseVoice) {
+      utterance.voice = chineseVoice;
     }
 
     speechSynthesis.speak(utterance);
-  } catch (e) {
-    console.error("Local SpeechSynthesis completely failed:", e);
   }
 }
 
@@ -1619,7 +1630,6 @@ function setupEventListeners() {
   speakBtnFront.addEventListener('click', (e) => {
     e.stopPropagation();
     if (filteredList.length > 0) {
-      showToast("Đang tải phát âm từ vựng...", false);
       markWordAsStudied(filteredList[currentIndex].id);
       speakText(filteredList[currentIndex].word);
     }
@@ -1628,7 +1638,6 @@ function setupEventListeners() {
   speakExampleBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     if (filteredList.length > 0 && filteredList[currentIndex].example_zh) {
-      showToast("Đang tải phát âm ví dụ...", false);
       markWordAsStudied(filteredList[currentIndex].id);
       speakText(filteredList[currentIndex].example_zh);
     }
