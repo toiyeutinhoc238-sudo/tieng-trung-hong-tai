@@ -163,59 +163,19 @@ function toggleTheme() {
 }
 
 // --- TEXT TO SPEECH (TTS) SETUP ---
-let speechVoice = localStorage.getItem('speech_voice') || 'default';
+let speechVoice = localStorage.getItem('speech_voice') || 'zh-CN-XiaoxiaoNeural';
 let speechPlaybackRate = parseFloat(localStorage.getItem('speech_playback_rate') || '1.0');
-
-function populateVoices() {
-  if (typeof speechSynthesis === 'undefined') return;
-  const voices = speechSynthesis.getVoices();
-  if (!voices || voices.length === 0) return;
-
-  const zhVoices = voices.filter(v => 
-    v.lang.includes('zh') || 
-    v.lang.includes('cmn') || 
-    v.name.toLowerCase().includes('chinese') || 
-    v.name.toLowerCase().includes('mandarin')
-  );
-
-  if (!chineseVoice && zhVoices.length > 0) {
-    chineseVoice = zhVoices.find(v => v.name === speechVoice) ||
-      zhVoices.find(v => v.name.includes('Google') || v.name.includes('Neural') || v.name.includes('Xiaoxiao') || v.lang === 'zh-CN') ||
-      zhVoices[0];
-  }
-
-  const ttsVoiceSelect = document.getElementById('tts-voice-select');
-  if (ttsVoiceSelect && (ttsVoiceSelect.options.length <= 1 || ttsVoiceSelect.options[0].value === 'default')) {
-    ttsVoiceSelect.innerHTML = '';
-    zhVoices.forEach(v => {
-      const opt = document.createElement('option');
-      opt.value = v.name;
-      opt.textContent = `${v.name} (${v.lang})`;
-      if (v === chineseVoice || v.name === speechVoice) {
-        opt.selected = true;
-      }
-      ttsVoiceSelect.appendChild(opt);
-    });
-  }
-}
+let activeAudioElement = null;
 
 function initVoices() {
-  populateVoices();
-  if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = populateVoices;
-  }
-
   const ttsVoiceSelect = document.getElementById('tts-voice-select');
   const ttsSpeedSelect = document.getElementById('tts-speed-select');
 
   if (ttsVoiceSelect) {
+    ttsVoiceSelect.value = speechVoice;
     ttsVoiceSelect.addEventListener('change', (e) => {
       speechVoice = e.target.value;
       localStorage.setItem('speech_voice', speechVoice);
-      if (typeof speechSynthesis !== 'undefined') {
-        const voices = speechSynthesis.getVoices();
-        chineseVoice = voices.find(v => v.name === speechVoice) || chineseVoice;
-      }
     });
   }
 
@@ -245,21 +205,43 @@ function speakText(text) {
   const cleanText = cleanFrontendSpeechText(text);
   if (!cleanText) return;
 
-  if (typeof speechSynthesis !== 'undefined') {
-    speechSynthesis.cancel();
+  // 1. Instantly stop previous playing audio element
+  if (activeAudioElement) {
+    try {
+      activeAudioElement.pause();
+      activeAudioElement.currentTime = 0;
+      activeAudioElement.src = '';
+    } catch (e) {}
+    activeAudioElement = null;
+  }
 
-    const utterance = new SpeechSynthesisUtterance(cleanText);
+  // 2. Play Edge Neural TTS with selected voice (Xiaoxiao female, Yunxi male, Yunjian male, Xiaoyi female)
+  const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(speechVoice)}`;
+  const audio = new Audio(url);
+  audio.playbackRate = speechPlaybackRate;
+  activeAudioElement = audio;
+
+  audio.play().catch(err => {
+    console.warn("Edge TTS play failed, using fallback:", err);
+    fallbackSpeakSpeechSynthesis(cleanText);
+  });
+}
+
+function fallbackSpeakSpeechSynthesis(text) {
+  if (typeof speechSynthesis === 'undefined') return;
+  try {
+    speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'zh-CN';
     utterance.rate = speechPlaybackRate;
-
-    if (!chineseVoice) {
-      populateVoices();
+    const voices = speechSynthesis.getVoices();
+    const zhVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('cmn'));
+    if (zhVoice) {
+      utterance.voice = zhVoice;
     }
-    if (chineseVoice) {
-      utterance.voice = chineseVoice;
-    }
-
     speechSynthesis.speak(utterance);
+  } catch (e) {
+    console.error("Local SpeechSynthesis failed:", e);
   }
 }
 
