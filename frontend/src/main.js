@@ -165,7 +165,6 @@ function toggleTheme() {
 // --- TEXT TO SPEECH (TTS) SETUP ---
 let speechVoice = localStorage.getItem('speech_voice') || 'default';
 let speechPlaybackRate = parseFloat(localStorage.getItem('speech_playback_rate') || '1.0');
-let chineseVoice = null;
 let activeAudioElement = null;
 
 function populateVoices() {
