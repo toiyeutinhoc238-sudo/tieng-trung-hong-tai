@@ -747,7 +747,7 @@
       container.appendChild(nextBtn);
     }
 
-    let speechVoice = localStorage.getItem('speech_voice') || 'zh-CN-XiaoxiaoNeural';
+    let speechVoice = localStorage.getItem('speech_voice') || 'baidu-female';
     let speechPlaybackRate = parseFloat(localStorage.getItem('speech_playback_rate') || '1.0');
     let activeAudioElement = null;
 
@@ -779,14 +779,10 @@
       }
 
       let voiceRateMultiplier = 1.0;
-      if (speechVoice.includes('Yunyang')) {
+      if (speechVoice.includes('male') || speechVoice.includes('Yunyang')) {
         voiceRateMultiplier = 0.88;
-      } else if (speechVoice.includes('Yunxi')) {
-        voiceRateMultiplier = 1.12;
-      } else if (speechVoice.includes('Xiaoxiao')) {
-        voiceRateMultiplier = 0.92;
-      } else if (speechVoice.includes('Xiaoyi')) {
-        voiceRateMultiplier = 1.15;
+      } else {
+        voiceRateMultiplier = 1.0;
       }
 
       const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(speechVoice)}`;
@@ -795,7 +791,7 @@
       activeAudioElement = audio;
 
       audio.play().catch(err => {
-        console.warn("Edge TTS play failed, using fallback:", err);
+        console.warn("Primary TTS play failed, using fallback:", err);
         fallbackSpeakSpeechSynthesis(cleanText);
       });
     }
@@ -808,21 +804,13 @@
         utterance.lang = 'zh-CN';
 
         const voices = speechSynthesis.getVoices();
+        const isMale = speechVoice.includes('male') || speechVoice.includes('Yunyang') || speechVoice.includes('Yunxi');
 
-        if (speechVoice.includes('Yunyang')) {
-          utterance.pitch = 0.35;
-          utterance.rate = speechPlaybackRate * 0.85;
-        } else if (speechVoice.includes('Yunxi')) {
-          utterance.pitch = 0.70;
-          utterance.rate = speechPlaybackRate * 1.12;
-        } else if (speechVoice.includes('Xiaoxiao')) {
-          utterance.pitch = 1.10;
-          utterance.rate = speechPlaybackRate * 0.92;
-        } else if (speechVoice.includes('Xiaoyi')) {
-          utterance.pitch = 1.45;
-          utterance.rate = speechPlaybackRate * 1.18;
+        if (isMale) {
+          utterance.pitch = 0.40;
+          utterance.rate = speechPlaybackRate * 0.88;
         } else {
-          utterance.pitch = 1.0;
+          utterance.pitch = 1.20;
           utterance.rate = speechPlaybackRate;
         }
 

@@ -1201,7 +1201,8 @@ async function fetchBaiduTTS(text, speed = 3) {
   return new Promise((resolve, reject) => {
     https.get(url, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Referer': 'https://fanyi.baidu.com/'
       }
     }, res => {
       if (res.statusCode !== 200) {
@@ -1213,6 +1214,32 @@ async function fetchBaiduTTS(text, speed = 3) {
         const buffer = Buffer.concat(chunks);
         if (buffer.length < 100) {
           return reject(new Error('Baidu TTS returned invalid audio buffer'));
+        }
+        resolve(buffer);
+      });
+      res.on('error', err => reject(err));
+    }).on('error', err => reject(err));
+  });
+}
+
+// Helper to fetch MP3 audio from Google Translate CDN
+async function fetchGoogleTTS(text) {
+  const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=zh-CN&client=tw-ob`;
+  return new Promise((resolve, reject) => {
+    https.get(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+      }
+    }, res => {
+      if (res.statusCode !== 200) {
+        return reject(new Error(`Google TTS status code: ${res.statusCode}`));
+      }
+      const chunks = [];
+      res.on('data', chunk => chunks.push(chunk));
+      res.on('end', () => {
+        const buffer = Buffer.concat(chunks);
+        if (buffer.length < 100) {
+          return reject(new Error('Google TTS returned invalid audio buffer'));
         }
         resolve(buffer);
       });
@@ -1236,7 +1263,7 @@ async function generateEdgeAudio(text, voice) {
 
 // GET /api/tts - Native Baidu TTS & Edge Neural TTS with caching
 app.get('/api/tts', async (req, res) => {
-  const { text, voice = 'zh-CN-XiaoxiaoNeural' } = req.query;
+  const { text, voice = 'baidu-female' } = req.query;
   if (!text) {
     return res.status(400).json({ error: 'Text parameter is required' });
   }
@@ -1246,7 +1273,7 @@ app.get('/api/tts', async (req, res) => {
     const rawText = String(text).trim();
     const cleanText = cleanTTSInput(rawText) || rawText;
 
-    const hash = crypto.createHash('md5').update(`baidu_${safeVoice}_${cleanText}`).digest('hex');
+    const hash = crypto.createHash('md5').update(`v2_${safeVoice}_${cleanText}`).digest('hex');
     const fileName = `${hash}.mp3`;
     const filePath = path.join(AUDIO_CACHE_DIR, fileName);
 
@@ -1260,14 +1287,34 @@ app.get('/api/tts', async (req, res) => {
 
     if (!fileExists) {
       try {
-        // Try Baidu TTS CDN first (Native Chinese, 0% blocking, ~30ms latency)
-        const spdParam = safeVoice.includes('Yunyang') ? 2 : 3;
-        const audioBuffer = await fetchBaiduTTS(cleanText, spdParam);
-        await fs.writeFile(filePath, audioBuffer);
-      } catch (baiduErr) {
-        console.warn(`Baidu TTS failed for "${cleanText}", retrying EdgeTTS fallback...`, baiduErr.message);
-        const audioBuffer = await generateEdgeAudio(cleanText, safeVoice);
-        await fs.writeFile(filePath, audioBuffer);
+        let audioBuffer = null;
+        if (safeVoice === 'baidu-male') {
+          audioBuffer = await fetchBaiduTTS(cleanText, 2);
+        } else if (safeVoice === 'baidu-female') {
+          audioBuffer = await fetchBaiduTTS(cleanText, 3);
+        } else if (safeVoice.includes('Yunyang') || safeVoice.includes('Yunxi')) {
+          try {
+            audioBuffer = await generateEdgeAudio(cleanText, safeVoice);
+          } catch {
+            audioBuffer = await fetchBaiduTTS(cleanText, 2);
+          }
+        } else {
+          try {
+            audioBuffer = await generateEdgeAudio(cleanText, safeVoice);
+          } catch {
+            audioBuffer = await fetchBaiduTTS(cleanText, 3);
+          }
+        }
+
+        if (audioBuffer && audioBuffer.length > 100) {
+          await fs.writeFile(filePath, audioBuffer);
+        } else {
+          throw new Error('Invalid audio buffer generated');
+        }
+      } catch (firstErr) {
+        console.warn(`Primary TTS failed for "${cleanText}", trying Google TTS fallback...`, firstErr.message);
+        const fallbackBuffer = await fetchGoogleTTS(cleanText);
+        await fs.writeFile(filePath, fallbackBuffer);
       }
     }
 
