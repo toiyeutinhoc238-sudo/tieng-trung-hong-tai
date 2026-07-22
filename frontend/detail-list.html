@@ -777,35 +777,57 @@
       lastSpeakText = cleanText;
       lastSpeakTime = now;
 
+      if (typeof speechSynthesis !== 'undefined') {
+        speechSynthesis.cancel();
+      }
+
       if (activeAudioElement) {
         try {
           activeAudioElement._cancelled = true;
           activeAudioElement.onerror = null;
+          activeAudioElement.onplay = null;
           activeAudioElement.pause();
           activeAudioElement.currentTime = 0;
           activeAudioElement.src = '';
         } catch (e) {}
         activeAudioElement = null;
       }
-      if (typeof speechSynthesis !== 'undefined') {
-        speechSynthesis.cancel();
-      }
 
       const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(speechVoice)}`;
       const audio = new Audio(url);
       audio.playbackRate = speechPlaybackRate;
+      audio._cancelled = false;
+      audio.hasStarted = false;
+      let fallbackTriggered = false;
       activeAudioElement = audio;
 
-      audio.onerror = (e) => {
-        if (audio._cancelled) return;
-        console.warn("Audio element failed to load TTS, trying fallback:", e);
+      const triggerFallbackOnce = (reason) => {
+        if (audio._cancelled || audio.hasStarted || fallbackTriggered) return;
+        fallbackTriggered = true;
+        console.warn(`Edge TTS fallback triggered (${reason}).`);
         fallbackSpeakSpeechSynthesis(cleanText);
       };
 
+      const timeoutId = setTimeout(() => {
+        if (!audio.hasStarted && !audio._cancelled && !fallbackTriggered) {
+          triggerFallbackOnce('Server timeout');
+        }
+      }, 3500);
+
+      audio.onplay = () => {
+        audio.hasStarted = true;
+        clearTimeout(timeoutId);
+      };
+
+      audio.onerror = () => {
+        clearTimeout(timeoutId);
+        triggerFallbackOnce('Audio element error');
+      };
+
       audio.play().catch(err => {
-        if (audio._cancelled || err.name === 'AbortError') return;
-        console.warn("Edge TTS play failed, falling back to browser SpeechSynthesis:", err);
-        fallbackSpeakSpeechSynthesis(cleanText);
+        clearTimeout(timeoutId);
+        if (err.name === 'AbortError') return;
+        triggerFallbackOnce(err.message || 'Play rejected');
       });
     }
 
@@ -816,15 +838,21 @@
       }
       try {
         const cleanText = cleanFrontendSpeechText(text);
-        const utterance = new SpeechSynthesisUtterance(cleanText);
-        utterance.lang = 'zh-CN';
-        utterance.rate = speechPlaybackRate * 0.85;
-        const voices = speechSynthesis.getVoices();
-        const zhVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('cmn'));
-        if (zhVoice) {
-          utterance.voice = zhVoice;
-        }
-        speechSynthesis.speak(utterance);
+        if (!cleanText) return;
+
+        speechSynthesis.cancel();
+
+        setTimeout(() => {
+          const utterance = new SpeechSynthesisUtterance(cleanText);
+          utterance.lang = 'zh-CN';
+          utterance.rate = speechPlaybackRate * 0.85;
+          const voices = speechSynthesis.getVoices();
+          const zhVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('cmn'));
+          if (zhVoice) {
+            utterance.voice = zhVoice;
+          }
+          speechSynthesis.speak(utterance);
+        }, 50);
       } catch (e) {
         console.error("Local SpeechSynthesis completely failed:", e);
       }

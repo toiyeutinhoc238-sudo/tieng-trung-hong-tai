@@ -216,37 +216,61 @@ function speakText(text) {
   lastSpeakText = cleanText;
   lastSpeakTime = now;
 
-  // Cleanly stop any currently playing audio or speech synthesis
+  // 1. Immediately cancel any running SpeechSynthesis
+  if (typeof speechSynthesis !== 'undefined') {
+    speechSynthesis.cancel();
+  }
+
+  // 2. Cleanly stop any currently playing HTML5 audio element
   if (activeAudioElement) {
     try {
       activeAudioElement._cancelled = true;
-      activeAudioElement.onerror = null; // Detach handler so resetting src doesn't trigger fallback
+      activeAudioElement.onerror = null;
+      activeAudioElement.onplay = null;
       activeAudioElement.pause();
       activeAudioElement.currentTime = 0;
       activeAudioElement.src = '';
     } catch (e) {}
     activeAudioElement = null;
   }
-  if (typeof speechSynthesis !== 'undefined') {
-    speechSynthesis.cancel();
-  }
 
   // Construct backend Edge Neural TTS URL
   const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(speechVoice)}`;
   const audio = new Audio(url);
   audio.playbackRate = speechPlaybackRate;
+  audio._cancelled = false;
+  audio.hasStarted = false;
+  let fallbackTriggered = false;
   activeAudioElement = audio;
 
-  audio.onerror = (e) => {
-    if (audio._cancelled) return;
-    console.warn("Audio element failed to load TTS, trying fallback:", e);
+  const triggerFallbackOnce = (reason) => {
+    if (audio._cancelled || audio.hasStarted || fallbackTriggered) return;
+    fallbackTriggered = true;
+    console.warn(`Edge TTS fallback triggered (${reason}).`);
     fallbackSpeakSpeechSynthesis(cleanText);
   };
 
+  // Timeout fallback if server takes > 3.5s to respond
+  const timeoutId = setTimeout(() => {
+    if (!audio.hasStarted && !audio._cancelled && !fallbackTriggered) {
+      triggerFallbackOnce('Server timeout');
+    }
+  }, 3500);
+
+  audio.onplay = () => {
+    audio.hasStarted = true;
+    clearTimeout(timeoutId);
+  };
+
+  audio.onerror = () => {
+    clearTimeout(timeoutId);
+    triggerFallbackOnce('Audio element error');
+  };
+
   audio.play().catch(err => {
-    if (audio._cancelled || err.name === 'AbortError') return;
-    console.warn("Edge TTS play failed, falling back to browser SpeechSynthesis:", err);
-    fallbackSpeakSpeechSynthesis(cleanText);
+    clearTimeout(timeoutId);
+    if (err.name === 'AbortError') return;
+    triggerFallbackOnce(err.message || 'Play rejected');
   });
 }
 
@@ -258,17 +282,23 @@ function fallbackSpeakSpeechSynthesis(text) {
 
   try {
     const cleanText = cleanFrontendSpeechText(text);
-    const utterance = new SpeechSynthesisUtterance(cleanText);
-    utterance.lang = 'zh-CN';
-    utterance.rate = speechPlaybackRate * 0.85;
+    if (!cleanText) return;
 
-    const voices = speechSynthesis.getVoices();
-    const zhVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('cmn'));
-    if (zhVoice) {
-      utterance.voice = zhVoice;
-    }
+    speechSynthesis.cancel();
 
-    speechSynthesis.speak(utterance);
+    setTimeout(() => {
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.lang = 'zh-CN';
+      utterance.rate = speechPlaybackRate * 0.85;
+
+      const voices = speechSynthesis.getVoices();
+      const zhVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('cmn'));
+      if (zhVoice) {
+        utterance.voice = zhVoice;
+      }
+
+      speechSynthesis.speak(utterance);
+    }, 50);
   } catch (e) {
     console.error("Local SpeechSynthesis completely failed:", e);
   }
@@ -1608,8 +1638,8 @@ function setupEventListeners() {
 
   // Card Flip Click
   cardElement.addEventListener('click', (e) => {
-    // Prevent flip if clicking a button inside card actions
-    if (e.target.closest('.circle-btn') || e.target.closest('.speak-example-btn')) {
+    // Prevent flip if clicking a button, quick-save wrapper, or example box inside card actions
+    if (e.target.closest('.circle-btn') || e.target.closest('.speak-example-btn') || e.target.closest('.example-box') || e.target.closest('.fc-quick-save-wrapper')) {
       return;
     }
     flipCard();
