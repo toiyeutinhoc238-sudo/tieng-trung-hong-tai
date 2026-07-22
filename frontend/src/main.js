@@ -163,7 +163,7 @@ function toggleTheme() {
 }
 
 // --- TEXT TO SPEECH (TTS) SETUP ---
-let speechVoice = localStorage.getItem('speech_voice') || 'elevenlabs-male';
+let speechVoice = localStorage.getItem('speech_voice') || 'elevenlabs-adam';
 let speechPlaybackRate = parseFloat(localStorage.getItem('speech_playback_rate') || '1.0');
 let activeAudioElement = null;
 
@@ -173,10 +173,10 @@ function initVoices() {
 
   if (ttsVoiceSelect) {
     const savedVoice = localStorage.getItem('speech_voice');
-    if (savedVoice) {
+    if (savedVoice && savedVoice.startsWith('elevenlabs-')) {
       ttsVoiceSelect.value = savedVoice;
     } else {
-      localStorage.setItem('speech_voice', ttsVoiceSelect.value || 'elevenlabs-male');
+      localStorage.setItem('speech_voice', ttsVoiceSelect.value || 'elevenlabs-adam');
     }
 
     ttsVoiceSelect.addEventListener('change', (e) => {

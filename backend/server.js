@@ -7,7 +7,6 @@ import { fileURLToPath } from 'url';
 import https from 'https';
 import mongoose from 'mongoose';
 import crypto from 'crypto';
-import { MsEdgeTTS, OUTPUT_FORMAT } from 'msedge-tts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -1181,7 +1180,6 @@ app.post('/api/chat/migrate', async (req, res) => {
     res.status(500).json({ error: 'Có lỗi xảy ra khi đồng bộ lịch sử hội thoại.' });
   }
 });
-
 // Helper to sanitize text for TTS engine (removes HTML, dialogue markers, pinyin in parens, etc.)
 function cleanTTSInput(str) {
   if (!str) return '';
@@ -1236,34 +1234,7 @@ async function fetchElevenLabsTTS(text, voiceId, apiKey) {
   });
 }
 
-// Helper to fetch MP3 audio from Baidu TTS CDN (Native Mandarin Chinese)
-async function fetchBaiduTTS(text, speed = 3, pitch = 5) {
-  const url = `https://fanyi.baidu.com/gettts?lan=zh&text=${encodeURIComponent(text)}&spd=${speed}&source=web&pit=${pitch}`;
-  return new Promise((resolve, reject) => {
-    https.get(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Referer': 'https://fanyi.baidu.com/'
-      }
-    }, res => {
-      if (res.statusCode !== 200) {
-        return reject(new Error(`Baidu TTS status code: ${res.statusCode}`));
-      }
-      const chunks = [];
-      res.on('data', chunk => chunks.push(chunk));
-      res.on('end', () => {
-        const buffer = Buffer.concat(chunks);
-        if (buffer.length < 100) {
-          return reject(new Error('Baidu TTS returned invalid audio buffer'));
-        }
-        resolve(buffer);
-      });
-      res.on('error', err => reject(err));
-    }).on('error', err => reject(err));
-  });
-}
-
-// Helper to fetch MP3 audio from Google Translate CDN
+// Helper to fetch MP3 audio from Google Translate CDN (Emergency Network Fallback)
 async function fetchGoogleTTS(text) {
   const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=zh-CN&client=tw-ob`;
   return new Promise((resolve, reject) => {
@@ -1289,22 +1260,9 @@ async function fetchGoogleTTS(text) {
   });
 }
 
-// Helper to generate MP3 audio using MsEdgeTTS
-async function generateEdgeAudio(text, voice) {
-  const tts = new MsEdgeTTS();
-  await tts.setMetadata(voice, OUTPUT_FORMAT.AUDIO_24KHZ_96KBITRATE_MONO_MP3);
-  return new Promise((resolve, reject) => {
-    const { audioStream } = tts.toStream(text);
-    const chunks = [];
-    audioStream.on('data', chunk => chunks.push(chunk));
-    audioStream.on('close', () => resolve(Buffer.concat(chunks)));
-    audioStream.on('error', err => reject(err));
-  });
-}
-
-// GET /api/tts - ElevenLabs, Baidu & Edge Neural TTS with caching
+// GET /api/tts - ElevenLabs Multilingual v2 AI Speech Engine
 app.get('/api/tts', async (req, res) => {
-  const { text, voice = 'baidu-female' } = req.query;
+  const { text, voice = 'elevenlabs-adam' } = req.query;
   if (!text) {
     return res.status(400).json({ error: 'Text parameter is required' });
   }
@@ -1314,8 +1272,7 @@ app.get('/api/tts', async (req, res) => {
     const rawText = String(text).trim();
     const cleanText = cleanTTSInput(rawText) || rawText;
 
-    // Cache prefix v6 to force fresh distinct audio per voice
-    const hash = crypto.createHash('md5').update(`v6_${safeVoice}_${cleanText}`).digest('hex');
+    const hash = crypto.createHash('md5').update(`v7_eleven_${safeVoice}_${cleanText}`).digest('hex');
     const fileName = `${hash}.mp3`;
     const filePath = path.join(AUDIO_CACHE_DIR, fileName);
 
@@ -1329,27 +1286,22 @@ app.get('/api/tts', async (req, res) => {
 
     if (!fileExists) {
       let audioBuffer = null;
+      const apiKey = process.env.ELEVENLABS_API_KEY || 'sk_51feae550df86c7bb9ab69706394130a8061ab0aef5dbf2e';
+      
+      let voiceId = 'pNInz6obpgDQGcFmaJgB'; // Default Adam Male
+      if (safeVoice === 'elevenlabs-antoni') {
+        voiceId = 'ErXwobaYiN019PkySvjV'; // Antoni Male
+      } else if (safeVoice === 'elevenlabs-bella') {
+        voiceId = 'EXAVITQu4vr4xnSDxMaL'; // Bella Female
+      } else if (safeVoice === 'elevenlabs-jessica') {
+        voiceId = 'cgSgspJ2msm6clMCkdW9'; // Jessica Female
+      }
+
       try {
-        const apiKey = process.env.ELEVENLABS_API_KEY || 'sk_51feae550df86c7bb9ab69706394130a8061ab0aef5dbf2e';
-        if (safeVoice === 'elevenlabs-male' && apiKey) {
-          audioBuffer = await fetchElevenLabsTTS(cleanText, 'pNInz6obpgDQGcFmaJgB', apiKey); // Adam Male (Verified HTTP 200)
-        } else if (safeVoice === 'elevenlabs-female' && apiKey) {
-          audioBuffer = await fetchElevenLabsTTS(cleanText, 'EXAVITQu4vr4xnSDxMaL', apiKey); // Bella Female (Verified HTTP 200)
-        } else if (safeVoice === 'baidu-male') {
-          audioBuffer = await fetchBaiduTTS(cleanText, 3, 1);
-        } else if (safeVoice === 'baidu-female') {
-          audioBuffer = await fetchBaiduTTS(cleanText, 3, 6);
-        } else {
-          audioBuffer = await generateEdgeAudio(cleanText, safeVoice);
-        }
+        audioBuffer = await fetchElevenLabsTTS(cleanText, voiceId, apiKey);
       } catch (err) {
-        console.warn(`Primary TTS failed for "${cleanText}" (${safeVoice}), retrying fallback:`, err.message);
-        try {
-          const pitParam = (safeVoice.includes('male') || safeVoice.includes('Yunyang')) ? 1 : 6;
-          audioBuffer = await fetchBaiduTTS(cleanText, 3, pitParam);
-        } catch {
-          audioBuffer = await fetchGoogleTTS(cleanText);
-        }
+        console.warn(`ElevenLabs TTS failed for "${cleanText}" (${safeVoice}), retrying Google fallback:`, err.message);
+        audioBuffer = await fetchGoogleTTS(cleanText);
       }
 
       if (audioBuffer && audioBuffer.length > 100) {
@@ -1365,7 +1317,7 @@ app.get('/api/tts', async (req, res) => {
     });
     return res.sendFile(filePath);
   } catch (error) {
-    console.error('TTS Generation Error:', error);
+    console.error('ElevenLabs TTS Error:', error);
     return res.status(500).json({ error: 'Failed to generate audio' });
   }
 });
