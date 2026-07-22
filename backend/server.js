@@ -1234,6 +1234,33 @@ async function fetchElevenLabsTTS(text, voiceId, apiKey) {
   });
 }
 
+// Helper to fetch MP3 audio from Baidu TTS CDN (Distinct Fallback Engine)
+async function fetchBaiduTTS(text, speed = 3, pitch = 5) {
+  const url = `https://fanyi.baidu.com/gettts?lan=zh&text=${encodeURIComponent(text)}&spd=${speed}&source=web&pit=${pitch}`;
+  return new Promise((resolve, reject) => {
+    https.get(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Referer': 'https://fanyi.baidu.com/'
+      }
+    }, res => {
+      if (res.statusCode !== 200) {
+        return reject(new Error(`Baidu TTS status code: ${res.statusCode}`));
+      }
+      const chunks = [];
+      res.on('data', chunk => chunks.push(chunk));
+      res.on('end', () => {
+        const buffer = Buffer.concat(chunks);
+        if (buffer.length < 100) {
+          return reject(new Error('Baidu TTS returned invalid audio buffer'));
+        }
+        resolve(buffer);
+      });
+      res.on('error', err => reject(err));
+    }).on('error', err => reject(err));
+  });
+}
+
 // Helper to fetch MP3 audio from Google Translate CDN (Emergency Network Fallback)
 async function fetchGoogleTTS(text) {
   const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=zh-CN&client=tw-ob`;
@@ -1272,7 +1299,7 @@ app.get('/api/tts', async (req, res) => {
     const rawText = String(text).trim();
     const cleanText = cleanTTSInput(rawText) || rawText;
 
-    const hash = crypto.createHash('md5').update(`v7_eleven_${safeVoice}_${cleanText}`).digest('hex');
+    const hash = crypto.createHash('md5').update(`v8_eleven_${safeVoice}_${cleanText}`).digest('hex');
     const fileName = `${hash}.mp3`;
     const filePath = path.join(AUDIO_CACHE_DIR, fileName);
 
@@ -1288,7 +1315,7 @@ app.get('/api/tts', async (req, res) => {
       let audioBuffer = null;
       const apiKey = process.env.ELEVENLABS_API_KEY || 'sk_51feae550df86c7bb9ab69706394130a8061ab0aef5dbf2e';
       
-      let voiceId = 'pNInz6obpgDQGcFmaJgB'; // Default Adam Male
+      let voiceId = 'pNInz6obpgDQGcFmaJgB'; // Adam Male
       if (safeVoice === 'elevenlabs-antoni') {
         voiceId = 'ErXwobaYiN019PkySvjV'; // Antoni Male
       } else if (safeVoice === 'elevenlabs-bella') {
@@ -1300,8 +1327,28 @@ app.get('/api/tts', async (req, res) => {
       try {
         audioBuffer = await fetchElevenLabsTTS(cleanText, voiceId, apiKey);
       } catch (err) {
-        console.warn(`ElevenLabs TTS failed for "${cleanText}" (${safeVoice}), retrying Google fallback:`, err.message);
-        audioBuffer = await fetchGoogleTTS(cleanText);
+        console.warn(`ElevenLabs TTS failed for "${cleanText}" (${safeVoice}), retrying distinct fallback:`, err.message);
+        let fallbackPitch = 6;
+        let fallbackSpeed = 3;
+        if (safeVoice === 'elevenlabs-adam') {
+          fallbackPitch = 1;
+          fallbackSpeed = 2;
+        } else if (safeVoice === 'elevenlabs-antoni') {
+          fallbackPitch = 3;
+          fallbackSpeed = 4;
+        } else if (safeVoice === 'elevenlabs-bella') {
+          fallbackPitch = 6;
+          fallbackSpeed = 3;
+        } else if (safeVoice === 'elevenlabs-jessica') {
+          fallbackPitch = 8;
+          fallbackSpeed = 4;
+        }
+
+        try {
+          audioBuffer = await fetchBaiduTTS(cleanText, fallbackSpeed, fallbackPitch);
+        } catch {
+          audioBuffer = await fetchGoogleTTS(cleanText);
+        }
       }
 
       if (audioBuffer && audioBuffer.length > 100) {
