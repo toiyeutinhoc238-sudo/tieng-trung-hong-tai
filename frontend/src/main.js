@@ -163,7 +163,7 @@ function toggleTheme() {
 }
 
 // --- TEXT TO SPEECH (TTS) SETUP ---
-let speechVoice = localStorage.getItem('speech_voice') || 'zh-CN-XiaoxiaoNeural';
+let speechVoice = localStorage.getItem('speech_voice') || 'elevenlabs-male';
 let speechPlaybackRate = parseFloat(localStorage.getItem('speech_playback_rate') || '1.0');
 let activeAudioElement = null;
 
@@ -172,7 +172,13 @@ function initVoices() {
   const ttsSpeedSelect = document.getElementById('tts-speed-select');
 
   if (ttsVoiceSelect) {
-    ttsVoiceSelect.value = speechVoice;
+    const savedVoice = localStorage.getItem('speech_voice');
+    if (savedVoice) {
+      ttsVoiceSelect.value = savedVoice;
+    } else {
+      localStorage.setItem('speech_voice', ttsVoiceSelect.value || 'elevenlabs-male');
+    }
+
     ttsVoiceSelect.addEventListener('change', (e) => {
       speechVoice = e.target.value;
       localStorage.setItem('speech_voice', speechVoice);
@@ -180,7 +186,10 @@ function initVoices() {
   }
 
   if (ttsSpeedSelect) {
-    ttsSpeedSelect.value = speechPlaybackRate.toString();
+    const savedSpeed = localStorage.getItem('speech_playback_rate');
+    if (savedSpeed) {
+      ttsSpeedSelect.value = savedSpeed;
+    }
     ttsSpeedSelect.addEventListener('change', (e) => {
       speechPlaybackRate = parseFloat(e.target.value) || 1.0;
       localStorage.setItem('speech_playback_rate', speechPlaybackRate);
@@ -216,30 +225,28 @@ function speakText(text) {
     activeAudioElement = null;
   }
 
-  // 2. Apply rate multiplier for voice separation
-  let voiceRateMultiplier = 1.0;
-  if (speechVoice.includes('Yunyang')) {
-    voiceRateMultiplier = 0.88;
-  } else if (speechVoice.includes('Yunjian')) {
-    voiceRateMultiplier = 0.95;
-  } else if (speechVoice.includes('Xiaoxiao')) {
-    voiceRateMultiplier = 1.0;
-  } else if (speechVoice.includes('Xiaoyi')) {
-    voiceRateMultiplier = 1.15;
-  }
+  // 2. Fetch live selected voice & speed directly from DOM
+  const voiceSelectEl = document.getElementById('tts-voice-select');
+  const currentVoice = (voiceSelectEl && voiceSelectEl.value) ? voiceSelectEl.value : (localStorage.getItem('speech_voice') || 'elevenlabs-male');
+  localStorage.setItem('speech_voice', currentVoice);
 
-  const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(speechVoice)}`;
+  const speedSelectEl = document.getElementById('tts-speed-select');
+  const currentSpeed = (speedSelectEl && speedSelectEl.value) ? parseFloat(speedSelectEl.value) : (parseFloat(localStorage.getItem('speech_playback_rate')) || 1.0);
+  localStorage.setItem('speech_playback_rate', currentSpeed.toString());
+
+  // 3. Cache-busting timestamp to guarantee fresh distinct voice audio
+  const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(currentVoice)}&_t=${Date.now()}`;
   const audio = new Audio(url);
-  audio.playbackRate = speechPlaybackRate * voiceRateMultiplier;
+  audio.playbackRate = currentSpeed;
   activeAudioElement = audio;
 
   audio.play().catch(err => {
     console.warn("Primary TTS play failed, using fallback:", err);
-    fallbackSpeakSpeechSynthesis(cleanText);
+    fallbackSpeakSpeechSynthesis(cleanText, currentVoice, currentSpeed);
   });
 }
 
-function fallbackSpeakSpeechSynthesis(text) {
+function fallbackSpeakSpeechSynthesis(text, currentVoice, currentSpeed) {
   if (typeof speechSynthesis === 'undefined') return;
   try {
     speechSynthesis.cancel();
@@ -247,14 +254,15 @@ function fallbackSpeakSpeechSynthesis(text) {
     utterance.lang = 'zh-CN';
 
     const voices = speechSynthesis.getVoices();
-    const isMale = speechVoice.includes('male') || speechVoice.includes('Yunyang') || speechVoice.includes('Yunxi');
+    const vName = currentVoice || 'female';
+    const isMale = vName.includes('male') || vName.includes('Yunyang') || vName.includes('Yunjian');
 
     if (isMale) {
       utterance.pitch = 0.40;
-      utterance.rate = speechPlaybackRate * 0.88;
+      utterance.rate = (currentSpeed || 1.0) * 0.88;
     } else {
       utterance.pitch = 1.20;
-      utterance.rate = speechPlaybackRate;
+      utterance.rate = currentSpeed || 1.0;
     }
 
     const zhVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('cmn'));
