@@ -233,7 +233,6 @@ function fallbackSpeakSpeechSynthesis(text) {
     speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'zh-CN';
-    utterance.rate = speechPlaybackRate;
 
     const voices = speechSynthesis.getVoices();
     const isMale = speechVoice.includes('Yunyang') || speechVoice.includes('Yunjian') || speechVoice.includes('Yunxi');
@@ -241,10 +240,12 @@ function fallbackSpeakSpeechSynthesis(text) {
     let targetVoice = null;
     if (isMale) {
       targetVoice = voices.find(v => (v.lang.includes('zh') || v.lang.includes('cmn')) && (v.name.includes('Yunyang') || v.name.includes('Kangkang') || v.name.includes('Yunjian') || v.name.includes('Yunxi') || v.name.toLowerCase().includes('male')));
-      utterance.pitch = 0.55;
+      utterance.pitch = 0.45; // Ultra deep masculine pitch
+      utterance.rate = speechPlaybackRate * 0.85; // Slightly slower, authoritative male cadence
     } else {
       targetVoice = voices.find(v => (v.lang.includes('zh') || v.lang.includes('cmn')) && (v.name.includes('Xiaoxiao') || v.name.includes('Huihui') || v.name.includes('Xiaoyi') || v.name.toLowerCase().includes('female')));
-      utterance.pitch = 1.25;
+      utterance.pitch = 1.3; // Crisp feminine pitch
+      utterance.rate = speechPlaybackRate;
     }
 
     if (!targetVoice) {
