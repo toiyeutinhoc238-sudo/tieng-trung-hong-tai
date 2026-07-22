@@ -1,0 +1,1 @@
+{"detail":{"type":"authentication_error","code":"unauthorized","message":"The API key you used is missing the permission text_to_speech to execute this operation.","status":"missing_permissions","request_id":"4f3575d268613ec7002f2869486fb146"}}

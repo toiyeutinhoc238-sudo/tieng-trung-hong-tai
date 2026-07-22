@@ -1195,6 +1195,47 @@ function cleanTTSInput(str) {
     .trim();
 }
 
+// Helper to fetch MP3 audio from ElevenLabs Multilingual v2 API
+async function fetchElevenLabsTTS(text, voiceId, apiKey) {
+  const url = `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`;
+  const body = JSON.stringify({
+    text: text,
+    model_id: 'eleven_multilingual_v2',
+    voice_settings: {
+      stability: 0.5,
+      similarity_boost: 0.75
+    }
+  });
+
+  return new Promise((resolve, reject) => {
+    const req = https.request(url, {
+      method: 'POST',
+      headers: {
+        'Accept': 'audio/mpeg',
+        'Content-Type': 'application/json',
+        'xi-api-key': apiKey
+      }
+    }, res => {
+      if (res.statusCode !== 200) {
+        return reject(new Error(`ElevenLabs API status code: ${res.statusCode}`));
+      }
+      const chunks = [];
+      res.on('data', chunk => chunks.push(chunk));
+      res.on('end', () => {
+        const buffer = Buffer.concat(chunks);
+        if (buffer.length < 100) {
+          return reject(new Error('ElevenLabs returned invalid audio buffer'));
+        }
+        resolve(buffer);
+      });
+      res.on('error', err => reject(err));
+    });
+    req.on('error', err => reject(err));
+    req.write(body);
+    req.end();
+  });
+}
+
 // Helper to fetch MP3 audio from Baidu TTS CDN (Native Mandarin Chinese)
 async function fetchBaiduTTS(text, speed = 3, pitch = 5) {
   const url = `https://fanyi.baidu.com/gettts?lan=zh&text=${encodeURIComponent(text)}&spd=${speed}&source=web&pit=${pitch}`;
@@ -1261,7 +1302,7 @@ async function generateEdgeAudio(text, voice) {
   });
 }
 
-// GET /api/tts - Authentic Baidu (Male/Female) & Edge Neural TTS with caching
+// GET /api/tts - ElevenLabs, Baidu & Edge Neural TTS with caching
 app.get('/api/tts', async (req, res) => {
   const { text, voice = 'baidu-female' } = req.query;
   if (!text) {
@@ -1273,8 +1314,7 @@ app.get('/api/tts', async (req, res) => {
     const rawText = String(text).trim();
     const cleanText = cleanTTSInput(rawText) || rawText;
 
-    // Cache prefix v4 to force fresh distinct Baidu male/female audio generation
-    const hash = crypto.createHash('md5').update(`v4_${safeVoice}_${cleanText}`).digest('hex');
+    const hash = crypto.createHash('md5').update(`v5_${safeVoice}_${cleanText}`).digest('hex');
     const fileName = `${hash}.mp3`;
     const filePath = path.join(AUDIO_CACHE_DIR, fileName);
 
@@ -1289,10 +1329,15 @@ app.get('/api/tts', async (req, res) => {
     if (!fileExists) {
       let audioBuffer = null;
       try {
-        if (safeVoice === 'baidu-male') {
-          audioBuffer = await fetchBaiduTTS(cleanText, 3, 1); // Pitch 1 = Deep Baidu Male
+        const apiKey = process.env.ELEVENLABS_API_KEY || 'sk_51feae550df86c7bb9ab69706394130a8061ab0aef5dbf2e';
+        if (safeVoice === 'elevenlabs-male' && apiKey) {
+          audioBuffer = await fetchElevenLabsTTS(cleanText, 'pNInz6obpgDQGcFmaJgB', apiKey);
+        } else if (safeVoice === 'elevenlabs-female' && apiKey) {
+          audioBuffer = await fetchElevenLabsTTS(cleanText, '21m00Tcm4TlvDq8ikWAM', apiKey);
+        } else if (safeVoice === 'baidu-male') {
+          audioBuffer = await fetchBaiduTTS(cleanText, 3, 1);
         } else if (safeVoice === 'baidu-female') {
-          audioBuffer = await fetchBaiduTTS(cleanText, 3, 6); // Pitch 6 = Crisp Baidu Female
+          audioBuffer = await fetchBaiduTTS(cleanText, 3, 6);
         } else {
           audioBuffer = await generateEdgeAudio(cleanText, safeVoice);
         }
