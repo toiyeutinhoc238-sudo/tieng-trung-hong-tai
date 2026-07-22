@@ -248,6 +248,26 @@ function speakText(text) {
   });
 }
 
+// iOS Safari & Mobile Audio Autoplay Unlocker
+function setupAudioUnlocker() {
+  const unlock = () => {
+    try {
+      const silentAudio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=');
+      silentAudio.play().then(() => {
+        document.removeEventListener('touchstart', unlock);
+        document.removeEventListener('click', unlock);
+      }).catch(() => {});
+    } catch (e) {}
+  };
+  document.addEventListener('touchstart', unlock, { once: true });
+  document.addEventListener('click', unlock, { once: true });
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', setupAudioUnlocker);
+} else {
+  setupAudioUnlocker();
+}
+
 function cleanPinyinText(str) {
   if (!str) return '';
   const parts = str.split(/[|/\\;]/);

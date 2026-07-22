@@ -2,9 +2,24 @@
 <html lang="vi" class="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Lịch Sử Trò Chuyện - Tiếng Trung Hongtai</title>
   <link rel="icon" type="image/png" href="./src/assets/logo.png">
+
+  <!-- PWA Mobile App Support -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0b0f19">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Hongtai HSK">
+  <link rel="apple-touch-icon" href="./src/assets/logo.png">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
+  </script>
   
   <!-- Font and Stylesheets -->
   <link rel="preconnect" href="https://fonts.googleapis.com">

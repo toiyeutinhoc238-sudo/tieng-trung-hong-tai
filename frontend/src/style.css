@@ -4302,3 +4302,40 @@ html.dark .topic-card:hover {
   border-color: var(--accent-purple);
 }
 
+/* --- UNIVERSAL CROSS-PLATFORM & MOBILE RESPONSIVE POLISH --- */
+html, body {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  overflow-x: hidden;
+}
+
+body {
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+button, input, select, textarea, .btn, .nav-item, .quiz-option-btn, .speaker-btn {
+  touch-action: manipulation;
+  min-height: 44px;
+}
+
+.table-responsive, .custom-words-table-wrap, .detail-table-wrap {
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+  .flashcard-card {
+    min-height: 320px !important;
+    padding: 16px !important;
+  }
+  .study-controls {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .control-btn {
+    flex: 1 1 45%;
+  }
+}
+
