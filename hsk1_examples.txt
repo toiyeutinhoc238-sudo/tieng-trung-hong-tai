@@ -1,0 +1,1541 @@
+ID 1 | 不客气 (búkèqi) | Không có gì; đừng khách sáo
+CN: A: 谢谢你！
+B: 不客气！
+VI: A: Cảm ơn bạn! 
+B: Đừng khách sáo!
+
+ID 2 | 老师 (lǎoshī) | Giáo viên, thầy cô
+CN: 她是我们的汉语老师。
+VI: Cô ấy là giáo viên tiếng Trung của chúng tôi.
+
+ID 3 | 你们 (nǐmen) | Các bạn, các anh, các chị
+CN: 你们要去哪儿？
+VI: Các bạn muốn đi đâu?
+
+ID 4 | 您 (nín) | Ngài, ông, bà
+CN: 您喜欢喝茶还是喝咖啡？
+VI: Ngài thích uống trà hay cà phê?
+
+ID 5 | 同学 (tóngxué) | Bạn học
+CN: 这是我的同学。
+VI: Đây là bạn học của tôi.
+
+ID 6 | 谢谢 (xièxie) | Cảm ơn
+CN: 谢谢你的帮助。
+VI: Cảm ơn sự giúp đỡ của bạn.
+
+ID 7 | 学生 (xuéshēng) | Học sinh
+CN: 她是我的学生。
+VI: Cô ấy là học sinh của tôi.
+
+ID 8 | 再见 (zàijiàn) | Tạm biệt
+CN: A: 明天见！
+B: 再见！
+VI: A: Hẹn gặp lại ngày mai! 
+B: Tạm biệt!
+
+ID 9 | 大家 (dàjiā) | Mọi người
+CN: 大家好！欢迎来到我们的学校。
+VI: Xin chào mọi người! Chào mừng đến với trường của chúng tôi.
+
+ID 10 | 不 (bù) | Không
+CN: 我不喜欢吃辣。
+VI: Tôi không thích ăn cay.
+
+ID 11 | 对不起 (duìbuqǐ) | Xin lỗi
+CN: 对不起，我迟到了。
+VI: Xin lỗi, tôi đã đến muộn.
+
+ID 12 | 高兴 (gāoxìng) | Vui mừng; háo hức
+CN: 今天我很高兴。
+VI: Hôm nay tôi rất vui.
+
+ID 13 | 很 (hěn) | Rất, nhiều
+CN: 今天的课文很长， 生词很多。
+VI: Hôm nay bài khoá rất dài, nên từ mới rất nhiều.
+
+ID 14 | 叫 (jiào) | Gọi, kêu
+CN: 妈妈叫我回家。
+VI: Mẹ gọi tôi về nhà.
+
+ID 15 | 没关系 (méi guānxi) | Không sao đâu
+CN: 没关系，我没生气。
+VI: Không sao, tôi không giận đâu.
+
+ID 16 | 名字 (míngzi) | Tên gọi
+CN: 你的名字是什么？
+VI: Tên của bạn là gì?
+
+ID 17 | 你 (nǐ) | Bạn, anh, chị
+CN: 你喜欢吃什么？
+VI: Bạn thích ăn gì?
+
+ID 18 | 请问 (qǐngwèn) | Xin hỏi
+CN: 请问您有空吗？
+VI: Xin hỏi anh có rảnh không ạ?
+
+ID 19 | 认识 (rènshi) | Quen biết
+CN: 我认识他。
+VI: Tôi quen biết anh ấy.
+
+ID 20 | 什么 (shénme) | Gì, cái gì
+CN: 你想吃什么？
+VI: Bạn muốn ăn gì?
+
+ID 21 | 是 (shì) | Là
+CN: 他是我的好朋友。
+VI: Anh ấy là bạn tốt của tôi.
+
+ID 22 | 我 (wǒ) | Tôi, mình
+CN: 我是学生。
+VI: Tôi là học sinh.
+
+ID 23 | 也 (yě) | Cũng
+CN: 我也喜欢吃苹果。
+VI: Tôi cũng thích ăn táo.
+
+ID 24 | 叫 (jiào) | Gọi là
+CN: 他叫大家小王。
+VI: Mọi người gọi anh ấy là Tiểu Vương.
+
+ID 25 | 的 (de) | Của (chỉ sở hữu)
+CN: 这是我的书。
+VI: Đây là sách của tôi.
+
+ID 26 | 国 (guó) | Nước; quốc gia
+CN: 中国的美食非常有名。
+VI: Ẩm thực của Trung Quốc rất nổi tiếng.
+
+ID 27 | 姐姐 (jiějie) | Chị gái
+CN: 她是我的姐姐。
+VI: Cô ấy là chị gái tôi.
+
+ID 28 | 吗 (ma) | Trợ từ nghi vấn
+CN: 你喜欢中国菜吗？
+VI: Bạn có thích món ăn Trung Quốc không?
+
+ID 29 | 忙 (máng) | Bận rộn
+CN: 他最近很忙。
+VI: Dạo này anh ấy rất bận.
+
+ID 30 | 哪 (nǎ) | Nào
+CN: 你喜欢哪本书？
+VI: Bạn thích quyển sách nào?
+
+ID 31 | 女朋友 (nǚpéngyou) | Bạn gái
+CN: 你有女朋友吗？
+VI: Cậu có bạn gái chưa?
+
+ID 32 | 人 (rén) | Người
+CN: 这个世界上有很多好人。
+VI: Trên thế giới này có rất nhiều người tốt.
+
+ID 33 | 谁 (shéi) | Ai
+CN: 这是谁的书？
+VI: Đây là sách của ai?
+
+ID 34 | 她 (tā) | Cô ấy, bà ấy
+CN: 她喜欢听音乐。
+VI: Cô ấy thích nghe nhạc.
+
+ID 35 | 太 (tài) | Quá, rất
+CN: 这个菜太好吃了。
+VI: Món ăn này quá ngon.
+
+ID 36 | 我们 (wǒmen) | Chúng tôi, chúng ta
+CN: 我们是好朋友。
+VI: Chúng tôi là bạn tốt của nhau.
+
+ID 37 | 这 (zhè) | Này, đây
+CN: 这是我的书。
+VI: Đây là sách của tôi.
+
+ID 38 | 中国 (Zhōngguó) | Trung quốc
+CN: 中国是一个美丽的国家。
+VI: Trung Quốc là một đất nước xinh đẹp.
+
+ID 39 | 中文 (Zhōngwén) | Tiếng trung quốc
+CN: 你的中文很好。
+VI: Tiếng Trung của bạn rất tốt
+
+ID 40 | 喂 (wèi) | A lô
+CN: 喂，你在家吗？
+VI: A lô, bạn có ở nhà không?
+
+ID 41 | 八 (bā) | Số tám
+CN: 他买了八个苹果。
+VI: Anh ấy đã mua tám quả táo.
+
+ID 42 | 爸爸 | 爸 (bàba) | Bố; ba
+CN: 他是我的爸爸。
+VI: Ông ấy là ba của tôi.
+
+ID 43 | 百 (bǎi) | Một trăm; số 100
+CN: 我有一百块钱。
+VI: Tôi có một trăm tệ.
+
+ID 44 | 多少 (duōshǎo) | Bao nhiêu; mấy; mấy mươi
+CN: 这个多少钱？
+VI: Cái này bao nhiêu tiền?
+
+ID 45 | 儿子 (érzi) | Con trai
+CN: 我有一个儿子。
+VI: Tôi có một cậu con trai.
+
+ID 46 | 二 (èr) | Số hai
+CN: 今天星期二。
+VI: Hôm nay là thứ ba.
+
+ID 47 | 哥哥  | 哥 (gēge/  |  /gē) | Anh trai
+CN: 我的哥哥比我大五岁。
+VI: Anh trai tôi lớn hơn tôi năm tuổi.
+
+ID 48 | 个 (gè) | Cái này
+CN: 我买了一个新手机。
+VI: Tôi đã mua một chiếc điện thoại mới.
+
+ID 49 | 孩子 (hái zi) | Con; bọn trẻ; trẻ em
+CN: 孩子们在公园玩儿。
+VI: Mấy đứa trẻ đang chơi trong công viên.
+
+ID 50 | 和 (hé) | Và; với
+CN: 我买了一本书和一件衣服。
+VI: Tôi đã mua 1 cuốn sách và 1 bộ quần áo.
+
+ID 51 | 和 (hé) | Với; cùng
+CN: 我和他一起去公园散步。
+VI: Tôi đi dạo với cậu ấy trong công viên.
+
+ID 52 | 几 (jǐ) | Mấy; bao nhiêu
+CN: 你有几个兄弟姐妹？
+VI: Bạn có mấy anh chị em?
+
+ID 53 | 家 (jiā) | Nhà
+CN: 我家在上海。
+VI: Nhà tôi ở Thượng Hải.
+
+ID 54 | 今年 (jīnnián) | Năm nay
+CN: 今年是2025年。
+VI: Năm nay là năm 2025.
+
+ID 55 | 九 (jiǔ) | Số chín
+CN: 这个班有九个学生。
+VI: Lớp này có chín học sinh.
+
+ID 56 | 口 (kǒu) | Miệng, mồm
+
+cửa, cổng
+CN: 我用盐水漱口。
+
+出口在左边，不要走错了。
+VI: Tôi dùng nước muối để súc miệng.
+
+Cửa ra ở bên trái, đừng đi sai nhé.
+
+ID 57 | 两 (liǎng) | Hai (chỉ số lượng)
+CN: 我有两个姐姐。
+VI: Tôi có hai chị gái.
+
+ID 58 | 零 (líng) | Số không
+CN: 这个数字是零。
+VI: Số này là số không.
+
+ID 59 | 六 (liù) | Số sáu
+CN: 我家有六口人。
+VI: Nhà tôi có sáu người.
+
+ID 60 | 妈妈 | 妈 (māma | mā) | Mẹ, má
+CN: 我妈妈做饭很好吃。
+VI: Mẹ tôi nấu ăn rất ngon.
+
+ID 61 | 没有 (méi yǒu) | Không có
+CN: 我没有钱。
+VI: Tôi không có tiền.
+
+ID 62 | 妹妹 | 妹 (mèimei | mèi) | Em gái
+CN: 我有一个妹妹。
+VI: Tôi có một người em gái.
+
+ID 64 | 七 (qī) | Số bảy
+CN: 我有七本书。
+VI: Tôi có bảy quyển sách.
+
+ID 65 | 三 (sān) | Số ba
+CN: 我有三个好朋友。
+VI: Tôi có ba người bạn tốt.
+
+ID 66 | 十 (shí) | Số mười
+CN: 他十岁就会游泳。
+VI: Anh ấy mười tuổi đã biết bơi.
+
+ID 67 | 四 (sì) | Số bốn
+CN: 他家有四口人。
+VI: Gia đình anh ấy có bốn người.
+
+ID 68 | 岁 (suì) | Tuổi
+CN: 她今年二十岁了。
+VI: Cô ấy năm nay 20 tuổi rồi.
+
+ID 69 | 他 (tā) | Anh ấy, ông ấy
+CN: 他是我的朋友。
+VI: Anh ấy là bạn của tôi.
+
+ID 70 | 五 (wǔ) | Số năm
+CN: 她今天买了五个苹果。
+VI: Hôm nay cô ấy đã mua năm quả táo.
+
+ID 71 | 一 (yī) | Một
+CN: 我只有一个妹妹。
+VI: Tôi chỉ có một em gái.
+
+ID 72 | 有 (yǒu) | Có, tồn tại
+CN: 我有一个好朋友。
+VI: Tôi có một người bạn tốt.
+
+ID 73 | 两 (liǎng) | Lạng (đơn vị đo trọng lượng)
+CN: 他买了五两花生米。
+VI: Anh ấy mua năm lạng đậu phộng.
+
+ID 74 | 千 (qiān) | Một nghìn
+CN: 这个手机两千块。
+VI: Chiếc điện thoại này hai nghìn tệ.
+
+ID 75 | 电脑 (diànnǎo) | Máy tính
+CN: 这个电脑非常贵。
+VI: Máy tính này rất đắt.
+
+ID 76 | 好看 (hǎo kàn) | Đẹp; hay; thú vị
+CN: 这本书很好看，我喜欢。
+VI: Cuốn sách này rất hay, tôi thích.
+
+ID 77 | 号 (hào) | Số; số thứ tự
+CN: 你的房间号是多少？
+VI: Số phòng của bạn là bao nhiêu?
+
+ID 78 | 今天 (jīntiān) | Hôm nay
+CN: 今天的天气很好。
+VI: Thời tiết hôm nay rất đẹp.
+
+ID 79 | 面条儿 (miàntiáor) | Mì sợi
+CN: 这碗面条儿很好吃。
+VI: Tô mì này rất ngon.
+
+ID 80 | 日 (rì) | Ngày, mỗi ngày
+
+mặt trời
+CN: 他的生日在六月。
+
+日出的时候很美。
+VI: Ngày sinh nhật của anh ấy vào tháng sáu.
+
+Lúc mặt trời mọc rất đẹp.
+
+ID 81 | 喜欢 (xǐhuan) | Thích
+CN: 我很喜欢吃中国菜。
+VI: Tôi rất thích ăn món Trung Quốc.
+
+ID 82 | 下班 (xiàbān) | Tan làm
+CN: 我今晚八点下班。
+VI: Tối nay tôi tan làm lúc 8 giờ.
+
+ID 83 | 新 (xīn) | Mới
+CN: 我买了一件新衣服。
+VI: Tôi đã mua một bộ quần áo mới.
+
+ID 84 | 星期 (xīngqī) | Tuần
+CN: 这个星期很忙。
+VI: Tuần này rất bận.
+
+ID 85 | 星期日 (xīngqīrì) | Chủ nhật
+CN: 星期日我们去公园吧。
+VI: Chủ nhật chúng ta đi công viên nhé.
+
+ID 86 | 星期天 (xīngqītiān) | Chủ nhật
+CN: 星期天我喜欢睡懒觉。
+VI: Chủ nhật tôi thích ngủ nướng.
+
+ID 87 | 休息 (xiūxi) | Nghỉ ngơi
+CN: 我每天都要休息一小时。
+VI: Tôi phải nghỉ ngơi một giờ mỗi ngày.
+
+ID 88 | 一些 (yìxiē) | Một số, một ít
+CN: 这里有一些苹果。
+VI: Ở đây có một vài quả táo.
+
+ID 89 | 月 (yuè) | Tháng
+
+ mặt trăng
+CN: 今年的二月有二十九天。
+
+今天的月亮很漂亮。
+VI: Tháng Hai năm nay có 29 ngày.
+
+Mặt trăng hôm nay rất đẹp.
+
+ID 90 | 真 (zhēn) | Thật, rất
+CN: 这个地方真美。
+VI: Nơi này thật đẹp!
+
+ID 91 | 做 (zuò) | Làm, thực hiện
+CN: 我妈做中国菜非常好吃。
+VI: Mẹ tôi làm đồ ăn Trung Quốc rất ngon.
+
+ID 92 | 饺子 (jiǎozi) | Sủi cảo
+CN: 我很喜欢吃饺子。
+VI: Tôi rất thích ăn sủi cảo.
+
+ID 93 | 它 (tā) | Nó (chỉ đồ vật, động vật)
+CN: 这是我的猫，它很可爱。
+VI: Đây là con mèo của tôi, nó rất đáng yêu.
+
+ID 94 | 月 (yuè) | Tháng, mặt trăng
+CN: 天上的月亮很美。
+VI: Mặt trăng trên trời rất đẹp.
+
+ID 95 | 做饭 (zuòfàn) | Nấu ăn
+CN: 妈妈每天做饭给我们吃。
+VI: Mẹ nấu ăn cho chúng tôi mỗi ngày.
+
+ID 96 | 包子 (bāozǐ) | Bánh bao
+CN: 我今天早上吃了两个包子。
+VI: Sáng nay tôi đã ăn 2 cái bánh bao.
+
+ID 97 | 吃 (chī) | Ăn
+CN: 我喜欢吃苹果。
+VI: Tôi thích ăn táo.
+
+ID 98 | 电话 (diànhuà) | Điện thoại
+CN: 他正在打电话。
+VI: Anh ấy đang gọi điện thoại.
+
+ID 99 | 东西 (dōngxi) | Đồ; vật; đồ ăn; đồ đạc
+CN: 吃东西的时候不要说话。
+VI: Không nên nói chuyện khi đang ăn.
+
+ID 100 | 非常 (fēicháng) | Đặc biệt; rất; vô cùng
+CN: 这个地方非常漂亮。
+VI: Nơi này cực kỳ đẹp.
+
+ID 101 | 好吃 (hǎo chī) | Ngon; ngon miệng
+CN: 这家餐厅的菜非常好吃。
+VI: Món ăn của nhà hàng này rất ngon.
+
+ID 102 | 买 (mǎi) | Mua
+CN: 我想买一件衣服。
+VI: Tôi muốn mua một cái áo.
+
+ID 103 | 米饭 (mǐfàn) | Cơm
+CN: 我每天都吃米饭。
+VI: Ngày nào tôi cũng ăn cơm.
+
+ID 104 | 明天 (míngtiān) | Ngày mai
+CN: 明天是星期几？
+VI: Ngày mai là thứ mấy?
+
+ID 105 | 哪儿 (nǎr) | Đâu, chỗ nào (phương ngữ bắc kinh)
+CN: 那部电影是在哪儿拍的？
+VI: Bộ phim đó được quay ở đâu vậy?
+
+ID 106 | 那边 (nàbiān) | Bên đó
+CN: 你看到那边的猫了吗？
+VI: Bạn có thấy con mèo bên đó không?
+
+ID 107 | 牛奶 (niúnǎi) | Sữa bò
+CN: 我喜欢喝牛奶。
+VI: Tôi thích uống sữa.
+
+ID 108 | 去 (qù) | Đi, rời đi, rời khỏi
+CN: 他吃完饭就去了。
+VI: Anh ấy ăn xong rồi đi ngay.
+
+ID 109 | 手机 (shǒujī) | Điện thoại di động
+CN: 我的手机在那里。
+VI: Điện thoại của tôi ở đằng kia.
+
+ID 110 | 晚饭 (wǎnfàn) | Bữa tối
+CN: 我们一起吃晚饭吧。
+VI: Chúng ta cùng đi ăn tối nhé.
+
+ID 111 | 想 (xiǎng) | Nghĩ, muốn
+CN: 我想去日本旅游。
+VI: Tôi muốn đi du lịch Nhật Bản.
+
+ID 112 | 怎么 (zěnme) | Như thế nào
+CN: 你怎么来学校的？
+VI: Bạn đến trường bằng cách nào?
+
+ID 113 | 坐 (zuò) | Ngồi
+CN: 请坐这里，老师马上来。
+VI: Mời ngồi đây, thầy giáo sẽ đến ngay.
+
+ID 114 | 超市 (chāoshì) | Siêu thị
+CN: 我去超市买点水果。
+VI: Tôi đi siêu thị mua ít trái cây.
+
+ID 115 | 出租车 (chūzūchē) | Xe taxi
+CN: 他坐出租车去机场。
+VI: Anh ấy ngồi taxi đến sân bay.
+
+ID 116 | 明天 (míngtiān) | Ngày mai
+CN: 明天我们去学校。
+VI: Ngày mai chúng tôi đi học.
+
+ID 117 | 吧 (ba) | Nhé; chứ; nào; thôi
+CN: 我们去公园玩儿吧。
+VI: Chúng mình đi công viên chơi nhé.
+
+ID 118 | 菜 (cài) | Món ăn; đồ ăn
+CN: 今天的菜很好吃。
+VI: Món ăn của hôm nay rất ngon.
+
+ID 119 | 电影 (diànyǐng) | Phim ảnh
+CN: 昨天我们看了一部电影。
+VI: Hôm qua chúng tôi đã xem một bộ phim.
+
+ID 120 | 电影院 (diànyǐngyuàn) | Rạp chiếu phim
+CN: 我们去电影院看电影。
+VI: Chúng tôi đi rạp chiếu phim để xem phim.
+
+ID 121 | 分 (fēn) | Điểm số
+CN: 这次考试我考了100分。
+VI: Kỳ thi lần này tôi thi được 100 điểm.
+
+ID 122 | 分 (fēn) | Phần
+
+phút
+CN: 这个蛋糕有八分。
+
+现在是三点十分。
+VI: Chiếc bánh này có tám phần.
+
+Bây giờ là 3 giờ 10 phút.
+
+ID 123 | 后 | 后边 (hòu/ | /hòubian) | Sau; phía sau
+CN: 书店在学校的后边。
+VI: Hiệu sách ở phía sau trường học.
+
+ID 124 | 见 (jiàn) | Gặp
+CN: 我在公园见到朋友。
+VI: Tôi gặp bạn ở công viên.
+
+ID 125 | 看 (kàn) | Nhìn, xem, đọc
+CN: 这本书我看完了。
+VI: Tôi đã đọc xong cuốn sách này.
+
+ID 126 | 课 (kè) | Tiết học, bài học
+CN: 今天的汉语课很有意思。
+VI: Bài học tiếng Trung hôm nay rất thú vị.
+
+ID 127 | 里 (lǐ) | Trong, bên trong
+CN: 房间里有很多书。
+VI: Trong phòng có rất nhiều sách.
+
+ID 128 | 呢 (ne) | Thế, nhỉ, ư
+CN: 我是学生，你呢？
+VI: Tớ là học sinh, còn cậu thì sao?
+
+ID 129 | 上班 (shàngbān) | Đi làm
+CN: 他每天八点上班。
+VI: Mỗi ngày anh ấy đi làm lúc 8 giờ.
+
+ID 130 | 上课 (shàng kè) | Lên lớp, đi học
+CN: 现在是上课时间。
+VI: Bây giờ là thời gian lên lớp.
+
+ID 131 | 上午 (shàngwǔ) | Buổi sáng
+CN: 我上午有一个会议。
+VI: Tôi có một cuộc họp vào buổi sáng.
+
+ID 132 | 晚上 (wǎnshàng) | Buổi tối
+CN: 晚上我们一起去看电影吧。
+VI: Buổi tối chúng ta cùng đi xem phim nhé.
+
+ID 133 | 下课 (xiàkè) | Tan học
+CN: 下课后，我们去喝奶茶吧。
+VI: Tan học xong, chúng ta đi uống trà sữa nhé.
+
+ID 134 | 下午 (xiàwǔ) | Buổi chiều
+CN: 我下午三点有个会议。
+VI: Tôi có một cuộc họp vào lúc 3 giờ chiều.
+
+ID 135 | 现在 (xiànzài) | Bây giờ
+CN: 我现在就去做。
+VI: Tôi đi làm bây giờ đây.
+
+ID 136 | 医院 (yīyuàn) | Bệnh viện
+CN: 他生病了，要去医院。
+VI: Anh ấy bị ốm, cần đến bệnh viện.
+
+ID 137 | 在 (zài) | Ở, tại
+CN: 我在家看电视。
+VI: Tôi ở nhà xem tivi.
+
+ID 138 | 早上 (zǎoshang) | Buổi sáng
+CN: 早上空气很好。
+VI: Không khí buổi sáng rất tốt.
+
+ID 139 | 店 (diàn) | Cửa hàng
+CN: 这家店很有名。
+VI: Cửa hàng này rất nổi tiếng.
+
+ID 140 | 分钟 (fēnzhōng) | Phút
+CN: 休息五分钟吧。
+VI: Nghỉ ngơi năm phút đi.
+
+ID 141 | 大 (dà) | Lớn; to
+CN: 这个房子很大。
+VI: Căn nhà này rất lớn.
+
+ID 142 | 到 (dào) | Đến
+CN: 我们到达了目的地。
+VI: Chúng ta đã đến nơi.
+
+ID 143 | 多 (duō) | Nhiều; rất nhiều
+CN: 今天的作业不太多。
+VI: Bài tập hôm nay không nhiều lắm.
+
+ID 144 | 多 (duō) | Dư ra; thừa ra
+CN: 今天的水果多了一些。
+VI: Hôm nay, trái cây còn dư một ít.
+
+ID 145 | 饭 (fàn) | Cơm; bữa
+CN: 我还没吃晚饭呢。
+
+他每天都吃三顿饭。
+VI: Tôi vẫn chưa ăn cơm tối. 
+
+Mỗi ngày anh ấy đều ăn ba bữa.
+
+ID 146 | 房间 (fángjiān) | Căn phòng
+CN: 这是我的房间。
+VI: Đây là phòng của tôi.
+
+ID 147 | 工作 (gōngzuò) | Công việc
+CN: 他的工作非常忙。
+VI: Công việc của anh ấy rất bận.
+
+ID 148 | 看见 (kànjiàn) | Thấy, trông thấy
+CN: 我看见一只小鸟在树上唱歌。
+VI: Tôi nhìn thấy một con chim đang hót trên cây.
+
+ID 149 | 没 (méi) | Không có, chưa
+CN: 我今天没时间。
+VI: Hôm nay tôi không có thời gian (không rảnh).
+
+ID 150 | 能 (néng) | Có thể
+CN: 咱们一定能完成任务。
+VI: Chúng ta nhất định có thể hoàn thành nhiệm vụ.
+
+ID 151 | 漂亮 (piàoliang) | Đẹp, xinh đẹp
+CN: 这件衣服很漂亮。
+VI: Bộ quần áo này rất đẹp.
+
+ID 152 | 前 (qián) | Trước
+CN: 他12号前会回来。
+VI: Anh ấy sẽ trở lại trước ngày 12.
+
+ID 153 | 书店 (shūdiàn) | Hiệu sách
+CN: 我喜欢去书店。
+VI: Tôi thích đi nhà sách.
+
+ID 154 | 外 (wài) | Bên ngoài
+CN: 我们去外面吃饭吧。
+VI: Chúng ta ra ngoài ăn đi.
+
+ID 155 | 午饭 (wǔfàn) | Bữa trưa
+CN: 我们一起去吃午饭吧。
+VI: Chúng ta cùng đi ăn trưa nhé.
+
+ID 156 | 小 (xiǎo) | Nhỏ, bé
+CN: 这只狗很小，很可爱。
+VI: Con chó này rất nhỏ, rất đáng yêu.
+
+ID 157 | 学校 (xuéxiào) | Trường học
+CN: 我们学校很大。
+VI: Trường của chúng tôi rất lớn.
+
+ID 158 | 医生 (yīshēng) | Bác sĩ
+CN: 我爸爸是一名医生。
+VI: Bố tôi là một bác sĩ.
+
+ID 159 | 桌子 (zhuōzi) | Cái bàn
+CN: 书在桌子上，你看见了吗？
+VI: Quyển sách ở trên bàn, bạn thấy chưa?
+
+ID 160 | 多 (duō) | Nhiều, nhiều hơn
+CN: 今天比昨天多了几个人。
+VI: Hôm nay có nhiều người hơn hôm qua một chút.
+
+ID 161 | 猫 (māo) | Mèo
+CN: 我家有一只猫。
+VI: Nhà tôi có một con mèo.
+
+ID 162 | 漂亮 (piàoliang) | Đẹp
+CN: 她的衣服很漂亮。
+VI: Quần áo của cô ấy rất đẹp.
+
+ID 163 | 白天 (báitiān) | Ban ngày
+CN: 早睡吧，你白天还要去上课。
+VI: Ngủ sớm đi, bạn ban ngày còn phải đi học.
+
+ID 164 | 本 (běn) | Cuốn; tập; vở
+CN: 你读过这本书了吗？
+VI: Bạn đã đọc cuốn sách này chưa?
+
+ID 165 | 唱 (chàng) | Hát; ca
+CN: 她唱太好了，大家都起立鼓掌。
+VI: Cô ấy hát rất hay, mọi người đều đứng dậy vỗ tay.
+
+ID 166 | 电视 | 电视机 (diànshì | diànshì jī) | Tivi
+CN: 爸爸在看电视。
+VI: Bố đang xem tivi.
+
+ID 167 | 读书 (dúshū) | Học bài
+CN: 他很努力读书。
+VI: Anh ấy rất chăm chỉ học bài.
+
+ID 168 | 歌 (gē) | Hát; ca
+CN: 这首歌很好听。
+VI: Bài hát này rất hay.
+
+ID 169 | 好听 (hǎotīng) | Hay; dễ nghe; êm tai (âm thanh)
+CN: 这首歌很好听。
+VI: Bài hát này rất hay.
+
+ID 170 | 朋友 (péngyou) | Bạn bè
+CN: 我有很多朋友。
+VI: Tôi có rất nhiều bạn.
+
+ID 171 | 前边 (qiánbiān) | Phía trước
+CN: 学校就在前边。
+VI: Trường học ở ngay phía trước.
+
+ID 172 | 书 (shū) | Sách
+CN: 我喜欢看书。
+VI: Tôi thích đọc sách.
+
+ID 173 | 外边 (wàibian) | Bên ngoài
+CN: 外边有很多漂亮的花。
+VI: Bên ngoài có rất nhiều hoa đẹp.
+
+ID 174 | 学习 (xuéxí) | Học tập
+CN: 我们应该认真学习。
+VI: Chúng ta nên học tập chăm chỉ.
+
+ID 175 | 边 (biān) | Bên, bên cạnh
+CN: 他坐在窗边看书。
+VI: Anh ấy ngồi bên cửa sổ đọc sách.
+
+ID 176 | 狗 (gǒu) | Chó
+CN: 这只小狗很可爱。
+VI: Con chó này rất đáng yêu.
+
+ID 177 | 椅子 (yǐzi) | Cái ghế
+CN: 这把椅子很舒服。
+VI: Cái ghế này rất thoải mái.
+
+ID 178 | 杯子 (bēizi) | Ly; cốc; tách
+CN: 这个杯子太小了。
+VI: Cái ly này quá nhỏ.
+
+ID 179 | 穿 (chuān) | Mặc; đi; mang; đeo
+CN: 今天我穿了件新衣服。
+VI: Hôm nay tôi mặc quần áo mới.
+
+ID 180 | 贵 (guì) | Đắt; mắc
+CN: 这件衣服太贵了。
+VI: Bộ quần áo này quá đắt!
+
+ID 181 | 块 (kuài) | Viên, thỏi, miếng
+CN: 我喜欢吃糖块儿。
+VI: Tôi thích ăn kẹo viên.
+
+ID 182 | 块 (kuài) | Khối, miếng, chiếc
+
+tờ, đồng (tiền)
+CN: 他买了三块手表。
+
+这本书卖五块钱。
+VI: Anh ấy đã mua ba chiếc đồng hồ.
+
+Quyển sách này bán năm đồng.
+
+ID 183 | 那儿 (nàr) | Ở đó (phương ngữ bắc kinh)
+CN: 你要去那儿做什么？
+VI: Bạn muốn đến đó làm gì?
+
+ID 184 | 那些 (nàxiē) | Những cái đó
+CN: 那些书都送给你吧。
+VI: Những cuốn sách này đều cho cậu.
+
+ID 185 | 男 (nán) | Nam, con trai
+CN: 我们班有很多男同学。
+VI: Lớp chúng tôi có rất nhiều bạn học sinh nam.
+
+ID 186 | 女 (nǚ) | Nữ, con gái
+CN: 我的女儿非常可爱。
+VI: Con gái tôi rất dễ thương.
+
+ID 187 | 钱 (qián) | Tiền
+CN: 我没钱。
+VI: Tôi không có tiền.
+
+ID 188 | 商店 (shāngdiàn) | Cửa hàng
+CN: 这个商店很大。
+VI: Cửa hàng này rất lớn.
+
+ID 189 | 少 (shǎo) | Ít
+CN: 这里的人很少。
+VI: Ở đây rất ít người.
+
+ID 190 | 水果 (shuǐguǒ) | Trái cây
+CN: 我每天都吃水果。
+VI: Tôi ăn trái cây mỗi ngày.
+
+ID 191 | 衣服 (yīfu) | Quần áo
+CN: 这件衣服很漂亮。
+VI: Bộ quần áo này rất đẹp.
+
+ID 192 | 元 (yuán) | Đồng (đơn vị tiền tệ)
+CN: 这本书五十元。
+VI: Cuốn sách này giá 50 tệ.
+
+ID 193 | 这边 (zhèbiān) | Bên này, phía này
+CN: 你坐这边吧。
+VI: Bạn ngồi bên này đi.
+
+ID 194 | 这儿 (zhèr) | Ở đây
+CN: 你来这儿看看吧。
+VI: Bạn đến chỗ này xem thử đi.
+
+ID 195 | 这些 (zhèxiē) | Những cái này
+CN: 这些水果很好吃。
+VI: Những loại trái cây này rất ngon.
+
+ID 196 | 便宜 (piányi) | Rẻ
+CN: 这件衣服很便宜。
+VI: Bộ quần áo này rất rẻ.
+
+ID 197 | 怎么样 (zěnmeyàng) | Như thế nào
+CN: 你今天怎么样？
+VI: Hôm nay bạn thế nào?
+
+ID 198 | 苹果 (píngguǒ) | quả táo
+CN: 这些个苹果很甜。
+VI: những quả táo này rất ngọt
+
+ID 199 | 车 (chē) | Xe
+CN: 我们开车去旅行。
+VI: Chúng tôi lái xe đi du lịch.
+
+ID 200 | 大学 (dàxué) | Đại học
+CN: 他在北京大学学习。
+VI: Anh ấy học ở Đại học Bắc Kinh.
+
+ID 201 | 大学生 (dàxuéshēng) | Sinh viên đại học
+CN: 我是大学生。
+VI: Tôi là sinh viên đại học.
+
+ID 202 | 弟弟 |  弟 (dìdi | dì) | Em trai
+CN: 我有一个弟弟。
+VI: Tôi có một người em trai.
+
+ID 203 | 读 (dú) | Đọc; xem
+CN: 我正在读书。
+VI: Tôi đang đọc sách.
+
+ID 204 | 对 (duì) | Đúng; chính xác
+CN: 你的答案是对的。
+VI: Câu trả lời của bạn là đúng.
+
+ID 205 | 饭店 (fàndiàn) | Quán cơm; nhà hàng
+CN: 这家饭店的菜很好吃。
+VI: Đồ ăn của nhà hàng này rất ngon.
+
+ID 207 | 哪里 (nǎ lǐ) | Ở đâu
+CN: 你住在哪里？
+VI: Bạn sống ở đâu?
+
+ID 208 | 那里 (nà lǐ) | Ở đó, chỗ đó, nơi đó
+CN: 我刚从那里回来。
+VI: Tôi vừa từ chỗ đó trở về.
+
+ID 209 | 起床 (qǐchuáng) | Thức dậy (ra khỏi giường)
+CN: 我每天六点起床。
+VI: Mỗi ngày tôi thức dậy lúc 6 giờ.
+
+ID 210 | 时候 (shíhou) | Thời gian, lúc
+CN: 你什么时候去北京？
+VI: Khi nào bạn đi Bắc Kinh?
+
+ID 211 | 睡 (shuì) | Ngủ
+CN: 他昨天晚上睡得很早。
+VI: Tối qua anh ấy ngủ rất sớm.
+
+ID 212 | 睡觉 (shuìjiào) | Ngủ
+CN: 孩子们都去睡觉了。
+VI: Bọn trẻ đều đi ngủ rồi.
+
+ID 213 | 说 (shuō) | Nói
+CN: 我会说汉语。
+VI: Tôi biết nói tiếng Trung.
+
+ID 214 | 问 (wèn) | Hỏi
+CN: 你可以问问老师这个问题。
+VI: Bạn có thể hỏi giáo viên câu hỏi này.
+
+ID 215 | 小朋友 (xiǎopéngyǒu) | Bạn nhỏ, trẻ em
+CN: 小朋友们都喜欢听故事。
+VI: Các bạn nhỏ đều thích nghe kể chuyện.
+
+ID 216 | 学 (xué) | Học
+CN: 我在学汉语。
+VI: Tôi đang học tiếng Trung.
+
+ID 217 | 找 (zhǎo) | Tìm kiếm
+CN: 我在找我的手机。
+VI: Tôi đang tìm điện thoại của tôi.
+
+ID 218 | 正在 (zhèngzài) | Đang (chỉ hành động xảy ra trong hiện tại)
+CN: 我正在写作业。
+VI: Tôi đang làm bài tập.
+
+ID 219 | 知道 (zhī dào) | Biết, hiểu biết
+CN: 你知道他的名字吗？
+VI: Bạn có biết tên của anh ấy không?
+
+ID 220 | 昨天 (zuótiān) | Hôm qua
+CN: 昨天天气很好，我们去公园了。
+VI: Hôm qua thời tiết rất đẹp, chúng tôi đã đi công viên.
+
+ID 221 | 对 (duì) | Về, đối với
+CN: 他对这个工作很有信心。
+VI: Anh ấy đối với công việc này rất có tự tin.
+
+ID 222 | 对 (duì) | Đối xử, đối đãi
+CN: 老师对学生很好。
+VI: Giáo viên rất tốt với học sinh.
+
+ID 223 | 问 (wèn) | Hỏi
+CN: 请问，这里怎么走？
+VI: Xin hỏi, đi đến đây như thế nào?
+
+ID 224 | 病 (bìng) | Bệnh; ốm
+CN: 我生病了。
+VI: Tôi bị bệnh rồi.
+
+ID 225 | 喝 (hē) | Uống
+CN: 我每天早上都喝咖啡。
+VI: Mỗi sáng tôi đều uống cà phê.
+
+ID 226 | 觉得 (juéde) | Cảm thấy, cho rằng
+CN: 我觉得这本书很好看。
+VI: Tôi cảm thấy cuốn sách này rất hay.
+
+ID 227 | 看病 (kàn bìng) | Khám bệnh
+CN: 我今天去医院看病。
+VI: Hôm nay tôi đi bệnh viện khám bệnh.
+
+ID 228 | 来 (lái) | Đến, tới
+CN: 你什么时候来我家?
+VI: Khi nào bạn đến nhà tôi?
+
+ID 229 | 了 (le) | Rồi (biểu thị hành động đã hoàn thành)
+CN: 我吃了一个苹果。
+VI: Tôi đã ăn một quả táo.
+
+ID 230 | 冷 (lěng) | Lạnh
+CN: 外面很冷，多穿点衣服。
+VI: Bên ngoài rất lạnh, mặc thêm áo vào.
+
+ID 231 | 热 (rè) | Nóng
+CN: 今天的天气很热。
+VI: Thời tiết của hôm nay rất nóng.
+
+ID 232 | 生病 (shēng bìng) | Bị bệnh
+CN: 他昨天生病了。
+VI: Hôm qua anh ấy bị bệnh.
+
+ID 233 | 水 (shuǐ) | Nước
+CN: 我想喝水。
+VI: Tôi muốn uống nước.
+
+ID 234 | 天 (tiān) | Ngày
+
+trời, bầu trời
+CN: 今天是星期天。
+
+我喜欢看天上的星星。
+VI: Hôm nay là Chủ nhật.
+
+Tôi thích ngắm sao trên trời.
+
+ID 235 | 天气 (tiānqì) | Thời tiết
+CN: 今天天气很好。
+VI: Hôm nay thời tiết rất đẹp.
+
+ID 236 | 下 (xià) | Dưới, phía dưới, bên dưới
+CN: 上有父母，下有儿女。
+VI: Trên có cha mẹ, dưới có con cái.
+
+ID 237 | 下 (xià) | Xuống
+CN: 下课后一起去吃饭吧。
+VI: Tan học xong cùng đi ăn nhé.
+
+ID 238 | 下雨 (xià yǔ) | Mưa rơi
+CN: 今天会下雨，你带伞了吗？
+VI: Hôm nay trời sẽ mưa, bạn đã mang ô chưa?
+
+ID 239 | 一点儿 (yìdiǎnr) | Một chút, một ít
+CN: 我想喝一点儿水。
+VI: Tôi muốn uống một chút nước.
+
+ID 240 | 雨 (yǔ) | Mưa
+CN: 今天下雨了。
+VI: Hôm nay trời mưa rồi.
+
+ID 241 | 再 (zài) | Lại, lần nữa
+CN: 请再说一遍。
+VI: Xin hãy nói lại một lần nữa.
+
+ID 242 | 这里 (zhè lǐ) | Ở đây, chỗ này
+CN: 这里的风景很美。
+VI: Phong cảnh ở đây rất đẹp.
+
+ID 243 | 公司 (gōngsī) | Công ty
+CN: 我在一家外资公司工作。
+VI: Tôi làm việc tại một công ty vốn nước ngoài.
+
+ID 244 | 下 (xià) | Tiếng, cái, lần (chỉ số lần của động tác)
+CN: 钟打了三下。
+VI: Chuông đổ ba tiếng.
+
+ID 245 | 雪 (xuě) | Tuyết
+CN: 下雪了，好美啊！
+VI: Tuyết rơi rồi, đẹp quá!
+
+ID 246 | 了 (liǎo) | Rồi, xong, hiểu
+CN: 这件事我忘不了。
+VI: Tôi hiểu rồi.
+
+ID 247 | 杯 (bēi) | Ly; cốc
+
+cúp (giải thưởng)
+CN: 我喝了一杯奶茶。
+
+我们队赢得了冠军杯。
+VI: Tôi đã uống 1 ly trà sữa.
+
+Đội chúng tôi đã giành được cúp vô địch.
+
+ID 248 | 打电话 (dǎ diànhuà) | Gọi điện thoại
+CN: 等一下，我要打电话问问。
+VI: Đợi chút nha, tôi cần gọi điện thoại hỏi thăm.
+
+ID 249 | 鸡蛋 (jīdàn) | Trứng gà
+CN: 我买了一些鸡蛋。
+VI: Tôi đã mua một vài quả trứng.
+
+ID 250 | 面包 (miànbāo) | Bánh mì
+CN: 你想吃面包吗？
+VI: Bạn có muốn ăn bánh mì không?
+
+ID 251 | 请 (qǐng) | Mời, xin vui lòng
+CN: 请给我一杯水。
+VI: Xin hãy cho tôi một cốc nước.
+
+ID 252 | 先生 (xiānsheng) | Ông, thầy, tiên sinh
+CN: 这位是李先生。
+VI: Đây là ông Lý.
+
+ID 253 | 一半 (yíbàn) | Một nửa
+CN: 我们班一半是男生。
+VI: Một nửa lớp chúng tôi là nam sinh.
+
+ID 254 | 早饭 (zǎofàn) | Bữa sáng
+CN: 你今天吃早饭了吗？
+VI: Hôm nay bạn đã ăn sáng chưa?
+
+ID 255 | 可以 (kěyǐ) | Có thể, được phép
+CN: 我们可以在这里休息一下。
+VI: Chúng ta có thể nghỉ ngơi ở đây.
+
+ID 256 | 卖 (mài) | Bán
+CN: 他在市场卖水果。
+VI: Anh ấy bán trái cây ở chợ.
+
+ID 257 | 问题 (wèntí) | Câu hỏi, vấn đề
+CN: 这个问题很容易。
+VI: Câu hỏi này rất dễ.
+
+ID 258 | 都 (dōu) | Đều, cả
+CN: 我们都很忙。
+VI: Chúng tôi đều rất bận.
+
+ID 259 | 汉语 (Hàn yǔ) | Tiếng hán; hán ngữ
+CN: 他的汉语说得很好。
+VI: Anh ấy nói tiếng Trung rất giỏi.
+
+ID 260 | 汉字 (Hàn zì) | Chữ hán
+CN: 我会写汉字。
+VI: Tôi biết viết chữ Hán.
+
+ID 261 | 火车 (huǒchē) | Tàu hỏa; xe lửa
+CN: 我坐火车去北京。
+VI: Tôi đi Bắc Kinh bằng tàu hỏa.
+
+ID 262 | 明年 (míngnián) | Năm sau
+CN: 明年我想去中国。
+VI: Năm sau tôi muốn đi Trung Quốc.
+
+ID 263 | 哪些 (nǎxiē) | Những cái nào, người nào
+CN: 你见过哪些名人？
+VI: Bạn đã gặp những người nổi tiếng nào?
+
+ID 264 | 上 (shàng) | Trên, lên
+CN: 书在桌子上。
+VI: Quyển sách ở trên bàn.
+
+ID 265 | 上学 (shàng xué) | Đi học
+CN: 孩子们七点上学。
+VI: Bọn trẻ đi học lúc 7 giờ.
+
+ID 266 | 说话 (shuōhuà) | Nói chuyện
+CN: 请不要大声说话。
+VI: Vui lòng đừng nói chuyện lớn tiếng.
+
+ID 267 | 他们 (tāmen) | Họ, bọn họ (nam)
+CN: 他们在学校学习。
+VI: Họ đang học ở trường.
+
+ID 268 | 她们 (tāmen) | Họ, bọn họ (nữ)
+CN: 她们正在看书。
+VI: Họ đang đọc sách.
+
+ID 269 | 听 (tīng) | Nghe
+CN: 他在听歌。
+VI: Anh ấy đang nghe nhạc.
+
+ID 270 | 听见 (tīngjiàn) | Nghe được
+CN: 你听见了吗？
+VI: Bạn có nghe thấy không?
+
+ID 271 | 晚 (wǎn) | Muộn, trễ
+CN: 现在太晚了，快睡吧。
+VI: Bây giờ quá muộn rồi, mau ngủ đi.
+
+ID 272 | 小学 (xiǎoxué) | Trường tiểu học
+CN: 我弟弟上小学二年级。
+VI: Em trai tôi học lớp 2 tiểu học.
+
+ID 273 | 小学生 (xiǎoxuéshēng) | Học sinh tiểu học
+CN: 她是个聪明的小学生。
+VI: Cô bé ấy là một học sinh tiểu học thông minh.
+
+ID 274 | 写 (xiě) | Viết
+CN: 请写下你的名字。
+VI: Vui lòng viết tên của bạn xuống.
+
+ID 275 | 有的 (yǒude) | Một số, có cái thì…
+CN: 有的人喜欢喝咖啡,有的人喜欢喝茶。
+VI: Có người thích uống cà phê, có người thích uống trà.
+
+ID 276 | 中午 (zhōngwǔ) | Buổi trưa
+CN: 我们中午去吃饭吧。
+VI: Chúng ta đi ăn trưa nhé.
+
+ID 277 | 中学 (zhōngxué) | Trường trung học
+CN: 他是我中学同学。
+VI: Anh ấy là bạn học của tôi ở trường trung học.
+
+ID 278 | 中学生 (zhōngxuéshēng) | Học sinh trung học
+CN: 他是一个中学生。
+VI: Cậu ấy là một học sinh trung học.
+
+ID 279 | 字 (zì) | Chữ, từ
+CN: 我不认识这个字。
+VI: Tôi không biết chữ này.
+
+ID 280 | 不要 (búyào) | Đừng, không được
+CN: 不要在教室里大声说话。
+VI: Đừng nói chuyện lớn tiếng trong lớp học.
+
+ID 281 | 它们 (tāmen) | Chúng, bọn chúng (chỉ đồ vật, động vật số nhiều)
+CN: 它们(tô đỏ)正在吃东西。
+VI: Họ đang ăn.
+
+ID 282 | 北京 (Běijīng) | Bắc kinh
+CN: 北京是中国的首都。
+VI: Bắc Kinh là thủ đô của Trung Quốc.
+
+ID 283 | 飞机 (fēijī) | Máy bay
+CN: 我第一次坐飞机时特别开心。
+VI: Lần đầu tiên tôi đi máy bay, tôi rất vui mừng.
+
+ID 284 | 好玩儿 (hǎowánr) | Hay; thú vị; thích thú
+CN: 这个游戏很好玩儿。
+VI: Trò chơi này rất vui.
+
+ID 285 | 家人 (jiārén) | Người nhà
+CN: 我家人都喜欢吃中国菜。
+VI: Cả nhà tôi đều thích ăn đồ ăn Trung Quốc.
+
+ID 286 | 男朋友 (nánpéngyou) | Bạn trai
+CN: 她的男朋友很帅。
+VI: Bạn trai của cô ấy rất đẹp trai.
+
+ID 287 | 去年 (qùnián) | Năm ngoái
+CN: 去年我买了一辆新车。
+VI: Năm ngoái tôi đã mua một chiếc xe mới.
+
+ID 288 | 时间 (shíjiān) | Thời gian
+CN: 时间过得真快。
+VI: Thời gian trôi qua thật nhanh.
+
+ID 289 | 小时 (xiǎoshí) | Giờ (đơn vị thời gian)
+CN: 我等了一个小时。
+VI: Tôi đã đợi 1 tiếng.
+
+ID 290 | 早 (zǎo) | Sớm
+CN: 今天你起得很早。
+VI: Hôm nay bạn dậy rất sớm.
+
+ID 291 | 住 (zhù) | Ở, cư trú, sống
+CN: 你住在哪个城市？
+VI: Bạn sống ở thành phố nào?
+
+ID 905 | 爱好 (àihào) | Yêu thích; yêu chuộng
+CN: 我爱好打篮球。
+VI: Tôi thích chơi bóng rổ.
+
+ID 906 | 爱好 (àihào) | Sở thích
+CN: 我的爱好是听音乐。
+VI: Sở thích của tôi là nghe nhạc.
+
+ID 907 | 白 (bái) | Trắng, màu trắng
+CN: 我姐姐的皮肤很白。
+VI: Da của chị tôi rất trắng.
+
+ID 908 | 半 (bàn) | Một nửa
+
+giữa; trung gian
+CN: 现在六点半。
+
+我们在半路上遇到了他。
+VI: Bây giờ là 6 giờ rưỡi.
+
+Chúng tôi đã gặp anh ấy giữa đường.
+
+ID 909 | 半年 (bànnián) | Nửa năm
+CN: 我来上海学习已经有半年了。
+VI: Tôi đến Thượng Hải học đã được nửa năm.
+
+ID 910 | 北 (běi) | Bắc, phía bắc
+CN: 我们一直往北走吧。
+VI: Chúng ta cứ đi về phía bắc đi.
+
+ID 911 | 北边 (běibian) | Phía bắc
+CN: 北边的天气很冷。
+VI: Thời tiết của phương bắc rất lạnh.
+
+ID 912 | 不大 (bù dà) | Không to; không lớn
+CN: 这个房间不大。
+VI: Căn phòng này không lớn.
+
+ID 913 | 不对 (bùduì) | Không đúng
+CN: 你的答案不对。
+VI: Đáp án của bạn không đúng.
+
+ID 914 | 尝尝 (cháng cháng) | Nếm; thử (ăn, uống)
+CN: 你尝尝这个菜。
+VI: Bạn hãy nếm thử món ăn này.
+
+ID 915 | 唱歌 (chànggē) | Hát; ca hát
+CN: 我家邻居昨天一直不停地唱歌。
+VI: Ngày hôm qua hàng xóm của tôi ca hát không ngừng.
+
+ID 916 | 车票 (chēpiào) | Vé xe
+CN: 快过年了，你买火车票了吗？
+VI: Tết sắp đến rồi, bạn đã mua vé tàu về nhà chưa?
+
+ID 917 | 车上 (chē shàng) | Trên xe
+CN: 她在车上学英语。
+VI: Cô ấy học tiếng Anh trên xe.
+
+ID 918 | 吃饭 (chīfàn) | Ăn cơm
+CN: 我们一起去吃饭吧。
+VI: Chúng ta cùng nhau đi ăn cơm nhé.
+
+ID 919 | 出 (chū) | Đi; xuất phát
+CN: 他出去买东西了。
+VI: Anh ấy ra ngoài mua đồ ăn rồi.
+
+ID 920 | 出来 (chūlái) | Ra; ra đây
+CN: 你出来，我跟你说句话。
+VI: Anh ra đây tôi nói chuyện với anh.
+
+ID 921 | 打球 (dǎqiú) | Đánh bóng; chơi bóng
+CN: 他们很喜欢打球。
+VI: Cậu ấy thích chơi bóng rổ.
+
+ID 922 | 地上 (dìshàng) | Mặt đất; dưới đất
+CN: 地上有很多树叶。
+VI: Dưới đất có rất nhiều lá cây.
+
+ID 923 | 第 （第二） (dì (dì èr)) | Thứ tự; thứ hạng
+CN: 这是第一个问题。
+VI: Đây là câu hỏi đầu tiên.
+
+ID 924 | 东 (dōng) | Đông; hướng đông
+CN: 学校在东边。
+VI: Trường học ở phía Đông.
+
+ID 926 | 动作 (dòngzuò) | Động tác; hành động
+CN: 舞蹈的动作很优美。
+VI: Động tác của điệu nhảy rất đẹp.
+
+ID 927 | 干什么 (gàn shénme) | Làm gì thế; tại sao
+CN: 你干什么不早说呀?
+VI: Tại sao bạn không nói sớm?
+
+ID 928 | 工人 (gōngrén) | Công nhân
+CN: 工人们每天都努力工作。
+VI: Những công nhân làm việc chăm chỉ mỗi ngày.
+
+ID 929 | 关上 (guān shàng) | Đóng; đóng vào; đóng lại
+CN: 请关上门，谢谢你！
+VI: Hãy đóng cửa lại, cảm ơn bạn.
+
+ID 930 | 国外 (guó wài) | Nước ngoài
+CN: 他在国外上大学。
+VI: Anh ấy học đại học ở nước ngoài.
+
+ID 931 | 还有 (hái yǒu) | Vẫn; còn; vẫn còn
+CN: 我家里还有两只猫。
+VI: Nhà tôi còn có hai con mèo.
+
+ID 932 | 话 (huà) | Lời nói; ngôn từ
+CN: 她的话让我很高兴。
+VI: Lời của cô ấy làm tôi rất vui.
+
+ID 933 | 回到 (huídào) | Về đến; trở về
+CN: 他回到家了。
+VI: Anh ấy đã về đến nhà rồi.
+
+ID 934 | 回家 (huí jiā) | Về nhà; đến nhà
+CN: 朋友们都回家了。
+VI: Các bạn tôi đều đã về nhà rồi.
+
+ID 935 | 记住 (jìzhù) | Nhớ; ghi nhớ
+CN: 请记住这个电话号码。
+VI: Hãy nhớ số điện thoại này.
+
+ID 936 | 家里 (jiā lǐ) | Trong nhà
+CN: 我家里有很多书。
+VI: Trong nhà tôi có rất nhiều sách.
+
+ID 937 | 教学楼 (jiàoxuélóu) | Tòa nhà giảng đường
+CN: 教学楼在图书馆东边。
+VI: Tòa nhà giảng dạy nằm ở phía đông của thư viện.
+
+ID 938 | 开玩笑 (kāi wánxiào) | Đùa, nói đùa
+CN: 别生气，我只是开玩笑。
+VI: Đừng giận mà, tôi chỉ đùa thôi.
+
+ID 939 | 看到 (kàndào) | Nhìn thấy
+CN: 我在街上看到一只小猫。
+VI: Tôi nhìn thấy một con mèo nhỏ trên đường.
+
+ID 940 | 课本 (kèběn) | Sách giáo khoa
+CN: 你带课本了吗？
+VI: Bạn có mang sách giáo khoa không?
+
+ID 941 | 课文 (kèwén) | Bài khóa (trong sách)
+CN: 请大家朗读课文。
+VI: Mọi người vui lòng đọc to bài khóa.
+
+ID 942 | 来到 (láidào) | Đến, đi đến
+CN: 他来到公司了。
+VI: Anh ấy đến công ty rồi.
+
+ID 943 | 老 (lǎo) | Già, cũ
+CN: 这辆车太老了。
+VI: Chiếc xe này quá cũ rồi.
+
+ID 944 | 里边 (lǐbian) | Bên trong
+CN: 你在里边等我。
+VI: Bạn đợi tôi ở bên trong nhé.
+
+ID 945 | 楼上 (lóu shàng) | Tầng trên
+CN: 我哥哥在楼上睡觉。
+VI: Anh trai tôi đang ngủ trên tầng.
+
+ID 946 | 楼下 (lóu xià) | Tầng dưới
+CN: 我在楼下等你。
+VI: Tôi đang đợi bạn ở tầng dưới.
+
+ID 947 | 没什么 (méi shénme) | Không có gì
+CN: 没什么好担心的。
+VI: Không có gì đáng lo lắng cả.
+
+ID 948 | 没事儿 (méi shìr) | Không có chuyện gì, không sao đâu
+CN: 没事儿，我帮你。
+VI: Không sao đâu, tôi giúp bạn.
+
+ID 949 | 们（朋友们） (men (péngyǒumen)) | Dùng để chỉ số nhiều (các bạn, các anh...)
+CN: 我们是好朋友。
+VI: Chúng tôi là bạn tốt.
+
+ID 950 | 男人 (nánrén) | Đàn ông
+CN: 那个男人在看手机。
+VI: Người đàn ông đó đang xem điện thoại.
+
+ID 951 | 南 (nán) | Phía nam
+CN: 我喜欢南方的美食。
+VI: Tôi thích ẩm thực miền Nam.
+
+ID 952 | 南边 (nánbiān) | Phía nam
+CN: 我家在学校南边。
+VI: Nhà tôi ở phía nam của trường.
+
+ID 953 | 女人 (nǚrén) | Phụ nữ
+CN: 女人都喜欢买漂亮的衣服。
+VI: Phụ nữ đều thích mua quần áo đẹp.
+
+ID 954 | 起来 (qǐlái) | Đứng dậy, ngồi dậy, thức dậy
+CN: 他站起来了。
+VI: Anh ấy đứng dậy rồi.
+
+ID 955 | 汽车 (qìchē) | Xe hơi, ô tô
+CN: 这辆汽车是我爸爸的。
+VI: Hai chiếc ô tô này là của bố tôi.
+
+ID 956 | 钱包 (qiánbāo) | Ví tiền, bóp tiền
+CN: 我的钱包不见了。
+VI: Ví tiền của tôi bị mất rồi.
+
+ID 957 | 请进 (qǐng jìn) | Mời vào
+CN: 请进，大家都在等你。
+VI: Mời vào, mọi người đang chờ bạn.
+
+ID 958 | 请坐 (qǐng zuò) | Mời ngồi
+CN: 欢迎光临，请坐。
+VI: Chào mừng quý khách, mời ngồi.
+
+ID 959 | 日期 (rìqī) | Ngày tháng, thời gian
+CN: 文件的日期写错了。
+VI: Ngày tháng trên tài liệu bị sai rồi.
+
+ID 960 | 上边 (shàngbiān) | Phía trên
+CN: 笔在书的上边。
+VI: Cây bút ở phía trên quyển sách.
+
+ID 961 | 上车 (shàng chē) | Lên xe
+CN: 我们快上车吧。
+VI: Chúng ta mau lên xe đi.
+
+ID 962 | 上次 (shàng cì) | Lần trước
+CN: 上次我们去上海了。
+VI: Lần trước chúng tôi đã đi Thượng Hải.
+
+ID 963 | 身上 (shēnshang) | Trên người
+CN: 你身上有钱吗？
+VI: Bạn có tiền trong người không?
+
+ID 964 | 事 (shì) | Việc, sự việc
+CN: 这是一件重要的事。
+VI: Đây là một việc quan trọng.
+
+ID 965 | 是不是 (shì bùshì) | Có phải không?
+CN: 这件事是不是你做的？
+VI: Việc này có phải cậu làm không?
+
+ID 966 | 听到 (tīngdào) | Nghe thấy
+CN: 我听到了你的声音。
+VI: Tôi đã nghe thấy giọng của bạn.
+
+ID 967 | 听写 (tīngxiě) | Nghe viết (chính tả)
+CN: 我们今天有听写考试。
+VI: Hôm nay chúng tôi có bài kiểm tra chính tả.
+
+ID 968 | 玩儿 (wánr) | Chơi
+CN: 孩子们喜欢玩儿游戏。
+VI: Bọn trẻ thích chơi trò chơi.
+
+ID 969 | 网友 (wǎngyǒu) | Bạn trên mạng
+CN: 我有很多网友。
+VI: Tôi có nhiều bạn trên mạng.
+
+ID 970 | 西 (xī) | Phía tây
+CN: 我家在学校西边。
+VI: Nhà tôi ở phía tây của trường.
+
+ID 972 | 下边 (xiàbian) | Bên dưới
+CN: 桌子下边有一只猫。
+VI: Dưới bàn có một con mèo.
+
+ID 973 | 下车 (xià chē) | Xuống xe
+CN: 我要在这一站下车。
+VI: Tôi muốn xuống xe ở trạm này.
+
+ID 974 | 下次 (xià cì) | Lần sau
+CN: 下次我们一起去看电影吧。
+VI: Lần sau chúng ta cùng đi xem phim nhé.
+
+ID 975 | 小姐 (xiǎojiě) | Tiểu thư, cô gái
+CN: 王小姐是我的同事。
+VI: Cô Vương là đồng nghiệp của tôi.
+
+ID 976 | 学院 (xuéyuàn) | Học viện
+CN: 这个学院很大很漂亮。
+VI: Học viện này rất lớn và đẹp.
+
+ID 977 | 要（动） (yào) | Muốn, cần
+CN: 我想要一杯咖啡。
+VI: Tôi muốn một ly cà phê.
+
+ID 978 | 一下儿 (yíxiàr) | Một chút, một lát
+CN: 你等我一下儿。
+VI: Đợi tôi một chút.
+
+ID 979 | 有（一）些 (yǒu (yì) xiē) | Một vài, một số
+CN: 这里有一些书。
+VI: Ở đây có một vài cuốn sách.
+
+ID 980 | 在家 (zàijiā) | Ở nhà
+CN: 周末我一般在家休息。
+VI: Cuối tuần tôi thường ở nhà nghỉ ngơi.
+
+ID 981 | 找到 (zhǎodào) | Tìm thấy
+CN: 我找到钥匙了。
+VI: Tôi tìm thấy chìa khóa rồi.
+
+ID 982 | 真的 (zhēn de) | Thật sự, thực sự
+CN: 你真的要去吗？
+VI: Bạn thật sự muốn đi à?
+
+ID 983 | 知识 (zhīshi) | Kiến thức
+CN: 学习知识很重要。
+VI: Việc học rất quan trọng.
+
+ID 984 | 中 (zhōng) | Ở giữa, trung tâm
+CN: 她站在房间中间。
+VI: Cô ấy đứng ở giữa phòng.
+
+ID 985 | 重 (zhòng) | Nặng
+
+trọng yếu, quan trọng
+CN: 这个箱子很重。
+
+这是个重大决定。
+VI: Chiếc hộp này rất nặng.
+
+Đây là một quyết định quan trọng.
+
+ID 986 | 子（桌子） (zi (zhuōzi)) | Hậu tố dùng trong danh từ
+CN: 你的桌子很大，很好看。
+VI: Cái bàn của bạn rất lớn, rất đẹp.
+
+ID 987 | 坐下 (zuòxia) | Ngồi xuống
+CN: 咱们坐下谈吧。
+VI: Chúng ta ngồi xuống nói chuyện.
