@@ -906,67 +906,7 @@ app.delete('/api/vocabulary/:id', async (req, res) => {
   }
 
   // Remove custom word
-  userData.customWords[email] = userCustomWords.filter(w => w.id !== wordId);
-  await writeUserData(userData);
-
-  res.json({ message: 'Word deleted successfully', id: wordId });
-});
-
-// GET endpoint to proxy TTS audio and stream it
-app.get('/api/tts', (req, res) => {
-  const { text } = req.query;
-  if (!text) {
-    return res.status(400).json({ error: 'Missing text parameter' });
-  }
-
-  const query = encodeURIComponent(text);
-  const urls = [
-    `https://dict.youdao.com/dictvoice?audio=${query}&type=2`,
-    `https://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&text=${query}`,
-    `https://translate.google.com/translate_tts?ie=UTF-8&tl=zh-CN&client=tw-ob&q=${query}`
-  ];
-
-  function tryUrl(index) {
-    if (index >= urls.length) {
-      return res.status(500).json({ error: 'All TTS engines failed' });
-    }
-
-    const ttsUrl = urls[index];
-    const headers = {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-    };
-
-    https.get(ttsUrl, { headers }, (response) => {
-      // Follow redirect if 301 or 302
-      if (response.statusCode === 302 || response.statusCode === 301) {
-        const redirectUrl = response.headers.location;
-        if (redirectUrl) {
-          https.get(redirectUrl, { headers }, (redirectRes) => {
-            if (redirectRes.statusCode === 200) {
-              res.setHeader('Content-Type', 'audio/mpeg');
-              redirectRes.pipe(res);
-            } else {
-              tryUrl(index + 1);
-            }
-          }).on('error', () => tryUrl(index + 1));
-          return;
-        }
-      }
-
-      if (response.statusCode === 200) {
-        res.setHeader('Content-Type', 'audio/mpeg');
-        response.pipe(res);
-      } else {
-        console.warn(`TTS source ${index} returned status ${response.statusCode}`);
-        tryUrl(index + 1);
-      }
-    }).on('error', (err) => {
-      console.warn(`TTS source ${index} error:`, err);
-      tryUrl(index + 1);
-    });
-  }
-
-  tryUrl(0);
+    res.json({ message: 'Word deleted successfully', id: wordId });
 });
 
 // POST endpoint for AI Chatbot

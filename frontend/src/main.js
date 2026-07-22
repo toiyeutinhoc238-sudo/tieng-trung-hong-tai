@@ -227,53 +227,25 @@ function speakText(text) {
 
   // 2. Fetch live selected voice & speed directly from DOM
   const voiceSelectEl = document.getElementById('tts-voice-select');
-  const currentVoice = (voiceSelectEl && voiceSelectEl.value) ? voiceSelectEl.value : (localStorage.getItem('speech_voice') || 'elevenlabs-male');
+  const currentVoice = (voiceSelectEl && voiceSelectEl.value) ? voiceSelectEl.value : (localStorage.getItem('speech_voice') || 'elevenlabs-adam');
   localStorage.setItem('speech_voice', currentVoice);
 
   const speedSelectEl = document.getElementById('tts-speed-select');
   const currentSpeed = (speedSelectEl && speedSelectEl.value) ? parseFloat(speedSelectEl.value) : (parseFloat(localStorage.getItem('speech_playback_rate')) || 1.0);
   localStorage.setItem('speech_playback_rate', currentSpeed.toString());
 
-  // 3. Cache-busting timestamp to guarantee fresh distinct voice audio
+  // 3. Play pure ElevenLabs MP3 stream from server
   const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(currentVoice)}&_t=${Date.now()}`;
   const audio = new Audio(url);
   audio.playbackRate = currentSpeed;
   activeAudioElement = audio;
 
   audio.play().catch(err => {
-    console.warn("Primary TTS play failed, using fallback:", err);
-    fallbackSpeakSpeechSynthesis(cleanText, currentVoice, currentSpeed);
+    console.warn("ElevenLabs audio playback failed, retrying...", err);
+    setTimeout(() => {
+      audio.play().catch(e => console.error("Audio retry error:", e));
+    }, 300);
   });
-}
-
-function fallbackSpeakSpeechSynthesis(text, currentVoice, currentSpeed) {
-  if (typeof speechSynthesis === 'undefined') return;
-  try {
-    speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'zh-CN';
-
-    const voices = speechSynthesis.getVoices();
-    const vName = currentVoice || 'female';
-    const isMale = vName.includes('male') || vName.includes('Yunyang') || vName.includes('Yunjian');
-
-    if (isMale) {
-      utterance.pitch = 0.40;
-      utterance.rate = (currentSpeed || 1.0) * 0.88;
-    } else {
-      utterance.pitch = 1.20;
-      utterance.rate = currentSpeed || 1.0;
-    }
-
-    const zhVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('cmn'));
-    if (zhVoice) {
-      utterance.voice = zhVoice;
-    }
-
-    speechSynthesis.speak(utterance);
-  } catch (e) {
-    console.error("Local SpeechSynthesis failed:", e);
-  }
 }
 
 function cleanPinyinText(str) {
