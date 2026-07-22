@@ -1314,7 +1314,8 @@ app.get('/api/tts', async (req, res) => {
     const rawText = String(text).trim();
     const cleanText = cleanTTSInput(rawText) || rawText;
 
-    const hash = crypto.createHash('md5').update(`v5_${safeVoice}_${cleanText}`).digest('hex');
+    // Cache prefix v6 to force fresh distinct audio per voice
+    const hash = crypto.createHash('md5').update(`v6_${safeVoice}_${cleanText}`).digest('hex');
     const fileName = `${hash}.mp3`;
     const filePath = path.join(AUDIO_CACHE_DIR, fileName);
 
@@ -1331,9 +1332,9 @@ app.get('/api/tts', async (req, res) => {
       try {
         const apiKey = process.env.ELEVENLABS_API_KEY || 'sk_51feae550df86c7bb9ab69706394130a8061ab0aef5dbf2e';
         if (safeVoice === 'elevenlabs-male' && apiKey) {
-          audioBuffer = await fetchElevenLabsTTS(cleanText, 'pNInz6obpgDQGcFmaJgB', apiKey);
+          audioBuffer = await fetchElevenLabsTTS(cleanText, 'pNInz6obpgDQGcFmaJgB', apiKey); // Adam Male (Verified HTTP 200)
         } else if (safeVoice === 'elevenlabs-female' && apiKey) {
-          audioBuffer = await fetchElevenLabsTTS(cleanText, '21m00Tcm4TlvDq8ikWAM', apiKey);
+          audioBuffer = await fetchElevenLabsTTS(cleanText, 'EXAVITQu4vr4xnSDxMaL', apiKey); // Bella Female (Verified HTTP 200)
         } else if (safeVoice === 'baidu-male') {
           audioBuffer = await fetchBaiduTTS(cleanText, 3, 1);
         } else if (safeVoice === 'baidu-female') {
@@ -1360,7 +1361,7 @@ app.get('/api/tts', async (req, res) => {
 
     res.set({
       'Content-Type': 'audio/mpeg',
-      'Cache-Control': 'public, max-age=31536000, immutable'
+      'Cache-Control': 'no-cache, no-store, must-revalidate'
     });
     return res.sendFile(filePath);
   } catch (error) {
