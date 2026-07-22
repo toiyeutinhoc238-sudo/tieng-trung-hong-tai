@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 import https from 'https';
 import mongoose from 'mongoose';
 import crypto from 'crypto';
-import { EdgeTTS } from '@travisvn/edge-tts';
+import { MsEdgeTTS, OUTPUT_FORMAT } from 'msedge-tts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -1195,6 +1195,19 @@ function cleanTTSInput(str) {
     .trim();
 }
 
+// Helper to generate MP3 audio using MsEdgeTTS
+async function generateEdgeAudio(text, voice) {
+  const tts = new MsEdgeTTS();
+  await tts.setMetadata(voice, OUTPUT_FORMAT.AUDIO_24KHZ_96KBITRATE_MONO_MP3);
+  return new Promise((resolve, reject) => {
+    const { audioStream } = tts.toStream(text);
+    const chunks = [];
+    audioStream.on('data', chunk => chunks.push(chunk));
+    audioStream.on('close', () => resolve(Buffer.concat(chunks)));
+    audioStream.on('error', err => reject(err));
+  });
+}
+
 // GET /api/tts - High quality Edge Neural TTS with caching
 app.get('/api/tts', async (req, res) => {
   const { text, voice = 'zh-CN-XiaoxiaoNeural' } = req.query;
@@ -1221,16 +1234,12 @@ app.get('/api/tts', async (req, res) => {
 
     if (!fileExists) {
       try {
-        const tts = new EdgeTTS(cleanText, safeVoice);
-        const result = await tts.synthesize();
-        const audioBuffer = Buffer.from(await result.audio.arrayBuffer());
+        const audioBuffer = await generateEdgeAudio(cleanText, safeVoice);
         await fs.writeFile(filePath, audioBuffer);
       } catch (firstErr) {
-        console.warn(`EdgeTTS failed for "${cleanText}" (${safeVoice}), retrying fallback...`, firstErr.message);
+        console.warn(`msedge-tts failed for "${cleanText}" (${safeVoice}), retrying fallback...`, firstErr.message);
         const fallbackText = cleanText.replace(/[^\u4e00-\u9fa5\u3000-\u303f\uff00-\uffef,!?]/g, ' ').trim() || cleanText;
-        const tts = new EdgeTTS(fallbackText, 'zh-CN-XiaoxiaoNeural');
-        const result = await tts.synthesize();
-        const audioBuffer = Buffer.from(await result.audio.arrayBuffer());
+        const audioBuffer = await generateEdgeAudio(fallbackText, 'zh-CN-XiaoxiaoNeural');
         await fs.writeFile(filePath, audioBuffer);
       }
     }

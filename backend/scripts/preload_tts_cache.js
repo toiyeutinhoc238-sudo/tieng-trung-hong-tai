@@ -2,7 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import crypto from 'crypto';
 import { fileURLToPath } from 'url';
-import { EdgeTTS } from '@travisvn/edge-tts';
+import { MsEdgeTTS, OUTPUT_FORMAT } from 'msedge-tts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,8 +14,20 @@ const DEFAULT_VOICE = 'zh-CN-XiaoxiaoNeural';
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+async function generateEdgeAudio(text, voice) {
+  const tts = new MsEdgeTTS();
+  await tts.setMetadata(voice, OUTPUT_FORMAT.AUDIO_24KHZ_96KBITRATE_MONO_MP3);
+  return new Promise((resolve, reject) => {
+    const { audioStream } = tts.toStream(text);
+    const chunks = [];
+    audioStream.on('data', chunk => chunks.push(chunk));
+    audioStream.on('close', () => resolve(Buffer.concat(chunks)));
+    audioStream.on('error', err => reject(err));
+  });
+}
+
 async function preloadTTS() {
-  console.log('🚀 Starting Pre-load TTS script...');
+  console.log('🚀 Starting Pre-load TTS script with MsEdgeTTS...');
   await fs.mkdir(AUDIO_CACHE_DIR, { recursive: true });
 
   let rawData = [];
@@ -65,12 +77,10 @@ async function preloadTTS() {
     } else {
       try {
         console.log(`[${i + 1}/${allTexts.length}] Generating TTS audio for: "${text.substring(0, 25)}"`);
-        const tts = new EdgeTTS(text, DEFAULT_VOICE);
-        const result = await tts.synthesize();
-        const audioBuffer = Buffer.from(await result.audio.arrayBuffer());
+        const audioBuffer = await generateEdgeAudio(text, DEFAULT_VOICE);
         await fs.writeFile(filePath, audioBuffer);
         newlyCached++;
-        await delay(50); // 50ms delay to prevent network rate limiting
+        await delay(30);
       } catch (err) {
         console.error(`❌ Failed generating TTS for "${text}":`, err.message);
         failed++;
