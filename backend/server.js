@@ -1183,9 +1183,9 @@ async function fetchElevenLabsTTS(text, voiceId, apiKey) {
   });
 }
 
-// Helper to fetch MP3 audio from Baidu TTS CDN (100% Native Beijing Mandarin Chinese)
-async function fetchBaiduTTS(text, speed = 3, pitch = 5) {
-  const url = `https://fanyi.baidu.com/gettts?lan=zh&text=${encodeURIComponent(text)}&spd=${speed}&source=web&pit=${pitch}`;
+// Helper to fetch MP3 audio from Baidu Fanyi TTS (Native Beijing Mandarin Female)
+async function fetchBaiduTTS(text) {
+  const url = 'https://fanyi.baidu.com/gettts?lan=zh&text=' + encodeURIComponent(text) + '&spd=4&source=web&pit=9';
   return new Promise((resolve, reject) => {
     https.get(url, {
       headers: {
@@ -1194,14 +1194,41 @@ async function fetchBaiduTTS(text, speed = 3, pitch = 5) {
       }
     }, res => {
       if (res.statusCode !== 200) {
-        return reject(new Error(`Baidu TTS status code: ${res.statusCode}`));
+        return reject(new Error('Baidu TTS status code: ' + res.statusCode));
       }
       const chunks = [];
       res.on('data', chunk => chunks.push(chunk));
       res.on('end', () => {
         const buffer = Buffer.concat(chunks);
         if (buffer.length < 100) {
-          return reject(new Error('Baidu TTS returned invalid audio buffer'));
+          return reject(new Error('Baidu TTS returned too small buffer'));
+        }
+        resolve(buffer);
+      });
+      res.on('error', err => reject(err));
+    }).on('error', err => reject(err));
+  });
+}
+
+// Helper to fetch MP3 audio from Google Translate TTS (Native Mandarin Chinese Male-ish)
+async function fetchGoogleTTS(text) {
+  const url = 'https://translate.google.com/translate_tts?ie=UTF-8&q=' + encodeURIComponent(text) + '&tl=zh-CN&total=1&idx=0&textlen=' + text.length + '&client=tw-ob';
+  return new Promise((resolve, reject) => {
+    https.get(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Referer': 'https://translate.google.com/'
+      }
+    }, res => {
+      if (res.statusCode !== 200) {
+        return reject(new Error('Google TTS status code: ' + res.statusCode));
+      }
+      const chunks = [];
+      res.on('data', chunk => chunks.push(chunk));
+      res.on('end', () => {
+        const buffer = Buffer.concat(chunks);
+        if (buffer.length < 100) {
+          return reject(new Error('Google TTS returned too small buffer'));
         }
         resolve(buffer);
       });
@@ -1237,9 +1264,11 @@ app.get('/api/tts', async (req, res) => {
     if (!fileExists) {
       let audioBuffer = null;
       if (safeVoice === 'baidu-female') {
-        audioBuffer = await fetchBaiduTTS(cleanText, 3, 6);
+        // Baidu Fanyi - Native Beijing Mandarin Female
+        audioBuffer = await fetchBaiduTTS(cleanText);
       } else if (safeVoice === 'baidu-male') {
-        audioBuffer = await fetchBaiduTTS(cleanText, 3, 1);
+        // Google Translate TTS - Mandarin Chinese (completely different AI model = clearly distinct voice)
+        audioBuffer = await fetchGoogleTTS(cleanText);
       } else {
         const apiKey = process.env.ELEVENLABS_API_KEY || 'sk_51feae550df86c7bb9ab69706394130a8061ab0aef5dbf2e';
         let voiceId = 'pNInz6obpgDQGcFmaJgB'; // Adam (Nam 1)
