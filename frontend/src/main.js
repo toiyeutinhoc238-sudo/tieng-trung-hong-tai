@@ -3127,17 +3127,9 @@ function renderActiveQuestion() {
     if (examAudioPlayer) {
       examAudioPlayer.src = url;
     }
-
-    // Bấm nút loa tròn cũng phát qua ElevenLabs speakText
-    audioContainer.onclick = (e) => {
-      if (e.target.closest('#exam-audio-player')) return; // Tránh bấm nhầm thanh player
-      speakText(q.audioText);
-    };
-
   } else {
     audioContainer.style.display = 'none';
     if (examAudioPlayer) examAudioPlayer.src = '';
-    audioContainer.onclick = null;
   }
 
   document.getElementById('active-question-text').innerHTML = q.question.replace(/\n/g, '<br>');
