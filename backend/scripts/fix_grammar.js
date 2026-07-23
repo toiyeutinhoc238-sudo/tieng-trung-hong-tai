@@ -7,61 +7,57 @@ const dbPath = path.join(__dirname, '..', 'database.json');
 
 const db = JSON.parse(fs.readFileSync(dbPath, 'utf-8'));
 
-// Rà soát và sửa chữa toàn bộ ngữ pháp ví dụ theo PDF ngữ pháp HSK 1 2 3
-// 1. Phủ định với 不/没/没有
-// 2. Câu chữ 比, 不如, 没有 so sánh
-// 3. Bổ ngữ kết quả, bổ ngữ trạng thái, bổ ngữ khả năng, bổ ngữ xu hướng
-// 4. Trợ từ 的, 得, 地, 了, 呢, 吧
-// 5. Câu chữ 把, Câu chữ 被
+console.log(`Đã nạp ${db.length} từ vựng từ database.json để rà soát ngữ pháp.`);
 
 let fixedCount = 0;
-const log = [];
+const errors = [];
 
 db.forEach(item => {
   if (!item.example_zh || !item.example_vi) return;
 
-  let origZh = item.example_zh;
-  let origVi = item.example_vi;
-  let newZh = origZh;
-  let newVi = origVi;
+  let zh = item.example_zh;
+  let vi = item.example_vi;
+  let originalZh = zh;
+  let originalVi = vi;
 
-  // Fix 1: Chữ Hán sai lỗi chính tả / sai cấu trúc ngữ pháp
-  // ID 1004: 我的中文不如他的好
-  if (item.id === 1004) {
-    if (newVi.includes("Tiếng Trung của anh ấy không giỏi bằng tôi")) {
-      newVi = newVi.replace("Tiếng Trung của anh ấy không giỏi bằng tôi", "Tiếng Trung của tôi không giỏi bằng anh ấy");
+  // 1. Sửa lỗi chính tả & dấu câu tiếng Trung
+  zh = zh.replace(/。。$/g, '。').replace(/？？$/g, '？').replace(/！！$/g, '！');
+
+  // 2. Chỉnh sửa vị trí ngữ pháp tiêu chuẩn trong tài liệu HSK 1 2 3 PDF
+
+  // A 不如 B = A không bằng B (ngữ pháp HSK 2-3)
+  if (zh.includes('不如') && vi.includes('không giỏi bằng')) {
+    // ví dụ ID 1004: 我的中文不如他的好 -> Tiếng Trung của tôi không giỏi bằng anh ấy
+    if (item.id === 1004 && vi.includes('anh ấy không giỏi bằng tôi')) {
+      vi = 'Tiếng Trung của tôi không giỏi bằng anh ấy.';
     }
   }
 
-  // ID 1688 / 1908: 北京的气候和上海不一样
-  if (item.id === 1688 || item.id === 1908) {
-    if (newVi.includes("giống nhau")) {
-      newVi = newVi.replace("giống nhau", "khác nhau");
-    }
+  // 不一样 = khác nhau (ngữ pháp HSK 2)
+  if (zh.includes('不一样') && vi.includes('giống nhau')) {
+    vi = vi.replace('giống nhau', 'khác nhau');
   }
 
-  // ID 184: 那些书都送给你吧 -> Những cuốn sách đó
-  if (item.id === 184) {
-    newVi = newVi.replace(/Những cuốn sách này/g, "Những cuốn sách đó");
+  // 都不 = đều không (phủ định toàn bộ) vs 不都 = không phải đều (phủ định một phần)
+  // (Theo trang 7 PDF Ngữ pháp HSK 1)
+  if (zh.includes('都不') && vi.includes('không đều')) {
+    vi = vi.replace('không đều', 'đều không');
   }
 
-  // Sửa lỗi phông chữ / khoảng trắng thừa trong câu Hán ngữ
-  newZh = newZh.replace(/。。$/g, '。').trim();
-
-  // Sửa bối cảnh dịch các hư từ/trợ từ ngữ khí cơ bản HSK 1 2 3
-  // Dạng hỏi phản vấn 能...吗?
-  if (newZh.includes("能不") && newZh.includes("吗") && newVi.includes("không thể")) {
-    // e.g. "có thể không... à?"
+  // Cấu trúc 比: A 比 B + tính từ
+  if (item.id === 184 && vi.includes('Những cuốn sách này')) {
+    vi = vi.replace('Những cuốn sách này', 'Những cuốn sách đó');
   }
 
-  if (newZh !== origZh || newVi !== origVi) {
-    item.example_zh = newZh;
-    item.example_vi = newVi;
+  if (zh !== originalZh || vi !== originalVi) {
+    item.example_zh = zh;
+    item.example_vi = vi;
     fixedCount++;
-    log.push({ id: item.id, word: item.word, fromZh: origZh, toZh: newZh, fromVi: origVi, toVi: newVi });
+    errors.push({ id: item.id, word: item.word, fromZh: originalZh, toZh: zh, fromVi: originalVi, toVi: vi });
   }
 });
 
+// Lưu lại database đã rà soát
 fs.writeFileSync(dbPath, JSON.stringify(db, null, 2), 'utf-8');
 
-console.log(`Đã rà soát và cập nhật ${fixedCount} câu ví dụ theo chuẩn ngữ pháp HSK 1 2 3.`);
+console.log(`✅ Đã hoàn tất rà soát ngữ pháp! Đã hiệu chỉnh ${fixedCount} lỗi ngữ pháp/câu ví dụ.`);

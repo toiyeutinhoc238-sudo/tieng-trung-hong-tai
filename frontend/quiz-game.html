@@ -708,6 +708,21 @@
             <div class="mode-chip" data-mode="pinyin-zh">Pinyin ➔ Chữ Hán</div>
             <div class="mode-chip" data-mode="mix" style="grid-column: span 2;">Hỗn hợp (Ngẫu nhiên)</div>
           </div>
+        <div class="setting-group">
+          <label class="setting-label">Giọng đọc phát âm (ElevenLabs AI Free)</label>
+          <select id="select-quiz-voice" class="setting-select">
+            <option value="elevenlabs-adam">✨ ElevenLabs Adam (Nam 1 - Trầm ấm AI)</option>
+            <option value="elevenlabs-antoni">✨ ElevenLabs Antoni (Nam 2 - Trẻ trung AI)</option>
+            <option value="elevenlabs-arnold">✨ ElevenLabs Arnold (Nam 3 - Mạnh mẽ AI)</option>
+            <option value="elevenlabs-charlie">✨ ElevenLabs Charlie (Nam 4 - Truyền cảm AI)</option>
+            <option value="elevenlabs-george">✨ ElevenLabs George (Nam 5 - Bản xứ AI)</option>
+            <option value="elevenlabs-daniel">✨ ElevenLabs Daniel (Nam 6 - Trang trọng AI)</option>
+            <option value="elevenlabs-chris">✨ ElevenLabs Chris (Nam 7 - Nhẹ nhàng AI)</option>
+            <option value="elevenlabs-bella">✨ ElevenLabs Bella (Nữ 1 - Ngọt ngào AI)</option>
+            <option value="elevenlabs-jessica">✨ ElevenLabs Jessica (Nữ 2 - Trong trẻo AI)</option>
+            <option value="elevenlabs-matilda">✨ ElevenLabs Matilda (Nữ 3 - Ấm áp AI)</option>
+            <option value="elevenlabs-laura">✨ ElevenLabs Laura (Nữ 4 - Tự nhiên AI)</option>
+          </select>
         </div>
 
         <button id="btn-start" class="start-btn">Bắt Đầu Thách Đấu</button>
@@ -1156,7 +1171,19 @@
       playBeep(600, 'sine', 0.08, 0.08);
     });
 
+    const selectQuizVoice = document.getElementById('select-quiz-voice');
+    if (selectQuizVoice) {
+      const savedVoice = localStorage.getItem('speech_voice') || 'elevenlabs-adam';
+      selectQuizVoice.value = savedVoice;
+      selectQuizVoice.addEventListener('change', () => {
+        localStorage.setItem('speech_voice', selectQuizVoice.value);
+      });
+    }
+
     btnStart.addEventListener('click', () => {
+      if (selectQuizVoice) {
+        localStorage.setItem('speech_voice', selectQuizVoice.value);
+      }
       selectedLevel = selectLevel.value;
       selectedLesson = selectLesson.value;
       initAudioContext();
@@ -1683,29 +1710,43 @@
       gameoverModal.style.display = 'flex';
     }
 
-    // --- SPEECH SYNTHESIS (TTS) ---
+    // --- SPEECH SYNTHESIS (ElevenLabs TTS API) ---
+    let activeQuizAudio = null;
+
     function speakChinese(text) {
-      if (!window.speechSynthesis) return;
-      window.speechSynthesis.cancel(); // Stop active voices
+      if (!text) return;
+      const cleanText = text.replace(/[A-Za-z0-9]/g, '').trim() || text;
+      
+      if (activeQuizAudio) {
+        try {
+          activeQuizAudio.pause();
+          activeQuizAudio.currentTime = 0;
+          activeQuizAudio.src = '';
+        } catch (e) {}
+        activeQuizAudio = null;
+      }
 
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'zh-CN';
-      utterance.rate = 0.85;
+      const voice = localStorage.getItem('speech_voice') || 'elevenlabs-adam';
+      const speed = parseFloat(localStorage.getItem('speech_playback_rate')) || 0.9;
+      
+      const API_BASE_URL = window.location.origin.includes('5173') 
+        ? 'http://localhost:5000' 
+        : window.location.origin;
 
-      // Find high quality voices if available
-      const voices = window.speechSynthesis.getVoices();
-      const zhVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('CN'));
-      if (zhVoice) utterance.voice = zhVoice;
-
-      window.speechSynthesis.speak(utterance);
-    }
-
-    // Load voices early
-    if (window.speechSynthesis) {
-      window.speechSynthesis.getVoices();
-      window.speechSynthesis.onvoiceschanged = () => {
-        window.speechSynthesis.getVoices();
-      };
+      const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(voice)}&_t=${Date.now()}`;
+      
+      activeQuizAudio = new Audio(url);
+      activeQuizAudio.playbackRate = speed;
+      activeQuizAudio.play().catch(err => {
+        console.warn("ElevenLabs audio play failed, falling back to Web Speech API:", err);
+        if (window.speechSynthesis) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(cleanText);
+          utterance.lang = 'zh-CN';
+          utterance.rate = 0.85;
+          window.speechSynthesis.speak(utterance);
+        }
+      });
     }
 
     // Load User Profile
