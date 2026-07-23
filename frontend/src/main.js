@@ -3119,14 +3119,25 @@ function renderActiveQuestion() {
   if (q.audioText) {
     audioContainer.style.display = 'flex';
 
-    // Gắn sự kiện: Bấm vào cái loa là gọi thẳng hàm offline, không cần thẻ <audio> nữa
-    audioContainer.onclick = () => {
+    // Cập nhật nguồn audio của trình phát HTML5 sang ElevenLabs API
+    const cleanText = cleanFrontendSpeechText(q.audioText);
+    const currentVoice = localStorage.getItem('speech_voice') || 'elevenlabs-adam';
+    const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(currentVoice)}&_t=${Date.now()}`;
+    
+    if (examAudioPlayer) {
+      examAudioPlayer.src = url;
+    }
+
+    // Bấm nút loa tròn cũng phát qua ElevenLabs speakText
+    audioContainer.onclick = (e) => {
+      if (e.target.closest('#exam-audio-player')) return; // Tránh bấm nhầm thanh player
       speakText(q.audioText);
     };
 
   } else {
     audioContainer.style.display = 'none';
-    audioContainer.onclick = null; // Gỡ sự kiện click nếu câu hỏi không có âm thanh
+    if (examAudioPlayer) examAudioPlayer.src = '';
+    audioContainer.onclick = null;
   }
 
   document.getElementById('active-question-text').innerHTML = q.question.replace(/\n/g, '<br>');
