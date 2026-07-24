@@ -4257,10 +4257,13 @@ const HSK_LESSONS_METADATA = {
 
 let activeVolumeFilter = 'all';
 
+let activeYctLevel = 1;
+
 function renderLessonsList() {
   const grid = document.getElementById('lessons-cards-grid');
   const objectivesText = document.getElementById('lessons-objectives-text');
   const lessonsLevelContainer = document.getElementById('lessons-level-pills-container');
+  const yctLevelContainer = document.getElementById('lessons-yct-level-pills-container');
   const volumePillsContainer = document.getElementById('lessons-volume-pills-container');
 
   if (!grid) return;
@@ -4268,17 +4271,78 @@ function renderLessonsList() {
   grid.innerHTML = '';
 
   if (activeLessonsCurriculum === 'yct') {
-    grid.innerHTML = `
-      <div style="grid-column: 1 / -1; text-align: center; padding: 48px 24px; color: var(--text-muted); font-style: italic;">
-        Giáo trình YCT (Trẻ em) đang được biên soạn! Vui lòng ôn tập giáo trình HSK.
-      </div>
-    `;
-    if (objectivesText) objectivesText.textContent = 'Mục tiêu: Đang cập nhật nội dung cho thiếu nhi...';
     if (lessonsLevelContainer) lessonsLevelContainer.style.display = 'none';
     if (volumePillsContainer) volumePillsContainer.style.display = 'none';
+    if (yctLevelContainer) yctLevelContainer.style.display = 'flex';
+
+    if (objectivesText) {
+      if (activeYctLevel === 1) objectivesText.textContent = 'Mục tiêu: YCT Cấp 1 - Dành cho trẻ em mới bắt đầu (80 từ vựng cơ bản)';
+      else if (activeYctLevel === 2) objectivesText.textContent = 'Mục tiêu: YCT Cấp 2 - Dành cho trẻ em sơ cấp (150 từ vựng cơ bản)';
+      else if (activeYctLevel === 3) objectivesText.textContent = 'Mục tiêu: YCT Cấp 3 - Dành cho trẻ em trung cấp cơ bản (300 từ vựng)';
+      else if (activeYctLevel === 4) objectivesText.textContent = 'Mục tiêu: YCT Cấp 4 - Dành cho trẻ em trung cấp hoàn chỉnh (600 từ vựng)';
+      else objectivesText.textContent = `Mục tiêu: Ôn tập từ vựng YCT Cấp ${activeYctLevel}`;
+    }
+
+    const yctVocabs = vocabList.filter(w =>
+      !w.isCustom &&
+      (w.curriculum === 'yct' || w.hskVersion === 'yct') &&
+      w.level.toString() === activeYctLevel.toString()
+    );
+
+    if (yctVocabs.length === 0) {
+      grid.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 48px 24px; color: var(--text-muted); font-style: italic;">
+          Danh sách từ vựng YCT Cấp ${activeYctLevel} đang được tổng hợp! Vui lòng chờ ít phút.
+        </div>
+      `;
+      return;
+    }
+
+    // Group dynamically by lessonId
+    const lessonGroups = {};
+    yctVocabs.forEach(w => {
+      const les = w.lessonId || 1;
+      if (!lessonGroups[les]) lessonGroups[les] = [];
+      lessonGroups[les].push(w);
+    });
+
+    const uniqueLessonIds = Object.keys(lessonGroups).map(Number).sort((a, b) => a - b);
+
+    uniqueLessonIds.forEach(lessonId => {
+      const sliceWords = lessonGroups[lessonId] || [];
+      const wordsCount = sliceWords.length;
+      if (wordsCount === 0) return;
+
+      const title = sliceWords[0].lessonTitle || `YCT ${activeYctLevel} - Bài ${lessonId}`;
+      const desc = sliceWords[0].lessonDesc || `Từ vựng YCT (Thiếu nhi) Cấp ${activeYctLevel} Bài ${lessonId}`;
+
+      const card = document.createElement('div');
+      card.className = 'lesson-card';
+      card.innerHTML = `
+        <div>
+          <span class="lesson-badge">YCT ${activeYctLevel} - Bài ${lessonId}</span>
+          <h3 class="lesson-title">${title}</h3>
+          <p class="lesson-desc">${desc}</p>
+        </div>
+        <div class="lesson-footer">
+          <span class="lesson-words-indicator">
+            <i class="fa-solid fa-book-open"></i> ${wordsCount} từ vựng
+          </span>
+          <span class="lesson-detail-link">Chi tiết bài học <i class="fa-solid fa-chevron-right"></i></span>
+        </div>
+      `;
+
+      card.addEventListener('click', () => {
+        startLessonStudy({ id: lessonId, title }, sliceWords);
+      });
+
+      grid.appendChild(card);
+    });
     return;
   }
 
+  // HSK Curriculum Mode
+  if (yctLevelContainer) yctLevelContainer.style.display = 'none';
   if (lessonsLevelContainer) lessonsLevelContainer.style.display = 'flex';
 
   // Toggle Volume Pills visibility for HSK 4 & 5 (v2.0)
@@ -4310,6 +4374,7 @@ function renderLessonsList() {
   // Filter HSK level vocabulary
   const levelVocabs = vocabList.filter(w => {
     if (w.isCustom) return false;
+    if (w.curriculum === 'yct' || w.hskVersion === 'yct') return false;
     if (w.level.toString() !== activeLessonsLevel.toString()) return false;
     if ((w.hskVersion || '3.0') !== activeHskVersion) return false;
     if ((activeLessonsLevel === 4 || activeLessonsLevel === 5) && activeHskVersion === '2.0' && activeVolumeFilter !== 'all') {
@@ -4376,14 +4441,14 @@ function startLessonStudy(lesson, sliceWords) {
   // Switch tab to flashcards first (so its default showTopicsView doesn't override our dashboard view)
   switchTab('flashcards');
 
-  // Set active smart topic to HSK
-  activeSmartTopic = 'hsk';
+  // Set active smart topic to HSK or YCT
+  activeSmartTopic = activeLessonsCurriculum === 'yct' ? 'yct' : 'hsk';
 
   // Highlight/select only this lesson on the notebook dashboard
   selectedDashboardLessons = [lesson.id];
 
-  // Open HSK Notebook Dashboard
-  showNotebookDashboardView(`hsk:${activeLessonsLevel}`, true);
+  // Open HSK/YCT Notebook Dashboard
+  showNotebookDashboardView(activeLessonsCurriculum === 'yct' ? `yct:${activeYctLevel}` : `hsk:${activeLessonsLevel}`, true);
 
   // Scroll to workspace smoothly
   const flashcardSec = document.getElementById('flashcard-section');
@@ -4397,6 +4462,7 @@ function initLessonsView() {
   const hskBtn = document.getElementById('lessons-curriculum-hsk-btn');
   const yctBtn = document.getElementById('lessons-curriculum-yct-btn');
   const levelPillsContainer = document.getElementById('lessons-level-pills-container');
+  const yctLevelPillsContainer = document.getElementById('lessons-yct-level-pills-container');
   const volumePillsContainer = document.getElementById('lessons-volume-pills-container');
 
   if (hskBtn && yctBtn) {
@@ -4423,6 +4489,18 @@ function initLessonsView() {
       levelPillsContainer.querySelectorAll('.lessons-level-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       activeLessonsLevel = parseInt(btn.getAttribute('data-level'));
+      renderLessonsList();
+    });
+  }
+
+  if (yctLevelPillsContainer) {
+    yctLevelPillsContainer.addEventListener('click', (e) => {
+      const btn = e.target.closest('.lessons-level-btn');
+      if (!btn) return;
+
+      yctLevelPillsContainer.querySelectorAll('.lessons-level-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeYctLevel = parseInt(btn.getAttribute('data-yct-level'));
       renderLessonsList();
     });
   }

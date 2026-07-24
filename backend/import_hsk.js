@@ -340,7 +340,7 @@ async function run() {
 
   // Helper to append a word with its lessonId, lessonTitle, and lessonDesc
   function appendWordToList(item, level, lessonId, lessonTitle, lessonDesc, version) {
-    const statusKey = `${item.word}_hsk${level}_v${version}`;
+    const statusKey = `${item.word}_${version}_${level}`;
     let isMemorized = false;
     let isStarred = false;
     if (existingStatusMap.has(statusKey)) {
@@ -359,11 +359,12 @@ async function run() {
     }
 
     const itemObj = {
-      id: version === '2.0' ? 50000 + currentId++ : currentId++,
+      id: version === 'yct' ? 80000 + currentId++ : (version === '2.0' ? 50000 + currentId++ : currentId++),
       word: item.word,
       pinyin: item.pinyin,
       meaning: item.meaning,
       level: level,
+      curriculum: version === 'yct' ? 'yct' : 'hsk',
       hskVersion: version,
       volume: volume,
       lessonId: lessonId,
@@ -508,9 +509,56 @@ async function run() {
     console.error('Error importing HSK 2.0 data:', err.message);
   }
 
+  // 5b. Parse and merge YCT vocabulary from yct_extracted.json
+  const YCT_EXTRACTED_PATH = path.join(__dirname, 'yct_extracted.json');
+  let yctCount = 0;
+  try {
+    const yctContent = await fs.readFile(YCT_EXTRACTED_PATH, 'utf-8');
+    const yctData = JSON.parse(yctContent);
+
+    for (let lvl = 1; lvl <= 4; lvl++) {
+      const lvlWords = yctData[lvl.toString()] || [];
+      console.log(`\nProcessing YCT Level ${lvl}: ${lvlWords.length} words.`);
+
+      // Group words by lesson
+      const lessonGroups = {};
+      lvlWords.forEach(w => {
+        const les = parseInt(w.lesson) || 1;
+        if (!lessonGroups[les]) lessonGroups[les] = [];
+        lessonGroups[les].push(w);
+      });
+
+      const lessons = Object.keys(lessonGroups).map(Number).sort((a, b) => a - b);
+
+      lessons.forEach(les => {
+        const words = lessonGroups[les];
+        const title = `YCT ${lvl} - Bài ${les}`;
+        const desc = `Từ vựng YCT (Thiếu nhi) Cấp ${lvl} Bài ${les}`;
+
+        const parts = splitIntoParts(words, 20, 13);
+        if (parts.length === 1) {
+          parts[0].forEach(item => {
+            appendWordToList({ ...item, curriculum: 'yct' }, lvl, les, title, desc, 'yct');
+            yctCount++;
+          });
+        } else {
+          parts.forEach((partWords, pIdx) => {
+            const partTitle = `${title} (Phần ${pIdx + 1})`;
+            partWords.forEach(item => {
+              appendWordToList({ ...item, curriculum: 'yct' }, lvl, les, partTitle, desc, 'yct');
+              yctCount++;
+            });
+          });
+        }
+      });
+    }
+  } catch (err) {
+    console.warn('Could not read yct_extracted.json or it is empty yet.', err.message);
+  }
+
   const totalBuiltInCount = finalList.length;
-  console.log(`\nTotal built-in items (HSK 3.0 + HSK 2.0): ${totalBuiltInCount}`);
-  console.log(`HSK 2.0 total words: ${totalBuiltInCount - hsk3Count}`);
+  console.log(`\nTotal built-in items (HSK + YCT): ${totalBuiltInCount}`);
+  console.log(`YCT total words: ${yctCount}`);
 
   // 6. Append custom words at the end of database list with updated IDs (>= 100000)
   let customId = 100000;
