@@ -4880,51 +4880,53 @@ html:not(.dark) #about-hongtai-modal p {
 }
 
 /* --- ZUBI DASHBOARD TABLE & SECTION TITLE STYLES --- */
-.zubi-section-title {
-  color: #f8fafc;
+html.dark .zubi-section-title {
+  color: #ffffff !important;
 }
 html:not(.dark) .zubi-section-title {
   color: #0f172a !important;
 }
 
-.zubi-table-wrap {
-  background: rgba(30, 41, 59, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+html.dark .zubi-table-wrap {
+  background: rgba(30, 41, 59, 0.95) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35) !important;
 }
 html:not(.dark) .zubi-table-wrap {
-  background: rgba(255, 255, 255, 0.95) !important;
-  border-color: rgba(226, 232, 240, 0.9) !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+  background: rgba(255, 255, 255, 0.98) !important;
+  border: 1px solid rgba(226, 232, 240, 0.9) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
 }
 
-.zubi-th {
-  color: #94a3b8;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+html.dark .zubi-th {
+  color: #cbd5e1 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: rgba(15, 23, 42, 0.4) !important;
 }
 html:not(.dark) .zubi-th {
   color: #475569 !important;
-  border-bottom-color: rgba(226, 232, 240, 0.9) !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.9) !important;
+  background: #f1f5f9 !important;
 }
 
-.zubi-td {
-  color: #cbd5e1;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+html.dark .zubi-td {
+  color: #f1f5f9 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
 html:not(.dark) .zubi-td {
-  color: #334155 !important;
-  border-bottom-color: rgba(241, 245, 249, 0.9) !important;
+  color: #1e293b !important;
+  border-bottom: 1px solid rgba(241, 245, 249, 0.9) !important;
 }
 
-.zubi-td-bold {
-  color: #ffffff;
+html.dark .zubi-td-bold {
+  color: #ffffff !important;
 }
 html:not(.dark) .zubi-td-bold {
   color: #0f172a !important;
 }
 
-.zubi-table-btn {
-  color: #60a5fa;
+html.dark .zubi-table-btn {
+  color: #60a5fa !important;
 }
 html:not(.dark) .zubi-table-btn {
   color: #2563eb !important;

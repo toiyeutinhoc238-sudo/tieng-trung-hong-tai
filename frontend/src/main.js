@@ -222,7 +222,7 @@ function speakText(text) {
       activeAudioElement.pause();
       activeAudioElement.currentTime = 0;
       activeAudioElement.src = '';
-    } catch (e) {}
+    } catch (e) { }
     activeAudioElement = null;
   }
 
@@ -257,8 +257,8 @@ function setupAudioUnlocker() {
       silentAudio.play().then(() => {
         document.removeEventListener('touchstart', unlock);
         document.removeEventListener('click', unlock);
-      }).catch(() => {});
-    } catch (e) {}
+      }).catch(() => { });
+    } catch (e) { }
   };
   document.addEventListener('touchstart', unlock, { once: true });
   document.addEventListener('click', unlock, { once: true });
@@ -3128,7 +3128,7 @@ function renderActiveQuestion() {
     const cleanText = cleanFrontendSpeechText(q.audioText);
     const currentVoice = localStorage.getItem('speech_voice') || 'elevenlabs-adam';
     const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(currentVoice)}&_t=${Date.now()}`;
-    
+
     if (examAudioPlayer) {
       examAudioPlayer.src = url;
     }
@@ -5374,7 +5374,7 @@ function updateStatsUI() {
   renderCourseCompletionDashboard();
 }
 
-window.selectCurriculumAndGo = function(curr, level) {
+window.selectCurriculumAndGo = function (curr, level) {
   if (curr === 'yct') {
     activeLessonsCurriculum = 'yct';
     activeYctLevel = level.toString();
@@ -5520,7 +5520,7 @@ function formatLessonFullName(item) {
   return `HSK ${level} (v3.0) - Bài ${lessonId}`;
 }
 
-window.openZubiRecentLessonDetail = function(curr, level) {
+window.openZubiRecentLessonDetail = function (curr, level) {
   const modal = document.getElementById('zubi-stat-modal');
   const titleEl = document.getElementById('zubi-modal-title');
   const subtitleEl = document.getElementById('zubi-modal-subtitle');
@@ -5572,7 +5572,7 @@ window.openZubiRecentLessonDetail = function(curr, level) {
   modal.style.display = 'flex';
 };
 
-window.openZubiStatDetail = function(type) {
+window.openZubiStatDetail = function (type) {
   const modal = document.getElementById('zubi-stat-modal');
   const titleEl = document.getElementById('zubi-modal-title');
   const subtitleEl = document.getElementById('zubi-modal-subtitle');
@@ -6753,7 +6753,7 @@ function startGameArenaFromNotebook() {
   }
 };
 
-window.openAboutModal = function() {
+window.openAboutModal = function () {
   const modal = document.getElementById('about-hongtai-modal');
   if (modal) {
     modal.style.display = 'flex';
