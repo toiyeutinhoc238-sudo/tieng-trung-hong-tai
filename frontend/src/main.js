@@ -5420,6 +5420,7 @@ function renderZubiDashboardTableAndRecent() {
       { name: 'HSK Cấp 3', curriculum: 'HSK Chuẩn (v2.0 & v3.0)', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === '3', curriculumType: 'hsk', level: 3 },
       { name: 'HSK Cấp 4 (Thượng / Hạ)', curriculum: 'HSK Chuẩn 2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === '4', curriculumType: 'hsk', level: 4 },
       { name: 'HSK Cấp 5 (Thượng / Hạ)', curriculum: 'HSK Chuẩn 2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === '5', curriculumType: 'hsk', level: 5 },
+      { name: 'HSK Cấp 6 (Thượng / Hạ)', curriculum: 'HSK Chuẩn 2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === '6', curriculumType: 'hsk', level: 6 },
       { name: 'YCT Cấp 1..4 (Thiếu nhi)', curriculum: 'Sắc màu YCT', filter: w => w.curriculum === 'yct' || w.hskVersion === 'yct', curriculumType: 'yct', level: 1 },
     ];
 
@@ -5526,6 +5527,11 @@ function formatLessonFullName(item) {
       const vol = lessonId <= 18 ? 'Thượng' : 'Hạ';
       const volLesson = lessonId <= 18 ? lessonId : lessonId - 18;
       return `HSK 5 ${vol} (v2.0) - Bài ${volLesson}`;
+    }
+    if (level.toString() === '6') {
+      const vol = lessonId <= 20 ? 'Thượng' : 'Hạ';
+      const volLesson = lessonId <= 20 ? lessonId : lessonId - 20;
+      return `HSK 6 ${vol} (v2.0) - Bài ${volLesson}`;
     }
     return `HSK ${level} (v2.0) - Bài ${lessonId}`;
   }
@@ -5722,6 +5728,7 @@ window.openZubiStatDetail = function (type) {
     const hsk3Count = builtIn.filter(w => (w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === '3').length;
     const hsk4Count = builtIn.filter(w => (w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === '4').length;
     const hsk5Count = builtIn.filter(w => (w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === '5').length;
+    const hsk6Count = builtIn.filter(w => (w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === '6').length;
     const yctCount = builtIn.filter(w => w.curriculum === 'yct' || w.hskVersion === 'yct').length;
 
     bodyEl.innerHTML = `
@@ -5752,6 +5759,10 @@ window.openZubiStatDetail = function (type) {
         <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
           <span style="color: #ffffff; font-weight: 600;">HSK Cấp 5 (Thượng & Hạ)</span>
           <span style="color: #38bdf8; font-weight: 800;">${hsk5Count.toLocaleString()} từ</span>
+        </div>
+        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
+          <span style="color: #ffffff; font-weight: 600;">HSK Cấp 6 (Thượng & Hạ)</span>
+          <span style="color: #38bdf8; font-weight: 800;">${hsk6Count.toLocaleString()} từ</span>
         </div>
         <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
           <span style="color: #ffffff; font-weight: 600;">YCT Cấp 1..4 (Thiếu nhi)</span>
