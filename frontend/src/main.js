@@ -4380,21 +4380,38 @@ function renderLessonsList() {
     }
   }
 
-  // Update objectives text
+  // Update objectives text - dynamically count words from vocabList
   if (objectivesText) {
-    if (activeHskVersion === '2.0') {
-      if (activeLessonsLevel === 1) objectivesText.textContent = 'Mục tiêu: HSK 2.0 Cấp 1 - Sơ cấp dành cho người mới bắt đầu (150 từ vựng)';
-      else if (activeLessonsLevel === 2) objectivesText.textContent = 'Mục tiêu: HSK 2.0 Cấp 2 - Sơ cấp nâng cao, giao tiếp đời sống cơ bản (150 từ vựng mới, tổng 300)';
-      else if (activeLessonsLevel === 3) objectivesText.textContent = 'Mục tiêu: HSK 2.0 Cấp 3 - Trung cấp, giao tiếp tự tin các chủ đề học tập/công việc (300 từ vựng mới, tổng 600)';
-      else if (activeLessonsLevel === 4) objectivesText.textContent = 'Mục tiêu: HSK 2.0 Cấp 4 - Trung cấp nâng cao, thảo luận nhiều chủ đề chuyên sâu (600 từ vựng mới, tổng 1200)';
-      else if (activeLessonsLevel === 5) objectivesText.textContent = 'Mục tiêu: HSK 2.0 Cấp 5 - Cao cấp, đọc báo chí xem phim và thuyết trình tự nhiên (1300 từ vựng mới, tổng 2500)';
-      else objectivesText.textContent = `Mục tiêu: Ôn tập từ vựng HSK Cấp ${activeLessonsLevel}`;
-    } else {
-      if (activeLessonsLevel === 1) objectivesText.textContent = 'Mục tiêu: HSK 3.0 Cấp 1 - Sơ cấp dành cho người mới bắt đầu (500 từ vựng)';
-      else if (activeLessonsLevel === 2) objectivesText.textContent = 'Mục tiêu: HSK 3.0 Cấp 2 - Sơ cấp nâng cao (772 từ vựng mới, tổng 1272)';
-      else if (activeLessonsLevel === 3) objectivesText.textContent = 'Mục tiêu: HSK 3.0 Cấp 3 - Sơ cấp hoàn chỉnh (973 từ vựng mới, tổng 2245)';
-      else objectivesText.textContent = `Mục tiêu: Ôn tập từ vựng HSK Cấp ${activeLessonsLevel}`;
-    }
+    // Count total words in this level/version
+    const totalWordsInLevel = vocabList.filter(w =>
+      !w.isCustom &&
+      w.curriculum !== 'yct' && w.hskVersion !== 'yct' &&
+      w.level.toString() === activeLessonsLevel.toString() &&
+      (w.hskVersion || '3.0') === activeHskVersion
+    ).length;
+    const totalStr = totalWordsInLevel > 0 ? `, ${totalWordsInLevel.toLocaleString()} từ vựng` : '';
+
+    const levelDescMap = {
+      '2.0': {
+        1: `HSK 2.0 Cấp 1 - Sơ cấp dành cho người mới bắt đầu`,
+        2: `HSK 2.0 Cấp 2 - Sơ cấp nâng cao, giao tiếp đời sống cơ bản`,
+        3: `HSK 2.0 Cấp 3 - Trung cấp, giao tiếp tự tin các chủ đề học tập/công việc`,
+        4: `HSK 2.0 Cấp 4 - Trung cấp nâng cao, thảo luận nhiều chủ đề chuyên sâu`,
+        5: `HSK 2.0 Cấp 5 - Cao cấp, đọc báo chí xem phim và thuyết trình tự nhiên`,
+        6: `HSK 2.0 Cấp 6 - Thành thạo, đọc văn học và viết học thuật`,
+      },
+      '3.0': {
+        1: `HSK 3.0 Cấp 1 - Sơ cấp dành cho người mới bắt đầu`,
+        2: `HSK 3.0 Cấp 2 - Sơ cấp nâng cao`,
+        3: `HSK 3.0 Cấp 3 - Sơ cấp hoàn chỉnh`,
+        4: `HSK 3.0 Cấp 4 - Trung cấp cơ bản`,
+        5: `HSK 3.0 Cấp 5 - Trung cấp nâng cao`,
+        6: `HSK 3.0 Cấp 6 - Cao cấp`,
+      }
+    };
+    const desc = (levelDescMap[activeHskVersion] || {})[activeLessonsLevel]
+      || `HSK ${activeHskVersion} Cấp ${activeLessonsLevel}`;
+    objectivesText.textContent = `Mục tiêu: ${desc}${totalStr}`;
   }
 
   // Filter HSK level vocabulary
@@ -4438,7 +4455,7 @@ function renderLessonsList() {
     card.className = 'lesson-card';
     card.innerHTML = `
       <div>
-        <span class="lesson-badge">HSK${activeLessonsLevel} - Bài ${lessonId}</span>
+        <span class="lesson-badge">HSK${activeLessonsLevel} (${activeHskVersion}) - Bài ${lessonId}</span>
         <h3 class="lesson-title">${title}</h3>
         <p class="lesson-desc">${desc}</p>
       </div>
