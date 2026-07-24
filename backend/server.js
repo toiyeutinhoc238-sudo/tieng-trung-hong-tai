@@ -65,6 +65,9 @@ app.use(cors({
 }));
 app.use(express.json());
 
+const EXAMS_FILES_DIR = path.join(__dirname, '..', 'TRON BO DE THI HSK TU 1 DEN 9');
+app.use('/exams-files', express.static(EXAMS_FILES_DIR));
+
 // Disable caching for all API routes
 app.use('/api', (req, res, next) => {
   res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
@@ -280,6 +283,18 @@ function decodeJwt(token) {
     return null;
   }
 }
+
+// GET /api/exams/catalog - Return real HSK exam catalog (117 exams)
+app.get('/api/exams/catalog', async (req, res) => {
+  try {
+    const catalogPath = path.join(__dirname, 'exam_catalog.json');
+    const catalogData = await fs.readFile(catalogPath, 'utf-8');
+    res.json(JSON.parse(catalogData));
+  } catch (error) {
+    console.error('Error reading exam_catalog.json:', error);
+    res.status(500).json({ error: 'Failed to load exam catalog' });
+  }
+});
 
 // POST endpoint for Google Login
 app.post('/api/auth/google', async (req, res) => {

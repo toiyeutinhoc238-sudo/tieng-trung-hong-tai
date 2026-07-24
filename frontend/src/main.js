@@ -2935,7 +2935,7 @@ function switchTab(tabId) {
   if (homeBtn) homeBtn.classList.toggle('active', tabId === 'home');
   if (flashcardsBtn) flashcardsBtn.classList.toggle('active', tabId === 'flashcards');
   if (customBtn) customBtn.classList.toggle('active', tabId === 'dictionary');
-  if (examsBtn) examsBtn.classList.toggle('active', tabId === 'lessons');
+  if (examsBtn) examsBtn.classList.toggle('active', tabId === 'exams');
 }
 
 function showHomeView() {
@@ -2943,7 +2943,7 @@ function showHomeView() {
 }
 
 function showExamsView() {
-  switchTab('lessons');
+  switchTab('exams');
 }
 
 function loadExamPapersList(level) {
@@ -3009,12 +3009,12 @@ const EXAM_LEVEL_FOLDER_NAMES = {
 };
 
 const EXAM_LIBRARY_CATALOG = {
-  1: ['H10000','H10901','H10902','H11003','H11004','H11005','H11006','H11007','H11008','H11009','H11112','H11113','H11220','H11221','H11222','H11223','H11329','H11330','H11331','H11332','H1334'],
-  2: ['H20000','H20901','H20902','H21003','H21004','H21005','H21006','H21007','H21009','H21112','H21113','H21220','H21221','H21222','H21223','H21329','H21330','H21331','H21334'],
-  3: ['H30000','H31001','H31002','H31004','H31005','H31006','H31007','H31008','H31009','H31110','H31111','H31218','H31219','H31220','H31221','H31327','H31332'],
-  4: ['H40000','H41001','H41002','H41003','H41004','H41005','H41006','H41007','H41008','H41009','H41110','H41111','H41218','H41219','H41220','H41221','H41327'],
-  5: ['H51001','H51002','H51003','H51004','H51005','H51007','H51008','H51009','H51110','H51111','H51218','H51219','H51220','H51221','H51327','H51328','H51329','H51330','H51331','H51332','H51333','H51553B','H51553C','H51553D'],
-  6: ['H60000','H61001','H61002','H61004','H61005','H61006','H61007','H61008','H61009','H61110','H61111','H61218','H61219','H61220','H61221','H61328','H61329','H61330','H61332'],
+  1: ['H10000', 'H10901', 'H10902', 'H11003', 'H11004', 'H11005', 'H11006', 'H11007', 'H11008', 'H11009', 'H11112', 'H11113', 'H11220', 'H11221', 'H11222', 'H11223', 'H11329', 'H11330', 'H11331', 'H11332', 'H1334'],
+  2: ['H20000', 'H20901', 'H20902', 'H21003', 'H21004', 'H21005', 'H21006', 'H21007', 'H21009', 'H21112', 'H21113', 'H21220', 'H21221', 'H21222', 'H21223', 'H21329', 'H21330', 'H21331', 'H21334'],
+  3: ['H30000', 'H31001', 'H31002', 'H31004', 'H31005', 'H31006', 'H31007', 'H31008', 'H31009', 'H31110', 'H31111', 'H31218', 'H31219', 'H31220', 'H31221', 'H31327', 'H31332'],
+  4: ['H40000', 'H41001', 'H41002', 'H41003', 'H41004', 'H41005', 'H41006', 'H41007', 'H41008', 'H41009', 'H41110', 'H41111', 'H41218', 'H41219', 'H41220', 'H41221', 'H41327'],
+  5: ['H51001', 'H51002', 'H51003', 'H51004', 'H51005', 'H51007', 'H51008', 'H51009', 'H51110', 'H51111', 'H51218', 'H51219', 'H51220', 'H51221', 'H51327', 'H51328', 'H51329', 'H51330', 'H51331', 'H51332', 'H51333', 'H51553B', 'H51553C', 'H51553D'],
+  6: ['H60000', 'H61001', 'H61002', 'H61004', 'H61005', 'H61006', 'H61007', 'H61008', 'H61009', 'H61110', 'H61111', 'H61218', 'H61219', 'H61220', 'H61221', 'H61328', 'H61329', 'H61330', 'H61332'],
 };
 
 function decodeExamCode(code) {
@@ -3045,7 +3045,11 @@ function renderExamLibrary(filterLevel = 'all') {
   filtered.forEach(({ level, code }) => {
     const { year, session } = decodeExamCode(code);
     const sessionText = year === 'Mẫu' ? 'Đề mẫu chính thức' : (session ? `Năm ${year} - Kỳ ${session}` : `Năm ${year}`);
-    const driveLink = DRIVE_BASE; // Direct to shared Drive root; user navigates to subfolder
+    
+    const folderName = EXAM_LEVEL_FOLDER_NAMES[level] || `ĐỀ THI HSK ${level} + FILE NGHE`;
+    const pdfUrl = `${API_BASE_URL}/exams-files/${encodeURIComponent(folderName)}/${encodeURIComponent(code)}/${encodeURIComponent(code + '.pdf')}`;
+    const mp3Url = `${API_BASE_URL}/exams-files/${encodeURIComponent(folderName)}/${encodeURIComponent(code)}/${encodeURIComponent(code + '.mp3')}`;
+    const ansUrl = `${API_BASE_URL}/exams-files/${encodeURIComponent(folderName)}/${encodeURIComponent(code)}/${encodeURIComponent(code + ' 答案.pdf')}`;
 
     const card = document.createElement('div');
     card.className = 'exam-lib-card';
@@ -3058,13 +3062,13 @@ function renderExamLibrary(filterLevel = 'all') {
         &nbsp;·&nbsp; <i class="fa-solid fa-headphones"></i> Có file nghe MP3
       </p>
       <div class="exam-lib-actions">
-        <a class="exam-lib-btn exam-lib-btn-pdf" href="${driveLink}" target="_blank" rel="noopener">
+        <a class="exam-lib-btn exam-lib-btn-pdf" href="${pdfUrl}" target="_blank" rel="noopener" title="Xem/Tải file đề thi PDF">
           <i class="fa-solid fa-file-pdf"></i> Đề thi PDF
         </a>
-        <a class="exam-lib-btn exam-lib-btn-mp3" href="${driveLink}" target="_blank" rel="noopener">
+        <a class="exam-lib-btn exam-lib-btn-mp3" href="${mp3Url}" target="_blank" rel="noopener" title="Nghe/Tải file MP3">
           <i class="fa-solid fa-headphones"></i> File nghe MP3
         </a>
-        <a class="exam-lib-btn exam-lib-btn-ans" href="${driveLink}" target="_blank" rel="noopener">
+        <a class="exam-lib-btn exam-lib-btn-ans" href="${ansUrl}" target="_blank" rel="noopener" title="Xem file đáp án">
           <i class="fa-solid fa-key"></i> Đáp án
         </a>
       </div>
@@ -3073,7 +3077,7 @@ function renderExamLibrary(filterLevel = 'all') {
   });
 }
 
-window.switchExamTab = function(tab) {
+window.switchExamTab = function (tab) {
   const onlinePanel = document.getElementById('exam-panel-online');
   const libraryPanel = document.getElementById('exam-panel-library');
   const tabOnline = document.getElementById('exam-tab-online');
@@ -3093,7 +3097,7 @@ window.switchExamTab = function(tab) {
   }
 };
 
-window.filterExamLibrary = function(btn, level) {
+window.filterExamLibrary = function (btn, level) {
   document.querySelectorAll('.exam-lib-pill').forEach(p => p.classList.remove('active'));
   btn.classList.add('active');
   renderExamLibrary(level === 'all' ? 'all' : parseInt(level));
@@ -3396,7 +3400,7 @@ function renderExamResults(correct, total, percentage, timeSpent, status) {
       }
 
       optDiv.innerHTML = `${prefix}${String.fromCharCode(65 + optIdx)}. ${choice}`;
-      optGrid.appendChild(optDiv);
+      optionsGrid.appendChild(optDiv);
     });
 
     reviewContainer.appendChild(qItem);
@@ -3433,7 +3437,7 @@ function initExams() {
   if (navExamsBtn) {
     navExamsBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      switchTab('lessons');
+      switchTab('exams');
     });
   }
 
