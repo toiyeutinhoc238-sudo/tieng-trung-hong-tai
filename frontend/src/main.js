@@ -1,4 +1,5 @@
 // HSK Vocabulary Flashcard - Main Frontend Controller
+import './style.css';
 
 // --- STATE MANAGEMENT ---
 let vocabList = [];       // Master list of all vocabulary (seeded + custom)
