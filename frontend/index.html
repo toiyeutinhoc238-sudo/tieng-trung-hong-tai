@@ -1816,6 +1816,21 @@
 
     <!-- HSK 3.0 Exams Section -->
     <section id="hsk-exams-section" class="workspace-section" style="display: none;">
+
+      <!-- Exam Mode Tabs -->
+      <div style="display: flex; gap: 10px; margin-bottom: 24px; border-bottom: 2px solid var(--border-glass); padding-bottom: 0;">
+        <button id="exam-tab-online" class="exam-mode-tab active" onclick="switchExamTab('online')">
+          <i class="fa-solid fa-laptop-code"></i> Thi thử trực tuyến
+        </button>
+        <button id="exam-tab-library" class="exam-mode-tab" onclick="switchExamTab('library')">
+          <i class="fa-solid fa-folder-open"></i> Thư viện đề thực tế
+          <span class="exam-tab-badge">117 đề</span>
+        </button>
+      </div>
+
+      <!-- ===== ONLINE MOCK EXAM PANEL ===== -->
+      <div id="exam-panel-online">
+
       <!-- 1. HSK Levels Selection Screen -->
       <div id="exam-level-selection">
         <div class="section-header"
@@ -1836,6 +1851,7 @@
           </div>
         </div>
         <div class="level-selector-grid">
+
           <!-- HSK 1 Card -->
           <div class="level-card glass-panel" data-level="1">
             <div class="level-card-header">
@@ -1995,7 +2011,48 @@
           </div>
         </div>
       </div>
+
+      </div> <!-- end exam-panel-online -->
+
+      <!-- ===== REAL EXAM LIBRARY PANEL ===== -->
+      <div id="exam-panel-library" style="display: none;">
+        <!-- Header -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 28px;">
+          <div>
+            <h2 style="font-size: 1.5rem; font-weight: 800; margin: 0 0 6px 0;">
+              <i class="fa-solid fa-folder-open text-primary"></i> Thư viện Đề thi HSK Thực tế
+            </h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">
+              Bộ sưu tập <strong>117 đề thi chính thức HSK Cấp 1–6</strong> từ năm 2009–2013. Mỗi đề gồm: đề thi, tài liệu nghe và đáp án.
+            </p>
+          </div>
+          <a href="https://drive.google.com/drive/folders/1F_NE_evsJwGQ-lD_0BM-y2X9kFUyyqu4?usp=sharing"
+            target="_blank" rel="noopener"
+            style="display: inline-flex; align-items: center; gap: 8px; background: #0f9d58; color: white; border: none; border-radius: 10px; padding: 9px 18px; font-weight: 700; font-size: 0.88rem; text-decoration: none; flex-shrink: 0; transition: opacity 0.2s;"
+            onmouseover="this.style.opacity=0.85" onmouseout="this.style.opacity=1">
+            <i class="fa-brands fa-google-drive"></i> Mở Google Drive
+          </a>
+        </div>
+
+        <!-- Level filter pills -->
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;" id="exam-lib-level-pills">
+          <button class="exam-lib-pill active" data-lib-level="all" onclick="filterExamLibrary(this,'all')">Tất cả (117)</button>
+          <button class="exam-lib-pill" data-lib-level="1" onclick="filterExamLibrary(this,1)">HSK 1 (21)</button>
+          <button class="exam-lib-pill" data-lib-level="2" onclick="filterExamLibrary(this,2)">HSK 2 (19)</button>
+          <button class="exam-lib-pill" data-lib-level="3" onclick="filterExamLibrary(this,3)">HSK 3 (17)</button>
+          <button class="exam-lib-pill" data-lib-level="4" onclick="filterExamLibrary(this,4)">HSK 4 (17)</button>
+          <button class="exam-lib-pill" data-lib-level="5" onclick="filterExamLibrary(this,5)">HSK 5 (24)</button>
+          <button class="exam-lib-pill" data-lib-level="6" onclick="filterExamLibrary(this,6)">HSK 6 (19)</button>
+        </div>
+
+        <!-- Exam cards grid -->
+        <div id="exam-library-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px;">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
     </section>
+
 
 
 
