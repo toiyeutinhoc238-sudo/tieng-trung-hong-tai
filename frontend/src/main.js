@@ -5488,6 +5488,193 @@ function renderZubiDashboardTableAndRecent() {
   }
 }
 
+window.openZubiStatDetail = function(type) {
+  const modal = document.getElementById('zubi-stat-modal');
+  const titleEl = document.getElementById('zubi-modal-title');
+  const subtitleEl = document.getElementById('zubi-modal-subtitle');
+  const iconEl = document.getElementById('zubi-modal-icon');
+  const bodyEl = document.getElementById('zubi-modal-body');
+
+  if (!modal || !bodyEl) return;
+
+  const builtIn = vocabList.filter(w => !w.isCustom);
+  const totalMemorized = builtIn.filter(w => w.isMemorized).length;
+
+  if (type === 'completed') {
+    titleEl.textContent = 'Bài học đã hoàn thành';
+    subtitleEl.textContent = 'Danh sách các bài học bạn đã thuộc 100% từ vựng';
+    iconEl.className = 'zubi-circle-icon pink';
+    iconEl.style.background = 'rgba(236, 72, 153, 0.2)';
+    iconEl.style.color = '#ec4899';
+    iconEl.innerHTML = '<i class="fa-solid fa-clock-rotate-left"></i>';
+
+    const textbookGroups = {};
+    builtIn.forEach(w => {
+      if (!w.level || !w.lessonId) return;
+      const key = `${w.hskVersion || '3.0'}_${w.level}_${w.lessonId}`;
+      if (!textbookGroups[key]) textbookGroups[key] = { key, level: w.level, lessonId: w.lessonId, curr: w.curriculum || 'hsk', words: [] };
+      textbookGroups[key].words.push(w);
+    });
+
+    const completedLessons = Object.values(textbookGroups).filter(g => g.words.length > 0 && g.words.every(w => w.isMemorized));
+
+    let html = `
+      <div style="background: rgba(236, 72, 153, 0.1); border: 1px solid rgba(236, 72, 153, 0.3); border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;">
+        <div>
+          <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: #ec4899; font-weight: 700;">Tổng số bài đã xong</span>
+          <h2 style="font-size: 1.8rem; font-weight: 800; color: #ffffff; margin: 4px 0 0 0;">${completedLessons.length} / ${Object.keys(textbookGroups).length} Bài</h2>
+        </div>
+        <div style="font-size: 2.2rem; color: #ec4899; opacity: 0.8;"><i class="fa-solid fa-trophy"></i></div>
+      </div>
+    `;
+
+    if (completedLessons.length === 0) {
+      html += `
+        <div style="text-align: center; padding: 30px 20px;">
+          <i class="fa-solid fa-book-bookmark" style="font-size: 3rem; color: #64748b; margin-bottom: 12px; display: block;"></i>
+          <h4 style="color: #f1f5f9; margin: 0 0 6px 0; font-size: 1.1rem;">Chưa có bài học nào hoàn thành 100%</h4>
+          <p style="color: #94a3b8; font-size: 0.85rem; margin: 0 0 16px 0;">Hãy tiếp tục lật flashcard và đánh dấu thuộc từ để hoàn thành bài nhé!</p>
+          <button class="btn btn-primary" style="padding: 10px 24px; border-radius: 12px;" onclick="document.getElementById('zubi-stat-modal').style.display='none'; window.selectCurriculumAndGo('hsk', 1);">Bắt đầu học ngay</button>
+        </div>
+      `;
+    } else {
+      html += `<div style="display: flex; flex-direction: column; gap: 10px;">`;
+      completedLessons.forEach(les => {
+        html += `
+          <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <strong style="color: #f8fafc; font-size: 0.95rem;">${les.curr.toUpperCase()} Cấp ${les.level} - Bài ${les.lessonId}</strong>
+              <div style="font-size: 0.8rem; color: #94a3b8;">${les.words.length} từ vựng đã ghi nhớ</div>
+            </div>
+            <span class="zubi-pill success" style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: rgba(16, 185, 129, 0.2); color: #34d399;">Hoàn thành</span>
+          </div>
+        `;
+      });
+      html += `</div>`;
+    }
+    bodyEl.innerHTML = html;
+
+  } else if (type === 'time') {
+    titleEl.textContent = 'Thời gian tham gia học';
+    subtitleEl.textContent = 'Thống kê thời gian duy trì thói quen học tập của bạn';
+    iconEl.className = 'zubi-circle-icon blue';
+    iconEl.style.background = 'rgba(59, 130, 246, 0.2)';
+    iconEl.style.color = '#3b82f6';
+    iconEl.innerHTML = '<i class="fa-solid fa-clock"></i>';
+
+    const mins = Math.floor(userStudyTime / 60);
+    const hrs = Math.floor(mins / 60);
+    const remMins = mins % 60;
+    const timeDisplay = hrs > 0 ? `${hrs} giờ ${remMins} phút` : `${mins} phút`;
+
+    bodyEl.innerHTML = `
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+        <div style="background: rgba(59, 130, 246, 0.12); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 16px; padding: 18px; text-align: center;">
+          <div style="font-size: 0.8rem; color: #60a5fa; font-weight: 700; text-transform: uppercase;">Tổng thời gian đã học</div>
+          <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-top: 6px;">${timeDisplay}</div>
+        </div>
+        <div style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 16px; padding: 18px; text-align: center;">
+          <div style="font-size: 0.8rem; color: #fbbf24; font-weight: 700; text-transform: uppercase;">Chuỗi ngày liên tục (Streak)</div>
+          <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-top: 6px;">🔥 ${userStreak} Ngày</div>
+        </div>
+      </div>
+      <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 18px; display: flex; gap: 14px; align-items: flex-start;">
+        <div style="width: 36px; height: 36px; border-radius: 50%; background: rgba(16, 185, 129, 0.2); color: #34d399; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.1rem;"><i class="fa-solid fa-lightbulb"></i></div>
+        <div>
+          <strong style="color: #ffffff; font-size: 0.95rem;">Mẹo học hiệu quả:</strong>
+          <p style="margin: 4px 0 0 0; color: #94a3b8; font-size: 0.85rem; line-height: 1.5;">Duy trì khoảng 15 - 20 phút lật thẻ Flashcard & làm bài tập mỗi ngày sẽ giúp bộ não ghi nhớ từ vựng lâu hơn gấp 3 lần so với dồn học 1 buổi kéo dài!</p>
+        </div>
+      </div>
+    `;
+
+  } else if (type === 'enrolled') {
+    titleEl.textContent = 'Bài học đang theo học';
+    subtitleEl.textContent = 'Phân bổ 220 bài học trong hệ thống giáo trình HSK & YCT';
+    iconEl.className = 'zubi-circle-icon orange';
+    iconEl.style.background = 'rgba(249, 115, 22, 0.2)';
+    iconEl.style.color = '#f97316';
+    iconEl.innerHTML = '<i class="fa-solid fa-hourglass-half"></i>';
+
+    bodyEl.innerHTML = `
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
+          <div><strong style="color: #ffffff;">HSK 1 (v3.0 & v2.0)</strong><div style="font-size: 0.8rem; color: #94a3b8;">Sơ cấp HSK</div></div>
+          <span style="font-weight: 800; color: #f97316; font-size: 1.1rem;">36 Bài</span>
+        </div>
+        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
+          <div><strong style="color: #ffffff;">HSK 2 (v3.0 & v2.0)</strong><div style="font-size: 0.8rem; color: #94a3b8;">Sơ cấp nâng cao HSK</div></div>
+          <span style="font-weight: 800; color: #f97316; font-size: 1.1rem;">31 Bài</span>
+        </div>
+        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
+          <div><strong style="color: #ffffff;">HSK 3 (v3.0 & v2.0)</strong><div style="font-size: 0.8rem; color: #94a3b8;">Trung cấp HSK</div></div>
+          <span style="font-weight: 800; color: #f97316; font-size: 1.1rem;">51 Bài</span>
+        </div>
+        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
+          <div><strong style="color: #ffffff;">HSK 4 & 5 (Thượng & Hạ)</strong><div style="font-size: 0.8rem; color: #94a3b8;">Cao cấp HSK 2.0</div></div>
+          <span style="font-weight: 800; color: #f97316; font-size: 1.1rem;">56 Bài</span>
+        </div>
+        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
+          <div><strong style="color: #ffffff;">YCT 1, 2, 3, 4 (Thiếu nhi)</strong><div style="font-size: 0.8rem; color: #94a3b8;">Sắc màu YCT Tiếng Việt</div></div>
+          <span style="font-weight: 800; color: #f97316; font-size: 1.1rem;">47 Bài</span>
+        </div>
+      </div>
+    `;
+
+  } else if (type === 'words') {
+    titleEl.textContent = 'Thống kê Từ vựng HSK & YCT';
+    subtitleEl.textContent = 'Phân bổ 5,653 từ vựng theo từng cấp độ';
+    iconEl.className = 'zubi-circle-icon cyan';
+    iconEl.style.background = 'rgba(2, 132, 199, 0.2)';
+    iconEl.style.color = '#38bdf8';
+    iconEl.innerHTML = '<i class="fa-solid fa-layer-group"></i>';
+
+    const hsk1Count = builtIn.filter(w => (w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === '1').length;
+    const hsk2Count = builtIn.filter(w => (w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === '2').length;
+    const hsk3Count = builtIn.filter(w => (w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === '3').length;
+    const hsk4Count = builtIn.filter(w => (w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === '4').length;
+    const hsk5Count = builtIn.filter(w => (w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === '5').length;
+    const yctCount = builtIn.filter(w => w.curriculum === 'yct' || w.hskVersion === 'yct').length;
+
+    bodyEl.innerHTML = `
+      <div style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;">
+        <div>
+          <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: #38bdf8; font-weight: 700;">Tổng từ vựng chuẩn hóa</span>
+          <h2 style="font-size: 1.8rem; font-weight: 800; color: #ffffff; margin: 4px 0 0 0;">${vocabList.length.toLocaleString()} Từ</h2>
+        </div>
+        <div style="font-size: 2.2rem; color: #38bdf8; opacity: 0.8;"><i class="fa-solid fa-book"></i></div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
+          <span style="color: #ffffff; font-weight: 600;">HSK Cấp 1</span>
+          <span style="color: #38bdf8; font-weight: 800;">${hsk1Count.toLocaleString()} từ</span>
+        </div>
+        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
+          <span style="color: #ffffff; font-weight: 600;">HSK Cấp 2</span>
+          <span style="color: #38bdf8; font-weight: 800;">${hsk2Count.toLocaleString()} từ</span>
+        </div>
+        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
+          <span style="color: #ffffff; font-weight: 600;">HSK Cấp 3</span>
+          <span style="color: #38bdf8; font-weight: 800;">${hsk3Count.toLocaleString()} từ</span>
+        </div>
+        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
+          <span style="color: #ffffff; font-weight: 600;">HSK Cấp 4 (Thượng & Hạ)</span>
+          <span style="color: #38bdf8; font-weight: 800;">${hsk4Count.toLocaleString()} từ</span>
+        </div>
+        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
+          <span style="color: #ffffff; font-weight: 600;">HSK Cấp 5 (Thượng & Hạ)</span>
+          <span style="color: #38bdf8; font-weight: 800;">${hsk5Count.toLocaleString()} từ</span>
+        </div>
+        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
+          <span style="color: #ffffff; font-weight: 600;">YCT Cấp 1..4 (Thiếu nhi)</span>
+          <span style="color: #38bdf8; font-weight: 800;">${yctCount.toLocaleString()} từ</span>
+        </div>
+      </div>
+    `;
+  }
+
+  modal.style.display = 'flex';
+};
+
 async function loadInitialStats() {
   if (currentUser) {
     try {
