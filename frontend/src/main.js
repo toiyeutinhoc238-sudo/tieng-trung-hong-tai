@@ -5278,6 +5278,7 @@ function renderCourseCompletionDashboard() {
   const zubiCompleted = document.getElementById('zubi-completed-count');
   const zubiEnrolled = document.getElementById('zubi-enrolled-count');
   const zubiTotalWords = document.getElementById('zubi-total-words-count');
+  const zubiStudyTime = document.getElementById('zubi-study-time-count');
 
   const activeVocabs = vocabList.filter(w => !w.isCustom);
   const totalMemorized = activeVocabs.filter(w => w.isMemorized).length;
@@ -5304,6 +5305,16 @@ function renderCourseCompletionDashboard() {
   if (zubiCompleted) zubiCompleted.textContent = `${completed} Bài`;
   if (zubiEnrolled) zubiEnrolled.textContent = `${enrolled} Bài`;
   if (zubiTotalWords) zubiTotalWords.textContent = `${vocabList.length.toLocaleString()} Từ`;
+  if (zubiStudyTime) {
+    const mins = Math.floor(userStudyTime / 60);
+    if (mins >= 60) {
+      const hrs = Math.floor(mins / 60);
+      const remMins = mins % 60;
+      zubiStudyTime.textContent = `${hrs}h ${remMins}m`;
+    } else {
+      zubiStudyTime.textContent = `${mins} phút`;
+    }
+  }
 
   if (!pieSvg) return;
 
