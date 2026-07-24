@@ -6751,6 +6751,14 @@ function startGameArenaFromNotebook() {
   if (iframe) {
     iframe.src = `quiz-game.html?level=${levelParam}&lessons=${lessonsParam}&filter=${dashboardActiveFilter}&notebook=${activeNotebook}&start=true`;
   }
+};
+
+window.openAboutModal = function() {
+  const modal = document.getElementById('about-hongtai-modal');
+  if (modal) {
+    modal.style.display = 'flex';
+  }
+};
 }
 
 
