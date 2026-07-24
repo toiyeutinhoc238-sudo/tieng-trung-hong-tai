@@ -22,9 +22,13 @@ const CACHE_FILE = path.join(__dirname, '..', 'extraction_cache_hsk2.json');
 const OUTPUT_FILE = path.join(__dirname, '..', 'hsk2_extracted.json');
 
 const pdfFiles = [
-  { level: 1, name: 'tu vung hsk 1 2.0.pdf', pages: 10 },
-  { level: 2, name: 'tu vung hsk 2 2.0.pdf', pages: 9 },
-  { level: 3, name: 'tu vung hsk 3 2.0.pdf', pages: 14 }
+  { level: 1, name: 'tu vung hsk 1 2.0.pdf', pages: 10, id: 'level1' },
+  { level: 2, name: 'tu vung hsk 2 2.0.pdf', pages: 9, id: 'level2' },
+  { level: 3, name: 'tu vung hsk 3 2.0.pdf', pages: 14, id: 'level3' },
+  { level: 4, name: 'tu vung hsk 4 thuong 2.0.pdf', pages: 14, id: 'level4_thuong' },
+  { level: 4, name: 'tu vung hsk 4 ha 2.0.pdf', pages: 15, id: 'level4_ha' },
+  { level: 5, name: 'tu vung hsk 5 thuong 2.0.pdf', pages: 26, id: 'level5_thuong' },
+  { level: 5, name: 'tu vung hsk 5 ha 2.0.pdf', pages: 24, id: 'level5_ha' }
 ];
 
 async function delay(ms) {
@@ -119,19 +123,22 @@ Không trả về bất kỳ văn bản nào khác ngoài JSON array thuần tú
 async function main() {
   console.log('Starting HSK 2.0 vocabulary extraction from PDFs...');
   const cache = await loadCache();
-  const resultData = { "1": [], "2": [], "3": [] };
+  const resultData = { "1": [], "2": [], "3": [], "4": [], "5": [] };
 
   // Load existing output if any, to preserve what is already done
   try {
     const existingOutput = await fs.readFile(OUTPUT_FILE, 'utf-8');
     const existingJson = JSON.parse(existingOutput);
-    if (existingJson["1"]) resultData["1"] = existingJson["1"];
-    if (existingJson["2"]) resultData["2"] = existingJson["2"];
-    if (existingJson["3"]) resultData["3"] = existingJson["3"];
-    console.log(`Loaded existing extracted data: Level 1: ${resultData["1"].length}, Level 2: ${resultData["2"].length}, Level 3: ${resultData["3"].length}`);
+    ["1", "2", "3", "4", "5"].forEach(k => {
+      if (existingJson[k]) resultData[k] = existingJson[k];
+    });
+    console.log(`Loaded existing extracted data: L1: ${resultData["1"].length}, L2: ${resultData["2"].length}, L3: ${resultData["3"].length}, L4: ${resultData["4"].length}, L5: ${resultData["5"].length}`);
   } catch (e) {
     console.log('No existing hsk2_extracted.json found, starting fresh compilation.');
   }
+
+  // Accumulate words per level
+  const wordsByLevel = { "1": [], "2": [], "3": [], "4": [], "5": [] };
 
   for (const f of pdfFiles) {
     console.log(`\n========================================`);
@@ -144,17 +151,15 @@ async function main() {
     const parser = new PDFParse({ data: uint8Array });
     await parser.load();
 
-    const levelWords = [];
-
     for (let p = 1; p <= f.pages; p++) {
-      const cacheKey = `hsk2_level${f.level}_page${p}`;
+      const cacheKey = f.id ? `hsk2_${f.id}_page${p}` : `hsk2_level${f.level}_page${p}`;
       if (cache[cacheKey] && cache[cacheKey].length > 0) {
-        console.log(`Page ${p}/${f.pages} loaded from cache (${cache[cacheKey].length} words).`);
-        levelWords.push(...cache[cacheKey]);
+        console.log(`[${f.name}] Page ${p}/${f.pages} loaded from cache (${cache[cacheKey].length} words).`);
+        wordsByLevel[f.level.toString()].push(...cache[cacheKey]);
         continue;
       }
 
-      console.log(`Rendering page ${p}/${f.pages}...`);
+      console.log(`[${f.name}] Rendering page ${p}/${f.pages}...`);
       try {
         const screenshotResult = await parser.getScreenshot({
           partial: [p],
@@ -171,39 +176,37 @@ async function main() {
         const page = screenshotResult.pages[0];
         const base64Image = Buffer.from(page.data).toString('base64');
 
-        console.log(`Sending page ${p} to Gemini...`);
+        console.log(`[${f.name}] Sending page ${p} to Gemini...`);
         const pageWords = await callGeminiWithRetry(base64Image, p, f.level);
-        console.log(`Page ${p} extracted ${pageWords.length} words.`);
+        console.log(`[${f.name}] Page ${p} extracted ${pageWords.length} words.`);
 
         cache[cacheKey] = pageWords;
         await saveCache(cache);
 
-        levelWords.push(...pageWords);
+        wordsByLevel[f.level.toString()].push(...pageWords);
 
         // Wait 3 seconds to stay under rate limits
         await delay(3000);
       } catch (err) {
-        console.error(`Failed to process page ${p} of HSK ${f.level}:`, err.message);
+        console.error(`Failed to process page ${p} of ${f.name}:`, err.message);
       }
     }
-
-    console.log(`Level ${f.level} total words extracted: ${levelWords.length}`);
-    
-    // De-duplicate words for this level to make it clean
-    const uniqueMap = new Map();
-    levelWords.forEach(item => {
-      if (item && item.word) {
-        const key = `${item.word.trim()}_${item.pinyin?.trim()}`;
-        uniqueMap.set(key, item);
-      }
-    });
-
-    resultData[f.level.toString()] = Array.from(uniqueMap.values());
-    console.log(`Level ${f.level} unique words count: ${resultData[f.level.toString()].length}`);
-
-    // Save progressively after each level
-    await fs.writeFile(OUTPUT_FILE, JSON.stringify(resultData, null, 2), 'utf-8');
   }
+
+  // Deduplicate and update resultData for levels 1-5
+  ["1", "2", "3", "4", "5"].forEach(lvl => {
+    const list = wordsByLevel[lvl];
+    if (list && list.length > 0) {
+      const uniqueMap = new Map();
+      list.forEach(item => {
+        if (item && item.word) {
+          const key = `${item.word.trim()}_${item.pinyin?.trim()}`;
+          uniqueMap.set(key, item);
+        }
+      });
+      resultData[lvl] = Array.from(uniqueMap.values());
+    }
+  });
 
   console.log('\n========================================');
   console.log('Extraction complete!');
@@ -211,7 +214,11 @@ async function main() {
   console.log(`  Level 1: ${resultData["1"].length}`);
   console.log(`  Level 2: ${resultData["2"].length}`);
   console.log(`  Level 3: ${resultData["3"].length}`);
+  console.log(`  Level 4: ${resultData["4"].length}`);
+  console.log(`  Level 5: ${resultData["5"].length}`);
   console.log('========================================');
+
+  await fs.writeFile(OUTPUT_FILE, JSON.stringify(resultData, null, 2), 'utf-8');
 }
 
 main().catch(err => {

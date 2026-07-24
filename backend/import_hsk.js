@@ -432,7 +432,7 @@ async function run() {
     const hsk2Content = await fs.readFile(HSK2_EXTRACTED_PATH, 'utf-8');
     const hsk2Data = JSON.parse(hsk2Content);
 
-    for (let lvl = 1; lvl <= 3; lvl++) {
+    for (let lvl = 1; lvl <= 5; lvl++) {
       const lvlWords = hsk2Data[lvl.toString()] || [];
       console.log(`\nProcessing HSK 2.0 Level ${lvl}: ${lvlWords.length} words.`);
 

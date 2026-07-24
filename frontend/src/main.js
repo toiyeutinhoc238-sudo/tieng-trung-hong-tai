@@ -4283,6 +4283,8 @@ function renderLessonsList() {
       if (activeLessonsLevel === 1) objectivesText.textContent = 'Mục tiêu: HSK 2.0 Cấp 1 - Sơ cấp dành cho người mới bắt đầu (150 từ vựng)';
       else if (activeLessonsLevel === 2) objectivesText.textContent = 'Mục tiêu: HSK 2.0 Cấp 2 - Sơ cấp nâng cao, giao tiếp đời sống cơ bản (150 từ vựng mới, tổng 300)';
       else if (activeLessonsLevel === 3) objectivesText.textContent = 'Mục tiêu: HSK 2.0 Cấp 3 - Trung cấp, giao tiếp tự tin các chủ đề học tập/công việc (300 từ vựng mới, tổng 600)';
+      else if (activeLessonsLevel === 4) objectivesText.textContent = 'Mục tiêu: HSK 2.0 Cấp 4 - Trung cấp nâng cao, thảo luận nhiều chủ đề chuyên sâu (600 từ vựng mới, tổng 1200)';
+      else if (activeLessonsLevel === 5) objectivesText.textContent = 'Mục tiêu: HSK 2.0 Cấp 5 - Cao cấp, đọc báo chí xem phim và thuyết trình tự nhiên (1300 từ vựng mới, tổng 2500)';
       else objectivesText.textContent = `Mục tiêu: Ôn tập từ vựng HSK Cấp ${activeLessonsLevel}`;
     } else {
       if (activeLessonsLevel === 1) objectivesText.textContent = 'Mục tiêu: HSK 3.0 Cấp 1 - Sơ cấp dành cho người mới bắt đầu (500 từ vựng)';
