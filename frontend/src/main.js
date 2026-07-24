@@ -4270,6 +4270,10 @@ function renderLessonsList() {
   const lessonsLevelContainer = document.getElementById('lessons-level-pills-container');
   const yctLevelContainer = document.getElementById('lessons-yct-level-pills-container');
   const volumePillsContainer = document.getElementById('lessons-volume-pills-container');
+  const levelSelect = document.getElementById('lessons-level-select');
+  const yctLevelSelect = document.getElementById('lessons-yct-level-select');
+  const volumeSelect = document.getElementById('lessons-volume-select');
+  const hsk6Option = document.getElementById('hsk-level-6-option');
 
   if (!grid) return;
 
@@ -4350,12 +4354,29 @@ function renderLessonsList() {
   if (yctLevelContainer) yctLevelContainer.style.display = 'none';
   if (lessonsLevelContainer) lessonsLevelContainer.style.display = 'flex';
 
-  // Toggle Volume Pills visibility for HSK 4 & 5 (v2.0)
+  // Sync level select value
+  if (levelSelect && levelSelect.value !== activeLessonsLevel.toString()) {
+    levelSelect.value = activeLessonsLevel.toString();
+  }
+
+  // Show/hide HSK 6 option based on version
+  if (hsk6Option) {
+    hsk6Option.style.display = activeHskVersion === '2.0' ? '' : 'none';
+    if (activeHskVersion !== '2.0' && activeLessonsLevel === 6) {
+      activeLessonsLevel = 1;
+      if (levelSelect) levelSelect.value = '1';
+    }
+  }
+
+  // Toggle Volume Dropdown visibility for HSK 4, 5, 6 (v2.0)
   if (volumePillsContainer) {
-    if ((activeLessonsLevel === 4 || activeLessonsLevel === 5) && activeHskVersion === '2.0') {
+    if ((activeLessonsLevel === 4 || activeLessonsLevel === 5 || activeLessonsLevel === 6) && activeHskVersion === '2.0') {
       volumePillsContainer.style.display = 'flex';
+      if (volumeSelect) volumeSelect.value = activeVolumeFilter;
     } else {
       volumePillsContainer.style.display = 'none';
+      activeVolumeFilter = 'all';
+      if (volumeSelect) volumeSelect.value = 'all';
     }
   }
 
@@ -4466,9 +4487,9 @@ function startLessonStudy(lesson, sliceWords) {
 function initLessonsView() {
   const hskBtn = document.getElementById('lessons-curriculum-hsk-btn');
   const yctBtn = document.getElementById('lessons-curriculum-yct-btn');
-  const levelPillsContainer = document.getElementById('lessons-level-pills-container');
-  const yctLevelPillsContainer = document.getElementById('lessons-yct-level-pills-container');
-  const volumePillsContainer = document.getElementById('lessons-volume-pills-container');
+  const levelSelect = document.getElementById('lessons-level-select');
+  const yctLevelSelect = document.getElementById('lessons-yct-level-select');
+  const volumeSelect = document.getElementById('lessons-volume-select');
 
   if (hskBtn && yctBtn) {
     hskBtn.addEventListener('click', () => {
@@ -4486,42 +4507,28 @@ function initLessonsView() {
     });
   }
 
-  if (levelPillsContainer) {
-    levelPillsContainer.addEventListener('click', (e) => {
-      const btn = e.target.closest('.lessons-level-btn');
-      if (!btn) return;
-
-      levelPillsContainer.querySelectorAll('.lessons-level-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      activeLessonsLevel = parseInt(btn.getAttribute('data-level'));
+  if (levelSelect) {
+    levelSelect.addEventListener('change', () => {
+      activeLessonsLevel = parseInt(levelSelect.value);
       renderLessonsList();
     });
   }
 
-  if (yctLevelPillsContainer) {
-    yctLevelPillsContainer.addEventListener('click', (e) => {
-      const btn = e.target.closest('.lessons-level-btn');
-      if (!btn) return;
-
-      yctLevelPillsContainer.querySelectorAll('.lessons-level-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      activeYctLevel = parseInt(btn.getAttribute('data-yct-level'));
+  if (yctLevelSelect) {
+    yctLevelSelect.addEventListener('change', () => {
+      activeYctLevel = parseInt(yctLevelSelect.value);
       renderLessonsList();
     });
   }
 
-  if (volumePillsContainer) {
-    volumePillsContainer.addEventListener('click', (e) => {
-      const btn = e.target.closest('.lessons-volume-btn');
-      if (!btn) return;
-
-      volumePillsContainer.querySelectorAll('.lessons-volume-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      activeVolumeFilter = btn.getAttribute('data-volume') || 'all';
+  if (volumeSelect) {
+    volumeSelect.addEventListener('change', () => {
+      activeVolumeFilter = volumeSelect.value || 'all';
       renderLessonsList();
     });
   }
 }
+
 
 // --- AI DICTIONARY CONTROLLER ---
 let selectedDictWordId = null;
