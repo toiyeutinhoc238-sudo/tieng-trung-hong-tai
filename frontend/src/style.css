@@ -4377,6 +4377,8 @@ button, input, select, textarea, .btn, .nav-item, .quiz-option-btn, .speaker-btn
   .control-btn {
     flex: 1 1 45%;
   }
+}
+
 /* --- ZUBI / INVOICE.IO DASHBOARD LAYOUT (EXACT MATCH FOR USER SCREENSHOT) --- */
 .zubi-dashboard-container {
   display: flex;
