@@ -5265,6 +5265,73 @@ function calculateCompletedLessons() {
   return completedCount;
 }
 
+function renderCourseCompletionDashboard() {
+  const enrolledEl = document.getElementById('dashboard-enrolled-count');
+  const completedEl = document.getElementById('dashboard-completed-count');
+  const memorizedEl = document.getElementById('dashboard-memorized-count');
+  const completedPctEl = document.getElementById('dashboard-completed-pct');
+  const remainingPctEl = document.getElementById('dashboard-remaining-pct');
+  const pieSvg = document.getElementById('course-completion-pie-svg');
+  const centerValue = document.getElementById('pie-center-value');
+
+  if (!pieSvg) return;
+
+  const activeVocabs = vocabList.filter(w => !w.isCustom);
+  const totalMemorized = activeVocabs.filter(w => w.isMemorized).length;
+
+  const textbookGroups = {};
+  activeVocabs.forEach(w => {
+    if (!w.level || !w.lessonId) return;
+    const key = `${w.hskVersion || '3.0'}_${w.level}_${w.lessonId}`;
+    if (!textbookGroups[key]) textbookGroups[key] = [];
+    textbookGroups[key].push(w);
+  });
+
+  const totalEnrolled = Object.keys(textbookGroups).length || 21;
+  let completedCount = 0;
+  Object.values(textbookGroups).forEach(words => {
+    if (words.length > 0 && words.every(w => w.isMemorized)) {
+      completedCount++;
+    }
+  });
+
+  const enrolled = totalEnrolled > 0 ? totalEnrolled : 21;
+  const completed = completedCount;
+  const completedPct = enrolled > 0 ? Math.min(100, Math.round((completed / enrolled) * 100)) : 67;
+  const remainingPct = 100 - completedPct;
+
+  if (enrolledEl) enrolledEl.textContent = enrolled;
+  if (completedEl) completedEl.textContent = completed;
+  if (memorizedEl) memorizedEl.textContent = totalMemorized.toLocaleString();
+  if (completedPctEl) completedPctEl.textContent = `${completedPct}%`;
+  if (remainingPctEl) remainingPctEl.textContent = `${remainingPct}%`;
+  if (centerValue) centerValue.textContent = `${completedPct}%`;
+
+  // Draw SVG Pie Chart (Purple = Completed, Electric Blue = Remaining)
+  const cx = 100, cy = 100, r = 85;
+  if (completedPct === 100) {
+    pieSvg.innerHTML = `<circle cx="100" cy="100" r="85" fill="#800080" stroke="#ffffff" stroke-width="2.5" />`;
+  } else if (completedPct === 0) {
+    pieSvg.innerHTML = `<circle cx="100" cy="100" r="85" fill="#0033ff" stroke="#ffffff" stroke-width="2.5" />`;
+  } else {
+    const angle1 = (completedPct / 100) * 2 * Math.PI;
+    const x1 = cx + r * Math.cos(0);
+    const y1 = cy + r * Math.sin(0);
+    const x2 = cx + r * Math.cos(angle1);
+    const y2 = cy + r * Math.sin(angle1);
+    const large1 = completedPct > 50 ? 1 : 0;
+    const large2 = remainingPct > 50 ? 1 : 0;
+
+    const path1 = `M ${cx} ${cy} L ${x1.toFixed(2)} ${y1.toFixed(2)} A ${r} ${r} 0 ${large1} 1 ${x2.toFixed(2)} ${y2.toFixed(2)} Z`;
+    const path2 = `M ${cx} ${cy} L ${x2.toFixed(2)} ${y2.toFixed(2)} A ${r} ${r} 0 ${large2} 1 ${x1.toFixed(2)} ${y1.toFixed(2)} Z`;
+
+    pieSvg.innerHTML = `
+      <path d="${path1}" fill="#800080" stroke="#ffffff" stroke-width="2.5" />
+      <path d="${path2}" fill="#0033ff" stroke="#ffffff" stroke-width="2.5" />
+    `;
+  }
+}
+
 function updateStatsUI() {
   const streakEl = document.getElementById('welcome-streak-val');
   const completedEl = document.getElementById('welcome-completed-val');
@@ -5275,6 +5342,8 @@ function updateStatsUI() {
 
   const completedCount = calculateCompletedLessons();
   if (completedEl) completedEl.textContent = `${completedCount} bài`;
+
+  renderCourseCompletionDashboard();
 }
 
 async function loadInitialStats() {

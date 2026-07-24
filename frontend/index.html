@@ -181,6 +181,64 @@
           <h3>Giáo trình Sắc màu YCT</h3>
         </div>
       </div>
+
+      <!-- Course Completion Dashboard Widget (Matching User Design) -->
+      <div class="course-completion-dashboard-wrapper" style="margin-top: 36px; margin-bottom: 24px;">
+        <!-- Top Stat Cards Grid -->
+        <div class="completion-stats-grid">
+          <!-- Stat Card 1: Enrolled Courses -->
+          <div class="completion-stat-card">
+            <div class="completion-icon-badge red-pink">
+              <i class="fa-solid fa-users"></i>
+            </div>
+            <div class="completion-stat-content">
+              <div class="completion-stat-number" id="dashboard-enrolled-count">21</div>
+              <div class="completion-stat-label">Enrolled Courses</div>
+            </div>
+          </div>
+          <!-- Stat Card 2: Completed Courses -->
+          <div class="completion-stat-card">
+            <div class="completion-icon-badge blue">
+              <i class="fa-solid fa-book-bookmark"></i>
+            </div>
+            <div class="completion-stat-content">
+              <div class="completion-stat-number" id="dashboard-completed-count">14</div>
+              <div class="completion-stat-label">Completed Courses</div>
+            </div>
+          </div>
+          <!-- Stat Card 3: Memorized Words -->
+          <div class="completion-stat-card">
+            <div class="completion-icon-badge green">
+              <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <div class="completion-stat-content">
+              <div class="completion-stat-number" id="dashboard-memorized-count">0</div>
+              <div class="completion-stat-label">Memorized Words</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Chart Card: Course Completion -->
+        <div class="course-completion-main-card">
+          <div class="course-completion-header">
+            <h2 class="course-completion-title">Course Completion</h2>
+            <div class="course-completion-legend">
+              <span class="legend-item"><span class="legend-dot purple"></span> Completed (<span id="dashboard-completed-pct">67%</span>)</span>
+              <span class="legend-item"><span class="legend-dot blue"></span> In Progress (<span id="dashboard-remaining-pct">33%</span>)</span>
+            </div>
+          </div>
+
+          <div class="course-completion-chart-container">
+            <svg id="course-completion-pie-svg" viewBox="0 0 200 200" class="completion-pie-chart">
+              <!-- Dynamically populated SVG Slices -->
+            </svg>
+            <div class="pie-chart-center-overlay">
+              <div class="overlay-value" id="pie-center-value">67%</div>
+              <div class="overlay-label">Progress</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Learning Section (Hidden by default, containing learning-specific cards) -->
