@@ -165,7 +165,7 @@
         <!-- Middle Section: Recent Lessons / Activity -->
         <div class="zubi-section-block" style="display: flex; flex-direction: column; gap: 16px;">
           <div class="zubi-section-header">
-            <h2 style="font-family: var(--font-display, sans-serif); font-size: 1.35rem; font-weight: 700; color: #f8fafc; margin: 0;">Bài học gần đây</h2>
+            <h2 class="zubi-section-title" style="font-family: var(--font-display, sans-serif); font-size: 1.35rem; font-weight: 700; margin: 0;">Bài học gần đây</h2>
           </div>
           <div class="zubi-recent-cards-grid" id="zubi-recent-cards-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
             <!-- Dynamically rendered recent lesson cards -->
@@ -175,18 +175,18 @@
         <!-- Bottom Section: All Curriculum Overview Table -->
         <div class="zubi-section-block" style="display: flex; flex-direction: column; gap: 16px;">
           <div class="zubi-section-header">
-            <h2 style="font-family: var(--font-display, sans-serif); font-size: 1.35rem; font-weight: 700; color: #f8fafc; margin: 0;">Tổng quan tất cả Giáo trình</h2>
+            <h2 class="zubi-section-title" style="font-family: var(--font-display, sans-serif); font-size: 1.35rem; font-weight: 700; margin: 0;">Tổng quan tất cả Giáo trình</h2>
           </div>
-          <div class="zubi-table-wrap" style="background: rgba(30, 41, 59, 0.9); border-radius: 16px; padding: 16px 20px; box-shadow: 0 4px 16px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); overflow-x: auto;">
+          <div class="zubi-table-wrap" style="border-radius: 16px; padding: 16px 20px; overflow-x: auto;">
             <table class="zubi-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem;">
               <thead>
                 <tr>
-                  <th style="padding: 14px 16px; color: #94a3b8; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; border-bottom: 1px solid rgba(255,255,255,0.08);">CẤP ĐỘ GIÁO TRÌNH <i class="fa-solid fa-chevron-down"></i></th>
-                  <th style="padding: 14px 16px; color: #94a3b8; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; border-bottom: 1px solid rgba(255,255,255,0.08);">GIÁO TRÌNH <i class="fa-solid fa-chevron-down"></i></th>
-                  <th style="padding: 14px 16px; color: #94a3b8; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; border-bottom: 1px solid rgba(255,255,255,0.08);">TỔNG SỐ TỪ <i class="fa-solid fa-chevron-down"></i></th>
-                  <th style="padding: 14px 16px; color: #94a3b8; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; border-bottom: 1px solid rgba(255,255,255,0.08);">TIẾN ĐỘ THUỘC <i class="fa-solid fa-chevron-down"></i></th>
-                  <th style="padding: 14px 16px; color: #94a3b8; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; border-bottom: 1px solid rgba(255,255,255,0.08);">TRẠNG THÁI <i class="fa-solid fa-chevron-down"></i></th>
-                  <th style="padding: 14px 16px; color: #94a3b8; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; border-bottom: 1px solid rgba(255,255,255,0.08);">HÀNH ĐỘNG</th>
+                  <th class="zubi-th" style="padding: 14px 16px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em;">CẤP ĐỘ GIÁO TRÌNH <i class="fa-solid fa-chevron-down"></i></th>
+                  <th class="zubi-th" style="padding: 14px 16px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em;">GIÁO TRÌNH <i class="fa-solid fa-chevron-down"></i></th>
+                  <th class="zubi-th" style="padding: 14px 16px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em;">TỔNG SỐ TỪ <i class="fa-solid fa-chevron-down"></i></th>
+                  <th class="zubi-th" style="padding: 14px 16px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em;">TIẾN ĐỘ THUỘC <i class="fa-solid fa-chevron-down"></i></th>
+                  <th class="zubi-th" style="padding: 14px 16px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em;">TRẠNG THÁI <i class="fa-solid fa-chevron-down"></i></th>
+                  <th class="zubi-th" style="padding: 14px 16px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em;">HÀNH ĐỘNG</th>
                 </tr>
               </thead>
               <tbody id="zubi-table-body">

@@ -5429,17 +5429,17 @@ function renderZubiDashboardTableAndRecent() {
 
       rowsHtml += `
         <tr>
-          <td style="padding: 16px; color: #cbd5e1; ${borderStyle}"><strong style="color: #ffffff;">${tier.name}</strong></td>
-          <td style="padding: 16px; color: #cbd5e1; ${borderStyle}">${tier.curriculum}</td>
-          <td style="padding: 16px; color: #cbd5e1; ${borderStyle}">${total.toLocaleString()} từ vựng</td>
-          <td style="padding: 16px; color: #cbd5e1; ${borderStyle}">
-            <div class="zubi-progress-bar-wrap" style="width: 120px; height: 8px; background: rgba(255,255,255,0.1); border-radius: 50px; overflow: hidden;">
-              <div class="zubi-progress-bar" style="width: ${pct}%; height: 100%; background: linear-gradient(90deg, #3b82f6 0%, #10b981 100%); border-radius: 50px;"></div>
+          <td class="zubi-td" style="padding: 16px;"><strong class="zubi-td-bold">${tier.name}</strong></td>
+          <td class="zubi-td" style="padding: 16px;">${tier.curriculum}</td>
+          <td class="zubi-td" style="padding: 16px;">${total.toLocaleString()} từ vựng</td>
+          <td class="zubi-td" style="padding: 16px;">
+            <div class="zubi-progress-bar-wrap">
+              <div class="zubi-progress-bar" style="width: ${pct}%;"></div>
             </div>
           </td>
-          <td style="padding: 16px; color: #cbd5e1; ${borderStyle}">${badgeHtml}</td>
-          <td style="padding: 16px; color: #cbd5e1; ${borderStyle}">
-            <button style="background: transparent; border: none; color: #60a5fa; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;" onclick="window.selectCurriculumAndGo('${tier.curriculumType}', ${tier.level})">Vào học <i class="fa-solid fa-arrow-right"></i></button>
+          <td class="zubi-td" style="padding: 16px;">${badgeHtml}</td>
+          <td class="zubi-td" style="padding: 16px;">
+            <button class="zubi-table-btn" style="background: transparent; border: none; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;" onclick="window.selectCurriculumAndGo('${tier.curriculumType}', ${tier.level})">Vào học <i class="fa-solid fa-arrow-right"></i></button>
           </td>
         </tr>
       `;
