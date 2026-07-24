@@ -167,45 +167,8 @@
           <div class="zubi-section-header">
             <h2 style="font-family: var(--font-display, sans-serif); font-size: 1.35rem; font-weight: 700; color: #f8fafc; margin: 0;">Bài học gần đây</h2>
           </div>
-          <div class="zubi-recent-cards-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-            <!-- Recent Card 1 -->
-            <div class="zubi-recent-card" id="recent-card-hsk1" style="background: rgba(30, 41, 59, 0.9); border-radius: 16px; padding: 20px 22px; box-shadow: 0 4px 16px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; gap: 14px;">
-              <div class="recent-card-top" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
-                <div class="recent-title" style="font-weight: 700; font-size: 0.95rem; color: #f8fafc; line-height: 1.3;">HSK 1 - Bài 5: 你的名字叫什么</div>
-                <i class="fa-regular fa-eye zubi-eye-icon" style="color: #94a3b8; font-size: 1rem;"></i>
-              </div>
-              <div class="recent-val green-text" style="font-family: var(--font-display, sans-serif); font-size: 1.6rem; font-weight: 800; color: #10b981;">150 từ vựng</div>
-              <div class="recent-card-footer" style="display: flex; justify-content: space-between; align-items: center;">
-                <span class="zubi-pill warning" style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: rgba(217, 119, 6, 0.2); color: #fbbf24;">Đang học</span>
-                <span class="recent-date" style="font-size: 0.8rem; color: #94a3b8; font-weight: 500;">24/07/26</span>
-              </div>
-            </div>
-
-            <!-- Recent Card 2 -->
-            <div class="zubi-recent-card" id="recent-card-hsk2" style="background: rgba(30, 41, 59, 0.9); border-radius: 16px; padding: 20px 22px; box-shadow: 0 4px 16px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; gap: 14px;">
-              <div class="recent-card-top" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
-                <div class="recent-title" style="font-weight: 700; font-size: 0.95rem; color: #f8fafc; line-height: 1.3;">HSK 2 - Bài 3: 左边那个红色的是我的</div>
-                <i class="fa-regular fa-eye zubi-eye-icon" style="color: #94a3b8; font-size: 1rem;"></i>
-              </div>
-              <div class="recent-val cyan-text" style="font-family: var(--font-display, sans-serif); font-size: 1.6rem; font-weight: 800; color: #06b6d4;">209 từ vựng</div>
-              <div class="recent-card-footer" style="display: flex; justify-content: space-between; align-items: center;">
-                <span class="zubi-pill danger" style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: rgba(239, 68, 68, 0.2); color: #f87171;">Cần ôn tập</span>
-                <span class="recent-date" style="font-size: 0.8rem; color: #94a3b8; font-weight: 500;">22/07/26</span>
-              </div>
-            </div>
-
-            <!-- Recent Card 3 -->
-            <div class="zubi-recent-card" id="recent-card-yct1" style="background: rgba(30, 41, 59, 0.9); border-radius: 16px; padding: 20px 22px; box-shadow: 0 4px 16px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; gap: 14px;">
-              <div class="recent-card-top" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
-                <div class="recent-title" style="font-weight: 700; font-size: 0.95rem; color: #f8fafc; line-height: 1.3;">YCT 1 - Bài 1: 你好 (Thiếu nhi)</div>
-                <i class="fa-regular fa-eye zubi-eye-icon" style="color: #94a3b8; font-size: 1rem;"></i>
-              </div>
-              <div class="recent-val green-text" style="font-family: var(--font-display, sans-serif); font-size: 1.6rem; font-weight: 800; color: #10b981;">104 từ vựng</div>
-              <div class="recent-card-footer" style="display: flex; justify-content: space-between; align-items: center;">
-                <span class="zubi-pill success" style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: rgba(16, 185, 129, 0.2); color: #34d399;">Hoàn thành</span>
-                <span class="recent-date" style="font-size: 0.8rem; color: #94a3b8; font-weight: 500;">24/07/26</span>
-              </div>
-            </div>
+          <div class="zubi-recent-cards-grid" id="zubi-recent-cards-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+            <!-- Dynamically rendered recent lesson cards -->
           </div>
         </div>
 
@@ -226,79 +189,8 @@
                   <th style="padding: 14px 16px; color: #94a3b8; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; border-bottom: 1px solid rgba(255,255,255,0.08);">HÀNH ĐỘNG</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);"><strong style="color: #ffffff;">HSK Cấp 1</strong></td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);">HSK Chuẩn (v2.0 & v3.0)</td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);">500 từ vựng</td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                    <div class="zubi-progress-bar-wrap" style="width: 120px; height: 8px; background: rgba(255,255,255,0.1); border-radius: 50px; overflow: hidden;">
-                      <div class="zubi-progress-bar" style="width: 75%; height: 100%; background: linear-gradient(90deg, #3b82f6 0%, #10b981 100%); border-radius: 50px;"></div>
-                    </div>
-                  </td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);"><span class="zubi-pill warning" style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: rgba(217, 119, 6, 0.2); color: #fbbf24;">Đang học 75%</span></td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);"><a href="#flashcard-section" class="zubi-action-link" style="color: #60a5fa; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">Vào học <i class="fa-solid fa-arrow-right"></i></a></td>
-                </tr>
-                <tr>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);"><strong style="color: #ffffff;">HSK Cấp 2</strong></td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);">HSK Chuẩn (v2.0 & v3.0)</td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);">772 từ vựng</td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                    <div class="zubi-progress-bar-wrap" style="width: 120px; height: 8px; background: rgba(255,255,255,0.1); border-radius: 50px; overflow: hidden;">
-                      <div class="zubi-progress-bar" style="width: 40%; height: 100%; background: linear-gradient(90deg, #3b82f6 0%, #10b981 100%); border-radius: 50px;"></div>
-                    </div>
-                  </td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);"><span class="zubi-pill warning" style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: rgba(217, 119, 6, 0.2); color: #fbbf24;">Đang học 40%</span></td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);"><a href="#flashcard-section" class="zubi-action-link" style="color: #60a5fa; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">Vào học <i class="fa-solid fa-arrow-right"></i></a></td>
-                </tr>
-                <tr>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);"><strong style="color: #ffffff;">HSK Cấp 3</strong></td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);">HSK Chuẩn (v2.0 & v3.0)</td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);">973 từ vựng</td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                    <div class="zubi-progress-bar-wrap" style="width: 120px; height: 8px; background: rgba(255,255,255,0.1); border-radius: 50px; overflow: hidden;">
-                      <div class="zubi-progress-bar" style="width: 20%; height: 100%; background: linear-gradient(90deg, #3b82f6 0%, #10b981 100%); border-radius: 50px;"></div>
-                    </div>
-                  </td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);"><span class="zubi-pill danger" style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: rgba(239, 68, 68, 0.2); color: #f87171;">Chưa học</span></td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);"><a href="#flashcard-section" class="zubi-action-link" style="color: #60a5fa; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">Vào học <i class="fa-solid fa-arrow-right"></i></a></td>
-                </tr>
-                <tr>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);"><strong style="color: #ffffff;">HSK Cấp 4 (Thượng / Hạ)</strong></td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);">HSK Chuẩn 2.0</td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);">738 từ vựng</td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                    <div class="zubi-progress-bar-wrap" style="width: 120px; height: 8px; background: rgba(255,255,255,0.1); border-radius: 50px; overflow: hidden;">
-                      <div class="zubi-progress-bar" style="width: 10%; height: 100%; background: linear-gradient(90deg, #3b82f6 0%, #10b981 100%); border-radius: 50px;"></div>
-                    </div>
-                  </td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);"><span class="zubi-pill danger" style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: rgba(239, 68, 68, 0.2); color: #f87171;">Chưa học</span></td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);"><a href="#flashcard-section" class="zubi-action-link" style="color: #60a5fa; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">Vào học <i class="fa-solid fa-arrow-right"></i></a></td>
-                </tr>
-                <tr>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);"><strong style="color: #ffffff;">HSK Cấp 5 (Thượng / Hạ)</strong></td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);">HSK Chuẩn 2.0</td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);">1,456 từ vựng</td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                    <div class="zubi-progress-bar-wrap" style="width: 120px; height: 8px; background: rgba(255,255,255,0.1); border-radius: 50px; overflow: hidden;">
-                      <div class="zubi-progress-bar" style="width: 5%; height: 100%; background: linear-gradient(90deg, #3b82f6 0%, #10b981 100%); border-radius: 50px;"></div>
-                    </div>
-                  </td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);"><span class="zubi-pill danger" style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: rgba(239, 68, 68, 0.2); color: #f87171;">Chưa học</span></td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);"><a href="#flashcard-section" class="zubi-action-link" style="color: #60a5fa; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">Vào học <i class="fa-solid fa-arrow-right"></i></a></td>
-                </tr>
-                <tr>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: none;"><strong style="color: #ffffff;">YCT Cấp 1..4 (Thiếu nhi)</strong></td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: none;">Sắc màu YCT</td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: none;">351 từ vựng</td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: none;">
-                    <div class="zubi-progress-bar-wrap" style="width: 120px; height: 8px; background: rgba(255,255,255,0.1); border-radius: 50px; overflow: hidden;">
-                      <div class="zubi-progress-bar" style="width: 90%; height: 100%; background: linear-gradient(90deg, #3b82f6 0%, #10b981 100%); border-radius: 50px;"></div>
-                    </div>
-                  </td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: none;"><span class="zubi-pill success" style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: rgba(16, 185, 129, 0.2); color: #34d399;">Đã thuộc 90%</span></td>
-                  <td style="padding: 16px; color: #cbd5e1; border-bottom: none;"><a href="#flashcard-section" class="zubi-action-link" style="color: #60a5fa; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">Vào học <i class="fa-solid fa-arrow-right"></i></a></td>
-                </tr>
+              <tbody id="zubi-table-body">
+                <!-- Dynamically rendered curriculum tier rows -->
               </tbody>
             </table>
           </div>
