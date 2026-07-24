@@ -6759,6 +6759,5 @@ window.openAboutModal = function() {
     modal.style.display = 'flex';
   }
 };
-}
 
 
