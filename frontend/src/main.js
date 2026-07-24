@@ -317,12 +317,16 @@ async function fetchVocabulary() {
       const guestProgress = JSON.parse(localStorage.getItem('guest_progress') || '{}');
       vocabList = vocabList.map(w => {
         const state = guestProgress[w.id];
+        const isMem = state ? !!state.isMemorized : !!w.isMemorized;
+        const isStar = state ? !!state.isStarred : !!w.isStarred;
+        const isWr = state ? !!state.isWrong : !!w.isWrong;
+        const isStd = state ? !!state.isStudied : !!w.isStudied;
         return {
           ...w,
-          isMemorized: state ? !!state.isMemorized : !!w.isMemorized,
-          isStarred: state ? !!state.isStarred : !!w.isStarred,
-          isWrong: state ? !!state.isWrong : !!w.isWrong,
-          isStudied: state ? !!state.isStudied : !!w.isStudied
+          isMemorized: isMem,
+          isStarred: isStar,
+          isWrong: isWr,
+          isStudied: isStd || isMem || isStar || isWr
         };
       });
     }
@@ -6091,10 +6095,10 @@ function openNotebookDashboard(notebookId) {
 
   const total = wordsForStats.length;
   const memorized = wordsForStats.filter(w => w.isMemorized).length;
-  const unmemorized = wordsForStats.filter(w => w.isStudied && !w.isMemorized).length;
-  const starred = wordsForStats.filter(w => w.isStarred).length;
-  const studied = wordsForStats.filter(w => w.isStudied).length;
+  const studied = wordsForStats.filter(w => w.isStudied || w.isMemorized || w.isWrong || w.isStarred).length;
   const unstudied = total - studied;
+  const unmemorized = total - memorized;
+  const starred = wordsForStats.filter(w => w.isStarred).length;
 
   const nbStatTotal = document.getElementById('nb-stat-total');
   const nbStatMemorized = document.getElementById('nb-stat-memorized');
@@ -6132,13 +6136,13 @@ function renderNotebookWordsTable() {
 
   // Filter by dashboard active filter
   if (dashboardActiveFilter === 'studied') {
-    words = words.filter(w => w.isStudied);
+    words = words.filter(w => w.isStudied || w.isMemorized || w.isWrong || w.isStarred);
   } else if (dashboardActiveFilter === 'unstudied') {
-    words = words.filter(w => !w.isStudied);
+    words = words.filter(w => !w.isStudied && !w.isMemorized && !w.isWrong && !w.isStarred);
   } else if (dashboardActiveFilter === 'memorized') {
     words = words.filter(w => w.isMemorized);
   } else if (dashboardActiveFilter === 'unmemorized') {
-    words = words.filter(w => w.isStudied && !w.isMemorized);
+    words = words.filter(w => !w.isMemorized);
   } else if (dashboardActiveFilter === 'starred') {
     words = words.filter(w => w.isStarred);
   }
