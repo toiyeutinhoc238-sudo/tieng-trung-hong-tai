@@ -4359,18 +4359,9 @@ function renderLessonsList() {
     levelSelect.value = activeLessonsLevel.toString();
   }
 
-  // Show/hide HSK 6 option based on version
-  if (hsk6Option) {
-    hsk6Option.style.display = activeHskVersion === '2.0' ? '' : 'none';
-    if (activeHskVersion !== '2.0' && activeLessonsLevel === 6) {
-      activeLessonsLevel = 1;
-      if (levelSelect) levelSelect.value = '1';
-    }
-  }
-
-  // Toggle Volume Dropdown visibility for HSK 4, 5, 6 (v2.0)
+  // Toggle Volume Dropdown visibility for HSK 4-9 (v2.0)
   if (volumePillsContainer) {
-    if ((activeLessonsLevel === 4 || activeLessonsLevel === 5 || activeLessonsLevel === 6) && activeHskVersion === '2.0') {
+    if (activeLessonsLevel >= 4 && activeHskVersion === '2.0') {
       volumePillsContainer.style.display = 'flex';
       if (volumeSelect) volumeSelect.value = activeVolumeFilter;
     } else {
@@ -4399,6 +4390,9 @@ function renderLessonsList() {
         4: `HSK 2.0 Cấp 4 - Trung cấp nâng cao, thảo luận nhiều chủ đề chuyên sâu`,
         5: `HSK 2.0 Cấp 5 - Cao cấp, đọc báo chí xem phim và thuyết trình tự nhiên`,
         6: `HSK 2.0 Cấp 6 - Thành thạo, đọc văn học và viết học thuật`,
+        7: `HSK 2.0 Cấp 7 - Nâng cao chuyên nghiệp, sử dụng ngôn ngữ tiếng Trung nước ngoài`,
+        8: `HSK 2.0 Cấp 8 - Đỉnh cao chuyên môn, có thể nghiên cứu và giảng dạy`,
+        9: `HSK 2.0 Cấp 9 - Thành thạo hoàn toàn, nắm vững văn hóa và ngôn ngữ Trung Quốc`,
       },
       '3.0': {
         1: `HSK 3.0 Cấp 1 - Sơ cấp dành cho người mới bắt đầu`,
@@ -4407,6 +4401,9 @@ function renderLessonsList() {
         4: `HSK 3.0 Cấp 4 - Trung cấp cơ bản`,
         5: `HSK 3.0 Cấp 5 - Trung cấp nâng cao`,
         6: `HSK 3.0 Cấp 6 - Cao cấp`,
+        7: `HSK 3.0 Cấp 7 - Nâng cao chuyên nghiệp`,
+        8: `HSK 3.0 Cấp 8 - Đỉnh cao chuyên môn`,
+        9: `HSK 3.0 Cấp 9 - Thành thạo hoàn toàn`,
       }
     };
     const desc = (levelDescMap[activeHskVersion] || {})[activeLessonsLevel]
