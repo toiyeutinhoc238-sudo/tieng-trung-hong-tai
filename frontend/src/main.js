@@ -4255,10 +4255,13 @@ const HSK_LESSONS_METADATA = {
   ]
 };
 
+let activeVolumeFilter = 'all';
+
 function renderLessonsList() {
   const grid = document.getElementById('lessons-cards-grid');
   const objectivesText = document.getElementById('lessons-objectives-text');
   const lessonsLevelContainer = document.getElementById('lessons-level-pills-container');
+  const volumePillsContainer = document.getElementById('lessons-volume-pills-container');
 
   if (!grid) return;
 
@@ -4272,10 +4275,20 @@ function renderLessonsList() {
     `;
     if (objectivesText) objectivesText.textContent = 'Mục tiêu: Đang cập nhật nội dung cho thiếu nhi...';
     if (lessonsLevelContainer) lessonsLevelContainer.style.display = 'none';
+    if (volumePillsContainer) volumePillsContainer.style.display = 'none';
     return;
   }
 
   if (lessonsLevelContainer) lessonsLevelContainer.style.display = 'flex';
+
+  // Toggle Volume Pills visibility for HSK 4 & 5 (v2.0)
+  if (volumePillsContainer) {
+    if ((activeLessonsLevel === 4 || activeLessonsLevel === 5) && activeHskVersion === '2.0') {
+      volumePillsContainer.style.display = 'flex';
+    } else {
+      volumePillsContainer.style.display = 'none';
+    }
+  }
 
   // Update objectives text
   if (objectivesText) {
@@ -4295,11 +4308,21 @@ function renderLessonsList() {
   }
 
   // Filter HSK level vocabulary
-  const levelVocabs = vocabList.filter(w =>
-    !w.isCustom &&
-    w.level.toString() === activeLessonsLevel.toString() &&
-    (w.hskVersion || '3.0') === activeHskVersion
-  );
+  const levelVocabs = vocabList.filter(w => {
+    if (w.isCustom) return false;
+    if (w.level.toString() !== activeLessonsLevel.toString()) return false;
+    if ((w.hskVersion || '3.0') !== activeHskVersion) return false;
+    if ((activeLessonsLevel === 4 || activeLessonsLevel === 5) && activeHskVersion === '2.0' && activeVolumeFilter !== 'all') {
+      if (w.volume) {
+        if (w.volume !== activeVolumeFilter) return false;
+      } else {
+        const isThuong = activeLessonsLevel === 4 ? (w.lessonId <= 10) : (w.lessonId <= 18);
+        if (activeVolumeFilter === 'thuong' && !isThuong) return false;
+        if (activeVolumeFilter === 'ha' && isThuong) return false;
+      }
+    }
+    return true;
+  });
 
   // Group vocabulary dynamically by their lessonId field
   const lessonGroups = {};
@@ -4374,6 +4397,7 @@ function initLessonsView() {
   const hskBtn = document.getElementById('lessons-curriculum-hsk-btn');
   const yctBtn = document.getElementById('lessons-curriculum-yct-btn');
   const levelPillsContainer = document.getElementById('lessons-level-pills-container');
+  const volumePillsContainer = document.getElementById('lessons-volume-pills-container');
 
   if (hskBtn && yctBtn) {
     hskBtn.addEventListener('click', () => {
@@ -4399,6 +4423,18 @@ function initLessonsView() {
       levelPillsContainer.querySelectorAll('.lessons-level-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       activeLessonsLevel = parseInt(btn.getAttribute('data-level'));
+      renderLessonsList();
+    });
+  }
+
+  if (volumePillsContainer) {
+    volumePillsContainer.addEventListener('click', (e) => {
+      const btn = e.target.closest('.lessons-volume-btn');
+      if (!btn) return;
+
+      volumePillsContainer.querySelectorAll('.lessons-volume-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeVolumeFilter = btn.getAttribute('data-volume') || 'all';
       renderLessonsList();
     });
   }

@@ -1700,13 +1700,21 @@
             </div>
           </div>
         </div>
-        <!-- Right selection pills (HSK 1, 2, 3, 4, 5) -->
-        <div class="lessons-level-pills" id="lessons-level-pills-container">
-          <button class="lessons-level-btn active" data-level="1">Cấp HSK 1</button>
-          <button class="lessons-level-btn" data-level="2">Cấp HSK 2</button>
-          <button class="lessons-level-btn" data-level="3">Cấp HSK 3</button>
-          <button class="lessons-level-btn" data-level="4">Cấp HSK 4</button>
-          <button class="lessons-level-btn" data-level="5">Cấp HSK 5</button>
+        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+          <!-- Right selection pills (HSK 1, 2, 3, 4, 5) -->
+          <div class="lessons-level-pills" id="lessons-level-pills-container">
+            <button class="lessons-level-btn active" data-level="1">Cấp HSK 1</button>
+            <button class="lessons-level-btn" data-level="2">Cấp HSK 2</button>
+            <button class="lessons-level-btn" data-level="3">Cấp HSK 3</button>
+            <button class="lessons-level-btn" data-level="4">Cấp HSK 4</button>
+            <button class="lessons-level-btn" data-level="5">Cấp HSK 5</button>
+          </div>
+          <!-- Volume selection pills (Thượng / Hạ) -->
+          <div class="lessons-volume-pills" id="lessons-volume-pills-container" style="display: none;">
+            <button class="lessons-volume-btn active" data-volume="all">Tất cả</button>
+            <button class="lessons-volume-btn" data-volume="thuong">Tập Thượng</button>
+            <button class="lessons-volume-btn" data-volume="ha">Tập Hạ</button>
+          </div>
         </div>
       </div>
 

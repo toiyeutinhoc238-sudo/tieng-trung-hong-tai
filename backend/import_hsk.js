@@ -349,6 +349,15 @@ async function run() {
       isStarred = status.isStarred;
     }
 
+    let volume = null;
+    if (version === '2.0') {
+      if (level === 4) {
+        volume = lessonId <= 10 ? 'thuong' : 'ha';
+      } else if (level === 5) {
+        volume = lessonId <= 18 ? 'thuong' : 'ha';
+      }
+    }
+
     const itemObj = {
       id: version === '2.0' ? 50000 + currentId++ : currentId++,
       word: item.word,
@@ -356,6 +365,7 @@ async function run() {
       meaning: item.meaning,
       level: level,
       hskVersion: version,
+      volume: volume,
       lessonId: lessonId,
       lessonTitle: lessonTitle,
       lessonDesc: lessonDesc,
@@ -449,10 +459,33 @@ async function run() {
 
       lessons.forEach(les => {
         const words = lessonGroups[les];
-        const meta = (HSK2_LESSONS_METADATA[lvl] && HSK2_LESSONS_METADATA[lvl][les]) || {
-          title: les === 99 ? "Từ vựng bổ sung" : `Bài ${les}`,
-          desc: les === 99 ? "Từ vựng bổ sung HSK 2.0" : `Từ vựng HSK 2.0 Cấp ${lvl} Bài ${les}`
-        };
+        let meta = (HSK2_LESSONS_METADATA[lvl] && HSK2_LESSONS_METADATA[lvl][les]);
+        if (!meta) {
+          if (lvl === 4) {
+            if (les === 99) {
+              meta = { title: "Từ vựng bổ sung", desc: "Từ vựng bổ sung HSK 2.0 Cấp 4" };
+            } else if (les <= 10) {
+              meta = { title: `Bài ${les} (Thượng)`, desc: `Từ vựng HSK 2.0 Cấp 4 Tập Thượng - Bài ${les}` };
+            } else {
+              const subNum = les - 10;
+              meta = { title: `Bài ${subNum} (Hạ) [Bài ${les}]`, desc: `Từ vựng HSK 2.0 Cấp 4 Tập Hạ - Bài ${subNum}` };
+            }
+          } else if (lvl === 5) {
+            if (les === 99) {
+              meta = { title: "Từ vựng bổ sung", desc: "Từ vựng bổ sung HSK 2.0 Cấp 5" };
+            } else if (les <= 18) {
+              meta = { title: `Bài ${les} (Thượng)`, desc: `Từ vựng HSK 2.0 Cấp 5 Tập Thượng - Bài ${les}` };
+            } else {
+              const subNum = les - 18;
+              meta = { title: `Bài ${subNum} (Hạ) [Bài ${les}]`, desc: `Từ vựng HSK 2.0 Cấp 5 Tập Hạ - Bài ${subNum}` };
+            }
+          } else {
+            meta = {
+              title: les === 99 ? "Từ vựng bổ sung" : `Bài ${les}`,
+              desc: les === 99 ? "Từ vựng bổ sung HSK 2.0" : `Từ vựng HSK 2.0 Cấp ${lvl} Bài ${les}`
+            };
+          }
+        }
 
         // Split lessons that are too large (just like in HSK 3.0)
         const parts = splitIntoParts(words, 20, 13);
@@ -463,7 +496,7 @@ async function run() {
           });
         } else {
           parts.forEach((partWords, pIdx) => {
-            const partTitle = `${meta.title} (Phần ${pIdx + 1})`;
+            const partTitle = `${meta.title} - Phần ${pIdx + 1}`;
             partWords.forEach(item => {
               appendWordToList(item, lvl, les, partTitle, meta.desc, '2.0');
             });

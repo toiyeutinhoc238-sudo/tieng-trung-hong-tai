@@ -3777,6 +3777,46 @@ html.dark .lessons-level-btn:hover {
   box-shadow: 0 4px 12px rgba(255, 42, 95, 0.25);
 }
 
+/* Volume selection pills (Thượng / Hạ) */
+.lessons-volume-pills {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.lessons-volume-btn {
+  background: white;
+  border: 1.5px solid #cbd5e1;
+  color: #475569;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+html.dark .lessons-volume-btn {
+  background: rgba(30, 27, 26, 0.3);
+  border-color: var(--border-glass);
+  color: #94a3b8;
+}
+
+.lessons-volume-btn:hover {
+  background: #f1f5f9;
+}
+
+html.dark .lessons-volume-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.lessons-volume-btn.active {
+  background: #0284c7;
+  border-color: #0284c7;
+  color: white !important;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25);
+}
+
 /* Objectives Bar */
 .lessons-objectives-bar {
   background: #fffdf9;
