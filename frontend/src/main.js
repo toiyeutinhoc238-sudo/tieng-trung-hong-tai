@@ -5474,7 +5474,7 @@ function renderZubiDashboardTableAndRecent() {
         <div class="zubi-recent-card" style="background: rgba(30, 41, 59, 0.9); border-radius: 16px; padding: 20px 22px; box-shadow: 0 4px 16px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; gap: 14px; cursor: pointer;" onclick="window.selectCurriculumAndGo('${les.curr}', ${les.level})">
           <div class="recent-card-top" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
             <div class="recent-title" style="font-weight: 700; font-size: 0.95rem; color: #f8fafc; line-height: 1.3;">${les.name}</div>
-            <i class="fa-regular fa-eye zubi-eye-icon" style="color: #94a3b8; font-size: 1rem;"></i>
+            <i class="fa-regular fa-eye zubi-eye-icon" style="color: #94a3b8; font-size: 1rem; cursor: pointer;" title="Chi tiết bài học này" onclick="event.stopPropagation(); window.openZubiRecentLessonDetail('${les.curr}', ${les.level})"></i>
           </div>
           <div class="recent-val green-text" style="font-family: var(--font-display, sans-serif); font-size: 1.6rem; font-weight: 800; color: #10b981;">${count.toLocaleString()} từ vựng</div>
           <div class="recent-card-footer" style="display: flex; justify-content: space-between; align-items: center;">
@@ -5487,6 +5487,58 @@ function renderZubiDashboardTableAndRecent() {
     recentGrid.innerHTML = cardsHtml;
   }
 }
+
+window.openZubiRecentLessonDetail = function(curr, level) {
+  const modal = document.getElementById('zubi-stat-modal');
+  const titleEl = document.getElementById('zubi-modal-title');
+  const subtitleEl = document.getElementById('zubi-modal-subtitle');
+  const iconEl = document.getElementById('zubi-modal-icon');
+  const bodyEl = document.getElementById('zubi-modal-body');
+
+  if (!modal || !bodyEl) return;
+
+  const builtIn = vocabList.filter(w => !w.isCustom);
+  const lesWords = builtIn.filter(w => (curr === 'yct' ? (w.curriculum === 'yct' || w.hskVersion === 'yct') : ((w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === level.toString())));
+  const total = lesWords.length;
+  const memorized = lesWords.filter(w => w.isMemorized).length;
+  const pct = total > 0 ? Math.round((memorized / total) * 100) : 0;
+
+  titleEl.textContent = `${curr.toUpperCase()} Cấp độ ${level}`;
+  subtitleEl.textContent = `Tổng quan chi tiết cấp độ bài học`;
+  iconEl.className = 'zubi-circle-icon green';
+  iconEl.style.background = 'rgba(16, 185, 129, 0.2)';
+  iconEl.style.color = '#34d399';
+  iconEl.innerHTML = '<i class="fa-solid fa-book-open"></i>';
+
+  let html = `
+    <div style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 16px; padding: 18px; display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <span style="font-size: 0.8rem; text-transform: uppercase; color: #34d399; font-weight: 700;">Tiến độ hoàn thành cấp độ</span>
+        <h2 style="font-size: 1.8rem; font-weight: 800; color: #ffffff; margin: 4px 0 0 0;">${memorized} / ${total.toLocaleString()} Từ (${pct}%)</h2>
+      </div>
+      <button class="btn btn-primary" style="padding: 10px 20px; border-radius: 12px; font-weight: 700;" onclick="document.getElementById('zubi-stat-modal').style.display='none'; window.selectCurriculumAndGo('${curr}', ${level});">Vào học ngay</button>
+    </div>
+    <h4 style="color: #f8fafc; margin: 10px 0 4px 0; font-size: 1rem;">Mẫu từ vựng tiêu biểu trong cấp độ này:</h4>
+    <div style="display: flex; flex-direction: column; gap: 8px; max-height: 240px; overflow-y: auto;">
+  `;
+
+  const samples = lesWords.slice(0, 10);
+  samples.forEach(w => {
+    html += `
+      <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <strong style="color: #38bdf8; font-size: 1.1rem;">${w.word}</strong>
+          <span style="color: #cbd5e1; margin-left: 10px; font-size: 0.9rem;">[ ${w.pinyin} ]</span>
+        </div>
+        <span style="color: #94a3b8; font-size: 0.85rem;">${w.meaning}</span>
+      </div>
+    `;
+  });
+
+  html += `</div>`;
+  bodyEl.innerHTML = html;
+  modal.style.display = 'flex';
+};
 
 window.openZubiStatDetail = function(type) {
   const modal = document.getElementById('zubi-stat-modal');

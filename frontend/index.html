@@ -122,40 +122,40 @@
         <!-- 4 Overlapping Stat Cards Grid -->
         <div class="zubi-stat-cards-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: -46px; position: relative; z-index: 10; padding: 0 16px;">
           <!-- Card 1: Completed -->
-          <div class="zubi-stat-card" style="background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(16px); border-radius: 16px; padding: 22px 24px; box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.12); display: flex; flex-direction: column; gap: 12px;">
+          <div class="zubi-stat-card" style="background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(16px); border-radius: 16px; padding: 22px 24px; box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.12); display: flex; flex-direction: column; gap: 12px; cursor: pointer;" onclick="window.openZubiStatDetail('completed')">
             <div class="zubi-stat-top" style="display: flex; justify-content: space-between; align-items: center;">
               <div class="zubi-circle-icon pink" style="width: 44px; height: 44px; border-radius: 50%; background: rgba(236, 72, 153, 0.2); color: #ec4899; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;"><i class="fa-solid fa-clock-rotate-left"></i></div>
-              <i class="fa-regular fa-eye zubi-eye-icon" style="color: #94a3b8; font-size: 1.05rem; cursor: pointer;" title="Chi tiết bài hoàn thành" onclick="window.openZubiStatDetail('completed')"></i>
+              <i class="fa-regular fa-eye zubi-eye-icon" style="color: #94a3b8; font-size: 1.05rem; cursor: pointer;" title="Chi tiết bài hoàn thành" onclick="event.stopPropagation(); window.openZubiStatDetail('completed')"></i>
             </div>
             <div class="zubi-stat-val" id="zubi-completed-count" style="font-family: var(--font-display, sans-serif); font-size: 1.85rem; font-weight: 800; color: #ffffff; line-height: 1.1;">14 Bài</div>
             <div class="zubi-stat-label" style="font-size: 0.85rem; font-weight: 500; color: #94a3b8;">Bài học đã hoàn thành</div>
           </div>
 
           <!-- Card 2: Study Time -->
-          <div class="zubi-stat-card" style="background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(16px); border-radius: 16px; padding: 22px 24px; box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.12); display: flex; flex-direction: column; gap: 12px;">
+          <div class="zubi-stat-card" style="background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(16px); border-radius: 16px; padding: 22px 24px; box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.12); display: flex; flex-direction: column; gap: 12px; cursor: pointer;" onclick="window.openZubiStatDetail('time')">
             <div class="zubi-stat-top" style="display: flex; justify-content: space-between; align-items: center;">
               <div class="zubi-circle-icon blue" style="width: 44px; height: 44px; border-radius: 50%; background: rgba(59, 130, 246, 0.2); color: #3b82f6; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;"><i class="fa-solid fa-clock"></i></div>
-              <i class="fa-regular fa-eye zubi-eye-icon" style="color: #94a3b8; font-size: 1.05rem; cursor: pointer;" title="Chi tiết thời gian học" onclick="window.openZubiStatDetail('time')"></i>
+              <i class="fa-regular fa-eye zubi-eye-icon" style="color: #94a3b8; font-size: 1.05rem; cursor: pointer;" title="Chi tiết thời gian học" onclick="event.stopPropagation(); window.openZubiStatDetail('time')"></i>
             </div>
             <div class="zubi-stat-val" id="zubi-study-time-count" style="font-family: var(--font-display, sans-serif); font-size: 1.85rem; font-weight: 800; color: #ffffff; line-height: 1.1;">0 phút</div>
             <div class="zubi-stat-label" style="font-size: 0.85rem; font-weight: 500; color: #94a3b8;">Thời gian tham gia học</div>
           </div>
 
           <!-- Card 3: Enrolled -->
-          <div class="zubi-stat-card" style="background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(16px); border-radius: 16px; padding: 22px 24px; box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.12); display: flex; flex-direction: column; gap: 12px;">
+          <div class="zubi-stat-card" style="background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(16px); border-radius: 16px; padding: 22px 24px; box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.12); display: flex; flex-direction: column; gap: 12px; cursor: pointer;" onclick="window.openZubiStatDetail('enrolled')">
             <div class="zubi-stat-top" style="display: flex; justify-content: space-between; align-items: center;">
               <div class="zubi-circle-icon orange" style="width: 44px; height: 44px; border-radius: 50%; background: rgba(249, 115, 22, 0.2); color: #f97316; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;"><i class="fa-solid fa-hourglass-half"></i></div>
-              <i class="fa-regular fa-eye zubi-eye-icon" style="color: #94a3b8; font-size: 1.05rem; cursor: pointer;" title="Chi tiết bài đang học" onclick="window.openZubiStatDetail('enrolled')"></i>
+              <i class="fa-regular fa-eye zubi-eye-icon" style="color: #94a3b8; font-size: 1.05rem; cursor: pointer;" title="Chi tiết bài đang học" onclick="event.stopPropagation(); window.openZubiStatDetail('enrolled')"></i>
             </div>
             <div class="zubi-stat-val" id="zubi-enrolled-count" style="font-family: var(--font-display, sans-serif); font-size: 1.85rem; font-weight: 800; color: #ffffff; line-height: 1.1;">21 Bài</div>
             <div class="zubi-stat-label" style="font-size: 0.85rem; font-weight: 500; color: #94a3b8;">Bài học đang theo học</div>
           </div>
 
           <!-- Card 4: Total Words -->
-          <div class="zubi-stat-card" style="background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(16px); border-radius: 16px; padding: 22px 24px; box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.12); display: flex; flex-direction: column; gap: 12px;">
+          <div class="zubi-stat-card" style="background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(16px); border-radius: 16px; padding: 22px 24px; box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.12); display: flex; flex-direction: column; gap: 12px; cursor: pointer;" onclick="window.openZubiStatDetail('words')">
             <div class="zubi-stat-top" style="display: flex; justify-content: space-between; align-items: center;">
               <div class="zubi-circle-icon cyan" style="width: 44px; height: 44px; border-radius: 50%; background: rgba(2, 132, 199, 0.2); color: #38bdf8; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;"><i class="fa-solid fa-layer-group"></i></div>
-              <i class="fa-regular fa-eye zubi-eye-icon" style="color: #94a3b8; font-size: 1.05rem; cursor: pointer;" title="Chi tiết phân bổ từ vựng" onclick="window.openZubiStatDetail('words')"></i>
+              <i class="fa-regular fa-eye zubi-eye-icon" style="color: #94a3b8; font-size: 1.05rem; cursor: pointer;" title="Chi tiết phân bổ từ vựng" onclick="event.stopPropagation(); window.openZubiStatDetail('words')"></i>
             </div>
             <div class="zubi-stat-val" id="zubi-total-words-count" style="font-family: var(--font-display, sans-serif); font-size: 1.85rem; font-weight: 800; color: #ffffff; line-height: 1.1;">5,653 Từ</div>
             <div class="zubi-stat-label" style="font-size: 0.85rem; font-weight: 500; color: #94a3b8;">Tổng từ vựng HSK & YCT</div>
