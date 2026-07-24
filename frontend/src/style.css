@@ -4377,211 +4377,419 @@ button, input, select, textarea, .btn, .nav-item, .quiz-option-btn, .speaker-btn
   .control-btn {
     flex: 1 1 45%;
   }
-/* --- COURSE COMPLETION DASHBOARD (INTEGRATED INSIDE WELCOME HERO BANNER) --- */
-.welcome-stats-right.course-completion-dashboard-wrapper {
+/* --- ZUBI / INVOICE.IO DASHBOARD LAYOUT (EXACT MATCH FOR USER SCREENSHOT) --- */
+.zubi-dashboard-container {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  width: 100%;
+  gap: 28px;
+  margin-bottom: 40px;
 }
 
-.completion-stats-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.completion-stat-card {
-  background: #343a4e;
-  border-radius: 14px;
-  padding: 14px 18px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-html.light .completion-stat-card {
-  background: #ffffff;
-  border-color: #cbd5e1;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
-}
-
-.completion-stat-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
-}
-
-.completion-icon-badge {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.15rem;
-  color: white;
-  flex-shrink: 0;
-}
-
-.completion-icon-badge.red-pink {
-  background: #ff5252;
-  box-shadow: 0 4px 10px rgba(255, 82, 82, 0.35);
-}
-
-.completion-icon-badge.blue {
-  background: #448aff;
-  box-shadow: 0 4px 10px rgba(68, 138, 255, 0.35);
-}
-
-.completion-stat-content {
-  display: flex;
-  flex-direction: column;
-}
-
-.completion-stat-number {
-  font-family: var(--font-display);
-  font-size: 1.45rem;
-  font-weight: 800;
+/* 1. Header Banner */
+.zubi-header-banner {
+  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #3b82f6 100%);
+  border-radius: 20px;
+  padding: 36px 40px 64px 40px;
+  position: relative;
+  overflow: hidden;
   color: #ffffff;
-  line-height: 1.1;
-}
-
-html.light .completion-stat-number {
-  color: #0f172a;
-}
-
-.completion-stat-label {
-  font-size: 0.78rem;
-  font-weight: 500;
-  color: #cbd5e1;
-  margin-top: 2px;
-  white-space: nowrap;
-}
-
-html.light .completion-stat-label {
-  color: #64748b;
-}
-
-.course-completion-main-card {
-  background: #343a4e;
-  border-radius: 16px;
-  padding: 20px 22px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-html.light .course-completion-main-card {
-  background: #ffffff;
-  border-color: #cbd5e1;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-}
-
-.course-completion-header {
-  width: 100%;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 14px;
+  align-items: flex-start;
+  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.25);
 }
 
-.course-completion-title {
+html.dark .zubi-header-banner {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 60%, #2563eb 100%);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+}
+
+.zubi-header-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.zubi-header-title .title-bar {
+  width: 4px;
+  height: 28px;
+  background: #ffffff;
+  border-radius: 4px;
+}
+
+.zubi-header-title h1 {
   font-family: var(--font-display);
-  font-size: 1.3rem;
+  font-size: 2.2rem;
   font-weight: 800;
-  color: #facc15;
+  color: #ffffff;
   margin: 0;
   letter-spacing: -0.02em;
 }
 
-.course-completion-legend {
+.zubi-header-subtitle {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+  font-weight: 400;
+}
+
+.zubi-header-illustration {
   display: flex;
   gap: 12px;
   align-items: center;
 }
 
-.legend-item {
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: #cbd5e1;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-html.light .legend-item {
-  color: #475569;
-}
-
-.legend-dot {
-  width: 10px;
-  height: 10px;
+.illustration-badge {
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
-}
-
-.legend-dot.purple {
-  background: #800080;
-}
-
-.legend-dot.blue {
-  background: #0033ff;
-}
-
-.course-completion-chart-container {
-  position: relative;
-  width: 170px;
-  height: 170px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 4px 0 8px 0;
+  font-size: 1.6rem;
+  color: #ffffff;
 }
 
-.completion-pie-chart {
-  width: 100%;
-  height: 100%;
-  transform: rotate(-90deg);
-  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
+.illustration-badge.secondary {
+  width: 44px;
+  height: 44px;
+  font-size: 1.2rem;
+  background: rgba(255, 255, 255, 0.15);
 }
 
-.pie-chart-center-overlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  pointer-events: none;
+/* 2. Overlapping Stat Cards Grid */
+.zubi-stat-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: -50px;
+  position: relative;
+  z-index: 10;
+  padding: 0 16px;
 }
 
-.overlay-value {
+@media (max-width: 900px) {
+  .zubi-stat-cards-grid {
+    grid-template-columns: 1fr;
+    margin-top: -30px;
+  }
+}
+
+.zubi-stat-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 22px 24px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+html.dark .zubi-stat-card {
+  background: #1e293b;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+
+.zubi-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
+}
+
+.zubi-stat-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.zubi-circle-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.zubi-circle-icon.pink {
+  background: #fce7f3;
+  color: #ec4899;
+}
+
+.zubi-circle-icon.orange {
+  background: #ffedd5;
+  color: #f97316;
+}
+
+.zubi-circle-icon.cyan {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+
+html.dark .zubi-circle-icon.pink {
+  background: rgba(236, 72, 153, 0.2);
+}
+html.dark .zubi-circle-icon.orange {
+  background: rgba(249, 115, 22, 0.2);
+}
+html.dark .zubi-circle-icon.cyan {
+  background: rgba(2, 132, 199, 0.2);
+}
+
+.zubi-eye-icon {
+  color: #94a3b8;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.zubi-eye-icon:hover {
+  color: #3b82f6;
+}
+
+.zubi-stat-val {
+  font-family: var(--font-display);
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.1;
+}
+
+html.dark .zubi-stat-val {
+  color: #f8fafc;
+}
+
+.zubi-stat-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #64748b;
+}
+
+html.dark .zubi-stat-label {
+  color: #94a3b8;
+}
+
+/* 3. Section Block */
+.zubi-section-block {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.zubi-section-header h2 {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+html.dark .zubi-section-header h2 {
+  color: #f8fafc;
+}
+
+.zubi-recent-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.zubi-recent-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px 22px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+html.dark .zubi-recent-card {
+  background: #1e293b;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.zubi-recent-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.recent-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.recent-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #0f172a;
+  line-height: 1.3;
+}
+
+html.dark .recent-title {
+  color: #f8fafc;
+}
+
+.recent-val {
   font-family: var(--font-display);
   font-size: 1.6rem;
   font-weight: 800;
-  color: #ffffff;
-  line-height: 1;
 }
 
-html.light .overlay-value {
-  color: #0f172a;
+.recent-val.green-text {
+  color: #10b981;
 }
 
-.overlay-label {
-  font-size: 0.68rem;
-  font-weight: 600;
+.recent-val.cyan-text {
+  color: #06b6d4;
+}
+
+.recent-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.recent-date {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* Pills */
+.zubi-pill {
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: inline-block;
+}
+
+.zubi-pill.warning {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.zubi-pill.danger {
+  background: #fee2e2;
+  color: #ef4444;
+}
+
+.zubi-pill.success {
+  background: #d1fae5;
+  color: #059669;
+}
+
+html.dark .zubi-pill.warning {
+  background: rgba(217, 119, 6, 0.2);
+  color: #fbbf24;
+}
+
+html.dark .zubi-pill.danger {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+
+html.dark .zubi-pill.success {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+}
+
+/* 4. Table Wrap */
+.zubi-table-wrap {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+  overflow-x: auto;
+}
+
+html.dark .zubi-table-wrap {
+  background: #1e293b;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.zubi-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.88rem;
+}
+
+.zubi-table th {
+  padding: 14px 16px;
+  color: #94a3b8;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+html.dark .zubi-table th {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.zubi-table td {
+  padding: 16px;
+  color: #334155;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+html.dark .zubi-table td {
   color: #cbd5e1;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-top: 4px;
+  border-bottom-color: rgba(255, 255, 255, 0.05);
 }
 
-html.light .overlay-label {
-  color: #64748b;
+.zubi-table tr:last-child td {
+  border-bottom: none;
+}
+
+.zubi-progress-bar-wrap {
+  width: 120px;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 50px;
+  overflow: hidden;
+}
+
+html.dark .zubi-progress-bar-wrap {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.zubi-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6 0%, #10b981 100%);
+  border-radius: 50px;
+}
+
+.zubi-action-link {
+  color: #2563eb;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s ease;
+}
+
+.zubi-action-link:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+html.dark .zubi-action-link {
+  color: #60a5fa;
 }
 

@@ -101,90 +101,199 @@
   <!-- Main Content Layout -->
   <main class="main-layout">
 
-    <!-- Premium Brand Header with Blocks -->
-    <!-- Dedicated Home View Section -->
-    <div id="home-view-section">
-      <!-- Premium Brand Header with Blocks -->
-      <div class="premium-brand-header">
-        <div class="brand-cap-text">
-          <i class="fa-solid fa-user-graduate"></i> Tiếng Trung
-        </div>
-        <div class="brand-blocks">
-          <div class="brand-block">H</div>
-          <div class="brand-block">O</div>
-          <div class="brand-block">N</div>
-          <div class="brand-block">G</div>
-          <div class="brand-block">T</div>
-          <div class="brand-block">A</div>
-          <div class="brand-block">i</div>
-        </div>
-        <div class="brand-slogan">Ngôn ngữ mới - Cơ hội mới</div>
-      </div>
-
-      <!-- Premium Welcome Banner Card -->
-      <div class="premium-welcome-card">
-        <div class="welcome-content-left">
-          <span class="welcome-tag">Chào mừng bạn học bài mới!</span>
-          <h1 class="welcome-title">Chinh phục <span>tiếng Trung</span> cùng HONGTAI</h1>
-          <p class="welcome-desc">
-            “Ngôn ngữ mới - Cơ hội mới”. Hãy khởi đầu hành trình lý thú hôm nay cùng giáo trình chuẩn HSK cho định hướng
-            sự nghiệp và YCT rực rỡ sắc màu dành riêng cho trẻ em!
-          </p>
-          <div class="welcome-actions">
-            <a href="#flashcard-section" class="btn btn-red-pill" id="banner-start-study-btn">
-              Vào học lớp HSK & YCT <i class="fa-solid fa-arrow-right-long"></i>
-            </a>
-            <a href="#custom-section" class="btn btn-outline-pill" id="banner-dictionary-btn">
-              Tra cứu từ điển ngay
-            </a>
+          <!-- Dedicated Home View Section with Zubi / Invoice.io Dashboard Layout -->
+      <div id="home-view-section" class="zubi-dashboard-container">
+        
+        <!-- Top Vibrant Blue Header Banner -->
+        <div class="zubi-header-banner">
+          <div class="zubi-header-content">
+            <div class="zubi-header-title">
+              <span class="title-bar"></span>
+              <h1>Dashboard</h1>
+            </div>
+            <p class="zubi-header-subtitle">Tất cả dữ liệu học tập HSK & YCT của bạn ở một nơi</p>
+          </div>
+          <div class="zubi-header-illustration">
+            <div class="illustration-badge"><i class="fa-solid fa-graduation-cap"></i></div>
+            <div class="illustration-badge secondary"><i class="fa-solid fa-book-open"></i></div>
           </div>
         </div>
-        <div class="welcome-stats-right course-completion-dashboard-wrapper">
-          <!-- Top Stat Cards Grid -->
-          <div class="completion-stats-grid">
-            <!-- Stat Card 1: Enrolled Courses -->
-            <div class="completion-stat-card">
-              <div class="completion-icon-badge red-pink">
-                <i class="fa-solid fa-users"></i>
-              </div>
-              <div class="completion-stat-content">
-                <div class="completion-stat-number" id="dashboard-enrolled-count">21</div>
-                <div class="completion-stat-label">Enrolled Courses</div>
-              </div>
+
+        <!-- 3 Overlapping Stat Cards Grid -->
+        <div class="zubi-stat-cards-grid">
+          <!-- Card 1 -->
+          <div class="zubi-stat-card">
+            <div class="zubi-stat-top">
+              <div class="zubi-circle-icon pink"><i class="fa-solid fa-clock-rotate-left"></i></div>
+              <i class="fa-regular fa-eye zubi-eye-icon" title="Chi tiết"></i>
             </div>
-            <!-- Stat Card 2: Completed Courses -->
-            <div class="completion-stat-card">
-              <div class="completion-icon-badge blue">
-                <i class="fa-solid fa-book-bookmark"></i>
-              </div>
-              <div class="completion-stat-content">
-                <div class="completion-stat-number" id="dashboard-completed-count">14</div>
-                <div class="completion-stat-label">Completed Courses</div>
-              </div>
-            </div>
+            <div class="zubi-stat-val" id="zubi-completed-count">14 Bài</div>
+            <div class="zubi-stat-label">Bài học đã hoàn thành</div>
           </div>
 
-          <!-- Main Chart Card: Course Completion -->
-          <div class="course-completion-main-card">
-            <div class="course-completion-header">
-              <h2 class="course-completion-title">Course Completion</h2>
-              <div class="course-completion-legend">
-                <span class="legend-item"><span class="legend-dot purple"></span> Completed (<span id="dashboard-completed-pct">67%</span>)</span>
-                <span class="legend-item"><span class="legend-dot blue"></span> In Progress (<span id="dashboard-remaining-pct">33%</span>)</span>
+          <!-- Card 2 -->
+          <div class="zubi-stat-card">
+            <div class="zubi-stat-top">
+              <div class="zubi-circle-icon orange"><i class="fa-solid fa-hourglass-half"></i></div>
+              <i class="fa-regular fa-eye zubi-eye-icon" title="Chi tiết"></i>
+            </div>
+            <div class="zubi-stat-val" id="zubi-enrolled-count">21 Bài</div>
+            <div class="zubi-stat-label">Bài học đang theo học</div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="zubi-stat-card">
+            <div class="zubi-stat-top">
+              <div class="zubi-circle-icon cyan"><i class="fa-solid fa-layer-group"></i></div>
+              <i class="fa-regular fa-eye zubi-eye-icon" title="Chi tiết"></i>
+            </div>
+            <div class="zubi-stat-val" id="zubi-total-words-count">5,653 Từ</div>
+            <div class="zubi-stat-label">Tổng từ vựng HSK & YCT</div>
+          </div>
+        </div>
+
+        <!-- Middle Section: Recent Lessons / Activity -->
+        <div class="zubi-section-block">
+          <div class="zubi-section-header">
+            <h2>Bài học gần đây</h2>
+          </div>
+          <div class="zubi-recent-cards-grid">
+            <!-- Recent Card 1 -->
+            <div class="zubi-recent-card" id="recent-card-hsk1">
+              <div class="recent-card-top">
+                <div class="recent-title">HSK 1 - Bài 5: 你的名字叫什么</div>
+                <i class="fa-regular fa-eye zubi-eye-icon"></i>
+              </div>
+              <div class="recent-val green-text">150 từ vựng</div>
+              <div class="recent-card-footer">
+                <span class="zubi-pill warning">Đang học</span>
+                <span class="recent-date">24/07/26</span>
               </div>
             </div>
 
-            <div class="course-completion-chart-container">
-              <svg id="course-completion-pie-svg" viewBox="0 0 200 200" class="completion-pie-chart">
-                <!-- Dynamically populated SVG Slices -->
-              </svg>
-              <div class="pie-chart-center-overlay">
-                <div class="overlay-value" id="pie-center-value">67%</div>
-                <div class="overlay-label">Progress</div>
+            <!-- Recent Card 2 -->
+            <div class="zubi-recent-card" id="recent-card-hsk2">
+              <div class="recent-card-top">
+                <div class="recent-title">HSK 2 - Bài 3: 左边那个红色的是我的</div>
+                <i class="fa-regular fa-eye zubi-eye-icon"></i>
+              </div>
+              <div class="recent-val cyan-text">209 từ vựng</div>
+              <div class="recent-card-footer">
+                <span class="zubi-pill danger">Cần ôn tập</span>
+                <span class="recent-date">22/07/26</span>
+              </div>
+            </div>
+
+            <!-- Recent Card 3 -->
+            <div class="zubi-recent-card" id="recent-card-yct1">
+              <div class="recent-card-top">
+                <div class="recent-title">YCT 1 - Bài 1: 你好 (Thiếu nhi)</div>
+                <i class="fa-regular fa-eye zubi-eye-icon"></i>
+              </div>
+              <div class="recent-val green-text">104 từ vựng</div>
+              <div class="recent-card-footer">
+                <span class="zubi-pill success">Hoàn thành</span>
+                <span class="recent-date">24/07/26</span>
               </div>
             </div>
           </div>
         </div>
+
+        <!-- Bottom Section: All Curriculum Overview Table -->
+        <div class="zubi-section-block">
+          <div class="zubi-section-header">
+            <h2>Tổng quan tất cả Giáo trình</h2>
+          </div>
+          <div class="zubi-table-wrap">
+            <table class="zubi-table">
+              <thead>
+                <tr>
+                  <th>CẤP ĐỘ GIÁO TRÌNH <i class="fa-solid fa-chevron-down"></i></th>
+                  <th>GIÁO TRÌNH <i class="fa-solid fa-chevron-down"></i></th>
+                  <th>TỔNG SỐ TỪ <i class="fa-solid fa-chevron-down"></i></th>
+                  <th>TIẾN ĐỘ THUỘC <i class="fa-solid fa-chevron-down"></i></th>
+                  <th>TRẠNG THÁI <i class="fa-solid fa-chevron-down"></i></th>
+                  <th>HÀNH ĐỘNG</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>HSK Cấp 1</strong></td>
+                  <td>HSK Chuẩn (v2.0 & v3.0)</td>
+                  <td>500 từ vựng</td>
+                  <td>
+                    <div class="zubi-progress-bar-wrap">
+                      <div class="zubi-progress-bar" style="width: 75%;"></div>
+                    </div>
+                  </td>
+                  <td><span class="zubi-pill warning">Đang học 75%</span></td>
+                  <td><a href="#flashcard-section" class="zubi-action-link">Vào học <i class="fa-solid fa-arrow-right"></i></a></td>
+                </tr>
+                <tr>
+                  <td><strong>HSK Cấp 2</strong></td>
+                  <td>HSK Chuẩn (v2.0 & v3.0)</td>
+                  <td>772 từ vựng</td>
+                  <td>
+                    <div class="zubi-progress-bar-wrap">
+                      <div class="zubi-progress-bar" style="width: 40%;"></div>
+                    </div>
+                  </td>
+                  <td><span class="zubi-pill warning">Đang học 40%</span></td>
+                  <td><a href="#flashcard-section" class="zubi-action-link">Vào học <i class="fa-solid fa-arrow-right"></i></a></td>
+                </tr>
+                <tr>
+                  <td><strong>HSK Cấp 3</strong></td>
+                  <td>HSK Chuẩn (v2.0 & v3.0)</td>
+                  <td>973 từ vựng</td>
+                  <td>
+                    <div class="zubi-progress-bar-wrap">
+                      <div class="zubi-progress-bar" style="width: 20%;"></div>
+                    </div>
+                  </td>
+                  <td><span class="zubi-pill danger">Chưa học</span></td>
+                  <td><a href="#flashcard-section" class="zubi-action-link">Vào học <i class="fa-solid fa-arrow-right"></i></a></td>
+                </tr>
+                <tr>
+                  <td><strong>HSK Cấp 4 (Thượng / Hạ)</strong></td>
+                  <td>HSK Chuẩn 2.0</td>
+                  <td>738 từ vựng</td>
+                  <td>
+                    <div class="zubi-progress-bar-wrap">
+                      <div class="zubi-progress-bar" style="width: 10%;"></div>
+                    </div>
+                  </td>
+                  <td><span class="zubi-pill danger">Chưa học</span></td>
+                  <td><a href="#flashcard-section" class="zubi-action-link">Vào học <i class="fa-solid fa-arrow-right"></i></a></td>
+                </tr>
+                <tr>
+                  <td><strong>HSK Cấp 5 (Thượng / Hạ)</strong></td>
+                  <td>HSK Chuẩn 2.0</td>
+                  <td>1,456 từ vựng</td>
+                  <td>
+                    <div class="zubi-progress-bar-wrap">
+                      <div class="zubi-progress-bar" style="width: 5%;"></div>
+                    </div>
+                  </td>
+                  <td><span class="zubi-pill danger">Chưa học</span></td>
+                  <td><a href="#flashcard-section" class="zubi-action-link">Vào học <i class="fa-solid fa-arrow-right"></i></a></td>
+                </tr>
+                <tr>
+                  <td><strong>YCT Cấp 1..4 (Thiếu nhi)</strong></td>
+                  <td>Sắc màu YCT</td>
+                  <td>351 từ vựng</td>
+                  <td>
+                    <div class="zubi-progress-bar-wrap">
+                      <div class="zubi-progress-bar" style="width: 90%;"></div>
+                    </div>
+                  </td>
+                  <td><span class="zubi-pill success">Đã thuộc 90%</span></td>
+                  <td><a href="#flashcard-section" class="zubi-action-link">Vào học <i class="fa-solid fa-arrow-right"></i></a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
 
     <!-- Learning Section (Hidden by default, containing learning-specific cards) -->

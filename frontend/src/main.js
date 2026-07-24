@@ -5274,7 +5274,9 @@ function renderCourseCompletionDashboard() {
   const pieSvg = document.getElementById('course-completion-pie-svg');
   const centerValue = document.getElementById('pie-center-value');
 
-  if (!pieSvg) return;
+  const zubiCompleted = document.getElementById('zubi-completed-count');
+  const zubiEnrolled = document.getElementById('zubi-enrolled-count');
+  const zubiTotalWords = document.getElementById('zubi-total-words-count');
 
   const activeVocabs = vocabList.filter(w => !w.isCustom);
   const totalMemorized = activeVocabs.filter(w => w.isMemorized).length;
@@ -5297,6 +5299,13 @@ function renderCourseCompletionDashboard() {
 
   const enrolled = totalEnrolled > 0 ? totalEnrolled : 21;
   const completed = completedCount;
+
+  if (zubiCompleted) zubiCompleted.textContent = `${completed} Bài`;
+  if (zubiEnrolled) zubiEnrolled.textContent = `${enrolled} Bài`;
+  if (zubiTotalWords) zubiTotalWords.textContent = `${vocabList.length.toLocaleString()} Từ`;
+
+  if (!pieSvg) return;
+
   const completedPct = enrolled > 0 ? Math.min(100, Math.round((completed / enrolled) * 100)) : 67;
   const remainingPct = 100 - completedPct;
 
