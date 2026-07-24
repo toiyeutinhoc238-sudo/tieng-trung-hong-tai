@@ -2114,19 +2114,19 @@
   </div>
 
   <!-- About Tiếng Trung Hongtai Overview Modal -->
-  <div id="about-hongtai-modal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;">
-    <div style="background: rgba(30, 41, 59, 0.98); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 24px; width: 100%; max-width: 720px; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.7); overflow: hidden;">
+  <div id="about-hongtai-modal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(16px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: rgba(30, 41, 59, 0.98); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 24px; width: 100%; max-width: 760px; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.8); overflow: hidden;">
       
       <!-- Modal Header Banner -->
-      <div style="padding: 24px 28px; background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(59, 130, 246, 0.2)); border-bottom: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center;">
+      <div style="padding: 24px 28px; background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(59, 130, 246, 0.25)); border-bottom: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center;">
         <div style="display: flex; align-items: center; gap: 16px;">
-          <img src="/src/assets/logo.png" alt="Hongtai Logo" style="height: 52px; width: auto; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));">
+          <img src="/src/assets/logo.png" alt="Hongtai Logo" style="height: 54px; width: auto; object-fit: contain; filter: drop-shadow(0 4px 14px rgba(0,0,0,0.4));">
           <div>
-            <h2 style="font-family: var(--font-display, sans-serif); font-size: 1.4rem; font-weight: 800; color: #ffffff; margin: 0; display: flex; align-items: center; gap: 8px;">
+            <h2 style="font-family: var(--font-display, sans-serif); font-size: 1.45rem; font-weight: 800; color: #ffffff; margin: 0; display: flex; align-items: center; gap: 8px;">
               Tiếng Trung Hongtai
-              <span style="font-size: 0.7rem; background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); padding: 2px 8px; border-radius: 50px; font-weight: 700;">PRO v3.0</span>
+              <span style="font-size: 0.7rem; background: rgba(239, 68, 68, 0.25); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); padding: 2px 10px; border-radius: 50px; font-weight: 700;">PRO v3.0</span>
             </h2>
-            <p style="font-size: 0.85rem; color: #cbd5e1; margin: 3px 0 0 0; font-weight: 500;">Vạn ngôn ngữ - Một tương lai 🐉</p>
+            <p style="font-size: 0.85rem; color: #cbd5e1; margin: 3px 0 0 0; font-weight: 500; font-style: italic;">"Vạn ngôn ngữ – Một tương lai 🐉"</p>
           </div>
         </div>
         <button style="background: rgba(255,255,255,0.1); border: none; color: #f1f5f9; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; transition: all 0.2s;" onclick="document.getElementById('about-hongtai-modal').style.display='none'">
@@ -2135,79 +2135,84 @@
       </div>
 
       <!-- Modal Body (Overview Article) -->
-      <div style="padding: 24px 28px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; color: #cbd5e1; font-size: 0.92rem; line-height: 1.6;">
+      <div style="padding: 24px 28px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; color: #cbd5e1; font-size: 0.93rem; line-height: 1.65;">
         
         <!-- Quick Badges -->
         <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-          <span style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); padding: 4px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700;"><i class="fa-solid fa-graduation-cap"></i> HSK 3.0 & 2.0 Chuẩn</span>
-          <span style="background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); padding: 4px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700;"><i class="fa-solid fa-child"></i> YCT Tiếng Việt Thiếu Nhi</span>
-          <span style="background: rgba(236, 72, 153, 0.15); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.3); padding: 4px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700;"><i class="fa-solid fa-robot"></i> Trợ lý AI Zubi</span>
-          <span style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); padding: 4px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700;"><i class="fa-solid fa-bolt"></i> 100% Miễn Phí</span>
+          <span style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); padding: 4px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 700;"><i class="fa-solid fa-graduation-cap"></i> HSK 3.0 & 2.0 Chuẩn Quôc Tế</span>
+          <span style="background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); padding: 4px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 700;"><i class="fa-solid fa-child"></i> YCT Tiếng Việt Thiếu Nhi</span>
+          <span style="background: rgba(236, 72, 153, 0.15); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.3); padding: 4px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 700;"><i class="fa-solid fa-brain"></i> Spaced Repetition AI</span>
+          <span style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); padding: 4px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 700;"><i class="fa-solid fa-heart"></i> 100% Miễn Phí Cộng Đồng</span>
         </div>
 
-        <!-- Section 1: Giới thiệu chung -->
+        <!-- Quote Block -->
+        <div style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9)); border-left: 4px solid #38bdf8; border-radius: 12px; padding: 14px 18px; font-style: italic; color: #e2e8f0; font-size: 0.9rem;">
+          "Mỗi ngôn ngữ mới là một thế giới hoàn toàn mới được khai mở. Làm chủ Tiếng Trung không chỉ là nắm bắt một công cụ giao tiếp toàn cầu, mà là mở rộng tầm nhìn, kết nối văn hóa và chinh phục những đỉnh cao mới trong tương lai."
+        </div>
+
+        <!-- Section 1: Giới thiệu chung & Tầm nhìn -->
         <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 18px 20px;">
           <h3 style="font-size: 1.05rem; font-weight: 700; color: #f8fafc; margin: 0 0 8px 0; display: flex; align-items: center; gap: 8px;">
-            <i class="fa-solid fa-compass" style="color: #38bdf8;"></i> Về Nền Tảng Học Tiếng Trung Hongtai
+            <i class="fa-solid fa-feather-pointed" style="color: #38bdf8;"></i> Hành Trình Khai Mở Tri Thức Tiếng Trung
           </h3>
-          <p style="margin: 0; color: #94a3b8; font-size: 0.9rem;">
-            <strong>Tiếng Trung Hongtai</strong> là nền tảng học Tiếng Trung trực tuyến thông minh dành cho người Việt Nam. Ứng dụng tích hợp công nghệ AI tiên tiến, hỗ trợ người học chinh phục từ vựng HSK 1 đến HSK 5 và YCT Thiếu nhi một cách trực quan, khoa học thông qua Spaced Repetition (Lặp lại ngắt quãng), Flashcard 3D và các trò chơi tương tác hấp dẫn.
+          <p style="margin: 0; color: #94a3b8; font-size: 0.9rem; text-align: justify;">
+            <strong>Tiếng Trung Hongtai</strong> ra đời từ tâm huyết kiến tạo một không gian học tập trực tuyến hiện đại, thẩm mỹ và giàu cảm hứng nhất cho người Việt Nam. Không còn những trang sách giáo khoa khô khan hay áp lực học thuộc lòng máy móc, Hongtai là sự kết hợp hài hòa giữa <strong>nghệ thuật sư phạm ngôn ngữ</strong> và <strong>sức mạnh công nghệ AI tiên tiến</strong> – biến hành trình chinh phục tiếng Trung của bạn trở thành một chuyến khám phá đầy đam mê và cuốn hút mỗi ngày.
           </p>
         </div>
 
-        <!-- Section 2: Các tính năng cốt lõi -->
+        <!-- Section 2: Các trụ cột tính năng -->
         <div>
           <h3 style="font-size: 1.05rem; font-weight: 700; color: #f8fafc; margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;">
-            <i class="fa-solid fa-star" style="color: #fbbf24;"></i> Các Tính Năng Nổi Bật
+            <i class="fa-solid fa-gem" style="color: #fbbf24;"></i> Những Trụ Cột Đột Phá Trên System
           </h3>
 
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px;">
             
-            <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 14px 16px;">
-              <div style="font-weight: 700; color: #38bdf8; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
-                <i class="fa-solid fa-book"></i> Kho Từ Vựng 5,653 Từ Chuẩn
+            <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 16px;">
+              <div style="font-weight: 700; color: #38bdf8; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; font-size: 0.95rem;">
+                <i class="fa-solid fa-book-bookmark"></i> Kho Từ Vựng 5,653 Từ Chuẩn Hóa
               </div>
-              <div style="font-size: 0.85rem; color: #94a3b8;">
-                Đầy đủ HSK 3.0 (Cấp 1..3), HSK 2.0 (Cấp 1..5 Thượng/Hạ) và YCT 1..4 Thiếu Nhi kèm Pinyin, Hán Việt, câu ví dụ & phát âm HD.
-              </div>
-            </div>
-
-            <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 14px 16px;">
-              <div style="font-weight: 700; color: #34d399; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
-                <i class="fa-solid fa-keyboard"></i> Flashcard 3D & Luyện Gõ Pinyin
-              </div>
-              <div style="font-size: 0.85rem; color: #94a3b8;">
-                Kết hợp chế độ lật thẻ ghi nhớ thụ động và chế độ gõ Pinyin trực tiếp nhận diện đáp án giúp khắc sâu ký ức gấp 3 lần.
+              <div style="font-size: 0.85rem; color: #94a3b8; text-align: justify;">
+                Hệ thống 281 bài học bao phủ toàn bộ HSK 3.0 (Cấp 1..3), HSK 2.0 (Cấp 1..5 Thượng/Hạ) và YCT 1..4 Thiếu nhi. Mỗi từ vựng được chuẩn hóa tỉ mỉ: Chữ Hán, Pinyin, Hán Việt, Nghĩa Tiếng Việt, Ví dụ thực tế và Âm thanh đọc chuẩn HD.
               </div>
             </div>
 
-            <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 14px 16px;">
-              <div style="font-weight: 700; color: #f472b6; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
+            <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 16px;">
+              <div style="font-weight: 700; color: #34d399; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; font-size: 0.95rem;">
+                <i class="fa-solid fa-layer-group"></i> Flashcard 3D & Luyện Gõ Pinyin
+              </div>
+              <div style="font-size: 0.85rem; color: #94a3b8; text-align: justify;">
+                Ứng dụng thuật toán Ghi nhớ Ngắt quãng (Spaced Repetition) kết hợp linh hoạt giữa chế độ lật thẻ 3D trực quan và chế độ Luyện gõ Pinyin nhận diện đáp án – giúp bộ não khắc sâu phản xạ từ vựng gấp 3 lần.
+              </div>
+            </div>
+
+            <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 16px;">
+              <div style="font-weight: 700; color: #f472b6; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; font-size: 0.95rem;">
                 <i class="fa-solid fa-gamepad"></i> Game Hub Tương Tác 4 Trong 1
               </div>
-              <div style="font-size: 0.85rem; color: #94a3b8;">
-                Luyện phản xạ với 4 trò chơi hấp dẫn: Ghép từ nối thẻ, Nghe chọn hình ảnh, Trắc nghiệm tính giờ, và Nối từ thành câu.
+              <div style="font-size: 0.85rem; color: #94a3b8; text-align: justify;">
+                Thử thách phản xạ ngôn ngữ thông qua 4 tựa game cuốn hút: <em>Ghép từ nối thẻ</em>, <em>Nghe chọn hình ảnh</em>, <em>Trắc nghiệm tính giờ</em> và <em>Thử thách xếp chữ thành câu</em>.
               </div>
             </div>
 
-            <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 14px 16px;">
-              <div style="font-weight: 700; color: #fbbf24; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
-                <i class="fa-solid fa-robot"></i> Trợ Lý AI Zubi & Từ Điển Thông Minh
+            <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 16px;">
+              <div style="font-weight: 700; color: #fbbf24; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; font-size: 0.95rem;">
+                <i class="fa-solid fa-robot"></i> Trợ Lý AI Zubi & Đồ Họa Nét Chữ Hán
               </div>
-              <div style="font-size: 0.85rem; color: #94a3b8;">
-                Hỏi đáp ngữ pháp, tra từ theo ngữ cảnh, hướng dẫn viết chữ Hán theo thứ tự nét chuẩn xác 24/7.
+              <div style="font-size: 0.85rem; color: #94a3b8; text-align: justify;">
+                Giải đáp mọi thắc mắc ngữ pháp, phân tích ngữ cảnh câu từ 24/7 và minh họa chuyển động nét vẽ chữ Hán (Hanzi Writer) chuẩn từng nét thuận theo quy tắc bút thuận.
               </div>
             </div>
 
           </div>
         </div>
 
-        <!-- Section 3: Cam kết -->
-        <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 16px; padding: 16px 20px; display: flex; gap: 14px; align-items: center;">
-          <div style="font-size: 2rem; color: #f87171; flex-shrink: 0;"><i class="fa-solid fa-heart"></i></div>
+        <!-- Section 3: Cam kết cộng đồng -->
+        <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 16px; padding: 18px 20px; display: flex; gap: 16px; align-items: center;">
+          <div style="font-size: 2.2rem; color: #f87171; flex-shrink: 0;"><i class="fa-solid fa-hand-holding-heart"></i></div>
           <div>
-            <strong style="color: #ffffff; font-size: 0.95rem;">Sứ mệnh cộng đồng:</strong>
-            <p style="margin: 2px 0 0 0; color: #94a3b8; font-size: 0.85rem;">Tiếng Trung Hongtai cam kết mang lại trải nghiệm học tập Tiếng Trung chất lượng cao nhất, hoàn toàn miễn phí cho tất cả mọi người!</p>
+            <strong style="color: #ffffff; font-size: 0.95rem;">Sứ mệnh Phụng sự Cộng đồng:</strong>
+            <p style="margin: 3px 0 0 0; color: #94a3b8; font-size: 0.85rem;">Tiếng Trung Hongtai cam kết mang lại một môi trường học tập đẳng cấp, giàu tính thẩm mỹ và hoàn toàn miễn phí – chắp cánh ước mơ vươn tầm quốc tế cho hàng triệu học viên Việt Nam.</p>
           </div>
         </div>
 
@@ -2215,8 +2220,8 @@
 
       <!-- Modal Footer -->
       <div style="padding: 16px 28px; background: rgba(15, 23, 42, 0.5); border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center;">
-        <span style="font-size: 0.8rem; color: #94a3b8;">© 2026 Tiếng Trung Hongtai. All rights reserved.</span>
-        <button class="btn btn-primary" style="padding: 10px 24px; border-radius: 12px; font-weight: 700;" onclick="document.getElementById('about-hongtai-modal').style.display='none'">
+        <span style="font-size: 0.8rem; color: #94a3b8;">© 2026 Tiếng Trung Hongtai. Vạn ngôn ngữ - Một tương lai.</span>
+        <button class="btn btn-primary" style="padding: 10px 26px; border-radius: 12px; font-weight: 700;" onclick="document.getElementById('about-hongtai-modal').style.display='none'">
           Khám phá ngay 🚀
         </button>
       </div>
