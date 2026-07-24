@@ -4281,10 +4281,10 @@ function renderLessonsList() {
     if (yctLevelContainer) yctLevelContainer.style.display = 'flex';
 
     if (objectivesText) {
-      if (activeYctLevel === 1) objectivesText.textContent = 'Mục tiêu: YCT Cấp 1 - Dành cho trẻ em mới bắt đầu (80 từ vựng cơ bản)';
-      else if (activeYctLevel === 2) objectivesText.textContent = 'Mục tiêu: YCT Cấp 2 - Dành cho trẻ em sơ cấp (150 từ vựng cơ bản)';
-      else if (activeYctLevel === 3) objectivesText.textContent = 'Mục tiêu: YCT Cấp 3 - Dành cho trẻ em trung cấp cơ bản (300 từ vựng)';
-      else if (activeYctLevel === 4) objectivesText.textContent = 'Mục tiêu: YCT Cấp 4 - Dành cho trẻ em trung cấp hoàn chỉnh (600 từ vựng)';
+      if (activeYctLevel.toString() === '1') objectivesText.textContent = 'Mục tiêu: YCT Cấp 1 - Dành cho trẻ em mới bắt đầu (12 Bài học, 104 từ vựng)';
+      else if (activeYctLevel.toString() === '2') objectivesText.textContent = 'Mục tiêu: YCT Cấp 2 - Dành cho trẻ em sơ cấp (12 Bài học, 85 từ vựng)';
+      else if (activeYctLevel.toString() === '3') objectivesText.textContent = 'Mục tiêu: YCT Cấp 3 - Dành cho trẻ em trung cấp cơ bản (12 Bài học, 78 từ vựng)';
+      else if (activeYctLevel.toString() === '4') objectivesText.textContent = 'Mục tiêu: YCT Cấp 4 - Dành cho trẻ em trung cấp hoàn chỉnh (12 Bài học, 84 từ vựng)';
       else objectivesText.textContent = `Mục tiêu: Ôn tập từ vựng YCT Cấp ${activeYctLevel}`;
     }
 
@@ -5398,6 +5398,19 @@ function renderZubiDashboardTableAndRecent() {
   const tableBody = document.getElementById('zubi-table-body');
 
   const builtInVocabs = vocabList.filter(w => !w.isCustom);
+
+  // Dynamic Total Unique Lessons calculation
+  const lessonGroupsMap = {};
+  builtInVocabs.forEach(w => {
+    if (!w.level || !w.lessonId) return;
+    const key = `${w.curriculum || 'hsk'}_${w.hskVersion || '3.0'}_${w.level}_${w.lessonId}`;
+    lessonGroupsMap[key] = true;
+  });
+  const totalLessonsCount = Object.keys(lessonGroupsMap).length;
+  const enrolledStatBadge = document.getElementById('zubi-enrolled-count');
+  if (enrolledStatBadge && totalLessonsCount > 0) {
+    enrolledStatBadge.textContent = `${totalLessonsCount} Bài`;
+  }
 
   // 1. Dynamic Overview Table Rows
   if (tableBody) {
