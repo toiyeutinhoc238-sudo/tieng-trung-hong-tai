@@ -5488,6 +5488,34 @@ function renderZubiDashboardTableAndRecent() {
   }
 }
 
+function formatLessonFullName(item) {
+  if (!item) return 'Bài học';
+  const curr = (item.curriculum || 'hsk').toLowerCase();
+  const ver = item.hskVersion || '3.0';
+  const level = item.level;
+  const lessonId = item.lessonId;
+
+  if (curr === 'yct') {
+    return `YCT Cấp ${level} (Thiếu nhi) - Bài ${lessonId}`;
+  }
+
+  if (ver === '2.0') {
+    if (level.toString() === '4') {
+      const vol = lessonId <= 10 ? 'Thượng' : (lessonId === 99 ? 'Bổ bổ sung' : 'Hạ');
+      const volLesson = lessonId <= 10 ? lessonId : (lessonId === 99 ? '' : lessonId - 10);
+      return `HSK 4 ${vol} (v2.0) ${volLesson ? '- Bài ' + volLesson : ''}`;
+    }
+    if (level.toString() === '5') {
+      const vol = lessonId <= 18 ? 'Thượng' : 'Hạ';
+      const volLesson = lessonId <= 18 ? lessonId : lessonId - 18;
+      return `HSK 5 ${vol} (v2.0) - Bài ${volLesson}`;
+    }
+    return `HSK ${level} (v2.0) - Bài ${lessonId}`;
+  }
+
+  return `HSK ${level} (v3.0) - Bài ${lessonId}`;
+}
+
 window.openZubiRecentLessonDetail = function(curr, level) {
   const modal = document.getElementById('zubi-stat-modal');
   const titleEl = document.getElementById('zubi-modal-title');
@@ -5550,7 +5578,6 @@ window.openZubiStatDetail = function(type) {
   if (!modal || !bodyEl) return;
 
   const builtIn = vocabList.filter(w => !w.isCustom);
-  const totalMemorized = builtIn.filter(w => w.isMemorized).length;
 
   if (type === 'completed') {
     titleEl.textContent = 'Bài học đã hoàn thành';
@@ -5563,7 +5590,7 @@ window.openZubiStatDetail = function(type) {
     const textbookGroups = {};
     builtIn.forEach(w => {
       if (!w.level || !w.lessonId) return;
-      const key = `${w.hskVersion || '3.0'}_${w.level}_${w.lessonId}`;
+      const key = `${w.curriculum || 'hsk'}_${w.hskVersion || '3.0'}_${w.level}_${w.lessonId}`;
       if (!textbookGroups[key]) textbookGroups[key] = { key, level: w.level, lessonId: w.lessonId, curr: w.curriculum || 'hsk', words: [] };
       textbookGroups[key].words.push(w);
     });
@@ -5592,10 +5619,11 @@ window.openZubiStatDetail = function(type) {
     } else {
       html += `<div style="display: flex; flex-direction: column; gap: 10px;">`;
       completedLessons.forEach(les => {
+        const fullTitle = formatLessonFullName(les.words[0]);
         html += `
           <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
             <div>
-              <strong style="color: #f8fafc; font-size: 0.95rem;">${les.curr.toUpperCase()} Cấp ${les.level} - Bài ${les.lessonId}</strong>
+              <strong style="color: #f8fafc; font-size: 0.95rem;">${fullTitle}</strong>
               <div style="font-size: 0.8rem; color: #94a3b8;">${les.words.length} từ vựng đã ghi nhớ</div>
             </div>
             <span class="zubi-pill success" style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: rgba(16, 185, 129, 0.2); color: #34d399;">Hoàn thành</span>
@@ -5641,7 +5669,7 @@ window.openZubiStatDetail = function(type) {
 
   } else if (type === 'enrolled') {
     titleEl.textContent = 'Bài học đang theo học';
-    subtitleEl.textContent = 'Phân bổ 220 bài học trong hệ thống giáo trình HSK & YCT';
+    subtitleEl.textContent = 'Tổng cộng 281 bài học phân bổ theo 3 bộ giáo trình chuẩn';
     iconEl.className = 'zubi-circle-icon orange';
     iconEl.style.background = 'rgba(249, 115, 22, 0.2)';
     iconEl.style.color = '#f97316';
@@ -5650,24 +5678,16 @@ window.openZubiStatDetail = function(type) {
     bodyEl.innerHTML = `
       <div style="display: flex; flex-direction: column; gap: 12px;">
         <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
-          <div><strong style="color: #ffffff;">HSK 1 (v3.0 & v2.0)</strong><div style="font-size: 0.8rem; color: #94a3b8;">Sơ cấp HSK</div></div>
-          <span style="font-weight: 800; color: #f97316; font-size: 1.1rem;">36 Bài</span>
+          <div><strong style="color: #ffffff;">HSK 3.0 (Cấp 1, 2, 3)</strong><div style="font-size: 0.8rem; color: #94a3b8;">Bộ giáo trình mới HSK 3.0</div></div>
+          <span style="font-weight: 800; color: #f97316; font-size: 1.1rem;">126 Bài</span>
         </div>
         <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
-          <div><strong style="color: #ffffff;">HSK 2 (v3.0 & v2.0)</strong><div style="font-size: 0.8rem; color: #94a3b8;">Sơ cấp nâng cao HSK</div></div>
-          <span style="font-weight: 800; color: #f97316; font-size: 1.1rem;">31 Bài</span>
+          <div><strong style="color: #ffffff;">HSK 2.0 (Cấp 1..5 Thượng / Hạ)</strong><div style="font-size: 0.8rem; color: #94a3b8;">Bộ giáo trình HSK 2.0 truyền thống</div></div>
+          <span style="font-weight: 800; color: #f97316; font-size: 1.1rem;">109 Bài</span>
         </div>
         <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
-          <div><strong style="color: #ffffff;">HSK 3 (v3.0 & v2.0)</strong><div style="font-size: 0.8rem; color: #94a3b8;">Trung cấp HSK</div></div>
-          <span style="font-weight: 800; color: #f97316; font-size: 1.1rem;">51 Bài</span>
-        </div>
-        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
-          <div><strong style="color: #ffffff;">HSK 4 & 5 (Thượng & Hạ)</strong><div style="font-size: 0.8rem; color: #94a3b8;">Cao cấp HSK 2.0</div></div>
-          <span style="font-weight: 800; color: #f97316; font-size: 1.1rem;">56 Bài</span>
-        </div>
-        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
-          <div><strong style="color: #ffffff;">YCT 1, 2, 3, 4 (Thiếu nhi)</strong><div style="font-size: 0.8rem; color: #94a3b8;">Sắc màu YCT Tiếng Việt</div></div>
-          <span style="font-weight: 800; color: #f97316; font-size: 1.1rem;">47 Bài</span>
+          <div><strong style="color: #ffffff;">YCT 1, 2, 3, 4 (Thiếu nhi)</strong><div style="font-size: 0.8rem; color: #94a3b8;">Sắc màu YCT Tiếng Việt cho trẻ em</div></div>
+          <span style="font-weight: 800; color: #f97316; font-size: 1.1rem;">46 Bài</span>
         </div>
       </div>
     `;
