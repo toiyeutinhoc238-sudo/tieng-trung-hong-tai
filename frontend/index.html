@@ -199,10 +199,11 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 10px 12px;
-    background: var(--bg-tertiary, rgba(255, 255, 255, 0.05));
+    padding: 12px 14px;
+    background: var(--bg-secondary);
     border-radius: var(--radius-md);
-    border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.12));
+    border: 1px solid var(--border-glass-hover);
+    box-shadow: var(--shadow-sm);
     cursor: pointer;
     width: 100%;
     box-sizing: border-box;
@@ -211,8 +212,9 @@
   }
 
   .app-sidebar .sidebar-profile-card:hover {
-    background: rgba(59, 130, 246, 0.12);
+    background: var(--bg-glass);
     border-color: var(--accent-blue);
+    box-shadow: var(--shadow-md);
   }
 
   .app-sidebar .sidebar-avatar-wrap {
