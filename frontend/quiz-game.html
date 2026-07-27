@@ -813,6 +813,24 @@
       }
     } catch(e) {}
 
+    const newRecord = {
+      score: score,
+      stage: playedCount,
+      level: levelVal,
+      mode: modeVal,
+      combo: maxComboCount,
+      playedAt: new Date().toISOString()
+    };
+
+    // Save instant fallback to localStorage
+    try {
+      const localKey = savedEmail ? `local_game_history_${savedEmail}` : 'local_game_history_guest';
+      const existing = JSON.parse(localStorage.getItem(localKey) || '[]');
+      existing.unshift(newRecord);
+      if (existing.length > 100) existing.length = 100;
+      localStorage.setItem(localKey, JSON.stringify(existing));
+    } catch(e) {}
+
     const API_BASE_URL = window.location.origin.includes('5173') 
       ? 'http://localhost:5000' 
       : window.location.origin;
@@ -833,10 +851,10 @@
       })
     }).then(res => res.json())
       .then(data => {
-        console.log("Game history saved successfully:", data);
+        console.log("Game history saved successfully to server:", data);
       })
       .catch(err => {
-        console.warn("Failed to save game history:", err);
+        console.warn("Server save offline, local fallback active:", err);
       });
   }
 

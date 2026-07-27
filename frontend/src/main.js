@@ -1775,60 +1775,93 @@ function setupEventListeners() {
         return;
       }
 
-      const fetchUrl = (userEmail || (currentUser && currentUser.email))
-        ? `${API_BASE_URL}/api/user/game-history?email=${encodeURIComponent(userEmail || currentUser.email)}`
+      const activeEmail = userEmail || (currentUser && currentUser.email) || '';
+      const localKey = activeEmail ? `local_game_history_${activeEmail}` : 'local_game_history_guest';
+      let localHistory = [];
+      try {
+        localHistory = JSON.parse(localStorage.getItem(localKey) || '[]');
+      } catch(e) {}
+
+      const fetchUrl = activeEmail
+        ? `${API_BASE_URL}/api/user/game-history?email=${encodeURIComponent(activeEmail)}`
         : `${API_BASE_URL}/api/user/game-history`;
+
+      const renderHistory = (historyArr) => {
+        if (!historyArr || !Array.isArray(historyArr) || historyArr.length === 0) {
+          if (emptyDiv) emptyDiv.style.display = 'block';
+          return;
+        }
+
+        if (emptyDiv) emptyDiv.style.display = 'none';
+        if (tbody) tbody.innerHTML = '';
+
+        // Deduplicate records by playedAt timestamp
+        const seen = new Set();
+        const uniqueHistory = [];
+        historyArr.forEach(item => {
+          if (item && item.playedAt && !seen.has(item.playedAt)) {
+            seen.add(item.playedAt);
+            uniqueHistory.push(item);
+          }
+        });
+
+        // Sort by newest played first
+        uniqueHistory.sort((a, b) => new Date(b.playedAt) - new Date(a.playedAt));
+
+        const modeNames = {
+          'zh-vi': 'Chữ Hán ➔ Việt',
+          'vi-zh': 'Việt ➔ Chữ Hán',
+          'zh-pinyin': 'Chữ Hán ➔ Pinyin',
+          'pinyin-zh': 'Pinyin ➔ Chữ Hán',
+          'mix': 'Hỗn hợp'
+        };
+
+        uniqueHistory.forEach(item => {
+          const tr = document.createElement('tr');
+          tr.style.borderBottom = '1px solid var(--border-glass)';
+          tr.style.transition = 'background 0.2s';
+          tr.onmouseover = () => tr.style.background = 'rgba(255,255,255,0.02)';
+          tr.onmouseout = () => tr.style.background = 'transparent';
+
+          const date = new Date(item.playedAt).toLocaleString('vi-VN', {
+            year: 'numeric', month: 'numeric', day: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+          });
+
+          const modeName = modeNames[item.mode] || item.mode;
+          const levelLabel = item.level === 'all' ? 'Tất cả' : `HSK ${item.level}`;
+
+          tr.innerHTML = `
+          <td style="padding: 12px 16px; color: var(--text-secondary);">${date}</td>
+          <td style="padding: 12px 16px; font-weight: 500;">${modeName}</td>
+          <td style="padding: 12px 16px; text-align: center; color: var(--accent-teal); font-weight: 600;">${levelLabel}</td>
+          <td style="padding: 12px 16px; text-align: center; color: #ffd700; font-weight: 700; font-size: 1.05rem;">${item.score}</td>
+          <td style="padding: 12px 16px; text-align: center;">${item.stage} câu</td>
+          <td style="padding: 12px 16px; text-align: center; color: var(--success); font-weight: 600;">${item.combo}</td>
+        `;
+          tbody.appendChild(tr);
+        });
+      };
+
+      // Show local history immediately for instant UI feedback
+      if (localHistory.length > 0) {
+        renderHistory(localHistory);
+      }
 
       fetch(fetchUrl, {
         headers: getAuthHeaders()
       })
         .then(res => res.json())
         .then(history => {
-          if (!history || !Array.isArray(history) || history.length === 0) {
-            if (emptyDiv) emptyDiv.style.display = 'block';
-            return;
-          }
-
-          // Sort by newest played first
-          history.sort((a, b) => new Date(b.playedAt) - new Date(a.playedAt));
-
-          const modeNames = {
-            'zh-vi': 'Chữ Hán ➔ Việt',
-            'vi-zh': 'Việt ➔ Chữ Hán',
-            'zh-pinyin': 'Chữ Hán ➔ Pinyin',
-            'pinyin-zh': 'Pinyin ➔ Chữ Hán',
-            'mix': 'Hỗn hợp'
-          };
-
-          history.forEach(item => {
-            const tr = document.createElement('tr');
-            tr.style.borderBottom = '1px solid var(--border-glass)';
-            tr.style.transition = 'background 0.2s';
-            tr.onmouseover = () => tr.style.background = 'rgba(255,255,255,0.02)';
-            tr.onmouseout = () => tr.style.background = 'transparent';
-
-            const date = new Date(item.playedAt).toLocaleString('vi-VN', {
-              year: 'numeric', month: 'numeric', day: 'numeric',
-              hour: '2-digit', minute: '2-digit'
-            });
-
-            const modeName = modeNames[item.mode] || item.mode;
-            const levelLabel = item.level === 'all' ? 'Tất cả' : `HSK ${item.level}`;
-
-            tr.innerHTML = `
-            <td style="padding: 12px 16px; color: var(--text-secondary);">${date}</td>
-            <td style="padding: 12px 16px; font-weight: 500;">${modeName}</td>
-            <td style="padding: 12px 16px; text-align: center; color: var(--accent-teal); font-weight: 600;">${levelLabel}</td>
-            <td style="padding: 12px 16px; text-align: center; color: #ffd700; font-weight: 700; font-size: 1.05rem;">${item.score}</td>
-            <td style="padding: 12px 16px; text-align: center;">${item.stage} câu</td>
-            <td style="padding: 12px 16px; text-align: center; color: var(--success); font-weight: 600;">${item.combo}</td>
-          `;
-            tbody.appendChild(tr);
-          });
+          const serverArr = Array.isArray(history) ? history : [];
+          const merged = [...localHistory, ...serverArr];
+          renderHistory(merged);
         })
         .catch(err => {
-          console.error("Error loading game history:", err);
-          if (emptyDiv) {
+          console.error("Error loading game history from server, showing local data:", err);
+          if (localHistory.length > 0) {
+            renderHistory(localHistory);
+          } else if (emptyDiv) {
             emptyDiv.innerHTML = '<i class="fa-solid fa-circle-exclamation" style="font-size: 2.5rem; margin-bottom: 12px; color: var(--danger);"></i><p>Không thể tải lịch sử chơi game từ máy chủ.</p>';
             emptyDiv.style.display = 'block';
           }
