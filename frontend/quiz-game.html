@@ -490,7 +490,11 @@
 
   btnStart.addEventListener('click', startGame);
   btnRestart.addEventListener('click', () => { goModal.style.display='none'; setupModal.style.display='flex'; });
-  btnQuit.addEventListener('click', () => { window.close(); setTimeout(() => window.location.href = 'index.html', 150); });
+  btnQuit.addEventListener('click', () => { 
+    saveGameHistory();
+    window.close(); 
+    setTimeout(() => window.location.href = 'index.html', 150); 
+  });
   btnSpeak.addEventListener('click', () => { if(activeQ) speak(activeQ.word); });
 
   // --- GAME LOGIC ---
@@ -791,16 +795,8 @@
     });
   }
 
-  function endGame(title, desc) {
-    clearInterval(timerInterval);
-    document.getElementById('go-title').textContent = title;
-    document.getElementById('go-desc').textContent = desc;
-    document.getElementById('go-score').textContent = score;
-    renderReviewList();
-    goModal.style.display = 'flex';
-    playBeep(300, 'triangle', 0.5);
-
-    // Save game history to server API
+  function saveGameHistory() {
+    if (score <= 0 && (!playedHistory || playedHistory.length === 0)) return;
     const playedCount = playedHistory ? playedHistory.length : 0;
     const levelVal = selLevel ? selLevel.value : 'all';
     const modeVal = currentMode || 'zh-vi';
@@ -842,6 +838,17 @@
       .catch(err => {
         console.warn("Failed to save game history:", err);
       });
+  }
+
+  function endGame(title, desc) {
+    clearInterval(timerInterval);
+    document.getElementById('go-title').textContent = title;
+    document.getElementById('go-desc').textContent = desc;
+    document.getElementById('go-score').textContent = score;
+    renderReviewList();
+    goModal.style.display = 'flex';
+    playBeep(300, 'triangle', 0.5);
+    saveGameHistory();
   }
 
   loadVocab();
