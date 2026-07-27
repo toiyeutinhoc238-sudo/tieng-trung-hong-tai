@@ -799,6 +799,39 @@
     renderReviewList();
     goModal.style.display = 'flex';
     playBeep(300, 'triangle', 0.5);
+
+    // Save game history to server API
+    const playedCount = playedHistory ? playedHistory.length : 0;
+    const levelVal = selLevel ? selLevel.value : 'all';
+    const modeVal = currentMode || 'zh-vi';
+    const maxComboCount = (playedHistory && playedHistory.length > 0) 
+      ? playedHistory.filter(x => x.isCorrect).length 
+      : 0;
+
+    const API_BASE_URL = window.location.origin.includes('5173') 
+      ? 'http://localhost:5000' 
+      : window.location.origin;
+
+    fetch(API_BASE_URL + '/api/user/game-history', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'omit',
+      body: JSON.stringify({
+        score: score,
+        stage: playedCount,
+        level: levelVal,
+        mode: modeVal,
+        combo: maxComboCount
+      })
+    }).then(res => res.json())
+      .then(data => {
+        console.log("Game history saved successfully:", data);
+      })
+      .catch(err => {
+        console.warn("Failed to save game history:", err);
+      });
   }
 
   loadVocab();
