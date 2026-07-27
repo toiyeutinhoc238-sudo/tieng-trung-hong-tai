@@ -4526,6 +4526,8 @@ function renderLessonsList() {
   const volumeSelect = document.getElementById('lessons-volume-select');
   const hsk6Option = document.getElementById('hsk-level-6-option');
 
+  const versionSelectorWrap = document.getElementById('lessons-version-selector-wrap');
+
   if (!grid) return;
 
   grid.innerHTML = '';
@@ -4533,6 +4535,7 @@ function renderLessonsList() {
   if (activeLessonsCurriculum === 'yct') {
     if (lessonsLevelContainer) lessonsLevelContainer.style.display = 'none';
     if (volumePillsContainer) volumePillsContainer.style.display = 'none';
+    if (versionSelectorWrap) versionSelectorWrap.style.display = 'none';
     if (yctLevelContainer) yctLevelContainer.style.display = 'flex';
 
     if (objectivesText) {
@@ -4604,6 +4607,7 @@ function renderLessonsList() {
   // HSK Curriculum Mode
   if (yctLevelContainer) yctLevelContainer.style.display = 'none';
   if (lessonsLevelContainer) lessonsLevelContainer.style.display = 'flex';
+  if (versionSelectorWrap) versionSelectorWrap.style.display = 'flex';
 
   // Sync level select value
   if (levelSelect && levelSelect.value !== activeLessonsLevel.toString()) {
