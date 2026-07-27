@@ -164,7 +164,7 @@
 
     <div class="sidebar-menu-wrapper" style="overflow-y: auto; flex: 1; padding-right: 4px;">
       
-      <!-- NÓM 1: HỌC TẬP -->
+      <!-- DANH MỤC 1: HỌC TẬP -->
       <div class="sidebar-section-label" style="font-size: 0.72rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; padding: 12px 14px 6px 14px;">Học Tập</div>
       <ul class="sidebar-menu" style="list-style: none; display: flex; flex-direction: column; gap: 4px;">
         <li class="sidebar-item active" data-tab="home" id="sidebar-nav-home" onclick="window.switchTab('home')">
@@ -178,14 +178,14 @@
         </li>
       </ul>
 
-      <!-- NHÓM 2: TỪ VỰNG (Danh sách mở rộng) -->
+      <!-- DANH MỤC 2: TỪ VỰNG (Mở rộng) -->
       <div class="sidebar-section-label" style="font-size: 0.72rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; padding: 14px 14px 6px 14px;">Từ Vựng</div>
       <ul class="sidebar-menu" style="list-style: none; display: flex; flex-direction: column; gap: 4px;">
         <li class="sidebar-item" data-tab="alphabet" onclick="window.switchTab('dictionary')">
-          <i class="fa-solid fa-font"></i> <span>Bảng chữ cái (Pinyin)</span>
+          <i class="fa-solid fa-font"></i> <span>Bảng chữ cái</span>
         </li>
         <li class="sidebar-item" data-tab="dictionary" id="sidebar-nav-dictionary" onclick="window.switchTab('dictionary')">
-          <i class="fa-solid fa-book-open"></i> <span>Danh sách từ vựng</span>
+          <i class="fa-solid fa-book-open"></i> <span>Từ vựng</span>
         </li>
         <li class="sidebar-item" data-tab="flashcards" id="sidebar-nav-flashcards" onclick="window.switchTab('flashcards')">
           <i class="fa-solid fa-box-archive"></i> <span>Sổ tay từ vựng</span>
@@ -198,42 +198,50 @@
         </li>
       </ul>
 
-      <!-- NHÓM 3: NGỮ PHÁP -->
+      <!-- DANH MỤC 3: NGỮ PHÁP (Mở rộng) -->
       <div class="sidebar-section-label" style="font-size: 0.72rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; padding: 14px 14px 6px 14px;">Ngữ Pháp</div>
       <ul class="sidebar-menu" style="list-style: none; display: flex; flex-direction: column; gap: 4px;">
         <li class="sidebar-item" onclick="window.switchTab('dictionary')">
-          <i class="fa-solid fa-spell-check"></i> <span>Cấu trúc Ngữ pháp</span>
+          <i class="fa-solid fa-spell-check"></i> <span>Ngữ pháp</span>
         </li>
         <li class="sidebar-item" onclick="window.switchTab('flashcards')">
           <i class="fa-solid fa-book-bookmark"></i> <span>Sổ tay ngữ pháp</span>
         </li>
       </ul>
 
-      <!-- NHÓM 4: CÁC CHỨC NĂNG KHÁC (ÔN TẬP & LUYỆN ĐỀ) -->
+      <!-- DANH MỤC 4: ÔN TẬP & LUYỆN ĐỀ -->
       <div class="sidebar-section-label" style="font-size: 0.72rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; padding: 14px 14px 6px 14px;">Ôn Tập & Luyện Đề</div>
       <ul class="sidebar-menu" style="list-style: none; display: flex; flex-direction: column; gap: 4px;">
         <li class="sidebar-item" data-tab="quiz" onclick="window.open('/quiz-game.html', '_blank')">
-          <i class="fa-solid fa-gamepad"></i> <span>Đấu trường Trắc nghiệm</span>
+          <i class="fa-solid fa-gamepad"></i> <span>Ôn tập trắc nghiệm</span>
         </li>
         <li class="sidebar-item" onclick="window.switchTab('dictionary')">
-          <i class="fa-solid fa-file-signature"></i> <span>117 Đề thi HSK</span>
+          <i class="fa-solid fa-file-signature"></i> <span>Luyện đề (117 Đề HSK)</span>
         </li>
         <li class="sidebar-item" data-tab="ai" onclick="window.open('/chat-history.html', '_blank')">
-          <i class="fa-solid fa-robot"></i> <span>Trợ lý AI Chatbot</span>
+          <i class="fa-solid fa-robot"></i> <span>Trợ lý AI</span>
         </li>
       </ul>
 
-      <!-- NHÓM 5: HỆ THỐNG & VIP -->
+      <!-- DANH MỤC 5: VIP -->
+      <div class="sidebar-section-label" style="font-size: 0.72rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; padding: 14px 14px 6px 14px;">VIP</div>
+      <ul class="sidebar-menu" style="list-style: none; display: flex; flex-direction: column; gap: 4px;">
+        <li class="sidebar-item" onclick="alert('Bảng xếp hạng học viên Hongtai đang cập nhật!')">
+          <i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> <span>Bảng xếp hạng</span>
+        </li>
+        <li class="sidebar-item" onclick="alert('Tài khoản của bạn đã được kích hoạt VIP Miễn phí!')">
+          <i class="fa-solid fa-crown" style="color: #fbbf24;"></i> <span>Nâng cấp VIP</span>
+        </li>
+      </ul>
+
+      <!-- DANH MỤC 6: HỆ THỐNG -->
       <div class="sidebar-section-label" style="font-size: 0.72rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; padding: 14px 14px 6px 14px;">Hệ Thống</div>
       <ul class="sidebar-menu" style="list-style: none; display: flex; flex-direction: column; gap: 4px;">
-        <li class="sidebar-item" onclick="alert('Tài khoản của bạn đã được kích hoạt VIP Miễn phí!')">
-          <i class="fa-solid fa-crown" style="color: #fbbf24;"></i> <span>Gói VIP Hongtai</span>
+        <li class="sidebar-item" onclick="document.getElementById('about-hongtai-modal').style.display='flex'">
+          <i class="fa-solid fa-gear"></i> <span>Cài đặt</span>
         </li>
         <li class="sidebar-item" onclick="document.getElementById('about-hongtai-modal').style.display='flex'">
-          <i class="fa-solid fa-gear"></i> <span>Cài đặt & Giới thiệu</span>
-        </li>
-        <li class="sidebar-item" onclick="document.getElementById('about-hongtai-modal').style.display='flex'">
-          <i class="fa-solid fa-shield-halved"></i> <span>Chính sách sử dụng</span>
+          <i class="fa-solid fa-shield-halved"></i> <span>Chính sách</span>
         </li>
       </ul>
 
