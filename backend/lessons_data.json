@@ -1,0 +1,175 @@
+{
+  "hsk1_lesson1": {
+    "lessonId": "hsk1_lesson1",
+    "title": "Bài 1: 你好 - Nǐ hǎo - Xin chào!",
+    "level": "HSK 1",
+    "curriculum": "HSK 3.0",
+    "sections": {
+      "text": [
+        {
+          "speaker": "A (Li Na)",
+          "zh": "你好！",
+          "pinyin": "Nǐ hǎo!",
+          "vi": "Xin chào!"
+        },
+        {
+          "speaker": "B (Wang Lin)",
+          "zh": "你好！",
+          "pinyin": "Nǐ hǎo!",
+          "vi": "Xin chào!"
+        },
+        {
+          "speaker": "A (Li Na)",
+          "zh": "你好吗？",
+          "pinyin": "Nǐ hǎo ma?",
+          "vi": "Bạn có khỏe không?"
+        },
+        {
+          "speaker": "B (Wang Lin)",
+          "zh": "我很好，谢谢！你呢？",
+          "pinyin": "Wǒ hěn hǎo, xièxie! Nǐ ne?",
+          "vi": "Tôi rất khỏe, cảm ơn! Còn bạn thì sao?"
+        },
+        {
+          "speaker": "A (Li Na)",
+          "zh": "我也很好。再见！",
+          "pinyin": "Wǒ yě hěn hǎo. Zàijiàn!",
+          "vi": "Tôi cũng rất khỏe. Tạm biệt!"
+        },
+        {
+          "speaker": "B (Wang Lin)",
+          "zh": "再见！",
+          "pinyin": "Zàijiàn!",
+          "vi": "Tạm biệt!"
+        }
+      ],
+      "vocab": [
+        {
+          "word": "你好",
+          "pinyin": "nǐ hǎo",
+          "type": "Thành ngữ",
+          "meaning": "Xin chào",
+          "example": "你好，很高兴认识你！ (Xin chào, rất vui được quen biết bạn!)"
+        },
+        {
+          "word": "你",
+          "pinyin": "nǐ",
+          "type": "Đại từ",
+          "meaning": "Bạn, anh, chị (ngôi thứ 2 số ít)",
+          "example": "你是老师吗？ (Bạn có phải là giáo viên không?)"
+        },
+        {
+          "word": "好",
+          "pinyin": "hǎo",
+          "type": "Tính từ",
+          "meaning": "Tốt, khỏe, hay, đẹp",
+          "example": "今天天气很好。 (Thời tiết hôm nay rất tốt.)"
+        },
+        {
+          "word": "吗",
+          "pinyin": "ma",
+          "type": "Trợ từ",
+          "meaning": "Không? (Dùng ở cuối câu hỏi Có/Không)",
+          "example": "你好吗？ (Bạn có khỏe không?)"
+        },
+        {
+          "word": "我",
+          "pinyin": "wǒ",
+          "type": "Đại từ",
+          "meaning": "Tôi, tớ, mình (ngôi thứ 1 số ít)",
+          "example": "我是学生。 (Tôi là học sinh.)"
+        },
+        {
+          "word": "很",
+          "pinyin": "hěn",
+          "type": "Phó từ",
+          "meaning": "Rất",
+          "example": "我很好。 (Tôi rất khỏe.)"
+        },
+        {
+          "word": "谢谢",
+          "pinyin": "xièxie",
+          "type": "Động từ",
+          "meaning": "Cảm ơn",
+          "example": "谢谢你的帮助！ (Cảm ơn sự giúp đỡ của bạn!)"
+        },
+        {
+          "word": "呢",
+          "pinyin": "ne",
+          "type": "Trợ từ",
+          "meaning": "Còn... thì sao? (Dùng hỏi rút gọn)",
+          "example": "你呢？ (Còn bạn thì sao?)"
+        },
+        {
+          "word": "也",
+          "pinyin": "yě",
+          "type": "Phó từ",
+          "meaning": "Cũng",
+          "example": "我也学习汉语。 (Tôi cũng học tiếng Trung.)"
+        },
+        {
+          "word": "再见",
+          "pinyin": "zàijiàn",
+          "type": "Động từ / Thành ngữ",
+          "meaning": "Tạm biệt, hẹn gặp lại",
+          "example": "明天见，再见！ (Hẹn gặp lại ngày mai, tạm biệt!)"
+        }
+      ],
+      "grammar": [
+        {
+          "title": "1. Câu hỏi Nghi vấn dùng Trợ từ 「吗」(ma)",
+          "formula": "Chủ ngữ + Vị ngữ + 吗？",
+          "explanation": "Để biến một câu trần thuật (câu kể) thành câu hỏi Có/Không trong tiếng Trung, bạn chỉ cần thêm trợ từ nghi vấn 吗 vào cuối câu.",
+          "examples": [
+            { "zh": "你好吗？", "pinyin": "Nǐ hǎo ma?", "vi": "Bạn có khỏe không?" },
+            { "zh": "你是中国学生吗？", "pinyin": "Nǐ shì Zhōngguó xuéshēng ma?", "vi": "Bạn có phải là học sinh Trung Quốc không?" }
+          ]
+        },
+        {
+          "title": "2. Câu hỏi rút gọn dùng Trợ từ 「呢」(ne)",
+          "formula": "Danh từ / Đại từ + 呢？",
+          "explanation": "Trợ từ 呢 dùng sau danh từ hoặc đại từ để hỏi về tình trạng của đối tượng đó dựa trên ngữ cảnh đã nhắc tới trước đó (tương đương 'Còn... thì sao?').",
+          "examples": [
+            { "zh": "我很好，你呢？", "pinyin": "Wǒ hěn hǎo, nǐ ne?", "vi": "Tôi rất khỏe, còn bạn thì sao?" },
+            { "zh": "我是学生，你呢？", "pinyin": "Wǒ shì xuéshēng, nǐ ne?", "vi": "Tôi là học sinh, còn bạn thì sao?" }
+          ]
+        },
+        {
+          "title": "3. Phó từ chỉ mức độ 「很」(hěn) & Phó từ 「也」(yě)",
+          "formula": "Phó từ + Tính từ / Động từ",
+          "explanation": "Trong tiếng Trung, phó từ luôn đứng TRƯỚC tính từ hoặc động từ mà nó bổ nghĩa. 「很」 có nghĩa là 'rất', 「也」 có nghĩa là 'cũng'.",
+          "examples": [
+            { "zh": "我很高兴。", "pinyin": "Wǒ hěn gāoxìng.", "vi": "Tôi rất vui mừng." },
+            { "zh": "我也很高兴。", "pinyin": "Wǒ yě hěn gāoxìng.", "vi": "Tôi cũng rất vui mừng." }
+          ]
+        }
+      ],
+      "exercises": [
+        {
+          "id": 1,
+          "type": "mcq",
+          "question": "Dịch câu sau sang tiếng Trung: 'Bạn có khỏe không?'",
+          "options": ["你好吗？", "你好！", "你是谁？", "再见！"],
+          "answer": 0,
+          "explanation": "Dùng cấu trúc Chủ ngữ + Tính từ (好) + 吗？ ở cuối câu."
+        },
+        {
+          "id": 2,
+          "type": "mcq",
+          "question": "Điền từ thích hợp vào chỗ trống: '我____很好，谢谢！'",
+          "options": ["吗", "很", "再", "好"],
+          "answer": 1,
+          "explanation": "Dùng phó từ '很' đứng trước tính từ '好' để chỉ mức độ (rất khỏe)."
+        },
+        {
+          "id": 3,
+          "type": "mcq",
+          "question": "Nghĩa của từ 「再见」 là gì?",
+          "options": ["Xin chào", "Cảm ơn", "Tạm biệt", "Xin lỗi"],
+          "answer": 2,
+          "explanation": "再见 (zàijiàn) có nghĩa là Tạm biệt / Hẹn gặp lại."
+        }
+      ]
+    }
+  }
+}

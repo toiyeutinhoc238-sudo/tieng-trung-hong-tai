@@ -591,6 +591,28 @@ app.get('/api/vocabulary', async (req, res) => {
   res.json([...mergedList, ...mappedCustomWords]);
 });
 
+// GET endpoint to fetch structured online lesson content (text, vocab, grammar, exercises)
+app.get('/api/lesson-detail', async (req, res) => {
+  try {
+    const lessonId = req.query.id || 'hsk1_lesson1';
+    const filePath = path.join(__dirname, 'lessons_data.json');
+    const dataStr = await fs.readFile(filePath, 'utf-8');
+    const lessonsData = JSON.parse(dataStr);
+    
+    if (lessonsData[lessonId]) {
+      return res.json(lessonsData[lessonId]);
+    } else if (lessonsData['hsk1_lesson1']) {
+      // Fallback sample lesson
+      return res.json(lessonsData['hsk1_lesson1']);
+    }
+    
+    return res.status(404).json({ error: 'Lesson content not found' });
+  } catch (err) {
+    console.error("Error reading lessons_data.json:", err);
+    res.status(500).json({ error: 'Failed to load lesson detail' });
+  }
+});
+
 // POST toggle memorized
 app.post('/api/vocabulary/toggle-memorized', async (req, res) => {
   const email = getLoggedInUserEmail(req);
