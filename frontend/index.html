@@ -109,50 +109,6 @@
       </div>
     </div>
 
-    <!-- User Account Card (Google login / Profile - Directly under Logo Header) -->
-    <div id="auth-container" class="auth-container logged-out">
-      <!-- Logged out state elements -->
-      <div class="logged-out-view">
-        <div id="google-signin-button"></div>
-        <button id="fallback-login-btn" onclick="window.triggerGoogleLogin()" style="width:100%; padding:10px 14px; background:linear-gradient(135deg, #3b82f6, #2563eb); color:#fff; border:none; border-radius:12px; font-weight:800; font-size:0.88rem; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow: 0 4px 12px rgba(37,99,235,0.25);">
-          <i class="fa-solid fa-right-to-bracket"></i> Đăng nhập bằng Google
-        </button>
-      </div>
-
-      <!-- Logged in state elements -->
-      <div class="logged-in-view user-dropdown">
-        <!-- Profile card (click to open dropdown) -->
-        <div class="user-profile sidebar-profile-card" onclick="this.closest('.user-dropdown').classList.toggle('show-menu')">
-          <div class="sidebar-avatar-wrap">
-            <img id="user-avatar-img" class="user-avatar-img" src="" alt="Avatar" style="display: none;">
-            <div id="user-avatar-placeholder" class="user-avatar sidebar-avatar-placeholder"><i class="fa-solid fa-user"></i></div>
-          </div>
-          <div class="user-info">
-            <span class="user-name" id="user-display-name">Học viên Hongtai</span>
-            <span class="user-sub" id="user-display-email">user@hongtai.edu.vn</span>
-            <span class="user-role-badge">Học viên</span>
-          </div>
-          <i class="fa-solid fa-chevron-down profile-chevron" style="margin-left:auto;"></i>
-        </div>
-        <ul class="profile-dropdown-menu">
-          <li>
-            <a href="/chat-history.html" target="_blank" class="history-link">
-              <i class="fa-solid fa-clock-rotate-left"></i> Lịch sử cuộc trò chuyện
-            </a>
-          </li>
-          <li>
-            <a href="#" id="game-history-btn" class="history-link">
-              <i class="fa-solid fa-gamepad"></i> Lịch sử chơi trò chơi
-            </a>
-          </li>
-          <li>
-            <a href="#" id="logout-btn" class="logout-link">
-              <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
 
     <!-- Modal Đăng nhập / Google SSO Account Modal -->
     <div class="modal-overlay" id="app-login-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.65); backdrop-filter: blur(6px); z-index: 99999; align-items: center; justify-content: center;">
