@@ -57,44 +57,6 @@
         <button id="theme-toggle" class="theme-toggle-btn" title="Chuyển chế độ Sáng/Tối">
           <i class="fa-solid fa-moon"></i>
         </button>
-
-        <!-- User Account Card (Google login / Profile) -->
-        <div id="auth-container" class="auth-container logged-out">
-          <!-- Logged out state elements -->
-          <div class="logged-out-view">
-            <div id="google-signin-button"></div>
-          </div>
-
-          <!-- Logged in state elements -->
-          <div class="logged-in-view user-dropdown">
-            <div class="user-profile" onclick="this.closest('.user-dropdown').classList.toggle('show-menu')">
-              <img id="user-avatar-img" class="user-avatar-img" src="" alt="Avatar" style="display: none;">
-              <div id="user-avatar-placeholder" class="user-avatar"><i class="fa-solid fa-user"></i></div>
-              <div class="user-info">
-                <span class="user-name" id="user-display-name">Học viên Hongtai</span>
-                <span class="user-role" id="user-display-email">user@hongtai.edu.vn</span>
-              </div>
-              <i class="fa-solid fa-chevron-down profile-chevron"></i>
-            </div>
-            <ul class="profile-dropdown-menu">
-              <li>
-                <a href="/chat-history.html" target="_blank" class="history-link">
-                  <i class="fa-solid fa-clock-rotate-left"></i> Lịch sử cuộc trò chuyện
-                </a>
-              </li>
-              <li>
-                <a href="#" id="game-history-btn" class="history-link">
-                  <i class="fa-solid fa-gamepad"></i> Lịch sử chơi trò chơi
-                </a>
-              </li>
-              <li>
-                <a href="#" id="logout-btn" class="logout-link">
-                  <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
       </div>
     </div>
   </nav>
@@ -106,6 +68,51 @@
       <div style="display: flex; flex-direction: column;">
         <span style="font-weight: 800; font-size: 1.05rem; color: var(--text-primary); letter-spacing: -0.01em;">Hongtai Chinese</span>
         <span style="font-size: 0.75rem; color: var(--text-muted);">Ôn Tập HSK & YCT</span>
+      </div>
+    </div>
+
+    <!-- User Account Card (Google login / Profile - Directly under Logo Header) -->
+    <div id="auth-container" class="auth-container logged-out" style="width: 100%; border-bottom: 1px solid var(--border-glass); padding-bottom: 12px; margin-bottom: 12px;">
+      <!-- Logged out state elements -->
+      <div class="logged-out-view" style="width: 100%;">
+        <div id="google-signin-button" style="width: 100%;"></div>
+        <button id="fallback-login-btn" onclick="window.triggerGoogleLogin()" style="width:100%; padding:10px 14px; background:linear-gradient(135deg, #3b82f6, #2563eb); color:#fff; border:none; border-radius:12px; font-weight:800; font-size:0.88rem; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow: 0 4px 12px rgba(37,99,235,0.25);">
+          <i class="fa-solid fa-right-to-bracket"></i> Đăng nhập bằng Google
+        </button>
+      </div>
+
+      <!-- Logged in state elements -->
+      <div class="logged-in-view user-dropdown" style="width: 100%; position: relative;">
+        <!-- Profile card (click to open dropdown) -->
+        <div class="user-profile sidebar-profile-card" onclick="this.closest('.user-dropdown').classList.toggle('show-menu')" style="display: flex; align-items: center; gap: 12px; padding: 10px 12px; background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; cursor: pointer; width: 100%; box-sizing: border-box;">
+          <div class="sidebar-avatar-wrap" style="width: 42px; height: 42px; flex-shrink: 0;">
+            <img id="user-avatar-img" class="user-avatar-img" src="" alt="Avatar" style="display: none; width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid #3b82f6;">
+            <div id="user-avatar-placeholder" class="user-avatar sidebar-avatar-placeholder" style="width: 42px; height: 42px; border-radius: 50%; background: #334155; color: #94a3b8; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;"><i class="fa-solid fa-user"></i></div>
+          </div>
+          <div class="user-info" style="display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1;">
+            <span class="user-name" id="user-display-name" style="font-size: 0.95rem; font-weight: 700; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Phú Phan</span>
+            <span class="user-sub" id="user-display-email" style="font-size: 0.78rem; color: #94a3b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">phanphiphu04@gmail...</span>
+            <span class="user-role-badge" style="font-size: 0.75rem; font-weight: 700; color: #3b82f6; margin-top: 1px;">Học viên</span>
+          </div>
+          <i class="fa-solid fa-chevron-down profile-chevron" style="color: #94a3b8; font-size: 0.8rem; margin-left: auto;"></i>
+        </div>
+        <ul class="profile-dropdown-menu" style="top: calc(100% + 6px); left: 0; right: 0; width: 100%;">
+          <li>
+            <a href="/chat-history.html" target="_blank" class="history-link">
+              <i class="fa-solid fa-clock-rotate-left"></i> Lịch sử cuộc trò chuyện
+            </a>
+          </li>
+          <li>
+            <a href="#" id="game-history-btn" class="history-link">
+              <i class="fa-solid fa-gamepad"></i> Lịch sử chơi trò chơi
+            </a>
+          </li>
+          <li>
+            <a href="#" id="logout-btn" class="logout-link">
+              <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
 
