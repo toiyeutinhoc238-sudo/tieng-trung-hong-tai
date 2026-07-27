@@ -66,14 +66,17 @@
 
           <!-- Logged in state elements -->
           <div class="logged-in-view user-dropdown">
-            <div class="user-profile">
-              <img id="user-avatar-img" class="user-avatar-img" src="" alt="Avatar" style="display: none;">
-              <div id="user-avatar-placeholder" class="user-avatar">HT</div>
-              <div class="user-info">
-                <span class="user-name" id="user-display-name">Tiếng Trung Hongtai</span>
-                <span class="user-role" id="user-display-email">demo@tiengtrunghongtai.com</span>
+            <div class="user-profile" style="display: flex; align-items: center; gap: 12px; padding: 4px 10px; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid var(--border-glass);">
+              <div class="user-avatar-wrap" style="position: relative; width: 38px; height: 38px;">
+                <img id="user-avatar-img" class="user-avatar-img" src="" alt="Avatar" style="display: none; width: 38px; height: 38px; border-radius: 50%; object-fit: cover;">
+                <div id="user-avatar-placeholder" class="user-avatar" style="width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;">HT</div>
               </div>
-              <i class="fa-solid fa-chevron-down profile-chevron"></i>
+              <div class="user-info" style="display: flex; flex-direction: column; gap: 1px;">
+                <span class="user-name" id="user-display-name" style="font-size: 0.9rem; font-weight: 700; color: var(--text-primary); max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Tiếng Trung Hongtai</span>
+                <span class="user-role" id="user-display-email" style="font-size: 0.75rem; color: var(--text-muted); max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">demo@tiengtrunghongtai.com</span>
+                <span class="user-badge" style="font-size: 0.7rem; font-weight: 700; color: var(--accent-blue); line-height: 1;">Học viên</span>
+              </div>
+              <i class="fa-solid fa-chevron-down profile-chevron" style="font-size: 0.75rem; color: var(--text-muted); margin-left: 4px;"></i>
             </div>
             <ul class="profile-dropdown-menu">
               <li>
