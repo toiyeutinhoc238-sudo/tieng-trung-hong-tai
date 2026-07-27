@@ -62,9 +62,9 @@
     /* Answer Tiles (Quizizz exact colors) */
     .answers-grid { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
     @media (max-width: 600px) { .answers-grid { grid-template-columns: 1fr; } }
-    .ans-btn { border: none; border-radius: 12px; padding: 20px; color: #fff; font-size: 1.25rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; position: relative; transition: transform 0.1s, box-shadow 0.1s, filter 0.2s; word-break: break-word; text-align: left; }
-    .ans-btn span { flex: 1; }
-    .ans-icon { width: 36px; height: 36px; background: rgba(0,0,0,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0; font-size: 1.2rem; font-weight: 900; color: #fff; }
+    .ans-btn { border: none; border-radius: 14px; padding: 22px 24px; color: #fff; font-size: 1.6rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; position: relative; transition: transform 0.1s, box-shadow 0.1s, filter 0.2s; word-break: break-word; text-align: left; letter-spacing: 0.5px; }
+    .ans-btn span { flex: 1; font-size: 1.6rem; font-weight: 800; }
+    .ans-icon { width: 44px; height: 44px; background: rgba(0,0,0,0.25); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 18px; flex-shrink: 0; font-size: 1.35rem; font-weight: 900; color: #fff; }
     
     .c-red { background: #e21b3c; box-shadow: 0 8px 0 #a9122c; }
     .c-blue { background: #1368ce; box-shadow: 0 8px 0 #0d4a94; }
@@ -796,8 +796,8 @@
   }
 
   function saveGameHistory() {
-    if (score <= 0 && (!playedHistory || playedHistory.length === 0)) return;
-    const playedCount = playedHistory ? playedHistory.length : 0;
+    if (!playedHistory || playedHistory.length === 0) return;
+    const playedCount = playedHistory.length;
     const levelVal = selLevel ? selLevel.value : 'all';
     const modeVal = currentMode || 'zh-vi';
     const maxComboCount = (playedHistory && playedHistory.length > 0) 
