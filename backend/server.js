@@ -66,6 +66,8 @@ app.use(cors({
 app.use(express.json());
 
 const FRONTEND_DIR = path.join(__dirname, '..', 'frontend');
+const DIST_DIR = path.join(__dirname, '..', 'frontend', 'dist');
+app.use(express.static(DIST_DIR));
 app.use(express.static(FRONTEND_DIR));
 
 // Disable caching for all API routes

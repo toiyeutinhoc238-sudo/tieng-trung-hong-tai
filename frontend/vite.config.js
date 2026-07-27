@@ -17,7 +17,8 @@ export default defineConfig({
         main: 'index.html',
         detail: 'detail-list.html',
         history: 'chat-history.html',
-        quiz: 'quiz-game.html'
+        quiz: 'quiz-game.html',
+        lesson: 'lesson-online.html'
       }
     }
   }
