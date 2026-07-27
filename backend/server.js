@@ -171,7 +171,14 @@ async function writeUserData(data) {
   // Sync instantly to in-memory cache
   cachedUserData = data;
 
-  // Persist asynchronously in the background
+  // Dual persistence: Write to local JSON file & MongoDB Atlas
+  try {
+    await fs.writeFile(USER_DB_PATH, JSON.stringify(data, null, 2), 'utf-8');
+  } catch (fileErr) {
+    console.error("Failed writing to user_data.json:", fileErr);
+  }
+
+  // Persist asynchronously in the background to MongoDB
   persistToMongoDB(data).catch(err => {
     console.error("Background persistence to MongoDB failed:", err);
   });
