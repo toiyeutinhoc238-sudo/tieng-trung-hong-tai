@@ -65,8 +65,8 @@ app.use(cors({
 }));
 app.use(express.json());
 
-const EXAMS_FILES_DIR = path.join(__dirname, '..', 'TRON BO DE THI HSK TU 1 DEN 9');
-app.use('/exams-files', express.static(EXAMS_FILES_DIR));
+const FRONTEND_DIR = path.join(__dirname, '..', 'frontend');
+app.use(express.static(FRONTEND_DIR));
 
 // Disable caching for all API routes
 app.use('/api', (req, res, next) => {
@@ -1373,9 +1373,12 @@ app.get('/api/tts', async (req, res) => {
   }
 });
 
-// Thêm đoạn này để xử lý đường dẫn gốc
+const EXAMS_FILES_DIR = path.join(__dirname, '..', 'TRON BO DE THI HSK TU 1 DEN 9');
+app.use('/exams-files', express.static(EXAMS_FILES_DIR));
+
+// Serve index.html as root
 app.get('/', (req, res) => {
-  res.send('API Flashcard HSK đang hoạt động ngon lành!');
+  res.sendFile(path.join(FRONTEND_DIR, 'index.html'));
 });
 
 // Start Server
