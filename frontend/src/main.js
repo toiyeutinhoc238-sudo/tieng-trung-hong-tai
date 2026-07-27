@@ -1760,18 +1760,31 @@ function setupEventListeners() {
       if (tbody) tbody.innerHTML = '';
       if (emptyDiv) emptyDiv.style.display = 'none';
 
+      let userEmail = '';
+      try {
+        const uStr = localStorage.getItem('user');
+        if (uStr) {
+          const uObj = JSON.parse(uStr);
+          if (uObj && uObj.email) userEmail = uObj.email;
+        }
+      } catch(e) {}
+
       const token = localStorage.getItem('session_token');
-      if (!token) {
+      if (!token && !userEmail && !currentUser) {
         if (emptyDiv) emptyDiv.style.display = 'block';
         return;
       }
 
-      fetch(API_BASE_URL + '/api/user/game-history', {
+      const fetchUrl = (userEmail || (currentUser && currentUser.email))
+        ? `${API_BASE_URL}/api/user/game-history?email=${encodeURIComponent(userEmail || currentUser.email)}`
+        : `${API_BASE_URL}/api/user/game-history`;
+
+      fetch(fetchUrl, {
         headers: getAuthHeaders()
       })
         .then(res => res.json())
         .then(history => {
-          if (!history || history.length === 0) {
+          if (!history || !Array.isArray(history) || history.length === 0) {
             if (emptyDiv) emptyDiv.style.display = 'block';
             return;
           }
