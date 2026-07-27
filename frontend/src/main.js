@@ -2370,7 +2370,19 @@ function getAuthHeaders(customHeaders = {}) {
 
 // Fetch current user from session / local storage and initialize Google Sign-In SDK
 async function initAuth() {
-  // Check if session is active on backend
+  // 1. Load instantly from local storage so logged in user profile is rendered immediately
+  const savedUser = localStorage.getItem('user');
+  if (savedUser) {
+    try {
+      currentUser = JSON.parse(savedUser);
+      renderUserProfile();
+    } catch (e) {
+      localStorage.removeItem('user');
+      localStorage.removeItem('session_token');
+    }
+  }
+
+  // 2. Refresh active session with backend API
   try {
     const res = await fetch(API_BASE_URL + '/api/auth/me', {
       headers: getAuthHeaders(),
@@ -2381,10 +2393,11 @@ async function initAuth() {
       const data = await res.json();
       if (data.user) {
         currentUser = data.user;
+        localStorage.setItem('user', JSON.stringify(currentUser));
         renderUserProfile();
         return;
-      } else {
-        // Backend explicitly returned user: null, session is invalid/expired!
+      } else if (!currentUser) {
+        // Only clear if we had no offline session
         localStorage.removeItem('user');
         localStorage.removeItem('session_token');
         currentUser = null;
@@ -2397,20 +2410,11 @@ async function initAuth() {
     console.warn('Backend session retrieval failed, using local storage:', err);
   }
 
-  // Fallback to local storage only if backend offline/unreachable
-  const savedUser = localStorage.getItem('user');
-  if (savedUser) {
-    try {
-      currentUser = JSON.parse(savedUser);
-      renderUserProfile();
-    } catch (e) {
-      localStorage.removeItem('user');
-      localStorage.removeItem('session_token');
-    }
+  // 3. Initialize Google Identity Services if not logged in
+  if (!currentUser) {
+    renderUserProfile();
+    initGoogleSignIn();
   }
-
-  // Initialize Google Identity Services
-  initGoogleSignIn();
 }
 
 function initGoogleSignIn() {
