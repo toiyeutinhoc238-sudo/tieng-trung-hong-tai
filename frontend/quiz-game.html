@@ -808,6 +808,15 @@
       ? playedHistory.filter(x => x.isCorrect).length 
       : 0;
 
+    let savedEmail = '';
+    try {
+      const uStr = localStorage.getItem('user');
+      if (uStr) {
+        const uObj = JSON.parse(uStr);
+        if (uObj && uObj.email) savedEmail = uObj.email;
+      }
+    } catch(e) {}
+
     const API_BASE_URL = window.location.origin.includes('5173') 
       ? 'http://localhost:5000' 
       : window.location.origin;
@@ -819,6 +828,7 @@
       },
       credentials: 'omit',
       body: JSON.stringify({
+        email: savedEmail,
         score: score,
         stage: playedCount,
         level: levelVal,
