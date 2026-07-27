@@ -152,16 +152,16 @@ function initTheme() {
 function toggleTheme() {
   const isDark = document.documentElement.classList.toggle('dark');
   localStorage.setItem('theme', isDark ? 'dark' : 'light');
-  if (themeToggleBtn) {
-    themeToggleBtn.innerHTML = isDark
-      ? '<i class="fa-solid fa-moon"></i>'
-      : '<i class="fa-solid fa-sun"></i>';
-  }
+  const icon = isDark ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
+  if (themeToggleBtn) themeToggleBtn.innerHTML = icon;
+  const sidebarToggle = document.getElementById('sidebar-theme-toggle');
+  if (sidebarToggle) sidebarToggle.innerHTML = `${icon} Giao diện`;
   showToast(isDark ? 'Đã chuyển sang chế độ tối' : 'Đã chuyển sang chế độ sáng');
   if (!currentUser && typeof initGoogleSignIn === 'function') {
     initGoogleSignIn();
   }
 }
+window.toggleTheme = toggleTheme;
 
 // --- TEXT TO SPEECH (TTS) SETUP ---
 let speechVoice = localStorage.getItem('speech_voice') || 'elevenlabs-adam';
@@ -437,16 +437,7 @@ async function toggleWordMemorized(id) {
       // Rollback optimistic state
       vocabList[index].isMemorized = oldMemorized;
       updateStats();
-      if (studyMode !== 'type') {
-        applyFilters(true);
-      }
-
-      localStorage.removeItem('user');
-      localStorage.removeItem('session_token');
-      currentUser = null;
-      renderUserProfile();
-      showToast('Phiên làm việc đã hết hạn. Vui lòng đăng nhập lại.', true);
-
+      // Fallback guest progress save without logging out the user
       const guestProgress = JSON.parse(localStorage.getItem('guest_progress') || '{}');
       if (!guestProgress[id]) guestProgress[id] = {};
       guestProgress[id].isMemorized = !oldMemorized;
@@ -513,14 +504,7 @@ async function toggleWordStarred(id) {
       // Rollback optimistic state
       vocabList[index].isStarred = oldStarred;
       updateStats();
-      applyFilters(true);
-
-      localStorage.removeItem('user');
-      localStorage.removeItem('session_token');
-      currentUser = null;
-      renderUserProfile();
-      showToast('Phiên làm việc đã hết hạn. Vui lòng đăng nhập lại.', true);
-
+      // Fallback guest progress save without logging out the user
       const guestProgress = JSON.parse(localStorage.getItem('guest_progress') || '{}');
       if (!guestProgress[id]) guestProgress[id] = {};
       guestProgress[id].isStarred = !oldStarred;
@@ -1556,9 +1540,6 @@ function setupEventListeners() {
   if (hskCard) {
     hskCard.addEventListener('click', () => {
       switchTab('lessons');
-      // Go to level selection or auto select HSK level
-      document.getElementById('exam-level-selection').style.display = 'block';
-      document.getElementById('exam-papers-list').style.display = 'none';
     });
   }
 
@@ -1722,10 +1703,15 @@ function setupEventListeners() {
   }
 
 
-  // Logout
+  // Logout (sidebar)
   const logoutBtn = document.getElementById('logout-btn');
   if (logoutBtn) {
     logoutBtn.addEventListener('click', handleLogout);
+  }
+  // Logout (navbar)
+  const logoutBtnNav = document.getElementById('logout-btn-nav');
+  if (logoutBtnNav) {
+    logoutBtnNav.addEventListener('click', handleLogout);
   }
 
   // Theme Toggle
@@ -2097,8 +2083,13 @@ function setupEventListeners() {
   const ev2Btn = document.getElementById('exams-version-2-btn');
 
   const setHskVersion = (version) => {
-    activeHskVersion = version;
-    localStorage.setItem('active_hsk_version', version);
+    if (version === 'yct') {
+      activeLessonsCurriculum = 'yct';
+      activeHskVersion = '3.0';
+    } else {
+      activeHskVersion = version;
+    }
+    localStorage.setItem('active_hsk_version', activeHskVersion);
     updateVersionButtonsUI();
 
     // Refresh lists and stats dynamically
@@ -2109,10 +2100,13 @@ function setupEventListeners() {
     updateExamsVersionUI();
   };
 
+  const svYctBtn = document.getElementById('smart-yct-version-btn');
+
   if (lv3Btn) lv3Btn.addEventListener('click', () => setHskVersion('3.0'));
   if (lv2Btn) lv2Btn.addEventListener('click', () => setHskVersion('2.0'));
   if (sv3Btn) sv3Btn.addEventListener('click', () => setHskVersion('3.0'));
   if (sv2Btn) sv2Btn.addEventListener('click', () => setHskVersion('2.0'));
+  if (svYctBtn) svYctBtn.addEventListener('click', () => setHskVersion('yct'));
   if (ev3Btn) ev3Btn.addEventListener('click', () => setHskVersion('3.0'));
   if (ev2Btn) ev2Btn.addEventListener('click', () => setHskVersion('2.0'));
 
@@ -2305,8 +2299,6 @@ function setupEventListeners() {
       showNotebookDashboardView(activeNotebook, true);
     });
   }
-
-  // Click handler for mark-unmemorized-btn
   const markUnmemorizedBtn = document.getElementById('mark-unmemorized-btn');
   if (markUnmemorizedBtn) {
     markUnmemorizedBtn.addEventListener('click', () => {
@@ -2376,34 +2368,7 @@ function getAuthHeaders(customHeaders = {}) {
 
 // Fetch current user from session / local storage and initialize Google Sign-In SDK
 async function initAuth() {
-  // Check if session is active on backend
-  try {
-    const res = await fetch(API_BASE_URL + '/api/auth/me', {
-      headers: getAuthHeaders(),
-      credentials: 'include',
-      cache: 'no-store'
-    });
-    if (res.ok) {
-      const data = await res.json();
-      if (data.user) {
-        currentUser = data.user;
-        renderUserProfile();
-        return;
-      } else {
-        // Backend explicitly returned user: null, session is invalid/expired!
-        localStorage.removeItem('user');
-        localStorage.removeItem('session_token');
-        currentUser = null;
-        renderUserProfile();
-        initGoogleSignIn();
-        return;
-      }
-    }
-  } catch (err) {
-    console.warn('Backend session retrieval failed, using local storage:', err);
-  }
-
-  // Fallback to local storage only if backend offline/unreachable
+  // 1. Load instantly from local storage so there's no delay or loss of logged-in state
   const savedUser = localStorage.getItem('user');
   if (savedUser) {
     try {
@@ -2415,23 +2380,99 @@ async function initAuth() {
     }
   }
 
-  // Initialize Google Identity Services
-  initGoogleSignIn();
+  // 2. Verify and refresh active session with backend API
+  try {
+    const res = await fetch(API_BASE_URL + '/api/auth/me', {
+      headers: getAuthHeaders(),
+      credentials: 'include',
+      cache: 'no-store'
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.user) {
+        currentUser = data.user;
+        localStorage.setItem('user', JSON.stringify(currentUser));
+        renderUserProfile();
+        return;
+      }
+      // If backend returns null user but we have localStorage user,
+      // keep the localStorage user (offline-first / token-mismatch tolerance)
+      if (currentUser) {
+        renderUserProfile();
+        return;
+      }
+    }
+  } catch (err) {
+    console.warn('Backend session retrieval failed, using local storage:', err);
+    // Keep whatever we loaded from localStorage
+    if (currentUser) {
+      renderUserProfile();
+      return;
+    }
+  }
+
+  // 3. Render logged-out view if no user found anywhere
+  if (!currentUser) {
+    renderUserProfile();
+    initGoogleSignIn();
+  }
 }
+
+window.triggerGoogleLogin = function() {
+  const modal = document.getElementById('app-login-modal');
+  if (modal) modal.style.display = 'flex';
+  if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+    try { google.accounts.id.prompt(); } catch(e){}
+  }
+};
+
+window.loginWithGoogleAccount = async function(email, name, picture) {
+  try {
+    const res = await fetch(API_BASE_URL + '/api/auth/google', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, name, picture }),
+      credentials: 'include'
+    });
+    
+    if (res.ok) {
+      const data = await res.json();
+      if (data.success && data.user) {
+        currentUser = data.user;
+        if (data.token) {
+          localStorage.setItem('session_token', data.token);
+        }
+        localStorage.setItem('user', JSON.stringify(currentUser));
+        renderUserProfile();
+        showToast(`Đã đăng nhập tài khoản Google: ${currentUser.name} 🎉`);
+        const modal = document.getElementById('app-login-modal');
+        if (modal) modal.style.display = 'none';
+        return;
+      }
+    }
+  } catch(err) {
+    console.warn("Direct Google login API call failed, setting client state:", err);
+  }
+
+  // Fallback client state if server offline
+  currentUser = { name, email, picture };
+  localStorage.setItem('user', JSON.stringify(currentUser));
+  localStorage.setItem('session_token', 'token_' + Date.now());
+  renderUserProfile();
+  showToast(`Đã đăng nhập tài khoản Google: ${name} 🎉`);
+  const modal = document.getElementById('app-login-modal');
+  if (modal) modal.style.display = 'none';
+};
 
 function initGoogleSignIn() {
   if (typeof google === 'undefined') {
-    // Retry in 1s if Google Identity Services script hasn't loaded yet
-    setTimeout(initGoogleSignIn, 1000);
+    setTimeout(initGoogleSignIn, 500);
     return;
   }
 
   try {
     const signinBtnWrapper = document.getElementById('google-signin-button');
-    if (!signinBtnWrapper) return;
-
-    // Clear wrapper first in case of re-rendering
-    signinBtnWrapper.innerHTML = '';
+    const modalBtnWrapper = document.getElementById('modal-google-signin');
 
     google.accounts.id.initialize({
       client_id: GOOGLE_CLIENT_ID,
@@ -2440,17 +2481,37 @@ function initGoogleSignIn() {
       cancel_on_tap_outside: true
     });
 
-    google.accounts.id.renderButton(
-      signinBtnWrapper,
-      {
-        theme: document.documentElement.classList.contains('dark') ? 'filled_black' : 'outline',
-        size: 'medium',
-        type: 'standard',
-        shape: 'rectangular',
-        text: 'signin_with',
-        logo_alignment: 'left'
-      }
-    );
+    if (signinBtnWrapper) {
+      signinBtnWrapper.innerHTML = '';
+      google.accounts.id.renderButton(
+        signinBtnWrapper,
+        {
+          theme: document.documentElement.classList.contains('dark') ? 'filled_black' : 'outline',
+          size: 'large',
+          type: 'standard',
+          shape: 'rectangular',
+          text: 'signin_with',
+          logo_alignment: 'left',
+          width: 220
+        }
+      );
+    }
+
+    if (modalBtnWrapper) {
+      modalBtnWrapper.innerHTML = '';
+      google.accounts.id.renderButton(
+        modalBtnWrapper,
+        {
+          theme: document.documentElement.classList.contains('dark') ? 'filled_black' : 'outline',
+          size: 'large',
+          type: 'standard',
+          shape: 'rectangular',
+          text: 'signin_with',
+          logo_alignment: 'left',
+          width: 280
+        }
+      );
+    }
   } catch (err) {
     console.error('Google Sign-In initialization failed:', err);
   }
@@ -2561,7 +2622,6 @@ function renderUserProfile() {
   const avatarPlaceholder = document.getElementById('user-avatar-placeholder');
   const displayName = document.getElementById('user-display-name');
   const displayEmail = document.getElementById('user-display-email');
-
   const navChatHistoryLi = document.getElementById('nav-chat-history-li');
 
   if (!authContainer) return;
@@ -2571,17 +2631,18 @@ function renderUserProfile() {
     authContainer.classList.add('logged-in');
 
     if (currentUser.picture) {
-      avatarImg.src = currentUser.picture;
-      avatarImg.style.display = 'block';
-      avatarPlaceholder.style.display = 'none';
+      if (avatarImg) {
+        avatarImg.src = currentUser.picture;
+        avatarImg.style.display = 'block';
+      }
+      if (avatarPlaceholder) avatarPlaceholder.style.display = 'none';
     } else {
-      avatarImg.style.display = 'none';
-      avatarPlaceholder.style.display = 'flex';
-      avatarPlaceholder.textContent = currentUser.name ? currentUser.name.substring(0, 2).toUpperCase() : 'HT';
+      if (avatarImg) avatarImg.style.display = 'none';
+      if (avatarPlaceholder) avatarPlaceholder.style.display = 'flex';
     }
 
-    displayName.textContent = currentUser.name || 'Học viên';
-    displayEmail.textContent = currentUser.email || 'demo@tiengtrunghongtai.com';
+    if (displayName) displayName.textContent = currentUser.name || 'Học viên';
+    if (displayEmail) displayEmail.textContent = currentUser.email || '';
 
     if (navChatHistoryLi) navChatHistoryLi.style.display = 'block';
 
@@ -2591,7 +2652,6 @@ function renderUserProfile() {
   } else {
     authContainer.classList.remove('logged-in');
     authContainer.classList.add('logged-out');
-
     if (navChatHistoryLi) navChatHistoryLi.style.display = 'none';
   }
 
@@ -2605,12 +2665,12 @@ function renderUserProfile() {
 // --- HSK MOCK EXAM ENGINE ---
 
 const HSK_LEVELS_METADATA = {
-  1: { time: 35, questionsCount: 40, title: "Sơ cấp - HSK Cấp 1" },
-  2: { time: 55, questionsCount: 50, title: "Sơ cấp - HSK Cấp 2" },
-  3: { time: 90, questionsCount: 80, title: "Sơ cấp - HSK Cấp 3" },
-  4: { time: 105, questionsCount: 85, title: "Trung cấp - HSK Cấp 4" },
-  5: { time: 125, questionsCount: 90, title: "Trung cấp - HSK Cấp 5" },
-  6: { time: 140, questionsCount: 101, title: "Cao cấp - HSK Cấp 6" }
+  1: { time: 35, questionsCount: 40, listenCount: 20, readCount: 20, writeCount: 0, title: "Sơ cấp - HSK Cấp 1" },
+  2: { time: 55, questionsCount: 60, listenCount: 35, readCount: 25, writeCount: 0, title: "Sơ cấp - HSK Cấp 2" },
+  3: { time: 90, questionsCount: 80, listenCount: 40, readCount: 30, writeCount: 10, title: "Sơ cấp - HSK Cấp 3" },
+  4: { time: 105, questionsCount: 100, listenCount: 45, readCount: 40, writeCount: 15, title: "Trung cấp - HSK Cấp 4" },
+  5: { time: 125, questionsCount: 100, listenCount: 45, readCount: 45, writeCount: 10, title: "Trung cấp - HSK Cấp 5" },
+  6: { time: 140, questionsCount: 101, listenCount: 50, readCount: 50, writeCount: 1, title: "Cao cấp - HSK Cấp 6" }
 };
 
 let currentExamLevel = null;
@@ -2663,27 +2723,32 @@ function generateExam(level, setNumber) {
 
   const meta = HSK_LEVELS_METADATA[level] || { time: 45, questionsCount: 40 };
   const qCount = meta.questionsCount;
-  let baseSeed = level * 10000 + setNumber * 500;
 
-  const shuffledVocab = seededShuffle(levelVocabs, baseSeed);
+  // Shuffle level vocabs deterministically per level
+  const masterLevelVocab = seededShuffle(levelVocabs, level * 7919);
 
-  let listenCount = Math.round(qCount * 0.4);
-  let readCount = Math.round(qCount * 0.50);
+  // Shift index based on setNumber so each of the 20 sets gets a distinct, non-overlapping vocab slice
+  const stepOffset = Math.max(1, Math.floor(masterLevelVocab.length / 20));
+  const startOffset = (setNumber - 1) * stepOffset;
+
+  let listenCount = meta.listenCount || Math.round(qCount * 0.4);
+  let readCount = meta.readCount || Math.round(qCount * 0.5);
 
   const questions = [];
 
   for (let i = 0; i < qCount; i++) {
-    const vocabItem = shuffledVocab[i % shuffledVocab.length];
+    const vocabIndex = (startOffset + i) % masterLevelVocab.length;
+    const vocabItem = masterLevelVocab[vocabIndex];
 
-    let section = "Phần II: Đọc hiểu";
+    let section = "Phần II: Đọc hiểu (阅读)";
     let isListening = false;
     let isWriting = false;
 
     if (i < listenCount) {
-      section = "Phần I: Nghe hiểu";
+      section = "Phần I: Nghe hiểu (听力)";
       isListening = true;
     } else if (i >= listenCount + readCount) {
-      section = "Phần III: Viết & Củng cố";
+      section = "Phần III: Viết & Viết luận (书写)";
       isWriting = true;
     }
 
@@ -2884,11 +2949,9 @@ function switchTab(tabId) {
     setDisp(examsSec, 'block');
     setDisp(lessonsSec, 'none');
 
-    // Ensure level selection is displayed first
-    setDisp(document.getElementById('exam-level-selection'), 'block');
-    setDisp(document.getElementById('exam-papers-list'), 'none');
-    setDisp(document.getElementById('exam-player'), 'none');
-    setDisp(document.getElementById('exam-result-view'), 'none');
+    const libraryPanel = document.getElementById('exam-panel-library');
+    if (libraryPanel) libraryPanel.style.display = 'block';
+    renderExamLibrary('all');
   }
   else if (tabId === 'flashcards') {
     // Hide home elements
@@ -2926,7 +2989,7 @@ function switchTab(tabId) {
     }
   }
 
-  // 3. Sync top navbar active state
+  // 3. Sync top navbar & left sidebar active state
   const homeBtn = document.getElementById('nav-home-btn');
   const flashcardsBtn = document.getElementById('nav-flashcards-btn');
   const customBtn = document.getElementById('nav-custom-btn');
@@ -2936,11 +2999,26 @@ function switchTab(tabId) {
   if (flashcardsBtn) flashcardsBtn.classList.toggle('active', tabId === 'flashcards');
   if (customBtn) customBtn.classList.toggle('active', tabId === 'dictionary');
   if (examsBtn) examsBtn.classList.toggle('active', tabId === 'exams');
+
+  // Sync Left Sidebar items
+  document.querySelectorAll('.sidebar-item').forEach(item => {
+    const itemTab = item.getAttribute('data-tab');
+    if (itemTab) {
+      item.classList.toggle('active', itemTab === tabId);
+    }
+  });
 }
+window.switchTab = switchTab;
 
 function showHomeView() {
   switchTab('home');
 }
+
+function showRoadmapView() {
+  activeLessonsCurriculum = 'hsk';
+  switchTab('lessons');
+}
+window.showRoadmapView = showRoadmapView;
 
 function showExamsView() {
   switchTab('exams');
@@ -2997,7 +3075,135 @@ function loadExamPapersList(level) {
 }
 
 // ===== REAL EXAM LIBRARY =====
+const EXAM_DIRECT_DRIVE_LINKS = {
+  "H1334": "https://drive.google.com/drive/folders/164VIGlRm4BEwtzc--hVgTBVNGgp3unDX",
+  "H10000": "https://drive.google.com/drive/folders/1q1284TigDFFy-j0AHiKzVE2ptHpgj7Qu",
+  "H10901": "https://drive.google.com/drive/folders/1RJDREa754e8cQ9Fh0pw05Tv3DuhhSMtZ",
+  "H10902": "https://drive.google.com/drive/folders/1bn7E5CRft4tnY-nJnocpLRZ9f339v_PO",
+  "H11003": "https://drive.google.com/drive/folders/1YRERGTZ3AsA2vkAIybBP6UZbZfTuk9kN",
+  "H11004": "https://drive.google.com/drive/folders/1qTLhvHjsaUTzGPvJc11guTPg_03PsMdj",
+  "H11005": "https://drive.google.com/drive/folders/15U4G9ytOqfIFbEDb3L_zVuuTe96oCd-J",
+  "H11006": "https://drive.google.com/drive/folders/1uw9XYmjEjGdqwe3t1wkYSzHSrqwSuEKZ",
+  "H11007": "https://drive.google.com/drive/folders/1Yb6gHwI_p0aVdsPgx_foZrNc2-zN4brf",
+  "H11008": "https://drive.google.com/drive/folders/1AgvY-qjRLWkjFKwZ6o2eeC9IlCBIbbLy",
+  "H11009": "https://drive.google.com/drive/folders/1Ule1XXp40J8mc_jRuRI0l89tymrYlhe7",
+  "H11112": "https://drive.google.com/drive/folders/1qj30BD7gvg0141XVFDBzR7cSddRBYWDB",
+  "H11113": "https://drive.google.com/drive/folders/1lIZKt-nD_rHY4Vx5aeWLREd-_U5KrGqf",
+  "H11220": "https://drive.google.com/drive/folders/1oFFj-pbP16Y5djygXJWGuG02Y-LEZCiI",
+  "H11221": "https://drive.google.com/drive/folders/12snkvPq9aIGPnfY2mfFgdXN4f6RUCnXh",
+  "H11222": "https://drive.google.com/drive/folders/14rIQoLvHKsaCs2eYk6raPSEd4G5_-F_1",
+  "H11223": "https://drive.google.com/drive/folders/15-3y3oxNmK1l1ZLxEAnyK0nhWUmNXID0",
+  "H11329": "https://drive.google.com/drive/folders/1xAr7okZibW_0FAB_gDxB176SntW2iQ0w",
+  "H11330": "https://drive.google.com/drive/folders/1gkHI6XsjRevokenVA3kqXznGY5cbqOlN",
+  "H11331": "https://drive.google.com/drive/folders/1yQAcp01d-vUTHZqOJbbDizdMY3otrcQh",
+  "H11332": "https://drive.google.com/drive/folders/1AO3xUuRrGkeffrfofRnfKp2cAQrcB3z1",
+  "H20000": "https://drive.google.com/drive/folders/1vqVQasFve7y3zY_dUHg83dL_nQX3fWxD",
+  "H20901": "https://drive.google.com/drive/folders/1q49tUSEoQgNjQvUPT5QcrDZp8hwOJlkL",
+  "H20902": "https://drive.google.com/drive/folders/1ZgPFKwh2XZGwn-LcHqJHegJor0M1YVcC",
+  "H21003": "https://drive.google.com/drive/folders/174wlmRov3CfTJi7JahLHuvZ9vVFDMTu-",
+  "H21004": "https://drive.google.com/drive/folders/1J8DueJ1EX9EPavU8m76GweM6Lqk1qHK6",
+  "H21005": "https://drive.google.com/drive/folders/1ymojRizeAr5-08yn1ftNdKhDot2CcHG5",
+  "H21006": "https://drive.google.com/drive/folders/1J6xhFMdc-CYgCdmbVCizhawEeRAYIloO",
+  "H21007": "https://drive.google.com/drive/folders/1x-kqUgx-7I3SKC8qJ12QHzdRVknOOMTd",
+  "H21009": "https://drive.google.com/drive/folders/1XnBaT8ZpvqqbjHOY4gp7MFEOotblpB97",
+  "H21112": "https://drive.google.com/drive/folders/1BQQCbV5Spgijiiv23sQvQbD9pN7tS9DS",
+  "H21113": "https://drive.google.com/drive/folders/11N1wdiNraIuZCfGK0Mu6aswAjHLS18nU",
+  "H21220": "https://drive.google.com/drive/folders/1taBGPNeobHN_zFcJFZB3rNxHgJRvenhI",
+  "H21221": "https://drive.google.com/drive/folders/1wegjRw_dq3cWId5iD-UJNebmy2do_s4i",
+  "H21222": "https://drive.google.com/drive/folders/1vPeMRSXgiK0UBdkzOUm4dK-hkFbiXIZJ",
+  "H21223": "https://drive.google.com/drive/folders/1XDavGgAjvJhlqdLInKihQb0oyRBCexck",
+  "H21329": "https://drive.google.com/drive/folders/1FsbRAHai7VEDJIAVy3v4V3hRoOQJMWin",
+  "H21330": "https://drive.google.com/drive/folders/1kDIOIqA5q4uWDt8gmT_FQgC7uF8V8SSo",
+  "H21331": "https://drive.google.com/drive/folders/1mD8SPEG__93VqBuzx_3QhNsgvrV9Sc6c",
+  "H21334": "https://drive.google.com/drive/folders/1irvl5bpGWZ2YDPmeGGizimqIBn179jyX",
+  "H30000": "https://drive.google.com/drive/folders/1y-iPBGX7onRq9YstFd4BzVmp6d49ta5b",
+  "H31001": "https://drive.google.com/drive/folders/14Njw46pYlz6KsK6_AaWnGUVuzJRKE4P3",
+  "H31002": "https://drive.google.com/drive/folders/1FqB7WOGXYZY_B39gKI-GujAhT6aP6RN4",
+  "H31004": "https://drive.google.com/drive/folders/1xZYkYwLPzB8uShaNHUIshyWj1cNkMhke",
+  "H31005": "https://drive.google.com/drive/folders/1KHi0HxhvxsiWsZh9PnoGbX0Vk7ZnTJt5",
+  "H31006": "https://drive.google.com/drive/folders/1Gf22Cy2gXUgMVTSPP5vHVqCPIHO5GdXH",
+  "H31007": "https://drive.google.com/drive/folders/1EIaBYK7XohkJ59g00zzCC92bpzeq-PKE",
+  "H31008": "https://drive.google.com/drive/folders/1MGKg9rNhj4-WoAM8HzY2kgs4lXtRFDuC",
+  "H31009": "https://drive.google.com/drive/folders/1unxdRr4p-9D6NrdGt61VVhxi2EFDGhfO",
+  "H31110": "https://drive.google.com/drive/folders/1V5CLvq1AVx5P6JLeckKu152RVKWCrzzL",
+  "H31111": "https://drive.google.com/drive/folders/1KLK4ligmkd3A5EkHk0nWz03BtVmXRcy7",
+  "H31218": "https://drive.google.com/drive/folders/1_78QgpiTHjjctgZTdsNNUMHYGx7Mw3ov",
+  "H31219": "https://drive.google.com/drive/folders/1QgNE5HocJ33Z78COc0x4d9q87lnXghRb",
+  "H31220": "https://drive.google.com/drive/folders/1Y0IJRilhL7kbtkm7wnKoppge7ca7nUIz",
+  "H31221": "https://drive.google.com/drive/folders/1dLqxrESMa33MeVeCgzTw-fr0pOqlUvhC",
+  "H31327": "https://drive.google.com/drive/folders/1CmdWTe5n0I4lGjHUxxV5MEfrsPdahtlL",
+  "H31332": "https://drive.google.com/drive/folders/1tGsT4roiLZ7M3Gsu4MCVnj1tXV5_Tjax",
+  "H40000": "https://drive.google.com/drive/folders/12dVhEZ4MMOlPK4OCDAv3L2q-WyJxtRgL",
+  "H41001": "https://drive.google.com/drive/folders/1SjmSjcqJthqRAi4qfEWcE2StSvV5Pysg",
+  "H41002": "https://drive.google.com/drive/folders/1z1NkwavuBGGrzWjqxclSVTiDcRFB40Fa",
+  "H41003": "https://drive.google.com/drive/folders/1AzwCVM7xSCTiren8qf225YWscGXaabOz",
+  "H41004": "https://drive.google.com/drive/folders/1BBk7KOf8DfFM448lNn0KfAVkIvQ5oVDB",
+  "H41005": "https://drive.google.com/drive/folders/1jxzrTK9qkRaH3mCEdmTTtYuHBjPb8M2x",
+  "H41006": "https://drive.google.com/drive/folders/1AaUzUULDzmg3Z-if0hQn4YFZhkq4bANg",
+  "H41007": "https://drive.google.com/drive/folders/1EyLCJFTwEGZ2BgcSgelni91BPvC8nZh0",
+  "H41008": "https://drive.google.com/drive/folders/1Y1AsY_cp5h2-tKOBSMWGPa2ZfDQDGIv-",
+  "H41009": "https://drive.google.com/drive/folders/1JN6Isbx298l4UUTyyqN0AVz7xM6GBcwe",
+  "H41110": "https://drive.google.com/drive/folders/1pSTn49uZlTgfLtCmg-Bv1f3WGtFGDUCE",
+  "H41111": "https://drive.google.com/drive/folders/1I6JgiO1c1MlnbkJ2x251eguKTVkRv4n2",
+  "H41218": "https://drive.google.com/drive/folders/1RzC-XGdv8ojmUeO2vKsAiLHelcLhb6l0",
+  "H41219": "https://drive.google.com/drive/folders/1tqmxZTSy_deHeWQ2NsmnzqYgxw93lVRc",
+  "H41220": "https://drive.google.com/drive/folders/12LEdVK0OuiNnNj0BKa7MaeOwsDP5SKoD",
+  "H41221": "https://drive.google.com/drive/folders/1sGWqnNWaRHCEZZw0S2fVgKTrGAUgnmZF",
+  "H41327": "https://drive.google.com/drive/folders/12DozuF17bGh7OT5PCCrGY4g_5kKwGcMK",
+  "H51001": "https://drive.google.com/drive/folders/1WXCroAbpPiFr4bKIwruGFxEBder6ukHh",
+  "H51002": "https://drive.google.com/drive/folders/1K6pr4r0fssVGp5tKzFx57sSag8F4rSsV",
+  "H51003": "https://drive.google.com/drive/folders/1wWsmhLHcdFMBK47Waj8Rzcu0Xf4wr1HS",
+  "H51004": "https://drive.google.com/drive/folders/1MHMIA7lOxSd9XO-5hU6KnenSHHGiRw3e",
+  "H51005": "https://drive.google.com/drive/folders/1NcDq1ZZ6btgzPgJcoYuIEuC7bywQlsyc",
+  "H51007": "https://drive.google.com/drive/folders/1nYJZ65wC-izlObROWtFKG4barCT5YRWF",
+  "H51008": "https://drive.google.com/drive/folders/1fwxmreCiYlgkwlZ_tCiUWF-jpDpvOAYv",
+  "H51009": "https://drive.google.com/drive/folders/1Bec1_4as5Dg8X6A5JjVUfM0v3aHxYgTO",
+  "H51110": "https://drive.google.com/drive/folders/1PpzP166-KGRuIx9xK7Jxm-EeUDa2c5go",
+  "H51111": "https://drive.google.com/drive/folders/1F1bjPsx0e_rge31q8f_O2ob5xO2h4diQ",
+  "H51218": "https://drive.google.com/drive/folders/1V1NbC-YFeMWC9nz7C9188fZE43XJ7XVU",
+  "H51219": "https://drive.google.com/drive/folders/1lg2CZPAvBEZgVlmaKI4OO5daoO4Trzha",
+  "H51220": "https://drive.google.com/drive/folders/1XADCoHuK7vciNRDzHnxA3h1-uP0eIHmw",
+  "H51221": "https://drive.google.com/drive/folders/1j64QpnIFnaw7k2lr-ju-LTAenrYJe2bu",
+  "H51327": "https://drive.google.com/drive/folders/1YbQsfSBeiRrCV8S0x821Y_hDzwkd6Drn",
+  "H51328": "https://drive.google.com/drive/folders/1Tz2Q4hTRaBAqTbAr4smYSYuRtmeKfYJT",
+  "H51329": "https://drive.google.com/drive/folders/166Mls6B6Cvf9ICrzLAPgk3J5AJ2xc3lw",
+  "H51330": "https://drive.google.com/drive/folders/1FuHXdY_9-jSxi9EKUWFSrQICg7FfVQS3",
+  "H51331": "https://drive.google.com/drive/folders/1Y9n8c1nzc7R4HTSqCswNaAVCQQNsFYAi",
+  "H51332": "https://drive.google.com/drive/folders/1J39Jqnhq9VcIU8PIYoUlWHLXI2r4ulFJ",
+  "H51333": "https://drive.google.com/drive/folders/1nTh-562IIpbLVUDwrAcyn4HgQEbUNoFn",
+  "H51553B": "https://drive.google.com/drive/folders/1ubhf43vCosvZ8hsglSs4rGep9c4OwBad",
+  "H51553C": "https://drive.google.com/drive/folders/1svx13FLqq5UPRogZ5Jo6-xh2li3jaOik",
+  "H51553D": "https://drive.google.com/drive/folders/1CdtcY6DhX0Gf88wZs3lLiz7-cYQ-B9Dd",
+  "H60000": "https://drive.google.com/drive/folders/1E8x9UQ8R3cE8xFQXVz3ZUTkm13tpjVqK",
+  "H61001": "https://drive.google.com/drive/folders/19zbRhcDHrUsA1_kf_E2LjWKGxnojbmeI",
+  "H61002": "https://drive.google.com/drive/folders/1lOwyl-4gX5bBQl-Lr79xVtx-gE3u_3Bh",
+  "H61004": "https://drive.google.com/drive/folders/1R0DPatLPPpXM50CsmWUDgeA6zIHJg3X8",
+  "H61005": "https://drive.google.com/drive/folders/1fVVYfe-KSeLVboWNCgnvyAHpifTIU9qG",
+  "H61006": "https://drive.google.com/drive/folders/1JMwJf9jx4P-X3pER18cMi6-O2nP7bM4v",
+  "H61007": "https://drive.google.com/drive/folders/1dlGDN16aOKk3B9Aj_8Nf7YheD0ZgOlzY",
+  "H61008": "https://drive.google.com/drive/folders/1ljSj1oL0Knk0cAL3nsr8kJCZvCLvRKO0",
+  "H61009": "https://drive.google.com/drive/folders/1dzYrhVf8wZUnafe_H5u36qThuAmoI7mJ",
+  "H61110": "https://drive.google.com/drive/folders/1s7J2d_3hcUwOrnUNk96FTvPM3qAWtPTb",
+  "H61111": "https://drive.google.com/drive/folders/1ZTe8_qa6n4Ya0L8Z2qvXmP92N5fYxOjx",
+  "H61218": "https://drive.google.com/drive/folders/1feBIQgIWuGSxWJf3rwlVvMmcc2U-zYbQ",
+  "H61219": "https://drive.google.com/drive/folders/14s5OG0r8PYENnCBYbQxd9JLWcrf3uH_s",
+  "H61220": "https://drive.google.com/drive/folders/1cZFglKkEBLyM3XKCcwdLPvImQWwH8tU-",
+  "H61221": "https://drive.google.com/drive/folders/1TOTbi9dUMhTeIhnCtwmGQ-McJAqZf2-W",
+  "H61328": "https://drive.google.com/drive/folders/15SWovX-qweATO8nEhLcgm262jDuOvLmL",
+  "H61329": "https://drive.google.com/drive/folders/1NLx8Dx6wFCX9ayOLVcTXMQE39bmDflh4",
+  "H61330": "https://drive.google.com/drive/folders/1b7iandyBKiq6Zxhyz9B9hHLVQznRCgDW",
+  "H61332": "https://drive.google.com/drive/folders/11lM1sQglIZ-ptLkl5E9OMSs6YaKauASS"
+};
 const DRIVE_BASE = 'https://drive.google.com/drive/folders/1F_NE_evsJwGQ-lD_0BM-y2X9kFUyyqu4?usp=sharing';
+
+const EXAM_LEVEL_DRIVE_LINKS = {
+  1: 'https://drive.google.com/drive/folders/1igjlfXAS-wWSYCqctMszsSuXm_rQifdt',
+  2: 'https://drive.google.com/drive/folders/12UYGIBLlQZYPxgKfKooGyC9rO-X5x1wQ',
+  3: 'https://drive.google.com/drive/folders/1oA5ue_Dmz6QDMKh3UAMw7OjD3jY_vNvG',
+  4: 'https://drive.google.com/drive/folders/1i3uEqBMEHMgV87SxSWT6AXaBD-SWozZV',
+  5: 'https://drive.google.com/drive/folders/1Nr6iAca2vWYUXkONwtrrOjE28hfp0hZZ',
+  6: 'https://drive.google.com/drive/folders/1gmUsMb7XrWef0oc4G7pW0XiW9Xuc8ulb',
+};
 
 const EXAM_LEVEL_FOLDER_NAMES = {
   1: 'ĐỀ THI HSK 1 + FILE NGHE',
@@ -3045,11 +3251,15 @@ function renderExamLibrary(filterLevel = 'all') {
   filtered.forEach(({ level, code }) => {
     const { year, session } = decodeExamCode(code);
     const sessionText = year === 'Mẫu' ? 'Đề mẫu chính thức' : (session ? `Năm ${year} - Kỳ ${session}` : `Năm ${year}`);
-    
-    const folderName = EXAM_LEVEL_FOLDER_NAMES[level] || `ĐỀ THI HSK ${level} + FILE NGHE`;
-    const pdfUrl = `${API_BASE_URL}/exams-files/${encodeURIComponent(folderName)}/${encodeURIComponent(code)}/${encodeURIComponent(code + '.pdf')}`;
-    const mp3Url = `${API_BASE_URL}/exams-files/${encodeURIComponent(folderName)}/${encodeURIComponent(code)}/${encodeURIComponent(code + '.mp3')}`;
-    const ansUrl = `${API_BASE_URL}/exams-files/${encodeURIComponent(folderName)}/${encodeURIComponent(code)}/${encodeURIComponent(code + ' 答案.pdf')}`;
+
+    // Tự động định vị và lọc toàn bộ các file (Đề, Nghe, Đáp án, Bản dịch nghe 听力材料, Bài thi viết 书写) theo mã đề trên Google Drive
+    // Link trực tiếp dẫn thẳng tới thư mục Google Drive chính xác của duy nhất mã đề này
+    const directFolderUrl = EXAM_DIRECT_DRIVE_LINKS[code] || EXAM_LEVEL_DRIVE_LINKS[level] || DRIVE_BASE;
+    const folderLink = directFolderUrl;
+    const pdfLink = directFolderUrl;
+    const mp3Link = directFolderUrl;
+    const ansLink = directFolderUrl;
+    const scriptLink = directFolderUrl;
 
     const card = document.createElement('div');
     card.className = 'exam-lib-card';
@@ -3059,17 +3269,23 @@ function renderExamLibrary(filterLevel = 'all') {
       <p class="exam-lib-card-code">Đề thi ${code}</p>
       <p class="exam-lib-card-meta">
         <i class="fa-regular fa-calendar"></i> ${sessionText}
-        &nbsp;·&nbsp; <i class="fa-solid fa-headphones"></i> Có file nghe MP3
+        &nbsp;·&nbsp; <i class="fa-solid fa-headphones"></i> Trọn bộ File nghe, Đáp án & Script
       </p>
-      <div class="exam-lib-actions">
-        <a class="exam-lib-btn exam-lib-btn-pdf" href="${pdfUrl}" target="_blank" rel="noopener" title="Xem/Tải file đề thi PDF">
+      <div class="exam-lib-actions" style="display: flex; flex-wrap: wrap; gap: 8px;">
+        <a class="exam-lib-btn exam-lib-btn-folder" href="${folderLink}" target="_blank" rel="noopener" title="Xem tất cả các file của đề thi ${code}" style="width: 100%; background: rgba(99, 102, 241, 0.2); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.4); justify-content: center; font-weight: 700; padding: 8px 12px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-folder-open"></i> Xem trọn bộ tài liệu đề ${code} (Full Files)
+        </a>
+        <a class="exam-lib-btn exam-lib-btn-pdf" href="${pdfLink}" target="_blank" rel="noopener" title="Mở file Đề thi PDF ${code} trên Google Drive">
           <i class="fa-solid fa-file-pdf"></i> Đề thi PDF
         </a>
-        <a class="exam-lib-btn exam-lib-btn-mp3" href="${mp3Url}" target="_blank" rel="noopener" title="Nghe/Tải file MP3">
+        <a class="exam-lib-btn exam-lib-btn-mp3" href="${mp3Link}" target="_blank" rel="noopener" title="Mở file nghe MP3 ${code} trên Google Drive">
           <i class="fa-solid fa-headphones"></i> File nghe MP3
         </a>
-        <a class="exam-lib-btn exam-lib-btn-ans" href="${ansUrl}" target="_blank" rel="noopener" title="Xem file đáp án">
+        <a class="exam-lib-btn exam-lib-btn-ans" href="${ansLink}" target="_blank" rel="noopener" title="Mở file Đáp án ${code} trên Google Drive">
           <i class="fa-solid fa-key"></i> Đáp án
+        </a>
+        <a class="exam-lib-btn exam-lib-btn-script" href="${scriptLink}" target="_blank" rel="noopener" title="Mở Kịch bản nghe (听力材料) trên Google Drive" style="background: rgba(236, 72, 153, 0.15); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.3);">
+          <i class="fa-solid fa-file-lines"></i> Kịch bản nghe
         </a>
       </div>
     `;
@@ -3078,23 +3294,9 @@ function renderExamLibrary(filterLevel = 'all') {
 }
 
 window.switchExamTab = function (tab) {
-  const onlinePanel = document.getElementById('exam-panel-online');
   const libraryPanel = document.getElementById('exam-panel-library');
-  const tabOnline = document.getElementById('exam-tab-online');
-  const tabLibrary = document.getElementById('exam-tab-library');
-
-  if (tab === 'library') {
-    if (onlinePanel) onlinePanel.style.display = 'none';
-    if (libraryPanel) libraryPanel.style.display = 'block';
-    if (tabOnline) tabOnline.classList.remove('active');
-    if (tabLibrary) tabLibrary.classList.add('active');
-    renderExamLibrary('all');
-  } else {
-    if (onlinePanel) onlinePanel.style.display = 'block';
-    if (libraryPanel) libraryPanel.style.display = 'none';
-    if (tabOnline) tabOnline.classList.add('active');
-    if (tabLibrary) tabLibrary.classList.remove('active');
-  }
+  if (libraryPanel) libraryPanel.style.display = 'block';
+  renderExamLibrary('all');
 };
 
 window.filterExamLibrary = function (btn, level) {
@@ -3448,34 +3650,7 @@ function initExams() {
     });
   }
 
-  const levelCards = document.querySelectorAll('.level-card');
-  levelCards.forEach(card => {
-    card.addEventListener('click', (e) => {
-      const level = card.getAttribute('data-level');
-      if (level) {
-        document.getElementById('exam-level-selection').style.display = 'none';
-        document.getElementById('exam-papers-list').style.display = 'block';
-        loadExamPapersList(level);
-      }
-    });
-  });
 
-  const backToLevelsBtn = document.getElementById('back-to-levels-btn');
-  if (backToLevelsBtn) {
-    backToLevelsBtn.addEventListener('click', () => {
-      document.getElementById('exam-papers-list').style.display = 'none';
-      document.getElementById('exam-level-selection').style.display = 'block';
-    });
-  }
-
-  const exitResultBtn = document.getElementById('exit-result-btn');
-  if (exitResultBtn) {
-    exitResultBtn.addEventListener('click', () => {
-      document.getElementById('exam-result-view').style.display = 'none';
-      document.getElementById('exam-papers-list').style.display = 'block';
-      loadExamPapersList(currentExamLevel);
-    });
-  }
 
   const playQuestionAudioBtn = document.getElementById('play-question-audio');
   if (playQuestionAudioBtn) {
@@ -3994,23 +4169,6 @@ async function setWordWrong(id, isWrong) {
       body: JSON.stringify({ id, isWrong }),
       credentials: 'include'
     });
-    if (response.status === 401) {
-      localStorage.removeItem('user');
-      localStorage.removeItem('session_token');
-      currentUser = null;
-      renderUserProfile();
-      showToast('Phiên làm việc đã hết hạn. Vui lòng đăng nhập lại.', true);
-      const index = vocabList.findIndex(w => w.id === id);
-      if (index !== -1) {
-        vocabList[index].isWrong = isWrong;
-        const guestProgress = JSON.parse(localStorage.getItem('guest_progress') || '{}');
-        if (!guestProgress[id]) guestProgress[id] = {};
-        guestProgress[id].isWrong = isWrong;
-        localStorage.setItem('guest_progress', JSON.stringify(guestProgress));
-        updateStats();
-      }
-      return;
-    }
     if (!response.ok) throw new Error('Lỗi cập nhật trạng thái sai');
     const updatedWord = await response.json();
 
@@ -4659,9 +4817,11 @@ let activeHanziWriter = null;
 let voiceRecognitionInstance = null;
 
 const WRITING_PROMPTS = [
-  { title: "Giới thiệu bản thân (HSK 1)", text: "你好！我叫小王。我是越南人。我学习汉语。很高兴认识nǐ！" },
+  { title: "Giới thiệu bản thân (HSK 1)", text: "你好！我叫小王。我是越南人。我学习汉语。很高兴认识你！" },
+  { title: "Gia đình tôi (YCT Thiếu Nhi)", text: "我家有四个人：爸爸、妈妈、哥哥和我。我们住在河内。我爱我的家人。" },
   { title: "Một ngày của tôi (HSK 2)", text: "我每天早上七点半起床。吃早饭以后去上学。我下午六点回宿舍。" },
-  { title: "Sở thích của tôi (HSK 3)", text: "Sở thích của tôi là nghe nhạc và xem phim Trung Quốc. Tôi cảm thấy viết chữ Hán rất thú vị, nhưng cũng rất khó." }
+  { title: "Sở thích & Giải trí (HSK 3)", text: "我的爱好是听音乐和看中国电影。我觉得写汉字很有趣，但是也很难。" },
+  { title: "Lớp học của em (YCT Thiếu Nhi)", text: "我们的教室很大，也很干净。老师教我们画画和说汉语，我很喜欢上学。" }
 ];
 
 function initDictionaryView() {
@@ -4806,21 +4966,32 @@ function renderDictPopularList(query = '') {
 
   container.innerHTML = '';
 
-  let filtered = vocabList;
-  if (query) {
-    const q = query.toLowerCase();
-    filtered = vocabList.filter(w =>
-      w.word.includes(q) ||
-      w.pinyin.toLowerCase().includes(q) ||
-      w.meaning.toLowerCase().includes(q)
-    );
+  const q = query.trim().toLowerCase();
+
+  // Khi chưa nhập từ khóa tìm kiếm: không hiển thị danh sách đề xuất
+  if (!q) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 36px 16px; color: var(--text-muted); font-size: 0.85rem; font-style: italic;">
+        <i class="fa-solid fa-keyboard" style="font-size: 1.8rem; margin-bottom: 10px; color: var(--accent-blue); opacity: 0.5; display: block;"></i>
+        Nhập chữ Hán, Pinyin hoặc nghĩa Tiếng Việt ở ô trên để tra cứu từ vựng...
+      </div>
+    `;
+    return;
   }
 
-  // Fallback if empty
+  // Tìm kiếm khớp với từ khóa người dùng gõ
+  const filtered = vocabList.filter(w =>
+    w.word.toLowerCase().includes(q) ||
+    w.pinyin.toLowerCase().includes(q) ||
+    w.meaning.toLowerCase().includes(q)
+  );
+
+  // Fallback nếu không tìm thấy từ khớp
   if (filtered.length === 0) {
     container.innerHTML = `
-      <div style="text-align: center; padding: 24px; color: var(--text-muted); font-size: 0.85rem; font-style: italic;">
-        Không tìm thấy từ vựng nào!
+      <div style="text-align: center; padding: 36px 16px; color: var(--text-muted); font-size: 0.85rem; font-style: italic;">
+        <i class="fa-solid fa-magnifying-glass" style="font-size: 1.5rem; margin-bottom: 8px; display: block;"></i>
+        Không tìm thấy từ vựng nào khớp với "${query}"!
       </div>
     `;
     return;
@@ -5513,14 +5684,18 @@ window.selectCurriculumAndGo = function (curr, level) {
     activeLessonsLevel = level.toString();
   }
 
-  const flashcardTabBtn = document.querySelector('[data-tab="flashcards"]');
-  if (flashcardTabBtn) {
-    flashcardTabBtn.click();
+  // Chuyển tab sang thẻ từ vựng
+  if (window.switchTab) {
+    window.switchTab('flashcards');
   }
+
   renderLessonsList();
 
   const flashcardSec = document.getElementById('flashcard-section');
-  if (flashcardSec) flashcardSec.scrollIntoView({ behavior: 'smooth' });
+  if (flashcardSec) {
+    flashcardSec.style.display = 'block';
+    flashcardSec.scrollIntoView({ behavior: 'smooth' });
+  }
 };
 
 function renderZubiDashboardTableAndRecent() {
@@ -5572,7 +5747,7 @@ function renderZubiDashboardTableAndRecent() {
       }
 
       rowsHtml += `
-        <tr>
+        <tr style="cursor: pointer; transition: background 0.15s ease;" onclick="window.selectCurriculumAndGo('${tier.curriculumType}', ${tier.level})" onmouseover="this.style.background='rgba(59,130,246,0.08)'" onmouseout="this.style.background='transparent'">
           <td class="zubi-td" style="padding: 16px;"><strong class="zubi-td-bold">${tier.name}</strong></td>
           <td class="zubi-td" style="padding: 16px;">${tier.curriculum}</td>
           <td class="zubi-td" style="padding: 16px;">${total.toLocaleString()} từ vựng</td>
@@ -5583,7 +5758,7 @@ function renderZubiDashboardTableAndRecent() {
           </td>
           <td class="zubi-td" style="padding: 16px;">${badgeHtml}</td>
           <td class="zubi-td" style="padding: 16px;">
-            <button class="zubi-table-btn" style="background: transparent; border: none; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;" onclick="window.selectCurriculumAndGo('${tier.curriculumType}', ${tier.level})">Vào học <i class="fa-solid fa-arrow-right"></i></button>
+            <button class="zubi-table-btn" style="background: rgba(59,130,246,0.15); color: #3b82f6; border: 1px solid rgba(59,130,246,0.3); padding: 6px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;" onclick="event.stopPropagation(); window.selectCurriculumAndGo('${tier.curriculumType}', ${tier.level})">Vào học <i class="fa-solid fa-arrow-right"></i></button>
           </td>
         </tr>
       `;
@@ -5847,56 +6022,73 @@ window.openZubiStatDetail = function (type) {
 
   } else if (type === 'words') {
     titleEl.textContent = 'Thống kê Từ vựng HSK & YCT';
-    subtitleEl.textContent = 'Phân bổ 5,653 từ vựng theo từng cấp độ';
+    subtitleEl.textContent = `Phân bổ ${vocabList.length.toLocaleString()} từ vựng HSK 3.0 & 2.0 chuẩn hóa`;
     iconEl.className = 'zubi-circle-icon cyan';
     iconEl.style.background = 'rgba(2, 132, 199, 0.2)';
     iconEl.style.color = '#38bdf8';
     iconEl.innerHTML = '<i class="fa-solid fa-layer-group"></i>';
 
-    const hsk1Count = builtIn.filter(w => (w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === '1').length;
-    const hsk2Count = builtIn.filter(w => (w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === '2').length;
-    const hsk3Count = builtIn.filter(w => (w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === '3').length;
-    const hsk4Count = builtIn.filter(w => (w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === '4').length;
-    const hsk5Count = builtIn.filter(w => (w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === '5').length;
-    const hsk6Count = builtIn.filter(w => (w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === '6').length;
+    const hsk30_1 = builtIn.filter(w => (w.hskVersion || '3.0') === '3.0' && w.level.toString() === '1').length;
+    const hsk30_2 = builtIn.filter(w => (w.hskVersion || '3.0') === '3.0' && w.level.toString() === '2').length;
+    const hsk30_3 = builtIn.filter(w => (w.hskVersion || '3.0') === '3.0' && w.level.toString() === '3').length;
+
+    const hsk20_1 = builtIn.filter(w => w.hskVersion === '2.0' && w.level.toString() === '1').length;
+    const hsk20_2 = builtIn.filter(w => w.hskVersion === '2.0' && w.level.toString() === '2').length;
+    const hsk20_3 = builtIn.filter(w => w.hskVersion === '2.0' && w.level.toString() === '3').length;
+    const hsk20_4 = builtIn.filter(w => w.hskVersion === '2.0' && w.level.toString() === '4').length;
+    const hsk20_5 = builtIn.filter(w => w.hskVersion === '2.0' && w.level.toString() === '5').length;
+    const hsk20_6 = builtIn.filter(w => w.hskVersion === '2.0' && w.level.toString() === '6').length;
+
     const yctCount = builtIn.filter(w => w.curriculum === 'yct' || w.hskVersion === 'yct').length;
 
+    const hsk30Total = hsk30_1 + hsk30_2 + hsk30_3;
+    const hsk20Total = hsk20_1 + hsk20_2 + hsk20_3 + hsk20_4 + hsk20_5 + hsk20_6;
+
     bodyEl.innerHTML = `
-      <div style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;">
+      <div style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
         <div>
-          <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: #38bdf8; font-weight: 700;">Tổng từ vựng chuẩn hóa</span>
+          <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: #38bdf8; font-weight: 700;">TỔNG TỪ VỰNG CHUẨN HÓA</span>
           <h2 style="font-size: 1.8rem; font-weight: 800; color: #ffffff; margin: 4px 0 0 0;">${vocabList.length.toLocaleString()} Từ</h2>
         </div>
         <div style="font-size: 2.2rem; color: #38bdf8; opacity: 0.8;"><i class="fa-solid fa-book"></i></div>
       </div>
-      <div style="display: flex; flex-direction: column; gap: 10px;">
-        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
-          <span style="color: #ffffff; font-weight: 600;">HSK Cấp 1</span>
-          <span style="color: #38bdf8; font-weight: 800;">${hsk1Count.toLocaleString()} từ</span>
+
+      <div style="max-height: 50vh; overflow-y: auto; padding-right: 4px; display: flex; flex-direction: column; gap: 14px;">
+        <!-- HSK 3.0 Section -->
+        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px; margin-bottom: 10px;">
+            <strong style="color: #38bdf8; font-size: 0.95rem;"><i class="fa-solid fa-layer-group"></i> Phân Loại HSK 3.0 (9 Cấp Mới)</strong>
+            <span style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; font-weight: 800; font-size: 0.85rem; padding: 2px 8px; border-radius: 10px;">${hsk30Total.toLocaleString()} từ</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #cbd5e1;"><span>HSK 3.0 Cấp 1</span><strong style="color: #ffffff;">${hsk30_1.toLocaleString()} từ</strong></div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #cbd5e1;"><span>HSK 3.0 Cấp 2</span><strong style="color: #ffffff;">${hsk30_2.toLocaleString()} từ</strong></div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #cbd5e1;"><span>HSK 3.0 Cấp 3</span><strong style="color: #ffffff;">${hsk30_3.toLocaleString()} từ</strong></div>
+          </div>
         </div>
-        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
-          <span style="color: #ffffff; font-weight: 600;">HSK Cấp 2</span>
-          <span style="color: #38bdf8; font-weight: 800;">${hsk2Count.toLocaleString()} từ</span>
+
+        <!-- HSK 2.0 Section -->
+        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 14px; padding: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px; margin-bottom: 10px;">
+            <strong style="color: #c084fc; font-size: 0.95rem;"><i class="fa-solid fa-book-open"></i> Phân Loại HSK 2.0 (6 Cấp Cũ)</strong>
+            <span style="background: rgba(168, 85, 247, 0.2); color: #c084fc; font-weight: 800; font-size: 0.85rem; padding: 2px 8px; border-radius: 10px;">${hsk20Total.toLocaleString()} từ</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #cbd5e1;"><span>HSK 2.0 Cấp 1</span><strong style="color: #ffffff;">${hsk20_1.toLocaleString()} từ</strong></div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #cbd5e1;"><span>HSK 2.0 Cấp 2</span><strong style="color: #ffffff;">${hsk20_2.toLocaleString()} từ</strong></div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #cbd5e1;"><span>HSK 2.0 Cấp 3</span><strong style="color: #ffffff;">${hsk20_3.toLocaleString()} từ</strong></div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #cbd5e1;"><span>HSK 2.0 Cấp 4 (Thượng & Hạ)</span><strong style="color: #ffffff;">${hsk20_4.toLocaleString()} từ</strong></div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #cbd5e1;"><span>HSK 2.0 Cấp 5 (Thượng & Hạ)</span><strong style="color: #ffffff;">${hsk20_5.toLocaleString()} từ</strong></div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #cbd5e1;"><span>HSK 2.0 Cấp 6 (Thượng & Hạ)</span><strong style="color: #ffffff;">${hsk20_6.toLocaleString()} từ</strong></div>
+          </div>
         </div>
-        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
-          <span style="color: #ffffff; font-weight: 600;">HSK Cấp 3</span>
-          <span style="color: #38bdf8; font-weight: 800;">${hsk3Count.toLocaleString()} từ</span>
-        </div>
-        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
-          <span style="color: #ffffff; font-weight: 600;">HSK Cấp 4 (Thượng & Hạ)</span>
-          <span style="color: #38bdf8; font-weight: 800;">${hsk4Count.toLocaleString()} từ</span>
-        </div>
-        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
-          <span style="color: #ffffff; font-weight: 600;">HSK Cấp 5 (Thượng & Hạ)</span>
-          <span style="color: #38bdf8; font-weight: 800;">${hsk5Count.toLocaleString()} từ</span>
-        </div>
-        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
-          <span style="color: #ffffff; font-weight: 600;">HSK Cấp 6 (Thượng & Hạ)</span>
-          <span style="color: #38bdf8; font-weight: 800;">${hsk6Count.toLocaleString()} từ</span>
-        </div>
-        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
-          <span style="color: #ffffff; font-weight: 600;">YCT Cấp 1..4 (Thiếu nhi)</span>
-          <span style="color: #38bdf8; font-weight: 800;">${yctCount.toLocaleString()} từ</span>
+
+        <!-- YCT Section -->
+        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 14px; padding: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <strong style="color: #fbbf24; font-size: 0.95rem;"><i class="fa-solid fa-child"></i> YCT Cấp 1..4 (Thiếu Nhi)</strong>
+            <span style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; font-weight: 800; font-size: 0.85rem; padding: 2px 8px; border-radius: 10px;">${yctCount.toLocaleString()} từ</span>
+          </div>
         </div>
       </div>
     `;
@@ -6068,10 +6260,25 @@ function renderSubdecksList() {
     });
   }
   else if (activeSmartTopic === 'hsk') {
-    title.textContent = `Danh sách Từ vựng HSK ${activeHskVersion}`;
-    for (let lvl = 1; lvl <= 3; lvl++) {
-      const lvlWords = vocabList.filter(w => !w.isCustom && w.level.toString() === lvl.toString() && (w.hskVersion || '3.0') === activeHskVersion);
-      grid.appendChild(createSubdeckCard(`HSK Cấp ${lvl}`, `hsk:${lvl}`, lvlWords.length, 'fa-graduation-cap', 'var(--success)'));
+    if (activeHskVersion === 'yct') {
+      title.textContent = 'Danh sách Từ vựng YCT Thiếu Nhi';
+      for (let lvl = 1; lvl <= 4; lvl++) {
+        const lvlWords = vocabList.filter(w => (w.curriculum === 'yct' || w.hskVersion === 'yct') && w.level.toString() === lvl.toString());
+        grid.appendChild(createSubdeckCard(`YCT Cấp ${lvl}`, `yct:${lvl}`, lvlWords.length, 'fa-child', 'var(--accent-teal)'));
+      }
+    } else {
+      title.textContent = `Danh sách Từ vựng HSK & YCT (${activeHskVersion})`;
+      const maxLvl = activeHskVersion === '3.0' ? 9 : 6;
+      for (let lvl = 1; lvl <= maxLvl; lvl++) {
+        const lvlWords = vocabList.filter(w => !w.isCustom && w.level.toString() === lvl.toString() && (w.hskVersion || '3.0') === activeHskVersion);
+        grid.appendChild(createSubdeckCard(`HSK Cấp ${lvl}`, `hsk:${lvl}`, lvlWords.length, 'fa-graduation-cap', 'var(--success)'));
+      }
+
+      // Luôn hiển thị thêm 4 thẻ YCT Thiếu Nhi ở dưới cùng để người học bấm chọn trực tiếp!
+      for (let lvl = 1; lvl <= 4; lvl++) {
+        const lvlWords = vocabList.filter(w => (w.curriculum === 'yct' || w.hskVersion === 'yct') && w.level.toString() === lvl.toString());
+        grid.appendChild(createSubdeckCard(`YCT Cấp ${lvl} (Thiếu Nhi)`, `yct:${lvl}`, lvlWords.length, 'fa-child', 'var(--accent-teal)'));
+      }
     }
   }
   else if (activeSmartTopic === 'premium') {
@@ -6181,10 +6388,10 @@ function openNotebookDashboard(notebookId) {
 
   // Update Stats Widget
 
-  // Render HSK Lesson Selector Block if applicable
+  // Render HSK Lesson Selector Block if applicable (Chỉ hiển thị khi xem toàn bộ cấp độ HSK, ẩn khi đã nhấp chọn 1 bài học cụ thể)
   const lessonContainer = document.getElementById('nb-hsk-lesson-selector-container');
   if (lessonContainer) {
-    if (notebookId.startsWith('hsk:')) {
+    if (notebookId.startsWith('hsk:') && Array.isArray(selectedDashboardLessons) && selectedDashboardLessons.length === 0) {
       lessonContainer.style.display = 'block';
       const lessonsList = document.getElementById('nb-hsk-lessons-list');
       if (lessonsList) {
@@ -6237,8 +6444,22 @@ function openNotebookDashboard(notebookId) {
       }
     } else {
       lessonContainer.style.display = 'none';
-      selectedDashboardLessons = []; // Reset when leaving HSK notebook
+      if (!notebookId.startsWith('hsk:')) {
+        selectedDashboardLessons = []; // Reset when leaving HSK notebook
+      }
     }
+  }
+
+  // Toggle Left Column visibility & adjust grid layout dynamically
+  const leftCol = document.getElementById('nb-left-col-container');
+  const gridRow2 = document.getElementById('nb-row2-grid-container');
+  const isLeftColVisible = (addFormContainer && addFormContainer.style.display !== 'none') || (lessonContainer && lessonContainer.style.display !== 'none');
+
+  if (leftCol) {
+    leftCol.style.display = isLeftColVisible ? 'flex' : 'none';
+  }
+  if (gridRow2) {
+    gridRow2.style.gridTemplateColumns = isLeftColVisible ? '1.2fr 1fr' : '1fr';
   }
 
   // Filter baseWords for statistics if specific HSK lessons are selected
@@ -6834,14 +7055,12 @@ function updateVersionButtonsUI() {
     }
   }
 
+  const svYctBtn = document.getElementById('smart-yct-version-btn');
+
   if (sv3Btn && sv2Btn) {
-    if (activeHskVersion === '3.0') {
-      sv3Btn.classList.add('active');
-      sv2Btn.classList.remove('active');
-    } else {
-      sv2Btn.classList.add('active');
-      sv3Btn.classList.remove('active');
-    }
+    sv3Btn.classList.toggle('active', activeHskVersion === '3.0');
+    sv2Btn.classList.toggle('active', activeHskVersion === '2.0');
+    if (svYctBtn) svYctBtn.classList.toggle('active', activeHskVersion === 'yct');
   }
 
   if (ev3Btn && ev2Btn) {
@@ -6903,7 +7122,7 @@ function startGameArenaFromNotebook() {
 
   const iframe = document.getElementById('game-play-iframe');
   if (iframe) {
-    iframe.src = `quiz-game.html?level=${levelParam}&lessons=${lessonsParam}&filter=${dashboardActiveFilter}&notebook=${activeNotebook}&start=true`;
+    iframe.src = `quiz-game.html?level=${levelParam}&lessons=${lessonsParam}&filter=${dashboardActiveFilter}&notebook=${activeNotebook}`;
   }
 };
 

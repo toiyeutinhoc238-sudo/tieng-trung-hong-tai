@@ -4,6 +4,7 @@
   /* Fonts */
   --font-sans: 'Be Vietnam Pro', 'Inter', -apple-system, sans-serif;
   --font-display: 'Be Vietnam Pro', sans-serif;
+  --font-handwriting: 'Mali', cursive, sans-serif;
   --font-chinese: 'Noto Sans SC', 'Ma Shan Zheng', sans-serif;
 
   /* Layout */
@@ -3185,24 +3186,9 @@ html.dark .section-accent-header {
   color: var(--text-primary);
 }
 
-/* 5. Sticky Bottom Navigation Bar */
+/* 5. Sticky Bottom Navigation Bar (Hidden - chỉ sử dụng Left Sidebar) */
 .bottom-nav-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 64px;
-  background: var(--bg-glass);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid var(--border-glass);
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  z-index: 999;
-  padding: 0 16px;
-  transition: transform 0.3s ease;
+  display: none !important;
 }
 
 .bottom-nav-item {
@@ -3854,21 +3840,23 @@ html.dark .lessons-volume-btn:hover {
 
 /* Light mode overrides for dropdown */
 html:not(.dark) .lessons-dropdown-select {
-  background-color: #f8fafc;
-  border-color: #cbd5e1;
-  color: #1e293b;
-  background-image: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='%2364748b' d='M4.5 6l3.5 4 3.5-4z'/></svg>");
+  background-color: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  color: #0f172a !important;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  background-image: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='%23334155' d='M4.5 6l3.5 4 3.5-4z'/></svg>");
 }
 
 html:not(.dark) .lessons-dropdown-select:hover,
 html:not(.dark) .lessons-dropdown-select:focus {
-  border-color: #ff2a5f;
-  box-shadow: 0 0 0 3px rgba(255, 42, 95, 0.1);
+  border-color: #e53e3e;
+  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.15);
 }
 
 html:not(.dark) .lessons-dropdown-select option {
   background: #ffffff;
-  color: #1e293b;
+  color: #0f172a;
 }
 
 
@@ -5186,4 +5174,303 @@ html:not(.dark) .exam-lib-pill {
 html:not(.dark) .exam-lib-pill:hover {
   border-color: #ff2a5f;
   color: #1e293b;
+}
+html:not(.dark) .exam-lib-pill.active { background: #ff2a5f; color: white; }
+
+/* ==========================================================================
+   APP SIDEBAR LAYOUT (Lấy cảm hứng từ nhaitopik.com)
+   ========================================================================== */
+body {
+  display: flex;
+  min-height: 100vh;
+  padding-bottom: 0 !important;
+}
+
+/* Left Fixed Sidebar Container */
+.app-sidebar {
+  width: 260px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  background: var(--bg-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-right: 1px solid var(--border-glass);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px 16px;
+  transition: all var(--transition-normal);
+}
+
+  .sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px 20px 12px;
+    border-bottom: 1px solid var(--border-glass);
+    margin-bottom: 16px;
+  }
+
+  .sidebar-logo {
+    height: 44px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.6));
+  }
+
+  .sidebar-menu {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .sidebar-item i {
+    font-size: 1.15rem;
+    width: 22px;
+    text-align: center;
+    color: var(--text-muted);
+    transition: color var(--transition-fast);
+  }
+
+  .sidebar-item:hover {
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--text-primary);
+  }
+
+  .sidebar-item:hover i {
+    color: var(--accent-blue);
+  }
+
+  .sidebar-item.active {
+    background: linear-gradient(135deg, rgba(229, 62, 62, 0.18), rgba(239, 68, 68, 0.08));
+    color: var(--accent-primary);
+    border: 1px solid rgba(229, 62, 62, 0.25);
+    box-shadow: 0 4px 12px rgba(229, 62, 62, 0.15);
+  }
+
+  .sidebar-item.active i {
+    color: var(--accent-primary);
+  }
+
+  .app-sidebar .auth-container {
+    border-left: none;
+    padding: 0 0 14px 0;
+    height: auto;
+    width: 100%;
+    position: relative;
+    border-bottom: 1px solid var(--border-glass);
+    margin-bottom: 12px;
+  }
+
+  .app-sidebar .user-dropdown {
+    width: 100%;
+    position: relative;
+  }
+
+  .app-sidebar .sidebar-profile-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-glass);
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
+    transition: background 0.2s;
+  }
+
+  .app-sidebar .sidebar-profile-card:hover {
+    background: rgba(59, 130, 246, 0.08);
+  }
+
+  .app-sidebar .sidebar-avatar-wrap {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--bg-tertiary, #334155);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--border-glass);
+  }
+
+  .app-sidebar .user-avatar-img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: none;
+    box-shadow: none;
+  }
+
+  .app-sidebar .sidebar-avatar-placeholder {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .app-sidebar .user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .app-sidebar .user-name {
+    font-size: 0.93rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 130px;
+  }
+
+  .app-sidebar .user-sub {
+    font-size: 0.76rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 130px;
+  }
+
+  .app-sidebar .user-role-badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--accent-blue, #3b82f6);
+    margin-top: 1px;
+  }
+
+  .app-sidebar .profile-chevron {
+    flex-shrink: 0;
+    color: var(--text-muted);
+  }
+
+  .app-sidebar .profile-dropdown-menu {
+    top: calc(100% + 6px);
+    bottom: auto;
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
+
+  .sidebar-footer {
+    padding-top: 16px;
+    border-top: 1px solid var(--border-glass);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+  }
+
+  /* Main layout offset for Sidebar */
+  .navbar {
+    display: none !important; /* Hide old navbar */
+  }
+
+  .main-layout {
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    max-width: 1300px;
+    padding: 32px 40px;
+  }
+
+/* Roadmap Visual Timeline Styles */
+.roadmap-step-title, .hsk-badge-label, .comic-title {
+  font-family: var(--font-handwriting);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.roadmap-timeline {
+  position: relative;
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 20px 0;
+}
+.roadmap-timeline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 28px;
+  width: 4px;
+  background: linear-gradient(180deg, var(--accent-blue), var(--accent-primary), var(--accent-teal));
+  border-radius: 4px;
+}
+.roadmap-step {
+  position: relative;
+  padding-left: 70px;
+  margin-bottom: 36px;
+}
+.roadmap-step-icon {
+  position: absolute;
+  left: 8px;
+  top: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  border: 3px solid var(--accent-blue);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+  z-index: 2;
+}
+.roadmap-step.completed .roadmap-step-icon {
+  border-color: var(--success);
+  background: var(--success);
+  color: white;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+}
+.roadmap-step-card {
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.roadmap-step-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-glass-hover);
 }
