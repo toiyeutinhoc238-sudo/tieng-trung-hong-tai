@@ -67,12 +67,12 @@
 
           <!-- Logged in state elements -->
           <div class="logged-in-view user-dropdown">
-            <div class="user-profile">
+            <div class="user-profile" onclick="this.closest('.user-dropdown').classList.toggle('show-menu')">
               <img id="user-avatar-img" class="user-avatar-img" src="" alt="Avatar" style="display: none;">
-              <div id="user-avatar-placeholder" class="user-avatar">HT</div>
+              <div id="user-avatar-placeholder" class="user-avatar"><i class="fa-solid fa-user"></i></div>
               <div class="user-info">
-                <span class="user-name" id="user-display-name">Tiếng Trung Hongtai</span>
-                <span class="user-role" id="user-display-email">demo@tiengtrunghongtai.com</span>
+                <span class="user-name" id="user-display-name">Học viên Hongtai</span>
+                <span class="user-role" id="user-display-email">user@hongtai.edu.vn</span>
               </div>
               <i class="fa-solid fa-chevron-down profile-chevron"></i>
             </div>
@@ -88,7 +88,7 @@
                 </a>
               </li>
               <li>
-                <a href="#" id="logout-btn-nav" class="logout-link">
+                <a href="#" id="logout-btn" class="logout-link">
                   <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
                 </a>
               </li>

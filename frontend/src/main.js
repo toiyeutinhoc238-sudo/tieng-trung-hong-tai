@@ -2366,9 +2366,38 @@ function getAuthHeaders(customHeaders = {}) {
 
 // --- AUTHENTICATION & LOGIN LOGIC ---
 
+// --- AUTHENTICATION & LOGIN LOGIC ---
+
 // Fetch current user from session / local storage and initialize Google Sign-In SDK
 async function initAuth() {
-  // 1. Load instantly from local storage so there's no delay or loss of logged-in state
+  // Check if session is active on backend
+  try {
+    const res = await fetch(API_BASE_URL + '/api/auth/me', {
+      headers: getAuthHeaders(),
+      credentials: 'include',
+      cache: 'no-store'
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.user) {
+        currentUser = data.user;
+        renderUserProfile();
+        return;
+      } else {
+        // Backend explicitly returned user: null, session is invalid/expired!
+        localStorage.removeItem('user');
+        localStorage.removeItem('session_token');
+        currentUser = null;
+        renderUserProfile();
+        initGoogleSignIn();
+        return;
+      }
+    }
+  } catch (err) {
+    console.warn('Backend session retrieval failed, using local storage:', err);
+  }
+
+  // Fallback to local storage only if backend offline/unreachable
   const savedUser = localStorage.getItem('user');
   if (savedUser) {
     try {
@@ -2380,99 +2409,23 @@ async function initAuth() {
     }
   }
 
-  // 2. Verify and refresh active session with backend API
-  try {
-    const res = await fetch(API_BASE_URL + '/api/auth/me', {
-      headers: getAuthHeaders(),
-      credentials: 'include',
-      cache: 'no-store'
-    });
-    if (res.ok) {
-      const data = await res.json();
-      if (data.user) {
-        currentUser = data.user;
-        localStorage.setItem('user', JSON.stringify(currentUser));
-        renderUserProfile();
-        return;
-      }
-      // If backend returns null user but we have localStorage user,
-      // keep the localStorage user (offline-first / token-mismatch tolerance)
-      if (currentUser) {
-        renderUserProfile();
-        return;
-      }
-    }
-  } catch (err) {
-    console.warn('Backend session retrieval failed, using local storage:', err);
-    // Keep whatever we loaded from localStorage
-    if (currentUser) {
-      renderUserProfile();
-      return;
-    }
-  }
-
-  // 3. Render logged-out view if no user found anywhere
-  if (!currentUser) {
-    renderUserProfile();
-    initGoogleSignIn();
-  }
+  // Initialize Google Identity Services
+  initGoogleSignIn();
 }
-
-window.triggerGoogleLogin = function() {
-  const modal = document.getElementById('app-login-modal');
-  if (modal) modal.style.display = 'flex';
-  if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
-    try { google.accounts.id.prompt(); } catch(e){}
-  }
-};
-
-window.loginWithGoogleAccount = async function(email, name, picture) {
-  try {
-    const res = await fetch(API_BASE_URL + '/api/auth/google', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, name, picture }),
-      credentials: 'include'
-    });
-    
-    if (res.ok) {
-      const data = await res.json();
-      if (data.success && data.user) {
-        currentUser = data.user;
-        if (data.token) {
-          localStorage.setItem('session_token', data.token);
-        }
-        localStorage.setItem('user', JSON.stringify(currentUser));
-        renderUserProfile();
-        showToast(`Đã đăng nhập tài khoản Google: ${currentUser.name} 🎉`);
-        const modal = document.getElementById('app-login-modal');
-        if (modal) modal.style.display = 'none';
-        return;
-      }
-    }
-  } catch(err) {
-    console.warn("Direct Google login API call failed, setting client state:", err);
-  }
-
-  // Fallback client state if server offline
-  currentUser = { name, email, picture };
-  localStorage.setItem('user', JSON.stringify(currentUser));
-  localStorage.setItem('session_token', 'token_' + Date.now());
-  renderUserProfile();
-  showToast(`Đã đăng nhập tài khoản Google: ${name} 🎉`);
-  const modal = document.getElementById('app-login-modal');
-  if (modal) modal.style.display = 'none';
-};
 
 function initGoogleSignIn() {
   if (typeof google === 'undefined') {
-    setTimeout(initGoogleSignIn, 500);
+    // Retry in 1s if Google Identity Services script hasn't loaded yet
+    setTimeout(initGoogleSignIn, 1000);
     return;
   }
 
   try {
     const signinBtnWrapper = document.getElementById('google-signin-button');
-    const modalBtnWrapper = document.getElementById('modal-google-signin');
+    if (!signinBtnWrapper) return;
+
+    // Clear wrapper first in case of re-rendering
+    signinBtnWrapper.innerHTML = '';
 
     google.accounts.id.initialize({
       client_id: GOOGLE_CLIENT_ID,
@@ -2481,37 +2434,17 @@ function initGoogleSignIn() {
       cancel_on_tap_outside: true
     });
 
-    if (signinBtnWrapper) {
-      signinBtnWrapper.innerHTML = '';
-      google.accounts.id.renderButton(
-        signinBtnWrapper,
-        {
-          theme: document.documentElement.classList.contains('dark') ? 'filled_black' : 'outline',
-          size: 'large',
-          type: 'standard',
-          shape: 'rectangular',
-          text: 'signin_with',
-          logo_alignment: 'left',
-          width: 220
-        }
-      );
-    }
-
-    if (modalBtnWrapper) {
-      modalBtnWrapper.innerHTML = '';
-      google.accounts.id.renderButton(
-        modalBtnWrapper,
-        {
-          theme: document.documentElement.classList.contains('dark') ? 'filled_black' : 'outline',
-          size: 'large',
-          type: 'standard',
-          shape: 'rectangular',
-          text: 'signin_with',
-          logo_alignment: 'left',
-          width: 280
-        }
-      );
-    }
+    google.accounts.id.renderButton(
+      signinBtnWrapper,
+      {
+        theme: document.documentElement.classList.contains('dark') ? 'filled_black' : 'outline',
+        size: 'medium',
+        type: 'standard',
+        shape: 'rectangular',
+        text: 'signin_with',
+        logo_alignment: 'left'
+      }
+    );
   } catch (err) {
     console.error('Google Sign-In initialization failed:', err);
   }
@@ -2622,6 +2555,7 @@ function renderUserProfile() {
   const avatarPlaceholder = document.getElementById('user-avatar-placeholder');
   const displayName = document.getElementById('user-display-name');
   const displayEmail = document.getElementById('user-display-email');
+
   const navChatHistoryLi = document.getElementById('nav-chat-history-li');
 
   if (!authContainer) return;
@@ -2631,18 +2565,17 @@ function renderUserProfile() {
     authContainer.classList.add('logged-in');
 
     if (currentUser.picture) {
-      if (avatarImg) {
-        avatarImg.src = currentUser.picture;
-        avatarImg.style.display = 'block';
-      }
-      if (avatarPlaceholder) avatarPlaceholder.style.display = 'none';
+      avatarImg.src = currentUser.picture;
+      avatarImg.style.display = 'block';
+      avatarPlaceholder.style.display = 'none';
     } else {
-      if (avatarImg) avatarImg.style.display = 'none';
-      if (avatarPlaceholder) avatarPlaceholder.style.display = 'flex';
+      avatarImg.style.display = 'none';
+      avatarPlaceholder.style.display = 'flex';
+      avatarPlaceholder.textContent = currentUser.name ? currentUser.name.substring(0, 2).toUpperCase() : 'HT';
     }
 
-    if (displayName) displayName.textContent = currentUser.name || 'Học viên';
-    if (displayEmail) displayEmail.textContent = currentUser.email || '';
+    displayName.textContent = currentUser.name || 'Học viên';
+    displayEmail.textContent = currentUser.email || 'demo@tiengtrunghongtai.com';
 
     if (navChatHistoryLi) navChatHistoryLi.style.display = 'block';
 
@@ -2652,6 +2585,7 @@ function renderUserProfile() {
   } else {
     authContainer.classList.remove('logged-in');
     authContainer.classList.add('logged-out');
+
     if (navChatHistoryLi) navChatHistoryLi.style.display = 'none';
   }
 
