@@ -285,6 +285,30 @@
       </div>
     </div>
 
+    <!-- VIP Voice Selection Control Bar (Nổi bật & Chuẩn ElevenLabs) -->
+    <div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(167, 139, 250, 0.12)); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 14px; padding: 14px 20px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.2);">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div style="width: 36px; height: 36px; border-radius: 50%; background: #3b82f6; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
+          <i class="fa-solid fa-microphone"></i>
+        </div>
+        <div>
+          <div style="font-weight: 800; font-size: 0.95rem; color: #fff;">Cấu Hình Giọng Đọc Phát Âm (Voice Engine)</div>
+          <div style="font-size: 0.8rem; color: #94a3b8;">Chọn giọng đọc AI chuẩn để nghe khi bấm vào ví dụ & chữ Hán ngữ pháp</div>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 0.85rem; font-weight: 700; color: #f59e0b;">Giọng Đọc Đang Chọn:</span>
+        <select id="grammar-voice-select" onchange="localStorage.setItem('speech_voice', this.value)" style="background: #0f172a; border: 1.5px solid #3b82f6; color: #fff; padding: 8px 16px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; outline: none; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+          <option value="baidu-female" selected>🇨🇳 Baidu Nữ (Giọng Bắc Kinh chuẩn)</option>
+          <option value="baidu-male">🇨🇳 Baidu Nam (Giọng Chuẩn)</option>
+          <option value="elevenlabs-adam">✨ ElevenLabs AI - Adam (Giọng Nam VIP)</option>
+          <option value="elevenlabs-bella">✨ ElevenLabs AI - Bella (Giọng Nữ VIP)</option>
+          <option value="elevenlabs-jessica">✨ ElevenLabs AI - Jessica (Giọng Nữ Ngọt Ngào)</option>
+        </select>
+      </div>
+    </div>
+
     <!-- Level Navigation Tabs -->
     <div class="level-tabs">
       <button class="tab-btn active" data-level="hsk1" onclick="switchLevelTab('hsk1')">
@@ -560,16 +584,19 @@
       if (!text) return;
       if (audioCurrent) {
         audioCurrent.pause();
+        audioCurrent = null;
       }
-      const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === ''
-        ? 'http://localhost:5000'
-        : 'https://tieng-trung-hong-tai.onrender.com';
 
-      const voice = localStorage.getItem('speech_voice') || 'baidu-female';
+      const API_BASE_URL = getApiBaseUrl();
+      const voiceSelect = document.getElementById('grammar-voice-select');
+      const voice = voiceSelect ? voiceSelect.value : (localStorage.getItem('speech_voice') || 'baidu-female');
+      localStorage.setItem('speech_voice', voice);
+
       const audioUrl = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(text)}&voice=${voice}`;
 
       audioCurrent = new Audio(audioUrl);
       audioCurrent.play().catch(err => {
+        console.warn("TTS audio play failed, fallback to WebSpeech:", err);
         if ('speechSynthesis' in window) {
           window.speechSynthesis.cancel();
           const u = new SpeechSynthesisUtterance(text);
