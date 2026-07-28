@@ -13,7 +13,9 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+SC:wght@400;500;700;800&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+SC:wght@400;500;700;800&family=Outfit:wght@400;600;700;800&display=swap"
+    rel="stylesheet">
 
   <link rel="stylesheet" href="/src/style.css">
   <style>
@@ -48,7 +50,7 @@
       border-radius: 20px;
       padding: 32px;
       margin-bottom: 28px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -57,8 +59,8 @@
     }
 
     .rules-title-group h1 {
-      font-family: 'Outfit', sans-serif;
-      font-size: 2.2rem;
+      font-family: 'Be Vietnam Pro', sans-serif;
+      font-size: 2.1rem;
       font-weight: 800;
       margin: 0 0 8px 0;
       background: linear-gradient(135deg, #60a5fa, #a78bfa);
@@ -116,8 +118,15 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .rule-card-grid {
@@ -138,7 +147,7 @@
       transform: translateY(-3px);
       background: var(--rules-card-hover);
       border-color: rgba(255, 255, 255, 0.2);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     }
 
     .rule-card-header {
@@ -161,7 +170,7 @@
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.1);
       border: none;
       color: #fff;
       display: flex;
@@ -233,12 +242,16 @@
     <!-- Intelligent Lookup Converter Bar -->
     <div class="search-box-wrap">
       <i class="fa-solid fa-wand-magic-sparkles" style="color: var(--rules-accent); font-size: 1.3rem;"></i>
-      <input type="text" id="lookup-input" placeholder="Nhập từ Hán-Việt hoặc chữ Hán bất kỳ (Ví dụ: Quốc, Học, Nam, Vương, 汉)..." onkeyup="window.processHanVietLookup()">
-      <button class="btn btn-primary" onclick="window.processHanVietLookup()"><i class="fa-solid fa-magnifying-glass"></i> Tra Quy Tắc Suy Âm</button>
+      <input type="text" id="lookup-input"
+        placeholder="Nhập từ Hán-Việt hoặc chữ Hán bất kỳ (Ví dụ: Quốc, Học, Nam, Vương, 汉)..."
+        onkeyup="window.processHanVietLookup()">
+      <button class="btn btn-primary" onclick="window.processHanVietLookup()"><i
+          class="fa-solid fa-magnifying-glass"></i> Tra Quy Tắc Suy Âm</button>
     </div>
 
     <!-- Dynamic Result Box -->
-    <div id="lookup-result-box" style="display: none; background: rgba(59, 130, 246, 0.1); border: 1px solid var(--rules-primary); padding: 18px 24px; border-radius: 16px; margin-bottom: 24px;">
+    <div id="lookup-result-box"
+      style="display: none; background: rgba(59, 130, 246, 0.1); border: 1px solid var(--rules-primary); padding: 18px 24px; border-radius: 16px; margin-bottom: 24px;">
       <!-- Lookup Result Rendered Here -->
     </div>
 
@@ -273,7 +286,8 @@
             <span class="rule-badge">h- ➔ h</span>
             <button class="audio-btn" onclick="window.speakZh('h')"><i class="fa-solid fa-volume-high"></i></button>
           </div>
-          <p style="color: #94a3b8; font-size: 0.88rem;">Âm đầu <b>h-</b> trong tiếng Việt gần như giữ nguyên thành <b>h</b> trong Pinyin Tiếng Trung.</p>
+          <p style="color: #94a3b8; font-size: 0.88rem;">Âm đầu <b>h-</b> trong tiếng Việt gần như giữ nguyên thành
+            <b>h</b> trong Pinyin Tiếng Trung.</p>
           <div class="example-box">
             <div><span class="zh">學</span> (Học) ➔ <b>xué / húe</b></div>
             <div><span class="zh">海</span> (Hải) ➔ <b>hǎi</b></div>
@@ -286,7 +300,8 @@
             <span class="rule-badge">c / k / qu ➔ g / k</span>
             <button class="audio-btn" onclick="window.speakZh('g')"><i class="fa-solid fa-volume-high"></i></button>
           </div>
-          <p style="color: #94a3b8; font-size: 0.88rem;">Âm đầu <b>c-, k-, qu-</b> chuyển thành nhóm gốc lưỡi <b>g</b> (không bật hơi) hoặc <b>k</b> (bật hơi).</p>
+          <p style="color: #94a3b8; font-size: 0.88rem;">Âm đầu <b>c-, k-, qu-</b> chuyển thành nhóm gốc lưỡi <b>g</b>
+            (không bật hơi) hoặc <b>k</b> (bật hơi).</p>
           <div class="example-box">
             <div><span class="zh">國</span> (Quốc) ➔ <b>guó</b></div>
             <div><span class="zh">高</span> (Cao) ➔ <b>gāo</b></div>
@@ -299,7 +314,8 @@
             <span class="rule-badge">t / th ➔ d / t</span>
             <button class="audio-btn" onclick="window.speakZh('d')"><i class="fa-solid fa-volume-high"></i></button>
           </div>
-          <p style="color: #94a3b8; font-size: 0.88rem;">Âm <b>đ / t</b> Hán-Việt chuyển thành <b>d</b> (không bật), <b>th</b> chuyển thành <b>t</b> (bật hơi).</p>
+          <p style="color: #94a3b8; font-size: 0.88rem;">Âm <b>đ / t</b> Hán-Việt chuyển thành <b>d</b> (không bật),
+            <b>th</b> chuyển thành <b>t</b> (bật hơi).</p>
           <div class="example-box">
             <div><span class="zh">多</span> (Đa) ➔ <b>duō</b></div>
             <div><span class="zh">天</span> (Thiên) ➔ <b>tiān</b></div>
@@ -312,7 +328,8 @@
             <span class="rule-badge">b / p ➔ b / p</span>
             <button class="audio-btn" onclick="window.speakZh('b')"><i class="fa-solid fa-volume-high"></i></button>
           </div>
-          <p style="color: #94a3b8; font-size: 0.88rem;">Âm môi <b>b, p</b> Hán-Việt tương ứng với <b>b</b> (không bật) và <b>p</b> (bật hơi) Pinyin.</p>
+          <p style="color: #94a3b8; font-size: 0.88rem;">Âm môi <b>b, p</b> Hán-Việt tương ứng với <b>b</b> (không bật)
+            và <b>p</b> (bật hơi) Pinyin.</p>
           <div class="example-box">
             <div><span class="zh">不</span> (Bất) ➔ <b>bù</b></div>
             <div><span class="zh">北</span> (Bắc) ➔ <b>běi</b></div>
@@ -325,7 +342,8 @@
             <span class="rule-badge">nh ➔ r / n</span>
             <button class="audio-btn" onclick="window.speakZh('ri')"><i class="fa-solid fa-volume-high"></i></button>
           </div>
-          <p style="color: #94a3b8; font-size: 0.88rem;">Phụ âm <b>nh-</b> Hán-Việt thường chuyển thành <b>r-</b> hoặc <b>n-</b> trong Pinyin.</p>
+          <p style="color: #94a3b8; font-size: 0.88rem;">Phụ âm <b>nh-</b> Hán-Việt thường chuyển thành <b>r-</b> hoặc
+            <b>n-</b> trong Pinyin.</p>
           <div class="example-box">
             <div><span class="zh">日</span> (Nhật) ➔ <b>rì</b></div>
             <div><span class="zh">人</span> (Nhân) ➔ <b>rén</b></div>
@@ -338,7 +356,8 @@
             <span class="rule-badge">v ➔ w / y</span>
             <button class="audio-btn" onclick="window.speakZh('wang')"><i class="fa-solid fa-volume-high"></i></button>
           </div>
-          <p style="color: #94a3b8; font-size: 0.88rem;">Phụ âm <b>v-</b> Hán-Việt thường biến đổi thành <b>w-</b> hoặc <b>y-</b> trong Tiếng Trung.</p>
+          <p style="color: #94a3b8; font-size: 0.88rem;">Phụ âm <b>v-</b> Hán-Việt thường biến đổi thành <b>w-</b> hoặc
+            <b>y-</b> trong Tiếng Trung.</p>
           <div class="example-box">
             <div><span class="zh">王</span> (Vương) ➔ <b>wáng</b></div>
             <div><span class="zh">文</span> (Văn) ➔ <b>wén</b></div>
@@ -357,9 +376,11 @@
       <div class="rule-card-grid">
         <div class="rule-card">
           <div class="rule-card-header">
-            <span class="rule-badge" style="color: var(--rules-accent); background: rgba(245,158,11,0.15);">-ang / -an ➔ -ang / -an</span>
+            <span class="rule-badge" style="color: var(--rules-accent); background: rgba(245,158,11,0.15);">-ang / -an ➔
+              -ang / -an</span>
           </div>
-          <p style="color: #94a3b8; font-size: 0.88rem;">Vần <b>-ang, -an</b> giữ nguyên vần tương ứng trong Tiếng Trung.</p>
+          <p style="color: #94a3b8; font-size: 0.88rem;">Vần <b>-ang, -an</b> giữ nguyên vần tương ứng trong Tiếng
+            Trung.</p>
           <div class="example-box">
             <div><span class="zh">南</span> (Nam) ➔ <b>nán</b></div>
             <div><span class="zh">康</span> (Khang) ➔ <b>kāng</b></div>
@@ -368,9 +389,11 @@
 
         <div class="rule-card">
           <div class="rule-card-header">
-            <span class="rule-badge" style="color: var(--rules-accent); background: rgba(245,158,11,0.15);">Dấu Huyền / Không dấu ➔ Thanh 1 / 2</span>
+            <span class="rule-badge" style="color: var(--rules-accent); background: rgba(245,158,11,0.15);">Dấu Huyền /
+              Không dấu ➔ Thanh 1 / 2</span>
           </div>
-          <p style="color: #94a3b8; font-size: 0.88rem;">Chữ Hán-Việt mang <b>dấu huyền</b> hoặc <b>không dấu</b> thường suy ra Thanh 1 (ngang) hoặc Thanh 2 (sắc).</p>
+          <p style="color: #94a3b8; font-size: 0.88rem;">Chữ Hán-Việt mang <b>dấu huyền</b> hoặc <b>không dấu</b> thường
+            suy ra Thanh 1 (ngang) hoặc Thanh 2 (sắc).</p>
           <div class="example-box">
             <div><span class="zh">天</span> (Thiên) ➔ <b>tiān (Thanh 1)</b></div>
             <div><span class="zh">人</span> (Nhân) ➔ <b>rén (Thanh 2)</b></div>
@@ -379,9 +402,11 @@
 
         <div class="rule-card">
           <div class="rule-card-header">
-            <span class="rule-badge" style="color: var(--rules-accent); background: rgba(245,158,11,0.15);">Dấu Hỏi / Dấu Ngã ➔ Thanh 3</span>
+            <span class="rule-badge" style="color: var(--rules-accent); background: rgba(245,158,11,0.15);">Dấu Hỏi /
+              Dấu Ngã ➔ Thanh 3</span>
           </div>
-          <p style="color: #94a3b8; font-size: 0.88rem;">Chữ Hán-Việt mang <b>dấu hỏi (?)</b> hoặc <b>dấu ngã (~)</b> đa số suy ra Thanh 3 (lượn xuống nâng lên).</p>
+          <p style="color: #94a3b8; font-size: 0.88rem;">Chữ Hán-Việt mang <b>dấu hỏi (?)</b> hoặc <b>dấu ngã (~)</b> đa
+            số suy ra Thanh 3 (lượn xuống nâng lên).</p>
           <div class="example-box">
             <div><span class="zh">好</span> (Hảo) ➔ <b>hǎo (Thanh 3)</b></div>
             <div><span class="zh">海</span> (Hải) ➔ <b>hǎi (Thanh 3)</b></div>
@@ -390,9 +415,11 @@
 
         <div class="rule-card">
           <div class="rule-card-header">
-            <span class="rule-badge" style="color: var(--rules-accent); background: rgba(245,158,11,0.15);">Dấu Sắc / Dấu Nặng ➔ Thanh 4</span>
+            <span class="rule-badge" style="color: var(--rules-accent); background: rgba(245,158,11,0.15);">Dấu Sắc /
+              Dấu Nặng ➔ Thanh 4</span>
           </div>
-          <p style="color: #94a3b8; font-size: 0.88rem;">Chữ Hán-Việt mang <b>dấu sắc (')</b> hoặc <b>dấu nặng (.)</b> tỷ lệ cao suy ra Thanh 4 (giật mạnh từ cao xuống).</p>
+          <p style="color: #94a3b8; font-size: 0.88rem;">Chữ Hán-Việt mang <b>dấu sắc (')</b> hoặc <b>dấu nặng (.)</b>
+            tỷ lệ cao suy ra Thanh 4 (giật mạnh từ cao xuống).</p>
           <div class="example-box">
             <div><span class="zh">大</span> (Đại) ➔ <b>dà (Thanh 4)</b></div>
             <div><span class="zh">國</span> (Quốc) ➔ <b>guó / guò (Thanh 4)</b></div>
@@ -409,9 +436,11 @@
       <div class="rule-card-grid">
         <div class="rule-card">
           <div class="rule-card-header">
-            <span class="rule-badge" style="color: var(--rules-success); background: rgba(16,185,129,0.15);">Âm Môi (b, p, m, f)</span>
+            <span class="rule-badge" style="color: var(--rules-success); background: rgba(16,185,129,0.15);">Âm Môi (b,
+              p, m, f)</span>
           </div>
-          <p style="color: #94a3b8; font-size: 0.88rem;"><b>b</b> (bô), <b>p</b> (phô - bật hơi), <b>m</b> (mô), <b>f</b> (phô).</p>
+          <p style="color: #94a3b8; font-size: 0.88rem;"><b>b</b> (bô), <b>p</b> (phô - bật hơi), <b>m</b> (mô),
+            <b>f</b> (phô).</p>
           <div style="display: flex; gap: 8px; margin-top: 10px;">
             <button class="btn btn-sm btn-outline" onclick="window.speakZh('bō')">b</button>
             <button class="btn btn-sm btn-outline" onclick="window.speakZh('pō')">p</button>
@@ -422,9 +451,11 @@
 
         <div class="rule-card">
           <div class="rule-card-header">
-            <span class="rule-badge" style="color: var(--rules-success); background: rgba(16,185,129,0.15);">Âm Đầu Lưỡi (d, t, n, l)</span>
+            <span class="rule-badge" style="color: var(--rules-success); background: rgba(16,185,129,0.15);">Âm Đầu Lưỡi
+              (d, t, n, l)</span>
           </div>
-          <p style="color: #94a3b8; font-size: 0.88rem;"><b>d</b> (tơ), <b>t</b> (thơ - bật hơi), <b>n</b> (nơ), <b>l</b> (lơ).</p>
+          <p style="color: #94a3b8; font-size: 0.88rem;"><b>d</b> (tơ), <b>t</b> (thơ - bật hơi), <b>n</b> (nơ),
+            <b>l</b> (lơ).</p>
           <div style="display: flex; gap: 8px; margin-top: 10px;">
             <button class="btn btn-sm btn-outline" onclick="window.speakZh('dē')">d</button>
             <button class="btn btn-sm btn-outline" onclick="window.speakZh('tē')">t</button>
@@ -435,7 +466,8 @@
 
         <div class="rule-card">
           <div class="rule-card-header">
-            <span class="rule-badge" style="color: var(--rules-success); background: rgba(16,185,129,0.15);">Âm Gốc Lưỡi (g, k, h)</span>
+            <span class="rule-badge" style="color: var(--rules-success); background: rgba(16,185,129,0.15);">Âm Gốc Lưỡi
+              (g, k, h)</span>
           </div>
           <p style="color: #94a3b8; font-size: 0.88rem;"><b>g</b> (cơ), <b>k</b> (khơ - bật hơi), <b>h</b> (hơ).</p>
           <div style="display: flex; gap: 8px; margin-top: 10px;">
@@ -447,7 +479,8 @@
 
         <div class="rule-card">
           <div class="rule-card-header">
-            <span class="rule-badge" style="color: var(--rules-success); background: rgba(16,185,129,0.15);">Âm Mặt Lưỡi (j, q, x)</span>
+            <span class="rule-badge" style="color: var(--rules-success); background: rgba(16,185,129,0.15);">Âm Mặt Lưỡi
+              (j, q, x)</span>
           </div>
           <p style="color: #94a3b8; font-size: 0.88rem;"><b>j</b> (chi), <b>q</b> (chi - bật hơi), <b>x</b> (xi).</p>
           <div style="display: flex; gap: 8px; margin-top: 10px;">
@@ -459,9 +492,11 @@
 
         <div class="rule-card">
           <div class="rule-card-header">
-            <span class="rule-badge" style="color: var(--rules-success); background: rgba(16,185,129,0.15);">Âm Uốn Lưỡi (zh, ch, sh, r)</span>
+            <span class="rule-badge" style="color: var(--rules-success); background: rgba(16,185,129,0.15);">Âm Uốn Lưỡi
+              (zh, ch, sh, r)</span>
           </div>
-          <p style="color: #94a3b8; font-size: 0.88rem;"><b>zh</b> (trư), <b>ch</b> (trư - bật hơi), <b>sh</b> (sư), <b>r</b> (rư).</p>
+          <p style="color: #94a3b8; font-size: 0.88rem;"><b>zh</b> (trư), <b>ch</b> (trư - bật hơi), <b>sh</b> (sư),
+            <b>r</b> (rư).</p>
           <div style="display: flex; gap: 8px; margin-top: 10px;">
             <button class="btn btn-sm btn-outline" onclick="window.speakZh('zhi')">zh</button>
             <button class="btn btn-sm btn-outline" onclick="window.speakZh('chi')">ch</button>
@@ -480,7 +515,8 @@
       <div class="rule-card-grid">
         <div class="rule-card">
           <div class="rule-card-header">
-            <span class="rule-badge" style="color: #a78bfa; background: rgba(167,139,250,0.15);">6 Vận Âm Đơn (Simple)</span>
+            <span class="rule-badge" style="color: #a78bfa; background: rgba(167,139,250,0.15);">6 Vận Âm Đơn
+              (Simple)</span>
           </div>
           <p style="color: #94a3b8; font-size: 0.88rem;">a, o, e, i, u, ü (nguyên âm cơ bản).</p>
           <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
@@ -503,10 +539,13 @@
       <div class="rule-card-grid">
         <div class="rule-card">
           <div class="rule-card-header">
-            <span class="rule-badge" style="color: #f43f5e; background: rgba(244,63,94,0.15);">Hai Thanh 3 Đi Cùng Nhau</span>
-            <button class="audio-btn" onclick="window.speakZh('nǐ hǎo')"><i class="fa-solid fa-volume-high"></i></button>
+            <span class="rule-badge" style="color: #f43f5e; background: rgba(244,63,94,0.15);">Hai Thanh 3 Đi Cùng
+              Nhau</span>
+            <button class="audio-btn" onclick="window.speakZh('nǐ hǎo')"><i
+                class="fa-solid fa-volume-high"></i></button>
           </div>
-          <p style="color: #94a3b8; font-size: 0.88rem;">Khi 2 âm Thanh 3 đứng liền nhau: <b>Thanh 3 + Thanh 3 ➔ Thanh 2 + Thanh 3</b>.</p>
+          <p style="color: #94a3b8; font-size: 0.88rem;">Khi 2 âm Thanh 3 đứng liền nhau: <b>Thanh 3 + Thanh 3 ➔ Thanh 2
+              + Thanh 3</b>.</p>
           <div class="example-box">
             <div><span class="zh">你好</span> <i>nǐ hǎo</i> ➔ đọc thành <b>ní hǎo</b></div>
             <div><span class="zh">可以</span> <i>kě yǐ</i> ➔ đọc thành <b>ké yǐ</b></div>
@@ -515,10 +554,13 @@
 
         <div class="rule-card">
           <div class="rule-card-header">
-            <span class="rule-badge" style="color: #f43f5e; background: rgba(244,63,94,0.15);">Biến Điệu Chữ 不 (bù)</span>
-            <button class="audio-btn" onclick="window.speakZh('bú shì')"><i class="fa-solid fa-volume-high"></i></button>
+            <span class="rule-badge" style="color: #f43f5e; background: rgba(244,63,94,0.15);">Biến Điệu Chữ 不
+              (bù)</span>
+            <button class="audio-btn" onclick="window.speakZh('bú shì')"><i
+                class="fa-solid fa-volume-high"></i></button>
           </div>
-          <p style="color: #94a3b8; font-size: 0.88rem;">Chữ <b>不</b> vốn đọc thanh 4 (bù), nhưng khi đứng trước từ mang <b>Thanh 4</b> thì đọc đổi thành <b>Thanh 2 (bú)</b>.</p>
+          <p style="color: #94a3b8; font-size: 0.88rem;">Chữ <b>不</b> vốn đọc thanh 4 (bù), nhưng khi đứng trước từ mang
+            <b>Thanh 4</b> thì đọc đổi thành <b>Thanh 2 (bú)</b>.</p>
           <div class="example-box">
             <div><span class="zh">不是</span> <i>bù shì</i> ➔ đọc thành <b>bú shì</b></div>
             <div><span class="zh">不对</span> <i>bù duì</i> ➔ đọc thành <b>bú duì</b></div>
