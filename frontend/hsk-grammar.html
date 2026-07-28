@@ -392,8 +392,37 @@
       if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '') {
         return 'http://localhost:5000';
       }
-      return window.location.origin;
+      return 'https://tieng-trung-hong-tai.onrender.com';
     }
+
+    let audioCurrent = null;
+    window.speakZhText = function (text) {
+      if (!text) return;
+
+      const selectEl = document.getElementById('grammar-voice-select');
+      const voice = selectEl ? selectEl.value : (localStorage.getItem('speech_voice') || 'baidu-female');
+      localStorage.setItem('speech_voice', voice);
+
+      if (audioCurrent) {
+        audioCurrent.pause();
+        audioCurrent = null;
+      }
+
+      const API_BASE_URL = getApiBaseUrl();
+      const audioUrl = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(text)}&voice=${voice}`;
+
+      audioCurrent = new Audio(audioUrl);
+      audioCurrent.play().catch(err => {
+        console.warn("ElevenLabs/Baidu Audio Playback error, fallback to Web Speech:", err);
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const u = new SpeechSynthesisUtterance(text);
+          u.lang = 'zh-CN';
+          u.rate = 0.85;
+          window.speechSynthesis.speak(u);
+        }
+      });
+    };
 
     const pdfMap = {
       'hsk1': `${getApiBaseUrl()}/grammar-files/ngu phap hsk 1.pdf`,
@@ -495,33 +524,6 @@
     window.filterGrammarContent = function () {
       const query = document.getElementById('search-grammar-input').value.trim();
       renderGrammarContent(currentActiveLevel, query);
-    };
-
-    let audioCurrent = null;
-    window.speakZhText = function (text) {
-      if (!text) return;
-      if (audioCurrent) {
-        audioCurrent.pause();
-        audioCurrent = null;
-      }
-
-      const API_BASE_URL = getApiBaseUrl();
-      const voiceSelect = document.getElementById('grammar-voice-select');
-      const voice = voiceSelect ? voiceSelect.value : (localStorage.getItem('speech_voice') || 'baidu-female');
-      localStorage.setItem('speech_voice', voice);
-
-      const audioUrl = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(text)}&voice=${voice}`;
-
-      audioCurrent = new Audio(audioUrl);
-      audioCurrent.play().catch(err => {
-        console.warn("TTS audio play failed, fallback to WebSpeech:", err);
-        if ('speechSynthesis' in window) {
-          window.speechSynthesis.cancel();
-          const u = new SpeechSynthesisUtterance(text);
-          u.lang = 'zh-CN';
-          window.speechSynthesis.speak(u);
-        }
-      });
     };
   </script>
 </body>

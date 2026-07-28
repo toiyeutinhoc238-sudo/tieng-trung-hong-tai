@@ -152,7 +152,7 @@ async function performDataMigration() {
     }
 
     console.log("Starting data migration from user_data.json to MongoDB...");
-    
+
     cachedUserData = {
       users: fileData.users || {},
       progress: fileData.progress || {},
@@ -392,9 +392,9 @@ app.get('/api/auth/me', async (req, res) => {
 
 // POST endpoint to logout
 app.post('/api/auth/logout', async (req, res) => {
-  const token = req.headers['x-session-token'] || 
-                (req.headers.authorization && req.headers.authorization.startsWith('Bearer ') ? req.headers.authorization.substring(7) : null) || 
-                getSessionCookie(req);
+  const token = req.headers['x-session-token'] ||
+    (req.headers.authorization && req.headers.authorization.startsWith('Bearer ') ? req.headers.authorization.substring(7) : null) ||
+    getSessionCookie(req);
   if (token) {
     activeSessions.delete(token);
     try {
@@ -492,7 +492,7 @@ app.post('/api/user/game-history', async (req, res) => {
   }
 
   const { score, stage, level, mode, combo } = req.body;
-  
+
   if (typeof score !== 'number' || typeof stage !== 'number') {
     return res.status(400).json({ error: 'Invalid score or stage' });
   }
@@ -523,7 +523,7 @@ app.post('/api/user/game-history', async (req, res) => {
   };
 
   userRecord.gameHistory.push(newRecord);
-  
+
   // Keep last 100 games
   if (userRecord.gameHistory.length > 100) {
     userRecord.gameHistory = userRecord.gameHistory.slice(-100);
@@ -661,14 +661,14 @@ app.get('/api/lesson-detail', async (req, res) => {
     const filePath = path.join(__dirname, 'lessons_data.json');
     const dataStr = await fs.readFile(filePath, 'utf-8');
     const lessonsData = JSON.parse(dataStr);
-    
+
     if (lessonsData[lessonId]) {
       return res.json(lessonsData[lessonId]);
     } else if (lessonsData['hsk1_lesson1']) {
       // Fallback sample lesson
       return res.json(lessonsData['hsk1_lesson1']);
     }
-    
+
     return res.status(404).json({ error: 'Lesson content not found' });
   } catch (err) {
     console.error("Error reading lessons_data.json:", err);
@@ -1033,13 +1033,13 @@ app.delete('/api/vocabulary/:id', async (req, res) => {
   }
 
   // Remove custom word
-    res.json({ message: 'Word deleted successfully', id: wordId });
+  res.json({ message: 'Word deleted successfully', id: wordId });
 });
 
 // POST endpoint for AI Chatbot
 app.post('/api/chat', async (req, res) => {
   const { messages, threadId } = req.body;
-  
+
   if (!messages || !Array.isArray(messages)) {
     return res.status(400).json({ error: 'Missing or invalid messages parameter' });
   }
@@ -1086,7 +1086,7 @@ app.post('/api/chat', async (req, res) => {
 
     const data = await response.json();
     const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Xin lỗi bạn, tôi không thể xử lý yêu cầu lúc này. Vui lòng thử lại sau.';
-    
+
     let returnedThreadId = null;
 
     // If logged in, persist the messages into user_data.json
