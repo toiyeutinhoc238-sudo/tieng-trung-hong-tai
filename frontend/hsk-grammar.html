@@ -335,13 +335,20 @@
     let allGrammarData = {};
     let currentActiveLevel = 'hsk1';
 
+    function getApiBaseUrl() {
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '') {
+        return 'http://localhost:5000';
+      }
+      return window.location.origin;
+    }
+
     const pdfMap = {
-      'hsk1': '/grammar-files/ngu phap hsk 1.pdf',
-      'hsk2': '/grammar-files/ngu phap hsk 2.pdf',
-      'hsk3': '/grammar-files/ngu phap hsk 3.pdf',
-      'hsk4': '/grammar-files/ngu phap hsk 4.pdf',
-      'hsk5': '/grammar-files/ngu phap hsk 5.pdf',
-      'hsk6': '/grammar-files/ngu phap hsk 6.pdf'
+      'hsk1': `${getApiBaseUrl()}/grammar-files/ngu phap hsk 1.pdf`,
+      'hsk2': `${getApiBaseUrl()}/grammar-files/ngu phap hsk 2.pdf`,
+      'hsk3': `${getApiBaseUrl()}/grammar-files/ngu phap hsk 3.pdf`,
+      'hsk4': `${getApiBaseUrl()}/grammar-files/ngu phap hsk 4.pdf`,
+      'hsk5': `${getApiBaseUrl()}/grammar-files/ngu phap hsk 5.pdf`,
+      'hsk6': `${getApiBaseUrl()}/grammar-files/ngu phap hsk 6.pdf`
     };
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -349,9 +356,7 @@
     });
 
     function fetchGrammarData() {
-      const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === ''
-        ? 'http://localhost:5000'
-        : 'https://tieng-trung-hong-tai.onrender.com';
+      const API_BASE_URL = getApiBaseUrl();
 
       fetch(`${API_BASE_URL}/api/grammar/full-content`)
         .then(res => res.json())

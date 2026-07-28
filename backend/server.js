@@ -1446,7 +1446,9 @@ app.use('/grammar-files', express.static(GRAMMAR_FILES_DIR));
 app.get('/api/grammar/full-content', async (req, res) => {
   try {
     const jsonPath = path.join(__dirname, 'hsk_grammar_full.json');
-    if (!fsSync.existsSync(jsonPath)) {
+    try {
+      await fs.access(jsonPath);
+    } catch {
       return res.status(404).json({ error: 'Grammar full data not found' });
     }
     const dataStr = await fs.readFile(jsonPath, 'utf-8');
