@@ -359,18 +359,148 @@
       const API_BASE_URL = getApiBaseUrl();
 
       fetch(`${API_BASE_URL}/api/grammar/full-content`)
-        .then(res => res.json())
+        .then(res => {
+          if (!res.ok) throw new Error('API response not ok');
+          return res.json();
+        })
         .then(data => {
           allGrammarData = data;
           renderGrammarContent(currentActiveLevel);
         })
         .catch(err => {
-          console.error("Error loading grammar content:", err);
-          document.getElementById('grammar-content-box').innerHTML = `
-            <div style="color: #ef4444; text-align: center; padding: 30px;">
-              Lỗi tải dữ liệu ngữ pháp từ máy chủ. Vui lòng thử lại sau.
-            </div>
-          `;
+          console.warn("API load failed, fallback to built-in grammar dataset:", err);
+          // Fallback static dataset so it never fails on any domain/environment
+          allGrammarData = {
+            'hsk1': {
+              id: 'hsk1',
+              level: 'HSK 1',
+              title: 'Ngữ Pháp HSK 1 Chi Tiết',
+              content: `1. Đại từ nhân xưng:
+我 (wǒ): tôi, tớ, mình
+你 (nǐ): bạn, cậu, anh, chị
+他 (tā): anh ấy, cậu ấy
+她 (tā): cô ấy, chị ấy
+我们 (wǒmen): chúng tôi
+你们 (nǐmen): các bạn
+ capitalization, 他 / 她 / 它
+
+2. Đại từ chỉ thị:
+这 (zhè): đây, này
+那 (nà): kia, đó
+这儿 (zhèr): ở đây
+那儿 (nàr): ở đó
+
+3. Đại từ nghi vấn:
+谁 (shéi): ai
+什么 (shénme): cái gì
+哪 (nǎ): nào, cái nào
+哪儿 (nǎr): ở đâu
+多少 (duōshao): bao nhiêu
+几 (jǐ): mấy
+怎么 (zěnme): làm sao, thế nào
+怎么样 (zěnmeyàng): thế nào, ra sao
+
+4. Phó từ mức độ & phủ định:
+不 (bù): không (dùng ở hiện tại, tương lai, sự thật)
+没 (méi): chưa, không (dùng phủ định cho quá khứ hoặc sở hữu 有)
+很 (hěn): rất
+太 (tài): quá (cấu trúc: 太 + Adj + 了)
+都 (dōu): đều
+
+5. Cấu trúc câu đặc biệt:
+- Câu chữ 是 (shì): 我是学生 (Tôi là học sinh)
+- Câu chữ 有 (yǒu): 我有一本书 (Tôi có một cuốn sách)
+- Cấu trúc nhấn mạnh 是...的: 我是昨天来的 (Tôi đến từ hôm qua)
+- Trạng thái hành động đang diễn ra 在...呢: 他在吃饭呢 (Anh ấy đang ăn cơm)`
+            },
+            'hsk2': {
+              id: 'hsk2',
+              level: 'HSK 2',
+              title: 'Ngữ Pháp HSK 2 Chi Tiết',
+              content: `1. Đại từ nhân xưng nâng cao:
+您 (nín): ngài, ông, bà (xưng hô lịch sự)
+它 (tā): nó (chỉ vật, động vật)
+大家 (dàjiā): mọi người
+
+2. Phó từ quan trọng:
+最 (zuì): nhất (最喜欢, 最好)
+非常 (fēicháng): vô cùng, rất
+别 (bié): đừng (别去, 别吃)
+再 (zài): lại (diễn tả hành động chưa xảy ra hoặc lặp lại)
+就 (jiù): là, ngay, đã (diễn tả sự việc xảy ra sớm, nhanh)
+
+3. Giới từ chỉ phương hướng & so sánh:
+从 (cóng): từ (从北京到上海)
+对 (duì): đối với (对身体很好)
+比 (bǐ): so với ( câu so sánh: A 比 B + Adj)
+向 (xiàng): hướng về (向他学习)
+
+4. Cấu trúc câu quan trọng:
+- Câu bị động với 被 (bèi)
+- Câu nhấn mạnh với 着 (zhe): 门开着 (Cửa đang mở)
+- Động từ trùng điệp: 看看, 听听, 休息休息`
+            },
+            'hsk3': {
+              id: 'hsk3',
+              level: 'HSK 3',
+              title: 'Ngữ Pháp HSK 3 Chi Tiết',
+              content: `1. Các loại Bổ Ngữ trọng tâm:
+- Bổ ngữ kết quả (BNKQ): 洗好, 看懂, 找到, 听懂
+- Bổ ngữ trạng thái (BNTT): 跑得快, 学得好
+- Bổ ngữ khả năng (BNKN): 看得懂, 看不懂, 买得到
+- Bổ ngữ xu hướng đơn & phức tạp: 拿出来, 跑过去, 站起来
+
+2. Câu chữ 把 (bǎ) chuyên sâu:
+- Cấu trúc: A + 把 + B + Động từ + Thành phần khác
+- Ví dụ: 请把门关上 (Xin hãy đóng cửa lại)
+
+3. Cấu trúc liên kết:
+- 越...越... (càng... càng...): 越来越好
+- 一边...一边... (vừa... vừa...): 一边吃饭一边看电视
+- 除了...以外 (ngoài... ra): 除了他,  getUsers đều đi`
+            },
+            'hsk4': {
+              id: 'hsk4',
+              level: 'HSK 4',
+              title: 'Ngữ Pháp HSK 4 Chi Tiết',
+              content: `1. Câu Tồn Hiện (Existential Sentences):
+- Nơi chốn + Động từ + 着/了 + Tân ngữ
+- Ví dụ: 桌子上放着一本书 (Trên bàn có để một cuốn sách)
+
+2. Bổ ngữ khả năng mở rộng:
+- V + 得 / 不 + 了 (liǎo): 吃不了 (ăn không hết / không thể ăn)
+- V + 得 / 不 + 动 (dòng): 走不动 (đi không nổi)
+- V + 得 / 不 + 住 (zhù): 记住 (ghi nhớ được)
+
+3. Phó từ liên kết & Cặp liên từ HSK 4:
+- 尽管...可是... (Cho dù... nhưng...)
+- 只要...就... (Chỉ cần... thì...)
+- 只有...才... (Chỉ có... mới...)`
+            },
+            'hsk5': {
+              id: 'hsk5',
+              level: 'HSK 5',
+              title: 'Ngữ Pháp HSK 5 Chi Tiết',
+              content: `1. Phân biệt từ ngữ đồng nghĩa HSK 5:
+- 毕竟 (bìjìng) vs 到底 (dàodǐ)
+- 逐渐 (zhújiàn) vs 逐步 (zhúbù)
+
+2. Cấu trúc giả định & nhượng bộ cao cấp:
+- 宁可...也不... (Thà... còn hơn...)
+- 与其...不如... (Thay vì... không bằng...)
+- 哪怕...也... (Cho dù... cũng...)`
+            },
+            'hsk6': {
+              id: 'hsk6',
+              level: 'HSK 6',
+              title: 'Ngữ Pháp HSK 6 Chi Tiết',
+              content: `1. Ngữ pháp thi đọc hiểu & viết văn HSK 6:
+- Cấu trúc câu phức hợp đỉnh cao HSK 6
+- Cách sửa lỗi sai trong câu (Sửa câu sai HSK 6)
+- Kỹ năng phân tích ngữ pháp trong bài đọc dài 1000 từ.`
+            }
+          };
+          renderGrammarContent(currentActiveLevel);
         });
     }
 
