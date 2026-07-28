@@ -399,17 +399,179 @@
       'hsk6': `${getApiBaseUrl()}/grammar-files/ngu phap hsk 6.pdf`
     };
 
-    document.addEventListener('DOMContentLoaded', () => {
-      // Initialize 100% full extracted datasets
+    function initBuiltInGrammar() {
       allGrammarData = {
-        'hsk1': { id: 'hsk1', level: 'HSK 1', title: 'Tổng Hợp Ngữ Pháp HSK 1 Chi Tiết', content: window.GRAMMAR_HSK1 || '' },
-        'hsk2': { id: 'hsk2', level: 'HSK 2', title: 'Tổng Hợp Ngữ Pháp HSK 2 Chi Tiết', content: window.GRAMMAR_HSK2 || '' },
-        'hsk3': { id: 'hsk3', level: 'HSK 3', title: 'Tổng Hợp Ngữ Pháp HSK 3 Chi Tiết', content: window.GRAMMAR_HSK3 || '' },
-        'hsk4': { id: 'hsk4', level: 'HSK 4', title: 'Tổng Hợp Ngữ Pháp HSK 4 Chi Tiết', content: window.GRAMMAR_HSK4 || '' },
-        'hsk5': { id: 'hsk5', level: 'HSK 5', title: 'Tổng Hợp Ngữ Pháp HSK 5 Chi Tiết', content: window.GRAMMAR_HSK5 || '' },
-        'hsk6': { id: 'hsk6', level: 'HSK 6', title: 'Tổng Hợp Ngữ Pháp HSK 6 Chi Tiết', content: window.GRAMMAR_HSK6 || '' }
-      };
+        'hsk1': {
+          id: 'hsk1',
+          level: 'HSK 1',
+          title: 'Tổng Hợp Ngữ Pháp HSK 1 Chi Tiết',
+          content: window.GRAMMAR_HSK1 || `Tổng hợp ngữ pháp HSK 1
+HSK bao gồm 6 cấp độ là kỳ thi năng lực Hán ngữ trong đó HSK 1 là cấp độ sơ cấp dành cho các bạn mới bắt đầu học tiếng Trung.
 
+1. Đại từ tiếng Trung
+- Đại từ nhân xưng:
+我 /wǒ/: tôi, tớ, mình
+你 /nǐ/: cậu, bạn, anh, chị
+他 /tā/: cậu ấy, anh ấy, hắn, ông ấy (phái nam)
+她 /tā/: cô ấy, chị ấy, bà ấy (phái nữ)
+我们 /wǒmen/: chúng tôi, chúng ta, chúng mình
+你们 /nǐmen/: các bạn, các cậu, các anh
+他们 /tāmen/: họ, bọn họ, các anh ấy
+她们 /tāmen/: họ, các chị ấy, các cô ấy
+
+2. Đại từ chỉ thị:
+这 /zhè/: đây, này, cái này
+这儿 /zhèr/: ở đây, chỗ này
+那 /nà/: kia, cái kia, đó
+那儿 /nàr/: chỗ kia, chỗ ấy
+Cấu trúc: 这/那 + 是 + danh từ | 这/那 + lượng từ + danh từ
+
+3. Đại từ nghi vấn:
+谁 /shéi/: ai
+哪 /nǎ/: nào, cái nào
+哪儿 /nǎr/: chỗ nào, đâu
+什么 /shénme/: cái gì
+多少 /duōshao/: bao nhiêu
+几 /jǐ/: mấy
+怎么 /zěnme/: thế nào, sao, làm sao (thực hiện động tác)
+怎么样 /zěnmeyàng/: thế nào, ra làm sao (hỏi tính chất, ý kiến)
+
+4. Chữ số & Lượng từ:
+- Biểu thị thời gian, tuổi tác, số tiền, chữ số (đọc từng số, số 1 đọc là yāo)
+- Lượng từ: Số từ + lượng từ + danh từ (三本书, 一个馒头)
+
+5. Phó từ & Giới từ & Trợ động từ:
+- Phó từ phủ định: 不 (bù - hiện tại/tương lai), 没 (méi - quá khứ)
+- Phó từ mức độ: 很 (hěn - rất), 太 (tài - quá... rồi)
+- Phó từ phạm vi: 都 (dōu - đều)
+- Giới từ: 在 (zài - ở) | Liên từ: 和 (hé - và)
+- Trợ động từ: 会 (huì - biết qua học tập), 能 (néng - có thể)
+
+6. Trợ từ & Cấu trúc đặc biệt:
+- Trợ từ kết cấu 的: Định ngữ + (的) + Trung tâm ngữ
+- Trợ từ ngữ khí: 了, 吗, 呢
+- Câu chữ 是, Câu chữ 有, Mẫu câu nhấn mạnh 是......的
+- Trạng thái hành động: 在......呢`
+        },
+        'hsk2': {
+          id: 'hsk2',
+          level: 'HSK 2',
+          title: 'Tổng Hợp Ngữ Pháp HSK 2 Chi Tiết',
+          content: window.GRAMMAR_HSK2 || `Tổng hợp ngữ pháp HSK 2
+
+1. Đại từ nhân xưng bổ sung:
+您 /nín/: ngài, ông, bà (xưng hô kính trọng)
+它 /tā/: nó (ngôi thứ ba chỉ đồ vật, con vật)
+它们 /tāmen/: chúng nó (chỉ đồ vật, con vật số nhiều)
+大家 /dàjiā/: mọi người
+
+2. Đại từ nghi vấn & chỉ thị bổ sung:
+每 /měi/: mỗi (每人, 每天)
+为 /wèi/: vì cái gì (为你们的幸福干杯)
+
+3. Phó từ HSK 2:
+- Mức độ: 最 (zuì - nhất), 非常 (fēicháng - vô cùng), 真 (zhēn - thật)
+- Phủ định: 别 (bié - đừng)
+- Phạm vi & Tần suất: 一起 (yīqǐ - cùng nhau), 再 (zài - lại), 也 (yě - cũng)
+- Ngữ khí & Thời gian: 正在 (zhèngzài - đang), 已经 (yǐjīng - đã), 就 (jiù - là/ngay)
+
+4. Giới từ HSK 2:
+从...到... (cóng... dào...: từ... đến...)
+对 (duì: đối với...)
+比 (bǐ: so với...)
+向 (xiàng: hướng về...)
+离 (lí: cách...)
+
+5. Cấu trúc câu & Động từ trùng điệp:
+- Động từ lặp lại: AA (看看), A一A (试一试), ABAB (学习学习)
+- Câu so sánh: A 比 B + Tính từ
+- Trạng thái hành động: 着 (zhe), 要...了 (yào...le), 正在 (zhèngzài)
+- Cấu trúc biểu thị nguyên nhân kết quả: 因为... profit...`
+        },
+        'hsk3': {
+          id: 'hsk3',
+          level: 'HSK 3',
+          title: 'Tổng Hợp Ngữ Pháp HSK 3 Chi Tiết',
+          content: window.GRAMMAR_HSK3 || `Tổng hợp ngữ pháp HSK 3
+
+1. Các loại Bổ Ngữ thường gặp:
+- Bổ ngữ kết quả (BNKQ): 洗好, 看懂, 找到, 听懂
+- Bổ ngữ trạng thái (BNTT): 跑得快, 学得好, Làm rất tốt
+- Bổ ngữ khả năng (BNKN): 看得懂 / 看不懂, 找得到 / 找不到
+- Bổ ngữ phương hướng (đơn & phức): 拿出来, 跑过去, 站起来, 想起来
+
+2. Câu chữ 把 (bǎ) & Câu chữ 被 (bèi):
+- Câu chữ 把: A + 把 + O + V + bổ ngữ/thành phần khác (tác động làm thay đổi vị trí, trạng thái của tân ngữ)
+- Câu chữ 被: S + 被 (让/叫) + O + V + thành phần khác (câu bị động)
+
+3. Cấu trúc so sánh & liên kết HSK 3:
+- 越 A 越 B (Càng A càng B) / 越来越 + Adj (Càng ngày càng...)
+- 又...又... (Vừa... vừa...) / 一边...一边... (Vừa... vừa...)
+- 除了...以外, 都/还/也... (Ngoại trừ... ra, đều/vẫn...)
+- 先..., 再/又..., 然后... (Trước tiên..., sau đó...)
+- 只要..., 就... (Chỉ cần..., thì...) / 如果..., 就... (Nếu..., thì...)
+- S + 一 + Lượng + N + 也/都 + 没/不 + V (Phủ định hoàn toàn)`
+        },
+        'hsk4': {
+          id: 'hsk4',
+          level: 'HSK 4',
+          title: 'Tổng Hợp Ngữ Pháp HSK 4 Chi Tiết',
+          content: window.GRAMMAR_HSK4 || `Tổng hợp ngữ pháp HSK 4
+
+1. Câu tồn tại (Existential Sentences):
+Cấu trúc: Địa điểm + Động từ + 着/了/Bổ ngữ xu hướng + Tân ngữ
+(Ví dụ: 桌子上摆着一瓶花, 床上睡着一个男人, 前面来了一辆汽车)
+
+2. Bổ ngữ khả năng chuyên sâu HSK 4:
+- V + 得 / 不 + 了 (liǎo): Biểu thị sự hoàn thành hoặc khả năng thực hiện (吃不了, 去不了)
+- V + 得 / 不 + 着 (zháo): Biểu thị đạt mục đích (睡不着, 找不着)
+- V + 得 / 不 + 动 (dòng): Biểu thị khả năng di chuyển/sức lực (走不动, 抬不动)
+- V + 得 / 不 + 住 (zhù): Biểu thị sự cố định (记得住)
+
+3. Cặp liên từ & Phó từ liên kết HSK 4:
+- 先... 再... 然后... 最后... (Đã..., rồi mới..., sau đó..., cuối cùng...)
+- 除了...以外, 还... / 除了...以外, 都...
+- 尽管...可是... | 只要...就... | 只有...才... | 哪怕...也...`
+        },
+        'hsk5': {
+          id: 'hsk5',
+          level: 'HSK 5',
+          title: 'Tổng Hợp Ngữ Pháp HSK 5 Chi Tiết',
+          content: window.GRAMMAR_HSK5 || `Tổng hợp ngữ pháp HSK 5
+
+1. Đại từ & Số từ & Giới từ HSK 5:
+- Đại từ: 某 (mǒu - người/vật nào đó), 各自 (gèzì - tự mình, cá nhân)
+- Số từ: 分之 (fēn zhī - đọc số thập phân và phần trăm)
+- Giới từ: 朝 (cháo - về phía), 自 (zì - từ), 自从 (zì cóng - từ khi)
+
+2. Phân biệt liên từ & phó từ cao cấp HSK 5:
+- 究竟 (jiūjìng - rốt cuộc, cuối cùng)
+- 于是 (yúshì - thế là, ngay sau đó)
+- 总之 (zǒngzhī - tóm lại)
+- 何况 (hékuàng - huống chi, hơn nữa)
+
+3. Cấu trúc ngữ pháp trọng tâm HSK 5:
+- 宁可...，也不/也要... (Thà... còn hơn...)
+- 与其...，不如... (Thay vì... không bằng...)
+- 不但不...，反而... (Không những không..., trái lại...)
+- 再...，也... (Cho dù... cũng...)`
+        },
+        'hsk6': {
+          id: 'hsk6',
+          level: 'HSK 6',
+          title: 'Tổng Hợp Ngữ Pháp HSK 6 Chi Tiết',
+          content: window.GRAMMAR_HSK6 || `Tổng hợp ngữ pháp HSK 6
+
+1. Trọng tâm luyện thi HSK 6 cao cấp:
+- Phân tích cấu trúc câu phức hợp, bổ ngữ tầng bậc và trật tự định ngữ nâng cao.
+- Phương pháp sửa lỗi sai trong câu (Bệnh câu HSK 6).
+- Ứng dụng phân tích ngữ pháp dịch thuật văn bản HSK 6 thực tế.`
+        }
+      };
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initBuiltInGrammar();
       renderGrammarContent(currentActiveLevel);
       fetchGrammarData();
     });
@@ -429,7 +591,7 @@
           }
         })
         .catch(err => {
-          console.warn("API fetch failed, retaining full extracted JS dataset:", err);
+          console.warn("API fetch failed, retaining full extracted dataset:", err);
           renderGrammarContent(currentActiveLevel);
         });
     }
