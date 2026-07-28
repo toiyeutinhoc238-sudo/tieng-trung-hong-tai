@@ -1439,6 +1439,22 @@ app.get('/api/tts', async (req, res) => {
 const EXAMS_FILES_DIR = path.join(__dirname, '..', 'TRON BO DE THI HSK TU 1 DEN 9');
 app.use('/exams-files', express.static(EXAMS_FILES_DIR));
 
+const GRAMMAR_FILES_DIR = path.join(__dirname, '..', 'filetuvung');
+app.use('/grammar-files', express.static(GRAMMAR_FILES_DIR));
+
+// GET endpoint to list available Grammar PDFs
+app.get('/api/grammar/list', (req, res) => {
+  res.json([
+    { id: 'hsk1', title: 'Ngữ Pháp HSK 1 Chi Tiết', file: '/grammar-files/ngu phap hsk 1.pdf', level: 'HSK 1', color: '#10b981' },
+    { id: 'hsk2', title: 'Ngữ Pháp HSK 2 Chi Tiết', file: '/grammar-files/ngu phap hsk 2.pdf', level: 'HSK 2', color: '#3b82f6' },
+    { id: 'hsk3', title: 'Ngữ Pháp HSK 3 Chi Tiết', file: '/grammar-files/ngu phap hsk 3.pdf', level: 'HSK 3', color: '#8b5cf6' },
+    { id: 'hsk4', title: 'Ngữ Pháp HSK 4 Chi Tiết', file: '/grammar-files/ngu phap hsk 4.pdf', level: 'HSK 4', color: '#f59e0b' },
+    { id: 'hsk5', title: 'Ngữ Pháp HSK 5 Chi Tiết', file: '/grammar-files/ngu phap hsk 5.pdf', level: 'HSK 5', color: '#ec4899' },
+    { id: 'hsk6', title: 'Ngữ Pháp HSK 6 Chi Tiết', file: '/grammar-files/ngu phap hsk 6.pdf', level: 'HSK 6', color: '#ef4444' },
+    { id: 'hsk123', title: 'Tổng Hợp Ngữ Pháp HSK 1 - 2 - 3', file: '/grammar-files/ngu phap hsk 1 2 3.pdf', level: 'Sơ Cấp', color: '#06b6d4' }
+  ]);
+});
+
 // Serve index.html as root
 app.get('/', (req, res) => {
   res.sendFile(path.join(FRONTEND_DIR, 'index.html'));

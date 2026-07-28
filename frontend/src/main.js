@@ -7357,6 +7357,66 @@ window.showLeaderboardModal = function () {
         container.innerHTML = `<div style="text-align: center; color: #ef4444; padding: 20px;">Lỗi tải dữ liệu bảng xếp hạng từ server.</div>`;
       }
     });
+window.showGrammarModal = function () {
+  let modal = document.getElementById('grammar-hsk-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'grammar-hsk-modal';
+    modal.className = 'modal-overlay';
+    modal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;';
+    modal.innerHTML = `
+      <div style="background: var(--bg-primary, #1e293b); border: 1px solid var(--border-glass, rgba(255,255,255,0.12)); border-radius: 20px; width: 100%; max-width: 900px; max-height: 88vh; display: flex; flex-direction: column; padding: 28px; color: var(--text-primary, #fff); position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
+        <button onclick="document.getElementById('grammar-hsk-modal').style.display='none'" style="position: absolute; top: 18px; right: 18px; background: none; border: none; color: var(--text-muted, #94a3b8); font-size: 1.5rem; cursor: pointer;">&times;</button>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+          <div style="font-size: 2.2rem; background: rgba(59,130,246,0.15); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #3b82f6;">📖</div>
+          <div>
+            <h2 style="font-size: 1.4rem; font-weight: 800; margin: 0;">Kho Tài Liệu Ngữ Pháp HSK (Từ HSK 1 Đến HSK 6)</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted, #94a3b8); margin: 4px 0 0 0;">Tổng hợp 6 bộ sách chuyên sâu ngữ pháp HSK, cấu trúc câu và ví dụ minh họa</p>
+          </div>
+        </div>
+
+        <div id="grammar-cards-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; overflow-y: auto; padding-right: 4px;">
+          <div style="text-align: center; color: var(--text-muted); padding: 20px; grid-column: 1 / -1;"><i class="fa-solid fa-spinner fa-spin"></i> Đang danh sách bộ ngữ pháp HSK...</div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+  modal.style.display = 'flex';
+
+  const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === ''
+    ? 'http://localhost:5000'
+    : 'https://tieng-trung-hong-tai.onrender.com';
+
+  fetch(`${API_BASE_URL}/api/grammar/list`)
+    .then(res => res.json())
+    .then(list => {
+      const grid = document.getElementById('grammar-cards-grid');
+      if (!grid) return;
+
+      let html = '';
+      list.forEach(item => {
+        html += `
+          <div style="background: var(--bg-secondary); border: 1px solid var(--border-glass); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 12px; transition: all 0.2s ease;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 0.75rem; font-weight: 800; padding: 3px 10px; border-radius: 20px; background: ${item.color}22; color: ${item.color}; border: 1px solid ${item.color}44;">${item.level}</span>
+              <i class="fa-solid fa-file-pdf" style="color: ${item.color}; font-size: 1.4rem;"></i>
+            </div>
+            <div style="font-weight: 800; font-size: 1.1rem; color: #fff;">${item.title}</div>
+            <p style="font-size: 0.8rem; color: #94a3b8; margin: 0; line-height: 1.4;">Tài liệu tổng hợp lý thuyết ngữ pháp, ví dụ Pinyin và cách dùng chuẩn HSK.</p>
+            <div style="display: flex; gap: 8px; margin-top: auto; padding-top: 8px;">
+              <a href="${item.file}" target="_blank" class="btn btn-primary btn-sm" style="flex: 1; text-align: center; text-decoration: none;"><i class="fa-solid fa-book-open"></i> Đọc Sách PDF</a>
+              <a href="${item.file}" download class="btn btn-outline btn-sm" style="text-decoration: none;"><i class="fa-solid fa-download"></i></a>
+            </div>
+          </div>
+        `;
+      });
+
+      grid.innerHTML = html;
+    })
+    .catch(err => {
+      console.error("Error loading grammar list:", err);
+    });
 };
 
 
