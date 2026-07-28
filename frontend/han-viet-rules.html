@@ -234,7 +234,18 @@
           Hệ thống suy đoán âm đọc Tiếng Trung từ âm Hán-Việt & Bảng phát âm Pinyin chuẩn giọng Bắc Kinh
         </p>
       </div>
-      <div>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.06); border: 1px solid var(--rules-border); padding: 6px 12px; border-radius: 10px;">
+          <i class="fa-solid fa-microphone text-primary"></i>
+          <span style="font-size: 0.8rem; font-weight: 700; color: #94a3b8;">Giọng đọc:</span>
+          <select id="voice-engine-select" style="background: transparent; border: none; color: #fff; font-size: 0.85rem; font-weight: 700; outline: none; cursor: pointer;">
+            <option value="baidu-female" style="background: #0f172a;">🇨🇳 Baidu Nữ (Bắc Kinh)</option>
+            <option value="baidu-male" style="background: #0f172a;">🇨🇳 Baidu Nam (Chuẩn)</option>
+            <option value="elevenlabs-adam" style="background: #0f172a;">✨ ElevenLabs AI - Adam (Giọng VIP)</option>
+            <option value="elevenlabs-bella" style="background: #0f172a;">✨ ElevenLabs AI - Bella (Giọng VIP)</option>
+            <option value="elevenlabs-jessica" style="background: #0f172a;">✨ ElevenLabs AI - Jessica (Giọng VIP)</option>
+          </select>
+        </div>
         <button class="btn btn-outline" onclick="window.close()"><i class="fa-solid fa-xmark"></i> Đóng cửa sổ</button>
       </div>
     </div>
@@ -580,15 +591,53 @@
       document.getElementById('tab-' + tabId).classList.add('active');
     };
 
+    let currentAudio = null;
+
     window.speakZh = function (text) {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'zh-CN';
-        utterance.rate = 0.85;
-        window.speechSynthesis.speak(utterance);
+      if (!text) return;
+      
+      const selectEl = document.getElementById('voice-engine-select');
+      const voice = selectEl ? selectEl.value : 'baidu-female';
+      
+      // Stop any currently playing audio
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio = null;
       }
+
+      const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === ''
+        ? 'http://localhost:5000'
+        : 'https://tieng-trung-hong-tai.onrender.com';
+
+      const audioUrl = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(text)}&voice=${voice}`;
+      currentAudio = new Audio(audioUrl);
+      currentAudio.play().catch(err => {
+        console.warn('ElevenLabs/Baidu Audio Playback error, fallback to Web Speech:', err);
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'zh-CN';
+          utterance.rate = 0.85;
+          window.speechSynthesis.speak(utterance);
+        }
+      });
     };
+
+    // Attach click listeners to all clickable word items & examples
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.example-box > div, .rule-badge, .example-box .zh').forEach(el => {
+        el.style.cursor = 'pointer';
+        el.title = 'Bấm để nghe phát âm giọng ElevenLabs AI';
+        el.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const zhChar = el.querySelector('.zh') ? el.querySelector('.zh').textContent : el.textContent;
+          const cleanText = zhChar.replace(/[^一-龥a-zA-Zāáǎàōóǒòēéěèīíǐìūúǔùǖǘǚǜ]/g, '');
+          if (cleanText) {
+            window.speakZh(cleanText);
+          }
+        });
+      });
+    });
 
     window.processHanVietLookup = function () {
       const val = document.getElementById('lookup-input').value.trim().toLowerCase();
