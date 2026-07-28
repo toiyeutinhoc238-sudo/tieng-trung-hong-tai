@@ -533,20 +533,81 @@ app.post('/api/user/game-history', async (req, res) => {
   res.json({ success: true, record: newRecord });
 });
 
-// GET endpoint to retrieve game history
-app.get('/api/user/game-history', async (req, res) => {
-  const email = getLoggedInUserEmail(req);
-  if (!email) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
+// GET endpoint for Real MongoDB Leaderboard
+app.get('/api/leaderboard', async (req, res) => {
+  try {
+    const userData = await readUserData();
+    const usersObj = userData.users || {};
+    const progressObj = userData.progress || {};
 
-  const userData = await readUserData();
-  const userRecord = userData.users[email];
-  if (!userRecord) {
-    return res.status(404).json({ error: 'User not found' });
-  }
+    const leaderboard = [];
 
-  res.json(userRecord.gameHistory || []);
+    for (const email of Object.keys(usersObj)) {
+      const u = usersObj[email];
+      const userProg = progressObj[email] || {};
+
+      // 1. Tính số lượng bài học (từ vựng) đã học thuộc/hoàn thành
+      let completedLessonsCount = 0;
+      let earliestCompletionTime = null;
+
+      for (const wordId of Object.keys(userProg)) {
+        const item = userProg[wordId];
+        if (item && (item.isMemorized || item.isStudied)) {
+          completedLessonsCount++;
+          if (item.updatedAt || item.completedAt) {
+            const timeVal = new Date(item.updatedAt || item.completedAt).getTime();
+            if (!earliestCompletionTime || timeVal < earliestCompletionTime) {
+              earliestCompletionTime = timeVal;
+            }
+          }
+        }
+      }
+
+      // Thời gian hoạt động gần nhất hoặc hoàn thành bài học
+      const lastActive = u.stats && u.stats.lastActiveDate ? new Date(u.stats.lastActiveDate).getTime() : (earliestCompletionTime || Date.now());
+
+      leaderboard.push({
+        email: email,
+        name: u.name || email.split('@')[0],
+        picture: u.picture || '',
+        completedCount: completedLessonsCount,
+        studyTime: u.stats ? (u.stats.studyTime || 0) : 0,
+        streak: u.stats ? (u.stats.streak || 0) : 0,
+        earliestCompletionTime: earliestCompletionTime || lastActive,
+        isVip: true
+      });
+    }
+
+    // 2. Sắp xếp thứ tự ưu tiên từ trên xuống:
+    // Priority 1: Số lượng bài học hoàn thành (completedCount) giảm dần (nhiều hơn đứng trên)
+    // Priority 2: Thời gian hoàn thành tất cả bài học sớm nhất (earliestCompletionTime) tăng dần (sớm hơn đứng trên)
+    // Priority 3: Tổng thời gian học (studyTime) giảm dần
+    leaderboard.sort((a, b) => {
+      if (b.completedCount !== a.completedCount) {
+        return b.completedCount - a.completedCount;
+      }
+      if (a.earliestCompletionTime !== b.earliestCompletionTime) {
+        return a.earliestCompletionTime - b.earliestCompletionTime;
+      }
+      return b.studyTime - a.studyTime;
+    });
+
+    // Chỉ lấy Top 10 học viên xuất sắc nhất
+    const top10 = leaderboard.slice(0, 10).map((item, index) => ({
+      rank: index + 1,
+      name: item.name,
+      picture: item.picture,
+      completedCount: item.completedCount,
+      studyTimeMinutes: Math.round(item.studyTime / 60),
+      streak: item.streak,
+      isVip: item.isVip
+    }));
+
+    res.json(top10);
+  } catch (error) {
+    console.error("Leaderboard calculation error:", error);
+    res.status(500).json({ error: "Failed to fetch real leaderboard" });
+  }
 });
 
 // GET all vocabulary (merges built-in list with user-specific states and custom words)

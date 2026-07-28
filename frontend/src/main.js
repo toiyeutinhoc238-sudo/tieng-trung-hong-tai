@@ -7275,37 +7275,88 @@ window.showLeaderboardModal = function () {
     modal.className = 'modal-overlay';
     modal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;';
     modal.innerHTML = `
-      <div style="background: var(--bg-primary, #1e293b); border: 1px solid var(--border-glass, rgba(255,255,255,0.12)); border-radius: 20px; width: 100%; max-width: 600px; padding: 28px; color: var(--text-primary, #fff); position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
+      <div style="background: var(--bg-primary, #1e293b); border: 1px solid var(--border-glass, rgba(255,255,255,0.12)); border-radius: 20px; width: 100%; max-width: 650px; padding: 28px; color: var(--text-primary, #fff); position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
         <button onclick="document.getElementById('leaderboard-modal').style.display='none'" style="position: absolute; top: 18px; right: 18px; background: none; border: none; color: var(--text-muted, #94a3b8); font-size: 1.5rem; cursor: pointer;">&times;</button>
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
           <div style="font-size: 2.2rem; background: rgba(251,191,36,0.15); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fbbf24;">🏆</div>
           <div>
-            <h2 style="font-size: 1.4rem; font-weight: 800; margin: 0;">Bảng Xếp Hạng Học Viên Chăm Chỉ</h2>
-            <p style="font-size: 0.85rem; color: var(--text-muted, #94a3b8); margin: 4px 0 0 0;">Top 10 học viên có điểm số ôn tập SRS & làm bài xuất sắc nhất</p>
+            <h2 style="font-size: 1.4rem; font-weight: 800; margin: 0;">Bảng Xếp Hạng Học Viên Thực Tế (MongoDB)</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted, #94a3b8); margin: 4px 0 0 0;">Xếp hạng ưu tiên theo: Số bài học hoàn thành nhiều nhất ➔ Thời gian hoàn thành sớm nhất</p>
           </div>
         </div>
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-          <div style="display: flex; align-items: center; padding: 12px 16px; background: rgba(251,191,36,0.1); border: 1px solid #fbbf24; border-radius: 12px;">
-            <span style="font-size: 1.2rem; font-weight: 800; width: 30px; color: #fbbf24;">🥇</span>
-            <div style="flex: 1; font-weight: 700;">Phú Phan <span style="font-size: 0.75rem; background: #fbbf24; color: #000; padding: 2px 6px; border-radius: 4px; margin-left: 6px;">VIP</span></div>
-            <div style="font-weight: 800; color: #fbbf24;">18,135 điểm</div>
-          </div>
-          <div style="display: flex; align-items: center; padding: 12px 16px; background: var(--bg-secondary); border: 1px solid var(--border-glass); border-radius: 12px;">
-            <span style="font-size: 1.2rem; font-weight: 800; width: 30px; color: #94a3b8;">🥈</span>
-            <div style="flex: 1; font-weight: 700;">Ngọc Hân</div>
-            <div style="font-weight: 800; color: #3b82f6;">12,184 điểm</div>
-          </div>
-          <div style="display: flex; align-items: center; padding: 12px 16px; background: var(--bg-secondary); border: 1px solid var(--border-glass); border-radius: 12px;">
-            <span style="font-size: 1.2rem; font-weight: 800; width: 30px; color: #b45309;">🥉</span>
-            <div style="flex: 1; font-weight: 700;">Đào Ngô</div>
-            <div style="font-weight: 800; color: #3b82f6;">11,903 điểm</div>
-          </div>
+        <div id="leaderboard-list-container" style="display: flex; flex-direction: column; gap: 10px; max-height: 400px; overflow-y: auto; padding-right: 4px;">
+          <div style="text-align: center; color: var(--text-muted); padding: 20px;"><i class="fa-solid fa-spinner fa-spin"></i> Đang tải bảng xếp hạng từ MongoDB...</div>
         </div>
       </div>
     `;
     document.body.appendChild(modal);
   }
   modal.style.display = 'flex';
+
+  // Load real data from MongoDB backend API
+  const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === ''
+    ? 'http://localhost:5000'
+    : 'https://tieng-trung-hong-tai.onrender.com';
+
+  fetch(`${API_BASE_URL}/api/leaderboard`)
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById('leaderboard-list-container');
+      if (!container) return;
+
+      if (!Array.isArray(data) || data.length === 0) {
+        container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 20px;">Chưa có học viên nào hoàn thành bài học. Hãy là người đầu tiên!</div>`;
+        return;
+      }
+
+      let html = '';
+      data.forEach(item => {
+        let badgeIcon = `#${item.rank}`;
+        let rankStyle = 'background: var(--bg-secondary); border: 1px solid var(--border-glass);';
+        let rankColor = '#3b82f6';
+
+        if (item.rank === 1) {
+          badgeIcon = '🥇';
+          rankStyle = 'background: rgba(251,191,36,0.12); border: 1px solid #fbbf24;';
+          rankColor = '#fbbf24';
+        } else if (item.rank === 2) {
+          badgeIcon = '🥈';
+          rankStyle = 'background: rgba(148,163,184,0.1); border: 1px solid #94a3b8;';
+          rankColor = '#94a3b8';
+        } else if (item.rank === 3) {
+          badgeIcon = '🥉';
+          rankStyle = 'background: rgba(180,83,9,0.1); border: 1px solid #b45309;';
+          rankColor = '#b45309';
+        }
+
+        html += `
+          <div style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; ${rankStyle}">
+            <span style="font-size: 1.2rem; font-weight: 800; width: 30px; text-align: center; color: ${rankColor};">${badgeIcon}</span>
+            ${item.picture ? `<img src="${item.picture}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover;">` : `<div style="width: 38px; height: 38px; border-radius: 50%; background: #3b82f6; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700;">${item.name.charAt(0)}</div>`}
+            <div style="flex: 1; min-width: 0;">
+              <div style="font-weight: 800; font-size: 0.95rem; color: #fff; display: flex; align-items: center; gap: 6px;">
+                ${item.name}
+                ${item.isVip ? `<span style="font-size: 0.65rem; background: #fbbf24; color: #000; font-weight: 800; padding: 1px 6px; border-radius: 4px;">VIP</span>` : ''}
+              </div>
+              <div style="font-size: 0.75rem; color: #94a3b8;">Đã học thuộc: <strong style="color: #10b981;">${item.completedCount} từ / bài</strong></div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-weight: 800; color: ${rankColor}; font-size: 0.95rem;">${item.completedCount * 100} Điểm</div>
+              <div style="font-size: 0.72rem; color: #94a3b8;">Thời gian học: ${item.studyTimeMinutes} phút</div>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    })
+    .catch(err => {
+      console.error("Leaderboard fetch error:", err);
+      const container = document.getElementById('leaderboard-list-container');
+      if (container) {
+        container.innerHTML = `<div style="text-align: center; color: #ef4444; padding: 20px;">Lỗi tải dữ liệu bảng xếp hạng từ server.</div>`;
+      }
+    });
 };
 
 
