@@ -66,13 +66,15 @@
     <div class="sidebar-header" style="cursor: pointer;" onclick="window.openAboutModal()">
       <img class="sidebar-logo" src="/src/assets/logo.png" alt="Hongtai Logo">
       <div style="display: flex; flex-direction: column;">
-        <span style="font-weight: 800; font-size: 1.05rem; color: var(--text-primary); letter-spacing: -0.01em;">Hongtai Chinese</span>
+        <span style="font-weight: 800; font-size: 1.05rem; color: var(--text-primary); letter-spacing: -0.01em;">Hongtai
+          Chinese</span>
         <span style="font-size: 0.75rem; color: var(--text-muted);">Ôn Tập HSK & YCT</span>
       </div>
     </div>
 
     <!-- User Account Card (Google login / Profile - Directly under Logo Header) -->
-    <div id="auth-container" class="auth-container logged-out" style="width: 100%; border-bottom: 1px solid var(--border-glass); padding-bottom: 12px; margin-bottom: 12px;">
+    <div id="auth-container" class="auth-container logged-out"
+      style="width: 100%; border-bottom: 1px solid var(--border-glass); padding-bottom: 12px; margin-bottom: 12px;">
       <!-- Logged out state elements -->
       <div class="logged-out-view" style="width: 100%;">
         <div id="google-signin-button" style="width: 100%;"></div>
@@ -84,7 +86,8 @@
         <div class="user-profile sidebar-profile-card">
           <div class="sidebar-avatar-wrap">
             <img id="user-avatar-img" class="user-avatar-img" src="" alt="Avatar" style="display: none;">
-            <div id="user-avatar-placeholder" class="user-avatar sidebar-avatar-placeholder"><i class="fa-solid fa-user"></i></div>
+            <div id="user-avatar-placeholder" class="user-avatar sidebar-avatar-placeholder"><i
+                class="fa-solid fa-user"></i></div>
           </div>
           <div class="user-info">
             <span class="user-name" id="user-display-name">Phú Phan</span>
@@ -115,25 +118,33 @@
 
 
     <!-- Modal Đăng nhập / Google SSO Account Modal -->
-    <div class="modal-overlay" id="app-login-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.65); backdrop-filter: blur(6px); z-index: 99999; align-items: center; justify-content: center;">
-      <div class="modal-card" style="background: var(--bg-primary, #1e293b); border: 1px solid var(--border-glass, rgba(255,255,255,0.12)); border-radius: 20px; width: 90%; max-width: 440px; padding: 28px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); text-align: center; color: var(--text-primary, #fff); position: relative;">
-        <button onclick="document.getElementById('app-login-modal').style.display='none'" style="position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--text-muted, #94a3b8); font-size: 1.4rem; cursor: pointer;">&times;</button>
-        
+    <div class="modal-overlay" id="app-login-modal"
+      style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.65); backdrop-filter: blur(6px); z-index: 99999; align-items: center; justify-content: center;">
+      <div class="modal-card"
+        style="background: var(--bg-primary, #1e293b); border: 1px solid var(--border-glass, rgba(255,255,255,0.12)); border-radius: 20px; width: 90%; max-width: 440px; padding: 28px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); text-align: center; color: var(--text-primary, #fff); position: relative;">
+        <button onclick="document.getElementById('app-login-modal').style.display='none'"
+          style="position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--text-muted, #94a3b8); font-size: 1.4rem; cursor: pointer;">&times;</button>
+
         <div style="font-size: 2.8rem; margin-bottom: 6px;">🌐</div>
         <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 6px;">Đăng Nhập Bằng Google</h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted, #94a3b8); margin-bottom: 20px;">Đồng bộ tiến độ học HSK, YCT và lịch sử cuộc trò chuyện AI</p>
+        <p style="font-size: 0.85rem; color: var(--text-muted, #94a3b8); margin-bottom: 20px;">Đồng bộ tiến độ học HSK,
+          YCT và lịch sử cuộc trò chuyện AI</p>
 
         <!-- Official Google SSO Button Container -->
         <div id="modal-google-signin" style="display: flex; justify-content: center; margin-bottom: 16px;"></div>
 
         <!-- Google Accounts Quick Selection -->
         <div style="display: flex; flex-direction: column; gap: 10px; text-align: left; margin-top: 12px;">
-          <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted, #94a3b8); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">
+          <div
+            style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted, #94a3b8); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">
             Chọn Tài Khoản Google Nhanh:
           </div>
 
-          <div class="google-acc-card" onclick="window.loginWithGoogleAccount('phanphiphu04@gmail.com', 'Phú Phan', 'https://lh3.googleusercontent.com/a/ACg8ocIebQJ8CFxQDSOgwYPsfuN9FJvtBWARLqdYN9fCo-3UBytEPmI=s96-c')" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--bg-secondary, #0f172a); border: 1px solid var(--border-glass, rgba(255,255,255,0.1)); border-radius: 14px; cursor: pointer; transition: all 0.2s;">
-            <img src="https://lh3.googleusercontent.com/a/ACg8ocIebQJ8CFxQDSOgwYPsfuN9FJvtBWARLqdYN9fCo-3UBytEPmI=s96-c" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+          <div class="google-acc-card"
+            onclick="window.loginWithGoogleAccount('phanphiphu04@gmail.com', 'Phú Phan', 'https://lh3.googleusercontent.com/a/ACg8ocIebQJ8CFxQDSOgwYPsfuN9FJvtBWARLqdYN9fCo-3UBytEPmI=s96-c')"
+            style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--bg-secondary, #0f172a); border: 1px solid var(--border-glass, rgba(255,255,255,0.1)); border-radius: 14px; cursor: pointer; transition: all 0.2s;">
+            <img src="https://lh3.googleusercontent.com/a/ACg8ocIebQJ8CFxQDSOgwYPsfuN9FJvtBWARLqdYN9fCo-3UBytEPmI=s96-c"
+              style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
             <div style="flex: 1; min-width: 0;">
               <div style="font-weight: 800; font-size: 0.95rem; color: #fff;">Phú Phan</div>
               <div style="font-size: 0.8rem; color: #94a3b8;">phanphiphu04@gmail.com</div>
@@ -141,8 +152,11 @@
             <i class="fa-brands fa-google" style="color: #4285f4; font-size: 1.2rem;"></i>
           </div>
 
-          <div class="google-acc-card" onclick="window.loginWithGoogleAccount('toiyeutinhoc238@gmail.com', 'Tin Học Tôi Yêu', 'https://lh3.googleusercontent.com/a/ACg8ocLWmTibkR6zSwMBMRXRt2TUj-9fF82AJJJGfOM6D7sCxXByyw=s96-c')" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--bg-secondary, #0f172a); border: 1px solid var(--border-glass, rgba(255,255,255,0.1)); border-radius: 14px; cursor: pointer; transition: all 0.2s;">
-            <img src="https://lh3.googleusercontent.com/a/ACg8ocLWmTibkR6zSwMBMRXRt2TUj-9fF82AJJJGfOM6D7sCxXByyw=s96-c" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+          <div class="google-acc-card"
+            onclick="window.loginWithGoogleAccount('toiyeutinhoc238@gmail.com', 'Tin Học Tôi Yêu', 'https://lh3.googleusercontent.com/a/ACg8ocLWmTibkR6zSwMBMRXRt2TUj-9fF82AJJJGfOM6D7sCxXByyw=s96-c')"
+            style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--bg-secondary, #0f172a); border: 1px solid var(--border-glass, rgba(255,255,255,0.1)); border-radius: 14px; cursor: pointer; transition: all 0.2s;">
+            <img src="https://lh3.googleusercontent.com/a/ACg8ocLWmTibkR6zSwMBMRXRt2TUj-9fF82AJJJGfOM6D7sCxXByyw=s96-c"
+              style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
             <div style="flex: 1; min-width: 0;">
               <div style="font-weight: 800; font-size: 0.95rem; color: #fff;">Tin Học Tôi Yêu</div>
               <div style="font-size: 0.8rem; color: #94a3b8;">toiyeutinhoc238@gmail.com</div>
@@ -150,8 +164,11 @@
             <i class="fa-brands fa-google" style="color: #ea4335; font-size: 1.2rem;"></i>
           </div>
 
-          <div class="google-acc-card" onclick="window.loginWithGoogleAccount('nguyenngawork26@gmail.com', 'Thúy Nga Nguyễn', 'https://lh3.googleusercontent.com/a/ACg8ocIN7wiM4sgIz7-Ixie7W_ngBFPpm4te18063mXjjBdErThB7g=s96-c')" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--bg-secondary, #0f172a); border: 1px solid var(--border-glass, rgba(255,255,255,0.1)); border-radius: 14px; cursor: pointer; transition: all 0.2s;">
-            <img src="https://lh3.googleusercontent.com/a/ACg8ocIN7wiM4sgIz7-Ixie7W_ngBFPpm4te18063mXjjBdErThB7g=s96-c" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+          <div class="google-acc-card"
+            onclick="window.loginWithGoogleAccount('nguyenngawork26@gmail.com', 'Thúy Nga Nguyễn', 'https://lh3.googleusercontent.com/a/ACg8ocIN7wiM4sgIz7-Ixie7W_ngBFPpm4te18063mXjjBdErThB7g=s96-c')"
+            style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--bg-secondary, #0f172a); border: 1px solid var(--border-glass, rgba(255,255,255,0.1)); border-radius: 14px; cursor: pointer; transition: all 0.2s;">
+            <img src="https://lh3.googleusercontent.com/a/ACg8ocIN7wiM4sgIz7-Ixie7W_ngBFPpm4te18063mXjjBdErThB7g=s96-c"
+              style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
             <div style="flex: 1; min-width: 0;">
               <div style="font-weight: 800; font-size: 0.95rem; color: #fff;">Thúy Nga Nguyễn</div>
               <div style="font-size: 0.8rem; color: #94a3b8;">nguyenngawork26@gmail.com</div>
@@ -163,80 +180,106 @@
     </div>
 
     <div class="sidebar-menu-wrapper" style="overflow-y: auto; flex: 1; padding-right: 4px;">
-      
+
       <!-- DANH MỤC 1: HỌC TẬP -->
-      <div class="sidebar-section-label" style="font-size: 0.72rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; padding: 12px 14px 6px 14px;">Học Tập</div>
-      <ul class="sidebar-menu" style="list-style: none; display: flex; flex-direction: column; gap: 4px;">
+      <div class="sidebar-section-label">Học Tập</div>
+      <ul class="sidebar-menu">
         <li class="sidebar-item active" data-tab="home" id="sidebar-nav-home" onclick="window.switchTab('home')">
           <i class="fa-solid fa-house"></i> <span>Trang chủ</span>
         </li>
         <li class="sidebar-item" data-tab="roadmap" id="sidebar-nav-roadmap" onclick="window.showRoadmapView()">
-          <i class="fa-solid fa-route"></i> <span>Lộ trình</span> <span class="badge-demo" style="background: #ef4444; color: #fff; font-size: 0.65rem; font-weight: 800; padding: 1px 6px; border-radius: 10px; margin-left: auto;">demo</span>
-        </li>
-        <li class="sidebar-item" onclick="window.open('/lesson-online.html', '_blank')">
-          <i class="fa-solid fa-chalkboard-user"></i> <span>Bài học Online</span>
+          <i class="fa-solid fa-route"></i> <span>Lộ trình</span>
+          <span class="badge-demo">demo</span>
         </li>
       </ul>
 
-      <!-- DANH MỤC 2: TỪ VỰNG (Mở rộng) -->
-      <div class="sidebar-section-label" style="font-size: 0.72rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; padding: 14px 14px 6px 14px;">Từ Vựng</div>
-      <ul class="sidebar-menu" style="list-style: none; display: flex; flex-direction: column; gap: 4px;">
-        <li class="sidebar-item" data-tab="alphabet" onclick="window.switchTab('dictionary')">
-          <i class="fa-solid fa-font"></i> <span>Bảng chữ cái</span>
-        </li>
-        <li class="sidebar-item" data-tab="dictionary" id="sidebar-nav-dictionary" onclick="window.switchTab('dictionary')">
-          <i class="fa-solid fa-book-open"></i> <span>Từ vựng</span>
-        </li>
-        <li class="sidebar-item" data-tab="flashcards" id="sidebar-nav-flashcards" onclick="window.switchTab('flashcards')">
-          <i class="fa-solid fa-box-archive"></i> <span>Sổ tay từ vựng</span>
-        </li>
-        <li class="sidebar-item" onclick="alert('Tính năng Quy tắc chuyển âm Hán-Việt đang được hoàn thiện!')">
-          <i class="fa-solid fa-language"></i> <span>Quy tắc chuyển âm</span>
-        </li>
-        <li class="sidebar-item" onclick="alert('Tính năng Tạo file luyện viết chữ Hán đang được hoàn thiện!')">
-          <i class="fa-solid fa-pen-nib"></i> <span>Tạo file luyện viết</span>
-        </li>
-      </ul>
+      <!-- DANH MỤC 2: TỪ VỰNG (Dropdown) -->
+      <div class="sidebar-group">
+        <div class="sidebar-item sidebar-dropdown-toggle" onclick="window.toggleSidebarDropdown(this)">
+          <i class="fa-solid fa-font"></i> <span>Từ vựng</span>
+          <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
+        </div>
+        <ul class="sidebar-submenu">
+          <li class="sidebar-subitem" onclick="window.switchTab('dictionary')">
+            <i class="fa-solid fa-table-cells"></i> <span>Bảng chữ cái & Pinyin</span>
+          </li>
+          <li class="sidebar-subitem" onclick="window.switchTab('dictionary')">
+            <i class="fa-solid fa-book-open"></i> <span>Từ vựng HSK / YCT</span>
+          </li>
+          <li class="sidebar-subitem" onclick="window.switchTab('flashcards')">
+            <i class="fa-solid fa-book-bookmark"></i> <span>Sổ tay từ vựng</span>
+          </li>
+          <li class="sidebar-subitem" onclick="window.showHanVietRulesModal()">
+            <i class="fa-solid fa-language"></i> <span>Quy tắc chuyển âm</span>
+          </li>
+          <li class="sidebar-subitem" onclick="window.showWritingWorksheetModal()">
+            <i class="fa-solid fa-pen-nib"></i> <span>Tạo file luyện viết</span>
+          </li>
+        </ul>
+      </div>
 
-      <!-- DANH MỤC 3: NGỮ PHÁP (Mở rộng) -->
-      <div class="sidebar-section-label" style="font-size: 0.72rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; padding: 14px 14px 6px 14px;">Ngữ Pháp</div>
-      <ul class="sidebar-menu" style="list-style: none; display: flex; flex-direction: column; gap: 4px;">
-        <li class="sidebar-item" onclick="window.switchTab('dictionary')">
+      <!-- DANH MỤC 3: NGỮ PHÁP (Dropdown) -->
+      <div class="sidebar-group">
+        <div class="sidebar-item sidebar-dropdown-toggle" onclick="window.toggleSidebarDropdown(this)">
           <i class="fa-solid fa-spell-check"></i> <span>Ngữ pháp</span>
-        </li>
-        <li class="sidebar-item" onclick="window.switchTab('flashcards')">
-          <i class="fa-solid fa-book-bookmark"></i> <span>Sổ tay ngữ pháp</span>
-        </li>
-      </ul>
+          <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
+        </div>
+        <ul class="sidebar-submenu">
+          <li class="sidebar-subitem" onclick="window.switchTab('dictionary')">
+            <i class="fa-solid fa-list-check"></i> <span>Ngữ pháp HSK</span>
+          </li>
+          <li class="sidebar-subitem" onclick="window.switchTab('flashcards')">
+            <i class="fa-solid fa-bookmark"></i> <span>Sổ tay ngữ pháp</span>
+          </li>
+        </ul>
+      </div>
 
       <!-- DANH MỤC 4: ÔN TẬP & LUYỆN ĐỀ -->
-      <div class="sidebar-section-label" style="font-size: 0.72rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; padding: 14px 14px 6px 14px;">Ôn Tập & Luyện Đề</div>
-      <ul class="sidebar-menu" style="list-style: none; display: flex; flex-direction: column; gap: 4px;">
+      <div class="sidebar-section-label">Ôn Tập & Luyện Đề</div>
+      <ul class="sidebar-menu">
+        <li class="sidebar-item" onclick="window.switchTab('flashcards')">
+          <i class="fa-solid fa-rotate-left"></i> <span>Ôn tập ngắt quãng (SRS)</span>
+        </li>
         <li class="sidebar-item" data-tab="quiz" onclick="window.open('/quiz-game.html', '_blank')">
           <i class="fa-solid fa-gamepad"></i> <span>Ôn tập trắc nghiệm</span>
         </li>
         <li class="sidebar-item" onclick="window.switchTab('dictionary')">
           <i class="fa-solid fa-file-signature"></i> <span>Luyện đề (117 Đề HSK)</span>
         </li>
-        <li class="sidebar-item" data-tab="ai" onclick="window.open('/chat-history.html', '_blank')">
-          <i class="fa-solid fa-robot"></i> <span>Trợ lý AI</span>
-        </li>
       </ul>
 
-      <!-- DANH MỤC 5: VIP -->
-      <div class="sidebar-section-label" style="font-size: 0.72rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; padding: 14px 14px 6px 14px;">VIP</div>
-      <ul class="sidebar-menu" style="list-style: none; display: flex; flex-direction: column; gap: 4px;">
-        <li class="sidebar-item" onclick="alert('Bảng xếp hạng học viên Hongtai đang cập nhật!')">
+      <!-- DANH MỤC 5: VIP AI SUITE (Dropdown) -->
+      <div class="sidebar-group">
+        <div class="sidebar-item sidebar-dropdown-toggle vip-toggle" onclick="window.toggleSidebarDropdown(this)">
+          <i class="fa-solid fa-crown" style="color: #fbbf24;"></i> <span>VIP (Tính năng AI)</span>
+          <span class="badge-vip">NEW</span>
+          <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
+        </div>
+        <ul class="sidebar-submenu">
+          <li class="sidebar-subitem" onclick="window.open('/chat-history.html', '_blank')">
+            <i class="fa-solid fa-comments"></i> <span>Hội thoại nhập vai AI</span>
+          </li>
+          <li class="sidebar-subitem" onclick="window.open('/chat-history.html', '_blank')">
+            <i class="fa-solid fa-book-reader"></i> <span>Đọc hiểu AI</span>
+          </li>
+          <li class="sidebar-subitem" onclick="window.open('/chat-history.html', '_blank')">
+            <i class="fa-solid fa-headphones"></i> <span>Shadowing & Chép chính tả</span>
+          </li>
+          <li class="sidebar-subitem" onclick="window.showSentenceParserModal()">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Phân tích câu AI</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- DANH MỤC 6: CỘNG ĐỒNG & HỆ THỐNG -->
+      <div class="sidebar-section-label">Hệ Thống & Bảng Xếp Hạng</div>
+      <ul class="sidebar-menu">
+        <li class="sidebar-item" onclick="window.showLeaderboardModal()">
           <i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> <span>Bảng xếp hạng</span>
         </li>
-        <li class="sidebar-item" onclick="alert('Tài khoản của bạn đã được kích hoạt VIP Miễn phí!')">
-          <i class="fa-solid fa-crown" style="color: #fbbf24;"></i> <span>Nâng cấp VIP</span>
+        <li class="sidebar-item sidebar-upgrade-btn" onclick="alert('Tài khoản của bạn đã được kích hoạt VIP Miễn phí Trọn đời!')">
+          <i class="fa-solid fa-crown"></i> <span>Nâng cấp VIP</span>
         </li>
-      </ul>
-
-      <!-- DANH MỤC 6: HỆ THỐNG -->
-      <div class="sidebar-section-label" style="font-size: 0.72rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; padding: 14px 14px 6px 14px;">Hệ Thống</div>
-      <ul class="sidebar-menu" style="list-style: none; display: flex; flex-direction: column; gap: 4px;">
         <li class="sidebar-item" onclick="document.getElementById('about-hongtai-modal').style.display='flex'">
           <i class="fa-solid fa-gear"></i> <span>Cài đặt</span>
         </li>
@@ -250,119 +293,121 @@
     <div class="sidebar-footer">
       <style>
         .app-sidebar .auth-container {
-    border-left: none;
-    padding: 0 0 14px 0;
-    height: auto;
-    width: 100%;
-    position: relative;
-    border-bottom: 1px solid var(--border-glass);
-    margin-bottom: 12px;
-  }
+          border-left: none;
+          padding: 0 0 14px 0;
+          height: auto;
+          width: 100%;
+          position: relative;
+          border-bottom: 1px solid var(--border-glass);
+          margin-bottom: 12px;
+        }
 
-  .app-sidebar .sidebar-profile-card {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 14px;
-    background: var(--bg-secondary);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-glass-hover);
-    box-shadow: var(--shadow-sm);
-    cursor: pointer;
-    width: 100%;
-    box-sizing: border-box;
-    transition: all 0.2s ease;
-    user-select: none;
-  }
+        .app-sidebar .sidebar-profile-card {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 12px 14px;
+          background: var(--bg-secondary);
+          border-radius: var(--radius-md);
+          border: 1px solid var(--border-glass-hover);
+          box-shadow: var(--shadow-sm);
+          cursor: pointer;
+          width: 100%;
+          box-sizing: border-box;
+          transition: all 0.2s ease;
+          user-select: none;
+        }
 
-  .app-sidebar .sidebar-profile-card:hover {
-    background: var(--bg-glass);
-    border-color: var(--accent-blue);
-    box-shadow: var(--shadow-md);
-  }
+        .app-sidebar .sidebar-profile-card:hover {
+          background: var(--bg-glass);
+          border-color: var(--accent-blue);
+          box-shadow: var(--shadow-md);
+        }
 
-  .app-sidebar .sidebar-avatar-wrap {
-    flex-shrink: 0;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    overflow: hidden;
-    background: var(--bg-secondary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid var(--accent-blue);
-  }
+        .app-sidebar .sidebar-avatar-wrap {
+          flex-shrink: 0;
+          width: 42px;
+          height: 42px;
+          border-radius: 50%;
+          overflow: hidden;
+          background: var(--bg-secondary);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 2px solid var(--accent-blue);
+        }
 
-  .app-sidebar .user-avatar-img {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
+        .app-sidebar .user-avatar-img {
+          width: 42px;
+          height: 42px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
 
-  .app-sidebar .sidebar-avatar-placeholder {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    background: var(--accent-blue);
-    color: #ffffff;
-    font-size: 1.1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+        .app-sidebar .sidebar-avatar-placeholder {
+          width: 42px;
+          height: 42px;
+          border-radius: 50%;
+          background: var(--accent-blue);
+          color: #ffffff;
+          font-size: 1.1rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
 
-  .app-sidebar .user-info {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-    min-width: 0;
-    flex: 1;
-  }
+        .app-sidebar .user-info {
+          display: flex;
+          flex-direction: column;
+          gap: 1px;
+          min-width: 0;
+          flex: 1;
+        }
 
-  .app-sidebar .user-name {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+        .app-sidebar .user-name {
+          font-size: 0.95rem;
+          font-weight: 700;
+          color: var(--text-primary);
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
 
-  .app-sidebar .user-sub {
-    font-size: 0.78rem;
-    color: var(--text-secondary);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+        .app-sidebar .user-sub {
+          font-size: 0.78rem;
+          color: var(--text-secondary);
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
 
-  .app-sidebar .user-role-badge {
-    display: inline-block;
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--accent-blue);
-    margin-top: 1px;
-  }
+        .app-sidebar .user-role-badge {
+          display: inline-block;
+          font-size: 0.75rem;
+          font-weight: 700;
+          color: var(--accent-blue);
+          margin-top: 1px;
+        }
 
-  .app-sidebar .profile-chevron {
-    flex-shrink: 0;
-    color: var(--text-secondary);
-    font-size: 0.8rem;
-    margin-left: auto;
-    transition: transform 0.2s ease;
-  }
+        .app-sidebar .profile-chevron {
+          flex-shrink: 0;
+          color: var(--text-secondary);
+          font-size: 0.8rem;
+          margin-left: auto;
+          transition: transform 0.2s ease;
+        }
 
-  .app-sidebar .profile-dropdown-menu {
-    position: absolute;
-    top: calc(100% + 6px);
-    left: 0;
-    right: 0;
-    width: 100%;
-  }
+        .app-sidebar .profile-dropdown-menu {
+          position: absolute;
+          top: calc(100% + 6px);
+          left: 0;
+          right: 0;
+          width: 100%;
+        }
       </style>
-      <button id="sidebar-theme-toggle" class="theme-toggle-btn" onclick="window.toggleTheme()" style="width: 100%; justify-content: center; gap: 8px; padding: 10px; border-radius: 12px; background: var(--bg-secondary); border: 1px solid var(--border-glass); color: var(--text-primary); cursor: pointer;" title="Chuyển chế độ Sáng/Tối">
+      <button id="sidebar-theme-toggle" class="theme-toggle-btn" onclick="window.toggleTheme()"
+        style="width: 100%; justify-content: center; gap: 8px; padding: 10px; border-radius: 12px; background: var(--bg-secondary); border: 1px solid var(--border-glass); color: var(--text-primary); cursor: pointer;"
+        title="Chuyển chế độ Sáng/Tối">
         <i class="fa-solid fa-moon"></i> Giao diện
       </button>
     </div>
@@ -2442,7 +2487,9 @@
                 <i class="fa-solid fa-book-bookmark"></i> Kho Từ Vựng HSK 1..9 & YCT 1..4 Chuẩn Hóa
               </div>
               <div style="font-size: 0.85rem; color: #94a3b8; text-align: justify;">
-                Hệ thống dữ liệu bài học phong phú bao phủ toàn bộ HSK (từ Cấp 1 đến Cấp 9) và YCT (từ Cấp 1 đến Cấp 4 Thiếu nhi). Mỗi từ vựng tích hợp Chữ Hán, Pinyin, Hán Việt, Nghĩa tiếng Việt, Câu ví dụ ngữ cảnh và Phát âm chuẩn tự nhiên.
+                Hệ thống dữ liệu bài học phong phú bao phủ toàn bộ HSK (từ Cấp 1 đến Cấp 9) và YCT (từ Cấp 1 đến Cấp 4
+                Thiếu nhi). Mỗi từ vựng tích hợp Chữ Hán, Pinyin, Hán Việt, Nghĩa tiếng Việt, Câu ví dụ ngữ cảnh và Phát
+                âm chuẩn tự nhiên.
               </div>
             </div>
 
@@ -2453,7 +2500,8 @@
                 <i class="fa-solid fa-layer-group"></i> Thẻ Flashcard 3D & Luyện Gõ Từ Vựng
               </div>
               <div style="font-size: 0.85rem; color: #94a3b8; text-align: justify;">
-                Hỗ trợ thuật toán Lặp lại ngắt quãng (Spaced Repetition) kết hợp linh hoạt giữa lật thẻ 3D trực quan, nút đánh giá Đã thuộc / Chưa thuộc và chế độ Luyện gõ Pinyin giúp bộ não ghi nhớ sâu từ vựng.
+                Hỗ trợ thuật toán Lặp lại ngắt quãng (Spaced Repetition) kết hợp linh hoạt giữa lật thẻ 3D trực quan,
+                nút đánh giá Đã thuộc / Chưa thuộc và chế độ Luyện gõ Pinyin giúp bộ não ghi nhớ sâu từ vựng.
               </div>
             </div>
 
@@ -2464,7 +2512,8 @@
                 <i class="fa-solid fa-file-signature"></i> Thư Viện 117 Đề Thi HSK Thực Tế & Trắc Nghiệm Game
               </div>
               <div style="font-size: 0.85rem; color: #94a3b8; text-align: justify;">
-                Bộ sưu tập đề thi thử HSK chính thức đầy đủ File Đề PDF, File Nghe MP3 và Đáp án. Tích hợp Trò chơi Quiz game trắc nghiệm tính giờ luyện phản xạ cực kỳ cuốn hút.
+                Bộ sưu tập đề thi thử HSK chính thức đầy đủ File Đề PDF, File Nghe MP3 và Đáp án. Tích hợp Trò chơi Quiz
+                game trắc nghiệm tính giờ luyện phản xạ cực kỳ cuốn hút.
               </div>
             </div>
 
@@ -2475,7 +2524,8 @@
                 <i class="fa-solid fa-robot"></i> Trợ Lý AI Hongtai Chatbot & Hanzi Writer
               </div>
               <div style="font-size: 0.85rem; color: #94a3b8; text-align: justify;">
-                Trợ lý AI giải đáp thắc mắc ngữ pháp, phân tích ngữ cảnh hội thoại 24/7 và minh họa chuyển động nét vẽ chữ Hán (Hanzi Writer) chuẩn quy tắc bút thuận.
+                Trợ lý AI giải đáp thắc mắc ngữ pháp, phân tích ngữ cảnh hội thoại 24/7 và minh họa chuyển động nét vẽ
+                chữ Hán (Hanzi Writer) chuẩn quy tắc bút thuận.
               </div>
             </div>
 

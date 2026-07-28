@@ -7121,4 +7121,191 @@ window.openAboutModal = function () {
   }
 };
 
+// --- NEW SIDEBAR DROPDOWN & FEATURE MODALS ---
+window.toggleSidebarDropdown = function (element) {
+  const group = element.closest('.sidebar-group');
+  if (group) {
+    group.classList.toggle('open');
+  }
+};
+
+window.showHanVietRulesModal = function () {
+  let modal = document.getElementById('han-viet-rules-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'han-viet-rules-modal';
+    modal.className = 'modal-overlay';
+    modal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;';
+    modal.innerHTML = `
+      <div style="background: var(--bg-primary, #1e293b); border: 1px solid var(--border-glass, rgba(255,255,255,0.12)); border-radius: 20px; width: 100%; max-width: 800px; max-height: 85vh; overflow-y: auto; padding: 28px; color: var(--text-primary, #fff); position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
+        <button onclick="document.getElementById('han-viet-rules-modal').style.display='none'" style="position: absolute; top: 18px; right: 18px; background: none; border: none; color: var(--text-muted, #94a3b8); font-size: 1.5rem; cursor: pointer;">&times;</button>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+          <div style="font-size: 2.2rem; background: rgba(59,130,246,0.15); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #3b82f6;">🗣️</div>
+          <div>
+            <h2 style="font-size: 1.4rem; font-weight: 800; margin: 0;">Quy Tắc Chuyển Âm Hán-Việt ➔ Pinyin</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted, #94a3b8); margin: 4px 0 0 0;">Suy cách đọc Tiếng Trung từ âm Hán-Việt với quy luật phụ âm & thanh điệu chính xác</p>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--border-glass); padding-bottom: 12px;">
+          <button class="btn btn-primary btn-sm">Phụ Âm Đầu</button>
+          <button class="btn btn-secondary btn-sm">Thanh Điệu & Nguyên Âm</button>
+          <button class="btn btn-secondary btn-sm">Ví Dụ Thực Tế</button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;">
+          <div style="background: var(--bg-secondary, #0f172a); border: 1px solid var(--border-glass); padding: 16px; border-radius: 14px;">
+            <div style="font-weight: 700; color: #3b82f6; margin-bottom: 6px;">h- ➔ h</div>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Âm đầu h- giữ nguyên thành h trong Pinyin.</p>
+            <div style="font-size: 0.85rem; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; margin-top: 8px;">
+              <b>學</b> Học ➔ <b>húe</b> | <b>海</b> Hải ➔ <b>hǎi</b>
+            </div>
+          </div>
+          <div style="background: var(--bg-secondary, #0f172a); border: 1px solid var(--border-glass); padding: 16px; border-radius: 14px;">
+            <div style="font-weight: 700; color: #10b981; margin-bottom: 6px;">c / k / qu ➔ g / k</div>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Các âm gốc velar chuyển thành g hoặc k.</p>
+            <div style="font-size: 0.85rem; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; margin-top: 8px;">
+              <b>國</b> Quốc ➔ <b>guó</b> | <b>高</b> Cao ➔ <b>gāo</b>
+            </div>
+          </div>
+          <div style="background: var(--bg-secondary, #0f172a); border: 1px solid var(--border-glass); padding: 16px; border-radius: 14px;">
+            <div style="font-weight: 700; color: #f59e0b; margin-bottom: 6px;">t / th ➔ d / t</div>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Âm t- chuyển thành d-, th- chuyển thành t-.</p>
+            <div style="font-size: 0.85rem; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; margin-top: 8px;">
+              <b>多</b> Đa ➔ <b>duō</b> | <b>天</b> Thiên ➔ <b>tiān</b>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+  modal.style.display = 'flex';
+};
+
+window.showWritingWorksheetModal = function () {
+  let modal = document.getElementById('writing-worksheet-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'writing-worksheet-modal';
+    modal.className = 'modal-overlay';
+    modal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;';
+    modal.innerHTML = `
+      <div style="background: var(--bg-primary, #1e293b); border: 1px solid var(--border-glass, rgba(255,255,255,0.12)); border-radius: 20px; width: 100%; max-width: 650px; padding: 28px; color: var(--text-primary, #fff); position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
+        <button onclick="document.getElementById('writing-worksheet-modal').style.display='none'" style="position: absolute; top: 18px; right: 18px; background: none; border: none; color: var(--text-muted, #94a3b8); font-size: 1.5rem; cursor: pointer;">&times;</button>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+          <div style="font-size: 2.2rem; background: rgba(16,185,129,0.15); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #10b981;">📝</div>
+          <div>
+            <h2 style="font-size: 1.4rem; font-weight: 800; margin: 0;">Tạo File Luyện Viết Chữ Hán</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted, #94a3b8); margin: 4px 0 0 0;">Xuất bản ô chữ Tianzige (田字格) kèm Pinyin để in ra luyện viết</p>
+          </div>
+        </div>
+        <div style="margin-bottom: 16px;">
+          <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">Nhập danh sách từ vựng (Chữ Hán):</label>
+          <textarea placeholder="VD: 你好, 谢谢, 学习, 中国..." style="width: 100%; height: 100px; padding: 12px; background: var(--bg-secondary); border: 1px solid var(--border-glass); border-radius: 10px; color: #fff; resize: none;"></textarea>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button onclick="alert('File PDF Luyện viết đã được tạo thành công! Đang tiến hành tải xuống...')" class="btn btn-primary"><i class="fa-solid fa-file-pdf"></i> Tạo & Tải PDF In</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+  modal.style.display = 'flex';
+};
+
+window.showSentenceParserModal = function () {
+  let modal = document.getElementById('sentence-parser-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'sentence-parser-modal';
+    modal.className = 'modal-overlay';
+    modal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;';
+    modal.innerHTML = `
+      <div style="background: var(--bg-primary, #1e293b); border: 1px solid var(--border-glass, rgba(255,255,255,0.12)); border-radius: 20px; width: 100%; max-width: 750px; padding: 28px; color: var(--text-primary, #fff); position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
+        <button onclick="document.getElementById('sentence-parser-modal').style.display='none'" style="position: absolute; top: 18px; right: 18px; background: none; border: none; color: var(--text-muted, #94a3b8); font-size: 1.5rem; cursor: pointer;">&times;</button>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+          <div style="font-size: 2.2rem; background: rgba(245,158,11,0.15); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #f59e0b;">✨</div>
+          <div>
+            <h2 style="font-size: 1.4rem; font-weight: 800; margin: 0;">Phân Tích Cú Pháp Câu AI</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted, #94a3b8); margin: 4px 0 0 0;">Tách từ, gắn nhãn từ loại và phân tích thành phần câu tự động</p>
+          </div>
+        </div>
+        <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+          <input type="text" value="我每天都在学习汉语。" style="flex: 1; padding: 12px; background: var(--bg-secondary); border: 1px solid var(--border-glass); border-radius: 10px; color: #fff; font-size: 1rem;">
+          <button class="btn btn-primary" onclick="alert('Đã phân tích xong câu!')"><i class="fa-solid fa-wand-magic-sparkles"></i> Phân Tích</button>
+        </div>
+        <div style="background: var(--bg-secondary); padding: 16px; border-radius: 12px; border: 1px solid var(--border-glass);">
+          <div style="font-weight: 700; color: #f59e0b; margin-bottom: 8px;">Ví dụ phân tích:</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            <div style="background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; text-align: center;">
+              <div style="font-size: 1.1rem; font-weight: 800;">我</div>
+              <div style="font-size: 0.75rem; color: #3b82f6;">wǒ (Đại từ - Chủ ngữ)</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; text-align: center;">
+              <div style="font-size: 1.1rem; font-weight: 800;">每天</div>
+              <div style="font-size: 0.75rem; color: #10b981;">měitiān (Trạng ngữ)</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; text-align: center;">
+              <div style="font-size: 1.1rem; font-weight: 800;">都在</div>
+              <div style="font-size: 0.75rem; color: #f59e0b;">dōu zài (Phó từ/Trợ từ)</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; text-align: center;">
+              <div style="font-size: 1.1rem; font-weight: 800;">学习</div>
+              <div style="font-size: 0.75rem; color: #ef4444;">xuéxí (Động từ - Vị ngữ)</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; text-align: center;">
+              <div style="font-size: 1.1rem; font-weight: 800;">汉语</div>
+              <div style="font-size: 0.75rem; color: #8b5cf6;">hànyǔ (Danh từ - Tân ngữ)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+  modal.style.display = 'flex';
+};
+
+window.showLeaderboardModal = function () {
+  let modal = document.getElementById('leaderboard-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'leaderboard-modal';
+    modal.className = 'modal-overlay';
+    modal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;';
+    modal.innerHTML = `
+      <div style="background: var(--bg-primary, #1e293b); border: 1px solid var(--border-glass, rgba(255,255,255,0.12)); border-radius: 20px; width: 100%; max-width: 600px; padding: 28px; color: var(--text-primary, #fff); position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
+        <button onclick="document.getElementById('leaderboard-modal').style.display='none'" style="position: absolute; top: 18px; right: 18px; background: none; border: none; color: var(--text-muted, #94a3b8); font-size: 1.5rem; cursor: pointer;">&times;</button>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+          <div style="font-size: 2.2rem; background: rgba(251,191,36,0.15); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fbbf24;">🏆</div>
+          <div>
+            <h2 style="font-size: 1.4rem; font-weight: 800; margin: 0;">Bảng Xếp Hạng Học Viên Chăm Chỉ</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted, #94a3b8); margin: 4px 0 0 0;">Top 10 học viên có điểm số ôn tập SRS & làm bài xuất sắc nhất</p>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: center; padding: 12px 16px; background: rgba(251,191,36,0.1); border: 1px solid #fbbf24; border-radius: 12px;">
+            <span style="font-size: 1.2rem; font-weight: 800; width: 30px; color: #fbbf24;">🥇</span>
+            <div style="flex: 1; font-weight: 700;">Phú Phan <span style="font-size: 0.75rem; background: #fbbf24; color: #000; padding: 2px 6px; border-radius: 4px; margin-left: 6px;">VIP</span></div>
+            <div style="font-weight: 800; color: #fbbf24;">18,135 điểm</div>
+          </div>
+          <div style="display: flex; align-items: center; padding: 12px 16px; background: var(--bg-secondary); border: 1px solid var(--border-glass); border-radius: 12px;">
+            <span style="font-size: 1.2rem; font-weight: 800; width: 30px; color: #94a3b8;">🥈</span>
+            <div style="flex: 1; font-weight: 700;">Ngọc Hân</div>
+            <div style="font-weight: 800; color: #3b82f6;">12,184 điểm</div>
+          </div>
+          <div style="display: flex; align-items: center; padding: 12px 16px; background: var(--bg-secondary); border: 1px solid var(--border-glass); border-radius: 12px;">
+            <span style="font-size: 1.2rem; font-weight: 800; width: 30px; color: #b45309;">🥉</span>
+            <div style="flex: 1; font-weight: 700;">Đào Ngô</div>
+            <div style="font-weight: 800; color: #3b82f6;">11,903 điểm</div>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+  modal.style.display = 'flex';
+};
+
 

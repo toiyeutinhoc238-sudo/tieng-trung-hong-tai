@@ -557,6 +557,102 @@ html.dark .brand-logo-img {
   gap: 8px;
 }
 
+/* Sidebar Custom Enhancements (NhaiTOPIK Style) */
+.sidebar-section-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 14px 14px 6px 14px;
+}
+
+.sidebar-group {
+  margin-bottom: 2px;
+}
+
+.sidebar-dropdown-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+}
+
+.sidebar-dropdown-toggle:hover {
+  background: rgba(59, 130, 246, 0.08);
+  color: var(--text-primary);
+}
+
+.sidebar-dropdown-toggle .dropdown-arrow {
+  font-size: 0.75rem;
+  transition: transform 0.25s ease;
+  margin-left: auto;
+}
+
+.sidebar-group.open .sidebar-dropdown-toggle .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.sidebar-submenu {
+  list-style: none;
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: 18px;
+  margin-top: 4px;
+}
+
+.sidebar-group.open .sidebar-submenu {
+  display: flex;
+}
+
+.sidebar-subitem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sidebar-subitem:hover {
+  background: rgba(59, 130, 246, 0.12);
+  color: var(--accent-blue);
+  transform: translateX(3px);
+}
+
+.badge-vip {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 6px;
+  margin-left: 6px;
+}
+
+.sidebar-upgrade-btn {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b) !important;
+  color: #0f172a !important;
+  font-weight: 800 !important;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3) !important;
+  border: 1px solid #f59e0b !important;
+}
+
+.sidebar-upgrade-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4) !important;
+}
+
 .btn-lg {
   padding: 14px 28px;
   border-radius: var(--radius-lg);
