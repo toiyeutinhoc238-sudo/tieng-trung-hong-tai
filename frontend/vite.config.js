@@ -19,7 +19,8 @@ export default defineConfig({
         history: 'chat-history.html',
         quiz: 'quiz-game.html',
         lesson: 'lesson-online.html',
-        rules: 'han-viet-rules.html'
+        rules: 'han-viet-rules.html',
+        grammar: 'hsk-grammar.html'
       }
     }
   }

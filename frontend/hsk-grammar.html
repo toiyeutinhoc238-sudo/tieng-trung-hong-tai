@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tổng Hợp Ngữ Pháp Tiếng Trung HSK 1 - 6 | Hongtai Chinese</title>
+
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-dark: #0b0f19;
+      --bg-card: rgba(15, 23, 42, 0.75);
+      --border-glass: rgba(255, 255, 255, 0.1);
+      --primary: #3b82f6;
+      --accent: #f59e0b;
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-dark);
+      background-image:
+        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(245, 158, 11, 0.08) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .grammar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 24px;
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-glass);
+      border-radius: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .title-group h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .title-group p {
+      color: var(--text-sub);
+      font-size: 0.95rem;
+      margin-top: 4px;
+    }
+
+    /* Search & Filter Bar */
+    .controls-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .search-wrap {
+      flex: 1;
+      min-width: 280px;
+      position: relative;
+    }
+
+    .search-wrap i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-sub);
+      font-size: 1.1rem;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 14px 16px 14px 48px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      border-radius: 14px;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    }
+
+    /* Navigation Tabs */
+    .level-tabs {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 24px;
+    }
+
+    .tab-btn {
+      padding: 12px 22px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-glass);
+      border-radius: 12px;
+      color: var(--text-sub);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+    }
+
+    /* Main Content Reader Container */
+    .reader-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-glass);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      min-height: 500px;
+    }
+
+    .reader-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-glass);
+      padding-bottom: 18px;
+      margin-bottom: 24px;
+    }
+
+    .reader-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .level-badge {
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    /* Grammar Formatting Body */
+    .grammar-body {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: #cbd5e1;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .grammar-body b, .grammar-body strong {
+      color: #fbbf24;
+      font-weight: 700;
+    }
+
+    .grammar-body .zh-text {
+      color: #60a5fa;
+      font-size: 1.15rem;
+      font-weight: 700;
+      background: rgba(59, 130, 246, 0.1);
+      padding: 2px 6px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .grammar-body .zh-text:hover {
+      background: rgba(59, 130, 246, 0.25);
+    }
+
+    /* Audio Speaker Float Button */
+    .audio-btn {
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid #f59e0b;
+      color: #fbbf24;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 700;
+      transition: all 0.2s;
+    }
+
+    .audio-btn:hover {
+      background: #f59e0b;
+      color: #000;
+    }
+
+    .btn-close {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-glass);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-close:hover {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+      border-color: #ef4444;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- Header -->
+    <div class="grammar-header">
+      <div class="title-group">
+        <h1><i class="fa-solid fa-book-open-reader"></i> Chuyên Trang Ngữ Pháp HSK (HSK 1 đến HSK 6)</h1>
+        <p>Hệ thống tra cứu, tổng hợp lý thuyết ngữ pháp toàn diện bóc tách từ bộ tài liệu chuẩn thi HSK</p>
+      </div>
+      <div>
+        <button class="btn-close" onclick="window.close()"><i class="fa-solid fa-xmark"></i> Đóng Cửa Sổ</button>
+      </div>
+    </div>
+
+    <!-- Search & Filter Controls -->
+    <div class="controls-bar">
+      <div class="search-wrap">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="search-grammar-input" class="search-input"
+          placeholder="Tim kiếm điểm ngữ pháp, từ khóa (Ví dụ: 把, 被, 比, 越来越, 结果补语)..."
+          onkeyup="filterGrammarContent()">
+      </div>
+    </div>
+
+    <!-- Level Navigation Tabs -->
+    <div class="level-tabs">
+      <button class="tab-btn active" data-level="hsk1" onclick="switchLevelTab('hsk1')">
+        <i class="fa-solid fa-seedling"></i> HSK 1
+      </button>
+      <button class="tab-btn" data-level="hsk2" onclick="switchLevelTab('hsk2')">
+        <i class="fa-solid fa-graduation-cap"></i> HSK 2
+      </button>
+      <button class="tab-btn" data-level="hsk3" onclick="switchLevelTab('hsk3')">
+        <i class="fa-solid fa-book-bookmark"></i> HSK 3
+      </button>
+      <button class="tab-btn" data-level="hsk4" onclick="switchLevelTab('hsk4')">
+        <i class="fa-solid fa-star"></i> HSK 4
+      </button>
+      <button class="tab-btn" data-level="hsk5" onclick="switchLevelTab('hsk5')">
+        <i class="fa-solid fa-award"></i> HSK 5
+      </button>
+      <button class="tab-btn" data-level="hsk6" onclick="switchLevelTab('hsk6')">
+        <i class="fa-solid fa-crown"></i> HSK 6
+      </button>
+    </div>
+
+    <!-- Main Reader Display Area -->
+    <div class="reader-card">
+      <div class="reader-header">
+        <div class="reader-title">
+          <span id="current-title">Tổng Hợp Ngữ Pháp HSK 1</span>
+          <span id="current-badge" class="level-badge">HSK 1</span>
+        </div>
+        <div>
+          <a id="download-pdf-btn" href="/grammar-files/ngu phap hsk 1.pdf" download target="_blank" class="audio-btn" style="text-decoration: none;">
+            <i class="fa-solid fa-file-pdf"></i> Tải File Sách PDF
+          </a>
+        </div>
+      </div>
+
+      <div id="grammar-content-box" class="grammar-body">
+        <div style="text-align: center; padding: 40px; color: var(--text-sub);">
+          <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+          <p style="margin-top: 12px;">Đang tải toàn bộ dữ liệu ngữ pháp HSK...</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let allGrammarData = {};
+    let currentActiveLevel = 'hsk1';
+
+    const pdfMap = {
+      'hsk1': '/grammar-files/ngu phap hsk 1.pdf',
+      'hsk2': '/grammar-files/ngu phap hsk 2.pdf',
+      'hsk3': '/grammar-files/ngu phap hsk 3.pdf',
+      'hsk4': '/grammar-files/ngu phap hsk 4.pdf',
+      'hsk5': '/grammar-files/ngu phap hsk 5.pdf',
+      'hsk6': '/grammar-files/ngu phap hsk 6.pdf'
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchGrammarData();
+    });
+
+    function fetchGrammarData() {
+      const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === ''
+        ? 'http://localhost:5000'
+        : 'https://tieng-trung-hong-tai.onrender.com';
+
+      fetch(`${API_BASE_URL}/api/grammar/full-content`)
+        .then(res => res.json())
+        .then(data => {
+          allGrammarData = data;
+          renderGrammarContent(currentActiveLevel);
+        })
+        .catch(err => {
+          console.error("Error loading grammar content:", err);
+          document.getElementById('grammar-content-box').innerHTML = `
+            <div style="color: #ef4444; text-align: center; padding: 30px;">
+              Lỗi tải dữ liệu ngữ pháp từ máy chủ. Vui lòng thử lại sau.
+            </div>
+          `;
+        });
+    }
+
+    window.switchLevelTab = function (levelId) {
+      currentActiveLevel = levelId;
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        if (btn.getAttribute('data-level') === levelId) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      document.getElementById('download-pdf-btn').href = pdfMap[levelId] || '#';
+      renderGrammarContent(levelId);
+    };
+
+    function renderGrammarContent(levelId, filterQuery = '') {
+      const item = allGrammarData[levelId];
+      const box = document.getElementById('grammar-content-box');
+      const titleEl = document.getElementById('current-title');
+      const badgeEl = document.getElementById('current-badge');
+
+      if (!item || !item.content) {
+        box.innerHTML = `<div style="text-align: center; padding: 30px;">Chưa có nội dung cho cấp độ này.</div>`;
+        return;
+      }
+
+      titleEl.textContent = item.title || `Tổng Hợp Ngữ Pháp ${levelId.toUpperCase()}`;
+      badgeEl.textContent = item.level || levelId.toUpperCase();
+
+      let text = item.content;
+
+      if (filterQuery) {
+        const lines = text.split('\n');
+        const matchedLines = lines.filter(l => l.toLowerCase().includes(filterQuery.toLowerCase()));
+        if (matchedLines.length > 0) {
+          text = `--- KẾT QUẢ TÌM KIẾM CHO TỪ KHÓA "${filterQuery}" (${matchedLines.length} DÒNG NỔI BẬT) ---\n\n` + matchedLines.join('\n');
+        } else {
+          text = `Không tìm thấy kết quả phù hợp cho từ khóa "${filterQuery}" trong ${item.level}.`;
+        }
+      }
+
+      // Format Chinese text highlighting
+      const formattedHtml = text.replace(/([一-龥]+)/g, '<span class="zh-text" onclick="speakZhText(\'$1\')">$1</span>');
+
+      box.innerHTML = formattedHtml;
+    }
+
+    window.filterGrammarContent = function () {
+      const query = document.getElementById('search-grammar-input').value.trim();
+      renderGrammarContent(currentActiveLevel, query);
+    };
+
+    let audioCurrent = null;
+    window.speakZhText = function (text) {
+      if (!text) return;
+      if (audioCurrent) {
+        audioCurrent.pause();
+      }
+      const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === ''
+        ? 'http://localhost:5000'
+        : 'https://tieng-trung-hong-tai.onrender.com';
+
+      const voice = localStorage.getItem('speech_voice') || 'baidu-female';
+      const audioUrl = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(text)}&voice=${voice}`;
+
+      audioCurrent = new Audio(audioUrl);
+      audioCurrent.play().catch(err => {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const u = new SpeechSynthesisUtterance(text);
+          u.lang = 'zh-CN';
+          window.speechSynthesis.speak(u);
+        }
+      });
+    };
+  </script>
+</body>
+
+</html>

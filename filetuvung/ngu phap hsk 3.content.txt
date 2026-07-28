@@ -1,0 +1,297 @@
+BNTT dùng để mô tả, đánh giá kết quả, mức độ, trạng thái của hành động.
+2. Bổ ngữ trạng thái (Trình độ) (BNTT)
+Mẹ đã nấu cơm xong chưa?
+Bạn tìm thấy chó của mình chưa?
+妈妈做 好今晚的饭 了没有？
+VD: 你 找 到 你的狗 了吗？
+Nghi vấn: S + V + BNKQ + O +了吗/了没有？
+Tôi chưa làm xong bài tập.
+Tôi không thấy bạn gái của cậu.
+我 没 做 完 今天的作业。
+VD: 我 没有 看 到 你的女朋友。
+Phủ định: S + 没（有）V + BNKQ + O
+Tôi rửa hoa quả xong rồi
+Tôi tìm thấy kính của mình rồi.
+我 洗 好 水果了。
+VD: 我找 到 你的眼镜了！
+Khẳng định: S + V + BNKQ + O
+BNKQ dùng để nói rõ kết quả của hành động.
+1. Bổ ngữ kết quả (BNKQ)
+Các loại Bổ Ngữ thường gặp trong Ngữ pháp HSK 3
+Ngoài ra, các bạn có thể tải file PDF kiến thức ngữ pháp HSK 3 cơ bản ở cuối bài viết.
+Dưới đây là tổng hợp các chủ điểm thường gặp của “Ngữ pháp HSK3′′ trong tiếng Trung.
+chặng đường luyệnngữ pháp HSK 2.
+học tiếng Trungđược biên soạn kỹ sẽ là hành trangkiến thức tiếp theo sau khi kết thúc
+Cửa ải HSK vẫn luôn chờ bạn, tài liệu tổng hợp ngữ pháp HSK 3 cho các bạnmới bắt đầu
+Tổng hợp ngữ pháp HSK 3
+----------------Page (0) Break----------------
+Bạn có tìm thấy kính của tôi không?
+VD：你 找 得 到 我的眼镜吗？
+S + V + 得 + BNKN + O + 吗？
+VD: 你 找 得 到 找 不 到 我的眼镜？  Bạn có tìm thấy kính của tôi không?
+Nghi vấn: S + V + 得 + BNKN + V + 不 + BNKN + O？
+Tôi không tìm được bạn trai của mình
+VD: 我 找 不 到 我的男朋友了。
+Phủ định: S + V + 不 + BNKN+ O
+Tôi nhìn rất rõ ràng chữ Hán mà bạn viết
+VD: 我 看 得 很清楚你写的汉字。
+Khẳng định:S + V + 得 + BNKN + O
+Bổ ngữ khả năng nói về Động tác (V) có thể thực hiện được hay không.
+3. Bổ ngữ khả năng (BNKN)
+Bạn nấu cơm có ngon không?
+VD: 你做饭做得好吃吗？
+S + （V）O + V + 得 + tính từ 不 tính từ？
+Nghi vấn: S + （V）O + V + 得 + tính từ + 吗？
+Tôi chạy không nhanh.
+VD： 我 跑得不快。
+Phủ định:S + （V）O + V + 得 + 不 + tính từ
+Bạn học tiếng Anh giỏi quá
+VD： 我（学）英文 学 得 很好。
+S + （V） O + V + 得 + tính từ
+Anh ấy chạy nhanh quá
+VD： 他跑得很快。
+Khẳng định: S + V + 得 + tính từ？
+----------------Page (1) Break----------------
+明天你坐公共汽车 回学校 来吧.
+Nếu O chỉ nơi chốn:V + 上/下/进/出/回/过/起 + O + 来/去
+VD: 他们带 过去 了(Bọn họ mang qua đó rồi.)
+V + bổ ngữ phương hướng phức tạp
+Động từ phương hướng phức tạp – Ngữ pháp HSK 3
+ra xa (去) người nói và miêu tả cụ thể hành động.
+Bổ ngữ phương hướng phức tạp: Miêu tả phương hướng của động tác (V) đến gần (来) hay
+Tôi mang bài tập đến rồi
+我带来作业了。
+VD：我带作业 来 了。
+V+来/去+O
+Nếu O không chỉ nơi chốn: V + O + 来/去
+Tôi đi về nhà rồi
+VD:我回家去了。
+Nếu O chỉ nơi chốn: V + O + 来/去
+Tôi đi qua đó.
+我过 去 吧。
+Tôi về rồi.
+我回 来 了。
+V+来/去
+xa (去) người nói.
+Bổ ngữ phương hướng đơn giản: Miêu tả phương hướng của động tác đến gần (来) hay ra
+4. Bổ ngữ phương hướng
+----------------Page (2) Break----------------
+Câu sử dụng Giới từ
+Bạn mặc chiếc váy này xem ra rất giống con gái
+VD：你穿这条裙子看起来很像一个女孩。
+Ngoài ra: 看上去，看起来 có nghĩa “Xem ra”
+Bạn có nhớ ra tôi là ai không?
+VD: 你能想起来我是谁吗？
+Động từ diễn tả người nào đó có hồi tưởng lại/nhớ lại (Dịch: Lại)
+V+起来
+(Chiếc xe kia càng đi càng chậm, bây giờ dừng lại rồi)
+VD: 那辆车越开越慢，现在停下来了。
+lại... (Dịch: Lại, xuống, đi...):
+Nói về sự thay đổi trạng thái mạnh sang yếu, nhanh sang chậm,  chuyển động sang ngừng
+V/tính từ + 下来
+(Chữ Hán tôi viết bạn có nhìn ra không?)
+VD: 我写的汉字你能看出来吗？
+hiển thị ra
+VD: 我很快就画出来一只狗。(Tôi vẽ hình 1 con chó rất nhanh) Diễn tả sự phân biệt, bộc lộ,
+Nói về sự xuất hiện của sự vật mới
+V+出来
+Một số bổ ngữ xu hướng phức tạp thường dùng:
+(Tôi mang quần áo của bạn qua rồi.)
+VD： 我 带 过 来 你的衣服了。
+V + 上/下/进/出/回/过/起 + 来/去 + O
+VD: 我带 过 你的衣服 来了。
+Nếu O không chỉ nơi chốn: V + 上/下/进/出/回/过/起 + O +来/去
+Ngày mai bạn đi xe bus về trường  đi
+----------------Page (3) Break----------------
+VD:我把 你的衣服 放 进 行李箱了。  Tôi để quần áo của bạn vào trong vali rồi.
+Câu chữ 把 làm thay đổi vị trí tân ngữ (O):A 把 O 放/搬 ... + 到/在/进... + địa điểm
+Bạn uống cà phê đi!
+VD：你把 咖啡喝吧！
+Câu chữ 把 cơ bản:A + 把 + O + V + thành phần khác
+được tác động đến người hoặc sự vậy xác định.
+Thường dùng để đưa ra mệnh lệnh, đề nghị..., dùng để chỉ hành động được  thực hiện
+5. Câu chữ 把
+Tôi bị bố đánh rồi.
+VD: 我 被 爸爸 打 了。
+Dùng để diễn tả nghĩa bị động:S + 被（让/叫） + O + V +thành phần khác.
+4. Câu chữ 被
+Anh ấy đối với tôi vô cùng tốt
+VD: 他 对 我非常好。
+A 对 B + thành phần khác.
+Dùng để dẫn ra S đối xử, đối đãi, đối với thành phần phía sau như thế nào,  có tác dụng gì:
+3. Giới từ 对
+Tôi cùng bạn cũ đến tiệm sách mua sách.
+VD: 我 跟 老朋友去书店买书。
+Là giới từ, đồng thời là danh từ, A và B cùng nhau làm gì đó, bằng 和. A 跟 B （一起）+V
+2. Giới từ 跟
+Tôi mua cà phê cho bạn.
+VD：我给 你 买 咖啡。
+Dùng khi nói làm việc gì cho ai đó:S 给 ĐẠI TỪ/ DANHTỪ + V
+1. Giới từ 给
+thành phần đứng sau.
+Giới từ là từ đặt trước danh từ/ cụm danh từ/ đại từ/ cụm đại từ, thường  dùng để giới thiệu
+----------------Page (4) Break----------------
+5. 一边 V 一边 V
+(Em gái tôi vừa thông minh vừa đáng yêu)
+VD: 我的妹妹又聪明又可爱。
+Diễn tả hai đặc điểm, trạng thái cùng tồn tại ra ở một chủ từ  (Dịch: Vừa... vừa...)
+4. 又 Tính từ 又 Tính từ
+(Tôi càng ngày càng thích học tiếng Trung)
+VD: 我越来越喜欢学汉语。
+A thay đổi theo thời gian. (Dịch: Càng ngày càng)
+3. 越来越 Tính từ
+càng chạy càng nhanh)
+B thay đổi theo sự thay đổi của A. (Dịch: Càng A càng B) VD：那辆车越跑越快。 (Cái xe đó
+2. 越 A 越 B
+（Tôi mệt lắm rồi, Cô ấy xinh đẹp quá）
+Tính từ + 极了 （我累极了，她漂亮极了）
+了，太高兴了）
+Các phó từ mức độ: 很/ 非常/ 特别/ 真/ 不太/ 有点儿 + Tính từ Ngoài ra: 太 Tính từ 了（太好
+1. Phó từ mức độ
+Ngữ pháp tiếng trung HSK 3 nâng cao
+VD: 你 把水果拿过来 (Bạn lấy hoa quả ra đây.)
+Câu chữ 把 dùng bổ ngữ xu hướng:A + 把 + O + V + bổngữ xu hướng
+Bạn rửa sạch hoa quả đi.
+VD: 你 把 水果 洗 干净吧。
+Câu chữ 把 dùng bổ ngữ kết quả:A + 把 + O + V + bổngữ kết quả
+Tôi trả tiền cho anh trai rồi
+VD: 我 把 钱 还 给 哥哥了。
+Câu chữ 把 làm thay đổi chủ sở hữu tân ngữ (O):A 把 O 送/还/借/带... + 给 + đại từ
+----------------Page (5) Break----------------
+So sánh hơn：A 比 B Tính từ （多了/得多/一些/一点儿/...）
+11. Câu so sánh
+Hôm nay học tiếng Trung, ngày mai lại học tiếng Trung.
+汉语。
+再 + V : Hành động được lặp lại nhưng chưa xảy ra. (Dịch: Lại)   VD：今天学汉语，明天再学
+Hôm qua ăn mì, hôm nay lại ăn mì
+条。
+又+ V ：Hành động được lặp lại và đã xảy ra rồi. (Dịch: Lại....)  VD：昨天吃面条，今天又吃面
+10. 又+V/再+V
+Tôi có hừng thú với âm nhạc
+Diễn tả sự hứng thú với cái gì đó. (Dịch: S có hứng thú với...) VD：我对音乐很感兴趣。
+9. S + 对 + N +感兴趣/有兴趣
+VD： 我看着电视做作业。(Làm bài tập trong lúc xem tivi.) 我站着等她。（Đứng đợi cô ấy ）
+thức hành động thứ hai.
+Dùng để diễn tả hai hành động xảy ra cùng lúc, trong đó hành động thứ  nhất là phương
+8. V1 + 着 +（O1）+ V2 +（O2）
+VD：桌子上放着一杯咖啡。(Trên bàn có 1 cốc cà phê)
+Câu tồn tại, diễn tả ở đâu đó có cái gì đó.
+7. Nơi chốn + V + 着 + số lượng danh
+(Mẹ tôi mỗi tối ăn cơm xong là xem tivi)
+我妈妈每天晚上吃了饭就看电视。
+VD：我回了家就睡觉。(Tôi về nhà là đi ngủ)
+Diễn tả hai hành động xảy ra liên tiếp.
+6. V1 了（O）就 V2...
+(Bạn gái tôi vừa nói vừa cười)
+VD：我女朋友一边说一边笑。
+Diễn tả hai động tác được thực hiện cùng lúc. (Dịch: Vừa... vừa...)
+----------------Page (6) Break----------------
+Trừ bơi lội, thể loại vận động nào tôi cũng biết.
+VD: 除了游泳以外，什么运动我都会。
+(Dịch: Ngoài/trừ A ra, B đều.... ) (A không thuộc B)
+除 A 以外,B 都...
+14. 除了...(以外)，都/还/也...
+quả, sau đó về nhà làm bài tập
+VD: 你先吃饭，再去商店买点儿水果，然后回家做作业。  Tôi ăn cơm trước, rồi đi mua hoa
+Diễn tả thứ tự thực hiện các hành động.
+13. 先 V，再/又 V，然后 V
+Mỗi ngày 8 giờ tôi dậy, hôm nay 7 giờ đã dậy rồi.
+VD: 我每天八点起床，今天我七点就起床了。
+(Dịch: Đã V, là V)
+就 + V (了): Diễn tả hành động xảy ra sớm, nhanh, thuận lợi.
+Mỗi ngày 8 giờ tôi dậy, hôm nay 9 giờ mới dậy.
+VD: 我每天八点起床，今天我九点才起床。
+才 + V: Diễn tả hành động xảy ra muộn, chậm và không thuận lợi  (Dịch: mới ...)
+12. 才+V,就+V
+Tôi với em trai tôi giống nhau
+VD:我跟我弟弟一样。
+So sánh bằng：A 跟 B 一样 (+Tính từ)
+Tôi không xinh đẹp bằng em gái
+VD: 我没有我妹妹那么漂亮。
+So sánh kém: A 没有 B + （那么/多么）Tính từ
+(Hôm nay dưa hấu đắt hơn hôm qua 2 tệ)
+今天的西瓜比昨天贵两块钱。
+VD: 她学得比我好一些。(Cô ấy học tốt hơn tôi một chút)
+----------------Page (7) Break----------------
+Chỉ cần có thời gian thì tôi nhất định đi du lịch cùng bạn
+VD: 只要有时间，我一定就跟你去旅游。
+Câu điều kiện: Chỉ cần..., thì...
+18. 只要..., (S) 就...
+Anh ấy vui mừng nói với tôi, anh ấy đỗ đại học rồi
+VD: 他高高兴兴地告诉我，他考上大学了。
+Tính từ 2 chữ cái AB: AABB (漂漂亮亮，高高兴兴...)
+Tóc cô ấy dài, mắt to, đáng yêu quá đi!
+VD: 她头发长长的，眼睛大大的，可爱极了！
+Tính từ 1 chữ cái A: AA 的 (红红的，长长的...)
+17. Tính từ lặp lại: Nghĩa tăng lên
+Anh ấy đẹp trau quá, có thể giưới thiệu làm quen không?
+们认识认识吗？
+Động từ 2 chữ cái AB: ABAB (认识认识，介绍介绍，锻炼锻炼...) VD: 他好帅，可以介绍我
+Bạn xem quyển sách này xem, thấy sao?
+VD: 你看看这本书，觉得怎么样？
+A 一 A (走一走，读一读...)
+Động từ 1 chữ cái A: AA ( 试试，看看...)
+16. Động từ lặp lại: Nghĩa giảm đi
+Nếu có tiền, tôi sẽ mua cho bạn 1 cái điện thoại mới.
+VD: 如果有钱的话，我就我给你买一个新手机。
+Câu điều kiện: Nếu ... thì...
+15. 如果...（的话），（S）就...
+Trừ tiếng Trung, tôi còn biết nói tiếng Anh, tiếng Nhật.
+我也会说英语，日语。
+除了 A (以外)，...还/也 B (Dịch: Ngoài A ra, vẫn/ còn B.... ) (A thuộc B) VD: 除了汉语以外，
+----------------Page (8) Break----------------
+(S) 一 点儿 + 也/都 + 不 + Tính từ
+Một chút cà phê cũng chưa uống mà anh ấy đã đi rồi
+VD：他一 点儿咖啡都没喝就走了。
+(Với những thứ không đếm được)
+(S) 一 点儿 + (N) + 也/都 + 没/不 + thành phần khác
+(Một cái bánh bao tôi cũng không muốn ăn)
+VD：我一个面包也不想吃。
+(Với những thứ đếm được)
+(S) 一 lượng + (N) + 也/都 + 没/不 + thành phần khác
+23. Diễn tả sự phủ định hoàn toàn
+VD: 我看过这个电影了。(Tôi xem phim này rồi)
+tại. (Dịch: Đã, đã từng)
+Nói về kinh nghiệm, trải nghiệm hoặc hành động gì đã xảy ra mà không  kéo dài đến hiện
+22. V + 过
+Nhanh lên, tôi đã đợi cậu nửa tiếng đồng hồ rồi.
+VD: 快点儿，我都等你半个小时了。
+Dùng nhấn mạnh hoặc diễn tả thái độ không hài lòng.
+21. 都...了
+Sắp mưa rồi, chúng ta nhanh về thôi!
+VD: 快要下雨了，我们快回去吧！
+Dùng để nói về hành động, sự việc gì đó sắp xảy ra.
+20. 要/快要/就要 .... 了
+Tôi rất thích xem phim điện ảnh liên quan đến lịch sử Trung Quốc
+VD: 我很喜欢看关于中国历史的电影。
+Giới thiệu, dẫn ra đối tượng muốn nói đến (N thường là danh từ phức tạp).
+19. 关于+N
+----------------Page (9) Break----------------
+đăng ký thông tin để Zhong Ruan tư vấn nhé:https://zhongruan.edu.vn
+nhé. Nếu bạn có bất kỳ vấn đề nào trong quá trình học ngữ pháp HSK 3, các bạn có thể
+Trên đây là bài viết tổng hợp chia sẻ ngữ pháp HSK 3, các bạn nhớ lưu về học và luyện tập
+Cái bút chì này 3, 4 tệ.
+VD: 这个铅笔三四 块。
+Số từ liên tiếp + lượng + Danh từ
+Trường của chúng ta có khoảng 100 người
+VD: 我们学校有一百人左右。
+Số + lượng + 左右
+26. Diễn tả số ước lượng
+Cho tôi một cốc trà hoặc là cà phê cũng được
+VD: 给我一杯茶或者咖啡也行
+或者： Dùng trong câu trần thuật. (Dịch: Hoặc)
+Bạn thích trà hay là cà phê
+VD：你喜欢茶还是咖啡。
+还是： Dùng trong câu hỏi hoặc câu có hình thức nghi vấn. (Dịch: Hay là)
+Đều dùng để diễn tả sự lựa chọn.
+25. 还是 và 或者
+thể học tốt không?
+VD: 你不喜欢学习，能学好吗？→ Khẳng định sẽ “học không tốt” Cậu không thích học thì có
+能 + khẳng định + 吗？ → Phủ định
+Cậu ngày nào cũng không vận động, có thể không béo à?
+VD: 你每天不运动，能不胖吗？→ Khẳng định sẽ “mập”
+能 + phủ định + 吗？ → Khẳng định
+24. Cấu trúc 能...吗？
+VD：我一点儿也不累。(Tôi không mệt chút nào)
+(Với tính từ)
+----------------Page (10) Break----------------
