@@ -7357,6 +7357,8 @@ window.showLeaderboardModal = function () {
         container.innerHTML = `<div style="text-align: center; color: #ef4444; padding: 20px;">Lỗi tải dữ liệu bảng xếp hạng từ server.</div>`;
       }
     });
+};
+
 window.showGrammarModal = function () {
   let modal = document.getElementById('grammar-hsk-modal');
   if (!modal) {
