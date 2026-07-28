@@ -400,7 +400,7 @@
     };
 
     document.addEventListener('DOMContentLoaded', () => {
-      // Initialize full extracted datasets
+      // Initialize 100% full extracted datasets
       allGrammarData = {
         'hsk1': { id: 'hsk1', level: 'HSK 1', title: 'Tổng Hợp Ngữ Pháp HSK 1 Chi Tiết', content: window.GRAMMAR_HSK1 || '' },
         'hsk2': { id: 'hsk2', level: 'HSK 2', title: 'Tổng Hợp Ngữ Pháp HSK 2 Chi Tiết', content: window.GRAMMAR_HSK2 || '' },
@@ -410,6 +410,7 @@
         'hsk6': { id: 'hsk6', level: 'HSK 6', title: 'Tổng Hợp Ngữ Pháp HSK 6 Chi Tiết', content: window.GRAMMAR_HSK6 || '' }
       };
 
+      renderGrammarContent(currentActiveLevel);
       fetchGrammarData();
     });
 
@@ -422,13 +423,13 @@
           return res.json();
         })
         .then(data => {
-          if (data && Object.keys(data).length > 0) {
+          if (data && Object.keys(data).length > 0 && data.hsk1 && data.hsk1.content) {
             allGrammarData = data;
+            renderGrammarContent(currentActiveLevel);
           }
-          renderGrammarContent(currentActiveLevel);
         })
         .catch(err => {
-          console.warn("Using built-in full extracted JS dataset:", err);
+          console.warn("API fetch failed, retaining full extracted JS dataset:", err);
           renderGrammarContent(currentActiveLevel);
         });
     }
