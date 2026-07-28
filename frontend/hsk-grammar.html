@@ -325,11 +325,16 @@
       <div style="display: flex; align-items: center; gap: 10px;">
         <span style="font-size: 0.85rem; font-weight: 700; color: #f59e0b;">Giọng Đọc Đang Chọn:</span>
         <select id="grammar-voice-select" onchange="localStorage.setItem('speech_voice', this.value)" style="background: #0f172a; border: 1.5px solid #3b82f6; color: #fff; padding: 8px 16px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; outline: none; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
-          <option value="baidu-female" selected>🇨🇳 Baidu Nữ (Giọng Bắc Kinh chuẩn)</option>
-          <option value="baidu-male">🇨🇳 Baidu Nam (Giọng Chuẩn)</option>
-          <option value="elevenlabs-adam">✨ ElevenLabs AI - Adam (Giọng Nam VIP)</option>
-          <option value="elevenlabs-bella">✨ ElevenLabs AI - Bella (Giọng Nữ VIP)</option>
+          <option value="elevenlabs-adam">✨ ElevenLabs AI - Adam (Giọng Nam Trầm Ấm)</option>
+          <option value="elevenlabs-bella">✨ ElevenLabs AI - Bella (Giọng Nữ Nhẹ Nhàng)</option>
           <option value="elevenlabs-jessica">✨ ElevenLabs AI - Jessica (Giọng Nữ Ngọt Ngào)</option>
+          <option value="elevenlabs-antoni">✨ ElevenLabs AI - Antoni (Giọng Nam Truyền Cảm)</option>
+          <option value="elevenlabs-arnold">✨ ElevenLabs AI - Arnold (Giọng Nam Mạnh Mẽ)</option>
+          <option value="elevenlabs-charlie">✨ ElevenLabs AI - Charlie (Giọng Nam Tự Nhiên)</option>
+          <option value="elevenlabs-george">✨ ElevenLabs AI - George (Giọng Nam Sang Trọng)</option>
+          <option value="elevenlabs-laura">✨ ElevenLabs AI - Laura (Giọng Nữ Ấm Áp)</option>
+          <option value="baidu-female">🇨🇳 Baidu Nữ (Giọng Bắc Kinh chuẩn)</option>
+          <option value="baidu-male">🇨🇳 Google/Baidu Nam (Giọng Nam Chuẩn)</option>
         </select>
       </div>
     </div>
@@ -411,6 +416,11 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      const savedVoice = localStorage.getItem('speech_voice');
+      const voiceSelect = document.getElementById('grammar-voice-select');
+      if (savedVoice && voiceSelect) {
+        voiceSelect.value = savedVoice;
+      }
       initBuiltInGrammar();
       renderGrammarContent(currentActiveLevel);
       fetchGrammarData();
