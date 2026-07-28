@@ -412,31 +412,7 @@
           renderGrammarContent(currentActiveLevel);
         })
         .catch(err => {
-- 只有...才... (Chỉ có... mới...)`
-            },
-            'hsk5': {
-              id: 'hsk5',
-              level: 'HSK 5',
-              title: 'Ngữ Pháp HSK 5 Chi Tiết',
-              content: `1. Phân biệt từ ngữ đồng nghĩa HSK 5:
-- 毕竟 (bìjìng) vs 到底 (dàodǐ)
-- 逐渐 (zhújiàn) vs 逐步 (zhúbù)
-
-2. Cấu trúc giả định & nhượng bộ cao cấp:
-- 宁可...也不... (Thà... còn hơn...)
-- 与其...不如... (Thay vì... không bằng...)
-- 哪怕...也... (Cho dù... cũng...)`
-            },
-            'hsk6': {
-              id: 'hsk6',
-              level: 'HSK 6',
-              title: 'Ngữ Pháp HSK 6 Chi Tiết',
-              content: `1. Ngữ pháp thi đọc hiểu & viết văn HSK 6:
-- Cấu trúc câu phức hợp đỉnh cao HSK 6
-- Cách sửa lỗi sai trong câu (Sửa câu sai HSK 6)
-- Kỹ năng phân tích ngữ pháp trong bài đọc dài 1000 từ.`
-            }
-          };
+          console.warn("Using built-in full extracted JS dataset:", err);
           renderGrammarContent(currentActiveLevel);
         });
     }
