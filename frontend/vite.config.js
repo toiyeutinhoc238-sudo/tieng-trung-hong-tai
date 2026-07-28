@@ -18,7 +18,8 @@ export default defineConfig({
         detail: 'detail-list.html',
         history: 'chat-history.html',
         quiz: 'quiz-game.html',
-        lesson: 'lesson-online.html'
+        lesson: 'lesson-online.html',
+        rules: 'han-viet-rules.html'
       }
     }
   }
