@@ -5,12 +5,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tổng Hợp Ngữ Pháp Tiếng Trung HSK 1 - 6 | Hongtai Chinese</title>
+  <link rel="icon" type="image/png" href="./src/assets/logo.png">
 
   <!-- Google Fonts & FontAwesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Direct Embedded Extracted PDF Datasets -->
+  <script src="./grammar_hsk1.js"></script>
+  <script src="./grammar_hsk2.js"></script>
+  <script src="./grammar_hsk3.js"></script>
+  <script src="./grammar_hsk4.js"></script>
+  <script src="./grammar_hsk5.js"></script>
+  <script src="./grammar_hsk6.js"></script>
 
   <style>
     :root {
@@ -60,6 +69,18 @@
       border-radius: 20px;
       margin-bottom: 24px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-logo-img {
+      height: 48px;
+      width: auto;
+      object-fit: contain;
     }
 
     .title-group h1 {
@@ -266,13 +287,17 @@
 
     <!-- Header -->
     <div class="grammar-header">
-      <div class="title-group">
-        <h1><i class="fa-solid fa-book-open-reader"></i> Chuyên Trang Ngữ Pháp HSK (HSK 1 đến HSK 6)</h1>
-        <p>Hệ thống tra cứu, tổng hợp lý thuyết ngữ pháp toàn diện bóc tách từ bộ tài liệu chuẩn thi HSK</p>
+      <div class="brand-box">
+        <img class="brand-logo-img" src="./src/assets/logo.png" alt="Tiếng Trung Hongtai Logo">
+        <div class="title-group">
+          <h1>Chuyên Trang Ngữ Pháp HSK (HSK 1 đến HSK 6)</h1>
+          <p>Hệ thống tra cứu, tổng hợp lý thuyết ngữ pháp toàn diện bóc tách từ bộ tài liệu chuẩn thi HSK</p>
+        </div>
       </div>
       <div>
         <button class="btn-close" onclick="window.close()"><i class="fa-solid fa-xmark"></i> Đóng Cửa Sổ</button>
       </div>
+    </div>
     </div>
 
     <!-- Search & Filter Controls -->
@@ -354,15 +379,6 @@
     </div>
 
   </div>
-
-  <!-- Load 100% Full Extracted PDF Dataset Scripts -->
-  <script src="./grammar_hsk1.js"></script>
-  <script src="./grammar_hsk2.js"></script>
-  <script src="./grammar_hsk3.js"></script>
-  <script src="./grammar_hsk4.js"></script>
-  <script src="./grammar_hsk5.js"></script>
-  <script src="./grammar_hsk6.js"></script>
-
   <script>
     let allGrammarData = {};
     let currentActiveLevel = 'hsk1';
