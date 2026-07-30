@@ -1793,7 +1793,7 @@ function setupEventListeners() {
           const uObj = JSON.parse(uStr);
           if (uObj && uObj.email) userEmail = uObj.email;
         }
-      } catch(e) {}
+      } catch (e) { }
 
       const token = localStorage.getItem('session_token');
       if (!token && !userEmail && !currentUser) {
@@ -1806,7 +1806,7 @@ function setupEventListeners() {
       let localHistory = [];
       try {
         localHistory = JSON.parse(localStorage.getItem(localKey) || '[]');
-      } catch(e) {}
+      } catch (e) { }
 
       const fetchUrl = activeEmail
         ? `${API_BASE_URL}/api/user/game-history?email=${encodeURIComponent(activeEmail)}`
@@ -3136,7 +3136,7 @@ function renderGamifiedRoadmapPath() {
 }
 
 window.renderGamifiedRoadmapPath = renderGamifiedRoadmapPath;
-window.goToRoadmapLevel = function(ver, level) {
+window.goToRoadmapLevel = function (ver, level) {
   if (window.setHskVersion) {
     window.setHskVersion(ver);
   }
@@ -3145,7 +3145,7 @@ window.goToRoadmapLevel = function(ver, level) {
   }
   switchTab('lessons');
 };
-window.setRoadmapVersion = function(ver) {
+window.setRoadmapVersion = function (ver) {
   activeRoadmapVersion = ver;
   document.querySelectorAll('.roadmap-ver-pill').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.ver === ver);
@@ -6427,14 +6427,14 @@ function renderSubdecksList() {
   }
   else if (activeSmartTopic === 'hsk') {
     if (activeHskVersion === 'yct') {
-      title.textContent = 'Danh sách Từ vựng YCT Thiếu Nhi';
+      title.textContent = 'Danh sách Từ vựng YCT (Thiếu Nhi)';
       for (let lvl = 1; lvl <= 4; lvl++) {
         const lvlWords = vocabList.filter(w => (w.curriculum === 'yct' || w.hskVersion === 'yct') && matchLevel(w.level, lvl));
         grid.appendChild(createSubdeckCard(`YCT Cấp ${lvl}`, `yct:${lvl}`, lvlWords.length, 'fa-child', 'var(--accent-teal)'));
       }
     } else {
-      title.textContent = `Danh sách Từ vựng HSK & YCT (${activeHskVersion})`;
-      const maxLvl = activeHskVersion === '3.0' ? 6 : 6;
+      title.textContent = `Danh sách Từ vựng HSK ${activeHskVersion}`;
+      const maxLvl = 6;
       for (let lvl = 1; lvl <= maxLvl; lvl++) {
         const lvlWords = vocabList.filter(w => !w.isCustom && matchLevel(w.level, lvl) && (w.hskVersion || '3.0') === activeHskVersion);
         grid.appendChild(createSubdeckCard(`HSK Cấp ${lvl}`, `hsk:${lvl}`, lvlWords.length, 'fa-graduation-cap', 'var(--success)'));
@@ -6442,12 +6442,6 @@ function renderSubdecksList() {
       if (activeHskVersion === '3.0') {
         const hsk79Words = vocabList.filter(w => !w.isCustom && matchLevel(w.level, '7-9') && (w.hskVersion || '3.0') === activeHskVersion);
         grid.appendChild(createSubdeckCard(`HSK Cấp 7-8-9 (Cao cấp)`, `hsk:7-9`, hsk79Words.length, 'fa-award', '#a855f7'));
-      }
-
-      // Luôn hiển thị thêm 4 thẻ YCT Thiếu Nhi ở dưới cùng để người học bấm chọn trực tiếp!
-      for (let lvl = 1; lvl <= 4; lvl++) {
-        const lvlWords = vocabList.filter(w => (w.curriculum === 'yct' || w.hskVersion === 'yct') && matchLevel(w.level, lvl));
-        grid.appendChild(createSubdeckCard(`YCT Cấp ${lvl} (Thiếu Nhi)`, `yct:${lvl}`, lvlWords.length, 'fa-child', 'var(--accent-teal)'));
       }
     }
   }

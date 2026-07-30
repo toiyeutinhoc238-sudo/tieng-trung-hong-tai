@@ -370,11 +370,39 @@
       }
 
       // Initialize dropdown selections
+      function syncDetailLevelSelectOptions() {
+        const levelSelect = document.getElementById('detail-level-select');
+        if (!levelSelect) return;
+        const opt79 = levelSelect.querySelector('option[value="7-9"]');
+        if (activeHskVersion === '2.0') {
+          if (opt79) {
+            window._detailOpt79 = opt79;
+            opt79.remove();
+          }
+          if (activeLevel === '7-9') {
+            activeLevel = 'all';
+            levelSelect.value = 'all';
+          }
+        } else {
+          if (!opt79) {
+            if (!window._detailOpt79) {
+              const opt = document.createElement('option');
+              opt.value = '7-9';
+              opt.textContent = 'Cấp độ: HSK 7-8-9 (Cao cấp)';
+              window._detailOpt79 = opt;
+            }
+            levelSelect.appendChild(window._detailOpt79);
+          }
+        }
+      }
+
       const versionSelect = document.getElementById('detail-version-select');
       if (versionSelect) {
         versionSelect.value = activeHskVersion;
+        syncDetailLevelSelectOptions();
         versionSelect.addEventListener('change', (e) => {
           activeHskVersion = e.target.value;
+          syncDetailLevelSelectOptions();
           applyFilters();
         });
       }
