@@ -1352,22 +1352,22 @@
       const showMeaning = meaningCheck ? meaningCheck.checked : true;
 
       const COLS = 12;
-      const BOX = ROWS > 7 ? 46 : (ROWS === 7 ? 48 : 52);
+      const BOX = ROWS > 7 ? 48 : (ROWS === 7 ? 52 : 56.5);
 
       function mizigeCell(size, innerHtml = '') {
-        const h = size, w = size;
+        const h = Math.round(size), w = size;
         return `<div style="
-          width:${w}px; height:${h}px; min-width:${w}px; min-height:${h}px;
+          flex:1; height:${h}px; min-height:${h}px;
           border-right:1px solid #22c55e;
           border-bottom:1px solid #22c55e;
           position:relative; display:flex; align-items:center; justify-content:center;
-          background:#fff; box-sizing:border-box; flex-shrink:0; overflow:hidden;
+          background:#fff; box-sizing:border-box; overflow:hidden;
         ">
-          <svg width="${w}" height="${h}" style="position:absolute;top:0;left:0;" viewBox="0 0 ${w} ${h}">
-            <line x1="0" y1="${h/2}" x2="${w}" y2="${h/2}" stroke="#86efac" stroke-width="0.7" stroke-dasharray="3,2"/>
-            <line x1="${w/2}" y1="0" x2="${w/2}" y2="${h}" stroke="#86efac" stroke-width="0.7" stroke-dasharray="3,2"/>
-            <line x1="0" y1="0" x2="${w}" y2="${h}" stroke="#bbf7d0" stroke-width="0.55" stroke-dasharray="2,3"/>
-            <line x1="${w}" y1="0" x2="0" y2="${h}" stroke="#bbf7d0" stroke-width="0.55" stroke-dasharray="2,3"/>
+          <svg width="100%" height="100%" style="position:absolute;top:0;left:0;" viewBox="0 0 ${h} ${h}" preserveAspectRatio="none">
+            <line x1="0" y1="${h/2}" x2="${h}" y2="${h/2}" stroke="#86efac" stroke-width="0.7" stroke-dasharray="3,2"/>
+            <line x1="${h/2}" y1="0" x2="${h/2}" y2="${h}" stroke="#86efac" stroke-width="0.7" stroke-dasharray="3,2"/>
+            <line x1="0" y1="0" x2="${h}" y2="${h}" stroke="#bbf7d0" stroke-width="0.55" stroke-dasharray="2,3"/>
+            <line x1="${h}" y1="0" x2="0" y2="${h}" stroke="#bbf7d0" stroke-width="0.55" stroke-dasharray="2,3"/>
           </svg>
           ${innerHtml}
         </div>`;
@@ -1407,12 +1407,12 @@
 
       const strokeSequenceContainerId = 'stroke-order-sequence-box';
 
-      // Khung thông tin từ vựng (Bao gồm dãy nét bút thuận bút chuẩn, không có chữ chú thích thừa)
+      // Khung thông tin từ vựng (rộng 100% khớp hoàn toàn với khối lưới bên dưới)
       const infoBox = `
         <div style="
           border:2px solid #22c55e; border-radius:8px;
           padding:12px 18px; margin-bottom:12px;
-          background:#fff;
+          background:#fff; width:100%; box-sizing:border-box;
         ">
           <!-- Hàng 1: Từ vựng + Pinyin + Dịch nghĩa + Cấp độ -->
           <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:8px; border-bottom:1px dashed #dcfce7;">
@@ -1438,7 +1438,7 @@
           </div>
         </div>`;
 
-      // Khối luyện viết chữ
+      // Khối luyện viết chữ (rộng 100% bằng khung thông tin phía trên)
       const practiceBlock = `
         <div style="
           display:inline-flex;
@@ -1447,6 +1447,7 @@
           border-radius:6px;
           overflow:hidden;
           box-sizing:border-box;
+          width:100%;
         ">
           ${allRows}
         </div>`;
