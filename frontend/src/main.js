@@ -6166,18 +6166,21 @@ window.openZubiStatDetail = function (type) {
   } else if (type === 'enrolled') {
     const activeVocabs = vocabList.filter(w => !w.isCustom);
 
-    // Group lessons dynamically
+    // Group lessons dynamically (Thống nhất 100% key với Dashboard)
     const hsk3Lessons = new Set();
     const hsk2Lessons = new Set();
     const yctLessons = new Set();
 
     activeVocabs.forEach(w => {
-      if (!w.lessonId) return;
-      const isY = (w.curriculum || '').toString().toLowerCase().includes('yct') || (w.hskVersion || '').toString().toLowerCase().includes('yct');
-      const isHsk2 = !isY && (w.hskVersion === '2.0' || w.hskVersion === 2);
-      const isHsk3 = !isY && (w.hskVersion === '3.0' || w.hskVersion === 3 || !w.hskVersion);
+      if (!w.level || !w.lessonId) return;
+      const curr = w.curriculum || 'hsk';
+      const ver = w.hskVersion || '3.0';
+      const key = `${curr}_${ver}_${w.level}_${w.lessonId}`;
 
-      const key = `${w.level}_${w.lessonId}`;
+      const isY = curr.toString().toLowerCase().includes('yct') || ver.toString().toLowerCase().includes('yct');
+      const isHsk2 = !isY && (ver === '2.0' || ver === 2);
+      const isHsk3 = !isY && (ver === '3.0' || ver === 3 || !ver);
+
       if (isY) yctLessons.add(key);
       else if (isHsk2) hsk2Lessons.add(key);
       else if (isHsk3) hsk3Lessons.add(key);
