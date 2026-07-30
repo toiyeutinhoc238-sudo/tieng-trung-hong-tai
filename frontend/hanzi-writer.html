@@ -282,8 +282,14 @@
     }
 
     @media print {
-      body > *:not(#print-worksheet-modal) {
-        display: none !important;
+      body * {
+        visibility: hidden !important;
+      }
+      #print-worksheet-modal, 
+      #print-worksheet-modal *,
+      #print-worksheet-content-wrap, 
+      #print-worksheet-content-wrap * {
+        visibility: visible !important;
       }
       #print-worksheet-modal {
         position: absolute !important;
@@ -292,16 +298,26 @@
         width: 100% !important;
         height: auto !important;
         background: #ffffff !important;
+        color: #000000 !important;
+        display: block !important;
         padding: 0 !important;
         margin: 0 !important;
-        display: block !important;
+        z-index: 999999 !important;
       }
       #print-worksheet-content-wrap {
-        padding: 0 !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
         background: #ffffff !important;
+        color: #000000 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: visible !important;
       }
       .no-print {
         display: none !important;
+        visibility: hidden !important;
       }
     }
 
