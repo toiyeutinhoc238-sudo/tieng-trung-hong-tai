@@ -5885,7 +5885,7 @@ function renderZubiDashboardTableAndRecent() {
       }
 
       rowsHtml += `
-        <tr style="cursor: pointer; transition: background 0.15s ease;" onclick="window.selectCurriculumAndGo('${tier.curriculumType}', ${tier.level})" onmouseover="this.style.background='rgba(59,130,246,0.08)'" onmouseout="this.style.background='transparent'">
+        <tr style="cursor: pointer; transition: background 0.15s ease;" onclick="window.selectCurriculumAndGo('${tier.curriculumType}', '${tier.level}')" onmouseover="this.style.background='rgba(59,130,246,0.08)'" onmouseout="this.style.background='transparent'">
           <td class="zubi-td" style="padding: 16px;"><strong class="zubi-td-bold">${tier.name}</strong></td>
           <td class="zubi-td" style="padding: 16px;">${tier.curriculum}</td>
           <td class="zubi-td" style="padding: 16px;">${total.toLocaleString()} từ vựng</td>
@@ -5896,7 +5896,7 @@ function renderZubiDashboardTableAndRecent() {
           </td>
           <td class="zubi-td" style="padding: 16px;">${badgeHtml}</td>
           <td class="zubi-td" style="padding: 16px;">
-            <button class="zubi-table-btn" style="background: rgba(59,130,246,0.15); color: #3b82f6; border: 1px solid rgba(59,130,246,0.3); padding: 6px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;" onclick="event.stopPropagation(); window.selectCurriculumAndGo('${tier.curriculumType}', ${tier.level})">Vào học <i class="fa-solid fa-arrow-right"></i></button>
+            <button class="zubi-table-btn" style="background: rgba(59,130,246,0.15); color: #3b82f6; border: 1px solid rgba(59,130,246,0.3); padding: 6px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;" onclick="event.stopPropagation(); window.selectCurriculumAndGo('${tier.curriculumType}', '${tier.level}')">Vào học <i class="fa-solid fa-arrow-right"></i></button>
           </td>
         </tr>
       `;
@@ -5916,7 +5916,7 @@ function renderZubiDashboardTableAndRecent() {
 
     let cardsHtml = '';
     recentLessons.forEach(les => {
-      const lesWords = builtInVocabs.filter(w => (les.curr === 'yct' ? (w.curriculum === 'yct' || w.hskVersion === 'yct') : ((w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === les.level.toString())));
+      const lesWords = builtInVocabs.filter(w => (les.curr === 'yct' ? (w.curriculum === 'yct' || w.hskVersion === 'yct') : ((w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, les.level))));
       const count = lesWords.length;
       const memorized = lesWords.filter(w => w.isMemorized).length;
       const pct = count > 0 ? Math.round((memorized / count) * 100) : 0;
@@ -5932,10 +5932,10 @@ function renderZubiDashboardTableAndRecent() {
       }
 
       cardsHtml += `
-        <div class="zubi-recent-card" style="background: rgba(30, 41, 59, 0.9); border-radius: 16px; padding: 20px 22px; box-shadow: 0 4px 16px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; gap: 14px; cursor: pointer;" onclick="window.selectCurriculumAndGo('${les.curr}', ${les.level})">
+        <div class="zubi-recent-card" style="background: rgba(30, 41, 59, 0.9); border-radius: 16px; padding: 20px 22px; box-shadow: 0 4px 16px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; gap: 14px; cursor: pointer;" onclick="window.selectCurriculumAndGo('${les.curr}', '${les.level}')">
           <div class="recent-card-top" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
             <div class="recent-title" style="font-weight: 700; font-size: 0.95rem; color: #f8fafc; line-height: 1.3;">${les.name}</div>
-            <i class="fa-regular fa-eye zubi-eye-icon" style="color: #94a3b8; font-size: 1rem; cursor: pointer;" title="Chi tiết bài học này" onclick="event.stopPropagation(); window.openZubiRecentLessonDetail('${les.curr}', ${les.level})"></i>
+            <i class="fa-regular fa-eye zubi-eye-icon" style="color: #94a3b8; font-size: 1rem; cursor: pointer;" title="Chi tiết bài học này" onclick="event.stopPropagation(); window.openZubiRecentLessonDetail('${les.curr}', '${les.level}')"></i>
           </div>
           <div class="recent-val green-text" style="font-family: var(--font-display, sans-serif); font-size: 1.6rem; font-weight: 800; color: #10b981;">${count.toLocaleString()} từ vựng</div>
           <div class="recent-card-footer" style="display: flex; justify-content: space-between; align-items: center;">
@@ -5992,7 +5992,7 @@ window.openZubiRecentLessonDetail = function (curr, level) {
   if (!modal || !bodyEl) return;
 
   const builtIn = vocabList.filter(w => !w.isCustom);
-  const lesWords = builtIn.filter(w => (curr === 'yct' ? (w.curriculum === 'yct' || w.hskVersion === 'yct') : ((w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === level.toString())));
+  const lesWords = builtIn.filter(w => (curr === 'yct' ? (w.curriculum === 'yct' || w.hskVersion === 'yct') : ((w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, level))));
   const total = lesWords.length;
   const memorized = lesWords.filter(w => w.isMemorized).length;
   const pct = total > 0 ? Math.round((memorized / total) * 100) : 0;
@@ -6010,7 +6010,7 @@ window.openZubiRecentLessonDetail = function (curr, level) {
         <span style="font-size: 0.8rem; text-transform: uppercase; color: #34d399; font-weight: 700;">Tiến độ hoàn thành cấp độ</span>
         <h2 style="font-size: 1.8rem; font-weight: 800; color: #ffffff; margin: 4px 0 0 0;">${memorized} / ${total.toLocaleString()} Từ (${pct}%)</h2>
       </div>
-      <button class="btn btn-primary" style="padding: 10px 20px; border-radius: 12px; font-weight: 700;" onclick="document.getElementById('zubi-stat-modal').style.display='none'; window.selectCurriculumAndGo('${curr}', ${level});">Vào học ngay</button>
+      <button class="btn btn-primary" style="padding: 10px 20px; border-radius: 12px; font-weight: 700;" onclick="document.getElementById('zubi-stat-modal').style.display='none'; window.selectCurriculumAndGo('${curr}', '${level}');">Vào học ngay</button>
     </div>
     <h4 style="color: #f8fafc; margin: 10px 0 4px 0; font-size: 1rem;">Mẫu từ vựng tiêu biểu trong cấp độ này:</h4>
     <div style="display: flex; flex-direction: column; gap: 8px; max-height: 240px; overflow-y: auto;">
