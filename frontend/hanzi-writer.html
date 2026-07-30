@@ -872,9 +872,12 @@
           <button class="action-btn" onclick="showStrokeHint()"><i class="fa-solid fa-lightbulb"></i> Gợi Ý Nét</button>
           <button class="action-btn" onclick="resetWriter()"><i class="fa-solid fa-rotate-left"></i> Xóa Viết Lại</button>
           <button class="action-btn" onclick="toggleOutline()"><i class="fa-solid fa-eye"></i> Bật/Tắt Nét Mờ</button>
-          <button class="action-btn" style="background: linear-gradient(135deg, #10b981, #059669); color:#fff; border:none; grid-column: span 2;" onclick="openPrintWorksheetModal()">
+          <button class="action-btn" style="background: linear-gradient(135deg, #10b981, #059669); color:#fff; border:none;" onclick="openPrintWorksheetModal()">
             <i class="fa-solid fa-print"></i> In Phiếu Tập Viết
           </button>
+          <a href="/grammar-files/giay viet tieng trung pho bien.pdf" target="_blank" download class="action-btn" style="background: rgba(239, 68, 68, 0.18); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
+            <i class="fa-solid fa-file-pdf"></i> Tải Giấy Mẫu
+          </a>
         </div>
 
         <!-- Status Alert Banner -->
@@ -1561,25 +1564,16 @@
         return;
       }
 
-      const contentHtml = printWrap.innerHTML;
-      
-      // Tạo một iframe ẩn chuyên dùng cho việc in ấn để không bị trình duyệt chặn popup
-      let printFrame = document.getElementById('silent-print-iframe');
-      if (!printFrame) {
-        printFrame = document.createElement('iframe');
-        printFrame.id = 'silent-print-iframe';
-        printFrame.style.position = 'fixed';
-        printFrame.style.right = '0';
-        printFrame.style.bottom = '0';
-        printFrame.style.width = '0';
-        printFrame.style.height = '0';
-        printFrame.style.border = '0';
-        document.body.appendChild(printFrame);
+      const printWindow = window.open('', '_blank', 'width=900,height=900');
+      if (!printWindow) {
+        window.print();
+        return;
       }
 
-      const frameDoc = printFrame.contentWindow.document;
-      frameDoc.open();
-      frameDoc.write(`
+      const contentHtml = printWrap.innerHTML;
+
+      printWindow.document.open();
+      printWindow.document.write(`
         <!DOCTYPE html>
         <html>
         <head>
@@ -1590,12 +1584,15 @@
               size: A4 portrait;
               margin: 8mm 10mm;
             }
-            * { box-sizing: border-box; }
+            * {
+              box-sizing: border-box;
+            }
             body {
-              font-family: 'Be Vietnam Pro', 'Segoe UI', sans-serif;
+              font-family: 'Be Vietnam Pro', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
               background: #ffffff !important;
               color: #000000 !important;
-              margin: 0; padding: 0;
+              margin: 0;
+              padding: 0;
               -webkit-print-color-adjust: exact !important;
               print-color-adjust: exact !important;
             }
@@ -1607,20 +1604,25 @@
               padding: 0 !important;
               margin: 0 !important;
             }
-            .no-print { display: none !important; }
+            .no-print {
+              display: none !important;
+            }
           </style>
         </head>
         <body>
           ${contentHtml}
+          <script>
+            window.onload = function() {
+              setTimeout(function() {
+                window.print();
+                window.close();
+              }, 300);
+            };
+          <\/script>
         </body>
         </html>
       `);
-      frameDoc.close();
-
-      setTimeout(function () {
-        printFrame.contentWindow.focus();
-        printFrame.contentWindow.print();
-      }, 250);
+      printWindow.document.close();
     };
 
     // Initialize Page
