@@ -441,66 +441,55 @@
         size: A4 portrait;
         margin: 0;
       }
-      html, body {
+      body {
         background: #ffffff !important;
         color: #000000 !important;
         margin: 0 !important;
         padding: 0 !important;
-        width: 100% !important;
-        height: auto !important;
-        overflow: visible !important;
       }
-      /* Ẩn các phần tử rác ngoài phiếu in */
-      header, nav, .app-header, .main-workspace, .no-print {
+      /* Ẩn tất cả các phần tử trên trang ngoại trừ modal in */
+      body > *:not(#print-worksheet-modal) {
         display: none !important;
       }
-      /* Cấu hình hiển thị tuyệt đối cho modal và phiếu in */
+      /* Cấu hình để hiển thị duy nhất tờ giấy in, bỏ hết các khung modal rác */
       #print-worksheet-modal {
-        position: static !important;
         display: block !important;
-        visibility: visible !important;
+        position: static !important;
         width: 100% !important;
         height: auto !important;
-        background: #ffffff !important;
-        color: #000000 !important;
+        background: transparent !important;
         padding: 0 !important;
         margin: 0 !important;
         box-shadow: none !important;
         border: none !important;
-        overflow: visible !important;
       }
       #print-worksheet-modal > div {
-        background: #ffffff !important;
+        background: transparent !important;
         border: none !important;
         box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
         max-width: 100% !important;
         width: 100% !important;
-        height: auto !important;
-        max-height: none !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        overflow: visible !important;
       }
       #print-worksheet-content-wrap {
-        background: #ffffff !important;
+        background: transparent !important;
         padding: 0 !important;
         margin: 0 !important;
-        overflow: visible !important;
-        display: block !important;
-        visibility: visible !important;
       }
+      .no-print {
+        display: none !important;
+      }
+      /* TỜ GIẤY IN DUY NHẤT */
       .print-page-area {
         box-shadow: none !important;
         border: none !important;
-        padding: 10mm 15mm !important;
+        padding: 8mm 12mm !important;
         margin: 0 auto !important;
         background: #ffffff !important;
         color: #000000 !important;
         display: block !important;
-        visibility: visible !important;
-      }
-      .print-page-area * {
-        visibility: visible !important;
+        width: 100% !important;
       }
     }
 
