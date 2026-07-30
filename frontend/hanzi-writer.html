@@ -1263,10 +1263,11 @@
     window.animateStrokes = function () {
       if (!writerInstance) return;
       writerInstance.cancelQuiz();
-      updateStatusBanner(`<i class="fa-solid fa-spinner fa-spin" style="color:#60a5fa;"></i> Đang chạy mô phỏng thuận bút chữ <strong>"${currentChar}"</strong>...`);
+      writerInstance.showCharacter();
+      updateStatusBanner(`<i class="fa-solid fa-spinner fa-spin" style="color:#60a5fa;"></i> Đang vẽ chữ <strong>"${currentChar}"</strong> từ đầu đến cuối...`);
       writerInstance.animateCharacter({
         onComplete: function () {
-          updateStatusBanner(`<i class="fa-solid fa-check" style="color:#10b981;"></i> Đã hoàn thành xem nét vẽ chữ <strong>"${currentChar}"</strong>!`);
+          updateStatusBanner(`<i class="fa-solid fa-check" style="color:#10b981;"></i> Đã vẽ xong chữ <strong>"${currentChar}"</strong>!`);
         }
       });
     };
@@ -1274,14 +1275,16 @@
     window.startWritingQuiz = function () {
       if (!writerInstance) return;
       writerInstance.cancelQuiz();
-      updateStatusBanner(`<i class="fa-solid fa-pen-nib" style="color:#f59e0b;"></i> Hãy vẽ nét chữ Hán <strong>"${currentChar}"</strong> trực tiếp lên bảng vẽ!`);
+      writerInstance.hideCharacter();
+      if (showOutlineFlag) writerInstance.showOutline();
+      updateStatusBanner(`<i class="fa-solid fa-pen-nib" style="color:#f59e0b;"></i> Chế độ tập viết: Hãy vẽ từng nét chữ <strong>"${currentChar}"</strong> trực tiếp lên ô Mễ Tự Cách!`);
 
       writerInstance.quiz({
         onCorrectStroke: function (strokeData) {
-          updateStatusBanner(`<i class="fa-solid fa-circle-check" style="color:#10b981;"></i> Nét vẽ chuẩn xác! Tiếp tục vẽ nét tiếp theo...`);
+          updateStatusBanner(`<i class="fa-solid fa-circle-check" style="color:#10b981;"></i> Vẽ đúng nét rồi! Tiếp tục vẽ nét tiếp theo...`);
         },
         onMistake: function (strokeData) {
-          updateStatusBanner(`<i class="fa-solid fa-circle-xmark" style="color:#ef4444;"></i> Sai thứ tự nét hoặc vẽ lệch. Hãy thử lại theo đường nét mờ!`);
+          updateStatusBanner(`<i class="fa-solid fa-circle-xmark" style="color:#ef4444;"></i> Vẽ sai nét hoặc sai thứ tự. Hãy nhìn nét gợi ý nhấp nháy để vẽ lại!`);
         },
         onComplete: function (summaryData) {
           speakZhText(currentChar);
@@ -1292,20 +1295,18 @@
 
     window.showStrokeHint = function () {
       if (!writerInstance) return;
-      writerInstance.cancelQuiz();
-      updateStatusBanner(`<i class="fa-solid fa-lightbulb" style="color:#f59e0b;"></i> Đang vẽ chi tiết từng nét từng bước theo thứ tự thuận bút chữ <strong>"${currentChar}"</strong>...`);
-      writerInstance.animateCharacter({
-        onComplete: function () {
-          updateStatusBanner(`<i class="fa-solid fa-circle-check" style="color:#10b981;"></i> Đã hoàn thành hướng dẫn từng nét thuận bút chữ <strong>"${currentChar}"</strong>! Bấm <strong>"Tự Tay Tập Viết"</strong> để thực hành.`);
-        }
-      });
+      // Nếu đang ở trong Quiz mode tập viết, nhấp nháy gợi ý nét tiếp theo
+      // Ngược lại, nhấp nháy nét đang cần vẽ
+      writerInstance.quiz();
+      writerInstance.showHint();
+      updateStatusBanner(`<i class="fa-solid fa-lightbulb" style="color:#f59e0b;"></i> Đã hiển thị gợi ý nhấp nháy nét bút tiếp theo cho chữ <strong>"${currentChar}"</strong>!`);
     };
 
     window.resetWriter = function () {
       if (!writerInstance) return;
       writerInstance.cancelQuiz();
       writerInstance.showCharacter();
-      updateStatusBanner(`<i class="fa-solid fa-arrow-rotate-right" style="color:#60a5fa;"></i> Đã xóa bảng vẽ. Bấm <strong>"Tự Tay Tập Viết"</strong> để viết lại.`);
+      updateStatusBanner(`<i class="fa-solid fa-arrow-rotate-right" style="color:#60a5fa;"></i> Đã làm mới bảng vẽ chữ <strong>"${currentChar}"</strong>.`);
     };
 
     window.toggleOutline = function () {
@@ -1313,10 +1314,10 @@
       showOutlineFlag = !showOutlineFlag;
       if (showOutlineFlag) {
         writerInstance.showOutline();
-        updateStatusBanner(`<i class="fa-solid fa-eye" style="color:#60a5fa;"></i> Đã bật hiển thị đường nét chữ mờ.`);
+        updateStatusBanner(`<i class="fa-solid fa-eye" style="color:#60a5fa;"></i> Đã BẬT nét chữ mờ mẫu.`);
       } else {
         writerInstance.hideOutline();
-        updateStatusBanner(`<i class="fa-solid fa-eye-slash" style="color:#94a3b8;"></i> Đã ẩn đường nét chữ mờ.`);
+        updateStatusBanner(`<i class="fa-solid fa-eye-slash" style="color:#94a3b8;"></i> Đã ẨN nét chữ mờ mẫu (thách thức tự nhớ nét).`);
       }
     };
 
