@@ -93,12 +93,32 @@
     }
     html.light-mode body, body.light-mode {
       --bg-dark: #f1f5f9;
-      --bg-card: rgba(255, 255, 255, 0.9);
+      --bg-card: #ffffff;
       --border-glass: rgba(0, 0, 0, 0.1);
       --text-main: #0f172a;
-      --text-sub: #475569;
+      --text-sub: #334155;
       background-color: #f1f5f9;
       color: #0f172a;
+    }
+    html.light-mode .voice-control-bar,
+    html.light-mode .phonetics-header,
+    html.light-mode .hub-card,
+    html.light-mode .reader-card,
+    html.light-mode .info-sub-card,
+    html.light-mode .char-detail-inspector,
+    html.light-mode .vd-box {
+      background: #ffffff !important;
+      border-color: #cbd5e1 !important;
+      color: #0f172a !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06) !important;
+    }
+    html.light-mode .info-sub-content,
+    html.light-mode .vd-pinyin,
+    html.light-mode [style*="color: #94a3b8"],
+    html.light-mode [style*="color:#94a3b8"],
+    html.light-mode [style*="color: #cbd5e1"],
+    html.light-mode [style*="color:#cbd5e1"] {
+      color: #334155 !important;
     }
     :root {
       --bg-dark: #0b0f19;

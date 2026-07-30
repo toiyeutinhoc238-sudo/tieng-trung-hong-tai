@@ -5794,3 +5794,67 @@ body {
   font-size: 0.85rem;
   cursor: pointer;
 }
+
+/* =======================================================
+   LIGHT MODE TOTAL FIX (Khắc phục lỗi mất chữ/chữ mờ ở chế độ Sáng)
+   ======================================================= */
+html.light-mode, body.light-mode, html.light {
+  --bg-primary: #f1f5f9;
+  --bg-secondary: #ffffff;
+  --bg-glass: rgba(255, 255, 255, 0.95);
+  --border-glass: rgba(0, 0, 0, 0.12);
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  color: #0f172a !important;
+}
+
+html.light-mode body, body.light-mode {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+/* Đảm bảo toàn bộ thẻ panel, card, modal ở chế độ sáng không bị chìm chữ */
+html.light-mode .glass-panel,
+html.light-mode .voice-control-bar,
+html.light-mode .zubi-stat-card,
+html.light-mode .info-sub-card,
+html.light-mode .group-block,
+html.light-mode .char-detail-inspector,
+html.light-mode .vd-box,
+html.light-mode .modal-content,
+html.light-mode .vocab-panel,
+html.light-mode .filter-section,
+html.light-mode .writing-workshop {
+  background: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Ép màu các tiêu đề, văn bản phụ rõ nét ở chế độ sáng */
+html.light-mode h1, html.light-mode h2, html.light-mode h3, html.light-mode h4,
+html.light-mode p, html.light-mode span, html.light-mode div, html.light-mode label {
+  color: inherit;
+}
+
+/* Đảm bảo màu chữ xám phụ ở chế độ sáng đủ độ tương phản */
+html.light-mode [style*="color: #94a3b8"],
+html.light-mode [style*="color:#94a3b8"],
+html.light-mode [style*="color: #cbd5e1"],
+html.light-mode [style*="color:#cbd5e1"],
+html.light-mode .text-secondary,
+html.light-mode .zubi-stat-label,
+html.light-mode .info-sub-content {
+  color: #475569 !important;
+}
+
+/* Các trường input / select trong chế độ sáng */
+html.light-mode input,
+html.light-mode select,
+html.light-mode textarea {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+
