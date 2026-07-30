@@ -72,9 +72,11 @@
       background: #fff;
       color: #333;
       border-radius: 20px;
-      padding: 30px;
+      padding: 26px 28px;
       width: 100%;
-      max-width: 480px;
+      max-width: 500px;
+      max-height: 92vh;
+      overflow-y: auto;
       text-align: center;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
     }
@@ -508,7 +510,11 @@
             <div class="mode-btn" data-mode="vi-zh">Tiếng Việt ➔ Hán</div>
             <div class="mode-btn" data-mode="zh-pinyin">Chữ Hán ➔ Pinyin</div>
             <div class="mode-btn" data-mode="pinyin-zh">Pinyin ➔ Hán</div>
-            <div class="mode-btn" data-mode="mix" style="grid-column: span 2;">Hỗn hợp ngẫu nhiên</div>
+            <div class="mode-btn" data-mode="pinyin-vi">Pinyin ➔ Việt</div>
+            <div class="mode-btn" data-mode="audio-zh"><i class="fa-solid fa-volume-high"></i> Nghe ➔ Chữ Hán</div>
+            <div class="mode-btn" data-mode="audio-vi"><i class="fa-solid fa-headphones"></i> Nghe ➔ Việt</div>
+            <div class="mode-btn" data-mode="audio-pinyin"><i class="fa-solid fa-ear-listen"></i> Nghe ➔ Pinyin</div>
+            <div class="mode-btn" data-mode="mix" style="grid-column: span 2;"><i class="fa-solid fa-bolt"></i> Hỗn hợp ngẫu nhiên</div>
           </div>
         </div>
 
@@ -917,7 +923,7 @@
 
       let mode = currentMode;
       if (mode === 'mix') {
-        const ms = ['zh-vi', 'vi-zh', 'zh-pinyin', 'pinyin-zh'];
+        const ms = ['zh-vi', 'vi-zh', 'zh-pinyin', 'pinyin-zh', 'pinyin-vi', 'audio-zh', 'audio-vi', 'audio-pinyin'];
         mode = ms[Math.floor(Math.random() * ms.length)];
       }
 
@@ -925,11 +931,11 @@
       function cleanOptionFormat(str, type) {
         if (!str) return '';
         let s = str.trim();
-        if (type === 'zh-vi') {
+        if (type === 'zh-vi' || type === 'pinyin-vi' || type === 'audio-vi') {
           // Remove trailing English inside parentheses and normalize
           s = s.replace(/\([a-zA-Z\s,.-]+\)/g, '').trim();
           return s;
-        } else if (type === 'zh-pinyin') {
+        } else if (type === 'zh-pinyin' || type === 'audio-pinyin') {
           s = s.replace(/[\[\]]/g, '').trim();
           return `[ ${s} ]`;
         }
@@ -941,10 +947,14 @@
       let rawAns = activeQ.meaning;
       qText.classList.remove('vi');
 
-      if (mode === 'zh-vi') { pPrompt = "Tìm nghĩa"; pQ = activeQ.word; rawAns = activeQ.meaning; }
+      if (mode === 'zh-vi') { pPrompt = "Tìm nghĩa Việt"; pQ = activeQ.word; rawAns = activeQ.meaning; }
       else if (mode === 'vi-zh') { pPrompt = "Tìm chữ Hán"; pQ = cleanOptionFormat(activeQ.meaning, 'zh-vi'); rawAns = activeQ.word; qText.classList.add('vi'); }
       else if (mode === 'zh-pinyin') { pPrompt = "Tìm Pinyin"; pQ = activeQ.word; rawAns = activeQ.pinyin; }
       else if (mode === 'pinyin-zh') { pPrompt = "Tìm chữ Hán"; pQ = `[ ${activeQ.pinyin.replace(/[\[\]]/g, '')} ]`; rawAns = activeQ.word; qText.classList.add('vi'); }
+      else if (mode === 'pinyin-vi') { pPrompt = "Tìm nghĩa Việt"; pQ = `[ ${activeQ.pinyin.replace(/[\[\]]/g, '')} ]`; rawAns = activeQ.meaning; qText.classList.add('vi'); }
+      else if (mode === 'audio-zh') { pPrompt = "🔊 Nghe âm ➔ Tìm chữ Hán"; pQ = "🔊 (Bấm loa để nghe lại)"; rawAns = activeQ.word; qText.classList.add('vi'); }
+      else if (mode === 'audio-vi') { pPrompt = "🎧 Nghe âm ➔ Tìm nghĩa Việt"; pQ = "🎧 (Bấm loa để nghe lại)"; rawAns = activeQ.meaning; qText.classList.add('vi'); }
+      else if (mode === 'audio-pinyin') { pPrompt = "👂 Nghe âm ➔ Tìm Pinyin"; pQ = "👂 (Bấm loa để nghe lại)"; rawAns = activeQ.pinyin; qText.classList.add('vi'); }
 
       const pAns = cleanOptionFormat(rawAns, mode);
       qType.textContent = pPrompt;
@@ -970,9 +980,9 @@
       const distOpts = [];
       for (const c of shuffle(candidates)) {
         let rawVal = '';
-        if (mode === 'zh-vi') rawVal = c.meaning;
-        else if (mode === 'vi-zh' || mode === 'pinyin-zh') rawVal = c.word;
-        else if (mode === 'zh-pinyin') rawVal = c.pinyin;
+        if (mode === 'zh-vi' || mode === 'pinyin-vi' || mode === 'audio-vi') rawVal = c.meaning;
+        else if (mode === 'vi-zh' || mode === 'pinyin-zh' || mode === 'audio-zh') rawVal = c.word;
+        else if (mode === 'zh-pinyin' || mode === 'audio-pinyin') rawVal = c.pinyin;
 
         const val = cleanOptionFormat(rawVal, mode);
         if (val && !seenAns.has(val)) {
