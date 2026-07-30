@@ -36,6 +36,35 @@
         document.documentElement.classList.remove('light', 'light-mode');
       }
     })();
+
+    window.toggleTheme = function() {
+      var isLight = document.documentElement.classList.contains('light-mode') || document.documentElement.classList.contains('light');
+      if (isLight) {
+        document.documentElement.classList.remove('light', 'light-mode');
+        document.documentElement.classList.add('dark');
+        if (document.body) document.body.classList.remove('light-mode');
+        localStorage.setItem('theme', 'dark');
+        updateToggleBtns(false);
+      } else {
+        document.documentElement.classList.add('light', 'light-mode');
+        document.documentElement.classList.remove('dark');
+        if (document.body) document.body.classList.add('light-mode');
+        localStorage.setItem('theme', 'light');
+        updateToggleBtns(true);
+      }
+    };
+
+    function updateToggleBtns(isLight) {
+      var btns = document.querySelectorAll('#theme-toggle, .theme-toggle-btn');
+      btns.forEach(function(btn) {
+        btn.innerHTML = isLight ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var isLight = document.documentElement.classList.contains('light-mode') || document.documentElement.classList.contains('light');
+      updateToggleBtns(isLight);
+    });
   </script>
 
   <style>
@@ -625,7 +654,10 @@
           <p>Tự tay tập viết từng nét chữ Hán chuẩn nét thuận bút trực tiếp trên bảng vẽ thông minh</p>
         </div>
       </div>
-      <div style="display: flex; gap: 8px;">
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <button id="theme-toggle" class="btn-close" onclick="window.toggleTheme()" title="Chuyển đổi Giao diện Sáng/Tối">
+          <i class="fa-solid fa-moon"></i>
+        </button>
         <a href="/index.html" class="btn-close" style="background: rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.3);">
           <i class="fa-solid fa-house"></i> Trang Chủ
         </a>
