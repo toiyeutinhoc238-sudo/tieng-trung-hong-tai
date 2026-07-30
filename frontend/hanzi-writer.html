@@ -437,42 +437,62 @@
     }
 
     @media print {
-      body * {
-        visibility: hidden !important;
+      @page {
+        size: A4 portrait;
+        margin: 10mm;
       }
-      #print-worksheet-modal, 
-      #print-worksheet-modal *,
-      #print-worksheet-content-wrap, 
-      #print-worksheet-content-wrap * {
+      html, body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        height: 100% !important;
+        overflow: hidden !important;
+      }
+      body * {
+        display: none !important;
+      }
+      #print-worksheet-modal,
+      #print-worksheet-modal * {
+        display: block !important;
         visibility: visible !important;
       }
       #print-worksheet-modal {
-        position: absolute !important;
+        position: fixed !important;
         top: 0 !important;
         left: 0 !important;
         width: 100% !important;
-        height: auto !important;
+        height: 100% !important;
         background: #ffffff !important;
         color: #000000 !important;
-        display: block !important;
         padding: 0 !important;
         margin: 0 !important;
         z-index: 999999 !important;
+        overflow: hidden !important;
       }
-      #print-worksheet-content-wrap {
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        background: #ffffff !important;
-        color: #000000 !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        overflow: visible !important;
+      #print-worksheet-content-wrap,
+      #print-worksheet-content-wrap * {
+        display: block !important;
       }
-      .no-print {
+      .print-page-area,
+      .print-page-area * {
+        display: block !important;
+      }
+      .print-page-area span,
+      .print-page-area i,
+      .print-page-area path,
+      .print-page-area line,
+      .print-page-area svg {
+        display: inline-block !important;
+      }
+      #stroke-steps-list,
+      #stroke-steps-list * {
+        display: flex !important;
+      }
+      .no-print,
+      .btn-close,
+      button {
         display: none !important;
-        visibility: hidden !important;
       }
     }
 
@@ -1271,8 +1291,8 @@
       const todayStr = new Date().toLocaleDateString('vi-VN');
 
       const COLS = 12;
-      const ROWS = 7;
-      const BOX  = 58;
+      const ROWS = 6;
+      const BOX  = 52;
 
       // =======================================================
       // TẠO LƯỚI BẢNG LUYỆN VIẾT (MICICELL)
