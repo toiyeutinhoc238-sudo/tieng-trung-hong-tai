@@ -3052,7 +3052,8 @@ function renderGamifiedRoadmapPath() {
       { level: 3, name: 'HSK 3 (3.0)', desc: 'Sơ cấp 3 - 2,245 từ vựng hoàn thiện nền tảng', count: '2,245 từ', color: '#06b6d4' },
       { level: 4, name: 'HSK 4 (3.0)', desc: 'Trung cấp 4 - 3,245 từ vựng học thuật & đời sống', count: '3,245 từ', color: '#f59e0b' },
       { level: 5, name: 'HSK 5 (3.0)', desc: 'Trung cấp 5 - 4,316 từ vựng làm việc & công sở', count: '4,316 từ', color: '#ec4899' },
-      { level: 6, name: 'HSK 6 (3.0)', desc: 'Trung cấp 6 - 5,456 từ vựng cao cấp & học thuật', count: '5,456 từ', color: '#8b5cf6' }
+      { level: 6, name: 'HSK 6 (3.0)', desc: 'Trung cấp 6 - 5,456 từ vựng cao cấp & học thuật', count: '5,456 từ', color: '#8b5cf6' },
+      { level: '7-9', name: 'New HSK 7-9 (3.0)', desc: 'Cao cấp HSK 7-9 - 6,016 từ vựng chuyên sâu cho bậc Đại học & Chuyên gia', count: '6,016 từ', color: '#a855f7' }
     ];
   }
 
