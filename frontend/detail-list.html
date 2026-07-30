@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="vi" class="dark">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Danh Sách Chi Tiết Từ Vựng - Tiếng Trung Hongtai</title>
   <link rel="icon" type="image/png" href="./src/assets/logo.png">
 
@@ -16,10 +18,10 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch(() => {});
+        navigator.serviceWorker.register('/sw.js').catch(() => { });
       });
     }
-    (function() {
+    (function () {
       var t = localStorage.getItem('theme') || 'dark';
       if (t === 'light') {
         document.documentElement.classList.add('light-mode', 'light');
@@ -27,7 +29,7 @@
         if (document.body) {
           document.body.classList.add('light-mode');
         } else {
-          document.addEventListener('DOMContentLoaded', function() {
+          document.addEventListener('DOMContentLoaded', function () {
             document.body.classList.add('light-mode');
           });
         }
@@ -37,7 +39,7 @@
       }
     })();
 
-    window.toggleTheme = function() {
+    window.toggleTheme = function () {
       var isLight = document.documentElement.classList.contains('light-mode') || document.documentElement.classList.contains('light');
       if (isLight) {
         document.documentElement.classList.remove('light', 'light-mode');
@@ -56,28 +58,30 @@
 
     function updateToggleBtns(isLight) {
       var btns = document.querySelectorAll('#theme-toggle, .theme-toggle-btn, .theme-toggle-btn-top');
-      btns.forEach(function(btn) {
-        btn.innerHTML = isLight 
-          ? '<i class="fa-solid fa-moon" style="color:#d97706;"></i> <span class="theme-btn-text">Giao diện Tối</span>' 
+      btns.forEach(function (btn) {
+        btn.innerHTML = isLight
+          ? '<i class="fa-solid fa-moon" style="color:#d97706;"></i> <span class="theme-btn-text">Giao diện Tối</span>'
           : '<i class="fa-solid fa-sun" style="color:#f59e0b;"></i> <span class="theme-btn-text">Giao diện Sáng</span>';
       });
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       var isLight = document.documentElement.classList.contains('light-mode') || document.documentElement.classList.contains('light');
       updateToggleBtns(isLight);
     });
   </script>
-  
+
   <!-- Font and Stylesheets -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  
+
   <!-- Main Styling System -->
   <link rel="stylesheet" href="/src/style.css">
-  
+
   <style>
     .theme-toggle-btn-top {
       background: rgba(245, 158, 11, 0.15);
@@ -93,19 +97,68 @@
       gap: 8px;
       transition: all 0.2s ease;
     }
+
     .theme-toggle-btn-top:hover {
       background: #f59e0b;
       color: #000;
     }
-    html.light-mode .theme-toggle-btn-top, body.light-mode .theme-toggle-btn-top {
+
+    html.light-mode .theme-toggle-btn-top,
+    body.light-mode .theme-toggle-btn-top {
       background: #ffffff !important;
       border: 1px solid #cbd5e1 !important;
       color: #0f172a !important;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
     }
-    button, input, select, textarea {
+
+    /* High-contrast Light Mode overrides for detail-list.html */
+    html.light-mode body, body.light-mode {
+      background-color: #f1f5f9;
+      color: #0f172a;
+    }
+    html.light-mode .glass-panel, body.light-mode .glass-panel {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      color: #0f172a;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    }
+    html.light-mode h1, html.light-mode h2, html.light-mode h3,
+    body.light-mode h1, body.light-mode h2, body.light-mode h3 {
+      color: #0f172a !important;
+    }
+    html.light-mode p, body.light-mode p {
+      color: #334155 !important;
+    }
+    html.light-mode .filter-select, body.light-mode .filter-select,
+    html.light-mode #detail-search-input, body.light-mode #detail-search-input {
+      background: #ffffff !important;
+      color: #0f172a !important;
+      border-color: #cbd5e1 !important;
+    }
+    html.light-mode table, body.light-mode table {
+      color: #0f172a !important;
+    }
+    html.light-mode table thead tr, body.light-mode table thead tr {
+      background: #e2e8f0 !important;
+      color: #0f172a !important;
+    }
+    html.light-mode table td, body.light-mode table td {
+      border-bottom: 1px solid #e2e8f0 !important;
+      color: #0f172a !important;
+    }
+    html.light-mode .page-btn, body.light-mode .page-btn {
+      background: #ffffff;
+      border-color: #cbd5e1;
+      color: #0f172a;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
       font-family: inherit;
     }
+
     body {
       background-color: #0b0f19;
       color: #f3f4f6;
@@ -113,12 +166,12 @@
       min-height: 100vh;
       padding: 32px 16px;
     }
-    
+
     .container {
       max-width: 1200px;
       margin: 0 auto;
     }
-    
+
     .header-panel {
       display: flex;
       justify-content: space-between;
@@ -127,13 +180,13 @@
       flex-wrap: wrap;
       gap: 16px;
     }
-    
+
     .logo {
       display: flex;
       align-items: center;
       gap: 10px;
     }
-    
+
     .search-filter-row {
       display: flex;
       justify-content: space-between;
@@ -142,13 +195,13 @@
       margin-bottom: 20px;
       flex-wrap: wrap;
     }
-    
+
     .search-input-wrapper {
       position: relative;
       flex-grow: 1;
       max-width: 450px;
     }
-    
+
     .search-input-wrapper i {
       position: absolute;
       left: 14px;
@@ -156,7 +209,7 @@
       transform: translateY(-50%);
       color: var(--text-muted);
     }
-    
+
     .search-input-wrapper input {
       width: 100%;
       padding: 10px 14px 10px 40px;
@@ -168,18 +221,18 @@
       outline: none;
       transition: border-color 0.2s;
     }
-    
+
     .search-input-wrapper input:focus {
       border-color: var(--accent-blue);
     }
-    
+
     .active-filters-badges {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
       align-items: center;
     }
-    
+
     .filter-badge {
       background: rgba(59, 130, 246, 0.1);
       color: var(--accent-blue);
@@ -189,7 +242,7 @@
       font-weight: 600;
       border-radius: var(--radius-sm);
     }
-    
+
     /* Pagination styling */
     .pagination-container {
       display: flex;
@@ -199,21 +252,21 @@
       flex-wrap: wrap;
       gap: 16px;
     }
-    
+
     .pagination-info {
       font-size: 0.9rem;
       color: var(--text-secondary);
     }
-    
+
     .pagination-buttons {
       display: flex;
       gap: 6px;
     }
-    
+
     .page-btn {
       padding: 6px 12px;
       border: 1px solid var(--border-glass);
-      background: rgba(255,255,255,0.03);
+      background: rgba(255, 255, 255, 0.03);
       color: var(--text-secondary);
       border-radius: var(--radius-sm);
       cursor: pointer;
@@ -221,19 +274,19 @@
       font-size: 0.9rem;
       transition: all 0.2s;
     }
-    
+
     .page-btn:hover:not(:disabled) {
       border-color: var(--accent-blue);
       color: var(--text-primary);
       background: rgba(59, 130, 246, 0.05);
     }
-    
+
     .page-btn.active {
       background: var(--accent-blue);
       color: white;
       border-color: var(--accent-blue);
     }
-    
+
     .page-btn:disabled {
       opacity: 0.4;
       cursor: not-allowed;
@@ -256,7 +309,7 @@
       z-index: 1000;
       transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    
+
     .toast-popup.show {
       transform: translateX(-50%) translateY(0);
     }
@@ -287,40 +340,47 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container">
-    
+
     <!-- Top Header -->
     <div class="header-panel glass-panel" style="padding: 24px;">
       <div>
         <div class="logo">
           <img class="brand-logo-img" src="/src/assets/logo.png" alt="Tiếng Trung Hongtai Logo">
         </div>
-        <h1 style="font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; margin: 8px 0 2px 0;">Danh Sách Từ Vựng Đầy Đủ</h1>
-        <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0;">Trang học tập tập trung hiển thị toàn bộ từ vựng theo cấu hình lọc của bạn.</p>
+        <h1 style="font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; margin: 8px 0 2px 0;">Danh
+          Sách Từ Vựng Đầy Đủ</h1>
+        <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0;">Trang học tập tập trung hiển thị toàn bộ
+          từ vựng theo cấu hình lọc của bạn.</p>
       </div>
-      
+
       <div style="display: flex; gap: 8px; align-items: center;">
-        <button id="theme-toggle" class="theme-toggle-btn-top" onclick="window.toggleTheme()" title="Chuyển đổi Giao diện Sáng/Tối">
+        <button id="theme-toggle" class="theme-toggle-btn-top" onclick="window.toggleTheme()"
+          title="Chuyển đổi Giao diện Sáng/Tối">
           <i class="fa-solid fa-moon"></i> <span class="theme-btn-text">Giao diện Sáng/Tối</span>
         </button>
-        <button id="export-excel-btn" class="btn btn-secondary btn-sm" style="display: flex; align-items: center; gap: 6px; padding: 10px 16px; background: rgba(16, 185, 129, 0.15); color: var(--accent-teal); border: 1px solid rgba(16, 185, 129, 0.3);">
+        <button id="export-excel-btn" class="btn btn-secondary btn-sm"
+          style="display: flex; align-items: center; gap: 6px; padding: 10px 16px; background: rgba(16, 185, 129, 0.15); color: var(--accent-teal); border: 1px solid rgba(16, 185, 129, 0.3);">
           <i class="fa-solid fa-file-excel"></i> Xuất Excel
         </button>
-        <button onclick="window.close()" class="btn btn-primary btn-sm" style="display: flex; align-items: center; gap: 6px; padding: 10px 16px; background: var(--accent-blue); color: white;">
+        <button onclick="window.close()" class="btn btn-primary btn-sm"
+          style="display: flex; align-items: center; gap: 6px; padding: 10px 16px; background: var(--accent-blue); color: white;">
           Đóng cửa sổ
         </button>
       </div>
     </div>
-    
+
     <!-- Search and Active Filters -->
     <div class="glass-panel" style="padding: 24px; margin-bottom: 24px;">
-      <div class="search-filter-row" style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; width: 100%;">
+      <div class="search-filter-row"
+        style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; width: 100%;">
         <div class="search-input-wrapper" style="flex-grow: 1; max-width: 400px; position: relative;">
           <i class="fa-solid fa-magnifying-glass"></i>
           <input type="text" id="detail-search-input" placeholder="Tìm kiếm nhanh trong danh sách này...">
         </div>
-        
+
         <div class="filter-controls" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
           <select id="detail-version-select" class="filter-select">
             <option value="3.0">Phiên bản: HSK 3.0</option>
@@ -350,12 +410,15 @@
           <span id="badge-custom" class="filter-badge" style="display: none;">Sổ tay cá nhân</span>
         </div>
       </div>
-      
+
       <!-- Table View -->
-      <div class="filtered-words-table-wrapper" style="overflow-x: auto; border: 1px solid var(--border-glass); border-radius: var(--radius-md);">
-        <table class="custom-words-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem;">
+      <div class="filtered-words-table-wrapper"
+        style="overflow-x: auto; border: 1px solid var(--border-glass); border-radius: var(--radius-md);">
+        <table class="custom-words-table"
+          style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem;">
           <thead>
-            <tr style="border-bottom: 2px solid var(--border-glass); font-weight: 600; color: var(--text-muted); font-family: var(--font-display); background: rgba(0,0,0,0.25);">
+            <tr
+              style="border-bottom: 2px solid var(--border-glass); font-weight: 600; color: var(--text-muted); font-family: var(--font-display); background: rgba(0,0,0,0.25);">
               <th style="padding: 12px; width: 140px;">Chữ Hán</th>
               <th style="padding: 12px; width: 150px;">Pinyin</th>
               <th style="padding: 12px;">Nghĩa tiếng Việt</th>
@@ -366,14 +429,15 @@
           <tbody id="detail-words-table-rows">
             <tr>
               <td colspan="5" style="text-align: center; padding: 48px; color: var(--text-muted);">
-                <i class="fa-solid fa-spinner fa-spin" style="font-size: 1.5rem; margin-bottom: 12px; color: var(--accent-blue);"></i>
+                <i class="fa-solid fa-spinner fa-spin"
+                  style="font-size: 1.5rem; margin-bottom: 12px; color: var(--accent-blue);"></i>
                 <div>Đang tải dữ liệu từ vựng...</div>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-      
+
       <!-- Pagination -->
       <div class="pagination-container">
         <div class="pagination-info" id="pagination-info">
@@ -383,9 +447,9 @@
           <!-- Page buttons will go here -->
         </div>
       </div>
-      
+
     </div>
-    
+
   </div>
 
   <!-- Toast Notification element -->
@@ -396,16 +460,16 @@
     let vocabList = [];
     let filteredList = [];
     let currentUser = null;
-    
+
     // Pagination parameters
     const pageSize = 50;
     let currentPage = 1;
-    
+
     // Resolve dynamic API URL
     const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === ''
       ? 'http://localhost:5000'
       : 'https://tieng-trung-hong-tai.onrender.com';
-      
+
     // Auth headers builder
     function getAuthHeaders(customHeaders = {}) {
       const token = localStorage.getItem('session_token');
@@ -434,7 +498,7 @@
     let activeHskVersion = urlParams.get('hskVersion') || '3.0';
     const initialSearch = urlParams.get('search') || '';
     const customCategory = urlParams.get('customCategory') || '';
-    
+
     // Document DOM load event listener
     document.addEventListener('DOMContentLoaded', () => {
       // Set initial search input value
@@ -499,10 +563,10 @@
           applyFilters();
         });
       }
-      
+
       // Update custom filters badges UI
       updateFiltersBadges();
-      
+
       // Fetch vocabulary data
       fetchVocabulary();
 
@@ -558,16 +622,16 @@
 
       const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
-      
+
       const a = document.createElement('a');
       a.href = url;
-      
+
       let fileName = 'danh_sach_tu_vung';
       if (activeLevel !== 'all') fileName += `_hsk${activeLevel}`;
       fileName += `_v${activeHskVersion}`;
       if (activeStatus !== 'all') fileName += `_${activeStatus}`;
       fileName += '.csv';
-      
+
       a.download = fileName;
       document.body.appendChild(a);
       a.click();
@@ -599,14 +663,14 @@
         });
         if (!response.ok) throw new Error('Không thể tải từ vựng');
         vocabList = await response.json();
-        
+
         // Clean pinyin
         vocabList.forEach(w => {
           if (w.pinyin) {
             w.pinyin = cleanPinyinText(w.pinyin);
           }
         });
-        
+
         // Load guest progress if not logged in
         if (!currentUser) {
           const guestProgress = JSON.parse(localStorage.getItem('guest_progress') || '{}');
@@ -620,12 +684,12 @@
             };
           });
         }
-        
+
         applyFilters();
       } catch (err) {
         console.error('Fetch error:', err);
         showToast('Lỗi tải dữ liệu từ máy chủ. Đang thử dùng dữ liệu dự phòng...', true);
-        
+
         // Clean pinyin in fallback as well
         vocabList.forEach(w => {
           if (w.pinyin) {
@@ -667,7 +731,7 @@
 
     function applyFilters() {
       const searchVal = document.getElementById('detail-search-input').value.toLowerCase().trim();
-      
+
       filteredList = vocabList.filter(w => {
         // Custom category filter
         if (customCategory && (!w.isCustom || w.category !== customCategory)) {
@@ -678,19 +742,19 @@
         if (!w.isCustom && w.level !== 'premium' && (w.hskVersion || '3.0') !== activeHskVersion) {
           return false;
         }
-        
+
         // HSK Level filter
         if (activeLevel !== 'all' && !matchLevel(w.level, activeLevel)) {
           return false;
         }
-        
+
         // Status filter
         if (activeStatus === 'memorized' && !w.isMemorized) return false;
         if (activeStatus === 'unmemorized' && w.isMemorized) return false;
         if (activeStatus === 'starred' && !w.isStarred) return false;
         if (activeStatus === 'wrong' && !w.isWrong) return false;
         if (activeStatus === 'custom' && !w.isCustom) return false;
-        
+
         // Search filter
         if (searchVal) {
           const matchWord = w.word.includes(searchVal);
@@ -698,10 +762,10 @@
           const matchMeaning = w.meaning.toLowerCase().includes(searchVal);
           return matchWord || matchPinyin || matchMeaning;
         }
-        
+
         return true;
       });
-      
+
       currentPage = 1;
       renderTable();
     }
@@ -709,9 +773,9 @@
     function renderTable() {
       const tbody = document.getElementById('detail-words-table-rows');
       if (!tbody) return;
-      
+
       tbody.innerHTML = '';
-      
+
       if (filteredList.length === 0) {
         tbody.innerHTML = `
           <tr>
@@ -724,18 +788,18 @@
         document.getElementById('pagination-buttons').innerHTML = '';
         return;
       }
-      
+
       // Calculate pagination boundaries
       const totalWords = filteredList.length;
       const totalPages = Math.ceil(totalWords / pageSize);
       if (currentPage > totalPages) currentPage = totalPages;
       if (currentPage < 1) currentPage = 1;
-      
+
       const startIdx = (currentPage - 1) * pageSize;
       const endIdx = Math.min(startIdx + pageSize, totalWords);
-      
+
       const wordsToDisplay = filteredList.slice(startIdx, endIdx);
-      
+
       wordsToDisplay.forEach(w => {
         const tr = document.createElement('tr');
         tr.style.borderBottom = '1px solid var(--border-glass)';
@@ -760,13 +824,13 @@
         `;
         tbody.appendChild(tr);
       });
-      
+
       // Update pagination info
       document.getElementById('pagination-info').textContent = `Hiển thị ${startIdx + 1} - ${endIdx} trong tổng số ${totalWords} từ vựng`;
-      
+
       // Draw pagination buttons
       renderPaginationButtons(totalPages);
-      
+
       // Bind Speak Events
       tbody.querySelectorAll('.speak-row-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -775,7 +839,7 @@
           speakText(word);
         });
       });
-      
+
       // Bind Star Toggles
       tbody.querySelectorAll('.star-row-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -784,7 +848,7 @@
           toggleWordStarred(id, btn);
         });
       });
-      
+
       // Bind Check Toggles
       tbody.querySelectorAll('.check-row-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -798,9 +862,9 @@
     function renderPaginationButtons(totalPages) {
       const container = document.getElementById('pagination-buttons');
       if (!container) return;
-      
+
       container.innerHTML = '';
-      
+
       // Prev Button
       const prevBtn = document.createElement('button');
       prevBtn.className = 'page-btn';
@@ -811,12 +875,12 @@
         renderTable();
       });
       container.appendChild(prevBtn);
-      
+
       // Draw page numbers dynamically (max 5 page numbers)
       const range = 2;
       let startPage = Math.max(1, currentPage - range);
       let endPage = Math.min(totalPages, currentPage + range);
-      
+
       if (startPage > 1) {
         const firstBtn = document.createElement('button');
         firstBtn.className = 'page-btn';
@@ -826,7 +890,7 @@
           renderTable();
         });
         container.appendChild(firstBtn);
-        
+
         if (startPage > 2) {
           const dots = document.createElement('span');
           dots.textContent = '...';
@@ -836,7 +900,7 @@
           container.appendChild(dots);
         }
       }
-      
+
       for (let p = startPage; p <= endPage; p++) {
         const pageBtn = document.createElement('button');
         pageBtn.className = `page-btn ${p === currentPage ? 'active' : ''}`;
@@ -847,7 +911,7 @@
         });
         container.appendChild(pageBtn);
       }
-      
+
       if (endPage < totalPages) {
         if (endPage < totalPages - 1) {
           const dots = document.createElement('span');
@@ -857,7 +921,7 @@
           dots.style.color = 'var(--text-muted)';
           container.appendChild(dots);
         }
-        
+
         const lastBtn = document.createElement('button');
         lastBtn.className = 'page-btn';
         lastBtn.textContent = totalPages;
@@ -867,7 +931,7 @@
         });
         container.appendChild(lastBtn);
       }
-      
+
       // Next Button
       const nextBtn = document.createElement('button');
       nextBtn.className = 'page-btn';
@@ -907,7 +971,7 @@
           activeAudioElement.pause();
           activeAudioElement.currentTime = 0;
           activeAudioElement.src = '';
-        } catch (e) {}
+        } catch (e) { }
         activeAudioElement = null;
       }
 
@@ -938,8 +1002,8 @@
           silentAudio.play().then(() => {
             document.removeEventListener('touchstart', unlock);
             document.removeEventListener('click', unlock);
-          }).catch(() => {});
-        } catch (e) {}
+          }).catch(() => { });
+        } catch (e) { }
       };
       document.addEventListener('touchstart', unlock, { once: true });
       document.addEventListener('click', unlock, { once: true });
@@ -955,7 +1019,7 @@
     async function toggleWordMemorized(id, btn) {
       const idx = vocabList.findIndex(w => w.id === id);
       if (idx === -1) return;
-      
+
       const oldMemorized = vocabList[idx].isMemorized;
       const nextState = !oldMemorized;
 
@@ -963,7 +1027,7 @@
       vocabList[idx].isMemorized = nextState;
       applyFilters();
       showToast(nextState ? 'Đã thuộc từ này! 🎉' : 'Đã chuyển về danh sách cần ôn tập.');
-      
+
       if (!currentUser) {
         const guestProgress = JSON.parse(localStorage.getItem('guest_progress') || '{}');
         if (!guestProgress[id]) guestProgress[id] = {};
@@ -979,7 +1043,7 @@
           body: JSON.stringify({ id }),
           credentials: 'include'
         });
-        
+
         if (response.status === 401) {
           // Rollback local state
           vocabList[idx].isMemorized = oldMemorized;
@@ -989,7 +1053,7 @@
           localStorage.removeItem('session_token');
           currentUser = null;
           showToast('Phiên làm việc đã hết hạn. Đang chạy chế độ khách...', true);
-          
+
           const guestProgress = JSON.parse(localStorage.getItem('guest_progress') || '{}');
           if (!guestProgress[id]) guestProgress[id] = {};
           guestProgress[id].isMemorized = !oldMemorized;
@@ -1006,7 +1070,7 @@
       } catch (err) {
         console.error(err);
         showToast('Lỗi đồng bộ trạng thái!', true);
-        
+
         // Rollback state on error
         vocabList[idx].isMemorized = oldMemorized;
         applyFilters();
@@ -1016,7 +1080,7 @@
     async function toggleWordStarred(id, btn) {
       const idx = vocabList.findIndex(w => w.id === id);
       if (idx === -1) return;
-      
+
       const oldStarred = vocabList[idx].isStarred;
       const nextState = !oldStarred;
 
@@ -1024,7 +1088,7 @@
       vocabList[idx].isStarred = nextState;
       applyFilters();
       showToast(nextState ? 'Đã thêm vào yêu thích ⭐' : 'Đã bỏ yêu thích.');
-      
+
       if (!currentUser) {
         const guestProgress = JSON.parse(localStorage.getItem('guest_progress') || '{}');
         if (!guestProgress[id]) guestProgress[id] = {};
@@ -1040,7 +1104,7 @@
           body: JSON.stringify({ id }),
           credentials: 'include'
         });
-        
+
         if (response.status === 401) {
           // Rollback local state
           vocabList[idx].isStarred = oldStarred;
@@ -1086,4 +1150,5 @@
     }
   </script>
 </body>
+
 </html>
