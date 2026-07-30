@@ -1351,9 +1351,8 @@
       const showPinyin = pinyinCheck ? pinyinCheck.checked : true;
       const showMeaning = meaningCheck ? meaningCheck.checked : true;
 
-      const GRID_WIDTH = 680;
-      const CELL_SIZE = Math.floor(GRID_WIDTH / COLS); // 56px per cell
-      const FINAL_GRID_WIDTH = CELL_SIZE * COLS; // 672px
+      const COLS = 12;
+      const BOX = ROWS > 7 ? 44 : (ROWS === 7 ? 48 : 54);
 
       function mizigeCell(size, innerHtml = '') {
         const h = size, w = size;
@@ -1389,14 +1388,14 @@
           let inner = '';
           if (isTrace) {
             inner = `<span style="
-              font-size:${CELL_SIZE * 0.72}px;
+              font-size:${BOX * 0.72}px;
               font-family:'Kaiti','STKaiti','Noto Serif SC',serif;
               font-weight:normal; color:#111827; opacity:0.18;
               line-height:1; position:relative; z-index:2; pointer-events:none;
             ">${ch}</span>`;
           }
 
-          cells += mizigeCell(CELL_SIZE, inner);
+          cells += mizigeCell(BOX, inner);
         }
         return `<div style="display:flex;">${cells}</div>`;
       }
@@ -1408,13 +1407,13 @@
 
       const strokeSequenceContainerId = 'stroke-order-sequence-box';
 
-      // Khung thông tin từ vựng (rộng đúng bằng FINAL_GRID_WIDTH + 4px viền = 676px)
+      // Khung thông tin từ vựng (rộng vừa khít 652px khớp 100% với 12 ô vuông Mễ Tự Cách)
       const infoBox = `
         <div style="
           border:2px solid #22c55e; border-radius:8px;
           padding:12px 18px; margin-bottom:12px;
-          background:#fff; width:${FINAL_GRID_WIDTH + 4}px; box-sizing:border-box;
-          margin:0 auto;
+          background:#fff; width:${COLS * BOX + 4}px; box-sizing:border-box;
+          margin-left:auto; margin-right:auto;
         ">
           <!-- Hàng 1: Từ vựng + Pinyin + Dịch nghĩa + Cấp độ -->
           <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:8px; border-bottom:1px dashed #dcfce7;">
@@ -1440,7 +1439,7 @@
           </div>
         </div>`;
 
-      // Khối luyện viết chữ (rộng đúng bằng FINAL_GRID_WIDTH + 4px viền = 676px)
+      // Khối luyện viết chữ (ô vuông chuẩn 54px x 54px, tổng 652px)
       const practiceBlock = `
         <div style="
           display:inline-flex;
@@ -1449,24 +1448,22 @@
           border-radius:6px;
           overflow:hidden;
           box-sizing:border-box;
-          width:${FINAL_GRID_WIDTH + 4}px;
-          margin:0 auto;
+          width:${COLS * BOX + 4}px;
         ">
           ${allRows}
         </div>`;
 
-      // TOÀN BỘ PHIẾU IN (Rộng 740px vừa khít trang A4)
+      // TOÀN BỘ PHIẾU IN (Max width 710px vừa vặn 1 trang A4)
       container.innerHTML = `
         <div class="print-page-area" style="
           font-family:'Be Vietnam Pro','Segoe UI',sans-serif;
           padding:24px 28px;
           background:#fff; color:#000;
-          width:${FINAL_GRID_WIDTH + 60}px;
+          width:${COLS * BOX + 60}px;
           max-width:100%;
           margin:0 auto;
           box-shadow:0 4px 20px rgba(0,0,0,0.08);
           border-radius:12px;
-          box-sizing:border-box;
         ">
 
           <!-- HEADER -->
