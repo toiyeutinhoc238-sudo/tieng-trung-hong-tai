@@ -869,7 +869,7 @@ function renderDetailedStatsTable() {
     const starred = lvl79Words.filter(w => w.isStarred).length;
 
     rowsData.push({
-      name: `New HSK 7-9 (Cao cấp)`,
+      name: `HSK Cấp 7-8-9 (Cao cấp)`,
       total, memorized, unmemorized, starred
     });
   }
@@ -5863,7 +5863,7 @@ function renderZubiDashboardTableAndRecent() {
       { name: 'HSK Cấp 4 (Thượng / Hạ)', curriculum: 'HSK Chuẩn 2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '4'), curriculumType: 'hsk', level: 4 },
       { name: 'HSK Cấp 5 (Thượng / Hạ)', curriculum: 'HSK Chuẩn 2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '5'), curriculumType: 'hsk', level: 5 },
       { name: 'HSK Cấp 6 (Thượng / Hạ)', curriculum: 'HSK Chuẩn 2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '6'), curriculumType: 'hsk', level: 6 },
-      { name: 'New HSK 7-9 (Cao cấp)', curriculum: 'HSK 3.0 Chuyên nghiệp', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '7-9'), curriculumType: 'hsk', level: '7-9' },
+      { name: 'HSK Cấp 7-8-9 (Cao cấp)', curriculum: 'HSK 3.0 Chuyên nghiệp', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '7-9'), curriculumType: 'hsk', level: '7-9' },
       { name: 'YCT Cấp 1..4 (Thiếu nhi)', curriculum: 'Sắc màu YCT', filter: w => w.curriculum === 'yct' || w.hskVersion === 'yct', curriculumType: 'yct', level: 1 },
     ];
 
@@ -6413,7 +6413,7 @@ function renderSubdecksList() {
       }
       if (activeHskVersion === '3.0') {
         const hsk79Words = vocabList.filter(w => !w.isCustom && matchLevel(w.level, '7-9') && (w.hskVersion || '3.0') === activeHskVersion);
-        grid.appendChild(createSubdeckCard(`New HSK 7-9 (Cao cấp)`, `hsk:7-9`, hsk79Words.length, 'fa-award', '#a855f7'));
+        grid.appendChild(createSubdeckCard(`HSK Cấp 7-8-9 (Cao cấp)`, `hsk:7-9`, hsk79Words.length, 'fa-award', '#a855f7'));
       }
 
       // Luôn hiển thị thêm 4 thẻ YCT Thiếu Nhi ở dưới cùng để người học bấm chọn trực tiếp!
