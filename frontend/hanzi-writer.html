@@ -1249,53 +1249,13 @@
         drawingWidth: 16
       });
 
-      updateStatusBanner(`<i class="fa-solid fa-circle-check" style="color:#10b981;"></i> Đã tải chữ Hán <strong>"${char}"</strong> và dãy nét thuận bút!`);
+      updateStatusBanner(`<i class="fa-solid fa-spinner fa-spin" style="color:#60a5fa;"></i> Đang vẽ thuận bút chữ <strong>"${char}"</strong> từng nét...`);
+      writerInstance.animateCharacter({
+        onComplete: function () {
+          updateStatusBanner(`<i class="fa-solid fa-circle-check" style="color:#10b981;"></i> Đã hiển thị xong thứ tự vẽ nét thuận bút chữ <strong>"${char}"</strong>! Bấm <strong>"In Phiếu Tập Viết"</strong> để in phiếu bài tập.`);
+        }
+      });
 
-      // Tải và hiển thị Dãy Nét Bút Thuận Bút Từng Bước trên giao diện
-      const pageStepsContainer = document.getElementById('page-stroke-steps-list');
-      if (pageStepsContainer) {
-        pageStepsContainer.innerHTML = '<span style="font-size:0.8rem; color:#94a3b8;"><i class="fa-solid fa-spinner fa-spin"></i> Đang tải nét...</span>';
-        HanziWriter.loadCharacterData(char).then(charData => {
-          if (!charData || !charData.strokes) {
-            pageStepsContainer.innerHTML = '';
-            return;
-          }
-          let html = '';
-          const strokes = charData.strokes;
-          strokes.forEach((_, idx) => {
-            const stepNum = idx + 1;
-            const targetId = `page-step-svg-${char}-${stepNum}-${Math.random().toString(36).substring(2, 5)}`;
-            html += `
-              <div style="display:inline-flex; flex-direction:column; align-items:center; background:rgba(15,23,42,0.8); border:1px solid rgba(255,255,255,0.12); border-radius:8px; padding:6px 8px;">
-                <div id="${targetId}" style="width:38px; height:38px;"></div>
-                <span style="font-size:0.68rem; color:#64748b; font-weight:700; margin-top:2px;">Nét ${stepNum}</span>
-              </div>
-            `;
-          });
-          pageStepsContainer.innerHTML = html;
-
-          strokes.forEach((_, idx) => {
-            const stepNum = idx + 1;
-            const targetId = pageStepsContainer.querySelectorAll('[id^="page-step-svg-"]')[idx]?.id;
-            if (targetId) {
-              const w = HanziWriter.create(targetId, char, {
-                width: 38,
-                height: 38,
-                padding: 3,
-                showOutline: true,
-                strokeColor: '#000000',
-                outlineColor: '#cbd5e1',
-                showCharacter: false
-              });
-              w.showCharacter({
-                strokeNum: stepNum
-              });
-            }
-          });
-        }).catch(err => {
-          pageStepsContainer.innerHTML = '';
-        });
-      }
     };
 
     window.animateStrokes = function () {
