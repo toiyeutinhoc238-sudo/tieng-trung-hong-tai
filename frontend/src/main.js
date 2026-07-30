@@ -2919,9 +2919,25 @@ function switchTab(tabId) {
     setDisp(customSec, 'none');
     setDisp(examsSec, 'none');
     setDisp(lessonsSec, 'block');
+    const roadmapSec = document.getElementById('roadmap-view-section');
+    if (roadmapSec) roadmapSec.style.display = 'none';
 
     // Render lessons list
     renderLessonsList();
+  }
+  else if (tabId === 'roadmap') {
+    // Hide home elements
+    setDisp(homeViewSec, 'none');
+
+    // Show roadmap section
+    setDisp(flashcardSec, 'none');
+    setDisp(customSec, 'none');
+    setDisp(examsSec, 'none');
+    setDisp(lessonsSec, 'none');
+    const roadmapSec = document.getElementById('roadmap-view-section');
+    if (roadmapSec) roadmapSec.style.display = 'block';
+
+    renderGamifiedRoadmapPath();
   }
   else if (tabId === 'exams') {
     // Hide home elements
@@ -2999,10 +3015,120 @@ function showHomeView() {
 }
 
 function showRoadmapView() {
-  activeLessonsCurriculum = 'hsk';
-  switchTab('lessons');
+  switchTab('roadmap');
 }
 window.showRoadmapView = showRoadmapView;
+
+let activeRoadmapLevel = 1;
+let activeRoadmapVersion = '3.0';
+
+function renderGamifiedRoadmapPath() {
+  const container = document.getElementById('roadmap-path-nodes-container');
+  if (!container) return;
+
+  const currentLevel = activeRoadmapLevel || 1;
+  const hskVer = activeRoadmapVersion || '3.0';
+
+  let targetVocab = (vocabList || []).filter(w => {
+    if (!w) return false;
+    if (hskVer === 'yct') return isYct(w) && w.level == currentLevel;
+    return !isYct(w) && w.level == currentLevel && (hskVer === '3.0' ? (w.hskVersion === '3.0' || w.hskVersion === 3) : (w.hskVersion === '2.0' || w.hskVersion === 2 || !w.hskVersion));
+  });
+
+  const lessonMap = new Map();
+  targetVocab.forEach(w => {
+    if (w.lessonId) {
+      const lid = w.lessonId.toString();
+      if (!lessonMap.has(lid)) {
+        lessonMap.set(lid, {
+          lessonId: lid,
+          title: w.lessonTitle ? `Bài ${lid}: ${w.lessonTitle}` : `Bài ${lid}`,
+          count: 0
+        });
+      }
+      lessonMap.get(lid).count++;
+    }
+  });
+
+  const lessonsArray = Array.from(lessonMap.values()).sort((a, b) => parseInt(a.lessonId) - parseInt(b.lessonId));
+  if (lessonsArray.length === 0) {
+    for (let i = 1; i <= 15; i++) {
+      lessonsArray.push({ lessonId: i, title: `Bài ${i}: Từ Vựng HSK ${currentLevel}`, count: 12 });
+    }
+  }
+
+  let html = '';
+  const positions = ['pos-center', 'pos-left', 'pos-center', 'pos-right'];
+
+  lessonsArray.forEach((lsn, idx) => {
+    const isCompleted = idx < 3;
+    const isActive = idx === 3;
+    const isLocked = idx > 3;
+
+    const posClass = positions[idx % positions.length];
+    const statusBadge = isCompleted
+      ? `<span class="roadmap-badge done"><i class="fa-solid fa-circle-check"></i> Hoàn thành</span>`
+      : (isActive ? `<span class="roadmap-badge active-pulse"><i class="fa-solid fa-bolt"></i> Đang học</span>` : `<span class="roadmap-badge locked"><i class="fa-solid fa-lock"></i> Chưa mở</span>`);
+
+    const iconClass = isCompleted ? 'fa-check' : (isActive ? 'fa-book-open' : 'fa-lock');
+    const nodeState = isCompleted ? 'node-done' : (isActive ? 'node-active' : 'node-locked');
+
+    html += `
+      <div class="roadmap-node-item ${posClass} ${nodeState}">
+        <div class="node-icon-circle" onclick="window.open('/detail-list.html?level=${currentLevel}&lesson=${lsn.lessonId}', '_blank')">
+          <i class="fa-solid ${iconClass}"></i>
+          <span class="node-num">${lsn.lessonId}</span>
+        </div>
+
+        <div class="node-info-card">
+          <div class="node-card-top">
+            <span class="node-card-title">${lsn.title}</span>
+            ${statusBadge}
+          </div>
+          <div class="node-card-sub"><i class="fa-solid fa-layer-group"></i> ${lsn.count} từ vựng chuẩn</div>
+          <div class="node-card-actions">
+            <button class="btn-node-start" onclick="window.open('/detail-list.html?level=${currentLevel}&lesson=${lsn.lessonId}', '_blank')">
+              ${isCompleted ? 'Ôn Tập Lại' : (isActive ? 'Học Tiếp Bài Này <i class="fa-solid fa-play"></i>' : 'Xem Chi Tiết Bài')}
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    if ((idx + 1) % 5 === 0) {
+      html += `
+        <div class="roadmap-milestone-chest pos-center">
+          <div class="milestone-box" onclick="window.open('/quiz-game.html', '_blank')">
+            <div class="chest-icon"><i class="fa-solid fa-trophy"></i></div>
+            <div class="chest-info">
+              <div class="chest-title">🏆 THÁCH ĐẤU QUIZ - HSK ${currentLevel} CHẶNG ${Math.ceil((idx + 1) / 5)}</div>
+              <div class="chest-desc">Thi thử trắc nghiệm kiểm tra phản xạ ghi nhớ từ vựng</div>
+            </div>
+            <button class="btn-chest-play"><i class="fa-solid fa-gamepad"></i> Đấu Trường Quiz</button>
+          </div>
+        </div>
+      `;
+    }
+  });
+
+  container.innerHTML = html;
+}
+
+window.renderGamifiedRoadmapPath = renderGamifiedRoadmapPath;
+window.setRoadmapLevel = function(lvl) {
+  activeRoadmapLevel = lvl;
+  document.querySelectorAll('.roadmap-lvl-pill').forEach(btn => {
+    btn.classList.toggle('active', parseInt(btn.dataset.level) === lvl);
+  });
+  renderGamifiedRoadmapPath();
+};
+window.setRoadmapVersion = function(ver) {
+  activeRoadmapVersion = ver;
+  document.querySelectorAll('.roadmap-ver-pill').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.ver === ver);
+  });
+  renderGamifiedRoadmapPath();
+};
 
 function showExamsView() {
   switchTab('exams');
