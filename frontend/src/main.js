@@ -5857,12 +5857,13 @@ function renderZubiDashboardTableAndRecent() {
   // 1. Dynamic Overview Table Rows
   if (tableBody) {
     const tiers = [
-      { name: 'HSK Cấp 1', curriculum: 'HSK Chuẩn (v2.0 & v3.0)', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === '1', curriculumType: 'hsk', level: 1 },
-      { name: 'HSK Cấp 2', curriculum: 'HSK Chuẩn (v2.0 & v3.0)', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === '2', curriculumType: 'hsk', level: 2 },
-      { name: 'HSK Cấp 3', curriculum: 'HSK Chuẩn (v2.0 & v3.0)', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === '3', curriculumType: 'hsk', level: 3 },
-      { name: 'HSK Cấp 4 (Thượng / Hạ)', curriculum: 'HSK Chuẩn 2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === '4', curriculumType: 'hsk', level: 4 },
-      { name: 'HSK Cấp 5 (Thượng / Hạ)', curriculum: 'HSK Chuẩn 2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === '5', curriculumType: 'hsk', level: 5 },
-      { name: 'HSK Cấp 6 (Thượng / Hạ)', curriculum: 'HSK Chuẩn 2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && w.level.toString() === '6', curriculumType: 'hsk', level: 6 },
+      { name: 'HSK Cấp 1', curriculum: 'HSK Chuẩn (v2.0 & v3.0)', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '1'), curriculumType: 'hsk', level: 1 },
+      { name: 'HSK Cấp 2', curriculum: 'HSK Chuẩn (v2.0 & v3.0)', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '2'), curriculumType: 'hsk', level: 2 },
+      { name: 'HSK Cấp 3', curriculum: 'HSK Chuẩn (v2.0 & v3.0)', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '3'), curriculumType: 'hsk', level: 3 },
+      { name: 'HSK Cấp 4 (Thượng / Hạ)', curriculum: 'HSK Chuẩn 2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '4'), curriculumType: 'hsk', level: 4 },
+      { name: 'HSK Cấp 5 (Thượng / Hạ)', curriculum: 'HSK Chuẩn 2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '5'), curriculumType: 'hsk', level: 5 },
+      { name: 'HSK Cấp 6 (Thượng / Hạ)', curriculum: 'HSK Chuẩn 2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '6'), curriculumType: 'hsk', level: 6 },
+      { name: 'New HSK 7-9 (Cao cấp)', curriculum: 'HSK 3.0 Chuyên nghiệp', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '7-9'), curriculumType: 'hsk', level: '7-9' },
       { name: 'YCT Cấp 1..4 (Thiếu nhi)', curriculum: 'Sắc màu YCT', filter: w => w.curriculum === 'yct' || w.hskVersion === 'yct', curriculumType: 'yct', level: 1 },
     ];
 
