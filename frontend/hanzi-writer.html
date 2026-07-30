@@ -1025,9 +1025,9 @@
 
     function matchLevel(wLevel, targetLevel) {
       if (!targetLevel || targetLevel === 'all') return true;
-      if (!wLevel) return true;
-      const w = wLevel.toString().trim().toLowerCase().replace('hsk', '').replace('yct', '');
-      const t = targetLevel.toString().trim().toLowerCase().replace('hsk', '').replace('yct', '');
+      if (!wLevel) return false;
+      const w = wLevel.toString().trim().toLowerCase().replace('hsk', '');
+      const t = targetLevel.toString().trim().toLowerCase().replace('hsk', '');
       if (w === t) return true;
       const hsk79 = ['7', '8', '9', '7-9', '7_9'];
       if (hsk79.includes(w) && hsk79.includes(t)) return true;
@@ -1092,13 +1092,13 @@
       if (std === 'hsk2') {
         pool = pool.filter(w => !isYct(w) && (w.hskVersion === '2.0' || w.hskVersion === 2 || !w.hskVersion));
       } else if (std === 'hsk3') {
-        pool = pool.filter(w => !isYct(w));
+        pool = pool.filter(w => !isYct(w) && (w.hskVersion === '3.0' || w.hskVersion === 3));
       } else if (std === 'yct') {
         pool = pool.filter(w => isYct(w));
       }
 
       if (lvl !== 'all') {
-        pool = pool.filter(w => matchLevel(w.level, lvl));
+        pool = pool.filter(w => w.level && matchLevel(w.level, lvl));
       }
 
       // Populate lesson options
@@ -1131,13 +1131,13 @@
       if (std === 'hsk2') {
         pool = pool.filter(w => !isYct(w) && (w.hskVersion === '2.0' || w.hskVersion === 2 || !w.hskVersion));
       } else if (std === 'hsk3') {
-        pool = pool.filter(w => !isYct(w));
+        pool = pool.filter(w => !isYct(w) && (w.hskVersion === '3.0' || w.hskVersion === 3));
       } else if (std === 'yct') {
         pool = pool.filter(w => isYct(w));
       }
 
       if (lvl !== 'all') {
-        pool = pool.filter(w => matchLevel(w.level, lvl));
+        pool = pool.filter(w => w.level && matchLevel(w.level, lvl));
       }
 
       if (lsn !== 'all') {
