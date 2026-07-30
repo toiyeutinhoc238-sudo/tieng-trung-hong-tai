@@ -1403,14 +1403,17 @@
         allRows += buildRow(r);
       }
 
-      // Khung thông tin từ vựng (tự động bật/tắt Pinyin và Nghĩa)
+      const strokeSequenceContainerId = 'stroke-order-sequence-box';
+
+      // Khung thông tin từ vựng (Bao gồm dãy nét bút thuận bút chuẩn, không có chữ chú thích thừa)
       const infoBox = `
         <div style="
           border:2px solid #22c55e; border-radius:8px;
-          padding:10px 18px; margin-bottom:12px;
+          padding:12px 18px; margin-bottom:12px;
           background:#fff;
         ">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
+          <!-- Hàng 1: Từ vựng + Pinyin + Dịch nghĩa + Cấp độ -->
+          <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:8px; border-bottom:1px dashed #dcfce7;">
             <div style="display:flex; align-items:baseline; gap:16px;">
               <span style="
                 font-size:2.2rem;
@@ -1422,6 +1425,13 @@
             </div>
             <div style="font-size:0.75rem; color:#16a34a; font-weight:700; background:#f0fdf4; padding:4px 12px; border-radius:12px; border:1px solid #bbf7d0;">
               ${(target.curriculum || 'HSK').toUpperCase()} Cấp ${target.level}
+            </div>
+          </div>
+
+          <!-- Hàng 2: Chuỗi nét bút Thuận Bút (Chỉ hiển thị dãy nét chuẩn đẹp, không có nhãn chữ thừa) -->
+          <div id="${strokeSequenceContainerId}" style="margin-top:8px;">
+            <div id="stroke-steps-list" style="display:flex; flex-wrap:wrap; gap:16px; align-items:center; font-family:'Kaiti','STKaiti','Noto Serif SC',serif;">
+              <span style="font-size:0.8rem; color:#9ca3af;">Đang tải nét bút...</span>
             </div>
           </div>
         </div>`;
@@ -1487,6 +1497,51 @@
       `;
 
       modal.style.display = 'flex';
+
+      // =======================================================
+      // TẢI DỮ LIỆU VÀ VẼ CÁC NÉT THUẬN BÚT (DÃY TÙY TỪNG CHỮ HÁN)
+      // =======================================================
+      const stepsContainer = document.getElementById('stroke-steps-list');
+      if (stepsContainer && typeof HanziWriter !== 'undefined') {
+        let sequenceHtml = '';
+        let pending = wordChars.length;
+
+        wordChars.forEach(ch => {
+          HanziWriter.loadCharacterData(ch).then(data => {
+            if (data && data.strokes) {
+              const strokesCount = data.strokes.length;
+              let charStepsHtml = `<div style="display:inline-flex; align-items:center; gap:5px; background:#f8fafc; padding:3px 8px; border-radius:6px; border:1px solid #e2e8f0;">`;
+              charStepsHtml += `<span style="font-weight:bold; color:#111827; font-size:1.05rem; margin-right:4px;">${ch}:</span>`;
+              
+              for (let i = 1; i <= strokesCount; i++) {
+                const stepStrokes = data.strokes.slice(0, i);
+                let svgPaths = '';
+                stepStrokes.forEach(pathData => {
+                  svgPaths += `<path d="${pathData}" fill="#111827" transform="scale(0.022, -0.022) translate(0, -900)" />`;
+                });
+
+                charStepsHtml += `
+                  <div style="display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" style="overflow:visible;">
+                      ${svgPaths}
+                    </svg>
+                  </div>`;
+              }
+              charStepsHtml += `</div>`;
+              sequenceHtml += charStepsHtml;
+            }
+            pending--;
+            if (pending === 0) {
+              stepsContainer.innerHTML = sequenceHtml || '';
+            }
+          }).catch(err => {
+            pending--;
+            if (pending === 0 && !sequenceHtml) {
+              stepsContainer.innerHTML = '';
+            }
+          });
+        });
+      }
     };
 
     window.closePrintWorksheetModal = function () {
