@@ -55,9 +55,11 @@
     };
 
     function updateToggleBtns(isLight) {
-      var btns = document.querySelectorAll('#theme-toggle, .theme-toggle-btn');
+      var btns = document.querySelectorAll('#theme-toggle, .theme-toggle-btn, .theme-toggle-btn-top');
       btns.forEach(function(btn) {
-        btn.innerHTML = isLight ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
+        btn.innerHTML = isLight 
+          ? '<i class="fa-solid fa-moon" style="color:#d97706;"></i> <span class="theme-btn-text">Giao diện Tối</span>' 
+          : '<i class="fa-solid fa-sun" style="color:#f59e0b;"></i> <span class="theme-btn-text">Giao diện Sáng</span>';
       });
     }
 
@@ -77,6 +79,30 @@
   <link rel="stylesheet" href="/src/style.css">
   
   <style>
+    .theme-toggle-btn-top {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #fbbf24;
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+    .theme-toggle-btn-top:hover {
+      background: #f59e0b;
+      color: #000;
+    }
+    html.light-mode .theme-toggle-btn-top, body.light-mode .theme-toggle-btn-top {
+      background: #ffffff !important;
+      border: 1px solid #cbd5e1 !important;
+      color: #0f172a !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+    }
     button, input, select, textarea {
       font-family: inherit;
     }
@@ -275,8 +301,8 @@
       </div>
       
       <div style="display: flex; gap: 8px; align-items: center;">
-        <button id="theme-toggle" class="btn btn-secondary btn-sm" onclick="window.toggleTheme()" title="Chuyển đổi Giao diện Sáng/Tối" style="padding: 10px 14px;">
-          <i class="fa-solid fa-moon"></i>
+        <button id="theme-toggle" class="theme-toggle-btn-top" onclick="window.toggleTheme()" title="Chuyển đổi Giao diện Sáng/Tối">
+          <i class="fa-solid fa-moon"></i> <span class="theme-btn-text">Giao diện Sáng/Tối</span>
         </button>
         <button id="export-excel-btn" class="btn btn-secondary btn-sm" style="display: flex; align-items: center; gap: 6px; padding: 10px 16px; background: rgba(16, 185, 129, 0.15); color: var(--accent-teal); border: 1px solid rgba(16, 185, 129, 0.3);">
           <i class="fa-solid fa-file-excel"></i> Xuất Excel
