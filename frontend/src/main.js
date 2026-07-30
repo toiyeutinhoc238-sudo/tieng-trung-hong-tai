@@ -6164,8 +6164,29 @@ window.openZubiStatDetail = function (type) {
     `;
 
   } else if (type === 'enrolled') {
+    const activeVocabs = vocabList.filter(w => !w.isCustom);
+    
+    // Group lessons dynamically
+    const hsk3Lessons = new Set();
+    const hsk2Lessons = new Set();
+    const yctLessons = new Set();
+
+    activeVocabs.forEach(w => {
+      if (!w.lessonId) return;
+      const isY = (w.curriculum || '').toString().toLowerCase().includes('yct') || (w.hskVersion || '').toString().toLowerCase().includes('yct');
+      const isHsk2 = !isY && (w.hskVersion === '2.0' || w.hskVersion === 2);
+      const isHsk3 = !isY && (w.hskVersion === '3.0' || w.hskVersion === 3 || !w.hskVersion);
+
+      const key = `${w.level}_${w.lessonId}`;
+      if (isY) yctLessons.add(key);
+      else if (isHsk2) hsk2Lessons.add(key);
+      else if (isHsk3) hsk3Lessons.add(key);
+    });
+
+    const totalDynamicLessons = hsk3Lessons.size + hsk2Lessons.size + yctLessons.size;
+
     titleEl.textContent = 'Bài học đang theo học';
-    subtitleEl.textContent = 'Tổng cộng 283 bài học phân bổ chuẩn theo từng bộ giáo trình';
+    subtitleEl.textContent = `Tổng cộng ${totalDynamicLessons} bài học phân bổ chuẩn theo từng bộ giáo trình`;
     iconEl.className = 'zubi-circle-icon orange';
     iconEl.style.background = 'rgba(249, 115, 22, 0.2)';
     iconEl.style.color = '#f97316';
@@ -6174,16 +6195,16 @@ window.openZubiStatDetail = function (type) {
     bodyEl.innerHTML = `
       <div style="display: flex; flex-direction: column; gap: 12px;">
         <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
-          <div><strong style="color: #ffffff;">HSK 3.0 (Cấp 1, 2, 3)</strong><div style="font-size: 0.8rem; color: #94a3b8;">Bộ giáo trình mới HSK 3.0</div></div>
-          <span style="font-weight: 800; color: #f97316; font-size: 1.1rem;">126 Bài</span>
+          <div><strong style="color: #ffffff;">HSK 3.0 (Tất cả cấp độ)</strong><div style="font-size: 0.8rem; color: #94a3b8;">Bộ giáo trình mới HSK 3.0</div></div>
+          <span style="font-weight: 800; color: #f97316; font-size: 1.1rem;">${hsk3Lessons.size} Bài</span>
         </div>
         <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
-          <div><strong style="color: #ffffff;">HSK 2.0 (Cấp 1..5 Thượng / Hạ)</strong><div style="font-size: 0.8rem; color: #94a3b8;">Bộ giáo trình HSK 2.0 truyền thống</div></div>
-          <span style="font-weight: 800; color: #f97316; font-size: 1.1rem;">109 Bài</span>
+          <div><strong style="color: #ffffff;">HSK 2.0 (Cấp 1..6)</strong><div style="font-size: 0.8rem; color: #94a3b8;">Bộ giáo trình HSK 2.0 truyền thống</div></div>
+          <span style="font-weight: 800; color: #f97316; font-size: 1.1rem;">${hsk2Lessons.size} Bài</span>
         </div>
         <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
-          <div><strong style="color: #ffffff;">YCT 1, 2, 3, 4 (Thiếu nhi)</strong><div style="font-size: 0.8rem; color: #94a3b8;">Chuẩn đúng 12 Bài / mỗi cấp độ (YCT 1..4)</div></div>
-          <span style="font-weight: 800; color: #f97316; font-size: 1.1rem;">48 Bài</span>
+          <div><strong style="color: #ffffff;">YCT 1, 2, 3, 4 (Thiếu nhi)</strong><div style="font-size: 0.8rem; color: #94a3b8;">Giáo trình Tiếng Trung Trẻ Em YCT</div></div>
+          <span style="font-weight: 800; color: #f97316; font-size: 1.1rem;">${yctLessons.size} Bài</span>
         </div>
       </div>
     `;
