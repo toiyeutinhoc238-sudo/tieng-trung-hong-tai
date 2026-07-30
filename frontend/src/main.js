@@ -5833,7 +5833,7 @@ function updateStatsUI() {
   const studyTimeEl = document.getElementById('welcome-study-time-val');
 
   if (streakEl) streakEl.textContent = `${userStreak} ngày`;
-  if (studyTimeEl) studyTimeEl.textContent = `${Math.floor(userStudyTime / 60)} phút`;
+  if (studyTimeEl) studyTimeEl.textContent = `${Math.floor((userStudyTime + sessionStudyTime) / 60)} phút`;
 
   const completedCount = calculateCompletedLessons();
   if (completedEl) completedEl.textContent = `${completedCount} bài`;
@@ -6137,7 +6137,8 @@ window.openZubiStatDetail = function (type) {
     iconEl.style.color = '#3b82f6';
     iconEl.innerHTML = '<i class="fa-solid fa-clock"></i>';
 
-    const mins = Math.floor(userStudyTime / 60);
+    const totalCurrentSecs = userStudyTime + sessionStudyTime;
+    const mins = Math.floor(totalCurrentSecs / 60);
     const hrs = Math.floor(mins / 60);
     const remMins = mins % 60;
     const timeDisplay = hrs > 0 ? `${hrs} giờ ${remMins} phút` : `${mins} phút`;
