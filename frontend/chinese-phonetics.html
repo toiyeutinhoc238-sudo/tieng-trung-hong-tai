@@ -458,13 +458,50 @@
 
     .pitch-badge {
       display: inline-block;
-      padding: 3px 10px;
+      padding: 4px 12px;
       border-radius: 12px;
       font-size: 0.8rem;
       font-weight: 700;
-      margin-bottom: 12px;
       background: rgba(59, 130, 246, 0.15);
       color: #38bdf8;
+    }
+
+    .tone-symbol-box {
+      font-size: 0.9rem;
+      color: #94a3b8;
+      font-weight: 700;
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid var(--border-glass);
+      padding: 8px 14px;
+      border-radius: 10px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .tone-symbol-text {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #f59e0b;
+    }
+
+    .tone-card .example-tags-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .tone-card .example-chip {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 14px;
+      background: rgba(30, 41, 59, 0.9);
+      border: 1px solid var(--border-glass);
+      border-radius: 10px;
     }
   </style>
 </head>
@@ -808,16 +845,19 @@
             ${td.tones.map((t, idx) => `
               <div class="tone-card t${idx+1}">
                 <div class="tone-title">${t.name}</div>
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <span class="pitch-badge">Độ cao: ${t.pitch}</span>
-                  <span style="font-size:1.8rem; font-weight:800; color:#cbd5e1;">${t.symbol}</span>
+                <div style="margin-bottom: 10px;">
+                  <span class="pitch-badge"><i class="fa-solid fa-chart-line"></i> Độ cao: ${t.pitch}</span>
+                </div>
+                <div class="tone-symbol-box">
+                  <span>Dấu / Ký hiệu:</span>
+                  <span class="tone-symbol-text">${t.symbol}</span>
                 </div>
                 <div style="font-size:0.9rem; color:#cbd5e1; margin-bottom:1.2rem; line-height:1.6;">${t.guide}</div>
                 <div>
-                  <div style="font-size:0.75rem; font-weight:700; color:var(--text-sub); margin-bottom:8px;">VÍ DỤ THỰC HÀNH:</div>
+                  <div style="font-size:0.75rem; font-weight:700; color:var(--text-sub); margin-bottom:8px; text-transform:uppercase;">VÍ DỤ THỰC HÀNH:</div>
                   <div class="example-tags-container">
                     ${t.examples.map(ex => `
-                      <div class="example-chip" onclick="speakZhText('${ex.pinyin}')">
+                      <div class="example-chip" onclick="speakZhText('${ex.pinyin}')" title="${ex.meaning}">
                         <span class="example-pinyin">${ex.pinyin}</span>
                         <span class="example-meaning">${ex.meaning}</span>
                       </div>
