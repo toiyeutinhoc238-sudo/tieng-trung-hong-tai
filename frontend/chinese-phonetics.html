@@ -497,75 +497,57 @@
       cursor: pointer;
     }
 
-    .audio-play-btn {
-      margin-top: 8px;
-      background: #3b82f6;
-      border: none;
-      color: #fff;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s;
-    }
-
-    .audio-play-btn:hover {
-      background: #2563eb;
-      transform: scale(1.05);
-    }
-
-    .char-text-info-box {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .info-sub-card {
-      background: rgba(30, 41, 59, 0.6);
-      border: 1px solid var(--border-glass);
-      border-radius: 12px;
-      padding: 12px 16px;
-    }
-
-    .info-sub-title {
-      font-size: 0.82rem;
-      font-weight: 800;
-      color: #f59e0b;
-      text-transform: uppercase;
-      margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .info-sub-content {
-      font-size: 0.92rem;
-      color: #cbd5e1;
-      line-height: 1.5;
-    }
-
-    .mouth-diagram-box {
-      background: rgba(30, 41, 59, 0.6);
+    /* Voice Control Bar (Đơn giản hóa: Cố định giọng Baidu Nữ chuẩn) */
+    .voice-control-bar {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
       border: 1px solid var(--border-glass);
       border-radius: 16px;
-      padding: 14px;
-      text-align: center;
+      padding: 12px 20px;
+      margin-bottom: 24px;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
     }
 
-    .diagram-title {
-      font-size: 0.82rem;
-      font-weight: 800;
-      color: #34d399;
-      text-transform: uppercase;
-      margin-bottom: 8px;
+    /* Collapse/Accordion note toggle button */
+    .group-note-toggle-btn {
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: #60a5fa;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 12px;
+      transition: all 0.2s ease;
+    }
+
+    .group-note-toggle-btn:hover {
+      background: rgba(59, 130, 246, 0.25);
+      color: #fff;
+    }
+
+    /* Note Box under sound buttons (Dạng ẩn/hiện collapsible) */
+    .group-note-alert {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border-glass);
+      border-left: 4px solid #f59e0b;
+      padding: 14px 18px;
+      border-radius: 12px;
+      color: #cbd5e1;
+      font-size: 0.88rem;
+      margin-bottom: 20px;
+      line-height: 1.6;
+      display: none; /* Mặc định ẩn cho gọn */
+    }
+
+    .group-note-alert.show {
+      display: block;
     }
 
     /* 2x2 Example Grid Boxes */
@@ -586,10 +568,10 @@
       background: rgba(30, 41, 59, 0.9);
       border: 1px solid var(--border-glass);
       border-radius: 14px;
-      padding: 12px 16px;
+      padding: 14px 18px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
       cursor: pointer;
       transition: all 0.2s;
     }
@@ -601,14 +583,9 @@
     }
 
     .vd-pinyin {
-      font-size: 1.1rem;
+      font-size: 1.25rem;
       font-weight: 800;
       color: #38bdf8;
-    }
-
-    .vd-meaning {
-      font-size: 0.85rem;
-      color: #94a3b8;
     }
   </style>
 </head>
@@ -633,39 +610,21 @@
         <a href="/index.html" class="btn-close" style="background: rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.3);">
           <i class="fa-solid fa-house"></i> Trang Chủ
         </a>
-        <button class="btn-close" onclick="window.close()"><i class="fa-solid fa-xmark"></i> Đóng</button>
       </div>
     </div>
 
-    <!-- Voice Control Bar -->
+    <!-- Voice Info Bar (Giữ cố định giọng Baidu Nữ chuẩn) -->
     <div class="voice-control-bar">
       <div style="display: flex; align-items: center; gap: 10px;">
         <div
-          style="width: 36px; height: 36px; border-radius: 50%; background: #3b82f6; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
-          <i class="fa-solid fa-microphone"></i>
+          style="width: 34px; height: 34px; border-radius: 50%; background: rgba(59, 130, 246, 0.2); color: #60a5fa; display: flex; align-items: center; justify-content: center; font-size: 1rem;">
+          <i class="fa-solid fa-volume-high"></i>
         </div>
         <div>
-          <div style="font-weight: 800; font-size: 0.95rem; color: #fff;">Cấu Hình Giọng Đọc AI (Voice Engine)</div>
-          <div style="font-size: 0.8rem; color: #94a3b8;">Chọn giọng đọc AI chuẩn để nghe khi bấm vào âm tiết & ví dụ</div>
+          <div style="font-weight: 700; font-size: 0.9rem; color: #f8fafc;">Giọng Đọc Chuẩn: <span style="color:#34d399;">🇨🇳 Baidu Nữ (Phát âm Bắc Kinh chuẩn)</span></div>
         </div>
       </div>
-
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <span style="font-size: 0.85rem; font-weight: 700; color: #f59e0b;">Giọng Đọc Đang Chọn:</span>
-        <select id="grammar-voice-select" onchange="localStorage.setItem('speech_voice', this.value)"
-          style="background: #0f172a; border: 1.5px solid #3b82f6; color: #fff; padding: 8px 16px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; outline: none; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
-          <option value="elevenlabs-adam">✨ ElevenLabs AI - Adam (Giọng Nam Trầm Ấm)</option>
-          <option value="elevenlabs-bella">✨ ElevenLabs AI - Bella (Giọng Nữ Nhẹ Nhàng)</option>
-          <option value="elevenlabs-jessica">✨ ElevenLabs AI - Jessica (Giọng Nữ Ngọt Ngào)</option>
-          <option value="elevenlabs-antoni">✨ ElevenLabs AI - Antoni (Giọng Nam Truyền Cảm)</option>
-          <option value="elevenlabs-arnold">✨ ElevenLabs AI - Arnold (Giọng Nam Mạnh Mẽ)</option>
-          <option value="elevenlabs-charlie">✨ ElevenLabs AI - Charlie (Giọng Nam Tự Nhiên)</option>
-          <option value="elevenlabs-george">✨ ElevenLabs AI - George (Giọng Nam Sang Trọng)</option>
-          <option value="elevenlabs-laura">✨ ElevenLabs AI - Laura (Giọng Nữ Ấm Áp)</option>
-          <option value="baidu-female">🇨🇳 Baidu Nữ (Giọng Bắc Kinh chuẩn)</option>
-          <option value="baidu-male">🇨🇳 Google/Baidu Nam (Giọng Nam Chuẩn)</option>
-        </select>
-      </div>
+      <div style="font-size: 0.8rem; color: #94a3b8;"><i class="fa-solid fa-circle-check" style="color:#10b981;"></i> Đã tối ưu âm thanh</div>
     </div>
 
     <!-- MAIN HUB VIEW (HÌNH 1: 4 Khối Vuông Trung Tâm) -->
@@ -676,25 +635,25 @@
         <div class="hub-card card-thanhmau" onclick="openSection('thanhmau')">
           <div class="hub-number">21</div>
           <div class="hub-text">Thanh Mẫu</div>
-          <div class="hub-sub">System of 21 Consonants</div>
+          <div class="hub-sub">Hệ thống 21 Phụ Âm Đầu</div>
         </div>
 
         <div class="hub-card card-vanmau" onclick="openSection('vanmau')">
           <div class="hub-number">36</div>
           <div class="hub-text">Vận Mẫu</div>
-          <div class="hub-sub">System of 36 Vowels</div>
+          <div class="hub-sub">Hệ thống 36 Nguyên Âm</div>
         </div>
 
         <div class="hub-card card-thanhdieu" onclick="openSection('thanhdieu')">
           <div class="hub-number">4</div>
           <div class="hub-text">Thanh Điệu</div>
-          <div class="hub-sub">4 Essential Tones & Sandhi Rules</div>
+          <div class="hub-sub">4 Thanh Điệu & Biến Điệu</div>
         </div>
 
-        <div class="hub-card card-luyentap" onclick="window.open('/quiz-game.html', '_blank')">
+        <div class="hub-card card-luyentap" onclick="openSection('luyentap')">
           <div class="hub-number"><i class="fa-solid fa-gamepad"></i></div>
           <div class="hub-text">Luyện Tập</div>
-          <div class="hub-sub">Ôn Tập Trắc Nghiệm Trò Chơi</div>
+          <div class="hub-sub">Ôn Tập Trắc Nghiệm Nghe Âm</div>
         </div>
       </div>
     </div>
@@ -738,26 +697,20 @@
     window.speakZhText = function (text) {
       if (!text) return;
 
-      const selectEl = document.getElementById('grammar-voice-select');
-      const voice = selectEl ? selectEl.value : (localStorage.getItem('speech_voice') || 'baidu-female');
-      localStorage.setItem('speech_voice', voice);
+      const voice = 'baidu-female'; // Cố định giọng Baidu Nữ chuẩn theo yêu cầu của chị
 
       if (audioCurrent) {
         audioCurrent.pause();
         audioCurrent = null;
       }
 
-      if (voice.startsWith('elevenlabs') || voice.startsWith('baidu')) {
-        const API_BASE_URL = getApiBaseUrl();
-        const audioUrl = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(text)}&voice=${voice}`;
-        audioCurrent = new Audio(audioUrl);
-        audioCurrent.play().catch(err => {
-          console.warn("API Audio error, fallback to Web Speech:", err);
-          fallbackWebSpeech(text);
-        });
-      } else {
+      const API_BASE_URL = getApiBaseUrl();
+      const audioUrl = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(text)}&voice=${voice}`;
+      audioCurrent = new Audio(audioUrl);
+      audioCurrent.play().catch(err => {
+        console.warn("API Audio error, fallback to Web Speech:", err);
         fallbackWebSpeech(text);
-      }
+      });
     };
 
     function fallbackWebSpeech(text) {
@@ -797,11 +750,27 @@
         badgeEl.textContent = 'Thanh Điệu';
         renderThanhDieuDetailedView();
       } else if (secKey === 'luyentap') {
-        window.open('/quiz-game.html', '_blank');
-        return;
+        titleEl.textContent = 'Luyện Tập Trắc Nghiệm Nghe Âm';
+        badgeEl.textContent = 'Luyện Tập';
+        renderLuyenTapView();
       }
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.toggleGroupNote = function (gIdx) {
+      const noteEl = document.getElementById(`group-note-${gIdx}`);
+      const btnEl = document.getElementById(`group-note-btn-${gIdx}`);
+      if (noteEl) {
+        const isShown = noteEl.classList.contains('show');
+        if (isShown) {
+          noteEl.classList.remove('show');
+          if (btnEl) btnEl.innerHTML = `<i class="fa-solid fa-chevron-down"></i> Hiện lưu ý nhóm`;
+        } else {
+          noteEl.classList.add('show');
+          if (btnEl) btnEl.innerHTML = `<i class="fa-solid fa-chevron-up"></i> Ẩn lưu ý nhóm`;
+        }
+      }
     };
 
     // Render Detailed View according to IMAGE 2 sketch
@@ -809,19 +778,38 @@
       const container = document.getElementById('section-body-content');
       let html = '';
 
-      data.groups.forEach((group, gIdx) => {
-        // Find if any item in this group is aspirated (usually the 2nd sound: p, t, k, q, c, ch)
+      // Hiển thị 1 chú thích nhỏ ở đầu trang Thanh Mẫu
+      if (sectionType === 'thanhmau') {
         html += `
-          <div class="group-block" style="margin-bottom: 3.5rem;">
+          <div style="margin-bottom: 20px; font-size: 0.88rem; color: #a7f3d0; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.25); padding: 10px 16px; border-radius: 12px; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-lightbulb" style="color: #10b981;"></i>
+            <span><strong>Ghi chú:</strong> Các âm tô màu xanh lá là âm <strong>BẬT HƠI</strong>.</span>
+          </div>
+        `;
+      }
+
+      data.groups.forEach((group, gIdx) => {
+        html += `
+          <div class="group-block" style="margin-bottom: 3rem;">
             <div class="group-subtitle">
               <i class="fa-solid fa-layer-group" style="color:#38bdf8;"></i> ${group.name}
+            </div>
+
+            <!-- Nút bấm ẩn/hiện Lưu ý dạng accordion gọn gàng -->
+            <button id="group-note-btn-${gIdx}" class="group-note-toggle-btn" onclick="toggleGroupNote(${gIdx})">
+              <i class="fa-solid fa-chevron-down"></i> Xem lưu ý của nhóm
+            </button>
+
+            <!-- Lưu ý alert box (Mặc định ẩn, bấm mới hiện) -->
+            <div id="group-note-${gIdx}" class="group-note-alert">
+              <i class="fa-solid fa-circle-info" style="color: #f59e0b; margin-right: 6px;"></i>
+              <strong>Chi tiết lưu ý nhóm:</strong> ${group.note_special || group.standalone_rule || group.pronunciation_tip || 'Chú ý vị trí đặt lưỡi và luồng hơi chuẩn khi phát âm nhóm này.'}
             </div>
 
             <!-- Top Row Sound Buttons (Hình 2) -->
             <div class="sound-buttons-row">
               ${group.items.map((item, iIdx) => {
-                // Determine if this is the 2nd sound or aspirated sound (p, t, k, q, c, ch)
-                const isAspirated = (iIdx === 1) || ['p', 't', 'k', 'q', 'c', 'ch'].includes(item.char);
+                const isAspirated = (sectionType === 'thanhmau') && ((iIdx === 1) || ['p', 't', 'k', 'q', 'c', 'ch'].includes(item.char));
                 return `
                   <div class="sound-btn-box ${isAspirated ? 'aspirated-green' : ''} ${gIdx === selectedGroupIndex && iIdx === selectedItemIndex ? 'selected' : ''}"
                     onclick="selectSoundItem(${gIdx}, ${iIdx}, '${sectionType}')">
@@ -832,15 +820,8 @@
               }).join('')}
             </div>
 
-            <!-- Chú Ý Alert Box (Hình 2) -->
-            <div class="group-note-alert">
-              <i class="fa-solid fa-lightbulb" style="color: #10b981; font-size: 1.1rem; margin-right: 6px;"></i>
-              <strong>Chú Ý:</strong> Các âm tô màu xanh lá (${group.items.filter((it, idx) => idx === 1 || ['p', 't', 'k', 'q', 'c', 'ch'].includes(it.char)).map(it => "'" + it.char + "'").join(', ')}) là những âm <strong>BẬT HƠI</strong> dứt khoát mạnh từ cuống họng/kẽ răng!
-              ${group.note_special ? `<br><span style="color:#fef08a; font-weight:700;">★ ${group.note_special}</span>` : ''}
-            </div>
-
-            <!-- Detailed Inspector Panel (Mũi tên nối từ nút âm xuống) -->
-            ${renderCharInspector(group.items[gIdx === selectedGroupIndex ? selectedItemIndex : 0])}
+            <!-- Detailed Inspector Panel -->
+            ${renderCharInspector(group.items[gIdx === selectedGroupIndex ? selectedItemIndex : 0], sectionType)}
           </div>
         `;
       });
@@ -878,19 +859,21 @@
       container.innerHTML = html;
     }
 
-    function renderCharInspector(item) {
+    function renderCharInspector(item, sectionType) {
       if (!item) return '';
 
       // Get 4 examples for the 2x2 grid
       const examples = item.examples || [];
-      const ex1 = examples[0] || { pinyin: '—', meaning: '—' };
-      const ex2 = examples[1] || { pinyin: '—', meaning: '—' };
-      const ex3 = examples[2] || { pinyin: '—', meaning: '—' };
-      const ex4 = examples[3] || { pinyin: '—', meaning: '—' };
+      const ex1 = examples[0] || { pinyin: '—' };
+      const ex2 = examples[1] || { pinyin: '—' };
+      const ex3 = examples[2] || { pinyin: '—' };
+      const ex4 = examples[3] || { pinyin: '—' };
+
+      const showDiagram = (sectionType !== 'vanmau');
 
       return `
         <div class="char-detail-inspector">
-          <div class="inspector-top-grid">
+          <div class="inspector-top-grid" style="${!showDiagram ? 'grid-template-columns: 100px 1fr;' : ''}">
             <!-- Cột 1: Ký tự to + Audio -->
             <div class="char-big-box">
               <span class="char-big-symbol" onclick="speakZhText('${item.char}')">${item.char}</span>
@@ -912,34 +895,32 @@
               </div>
             </div>
 
-            <!-- Cột 3: Hình mô phỏng -->
+            <!-- Cột 3: Hình mô phỏng (Chỉ dành cho Thanh Mẫu, Vận Mẫu ẩn hoàn toàn) -->
+            ${showDiagram ? `
             <div class="mouth-diagram-box">
-              <div class="diagram-title"><i class="fa-solid fa-image"></i> Hình mô phỏng</div>
+              <div class="diagram-title"><i class="fa-solid fa-image"></i> Mô Phỏng Khẩu Hình</div>
               <div style="font-size:2.5rem; color:#60a5fa; margin:6px 0;"><i class="fa-solid fa-head-side-virus"></i></div>
-              <div style="font-size:0.78rem; color:#94a3b8;">Khẩu hình & Khí lưu bật hơi</div>
+              <div style="font-size:0.78rem; color:#94a3b8;">Vị trí lưỡi & luồng hơi</div>
             </div>
+            ` : ''}
           </div>
 
-          <!-- Lưới 4 Ví Dụ (2x2 Grid) đúng theo sơ đồ Hình 2 -->
+          <!-- Lưới 4 Ví Dụ (Chỉ hiện Pinyin để bấm nghe, không kèm nghĩa tiếng Việt) -->
           <div style="font-size:0.8rem; font-weight:800; color:#f59e0b; text-transform:uppercase; margin-top:12px; margin-bottom:8px;">
-            <i class="fa-solid fa-list-check"></i> Ví Dụ Thực Hành (4 VD)
+            <i class="fa-solid fa-volume-low"></i> Ví Dụ Thực Hành (Bấm vào để nghe phát âm)
           </div>
           <div class="examples-2x2-grid">
             <div class="vd-box" onclick="speakZhText('${ex1.pinyin}')">
               <span class="vd-pinyin">${ex1.pinyin}</span>
-              <span class="vd-meaning">${ex1.meaning}</span>
             </div>
             <div class="vd-box" onclick="speakZhText('${ex2.pinyin}')">
               <span class="vd-pinyin">${ex2.pinyin}</span>
-              <span class="vd-meaning">${ex2.meaning}</span>
             </div>
             <div class="vd-box" onclick="speakZhText('${ex3.pinyin}')">
               <span class="vd-pinyin">${ex3.pinyin}</span>
-              <span class="vd-meaning">${ex3.meaning}</span>
             </div>
             <div class="vd-box" onclick="speakZhText('${ex4.pinyin}')">
               <span class="vd-pinyin">${ex4.pinyin}</span>
-              <span class="vd-meaning">${ex4.meaning}</span>
             </div>
           </div>
         </div>
@@ -987,7 +968,7 @@
                 <div style="margin-bottom:10px;">
                   <span style="font-size:0.8rem; font-weight:700; background:rgba(59,130,246,0.15); color:#38bdf8; padding:4px 12px; border-radius:12px;">Độ cao: ${t.pitch}</span>
                 </div>
-                <div style="background:rgba(30,41,59,0.8); border:1px solid var(--border-glass); padding:8px 14px; border-radius:10px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center;">
+                <div style="background:rgba(30,41,59,0.8); border:1px solid var(--border-glass); padding:8px 14px; border-radius:10px; margin-bottom:14px; display:flex; justify-style:space-between; align-items:center;">
                   <span style="color:#94a3b8; font-size:0.9rem; font-weight:700;">Dấu / Ký hiệu:</span>
                   <span style="font-size:1.4rem; font-weight:800; color:#f59e0b;">${t.symbol}</span>
                 </div>
@@ -996,9 +977,8 @@
                   <div style="font-size:0.75rem; font-weight:700; color:var(--text-sub); margin-bottom:8px; text-transform:uppercase;">VÍ DỤ THỰC HÀNH:</div>
                   <div style="display:flex; flex-direction:column; gap:8px;">
                     ${t.examples.map(ex => `
-                      <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 14px; background:rgba(30,41,59,0.9); border:1px solid var(--border-glass); border-radius:10px; cursor:pointer;" onclick="speakZhText('${ex.pinyin}')">
-                        <span style="font-weight:800; color:#38bdf8;">${ex.pinyin}</span>
-                        <span style="color:#94a3b8; font-size:0.85rem;">${ex.meaning}</span>
+                      <div style="display:flex; justify-content:center; align-items:center; padding:10px 14px; background:rgba(30,41,59,0.9); border:1px solid var(--border-glass); border-radius:10px; cursor:pointer;" onclick="speakZhText('${ex.pinyin}')">
+                        <span style="font-weight:800; color:#38bdf8; font-size:1.1rem;">${ex.pinyin}</span>
                       </div>
                     `).join('')}
                   </div>
@@ -1022,8 +1002,8 @@
               <div style="background:rgba(15,23,42,0.6); padding:1.2rem; border-radius:14px; border-left:4px solid #f59e0b; border:1px solid var(--border-glass);">
                 <div style="font-weight:700; color:#fef08a; font-size:1rem; margin-bottom:6px;">${c.case_title}</div>
                 <div style="color:#cbd5e1; font-size:0.92rem; margin-bottom:10px;">${c.desc}</div>
-                <div style="background:rgba(30,41,59,0.9); padding:8px 16px; border-radius:10px; font-weight:700; color:#38bdf8; display:inline-block; font-size:0.92rem;">
-                  <i class="fa-solid fa-arrow-right"></i> ${c.example}
+                <div style="background:rgba(30,41,59,0.9); padding:8px 16px; border-radius:10px; font-weight:700; color:#38bdf8; display:inline-block; font-size:0.92rem; cursor:pointer;" onclick="speakZhText('${c.example.split('==>')[0] || c.example}')">
+                  <i class="fa-solid fa-volume-high"></i> ${c.example}
                 </div>
               </div>
             `).join('')}
@@ -1046,12 +1026,12 @@
       const container = document.getElementById('section-body-content');
 
       const quizData = [
-        { sound: "bā", options: ["bā", "pā", "mā", "fā"], correct: 0, meaning: "Tám (Số 8)" },
-        { sound: "pó", options: ["bó", "pó", "mò", "fó"], correct: 1, meaning: "Bà nội / Bà lão" },
-        { sound: "tā", options: ["dā", "tā", "nā", "lā"], correct: 1, meaning: "Anh ấy / Cô ấy" },
-        { sound: "kě", options: ["gē", "kě", "hē", "lè"], correct: 1, meaning: "Khát / Có thể" },
-        { sound: "zhǎo", options: ["zǎo", "cǎo", "zhǎo", "chǎo"], correct: 2, meaning: "Tìm kiếm" },
-        { sound: "shù", options: ["sù", "cù", "zù", "shù"], correct: 3, meaning: "Cây / Số" }
+        { sound: "bā", options: ["bā", "pā", "mā", "fā"], correct: 0 },
+        { sound: "pó", options: ["bó", "pó", "mò", "fó"], correct: 1 },
+        { sound: "tā", options: ["dā", "tā", "nā", "lā"], correct: 1 },
+        { sound: "kě", options: ["gē", "kě", "hē", "lè"], correct: 1 },
+        { sound: "zhǎo", options: ["zǎo", "cǎo", "zhǎo", "chǎo"], correct: 2 },
+        { sound: "shù", options: ["sù", "cù", "zù", "shù"], correct: 3 }
       ];
 
       let score = 0;
@@ -1060,10 +1040,10 @@
       window.checkQuizAnswer = function (idx) {
         const item = quizData[qIdx];
         if (idx === item.correct) {
-          alert("🎉 Chính xác! Bạn đã phát âm đúng: " + item.sound + " (" + item.meaning + ")");
+          alert("🎉 Chính xác! Âm bạn nghe là: " + item.sound);
           score++;
         } else {
-          alert("❌ Chưa đúng rồi! Âm chính xác là: " + item.sound + " (" + item.meaning + ")");
+          alert("❌ Chưa đúng rồi! Âm chính xác là: " + item.sound);
         }
         qIdx = (qIdx + 1) % quizData.length;
         renderQuizItem();
@@ -1097,17 +1077,8 @@
           </div>
         `;
       };
-
       renderQuizItem();
-    }
-
-    // Load Voice Preference from LocalStorage
-    const savedVoice = localStorage.getItem('speech_voice');
-    if (savedVoice) {
-      const selectEl = document.getElementById('grammar-voice-select');
-      if (selectEl) selectEl.value = savedVoice;
     }
   </script>
 </body>
-
 </html>

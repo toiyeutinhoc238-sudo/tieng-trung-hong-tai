@@ -1389,40 +1389,10 @@ app.get('/api/tts', async (req, res) => {
     }
 
     if (!fileExists) {
-      let audioBuffer = null;
-      if (safeVoice === 'baidu-female') {
-        // Baidu Fanyi - Native Beijing Mandarin Female
-        audioBuffer = await fetchBaiduTTS(cleanText);
-      } else if (safeVoice === 'baidu-male') {
-        // Google Translate TTS - Mandarin Chinese (completely different AI model = clearly distinct voice)
+      let audioBuffer = await fetchBaiduTTS(cleanText);
+      if (!audioBuffer || audioBuffer.length < 100) {
         audioBuffer = await fetchGoogleTTS(cleanText);
-      } else {
-        const apiKey = process.env.ELEVENLABS_API_KEY || 'sk_51feae550df86c7bb9ab69706394130a8061ab0aef5dbf2e';
-        let voiceId = 'pNInz6obpgDQGcFmaJgB'; // Adam (Nam 1 - Default)
-        if (safeVoice === 'elevenlabs-bella') voiceId = 'EXAVITQu4vr4xnSDxMaL';
-        else if (safeVoice === 'elevenlabs-jessica') voiceId = 'cgSgspJ2msm6clMCkdW9';
-        else if (safeVoice === 'elevenlabs-antoni') voiceId = 'ErXwobaYiN019PkySvjV';
-        else if (safeVoice === 'elevenlabs-arnold') voiceId = 'VR6AewLTigWG4xSOukaG';
-        else if (safeVoice === 'elevenlabs-charlie') voiceId = 'IKne3meq5aSn9XLyUdCD';
-        else if (safeVoice === 'elevenlabs-george') voiceId = 'JBFqnCBsd6RMkjVDRZzb';
-        else if (safeVoice === 'elevenlabs-laura') voiceId = 'FGY2WhTYpPnrIDTdsKH5';
-        else if (safeVoice === 'elevenlabs-daniel') voiceId = 'onwK4e9ZLuTAKqWW03F9';
-        else if (safeVoice === 'elevenlabs-chris') voiceId = 'iP95p4xoKVk53GoZ742B';
-        else if (safeVoice === 'elevenlabs-matilda') voiceId = 'XrExE9yKIg1WjnnlVkGX';
-
-        try {
-          console.log(`[TTS API] Calling ElevenLabs for voice ${safeVoice} (${voiceId}) with text: "${cleanText.slice(0, 30)}..."`);
-          audioBuffer = await fetchElevenLabsTTS(cleanText, voiceId, apiKey);
-        } catch (err) {
-          console.warn(`[TTS API] ElevenLabs error for ${safeVoice} (${voiceId}): ${err.message}. Fallback to Baidu/Google.`);
-          if (safeVoice.includes('female') || safeVoice.includes('bella') || safeVoice.includes('jessica') || safeVoice.includes('laura')) {
-            audioBuffer = await fetchBaiduTTS(cleanText);
-          } else {
-            audioBuffer = await fetchGoogleTTS(cleanText);
-          }
-        }
       }
-
       if (audioBuffer && audioBuffer.length > 100) {
         await fs.writeFile(filePath, audioBuffer);
       } else {

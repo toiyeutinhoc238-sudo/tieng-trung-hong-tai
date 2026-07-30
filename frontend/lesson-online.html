@@ -622,7 +622,8 @@
         try { activeAudio.pause(); activeAudio.currentTime = 0; } catch (e) {}
       }
 
-      const voice = document.getElementById('select-voice').value || 'elevenlabs-adam';
+      const voice = 'baidu-female';
+      localStorage.setItem('speech_voice', 'baidu-female');
       const cleanText = text.replace(/[A-Za-z0-9]/g, '').trim() || text;
       const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(voice)}&_t=${Date.now()}`;
 

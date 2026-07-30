@@ -164,7 +164,8 @@ function toggleTheme() {
 window.toggleTheme = toggleTheme;
 
 // --- TEXT TO SPEECH (TTS) SETUP ---
-let speechVoice = localStorage.getItem('speech_voice') || 'elevenlabs-adam';
+let speechVoice = localStorage.getItem('speech_voice') || 'baidu-female';
+localStorage.setItem('speech_voice', 'baidu-female');
 let speechPlaybackRate = parseFloat(localStorage.getItem('speech_playback_rate') || '1.0');
 let activeAudioElement = null;
 
@@ -228,8 +229,8 @@ function speakText(text) {
 
   // 2. Fetch live selected voice & speed directly from DOM
   const voiceSelectEl = document.getElementById('tts-voice-select');
-  const currentVoice = (voiceSelectEl && voiceSelectEl.value) ? voiceSelectEl.value : (localStorage.getItem('speech_voice') || 'elevenlabs-adam');
-  localStorage.setItem('speech_voice', currentVoice);
+  const currentVoice = 'baidu-female';
+  localStorage.setItem('speech_voice', 'baidu-female');
 
   const speedSelectEl = document.getElementById('tts-speed-select');
   const currentSpeed = (speedSelectEl && speedSelectEl.value) ? parseFloat(speedSelectEl.value) : (parseFloat(localStorage.getItem('speech_playback_rate')) || 1.0);

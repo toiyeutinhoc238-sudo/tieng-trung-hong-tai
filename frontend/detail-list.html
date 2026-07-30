@@ -112,41 +112,62 @@
     }
 
     /* High-contrast Light Mode overrides for detail-list.html */
-    html.light-mode body, body.light-mode {
+    html.light-mode body,
+    body.light-mode {
       background-color: #f1f5f9;
       color: #0f172a;
     }
-    html.light-mode .glass-panel, body.light-mode .glass-panel {
+
+    html.light-mode .glass-panel,
+    body.light-mode .glass-panel {
       background: #ffffff;
       border: 1px solid #cbd5e1;
       color: #0f172a;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
     }
-    html.light-mode h1, html.light-mode h2, html.light-mode h3,
-    body.light-mode h1, body.light-mode h2, body.light-mode h3 {
+
+    html.light-mode h1,
+    html.light-mode h2,
+    html.light-mode h3,
+    body.light-mode h1,
+    body.light-mode h2,
+    body.light-mode h3 {
       color: #0f172a !important;
     }
-    html.light-mode p, body.light-mode p {
+
+    html.light-mode p,
+    body.light-mode p {
       color: #334155 !important;
     }
-    html.light-mode .filter-select, body.light-mode .filter-select,
-    html.light-mode #detail-search-input, body.light-mode #detail-search-input {
+
+    html.light-mode .filter-select,
+    body.light-mode .filter-select,
+    html.light-mode #detail-search-input,
+    body.light-mode #detail-search-input {
       background: #ffffff !important;
       color: #0f172a !important;
       border-color: #cbd5e1 !important;
     }
-    html.light-mode table, body.light-mode table {
+
+    html.light-mode table,
+    body.light-mode table {
       color: #0f172a !important;
     }
-    html.light-mode table thead tr, body.light-mode table thead tr {
+
+    html.light-mode table thead tr,
+    body.light-mode table thead tr {
       background: #e2e8f0 !important;
       color: #0f172a !important;
     }
-    html.light-mode table td, body.light-mode table td {
+
+    html.light-mode table td,
+    body.light-mode table td {
       border-bottom: 1px solid #e2e8f0 !important;
       color: #0f172a !important;
     }
-    html.light-mode .page-btn, body.light-mode .page-btn {
+
+    html.light-mode .page-btn,
+    body.light-mode .page-btn {
       background: #ffffff;
       border-color: #cbd5e1;
       color: #0f172a;
@@ -976,7 +997,8 @@
       }
 
       const voiceSelectEl = document.getElementById('tts-voice-select');
-      const currentVoice = (voiceSelectEl && voiceSelectEl.value) ? voiceSelectEl.value : (localStorage.getItem('speech_voice') || 'elevenlabs-adam');
+      const currentVoice = 'baidu-female';
+      localStorage.setItem('speech_voice', 'baidu-female');
 
       const speedSelectEl = document.getElementById('tts-speed-select');
       const currentSpeed = (speedSelectEl && speedSelectEl.value) ? parseFloat(speedSelectEl.value) : (parseFloat(localStorage.getItem('speech_playback_rate')) || 1.0);
