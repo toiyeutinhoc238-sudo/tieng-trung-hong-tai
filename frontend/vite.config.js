@@ -20,7 +20,8 @@ export default defineConfig({
         quiz: 'quiz-game.html',
         lesson: 'lesson-online.html',
         rules: 'han-viet-rules.html',
-        grammar: 'hsk-grammar.html'
+        grammar: 'hsk-grammar.html',
+        phonetics: 'chinese-phonetics.html'
       }
     }
   }

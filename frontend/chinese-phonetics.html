@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bảng Chữ Cái & Ngữ Âm Tiếng Trung (Pinyin) - Tiếng Trung Hongtai</title>
+  <link rel="icon" type="image/png" href="./src/assets/logo.png">
+
+  <!-- FontAwesome Icons & Google Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/src/style.css">
+
+  <style>
+    :root {
+      --primary-accent: #6366f1;
+      --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      --card-hover-border: #8b5cf6;
+      --tone1-color: #3b82f6;
+      --tone2-color: #10b981;
+      --tone3-color: #f59e0b;
+      --tone4-color: #ef4444;
+    }
+
+    body {
+      background-color: var(--bg-primary, #0b0f19);
+      color: var(--text-primary, #f8fafc);
+      font-family: 'Be Vietnam Pro', 'Outfit', sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+
+    .phonetics-header {
+      background: linear-gradient(180deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0) 100%);
+      border-bottom: 1px solid var(--border-glass, rgba(255, 255, 255, 0.08));
+      padding: 2.5rem 1.5rem 1.5rem 1.5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .phonetics-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #a5b4fc 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 0 0 0.5rem 0;
+    }
+
+    .phonetics-subtitle {
+      color: var(--text-muted, #94a3b8);
+      font-size: 1rem;
+      max-width: 700px;
+      margin: 0 auto 1.5rem auto;
+      line-height: 1.5;
+    }
+
+    .tab-navigation {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #94a3b8;
+      padding: 10px 22px;
+      border-radius: 14px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-btn:hover {
+      background: rgba(99, 102, 241, 0.15);
+      color: #c7d2fe;
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+
+    .tab-btn.active {
+      background: var(--primary-gradient);
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
+    }
+
+    .content-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    .search-filter-box {
+      margin-bottom: 2rem;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      background: rgba(15, 23, 42, 0.6);
+      padding: 12px 20px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .search-input-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .search-input-wrap i {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #64748b;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px 14px 10px 42px;
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    .group-card {
+      background: rgba(30, 41, 59, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 1.8rem;
+      margin-bottom: 2.5rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .group-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.2rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding-bottom: 0.8rem;
+    }
+
+    .group-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .special-note-box {
+      background: rgba(245, 158, 11, 0.1);
+      border-left: 4px solid #f59e0b;
+      padding: 12px 16px;
+      border-radius: 8px;
+      color: #fef08a;
+      font-size: 0.9rem;
+      margin-bottom: 1.2rem;
+      line-height: 1.5;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .sound-card {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 1.2rem;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .sound-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--card-hover-border);
+      box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15);
+    }
+
+    .sound-char-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .sound-char {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #818cf8;
+      font-family: 'Noto Sans SC', sans-serif;
+    }
+
+    .sound-badge {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(99, 102, 241, 0.15);
+      color: #a5b4fc;
+      font-weight: 600;
+    }
+
+    .audio-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--primary-gradient);
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+    }
+
+    .audio-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .sound-detail {
+      font-size: 0.88rem;
+      color: #cbd5e1;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .sound-note {
+      font-size: 0.82rem;
+      color: #94a3b8;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 8px 10px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      border-left: 2px solid #6366f1;
+    }
+
+    .example-list {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .example-tag {
+      background: rgba(30, 41, 59, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 4px 10px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .example-tag:hover {
+      background: rgba(99, 102, 241, 0.2);
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+
+    .example-pinyin {
+      font-weight: 700;
+      color: #38bdf8;
+    }
+
+    .example-meaning {
+      color: #94a3b8;
+      font-size: 0.75rem;
+    }
+
+    /* Comparison Table Styling */
+    .comparison-box {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-top: 1.5rem;
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+      padding: 14px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .comparison-table th {
+      background: rgba(30, 41, 59, 0.8);
+      color: #a5b4fc;
+      font-weight: 700;
+    }
+
+    /* Tone Card Styling */
+    .tone-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .tone-card {
+      background: rgba(15, 23, 42, 0.7);
+      border-radius: 18px;
+      padding: 1.5rem;
+      border-top: 4px solid var(--tone1-color);
+      position: relative;
+    }
+
+    .tone-card.t1 { border-color: var(--tone1-color); }
+    .tone-card.t2 { border-color: var(--tone2-color); }
+    .tone-card.t3 { border-color: var(--tone3-color); }
+    .tone-card.t4 { border-color: var(--tone4-color); }
+
+    .tone-name {
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .tone-pitch-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #38bdf8;
+    }
+
+    .back-btn-top {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #cbd5e1;
+      padding: 8px 16px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .back-btn-top:hover {
+      background: rgba(99, 102, 241, 0.2);
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Top Header with Back Navigation -->
+  <header class="phonetics-header">
+    <a href="/index.html" class="back-btn-top">
+      <i class="fa-solid fa-arrow-left"></i> Trang Chủ
+    </a>
+    <h1 class="phonetics-title"><i class="fa-solid fa-language"></i> Ngữ Âm & Bảng Chữ Cái Pinyin</h1>
+    <p class="phonetics-subtitle">Hệ thống chuẩn hóa 21 Thanh Mẫu, 36 Vận Mẫu và 4 Thanh Điệu Tiếng Trung tích hợp phát âm Audio tương tác.</p>
+
+    <!-- Main Navigation Tabs -->
+    <div class="tab-navigation">
+      <button class="tab-btn active" id="tab-thanhmau" onclick="switchPhoneticsTab('thanhmau')">
+        <i class="fa-solid fa-font"></i> 21 Thanh Mẫu (Phụ Âm)
+      </button>
+      <button class="tab-btn" id="tab-vanmau" onclick="switchPhoneticsTab('vanmau')">
+        <i class="fa-solid fa-spell-check"></i> 36 Vận Mẫu (Nguyên Âm)
+      </button>
+      <button class="tab-btn" id="tab-thanhdieu" onclick="switchPhoneticsTab('thanhdieu')">
+        <i class="fa-solid fa-sliders"></i> 4 Thanh Điệu & Biến Điệu
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="content-container">
+
+    <!-- Search & Filter Controls -->
+    <div class="search-filter-box" id="search-bar-wrap">
+      <div class="search-input-wrap">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="phonetics-search" class="search-input" placeholder="Tìm kiếm thanh mẫu, vận mẫu, pinyin, ví dụ (vd: b, p, mā, z...)..." oninput="filterPhoneticsData()">
+      </div>
+      <div style="color: #94a3b8; font-size: 0.85rem;">
+        <i class="fa-solid fa-volume-high" style="color: #6366f1;"></i> Bấm vào chữ hoặc thẻ ví dụ để nghe âm chuẩn
+      </div>
+    </div>
+
+    <!-- TAB 1: THANH MẪU -->
+    <div id="view-thanhmau" class="tab-view"></div>
+
+    <!-- TAB 2: VẬN MẪU -->
+    <div id="view-vanmau" class="tab-view" style="display: none;"></div>
+
+    <!-- TAB 3: THANH ĐIỆU -->
+    <div id="view-thanhdieu" class="tab-view" style="display: none;"></div>
+
+  </main>
+
+  <!-- Script Modules -->
+  <script type="module">
+    import { THANH_MAU_DATA, VAN_MAU_DATA, THANH_DIEU_DATA } from './src/pinyin_data.js';
+
+    window.THANH_MAU_DATA = THANH_MAU_DATA;
+    window.VAN_MAU_DATA = VAN_MAU_DATA;
+    window.THANH_DIEU_DATA = THANH_DIEU_DATA;
+
+    let currentTab = 'thanhmau';
+
+    // Speech Synthesis for Audio Playback
+    window.playAudio = function (text) {
+      if (!('speechSynthesis' in window)) {
+        alert("Trình duyệt không hỗ trợ đọc âm thanh Web Speech API.");
+        return;
+      }
+      window.speechSynthesis.cancel(); // cancel previous
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'zh-CN';
+      utterance.rate = 0.85; // Slightly slower for clear learning
+      window.speechSynthesis.speak(utterance);
+    };
+
+    window.switchPhoneticsTab = function (tabName) {
+      currentTab = tabName;
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(`tab-${tabName}`).classList.add('active');
+
+      document.querySelectorAll('.tab-view').forEach(view => view.style.display = 'none');
+      document.getElementById(`view-${tabName}`).style.display = 'block';
+
+      if (tabName === 'thanhdieu') {
+        document.getElementById('search-bar-wrap').style.display = 'none';
+      } else {
+        document.getElementById('search-bar-wrap').style.display = 'flex';
+      }
+      filterPhoneticsData();
+    };
+
+    function renderThanhMauView() {
+      const container = document.getElementById('view-thanhmau');
+      let html = '';
+
+      THANH_MAU_DATA.groups.forEach(group => {
+        html += `
+          <div class="group-card" data-group-id="${group.id}">
+            <div class="group-header">
+              <div class="group-title"><i class="fa-solid fa-layer-group" style="color:#818cf8;"></i> ${group.name}</div>
+            </div>
+            ${group.note_special ? `<div class="special-note-box"><i class="fa-solid fa-lightbulb"></i> ${group.note_special}</div>` : ''}
+            <div class="cards-grid">
+        `;
+
+        group.items.forEach(item => {
+          html += `
+            <div class="sound-card" data-search="${item.char} ${item.type} ${item.detail} ${item.note} ${item.examples.map(e => e.pinyin + ' ' + e.meaning).join(' ')}">
+              <div>
+                <div class="sound-char-wrap">
+                  <span class="sound-char" onclick="playAudio('${item.char}')">${item.char}</span>
+                  <span class="sound-badge">${item.type}</span>
+                  <button class="audio-btn" onclick="playAudio('${item.char}')" title="Nghe phát âm ${item.char}">
+                    <i class="fa-solid fa-volume-high"></i>
+                  </button>
+                </div>
+                <div class="sound-detail">${item.detail}</div>
+                <div class="sound-note"><i class="fa-solid fa-info-circle"></i> ${item.note}</div>
+              </div>
+              <div>
+                <div style="font-size:0.75rem; color:#94a3b8; font-weight:700; margin-bottom:6px; text-transform:uppercase;">Ví dụ thực hành:</div>
+                <div class="example-list">
+                  ${item.examples.map(ex => `
+                    <div class="example-tag" onclick="playAudio('${ex.pinyin}')" title="${ex.meaning}">
+                      <span class="example-pinyin">${ex.pinyin}</span>
+                      <span class="example-meaning">${ex.meaning}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+          `;
+        });
+
+        html += `</div></div>`;
+      });
+
+      // Comparison Table
+      const comp = THANH_MAU_DATA.comparison_table;
+      html += `
+        <div class="group-card">
+          <div class="group-title"><i class="fa-solid fa-code-compare" style="color:#f59e0b;"></i> ${comp.title}</div>
+          <div class="comparison-box">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>Đặc điểm phân biệt</th>
+                  <th>Nhóm 4 (j, q, x)</th>
+                  <th>Nhóm 5 (z, c, s)</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${comp.rows.map(r => `
+                  <tr>
+                    <td style="font-weight:700; color:#e2e8f0;">${r.feature}</td>
+                    <td>${r.group4}</td>
+                    <td>${r.group5}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    function renderVanMauView() {
+      const container = document.getElementById('view-vanmau');
+      let html = '';
+
+      VAN_MAU_DATA.groups.forEach(group => {
+        html += `
+          <div class="group-card">
+            <div class="group-header">
+              <div class="group-title"><i class="fa-solid fa-align-center" style="color:#34d399;"></i> ${group.name}</div>
+            </div>
+            ${group.standalone_rule ? `<div class="special-note-box"><i class="fa-solid fa-circle-info"></i> ${group.standalone_rule}</div>` : ''}
+            ${group.pronunciation_tip ? `<div class="special-note-box" style="border-left-color:#38bdf8; background:rgba(56,189,248,0.1); color:#bae6fd;"><i class="fa-solid fa-comment-dots"></i> ${group.pronunciation_tip}</div>` : ''}
+            
+            ${group.standalone_table ? `
+              <div style="margin-bottom:1.2rem; background:rgba(15,23,42,0.6); padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.06);">
+                <div style="font-size:0.8rem; font-weight:700; color:#a5b4fc; margin-bottom:8px;">Quy tắc viết khi đứng độc lập làm 1 âm tiết:</div>
+                <div style="display:flex; flex-wrap:wrap; gap:10px;">
+                  ${group.standalone_table.map(t => `<div style="background:rgba(30,41,59,0.8); padding:4px 12px; border-radius:8px; font-size:0.85rem;"><span style="color:#94a3b8;">${t.orig}</span> ➔ <strong style="color:#38bdf8;">${t.solo}</strong></div>`).join('')}
+                </div>
+              </div>
+            ` : ''}
+
+            <div class="cards-grid">
+        `;
+
+        group.items.forEach(item => {
+          html += `
+            <div class="sound-card" data-search="${item.char} ${item.detail} ${item.note} ${item.examples.map(e => e.pinyin + ' ' + e.meaning).join(' ')}">
+              <div>
+                <div class="sound-char-wrap">
+                  <span class="sound-char" onclick="playAudio('${item.char}')">${item.char}</span>
+                  <button class="audio-btn" onclick="playAudio('${item.char}')" title="Nghe phát âm ${item.char}">
+                    <i class="fa-solid fa-volume-high"></i>
+                  </button>
+                </div>
+                <div class="sound-detail">${item.detail}</div>
+                <div class="sound-note"><i class="fa-solid fa-check-circle"></i> ${item.note}</div>
+              </div>
+              <div>
+                <div style="font-size:0.75rem; color:#94a3b8; font-weight:700; margin-bottom:6px; text-transform:uppercase;">Ví dụ:</div>
+                <div class="example-list">
+                  ${item.examples.map(ex => `
+                    <div class="example-tag" onclick="playAudio('${ex.pinyin}')" title="${ex.meaning}">
+                      <span class="example-pinyin">${ex.pinyin}</span>
+                      <span class="example-meaning">${ex.meaning}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+          `;
+        });
+
+        html += `</div></div>`;
+      });
+
+      // N vs NG tip
+      const tip = VAN_MAU_DATA.n_ng_tip;
+      html += `
+        <div class="group-card">
+          <div class="group-title"><i class="fa-solid fa-bullhorn" style="color:#f43f5e;"></i> ${tip.title}</div>
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1.2rem; margin-top:1rem;">
+            ${tip.points.map(p => `
+              <div style="background:rgba(15,23,42,0.6); padding:1rem; border-radius:14px; border:1px solid rgba(255,255,255,0.06);">
+                <div style="font-weight:700; color:#fb7185; margin-bottom:6px;">${p.topic}</div>
+                <div style="font-size:0.88rem; color:#cbd5e1; line-height:1.5;">${p.detail}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    function renderThanhDieuView() {
+      const container = document.getElementById('view-thanhdieu');
+      const td = THANH_DIEU_DATA;
+
+      let html = `
+        <div class="group-card">
+          <div class="group-header">
+            <div class="group-title"><i class="fa-solid fa-music" style="color:#38bdf8;"></i> ${td.title}</div>
+          </div>
+          <p style="color:#94a3b8; font-size:0.95rem; margin-bottom:1.5rem;">${td.description}</p>
+          
+          <div class="tone-grid">
+            ${td.tones.map((t, idx) => `
+              <div class="tone-card t${idx+1}">
+                <div class="tone-name">${t.name}</div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <span class="tone-pitch-badge">Độ cao âm lượng: ${t.pitch}</span>
+                  <span style="font-size:1.8rem; font-weight:800; color:#cbd5e1;">${t.symbol}</span>
+                </div>
+                <div style="font-size:0.88rem; color:#cbd5e1; margin-bottom:1rem; line-height:1.5;">${t.guide}</div>
+                <div>
+                  <div style="font-size:0.75rem; font-weight:700; color:#94a3b8; margin-bottom:6px;">VÍ DỤ THỰC HÀNH:</div>
+                  <div class="example-list">
+                    ${t.examples.map(ex => `
+                      <div class="example-tag" onclick="playAudio('${ex.pinyin}')">
+                        <span class="example-pinyin">${ex.pinyin}</span>
+                        <span class="example-meaning">${ex.meaning}</span>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- Rules Section -->
+        <div class="group-card">
+          <div class="group-title"><i class="fa-solid fa-pen-fancy" style="color:#c084fc;"></i> ${td.rules.placement.title}</div>
+          <ul style="color:#cbd5e1; font-size:0.92rem; line-height:1.8; margin-top:1rem; padding-left:1.2rem;">
+            ${td.rules.placement.steps.map(s => `<li>${s}</li>`).join('')}
+          </ul>
+        </div>
+
+        <div class="group-card">
+          <div class="group-title"><i class="fa-solid fa-shuffle" style="color:#f59e0b;"></i> ${td.rules.sandhi.title}</div>
+          <div style="display:grid; gap:1.2rem; margin-top:1.2rem;">
+            ${td.rules.sandhi.cases.map(c => `
+              <div style="background:rgba(15,23,42,0.7); padding:1.2rem; border-radius:14px; border-left:4px solid #f59e0b;">
+                <div style="font-weight:700; color:#fef08a; font-size:1rem; margin-bottom:4px;">${c.case_title}</div>
+                <div style="color:#cbd5e1; font-size:0.9rem; margin-bottom:8px;">${c.desc}</div>
+                <div style="background:rgba(30,41,59,0.9); padding:8px 14px; border-radius:10px; font-weight:700; color:#38bdf8; display:inline-block; font-size:0.9rem;">
+                  <i class="fa-solid fa-arrow-right"></i> ${c.example}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    window.filterPhoneticsData = function () {
+      const query = document.getElementById('phonetics-search').value.toLowerCase().trim();
+      if (!query) {
+        document.querySelectorAll('.sound-card').forEach(card => card.style.display = 'flex');
+        document.querySelectorAll('.group-card').forEach(card => card.style.display = 'block');
+        return;
+      }
+
+      document.querySelectorAll('.sound-card').forEach(card => {
+        const searchData = (card.getAttribute('data-search') || '').toLowerCase();
+        if (searchData.includes(query)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      // Hide group card if all children sound-cards are hidden
+      document.querySelectorAll('.group-card').forEach(groupCard => {
+        const visibleCards = groupCard.querySelectorAll('.sound-card[style*="display: flex"], .sound-card:not([style*="display"])');
+        if (groupCard.querySelector('.cards-grid') && visibleCards.length === 0) {
+          groupCard.style.display = 'none';
+        } else {
+          groupCard.style.display = 'block';
+        }
+      });
+    };
+
+    // Initialize
+    renderThanhMauView();
+    renderVanMauView();
+    renderThanhDieuView();
+  </script>
+</body>
+
+</html>
