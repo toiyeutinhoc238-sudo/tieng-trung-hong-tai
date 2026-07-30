@@ -4758,16 +4758,28 @@ function renderLessonsList() {
   if (lessonsLevelContainer) lessonsLevelContainer.style.display = 'flex';
   if (versionSelectorWrap) versionSelectorWrap.style.display = 'flex';
 
-  // Toggle HSK 7-8-9 option visibility (only available in HSK 3.0)
-  const hsk79Opt = document.getElementById('hsk-level-79-option');
-  if (hsk79Opt) {
+  // Toggle HSK 7-8-9 option physically in DOM (only available in HSK 3.0)
+  if (levelSelect) {
+    const existingOpt = levelSelect.querySelector('option[value="7-9"]');
     if (activeHskVersion === '2.0') {
-      hsk79Opt.style.display = 'none';
+      if (existingOpt) {
+        window._hsk79OptionElement = existingOpt;
+        existingOpt.remove();
+      }
       if (activeLessonsLevel.toString() === '7-9') {
         activeLessonsLevel = 1;
       }
     } else {
-      hsk79Opt.style.display = 'block';
+      if (!existingOpt) {
+        if (!window._hsk79OptionElement) {
+          const opt = document.createElement('option');
+          opt.value = '7-9';
+          opt.id = 'hsk-level-79-option';
+          opt.textContent = 'Cấp HSK 7-8-9 (Cao cấp)';
+          window._hsk79OptionElement = opt;
+        }
+        levelSelect.appendChild(window._hsk79OptionElement);
+      }
     }
   }
 
