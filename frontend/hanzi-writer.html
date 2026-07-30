@@ -1289,17 +1289,14 @@
 
       function renderAllWordStrokeSteps(wordChars, charDataMap) {
         let containerHtml = '';
-        const stepTargets = [];
-
         wordChars.forEach(ch => {
           const data = charDataMap[ch];
           if (!data || !data.strokes) return;
-          containerHtml += `<div style="display:flex; align-items:center; gap:6px; background:rgba(15,23,42,0.9); padding:8px 12px; border-radius:10px; border:1px solid rgba(56,189,248,0.3); margin-bottom:6px; flex-wrap:wrap;">`;
+          containerHtml += `<div style="display:flex; align-items:center; gap:6px; background:rgba(15,23,42,0.9); padding:8px 12px; border-radius:10px; border:1px solid rgba(56,189,248,0.3); margin-bottom:6px;">`;
           containerHtml += `<span style="font-size:1.1rem; font-weight:bold; color:#38bdf8; margin-right:8px; font-family:'Noto Sans SC',sans-serif;">${ch}:</span>`;
           data.strokes.forEach((_, idx) => {
             const stepNum = idx + 1;
-            const targetId = `pgstep-${Math.random().toString(36).substring(2, 9)}`;
-            stepTargets.push({ id: targetId, char: ch, stepNum: stepNum });
+            const targetId = `pg-step-${ch}-${stepNum}-${Math.random().toString(36).substring(2, 5)}`;
             containerHtml += `
               <div style="display:inline-flex; flex-direction:column; align-items:center; background:#ffffff; border:1px solid #cbd5e1; border-radius:6px; padding:3px;">
                 <div id="${targetId}" style="width:34px; height:34px;"></div>
@@ -1311,28 +1308,27 @@
 
         pageStepsContainer.innerHTML = containerHtml || '<span style="font-size:0.8rem; color:#94a3b8;">Không tải được dãy nét.</span>';
 
-        // Render SVGs ngay khi DOM sẵn sàng
-        setTimeout(() => {
-          stepTargets.forEach(item => {
-            const el = document.getElementById(item.id);
-            if (el) {
-              try {
-                const w = HanziWriter.create(item.id, item.char, {
-                  width: 34,
-                  height: 34,
-                  padding: 2,
-                  showOutline: true,
-                  strokeColor: '#0f172a',
-                  outlineColor: '#cbd5e1',
-                  showCharacter: false
-                });
-                w.showCharacter({ strokeNum: item.stepNum });
-              } catch (err) {
-                console.error("Error creating step svg:", err);
-              }
+        // Render SVGs
+        wordChars.forEach(ch => {
+          const data = charDataMap[ch];
+          if (!data || !data.strokes) return;
+          data.strokes.forEach((_, idx) => {
+            const stepNum = idx + 1;
+            const targetEl = pageStepsContainer.querySelector(`[id^="pg-step-${ch}-${stepNum}-"]`);
+            if (targetEl) {
+              const w = HanziWriter.create(targetEl.id, ch, {
+                width: 34,
+                height: 34,
+                padding: 2,
+                showOutline: true,
+                strokeColor: '#0f172a',
+                outlineColor: '#e2e8f0',
+                showCharacter: false
+              });
+              w.showCharacter({ strokeNum: stepNum });
             }
           });
-        }, 50);
+        });
       }
     };
 
