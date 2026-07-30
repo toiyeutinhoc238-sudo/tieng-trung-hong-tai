@@ -1,140 +1,133 @@
 <!DOCTYPE html>
-<html lang="vi" class="dark">
+<html lang="vi">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bảng Chữ Cái & Ngữ Âm Tiếng Trung (Pinyin) - Tiếng Trung Hongtai</title>
+  <title>Bảng Chữ Cái & Ngữ Âm Tiếng Trung (Pinyin) | Hongtai Chinese</title>
   <link rel="icon" type="image/png" href="./src/assets/logo.png">
 
-  <!-- FontAwesome Icons & Google Fonts -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts & FontAwesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="/src/style.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Noto+Sans+SC:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
     :root {
-      --primary-accent: #6366f1;
-      --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-      --card-hover-border: #8b5cf6;
+      --bg-dark: #0b0f19;
+      --bg-card: rgba(15, 23, 42, 0.75);
+      --border-glass: rgba(255, 255, 255, 0.1);
+      --primary: #3b82f6;
+      --accent: #f59e0b;
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
       --tone1-color: #3b82f6;
       --tone2-color: #10b981;
       --tone3-color: #f59e0b;
       --tone4-color: #ef4444;
     }
 
-    body {
-      background-color: var(--bg-primary, #0b0f19);
-      color: var(--text-primary, #f8fafc);
-      font-family: 'Be Vietnam Pro', 'Outfit', sans-serif;
-      min-height: 100vh;
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
-    .phonetics-header {
-      background: linear-gradient(180deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0) 100%);
-      border-bottom: 1px solid var(--border-glass, rgba(255, 255, 255, 0.08));
-      padding: 2.5rem 1.5rem 1.5rem 1.5rem;
-      text-align: center;
-      position: relative;
+    body {
+      font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-dark);
+      background-image:
+        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(245, 158, 11, 0.08) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 24px;
     }
 
-    .phonetics-title {
-      font-size: 2.2rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, #a5b4fc 0%, #c084fc 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin: 0 0 0.5rem 0;
-    }
-
-    .phonetics-subtitle {
-      color: var(--text-muted, #94a3b8);
-      font-size: 1rem;
-      max-width: 700px;
-      margin: 0 auto 1.5rem auto;
-      line-height: 1.5;
-    }
-
-    .tab-navigation {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 1.5rem;
-      flex-wrap: wrap;
-    }
-
-    .tab-btn {
-      background: rgba(30, 41, 59, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #94a3b8;
-      padding: 10px 22px;
-      border-radius: 14px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .tab-btn:hover {
-      background: rgba(99, 102, 241, 0.15);
-      color: #c7d2fe;
-      border-color: rgba(99, 102, 241, 0.4);
-    }
-
-    .tab-btn.active {
-      background: var(--primary-gradient);
-      color: #ffffff;
-      border-color: transparent;
-      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
-    }
-
-    .content-container {
-      max-width: 1200px;
+    .container {
+      max-width: 1240px;
       margin: 0 auto;
-      padding: 2rem 1.5rem;
     }
 
-    .search-filter-box {
-      margin-bottom: 2rem;
+    /* Header */
+    .phonetics-header {
       display: flex;
-      gap: 1rem;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
-      background: rgba(15, 23, 42, 0.6);
-      padding: 12px 20px;
-      border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      gap: 16px;
+      padding: 24px;
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-glass);
+      border-radius: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
 
-    .search-input-wrap {
-      position: relative;
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-logo-img {
+      height: 48px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .title-group h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .title-group p {
+      color: var(--text-sub);
+      font-size: 0.95rem;
+      margin-top: 4px;
+    }
+
+    /* Search & Filter Bar */
+    .controls-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .search-wrap {
       flex: 1;
-      min-width: 260px;
+      min-width: 280px;
+      position: relative;
     }
 
-    .search-input-wrap i {
+    .search-wrap i {
       position: absolute;
-      left: 14px;
+      left: 16px;
       top: 50%;
       transform: translateY(-50%);
-      color: #64748b;
+      color: var(--text-sub);
+      font-size: 1.1rem;
     }
 
     .search-input {
       width: 100%;
-      padding: 10px 14px 10px 42px;
-      background: rgba(30, 41, 59, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 12px;
+      padding: 14px 16px 14px 48px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      border-radius: 14px;
       color: #fff;
       font-size: 0.95rem;
       outline: none;
@@ -142,46 +135,148 @@
     }
 
     .search-input:focus {
-      border-color: #6366f1;
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
     }
 
-    .group-card {
-      background: rgba(30, 41, 59, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 20px;
-      padding: 1.8rem;
-      margin-bottom: 2.5rem;
-      backdrop-filter: blur(10px);
-    }
-
-    .group-header {
+    /* Voice Engine Selector */
+    .voice-control-bar {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(167, 139, 250, 0.12));
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 14px;
+      padding: 14px 20px;
+      margin-bottom: 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 1.2rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      padding-bottom: 0.8rem;
+      flex-wrap: wrap;
+      gap: 12px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
     }
 
-    .group-title {
-      font-size: 1.3rem;
+    /* Navigation Tabs */
+    .level-tabs {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 24px;
+    }
+
+    .tab-btn {
+      padding: 12px 22px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-glass);
+      border-radius: 12px;
+      color: var(--text-sub);
       font-weight: 700;
-      color: #e2e8f0;
+      font-size: 0.95rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+    }
+
+    /* Main Reader Display Area */
+    .reader-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-glass);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      min-height: 500px;
+    }
+
+    .reader-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-glass);
+      padding-bottom: 18px;
+      margin-bottom: 24px;
+    }
+
+    .reader-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .level-badge {
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .btn-close {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-glass);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-close:hover {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+      border-color: #ef4444;
+    }
+
+    /* Sound Groups and Cards */
+    .group-block {
+      margin-bottom: 2.5rem;
+    }
+
+    .group-block-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #60a5fa;
+      margin-bottom: 1.2rem;
       display: flex;
       align-items: center;
       gap: 10px;
+      border-left: 4px solid var(--primary);
+      padding-left: 12px;
     }
 
-    .special-note-box {
+    .special-note-alert {
       background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
       border-left: 4px solid #f59e0b;
-      padding: 12px 16px;
-      border-radius: 8px;
+      padding: 14px 18px;
+      border-radius: 12px;
       color: #fef08a;
-      font-size: 0.9rem;
-      margin-bottom: 1.2rem;
-      line-height: 1.5;
+      font-size: 0.92rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
     }
 
     .cards-grid {
@@ -191,24 +286,23 @@
     }
 
     .sound-card {
-      background: rgba(15, 23, 42, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-glass);
       border-radius: 16px;
       padding: 1.2rem;
       transition: all 0.25s ease;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      position: relative;
     }
 
     .sound-card:hover {
       transform: translateY(-3px);
-      border-color: var(--card-hover-border);
-      box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15);
+      border-color: #60a5fa;
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2);
     }
 
-    .sound-char-wrap {
+    .sound-char-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -218,76 +312,83 @@
     .sound-char {
       font-size: 2.2rem;
       font-weight: 800;
-      color: #818cf8;
+      color: #60a5fa;
       font-family: 'Noto Sans SC', sans-serif;
+      cursor: pointer;
+    }
+
+    .sound-char:hover {
+      color: #93c5fd;
     }
 
     .sound-badge {
       font-size: 0.75rem;
+      font-weight: 700;
       padding: 4px 10px;
       border-radius: 20px;
-      background: rgba(99, 102, 241, 0.15);
-      color: #a5b4fc;
-      font-weight: 600;
+      background: rgba(59, 130, 246, 0.2);
+      color: #93c5fd;
     }
 
-    .audio-btn {
-      width: 38px;
-      height: 38px;
+    .audio-icon-btn {
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
-      background: var(--primary-gradient);
-      border: none;
-      color: #fff;
+      background: rgba(59, 130, 246, 0.2);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      color: #60a5fa;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.2s;
+      transition: all 0.2s;
     }
 
-    .audio-btn:hover {
+    .audio-icon-btn:hover {
+      background: #3b82f6;
+      color: #fff;
       transform: scale(1.1);
     }
 
-    .sound-detail {
-      font-size: 0.88rem;
+    .sound-detail-text {
+      font-size: 0.9rem;
       color: #cbd5e1;
-      margin-bottom: 8px;
-      line-height: 1.4;
+      margin-bottom: 10px;
+      line-height: 1.5;
     }
 
-    .sound-note {
+    .sound-note-tag {
       font-size: 0.82rem;
       color: #94a3b8;
-      background: rgba(255, 255, 255, 0.03);
-      padding: 8px 10px;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 8px 12px;
       border-radius: 8px;
-      margin-bottom: 12px;
-      border-left: 2px solid #6366f1;
+      margin-bottom: 14px;
+      border-left: 3px solid #f59e0b;
     }
 
-    .example-list {
+    .example-tags-container {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
     }
 
-    .example-tag {
-      background: rgba(30, 41, 59, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 4px 10px;
+    .example-chip {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid var(--border-glass);
+      padding: 5px 12px;
       border-radius: 10px;
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: all 0.2s;
       display: flex;
       align-items: center;
       gap: 6px;
     }
 
-    .example-tag:hover {
-      background: rgba(99, 102, 241, 0.2);
-      border-color: rgba(99, 102, 241, 0.4);
+    .example-chip:hover {
+      background: rgba(59, 130, 246, 0.25);
+      border-color: #60a5fa;
     }
 
     .example-pinyin {
@@ -297,38 +398,38 @@
 
     .example-meaning {
       color: #94a3b8;
-      font-size: 0.75rem;
+      font-size: 0.78rem;
     }
 
-    /* Comparison Table Styling */
-    .comparison-box {
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      overflow: hidden;
-      margin-top: 1.5rem;
+    /* Comparison Table */
+    .table-responsive {
+      overflow-x: auto;
+      border-radius: 14px;
+      border: 1px solid var(--border-glass);
+      background: rgba(15, 23, 42, 0.6);
+      margin-top: 1rem;
     }
 
-    .comparison-table {
+    .comp-table {
       width: 100%;
       border-collapse: collapse;
       text-align: left;
-      font-size: 0.9rem;
+      font-size: 0.92rem;
     }
 
-    .comparison-table th,
-    .comparison-table td {
+    .comp-table th,
+    .comp-table td {
       padding: 14px 18px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     }
 
-    .comparison-table th {
-      background: rgba(30, 41, 59, 0.8);
-      color: #a5b4fc;
+    .comp-table th {
+      background: rgba(30, 41, 59, 0.9);
+      color: #60a5fa;
       font-weight: 700;
     }
 
-    /* Tone Card Styling */
+    /* Tone Cards */
     .tone-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -337,72 +438,100 @@
     }
 
     .tone-card {
-      background: rgba(15, 23, 42, 0.7);
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-glass);
       border-radius: 18px;
       padding: 1.5rem;
       border-top: 4px solid var(--tone1-color);
-      position: relative;
     }
 
-    .tone-card.t1 { border-color: var(--tone1-color); }
-    .tone-card.t2 { border-color: var(--tone2-color); }
-    .tone-card.t3 { border-color: var(--tone3-color); }
-    .tone-card.t4 { border-color: var(--tone4-color); }
+    .tone-card.t1 { border-top-color: var(--tone1-color); }
+    .tone-card.t2 { border-top-color: var(--tone2-color); }
+    .tone-card.t3 { border-top-color: var(--tone3-color); }
+    .tone-card.t4 { border-top-color: var(--tone4-color); }
 
-    .tone-name {
+    .tone-title {
       font-size: 1.2rem;
       font-weight: 800;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
 
-    .tone-pitch-badge {
+    .pitch-badge {
       display: inline-block;
       padding: 3px 10px;
       border-radius: 12px;
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       font-weight: 700;
       margin-bottom: 12px;
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(59, 130, 246, 0.15);
       color: #38bdf8;
-    }
-
-    .back-btn-top {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      background: rgba(30, 41, 59, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #cbd5e1;
-      padding: 8px 16px;
-      border-radius: 12px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.85rem;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s;
-    }
-
-    .back-btn-top:hover {
-      background: rgba(99, 102, 241, 0.2);
-      color: #fff;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- Top Header with Back Navigation -->
-  <header class="phonetics-header">
-    <a href="/index.html" class="back-btn-top">
-      <i class="fa-solid fa-arrow-left"></i> Trang Chủ
-    </a>
-    <h1 class="phonetics-title"><i class="fa-solid fa-language"></i> Ngữ Âm & Bảng Chữ Cái Pinyin</h1>
-    <p class="phonetics-subtitle">Hệ thống chuẩn hóa 21 Thanh Mẫu, 36 Vận Mẫu và 4 Thanh Điệu Tiếng Trung tích hợp phát âm Audio tương tác.</p>
+  <div class="container">
 
-    <!-- Main Navigation Tabs -->
-    <div class="tab-navigation">
+    <!-- Header -->
+    <div class="phonetics-header">
+      <div class="brand-box">
+        <img class="brand-logo-img" src="./src/assets/logo.png" alt="Tiếng Trung Hongtai Logo">
+        <div class="title-group">
+          <h1>Chuyên Trang Ngữ Âm & Bảng Chữ Cái Pinyin</h1>
+          <p>Hệ thống tra cứu, tổng hợp 21 Thanh Mẫu, 36 Vận Mẫu và 4 Thanh Điệu Tiếng Trung chuẩn hóa</p>
+        </div>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <a href="/index.html" class="btn-close" style="background: rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.3);">
+          <i class="fa-solid fa-house"></i> Trang Chủ
+        </a>
+        <button class="btn-close" onclick="window.close()"><i class="fa-solid fa-xmark"></i> Đóng</button>
+      </div>
+    </div>
+
+    <!-- Search & Filter Controls -->
+    <div class="controls-bar" id="phonetics-search-bar">
+      <div class="search-wrap">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="search-phonetics-input" class="search-input"
+          placeholder="Tìm kiếm thanh mẫu, vận mẫu, pinyin, ví dụ (Ví dụ: b, p, mā, z...)..." onkeyup="filterPhoneticsContent()">
+      </div>
+    </div>
+
+    <!-- Voice Engine Selection Bar (Giống hệt Ngữ pháp HSK) -->
+    <div class="voice-control-bar">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div
+          style="width: 36px; height: 36px; border-radius: 50%; background: #3b82f6; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
+          <i class="fa-solid fa-microphone"></i>
+        </div>
+        <div>
+          <div style="font-weight: 800; font-size: 0.95rem; color: #fff;">Cấu Hình Giọng Đọc Phát Âm (Voice Engine)</div>
+          <div style="font-size: 0.8rem; color: #94a3b8;">Chọn giọng đọc AI chuẩn để nghe khi bấm vào âm tiết & ví dụ</div>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 0.85rem; font-weight: 700; color: #f59e0b;">Giọng Đọc Đang Chọn:</span>
+        <select id="grammar-voice-select" onchange="localStorage.setItem('speech_voice', this.value)"
+          style="background: #0f172a; border: 1.5px solid #3b82f6; color: #fff; padding: 8px 16px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; outline: none; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+          <option value="elevenlabs-adam">✨ ElevenLabs AI - Adam (Giọng Nam Trầm Ấm)</option>
+          <option value="elevenlabs-bella">✨ ElevenLabs AI - Bella (Giọng Nữ Nhẹ Nhàng)</option>
+          <option value="elevenlabs-jessica">✨ ElevenLabs AI - Jessica (Giọng Nữ Ngọt Ngào)</option>
+          <option value="elevenlabs-antoni">✨ ElevenLabs AI - Antoni (Giọng Nam Truyền Cảm)</option>
+          <option value="elevenlabs-arnold">✨ ElevenLabs AI - Arnold (Giọng Nam Mạnh Mẽ)</option>
+          <option value="elevenlabs-charlie">✨ ElevenLabs AI - Charlie (Giọng Nam Tự Nhiên)</option>
+          <option value="elevenlabs-george">✨ ElevenLabs AI - George (Giọng Nam Sang Trọng)</option>
+          <option value="elevenlabs-laura">✨ ElevenLabs AI - Laura (Giọng Nữ Ấm Áp)</option>
+          <option value="baidu-female">🇨🇳 Baidu Nữ (Giọng Bắc Kinh chuẩn)</option>
+          <option value="baidu-male">🇨🇳 Google/Baidu Nam (Giọng Nam Chuẩn)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="level-tabs">
       <button class="tab-btn active" id="tab-thanhmau" onclick="switchPhoneticsTab('thanhmau')">
         <i class="fa-solid fa-font"></i> 21 Thanh Mẫu (Phụ Âm)
       </button>
@@ -413,34 +542,31 @@
         <i class="fa-solid fa-sliders"></i> 4 Thanh Điệu & Biến Điệu
       </button>
     </div>
-  </header>
 
-  <!-- Main Content Area -->
-  <main class="content-container">
+    <!-- Main Reader Display Area -->
+    <div class="reader-card">
+      <div class="reader-header">
+        <div class="reader-title">
+          <span id="current-tab-title">21 Thanh Mẫu Tiếng Trung (Phụ Âm Đầu)</span>
+          <span id="current-tab-badge" class="level-badge">Thanh Mẫu</span>
+        </div>
+        <div style="color: var(--text-sub); font-size: 0.88rem;">
+          <i class="fa-solid fa-volume-high" style="color: #60a5fa;"></i> Bấm vào ký tự hoặc ví dụ để phát âm
+        </div>
+      </div>
 
-    <!-- Search & Filter Controls -->
-    <div class="search-filter-box" id="search-bar-wrap">
-      <div class="search-input-wrap">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="phonetics-search" class="search-input" placeholder="Tìm kiếm thanh mẫu, vận mẫu, pinyin, ví dụ (vd: b, p, mā, z...)..." oninput="filterPhoneticsData()">
-      </div>
-      <div style="color: #94a3b8; font-size: 0.85rem;">
-        <i class="fa-solid fa-volume-high" style="color: #6366f1;"></i> Bấm vào chữ hoặc thẻ ví dụ để nghe âm chuẩn
-      </div>
+      <!-- TAB 1: THANH MẪU CONTENT -->
+      <div id="view-thanhmau" class="tab-view-content"></div>
+
+      <!-- TAB 2: VẬN MẪU CONTENT -->
+      <div id="view-vanmau" class="tab-view-content" style="display: none;"></div>
+
+      <!-- TAB 3: THANH ĐIỆU CONTENT -->
+      <div id="view-thanhdieu" class="tab-view-content" style="display: none;"></div>
     </div>
 
-    <!-- TAB 1: THANH MẪU -->
-    <div id="view-thanhmau" class="tab-view"></div>
+  </div>
 
-    <!-- TAB 2: VẬN MẪU -->
-    <div id="view-vanmau" class="tab-view" style="display: none;"></div>
-
-    <!-- TAB 3: THANH ĐIỆU -->
-    <div id="view-thanhdieu" class="tab-view" style="display: none;"></div>
-
-  </main>
-
-  <!-- Script Modules -->
   <script type="module">
     import { THANH_MAU_DATA, VAN_MAU_DATA, THANH_DIEU_DATA } from './src/pinyin_data.js';
 
@@ -450,33 +576,76 @@
 
     let currentTab = 'thanhmau';
 
-    // Speech Synthesis for Audio Playback
-    window.playAudio = function (text) {
-      if (!('speechSynthesis' in window)) {
-        alert("Trình duyệt không hỗ trợ đọc âm thanh Web Speech API.");
-        return;
+    function getApiBaseUrl() {
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '') {
+        return 'http://localhost:5000';
       }
-      window.speechSynthesis.cancel(); // cancel previous
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'zh-CN';
-      utterance.rate = 0.85; // Slightly slower for clear learning
-      window.speechSynthesis.speak(utterance);
+      return 'https://tieng-trung-hong-tai.onrender.com';
+    }
+
+    let audioCurrent = null;
+    window.speakZhText = function (text) {
+      if (!text) return;
+
+      const selectEl = document.getElementById('grammar-voice-select');
+      const voice = selectEl ? selectEl.value : (localStorage.getItem('speech_voice') || 'baidu-female');
+      localStorage.setItem('speech_voice', voice);
+
+      if (audioCurrent) {
+        audioCurrent.pause();
+        audioCurrent = null;
+      }
+
+      if (voice.startsWith('elevenlabs') || voice.startsWith('baidu')) {
+        const API_BASE_URL = getApiBaseUrl();
+        const audioUrl = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(text)}&voice=${voice}`;
+        audioCurrent = new Audio(audioUrl);
+        audioCurrent.play().catch(err => {
+          console.warn("API Audio error, fallback to Web Speech:", err);
+          fallbackWebSpeech(text);
+        });
+      } else {
+        fallbackWebSpeech(text);
+      }
     };
+
+    function fallbackWebSpeech(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'zh-CN';
+        u.rate = 0.85;
+        window.speechSynthesis.speak(u);
+      }
+    }
 
     window.switchPhoneticsTab = function (tabName) {
       currentTab = tabName;
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       document.getElementById(`tab-${tabName}`).classList.add('active');
 
-      document.querySelectorAll('.tab-view').forEach(view => view.style.display = 'none');
+      document.querySelectorAll('.tab-view-content').forEach(view => view.style.display = 'none');
       document.getElementById(`view-${tabName}`).style.display = 'block';
 
-      if (tabName === 'thanhdieu') {
-        document.getElementById('search-bar-wrap').style.display = 'none';
+      const titleEl = document.getElementById('current-tab-title');
+      const badgeEl = document.getElementById('current-tab-badge');
+      const searchBar = document.getElementById('phonetics-search-bar');
+
+      if (tabName === 'thanhmau') {
+        titleEl.textContent = '21 Thanh Mẫu Tiếng Trung (Phụ Âm Đầu)';
+        badgeEl.textContent = 'Thanh Mẫu';
+        searchBar.style.display = 'flex';
+      } else if (tabName === 'vanmau') {
+        titleEl.textContent = '36 Vận Mẫu Tiếng Trung (Nguyên Âm)';
+        badgeEl.textContent = 'Vận Mẫu';
+        searchBar.style.display = 'flex';
       } else {
-        document.getElementById('search-bar-wrap').style.display = 'flex';
+        titleEl.textContent = '4 Thanh Điệu & Các Quy Tắc Biến Điệu';
+        badgeEl.textContent = 'Thanh Điệu';
+        searchBar.style.display = 'none';
       }
-      filterPhoneticsData();
+
+      filterPhoneticsContent();
     };
 
     function renderThanhMauView() {
@@ -485,11 +654,9 @@
 
       THANH_MAU_DATA.groups.forEach(group => {
         html += `
-          <div class="group-card" data-group-id="${group.id}">
-            <div class="group-header">
-              <div class="group-title"><i class="fa-solid fa-layer-group" style="color:#818cf8;"></i> ${group.name}</div>
-            </div>
-            ${group.note_special ? `<div class="special-note-box"><i class="fa-solid fa-lightbulb"></i> ${group.note_special}</div>` : ''}
+          <div class="group-block" data-group-id="${group.id}">
+            <div class="group-block-title"><i class="fa-solid fa-layer-group"></i> ${group.name}</div>
+            ${group.note_special ? `<div class="special-note-alert"><i class="fa-solid fa-lightbulb"></i> ${group.note_special}</div>` : ''}
             <div class="cards-grid">
         `;
 
@@ -497,21 +664,21 @@
           html += `
             <div class="sound-card" data-search="${item.char} ${item.type} ${item.detail} ${item.note} ${item.examples.map(e => e.pinyin + ' ' + e.meaning).join(' ')}">
               <div>
-                <div class="sound-char-wrap">
-                  <span class="sound-char" onclick="playAudio('${item.char}')">${item.char}</span>
+                <div class="sound-char-header">
+                  <span class="sound-char" onclick="speakZhText('${item.char}')">${item.char}</span>
                   <span class="sound-badge">${item.type}</span>
-                  <button class="audio-btn" onclick="playAudio('${item.char}')" title="Nghe phát âm ${item.char}">
+                  <button class="audio-icon-btn" onclick="speakZhText('${item.char}')" title="Nghe phát âm ${item.char}">
                     <i class="fa-solid fa-volume-high"></i>
                   </button>
                 </div>
-                <div class="sound-detail">${item.detail}</div>
-                <div class="sound-note"><i class="fa-solid fa-info-circle"></i> ${item.note}</div>
+                <div class="sound-detail-text">${item.detail}</div>
+                <div class="sound-note-tag"><i class="fa-solid fa-circle-info"></i> ${item.note}</div>
               </div>
               <div>
-                <div style="font-size:0.75rem; color:#94a3b8; font-weight:700; margin-bottom:6px; text-transform:uppercase;">Ví dụ thực hành:</div>
-                <div class="example-list">
+                <div style="font-size:0.75rem; color:var(--text-sub); font-weight:700; margin-bottom:8px; text-transform:uppercase;">Ví dụ thực hành:</div>
+                <div class="example-tags-container">
                   ${item.examples.map(ex => `
-                    <div class="example-tag" onclick="playAudio('${ex.pinyin}')" title="${ex.meaning}">
+                    <div class="example-chip" onclick="speakZhText('${ex.pinyin}')" title="${ex.meaning}">
                       <span class="example-pinyin">${ex.pinyin}</span>
                       <span class="example-meaning">${ex.meaning}</span>
                     </div>
@@ -528,10 +695,10 @@
       // Comparison Table
       const comp = THANH_MAU_DATA.comparison_table;
       html += `
-        <div class="group-card">
-          <div class="group-title"><i class="fa-solid fa-code-compare" style="color:#f59e0b;"></i> ${comp.title}</div>
-          <div class="comparison-box">
-            <table class="comparison-table">
+        <div class="group-block">
+          <div class="group-block-title" style="color:#f59e0b;"><i class="fa-solid fa-code-compare"></i> ${comp.title}</div>
+          <div class="table-responsive">
+            <table class="comp-table">
               <thead>
                 <tr>
                   <th>Đặc điểm phân biệt</th>
@@ -542,9 +709,9 @@
               <tbody>
                 ${comp.rows.map(r => `
                   <tr>
-                    <td style="font-weight:700; color:#e2e8f0;">${r.feature}</td>
-                    <td>${r.group4}</td>
-                    <td>${r.group5}</td>
+                    <td style="font-weight:700; color:#fff;">${r.feature}</td>
+                    <td style="color:#cbd5e1;">${r.group4}</td>
+                    <td style="color:#cbd5e1;">${r.group5}</td>
                   </tr>
                 `).join('')}
               </tbody>
@@ -562,18 +729,16 @@
 
       VAN_MAU_DATA.groups.forEach(group => {
         html += `
-          <div class="group-card">
-            <div class="group-header">
-              <div class="group-title"><i class="fa-solid fa-align-center" style="color:#34d399;"></i> ${group.name}</div>
-            </div>
-            ${group.standalone_rule ? `<div class="special-note-box"><i class="fa-solid fa-circle-info"></i> ${group.standalone_rule}</div>` : ''}
-            ${group.pronunciation_tip ? `<div class="special-note-box" style="border-left-color:#38bdf8; background:rgba(56,189,248,0.1); color:#bae6fd;"><i class="fa-solid fa-comment-dots"></i> ${group.pronunciation_tip}</div>` : ''}
+          <div class="group-block">
+            <div class="group-block-title" style="color:#34d399;"><i class="fa-solid fa-align-center"></i> ${group.name}</div>
+            ${group.standalone_rule ? `<div class="special-note-alert"><i class="fa-solid fa-circle-info"></i> ${group.standalone_rule}</div>` : ''}
+            ${group.pronunciation_tip ? `<div class="special-note-alert" style="border-left-color:#38bdf8; background:rgba(56,189,248,0.1); color:#bae6fd;"><i class="fa-solid fa-comment-dots"></i> ${group.pronunciation_tip}</div>` : ''}
             
             ${group.standalone_table ? `
-              <div style="margin-bottom:1.2rem; background:rgba(15,23,42,0.6); padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.06);">
-                <div style="font-size:0.8rem; font-weight:700; color:#a5b4fc; margin-bottom:8px;">Quy tắc viết khi đứng độc lập làm 1 âm tiết:</div>
+              <div style="margin-bottom:1.5rem; background:rgba(15,23,42,0.6); padding:14px 18px; border-radius:14px; border:1px solid var(--border-glass);">
+                <div style="font-size:0.85rem; font-weight:700; color:#60a5fa; margin-bottom:10px;">Quy tắc viết khi đứng độc lập làm 1 âm tiết:</div>
                 <div style="display:flex; flex-wrap:wrap; gap:10px;">
-                  ${group.standalone_table.map(t => `<div style="background:rgba(30,41,59,0.8); padding:4px 12px; border-radius:8px; font-size:0.85rem;"><span style="color:#94a3b8;">${t.orig}</span> ➔ <strong style="color:#38bdf8;">${t.solo}</strong></div>`).join('')}
+                  ${group.standalone_table.map(t => `<div style="background:rgba(30,41,59,0.8); padding:5px 14px; border-radius:8px; font-size:0.88rem;"><span style="color:#94a3b8;">${t.orig}</span> ➔ <strong style="color:#38bdf8;">${t.solo}</strong></div>`).join('')}
                 </div>
               </div>
             ` : ''}
@@ -585,20 +750,20 @@
           html += `
             <div class="sound-card" data-search="${item.char} ${item.detail} ${item.note} ${item.examples.map(e => e.pinyin + ' ' + e.meaning).join(' ')}">
               <div>
-                <div class="sound-char-wrap">
-                  <span class="sound-char" onclick="playAudio('${item.char}')">${item.char}</span>
-                  <button class="audio-btn" onclick="playAudio('${item.char}')" title="Nghe phát âm ${item.char}">
+                <div class="sound-char-header">
+                  <span class="sound-char" onclick="speakZhText('${item.char}')">${item.char}</span>
+                  <button class="audio-icon-btn" onclick="speakZhText('${item.char}')" title="Nghe phát âm ${item.char}">
                     <i class="fa-solid fa-volume-high"></i>
                   </button>
                 </div>
-                <div class="sound-detail">${item.detail}</div>
-                <div class="sound-note"><i class="fa-solid fa-check-circle"></i> ${item.note}</div>
+                <div class="sound-detail-text">${item.detail}</div>
+                <div class="sound-note-tag"><i class="fa-solid fa-check-circle"></i> ${item.note}</div>
               </div>
               <div>
-                <div style="font-size:0.75rem; color:#94a3b8; font-weight:700; margin-bottom:6px; text-transform:uppercase;">Ví dụ:</div>
-                <div class="example-list">
+                <div style="font-size:0.75rem; color:var(--text-sub); font-weight:700; margin-bottom:8px; text-transform:uppercase;">Ví dụ:</div>
+                <div class="example-tags-container">
                   ${item.examples.map(ex => `
-                    <div class="example-tag" onclick="playAudio('${ex.pinyin}')" title="${ex.meaning}">
+                    <div class="example-chip" onclick="speakZhText('${ex.pinyin}')" title="${ex.meaning}">
                       <span class="example-pinyin">${ex.pinyin}</span>
                       <span class="example-meaning">${ex.meaning}</span>
                     </div>
@@ -615,13 +780,13 @@
       // N vs NG tip
       const tip = VAN_MAU_DATA.n_ng_tip;
       html += `
-        <div class="group-card">
-          <div class="group-title"><i class="fa-solid fa-bullhorn" style="color:#f43f5e;"></i> ${tip.title}</div>
+        <div class="group-block">
+          <div class="group-block-title" style="color:#f43f5e;"><i class="fa-solid fa-bullhorn"></i> ${tip.title}</div>
           <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1.2rem; margin-top:1rem;">
             ${tip.points.map(p => `
-              <div style="background:rgba(15,23,42,0.6); padding:1rem; border-radius:14px; border:1px solid rgba(255,255,255,0.06);">
+              <div style="background:rgba(15,23,42,0.6); padding:1.2rem; border-radius:14px; border:1px solid var(--border-glass);">
                 <div style="font-weight:700; color:#fb7185; margin-bottom:6px;">${p.topic}</div>
-                <div style="font-size:0.88rem; color:#cbd5e1; line-height:1.5;">${p.detail}</div>
+                <div style="font-size:0.9rem; color:#cbd5e1; line-height:1.6;">${p.detail}</div>
               </div>
             `).join('')}
           </div>
@@ -636,26 +801,23 @@
       const td = THANH_DIEU_DATA;
 
       let html = `
-        <div class="group-card">
-          <div class="group-header">
-            <div class="group-title"><i class="fa-solid fa-music" style="color:#38bdf8;"></i> ${td.title}</div>
-          </div>
-          <p style="color:#94a3b8; font-size:0.95rem; margin-bottom:1.5rem;">${td.description}</p>
+        <div class="group-block">
+          <p style="color:var(--text-sub); font-size:0.98rem; margin-bottom:1.8rem; line-height:1.6;">${td.description}</p>
           
           <div class="tone-grid">
             ${td.tones.map((t, idx) => `
               <div class="tone-card t${idx+1}">
-                <div class="tone-name">${t.name}</div>
+                <div class="tone-title">${t.name}</div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <span class="tone-pitch-badge">Độ cao âm lượng: ${t.pitch}</span>
+                  <span class="pitch-badge">Độ cao: ${t.pitch}</span>
                   <span style="font-size:1.8rem; font-weight:800; color:#cbd5e1;">${t.symbol}</span>
                 </div>
-                <div style="font-size:0.88rem; color:#cbd5e1; margin-bottom:1rem; line-height:1.5;">${t.guide}</div>
+                <div style="font-size:0.9rem; color:#cbd5e1; margin-bottom:1.2rem; line-height:1.6;">${t.guide}</div>
                 <div>
-                  <div style="font-size:0.75rem; font-weight:700; color:#94a3b8; margin-bottom:6px;">VÍ DỤ THỰC HÀNH:</div>
-                  <div class="example-list">
+                  <div style="font-size:0.75rem; font-weight:700; color:var(--text-sub); margin-bottom:8px;">VÍ DỤ THỰC HÀNH:</div>
+                  <div class="example-tags-container">
                     ${t.examples.map(ex => `
-                      <div class="example-tag" onclick="playAudio('${ex.pinyin}')">
+                      <div class="example-chip" onclick="speakZhText('${ex.pinyin}')">
                         <span class="example-pinyin">${ex.pinyin}</span>
                         <span class="example-meaning">${ex.meaning}</span>
                       </div>
@@ -667,22 +829,21 @@
           </div>
         </div>
 
-        <!-- Rules Section -->
-        <div class="group-card">
-          <div class="group-title"><i class="fa-solid fa-pen-fancy" style="color:#c084fc;"></i> ${td.rules.placement.title}</div>
-          <ul style="color:#cbd5e1; font-size:0.92rem; line-height:1.8; margin-top:1rem; padding-left:1.2rem;">
+        <div class="group-block">
+          <div class="group-block-title" style="color:#c084fc;"><i class="fa-solid fa-pen-fancy"></i> ${td.rules.placement.title}</div>
+          <ul style="color:#cbd5e1; font-size:0.95rem; line-height:1.8; margin-top:1rem; padding-left:1.4rem;">
             ${td.rules.placement.steps.map(s => `<li>${s}</li>`).join('')}
           </ul>
         </div>
 
-        <div class="group-card">
-          <div class="group-title"><i class="fa-solid fa-shuffle" style="color:#f59e0b;"></i> ${td.rules.sandhi.title}</div>
+        <div class="group-block">
+          <div class="group-block-title" style="color:#f59e0b;"><i class="fa-solid fa-shuffle"></i> ${td.rules.sandhi.title}</div>
           <div style="display:grid; gap:1.2rem; margin-top:1.2rem;">
             ${td.rules.sandhi.cases.map(c => `
-              <div style="background:rgba(15,23,42,0.7); padding:1.2rem; border-radius:14px; border-left:4px solid #f59e0b;">
-                <div style="font-weight:700; color:#fef08a; font-size:1rem; margin-bottom:4px;">${c.case_title}</div>
-                <div style="color:#cbd5e1; font-size:0.9rem; margin-bottom:8px;">${c.desc}</div>
-                <div style="background:rgba(30,41,59,0.9); padding:8px 14px; border-radius:10px; font-weight:700; color:#38bdf8; display:inline-block; font-size:0.9rem;">
+              <div style="background:rgba(15,23,42,0.6); padding:1.2rem; border-radius:14px; border-left:4px solid #f59e0b; border:1px solid var(--border-glass);">
+                <div style="font-weight:700; color:#fef08a; font-size:1rem; margin-bottom:6px;">${c.case_title}</div>
+                <div style="color:#cbd5e1; font-size:0.92rem; margin-bottom:10px;">${c.desc}</div>
+                <div style="background:rgba(30,41,59,0.9); padding:8px 16px; border-radius:10px; font-weight:700; color:#38bdf8; display:inline-block; font-size:0.92rem;">
                   <i class="fa-solid fa-arrow-right"></i> ${c.example}
                 </div>
               </div>
@@ -694,11 +855,14 @@
       container.innerHTML = html;
     }
 
-    window.filterPhoneticsData = function () {
-      const query = document.getElementById('phonetics-search').value.toLowerCase().trim();
+    window.filterPhoneticsContent = function () {
+      const searchInput = document.getElementById('search-phonetics-input');
+      if (!searchInput) return;
+
+      const query = searchInput.value.toLowerCase().trim();
       if (!query) {
         document.querySelectorAll('.sound-card').forEach(card => card.style.display = 'flex');
-        document.querySelectorAll('.group-card').forEach(card => card.style.display = 'block');
+        document.querySelectorAll('.group-block').forEach(card => card.style.display = 'block');
         return;
       }
 
@@ -711,16 +875,22 @@
         }
       });
 
-      // Hide group card if all children sound-cards are hidden
-      document.querySelectorAll('.group-card').forEach(groupCard => {
-        const visibleCards = groupCard.querySelectorAll('.sound-card[style*="display: flex"], .sound-card:not([style*="display"])');
-        if (groupCard.querySelector('.cards-grid') && visibleCards.length === 0) {
-          groupCard.style.display = 'none';
+      document.querySelectorAll('.group-block').forEach(groupBlock => {
+        const visibleCards = groupBlock.querySelectorAll('.sound-card[style*="display: flex"], .sound-card:not([style*="display"])');
+        if (groupBlock.querySelector('.cards-grid') && visibleCards.length === 0) {
+          groupBlock.style.display = 'none';
         } else {
-          groupCard.style.display = 'block';
+          groupBlock.style.display = 'block';
         }
       });
     };
+
+    // Load Voice Preference from LocalStorage
+    const savedVoice = localStorage.getItem('speech_voice');
+    if (savedVoice) {
+      const selectEl = document.getElementById('grammar-voice-select');
+      if (selectEl) selectEl.value = savedVoice;
+    }
 
     // Initialize
     renderThanhMauView();
