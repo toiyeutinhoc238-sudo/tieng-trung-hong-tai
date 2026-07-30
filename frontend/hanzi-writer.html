@@ -527,13 +527,13 @@
           <label class="filter-label">2. Cấp Độ / Level</label>
           <select id="sel-level" class="filter-select" onchange="onStandardOrLevelChange()">
             <option value="all">Tất cả cấp độ</option>
-            <option value="1">HSK 1 / YCT 1</option>
-            <option value="2">HSK 2 / YCT 2</option>
-            <option value="3">HSK 3 / YCT 3</option>
-            <option value="4">HSK 4 / YCT 4</option>
-            <option value="5">HSK 5</option>
-            <option value="6">HSK 6</option>
-            <option value="7-9">HSK 7-8-9 (Cao cấp)</option>
+            <option value="1">HSK Cấp 1</option>
+            <option value="2">HSK Cấp 2</option>
+            <option value="3">HSK Cấp 3</option>
+            <option value="4">HSK Cấp 4</option>
+            <option value="5">HSK Cấp 5</option>
+            <option value="6">HSK Cấp 6</option>
+            <option value="7-9">HSK Cấp 7-8-9 (Cao cấp)</option>
           </select>
         </div>
 
@@ -710,30 +710,52 @@
       return false;
     }
 
+    let currentLevelMode = '';
+
     window.onStandardOrLevelChange = function () {
       const std = document.getElementById('sel-standard').value;
       const levelSelect = document.getElementById('sel-level');
       
-      if (levelSelect) {
-        const opt79 = levelSelect.querySelector('option[value="7-9"]');
-        if (std === 'hsk2' || std === 'yct') {
-          if (opt79) {
-            window._hwOpt79 = opt79;
-            opt79.remove();
-          }
-          if (levelSelect.value === '7-9') {
-            levelSelect.value = 'all';
-          }
+      const targetMode = std === 'yct' ? 'yct' : (std === 'hsk2' ? 'hsk2' : 'hsk3');
+      if (currentLevelMode !== targetMode) {
+        currentLevelMode = targetMode;
+        const currentVal = levelSelect.value;
+        
+        if (targetMode === 'yct') {
+          levelSelect.innerHTML = `
+            <option value="all">Tất cả cấp độ YCT</option>
+            <option value="1">YCT Cấp 1 (Thiếu Nhi)</option>
+            <option value="2">YCT Cấp 2 (Thiếu Nhi)</option>
+            <option value="3">YCT Cấp 3 (Thiếu Nhi)</option>
+            <option value="4">YCT Cấp 4 (Thiếu Nhi)</option>
+          `;
+        } else if (targetMode === 'hsk2') {
+          levelSelect.innerHTML = `
+            <option value="all">Tất cả cấp độ HSK</option>
+            <option value="1">HSK Cấp 1</option>
+            <option value="2">HSK Cấp 2</option>
+            <option value="3">HSK Cấp 3</option>
+            <option value="4">HSK Cấp 4</option>
+            <option value="5">HSK Cấp 5</option>
+            <option value="6">HSK Cấp 6</option>
+          `;
         } else {
-          if (!opt79) {
-            if (!window._hwOpt79) {
-              const opt = document.createElement('option');
-              opt.value = '7-9';
-              opt.textContent = 'HSK 7-8-9 (Cao cấp)';
-              window._hwOpt79 = opt;
-            }
-            levelSelect.appendChild(window._hwOpt79);
-          }
+          levelSelect.innerHTML = `
+            <option value="all">Tất cả cấp độ HSK</option>
+            <option value="1">HSK Cấp 1</option>
+            <option value="2">HSK Cấp 2</option>
+            <option value="3">HSK Cấp 3</option>
+            <option value="4">HSK Cấp 4</option>
+            <option value="5">HSK Cấp 5</option>
+            <option value="6">HSK Cấp 6</option>
+            <option value="7-9">HSK Cấp 7-8-9 (Cao cấp)</option>
+          `;
+        }
+
+        if (Array.from(levelSelect.options).some(o => o.value === currentVal)) {
+          levelSelect.value = currentVal;
+        } else {
+          levelSelect.value = 'all';
         }
       }
 
