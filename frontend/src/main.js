@@ -4781,7 +4781,7 @@ function renderLessonsList() {
     const totalWordsInLevel = vocabList.filter(w =>
       !w.isCustom &&
       w.curriculum !== 'yct' && w.hskVersion !== 'yct' &&
-      w.level.toString() === activeLessonsLevel.toString() &&
+      matchLevel(w.level, activeLessonsLevel) &&
       (w.hskVersion || '3.0') === activeHskVersion
     ).length;
     const totalStr = totalWordsInLevel > 0 ? `, ${totalWordsInLevel.toLocaleString()} từ vựng` : '';
@@ -4794,9 +4794,7 @@ function renderLessonsList() {
         4: `HSK 2.0 Cấp 4 - Trung cấp nâng cao, thảo luận nhiều chủ đề chuyên sâu`,
         5: `HSK 2.0 Cấp 5 - Cao cấp, đọc báo chí xem phim và thuyết trình tự nhiên`,
         6: `HSK 2.0 Cấp 6 - Thành thạo, đọc văn học và viết học thuật`,
-        7: `HSK 2.0 Cấp 7 - Nâng cao chuyên nghiệp, sử dụng ngôn ngữ tiếng Trung nước ngoài`,
-        8: `HSK 2.0 Cấp 8 - Đỉnh cao chuyên môn, có thể nghiên cứu và giảng dạy`,
-        9: `HSK 2.0 Cấp 9 - Thành thạo hoàn toàn, nắm vững văn hóa và ngôn ngữ Trung Quốc`,
+        '7-9': `HSK 2.0 Cấp 7-8-9 - Nâng cao chuyên nghiệp, sử dụng ngôn ngữ tiếng Trung nước ngoài`,
       },
       '3.0': {
         1: `HSK 3.0 Cấp 1 - Sơ cấp dành cho người mới bắt đầu`,
@@ -4805,13 +4803,11 @@ function renderLessonsList() {
         4: `HSK 3.0 Cấp 4 - Trung cấp cơ bản`,
         5: `HSK 3.0 Cấp 5 - Trung cấp nâng cao`,
         6: `HSK 3.0 Cấp 6 - Cao cấp`,
-        7: `HSK 3.0 Cấp 7 - Nâng cao chuyên nghiệp`,
-        8: `HSK 3.0 Cấp 8 - Đỉnh cao chuyên môn`,
-        9: `HSK 3.0 Cấp 9 - Thành thạo hoàn toàn`,
+        '7-9': `HSK 3.0 Cấp 7-8-9 - Nâng cao chuyên nghiệp`,
       }
     };
     const desc = (levelDescMap[activeHskVersion] || {})[activeLessonsLevel]
-      || `HSK ${activeHskVersion} Cấp ${activeLessonsLevel}`;
+      || `HSK ${activeHskVersion} Cấp ${activeLessonsLevel === '7-9' ? '7-8-9' : activeLessonsLevel}`;
     objectivesText.textContent = `Mục tiêu: ${desc}${totalStr}`;
   }
 
@@ -4819,7 +4815,7 @@ function renderLessonsList() {
   const levelVocabs = vocabList.filter(w => {
     if (w.isCustom) return false;
     if (w.curriculum === 'yct' || w.hskVersion === 'yct') return false;
-    if (w.level.toString() !== activeLessonsLevel.toString()) return false;
+    if (!matchLevel(w.level, activeLessonsLevel)) return false;
     if ((w.hskVersion || '3.0') !== activeHskVersion) return false;
     if ((activeLessonsLevel === 4 || activeLessonsLevel === 5) && activeHskVersion === '2.0' && activeVolumeFilter !== 'all') {
       if (w.volume) {
@@ -4841,22 +4837,28 @@ function renderLessonsList() {
     lessonGroups[les].push(w);
   });
 
-  const uniqueLessonIds = Object.keys(lessonGroups).map(Number).sort((a, b) => a - b);
+  const uniqueLessonKeys = Object.keys(lessonGroups).sort((a, b) => {
+    const numA = parseInt(a.replace(/\D/g, '')) || 0;
+    const numB = parseInt(b.replace(/\D/g, '')) || 0;
+    return numA - numB;
+  });
 
-  uniqueLessonIds.forEach(lessonId => {
-    const sliceWords = lessonGroups[lessonId] || [];
+  uniqueLessonKeys.forEach(lessonKey => {
+    const sliceWords = lessonGroups[lessonKey] || [];
     const wordsCount = sliceWords.length;
     if (wordsCount === 0) return;
 
     // Retrieve title and desc directly from the first word of the group
-    const title = sliceWords[0].lessonTitle || `Bài ${lessonId}`;
-    const desc = sliceWords[0].lessonDesc || `Ôn tập từ vựng bài học HSK Cấp ${activeLessonsLevel}`;
+    const firstWord = sliceWords[0];
+    const title = firstWord.lessonTitle || firstWord.category || `Bài ${lessonKey}`;
+    const desc = firstWord.lessonDesc || `Ôn tập từ vựng bài học HSK Cấp ${activeLessonsLevel}`;
+    const badgeLevelStr = activeLessonsLevel === '7-9' ? '7-8-9' : activeLessonsLevel;
 
     const card = document.createElement('div');
     card.className = 'lesson-card';
     card.innerHTML = `
       <div>
-        <span class="lesson-badge">HSK${activeLessonsLevel} (${activeHskVersion}) - Bài ${lessonId}</span>
+        <span class="lesson-badge">HSK ${badgeLevelStr} (${activeHskVersion}) - ${firstWord.category || ('Bài ' + lessonKey)}</span>
         <h3 class="lesson-title">${title}</h3>
         <p class="lesson-desc">${desc}</p>
       </div>
@@ -4869,7 +4871,7 @@ function renderLessonsList() {
     `;
 
     card.addEventListener('click', () => {
-      startLessonStudy({ id: lessonId, title }, sliceWords);
+      startLessonStudy({ id: lessonKey, title }, sliceWords);
     });
 
     grid.appendChild(card);
@@ -4927,7 +4929,8 @@ function initLessonsView() {
 
   if (levelSelect) {
     levelSelect.addEventListener('change', () => {
-      activeLessonsLevel = parseInt(levelSelect.value);
+      const val = levelSelect.value;
+      activeLessonsLevel = /^\d+$/.test(val) ? parseInt(val) : val;
       renderLessonsList();
     });
   }
