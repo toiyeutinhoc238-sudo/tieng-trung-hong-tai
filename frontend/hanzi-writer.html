@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luyện Viết Chữ Hán Tương Tác | Hongtai Chinese</title>
+  <link rel="icon" type="image/png" href="./src/assets/logo.png">
+
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Noto+Sans+SC:wght@400;500;700;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- HanziWriter Engine CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #0b0f19;
+      --bg-card: rgba(15, 23, 42, 0.75);
+      --border-glass: rgba(255, 255, 255, 0.1);
+      --primary: #3b82f6;
+      --accent: #f59e0b;
+      --success: #10b981;
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-dark);
+      background-image:
+        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(245, 158, 11, 0.08) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .hanzi-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 24px;
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-glass);
+      border-radius: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-logo-img {
+      height: 48px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .title-group h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .title-group p {
+      color: var(--text-sub);
+      font-size: 0.95rem;
+      margin-top: 4px;
+    }
+
+    .btn-close {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-glass);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-close:hover {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+      border-color: #ef4444;
+    }
+
+    /* Voice Control Bar */
+    .voice-control-bar {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(167, 139, 250, 0.12));
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 14px;
+      padding: 14px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Filter & Controls Bar */
+    .filter-section {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-glass);
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .filter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .filter-label {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .filter-select {
+      width: 100%;
+      padding: 12px 14px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border-glass);
+      border-radius: 12px;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.92rem;
+      outline: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    }
+
+    .search-input-wrap {
+      position: relative;
+      width: 100%;
+    }
+
+    .search-input-wrap i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-sub);
+      font-size: 1.1rem;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 14px 16px 14px 48px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border-glass);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .search-input:focus {
+      border-color: var(--primary);
+    }
+
+    /* Main Workspace Layout (2 Columns) */
+    .main-workspace {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 992px) {
+      .main-workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Column 1: Vocab List Panel */
+    .vocab-panel {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-glass);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      max-height: 780px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel-header {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-glass);
+      padding-bottom: 12px;
+    }
+
+    .vocab-list-scroll {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-right: 4px;
+    }
+
+    .word-card-item {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid var(--border-glass);
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .word-card-item:hover {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: #60a5fa;
+      transform: translateX(3px);
+    }
+
+    .word-card-item.active {
+      background: rgba(59, 130, 246, 0.25);
+      border-color: #3b82f6;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+    }
+
+    .word-char-display {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #60a5fa;
+      font-family: 'Noto Sans SC', sans-serif;
+    }
+
+    .word-pinyin-display {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #38bdf8;
+    }
+
+    .word-meaning-display {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+    }
+
+    /* Column 2: Writing Canvas Workshop */
+    .writing-workshop {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-glass);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .workshop-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-glass);
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+
+    .word-active-title {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #fff;
+      font-family: 'Noto Sans SC', sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    /* Character Tabs for Multi-char words (e.g. 学习 -> 学 | 习) */
+    .char-selector-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .char-tab-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: rgba(30, 41, 59, 0.8);
+      border: 2px solid var(--border-glass);
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: 800;
+      font-family: 'Noto Sans SC', sans-serif;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .char-tab-btn:hover {
+      border-color: #60a5fa;
+    }
+
+    .char-tab-btn.active {
+      background: #3b82f6;
+      border-color: #3b82f6;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+    }
+
+    /* Hanzi Rice Grid Canvas Box (Ô Mễ) */
+    .canvas-rice-grid-wrap {
+      position: relative;
+      width: 280px;
+      height: 280px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 3px solid #3b82f6;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Rice Grid Overlay SVG (Đường kẻ Ô Mễ) */
+    .rice-grid-svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .hanzi-target-box {
+      width: 260px;
+      height: 260px;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Action Control Buttons */
+    .action-buttons-grid {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .action-btn {
+      padding: 12px 20px;
+      border-radius: 12px;
+      background: rgba(30, 41, 59, 0.9);
+      border: 1px solid var(--border-glass);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+      background: rgba(59, 130, 246, 0.25);
+      border-color: #60a5fa;
+      transform: translateY(-2px);
+    }
+
+    .action-btn.btn-quiz-mode {
+      background: #3b82f6;
+      border-color: #3b82f6;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+    }
+
+    .action-btn.btn-quiz-mode:hover {
+      background: #2563eb;
+    }
+
+    /* Status Alert Banner */
+    .status-alert-banner {
+      width: 100%;
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid var(--border-glass);
+      border-radius: 12px;
+      padding: 12px 18px;
+      text-align: center;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #cbd5e1;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- Header -->
+    <div class="hanzi-header">
+      <div class="brand-box">
+        <img class="brand-logo-img" src="./src/assets/logo.png" alt="Tiếng Trung Hongtai Logo">
+        <div class="title-group">
+          <h1>Chuyên Trang Luyện Viết Chữ Hán Tương Tác</h1>
+          <p>Tự tay tập viết từng nét chữ Hán chuẩn nét thuận bút trực tiếp trên bảng vẽ thông minh</p>
+        </div>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <a href="/index.html" class="btn-close" style="background: rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.3);">
+          <i class="fa-solid fa-house"></i> Trang Chủ
+        </a>
+        <button class="btn-close" onclick="window.close()"><i class="fa-solid fa-xmark"></i> Đóng</button>
+      </div>
+    </div>
+
+    <!-- Voice Control Bar -->
+    <div class="voice-control-bar">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div
+          style="width: 36px; height: 36px; border-radius: 50%; background: #3b82f6; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
+          <i class="fa-solid fa-microphone"></i>
+        </div>
+        <div>
+          <div style="font-weight: 800; font-size: 0.95rem; color: #fff;">Cấu Hình Giọng Đọc AI (Voice Engine)</div>
+          <div style="font-size: 0.8rem; color: #94a3b8;">Chọn giọng đọc AI chuẩn để nghe khi tập viết chữ Hán</div>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 0.85rem; font-weight: 700; color: #f59e0b;">Giọng Đọc Đang Chọn:</span>
+        <select id="grammar-voice-select" onchange="localStorage.setItem('speech_voice', this.value)"
+          style="background: #0f172a; border: 1.5px solid #3b82f6; color: #fff; padding: 8px 16px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; outline: none; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+          <option value="elevenlabs-adam">✨ ElevenLabs AI - Adam (Giọng Nam Trầm Ấm)</option>
+          <option value="elevenlabs-bella">✨ ElevenLabs AI - Bella (Giọng Nữ Nhẹ Nhàng)</option>
+          <option value="elevenlabs-jessica">✨ ElevenLabs AI - Jessica (Giọng Nữ Ngọt Ngào)</option>
+          <option value="elevenlabs-antoni">✨ ElevenLabs AI - Antoni (Giọng Nam Truyền Cảm)</option>
+          <option value="elevenlabs-arnold">✨ ElevenLabs AI - Arnold (Giọng Nam Mạnh Mẽ)</option>
+          <option value="elevenlabs-charlie">✨ ElevenLabs AI - Charlie (Giọng Nam Tự Nhiên)</option>
+          <option value="elevenlabs-george">✨ ElevenLabs AI - George (Giọng Nam Sang Trọng)</option>
+          <option value="elevenlabs-laura">✨ ElevenLabs AI - Laura (Giọng Nữ Ấm Áp)</option>
+          <option value="baidu-female">🇨🇳 Baidu Nữ (Giọng Bắc Kinh chuẩn)</option>
+          <option value="baidu-male">🇨🇳 Google/Baidu Nam (Giọng Nam Chuẩn)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Filter & Controls Section -->
+    <div class="filter-section">
+      <div class="filter-grid">
+        <div class="filter-group">
+          <label class="filter-label">1. Chuẩn Giáo Trình</label>
+          <select id="sel-standard" class="filter-select" onchange="onStandardOrLevelChange()">
+            <option value="all">Tất cả giáo trình</option>
+            <option value="hsk2">HSK 2.0 (Truyền thống)</option>
+            <option value="hsk3">HSK 3.0 (Mới nhất)</option>
+            <option value="yct">YCT (Tiếng Trung Trẻ Em)</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">2. Cấp Độ / Level</label>
+          <select id="sel-level" class="filter-select" onchange="onStandardOrLevelChange()">
+            <option value="all">Tất cả cấp độ</option>
+            <option value="1">HSK 1 / YCT 1</option>
+            <option value="2">HSK 2 / YCT 2</option>
+            <option value="3">HSK 3 / YCT 3</option>
+            <option value="4">HSK 4 / YCT 4</option>
+            <option value="5">HSK 5</option>
+            <option value="6">HSK 6</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">3. Bài Học Cụ Thể</label>
+          <select id="sel-lesson" class="filter-select" onchange="renderFilteredVocabList()">
+            <option value="all">Tất cả các bài (Mặc định)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="search-input-wrap">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="search-vocab-input" class="search-input"
+          placeholder="Tìm từ vựng, pinyin hoặc nghĩa tiếng Việt (Ví dụ: 你好, xuéxí, học tập)..." oninput="renderFilteredVocabList()">
+      </div>
+    </div>
+
+    <!-- Main Workspace (2 Columns) -->
+    <div class="main-workspace">
+
+      <!-- Column 1: Vocab Panel List -->
+      <div class="vocab-panel">
+        <div class="panel-header">
+          <span><i class="fa-solid fa-list-check" style="color:#60a5fa;"></i> Danh Sách Từ Vựng</span>
+          <span id="vocab-count-badge" style="font-size:0.8rem; background:rgba(59,130,246,0.2); color:#60a5fa; padding:2px 10px; border-radius:12px;">0 từ</span>
+        </div>
+        <div id="vocab-list-container" class="vocab-list-scroll"></div>
+      </div>
+
+      <!-- Column 2: Hanzi Writer Canvas Workshop -->
+      <div class="writing-workshop">
+        <div class="workshop-header">
+          <div>
+            <div class="word-active-title">
+              <span id="active-word-text">你好</span>
+              <button class="btn-close" style="padding:6px 12px; font-size:0.8rem; background:rgba(59,130,246,0.2);" onclick="speakZhText(currentWordObj?.word)">
+                <i class="fa-solid fa-volume-high"></i> Nghe đọc
+              </button>
+            </div>
+            <div style="margin-top:4px;">
+              <span id="active-pinyin-text" style="font-size:1.1rem; font-weight:700; color:#38bdf8; margin-right:12px;">nǐ hǎo</span>
+              <span id="active-meaning-text" style="font-size:0.95rem; color:#cbd5e1;">Xin chào</span>
+            </div>
+          </div>
+          <div id="active-level-badge" class="level-badge">HSK 1</div>
+        </div>
+
+        <!-- Character Selector Tabs (For words with multiple chars like 你好 -> 你 | 好) -->
+        <div style="font-size:0.8rem; font-weight:800; color:var(--text-sub); text-transform:uppercase; margin-bottom:8px;">
+          Chọn Chữ Hán Cần Tập Viết:
+        </div>
+        <div id="char-tabs-container" class="char-selector-tabs"></div>
+
+        <!-- Rice Grid Box (Ô Mễ / 米字格) -->
+        <div class="canvas-rice-grid-wrap">
+          <svg class="rice-grid-svg" viewBox="0 0 100 100">
+            <line x1="0" y1="0" x2="100" y2="100" stroke="rgba(59, 130, 246, 0.25)" stroke-width="0.8" stroke-dasharray="2 2" />
+            <line x1="100" y1="0" x2="0" y2="100" stroke="rgba(59, 130, 246, 0.25)" stroke-width="0.8" stroke-dasharray="2 2" />
+            <line x1="50" y1="0" x2="50" y2="100" stroke="rgba(59, 130, 246, 0.4)" stroke-width="1" stroke-dasharray="3 3" />
+            <line x1="0" y1="50" x2="100" y2="50" stroke="rgba(59, 130, 246, 0.4)" stroke-width="1" stroke-dasharray="3 3" />
+          </svg>
+          <div id="hanzi-target-box" class="hanzi-target-box"></div>
+        </div>
+
+        <!-- Action Control Buttons -->
+        <div class="action-buttons-grid">
+          <button class="action-btn" onclick="animateStrokes()"><i class="fa-solid fa-play"></i> Xem Nét Vẽ</button>
+          <button class="action-btn btn-quiz-mode" onclick="startWritingQuiz()"><i class="fa-solid fa-pen-fancy"></i> Tự Tay Tập Viết</button>
+          <button class="action-btn" onclick="showStrokeHint()"><i class="fa-solid fa-lightbulb"></i> Gợi Ý Nét</button>
+          <button class="action-btn" onclick="resetWriter()"><i class="fa-solid fa-rotate-left"></i> Xóa Viết Lại</button>
+          <button class="action-btn" onclick="toggleOutline()"><i class="fa-solid fa-eye"></i> Bật/Tắt Nét Mờ</button>
+        </div>
+
+        <!-- Status Alert Banner -->
+        <div id="status-alert-banner" class="status-alert-banner">
+          <i class="fa-solid fa-info-circle" style="color:#60a5fa;"></i> Bấm nút <strong>"Tự Tay Tập Viết"</strong> để bắt đầu vẽ từng nét chữ Hán.
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === ''
+      ? 'http://localhost:5000'
+      : 'https://tieng-trung-hong-tai.onrender.com';
+
+    const fallbackVocab = [
+      { id: '1', word: '你好', pinyin: 'nǐ hǎo', meaning: 'xin chào', level: '1', curriculum: 'hsk' },
+      { id: '2', word: '学习', pinyin: 'xuéxí', meaning: 'học tập', level: '1', curriculum: 'hsk' },
+      { id: '3', word: '谢谢', pinyin: 'xièxie', meaning: 'cảm ơn', level: '1', curriculum: 'hsk' },
+      { id: '4', word: '苹果', pinyin: 'píngguǒ', meaning: 'quả táo', level: '1', curriculum: 'hsk' }
+    ];
+
+    let vocabData = [];
+    let filteredVocab = [];
+    let currentWordObj = null;
+    let currentChar = '';
+    let writerInstance = null;
+    let showOutlineFlag = true;
+
+    // Speech Audio
+    let audioCurrent = null;
+    window.speakZhText = function (text) {
+      if (!text) return;
+      const selectEl = document.getElementById('grammar-voice-select');
+      const voice = selectEl ? selectEl.value : (localStorage.getItem('speech_voice') || 'baidu-female');
+      localStorage.setItem('speech_voice', voice);
+
+      if (audioCurrent) {
+        audioCurrent.pause();
+        audioCurrent = null;
+      }
+
+      if (voice.startsWith('elevenlabs') || voice.startsWith('baidu')) {
+        const audioUrl = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(text)}&voice=${voice}`;
+        audioCurrent = new Audio(audioUrl);
+        audioCurrent.play().catch(err => {
+          fallbackWebSpeech(text);
+        });
+      } else {
+        fallbackWebSpeech(text);
+      }
+    };
+
+    function fallbackWebSpeech(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'zh-CN';
+        u.rate = 0.85;
+        window.speechSynthesis.speak(u);
+      }
+    }
+
+    async function initPage() {
+      try {
+        const t = localStorage.getItem('session_token');
+        const headers = t ? { 'Authorization': `Bearer ${t}`, 'x-session-token': t } : {};
+        const res = await fetch(API_BASE_URL + '/api/vocabulary', { headers });
+        if (res.ok) {
+          vocabData = await res.json();
+        }
+      } catch (e) {
+        console.warn("Error loading vocabulary:", e);
+      }
+
+      if (!vocabData || vocabData.length === 0) {
+        vocabData = fallbackVocab;
+      }
+
+      vocabData = vocabData.filter(w => w && w.word && w.pinyin);
+      onStandardOrLevelChange();
+    }
+
+    function isYct(w) {
+      if (!w) return false;
+      const c = (w.curriculum || '').toString().toLowerCase();
+      const v = (w.hskVersion || '').toString().toLowerCase();
+      const l = (w.level || '').toString().toLowerCase();
+      return c.includes('yct') || v.includes('yct') || l.includes('yct');
+    }
+
+    window.onStandardOrLevelChange = function () {
+      const std = document.getElementById('sel-standard').value;
+      const lvl = document.getElementById('sel-level').value;
+      const lsnSelect = document.getElementById('sel-lesson');
+
+      lsnSelect.innerHTML = `<option value="all">Tất cả các bài (Mặc định)</option>`;
+
+      let pool = vocabData;
+      if (std === 'hsk2') {
+        pool = pool.filter(w => !isYct(w) && (w.hskVersion === '2.0' || w.hskVersion === 2 || !w.hskVersion));
+      } else if (std === 'hsk3') {
+        pool = pool.filter(w => !isYct(w) && (w.hskVersion === '3.0' || w.hskVersion === 3));
+      } else if (std === 'yct') {
+        pool = pool.filter(w => isYct(w));
+      }
+
+      if (lvl !== 'all') {
+        pool = pool.filter(w => w.level && w.level.toString() === lvl.toString());
+      }
+
+      // Populate lesson options
+      const lMap = new Map();
+      pool.forEach(w => {
+        if (w.lessonId) {
+          const title = w.lessonTitle ? `Bài ${w.lessonId}: ${w.lessonTitle}` : `Bài ${w.lessonId}`;
+          lMap.set(w.lessonId.toString(), title);
+        }
+      });
+
+      Array.from(lMap.entries()).sort((a, b) => parseInt(a[0]) - parseInt(b[0])).forEach(([id, title]) => {
+        const opt = document.createElement('option');
+        opt.value = id;
+        opt.textContent = title;
+        lsnSelect.appendChild(opt);
+      });
+
+      renderFilteredVocabList();
+    };
+
+    window.renderFilteredVocabList = function () {
+      const std = document.getElementById('sel-standard').value;
+      const lvl = document.getElementById('sel-level').value;
+      const lsn = document.getElementById('sel-lesson').value;
+      const query = document.getElementById('search-vocab-input').value.toLowerCase().trim();
+
+      let pool = vocabData;
+
+      if (std === 'hsk2') {
+        pool = pool.filter(w => !isYct(w) && (w.hskVersion === '2.0' || w.hskVersion === 2 || !w.hskVersion));
+      } else if (std === 'hsk3') {
+        pool = pool.filter(w => !isYct(w) && (w.hskVersion === '3.0' || w.hskVersion === 3));
+      } else if (std === 'yct') {
+        pool = pool.filter(w => isYct(w));
+      }
+
+      if (lvl !== 'all') {
+        pool = pool.filter(w => w.level && w.level.toString() === lvl.toString());
+      }
+
+      if (lsn !== 'all') {
+        pool = pool.filter(w => w.lessonId && w.lessonId.toString() === lsn.toString());
+      }
+
+      if (query) {
+        pool = pool.filter(w =>
+          (w.word && w.word.toLowerCase().includes(query)) ||
+          (w.pinyin && w.pinyin.toLowerCase().includes(query)) ||
+          (w.meaning && w.meaning.toLowerCase().includes(query))
+        );
+      }
+
+      filteredVocab = pool;
+      document.getElementById('vocab-count-badge').textContent = `${filteredVocab.length} từ`;
+
+      const listContainer = document.getElementById('vocab-list-container');
+      if (filteredVocab.length === 0) {
+        listContainer.innerHTML = `<div style="text-align:center; color:var(--text-sub); padding:30px;">Không tìm thấy từ vựng phù hợp.</div>`;
+        return;
+      }
+
+      let html = '';
+      filteredVocab.forEach((item, idx) => {
+        const activeClass = (currentWordObj && currentWordObj.word === item.word) ? 'active' : '';
+        html += `
+          <div class="word-card-item ${activeClass}" onclick="selectWordObj(${idx})">
+            <div>
+              <div class="word-char-display">${item.word}</div>
+              <div class="word-pinyin-display">${item.pinyin}</div>
+              <div class="word-meaning-display">${item.meaning}</div>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
+              <span class="level-badge" style="font-size:0.7rem; padding:2px 8px;">${isYct(item) ? 'YCT' : 'HSK'} ${item.level || '1'}</span>
+              <i class="fa-solid fa-pen-nib" style="color:#60a5fa; font-size:0.9rem;"></i>
+            </div>
+          </div>
+        `;
+      });
+
+      listContainer.innerHTML = html;
+
+      // Select first word by default if not set
+      if (!currentWordObj || !filteredVocab.some(w => w.word === currentWordObj.word)) {
+        selectWordObj(0);
+      }
+    };
+
+    window.selectWordObj = function (idx) {
+      if (!filteredVocab[idx]) return;
+      currentWordObj = filteredVocab[idx];
+
+      document.getElementById('active-word-text').textContent = currentWordObj.word;
+      document.getElementById('active-pinyin-text').textContent = currentWordObj.pinyin;
+      document.getElementById('active-meaning-text').textContent = currentWordObj.meaning;
+      document.getElementById('active-level-badge').textContent = `${isYct(currentWordObj) ? 'YCT' : 'HSK'} ${currentWordObj.level || '1'}`;
+
+      // Update active state in list
+      document.querySelectorAll('.word-card-item').forEach((el, i) => {
+        if (i === idx) el.classList.add('active');
+        else el.classList.remove('active');
+      });
+
+      // Character tabs for multi-char words (e.g. 学习 -> 学, 习)
+      const chars = Array.from(currentWordObj.word).filter(c => /[\u4e00-\u9fa5]/.test(c));
+      const charTabsContainer = document.getElementById('char-tabs-container');
+
+      if (chars.length === 0) {
+        charTabsContainer.innerHTML = `<div style="color:var(--text-sub); font-size:0.85rem;">Từ này không có chữ Hán tiêu chuẩn.</div>`;
+        return;
+      }
+
+      let tabsHtml = '';
+      chars.forEach((c, cIdx) => {
+        tabsHtml += `
+          <button class="char-tab-btn ${cIdx === 0 ? 'active' : ''}" onclick="selectCharToDraw('${c}', this)">
+            ${c}
+          </button>
+        `;
+      });
+
+      charTabsContainer.innerHTML = tabsHtml;
+      selectCharToDraw(chars[0], charTabsContainer.querySelector('.char-tab-btn'));
+    };
+
+    window.selectCharToDraw = function (char, btnEl) {
+      currentChar = char;
+      if (btnEl) {
+        document.querySelectorAll('.char-tab-btn').forEach(b => b.classList.remove('active'));
+        btnEl.classList.add('active');
+      }
+
+      const targetBox = document.getElementById('hanzi-target-box');
+      targetBox.innerHTML = '';
+
+      if (typeof HanziWriter === 'undefined') {
+        document.getElementById('status-alert-banner').innerHTML = `<i class="fa-solid fa-triangle-exclamation" style="color:#f59e0b;"></i> Đang tải thư viện nét vẽ HanziWriter...`;
+        return;
+      }
+
+      showOutlineFlag = true;
+      writerInstance = HanziWriter.create('hanzi-target-box', char, {
+        width: 260,
+        height: 260,
+        padding: 10,
+        showOutline: true,
+        strokeColor: '#3b82f6',
+        outlineColor: 'rgba(255, 255, 255, 0.18)',
+        drawingColor: '#38bdf8',
+        radicalColor: '#f59e0b',
+        showHintAfterMisses: 1,
+        highlightOnComplete: true,
+        drawingWidth: 16
+      });
+
+      updateStatusBanner(`<i class="fa-solid fa-circle-check" style="color:#10b981;"></i> Đã tải chữ Hán <strong>"${char}"</strong>. Bấm <strong>"Xem Nét Vẽ"</strong> hoặc <strong>"Tự Tay Tập Viết"</strong>!`);
+    };
+
+    window.animateStrokes = function () {
+      if (!writerInstance) return;
+      writerInstance.cancelQuiz();
+      updateStatusBanner(`<i class="fa-solid fa-spinner fa-spin" style="color:#60a5fa;"></i> Đang chạy mô phỏng thuận bút chữ <strong>"${currentChar}"</strong>...`);
+      writerInstance.animateCharacter({
+        onComplete: function () {
+          updateStatusBanner(`<i class="fa-solid fa-check" style="color:#10b981;"></i> Đã hoàn thành xem nét vẽ chữ <strong>"${currentChar}"</strong>!`);
+        }
+      });
+    };
+
+    window.startWritingQuiz = function () {
+      if (!writerInstance) return;
+      writerInstance.cancelQuiz();
+      updateStatusBanner(`<i class="fa-solid fa-pen-nib" style="color:#f59e0b;"></i> Hãy vẽ nét chữ Hán <strong>"${currentChar}"</strong> trực tiếp lên bảng vẽ!`);
+
+      writerInstance.quiz({
+        onCorrectStroke: function (strokeData) {
+          updateStatusBanner(`<i class="fa-solid fa-circle-check" style="color:#10b981;"></i> Nét vẽ chuẩn xác! Tiếp tục vẽ nét tiếp theo...`);
+        },
+        onMistake: function (strokeData) {
+          updateStatusBanner(`<i class="fa-solid fa-circle-xmark" style="color:#ef4444;"></i> Sai thứ tự nét hoặc vẽ lệch. Hãy thử lại theo đường nét mờ!`);
+        },
+        onComplete: function (summaryData) {
+          speakZhText(currentChar);
+          updateStatusBanner(`🎉 <strong>XUẤT SẮC!</strong> Bạn đã hoàn thành tự tay viết chữ <strong>"${currentChar}"</strong>!`);
+        }
+      });
+    };
+
+    window.showStrokeHint = function () {
+      if (!writerInstance) return;
+      writerInstance.quiz();
+      writerInstance.showHint();
+      updateStatusBanner(`<i class="fa-solid fa-lightbulb" style="color:#f59e0b;"></i> Đã hiển thị gợi ý nét chữ tiếp theo.`);
+    };
+
+    window.resetWriter = function () {
+      if (!writerInstance) return;
+      writerInstance.cancelQuiz();
+      writerInstance.showCharacter();
+      updateStatusBanner(`<i class="fa-solid fa-arrow-rotate-right" style="color:#60a5fa;"></i> Đã xóa bảng vẽ. Bấm <strong>"Tự Tay Tập Viết"</strong> để viết lại.`);
+    };
+
+    window.toggleOutline = function () {
+      if (!writerInstance) return;
+      showOutlineFlag = !showOutlineFlag;
+      if (showOutlineFlag) {
+        writerInstance.showOutline();
+        updateStatusBanner(`<i class="fa-solid fa-eye" style="color:#60a5fa;"></i> Đã bật hiển thị đường nét chữ mờ.`);
+      } else {
+        writerInstance.hideOutline();
+        updateStatusBanner(`<i class="fa-solid fa-eye-slash" style="color:#94a3b8;"></i> Đã ẩn đường nét chữ mờ.`);
+      }
+    };
+
+    function updateStatusBanner(html) {
+      document.getElementById('status-alert-banner').innerHTML = html;
+    }
+
+    // Initialize Page
+    initPage();
+  </script>
+</body>
+
+</html>

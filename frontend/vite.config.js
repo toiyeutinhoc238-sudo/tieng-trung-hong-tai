@@ -21,7 +21,8 @@ export default defineConfig({
         lesson: 'lesson-online.html',
         rules: 'han-viet-rules.html',
         grammar: 'hsk-grammar.html',
-        phonetics: 'chinese-phonetics.html'
+        phonetics: 'chinese-phonetics.html',
+        hanzi: 'hanzi-writer.html'
       }
     }
   }
