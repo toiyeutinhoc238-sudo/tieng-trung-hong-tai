@@ -3019,93 +3019,87 @@ function showRoadmapView() {
 }
 window.showRoadmapView = showRoadmapView;
 
-let activeRoadmapLevel = 1;
 let activeRoadmapVersion = '3.0';
 
 function renderGamifiedRoadmapPath() {
   const container = document.getElementById('roadmap-path-nodes-container');
   if (!container) return;
 
-  const currentLevel = activeRoadmapLevel || 1;
   const hskVer = activeRoadmapVersion || '3.0';
 
-  let targetVocab = (vocabList || []).filter(w => {
-    if (!w) return false;
-    if (hskVer === 'yct') return isYct(w) && w.level == currentLevel;
-    return !isYct(w) && w.level == currentLevel && (hskVer === '3.0' ? (w.hskVersion === '3.0' || w.hskVersion === 3) : (w.hskVersion === '2.0' || w.hskVersion === 2 || !w.hskVersion));
-  });
-
-  const lessonMap = new Map();
-  targetVocab.forEach(w => {
-    if (w.lessonId) {
-      const lid = w.lessonId.toString();
-      if (!lessonMap.has(lid)) {
-        lessonMap.set(lid, {
-          lessonId: lid,
-          title: w.lessonTitle ? `Bài ${lid}: ${w.lessonTitle}` : `Bài ${lid}`,
-          count: 0
-        });
-      }
-      lessonMap.get(lid).count++;
-    }
-  });
-
-  const lessonsArray = Array.from(lessonMap.values()).sort((a, b) => parseInt(a.lessonId) - parseInt(b.lessonId));
-  if (lessonsArray.length === 0) {
-    for (let i = 1; i <= 15; i++) {
-      lessonsArray.push({ lessonId: i, title: `Bài ${i}: Từ Vựng HSK ${currentLevel}`, count: 12 });
-    }
+  let levelsData = [];
+  if (hskVer === 'yct') {
+    levelsData = [
+      { level: 1, name: 'YCT Cấp 1', desc: 'Thiếu nhi sơ cấp 1 - 80 từ vựng cơ bản', count: '80 từ', color: '#10b981' },
+      { level: 2, name: 'YCT Cấp 2', desc: 'Thiếu nhi sơ cấp 2 - 150 từ vựng thông dụng', count: '150 từ', color: '#3b82f6' },
+      { level: 3, name: 'YCT Cấp 3', desc: 'Thiếu nhi trung cấp 3 - 300 từ vựng giao tiếp', count: '300 từ', color: '#f59e0b' },
+      { level: 4, name: 'YCT Cấp 4', desc: 'Thiếu nhi cao cấp 4 - 600 từ vựng nâng cao', count: '600 từ', color: '#8b5cf6' }
+    ];
+  } else if (hskVer === '2.0') {
+    levelsData = [
+      { level: 1, name: 'HSK 1 (2.0)', desc: 'Nhập môn sơ cấp - 150 từ vựng cơ bản nhất', count: '150 từ', color: '#10b981' },
+      { level: 2, name: 'HSK 2 (2.0)', desc: 'Giao tiếp cơ bản - 300 từ vựng sinh hoạt', count: '300 từ', color: '#3b82f6' },
+      { level: 3, name: 'HSK 3 (2.0)', desc: 'Trung cấp 1 - 600 từ vựng giao tiếp tự tin', count: '600 từ', color: '#06b6d4' },
+      { level: 4, name: 'HSK 4 (2.0)', desc: 'Trung cấp 2 - 1,200 từ vựng học tập & làm việc', count: '1,200 từ', color: '#f59e0b' },
+      { level: 5, name: 'HSK 5 (2.0)', desc: 'Cao cấp 1 - 2,500 từ vựng báo chí & công sở', count: '2,500 từ', color: '#ec4899' },
+      { level: 6, name: 'HSK 6 (2.0)', desc: 'Thành thạo - 5,000 từ vựng chuyên sâu & dịch thuật', count: '5,000 từ', color: '#8b5cf6' }
+    ];
+  } else {
+    // HSK 3.0
+    levelsData = [
+      { level: 1, name: 'HSK 1 (3.0)', desc: 'Sơ cấp 1 - 500 từ vựng & âm tiết ngữ pháp cơ bản', count: '500 từ', color: '#10b981' },
+      { level: 2, name: 'HSK 2 (3.0)', desc: 'Sơ cấp 2 - 1,272 từ vựng giao tiếp đa dạng', count: '1,272 từ', color: '#3b82f6' },
+      { level: 3, name: 'HSK 3 (3.0)', desc: 'Sơ cấp 3 - 2,245 từ vựng hoàn thiện nền tảng', count: '2,245 từ', color: '#06b6d4' },
+      { level: 4, name: 'HSK 4 (3.0)', desc: 'Trung cấp 4 - 3,245 từ vựng học thuật & đời sống', count: '3,245 từ', color: '#f59e0b' },
+      { level: 5, name: 'HSK 5 (3.0)', desc: 'Trung cấp 5 - 4,316 từ vựng làm việc & công sở', count: '4,316 từ', color: '#ec4899' },
+      { level: 6, name: 'HSK 6 (3.0)', desc: 'Trung cấp 6 - 5,456 từ vựng cao cấp & học thuật', count: '5,456 từ', color: '#8b5cf6' }
+    ];
   }
 
   let html = '';
   const positions = ['pos-center', 'pos-left', 'pos-center', 'pos-right'];
 
-  lessonsArray.forEach((lsn, idx) => {
-    const isCompleted = idx < 3;
-    const isActive = idx === 3;
-    const isLocked = idx > 3;
+  levelsData.forEach((item, idx) => {
+    const isCompleted = idx === 0;
+    const isActive = idx === 0 || idx === 1;
 
     const posClass = positions[idx % positions.length];
     const statusBadge = isCompleted
-      ? `<span class="roadmap-badge done"><i class="fa-solid fa-circle-check"></i> Hoàn thành</span>`
-      : (isActive ? `<span class="roadmap-badge active-pulse"><i class="fa-solid fa-bolt"></i> Đang học</span>` : `<span class="roadmap-badge locked"><i class="fa-solid fa-lock"></i> Chưa mở</span>`);
+      ? `<span class="roadmap-badge done"><i class="fa-solid fa-circle-check"></i> Hoàn thành 100%</span>`
+      : (isActive ? `<span class="roadmap-badge active-pulse"><i class="fa-solid fa-bolt"></i> Đang học</span>` : `<span class="roadmap-badge locked"><i class="fa-solid fa-lock"></i> Chưa mở khóa</span>`);
 
-    const iconClass = isCompleted ? 'fa-check' : (isActive ? 'fa-book-open' : 'fa-lock');
+    const iconClass = isCompleted ? 'fa-check' : (isActive ? 'fa-graduation-cap' : 'fa-lock');
     const nodeState = isCompleted ? 'node-done' : (isActive ? 'node-active' : 'node-locked');
 
     html += `
       <div class="roadmap-node-item ${posClass} ${nodeState}">
-        <div class="node-icon-circle" onclick="window.open('/detail-list.html?level=${currentLevel}&lesson=${lsn.lessonId}', '_blank')">
-          <i class="fa-solid ${iconClass}"></i>
-          <span class="node-num">${lsn.lessonId}</span>
+        <div class="node-icon-circle" style="border-color: ${item.color};" onclick="goToRoadmapLevel('${hskVer}', ${item.level})">
+          <i class="fa-solid ${iconClass}" style="color: ${item.color};"></i>
+          <span class="node-num" style="color: #fff;">${item.level}</span>
         </div>
 
         <div class="node-info-card">
           <div class="node-card-top">
-            <span class="node-card-title">${lsn.title}</span>
+            <span class="node-card-title">${item.name}</span>
             ${statusBadge}
           </div>
-          <div class="node-card-sub"><i class="fa-solid fa-layer-group"></i> ${lsn.count} từ vựng chuẩn</div>
-          <div class="node-card-actions">
-            <button class="btn-node-start" onclick="window.open('/detail-list.html?level=${currentLevel}&lesson=${lsn.lessonId}', '_blank')">
-              ${isCompleted ? 'Ôn Tập Lại' : (isActive ? 'Học Tiếp Bài Này <i class="fa-solid fa-play"></i>' : 'Xem Chi Tiết Bài')}
+          <div class="node-card-sub">${item.desc}</div>
+          <div class="node-card-actions" style="display: flex; gap: 8px;">
+            <button class="btn-node-start" style="background: ${item.color};" onclick="goToRoadmapLevel('${hskVer}', ${item.level})">
+              Khám Phá Cấp ${item.level} <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <button class="btn-node-start" style="background: rgba(255,255,255,0.1); width: auto;" onclick="window.open('/quiz-game.html?level=${item.level}', '_blank')" title="Thi trắc nghiệm">
+              <i class="fa-solid fa-gamepad"></i>
             </button>
           </div>
         </div>
       </div>
     `;
 
-    if ((idx + 1) % 5 === 0) {
+    if (idx < levelsData.length - 1) {
       html += `
-        <div class="roadmap-milestone-chest pos-center">
-          <div class="milestone-box" onclick="window.open('/quiz-game.html', '_blank')">
-            <div class="chest-icon"><i class="fa-solid fa-trophy"></i></div>
-            <div class="chest-info">
-              <div class="chest-title">🏆 THÁCH ĐẤU QUIZ - HSK ${currentLevel} CHẶNG ${Math.ceil((idx + 1) / 5)}</div>
-              <div class="chest-desc">Thi thử trắc nghiệm kiểm tra phản xạ ghi nhớ từ vựng</div>
-            </div>
-            <button class="btn-chest-play"><i class="fa-solid fa-gamepad"></i> Đấu Trường Quiz</button>
-          </div>
+        <div style="text-align: center; color: rgba(255,255,255,0.3); font-size: 1.5rem; margin: -10px 0;">
+          <i class="fa-solid fa-down-long"></i>
         </div>
       `;
     }
@@ -3115,12 +3109,14 @@ function renderGamifiedRoadmapPath() {
 }
 
 window.renderGamifiedRoadmapPath = renderGamifiedRoadmapPath;
-window.setRoadmapLevel = function(lvl) {
-  activeRoadmapLevel = lvl;
-  document.querySelectorAll('.roadmap-lvl-pill').forEach(btn => {
-    btn.classList.toggle('active', parseInt(btn.dataset.level) === lvl);
-  });
-  renderGamifiedRoadmapPath();
+window.goToRoadmapLevel = function(ver, level) {
+  if (window.setHskVersion) {
+    window.setHskVersion(ver);
+  }
+  if (window.selectCurriculumLevel) {
+    window.selectCurriculumLevel(level);
+  }
+  switchTab('lessons');
 };
 window.setRoadmapVersion = function(ver) {
   activeRoadmapVersion = ver;
