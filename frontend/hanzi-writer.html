@@ -1619,13 +1619,9 @@
       frameDoc.close();
 
       setTimeout(function () {
-        try {
-          printFrame.contentWindow.focus();
-          printFrame.contentWindow.print();
-        } catch (e) {
-          window.print();
-        }
-      }, 300);
+        printFrame.contentWindow.focus();
+        printFrame.contentWindow.print();
+      }, 250);
     };
 
     // Initialize Page
