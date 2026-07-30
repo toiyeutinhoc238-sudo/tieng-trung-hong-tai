@@ -866,12 +866,13 @@
         </div>
 
         <!-- Action Control Buttons -->
-        <div class="action-buttons-grid" style="grid-template-columns: repeat(4, 1fr);">
+        <div class="action-buttons-grid">
           <button class="action-btn" onclick="animateStrokes()"><i class="fa-solid fa-play"></i> Xem Nét Vẽ</button>
           <button class="action-btn btn-quiz-mode" onclick="startWritingQuiz()"><i class="fa-solid fa-pen-fancy"></i> Tự Tay Tập Viết</button>
+          <button class="action-btn" onclick="showStrokeHint()"><i class="fa-solid fa-lightbulb"></i> Gợi Ý Nét</button>
           <button class="action-btn" onclick="resetWriter()"><i class="fa-solid fa-rotate-left"></i> Xóa Viết Lại</button>
           <button class="action-btn" onclick="toggleOutline()"><i class="fa-solid fa-eye"></i> Bật/Tắt Nét Mờ</button>
-          <button class="action-btn" style="background: linear-gradient(135deg, #10b981, #059669); color:#fff; border:none; grid-column: span 4;" onclick="openPrintWorksheetModal()">
+          <button class="action-btn" style="background: linear-gradient(135deg, #10b981, #059669); color:#fff; border:none; grid-column: span 2;" onclick="openPrintWorksheetModal()">
             <i class="fa-solid fa-print"></i> In Phiếu Tập Viết
           </button>
         </div>
@@ -1259,13 +1260,11 @@
     window.animateStrokes = function () {
       if (!writerInstance) return;
       writerInstance.cancelQuiz();
-      writerInstance.hideCharacter();
-      if (showOutlineFlag) writerInstance.showOutline();
-      updateStatusBanner(`<i class="fa-solid fa-spinner fa-spin" style="color:#60a5fa;"></i> Đang hướng dẫn vẽ chi tiết từng nét từng bước chữ <strong>"${currentChar}"</strong>...`);
+      writerInstance.showCharacter();
+      updateStatusBanner(`<i class="fa-solid fa-spinner fa-spin" style="color:#60a5fa;"></i> Đang vẽ chữ <strong>"${currentChar}"</strong> từ đầu đến cuối...`);
       writerInstance.animateCharacter({
         onComplete: function () {
-          writerInstance.showCharacter();
-          updateStatusBanner(`<i class="fa-solid fa-check" style="color:#10b981;"></i> Đã vẽ xong toàn bộ các nét chữ <strong>"${currentChar}"</strong>! Bấm <strong>"Tự Tay Tập Viết"</strong> để thực hành.`);
+          updateStatusBanner(`<i class="fa-solid fa-check" style="color:#10b981;"></i> Đã vẽ xong chữ <strong>"${currentChar}"</strong>!`);
         }
       });
     };
@@ -1275,7 +1274,6 @@
       writerInstance.cancelQuiz();
       writerInstance.hideCharacter();
       if (showOutlineFlag) writerInstance.showOutline();
-      else writerInstance.hideOutline();
       updateStatusBanner(`<i class="fa-solid fa-pen-nib" style="color:#f59e0b;"></i> Chế độ tập viết: Hãy vẽ từng nét chữ <strong>"${currentChar}"</strong> trực tiếp lên ô Mễ Tự Cách!`);
 
       writerInstance.quiz({
@@ -1283,8 +1281,7 @@
           updateStatusBanner(`<i class="fa-solid fa-circle-check" style="color:#10b981;"></i> Vẽ đúng nét rồi! Tiếp tục vẽ nét tiếp theo...`);
         },
         onMistake: function (strokeData) {
-          writerInstance.showHint();
-          updateStatusBanner(`<i class="fa-solid fa-circle-xmark" style="color:#ef4444;"></i> Sai nét hoặc sai thứ tự! Hệ thống đã nhấp nháy gợi ý nét đúng cho bạn.`);
+          updateStatusBanner(`<i class="fa-solid fa-circle-xmark" style="color:#ef4444;"></i> Vẽ sai nét hoặc sai thứ tự. Hãy nhìn nét gợi ý nhấp nháy để vẽ lại!`);
         },
         onComplete: function (summaryData) {
           speakZhText(currentChar);
@@ -1295,6 +1292,8 @@
 
     window.showStrokeHint = function () {
       if (!writerInstance) return;
+      // Nếu đang ở trong Quiz mode tập viết, nhấp nháy gợi ý nét tiếp theo
+      // Ngược lại, nhấp nháy nét đang cần vẽ
       writerInstance.quiz();
       writerInstance.showHint();
       updateStatusBanner(`<i class="fa-solid fa-lightbulb" style="color:#f59e0b;"></i> Đã hiển thị gợi ý nhấp nháy nét bút tiếp theo cho chữ <strong>"${currentChar}"</strong>!`);
