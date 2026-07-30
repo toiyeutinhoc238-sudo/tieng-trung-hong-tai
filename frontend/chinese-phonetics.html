@@ -604,10 +604,10 @@
           <div class="hub-sub">4 Essential Tones & Sandhi Rules</div>
         </div>
 
-        <div class="hub-card card-luyentap" onclick="openSection('luyentap')">
+        <div class="hub-card card-luyentap" onclick="window.open('/quiz-game.html', '_blank')">
           <div class="hub-number"><i class="fa-solid fa-gamepad"></i></div>
           <div class="hub-text">Luyện Tập</div>
-          <div class="hub-sub">Interactive Audio Practice Quiz</div>
+          <div class="hub-sub">Ôn Tập Trắc Nghiệm Trò Chơi</div>
         </div>
       </div>
     </div>
@@ -710,9 +710,8 @@
         badgeEl.textContent = 'Thanh Điệu';
         renderThanhDieuDetailedView();
       } else if (secKey === 'luyentap') {
-        titleEl.textContent = 'Luyện Tập Phát Âm Audio';
-        badgeEl.textContent = 'Luyện Tập';
-        renderLuyenTapView();
+        window.open('/quiz-game.html', '_blank');
+        return;
       }
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
