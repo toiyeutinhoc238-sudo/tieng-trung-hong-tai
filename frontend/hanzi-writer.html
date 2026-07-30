@@ -1261,73 +1261,49 @@
 
       updateStatusBanner(`<i class="fa-solid fa-circle-check" style="color:#10b981;"></i> Đã tải chữ Hán <strong>"${char}"</strong> và dãy nét thuận bút!`);
 
-      // Tải và hiển thị Dãy Nét Bút Thuận Bút Từng Bước của toàn bộ từ vựng trên giao diện
+      // Tải và hiển thị Dãy Nét Bút Thuận Bút Từng Bước trên giao diện
       const pageStepsContainer = document.getElementById('page-stroke-steps-list');
-      if (pageStepsContainer && currentWordObj) {
-        pageStepsContainer.innerHTML = '<span style="font-size:0.8rem; color:#94a3b8;"><i class="fa-solid fa-spinner fa-spin"></i> Đang tải dãy nét thuận bút...</span>';
-        const wordChars = Array.from(currentWordObj.word).filter(c => /[\u4e00-\u9fa5]/.test(c));
-        let totalHtml = '';
-
-        let pendingCount = wordChars.length;
-        const charDataMap = {};
-
-        wordChars.forEach(ch => {
-          HanziWriter.loadCharacterData(ch).then(data => {
-            charDataMap[ch] = data;
-            pendingCount--;
-            if (pendingCount === 0) {
-              renderAllWordStrokeSteps(wordChars, charDataMap);
-            }
-          }).catch(err => {
-            pendingCount--;
-            if (pendingCount === 0) {
-              renderAllWordStrokeSteps(wordChars, charDataMap);
-            }
-          });
-        });
-      }
-
-      function renderAllWordStrokeSteps(wordChars, charDataMap) {
-        let containerHtml = '';
-        wordChars.forEach(ch => {
-          const data = charDataMap[ch];
-          if (!data || !data.strokes) return;
-          containerHtml += `<div style="display:flex; align-items:center; gap:6px; background:rgba(15,23,42,0.9); padding:8px 12px; border-radius:10px; border:1px solid rgba(56,189,248,0.3); margin-bottom:6px;">`;
-          containerHtml += `<span style="font-size:1.1rem; font-weight:bold; color:#38bdf8; margin-right:8px; font-family:'Noto Sans SC',sans-serif;">${ch}:</span>`;
-          data.strokes.forEach((_, idx) => {
+      if (pageStepsContainer) {
+        pageStepsContainer.innerHTML = '<span style="font-size:0.8rem; color:#94a3b8;"><i class="fa-solid fa-spinner fa-spin"></i> Đang tải nét...</span>';
+        HanziWriter.loadCharacterData(char).then(charData => {
+          if (!charData || !charData.strokes) {
+            pageStepsContainer.innerHTML = '';
+            return;
+          }
+          let html = '';
+          const strokes = charData.strokes;
+          strokes.forEach((_, idx) => {
             const stepNum = idx + 1;
-            const targetId = `pg-step-${ch}-${stepNum}-${Math.random().toString(36).substring(2, 5)}`;
-            containerHtml += `
-              <div style="display:inline-flex; flex-direction:column; align-items:center; background:#ffffff; border:1px solid #cbd5e1; border-radius:6px; padding:3px;">
-                <div id="${targetId}" style="width:34px; height:34px;"></div>
+            const targetId = `page-step-svg-${char}-${stepNum}-${Math.random().toString(36).substring(2, 5)}`;
+            html += `
+              <div style="display:inline-flex; flex-direction:column; align-items:center; background:rgba(15,23,42,0.8); border:1px solid rgba(255,255,255,0.12); border-radius:8px; padding:6px 8px;">
+                <div id="${targetId}" style="width:38px; height:38px;"></div>
+                <span style="font-size:0.68rem; color:#64748b; font-weight:700; margin-top:2px;">Nét ${stepNum}</span>
               </div>
             `;
           });
-          containerHtml += `</div>`;
-        });
+          pageStepsContainer.innerHTML = html;
 
-        pageStepsContainer.innerHTML = containerHtml || '<span style="font-size:0.8rem; color:#94a3b8;">Không tải được dãy nét.</span>';
-
-        // Render SVGs
-        wordChars.forEach(ch => {
-          const data = charDataMap[ch];
-          if (!data || !data.strokes) return;
-          data.strokes.forEach((_, idx) => {
+          strokes.forEach((_, idx) => {
             const stepNum = idx + 1;
-            const targetEl = pageStepsContainer.querySelector(`[id^="pg-step-${ch}-${stepNum}-"]`);
-            if (targetEl) {
-              const w = HanziWriter.create(targetEl.id, ch, {
-                width: 34,
-                height: 34,
-                padding: 2,
+            const targetId = pageStepsContainer.querySelectorAll('[id^="page-step-svg-"]')[idx]?.id;
+            if (targetId) {
+              const w = HanziWriter.create(targetId, char, {
+                width: 38,
+                height: 38,
+                padding: 3,
                 showOutline: true,
-                strokeColor: '#0f172a',
-                outlineColor: '#e2e8f0',
+                strokeColor: '#000000',
+                outlineColor: '#cbd5e1',
                 showCharacter: false
               });
-              w.showCharacter({ strokeNum: stepNum });
+              w.showCharacter({
+                strokeNum: stepNum
+              });
             }
           });
+        }).catch(err => {
+          pageStepsContainer.innerHTML = '';
         });
       }
     };
@@ -1461,8 +1437,8 @@
           if (isTrace) {
             inner = `<span style="
               font-size:${BOX * 0.72}px;
-              font-family:'Noto Sans SC','Kaiti','STKaiti',sans-serif;
-              font-weight:bold; color:#111827; opacity:0.18;
+              font-family:'Kaiti','STKaiti','Noto Serif SC',serif;
+              font-weight:normal; color:#111827; opacity:0.18;
               line-height:1; position:relative; z-index:2; pointer-events:none;
             ">${ch}</span>`;
           }
