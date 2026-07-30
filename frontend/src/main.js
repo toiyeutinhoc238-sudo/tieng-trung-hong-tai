@@ -4758,6 +4758,19 @@ function renderLessonsList() {
   if (lessonsLevelContainer) lessonsLevelContainer.style.display = 'flex';
   if (versionSelectorWrap) versionSelectorWrap.style.display = 'flex';
 
+  // Toggle HSK 7-8-9 option visibility (only available in HSK 3.0)
+  const hsk79Opt = document.getElementById('hsk-level-79-option');
+  if (hsk79Opt) {
+    if (activeHskVersion === '2.0') {
+      hsk79Opt.style.display = 'none';
+      if (activeLessonsLevel.toString() === '7-9') {
+        activeLessonsLevel = 1;
+      }
+    } else {
+      hsk79Opt.style.display = 'block';
+    }
+  }
+
   // Sync level select value
   if (levelSelect && levelSelect.value !== activeLessonsLevel.toString()) {
     levelSelect.value = activeLessonsLevel.toString();
