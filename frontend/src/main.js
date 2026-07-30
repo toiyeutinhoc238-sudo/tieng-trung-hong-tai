@@ -6165,7 +6165,7 @@ window.openZubiStatDetail = function (type) {
 
   } else if (type === 'enrolled') {
     const activeVocabs = vocabList.filter(w => !w.isCustom);
-    
+
     // Group lessons dynamically
     const hsk3Lessons = new Set();
     const hsk2Lessons = new Set();
@@ -6210,25 +6210,26 @@ window.openZubiStatDetail = function (type) {
     `;
 
   } else if (type === 'words') {
+    const activeVocabs = vocabList.filter(w => !w.isCustom);
     titleEl.textContent = 'Thống kê Từ vựng HSK & YCT';
-    subtitleEl.textContent = `Phân bổ ${vocabList.length.toLocaleString()} từ vựng HSK 3.0 & 2.0 chuẩn hóa`;
+    subtitleEl.textContent = `Phân bổ ${activeVocabs.length.toLocaleString()} từ vựng HSK 3.0 & 2.0 chuẩn hóa`;
     iconEl.className = 'zubi-circle-icon cyan';
     iconEl.style.background = 'rgba(2, 132, 199, 0.2)';
     iconEl.style.color = '#38bdf8';
     iconEl.innerHTML = '<i class="fa-solid fa-layer-group"></i>';
 
-    const hsk30_1 = builtIn.filter(w => (w.hskVersion || '3.0') === '3.0' && w.level.toString() === '1').length;
-    const hsk30_2 = builtIn.filter(w => (w.hskVersion || '3.0') === '3.0' && w.level.toString() === '2').length;
-    const hsk30_3 = builtIn.filter(w => (w.hskVersion || '3.0') === '3.0' && w.level.toString() === '3').length;
+    const hsk30_1 = activeVocabs.filter(w => (w.hskVersion === '3.0' || w.hskVersion === 3 || (!w.hskVersion && w.curriculum !== 'yct')) && w.level.toString() === '1').length;
+    const hsk30_2 = activeVocabs.filter(w => (w.hskVersion === '3.0' || w.hskVersion === 3 || (!w.hskVersion && w.curriculum !== 'yct')) && w.level.toString() === '2').length;
+    const hsk30_3 = activeVocabs.filter(w => (w.hskVersion === '3.0' || w.hskVersion === 3 || (!w.hskVersion && w.curriculum !== 'yct')) && w.level.toString() === '3').length;
 
-    const hsk20_1 = builtIn.filter(w => w.hskVersion === '2.0' && w.level.toString() === '1').length;
-    const hsk20_2 = builtIn.filter(w => w.hskVersion === '2.0' && w.level.toString() === '2').length;
-    const hsk20_3 = builtIn.filter(w => w.hskVersion === '2.0' && w.level.toString() === '3').length;
-    const hsk20_4 = builtIn.filter(w => w.hskVersion === '2.0' && w.level.toString() === '4').length;
-    const hsk20_5 = builtIn.filter(w => w.hskVersion === '2.0' && w.level.toString() === '5').length;
-    const hsk20_6 = builtIn.filter(w => w.hskVersion === '2.0' && w.level.toString() === '6').length;
+    const hsk20_1 = activeVocabs.filter(w => (w.hskVersion === '2.0' || w.hskVersion === 2) && w.level.toString() === '1').length;
+    const hsk20_2 = activeVocabs.filter(w => (w.hskVersion === '2.0' || w.hskVersion === 2) && w.level.toString() === '2').length;
+    const hsk20_3 = activeVocabs.filter(w => (w.hskVersion === '2.0' || w.hskVersion === 2) && w.level.toString() === '3').length;
+    const hsk20_4 = activeVocabs.filter(w => (w.hskVersion === '2.0' || w.hskVersion === 2) && w.level.toString() === '4').length;
+    const hsk20_5 = activeVocabs.filter(w => (w.hskVersion === '2.0' || w.hskVersion === 2) && w.level.toString() === '5').length;
+    const hsk20_6 = activeVocabs.filter(w => (w.hskVersion === '2.0' || w.hskVersion === 2) && w.level.toString() === '6').length;
 
-    const yctCount = builtIn.filter(w => w.curriculum === 'yct' || w.hskVersion === 'yct').length;
+    const yctCount = activeVocabs.filter(w => (w.curriculum || '').toString().toLowerCase().includes('yct') || (w.hskVersion || '').toString().toLowerCase().includes('yct')).length;
 
     const hsk30Total = hsk30_1 + hsk30_2 + hsk30_3;
     const hsk20Total = hsk20_1 + hsk20_2 + hsk20_3 + hsk20_4 + hsk20_5 + hsk20_6;
