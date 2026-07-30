@@ -845,9 +845,10 @@ function renderDetailedStatsTable() {
   tbody.innerHTML = '';
   const rowsData = [];
 
-  // HSK Levels 1-3
-  for (let lvl = 1; lvl <= 3; lvl++) {
-    const lvlWords = vocabList.filter(w => !w.isCustom && w.level.toString() === lvl.toString() && (w.hskVersion || '3.0') === activeHskVersion);
+  // HSK Levels
+  const maxLvl = activeHskVersion === '3.0' ? 6 : 6;
+  for (let lvl = 1; lvl <= maxLvl; lvl++) {
+    const lvlWords = vocabList.filter(w => !w.isCustom && matchLevel(w.level, lvl) && (w.hskVersion || '3.0') === activeHskVersion);
     const total = lvlWords.length;
     const memorized = lvlWords.filter(w => w.isMemorized).length;
     const unmemorized = total - memorized;
@@ -855,6 +856,20 @@ function renderDetailedStatsTable() {
 
     rowsData.push({
       name: `HSK ${lvl} (v${activeHskVersion})`,
+      total, memorized, unmemorized, starred
+    });
+  }
+
+  // HSK 7-9 for HSK 3.0
+  if (activeHskVersion === '3.0') {
+    const lvl79Words = vocabList.filter(w => !w.isCustom && matchLevel(w.level, '7-9') && (w.hskVersion || '3.0') === activeHskVersion);
+    const total = lvl79Words.length;
+    const memorized = lvl79Words.filter(w => w.isMemorized).length;
+    const unmemorized = total - memorized;
+    const starred = lvl79Words.filter(w => w.isStarred).length;
+
+    rowsData.push({
+      name: `New HSK 7-9 (Cao cấp)`,
       total, memorized, unmemorized, starred
     });
   }
@@ -2701,7 +2716,7 @@ function generateExam(level, setNumber) {
   let levelVocabs = vocabList.filter(w => {
     if (w.isCustom) return false;
     if (w.level === 'premium') return false;
-    return w.level.toString() === level.toString() && (w.hskVersion || '3.0') === activeHskVersion;
+    return matchLevel(w.level, level) && (w.hskVersion || '3.0') === activeHskVersion;
   });
 
   if (levelVocabs.length === 0) {

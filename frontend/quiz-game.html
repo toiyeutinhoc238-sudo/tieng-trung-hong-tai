@@ -981,7 +981,7 @@
 
       let candidates = currentPool.filter(w => w.id !== activeQ.id && w.meaning !== activeQ.meaning && isVietnameseMeaning(w.meaning));
       if (candidates.length < 3) {
-        const sameLevel = vocabData.filter(w => w.level == activeQ.level && w.id !== activeQ.id && w.meaning !== activeQ.meaning && isVietnameseMeaning(w.meaning));
+        const sameLevel = vocabData.filter(w => matchLevel(w.level, activeQ.level) && w.id !== activeQ.id && w.meaning !== activeQ.meaning && isVietnameseMeaning(w.meaning));
         candidates.push(...sameLevel);
       }
       if (candidates.length < 3) {
