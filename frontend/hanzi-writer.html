@@ -1282,24 +1282,16 @@
       const container = document.getElementById('print-worksheet-content-wrap');
       if (!modal || !container) return;
 
-      // Lấy chỉ các chữ Hán trong từ
       const wordChars = target.word.split('').filter(c => /[\u4e00-\u9fa5]/.test(c));
-      const N = wordChars.length; // số chữ trong từ
+      const N = wordChars.length;
       const todayStr = new Date().toLocaleDateString('vi-VN');
 
-      // =======================================================
-      // KÍCH THƯỚC LƯỚI
-      // 12 ô ngang × 7 hàng
-      // Ô mẫu lớn bên trái chiếm cả chiều cao (7 hàng)
-      // =======================================================
-      const COLS = 12;           // tổng số ô ngang
-      const ROWS = 7;            // tổng số hàng
-      const BOX  = 58;           // kích thước mỗi ô (px)
-      const BIG_W = N * BOX + (N > 1 ? (N-1)*2 : 0) + 16; // chiều rộng ô chữ mẫu lớn
-      const BIG_H = ROWS * BOX; // chiều cao ô mẫu lớn = toàn bộ lưới
+      const COLS = 12;
+      const ROWS = 7;
+      const BOX  = 58;
 
       // =======================================================
-      // TẠO Ô 米字格 bằng SVG inline
+      // TẠO LƯỚI BẢNG LUYỆN VIẾT (MICICELL)
       // =======================================================
       function mizigeCell(size, innerHtml = '') {
         const h = size, w = size;
@@ -1320,27 +1312,19 @@
         </div>`;
       }
 
-      // =======================================================
-      // XÁC ĐỊNH Ô NÀO LÀ MỜ (trace), ô nào là trống
-      // - Hàng 0: lặp từ đầy đủ, các ô đầu tiên (1 lần từ) là mờ đậm
-      // - Hàng 1: ô đầu tiên (1 lần từ) là mờ nhạt hơn
-      // - Còn lại: trống
-      // =======================================================
       function buildRow(rowIdx) {
         let cells = '';
         for (let col = 0; col < COLS; col++) {
-          // Vị trí trong từ: 0..N-1
           const posInWord = col % N;
           const ch = wordChars[posInWord];
-          // Lần thứ mấy của từ trong hàng này?
           const repIdx = Math.floor(col / N);
 
           let inner = '';
           let opacity = 0;
 
-          if (rowIdx === 0 && repIdx === 0) opacity = 0.22; // hàng đầu, lần 1: mờ đậm
-          else if (rowIdx === 0 && repIdx === 1) opacity = 0.14; // hàng đầu, lần 2: mờ nhạt
-          else if (rowIdx === 1 && repIdx === 0) opacity = 0.10; // hàng 2, lần 1: rất mờ
+          if (rowIdx === 0 && repIdx === 0) opacity = 0.25;
+          else if (rowIdx === 0 && repIdx === 1) opacity = 0.16;
+          else if (rowIdx === 1 && repIdx === 0) opacity = 0.12;
 
           if (opacity > 0) {
             inner = `<span style="
@@ -1356,119 +1340,72 @@
         return `<div style="display:flex;">${cells}</div>`;
       }
 
-      // Build 7 hàng
       let allRows = '';
       for (let r = 0; r < ROWS; r++) {
         allRows += buildRow(r);
       }
 
       // =======================================================
-      // Ô CHỮ LỚN BÊN TRÁI (giống hệt trong sách)
-      // Hiển thị từ mẫu to, chiếm toàn bộ chiều cao lưới
+      // HIỂN THỊ KHUNG THÔNG TIN TỪ VỰNG DÍNH LIỀN GỌN GÀNG (NHƯ HÌNH 1 & HÌNH 2)
+      // Tự động tạo chuỗi các nét thuận bút (stroke order) cho từng chữ Hán
       // =======================================================
-      const bigFontSize = N === 1 ? Math.round(BIG_H * 0.6)
-                        : N === 2 ? Math.round(BIG_H * 0.28)
-                        : Math.round(BIG_H * 0.20);
+      const strokeSequenceContainerId = 'stroke-order-sequence-box';
 
-      // Render từng chữ theo chiều dọc hoặc ngang tùy số chữ
-      let bigCharsHtml = '';
-      wordChars.forEach(ch => {
-        bigCharsHtml += `<div style="
-          font-size:${bigFontSize}px;
-          font-family:'Kaiti','STKaiti','Noto Serif SC',serif;
-          font-weight:bold; color:#111827;
-          line-height:1.05; text-align:center;
-        ">${ch}</div>`;
-      });
-
-      const bigCellHtml = `
-        <div style="
-          width:${BIG_W}px; min-width:${BIG_W}px; height:${BIG_H}px;
-          border-right:2px solid #22c55e;
-          border-bottom:1px solid #22c55e;
-          position:relative; display:flex;
-          flex-direction:column; align-items:center; justify-content:center;
-          background:#fff; box-sizing:border-box; flex-shrink:0; overflow:hidden;
-        ">
-          <!-- Lưới 米字格 cho ô lớn -->
-          <svg width="${BIG_W}" height="${BIG_H}" style="position:absolute;top:0;left:0;" viewBox="0 0 ${BIG_W} ${BIG_H}">
-            <line x1="0" y1="${BIG_H/2}" x2="${BIG_W}" y2="${BIG_H/2}" stroke="#86efac" stroke-width="1" stroke-dasharray="4,3"/>
-            <line x1="${BIG_W/2}" y1="0" x2="${BIG_W/2}" y2="${BIG_H}" stroke="#86efac" stroke-width="1" stroke-dasharray="4,3"/>
-            <line x1="0" y1="0" x2="${BIG_W}" y2="${BIG_H}" stroke="#bbf7d0" stroke-width="0.8" stroke-dasharray="3,4"/>
-            <line x1="${BIG_W}" y1="0" x2="0" y2="${BIG_H}" stroke="#bbf7d0" stroke-width="0.8" stroke-dasharray="3,4"/>
-          </svg>
-          <div style="position:relative; z-index:2;">
-            ${bigCharsHtml}
-          </div>
-        </div>`;
-
-      // =======================================================
-      // PHẦN THÔNG TIN TỪ VỰNG (khung xanh lá đầu trang)
-      // =======================================================
       const infoBox = `
         <div style="
-          display:flex; align-items:center; gap:20px;
           border:2px solid #22c55e; border-radius:8px;
-          padding:12px 16px; margin-bottom:16px;
-          background:#f0fdf4;
+          padding:12px 18px; margin-bottom:12px;
+          background:#fff;
         ">
-          <div style="
-            font-size:${N === 1 ? '3.2' : N === 2 ? '2.4' : '1.9'}rem;
-            font-family:'Kaiti','STKaiti','Noto Serif SC',serif;
-            font-weight:bold; color:#111827; line-height:1;
-            white-space:nowrap;
-          ">${target.word}</div>
-          <div style="border-left:2px solid #86efac; padding-left:14px;">
-            <div style="font-size:1rem; font-weight:800; color:#f97316;">${target.pinyin}</div>
-            <div style="font-size:0.88rem; color:#374151; font-weight:600; margin-top:3px;">
-              ${target.pos ? `<span style="color:#6b7280">(${target.pos})</span> ` : ''}${target.meaning}
+          <!-- Hàng 1: Chữ Hán + Pinyin + Nghĩa -->
+          <div style="display:flex; justify-content:space-between; align-items:flex-end; padding-bottom:8px; border-bottom:1px solid #dcfce7;">
+            <div style="display:flex; align-items:baseline; gap:16px;">
+              <span style="
+                font-size:2.2rem;
+                font-family:'Kaiti','STKaiti','Noto Serif SC',serif;
+                font-weight:bold; color:#111827; line-height:1;
+              ">${target.word}</span>
+              <span style="font-size:1.15rem; font-weight:800; color:#ea580c;">${target.pinyin}</span>
+              <span style="font-size:0.95rem; color:#374151; font-weight:600;">
+                ${target.pos ? `<span style="color:#6b7280">(${target.pos})</span> ` : ''}${target.meaning}
+              </span>
             </div>
-            <div style="font-size:0.72rem; color:#9ca3af; margin-top:3px;">
+            <div style="font-size:0.75rem; color:#16a34a; font-weight:700; background:#f0fdf4; padding:3px 10px; border-radius:12px; border:1px solid #bbf7d0;">
               ${(target.curriculum || 'HSK').toUpperCase()} Cấp ${target.level}
             </div>
           </div>
-        </div>`;
 
-      // =======================================================
-      // GHÉP: Ô lớn + lưới thực hành
-      // =======================================================
-      const practiceBlock = `
-        <div style="margin-bottom:0;">
-          <!-- Pinyin + nghĩa nhỏ trên đầu -->
-          <div style="display:flex; gap:10px; align-items:baseline; margin-bottom:5px;">
-            <span style="font-size:0.8rem; font-weight:800; color:#f97316;">${target.pinyin}</span>
-            <span style="font-size:0.78rem; color:#374151;">
-              ${target.pos ? `(${target.pos})` : ''} ${target.meaning}
-            </span>
-          </div>
-
-          <!-- Khối luyện viết: ô lớn trái + lưới phải -->
-          <div style="
-            display:inline-flex;
-            border:2px solid #22c55e;
-            border-radius:4px;
-            overflow:hidden;
-            box-sizing:border-box;
-          ">
-            <!-- Ô chữ mẫu lớn (bên trái) -->
-            ${bigCellHtml}
-
-            <!-- Lưới 12×7 ô luyện viết (bên phải) -->
-            <div style="display:flex; flex-direction:column;">
-              ${allRows}
+          <!-- Hàng 2: Thứ tự nét bút (Thuận bút) cho từng chữ Hán (như Hình 2) -->
+          <div id="${strokeSequenceContainerId}" style="margin-top:10px; display:flex; flex-direction:column; gap:8px;">
+            <div style="font-size:0.8rem; font-weight:700; color:#4b5563; display:flex; align-items:center; gap:6px;">
+              <i class="fa-solid fa-pen-line" style="color:#22c55e;"></i> Thứ tự nét bút (Thuận bút):
+            </div>
+            <div id="stroke-steps-list" style="display:flex; flex-wrap:wrap; gap:16px; align-items:center; font-family:'Kaiti','STKaiti','Noto Serif SC',serif;">
+              <span style="font-size:0.8rem; color:#9ca3af;">Đang tải thứ tự nét bút...</span>
             </div>
           </div>
         </div>`;
 
-      // =======================================================
+      // Khối luyện viết chữ (Lưới 12x7 ô dính sát bên dưới)
+      const practiceBlock = `
+        <div style="
+          display:inline-flex;
+          flex-direction:column;
+          border:2px solid #22c55e;
+          border-radius:6px;
+          overflow:hidden;
+          box-sizing:border-box;
+        ">
+          ${allRows}
+        </div>`;
+
       // TOÀN BỘ PHIẾU IN
-      // =======================================================
       container.innerHTML = `
         <div class="print-page-area" style="
           font-family:'Be Vietnam Pro','Segoe UI',sans-serif;
           padding:24px 28px;
           background:#fff; color:#000;
-          max-width:${BIG_W + COLS * BOX + 80}px;
+          max-width:${COLS * BOX + 80}px;
           margin:0 auto;
           box-shadow:0 4px 20px rgba(0,0,0,0.08);
           border-radius:12px;
@@ -1493,21 +1430,69 @@
             <span>Ngày tháng năm: <span style="display:inline-block; border-bottom:1.5px solid #22c55e; min-width:110px;">&nbsp;</span></span>
           </div>
 
-          <!-- KHUNG THÔNG TIN TỪ VỰNG -->
+          <!-- KHUNG THÔNG TIN TỪ VỰNG & THUẬN BÚT -->
           ${infoBox}
 
-          <!-- KHỐI LUYỆN VIẾT -->
-          ${practiceBlock}
+          <!-- KHỐI LƯỚI LUYỆN VIẾT -->
+          <div style="text-align:center;">
+            ${practiceBlock}
+          </div>
 
           <!-- FOOTER -->
           <div style="margin-top:14px; border-top:1px dashed #86efac; padding-top:8px; display:flex; justify-content:space-between; font-size:0.72rem; color:#9ca3af;">
-            <span>💡 Viết theo chữ mẫu to (ô trái) → Tô theo chữ mờ → Tự viết vào các ô trống (mỗi ô 1 chữ, viết lần lượt theo thứ tự từ).</span>
+            <span>💡 Tô theo chữ mờ ở các ô đầu → Tự viết vào các ô trống (mỗi ô 1 chữ, viết lần lượt theo thứ tự từ).</span>
             <span style="font-weight:800; color:#f97316;">Tiếng Trung HongTai</span>
           </div>
         </div>
       `;
 
       modal.style.display = 'flex';
+
+      // =======================================================
+      // TẢI DỮ LIỆU NÉT BÚT VÀ HIỂN THỊ CHUỖI NÉT THUẬN BÚT (NHƯ HÌNH 2)
+      // =======================================================
+      const stepsContainer = document.getElementById('stroke-steps-list');
+      if (stepsContainer && typeof HanziWriter !== 'undefined') {
+        let sequenceHtml = '';
+        let pending = wordChars.length;
+
+        wordChars.forEach(ch => {
+          HanziWriter.loadCharacterData(ch).then(data => {
+            if (data && data.strokes) {
+              const strokesCount = data.strokes.length;
+              let charStepsHtml = `<div style="display:inline-flex; align-items:center; gap:6px; background:#f9fafb; padding:4px 10px; border-radius:8px; border:1px solid #e5e7eb;">`;
+              charStepsHtml += `<span style="font-weight:bold; color:#111827; font-size:1.1rem; margin-right:4px;">${ch}:</span>`;
+              
+              // Vẽ các nét lũy tiến (1 nét, 2 nét, 3 nét... đến hết chữ)
+              for (let i = 1; i <= strokesCount; i++) {
+                const stepStrokes = data.strokes.slice(0, i);
+                let svgPaths = '';
+                stepStrokes.forEach(pathData => {
+                  svgPaths += `<path d="${pathData}" fill="#111827" transform="scale(0.022, -0.022) translate(0, -900)" />`;
+                });
+
+                charStepsHtml += `
+                  <div style="display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" style="overflow:visible;">
+                      ${svgPaths}
+                    </svg>
+                  </div>`;
+              }
+              charStepsHtml += `</div>`;
+              sequenceHtml += charStepsHtml;
+            }
+            pending--;
+            if (pending === 0) {
+              stepsContainer.innerHTML = sequenceHtml || `<span style="font-size:0.8rem; color:#9ca3af;">Không có dữ liệu nét bút.</span>`;
+            }
+          }).catch(err => {
+            pending--;
+            if (pending === 0 && !sequenceHtml) {
+              stepsContainer.innerHTML = `<span style="font-size:0.8rem; color:#9ca3af;">(Không tải được thuận bút)</span>`;
+            }
+          });
+        });
+      }
     };
 
     window.closePrintWorksheetModal = function () {
