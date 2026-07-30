@@ -435,22 +435,10 @@
       </div>
     </div>
 
-    <div style="display: flex; align-items: center; gap: 10px;">
-      <span style="font-size: 0.85rem; font-weight: 700; color: #f59e0b;">Giọng Đọc Đang Chọn:</span>
-      <select id="grammar-voice-select" onchange="localStorage.setItem('speech_voice', this.value)"
-        style="background: #0f172a; border: 1.5px solid #3b82f6; color: #fff; padding: 8px 16px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; outline: none; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
-        <option value="elevenlabs-adam">✨ ElevenLabs AI - Adam (Giọng Nam Trầm Ấm)</option>
-        <option value="elevenlabs-bella">✨ ElevenLabs AI - Bella (Giọng Nữ Nhẹ Nhàng)</option>
-        <option value="elevenlabs-jessica">✨ ElevenLabs AI - Jessica (Giọng Nữ Ngọt Ngào)</option>
-        <option value="elevenlabs-antoni">✨ ElevenLabs AI - Antoni (Giọng Nam Truyền Cảm)</option>
-        <option value="elevenlabs-arnold">✨ ElevenLabs AI - Arnold (Giọng Nam Mạnh Mẽ)</option>
-        <option value="elevenlabs-charlie">✨ ElevenLabs AI - Charlie (Giọng Nam Tự Nhiên)</option>
-        <option value="elevenlabs-george">✨ ElevenLabs AI - George (Giọng Nam Sang Trọng)</option>
-        <option value="elevenlabs-laura">✨ ElevenLabs AI - Laura (Giọng Nữ Ấm Áp)</option>
-        <option value="baidu-female">🇨🇳 Baidu Nữ (Giọng Bắc Kinh chuẩn)</option>
-        <option value="baidu-male">🇨🇳 Google/Baidu Nam (Giọng Nam Chuẩn)</option>
+      <span style="font-size: 0.85rem; font-weight: 700; color: #10b981;">Giọng Đọc Chuẩn:</span>
+      <select id="grammar-voice-select" style="background: #0f172a; border: 1.5px solid #10b981; color: #fff; padding: 8px 16px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; outline: none; cursor: pointer;">
+        <option value="baidu-female" selected>🇨🇳 Baidu Nữ (Giọng Bắc Kinh Chuẩn)</option>
       </select>
-    </div>
   </div>
 
   <!-- Level Navigation Tabs -->
