@@ -2155,11 +2155,11 @@ function setupEventListeners() {
   const ev2Btn = document.getElementById('exams-version-2-btn');
 
   const setHskVersion = (version) => {
+    activeHskVersion = version;
     if (version === 'yct') {
       activeLessonsCurriculum = 'yct';
-      activeHskVersion = '3.0';
     } else {
-      activeHskVersion = version;
+      activeLessonsCurriculum = 'hsk';
     }
     localStorage.setItem('active_hsk_version', activeHskVersion);
     updateVersionButtonsUI();
@@ -6426,14 +6426,13 @@ function renderSubdecksList() {
     });
   }
   else if (activeSmartTopic === 'hsk') {
+    title.textContent = 'Danh sách Từ vựng';
     if (activeHskVersion === 'yct') {
-      title.textContent = 'Danh sách Từ vựng YCT (Thiếu Nhi)';
       for (let lvl = 1; lvl <= 4; lvl++) {
         const lvlWords = vocabList.filter(w => (w.curriculum === 'yct' || w.hskVersion === 'yct') && matchLevel(w.level, lvl));
         grid.appendChild(createSubdeckCard(`YCT Cấp ${lvl}`, `yct:${lvl}`, lvlWords.length, 'fa-child', 'var(--accent-teal)'));
       }
     } else {
-      title.textContent = `Danh sách Từ vựng HSK ${activeHskVersion}`;
       const maxLvl = 6;
       for (let lvl = 1; lvl <= maxLvl; lvl++) {
         const lvlWords = vocabList.filter(w => !w.isCustom && matchLevel(w.level, lvl) && (w.hskVersion || '3.0') === activeHskVersion);
