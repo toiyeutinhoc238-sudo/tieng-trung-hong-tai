@@ -257,6 +257,10 @@
             <option value="1">Cấp độ: HSK 1</option>
             <option value="2">Cấp độ: HSK 2</option>
             <option value="3">Cấp độ: HSK 3</option>
+            <option value="4">Cấp độ: HSK 4</option>
+            <option value="5">Cấp độ: HSK 5</option>
+            <option value="6">Cấp độ: HSK 6</option>
+            <option value="7-9">Cấp độ: New HSK 7-9 (Cao cấp)</option>
           </select>
 
           <select id="detail-status-select" class="filter-select">
@@ -547,6 +551,17 @@
       applyFilters();
     }
 
+    function matchLevel(wLevel, targetLevel) {
+      if (!targetLevel || targetLevel === 'all') return true;
+      if (!wLevel) return false;
+      const w = wLevel.toString().trim().toLowerCase().replace('hsk', '');
+      const t = targetLevel.toString().trim().toLowerCase().replace('hsk', '');
+      if (w === t) return true;
+      const hsk79 = ['7', '8', '9', '7-9', '7_9'];
+      if (hsk79.includes(w) && hsk79.includes(t)) return true;
+      return false;
+    }
+
     function applyFilters() {
       const searchVal = document.getElementById('detail-search-input').value.toLowerCase().trim();
       
@@ -562,7 +577,7 @@
         }
         
         // HSK Level filter
-        if (activeLevel !== 'all' && w.level.toString() !== activeLevel) {
+        if (activeLevel !== 'all' && !matchLevel(w.level, activeLevel)) {
           return false;
         }
         

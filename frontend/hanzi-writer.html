@@ -699,6 +699,17 @@
       return c.includes('yct') || v.includes('yct') || l.includes('yct');
     }
 
+    function matchLevel(wLevel, targetLevel) {
+      if (!targetLevel || targetLevel === 'all') return true;
+      if (!wLevel) return false;
+      const w = wLevel.toString().trim().toLowerCase().replace('hsk', '');
+      const t = targetLevel.toString().trim().toLowerCase().replace('hsk', '');
+      if (w === t) return true;
+      const hsk79 = ['7', '8', '9', '7-9', '7_9'];
+      if (hsk79.includes(w) && hsk79.includes(t)) return true;
+      return false;
+    }
+
     window.onStandardOrLevelChange = function () {
       const std = document.getElementById('sel-standard').value;
       const lvl = document.getElementById('sel-level').value;
@@ -716,7 +727,7 @@
       }
 
       if (lvl !== 'all') {
-        pool = pool.filter(w => w.level && w.level.toString() === lvl.toString());
+        pool = pool.filter(w => w.level && matchLevel(w.level, lvl));
       }
 
       // Populate lesson options
@@ -755,7 +766,7 @@
       }
 
       if (lvl !== 'all') {
-        pool = pool.filter(w => w.level && w.level.toString() === lvl.toString());
+        pool = pool.filter(w => w.level && matchLevel(w.level, lvl));
       }
 
       if (lsn !== 'all') {

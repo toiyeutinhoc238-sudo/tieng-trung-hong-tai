@@ -956,6 +956,17 @@ function shuffleArray(array) {
   return shuffled;
 }
 
+function matchLevel(wLevel, targetLevel) {
+  if (!targetLevel || targetLevel === 'all') return true;
+  if (!wLevel) return false;
+  const w = wLevel.toString().trim().toLowerCase().replace('hsk', '');
+  const t = targetLevel.toString().trim().toLowerCase().replace('hsk', '');
+  if (w === t) return true;
+  const hsk79 = ['7', '8', '9', '7-9', '7_9'];
+  if (hsk79.includes(w) && hsk79.includes(t)) return true;
+  return false;
+}
+
 function applyFilters(preserveIndex = false) {
   const previousWordId = (filteredList.length > 0 && currentIndex < filteredList.length) ? filteredList[currentIndex].id : null;
 
@@ -982,7 +993,7 @@ function applyFilters(preserveIndex = false) {
       }
 
       // 1. Level Filter
-      if (activeLevel !== 'all' && w.level.toString() !== activeLevel) return false;
+      if (activeLevel !== 'all' && !matchLevel(w.level, activeLevel)) return false;
 
       // 1.1 Lessons Filter (if studying custom selected HSK lessons)
       if (studySelectedLessons && studySelectedLessons.length > 0) {
@@ -6333,7 +6344,7 @@ function getNotebookWords(notebookId) {
     return vocabList.filter(w => w.isCustom && w.category === listName);
   } else if (notebookId.startsWith('hsk:')) {
     const lvl = notebookId.substring(4);
-    return vocabList.filter(w => !w.isCustom && w.level.toString() === lvl && (w.hskVersion || '3.0') === activeHskVersion);
+    return vocabList.filter(w => !w.isCustom && matchLevel(w.level, lvl) && (w.hskVersion || '3.0') === activeHskVersion);
   } else if (notebookId.startsWith('premium:')) {
     const category = notebookId.substring(8);
     let catName = '';
@@ -6374,20 +6385,24 @@ function renderSubdecksList() {
     if (activeHskVersion === 'yct') {
       title.textContent = 'Danh sách Từ vựng YCT Thiếu Nhi';
       for (let lvl = 1; lvl <= 4; lvl++) {
-        const lvlWords = vocabList.filter(w => (w.curriculum === 'yct' || w.hskVersion === 'yct') && w.level.toString() === lvl.toString());
+        const lvlWords = vocabList.filter(w => (w.curriculum === 'yct' || w.hskVersion === 'yct') && matchLevel(w.level, lvl));
         grid.appendChild(createSubdeckCard(`YCT Cấp ${lvl}`, `yct:${lvl}`, lvlWords.length, 'fa-child', 'var(--accent-teal)'));
       }
     } else {
       title.textContent = `Danh sách Từ vựng HSK & YCT (${activeHskVersion})`;
-      const maxLvl = activeHskVersion === '3.0' ? 9 : 6;
+      const maxLvl = activeHskVersion === '3.0' ? 6 : 6;
       for (let lvl = 1; lvl <= maxLvl; lvl++) {
-        const lvlWords = vocabList.filter(w => !w.isCustom && w.level.toString() === lvl.toString() && (w.hskVersion || '3.0') === activeHskVersion);
+        const lvlWords = vocabList.filter(w => !w.isCustom && matchLevel(w.level, lvl) && (w.hskVersion || '3.0') === activeHskVersion);
         grid.appendChild(createSubdeckCard(`HSK Cấp ${lvl}`, `hsk:${lvl}`, lvlWords.length, 'fa-graduation-cap', 'var(--success)'));
+      }
+      if (activeHskVersion === '3.0') {
+        const hsk79Words = vocabList.filter(w => !w.isCustom && matchLevel(w.level, '7-9') && (w.hskVersion || '3.0') === activeHskVersion);
+        grid.appendChild(createSubdeckCard(`New HSK 7-9 (Cao cấp)`, `hsk:7-9`, hsk79Words.length, 'fa-award', '#a855f7'));
       }
 
       // Luôn hiển thị thêm 4 thẻ YCT Thiếu Nhi ở dưới cùng để người học bấm chọn trực tiếp!
       for (let lvl = 1; lvl <= 4; lvl++) {
-        const lvlWords = vocabList.filter(w => (w.curriculum === 'yct' || w.hskVersion === 'yct') && w.level.toString() === lvl.toString());
+        const lvlWords = vocabList.filter(w => (w.curriculum === 'yct' || w.hskVersion === 'yct') && matchLevel(w.level, lvl));
         grid.appendChild(createSubdeckCard(`YCT Cấp ${lvl} (Thiếu Nhi)`, `yct:${lvl}`, lvlWords.length, 'fa-child', 'var(--accent-teal)'));
       }
     }
