@@ -1282,216 +1282,226 @@
       const container = document.getElementById('print-worksheet-content-wrap');
       if (!modal || !container) return;
 
-      const characters = target.word.split('').filter(c => /[\u4e00-\u9fa5]/.test(c));
+      // Lấy chỉ các chữ Hán trong từ
+      const wordChars = target.word.split('').filter(c => /[\u4e00-\u9fa5]/.test(c));
+      const N = wordChars.length; // số chữ trong từ
       const todayStr = new Date().toLocaleDateString('vi-VN');
-      const pinyinParts = target.pinyin ? target.pinyin.split(/\s+/) : [];
 
-      // ============================================================
-      // SVG Inline: Lưới 米字格 (mễ tự cách) — nền mỗi ô
-      // 4 đường kẻ mờ: ngang giữa, dọc giữa, chéo trái, chéo phải
-      // ============================================================
-      function makeMiZiGeCell(sizeBox, content = '', isTrace = false, isSample = false) {
-        const S = sizeBox;
-        const half = S / 2;
-        // Màu đường kẻ: xanh lá nhạt cho ô nhỏ
-        const lineColor = '#86efac';
-        const borderColor = '#22c55e';
-        const crossColor = '#bbf7d0';
-        return `
-          <div style="
-            width:${S}px; height:${S}px;
-            border: 1.5px solid ${borderColor};
-            position: relative;
-            display: flex; align-items: center; justify-content: center;
-            background: #fff;
-            box-sizing: border-box;
-            flex-shrink: 0;
-            overflow: hidden;
-          ">
-            <!-- Lưới 米字格 bằng SVG -->
-            <svg width="${S}" height="${S}" style="position:absolute;top:0;left:0;pointer-events:none;" viewBox="0 0 ${S} ${S}">
-              <!-- Nét ngang giữa -->
-              <line x1="0" y1="${half}" x2="${S}" y2="${half}" stroke="${lineColor}" stroke-width="0.8" stroke-dasharray="3,2"/>
-              <!-- Nét dọc giữa -->
-              <line x1="${half}" y1="0" x2="${half}" y2="${S}" stroke="${lineColor}" stroke-width="0.8" stroke-dasharray="3,2"/>
-              <!-- Nét chéo trái-phải -->
-              <line x1="0" y1="0" x2="${S}" y2="${S}" stroke="${crossColor}" stroke-width="0.6" stroke-dasharray="2,3"/>
-              <!-- Nét chéo phải-trái -->
-              <line x1="${S}" y1="0" x2="0" y2="${S}" stroke="${crossColor}" stroke-width="0.6" stroke-dasharray="2,3"/>
-            </svg>
-            <!-- Nội dung chữ -->
-            ${content}
-          </div>`;
+      // =======================================================
+      // KÍCH THƯỚC LƯỚI
+      // 12 ô ngang × 7 hàng
+      // Ô mẫu lớn bên trái chiếm cả chiều cao (7 hàng)
+      // =======================================================
+      const COLS = 12;           // tổng số ô ngang
+      const ROWS = 7;            // tổng số hàng
+      const BOX  = 58;           // kích thước mỗi ô (px)
+      const BIG_W = N * BOX + (N > 1 ? (N-1)*2 : 0) + 16; // chiều rộng ô chữ mẫu lớn
+      const BIG_H = ROWS * BOX; // chiều cao ô mẫu lớn = toàn bộ lưới
+
+      // =======================================================
+      // TẠO Ô 米字格 bằng SVG inline
+      // =======================================================
+      function mizigeCell(size, innerHtml = '') {
+        const h = size, w = size;
+        return `<div style="
+          width:${w}px; height:${h}px; min-width:${w}px; min-height:${h}px;
+          border-right:1px solid #22c55e;
+          border-bottom:1px solid #22c55e;
+          position:relative; display:flex; align-items:center; justify-content:center;
+          background:#fff; box-sizing:border-box; flex-shrink:0; overflow:hidden;
+        ">
+          <svg width="${w}" height="${h}" style="position:absolute;top:0;left:0;" viewBox="0 0 ${w} ${h}">
+            <line x1="0" y1="${h/2}" x2="${w}" y2="${h/2}" stroke="#86efac" stroke-width="0.7" stroke-dasharray="3,2"/>
+            <line x1="${w/2}" y1="0" x2="${w/2}" y2="${h}" stroke="#86efac" stroke-width="0.7" stroke-dasharray="3,2"/>
+            <line x1="0" y1="0" x2="${w}" y2="${h}" stroke="#bbf7d0" stroke-width="0.55" stroke-dasharray="2,3"/>
+            <line x1="${w}" y1="0" x2="0" y2="${h}" stroke="#bbf7d0" stroke-width="0.55" stroke-dasharray="2,3"/>
+          </svg>
+          ${innerHtml}
+        </div>`;
       }
 
-      // ============================================================
-      // Build từng BLOCK chữ (theo mẫu sách thực tế)
-      // Cấu trúc: [Ô chữ lớn | Nét nhỏ mô tả thứ tự] + hàng luyện viết
-      // ============================================================
-      const COLS = 11;  // số ô trên mỗi hàng (bao gồm cả ô lớn bên trái)
-      const BOX = 62;   // kích thước ô luyện viết (px)
-      const BIG = 90;   // kích thước ô mẫu lớn bên trái
+      // =======================================================
+      // XÁC ĐỊNH Ô NÀO LÀ MỜ (trace), ô nào là trống
+      // - Hàng 0: lặp từ đầy đủ, các ô đầu tiên (1 lần từ) là mờ đậm
+      // - Hàng 1: ô đầu tiên (1 lần từ) là mờ nhạt hơn
+      // - Còn lại: trống
+      // =======================================================
+      function buildRow(rowIdx) {
+        let cells = '';
+        for (let col = 0; col < COLS; col++) {
+          // Vị trí trong từ: 0..N-1
+          const posInWord = col % N;
+          const ch = wordChars[posInWord];
+          // Lần thứ mấy của từ trong hàng này?
+          const repIdx = Math.floor(col / N);
 
-      let charSectionsHtml = '';
+          let inner = '';
+          let opacity = 0;
 
-      characters.forEach((ch, chIdx) => {
-        const chPinyin = pinyinParts[chIdx] || target.pinyin || '';
-        const chMeaning = chIdx === 0 ? target.meaning : '';
+          if (rowIdx === 0 && repIdx === 0) opacity = 0.22; // hàng đầu, lần 1: mờ đậm
+          else if (rowIdx === 0 && repIdx === 1) opacity = 0.14; // hàng đầu, lần 2: mờ nhạt
+          else if (rowIdx === 1 && repIdx === 0) opacity = 0.10; // hàng 2, lần 1: rất mờ
 
-        // --- Hàng 1: Ô lớn chữ mẫu + hàng ô luyện (ô mờ + ô trống)
-        // Ô lớn bên trái: chữ đậm đen
-        const bigCellContent = `<span style="
-          font-size:${BIG * 0.75}px;
+          if (opacity > 0) {
+            inner = `<span style="
+              font-size:${BOX * 0.74}px;
+              font-family:'Kaiti','STKaiti','Noto Serif SC',serif;
+              font-weight:bold; color:#111827; opacity:${opacity};
+              line-height:1; position:relative; z-index:2; pointer-events:none;
+            ">${ch}</span>`;
+          }
+
+          cells += mizigeCell(BOX, inner);
+        }
+        return `<div style="display:flex;">${cells}</div>`;
+      }
+
+      // Build 7 hàng
+      let allRows = '';
+      for (let r = 0; r < ROWS; r++) {
+        allRows += buildRow(r);
+      }
+
+      // =======================================================
+      // Ô CHỮ LỚN BÊN TRÁI (giống hệt trong sách)
+      // Hiển thị từ mẫu to, chiếm toàn bộ chiều cao lưới
+      // =======================================================
+      const bigFontSize = N === 1 ? Math.round(BIG_H * 0.6)
+                        : N === 2 ? Math.round(BIG_H * 0.28)
+                        : Math.round(BIG_H * 0.20);
+
+      // Render từng chữ theo chiều dọc hoặc ngang tùy số chữ
+      let bigCharsHtml = '';
+      wordChars.forEach(ch => {
+        bigCharsHtml += `<div style="
+          font-size:${bigFontSize}px;
           font-family:'Kaiti','STKaiti','Noto Serif SC',serif;
           font-weight:bold; color:#111827;
-          line-height:1; position:relative; z-index:2;
-        ">${ch}</span>`;
-
-        // Ô chữ mờ để tô theo (ô nhỏ)
-        function traceCell(opacity = 0.18) {
-          const inner = `<span style="
-            font-size:${BOX * 0.74}px;
-            font-family:'Kaiti','STKaiti','Noto Serif SC',serif;
-            font-weight:bold; color:#1f2937;
-            opacity:${opacity}; line-height:1; position:relative; z-index:2;
-          ">${ch}</span>`;
-          return makeMiZiGeCell(BOX, inner);
-        }
-
-        // Ô trống để tự viết
-        function emptyCell() {
-          return makeMiZiGeCell(BOX, '');
-        }
-
-        // Xây 3 hàng luyện viết:
-        // Hàng 1: 2 ô mờ đậm hơn + (COLS-2) ô trống
-        // Hàng 2: 1 ô mờ nhạt + (COLS-1) ô trống
-        // Hàng 3: tất cả ô trống
-        let rows = '';
-        for (let row = 0; row < 3; row++) {
-          let cells = '';
-          for (let col = 0; col < COLS; col++) {
-            if (row === 0 && col === 0) cells += traceCell(0.22);
-            else if (row === 0 && col === 1) cells += traceCell(0.15);
-            else if (row === 1 && col === 0) cells += traceCell(0.10);
-            else cells += emptyCell();
-          }
-          rows += `<div style="display:flex; border-bottom: ${row < 2 ? '1.5px solid #22c55e' : 'none'};">${cells}</div>`;
-        }
-
-        // Ô lớn bên trái: chiếm chiều cao 3 hàng nhỏ (BIG × height of 3 rows)
-        const rowsHeight = BOX * 3; // tổng chiều cao 3 hàng
-
-        charSectionsHtml += `
-          <div style="margin-bottom: 20px; page-break-inside: avoid;">
-
-            <!-- Dòng pinyin + loại từ + nghĩa trên ô lớn -->
-            <div style="display:flex; align-items:flex-end; gap:14px; margin-bottom:6px;">
-              <div style="
-                width:${BIG}px; min-width:${BIG}px;
-                font-size:0.75rem; font-weight:800; color:#f97316;
-                letter-spacing:0.02em;
-                text-align:center;
-              ">${chPinyin}</div>
-              <div style="font-size:0.8rem; color:#374151; font-weight:600;">
-                ${chMeaning ? `<span style="color:#6b7280;">(${target.pos || ''})</span> ${chMeaning}` : ''}
-              </div>
-            </div>
-
-            <!-- Layout ngang: Ô lớn | Hàng luyện viết -->
-            <div style="display:flex; border: 2px solid #22c55e; border-radius:4px; overflow:hidden;">
-
-              <!-- Ô lớn chữ mẫu (bên trái) -->
-              <div style="
-                width:${BIG}px; min-width:${BIG}px; height:${rowsHeight}px;
-                border-right: 2px solid #22c55e;
-                position:relative; display:flex; align-items:center; justify-content:center;
-                background:#fff; flex-shrink:0; overflow:hidden;
-              ">
-                <svg width="${BIG}" height="${rowsHeight}" style="position:absolute;top:0;left:0;pointer-events:none;" viewBox="0 0 ${BIG} ${rowsHeight}">
-                  <line x1="0" y1="${rowsHeight/2}" x2="${BIG}" y2="${rowsHeight/2}" stroke="#86efac" stroke-width="1" stroke-dasharray="4,3"/>
-                  <line x1="${BIG/2}" y1="0" x2="${BIG/2}" y2="${rowsHeight}" stroke="#86efac" stroke-width="1" stroke-dasharray="4,3"/>
-                  <line x1="0" y1="0" x2="${BIG}" y2="${rowsHeight}" stroke="#bbf7d0" stroke-width="0.8" stroke-dasharray="3,4"/>
-                  <line x1="${BIG}" y1="0" x2="0" y2="${rowsHeight}" stroke="#bbf7d0" stroke-width="0.8" stroke-dasharray="3,4"/>
-                </svg>
-                ${bigCellContent}
-              </div>
-
-              <!-- Các hàng ô luyện viết (bên phải) -->
-              <div style="flex:1; display:flex; flex-direction:column;">
-                ${rows}
-              </div>
-
-            </div>
-          </div>
-        `;
+          line-height:1.05; text-align:center;
+        ">${ch}</div>`;
       });
 
-      // ============================================================
-      // TOÀN BỘ NỘI DUNG PHIẾU IN
-      // ============================================================
+      const bigCellHtml = `
+        <div style="
+          width:${BIG_W}px; min-width:${BIG_W}px; height:${BIG_H}px;
+          border-right:2px solid #22c55e;
+          border-bottom:1px solid #22c55e;
+          position:relative; display:flex;
+          flex-direction:column; align-items:center; justify-content:center;
+          background:#fff; box-sizing:border-box; flex-shrink:0; overflow:hidden;
+        ">
+          <!-- Lưới 米字格 cho ô lớn -->
+          <svg width="${BIG_W}" height="${BIG_H}" style="position:absolute;top:0;left:0;" viewBox="0 0 ${BIG_W} ${BIG_H}">
+            <line x1="0" y1="${BIG_H/2}" x2="${BIG_W}" y2="${BIG_H/2}" stroke="#86efac" stroke-width="1" stroke-dasharray="4,3"/>
+            <line x1="${BIG_W/2}" y1="0" x2="${BIG_W/2}" y2="${BIG_H}" stroke="#86efac" stroke-width="1" stroke-dasharray="4,3"/>
+            <line x1="0" y1="0" x2="${BIG_W}" y2="${BIG_H}" stroke="#bbf7d0" stroke-width="0.8" stroke-dasharray="3,4"/>
+            <line x1="${BIG_W}" y1="0" x2="0" y2="${BIG_H}" stroke="#bbf7d0" stroke-width="0.8" stroke-dasharray="3,4"/>
+          </svg>
+          <div style="position:relative; z-index:2;">
+            ${bigCharsHtml}
+          </div>
+        </div>`;
+
+      // =======================================================
+      // PHẦN THÔNG TIN TỪ VỰNG (khung xanh lá đầu trang)
+      // =======================================================
+      const infoBox = `
+        <div style="
+          display:flex; align-items:center; gap:20px;
+          border:2px solid #22c55e; border-radius:8px;
+          padding:12px 16px; margin-bottom:16px;
+          background:#f0fdf4;
+        ">
+          <div style="
+            font-size:${N === 1 ? '3.2' : N === 2 ? '2.4' : '1.9'}rem;
+            font-family:'Kaiti','STKaiti','Noto Serif SC',serif;
+            font-weight:bold; color:#111827; line-height:1;
+            white-space:nowrap;
+          ">${target.word}</div>
+          <div style="border-left:2px solid #86efac; padding-left:14px;">
+            <div style="font-size:1rem; font-weight:800; color:#f97316;">${target.pinyin}</div>
+            <div style="font-size:0.88rem; color:#374151; font-weight:600; margin-top:3px;">
+              ${target.pos ? `<span style="color:#6b7280">(${target.pos})</span> ` : ''}${target.meaning}
+            </div>
+            <div style="font-size:0.72rem; color:#9ca3af; margin-top:3px;">
+              ${(target.curriculum || 'HSK').toUpperCase()} Cấp ${target.level}
+            </div>
+          </div>
+        </div>`;
+
+      // =======================================================
+      // GHÉP: Ô lớn + lưới thực hành
+      // =======================================================
+      const practiceBlock = `
+        <div style="margin-bottom:0;">
+          <!-- Pinyin + nghĩa nhỏ trên đầu -->
+          <div style="display:flex; gap:10px; align-items:baseline; margin-bottom:5px;">
+            <span style="font-size:0.8rem; font-weight:800; color:#f97316;">${target.pinyin}</span>
+            <span style="font-size:0.78rem; color:#374151;">
+              ${target.pos ? `(${target.pos})` : ''} ${target.meaning}
+            </span>
+          </div>
+
+          <!-- Khối luyện viết: ô lớn trái + lưới phải -->
+          <div style="
+            display:inline-flex;
+            border:2px solid #22c55e;
+            border-radius:4px;
+            overflow:hidden;
+            box-sizing:border-box;
+          ">
+            <!-- Ô chữ mẫu lớn (bên trái) -->
+            ${bigCellHtml}
+
+            <!-- Lưới 12×7 ô luyện viết (bên phải) -->
+            <div style="display:flex; flex-direction:column;">
+              ${allRows}
+            </div>
+          </div>
+        </div>`;
+
+      // =======================================================
+      // TOÀN BỘ PHIẾU IN
+      // =======================================================
       container.innerHTML = `
         <div class="print-page-area" style="
           font-family:'Be Vietnam Pro','Segoe UI',sans-serif;
-          padding: 28px 32px;
-          background: #fff; color: #000;
-          max-width: 860px; margin: 0 auto;
-          box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-          border-radius: 12px;
+          padding:24px 28px;
+          background:#fff; color:#000;
+          max-width:${BIG_W + COLS * BOX + 80}px;
+          margin:0 auto;
+          box-shadow:0 4px 20px rgba(0,0,0,0.08);
+          border-radius:12px;
         ">
 
-          <!-- ===== HEADER ===== -->
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:3px solid #f97316; padding-bottom:12px; margin-bottom:14px;">
+          <!-- HEADER -->
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:3px solid #f97316; padding-bottom:10px; margin-bottom:12px;">
             <div>
-              <div style="font-size:1.5rem; font-weight:900; color:#f97316; letter-spacing:-0.01em;">
-                Tiếng Trung HongTai
-              </div>
-              <div style="font-size:0.78rem; color:#16a34a; font-weight:700; margin-top:2px;">
-                Luyện viết chữ Hán – Mễ Tự Cách (米字格)
-              </div>
+              <div style="font-size:1.45rem; font-weight:900; color:#f97316;">Tiếng Trung HongTai</div>
+              <div style="font-size:0.75rem; color:#16a34a; font-weight:700; margin-top:2px;">Luyện viết chữ Hán – Mễ Tự Cách (米字格)</div>
             </div>
-            <div style="text-align:right; font-size:0.78rem; color:#6b7280;">
+            <div style="text-align:right; font-size:0.75rem; color:#6b7280;">
               <div style="font-weight:700; color:#111827;">tiengtrunghongtai.com</div>
               <div>Ngày in: ${todayStr}</div>
             </div>
           </div>
 
-          <!-- ===== HÀNG TÊN / LỚP / NGÀY ===== -->
-          <div style="display:flex; gap:20px; margin-bottom:14px; font-size:0.82rem; font-weight:700; color:#16a34a;">
-            <span>Tên: <span style="display:inline-block; border-bottom:1.5px solid #22c55e; min-width:160px;">&nbsp;</span></span>
-            <span>Lớp: <span style="display:inline-block; border-bottom:1.5px solid #22c55e; min-width:90px;">&nbsp;</span></span>
-            <span>Ngày tháng năm: <span style="display:inline-block; border-bottom:1.5px solid #22c55e; min-width:120px;">&nbsp;</span></span>
+          <!-- HÀNG TÊN / LỚP / NGÀY -->
+          <div style="display:flex; gap:20px; margin-bottom:12px; font-size:0.8rem; font-weight:700; color:#16a34a;">
+            <span>Tên: <span style="display:inline-block; border-bottom:1.5px solid #22c55e; min-width:150px;">&nbsp;</span></span>
+            <span>Lớp: <span style="display:inline-block; border-bottom:1.5px solid #22c55e; min-width:80px;">&nbsp;</span></span>
+            <span>Ngày tháng năm: <span style="display:inline-block; border-bottom:1.5px solid #22c55e; min-width:110px;">&nbsp;</span></span>
           </div>
 
-          <!-- ===== THÔNG TIN TỪ VỰNG ===== -->
-          <div style="
-            display:flex; align-items:center; gap:20px;
-            border:2px solid #22c55e; border-radius:8px;
-            padding:12px 16px; margin-bottom:20px;
-            background:#f0fdf4;
-          ">
-            <div style="
-              font-size:3.2rem;
-              font-family:'Kaiti','STKaiti','Noto Serif SC',serif;
-              font-weight:bold; color:#111827; line-height:1;
-            ">${target.word}</div>
-            <div style="border-left:2px solid #86efac; padding-left:16px;">
-              <div style="font-size:1rem; font-weight:800; color:#f97316;">${target.pinyin}</div>
-              <div style="font-size:0.88rem; color:#374151; font-weight:600; margin-top:3px;">
-                ${target.pos ? `<span style="color:#6b7280">(${target.pos})</span> ` : ''}${target.meaning}
-              </div>
-              <div style="font-size:0.72rem; color:#9ca3af; margin-top:3px;">
-                ${(target.curriculum || 'HSK').toUpperCase()} Cấp ${target.level}
-              </div>
-            </div>
-          </div>
+          <!-- KHUNG THÔNG TIN TỪ VỰNG -->
+          ${infoBox}
 
-          <!-- ===== KHỐI LUYỆN VIẾT TỪNG CHỮ ===== -->
-          ${charSectionsHtml}
+          <!-- KHỐI LUYỆN VIẾT -->
+          ${practiceBlock}
 
-          <!-- ===== FOOTER ===== -->
-          <div style="margin-top:18px; border-top:1px dashed #86efac; padding-top:10px; display:flex; justify-content:space-between; font-size:0.74rem; color:#9ca3af;">
-            <span>💡 Viết theo chữ đậm mẫu (ô lớn trái) → Tô theo chữ mờ → Tự luyện vào các ô trống.</span>
+          <!-- FOOTER -->
+          <div style="margin-top:14px; border-top:1px dashed #86efac; padding-top:8px; display:flex; justify-content:space-between; font-size:0.72rem; color:#9ca3af;">
+            <span>💡 Viết theo chữ mẫu to (ô trái) → Tô theo chữ mờ → Tự viết vào các ô trống (mỗi ô 1 chữ, viết lần lượt theo thứ tự từ).</span>
             <span style="font-weight:800; color:#f97316;">Tiếng Trung HongTai</span>
           </div>
         </div>
