@@ -12,6 +12,26 @@
     href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700;800&family=Noto+Sans+SC:wght@700;900&display=swap"
     rel="stylesheet">
 
+  <script>
+    (function() {
+      var t = localStorage.getItem('theme') || 'dark';
+      if (t === 'light') {
+        document.documentElement.classList.add('light-mode', 'light');
+        document.documentElement.classList.remove('dark');
+        if (document.body) {
+          document.body.classList.add('light-mode');
+        } else {
+          document.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.add('light-mode');
+          });
+        }
+      } else {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light', 'light-mode');
+      }
+    })();
+  </script>
+
   <style>
     * {
       box-sizing: border-box;

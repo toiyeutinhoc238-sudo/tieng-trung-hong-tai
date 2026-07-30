@@ -21,6 +21,23 @@
         navigator.serviceWorker.register('/sw.js').catch(() => { });
       });
     }
+    (function() {
+      var t = localStorage.getItem('theme') || 'dark';
+      if (t === 'light') {
+        document.documentElement.classList.add('light-mode', 'light');
+        document.documentElement.classList.remove('dark');
+        if (document.body) {
+          document.body.classList.add('light-mode');
+        } else {
+          document.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.add('light-mode');
+          });
+        }
+      } else {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light', 'light-mode');
+      }
+    })();
   </script>
 
   <!-- FontAwesome Icons -->
@@ -243,29 +260,6 @@
           <i class="fa-solid fa-file-signature"></i> <span>Luyện đề (117 Đề HSK)</span>
         </li>
       </ul>
-
-      <!-- DANH MỤC 5: VIP AI SUITE (Dropdown) -->
-      <div class="sidebar-group">
-        <div class="sidebar-item sidebar-dropdown-toggle vip-toggle" onclick="window.toggleSidebarDropdown(this)">
-          <i class="fa-solid fa-crown" style="color: #fbbf24;"></i> <span>VIP (Tính năng AI)</span>
-          <span class="badge-vip">NEW</span>
-          <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
-        </div>
-        <ul class="sidebar-submenu">
-          <li class="sidebar-subitem" onclick="window.open('/chat-history.html', '_blank')">
-            <i class="fa-solid fa-comments"></i> <span>Hội thoại nhập vai AI</span>
-          </li>
-          <li class="sidebar-subitem" onclick="window.open('/chat-history.html', '_blank')">
-            <i class="fa-solid fa-book-reader"></i> <span>Đọc hiểu AI</span>
-          </li>
-          <li class="sidebar-subitem" onclick="window.open('/chat-history.html', '_blank')">
-            <i class="fa-solid fa-headphones"></i> <span>Shadowing & Chép chính tả</span>
-          </li>
-          <li class="sidebar-subitem" onclick="window.showSentenceParserModal()">
-            <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Phân tích câu AI</span>
-          </li>
-        </ul>
-      </div>
 
       <!-- DANH MỤC 6: CỘNG ĐỒNG & HỆ THỐNG -->
       <div class="sidebar-section-label">Hệ Thống & Bảng Xếp Hạng</div>
