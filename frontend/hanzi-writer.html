@@ -1547,7 +1547,71 @@
     };
 
     window.triggerPrintWorksheet = function () {
-      window.print();
+      const printWrap = document.getElementById('print-worksheet-content-wrap');
+      if (!printWrap) {
+        window.print();
+        return;
+      }
+
+      const printWindow = window.open('', '_blank', 'width=900,height=900');
+      if (!printWindow) {
+        window.print();
+        return;
+      }
+
+      const contentHtml = printWrap.innerHTML;
+
+      printWindow.document.open();
+      printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Phiếu Luyện Viết Chữ Hán - Tiếng Trung HongTai</title>
+          <meta charset="utf-8">
+          <style>
+            @page {
+              size: A4 portrait;
+              margin: 8mm 10mm;
+            }
+            * {
+              box-sizing: border-box;
+            }
+            body {
+              font-family: 'Be Vietnam Pro', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              background: #ffffff !important;
+              color: #000000 !important;
+              margin: 0;
+              padding: 0;
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
+            }
+            .print-page-area {
+              width: 100% !important;
+              max-width: 100% !important;
+              box-shadow: none !important;
+              border: none !important;
+              padding: 0 !important;
+              margin: 0 !important;
+            }
+            .no-print {
+              display: none !important;
+            }
+          </style>
+        </head>
+        <body>
+          ${contentHtml}
+          <script>
+            window.onload = function() {
+              setTimeout(function() {
+                window.print();
+                window.close();
+              }, 300);
+            };
+          <\/script>
+        </body>
+        </html>
+      `);
+      printWindow.document.close();
     };
 
     // Initialize Page
