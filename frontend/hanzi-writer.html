@@ -712,7 +712,32 @@
 
     window.onStandardOrLevelChange = function () {
       const std = document.getElementById('sel-standard').value;
-      const lvl = document.getElementById('sel-level').value;
+      const levelSelect = document.getElementById('sel-level');
+      
+      if (levelSelect) {
+        const opt79 = levelSelect.querySelector('option[value="7-9"]');
+        if (std === 'hsk2' || std === 'yct') {
+          if (opt79) {
+            window._hwOpt79 = opt79;
+            opt79.remove();
+          }
+          if (levelSelect.value === '7-9') {
+            levelSelect.value = 'all';
+          }
+        } else {
+          if (!opt79) {
+            if (!window._hwOpt79) {
+              const opt = document.createElement('option');
+              opt.value = '7-9';
+              opt.textContent = 'HSK 7-8-9 (Cao cấp)';
+              window._hwOpt79 = opt;
+            }
+            levelSelect.appendChild(window._hwOpt79);
+          }
+        }
+      }
+
+      const lvl = levelSelect.value;
       const lsnSelect = document.getElementById('sel-lesson');
 
       lsnSelect.innerHTML = `<option value="all">Tất cả các bài (Mặc định)</option>`;
