@@ -1121,7 +1121,7 @@
 
       // Hàm gửi điểm số lên hệ thống để xếp hạng & lưu lịch sử (Chỉ gửi 1 lần khi kết thúc hoặc thoát dở dang)
       async function saveQuizScoreToLeaderboard(finalScore, isAborted = false) {
-        if (hasSavedScore || finalScore <= 0) return;
+        if (hasSavedScore || stageCount === 0) return;
         hasSavedScore = true;
         try {
           const API_BASE_URL = getApiBaseUrl();
@@ -1147,7 +1147,7 @@
 
       // Đăng ký sự kiện nếu người dùng đóng tab / rời trang dở dang
       const handleBeforeUnload = () => {
-        if (!hasSavedScore && score > 0) {
+        if (!hasSavedScore && stageCount > 0) {
           saveQuizScoreToLeaderboard(score, true);
         }
       };

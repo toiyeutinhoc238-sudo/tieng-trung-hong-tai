@@ -632,7 +632,7 @@ app.get('/api/leaderboard', async (req, res) => {
 // POST endpoint to save quiz game results & update leaderboard
 app.post('/api/quiz/save', async (req, res) => {
   const email = getLoggedInUserEmail(req) || 'guest';
-  const { score, total, mode } = req.body;
+  const { score, stage, total, combo, mode } = req.body;
 
   try {
     const userData = await readUserData();
@@ -640,8 +640,10 @@ app.post('/api/quiz/save', async (req, res) => {
     if (!userData.quizHistory[email]) userData.quizHistory[email] = [];
 
     const newRecord = {
-      score: score || 0,
-      total: total || 100,
+      score: typeof score === 'number' ? score : 0,
+      stage: typeof stage === 'number' ? stage : 0,
+      total: typeof total === 'number' ? total : 0,
+      combo: typeof combo === 'number' ? combo : 0,
       mode: mode || 'Pinyin Challenge',
       playedAt: new Date().toISOString()
     };
