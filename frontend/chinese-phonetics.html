@@ -725,6 +725,7 @@
     window.speakZhText = function (text) {
       if (!text) return;
 
+      const cleanStr = String(text).replace(/['’]/g, '').trim();
       const voice = 'baidu-female'; // Cố định giọng Baidu Nữ chuẩn theo yêu cầu của chị
 
       if (audioCurrent) {
@@ -733,18 +734,19 @@
       }
 
       const API_BASE_URL = getApiBaseUrl();
-      const audioUrl = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(text)}&voice=${voice}`;
+      const audioUrl = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanStr)}&voice=${voice}`;
       audioCurrent = new Audio(audioUrl);
       audioCurrent.play().catch(err => {
         console.warn("API Audio error, fallback to Web Speech:", err);
-        fallbackWebSpeech(text);
+        fallbackWebSpeech(cleanStr);
       });
     };
 
     function fallbackWebSpeech(text) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(text);
+        const cleanStr = String(text).replace(/['’]/g, '').trim();
+        const u = new SpeechSynthesisUtterance(cleanStr);
         u.lang = 'zh-CN';
         u.rate = 0.85;
         window.speechSynthesis.speak(u);

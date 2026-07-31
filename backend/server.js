@@ -1314,6 +1314,7 @@ app.post('/api/chat/migrate', async (req, res) => {
 function cleanTTSInput(str) {
   if (!str) return '';
   return String(str)
+    .replace(/['’]/g, '')
     .replace(/<[^>]*>/g, '')
     .replace(/^[A-Z]:\s*/gm, '')
     .replace(/\n[A-Z]:\s*/g, '，')
