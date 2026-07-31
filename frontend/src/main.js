@@ -2443,6 +2443,18 @@ function getAuthHeaders(customHeaders = {}) {
 
 // Fetch current user from session / local storage and initialize Google Sign-In SDK
 async function initAuth() {
+  const SIX_HOURS_MS = 6 * 60 * 60 * 1000; // 6 tiếng = 21,600,000 miligiây
+  const now = Date.now();
+  const lastActive = localStorage.getItem('last_active_time');
+
+  // Kiểm tra quy định an toàn: Nếu đã 6 tiếng trở lên không truy cập -> Tự động đăng xuất
+  if (lastActive && (now - parseInt(lastActive, 10)) >= SIX_HOURS_MS) {
+    console.log('Phát hiện quá 6 tiếng không hoạt động, tiến hành tự động đăng xuất an toàn...');
+    localStorage.removeItem('last_active_time');
+    await handleLogout();
+    return;
+  }
+
   // 1. Kiểm tra phiên đăng nhập thực tế với Server
   try {
     const res = await fetch(API_BASE_URL + '/api/auth/me', {
@@ -2455,12 +2467,17 @@ async function initAuth() {
       if (data && data.user) {
         currentUser = data.user;
         localStorage.setItem('user', JSON.stringify(currentUser));
+        localStorage.setItem('last_active_time', now.toString()); // Cập nhật thời gian hoạt động gần nhất
         renderUserProfile();
+
+        // Thiết lập sự kiện cập nhật thời gian hoạt động khi người dùng tương tác
+        setupActivityListener();
         return;
       } else {
         // Nếu Server báo chưa đăng nhập -> Xóa toàn bộ session cũ ở máy này
         localStorage.removeItem('user');
         localStorage.removeItem('session_token');
+        localStorage.removeItem('last_active_time');
         currentUser = null;
         renderUserProfile();
         initGoogleSignIn();
@@ -2476,19 +2493,36 @@ async function initAuth() {
   if (savedUser) {
     try {
       currentUser = JSON.parse(savedUser);
+      localStorage.setItem('last_active_time', now.toString());
       renderUserProfile();
+      setupActivityListener();
     } catch (e) {
       localStorage.removeItem('user');
       localStorage.removeItem('session_token');
+      localStorage.removeItem('last_active_time');
       currentUser = null;
       renderUserProfile();
       initGoogleSignIn();
     }
   } else {
     currentUser = null;
+    localStorage.removeItem('last_active_time');
     renderUserProfile();
     initGoogleSignIn();
   }
+}
+
+// Cập nhật mốc thời gian hoạt động gần nhất khi người dùng click/gõ phím
+function setupActivityListener() {
+  const updateActivity = () => {
+    if (currentUser) {
+      localStorage.setItem('last_active_time', Date.now().toString());
+    }
+  };
+
+  window.addEventListener('click', updateActivity, { passive: true });
+  window.addEventListener('keydown', updateActivity, { passive: true });
+  window.addEventListener('scroll', updateActivity, { passive: true });
 }
 
 function initGoogleSignIn() {
