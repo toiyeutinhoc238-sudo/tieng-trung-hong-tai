@@ -1361,14 +1361,17 @@
         ? 'http://localhost:5000'
         : window.location.origin;
 
+      const token = localStorage.getItem('session_token');
+      const authHeaders = token ? { 'Authorization': `Bearer ${token}`, 'x-session-token': token } : {};
+      
       fetch(API_BASE_URL + '/api/user/game-history', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          ...authHeaders
         },
         credentials: 'omit',
         body: JSON.stringify({
-          email: savedEmail,
           score: score,
           stage: playedCount,
           level: levelVal,
