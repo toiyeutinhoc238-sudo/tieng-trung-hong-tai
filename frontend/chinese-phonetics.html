@@ -1103,7 +1103,7 @@
       container.innerHTML = html;
     }
 
-    function renderLuyenTapView() {
+    window.renderLuyenTapView = function () {
       const container = document.getElementById('section-body-content');
 
       // 1. Lấy dữ liệu 100 câu trắc nghiệm & xáo trộn ngẫu nhiên
@@ -1235,7 +1235,7 @@
             </div>
 
             <div style="display:flex; justify-content:center;">
-              <button onclick="renderLuyenTapView()" style="background:linear-gradient(135deg, #a855f7, #6366f1); border:none; color:#ffffff; padding:14px 36px; border-radius:14px; font-weight:800; font-size:1.05rem; font-family:'Be Vietnam Pro', 'Outfit', sans-serif; cursor:pointer; display:inline-flex; align-items:center; gap:10px; box-shadow:0 8px 24px rgba(168,85,247,0.4); text-transform:none; letter-spacing:0.3px;">
+              <button onclick="window.renderLuyenTapView()" style="background:linear-gradient(135deg, #a855f7, #6366f1); border:none; color:#ffffff; padding:14px 36px; border-radius:14px; font-weight:800; font-size:1.05rem; font-family:'Be Vietnam Pro', 'Outfit', sans-serif; cursor:pointer; display:inline-flex; align-items:center; gap:10px; box-shadow:0 8px 24px rgba(168,85,247,0.4); text-transform:none; letter-spacing:0.3px;">
                 <i class="fa-solid fa-rotate-right"></i> Chơi Lại Từ Đầu
               </button>
             </div>
