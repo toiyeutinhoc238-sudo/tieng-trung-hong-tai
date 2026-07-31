@@ -8,38 +8,38 @@ export const THANH_MAU_DATA = {
       id: "group1",
       name: "Nhóm 1: Âm hai môi & Môi răng",
       items: [
-        { char: "b", type: "Âm hai môi", detail: "Mép môi khép lại, luồng hơi ngắt nhẹ rồi bật ra. Không bật hơi.", note: "Phát âm gần giống 'b' hoặc 'p' nhẹ trong tiếng Việt.", examples: [{ pinyin: "bā", meaning: "Tám (Số 8)" }, { pinyin: "bò", meaning: "Bạc hà" }, { pinyin: "bǐ", meaning: "Cây bút" }, { pinyin: "bù", meaning: "Không" }] },
-        { char: "p", type: "Âm hai môi (Bật hơi)", detail: "Vị trí môi giống âm 'b', nhưng luồng hơi đẩy mạnh dứt khoát ra ngoài.", note: "Bật hơi rất mạnh (thử bằng tờ giấy trước miệng).", examples: [{ pinyin: "pā", meaning: "Nằm sấp" }, { pinyin: "pó", meaning: "Bà nội / Bà lão" }, { pinyin: "pí", meaning: "Da / Da thuộc" }, { pinyin: "pù", meaning: "Quán / Tiệm" }] },
-        { char: "m", type: "Âm hai môi (Âm mũi)", detail: "Hai môi khép lại, luồng hơi thoát ra qua đường mũi, dây thanh rung.", note: "Giống hoàn toàn âm 'm' trong tiếng Việt.", examples: [{ pinyin: "mā", meaning: "Mẹ" }, { pinyin: "mò", meaning: "Mực in" }, { pinyin: "mǐ", meaning: "Gạo / Mét" }, { pinyin: "mù", meaning: "Gỗ" }] },
-        { char: "f", type: "Âm môi răng", detail: "Răng cửa trên chạm nhẹ vào môi dưới, luồng hơi ma sát thoát ra.", note: "Giống âm 'ph' / 'f' trong tiếng Việt.", examples: [{ pinyin: "fā", meaning: "Phát / Gửi" }, { pinyin: "fó", meaning: "Phật" }, { pinyin: "fǔ", meaning: "Búa / Phủ" }, { pinyin: "fù", meaning: "Cha / Trả tiền" }] }
+        { char: "b", type: "Âm hai môi", detail: "Mép môi khép lại, luồng hơi ngắt nhẹ rồi bật ra. Không bật hơi.", note: "Phát âm gần giống 'b' hoặc 'p' nhẹ trong tiếng Việt.", examples: [{ pinyin: "bā", meaning: "Số 8" }, { pinyin: "bǐ", meaning: "Cây bút" }, { pinyin: "bàba", meaning: "Bố" }, { pinyin: "báibǐ", meaning: "Bút trắng" }] },
+        { char: "p", type: "Âm hai môi (Bật hơi)", detail: "Vị trí môi giống âm 'b', nhưng luồng hơi đẩy mạnh dứt khoát ra ngoài.", note: "Bật hơi rất mạnh (thử bằng tờ giấy trước miệng).", examples: [{ pinyin: "pā", meaning: "Nằm sấp" }, { pinyin: "pó", meaning: "Bà nội" }, { pinyin: "píngguǒ", meaning: "Quả táo" }, { pinyin: "pápō", meaning: "Leo dốc" }] },
+        { char: "m", type: "Âm hai môi (Âm mũi)", detail: "Hai môi khép lại, luồng hơi thoát ra qua đường mũi, dây thanh rung.", note: "Giống hoàn toàn âm 'm' trong tiếng Việt.", examples: [{ pinyin: "mā", meaning: "Mẹ" }, { pinyin: "mǐ", meaning: "Gạo" }, { pinyin: "máobǐ", meaning: "Bút lông" }, { pinyin: "mìmì", meaning: "Bí mật" }] },
+        { char: "f", type: "Âm môi răng", detail: "Răng cửa trên chạm nhẹ vào môi dưới, luồng hơi ma sát thoát ra.", note: "Giống âm 'ph' / 'f' trong tiếng Việt.", examples: [{ pinyin: "fā", meaning: "Phát" }, { pinyin: "fù", meaning: "Cha" }, { pinyin: "fúwù", meaning: "Phục vụ" }, { pinyin: "fēnxi", meaning: "Phân tích" }] }
       ]
     },
     {
       id: "group2",
       name: "Nhóm 2: Âm đầu lưỡi giữa",
       items: [
-        { char: "d", type: "Âm đầu lưỡi giữa", detail: "Đầu lưỡi chạm chân răng trên, luồng hơi ngắt nhẹ rồi bật ra. Không bật hơi.", note: "Đọc giống âm 't' trong tiếng Việt.", examples: [{ pinyin: "dā", meaning: "Dựng / Bắt cầu" }, { pinyin: "dé", meaning: "Được / Đạo đức" }, { pinyin: "dǐ", meaning: "Đáy / Cuối" }, { pinyin: "dù", meaning: "Độ / Qua sông" }] },
-        { char: "t", type: "Âm đầu lưỡi giữa (Bật hơi)", detail: "Vị trí lưỡi giống 'd', nhưng đẩy luồng hơi mạnh ra ngoài.", note: "Bật hơi mạnh, đọc gần giống 'th' tiếng Việt.", examples: [{ pinyin: "tā", meaning: "Anh ấy / Cô ấy" }, { pinyin: "tè", meaning: "Đặc biệt" }, { pinyin: "tǐ", meaning: "Thể / Thể thao" }, { pinyin: "tù", meaning: "Thỏ / Nôn" }] },
-        { char: "n", type: "Âm đầu lưỡi giữa (Âm mũi)", detail: "Đầu lưỡi chạm chân răng trên, luồng hơi thoát qua đường mũi.", note: "Giống âm 'n' tiếng Việt.", examples: [{ pinyin: "nā", meaning: "Nam mô" }, { pinyin: "nè", meaning: "Nói lắp" }, { pinyin: "nǐ", meaning: "Bạn / Anh" }, { pinyin: "nù", meaning: "Tức giận" }] },
-        { char: "l", type: "Âm đầu lưỡi giữa (Âm bên)", detail: "Đầu lưỡi chạm chân răng trên, luồng hơi thoát ra hai bên cạnh lưỡi.", note: "Giống âm 'l' tiếng Việt.", examples: [{ pinyin: "lā", meaning: "Kéo / Nắm" }, { pinyin: "lè", meaning: "Vui vẻ" }, { pinyin: "lǐ", meaning: "Trong / Lý lẽ" }, { pinyin: "lù", meaning: "Con đường" }] }
+        { char: "d", type: "Âm đầu lưỡi giữa", detail: "Đầu lưỡi chạm chân răng trên, luồng hơi ngắt nhẹ rồi bật ra. Không bật hơi.", note: "Đọc giống âm 't' trong tiếng Việt.", examples: [{ pinyin: "dā", meaning: "Dựng" }, { pinyin: "dǐ", meaning: "Đáy" }, { pinyin: "dǎdiàn", meaning: "Gợi ý" }, { pinyin: "dàtáng", meaning: "Đại sảnh" }] },
+        { char: "t", type: "Âm đầu lưỡi giữa (Bật hơi)", detail: "Vị trí lưỡi giống 'd', nhưng đẩy luồng hơi mạnh ra ngoài.", note: "Bật hơi mạnh, đọc gần giống 'th' tiếng Việt.", examples: [{ pinyin: "tā", meaning: "Anh ấy" }, { pinyin: "tǐ", meaning: "Thể thao" }, { pinyin: "táitóu", meaning: "Ngẩng đầu" }, { pinyin: "tútú", meaning: "Đồ họa" }] },
+        { char: "n", type: "Âm đầu lưỡi giữa (Âm mũi)", detail: "Đầu lưỡi chạm chân răng trên, luồng hơi thoát qua đường mũi.", note: "Giống âm 'n' tiếng Việt.", examples: [{ pinyin: "nǐ", meaning: "Bạn" }, { pinyin: "nù", meaning: "Tức giận" }, { pinyin: "nǔlì", meaning: "Nỗ lực" }, { pinyin: "nǐhǎo", meaning: "Xin chào" }] },
+        { char: "l", type: "Âm đầu lưỡi giữa (Âm bên)", detail: "Đầu lưỡi chạm chân răng trên, luồng hơi thoát ra hai bên cạnh lưỡi.", note: "Giống âm 'l' tiếng Việt.", examples: [{ pinyin: "lā", meaning: "Kéo" }, { pinyin: "lè", meaning: "Vui vẻ" }, { pinyin: "lǎoshī", meaning: "Thầy cô" }, { pinyin: "lúnchuán", meaning: "Tàu thủy" }] }
       ]
     },
     {
       id: "group3",
       name: "Nhóm 3: Âm cuống lưỡi (Gốc lưỡi)",
       items: [
-        { char: "g", type: "Âm cuống lưỡi", detail: "Cuống lưỡi nâng lên chạm vòm mềm, ngắt hơi rồi buông nhẹ. Không bật hơi.", note: "Phát âm giống âm 'c' hoặc 'k' trong tiếng Việt.", examples: [{ pinyin: "gā", meaning: "Cà rê" }, { pinyin: "gē", meaning: "Anh trai" }, { pinyin: "gǔ", meaning: "Cổ / Cái trống" }, { pinyin: "gù", meaning: "Cố hương" }] },
-        { char: "k", type: "Âm cuống lưỡi (Bật hơi)", detail: "Vị trí giống 'g', nhưng bật luồng hơi mạnh từ cuống họng ra.", note: "Âm bật hơi mạnh, nghe giống 'kh' tiếng Việt.", examples: [{ pinyin: "kā", meaning: "Cà phê" }, { pinyin: "kě", meaning: "Khát / Có thể" }, { pinyin: "kǔ", meaning: "Đắng / Khổ" }, { pinyin: "kù", meaning: "Quần / Kho" }] },
-        { char: "h", type: "Âm cuống lưỡi (Âm xát)", detail: "Cuống lưỡi nâng gần vòm mềm tạo khe hở cho luồng hơi ma sát đi ra.", note: "Giữa 'h' và 'kh' tiếng Việt (nhẹ hơn 'kh').", examples: [{ pinyin: "hā", meaning: "Há miệng / Cười" }, { pinyin: "hē", meaning: "Uống" }, { pinyin: "hǔ", meaning: "Con hổ" }, { pinyin: "hù", meaning: "Hộ gia đình" }] }
+        { char: "g", type: "Âm cuống lưỡi", detail: "Cuống lưỡi nâng lên chạm vòm mềm, ngắt hơi rồi buông nhẹ. Không bật hơi.", note: "Phát âm giống âm 'c' hoặc 'k' trong tiếng Việt.", examples: [{ pinyin: "gē", meaning: "Anh trai" }, { pinyin: "gǔ", meaning: "Cái trống" }, { pinyin: "gāngbǐ", meaning: "Bút máy" }, { pinyin: "guójiā", meaning: "Quốc gia" }] },
+        { char: "k", type: "Âm cuống lưỡi (Bật hơi)", detail: "Vị trí giống 'g', nhưng bật luồng hơi mạnh từ cuống họng ra.", note: "Âm bật hơi mạnh, nghe giống 'kh' tiếng Việt.", examples: [{ pinyin: "kě", meaning: "Khát" }, { pinyin: "kù", meaning: "Quần" }, { pinyin: "kāfèi", meaning: "Cà phê" }, { pinyin: "kělè", meaning: "Kha-khát / Cola" }] },
+        { char: "h", type: "Âm cuống lưỡi (Âm xát)", detail: "Cuống lưỡi nâng gần vòm mềm tạo khe hở cho luồng hơi ma sát đi ra.", note: "Giữa 'h' và 'kh' tiếng Việt (nhẹ hơn 'kh').", examples: [{ pinyin: "hē", meaning: "Uống" }, { pinyin: "hǔ", meaning: "Con hổ" }, { pinyin: "hénèi", meaning: "Hà Nội" }, { pinyin: "huǒguō", meaning: "Lẩu" }] }
       ]
     },
     {
       id: "group4",
       name: "Nhóm 4: Âm mặt lưỡi",
       items: [
-        { char: "j", type: "Âm mặt lưỡi", detail: "Mặt lưỡi áp sát ngạc cứng, đầu lưỡi đặt sau răng dưới. Không bật hơi.", note: "Gần giống âm 'ch' tiếng Việt nhưng mặt lưỡi phẳng.", examples: [{ pinyin: "jī", meaning: "Con gà" }, { pinyin: "jū", meaning: "Cư trú / Ở" }, { pinyin: "jiā", meaning: "Gia đình / Nhà" }, { pinyin: "jù", meaning: "Câu văn / Kịch" }] },
-        { char: "q", type: "Âm mặt lưỡi (Bật hơi)", detail: "Vị trí giống 'j', nhưng bật luồng hơi rất mạnh thoát ra qua kẽ răng.", note: "Bật hơi mạnh (kiểm tra bằng giấy).", examples: [{ pinyin: "qī", meaning: "Số 7 / Bảy" }, { pinyin: "qū", meaning: "Khu vực" }, { pinyin: "qiā", meaning: "Bấm / Bắt lấy" }, { pinyin: "qù", meaning: "Đi" }] },
-        { char: "x", type: "Âm mặt lưỡi (Âm xát)", detail: "Mặt lưỡi nâng gần ngạc cứng tạo kẽ hở cho luồng hơi ma sát.", note: "Phát âm nhẹ nhàng giống 'x' tiếng Việt.", examples: [{ pinyin: "xī", meaning: "Phía Tây / Hít" }, { pinyin: "xū", meaning: "Cần thiết / Nhẹ" }, { pinyin: "xiā", meaning: "Con tôm / Mù" }, { pinyin: "xù", meaning: "Lời nói đầu" }] }
+        { char: "j", type: "Âm mặt lưỡi", detail: "Mặt lưỡi áp sát ngạc cứng, đầu lưỡi đặt sau răng dưới. Không bật hơi.", note: "Gần giống âm 'ch' tiếng Việt nhưng mặt lưỡi phẳng.", examples: [{ pinyin: "jī", meaning: "Con gà" }, { pinyin: "jiā", meaning: "Gia đình" }, { pinyin: "jīchǎng", meaning: "Sân bay" }, { pinyin: "jiéguǒ", meaning: "Kết quả" }] },
+        { char: "q", type: "Âm mặt lưỡi (Bật hơi)", detail: "Vị trí giống 'j', nhưng bật luồng hơi rất mạnh thoát ra qua kẽ răng.", note: "Bật hơi mạnh (kiểm tra bằng giấy).", examples: [{ pinyin: "qī", meaning: "Số 7" }, { pinyin: "qù", meaning: "Đi" }, { pinyin: "qīn'ài", meaning: "Thân yêu" }, { pinyin: "qíngkuàng", meaning: "Tình huống" }] },
+        { char: "x", type: "Âm mặt lưỡi (Âm xát)", detail: "Mặt lưỡi nâng gần ngạc cứng tạo kẽ hở cho luồng hơi ma sát.", note: "Phát âm nhẹ nhàng giống 'x' tiếng Việt.", examples: [{ pinyin: "xī", meaning: "Phía Tây" }, { pinyin: "xiā", meaning: "Con tôm" }, { pinyin: "xīguā", meaning: "Dưa hấu" }, { pinyin: "xuéxí", meaning: "Học tập" }] }
       ]
     },
     {
@@ -47,9 +47,9 @@ export const THANH_MAU_DATA = {
       name: "Nhóm 5: Âm đầu lưỡi trước",
       note_special: "Lưu ý đặc biệt: Khi các âm z, c, s đi kèm với nguyên âm 'i', âm 'i' sẽ được đọc thành 'ư' (vd: zi = tư, ci = tư, si = tư).",
       items: [
-        { char: "z", type: "Âm đầu lưỡi trước", detail: "Đầu lưỡi thẳng chạm mặt sau răng cửa trên, ngắt hơi rồi buông nhẹ.", note: "Không bật hơi. Gần giống âm 'ch' tiếng Việt nhưng lưỡi thẳng phẳng.", examples: [{ pinyin: "zā", meaning: "Buộc / Cột" }, { pinyin: "zǎo", meaning: "Buổi sáng / Quả táo" }, { pinyin: "zè", meaning: "Trắc" }, { pinyin: "zù", meaning: "Tổ / Thuê" }] },
-        { char: "c", type: "Âm đầu lưỡi trước (Bật hơi)", detail: "Vị trí giống 'z', nhưng bật luồng hơi dứt khoát cực mạnh ra ngoài.", note: "Bật hơi mạnh (dùng tờ giấy thử luồng hơi).", examples: [{ pinyin: "cā", meaning: "Lau / Chùi" }, { pinyin: "cǎo", meaning: "Cỏ" }, { pinyin: "cè", meaning: "Trang / Cuốn sách" }, { pinyin: "cù", meaning: "Giấm" }] },
-        { char: "s", type: "Âm đầu lưỡi trước (Âm xát)", detail: "Đầu lưỡi gần mặt sau răng cửa trên, tạo khe hở cho hơi ma sát đi ra.", note: "Âm xát nhẹ, giống 's' tiếng Việt.", examples: [{ pinyin: "sā", meaning: "Buông thả" }, { pinyin: "sǎo", meaning: "Quét nhà" }, { pinyin: "sè", meaning: "Màu sắc" }, { pinyin: "sù", meaning: "Tố cáo / Chất" }] }
+        { char: "z", type: "Âm đầu lưỡi trước", detail: "Đầu lưỡi thẳng chạm mặt sau răng cửa trên, ngắt hơi rồi buông nhẹ.", note: "Không bật hơi. Gần giống âm 'ch' tiếng Việt nhưng lưỡi thẳng phẳng.", examples: [{ pinyin: "zā", meaning: "Buộc" }, { pinyin: "zǎo", meaning: "Sáng" }, { pinyin: "zúqiú", meaning: "Bóng đá" }, { pinyin: "zìjǐ", meaning: "Tự bản thân" }] },
+        { char: "c", type: "Âm đầu lưỡi trước (Bật hơi)", detail: "Vị trí giống 'z', nhưng bật luồng hơi dứt khoát cực mạnh ra ngoài.", note: "Bật hơi mạnh (dùng tờ giấy thử luồng hơi).", examples: [{ pinyin: "cā", meaning: "Lau" }, { pinyin: "cù", meaning: "Giấm" }, { pinyin: "cánjiā", meaning: "Tham gia" }, { pinyin: "cóngqián", meaning: "Ngày trước" }] },
+        { char: "s", type: "Âm đầu lưỡi trước (Âm xát)", detail: "Đầu lưỡi gần mặt sau răng cửa trên, tạo khe hở cho hơi ma sát đi ra.", note: "Âm xát nhẹ, giống 's' tiếng Việt.", examples: [{ pinyin: "sā", meaning: "Buông" }, { pinyin: "sè", meaning: "Màu" }, { pinyin: "sānshí", meaning: "Ba mươi" }, { pinyin: "sūsǐ", meaning: "Tỉnh lại" }] }
       ]
     },
     {
@@ -57,10 +57,10 @@ export const THANH_MAU_DATA = {
       name: "Nhóm 6: Âm đầu lưỡi sau (Âm cong lưỡi)",
       note_special: "Lưu ý quan trọng: Khi phát âm nhóm này, đầu lưỡi phải cong lên chạm hoặc gần chạm vòm miệng cứng. Khi đi với 'i', 'i' được đọc thành 'ư' (zh-ch-sh-r + i -> chư, trư, sư, rư).",
       items: [
-        { char: "zh", type: "Âm cong lưỡi", detail: "Cong đầu lưỡi chạm vòm cứng, chặn hơi rồi buông nhẹ. Không bật hơi.", note: "Cong lưỡi phát âm gần giống 'tr' tiếng Việt (không bật hơi).", examples: [{ pinyin: "zhā", meaning: "Đâm / Cắm" }, { pinyin: "zhǎo", meaning: "Tìm kiếm" }, { pinyin: "zhè", meaning: "Đây / Này" }, { pinyin: "zhù", meaning: "Sinh sống / Chúc" }] },
-        { char: "ch", type: "Âm cong lưỡi (Bật hơi)", detail: "Vị trí lưỡi cong giống 'zh', nhưng bật hơi cực mạnh ra ngoài.", note: "Cong lưỡi + bật hơi mạnh, gần giống 'tr' bật hơi mạnh.", examples: [{ pinyin: "chā", meaning: "Cắm / Cài" }, { pinyin: "chǎo", meaning: "Cãi nhau / Răng" }, { pinyin: "chè", meaning: "Triệt / Rõ ràng" }, { pinyin: "chù", meaning: "Nơi / Chỗ" }] },
-        { char: "sh", type: "Âm cong lưỡi (Âm xát)", detail: "Đầu lưỡi cong lên gần vòm cứng, tạo khe hở cho hơi ma sát đi ra.", note: "Cong lưỡi, phát âm giống âm 's' nặng tiếng Việt.", examples: [{ pinyin: "shā", meaning: "Giết / Cát" }, { pinyin: "shǎo", meaning: "Ít" }, { pinyin: "shè", meaning: "Bắn / Bắn súng" }, { pinyin: "shù", meaning: "Cây / Số" }] },
-        { char: "r", type: "Âm cong lưỡi (Dây thanh rung)", detail: "Vị trí lưỡi cong giống 'sh', dây thanh rung, luồng hơi ma sát nhẹ.", note: "Gần giống âm 'r' tiếng Việt nhưng êm hơn và cong lưỡi.", examples: [{ pinyin: "rā", meaning: "Nói nhảm" }, { pinyin: "rǎo", meaning: "Làm phiền" }, { pinyin: "rè", meaning: "Nóng / Nhiệt" }, { pinyin: "rù", meaning: "Vào / Nhập" }] }
+        { char: "zh", type: "Âm cong lưỡi", detail: "Cong đầu lưỡi chạm vòm cứng, chặn hơi rồi buông nhẹ. Không bật hơi.", note: "Cong lưỡi phát âm gần giống 'tr' tiếng Việt (không bật hơi).", examples: [{ pinyin: "zhā", meaning: "Đâm" }, { pinyin: "zhè", meaning: "Đây" }, { pinyin: "zhòngguó", meaning: "Trung Quốc" }, { pinyin: "zhǔrén", meaning: "Chủ nhân" }] },
+        { char: "ch", type: "Âm cong lưỡi (Bật hơi)", detail: "Vị trí lưỡi cong giống 'zh', nhưng bật hơi cực mạnh ra ngoài.", note: "Cong lưỡi + bật hơi mạnh, gần giống 'tr' bật hơi mạnh.", examples: [{ pinyin: "chā", meaning: "Cắm" }, { pinyin: "chù", meaning: "Chỗ" }, { pinyin: "chūnjié", meaning: "Tết Nguyên Đán" }, { pinyin: "chēzhàn", meaning: "Bến xe" }] },
+        { char: "sh", type: "Âm cong lưỡi (Âm xát)", detail: "Đầu lưỡi cong lên gần vòm cứng, tạo khe hở cho hơi ma sát đi ra.", note: "Cong lưỡi, phát âm giống âm 's' nặng tiếng Việt.", examples: [{ pinyin: "shā", meaning: "Giết" }, { pinyin: "shù", meaning: "Cây" }, { pinyin: "shǒubǐ", meaning: "Cây bút" }, { pinyin: "shuǐguǒ", meaning: "Hoa quả" }] },
+        { char: "r", type: "Âm cong lưỡi (Dây thanh rung)", detail: "Vị trí lưỡi cong giống 'sh', dây thanh rung, luồng hơi ma sát nhẹ.", note: "Gần giống âm 'r' tiếng Việt nhưng êm hơn và cong lưỡi.", examples: [{ pinyin: "rè", meaning: "Nóng" }, { pinyin: "rù", meaning: "Nhập" }, { pinyin: "rénmín", meaning: "Nhân dân" }, { pinyin: "rìběn", meaning: "Nhật Bản" }] }
       ]
     }
   ],
