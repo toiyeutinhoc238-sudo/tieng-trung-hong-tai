@@ -146,11 +146,12 @@
       background-attachment: fixed;
       color: var(--text-main);
       min-height: 100vh;
-      padding: 24px;
+      padding: 16px;
     }
 
     .container {
-      max-width: 1240px;
+      width: 100%;
+      max-width: 100%;
       margin: 0 auto;
     }
 
@@ -407,13 +408,15 @@
     }
 
     .sound-btn-box {
-      width: 72px;
+      min-width: 72px;
+      width: auto;
       height: 72px;
+      padding: 0 16px;
       border-radius: 16px;
       background: rgba(30, 41, 59, 0.8);
       border: 2px solid rgba(255, 255, 255, 0.15);
       color: #fff;
-      font-size: 1.8rem;
+      font-size: 1.4rem;
       font-weight: 800;
       font-family: 'Noto Sans SC', sans-serif;
       display: flex;
@@ -423,6 +426,8 @@
       cursor: pointer;
       transition: all 0.25s;
       position: relative;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .sound-btn-box:hover {
@@ -514,7 +519,6 @@
       font-weight: 900;
       color: #60a5fa;
       font-family: 'Noto Sans SC', sans-serif;
-      cursor: pointer;
     }
 
     /* Voice Control Bar (Đơn giản hóa: Cố định giọng Baidu Nữ chuẩn) */
@@ -822,8 +826,37 @@
 
             <!-- Lưu ý alert box (Mặc định ẩn, bấm mới hiện) -->
             <div id="group-note-${gIdx}" class="group-note-alert">
-              <i class="fa-solid fa-circle-info" style="color: #f59e0b; margin-right: 6px;"></i>
-              <strong>Chi tiết lưu ý nhóm:</strong> ${group.note_special || group.standalone_rule || group.pronunciation_tip || 'Chú ý vị trí đặt lưỡi và luồng hơi chuẩn khi phát âm nhóm này.'}
+              <div style="font-weight: 700; margin-bottom: 8px; color: #f59e0b; display: flex; align-items: center; gap: 6px; font-size: 0.95rem;">
+                <i class="fa-solid fa-circle-info"></i> Chi tiết lưu ý nhóm:
+              </div>
+              ${group.note_special ? `<div style="margin-bottom: 8px; color: #e2e8f0;">${group.note_special}</div>` : ''}
+              ${group.pronunciation_tip ? `
+                <div style="margin-bottom: 10px; color: #f8fafc; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); padding: 10px 14px; border-radius: 10px; font-size: 0.9rem; line-height: 1.5;">
+                  💡 <strong>${group.pronunciation_tip}</strong>
+                </div>
+              ` : ''}
+              ${group.standalone_rule ? `<div style="color: #cbd5e1; white-space: pre-line; line-height: 1.5; margin-top: 6px; font-weight: 600;">📌 ${group.standalone_rule}</div>` : ''}
+              ${group.standalone_table ? `
+                <div style="margin-top: 12px; overflow-x: auto;">
+                  <table style="width: 100%; max-width: 500px; border-collapse: collapse; text-align: left; font-size: 0.88rem; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 10px; overflow: hidden;">
+                    <thead>
+                      <tr style="background: rgba(30, 41, 59, 0.9); color: #38bdf8; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                        <th style="padding: 8px 14px;">Vận mẫu gốc</th>
+                        <th style="padding: 8px 14px;">Viết khi đứng 1 mình</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${group.standalone_table.map(t => `
+                        <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+                          <td style="padding: 8px 14px; color: #cbd5e1; font-weight: 700;">${t.orig}</td>
+                          <td style="padding: 8px 14px; color: #f59e0b; font-weight: 800;">${t.solo}</td>
+                        </tr>
+                      `).join('')}
+                    </tbody>
+                  </table>
+                </div>
+              ` : ''}
+              ${!group.note_special && !group.pronunciation_tip && !group.standalone_rule && !group.standalone_table ? `<div style="color: #cbd5e1;">Chú ý vị trí đặt lưỡi và luồng hơi chuẩn khi phát âm nhóm này.</div>` : ''}
             </div>
 
             <!-- Top Row Sound Buttons (Hình 2) -->
@@ -856,7 +889,7 @@
               <table style="width:100%; border-collapse:collapse; text-align:left; font-size:0.92rem;">
                 <thead>
                   <tr style="background:rgba(30,41,59,0.9); color:#60a5fa;">
-                    <th style="padding:14px;">Đặc điểm phân biệt</th>
+                    <th style="padding:14px;">Đặc điểm</th>
                     <th style="padding:14px;">Nhóm 4 (j, q, x)</th>
                     <th style="padding:14px;">Nhóm 5 (z, c, s)</th>
                   </tr>
@@ -871,6 +904,30 @@
                   `).join('')}
                 </tbody>
               </table>
+            </div>
+          </div>
+        `;
+      }
+
+      // Include Mẹo Phân Biệt & Sửa Ngọng âm 'n' và 'ng' if available (Nằm ở dưới cùng)
+      if (data.n_ng_tip) {
+        const tip = data.n_ng_tip;
+        html += `
+          <div class="group-block" style="margin-top: 2.5rem;">
+            <div class="group-subtitle" style="color: #f59e0b;"><i class="fa-solid fa-lightbulb"></i> ${tip.title}</div>
+            <div style="overflow-x: auto; border-radius: 16px; border: 1px solid var(--border-glass); background: rgba(15, 23, 42, 0.6); padding: 24px;">
+              ${tip.sections.map(s => `
+                <div style="margin-bottom: 18px;">
+                  <div style="font-weight: 800; color: #38bdf8; font-size: 1rem; margin-bottom: 8px;">${s.heading}</div>
+                  <ul style="list-style-type: none; padding-left: 4px;">
+                    ${s.bullets.map(b => `
+                      <li style="margin-bottom: 6px; line-height: 1.5; font-size: 0.92rem; color: #cbd5e1; display: flex; gap: 8px;">
+                        <span style="color: #f59e0b; font-weight: 800;">•</span> <span>${b}</span>
+                      </li>
+                    `).join('')}
+                  </ul>
+                </div>
+              `).join('')}
             </div>
           </div>
         `;
@@ -894,12 +951,9 @@
       return `
         <div class="char-detail-inspector">
           <div class="inspector-top-grid" style="${!showDiagram ? 'grid-template-columns: 100px 1fr;' : ''}">
-            <!-- Cột 1: Ký tự to + Audio -->
+            <!-- Cột 1: Ký tự to -->
             <div class="char-big-box">
-              <span class="char-big-symbol" onclick="speakZhText('${item.char}')">${item.char}</span>
-              <button class="audio-play-btn" onclick="speakZhText('${item.char}')">
-                <i class="fa-solid fa-volume-high"></i> Phát âm
-              </button>
+              <span class="char-big-symbol">${item.char}</span>
             </div>
 
             <!-- Cột 2: Cách Đọc & Lưu Ý -->

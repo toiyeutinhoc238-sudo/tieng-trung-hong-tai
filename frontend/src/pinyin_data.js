@@ -67,9 +67,9 @@ export const THANH_MAU_DATA = {
   comparison_table: {
     title: "Bảng So Sánh Nhóm 4 (j, q, x) và Nhóm 5 (z, c, s)",
     rows: [
-      { feature: "Cách đặt lưỡi", group4: "Mặt lưỡi nâng áp sát ngạc cứng, đầu lưỡi đặt sau răng dưới", group5: "Đầu lưỡi đặt sau răng cửa trên, lưỡi phẳng thẳng" },
-      { feature: "Kết hợp với nguyên âm 'i'", group4: "Đọc bình thường là 'i' (ji, qi, xi)", group5: "Đọc thành âm 'ư' (zi, ci, si)" },
-      { feature: "Kết hợp với 'u', 'ü'", group4: "Chỉ kết hợp với 'ü' (viết bỏ 2 chấm thành ju, qu, xu)", group5: "Chỉ kết hợp với 'u' (zu, cu, su), không kết hợp với 'ü'" }
+      { feature: "Cách đặt lưỡi", group4: "Mặt lưỡi nâng áp sát ngạc cứng, đầu lưỡi đặt sau răng dưới", group5: "Đầu lưỡi đặt sau răng cửa trên, lưỡi phẳng" },
+      { feature: "Kết hợp với i", group4: "Đọc bình thường là \"i\"", group5: "Đọc thành âm \"ư\"" },
+      { feature: "Kết hợp với u, ü và các vận mẫu ghép của u, ü", group4: "Chỉ kết hợp với ü và các vận mẫu ghép của ü (viết là u), không kết hợp với u", group5: "Chỉ kết hợp với u và các vận mẫu ghép của u, không kết hợp với ü" }
     ]
   }
 };
@@ -85,7 +85,7 @@ export const VAN_MAU_DATA = {
       items: [
         { char: "a", detail: "Miệng mở to hết cỡ, lưỡi đặt tự nhiên thả lỏng ở dưới.", note: "Giống 'a' Việt nhưng mở miệng theo chiều dọc sâu hơn.", examples: [{ pinyin: "bā", meaning: "Tám" }, { pinyin: "mǎ", meaning: "Con ngựa" }, { pinyin: "tà", meaning: "Dẫm lên" }, { pinyin: "fā", meaning: "Phát" }] },
         { char: "o", detail: "Miệng hơi mở, tròn môi, lưỡi lùi về sau và nâng nhẹ.", note: "Giống 'ô' hoặc 'ua'. Phải tròn môi chặt.", examples: [{ pinyin: "bó", meaning: "Bác" }, { pinyin: "mò", meaning: "Mực" }, { pinyin: "pó", meaning: "Bà" }] },
-        { char: "e", detail: "Miệng nửa mở, lưỡi lùi về sau, nâng lên mức trung bình.", note: "Đọc là 'ưa'. Đọc là 'ơ' khi không có thanh điệu hoặc đi với d, n, l, m, zh.", examples: [{ pinyin: "gē", meaning: "Anh trai" }, { pinyin: "le", meaning: "Rồi (trợ từ)" }, { pinyin: "mè", meaning: "Em gái" }] },
+        { char: "e", detail: "Miệng nửa mở, lưỡi lùi về sau, nâng lên mức trung bình.", note: "Có 2 cách đọc 'ưa' và 'ơ'. Đọc là 'ơ' khi không có thanh điệu và đi với d, n, l, n, zh, còn lại đọc là 'ưa'.", examples: [{ pinyin: "gē", meaning: "Anh trai" }, { pinyin: "le", meaning: "Rồi (trợ từ)" }, { pinyin: "mè", meaning: "Em gái" }] },
         { char: "i", detail: "Miệng dẹt (khoe răng), căng môi 2 bên. Lưỡi nâng cao.", note: "Giống âm 'i' tiếng Việt.", examples: [{ pinyin: "bǐ", meaning: "Bút" }, { pinyin: "nì", meaning: "Ngán / Chán" }, { pinyin: "qī", meaning: "Số 7" }, { pinyin: "jí", meaning: "Gấp / Nhanh" }] },
         { char: "u", detail: "Môi chu ra tròn và nhỏ, lưỡi nâng cao về phía vòm họng.", note: "Giống âm 'u' tiếng Việt.", examples: [{ pinyin: "bù", meaning: "Không" }, { pinyin: "tú", meaning: "Đồ / Vẽ" }, { pinyin: "shǔ", meaning: "Đếm / Chuột" }, { pinyin: "fú", meaning: "Phúc / Nổi" }] },
         { char: "ü", detail: "Giữ vị trí lưỡi như âm 'i', sau đó tròn môi lại.", note: "Đọc như 'uy'. Đi với j, q, x thì bỏ dấu 2 chấm (ju, qu, xu) nhưng giữ cách đọc.", examples: [{ pinyin: "lǚ", meaning: "Du lịch" }, { pinyin: "nǘ", meaning: "Nữ / Con gái" }, { pinyin: "qū", meaning: "Khu vực" }, { pinyin: "jù", meaning: "Câu" }] }
@@ -111,19 +111,20 @@ export const VAN_MAU_DATA = {
     {
       id: "v_group3",
       name: "Nhóm 3: Vận Mẫu Ghép của i (9 âm)",
-      pronunciation_tip: "Giữ âm 'i' ngắn lướt nhanh, chuyển trọng tâm sang âm phía sau.",
+      pronunciation_tip: "i + [vận mẫu]: Luôn luôn giữ âm 'i' ngắn và lướt nhanh, sau đó chuyển trọng tâm sang vận mẫu phía sau.",
+      standalone_rule: "Khi i và các vận mẫu ghép của i đứng 1 mình làm 1 âm tiết:",
       standalone_table: [
         { orig: "i", solo: "yi" }, { orig: "ia", solo: "ya" }, { orig: "ie", solo: "ye" },
         { orig: "iao", solo: "yao" }, { orig: "iou", solo: "you" }, { orig: "ian", solo: "yan" },
         { orig: "in", solo: "yin" }, { orig: "iang", solo: "yang" }, { orig: "ing", solo: "ying" }, { orig: "iong", solo: "yong" }
       ],
       items: [
-        { char: "ia", detail: "Phát âm i rồi trượt nhanh sang a.", note: "Nghe như i+a.", examples: [{ pinyin: "jiā", meaning: "Nhà" }, { pinyin: "xiā", meaning: "Con tôm" }, { pinyin: "qiā", meaning: "Bấm" }, { pinyin: "xià", meaning: "Dưới" }] },
-        { char: "ie", detail: "Phát âm i rồi trượt sang ê.", note: "Đọc giống i + ê.", examples: [{ pinyin: "jiě", meaning: "Chị gái" }, { pinyin: "xiè", meaning: "Cảm ơn" }, { pinyin: "qié", meaning: "Cà tím" }, { pinyin: "niē", meaning: "Nắn" }] },
-        { char: "in", detail: "Phát âm i kết thúc bằng n.", note: "Đọc giống in.", examples: [{ pinyin: "jīn", meaning: "Vàng / Cân" }, { pinyin: "xīn", meaning: "Tim / Mới" }, { pinyin: "qín", meaning: "Cần cù" }, { pinyin: "lín", meaning: "Rừng" }] },
-        { char: "iao", detail: "Phát âm i rồi trượt sang ao.", note: "Đọc gần như ieo.", examples: [{ pinyin: "jiǎo", meaning: "Chân / Góc" }, { pinyin: "xiāo", meaning: "Tiêu tan" }, { pinyin: "qiáo", meaning: "Cây cầu" }, { pinyin: "liào", meaning: "Nguyên liệu" }] },
-        { char: "iu (iou)", detail: "Phát âm i lướt sang ou. Khi có phụ âm viết tắt là -iu.", note: "Đọc giống i + âu.", examples: [{ pinyin: "jiù", meaning: "Cũ / Cứu" }, { pinyin: "xiū", meaning: "Sửa chữa" }, { pinyin: "qiú", meaning: "Quả bóng" }, { pinyin: "liú", meaning: "Chảy / Ở lại" }] },
-        { char: "ian", detail: "Phát âm i lướt sang an.", note: "Đọc giống i + en (iên).", examples: [{ pinyin: "jiān", meaning: "Vai / Giữa" }, { pinyin: "xiān", meaning: "Tươi / Tiên" }, { pinyin: "qián", meaning: "Tiền" }, { pinyin: "nián", meaning: "Năm" }] },
+        { char: "ia", detail: "Phát âm i rồi trượt sang a.", note: "(i+a)", examples: [{ pinyin: "jiā", meaning: "Nhà" }, { pinyin: "xiā", meaning: "Con tôm" }, { pinyin: "qiā", meaning: "Bấm" }, { pinyin: "xià", meaning: "Dưới" }] },
+        { char: "ie", detail: "Phát âm i rồi trượt sang ê.", note: "(i+ê)", examples: [{ pinyin: "jiě", meaning: "Chị gái" }, { pinyin: "xiè", meaning: "Cảm ơn" }, { pinyin: "qié", meaning: "Cà tím" }, { pinyin: "niē", meaning: "Nắn" }] },
+        { char: "in", detail: "Phát âm i rồi kết thúc bằng n.", note: "Đọc giống in.", examples: [{ pinyin: "jīn", meaning: "Vàng / Cân" }, { pinyin: "xīn", meaning: "Tim / Mới" }, { pinyin: "qín", meaning: "Cần cù" }, { pinyin: "lín", meaning: "Rừng" }] },
+        { char: "iao", detail: "Phát âm i rồi trượt sang ao.", note: "( nghe như ieo, nhưng không hoàn toàn là e do trong tiếng trung âm a mở rộng theo chiều dọc)", examples: [{ pinyin: "jiǎo", meaning: "Chân / Góc" }, { pinyin: "xiāo", meaning: "Tiêu tan" }, { pinyin: "qiáo", meaning: "Cây cầu" }, { pinyin: "liào", meaning: "Nguyên liệu" }] },
+        { char: "iou (-iu)", detail: "Phát âm i rồi trượt sang ou.", note: "( khi iou đi với thanh mẫu sẽ được viết tắt thành -iu. iou Đọc giống i+ âu)", examples: [{ pinyin: "jiù", meaning: "Cũ / Cứu" }, { pinyin: "xiū", meaning: "Sửa chữa" }, { pinyin: "qiú", meaning: "Quả bóng" }, { pinyin: "liú", meaning: "Chảy / Ở lại" }] },
+        { char: "ian", detail: "Phát âm i rồi trượt sang an.", note: "( Đọc giống i+en)", examples: [{ pinyin: "jiān", meaning: "Vai / Giữa" }, { pinyin: "xiān", meaning: "Tươi / Tiên" }, { pinyin: "qián", meaning: "Tiền" }, { pinyin: "nián", meaning: "Năm" }] },
         { char: "ing", detail: "Phát âm i kết thúc bằng ng.", note: "Đọc giống ing.", examples: [{ pinyin: "jīng", meaning: "Kinh đô" }, { pinyin: "xīng", meaning: "Ngôi sao" }, { pinyin: "qíng", meaning: "Tình cảm" }, { pinyin: "líng", meaning: "Số 0" }] },
         { char: "iang", detail: "Phát âm i lướt sang ang.", note: "Đọc nghe hơi giống ieng.", examples: [{ pinyin: "jiāng", meaning: "Sông" }, { pinyin: "xiāng", meaning: "Thơm / Hòm" }, { pinyin: "qiáng", meaning: "Bức tường" }, { pinyin: "liáng", meaning: "Mát mẻ" }] },
         { char: "iong", detail: "Phát âm i lướt sang ong.", note: "Đọc giống i + ung.", examples: [{ pinyin: "jiōng", meaning: "Lúng túng" }, { pinyin: "xiōng", meaning: "Anh trai / Ngực" }, { pinyin: "qióng", meaning: "Nghèo" }, { pinyin: "liōng", meaning: "Lén lút" }] }
@@ -132,6 +133,7 @@ export const VAN_MAU_DATA = {
     {
       id: "v_group4",
       name: "Nhóm 4: Vận Mẫu Ghép của ü (3 âm)",
+      standalone_rule: "Quy tắc quan trọng của 'ü':\n1. Khi đứng độc lập: Thêm 'y' ở trước và bỏ 2 chấm -> yu, yue, yuan, yun.\n2. Khi ghép với j, q, x: Bỏ dấu 2 chấm trên đầu 'ü' (viết là ju, qu, xu, juan, xuan, jun...) nhưng cách đọc vẫn giữ nguyên là âm 'ü' (uy).\n3. Khi ghép với n, l: Giữ nguyên 2 chấm (nǚ, lǚ).",
       standalone_table: [
         { orig: "ü", solo: "yu" }, { orig: "üe", solo: "yue" },
         { orig: "üan", solo: "yuan" }, { orig: "ün", solo: "yun" }
@@ -145,6 +147,7 @@ export const VAN_MAU_DATA = {
     {
       id: "v_group5",
       name: "Nhóm 5: Vận Mẫu Ghép của u (8 âm)",
+      standalone_rule: "Khi đứng độc lập (không có thanh mẫu đi kèm):\n• Với âm 'u' đơn: Thêm 'w' ở trước -> wu.\n• Với các vận mẫu còn lại: Đổi 'u' thành 'w' -> wa, wo, wai, wei, wan, wen, wang, weng.\n• Lưu ý quan trọng: uei và uen khi kết hợp với thanh mẫu thì được viết tắt là -ui và -un, nhưng cách đọc giữ nguyên.",
       standalone_table: [
         { orig: "u", solo: "wu" }, { orig: "ua", solo: "wa" }, { orig: "uo", solo: "wo" },
         { orig: "uai", solo: "wai" }, { orig: "uei", solo: "wei" }, { orig: "uan", solo: "wan" },
@@ -154,9 +157,9 @@ export const VAN_MAU_DATA = {
         { char: "ua", detail: "Phát âm u rồi lướt sang a.", note: "Giống qua / oa.", examples: [{ pinyin: "huā", meaning: "Hoa" }, { pinyin: "kuā", meaning: "Khen ngợi" }, { pinyin: "shuā", meaning: "Bàn chải / Chải" }] },
         { char: "uo", detail: "Phát âm u rồi lướt sang o.", note: "Đọc giống u + ô (ua).", examples: [{ pinyin: "duó", meaning: "Cướp" }, { pinyin: "shuō", meaning: "Nói" }, { pinyin: "guó", meaning: "Quốc gia" }, { pinyin: "luó", meaning: "Cái chiêng" }] },
         { char: "uai", detail: "Phát âm u rồi lướt sang ai.", note: "Đọc giống oai.", examples: [{ pinyin: "kuài", meaning: "Nhanh / Đồng" }, { pinyin: "shuāi", meaning: "Ngã" }, { pinyin: "huài", meaning: "Hỏng / Xấu" }] },
-        { char: "ui (uei)", detail: "Phát âm u lướt sang ei. Đi với thanh mẫu viết tắt là -ui.", note: "Đọc giống u + ây (uôi).", examples: [{ pinyin: "duì", meaning: "Đúng / Đội" }, { pinyin: "huí", meaning: "Về" }, { pinyin: "kuí", meaning: "Khôi ngô" }, { pinyin: "shuǐ", meaning: "Nước" }] },
+        { char: "uei (-ui)", detail: "Phát âm u lướt sang ei.", note: "Khi kết hợp với thanh mẫu thì được viết tắt là -ui nhưng cách đọc vẫn giữ nguyên (giống u + ây).", examples: [{ pinyin: "duì", meaning: "Đúng / Đội" }, { pinyin: "huí", meaning: "Về" }, { pinyin: "kuí", meaning: "Khôi ngô" }, { pinyin: "shuǐ", meaning: "Nước" }] },
         { char: "uan", detail: "Phát âm u rồi lướt sang an.", note: "Đọc giống oan.", examples: [{ pinyin: "suān", meaning: "Chua" }, { pinyin: "huān", meaning: "Hoan hỉ" }, { pinyin: "kuān", meaning: "Rộng" }, { pinyin: "duǎn", meaning: "Ngắn" }] },
-        { char: "un (uen)", detail: "Phát âm u lướt sang en. Đi với thanh mẫu viết tắt là -un.", note: "Đọc giống u + ân (uân).", examples: [{ pinyin: "lùn", meaning: "Bàn luận" }, { pinyin: "shùn", meaning: "Thuận lợi" }, { pinyin: "kùn", meaning: "Mệt buồn ngủ" }, { pinyin: "cún", meaning: "Gửi tiết kiệm" }] },
+        { char: "uen (-un)", detail: "Phát âm u lướt sang en.", note: "Khi kết hợp với thanh mẫu thì được viết tắt là -un nhưng cách đọc vẫn giữ nguyên (giống u + ân).", examples: [{ pinyin: "lùn", meaning: "Bàn luận" }, { pinyin: "shùn", meaning: "Thuận lợi" }, { pinyin: "kùn", meaning: "Mệt buồn ngủ" }, { pinyin: "cún", meaning: "Gửi tiết kiệm" }] },
         { char: "uang", detail: "Phát âm u rồi lướt sang ang.", note: "Đọc giống oang.", examples: [{ pinyin: "huāng", meaning: "Hoảng hốt" }, { pinyin: "kuāng", meaning: "Cái khung" }, { pinyin: "shuāng", meaning: "Đôi / Sương" }] },
         { char: "ueng", detail: "Phát âm u rồi lướt sang eng.", note: "Đọc giống u + âng (ít gặp).", examples: [{ pinyin: "wēng", meaning: "Ông lão" }] }
       ]
@@ -164,10 +167,28 @@ export const VAN_MAU_DATA = {
   ],
   n_ng_tip: {
     title: "Mẹo Phân Biệt & Sửa Ngọng âm 'n' và 'ng'",
-    points: [
-      { topic: "Vị trí lưỡi", detail: "'n' là âm đầu lưỡi (đầu lưỡi chạm chân răng trên). 'ng' là âm cuống lưỡi (đầu lưỡi thả lỏng, cuống lưỡi nâng cao chạm ngạc mềm)." },
-      { topic: "Luồng hơi", detail: "'n' luồng hơi qua mũi và chặn ở đầu lưỡi. 'ng' luồng hơi qua mũi và chặn sâu trong cuống lưỡi." },
-      { topic: "Bài tập thực hành", detail: "Tập luyện đọc luân phiên: 'an - ang', 'en - eng', 'in - ing'." }
+    sections: [
+      {
+        heading: "1. Phân biệt vị trí lưỡi:",
+        bullets: [
+          "\"n\" là âm đầu lưỡi: Đầu lưỡi đặt chạm chân răng trên (lợi).",
+          "\"ng\" là âm cuống lưỡi: Đầu lưỡi thả lỏng, cuống lưỡi nâng cao chạm vòm họng mềm (ngạc mềm)."
+        ]
+      },
+      {
+        heading: "2. Khác biệt luồng hơi:",
+        bullets: [
+          "\"n\" là âm mũi (đầu lưỡi): Luồng hơi thoát qua mũi, chặn ở đầu lưỡi.",
+          "\"ng\" là âm mũi (cuống lưỡi): Luồng hơi thoát qua mũi, chặn ở cuống lưỡi."
+        ]
+      },
+      {
+        heading: "3. Bài tập:",
+        bullets: [
+          "Tập đọc luân phiên: \"an - ang\", \"en - eng\", \"in - ing\".",
+          "Kiểm tra: Khi đọc \"n\", cảm nhận độ rung ở đầu lưỡi và chân răng. Khi đọc \"ng\", cảm nhận độ rung ở sâu trong họng (cuống lưỡi)."
+        ]
+      }
     ]
   }
 };
