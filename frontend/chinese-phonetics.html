@@ -699,14 +699,15 @@
 
   </div>
 
-  <script type="module">
     import { THANH_MAU_DATA, VAN_MAU_DATA, THANH_DIEU_DATA } from './src/pinyin_data.js';
     import { getMouthDiagramSVG } from './src/mouth_diagrams.js';
+    import { LARGE_QUIZ_DATABASE } from './src/quiz_data.js';
 
     window.THANH_MAU_DATA = THANH_MAU_DATA;
     window.VAN_MAU_DATA = VAN_MAU_DATA;
     window.THANH_DIEU_DATA = THANH_DIEU_DATA;
     window.getMouthDiagramSVG = getMouthDiagramSVG;
+    window.LARGE_QUIZ_DATABASE = LARGE_QUIZ_DATABASE;
 
     let currentSection = 'hub';
     let selectedGroupIndex = 0;
@@ -1104,58 +1105,92 @@
     function renderLuyenTapView() {
       const container = document.getElementById('section-body-content');
 
-      const quizData = [
-        { sound: "bā", options: ["bā", "pā", "mā", "fā"], correct: 0 },
-        { sound: "pó", options: ["bó", "pó", "mò", "fó"], correct: 1 },
-        { sound: "tā", options: ["dā", "tā", "nā", "lā"], correct: 1 },
-        { sound: "kě", options: ["gē", "kě", "hē", "lè"], correct: 1 },
-        { sound: "zhǎo", options: ["zǎo", "cǎo", "zhǎo", "chǎo"], correct: 2 },
-        { sound: "shù", options: ["sù", "cù", "zù", "shù"], correct: 3 }
-      ];
+      // Tạo bản sao xáo trộn ngẫu nhiên (Shuffle) từ ngân hàng 100 câu hỏi
+      const db = window.LARGE_QUIZ_DATABASE || [];
+      const shuffledQuiz = [...db].sort(() => Math.random() - 0.5);
 
       let score = 0;
       let qIdx = 0;
+      let isAnswered = false;
 
-      window.checkQuizAnswer = function (idx) {
-        const item = quizData[qIdx];
-        if (idx === item.correct) {
-          alert("🎉 Chính xác! Âm bạn nghe là: " + item.sound);
+      window.checkQuizAnswer = function (selectedOptIdx) {
+        if (isAnswered) return; // Tránh bấm chọn nhiều lần 1 câu
+        isAnswered = true;
+
+        const item = shuffledQuiz[qIdx];
+        const feedbackEl = document.getElementById('quiz-inline-feedback');
+        const nextBtn = document.getElementById('quiz-next-btn');
+
+        if (selectedOptIdx === item.correct) {
           score++;
+          feedbackEl.innerHTML = `
+            <div style="background: rgba(16, 185, 129, 0.15); border: 1.5px solid #10b981; color: #34d399; padding: 14px 20px; border-radius: 14px; font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 10px; animation: fadeIn 0.3s ease;">
+              <i class="fa-solid fa-circle-check fa-lg"></i> 🎉 Chính xác! Âm bạn vừa nghe là: <strong>${item.sound}</strong>
+            </div>
+          `;
         } else {
-          alert("❌ Chưa đúng rồi! Âm chính xác là: " + item.sound);
+          feedbackEl.innerHTML = `
+            <div style="background: rgba(239, 68, 68, 0.15); border: 1.5px solid #ef4444; color: #f87171; padding: 14px 20px; border-radius: 14px; font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 10px; animation: fadeIn 0.3s ease;">
+              <i class="fa-solid fa-circle-xmark fa-lg"></i> ❌ Chưa đúng! Đáp án chính xác phải là: <strong>${item.sound}</strong>
+            </div>
+          `;
         }
-        qIdx = (qIdx + 1) % quizData.length;
+
+        // Hiện nút Câu tiếp theo
+        nextBtn.style.display = 'inline-flex';
+        document.getElementById('quiz-score-num').innerText = score;
+      };
+
+      window.nextQuizQuestion = function() {
+        qIdx++;
+        if (qIdx >= shuffledQuiz.length) {
+          alert(`🏆 Bạn đã hoàn thành xuất sắc thử thách! Điểm số chung cuộc: ${score}/${shuffledQuiz.length}`);
+          qIdx = 0;
+        }
+        isAnswered = false;
         renderQuizItem();
       };
 
       window.renderQuizItem = function () {
-        const item = quizData[qIdx];
+        const item = shuffledQuiz[qIdx];
         container.innerHTML = `
-          <div style="max-width:600px; margin:0 auto; text-align:center; background:rgba(15,23,42,0.8); border:2px solid rgba(168,85,247,0.4); padding:32px; border-radius:24px;">
-            <div style="font-size:1rem; font-weight:800; color:#c084fc; text-transform:uppercase; margin-bottom:12px;">
-              <i class="fa-solid fa-gamepad"></i> Thử Thách Nghe & Đoán Âm (Câu ${qIdx + 1}/${quizData.length})
+          <div style="max-width:640px; margin:0 auto; text-align:center; background:rgba(15,23,42,0.8); border:2px solid rgba(168,85,247,0.4); padding:32px; border-radius:24px; box-shadow:0 12px 36px rgba(0,0,0,0.4);">
+            <div style="font-size:1.05rem; font-weight:800; color:#c084fc; text-transform:uppercase; margin-bottom:12px; display:flex; align-items:center; justify-content:center; gap:8px;">
+              <i class="fa-solid fa-gamepad"></i> Thử Thách Nghe & Đoán Âm (Câu ${qIdx + 1}/${shuffledQuiz.length})
             </div>
             
-            <button onclick="speakZhText('${item.sound}')" style="background:linear-gradient(135deg, #a855f7, #6366f1); border:none; color:#fff; padding:16px 32px; border-radius:50px; font-size:1.2rem; font-weight:800; cursor:pointer; margin:20px 0; box-shadow:0 8px 24px rgba(168,85,247,0.4); display:inline-flex; align-items:center; gap:10px;">
+            <button onclick="speakZhText('${item.sound}')" style="background:linear-gradient(135deg, #a855f7, #6366f1); border:none; color:#fff; padding:16px 36px; border-radius:50px; font-size:1.2rem; font-weight:800; cursor:pointer; margin:16px 0; box-shadow:0 8px 24px rgba(168,85,247,0.4); display:inline-flex; align-items:center; gap:10px; transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
               <i class="fa-solid fa-volume-high fa-lg"></i> Bấm Để Nghe Âm
             </button>
 
-            <div style="font-size:0.9rem; color:#cbd5e1; margin-bottom:24px;">Chọn đáp án Pinyin bạn nghe được:</div>
+            <div style="font-size:0.95rem; color:#cbd5e1; margin-bottom:20px; font-weight:600;">Chọn đáp án Pinyin bạn nghe được:</div>
 
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:20px;">
               ${item.options.map((opt, idx) => `
-                <button onclick="checkQuizAnswer(${idx})" style="background:rgba(30,41,59,0.9); border:1.5px solid rgba(255,255,255,0.15); color:#fff; padding:16px; border-radius:14px; font-size:1.4rem; font-weight:800; cursor:pointer; font-family:'Noto Sans SC', sans-serif;">
+                <button onclick="checkQuizAnswer(${idx})" style="background:rgba(30,41,59,0.9); border:1.5px solid rgba(255,255,255,0.15); color:#fff; padding:16px; border-radius:14px; font-size:1.45rem; font-weight:800; cursor:pointer; font-family:'Noto Sans SC', sans-serif; transition:all 0.2s;" onmouseover="this.style.borderColor='#a855f7'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.15)'; this.style.transform='translateY(0)'">
                   ${opt}
                 </button>
               `).join('')}
             </div>
 
-            <div style="margin-top:24px; font-size:0.9rem; color:#94a3b8; font-weight:700;">
-              Điểm số hiện tại: <span style="color:#34d399; font-size:1.1rem;">${score}</span>
+            <!-- Vùng Phản Hồi Trực Tiếp Inline (Không làm gián đoạn màn hình) -->
+            <div id="quiz-inline-feedback" style="min-height: 54px; margin-bottom: 16px;"></div>
+
+            <!-- Nút Câu Tiếp Theo -->
+            <button id="quiz-next-btn" onclick="nextQuizQuestion()" style="display:none; background:linear-gradient(135deg, #10b981, #059669); border:none; color:#fff; padding:12px 28px; border-radius:12px; font-size:1.05rem; font-weight:800; cursor:pointer; gap:8px; align-items:center; justify-content:center; margin:0 auto; box-shadow:0 6px 20px rgba(16,185,129,0.3);">
+              Câu Tiếp Theo <i class="fa-solid fa-arrow-right"></i>
+            </button>
+
+            <div style="margin-top:24px; font-size:0.95rem; color:#94a3b8; font-weight:700;">
+              Điểm số hiện tại: <span id="quiz-score-num" style="color:#34d399; font-size:1.2rem;">${score}</span>
             </div>
           </div>
         `;
       };
+
+      // Tự động đọc ngay câu đầu tiên và render
+      renderQuizItem();
+    }
       renderQuizItem();
     }
   </script>
