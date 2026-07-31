@@ -1114,9 +1114,12 @@
       let lives = 3; // 3 Mạng Quizizz Style
       let qIdx = 0;
       let isAnswered = false;
+      let hasSavedScore = false;
 
-      // Hàm gửi điểm số lên hệ thống để xếp hạng & lưu lịch sử
-      async function saveQuizScoreToLeaderboard(finalScore) {
+      // Hàm gửi điểm số lên hệ thống để xếp hạng & lưu lịch sử (Chỉ gửi 1 lần khi kết thúc hoặc thoát dở dang)
+      async function saveQuizScoreToLeaderboard(finalScore, isAborted = false) {
+        if (hasSavedScore || finalScore <= 0) return;
+        hasSavedScore = true;
         try {
           const API_BASE_URL = getApiBaseUrl();
           await fetch(`${API_BASE_URL}/api/quiz/save`, {
@@ -1128,7 +1131,7 @@
             body: JSON.stringify({
               score: finalScore,
               total: shuffledQuiz.length,
-              mode: 'Pinyin Listening Challenge'
+              mode: isAborted ? 'Pinyin Listening Challenge (Bỏ dở)' : 'Pinyin Listening Challenge'
             }),
             credentials: 'include'
           });
@@ -1136,6 +1139,14 @@
           console.warn("Lưu điểm số trắc nghiệm thất bại:", err);
         }
       }
+
+      // Đăng ký sự kiện nếu người dùng đóng tab / rời trang dở dang
+      const handleBeforeUnload = () => {
+        if (!hasSavedScore && score > 0) {
+          saveQuizScoreToLeaderboard(score, true);
+        }
+      };
+      window.addEventListener('beforeunload', handleBeforeUnload);
 
       window.checkQuizAnswer = function (selectedOptIdx) {
         if (isAnswered || lives <= 0) return;
