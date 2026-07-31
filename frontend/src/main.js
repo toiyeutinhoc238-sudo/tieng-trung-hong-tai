@@ -7607,7 +7607,7 @@ window.showLeaderboardModal = function () {
               <div style="font-weight: 800; font-size: 0.95rem; color: #fff; display: flex; align-items: center; gap: 6px;">
                 ${item.name}
               </div>
-              <div style="font-size: 0.75rem; color: #94a3b8;">Đã hoàn thành: <strong style="color: #10b981;">${item.completedCount} bài học</strong></div>
+              <div style="font-size: 0.75rem; color: #94a3b8;">Đã học thuộc: <strong style="color: #10b981;">${item.completedCount} từ vựng</strong></div>
             </div>
             <div style="text-align: right;">
               <div style="font-weight: 800; color: ${rankColor}; font-size: 0.95rem;">${item.completedCount * 100} Điểm</div>
