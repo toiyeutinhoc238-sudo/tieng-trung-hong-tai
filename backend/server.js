@@ -594,23 +594,22 @@ app.get('/api/leaderboard', async (req, res) => {
         completedCount: completedLessonsCount,
         studyTime: u.stats ? (u.stats.studyTime || 0) : 0,
         streak: u.stats ? (u.stats.streak || 0) : 0,
-        earliestCompletionTime: earliestCompletionTime || lastActive,
-        isVip: true
+        earliestCompletionTime: earliestCompletionTime || lastActive
       });
     }
 
-    // 2. Sắp xếp thứ tự ưu tiên tuyệt đối từ trên xuống:
-    // Mức ưu tiên 1: Số bài đã học hoàn thành (completedCount) - Bài học nhiều hơn đứng trên
-    // Mức ưu tiên 2: Thời gian tương tác / học tập (studyTime) - Chỉ xét khi số bài đã học bằng nhau (Thời gian nhiều hơn đứng trên)
-    // Mức ưu tiên 3: Thời gian hoàn thành sớm nhất (earliestCompletionTime)
+    // 2. Sắp xếp thứ tự ưu tiên tuyệt đối:
+    // Mức 1: Số bài đã học (completedCount) nhiều nhất lên trước
+    // Mức 2 (nếu bằng số bài): Hoàn thành sớm nhất (earliestCompletionTime) lên trước
+    // Mức 3 (nếu bằng số bài và bằng thời gian hoàn thành sớm nhất): Thời gian tương tác (studyTime) nhiều hơn lên trước
     leaderboard.sort((a, b) => {
       if (b.completedCount !== a.completedCount) {
         return b.completedCount - a.completedCount;
       }
-      if (b.studyTime !== a.studyTime) {
-        return b.studyTime - a.studyTime;
+      if (a.earliestCompletionTime !== b.earliestCompletionTime) {
+        return a.earliestCompletionTime - b.earliestCompletionTime;
       }
-      return a.earliestCompletionTime - b.earliestCompletionTime;
+      return b.studyTime - a.studyTime;
     });
 
     // Chỉ lấy Top 10 học viên xuất sắc nhất
@@ -620,8 +619,7 @@ app.get('/api/leaderboard', async (req, res) => {
       picture: item.picture,
       completedCount: item.completedCount,
       studyTimeMinutes: Math.round(item.studyTime / 60),
-      streak: item.streak,
-      isVip: item.isVip
+      streak: item.streak
     }));
 
     res.json(top10);

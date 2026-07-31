@@ -7550,11 +7550,12 @@ window.showLeaderboardModal = function () {
         <button onclick="document.getElementById('leaderboard-modal').style.display='none'" style="position: absolute; top: 18px; right: 18px; background: none; border: none; color: var(--text-muted, #94a3b8); font-size: 1.5rem; cursor: pointer;">&times;</button>
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
           <div style="font-size: 2.2rem; background: rgba(251,191,36,0.15); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fbbf24;">🏆</div>
+          <div>
             <h2 style="font-size: 1.4rem; font-weight: 800; margin: 0;">Bảng Xếp Hạng Học Viên Thực Tế</h2>
-            <p style="font-size: 0.85rem; color: var(--text-muted, #94a3b8); margin: 4px 0 0 0;">Xếp hạng ưu tiên: Số bài đã học nhiều hơn ➔ Thời gian học tập / tương tác nhiều hơn</p>
+          </div>
         </div>
         <div id="leaderboard-list-container" style="display: flex; flex-direction: column; gap: 10px; max-height: 400px; overflow-y: auto; padding-right: 4px;">
-          <div style="text-align: center; color: var(--text-muted); padding: 20px;"><i class="fa-solid fa-spinner fa-spin"></i> Đang tải bảng xếp hạng từ MongoDB...</div>
+          <div style="text-align: center; color: var(--text-muted); padding: 20px;"><i class="fa-solid fa-spinner fa-spin"></i> Đang tải bảng xếp hạng từ Server...</div>
         </div>
       </div>
     `;
@@ -7605,7 +7606,6 @@ window.showLeaderboardModal = function () {
             <div style="flex: 1; min-width: 0;">
               <div style="font-weight: 800; font-size: 0.95rem; color: #fff; display: flex; align-items: center; gap: 6px;">
                 ${item.name}
-                ${item.isVip ? `<span style="font-size: 0.65rem; background: #fbbf24; color: #000; font-weight: 800; padding: 1px 6px; border-radius: 4px;">VIP</span>` : ''}
               </div>
               <div style="font-size: 0.75rem; color: #94a3b8;">Đã học thuộc: <strong style="color: #10b981;">${item.completedCount} từ / bài</strong></div>
             </div>
