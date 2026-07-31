@@ -5858,3 +5858,154 @@ html.light-mode textarea {
   border-color: #cbd5e1 !important;
 }
 
+/* ─── LIGHT MODE EXTENDED: NavBar ─── */
+html.light-mode .navbar {
+  background: rgba(255,255,255,0.95) !important;
+  border-bottom-color: #e2e8f0 !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06) !important;
+}
+html.light-mode .nav-tabs .nav-tab {
+  color: #475569 !important;
+}
+html.light-mode .nav-tabs .nav-tab.active,
+html.light-mode .nav-tabs .nav-tab:hover {
+  color: #1d4ed8 !important;
+  background: rgba(37,99,235,0.08) !important;
+}
+
+/* ─── LIGHT MODE EXTENDED: Filter / Sidebar ─── */
+html.light-mode .sidebar,
+html.light-mode .filter-sidebar {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+html.light-mode .level-tab,
+html.light-mode .status-filter-btn {
+  background: #f1f5f9 !important;
+  color: #475569 !important;
+  border-color: #e2e8f0 !important;
+}
+html.light-mode .level-tab.active,
+html.light-mode .status-filter-btn.active {
+  background: #2563eb !important;
+  color: #ffffff !important;
+  border-color: #2563eb !important;
+}
+
+/* ─── LIGHT MODE EXTENDED: Flashcard ─── */
+html.light-mode .flashcard-card {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08) !important;
+}
+html.light-mode .card-word-front {
+  color: #1e293b !important;
+}
+html.light-mode .card-pinyin-back {
+  color: #1d4ed8 !important;
+}
+html.light-mode .card-meaning-back {
+  color: #1e293b !important;
+}
+html.light-mode .card-example-zh-back {
+  color: #1e293b !important;
+}
+html.light-mode .card-example-vi-back {
+  color: #475569 !important;
+}
+
+/* ─── LIGHT MODE EXTENDED: Modals (rendered via main.js inline) ─── */
+html.light-mode [style*="background: var(--bg-primary, #1e293b)"],
+html.light-mode [style*="background:var(--bg-primary, #1e293b)"] {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+html.light-mode [style*="background: var(--bg-secondary, #0f172a)"],
+html.light-mode [style*="background:var(--bg-secondary, #0f172a)"] {
+  background: #f8fafc !important;
+  color: #0f172a !important;
+}
+html.light-mode [style*="color: var(--text-primary, #fff)"],
+html.light-mode [style*="color:var(--text-primary, #fff)"] {
+  color: #0f172a !important;
+}
+
+/* ─── LIGHT MODE EXTENDED: Leaderboard modal ─── */
+html.light-mode .leaderboard-card,
+html.light-mode .leaderboard-item {
+  background: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+  color: #1e293b !important;
+}
+html.light-mode [style*="color: #f8fafc"],
+html.light-mode [style*="color:#f8fafc"] {
+  color: #1e293b !important;
+}
+html.light-mode [style*="color: #ffffff"],
+html.light-mode [style*="color:#ffffff"] {
+  color: #1e293b !important;
+}
+
+/* ─── LIGHT MODE EXTENDED: Game History modal ─── */
+html.light-mode #gameHistoryModal .modal-content,
+html.light-mode #leaderboard-modal > div > div {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+html.light-mode #gameHistoryModal table th {
+  color: #1d4ed8 !important;
+}
+html.light-mode #gameHistoryModal table td {
+  color: #334155 !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* ─── LIGHT MODE EXTENDED: Badges / Tags ─── */
+html.light-mode .badge,
+html.light-mode .level-badge,
+html.light-mode .hsk-badge {
+  background: rgba(37,99,235,0.1) !important;
+  color: #1d4ed8 !important;
+  border-color: rgba(37,99,235,0.2) !important;
+}
+
+/* ─── LIGHT MODE EXTENDED: Stats row ─── */
+html.light-mode .stats-bar,
+html.light-mode .stat-item {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  color: #1e293b !important;
+}
+html.light-mode .stat-value {
+  color: #1d4ed8 !important;
+}
+html.light-mode .stat-label {
+  color: #475569 !important;
+}
+
+/* ─── LIGHT MODE EXTENDED: Toast Notification ─── */
+html.light-mode #toast {
+  background: #1e293b !important;
+  color: #f8fafc !important;
+}
+
+/* ─── LIGHT MODE EXTENDED: Chest / Gamification ─── */
+html.light-mode .chest-desc {
+  color: #475569 !important;
+}
+
+/* ─── LIGHT MODE EXTENDED: Inline colors in rendered HTML ─── */
+html.light-mode [style*="color: #64748b"],
+html.light-mode [style*="color:#64748b"] {
+  color: #475569 !important;
+}
+html.light-mode [style*="background: rgba(15,23,42"],
+html.light-mode [style*="background:rgba(15,23,42"],
+html.light-mode [style*="background: rgba(15, 23, 42"],
+html.light-mode [style*="background: rgba(30,41,59"],
+html.light-mode [style*="background:rgba(30,41,59"],
+html.light-mode [style*="background: rgba(30, 41, 59"] {
+  background: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
