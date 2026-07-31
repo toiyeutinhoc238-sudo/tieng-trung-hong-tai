@@ -971,11 +971,17 @@
               </div>
             </div>
 
-            <!-- Cột 3: Hình mô phỏng khẩu hình chuẩn -->
-            <div class="mouth-diagram-box">
-              <div class="diagram-title" style="margin-bottom: 6px;"><i class="fa-solid fa-image"></i> Mô Phỏng Khẩu Hình</div>
-              ${getMouthDiagramSVG(item.char, sectionType)}
-            </div>
+            <!-- Cột 3: Hình mô phỏng khẩu hình chuẩn (Chỉ hiện khi có dữ liệu SVG/Ảnh) -->
+            ${(() => {
+              const diagramHtml = getMouthDiagramSVG(item.char, sectionType);
+              if (!diagramHtml) return '';
+              return `
+                <div class="mouth-diagram-box">
+                  <div class="diagram-title" style="margin-bottom: 6px;"><i class="fa-solid fa-image"></i> Mô Phỏng Khẩu Hình</div>
+                  ${diagramHtml}
+                </div>
+              `;
+            })()}
           </div>
 
           <!-- Lưới 4 Ví Dụ (Chỉ hiện Pinyin để bấm nghe, không kèm nghĩa tiếng Việt) -->
