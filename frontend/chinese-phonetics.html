@@ -1115,6 +1115,9 @@
       let qIdx = 0;
       let isAnswered = false;
       let hasSavedScore = false;
+      let currentCombo = 0;
+      let maxCombo = 0;
+      let stageCount = 0; // Số câu thực tế đã hoàn thành
 
       // Hàm gửi điểm số lên hệ thống để xếp hạng & lưu lịch sử (Chỉ gửi 1 lần khi kết thúc hoặc thoát dở dang)
       async function saveQuizScoreToLeaderboard(finalScore, isAborted = false) {
@@ -1130,7 +1133,9 @@
             },
             body: JSON.stringify({
               score: finalScore,
-              total: shuffledQuiz.length,
+              stage: stageCount,
+              total: stageCount,
+              combo: maxCombo,
               mode: isAborted ? 'Pinyin Listening Challenge (Bỏ dở)' : 'Pinyin Listening Challenge'
             }),
             credentials: 'include'
@@ -1151,6 +1156,7 @@
       window.checkQuizAnswer = function (selectedOptIdx) {
         if (isAnswered || lives <= 0) return;
         isAnswered = true;
+        stageCount++; // Tăng số câu thực tế đã làm
 
         const item = shuffledQuiz[qIdx];
         const feedbackEl = document.getElementById('quiz-inline-feedback');
@@ -1158,6 +1164,9 @@
 
         if (selectedOptIdx === item.correct) {
           score += 10;
+          currentCombo++;
+          if (currentCombo > maxCombo) maxCombo = currentCombo;
+
           feedbackEl.innerHTML = `
             <div style="background: rgba(16, 185, 129, 0.15); border: 1.5px solid #10b981; color: #34d399; padding: 14px 20px; border-radius: 14px; font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 10px; animation: fadeIn 0.3s ease;">
               <i class="fa-solid fa-circle-check fa-lg"></i> 🎉 Chính xác! (+10 điểm) - Âm đúng: <strong>${item.sound}</strong>
@@ -1165,6 +1174,8 @@
           `;
         } else {
           lives--;
+          currentCombo = 0; // Reset combo khi trả lời sai
+
           feedbackEl.innerHTML = `
             <div style="background: rgba(239, 68, 68, 0.15); border: 1.5px solid #ef4444; color: #f87171; padding: 14px 20px; border-radius: 14px; font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 10px; animation: fadeIn 0.3s ease;">
               <i class="fa-solid fa-circle-xmark fa-lg"></i> ❌ Chưa đúng! (-1 Mạng 💔) - Âm chính xác: <strong>${item.sound}</strong>
@@ -1216,19 +1227,16 @@
           <div style="max-width:600px; margin:0 auto; text-align:center; background:rgba(15,23,42,0.9); border:2px solid rgba(245,158,11,0.5); padding:40px 32px; border-radius:24px; box-shadow:0 12px 36px rgba(0,0,0,0.5);">
             <div style="font-size:3rem; margin-bottom:12px;">${isWin ? '🏆' : '💀'}</div>
             <h2 style="font-size:1.8rem; font-weight:900; color:#f59e0b; margin-bottom:8px;">${isWin ? 'XUẤT SẮC HOÀN THÀNH!' : 'TRÒ CHƠI KẾT THÚC!'}</h2>
-            <p style="color:#cbd5e1; font-size:1rem; margin-bottom:24px;">${isWin ? 'Bạn đã chinh phục toàn bộ 100 câu hỏi nghe âm!' : 'Bạn đã dùng hết 3 mạng chơi.'}</p>
+            <p style="color:#cbd5e1; font-size:1rem; margin-bottom:24px;">${isWin ? 'Bạn đã chinh phục toàn bộ câu hỏi nghe âm!' : 'Bạn đã dùng hết 3 mạng chơi.'}</p>
             
             <div style="background:rgba(30,41,59,0.8); border:1px solid var(--border-glass); border-radius:16px; padding:20px; margin-bottom:28px;">
               <div style="font-size:0.9rem; color:#94a3b8; font-weight:700; text-transform:uppercase;">Tổng Điểm Đạt Được</div>
               <div style="font-size:2.8rem; font-weight:900; color:#38bdf8; margin-top:4px;">${score} <span style="font-size:1rem; color:#94a3b8;">ĐIỂM</span></div>
             </div>
 
-            <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
-              <button onclick="renderLuyenTapView()" style="background:linear-gradient(135deg, #a855f7, #6366f1); border:none; color:#fff; padding:14px 28px; border-radius:12px; font-weight:800; font-size:1rem; cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
+            <div style="display:flex; justify-content:center;">
+              <button onclick="renderLuyenTapView()" style="background:linear-gradient(135deg, #a855f7, #6366f1); border:none; color:#ffffff; padding:14px 36px; border-radius:14px; font-weight:800; font-size:1.05rem; font-family:'Be Vietnam Pro', 'Outfit', sans-serif; cursor:pointer; display:inline-flex; align-items:center; gap:10px; box-shadow:0 8px 24px rgba(168,85,247,0.4); text-transform:none; letter-spacing:0.3px;">
                 <i class="fa-solid fa-rotate-right"></i> Chơi Lại Từ Đầu
-              </button>
-              <button onclick="showLeaderboardModal()" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; padding:14px 28px; border-radius:12px; font-weight:700; font-size:1rem; cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
-                <i class="fa-solid fa-trophy" style="color:#f59e0b;"></i> Xem Bảng Xếp Hạng
               </button>
             </div>
           </div>
