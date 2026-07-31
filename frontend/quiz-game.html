@@ -13,7 +13,7 @@
     rel="stylesheet">
 
   <script>
-    (function() {
+    (function () {
       var t = localStorage.getItem('theme') || 'dark';
       if (t === 'light') {
         document.documentElement.classList.add('light-mode', 'light');
@@ -21,7 +21,7 @@
         if (document.body) {
           document.body.classList.add('light-mode');
         } else {
-          document.addEventListener('DOMContentLoaded', function() {
+          document.addEventListener('DOMContentLoaded', function () {
             document.body.classList.add('light-mode');
           });
         }
@@ -31,7 +31,7 @@
       }
     })();
 
-    window.toggleTheme = function() {
+    window.toggleTheme = function () {
       var isLight = document.documentElement.classList.contains('light-mode') || document.documentElement.classList.contains('light');
       if (isLight) {
         document.documentElement.classList.remove('light', 'light-mode');
@@ -50,14 +50,14 @@
 
     function updateToggleBtns(isLight) {
       var btns = document.querySelectorAll('#theme-toggle, .theme-toggle-btn, .theme-toggle-btn-top');
-      btns.forEach(function(btn) {
-        btn.innerHTML = isLight 
-          ? '<i class="fa-solid fa-moon" style="color:#d97706;"></i> <span class="theme-btn-text">Giao diện Tối</span>' 
+      btns.forEach(function (btn) {
+        btn.innerHTML = isLight
+          ? '<i class="fa-solid fa-moon" style="color:#d97706;"></i> <span class="theme-btn-text">Giao diện Tối</span>'
           : '<i class="fa-solid fa-sun" style="color:#f59e0b;"></i> <span class="theme-btn-text">Giao diện Sáng</span>';
       });
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       var isLight = document.documentElement.classList.contains('light-mode') || document.documentElement.classList.contains('light');
       updateToggleBtns(isLight);
     });
@@ -78,74 +78,94 @@
       gap: 8px;
       transition: all 0.2s ease;
     }
+
     .theme-toggle-btn-top:hover {
       background: #f59e0b;
       color: #000;
     }
-    html.light-mode .theme-toggle-btn-top, body.light-mode .theme-toggle-btn-top {
+
+    html.light-mode .theme-toggle-btn-top,
+    body.light-mode .theme-toggle-btn-top {
       background: #ffffff !important;
       border: 1px solid #cbd5e1 !important;
       color: #0f172a !important;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
     }
-    html.light-mode body, body.light-mode {
+
+    html.light-mode body,
+    body.light-mode {
       background-color: #e2e8f0 !important;
       color: #0f172a !important;
     }
+
     html.light-mode .app-container {
       background: #ffffff !important;
-      box-shadow: 0 0 30px rgba(0,0,0,0.12) !important;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.12) !important;
     }
+
     html.light-mode .top-bar {
-      background: rgba(0,0,0,0.04) !important;
-      border-bottom-color: rgba(0,0,0,0.1) !important;
+      background: rgba(0, 0, 0, 0.04) !important;
+      border-bottom-color: rgba(0, 0, 0, 0.1) !important;
     }
+
     html.light-mode .player-details h4,
     html.light-mode .score-label {
       color: #334155 !important;
     }
+
     html.light-mode .score-value {
       background: #e2e8f0 !important;
       color: #1e293b !important;
     }
+
     html.light-mode .timer-container {
       background: #e2e8f0 !important;
     }
+
     html.light-mode .play-area {
       background: #f8fafc !important;
     }
+
     html.light-mode .modal-content {
       background: #ffffff !important;
       color: #0f172a !important;
       border-color: #e2e8f0 !important;
     }
+
     html.light-mode .modal-title {
       color: #6d28d9 !important;
     }
+
     html.light-mode .modal-desc {
       color: #475569 !important;
     }
+
     html.light-mode .form-label {
       color: #64748b !important;
     }
+
     html.light-mode .form-select {
       background: #f8fafc !important;
       color: #1e293b !important;
       border-color: #cbd5e1 !important;
     }
+
     html.light-mode .mode-btn {
       background: #f1f5f9 !important;
       color: #475569 !important;
       border-color: #cbd5e1 !important;
     }
+
     html.light-mode .mode-btn.active {
       color: #6d28d9 !important;
-      background: rgba(109,40,217,0.08) !important;
+      background: rgba(109, 40, 217, 0.08) !important;
       border-color: #6d28d9 !important;
     }
+
     html.light-mode .score-label {
       color: #64748b !important;
     }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -579,9 +599,11 @@
     <!-- SETUP OVERLAY MODAL -->
     <div class="modal-overlay" id="setup-modal">
       <div class="modal-content">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+        <div
+          style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
           <div class="modal-title" style="margin-bottom:0;">Quizizz HSK</div>
-          <button id="theme-toggle" class="theme-toggle-btn-top" onclick="window.toggleTheme()" title="Chuyển đổi Giao diện Sáng/Tối">
+          <button id="theme-toggle" class="theme-toggle-btn-top" onclick="window.toggleTheme()"
+            title="Chuyển đổi Giao diện Sáng/Tối">
             <i class="fa-solid fa-moon"></i> <span class="theme-btn-text">Giao diện Sáng/Tối</span>
           </button>
         </div>
@@ -635,7 +657,8 @@
             <div class="mode-btn" data-mode="audio-zh"><i class="fa-solid fa-volume-high"></i> Nghe ➔ Chữ Hán</div>
             <div class="mode-btn" data-mode="audio-vi"><i class="fa-solid fa-headphones"></i> Nghe ➔ Việt</div>
             <div class="mode-btn" data-mode="audio-pinyin"><i class="fa-solid fa-ear-listen"></i> Nghe ➔ Pinyin</div>
-            <div class="mode-btn" data-mode="mix" style="grid-column: span 2;"><i class="fa-solid fa-bolt"></i> Hỗn hợp ngẫu nhiên</div>
+            <div class="mode-btn" data-mode="mix" style="grid-column: span 2;"><i class="fa-solid fa-bolt"></i> Hỗn hợp
+              ngẫu nhiên</div>
           </div>
         </div>
 

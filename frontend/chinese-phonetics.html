@@ -765,6 +765,9 @@
         <a href="/index.html" class="btn-close" style="background: rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.3);">
           <i class="fa-solid fa-house"></i> Trang Chủ
         </a>
+        <button onclick="if(window.opener || window.history.length > 1){ window.close(); } else { window.location.href='/index.html'; }" class="btn-close" style="background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.3); color: #ef4444;" title="Đóng cửa sổ web này">
+          <i class="fa-solid fa-xmark"></i> Đóng
+        </button>
       </div>
     </div>
 
