@@ -2443,19 +2443,7 @@ function getAuthHeaders(customHeaders = {}) {
 
 // Fetch current user from session / local storage and initialize Google Sign-In SDK
 async function initAuth() {
-  // 1. Load instantly from local storage so logged in user profile is rendered immediately
-  const savedUser = localStorage.getItem('user');
-  if (savedUser) {
-    try {
-      currentUser = JSON.parse(savedUser);
-      renderUserProfile();
-    } catch (e) {
-      localStorage.removeItem('user');
-      localStorage.removeItem('session_token');
-    }
-  }
-
-  // 2. Refresh active session with backend API
+  // 1. Kiểm tra phiên đăng nhập thực tế với Server
   try {
     const res = await fetch(API_BASE_URL + '/api/auth/me', {
       headers: getAuthHeaders(),
@@ -2464,13 +2452,13 @@ async function initAuth() {
     });
     if (res.ok) {
       const data = await res.json();
-      if (data.user) {
+      if (data && data.user) {
         currentUser = data.user;
         localStorage.setItem('user', JSON.stringify(currentUser));
         renderUserProfile();
         return;
-      } else if (!currentUser) {
-        // Only clear if we had no offline session
+      } else {
+        // Nếu Server báo chưa đăng nhập -> Xóa toàn bộ session cũ ở máy này
         localStorage.removeItem('user');
         localStorage.removeItem('session_token');
         currentUser = null;
@@ -2480,11 +2468,24 @@ async function initAuth() {
       }
     }
   } catch (err) {
-    console.warn('Backend session retrieval failed, using local storage:', err);
+    console.warn('Backend session retrieval failed, checking local storage:', err);
   }
 
-  // 3. Initialize Google Identity Services if not logged in
-  if (!currentUser) {
+  // 2. Nếu mất kết nối Backend, mới dùng session lưu tại máy (nếu có)
+  const savedUser = localStorage.getItem('user');
+  if (savedUser) {
+    try {
+      currentUser = JSON.parse(savedUser);
+      renderUserProfile();
+    } catch (e) {
+      localStorage.removeItem('user');
+      localStorage.removeItem('session_token');
+      currentUser = null;
+      renderUserProfile();
+      initGoogleSignIn();
+    }
+  } else {
+    currentUser = null;
     renderUserProfile();
     initGoogleSignIn();
   }
