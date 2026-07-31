@@ -6221,27 +6221,63 @@ window.openZubiStatDetail = function (type) {
     iconEl.style.color = '#38bdf8';
     iconEl.innerHTML = '<i class="fa-solid fa-layer-group"></i>';
 
-    const hsk30_1 = activeVocabs.filter(w => (w.hskVersion === '3.0' || w.hskVersion === 3 || (!w.hskVersion && w.curriculum !== 'yct')) && w.level.toString() === '1').length;
-    const hsk30_2 = activeVocabs.filter(w => (w.hskVersion === '3.0' || w.hskVersion === 3 || (!w.hskVersion && w.curriculum !== 'yct')) && w.level.toString() === '2').length;
-    const hsk30_3 = activeVocabs.filter(w => (w.hskVersion === '3.0' || w.hskVersion === 3 || (!w.hskVersion && w.curriculum !== 'yct')) && w.level.toString() === '3').length;
+    const hsk30Levels = {};
+    const hsk20Levels = {};
+    const yctLevels = {};
 
-    const hsk20_1 = activeVocabs.filter(w => (w.hskVersion === '2.0' || w.hskVersion === 2) && w.level.toString() === '1').length;
-    const hsk20_2 = activeVocabs.filter(w => (w.hskVersion === '2.0' || w.hskVersion === 2) && w.level.toString() === '2').length;
-    const hsk20_3 = activeVocabs.filter(w => (w.hskVersion === '2.0' || w.hskVersion === 2) && w.level.toString() === '3').length;
-    const hsk20_4 = activeVocabs.filter(w => (w.hskVersion === '2.0' || w.hskVersion === 2) && w.level.toString() === '4').length;
-    const hsk20_5 = activeVocabs.filter(w => (w.hskVersion === '2.0' || w.hskVersion === 2) && w.level.toString() === '5').length;
-    const hsk20_6 = activeVocabs.filter(w => (w.hskVersion === '2.0' || w.hskVersion === 2) && w.level.toString() === '6').length;
+    let hsk30Total = 0;
+    let hsk20Total = 0;
+    let yctTotal = 0;
 
-    const yctCount = activeVocabs.filter(w => (w.curriculum || '').toString().toLowerCase().includes('yct') || (w.hskVersion || '').toString().toLowerCase().includes('yct')).length;
+    activeVocabs.forEach(w => {
+      const curr = (w.curriculum || '').toString().toLowerCase();
+      const ver = (w.hskVersion || '').toString().toLowerCase();
+      const levelStr = (w.level || '1').toString();
 
-    const hsk30Total = hsk30_1 + hsk30_2 + hsk30_3;
-    const hsk20Total = hsk20_1 + hsk20_2 + hsk20_3 + hsk20_4 + hsk20_5 + hsk20_6;
+      const isYct = curr.includes('yct') || ver.includes('yct');
+      const isHsk2 = !isYct && (ver.includes('2') || ver === '2.0');
+
+      if (isYct) {
+        yctLevels[levelStr] = (yctLevels[levelStr] || 0) + 1;
+        yctTotal++;
+      } else if (isHsk2) {
+        hsk20Levels[levelStr] = (hsk20Levels[levelStr] || 0) + 1;
+        hsk20Total++;
+      } else {
+        hsk30Levels[levelStr] = (hsk30Levels[levelStr] || 0) + 1;
+        hsk30Total++;
+      }
+    });
+
+    // Generate HSK 3.0 Level rows
+    const hsk30Rows = Object.keys(hsk30Levels).sort((a, b) => parseInt(a) - parseInt(b)).map(lvl => `
+      <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #cbd5e1;">
+        <span>HSK 3.0 Cấp ${lvl}</span>
+        <strong style="color: #ffffff;">${hsk30Levels[lvl].toLocaleString()} từ</strong>
+      </div>
+    `).join('');
+
+    // Generate HSK 2.0 Level rows
+    const hsk20Rows = Object.keys(hsk20Levels).sort((a, b) => parseInt(a) - parseInt(b)).map(lvl => `
+      <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #cbd5e1;">
+        <span>HSK 2.0 Cấp ${lvl} ${parseInt(lvl) >= 4 ? '(Thượng & Hạ)' : ''}</span>
+        <strong style="color: #ffffff;">${hsk20Levels[lvl].toLocaleString()} từ</strong>
+      </div>
+    `).join('');
+
+    // Generate YCT Level rows
+    const yctRows = Object.keys(yctLevels).sort((a, b) => parseInt(a) - parseInt(b)).map(lvl => `
+      <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #cbd5e1;">
+        <span>YCT Cấp ${lvl}</span>
+        <strong style="color: #ffffff;">${yctLevels[lvl].toLocaleString()} từ</strong>
+      </div>
+    `).join('');
 
     bodyEl.innerHTML = `
       <div style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
         <div>
           <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: #38bdf8; font-weight: 700;">TỔNG TỪ VỰNG CHUẨN HÓA</span>
-          <h2 style="font-size: 1.8rem; font-weight: 800; color: #ffffff; margin: 4px 0 0 0;">${vocabList.length.toLocaleString()} Từ</h2>
+          <h2 style="font-size: 1.8rem; font-weight: 800; color: #ffffff; margin: 4px 0 0 0;">${activeVocabs.length.toLocaleString()} Từ</h2>
         </div>
         <div style="font-size: 2.2rem; color: #38bdf8; opacity: 0.8;"><i class="fa-solid fa-book"></i></div>
       </div>
@@ -6254,9 +6290,7 @@ window.openZubiStatDetail = function (type) {
             <span style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; font-weight: 800; font-size: 0.85rem; padding: 2px 8px; border-radius: 10px;">${hsk30Total.toLocaleString()} từ</span>
           </div>
           <div style="display: flex; flex-direction: column; gap: 6px;">
-            <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #cbd5e1;"><span>HSK 3.0 Cấp 1</span><strong style="color: #ffffff;">${hsk30_1.toLocaleString()} từ</strong></div>
-            <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #cbd5e1;"><span>HSK 3.0 Cấp 2</span><strong style="color: #ffffff;">${hsk30_2.toLocaleString()} từ</strong></div>
-            <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #cbd5e1;"><span>HSK 3.0 Cấp 3</span><strong style="color: #ffffff;">${hsk30_3.toLocaleString()} từ</strong></div>
+            ${hsk30Rows}
           </div>
         </div>
 
@@ -6267,20 +6301,18 @@ window.openZubiStatDetail = function (type) {
             <span style="background: rgba(168, 85, 247, 0.2); color: #c084fc; font-weight: 800; font-size: 0.85rem; padding: 2px 8px; border-radius: 10px;">${hsk20Total.toLocaleString()} từ</span>
           </div>
           <div style="display: flex; flex-direction: column; gap: 6px;">
-            <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #cbd5e1;"><span>HSK 2.0 Cấp 1</span><strong style="color: #ffffff;">${hsk20_1.toLocaleString()} từ</strong></div>
-            <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #cbd5e1;"><span>HSK 2.0 Cấp 2</span><strong style="color: #ffffff;">${hsk20_2.toLocaleString()} từ</strong></div>
-            <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #cbd5e1;"><span>HSK 2.0 Cấp 3</span><strong style="color: #ffffff;">${hsk20_3.toLocaleString()} từ</strong></div>
-            <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #cbd5e1;"><span>HSK 2.0 Cấp 4 (Thượng & Hạ)</span><strong style="color: #ffffff;">${hsk20_4.toLocaleString()} từ</strong></div>
-            <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #cbd5e1;"><span>HSK 2.0 Cấp 5 (Thượng & Hạ)</span><strong style="color: #ffffff;">${hsk20_5.toLocaleString()} từ</strong></div>
-            <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #cbd5e1;"><span>HSK 2.0 Cấp 6 (Thượng & Hạ)</span><strong style="color: #ffffff;">${hsk20_6.toLocaleString()} từ</strong></div>
+            ${hsk20Rows}
           </div>
         </div>
 
         <!-- YCT Section -->
         <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 14px; padding: 14px;">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px; margin-bottom: 10px;">
             <strong style="color: #fbbf24; font-size: 0.95rem;"><i class="fa-solid fa-child"></i> YCT Cấp 1..4 (Thiếu Nhi)</strong>
-            <span style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; font-weight: 800; font-size: 0.85rem; padding: 2px 8px; border-radius: 10px;">${yctCount.toLocaleString()} từ</span>
+            <span style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; font-weight: 800; font-size: 0.85rem; padding: 2px 8px; border-radius: 10px;">${yctTotal.toLocaleString()} từ</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px;">
+            ${yctRows}
           </div>
         </div>
       </div>
