@@ -40,6 +40,7 @@ const userSchema = new mongoose.Schema({
     lastActiveDate: { type: String, default: "" }
   },
   gameHistory: { type: Array, default: [] },
+  quizHistory: { type: Array, default: [] },
   progress: { type: Object, default: {} },
   customWords: { type: Array, default: [] },
   chats: { type: Array, default: [] }
@@ -104,6 +105,7 @@ async function readUserData() {
     const customWords = {};
     const chats = {};
     const sessions = {};
+    const quizHistory = {};
 
     usersList.forEach(u => {
       users[u._id] = {
@@ -112,6 +114,9 @@ async function readUserData() {
         stats: u.stats,
         gameHistory: u.gameHistory || []
       };
+      if (u.quizHistory && u.quizHistory.length > 0) {
+        quizHistory[u._id] = u.quizHistory;
+      }
       progress[u._id] = u.progress || {};
       customWords[u._id] = u.customWords || [];
       chats[u._id] = u.chats || [];
@@ -121,7 +126,7 @@ async function readUserData() {
       sessions[s._id] = s.email;
     });
 
-    cachedUserData = { users, progress, customWords, sessions, chats };
+    cachedUserData = { users, progress, customWords, sessions, chats, quizHistory };
 
     // If MongoDB is completely empty (no users), perform migration from user_data.json
     if (usersList.length === 0) {
@@ -208,6 +213,7 @@ async function persistToMongoDB(data) {
         picture: u.picture,
         stats: u.stats,
         gameHistory: u.gameHistory || [],
+        quizHistory: (data.quizHistory && data.quizHistory[email]) || [],
         progress: data.progress[email] || {},
         customWords: data.customWords[email] || [],
         chats: data.chats[email] || []
