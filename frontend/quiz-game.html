@@ -602,10 +602,15 @@
         <div
           style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
           <div class="modal-title" style="margin-bottom:0;">Quizizz HSK</div>
-          <button id="theme-toggle" class="theme-toggle-btn-top" onclick="window.toggleTheme()"
-            title="Chuyển đổi Giao diện Sáng/Tối">
-            <i class="fa-solid fa-moon"></i> <span class="theme-btn-text">Giao diện Sáng/Tối</span>
-          </button>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button id="theme-toggle" class="theme-toggle-btn-top" onclick="window.toggleTheme()"
+              title="Chuyển đổi Giao diện Sáng/Tối">
+              <i class="fa-solid fa-moon"></i> <span class="theme-btn-text">Giao diện Sáng/Tối</span>
+            </button>
+            <a href="/index.html" style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); color: #3b82f6; padding: 6px 14px; border-radius: 8px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem;">
+              <i class="fa-solid fa-house"></i> Trang Chủ
+            </a>
+          </div>
         </div>
         <div class="modal-desc">Đấu trường trắc nghiệm phản xạ từ vựng</div>
 
@@ -690,7 +695,7 @@
         <div style="display: flex; gap: 10px;">
           <button class="btn-primary" id="btn-restart" style="flex: 1;">Chơi Lại</button>
           <button class="btn-primary" id="btn-quit"
-            style="flex: 1; background: #e21b3c; box-shadow: 0 6px 0 #a9122c;">Thoát</button>
+            style="flex: 1; background: #e21b3c; box-shadow: 0 6px 0 #a9122c;"><i class="fa-solid fa-house"></i> Trang Chủ</button>
         </div>
       </div>
     </div>
@@ -708,9 +713,14 @@
           </div>
         </div>
       </div>
-      <div class="score-box">
-        <div class="score-label">Điểm số</div>
-        <div class="score-value" id="hud-score">0</div>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div class="score-box">
+          <div class="score-label">Điểm số</div>
+          <div class="score-value" id="hud-score">0</div>
+        </div>
+        <a href="/index.html" title="Trở về Trang Chủ" style="background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); color: #fff; padding: 8px 14px; border-radius: 12px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem;">
+          <i class="fa-solid fa-house"></i> Trang Chủ
+        </a>
       </div>
     </div>
 
