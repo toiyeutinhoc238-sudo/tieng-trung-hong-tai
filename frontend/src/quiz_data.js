@@ -24,7 +24,7 @@ export const LARGE_QUIZ_DATABASE = [
 
   // Từ 2 âm tiết ghép & biến điệu
   { sound: "bàba", options: ["bàba", "pàpa", "màma", "fàfa"], correct: 0 },
-  { sound: "nǐhǎo", options: ["líhǎo", "nǐhǎo", "nǐhǎo", "mǐhǎo"], correct: 1 },
+  { sound: "nǐhǎo", options: ["líhǎo", "nǐhǎo", "nǐhào", "mǐhǎo"], correct: 1 },
   { sound: "lǎoshī", options: ["nǎoshī", "lǎoshī", "rǎoshī", "cǎoshī"], correct: 1 },
   { sound: "kāfèi", options: ["gāfèi", "kāfèi", "hāfèi", "pāfèi"], correct: 1 },
   { sound: "hénèi", options: ["génèi", "kénèi", "hénèi", "fénèi"], correct: 2 },
@@ -94,7 +94,7 @@ export const LARGE_QUIZ_DATABASE = [
   { sound: "mìshū", options: ["mìsū", "mìshū", "mìzhū", "mìchū"], correct: 1 },
   { sound: "dàtáng", options: ["tàtáng", "dàtáng", "nàtáng", "làtáng"], correct: 1 },
   { sound: "tútú", options: ["dútú", "tútú", "nútú", "lútú"], correct: 1 },
-  { sound: "nǐhǎo", options: ["líhǎo", "nǐhǎo", "nǐhǎo", "mǐhǎo"], correct: 1 },
+  { sound: "nǐhǎo", options: ["líhǎo", "nǐhǎo", "nǐhào", "mǐhǎo"], correct: 1 },
   { sound: "lúnchuán", options: ["núnchuán", "lúnchuán", "rúnchuán", "cúnchuán"], correct: 1 },
   { sound: "guójiā", options: ["kuójiā", "guójiā", "huójiā", "luójiā"], correct: 1 },
   { sound: "kělè", options: ["gělè", "kělè", "hělè", "lělè"], correct: 1 },
