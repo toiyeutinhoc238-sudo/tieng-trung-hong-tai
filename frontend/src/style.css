@@ -6009,3 +6009,85 @@ html.light-mode [style*="background: rgba(30, 41, 59"] {
   background: #f8fafc !important;
   border-color: #e2e8f0 !important;
 }
+
+/* ─── LIGHT MODE: Google Account Cards in Login Modal ─── */
+html.light-mode .google-acc-card {
+  background: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+  color: #1e293b !important;
+}
+html.light-mode .google-acc-card:hover {
+  background: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+}
+html.light-mode .modal-card {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* ─── LIGHT MODE: Zubi/Dashboard Stat Cards ─── */
+html.light-mode .zubi-stat-card {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06) !important;
+  color: #1e293b !important;
+}
+
+/* ─── LIGHT MODE: Sidebar menu items ─── */
+html.light-mode .sidebar-menu-item,
+html.light-mode .sidebar-item {
+  color: #334155 !important;
+}
+html.light-mode .sidebar-menu-item:hover,
+html.light-mode .sidebar-item:hover {
+  background: rgba(37,99,235,0.08) !important;
+  color: #1d4ed8 !important;
+}
+html.light-mode .sidebar-menu-item.active,
+html.light-mode .sidebar-item.active {
+  background: rgba(37,99,235,0.1) !important;
+  color: #1d4ed8 !important;
+}
+
+/* ─── LIGHT MODE: Vocab table rows ─── */
+html.light-mode .vocab-table tr:nth-child(even) {
+  background: #f8fafc !important;
+}
+html.light-mode .vocab-table th {
+  background: #f1f5f9 !important;
+  color: #475569 !important;
+}
+html.light-mode .vocab-table td {
+  color: #334155 !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* ─── LIGHT MODE: Lesson card ─── */
+html.light-mode .lesson-card,
+html.light-mode .lesson-item {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  color: #1e293b !important;
+}
+
+/* ─── LIGHT MODE: Override hardcoded white text in inline styles ─── */
+html.light-mode [style*="color: #fff;"],
+html.light-mode [style*="color:#fff;"] {
+  color: #1e293b !important;
+}
+html.light-mode [style*="color: #ffffff;"],
+html.light-mode [style*="color:#ffffff;"] {
+  color: #1e293b !important;
+}
+
+/* ─── Exception: Keep white text on colored button/badge backgrounds ─── */
+html.light-mode .btn-primary,
+html.light-mode .ans-btn,
+html.light-mode [style*="background: linear-gradient"] [style*="color: #ffffff"],
+html.light-mode .c-red,
+html.light-mode .c-blue,
+html.light-mode .c-yellow,
+html.light-mode .c-green {
+  color: #ffffff !important;
+}
