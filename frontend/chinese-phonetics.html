@@ -1227,7 +1227,7 @@
               <button onclick="renderLuyenTapView()" style="background:linear-gradient(135deg, #a855f7, #6366f1); border:none; color:#fff; padding:14px 28px; border-radius:12px; font-weight:800; font-size:1rem; cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
                 <i class="fa-solid fa-rotate-right"></i> Chơi Lại Từ Đầu
               </button>
-              <button onclick="if(window.opener && window.opener.showLeaderboardModal){ window.opener.showLeaderboardModal(); } else { alert('Điểm số đã được tự động lưu vào Bảng Xếp Hạng & Lịch Sử Trò Chơi!'); }" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; padding:14px 28px; border-radius:12px; font-weight:700; font-size:1rem; cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
+              <button onclick="showLeaderboardModal()" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; padding:14px 28px; border-radius:12px; font-weight:700; font-size:1rem; cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
                 <i class="fa-solid fa-trophy" style="color:#f59e0b;"></i> Xem Bảng Xếp Hạng
               </button>
             </div>
@@ -1282,6 +1282,98 @@
       // Tự động render câu đầu tiên
       renderQuizItem();
     }
+
+    window.showLeaderboardModal = function() {
+      let modal = document.getElementById('leaderboard-modal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'leaderboard-modal';
+        modal.className = 'modal-overlay';
+        modal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;';
+        modal.innerHTML = `
+          <div style="background: #0f172a; border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; width: 100%; max-width: 620px; padding: 28px; color: #fff; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.6);">
+            <button onclick="document.getElementById('leaderboard-modal').style.display='none'" style="position: absolute; top: 18px; right: 18px; background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer;">&times;</button>
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+              <div style="font-size: 2.2rem; background: rgba(251,191,36,0.15); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fbbf24;">🏆</div>
+              <div>
+                <h2 style="font-size: 1.4rem; font-weight: 800; margin: 0; color:#fff;">Bảng Xếp Hạng Học Viên Thực Tế</h2>
+                <p style="font-size: 0.85rem; color: #94a3b8; margin: 4px 0 0 0;">Xếp hạng ưu tiên: Số bài đã học nhiều hơn ➔ Thời gian học tập / tương tác nhiều hơn</p>
+              </div>
+            </div>
+            <div id="leaderboard-list-container" style="display: flex; flex-direction: column; gap: 10px; max-height: 400px; overflow-y: auto; padding-right: 4px;">
+              <div style="text-align: center; color: #94a3b8; padding: 20px;"><i class="fa-solid fa-spinner fa-spin"></i> Đang tải bảng xếp hạng...</div>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(modal);
+      }
+      modal.style.display = 'flex';
+
+      const API_BASE_URL = getApiBaseUrl();
+      fetch(`${API_BASE_URL}/api/leaderboard`)
+        .then(res => res.json())
+        .then(data => {
+          const container = document.getElementById('leaderboard-list-container');
+          if (!container) return;
+
+          if (!Array.isArray(data) || data.length === 0) {
+            container.innerHTML = `<div style="text-align: center; color: #94a3b8; padding: 20px;">Chưa có học viên nào hoàn thành bài học. Hãy là người đầu tiên!</div>`;
+            return;
+          }
+
+          let html = '';
+          data.forEach(item => {
+            let badgeIcon = `#${item.rank}`;
+            let rankStyle = 'background: rgba(30,41,59,0.8); border: 1px solid rgba(255,255,255,0.1);';
+            let rankColor = '#3b82f6';
+
+            if (item.rank === 1) {
+              badgeIcon = '<i class="fa-solid fa-medal" style="color: #fbbf24; font-size: 1.2rem;"></i>';
+              rankStyle = 'background: linear-gradient(90deg, rgba(251,191,36,0.15), rgba(30,41,59,0.8)); border: 1px solid rgba(251,191,36,0.4);';
+              rankColor = '#fbbf24';
+            } else if (item.rank === 2) {
+              badgeIcon = '<i class="fa-solid fa-medal" style="color: #94a3b8; font-size: 1.2rem;"></i>';
+              rankStyle = 'background: linear-gradient(90deg, rgba(148,163,184,0.15), rgba(30,41,59,0.8)); border: 1px solid rgba(148,163,184,0.4);';
+              rankColor = '#94a3b8';
+            } else if (item.rank === 3) {
+              badgeIcon = '<i class="fa-solid fa-medal" style="color: #b45309; font-size: 1.2rem;"></i>';
+              rankStyle = 'background: linear-gradient(90deg, rgba(180,83,9,0.15), rgba(30,41,59,0.8)); border: 1px solid rgba(180,83,9,0.4);';
+              rankColor = '#f59e0b';
+            }
+
+            const avatarHTML = item.picture
+              ? `<img src="${item.picture}" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid ${rankColor};">`
+              : `<div style="width: 42px; height: 42px; border-radius: 50%; background: ${rankColor}; color: #000; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">${item.name.substring(0, 1).toUpperCase()}</div>`;
+
+            html += `
+              <div style="${rankStyle} padding: 12px 16px; border-radius: 14px; display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                  <div style="width: 28px; text-align: center; font-weight: 800;">${badgeIcon}</div>
+                  ${avatarHTML}
+                  <div>
+                    <div style="font-weight: 800; font-size: 1rem; color: #fff; display: flex; align-items: center; gap: 6px;">
+                      ${item.name}
+                      ${item.isVip ? '<span style="font-size: 0.65rem; background: #f59e0b; color: #000; padding: 1px 6px; border-radius: 4px; font-weight: 900;">VIP</span>' : ''}
+                    </div>
+                    <div style="font-size: 0.8rem; color: #94a3b8; font-weight: 600;">
+                      Đã học thuộc: <strong style="color: #38bdf8;">${item.completedCount} từ / bài</strong>
+                    </div>
+                  </div>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-weight: 900; font-size: 1.1rem; color: ${rankColor};">${item.completedCount * 100} Điểm</div>
+                  <div style="font-size: 0.78rem; color: #94a3b8; font-weight: 500;">Thời gian học: ${item.studyTimeMinutes} phút</div>
+                </div>
+              </div>
+            `;
+          });
+          container.innerHTML = html;
+        })
+        .catch(() => {
+          const container = document.getElementById('leaderboard-list-container');
+          if (container) container.innerHTML = `<div style="text-align: center; color: #f87171; padding: 20px;">Khởi tạo bảng xếp hạng thất bại. Vui lòng thử lại sau!</div>`;
+        });
+    };
   </script>
 </body>
 </html>

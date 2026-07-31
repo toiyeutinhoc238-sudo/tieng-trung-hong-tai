@@ -533,6 +533,27 @@ app.post('/api/user/game-history', async (req, res) => {
   res.json({ success: true, record: newRecord });
 });
 
+// GET endpoint to fetch game history
+app.get('/api/user/game-history', async (req, res) => {
+  const email = req.query.email || getLoggedInUserEmail(req);
+  if (!email) {
+    return res.json([]);
+  }
+
+  try {
+    const userData = await readUserData();
+    const userRecord = userData.users[email];
+    const userHistory = (userRecord && userRecord.gameHistory) ? userRecord.gameHistory : [];
+    const quizHistory = (userData.quizHistory && userData.quizHistory[email]) ? userData.quizHistory[email] : [];
+    
+    // Gop va sap xep theo thoi gian playedAt moi nhat
+    const combined = [...userHistory, ...quizHistory].sort((a, b) => new Date(b.playedAt) - new Date(a.playedAt));
+    res.json(combined);
+  } catch (err) {
+    res.json([]);
+  }
+});
+
 // GET endpoint for Real MongoDB Leaderboard
 app.get('/api/leaderboard', async (req, res) => {
   try {
@@ -578,18 +599,18 @@ app.get('/api/leaderboard', async (req, res) => {
       });
     }
 
-    // 2. Sắp xếp thứ tự ưu tiên từ trên xuống:
-    // Priority 1: Số lượng bài học hoàn thành (completedCount) giảm dần (nhiều hơn đứng trên)
-    // Priority 2: Thời gian hoàn thành tất cả bài học sớm nhất (earliestCompletionTime) tăng dần (sớm hơn đứng trên)
-    // Priority 3: Tổng thời gian học (studyTime) giảm dần
+    // 2. Sắp xếp thứ tự ưu tiên tuyệt đối từ trên xuống:
+    // Mức ưu tiên 1: Số bài đã học hoàn thành (completedCount) - Bài học nhiều hơn đứng trên
+    // Mức ưu tiên 2: Thời gian tương tác / học tập (studyTime) - Chỉ xét khi số bài đã học bằng nhau (Thời gian nhiều hơn đứng trên)
+    // Mức ưu tiên 3: Thời gian hoàn thành sớm nhất (earliestCompletionTime)
     leaderboard.sort((a, b) => {
       if (b.completedCount !== a.completedCount) {
         return b.completedCount - a.completedCount;
       }
-      if (a.earliestCompletionTime !== b.earliestCompletionTime) {
-        return a.earliestCompletionTime - b.earliestCompletionTime;
+      if (b.studyTime !== a.studyTime) {
+        return b.studyTime - a.studyTime;
       }
-      return b.studyTime - a.studyTime;
+      return a.earliestCompletionTime - b.earliestCompletionTime;
     });
 
     // Chỉ lấy Top 10 học viên xuất sắc nhất

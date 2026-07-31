@@ -1855,16 +1855,18 @@ function setupEventListeners() {
             hour: '2-digit', minute: '2-digit'
           });
 
-          const modeName = modeNames[item.mode] || item.mode;
-          const levelLabel = item.level === 'all' ? 'Tất cả' : `HSK ${item.level}`;
+          const modeName = modeNames[item.mode] || item.mode || 'Thử thách Nghe Pinyin';
+          const levelLabel = item.level === 'all' ? 'Tất cả' : (item.level ? `HSK ${item.level}` : 'Phiên Âm');
+          const stageText = item.stage ? `${item.stage} câu` : (item.total ? `${item.total} câu` : '100 câu');
+          const comboText = typeof item.combo !== 'undefined' ? item.combo : '-';
 
           tr.innerHTML = `
           <td style="padding: 12px 16px; color: var(--text-secondary);">${date}</td>
           <td style="padding: 12px 16px; font-weight: 500;">${modeName}</td>
           <td style="padding: 12px 16px; text-align: center; color: var(--accent-teal); font-weight: 600;">${levelLabel}</td>
           <td style="padding: 12px 16px; text-align: center; color: #ffd700; font-weight: 700; font-size: 1.05rem;">${item.score}</td>
-          <td style="padding: 12px 16px; text-align: center;">${item.stage} câu</td>
-          <td style="padding: 12px 16px; text-align: center; color: var(--success); font-weight: 600;">${item.combo}</td>
+          <td style="padding: 12px 16px; text-align: center;">${stageText}</td>
+          <td style="padding: 12px 16px; text-align: center; color: var(--success); font-weight: 600;">${comboText}</td>
         `;
           tbody.appendChild(tr);
         });
@@ -7548,10 +7550,8 @@ window.showLeaderboardModal = function () {
         <button onclick="document.getElementById('leaderboard-modal').style.display='none'" style="position: absolute; top: 18px; right: 18px; background: none; border: none; color: var(--text-muted, #94a3b8); font-size: 1.5rem; cursor: pointer;">&times;</button>
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
           <div style="font-size: 2.2rem; background: rgba(251,191,36,0.15); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fbbf24;">🏆</div>
-          <div>
-            <h2 style="font-size: 1.4rem; font-weight: 800; margin: 0;">Bảng Xếp Hạng Học Viên Thực Tế (MongoDB)</h2>
-            <p style="font-size: 0.85rem; color: var(--text-muted, #94a3b8); margin: 4px 0 0 0;">Xếp hạng ưu tiên theo: Số bài học hoàn thành nhiều nhất ➔ Thời gian hoàn thành sớm nhất</p>
-          </div>
+            <h2 style="font-size: 1.4rem; font-weight: 800; margin: 0;">Bảng Xếp Hạng Học Viên Thực Tế</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted, #94a3b8); margin: 4px 0 0 0;">Xếp hạng ưu tiên: Số bài đã học nhiều hơn ➔ Thời gian học tập / tương tác nhiều hơn</p>
         </div>
         <div id="leaderboard-list-container" style="display: flex; flex-direction: column; gap: 10px; max-height: 400px; overflow-y: auto; padding-right: 4px;">
           <div style="text-align: center; color: var(--text-muted); padding: 20px;"><i class="fa-solid fa-spinner fa-spin"></i> Đang tải bảng xếp hạng từ MongoDB...</div>
