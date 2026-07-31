@@ -61,7 +61,7 @@
     .history-container {
       display: flex;
       flex-grow: 1;
-      height: calc(100vh - 70px);
+      height: 100vh;
       max-width: 100%;
       margin: 0;
       position: relative;
@@ -412,10 +412,15 @@
     <!-- Left Sidebar -->
     <div class="threads-sidebar" id="threads-sidebar">
       <div class="sidebar-header">
-        <h3><i class="fa-solid fa-clock-rotate-left text-primary"></i> Các cuộc hội thoại</h3>
-        <button id="new-thread-btn" class="btn-new-chat" title="Bắt đầu cuộc trò chuyện mới">
-          <i class="fa-solid fa-plus"></i>
-        </button>
+        <h3 style="margin:0; font-size: 1.05rem; display: flex; align-items: center; gap: 6px;"><i class="fa-solid fa-clock-rotate-left text-primary"></i> Hội thoại</h3>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <a href="/index.html" class="btn-home-top" title="Quay về Trang Chủ" style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); color: var(--accent-blue); padding: 5px 12px; border-radius: 8px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; transition: all 0.2s;">
+            <i class="fa-solid fa-house"></i> Trang Chủ
+          </a>
+          <button id="new-thread-btn" class="btn-new-chat" title="Bắt đầu cuộc trò chuyện mới">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
       </div>
       <div class="threads-list" id="threads-list">
         <!-- Loading spinner -->
@@ -436,8 +441,11 @@
 
       <!-- Active Conversation Panel (Hidden initially) -->
       <div id="active-chat-panel" style="display: none; flex-direction: column; flex-grow: 1; height: 100%;">
-        <div class="chat-view-header">
-          <h4 class="chat-view-title" id="active-thread-title">Cuộc trò chuyện chi tiết</h4>
+        <div class="chat-view-header" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-bottom: 1px solid var(--border-glass);">
+          <h4 class="chat-view-title" id="active-thread-title" style="margin: 0;">Cuộc trò chuyện chi tiết</h4>
+          <a href="/index.html" class="btn-home-top" title="Quay về Trang Chủ" style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); color: var(--accent-blue); padding: 5px 12px; border-radius: 8px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; transition: all 0.2s;">
+            <i class="fa-solid fa-house"></i> Trang Chủ
+          </a>
         </div>
         
         <div class="chat-messages" id="chat-messages-container">
