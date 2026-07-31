@@ -45,7 +45,7 @@ export const THANH_MAU_DATA = {
     {
       id: "group5",
       name: "Nhóm 5: Âm đầu lưỡi trước",
-      note_special: "Lưu ý đặc biệt: Khi các âm z, c, s đi kèm với nguyên âm 'i', âm 'i' sẽ được đọc thành 'ư' (vd: zi = tư, ci = tư, si = tư).",
+      note_special: "Lưu ý đặc biệt: Khi các âm z, c, s đi kèm với nguyên âm 'i', âm 'i' sẽ được đọc thành 'ư'.",
       items: [
         { char: "z", type: "Âm đầu lưỡi trước", detail: "Đầu lưỡi thẳng chạm mặt sau răng cửa trên, ngắt hơi rồi buông nhẹ.", note: "Không bật hơi. Gần giống âm 'ch' tiếng Việt nhưng lưỡi thẳng phẳng.", examples: [{ pinyin: "zā", meaning: "Buộc" }, { pinyin: "zǎo", meaning: "Sáng" }, { pinyin: "zúqiú", meaning: "Bóng đá" }, { pinyin: "zìjǐ", meaning: "Tự bản thân" }] },
         { char: "c", type: "Âm đầu lưỡi trước (Bật hơi)", detail: "Vị trí giống 'z', nhưng bật luồng hơi dứt khoát cực mạnh ra ngoài.", note: "Bật hơi mạnh (dùng tờ giấy thử luồng hơi).", examples: [{ pinyin: "cā", meaning: "Lau" }, { pinyin: "cù", meaning: "Giấm" }, { pinyin: "cánjiā", meaning: "Tham gia" }, { pinyin: "cóngqián", meaning: "Ngày trước" }] },
@@ -55,7 +55,7 @@ export const THANH_MAU_DATA = {
     {
       id: "group6",
       name: "Nhóm 6: Âm đầu lưỡi sau (Âm cong lưỡi)",
-      note_special: "Lưu ý quan trọng: Khi phát âm nhóm này, đầu lưỡi phải cong lên chạm hoặc gần chạm vòm miệng cứng. Khi đi với 'i', 'i' được đọc thành 'ư' (zh-ch-sh-r + i -> chư, trư, sư, rư).",
+      note_special: "Lưu ý quan trọng: Khi phát âm nhóm này, đầu lưỡi phải cong lên chạm hoặc gần chạm vòm miệng cứng.",
       items: [
         { char: "zh", type: "Âm cong lưỡi", detail: "Cong đầu lưỡi chạm vòm cứng, chặn hơi rồi buông nhẹ. Không bật hơi.", note: "Cong lưỡi phát âm gần giống 'tr' tiếng Việt (không bật hơi).", examples: [{ pinyin: "zhā", meaning: "Đâm" }, { pinyin: "zhè", meaning: "Đây" }, { pinyin: "zhòngguó", meaning: "Trung Quốc" }, { pinyin: "zhǔrén", meaning: "Chủ nhân" }] },
         { char: "ch", type: "Âm cong lưỡi (Bật hơi)", detail: "Vị trí lưỡi cong giống 'zh', nhưng bật hơi cực mạnh ra ngoài.", note: "Cong lưỡi + bật hơi mạnh, gần giống 'tr' bật hơi mạnh.", examples: [{ pinyin: "chā", meaning: "Cắm" }, { pinyin: "chù", meaning: "Chỗ" }, { pinyin: "chūnjié", meaning: "Tết Nguyên Đán" }, { pinyin: "chēzhàn", meaning: "Bến xe" }] },
