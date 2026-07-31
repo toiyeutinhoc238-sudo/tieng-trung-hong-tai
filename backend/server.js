@@ -608,7 +608,41 @@ app.get('/api/leaderboard', async (req, res) => {
     console.error("Leaderboard calculation error:", error);
     res.status(500).json({ error: "Failed to fetch real leaderboard" });
   }
+// POST endpoint to save quiz game results & update leaderboard
+app.post('/api/quiz/save', async (req, res) => {
+  const email = getLoggedInUserEmail(req) || 'guest';
+  const { score, total, mode } = req.body;
+
+  try {
+    const userData = await readUserData();
+    if (!userData.quizHistory) userData.quizHistory = {};
+    if (!userData.quizHistory[email]) userData.quizHistory[email] = [];
+
+    const newRecord = {
+      score: score || 0,
+      total: total || 100,
+      mode: mode || 'Pinyin Challenge',
+      playedAt: new Date().toISOString()
+    };
+
+    userData.quizHistory[email].push(newRecord);
+
+    // Cập nhật điểm tích lũy vào hồ sơ người dùng để xếp hạng
+    if (email !== 'guest' && userData.users[email]) {
+      if (!userData.users[email].stats) {
+        userData.users[email].stats = { streak: 0, studyTime: 0, lastActiveDate: '' };
+      }
+      userData.users[email].stats.studyTime = (userData.users[email].stats.studyTime || 0) + Math.round(score / 2);
+    }
+
+    await writeUserData(userData);
+    res.json({ success: true, record: newRecord });
+  } catch (err) {
+    console.error("Save quiz error:", err);
+    res.status(500).json({ error: "Failed to save quiz score" });
+  }
 });
+
 
 // GET all vocabulary (merges built-in list with user-specific states and custom words)
 app.get('/api/vocabulary', async (req, res) => {

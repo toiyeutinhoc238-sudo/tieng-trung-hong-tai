@@ -1106,16 +1106,39 @@
     function renderLuyenTapView() {
       const container = document.getElementById('section-body-content');
 
-      // Tạo bản sao xáo trộn ngẫu nhiên (Shuffle) từ ngân hàng 100 câu hỏi
+      // 1. Lấy dữ liệu 100 câu trắc nghiệm & xáo trộn ngẫu nhiên
       const db = window.LARGE_QUIZ_DATABASE || [];
       const shuffledQuiz = [...db].sort(() => Math.random() - 0.5);
 
       let score = 0;
+      let lives = 3; // 3 Mạng Quizizz Style
       let qIdx = 0;
       let isAnswered = false;
 
+      // Hàm gửi điểm số lên hệ thống để xếp hạng & lưu lịch sử
+      async function saveQuizScoreToLeaderboard(finalScore) {
+        try {
+          const API_BASE_URL = getApiBaseUrl();
+          await fetch(`${API_BASE_URL}/api/quiz/save`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + (localStorage.getItem('session_token') || '')
+            },
+            body: JSON.stringify({
+              score: finalScore,
+              total: shuffledQuiz.length,
+              mode: 'Pinyin Listening Challenge'
+            }),
+            credentials: 'include'
+          });
+        } catch (err) {
+          console.warn("Lưu điểm số trắc nghiệm thất bại:", err);
+        }
+      }
+
       window.checkQuizAnswer = function (selectedOptIdx) {
-        if (isAnswered) return; // Tránh bấm chọn nhiều lần 1 câu
+        if (isAnswered || lives <= 0) return;
         isAnswered = true;
 
         const item = shuffledQuiz[qIdx];
@@ -1123,44 +1146,104 @@
         const nextBtn = document.getElementById('quiz-next-btn');
 
         if (selectedOptIdx === item.correct) {
-          score++;
+          score += 10;
           feedbackEl.innerHTML = `
             <div style="background: rgba(16, 185, 129, 0.15); border: 1.5px solid #10b981; color: #34d399; padding: 14px 20px; border-radius: 14px; font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 10px; animation: fadeIn 0.3s ease;">
-              <i class="fa-solid fa-circle-check fa-lg"></i> 🎉 Chính xác! Âm bạn vừa nghe là: <strong>${item.sound}</strong>
+              <i class="fa-solid fa-circle-check fa-lg"></i> 🎉 Chính xác! (+10 điểm) - Âm đúng: <strong>${item.sound}</strong>
             </div>
           `;
         } else {
+          lives--;
           feedbackEl.innerHTML = `
             <div style="background: rgba(239, 68, 68, 0.15); border: 1.5px solid #ef4444; color: #f87171; padding: 14px 20px; border-radius: 14px; font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 10px; animation: fadeIn 0.3s ease;">
-              <i class="fa-solid fa-circle-xmark fa-lg"></i> ❌ Chưa đúng! Đáp án chính xác phải là: <strong>${item.sound}</strong>
+              <i class="fa-solid fa-circle-xmark fa-lg"></i> ❌ Chưa đúng! (-1 Mạng 💔) - Âm chính xác: <strong>${item.sound}</strong>
             </div>
           `;
         }
 
+        // Cập nhật lại số mạng & điểm số trên UI
+        document.getElementById('quiz-score-num').innerText = score;
+        document.getElementById('quiz-lives-container').innerHTML = getLivesHTML(lives);
+
+        if (lives <= 0) {
+          saveQuizScoreToLeaderboard(score);
+          setTimeout(() => {
+            renderGameOverView(false);
+          }, 1200);
+          return;
+        }
+
         // Hiện nút Câu tiếp theo
         nextBtn.style.display = 'inline-flex';
-        document.getElementById('quiz-score-num').innerText = score;
       };
 
       window.nextQuizQuestion = function() {
         qIdx++;
         if (qIdx >= shuffledQuiz.length) {
-          alert(`🏆 Bạn đã hoàn thành xuất sắc thử thách! Điểm số chung cuộc: ${score}/${shuffledQuiz.length}`);
-          qIdx = 0;
+          saveQuizScoreToLeaderboard(score);
+          renderGameOverView(true);
+          return;
         }
         isAnswered = false;
         renderQuizItem();
       };
 
+      function getLivesHTML(count) {
+        let html = '';
+        for (let i = 0; i < 3; i++) {
+          if (i < count) {
+            html += `<i class="fa-solid fa-heart" style="color: #ef4444; font-size: 1.3rem;"></i> `;
+          } else {
+            html += `<i class="fa-regular fa-heart" style="color: #64748b; font-size: 1.3rem;"></i> `;
+          }
+        }
+        return html;
+      }
+
+      function renderGameOverView(isWin) {
+        container.innerHTML = `
+          <div style="max-width:600px; margin:0 auto; text-align:center; background:rgba(15,23,42,0.9); border:2px solid rgba(245,158,11,0.5); padding:40px 32px; border-radius:24px; box-shadow:0 12px 36px rgba(0,0,0,0.5);">
+            <div style="font-size:3rem; margin-bottom:12px;">${isWin ? '🏆' : '💀'}</div>
+            <h2 style="font-size:1.8rem; font-weight:900; color:#f59e0b; margin-bottom:8px;">${isWin ? 'XUẤT SẮC HOÀN THÀNH!' : 'TRÒ CHƠI KẾT THÚC!'}</h2>
+            <p style="color:#cbd5e1; font-size:1rem; margin-bottom:24px;">${isWin ? 'Bạn đã chinh phục toàn bộ 100 câu hỏi nghe âm!' : 'Bạn đã dùng hết 3 mạng chơi.'}</p>
+            
+            <div style="background:rgba(30,41,59,0.8); border:1px solid var(--border-glass); border-radius:16px; padding:20px; margin-bottom:28px;">
+              <div style="font-size:0.9rem; color:#94a3b8; font-weight:700; text-transform:uppercase;">Tổng Điểm Đạt Được</div>
+              <div style="font-size:2.8rem; font-weight:900; color:#38bdf8; margin-top:4px;">${score} <span style="font-size:1rem; color:#94a3b8;">ĐIỂM</span></div>
+            </div>
+
+            <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+              <button onclick="renderLuyenTapView()" style="background:linear-gradient(135deg, #a855f7, #6366f1); border:none; color:#fff; padding:14px 28px; border-radius:12px; font-weight:800; font-size:1rem; cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
+                <i class="fa-solid fa-rotate-right"></i> Chơi Lại Từ Đầu
+              </button>
+              <button onclick="if(window.opener && window.opener.showLeaderboardModal){ window.opener.showLeaderboardModal(); } else { alert('Điểm số đã được tự động lưu vào Bảng Xếp Hạng & Lịch Sử Trò Chơi!'); }" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; padding:14px 28px; border-radius:12px; font-weight:700; font-size:1rem; cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
+                <i class="fa-solid fa-trophy" style="color:#f59e0b;"></i> Xem Bảng Xếp Hạng
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
       window.renderQuizItem = function () {
         const item = shuffledQuiz[qIdx];
         container.innerHTML = `
           <div style="max-width:640px; margin:0 auto; text-align:center; background:rgba(15,23,42,0.8); border:2px solid rgba(168,85,247,0.4); padding:32px; border-radius:24px; box-shadow:0 12px 36px rgba(0,0,0,0.4);">
+            
+            <!-- Thống kê Thanh Mạng Quizizz (3 Hearts) & Điểm Số -->
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; background:rgba(30,41,59,0.7); padding:10px 18px; border-radius:16px; border:1px solid rgba(255,255,255,0.1);">
+              <div id="quiz-lives-container" style="display:flex; align-items:center; gap:4px;">
+                ${getLivesHTML(lives)}
+              </div>
+              <div style="font-size:0.95rem; color:#94a3b8; font-weight:800;">
+                ĐIỂM: <span id="quiz-score-num" style="color:#34d399; font-size:1.25rem;">${score}</span>
+              </div>
+            </div>
+
             <div style="font-size:1.05rem; font-weight:800; color:#c084fc; text-transform:uppercase; margin-bottom:12px; display:flex; align-items:center; justify-content:center; gap:8px;">
               <i class="fa-solid fa-gamepad"></i> Thử Thách Nghe & Đoán Âm (Câu ${qIdx + 1}/${shuffledQuiz.length})
             </div>
             
-            <button onclick="speakZhText('${item.sound}')" style="background:linear-gradient(135deg, #a855f7, #6366f1); border:none; color:#fff; padding:16px 36px; border-radius:50px; font-size:1.15rem; font-weight:600; font-family:'Be Vietnam Pro', 'Outfit', sans-serif; text-transform:none; letter-spacing:0.2px; cursor:pointer; margin:16px 0; box-shadow:0 8px 24px rgba(168,85,247,0.4); display:inline-flex; align-items:center; gap:10px; transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            <button onclick="speakZhText('${item.sound}')" style="background:linear-gradient(135deg, #a855f7, #6366f1); border:none; color:#fff; padding:16px 36px; border-radius:50px; font-size:1.15rem; font-weight:600; font-family:'Be Vietnam Pro', 'Outfit', sans-serif; text-transform:none; letter-spacing:0.2px; cursor:pointer; margin:14px 0; box-shadow:0 8px 24px rgba(168,85,247,0.4); display:inline-flex; align-items:center; gap:10px; transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
               <i class="fa-solid fa-volume-high fa-lg"></i> Bấm Để Nghe Âm
             </button>
 
@@ -1174,17 +1257,13 @@
               `).join('')}
             </div>
 
-            <!-- Vùng Phản Hồi Trực Tiếp Inline (Không làm gián đoạn màn hình) -->
+            <!-- Vùng Phản Hồi Trực Tiếp Inline -->
             <div id="quiz-inline-feedback" style="min-height: 54px; margin-bottom: 16px;"></div>
 
             <!-- Nút Câu Tiếp Theo -->
             <button id="quiz-next-btn" onclick="nextQuizQuestion()" style="display:none; background:linear-gradient(135deg, #10b981, #059669); border:none; color:#fff; padding:12px 28px; border-radius:12px; font-size:1.05rem; font-weight:800; cursor:pointer; gap:8px; align-items:center; justify-content:center; margin:0 auto; box-shadow:0 6px 20px rgba(16,185,129,0.3);">
               Câu Tiếp Theo <i class="fa-solid fa-arrow-right"></i>
             </button>
-
-            <div style="margin-top:24px; font-size:0.95rem; color:#94a3b8; font-weight:700;">
-              Điểm số hiện tại: <span id="quiz-score-num" style="color:#34d399; font-size:1.2rem;">${score}</span>
-            </div>
           </div>
         `;
       };

@@ -109,5 +109,9 @@ export const LARGE_QUIZ_DATABASE = [
   { sound: "rìběn", options: ["lìběn", "nìběn", "shìběn", "rìběn"], correct: 3 },
   { sound: "máobǐ", options: ["náobǐ", "láobǐ", "máobǐ", "páobǐ"], correct: 2 },
   { sound: "píngguǒ", options: ["bíngguǒ", "píngguǒ", "míngguǒ", "fíngguǒ"], correct: 1 },
-  { sound: "báibǐ", options: ["báibǐ", "páibǐ", "máibǐ", "fáibǐ"], correct: 0 }
+  { sound: "báibǐ", options: ["báibǐ", "páibǐ", "máibǐ", "fáibǐ"], correct: 0 },
+
+  // 2 Câu bổ sung tròn đủ 100 câu
+  { sound: "hǎochī", options: ["kǎochī", "hǎochī", "gǎochī", "bǎochī"], correct: 1 },
+  { sound: "xuéxiào", options: ["juéxiào", "quéxiào", "xuéxiào", "xiuéxiào"], correct: 2 }
 ];
