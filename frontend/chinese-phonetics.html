@@ -1048,7 +1048,7 @@
                 <div style="margin-bottom:10px;">
                   <span style="font-size:0.8rem; font-weight:700; background:rgba(59,130,246,0.15); color:#38bdf8; padding:4px 12px; border-radius:12px;">Độ cao: ${t.pitch}</span>
                 </div>
-                <div style="background:rgba(30,41,59,0.8); border:1px solid var(--border-glass); padding:8px 14px; border-radius:10px; margin-bottom:14px; display:flex; justify-style:space-between; align-items:center;">
+                <div style="background:rgba(30,41,59,0.8); border:1px solid var(--border-glass); padding:8px 14px; border-radius:10px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center;">
                   <span style="color:#94a3b8; font-size:0.9rem; font-weight:700;">Dấu / Ký hiệu:</span>
                   <span style="font-size:1.4rem; font-weight:800; color:#f59e0b;">${t.symbol}</span>
                 </div>
@@ -1188,9 +1188,7 @@
         `;
       };
 
-      // Tự động đọc ngay câu đầu tiên và render
-      renderQuizItem();
-    }
+      // Tự động render câu đầu tiên
       renderQuizItem();
     }
   </script>
