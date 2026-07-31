@@ -629,6 +629,8 @@ app.get('/api/leaderboard', async (req, res) => {
     console.error("Leaderboard calculation error:", error);
     res.status(500).json({ error: "Failed to fetch real leaderboard" });
   }
+});
+
 // POST endpoint to save quiz game results & update leaderboard
 app.post('/api/quiz/save', async (req, res) => {
   const email = getLoggedInUserEmail(req) || 'guest';
