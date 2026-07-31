@@ -1014,7 +1014,6 @@
     btnRestart.addEventListener('click', () => { goModal.style.display = 'none'; setupModal.style.display = 'flex'; });
     btnQuit.addEventListener('click', () => {
       saveGameHistory();
-      window.close();
       setTimeout(() => window.location.href = 'index.html', 150);
     });
     btnSpeak.addEventListener('click', () => { if (activeQ) speak(activeQ.word); });

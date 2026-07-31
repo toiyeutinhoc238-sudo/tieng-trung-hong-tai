@@ -2145,7 +2145,7 @@ function setupEventListeners() {
       if (studyCustomCategory) params.set('customCategory', studyCustomCategory);
       if (activeHskVersion) params.set('hskVersion', activeHskVersion);
 
-      window.open(`detail-list.html?${params.toString()}`, '_blank');
+      window.location.href = `detail-list.html?${params.toString()}`;
     });
   }
 
@@ -3153,7 +3153,7 @@ function renderGamifiedRoadmapPath() {
             <button class="btn-node-start" style="background: ${item.color};" onclick="goToRoadmapLevel('${hskVer}', ${item.level})">
               Khám Phá Cấp ${item.level} <i class="fa-solid fa-arrow-right"></i>
             </button>
-            <button class="btn-node-start" style="background: rgba(255,255,255,0.1); width: auto;" onclick="window.open('/quiz-game.html?level=${item.level}', '_blank')" title="Thi trắc nghiệm">
+            <button class="btn-node-start" style="background: rgba(255,255,255,0.1); width: auto;" onclick="window.location.href='/quiz-game.html?level=${item.level}'" title="Thi trắc nghiệm">
               <i class="fa-solid fa-gamepad"></i>
             </button>
           </div>
@@ -4536,7 +4536,7 @@ function initChatbot() {
   if (historyBtn) {
     historyBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      window.open('/chat-history.html', '_blank');
+      window.location.href = '/chat-history.html';
     });
   }
 

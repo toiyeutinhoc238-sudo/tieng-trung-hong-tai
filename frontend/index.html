@@ -115,7 +115,7 @@
         </div>
         <ul class="profile-dropdown-menu">
           <li>
-            <a href="/chat-history.html" target="_blank" class="history-link">
+            <a href="/chat-history.html" class="history-link">
               <i class="fa-solid fa-clock-rotate-left"></i> Lịch sử cuộc trò chuyện
             </a>
           </li>
@@ -225,7 +225,7 @@
           <li class="sidebar-subitem" onclick="window.switchTab('flashcards')">
             <i class="fa-solid fa-book-bookmark"></i> <span>Sổ tay từ vựng</span>
           </li>
-          <li class="sidebar-subitem" onclick="window.open('/hanzi-writer.html', '_blank')">
+          <li class="sidebar-subitem" onclick="window.location.href = '/hanzi-writer.html'">
             <i class="fa-solid fa-pen-nib"></i> <span>Luyện viết chữ Hán tương tác</span>
           </li>
         </ul>
@@ -238,7 +238,7 @@
           <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
         </div>
         <ul class="sidebar-submenu">
-          <li class="sidebar-subitem" onclick="window.open('/hsk-grammar.html', '_blank')">
+          <li class="sidebar-subitem" onclick="window.location.href = '/hsk-grammar.html'">
             <i class="fa-solid fa-list-check"></i> <span>Ngữ pháp HSK (1 đến 6)</span>
           </li>
           <li class="sidebar-subitem" onclick="window.switchTab('flashcards')">
@@ -253,7 +253,7 @@
         <li class="sidebar-item" onclick="window.switchTab('flashcards')">
           <i class="fa-solid fa-rotate-left"></i> <span>Ôn tập ngắt quãng (SRS)</span>
         </li>
-        <li class="sidebar-item" data-tab="quiz" onclick="window.open('/quiz-game.html', '_blank')">
+        <li class="sidebar-item" data-tab="quiz" onclick="window.location.href = '/quiz-game.html'">
           <i class="fa-solid fa-gamepad"></i> <span>Ôn tập trắc nghiệm</span>
         </li>
         <li class="sidebar-item" onclick="window.switchTab('exams')">
@@ -1546,7 +1546,7 @@
                 chủ Tiếng Trung!
               </p>
             </div>
-            <button class="btn btn-primary" onclick="window.open('/quiz-game.html', '_blank')"
+            <button class="btn btn-primary" onclick="window.location.href = '/quiz-game.html'"
               style="background: #f59e0b; color: #000; border: none; font-weight: 800;">
               <i class="fa-solid fa-gamepad"></i> Đấu Trường Quiz Game
             </button>
