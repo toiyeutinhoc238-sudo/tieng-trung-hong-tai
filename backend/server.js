@@ -285,16 +285,10 @@ function getLoggedInUserEmail(req) {
     return activeSessions.get(token);
   }
 
-  // 4. Fallback to email passed in body/query or user object in body
+  // 4. Fallback to email explicitly passed in body/query
   if (req.body && req.body.email) return req.body.email.toLowerCase().trim();
   if (req.query && req.query.email) return req.query.email.toLowerCase().trim();
   if (req.body && req.body.userEmail) return req.body.userEmail.toLowerCase().trim();
-
-  // If activeSessions has any active user, use the latest logged-in user
-  if (activeSessions.size > 0) {
-    const emails = Array.from(activeSessions.values());
-    return emails[emails.length - 1];
-  }
 
   return null;
 }
