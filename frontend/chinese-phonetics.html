@@ -948,11 +948,11 @@
       const ex3 = examples[2] || { pinyin: '—' };
       const ex4 = examples[3] || { pinyin: '—' };
 
-      const showDiagram = (sectionType !== 'vanmau');
+      const showDiagram = true;
 
       return `
         <div class="char-detail-inspector">
-          <div class="inspector-top-grid" style="${!showDiagram ? 'grid-template-columns: 100px 1fr;' : ''}">
+          <div class="inspector-top-grid">
             <!-- Cột 1: Ký tự to -->
             <div class="char-big-box">
               <span class="char-big-symbol">${item.char}</span>
@@ -971,13 +971,11 @@
               </div>
             </div>
 
-            <!-- Cột 3: Hình mô phỏng khẩu hình chuẩn (Chỉ dành cho Thanh Mẫu) -->
-            ${showDiagram ? `
+            <!-- Cột 3: Hình mô phỏng khẩu hình chuẩn -->
             <div class="mouth-diagram-box">
               <div class="diagram-title" style="margin-bottom: 6px;"><i class="fa-solid fa-image"></i> Mô Phỏng Khẩu Hình</div>
-              ${getMouthDiagramSVG(item.char)}
+              ${getMouthDiagramSVG(item.char, sectionType)}
             </div>
-            ` : ''}
           </div>
 
           <!-- Lưới 4 Ví Dụ (Chỉ hiện Pinyin để bấm nghe, không kèm nghĩa tiếng Việt) -->
