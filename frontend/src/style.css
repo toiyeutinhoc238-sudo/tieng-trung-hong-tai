@@ -6498,3 +6498,103 @@ html.light-mode .c-green,
 html.light-mode .btn-node-start {
   color: #ffffff !important;
 }
+
+/* Notebook Lesson Pill Filter Buttons */
+.nb-lesson-pill {
+  font-size: 0.78rem;
+  padding: 6px 14px;
+  border-radius: 50px;
+  cursor: pointer;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  background: rgba(241, 245, 249, 0.9);
+  color: #1e293b !important;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+html.dark .nb-lesson-pill,
+body.dark .nb-lesson-pill {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f1f5f9 !important;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+.nb-lesson-pill:hover {
+  border-color: #3b82f6;
+  color: #2563eb !important;
+}
+html.dark .nb-lesson-pill:hover,
+body.dark .nb-lesson-pill:hover {
+  border-color: #60a5fa;
+  color: #60a5fa !important;
+}
+.nb-lesson-pill.active {
+  background: #2563eb !important;
+  color: #ffffff !important;
+  border-color: #2563eb !important;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+}
+
+/* Sidebar Toggle & Collapsed State Rules */
+.sidebar-expand-float-btn {
+  display: none;
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 999;
+  background: var(--bg-glass, rgba(15, 23, 42, 0.88));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.18));
+  color: var(--text-primary, #ffffff);
+  padding: 8px 18px;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  align-items: center;
+  gap: 8px;
+  transition: all 0.25s ease;
+}
+.sidebar-expand-float-btn:hover {
+  background: #2563eb;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.4);
+}
+
+.sidebar-toggle-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.12));
+  color: var(--text-secondary, #cbd5e1);
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-left: auto;
+  transition: all 0.2s ease;
+}
+.sidebar-toggle-btn:hover {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+body.sidebar-collapsed .app-sidebar {
+  transform: translateX(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+body.sidebar-collapsed .main-layout {
+  margin-left: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+body.sidebar-collapsed .sidebar-expand-float-btn {
+  display: flex !important;
+}
+
+

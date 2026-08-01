@@ -835,9 +835,14 @@
 
       <!-- Column 1: Vocab Panel List -->
       <div class="vocab-panel">
-        <div class="panel-header">
+        <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center;">
           <span><i class="fa-solid fa-list-check" style="color:#60a5fa;"></i> Danh Sách Từ Vựng</span>
-          <span id="vocab-count-badge" style="font-size:0.8rem; background:rgba(59,130,246,0.2); color:#60a5fa; padding:2px 10px; border-radius:12px;">0 từ</span>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <button id="toggle-select-all-btn" onclick="toggleSelectAllPrintWords()" style="font-size:0.72rem; background:rgba(255,255,255,0.08); color:#38bdf8; border:1px solid rgba(56,189,248,0.3); padding:3px 10px; border-radius:8px; cursor:pointer; font-weight:600;">
+              <i class="fa-solid fa-square-check"></i> Chọn tất cả
+            </button>
+            <span id="vocab-count-badge" style="font-size:0.8rem; background:rgba(59,130,246,0.2); color:#60a5fa; padding:2px 10px; border-radius:12px;">0 từ</span>
+          </div>
         </div>
         <div id="vocab-list-container" class="vocab-list-scroll"></div>
       </div>
@@ -860,39 +865,51 @@
           <div id="active-level-badge" class="level-badge">HSK 1</div>
         </div>
 
-
-
-        <!-- Action Control Buttons: CHỈ GIỮ DUY NHẤT NÚT IN PHIẾU TẬP VIẾT -->
-        <div style="margin-top:16px;">
-          <button class="action-btn" style="font-family:'Be Vietnam Pro','Segoe UI',sans-serif; background: linear-gradient(135deg, #10b981, #059669); color:#fff; border:none; width:100%; font-size:1.05rem; padding:12px; font-weight:700; border-radius:12px; box-shadow:0 4px 15px rgba(16,185,129,0.3); cursor:pointer;" onclick="openPrintWorksheetModal()">
-            <i class="fa-solid fa-print"></i> In Phiếu Tập Viết
+        <!-- Action Control Buttons: Nút In từ đang xem & Nút In theo danh sách chọn -->
+        <div style="margin-top:16px; display:flex; gap:10px;">
+          <button class="action-btn" style="flex:1; font-family:'Be Vietnam Pro','Segoe UI',sans-serif; background: linear-gradient(135deg, #10b981, #059669); color:#fff; border:none; font-size:0.95rem; padding:12px; font-weight:700; border-radius:12px; box-shadow:0 4px 15px rgba(16,185,129,0.3); cursor:pointer;" onclick="openPrintWorksheetModal('single')">
+            <i class="fa-solid fa-print"></i> In Từ Này (1 Trang)
+          </button>
+          <button class="action-btn" id="print-batch-btn" style="flex:1.2; font-family:'Be Vietnam Pro','Segoe UI',sans-serif; background: linear-gradient(135deg, #3b82f6, #1d4ed8); color:#fff; border:none; font-size:0.95rem; padding:12px; font-weight:700; border-radius:12px; box-shadow:0 4px 15px rgba(59,130,246,0.3); cursor:pointer;" onclick="openPrintWorksheetModal('batch')">
+            <i class="fa-solid fa-layer-group"></i> In Phiếu Theo Bài (<span id="btn-selected-count">Tất cả</span>)
           </button>
         </div>
 
         <!-- Status Alert Banner -->
         <div id="status-alert-banner" class="status-alert-banner" style="margin-top:12px;">
-          <i class="fa-solid fa-info-circle" style="color:#60a5fa;"></i> Chọn từ vựng và bấm <strong>"In Phiếu Tập Viết"</strong> để in phiếu bài tập luyện viết.
+          <i class="fa-solid fa-info-circle" style="color:#60a5fa;"></i> Chọn từ tùy thích hoặc bấm <strong>"In Phiếu Theo Bài"</strong> để in trọn bộ bài tập (mỗi từ 1 trang A4).
         </div>
       </div>
 
   <!-- PRINT WORKSHEET PREVIEW MODAL -->
   <div id="print-worksheet-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(11,15,25,0.92); z-index:99999; align-items:center; justify-content:center; padding:20px;">
-    <div style="background:#0f172a; border:1px solid rgba(255,255,255,0.15); border-radius:20px; max-width:920px; width:100%; max-height:95vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,0.5);">
+    <div style="background:#0f172a; border:1px solid rgba(255,255,255,0.15); border-radius:20px; max-width:960px; width:100%; max-height:95vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,0.5);">
       
       <!-- Thanh Tiêu Đề Modal -->
       <div class="no-print" style="padding:14px 20px; border-bottom:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; align-items:center; background:rgba(30,41,59,0.9);">
-        <h3 style="color:#fff; font-size:1.1rem; margin:0; font-weight:700;"><i class="fa-solid fa-print" style="color:#10b981;"></i> Xem Trước Phiếu In Tập Viết</h3>
+        <h3 style="color:#fff; font-size:1.1rem; margin:0; font-weight:700;"><i class="fa-solid fa-print" style="color:#10b981;"></i> Xem Trước Phiếu In Tập Viết Chữ Hán</h3>
         <div style="display:flex; gap:10px; align-items:center;">
-          <button class="btn btn-primary" style="background:#10b981; border:none; color:#fff; padding:8px 18px; border-radius:10px; font-weight:700; cursor:pointer;" onclick="triggerPrintWorksheet()"><i class="fa-solid fa-print"></i> In Ngay</button>
+          <button class="btn btn-primary" style="background:#10b981; border:none; color:#fff; padding:8px 18px; border-radius:10px; font-weight:700; cursor:pointer;" onclick="triggerPrintWorksheet()"><i class="fa-solid fa-print"></i> In Ngay (<span id="modal-print-total-pages">1</span> trang)</button>
           <button class="btn-close" style="padding:8px 14px; border-radius:10px; cursor:pointer;" onclick="closePrintWorksheetModal()"><i class="fa-solid fa-xmark"></i> Đóng</button>
         </div>
       </div>
 
       <!-- Thanh Bảng Điều Khiển Tùy Chỉnh Phiếu In (Số Hàng, Pinyin, Nghĩa) -->
       <div class="no-print" style="padding:10px 20px; background:#1e293b; border-bottom:1px solid rgba(255,255,255,0.08); display:flex; flex-wrap:wrap; align-items:center; gap:20px; font-size:0.85rem; color:#cbd5e1;">
+        
+        <!-- Chọn Phạm Vi In -->
+        <div style="display:flex; align-items:center; gap:8px;">
+          <label style="font-weight:700; color:#f59e0b;"><i class="fa-solid fa-list-check"></i> Danh sách in:</label>
+          <select id="print-custom-scope" onchange="updateWorksheetPreviewConfig()" style="background:#0f172a; border:1px solid #f59e0b; color:#fff; padding:4px 10px; border-radius:8px; font-weight:700; outline:none; cursor:pointer;">
+            <option value="single">Chỉ từ đang chọn</option>
+            <option value="selected">Các từ đã tích chọn</option>
+            <option value="all">Tất cả từ theo bài/bộ lọc</option>
+          </select>
+        </div>
+
         <!-- Tùy chỉnh Số Hàng -->
         <div style="display:flex; align-items:center; gap:8px;">
-          <label style="font-weight:700; color:#60a5fa;"><i class="fa-solid fa-table-cells-large"></i> Số hàng tập viết:</label>
+          <label style="font-weight:700; color:#60a5fa;"><i class="fa-solid fa-table-cells-large"></i> Số hàng/trang:</label>
           <select id="print-custom-rows" onchange="updateWorksheetPreviewConfig()" style="background:#0f172a; border:1px solid #3b82f6; color:#fff; padding:4px 10px; border-radius:8px; font-weight:700; outline:none; cursor:pointer;">
             <option value="4">4 hàng (Ngắn gọn)</option>
             <option value="5">5 hàng</option>
@@ -952,6 +969,7 @@
     let currentChar = '';
     let writerInstance = null;
     let showOutlineFlag = true;
+    let selectedPrintWords = new Set(); // Store selected words for print
 
     // Speech Audio
     let audioCurrent = null;
@@ -1112,6 +1130,28 @@
       renderFilteredVocabList();
     };
 
+    window.toggleSelectPrintWord = function (e, wordStr) {
+      if (e) e.stopPropagation();
+      if (selectedPrintWords.has(wordStr)) {
+        selectedPrintWords.delete(wordStr);
+      } else {
+        selectedPrintWords.add(wordStr);
+      }
+      renderFilteredVocabList();
+    };
+
+    window.toggleSelectAllPrintWords = function () {
+      const currentFilteredWords = filteredVocab.map(w => w.word);
+      const allSelected = currentFilteredWords.length > 0 && currentFilteredWords.every(w => selectedPrintWords.has(w));
+      
+      if (allSelected) {
+        currentFilteredWords.forEach(w => selectedPrintWords.delete(w));
+      } else {
+        currentFilteredWords.forEach(w => selectedPrintWords.add(w));
+      }
+      renderFilteredVocabList();
+    };
+
     window.renderFilteredVocabList = function () {
       const std = document.getElementById('sel-standard').value;
       const lvl = document.getElementById('sel-level').value;
@@ -1147,6 +1187,22 @@
       filteredVocab = pool;
       document.getElementById('vocab-count-badge').textContent = `${filteredVocab.length} từ`;
 
+      // Update print batch count button
+      const selCount = selectedPrintWords.size;
+      const btnSelEl = document.getElementById('btn-selected-count');
+      if (btnSelEl) {
+        btnSelEl.textContent = selCount > 0 ? `${selCount} từ chọn` : `Tất cả ${filteredVocab.length} từ`;
+      }
+
+      // Update select-all button label
+      const toggleAllBtn = document.getElementById('toggle-select-all-btn');
+      if (toggleAllBtn) {
+        const allSelected = filteredVocab.length > 0 && filteredVocab.every(w => selectedPrintWords.has(w.word));
+        toggleAllBtn.innerHTML = allSelected 
+          ? `<i class="fa-solid fa-square-minus" style="color:#ef4444;"></i> Bỏ chọn tất cả`
+          : `<i class="fa-solid fa-square-check"></i> Chọn tất cả`;
+      }
+
       const listContainer = document.getElementById('vocab-list-container');
       if (filteredVocab.length === 0) {
         listContainer.innerHTML = `<div style="text-align:center; color:var(--text-sub); padding:30px;">Không tìm thấy từ vựng phù hợp.</div>`;
@@ -1156,6 +1212,7 @@
       let html = '';
       filteredVocab.forEach((item, idx) => {
         const activeClass = (currentWordObj && currentWordObj.word === item.word) ? 'active' : '';
+        const isSelected = selectedPrintWords.has(item.word);
         html += `
           <div class="word-card-item ${activeClass}" onclick="selectWordObj(${idx})">
             <div>
@@ -1163,9 +1220,11 @@
               <div class="word-pinyin-display">${item.pinyin}</div>
               <div class="word-meaning-display">${item.meaning}</div>
             </div>
-            <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
+            <div style="display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
               <span class="level-badge" style="font-size:0.7rem; padding:2px 8px;">${isYct(item) ? 'YCT' : 'HSK'} ${item.level || '1'}</span>
-              <i class="fa-solid fa-pen-nib" style="color:#60a5fa; font-size:0.9rem;"></i>
+              <button onclick="toggleSelectPrintWord(event, '${item.word}')" title="${isSelected ? 'Bỏ chọn in' : 'Tích chọn để in'}" style="background:${isSelected ? '#10b981' : 'rgba(255,255,255,0.06)'}; color:${isSelected ? '#ffffff' : '#60a5fa'}; border:${isSelected ? 'none' : '1px solid rgba(96,165,250,0.3)'}; padding:4px 8px; border-radius:6px; font-size:0.72rem; cursor:pointer; display:flex; align-items:center; gap:4px; font-weight:700; transition:all 0.2s ease;">
+                <i class="fa-solid ${isSelected ? 'fa-square-check' : 'fa-pen-nib'}"></i> ${isSelected ? 'Đã chọn in' : 'Chọn in'}
+              </button>
             </div>
           </div>
         `;
@@ -1333,24 +1392,46 @@
 
 
     window.updateWorksheetPreviewConfig = function () {
-      if (currentWordObj) {
-        openPrintWorksheetModal(currentWordObj);
-      }
+      const scopeSelect = document.getElementById('print-custom-scope');
+      const scope = scopeSelect ? scopeSelect.value : 'single';
+      openPrintWorksheetModal(scope);
     };
 
-    window.openPrintWorksheetModal = function (wordObj) {
-      const target = wordObj || currentWordObj;
-      if (!target || !target.word) return;
-
+    window.openPrintWorksheetModal = function (mode = 'single') {
       const modal = document.getElementById('print-worksheet-modal');
       const container = document.getElementById('print-worksheet-content-wrap');
       if (!modal || !container) return;
 
-      const wordChars = target.word.split('').filter(c => /[\u4e00-\u9fa5]/.test(c));
-      const N = wordChars.length;
-      const todayStr = new Date().toLocaleDateString('vi-VN');
+      const scopeSelect = document.getElementById('print-custom-scope');
+      
+      // Handle initial mode trigger
+      if (mode === 'batch') {
+        if (selectedPrintWords.size > 0) {
+          if (scopeSelect) scopeSelect.value = 'selected';
+        } else {
+          if (scopeSelect) scopeSelect.value = 'all';
+        }
+      } else if (mode === 'single') {
+        if (scopeSelect) scopeSelect.value = 'single';
+      }
 
-      // Đọc các giá trị tùy chọn từ giao diện điều khiển (nếu có)
+      const activeScope = scopeSelect ? scopeSelect.value : (mode === 'batch' ? (selectedPrintWords.size > 0 ? 'selected' : 'all') : 'single');
+
+      // Determine list of words to print
+      let wordsToPrint = [];
+      if (activeScope === 'single') {
+        if (currentWordObj) wordsToPrint = [currentWordObj];
+      } else if (activeScope === 'selected') {
+        wordsToPrint = filteredVocab.filter(w => selectedPrintWords.has(w.word));
+        if (wordsToPrint.length === 0 && currentWordObj) wordsToPrint = [currentWordObj];
+      } else {
+        wordsToPrint = [...filteredVocab];
+        if (wordsToPrint.length === 0 && currentWordObj) wordsToPrint = [currentWordObj];
+      }
+
+      if (wordsToPrint.length === 0) return;
+
+      // Read controls
       const rowsSelect = document.getElementById('print-custom-rows');
       const traceRowsSelect = document.getElementById('print-custom-trace-rows');
       const pinyinCheck = document.getElementById('print-custom-show-pinyin');
@@ -1363,9 +1444,12 @@
 
       const COLS = 12;
       const BOX = ROWS > 7 ? 48 : (ROWS === 7 ? 52 : 56.5);
+      const todayStr = new Date().toLocaleDateString('vi-VN');
+
+      document.getElementById('modal-print-total-pages').textContent = wordsToPrint.length;
 
       function mizigeCell(size, innerHtml = '') {
-        const h = Math.round(size), w = size;
+        const h = Math.round(size);
         return `<div style="
           flex:1; height:${h}px; min-height:${h}px;
           border-right:1px solid #22c55e;
@@ -1383,175 +1467,183 @@
         </div>`;
       }
 
-      function buildRow(rowIdx) {
-        let cells = '';
-        for (let col = 0; col < COLS; col++) {
-          const posInWord = col % N;
-          const ch = wordChars[posInWord];
+      let pagesHtml = '';
+      const pendingStrokeLoaders = [];
 
-          let isTrace = false;
-          if (traceConfig === 'all') isTrace = true;
-          else if (traceConfig === '1' && rowIdx === 0) isTrace = true;
-          else if (traceConfig === '2' && (rowIdx === 0 || rowIdx === 1)) isTrace = true;
-          else if (traceConfig === '3' && (rowIdx === 0 || rowIdx === 1 || rowIdx === 2)) isTrace = true;
+      wordsToPrint.forEach((target, pageIdx) => {
+        const wordChars = target.word.split('').filter(c => /[\u4e00-\u9fa5]/.test(c));
+        const N = wordChars.length || 1;
 
-          let inner = '';
-          if (isTrace) {
-            inner = `<span style="
-              font-size:${BOX * 0.72}px;
-              font-family:'LXGW WenKai Lite','Kaiti','STKaiti','Kai','PingFang SC','Noto Serif SC','Noto Sans SC',serif;
-              font-weight:normal; color:#111827; opacity:0.18;
-              line-height:1; position:relative; z-index:2; pointer-events:none;
-            ">${ch}</span>`;
-          }
+        function buildRow(rowIdx) {
+          let cells = '';
+          for (let col = 0; col < COLS; col++) {
+            const posInWord = col % N;
+            const ch = wordChars[posInWord] || '';
 
-          cells += mizigeCell(BOX, inner);
-        }
-        return `<div style="display:flex;">${cells}</div>`;
-      }
+            let isTrace = false;
+            if (traceConfig === 'all') isTrace = true;
+            else if (traceConfig === '1' && rowIdx === 0) isTrace = true;
+            else if (traceConfig === '2' && (rowIdx === 0 || rowIdx === 1)) isTrace = true;
+            else if (traceConfig === '3' && (rowIdx === 0 || rowIdx === 1 || rowIdx === 2)) isTrace = true;
 
-      let allRows = '';
-      for (let r = 0; r < ROWS; r++) {
-        allRows += buildRow(r);
-      }
-
-      const strokeSequenceContainerId = 'stroke-order-sequence-box';
-
-      // Khung thông tin từ vựng (rộng 100% khớp hoàn toàn với khối lưới bên dưới)
-      const infoBox = `
-        <div style="
-          border:2px solid #22c55e; border-radius:8px;
-          padding:12px 18px; margin-bottom:12px;
-          background:#fff; width:100%; box-sizing:border-box;
-        ">
-          <!-- Hàng 1: Từ vựng + Pinyin + Dịch nghĩa + Cấp độ -->
-          <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:8px; border-bottom:1px dashed #dcfce7;">
-            <div style="display:flex; align-items:baseline; gap:16px;">
-              <span style="
-                font-size:2.2rem;
+            let inner = '';
+            if (isTrace && ch) {
+              inner = `<span style="
+                font-size:${BOX * 0.72}px;
                 font-family:'LXGW WenKai Lite','Kaiti','STKaiti','Kai','PingFang SC','Noto Serif SC','Noto Sans SC',serif;
-                font-weight:bold; color:#111827; line-height:1;
-              ">${target.word}</span>
-              ${showPinyin ? `<span style="font-size:1.15rem; font-weight:800; color:#ea580c;">${target.pinyin}</span>` : ''}
-              ${showMeaning ? `<span style="font-size:0.95rem; color:#374151; font-weight:600;">${target.pos ? `<span style="color:#6b7280">(${target.pos})</span> ` : ''}${target.meaning}</span>` : ''}
+                font-weight:normal; color:#111827; opacity:0.18;
+                line-height:1; position:relative; z-index:2; pointer-events:none;
+              ">${ch}</span>`;
+            }
+
+            cells += mizigeCell(BOX, inner);
+          }
+          return `<div style="display:flex;">${cells}</div>`;
+        }
+
+        let allRows = '';
+        for (let r = 0; r < ROWS; r++) {
+          allRows += buildRow(r);
+        }
+
+        const strokeSeqContainerId = `stroke-steps-list-modal-${pageIdx}`;
+        pendingStrokeLoaders.push({ id: strokeSeqContainerId, wordChars });
+
+        const infoBox = `
+          <div style="
+            border:2px solid #22c55e; border-radius:8px;
+            padding:12px 18px; margin-bottom:12px;
+            background:#fff; width:100%; box-sizing:border-box;
+          ">
+            <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:8px; border-bottom:1px dashed #dcfce7;">
+              <div style="display:flex; align-items:baseline; gap:16px;">
+                <span style="
+                  font-size:2.2rem;
+                  font-family:'LXGW WenKai Lite','Kaiti','STKaiti','Kai','PingFang SC','Noto Serif SC','Noto Sans SC',serif;
+                  font-weight:bold; color:#111827; line-height:1;
+                ">${target.word}</span>
+                ${showPinyin ? `<span style="font-size:1.15rem; font-weight:800; color:#ea580c;">${target.pinyin}</span>` : ''}
+                ${showMeaning ? `<span style="font-size:0.95rem; color:#374151; font-weight:600;">${target.pos ? `<span style="color:#6b7280">(${target.pos})</span> ` : ''}${target.meaning}</span>` : ''}
+              </div>
+              <div style="font-size:0.75rem; color:#16a34a; font-weight:700; background:#f0fdf4; padding:4px 12px; border-radius:12px; border:1px solid #bbf7d0;">
+                ${(target.curriculum || 'HSK').toUpperCase()} Cấp ${target.level || '1'}
+              </div>
             </div>
-            <div style="font-size:0.75rem; color:#16a34a; font-weight:700; background:#f0fdf4; padding:4px 12px; border-radius:12px; border:1px solid #bbf7d0;">
-              ${(target.curriculum || 'HSK').toUpperCase()} Cấp ${target.level}
+
+            <div style="margin-top:8px;">
+              <div id="${strokeSeqContainerId}" style="display:flex; flex-wrap:wrap; gap:16px; align-items:center; font-family:'Kaiti','STKaiti','Noto Serif SC',serif;">
+                <span style="font-size:0.8rem; color:#9ca3af;">Đang tải nét bút...</span>
+              </div>
+            </div>
+          </div>`;
+
+        const practiceBlock = `
+          <div style="
+            display:inline-flex;
+            flex-direction:column;
+            border:2px solid #22c55e;
+            border-radius:6px;
+            overflow:hidden;
+            box-sizing:border-box;
+            width:100%;
+          ">
+            ${allRows}
+          </div>`;
+
+        const isLastPage = pageIdx === wordsToPrint.length - 1;
+        pagesHtml += `
+          <div class="print-page-area" style="
+            font-family:'Be Vietnam Pro','Segoe UI',sans-serif;
+            padding:24px 28px;
+            background:#fff; color:#000;
+            max-width:${COLS * BOX + 80}px;
+            margin:0 auto ${isLastPage ? '0' : '30px'} auto;
+            box-shadow:0 4px 20px rgba(0,0,0,0.08);
+            border-radius:12px;
+            page-break-after: always;
+            break-after: page;
+          ">
+            <!-- HEADER -->
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:3px solid #f97316; padding-bottom:10px; margin-bottom:12px;">
+              <div>
+                <div style="font-size:1.45rem; font-weight:900; color:#f97316;">Tiếng Trung HongTai</div>
+                <div style="font-size:0.78rem; color:#16a34a; font-weight:700; margin-top:2px;">Luyện viết chữ Hán</div>
+              </div>
+              <div style="text-align:right; font-size:0.75rem; color:#6b7280;">
+                <div style="font-weight:700; color:#111827;">tiengtrunghongtai.com</div>
+                <div>Trang ${pageIdx + 1}/${wordsToPrint.length} - Ngày in: ${todayStr}</div>
+              </div>
+            </div>
+
+            <!-- HÀNG TÊN / LỚP / NGÀY -->
+            <div style="display:flex; gap:20px; margin-bottom:12px; font-size:0.8rem; font-weight:700; color:#16a34a;">
+              <span>Tên: <span style="display:inline-block; border-bottom:1.5px solid #22c55e; min-width:150px;">&nbsp;</span></span>
+              <span>Lớp: <span style="display:inline-block; border-bottom:1.5px solid #22c55e; min-width:80px;">&nbsp;</span></span>
+              <span>Ngày: <span style="display:inline-block; border-bottom:1.5px solid #22c55e; min-width:110px;">&nbsp;</span></span>
+            </div>
+
+            <!-- KHUNG THÔNG TIN TỪ VỰNG -->
+            ${infoBox}
+
+            <!-- KHỐI LƯỚI LUYỆN VIẾT -->
+            <div style="text-align:center;">
+              ${practiceBlock}
+            </div>
+
+            <!-- FOOTER -->
+            <div style="margin-top:14px; border-top:1px dashed #86efac; padding-top:8px; display:flex; justify-content:space-between; font-size:0.72rem; color:#9ca3af;">
+              <span>💡 Viết theo các ô mờ mẫu → Tự viết vào các ô trống (mỗi ô 1 chữ, viết lần lượt theo thứ tự từ).</span>
+              <span style="font-weight:800; color:#f97316;">Tiếng Trung HongTai</span>
             </div>
           </div>
+        `;
+      });
 
-          <!-- Hàng 2: Chuỗi nét bút Thuận Bút (Chỉ hiển thị dãy nét chuẩn đẹp, không có nhãn chữ thừa) -->
-          <div id="${strokeSequenceContainerId}" style="margin-top:8px;">
-            <div id="stroke-steps-list" style="display:flex; flex-wrap:wrap; gap:16px; align-items:center; font-family:'Kaiti','STKaiti','Noto Serif SC',serif;">
-              <span style="font-size:0.8rem; color:#9ca3af;">Đang tải nét bút...</span>
-            </div>
-          </div>
-        </div>`;
-
-      // Khối luyện viết chữ (rộng 100% bằng khung thông tin phía trên)
-      const practiceBlock = `
-        <div style="
-          display:inline-flex;
-          flex-direction:column;
-          border:2px solid #22c55e;
-          border-radius:6px;
-          overflow:hidden;
-          box-sizing:border-box;
-          width:100%;
-        ">
-          ${allRows}
-        </div>`;
-
-      // TOÀN BỘ PHIẾU IN
-      container.innerHTML = `
-        <div class="print-page-area" style="
-          font-family:'Be Vietnam Pro','Segoe UI',sans-serif;
-          padding:24px 28px;
-          background:#fff; color:#000;
-          max-width:${COLS * BOX + 80}px;
-          margin:0 auto;
-          box-shadow:0 4px 20px rgba(0,0,0,0.08);
-          border-radius:12px;
-        ">
-
-          <!-- HEADER -->
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:3px solid #f97316; padding-bottom:10px; margin-bottom:12px;">
-            <div>
-              <div style="font-size:1.45rem; font-weight:900; color:#f97316;">Tiếng Trung HongTai</div>
-              <div style="font-size:0.78rem; color:#16a34a; font-weight:700; margin-top:2px;">Luyện viết chữ Hán</div>
-            </div>
-            <div style="text-align:right; font-size:0.75rem; color:#6b7280;">
-              <div style="font-weight:700; color:#111827;">tiengtrunghongtai.com</div>
-              <div>Ngày in: ${todayStr}</div>
-            </div>
-          </div>
-
-          <!-- HÀNG TÊN / LỚP / NGÀY -->
-          <div style="display:flex; gap:20px; margin-bottom:12px; font-size:0.8rem; font-weight:700; color:#16a34a;">
-            <span>Tên: <span style="display:inline-block; border-bottom:1.5px solid #22c55e; min-width:150px;">&nbsp;</span></span>
-            <span>Lớp: <span style="display:inline-block; border-bottom:1.5px solid #22c55e; min-width:80px;">&nbsp;</span></span>
-            <span>Ngày tháng năm: <span style="display:inline-block; border-bottom:1.5px solid #22c55e; min-width:110px;">&nbsp;</span></span>
-          </div>
-
-          <!-- KHUNG THÔNG TIN TỪ VỰNG -->
-          ${infoBox}
-
-          <!-- KHỐI LƯỚI LUYỆN VIẾT -->
-          <div style="text-align:center;">
-            ${practiceBlock}
-          </div>
-
-          <!-- FOOTER -->
-          <div style="margin-top:14px; border-top:1px dashed #86efac; padding-top:8px; display:flex; justify-content:space-between; font-size:0.72rem; color:#9ca3af;">
-            <span>💡 Viết theo các ô mờ mẫu → Tự viết vào các ô trống (mỗi ô 1 chữ, viết lần lượt theo thứ tự từ).</span>
-            <span style="font-weight:800; color:#f97316;">Tiếng Trung HongTai</span>
-          </div>
-        </div>
-      `;
-
+      container.innerHTML = pagesHtml;
       modal.style.display = 'flex';
 
-      // =======================================================
-      // TẢI DỮ LIỆU VÀ VẼ CÁC NÉT THUẬN BÚT (DÃY TÙY TỪNG CHỮ HÁN)
-      // =======================================================
-      const stepsContainer = document.getElementById('stroke-steps-list');
-      if (stepsContainer && typeof HanziWriter !== 'undefined') {
-        let sequenceHtml = '';
-        let pending = wordChars.length;
+      // Load stroke steps for each page
+      if (typeof HanziWriter !== 'undefined') {
+        pendingStrokeLoaders.forEach(item => {
+          const stepsContainer = document.getElementById(item.id);
+          if (!stepsContainer) return;
+          let sequenceHtml = '';
+          let pending = item.wordChars.length;
 
-        wordChars.forEach(ch => {
-          HanziWriter.loadCharacterData(ch).then(data => {
-            if (data && data.strokes) {
-              const strokesCount = data.strokes.length;
-              let charStepsHtml = `<div style="display:inline-flex; align-items:center; gap:5px; background:#f8fafc; padding:3px 8px; border-radius:6px; border:1px solid #e2e8f0;">`;
-              charStepsHtml += `<span style="font-weight:bold; color:#111827; font-size:1.05rem; margin-right:4px;">${ch}:</span>`;
-              
-              for (let i = 1; i <= strokesCount; i++) {
-                const stepStrokes = data.strokes.slice(0, i);
-                let svgPaths = '';
-                stepStrokes.forEach(pathData => {
-                  svgPaths += `<path d="${pathData}" fill="#111827" transform="scale(0.022, -0.022) translate(0, -900)" />`;
-                });
+          item.wordChars.forEach(ch => {
+            HanziWriter.loadCharacterData(ch).then(data => {
+              if (data && data.strokes) {
+                const strokesCount = data.strokes.length;
+                let charStepsHtml = `<div style="display:inline-flex; align-items:center; gap:5px; background:#f8fafc; padding:3px 8px; border-radius:6px; border:1px solid #e2e8f0;">`;
+                charStepsHtml += `<span style="font-weight:bold; color:#111827; font-size:1.05rem; margin-right:4px;">${ch}:</span>`;
+                
+                for (let i = 1; i <= strokesCount; i++) {
+                  const stepStrokes = data.strokes.slice(0, i);
+                  let svgPaths = '';
+                  stepStrokes.forEach(pathData => {
+                    svgPaths += `<path d="${pathData}" fill="#111827" transform="scale(0.022, -0.022) translate(0, -900)" />`;
+                  });
 
-                charStepsHtml += `
-                  <div style="display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px;">
-                    <svg width="22" height="22" viewBox="0 0 24 24" style="overflow:visible;">
-                      ${svgPaths}
-                    </svg>
-                  </div>`;
+                  charStepsHtml += `
+                    <div style="display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px;">
+                      <svg width="22" height="22" viewBox="0 0 24 24" style="overflow:visible;">
+                        ${svgPaths}
+                      </svg>
+                    </div>`;
+                }
+                charStepsHtml += `</div>`;
+                sequenceHtml += charStepsHtml;
               }
-              charStepsHtml += `</div>`;
-              sequenceHtml += charStepsHtml;
-            }
-            pending--;
-            if (pending === 0) {
-              stepsContainer.innerHTML = sequenceHtml || '';
-            }
-          }).catch(err => {
-            pending--;
-            if (pending === 0 && !sequenceHtml) {
-              stepsContainer.innerHTML = '';
-            }
+              pending--;
+              if (pending === 0) {
+                stepsContainer.innerHTML = sequenceHtml || '';
+              }
+            }).catch(err => {
+              pending--;
+              if (pending === 0 && !sequenceHtml) {
+                stepsContainer.innerHTML = '';
+              }
+            });
           });
         });
       }

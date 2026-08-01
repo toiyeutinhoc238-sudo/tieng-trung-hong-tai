@@ -80,14 +80,23 @@
   </nav>
 
   <!-- Left Navigation Sidebar (Cảm hứng nhaitopik.com) -->
+  <button id="sidebar-expand-float-btn" class="sidebar-expand-float-btn" onclick="window.toggleSidebarCollapse()" title="Mở menu điều hướng">
+    <i class="fa-solid fa-bars"></i> <span>Menu</span>
+  </button>
+
   <aside class="app-sidebar">
-    <div class="sidebar-header" style="cursor: pointer;" onclick="window.openAboutModal()">
-      <img class="sidebar-logo" src="/src/assets/logo.png" alt="Hongtai Logo">
-      <div style="display: flex; flex-direction: column;">
-        <span style="font-weight: 800; font-size: 1.05rem; color: var(--text-primary); letter-spacing: -0.01em;">Hongtai
-          Chinese</span>
-        <span style="font-size: 0.75rem; color: var(--text-muted);">Ôn Tập HSK & YCT</span>
+    <div class="sidebar-header">
+      <div style="display: flex; align-items: center; gap: 12px; cursor: pointer; flex: 1;" onclick="window.openAboutModal()">
+        <img class="sidebar-logo" src="/src/assets/logo.png" alt="Hongtai Logo">
+        <div style="display: flex; flex-direction: column;">
+          <span style="font-weight: 800; font-size: 1.05rem; color: var(--text-primary); letter-spacing: -0.01em;">Hongtai
+            Chinese</span>
+          <span style="font-size: 0.75rem; color: var(--text-muted);">Ôn Tập HSK & YCT</span>
+        </div>
       </div>
+      <button class="sidebar-toggle-btn" onclick="window.toggleSidebarCollapse()" title="Thu gọn / Ẩn menu">
+        <i class="fa-solid fa-angles-left"></i>
+      </button>
     </div>
 
     <!-- User Account Card (Google login / Profile - Directly under Logo Header) -->
@@ -220,14 +229,11 @@
           <li class="sidebar-subitem" onclick="window.location.href = '/chinese-phonetics.html'">
             <i class="fa-solid fa-table-cells"></i> <span>Bảng phiên âm (Pinyin)</span>
           </li>
-          <li class="sidebar-subitem" onclick="window.switchTab('lessons')">
-            <i class="fa-solid fa-book-open"></i> <span>Từ vựng HSK / YCT</span>
-          </li>
           <li class="sidebar-subitem" onclick="window.switchTab('flashcards')">
             <i class="fa-solid fa-book-bookmark"></i> <span>Sổ tay từ vựng</span>
           </li>
           <li class="sidebar-subitem" onclick="window.location.href = '/hanzi-writer.html'">
-            <i class="fa-solid fa-pen-nib"></i> <span>Luyện viết chữ Hán tương tác</span>
+            <i class="fa-solid fa-pen-nib"></i> <span>Luyện viết & In phiếu tập viết</span>
           </li>
         </ul>
       </div>
@@ -1547,10 +1553,6 @@
                 chủ Tiếng Trung!
               </p>
             </div>
-            <button class="btn btn-primary" onclick="window.location.href = '/quiz-game.html'"
-              style="background: #f59e0b; color: #000; border: none; font-weight: 800;">
-              <i class="fa-solid fa-gamepad"></i> Đấu Trường Quiz Game
-            </button>
           </div>
 
           <!-- Version Selection Pills -->
@@ -2090,7 +2092,8 @@
     <section id="lessons-section" class="workspace-section" style="display: none;">
       <!-- Curriculum Selection Banner Row -->
       <div class="lessons-top-banner"
-        style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        style="display: none !important; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+
         <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
           <span class="lessons-cap-title">GIÁ TRÌNH CHỦ CHỐT:</span>
           <div class="lessons-curriculum-pills">
@@ -2109,7 +2112,7 @@
       </div>
 
       <!-- Main Curriculum Header Card -->
-      <div class="lessons-header-card">
+      <div class="lessons-header-card" style="display: none !important;">
         <div class="lessons-header-info">
           <div style="display: flex; gap: 14px; align-items: flex-start;">
             <div class="lessons-book-icon-wrapper">

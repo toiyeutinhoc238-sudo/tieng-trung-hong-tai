@@ -125,6 +125,9 @@ const toastElement = document.getElementById('toast');
 
 // --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', async () => {
+  if (localStorage.getItem('sidebar_collapsed') === 'true') {
+    document.body.classList.add('sidebar-collapsed');
+  }
   initTheme();
   initVoices();
   await initAuth();
@@ -6707,7 +6710,7 @@ function openNotebookDashboard(notebookId) {
   // Render HSK Lesson Selector Block if applicable (Chỉ hiển thị khi xem toàn bộ cấp độ HSK, ẩn khi đã nhấp chọn 1 bài học cụ thể)
   const lessonContainer = document.getElementById('nb-hsk-lesson-selector-container');
   if (lessonContainer) {
-    if (notebookId.startsWith('hsk:') && Array.isArray(selectedDashboardLessons) && selectedDashboardLessons.length === 0) {
+    if (notebookId.startsWith('hsk:')) {
       lessonContainer.style.display = 'block';
       const lessonsList = document.getElementById('nb-hsk-lessons-list');
       if (lessonsList) {
@@ -6725,11 +6728,7 @@ function openNotebookDashboard(notebookId) {
 
         // Add "All" button
         const allBtn = document.createElement('button');
-        allBtn.className = `btn btn-sm ${selectedDashboardLessons.length === 0 ? 'btn-primary' : 'btn-outline'}`;
-        allBtn.style.fontSize = '0.75rem';
-        allBtn.style.padding = '6px 12px';
-        allBtn.style.borderRadius = '50px';
-        allBtn.style.cursor = 'pointer';
+        allBtn.className = `nb-lesson-pill ${selectedDashboardLessons.length === 0 ? 'active' : ''}`;
         allBtn.textContent = 'Tất cả bài học';
         allBtn.addEventListener('click', () => {
           selectedDashboardLessons = [];
@@ -6741,11 +6740,7 @@ function openNotebookDashboard(notebookId) {
         sortedLessonIds.forEach(lId => {
           const btn = document.createElement('button');
           const isSelected = selectedDashboardLessons.includes(lId);
-          btn.className = `btn btn-sm ${isSelected ? 'btn-primary' : 'btn-outline'}`;
-          btn.style.fontSize = '0.75rem';
-          btn.style.padding = '6px 12px';
-          btn.style.borderRadius = '50px';
-          btn.style.cursor = 'pointer';
+          btn.className = `nb-lesson-pill ${isSelected ? 'active' : ''}`;
           btn.textContent = uniqueLessons[lId];
           btn.addEventListener('click', () => {
             if (isSelected) {
@@ -7449,7 +7444,13 @@ window.openAboutModal = function () {
   }
 };
 
-// --- NEW SIDEBAR DROPDOWN & FEATURE MODALS ---
+// --- NEW SIDEBAR COLLAPSE, DROPDOWN & FEATURE MODALS ---
+window.toggleSidebarCollapse = function () {
+  document.body.classList.toggle('sidebar-collapsed');
+  const isCollapsed = document.body.classList.contains('sidebar-collapsed');
+  localStorage.setItem('sidebar_collapsed', isCollapsed ? 'true' : 'false');
+};
+
 window.toggleSidebarDropdown = function (element) {
   const group = element.closest('.sidebar-group');
   if (group) {
