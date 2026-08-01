@@ -138,25 +138,38 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 // --- THEME MANAGEMENT ---
-function initTheme() {
-  const savedTheme = localStorage.getItem('theme') || 'dark';
-  if (savedTheme === 'light') {
-    document.documentElement.classList.remove('dark');
-    if (themeToggleBtn) themeToggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
-  } else {
+function applyThemeClass(isDark) {
+  if (isDark) {
     document.documentElement.classList.add('dark');
-    if (themeToggleBtn) themeToggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+    document.documentElement.classList.remove('light-mode');
+  } else {
+    document.documentElement.classList.remove('dark');
+    document.documentElement.classList.add('light-mode');
   }
 }
 
-function toggleTheme() {
-  const isDark = document.documentElement.classList.toggle('dark');
-  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+function initTheme() {
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  const isDark = savedTheme !== 'light';
+  applyThemeClass(isDark);
   const icon = isDark ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
   if (themeToggleBtn) themeToggleBtn.innerHTML = icon;
   const sidebarToggle = document.getElementById('sidebar-theme-toggle');
   if (sidebarToggle) sidebarToggle.innerHTML = `${icon} Giao diện`;
-  showToast(isDark ? 'Đã chuyển sang chế độ tối' : 'Đã chuyển sang chế độ sáng');
+}
+
+function toggleTheme() {
+  const isCurrentlyDark = document.documentElement.classList.contains('dark');
+  const nextDark = !isCurrentlyDark;
+  applyThemeClass(nextDark);
+  localStorage.setItem('theme', nextDark ? 'dark' : 'light');
+
+  const icon = nextDark ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
+  if (themeToggleBtn) themeToggleBtn.innerHTML = icon;
+  const sidebarToggle = document.getElementById('sidebar-theme-toggle');
+  if (sidebarToggle) sidebarToggle.innerHTML = `${icon} Giao diện`;
+
+  showToast(nextDark ? 'Đã chuyển sang chế độ tối' : 'Đã chuyển sang chế độ sáng');
   if (!currentUser && typeof initGoogleSignIn === 'function') {
     initGoogleSignIn();
   }
