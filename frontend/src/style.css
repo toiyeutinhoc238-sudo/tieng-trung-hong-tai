@@ -19,83 +19,87 @@
   --transition-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Dark Mode Theme Tokens (Default - Inspired by HSKClub) */
-html.dark {
-  --bg-primary: #090d16;
-  --bg-secondary: #111827;
-  --bg-card: #1f2937;
-  --bg-glass: rgba(17, 24, 39, 0.85);
-  --border-glass: rgba(255, 255, 255, 0.08);
-  --border-glass-hover: rgba(99, 102, 241, 0.4);
-  
-  --text-primary: #f9fafb;
-  --text-secondary: #9ca3af;
-  --text-muted: #6b7280;
-  
-  --accent-primary: #6366f1; /* HSKClub Primary Indigo */
-  --accent-primary-hover: #4f46e5;
-  --accent-purple: #8b5cf6;
-  --accent-emerald: #10b981;
-  --accent-amber: #f59e0b;
-  --accent-rose: #f43f5e;
-  
-  --card-bg-front: #111827;
-  --card-bg-back: #1e1b4b;
-  
-  --success: #10b981;
-  --success-bg: rgba(16, 185, 129, 0.15);
-  --warning: #f59e0b;
-  --warning-bg: rgba(245, 158, 11, 0.15);
-  --danger: #ef4444;
-  --danger-bg: rgba(239, 68, 68, 0.15);
-  
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.35);
-  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
-  --shadow-glow: 0 0 25px rgba(99, 102, 241, 0.35);
-  
-  --scrollbar-thumb: #374151;
-  --scrollbar-track: #090d16;
-}
-
-/* Light Mode Theme Tokens (HSKClub Modern Clean White/Slate) */
+/* Cartoon / Gamified Playful Theme Tokens (Duolingo & Quizlet Inspired) */
 html {
-  --bg-primary: #f8fafc;
+  /* Fonts */
+  --font-sans: 'Mali', 'Be Vietnam Pro', -apple-system, sans-serif;
+  --font-display: 'Mali', cursive, sans-serif;
+  --font-chinese: 'Noto Sans SC', sans-serif;
+  
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 26px;
+  --radius-xl: 36px;
+  
+  /* Cartoon Colors (Vibrant, Friendly & Engaging for Students) */
+  --bg-primary: #f4f6fd;
   --bg-secondary: #ffffff;
   --bg-card: #ffffff;
-  --bg-glass: rgba(255, 255, 255, 0.9);
-  --border-glass: rgba(226, 232, 240, 0.8);
-  --border-glass-hover: rgba(99, 102, 241, 0.3);
+  --bg-glass: rgba(255, 255, 255, 0.95);
   
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #94a3b8;
+  --border-glass: #e5e7eb;
+  --border-glass-hover: #58cc02;
   
-  --accent-primary: #6366f1; /* HSKClub Primary Indigo */
-  --accent-primary-hover: #4f46e5;
-  --accent-purple: #8b5cf6;
-  --accent-emerald: #10b981;
-  --accent-amber: #f59e0b;
-  --accent-rose: #f43f5e;
+  --text-primary: #2b3a4a;
+  --text-secondary: #52657a;
+  --text-muted: #8b9eb0;
+  
+  --accent-primary: #58cc02; /* Duolingo Friendly Green */
+  --accent-primary-hover: #46a302;
+  --accent-blue: #1cb0f6;   /* Bright Sky Blue */
+  --accent-purple: #ce82ff; /* Cute Pastel Violet */
+  --accent-amber: #ffc800;  /* Cartoon Gold/Yellow */
+  --accent-rose: #ff4b4b;   /* Soft Coral Red */
   
   --card-bg-front: #ffffff;
-  --card-bg-back: #f5f3ff;
+  --card-bg-back: #eef8ff;
   
-  --success: #059669;
-  --success-bg: rgba(5, 150, 105, 0.1);
-  --warning: #d97706;
-  --warning-bg: rgba(217, 119, 6, 0.1);
-  --danger: #dc2626;
-  --danger-bg: rgba(220, 38, 38, 0.1);
+  --success: #58cc02;
+  --success-bg: #e5f9d3;
+  --warning: #ffb100;
+  --warning-bg: #fff5d6;
+  --danger: #ff4b4b;
+  --danger-bg: #ffe5e5;
   
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 16px rgba(148, 163, 184, 0.12);
-  --shadow-lg: 0 12px 30px rgba(99, 102, 241, 0.12);
-  --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.2);
+  /* 3D Cartoon Shadow / Press Effects */
+  --shadow-sm: 0 3px 0 #e5e7eb;
+  --shadow-md: 0 5px 0 #d1d5db;
+  --shadow-lg: 0 8px 0 #9ca3af;
+  --shadow-glow: 0 6px 20px rgba(88, 204, 2, 0.25);
+  
+  --btn-3d-green: 0 4px 0 #46a302;
+  --btn-3d-blue: 0 4px 0 #1899d6;
+  --btn-3d-amber: 0 4px 0 #e5b200;
+  --btn-3d-purple: 0 4px 0 #b45be6;
   
   --scrollbar-thumb: #cbd5e1;
-  --scrollbar-track: #f8fafc;
+  --scrollbar-track: #f4f6fd;
 }
+
+html.dark {
+  --bg-primary: #131f24;
+  --bg-secondary: #1a2b32;
+  --bg-card: #20353e;
+  --bg-glass: rgba(32, 53, 62, 0.95);
+  
+  --border-glass: #2b4550;
+  --border-glass-hover: #58cc02;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --card-bg-front: #20353e;
+  --card-bg-back: #182830;
+  
+  --shadow-sm: 0 3px 0 #182830;
+  --shadow-md: 0 5px 0 #0f1a20;
+  --shadow-lg: 0 8px 0 #0a1216;
+  --shadow-glow: 0 6px 25px rgba(88, 204, 2, 0.35);
+  
+  --scrollbar-thumb: #2b4550;
+  --scrollbar-track: #131f24;
+};
 
 /* Global Reset */
 * {
@@ -139,12 +143,12 @@ a {
   text-decoration: none;
 }
 
-/* Glassmorphism Panel & Glow Card Utilities */
+/* Glassmorphism & Cartoon Card Utilities */
 .glass-panel {
   background: var(--bg-glass);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--border-glass);
+  border: 2px solid var(--border-glass);
   box-shadow: var(--shadow-md);
   border-radius: var(--radius-lg);
   transition: all var(--transition-normal);
