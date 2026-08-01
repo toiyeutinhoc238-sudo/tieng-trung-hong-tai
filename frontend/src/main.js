@@ -3176,12 +3176,21 @@ function renderGamifiedRoadmapPath() {
     const nodeState = isCompleted ? 'node-done' : (isStarted ? 'node-active' : 'node-locked');
 
     const posClass = positions[idx % positions.length];
+    const crownHtml = isCompleted ? `<div style="position: absolute; top: -14px; font-size: 1.2rem; color: #fbbf24; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); z-index: 10;"><i class="fa-solid fa-crown"></i></div>` : '';
+    const starsHtml = `<div style="display: flex; gap: 3px; position: absolute; bottom: -16px; z-index: 10;">
+      <i class="fa-solid fa-star" style="font-size: 0.75rem; color: ${pct >= 33 ? '#fbbf24' : '#64748b'}; text-shadow: 0 1px 2px rgba(0,0,0,0.5);"></i>
+      <i class="fa-solid fa-star" style="font-size: 0.85rem; color: ${pct >= 66 ? '#fbbf24' : '#64748b'}; text-shadow: 0 1px 2px rgba(0,0,0,0.5); transform: translateY(-2px);"></i>
+      <i class="fa-solid fa-star" style="font-size: 0.75rem; color: ${pct === 100 ? '#fbbf24' : '#64748b'}; text-shadow: 0 1px 2px rgba(0,0,0,0.5);"></i>
+    </div>`;
 
     html += `
       <div class="roadmap-node-item ${posClass} ${nodeState}">
-        <div class="node-icon-circle" style="border-color: ${item.color};" onclick="goToRoadmapLevel('${hskVer}', '${item.level}')">
-          <i class="fa-solid ${iconClass}" style="color: ${item.color};"></i>
-          <span class="node-num" style="color: #fff;">${item.level}</span>
+        <div style="position: relative; display: flex; flex-direction: column; align-items: center;">
+          ${crownHtml}
+          <div class="node-icon-circle" onclick="goToRoadmapLevel('${hskVer}', '${item.level}')">
+            <span class="node-num">${item.level}</span>
+          </div>
+          ${starsHtml}
         </div>
 
         <div class="node-info-card">
@@ -3191,7 +3200,7 @@ function renderGamifiedRoadmapPath() {
           </div>
           <div class="node-card-sub">${item.desc} (${memorizedWords}/${totalWords} từ)</div>
           <div class="node-card-actions" style="display: flex; gap: 8px;">
-            <button class="btn-node-start" style="background: ${item.color};" onclick="goToRoadmapLevel('${hskVer}', '${item.level}')">
+            <button class="btn-node-start" style="background: linear-gradient(180deg, ${item.color} 0%, #1e293b 140%); border-bottom: 3px solid rgba(0,0,0,0.3);" onclick="goToRoadmapLevel('${hskVer}', '${item.level}')">
               Khám Phá Cấp ${item.level} <i class="fa-solid fa-arrow-right"></i>
             </button>
             <button class="btn-node-start" style="background: rgba(255,255,255,0.1); width: auto;" onclick="window.location.href='/quiz-game.html?level=${item.level}'" title="Thi trắc nghiệm">
