@@ -252,21 +252,26 @@
     </div>
 
     <!-- VIP Voice Selection Control Bar (Rõ ràng & Nổi bật) -->
-    <div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(167, 139, 250, 0.12)); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 14px; padding: 14px 20px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.2);">
+    <div
+      style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(167, 139, 250, 0.12)); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 14px; padding: 14px 20px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.2);">
       <div style="display: flex; align-items: center; gap: 10px;">
-        <div style="width: 36px; height: 36px; border-radius: 50%; background: #3b82f6; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
+        <div
+          style="width: 36px; height: 36px; border-radius: 50%; background: #3b82f6; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
           <i class="fa-solid fa-microphone"></i>
         </div>
         <div>
-          <div style="font-weight: 800; font-size: 0.95rem; color: #fff;">Cấu Hình Giọng Đọc Phát Âm (Voice Engine)</div>
-          <div style="font-size: 0.8rem; color: #94a3b8;">Chọn giọng đọc AI chuẩn để nghe khi bấm vào từ vựng & bảng phát âm</div>
+          <div style="font-weight: 800; font-size: 0.95rem; color: #fff;">Cấu Hình Giọng Đọc Phát Âm (Voice Engine)
+          </div>
+          <div style="font-size: 0.8rem; color: #94a3b8;">Chọn giọng đọc AI chuẩn để nghe khi bấm vào từ vựng & bảng
+            phát âm</div>
         </div>
       </div>
 
-        <span style="font-size: 0.85rem; font-weight: 700; color: #10b981;">Giọng Đọc Chuẩn:</span>
-        <select id="voice-engine-select" style="background: #0f172a; border: 1.5px solid #10b981; color: #fff; padding: 8px 16px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; outline: none; cursor: pointer;">
-          <option value="baidu-female" selected>🇨🇳 Baidu Nữ (Giọng Bắc Kinh chuẩn)</option>
-        </select>
+      <span style="font-size: 0.85rem; font-weight: 700; color: #10b981;">Giọng Đọc Chuẩn:</span>
+      <select id="voice-engine-select"
+        style="background: #0f172a; border: 1.5px solid #10b981; color: #fff; padding: 8px 16px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; outline: none; cursor: pointer;">
+        <option value="baidu-female" selected>🇨🇳 Baidu Nữ (Giọng Bắc Kinh chuẩn)</option>
+      </select>
     </div>
 
     <!-- Dynamic Result Box -->
@@ -307,7 +312,8 @@
             <button class="audio-btn" onclick="window.speakZh('h')"><i class="fa-solid fa-volume-high"></i></button>
           </div>
           <p style="color: #94a3b8; font-size: 0.88rem;">Âm đầu <b>h-</b> trong tiếng Việt gần như giữ nguyên thành
-            <b>h</b> trong Pinyin Tiếng Trung.</p>
+            <b>h</b> trong Pinyin Tiếng Trung.
+          </p>
           <div class="example-box">
             <div><span class="zh">學</span> (Học) ➔ <b>xué / húe</b></div>
             <div><span class="zh">海</span> (Hải) ➔ <b>hǎi</b></div>
@@ -335,7 +341,8 @@
             <button class="audio-btn" onclick="window.speakZh('d')"><i class="fa-solid fa-volume-high"></i></button>
           </div>
           <p style="color: #94a3b8; font-size: 0.88rem;">Âm <b>đ / t</b> Hán-Việt chuyển thành <b>d</b> (không bật),
-            <b>th</b> chuyển thành <b>t</b> (bật hơi).</p>
+            <b>th</b> chuyển thành <b>t</b> (bật hơi).
+          </p>
           <div class="example-box">
             <div><span class="zh">多</span> (Đa) ➔ <b>duō</b></div>
             <div><span class="zh">天</span> (Thiên) ➔ <b>tiān</b></div>
@@ -363,7 +370,8 @@
             <button class="audio-btn" onclick="window.speakZh('ri')"><i class="fa-solid fa-volume-high"></i></button>
           </div>
           <p style="color: #94a3b8; font-size: 0.88rem;">Phụ âm <b>nh-</b> Hán-Việt thường chuyển thành <b>r-</b> hoặc
-            <b>n-</b> trong Pinyin.</p>
+            <b>n-</b> trong Pinyin.
+          </p>
           <div class="example-box">
             <div><span class="zh">日</span> (Nhật) ➔ <b>rì</b></div>
             <div><span class="zh">人</span> (Nhân) ➔ <b>rén</b></div>
@@ -377,7 +385,8 @@
             <button class="audio-btn" onclick="window.speakZh('wang')"><i class="fa-solid fa-volume-high"></i></button>
           </div>
           <p style="color: #94a3b8; font-size: 0.88rem;">Phụ âm <b>v-</b> Hán-Việt thường biến đổi thành <b>w-</b> hoặc
-            <b>y-</b> trong Tiếng Trung.</p>
+            <b>y-</b> trong Tiếng Trung.
+          </p>
           <div class="example-box">
             <div><span class="zh">王</span> (Vương) ➔ <b>wáng</b></div>
             <div><span class="zh">文</span> (Văn) ➔ <b>wén</b></div>
@@ -460,7 +469,8 @@
               p, m, f)</span>
           </div>
           <p style="color: #94a3b8; font-size: 0.88rem;"><b>b</b> (bô), <b>p</b> (phô - bật hơi), <b>m</b> (mô),
-            <b>f</b> (phô).</p>
+            <b>f</b> (phô).
+          </p>
           <div style="display: flex; gap: 8px; margin-top: 10px;">
             <button class="btn btn-sm btn-outline" onclick="window.speakZh('bō')">b</button>
             <button class="btn btn-sm btn-outline" onclick="window.speakZh('pō')">p</button>
@@ -475,7 +485,8 @@
               (d, t, n, l)</span>
           </div>
           <p style="color: #94a3b8; font-size: 0.88rem;"><b>d</b> (tơ), <b>t</b> (thơ - bật hơi), <b>n</b> (nơ),
-            <b>l</b> (lơ).</p>
+            <b>l</b> (lơ).
+          </p>
           <div style="display: flex; gap: 8px; margin-top: 10px;">
             <button class="btn btn-sm btn-outline" onclick="window.speakZh('dē')">d</button>
             <button class="btn btn-sm btn-outline" onclick="window.speakZh('tē')">t</button>
@@ -516,7 +527,8 @@
               (zh, ch, sh, r)</span>
           </div>
           <p style="color: #94a3b8; font-size: 0.88rem;"><b>zh</b> (trư), <b>ch</b> (trư - bật hơi), <b>sh</b> (sư),
-            <b>r</b> (rư).</p>
+            <b>r</b> (rư).
+          </p>
           <div style="display: flex; gap: 8px; margin-top: 10px;">
             <button class="btn btn-sm btn-outline" onclick="window.speakZh('zhi')">zh</button>
             <button class="btn btn-sm btn-outline" onclick="window.speakZh('chi')">ch</button>
@@ -580,7 +592,8 @@
                 class="fa-solid fa-volume-high"></i></button>
           </div>
           <p style="color: #94a3b8; font-size: 0.88rem;">Chữ <b>不</b> vốn đọc thanh 4 (bù), nhưng khi đứng trước từ mang
-            <b>Thanh 4</b> thì đọc đổi thành <b>Thanh 2 (bú)</b>.</p>
+            <b>Thanh 4</b> thì đọc đổi thành <b>Thanh 2 (bú)</b>.
+          </p>
           <div class="example-box">
             <div><span class="zh">不是</span> <i>bù shì</i> ➔ đọc thành <b>bú shì</b></div>
             <div><span class="zh">不对</span> <i>bù duì</i> ➔ đọc thành <b>bú duì</b></div>
@@ -604,10 +617,10 @@
 
     window.speakZh = function (text) {
       if (!text) return;
-      
+
       const selectEl = document.getElementById('voice-engine-select');
       const voice = selectEl ? selectEl.value : 'baidu-female';
-      
+
       // Stop any currently playing audio
       if (currentAudio) {
         currentAudio.pause();
