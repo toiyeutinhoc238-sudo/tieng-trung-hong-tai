@@ -871,13 +871,13 @@
             <i class="fa-solid fa-print"></i> In Từ Này (1 Trang)
           </button>
           <button class="action-btn" id="print-batch-btn" style="flex:1.2; font-family:'Be Vietnam Pro','Segoe UI',sans-serif; background: linear-gradient(135deg, #3b82f6, #1d4ed8); color:#fff; border:none; font-size:0.95rem; padding:12px; font-weight:700; border-radius:12px; box-shadow:0 4px 15px rgba(59,130,246,0.3); cursor:pointer;" onclick="openPrintWorksheetModal('batch')">
-            <i class="fa-solid fa-layer-group"></i> In Phiếu Theo Bài (<span id="btn-selected-count">Tất cả</span>)
+            <i class="fa-solid fa-layer-group"></i> In Những Từ Đã Chọn (<span id="btn-selected-count">Tất cả</span>)
           </button>
         </div>
 
         <!-- Status Alert Banner -->
         <div id="status-alert-banner" class="status-alert-banner" style="margin-top:12px;">
-          <i class="fa-solid fa-info-circle" style="color:#60a5fa;"></i> Chọn từ tùy thích hoặc bấm <strong>"In Phiếu Theo Bài"</strong> để in trọn bộ bài tập (mỗi từ 1 trang A4).
+          <i class="fa-solid fa-info-circle" style="color:#60a5fa;"></i> Chọn từ tùy thích hoặc bấm <strong>"In Những Từ Đã Chọn"</strong> để in trọn bộ bài tập (mỗi từ 1 trang A4).
         </div>
       </div>
 
@@ -1191,7 +1191,7 @@
       const selCount = selectedPrintWords.size;
       const btnSelEl = document.getElementById('btn-selected-count');
       if (btnSelEl) {
-        btnSelEl.textContent = selCount > 0 ? `${selCount} từ chọn` : `Tất cả ${filteredVocab.length} từ`;
+        btnSelEl.textContent = selCount > 0 ? `${selCount} từ đã chọn` : `Tất cả ${filteredVocab.length} từ`;
       }
 
       // Update select-all button label
