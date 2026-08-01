@@ -1156,12 +1156,16 @@
                 const vanMauMap = {
                   "a": "vm_01_a.mp4", "o": "vm_02_o.mp4", "e": "vm_03_e.mp4", "i": "vm_04_i.mp4", "u": "vm_05_u.mp4", "ü": "vm_06_v_u.mp4",
                   "ai": "vm_07_ai.mp4", "ei": "vm_08_ei.mp4", "ao": "vm_09_ao.mp4", "ou": "vm_10_ou.mp4", "ia": "vm_11_ia.mp4", "ie": "vm_12_ie.mp4",
-                  "ua": "vm_13_ua.mp4", "uo": "vm_14_uo.mp4", "üe": "vm_15_ve_ue.mp4", "iao": "vm_16_iao.mp4", "iu": "vm_17_iu.mp4", "uai": "vm_18_uai.mp4", "ui": "vm_19_ui.mp4",
+                  "ua": "vm_13_ua.mp4", "uo": "vm_14_uo.mp4", "üe": "vm_15_ve_ue.mp4", "iao": "vm_16_iao.mp4", "iu": "vm_17_iu.mp4", "iou": "vm_17_iu.mp4",
+                  "uai": "vm_18_uai.mp4", "ui": "vm_19_ui.mp4", "uei": "vm_19_ui.mp4",
                   "an": "vm_20_an.mp4", "en": "vm_21_en.mp4", "in": "vm_22_in.mp4", "ün": "vm_23_vn_un.mp4", "ian": "vm_24_ian.mp4", "uan": "vm_25_uan.mp4",
-                  "üan": "vm_26_van_uan.mp4", "un": "vm_27_un.mp4", "ang": "vm_28_ang.mp4", "eng": "vm_29_eng.mp4", "ing": "vm_30_ing.mp4", "ong": "vm_31_ong.mp4",
+                  "üan": "vm_26_van_uan.mp4", "un": "vm_27_un.mp4", "uen": "vm_27_un.mp4", "ang": "vm_28_ang.mp4", "eng": "vm_29_eng.mp4", "ing": "vm_30_ing.mp4", "ong": "vm_31_ong.mp4",
                   "iang": "vm_32_iang.mp4", "uang": "vm_33_uang.mp4", "iong": "vm_34_iong.mp4", "ueng": "vm_35_ueng.mp4", "er": "vm_36_er.mp4"
                 };
-                const videoFileName = vanMauMap[item.char] || "vm_01_a.mp4";
+                
+                // Chuẩn hóa tên âm (loại bỏ phần chú thích viết tắt trong ngoặc nếu có)
+                const charKey = (item.char || '').split(' ')[0].trim();
+                const videoFileName = vanMauMap[charKey] || vanMauMap[item.char] || "vm_01_a.mp4";
 
                 return `
                   <div class="mouth-diagram-box" style="text-align: center; background: rgba(30, 41, 59, 0.9); padding: 12px; border-radius: 16px; border: 1px solid rgba(59, 130, 246, 0.3);">
