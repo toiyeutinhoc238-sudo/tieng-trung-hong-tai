@@ -7458,6 +7458,27 @@ window.toggleSidebarDropdown = function (element) {
   }
 };
 
+window.showComingSoonNotice = function (featureName = 'Tính năng') {
+  let modal = document.getElementById('coming-soon-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'coming-soon-modal';
+    modal.className = 'modal-overlay';
+    modal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;';
+    document.body.appendChild(modal);
+  }
+  modal.innerHTML = `
+    <div style="background: var(--bg-primary, #1e293b); border: 1px solid var(--border-glass, rgba(255,255,255,0.15)); border-radius: 20px; width: 90%; max-width: 420px; padding: 28px; text-align: center; color: #fff; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
+      <button onclick="document.getElementById('coming-soon-modal').style.display='none'" style="position: absolute; top: 14px; right: 14px; background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer;">&times;</button>
+      <div style="font-size: 3rem; margin-bottom: 10px;">🚀</div>
+      <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 8px; color: #f59e0b;">${featureName}</h3>
+      <p style="font-size: 0.9rem; color: #cbd5e1; margin-bottom: 20px; line-height: 1.5;">Chức năng này đang được tối ưu phát triển và sẽ sớm ra mắt trong thời gian tới!</p>
+      <button class="btn btn-primary" onclick="document.getElementById('coming-soon-modal').style.display='none'" style="background: #3b82f6; border: none; color: #fff; padding: 10px 24px; border-radius: 10px; font-weight: 700; cursor: pointer; width: 100%;">Đã hiểu</button>
+    </div>
+  `;
+  modal.style.display = 'flex';
+};
+
 window.showHanVietRulesModal = function () {
   let modal = document.getElementById('han-viet-rules-modal');
   if (!modal) {
