@@ -5019,6 +5019,70 @@ html:not(.dark) #about-hongtai-modal p {
   color: #475569 !important;
 }
 
+/* About Hongtai Modal Theme Styles */
+html.dark #about-hongtai-modal .about-quote-box {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95)) !important;
+  color: #f1f5f9 !important;
+  border-left-color: #38bdf8 !important;
+}
+html:not(.dark) #about-hongtai-modal .about-quote-box {
+  background: #f0f9ff !important;
+  color: #0f172a !important;
+  border-left-color: #0284c7 !important;
+}
+
+html.dark #about-hongtai-modal .about-card-box {
+  background: rgba(15, 23, 42, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #cbd5e1 !important;
+}
+html:not(.dark) #about-hongtai-modal .about-card-box {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #334155 !important;
+}
+
+html.dark #about-hongtai-modal .about-card-box p {
+  color: #cbd5e1 !important;
+}
+html:not(.dark) #about-hongtai-modal .about-card-box p {
+  color: #475569 !important;
+}
+
+html.dark #about-hongtai-modal .about-mission-box {
+  background: rgba(239, 68, 68, 0.12) !important;
+  border: 1px solid rgba(239, 68, 68, 0.3) !important;
+}
+html:not(.dark) #about-hongtai-modal .about-mission-box {
+  background: #fef2f2 !important;
+  border: 1px solid #fca5a5 !important;
+}
+
+html.dark #about-hongtai-modal .about-mission-title {
+  color: #ffffff !important;
+}
+html:not(.dark) #about-hongtai-modal .about-mission-title {
+  color: #991b1b !important;
+}
+
+html.dark #about-hongtai-modal .about-mission-box p {
+  color: #cbd5e1 !important;
+}
+html:not(.dark) #about-hongtai-modal .about-mission-box p {
+  color: #7f1d1d !important;
+}
+
+html.dark #about-hongtai-modal .about-modal-footer {
+  background: rgba(15, 23, 42, 0.5) !important;
+  border-top-color: rgba(255, 255, 255, 0.1) !important;
+  color: #94a3b8 !important;
+}
+html:not(.dark) #about-hongtai-modal .about-modal-footer {
+  background: #f1f5f9 !important;
+  border-top-color: #e2e8f0 !important;
+  color: #64748b !important;
+}
+
 /* --- ZUBI DASHBOARD TABLE & SECTION TITLE STYLES --- */
 html.dark .zubi-section-title {
   color: #ffffff !important;
