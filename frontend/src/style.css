@@ -6104,6 +6104,15 @@ html.light-mode .sidebar-profile-card {
   color: #0f172a !important;
 }
 
+html.light-mode .sidebar-profile-card .user-name {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+html.light-mode .sidebar-profile-card .user-sub {
+  color: #64748b !important;
+}
+
 html.light-mode .sidebar-profile-card:hover {
   background: #f1f5f9 !important;
   border-color: #2563eb !important;
@@ -6130,33 +6139,49 @@ html.dark .sidebar-menu-item,
 html.dark .sidebar-item,
 html.dark .sidebar-subitem,
 html.dark .sidebar-dropdown-toggle {
-  color: #94a3b8 !important;
+  color: #cbd5e1 !important;
 }
 
 html.dark .sidebar-menu-item:hover,
 html.dark .sidebar-item:hover,
 html.dark .sidebar-subitem:hover,
 html.dark .sidebar-dropdown-toggle:hover {
-  background: rgba(255, 255, 255, 0.06) !important;
-  color: #f8fafc !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
 }
 
 html.dark .sidebar-menu-item.active,
 html.dark .sidebar-item.active,
 html.dark .sidebar-subitem.active {
-  background: rgba(59, 130, 246, 0.15) !important;
+  background: rgba(59, 130, 246, 0.25) !important;
   color: #60a5fa !important;
+  font-weight: 700 !important;
 }
 
 html.dark .sidebar-profile-card {
-  background: #131c31 !important;
-  border-color: rgba(255, 255, 255, 0.1) !important;
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
   color: #ffffff !important;
 }
 
+html.dark .user-name {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+html.dark .user-sub,
+html.dark .sidebar-section-label {
+  color: #94a3b8 !important;
+}
+
 html.dark #sidebar-theme-toggle {
-  background: #131c31 !important;
-  border-color: rgba(255, 255, 255, 0.1) !important;
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+
+html.dark #sidebar-theme-toggle:hover {
+  background: #334155 !important;
   color: #ffffff !important;
 }
 
