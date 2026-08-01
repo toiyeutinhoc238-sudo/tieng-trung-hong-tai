@@ -1443,7 +1443,14 @@
       const showMeaning = meaningCheck ? meaningCheck.checked : true;
 
       const COLS = 12;
-      const BOX = ROWS > 7 ? 48 : (ROWS === 7 ? 52 : 56.5);
+      let BOX = 50;
+      if (ROWS === 4) BOX = 58;
+      else if (ROWS === 5) BOX = 54;
+      else if (ROWS === 6) BOX = 50;
+      else if (ROWS === 7) BOX = 44;
+      else if (ROWS === 8) BOX = 39;
+      else if (ROWS >= 9) BOX = 32;
+
       const todayStr = new Date().toLocaleDateString('vi-VN');
 
       document.getElementById('modal-print-total-pages').textContent = wordsToPrint.length;
@@ -1689,7 +1696,7 @@
           <style>
             @page {
               size: A4 portrait;
-              margin: 8mm 10mm;
+              margin: 5mm 8mm;
             }
             * {
               box-sizing: border-box;
@@ -1706,10 +1713,14 @@
             .print-page-area {
               width: 100% !important;
               max-width: 100% !important;
+              max-height: 280mm !important;
+              overflow: hidden !important;
               box-shadow: none !important;
               border: none !important;
               padding: 0 !important;
               margin: 0 !important;
+              page-break-after: always !important;
+              break-after: page !important;
             }
             .no-print {
               display: none !important;
