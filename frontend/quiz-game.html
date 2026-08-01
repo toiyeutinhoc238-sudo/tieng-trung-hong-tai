@@ -95,18 +95,23 @@
 
     html.light-mode body,
     body.light-mode {
-      background-color: #e2e8f0 !important;
+      background-color: #f1f5f9 !important;
       color: #0f172a !important;
     }
 
     html.light-mode .app-container {
-      background: #ffffff !important;
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.12) !important;
+      background: #f8fafc !important;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    html.light-mode .modal-overlay {
+      background: rgba(15, 23, 42, 0.4) !important;
+      backdrop-filter: blur(8px) !important;
     }
 
     html.light-mode .top-bar {
-      background: rgba(0, 0, 0, 0.04) !important;
-      border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+      background: #ffffff !important;
+      border-bottom-color: #e2e8f0 !important;
     }
 
     html.light-mode .player-details h4,
@@ -130,7 +135,8 @@
     html.light-mode .modal-content {
       background: #ffffff !important;
       color: #0f172a !important;
-      border-color: #e2e8f0 !important;
+      border: 1px solid #cbd5e1 !important;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15) !important;
     }
 
     html.light-mode .modal-title {
