@@ -6071,11 +6071,11 @@ html.light-mode .lesson-item {
   color: #1e293b !important;
 }
 
-/* ─── GLOBAL ABSOLUTE LIGHT MODE TEXT CONTRAST OVERRIDES ─── */
+/* ─── GLOBAL ABSOLUTE LIGHT MODE TEXT & ROADMAP OVERRIDES ─── */
 html.light-mode {
-  --bg-primary: #f8fafc;
+  --bg-primary: #f1f5f9;
   --bg-secondary: #ffffff;
-  --bg-glass: rgba(255, 255, 255, 0.85);
+  --bg-glass: rgba(255, 255, 255, 0.9);
   --border-glass: rgba(0, 0, 0, 0.1);
   --border-glass-hover: rgba(0, 0, 0, 0.2);
   --text-primary: #0f172a;
@@ -6087,7 +6087,7 @@ html.light-mode {
 }
 
 html.light-mode body {
-  background-color: #f1f5f9 !important;
+  background-color: #e2e8f0 !important;
   color: #0f172a !important;
 }
 
@@ -6100,7 +6100,7 @@ html.light-mode h5:not(.btn *),
 html.light-mode h6:not(.btn *),
 html.light-mode p:not(.btn *),
 html.light-mode span:not(.btn *):not(.badge):not(.badge *):not(.c-red):not(.c-blue):not(.c-green):not(.c-yellow),
-html.light-mode div:not(.btn *):not(.badge *),
+html.light-mode div:not(.btn *):not(.badge *):not(.btn-node-start),
 html.light-mode td,
 html.light-mode th,
 html.light-mode li,
@@ -6109,12 +6109,12 @@ html.light-mode label {
 }
 
 /* Đảm bảo chữ trắng inline style chuyển thành tối dứt khoát */
-html.light-mode [style*="color: #fff"]:not(.btn *):not(.btn):not(.badge *),
-html.light-mode [style*="color:#fff"]:not(.btn *):not(.btn):not(.badge *),
-html.light-mode [style*="color: #ffffff"]:not(.btn *):not(.btn):not(.badge *),
-html.light-mode [style*="color:#ffffff"]:not(.btn *):not(.btn):not(.badge *),
-html.light-mode [style*="color: white"]:not(.btn *):not(.btn):not(.badge *),
-html.light-mode [style*="color:white"]:not(.btn *):not(.btn):not(.badge *) {
+html.light-mode [style*="color: #fff"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start),
+html.light-mode [style*="color:#fff"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start),
+html.light-mode [style*="color: #ffffff"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start),
+html.light-mode [style*="color:#ffffff"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start),
+html.light-mode [style*="color: white"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start),
+html.light-mode [style*="color:white"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start) {
   color: #0f172a !important;
 }
 
@@ -6148,6 +6148,71 @@ html.light-mode [style*="background:#0b0f19"] {
   border-color: #cbd5e1 !important;
 }
 
+/* ─── ROADMAP SPECIFIC LIGHT MODE OVERRIDES ─── */
+html.light-mode .roadmap-header-banner {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #4338ca 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 30px rgba(79, 70, 229, 0.25) !important;
+}
+html.light-mode .roadmap-header-banner h2,
+html.light-mode .roadmap-header-banner p {
+  color: #ffffff !important;
+}
+html.light-mode .roadmap-ver-pill {
+  background: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  color: #334155 !important;
+}
+html.light-mode .roadmap-ver-pill:hover {
+  background: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+html.light-mode .roadmap-ver-pill.active {
+  background: #3b82f6 !important;
+  border-color: #2563eb !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3) !important;
+}
+
+/* Roadmap Level Nodes & Cards in Light Mode */
+html.light-mode .node-info-card {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
+}
+html.light-mode .node-card-title {
+  color: #0f172a !important;
+}
+html.light-mode .node-card-sub {
+  color: #475569 !important;
+}
+html.light-mode .node-icon-circle {
+  background: #f1f5f9 !important;
+  border-color: #94a3b8 !important;
+  color: #475569 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+html.light-mode .node-done .node-icon-circle {
+  background: linear-gradient(135deg, #059669, #10b981) !important;
+  border-color: #059669 !important;
+  color: #ffffff !important;
+}
+html.light-mode .node-active .node-icon-circle {
+  background: linear-gradient(135deg, #2563eb, #3b82f6) !important;
+  border-color: #1d4ed8 !important;
+  color: #ffffff !important;
+}
+
+/* Foreign / Sidebar Elements in Light Mode */
+html.light-mode .app-sidebar {
+  background: #ffffff !important;
+  border-right-color: #e2e8f0 !important;
+}
+html.light-mode .sidebar-section-label {
+  color: #64748b !important;
+}
+
 /* Ngoại lệ: Giữ chữ trắng tương phản cho Nút bấm màu, Thẻ Badge màu */
 html.light-mode .btn-primary,
 html.light-mode .btn-success,
@@ -6157,6 +6222,7 @@ html.light-mode .ans-btn,
 html.light-mode .c-red,
 html.light-mode .c-blue,
 html.light-mode .c-yellow,
-html.light-mode .c-green {
+html.light-mode .c-green,
+html.light-mode .btn-node-start {
   color: #ffffff !important;
 }
