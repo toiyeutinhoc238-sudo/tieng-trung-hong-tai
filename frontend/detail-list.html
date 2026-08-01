@@ -378,10 +378,15 @@
           từ vựng theo cấu hình lọc của bạn.</p>
       </div>
 
-      <div style="display: flex; gap: 8px; align-items: center;">
+      <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
         <button id="theme-toggle" class="theme-toggle-btn-top" onclick="window.toggleTheme()"
           title="Chuyển đổi Giao diện Sáng/Tối">
           <i class="fa-solid fa-moon"></i> <span class="theme-btn-text">Giao diện Sáng/Tối</span>
+        </button>
+        <button id="download-hsk3-pdf-btn" class="btn btn-secondary btn-sm" onclick="window.downloadHsk30Pdf()"
+          title="Tải File PDF Từ Vựng HSK 3.0 Mới Chuẩn Xác"
+          style="display: flex; align-items: center; gap: 6px; padding: 10px 16px; background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; font-weight: 700; cursor: pointer;">
+          <i class="fa-solid fa-file-pdf"></i> Tải PDF HSK 3.0 Chuẩn
         </button>
         <button id="export-excel-btn" class="btn btn-secondary btn-sm"
           style="display: flex; align-items: center; gap: 6px; padding: 10px 16px; background: rgba(16, 185, 129, 0.15); color: var(--accent-teal); border: 1px solid rgba(16, 185, 129, 0.3);">
@@ -598,6 +603,22 @@
         exportExcelBtn.addEventListener('click', exportToExcel);
       }
     });
+
+    window.downloadHsk30Pdf = function() {
+      const pdfMap = {
+        '1': '/grammar-files/hsk 3.0 new chuan xac/HSK1.pdf',
+        '2': '/grammar-files/hsk 3.0 new chuan xac/HSK2.pdf',
+        '3': '/grammar-files/hsk 3.0 new chuan xac/HSK3.pdf',
+        '4': '/grammar-files/hsk 3.0 new chuan xac/HSK4.pdf',
+        '5': '/grammar-files/hsk 3.0 new chuan xac/HSK5.pdf',
+        '6': '/grammar-files/hsk 3.0 new chuan xac/HSK6.pdf',
+        '7-9': '/grammar-files/hsk 3.0 new chuan xac/HSK 7-9.pdf'
+      };
+      const currentLevel = activeLevel === 'all' ? '1' : activeLevel;
+      const pdfUrl = pdfMap[currentLevel] || pdfMap['1'];
+      window.open(pdfUrl, '_blank');
+      showToast(`Đã mở file PDF Từ Vựng HSK ${currentLevel} 3.0 Chuẩn Xác 📄`);
+    };
 
     function updateFiltersBadges() {
       const customEl = document.getElementById('badge-custom');

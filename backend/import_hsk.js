@@ -12,7 +12,10 @@ const HSK2_EXTRACTED_PATH = path.join(__dirname, 'hsk2_extracted.json');
 const files = [
   { level: 1, filename: 'TỔNG HỢP TỪ VỰNG HSK 1 PHIÊN BẢN 3.0.xlsx' },
   { level: 2, filename: 'TỔNG HỢP TỪ VỰNG HSK 2 PHIÊN BẢN 3.0.xlsx' },
-  { level: 3, filename: 'TỔNG HỢP TỪ VỰNG HSK 3 PHIÊN BẢN 3.0.xlsx' }
+  { level: 3, filename: 'TỔNG HỢP TỪ VỰNG HSK 3 PHIÊN BẢN 3.0.xlsx' },
+  { level: 4, filename: 'TỔNG HỢP TỪ VỰNG HSK 4 PHIÊN BẢN 3.0.xlsx' },
+  { level: 5, filename: 'TỔNG HỢP TỪ VỰNG HSK 5 PHIÊN BẢN 3.0.xlsx' },
+  { level: 6, filename: 'TỔNG HỢP TỪ VỰNG HSK 6 PHIÊN BẢN 3.0.xlsx' }
 ];
 
 const LESSONS_METADATA = {
@@ -320,8 +323,8 @@ async function run() {
   let currentId = 1;
 
   // Separate textbook words by level and PDF lesson
-  const textbookGroups3 = { 1: {}, 2: {}, 3: {} };
-  const unmatchedByLevel3 = { 1: [], 2: [], 3: [] };
+  const textbookGroups3 = { 1: {}, 2: {}, 3: {}, 4: {}, 5: {}, 6: {} };
+  const unmatchedByLevel3 = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [] };
 
   parsedWords3.forEach(item => {
     const pdfInfo = getPdfLessonInfo(item.word);
@@ -329,11 +332,13 @@ async function run() {
     if (pdfInfo) {
       const lvl = pdfInfo.level;
       const les = pdfInfo.lesson;
+      if (!textbookGroups3[lvl]) textbookGroups3[lvl] = {};
       if (!textbookGroups3[lvl][les]) {
         textbookGroups3[lvl][les] = [];
       }
       textbookGroups3[lvl][les].push(item);
     } else {
+      if (!unmatchedByLevel3[item.excelLevel]) unmatchedByLevel3[item.excelLevel] = [];
       unmatchedByLevel3[item.excelLevel].push(item);
     }
   });
@@ -382,13 +387,13 @@ async function run() {
   }
 
   // Process and split textbook lessons for HSK 3.0
-  const nextLessonIdForLevel3 = { 1: 1, 2: 1, 3: 1 };
+  const nextLessonIdForLevel3 = { 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1 };
 
-  for (let lvl = 1; lvl <= 3; lvl++) {
-    const maxPdfLesson = lvl === 1 ? 15 : (lvl === 2 ? 15 : 18);
+  for (let lvl = 1; lvl <= 6; lvl++) {
+    const maxPdfLesson = lvl === 1 ? 15 : (lvl === 2 ? 15 : 20);
 
     for (let les = 1; les <= maxPdfLesson; les++) {
-      const words = textbookGroups3[lvl][les] || [];
+      const words = (textbookGroups3[lvl] && textbookGroups3[lvl][les]) || [];
       if (words.length === 0) continue;
 
       const meta = (LESSONS_METADATA[lvl] && LESSONS_METADATA[lvl][les]) || { title: `Bài ${les}`, desc: `Từ vựng HSK ${lvl} Bài ${les}` };
@@ -414,8 +419,8 @@ async function run() {
   }
 
   // Process unmatched words into supplementary lessons for HSK 3.0
-  for (let lvl = 1; lvl <= 3; lvl++) {
-    const list = unmatchedByLevel3[lvl];
+  for (let lvl = 1; lvl <= 6; lvl++) {
+    const list = unmatchedByLevel3[lvl] || [];
     list.sort((a, b) => a.word.localeCompare(b.word, 'zh'));
 
     const chunks = splitIntoParts(list, 20, 13);
@@ -556,8 +561,32 @@ async function run() {
     console.warn('Could not read yct_extracted.json or it is empty yet.', err.message);
   }
 
+  // 5c. Parse and merge HSK 7-9 vocabulary from hsk79_vocab_new.json
+  const HSK79_VOCAB_PATH = path.join(__dirname, 'hsk79_vocab_new.json');
+  let hsk79Count = 0;
+  try {
+    const hsk79Content = await fs.readFile(HSK79_VOCAB_PATH, 'utf-8');
+    const hsk79Data = JSON.parse(hsk79Content);
+    console.log(`\nProcessing HSK 7-9 Vocabulary: ${hsk79Data.length} items.`);
+
+    hsk79Data.forEach((w, idx) => {
+      appendWordToList({
+        word: w.word,
+        pinyin: w.pinyin,
+        meaning: w.meaning,
+        category: w.category || 'New HSK 7-9',
+        example_zh: w.example_zh || '',
+        example_vi: w.example_vi || ''
+      }, '7-9', w.lessonId || 'hsk79_topic1', w.lessonTitle || 'New HSK 7-9', w.lessonDesc || 'New HSK 7-9 Cao cấp', '3.0');
+      hsk79Count++;
+    });
+  } catch (err) {
+    console.warn('Could not read hsk79_vocab_new.json:', err.message);
+  }
+
   const totalBuiltInCount = finalList.length;
   console.log(`\nTotal built-in items (HSK + YCT): ${totalBuiltInCount}`);
+  console.log(`HSK 7-9 total words: ${hsk79Count}`);
   console.log(`YCT total words: ${yctCount}`);
 
   // 6. Append custom words at the end of database list with updated IDs (>= 100000)
