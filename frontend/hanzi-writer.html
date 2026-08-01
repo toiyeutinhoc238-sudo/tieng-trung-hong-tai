@@ -454,20 +454,29 @@
       body > *:not(#print-worksheet-modal) {
         display: none !important;
       }
+      /* Ẩn các nút bấm thanh công cụ & tiêu đề điều khiển trong modal khi in */
+      .no-print,
+      #print-worksheet-modal button,
+      #print-worksheet-modal select,
+      #print-worksheet-modal label,
+      #print-worksheet-modal input,
+      #print-worksheet-modal > div > div:first-child {
+        display: none !important;
+      }
       /* Cấu hình để hiển thị duy nhất tờ giấy in, bỏ hết các khung modal rác */
       #print-worksheet-modal {
         display: block !important;
         position: static !important;
         width: 100% !important;
         height: auto !important;
-        background: transparent !important;
+        background: #ffffff !important;
         padding: 0 !important;
         margin: 0 !important;
         box-shadow: none !important;
         border: none !important;
       }
       #print-worksheet-modal > div {
-        background: transparent !important;
+        background: #ffffff !important;
         border: none !important;
         box-shadow: none !important;
         padding: 0 !important;
@@ -476,7 +485,7 @@
         width: 100% !important;
       }
       #print-worksheet-content-wrap {
-        background: transparent !important;
+        background: #ffffff !important;
         padding: 0 !important;
         margin: 0 !important;
       }
@@ -1553,6 +1562,16 @@
     };
 
     window.triggerPrintWorksheet = function () {
+      // 1. Kiểm tra thiết bị iOS (iPhone/iPad/iPod/Safari)
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+      if (isIOS) {
+        // Trên iOS, window.open bị Safari chặn Popup. Gọi trực tiếp window.print()
+        window.print();
+        return;
+      }
+
+      // 2. Trên Máy tính / Chrome / Android: Sử dụng Popup Window để in chuẩn đẹp
       const printWrap = document.getElementById('print-worksheet-content-wrap');
       if (!printWrap) {
         window.print();
