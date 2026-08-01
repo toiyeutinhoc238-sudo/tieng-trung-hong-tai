@@ -3503,20 +3503,8 @@ function renderExamLibrary(filterLevel = 'all') {
         &nbsp;·&nbsp; <i class="fa-solid fa-headphones"></i> Trọn bộ File nghe, Đáp án & Script
       </p>
       <div class="exam-lib-actions" style="display: flex; flex-wrap: wrap; gap: 8px;">
-        <a class="exam-lib-btn exam-lib-btn-folder" href="${folderLink}" target="_blank" rel="noopener" title="Xem tất cả các file của đề thi ${code}" style="width: 100%; background: rgba(99, 102, 241, 0.2); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.4); justify-content: center; font-weight: 700; padding: 8px 12px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+        <a class="exam-lib-btn exam-lib-btn-folder" href="${folderLink}" target="_blank" rel="noopener" title="Xem tất cả các file của đề thi ${code}" style="width: 100%; background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: #ffffff; border: none; justify-content: center; font-weight: 700; padding: 10px 14px; border-radius: 10px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);">
           <i class="fa-solid fa-folder-open"></i> Xem trọn bộ tài liệu đề ${code} (Full Files)
-        </a>
-        <a class="exam-lib-btn exam-lib-btn-pdf" href="${pdfLink}" target="_blank" rel="noopener" title="Mở file Đề thi PDF ${code} trên Google Drive">
-          <i class="fa-solid fa-file-pdf"></i> Đề thi PDF
-        </a>
-        <a class="exam-lib-btn exam-lib-btn-mp3" href="${mp3Link}" target="_blank" rel="noopener" title="Mở file nghe MP3 ${code} trên Google Drive">
-          <i class="fa-solid fa-headphones"></i> File nghe MP3
-        </a>
-        <a class="exam-lib-btn exam-lib-btn-ans" href="${ansLink}" target="_blank" rel="noopener" title="Mở file Đáp án ${code} trên Google Drive">
-          <i class="fa-solid fa-key"></i> Đáp án
-        </a>
-        <a class="exam-lib-btn exam-lib-btn-script" href="${scriptLink}" target="_blank" rel="noopener" title="Mở Kịch bản nghe (听力材料) trên Google Drive" style="background: rgba(236, 72, 153, 0.15); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.3);">
-          <i class="fa-solid fa-file-lines"></i> Kịch bản nghe
         </a>
       </div>
     `;
