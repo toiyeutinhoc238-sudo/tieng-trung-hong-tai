@@ -129,6 +129,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initVoices();
   await initAuth();
   await fetchVocabulary();
+  renderGamifiedRoadmapPath();
   setupEventListeners();
   initExams();
   initLessonsView();
