@@ -68,7 +68,9 @@ app.use(express.json());
 
 const FRONTEND_DIR = path.join(__dirname, '..', 'frontend');
 const DIST_DIR = path.join(__dirname, '..', 'frontend', 'dist');
+const PUBLIC_DIR = path.join(__dirname, '..', 'frontend', 'public');
 app.use(express.static(DIST_DIR));
+app.use(express.static(PUBLIC_DIR));
 app.use(express.static(FRONTEND_DIR));
 
 // Disable caching for all API routes
