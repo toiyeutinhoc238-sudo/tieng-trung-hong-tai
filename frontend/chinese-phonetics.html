@@ -832,13 +832,11 @@
 
   <script type="module">
     import { THANH_MAU_DATA, VAN_MAU_DATA, THANH_DIEU_DATA } from './src/pinyin_data.js';
-    import { getMouthDiagramSVG } from './src/mouth_diagrams.js';
     import { LARGE_QUIZ_DATABASE } from './src/quiz_data.js';
 
     window.THANH_MAU_DATA = THANH_MAU_DATA;
     window.VAN_MAU_DATA = VAN_MAU_DATA;
     window.THANH_DIEU_DATA = THANH_DIEU_DATA;
-    window.getMouthDiagramSVG = getMouthDiagramSVG;
     window.LARGE_QUIZ_DATABASE = LARGE_QUIZ_DATABASE;
 
     let currentSection = 'hub';
@@ -1183,14 +1181,7 @@
                   </div>
                 `;
               }
-              const diagramHtml = getMouthDiagramSVG(item.char, sectionType);
-              if (!diagramHtml) return '';
-              return `
-                <div class="mouth-diagram-box">
-                  <div class="diagram-title" style="margin-bottom: 6px;"><i class="fa-solid fa-image"></i> Mô Phỏng Khẩu Hình</div>
-                  ${diagramHtml}
-                </div>
-              `;
+              return '';
             })()}
           </div>
 
