@@ -907,16 +907,25 @@
           </select>
         </div>
 
+        <!-- Chọn Chế Độ Ghép Trang / Tiết Kiệm Giấy -->
+        <div style="display:flex; align-items:center; gap:8px;">
+          <label style="font-weight:700; color:#38bdf8;"><i class="fa-solid fa-file-invoice"></i> Chế độ in:</label>
+          <select id="print-custom-layout" onchange="updateWorksheetPreviewConfig()" style="background:#0f172a; border:1px solid #38bdf8; color:#fff; padding:4px 10px; border-radius:8px; font-weight:700; outline:none; cursor:pointer;">
+            <option value="fit_multi" selected>🌱 Ghép nhiều từ/trang (Tiết kiệm giấy)</option>
+            <option value="one_per_page">📄 Mỗi từ 1 trang riêng</option>
+          </select>
+        </div>
+
         <!-- Tùy chỉnh Số Hàng -->
         <div style="display:flex; align-items:center; gap:8px;">
-          <label style="font-weight:700; color:#60a5fa;"><i class="fa-solid fa-table-cells-large"></i> Số hàng/trang:</label>
+          <label style="font-weight:700; color:#60a5fa;"><i class="fa-solid fa-table-cells-large"></i> Số hàng/từ:</label>
           <select id="print-custom-rows" onchange="updateWorksheetPreviewConfig()" style="background:#0f172a; border:1px solid #3b82f6; color:#fff; padding:4px 10px; border-radius:8px; font-weight:700; outline:none; cursor:pointer;">
-            <option value="4">4 hàng (Ngắn gọn)</option>
-            <option value="5">5 hàng</option>
-            <option value="6" selected>6 hàng (Chuẩn 1 trang A4)</option>
-            <option value="7">7 hàng</option>
-            <option value="8">8 hàng</option>
-            <option value="10">10 hàng (Nhiều hàng)</option>
+            <option value="2">2 hàng (Siêu tiết kiệm, 4-5 từ/trang)</option>
+            <option value="3">3 hàng (Tiết kiệm, 3-4 từ/trang)</option>
+            <option value="4" selected>4 hàng (Chuẩn ghép, 2-3 từ/trang)</option>
+            <option value="5">5 hàng (Ghép 1-2 từ/trang)</option>
+            <option value="6">6 hàng (Chuẩn 1 từ/trang)</option>
+            <option value="8">8 hàng (Nhiều hàng tập viết)</option>
           </select>
         </div>
 
@@ -1434,26 +1443,28 @@
       // Read controls
       const rowsSelect = document.getElementById('print-custom-rows');
       const traceRowsSelect = document.getElementById('print-custom-trace-rows');
+      const layoutSelect = document.getElementById('print-custom-layout');
       const pinyinCheck = document.getElementById('print-custom-show-pinyin');
       const meaningCheck = document.getElementById('print-custom-show-meaning');
 
-      const ROWS = rowsSelect ? parseInt(rowsSelect.value) : 6;
+      const ROWS = rowsSelect ? parseInt(rowsSelect.value) : 4;
       const traceConfig = traceRowsSelect ? traceRowsSelect.value : '2';
+      const layoutMode = layoutSelect ? layoutSelect.value : 'fit_multi';
       const showPinyin = pinyinCheck ? pinyinCheck.checked : true;
       const showMeaning = meaningCheck ? meaningCheck.checked : true;
 
       const COLS = 12;
-      let BOX = 50;
-      if (ROWS === 4) BOX = 58;
-      else if (ROWS === 5) BOX = 54;
-      else if (ROWS === 6) BOX = 50;
-      else if (ROWS === 7) BOX = 44;
-      else if (ROWS === 8) BOX = 39;
-      else if (ROWS >= 9) BOX = 32;
+      let BOX = 48;
+      if (ROWS === 2) BOX = 56;
+      else if (ROWS === 3) BOX = 52;
+      else if (ROWS === 4) BOX = 48;
+      else if (ROWS === 5) BOX = 44;
+      else if (ROWS === 6) BOX = 40;
+      else if (ROWS >= 8) BOX = 34;
 
       const todayStr = new Date().toLocaleDateString('vi-VN');
-
-      document.getElementById('modal-print-total-pages').textContent = wordsToPrint.length;
+      const totalWordsCount = wordsToPrint.length;
+      document.getElementById('modal-print-total-pages').textContent = layoutMode === 'fit_multi' ? `${totalWordsCount} từ (Ghép trang)` : `${totalWordsCount} trang`;
 
       function mizigeCell(size, innerHtml = '') {
         const h = Math.round(size);
@@ -1477,134 +1488,270 @@
       let pagesHtml = '';
       const pendingStrokeLoaders = [];
 
-      wordsToPrint.forEach((target, pageIdx) => {
-        const wordChars = target.word.split('').filter(c => /[\u4e00-\u9fa5]/.test(c));
-        const N = wordChars.length || 1;
+      if (layoutMode === 'fit_multi') {
+        // 🌱 PAPER-SAVING LAYOUT: Multiple words on same A4 sheet
+        let wordsCardsHtml = '';
+        wordsToPrint.forEach((target, pageIdx) => {
+          const wordChars = target.word.split('').filter(c => /[\u4e00-\u9fa5]/.test(c));
+          const N = wordChars.length || 1;
 
-        function buildRow(rowIdx) {
-          let cells = '';
-          for (let col = 0; col < COLS; col++) {
-            const posInWord = col % N;
-            const ch = wordChars[posInWord] || '';
+          function buildRow(rowIdx) {
+            let cells = '';
+            for (let col = 0; col < COLS; col++) {
+              const posInWord = col % N;
+              const ch = wordChars[posInWord] || '';
 
-            let isTrace = false;
-            if (traceConfig === 'all') isTrace = true;
-            else if (traceConfig === '1' && rowIdx === 0) isTrace = true;
-            else if (traceConfig === '2' && (rowIdx === 0 || rowIdx === 1)) isTrace = true;
-            else if (traceConfig === '3' && (rowIdx === 0 || rowIdx === 1 || rowIdx === 2)) isTrace = true;
+              let isTrace = false;
+              if (traceConfig === 'all') isTrace = true;
+              else if (traceConfig === '1' && rowIdx === 0) isTrace = true;
+              else if (traceConfig === '2' && (rowIdx === 0 || rowIdx === 1)) isTrace = true;
+              else if (traceConfig === '3' && (rowIdx === 0 || rowIdx === 1 || rowIdx === 2)) isTrace = true;
 
-            let inner = '';
-            if (isTrace && ch) {
-              inner = `<span style="
-                font-size:${BOX * 0.72}px;
-                font-family:'LXGW WenKai Lite','Kaiti','STKaiti','Kai','PingFang SC','Noto Serif SC','Noto Sans SC',serif;
-                font-weight:normal; color:#111827; opacity:0.18;
-                line-height:1; position:relative; z-index:2; pointer-events:none;
-              ">${ch}</span>`;
-            }
-
-            cells += mizigeCell(BOX, inner);
-          }
-          return `<div style="display:flex;">${cells}</div>`;
-        }
-
-        let allRows = '';
-        for (let r = 0; r < ROWS; r++) {
-          allRows += buildRow(r);
-        }
-
-        const strokeSeqContainerId = `stroke-steps-list-modal-${pageIdx}`;
-        pendingStrokeLoaders.push({ id: strokeSeqContainerId, wordChars });
-
-        const infoBox = `
-          <div style="
-            border:2px solid #22c55e; border-radius:8px;
-            padding:12px 18px; margin-bottom:12px;
-            background:#fff; width:100%; box-sizing:border-box;
-          ">
-            <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:8px; border-bottom:1px dashed #dcfce7;">
-              <div style="display:flex; align-items:baseline; gap:16px;">
-                <span style="
-                  font-size:2.2rem;
+              let inner = '';
+              if (isTrace && ch) {
+                inner = `<span style="
+                  font-size:${BOX * 0.72}px;
                   font-family:'LXGW WenKai Lite','Kaiti','STKaiti','Kai','PingFang SC','Noto Serif SC','Noto Sans SC',serif;
-                  font-weight:bold; color:#111827; line-height:1;
-                ">${target.word}</span>
-                ${showPinyin ? `<span style="font-size:1.15rem; font-weight:800; color:#ea580c;">${target.pinyin}</span>` : ''}
-                ${showMeaning ? `<span style="font-size:0.95rem; color:#374151; font-weight:600;">${target.pos ? `<span style="color:#6b7280">(${target.pos})</span> ` : ''}${target.meaning}</span>` : ''}
+                  font-weight:normal; color:#111827; opacity:0.18;
+                  line-height:1; position:relative; z-index:2; pointer-events:none;
+                ">${ch}</span>`;
+              }
+              cells += mizigeCell(BOX, inner);
+            }
+            return `<div style="display:flex;">${cells}</div>`;
+          }
+
+          let allRows = '';
+          for (let r = 0; r < ROWS; r++) {
+            allRows += buildRow(r);
+          }
+
+          const strokeSeqContainerId = `stroke-steps-list-modal-${pageIdx}`;
+          pendingStrokeLoaders.push({ id: strokeSeqContainerId, wordChars });
+
+          const infoBox = `
+            <div style="
+              border:1.5px solid #22c55e; border-radius:8px;
+              padding:10px 14px; margin-bottom:8px;
+              background:#fff; width:100%; box-sizing:border-box;
+            ">
+              <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:6px; border-bottom:1px dashed #dcfce7;">
+                <div style="display:flex; align-items:baseline; gap:14px;">
+                  <span style="
+                    font-size:1.85rem;
+                    font-family:'LXGW WenKai Lite','Kaiti','STKaiti','Kai','PingFang SC','Noto Serif SC','Noto Sans SC',serif;
+                    font-weight:bold; color:#111827; line-height:1;
+                  ">${target.word}</span>
+                  ${showPinyin ? `<span style="font-size:1.05rem; font-weight:800; color:#ea580c;">${target.pinyin}</span>` : ''}
+                  ${showMeaning ? `<span style="font-size:0.9rem; color:#374151; font-weight:600;">${target.pos ? `<span style="color:#6b7280">(${target.pos})</span> ` : ''}${target.meaning}</span>` : ''}
+                </div>
+                <div style="font-size:0.72rem; color:#16a34a; font-weight:700; background:#f0fdf4; padding:3px 10px; border-radius:10px; border:1px solid #bbf7d0;">
+                  ${(target.curriculum || 'HSK').toUpperCase()} Cấp ${target.level || '1'}
+                </div>
               </div>
-              <div style="font-size:0.75rem; color:#16a34a; font-weight:700; background:#f0fdf4; padding:4px 12px; border-radius:12px; border:1px solid #bbf7d0;">
-                ${(target.curriculum || 'HSK').toUpperCase()} Cấp ${target.level || '1'}
+
+              <div style="margin-top:6px;">
+                <div id="${strokeSeqContainerId}" style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; font-family:'Kaiti','STKaiti','Noto Serif SC',serif;">
+                  <span style="font-size:0.78rem; color:#9ca3af;">Đang tải nét bút...</span>
+                </div>
+              </div>
+            </div>`;
+
+          const practiceBlock = `
+            <div style="
+              display:inline-flex;
+              flex-direction:column;
+              border:1.5px solid #22c55e;
+              border-radius:6px;
+              overflow:hidden;
+              box-sizing:border-box;
+              width:100%;
+            ">
+              ${allRows}
+            </div>`;
+
+          wordsCardsHtml += `
+            <div class="print-word-card" style="
+              page-break-inside: avoid; break-inside: avoid;
+              margin-bottom: 20px; padding: 16px; background: #ffffff;
+              border: 1.5px solid #bbf7d0; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            ">
+              <div style="font-size: 0.75rem; font-weight: 800; color: #16a34a; margin-bottom: 6px;">Từ vựng #${pageIdx + 1}: ${target.word}</div>
+              ${infoBox}
+              <div style="text-align:center;">
+                ${practiceBlock}
               </div>
             </div>
+          `;
+        });
 
-            <div style="margin-top:8px;">
-              <div id="${strokeSeqContainerId}" style="display:flex; flex-wrap:wrap; gap:16px; align-items:center; font-family:'Kaiti','STKaiti','Noto Serif SC',serif;">
-                <span style="font-size:0.8rem; color:#9ca3af;">Đang tải nét bút...</span>
-              </div>
-            </div>
-          </div>`;
-
-        const practiceBlock = `
-          <div style="
-            display:inline-flex;
-            flex-direction:column;
-            border:2px solid #22c55e;
-            border-radius:6px;
-            overflow:hidden;
-            box-sizing:border-box;
-            width:100%;
-          ">
-            ${allRows}
-          </div>`;
-
-        const isLastPage = pageIdx === wordsToPrint.length - 1;
-        pagesHtml += `
+        pagesHtml = `
           <div class="print-page-area" style="
             font-family:'Be Vietnam Pro','Segoe UI',sans-serif;
-            padding:24px 28px;
-            background:#fff; color:#000;
-            max-width:${COLS * BOX + 80}px;
-            margin:0 auto ${isLastPage ? '0' : '30px'} auto;
-            box-shadow:0 4px 20px rgba(0,0,0,0.08);
-            border-radius:12px;
-            page-break-after: always;
-            break-after: page;
+            padding:20px 24px; background:#fff; color:#000;
+            max-width:${COLS * BOX + 80}px; margin:0 auto;
+            border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.08);
           ">
-            <!-- HEADER -->
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:3px solid #f97316; padding-bottom:10px; margin-bottom:12px;">
+            <!-- TOP HEADER FOR WORKSHEET -->
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:3px solid #f97316; padding-bottom:8px; margin-bottom:12px;">
               <div>
-                <div style="font-size:1.45rem; font-weight:900; color:#f97316;">Tiếng Trung HongTai</div>
-                <div style="font-size:0.78rem; color:#16a34a; font-weight:700; margin-top:2px;">Luyện viết chữ Hán</div>
+                <div style="font-size:1.35rem; font-weight:900; color:#f97316;">Tiếng Trung HongTai</div>
+                <div style="font-size:0.75rem; color:#16a34a; font-weight:700; margin-top:2px;">Phiếu Tập Viết Chữ Hán (Tiết Kiệm Giấy - ${wordsToPrint.length} từ)</div>
               </div>
               <div style="text-align:right; font-size:0.75rem; color:#6b7280;">
                 <div style="font-weight:700; color:#111827;">tiengtrunghongtai.com</div>
-                <div>Trang ${pageIdx + 1}/${wordsToPrint.length} - Ngày in: ${todayStr}</div>
+                <div>Ngày in: ${todayStr}</div>
               </div>
             </div>
 
             <!-- HÀNG TÊN / LỚP / NGÀY -->
-            <div style="display:flex; gap:20px; margin-bottom:12px; font-size:0.8rem; font-weight:700; color:#16a34a;">
+            <div style="display:flex; gap:20px; margin-bottom:16px; font-size:0.8rem; font-weight:700; color:#16a34a; border-bottom:1px dashed #cbd5e1; padding-bottom:10px;">
               <span>Tên: <span style="display:inline-block; border-bottom:1.5px solid #22c55e; min-width:150px;">&nbsp;</span></span>
               <span>Lớp: <span style="display:inline-block; border-bottom:1.5px solid #22c55e; min-width:80px;">&nbsp;</span></span>
               <span>Ngày: <span style="display:inline-block; border-bottom:1.5px solid #22c55e; min-width:110px;">&nbsp;</span></span>
             </div>
 
-            <!-- KHUNG THÔNG TIN TỪ VỰNG -->
-            ${infoBox}
-
-            <!-- KHỐI LƯỚI LUYỆN VIẾT -->
-            <div style="text-align:center;">
-              ${practiceBlock}
-            </div>
+            <!-- DANH SÁCH CÁC THẺ TỪ VỰNG GHÉP TIẾT KIỆM GIẤY -->
+            ${wordsCardsHtml}
 
             <!-- FOOTER -->
-            <div style="margin-top:14px; border-top:1px dashed #86efac; padding-top:8px; display:flex; justify-content:space-between; font-size:0.72rem; color:#9ca3af;">
-              <span>💡 Viết theo các ô mờ mẫu → Tự viết vào các ô trống (mỗi ô 1 chữ, viết lần lượt theo thứ tự từ).</span>
+            <div style="margin-top:14px; border-top:1px dashed #86efac; padding-top:8px; display:flex; justify-content:space-between; font-size:0.72rem; color:#9ca3af; page-break-inside: avoid; break-inside: avoid;">
+              <span>💡 Viết theo các ô mờ mẫu → Tự viết vào các ô trống (tự điều chỉnh số hàng để ghép vừa 1 trang A4).</span>
               <span style="font-weight:800; color:#f97316;">Tiếng Trung HongTai</span>
             </div>
           </div>
         `;
-      });
+      } else {
+        // 📄 ONE WORD PER PAGE LAYOUT
+        wordsToPrint.forEach((target, pageIdx) => {
+          const wordChars = target.word.split('').filter(c => /[\u4e00-\u9fa5]/.test(c));
+          const N = wordChars.length || 1;
+
+          function buildRow(rowIdx) {
+            let cells = '';
+            for (let col = 0; col < COLS; col++) {
+              const posInWord = col % N;
+              const ch = wordChars[posInWord] || '';
+
+              let isTrace = false;
+              if (traceConfig === 'all') isTrace = true;
+              else if (traceConfig === '1' && rowIdx === 0) isTrace = true;
+              else if (traceConfig === '2' && (rowIdx === 0 || rowIdx === 1)) isTrace = true;
+              else if (traceConfig === '3' && (rowIdx === 0 || rowIdx === 1 || rowIdx === 2)) isTrace = true;
+
+              let inner = '';
+              if (isTrace && ch) {
+                inner = `<span style="
+                  font-size:${BOX * 0.72}px;
+                  font-family:'LXGW WenKai Lite','Kaiti','STKaiti','Kai','PingFang SC','Noto Serif SC','Noto Sans SC',serif;
+                  font-weight:normal; color:#111827; opacity:0.18;
+                  line-height:1; position:relative; z-index:2; pointer-events:none;
+                ">${ch}</span>`;
+              }
+
+              cells += mizigeCell(BOX, inner);
+            }
+            return `<div style="display:flex;">${cells}</div>`;
+          }
+
+          let allRows = '';
+          for (let r = 0; r < ROWS; r++) {
+            allRows += buildRow(r);
+          }
+
+          const strokeSeqContainerId = `stroke-steps-list-modal-${pageIdx}`;
+          pendingStrokeLoaders.push({ id: strokeSeqContainerId, wordChars });
+
+          const infoBox = `
+            <div style="
+              border:2px solid #22c55e; border-radius:8px;
+              padding:12px 18px; margin-bottom:12px;
+              background:#fff; width:100%; box-sizing:border-box;
+            ">
+              <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:8px; border-bottom:1px dashed #dcfce7;">
+                <div style="display:flex; align-items:baseline; gap:16px;">
+                  <span style="
+                    font-size:2.2rem;
+                    font-family:'LXGW WenKai Lite','Kaiti','STKaiti','Kai','PingFang SC','Noto Serif SC','Noto Sans SC',serif;
+                    font-weight:bold; color:#111827; line-height:1;
+                  ">${target.word}</span>
+                  ${showPinyin ? `<span style="font-size:1.15rem; font-weight:800; color:#ea580c;">${target.pinyin}</span>` : ''}
+                  ${showMeaning ? `<span style="font-size:0.95rem; color:#374151; font-weight:600;">${target.pos ? `<span style="color:#6b7280">(${target.pos})</span> ` : ''}${target.meaning}</span>` : ''}
+                </div>
+                <div style="font-size:0.75rem; color:#16a34a; font-weight:700; background:#f0fdf4; padding:4px 12px; border-radius:12px; border:1px solid #bbf7d0;">
+                  ${(target.curriculum || 'HSK').toUpperCase()} Cấp ${target.level || '1'}
+                </div>
+              </div>
+
+              <div style="margin-top:8px;">
+                <div id="${strokeSeqContainerId}" style="display:flex; flex-wrap:wrap; gap:16px; align-items:center; font-family:'Kaiti','STKaiti','Noto Serif SC',serif;">
+                  <span style="font-size:0.8rem; color:#9ca3af;">Đang tải nét bút...</span>
+                </div>
+              </div>
+            </div>`;
+
+          const practiceBlock = `
+            <div style="
+              display:inline-flex;
+              flex-direction:column;
+              border:2px solid #22c55e;
+              border-radius:6px;
+              overflow:hidden;
+              box-sizing:border-box;
+              width:100%;
+            ">
+              ${allRows}
+            </div>`;
+
+          const isLastPage = pageIdx === wordsToPrint.length - 1;
+          pagesHtml += `
+            <div class="print-page-area" style="
+              font-family:'Be Vietnam Pro','Segoe UI',sans-serif;
+              padding:24px 28px;
+              background:#fff; color:#000;
+              max-width:${COLS * BOX + 80}px;
+              margin:0 auto ${isLastPage ? '0' : '30px'} auto;
+              box-shadow:0 4px 20px rgba(0,0,0,0.08);
+              border-radius:12px;
+              page-break-after: always;
+              break-after: page;
+            ">
+              <!-- HEADER -->
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:3px solid #f97316; padding-bottom:10px; margin-bottom:12px;">
+                <div>
+                  <div style="font-size:1.45rem; font-weight:900; color:#f97316;">Tiếng Trung HongTai</div>
+                  <div style="font-size:0.78rem; color:#16a34a; font-weight:700; margin-top:2px;">Luyện viết chữ Hán</div>
+                </div>
+                <div style="text-align:right; font-size:0.75rem; color:#6b7280;">
+                  <div style="font-weight:700; color:#111827;">tiengtrunghongtai.com</div>
+                  <div>Trang ${pageIdx + 1}/${wordsToPrint.length} - Ngày in: ${todayStr}</div>
+                </div>
+              </div>
+
+              <!-- HÀNG TÊN / LỚP / NGÀY -->
+              <div style="display:flex; gap:20px; margin-bottom:12px; font-size:0.8rem; font-weight:700; color:#16a34a;">
+                <span>Tên: <span style="display:inline-block; border-bottom:1.5px solid #22c55e; min-width:150px;">&nbsp;</span></span>
+                <span>Lớp: <span style="display:inline-block; border-bottom:1.5px solid #22c55e; min-width:80px;">&nbsp;</span></span>
+                <span>Ngày: <span style="display:inline-block; border-bottom:1.5px solid #22c55e; min-width:110px;">&nbsp;</span></span>
+              </div>
+
+              <!-- KHUNG THÔNG TIN TỪ VỰNG -->
+              ${infoBox}
+
+              <!-- KHỐI LƯỚI LUYỆN VIẾT -->
+              <div style="text-align:center;">
+                ${practiceBlock}
+              </div>
+
+              <!-- FOOTER -->
+              <div style="margin-top:14px; border-top:1px dashed #86efac; padding-top:8px; display:flex; justify-content:space-between; font-size:0.72rem; color:#9ca3af;">
+                <span>💡 Viết theo các ô mờ mẫu → Tự viết vào các ô trống (mỗi ô 1 chữ, viết lần lượt theo thứ tự từ).</span>
+                <span style="font-weight:800; color:#f97316;">Tiếng Trung HongTai</span>
+              </div>
+            </div>
+          `;
+        });
+      }
 
       container.innerHTML = pagesHtml;
       modal.style.display = 'flex';
