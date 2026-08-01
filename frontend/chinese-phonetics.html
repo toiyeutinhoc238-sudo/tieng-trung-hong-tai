@@ -884,13 +884,26 @@
       }
     }
 
+    window.stopAllAudio = function () {
+      if (audioCurrent) {
+        audioCurrent.pause();
+        audioCurrent.currentTime = 0;
+        audioCurrent = null;
+      }
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+
     window.backToHub = function () {
+      window.stopAllAudio();
       document.getElementById('pinyin-main-hub').style.display = 'block';
       document.getElementById('section-reader-card').style.display = 'none';
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     window.openSection = function (secKey) {
+      window.stopAllAudio();
       currentSection = secKey;
       document.getElementById('pinyin-main-hub').style.display = 'none';
       document.getElementById('section-reader-card').style.display = 'block';
