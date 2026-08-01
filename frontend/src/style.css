@@ -6106,6 +6106,56 @@ html.light-mode .lesson-item {
   color: #1e293b !important;
 }
 
+/* ─── GLOBAL ABSOLUTE DARK MODE OVERRIDES (Đảm bảo chuyển Tối dứt khoát 100%) ─── */
+html.dark {
+  --bg-primary: #0b0f19;
+  --bg-secondary: #131c31;
+  --bg-glass: rgba(19, 28, 49, 0.65);
+  --border-glass: rgba(255, 255, 255, 0.08);
+  --border-glass-hover: rgba(255, 255, 255, 0.15);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  color: #f8fafc !important;
+}
+
+html.dark body {
+  background-color: #0b0f19 !important;
+  color: #f8fafc !important;
+}
+
+/* Ép trả lại màu nền tối cho tất cả ô card khi ở chế độ TỐI */
+html.dark .zubi-stat-card,
+html.dark .zubi-recent-card,
+html.dark .google-acc-card,
+html.dark .modal-card,
+html.dark .glass-panel,
+html.dark .voice-control-bar,
+html.dark .info-sub-card,
+html.dark .group-block,
+html.dark .char-detail-inspector,
+html.dark .vd-box,
+html.dark .modal-content,
+html.dark .vocab-panel,
+html.dark .filter-section,
+html.dark .writing-workshop {
+  background: rgba(30, 41, 59, 0.95) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+
+html.dark .zubi-stat-val,
+html.dark .recent-title,
+html.dark .zubi-td-bold {
+  color: #ffffff !important;
+}
+
+html.dark .zubi-stat-label,
+html.dark .zubi-eye-icon,
+html.dark .text-secondary {
+  color: #94a3b8 !important;
+}
+
 /* ─── GLOBAL ABSOLUTE LIGHT MODE TEXT & ROADMAP OVERRIDES ─── */
 html.light-mode {
   --bg-primary: #f1f5f9;
