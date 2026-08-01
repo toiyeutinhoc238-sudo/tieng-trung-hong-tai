@@ -6143,9 +6143,17 @@ html.light-mode [style*="background:#0f172a"],
 html.light-mode [style*="background: #1e293b"],
 html.light-mode [style*="background:#1e293b"],
 html.light-mode [style*="background: #0b0f19"],
-html.light-mode [style*="background:#0b0f19"] {
+html.light-mode [style*="background:#0b0f19"],
+html.light-mode [style*="background:rgba(30, 41, 59"],
+html.light-mode [style*="background: rgba(30,41,59,0.9)"],
+html.light-mode [style*="background: rgba(30, 41, 59, 0.9)"],
+html.light-mode [style*="background: rgba(30, 41, 59, 0.95)"],
+html.light-mode [style*="background: rgba(30,41,59,0.95)"],
+html.light-mode [style*="background: rgba(30, 41, 59, 0.6)"],
+html.light-mode [style*="background: rgba(30,41,59,0.6)"] {
   background: #ffffff !important;
   border-color: #cbd5e1 !important;
+  color: #0f172a !important;
 }
 
 /* ─── ROADMAP SPECIFIC LIGHT MODE OVERRIDES ─── */
