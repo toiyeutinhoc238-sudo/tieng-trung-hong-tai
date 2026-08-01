@@ -3094,6 +3094,9 @@ function switchTab(tabId) {
       item.classList.toggle('active', itemTab === tabId);
     }
   });
+
+  // Always scroll to top smoothly when switching tab (e.g. clicking Trang chủ)
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 window.switchTab = switchTab;
 
