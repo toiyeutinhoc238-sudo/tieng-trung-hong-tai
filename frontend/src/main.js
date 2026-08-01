@@ -5859,7 +5859,8 @@ function calculateCompletedLessons() {
   const textbookGroups = {};
   vocabList.forEach(w => {
     if (w.isCustom || !w.level || !w.lessonId) return;
-    const key = `${w.level}_${w.lessonId}`;
+    if ((w.hskVersion || '3.0') !== activeHskVersion && (w.curriculum || 'hsk') !== activeRoadmapVersion) return;
+    const key = `${w.curriculum || 'hsk'}_${w.hskVersion || '3.0'}_${w.level}_${w.lessonId}`;
     if (!textbookGroups[key]) textbookGroups[key] = [];
     textbookGroups[key].push(w);
   });
@@ -6222,6 +6223,7 @@ window.openZubiStatDetail = function (type) {
     const textbookGroups = {};
     builtIn.forEach(w => {
       if (!w.level || !w.lessonId) return;
+      if ((w.hskVersion || '3.0') !== activeHskVersion) return;
       const key = `${w.curriculum || 'hsk'}_${w.hskVersion || '3.0'}_${w.level}_${w.lessonId}`;
       if (!textbookGroups[key]) textbookGroups[key] = { key, level: w.level, lessonId: w.lessonId, curr: w.curriculum || 'hsk', words: [] };
       textbookGroups[key].words.push(w);
@@ -6232,7 +6234,7 @@ window.openZubiStatDetail = function (type) {
     let html = `
       <div style="background: rgba(236, 72, 153, 0.1); border: 1px solid rgba(236, 72, 153, 0.3); border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;">
         <div>
-          <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: #ec4899; font-weight: 700;">Tổng số bài đã xong</span>
+          <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: #ec4899; font-weight: 700;">Tổng số bài đã xong (${activeHskVersion})</span>
           <h2 style="font-size: 1.8rem; font-weight: 800; color: #ffffff; margin: 4px 0 0 0;">${completedLessons.length} / ${Object.keys(textbookGroups).length} Bài</h2>
         </div>
         <div style="font-size: 2.2rem; color: #ec4899; opacity: 0.8;"><i class="fa-solid fa-trophy"></i></div>

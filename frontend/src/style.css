@@ -6712,4 +6712,63 @@ body.sidebar-collapsed .sidebar-expand-float-btn {
   display: flex !important;
 }
 
+/* ==========================================================================
+   100% UNIFIED CARTOON GAMIFIED DESIGN SYSTEM (Duolingo & Quizlet Style)
+   ========================================================================== */
+
+/* Cartoon Buttons globally */
+.btn, .node-btn, .btn-node-start, .lesson-mod-btn, .circle-btn, button {
+  border-radius: 16px !important;
+  font-family: var(--font-display), 'Be Vietnam Pro', sans-serif !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.2s ease !important;
+}
+
+/* 3D Button Press Effect for standard primary buttons */
+.btn-primary, .btn-cartoon-green {
+  background: #58cc02 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 0 #46a302, 0 6px 12px rgba(88, 204, 2, 0.3) !important;
+  border: none !important;
+}
+.btn-primary:active, .btn-cartoon-green:active {
+  transform: translateY(3px) !important;
+  box-shadow: 0 1px 0 #46a302 !important;
+}
+
+.btn-secondary, .btn-cartoon-blue {
+  background: #1cb0f6 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 0 #1899d6, 0 6px 12px rgba(28, 176, 246, 0.3) !important;
+  border: none !important;
+}
+.btn-secondary:active, .btn-cartoon-blue:active {
+  transform: translateY(3px) !important;
+  box-shadow: 0 1px 0 #1899d6 !important;
+}
+
+/* Cartoon Modal Windows & Dialogs */
+.modal-content, .zubi-stat-card, .glass-panel, .card, .dashboard-card {
+  border-radius: 24px !important;
+  border: 2px solid var(--border-glass, #e2e8f0) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), 0 4px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Gamified Badges */
+.roadmap-badge, .badge, .zubi-pill, .lesson-badge {
+  border-radius: 50px !important;
+  font-family: var(--font-display), sans-serif !important;
+  font-weight: 800 !important;
+}
+
+/* Cartoon Pills & Tabs */
+.tab-btn, .pill-btn, .nb-lesson-pill {
+  border-radius: 20px !important;
+  font-weight: 700 !important;
+}
+.tab-btn.active, .nb-lesson-pill.active {
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.15) !important;
+}
+
 
