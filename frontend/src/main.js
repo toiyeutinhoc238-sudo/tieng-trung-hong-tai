@@ -3123,22 +3123,50 @@ function renderGamifiedRoadmapPath() {
 
   let html = '';
   const positions = ['pos-center', 'pos-left', 'pos-center', 'pos-right'];
+  const builtInVocabs = vocabList.filter(w => !w.isCustom);
 
   levelsData.forEach((item, idx) => {
-    const isCompleted = idx === 0;
-    const isActive = idx === 0 || idx === 1;
+    // Căn cứ thực tế từ dữ liệu vocabList
+    const levelWords = builtInVocabs.filter(w => {
+      const curr = (w.curriculum || 'hsk').toLowerCase();
+      const ver = (w.hskVersion || '3.0').toLowerCase();
+
+      if (hskVer === 'yct') {
+        return (curr.includes('yct') || ver.includes('yct')) && matchLevel(w.level, item.level);
+      }
+      if (hskVer === '2.0') {
+        return !curr.includes('yct') && !ver.includes('yct') && (ver.includes('2') || ver === '2.0') && matchLevel(w.level, item.level);
+      }
+      // HSK 3.0
+      return !curr.includes('yct') && !ver.includes('yct') && (ver.includes('3') || ver === '3.0' || !w.hskVersion) && matchLevel(w.level, item.level);
+    });
+
+    const totalWords = levelWords.length;
+    const memorizedWords = levelWords.filter(w => w.isMemorized).length;
+    const pct = totalWords > 0 ? Math.round((memorizedWords / totalWords) * 100) : 0;
+
+    const isCompleted = pct === 100;
+    const isStarted = pct > 0 || idx === 0;
+
+    let statusBadge = '';
+    if (isCompleted) {
+      statusBadge = `<span class="roadmap-badge done"><i class="fa-solid fa-circle-check"></i> Hoàn thành 100%</span>`;
+    } else if (pct > 0) {
+      statusBadge = `<span class="roadmap-badge active-pulse"><i class="fa-solid fa-bolt"></i> Đang học ${pct}%</span>`;
+    } else if (idx === 0) {
+      statusBadge = `<span class="roadmap-badge active-pulse"><i class="fa-solid fa-play"></i> Bắt đầu học</span>`;
+    } else {
+      statusBadge = `<span class="roadmap-badge locked"><i class="fa-solid fa-lock"></i> Chưa mở khóa</span>`;
+    }
+
+    const iconClass = isCompleted ? 'fa-check' : (pct > 0 ? 'fa-graduation-cap' : (idx === 0 ? 'fa-book-open' : 'fa-lock'));
+    const nodeState = isCompleted ? 'node-done' : (isStarted ? 'node-active' : 'node-locked');
 
     const posClass = positions[idx % positions.length];
-    const statusBadge = isCompleted
-      ? `<span class="roadmap-badge done"><i class="fa-solid fa-circle-check"></i> Hoàn thành 100%</span>`
-      : (isActive ? `<span class="roadmap-badge active-pulse"><i class="fa-solid fa-bolt"></i> Đang học</span>` : `<span class="roadmap-badge locked"><i class="fa-solid fa-lock"></i> Chưa mở khóa</span>`);
-
-    const iconClass = isCompleted ? 'fa-check' : (isActive ? 'fa-graduation-cap' : 'fa-lock');
-    const nodeState = isCompleted ? 'node-done' : (isActive ? 'node-active' : 'node-locked');
 
     html += `
       <div class="roadmap-node-item ${posClass} ${nodeState}">
-        <div class="node-icon-circle" style="border-color: ${item.color};" onclick="goToRoadmapLevel('${hskVer}', ${item.level})">
+        <div class="node-icon-circle" style="border-color: ${item.color};" onclick="goToRoadmapLevel('${hskVer}', '${item.level}')">
           <i class="fa-solid ${iconClass}" style="color: ${item.color};"></i>
           <span class="node-num" style="color: #fff;">${item.level}</span>
         </div>
@@ -3148,9 +3176,9 @@ function renderGamifiedRoadmapPath() {
             <span class="node-card-title">${item.name}</span>
             ${statusBadge}
           </div>
-          <div class="node-card-sub">${item.desc}</div>
+          <div class="node-card-sub">${item.desc} (${memorizedWords}/${totalWords} từ)</div>
           <div class="node-card-actions" style="display: flex; gap: 8px;">
-            <button class="btn-node-start" style="background: ${item.color};" onclick="goToRoadmapLevel('${hskVer}', ${item.level})">
+            <button class="btn-node-start" style="background: ${item.color};" onclick="goToRoadmapLevel('${hskVer}', '${item.level}')">
               Khám Phá Cấp ${item.level} <i class="fa-solid fa-arrow-right"></i>
             </button>
             <button class="btn-node-start" style="background: rgba(255,255,255,0.1); width: auto;" onclick="window.location.href='/quiz-game.html?level=${item.level}'" title="Thi trắc nghiệm">
