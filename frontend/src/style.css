@@ -5072,6 +5072,12 @@ html:not(.dark) #about-hongtai-modal .about-mission-box p {
   color: #7f1d1d !important;
 }
 
+#about-hongtai-modal .btn-primary {
+  background: linear-gradient(135deg, #2563eb, #3b82f6) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3) !important;
+}
+
 html.dark #about-hongtai-modal .about-modal-footer {
   background: rgba(15, 23, 42, 0.5) !important;
   border-top-color: rgba(255, 255, 255, 0.1) !important;
