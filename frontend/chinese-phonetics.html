@@ -885,14 +885,23 @@
     }
 
     window.stopAllAudio = function () {
+      // 1. Tắt âm thanh phát âm đọc bằng Audio API
       if (audioCurrent) {
         audioCurrent.pause();
         audioCurrent.currentTime = 0;
         audioCurrent = null;
       }
+      // 2. Tắt âm thanh WebSpeech nếu đang đọc
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
       }
+      // 3. Tắt và tạm dừng tất cả các video khẩu hình đang chạy
+      document.querySelectorAll('video').forEach(v => {
+        try {
+          v.pause();
+          v.currentTime = 0;
+        } catch (e) {}
+      });
     };
 
     window.backToHub = function () {
