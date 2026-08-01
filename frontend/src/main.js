@@ -3137,13 +3137,13 @@ function renderGamifiedRoadmapPath() {
   } else {
     // HSK 3.0
     levelsData = [
-      { level: 1, name: 'HSK 1 (3.0)', desc: 'Sơ cấp 1 - 500 từ vựng & âm tiết ngữ pháp cơ bản', count: '500 từ', color: '#10b981' },
-      { level: 2, name: 'HSK 2 (3.0)', desc: 'Sơ cấp 2 - 1,272 từ vựng giao tiếp đa dạng', count: '1,272 từ', color: '#3b82f6' },
-      { level: 3, name: 'HSK 3 (3.0)', desc: 'Sơ cấp 3 - 2,245 từ vựng hoàn thiện nền tảng', count: '2,245 từ', color: '#06b6d4' },
-      { level: 4, name: 'HSK 4 (3.0)', desc: 'Trung cấp 4 - 3,245 từ vựng học thuật & đời sống', count: '3,245 từ', color: '#f59e0b' },
-      { level: 5, name: 'HSK 5 (3.0)', desc: 'Trung cấp 5 - 4,316 từ vựng làm việc & công sở', count: '4,316 từ', color: '#ec4899' },
-      { level: 6, name: 'HSK 6 (3.0)', desc: 'Trung cấp 6 - 5,456 từ vựng cao cấp & học thuật', count: '5,456 từ', color: '#8b5cf6' },
-      { level: '7-9', name: 'New HSK 7-9 (3.0)', desc: 'Cao cấp HSK 7-9 - 6,016 từ vựng chuyên sâu cho bậc Đại học & Chuyên gia', count: '6,016 từ', color: '#a855f7' }
+      { level: 1, name: 'HSK 1 (3.0)', desc: 'Sơ cấp 1 - 500 âm tiết & từ vựng cơ bản', color: '#10b981' },
+      { level: 2, name: 'HSK 2 (3.0)', desc: 'Sơ cấp 2 - Từ vựng giao tiếp đời sống', color: '#3b82f6' },
+      { level: 3, name: 'HSK 3 (3.0)', desc: 'Sơ cấp 3 - Từ vựng hoàn thiện nền tảng', color: '#06b6d4' },
+      { level: 4, name: 'HSK 4 (3.0)', desc: 'Trung cấp 4 - Từ vựng học thuật & đời sống', color: '#f59e0b' },
+      { level: 5, name: 'HSK 5 (3.0)', desc: 'Trung cấp 5 - Từ vựng làm việc & công sở', color: '#ec4899' },
+      { level: 6, name: 'HSK 6 (3.0)', desc: 'Trung cấp 6 - Từ vựng cao cấp & học thuật', color: '#8b5cf6' },
+      { level: '7-9', name: 'New HSK 7-9 (3.0)', desc: 'Cao cấp HSK 7-9 - 10 Chủ đề chuyên sâu cho bậc Đại học & Chuyên gia', color: '#a855f7' }
     ];
   }
 
@@ -3164,14 +3164,14 @@ function renderGamifiedRoadmapPath() {
         return !curr.includes('yct') && !ver.includes('yct') && (ver.includes('2') || ver === '2.0') && matchLevel(w.level, item.level);
       }
       // HSK 3.0
-      return !curr.includes('yct') && !ver.includes('yct') && (ver.includes('3') || ver === '3.0' || !w.hskVersion) && matchLevel(w.level, item.level);
+      return !curr.includes('yct') && !ver.includes('yct') && (ver.includes('3') || ver === '3.0' || w.hskVersion === '3.0') && matchLevel(w.level, item.level);
     });
 
     const totalWords = levelWords.length;
     const memorizedWords = levelWords.filter(w => w.isMemorized).length;
     const pct = totalWords > 0 ? Math.round((memorizedWords / totalWords) * 100) : 0;
 
-    const isCompleted = pct === 100;
+    const isCompleted = pct === 100 && totalWords > 0;
     const isStarted = pct > 0 || idx === 0;
 
     let statusBadge = '';
@@ -4831,17 +4831,20 @@ function renderLessonsList() {
             <span>Từ Vựng</span>
             <small>${wordsCount} từ</small>
           </button>
-          <button class="lesson-mod-btn mod-grammar" onclick="event.stopPropagation(); window.openLessonGrammarStudy('${lessonId}')">
+          <button class="lesson-mod-btn mod-grammar" style="opacity: 0.85; position: relative;" onclick="event.stopPropagation(); window.showComingSoonNotice('Ngữ Pháp')">
             <i class="fa-solid fa-spell-check"></i>
             <span>Ngữ Pháp</span>
+            <small style="background: rgba(0,0,0,0.25); color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">Sắp ra mắt</small>
           </button>
-          <button class="lesson-mod-btn mod-text" onclick="event.stopPropagation(); window.openLessonTextStudy('${lessonId}')">
+          <button class="lesson-mod-btn mod-text" style="opacity: 0.85; position: relative;" onclick="event.stopPropagation(); window.showComingSoonNotice('Bài Khóa')">
             <i class="fa-solid fa-comments"></i>
             <span>Bài Khóa</span>
+            <small style="background: rgba(0,0,0,0.25); color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">Sắp ra mắt</small>
           </button>
-          <button class="lesson-mod-btn mod-review" onclick="event.stopPropagation(); window.openLessonReviewStudy('${lessonId}')">
+          <button class="lesson-mod-btn mod-review" style="opacity: 0.85; position: relative;" onclick="event.stopPropagation(); window.showComingSoonNotice('Ôn Tập')">
             <i class="fa-solid fa-circle-play"></i>
             <span>Ôn Tập</span>
+            <small style="background: rgba(0,0,0,0.25); color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">Sắp ra mắt</small>
           </button>
         </div>
       `;
@@ -4995,17 +4998,20 @@ function renderLessonsList() {
           <span>Từ Vựng</span>
           <small>${wordsCount} từ</small>
         </button>
-        <button class="lesson-mod-btn mod-grammar" onclick="event.stopPropagation(); window.openLessonGrammarStudy('${lessonKey}')">
+        <button class="lesson-mod-btn mod-grammar" style="opacity: 0.85; position: relative;" onclick="event.stopPropagation(); window.showComingSoonNotice('Ngữ Pháp')">
           <i class="fa-solid fa-spell-check"></i>
           <span>Ngữ Pháp</span>
+          <small style="background: rgba(0,0,0,0.25); color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">Sắp ra mắt</small>
         </button>
-        <button class="lesson-mod-btn mod-text" onclick="event.stopPropagation(); window.openLessonTextStudy('${lessonKey}')">
+        <button class="lesson-mod-btn mod-text" style="opacity: 0.85; position: relative;" onclick="event.stopPropagation(); window.showComingSoonNotice('Bài Khóa')">
           <i class="fa-solid fa-comments"></i>
           <span>Bài Khóa</span>
+          <small style="background: rgba(0,0,0,0.25); color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">Sắp ra mắt</small>
         </button>
-        <button class="lesson-mod-btn mod-review" onclick="event.stopPropagation(); window.openLessonReviewStudy('${lessonKey}')">
+        <button class="lesson-mod-btn mod-review" style="opacity: 0.85; position: relative;" onclick="event.stopPropagation(); window.showComingSoonNotice('Ôn Tập')">
           <i class="fa-solid fa-circle-play"></i>
           <span>Ôn Tập</span>
+          <small style="background: rgba(0,0,0,0.25); color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">Sắp ra mắt</small>
         </button>
       </div>
     `;
@@ -5049,16 +5055,15 @@ window.openLessonVocabStudy = function(lessonId) {
 };
 
 window.openLessonGrammarStudy = function(lessonId) {
-  window.location.href = '/hsk-grammar.html';
+  showComingSoonNotice('Ngữ Pháp');
 };
 
 window.openLessonTextStudy = function(lessonId) {
-  showToast(`Bài Khóa (Hội thoại) Bài ${lessonId} đang mở! 💬`);
-  window.openLessonVocabStudy(lessonId);
+  showComingSoonNotice('Bài Khóa');
 };
 
 window.openLessonReviewStudy = function(lessonId) {
-  window.location.href = '/quiz-game.html';
+  showComingSoonNotice('Ôn Tập');
 };
 
 // Setup event listeners for lessons curriculum pills
@@ -6018,13 +6023,13 @@ function renderZubiDashboardTableAndRecent() {
   // 1. Dynamic Overview Table Rows
   if (tableBody) {
     const tiers = [
-      { name: 'HSK Cấp 1', curriculum: 'HSK Chuẩn (v2.0 & v3.0)', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '1'), curriculumType: 'hsk', level: 1 },
-      { name: 'HSK Cấp 2', curriculum: 'HSK Chuẩn (v2.0 & v3.0)', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '2'), curriculumType: 'hsk', level: 2 },
-      { name: 'HSK Cấp 3', curriculum: 'HSK Chuẩn (v2.0 & v3.0)', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '3'), curriculumType: 'hsk', level: 3 },
-      { name: 'HSK Cấp 4 (Thượng / Hạ)', curriculum: 'HSK Chuẩn 2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '4'), curriculumType: 'hsk', level: 4 },
-      { name: 'HSK Cấp 5 (Thượng / Hạ)', curriculum: 'HSK Chuẩn 2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '5'), curriculumType: 'hsk', level: 5 },
-      { name: 'HSK Cấp 6 (Thượng / Hạ)', curriculum: 'HSK Chuẩn 2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '6'), curriculumType: 'hsk', level: 6 },
-      { name: 'HSK Cấp 7-8-9 (Cao cấp)', curriculum: 'HSK 3.0 Chuyên nghiệp', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '7-9'), curriculumType: 'hsk', level: '7-9' },
+      { name: 'HSK Cấp 1', curriculum: `HSK Chuẩn (${activeHskVersion})`, filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '1') && (w.hskVersion || '3.0') === activeHskVersion, curriculumType: 'hsk', level: 1 },
+      { name: 'HSK Cấp 2', curriculum: `HSK Chuẩn (${activeHskVersion})`, filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '2') && (w.hskVersion || '3.0') === activeHskVersion, curriculumType: 'hsk', level: 2 },
+      { name: 'HSK Cấp 3', curriculum: `HSK Chuẩn (${activeHskVersion})`, filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '3') && (w.hskVersion || '3.0') === activeHskVersion, curriculumType: 'hsk', level: 3 },
+      { name: 'HSK Cấp 4', curriculum: `HSK Chuẩn (${activeHskVersion})`, filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '4') && (w.hskVersion || '3.0') === activeHskVersion, curriculumType: 'hsk', level: 4 },
+      { name: 'HSK Cấp 5', curriculum: `HSK Chuẩn (${activeHskVersion})`, filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '5') && (w.hskVersion || '3.0') === activeHskVersion, curriculumType: 'hsk', level: 5 },
+      { name: 'HSK Cấp 6', curriculum: `HSK Chuẩn (${activeHskVersion})`, filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '6') && (w.hskVersion || '3.0') === activeHskVersion, curriculumType: 'hsk', level: 6 },
+      { name: 'HSK Cấp 7-8-9 (Cao cấp)', curriculum: 'HSK 3.0 Chuyên nghiệp', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '7-9') && (w.hskVersion || '3.0') === '3.0', curriculumType: 'hsk', level: '7-9' },
       { name: 'YCT Cấp 1..4 (Thiếu nhi)', curriculum: 'Sắc màu YCT', filter: w => w.curriculum === 'yct' || w.hskVersion === 'yct', curriculumType: 'yct', level: 1 },
     ];
 
