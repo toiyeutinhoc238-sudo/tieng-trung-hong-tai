@@ -6071,20 +6071,89 @@ html.light-mode .lesson-item {
   color: #1e293b !important;
 }
 
-/* ─── LIGHT MODE: Override hardcoded white text in inline styles ─── */
-html.light-mode [style*="color: #fff;"],
-html.light-mode [style*="color:#fff;"] {
-  color: #1e293b !important;
-}
-html.light-mode [style*="color: #ffffff;"],
-html.light-mode [style*="color:#ffffff;"] {
-  color: #1e293b !important;
+/* ─── GLOBAL ABSOLUTE LIGHT MODE TEXT CONTRAST OVERRIDES ─── */
+html.light-mode {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-glass: rgba(255, 255, 255, 0.85);
+  --border-glass: rgba(0, 0, 0, 0.1);
+  --border-glass-hover: rgba(0, 0, 0, 0.2);
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --card-bg-front: #ffffff;
+  --card-bg-back: #f8fafc;
+  color: #0f172a !important;
 }
 
-/* ─── Exception: Keep white text on colored button/badge backgrounds ─── */
+html.light-mode body {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+/* Ép tất cả các thẻ chữ thông thường sang màu tối chuẩn khi ở chế độ SÁNG */
+html.light-mode h1:not(.btn *),
+html.light-mode h2:not(.btn *),
+html.light-mode h3:not(.btn *),
+html.light-mode h4:not(.btn *),
+html.light-mode h5:not(.btn *),
+html.light-mode h6:not(.btn *),
+html.light-mode p:not(.btn *),
+html.light-mode span:not(.btn *):not(.badge):not(.badge *):not(.c-red):not(.c-blue):not(.c-green):not(.c-yellow),
+html.light-mode div:not(.btn *):not(.badge *),
+html.light-mode td,
+html.light-mode th,
+html.light-mode li,
+html.light-mode label {
+  color: inherit;
+}
+
+/* Đảm bảo chữ trắng inline style chuyển thành tối dứt khoát */
+html.light-mode [style*="color: #fff"]:not(.btn *):not(.btn):not(.badge *),
+html.light-mode [style*="color:#fff"]:not(.btn *):not(.btn):not(.badge *),
+html.light-mode [style*="color: #ffffff"]:not(.btn *):not(.btn):not(.badge *),
+html.light-mode [style*="color:#ffffff"]:not(.btn *):not(.btn):not(.badge *),
+html.light-mode [style*="color: white"]:not(.btn *):not(.btn):not(.badge *),
+html.light-mode [style*="color:white"]:not(.btn *):not(.btn):not(.badge *) {
+  color: #0f172a !important;
+}
+
+html.light-mode [style*="color: #f8fafc"],
+html.light-mode [style*="color:#f8fafc"],
+html.light-mode [style*="color: #e2e8f0"],
+html.light-mode [style*="color:#e2e8f0"],
+html.light-mode [style*="color: #cbd5e1"],
+html.light-mode [style*="color:#cbd5e1"],
+html.light-mode [style*="color: #94a3b8"],
+html.light-mode [style*="color:#94a3b8"],
+html.light-mode [style*="color: #64748b"],
+html.light-mode [style*="color:#64748b"] {
+  color: #334155 !important;
+}
+
+/* Tự động chuyển nền tối sẫm inline style sang nền sáng dịu */
+html.light-mode [style*="background: rgba(15,23,42"],
+html.light-mode [style*="background:rgba(15,23,42"],
+html.light-mode [style*="background: rgba(15, 23, 42"],
+html.light-mode [style*="background: rgba(30,41,59"],
+html.light-mode [style*="background:rgba(30,41,59"],
+html.light-mode [style*="background: rgba(30, 41, 59"],
+html.light-mode [style*="background: #0f172a"],
+html.light-mode [style*="background:#0f172a"],
+html.light-mode [style*="background: #1e293b"],
+html.light-mode [style*="background:#1e293b"],
+html.light-mode [style*="background: #0b0f19"],
+html.light-mode [style*="background:#0b0f19"] {
+  background: #ffffff !important;
+  border-color: #cbd5e1 !important;
+}
+
+/* Ngoại lệ: Giữ chữ trắng tương phản cho Nút bấm màu, Thẻ Badge màu */
 html.light-mode .btn-primary,
+html.light-mode .btn-success,
+html.light-mode .btn-danger,
+html.light-mode .btn-warning,
 html.light-mode .ans-btn,
-html.light-mode [style*="background: linear-gradient"] [style*="color: #ffffff"],
 html.light-mode .c-red,
 html.light-mode .c-blue,
 html.light-mode .c-yellow,
