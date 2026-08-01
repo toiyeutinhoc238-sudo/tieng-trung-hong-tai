@@ -3220,7 +3220,7 @@ function renderGamifiedRoadmapPath() {
 
     if (idx < levelsData.length - 1) {
       html += `
-        <div style="text-align: center; color: rgba(255,255,255,0.3); font-size: 1.5rem; margin: -10px 0;">
+        <div class="roadmap-connector-arrow" style="text-align: center; font-size: 1.5rem; margin: -10px 0;">
           <i class="fa-solid fa-down-long"></i>
         </div>
       `;

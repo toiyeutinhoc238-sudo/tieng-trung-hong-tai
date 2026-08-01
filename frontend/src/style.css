@@ -6447,6 +6447,15 @@ html.light-mode .node-info-card {
 html.light-mode .node-card-title {
   color: #0f172a !important;
 }
+
+/* Roadmap Connector Arrow Contrast Fix */
+html.dark .roadmap-connector-arrow {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+html:not(.dark) .roadmap-connector-arrow {
+  color: #3b82f6 !important;
+}
+
 html.light-mode .node-card-sub {
   color: #475569 !important;
 }
