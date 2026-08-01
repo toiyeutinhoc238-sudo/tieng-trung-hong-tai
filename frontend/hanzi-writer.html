@@ -1860,14 +1860,15 @@
             .print-page-area {
               width: 100% !important;
               max-width: 100% !important;
-              max-height: 280mm !important;
-              overflow: hidden !important;
               box-shadow: none !important;
               border: none !important;
               padding: 0 !important;
               margin: 0 !important;
-              page-break-after: always !important;
-              break-after: page !important;
+            }
+            .print-word-card {
+              page-break-inside: avoid !important;
+              break-inside: avoid !important;
+              margin-bottom: 24px !important;
             }
             .no-print {
               display: none !important;
