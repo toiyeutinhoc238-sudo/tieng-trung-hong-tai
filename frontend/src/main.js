@@ -4818,18 +4818,31 @@ function renderLessonsList() {
       const desc = sliceWords[0].lessonDesc || `Từ vựng YCT (Thiếu nhi) Cấp ${activeYctLevel} Bài ${lessonId}`;
 
       const card = document.createElement('div');
-      card.className = 'lesson-card';
+      card.className = 'lesson-card glass-panel cartoon-lesson-card';
       card.innerHTML = `
-        <div>
-          <span class="lesson-badge">YCT ${activeYctLevel} - Bài ${lessonId}</span>
-          <h3 class="lesson-title">${title}</h3>
+        <div class="lesson-card-header">
+          <span class="lesson-badge hsk-badge-2">YCT ${activeYctLevel} • Bài ${lessonId}</span>
+          <h3 class="lesson-title" style="margin-top: 8px; font-family: var(--font-display); font-size: 1.3rem;">${title}</h3>
           <p class="lesson-desc">${desc}</p>
         </div>
-        <div class="lesson-footer">
-          <span class="lesson-words-indicator">
-            <i class="fa-solid fa-book-open"></i> ${wordsCount} từ vựng
-          </span>
-          <span class="lesson-detail-link">Chi tiết bài học <i class="fa-solid fa-chevron-right"></i></span>
+        <div class="lesson-modules-grid">
+          <button class="lesson-mod-btn mod-vocab" onclick="event.stopPropagation(); window.openLessonVocabStudy('${lessonId}')">
+            <i class="fa-solid fa-book-bookmark"></i>
+            <span>Từ Vựng</span>
+            <small>${wordsCount} từ</small>
+          </button>
+          <button class="lesson-mod-btn mod-grammar" onclick="event.stopPropagation(); window.openLessonGrammarStudy('${lessonId}')">
+            <i class="fa-solid fa-spell-check"></i>
+            <span>Ngữ Pháp</span>
+          </button>
+          <button class="lesson-mod-btn mod-text" onclick="event.stopPropagation(); window.openLessonTextStudy('${lessonId}')">
+            <i class="fa-solid fa-comments"></i>
+            <span>Bài Khóa</span>
+          </button>
+          <button class="lesson-mod-btn mod-review" onclick="event.stopPropagation(); window.openLessonReviewStudy('${lessonId}')">
+            <i class="fa-solid fa-circle-play"></i>
+            <span>Ôn Tập</span>
+          </button>
         </div>
       `;
 
@@ -4969,18 +4982,31 @@ function renderLessonsList() {
     const badgeLevelStr = activeLessonsLevel === '7-9' ? '7-8-9' : activeLessonsLevel;
 
     const card = document.createElement('div');
-    card.className = 'lesson-card';
+    card.className = 'lesson-card glass-panel cartoon-lesson-card';
     card.innerHTML = `
-      <div>
-        <span class="lesson-badge">HSK ${badgeLevelStr} (${activeHskVersion}) - ${firstWord.category || ('Bài ' + lessonKey)}</span>
-        <h3 class="lesson-title">${title}</h3>
+      <div class="lesson-card-header">
+        <span class="lesson-badge hsk-badge-${Math.min(activeLessonsLevel === '7-9' ? 6 : Number(activeLessonsLevel), 6)}">HSK ${badgeLevelStr} (${activeHskVersion}) • ${firstWord.category || ('Bài ' + lessonKey)}</span>
+        <h3 class="lesson-title" style="margin-top: 8px; font-family: var(--font-display); font-size: 1.3rem;">${title}</h3>
         <p class="lesson-desc">${desc}</p>
       </div>
-      <div class="lesson-footer">
-        <span class="lesson-words-indicator">
-          <i class="fa-solid fa-book-open"></i> ${wordsCount} từ vựng
-        </span>
-        <span class="lesson-detail-link">Chi tiết bài học <i class="fa-solid fa-chevron-right"></i></span>
+      <div class="lesson-modules-grid">
+        <button class="lesson-mod-btn mod-vocab" onclick="event.stopPropagation(); window.openLessonVocabStudy('${lessonKey}')">
+          <i class="fa-solid fa-book-bookmark"></i>
+          <span>Từ Vựng</span>
+          <small>${wordsCount} từ</small>
+        </button>
+        <button class="lesson-mod-btn mod-grammar" onclick="event.stopPropagation(); window.openLessonGrammarStudy('${lessonKey}')">
+          <i class="fa-solid fa-spell-check"></i>
+          <span>Ngữ Pháp</span>
+        </button>
+        <button class="lesson-mod-btn mod-text" onclick="event.stopPropagation(); window.openLessonTextStudy('${lessonKey}')">
+          <i class="fa-solid fa-comments"></i>
+          <span>Bài Khóa</span>
+        </button>
+        <button class="lesson-mod-btn mod-review" onclick="event.stopPropagation(); window.openLessonReviewStudy('${lessonKey}')">
+          <i class="fa-solid fa-circle-play"></i>
+          <span>Ôn Tập</span>
+        </button>
       </div>
     `;
 
@@ -5016,6 +5042,24 @@ function startLessonStudy(lesson, sliceWords) {
 
   showToast(`Đang hiển thị chi tiết bài học: ${lesson.title} 📖`);
 }
+
+window.openLessonVocabStudy = function(lessonId) {
+  const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : activeLessonsLevel;
+  startLessonStudy({ id: lessonId, title: `Bài ${lessonId}` }, vocabList.filter(w => !w.isCustom && matchLevel(w.level, currentLvl)));
+};
+
+window.openLessonGrammarStudy = function(lessonId) {
+  window.location.href = '/hsk-grammar.html';
+};
+
+window.openLessonTextStudy = function(lessonId) {
+  showToast(`Bài Khóa (Hội thoại) Bài ${lessonId} đang mở! 💬`);
+  window.openLessonVocabStudy(lessonId);
+};
+
+window.openLessonReviewStudy = function(lessonId) {
+  window.location.href = '/quiz-game.html';
+};
 
 // Setup event listeners for lessons curriculum pills
 function initLessonsView() {

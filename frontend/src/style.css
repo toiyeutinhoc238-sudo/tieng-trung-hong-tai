@@ -4051,25 +4051,109 @@ html.dark .lessons-objectives-bar {
   justify-content: space-between;
   min-height: 180px;
   transition: all 0.25s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.01);
+  min-height: 220px;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
 }
 
 html.dark .lesson-card {
-  background: rgba(30, 27, 26, 0.2);
+  background: var(--bg-card);
   border-color: var(--border-glass);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .lesson-card:hover {
-  transform: translateY(-3px);
-  border-color: #cbd5e1;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+  transform: translateY(-4px);
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-glow);
 }
 
-html.dark .lesson-card:hover {
-  border-color: var(--border-glass-hover);
-  background: rgba(30, 27, 26, 0.4);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+/* Cartoon Lesson Wireframe Module Buttons */
+.lesson-modules-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 2px dashed var(--border-glass);
+}
+
+.lesson-mod-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 12px 8px;
+  border-radius: var(--radius-md);
+  border: none;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.lesson-mod-btn i {
+  font-size: 1.15rem;
+}
+
+.lesson-mod-btn small {
+  font-size: 0.7rem;
+  opacity: 0.85;
+}
+
+.lesson-mod-btn.mod-vocab {
+  background: #58cc02;
+  color: #ffffff;
+  box-shadow: 0 4px 0 #46a302;
+}
+.lesson-mod-btn.mod-vocab:hover {
+  background: #61df02;
+}
+.lesson-mod-btn.mod-vocab:active {
+  box-shadow: 0 1px 0 #46a302;
+  transform: translateY(3px);
+}
+
+.lesson-mod-btn.mod-grammar {
+  background: #1cb0f6;
+  color: #ffffff;
+  box-shadow: 0 4px 0 #1899d6;
+}
+.lesson-mod-btn.mod-grammar:hover {
+  background: #24bbfd;
+}
+.lesson-mod-btn.mod-grammar:active {
+  box-shadow: 0 1px 0 #1899d6;
+  transform: translateY(3px);
+}
+
+.lesson-mod-btn.mod-text {
+  background: #ffc800;
+  color: #4b3200;
+  box-shadow: 0 4px 0 #e5b200;
+}
+.lesson-mod-btn.mod-text:hover {
+  background: #ffd21a;
+}
+.lesson-mod-btn.mod-text:active {
+  box-shadow: 0 1px 0 #e5b200;
+  transform: translateY(3px);
+}
+
+.lesson-mod-btn.mod-review {
+  background: #ce82ff;
+  color: #ffffff;
+  box-shadow: 0 4px 0 #b45be6;
+}
+.lesson-mod-btn.mod-review:hover {
+  background: #d896ff;
+}
+.lesson-mod-btn.mod-review:active {
+  box-shadow: 0 1px 0 #b45be6;
+  transform: translateY(3px);
 }
 
 .lesson-badge {
