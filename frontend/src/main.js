@@ -142,10 +142,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 function applyThemeClass(isDark) {
   if (isDark) {
     document.documentElement.classList.add('dark');
-    document.documentElement.classList.remove('light-mode');
+    document.documentElement.classList.remove('light', 'light-mode');
+    if (document.body) {
+      document.body.classList.remove('light', 'light-mode');
+    }
   } else {
     document.documentElement.classList.remove('dark');
-    document.documentElement.classList.add('light-mode');
+    document.documentElement.classList.add('light', 'light-mode');
+    if (document.body) {
+      document.body.classList.add('light-mode');
+    }
   }
 }
 

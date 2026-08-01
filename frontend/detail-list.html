@@ -45,7 +45,7 @@
       if (isLight) {
         document.documentElement.classList.remove('light', 'light-mode');
         document.documentElement.classList.add('dark');
-        if (document.body) document.body.classList.remove('light-mode');
+        if (document.body) document.body.classList.remove('light', 'light-mode');
         localStorage.setItem('theme', 'dark');
         updateToggleBtns(false);
       } else {
