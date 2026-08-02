@@ -3347,12 +3347,23 @@ function renderGamifiedRoadmapPath() {
 
 window.renderGamifiedRoadmapPath = renderGamifiedRoadmapPath;
 window.goToRoadmapLevel = function (ver, level) {
-  if (window.setHskVersion) {
-    window.setHskVersion(ver);
+  // Set version
+  if (ver === 'yct') {
+    activeHskVersion = 'yct';
+    activeLessonsCurriculum = 'yct';
+    activeYctLevel = level.toString();
+  } else {
+    activeHskVersion = ver;
+    activeLessonsCurriculum = 'hsk';
+    // Parse level correctly: '7-9' stays string, numbers become int
+    activeLessonsLevel = /^\d+$/.test(level.toString()) ? parseInt(level) : level.toString();
   }
-  if (window.selectCurriculumLevel) {
-    window.selectCurriculumLevel(level);
-  }
+
+  // Sync version selector UI buttons
+  if (typeof updateVersionButtonsUI === 'function') updateVersionButtonsUI();
+  if (typeof updateExamsVersionUI === 'function') updateExamsVersionUI();
+
+  // Switch to lessons tab (which calls renderLessonsList internally)
   switchTab('lessons');
 };
 window.setRoadmapVersion = function (ver) {
