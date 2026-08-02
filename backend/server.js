@@ -154,8 +154,7 @@ async function performDataMigration() {
     const dataStr = await fs.readFile(USER_DB_PATH, 'utf-8');
     const fileData = JSON.parse(dataStr);
     if (!fileData || !fileData.users || Object.keys(fileData.users).length === 0) {
-      console.log("user_data.json is empty, setting cachedUserData to empty.");
-      cachedUserData = { users: {}, progress: {}, customWords: {}, sessions: {}, chats: {}, quizHistory: {} };
+      console.log("user_data.json is empty or invalid, skipping migration.");
       return;
     }
 
@@ -552,20 +551,22 @@ app.get('/api/user/game-history', async (req, res) => {
   }
 });
 
-// GET endpoint for Real MongoDB Leaderboard
+// GET endpoint for Real MongoDB Leaderboard — reads directly from MongoDB (bypasses RAM cache)
 app.get('/api/leaderboard', async (req, res) => {
   try {
-    const userData = await readUserData();
-    const usersObj = userData.users || {};
-    const progressObj = userData.progress || {};
+    // Always query MongoDB directly so we reflect the real current state
+    const usersList = await User.find({});
+
+    if (!usersList || usersList.length === 0) {
+      return res.json([]);
+    }
 
     const leaderboard = [];
 
-    for (const email of Object.keys(usersObj)) {
-      const u = usersObj[email];
-      const userProg = progressObj[email] || {};
+    for (const u of usersList) {
+      const userProg = u.progress || {};
 
-      // 1. Tính số lượng bài học (từ vựng) đã học thuộc/hoàn thành
+      // Tính số từ vựng đã học thuộc/hoàn thành
       let completedLessonsCount = 0;
       let earliestCompletionTime = null;
 
@@ -582,12 +583,13 @@ app.get('/api/leaderboard', async (req, res) => {
         }
       }
 
-      // Thời gian hoạt động gần nhất hoặc hoàn thành bài học
-      const lastActive = u.stats && u.stats.lastActiveDate ? new Date(u.stats.lastActiveDate).getTime() : (earliestCompletionTime || Date.now());
+      const lastActive = u.stats && u.stats.lastActiveDate
+        ? new Date(u.stats.lastActiveDate).getTime()
+        : (earliestCompletionTime || Date.now());
 
       leaderboard.push({
-        email: email,
-        name: u.name || email.split('@')[0],
+        email: u._id,
+        name: u.name || u._id.split('@')[0],
         picture: u.picture || '',
         completedCount: completedLessonsCount,
         studyTime: u.stats ? (u.stats.studyTime || 0) : 0,
@@ -596,21 +598,12 @@ app.get('/api/leaderboard', async (req, res) => {
       });
     }
 
-    // 2. Sắp xếp thứ tự ưu tiên tuyệt đối:
-    // Mức 1: Số bài đã học (completedCount) nhiều nhất lên trước
-    // Mức 2 (nếu bằng số bài): Hoàn thành sớm nhất (earliestCompletionTime) lên trước
-    // Mức 3 (nếu bằng số bài và bằng thời gian hoàn thành sớm nhất): Thời gian tương tác (studyTime) nhiều hơn lên trước
     leaderboard.sort((a, b) => {
-      if (b.completedCount !== a.completedCount) {
-        return b.completedCount - a.completedCount;
-      }
-      if (a.earliestCompletionTime !== b.earliestCompletionTime) {
-        return a.earliestCompletionTime - b.earliestCompletionTime;
-      }
+      if (b.completedCount !== a.completedCount) return b.completedCount - a.completedCount;
+      if (a.earliestCompletionTime !== b.earliestCompletionTime) return a.earliestCompletionTime - b.earliestCompletionTime;
       return b.studyTime - a.studyTime;
     });
 
-    // Chỉ lấy Top 10 học viên xuất sắc nhất
     const top10 = leaderboard.slice(0, 10).map((item, index) => ({
       rank: index + 1,
       name: item.name,
@@ -624,6 +617,20 @@ app.get('/api/leaderboard', async (req, res) => {
   } catch (error) {
     console.error("Leaderboard calculation error:", error);
     res.status(500).json({ error: "Failed to fetch real leaderboard" });
+  }
+});
+
+// Admin: Reset toàn bộ dữ liệu người dùng (xóa MongoDB + RAM cache)
+app.delete('/api/admin/reset-all', async (req, res) => {
+  try {
+    await User.deleteMany({});
+    await Session.deleteMany({});
+    cachedUserData = null;
+    console.log("[ADMIN] All user data reset: MongoDB cleared, RAM cache invalidated.");
+    res.json({ success: true, message: "All user data has been reset successfully." });
+  } catch (err) {
+    console.error("[ADMIN] Reset failed:", err);
+    res.status(500).json({ error: "Reset failed", detail: err.message });
   }
 });
 
