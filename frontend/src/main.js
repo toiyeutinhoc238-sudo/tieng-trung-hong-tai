@@ -5792,10 +5792,20 @@ function startStudyTimer() {
       sessionStudyTime++;
 
       const totalSecs = userStudyTime + sessionStudyTime;
-      const totalMins = Math.floor(totalSecs / 60);
-      const studyTimeValEl = document.getElementById('welcome-study-time-val');
-      if (studyTimeValEl) {
-        studyTimeValEl.textContent = `${totalMins} phút`;
+      const mins = Math.floor(totalSecs / 60);
+      const zubiStudyTime = document.getElementById('zubi-study-time-count');
+      if (zubiStudyTime) {
+        if (mins >= 1440) {
+          const days = Math.floor(mins / 1440);
+          const remHrs = Math.floor((mins % 1440) / 60);
+          zubiStudyTime.textContent = remHrs > 0 ? `${days} ngày ${remHrs} giờ` : `${days} ngày`;
+        } else if (mins >= 60) {
+          const hrs = Math.floor(mins / 60);
+          const remMins = mins % 60;
+          zubiStudyTime.textContent = remMins > 0 ? `${hrs} giờ ${remMins} phút` : `${hrs} giờ`;
+        } else {
+          zubiStudyTime.textContent = `${mins} phút`;
+        }
       }
 
       if (sessionStudyTime >= 15) {
@@ -5895,7 +5905,8 @@ function renderCourseCompletionDashboard() {
   const textbookGroups = {};
   activeVocabs.forEach(w => {
     if (!w.level || !w.lessonId) return;
-    const key = `${w.hskVersion || '3.0'}_${w.level}_${w.lessonId}`;
+    if ((w.hskVersion || '3.0') !== activeHskVersion && (w.curriculum || 'hsk') !== activeRoadmapVersion) return;
+    const key = `${w.curriculum || 'hsk'}_${w.hskVersion || '3.0'}_${w.level}_${w.lessonId}`;
     if (!textbookGroups[key]) textbookGroups[key] = [];
     textbookGroups[key].push(w);
   });
@@ -5915,11 +5926,16 @@ function renderCourseCompletionDashboard() {
   if (zubiEnrolled) zubiEnrolled.textContent = `${enrolled} Bài`;
   if (zubiTotalWords) zubiTotalWords.textContent = `${vocabList.length.toLocaleString()} Từ`;
   if (zubiStudyTime) {
-    const mins = Math.floor(userStudyTime / 60);
-    if (mins >= 60) {
+    const totalSecs = userStudyTime + sessionStudyTime;
+    const mins = Math.floor(totalSecs / 60);
+    if (mins >= 1440) { // >= 1 day
+      const days = Math.floor(mins / 1440);
+      const remHrs = Math.floor((mins % 1440) / 60);
+      zubiStudyTime.textContent = remHrs > 0 ? `${days} ngày ${remHrs} giờ` : `${days} ngày`;
+    } else if (mins >= 60) { // >= 1 hour
       const hrs = Math.floor(mins / 60);
       const remMins = mins % 60;
-      zubiStudyTime.textContent = `${hrs}h ${remMins}m`;
+      zubiStudyTime.textContent = remMins > 0 ? `${hrs} giờ ${remMins} phút` : `${hrs} giờ`;
     } else {
       zubiStudyTime.textContent = `${mins} phút`;
     }
