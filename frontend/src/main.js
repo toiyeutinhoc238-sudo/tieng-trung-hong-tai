@@ -6106,33 +6106,9 @@ function updateStatsUI() {
 }
 
 window.selectCurriculumAndGo = function (curr, level, hskVersion) {
-  if (curr === 'yct') {
-    activeLessonsCurriculum = 'yct';
-    activeYctLevel = level.toString();
-    activeHskVersion = 'yct';
-  } else {
-    activeLessonsCurriculum = 'hsk';
-    activeLessonsLevel = level.toString();
-    if (hskVersion) {
-      activeHskVersion = hskVersion;
-      // Sync version UI buttons
-      if (typeof updateVersionButtonsUI === 'function') updateVersionButtonsUI();
-      if (typeof updateExamsVersionUI === 'function') updateExamsVersionUI();
-    }
-  }
-
-  // Chuyển tab sang thẻ từ vựng
-  if (window.switchTab) {
-    window.switchTab('flashcards');
-  }
-
-  renderLessonsList();
-
-  const flashcardSec = document.getElementById('flashcard-section');
-  if (flashcardSec) {
-    flashcardSec.style.display = 'block';
-    flashcardSec.scrollIntoView({ behavior: 'smooth' });
-  }
+  // Navigate to the lesson list for this HSK level/version — same as clicking a roadmap node
+  const ver = hskVersion || (curr === 'yct' ? 'yct' : activeHskVersion);
+  window.goToRoadmapLevel(ver, level);
 };
 
 function renderZubiDashboardTableAndRecent() {
