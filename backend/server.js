@@ -94,13 +94,20 @@ async function readDatabase() {
 
 // Helper to read user_data.json
 async function readUserData() {
-  if (cachedUserData) {
-    return cachedUserData;
+  if (!MONGODB_URI || mongoose.connection.readyState !== 1) {
+    try {
+      const fileData = await fs.readFile(USER_DB_PATH, 'utf-8');
+      cachedUserData = JSON.parse(fileData);
+      return cachedUserData;
+    } catch (e) {
+      if (cachedUserData) return cachedUserData;
+      return { users: {}, progress: {}, customWords: {}, sessions: {}, chats: {} };
+    }
   }
 
   try {
-    const usersList = await User.find({});
-    const sessionsList = await Session.find({});
+    const usersList = await User.find({}).maxTimeMS(2000);
+    const sessionsList = await Session.find({}).maxTimeMS(2000);
 
     const users = {};
     const progress = {};
@@ -130,7 +137,6 @@ async function readUserData() {
 
     cachedUserData = { users, progress, customWords, sessions, chats, quizHistory };
 
-    // If MongoDB is completely empty (no users), perform migration from user_data.json
     if (usersList.length === 0) {
       await performDataMigration();
     }
@@ -138,7 +144,13 @@ async function readUserData() {
     return cachedUserData;
   } catch (error) {
     console.error("Error reading database from MongoDB, returning skeleton:", error);
-    return { users: {}, progress: {}, customWords: {}, sessions: {}, chats: {} };
+    try {
+      const fileData = await fs.readFile(USER_DB_PATH, 'utf-8');
+      cachedUserData = JSON.parse(fileData);
+      return cachedUserData;
+    } catch (e) {
+      return { users: {}, progress: {}, customWords: {}, sessions: {}, chats: {} };
+    }
   }
 }
 

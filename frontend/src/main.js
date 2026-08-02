@@ -16,7 +16,7 @@ let chineseVoice = null;  // Reference to Web Speech Chinese voice object
 let currentUser = null;   // Active authenticated user profile
 const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === ''
   ? 'http://localhost:5000'
-  : 'https://tieng-trung-hong-tai.onrender.com';
+  : (window.location.origin.includes('5173') ? 'http://localhost:5000' : window.location.origin);
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || 'your-google-client-id-here.apps.googleusercontent.com';
 
 const premiumMockData = [
