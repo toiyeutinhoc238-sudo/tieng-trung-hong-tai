@@ -2514,6 +2514,17 @@ function setupEventListeners() {
 
   // Handle messages sent from game iframe
   window.addEventListener('message', async (event) => {
+    if (event.data && event.data.type === 'CLOSE_GAME_IFRAME') {
+      const gamePlayView = document.getElementById('game-play-view');
+      if (gamePlayView) gamePlayView.style.display = 'none';
+
+      const deckSelectionView = document.getElementById('deck-selection-view');
+      if (deckSelectionView) deckSelectionView.style.display = 'block';
+
+      const iframe = document.getElementById('game-play-iframe');
+      if (iframe) iframe.src = '';
+      return;
+    }
     if (event.data && event.data.type === 'VOCAB_STATE_UPDATED') {
       console.log('Real-time sync: Vocab state updated in game, refreshing data...');
       await fetchVocabulary();
@@ -5154,6 +5165,22 @@ function startLessonStudy(lesson, sliceWords) {
     return;
   }
 
+  // Record user activity for Recent Lessons section
+  if (window.recordUserRecentActivity) {
+    const curLevel = activeLessonsCurriculum === 'yct' ? activeYctLevel : activeLessonsLevel;
+    window.recordUserRecentActivity({
+      id: `lesson_${activeLessonsCurriculum}_${activeHskVersion}_${curLevel}_${lesson.id}`,
+      title: `${activeLessonsCurriculum === 'yct' ? 'YCT ' + activeYctLevel : 'HSK ' + activeLessonsLevel + ' (v' + activeHskVersion + ')'} - ${lesson.title}`,
+      type: 'lesson',
+      typeLabel: 'Bài học Từ vựng',
+      icon: '📖',
+      curriculum: activeLessonsCurriculum,
+      hskVersion: activeHskVersion,
+      level: curLevel,
+      lessonId: lesson.id
+    });
+  }
+
   // Switch tab to flashcards first (so its default showTopicsView doesn't override our dashboard view)
   switchTab('flashcards');
 
@@ -5161,7 +5188,6 @@ function startLessonStudy(lesson, sliceWords) {
   activeSmartTopic = activeLessonsCurriculum === 'yct' ? 'yct' : 'hsk';
 
   // Highlight/select only this lesson on the notebook dashboard
-  // Highlight/select only this lesson on the notebook dashboard (cast to String/Number safe)
   selectedDashboardLessons = [String(lesson.id)];
 
   // Open HSK/YCT Notebook Dashboard
@@ -6120,14 +6146,196 @@ function updateStatsUI() {
   renderCourseCompletionDashboard();
 }
 
+window.recordUserRecentActivity = function (item) {
+  if (!item || !item.id) return;
+  try {
+    const key = 'user_recent_activities';
+    let list = JSON.parse(localStorage.getItem(key) || '[]');
+    list = list.filter(x => x.id !== item.id);
+    item.lastAccessed = Date.now();
+    list.unshift(item);
+    if (list.length > 10) list.length = 10;
+    localStorage.setItem(key, JSON.stringify(list));
+    renderRecentActivityCards();
+  } catch (e) {
+    console.warn('Failed to save recent activity:', e);
+  }
+};
+
+window.launchRecentActivity = function (actId) {
+  try {
+    const key = 'user_recent_activities';
+    const list = JSON.parse(localStorage.getItem(key) || '[]');
+    const act = list.find(x => x.id === actId);
+    if (!act) return;
+
+    if (act.type === 'quiz') {
+      if (act.notebook) activeNotebook = act.notebook;
+      if (act.lessonId) selectedDashboardLessons = [String(act.lessonId)];
+      startGameArenaFromNotebook();
+    } else if (act.lessonId && act.level) {
+      activeLessonsCurriculum = act.curriculum || 'hsk';
+      if (act.curriculum === 'yct') {
+        activeYctLevel = Number(act.level);
+      } else {
+        activeLessonsLevel = Number(act.level);
+        if (act.hskVersion) activeHskVersion = act.hskVersion;
+      }
+      selectedDashboardLessons = [String(act.lessonId)];
+      showNotebookDashboardView(act.curriculum === 'yct' ? `yct:${act.level}` : `hsk:${act.level}`, true);
+    } else if (act.notebookId) {
+      showNotebookDashboardView(act.notebookId, true);
+    } else if (act.level) {
+      window.selectCurriculumAndGo(act.curriculum || 'hsk', act.level, act.hskVersion || '3.0');
+    }
+  } catch (e) {
+    console.error('Failed to launch recent activity:', e);
+  }
+};
+
+function formatTimeAgo(ts) {
+  if (!ts) return 'Vừa truy cập';
+  const diffSec = Math.floor((Date.now() - ts) / 1000);
+  if (diffSec < 60) return 'Vừa xong';
+  if (diffSec < 3600) return `${Math.floor(diffSec / 60)} phút trước`;
+  if (diffSec < 86400) return `${Math.floor(diffSec / 3600)} giờ trước`;
+  return new Date(ts).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: '2-digit' });
+}
+
+function renderRecentActivityCards() {
+  const recentGrid = document.getElementById('zubi-recent-cards-grid');
+  if (!recentGrid) return;
+
+  const key = 'user_recent_activities';
+  let list = [];
+  try {
+    list = JSON.parse(localStorage.getItem(key) || '[]');
+  } catch (e) { list = []; }
+
+  const builtInVocabs = vocabList.filter(w => !w.isCustom);
+
+  if (!list || list.length === 0) {
+    // Default starter recommendation cards if user hasn't studied any specific lesson yet
+    const defaults = [
+      {
+        id: 'hsk_3.0_1',
+        title: '🎓 HSK Chuẩn 3.0 – Cấp 1 (Nhập môn)',
+        typeLabel: 'Lộ trình gợi ý',
+        curr: 'hsk', hskVer: '3.0', level: 1
+      },
+      {
+        id: 'hsk_2.0_1',
+        title: '📘 HSK Chuẩn 2.0 – Cấp 1',
+        typeLabel: 'Lộ trình gợi ý',
+        curr: 'hsk', hskVer: '2.0', level: 1
+      },
+      {
+        id: 'yct_yct_1',
+        title: '🌟 YCT – Tiếng Trung Thiếu nhi Cấp 1',
+        typeLabel: 'Lộ trình gợi ý',
+        curr: 'yct', hskVer: 'yct', level: 1
+      }
+    ];
+
+    let cardsHtml = '';
+    defaults.forEach(les => {
+      const words = builtInVocabs.filter(w =>
+        (les.curr === 'yct' ? w.curriculum === 'yct' : (w.curriculum === 'hsk' || !w.curriculum)) &&
+        (les.hskVer === 'yct' ? true : (w.hskVersion || '3.0') === les.hskVer) &&
+        String(w.level) === String(les.level)
+      );
+      const count = words.length;
+      const memorized = words.filter(w => w.isMemorized).length;
+      const pct = count > 0 ? Math.round((memorized / count) * 100) : 0;
+      let pillBg = 'rgba(59,130,246,0.2)', pillColor = '#60a5fa', pillText = 'Chưa học';
+      if (pct > 0) {
+        pillBg = 'rgba(217,119,6,0.2)'; pillColor = '#fbbf24'; pillText = `Đang học ${pct}%`;
+      }
+
+      cardsHtml += `
+        <div class="zubi-recent-card" style="background: rgba(30,41,59,0.9); border-radius: 16px; padding: 20px 22px; box-shadow: 0 4px 16px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; gap: 14px; cursor: pointer; transition: transform 0.2s, border-color 0.2s;" onclick="window.selectCurriculumAndGo('${les.curr}', '${les.level}', '${les.hskVer}')" onmouseover="this.style.transform='translateY(-2px)';this.style.borderColor='rgba(59,130,246,0.4)';" onmouseout="this.style.transform='none';this.style.borderColor='rgba(255,255,255,0.08)';">
+          <div class="recent-card-top" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
+            <div class="recent-title" style="font-weight: 700; font-size: 0.95rem; color: #f8fafc; line-height: 1.3;">${les.title}</div>
+          </div>
+          <div class="recent-val green-text" style="font-family: var(--font-display,sans-serif); font-size: 1.5rem; font-weight: 800; color: #10b981;">${count.toLocaleString()} từ vựng</div>
+          <div class="recent-card-footer" style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: ${pillBg}; color: ${pillColor};">${pillText}</span>
+            <span style="font-size: 0.8rem; color: #94a3b8; font-weight: 500;">Gợi ý bài mới</span>
+          </div>
+        </div>
+      `;
+    });
+    recentGrid.innerHTML = cardsHtml;
+    return;
+  }
+
+  // Render REAL recent activities clicked/learned by user
+  let cardsHtml = '';
+  list.slice(0, 6).forEach(act => {
+    let matchedWords = [];
+    if (act.lessonId && act.level) {
+      matchedWords = builtInVocabs.filter(w =>
+        String(w.level) === String(act.level) &&
+        String(w.lessonId) === String(act.lessonId) &&
+        (act.hskVersion ? (w.hskVersion || '3.0') === act.hskVersion : true)
+      );
+    } else if (act.level) {
+      matchedWords = builtInVocabs.filter(w =>
+        String(w.level) === String(act.level) &&
+        (act.hskVersion ? (w.hskVersion || '3.0') === act.hskVersion : true)
+      );
+    }
+
+    const count = matchedWords.length || act.totalWords || 0;
+    const memorized = matchedWords.length > 0 ? matchedWords.filter(w => w.isMemorized).length : (act.memorizedWords || 0);
+    const pct = count > 0 ? Math.round((memorized / count) * 100) : 0;
+
+    let pillBg = 'rgba(59,130,246,0.2)', pillColor = '#60a5fa', pillText = 'Vừa tham gia';
+    if (pct === 100) {
+      pillBg = 'rgba(16,185,129,0.2)'; pillColor = '#34d399'; pillText = 'Đã thuộc 100%';
+    } else if (pct > 0) {
+      pillBg = 'rgba(217,119,6,0.2)'; pillColor = '#fbbf24'; pillText = `Đang học ${pct}% (${memorized}/${count})`;
+    } else {
+      pillBg = 'rgba(59,130,246,0.2)'; pillColor = '#60a5fa'; pillText = `Mới truy cập (${count} từ)`;
+    }
+
+    const icon = act.icon || (act.type === 'quiz' ? '🎮' : '📖');
+    const timeStr = formatTimeAgo(act.lastAccessed);
+
+    cardsHtml += `
+      <div class="zubi-recent-card" style="background: rgba(30,41,59,0.9); border-radius: 16px; padding: 18px 20px; box-shadow: 0 4px 16px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; gap: 12px; cursor: pointer; transition: transform 0.2s, border-color 0.2s;" onclick="window.launchRecentActivity('${act.id}')" onmouseover="this.style.transform='translateY(-2px)';this.style.borderColor='rgba(59,130,246,0.4)';" onmouseout="this.style.transform='none';this.style.borderColor='rgba(255,255,255,0.08)';">
+        <div class="recent-card-top" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
+          <div class="recent-title" style="font-weight: 700; font-size: 0.95rem; color: #f8fafc; line-height: 1.3;">${icon} ${act.title}</div>
+          <span style="font-size: 0.72rem; padding: 2px 8px; border-radius: 6px; background: rgba(255,255,255,0.08); color: #cbd5e1; font-weight: 600; white-space: nowrap;">${act.typeLabel || 'Hoạt động'}</span>
+        </div>
+        <div class="recent-val green-text" style="font-family: var(--font-display,sans-serif); font-size: 1.4rem; font-weight: 800; color: #10b981;">${count > 0 ? count.toLocaleString() + ' từ vựng' : 'Ôn tập'}</div>
+        <div class="recent-card-footer" style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: ${pillBg}; color: ${pillColor};">${pillText}</span>
+          <span style="font-size: 0.8rem; color: #94a3b8; font-weight: 500;"><i class="fa-regular fa-clock"></i> ${timeStr}</span>
+        </div>
+      </div>
+    `;
+  });
+
+  recentGrid.innerHTML = cardsHtml;
+}
+
 window.selectCurriculumAndGo = function (curr, level, hskVersion) {
-  // Navigate to the lesson list for this HSK level/version — same as clicking a roadmap node
   const ver = hskVersion || (curr === 'yct' ? 'yct' : activeHskVersion);
+  recordUserRecentActivity({
+    id: `level_${curr}_${ver}_${level}`,
+    title: `${curr === 'yct' ? 'YCT Cấp ' + level : 'HSK Cấp ' + level + ' (v' + ver + ')'}`,
+    type: 'level',
+    typeLabel: 'Lộ trình cấp độ',
+    icon: curr === 'yct' ? '🌟' : '🎓',
+    curriculum: curr,
+    hskVersion: ver,
+    level: level
+  });
   window.goToRoadmapLevel(ver, level);
 };
 
 function renderZubiDashboardTableAndRecent() {
-  const recentGrid = document.getElementById('zubi-recent-cards-grid');
   const tableBody = document.getElementById('zubi-table-body');
 
   const builtInVocabs = vocabList.filter(w => !w.isCustom);
@@ -6137,55 +6345,25 @@ function renderZubiDashboardTableAndRecent() {
   builtInVocabs.forEach(w => {
     if (!w.level || !w.lessonId) return;
     const key = `${w.curriculum || 'hsk'}_${w.hskVersion || '3.0'}_${w.level}_${w.lessonId}`;
-    lessonGroupsMap[key] = true;
+    if (!lessonGroupsMap[key]) lessonGroupsMap[key] = [];
+    lessonGroupsMap[key].push(w);
   });
-  const totalLessonsCount = Object.keys(lessonGroupsMap).length;
-  const enrolledStatBadge = document.getElementById('zubi-enrolled-count');
-  if (enrolledStatBadge && totalLessonsCount > 0) {
-    enrolledStatBadge.textContent = `${totalLessonsCount} Bài`;
-  }
 
-  // 1. Dynamic Overview Table Rows — all curricula (HSK 3.0, HSK 2.0, YCT)
+  // Render Dashboard Table Rows
   if (tableBody) {
-    // Build tier entries for each curriculum separately
-    const allTiers = [
-      // ── HSK 3.0 ──
-      { groupHeader: '🎓 HSK Chuẩn 3.0', type: 'header' },
-      { name: 'HSK Cấp 1', curriculum: 'HSK Chuẩn (3.0)', hskVer: '3.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '1') && (w.hskVersion || '3.0') === '3.0', curriculumType: 'hsk', level: 1 },
-      { name: 'HSK Cấp 2', curriculum: 'HSK Chuẩn (3.0)', hskVer: '3.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '2') && (w.hskVersion || '3.0') === '3.0', curriculumType: 'hsk', level: 2 },
-      { name: 'HSK Cấp 3', curriculum: 'HSK Chuẩn (3.0)', hskVer: '3.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '3') && (w.hskVersion || '3.0') === '3.0', curriculumType: 'hsk', level: 3 },
-      { name: 'HSK Cấp 4', curriculum: 'HSK Chuẩn (3.0)', hskVer: '3.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '4') && (w.hskVersion || '3.0') === '3.0', curriculumType: 'hsk', level: 4 },
-      { name: 'HSK Cấp 5', curriculum: 'HSK Chuẩn (3.0)', hskVer: '3.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '5') && (w.hskVersion || '3.0') === '3.0', curriculumType: 'hsk', level: 5 },
-      { name: 'HSK Cấp 6', curriculum: 'HSK Chuẩn (3.0)', hskVer: '3.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '6') && (w.hskVersion || '3.0') === '3.0', curriculumType: 'hsk', level: 6 },
-      { name: 'HSK Cấp 7-8-9 (Cao cấp)', curriculum: 'HSK 3.0 Chuyên nghiệp', hskVer: '3.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '7-9') && (w.hskVersion || '3.0') === '3.0', curriculumType: 'hsk', level: '7-9' },
-      // ── HSK 2.0 ──
-      { groupHeader: '📘 HSK Chuẩn 2.0', type: 'header' },
-      { name: 'HSK Cấp 1', curriculum: 'HSK Chuẩn (2.0)', hskVer: '2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '1') && (w.hskVersion || '3.0') === '2.0', curriculumType: 'hsk', level: 1 },
-      { name: 'HSK Cấp 2', curriculum: 'HSK Chuẩn (2.0)', hskVer: '2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '2') && (w.hskVersion || '3.0') === '2.0', curriculumType: 'hsk', level: 2 },
-      { name: 'HSK Cấp 3', curriculum: 'HSK Chuẩn (2.0)', hskVer: '2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '3') && (w.hskVersion || '3.0') === '2.0', curriculumType: 'hsk', level: 3 },
-      { name: 'HSK Cấp 4', curriculum: 'HSK Chuẩn (2.0)', hskVer: '2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '4') && (w.hskVersion || '3.0') === '2.0', curriculumType: 'hsk', level: 4 },
-      { name: 'HSK Cấp 5', curriculum: 'HSK Chuẩn (2.0)', hskVer: '2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '5') && (w.hskVersion || '3.0') === '2.0', curriculumType: 'hsk', level: 5 },
-      { name: 'HSK Cấp 6', curriculum: 'HSK Chuẩn (2.0)', hskVer: '2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '6') && (w.hskVersion || '3.0') === '2.0', curriculumType: 'hsk', level: 6 },
-      // ── YCT ──
-      { groupHeader: '🌟 YCT – Tiếng Trung Thiếu nhi', type: 'header' },
-      { name: 'YCT Cấp 1..4 (Thiếu nhi)', curriculum: 'Sắc màu YCT', hskVer: 'yct', filter: w => w.curriculum === 'yct' || w.hskVersion === 'yct', curriculumType: 'yct', level: 1 },
+    const roadmapTiers = [
+      { name: 'HSK Cấp 1', level: '1', curriculum: 'HSK Chuẩn 3.0 (Sơ cấp 1)', curriculumType: 'hsk', hskVer: '3.0' },
+      { name: 'HSK Cấp 2', level: '2', curriculum: 'HSK Chuẩn 3.0 (Sơ cấp 2)', curriculumType: 'hsk', hskVer: '3.0' },
+      { name: 'HSK Cấp 3', level: '3', curriculum: 'HSK Chuẩn 3.0 (Sơ cấp 3)', curriculumType: 'hsk', hskVer: '3.0' },
+      { name: 'HSK Cấp 4', level: '4', curriculum: 'HSK Chuẩn 3.0 (Trung cấp 4)', curriculumType: 'hsk', hskVer: '3.0' },
+      { name: 'HSK Cấp 5', level: '5', curriculum: 'HSK Chuẩn 3.0 (Trung cấp 5)', curriculumType: 'hsk', hskVer: '3.0' },
+      { name: 'HSK Cấp 6', level: '6', curriculum: 'HSK Chuẩn 3.0 (Trung cấp 6)', curriculumType: 'hsk', hskVer: '3.0' },
+      { name: 'HSK Cấp 7-9', level: '7-9', curriculum: 'HSK Chuẩn 3.0 (Cao cấp 7-9)', curriculumType: 'hsk', hskVer: '3.0' }
     ];
 
     let rowsHtml = '';
-    allTiers.forEach((tier, idx) => {
-      // Section header row
-      if (tier.type === 'header') {
-        rowsHtml += `
-          <tr>
-            <td colspan="6" style="padding: 12px 16px 6px; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted, #94a3b8); border-top: 1px solid rgba(255,255,255,0.07); border-bottom: none; background: transparent;">
-              ${tier.groupHeader}
-            </td>
-          </tr>
-        `;
-        return;
-      }
-
-      const tierWords = builtInVocabs.filter(tier.filter);
+    roadmapTiers.forEach(tier => {
+      const tierWords = builtInVocabs.filter(w => (w.curriculum || 'hsk') === tier.curriculumType && (w.hskVersion || '3.0') === tier.hskVer && matchLevel(w.level, tier.level));
       const total = tierWords.length;
       if (total === 0) return; // skip empty levels (e.g. HSK 2.0 level 7-9)
       const memorized = tierWords.filter(w => w.isMemorized).length;
@@ -6377,7 +6555,7 @@ window.openZubiRecentLessonDetail = function (curr, level) {
   modal.style.display = 'flex';
 };
 
-window.openZubiStatDetail = function (type) {
+window.openZubiStatDetail = function (type, filterVer) {
   const modal = document.getElementById('zubi-stat-modal');
   const titleEl = document.getElementById('zubi-modal-title');
   const subtitleEl = document.getElementById('zubi-modal-subtitle');
@@ -6396,21 +6574,37 @@ window.openZubiStatDetail = function (type) {
     iconEl.style.color = '#ec4899';
     iconEl.innerHTML = '<i class="fa-solid fa-clock-rotate-left"></i>';
 
+    const selectedVer = filterVer || activeHskVersion || '3.0';
+
     const textbookGroups = {};
     builtIn.forEach(w => {
       if (!w.level || !w.lessonId) return;
-      if ((w.hskVersion || '3.0') !== activeHskVersion) return;
-      const key = `${w.curriculum || 'hsk'}_${w.hskVersion || '3.0'}_${w.level}_${w.lessonId}`;
-      if (!textbookGroups[key]) textbookGroups[key] = { key, level: w.level, lessonId: w.lessonId, curr: w.curriculum || 'hsk', words: [] };
+      const ver = w.hskVersion || '3.0';
+      const curr = w.curriculum || 'hsk';
+      if (selectedVer !== 'all') {
+        if (selectedVer === 'yct' && curr !== 'yct') return;
+        if (selectedVer !== 'yct' && ver !== selectedVer) return;
+      }
+      const key = `${curr}_${ver}_${w.level}_${w.lessonId}`;
+      if (!textbookGroups[key]) textbookGroups[key] = { key, level: w.level, lessonId: w.lessonId, curr, words: [] };
       textbookGroups[key].words.push(w);
     });
 
     const completedLessons = Object.values(textbookGroups).filter(g => g.words.length > 0 && g.words.every(w => w.isMemorized));
 
+    let verTitle = selectedVer === 'all' ? 'Tất cả giáo trình' : (selectedVer === 'yct' ? 'YCT' : `HSK ${selectedVer}`);
+
     let html = `
-      <div style="background: rgba(236, 72, 153, 0.1); border: 1px solid rgba(236, 72, 153, 0.3); border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;">
+      <div style="display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+        <button class="btn btn-sm ${selectedVer === '3.0' ? 'btn-primary' : 'btn-secondary'}" onclick="window.openZubiStatDetail('completed', '3.0')" style="font-size: 0.8rem; padding: 5px 12px; border-radius: 8px;">HSK 3.0 (454 bài)</button>
+        <button class="btn btn-sm ${selectedVer === '2.0' ? 'btn-primary' : 'btn-secondary'}" onclick="window.openZubiStatDetail('completed', '2.0')" style="font-size: 0.8rem; padding: 5px 12px; border-radius: 8px;">HSK 2.0 (149 bài)</button>
+        <button class="btn btn-sm ${selectedVer === 'yct' ? 'btn-primary' : 'btn-secondary'}" onclick="window.openZubiStatDetail('completed', 'yct')" style="font-size: 0.8rem; padding: 5px 12px; border-radius: 8px;">YCT (46 bài)</button>
+        <button class="btn btn-sm ${selectedVer === 'all' ? 'btn-primary' : 'btn-secondary'}" onclick="window.openZubiStatDetail('completed', 'all')" style="font-size: 0.8rem; padding: 5px 12px; border-radius: 8px;">Tất cả (649 bài)</button>
+      </div>
+
+      <div style="background: rgba(236, 72, 153, 0.1); border: 1px solid rgba(236, 72, 153, 0.3); border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
         <div>
-          <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: #ec4899; font-weight: 700;">Tổng số bài đã xong (${activeHskVersion})</span>
+          <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: #ec4899; font-weight: 700;">Tổng số bài đã xong (${verTitle})</span>
           <h2 style="font-size: 1.8rem; font-weight: 800; color: #ffffff; margin: 4px 0 0 0;">${completedLessons.length} / ${Object.keys(textbookGroups).length} Bài</h2>
         </div>
         <div style="font-size: 2.2rem; color: #ec4899; opacity: 0.8;"><i class="fa-solid fa-trophy"></i></div>
@@ -7670,6 +7864,29 @@ function updateExamsVersionUI() {
 // 8. Launch Embedded game arena
 function startGameArenaFromNotebook() {
   if (!activeNotebook) return;
+
+  if (window.recordUserRecentActivity) {
+    let actTitle = 'Đấu trường Quiz';
+    if (activeNotebook.startsWith('hsk:')) {
+      const lvl = activeNotebook.split(':')[1];
+      const lesInfo = (selectedDashboardLessons && selectedDashboardLessons.length > 0) ? ` - Bài ${selectedDashboardLessons.join(', ')}` : '';
+      actTitle = `Đấu trường Quiz: HSK ${lvl} (v${activeHskVersion})${lesInfo}`;
+    } else if (activeNotebook.startsWith('yct:')) {
+      const lvl = activeNotebook.split(':')[1];
+      const lesInfo = (selectedDashboardLessons && selectedDashboardLessons.length > 0) ? ` - Bài ${selectedDashboardLessons.join(', ')}` : '';
+      actTitle = `Đấu trường Quiz: YCT Cấp ${lvl}${lesInfo}`;
+    }
+    window.recordUserRecentActivity({
+      id: `quiz_${activeNotebook}_${selectedDashboardLessons ? selectedDashboardLessons.join('_') : 'all'}`,
+      title: actTitle,
+      type: 'quiz',
+      typeLabel: 'Đấu trường Quiz',
+      icon: '🎮',
+      notebook: activeNotebook,
+      level: activeNotebook.includes(':') ? activeNotebook.split(':')[1] : 1,
+      hskVersion: activeHskVersion
+    });
+  }
 
   let levelParam = 'all';
   if (activeNotebook.startsWith('hsk:')) {
