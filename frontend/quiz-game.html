@@ -839,22 +839,25 @@
 
     function speak(text) {
       if (!text) return;
-      const voice = 'baidu-female';
-      localStorage.setItem('speech_voice', 'baidu-female');
+      const selectedVoice = selVoice ? selVoice.value : (localStorage.getItem('speech_voice') || 'elevenlabs-adam');
+      localStorage.setItem('speech_voice', selectedVoice);
 
       if (activeAudio) {
         try { activeAudio.pause(); activeAudio.currentTime = 0; activeAudio.src = ''; } catch (e) { }
         activeAudio = null;
       }
 
-      const cleanText = String(text).replace(/[\(\uff08][^\)\uff09]*[\)\uff09]/g, '').trim();
-      const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(voice)}&_t=${Date.now()}`;
-      const audio = new Audio(url);
-      activeAudio = audio;
-      audio.play().catch(err => {
-        console.warn("Baidu TTS audio error, fallback to WebSpeech", err);
-        fallbackWebSpeech(cleanText);
-      });
+      if (selectedVoice.startsWith('elevenlabs-')) {
+        const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(selectedVoice)}&_t=${Date.now()}`;
+        const audio = new Audio(url);
+        activeAudio = audio;
+        audio.play().catch(err => {
+          console.warn("ElevenLabs audio error, fallback to WebSpeech", err);
+          fallbackWebSpeech(text);
+        });
+      } else {
+        fallbackWebSpeech(text);
+      }
     }
 
     function fallbackWebSpeech(text) {

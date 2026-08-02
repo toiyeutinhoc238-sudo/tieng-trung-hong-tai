@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700;800&family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Serif+SC:wght@400;700;900&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Serif+SC:wght@400;700;900&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
@@ -986,20 +986,24 @@
     let audioCurrent = null;
     window.speakZhText = function (text) {
       if (!text) return;
-      const voice = 'baidu-female';
-      localStorage.setItem('speech_voice', 'baidu-female');
+      const selectEl = document.getElementById('grammar-voice-select');
+      const voice = selectEl ? selectEl.value : (localStorage.getItem('speech_voice') || 'baidu-female');
+      localStorage.setItem('speech_voice', voice);
 
       if (audioCurrent) {
         audioCurrent.pause();
         audioCurrent = null;
       }
 
-      const cleanText = String(text).replace(/[\(\uff08][^\)\uff09]*[\)\uff09]/g, '').trim();
-      const audioUrl = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${voice}`;
-      audioCurrent = new Audio(audioUrl);
-      audioCurrent.play().catch(err => {
-        fallbackWebSpeech(cleanText);
-      });
+      if (voice.startsWith('elevenlabs') || voice.startsWith('baidu')) {
+        const audioUrl = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(text)}&voice=${voice}`;
+        audioCurrent = new Audio(audioUrl);
+        audioCurrent.play().catch(err => {
+          fallbackWebSpeech(text);
+        });
+      } else {
+        fallbackWebSpeech(text);
+      }
     };
 
     function fallbackWebSpeech(text) {

@@ -17,11 +17,6 @@
   <meta name="google-site-verification" content="zNNHDeeYqNRg_2m3sOeo--yoJpRsm7k-_0qB-zRLFo8" />
   <link rel="apple-touch-icon" href="./src/assets/logo.png">
   <script>
-    if (window.self !== window.top) {
-      try {
-        window.parent.postMessage({ type: 'CLOSE_GAME_IFRAME' }, '*');
-      } catch (e) {}
-    }
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js').catch(() => { });
