@@ -848,18 +848,71 @@ function startStudySession(status, level, title, desc) {
   document.getElementById('deck-selection-view').style.display = 'none';
   document.getElementById('flashcard-study-view').style.display = 'block';
 
-  // Update stats widget
-  updateStats();
-
-  // Apply filters to load cards
+  // Apply filters to load cards (this already calls renderActiveCard inside)
   applyFilters();
 
-  // Explicitly ensure correct layout and HUD visibility for current studyMode
-  setStudyMode(studyMode);
+  // Fix UI layout for the current studyMode WITHOUT re-rendering the card again
+  // (call lightweight version that just toggles CSS/display, not renderActiveCard)
+  _applyStudyModeUI(studyMode);
 
-  // Scroll smooth
-  const flashcardSection = document.getElementById('flashcard-section');
-  if (flashcardSection) flashcardSection.scrollIntoView({ behavior: 'smooth' });
+  // Scroll smooth (deferred so DOM updates first)
+  requestAnimationFrame(() => {
+    const flashcardSection = document.getElementById('flashcard-section');
+    if (flashcardSection) flashcardSection.scrollIntoView({ behavior: 'smooth' });
+  });
+}
+
+// Lightweight version of setStudyMode that only adjusts UI without re-rendering cards
+function _applyStudyModeUI(mode) {
+  studyMode = mode;
+  const modeFlipBtn = document.getElementById('mode-flip-btn');
+  const modeTypeBtn = document.getElementById('mode-type-btn');
+  const cardViewportEl = document.querySelector('.card-viewport');
+
+  if (cardViewportEl) {
+    if (mode === 'type') {
+      cardViewportEl.classList.add('typing-mode-active');
+    } else {
+      cardViewportEl.classList.remove('typing-mode-active');
+    }
+  }
+
+  const markMemorizedBtn = document.getElementById('mark-memorized-btn');
+  const markUnmemorizedBtn = document.getElementById('mark-unmemorized-btn');
+  const markStarredBtn = document.getElementById('mark-starred-btn');
+  if (mode === 'type') {
+    if (markMemorizedBtn) markMemorizedBtn.style.display = 'none';
+    if (markUnmemorizedBtn) markUnmemorizedBtn.style.display = 'none';
+    if (markStarredBtn) markStarredBtn.style.display = 'none';
+  } else {
+    if (markMemorizedBtn) markMemorizedBtn.style.display = 'flex';
+    if (markUnmemorizedBtn) markUnmemorizedBtn.style.display = 'flex';
+    if (markStarredBtn) markStarredBtn.style.display = 'flex';
+  }
+
+  const flashcardCard = document.getElementById('flashcard-card');
+  const typingContainer = document.getElementById('typing-card-container');
+  if (modeFlipBtn && modeTypeBtn) {
+    if (mode === 'flip') {
+      modeFlipBtn.classList.add('active-mode');
+      modeFlipBtn.style.background = 'var(--accent-blue)';
+      modeFlipBtn.style.color = 'white';
+      modeTypeBtn.classList.remove('active-mode');
+      modeTypeBtn.style.background = 'transparent';
+      modeTypeBtn.style.color = 'var(--text-secondary)';
+      if (flashcardCard) flashcardCard.style.display = 'block';
+      if (typingContainer) typingContainer.style.display = 'none';
+    } else {
+      modeTypeBtn.classList.add('active-mode');
+      modeTypeBtn.style.background = 'var(--accent-blue)';
+      modeTypeBtn.style.color = 'white';
+      modeFlipBtn.classList.remove('active-mode');
+      modeFlipBtn.style.background = 'transparent';
+      modeFlipBtn.style.color = 'var(--text-secondary)';
+      if (flashcardCard) flashcardCard.style.display = 'none';
+      if (typingContainer) typingContainer.style.display = 'flex';
+    }
+  }
 }
 
 function renderDetailedStatsTable() {
@@ -7167,11 +7220,10 @@ function startStudySessionFromNotebook(mode) {
   if (!activeNotebook) return;
 
   studyNotebookId = activeNotebook;
-  studyMode = mode;
-  setStudyMode(mode);
+  studyMode = mode; // set the variable directly — startStudySession will call setStudyMode() once
 
-  const notebookName = document.getElementById('dashboard-notebook-title').textContent;
-  const notebookDesc = document.getElementById('dashboard-notebook-desc').textContent;
+  const notebookName = document.getElementById('dashboard-notebook-title')?.textContent || '';
+  const notebookDesc = document.getElementById('dashboard-notebook-desc')?.textContent || '';
 
   // Pass HSK lesson selections if studying HSK
   if (activeNotebook.startsWith('hsk:')) {
@@ -7180,7 +7232,7 @@ function startStudySessionFromNotebook(mode) {
     studySelectedLessons = null;
   }
 
-  // Pass active filter to study session
+  // Pass active filter to study session (this calls setStudyMode once internally)
   startStudySession(dashboardActiveFilter, 'all', notebookName, notebookDesc);
 }
 
