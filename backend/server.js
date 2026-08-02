@@ -154,7 +154,8 @@ async function performDataMigration() {
     const dataStr = await fs.readFile(USER_DB_PATH, 'utf-8');
     const fileData = JSON.parse(dataStr);
     if (!fileData || !fileData.users || Object.keys(fileData.users).length === 0) {
-      console.log("user_data.json is empty or invalid, skipping migration.");
+      console.log("user_data.json is empty, setting cachedUserData to empty.");
+      cachedUserData = { users: {}, progress: {}, customWords: {}, sessions: {}, chats: {}, quizHistory: {} };
       return;
     }
 
