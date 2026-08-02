@@ -6407,24 +6407,48 @@ window.openZubiStatDetail = function (type) {
     iconEl.style.color = '#ec4899';
     iconEl.innerHTML = '<i class="fa-solid fa-clock-rotate-left"></i>';
 
+    // Đếm TẤT CẢ bài học thuộc mọi bộ giáo trình (HSK 2.0 + HSK 3.0 + YCT)
     const textbookGroups = {};
     builtIn.forEach(w => {
       if (!w.level || !w.lessonId) return;
-      if ((w.hskVersion || '3.0') !== activeHskVersion) return;
       const key = `${w.curriculum || 'hsk'}_${w.hskVersion || '3.0'}_${w.level}_${w.lessonId}`;
-      if (!textbookGroups[key]) textbookGroups[key] = { key, level: w.level, lessonId: w.lessonId, curr: w.curriculum || 'hsk', words: [] };
+      if (!textbookGroups[key]) textbookGroups[key] = { key, level: w.level, lessonId: w.lessonId, curr: w.curriculum || 'hsk', ver: w.hskVersion || '3.0', words: [] };
       textbookGroups[key].words.push(w);
     });
 
     const completedLessons = Object.values(textbookGroups).filter(g => g.words.length > 0 && g.words.every(w => w.isMemorized));
+    const totalLessons = Object.keys(textbookGroups).length;
+
+    // Phân loại số bài đã xong theo từng giáo trình
+    const doneHsk3 = completedLessons.filter(g => !g.ver.toString().toLowerCase().includes('yct') && (g.ver === '3.0' || g.ver === 3 || !g.ver)).length;
+    const doneHsk2 = completedLessons.filter(g => !g.ver.toString().toLowerCase().includes('yct') && (g.ver === '2.0' || g.ver === 2)).length;
+    const doneYct  = completedLessons.filter(g => g.ver.toString().toLowerCase().includes('yct') || (g.curr || '').toLowerCase().includes('yct')).length;
+
+    const totalHsk3 = Object.values(textbookGroups).filter(g => !g.ver.toString().toLowerCase().includes('yct') && (g.ver === '3.0' || g.ver === 3 || !g.ver)).length;
+    const totalHsk2 = Object.values(textbookGroups).filter(g => !g.ver.toString().toLowerCase().includes('yct') && (g.ver === '2.0' || g.ver === 2)).length;
+    const totalYct  = Object.values(textbookGroups).filter(g => g.ver.toString().toLowerCase().includes('yct') || (g.curr || '').toLowerCase().includes('yct')).length;
 
     let html = `
-      <div style="background: rgba(236, 72, 153, 0.1); border: 1px solid rgba(236, 72, 153, 0.3); border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;">
+      <div style="background: rgba(236, 72, 153, 0.1); border: 1px solid rgba(236, 72, 153, 0.3); border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
         <div>
-          <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: #ec4899; font-weight: 700;">Tổng số bài đã xong (${activeHskVersion})</span>
-          <h2 style="font-size: 1.8rem; font-weight: 800; color: #ffffff; margin: 4px 0 0 0;">${completedLessons.length} / ${Object.keys(textbookGroups).length} Bài</h2>
+          <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: #ec4899; font-weight: 700;">Tổng số bài đã xong (Tất cả giáo trình)</span>
+          <h2 style="font-size: 1.8rem; font-weight: 800; color: #ffffff; margin: 4px 0 0 0;">${completedLessons.length} / ${totalLessons} Bài</h2>
         </div>
         <div style="font-size: 2.2rem; color: #ec4899; opacity: 0.8;"><i class="fa-solid fa-trophy"></i></div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px;">
+        <div style="background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.3); border-radius: 12px; padding: 12px; text-align: center;">
+          <div style="font-size: 0.72rem; color: #60a5fa; font-weight: 700; text-transform: uppercase;">HSK 3.0</div>
+          <div style="font-size: 1.3rem; font-weight: 800; color: #fff; margin-top: 4px;">${doneHsk3} / ${totalHsk3}</div>
+        </div>
+        <div style="background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 12px; padding: 12px; text-align: center;">
+          <div style="font-size: 0.72rem; color: #c084fc; font-weight: 700; text-transform: uppercase;">HSK 2.0</div>
+          <div style="font-size: 1.3rem; font-weight: 800; color: #fff; margin-top: 4px;">${doneHsk2} / ${totalHsk2}</div>
+        </div>
+        <div style="background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); border-radius: 12px; padding: 12px; text-align: center;">
+          <div style="font-size: 0.72rem; color: #fbbf24; font-weight: 700; text-transform: uppercase;">YCT</div>
+          <div style="font-size: 1.3rem; font-weight: 800; color: #fff; margin-top: 4px;">${doneYct} / ${totalYct}</div>
+        </div>
       </div>
     `;
 
@@ -6441,11 +6465,16 @@ window.openZubiStatDetail = function (type) {
       html += `<div style="display: flex; flex-direction: column; gap: 10px;">`;
       completedLessons.forEach(les => {
         const fullTitle = formatLessonFullName(les.words[0]);
+        // Nhãn giáo trình
+        const isYct = les.ver.toString().toLowerCase().includes('yct') || (les.curr || '').toLowerCase().includes('yct');
+        const isHsk2 = !isYct && (les.ver === '2.0' || les.ver === 2);
+        const currLabel = isYct ? 'YCT' : isHsk2 ? 'HSK 2.0' : 'HSK 3.0';
+        const currColor = isYct ? '#fbbf24' : isHsk2 ? '#c084fc' : '#60a5fa';
         html += `
           <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
             <div>
               <strong style="color: #f8fafc; font-size: 0.95rem;">${fullTitle}</strong>
-              <div style="font-size: 0.8rem; color: #94a3b8;">${les.words.length} từ vựng đã ghi nhớ</div>
+              <div style="font-size: 0.8rem; color: #94a3b8;">${les.words.length} từ vựng đã ghi nhớ &nbsp;·&nbsp; <span style="color: ${currColor}; font-weight: 700;">${currLabel}</span></div>
             </div>
             <span class="zubi-pill success" style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: rgba(16, 185, 129, 0.2); color: #34d399;">Hoàn thành</span>
           </div>
