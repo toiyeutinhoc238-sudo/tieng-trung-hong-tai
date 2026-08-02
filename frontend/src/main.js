@@ -162,7 +162,9 @@ function initTheme() {
   const savedTheme = localStorage.getItem('theme') || 'dark';
   const isDark = savedTheme !== 'light';
   applyThemeClass(isDark);
-  const icon = isDark ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
+  const icon = isDark ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun" style="color: #f59e0b;"></i>';
+  const headerToggle = document.getElementById('theme-toggle-btn');
+  if (headerToggle) headerToggle.innerHTML = icon;
   if (themeToggleBtn) themeToggleBtn.innerHTML = icon;
   const sidebarToggle = document.getElementById('sidebar-theme-toggle');
   if (sidebarToggle) sidebarToggle.innerHTML = `${icon} Giao diện`;
@@ -174,7 +176,9 @@ function toggleTheme() {
   applyThemeClass(nextDark);
   localStorage.setItem('theme', nextDark ? 'dark' : 'light');
 
-  const icon = nextDark ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
+  const icon = nextDark ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun" style="color: #f59e0b;"></i>';
+  const headerToggle = document.getElementById('theme-toggle-btn');
+  if (headerToggle) headerToggle.innerHTML = icon;
   if (themeToggleBtn) themeToggleBtn.innerHTML = icon;
   const sidebarToggle = document.getElementById('sidebar-theme-toggle');
   if (sidebarToggle) sidebarToggle.innerHTML = `${icon} Giao diện`;
