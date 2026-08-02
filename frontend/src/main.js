@@ -6216,48 +6216,75 @@ function renderZubiDashboardTableAndRecent() {
     tableBody.innerHTML = rowsHtml;
   }
 
-  // 2. Dynamic Recent Lessons Grid
+  // 2. Dynamic Recent Lessons Grid — one card per curriculum+version actually in data
   if (recentGrid) {
-    const recentLessons = [
-      { name: 'HSK 1 - Cấp độ Sơ cấp (v3.0 & v2.0)', level: 1, curr: 'hsk' },
-      { name: 'HSK 2 - Cấp độ Sơ cấp nâng cao', level: 2, curr: 'hsk' },
-      { name: 'YCT 1 - Tiếng Trung Thiếu nhi', level: 1, curr: 'yct' }
-    ];
+    // Build distinct curriculum groups from real data
+    const curricula = [];
+
+    // HSK 3.0 — check if exists
+    const hsk30Words = builtInVocabs.filter(w => (w.curriculum === 'hsk' || !w.curriculum) && (w.hskVersion || '3.0') === '3.0');
+    if (hsk30Words.length > 0) {
+      curricula.push({
+        name: 'HSK Chuẩn 3.0 – Toàn bộ Cấp 1→7-9',
+        curr: 'hsk', hskVer: '3.0', level: 1,
+        words: hsk30Words,
+        icon: '🎓'
+      });
+    }
+
+    // HSK 2.0 — check if exists
+    const hsk20Words = builtInVocabs.filter(w => (w.curriculum === 'hsk' || !w.curriculum) && (w.hskVersion || '3.0') === '2.0');
+    if (hsk20Words.length > 0) {
+      curricula.push({
+        name: 'HSK Chuẩn 2.0 – Toàn bộ Cấp 1→6',
+        curr: 'hsk', hskVer: '2.0', level: 1,
+        words: hsk20Words,
+        icon: '📘'
+      });
+    }
+
+    // YCT — check if exists
+    const yctWords = builtInVocabs.filter(w => w.curriculum === 'yct' || w.hskVersion === 'yct');
+    if (yctWords.length > 0) {
+      curricula.push({
+        name: 'YCT – Tiếng Trung Thiếu nhi Cấp 1→4',
+        curr: 'yct', hskVer: 'yct', level: 1,
+        words: yctWords,
+        icon: '🌟'
+      });
+    }
 
     const todayStr = new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: '2-digit' });
 
     let cardsHtml = '';
-    recentLessons.forEach(les => {
-      const lesWords = builtInVocabs.filter(w => (les.curr === 'yct' ? (w.curriculum === 'yct' || w.hskVersion === 'yct') : ((w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, les.level))));
-      const count = lesWords.length;
-      const memorized = lesWords.filter(w => w.isMemorized).length;
+    curricula.forEach(les => {
+      const count = les.words.length;
+      const memorized = les.words.filter(w => w.isMemorized).length;
       const pct = count > 0 ? Math.round((memorized / count) * 100) : 0;
 
-      let pillClass = 'warning';
-      let pillText = `Đang học ${pct}%`;
+      let pillBg, pillColor, pillText;
       if (pct === 0) {
-        pillClass = 'danger';
-        pillText = 'Chưa học';
+        pillBg = 'rgba(239,68,68,0.2)'; pillColor = '#f87171'; pillText = 'Chưa học';
       } else if (pct === 100) {
-        pillClass = 'success';
-        pillText = 'Hoàn thành';
+        pillBg = 'rgba(16,185,129,0.2)'; pillColor = '#34d399'; pillText = 'Hoàn thành';
+      } else {
+        pillBg = 'rgba(217,119,6,0.2)'; pillColor = '#fbbf24'; pillText = `Đang học ${pct}%`;
       }
 
       cardsHtml += `
-        <div class="zubi-recent-card" style="background: rgba(30, 41, 59, 0.9); border-radius: 16px; padding: 20px 22px; box-shadow: 0 4px 16px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; gap: 14px; cursor: pointer;" onclick="window.selectCurriculumAndGo('${les.curr}', '${les.level}')">
+        <div class="zubi-recent-card" style="background: rgba(30,41,59,0.9); border-radius: 16px; padding: 20px 22px; box-shadow: 0 4px 16px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; gap: 14px; cursor: pointer;" onclick="window.goToRoadmapLevel('${les.hskVer}', '${les.level}')">
           <div class="recent-card-top" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
-            <div class="recent-title" style="font-weight: 700; font-size: 0.95rem; color: #f8fafc; line-height: 1.3;">${les.name}</div>
-            <i class="fa-regular fa-eye zubi-eye-icon" style="color: #94a3b8; font-size: 1rem; cursor: pointer;" title="Chi tiết bài học này" onclick="event.stopPropagation(); window.openZubiRecentLessonDetail('${les.curr}', '${les.level}')"></i>
+            <div class="recent-title" style="font-weight: 700; font-size: 0.95rem; color: #f8fafc; line-height: 1.3;">${les.icon} ${les.name}</div>
           </div>
-          <div class="recent-val green-text" style="font-family: var(--font-display, sans-serif); font-size: 1.6rem; font-weight: 800; color: #10b981;">${count.toLocaleString()} từ vựng</div>
+          <div class="recent-val green-text" style="font-family: var(--font-display,sans-serif); font-size: 1.6rem; font-weight: 800; color: #10b981;">${count.toLocaleString()} từ vựng</div>
           <div class="recent-card-footer" style="display: flex; justify-content: space-between; align-items: center;">
-            <span class="zubi-pill ${pillClass}" style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; ${pillClass === 'success' ? 'background: rgba(16, 185, 129, 0.2); color: #34d399;' : pillClass === 'danger' ? 'background: rgba(239, 68, 68, 0.2); color: #f87171;' : 'background: rgba(217, 119, 6, 0.2); color: #fbbf24;'}">${pillText}</span>
-            <span class="recent-date" style="font-size: 0.8rem; color: #94a3b8; font-weight: 500;">${todayStr}</span>
+            <span style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: ${pillBg}; color: ${pillColor};">${pillText}</span>
+            <span style="font-size: 0.8rem; color: #94a3b8; font-weight: 500;">${todayStr}</span>
           </div>
         </div>
       `;
     });
-    recentGrid.innerHTML = cardsHtml;
+    recentGrid.innerHTML = cardsHtml || '<p style="color:var(--text-muted);padding:16px;">Không có dữ liệu.</p>';
   }
 }
 
