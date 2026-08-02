@@ -5078,7 +5078,8 @@ function startLessonStudy(lesson, sliceWords) {
   activeSmartTopic = activeLessonsCurriculum === 'yct' ? 'yct' : 'hsk';
 
   // Highlight/select only this lesson on the notebook dashboard
-  selectedDashboardLessons = [lesson.id];
+  // Highlight/select only this lesson on the notebook dashboard (cast to String/Number safe)
+  selectedDashboardLessons = [String(lesson.id)];
 
   // Open HSK/YCT Notebook Dashboard
   showNotebookDashboardView(activeLessonsCurriculum === 'yct' ? `yct:${activeYctLevel}` : `hsk:${activeLessonsLevel}`, true);
@@ -6875,7 +6876,7 @@ function openNotebookDashboard(notebookId) {
   // Filter baseWords for statistics if specific HSK lessons are selected
   let wordsForStats = baseWords;
   if (notebookId.startsWith('hsk:') && selectedDashboardLessons.length > 0) {
-    wordsForStats = baseWords.filter(w => w.lessonId && selectedDashboardLessons.includes(w.lessonId));
+    wordsForStats = baseWords.filter(w => w.lessonId && selectedDashboardLessons.some(id => String(id) === String(w.lessonId)));
   }
 
   const total = wordsForStats.length;
@@ -6916,7 +6917,7 @@ function renderNotebookWordsTable() {
 
   // Filter HSK dashboard lessons if selected
   if (activeNotebook && activeNotebook.startsWith('hsk:') && selectedDashboardLessons.length > 0) {
-    words = words.filter(w => w.lessonId && selectedDashboardLessons.includes(w.lessonId));
+    words = words.filter(w => w.lessonId && selectedDashboardLessons.some(id => String(id) === String(w.lessonId)));
   }
 
   // Filter by dashboard active filter
@@ -7189,7 +7190,7 @@ function startQuizSession() {
 
   // Apply HSK lesson filters if selected
   if (activeNotebook.startsWith('hsk:') && selectedDashboardLessons.length > 0) {
-    words = words.filter(w => w.lessonId && selectedDashboardLessons.includes(w.lessonId));
+    words = words.filter(w => w.lessonId && selectedDashboardLessons.some(id => String(id) === String(w.lessonId)));
   }
 
   // Filter by dashboard active filter
