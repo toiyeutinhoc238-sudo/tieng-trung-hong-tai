@@ -1538,46 +1538,46 @@
     <section id="roadmap-view-section" class="workspace-section" style="display: none;">
       <div class="roadmap-container">
 
-        <!-- Header Banner & Level Selectors (Matching Image 1 Wireframe 100%) -->
+        <!-- Header Banner & Level Selectors (Theme-Aware: Deep Blue in Dark Mode, Sky Blue in Light Mode) -->
         <div class="roadmap-header-banner cartoon-roadmap-hero"
-          style="background: url('/src/assets/cloud_temple_bg.png') no-repeat right top / cover, linear-gradient(180deg, #f0f7ff 0%, #ffffff 100%); border-radius: 28px; padding: 36px 32px 28px 32px; position: relative; overflow: hidden; border: 2px solid #bae6fd; box-shadow: 0 10px 30px rgba(28, 176, 246, 0.12); margin-bottom: 32px;">
+          style="background: var(--bg-card); border-radius: 28px; padding: 36px 32px 28px 32px; position: relative; overflow: hidden; border: 2px solid var(--border-glass); box-shadow: var(--shadow-md); margin-bottom: 32px;">
           
           <!-- Top Row: Dragon Mascot + Title + Pagoda Backdrop -->
           <div style="display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; z-index: 2; margin-bottom: 24px;">
             <!-- Floating Dragon Mascot Left -->
             <div style="position: absolute; left: 10px; top: -10px;">
-              <img src="/src/assets/hongtai_dragon_mascot.png" alt="HongTai Dragon Mascot" style="height: 140px; width: auto; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.15));">
+              <img src="/src/assets/hongtai_dragon_mascot.png" alt="HongTai Dragon Mascot" style="height: 140px; width: auto; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.25));">
             </div>
 
             <!-- Title & Subtitle -->
-            <h2 style="font-family: var(--font-display, sans-serif); font-size: 2.2rem; font-weight: 900; color: #1e293b; margin: 0; line-height: 1.2;">
+            <h2 style="font-family: var(--font-display, sans-serif); font-size: 2.2rem; font-weight: 900; color: var(--text-primary); margin: 0; line-height: 1.2;">
               HỌC TIẾNG TRUNG TỪ A-Z
             </h2>
-            <div style="font-family: var(--font-display); font-size: 1.2rem; font-weight: 800; color: #ff4b4b; margin-top: 4px;">
+            <div style="font-family: var(--font-display); font-size: 1.2rem; font-weight: 800; color: var(--danger); margin-top: 4px;">
               Cùng HongTai Chinese
             </div>
-            <p style="color: #64748b; font-size: 0.95rem; font-weight: 600; margin: 8px 0 0 0; max-width: 520px; line-height: 1.5;">
+            <p style="color: var(--text-secondary); font-size: 0.95rem; font-weight: 600; margin: 8px 0 0 0; max-width: 520px; line-height: 1.5;">
               Lộ trình được thiết kế khoa học, giúp bạn từng bước chinh phục tiếng Trung dễ dàng và hiệu quả.
             </p>
 
-            <!-- Progress Bar Card (Matching Image 1 Wireframe) -->
-            <div style="background: #ffffff; border: 2px solid #93c5fd; border-radius: 22px; padding: 14px 24px; margin-top: 20px; width: 100%; max-width: 540px; box-shadow: 0 6px 16px rgba(59, 130, 246, 0.12);">
-              <div style="display: flex; justify-content: space-between; align-items: center; font-family: var(--font-display); font-weight: 800; font-size: 0.95rem; color: #1e293b; margin-bottom: 8px;">
+            <!-- Progress Bar Card (Theme-Aware Card) -->
+            <div style="background: var(--bg-primary); border: 2px solid var(--border-glass); border-radius: 22px; padding: 14px 24px; margin-top: 20px; width: 100%; max-width: 540px; box-shadow: var(--shadow-sm);">
+              <div style="display: flex; justify-content: space-between; align-items: center; font-family: var(--font-display); font-weight: 800; font-size: 0.95rem; color: var(--text-primary); margin-bottom: 8px;">
                 <span>Tiến độ của bạn</span>
-                <span style="color: #58cc02; font-weight: 900;" id="roadmap-pct-text">65%</span>
+                <span style="color: var(--success); font-weight: 900;" id="roadmap-pct-text">65%</span>
               </div>
-              <div style="background: #e2e8f0; height: 14px; border-radius: 50px; overflow: hidden; border: 1px solid #cbd5e1; position: relative;">
+              <div style="background: var(--bg-secondary); height: 14px; border-radius: 50px; overflow: hidden; border: 1px solid var(--border-glass); position: relative;">
                 <div id="roadmap-progress-bar-fill" style="background: linear-gradient(90deg, #ff4b4b 0%, #ff6b6b 100%); height: 100%; width: 65%; border-radius: 50px; transition: width 0.5s ease; box-shadow: 0 2px 4px rgba(255, 75, 75, 0.4);"></div>
               </div>
-              <div style="display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 0.9rem; font-weight: 700; color: #475569;">
+              <div style="display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 0.9rem; font-weight: 700; color: var(--text-secondary);">
                 <span>⭐</span> <span id="roadmap-current-level-badge">Bạn đang ở HSK 1</span>
               </div>
             </div>
           </div>
 
           <!-- Bottom Curriculum Version Selector Bar -->
-          <div style="display: flex; justify-content: center; align-items: center; gap: 12px; padding-top: 16px; border-top: 1px dashed #bae6fd;">
-            <span style="font-size: 0.8rem; font-weight: 800; color: #64748b; text-transform: uppercase; font-family: var(--font-display);">Giáo trình:</span>
+          <div style="display: flex; justify-content: center; align-items: center; gap: 12px; padding-top: 16px; border-top: 1px dashed var(--border-glass);">
+            <span style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; font-family: var(--font-display);">Giáo trình:</span>
             <div class="roadmap-ver-pills" style="display: flex; gap: 10px; margin: 0;">
               <button class="roadmap-ver-pill active" data-ver="3.0" onclick="window.setRoadmapVersion('3.0')" style="padding: 8px 16px; border-radius: 12px; font-weight: 800;">🎓 HSK 3.0 (Mới Nhất)</button>
               <button class="roadmap-ver-pill" data-ver="2.0" onclick="window.setRoadmapVersion('2.0')" style="padding: 8px 16px; border-radius: 12px; font-weight: 800;">📜 HSK 2.0 (Truyền Thống)</button>
