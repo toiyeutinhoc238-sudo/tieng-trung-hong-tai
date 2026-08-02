@@ -3234,6 +3234,47 @@ function renderGamifiedRoadmapPath() {
   });
 
   container.innerHTML = html;
+
+  // --- Update header banner progress bar & level badge with real data ---
+  const builtInVocabsAll = vocabList.filter(w => !w.isCustom);
+  // Filter to active curriculum
+  const activeVocabsForRoadmap = builtInVocabsAll.filter(w => {
+    const curr = (w.curriculum || 'hsk').toLowerCase();
+    const ver = (w.hskVersion || '3.0').toLowerCase();
+    if (hskVer === 'yct') return curr.includes('yct') || ver.includes('yct');
+    if (hskVer === '2.0') return !curr.includes('yct') && !ver.includes('yct') && (ver.includes('2') || ver === '2.0');
+    return !curr.includes('yct') && !ver.includes('yct') && (ver.includes('3') || ver === '3.0' || w.hskVersion === '3.0');
+  });
+  const totalRoadmapWords = activeVocabsForRoadmap.length;
+  const memorizedRoadmapWords = activeVocabsForRoadmap.filter(w => w.isMemorized).length;
+  const overallPct = totalRoadmapWords > 0 ? Math.round((memorizedRoadmapWords / totalRoadmapWords) * 100) : 0;
+
+  const pctTextEl = document.getElementById('roadmap-pct-text');
+  const progressBarFillEl = document.getElementById('roadmap-progress-bar-fill');
+  const levelBadgeEl = document.getElementById('roadmap-current-level-badge');
+
+  if (pctTextEl) pctTextEl.textContent = `${overallPct}%`;
+  if (progressBarFillEl) progressBarFillEl.style.width = `${overallPct}%`;
+
+  // Determine current level: highest level with any memorized words
+  if (levelBadgeEl) {
+    let currentLevelDisplay = levelsData[0] ? levelsData[0].name : 'HSK 1';
+    for (let i = levelsData.length - 1; i >= 0; i--) {
+      const ld = levelsData[i];
+      const lvWords = builtInVocabsAll.filter(w => {
+        const curr2 = (w.curriculum || 'hsk').toLowerCase();
+        const ver2 = (w.hskVersion || '3.0').toLowerCase();
+        if (hskVer === 'yct') return (curr2.includes('yct') || ver2.includes('yct')) && matchLevel(w.level, ld.level);
+        if (hskVer === '2.0') return !curr2.includes('yct') && !ver2.includes('yct') && (ver2.includes('2') || ver2 === '2.0') && matchLevel(w.level, ld.level);
+        return !curr2.includes('yct') && !ver2.includes('yct') && (ver2.includes('3') || ver2 === '3.0' || w.hskVersion === '3.0') && matchLevel(w.level, ld.level);
+      });
+      if (lvWords.some(w => w.isMemorized)) {
+        currentLevelDisplay = ld.name;
+        break;
+      }
+    }
+    levelBadgeEl.textContent = `Bạn đang ở ${currentLevelDisplay}`;
+  }
 }
 
 window.renderGamifiedRoadmapPath = renderGamifiedRoadmapPath;
@@ -5911,7 +5952,7 @@ function renderCourseCompletionDashboard() {
     textbookGroups[key].push(w);
   });
 
-  const totalEnrolled = Object.keys(textbookGroups).length || 220;
+  const totalEnrolled = Object.keys(textbookGroups).length;
   let completedCount = 0;
   Object.values(textbookGroups).forEach(words => {
     if (words.length > 0 && words.every(w => w.isMemorized)) {
@@ -5946,7 +5987,7 @@ function renderCourseCompletionDashboard() {
 
   if (!pieSvg) return;
 
-  const completedPct = enrolled > 0 ? Math.min(100, Math.round((completed / enrolled) * 100)) : 67;
+  const completedPct = enrolled > 0 ? Math.min(100, Math.round((completed / enrolled) * 100)) : 0;
   const remainingPct = 100 - completedPct;
 
   if (enrolledEl) enrolledEl.textContent = enrolled;
