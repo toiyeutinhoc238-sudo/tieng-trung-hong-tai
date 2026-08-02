@@ -2315,7 +2315,16 @@ function setupEventListeners() {
   }
   if (nbStartTypingBtn) {
     nbStartTypingBtn.addEventListener('click', () => {
-      startStudySessionFromNotebook('type');
+      // Build the exact word list for current lesson/notebook directly (no heavy filter chain)
+      let lessonWords = getNotebookWords(activeNotebook);
+      if (activeNotebook && activeNotebook.startsWith('hsk:') && selectedDashboardLessons.length > 0) {
+        lessonWords = lessonWords.filter(w => w.lessonId && selectedDashboardLessons.some(id => String(id) === String(w.lessonId)));
+      }
+      if (lessonWords.length === 0) {
+        showToast('Không có từ vựng nào trong bài học này!', true);
+        return;
+      }
+      startDirectTypingSession(lessonWords);
     });
   }
   if (nbStartQuizBtn) {
@@ -7234,6 +7243,48 @@ function startStudySessionFromNotebook(mode) {
 
   // Pass active filter to study session (this calls setStudyMode once internally)
   startStudySession(dashboardActiveFilter, 'all', notebookName, notebookDesc);
+}
+
+// Fast-path typing session: bypass applyFilters/updateStats entirely, just set filteredList directly
+function startDirectTypingSession(words) {
+  if (!words || words.length === 0) {
+    showToast('Không có từ vựng nào để luyện gõ!', true);
+    return;
+  }
+
+  // Set mode
+  studyMode = 'type';
+
+  // Set filteredList directly — NO applyFilters, NO updateStats, NO openNotebookDashboard
+  filteredList = [...words];
+  currentIndex = 0;
+  isFlipped = false;
+
+  // Switch views
+  const deckView = document.getElementById('deck-selection-view');
+  const studyView = document.getElementById('flashcard-study-view');
+  const notebookDashboard = document.getElementById('notebook-dashboard-view');
+  if (deckView) deckView.style.display = 'none';
+  if (notebookDashboard) notebookDashboard.style.display = 'none';
+  if (studyView) studyView.style.display = 'block';
+
+  // Set header title
+  const titleEl = document.getElementById('study-deck-title');
+  const descEl = document.getElementById('study-deck-desc');
+  if (titleEl) titleEl.textContent = document.getElementById('dashboard-notebook-title')?.textContent || 'Luyện Gõ Chữ & Nghĩa';
+  if (descEl) descEl.textContent = `${words.length} từ vựng`;
+
+  // Apply UI for type mode (no renderActiveCard yet)
+  _applyStudyModeUI('type');
+
+  // Render card ONCE
+  renderActiveCard();
+
+  // Scroll
+  requestAnimationFrame(() => {
+    const flashcardSection = document.getElementById('flashcard-section');
+    if (flashcardSection) flashcardSection.scrollIntoView({ behavior: 'smooth' });
+  });
 }
 
 // 7. MULTIPLE-CHOICE QUIZ GAME ENGINE
