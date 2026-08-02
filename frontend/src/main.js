@@ -739,7 +739,7 @@ function updateStats() {
 
   // Adjust levelList if custom list or wrong/starred filter is active
   if (studySelectedLessons && studySelectedLessons.length > 0) {
-    levelList = levelList.filter(w => w.lessonId && studySelectedLessons.includes(w.lessonId));
+    levelList = levelList.filter(w => w.lessonId && studySelectedLessons.some(id => String(id) === String(w.lessonId)));
   } else if (activeStatus === 'custom' && studyCustomCategory) {
     levelList = vocabList.filter(w => w.isCustom && w.category === studyCustomCategory);
   } else if (activeStatus === 'wrong') {
@@ -1023,7 +1023,7 @@ function applyFilters(preserveIndex = false) {
 
       // Filter by studySelectedLessons if studying an HSK notebook
       if (studyNotebookId.startsWith('hsk:') && studySelectedLessons && studySelectedLessons.length > 0) {
-        if (!w.lessonId || !studySelectedLessons.includes(w.lessonId)) return false;
+        if (!w.lessonId || !studySelectedLessons.some(id => String(id) === String(w.lessonId))) return false;
       }
     } else {
       // If studying a specific custom list, show only custom words in that list
@@ -1036,7 +1036,7 @@ function applyFilters(preserveIndex = false) {
 
       // 1.1 Lessons Filter (if studying custom selected HSK lessons)
       if (studySelectedLessons && studySelectedLessons.length > 0) {
-        if (!w.lessonId || !studySelectedLessons.includes(w.lessonId)) return false;
+        if (!w.lessonId || !studySelectedLessons.some(id => String(id) === String(w.lessonId))) return false;
       }
     }
 
@@ -1122,7 +1122,7 @@ function renderFilteredWordsTable() {
     }
     if (activeLevel !== 'all' && w.level.toString() !== activeLevel) return false;
     if (studySelectedLessons && studySelectedLessons.length > 0) {
-      if (!w.lessonId || !studySelectedLessons.includes(w.lessonId)) return false;
+      if (!w.lessonId || !studySelectedLessons.some(id => String(id) === String(w.lessonId))) return false;
     }
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
