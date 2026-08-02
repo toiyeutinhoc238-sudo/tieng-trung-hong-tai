@@ -242,8 +242,39 @@
     /* ─── LIGHT MODE: VOICE BAR ─── */
     html.light-mode .voice-control-bar {
       background: #ffffff !important;
+      border-color: #cbd5e1 !important;
+      color: #0f172a !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+    }
+    html.light-mode .voice-control-bar [style*="color: #f8fafc"],
+    html.light-mode .voice-control-bar [style*="color:#f8fafc"] {
+      color: #0f172a !important;
+    }
+    html.light-mode .voice-control-bar [style*="color: #94a3b8"],
+    html.light-mode .voice-control-bar [style*="color:#94a3b8"] {
+      color: #475569 !important;
+    }
+
+    /* ─── LIGHT MODE: TONE PITCH CHART & CARDS ─── */
+    html.light-mode [style*="background: rgba(15, 23, 42, 0.6)"],
+    html.light-mode [style*="background:rgba(15, 23, 42, 0.6)"] {
+      background: #f8fafc !important;
+      border-color: #cbd5e1 !important;
+    }
+    html.light-mode [style*="color: #60a5fa"] {
+      color: #1d4ed8 !important;
+    }
+    html.light-mode .tone-card-item {
+      background: #ffffff !important;
+      border-color: #cbd5e1 !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
+    }
+    html.light-mode .tone-card-item [style*="background:var(--bg-secondary"],
+    html.light-mode .tone-card-item [style*="background: var(--bg-secondary"] {
+      background: #f1f5f9 !important;
       border-color: #e2e8f0 !important;
     }
+
     html.light-mode [style*="color: #f8fafc"],
     html.light-mode [style*="color:#f8fafc"] {
       color: #1e293b !important;
