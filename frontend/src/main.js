@@ -163,11 +163,11 @@ function initTheme() {
   const isDark = savedTheme !== 'light';
   applyThemeClass(isDark);
   const icon = isDark ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun" style="color: #f59e0b;"></i>';
+  const floatingToggle = document.getElementById('floating-theme-toggle-btn');
+  if (floatingToggle) floatingToggle.innerHTML = icon;
   const headerToggle = document.getElementById('theme-toggle-btn');
   if (headerToggle) headerToggle.innerHTML = icon;
   if (themeToggleBtn) themeToggleBtn.innerHTML = icon;
-  const sidebarToggle = document.getElementById('sidebar-theme-toggle');
-  if (sidebarToggle) sidebarToggle.innerHTML = `${icon} Giao diện`;
 }
 
 function toggleTheme() {
@@ -177,11 +177,11 @@ function toggleTheme() {
   localStorage.setItem('theme', nextDark ? 'dark' : 'light');
 
   const icon = nextDark ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun" style="color: #f59e0b;"></i>';
+  const floatingToggle = document.getElementById('floating-theme-toggle-btn');
+  if (floatingToggle) floatingToggle.innerHTML = icon;
   const headerToggle = document.getElementById('theme-toggle-btn');
   if (headerToggle) headerToggle.innerHTML = icon;
   if (themeToggleBtn) themeToggleBtn.innerHTML = icon;
-  const sidebarToggle = document.getElementById('sidebar-theme-toggle');
-  if (sidebarToggle) sidebarToggle.innerHTML = `${icon} Giao diện`;
 
   showToast(nextDark ? 'Đã chuyển sang chế độ tối' : 'Đã chuyển sang chế độ sáng');
   if (!currentUser && typeof initGoogleSignIn === 'function') {

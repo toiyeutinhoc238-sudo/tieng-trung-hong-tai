@@ -2241,6 +2241,14 @@
 
   </main>
 
+  <!-- Floating Theme Toggle Widget (Bottom-Left) -->
+  <div id="floating-theme-widget" style="position: fixed; bottom: 24px; left: 24px; z-index: 1000;">
+    <button id="floating-theme-toggle-btn" onclick="window.toggleTheme()" title="Chuyển đổi Sáng/Tối"
+      style="width: 54px; height: 54px; border-radius: 50%; background: var(--bg-card); border: 2px solid var(--border-glass); color: var(--text-primary); font-size: 1.4rem; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+      <i class="fa-solid fa-moon"></i>
+    </button>
+  </div>
+
   <!-- Simple toast notification -->
   <div id="toast" class="toast">Đã lưu trạng thái!</div>
 
