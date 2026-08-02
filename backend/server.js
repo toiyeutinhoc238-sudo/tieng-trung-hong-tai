@@ -1489,6 +1489,51 @@ app.get('/api/grammar/full-content', async (req, res) => {
   }
 });
 
+// GET /api/grammar/list — returns metadata list of all grammar levels
+app.get('/api/grammar/list', async (req, res) => {
+  try {
+    const jsonPath = path.join(__dirname, 'hsk_grammar_data.json');
+    try {
+      await fs.access(jsonPath);
+    } catch {
+      return res.status(404).json({ error: 'Grammar data not found. Please run build_grammar.js first.' });
+    }
+    const dataStr = await fs.readFile(jsonPath, 'utf-8');
+    const data = JSON.parse(dataStr);
+    // Return lightweight list (without full items content)
+    const list = Object.values(data).map(entry => ({
+      id: entry.id,
+      level: entry.level,
+      title: entry.title,
+      icon: entry.icon,
+      color: entry.color,
+      desc: entry.desc,
+      pointCount: entry.pointCount,
+    }));
+    res.json(list);
+  } catch (err) {
+    console.error("Error reading hsk_grammar_data.json:", err);
+    res.status(500).json({ error: 'Failed to load grammar list' });
+  }
+});
+
+// GET /api/grammar/detail/:key — returns full grammar detail with items for a specific level
+app.get('/api/grammar/detail/:key', async (req, res) => {
+  try {
+    const jsonPath = path.join(__dirname, 'hsk_grammar_data.json');
+    const dataStr = await fs.readFile(jsonPath, 'utf-8');
+    const data = JSON.parse(dataStr);
+    const key = req.params.key;
+    if (!data[key]) {
+      return res.status(404).json({ error: `Grammar key '${key}' not found` });
+    }
+    res.json(data[key]);
+  } catch (err) {
+    console.error("Error reading grammar detail:", err);
+    res.status(500).json({ error: 'Failed to load grammar detail' });
+  }
+});
+
 // Serve index.html as root
 app.get('/', (req, res) => {
   res.sendFile(path.join(FRONTEND_DIR, 'index.html'));

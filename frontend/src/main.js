@@ -7757,18 +7757,17 @@ window.showGrammarModal = function () {
     modal.className = 'modal-overlay';
     modal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;';
     modal.innerHTML = `
-      <div style="background: var(--bg-primary, #1e293b); border: 1px solid var(--border-glass, rgba(255,255,255,0.12)); border-radius: 20px; width: 100%; max-width: 900px; max-height: 88vh; display: flex; flex-direction: column; padding: 28px; color: var(--text-primary, #fff); position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
-        <button onclick="document.getElementById('grammar-hsk-modal').style.display='none'" style="position: absolute; top: 18px; right: 18px; background: none; border: none; color: var(--text-muted, #94a3b8); font-size: 1.5rem; cursor: pointer;">&times;</button>
-        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
-          <div style="font-size: 2.2rem; background: rgba(59,130,246,0.15); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #3b82f6;">📖</div>
+      <div style="background: var(--bg-primary, #f4f6fd); border: 2px solid var(--border-glass, #e5e7eb); border-radius: 28px; width: 100%; max-width: 980px; max-height: 90vh; display: flex; flex-direction: column; padding: 32px; color: var(--text-primary, #2b3a4a); position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.35);">
+        <button onclick="document.getElementById('grammar-hsk-modal').style.display='none'" style="position: absolute; top: 16px; right: 16px; background: var(--bg-secondary); border: 2px solid var(--border-glass); color: var(--text-secondary); font-size: 1.3rem; cursor: pointer; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">&times;</button>
+        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px; flex-shrink: 0;">
+          <div style="font-size: 2.4rem; background: linear-gradient(135deg, #ff4b4b22 0%, #ffc80022 100%); width: 58px; height: 58px; border-radius: 18px; display: flex; align-items: center; justify-content: center; border: 2px solid #ffc80044; box-shadow: 0 4px 0 #e5e7eb; flex-shrink: 0;">📖</div>
           <div>
-            <h2 style="font-size: 1.4rem; font-weight: 800; margin: 0;">Kho Tài Liệu Ngữ Pháp HSK (Từ HSK 1 Đến HSK 6)</h2>
-            <p style="font-size: 0.85rem; color: var(--text-muted, #94a3b8); margin: 4px 0 0 0;">Tổng hợp 6 bộ sách chuyên sâu ngữ pháp HSK, cấu trúc câu và ví dụ minh họa</p>
+            <h2 style="font-size: 1.5rem; font-weight: 900; margin: 0; font-family: var(--font-display);">Kho Tài Liệu Ngữ Pháp HSK & YCT</h2>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin: 4px 0 0 0;">Tổng hợp 10 bộ ngữ pháp chuẩn, cấu trúc câu và ví dụ minh họa song ngữ</p>
           </div>
         </div>
-
-        <div id="grammar-cards-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; overflow-y: auto; padding-right: 4px;">
-          <div style="text-align: center; color: var(--text-muted); padding: 20px; grid-column: 1 / -1;"><i class="fa-solid fa-spinner fa-spin"></i> Đang danh sách bộ ngữ pháp HSK...</div>
+        <div id="grammar-cards-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; overflow-y: auto; padding-right: 4px; flex: 1;">
+          <div style="text-align: center; color: var(--text-muted); padding: 40px; grid-column: 1 / -1;"><i class="fa-solid fa-spinner fa-spin"></i> Đang tải danh sách ngữ pháp HSK...</div>
         </div>
       </div>
     `;
@@ -7789,16 +7788,18 @@ window.showGrammarModal = function () {
       let html = '';
       list.forEach(item => {
         html += `
-          <div style="background: var(--bg-secondary); border: 1px solid var(--border-glass); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 12px; transition: all 0.2s ease;">
+          <div onclick="window.openGrammarDetail('${item.id}', '${API_BASE_URL}')" style="background: var(--bg-secondary, #fff); border: 2px solid ${item.color}33; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 12px; transition: all 0.2s ease; cursor: pointer; box-shadow: 0 4px 0 ${item.color}22;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 24px ${item.color}33';" onmouseout="this.style.transform=''; this.style.boxShadow='0 4px 0 ${item.color}22';">
             <div style="display: flex; align-items: center; justify-content: space-between;">
-              <span style="font-size: 0.75rem; font-weight: 800; padding: 3px 10px; border-radius: 20px; background: ${item.color}22; color: ${item.color}; border: 1px solid ${item.color}44;">${item.level}</span>
-              <i class="fa-solid fa-file-pdf" style="color: ${item.color}; font-size: 1.4rem;"></i>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 1.6rem;">${item.icon || '📘'}</span>
+                <span style="font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 50px; background: ${item.color}22; color: ${item.color}; border: 1.5px solid ${item.color}44;">${item.level}</span>
+              </div>
+              <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); background: var(--bg-primary); padding: 3px 10px; border-radius: 50px; border: 1px solid var(--border-glass);">${item.pointCount} điểm</span>
             </div>
-            <div style="font-weight: 800; font-size: 1.1rem; color: #fff;">${item.title}</div>
-            <p style="font-size: 0.8rem; color: #94a3b8; margin: 0; line-height: 1.4;">Tài liệu tổng hợp lý thuyết ngữ pháp, ví dụ Pinyin và cách dùng chuẩn HSK.</p>
-            <div style="display: flex; gap: 8px; margin-top: auto; padding-top: 8px;">
-              <a href="${item.file}" target="_blank" class="btn btn-primary btn-sm" style="flex: 1; text-align: center; text-decoration: none;"><i class="fa-solid fa-book-open"></i> Đọc Sách PDF</a>
-              <a href="${item.file}" download class="btn btn-outline btn-sm" style="text-decoration: none;"><i class="fa-solid fa-download"></i></a>
+            <div style="font-weight: 800; font-size: 1.05rem; color: var(--text-primary); font-family: var(--font-display);">${item.title}</div>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0; line-height: 1.5; flex: 1;">${item.desc || 'Tài liệu tổng hợp ngữ pháp chuẩn HSK.'}</p>
+            <div style="display: flex; align-items: center; gap: 6px; color: ${item.color}; font-weight: 700; font-size: 0.85rem; padding-top: 8px; border-top: 1px dashed ${item.color}33;">
+              <i class="fa-solid fa-book-open-reader"></i> Xem chi tiết ngữ pháp →
             </div>
           </div>
         `;
@@ -7807,8 +7808,81 @@ window.showGrammarModal = function () {
       grid.innerHTML = html;
     })
     .catch(err => {
+      const grid = document.getElementById('grammar-cards-grid');
+      if (grid) grid.innerHTML = `<div style="text-align: center; color: var(--danger); padding: 40px; grid-column: 1/-1;"><i class="fa-solid fa-circle-exclamation"></i> Không thể tải dữ liệu ngữ pháp.</div>`;
       console.error("Error loading grammar list:", err);
     });
 };
+
+// Open grammar detail modal for a specific level
+window.openGrammarDetail = function(grammarKey, apiBase) {
+  const API_BASE_URL = apiBase || (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:5000' : 'https://tieng-trung-hong-tai.onrender.com');
+  
+  let detailModal = document.getElementById('grammar-detail-modal');
+  if (!detailModal) {
+    detailModal = document.createElement('div');
+    detailModal.id = 'grammar-detail-modal';
+    detailModal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 100000; align-items: center; justify-content: center; padding: 20px;';
+    document.body.appendChild(detailModal);
+  }
+  
+  detailModal.innerHTML = `
+    <div style="background: var(--bg-primary); border: 2px solid var(--border-glass); border-radius: 28px; width: 100%; max-width: 820px; max-height: 90vh; display: flex; flex-direction: column; padding: 28px; color: var(--text-primary); position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
+      <button onclick="document.getElementById('grammar-detail-modal').style.display='none'" style="position: absolute; top: 16px; right: 16px; background: var(--bg-secondary); border: 2px solid var(--border-glass); color: var(--text-secondary); font-size: 1.2rem; cursor: pointer; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">&times;</button>
+      <div id="grammar-detail-header" style="margin-bottom: 20px; flex-shrink: 0;"><i class="fa-solid fa-spinner fa-spin"></i> Đang tải...</div>
+      <div style="overflow-y: auto; flex: 1; padding-right: 8px;" id="grammar-detail-content">
+        <div style="text-align: center; padding: 40px; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Đang tải nội dung ngữ pháp...</div>
+      </div>
+    </div>
+  `;
+  detailModal.style.display = 'flex';
+  
+  fetch(`${API_BASE_URL}/api/grammar/detail/${grammarKey}`)
+    .then(res => res.json())
+    .then(data => {
+      const header = document.getElementById('grammar-detail-header');
+      const content = document.getElementById('grammar-detail-content');
+      if (!header || !content) return;
+      
+      header.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span style="font-size: 2.2rem;">${data.icon || '📖'}</span>
+          <div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 0.75rem; font-weight: 800; padding: 3px 12px; border-radius: 50px; background: ${data.color}22; color: ${data.color}; border: 1.5px solid ${data.color}55;">${data.level}</span>
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted);">${data.pointCount} điểm ngữ pháp</span>
+            </div>
+            <h2 style="font-family: var(--font-display); font-size: 1.4rem; font-weight: 900; margin: 6px 0 0 0;">${data.title}</h2>
+          </div>
+        </div>
+      `;
+      
+      let itemsHtml = '';
+      (data.items || []).forEach((point, i) => {
+        const examplesHtml = (point.examples || []).map(ex => `
+          <div style="background: var(--bg-primary); border-left: 3px solid ${data.color}; border-radius: 0 10px 10px 0; padding: 10px 14px; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; font-family: var(--font-chinese);">${ex.replace(/[一-龯]+/g, (m) => `<strong style="color: ${data.color}; font-size: 1.1em;">${m}</strong>`)}</div>
+        `).join('');
+        
+        itemsHtml += `
+          <div style="background: var(--bg-secondary); border: 1.5px solid var(--border-glass); border-radius: 18px; padding: 18px 20px; margin-bottom: 12px;">
+            <div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: ${point.explanation ? '12px' : '0'};">
+              <div style="width: 28px; height: 28px; border-radius: 50%; background: ${data.color}22; border: 2px solid ${data.color}; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 900; color: ${data.color}; flex-shrink: 0;">${i + 1}</div>
+              <div style="font-weight: 800; font-size: 1rem; color: var(--text-primary); font-family: var(--font-display); flex: 1; line-height: 1.4;">${point.title}</div>
+            </div>
+            ${point.explanation ? `<p style="font-size: 0.88rem; color: var(--text-secondary); margin: 0 0 12px 40px; line-height: 1.6;">${point.explanation}</p>` : ''}
+            ${examplesHtml ? `<div style="display: flex; flex-direction: column; gap: 6px; margin-left: 40px;">${examplesHtml}</div>` : ''}
+          </div>
+        `;
+      });
+      
+      content.innerHTML = itemsHtml || `<div style="text-align: center; padding: 40px; color: var(--text-muted);">Không có dữ liệu chi tiết cho cấp độ này.</div>`;
+    })
+    .catch(err => {
+      const content = document.getElementById('grammar-detail-content');
+      if (content) content.innerHTML = `<div style="text-align: center; padding: 40px; color: var(--danger);"><i class="fa-solid fa-circle-exclamation"></i> Không thể tải chi tiết ngữ pháp.</div>`;
+      console.error("Error loading grammar detail:", err);
+    });
+};
+
 
 
