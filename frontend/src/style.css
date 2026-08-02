@@ -5941,11 +5941,11 @@ body {
 
 .roadmap-badge.done { background: rgba(16, 185, 129, 0.2); color: #34d399; }
 .roadmap-badge.active-pulse { background: rgba(59, 130, 246, 0.25); color: #60a5fa; }
-.roadmap-badge.locked { background: rgba(100, 116, 139, 0.2); color: #94a3b8; }
+.roadmap-badge.locked { background: rgba(100, 116, 139, 0.2); color: var(--text-muted); }
 
 .node-card-sub {
   font-size: 0.85rem;
-  color: #94a3b8;
+  color: var(--text-secondary);
   margin-bottom: 12px;
 }
 
@@ -6527,15 +6527,6 @@ html.light-mode [style*="background: rgba(30,41,59,0.6)"] {
 }
 
 /* ─── ROADMAP SPECIFIC LIGHT MODE OVERRIDES ─── */
-html.light-mode .roadmap-header-banner {
-  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #4338ca 100%) !important;
-  color: #ffffff !important;
-  box-shadow: 0 10px 30px rgba(79, 70, 229, 0.25) !important;
-}
-html.light-mode .roadmap-header-banner h2,
-html.light-mode .roadmap-header-banner p {
-  color: #ffffff !important;
-}
 html.light-mode .roadmap-ver-pill {
   background: #f1f5f9 !important;
   border-color: #cbd5e1 !important;
@@ -6569,26 +6560,6 @@ html.dark .roadmap-connector-arrow {
 }
 html:not(.dark) .roadmap-connector-arrow {
   color: #3b82f6 !important;
-}
-
-html.light-mode .node-card-sub {
-  color: #475569 !important;
-}
-html.light-mode .node-icon-circle {
-  background: #f1f5f9 !important;
-  border-color: #94a3b8 !important;
-  color: #475569 !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
-}
-html.light-mode .node-done .node-icon-circle {
-  background: linear-gradient(135deg, #059669, #10b981) !important;
-  border-color: #059669 !important;
-  color: #ffffff !important;
-}
-html.light-mode .node-active .node-icon-circle {
-  background: linear-gradient(135deg, #2563eb, #3b82f6) !important;
-  border-color: #1d4ed8 !important;
-  color: #ffffff !important;
 }
 
 /* Foreign / Sidebar Elements in Light Mode */
