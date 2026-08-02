@@ -6806,10 +6806,10 @@ function openNotebookDashboard(notebookId) {
 
   // Update Stats Widget
 
-  // Render HSK Lesson Selector Block if applicable (Chỉ hiển thị khi xem toàn bộ cấp độ HSK, ẩn khi đã nhấp chọn 1 bài học cụ thể)
+  // Render HSK Lesson Selector Block if applicable (Ẩn khi đã vào bài học cụ thể)
   const lessonContainer = document.getElementById('nb-hsk-lesson-selector-container');
   if (lessonContainer) {
-    if (notebookId.startsWith('hsk:')) {
+    if (notebookId.startsWith('hsk:') && selectedDashboardLessons.length === 0) {
       lessonContainer.style.display = 'block';
       const lessonsList = document.getElementById('nb-hsk-lessons-list');
       if (lessonsList) {
