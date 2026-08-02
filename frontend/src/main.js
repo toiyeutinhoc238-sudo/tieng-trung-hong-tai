@@ -6105,13 +6105,20 @@ function updateStatsUI() {
   renderCourseCompletionDashboard();
 }
 
-window.selectCurriculumAndGo = function (curr, level) {
+window.selectCurriculumAndGo = function (curr, level, hskVersion) {
   if (curr === 'yct') {
     activeLessonsCurriculum = 'yct';
     activeYctLevel = level.toString();
+    activeHskVersion = 'yct';
   } else {
     activeLessonsCurriculum = 'hsk';
     activeLessonsLevel = level.toString();
+    if (hskVersion) {
+      activeHskVersion = hskVersion;
+      // Sync version UI buttons
+      if (typeof updateVersionButtonsUI === 'function') updateVersionButtonsUI();
+      if (typeof updateExamsVersionUI === 'function') updateExamsVersionUI();
+    }
   }
 
   // Chuyển tab sang thẻ từ vựng
@@ -6147,49 +6154,74 @@ function renderZubiDashboardTableAndRecent() {
     enrolledStatBadge.textContent = `${totalLessonsCount} Bài`;
   }
 
-  // 1. Dynamic Overview Table Rows
+  // 1. Dynamic Overview Table Rows — all curricula (HSK 3.0, HSK 2.0, YCT)
   if (tableBody) {
-    const tiers = [
-      { name: 'HSK Cấp 1', curriculum: `HSK Chuẩn (${activeHskVersion})`, filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '1') && (w.hskVersion || '3.0') === activeHskVersion, curriculumType: 'hsk', level: 1 },
-      { name: 'HSK Cấp 2', curriculum: `HSK Chuẩn (${activeHskVersion})`, filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '2') && (w.hskVersion || '3.0') === activeHskVersion, curriculumType: 'hsk', level: 2 },
-      { name: 'HSK Cấp 3', curriculum: `HSK Chuẩn (${activeHskVersion})`, filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '3') && (w.hskVersion || '3.0') === activeHskVersion, curriculumType: 'hsk', level: 3 },
-      { name: 'HSK Cấp 4', curriculum: `HSK Chuẩn (${activeHskVersion})`, filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '4') && (w.hskVersion || '3.0') === activeHskVersion, curriculumType: 'hsk', level: 4 },
-      { name: 'HSK Cấp 5', curriculum: `HSK Chuẩn (${activeHskVersion})`, filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '5') && (w.hskVersion || '3.0') === activeHskVersion, curriculumType: 'hsk', level: 5 },
-      { name: 'HSK Cấp 6', curriculum: `HSK Chuẩn (${activeHskVersion})`, filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '6') && (w.hskVersion || '3.0') === activeHskVersion, curriculumType: 'hsk', level: 6 },
-      { name: 'HSK Cấp 7-8-9 (Cao cấp)', curriculum: 'HSK 3.0 Chuyên nghiệp', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '7-9') && (w.hskVersion || '3.0') === '3.0', curriculumType: 'hsk', level: '7-9' },
-      { name: 'YCT Cấp 1..4 (Thiếu nhi)', curriculum: 'Sắc màu YCT', filter: w => w.curriculum === 'yct' || w.hskVersion === 'yct', curriculumType: 'yct', level: 1 },
+    // Build tier entries for each curriculum separately
+    const allTiers = [
+      // ── HSK 3.0 ──
+      { groupHeader: '🎓 HSK Chuẩn 3.0', type: 'header' },
+      { name: 'HSK Cấp 1', curriculum: 'HSK Chuẩn (3.0)', hskVer: '3.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '1') && (w.hskVersion || '3.0') === '3.0', curriculumType: 'hsk', level: 1 },
+      { name: 'HSK Cấp 2', curriculum: 'HSK Chuẩn (3.0)', hskVer: '3.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '2') && (w.hskVersion || '3.0') === '3.0', curriculumType: 'hsk', level: 2 },
+      { name: 'HSK Cấp 3', curriculum: 'HSK Chuẩn (3.0)', hskVer: '3.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '3') && (w.hskVersion || '3.0') === '3.0', curriculumType: 'hsk', level: 3 },
+      { name: 'HSK Cấp 4', curriculum: 'HSK Chuẩn (3.0)', hskVer: '3.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '4') && (w.hskVersion || '3.0') === '3.0', curriculumType: 'hsk', level: 4 },
+      { name: 'HSK Cấp 5', curriculum: 'HSK Chuẩn (3.0)', hskVer: '3.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '5') && (w.hskVersion || '3.0') === '3.0', curriculumType: 'hsk', level: 5 },
+      { name: 'HSK Cấp 6', curriculum: 'HSK Chuẩn (3.0)', hskVer: '3.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '6') && (w.hskVersion || '3.0') === '3.0', curriculumType: 'hsk', level: 6 },
+      { name: 'HSK Cấp 7-8-9 (Cao cấp)', curriculum: 'HSK 3.0 Chuyên nghiệp', hskVer: '3.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '7-9') && (w.hskVersion || '3.0') === '3.0', curriculumType: 'hsk', level: '7-9' },
+      // ── HSK 2.0 ──
+      { groupHeader: '📘 HSK Chuẩn 2.0', type: 'header' },
+      { name: 'HSK Cấp 1', curriculum: 'HSK Chuẩn (2.0)', hskVer: '2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '1') && (w.hskVersion || '3.0') === '2.0', curriculumType: 'hsk', level: 1 },
+      { name: 'HSK Cấp 2', curriculum: 'HSK Chuẩn (2.0)', hskVer: '2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '2') && (w.hskVersion || '3.0') === '2.0', curriculumType: 'hsk', level: 2 },
+      { name: 'HSK Cấp 3', curriculum: 'HSK Chuẩn (2.0)', hskVer: '2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '3') && (w.hskVersion || '3.0') === '2.0', curriculumType: 'hsk', level: 3 },
+      { name: 'HSK Cấp 4', curriculum: 'HSK Chuẩn (2.0)', hskVer: '2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '4') && (w.hskVersion || '3.0') === '2.0', curriculumType: 'hsk', level: 4 },
+      { name: 'HSK Cấp 5', curriculum: 'HSK Chuẩn (2.0)', hskVer: '2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '5') && (w.hskVersion || '3.0') === '2.0', curriculumType: 'hsk', level: 5 },
+      { name: 'HSK Cấp 6', curriculum: 'HSK Chuẩn (2.0)', hskVer: '2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '6') && (w.hskVersion || '3.0') === '2.0', curriculumType: 'hsk', level: 6 },
+      // ── YCT ──
+      { groupHeader: '🌟 YCT – Tiếng Trung Thiếu nhi', type: 'header' },
+      { name: 'YCT Cấp 1..4 (Thiếu nhi)', curriculum: 'Sắc màu YCT', hskVer: 'yct', filter: w => w.curriculum === 'yct' || w.hskVersion === 'yct', curriculumType: 'yct', level: 1 },
     ];
 
     let rowsHtml = '';
-    tiers.forEach((tier, idx) => {
+    allTiers.forEach((tier, idx) => {
+      // Section header row
+      if (tier.type === 'header') {
+        rowsHtml += `
+          <tr>
+            <td colspan="6" style="padding: 12px 16px 6px; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted, #94a3b8); border-top: 1px solid rgba(255,255,255,0.07); border-bottom: none; background: transparent;">
+              ${tier.groupHeader}
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
       const tierWords = builtInVocabs.filter(tier.filter);
       const total = tierWords.length;
+      if (total === 0) return; // skip empty levels (e.g. HSK 2.0 level 7-9)
       const memorized = tierWords.filter(w => w.isMemorized).length;
-      const pct = total > 0 ? Math.round((memorized / total) * 100) : 0;
-      const borderStyle = idx === tiers.length - 1 ? 'border-bottom: none;' : 'border-bottom: 1px solid rgba(255,255,255,0.05);';
+      const pct = Math.round((memorized / total) * 100);
 
       let badgeHtml = '';
       if (pct === 0) {
-        badgeHtml = `<span class="zubi-pill danger" style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: rgba(239, 68, 68, 0.2); color: #f87171;">Chưa học</span>`;
+        badgeHtml = `<span style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: rgba(239, 68, 68, 0.2); color: #f87171;">Chưa học</span>`;
       } else if (pct === 100) {
-        badgeHtml = `<span class="zubi-pill success" style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: rgba(16, 185, 129, 0.2); color: #34d399;">Đã thuộc 100%</span>`;
+        badgeHtml = `<span style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: rgba(16, 185, 129, 0.2); color: #34d399;">Đã thuộc 100%</span>`;
       } else {
-        badgeHtml = `<span class="zubi-pill warning" style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: rgba(217, 119, 6, 0.2); color: #fbbf24;">Đang học ${pct}%</span>`;
+        badgeHtml = `<span style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: rgba(217, 119, 6, 0.2); color: #fbbf24;">Đang học ${pct}%</span>`;
       }
 
       rowsHtml += `
-        <tr style="cursor: pointer; transition: background 0.15s ease;" onclick="window.selectCurriculumAndGo('${tier.curriculumType}', '${tier.level}')" onmouseover="this.style.background='rgba(59,130,246,0.08)'" onmouseout="this.style.background='transparent'">
-          <td class="zubi-td" style="padding: 16px;"><strong class="zubi-td-bold">${tier.name}</strong></td>
-          <td class="zubi-td" style="padding: 16px;">${tier.curriculum}</td>
-          <td class="zubi-td" style="padding: 16px;">${total.toLocaleString()} từ vựng</td>
-          <td class="zubi-td" style="padding: 16px;">
+        <tr style="cursor: pointer; transition: background 0.15s ease;" onclick="window.selectCurriculumAndGo('${tier.curriculumType}', '${tier.level}', '${tier.hskVer}')" onmouseover="this.style.background='rgba(59,130,246,0.08)'" onmouseout="this.style.background='transparent'">
+          <td class="zubi-td" style="padding: 14px 16px;"><strong class="zubi-td-bold">${tier.name}</strong></td>
+          <td class="zubi-td" style="padding: 14px 16px;">${tier.curriculum}</td>
+          <td class="zubi-td" style="padding: 14px 16px;">${total.toLocaleString()} từ vựng</td>
+          <td class="zubi-td" style="padding: 14px 16px;">
             <div class="zubi-progress-bar-wrap">
               <div class="zubi-progress-bar" style="width: ${pct}%;"></div>
             </div>
           </td>
-          <td class="zubi-td" style="padding: 16px;">${badgeHtml}</td>
-          <td class="zubi-td" style="padding: 16px;">
-            <button class="zubi-table-btn" style="background: rgba(59,130,246,0.15); color: #3b82f6; border: 1px solid rgba(59,130,246,0.3); padding: 6px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;" onclick="event.stopPropagation(); window.selectCurriculumAndGo('${tier.curriculumType}', '${tier.level}')">Vào học <i class="fa-solid fa-arrow-right"></i></button>
+          <td class="zubi-td" style="padding: 14px 16px;">${badgeHtml}</td>
+          <td class="zubi-td" style="padding: 14px 16px;">
+            <button class="zubi-table-btn" style="background: rgba(59,130,246,0.15); color: #3b82f6; border: 1px solid rgba(59,130,246,0.3); padding: 6px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;" onclick="event.stopPropagation(); window.selectCurriculumAndGo('${tier.curriculumType}', '${tier.level}', '${tier.hskVer}')">Vào học <i class="fa-solid fa-arrow-right"></i></button>
           </td>
         </tr>
       `;
