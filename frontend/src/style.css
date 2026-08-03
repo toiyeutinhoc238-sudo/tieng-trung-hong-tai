@@ -3400,20 +3400,24 @@ html.dark .section-accent-header {
    SMART CONFIGURATION VIEW FOR FLASHCARDS
    ========================================================================== */
 .smart-flashcard-config {
-  background: white;
-  border: 1px solid rgba(229, 62, 62, 0.08);
+  background: rgba(255, 255, 255, 0.38);
+  backdrop-filter: blur(6px) saturate(160%);
+  -webkit-backdrop-filter: blur(6px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.75);
   border-radius: 24px;
   padding: 40px;
   max-width: 900px;
   margin: 0 auto 32px auto;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   font-family: 'Be Vietnam Pro', sans-serif;
 }
 
 html.dark .smart-flashcard-config {
-  background: linear-gradient(135deg, #181616 0%, #111010 100%);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  background: rgba(15, 23, 42, 0.28) !important;
+  backdrop-filter: blur(6px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(6px) saturate(160%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
 }
 
 .config-header {
@@ -6859,6 +6863,12 @@ html.dark .top-bar,
 html.dark .custom-words-table-wrapper,
 html.dark .dict-search-panel,
 html.dark .dict-details-panel,
+html.dark .smart-flashcard-config,
+html.dark .topic-card,
+html.dark .selection-card,
+html.dark #flashcard-topics-view,
+html.dark #flashcard-subdecks-view,
+html.dark #deck-selection-view,
 html.dark #roadmap-view-section,
 html.dark #flashcard-section,
 html.dark #custom-section {
@@ -6906,6 +6916,12 @@ html.light-mode .top-bar,
 html.light-mode .custom-words-table-wrapper,
 html.light-mode .dict-search-panel,
 html.light-mode .dict-details-panel,
+html.light-mode .smart-flashcard-config,
+html.light-mode .topic-card,
+html.light-mode .selection-card,
+html.light-mode #flashcard-topics-view,
+html.light-mode #flashcard-subdecks-view,
+html.light-mode #deck-selection-view,
 html.light-mode #roadmap-view-section,
 html.light-mode #flashcard-section,
 html.light-mode #custom-section {
