@@ -5822,9 +5822,26 @@ body {
   z-index: 5;
 }
 
-.roadmap-node-item.pos-center { justify-content: center; }
-.roadmap-node-item.pos-left { justify-content: flex-start; }
-.roadmap-node-item.pos-right { justify-content: flex-end; }
+/* Winding Path Layout for Saga Map */
+.roadmap-node-item:nth-child(even) {
+  flex-direction: row-reverse;
+}
+
+/* Custom positioning to create the zigzag */
+.roadmap-node-item:nth-child(4n+1) { transform: translateX(-15%); }
+.roadmap-node-item:nth-child(4n+2) { transform: translateX(0%); }
+.roadmap-node-item:nth-child(4n+3) { transform: translateX(15%); }
+.roadmap-node-item:nth-child(4n+4) { transform: translateX(0%); }
+
+/* Arrow Connector Customization for ZigZag */
+.roadmap-connector-arrow {
+  text-align: center;
+  font-size: 2rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  margin: -15px 0;
+  z-index: 1;
+}
 
 /* CANDY CRUSH 3D GLOSSY JELLY NODE BUTTON */
 .node-icon-circle {

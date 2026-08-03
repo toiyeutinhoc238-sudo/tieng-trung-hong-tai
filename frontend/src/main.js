@@ -3293,7 +3293,7 @@ function renderGamifiedRoadmapPath() {
     </div>`;
 
     html += `
-      <div class="roadmap-node-item ${posClass} ${nodeState}">
+      <div class="roadmap-node-item ${nodeState}">
         <div style="position: relative; display: flex; flex-direction: column; align-items: center;">
           ${crownHtml}
           <div class="node-icon-circle" onclick="goToRoadmapLevel('${hskVer}', '${item.level}')">
@@ -3321,9 +3321,15 @@ function renderGamifiedRoadmapPath() {
     `;
 
     if (idx < levelsData.length - 1) {
+      let icon = "fa-arrow-down";
+      if (idx % 4 === 0) icon = "fa-arrow-turn-down";
+      else if (idx % 4 === 1) icon = "fa-arrow-down";
+      else if (idx % 4 === 2) icon = "fa-arrow-turn-down fa-flip-horizontal";
+      else if (idx % 4 === 3) icon = "fa-arrow-down";
+
       html += `
-        <div class="roadmap-connector-arrow" style="text-align: center; font-size: 1.5rem; margin: -10px 0;">
-          <i class="fa-solid fa-down-long"></i>
+        <div class="roadmap-connector-arrow">
+          <i class="fa-solid ${icon}"></i>
         </div>
       `;
     }
