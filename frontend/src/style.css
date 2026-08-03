@@ -6348,10 +6348,13 @@ html.light-mode .zubi-stat-card {
   color: #1e293b !important;
 }
 
-/* ─── LIGHT MODE: Sidebar menu & Profile card ─── */
+/* ─── LIGHT MODE: Sidebar menu & Profile card (iOS 26 Light Glass) ─── */
 html.light-mode .app-sidebar {
-  background: #ffffff !important;
-  border-right: 1px solid #e2e8f0 !important;
+  background: rgba(255, 255, 255, 0.68) !important;
+  backdrop-filter: blur(28px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.6) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08) !important;
 }
 
 html.light-mode .sidebar-menu-item,
@@ -6365,21 +6368,25 @@ html.light-mode .sidebar-menu-item:hover,
 html.light-mode .sidebar-item:hover,
 html.light-mode .sidebar-subitem:hover,
 html.light-mode .sidebar-dropdown-toggle:hover {
-  background: rgba(37, 99, 235, 0.08) !important;
+  background: rgba(37, 99, 235, 0.12) !important;
+  border: 1px solid rgba(37, 99, 235, 0.2) !important;
   color: #1d4ed8 !important;
 }
 
 html.light-mode .sidebar-menu-item.active,
 html.light-mode .sidebar-item.active,
 html.light-mode .sidebar-subitem.active {
-  background: #eff6ff !important;
-  color: #1d4ed8 !important;
-  font-weight: 700 !important;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35) !important;
 }
 
 html.light-mode .sidebar-profile-card {
-  background: #f8fafc !important;
-  border-color: #cbd5e1 !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
   color: #0f172a !important;
 }
 
@@ -6408,39 +6415,53 @@ html.light-mode #sidebar-theme-toggle:hover {
   color: #1d4ed8 !important;
 }
 
-/* ─── DARK MODE: Sidebar menu & Profile card ─── */
+/* ─── DARK MODE: Sidebar menu & Profile card (iOS 26 Liquid Glass) ─── */
 html.dark .app-sidebar {
-  background: #0b0f19 !important;
-  border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background: rgba(11, 15, 25, 0.45) !important;
+  backdrop-filter: blur(28px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.18) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+}
+
+html.dark .sidebar-profile-card,
+html.dark .user-profile,
+html.dark .google-acc-card {
+  background: rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2) !important;
+  color: #ffffff !important;
 }
 
 html.dark .sidebar-menu-item,
 html.dark .sidebar-item,
 html.dark .sidebar-subitem,
 html.dark .sidebar-dropdown-toggle {
-  color: #cbd5e1 !important;
+  color: #f1f5f9 !important;
+  border-radius: 14px !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 html.dark .sidebar-menu-item:hover,
 html.dark .sidebar-item:hover,
 html.dark .sidebar-subitem:hover,
 html.dark .sidebar-dropdown-toggle:hover {
-  background: rgba(255, 255, 255, 0.08) !important;
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
   color: #ffffff !important;
 }
 
 html.dark .sidebar-menu-item.active,
 html.dark .sidebar-item.active,
 html.dark .sidebar-subitem.active {
-  background: rgba(59, 130, 246, 0.25) !important;
-  color: #60a5fa !important;
-  font-weight: 700 !important;
-}
-
-html.dark .sidebar-profile-card {
-  background: #1e293b !important;
-  border-color: rgba(255, 255, 255, 0.12) !important;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.85), rgba(37, 99, 235, 0.95)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
   color: #ffffff !important;
+  font-weight: 800 !important;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45) !important;
 }
 
 html.dark .user-name {
