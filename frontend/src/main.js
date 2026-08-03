@@ -6306,7 +6306,7 @@ function renderZubiDashboardTableAndRecent() {
       }
 
       cardsHtml += `
-        <div class="zubi-recent-card" style="background: rgba(30,41,59,0.9); border-radius: 16px; padding: 20px 22px; box-shadow: 0 4px 16px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; gap: 14px; cursor: pointer;" onclick="window.goToRoadmapLevel('${les.hskVer}', '${les.level}')">
+        <div class="zubi-recent-card" style="backdrop-filter: blur(24px) saturate(180%); border-radius: 16px; padding: 20px 22px; box-shadow: 0 4px 16px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.12); display: flex; flex-direction: column; gap: 14px; cursor: pointer;" onclick="window.goToRoadmapLevel('${les.hskVer}', '${les.level}')">
           <div class="recent-card-top" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
             <div class="recent-title" style="font-weight: 700; font-size: 0.95rem; color: #f8fafc; line-height: 1.3;">${les.icon} ${les.name}</div>
           </div>

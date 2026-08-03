@@ -6935,4 +6935,18 @@ html.light-mode #home-view-section {
   color: #0f172a !important;
 }
 
+/* Force 100% full window width stretch for main layout and all dashboard containers */
+.main-layout,
+.zubi-dashboard-container,
+#home-view-section,
+.workspace-section,
+.zubi-stat-cards-grid,
+.zubi-header-banner,
+.zubi-recent-cards-grid,
+.zubi-table-wrap {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
 
