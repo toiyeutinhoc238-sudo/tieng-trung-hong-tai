@@ -122,7 +122,7 @@ html, body {
 
 body {
   font-family: var(--font-sans);
-  background: url('./assets/app_bg_night.png') no-repeat center center fixed / cover !important;
+  background: url('/assets/app_bg_night.png') no-repeat center center fixed / cover !important;
   color: var(--text-primary);
   line-height: 1.6;
   transition: background 0.5s ease-in-out, color var(--transition-normal);
@@ -6374,7 +6374,7 @@ html.dark {
 }
 
 html.dark body {
-  background: url('./assets/app_bg_night.png') no-repeat center center fixed / cover !important;
+  background: url('/assets/app_bg_night.png') no-repeat center center fixed / cover !important;
   color: #f8fafc !important;
   transition: background 0.5s ease-in-out;
 }
@@ -6432,7 +6432,7 @@ html.light-mode {
 }
 
 html.light-mode body {
-  background: url('./assets/app_bg_day.png') no-repeat center center fixed / cover !important;
+  background: url('/assets/app_bg_day.png') no-repeat center center fixed / cover !important;
   color: #0f172a !important;
   transition: background 0.5s ease-in-out;
 }
@@ -6622,7 +6622,7 @@ html.light-mode, body.light-mode, html.light {
 }
 
 html.light-mode body, body.light-mode {
-  background: url('./assets/app_bg_day.png') no-repeat center center fixed / cover !important;
+  background: url('/assets/app_bg_day.png') no-repeat center center fixed / cover !important;
   color: #0f172a !important;
   transition: background 0.5s ease-in-out;
 }
@@ -6791,12 +6791,12 @@ html, body, #app {
 
 /* Master Full-Window Chibi Dragon Background (Night/Dark Mode) */
 html, body, #app, html.dark, html.dark body, body.dark, html.dark #app {
-  background: url('./assets/app_bg_night.png') no-repeat center center fixed / cover !important;
+  background: url('/assets/app_bg_night.png') no-repeat center center fixed / cover !important;
 }
 
 /* Master Full-Window Chibi Dragon Background (Day/Light Mode) */
 html.light-mode, html.light-mode body, body.light-mode, html.light, html.light body, html.light-mode #app {
-  background: url('./assets/app_bg_day.png') no-repeat center center fixed / cover !important;
+  background: url('/assets/app_bg_day.png') no-repeat center center fixed / cover !important;
 }
 
 /* 2. Strip all dark/white solid backgrounds, rounded container margins, and drop shadows from main layout wrappers */
@@ -6862,11 +6862,11 @@ html.dark .dict-details-panel,
 html.dark #roadmap-view-section,
 html.dark #flashcard-section,
 html.dark #custom-section {
-  background: rgba(15, 23, 42, 0.48) !important;
-  backdrop-filter: blur(28px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.35) !important;
+  background: rgba(15, 23, 42, 0.28) !important;
+  backdrop-filter: blur(6px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(6px) saturate(160%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25) !important;
   color: #ffffff !important;
 }
 
@@ -6909,11 +6909,11 @@ html.light-mode .dict-details-panel,
 html.light-mode #roadmap-view-section,
 html.light-mode #flashcard-section,
 html.light-mode #custom-section {
-  background: rgba(255, 255, 255, 0.58) !important;
-  backdrop-filter: blur(28px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.8) !important;
-  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.08) !important;
+  background: rgba(255, 255, 255, 0.38) !important;
+  backdrop-filter: blur(6px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(6px) saturate(160%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.75) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08) !important;
   color: #0f172a !important;
 }
 
