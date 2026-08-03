@@ -112,13 +112,20 @@ button, input, select, textarea {
   font-family: inherit;
 }
 
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
 body {
   font-family: var(--font-sans);
-  background: url('/assets/app_bg_night.png') no-repeat center center fixed / cover;
+  background: url('/assets/app_bg_night.png') no-repeat center center fixed / cover !important;
   color: var(--text-primary);
   line-height: 1.6;
   transition: background 0.5s ease-in-out, color var(--transition-normal);
-  overflow-x: hidden;
   padding-bottom: 80px;
 }
 
@@ -181,6 +188,24 @@ a {
 .hsk-badge-6 { background: var(--hsk-6, linear-gradient(135deg, #ef4444, #dc2626)); }
 
 /* Navigation Bar */
+.app-sidebar {
+  width: 260px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  background: rgba(15, 23, 42, 0.6) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.15) !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px 16px;
+  transition: all var(--transition-normal);
+}
+
 .navbar {
   position: sticky;
   top: 0;
@@ -5828,14 +5853,8 @@ body {
 }
 
 #home-view-section {
-  background: url('/assets/app_bg_night.png') no-repeat center center / cover;
-  border-radius: 28px;
-  padding: 28px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-}
-
-html.light-mode #home-view-section {
-  background: url('/assets/app_bg_day.png') no-repeat center center / cover;
+  background: transparent;
+  padding: 0;
 }
 
 #roadmap-view-section {
@@ -6486,6 +6505,7 @@ html.dark body {
 /* Ép trả lại màu nền tối cho tất cả ô card khi ở chế độ TỐI */
 html.dark .zubi-stat-card,
 html.dark .zubi-recent-card,
+html.dark .zubi-table-card,
 html.dark .google-acc-card,
 html.dark .modal-card,
 html.dark .glass-panel,
@@ -6497,10 +6517,13 @@ html.dark .vd-box,
 html.dark .modal-content,
 html.dark .vocab-panel,
 html.dark .filter-section,
-html.dark .writing-workshop {
-  background: rgba(15, 23, 42, 0.88) !important;
-  backdrop-filter: blur(12px) !important;
-  border-color: rgba(255, 255, 255, 0.15) !important;
+html.dark .writing-workshop,
+html.dark .sidebar-profile-card {
+  background: rgba(15, 23, 42, 0.6) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  box-shadow: 0 10px 32px 0 rgba(0, 0, 0, 0.37) !important;
   color: #ffffff !important;
 }
 
