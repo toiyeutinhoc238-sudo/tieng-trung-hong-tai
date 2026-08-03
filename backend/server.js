@@ -69,6 +69,14 @@ app.use(express.json());
 const FRONTEND_DIR = path.join(__dirname, '..', 'frontend');
 const DIST_DIR = path.join(__dirname, '..', 'frontend', 'dist');
 const PUBLIC_DIR = path.join(__dirname, '..', 'frontend', 'public');
+
+// Explicit static asset routes for production & dev builds
+app.use('/assets', express.static(path.join(DIST_DIR, 'assets')));
+app.use('/assets', express.static(path.join(PUBLIC_DIR, 'assets')));
+app.use('/assets', express.static(path.join(FRONTEND_DIR, 'public', 'assets')));
+app.use('/src/assets', express.static(path.join(FRONTEND_DIR, 'src', 'assets')));
+app.use('/src', express.static(path.join(FRONTEND_DIR, 'src')));
+
 app.use(express.static(DIST_DIR));
 app.use(express.static(PUBLIC_DIR));
 app.use(express.static(FRONTEND_DIR));
@@ -1542,9 +1550,14 @@ app.get('/api/grammar/detail/:key', async (req, res) => {
   }
 });
 
-// Serve index.html as root
+// Serve index.html or dist/index.html as root
 app.get('/', (req, res) => {
-  res.sendFile(path.join(FRONTEND_DIR, 'index.html'));
+  const distIndex = path.join(DIST_DIR, 'index.html');
+  if (fs.existsSync(distIndex)) {
+    res.sendFile(distIndex);
+  } else {
+    res.sendFile(path.join(FRONTEND_DIR, 'index.html'));
+  }
 });
 
 // Start Server
