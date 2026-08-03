@@ -73,14 +73,14 @@ html {
   --btn-3d-purple: 0 4px 0 #b45be6;
   
   --scrollbar-thumb: #cbd5e1;
-  --scrollbar-track: #f4f6fd;
+  --scrollbar-track: transparent;
 }
 
 html.dark {
-  --bg-primary: #131f24;
-  --bg-secondary: #1a2b32;
-  --bg-card: #20353e;
-  --bg-glass: rgba(32, 53, 62, 0.95);
+  --bg-primary: transparent;
+  --bg-secondary: rgba(15, 23, 42, 0.55);
+  --bg-card: rgba(15, 23, 42, 0.55);
+  --bg-glass: rgba(15, 23, 42, 0.55);
   
   --border-glass: #2b4550;
   --border-glass-hover: #58cc02;
@@ -89,12 +89,12 @@ html.dark {
   --text-secondary: #94a3b8;
   --text-muted: #64748b;
   
-  --card-bg-front: #20353e;
-  --card-bg-back: #182830;
+  --card-bg-front: rgba(15, 23, 42, 0.55);
+  --card-bg-back: rgba(15, 23, 42, 0.55);
   
-  --shadow-sm: 0 3px 0 #182830;
-  --shadow-md: 0 5px 0 #0f1a20;
-  --shadow-lg: 0 8px 0 #0a1216;
+  --shadow-sm: 0 3px 0 rgba(0,0,0,0.2);
+  --shadow-md: 0 5px 0 rgba(0,0,0,0.3);
+  --shadow-lg: 0 8px 0 rgba(0,0,0,0.4);
   --shadow-glow: 0 6px 25px rgba(88, 204, 2, 0.35);
   
   --scrollbar-thumb: #2b4550;
