@@ -572,7 +572,7 @@ app.get('/api/leaderboard', async (req, res) => {
 
       for (const wordId of Object.keys(userProg)) {
         const item = userProg[wordId];
-        if (item && (item.isMemorized || item.isStudied)) {
+        if (item && item.isMemorized) {
           completedLessonsCount++;
           if (item.updatedAt || item.completedAt) {
             const timeVal = new Date(item.updatedAt || item.completedAt).getTime();
