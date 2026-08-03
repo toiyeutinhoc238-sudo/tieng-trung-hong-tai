@@ -6776,19 +6776,39 @@ body.sidebar-collapsed .sidebar-expand-float-btn {
    SUPER GLOBAL ABSOLUTE IOS 26 LIQUID FROSTED GLASS & FULL COVERAGE OVERRIDE
    ========================================================================== */
 
-/* 1. Ensure body and html transparently expose the Day/Night master background */
-html, body {
-  background-attachment: fixed !important;
+/* 1. Ensure body and html transparently expose the Day/Night master background across 100% window */
+html, body, #app {
   margin: 0 !important;
   padding: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: 100vh !important;
+  overflow-x: hidden !important;
+  background-attachment: fixed !important;
 }
 
-html, body, html.dark body, body.dark {
+html, body, html.dark, html.dark body, body.dark {
   background: url('./assets/app_bg_night.png') no-repeat center center fixed / cover !important;
 }
 
-html.light-mode body, body.light-mode, html.light body {
+html.light-mode, html.light-mode body, body.light-mode, html.light, html.light body {
   background: url('./assets/app_bg_day.png') no-repeat center center fixed / cover !important;
+}
+
+/* Make main layout stretch 100% across the remaining window width with zero white margins */
+.main-layout {
+  max-width: none !important;
+  width: calc(100% - 260px) !important;
+  margin-left: 260px !important;
+  margin-right: 0 !important;
+  padding: 24px 32px !important;
+  box-sizing: border-box !important;
+}
+
+body.sidebar-collapsed .main-layout {
+  margin-left: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
 }
 
 /* 2. DARK MODE: Liquid Frosted Glass for ALL cards, containers, panels */
