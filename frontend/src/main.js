@@ -143,16 +143,33 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // --- THEME MANAGEMENT ---
 function applyThemeClass(isDark) {
+  const bgUrl = isDark ? "url('/assets/app_bg_night.png')" : "url('/assets/app_bg_day.png')";
+  document.documentElement.style.setProperty('background-image', bgUrl, 'important');
+  document.documentElement.style.setProperty('background-size', 'cover', 'important');
+  document.documentElement.style.setProperty('background-position', 'center center', 'important');
+  document.documentElement.style.setProperty('background-attachment', 'fixed', 'important');
+  document.documentElement.style.setProperty('background-repeat', 'no-repeat', 'important');
+
+  if (document.body) {
+    document.body.style.setProperty('background-image', bgUrl, 'important');
+    document.body.style.setProperty('background-size', 'cover', 'important');
+    document.body.style.setProperty('background-position', 'center center', 'important');
+    document.body.style.setProperty('background-attachment', 'fixed', 'important');
+    document.body.style.setProperty('background-repeat', 'no-repeat', 'important');
+  }
+
   if (isDark) {
     document.documentElement.classList.add('dark');
     document.documentElement.classList.remove('light', 'light-mode');
     if (document.body) {
       document.body.classList.remove('light', 'light-mode');
+      document.body.classList.add('dark');
     }
   } else {
     document.documentElement.classList.remove('dark');
     document.documentElement.classList.add('light', 'light-mode');
     if (document.body) {
+      document.body.classList.remove('dark');
       document.body.classList.add('light-mode');
     }
   }
