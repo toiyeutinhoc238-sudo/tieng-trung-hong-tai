@@ -5802,6 +5802,27 @@ body {
   box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
 }
 
+.cartoon-roadmap-hero .roadmap-ver-pill {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 2px solid #059669 !important;
+  color: #065f46 !important;
+  font-weight: 800 !important;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08) !important;
+}
+
+.cartoon-roadmap-hero .roadmap-ver-pill:hover {
+  background: #ffffff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.12) !important;
+}
+
+.cartoon-roadmap-hero .roadmap-ver-pill.active {
+  background: #2563eb !important;
+  border-color: #ffffff !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4) !important;
+}
+
 #roadmap-view-section {
   background: #84cc16 url('/src/assets/saga_map_bg.png') repeat center top / 600px 600px;
   border-radius: 28px;
