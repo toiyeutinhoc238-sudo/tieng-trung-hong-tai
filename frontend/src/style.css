@@ -6463,8 +6463,9 @@ html.dark {
 }
 
 html.dark body {
-  background-color: #0b0f19 !important;
+  background: url('/src/assets/app_bg_night.png') no-repeat center center fixed / cover !important;
   color: #f8fafc !important;
+  transition: background 0.5s ease-in-out;
 }
 
 /* Ép trả lại màu nền tối cho tất cả ô card khi ở chế độ TỐI */
@@ -6482,8 +6483,9 @@ html.dark .modal-content,
 html.dark .vocab-panel,
 html.dark .filter-section,
 html.dark .writing-workshop {
-  background: rgba(30, 41, 59, 0.95) !important;
-  border-color: rgba(255, 255, 255, 0.12) !important;
+  background: rgba(15, 23, 42, 0.88) !important;
+  backdrop-filter: blur(12px) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
   color: #ffffff !important;
 }
 
@@ -6515,8 +6517,9 @@ html.light-mode {
 }
 
 html.light-mode body {
-  background-color: #e2e8f0 !important;
+  background: url('/src/assets/app_bg_day.png') no-repeat center center fixed / cover !important;
   color: #0f172a !important;
+  transition: background 0.5s ease-in-out;
 }
 
 /* Ép tất cả các thẻ chữ thông thường sang màu tối chuẩn khi ở chế độ SÁNG */
