@@ -94,12 +94,16 @@
     }
     html.light-mode body, body.light-mode {
       --bg-dark: #f1f5f9;
-      --bg-card: #ffffff;
-      --border-glass: rgba(0, 0, 0, 0.1);
+      --bg-card: rgba(255, 255, 255, 0.68);
+      --border-glass: rgba(255, 255, 255, 0.8);
       --text-main: #0f172a;
       --text-sub: #334155;
-      background-color: #f1f5f9;
+      background: url('/assets/app_bg_day.png') no-repeat center center fixed / cover !important;
       color: #0f172a;
+    }
+    html.dark body {
+      background: url('/assets/app_bg_night.png') no-repeat center center fixed / cover !important;
+      color: #f8fafc;
     }
     html.light-mode .voice-control-bar,
     html.light-mode .phonetics-header,
@@ -108,10 +112,26 @@
     html.light-mode .info-sub-card,
     html.light-mode .char-detail-inspector,
     html.light-mode .vd-box {
-      background: #ffffff !important;
-      border-color: #cbd5e1 !important;
+      background: rgba(255, 255, 255, 0.68) !important;
+      backdrop-filter: blur(24px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.85) !important;
       color: #0f172a !important;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06) !important;
+      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.08) !important;
+    }
+    html.dark .voice-control-bar,
+    html.dark .phonetics-header,
+    html.dark .hub-card,
+    html.dark .reader-card,
+    html.dark .info-sub-card,
+    html.dark .char-detail-inspector,
+    html.dark .vd-box {
+      background: rgba(15, 23, 42, 0.6) !important;
+      backdrop-filter: blur(24px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.22) !important;
+      color: #ffffff !important;
+      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.37) !important;
     }
     html.light-mode .info-sub-content,
     html.light-mode .vd-pinyin,
@@ -775,6 +795,7 @@
       color: #38bdf8;
     }
   </style>
+  <link rel="stylesheet" href="/src/style.css">
 </head>
 
 <body>
