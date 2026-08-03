@@ -6772,4 +6772,147 @@ body.sidebar-collapsed .sidebar-expand-float-btn {
   box-shadow: 0 3px 0 rgba(0, 0, 0, 0.15) !important;
 }
 
+/* ==========================================================================
+   SUPER GLOBAL ABSOLUTE IOS 26 LIQUID FROSTED GLASS & FULL COVERAGE OVERRIDE
+   ========================================================================== */
+
+/* 1. Ensure body and html transparently expose the Day/Night master background */
+html, body {
+  background-attachment: fixed !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+html, body, html.dark body, body.dark {
+  background: url('./assets/app_bg_night.png') no-repeat center center fixed / cover !important;
+}
+
+html.light-mode body, body.light-mode, html.light body {
+  background: url('./assets/app_bg_day.png') no-repeat center center fixed / cover !important;
+}
+
+/* 2. DARK MODE: Liquid Frosted Glass for ALL cards, containers, panels */
+html.dark .review-banner,
+html.dark .deck-card,
+html.dark .dict-results-container,
+html.dark .notebook-card,
+html.dark .notebook-header-card,
+html.dark .zubi-stat-card,
+html.dark .zubi-recent-card,
+html.dark .zubi-table-card,
+html.dark .zubi-header-banner,
+html.dark .controls-dashboard,
+html.dark .widget-item,
+html.dark .level-card,
+html.dark .exam-paper-card,
+html.dark .exam-player-nav,
+html.dark .exam-player-main,
+html.dark .review-q-item,
+html.dark .result-stat-box,
+html.dark .flashcard-card,
+html.dark .card-side,
+html.dark .card-front,
+html.dark .card-back,
+html.dark .glass-panel,
+html.dark .modal-content,
+html.dark .modal-card,
+html.dark .sidebar-profile-card,
+html.dark .google-acc-card,
+html.dark .pinyin-card,
+html.dark .phonetic-card,
+html.dark .grammar-card,
+html.dark .hub-card,
+html.dark .reader-card,
+html.dark .info-sub-card,
+html.dark .char-detail-inspector,
+html.dark .vd-box,
+html.dark .vocab-panel,
+html.dark .filter-section,
+html.dark .writing-workshop,
+html.dark .voice-control-bar,
+html.dark .phonetics-header,
+html.dark .app-container,
+html.dark .table-card,
+html.dark .game-card,
+html.dark .chat-card,
+html.dark .rules-card,
+html.dark .detail-card,
+html.dark .top-bar,
+html.dark .custom-words-table-wrapper,
+html.dark .dict-search-panel,
+html.dark .dict-details-panel,
+html.dark #roadmap-view-section,
+html.dark #flashcard-section,
+html.dark #custom-section,
+html.dark #home-view-section {
+  background: rgba(15, 23, 42, 0.55) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.35) !important;
+  color: #ffffff !important;
+}
+
+/* 3. LIGHT MODE: Liquid Frosted Glass for ALL cards, containers, panels */
+html.light-mode .review-banner,
+html.light-mode .deck-card,
+html.light-mode .dict-results-container,
+html.light-mode .notebook-card,
+html.light-mode .notebook-header-card,
+html.light-mode .zubi-stat-card,
+html.light-mode .zubi-recent-card,
+html.light-mode .zubi-table-card,
+html.light-mode .zubi-header-banner,
+html.light-mode .controls-dashboard,
+html.light-mode .widget-item,
+html.light-mode .level-card,
+html.light-mode .exam-paper-card,
+html.light-mode .exam-player-nav,
+html.light-mode .exam-player-main,
+html.light-mode .review-q-item,
+html.light-mode .result-stat-box,
+html.light-mode .flashcard-card,
+html.light-mode .card-side,
+html.light-mode .card-front,
+html.light-mode .card-back,
+html.light-mode .glass-panel,
+html.light-mode .modal-content,
+html.light-mode .modal-card,
+html.light-mode .sidebar-profile-card,
+html.light-mode .google-acc-card,
+html.light-mode .pinyin-card,
+html.light-mode .phonetic-card,
+html.light-mode .grammar-card,
+html.light-mode .hub-card,
+html.light-mode .reader-card,
+html.light-mode .info-sub-card,
+html.light-mode .char-detail-inspector,
+html.light-mode .vd-box,
+html.light-mode .vocab-panel,
+html.light-mode .filter-section,
+html.light-mode .writing-workshop,
+html.light-mode .voice-control-bar,
+html.light-mode .phonetics-header,
+html.light-mode .app-container,
+html.light-mode .table-card,
+html.light-mode .game-card,
+html.light-mode .chat-card,
+html.light-mode .rules-card,
+html.light-mode .detail-card,
+html.light-mode .top-bar,
+html.light-mode .custom-words-table-wrapper,
+html.light-mode .dict-search-panel,
+html.light-mode .dict-details-panel,
+html.light-mode #roadmap-view-section,
+html.light-mode #flashcard-section,
+html.light-mode #custom-section,
+html.light-mode #home-view-section {
+  background: rgba(255, 255, 255, 0.65) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.08) !important;
+  color: #0f172a !important;
+}
+
 
