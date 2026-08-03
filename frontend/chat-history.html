@@ -431,6 +431,9 @@
       <div class="sidebar-header">
         <h3 style="margin:0; font-size: 1.05rem; display: flex; align-items: center; gap: 6px;"><i class="fa-solid fa-clock-rotate-left text-primary"></i> Hội thoại</h3>
         <div style="display: flex; align-items: center; gap: 8px;">
+          <button id="theme-toggle" class="btn-theme-toggle" onclick="toggleTheme()" title="Chuyển đổi giao diện Sáng / Tối" style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-glass); color: var(--text-primary); width: 34px; height: 34px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 0.95rem; transition: all 0.2s;">
+            <i class="fa-solid fa-moon"></i>
+          </button>
           <a href="/index.html" class="btn-home-top" title="Quay về Trang Chủ" style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); color: var(--accent-blue); padding: 5px 12px; border-radius: 8px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; transition: all 0.2s;">
             <i class="fa-solid fa-house"></i> Trang Chủ
           </a>
@@ -460,9 +463,14 @@
       <div id="active-chat-panel" style="display: none; flex-direction: column; flex-grow: 1; height: 100%;">
         <div class="chat-view-header" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-bottom: 1px solid var(--border-glass);">
           <h4 class="chat-view-title" id="active-thread-title" style="margin: 0;">Cuộc trò chuyện chi tiết</h4>
-          <a href="/index.html" class="btn-home-top" title="Quay về Trang Chủ" style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); color: var(--accent-blue); padding: 5px 12px; border-radius: 8px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; transition: all 0.2s;">
-            <i class="fa-solid fa-house"></i> Trang Chủ
-          </a>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button class="btn-theme-toggle" onclick="toggleTheme()" title="Chuyển đổi giao diện Sáng / Tối" style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-glass); color: var(--text-primary); width: 34px; height: 34px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 0.95rem; transition: all 0.2s;">
+              <i class="fa-solid fa-moon"></i>
+            </button>
+            <a href="/index.html" class="btn-home-top" title="Quay về Trang Chủ" style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); color: var(--accent-blue); padding: 5px 12px; border-radius: 8px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; transition: all 0.2s;">
+              <i class="fa-solid fa-house"></i> Trang Chủ
+            </a>
+          </div>
         </div>
         
         <div class="chat-messages" id="chat-messages-container">
@@ -513,26 +521,35 @@
       return headers;
     }
 
-    // Load theme setting
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    const themeToggleBtn = document.getElementById('theme-toggle');
-    if (savedTheme === 'light') {
-      document.documentElement.classList.remove('dark');
-      if (themeToggleBtn) themeToggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
-    } else {
-      document.documentElement.classList.add('dark');
-      if (themeToggleBtn) themeToggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
-    }
+    // Load and toggle theme setting
+    function toggleTheme() {
+      const isLight = document.documentElement.classList.contains('light-mode') || document.documentElement.classList.contains('light');
+      const nextDark = isLight;
+      const bgUrl = nextDark ? "url('/assets/app_bg_night.png')" : "url('/assets/app_bg_day.png')";
+      
+      document.documentElement.style.setProperty('background-image', bgUrl, 'important');
+      if (document.body) document.body.style.setProperty('background-image', bgUrl, 'important');
 
-    if (themeToggleBtn) {
-      themeToggleBtn.addEventListener('click', () => {
-        const isDark = document.documentElement.classList.toggle('dark');
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        themeToggleBtn.innerHTML = isDark
-          ? '<i class="fa-solid fa-moon"></i>'
-          : '<i class="fa-solid fa-sun"></i>';
-      });
+      if (nextDark) {
+        document.documentElement.classList.remove('light', 'light-mode');
+        document.documentElement.classList.add('dark');
+        if (document.body) document.body.classList.remove('light-mode');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light', 'light-mode');
+        if (document.body) document.body.classList.add('light-mode');
+        localStorage.setItem('theme', 'light');
+      }
+
+      const icon = nextDark ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun" style="color: #f59e0b;"></i>';
+      document.querySelectorAll('#theme-toggle, .btn-theme-toggle').forEach(btn => btn.innerHTML = icon);
     }
+    window.toggleTheme = toggleTheme;
+
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    const icon = savedTheme === 'light' ? '<i class="fa-solid fa-sun" style="color: #f59e0b;"></i>' : '<i class="fa-solid fa-moon"></i>';
+    document.querySelectorAll('#theme-toggle, .btn-theme-toggle').forEach(btn => btn.innerHTML = icon);
 
     // Check user login state
     const savedUser = localStorage.getItem('user');
