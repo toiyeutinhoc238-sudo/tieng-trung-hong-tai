@@ -516,7 +516,7 @@ app.post('/api/user/game-history', async (req, res) => {
     level: level || 'all',
     mode: mode || 'zh-vi',
     combo: combo || 0,
-    playedAt: new Date().toISOString()
+    playedAt: req.body.playedAt || new Date().toISOString()
   };
 
   userRecord.gameHistory.push(newRecord);

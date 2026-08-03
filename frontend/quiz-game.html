@@ -1398,7 +1398,8 @@
           stage: playedCount,
           level: levelVal,
           mode: modeVal,
-          combo: maxComboCount
+          combo: maxComboCount,
+          playedAt: newRecord.playedAt
         })
       }).then(res => res.json())
         .then(data => {
