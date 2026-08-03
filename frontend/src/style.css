@@ -5827,6 +5827,17 @@ body {
   box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4) !important;
 }
 
+#home-view-section {
+  background: url('/assets/app_bg_night.png') no-repeat center center / cover;
+  border-radius: 28px;
+  padding: 28px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+html.light-mode #home-view-section {
+  background: url('/assets/app_bg_day.png') no-repeat center center / cover;
+}
+
 #roadmap-view-section {
   background: #84cc16 url('/assets/saga_map_bg.png') repeat center top / 600px 600px;
   border-radius: 28px;
