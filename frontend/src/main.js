@@ -1905,7 +1905,7 @@ function setupEventListeners() {
         // Sort by newest played first
         historyArr.sort((a, b) => new Date(b.playedAt) - new Date(a.playedAt));
 
-        // Deduplicate records by checking if they are within 10 seconds of each other with same stats
+        // Deduplicate records by checking if they are within 60 seconds of each other with same stats
         const uniqueHistory = [];
         historyArr.forEach(item => {
           if (!item || !item.playedAt) return;
@@ -1914,10 +1914,10 @@ function setupEventListeners() {
           const isDuplicate = uniqueHistory.some(existing => {
             const existingTime = new Date(existing.playedAt).getTime();
             const timeDiff = Math.abs(itemTime - existingTime);
-            return timeDiff < 10000 && 
-                   existing.score === item.score && 
-                   existing.stage === item.stage && 
-                   existing.level === item.level;
+            return timeDiff < 60000 && 
+                   existing.score == item.score && 
+                   existing.stage == item.stage && 
+                   existing.level == item.level;
           });
 
           if (!isDuplicate) {
