@@ -3312,7 +3312,7 @@ function renderGamifiedRoadmapPath() {
             <button class="btn-node-start" style="background: ${item.color}; box-shadow: 0 4px 0 ${item.shadow || '#000000'}; border-bottom: none; color: ${item.textCol || '#ffffff'}; transition: all 0.2s; border-radius: 12px; font-weight: 700; padding: 12px 20px; font-size: 0.9rem;" onclick="goToRoadmapLevel('${hskVer}', '${item.level}')" onmousedown="this.style.transform='translateY(3px)'; this.style.boxShadow='0 1px 0 ${item.shadow || '#000000'}';" onmouseup="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 0 ${item.shadow || '#000000'}';" onmouseleave="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 0 ${item.shadow || '#000000'}';">
               Khám Phá Cấp ${item.level} <i class="fa-solid fa-arrow-right"></i>
             </button>
-            <button class="btn-node-start" style="background: rgba(255,255,255,0.1); width: auto;" onclick="window.location.href='/quiz-game.html?level=${item.level}'" title="Thi trắc nghiệm">
+            <button class="btn-node-start" style="background: rgba(255,255,255,0.1); width: auto;" onclick="window.location.href='/quiz-game.html?level=${item.level}&version=${hskVer}'" title="Thi trắc nghiệm">
               <i class="fa-solid fa-gamepad"></i>
             </button>
           </div>
@@ -7743,9 +7743,11 @@ function startGameArenaFromNotebook() {
   const gamePlayView = document.getElementById('game-play-view');
   if (gamePlayView) gamePlayView.style.display = 'block';
 
+  const hskVer = currentCurriculum.includes('HSK 3.0') ? '3.0' : '2.0';
+
   const iframe = document.getElementById('game-play-iframe');
   if (iframe) {
-    iframe.src = `quiz-game.html?level=${levelParam}&lessons=${lessonsParam}&filter=${dashboardActiveFilter}&notebook=${activeNotebook}`;
+    iframe.src = `quiz-game.html?level=${levelParam}&lessons=${lessonsParam}&filter=${dashboardActiveFilter}&notebook=${activeNotebook}&version=${hskVer}`;
   }
 };
 

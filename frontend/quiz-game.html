@@ -940,6 +940,7 @@
       const params = new URLSearchParams(window.location.search);
       const urlLevel = params.get('level');
       const urlLessons = params.get('lessons');
+      const urlVersion = params.get('version');
 
       if (urlLevel && urlLevel !== 'all' && urlLevel !== 'null' && urlLevel !== 'undefined') {
         const targetVal = urlLevel.toLowerCase().replace('hsk', '');
@@ -952,7 +953,19 @@
       if (urlLessons && urlLessons !== 'all' && urlLessons !== 'null') {
         const firstLesson = urlLessons.split(',')[0];
         if (firstLesson) {
-          const opt = Array.from(selLesson.options).find(o => o.value == firstLesson || o.value.endsWith(`_${firstLesson}`));
+          const opt = Array.from(selLesson.options).find(o => {
+            if (o.value == firstLesson) return true;
+            const parts = o.value.split('_');
+            // Check if the lessonId part matches
+            if (parts.length >= 3 && parts[2] == firstLesson) {
+              // If urlVersion is provided, try to match it too
+              if (urlVersion && parts.length === 4) {
+                return parts[3] === urlVersion;
+              }
+              return true;
+            }
+            return false;
+          });
           if (opt) selLesson.value = opt.value;
         }
       }
@@ -997,8 +1010,9 @@
         if (w.lessonId) {
           const yctFlag = isYct(w);
           const typePrefix = yctFlag ? 'yct' : 'hsk';
-          const key = `${typePrefix}_${w.level || ''}_${w.lessonId}`;
-          const versionStr = yctFlag ? '' : (w.hskVersion ? ` [HSK ${w.hskVersion}]` : ' [HSK 3.0]');
+          const ver = yctFlag ? '' : (w.hskVersion || '3.0');
+          const key = `${typePrefix}_${w.level || ''}_${w.lessonId}_${ver}`;
+          const versionStr = yctFlag ? '' : ` [HSK ${ver}]`;
           const prefix = yctFlag ? `YCT ${w.level}` : (w.level ? `HSK ${w.level}${versionStr}` : '');
 
           let rawTitle = w.lessonTitle || `Bài ${w.lessonId}`;
@@ -1061,7 +1075,11 @@
       if (lsn !== 'all' && lsn !== 'random') {
         if (lsn.includes('_')) {
           const parts = lsn.split('_');
-          if (parts.length === 3) {
+          if (parts.length === 4) {
+            const [type, lLevel, lId, lVer] = parts;
+            const targetYct = (type === 'yct');
+            pool = pool.filter(w => w.lessonId == lId && (w.level == lLevel || !lLevel) && isYct(w) === targetYct && (targetYct || (w.hskVersion || '3.0') === lVer));
+          } else if (parts.length === 3) {
             const [type, lLevel, lId] = parts;
             const targetYct = (type === 'yct');
             pool = pool.filter(w => w.lessonId == lId && (w.level == lLevel || !lLevel) && isYct(w) === targetYct);
