@@ -5803,8 +5803,9 @@ body {
 }
 
 #roadmap-view-section {
-  background: #84cc16 url('data:image/svg+xml;utf8,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><path d="M54.627 0l.83.83v58.34l-.83.83H5.373l-.83-.83V.83l.83-.83h49.254zM53.5 2H6.5v56h47V2z" fill="%2365a30d" fill-opacity="0.1" fill-rule="evenodd"/></svg>');
-  border-radius: 20px;
+  background: #84cc16 url('/src/assets/saga_map_bg.png') repeat center top / 600px 600px;
+  border-radius: 28px;
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.2);
 }
 
 .roadmap-path-trail {
