@@ -4750,9 +4750,11 @@ html.dark .zubi-header-banner {
 }
 
 html.dark .zubi-stat-card {
-  background: #1e293b;
-  border-color: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+  background: rgba(15, 23, 42, 0.78) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 2px solid rgba(255, 255, 255, 0.18) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35) !important;
 }
 
 .zubi-stat-card:hover {
@@ -4872,9 +4874,11 @@ html.dark .zubi-section-header h2 {
 }
 
 html.dark .zubi-recent-card {
-  background: #1e293b;
-  border-color: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  background: rgba(15, 23, 42, 0.78) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 2px solid rgba(255, 255, 255, 0.18) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35) !important;
 }
 
 .zubi-recent-card:hover {
