@@ -6053,152 +6053,6 @@ body {
   cursor: pointer;
   transition: all 0.2s;
 }
-
-.btn-node-start:hover {
-  background: #2563eb;
-}
-
-.roadmap-milestone-chest {
-  width: 100%;
-  max-width: 520px;
-  margin: 10px 0;
-}
-
-.milestone-box {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(217, 119, 6, 0.25));
-  border: 2px dashed #f59e0b;
-  border-radius: 18px;
-  padding: 18px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  cursor: pointer;
-  transition: all 0.25s;
-}
-
-.milestone-box:hover {
-  transform: scale(1.02);
-  box-shadow: 0 0 25px rgba(245, 158, 11, 0.4);
-}
-
-.chest-icon {
-  font-size: 2.2rem;
-  color: #fbbf24;
-}
-
-.chest-title {
-  font-weight: 800;
-  font-size: 0.95rem;
-  color: #fbbf24;
-}
-
-.chest-desc {
-  font-size: 0.8rem;
-  color: #cbd5e1;
-}
-
-.btn-chest-play {
-  background: #f59e0b;
-  color: #000;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 10px;
-  font-weight: 800;
-  font-size: 0.85rem;
-  cursor: pointer;
-}
-
-/* =======================================================
-   LIGHT MODE TOTAL FIX (Khắc phục lỗi mất chữ/chữ mờ ở chế độ Sáng)
-   ======================================================= */
-html.light-mode, body.light-mode, html.light {
-  --bg-primary: #f1f5f9;
-  --bg-secondary: #ffffff;
-  --bg-glass: rgba(255, 255, 255, 0.95);
-  --border-glass: rgba(0, 0, 0, 0.12);
-  --text-primary: #0f172a;
-  --text-secondary: #334155;
-  --text-muted: #64748b;
-  color: #0f172a !important;
-}
-
-html.light-mode body, body.light-mode {
-  background-color: #f1f5f9 !important;
-  color: #0f172a !important;
-}
-
-/* Đảm bảo toàn bộ thẻ panel, card, modal ở chế độ sáng không bị chìm chữ */
-html.light-mode .glass-panel,
-html.light-mode .voice-control-bar,
-html.light-mode .zubi-stat-card,
-html.light-mode .info-sub-card,
-html.light-mode .group-block,
-html.light-mode .char-detail-inspector,
-html.light-mode .vd-box,
-html.light-mode .modal-content,
-html.light-mode .vocab-panel,
-html.light-mode .filter-section,
-html.light-mode .writing-workshop {
-  background: #ffffff !important;
-  border-color: #cbd5e1 !important;
-  color: #0f172a !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06) !important;
-}
-
-/* Ép màu các tiêu đề, văn bản phụ rõ nét ở chế độ sáng */
-html.light-mode h1, html.light-mode h2, html.light-mode h3, html.light-mode h4,
-html.light-mode p, html.light-mode span, html.light-mode div, html.light-mode label {
-  color: inherit;
-}
-
-/* Đảm bảo màu chữ xám phụ ở chế độ sáng đủ độ tương phản */
-html.light-mode [style*="color: #94a3b8"],
-html.light-mode [style*="color:#94a3b8"],
-html.light-mode [style*="color: #cbd5e1"],
-html.light-mode [style*="color:#cbd5e1"],
-html.light-mode .text-secondary,
-html.light-mode .zubi-stat-label,
-html.light-mode .info-sub-content {
-  color: #475569 !important;
-}
-
-/* Các trường input / select trong chế độ sáng */
-html.light-mode input,
-html.light-mode select,
-html.light-mode textarea {
-  background-color: #ffffff !important;
-  color: #0f172a !important;
-  border-color: #cbd5e1 !important;
-}
-
-/* ─── LIGHT MODE EXTENDED: NavBar ─── */
-html.light-mode .navbar {
-  background: rgba(255,255,255,0.95) !important;
-  border-bottom-color: #e2e8f0 !important;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06) !important;
-}
-html.light-mode .nav-tabs .nav-tab {
-  color: #475569 !important;
-}
-html.light-mode .nav-tabs .nav-tab.active,
-html.light-mode .nav-tabs .nav-tab:hover {
-  color: #1d4ed8 !important;
-  background: rgba(37,99,235,0.08) !important;
-}
-
-/* ─── LIGHT MODE EXTENDED: Filter / Sidebar ─── */
-html.light-mode .sidebar,
-html.light-mode .filter-sidebar {
-  background: #ffffff !important;
-  border-color: #e2e8f0 !important;
-}
-html.light-mode .level-tab,
-html.light-mode .status-filter-btn {
-  background: #f1f5f9 !important;
-  color: #475569 !important;
-  border-color: #e2e8f0 !important;
-}
 html.light-mode .level-tab.active,
 html.light-mode .status-filter-btn.active {
   background: #2563eb !important;
@@ -6741,6 +6595,60 @@ body.dark .nb-lesson-pill:hover {
 }
 
 /* Sidebar Toggle & Collapsed State Rules */
+.sidebar-expand-float-btn {
+  display: none;
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 999;
+  background: var(--bg-glass, rgba(15, 23, 42, 0.88));
+  backdrop-filter: blur(16px);
+}
+
+/* =======================================================
+   LIGHT MODE iOS 26 LIQUID GLASSMORPHISM
+   ======================================================= */
+html.light-mode, body.light-mode, html.light {
+  --bg-primary: #f1f5f9;
+  --bg-secondary: rgba(255, 255, 255, 0.7);
+  --bg-glass: rgba(255, 255, 255, 0.68);
+  --border-glass: rgba(255, 255, 255, 0.8);
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  color: #0f172a !important;
+}
+
+html.light-mode body, body.light-mode {
+  background: url('/assets/app_bg_day.png') no-repeat center center fixed / cover !important;
+  color: #0f172a !important;
+  transition: background 0.5s ease-in-out;
+}
+
+/* Đảm bảo toàn bộ thẻ panel, card, modal ở chế độ sáng dùng iOS 26 Liquid Glass */
+html.light-mode .glass-panel,
+html.light-mode .voice-control-bar,
+html.light-mode .zubi-stat-card,
+html.light-mode .zubi-recent-card,
+html.light-mode .zubi-table-card,
+html.light-mode .info-sub-card,
+html.light-mode .group-block,
+html.light-mode .char-detail-inspector,
+html.light-mode .vd-box,
+html.light-mode .modal-content,
+html.light-mode .vocab-panel,
+html.light-mode .filter-section,
+html.light-mode .writing-workshop,
+html.light-mode .sidebar-profile-card,
+html.light-mode .user-profile,
+html.light-mode .google-acc-card {
+  background: rgba(255, 255, 255, 0.68) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.08) !important;
+  color: #0f172a !important;
+}
 .sidebar-expand-float-btn {
   display: none;
   position: fixed;
