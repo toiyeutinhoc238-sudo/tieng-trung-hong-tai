@@ -16,24 +16,44 @@
   <script>
     (function () {
       var t = localStorage.getItem('theme') || 'dark';
+      var bgUrl = t === 'light' ? "url('./src/assets/app_bg_day.png')" : "url('./src/assets/app_bg_night.png')";
+      document.documentElement.style.setProperty('background-image', bgUrl, 'important');
+      document.documentElement.style.setProperty('background-size', 'cover', 'important');
+      document.documentElement.style.setProperty('background-position', 'center center', 'important');
+      document.documentElement.style.setProperty('background-attachment', 'fixed', 'important');
+      document.documentElement.style.setProperty('background-repeat', 'no-repeat', 'important');
+
       if (t === 'light') {
         document.documentElement.classList.add('light-mode', 'light');
         document.documentElement.classList.remove('dark');
         if (document.body) {
           document.body.classList.add('light-mode');
+          document.body.style.setProperty('background-image', bgUrl, 'important');
         } else {
           document.addEventListener('DOMContentLoaded', function () {
             document.body.classList.add('light-mode');
+            document.body.style.setProperty('background-image', bgUrl, 'important');
           });
         }
       } else {
         document.documentElement.classList.add('dark');
         document.documentElement.classList.remove('light', 'light-mode');
+        if (document.body) {
+          document.body.style.setProperty('background-image', bgUrl, 'important');
+        } else {
+          document.addEventListener('DOMContentLoaded', function () {
+            document.body.style.setProperty('background-image', bgUrl, 'important');
+          });
+        }
       }
     })();
 
     window.toggleTheme = function () {
       var isLight = document.documentElement.classList.contains('light-mode') || document.documentElement.classList.contains('light');
+      var bgUrl = !isLight ? "url('./src/assets/app_bg_day.png')" : "url('./src/assets/app_bg_night.png')";
+      document.documentElement.style.setProperty('background-image', bgUrl, 'important');
+      document.body.style.setProperty('background-image', bgUrl, 'important');
+      
       if (isLight) {
         document.documentElement.classList.remove('light', 'light-mode');
         document.documentElement.classList.add('dark');

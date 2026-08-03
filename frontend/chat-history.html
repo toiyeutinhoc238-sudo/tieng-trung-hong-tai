@@ -20,21 +20,37 @@
         navigator.serviceWorker.register('/sw.js').catch(() => {});
       });
     }
-    (function() {
+    (function () {
       var t = localStorage.getItem('theme') || 'dark';
+      var bgUrl = t === 'light' ? "url('/assets/app_bg_day.png')" : "url('/assets/app_bg_night.png')";
+      document.documentElement.style.setProperty('background-image', bgUrl, 'important');
+      document.documentElement.style.setProperty('background-size', 'cover', 'important');
+      document.documentElement.style.setProperty('background-position', 'center center', 'important');
+      document.documentElement.style.setProperty('background-attachment', 'fixed', 'important');
+      document.documentElement.style.setProperty('background-repeat', 'no-repeat', 'important');
+
       if (t === 'light') {
         document.documentElement.classList.add('light-mode', 'light');
         document.documentElement.classList.remove('dark');
         if (document.body) {
           document.body.classList.add('light-mode');
+          document.body.style.setProperty('background-image', bgUrl, 'important');
         } else {
-          document.addEventListener('DOMContentLoaded', function() {
+          document.addEventListener('DOMContentLoaded', function () {
             document.body.classList.add('light-mode');
+            document.body.style.setProperty('background-image', bgUrl, 'important');
           });
         }
       } else {
         document.documentElement.classList.add('dark');
         document.documentElement.classList.remove('light', 'light-mode');
+        if (document.body) {
+          document.body.style.setProperty('background-image', bgUrl, 'important');
+        } else {
+          document.addEventListener('DOMContentLoaded', function () {
+            document.body.style.setProperty('background-image', bgUrl, 'important');
+          });
+        }
       }
     })();
   </script>

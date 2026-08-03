@@ -19,19 +19,55 @@
     rel="stylesheet">
 
   <link rel="stylesheet" href="/src/style.css">
+  <script>
+    (function () {
+      var t = localStorage.getItem('theme') || 'dark';
+      var bgUrl = t === 'light' ? "url('/assets/app_bg_day.png')" : "url('/assets/app_bg_night.png')";
+      document.documentElement.style.setProperty('background-image', bgUrl, 'important');
+      document.documentElement.style.setProperty('background-size', 'cover', 'important');
+      document.documentElement.style.setProperty('background-position', 'center center', 'important');
+      document.documentElement.style.setProperty('background-attachment', 'fixed', 'important');
+      document.documentElement.style.setProperty('background-repeat', 'no-repeat', 'important');
+
+      if (t === 'light') {
+        document.documentElement.classList.add('light-mode', 'light');
+        document.documentElement.classList.remove('dark');
+        if (document.body) {
+          document.body.classList.add('light-mode');
+          document.body.style.setProperty('background-image', bgUrl, 'important');
+        } else {
+          document.addEventListener('DOMContentLoaded', function () {
+            document.body.classList.add('light-mode');
+            document.body.style.setProperty('background-image', bgUrl, 'important');
+          });
+        }
+      } else {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light', 'light-mode');
+        if (document.body) {
+          document.body.style.setProperty('background-image', bgUrl, 'important');
+        } else {
+          document.addEventListener('DOMContentLoaded', function () {
+            document.body.style.setProperty('background-image', bgUrl, 'important');
+          });
+        }
+      }
+    })();
+  </script>
+
   <style>
     :root {
-      --rules-bg: #0b0f19;
-      --rules-card: #151c2c;
-      --rules-card-hover: #1e293b;
-      --rules-border: rgba(255, 255, 255, 0.1);
+      --rules-bg: transparent;
+      --rules-card: rgba(15, 23, 42, 0.28);
+      --rules-card-hover: rgba(30, 41, 59, 0.45);
+      --rules-border: rgba(255, 255, 255, 0.2);
       --rules-primary: #3b82f6;
       --rules-accent: #f59e0b;
       --rules-success: #10b981;
     }
 
     body {
-      background-color: var(--rules-bg);
+      background: transparent !important;
       color: #f8fafc;
       font-family: 'Be Vietnam Pro', sans-serif;
       margin: 0;
