@@ -94,18 +94,21 @@
     }
 
     body {
-      background: url('/assets/quiz_arena_bg.png') no-repeat center center fixed / cover !important;
+      background: url('./src/assets/app_bg_night.png') no-repeat center center fixed / cover !important;
       font-family: 'Quicksand', sans-serif;
     }
 
     html.light-mode body,
     body.light-mode {
-      background: url('/assets/quiz_arena_bg.png') no-repeat center center fixed / cover !important;
+      background: url('./src/assets/app_bg_day.png') no-repeat center center fixed / cover !important;
       color: #0f172a !important;
     }
 
     html.light-mode .app-container {
-      background: #f8fafc !important;
+      background: rgba(255, 255, 255, 0.68) !important;
+      backdrop-filter: blur(24px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.85) !important;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1) !important;
     }
 
