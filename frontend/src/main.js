@@ -4094,6 +4094,29 @@ window.revealNextRoadmapHint = function(targetAns) {
   }
 };
 
+function formatExampleBlocks(egZh, egVi) {
+  if (!egZh || !egZh.trim()) return '';
+
+  const zhLines = egZh.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  const viLines = (egVi || '').split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+
+  let html = `<div style="background: rgba(255,255,255,0.04); border-left: 3px solid #2563eb; padding: 10px 14px; border-radius: 0 8px 8px 0; margin-top: 6px;">`;
+  html += `<div style="font-size: 0.82rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Ví dụ:</div>`;
+
+  zhLines.forEach((zh, idx) => {
+    const vi = viLines[idx] || (viLines.length === 1 ? viLines[0] : '');
+    html += `
+      <div style="${idx > 0 ? 'margin-top: 8px; padding-top: 8px; border-top: 1px dashed rgba(255,255,255,0.1);' : ''}">
+        <div style="font-family: var(--font-hanzi); font-size: 1.15rem; color: var(--text-color); font-weight: 600; line-height: 1.4; white-space: pre-line;">${zh}</div>
+        ${vi ? `<div style="font-size: 0.9rem; color: var(--text-muted); font-style: italic; margin-top: 2px; white-space: pre-line;">${vi}</div>` : ''}
+      </div>
+    `;
+  });
+
+  html += `</div>`;
+  return html;
+}
+
 window.showLearningFlashcard = function(index) {
   if (index < 0 || index >= currentRoadmapLearningVocabs.length) return;
   currentRoadmapLearningIndex = index;
@@ -4163,19 +4186,13 @@ window.showLearningFlashcard = function(index) {
 
           <!-- Chú ý / Cách dùng -->
           ${usage ? `
-            <div style="font-size: 0.95rem; color: var(--text-muted); font-style: italic; line-height: 1.4;">
+            <div style="font-size: 0.95rem; color: var(--text-muted); font-style: italic; line-height: 1.4; white-space: pre-line;">
               <i class="fa-solid fa-circle-info" style="color: #3b82f6; margin-right: 4px;"></i> ${usage}
             </div>
           ` : ''}
 
-          <!-- Ví dụ -->
-          ${egZh ? `
-            <div style="background: rgba(255,255,255,0.04); border-left: 3px solid #2563eb; padding: 8px 12px; border-radius: 0 8px 8px 0; margin-top: 4px;">
-              <div style="font-size: 0.82rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">Ví dụ:</div>
-              <div style="font-family: var(--font-hanzi); font-size: 1.1rem; color: var(--text-color); font-weight: 600;">${egZh}</div>
-              ${egVi ? `<div style="font-size: 0.9rem; color: var(--text-muted); font-style: italic;">${egVi}</div>` : ''}
-            </div>
-          ` : ''}
+          <!-- Ví dụ (Multi-line formatted) -->
+          ${formatExampleBlocks(egZh, egVi)}
         </div>
       </div>
 
