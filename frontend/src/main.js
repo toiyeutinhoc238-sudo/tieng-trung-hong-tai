@@ -891,9 +891,12 @@ function renderActiveCardLesson(current) {
           strokeColor: '#ef4444',
           radicalColor: '#2563eb',
           outlineColor: '#fca5a5',
-          drawingWidth: 20
+          drawingWidth: 20,
+          onLoadCharDataError: function(err) {
+            targetContainer.innerHTML = `<span style="font-size: 4.5rem; font-weight: 900; color: #ef4444;">${current.word}</span>`;
+          }
         });
-        activeLessonHanziWriter.animateCharacter();
+        activeLessonHanziWriter.animateCharacter().catch(() => {});
       } catch (err) {
         console.warn('HanziWriter error:', err);
         targetContainer.innerHTML = `<span style="font-size: 5rem; font-weight: 900; color: #ef4444;">${current.word}</span>`;
