@@ -7959,15 +7959,15 @@ window.showLeaderboardModal = function () {
   if (!modal) {
     modal = document.createElement('div');
     modal.id = 'leaderboard-modal';
-    modal.className = 'modal-overlay';
-    modal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;';
+    modal.className = 'modal-overlay leaderboard-modal-overlay';
+    modal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 99999; align-items: center; justify-content: center; padding: 20px;';
     modal.innerHTML = `
-      <div style="background: var(--bg-primary, #1e293b); border: 1px solid var(--border-glass, rgba(255,255,255,0.12)); border-radius: 20px; width: 100%; max-width: 650px; padding: 28px; color: var(--text-primary, #fff); position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
-        <button onclick="document.getElementById('leaderboard-modal').style.display='none'" style="position: absolute; top: 18px; right: 18px; background: none; border: none; color: var(--text-muted, #94a3b8); font-size: 1.5rem; cursor: pointer;">&times;</button>
+      <div class="leaderboard-modal-content">
+        <button onclick="document.getElementById('leaderboard-modal').style.display='none'" style="position: absolute; top: 18px; right: 18px; background: none; border: none; color: var(--text-muted, #94a3b8); font-size: 1.5rem; cursor: pointer; z-index: 10;">&times;</button>
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
           <div style="font-size: 2.2rem; background: rgba(251,191,36,0.15); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fbbf24;">🏆</div>
           <div>
-            <h2 style="font-size: 1.4rem; font-weight: 800; margin: 0;">Bảng Xếp Hạng Học Viên Thực Tế</h2>
+            <h2>Bảng Xếp Hạng Học Viên Thực Tế</h2>
           </div>
         </div>
         <div id="leaderboard-list-container" style="display: flex; flex-direction: column; gap: 10px; max-height: 400px; overflow-y: auto; padding-right: 4px;">
@@ -7998,36 +7998,27 @@ window.showLeaderboardModal = function () {
       let html = '';
       data.forEach(item => {
         let badgeIcon = `#${item.rank}`;
-        let rankStyle = 'background: var(--bg-secondary); border: 1px solid var(--border-glass);';
-        let rankColor = '#3b82f6';
+        let rankClass = `rank-${item.rank}`;
 
         if (item.rank === 1) {
           badgeIcon = '🥇';
-          rankStyle = 'background: rgba(251,191,36,0.12); border: 1px solid #fbbf24;';
-          rankColor = '#fbbf24';
         } else if (item.rank === 2) {
           badgeIcon = '🥈';
-          rankStyle = 'background: rgba(148,163,184,0.1); border: 1px solid #94a3b8;';
-          rankColor = '#94a3b8';
         } else if (item.rank === 3) {
           badgeIcon = '🥉';
-          rankStyle = 'background: rgba(180,83,9,0.1); border: 1px solid #b45309;';
-          rankColor = '#b45309';
         }
 
         html += `
-          <div style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; ${rankStyle}">
-            <span style="font-size: 1.2rem; font-weight: 800; width: 30px; text-align: center; color: ${rankColor};">${badgeIcon}</span>
-            ${item.picture ? `<img src="${item.picture}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover;">` : `<div style="width: 38px; height: 38px; border-radius: 50%; background: #3b82f6; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700;">${item.name.charAt(0)}</div>`}
+          <div class="leaderboard-item ${rankClass}">
+            <span style="font-size: 1.3rem; font-weight: 800; width: 32px; text-align: center;">${badgeIcon}</span>
+            ${item.picture ? `<img src="${item.picture}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">` : `<div style="width: 40px; height: 40px; border-radius: 50%; background: #3b82f6; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700;">${item.name.charAt(0)}</div>`}
             <div style="flex: 1; min-width: 0;">
-              <div style="font-weight: 800; font-size: 0.95rem; color: #fff; display: flex; align-items: center; gap: 6px;">
-                ${item.name}
-              </div>
-              <div style="font-size: 0.75rem; color: #94a3b8;">Đã học thuộc: <strong style="color: #10b981;">${item.completedCount} từ vựng</strong></div>
+              <div class="lb-user-name">${item.name}</div>
+              <div class="lb-subtext">Đã học thuộc: <strong style="color: #059669;">${item.completedCount} từ vựng</strong></div>
             </div>
             <div style="text-align: right;">
-              <div style="font-weight: 800; color: ${rankColor}; font-size: 0.95rem;">${item.completedCount * 100} Điểm</div>
-              <div style="font-size: 0.72rem; color: #94a3b8;">Thời gian học: ${item.studyTimeMinutes} phút</div>
+              <div class="lb-score-val">${item.completedCount * 100} Điểm</div>
+              <div class="lb-subtext">Thời gian học: ${item.studyTimeMinutes} phút</div>
             </div>
           </div>
         `;

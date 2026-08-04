@@ -6295,19 +6295,214 @@ html.light-mode [style*="color:var(--text-primary, #fff)"] {
   color: #0f172a !important;
 }
 
-/* ─── LIGHT MODE EXTENDED: Leaderboard modal ─── */
-html.light-mode .leaderboard-card,
-html.light-mode .leaderboard-item {
-  background: rgba(255, 255, 255, 0.55) !important;
+/* ─── LEADERBOARD LIQUID GLASS SYSTEM (Light & Dark Mode) ─── */
+#leaderboard-modal {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99999;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+html.light-mode #leaderboard-modal,
+html:not(.dark) #leaderboard-modal {
+  background: rgba(15, 23, 42, 0.35) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+
+html.dark #leaderboard-modal {
+  background: rgba(0, 0, 0, 0.72) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+
+/* Modal Main Card Container */
+.leaderboard-modal-content {
+  border-radius: 24px !important;
+  width: 100%;
+  max-width: 650px;
+  padding: 28px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+html.light-mode .leaderboard-modal-content,
+html:not(.dark) .leaderboard-modal-content {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.78) 0%, rgba(225, 238, 255, 0.6) 100%) !important;
+  backdrop-filter: blur(28px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+  border: 2.5px solid rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 0 20px 50px rgba(31, 38, 135, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.9) !important;
+  color: #0f172a !important;
+}
+
+html.dark .leaderboard-modal-content {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.7) 100%) !important;
+  backdrop-filter: blur(28px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+  border: 2px solid rgba(255, 255, 255, 0.22) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+.leaderboard-modal-content h2 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+html.light-mode .leaderboard-modal-content h2,
+html:not(.dark) .leaderboard-modal-content h2 {
+  color: #0f172a !important;
+}
+
+html.dark .leaderboard-modal-content h2 {
+  color: #ffffff !important;
+}
+
+/* Leaderboard Item Rows */
+.leaderboard-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: 16px;
+  transition: all 0.2s ease;
+}
+
+/* Light Mode Items */
+html.light-mode .leaderboard-item,
+html:not(.dark) .leaderboard-item {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.65) 0%, rgba(240, 246, 255, 0.5) 100%) !important;
   backdrop-filter: blur(16px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 4px 16px rgba(31, 38, 135, 0.06) !important;
   color: #0f172a !important;
+}
+
+html.light-mode .leaderboard-item.rank-1,
+html:not(.dark) .leaderboard-item.rank-1 {
+  background: linear-gradient(135deg, rgba(254, 243, 199, 0.82) 0%, rgba(253, 230, 138, 0.55) 100%) !important;
+  border: 2px solid rgba(245, 158, 11, 0.65) !important;
+  box-shadow: 0 6px 20px rgba(217, 119, 6, 0.18) !important;
+}
+
+html.light-mode .leaderboard-item.rank-2,
+html:not(.dark) .leaderboard-item.rank-2 {
+  background: linear-gradient(135deg, rgba(241, 245, 249, 0.85) 0%, rgba(226, 232, 240, 0.6) 100%) !important;
+  border: 2px solid rgba(148, 163, 184, 0.65) !important;
+  box-shadow: 0 6px 20px rgba(71, 85, 105, 0.12) !important;
+}
+
+html.light-mode .leaderboard-item.rank-3,
+html:not(.dark) .leaderboard-item.rank-3 {
+  background: linear-gradient(135deg, rgba(254, 226, 226, 0.75) 0%, rgba(254, 205, 211, 0.5) 100%) !important;
+  border: 2px solid rgba(225, 29, 72, 0.55) !important;
+  box-shadow: 0 6px 20px rgba(225, 29, 72, 0.12) !important;
+}
+
+/* Light Mode Typography inside Leaderboard */
+html.light-mode .lb-user-name,
+html:not(.dark) .lb-user-name {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+  font-size: 0.98rem;
+}
+
+html.light-mode .lb-subtext,
+html:not(.dark) .lb-subtext {
+  color: #475569 !important;
+  font-weight: 600;
+  font-size: 0.78rem;
+}
+
+html.light-mode .lb-score-val,
+html:not(.dark) .lb-score-val {
+  font-weight: 900 !important;
+  font-size: 1.05rem;
+  color: #2563eb !important;
+}
+
+html.light-mode .rank-1 .lb-score-val,
+html:not(.dark) .rank-1 .lb-score-val {
+  color: #d97706 !important;
+}
+
+html.light-mode .rank-2 .lb-score-val,
+html:not(.dark) .rank-2 .lb-score-val {
+  color: #2563eb !important;
+}
+
+html.light-mode .rank-3 .lb-score-val,
+html:not(.dark) .rank-3 .lb-score-val {
+  color: #e11d48 !important;
+}
+
+/* Dark Mode Items */
+html.dark .leaderboard-item {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.65) 0%, rgba(15, 23, 42, 0.55) 100%) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
+  color: #ffffff !important;
+}
+
+html.dark .leaderboard-item.rank-1 {
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.25) 0%, rgba(245, 158, 11, 0.14) 100%) !important;
+  border: 1.5px solid rgba(251, 191, 36, 0.65) !important;
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.18) !important;
+}
+
+html.dark .leaderboard-item.rank-2 {
+  background: linear-gradient(135deg, rgba(148, 163, 184, 0.22) 0%, rgba(203, 213, 225, 0.12) 100%) !important;
+  border: 1.5px solid rgba(148, 163, 184, 0.55) !important;
+}
+
+html.dark .leaderboard-item.rank-3 {
+  background: linear-gradient(135deg, rgba(180, 83, 9, 0.22) 0%, rgba(217, 119, 6, 0.12) 100%) !important;
+  border: 1.5px solid rgba(245, 158, 11, 0.45) !important;
+}
+
+html.dark .lb-user-name {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  font-size: 0.98rem;
+}
+
+html.dark .lb-subtext {
+  color: #94a3b8 !important;
+  font-weight: 500;
+  font-size: 0.78rem;
+}
+
+html.dark .lb-score-val {
+  font-weight: 900 !important;
+  font-size: 1.05rem;
+  color: #38bdf8 !important;
+}
+
+html.dark .rank-1 .lb-score-val {
+  color: #fbbf24 !important;
+}
+
+html.dark .rank-2 .lb-score-val {
+  color: #38bdf8 !important;
+}
+
+html.dark .rank-3 .lb-score-val {
+  color: #f43f5e !important;
 }
 
 /* ─── LIGHT MODE EXTENDED: Game History modal ─── */
 html.light-mode #gameHistoryModal .modal-content,
-html.light-mode #leaderboard-modal > div > div,
 html.light-mode .modal-card {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.65) 0%, rgba(230, 240, 255, 0.48) 100%) !important;
   backdrop-filter: blur(24px) saturate(180%) !important;
