@@ -433,27 +433,39 @@ function speakText(text) {
   }
 
   // 2. Fetch live selected voice & speed directly from DOM
-  const voiceSelectEl = document.getElementById('tts-voice-select');
-  const currentVoice = 'baidu-female';
-  localStorage.setItem('speech_voice', 'baidu-female');
-
   const speedSelectEl = document.getElementById('tts-speed-select');
   const currentSpeed = (speedSelectEl && speedSelectEl.value) ? parseFloat(speedSelectEl.value) : (parseFloat(localStorage.getItem('speech_playback_rate')) || 1.0);
   localStorage.setItem('speech_playback_rate', currentSpeed.toString());
 
-  // 3. Play pure ElevenLabs MP3 stream from server
-  const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(currentVoice)}&_t=${Date.now()}`;
-  const audio = new Audio(url);
-  audio.playbackRate = currentSpeed;
-  activeAudioElement = audio;
+  const currentVoice = 'baidu-female';
 
-  audio.play().catch(err => {
-    console.warn("ElevenLabs audio playback failed, retrying...", err);
-    setTimeout(() => {
-      audio.play().catch(e => console.error("Audio retry error:", e));
-    }, 300);
-  });
+  // Fallback to Web Speech API if server audio fails
+  const fallbackWebSpeech = () => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.lang = 'zh-CN';
+      utterance.rate = currentSpeed;
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  // 3. Play MP3 stream from server or fallback to browser TTS
+  try {
+    const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(currentVoice)}&_t=${Date.now()}`;
+    const audio = new Audio(url);
+    audio.playbackRate = currentSpeed;
+    activeAudioElement = audio;
+
+    audio.play().catch(err => {
+      console.warn("Server audio playback failed, trying Web Speech API fallback:", err);
+      fallbackWebSpeech();
+    });
+  } catch (e) {
+    fallbackWebSpeech();
+  }
 }
+window.speakText = speakText;
 
 // iOS Safari & Mobile Audio Autoplay Unlocker
 function setupAudioUnlocker() {
