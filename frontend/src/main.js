@@ -248,16 +248,35 @@ function initSeasonalParticles() {
   }
 
   render();
+  const enabled = localStorage.getItem('particles_enabled') !== 'false';
+  updateParticleToggleBtns(enabled);
+}
+
+function updateParticleToggleBtns(enabled) {
+  const btns = document.querySelectorAll('#particle-toggle-btn, .particle-toggle-btn');
+  btns.forEach(btn => {
+    if (enabled) {
+      btn.classList.remove('particles-off');
+      btn.innerHTML = '<i class="fa-solid fa-snowflake" style="color: #60a5fa;"></i>';
+      btn.title = 'Tắt hiệu ứng rơi động (Đang BẬT)';
+    } else {
+      btn.classList.add('particles-off');
+      btn.innerHTML = '<i class="fa-solid fa-snowflake" style="opacity: 0.4;"></i>';
+      btn.title = 'Bật hiệu ứng rơi động (Đang TẮT)';
+    }
+  });
 }
 
 window.toggleSeasonalParticles = function() {
   const current = localStorage.getItem('particles_enabled') !== 'false';
   const next = !current;
   localStorage.setItem('particles_enabled', next ? 'true' : 'false');
+  updateParticleToggleBtns(next);
   if (typeof showToast === 'function') {
     showToast(next ? 'Đã BẬT hiệu ứng thời tiết mùa' : 'Đã TẮT hiệu ứng thời tiết mùa');
   }
 };
+window.updateParticleToggleBtns = updateParticleToggleBtns;
 
 // --- THEME MANAGEMENT ---
 function applyThemeClass(isDark) {
