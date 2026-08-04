@@ -3970,71 +3970,118 @@ window.renderRoadmapLearningList = function() {
   });
 };
 
-let currentRoadmapHanziWriter = null;
-let currentRoadmapWord = '';
-let currentRoadmapCharIndex = 0;
+let roadmapHanziWriters = [];
 let roadmapStrokeTimeout = null;
 
 function renderLearningTianzige(word) {
   if (roadmapStrokeTimeout) clearTimeout(roadmapStrokeTimeout);
-  currentRoadmapWord = word || '';
-  currentRoadmapCharIndex = 0;
+  roadmapHanziWriters = [];
 
-  playRoadmapSequentialChar();
-}
+  const container = document.getElementById('roadmap-tianzige-container');
+  if (!container) return;
+  container.innerHTML = '';
 
-function playRoadmapSequentialChar() {
-  const container = document.getElementById('roadmap-tianzige-target');
-  if (!container || !currentRoadmapWord || currentRoadmapWord === '---') return;
+  if (!word || word === '---') return;
 
-  const cleanChars = Array.from(currentRoadmapWord).filter(c => /[\u4e00-\u9fa5]/.test(c));
+  const cleanChars = Array.from(word).filter(c => /[\u4e00-\u9fa5]/.test(c));
   if (cleanChars.length === 0) {
-    container.innerHTML = `<span style="font-size: 4.5rem; font-weight: 800; color: #dc2626;">${currentRoadmapWord}</span>`;
+    container.innerHTML = `<span style="font-size: 3.5rem; font-weight: 800; color: #dc2626;">${word}</span>`;
     return;
   }
 
-  if (currentRoadmapCharIndex >= cleanChars.length) {
-    currentRoadmapCharIndex = 0;
+  // Determine size based on character count so all boxes fit nicely
+  let boxSize = 150;
+  if (cleanChars.length === 2) boxSize = 125;
+  else if (cleanChars.length >= 3) boxSize = 100;
+
+  // Render N Tianzige boxes side-by-side
+  cleanChars.forEach((char, idx) => {
+    const box = document.createElement('div');
+    box.className = 'tianzige-box';
+    box.style.cssText = `
+      width: ${boxSize}px;
+      height: ${boxSize}px;
+      border: 2.5px solid #dc2626;
+      border-radius: 12px;
+      position: relative;
+      background-color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(220, 38, 38, 0.15);
+      cursor: pointer;
+    `;
+    box.title = `Nhấp để xem nét viết '${char}'`;
+    box.onclick = () => animateRoadmapStroke();
+
+    box.innerHTML = `
+      <div style="position: absolute; inset: 0; pointer-events: none; background-image: 
+        linear-gradient(to right, transparent 49%, rgba(220, 38, 38, 0.3) 49%, rgba(220, 38, 38, 0.3) 51%, transparent 51%),
+        linear-gradient(to bottom, transparent 49%, rgba(220, 38, 38, 0.3) 49%, rgba(220, 38, 38, 0.3) 51%, transparent 51%),
+        linear-gradient(45deg, transparent 49.5%, rgba(220, 38, 38, 0.2) 49.5%, rgba(220, 38, 38, 0.2) 50.5%, transparent 50.5%),
+        linear-gradient(-45deg, transparent 49.5%, rgba(220, 38, 38, 0.2) 49.5%, rgba(220, 38, 38, 0.2) 50.5%, transparent 50.5%);">
+      </div>
+      <div id="roadmap-tianzige-target-${idx}" style="z-index: 2; display: flex; align-items: center; justify-content: center;"></div>
+    `;
+    container.appendChild(box);
+  });
+
+  // Create HanziWriter for each character
+  if (window.HanziWriter) {
+    cleanChars.forEach((char, idx) => {
+      try {
+        const writer = HanziWriter.create(`roadmap-tianzige-target-${idx}`, char, {
+          width: boxSize - 10,
+          height: boxSize - 10,
+          padding: 4,
+          showOutline: true,
+          strokeColor: '#dc2626',
+          radicalColor: '#2563eb',
+          outlineColor: '#fecdd3',
+          drawingWidth: boxSize > 120 ? 16 : 12
+        });
+        roadmapHanziWriters.push(writer);
+      } catch (e) {
+        const targetEl = document.getElementById(`roadmap-tianzige-target-${idx}`);
+        if (targetEl) targetEl.innerHTML = `<span style="font-size: 2.2rem; font-weight: 800; color: #dc2626;">${char}</span>`;
+      }
+    });
+
+    // Start sequential animation from Box 0
+    playSequentialWriterAnimation(0);
+  }
+}
+
+function playSequentialWriterAnimation(writerIndex) {
+  if (roadmapStrokeTimeout) clearTimeout(roadmapStrokeTimeout);
+  if (!roadmapHanziWriters || roadmapHanziWriters.length === 0) return;
+
+  if (writerIndex >= roadmapHanziWriters.length) {
+    // Loop back after 1.5s
+    roadmapStrokeTimeout = setTimeout(() => {
+      playSequentialWriterAnimation(0);
+    }, 1500);
+    return;
   }
 
-  const charToDraw = cleanChars[currentRoadmapCharIndex];
-  container.innerHTML = '';
-
-  if (window.HanziWriter) {
-    try {
-      currentRoadmapHanziWriter = HanziWriter.create('roadmap-tianzige-target', charToDraw, {
-        width: 155,
-        height: 155,
-        padding: 5,
-        showOutline: true,
-        strokeColor: '#dc2626',
-        radicalColor: '#2563eb',
-        outlineColor: '#fecdd3',
-        drawingWidth: 16
-      });
-
-      currentRoadmapHanziWriter.animateCharacter({
-        onComplete: function() {
-          currentRoadmapCharIndex++;
-          if (currentRoadmapCharIndex < cleanChars.length) {
-            roadmapStrokeTimeout = setTimeout(() => {
-              playRoadmapSequentialChar();
-            }, 600);
-          }
-        }
-      }).catch(() => {});
-    } catch (e) {
-      container.innerHTML = `<span style="font-size: 4.5rem; font-weight: 800; color: #dc2626;">${charToDraw}</span>`;
-    }
-  } else {
-    container.innerHTML = `<span style="font-size: 4.5rem; font-weight: 800; color: #dc2626;">${charToDraw}</span>`;
+  const writer = roadmapHanziWriters[writerIndex];
+  if (writer) {
+    writer.animateCharacter({
+      onComplete: function() {
+        roadmapStrokeTimeout = setTimeout(() => {
+          playSequentialWriterAnimation(writerIndex + 1);
+        }, 400);
+      }
+    }).catch(() => {
+      playSequentialWriterAnimation(writerIndex + 1);
+    });
   }
 }
 
 window.animateRoadmapStroke = function() {
   if (roadmapStrokeTimeout) clearTimeout(roadmapStrokeTimeout);
-  currentRoadmapCharIndex = 0;
-  playRoadmapSequentialChar();
+  playSequentialWriterAnimation(0);
 };
 
 let currentRoadmapTargetAns = '';
@@ -4146,20 +4193,10 @@ window.showLearningFlashcard = function(index) {
       <!-- TOP SECTION: 2 COLUMNS (TIANZIGE LEFT, DETAILS RIGHT) -->
       <div style="display: flex; gap: 24px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; text-align: left; width: 100%; ${hasExercise ? 'margin-bottom: 24px;' : ''}">
         
-        <!-- LEFT COLUMN: TIANZIGE GRID + TỪ LOẠI BADGE -->
-        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; min-width: 170px;">
-          <div class="tianzige-box" style="width: 170px; height: 170px; border: 2.5px solid #dc2626; border-radius: 12px; position: relative; background-color: #ffffff; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 4px 16px rgba(220, 38, 38, 0.15);">
-            <!-- Tianzige dashed grid lines background -->
-            <div style="position: absolute; inset: 0; pointer-events: none; background-image: 
-              linear-gradient(to right, transparent 49%, rgba(220, 38, 38, 0.3) 49%, rgba(220, 38, 38, 0.3) 51%, transparent 51%),
-              linear-gradient(to bottom, transparent 49%, rgba(220, 38, 38, 0.3) 49%, rgba(220, 38, 38, 0.3) 51%, transparent 51%),
-              linear-gradient(45deg, transparent 49.5%, rgba(220, 38, 38, 0.2) 49.5%, rgba(220, 38, 38, 0.2) 50.5%, transparent 50.5%),
-              linear-gradient(-45deg, transparent 49.5%, rgba(220, 38, 38, 0.2) 49.5%, rgba(220, 38, 38, 0.2) 50.5%, transparent 50.5%);">
-            </div>
-            
-            <!-- Hanzi Target Container -->
-            <div id="roadmap-tianzige-target" onclick="animateRoadmapStroke()" title="Nhấp để xem bút thuận" style="cursor: pointer; z-index: 2; display: flex; align-items: center; justify-content: center;"></div>
-          </div>
+        <!-- LEFT COLUMN: MULTI-CHARACTER TIANZIGE GRID + TỪ LOẠI BADGE -->
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+          <!-- Multi Tianzige Grid Container -->
+          <div id="roadmap-tianzige-container" style="display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap;"></div>
 
           <!-- Từ loại badge -->
           <div style="background: rgba(37, 99, 235, 0.12); color: #2563eb; border: 1.5px solid rgba(37, 99, 235, 0.3); font-weight: 700; font-size: 0.9rem; padding: 4px 18px; border-radius: 99px; text-align: center; letter-spacing: 0.5px;">
