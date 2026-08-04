@@ -3481,85 +3481,47 @@ function switchTab(tabId) {
   const customSec = document.getElementById('custom-section');
   const examsSec = document.getElementById('hsk-exams-section');
   const lessonsSec = document.getElementById('lessons-section');
+  const roadmapLearningSec = document.getElementById('roadmap-learning-section');
 
   // Helper function to set display
   const setDisp = (el, val) => { if (el) el.style.display = val; };
 
-  if (tabId === 'home') {
-    // Show home page elements
-    setDisp(homeViewSec, 'block');
+  // Always hide all first to simplify
+  setDisp(homeViewSec, 'none');
+  setDisp(flashcardSec, 'none');
+  setDisp(customSec, 'none');
+  setDisp(examsSec, 'none');
+  setDisp(lessonsSec, 'none');
+  setDisp(roadmapLearningSec, 'none');
+  const roadmapSec = document.getElementById('roadmap-view-section');
+  if (roadmapSec) roadmapSec.style.display = 'none';
 
-    // Hide learning sections
-    setDisp(flashcardSec, 'none');
-    setDisp(customSec, 'none');
-    setDisp(examsSec, 'none');
-    setDisp(lessonsSec, 'none');
+  if (tabId === 'home') {
+    setDisp(homeViewSec, 'block');
   }
   else if (tabId === 'lessons') {
-    // Hide home elements
-    setDisp(homeViewSec, 'none');
-
-    // Show lessons section
-    setDisp(flashcardSec, 'none');
-    setDisp(customSec, 'none');
-    setDisp(examsSec, 'none');
     setDisp(lessonsSec, 'block');
-    const roadmapSec = document.getElementById('roadmap-view-section');
-    if (roadmapSec) roadmapSec.style.display = 'none';
-
-    // Render lessons list
     renderLessonsList();
   }
   else if (tabId === 'roadmap') {
-    // Hide home elements
-    setDisp(homeViewSec, 'none');
-
-    // Show roadmap section
-    setDisp(flashcardSec, 'none');
-    setDisp(customSec, 'none');
-    setDisp(examsSec, 'none');
-    setDisp(lessonsSec, 'none');
-    const roadmapSec = document.getElementById('roadmap-view-section');
     if (roadmapSec) roadmapSec.style.display = 'block';
-
     renderGamifiedRoadmapPath();
   }
   else if (tabId === 'exams') {
-    // Hide home elements
-    setDisp(homeViewSec, 'none');
-
-    // Show exams section
-    setDisp(flashcardSec, 'none');
-    setDisp(customSec, 'none');
     setDisp(examsSec, 'block');
-    setDisp(lessonsSec, 'none');
-
     const libraryPanel = document.getElementById('exam-panel-library');
     if (libraryPanel) libraryPanel.style.display = 'block';
     renderExamLibrary('all');
   }
   else if (tabId === 'flashcards') {
-    // Hide home elements
-    setDisp(homeViewSec, 'none');
-
-    // Show flashcards section
     setDisp(flashcardSec, 'block');
-    setDisp(customSec, 'none');
-    setDisp(examsSec, 'none');
-    setDisp(lessonsSec, 'none');
-
-    // Always show the topics view menu first
     showTopicsView();
   }
   else if (tabId === 'dictionary') {
-    // Hide home elements
-    setDisp(homeViewSec, 'none');
-
-    // Show custom/dictionary section
-    setDisp(flashcardSec, 'none');
     setDisp(customSec, 'block');
-    setDisp(examsSec, 'none');
-    setDisp(lessonsSec, 'none');
+  }
+  else if (tabId === 'roadmap-learning') {
+    setDisp(roadmapLearningSec, 'block');
   }
 
   // If navigating away from flashcards, stop game iframe to prevent audio leak
@@ -3925,9 +3887,140 @@ window.goToRoadmapLevel = function (ver, level) {
   if (typeof updateVersionButtonsUI === 'function') updateVersionButtonsUI();
   if (typeof updateExamsVersionUI === 'function') updateExamsVersionUI();
 
-  // Switch to lessons tab (which calls renderLessonsList internally)
-  switchTab('lessons');
+  // Switch to roadmap learning view
+  openRoadmapLearningView(hskVer, level);
 };
+
+// --- ROADMAP LEARNING VIEW LOGIC ---
+let currentRoadmapLearningVocabs = [];
+let currentRoadmapLearningIndex = 0;
+
+window.openRoadmapLearningView = function (ver, level) {
+  switchTab('roadmap-learning');
+
+  const hskVer = ver || activeRoadmapVersion || '3.0';
+  let targetLevel = /^\d+$/.test(level.toString()) ? parseInt(level) : level.toString();
+
+  // Fetch words for this level
+  currentRoadmapLearningVocabs = builtInVocabsAll.filter(w => {
+    const curr2 = (w.curriculum || 'hsk').toLowerCase();
+    const ver2 = (w.hskVersion || '3.0').toLowerCase();
+    if (hskVer === 'yct') return (curr2.includes('yct') || ver2.includes('yct')) && matchLevel(w.level, targetLevel);
+    if (hskVer === '2.0') return !curr2.includes('yct') && !ver2.includes('yct') && (ver2.includes('2') || ver2 === '2.0') && matchLevel(w.level, targetLevel);
+    return !curr2.includes('yct') && !ver2.includes('yct') && (ver2.includes('3') || ver2 === '3.0' || w.hskVersion === '3.0') && matchLevel(w.level, targetLevel);
+  });
+
+  document.getElementById('learning-list-count').textContent = currentRoadmapLearningVocabs.length;
+
+  renderRoadmapLearningList();
+
+  currentRoadmapLearningIndex = 0;
+  if (currentRoadmapLearningVocabs.length > 0) {
+    showLearningFlashcard(0);
+  } else {
+    document.getElementById('roadmap-learning-flashcard').innerHTML = '<div style="color: var(--text-muted);">Không có từ vựng cho cấp độ này.</div>';
+  }
+};
+
+window.renderRoadmapLearningList = function() {
+  const grid = document.getElementById('roadmap-learning-vocab-list');
+  if (!grid) return;
+  grid.innerHTML = '';
+  
+  currentRoadmapLearningVocabs.forEach((w, index) => {
+    const item = document.createElement('div');
+    item.className = 'learning-vocab-item glass-panel';
+    item.style.cssText = `
+      padding: 14px 18px;
+      border-radius: 16px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(255,255,255,0.05);
+      background: rgba(255,255,255,0.02);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    `;
+    
+    // Hover effect dynamically added
+    item.onmouseenter = () => { if (currentRoadmapLearningIndex !== index) { item.style.transform = 'translateY(-2px)'; item.style.background = 'rgba(255,255,255,0.05)'; item.style.borderColor = 'rgba(255,255,255,0.1)'; } };
+    item.onmouseleave = () => { if (currentRoadmapLearningIndex !== index) { item.style.transform = 'translateY(0)'; item.style.background = 'rgba(255,255,255,0.02)'; item.style.borderColor = 'rgba(255,255,255,0.05)'; } };
+
+    item.innerHTML = `
+      <div style="font-family: var(--font-hanzi); font-size: 1.6rem; color: var(--text-color); line-height: 1.2;">${w.hanzi}</div>
+      <div style="font-size: 0.9rem; color: var(--text-muted); font-family: var(--font-pinyin); letter-spacing: 0.5px;">${w.pinyin}</div>
+      <div style="font-size: 0.95rem; color: var(--text-color); opacity: 0.9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 4px;">${w.meaning}</div>
+    `;
+    item.onclick = () => showLearningFlashcard(index);
+    grid.appendChild(item);
+  });
+};
+
+window.showLearningFlashcard = function(index) {
+  if (index < 0 || index >= currentRoadmapLearningVocabs.length) return;
+  currentRoadmapLearningIndex = index;
+  const w = currentRoadmapLearningVocabs[index];
+  
+  const flashcard = document.getElementById('roadmap-learning-flashcard');
+  if (!flashcard) return;
+
+  // Add a small animation effect
+  flashcard.style.opacity = '0';
+  flashcard.style.transform = 'scale(0.98)';
+  
+  setTimeout(() => {
+    flashcard.innerHTML = `
+      <div style="font-family: var(--font-hanzi); font-size: 5rem; color: var(--text-color); margin-bottom: 5px; font-weight: 500; line-height: 1.2;">${w.hanzi}</div>
+      <div style="font-family: var(--font-pinyin); font-size: 1.8rem; color: var(--primary-color); margin-bottom: 24px; font-weight: 500; letter-spacing: 1px;">${w.pinyin}</div>
+      <div style="font-size: 1.2rem; color: var(--text-color); margin-bottom: 18px; background: rgba(255,255,255,0.08); padding: 8px 24px; border-radius: 99px; border: 1px solid rgba(255,255,255,0.1); letter-spacing: 0.5px;">${w.hanviet || '---'}</div>
+      <div style="font-size: 1.4rem; color: var(--text-color); margin-bottom: 12px; font-weight: 600;">${w.meaning}</div>
+      <div style="font-size: 1.1rem; color: var(--text-muted); font-style: italic; max-width: 90%; margin-bottom: 30px; line-height: 1.5;">${w.usage || ''}</div>
+      
+      <button onclick="speakText('${w.hanzi.replace(/'/g, "\\'")}')" style="background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)); color: white; border: none; width: 56px; height: 56px; border-radius: 50%; font-size: 1.4rem; cursor: pointer; box-shadow: 0 8px 20px rgba(var(--primary-rgb), 0.4); transition: all 0.2s; display: flex; align-items: center; justify-content: center;" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'" onmouseleave="this.style.transform='scale(1)'">
+        <i class="fa-solid fa-volume-high"></i>
+      </button>
+    `;
+    
+    flashcard.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+    flashcard.style.opacity = '1';
+    flashcard.style.transform = 'scale(1)';
+  }, 50);
+
+  // Highlight list item
+  const listItems = document.querySelectorAll('#roadmap-learning-vocab-list .learning-vocab-item');
+  listItems.forEach((item, i) => {
+    if (i === index) {
+      item.style.background = 'rgba(var(--primary-rgb), 0.15)';
+      item.style.borderColor = 'var(--primary-color)';
+      item.style.transform = 'translateY(-2px)';
+      item.style.boxShadow = '0 6px 16px rgba(var(--primary-rgb), 0.2)';
+    } else {
+      item.style.background = 'rgba(255,255,255,0.02)';
+      item.style.borderColor = 'rgba(255,255,255,0.05)';
+      item.style.transform = 'translateY(0)';
+      item.style.boxShadow = '0 4px 12px rgba(0,0,0,0.05)';
+    }
+  });
+
+  // Auto scroll to item
+  if (listItems[index]) {
+    listItems[index].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+};
+
+window.prevLearningFlashcard = function() {
+  if (currentRoadmapLearningIndex > 0) {
+    showLearningFlashcard(currentRoadmapLearningIndex - 1);
+  }
+};
+
+window.nextLearningFlashcard = function() {
+  if (currentRoadmapLearningIndex < currentRoadmapLearningVocabs.length - 1) {
+    showLearningFlashcard(currentRoadmapLearningIndex + 1);
+  }
+};
+// -----------------------------------
 window.setRoadmapVersion = function (ver) {
   activeRoadmapVersion = ver;
   document.querySelectorAll('.roadmap-ver-pill').forEach(btn => {
