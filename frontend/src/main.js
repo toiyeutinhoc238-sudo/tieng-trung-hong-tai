@@ -5960,19 +5960,15 @@ function renderLessonsList() {
     if (versionSelectorWrap) versionSelectorWrap.style.display = 'none';
     if (yctLevelContainer) yctLevelContainer.style.display = 'flex';
 
-    if (objectivesText) {
-      if (activeYctLevel.toString() === '1') objectivesText.textContent = 'Mục tiêu: YCT Cấp 1 - Dành cho trẻ em mới bắt đầu (12 Bài học, 104 từ vựng)';
-      else if (activeYctLevel.toString() === '2') objectivesText.textContent = 'Mục tiêu: YCT Cấp 2 - Dành cho trẻ em sơ cấp (12 Bài học, 85 từ vựng)';
-      else if (activeYctLevel.toString() === '3') objectivesText.textContent = 'Mục tiêu: YCT Cấp 3 - Dành cho trẻ em trung cấp cơ bản (12 Bài học, 78 từ vựng)';
-      else if (activeYctLevel.toString() === '4') objectivesText.textContent = 'Mục tiêu: YCT Cấp 4 - Dành cho trẻ em trung cấp hoàn chỉnh (12 Bài học, 84 từ vựng)';
-      else objectivesText.textContent = `Mục tiêu: Ôn tập từ vựng YCT Cấp ${activeYctLevel}`;
-    }
-
     const yctVocabs = vocabList.filter(w =>
       !w.isCustom &&
       (w.curriculum === 'yct' || w.hskVersion === 'yct') &&
       w.level.toString() === activeYctLevel.toString()
     );
+
+    if (objectivesText) {
+      objectivesText.textContent = `Mục tiêu: Ôn tập trọn bộ ${yctVocabs.length} từ vựng YCT Cấp ${activeYctLevel} dành cho thiếu nhi`;
+    }
 
     if (yctVocabs.length === 0) {
       grid.innerHTML = `
@@ -5983,62 +5979,34 @@ function renderLessonsList() {
       return;
     }
 
-    // Group dynamically by lessonId
-    const lessonGroups = {};
-    yctVocabs.forEach(w => {
-      const les = w.lessonId || 1;
-      if (!lessonGroups[les]) lessonGroups[les] = [];
-      lessonGroups[les].push(w);
-    });
-
-    const uniqueLessonIds = Object.keys(lessonGroups).map(Number).sort((a, b) => a - b);
-
-    uniqueLessonIds.forEach(lessonId => {
-      const sliceWords = lessonGroups[lessonId] || [];
-      const wordsCount = sliceWords.length;
-      if (wordsCount === 0) return;
-
-      const title = sliceWords[0].lessonTitle || `YCT ${activeYctLevel} - Bài ${lessonId}`;
-      const desc = sliceWords[0].lessonDesc || `Từ vựng YCT (Thiếu nhi) Cấp ${activeYctLevel} Bài ${lessonId}`;
-
-      const card = document.createElement('div');
-      card.className = 'lesson-card glass-panel cartoon-lesson-card';
-      card.innerHTML = `
-        <div class="lesson-card-header">
-          <span class="lesson-badge hsk-badge-2">YCT ${activeYctLevel} • Bài ${lessonId}</span>
-          <h3 class="lesson-title" style="margin-top: 8px; font-family: var(--font-display); font-size: 1.3rem;">${title}</h3>
-          <p class="lesson-desc">${desc}</p>
-        </div>
-        <div class="lesson-modules-grid">
-          <button class="lesson-mod-btn mod-vocab" onclick="event.stopPropagation(); window.openLessonVocabStudy('${lessonId}')">
-            <i class="fa-solid fa-book-bookmark"></i>
-            <span>Từ Vựng</span>
-            <small>${wordsCount} từ</small>
-          </button>
-          <button class="lesson-mod-btn mod-grammar" style="opacity: 0.85; position: relative;" onclick="event.stopPropagation(); window.showComingSoonNotice('Ngữ Pháp')">
-            <i class="fa-solid fa-spell-check"></i>
-            <span>Ngữ Pháp</span>
-            <small style="background: rgba(0,0,0,0.25); color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">Sắp ra mắt</small>
-          </button>
-          <button class="lesson-mod-btn mod-text" style="opacity: 0.85; position: relative;" onclick="event.stopPropagation(); window.showComingSoonNotice('Bài Khóa')">
-            <i class="fa-solid fa-comments"></i>
-            <span>Bài Khóa</span>
-            <small style="background: rgba(0,0,0,0.25); color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">Sắp ra mắt</small>
-          </button>
-          <button class="lesson-mod-btn mod-review" style="opacity: 0.85; position: relative;" onclick="event.stopPropagation(); window.showComingSoonNotice('Ôn Tập')">
-            <i class="fa-solid fa-circle-play"></i>
-            <span>Ôn Tập</span>
-            <small style="background: rgba(0,0,0,0.25); color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">Sắp ra mắt</small>
-          </button>
-        </div>
-      `;
-
-      card.addEventListener('click', () => {
-        startLessonStudy({ id: lessonId, title }, sliceWords);
-      });
-
-      grid.appendChild(card);
-    });
+    // YCT is NOT categorized by lessons — render single direct YCT Level Deck Card
+    const card = document.createElement('div');
+    card.className = 'lesson-card glass-panel cartoon-lesson-card';
+    card.style.cssText = 'grid-column: 1 / -1; max-width: 600px; margin: 0 auto; width: 100%;';
+    card.innerHTML = `
+      <div class="lesson-card-header" style="text-align: center;">
+        <span class="lesson-badge hsk-badge-2" style="font-size: 0.9rem; padding: 6px 16px;">YCT Cấp ${activeYctLevel}</span>
+        <h3 class="lesson-title" style="margin-top: 10px; font-family: var(--font-display); font-size: 1.6rem; color: #fbbf24;">
+          Bộ Từ Vựng YCT Cấp ${activeYctLevel}
+        </h3>
+        <p class="lesson-desc" style="font-size: 1rem; color: #cbd5e1; margin-top: 6px;">
+          Tổng hợp đầy đủ ${yctVocabs.length} từ vựng chuẩn YCT Cấp ${activeYctLevel} dành cho thiếu nhi
+        </p>
+      </div>
+      <div class="lesson-modules-grid" style="margin-top: 18px; display: flex; gap: 14px; justify-content: center;">
+        <button class="lesson-mod-btn mod-vocab" style="flex: 1; max-width: 220px; padding: 14px;" onclick="event.stopPropagation(); window.openYctLevelVocabStudy('${activeYctLevel}')">
+          <i class="fa-solid fa-book-bookmark" style="font-size: 1.2rem;"></i>
+          <span style="font-size: 1.05rem; font-weight: 800;">Học Từ Vựng</span>
+          <small>${yctVocabs.length} từ</small>
+        </button>
+        <button class="lesson-mod-btn mod-flashcard" style="flex: 1; max-width: 220px; padding: 14px; background: rgba(37, 99, 235, 0.25); border-color: rgba(37, 99, 235, 0.4);" onclick="event.stopPropagation(); window.startYctLevelFlashcard('${activeYctLevel}')">
+          <i class="fa-solid fa-layer-group" style="font-size: 1.2rem; color: #60a5fa;"></i>
+          <span style="font-size: 1.05rem; font-weight: 800; color: #ffffff;">Học Flashcard</span>
+          <small style="color: #93c5fd;">Thẻ ghi nhớ</small>
+        </button>
+      </div>
+    `;
+    grid.appendChild(card);
     return;
   }
 
@@ -6249,6 +6217,28 @@ window.openLessonTextStudy = function(lessonId) {
 
 window.openLessonReviewStudy = function(lessonId) {
   showComingSoonNotice('Ôn Tập');
+};
+
+window.openYctLevelVocabStudy = function(level) {
+  const yctWords = vocabList.filter(w =>
+    !w.isCustom &&
+    (w.curriculum === 'yct' || w.hskVersion === 'yct') &&
+    w.level.toString() === level.toString()
+  );
+  startLessonStudy({ id: `yct_${level}`, title: `YCT Cấp ${level}` }, yctWords);
+};
+
+window.startYctLevelFlashcard = function(level) {
+  const yctWords = vocabList.filter(w =>
+    !w.isCustom &&
+    (w.curriculum === 'yct' || w.hskVersion === 'yct') &&
+    w.level.toString() === level.toString()
+  );
+  if (typeof openSubdeckStudy === 'function') {
+    openSubdeckStudy(`yct:${level}`);
+  } else if (typeof openDeckModal === 'function') {
+    openDeckModal(`YCT Cấp ${level}`, yctWords);
+  }
 };
 
 // Setup event listeners for lessons curriculum pills
