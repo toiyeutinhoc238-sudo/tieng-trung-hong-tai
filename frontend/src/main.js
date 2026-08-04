@@ -3609,6 +3609,78 @@ window.showRoadmapView = showRoadmapView;
 
 let activeRoadmapVersion = '3.0';
 
+
+function getUnlockedLevelsMap() {
+  try {
+    return JSON.parse(localStorage.getItem('unlocked_levels_map') || '{}');
+  } catch (err) {
+    return {};
+  }
+}
+
+function isLevelUnlocked(ver, level, levelIndex, levelsData, builtInVocabs) {
+  // Level 1 (first node) is always unlocked by default
+  if (levelIndex <= 0) return true;
+
+  // Check manual developer/admin override map
+  const overrideMap = getUnlockedLevelsMap();
+  const unlockedList = overrideMap[ver] || [];
+  if (unlockedList.includes(level) || unlockedList.includes(String(level)) || unlockedList.includes('all')) {
+    return true;
+  }
+
+  // Sequential progression: Level N is unlocked if Level N-1 is 100% completed
+  const prevLevelData = levelsData[levelIndex - 1];
+  if (!prevLevelData) return true;
+
+  const prevLevelWords = builtInVocabs.filter(w => {
+    const curr = (w.curriculum || 'hsk').toLowerCase();
+    const v = (w.hskVersion || '3.0').toLowerCase();
+    if (ver === 'yct') {
+      return (curr.includes('yct') || v.includes('yct')) && matchLevel(w.level, prevLevelData.level);
+    }
+    if (ver === '2.0') {
+      return !curr.includes('yct') && !v.includes('yct') && (v.includes('2') || v === '2.0') && matchLevel(w.level, prevLevelData.level);
+    }
+    return !curr.includes('yct') && !v.includes('yct') && (v.includes('3') || v === '3.0' || w.hskVersion === '3.0') && matchLevel(w.level, prevLevelData.level);
+  });
+
+  const prevTotal = prevLevelWords.length;
+  const prevMemorized = prevLevelWords.filter(w => w.isMemorized).length;
+
+  if (prevTotal > 0) {
+    return prevMemorized === prevTotal;
+  }
+  return true;
+}
+
+window.unlockRoadmapLevel = function(ver, level) {
+  try {
+    const map = getUnlockedLevelsMap();
+    if (!map[ver]) map[ver] = [];
+    if (!map[ver].includes(level)) map[ver].push(level);
+    localStorage.setItem('unlocked_levels_map', JSON.stringify(map));
+    showToast(`🔓 Đã mở khóa ${ver.toUpperCase()} Cấp ${level} thành công!`);
+    renderGamifiedRoadmapPath();
+  } catch (err) {
+    console.error('Failed to unlock level:', err);
+  }
+};
+
+window.lockRoadmapLevel = function(ver, level) {
+  try {
+    const map = getUnlockedLevelsMap();
+    if (map[ver]) {
+      map[ver] = map[ver].filter(l => String(l) !== String(level));
+      localStorage.setItem('unlocked_levels_map', JSON.stringify(map));
+    }
+    showToast(`🔒 Đã khóa lại ${ver.toUpperCase()} Cấp ${level}!`);
+    renderGamifiedRoadmapPath();
+  } catch (err) {
+    console.error('Failed to lock level:', err);
+  }
+};
+
 function renderGamifiedRoadmapPath() {
   const container = document.getElementById('roadmap-path-nodes-container');
   if (!container) return;
