@@ -7955,34 +7955,12 @@ window.showSentenceParserModal = function () {
 };
 
 window.showLeaderboardModal = function () {
-  let modal = document.getElementById('leaderboard-modal');
-  if (!modal) {
-    modal = document.createElement('div');
-    modal.id = 'leaderboard-modal';
-    modal.className = 'modal-overlay leaderboard-modal-overlay';
-    modal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 99999; align-items: center; justify-content: center; padding: 16px;';
-    modal.innerHTML = `
-      <div class="leaderboard-modal-content">
-        <button onclick="document.getElementById('leaderboard-modal').style.display='none'" class="lb-close-btn" title="Đóng">&times;</button>
-        
-        <!-- Header with Mascot -->
-        <div class="lb-modal-header">
-          <img src="/assets/hongtai_dragon_mascot.png" class="lb-mascot-img" alt="HongTai Dragon Mascot">
-          <div>
-            <h2 class="lb-title">🏆 LỄ TRAO GIẢI BẢNG XẾP HẠNG</h2>
-            <div class="lb-subtitle">Vinh danh Học viên xuất sắc nhất Tiếng Trung HongTai</div>
-          </div>
-        </div>
+  window.location.href = '/rank.html';
+};
 
-        <!-- Dynamic Content Body -->
-        <div id="leaderboard-list-container" class="lb-body-container">
-          <div style="text-align: center; color: var(--text-muted); padding: 30px;"><i class="fa-solid fa-spinner fa-spin fa-2x"></i><br><br>Đang tải bục trao giải từ Server...</div>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(modal);
-  }
-  modal.style.display = 'flex';
+window.loadRankPageData = function () {
+  const container = document.getElementById('leaderboard-list-container');
+  if (!container) return;
 
   const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === ''
     ? 'http://localhost:5000'
@@ -7991,7 +7969,6 @@ window.showLeaderboardModal = function () {
   fetch(`${API_BASE_URL}/api/leaderboard`)
     .then(res => res.json())
     .then(data => {
-      const container = document.getElementById('leaderboard-list-container');
       if (!container) return;
 
       if (!Array.isArray(data) || data.length === 0) {
@@ -8087,7 +8064,6 @@ window.showLeaderboardModal = function () {
     })
     .catch(err => {
       console.error("Leaderboard fetch error:", err);
-      const container = document.getElementById('leaderboard-list-container');
       if (container) {
         container.innerHTML = `<div style="text-align: center; color: #ef4444; padding: 20px;">Lỗi tải dữ liệu bảng xếp hạng từ server.</div>`;
       }
@@ -8233,12 +8209,12 @@ window.openGrammarDetail = function(grammarKey, apiBase) {
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
     if (window.location.pathname.includes('rank.html')) {
-      window.showLeaderboardModal();
+      window.loadRankPageData();
     }
   });
 } else {
   if (window.location.pathname.includes('rank.html')) {
-    window.showLeaderboardModal();
+    window.loadRankPageData();
   }
 }
 
