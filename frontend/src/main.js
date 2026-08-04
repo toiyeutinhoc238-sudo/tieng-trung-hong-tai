@@ -188,22 +188,19 @@ function toggleTheme() {
   localStorage.setItem('theme', nextDark ? 'dark' : 'light');
 
   const icon = nextDark ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun" style="color: #f59e0b;"></i>';
-  const floatingToggle = document.getElementById('floating-theme-toggle-btn');
-  if (floatingToggle) floatingToggle.innerHTML = icon;
-  const headerToggle = document.getElementById('theme-toggle-btn');
-  if (headerToggle) headerToggle.innerHTML = icon;
-  if (themeToggleBtn) themeToggleBtn.innerHTML = icon;
+  document.querySelectorAll('#theme-toggle, #theme-toggle-btn, .theme-toggle-btn, .theme-toggle-btn-top, .rank-theme-btn, .btn-theme-toggle').forEach(btn => {
+    btn.innerHTML = icon;
+  });
 
-  showToast(nextDark ? 'Đã chuyển sang chế độ tối' : 'Đã chuyển sang chế độ sáng');
-  if (!currentUser && typeof initGoogleSignIn === 'function') {
-    initGoogleSignIn();
+  if (typeof showToast === 'function') {
+    showToast(nextDark ? 'Đã chuyển sang chế độ tối' : 'Đã chuyển sang chế độ sáng');
   }
 }
 window.toggleTheme = toggleTheme;
 
 // Global listener for theme toggle button across all pages
 document.addEventListener('click', (e) => {
-  const toggleBtn = e.target.closest('#theme-toggle-btn, .rank-theme-btn');
+  const toggleBtn = e.target.closest('#theme-toggle, #theme-toggle-btn, .theme-toggle-btn, .theme-toggle-btn-top, .rank-theme-btn, .btn-theme-toggle');
   if (toggleBtn) {
     toggleTheme();
   }
