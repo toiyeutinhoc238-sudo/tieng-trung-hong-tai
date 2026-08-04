@@ -1,5 +1,54 @@
 // HSK Vocabulary Flashcard - Main Frontend Controller
 import './style.css';
+import radicalsData from './radicals_data.json';
+
+// --- RADICAL LOOKUP HELPERS ---
+function findRadicalsForWord(word) {
+  if (!word || !radicalsData || !radicalsData.radicals) return [];
+  const found = [];
+  const chars = Array.from(word);
+  const seenRads = new Set();
+
+  for (const char of chars) {
+    for (const rad of radicalsData.radicals) {
+      const key = rad.radical + '_' + (rad.variant || '');
+      if (seenRads.has(key)) continue;
+
+      const isExactMatch = rad.radical === char || rad.variant === char;
+      const isContained = (rad.radical && char.includes(rad.radical)) || (rad.variant && char.includes(rad.variant));
+      const isMentionedInExample = rad.example && rad.example.includes(char);
+
+      if (isExactMatch || isContained || isMentionedInExample) {
+        seenRads.add(key);
+        found.push(rad);
+      }
+    }
+  }
+  return found;
+}
+
+function getRadicalBadgeHtml(word) {
+  const rads = findRadicalsForWord(word);
+  if (!rads || rads.length === 0) return '';
+
+  const badgesHtml = rads.slice(0, 3).map(r => `
+    <span style="background: rgba(37, 99, 235, 0.12); color: #2563eb; border: 1px solid rgba(37, 99, 235, 0.28); padding: 3px 10px; border-radius: 6px; font-weight: 600; font-size: 0.88rem; display: flex; align-items: center; gap: 5px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+      <strong style="font-family: var(--font-hanzi); font-size: 1.05rem; color: #1d4ed8;">${r.variant ? `${r.radical} (${r.variant})` : r.radical}</strong>
+      <span>(${r.name} - ${r.meaning})</span>
+    </span>
+  `).join('');
+
+  return `
+    <div style="margin-top: 2px; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+      <div style="font-size: 0.82rem; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px;">
+        <i class="fa-solid fa-shapes"></i> Bộ thủ:
+      </div>
+      <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
+        ${badgesHtml}
+      </div>
+    </div>
+  `;
+}
 
 // --- STATE MANAGEMENT ---
 let vocabList = [];       // Master list of all vocabulary (seeded + custom)
@@ -4278,6 +4327,9 @@ window.showLearningFlashcard = function(index) {
               <i class="fa-solid fa-volume-high"></i>
             </button>
           </div>
+
+          <!-- Bộ thủ (Ngay dưới phiên âm) -->
+          ${getRadicalBadgeHtml(hz)}
 
           <!-- Nghĩa -->
           <div style="font-size: 1.8rem; font-weight: 800; color: var(--text-color); border-bottom: 2px solid rgba(255,255,255,0.1); padding-bottom: 6px; margin-bottom: 4px;">
@@ -9194,6 +9246,128 @@ if (!localStorage.getItem('lb_reset_v1')) {
     .then(() => console.log('Leaderboard database reset to 0 points!'))
     .catch(err => console.warn('Leaderboard reset request failed:', err));
 }
+
+// --- 214 BỘ THỦ TIẾNG TRUNG CONTROLLER ---
+let activeRadicalCategory = '50 bộ 1';
+
+window.openRadicalsModal = function() {
+  const modal = document.getElementById('radicals-study-modal');
+  if (!modal) return;
+  modal.style.display = 'flex';
+  window.switchRadicalTab('50 bộ 1');
+};
+
+window.switchRadicalTab = function(category) {
+  activeRadicalCategory = category;
+  
+  // Active tab button styling
+  const tabIds = {
+    '50 bộ 1': 'rad-tab-50-1',
+    '50 bộ 2': 'rad-tab-50-2',
+    '50 bộ 3': 'rad-tab-50-3',
+    'Bộ thủ còn lại': 'rad-tab-rest',
+    'So sánh': 'rad-tab-comp'
+  };
+
+  Object.entries(tabIds).forEach(([cat, id]) => {
+    const btn = document.getElementById(id);
+    if (btn) {
+      if (cat === category) btn.classList.add('active');
+      else btn.classList.remove('active');
+    }
+  });
+
+  const bodyEl = document.getElementById('radicals-modal-body');
+  if (!bodyEl) return;
+
+  if (category === 'So sánh') {
+    // Render comparison list
+    const compList = radicalsData.comparisons || [];
+    let html = `
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div style="font-size: 0.9rem; color: var(--text-muted); font-style: italic;">
+          <i class="fa-solid fa-circle-info" style="color: #3b82f6;"></i> Tổng hợp 25 cặp bộ thủ có hình dáng gần giống nhau và bí quyết phân biệt chính xác.
+        </div>
+    `;
+
+    compList.forEach((c, idx) => {
+      html += `
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="background: rgba(37, 99, 235, 0.15); color: #3b82f6; border: 1px solid rgba(37, 99, 235, 0.3); font-weight: 800; padding: 4px 12px; border-radius: 8px; font-family: var(--font-hanzi); font-size: 1.25rem;">
+                ${c.rad1} (${c.meaning1})
+              </span>
+              <span style="font-weight: 700; color: #ef4444; font-size: 1rem;">VS</span>
+              <span style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); font-weight: 800; padding: 4px 12px; border-radius: 8px; font-family: var(--font-hanzi); font-size: 1.25rem;">
+                ${c.rad2} (${c.meaning2})
+              </span>
+            </div>
+          </div>
+          <div style="font-size: 0.93rem; color: var(--text-color); line-height: 1.5;">
+            <strong style="color: #fbbf24;">Cách phân biệt:</strong> ${c.difference}
+          </div>
+          ${c.example ? `
+            <div style="font-size: 0.88rem; color: var(--text-muted); background: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 8px;">
+              <i class="fa-solid fa-book" style="color: #3b82f6; margin-right: 4px;"></i> <strong>Ví dụ:</strong> ${c.example}
+            </div>
+          ` : ''}
+        </div>
+      `;
+    });
+
+    html += `</div>`;
+    bodyEl.innerHTML = html;
+  } else {
+    // Render radical cards
+    const radList = (radicalsData.radicals || []).filter(r => r.category === category);
+    
+    let html = `
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px;">
+    `;
+
+    radList.forEach(r => {
+      html += `
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 8px; transition: all 0.2s; cursor: pointer;"
+          onmouseenter="this.style.borderColor='rgba(37,99,235,0.4)'; this.style.transform='translateY(-2px)'"
+          onmouseleave="this.style.borderColor='rgba(255,255,255,0.08)'; this.style.transform='translateY(0)'"
+          onclick="speakText('${(r.radical || '').replace(/'/g, "\\'")}')">
+          
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: baseline; gap: 8px;">
+              <span style="font-family: var(--font-hanzi); font-size: 2.2rem; font-weight: 800; color: #2563eb;">
+                ${r.radical}
+              </span>
+              ${r.variant ? `<span style="font-family: var(--font-hanzi); font-size: 1.4rem; color: #60a5fa; font-weight: 700;">(${r.variant})</span>` : ''}
+            </div>
+            <span style="font-family: var(--font-pinyin); font-size: 1.1rem; font-weight: 700; color: #38bdf8;">
+              ${r.pinyin}
+            </span>
+          </div>
+
+          <div style="font-size: 1.1rem; font-weight: 800; color: var(--text-color);">
+            Hán-Việt: ${r.name} - <span style="color: #34d399;">${r.meaning}</span>
+          </div>
+
+          ${r.note ? `
+            <div style="font-size: 0.85rem; color: var(--text-muted); font-style: italic; line-height: 1.35; background: rgba(0,0,0,0.15); padding: 6px 10px; border-radius: 6px;">
+              <i class="fa-solid fa-circle-info" style="color: #3b82f6;"></i> ${r.note}
+            </div>
+          ` : ''}
+
+          ${r.example ? `
+            <div style="font-size: 0.85rem; color: var(--text-color); font-weight: 600; margin-top: 2px;">
+              <i class="fa-solid fa-lightbulb" style="color: #fbbf24; margin-right: 4px;"></i> Ví dụ: ${r.example}
+            </div>
+          ` : ''}
+        </div>
+      `;
+    });
+
+    html += `</div>`;
+    bodyEl.innerHTML = html;
+  }
+};
 
 
 

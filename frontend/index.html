@@ -246,6 +246,9 @@
           <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
         </div>
         <ul class="sidebar-submenu">
+          <li class="sidebar-subitem" onclick="window.openRadicalsModal()">
+            <i class="fa-solid fa-shapes" style="color: #2563eb;"></i> <span>214 Bộ thủ tiếng Trung</span>
+          </li>
           <li class="sidebar-subitem" onclick="window.location.href = '/chinese-phonetics.html'">
             <i class="fa-solid fa-table-cells"></i> <span>Bảng phiên âm (Pinyin)</span>
           </li>
@@ -2777,6 +2780,40 @@
         </button>
       </div>
 
+    </div>
+  </div>
+
+  <!-- Modal Học 214 Bộ Thủ Tiếng Trung (Cấu trúc giao diện theo hình 2) -->
+  <div class="modal-overlay" id="radicals-study-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(10px); z-index: 99999; align-items: center; justify-content: center; padding: 16px;">
+    <div class="modal-card" style="background: var(--bg-primary, #1e293b); border: 1px solid var(--border-glass, rgba(255,255,255,0.12)); border-radius: 20px; width: 100%; max-width: 950px; height: 90vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.5); color: var(--text-primary, #fff); position: relative;">
+      
+      <!-- Modal Header -->
+      <div style="padding: 18px 24px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.2);">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);">
+            <i class="fa-solid fa-shapes"></i>
+          </div>
+          <div>
+            <h3 style="font-size: 1.35rem; font-weight: 800; margin: 0; color: #fff; letter-spacing: -0.01em;">214 Bộ Thủ Tiếng Trung (214 Radicals)</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted, #94a3b8); margin: 2px 0 0 0;">Thấu hiểu cấu trúc, Hán-Việt & nghĩa từ vựng tiếng Trung dễ dàng</p>
+          </div>
+        </div>
+        <button onclick="document.getElementById('radicals-study-modal').style.display='none'" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: var(--text-muted, #94a3b8); font-size: 1.5rem; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">&times;</button>
+      </div>
+
+      <!-- Top Section Tabs (Như hình 2 vẽ) -->
+      <div style="padding: 12px 20px; background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; gap: 8px; overflow-x: auto; align-items: center;">
+        <button class="rad-tab-btn active" id="rad-tab-50-1" onclick="window.switchRadicalTab('50 bộ 1')">50 bộ (1)</button>
+        <button class="rad-tab-btn" id="rad-tab-50-2" onclick="window.switchRadicalTab('50 bộ 2')">50 bộ (2)</button>
+        <button class="rad-tab-btn" id="rad-tab-50-3" onclick="window.switchRadicalTab('50 bộ 3')">50 bộ (3)</button>
+        <button class="rad-tab-btn" id="rad-tab-rest" onclick="window.switchRadicalTab('Bộ thủ còn lại')">Còn lại</button>
+        <button class="rad-tab-btn" id="rad-tab-comp" onclick="window.switchRadicalTab('So sánh')">Phân biệt</button>
+      </div>
+
+      <!-- Modal Body Content -->
+      <div id="radicals-modal-body" style="padding: 20px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 16px;">
+        <!-- Dynamic list of radical cards or comparison cards -->
+      </div>
     </div>
   </div>
 
