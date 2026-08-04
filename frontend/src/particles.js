@@ -120,6 +120,30 @@ window.toggleSeasonalParticles = function() {
   }
 };
 
+// Universal Study Time Tracker across ALL HTML pages
+(function initGlobalStudyTracker() {
+  let sessionSecs = 0;
+  const API_BASE_URL = window.location.origin.includes('5173') ? 'http://localhost:5000' : window.location.origin;
+
+  setInterval(() => {
+    if (document.hasFocus()) {
+      sessionSecs++;
+      if (sessionSecs >= 15) {
+        const increment = sessionSecs;
+        sessionSecs = 0;
+        const todayStr = new Date().toLocaleDateString('sv'); // YYYY-MM-DD
+
+        fetch(API_BASE_URL + '/api/user/stats/sync', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ incrementStudyTime: increment, localDateStr: todayStr }),
+          credentials: 'include'
+        }).catch(() => { });
+      }
+    }
+  }, 1000);
+})();
+
 // Auto run when script loads
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
