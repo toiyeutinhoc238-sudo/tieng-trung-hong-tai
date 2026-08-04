@@ -3974,7 +3974,16 @@ let roadmapHanziWriters = [];
 let roadmapStrokeTimeout = null;
 
 function renderLearningTianzige(word) {
-  if (roadmapStrokeTimeout) clearTimeout(roadmapStrokeTimeout);
+  if (roadmapStrokeTimeout) {
+    clearTimeout(roadmapStrokeTimeout);
+    roadmapStrokeTimeout = null;
+  }
+  
+  roadmapHanziWriters.forEach(w => {
+    try {
+      if (w && typeof w.cancelAnimation === 'function') w.cancelAnimation();
+    } catch(e){}
+  });
   roadmapHanziWriters = [];
 
   const container = document.getElementById('roadmap-tianzige-container');
@@ -4037,6 +4046,7 @@ function renderLearningTianzige(word) {
 
   // Create HanziWriter for each character cell
   if (window.HanziWriter) {
+    let loadedCount = 0;
     cleanChars.forEach((char, idx) => {
       try {
         const writer = HanziWriter.create(`roadmap-tianzige-target-${idx}`, char, {
@@ -4046,8 +4056,15 @@ function renderLearningTianzige(word) {
           showOutline: true,
           strokeColor: '#dc2626',
           radicalColor: '#2563eb',
-          outlineColor: '#e2e8f0',
-          drawingWidth: cellSize > 120 ? 16 : 12
+          outlineColor: '#cbd5e1',
+          drawingWidth: cellSize > 120 ? 16 : 12,
+          onLoadCharDataSuccess: function() {
+            try { writer.hideCharacter(); } catch(e){}
+            loadedCount++;
+            if (loadedCount === cleanChars.length) {
+              startCleanSequentialAnimation();
+            }
+          }
         });
         roadmapHanziWriters.push(writer);
       } catch (e) {
@@ -4055,54 +4072,62 @@ function renderLearningTianzige(word) {
         if (targetEl) targetEl.innerHTML = `<span style="font-size: 2.2rem; font-weight: 800; color: #dc2626;">${char}</span>`;
       }
     });
-
-    // Start sequential animation from Cell 0
-    playSequentialWriterAnimation(0);
   }
 }
 
-function playSequentialWriterAnimation(writerIndex) {
-  if (roadmapStrokeTimeout) clearTimeout(roadmapStrokeTimeout);
-  if (!roadmapHanziWriters || roadmapHanziWriters.length === 0) return;
+function startCleanSequentialAnimation() {
+  if (roadmapStrokeTimeout) {
+    clearTimeout(roadmapStrokeTimeout);
+    roadmapStrokeTimeout = null;
+  }
 
-  if (writerIndex >= roadmapHanziWriters.length) {
-    // Hold completed characters on screen for 1.8s before restarting
+  // Hide solid strokes on all writers so they show only light gray outlines
+  roadmapHanziWriters.forEach(w => {
+    try {
+      if (w) {
+        w.cancelAnimation();
+        w.hideCharacter();
+      }
+    } catch(e){}
+  });
+
+  playWriterAtIndex(0);
+}
+
+function playWriterAtIndex(idx) {
+  if (roadmapStrokeTimeout) {
+    clearTimeout(roadmapStrokeTimeout);
+    roadmapStrokeTimeout = null;
+  }
+
+  if (idx >= roadmapHanziWriters.length) {
+    // All cells finished writing! Keep full characters visible for 2.0s, then restart loop
     roadmapStrokeTimeout = setTimeout(() => {
-      playSequentialWriterAnimation(0);
-    }, 1800);
+      startCleanSequentialAnimation();
+    }, 2000);
     return;
   }
 
-  const writer = roadmapHanziWriters[writerIndex];
-  if (writer) {
-    try {
-      writer.animateCharacter({
-        onComplete: function() {
-          // Cell writerIndex is 100% finished! Now start Cell writerIndex + 1!
-          roadmapStrokeTimeout = setTimeout(() => {
-            playSequentialWriterAnimation(writerIndex + 1);
-          }, 300);
-        }
-      }).catch(() => {
-        playSequentialWriterAnimation(writerIndex + 1);
-      });
-    } catch(e) {
-      playSequentialWriterAnimation(writerIndex + 1);
-    }
+  const writer = roadmapHanziWriters[idx];
+  if (!writer) return;
+
+  try {
+    writer.cancelAnimation();
+    writer.animateCharacter({
+      onComplete: function() {
+        // Cell idx is 100% finished writing! Wait 300ms, then start Cell idx + 1
+        roadmapStrokeTimeout = setTimeout(() => {
+          playWriterAtIndex(idx + 1);
+        }, 300);
+      }
+    });
+  } catch(e) {
+    playWriterAtIndex(idx + 1);
   }
 }
 
 window.animateRoadmapStroke = function() {
-  if (roadmapStrokeTimeout) clearTimeout(roadmapStrokeTimeout);
-  roadmapHanziWriters.forEach(w => {
-    try {
-      if (typeof w.pauseAnimation === 'function') w.pauseAnimation();
-    } catch(e){}
-  });
-
-  roadmapStrokeTimeout = setTimeout(() => {
-    playSequentialWriterAnimation(0);
-  }, 50);
+  startCleanSequentialAnimation();
 };
 
 let currentRoadmapTargetAns = '';
