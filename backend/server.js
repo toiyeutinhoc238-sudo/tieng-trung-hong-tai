@@ -607,9 +607,20 @@ app.get('/api/leaderboard', async (req, res) => {
     }
 
     leaderboard.sort((a, b) => {
-      if (b.completedCount !== a.completedCount) return b.completedCount - a.completedCount;
-      if (a.earliestCompletionTime !== b.earliestCompletionTime) return a.earliestCompletionTime - b.earliestCompletionTime;
-      return b.studyTime - a.studyTime;
+      // 1. Tiêu chí 1: Số từ học thuộc / Điểm số (completedCount) - nhiều điểm hơn xếp trên
+      if (b.completedCount !== a.completedCount) {
+        return b.completedCount - a.completedCount;
+      }
+      // 2. Tiêu chí 2 khi BẰNG ĐIỂM NHAU: Thời gian học trên web (studyTime) - ai học lâu hơn xếp trên (thắng)
+      if (b.studyTime !== a.studyTime) {
+        return b.studyTime - a.studyTime;
+      }
+      // 3. Tiêu chí 3: Chuỗi học tập (Streak) - streak cao hơn xếp trên
+      if (b.streak !== a.streak) {
+        return b.streak - a.streak;
+      }
+      // 4. Tiêu chí 4: Thời điểm hoàn thành từ vựng sớm hơn
+      return a.earliestCompletionTime - b.earliestCompletionTime;
     });
 
     const top10 = leaderboard.slice(0, 10).map((item, index) => ({
