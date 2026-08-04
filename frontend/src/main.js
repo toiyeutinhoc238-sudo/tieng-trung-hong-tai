@@ -4038,7 +4038,7 @@ function renderLearningTianzige(word) {
           showOutline: true,
           strokeColor: '#dc2626',
           radicalColor: '#2563eb',
-          outlineColor: '#fecdd3',
+          outlineColor: '#cbd5e1',
           drawingWidth: boxSize > 120 ? 16 : 12
         });
         roadmapHanziWriters.push(writer);
