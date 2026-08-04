@@ -1028,7 +1028,7 @@
               <div class="search-box" style="margin: 0; max-width: 280px; width: 100%;">
                 <i class="fa-solid fa-magnifying-glass search-icon"
                   style="top: 50%; transform: translateY(-50%); font-size: 0.85rem; left: 12px;"></i>
-                <input type="text" id="nb-search-input" placeholder="Tìm nhanh trong sổ tay..."
+                <input type="text" id="nb-search-input" aria-label="Tìm kiếm trong sổ tay" placeholder="Tìm nhanh trong sổ tay..."
                   style="padding: 8px 10px 8px 32px; font-size: 0.82rem; border-radius: 6px;">
               </div>
             </div>
@@ -1267,7 +1267,7 @@
 
           <div class="control-group" style="display: none;">
             <label class="control-label">Trạng thái từ</label>
-            <select id="status-filter" class="form-select">
+            <select id="status-filter" aria-label="Lọc trạng thái từ vựng" class="form-select">
               <option value="all">Tất cả từ vựng</option>
               <option value="unmemorized">Chưa thuộc (Cần ôn)</option>
               <option value="memorized">Đã thuộc</option>
@@ -1285,7 +1285,7 @@
                 style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;">
                 <i class="fa-solid fa-play"></i> Tự động chạy
               </button>
-              <select id="autoplay-delay" class="form-select" title="Tốc độ chuyển thẻ">
+              <select id="autoplay-delay" aria-label="Tốc độ chuyển thẻ tự động" class="form-select" title="Tốc độ chuyển thẻ">
                 <option value="3000">3 giây</option>
                 <option value="5000" selected>5 giây</option>
                 <option value="8000">8 giây</option>
@@ -1296,7 +1296,7 @@
           <div class="control-group" style="flex: 1; min-width: 200px;">
             <label class="control-label">Giọng phát âm AI</label>
             <div class="tts-voice-wrap" style="width: 100%;">
-              <select id="tts-voice-select" class="form-select select-voice" style="width: 100%;">
+              <select id="tts-voice-select" aria-label="Chọn giọng phát âm" class="form-select select-voice" style="width: 100%;">
                 <option value="baidu-female" selected>🇨🇳 Baidu Nữ (Giọng Bắc Kinh Chuẩn)</option>
               </select>
             </div>
@@ -1305,7 +1305,7 @@
           <div class="control-group" style="flex: 0.7; min-width: 150px;">
             <label class="control-label">Tốc độ phát âm</label>
             <div class="tts-speed-wrap" style="width: 100%;">
-              <select id="tts-speed-select" class="form-select" style="width: 100%;">
+              <select id="tts-speed-select" aria-label="Chọn tốc độ phát âm" class="form-select" style="width: 100%;">
                 <option value="0.5">0.5x (Rất chậm)</option>
                 <option value="0.75">0.75x (Chậm)</option>
                 <option value="1.0" selected>1.0x (Chuẩn)</option>
@@ -1323,7 +1323,7 @@
           <div class="search-container">
             <div class="search-box">
               <i class="fa-solid fa-magnifying-glass search-icon"></i>
-              <input type="text" id="search-input" placeholder="Tìm kiếm từ Hán, Pinyin hoặc nghĩa tiếng Việt...">
+              <input type="text" id="search-input" aria-label="Tìm kiếm từ vựng HSK" placeholder="Tìm kiếm từ Hán, Pinyin hoặc nghĩa tiếng Việt...">
               <button id="clear-search-btn" class="clear-btn" style="display:none;"><i
                   class="fa-solid fa-xmark"></i></button>
             </div>
@@ -1450,7 +1450,7 @@
 
                 <!-- Input Box for Chinese Translation -->
                 <div style="display: flex; gap: 10px; align-items: center; position: relative;">
-                  <input type="text" id="lesson-typing-input" placeholder="Nhập đáp án dịch sang TQ (chữ Hán)..." autocomplete="off"
+                  <input type="text" id="lesson-typing-input" aria-label="Nhập đáp án dịch câu tiếng Trung" placeholder="Nhập đáp án dịch sang TQ (chữ Hán)..." autocomplete="off"
                     style="flex: 1; padding: 14px 20px; font-size: 1.1rem; border-radius: 16px; border: 2.5px solid #cbd5e1; outline: none; background: #ffffff; font-weight: 800; color: #0f172a; box-shadow: inset 0 2px 4px rgba(0,0,0,0.04); transition: border-color 0.2s ease;" />
                   <button id="lesson-check-btn" class="btn btn-primary"
                     style="padding: 14px 24px; border-radius: 16px; font-weight: 900; font-size: 1rem; cursor: pointer; white-space: nowrap;">
@@ -1586,7 +1586,7 @@
 
                 <div
                   style="width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 8px; position: relative;">
-                  <input type="text" id="type-answer-input" placeholder="Gõ từ chữ Hán (ví dụ: 苹果)..."
+                  <input type="text" id="type-answer-input" aria-label="Gõ từ chữ Hán" placeholder="Gõ từ chữ Hán (ví dụ: 苹果)..."
                     autocomplete="off"
                     style="width: 100%; padding: 10px 14px; font-size: 1.2rem; font-family: var(--font-chinese); text-align: center; border-radius: var(--radius-md); border: 2px solid var(--border-glass); background: rgba(0, 0, 0, 0.2); color: var(--text-primary); outline: none; transition: border-color 0.2s;">
                   <div id="type-feedback-msg"
@@ -1773,7 +1773,7 @@
             từ vựng</h3>
           <div class="search-box" style="margin: 0; width: 100%;">
             <i class="fa-solid fa-magnifying-glass search-icon"></i>
-            <input type="text" id="dict-search-input" placeholder="Nhập chữ Hán, Pinyin, nghĩa..." style="width: 100%;">
+            <input type="text" id="dict-search-input" aria-label="Tra cứu từ điển" placeholder="Nhập chữ Hán, Pinyin, nghĩa..." style="width: 100%;">
           </div>
 
           <!-- Scrollable list of words -->
@@ -2136,7 +2136,7 @@
 
           <!-- Add List Input & Button -->
           <div style="display: flex; gap: 8px;">
-            <input type="text" id="new-list-name-input" placeholder="Tên danh sách mới..."
+            <input type="text" id="new-list-name-input" aria-label="Tên danh sách mới" placeholder="Tên danh sách mới..."
               style="flex: 1; padding: 8px 12px; font-size: 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-glass); background: rgba(0, 0, 0, 0.1); color: var(--text-primary); outline: none;">
             <button id="add-list-btn" class="btn btn-primary btn-sm"
               style="padding: 8px 12px; font-size: 0.85rem; background: var(--accent-blue); color: white;">+
@@ -2180,7 +2180,7 @@
 
                   <div class="form-item">
                     <label for="input-level">Cấp độ HSK</label>
-                    <select id="input-level" class="form-select">
+                    <select id="input-level" aria-label="Chọn cấp độ HSK" class="form-select">
                       <option value="1" selected>HSK 1</option>
                       <option value="2">HSK 2</option>
                       <option value="3">HSK 3</option>
@@ -2189,7 +2189,7 @@
 
                   <div class="form-item">
                     <label for="input-category-select">Sổ tay lưu trữ</label>
-                    <select id="input-category-select" class="form-select">
+                    <select id="input-category-select" aria-label="Chọn phân loại từ vựng" class="form-select">
                       <!-- Dynamically populated from customLists -->
                     </select>
                   </div>
@@ -2288,7 +2288,7 @@
             <span
               style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap;">Cấp
               độ:</span>
-            <select id="lessons-level-select" class="lessons-dropdown-select">
+            <select id="lessons-level-select" aria-label="Chọn cấp độ bài học HSK" class="lessons-dropdown-select">
               <option value="1">Cấp HSK 1</option>
               <option value="2">Cấp HSK 2</option>
               <option value="3">Cấp HSK 3</option>
@@ -2303,7 +2303,7 @@
             <span
               style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap;">Cấp
               độ:</span>
-            <select id="lessons-yct-level-select" class="lessons-dropdown-select">
+            <select id="lessons-yct-level-select" aria-label="Chọn cấp độ bài học YCT" class="lessons-dropdown-select">
               <option value="1">Cấp YCT 1</option>
               <option value="2">Cấp YCT 2</option>
               <option value="3">Cấp YCT 3</option>
@@ -2314,7 +2314,7 @@
           <div id="lessons-volume-pills-container" style="display: none; align-items: center; gap: 8px;">
             <span
               style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap;">Tập:</span>
-            <select id="lessons-volume-select" class="lessons-dropdown-select">
+            <select id="lessons-volume-select" aria-label="Chọn tập giáo trình" class="lessons-dropdown-select">
               <option value="all">Tất cả</option>
               <option value="thuong">Tập Thượng</option>
               <option value="ha">Tập Hạ</option>
@@ -2454,7 +2454,7 @@
 
       <!-- Chat Input Area -->
       <div class="chatbot-input-area">
-        <input type="text" id="chatbot-input" placeholder="Hỏi nghĩa từ, dịch thuật, ngữ pháp..." autocomplete="off">
+        <input type="text" id="chatbot-input" aria-label="Hỏi trợ lý AI" placeholder="Hỏi nghĩa từ, dịch thuật, ngữ pháp..." autocomplete="off">
         <button id="chatbot-send-btn" title="Gửi tin nhắn">
           <i class="fa-solid fa-paper-plane"></i>
         </button>
