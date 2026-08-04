@@ -272,11 +272,33 @@ window.toggleSeasonalParticles = function() {
   const next = !current;
   localStorage.setItem('particles_enabled', next ? 'true' : 'false');
   updateParticleToggleBtns(next);
+
+  const canvas = document.getElementById('seasonal-particle-canvas');
+  if (canvas) {
+    canvas.style.display = next ? 'block' : 'none';
+  }
+
   if (typeof showToast === 'function') {
     showToast(next ? 'Đã BẬT hiệu ứng thời tiết mùa' : 'Đã TẮT hiệu ứng thời tiết mùa');
   }
 };
 window.updateParticleToggleBtns = updateParticleToggleBtns;
+
+// Global listener for particle toggle button
+document.addEventListener('click', (e) => {
+  const particleBtn = e.target.closest('#particle-toggle-btn, .particle-toggle-btn');
+  if (particleBtn) {
+    e.preventDefault();
+    e.stopPropagation();
+    window.toggleSeasonalParticles();
+  }
+});
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initSeasonalParticles);
+} else {
+  initSeasonalParticles();
+}
 
 // --- THEME MANAGEMENT ---
 function applyThemeClass(isDark) {
