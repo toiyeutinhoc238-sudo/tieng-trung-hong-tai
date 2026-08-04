@@ -109,10 +109,12 @@
       color: #000;
     }
     html.light-mode .theme-toggle-btn-top, body.light-mode .theme-toggle-btn-top {
-      background: #ffffff !important;
-      border: 1px solid #cbd5e1 !important;
+      background: rgba(255, 255, 255, 0.65) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.8) !important;
       color: #0f172a !important;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
     }
     :root {
       --bg-dark: #0b0f19;
@@ -126,13 +128,10 @@
     }
 
     html.light-mode body, body.light-mode {
-      --bg-dark: #f1f5f9;
-      --bg-card: #ffffff;
-      --border-glass: rgba(0, 0, 0, 0.12);
+      --bg-card: rgba(255, 255, 255, 0.62);
+      --border-glass: rgba(255, 255, 255, 0.82);
       --text-main: #0f172a;
-      --text-sub: #475569;
-      background-color: #f1f5f9;
-      background-image: radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.06) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(245, 158, 11, 0.05) 0px, transparent 50%);
+      --text-sub: #334155;
       color: #0f172a;
     }
     html.light-mode .hanzi-header,
@@ -140,10 +139,12 @@
     html.light-mode .filter-section,
     html.light-mode .vocab-panel,
     html.light-mode .writing-workshop {
-      background: #ffffff !important;
-      border: 1px solid #cbd5e1 !important;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(225, 238, 255, 0.42) 100%) !important;
+      backdrop-filter: blur(20px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.85) !important;
       color: #0f172a !important;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06) !important;
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.08) !important;
     }
     html.light-mode .title-group h1,
     html.light-mode .title-group p,
@@ -155,23 +156,27 @@
     }
     html.light-mode .filter-select,
     html.light-mode .search-input {
-      background: #ffffff !important;
+      background: rgba(255, 255, 255, 0.65) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
       color: #0f172a !important;
-      border-color: #cbd5e1 !important;
+      border-color: rgba(255, 255, 255, 0.8) !important;
     }
     html.light-mode .status-alert-banner {
-      background: #f8fafc !important;
-      border-color: #cbd5e1 !important;
+      background: rgba(255, 255, 255, 0.58) !important;
+      backdrop-filter: blur(12px) !important;
+      border-color: rgba(255, 255, 255, 0.8) !important;
       color: #334155 !important;
     }
     html.light-mode .btn-close {
-      background: #f1f5f9 !important;
+      background: rgba(255, 255, 255, 0.65) !important;
       color: #0f172a !important;
-      border-color: #cbd5e1 !important;
+      border-color: rgba(255, 255, 255, 0.8) !important;
     }
     html.light-mode .vocab-item {
-      background: #ffffff;
-      border-color: #e2e8f0;
+      background: rgba(255, 255, 255, 0.55) !important;
+      backdrop-filter: blur(12px) !important;
+      border-color: rgba(255, 255, 255, 0.8) !important;
     }
 
     * {

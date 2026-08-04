@@ -250,12 +250,17 @@
 
     /* ─── LIGHT MODE: INSPECTOR (Khi click vào âm) ─── */
     html.light-mode .char-detail-inspector {
-      background: #f8fafc !important;
-      border-color: #e2e8f0 !important;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.62) 0%, rgba(225, 238, 255, 0.45) 100%) !important;
+      backdrop-filter: blur(20px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.85) !important;
+      color: #0f172a !important;
     }
     html.light-mode .char-big-box {
-      background: #ffffff !important;
-      border-color: rgba(59,130,246,0.25) !important;
+      background: rgba(255, 255, 255, 0.65) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.85) !important;
     }
     html.light-mode .char-big-symbol {
       color: #1d4ed8 !important;
@@ -263,11 +268,13 @@
 
     /* ─── LIGHT MODE: VD-BOX (Ví dụ 2x2) ─── */
     html.light-mode .vd-box {
-      background: #f1f5f9 !important;
-      border-color: #e2e8f0 !important;
+      background: rgba(255, 255, 255, 0.5) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.75) !important;
     }
     html.light-mode .vd-box:hover {
-      background: rgba(59,130,246,0.08) !important;
+      background: rgba(255, 255, 255, 0.8) !important;
       border-color: #3b82f6 !important;
     }
     html.light-mode .vd-pinyin {
@@ -276,10 +283,12 @@
 
     /* ─── LIGHT MODE: VOICE BAR ─── */
     html.light-mode .voice-control-bar {
-      background: #ffffff !important;
-      border-color: #cbd5e1 !important;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.65) 0%, rgba(225, 238, 255, 0.48) 100%) !important;
+      backdrop-filter: blur(20px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.85) !important;
       color: #0f172a !important;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.08) !important;
     }
     html.light-mode .voice-control-bar [style*="color: #f8fafc"],
     html.light-mode .voice-control-bar [style*="color:#f8fafc"] {
@@ -293,16 +302,19 @@
     /* ─── LIGHT MODE: TONE PITCH CHART & CARDS ─── */
     html.light-mode [style*="background: rgba(15, 23, 42, 0.6)"],
     html.light-mode [style*="background:rgba(15, 23, 42, 0.6)"] {
-      background: #f8fafc !important;
-      border-color: #cbd5e1 !important;
+      background: rgba(255, 255, 255, 0.58) !important;
+      backdrop-filter: blur(16px) !important;
+      border-color: rgba(255, 255, 255, 0.82) !important;
     }
     html.light-mode [style*="color: #60a5fa"] {
       color: #1d4ed8 !important;
     }
     html.light-mode .tone-card-item {
-      background: #ffffff !important;
-      border-color: #cbd5e1 !important;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(225, 238, 255, 0.42) 100%) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.82) !important;
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.08) !important;
     }
     html.light-mode .tone-card-item [style*="background:var(--bg-secondary"],
     html.light-mode .tone-card-item [style*="background: var(--bg-secondary"] {

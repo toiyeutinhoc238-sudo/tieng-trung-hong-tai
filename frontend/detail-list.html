@@ -122,25 +122,28 @@
 
     html.light-mode .theme-toggle-btn-top,
     body.light-mode .theme-toggle-btn-top {
-      background: #ffffff !important;
-      border: 1px solid #cbd5e1 !important;
+      background: rgba(255, 255, 255, 0.65) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.8) !important;
       color: #0f172a !important;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
     }
 
     /* High-contrast Light Mode overrides for detail-list.html */
     html.light-mode body,
     body.light-mode {
-      background-color: #f1f5f9;
       color: #0f172a;
     }
 
     html.light-mode .glass-panel,
     body.light-mode .glass-panel {
-      background: #ffffff;
-      border: 1px solid #cbd5e1;
-      color: #0f172a;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.58) 0%, rgba(225, 238, 255, 0.42) 100%) !important;
+      backdrop-filter: blur(20px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.85) !important;
+      color: #0f172a !important;
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.08) !important;
     }
 
     html.light-mode h1,
@@ -161,9 +164,11 @@
     body.light-mode .filter-select,
     html.light-mode #detail-search-input,
     body.light-mode #detail-search-input {
-      background: #ffffff !important;
+      background: rgba(255, 255, 255, 0.65) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
       color: #0f172a !important;
-      border-color: #cbd5e1 !important;
+      border-color: rgba(255, 255, 255, 0.8) !important;
     }
 
     html.light-mode table,
@@ -173,21 +178,24 @@
 
     html.light-mode table thead tr,
     body.light-mode table thead tr {
-      background: #e2e8f0 !important;
+      background: rgba(226, 232, 240, 0.65) !important;
+      backdrop-filter: blur(10px) !important;
       color: #0f172a !important;
     }
 
     html.light-mode table td,
     body.light-mode table td {
-      border-bottom: 1px solid #e2e8f0 !important;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.5) !important;
       color: #0f172a !important;
     }
 
     html.light-mode .page-btn,
     body.light-mode .page-btn {
-      background: #ffffff;
-      border-color: #cbd5e1;
-      color: #0f172a;
+      background: rgba(255, 255, 255, 0.6) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      border-color: rgba(255, 255, 255, 0.8) !important;
+      color: #0f172a !important;
     }
 
     button,
