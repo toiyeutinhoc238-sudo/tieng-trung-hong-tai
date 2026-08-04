@@ -7960,18 +7960,23 @@ window.showLeaderboardModal = function () {
     modal = document.createElement('div');
     modal.id = 'leaderboard-modal';
     modal.className = 'modal-overlay leaderboard-modal-overlay';
-    modal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 99999; align-items: center; justify-content: center; padding: 20px;';
+    modal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 99999; align-items: center; justify-content: center; padding: 16px;';
     modal.innerHTML = `
       <div class="leaderboard-modal-content">
-        <button onclick="document.getElementById('leaderboard-modal').style.display='none'" style="position: absolute; top: 18px; right: 18px; background: none; border: none; color: var(--text-muted, #94a3b8); font-size: 1.5rem; cursor: pointer; z-index: 10;">&times;</button>
-        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
-          <div style="font-size: 2.2rem; background: rgba(251,191,36,0.15); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fbbf24;">🏆</div>
+        <button onclick="document.getElementById('leaderboard-modal').style.display='none'" class="lb-close-btn" title="Đóng">&times;</button>
+        
+        <!-- Header with Mascot -->
+        <div class="lb-modal-header">
+          <img src="/assets/dragon_award_mascot.png" class="lb-mascot-img" alt="Dragon Award Mascot">
           <div>
-            <h2>Bảng Xếp Hạng Học Viên Thực Tế</h2>
+            <h2 class="lb-title">🏆 LỄ TRAO GIẢI BẢNG XẾP HẠNG</h2>
+            <div class="lb-subtitle">Vinh danh Học viên xuất sắc nhất Tiếng Trung HongTai</div>
           </div>
         </div>
-        <div id="leaderboard-list-container" style="display: flex; flex-direction: column; gap: 10px; max-height: 400px; overflow-y: auto; padding-right: 4px;">
-          <div style="text-align: center; color: var(--text-muted); padding: 20px;"><i class="fa-solid fa-spinner fa-spin"></i> Đang tải bảng xếp hạng từ Server...</div>
+
+        <!-- Dynamic Content Body -->
+        <div id="leaderboard-list-container" class="lb-body-container">
+          <div style="text-align: center; color: var(--text-muted); padding: 30px;"><i class="fa-solid fa-spinner fa-spin fa-2x"></i><br><br>Đang tải bục trao giải từ Server...</div>
         </div>
       </div>
     `;
@@ -7979,7 +7984,6 @@ window.showLeaderboardModal = function () {
   }
   modal.style.display = 'flex';
 
-  // Load real data from MongoDB backend API
   const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === ''
     ? 'http://localhost:5000'
     : 'https://tieng-trung-hong-tai.onrender.com';
@@ -7991,38 +7995,93 @@ window.showLeaderboardModal = function () {
       if (!container) return;
 
       if (!Array.isArray(data) || data.length === 0) {
-        container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 20px;">Chưa có học viên nào hoàn thành bài học. Hãy là người đầu tiên!</div>`;
+        container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 30px;">Chưa có học viên nào hoàn thành bài học. Hãy là người đầu tiên lên bục vinh quang!</div>`;
         return;
       }
 
-      let html = '';
-      data.forEach(item => {
-        let badgeIcon = `#${item.rank}`;
-        let rankClass = `rank-${item.rank}`;
+      // Find top 3 (Podium) and remaining learners
+      const top1 = data.find(d => d.rank === 1) || data[0];
+      const top2 = data.length > 1 ? (data.find(d => d.rank === 2) || data[1]) : null;
+      const top3 = data.length > 2 ? (data.find(d => d.rank === 3) || data[2]) : null;
+      const remaining = data.filter(d => d !== top1 && d !== top2 && d !== top3);
 
-        if (item.rank === 1) {
-          badgeIcon = '🥇';
-        } else if (item.rank === 2) {
-          badgeIcon = '🥈';
-        } else if (item.rank === 3) {
-          badgeIcon = '🥉';
+      function renderAvatar(item, size = 52, borderCol = '#fbbf24') {
+        if (!item) return '';
+        if (item.picture) {
+          return `<img src="${item.picture}" style="width: ${size}px; height: ${size}px; border-radius: 50%; object-fit: cover; border: 3px solid ${borderCol}; box-shadow: 0 0 12px ${borderCol}80;">`;
         }
+        return `<div style="width: ${size}px; height: ${size}px; border-radius: 50%; background: linear-gradient(135deg, ${borderCol}, #2563eb); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: ${size * 0.4}px; border: 3px solid ${borderCol}; box-shadow: 0 0 12px ${borderCol}80;">${item.name ? item.name.charAt(0).toUpperCase() : '?'}</div>`;
+      }
 
-        html += `
-          <div class="leaderboard-item ${rankClass}">
-            <span style="font-size: 1.3rem; font-weight: 800; width: 32px; text-align: center;">${badgeIcon}</span>
-            ${item.picture ? `<img src="${item.picture}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">` : `<div style="width: 40px; height: 40px; border-radius: 50%; background: #3b82f6; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700;">${item.name.charAt(0)}</div>`}
-            <div style="flex: 1; min-width: 0;">
-              <div class="lb-user-name">${item.name}</div>
-              <div class="lb-subtext">Đã học thuộc: <strong style="color: #059669;">${item.completedCount} từ vựng</strong></div>
-            </div>
-            <div style="text-align: right;">
-              <div class="lb-score-val">${item.completedCount * 100} Điểm</div>
-              <div class="lb-subtext">Thời gian học: ${item.studyTimeMinutes} phút</div>
+      // Build Podium Stage HTML (Order: Rank 2 - Rank 1 - Rank 3)
+      let html = `
+        <div class="lb-podium-stage">
+          
+          <!-- Rank 2 Podium (Left) -->
+          <div class="lb-podium-slot rank-2-slot ${!top2 ? 'empty' : ''}">
+            ${top2 ? `
+              <div class="lb-podium-crown">🥈</div>
+              <div class="lb-podium-avatar-wrap">${renderAvatar(top2, 52, '#94a3b8')}</div>
+              <div class="lb-podium-user">${top2.name}</div>
+              <div class="lb-podium-score">${top2.completedCount * 100} Điểm</div>
+            ` : '<div class="lb-podium-empty-txt">Đang chờ...</div>'}
+            <div class="lb-podium-stand p-2">
+              <span class="lb-podium-num">2</span>
             </div>
           </div>
-        `;
-      });
+
+          <!-- Rank 1 Podium (Center - Highest) -->
+          <div class="lb-podium-slot rank-1-slot ${!top1 ? 'empty' : ''}">
+            ${top1 ? `
+              <div class="lb-podium-crown gold-crown">👑</div>
+              <div class="lb-podium-avatar-wrap">${renderAvatar(top1, 64, '#fbbf24')}</div>
+              <div class="lb-podium-user gold-user">${top1.name}</div>
+              <div class="lb-podium-score gold-score">${top1.completedCount * 100} Điểm</div>
+            ` : '<div class="lb-podium-empty-txt">Đang chờ...</div>'}
+            <div class="lb-podium-stand p-1">
+              <span class="lb-podium-num">1</span>
+            </div>
+          </div>
+
+          <!-- Rank 3 Podium (Right) -->
+          <div class="lb-podium-slot rank-3-slot ${!top3 ? 'empty' : ''}">
+            ${top3 ? `
+              <div class="lb-podium-crown">🥉</div>
+              <div class="lb-podium-avatar-wrap">${renderAvatar(top3, 48, '#e11d48')}</div>
+              <div class="lb-podium-user">${top3.name}</div>
+              <div class="lb-podium-score">${top3.completedCount * 100} Điểm</div>
+            ` : '<div class="lb-podium-empty-txt">Đang chờ...</div>'}
+            <div class="lb-podium-stand p-3">
+              <span class="lb-podium-num">3</span>
+            </div>
+          </div>
+
+        </div>
+      `;
+
+      // Remaining Learners List Section (Rank 4+)
+      if (remaining.length > 0) {
+        html += `<div class="lb-rest-title">Bảng Xếp Hạng Tiếp Theo</div>`;
+        html += `<div class="lb-rest-list">`;
+        remaining.forEach((item, index) => {
+          const rankNum = item.rank || (index + 4);
+          html += `
+            <div class="leaderboard-item rank-rest">
+              <span class="lb-rank-num">#${rankNum}</span>
+              ${item.picture ? `<img src="${item.picture}" class="lb-row-avatar">` : `<div class="lb-row-avatar-placeholder">${item.name.charAt(0)}</div>`}
+              <div style="flex: 1; min-width: 0;">
+                <div class="lb-user-name">${item.name}</div>
+                <div class="lb-subtext">Đã học thuộc: <strong style="color: #059669;">${item.completedCount} từ vựng</strong></div>
+              </div>
+              <div style="text-align: right;">
+                <div class="lb-score-val">${item.completedCount * 100} Điểm</div>
+                <div class="lb-subtext">${item.studyTimeMinutes} phút</div>
+              </div>
+            </div>
+          `;
+        });
+        html += `</div>`;
+      }
 
       container.innerHTML = html;
     })
