@@ -124,80 +124,93 @@
       color: #0f172a !important;
     }
 
-    html.light-mode .app-container {
-      background: rgba(255, 255, 255, 0.68) !important;
-      backdrop-filter: blur(24px) saturate(180%) !important;
-      -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
-      border: 1px solid rgba(255, 255, 255, 0.85) !important;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1) !important;
+    html.light-mode .app-container,
+    body.light-mode .app-container {
+      background: rgba(255, 255, 255, 0.72) !important;
+      backdrop-filter: blur(28px) saturate(200%) !important;
+      -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.9) !important;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08) !important;
     }
 
-    html.light-mode .modal-overlay {
-      background: rgba(15, 23, 42, 0.4) !important;
-      backdrop-filter: blur(8px) !important;
+    html.light-mode .modal-overlay,
+    body.light-mode .modal-overlay {
+      background: rgba(255, 255, 255, 0.25) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
     }
 
     html.light-mode .top-bar {
-      background: #ffffff !important;
-      border-bottom-color: #e2e8f0 !important;
+      background: rgba(255, 255, 255, 0.8) !important;
+      border-bottom-color: rgba(226, 232, 240, 0.8) !important;
     }
 
     html.light-mode .player-details h4,
     html.light-mode .score-label {
-      color: #334155 !important;
+      color: #0f172a !important;
+      font-weight: 700 !important;
     }
 
     html.light-mode .score-value {
-      background: #e2e8f0 !important;
-      color: #1e293b !important;
+      background: #ffffff !important;
+      color: #0f172a !important;
+      border: 1px solid #cbd5e1 !important;
+      font-weight: 800 !important;
     }
 
     html.light-mode .timer-container {
-      background: #e2e8f0 !important;
+      background: rgba(226, 232, 240, 0.8) !important;
     }
 
     html.light-mode .play-area {
-      background: rgba(255, 255, 255, 0.5) !important;
-      backdrop-filter: blur(12px) !important;
+      background: rgba(255, 255, 255, 0.6) !important;
+      backdrop-filter: blur(16px) !important;
     }
 
-    html.light-mode .modal-content {
-      background: rgba(255, 255, 255, 0.78) !important;
-      backdrop-filter: blur(24px) saturate(180%) !important;
-      -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    html.light-mode .modal-content,
+    body.light-mode .modal-content {
+      background: rgba(255, 255, 255, 0.85) !important;
+      backdrop-filter: blur(32px) saturate(200%) !important;
+      -webkit-backdrop-filter: blur(32px) saturate(200%) !important;
       color: #0f172a !important;
-      border: 1px solid rgba(255, 255, 255, 0.9) !important;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15) !important;
+      border: 1px solid rgba(255, 255, 255, 0.95) !important;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12), inset 0 1px 2px rgba(255, 255, 255, 1) !important;
     }
 
     html.light-mode .modal-title {
       color: #6d28d9 !important;
+      font-weight: 800 !important;
     }
 
     html.light-mode .modal-desc {
-      color: #475569 !important;
+      color: #334155 !important;
+      font-weight: 700 !important;
     }
 
     html.light-mode .form-label {
-      color: #64748b !important;
+      color: #0f172a !important;
+      font-weight: 800 !important;
     }
 
     html.light-mode .form-select {
-      background: #f8fafc !important;
-      color: #1e293b !important;
-      border-color: #cbd5e1 !important;
+      background: #ffffff !important;
+      color: #0f172a !important;
+      border: 1.5px solid #cbd5e1 !important;
+      font-weight: 700 !important;
     }
 
     html.light-mode .mode-btn {
-      background: #f1f5f9 !important;
-      color: #475569 !important;
-      border-color: #cbd5e1 !important;
+      background: #ffffff !important;
+      color: #1e293b !important;
+      border: 1.5px solid #cbd5e1 !important;
+      font-weight: 700 !important;
     }
 
     html.light-mode .mode-btn.active {
-      color: #6d28d9 !important;
-      background: rgba(109, 40, 217, 0.08) !important;
-      border-color: #6d28d9 !important;
+      color: #ffffff !important;
+      background: linear-gradient(135deg, #7c3aed, #6d28d9) !important;
+      border-color: transparent !important;
+      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35) !important;
     }
 
     html.light-mode .score-label {
