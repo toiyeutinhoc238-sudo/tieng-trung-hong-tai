@@ -52,7 +52,7 @@ const premiumMockData = [
 ];
 
 // --- ENHANCEMENT STATE MANAGEMENT ---
-let studyMode = 'flip';         // 'flip' or 'type'
+let studyMode = 'lesson';       // 'lesson', 'flip', or 'type'
 let typingAttempts = 3;         // Remaining attempts (starts at 3)
 let isTypingAnswerFinished = false; // Whether current card has finished evaluation
 let activeCustomList = 'Mặc định'; // Active custom list selected in sidebar
@@ -818,6 +818,148 @@ async function handleDeleteCustomWord(id) {
   }
 }
 
+let activeLessonHanziWriter = null;
+
+function renderActiveCardLesson(current) {
+  const lessonCard = document.getElementById('lesson-study-card');
+  if (!lessonCard) return;
+
+  // 1. Pinyin Badge
+  const pinyinBadge = document.getElementById('lesson-pinyin-badge');
+  if (pinyinBadge) pinyinBadge.textContent = current.pinyin || '';
+
+  // 2. Meaning Text
+  const meaningEl = document.getElementById('lesson-meaning-text');
+  if (meaningEl) meaningEl.textContent = current.meaning || '';
+
+  // 3. Word Type Badge
+  const wordTypeBadge = document.getElementById('lesson-wordtype-badge');
+  if (wordTypeBadge) wordTypeBadge.textContent = current.category || current.word_type || 'Từ vựng';
+
+  // 4. Level Badge
+  const levelBadge = document.getElementById('lesson-level-badge');
+  if (levelBadge) {
+    levelBadge.textContent = current.isCustom ? 'Cá nhân' : `HSK ${current.level || 1} (v${current.hskVersion || '3.0'})`;
+  }
+
+  // 5. Note / Usage Text
+  const noteEl = document.getElementById('lesson-note-text');
+  if (noteEl) {
+    if (current.note || current.description) {
+      noteEl.textContent = current.note || current.description;
+    } else {
+      noteEl.textContent = `Bài học từ vựng HSK ${current.level || 1} - Lộ trình học Tiếng Trung Hồng Thái`;
+    }
+  }
+
+  // 6. Example & Translation Exercise Prompts
+  const promptText = document.getElementById('lesson-prompt-text');
+  const inputEl = document.getElementById('lesson-typing-input');
+  const feedbackCorrect = document.getElementById('lesson-feedback-correct');
+  const feedbackWrong = document.getElementById('lesson-feedback-wrong');
+  const answerBox = document.getElementById('lesson-standard-answer-box');
+  const standardZhText = document.getElementById('lesson-standard-zh-text');
+
+  if (inputEl) {
+    inputEl.value = '';
+    inputEl.style.borderColor = '#cbd5e1';
+  }
+  if (feedbackCorrect) feedbackCorrect.style.display = 'none';
+  if (feedbackWrong) feedbackWrong.style.display = 'none';
+  if (answerBox) answerBox.style.display = 'none';
+
+  if (current.example_vi && current.example_zh) {
+    if (promptText) promptText.textContent = `"${current.example_vi}"`;
+    if (standardZhText) standardZhText.textContent = current.example_zh;
+  } else {
+    if (promptText) promptText.textContent = `Dịch nghĩa từ: "${current.meaning}"`;
+    if (standardZhText) standardZhText.textContent = current.word;
+  }
+
+  // 7. HanziWriter Tianzige Grid
+  const targetContainer = document.getElementById('lesson-hanzi-target');
+  if (targetContainer) {
+    targetContainer.innerHTML = '';
+    if (window.HanziWriter && current.word) {
+      const charToDraw = current.word[0];
+      try {
+        activeLessonHanziWriter = HanziWriter.create('lesson-hanzi-target', charToDraw, {
+          width: 160,
+          height: 160,
+          padding: 5,
+          showOutline: true,
+          strokeColor: '#ef4444',
+          radicalColor: '#2563eb',
+          outlineColor: '#fca5a5',
+          drawingWidth: 20
+        });
+        activeLessonHanziWriter.animateCharacter();
+      } catch (err) {
+        console.warn('HanziWriter error:', err);
+        targetContainer.innerHTML = `<span style="font-size: 5rem; font-weight: 900; color: #ef4444;">${current.word}</span>`;
+      }
+    } else {
+      targetContainer.innerHTML = `<span style="font-size: 5rem; font-weight: 900; color: #ef4444;">${current.word}</span>`;
+    }
+  }
+
+  // Update HUD Button States
+  const markMemorizedBtn = document.getElementById('mark-memorized-btn');
+  const markUnmemorizedBtn = document.getElementById('mark-unmemorized-btn');
+  const markStarredBtn = document.getElementById('mark-starred-btn');
+  if (markMemorizedBtn && markUnmemorizedBtn && markStarredBtn) {
+    if (current.isMemorized) {
+      markMemorizedBtn.classList.add('active');
+      markUnmemorizedBtn.classList.remove('active');
+    } else if (current.isStudied) {
+      markMemorizedBtn.classList.remove('active');
+      markUnmemorizedBtn.classList.add('active');
+    } else {
+      markMemorizedBtn.classList.remove('active');
+      markUnmemorizedBtn.classList.remove('active');
+    }
+    if (current.isStarred) {
+      markStarredBtn.classList.add('active');
+    } else {
+      markStarredBtn.classList.remove('active');
+    }
+  }
+}
+
+function checkLessonTranslationAnswer() {
+  if (!filteredList || filteredList.length === 0) return;
+  const current = filteredList[currentIndex];
+  if (!current) return;
+
+  const inputEl = document.getElementById('lesson-typing-input');
+  if (!inputEl) return;
+
+  const userText = inputEl.value.trim().replace(/[.,!?:;="'"()\[\]{}，。！？；：\s]/g, '');
+  const targetAnswer = (current.example_zh || current.word).trim().replace(/[.,!?:;="'"()\[\]{}，。！？；：\s]/g, '');
+
+  const feedbackCorrect = document.getElementById('lesson-feedback-correct');
+  const feedbackWrong = document.getElementById('lesson-feedback-wrong');
+
+  if (userText.length > 0 && (userText === targetAnswer || targetAnswer.includes(userText))) {
+    if (feedbackCorrect) feedbackCorrect.style.display = 'inline-flex';
+    if (feedbackWrong) feedbackWrong.style.display = 'none';
+    inputEl.style.borderColor = '#22c55e';
+    if (typeof playAudioSuccess === 'function') playAudioSuccess();
+  } else {
+    if (feedbackWrong) feedbackWrong.style.display = 'inline-flex';
+    if (feedbackCorrect) feedbackCorrect.style.display = 'none';
+    inputEl.style.borderColor = '#ef4444';
+    if (typeof playAudioError === 'function') playAudioError();
+  }
+}
+
+function toggleLessonStandardAnswer() {
+  const answerBox = document.getElementById('lesson-standard-answer-box');
+  if (answerBox) {
+    answerBox.style.display = (answerBox.style.display === 'none' || !answerBox.style.display) ? 'block' : 'none';
+  }
+}
+
 // --- RENDER FUNCTIONS ---
 function renderActiveCard() {
   if (filteredList.length === 0) {
@@ -849,6 +991,10 @@ function renderActiveCard() {
     progressPercentage.textContent = `${progressPercent}%`;
   }
 
+  if (studyMode === 'lesson') {
+    renderActiveCardLesson(current);
+    return;
+  }
   if (studyMode === 'type') {
     renderActiveCardTyping(current);
     return;
@@ -1047,8 +1193,13 @@ function startStudySession(status, level, title, desc) {
 // Lightweight version of setStudyMode that only adjusts UI without re-rendering cards
 function _applyStudyModeUI(mode) {
   studyMode = mode;
+  const modeLessonBtn = document.getElementById('mode-lesson-btn');
   const modeFlipBtn = document.getElementById('mode-flip-btn');
   const modeTypeBtn = document.getElementById('mode-type-btn');
+
+  const lessonStudyCard = document.getElementById('lesson-study-card');
+  const flashcardContainer = document.getElementById('flashcard-card-container');
+  const typingContainer = document.getElementById('typing-card-container');
   const cardViewportEl = document.querySelector('.card-viewport');
 
   if (cardViewportEl) {
@@ -1072,28 +1223,39 @@ function _applyStudyModeUI(mode) {
     if (markStarredBtn) markStarredBtn.style.display = 'flex';
   }
 
-  const flashcardCard = document.getElementById('flashcard-card');
-  const typingContainer = document.getElementById('typing-card-container');
-  if (modeFlipBtn && modeTypeBtn) {
-    if (mode === 'flip') {
-      modeFlipBtn.classList.add('active-mode');
-      modeFlipBtn.style.background = 'var(--accent-blue)';
-      modeFlipBtn.style.color = 'white';
-      modeTypeBtn.classList.remove('active-mode');
-      modeTypeBtn.style.background = 'transparent';
-      modeTypeBtn.style.color = 'var(--text-secondary)';
-      if (flashcardCard) flashcardCard.style.display = 'block';
-      if (typingContainer) typingContainer.style.display = 'none';
-    } else {
-      modeTypeBtn.classList.add('active-mode');
-      modeTypeBtn.style.background = 'var(--accent-blue)';
-      modeTypeBtn.style.color = 'white';
-      modeFlipBtn.classList.remove('active-mode');
-      modeFlipBtn.style.background = 'transparent';
-      modeFlipBtn.style.color = 'var(--text-secondary)';
-      if (flashcardCard) flashcardCard.style.display = 'none';
-      if (typingContainer) typingContainer.style.display = 'flex';
-    }
+  const resetBtnStyles = (btn) => {
+    if (!btn) return;
+    btn.classList.remove('active-mode');
+    btn.style.background = 'transparent';
+    btn.style.color = 'var(--text-secondary)';
+  };
+
+  const setBtnActive = (btn) => {
+    if (!btn) return;
+    btn.classList.add('active-mode');
+    btn.style.background = 'var(--accent-blue)';
+    btn.style.color = 'white';
+  };
+
+  resetBtnStyles(modeLessonBtn);
+  resetBtnStyles(modeFlipBtn);
+  resetBtnStyles(modeTypeBtn);
+
+  if (mode === 'lesson') {
+    setBtnActive(modeLessonBtn);
+    if (lessonStudyCard) lessonStudyCard.style.display = 'block';
+    if (flashcardContainer) flashcardContainer.style.display = 'none';
+    if (typingContainer) typingContainer.style.display = 'none';
+  } else if (mode === 'flip') {
+    setBtnActive(modeFlipBtn);
+    if (lessonStudyCard) lessonStudyCard.style.display = 'none';
+    if (flashcardContainer) flashcardContainer.style.display = 'block';
+    if (typingContainer) typingContainer.style.display = 'none';
+  } else if (mode === 'type') {
+    setBtnActive(modeTypeBtn);
+    if (lessonStudyCard) lessonStudyCard.style.display = 'none';
+    if (flashcardContainer) flashcardContainer.style.display = 'none';
+    if (typingContainer) typingContainer.style.display = 'flex';
   }
 }
 
@@ -2230,11 +2392,62 @@ function setupEventListeners() {
   }
 
   // Segmented Study Mode Toggles
+  const modeLessonBtn = document.getElementById('mode-lesson-btn');
   const modeFlipBtn = document.getElementById('mode-flip-btn');
   const modeTypeBtn = document.getElementById('mode-type-btn');
-  if (modeFlipBtn && modeTypeBtn) {
-    modeFlipBtn.addEventListener('click', () => setStudyMode('flip'));
-    modeTypeBtn.addEventListener('click', () => setStudyMode('type'));
+
+  if (modeLessonBtn) modeLessonBtn.addEventListener('click', () => setStudyMode('lesson'));
+  if (modeFlipBtn) modeFlipBtn.addEventListener('click', () => setStudyMode('flip'));
+  if (modeTypeBtn) modeTypeBtn.addEventListener('click', () => setStudyMode('type'));
+
+  // Lesson Interactive Study Card Event Listeners
+  const lessonAnimateBtn = document.getElementById('lesson-animate-stroke-btn');
+  if (lessonAnimateBtn) {
+    lessonAnimateBtn.addEventListener('click', () => {
+      if (activeLessonHanziWriter) {
+        activeLessonHanziWriter.animateCharacter();
+      }
+    });
+  }
+
+  const lessonSpeakBtn = document.getElementById('lesson-speak-btn');
+  if (lessonSpeakBtn) {
+    lessonSpeakBtn.addEventListener('click', () => {
+      if (!filteredList || filteredList.length === 0) return;
+      const current = filteredList[currentIndex];
+      if (current) speakText(current.word, 'zh-CN');
+    });
+  }
+
+  const lessonSpeakExampleBtn = document.getElementById('lesson-speak-example-btn');
+  if (lessonSpeakExampleBtn) {
+    lessonSpeakExampleBtn.addEventListener('click', () => {
+      if (!filteredList || filteredList.length === 0) return;
+      const current = filteredList[currentIndex];
+      if (current && (current.example_zh || current.word)) {
+        speakText(current.example_zh || current.word, 'zh-CN');
+      }
+    });
+  }
+
+  const lessonCheckBtn = document.getElementById('lesson-check-btn');
+  if (lessonCheckBtn) {
+    lessonCheckBtn.addEventListener('click', checkLessonTranslationAnswer);
+  }
+
+  const lessonTypingInput = document.getElementById('lesson-typing-input');
+  if (lessonTypingInput) {
+    lessonTypingInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        checkLessonTranslationAnswer();
+      }
+    });
+  }
+
+  const lessonRevealBtn = document.getElementById('lesson-reveal-hint-btn');
+  if (lessonRevealBtn) {
+    lessonRevealBtn.addEventListener('click', toggleLessonStandardAnswer);
   }
 
   // Typing Practice Controls
