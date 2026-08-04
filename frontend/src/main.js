@@ -432,38 +432,34 @@ function speakText(text) {
     activeAudioElement = null;
   }
 
-  // 2. Fetch live selected voice & speed directly from DOM
+  // 2. Speed settings
   const speedSelectEl = document.getElementById('tts-speed-select');
   const currentSpeed = (speedSelectEl && speedSelectEl.value) ? parseFloat(speedSelectEl.value) : (parseFloat(localStorage.getItem('speech_playback_rate')) || 1.0);
   localStorage.setItem('speech_playback_rate', currentSpeed.toString());
 
+  // 3. Request Baidu Female Voice MP3 stream from backend server
   const currentVoice = 'baidu-female';
+  const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(currentVoice)}`;
+  
+  const audio = new Audio(url);
+  audio.playbackRate = currentSpeed;
+  activeAudioElement = audio;
 
-  // Fallback to Web Speech API if server audio fails
-  const fallbackWebSpeech = () => {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(cleanText);
-      utterance.lang = 'zh-CN';
-      utterance.rate = currentSpeed;
-      window.speechSynthesis.speak(utterance);
-    }
-  };
-
-  // 3. Play MP3 stream from server or fallback to browser TTS
-  try {
-    const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(currentVoice)}&_t=${Date.now()}`;
-    const audio = new Audio(url);
-    audio.playbackRate = currentSpeed;
-    activeAudioElement = audio;
-
-    audio.play().catch(err => {
-      console.warn("Server audio playback failed, trying Web Speech API fallback:", err);
-      fallbackWebSpeech();
-    });
-  } catch (e) {
-    fallbackWebSpeech();
-  }
+  audio.play().catch(err => {
+    console.warn("Retrying Baidu female voice audio playback...", err);
+    setTimeout(() => {
+      audio.play().catch(e => {
+        console.error("Audio playback error:", e);
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(cleanText);
+          utterance.lang = 'zh-CN';
+          utterance.rate = currentSpeed;
+          window.speechSynthesis.speak(utterance);
+        }
+      });
+    }, 200);
+  });
 }
 window.speakText = speakText;
 
