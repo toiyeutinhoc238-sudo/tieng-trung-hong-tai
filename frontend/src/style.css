@@ -5878,7 +5878,7 @@ body {
 /* Light Mode: Vườn hoa ngoài trời SÁNG (app_bg_day.png) */
 html:not(.dark) .cartoon-roadmap-hero,
 html.light-mode .cartoon-roadmap-hero {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.42) 0%, rgba(220, 235, 255, 0.28) 100%), url('/assets/app_bg_day.png') no-repeat center center / cover !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.75) 0%, rgba(220, 238, 255, 0.6) 100%), url('/assets/app_bg_day_v2.png') no-repeat center center / cover !important;
   backdrop-filter: blur(20px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
   border: 3px solid rgba(255, 255, 255, 0.85) !important;
@@ -7243,7 +7243,7 @@ html.light-mode {
 }
 
 html.light-mode body {
-  background: url('/assets/app_bg_day.png') no-repeat center center fixed / cover !important;
+  background: url('/assets/app_bg_day_v2.png') no-repeat center center fixed / cover !important;
   color: #0f172a !important;
   transition: background 0.5s ease-in-out;
 }
