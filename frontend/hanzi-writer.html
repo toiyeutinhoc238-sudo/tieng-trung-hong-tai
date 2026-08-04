@@ -101,6 +101,7 @@
     function updateToggleBtns(isLight) {
       var btns = document.querySelectorAll('#theme-toggle, #theme-toggle-btn, .theme-toggle-btn, .theme-toggle-btn-top');
       btns.forEach(function(btn) {
+        if (btn.id === 'particle-toggle-btn' || btn.classList.contains('particle-toggle-btn')) return;
         btn.innerHTML = isLight 
           ? '<i class="fa-solid fa-moon" style="color:#d97706;"></i>' 
           : '<i class="fa-solid fa-sun" style="color:#f59e0b;"></i>';
@@ -810,7 +811,7 @@
         </div>
       </div>
       <div style="display: flex; gap: 8px; align-items: center;">
-        <button id="particle-toggle-btn" class="particle-toggle-btn theme-toggle-btn-top" onclick="window.toggleSeasonalParticles()" title="Bật/Tắt hiệu ứng mùa">
+        <button id="particle-toggle-btn" class="particle-toggle-btn" onclick="window.toggleSeasonalParticles()" title="Bật/Tắt hiệu ứng mùa">
           <i class="fa-solid fa-snowflake"></i>
         </button>
         <button id="theme-toggle" class="theme-toggle-btn-top" onclick="window.toggleTheme()" title="Chuyển đổi Giao diện Sáng/Tối">
