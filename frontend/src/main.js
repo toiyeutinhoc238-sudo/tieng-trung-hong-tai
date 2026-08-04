@@ -4058,12 +4058,12 @@ function renderLearningTianzige(word) {
           height: cellSize - 8,
           padding: 4,
           showOutline: true,
-          showCharacter: false, // Start completely hidden (outline only)
           strokeColor: '#dc2626',
           radicalColor: '#2563eb',
           outlineColor: '#cbd5e1',
           drawingWidth: cellSize > 120 ? 16 : 12,
           onLoadCharDataSuccess: function() {
+            try { writer.hideCharacter(); } catch(e){}
             if (currentRenderSeq !== roadmapAnimationSequence) return;
             loadedCount++;
             if (loadedCount === cleanChars.length) {
@@ -4130,9 +4130,6 @@ async function runSequentialStrokeChain(seq) {
     if (!writer) continue;
 
     try {
-      writer.cancelAnimation();
-      writer.hideCharacter();
-
       await writer.animateCharacter();
 
       if (seq !== roadmapAnimationSequence) return;
