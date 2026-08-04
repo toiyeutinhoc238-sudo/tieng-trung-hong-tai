@@ -3972,8 +3972,11 @@ window.renderRoadmapLearningList = function() {
 
 let roadmapHanziWriters = [];
 let roadmapStrokeTimeout = null;
+let roadmapAnimationSequence = 0;
 
 function renderLearningTianzige(word) {
+  roadmapAnimationSequence++;
+  
   if (roadmapStrokeTimeout) {
     clearTimeout(roadmapStrokeTimeout);
     roadmapStrokeTimeout = null;
@@ -4044,9 +4047,7 @@ function renderLearningTianzige(word) {
 
   container.appendChild(frame);
 
-  // Create HanziWriter for each character cell
   if (window.HanziWriter) {
-    let loadedCount = 0;
     cleanChars.forEach((char, idx) => {
       try {
         const writer = HanziWriter.create(`roadmap-tianzige-target-${idx}`, char, {
@@ -4057,14 +4058,7 @@ function renderLearningTianzige(word) {
           strokeColor: '#dc2626',
           radicalColor: '#2563eb',
           outlineColor: '#cbd5e1',
-          drawingWidth: cellSize > 120 ? 16 : 12,
-          onLoadCharDataSuccess: function() {
-            try { writer.hideCharacter(); } catch(e){}
-            loadedCount++;
-            if (loadedCount === cleanChars.length) {
-              startCleanSequentialAnimation();
-            }
-          }
+          drawingWidth: cellSize > 120 ? 16 : 12
         });
         roadmapHanziWriters.push(writer);
       } catch (e) {
@@ -4072,16 +4066,20 @@ function renderLearningTianzige(word) {
         if (targetEl) targetEl.innerHTML = `<span style="font-size: 2.2rem; font-weight: 800; color: #dc2626;">${char}</span>`;
       }
     });
+
+    startCleanSequentialAnimation();
   }
 }
 
 function startCleanSequentialAnimation() {
+  roadmapAnimationSequence++;
+  const currentSeq = roadmapAnimationSequence;
+
   if (roadmapStrokeTimeout) {
     clearTimeout(roadmapStrokeTimeout);
     roadmapStrokeTimeout = null;
   }
 
-  // Hide solid strokes on all writers so they show only light gray outlines
   roadmapHanziWriters.forEach(w => {
     try {
       if (w) {
@@ -4091,38 +4089,53 @@ function startCleanSequentialAnimation() {
     } catch(e){}
   });
 
-  playWriterAtIndex(0);
+  // Small delay to ensure hideCharacter takes effect visually before starting
+  roadmapStrokeTimeout = setTimeout(() => {
+    if (currentSeq === roadmapAnimationSequence) {
+      playWriterAtIndex(0, currentSeq);
+    }
+  }, 100);
 }
 
-function playWriterAtIndex(idx) {
+function playWriterAtIndex(idx, seq) {
+  if (seq !== roadmapAnimationSequence) return;
+
   if (roadmapStrokeTimeout) {
     clearTimeout(roadmapStrokeTimeout);
     roadmapStrokeTimeout = null;
   }
 
   if (idx >= roadmapHanziWriters.length) {
-    // All cells finished writing! Keep full characters visible for 2.0s, then restart loop
     roadmapStrokeTimeout = setTimeout(() => {
-      startCleanSequentialAnimation();
+      if (seq === roadmapAnimationSequence) {
+        startCleanSequentialAnimation();
+      }
     }, 2000);
     return;
   }
 
   const writer = roadmapHanziWriters[idx];
-  if (!writer) return;
+  if (!writer) {
+    playWriterAtIndex(idx + 1, seq);
+    return;
+  }
 
   try {
     writer.cancelAnimation();
     writer.animateCharacter({
       onComplete: function() {
-        // Cell idx is 100% finished writing! Wait 300ms, then start Cell idx + 1
+        if (seq !== roadmapAnimationSequence) return;
         roadmapStrokeTimeout = setTimeout(() => {
-          playWriterAtIndex(idx + 1);
+          if (seq === roadmapAnimationSequence) {
+            playWriterAtIndex(idx + 1, seq);
+          }
         }, 300);
       }
     });
   } catch(e) {
-    playWriterAtIndex(idx + 1);
+    if (seq === roadmapAnimationSequence) {
+      playWriterAtIndex(idx + 1, seq);
+    }
   }
 }
 
