@@ -461,7 +461,7 @@ async function toggleWordMemorized(id) {
   if (studyMode !== 'type') {
     applyFilters(true);
   }
-  showToast(nextState ? 'Đã thuộc từ này! 🎉 (+10 XP)' : 'Đã bỏ thuộc! Từ này quay lại danh sách cần ôn tập ⚠️ (-10 XP)');
+  showToast(nextState ? 'Đã thuộc từ này! 🎉 (+100 điểm)' : 'Đã bỏ thuộc! Từ này quay lại danh sách cần ôn tập ⚠️ (-100 điểm)');
 
   if (!currentUser) {
     const guestProgress = JSON.parse(localStorage.getItem('guest_progress') || '{}');
