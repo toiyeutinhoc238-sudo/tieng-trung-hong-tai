@@ -4005,43 +4005,61 @@ window.animateRoadmapStroke = function() {
   }
 };
 
-window.checkRoadmapSentence = function(targetAnswer) {
+let currentRoadmapTargetAns = '';
+
+window.handleRoadmapTranslationInput = function(targetAns) {
   const inputEl = document.getElementById('roadmap-sentence-input');
-  const resultEl = document.getElementById('roadmap-sentence-result');
-  if (!inputEl || !resultEl) return;
+  const feedbackEl = document.getElementById('roadmap-sentence-feedback');
+  if (!inputEl || !feedbackEl) return;
 
-  const val = inputEl.value.trim().replace(/[.,!?:;="'"()\[\]{}，。！？；：\s]/g, '');
-  const cleanAns = targetAnswer.trim().replace(/[.,!?:;="'"()\[\]{}，。！？；：\s]/g, '');
-
-  if (!val) {
-    showToast('Vui lòng nhập đáp án bằng tiếng Trung nhé!', true);
+  const typed = inputEl.value;
+  if (!typed) {
+    feedbackEl.innerHTML = '';
     return;
   }
 
-  if (val.toLowerCase() === cleanAns.toLowerCase() || cleanAns.toLowerCase().includes(val.toLowerCase())) {
-    resultEl.innerHTML = `
-      <span style="color: #22c55e; font-weight: 700; font-size: 0.95rem;">
-        <i class="fa-solid fa-circle-check"></i> [Đúng] Chính xác! Chúc mừng bạn 🎉
-      </span>
-    `;
-    showToast('🎉 Chính xác! Bạn làm rất tốt!', false);
-  } else {
-    resultEl.innerHTML = `
-      <span style="color: #ef4444; font-weight: 700; font-size: 0.95rem;">
-        <i class="fa-solid fa-circle-xmark"></i> [Chưa chính xác] Đáp án đúng: <strong style="font-family: var(--font-hanzi); font-size: 1.1rem; color: var(--text-color);">${targetAnswer}</strong>
-      </span>
-    `;
+  // Strip spaces & punctuation for clean comparison
+  const cleanTarget = targetAns.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s]/g, '');
+  const cleanTyped = typed.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s]/g, '');
+
+  let html = '<div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">';
+  
+  let isFullMatch = true;
+  for (let i = 0; i < cleanTyped.length; i++) {
+    const userChar = cleanTyped[i];
+    const targetChar = cleanTarget[i];
+
+    if (targetChar && userChar === targetChar) {
+      html += `<span style="background: rgba(34, 197, 94, 0.2); color: #22c55e; border: 1.5px solid #22c55e; padding: 4px 12px; border-radius: 8px; font-weight: 700; font-family: var(--font-hanzi); font-size: 1.15rem;">${userChar}</span>`;
+    } else {
+      isFullMatch = false;
+      html += `<span style="background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1.5px solid #ef4444; padding: 4px 12px; border-radius: 8px; font-weight: 700; font-family: var(--font-hanzi); font-size: 1.15rem;">${userChar}</span>`;
+    }
   }
+
+  if (cleanTyped.length === cleanTarget.length && isFullMatch) {
+    html += `<span style="color: #22c55e; font-weight: 700; display: flex; align-items: center; margin-left: 8px; font-size: 1rem;"><i class="fa-solid fa-circle-check" style="margin-right: 4px;"></i> Chính xác 100%! 🎉</span>`;
+  }
+
+  html += '</div>';
+  feedbackEl.innerHTML = html;
 };
 
-window.showRoadmapSentenceHint = function(targetAnswer) {
-  const resultEl = document.getElementById('roadmap-sentence-result');
-  if (!resultEl) return;
-  resultEl.innerHTML = `
-    <span style="color: #3b82f6; font-weight: 700; font-size: 0.95rem;">
-      <i class="fa-solid fa-lightbulb"></i> Gợi ý đáp án chuẩn: <strong style="font-family: var(--font-hanzi); font-size: 1.1rem; color: var(--text-color);">${targetAnswer}</strong>
-    </span>
-  `;
+window.revealNextRoadmapHint = function(targetAns) {
+  const inputEl = document.getElementById('roadmap-sentence-input');
+  if (!inputEl) return;
+
+  const cleanTarget = targetAns.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s]/g, '');
+  const cleanTyped = inputEl.value.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s]/g, '');
+
+  const nextIndex = cleanTyped.length;
+  if (nextIndex < cleanTarget.length) {
+    const nextChar = cleanTarget[nextIndex];
+    inputEl.value += nextChar;
+    handleRoadmapTranslationInput(targetAns);
+  } else {
+    showToast('Bạn đã điền hoàn tất câu rồi!', false);
+  }
 };
 
 window.showLearningFlashcard = function(index) {
@@ -4057,11 +4075,13 @@ window.showLearningFlashcard = function(index) {
   const pos = w.category || w.word_type || w.hanviet || 'Từ vựng';
   const mn = w.meaning || '---';
   const usage = w.explanation || w.usage || (w.example_vi ? `Dùng trong câu: "${w.example_vi}"` : '');
-  const egZh = w.example_zh || (w.word ? `${w.word}` : '');
-  const egVi = w.example_vi || (w.meaning ? `${w.meaning}` : '');
+  const egZh = w.example_zh || '';
+  const egVi = w.example_vi || '';
   
-  const sentenceQ = w.example_vi ? w.example_vi : (w.meaning ? `Đặt câu với từ "${w.word}" (${w.meaning})` : `Viết từ "${w.word}"`);
-  const sentenceAns = w.example_zh ? w.example_zh : w.word;
+  // Only show translation exercise if an example sentence exists!
+  const hasExercise = egZh.trim() !== '' && egVi.trim() !== '';
+  const sentenceQ = egVi;
+  const sentenceAns = egZh;
 
   flashcard.style.opacity = '0';
   flashcard.style.transform = 'scale(0.98)';
@@ -4069,7 +4089,7 @@ window.showLearningFlashcard = function(index) {
   setTimeout(() => {
     flashcard.innerHTML = `
       <!-- TOP SECTION: 2 COLUMNS (TIANZIGE LEFT, DETAILS RIGHT) -->
-      <div style="display: flex; gap: 24px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; margin-bottom: 24px; text-align: left; width: 100%;">
+      <div style="display: flex; gap: 24px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; text-align: left; width: 100%; ${hasExercise ? 'margin-bottom: 24px;' : ''}">
         
         <!-- LEFT COLUMN: TIANZIGE GRID + TỪ LOẠI BADGE -->
         <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; min-width: 170px;">
@@ -4127,34 +4147,41 @@ window.showLearningFlashcard = function(index) {
         </div>
       </div>
 
-      <!-- BOTTOM SECTION: ĐẶT CÂU / LUYỆN DỊCH (HÌNH 1 REQUIREMENT) -->
-      <div style="border-top: 1px dashed rgba(255,255,255,0.15); padding-top: 18px; width: 100%; text-align: left;">
-        <div style="display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1rem; color: var(--text-color); margin-bottom: 10px;">
-          <i class="fa-solid fa-caret-up text-primary" style="font-size: 1.2rem;"></i>
-          <span>Đặt câu:</span>
-          <span style="font-weight: 500; color: var(--text-muted); font-size: 0.95rem; margin-left: 4px;">${sentenceQ}</span>
-        </div>
+      <!-- BOTTOM SECTION: DỊCH CÂU (CHỈ HIỂN THỊ KHI CÓ CÂU MẪU) -->
+      ${hasExercise ? `
+        <div style="border-top: 1px dashed rgba(255,255,255,0.15); padding-top: 18px; width: 100%; text-align: left;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 1rem; color: var(--text-color);">
+              <i class="fa-solid fa-language text-primary" style="font-size: 1.1rem;"></i>
+              <span>Dịch sang tiếng Trung:</span>
+              <span style="font-weight: 600; color: #38bdf8; font-size: 1rem; margin-left: 4px;">"${sentenceQ}"</span>
+            </div>
 
-        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-          <input type="text" id="roadmap-sentence-input" placeholder="Nhập đáp án (Dịch sang TQ)..." 
-            style="flex: 1; min-width: 220px; padding: 12px 16px; border-radius: 12px; border: 1.5px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.2); color: var(--text-color); font-size: 1rem; font-family: var(--font-hanzi); outline: none; transition: border-color 0.2s;"
-            onkeypress="if(event.key === 'Enter') checkRoadmapSentence('${sentenceAns.replace(/'/g, "\\'")}')" />
+            <button onclick="revealNextRoadmapHint('${sentenceAns.replace(/'/g, "\\'")}')" 
+              style="background: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.4); padding: 6px 14px; border-radius: 99px; font-weight: 700; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; transition: all 0.2s;">
+              <i class="fa-solid fa-lightbulb"></i> Gợi ý từ tiếp theo
+            </button>
+          </div>
 
-          <button onclick="checkRoadmapSentence('${sentenceAns.replace(/'/g, "\\'")}')" 
-            style="background: var(--primary-color); color: white; border: none; padding: 12px 20px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap;">
-            Kiểm tra
-          </button>
-        </div>
+          <div style="position: relative;">
+            <input type="text" id="roadmap-sentence-input" placeholder="Gõ chữ Hán vào đây..." 
+              style="width: 100%; padding: 12px 16px; border-radius: 12px; border: 1.5px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.25); color: var(--text-color); font-size: 1.1rem; font-family: var(--font-hanzi); outline: none; transition: border-color 0.2s;"
+              oninput="handleRoadmapTranslationInput('${sentenceAns.replace(/'/g, "\\'")}')" />
+          </div>
 
-        <!-- Hints & Result Area -->
-        <div id="roadmap-sentence-result" style="display: flex; align-items: center; gap: 10px; margin-top: 12px; flex-wrap: wrap; font-size: 0.9rem;">
-          <span style="color: var(--text-muted); font-weight: 600;">Gợi ý:</span>
-          <button onclick="checkRoadmapSentence('${sentenceAns.replace(/'/g, "\\'")}')" style="background: rgba(34, 197, 94, 0.2); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.4); padding: 4px 12px; border-radius: 99px; font-weight: 700; cursor: pointer; font-size: 0.8rem;">Đúng</button>
-          <button onclick="showRoadmapSentenceHint('${sentenceAns.replace(/'/g, "\\'")}')" style="background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.4); padding: 4px 12px; border-radius: 99px; font-weight: 700; cursor: pointer; font-size: 0.8rem;">Sai</button>
-          <button onclick="animateRoadmapStroke()" style="background: rgba(148, 163, 184, 0.2); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.4); padding: 4px 12px; border-radius: 99px; font-weight: 700; cursor: pointer; font-size: 0.8rem;">Gợi ý chuẩn viết</button>
+          <!-- Real-time Character Matching Feedback (Green / Red) -->
+          <div id="roadmap-sentence-feedback" style="margin-top: 10px; min-height: 32px;"></div>
         </div>
-      </div>
+      ` : ''}
     `;
+
+    flashcard.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+    flashcard.style.opacity = '1';
+    flashcard.style.transform = 'scale(1)';
+
+    // Render Tianzige HanziWriter
+    renderLearningTianzige(hz);
+  }, 50);
 
     flashcard.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
     flashcard.style.opacity = '1';
