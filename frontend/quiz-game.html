@@ -696,10 +696,10 @@
           <div style="display: flex; align-items: center; gap: 8px;">
             <button id="theme-toggle" class="theme-toggle-btn-top" onclick="window.toggleTheme()"
               title="Chuyển đổi Giao diện Sáng/Tối">
-              <i class="fa-solid fa-moon"></i> <span class="theme-btn-text">Giao diện Sáng/Tối</span>
+              <i class="fa-solid fa-moon"></i>
             </button>
-            <a href="/index.html" target="_top" onclick="if(window.self !== window.top){event.preventDefault();window.parent.postMessage({type:'CLOSE_GAME_IFRAME'},'*');}" style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); color: #3b82f6; padding: 6px 14px; border-radius: 8px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem;">
-              <i class="fa-solid fa-house"></i> Trang Chủ
+            <a href="/index.html" target="_top" title="Trang Chủ" onclick="if(window.self !== window.top){event.preventDefault();window.parent.postMessage({type:'CLOSE_GAME_IFRAME'},'*');}" style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); color: #3b82f6; width: 38px; height: 38px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; text-decoration: none;">
+              <i class="fa-solid fa-house"></i>
             </a>
           </div>
         </div>

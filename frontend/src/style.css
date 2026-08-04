@@ -6784,6 +6784,31 @@ html.dark .rank-brand-logo span {
   gap: 12px;
 }
 
+/* ──────── ICON-ONLY HEADER BUTTONS ACROSS ALL PAGES ──────── */
+.theme-btn-text,
+.home-btn-text,
+.nav-btn-text {
+  display: none !important;
+}
+
+.theme-toggle-btn-top,
+.btn-theme-toggle,
+.btn-home-top,
+.nav-home-btn,
+.rank-theme-btn,
+.rank-nav-btn {
+  width: 40px !important;
+  height: 40px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1.1rem !important;
+  text-decoration: none !important;
+  line-height: 1 !important;
+}
+
 .rank-nav-btn {
   display: inline-flex;
   align-items: center;
