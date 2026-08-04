@@ -3,17 +3,48 @@ import radicalsData from './radicals_data.json';
 
 let currentTab = '50 bộ (1)';
 let writerInstance = null;
+let activeAudioElement = null;
 
 function speakText(text) {
   if (!text) return;
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'zh-CN';
-    utterance.rate = 0.85;
-    window.speechSynthesis.speak(utterance);
+  const cleanText = text.trim();
+  if (!cleanText) return;
+
+  if (activeAudioElement) {
+    try {
+      activeAudioElement.pause();
+      activeAudioElement.currentTime = 0;
+      activeAudioElement.src = '';
+    } catch (e) { }
+    activeAudioElement = null;
   }
+
+  const currentSpeed = parseFloat(localStorage.getItem('speech_playback_rate')) || 1.0;
+  const API_BASE_URL = window.location.origin;
+  const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=baidu-female`;
+
+  const audio = new Audio(url);
+  audio.playbackRate = currentSpeed;
+  activeAudioElement = audio;
+
+  audio.play().catch(err => {
+    console.warn("Retrying Baidu female voice audio playback...", err);
+    setTimeout(() => {
+      audio.play().catch(e => {
+        console.error("Audio playback error:", e);
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(cleanText);
+          utterance.lang = 'zh-CN';
+          utterance.rate = currentSpeed;
+          window.speechSynthesis.speak(utterance);
+        }
+      });
+    }, 200);
+  });
 }
+
+window.speakText = speakText;
 
 function initSeasonalParticles() {
   const canvas = document.getElementById('seasonal-particle-canvas');
@@ -255,7 +286,7 @@ window.openRadicalDetail = function(radId) {
           <div style="font-size: 1.2rem; font-weight: 700; color: #38bdf8; font-family: var(--font-pinyin);">
             Phiên âm: ${r.pinyin}
           </div>
-          <button onclick="speakText('${(r.radical || '').replace(/'/g, "\\'")}')" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; width: 38px; height: 36px; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+          <button onclick="window.speakText('${(r.radical || '').replace(/'/g, "\\'")}')" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; width: 38px; height: 36px; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);">
             <i class="fa-solid fa-volume-high"></i>
           </button>
         </div>
