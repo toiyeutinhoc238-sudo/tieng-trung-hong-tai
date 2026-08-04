@@ -3902,9 +3902,6 @@ window.goToRoadmapLevel = function (ver, level) {
 // --- ROADMAP LEARNING VIEW LOGIC ---
 let currentRoadmapLearningVocabs = [];
 let currentRoadmapLearningIndex = 0;
-let roadmapHanziWriters = [];
-let roadmapStrokeTimeout = null;
-let roadmapAnimationSequence = 0;
 
 window.openRoadmapLearningView = function (ver, level) {
   switchTab('roadmap-learning');
@@ -3973,178 +3970,71 @@ window.renderRoadmapLearningList = function() {
   });
 };
 
-function renderLearningTianzige(word) {
-  roadmapAnimationSequence++;
-  
-  if (roadmapStrokeTimeout) {
-    clearTimeout(roadmapStrokeTimeout);
-    roadmapStrokeTimeout = null;
-  }
-  
-  roadmapHanziWriters.forEach(w => {
-    try {
-      if (w && typeof w.cancelAnimation === 'function') w.cancelAnimation();
-    } catch(e){}
-  });
-  roadmapHanziWriters = [];
+let currentRoadmapHanziWriter = null;
+let currentRoadmapWord = '';
+let currentRoadmapCharIndex = 0;
+let roadmapStrokeTimeout = null;
 
-  const container = document.getElementById('roadmap-tianzige-container');
-  if (!container) return;
+function renderLearningTianzige(word) {
+  if (roadmapStrokeTimeout) clearTimeout(roadmapStrokeTimeout);
+  currentRoadmapWord = word || '';
+  currentRoadmapCharIndex = 0;
+
+  playRoadmapSequentialChar();
+}
+
+function playRoadmapSequentialChar() {
+  const container = document.getElementById('roadmap-tianzige-target');
+  if (!container || !currentRoadmapWord || currentRoadmapWord === '---') return;
+
+  const cleanChars = Array.from(currentRoadmapWord).filter(c => /[\u4e00-\u9fa5]/.test(c));
+  if (cleanChars.length === 0) {
+    container.innerHTML = `<span style="font-size: 4.5rem; font-weight: 800; color: #dc2626;">${currentRoadmapWord}</span>`;
+    return;
+  }
+
+  if (currentRoadmapCharIndex >= cleanChars.length) {
+    currentRoadmapCharIndex = 0;
+  }
+
+  const charToDraw = cleanChars[currentRoadmapCharIndex];
   container.innerHTML = '';
 
-  if (!word || word === '---') return;
-
-  const cleanChars = Array.from(word).filter(c => /[\u4e00-\u9fa5]/.test(c));
-  if (cleanChars.length === 0) {
-    container.innerHTML = `<span style="font-size: 3.5rem; font-weight: 800; color: #dc2626;">${word}</span>`;
-    return;
-  }
-
-  // Determine cell size based on character count (expands paper for >=2 chars)
-  let cellSize = 150;
-  if (cleanChars.length === 2) cellSize = 125;
-  else if (cleanChars.length >= 3) cellSize = 100;
-
-  // Single Merged Outer Frame ("Tờ giấy dài gộp ô")
-  const frame = document.createElement('div');
-  frame.className = 'tianzige-merged-frame';
-  frame.style.cssText = `
-    display: flex;
-    border: 2.5px solid #dc2626;
-    border-radius: 14px;
-    overflow: hidden;
-    background-color: #ffffff;
-    box-shadow: 0 4px 20px rgba(220, 38, 38, 0.18);
-    cursor: pointer;
-  `;
-  frame.title = "Nhấp để phát lại nét bút viết";
-  frame.onclick = () => animateRoadmapStroke();
-
-  cleanChars.forEach((char, idx) => {
-    const cell = document.createElement('div');
-    cell.style.cssText = `
-      width: ${cellSize}px;
-      height: ${cellSize}px;
-      position: relative;
-      border-right: ${idx < cleanChars.length - 1 ? '2px solid #dc2626' : 'none'};
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    `;
-
-    cell.innerHTML = `
-      <div style="position: absolute; inset: 0; pointer-events: none; background-image: 
-        linear-gradient(to right, transparent 49%, rgba(220, 38, 38, 0.3) 49%, rgba(220, 38, 38, 0.3) 51%, transparent 51%),
-        linear-gradient(to bottom, transparent 49%, rgba(220, 38, 38, 0.3) 49%, rgba(220, 38, 38, 0.3) 51%, transparent 51%),
-        linear-gradient(45deg, transparent 49.5%, rgba(220, 38, 38, 0.2) 49.5%, rgba(220, 38, 38, 0.2) 50.5%, transparent 50.5%),
-        linear-gradient(-45deg, transparent 49.5%, rgba(220, 38, 38, 0.2) 49.5%, rgba(220, 38, 38, 0.2) 50.5%, transparent 50.5%);">
-      </div>
-      <div id="roadmap-tianzige-target-${idx}" style="z-index: 2; display: flex; align-items: center; justify-content: center;"></div>
-    `;
-    frame.appendChild(cell);
-  });
-
-  container.appendChild(frame);
-
   if (window.HanziWriter) {
-    cleanChars.forEach((char, idx) => {
-      try {
-        const writer = HanziWriter.create(`roadmap-tianzige-target-${idx}`, char, {
-          width: cellSize - 8,
-          height: cellSize - 8,
-          padding: 4,
-          showOutline: true,
-          strokeColor: '#dc2626',
-          radicalColor: '#2563eb',
-          outlineColor: '#cbd5e1',
-          drawingWidth: cellSize > 120 ? 16 : 12,
-          onLoadCharDataError: function() {
-            const targetEl = document.getElementById(`roadmap-tianzige-target-${idx}`);
-            if (targetEl) targetEl.innerHTML = `<span style="font-size: 2.2rem; font-weight: 800; color: #dc2626;">${char}</span>`;
-          }
-        });
-        roadmapHanziWriters.push(writer);
-      } catch (e) {
-        const targetEl = document.getElementById(`roadmap-tianzige-target-${idx}`);
-        if (targetEl) targetEl.innerHTML = `<span style="font-size: 2.2rem; font-weight: 800; color: #dc2626;">${char}</span>`;
-      }
-    });
-
-    startCleanSequentialAnimation();
-  }
-}
-
-function startCleanSequentialAnimation() {
-  roadmapAnimationSequence++;
-  const currentSeq = roadmapAnimationSequence;
-
-  if (roadmapStrokeTimeout) {
-    clearTimeout(roadmapStrokeTimeout);
-    roadmapStrokeTimeout = null;
-  }
-
-  roadmapHanziWriters.forEach(w => {
     try {
-      if (w) {
-        w.cancelAnimation();
-        w.hideCharacter();
-      }
-    } catch(e){}
-  });
+      currentRoadmapHanziWriter = HanziWriter.create('roadmap-tianzige-target', charToDraw, {
+        width: 155,
+        height: 155,
+        padding: 5,
+        showOutline: true,
+        strokeColor: '#dc2626',
+        radicalColor: '#2563eb',
+        outlineColor: '#fecdd3',
+        drawingWidth: 16
+      });
 
-  roadmapStrokeTimeout = setTimeout(() => {
-    if (currentSeq === roadmapAnimationSequence) {
-      playWriterAtIndex(0, currentSeq);
+      currentRoadmapHanziWriter.animateCharacter({
+        onComplete: function() {
+          currentRoadmapCharIndex++;
+          if (currentRoadmapCharIndex < cleanChars.length) {
+            roadmapStrokeTimeout = setTimeout(() => {
+              playRoadmapSequentialChar();
+            }, 600);
+          }
+        }
+      }).catch(() => {});
+    } catch (e) {
+      container.innerHTML = `<span style="font-size: 4.5rem; font-weight: 800; color: #dc2626;">${charToDraw}</span>`;
     }
-  }, 100);
-}
-
-async function playWriterAtIndex(idx, seq) {
-  if (seq !== roadmapAnimationSequence) return;
-
-  if (roadmapStrokeTimeout) {
-    clearTimeout(roadmapStrokeTimeout);
-    roadmapStrokeTimeout = null;
-  }
-
-  if (idx >= roadmapHanziWriters.length) {
-    roadmapStrokeTimeout = setTimeout(() => {
-      if (seq === roadmapAnimationSequence) {
-        startCleanSequentialAnimation();
-      }
-    }, 2500);
-    return;
-  }
-
-  const writer = roadmapHanziWriters[idx];
-  if (!writer) {
-    playWriterAtIndex(idx + 1, seq);
-    return;
-  }
-
-  try {
-    writer.cancelAnimation();
-    writer.hideCharacter();
-    
-    // HanziWriter animateCharacter returns a Promise
-    await writer.animateCharacter();
-
-    if (seq !== roadmapAnimationSequence) return;
-
-    roadmapStrokeTimeout = setTimeout(() => {
-      if (seq === roadmapAnimationSequence) {
-        playWriterAtIndex(idx + 1, seq);
-      }
-    }, 300);
-  } catch(e) {
-    if (seq === roadmapAnimationSequence) {
-      playWriterAtIndex(idx + 1, seq);
-    }
+  } else {
+    container.innerHTML = `<span style="font-size: 4.5rem; font-weight: 800; color: #dc2626;">${charToDraw}</span>`;
   }
 }
 
 window.animateRoadmapStroke = function() {
-  startCleanSequentialAnimation();
+  if (roadmapStrokeTimeout) clearTimeout(roadmapStrokeTimeout);
+  currentRoadmapCharIndex = 0;
+  playRoadmapSequentialChar();
 };
 
 let currentRoadmapTargetAns = '';
@@ -4234,8 +4124,19 @@ window.showLearningFlashcard = function(index) {
       <div style="display: flex; gap: 24px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; text-align: left; width: 100%; ${hasExercise ? 'margin-bottom: 24px;' : ''}">
         
         <!-- LEFT COLUMN: TIANZIGE GRID + TỪ LOẠI BADGE -->
-        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; min-width: 150px;">
-          <div id="roadmap-tianzige-container" style="display: flex; justify-content: center; align-items: center;"></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; min-width: 170px;">
+          <div class="tianzige-box" style="width: 170px; height: 170px; border: 2.5px solid #dc2626; border-radius: 12px; position: relative; background-color: #ffffff; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 4px 16px rgba(220, 38, 38, 0.15);">
+            <!-- Tianzige dashed grid lines background -->
+            <div style="position: absolute; inset: 0; pointer-events: none; background-image: 
+              linear-gradient(to right, transparent 49%, rgba(220, 38, 38, 0.3) 49%, rgba(220, 38, 38, 0.3) 51%, transparent 51%),
+              linear-gradient(to bottom, transparent 49%, rgba(220, 38, 38, 0.3) 49%, rgba(220, 38, 38, 0.3) 51%, transparent 51%),
+              linear-gradient(45deg, transparent 49.5%, rgba(220, 38, 38, 0.2) 49.5%, rgba(220, 38, 38, 0.2) 50.5%, transparent 50.5%),
+              linear-gradient(-45deg, transparent 49.5%, rgba(220, 38, 38, 0.2) 49.5%, rgba(220, 38, 38, 0.2) 50.5%, transparent 50.5%);">
+            </div>
+            
+            <!-- Hanzi Target Container -->
+            <div id="roadmap-tianzige-target" onclick="animateRoadmapStroke()" title="Nhấp để xem bút thuận" style="cursor: pointer; z-index: 2; display: flex; align-items: center; justify-content: center;"></div>
+          </div>
 
           <!-- Từ loại badge -->
           <div style="background: rgba(37, 99, 235, 0.12); color: #2563eb; border: 1.5px solid rgba(37, 99, 235, 0.3); font-weight: 700; font-size: 0.9rem; padding: 4px 18px; border-radius: 99px; text-align: center; letter-spacing: 0.5px;">
