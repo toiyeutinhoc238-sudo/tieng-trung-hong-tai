@@ -22,7 +22,8 @@ export default defineConfig({
         rules: 'han-viet-rules.html',
         grammar: 'hsk-grammar.html',
         phonetics: 'chinese-phonetics.html',
-        hanzi: 'hanzi-writer.html'
+        hanzi: 'hanzi-writer.html',
+        rank: 'rank.html'
       }
     }
   }

@@ -7967,7 +7967,7 @@ window.showLeaderboardModal = function () {
         
         <!-- Header with Mascot -->
         <div class="lb-modal-header">
-          <img src="/assets/dragon_award_mascot.png" class="lb-mascot-img" alt="Dragon Award Mascot">
+          <img src="/assets/hongtai_dragon_mascot.png" class="lb-mascot-img" alt="HongTai Dragon Mascot">
           <div>
             <h2 class="lb-title">🏆 LỄ TRAO GIẢI BẢNG XẾP HẠNG</h2>
             <div class="lb-subtitle">Vinh danh Học viên xuất sắc nhất Tiếng Trung HongTai</div>
@@ -8228,6 +8228,19 @@ window.openGrammarDetail = function(grammarKey, apiBase) {
       console.error("Error loading grammar detail:", err);
     });
 };
+
+// Auto-initialize rank.html leaderboard if standalone rank page is loaded
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    if (window.location.pathname.includes('rank.html')) {
+      window.showLeaderboardModal();
+    }
+  });
+} else {
+  if (window.location.pathname.includes('rank.html')) {
+    window.showLeaderboardModal();
+  }
+}
 
 
 

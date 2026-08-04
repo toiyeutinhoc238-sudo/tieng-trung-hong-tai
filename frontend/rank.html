@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Bảng Xếp Hạng & Lễ Trao Giải Học Viên | Hongtai Chinese</title>
+  <meta name="description" content="Bảng xếp hạng học viên vinh danh top thành tích thuộc từ vựng HSK, YCT và điểm số thi đấu tại Tiếng Trung Hongtai.">
+  <meta property="og:title" content="Bảng Xếp Hạng & Lễ Trao Giải Học Viên | Hongtai Chinese">
+  <meta property="og:description" content="Bảng xếp hạng học viên vinh danh top thành tích thuộc từ vựng HSK, YCT và điểm số thi đấu tại Tiếng Trung Hongtai.">
+  <meta property="og:image" content="/assets/logo.png">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://tieng-trung-hong-tai-1.onrender.com/rank.html" />
+  <link rel="icon" type="image/png" href="/assets/logo.png">
+
+  <!-- PWA Mobile App Support -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0b0f19">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Hongtai Chinese">
+
+  <!-- FontAwesome & Google Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Outfit:wght@600;700;800;900&family=Noto+Sans+SC:wght@700;900&display=swap"
+    rel="stylesheet">
+
+  <script>
+    (function () {
+      var t = localStorage.getItem('theme') || 'dark';
+      var bgUrl = t === 'light' ? "url('/assets/app_bg_day.png')" : "url('/assets/app_bg_night.png')";
+      document.documentElement.style.setProperty('background-image', bgUrl, 'important');
+      document.documentElement.style.setProperty('background-size', 'cover', 'important');
+      document.documentElement.style.setProperty('background-position', 'center center', 'important');
+      document.documentElement.style.setProperty('background-attachment', 'fixed', 'important');
+      document.documentElement.style.setProperty('background-repeat', 'no-repeat', 'important');
+
+      if (t === 'light') {
+        document.documentElement.classList.add('light-mode', 'light');
+        document.documentElement.classList.remove('dark');
+      } else {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light', 'light-mode');
+      }
+    })();
+  </script>
+</head>
+
+<body class="rank-page-body">
+  <!-- Top Navigation Header -->
+  <header class="rank-header-nav">
+    <a href="/index.html" class="rank-brand-logo">
+      <img src="/assets/logo.png" alt="Hongtai Logo">
+      <span>Hongtai Chinese</span>
+    </a>
+
+    <div class="rank-nav-right">
+      <a href="/index.html" class="rank-nav-btn"><i class="fa-solid fa-house"></i> Trang Chủ</a>
+      <a href="/quiz-game.html" class="rank-nav-btn"><i class="fa-solid fa-gamepad"></i> Quiz Game</a>
+      <button id="theme-toggle-btn" class="rank-theme-btn" title="Đổi giao diện Sáng/Tối">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Rank Ceremony Container -->
+  <main class="rank-main-wrapper">
+    <div class="leaderboard-modal-content rank-modal-standalone">
+      
+      <!-- Header with Official Mascot Dragon -->
+      <div class="lb-modal-header">
+        <img src="/assets/hongtai_dragon_mascot.png" class="lb-mascot-img" alt="HongTai Dragon Mascot">
+        <div>
+          <h1 class="lb-title">🏆 LỄ TRAO GIẢI BẢNG XẾP HẠNG HỌC VIÊN</h1>
+          <div class="lb-subtitle">Vinh danh Top Học viên xuất sắc nhất Tiếng Trung HongTai</div>
+        </div>
+      </div>
+
+      <!-- Dynamic Content Body -->
+      <div id="leaderboard-list-container" class="lb-body-container">
+        <div style="text-align: center; color: var(--text-muted, #94a3b8); padding: 40px;">
+          <i class="fa-solid fa-spinner fa-spin fa-2x"></i><br><br>Đang tải bục vinh quang từ Server...
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>

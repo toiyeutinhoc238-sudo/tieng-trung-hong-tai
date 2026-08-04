@@ -6721,6 +6721,142 @@ html.dark .leaderboard-item {
   font-size: 0.9rem;
 }
 
+/* ──────── STANDALONE RANK.HTML STYLES ──────── */
+.rank-page-body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.rank-header-nav {
+  height: 64px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+html.light-mode .rank-header-nav,
+html:not(.dark) .rank-header-nav {
+  background: rgba(255, 255, 255, 0.72) !important;
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.85) !important;
+}
+
+html.dark .rank-header-nav {
+  background: rgba(15, 23, 42, 0.75) !important;
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+.rank-brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 1.15rem;
+}
+
+.rank-brand-logo img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+}
+
+html.light-mode .rank-brand-logo span,
+html:not(.dark) .rank-brand-logo span {
+  color: #0f172a !important;
+}
+
+html.dark .rank-brand-logo span {
+  color: #ffffff !important;
+}
+
+.rank-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rank-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+html.light-mode .rank-nav-btn,
+html:not(.dark) .rank-nav-btn {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.95) !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 12px rgba(31, 38, 135, 0.08) !important;
+}
+
+html.dark .rank-nav-btn {
+  background: rgba(30, 41, 59, 0.7) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+.rank-nav-btn:hover {
+  transform: translateY(-2px);
+}
+
+.rank-theme-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  font-size: 1.1rem;
+  transition: all 0.2s ease;
+}
+
+html.light-mode .rank-theme-btn,
+html:not(.dark) .rank-theme-btn {
+  background: rgba(255, 255, 255, 0.85) !important;
+  color: #d97706 !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.95) !important;
+}
+
+html.dark .rank-theme-btn {
+  background: rgba(30, 41, 59, 0.8) !important;
+  color: #fbbf24 !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.rank-main-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+}
+
+.rank-modal-standalone {
+  margin: 0 auto;
+  max-width: 720px !important;
+}
+
+.rank-modal-standalone .lb-close-btn {
+  display: none !important;
+}
+
 /* ─── LIGHT MODE EXTENDED: Game History modal ─── */
 html.light-mode #gameHistoryModal .modal-content,
 html.light-mode .modal-card {
