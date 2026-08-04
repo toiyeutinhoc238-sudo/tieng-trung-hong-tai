@@ -6995,7 +6995,7 @@ function startStudyTimer() {
           const remMins = mins % 60;
           zubiStudyTime.textContent = remMins > 0 ? `${hrs} giờ ${remMins} phút` : `${hrs} giờ`;
         } else {
-          const displayMins = (totalSecs > 0 && mins === 0) ? 1 : mins;
+          const displayMins = Math.round(totalSecs / 60);
           zubiStudyTime.textContent = `${displayMins} phút`;
         }
       }
@@ -7129,7 +7129,7 @@ function renderCourseCompletionDashboard() {
       const remMins = mins % 60;
       zubiStudyTime.textContent = remMins > 0 ? `${hrs} giờ ${remMins} phút` : `${hrs} giờ`;
     } else {
-      const displayMins = (totalSecs > 0 && mins === 0) ? 1 : mins;
+      const displayMins = Math.round(totalSecs / 60);
       zubiStudyTime.textContent = `${displayMins} phút`;
     }
   }
@@ -7550,7 +7550,7 @@ window.openZubiStatDetail = function (type) {
     iconEl.innerHTML = '<i class="fa-solid fa-clock"></i>';
 
     const totalCurrentSecs = userStudyTime + sessionStudyTime;
-    const mins = Math.floor(totalCurrentSecs / 60);
+    const mins = Math.round(totalCurrentSecs / 60);
     const hrs = Math.floor(mins / 60);
     const remMins = mins % 60;
     const timeDisplay = hrs > 0 ? `${hrs} giờ ${remMins} phút` : `${mins} phút`;
