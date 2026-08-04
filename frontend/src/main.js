@@ -3948,10 +3948,14 @@ window.renderRoadmapLearningList = function() {
     item.onmouseenter = () => { if (currentRoadmapLearningIndex !== index) { item.style.transform = 'translateY(-2px)'; item.style.background = 'rgba(255,255,255,0.05)'; item.style.borderColor = 'rgba(255,255,255,0.1)'; } };
     item.onmouseleave = () => { if (currentRoadmapLearningIndex !== index) { item.style.transform = 'translateY(0)'; item.style.background = 'rgba(255,255,255,0.02)'; item.style.borderColor = 'rgba(255,255,255,0.05)'; } };
 
+    const hz = w.word || w.hanzi || '---';
+    const py = w.pinyin || '';
+    const mn = w.meaning || '';
+
     item.innerHTML = `
-      <div style="font-family: var(--font-hanzi); font-size: 1.6rem; color: var(--text-color); line-height: 1.2;">${w.hanzi}</div>
-      <div style="font-size: 0.9rem; color: var(--text-muted); font-family: var(--font-pinyin); letter-spacing: 0.5px;">${w.pinyin}</div>
-      <div style="font-size: 0.95rem; color: var(--text-color); opacity: 0.9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 4px;">${w.meaning}</div>
+      <div style="font-family: var(--font-hanzi); font-size: 1.6rem; color: var(--text-color); line-height: 1.2;">${hz}</div>
+      <div style="font-size: 0.9rem; color: var(--text-muted); font-family: var(--font-pinyin); letter-spacing: 0.5px;">${py}</div>
+      <div style="font-size: 0.95rem; color: var(--text-color); opacity: 0.9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 4px;">${mn}</div>
     `;
     item.onclick = () => showLearningFlashcard(index);
     grid.appendChild(item);
@@ -3966,19 +3970,25 @@ window.showLearningFlashcard = function(index) {
   const flashcard = document.getElementById('roadmap-learning-flashcard');
   if (!flashcard) return;
 
+  const hz = w.word || w.hanzi || '---';
+  const py = w.pinyin || '---';
+  const hv = w.hanviet || w.category || w.word_type || '---';
+  const mn = w.meaning || '---';
+  const ex = w.example_zh ? `${w.example_zh} (${w.example_vi || ''})` : (w.explanation || w.usage || '');
+
   // Add a small animation effect
   flashcard.style.opacity = '0';
   flashcard.style.transform = 'scale(0.98)';
   
   setTimeout(() => {
     flashcard.innerHTML = `
-      <div style="font-family: var(--font-hanzi); font-size: 5rem; color: var(--text-color); margin-bottom: 5px; font-weight: 500; line-height: 1.2;">${w.hanzi}</div>
-      <div style="font-family: var(--font-pinyin); font-size: 1.8rem; color: var(--primary-color); margin-bottom: 24px; font-weight: 500; letter-spacing: 1px;">${w.pinyin}</div>
-      <div style="font-size: 1.2rem; color: var(--text-color); margin-bottom: 18px; background: rgba(255,255,255,0.08); padding: 8px 24px; border-radius: 99px; border: 1px solid rgba(255,255,255,0.1); letter-spacing: 0.5px;">${w.hanviet || '---'}</div>
-      <div style="font-size: 1.4rem; color: var(--text-color); margin-bottom: 12px; font-weight: 600;">${w.meaning}</div>
-      <div style="font-size: 1.1rem; color: var(--text-muted); font-style: italic; max-width: 90%; margin-bottom: 30px; line-height: 1.5;">${w.usage || ''}</div>
+      <div style="font-family: var(--font-hanzi); font-size: 5rem; color: var(--text-color); margin-bottom: 5px; font-weight: 500; line-height: 1.2;">${hz}</div>
+      <div style="font-family: var(--font-pinyin); font-size: 1.8rem; color: var(--primary-color); margin-bottom: 24px; font-weight: 500; letter-spacing: 1px;">${py}</div>
+      <div style="font-size: 1.2rem; color: var(--text-color); margin-bottom: 18px; background: rgba(255,255,255,0.08); padding: 8px 24px; border-radius: 99px; border: 1px solid rgba(255,255,255,0.1); letter-spacing: 0.5px;">${hv}</div>
+      <div style="font-size: 1.4rem; color: var(--text-color); margin-bottom: 12px; font-weight: 600;">${mn}</div>
+      <div style="font-size: 1.1rem; color: var(--text-muted); font-style: italic; max-width: 90%; margin-bottom: 30px; line-height: 1.5;">${ex}</div>
       
-      <button onclick="speakText('${w.hanzi.replace(/'/g, "\\'")}')" style="background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)); color: white; border: none; width: 56px; height: 56px; border-radius: 50%; font-size: 1.4rem; cursor: pointer; box-shadow: 0 8px 20px rgba(var(--primary-rgb), 0.4); transition: all 0.2s; display: flex; align-items: center; justify-content: center;" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'" onmouseleave="this.style.transform='scale(1)'">
+      <button onclick="speakText('${hz.replace(/'/g, "\\'")}')" style="background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)); color: white; border: none; width: 56px; height: 56px; border-radius: 50%; font-size: 1.4rem; cursor: pointer; box-shadow: 0 8px 20px rgba(var(--primary-rgb), 0.4); transition: all 0.2s; display: flex; align-items: center; justify-content: center;" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'" onmouseleave="this.style.transform='scale(1)'">
         <i class="fa-solid fa-volume-high"></i>
       </button>
     `;
