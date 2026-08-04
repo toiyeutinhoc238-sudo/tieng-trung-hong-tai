@@ -4183,14 +4183,6 @@ window.showLearningFlashcard = function(index) {
     renderLearningTianzige(hz);
   }, 50);
 
-    flashcard.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
-    flashcard.style.opacity = '1';
-    flashcard.style.transform = 'scale(1)';
-
-    // Render Tianzige HanziWriter
-    renderLearningTianzige(hz);
-  }, 50);
-
   // Highlight list item
   const listItems = document.querySelectorAll('#roadmap-learning-vocab-list .learning-vocab-item');
   listItems.forEach((item, i) => {
