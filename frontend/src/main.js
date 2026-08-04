@@ -3902,6 +3902,7 @@ window.openRoadmapLearningView = function (ver, level) {
   let targetLevel = /^\d+$/.test(level.toString()) ? parseInt(level) : level.toString();
 
   // Fetch words for this level
+  const builtInVocabsAll = vocabList.filter(w => !w.isCustom);
   currentRoadmapLearningVocabs = builtInVocabsAll.filter(w => {
     const curr2 = (w.curriculum || 'hsk').toLowerCase();
     const ver2 = (w.hskVersion || '3.0').toLowerCase();
