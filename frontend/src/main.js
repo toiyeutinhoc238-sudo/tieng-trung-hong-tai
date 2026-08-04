@@ -3971,14 +3971,36 @@ window.renderRoadmapLearningList = function() {
 };
 
 let currentRoadmapHanziWriter = null;
+let currentRoadmapWord = '';
+let currentRoadmapCharIndex = 0;
+let roadmapStrokeTimeout = null;
 
 function renderLearningTianzige(word) {
+  if (roadmapStrokeTimeout) clearTimeout(roadmapStrokeTimeout);
+  currentRoadmapWord = word || '';
+  currentRoadmapCharIndex = 0;
+
+  playRoadmapSequentialChar();
+}
+
+function playRoadmapSequentialChar() {
   const container = document.getElementById('roadmap-tianzige-target');
-  if (!container) return;
+  if (!container || !currentRoadmapWord || currentRoadmapWord === '---') return;
+
+  const cleanChars = Array.from(currentRoadmapWord).filter(c => /[\u4e00-\u9fa5]/.test(c));
+  if (cleanChars.length === 0) {
+    container.innerHTML = `<span style="font-size: 4.5rem; font-weight: 800; color: #dc2626;">${currentRoadmapWord}</span>`;
+    return;
+  }
+
+  if (currentRoadmapCharIndex >= cleanChars.length) {
+    currentRoadmapCharIndex = 0;
+  }
+
+  const charToDraw = cleanChars[currentRoadmapCharIndex];
   container.innerHTML = '';
 
-  if (window.HanziWriter && word && word !== '---') {
-    const charToDraw = word[0];
+  if (window.HanziWriter) {
     try {
       currentRoadmapHanziWriter = HanziWriter.create('roadmap-tianzige-target', charToDraw, {
         width: 155,
@@ -3990,19 +4012,29 @@ function renderLearningTianzige(word) {
         outlineColor: '#fecdd3',
         drawingWidth: 16
       });
-      currentRoadmapHanziWriter.animateCharacter().catch(() => {});
+
+      currentRoadmapHanziWriter.animateCharacter({
+        onComplete: function() {
+          currentRoadmapCharIndex++;
+          if (currentRoadmapCharIndex < cleanChars.length) {
+            roadmapStrokeTimeout = setTimeout(() => {
+              playRoadmapSequentialChar();
+            }, 600);
+          }
+        }
+      }).catch(() => {});
     } catch (e) {
-      container.innerHTML = `<span style="font-size: 4.5rem; font-weight: 800; color: #dc2626;">${word}</span>`;
+      container.innerHTML = `<span style="font-size: 4.5rem; font-weight: 800; color: #dc2626;">${charToDraw}</span>`;
     }
   } else {
-    container.innerHTML = `<span style="font-size: 4.5rem; font-weight: 800; color: #dc2626;">${word}</span>`;
+    container.innerHTML = `<span style="font-size: 4.5rem; font-weight: 800; color: #dc2626;">${charToDraw}</span>`;
   }
 }
 
 window.animateRoadmapStroke = function() {
-  if (currentRoadmapHanziWriter) {
-    currentRoadmapHanziWriter.animateCharacter().catch(() => {});
-  }
+  if (roadmapStrokeTimeout) clearTimeout(roadmapStrokeTimeout);
+  currentRoadmapCharIndex = 0;
+  playRoadmapSequentialChar();
 };
 
 let currentRoadmapTargetAns = '';
