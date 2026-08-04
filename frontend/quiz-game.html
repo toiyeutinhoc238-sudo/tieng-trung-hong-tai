@@ -16,7 +16,7 @@
   <script>
     (function () {
       var t = localStorage.getItem('theme') || 'dark';
-      var bgUrl = t === 'light' ? "url('./src/assets/app_bg_day.png')" : "url('./src/assets/app_bg_night.png')";
+      var bgUrl = t === 'light' ? "url('/assets/app_bg_day.png')" : "url('/assets/app_bg_night.png')";
       document.documentElement.style.setProperty('background-image', bgUrl, 'important');
       document.documentElement.style.setProperty('background-size', 'cover', 'important');
       document.documentElement.style.setProperty('background-position', 'center center', 'important');
@@ -50,7 +50,7 @@
 
     window.toggleTheme = function () {
       var isLight = document.documentElement.classList.contains('light-mode') || document.documentElement.classList.contains('light');
-      var bgUrl = !isLight ? "url('./src/assets/app_bg_day.png')" : "url('./src/assets/app_bg_night.png')";
+      var bgUrl = !isLight ? "url('/assets/app_bg_day.png')" : "url('/assets/app_bg_night.png')";
       document.documentElement.style.setProperty('background-image', bgUrl, 'important');
       document.body.style.setProperty('background-image', bgUrl, 'important');
       
@@ -107,20 +107,20 @@
 
     html.light-mode .theme-toggle-btn-top,
     body.light-mode .theme-toggle-btn-top {
-      background: #ffffff !important;
-      border: 1px solid #cbd5e1 !important;
+      background: rgba(255, 255, 255, 0.85) !important;
+      border: 1px solid rgba(203, 213, 225, 0.8) !important;
       color: #0f172a !important;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
     }
 
     body {
-      background: url('./src/assets/app_bg_night.png') no-repeat center center fixed / cover !important;
+      background: url('/assets/app_bg_night.png') no-repeat center center fixed / cover !important;
       font-family: 'Quicksand', sans-serif;
     }
 
     html.light-mode body,
     body.light-mode {
-      background: url('./src/assets/app_bg_day.png') no-repeat center center fixed / cover !important;
+      background: url('/assets/app_bg_day.png') no-repeat center center fixed / cover !important;
       color: #0f172a !important;
     }
 
@@ -213,7 +213,7 @@
     }
 
     body {
-      background-color: #090909;
+      background: url('/assets/app_bg_night.png') no-repeat center center fixed / cover !important;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -222,36 +222,40 @@
       color: #fff;
     }
 
-    /* Main App Container */
+    /* Main App Container (Dark Liquid Glass) */
     .app-container {
       width: 100%;
       max-width: 1000px;
       height: 100%;
       max-height: 800px;
-      background: #222222;
+      background: rgba(11, 15, 25, 0.5) !important;
+      backdrop-filter: blur(28px) saturate(200%) !important;
+      -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.18) !important;
       display: flex;
       flex-direction: column;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
     }
 
     @media (min-width: 1024px) {
       .app-container {
-        border-radius: 16px;
+        border-radius: 20px;
         height: 95vh;
       }
     }
 
-    /* Modals overlays */
+    /* Modals overlays (Dark Liquid Glass) */
     .modal-overlay {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(5px);
+      background: rgba(0, 0, 0, 0.45) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -260,16 +264,19 @@
     }
 
     .modal-content {
-      background: #fff;
-      color: #333;
-      border-radius: 20px;
-      padding: 26px 28px;
+      background: rgba(15, 23, 42, 0.72) !important;
+      backdrop-filter: blur(32px) saturate(200%) !important;
+      -webkit-backdrop-filter: blur(32px) saturate(200%) !important;
+      color: #ffffff !important;
+      border-radius: 24px;
+      padding: 28px 30px;
       width: 100%;
-      max-width: 500px;
+      max-width: 520px;
       max-height: 92vh;
       overflow-y: auto;
       text-align: center;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.22) !important;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
     }
 
     .modal-title {
