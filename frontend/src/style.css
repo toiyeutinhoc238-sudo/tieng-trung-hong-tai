@@ -6223,32 +6223,65 @@ body.light-mode .app-sidebar {
 html.light-mode .sidebar-menu-item,
 html.light-mode .sidebar-item,
 html.light-mode .sidebar-subitem,
-html.light-mode .sidebar-dropdown-toggle {
-  color: #334155 !important;
+html.light-mode .sidebar-dropdown-toggle,
+html.light .sidebar-item,
+html.light .sidebar-subitem,
+html:not(.dark) .sidebar-item,
+html:not(.dark) .sidebar-subitem {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+}
+
+html.light-mode .sidebar-item i,
+html.light-mode .sidebar-subitem i,
+html.light .sidebar-item i,
+html:not(.dark) .sidebar-item i {
+  color: #1e293b !important;
+  font-weight: 700 !important;
+}
+
+html.light-mode .sidebar-section-label,
+html.light .sidebar-section-label,
+html:not(.dark) .sidebar-section-label {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.04em !important;
+}
+
+html.light-mode .sidebar-header span,
+html.light .sidebar-header span,
+html:not(.dark) .sidebar-header span {
+  color: #0f172a !important;
+  font-weight: 900 !important;
 }
 
 html.light-mode .sidebar-menu-item:hover,
 html.light-mode .sidebar-item:hover,
 html.light-mode .sidebar-subitem:hover,
 html.light-mode .sidebar-dropdown-toggle:hover {
-  background: rgba(37, 99, 235, 0.12) !important;
-  border: 1px solid rgba(37, 99, 235, 0.2) !important;
+  background: rgba(37, 99, 235, 0.14) !important;
+  border: 1px solid rgba(37, 99, 235, 0.25) !important;
   color: #1d4ed8 !important;
 }
 
 html.light-mode .sidebar-menu-item.active,
 html.light-mode .sidebar-item.active,
 html.light-mode .sidebar-subitem.active {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+  background: linear-gradient(135deg, #1d4ed8, #1e40af) !important;
   color: #ffffff !important;
   font-weight: 800 !important;
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35) !important;
+  box-shadow: 0 4px 14px rgba(29, 78, 216, 0.4) !important;
+}
+
+html.light-mode .sidebar-item.active i,
+html.light-mode .sidebar-subitem.active i {
+  color: #ffffff !important;
 }
 
 html.light-mode .sidebar-profile-card {
-  background: rgba(255, 255, 255, 0.8) !important;
+  background: rgba(255, 255, 255, 0.85) !important;
   backdrop-filter: blur(20px) saturate(180%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.95) !important;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
   color: #0f172a !important;
 }
@@ -6259,7 +6292,8 @@ html.light-mode .sidebar-profile-card .user-name {
 }
 
 html.light-mode .sidebar-profile-card .user-sub {
-  color: #64748b !important;
+  color: #475569 !important;
+  font-weight: 600 !important;
 }
 
 html.light-mode .sidebar-profile-card:hover {
