@@ -150,20 +150,13 @@ function applyThemeClass(isDark) {
   document.documentElement.style.setProperty('background-attachment', 'fixed', 'important');
   document.documentElement.style.setProperty('background-repeat', 'no-repeat', 'important');
 
-  if (document.body) {
-    document.body.style.setProperty('background-image', bgUrl, 'important');
-    document.body.style.setProperty('background-size', 'cover', 'important');
-    document.body.style.setProperty('background-position', 'center center', 'important');
-    document.body.style.setProperty('background-attachment', 'fixed', 'important');
-    document.body.style.setProperty('background-repeat', 'no-repeat', 'important');
-  }
-
   if (isDark) {
     document.documentElement.classList.add('dark');
     document.documentElement.classList.remove('light', 'light-mode');
     if (document.body) {
       document.body.classList.remove('light', 'light-mode');
       document.body.classList.add('dark');
+      document.body.style.setProperty('background-image', bgUrl, 'important');
     }
   } else {
     document.documentElement.classList.remove('dark');
@@ -171,6 +164,7 @@ function applyThemeClass(isDark) {
     if (document.body) {
       document.body.classList.remove('dark');
       document.body.classList.add('light-mode');
+      document.body.style.setProperty('background-image', bgUrl, 'important');
     }
   }
 }
@@ -206,6 +200,14 @@ function toggleTheme() {
   }
 }
 window.toggleTheme = toggleTheme;
+
+// Global listener for theme toggle button across all pages
+document.addEventListener('click', (e) => {
+  const toggleBtn = e.target.closest('#theme-toggle-btn, .rank-theme-btn');
+  if (toggleBtn) {
+    toggleTheme();
+  }
+});
 
 // --- TEXT TO SPEECH (TTS) SETUP ---
 let speechVoice = localStorage.getItem('speech_voice') || 'baidu-female';
