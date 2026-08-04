@@ -6995,7 +6995,8 @@ function startStudyTimer() {
           const remMins = mins % 60;
           zubiStudyTime.textContent = remMins > 0 ? `${hrs} giờ ${remMins} phút` : `${hrs} giờ`;
         } else {
-          zubiStudyTime.textContent = `${mins} phút`;
+          const displayMins = (totalSecs > 0 && mins === 0) ? 1 : mins;
+          zubiStudyTime.textContent = `${displayMins} phút`;
         }
       }
 
@@ -7128,7 +7129,8 @@ function renderCourseCompletionDashboard() {
       const remMins = mins % 60;
       zubiStudyTime.textContent = remMins > 0 ? `${hrs} giờ ${remMins} phút` : `${hrs} giờ`;
     } else {
-      zubiStudyTime.textContent = `${mins} phút`;
+      const displayMins = (totalSecs > 0 && mins === 0) ? 1 : mins;
+      zubiStudyTime.textContent = `${displayMins} phút`;
     }
   }
 

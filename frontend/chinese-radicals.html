@@ -354,7 +354,7 @@
       box-shadow: 0 16px 36px rgba(37, 99, 235, 0.22) !important;
     }
 
-    /* Flashcard Modal Container (Đúng 100% mẫu ảnh thiết kế) */
+    /* Flashcard Modal Container */
     .flashcard-modal-content {
       background: #ffffff;
       border-radius: 24px;
@@ -368,10 +368,43 @@
     }
 
     html.dark .flashcard-modal-content {
-      background: rgba(15, 23, 42, 0.92) !important;
-      border-color: rgba(255,255,255,0.18) !important;
+      background: #0f172a !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
       color: #ffffff !important;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.5) !important;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.6) !important;
+    }
+
+    /* Dark mode text readability fixes */
+    .rad-text-primary {
+      color: #0f172a;
+    }
+    html.dark .rad-text-primary {
+      color: #f8fafc !important;
+    }
+
+    .rad-text-sub {
+      color: #475569;
+    }
+    html.dark .rad-text-sub {
+      color: #cbd5e1 !important;
+    }
+
+    .rad-info-box {
+      background: rgba(37, 99, 235, 0.1);
+      border: 1px solid rgba(37, 99, 235, 0.25);
+      color: #0f172a;
+    }
+    html.dark .rad-info-box {
+      background: rgba(37, 99, 235, 0.22) !important;
+      border-color: rgba(37, 99, 235, 0.4) !important;
+      color: #f8fafc !important;
+    }
+
+    .rad-variant-text {
+      color: #334155;
+    }
+    html.dark .rad-variant-text {
+      color: #e2e8f0 !important;
     }
   </style>
 </head>
@@ -426,10 +459,10 @@
     <div id="radicals-content-area"></div>
   </div>
 
-  <!-- Radical Detail Flashcard Modal (Chế độ xem thẻ Flashcard chuẩn hệt mẫu ảnh) -->
-  <div id="radical-detail-modal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.78); backdrop-filter: blur(14px); z-index: 99999; align-items: center; justify-content: center; padding: 16px;">
+  <!-- Radical Detail Flashcard Modal -->
+  <div id="radical-detail-modal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.82); backdrop-filter: blur(14px); z-index: 99999; align-items: center; justify-content: center; padding: 16px;">
     <div class="flashcard-modal-content">
-      <button onclick="document.getElementById('radical-detail-modal').style.display='none'" style="position: absolute; top: 18px; right: 20px; background: transparent; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" onhover="this.style.color='#ef4444'">&times;</button>
+      <button onclick="document.getElementById('radical-detail-modal').style.display='none'" style="position: absolute; top: 18px; right: 20px; background: transparent; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">&times;</button>
       
       <div id="radical-detail-card-body"></div>
     </div>

@@ -294,7 +294,7 @@ window.prevRadicalFlashcard = function() {
   }
 };
 
-// Render Flashcard Card (Đúng 100% mẫu thiết kế trong hình)
+// Render Flashcard Card (Tương thích sắc nét cả Chế độ Sáng & Tối)
 function renderFlashcardCard(r) {
   if (!r) return;
 
@@ -309,22 +309,22 @@ function renderFlashcardCard(r) {
 
   cardBody.innerHTML = `
     <!-- Top Progress Bar & Category Counter -->
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid rgba(0,0,0,0.08); padding-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid rgba(148, 163, 184, 0.2); padding-bottom: 12px; flex-wrap: wrap; gap: 8px;">
       <div style="display: flex; align-items: center; gap: 8px;">
         <span style="background: rgba(37, 99, 235, 0.12); color: #2563eb; padding: 4px 12px; border-radius: 99px; font-weight: 800; font-size: 0.85rem; border: 1px solid rgba(37, 99, 235, 0.25);">
           ${r.category || 'Bộ thủ'}
         </span>
-        <span style="font-weight: 700; font-size: 0.92rem; color: #64748b;">
+        <span style="font-weight: 700; font-size: 0.92rem;" class="rad-text-sub">
           Thẻ ${currNum} / ${total}
         </span>
       </div>
 
-      <div style="font-size: 0.82rem; font-weight: 600; color: #94a3b8; display: flex; align-items: center; gap: 6px;">
+      <div style="font-size: 0.82rem; font-weight: 600; display: flex; align-items: center; gap: 6px;" class="rad-text-sub">
         <i class="fa-solid fa-keyboard"></i> Phím mũi tên &larr; &rarr; để đổi thẻ
       </div>
     </div>
 
-    <!-- MAIN CARD CONTENT (Khai báo đúng 100% cấu trúc mẫu ảnh) -->
+    <!-- MAIN CARD CONTENT -->
     <div style="display: flex; gap: 28px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; text-align: left; width: 100%;">
       
       <!-- LEFT COLUMN: TIANZIGE (CÁCH VIẾT) -->
@@ -335,7 +335,7 @@ function renderFlashcardCard(r) {
 
         <div id="rad-tianzige-box" style="width: 170px; height: 170px; background: #ffffff; border: 2px solid #dc2626; border-radius: 16px; position: relative; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: center;"></div>
 
-        <button onclick="window.animateRadicalStroke()" style="margin-top: 14px; background: rgba(37, 99, 235, 0.12); color: #2563eb; border: 1px solid rgba(37, 99, 235, 0.28); padding: 8px 18px; border-radius: 99px; font-weight: 800; cursor: pointer; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1); transition: all 0.2s;" onhover="this.style.background='#2563eb'">
+        <button onclick="window.animateRadicalStroke()" style="margin-top: 14px; background: rgba(37, 99, 235, 0.12); color: #2563eb; border: 1px solid rgba(37, 99, 235, 0.28); padding: 8px 18px; border-radius: 99px; font-weight: 800; cursor: pointer; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1); transition: all 0.2s;">
           <i class="fa-solid fa-pen-nib"></i> Phát lại nét
         </button>
       </div>
@@ -345,7 +345,7 @@ function renderFlashcardCard(r) {
         
         <!-- Line 1: Hán-Việt -->
         <div style="font-size: 1.35rem; font-weight: 800; color: #2563eb;">
-          Hán-Việt: <span style="color: var(--text-heading, #0f172a); text-transform: uppercase; margin-left: 4px;">${r.name}</span>
+          Hán-Việt: <span class="rad-text-primary" style="text-transform: uppercase; margin-left: 4px;">${r.name}</span>
         </div>
 
         <!-- Line 2: Nghĩa -->
@@ -365,14 +365,14 @@ function renderFlashcardCard(r) {
         </div>
 
         <!-- Line 4: Bộ thủ Box -->
-        <div style="background: rgba(37, 99, 235, 0.1); border: 1px solid rgba(37, 99, 235, 0.25); padding: 10px 16px; border-radius: 12px; font-weight: 800; font-size: 1.15rem; color: #0f172a; display: flex; align-items: center; gap: 8px;">
+        <div class="rad-info-box" style="padding: 10px 16px; border-radius: 12px; font-weight: 800; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">
           Bộ thủ: <span style="font-family: var(--font-hanzi); font-size: 1.5rem; color: #2563eb; font-weight: 800;">${r.radical}</span>
-          ${r.variant ? `<span style="font-weight: 600; color: #334155; font-size: 1.05rem;">(Biến thể: <span style="font-family: var(--font-hanzi); color: #2563eb; font-weight: 700; font-size: 1.3rem;">${r.variant}</span> )</span>` : ''}
+          ${r.variant ? `<span class="rad-variant-text" style="font-weight: 600; font-size: 1.05rem;">(Biến thể: <span style="font-family: var(--font-hanzi); color: #2563eb; font-weight: 700; font-size: 1.3rem;">${r.variant}</span> )</span>` : ''}
         </div>
 
         <!-- Line 5: Cách dùng -->
         ${r.note ? `
-          <div style="font-size: 0.95rem; color: #475569; font-style: italic; line-height: 1.5; display: flex; align-items: flex-start; gap: 6px;">
+          <div class="rad-text-sub" style="font-size: 0.95rem; font-style: italic; line-height: 1.5; display: flex; align-items: flex-start; gap: 6px;">
             <i class="fa-solid fa-circle-info" style="color: #2563eb; font-size: 1rem; margin-top: 2px;"></i>
             <span><strong>Cách dùng:</strong> ${r.note}</span>
           </div>
@@ -382,16 +382,16 @@ function renderFlashcardCard(r) {
         ${r.example ? `
           <div style="border-left: 3.5px solid #2563eb; padding-left: 14px; margin-top: 4px;">
             <div style="font-size: 0.85rem; font-weight: 800; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">VÍ DỤ:</div>
-            <div style="font-size: 1.05rem; color: #0f172a; font-weight: 700;">${r.example}</div>
+            <div class="rad-text-primary" style="font-size: 1.05rem; font-weight: 700;">${r.example}</div>
           </div>
         ` : ''}
 
       </div>
     </div>
 
-    <!-- BOTTOM NAVIGATION CONTROLS (Thẻ trước / Phát âm / Thẻ tiếp) -->
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 28px; border-top: 1px solid rgba(0,0,0,0.08); padding-top: 18px; flex-wrap: wrap; gap: 12px;">
-      <button onclick="window.prevRadicalFlashcard()" style="background: rgba(255, 255, 255, 0.9); color: #334155; border: 1.5px solid #cbd5e1; padding: 10px 20px; border-radius: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.05);" onhover="this.style.borderColor='#2563eb'">
+    <!-- BOTTOM NAVIGATION CONTROLS -->
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 28px; border-top: 1px solid rgba(148, 163, 184, 0.2); padding-top: 18px; flex-wrap: wrap; gap: 12px;">
+      <button onclick="window.prevRadicalFlashcard()" style="background: rgba(255, 255, 255, 0.9); color: #334155; border: 1.5px solid #cbd5e1; padding: 10px 20px; border-radius: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
         <i class="fa-solid fa-chevron-left"></i> Thẻ trước
       </button>
 
