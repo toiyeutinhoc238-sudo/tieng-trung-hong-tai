@@ -3737,28 +3737,24 @@ function renderGamifiedRoadmapPath() {
       return !curr.includes('yct') && !ver.includes('yct') && (ver.includes('3') || ver === '3.0' || w.hskVersion === '3.0') && matchLevel(w.level, item.level);
     });
 
-    const totalWords = levelWords.length;
-    const memorizedWords = levelWords.filter(w => w.isMemorized).length;
-    const pct = totalWords > 0 ? Math.round((memorizedWords / totalWords) * 100) : 0;
-
+    const isUnlocked = isLevelUnlocked(hskVer, item.level, idx, levelsData, builtInVocabs);
     const isCompleted = pct === 100 && totalWords > 0;
     const isStarted = pct > 0 || idx === 0;
+    const prevItemName = idx > 0 ? levelsData[idx - 1].name : '';
 
     let statusBadge = '';
     if (isCompleted) {
       statusBadge = `<span class="roadmap-badge done"><i class="fa-solid fa-circle-check"></i> Hoàn thành 100%</span>`;
     } else if (pct > 0) {
       statusBadge = `<span class="roadmap-badge active-pulse"><i class="fa-solid fa-bolt"></i> Đang học ${pct}%</span>`;
-    } else if (idx === 0) {
+    } else if (isUnlocked) {
       statusBadge = `<span class="roadmap-badge active-pulse"><i class="fa-solid fa-play"></i> Bắt đầu học</span>`;
     } else {
-      statusBadge = `<span class="roadmap-badge locked"><i class="fa-solid fa-lock"></i> Chưa mở khóa</span>`;
+      statusBadge = `<span class="roadmap-badge locked" style="background: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3);"><i class="fa-solid fa-lock"></i> Chưa mở khóa</span>`;
     }
 
-    const iconClass = isCompleted ? 'fa-check' : (pct > 0 ? 'fa-graduation-cap' : (idx === 0 ? 'fa-book-open' : 'fa-lock'));
-    const nodeState = isCompleted ? 'node-done' : (isStarted ? 'node-active' : 'node-locked');
+    const nodeState = isCompleted ? 'node-done' : (isUnlocked ? 'node-active' : 'node-locked');
 
-    const posClass = positions[idx % positions.length];
     const crownHtml = isCompleted ? `<div style="position: absolute; top: -14px; font-size: 1.2rem; color: #fbbf24; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); z-index: 10;"><i class="fa-solid fa-crown"></i></div>` : '';
     const starsHtml = `<div style="display: flex; gap: 3px; position: absolute; bottom: -16px; z-index: 10;">
       <i class="fa-solid fa-star" style="font-size: 0.75rem; color: ${pct >= 33 ? '#fbbf24' : '#64748b'}; text-shadow: 0 1px 2px rgba(0,0,0,0.5);"></i>
@@ -3766,29 +3762,42 @@ function renderGamifiedRoadmapPath() {
       <i class="fa-solid fa-star" style="font-size: 0.75rem; color: ${pct === 100 ? '#fbbf24' : '#64748b'}; text-shadow: 0 1px 2px rgba(0,0,0,0.5);"></i>
     </div>`;
 
+    let actionButtonsHtml = '';
+    if (isUnlocked) {
+      actionButtonsHtml = `
+        <button class="btn-node-start" style="background: ${item.color}; box-shadow: 0 4px 0 ${item.shadow || '#000000'}; border-bottom: none; color: ${item.textCol || '#ffffff'}; transition: all 0.2s; border-radius: 12px; font-weight: 700; padding: 12px 20px; font-size: 0.9rem;" onclick="goToRoadmapLevel('${hskVer}', '${item.level}')" onmousedown="this.style.transform='translateY(3px)'; this.style.boxShadow='0 1px 0 ${item.shadow || '#000000'}';" onmouseup="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 0 ${item.shadow || '#000000'}';" onmouseleave="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 0 ${item.shadow || '#000000'}';">
+          Khám Phá Cấp ${item.level} <i class="fa-solid fa-arrow-right"></i>
+        </button>
+        <button class="btn-node-start" style="background: rgba(255,255,255,0.1); width: auto;" onclick="window.location.href='/quiz-game.html?level=${item.level}&version=${hskVer}'" title="Thi trắc nghiệm">
+          <i class="fa-solid fa-gamepad"></i>
+        </button>
+      `;
+    } else {
+      actionButtonsHtml = `
+        <button class="btn-node-start btn-node-locked" style="background: rgba(100, 116, 139, 0.35); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; border-radius: 12px; font-weight: 700; padding: 12px 20px; font-size: 0.88rem; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="goToRoadmapLevel('${hskVer}', '${item.level}')">
+          <i class="fa-solid fa-lock" style="color: #fca5a5;"></i> Cần hoàn thành ${prevItemName} trước
+        </button>
+      `;
+    }
+
     html += `
       <div class="roadmap-node-item ${nodeState}">
         <div style="position: relative; display: flex; flex-direction: column; align-items: center;">
           ${crownHtml}
-          <div class="node-icon-circle" onclick="goToRoadmapLevel('${hskVer}', '${item.level}')">
-            <span class="node-num">${item.level}</span>
+          <div class="node-icon-circle ${!isUnlocked ? 'node-circle-locked' : ''}" onclick="goToRoadmapLevel('${hskVer}', '${item.level}')" style="${!isUnlocked ? 'background: #334155; border-color: #64748b; color: #94a3b8; cursor: pointer;' : ''}">
+            <span class="node-num">${!isUnlocked ? '<i class="fa-solid fa-lock" style="color: #cbd5e1;"></i>' : item.level}</span>
           </div>
           ${starsHtml}
         </div>
 
-        <div class="node-info-card">
+        <div class="node-info-card ${!isUnlocked ? 'card-locked-style' : ''}" style="${!isUnlocked ? 'opacity: 0.88; filter: grayscale(0.15);' : ''}">
           <div class="node-card-top">
             <span class="node-card-title">${item.name}</span>
             ${statusBadge}
           </div>
           <div class="node-card-sub">${item.desc} (${memorizedWords}/${totalWords} từ)</div>
           <div class="node-card-actions" style="display: flex; gap: 8px;">
-            <button class="btn-node-start" style="background: ${item.color}; box-shadow: 0 4px 0 ${item.shadow || '#000000'}; border-bottom: none; color: ${item.textCol || '#ffffff'}; transition: all 0.2s; border-radius: 12px; font-weight: 700; padding: 12px 20px; font-size: 0.9rem;" onclick="goToRoadmapLevel('${hskVer}', '${item.level}')" onmousedown="this.style.transform='translateY(3px)'; this.style.boxShadow='0 1px 0 ${item.shadow || '#000000'}';" onmouseup="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 0 ${item.shadow || '#000000'}';" onmouseleave="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 0 ${item.shadow || '#000000'}';">
-              Khám Phá Cấp ${item.level} <i class="fa-solid fa-arrow-right"></i>
-            </button>
-            <button class="btn-node-start" style="background: rgba(255,255,255,0.1); width: auto;" onclick="window.location.href='/quiz-game.html?level=${item.level}&version=${hskVer}'" title="Thi trắc nghiệm">
-              <i class="fa-solid fa-gamepad"></i>
-            </button>
+            ${actionButtonsHtml}
           </div>
         </div>
       </div>
@@ -3855,6 +3864,47 @@ function renderGamifiedRoadmapPath() {
 
 window.renderGamifiedRoadmapPath = renderGamifiedRoadmapPath;
 window.goToRoadmapLevel = function (ver, level) {
+  const hskVer = ver || activeRoadmapVersion || '3.0';
+  let levelsData = [];
+  if (hskVer === 'yct') {
+    levelsData = [
+      { level: 1, name: 'YCT Cấp 1' },
+      { level: 2, name: 'YCT Cấp 2' },
+      { level: 3, name: 'YCT Cấp 3' },
+      { level: 4, name: 'YCT Cấp 4' }
+    ];
+  } else if (hskVer === '2.0') {
+    levelsData = [
+      { level: 1, name: 'HSK 1 (2.0)' },
+      { level: 2, name: 'HSK 2 (2.0)' },
+      { level: 3, name: 'HSK 3 (2.0)' },
+      { level: 4, name: 'HSK 4 (2.0)' },
+      { level: 5, name: 'HSK 5 (2.0)' },
+      { level: 6, name: 'HSK 6 (2.0)' }
+    ];
+  } else {
+    levelsData = [
+      { level: 1, name: 'HSK 1 (3.0)' },
+      { level: 2, name: 'HSK 2 (3.0)' },
+      { level: 3, name: 'HSK 3 (3.0)' },
+      { level: 4, name: 'HSK 4 (3.0)' },
+      { level: 5, name: 'HSK 5 (3.0)' },
+      { level: 6, name: 'HSK 6 (3.0)' },
+      { level: '7-9', name: 'New HSK 7-9 (3.0)' }
+    ];
+  }
+
+  const nodeIndex = levelsData.findIndex(item => String(item.level) === String(level));
+  const builtInVocabs = vocabList.filter(w => !w.isCustom);
+  const unlocked = isLevelUnlocked(hskVer, level, nodeIndex >= 0 ? nodeIndex : 0, levelsData, builtInVocabs);
+
+  if (!unlocked) {
+    const prevItemName = nodeIndex > 0 ? levelsData[nodeIndex - 1].name : 'cấp trước';
+    const targetItemName = nodeIndex >= 0 ? levelsData[nodeIndex].name : `Cấp ${level}`;
+    showToast(`🔒 ${targetItemName} đang bị khóa! Bạn cần hoàn thành 100% từ vựng ở ${prevItemName} trước để mở khóa nhé! 🎯`, true);
+    return;
+  }
+
   // Set version
   if (ver === 'yct') {
     activeHskVersion = 'yct';
