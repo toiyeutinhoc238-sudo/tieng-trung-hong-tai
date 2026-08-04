@@ -67,12 +67,17 @@ window.switchRadicalPageTab = function(tabName) {
     }
   });
 
-  loadTabContent();
+  renderGridContent();
 };
 
-function loadTabContent() {
+// 1. RENDER DEFAULT GRID VIEW (HÌNH 1)
+function renderGridContent() {
+  const container = document.getElementById('radicals-content-area');
+  if (!container) return;
+
   if (currentTab === 'So sánh') {
-    currentFlashcardList = (radicalsData.comparisons || []).map((c, i) => ({
+    const compList = radicalsData.comparisons || [];
+    currentFlashcardList = compList.map((c, i) => ({
       id: `comp_${i}`,
       radical: `${c.rad1} / ${c.rad2}`,
       variant: '',
@@ -83,21 +88,122 @@ function loadTabContent() {
       example: c.example,
       category: 'So sánh'
     }));
+
+    let html = `
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <div style="background: rgba(37, 99, 235, 0.12); border: 1px solid rgba(37, 99, 235, 0.3); border-radius: 14px; padding: 14px 18px; color: var(--text-color); font-size: 0.93rem; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-circle-info" style="color: #3b82f6; font-size: 1.1rem;"></i>
+          <span>Tổng hợp 25 cặp bộ thủ có hình dáng tương đồng và bí quyết phân biệt chi tiết:</span>
+        </div>
+    `;
+
+    compList.forEach((c, idx) => {
+      html += `
+        <div class="rad-card" onclick="window.openRadicalDetailByIndex(${idx})">
+          <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.15); padding-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <span style="background: rgba(37, 99, 235, 0.2); color: #3b82f6; border: 1.5px solid #2563eb; padding: 6px 16px; border-radius: 10px; font-weight: 800; font-family: var(--font-hanzi); font-size: 1.5rem;">
+                ${c.rad1} <span style="font-size: 0.95rem; font-weight: 600;">(${c.meaning1})</span>
+              </span>
+              <span style="font-weight: 800; color: #ef4444; font-size: 1.1rem;">VS</span>
+              <span style="background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1.5px solid #10b981; padding: 6px 16px; border-radius: 10px; font-weight: 800; font-family: var(--font-hanzi); font-size: 1.5rem;">
+                ${c.rad2} <span style="font-size: 0.95rem; font-weight: 600;">(${c.meaning2})</span>
+              </span>
+            </div>
+          </div>
+
+          <div style="font-size: 0.98rem; line-height: 1.55;">
+            <strong style="color: #fbbf24;"><i class="fa-solid fa-scale-balanced" style="margin-right: 4px;"></i> Phân biệt:</strong> ${c.difference}
+          </div>
+
+          ${c.example ? `
+            <div style="font-size: 0.92rem; background: rgba(0,0,0,0.25); border-left: 3px solid #3b82f6; padding: 10px 14px; border-radius: 0 8px 8px 0;">
+              <i class="fa-solid fa-book" style="color: #3b82f6; margin-right: 6px;"></i> <strong>Ví dụ:</strong> ${c.example}
+            </div>
+          ` : ''}
+        </div>
+      `;
+    });
+
+    html += `</div>`;
+    container.innerHTML = html;
   } else {
-    currentFlashcardList = (radicalsData.radicals || []).filter(r => r.category === currentTab);
-  }
+    const list = (radicalsData.radicals || []).filter(r => r.category === currentTab);
+    currentFlashcardList = list;
 
-  currentFlashcardIndex = 0;
-  
-  const countBadge = document.getElementById('radicals-count-badge');
-  if (countBadge) {
-    countBadge.textContent = `${currentFlashcardList.length} ${currentTab === 'So sánh' ? 'cặp phân biệt' : 'bộ thủ'}`;
-  }
+    let html = `<div class="grid-container">`;
 
-  if (currentFlashcardList.length > 0) {
-    selectRadicalByIndex(0);
+    list.forEach((r, idx) => {
+      html += `
+        <div class="rad-card" onclick="window.openRadicalDetailByIndex(${idx})">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: baseline; gap: 8px;">
+              <span style="font-family: var(--font-hanzi); font-size: 2.4rem; font-weight: 800; color: #2563eb;">
+                ${r.radical}
+              </span>
+              ${r.variant ? `<span style="font-family: var(--font-hanzi); font-size: 1.5rem; color: #0284c7; font-weight: 700;">(${r.variant})</span>` : ''}
+            </div>
+            <span style="font-family: var(--font-pinyin); font-size: 1.15rem; font-weight: 700; color: #0284c7;">
+              ${r.pinyin}
+            </span>
+          </div>
+
+          <div style="font-size: 1.1rem; font-weight: 800; border-top: 1px solid rgba(148, 163, 184, 0.2); padding-top: 8px;">
+            Hán-Việt: ${r.name} - <span style="color: #10b981;">${r.meaning}</span>
+          </div>
+
+          ${r.note ? `
+            <div style="font-size: 0.88rem; font-style: italic; line-height: 1.4; background: rgba(37, 99, 235, 0.08); padding: 8px 12px; border-radius: 8px;" class="rad-text-sub">
+              <i class="fa-solid fa-circle-info" style="color: #2563eb; margin-right: 4px;"></i> ${r.note}
+            </div>
+          ` : ''}
+
+          ${r.example ? `
+            <div style="font-size: 0.9rem; font-weight: 600; margin-top: 2px;" class="rad-text-primary">
+              <i class="fa-solid fa-lightbulb" style="color: #fbbf24; margin-right: 4px;"></i> Ví dụ: ${r.example}
+            </div>
+          ` : ''}
+        </div>
+      `;
+    });
+
+    html += `</div>`;
+    container.innerHTML = html;
   }
 }
+
+// 2. SWITCH TO FLASHCARD STUDY MODE (HÌNH 2 HERO + LIST)
+window.startRadicalFlashcardMode = function() {
+  const gridView = document.getElementById('radicals-grid-view');
+  const flashcardView = document.getElementById('radicals-flashcard-view');
+
+  if (gridView) gridView.style.display = 'none';
+  if (flashcardView) flashcardView.style.display = 'block';
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.selectRadicalByIndex(0);
+};
+
+window.openRadicalDetailByIndex = function(index) {
+  const gridView = document.getElementById('radicals-grid-view');
+  const flashcardView = document.getElementById('radicals-flashcard-view');
+
+  if (gridView) gridView.style.display = 'none';
+  if (flashcardView) flashcardView.style.display = 'block';
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.selectRadicalByIndex(index);
+};
+
+window.showGridView = function() {
+  const gridView = document.getElementById('radicals-grid-view');
+  const flashcardView = document.getElementById('radicals-flashcard-view');
+
+  if (gridView) gridView.style.display = 'block';
+  if (flashcardView) flashcardView.style.display = 'none';
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
 
 window.selectRadicalByIndex = function(index) {
   if (!currentFlashcardList || currentFlashcardList.length === 0) return;
@@ -106,6 +212,11 @@ window.selectRadicalByIndex = function(index) {
 
   currentFlashcardIndex = index;
   const r = currentFlashcardList[currentFlashcardIndex];
+
+  const countBadge = document.getElementById('radicals-count-badge');
+  if (countBadge) {
+    countBadge.textContent = `${currentFlashcardList.length} ${currentTab === 'So sánh' ? 'cặp phân biệt' : 'bộ thủ'}`;
+  }
 
   renderHeroFlashcard(r);
   renderMiniCardsGrid();
@@ -191,7 +302,7 @@ function renderHeroFlashcard(r) {
   // Play audio
   speakText(r.radical);
 
-  // Init HanziWriter stroke animation for the active radical
+  // Init HanziWriter stroke animation for active radical
   setTimeout(() => {
     const box = document.getElementById('hero-tianzige-box');
     if (box && window.HanziWriter) {
@@ -252,18 +363,21 @@ window.animateRadicalStroke = function() {
 
 // Keyboard listener for Flashcard navigation
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'ArrowLeft') {
-    window.prevRadicalFlashcard();
-  } else if (e.key === 'ArrowRight') {
-    window.nextRadicalFlashcard();
-  } else if (e.key === ' ' || e.key === 'Spacebar') {
-    e.preventDefault();
-    if (currentFlashcardList[currentFlashcardIndex]) {
-      speakText(currentFlashcardList[currentFlashcardIndex].radical);
+  const flashcardView = document.getElementById('radicals-flashcard-view');
+  if (flashcardView && flashcardView.style.display !== 'none') {
+    if (e.key === 'ArrowLeft') {
+      window.prevRadicalFlashcard();
+    } else if (e.key === 'ArrowRight') {
+      window.nextRadicalFlashcard();
+    } else if (e.key === ' ' || e.key === 'Spacebar') {
+      e.preventDefault();
+      if (currentFlashcardList[currentFlashcardIndex]) {
+        speakText(currentFlashcardList[currentFlashcardIndex].radical);
+      }
     }
   }
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  loadTabContent();
+  renderGridContent();
 });

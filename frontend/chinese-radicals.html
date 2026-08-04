@@ -116,7 +116,7 @@
     }
 
     .page-container {
-      max-width: 1280px;
+      max-width: 1260px;
       margin: 0 auto;
       padding: 20px 16px 60px 16px;
     }
@@ -240,13 +240,68 @@
       transform: scale(1.05);
     }
 
+    /* Học Flashcard Header Button */
+    .flashcard-mode-btn {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #ffffff;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
+      transition: all 0.22s ease;
+    }
+    .flashcard-mode-btn:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.45);
+    }
+
+    /* Back Button in Flashcard Mode */
+    .back-list-btn {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 9px 18px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    html.light-mode .back-list-btn {
+      background: #ffffff !important;
+      border: 1.5px solid #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+
+    .back-list-btn:hover {
+      background: #2563eb !important;
+      color: #ffffff !important;
+      border-color: #2563eb !important;
+    }
+
     /* TABS */
     .tabs-bar {
       display: flex;
       gap: 10px;
       align-items: center;
-      justify-content: center;
-      margin-bottom: 28px;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .tabs-group {
+      display: flex;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
@@ -276,7 +331,44 @@
       box-shadow: 0 6px 18px rgba(37, 99, 235, 0.38) !important;
     }
 
-    /* HERO FLASHCARD STAGE (UPPER SECTION) */
+    /* GRID VIEW CARDS (HÌNH 1 DEFAULT) */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 18px;
+    }
+
+    .rad-card {
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 18px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.22);
+    }
+
+    html.light-mode .rad-card {
+      background: rgba(255, 255, 255, 0.85) !important;
+      backdrop-filter: blur(24px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.95) !important;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06) !important;
+      color: #0f172a !important;
+    }
+
+    .rad-card:hover {
+      transform: translateY(-4px) scale(1.01);
+      border-color: #2563eb !important;
+      box-shadow: 0 16px 36px rgba(37, 99, 235, 0.22) !important;
+    }
+
+    /* FLASHCARD MODE STAGE (HÌNH 2 HERO) */
     .hero-stage-wrapper {
       display: flex;
       align-items: center;
@@ -318,7 +410,7 @@
     }
 
     .hero-flashcard-card {
-      background: rgba(15, 23, 42, 0.72);
+      background: rgba(15, 23, 42, 0.75);
       backdrop-filter: blur(28px) saturate(180%);
       -webkit-backdrop-filter: blur(28px) saturate(180%);
       border: 1.5px solid rgba(255, 255, 255, 0.18);
@@ -372,7 +464,7 @@
       color: #2563eb !important;
     }
 
-    /* BOTTOM CAROUSEL / LIST SECTION */
+    /* BOTTOM CAROUSEL LIST */
     .bottom-list-card {
       background: rgba(15, 23, 42, 0.65);
       backdrop-filter: blur(24px) saturate(180%);
@@ -456,8 +548,8 @@
       <div style="display: flex; align-items: center; gap: 14px;">
         <img src="/assets/logo.png" class="brand-logo-img" alt="Logo">
         <div class="title-group">
-          <h1>Học Flashcard Bộ Thủ Tiếng Trung</h1>
-          <p>Luyện nhớ nét viết, phiên âm, ý nghĩa và ví dụ minh họa trực quan</p>
+          <h1>Chuyên Trang Bộ Thủ Tiếng Trung</h1>
+          <p>Trọn bộ các bộ thủ tiếng Trung chuẩn HSK với phiên âm, Hán-Việt, nghĩa và phương pháp phân biệt chi tiết</p>
         </div>
       </div>
 
@@ -477,45 +569,69 @@
       </div>
     </div>
 
-    <!-- Category Tabs -->
-    <div class="tabs-bar">
-      <button class="rad-tab-btn active" id="tab-50-1" onclick="window.switchRadicalPageTab('50 bộ (1)')">50 bộ (1)</button>
-      <button class="rad-tab-btn" id="tab-50-2" onclick="window.switchRadicalPageTab('50 bộ (2)')">50 bộ (2)</button>
-      <button class="rad-tab-btn" id="tab-50-3" onclick="window.switchRadicalPageTab('50 bộ (3)')">50 bộ (3)</button>
-      <button class="rad-tab-btn" id="tab-rest" onclick="window.switchRadicalPageTab('Còn lại')">Còn lại</button>
-      <button class="rad-tab-btn" id="tab-comp" onclick="window.switchRadicalPageTab('So sánh')">Phân biệt</button>
-    </div>
-
-    <!-- HERO FLASHCARD STAGE SECTION -->
-    <div class="hero-stage-wrapper">
-      <button class="stage-arrow-btn" onclick="window.prevRadicalFlashcard()" title="Thẻ trước (&larr;)">
-        <i class="fa-solid fa-chevron-left"></i>
-      </button>
-
-      <!-- Main Hero Card Container -->
-      <div class="hero-flashcard-card" id="hero-flashcard-card">
-        <div id="hero-card-content"></div>
-      </div>
-
-      <button class="stage-arrow-btn" onclick="window.nextRadicalFlashcard()" title="Thẻ tiếp theo (&rarr;)">
-        <i class="fa-solid fa-chevron-right"></i>
-      </button>
-    </div>
-
-    <!-- BOTTOM SELECTION LIST SECTION -->
-    <div class="bottom-list-card">
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 8px;">
-        <div style="font-size: 1.15rem; font-weight: 800; color: #3b82f6; display: flex; align-items: center; gap: 8px;">
-          <i class="fa-solid fa-list-ul"></i> Danh sách bộ thủ ( <span id="radicals-count-badge" style="color: #60a5fa; font-weight: 800;">213 bộ thủ</span> )
+    <!-- VIEW 1: GRID MODE (MẶC ĐỊNH HÌNH 1) -->
+    <div id="radicals-grid-view">
+      <!-- Tabs Bar & Học Flashcard Button -->
+      <div class="tabs-bar">
+        <div class="tabs-group">
+          <button class="rad-tab-btn active" id="tab-50-1" onclick="window.switchRadicalPageTab('50 bộ (1)')">50 bộ (1)</button>
+          <button class="rad-tab-btn" id="tab-50-2" onclick="window.switchRadicalPageTab('50 bộ (2)')">50 bộ (2)</button>
+          <button class="rad-tab-btn" id="tab-50-3" onclick="window.switchRadicalPageTab('50 bộ (3)')">50 bộ (3)</button>
+          <button class="rad-tab-btn" id="tab-rest" onclick="window.switchRadicalPageTab('Còn lại')">Còn lại</button>
+          <button class="rad-tab-btn" id="tab-comp" onclick="window.switchRadicalPageTab('So sánh')">Phân biệt</button>
         </div>
 
-        <div style="font-size: 0.85rem; font-weight: 600; color: #94a3b8; display: flex; align-items: center; gap: 6px;">
-          <i class="fa-solid fa-keyboard"></i> Phím &larr; &rarr; để đổi thẻ | Phím Spacebar để nghe phát âm
+        <button class="flashcard-mode-btn" onclick="window.startRadicalFlashcardMode()">
+          <i class="fa-solid fa-layer-group"></i> Học Flashcard
+        </button>
+      </div>
+
+      <!-- Main Cards Grid -->
+      <div id="radicals-content-area"></div>
+    </div>
+
+    <!-- VIEW 2: FLASHCARD STUDY MODE (HÌNH 2 HERO + LIST) -->
+    <div id="radicals-flashcard-view" style="display: none;">
+      <!-- Flashcard Header Control Bar -->
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+        <button class="back-list-btn" onclick="window.showGridView()">
+          <i class="fa-solid fa-arrow-left"></i> Quay lại danh sách
+        </button>
+
+        <div style="font-weight: 800; font-size: 1.1rem; color: #3b82f6; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-layer-group"></i> Chế Độ Học Flashcard Bộ Thủ
         </div>
       </div>
 
-      <!-- Mini Cards List Container -->
-      <div class="mini-cards-grid" id="mini-cards-grid"></div>
+      <!-- Hero Flashcard Stage -->
+      <div class="hero-stage-wrapper">
+        <button class="stage-arrow-btn" onclick="window.prevRadicalFlashcard()" title="Thẻ trước (&larr;)">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+
+        <div class="hero-flashcard-card" id="hero-flashcard-card">
+          <div id="hero-card-content"></div>
+        </div>
+
+        <button class="stage-arrow-btn" onclick="window.nextRadicalFlashcard()" title="Thẻ tiếp theo (&rarr;)">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+
+      <!-- Bottom Carousel / List -->
+      <div class="bottom-list-card">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 8px;">
+          <div style="font-size: 1.15rem; font-weight: 800; color: #3b82f6; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-list-ul"></i> Danh sách bộ thủ ( <span id="radicals-count-badge" style="color: #60a5fa; font-weight: 800;">213 bộ thủ</span> )
+          </div>
+
+          <div style="font-size: 0.85rem; font-weight: 600; color: #94a3b8; display: flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-keyboard"></i> Phím &larr; &rarr; để đổi thẻ | Phím Spacebar để nghe phát âm
+          </div>
+        </div>
+
+        <div class="mini-cards-grid" id="mini-cards-grid"></div>
+      </div>
     </div>
 
   </div>
