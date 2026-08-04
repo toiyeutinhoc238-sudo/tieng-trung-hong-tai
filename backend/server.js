@@ -642,6 +642,43 @@ app.delete('/api/admin/reset-all', async (req, res) => {
   }
 });
 
+// Admin: Reset Bảng Xếp Hạng & Tiến Độ Tất Cả Học Viên
+app.all('/api/admin/reset-leaderboard', async (req, res) => {
+  try {
+    if (mongoose.connection.readyState === 1) {
+      await User.updateMany({}, {
+        $set: {
+          progress: {},
+          'stats.streak': 0,
+          'stats.studyTime': 0,
+          'stats.lastActiveDate': null
+        }
+      });
+    }
+
+    const userData = await readUserData();
+    userData.progress = {};
+    userData.quizHistory = {};
+    if (userData.users) {
+      Object.keys(userData.users).forEach(email => {
+        if (userData.users[email].progress) userData.users[email].progress = {};
+        if (userData.users[email].stats) {
+          userData.users[email].stats.streak = 0;
+          userData.users[email].stats.studyTime = 0;
+        }
+      });
+    }
+    await writeUserData(userData);
+    cachedUserData = null;
+
+    console.log("[ADMIN] Leaderboard and progress reset successfully.");
+    res.json({ success: true, message: "Bảng xếp hạng và tiến độ học tập đã được reset về 0 điểm!" });
+  } catch (err) {
+    console.error("[ADMIN] Leaderboard reset error:", err);
+    res.status(500).json({ error: "Reset failed", detail: err.message });
+  }
+});
+
 // POST endpoint to save quiz game results & update leaderboard
 app.post('/api/quiz/save', async (req, res) => {
   const email = getLoggedInUserEmail(req) || 'guest';
