@@ -4,6 +4,8 @@ import radicalsData from './radicals_data.json';
 let currentTab = '50 bộ (1)';
 let writerInstance = null;
 let activeAudioElement = null;
+let currentFlashcardIndex = 0;
+let currentFlashcardList = [];
 
 function speakText(text) {
   if (!text) return;
@@ -201,6 +203,7 @@ function renderContent() {
     container.innerHTML = html;
   } else {
     const list = (radicalsData.radicals || []).filter(r => r.category === currentTab);
+    currentFlashcardList = list;
     
     let html = `
       <div class="grid-container">
@@ -208,7 +211,7 @@ function renderContent() {
 
     list.forEach((r, idx) => {
       html += `
-        <div class="rad-card" onclick="window.openRadicalDetail('${r.id}')">
+        <div class="rad-card" onclick="window.openRadicalDetailByIndex(${idx})">
           <div style="display: flex; align-items: center; justify-content: space-between;">
             <div style="display: flex; align-items: baseline; gap: 8px;">
               <span style="font-family: var(--font-hanzi); font-size: 2.4rem; font-weight: 800; color: #2563eb;">
@@ -245,8 +248,54 @@ function renderContent() {
   }
 }
 
+// Open Flashcard Mode at specific index
+window.openRadicalDetailByIndex = function(index) {
+  if (!currentFlashcardList || currentFlashcardList.length === 0) {
+    currentFlashcardList = (radicalsData.radicals || []).filter(r => r.category === currentTab);
+  }
+  if (index < 0) index = currentFlashcardList.length - 1;
+  if (index >= currentFlashcardList.length) index = 0;
+
+  currentFlashcardIndex = index;
+  renderFlashcardCard(currentFlashcardList[currentFlashcardIndex]);
+};
+
 window.openRadicalDetail = function(radId) {
-  const r = (radicalsData.radicals || []).find(item => item.id === radId);
+  const list = currentFlashcardList.length > 0 ? currentFlashcardList : (radicalsData.radicals || []);
+  const idx = list.findIndex(r => r.id === radId);
+  if (idx !== -1) {
+    window.openRadicalDetailByIndex(idx);
+  } else {
+    const item = (radicalsData.radicals || []).find(r => r.id === radId);
+    if (item) renderFlashcardCard(item);
+  }
+};
+
+window.startRadicalFlashcardMode = function() {
+  if (currentTab === 'So sánh') {
+    currentFlashcardList = radicalsData.radicals || [];
+  } else {
+    currentFlashcardList = (radicalsData.radicals || []).filter(r => r.category === currentTab);
+  }
+  if (currentFlashcardList.length > 0) {
+    window.openRadicalDetailByIndex(0);
+  }
+};
+
+window.nextRadicalFlashcard = function() {
+  if (currentFlashcardList.length > 0) {
+    window.openRadicalDetailByIndex(currentFlashcardIndex + 1);
+  }
+};
+
+window.prevRadicalFlashcard = function() {
+  if (currentFlashcardList.length > 0) {
+    window.openRadicalDetailByIndex(currentFlashcardIndex - 1);
+  }
+};
+
+// Render Flashcard Card (Đúng 100% mẫu thiết kế trong hình)
+function renderFlashcardCard(r) {
   if (!r) return;
 
   const modal = document.getElementById('radical-detail-modal');
@@ -255,65 +304,109 @@ window.openRadicalDetail = function(radId) {
 
   modal.style.display = 'flex';
 
-  // Flashcard structure matching Image 2 mockup
+  const total = currentFlashcardList.length;
+  const currNum = currentFlashcardIndex + 1;
+
   cardBody.innerHTML = `
-    <div style="display: flex; gap: 24px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; text-align: left; width: 100%;">
+    <!-- Top Progress Bar & Category Counter -->
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid rgba(0,0,0,0.08); padding-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="background: rgba(37, 99, 235, 0.12); color: #2563eb; padding: 4px 12px; border-radius: 99px; font-weight: 800; font-size: 0.85rem; border: 1px solid rgba(37, 99, 235, 0.25);">
+          ${r.category || 'Bộ thủ'}
+        </span>
+        <span style="font-weight: 700; font-size: 0.92rem; color: #64748b;">
+          Thẻ ${currNum} / ${total}
+        </span>
+      </div>
+
+      <div style="font-size: 0.82rem; font-weight: 600; color: #94a3b8; display: flex; align-items: center; gap: 6px;">
+        <i class="fa-solid fa-keyboard"></i> Phím mũi tên &larr; &rarr; để đổi thẻ
+      </div>
+    </div>
+
+    <!-- MAIN CARD CONTENT (Khai báo đúng 100% cấu trúc mẫu ảnh) -->
+    <div style="display: flex; gap: 28px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; text-align: left; width: 100%;">
       
-      <!-- LEFT COLUMN: TIANZIGE (Cách viết) -->
-      <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
-        <div style="font-size: 0.85rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.5px;">Cách viết</div>
-        <div id="rad-tianzige-box" style="width: 170px; height: 170px; background: #ffffff; border: 2px solid #dc2626; border-radius: 12px; position: relative; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.15);"></div>
-        <button onclick="window.animateRadicalStroke()" style="background: rgba(37, 99, 235, 0.15); color: #2563eb; border: 1px solid rgba(37, 99, 235, 0.3); padding: 6px 14px; border-radius: 99px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">
+      <!-- LEFT COLUMN: TIANZIGE (CÁCH VIẾT) -->
+      <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+        <div style="font-size: 0.85rem; font-weight: 800; color: #2563eb; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px;">
+          CÁCH VIẾT
+        </div>
+
+        <div id="rad-tianzige-box" style="width: 170px; height: 170px; background: #ffffff; border: 2px solid #dc2626; border-radius: 16px; position: relative; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: center;"></div>
+
+        <button onclick="window.animateRadicalStroke()" style="margin-top: 14px; background: rgba(37, 99, 235, 0.12); color: #2563eb; border: 1px solid rgba(37, 99, 235, 0.28); padding: 8px 18px; border-radius: 99px; font-weight: 800; cursor: pointer; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1); transition: all 0.2s;" onhover="this.style.background='#2563eb'">
           <i class="fa-solid fa-pen-nib"></i> Phát lại nét
         </button>
       </div>
 
-      <!-- RIGHT COLUMN: DETAILS (Hán Việt, Nghĩa, Phiên âm, Bộ thủ, Cách dùng, Ví dụ) -->
-      <div style="flex: 1; min-width: 260px; display: flex; flex-direction: column; gap: 10px;">
+      <!-- RIGHT COLUMN: DETAILS -->
+      <div style="flex: 1; min-width: 270px; display: flex; flex-direction: column; gap: 12px;">
         
-        <!-- Line 1: Hán Việt -->
-        <div style="font-size: 1.25rem; font-weight: 800; color: #2563eb;">
-          Hán-Việt: <span style="color: #ffffff;">${r.name}</span>
+        <!-- Line 1: Hán-Việt -->
+        <div style="font-size: 1.35rem; font-weight: 800; color: #2563eb;">
+          Hán-Việt: <span style="color: var(--text-heading, #0f172a); text-transform: uppercase; margin-left: 4px;">${r.name}</span>
         </div>
 
         <!-- Line 2: Nghĩa -->
-        <div style="font-size: 1.5rem; font-weight: 800; color: #34d399; border-bottom: 2px solid rgba(255,255,255,0.1); padding-bottom: 6px;">
-          Nghĩa: ${r.meaning}
+        <div style="font-size: 1.55rem; font-weight: 800; color: #10b981;">
+          Nghĩa: <span style="color: #10b981; margin-left: 4px;">${r.meaning}</span>
         </div>
 
-        <!-- Line 3: Phiên âm -->
+        <!-- Line 3: Phiên âm + Baidu Female Audio Button -->
         <div style="display: flex; align-items: center; justify-content: space-between;">
-          <div style="font-size: 1.2rem; font-weight: 700; color: #38bdf8; font-family: var(--font-pinyin);">
-            Phiên âm: ${r.pinyin}
+          <div style="font-size: 1.25rem; font-weight: 700; color: #0284c7; font-family: var(--font-pinyin);">
+            Phiên âm: <span style="font-weight: 800; margin-left: 4px;">${r.pinyin}</span>
           </div>
-          <button onclick="window.speakText('${(r.radical || '').replace(/'/g, "\\'")}')" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; width: 38px; height: 36px; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);">
+
+          <button onclick="window.speakText('${(r.radical || '').replace(/'/g, "\\'")}')" title="Phát âm Giọng Baidu Nữ chuẩn" style="background: #2563eb; color: #ffffff; border: none; width: 44px; height: 44px; border-radius: 50%; font-size: 1.15rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35); transition: transform 0.15s;" onmousedown="this.style.transform='scale(0.92)'" onmouseup="this.style.transform='scale(1)'">
             <i class="fa-solid fa-volume-high"></i>
           </button>
         </div>
 
-        <!-- Line 4: Bộ thủ -->
-        <div style="background: rgba(37, 99, 235, 0.12); border: 1px solid rgba(37, 99, 235, 0.3); padding: 8px 12px; border-radius: 10px; font-weight: 700; font-size: 1.1rem; color: #ffffff;">
-          Bộ thủ: <span style="font-family: var(--font-hanzi); font-size: 1.4rem; color: #2563eb;">${r.radical}</span> ${r.variant ? `(Biến thể: <span style="font-family: var(--font-hanzi); color: #60a5fa;">${r.variant}</span>)` : ''}
+        <!-- Line 4: Bộ thủ Box -->
+        <div style="background: rgba(37, 99, 235, 0.1); border: 1px solid rgba(37, 99, 235, 0.25); padding: 10px 16px; border-radius: 12px; font-weight: 800; font-size: 1.15rem; color: #0f172a; display: flex; align-items: center; gap: 8px;">
+          Bộ thủ: <span style="font-family: var(--font-hanzi); font-size: 1.5rem; color: #2563eb; font-weight: 800;">${r.radical}</span>
+          ${r.variant ? `<span style="font-weight: 600; color: #334155; font-size: 1.05rem;">(Biến thể: <span style="font-family: var(--font-hanzi); color: #2563eb; font-weight: 700; font-size: 1.3rem;">${r.variant}</span> )</span>` : ''}
         </div>
 
         <!-- Line 5: Cách dùng -->
         ${r.note ? `
-          <div style="font-size: 0.95rem; color: #94a3b8; font-style: italic; line-height: 1.4;">
-            <i class="fa-solid fa-circle-info" style="color: #3b82f6; margin-right: 4px;"></i> <strong>Cách dùng:</strong> ${r.note}
+          <div style="font-size: 0.95rem; color: #475569; font-style: italic; line-height: 1.5; display: flex; align-items: flex-start; gap: 6px;">
+            <i class="fa-solid fa-circle-info" style="color: #2563eb; font-size: 1rem; margin-top: 2px;"></i>
+            <span><strong>Cách dùng:</strong> ${r.note}</span>
           </div>
         ` : ''}
 
         <!-- Line 6: VD -->
         ${r.example ? `
-          <div style="background: rgba(255,255,255,0.04); border-left: 3px solid #2563eb; padding: 10px 14px; border-radius: 0 8px 8px 0; margin-top: 4px;">
-            <div style="font-size: 0.85rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; margin-bottom: 2px;">Ví dụ:</div>
-            <div style="font-size: 1rem; color: #ffffff; font-weight: 600;">${r.example}</div>
+          <div style="border-left: 3.5px solid #2563eb; padding-left: 14px; margin-top: 4px;">
+            <div style="font-size: 0.85rem; font-weight: 800; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">VÍ DỤ:</div>
+            <div style="font-size: 1.05rem; color: #0f172a; font-weight: 700;">${r.example}</div>
           </div>
         ` : ''}
 
       </div>
     </div>
+
+    <!-- BOTTOM NAVIGATION CONTROLS (Thẻ trước / Phát âm / Thẻ tiếp) -->
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 28px; border-top: 1px solid rgba(0,0,0,0.08); padding-top: 18px; flex-wrap: wrap; gap: 12px;">
+      <button onclick="window.prevRadicalFlashcard()" style="background: rgba(255, 255, 255, 0.9); color: #334155; border: 1.5px solid #cbd5e1; padding: 10px 20px; border-radius: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.05);" onhover="this.style.borderColor='#2563eb'">
+        <i class="fa-solid fa-chevron-left"></i> Thẻ trước
+      </button>
+
+      <button onclick="window.speakText('${(r.radical || '').replace(/'/g, "\\'")}')" style="background: rgba(37, 99, 235, 0.12); color: #2563eb; border: 1px solid rgba(37, 99, 235, 0.3); padding: 10px 22px; border-radius: 99px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+        <i class="fa-solid fa-volume-high"></i> Giọng Baidu Nữ
+      </button>
+
+      <button onclick="window.nextRadicalFlashcard()" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 10px 22px; border-radius: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);">
+        Thẻ tiếp theo <i class="fa-solid fa-chevron-right"></i>
+      </button>
+    </div>
   `;
+
+  // Automatically play Baidu female audio on card open
+  speakText(r.radical);
 
   // Init HanziWriter for radical
   setTimeout(() => {
@@ -332,13 +425,30 @@ window.openRadicalDetail = function(radId) {
       writerInstance.animateCharacter();
     }
   }, 50);
-};
+}
 
 window.animateRadicalStroke = function() {
   if (writerInstance) {
     writerInstance.animateCharacter();
   }
 };
+
+// Keyboard listener for Flashcard navigation
+document.addEventListener('keydown', (e) => {
+  const modal = document.getElementById('radical-detail-modal');
+  if (modal && modal.style.display === 'flex') {
+    if (e.key === 'ArrowLeft') {
+      window.prevRadicalFlashcard();
+    } else if (e.key === 'ArrowRight') {
+      window.nextRadicalFlashcard();
+    } else if (e.key === ' ' || e.key === 'Spacebar') {
+      e.preventDefault();
+      if (currentFlashcardList[currentFlashcardIndex]) {
+        speakText(currentFlashcardList[currentFlashcardIndex].radical);
+      }
+    }
+  }
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   initSeasonalParticles();
