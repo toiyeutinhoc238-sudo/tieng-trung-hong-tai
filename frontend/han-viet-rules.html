@@ -272,9 +272,15 @@
           Hệ thống suy đoán âm đọc Tiếng Trung từ âm Hán-Việt & Bảng phát âm Pinyin chuẩn giọng Bắc Kinh
         </p>
       </div>
-      <div>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <button id="particle-toggle-btn" class="particle-toggle-btn theme-toggle-btn-top" onclick="window.toggleSeasonalParticles()" title="Bật/Tắt hiệu ứng mùa">
+          <i class="fa-solid fa-snowflake"></i>
+        </button>
+        <button id="theme-toggle" class="theme-toggle-btn-top" onclick="window.toggleTheme()" title="Chuyển đổi Giao diện Sáng/Tối">
+          <i class="fa-solid fa-moon"></i>
+        </button>
         <a href="/index.html" class="btn btn-outline" style="text-decoration:none;">
-          <i class="fa-solid fa-house"></i> Trang Chủ
+          <i class="fa-solid fa-house"></i>
         </a>
       </div>
     </div>
