@@ -13,6 +13,11 @@ export function initSeasonalParticles() {
     }
   }
 
+  const enabled = localStorage.getItem('particles_enabled') !== 'false';
+  if (canvas) {
+    canvas.style.display = enabled ? 'block' : 'none';
+  }
+
   const ctx = canvas.getContext('2d');
   let width = (canvas.width = window.innerWidth);
   let height = (canvas.height = window.innerHeight);
@@ -118,6 +123,8 @@ window.toggleSeasonalParticles = function() {
   if (window.updateParticleToggleBtns) {
     window.updateParticleToggleBtns(next);
   }
+  const cv = document.getElementById('seasonal-particle-canvas');
+  if (cv) cv.style.display = next ? 'block' : 'none';
 };
 
 // Universal Study Time Tracker across ALL HTML pages
