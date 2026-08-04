@@ -124,7 +124,7 @@ html, body {
 
 body {
   font-family: var(--font-sans);
-  background: url('/assets/app_bg_night.png') no-repeat center center fixed / cover !important;
+  background: url('/assets/app_bg_night_v2.png') no-repeat center center fixed / cover !important;
   color: var(--text-primary);
   line-height: 1.6;
   transition: background 0.5s ease-in-out, color var(--transition-normal);
@@ -7199,7 +7199,7 @@ html.dark {
 }
 
 html.dark body {
-  background: url('/assets/app_bg_night.png') no-repeat center center fixed / cover !important;
+  background: url('/assets/app_bg_night_v2.png') no-repeat center center fixed / cover !important;
   color: #f8fafc !important;
   transition: background 0.5s ease-in-out;
 }
@@ -7459,7 +7459,7 @@ html.light-mode, body.light-mode, html.light {
 }
 
 html.light-mode body, body.light-mode {
-  background: url('/assets/app_bg_day.png') no-repeat center center fixed / cover !important;
+  background: url('/assets/app_bg_day_v2.png') no-repeat center center fixed / cover !important;
   color: #0f172a !important;
   transition: background 0.5s ease-in-out;
 }
@@ -7628,12 +7628,12 @@ html, body, #app {
 
 /* Master Full-Window Chibi Dragon Background (Night/Dark Mode) */
 html, body, #app, html.dark, html.dark body, body.dark, html.dark #app {
-  background: url('/assets/app_bg_night.png') no-repeat center center fixed / cover !important;
+  background: url('/assets/app_bg_night_v2.png') no-repeat center center fixed / cover !important;
 }
 
 /* Master Full-Window Chibi Dragon Background (Day/Light Mode) */
 html.light-mode, html.light-mode body, body.light-mode, html.light, html.light body, html.light-mode #app {
-  background: url('/assets/app_bg_day.png') no-repeat center center fixed / cover !important;
+  background: url('/assets/app_bg_day_v2.png') no-repeat center center fixed / cover !important;
 }
 
 /* 2. Strip all dark/white solid backgrounds, rounded container margins, and drop shadows from main layout wrappers */

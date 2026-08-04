@@ -17,7 +17,7 @@
   <script>
     (function () {
       var t = localStorage.getItem('theme') || 'dark';
-      var bgUrl = t === 'light' ? "url('/assets/app_bg_day.png')" : "url('/assets/app_bg_night.png')";
+      var bgUrl = t === 'light' ? "url('/assets/app_bg_day_v2.png')" : "url('/assets/app_bg_night_v2.png')";
       document.documentElement.style.setProperty('background-image', bgUrl, 'important');
       document.documentElement.style.setProperty('background-size', 'cover', 'important');
       document.documentElement.style.setProperty('background-position', 'center center', 'important');
@@ -52,7 +52,7 @@
     window.toggleTheme = function () {
       var isLight = document.documentElement.classList.contains('light-mode') || document.documentElement.classList.contains('light');
       var nextDark = isLight;
-      var bgUrl = nextDark ? "url('/assets/app_bg_night.png')" : "url('/assets/app_bg_day.png')";
+      var bgUrl = nextDark ? "url('/assets/app_bg_night_v2.png')" : "url('/assets/app_bg_day_v2.png')";
 
       document.documentElement.style.setProperty('background-image', bgUrl, 'important');
       document.documentElement.style.setProperty('background-size', 'cover', 'important');
@@ -164,7 +164,7 @@
     }
 
     body {
-      background: url('/assets/app_bg_night.png') no-repeat center center fixed / cover !important;
+      background: url('/assets/app_bg_night_v2.png') no-repeat center center fixed / cover !important;
       font-family: 'Be Vietnam Pro', 'Quicksand', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
@@ -174,7 +174,7 @@
 
     html.light-mode body,
     body.light-mode {
-      background: url('/assets/app_bg_day.png') no-repeat center center fixed / cover !important;
+      background: url('/assets/app_bg_day_v2.png') no-repeat center center fixed / cover !important;
       color: #0f172a !important;
     }
 
@@ -282,7 +282,7 @@
     }
 
     body {
-      background: url('/assets/app_bg_night.png') no-repeat center center fixed / cover !important;
+      background: url('/assets/app_bg_night_v2.png') no-repeat center center fixed / cover !important;
       display: flex;
       align-items: center;
       justify-content: center;
