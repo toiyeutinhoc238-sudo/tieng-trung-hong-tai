@@ -1,57 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://tieng-trung-hong-tai-1.onrender.com/</loc>
-    <lastmod>2026-08-01</lastmod>
+    <loc>https://tiengtrunghongtai.online/</loc>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://tieng-trung-hong-tai-1.onrender.com/hsk-grammar.html</loc>
-    <lastmod>2026-08-01</lastmod>
+    <loc>https://tiengtrunghongtai.online/rank.html</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://tiengtrunghongtai.online/hsk-grammar.html</loc>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://tieng-trung-hong-tai-1.onrender.com/chinese-phonetics.html</loc>
-    <lastmod>2026-08-01</lastmod>
+    <loc>https://tiengtrunghongtai.online/quiz-game.html</loc>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://tieng-trung-hong-tai-1.onrender.com/han-viet-rules.html</loc>
-    <lastmod>2026-08-01</lastmod>
+    <loc>https://tiengtrunghongtai.online/hanzi-writer.html</loc>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://tieng-trung-hong-tai-1.onrender.com/hanzi-writer.html</loc>
-    <lastmod>2026-08-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://tieng-trung-hong-tai-1.onrender.com/quiz-game.html</loc>
-    <lastmod>2026-08-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://tieng-trung-hong-tai-1.onrender.com/lesson-online.html</loc>
-    <lastmod>2026-08-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://tieng-trung-hong-tai-1.onrender.com/detail-list.html</loc>
-    <lastmod>2026-08-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://tieng-trung-hong-tai-1.onrender.com/chat-history.html</loc>
-    <lastmod>2026-08-01</lastmod>
+    <loc>https://tiengtrunghongtai.online/chinese-phonetics.html</loc>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tiengtrunghongtai.online/han-viet-rules.html</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 </urlset>
