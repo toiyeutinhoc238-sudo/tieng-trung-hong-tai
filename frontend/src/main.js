@@ -4049,7 +4049,7 @@ function renderLearningTianzige(word) {
 
   if (window.HanziWriter) {
     let loadedCount = 0;
-    let localRenderSeq = roadmapAnimationSequence;
+    const currentRenderSeq = roadmapAnimationSequence;
 
     cleanChars.forEach((char, idx) => {
       try {
@@ -4063,22 +4063,41 @@ function renderLearningTianzige(word) {
           outlineColor: '#cbd5e1',
           drawingWidth: cellSize > 120 ? 16 : 12,
           onLoadCharDataSuccess: function() {
-            try { writer.hideCharacter(); } catch(e){}
-            if (localRenderSeq !== roadmapAnimationSequence) return;
-            loadedCount++;
-            if (loadedCount === cleanChars.length) {
-              startCleanSequentialAnimation();
-            }
+            setTimeout(() => {
+              if (currentRenderSeq !== roadmapAnimationSequence) return;
+              
+              const w = roadmapHanziWriters[idx];
+              if (w) {
+                try { w.hideCharacter(); } catch(e){}
+              }
+
+              loadedCount++;
+              if (loadedCount === cleanChars.length) {
+                startCleanSequentialAnimation();
+              }
+            }, 20);
+          },
+          onLoadCharDataError: function() {
+            setTimeout(() => {
+              if (currentRenderSeq !== roadmapAnimationSequence) return;
+              loadedCount++;
+              if (loadedCount === cleanChars.length) {
+                startCleanSequentialAnimation();
+              }
+            }, 20);
           }
         });
-        roadmapHanziWriters.push(writer);
+        roadmapHanziWriters[idx] = writer;
       } catch (e) {
         const targetEl = document.getElementById(`roadmap-tianzige-target-${idx}`);
         if (targetEl) targetEl.innerHTML = `<span style="font-size: 2.2rem; font-weight: 800; color: #dc2626;">${char}</span>`;
-        loadedCount++;
-        if (loadedCount === cleanChars.length && localRenderSeq === roadmapAnimationSequence) {
-          startCleanSequentialAnimation();
-        }
+        setTimeout(() => {
+          if (currentRenderSeq !== roadmapAnimationSequence) return;
+          loadedCount++;
+          if (loadedCount === cleanChars.length) {
+            startCleanSequentialAnimation();
+          }
+        }, 20);
       }
     });
   }
@@ -4102,12 +4121,11 @@ function startCleanSequentialAnimation() {
     } catch(e){}
   });
 
-  // Small delay to ensure hideCharacter takes effect visually before starting
   roadmapStrokeTimeout = setTimeout(() => {
     if (currentSeq === roadmapAnimationSequence) {
       playWriterAtIndex(0, currentSeq);
     }
-  }, 100);
+  }, 150);
 }
 
 function playWriterAtIndex(idx, seq) {
@@ -4123,7 +4141,7 @@ function playWriterAtIndex(idx, seq) {
       if (seq === roadmapAnimationSequence) {
         startCleanSequentialAnimation();
       }
-    }, 2000);
+    }, 2500);
     return;
   }
 
@@ -4135,6 +4153,7 @@ function playWriterAtIndex(idx, seq) {
 
   try {
     writer.cancelAnimation();
+    writer.hideCharacter(); // Ensure it starts from blank
     writer.animateCharacter({
       onComplete: function() {
         if (seq !== roadmapAnimationSequence) return;
@@ -4142,7 +4161,7 @@ function playWriterAtIndex(idx, seq) {
           if (seq === roadmapAnimationSequence) {
             playWriterAtIndex(idx + 1, seq);
           }
-        }, 300);
+        }, 400);
       }
     });
   } catch(e) {
