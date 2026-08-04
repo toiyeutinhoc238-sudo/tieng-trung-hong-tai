@@ -4048,9 +4048,6 @@ function renderLearningTianzige(word) {
   container.appendChild(frame);
 
   if (window.HanziWriter) {
-    let loadedCount = 0;
-    const currentRenderSeq = roadmapAnimationSequence;
-
     cleanChars.forEach((char, idx) => {
       try {
         const writer = HanziWriter.create(`roadmap-tianzige-target-${idx}`, char, {
@@ -4062,44 +4059,19 @@ function renderLearningTianzige(word) {
           radicalColor: '#2563eb',
           outlineColor: '#cbd5e1',
           drawingWidth: cellSize > 120 ? 16 : 12,
-          onLoadCharDataSuccess: function() {
-            setTimeout(() => {
-              if (currentRenderSeq !== roadmapAnimationSequence) return;
-              
-              const w = roadmapHanziWriters[idx];
-              if (w) {
-                try { w.hideCharacter(); } catch(e){}
-              }
-
-              loadedCount++;
-              if (loadedCount === cleanChars.length) {
-                startCleanSequentialAnimation();
-              }
-            }, 20);
-          },
           onLoadCharDataError: function() {
-            setTimeout(() => {
-              if (currentRenderSeq !== roadmapAnimationSequence) return;
-              loadedCount++;
-              if (loadedCount === cleanChars.length) {
-                startCleanSequentialAnimation();
-              }
-            }, 20);
+            const targetEl = document.getElementById(`roadmap-tianzige-target-${idx}`);
+            if (targetEl) targetEl.innerHTML = `<span style="font-size: 2.2rem; font-weight: 800; color: #dc2626;">${char}</span>`;
           }
         });
-        roadmapHanziWriters[idx] = writer;
+        roadmapHanziWriters.push(writer);
       } catch (e) {
         const targetEl = document.getElementById(`roadmap-tianzige-target-${idx}`);
         if (targetEl) targetEl.innerHTML = `<span style="font-size: 2.2rem; font-weight: 800; color: #dc2626;">${char}</span>`;
-        setTimeout(() => {
-          if (currentRenderSeq !== roadmapAnimationSequence) return;
-          loadedCount++;
-          if (loadedCount === cleanChars.length) {
-            startCleanSequentialAnimation();
-          }
-        }, 20);
       }
     });
+
+    startCleanSequentialAnimation();
   }
 }
 
@@ -4125,10 +4097,10 @@ function startCleanSequentialAnimation() {
     if (currentSeq === roadmapAnimationSequence) {
       playWriterAtIndex(0, currentSeq);
     }
-  }, 150);
+  }, 100);
 }
 
-function playWriterAtIndex(idx, seq) {
+async function playWriterAtIndex(idx, seq) {
   if (seq !== roadmapAnimationSequence) return;
 
   if (roadmapStrokeTimeout) {
@@ -4153,17 +4125,18 @@ function playWriterAtIndex(idx, seq) {
 
   try {
     writer.cancelAnimation();
-    writer.hideCharacter(); // Ensure it starts from blank
-    writer.animateCharacter({
-      onComplete: function() {
-        if (seq !== roadmapAnimationSequence) return;
-        roadmapStrokeTimeout = setTimeout(() => {
-          if (seq === roadmapAnimationSequence) {
-            playWriterAtIndex(idx + 1, seq);
-          }
-        }, 400);
+    writer.hideCharacter();
+    
+    // HanziWriter animateCharacter returns a Promise
+    await writer.animateCharacter();
+
+    if (seq !== roadmapAnimationSequence) return;
+
+    roadmapStrokeTimeout = setTimeout(() => {
+      if (seq === roadmapAnimationSequence) {
+        playWriterAtIndex(idx + 1, seq);
       }
-    });
+    }, 300);
   } catch(e) {
     if (seq === roadmapAnimationSequence) {
       playWriterAtIndex(idx + 1, seq);
