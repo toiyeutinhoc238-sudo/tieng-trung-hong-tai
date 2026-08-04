@@ -47,12 +47,54 @@
         document.documentElement.classList.add('dark');
         document.documentElement.classList.remove('light', 'light-mode');
         localStorage.setItem('theme', 'dark');
+        updateToggleBtns(false);
       } else {
         document.documentElement.classList.add('light', 'light-mode');
         document.documentElement.classList.remove('dark');
         localStorage.setItem('theme', 'light');
+        updateToggleBtns(true);
       }
     };
+
+    function updateToggleBtns(isLight) {
+      var btn = document.getElementById('theme-toggle-btn');
+      if (btn) {
+        btn.innerHTML = isLight 
+          ? '<i class="fa-solid fa-moon" style="color:#d97706;"></i>' 
+          : '<i class="fa-solid fa-sun" style="color:#f59e0b;"></i>';
+      }
+    }
+
+    window.toggleSeasonalParticles = function() {
+      var current = localStorage.getItem('particles_enabled') !== 'false';
+      var next = !current;
+      localStorage.setItem('particles_enabled', next ? 'true' : 'false');
+      updateParticleToggleBtns(next);
+      var cv = document.getElementById('seasonal-particle-canvas');
+      if (cv) cv.style.display = next ? 'block' : 'none';
+    };
+
+    function updateParticleToggleBtns(enabled) {
+      var btns = document.querySelectorAll('#particle-toggle-btn, .particle-toggle-btn');
+      btns.forEach(function(btn) {
+        if (enabled) {
+          btn.classList.remove('particles-off');
+          btn.innerHTML = '<i class="fa-solid fa-snowflake" style="color: #60a5fa;"></i>';
+          btn.title = 'Tắt hiệu ứng rơi động (Đang BẬT)';
+        } else {
+          btn.classList.add('particles-off');
+          btn.innerHTML = '<i class="fa-solid fa-snowflake" style="opacity: 0.35; color: #94a3b8;"></i>';
+          btn.title = 'Bật hiệu ứng rơi động (Đang TẮT)';
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var isLight = document.documentElement.classList.contains('light-mode') || document.documentElement.classList.contains('light');
+      updateToggleBtns(isLight);
+      var enabled = localStorage.getItem('particles_enabled') !== 'false';
+      updateParticleToggleBtns(enabled);
+    });
   </script>
 
   <style>
@@ -71,39 +113,80 @@
       background-size: cover;
       background-position: center;
     }
-    html.light-mode body {
-      color: #0f172a;
-    }
     .page-container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 24px 16px 60px 16px;
     }
+
+    /* ─── LIQUID GLASS IOS 26 AESTHETICS ─── */
     .header-card {
       background: rgba(15, 23, 42, 0.65);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.18);
       border-radius: 20px;
-      padding: 24px;
+      padding: 22px 26px;
       margin-bottom: 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      box-shadow: 0 12px 36px rgba(0,0,0,0.35);
     }
+
     html.light-mode .header-card {
-      background: rgba(255, 255, 255, 0.85);
-      border-color: rgba(0, 0, 0, 0.1);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+      background: rgba(255, 255, 255, 0.72) !important;
+      backdrop-filter: blur(28px) saturate(190%) !important;
+      -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
+      color: #0f172a !important;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.06), 0 1px 3px rgba(255,255,255,0.9) inset !important;
     }
+
+    /* Top Control Action Buttons (Home icon, Snowflake, Theme toggle) */
+    .top-control-btn {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      font-size: 1.15rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    html.light-mode .top-control-btn {
+      background: rgba(255, 255, 255, 0.8) !important;
+      backdrop-filter: blur(20px) !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.95) !important;
+      color: #0f172a !important;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(255, 255, 255, 1) inset !important;
+    }
+
+    .top-control-btn:hover {
+      background: #2563eb !important;
+      color: #ffffff !important;
+      border-color: #2563eb !important;
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35) !important;
+    }
+
+    /* Tab Buttons */
     .tabs-bar {
       display: flex;
       gap: 10px;
       overflow-x: auto;
       padding-bottom: 8px;
       margin-bottom: 24px;
+      scrollbar-width: none;
     }
     .rad-tab-btn {
       background: rgba(255, 255, 255, 0.06);
@@ -117,77 +200,81 @@
       white-space: nowrap;
       transition: all 0.2s ease;
     }
+
     html.light-mode .rad-tab-btn {
-      background: #ffffff;
-      color: #475569;
-      border-color: #cbd5e1;
+      background: rgba(255, 255, 255, 0.65) !important;
+      backdrop-filter: blur(16px) !important;
+      color: #334155 !important;
+      border: 1px solid rgba(0, 0, 0, 0.08) !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
     }
+
     .rad-tab-btn:hover {
       background: rgba(37, 99, 235, 0.15);
       color: #3b82f6;
       border-color: rgba(37, 99, 235, 0.4);
     }
+
     .rad-tab-btn.active {
       background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
       color: #ffffff !important;
       border-color: #2563eb !important;
-      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.38) !important;
     }
+
+    /* Radical Cards Grid */
     .grid-container {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 18px;
     }
+
     .rad-card {
       background: rgba(15, 23, 42, 0.6);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
       border-radius: 18px;
       padding: 20px;
       display: flex;
       flex-direction: column;
       gap: 10px;
-      transition: all 0.25s ease;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       cursor: pointer;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.22);
     }
+
     html.light-mode .rad-card {
-      background: rgba(255, 255, 255, 0.85);
-      border-color: rgba(0, 0, 0, 0.1);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+      background: rgba(255, 255, 255, 0.7) !important;
+      backdrop-filter: blur(24px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05), 0 1px 2px rgba(255,255,255,0.9) inset !important;
+      color: #0f172a !important;
     }
+
     .rad-card:hover {
-      transform: translateY(-4px);
-      border-color: #3b82f6;
-      box-shadow: 0 12px 28px rgba(37, 99, 235, 0.25);
+      transform: translateY(-4px) scale(1.01);
+      border-color: #2563eb !important;
+      box-shadow: 0 16px 36px rgba(37, 99, 235, 0.22) !important;
     }
-    .back-btn {
-      background: rgba(255, 255, 255, 0.08);
-      color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      padding: 10px 18px;
-      border-radius: 12px;
-      font-weight: 700;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.2s;
+
+    html.light-mode h1, html.light-mode h2, html.light-mode h3 {
+      color: #0f172a !important;
     }
-    html.light-mode .back-btn {
-      background: #ffffff;
-      color: #0f172a;
-      border-color: #cbd5e1;
+    html.light-mode .card-title-text {
+      color: #0f172a !important;
     }
-    .back-btn:hover {
-      background: #2563eb;
-      color: #fff;
-      border-color: #2563eb;
+    html.light-mode .card-sub-text {
+      color: #475569 !important;
     }
   </style>
 </head>
 
 <body>
+  <!-- Seasonal Particle Canvas -->
+  <canvas id="seasonal-particle-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;"></canvas>
+
   <div class="page-container">
     <!-- Header -->
     <div class="header-card">
@@ -196,22 +283,31 @@
           <i class="fa-solid fa-shapes"></i>
         </div>
         <div>
-          <h1 style="font-size: 1.75rem; font-weight: 800; margin: 0; letter-spacing: -0.01em;">Bộ thủ Tiếng Trung</h1>
-          <p style="font-size: 0.92rem; color: #94a3b8; margin: 4px 0 0 0;">Nắm vững cấu trúc nét chữ, phiên âm, Hán-Việt & mẹo phân biệt các bộ thủ</p>
+          <h1 class="card-title-text" style="font-size: 1.75rem; font-weight: 800; margin: 0; letter-spacing: -0.01em;">Bộ thủ Tiếng Trung</h1>
+          <p class="card-sub-text" style="font-size: 0.92rem; color: #94a3b8; margin: 4px 0 0 0;">Nắm vững cấu trúc nét chữ, phiên âm, Hán-Việt & mẹo phân biệt các bộ thủ</p>
         </div>
       </div>
 
-      <div style="display: flex; align-items: center; gap: 12px;">
-        <a href="/" class="back-btn">
-          <i class="fa-solid fa-arrow-left"></i> Trang chủ
+      <!-- Top Action Controls (Hình ngôi nhà, Nút bông tuyết, Nút theme toggle) -->
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <!-- Nút hình Ngôi nhà (Không có chữ Trang chủ) -->
+        <a href="/" class="top-control-btn" title="Trang chủ">
+          <i class="fa-solid fa-house"></i>
         </a>
-        <button onclick="window.toggleTheme()" class="back-btn" style="cursor: pointer;">
+
+        <!-- Nút bông tuyết hiệu ứng mùa -->
+        <button onclick="window.toggleSeasonalParticles()" id="particle-toggle-btn" class="top-control-btn particle-toggle-btn" title="Bật/Tắt hiệu ứng rơi động">
+          <i class="fa-solid fa-snowflake" style="color: #60a5fa;"></i>
+        </button>
+
+        <!-- Nút đổi theme giao diện -->
+        <button onclick="window.toggleTheme()" id="theme-toggle-btn" class="top-control-btn theme-toggle-btn-top" title="Đổi giao diện Sáng / Tối">
           <i class="fa-solid fa-moon"></i>
         </button>
       </div>
     </div>
 
-    <!-- Top Section Tabs (Tương thích hình 2) -->
+    <!-- Top Section Tabs (Theo bản vẽ hình 2) -->
     <div class="tabs-bar">
       <button class="rad-tab-btn active" id="tab-50-1" onclick="window.switchRadicalPageTab('50 bộ (1)')">50 bộ (1)</button>
       <button class="rad-tab-btn" id="tab-50-2" onclick="window.switchRadicalPageTab('50 bộ (2)')">50 bộ (2)</button>
@@ -224,10 +320,10 @@
     <div id="radicals-content-area"></div>
   </div>
 
-  <!-- Radical Detail Modal (Khung học chi tiết chuẩn như thiết kế hình 2) -->
-  <div id="radical-detail-modal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); z-index: 99999; align-items: center; justify-content: center; padding: 16px;">
-    <div style="background: var(--bg-primary, #1e293b); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; width: 100%; max-width: 720px; padding: 28px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); position: relative; color: #fff;">
-      <button onclick="document.getElementById('radical-detail-modal').style.display='none'" style="position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.1); border: none; color: #94a3b8; font-size: 1.4rem; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">&times;</button>
+  <!-- Radical Detail Modal (Chế độ xem thẻ Flashcard chi tiết theo hình 2) -->
+  <div id="radical-detail-modal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.82); backdrop-filter: blur(14px); z-index: 99999; align-items: center; justify-content: center; padding: 16px;">
+    <div class="modal-card" style="background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255,255,255,0.18); border-radius: 22px; width: 100%; max-width: 740px; padding: 28px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); position: relative; color: #fff;">
+      <button onclick="document.getElementById('radical-detail-modal').style.display='none'" style="position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.1); border: none; color: #94a3b8; font-size: 1.4rem; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">&times;</button>
       
       <div id="radical-detail-card-body"></div>
     </div>
