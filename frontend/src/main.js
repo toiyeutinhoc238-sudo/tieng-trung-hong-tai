@@ -4224,14 +4224,20 @@ window.showLearningFlashcard = function(index) {
   const py = w.pinyin || '---';
   const pos = w.category || w.word_type || w.hanviet || 'Từ vựng';
   const mn = w.meaning || '---';
-  const usage = w.explanation || w.usage || (w.example_vi ? `Dùng trong câu: "${w.example_vi}"` : '');
+  
   const egZh = w.example_zh || '';
   const egVi = w.example_vi || '';
   
+  const egZhLines = egZh ? egZh.split(/\r?\n/).map(s => s.trim()).filter(Boolean) : [];
+  const egViLines = egVi ? egVi.split(/\r?\n/).map(s => s.trim()).filter(Boolean) : [];
+
+  const rawUsage = w.explanation || w.usage || (egViLines[0] ? `Dùng trong câu: "${egViLines[0]}"` : '');
+  const usageLines = rawUsage ? rawUsage.split(/\r?\n/).map(s => s.trim()).filter(Boolean) : [];
+
   // Only show translation exercise if an example sentence exists!
-  const hasExercise = egZh.trim() !== '' && egVi.trim() !== '';
-  const sentenceQ = egVi;
-  const sentenceAns = egZh;
+  const hasExercise = egZhLines.length > 0 && egViLines.length > 0;
+  const sentenceQ = egViLines[0] || egVi;
+  const sentenceAns = egZhLines[0] || egZh;
 
   flashcard.style.opacity = '0';
   flashcard.style.transform = 'scale(0.98)';
@@ -4269,18 +4275,24 @@ window.showLearningFlashcard = function(index) {
           </div>
 
           <!-- Chú ý / Cách dùng -->
-          ${usage ? `
-            <div style="font-size: 0.95rem; color: var(--text-muted); font-style: italic; line-height: 1.4;">
-              <i class="fa-solid fa-circle-info" style="color: #3b82f6; margin-right: 4px;"></i> ${usage}
+          ${usageLines.length > 0 ? `
+            <div style="font-size: 0.95rem; color: var(--text-muted); font-style: italic; line-height: 1.4; display: flex; flex-direction: column; gap: 4px;">
+              ${usageLines.map(line => `<div><i class="fa-solid fa-circle-info" style="color: #3b82f6; margin-right: 4px;"></i> ${line}</div>`).join('')}
             </div>
           ` : ''}
 
-          <!-- Ví dụ -->
-          ${egZh ? `
-            <div style="background: rgba(255,255,255,0.04); border-left: 3px solid #2563eb; padding: 8px 12px; border-radius: 0 8px 8px 0; margin-top: 4px;">
-              <div style="font-size: 0.82rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">Ví dụ:</div>
-              <div style="font-family: var(--font-hanzi); font-size: 1.1rem; color: var(--text-color); font-weight: 600;">${egZh}</div>
-              ${egVi ? `<div style="font-size: 0.9rem; color: var(--text-muted); font-style: italic;">${egVi}</div>` : ''}
+          <!-- Ví dụ minh họa (Từng câu xuống dòng là 1 ví dụ) -->
+          ${egZhLines.length > 0 ? `
+            <div style="background: rgba(255,255,255,0.04); border-left: 3px solid #2563eb; padding: 10px 14px; border-radius: 0 8px 8px 0; margin-top: 6px; display: flex; flex-direction: column; gap: 8px;">
+              <div style="font-size: 0.85rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-book-open"></i> Ví dụ minh họa:
+              </div>
+              ${egZhLines.map((zhLine, i) => `
+                <div style="${i > 0 ? 'border-top: 1px dashed rgba(255,255,255,0.12); padding-top: 6px;' : ''}">
+                  <div style="font-family: var(--font-hanzi); font-size: 1.15rem; color: var(--text-color); font-weight: 600; line-height: 1.3;">${zhLine}</div>
+                  ${egViLines[i] ? `<div style="font-size: 0.92rem; color: var(--text-muted); font-style: italic; margin-top: 2px;">${egViLines[i]}</div>` : ''}
+                </div>
+              `).join('')}
             </div>
           ` : ''}
         </div>
