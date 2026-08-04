@@ -535,9 +535,11 @@ html.dark .brand-logo-img {
 
 /* Layout Main Container */
 .main-layout {
-  max-width: var(--container-width);
-  margin: 0 auto;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
   padding: 40px 24px;
+  box-sizing: border-box !important;
 }
 
 /* Hero Banner (matching design details) */
@@ -5784,9 +5786,10 @@ body {
 
   .main-layout {
     margin-left: 260px;
-    width: calc(100% - 260px);
-    max-width: 1300px;
+    width: calc(100% - 260px) !important;
+    max-width: none !important;
     padding: 32px 40px;
+    box-sizing: border-box !important;
   }
 
 /* Roadmap Visual Timeline Styles */
