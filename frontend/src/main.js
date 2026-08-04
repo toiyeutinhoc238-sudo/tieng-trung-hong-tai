@@ -3737,6 +3737,10 @@ function renderGamifiedRoadmapPath() {
       return !curr.includes('yct') && !ver.includes('yct') && (ver.includes('3') || ver === '3.0' || w.hskVersion === '3.0') && matchLevel(w.level, item.level);
     });
 
+    const totalWords = levelWords.length;
+    const memorizedWords = levelWords.filter(w => w.isMemorized).length;
+    const pct = totalWords > 0 ? Math.round((memorizedWords / totalWords) * 100) : 0;
+
     const isUnlocked = isLevelUnlocked(hskVer, item.level, idx, levelsData, builtInVocabs);
     const isCompleted = pct === 100 && totalWords > 0;
     const isStarted = pct > 0 || idx === 0;
