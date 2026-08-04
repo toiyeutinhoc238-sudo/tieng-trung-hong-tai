@@ -55,10 +55,10 @@ async function main() {
     return items;
   }
 
-  const rads1 = mapRadicalRows(list1, '50 bộ thủ 1');
-  const rads2 = mapRadicalRows(list2, '50 bộ thủ 2');
-  const rads3 = mapRadicalRows(list3, '50 bộ thủ 3');
-  const radsRest = mapRadicalRows(listRest, 'Bộ thủ còn lại');
+  const rads1 = mapRadicalRows(list1, '50 bộ (1)');
+  const rads2 = mapRadicalRows(list2, '50 bộ (2)');
+  const rads3 = mapRadicalRows(list3, '50 bộ (3)');
+  const radsRest = mapRadicalRows(listRest, 'Còn lại');
 
   const comparisons = [];
   for (let i = 1; i < listComp.length; i++) {
@@ -89,7 +89,7 @@ async function main() {
   fs.writeFileSync(outFrontend, JSON.stringify(dataset, null, 2), 'utf8');
   fs.writeFileSync(outBackend, JSON.stringify(dataset, null, 2), 'utf8');
 
-  console.log('Saved dataset to frontend and backend json successfully!');
+  console.log('Saved dataset with clean categories!');
 }
 
 main().catch(console.error);

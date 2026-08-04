@@ -1,7 +1,7 @@
 {
   "radicals": [
     {
-      "id": "rad_50_bộ_thủ_1_1",
+      "id": "rad_50_bộ_(1)_1",
       "radical": "人",
       "variant": "亻",
       "pinyin": "rén",
@@ -9,10 +9,10 @@
       "meaning": "Người",
       "example": "你 (nǐ): Bạn; 他 (tā): Anh ấy; 们 (men): Số nhiều",
       "note": "Thường đứng ở vị trí bên trái (biến thể 亻), đóng vai trò định hình ý nghĩa liên quan đến con người hoặc hành động của người.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_2",
+      "id": "rad_50_bộ_(1)_2",
       "radical": "儿",
       "variant": "",
       "pinyin": "ér",
@@ -20,10 +20,10 @@
       "meaning": "Trẻ con",
       "example": "兄 (xiōng): Anh trai; 先 (xiān): Trước; 光 (guāng): Ánh sáng",
       "note": "Thường đứng ở vị trí phía dưới, đóng vai trò phân loại các từ chỉ trẻ con hoặc thế hệ kế cận.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_3",
+      "id": "rad_50_bộ_(1)_3",
       "radical": "入",
       "variant": "",
       "pinyin": "rù",
@@ -31,10 +31,10 @@
       "meaning": "Vào",
       "example": "入口 (rùkǒu): Lối vào; 内 (nèi): Bên trong; 全 (quán): Toàn bộ",
       "note": "Thường bao quanh phía trên và hai bên, đóng vai trò định hình ý nghĩa về sự gia nhập hoặc đi vào.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_4",
+      "id": "rad_50_bộ_(1)_4",
       "radical": "冂",
       "variant": "",
       "pinyin": "jiōng",
@@ -42,10 +42,10 @@
       "meaning": "Vùng biên giới",
       "example": "网 (wǎng): Lưới; 冈 (gāng): Chỏm núi; 同 (tóng): Cùng nhau",
       "note": "Bao quanh phía trên và hai bên, đóng vai trò phân loại nhóm từ chỉ vùng biên giới hoặc không gian xa xôi.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_5",
+      "id": "rad_50_bộ_(1)_5",
       "radical": "冖",
       "variant": "",
       "pinyin": "mì",
@@ -53,10 +53,10 @@
       "meaning": "Trùm lên, che đậy",
       "example": "冠 (guān): Mũ; 军 (jūn): Quân đội; 写 (xiě): Viết",
       "note": "Đứng ở vị trí phía trên, đóng vai trò định hình ý nghĩa về sự che phủ hoặc trùm lên vật khác.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_6",
+      "id": "rad_50_bộ_(1)_6",
       "radical": "冫",
       "variant": "",
       "pinyin": "bīng",
@@ -64,10 +64,10 @@
       "meaning": "Băng, lạnh giá",
       "example": "冷 (lěng): Lạnh; 冰 (bīng): Băng; 准 (zhǔn): Chuẩn bị",
       "note": "Thường đứng ở vị trí bên trái, đóng vai trò phân loại các từ liên quan đến tính chất lạnh lẽo hoặc băng giá.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_7",
+      "id": "rad_50_bộ_(1)_7",
       "radical": "刀",
       "variant": "刂",
       "pinyin": "dāo",
@@ -75,10 +75,10 @@
       "meaning": "Con dao, vũ khí",
       "example": "分 (fēn): Phân chia; 别 (bié): Đừng/Khác; 刻 (kè): Khắc/Giờ",
       "note": "Thường đứng ở vị trí bên phải (biến thể 刂), đóng vai trò định hình ý nghĩa về việc cắt xẻ, phân chia hoặc vũ khí.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_8",
+      "id": "rad_50_bộ_(1)_8",
       "radical": "力",
       "variant": "",
       "pinyin": "lì",
@@ -86,10 +86,10 @@
       "meaning": "Sức mạnh",
       "example": "办 (bàn): Làm việc; 功 (gōng): Công lao; 加 (jiā): Thêm vào",
       "note": "Thường đứng ở vị trí bên phải, đóng vai trò định hình ý nghĩa về sức lực hoặc các hoạt động cần dùng đến thể lực.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_9",
+      "id": "rad_50_bộ_(1)_9",
       "radical": "勹",
       "variant": "",
       "pinyin": "bāo",
@@ -97,10 +97,10 @@
       "meaning": "Bao bọc",
       "example": "包 (bāo): Túi xách; 句 (jù): Câu; 勿 (wù): Chớ",
       "note": "Bao bọc bên ngoài và phía trên, đóng vai trò phân loại nhóm từ có ý nghĩa bao hàm hoặc gói bọc.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_10",
+      "id": "rad_50_bộ_(1)_10",
       "radical": "匚",
       "variant": "",
       "pinyin": "fāng",
@@ -108,10 +108,10 @@
       "meaning": "Tủ đựng, vật chứa",
       "example": "匠 (jiàng): Thợ; 匡 (kuāng): Sửa chữa; 匣 (xiá): Cái hộp",
       "note": "Bao quanh phía dưới và bên trái, đóng vai trò định hình ý nghĩa về đồ vật chứa đựng hoặc các loại tủ kệ.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_11",
+      "id": "rad_50_bộ_(1)_11",
       "radical": "匸",
       "variant": "",
       "pinyin": "xì",
@@ -119,10 +119,10 @@
       "meaning": "Che giấu, hệ thống",
       "example": "区 (qū): Khu vực; 医 (yī): Y học; 匹 (pǐ): Đơn vị con vật",
       "note": "Bao quanh bên trái và phía dưới, đóng vai trò phân loại các từ chỉ sự che giấu hoặc các hệ thống lưu trữ.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_12",
+      "id": "rad_50_bộ_(1)_12",
       "radical": "卜",
       "variant": "",
       "pinyin": "bǔ",
@@ -130,10 +130,10 @@
       "meaning": "Xem bói",
       "example": "占 (zhàn): Chiếm giữ; 卧 (wò): Nằm; 卦 (guà): Quẻ bói",
       "note": "Thường đứng ở vị trí bên phải hoặc phía trên, đóng vai trò định hình ý nghĩa liên quan đến bói toán và tiên đoán.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_13",
+      "id": "rad_50_bộ_(1)_13",
       "radical": "厂",
       "variant": "",
       "pinyin": "hǎn",
@@ -141,10 +141,10 @@
       "meaning": "Sườn núi, vách đá",
       "example": "厅 (tīng): Sảnh; 历 (lì): Lịch sử; 压 (yā): Áp lực",
       "note": "Bao quanh phía trên và bên trái, đóng vai trò định hình ý nghĩa về địa điểm như sườn núi, vách đá hoặc xưởng làm việc.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_14",
+      "id": "rad_50_bộ_(1)_14",
       "radical": "又",
       "variant": "",
       "pinyin": "yòu",
@@ -152,10 +152,10 @@
       "meaning": "Lại nữa, bàn tay",
       "example": "双 (shuāng): Đôi; 欢 (huān): Vui vẻ; 观 (guān): Quan sát",
       "note": "Có thể đứng ở vị trí bên phải hoặc phía dưới, đóng vai trò định hình ý nghĩa về sự lặp lại hoặc các thao tác của bàn tay.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_15",
+      "id": "rad_50_bộ_(1)_15",
       "radical": "口",
       "variant": "",
       "pinyin": "kǒu",
@@ -163,10 +163,10 @@
       "meaning": "Cái miệng",
       "example": "吃 (chī): Ăn; 叫 (jiào): Gọi; 听 (tīng): Nghe",
       "note": "Thường đứng ở vị trí bên trái hoặc phía dưới, đóng vai trò phân loại các từ liên quan đến ăn uống, âm thanh hoặc lời nói.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_16",
+      "id": "rad_50_bộ_(1)_16",
       "radical": "囗",
       "variant": "",
       "pinyin": "wéi",
@@ -174,10 +174,10 @@
       "meaning": "Vây quanh",
       "example": "国 (guó): Quốc gia; 园 (yuán): Vườn; 图 (tú): Bản đồ",
       "note": "Bao quanh toàn bộ các thành phần khác, đóng vai trò định hình ý nghĩa về sự vây quanh, biên giới hoặc phạm vi.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_17",
+      "id": "rad_50_bộ_(1)_17",
       "radical": "土",
       "variant": "",
       "pinyin": "tǔ",
@@ -185,10 +185,10 @@
       "meaning": "Đất",
       "example": "地 (dì): Đất đai; 城 (chéng): Thành phố; 场 (chǎng): Sân bãi",
       "note": "Thường đứng ở vị trí bên trái, đóng vai trò phân loại nhóm từ liên quan đến đất đai, địa danh hoặc thổ nhưỡng.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_18",
+      "id": "rad_50_bộ_(1)_18",
       "radical": "士",
       "variant": "",
       "pinyin": "shì",
@@ -196,10 +196,10 @@
       "meaning": "Kẻ sĩ, người học rộng",
       "example": "志 (zhì): Chí hướng; 声 (shēng): Âm thanh; 壳 (ké): Vỏ",
       "note": "Thường đứng ở vị trí phía dưới hoặc bên trái, đóng vai trò định hình ý nghĩa về người trí thức hoặc người có học vấn.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_19",
+      "id": "rad_50_bộ_(1)_19",
       "radical": "女",
       "variant": "",
       "pinyin": "nǚ",
@@ -207,10 +207,10 @@
       "meaning": "Phụ nữ, con gái",
       "example": "妈 (mā): Mẹ; 姐 (jiě): Chị; 妹 (mèi): Em gái",
       "note": "Thường đứng ở vị trí bên trái, đóng vai trò phân loại các từ liên quan đến phụ nữ, quan hệ gia đình hoặc tính chất mềm mỏng.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_20",
+      "id": "rad_50_bộ_(1)_20",
       "radical": "子",
       "variant": "",
       "pinyin": "zǐ",
@@ -218,10 +218,10 @@
       "meaning": "Con cái",
       "example": "学 (xué): Học; 字 (zì): Chữ; 孩 (hái): Trẻ em",
       "note": "Thường đứng ở vị trí phía dưới hoặc làm trung tâm chữ, đóng vai trò định hình ý nghĩa về con cái và giáo dục.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_21",
+      "id": "rad_50_bộ_(1)_21",
       "radical": "宀",
       "variant": "",
       "pinyin": "mián",
@@ -229,10 +229,10 @@
       "meaning": "Mái nhà",
       "example": "家 (jiā): Gia đình; 安 (ān): An toàn; 定 (dìng): Định rõ",
       "note": "Luôn đứng ở vị trí phía trên, đóng vai trò định hình ý nghĩa về nhà cửa, nơi cư trú hoặc sự che chở.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_22",
+      "id": "rad_50_bộ_(1)_22",
       "radical": "小",
       "variant": "",
       "pinyin": "xiǎo",
@@ -240,10 +240,10 @@
       "meaning": "Nhỏ bé",
       "example": "少 (shǎo): Ít; 尖 (jiān): Nhọn; 尘 (chén): Bụi",
       "note": "Thường đứng ở vị trí phía trên hoặc bên trái, đóng vai trò định hình ý nghĩa về kích thước nhỏ bé hoặc sự ít ỏi.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_23",
+      "id": "rad_50_bộ_(1)_23",
       "radical": "尢",
       "variant": "",
       "pinyin": "wāng",
@@ -251,10 +251,10 @@
       "meaning": "Yếu đuối, què quặt",
       "example": "尤 (yóu): Đặc biệt; 就 (jiù): Chính là; 尴 (gān): Lúng túng",
       "note": "Thường đứng ở vị trí bên trái, đóng vai trò phân loại nhóm từ chỉ sự yếu ớt, tật nguyền hoặc khác biệt.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_24",
+      "id": "rad_50_bộ_(1)_24",
       "radical": "尸",
       "variant": "",
       "pinyin": "shī",
@@ -262,10 +262,10 @@
       "meaning": "Xác chết, thân thể",
       "example": "尾 (wěi): Cái đuôi; 居 (jū): Cư trú; 层 (céng): Tầng",
       "note": "Bao quanh phía trên và bên trái, đóng vai trò định hình ý nghĩa về thân thể, xác chết hoặc các đồ vật liên quan.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_25",
+      "id": "rad_50_bộ_(1)_25",
       "radical": "山",
       "variant": "",
       "pinyin": "shān",
@@ -273,10 +273,10 @@
       "meaning": "Núi",
       "example": "岁 (suì): Tuổi; 岭 (lǐng): Đỉnh núi; 岛 (dǎo): Đảo",
       "note": "Đứng ở nhiều vị trí như bên trái, trên hoặc dưới, đóng vai trò phân loại các từ liên quan đến núi non, phong cảnh địa hình.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_26",
+      "id": "rad_50_bộ_(1)_26",
       "radical": "工",
       "variant": "",
       "pinyin": "gōng",
@@ -284,10 +284,10 @@
       "meaning": "Công việc, thợ",
       "example": "左 (zuǒ): Bên trái; 差 (chā): Kém; 巩 (gǒng): Củng cố",
       "note": "Thường đứng ở vị trí bên trái hoặc phía dưới, đóng vai trò định hình ý nghĩa về nghề nghiệp, kỹ năng hoặc công cụ làm việc.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_27",
+      "id": "rad_50_bộ_(1)_27",
       "radical": "己",
       "variant": "",
       "pinyin": "jǐ",
@@ -295,10 +295,10 @@
       "meaning": "Bản thân mình",
       "example": "已 (yǐ): Đã xong; 改 (gǎi): Sửa đổi; 巷 (xiàng): Ngõ",
       "note": "Thường đứng ở vị trí bên phải, đóng vai trò định hình ý nghĩa về bản thân hoặc các khái niệm mang tính cá nhân.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_28",
+      "id": "rad_50_bộ_(1)_28",
       "radical": "干",
       "variant": "",
       "pinyin": "gān",
@@ -306,10 +306,10 @@
       "meaning": "Can dự, khô ráo",
       "example": "干净 (gānjìng): Sạch sẽ; 平 (píng): Bằng phẳng; 年 (nián): Năm",
       "note": "Thường đứng ở vị trí bên trái hoặc bên phải, đóng vai trò phân loại nhóm từ liên quan đến sự can dự hoặc trạng thái khô ráo.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_29",
+      "id": "rad_50_bộ_(1)_29",
       "radical": "广",
       "variant": "",
       "pinyin": "yǎn",
@@ -317,10 +317,10 @@
       "meaning": "Mái nhà rộng",
       "example": "店 (diàn): Cửa hàng; 床 (chuáng): Cái giường; 府 (fǔ): Phủ",
       "note": "Bao quanh phía trên và bên trái, đóng vai trò định hình ý nghĩa về các công trình kiến trúc hoặc nhà cửa rộng lớn.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_30",
+      "id": "rad_50_bộ_(1)_30",
       "radical": "廴",
       "variant": "",
       "pinyin": "yǐn",
@@ -328,10 +328,10 @@
       "meaning": "Đi xa",
       "example": "延 (yán): Kéo dài; 建 (jiàn): Xây dựng; 廷 (tíng): Triều đình",
       "note": "Đứng bao quanh phía dưới và bên trái, đóng vai trò định hình ý nghĩa về sự di chuyển xa hoặc kéo dài.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_31",
+      "id": "rad_50_bộ_(1)_31",
       "radical": "彳",
       "variant": "",
       "pinyin": "chì",
@@ -339,10 +339,10 @@
       "meaning": "Bước chân trái",
       "example": "很 (hěn): Rất; 行 (xíng): Đi; 往 (wǎng): Hướng tới",
       "note": "Luôn đứng ở vị trí bên trái, đóng vai trò định hình ý nghĩa về sự di chuyển, bước chân hoặc các hành động cụ thể.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_32",
+      "id": "rad_50_bộ_(1)_32",
       "radical": "心",
       "variant": "忄",
       "pinyin": "xīn",
@@ -350,10 +350,10 @@
       "meaning": "Tâm trí, tình cảm",
       "example": "想 (xiǎng): Nghĩ; 忙 (máng): Bận; 情 (qíng): Tình cảm",
       "note": "Đứng ở vị trí bên trái (忄) hoặc dưới (心), đóng vai trò phân loại các từ chỉ cảm xúc, tư duy hoặc trạng thái tâm lý.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_33",
+      "id": "rad_50_bộ_(1)_33",
       "radical": "户",
       "variant": "",
       "pinyin": "hù",
@@ -361,10 +361,10 @@
       "meaning": "Căn nhà, cửa",
       "example": "房间 (fángjiān): Phòng; 肩 (jiān): Vai; 扇 (shàn): Cái quạt",
       "note": "Thường đứng ở vị trí phía trên hoặc bên trái, đóng vai trò định hình ý nghĩa về đơn vị gia đình hoặc cửa nẻo.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_34",
+      "id": "rad_50_bộ_(1)_34",
       "radical": "手",
       "variant": "扌",
       "pinyin": "shǒu",
@@ -372,10 +372,10 @@
       "meaning": "Cái tay",
       "example": "打 (dǎ): Đánh; 提 (tí): Nhắc tới; 找 (zhǎo): Tìm kiếm",
       "note": "Thường đứng ở vị trí bên trái (biến thể 扌), đóng vai trò định hình ý nghĩa cho các từ chỉ hành động, thao tác bằng tay.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_35",
+      "id": "rad_50_bộ_(1)_35",
       "radical": "日",
       "variant": "",
       "pinyin": "rì",
@@ -383,10 +383,10 @@
       "meaning": "Mặt trời, ngày",
       "example": "明 (míng): Sáng; 晚 (wǎn): Muộn; 时 (shí): Thời gian",
       "note": "Thường đứng ở vị trí bên trái hoặc bên phải, đóng vai trò phân loại nhóm từ liên quan đến thời gian, mặt trời hoặc ánh sáng.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_36",
+      "id": "rad_50_bộ_(1)_36",
       "radical": "月",
       "variant": "",
       "pinyin": "yuè",
@@ -394,10 +394,10 @@
       "meaning": "Mặt trăng, tháng",
       "example": "朋友 (péngyǒu): Bạn bè; 脸 (liǎn): Khuôn mặt; 胖 (pàng): Béo",
       "note": "Thường đứng ở vị trí bên trái hoặc bên phải, đóng vai trò định hình ý nghĩa về bộ phận cơ thể người hoặc các khoảng thời gian trong tháng.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_37",
+      "id": "rad_50_bộ_(1)_37",
       "radical": "曰",
       "variant": "",
       "pinyin": "yuē",
@@ -405,10 +405,10 @@
       "meaning": "Nói rằng",
       "example": "曲 (qǔ): Bài hát; 更 (gèng): Thêm; 曹 (cáo): Họ Tào",
       "note": "Thường đứng ở vị trí phía dưới, đóng vai trò định hình ý nghĩa liên quan đến lời nói hoặc trích dẫn.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_38",
+      "id": "rad_50_bộ_(1)_38",
       "radical": "木",
       "variant": "",
       "pinyin": "mù",
@@ -416,10 +416,10 @@
       "meaning": "Cây, gỗ",
       "example": "杯子 (bēizi): Cái cốc; 林 (lín): Rừng; 树 (shù): Cây",
       "note": "Thường đứng ở vị trí bên trái, đóng vai trò phân loại các từ liên quan đến thực vật thân gỗ hoặc đồ vật làm từ gỗ.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_39",
+      "id": "rad_50_bộ_(1)_39",
       "radical": "毛",
       "variant": "",
       "pinyin": "máo",
@@ -427,10 +427,10 @@
       "meaning": "Lông, tóc",
       "example": "毛笔 (máobǐ): Bút lông; 尾 (wěi): Đuôi; 毽 (jiàn): Cái cầu",
       "note": "Thường đứng ở vị trí bên phải hoặc phía dưới, đóng vai trò định hình ý nghĩa về chất liệu lông, tóc hoặc tính chất mềm mượt.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_40",
+      "id": "rad_50_bộ_(1)_40",
       "radical": "气",
       "variant": "",
       "pinyin": "qì",
@@ -438,10 +438,10 @@
       "meaning": "Hơi nước, không khí",
       "example": "天气 (tiānqì): Thời tiết; 氛 (fēn): Bầu không khí; 氧 (yǎng): Oxy",
       "note": "Thường đứng ở vị trí phía trên, đóng vai trò phân loại nhóm từ chỉ các loại khí, hơi nước hoặc bầu không khí.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_41",
+      "id": "rad_50_bộ_(1)_41",
       "radical": "水",
       "variant": "氵",
       "pinyin": "shuǐ",
@@ -449,10 +449,10 @@
       "meaning": "Nước",
       "example": "汉字 (hànzì): Chữ Hán; 江 (jiāng): Sông; 洗 (xǐ): Rửa",
       "note": "Luôn đứng ở vị trí bên trái (biến thể 氵), đóng vai trò định hình ý nghĩa cho các từ liên quan đến nước và chất lỏng.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_42",
+      "id": "rad_50_bộ_(1)_42",
       "radical": "火",
       "variant": "灬",
       "pinyin": "huǒ",
@@ -460,10 +460,10 @@
       "meaning": "Lửa",
       "example": "热 (rè): Nóng; 灯 (dēng): Đèn; 烤 (kǎo): Nướng",
       "note": "Thường đứng ở vị trí phía dưới (biến thể 灬), đóng vai trò phân loại các từ liên quan đến lửa, nhiệt độ hoặc sự đốt cháy.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_43",
+      "id": "rad_50_bộ_(1)_43",
       "radical": "牛",
       "variant": "牜",
       "pinyin": "niú",
@@ -471,10 +471,10 @@
       "meaning": "Con bò, con trâu",
       "example": "牛奶 (niúnǎi): Sữa bò; 物 (wù): Đồ vật; 牧 (mù): Chăn nuôi",
       "note": "Thường đứng ở vị trí bên trái (biến thể 牜), đóng vai trò định hình ý nghĩa về gia súc hoặc các sản phẩm từ động vật.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_44",
+      "id": "rad_50_bộ_(1)_44",
       "radical": "犬",
       "variant": "犭",
       "pinyin": "quǎn",
@@ -482,10 +482,10 @@
       "meaning": "Con chó, thú vật",
       "example": "狗 (gǒu): Con chó; 猫 (māo): Con mèo; 独 (dú): Độc lập",
       "note": "Thường đứng ở vị trí bên trái (biến thể 犭), đóng vai trò phân loại các từ chỉ các loài thú hoặc động vật bốn chân.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_45",
+      "id": "rad_50_bộ_(1)_45",
       "radical": "目",
       "variant": "",
       "pinyin": "mù",
@@ -493,10 +493,10 @@
       "meaning": "Mắt",
       "example": "看 (kàn): Xem, nhìn; 眼 (yǎn): Mắt; 睡 (shuì): Ngủ",
       "note": "Thường đứng ở vị trí bên trái hoặc phía dưới, đóng vai trò định hình ý nghĩa liên quan đến mắt và các hoạt động thị giác.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_46",
+      "id": "rad_50_bộ_(1)_46",
       "radical": "竹",
       "variant": "⺮",
       "pinyin": "zhú",
@@ -504,10 +504,10 @@
       "meaning": "Cây tre, trúc",
       "example": "笔 (bǐ): Cái bút; 答 (dá): Trả lời; 笑 (xiào): Cười",
       "note": "Thường đứng ở vị trí phía trên (biến thể ⺮), đóng vai trò định hình ý nghĩa về các vật dụng được chế tác từ tre, trúc.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_47",
+      "id": "rad_50_bộ_(1)_47",
       "radical": "艸",
       "variant": "艹",
       "pinyin": "cǎo",
@@ -515,10 +515,10 @@
       "meaning": "Cỏ, thảo mộc",
       "example": "花 (huā): Hoa; 茶 (chá): Trà; 菜 (cài): Rau/Món ăn",
       "note": "Thường đứng ở vị trí phía trên (biến thể 艹), đóng vai trò phân loại nhóm từ liên quan đến cỏ cây, thảo mộc hoặc thực vật.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_48",
+      "id": "rad_50_bộ_(1)_48",
       "radical": "言",
       "variant": "讠",
       "pinyin": "yán",
@@ -526,10 +526,10 @@
       "meaning": "Ngôn ngữ, lời nói",
       "example": "说话 (shuōhuà): Nói chuyện; 读 (dú): Đọc; 语 (yǔ): Ngôn ngữ",
       "note": "Thường đứng ở vị trí bên trái (biến thể 讠), đóng vai trò định hình ý nghĩa về ngôn ngữ, lời nói và các hoạt động giao tiếp.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_49",
+      "id": "rad_50_bộ_(1)_49",
       "radical": "寸",
       "variant": "",
       "pinyin": "cùn",
@@ -537,10 +537,10 @@
       "meaning": "Đơn vị đo (tấc)",
       "example": "对 (duì): Đúng; 寺 (sì): Chùa; 封 (fēng): Đóng lại",
       "note": "Thường đứng ở vị trí bên phải, đóng vai trò định hình ý nghĩa liên quan đến đo lường hoặc các khái niệm về khoảng cách, quy tắc.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_1_50",
+      "id": "rad_50_bộ_(1)_50",
       "radical": "生",
       "variant": "",
       "pinyin": "shēng",
@@ -548,10 +548,10 @@
       "meaning": "Sinh đẻ, sự sống",
       "example": "生日 (shēngrì): Sinh nhật; 产生 (chǎnshēng): Sản sinh; 隆 (lóng): Thịnh vượng",
       "note": "Thường đứng ở vị trí bên trái hoặc phía dưới, đóng vai trò định hình ý nghĩa về sự sống, sinh trưởng hoặc các quá trình tự nhiên.",
-      "category": "50 bộ thủ 1"
+      "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_1",
+      "id": "rad_50_bộ_(2)_1",
       "radical": "亠",
       "variant": "",
       "pinyin": "tóu",
@@ -559,10 +559,10 @@
       "meaning": "Phần trên cùng",
       "example": "亡 (wáng) - mất/chết, 夜 (yè) - ban đêm",
       "note": "Thường nằm phía trên đỉnh chữ, tạo thành phần bao phủ hoặc ngăn cách ở trên.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_2",
+      "id": "rad_50_bộ_(2)_2",
       "radical": "八",
       "variant": "丷",
       "pinyin": "bā",
@@ -570,10 +570,10 @@
       "meaning": "Số tám",
       "example": "分 (fēn) - chia, 公 (gōng) - công cộng",
       "note": "Chỉ sự phân chia, tách rời hoặc mở rộng ra hai bên.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_3",
+      "id": "rad_50_bộ_(2)_3",
       "radical": "己",
       "variant": "",
       "pinyin": "jǐ",
@@ -581,10 +581,10 @@
       "meaning": "Bản thân",
       "example": "已 (yǐ) - đã, 巳 (sì) - chi Tỵ",
       "note": "Liên quan đến bản thân, cái tôi; thường thấy trong các chữ biểu thị tính từ hoặc động từ chỉ trạng thái.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_4",
+      "id": "rad_50_bộ_(2)_4",
       "radical": "凵",
       "variant": "",
       "pinyin": "kǎn",
@@ -592,10 +592,10 @@
       "meaning": "Há miệng, hố",
       "example": "凶 (xiōng) - hung dữ, 出 (chū) - ra",
       "note": "Dạng cái hố hoặc miệng mở, thường bao quanh thành phần bên trong ở phía dưới.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_5",
+      "id": "rad_50_bộ_(2)_5",
       "radical": "夕",
       "variant": "",
       "pinyin": "xī",
@@ -603,10 +603,10 @@
       "meaning": "Buổi tối",
       "example": "外 (wài) - ngoài, 多 (duō) - nhiều",
       "note": "Biểu thị thời gian về tối hoặc hình trăng khuyết, tạo cảm giác về sự thay đổi của ánh sáng.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_6",
+      "id": "rad_50_bộ_(2)_6",
       "radical": "大",
       "variant": "",
       "pinyin": "dà",
@@ -614,10 +614,10 @@
       "meaning": "To lớn",
       "example": "天 (tiān) - trời, 太 (tài) - quá",
       "note": "Mô phỏng hình người đang dang tay, biểu thị sự to lớn, quan trọng hoặc mức độ cao.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_7",
+      "id": "rad_50_bộ_(2)_7",
       "radical": "巾",
       "variant": "",
       "pinyin": "jīn",
@@ -625,10 +625,10 @@
       "meaning": "Cái khăn",
       "example": "布 (bù) - vải, 市 (shì) - chợ/thành phố",
       "note": "Chỉ các vật dụng làm bằng vải, khăn hoặc liên quan đến may mặc.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_8",
+      "id": "rad_50_bộ_(2)_8",
       "radical": "彡",
       "variant": "",
       "pinyin": "shān",
@@ -636,10 +636,10 @@
       "meaning": "Lông dài, tóc",
       "example": "形 (xíng) - hình dáng, 须 (xū) - râu/cần phải",
       "note": "Biểu thị các nét phẩy dài, liên quan đến lông, tóc hoặc các đường nét trang trí làm đẹp.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_9",
+      "id": "rad_50_bộ_(2)_9",
       "radical": "文",
       "variant": "",
       "pinyin": "wén",
@@ -647,10 +647,10 @@
       "meaning": "Văn chương",
       "example": "斋 (zhāi) - phòng đọc sách/ăn chay, 斌 (bīn) - văn võ song toàn",
       "note": "Liên quan đến văn hóa, hoa văn, hoặc các yếu tố mang tính thẩm mỹ, tri thức.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_10",
+      "id": "rad_50_bộ_(2)_10",
       "radical": "斗",
       "variant": "",
       "pinyin": "dǒu",
@@ -658,10 +658,10 @@
       "meaning": "Cái đấu đo lường",
       "example": "料 (liào) - nguyên liệu, 斜 (xié) - nghiêng",
       "note": "Ban đầu là vật dụng đo lường, nay dùng để chỉ các đơn vị đo hoặc hành động đong đếm.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_11",
+      "id": "rad_50_bộ_(2)_11",
       "radical": "斤",
       "variant": "",
       "pinyin": "jīn",
@@ -669,10 +669,10 @@
       "meaning": "Cái rìu, cân",
       "example": "新 (xīn) - mới, 断 (duàn) - đứt/cắt",
       "note": "Hình chiếc rìu, thường chỉ hành động chặt, cắt hoặc đơn vị đo lường trọng lượng.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_12",
+      "id": "rad_50_bộ_(2)_12",
       "radical": "方",
       "variant": "",
       "pinyin": "fāng",
@@ -680,10 +680,10 @@
       "meaning": "Phương hướng",
       "example": "放 (fàng) - thả/đặt, 旅 (lǚ) - du lịch/lữ hành",
       "note": "Chỉ phương hướng, không gian hoặc các hành động sắp đặt, xếp đặt.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_13",
+      "id": "rad_50_bộ_(2)_13",
       "radical": "无",
       "variant": "",
       "pinyin": "wú",
@@ -691,10 +691,10 @@
       "meaning": "Không có",
       "example": "既 (jì) - đã/rồi",
       "note": "Chỉ sự phủ định, không có, hoặc trống rỗng.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_14",
+      "id": "rad_50_bộ_(2)_14",
       "radical": "欠",
       "variant": "",
       "pinyin": "qiàn",
@@ -702,10 +702,10 @@
       "meaning": "Thiếu thốn, ngáp",
       "example": "歌 (gē) - bài hát, 欢 (huān) - vui vẻ",
       "note": "Liên quan đến miệng há ra hoặc thiếu hụt hơi thở, thường gặp trong các động từ liên quan đến hoạt động của miệng.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_15",
+      "id": "rad_50_bộ_(2)_15",
       "radical": "殳",
       "variant": "",
       "pinyin": "shū",
@@ -713,10 +713,10 @@
       "meaning": "Binh khí dài",
       "example": "段 (duàn) - đoạn, 毅 (yì) - kiên nghị",
       "note": "Hình binh khí, chỉ hành động đánh, va chạm hoặc tác động lực mạnh.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_16",
+      "id": "rad_50_bộ_(2)_16",
       "radical": "比",
       "variant": "",
       "pinyin": "bǐ",
@@ -724,10 +724,10 @@
       "meaning": "So sánh",
       "example": "皆 (jiē) - đều, 毕 (bì) - xong/tốt nghiệp",
       "note": "Hai người đứng cạnh nhau, chỉ sự so sánh, đối chiếu hoặc quan hệ thân thiết.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_17",
+      "id": "rad_50_bộ_(2)_17",
       "radical": "氏",
       "variant": "",
       "pinyin": "shì",
@@ -735,10 +735,10 @@
       "meaning": "Họ",
       "example": "民 (mín) - dân, 昏 (hūn) - tối tăm/hôn mê",
       "note": "Chỉ dòng họ, gốc gác hoặc gia đình.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_18",
+      "id": "rad_50_bộ_(2)_18",
       "radical": "爪",
       "variant": "爫",
       "pinyin": "zhǎo",
@@ -746,10 +746,10 @@
       "meaning": "Móng vuốt",
       "example": "爬 (pá) - leo/bò, 采 (cǎi) - hái/ngắt",
       "note": "Hình móng vuốt thú, thường chỉ hành động bấu, cầm nắm hoặc vồ.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_19",
+      "id": "rad_50_bộ_(2)_19",
       "radical": "父",
       "variant": "",
       "pinyin": "fù",
@@ -757,10 +757,10 @@
       "meaning": "Cha",
       "example": "爸 (bà) - bố, 爷 (yé) - ông nội",
       "note": "Chỉ người cha hoặc những người đàn ông lớn tuổi trong gia đình.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_20",
+      "id": "rad_50_bộ_(2)_20",
       "radical": "玉",
       "variant": "王",
       "pinyin": "yù",
@@ -768,10 +768,10 @@
       "meaning": "Đá quý",
       "example": "珍 (zhēn) - quý giá, 珠 (zhū) - ngọc trai",
       "note": "Chỉ đá quý, vẻ đẹp trong sáng và giá trị quý báu.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_21",
+      "id": "rad_50_bộ_(2)_21",
       "radical": "瓜",
       "variant": "",
       "pinyin": "guā",
@@ -779,10 +779,10 @@
       "meaning": "Quả dưa",
       "example": "瓢 (piáo) - cái gáo, 瓣 (bàn) - cánh hoa/nhánh tỏi",
       "note": "Chỉ các loại quả, đặc biệt là các loại cây dây leo.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_22",
+      "id": "rad_50_bộ_(2)_22",
       "radical": "用",
       "variant": "",
       "pinyin": "yòng",
@@ -790,10 +790,10 @@
       "meaning": "Dùng",
       "example": "甭 (béng) - không cần, 甩 (shuǎi) - quăng/ném",
       "note": "Biểu thị sự sử dụng, công năng hoặc mục đích của sự vật.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_23",
+      "id": "rad_50_bộ_(2)_23",
       "radical": "田",
       "variant": "",
       "pinyin": "tián",
@@ -801,10 +801,10 @@
       "meaning": "Ruộng",
       "example": "男 (nán) - nam giới, 界 (jiè) - ranh giới/thế giới",
       "note": "Hình ảnh ruộng đất, chỉ các hoạt động sản xuất nông nghiệp hoặc không gian địa lý.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_24",
+      "id": "rad_50_bộ_(2)_24",
       "radical": "疋",
       "variant": "",
       "pinyin": "pǐ",
@@ -812,10 +812,10 @@
       "meaning": "Đơn vị đếm (vải, ngựa)",
       "example": "疏 (shū) - sơ sài/thưa thớt, 疑 (yí) - nghi ngờ",
       "note": "Liên quan đến chân, sự di chuyển hoặc đơn vị đếm các vật dài.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_25",
+      "id": "rad_50_bộ_(2)_25",
       "radical": "疒",
       "variant": "",
       "pinyin": "nè",
@@ -823,10 +823,10 @@
       "meaning": "Bệnh tật",
       "example": "病 (bìng) - bệnh, 瘦 (shòu) - gầy",
       "note": "Bộ nạch, luôn chỉ các bệnh lý, đau ốm hoặc trạng thái cơ thể không tốt.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_26",
+      "id": "rad_50_bộ_(2)_26",
       "radical": "白",
       "variant": "",
       "pinyin": "bái",
@@ -834,10 +834,10 @@
       "meaning": "Màu trắng",
       "example": "的 (de) - của, 百 (bǎi) - một trăm",
       "note": "Màu trắng, chỉ sự rõ ràng, tinh khiết hoặc sự hiển lộ.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_27",
+      "id": "rad_50_bộ_(2)_27",
       "radical": "矢",
       "variant": "",
       "pinyin": "shǐ",
@@ -845,10 +845,10 @@
       "meaning": "Mũi tên",
       "example": "短 (duǎn) - ngắn, 知 (zhī) - biết",
       "note": "Hình mũi tên, chỉ sự thẳng thắn, nhanh chóng hoặc sự nhắm đích.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_28",
+      "id": "rad_50_bộ_(2)_28",
       "radical": "石",
       "variant": "",
       "pinyin": "shí",
@@ -856,10 +856,10 @@
       "meaning": "Đá",
       "example": "矿 (kuàng) - quặng, 码 (mǎ) - mã số",
       "note": "Liên quan đến đá, khoáng sản, vật cứng hoặc sự kiên cố.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_29",
+      "id": "rad_50_bộ_(2)_29",
       "radical": "禾",
       "variant": "",
       "pinyin": "hé",
@@ -867,10 +867,10 @@
       "meaning": "Lúa",
       "example": "秋 (qiū) - mùa thu, 租 (zū) - thuê",
       "note": "Chỉ ngũ cốc, cây lúa, gắn liền với nông nghiệp.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_30",
+      "id": "rad_50_bộ_(2)_30",
       "radical": "米",
       "variant": "",
       "pinyin": "mǐ",
@@ -878,10 +878,10 @@
       "meaning": "Gạo",
       "example": "粉 (fěn) - bột/phấn, 粮 (liáng) - lương thực",
       "note": "Hạt gạo, chỉ lương thực, thực phẩm hoặc những thứ nhỏ bé.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_31",
+      "id": "rad_50_bộ_(2)_31",
       "radical": "网",
       "variant": "罒",
       "pinyin": "wǎng",
@@ -889,10 +889,10 @@
       "meaning": "Cái lưới",
       "example": "罚 (fá) - phạt, 置 (zhì) - sắp đặt",
       "note": "Hình cái lưới, chỉ việc bao vây, bắt giữ hoặc các quy tắc, ràng buộc.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_32",
+      "id": "rad_50_bộ_(2)_32",
       "radical": "羊",
       "variant": "⺷",
       "pinyin": "yáng",
@@ -900,10 +900,10 @@
       "meaning": "Con dê, cừu",
       "example": "美 (měi) - đẹp, 善 (shàn) - thiện lành",
       "note": "Con dê, thường tượng trưng cho sự tốt lành, đẹp đẽ, hiền lành.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_33",
+      "id": "rad_50_bộ_(2)_33",
       "radical": "羽",
       "variant": "",
       "pinyin": "yǔ",
@@ -911,10 +911,10 @@
       "meaning": "Lông vũ",
       "example": "习 (xí) - học tập/thói quen, 扇 (shàn) - cái quạt",
       "note": "Lông chim, chỉ sự bay lượn, nhẹ nhàng hoặc các yếu tố liên quan đến chim chóc.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_34",
+      "id": "rad_50_bộ_(2)_34",
       "radical": "老",
       "variant": "耂",
       "pinyin": "lǎo",
@@ -922,10 +922,10 @@
       "meaning": "Già, người già",
       "example": "孝 (xiào) - hiếu thảo, 者 (zhě) - người (hậu tố)",
       "note": "Người già, chỉ sự lão luyện, kinh nghiệm hoặc những người có thâm niên.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_35",
+      "id": "rad_50_bộ_(2)_35",
       "radical": "耳",
       "variant": "",
       "pinyin": "ěr",
@@ -933,10 +933,10 @@
       "meaning": "Tai",
       "example": "听 (tīng) - nghe, 聪 (cōng) - thông minh",
       "note": "Cái tai, liên quan đến thính giác, sự nghe hoặc tiếp nhận thông tin.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_36",
+      "id": "rad_50_bộ_(2)_36",
       "radical": "肉",
       "variant": "⺼ (nguyệt)",
       "pinyin": "ròu",
@@ -944,10 +944,10 @@
       "meaning": "Thịt",
       "example": "脸 (liǎn) - mặt, 肚子 (dùzi) - bụng",
       "note": "Thịt, chỉ bộ phận cơ thể con người hoặc động vật.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_37",
+      "id": "rad_50_bộ_(2)_37",
       "radical": "自",
       "variant": "",
       "pinyin": "zì",
@@ -955,10 +955,10 @@
       "meaning": "Tự mình, cái mũi",
       "example": "臭 (chòu) - thối, 鼻 (bí) - mũi",
       "note": "Cái mũi hoặc bản thân, chỉ nguồn gốc, tự thân vận động hoặc tính cách cá nhân.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_38",
+      "id": "rad_50_bộ_(2)_38",
       "radical": "舌",
       "variant": "",
       "pinyin": "shé",
@@ -966,10 +966,10 @@
       "meaning": "Cái lưỡi",
       "example": "甜 (tián) - ngọt, 辞 (cí) - từ từ/từ biệt",
       "note": "Cái lưỡi, liên quan đến vị giác, ăn uống hoặc lời nói.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_39",
+      "id": "rad_50_bộ_(2)_39",
       "radical": "艮",
       "variant": "",
       "pinyin": "gèn",
@@ -977,10 +977,10 @@
       "meaning": "Bền cứng, quẻ Cấn",
       "example": "良 (liáng) - tốt lành, 艰 (jiān) - gian khổ",
       "note": "Sự bền cứng, vững chắc, hoặc ranh giới, điểm dừng.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_40",
+      "id": "rad_50_bộ_(2)_40",
       "radical": "行",
       "variant": "",
       "pinyin": "xíng",
@@ -988,10 +988,10 @@
       "meaning": "Đi, thi hành",
       "example": "街 (jiē) - phố, 衙 (yá) - nha môn",
       "note": "Đường sá, sự di chuyển, hành động hoặc thực hiện.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_41",
+      "id": "rad_50_bộ_(2)_41",
       "radical": "衣",
       "variant": "衤",
       "pinyin": "yī",
@@ -999,10 +999,10 @@
       "meaning": "Áo, trang phục",
       "example": "衫 (shān) - áo sơ mi, 裤 (kù) - quần",
       "note": "Trang phục, quần áo, che chở thân thể.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_42",
+      "id": "rad_50_bộ_(2)_42",
       "radical": "见",
       "variant": "",
       "pinyin": "jiàn",
@@ -1010,10 +1010,10 @@
       "meaning": "Nhìn thấy",
       "example": "观 (guān) - quan sát, 规 (guī) - quy tắc",
       "note": "Nhìn, thấy, liên quan đến thị giác hoặc nhận thức.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_43",
+      "id": "rad_50_bộ_(2)_43",
       "radical": "豕",
       "variant": "",
       "pinyin": "shǐ",
@@ -1021,10 +1021,10 @@
       "meaning": "Con lợn",
       "example": "家 (jiā) - gia đình/nhà, 象 (xiàng) - con voi/hình tượng",
       "note": "Con lợn, gia súc, liên quan đến chăn nuôi.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_44",
+      "id": "rad_50_bộ_(2)_44",
       "radical": "贝",
       "variant": "",
       "pinyin": "bèi",
@@ -1032,10 +1032,10 @@
       "meaning": "Vỏ sò, tiền tệ",
       "example": "财 (cái) - tiền tài, 贵 (guì) - quý giá/đắt",
       "note": "Vỏ sò (tiền cổ), liên quan đến tiền bạc, tài sản, giá trị.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_45",
+      "id": "rad_50_bộ_(2)_45",
       "radical": "走",
       "variant": "",
       "pinyin": "zǒu",
@@ -1043,10 +1043,10 @@
       "meaning": "Đi, chạy",
       "example": "赴 (fù) - đi đến, 起 (qǐ) - dậy/khởi đầu",
       "note": "Chạy, đi bộ, di chuyển nhanh.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_46",
+      "id": "rad_50_bộ_(2)_46",
       "radical": "足",
       "variant": "⻜",
       "pinyin": "zú",
@@ -1054,10 +1054,10 @@
       "meaning": "Cái chân",
       "example": "跑 (pǎo) - chạy, 跳 (tiào) - nhảy",
       "note": "Cái chân, liên quan đến đi đứng, vận động hoặc các bộ phận thấp của cơ thể.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_47",
+      "id": "rad_50_bộ_(2)_47",
       "radical": "身",
       "variant": "",
       "pinyin": "shēn",
@@ -1065,10 +1065,10 @@
       "meaning": "Thân mình",
       "example": "躺 (tǎng) - nằm, 躲 (duǒ) - trốn tránh",
       "note": "Thân thể, con người, cuộc đời.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_48",
+      "id": "rad_50_bộ_(2)_48",
       "radical": "辵",
       "variant": "⻌",
       "pinyin": "chuò",
@@ -1076,10 +1076,10 @@
       "meaning": "Chợt đi chợt dừng",
       "example": "送 (sòng) - tặng/tiễn, 进 (jìn) - vào/tiến",
       "note": "Di chuyển, đi đường, tiến tới hoặc dừng lại.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_49",
+      "id": "rad_50_bộ_(2)_49",
       "radical": "风",
       "variant": "",
       "pinyin": "fēng",
@@ -1087,10 +1087,10 @@
       "meaning": "Gió",
       "example": "飘 (piāo) - bay lơ lửng, 飒 (sà) - tiếng gió thổi",
       "note": "Gió, khí hậu, phong cách hoặc sự thay đổi nhanh.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_2_50",
+      "id": "rad_50_bộ_(2)_50",
       "radical": "飞",
       "variant": "",
       "pinyin": "fēi",
@@ -1098,10 +1098,10 @@
       "meaning": "Bay",
       "example": "飞机 (fēijī) - máy bay",
       "note": "Bay, sự chuyển động trên không, tốc độ.",
-      "category": "50 bộ thủ 2"
+      "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_1",
+      "id": "rad_50_bộ_(3)_1",
       "radical": "二",
       "variant": "",
       "pinyin": "èr",
@@ -1109,10 +1109,10 @@
       "meaning": "Số hai",
       "example": "五 (wǔ - số năm), 互 (hù - lẫn nhau), 亏 (kuī - thiếu hụt)",
       "note": "Thường chỉ con số hoặc sự đối lập.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_2",
+      "id": "rad_50_bộ_(3)_2",
       "radical": "匕",
       "variant": "",
       "pinyin": "bǐ",
@@ -1120,10 +1120,10 @@
       "meaning": "Cái thìa",
       "example": "它 (tā - nó), 匙 (chí - cái thìa), 死 (sǐ - chết)",
       "note": "Hình cái thìa, liên quan đến đồ dùng.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_3",
+      "id": "rad_50_bộ_(3)_3",
       "radical": "十",
       "variant": "",
       "pinyin": "shí",
@@ -1131,10 +1131,10 @@
       "meaning": "Số mười",
       "example": "华 (huá - hoa lệ), 协 (xié - hiệp lực), 午 (wǔ - trưa)",
       "note": "Chỉ số mười hoặc sự trọn vẹn.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_4",
+      "id": "rad_50_bộ_(3)_4",
       "radical": "卩",
       "variant": "",
       "pinyin": "jié",
@@ -1142,10 +1142,10 @@
       "meaning": "Đốt tre",
       "example": "印 (yìn - in), 却 (què - nhưng), 卫 (wèi - bảo vệ)",
       "note": "Hình đốt tre, chỉ đơn vị hoặc sự cắt đoạn.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_5",
+      "id": "rad_50_bộ_(3)_5",
       "radical": "厶",
       "variant": "",
       "pinyin": "sī",
@@ -1153,10 +1153,10 @@
       "meaning": "Riêng tư, ích kỷ",
       "example": "去 (qù - đi), 公 (gōng - công cộng)",
       "note": "Chỉ sự riêng tư hoặc hành động cá nhân.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_6",
+      "id": "rad_50_bộ_(3)_6",
       "radical": "夊",
       "variant": "",
       "pinyin": "suī",
@@ -1164,10 +1164,10 @@
       "meaning": "Đi chậm, bước chậm",
       "example": "夏 (xià - mùa hè), 处 (chù - nơi chốn)",
       "note": "Hình bàn chân đi chậm, thường liên quan đến bước đi hoặc vị trí.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_7",
+      "id": "rad_50_bộ_(3)_7",
       "radical": "夂",
       "variant": "",
       "pinyin": "zhōng",
@@ -1175,10 +1175,10 @@
       "meaning": "Theo sau, chậm chạp",
       "example": "冬 (dōng - mùa đông), 终 (zhōng - kết thúc)",
       "note": "Hình bàn chân đi từ trên xuống, chỉ sự theo sau hoặc kết thúc.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_8",
+      "id": "rad_50_bộ_(3)_8",
       "radical": "幺",
       "variant": "",
       "pinyin": "yāo",
@@ -1186,10 +1186,10 @@
       "meaning": "Nhỏ, mảnh",
       "example": "幻 (huàn - huyễn hoặc), 幽 (yōu - u tối), 幼 (yòu - nhỏ/trẻ)",
       "note": "Chỉ sự nhỏ bé, mảnh mai.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_9",
+      "id": "rad_50_bộ_(3)_9",
       "radical": "弓",
       "variant": "",
       "pinyin": "gōng",
@@ -1197,10 +1197,10 @@
       "meaning": "Cái cung",
       "example": "引 (yǐn - dẫn), 张 (zhāng - tờ/trương), 弹 (dàn - đạn)",
       "note": "Hình cái cung, liên quan đến bắn.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_10",
+      "id": "rad_50_bộ_(3)_10",
       "radical": "彐",
       "variant": "彑",
       "pinyin": "jì",
@@ -1208,10 +1208,10 @@
       "meaning": "Đầu con lợn",
       "example": "归 (guī - trở về), 寻 (xún - tìm kiếm), 彗 (huì - sao chổi)",
       "note": "Hình dáng đầu lợn hoặc tay cầm.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_11",
+      "id": "rad_50_bộ_(3)_11",
       "radical": "戈",
       "variant": "",
       "pinyin": "gē",
@@ -1219,10 +1219,10 @@
       "meaning": "Binh khí qua",
       "example": "我 (wǒ - tôi), 成 (chéng - trở thành), 战 (zhàn - chiến đấu)",
       "note": "Binh khí dài, liên quan đến chiến đấu.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_12",
+      "id": "rad_50_bộ_(3)_12",
       "radical": "支",
       "variant": "",
       "pinyin": "zhī",
@@ -1230,10 +1230,10 @@
       "meaning": "Cành, nhánh",
       "example": "肢 (zhī - chi thể), 鼓 (gǔ - cái trống), 翅 (chì - cánh)",
       "note": "Cành cây hoặc đơn vị đếm.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_13",
+      "id": "rad_50_bộ_(3)_13",
       "radical": "攴",
       "variant": "攵",
       "pinyin": "pū",
@@ -1241,10 +1241,10 @@
       "meaning": "Đánh nhẹ",
       "example": "故 (gù - cố sự), 教 (jiào - giáo dục), 收 (shōu - thu thập)",
       "note": "Hành động đánh nhẹ.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_14",
+      "id": "rad_50_bộ_(3)_14",
       "radical": "止",
       "variant": "",
       "pinyin": "zhǐ",
@@ -1252,10 +1252,10 @@
       "meaning": "Bàn chân",
       "example": "步 (bù - bước đi), 正 (zhèng - chính xác), 此 (cǐ - này)",
       "note": "Liên quan đến đi lại, dừng lại.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_15",
+      "id": "rad_50_bộ_(3)_15",
       "radical": "爿",
       "variant": "",
       "pinyin": "qiáng",
@@ -1263,10 +1263,10 @@
       "meaning": "Mảnh gỗ, cái giường",
       "example": "状 (zhuàng - trạng thái), 墙 (qiáng - tường)",
       "note": "Hình cái giường, thường chỉ các đồ vật bằng gỗ hoặc cấu trúc.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_16",
+      "id": "rad_50_bộ_(3)_16",
       "radical": "片",
       "variant": "",
       "pinyin": "piàn",
@@ -1274,10 +1274,10 @@
       "meaning": "Mảnh, miếng",
       "example": "版 (bǎn - bản in), 牌 (pái - thẻ/bài), 牍 (dú - văn bản)",
       "note": "Tấm, mảnh.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_17",
+      "id": "rad_50_bộ_(3)_17",
       "radical": "牙",
       "variant": "",
       "pinyin": "yá",
@@ -1285,10 +1285,10 @@
       "meaning": "Răng",
       "example": "芽 (yá - mầm), 穿 (chuān - xuyên qua)",
       "note": "Răng hoặc mầm cây.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_18",
+      "id": "rad_50_bộ_(3)_18",
       "radical": "玄",
       "variant": "",
       "pinyin": "xuán",
@@ -1296,10 +1296,10 @@
       "meaning": "Màu đen",
       "example": "弦 (xián - dây cung), 兹 (zī - hiện nay)",
       "note": "Màu đen huyền bí.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_19",
+      "id": "rad_50_bộ_(3)_19",
       "radical": "甘",
       "variant": "",
       "pinyin": "gān",
@@ -1307,10 +1307,10 @@
       "meaning": "Ngọt",
       "example": "甜 (tián - ngọt), 甚 (shèn - rất)",
       "note": "Vị ngọt.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_20",
+      "id": "rad_50_bộ_(3)_20",
       "radical": "皮",
       "variant": "",
       "pinyin": "pí",
@@ -1318,10 +1318,10 @@
       "meaning": "Da, vỏ",
       "example": "波 (bō - làn sóng), 披 (pī - khoác)",
       "note": "Chỉ da động vật hoặc lớp vỏ bên ngoài của sự vật.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_21",
+      "id": "rad_50_bộ_(3)_21",
       "radical": "皿",
       "variant": "",
       "pinyin": "mǐn",
@@ -1329,10 +1329,10 @@
       "meaning": "Bát đĩa, đồ dùng đựng",
       "example": "盆 (pén - chậu), 益 (yì - lợi ích)",
       "note": "Hình cái bát/đĩa, liên quan đến đồ dùng ăn uống hoặc đựng đồ.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_22",
+      "id": "rad_50_bộ_(3)_22",
       "radical": "矛",
       "variant": "",
       "pinyin": "máo",
@@ -1340,10 +1340,10 @@
       "meaning": "Cái giáo",
       "example": "柔 (róu - mềm mại), 矜 (jīn - kiêu ngạo)",
       "note": "Binh khí giáo.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_23",
+      "id": "rad_50_bộ_(3)_23",
       "radical": "示",
       "variant": "礻",
       "pinyin": "shì",
@@ -1351,10 +1351,10 @@
       "meaning": "Chỉ thị, thần",
       "example": "社 (shè - xã hội), 福 (fú - phúc), 礼 (lǐ - lễ)",
       "note": "Liên quan đến thần thánh, cúng bái.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_24",
+      "id": "rad_50_bộ_(3)_24",
       "radical": "立",
       "variant": "",
       "pinyin": "lì",
@@ -1362,10 +1362,10 @@
       "meaning": "Đứng",
       "example": "站 (zhàn - trạm/đứng), 端 (duān - đầu mút), 亲 (qīn - thân thiết)",
       "note": "Sự đứng vững.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_25",
+      "id": "rad_50_bộ_(3)_25",
       "radical": "糸",
       "variant": "纟",
       "pinyin": "mì",
@@ -1373,10 +1373,10 @@
       "meaning": "Sợi tơ",
       "example": "红 (hóng - màu đỏ), 级 (jí - cấp bậc), 纸 (zhǐ - giấy)",
       "note": "Tơ lụa, sợi nhỏ.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_26",
+      "id": "rad_50_bộ_(3)_26",
       "radical": "至",
       "variant": "",
       "pinyin": "zhì",
@@ -1384,10 +1384,10 @@
       "meaning": "Đến",
       "example": "到 (dào - đến), 致 (zhì - gửi đến)",
       "note": "Đi đến nơi.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_27",
+      "id": "rad_50_bộ_(3)_27",
       "radical": "舟",
       "variant": "",
       "pinyin": "zhōu",
@@ -1395,10 +1395,10 @@
       "meaning": "Thuyền",
       "example": "船 (chuán - con thuyền), 航 (háng - hàng hải)",
       "note": "Phương tiện thủy.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_28",
+      "id": "rad_50_bộ_(3)_28",
       "radical": "色",
       "variant": "",
       "pinyin": "sè",
@@ -1406,10 +1406,10 @@
       "meaning": "Màu sắc",
       "example": "艳 (yàn - đẹp rực rỡ)",
       "note": "Màu sắc, diện mạo.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_29",
+      "id": "rad_50_bộ_(3)_29",
       "radical": "虫",
       "variant": "",
       "pinyin": "chóng",
@@ -1417,10 +1417,10 @@
       "meaning": "Côn trùng",
       "example": "蛇 (shé - con rắn), 虾 (xiā - con tôm), 蚊 (wén - muỗi)",
       "note": "Côn trùng, động vật nhỏ.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_30",
+      "id": "rad_50_bộ_(3)_30",
       "radical": "血",
       "variant": "",
       "pinyin": "xuè",
@@ -1428,10 +1428,10 @@
       "meaning": "Huyết",
       "example": "衅 (xìn - vết máu)",
       "note": "Liên quan đến máu.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_31",
+      "id": "rad_50_bộ_(3)_31",
       "radical": "角",
       "variant": "",
       "pinyin": "jiǎo",
@@ -1439,10 +1439,10 @@
       "meaning": "Sừng",
       "example": "解 (jiě - giải quyết), 触 (chù - tiếp xúc)",
       "note": "Sừng thú hoặc góc cạnh.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_32",
+      "id": "rad_50_bộ_(3)_32",
       "radical": "车",
       "variant": "",
       "pinyin": "chē",
@@ -1450,10 +1450,10 @@
       "meaning": "Xe",
       "example": "连 (lián - liên kết), 输 (shū - vận chuyển), 轨 (guǐ - đường ray)",
       "note": "Phương tiện đi lại.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_33",
+      "id": "rad_50_bộ_(3)_33",
       "radical": "辛",
       "variant": "",
       "pinyin": "xīn",
@@ -1461,10 +1461,10 @@
       "meaning": "Cay, vất vả",
       "example": "辣 (là - cay), 辞 (cí - từ biệt), 辩 (biàn - biện luận)",
       "note": "Cay đắng, vất vả.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_34",
+      "id": "rad_50_bộ_(3)_34",
       "radical": "邑",
       "variant": "阝",
       "pinyin": "yì",
@@ -1472,10 +1472,10 @@
       "meaning": "Ấp",
       "example": "郊 (jiāo - ngoại ô), 那 (nà - đó), 邮 (yóu - bưu điện)",
       "note": "Địa danh (đứng bên phải).",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_35",
+      "id": "rad_50_bộ_(3)_35",
       "radical": "酉",
       "variant": "",
       "pinyin": "yǒu",
@@ -1483,10 +1483,10 @@
       "meaning": "Dậu",
       "example": "酒 (jiǔ - rượu), 配 (pèi - phối hợp), 酷 (kù - khốc liệt)",
       "note": "Rượu, lên men.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_36",
+      "id": "rad_50_bộ_(3)_36",
       "radical": "金",
       "variant": "钅",
       "pinyin": "jīn",
@@ -1494,10 +1494,10 @@
       "meaning": "Kim loại",
       "example": "铁 (tiě - sắt), 银 (yín - bạc), 铜 (tóng - đồng)",
       "note": "Kim loại.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_37",
+      "id": "rad_50_bộ_(3)_37",
       "radical": "长",
       "variant": "",
       "pinyin": "cháng",
@@ -1505,10 +1505,10 @@
       "meaning": "Trường",
       "example": "账 (zhàng - sổ sách), 怅 (chàng - buồn bã)",
       "note": "Chiều dài, người đứng đầu.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_38",
+      "id": "rad_50_bộ_(3)_38",
       "radical": "门",
       "variant": "",
       "pinyin": "mén",
@@ -1516,10 +1516,10 @@
       "meaning": "Môn",
       "example": "问 (wèn - hỏi), 闭 (bì - đóng), 闪 (shǎn - lóe sáng)",
       "note": "Cánh cửa.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_39",
+      "id": "rad_50_bộ_(3)_39",
       "radical": "阝",
       "variant": "",
       "pinyin": "fù",
@@ -1527,10 +1527,10 @@
       "meaning": "Gò đất, núi",
       "example": "队 (duì - đội ngũ), 防 (fáng - phòng thủ)",
       "note": "Hình gò đất, thường liên quan đến địa hình hoặc sự tích tụ.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_40",
+      "id": "rad_50_bộ_(3)_40",
       "radical": "雨",
       "variant": "",
       "pinyin": "yǔ",
@@ -1538,10 +1538,10 @@
       "meaning": "Mưa",
       "example": "雪 (xuě) - tuyết, 雷 (léi) - sấm",
       "note": "Liên quan đến thời tiết, khí tượng, mưa, mây, sương, tuyết.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_41",
+      "id": "rad_50_bộ_(3)_41",
       "radical": "青",
       "variant": "",
       "pinyin": "qīng",
@@ -1549,10 +1549,10 @@
       "meaning": "Màu xanh",
       "example": "静 (jìng - yên tĩnh), 清 (qīng - trong sạch)",
       "note": "Chỉ màu xanh lục hoặc xanh lam, xuất hiện trong các từ chỉ sự tĩnh lặng, tươi tốt.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_42",
+      "id": "rad_50_bộ_(3)_42",
       "radical": "非",
       "variant": "",
       "pinyin": "fēi",
@@ -1560,10 +1560,10 @@
       "meaning": "Không, sai, phủ định",
       "example": "罪 (zuì - tội lỗi), 靠 (kào - dựa vào)",
       "note": "Chỉ sự phủ định, không đúng hoặc các khái niệm đối lập.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_43",
+      "id": "rad_50_bộ_(3)_43",
       "radical": "面",
       "variant": "",
       "pinyin": "miàn",
@@ -1571,10 +1571,10 @@
       "meaning": "Khuôn mặt",
       "example": "腼 (miǎn - thẹn thùng), 面前 (miànqián - trước mặt)",
       "note": "Chỉ bề mặt, khuôn mặt, diện mạo, phương diện hoặc phía.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_44",
+      "id": "rad_50_bộ_(3)_44",
       "radical": "韦",
       "variant": "",
       "pinyin": "wéi",
@@ -1582,10 +1582,10 @@
       "meaning": "Da thú",
       "example": "韧 (rèn - dẻo dai), 围 (wéi - bao quanh)",
       "note": "Chỉ da thú đã thuộc, sự mềm dẻo, bền bỉ (thường gặp trong các từ liên quan đến sự bền vững).",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_45",
+      "id": "rad_50_bộ_(3)_45",
       "radical": "音",
       "variant": "",
       "pinyin": "yīn",
@@ -1593,10 +1593,10 @@
       "meaning": "Âm thanh",
       "example": "韵 (yùn - vần điệu), 音乐 (yīnyuè - âm nhạc)",
       "note": "Chỉ âm thanh, tiếng vang, âm nhạc, ngôn ngữ.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_46",
+      "id": "rad_50_bộ_(3)_46",
       "radical": "手",
       "variant": "扌",
       "pinyin": "shǒu",
@@ -1604,10 +1604,10 @@
       "meaning": "Tay",
       "example": "提 (tí) - xách, 打 (dǎ) - đánh",
       "note": "Chỉ các hành động của bàn tay, công việc lao động, cầm nắm.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_47",
+      "id": "rad_50_bộ_(3)_47",
       "radical": "香",
       "variant": "",
       "pinyin": "xiāng",
@@ -1615,10 +1615,10 @@
       "meaning": "Mùi thơm",
       "example": "馨 (xīn - thơm ngát), 香港 (xiānggǎng - Hương Cảng)",
       "note": "Chỉ mùi thơm, hương vị, sự dễ chịu của khứu giác.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_48",
+      "id": "rad_50_bộ_(3)_48",
       "radical": "高",
       "variant": "",
       "pinyin": "gāo",
@@ -1626,10 +1626,10 @@
       "meaning": "Cao",
       "example": "敲 (qiāo - gõ), 高兴 (gāoxìng - vui vẻ)",
       "note": "Chỉ chiều cao, sự cao lớn, hoặc trạng thái ở vị trí cao.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_49",
+      "id": "rad_50_bộ_(3)_49",
       "radical": "鱼",
       "variant": "",
       "pinyin": "yú",
@@ -1637,10 +1637,10 @@
       "meaning": "Cá",
       "example": "鲁 (lǔ) - thô lỗ, 鲜 (xiān) - tươi",
       "note": "Chỉ các loài cá hoặc động vật sống dưới nước.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_thủ_3_50",
+      "id": "rad_50_bộ_(3)_50",
       "radical": "而",
       "variant": "",
       "pinyin": "ér",
@@ -1648,10 +1648,10 @@
       "meaning": "Râu, mà, và (từ nối)",
       "example": "耐 (nài - chịu đựng), 耍 (shuǎ - đùa nghịch)",
       "note": "Ban đầu chỉ chòm râu ở cằm, sau dùng làm hư từ, từ nối để biểu thị sự chuyển hướng hoặc nối tiếp trong câu.",
-      "category": "50 bộ thủ 3"
+      "category": "50 bộ (3)"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_1",
+      "id": "rad_Còn_lại_1",
       "radical": "一",
       "variant": "",
       "pinyin": "yī",
@@ -1659,10 +1659,10 @@
       "meaning": "số một",
       "example": "一 (yī - số một)",
       "note": "Thường nằm phía trên hoặc làm nét gạch ngang. Chỉ số đếm hoặc sự bắt đầu, liên quan đến các khái niệm đơn nhất.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_2",
+      "id": "rad_Còn_lại_2",
       "radical": "丨",
       "variant": "",
       "pinyin": "gǔn",
@@ -1670,10 +1670,10 @@
       "meaning": "nét sổ",
       "example": "中 (zhōng - ở giữa)",
       "note": "Thường nằm ở giữa hoặc xuyên suốt chữ. Mô tả hình dạng nét thẳng đứng, thường mang nghĩa thông suốt hoặc ngăn cách.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_3",
+      "id": "rad_Còn_lại_3",
       "radical": "丶",
       "variant": "",
       "pinyin": "zhǔ",
@@ -1681,10 +1681,10 @@
       "meaning": "điểm, chấm",
       "example": "丸 (wán - viên tròn)",
       "note": "Có thể đứng ở bất kỳ vị trí nào để tạo nét nhấn. Chỉ sự vật nhỏ bé, điểm tụ hoặc dấu hiệu nhận biết trên chữ.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_4",
+      "id": "rad_Còn_lại_4",
       "radical": "丿",
       "variant": "",
       "pinyin": "piě",
@@ -1692,10 +1692,10 @@
       "meaning": "nét sổ xiên qua trái",
       "example": "久 (jiǔ - lâu dài)",
       "note": "Thường nằm ở phía trên hoặc bên trái. Mô tả hình dạng nét phẩy xiên, thường dùng làm nét khởi đầu cho nhiều bộ chữ khác.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_5",
+      "id": "rad_Còn_lại_5",
       "radical": "乙",
       "variant": "⺄",
       "pinyin": "yǐ",
@@ -1703,10 +1703,10 @@
       "meaning": "vị trí thứ 2 trong thiên can",
       "example": "九 (jiǔ - số chín)",
       "note": "Thường nằm bên phải hoặc làm nét nền. Mô tả hình dáng uốn lượn, liên quan đến sự uyển chuyển hoặc các vật có móc gập.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_6",
+      "id": "rad_Còn_lại_6",
       "radical": "亅",
       "variant": "",
       "pinyin": "jué",
@@ -1714,10 +1714,10 @@
       "meaning": "nét sổ có móc",
       "example": "了 (le - rồi)",
       "note": "Thường nằm ở trục chính của chữ. Chỉ các hành động hoặc sự vật có tính chất móc nối, giữ lại.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_7",
+      "id": "rad_Còn_lại_7",
       "radical": "屮",
       "variant": "",
       "pinyin": "chè",
@@ -1725,10 +1725,10 @@
       "meaning": "mần non",
       "example": "屯 (tún - đồn trú)",
       "note": "Thường nằm ở phía dưới. Mô tả hình dạng cỏ non mới mọc, chỉ sự sinh trưởng từ mặt đất.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_8",
+      "id": "rad_Còn_lại_8",
       "radical": "巛",
       "variant": "川",
       "pinyin": "chuān",
@@ -1736,10 +1736,10 @@
       "meaning": "sông ngòi",
       "example": "州 (zhōu - châu/tỉnh)",
       "note": "Thường đứng bên phải (biến thể) hoặc nằm ở giữa. Chỉ các sự vật liên quan đến sông ngòi, dòng chảy tự nhiên.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_9",
+      "id": "rad_Còn_lại_9",
       "radical": "廾",
       "variant": "",
       "pinyin": "gǒng",
@@ -1747,10 +1747,10 @@
       "meaning": "chắp tay",
       "example": "弄 (nòng - chơi đùa)",
       "note": "Thường nằm phía dưới của chữ. Chỉ hành động chắp tay, bưng bê hoặc nâng đỡ các vật phẩm.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_10",
+      "id": "rad_Còn_lại_10",
       "radical": "弋",
       "variant": "",
       "pinyin": "yì",
@@ -1758,10 +1758,10 @@
       "meaning": "bắn, chiếm lấy",
       "example": "式 (shì - hình thức)",
       "note": "Thường nằm bên phải hoặc làm bao quanh một phần. Chỉ các sự vật liên quan đến săn bắn, chiếm giữ hoặc công cụ thô sơ.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_11",
+      "id": "rad_Còn_lại_11",
       "radical": "歹",
       "variant": "歺",
       "pinyin": "dǎi",
@@ -1769,10 +1769,10 @@
       "meaning": "xấu xa, tệ hại",
       "example": "死 (sǐ - chết)",
       "note": "Thường đứng bên trái. Chỉ các sự vật liên quan đến cái chết, sự tàn úa hoặc các điềm xấu, điều tệ hại.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_12",
+      "id": "rad_Còn_lại_12",
       "radical": "毋",
       "variant": "",
       "pinyin": "wú",
@@ -1780,10 +1780,10 @@
       "meaning": "chớ, đừng",
       "example": "母 (mǔ - mẹ)",
       "note": "Thường nằm ở giữa hoặc phía dưới chữ. Chỉ các mệnh lệnh ngăn cấm, sự phủ định hoặc liên quan đến nguồn gốc nòi giống.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_13",
+      "id": "rad_Còn_lại_13",
       "radical": "爻",
       "variant": "",
       "pinyin": "yáo",
@@ -1791,10 +1791,10 @@
       "meaning": "hào âm, hào dương",
       "example": "爽 (shuǎng - sảng khoái)",
       "note": "Thường nằm ở trung tâm hoặc làm phần trang trí. Mô tả các vạch đan chéo, liên quan đến sự biến hóa trong kinh dịch hoặc hoa văn.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_14",
+      "id": "rad_Còn_lại_14",
       "radical": "瓦",
       "variant": "",
       "pinyin": "wǎ",
@@ -1802,10 +1802,10 @@
       "meaning": "ngói",
       "example": "瓶 (píng - bình)",
       "note": "Thường đứng bên phải hoặc nằm phía dưới. Chỉ các sự vật liên quan đến đồ đất nung, gốm sứ hoặc vật liệu xây dựng.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_15",
+      "id": "rad_Còn_lại_15",
       "radical": "癶",
       "variant": "",
       "pinyin": "bō",
@@ -1813,10 +1813,10 @@
       "meaning": "gặt ngược lại, trở lại",
       "example": "登 (dēng - lên cao)",
       "note": "Thường nằm phía trên. Chỉ hành động bước đi, đạp chân hoặc sự thăng tiến, vượt qua trở ngại.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_16",
+      "id": "rad_Còn_lại_16",
       "radical": "禸",
       "variant": "",
       "pinyin": "róu",
@@ -1824,10 +1824,10 @@
       "meaning": "vết chân, lốt chân",
       "example": "禹 (yǔ - vua Vũ)",
       "note": "Thường nằm ở phía dưới chữ. Mô tả vết chân hoặc hành động dẫm đạp của loài thú.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_17",
+      "id": "rad_Còn_lại_17",
       "radical": "穴",
       "variant": "",
       "pinyin": "xuè",
@@ -1835,10 +1835,10 @@
       "meaning": "hang lỗ",
       "example": "空 (kōng - trống rỗng)",
       "note": "Thường nằm phía trên, làm phần che phủ. Chỉ các sự vật liên quan đến hang động, lỗ hổng hoặc nơi cư ngụ dưới lòng đất.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_18",
+      "id": "rad_Còn_lại_18",
       "radical": "缶",
       "variant": "",
       "pinyin": "fǒu",
@@ -1846,10 +1846,10 @@
       "meaning": "đồ sành",
       "example": "缸 (gāng - cái vại)",
       "note": "Thường đứng bên trái hoặc nằm phía dưới. Chỉ các loại bình sành, vại hoặc vật dụng chứa đựng làm bằng đất nung.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_19",
+      "id": "rad_Còn_lại_19",
       "radical": "耒",
       "variant": "",
       "pinyin": "lěi",
@@ -1857,10 +1857,10 @@
       "meaning": "cái cày",
       "example": "耕 (gēng - cày ruộng)",
       "note": "Thường đứng bên trái. Chỉ các công cụ lao động hoặc hành động liên quan đến nông nghiệp và trồng trọt.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_20",
+      "id": "rad_Còn_lại_20",
       "radical": "聿",
       "variant": "⺼",
       "pinyin": "yù",
@@ -1868,10 +1868,10 @@
       "meaning": "cây bút",
       "example": "建 (jiàn - xây dựng)",
       "note": "Thường đứng bên phải hoặc nằm dưới. Chỉ các sự vật liên quan đến việc viết lách, học thuật hoặc quy luật xây dựng.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_21",
+      "id": "rad_Còn_lại_21",
       "radical": "臣",
       "variant": "",
       "pinyin": "chén",
@@ -1879,10 +1879,10 @@
       "meaning": "bề tôi",
       "example": "卧 (wò - nằm)",
       "note": "Thường đứng bên trái hoặc nằm phía dưới. Chỉ các khái niệm về lòng trung thành, quan lại hoặc sự phục tùng.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_22",
+      "id": "rad_Còn_lại_22",
       "radical": "臼",
       "variant": "",
       "pinyin": "jiù",
@@ -1890,10 +1890,10 @@
       "meaning": "cái cỗi giã gạo",
       "example": "舀 (yǎo - múc bằng gáo)",
       "note": "Thường đứng bên phải hoặc nằm phía dưới. Chỉ các vật dụng trong sinh hoạt như cái cối, hành động giã hoặc múc.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_23",
+      "id": "rad_Còn_lại_23",
       "radical": "舛",
       "variant": "",
       "pinyin": "chuǎn",
@@ -1901,10 +1901,10 @@
       "meaning": "sai lầm",
       "example": "舞 (wǔ - múa)",
       "note": "Thường nằm ở giữa hoặc phía dưới chữ. Chỉ sự sai lệch, trái ngược hoặc các động tác chân không đồng nhất.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_24",
+      "id": "rad_Còn_lại_24",
       "radical": "虍",
       "variant": "",
       "pinyin": "hū",
@@ -1912,10 +1912,10 @@
       "meaning": "vằn vện của con hổ",
       "example": "虎 (hǔ - con hổ)",
       "note": "Thường nằm phía trên làm phần bao phủ. Chỉ các sự vật liên quan đến loài hổ hoặc sự uy dũng, vằn vện.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_25",
+      "id": "rad_Còn_lại_25",
       "radical": "襾",
       "variant": "ya",
       "pinyin": "yà",
@@ -1923,10 +1923,10 @@
       "meaning": "che đậy, úp lên",
       "example": "西 (xī - phía tây)",
       "note": "Thường nằm phía trên. Chỉ hành động che đậy, úp xuống hoặc chỉ phương hướng (phía Tây).",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_26",
+      "id": "rad_Còn_lại_26",
       "radical": "谷",
       "variant": "",
       "pinyin": "gǔ",
@@ -1934,10 +1934,10 @@
       "meaning": "hang núi",
       "example": "欲 (yù - ham muốn)",
       "note": "Thường đứng bên trái. Chỉ địa hình hang núi, khe suối hoặc mô tả các trạng thái trống rỗng, mong cầu.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_27",
+      "id": "rad_Còn_lại_27",
       "radical": "豆",
       "variant": "",
       "pinyin": "dòu",
@@ -1945,10 +1945,10 @@
       "meaning": "hạt đậu, cây đậu",
       "example": "豆腐 (dòufu - đậu phụ)",
       "note": "Thường đứng bên trái hoặc nằm phía dưới. Chỉ các loại cây họ đậu, hạt hoặc các vật dụng dùng trong lễ tế thời xưa.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_28",
+      "id": "rad_Còn_lại_28",
       "radical": "豸",
       "variant": "",
       "pinyin": "zhì",
@@ -1956,10 +1956,10 @@
       "meaning": "loài sâu",
       "example": "豹 (bào - con báo)",
       "note": "Thường đứng bên trái. Chỉ các loài bò sát không chân, sâu bọ hoặc thú dữ có thân hình dài.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_29",
+      "id": "rad_Còn_lại_29",
       "radical": "赤",
       "variant": "",
       "pinyin": "chì",
@@ -1967,10 +1967,10 @@
       "meaning": "màu đỏ",
       "example": "赭 (zhě - màu đỏ sẫm)",
       "note": "Thường đứng bên trái hoặc phía trên. Chỉ các sự vật có màu đỏ, liên quan đến lửa hoặc sự thanh khiết, chân thực.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_30",
+      "id": "rad_Còn_lại_30",
       "radical": "辰",
       "variant": "",
       "pinyin": "chén",
@@ -1978,10 +1978,10 @@
       "meaning": "chỉ con giáp Thìn",
       "example": "辱 (rǔ - nhục nhã)",
       "note": "Thường nằm phía dưới hoặc bên phải. Chỉ thời gian (giờ Thìn), các thiên thể hoặc sự chấn động, sỉ nhục.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_31",
+      "id": "rad_Còn_lại_31",
       "radical": "釆",
       "variant": "",
       "pinyin": "biàn",
@@ -1989,10 +1989,10 @@
       "meaning": "phân biệt",
       "example": "释 (shì - giải thích)",
       "note": "Thường đứng bên trái. Chỉ hành động phân biệt, lựa chọn hoặc giải thích sự việc rõ ràng.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_32",
+      "id": "rad_Còn_lại_32",
       "radical": "里",
       "variant": "",
       "pinyin": "lǐ",
@@ -2000,10 +2000,10 @@
       "meaning": "dặm, làng xóm",
       "example": "野 (yě - hoang dã)",
       "note": "Thường đứng bên trái hoặc phía dưới. Chỉ địa danh, đơn vị đo lường hoặc sự vật liên quan đến làng mạc, ruộng đất.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_33",
+      "id": "rad_Còn_lại_33",
       "radical": "隶",
       "variant": "",
       "pinyin": "dài",
@@ -2011,10 +2011,10 @@
       "meaning": "kịp, kịp đến",
       "example": "隶 (lì - lệ thuộc)",
       "note": "Thường đứng bên phải. Chỉ trạng thái lệ thuộc, bắt giữ hoặc hành động theo kịp, chạm tới.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_34",
+      "id": "rad_Còn_lại_34",
       "radical": "隹",
       "variant": "",
       "pinyin": "zhuī",
@@ -2022,10 +2022,10 @@
       "meaning": "chim đuôi ngắn",
       "example": "雅 (yǎ - nhã nhặn)",
       "note": "Thường đứng bên phải. Chỉ các loài chim nhỏ, đuôi ngắn hoặc mô tả vẻ nhã nhặn, thanh cao.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_35",
+      "id": "rad_Còn_lại_35",
       "radical": "面",
       "variant": "",
       "pinyin": "miàn",
@@ -2033,10 +2033,10 @@
       "meaning": "mặt, bề mặt",
       "example": "面前 (miànqián - trước mặt)",
       "note": "Thường làm bộ phận chính của chữ. Chỉ khuôn mặt, bề mặt hoặc phương diện của một vấn đề.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_36",
+      "id": "rad_Còn_lại_36",
       "radical": "韭",
       "variant": "",
       "pinyin": "jiǔ",
@@ -2044,10 +2044,10 @@
       "meaning": "rau hẹ",
       "example": "韭菜 (jiǔcài - rau hẹ)",
       "note": "Thường nằm phía dưới. Chỉ các loại rau cỏ có sức sống dai dẳng, đặc biệt là rau hẹ.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_37",
+      "id": "rad_Còn_lại_37",
       "radical": "頁",
       "variant": "页",
       "pinyin": "xiè",
@@ -2055,10 +2055,10 @@
       "meaning": "đầu, trang giấy",
       "example": "頂 (dǐng - cái đỉnh/nóc)",
       "note": "Thường đứng bên phải. Chỉ các sự vật liên quan đến đầu, trang sách hoặc các vị trí đứng đầu, nóc.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_38",
+      "id": "rad_Còn_lại_38",
       "radical": "鬼",
       "variant": "",
       "pinyin": "guǐ",
@@ -2066,10 +2066,10 @@
       "meaning": "con quỷ",
       "example": "魔 (mó - ma quỷ)",
       "note": "Thường đứng bên trái hoặc phía dưới. Chỉ các khái niệm tâm linh, ma quỷ, nỗi sợ hoặc sự huyền bí.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_39",
+      "id": "rad_Còn_lại_39",
       "radical": "馬",
       "variant": "",
       "pinyin": "mǎ",
@@ -2077,10 +2077,10 @@
       "meaning": "con ngựa",
       "example": "騎 (qí - cưỡi ngựa)",
       "note": "Thường đứng bên trái. Chỉ các sự vật liên quan đến ngựa, phương tiện di chuyển hoặc hành động cưỡi, chạy nhanh.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_40",
+      "id": "rad_Còn_lại_40",
       "radical": "骨",
       "variant": "",
       "pinyin": "gǔ",
@@ -2088,10 +2088,10 @@
       "meaning": "xương",
       "example": "骸 (hái - hài cốt)",
       "note": "Thường đứng bên trái. Chỉ các bộ phận liên quan đến hệ xương, cấu trúc cơ thể hoặc sự cốt lõi.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_41",
+      "id": "rad_Còn_lại_41",
       "radical": "髟",
       "variant": "",
       "pinyin": "biāo",
@@ -2099,10 +2099,10 @@
       "meaning": "tóc dài",
       "example": "髮 (fà - tóc)",
       "note": "Thường nằm phía trên. Chỉ các sự vật liên quan đến tóc, lông dài hoặc vẻ đẹp rực rỡ.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_42",
+      "id": "rad_Còn_lại_42",
       "radical": "鬥",
       "variant": "",
       "pinyin": "dòu",
@@ -2110,10 +2110,10 @@
       "meaning": "đánh nhau",
       "example": "鬧 (nào - náo động)",
       "note": "Thường làm bao quanh hai bên. Chỉ các hành động tranh chấp, đánh nhau hoặc sự náo nhiệt, ồn ào.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_43",
+      "id": "rad_Còn_lại_43",
       "radical": "鬯",
       "variant": "",
       "pinyin": "chàng",
@@ -2121,10 +2121,10 @@
       "meaning": "rượu nếp",
       "example": "鬯草 (chàngcǎo - cỏ sưởng)",
       "note": "Thường đứng một mình hoặc làm thành phần trung tâm. Chỉ các loại rượu thơm, lễ phẩm dùng trong cúng tế.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_44",
+      "id": "rad_Còn_lại_44",
       "radical": "鬲",
       "variant": "",
       "pinyin": "lì",
@@ -2132,10 +2132,10 @@
       "meaning": "nồi, chõ thời xưa",
       "example": "融 (róng - tan chảy/dung hòa)",
       "note": "Thường đứng bên trái hoặc nằm dưới. Chỉ các loại dụng cụ nấu nướng thời cổ hoặc sự dung hòa, tan chảy.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_45",
+      "id": "rad_Còn_lại_45",
       "radical": "鳥",
       "variant": "",
       "pinyin": "niǎo",
@@ -2143,10 +2143,10 @@
       "meaning": "con chim",
       "example": "鳳 (fèng - phượng hoàng)",
       "note": "Thường đứng bên phải hoặc phía dưới. Chỉ các loài chim có đuôi dài, lông vũ hoặc các loài chim thần thoại.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_46",
+      "id": "rad_Còn_lại_46",
       "radical": "鹵",
       "variant": "",
       "pinyin": "lǔ",
@@ -2154,10 +2154,10 @@
       "meaning": "đất mặn",
       "example": "鹹 (xián - mặn)",
       "note": "Thường làm bao quanh một phần hoặc đứng trái. Chỉ tính chất của đất mặn, muối hoặc các loại thực phẩm muối chua.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_47",
+      "id": "rad_Còn_lại_47",
       "radical": "鹿",
       "variant": "",
       "pinyin": "lù",
@@ -2165,10 +2165,10 @@
       "meaning": "con hưu",
       "example": "麒麟 (qílín - kỳ lân)",
       "note": "Thường đứng bên trái hoặc nằm phía trên. Chỉ các loài hươu, nai hoặc các loài thú lành trong truyền thuyết.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_48",
+      "id": "rad_Còn_lại_48",
       "radical": "麥",
       "variant": "",
       "pinyin": "mài",
@@ -2176,10 +2176,10 @@
       "meaning": "lúa mạch",
       "example": "麵 (miàn - mì)",
       "note": "Thường đứng bên trái hoặc phía dưới. Chỉ các loại ngũ cốc, đặc biệt là lúa mạch và các sản phẩm bột mì.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_49",
+      "id": "rad_Còn_lại_49",
       "radical": "麻",
       "variant": "",
       "pinyin": "má",
@@ -2187,10 +2187,10 @@
       "meaning": "cây gai",
       "example": "麻烦 (máfan - phiền phức)",
       "note": "Thường làm bao quanh phía trên và bên trái. Chỉ các loại cây sợi như gai, đay hoặc cảm giác tê mỏi, phiền phức.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_50",
+      "id": "rad_Còn_lại_50",
       "radical": "黃",
       "variant": "",
       "pinyin": "huáng",
@@ -2198,10 +2198,10 @@
       "meaning": "màu vàng",
       "example": "黃金 (huángjīn - vàng)",
       "note": "Thường đứng bên trái. Chỉ màu vàng của đất, lúa chín hoặc đại diện cho sự quyền quý, trung tâm.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_51",
+      "id": "rad_Còn_lại_51",
       "radical": "黍",
       "variant": "",
       "pinyin": "shǔ",
@@ -2209,10 +2209,10 @@
       "meaning": "lúa nếp",
       "example": "黍米 (shǔmǐ - hạt kê)",
       "note": "Thường đứng bên trái. Chỉ các loại kê, lúa nếp có tính dính, liên quan đến thực phẩm và rượu.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_52",
+      "id": "rad_Còn_lại_52",
       "radical": "黑",
       "variant": "",
       "pinyin": "hēi",
@@ -2220,10 +2220,10 @@
       "meaning": "màu đen",
       "example": "黑色 (hēisè - màu đen)",
       "note": "Thường đứng bên trái hoặc phía dưới. Chỉ màu đen của than khói, bóng tối hoặc sự mờ ám, xấu xa.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_53",
+      "id": "rad_Còn_lại_53",
       "radical": "黹",
       "variant": "",
       "pinyin": "zhǐ",
@@ -2231,10 +2231,10 @@
       "meaning": "may áo",
       "example": "黹 (zhǐ - thêu thùa)",
       "note": "Thường đứng một mình hoặc làm nền. Chỉ các công việc thêu thùa, may vá hoặc các hoa văn trên trang phục.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_54",
+      "id": "rad_Còn_lại_54",
       "radical": "黽",
       "variant": "",
       "pinyin": "měng",
@@ -2242,10 +2242,10 @@
       "meaning": "con ếch, cố gắng",
       "example": "黾勉 (měngmiǎn - cố gắng)",
       "note": "Thường đứng bên phải hoặc nằm dưới. Chỉ các loài lưỡng cư như ếch, rùa hoặc tinh thần nỗ lực, cố gắng.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_55",
+      "id": "rad_Còn_lại_55",
       "radical": "鼎",
       "variant": "",
       "pinyin": "dǐng",
@@ -2253,10 +2253,10 @@
       "meaning": "cái đỉnh",
       "example": "鼎盛 (dǐngshèng - cực thịnh)",
       "note": "Thường đứng một mình hoặc làm trung tâm. Chỉ các loại đỉnh, vạc dùng trong tế lễ, đại diện cho sự cực thịnh, uy nghiêm.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_56",
+      "id": "rad_Còn_lại_56",
       "radical": "鼓",
       "variant": "",
       "pinyin": "gǔ",
@@ -2264,10 +2264,10 @@
       "meaning": "cái trống",
       "example": "打鼓 (dǎgǔ - đánh trống)",
       "note": "Thường đứng bên trái. Chỉ các loại nhạc cụ gõ như trống hoặc hành động cổ vũ, khuấy động.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_57",
+      "id": "rad_Còn_lại_57",
       "radical": "鼠",
       "variant": "",
       "pinyin": "shǔ",
@@ -2275,10 +2275,10 @@
       "meaning": "con chuột",
       "example": "老鼠 (lǎoshǔ - con chuột)",
       "note": "Thường đứng bên trái hoặc phía dưới. Chỉ loài chuột hoặc các hành động lén lút, đục khoét.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_58",
+      "id": "rad_Còn_lại_58",
       "radical": "鼻",
       "variant": "",
       "pinyin": "bí",
@@ -2286,10 +2286,10 @@
       "meaning": "cái mũi",
       "example": "鼻子 (bízi - cái mũi)",
       "note": "Thường đứng một mình hoặc làm phần trên. Chỉ mũi, cơ quan khứu giác hoặc sự bắt đầu, nguồn gốc.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_59",
+      "id": "rad_Còn_lại_59",
       "radical": "齊",
       "variant": "",
       "pinyin": "qí",
@@ -2297,10 +2297,10 @@
       "meaning": "ngang bằng",
       "example": "整齊 (zhěngqí - chỉnh tề)",
       "note": "Thường đứng bên trái. Chỉ sự ngay ngắn, bằng phẳng hoặc trạng thái chỉnh tề, đồng bộ.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_60",
+      "id": "rad_Còn_lại_60",
       "radical": "齒",
       "variant": "",
       "pinyin": "chǐ",
@@ -2308,10 +2308,10 @@
       "meaning": "răng",
       "example": "牙齒 (yáchǐ - răng)",
       "note": "Thường đứng bên trái. Chỉ các sự vật liên quan đến răng, tuổi tác hoặc sự sắp xếp theo thứ tự.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_61",
+      "id": "rad_Còn_lại_61",
       "radical": "龍",
       "variant": "",
       "pinyin": "lóng",
@@ -2319,10 +2319,10 @@
       "meaning": "con rồng",
       "example": "龍舟 (lóngzhōu - thuyền rồng)",
       "note": "Thường đứng bên trái. Chỉ loài rồng trong truyền thuyết, biểu tượng cho quyền lực và sự linh thiêng.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_62",
+      "id": "rad_Còn_lại_62",
       "radical": "龜",
       "variant": "",
       "pinyin": "guī",
@@ -2330,10 +2330,10 @@
       "meaning": "con rùa",
       "example": "海龜 (hǎiguī - rùa biển)",
       "note": "Thường đứng bên trái. Chỉ loài rùa, sự trường thọ hoặc các hành động liên quan đến bói toán thời xưa.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     },
     {
-      "id": "rad_Bộ_thủ_còn_lại_63",
+      "id": "rad_Còn_lại_63",
       "radical": "龠",
       "variant": "",
       "pinyin": "yuè",
@@ -2341,7 +2341,7 @@
       "meaning": "sáo ba lỗ",
       "example": "龠 (yuè - sáo)",
       "note": "Thường nằm phía dưới. Chỉ các loại nhạc khí làm bằng ống tre hoặc sự hòa hợp, nhịp nhàng.",
-      "category": "Bộ thủ còn lại"
+      "category": "Còn lại"
     }
   ],
   "comparisons": [

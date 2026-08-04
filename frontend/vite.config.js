@@ -22,6 +22,7 @@ export default defineConfig({
         rules: 'han-viet-rules.html',
         grammar: 'hsk-grammar.html',
         phonetics: 'chinese-phonetics.html',
+        radicals: 'chinese-radicals.html',
         hanzi: 'hanzi-writer.html',
         rank: 'rank.html'
       }
