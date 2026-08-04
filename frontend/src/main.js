@@ -3989,33 +3989,39 @@ function renderLearningTianzige(word) {
     return;
   }
 
-  // Determine size based on character count so all boxes fit nicely
-  let boxSize = 150;
-  if (cleanChars.length === 2) boxSize = 125;
-  else if (cleanChars.length >= 3) boxSize = 100;
+  // Determine cell size based on character count
+  let cellSize = 150;
+  if (cleanChars.length === 2) cellSize = 125;
+  else if (cleanChars.length >= 3) cellSize = 100;
 
-  // Render N Tianzige boxes side-by-side
+  // Single Merged Outer Frame
+  const frame = document.createElement('div');
+  frame.className = 'tianzige-merged-frame';
+  frame.style.cssText = `
+    display: flex;
+    border: 2.5px solid #dc2626;
+    border-radius: 14px;
+    overflow: hidden;
+    background-color: #ffffff;
+    box-shadow: 0 4px 20px rgba(220, 38, 38, 0.18);
+    cursor: pointer;
+  `;
+  frame.title = "Nhấp để phát lại nét bút viết";
+  frame.onclick = () => animateRoadmapStroke();
+
   cleanChars.forEach((char, idx) => {
-    const box = document.createElement('div');
-    box.className = 'tianzige-box';
-    box.style.cssText = `
-      width: ${boxSize}px;
-      height: ${boxSize}px;
-      border: 2.5px solid #dc2626;
-      border-radius: 12px;
+    const cell = document.createElement('div');
+    cell.style.cssText = `
+      width: ${cellSize}px;
+      height: ${cellSize}px;
       position: relative;
-      background-color: #ffffff;
+      border-right: ${idx < cleanChars.length - 1 ? '2px solid #dc2626' : 'none'};
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
-      box-shadow: 0 4px 16px rgba(220, 38, 38, 0.15);
-      cursor: pointer;
     `;
-    box.title = `Nhấp để xem nét viết '${char}'`;
-    box.onclick = () => animateRoadmapStroke();
 
-    box.innerHTML = `
+    cell.innerHTML = `
       <div style="position: absolute; inset: 0; pointer-events: none; background-image: 
         linear-gradient(to right, transparent 49%, rgba(220, 38, 38, 0.3) 49%, rgba(220, 38, 38, 0.3) 51%, transparent 51%),
         linear-gradient(to bottom, transparent 49%, rgba(220, 38, 38, 0.3) 49%, rgba(220, 38, 38, 0.3) 51%, transparent 51%),
@@ -4024,21 +4030,23 @@ function renderLearningTianzige(word) {
       </div>
       <div id="roadmap-tianzige-target-${idx}" style="z-index: 2; display: flex; align-items: center; justify-content: center;"></div>
     `;
-    container.appendChild(box);
+    frame.appendChild(cell);
   });
 
-  // Create HanziWriter for each character
+  container.appendChild(frame);
+
+  // Create HanziWriter for each character cell
   if (window.HanziWriter) {
     cleanChars.forEach((char, idx) => {
       try {
         const writer = HanziWriter.create(`roadmap-tianzige-target-${idx}`, char, {
-          width: boxSize - 10,
-          height: boxSize - 10,
+          width: cellSize - 8,
+          height: cellSize - 8,
           padding: 4,
           showOutline: false,
           strokeColor: '#dc2626',
           radicalColor: '#2563eb',
-          drawingWidth: boxSize > 120 ? 16 : 12
+          drawingWidth: cellSize > 120 ? 16 : 12
         });
         roadmapHanziWriters.push(writer);
       } catch (e) {
@@ -4047,7 +4055,7 @@ function renderLearningTianzige(word) {
       }
     });
 
-    // Start sequential animation from Box 0
+    // Start sequential animation from Cell 0
     playSequentialWriterAnimation(0);
   }
 }
@@ -4056,15 +4064,18 @@ function playSequentialWriterAnimation(writerIndex) {
   if (roadmapStrokeTimeout) clearTimeout(roadmapStrokeTimeout);
   if (!roadmapHanziWriters || roadmapHanziWriters.length === 0) return;
 
-  // Hide all characters at start of loop so boxes start clean
+  // Clear/hide characters on new loop so cells start clean
   if (writerIndex === 0) {
     roadmapHanziWriters.forEach(w => {
-      try { w.hideCharacter(); } catch(e){}
+      try {
+        if (typeof w.pauseAnimation === 'function') w.pauseAnimation();
+        if (typeof w.hideCharacter === 'function') w.hideCharacter();
+      } catch(e){}
     });
   }
 
   if (writerIndex >= roadmapHanziWriters.length) {
-    // Loop back after 1.5s pause
+    // Hold completed characters on screen for 1.5s
     roadmapStrokeTimeout = setTimeout(() => {
       playSequentialWriterAnimation(0);
     }, 1500);
@@ -4073,21 +4084,34 @@ function playSequentialWriterAnimation(writerIndex) {
 
   const writer = roadmapHanziWriters[writerIndex];
   if (writer) {
-    writer.animateCharacter({
-      onComplete: function() {
-        roadmapStrokeTimeout = setTimeout(() => {
-          playSequentialWriterAnimation(writerIndex + 1);
-        }, 300);
-      }
-    }).catch(() => {
+    try {
+      writer.animateCharacter({
+        onComplete: function() {
+          roadmapStrokeTimeout = setTimeout(() => {
+            playSequentialWriterAnimation(writerIndex + 1);
+          }, 250);
+        }
+      }).catch(() => {
+        playSequentialWriterAnimation(writerIndex + 1);
+      });
+    } catch(e) {
       playSequentialWriterAnimation(writerIndex + 1);
-    });
+    }
   }
 }
 
 window.animateRoadmapStroke = function() {
   if (roadmapStrokeTimeout) clearTimeout(roadmapStrokeTimeout);
-  playSequentialWriterAnimation(0);
+  roadmapHanziWriters.forEach(w => {
+    try {
+      if (typeof w.pauseAnimation === 'function') w.pauseAnimation();
+      if (typeof w.hideCharacter === 'function') w.hideCharacter();
+    } catch(e){}
+  });
+
+  roadmapStrokeTimeout = setTimeout(() => {
+    playSequentialWriterAnimation(0);
+  }, 50);
 };
 
 let currentRoadmapTargetAns = '';
