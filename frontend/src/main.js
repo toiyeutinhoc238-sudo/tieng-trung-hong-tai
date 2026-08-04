@@ -4035,10 +4035,9 @@ function renderLearningTianzige(word) {
           width: boxSize - 10,
           height: boxSize - 10,
           padding: 4,
-          showOutline: true,
+          showOutline: false,
           strokeColor: '#dc2626',
           radicalColor: '#2563eb',
-          outlineColor: '#cbd5e1',
           drawingWidth: boxSize > 120 ? 16 : 12
         });
         roadmapHanziWriters.push(writer);
@@ -4057,8 +4056,15 @@ function playSequentialWriterAnimation(writerIndex) {
   if (roadmapStrokeTimeout) clearTimeout(roadmapStrokeTimeout);
   if (!roadmapHanziWriters || roadmapHanziWriters.length === 0) return;
 
+  // Hide all characters at start of loop so boxes start clean
+  if (writerIndex === 0) {
+    roadmapHanziWriters.forEach(w => {
+      try { w.hideCharacter(); } catch(e){}
+    });
+  }
+
   if (writerIndex >= roadmapHanziWriters.length) {
-    // Loop back after 1.5s
+    // Loop back after 1.5s pause
     roadmapStrokeTimeout = setTimeout(() => {
       playSequentialWriterAnimation(0);
     }, 1500);
@@ -4071,7 +4077,7 @@ function playSequentialWriterAnimation(writerIndex) {
       onComplete: function() {
         roadmapStrokeTimeout = setTimeout(() => {
           playSequentialWriterAnimation(writerIndex + 1);
-        }, 400);
+        }, 300);
       }
     }).catch(() => {
       playSequentialWriterAnimation(writerIndex + 1);
