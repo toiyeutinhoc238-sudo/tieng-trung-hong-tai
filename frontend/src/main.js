@@ -965,26 +965,28 @@ function toggleLessonStandardAnswer() {
 
 // --- RENDER FUNCTIONS ---
 function renderActiveCard() {
+  if (!filteredList) return;
   if (filteredList.length === 0) {
-    emptyState.style.display = 'flex';
-    cardViewport.style.display = 'none';
-    cardHudControls.style.display = 'none';
-    cardPageIndicator.style.display = 'none';
+    if (emptyState) emptyState.style.display = 'flex';
+    if (cardViewport) cardViewport.style.display = 'none';
+    if (cardHudControls) cardHudControls.style.display = 'none';
+    if (cardPageIndicator) cardPageIndicator.style.display = 'none';
     return;
   }
 
-  emptyState.style.display = 'none';
-  cardViewport.style.display = 'block';
-  cardHudControls.style.display = 'flex';
-  cardPageIndicator.style.display = 'block';
+  if (emptyState) emptyState.style.display = 'none';
+  if (cardViewport) cardViewport.style.display = 'block';
+  if (cardHudControls) cardHudControls.style.display = 'flex';
+  if (cardPageIndicator) cardPageIndicator.style.display = 'block';
 
   // Ensure index is within boundaries
   if (currentIndex >= filteredList.length) currentIndex = 0;
   if (currentIndex < 0) currentIndex = filteredList.length - 1;
 
   const current = filteredList[currentIndex];
+  if (!current) return;
 
-  // Update Indicator & Progress Fill (do this before potential early return in typing mode)
+  // Update Indicator & Progress Fill
   if (currentCardNum) currentCardNum.textContent = currentIndex + 1;
   if (totalCardNum) totalCardNum.textContent = filteredList.length;
 
@@ -1010,43 +1012,49 @@ function renderActiveCard() {
   };
 
   // Render Front Face
-  cardWordFront.textContent = current.word;
-  cardLevelFront.textContent = getLevelLabel(current);
-  cardCategoryFront.textContent = current.category || 'Chưa phân loại';
+  if (cardWordFront) cardWordFront.textContent = current.word;
+  if (cardLevelFront) cardLevelFront.textContent = getLevelLabel(current);
+  if (cardCategoryFront) cardCategoryFront.textContent = current.category || 'Chưa phân loại';
 
   // Render Back Face
-  cardPinyinBack.textContent = current.pinyin;
-  cardMeaningBack.textContent = current.meaning;
-  cardLevelBack.textContent = getLevelLabel(current);
-  cardCategoryBack.textContent = current.category || 'Chưa phân loại';
+  if (cardPinyinBack) cardPinyinBack.textContent = current.pinyin;
+  if (cardMeaningBack) cardMeaningBack.textContent = current.meaning;
+  if (cardLevelBack) cardLevelBack.textContent = getLevelLabel(current);
+  if (cardCategoryBack) cardCategoryBack.textContent = current.category || 'Chưa phân loại';
 
+  const exampleBox = document.querySelector('.example-box');
   if (current.example_zh) {
-    cardExampleZhBack.textContent = current.example_zh;
-    cardExampleViBack.textContent = current.example_vi || '';
-    document.querySelector('.example-box').style.display = 'block';
+    if (cardExampleZhBack) cardExampleZhBack.textContent = current.example_zh;
+    if (cardExampleViBack) cardExampleViBack.textContent = current.example_vi || '';
+    if (exampleBox) exampleBox.style.display = 'block';
   } else {
-    document.querySelector('.example-box').style.display = 'none';
+    if (exampleBox) exampleBox.style.display = 'none';
   }
-
-  // (Indicator & Progress Fill updated at the start of renderActiveCard)
 
   // Update HUD Button States
+  const markMemorizedBtn = document.getElementById('mark-memorized-btn');
   const markUnmemorizedBtn = document.getElementById('mark-unmemorized-btn');
-  if (current.isMemorized) {
-    markMemorizedBtn.classList.add('active');
-    if (markUnmemorizedBtn) markUnmemorizedBtn.classList.remove('active');
-  } else if (current.isStudied) {
-    markMemorizedBtn.classList.remove('active');
-    if (markUnmemorizedBtn) markUnmemorizedBtn.classList.add('active');
-  } else {
-    markMemorizedBtn.classList.remove('active');
-    if (markUnmemorizedBtn) markUnmemorizedBtn.classList.remove('active');
+  const markStarredBtn = document.getElementById('mark-starred-btn');
+
+  if (markMemorizedBtn) {
+    if (current.isMemorized) {
+      markMemorizedBtn.classList.add('active');
+      if (markUnmemorizedBtn) markUnmemorizedBtn.classList.remove('active');
+    } else if (current.isStudied) {
+      markMemorizedBtn.classList.remove('active');
+      if (markUnmemorizedBtn) markUnmemorizedBtn.classList.add('active');
+    } else {
+      markMemorizedBtn.classList.remove('active');
+      if (markUnmemorizedBtn) markUnmemorizedBtn.classList.remove('active');
+    }
   }
 
-  if (current.isStarred) {
-    markStarredBtn.classList.add('active');
-  } else {
-    markStarredBtn.classList.remove('active');
+  if (markStarredBtn) {
+    if (current.isStarred) {
+      markStarredBtn.classList.add('active');
+    } else {
+      markStarredBtn.classList.remove('active');
+    }
   }
 }
 
