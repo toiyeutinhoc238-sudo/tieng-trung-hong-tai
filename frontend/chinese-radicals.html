@@ -79,7 +79,7 @@
       btns.forEach(function(btn) {
         if (enabled) {
           btn.classList.remove('particles-off');
-          btn.innerHTML = '<i class="fa-solid fa-snowflake" style="color: #60a5fa;"></i>';
+          btn.innerHTML = '<i class="fa-solid fa-snowflake" style="color: #3b82f6;"></i>';
           btn.title = 'Tắt hiệu ứng rơi động (Đang BẬT)';
         } else {
           btn.classList.add('particles-off');
@@ -114,19 +114,19 @@
       background-position: center;
     }
     .page-container {
-      max-width: 1200px;
+      max-width: 1240px;
       margin: 0 auto;
       padding: 24px 16px 60px 16px;
     }
 
-    /* ─── LIQUID GLASS IOS 26 AESTHETICS ─── */
+    /* ─── HEADER (Đúng mẫu ảnh thiết kế) ─── */
     .header-card {
       background: rgba(15, 23, 42, 0.65);
       backdrop-filter: blur(24px) saturate(180%);
       -webkit-backdrop-filter: blur(24px) saturate(180%);
       border: 1px solid rgba(255, 255, 255, 0.18);
-      border-radius: 20px;
-      padding: 22px 26px;
+      border-radius: 22px;
+      padding: 20px 26px;
       margin-bottom: 24px;
       display: flex;
       align-items: center;
@@ -137,46 +137,112 @@
     }
 
     html.light-mode .header-card {
-      background: rgba(255, 255, 255, 0.72) !important;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.85), rgba(224, 242, 254, 0.75)) !important;
       backdrop-filter: blur(28px) saturate(190%) !important;
       -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
-      border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.95) !important;
       color: #0f172a !important;
-      box-shadow: 0 12px 32px rgba(0,0,0,0.06), 0 1px 3px rgba(255,255,255,0.9) inset !important;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.06), 0 1px 3px rgba(255,255,255,0.95) inset !important;
     }
 
-    /* Top Control Action Buttons (Home icon, Snowflake, Theme toggle) */
-    .top-control-btn {
-      background: rgba(255, 255, 255, 0.08);
+    .brand-logo-img {
+      height: 48px;
+      width: auto;
+      object-fit: contain;
+      background: #ffffff;
+      padding: 4px 8px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .title-group h1 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      margin: 0;
+      background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.01em;
+    }
+
+    html.light-mode .title-group h1 {
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%) !important;
+      -webkit-background-clip: text !important;
+      background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+    }
+
+    .title-group p {
+      font-size: 0.92rem;
+      color: #94a3b8;
+      margin: 4px 0 0 0;
+      font-weight: 500;
+    }
+
+    html.light-mode .title-group p {
+      color: #334155 !important;
+    }
+
+    /* Top Control Action Buttons (Đúng chuẩn mẫu) */
+    .top-circle-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    html.light-mode .top-circle-btn {
+      background: #ffffff !important;
+      border: 1.5px solid #cbd5e1 !important;
+      color: #0f172a !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+    }
+
+    .top-circle-btn:hover {
+      transform: scale(1.08);
+      border-color: #3b82f6 !important;
+    }
+
+    .top-home-btn {
+      padding: 10px 16px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(37, 99, 235, 0.2);
+      border: 1px solid rgba(37, 99, 235, 0.4);
+      color: #3b82f6;
       font-size: 1.15rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       text-decoration: none;
-      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      box-sizing: border-box;
     }
 
-    html.light-mode .top-control-btn {
-      background: rgba(255, 255, 255, 0.8) !important;
-      backdrop-filter: blur(20px) !important;
-      border: 1.5px solid rgba(255, 255, 255, 0.95) !important;
-      color: #0f172a !important;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(255, 255, 255, 1) inset !important;
+    html.light-mode .top-home-btn {
+      background: #e0f2fe !important;
+      border: 1.5px solid #bae6fd !important;
+      color: #0284c7 !important;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.1) !important;
     }
 
-    .top-control-btn:hover {
+    .top-home-btn:hover {
       background: #2563eb !important;
       color: #ffffff !important;
       border-color: #2563eb !important;
-      transform: translateY(-2px) scale(1.05);
-      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35) !important;
+      transform: scale(1.05);
     }
 
     /* Tab Buttons */
@@ -202,11 +268,11 @@
     }
 
     html.light-mode .rad-tab-btn {
-      background: rgba(255, 255, 255, 0.65) !important;
+      background: rgba(255, 255, 255, 0.75) !important;
       backdrop-filter: blur(16px) !important;
       color: #334155 !important;
-      border: 1px solid rgba(0, 0, 0, 0.08) !important;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
     }
 
     .rad-tab-btn:hover {
@@ -245,11 +311,11 @@
     }
 
     html.light-mode .rad-card {
-      background: rgba(255, 255, 255, 0.7) !important;
+      background: rgba(255, 255, 255, 0.78) !important;
       backdrop-filter: blur(24px) saturate(180%) !important;
       -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
       border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.05), 0 1px 2px rgba(255,255,255,0.9) inset !important;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06), 0 1px 2px rgba(255,255,255,0.9) inset !important;
       color: #0f172a !important;
     }
 
@@ -257,16 +323,6 @@
       transform: translateY(-4px) scale(1.01);
       border-color: #2563eb !important;
       box-shadow: 0 16px 36px rgba(37, 99, 235, 0.22) !important;
-    }
-
-    html.light-mode h1, html.light-mode h2, html.light-mode h3 {
-      color: #0f172a !important;
-    }
-    html.light-mode .card-title-text {
-      color: #0f172a !important;
-    }
-    html.light-mode .card-sub-text {
-      color: #475569 !important;
     }
   </style>
 </head>
@@ -276,34 +332,32 @@
   <canvas id="seasonal-particle-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;"></canvas>
 
   <div class="page-container">
-    <!-- Header -->
+    <!-- Header (Đúng mẫu ảnh thiết kế) -->
     <div class="header-card">
       <div style="display: flex; align-items: center; gap: 16px;">
-        <div style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; width: 54px; height: 54px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);">
-          <i class="fa-solid fa-shapes"></i>
-        </div>
-        <div>
-          <h1 class="card-title-text" style="font-size: 1.75rem; font-weight: 800; margin: 0; letter-spacing: -0.01em;">Bộ thủ Tiếng Trung</h1>
-          <p class="card-sub-text" style="font-size: 0.92rem; color: #94a3b8; margin: 4px 0 0 0;">Nắm vững cấu trúc nét chữ, phiên âm, Hán-Việt & mẹo phân biệt các bộ thủ</p>
+        <img src="/assets/logo.png" class="brand-logo-img" alt="Logo">
+        <div class="title-group">
+          <h1>Chuyên Trang Bộ Thủ Tiếng Trung</h1>
+          <p>Trọn bộ các bộ thủ tiếng Trung chuẩn HSK với phiên âm, Hán-Việt, nghĩa và phương pháp phân biệt chi tiết</p>
         </div>
       </div>
 
-      <!-- Top Action Controls (Hình ngôi nhà, Nút bông tuyết, Nút theme toggle) -->
+      <!-- Top Action Controls (Chuẩn thứ tự Nút Bông tuyết, Nút Mặt trăng, Nút Ngôi nhà như hình) -->
       <div style="display: flex; align-items: center; gap: 10px;">
-        <!-- Nút hình Ngôi nhà (Không có chữ Trang chủ) -->
-        <a href="/" class="top-control-btn" title="Trang chủ">
-          <i class="fa-solid fa-house"></i>
-        </a>
-
-        <!-- Nút bông tuyết hiệu ứng mùa -->
-        <button onclick="window.toggleSeasonalParticles()" id="particle-toggle-btn" class="top-control-btn particle-toggle-btn" title="Bật/Tắt hiệu ứng rơi động">
-          <i class="fa-solid fa-snowflake" style="color: #60a5fa;"></i>
+        <!-- Nút 1: Nút bông tuyết hiệu ứng mùa -->
+        <button onclick="window.toggleSeasonalParticles()" id="particle-toggle-btn" class="top-circle-btn particle-toggle-btn" title="Bật/Tắt hiệu ứng rơi động">
+          <i class="fa-solid fa-snowflake" style="color: #3b82f6;"></i>
         </button>
 
-        <!-- Nút đổi theme giao diện -->
-        <button onclick="window.toggleTheme()" id="theme-toggle-btn" class="top-control-btn theme-toggle-btn-top" title="Đổi giao diện Sáng / Tối">
+        <!-- Nút 2: Nút đổi theme giao diện Sáng/Tối -->
+        <button onclick="window.toggleTheme()" id="theme-toggle-btn" class="top-circle-btn theme-toggle-btn-top" title="Đổi giao diện Sáng / Tối">
           <i class="fa-solid fa-moon"></i>
         </button>
+
+        <!-- Nút 3: Nút hình Ngôi nhà (Không có chữ) -->
+        <a href="/" class="top-home-btn" title="Trang chủ">
+          <i class="fa-solid fa-house"></i>
+        </a>
       </div>
     </div>
 
