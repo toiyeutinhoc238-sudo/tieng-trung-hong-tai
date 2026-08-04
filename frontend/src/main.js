@@ -302,7 +302,7 @@ if (document.readyState === 'loading') {
 
 // --- THEME MANAGEMENT ---
 function applyThemeClass(isDark) {
-  const bgUrl = isDark ? "url('/assets/app_bg_night_v2.png')" : "url('/assets/app_bg_day_v2.png')";
+  const bgUrl = isDark ? "url('/assets/app_bg_night_v3.png')" : "url('/assets/app_bg_day_v3.png')";
   document.documentElement.style.setProperty('background-image', bgUrl, 'important');
   document.documentElement.style.setProperty('background-size', 'cover', 'important');
   document.documentElement.style.setProperty('background-position', 'center center', 'important');
