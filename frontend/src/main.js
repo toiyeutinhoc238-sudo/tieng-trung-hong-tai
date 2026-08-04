@@ -4047,6 +4047,9 @@ function renderLearningTianzige(word) {
   container.appendChild(frame);
 
   if (window.HanziWriter) {
+    let loadedCount = 0;
+    const currentRenderSeq = roadmapAnimationSequence;
+
     cleanChars.forEach((char, idx) => {
       try {
         const writer = HanziWriter.create(`roadmap-tianzige-target-${idx}`, char, {
@@ -4054,23 +4057,40 @@ function renderLearningTianzige(word) {
           height: cellSize - 8,
           padding: 4,
           showOutline: true,
+          showCharacter: false,
           strokeColor: '#dc2626',
           radicalColor: '#2563eb',
           outlineColor: '#cbd5e1',
           drawingWidth: cellSize > 120 ? 16 : 12,
+          onLoadCharDataSuccess: function() {
+            if (currentRenderSeq !== roadmapAnimationSequence) return;
+            loadedCount++;
+            if (loadedCount === cleanChars.length) {
+              startCleanSequentialAnimation();
+            }
+          },
           onLoadCharDataError: function() {
             const targetEl = document.getElementById(`roadmap-tianzige-target-${idx}`);
             if (targetEl) targetEl.innerHTML = `<span style="font-size: 2.2rem; font-weight: 800; color: #dc2626;">${char}</span>`;
+            if (currentRenderSeq !== roadmapAnimationSequence) return;
+            loadedCount++;
+            if (loadedCount === cleanChars.length) {
+              startCleanSequentialAnimation();
+            }
           }
         });
         roadmapHanziWriters.push(writer);
       } catch (e) {
         const targetEl = document.getElementById(`roadmap-tianzige-target-${idx}`);
         if (targetEl) targetEl.innerHTML = `<span style="font-size: 2.2rem; font-weight: 800; color: #dc2626;">${char}</span>`;
+        if (currentRenderSeq === roadmapAnimationSequence) {
+          loadedCount++;
+          if (loadedCount === cleanChars.length) {
+            startCleanSequentialAnimation();
+          }
+        }
       }
     });
-
-    startCleanSequentialAnimation();
   }
 }
 
