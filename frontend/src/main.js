@@ -4043,9 +4043,10 @@ function renderLearningTianzige(word) {
           width: cellSize - 8,
           height: cellSize - 8,
           padding: 4,
-          showOutline: false,
+          showOutline: true,
           strokeColor: '#dc2626',
           radicalColor: '#2563eb',
+          outlineColor: '#e2e8f0',
           drawingWidth: cellSize > 120 ? 16 : 12
         });
         roadmapHanziWriters.push(writer);
@@ -4064,21 +4065,11 @@ function playSequentialWriterAnimation(writerIndex) {
   if (roadmapStrokeTimeout) clearTimeout(roadmapStrokeTimeout);
   if (!roadmapHanziWriters || roadmapHanziWriters.length === 0) return;
 
-  // Clear/hide characters on new loop so cells start clean
-  if (writerIndex === 0) {
-    roadmapHanziWriters.forEach(w => {
-      try {
-        if (typeof w.pauseAnimation === 'function') w.pauseAnimation();
-        if (typeof w.hideCharacter === 'function') w.hideCharacter();
-      } catch(e){}
-    });
-  }
-
   if (writerIndex >= roadmapHanziWriters.length) {
-    // Hold completed characters on screen for 1.5s
+    // Hold completed characters on screen for 1.8s before restarting
     roadmapStrokeTimeout = setTimeout(() => {
       playSequentialWriterAnimation(0);
-    }, 1500);
+    }, 1800);
     return;
   }
 
@@ -4087,9 +4078,10 @@ function playSequentialWriterAnimation(writerIndex) {
     try {
       writer.animateCharacter({
         onComplete: function() {
+          // Cell writerIndex is 100% finished! Now start Cell writerIndex + 1!
           roadmapStrokeTimeout = setTimeout(() => {
             playSequentialWriterAnimation(writerIndex + 1);
-          }, 250);
+          }, 300);
         }
       }).catch(() => {
         playSequentialWriterAnimation(writerIndex + 1);
@@ -4105,7 +4097,6 @@ window.animateRoadmapStroke = function() {
   roadmapHanziWriters.forEach(w => {
     try {
       if (typeof w.pauseAnimation === 'function') w.pauseAnimation();
-      if (typeof w.hideCharacter === 'function') w.hideCharacter();
     } catch(e){}
   });
 
