@@ -5144,26 +5144,35 @@ html:not(.dark) #zubi-hero-tip {
 }
 
 html:not(.dark) .zubi-dashboard-table-container {
-  background: rgba(255, 255, 255, 0.95) !important;
-  border-color: rgba(226, 232, 240, 0.9) !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.58) 0%, rgba(225, 238, 255, 0.42) 100%) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border-color: rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 10px 32px rgba(31, 38, 135, 0.08) !important;
 }
 
-html:not(.dark) .zubi-table th {
-  background: #f1f5f9 !important;
-  color: #334155 !important;
+html:not(.dark) .zubi-table th,
+html:not(.dark) .zubi-th {
+  background: rgba(255, 255, 255, 0.45) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  color: #0f172a !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.8) !important;
 }
 
-html:not(.dark) .zubi-table td {
+html:not(.dark) .zubi-table td,
+html:not(.dark) .zubi-td {
   color: #1e293b !important;
-  border-bottom-color: #f1f5f9 !important;
+  border-bottom-color: rgba(255, 255, 255, 0.5) !important;
 }
 
 html:not(.dark) #zubi-stat-modal > div,
 html:not(.dark) #about-hongtai-modal > div {
-  background: rgba(255, 255, 255, 0.98) !important;
-  border-color: rgba(226, 232, 240, 0.9) !important;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15) !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.65) 0%, rgba(230, 240, 255, 0.48) 100%) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  border-color: rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 25px 50px rgba(31, 38, 135, 0.12) !important;
   color: #1e293b !important;
 }
 
@@ -5185,7 +5194,8 @@ html.dark #about-hongtai-modal .about-quote-box {
   border-left-color: #38bdf8 !important;
 }
 html:not(.dark) #about-hongtai-modal .about-quote-box {
-  background: #f0f9ff !important;
+  background: rgba(255, 255, 255, 0.6) !important;
+  backdrop-filter: blur(12px) !important;
   color: #0f172a !important;
   border-left-color: #0284c7 !important;
 }
@@ -5196,8 +5206,9 @@ html.dark #about-hongtai-modal .about-card-box {
   color: #cbd5e1 !important;
 }
 html:not(.dark) #about-hongtai-modal .about-card-box {
-  background: #f8fafc !important;
-  border: 1px solid #e2e8f0 !important;
+  background: rgba(255, 255, 255, 0.55) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
   color: #334155 !important;
 }
 
@@ -5213,7 +5224,8 @@ html.dark #about-hongtai-modal .about-mission-box {
   border: 1px solid rgba(239, 68, 68, 0.3) !important;
 }
 html:not(.dark) #about-hongtai-modal .about-mission-box {
-  background: #fef2f2 !important;
+  background: rgba(254, 242, 242, 0.7) !important;
+  backdrop-filter: blur(12px) !important;
   border: 1px solid #fca5a5 !important;
 }
 
@@ -5243,8 +5255,8 @@ html.dark #about-hongtai-modal .about-modal-footer {
   color: #94a3b8 !important;
 }
 html:not(.dark) #about-hongtai-modal .about-modal-footer {
-  background: #f1f5f9 !important;
-  border-top-color: #e2e8f0 !important;
+  background: rgba(255, 255, 255, 0.5) !important;
+  border-top-color: rgba(255, 255, 255, 0.8) !important;
   color: #64748b !important;
 }
 
@@ -5257,14 +5269,18 @@ html:not(.dark) .zubi-section-title {
 }
 
 html.dark .zubi-table-wrap {
-  background: rgba(30, 41, 59, 0.95) !important;
+  background: rgba(30, 41, 59, 0.65) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
   border: 1px solid rgba(255, 255, 255, 0.12) !important;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35) !important;
 }
 html:not(.dark) .zubi-table-wrap {
-  background: rgba(255, 255, 255, 0.98) !important;
-  border: 1px solid rgba(226, 232, 240, 0.9) !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.58) 0%, rgba(225, 238, 255, 0.42) 100%) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 10px 30px rgba(31, 38, 135, 0.08) !important;
 }
 
 html.dark .zubi-th {
@@ -5273,9 +5289,11 @@ html.dark .zubi-th {
   background: rgba(15, 23, 42, 0.4) !important;
 }
 html:not(.dark) .zubi-th {
-  color: #475569 !important;
-  border-bottom: 1px solid rgba(226, 232, 240, 0.9) !important;
-  background: #f1f5f9 !important;
+  color: #0f172a !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.8) !important;
+  background: rgba(255, 255, 255, 0.45) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
 }
 
 html.dark .zubi-td {
