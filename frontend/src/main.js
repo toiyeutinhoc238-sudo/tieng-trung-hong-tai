@@ -1032,8 +1032,15 @@ function renderActiveCard() {
 
   const exampleBox = document.querySelector('.example-box');
   if (current.example_zh) {
-    if (cardExampleZhBack) cardExampleZhBack.textContent = current.example_zh;
-    if (cardExampleViBack) cardExampleViBack.textContent = current.example_vi || '';
+    const zhLines = current.example_zh.split(/(?<=[！。？\n])\s*/).map(s => s.trim()).filter(Boolean);
+    const viLines = (current.example_vi || '').split(/(?<=[.!?\n])\s*/).map(s => s.trim()).filter(Boolean);
+
+    if (cardExampleZhBack) {
+      cardExampleZhBack.innerHTML = zhLines.map((line, i) => `<div style="${i > 0 ? 'margin-top: 4px;' : ''}">${line}</div>`).join('');
+    }
+    if (cardExampleViBack) {
+      cardExampleViBack.innerHTML = viLines.map((line, i) => `<div style="${i > 0 ? 'margin-top: 4px;' : ''}">${line}</div>`).join('');
+    }
     if (exampleBox) exampleBox.style.display = 'block';
   } else {
     if (exampleBox) exampleBox.style.display = 'none';
@@ -4228,8 +4235,11 @@ window.showLearningFlashcard = function(index) {
   const egZh = w.example_zh || '';
   const egVi = w.example_vi || '';
   
-  const egZhLines = egZh ? egZh.split(/\r?\n/).map(s => s.trim()).filter(Boolean) : [];
-  const egViLines = egVi ? egVi.split(/\r?\n/).map(s => s.trim()).filter(Boolean) : [];
+  // Smart split Chinese examples by sentence-ending punctuation (！, 。, ？) or newline
+  const egZhLines = egZh ? egZh.split(/(?<=[！。？\n])\s*/).map(s => s.trim()).filter(Boolean) : [];
+  
+  // Smart split Vietnamese examples by sentence-ending punctuation (. ! ?) or newline
+  const egViLines = egVi ? egVi.split(/(?<=[.!?\n])\s*/).map(s => s.trim()).filter(Boolean) : [];
 
   const rawUsage = w.explanation || w.usage || (egViLines[0] ? `Dùng trong câu: "${egViLines[0]}"` : '');
   const usageLines = rawUsage ? rawUsage.split(/\r?\n/).map(s => s.trim()).filter(Boolean) : [];
@@ -6476,8 +6486,14 @@ function selectDictWord(w) {
 
   const exBox = document.getElementById('dict-detail-example-box');
   if (w.example_zh) {
-    document.getElementById('dict-detail-example-zh').textContent = w.example_zh;
-    document.getElementById('dict-detail-example-vi').textContent = w.example_vi || '';
+    const zhLines = w.example_zh.split(/(?<=[！。？\n])\s*/).map(s => s.trim()).filter(Boolean);
+    const viLines = (w.example_vi || '').split(/(?<=[.!?\n])\s*/).map(s => s.trim()).filter(Boolean);
+
+    const zhEl = document.getElementById('dict-detail-example-zh');
+    const viEl = document.getElementById('dict-detail-example-vi');
+    if (zhEl) zhEl.innerHTML = zhLines.map((line, i) => `<div style="${i > 0 ? 'margin-top: 4px;' : ''}">${line}</div>`).join('');
+    if (viEl) viEl.innerHTML = viLines.map((line, i) => `<div style="${i > 0 ? 'margin-top: 4px;' : ''}">${line}</div>`).join('');
+
     if (exBox) exBox.style.display = 'block';
   } else {
     if (exBox) exBox.style.display = 'none';
