@@ -4167,8 +4167,13 @@ window.showLearningFlashcard = function(index) {
           </div>
         </div>
 
-        <!-- RIGHT COLUMN: PINYIN, NGHĨA, CHÚ Ý, VÍ DỤ -->
+        <!-- RIGHT COLUMN: CHỮ HÁN ĐẦY ĐỦ, PINYIN, NGHĨA, CHÚ Ý, VÍ DỤ -->
         <div style="flex: 1; min-width: 260px; display: flex; flex-direction: column; gap: 8px;">
+          <!-- Full Static Chinese Word -->
+          <div style="font-family: var(--font-hanzi); font-size: 2.8rem; font-weight: 800; color: var(--text-color); line-height: 1.1; letter-spacing: 2px;">
+            ${hz}
+          </div>
+
           <!-- Pinyin & Audio -->
           <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
             <span style="font-family: var(--font-pinyin); font-size: 1.8rem; font-weight: 700; color: #2563eb; letter-spacing: 1px;">
