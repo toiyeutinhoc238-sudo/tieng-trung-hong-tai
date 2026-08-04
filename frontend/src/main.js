@@ -1055,7 +1055,7 @@ function updateStats() {
   let levelList = vocabList.filter(w => {
     if (w.isCustom) return true;
     if (w.level === 'premium') return true;
-    return ((w.hskVersion || '3.0') === activeHskVersion || (activeHskVersion === '2.0' && matchLevel(w.level, 1)));
+    return (w.hskVersion || '3.0') === activeHskVersion;
   });
 
   if (activeLevel !== 'all') {
@@ -3738,7 +3738,7 @@ function renderGamifiedRoadmapPath() {
     const curr = (w.curriculum || 'hsk').toLowerCase();
     const ver = (w.hskVersion || '3.0').toLowerCase();
     if (hskVer === 'yct') return curr.includes('yct') || ver.includes('yct');
-    if (hskVer === '2.0') return !curr.includes('yct') && !ver.includes('yct') && (ver.includes('2') || ver === '2.0' || matchLevel(w.level, 1));
+    if (hskVer === '2.0') return !curr.includes('yct') && !ver.includes('yct') && (ver.includes('2') || ver === '2.0');
     return !curr.includes('yct') && !ver.includes('yct') && (ver.includes('3') || ver === '3.0' || w.hskVersion === '3.0');
   });
   const totalRoadmapWords = activeVocabsForRoadmap.length;
@@ -3761,10 +3761,7 @@ function renderGamifiedRoadmapPath() {
         const curr2 = (w.curriculum || 'hsk').toLowerCase();
         const ver2 = (w.hskVersion || '3.0').toLowerCase();
         if (hskVer === 'yct') return (curr2.includes('yct') || ver2.includes('yct')) && matchLevel(w.level, ld.level);
-        if (hskVer === '2.0') {
-          if (matchLevel(w.level, 1) && matchLevel(ld.level, 1)) return !curr2.includes('yct') && !ver2.includes('yct');
-          return !curr2.includes('yct') && !ver2.includes('yct') && (ver2.includes('2') || ver2 === '2.0') && matchLevel(w.level, ld.level);
-        }
+        if (hskVer === '2.0') return !curr2.includes('yct') && !ver2.includes('yct') && (ver2.includes('2') || ver2 === '2.0') && matchLevel(w.level, ld.level);
         return !curr2.includes('yct') && !ver2.includes('yct') && (ver2.includes('3') || ver2 === '3.0' || w.hskVersion === '3.0') && matchLevel(w.level, ld.level);
       });
       if (lvWords.some(w => w.isMemorized)) {
@@ -5497,7 +5494,7 @@ function renderLessonsList() {
     if (w.isCustom) return false;
     if (w.curriculum === 'yct' || w.hskVersion === 'yct') return false;
     if (!matchLevel(w.level, activeLessonsLevel)) return false;
-    if ((w.hskVersion || '3.0') !== activeHskVersion && !(activeHskVersion === '2.0' && matchLevel(w.level, 1))) return false;
+    if ((w.hskVersion || '3.0') !== activeHskVersion) return false;
     if ((activeLessonsLevel === 4 || activeLessonsLevel === 5) && activeHskVersion === '2.0' && activeVolumeFilter !== 'all') {
       if (w.volume) {
         if (w.volume !== activeVolumeFilter) return false;
@@ -6587,7 +6584,7 @@ function renderZubiDashboardTableAndRecent() {
       { name: 'HSK Cấp 7-8-9 (Cao cấp)', curriculum: 'HSK 3.0 Chuyên nghiệp', hskVer: '3.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '7-9') && (w.hskVersion || '3.0') === '3.0', curriculumType: 'hsk', level: '7-9' },
       // ── HSK 2.0 ──
       { groupHeader: '📘 HSK Chuẩn 2.0', type: 'header' },
-      { name: 'HSK Cấp 1', curriculum: 'HSK Chuẩn (2.0)', hskVer: '2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '1'), curriculumType: 'hsk', level: 1 },
+      { name: 'HSK Cấp 1', curriculum: 'HSK Chuẩn (2.0)', hskVer: '2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '1') && (w.hskVersion || '3.0') === '2.0', curriculumType: 'hsk', level: 1 },
       { name: 'HSK Cấp 2', curriculum: 'HSK Chuẩn (2.0)', hskVer: '2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '2') && (w.hskVersion || '3.0') === '2.0', curriculumType: 'hsk', level: 2 },
       { name: 'HSK Cấp 3', curriculum: 'HSK Chuẩn (2.0)', hskVer: '2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '3') && (w.hskVersion || '3.0') === '2.0', curriculumType: 'hsk', level: 3 },
       { name: 'HSK Cấp 4', curriculum: 'HSK Chuẩn (2.0)', hskVer: '2.0', filter: w => (w.curriculum === 'hsk' || !w.curriculum) && matchLevel(w.level, '4') && (w.hskVersion || '3.0') === '2.0', curriculumType: 'hsk', level: 4 },
@@ -6664,7 +6661,7 @@ function renderZubiDashboardTableAndRecent() {
     }
 
     // HSK 2.0 — check if exists
-    const hsk20Words = builtInVocabs.filter(w => (w.curriculum === 'hsk' || !w.curriculum) && ((w.hskVersion || '3.0') === '2.0' || matchLevel(w.level, '1')));
+    const hsk20Words = builtInVocabs.filter(w => (w.curriculum === 'hsk' || !w.curriculum) && (w.hskVersion || '3.0') === '2.0');
     if (hsk20Words.length > 0) {
       curricula.push({
         name: 'HSK Chuẩn 2.0 – Toàn bộ Cấp 1→6',
