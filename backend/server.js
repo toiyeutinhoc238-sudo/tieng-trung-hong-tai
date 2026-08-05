@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import fs from 'fs/promises';
+import { existsSync } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import https from 'https';
@@ -1609,7 +1610,7 @@ app.get('/api/grammar/detail/:key', async (req, res) => {
 // Serve index.html or dist/index.html as root
 app.get('/', (req, res) => {
   const distIndex = path.join(DIST_DIR, 'index.html');
-  if (fs.existsSync(distIndex)) {
+  if (existsSync(distIndex)) {
     res.sendFile(distIndex);
   } else {
     res.sendFile(path.join(FRONTEND_DIR, 'index.html'));
