@@ -93,11 +93,9 @@ app.use((req, res, next) => {
 
 // Force no-cache on HTML and SW files so browsers always pull latest builds
 app.use((req, res, next) => {
-  if (req.url === '/' || req.url.endsWith('.html') || req.url === '/sw.js' || req.url.includes('sw.js')) {
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
-    res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
-  }
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
   next();
 });
 
