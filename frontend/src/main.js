@@ -307,14 +307,26 @@ document.addEventListener('DOMContentLoaded', async () => {
   initSeasonalParticles();
   initVoices();
   await initAuth();
-  await fetchVocabulary();
-  renderGamifiedRoadmapPath();
-  setupEventListeners();
-  initExams();
-  initLessonsView();
-  initDictionaryView();
-  initChatbot();
-  showHomeView();
+
+  const pathname = window.location.pathname;
+  const isMainAppPage = !pathname.includes('.html') || pathname.endsWith('index.html') || pathname === '/';
+
+  if (isMainAppPage) {
+    await fetchVocabulary();
+    renderGamifiedRoadmapPath();
+    setupEventListeners();
+    initExams();
+    initLessonsView();
+    initDictionaryView();
+    initChatbot();
+    showHomeView();
+  } else {
+    try {
+      await fetchVocabulary();
+    } catch (e) {
+      console.warn("Subpage vocab fetch:", e);
+    }
+  }
 });
 
 // --- SEASONAL FALLING PARTICLES ENGINE (Xuân - Hạ - Thu - Đông) ---
@@ -1901,7 +1913,7 @@ function applyFilters(preserveIndex = false) {
   }
 
   isFlipped = false;
-  cardElement.classList.remove('flipped');
+  if (cardElement) cardElement.classList.remove('flipped');
   renderActiveCard();
   renderFilteredWordsTable();
 }
