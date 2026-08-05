@@ -2843,6 +2843,22 @@ function setupEventListeners() {
 
     const key = e.key.toLowerCase();
 
+    // Check if Lesson Flashcard Mode is active
+    if (isLessonVocabStudyMode) {
+      if (key === 'arrowleft') {
+        e.preventDefault();
+        window.navigateLessonFlashcard(-1);
+      } else if (key === 'arrowright') {
+        e.preventDefault();
+        window.navigateLessonFlashcard(1);
+      } else if (key === ' ' || key === 'spacebar' || e.code === 'Space') {
+        e.preventDefault();
+        const cur = currentLessonVocabWords[currentLessonVocabIndex];
+        if (cur) window.speakLessonWord(cur.word || cur.simplified || cur.character);
+      }
+      return;
+    }
+
     // Check if HSK Exam Player is active
     const examPlayer = document.getElementById('exam-player');
     if (examPlayer && examPlayer.style.display === 'block') {
@@ -7000,6 +7016,214 @@ window.openLessonDetailModal = function (lessonKey) {
 }
 
 let isLessonVocabStudyMode = false;
+let currentLessonVocabIndex = 0;
+let currentLessonVocabWords = [];
+let currentLessonTitleStr = '';
+
+function renderLessonHeroCardContent(w, index, total) {
+  if (!w) return `<div style="text-align: center; padding: 40px; font-size: 1.1rem; color: #94a3b8;">Chưa có từ vựng</div>`;
+
+  const char = w.word || w.simplified || w.character || w.hanzi || '';
+  const pinyin = w.pinyin || '';
+  const meaning = w.meaning || w.definition || w.vietnamese || '';
+  const hanviet = w.hanViet || w.han_viet || '';
+  const category = w.category || w.pos || w.type || 'Từ vựng';
+  const exampleCn = w.example || w.example_cn || w.sentence || '';
+  const examplePy = w.examplePinyin || w.example_pinyin || '';
+  const exampleVi = w.exampleMeaning || w.example_vi || w.example_vietnamese || '';
+
+  return `
+    <div style="display: flex; gap: 32px; align-items: flex-start; flex-wrap: wrap;">
+      <!-- Left: Stroke Writer Container -->
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; min-width: 150px; margin: 0 auto;">
+        <div id="lesson-hanzi-writer-box" style="width: 150px; height: 150px; background: rgba(255,255,255,0.06); border: 2px solid rgba(255,255,255,0.18); border-radius: 18px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.2);">
+          <div style="font-size: 4rem; font-weight: 800; font-family: var(--font-display); color: var(--text-primary);">${char}</div>
+        </div>
+        <button class="btn btn-sm btn-outline-primary" onclick="window.replayLessonHanziStrokes()" style="border-radius: 10px; font-size: 0.82rem; font-weight: 700; padding: 6px 14px; gap: 6px; display: flex; align-items: center;">
+          <i class="fa-solid fa-pen-nib"></i> Phát lại nét
+        </button>
+        <div style="font-size: 0.8rem; font-weight: 700; color: #60a5fa; background: rgba(59, 130, 246, 0.15); padding: 4px 10px; border-radius: 99px;">
+          Thẻ ${index + 1} / ${total}
+        </div>
+      </div>
+
+      <!-- Right: Detailed Vocab Info -->
+      <div style="flex: 1; min-width: 260px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 2.2rem; font-weight: 800; color: #3b82f6; font-family: var(--font-display);">${pinyin}</span>
+            <button class="top-circle-btn" onclick="window.speakLessonWord('${char}')" title="Nghe phát âm" style="width: 38px; height: 38px; background: rgba(59, 130, 246, 0.2); color: #3b82f6; border-color: rgba(59,130,246,0.4);">
+              <i class="fa-solid fa-volume-high"></i>
+            </button>
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <span class="hero-info-badge" style="font-size: 0.82rem; padding: 4px 10px;">${category}</span>
+            <span class="hero-info-badge" style="font-size: 0.82rem; padding: 4px 10px; background: rgba(168, 85, 247, 0.18); border-color: rgba(168, 85, 247, 0.35); color: #c084fc;">HSK ${activeLessonsLevel}</span>
+          </div>
+        </div>
+
+        <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin-bottom: 10px;">
+          ${meaning} ${hanviet ? `<span style="font-size: 1rem; color: #3b82f6; font-weight: 700;">(${hanviet})</span>` : ''}
+        </div>
+
+        ${w.note ? `
+          <div style="font-size: 0.88rem; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 10px 14px; border-radius: 12px; margin-bottom: 14px; border-left: 3px solid #3b82f6;">
+            <i class="fa-solid fa-circle-info" style="color: #3b82f6; margin-right: 6px;"></i> ${w.note}
+          </div>
+        ` : ''}
+
+        ${exampleCn ? `
+          <div style="background: rgba(37, 99, 235, 0.08); border: 1px dashed rgba(37, 99, 235, 0.3); border-radius: 14px; padding: 14px; margin-top: 12px;">
+            <div style="font-size: 0.8rem; font-weight: 800; color: #3b82f6; text-transform: uppercase; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between;">
+              <span><i class="fa-solid fa-pen-to-square"></i> VÍ DỤ</span>
+              <button onclick="window.speakLessonWord('${exampleCn}')" style="background: none; border: none; color: #3b82f6; cursor: pointer; font-size: 0.9rem;" title="Nghe câu ví dụ">
+                <i class="fa-solid fa-volume-high"></i> Nghe câu ví dụ
+              </button>
+            </div>
+            <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 2px;">${exampleCn}</div>
+            ${examplePy ? `<div style="font-size: 0.9rem; font-weight: 600; color: #3b82f6; margin-bottom: 4px;">${examplePy}</div>` : ''}
+            ${exampleVi ? `<div style="font-size: 0.88rem; color: var(--text-secondary);">${exampleVi}</div>` : ''}
+          </div>
+        ` : ''}
+      </div>
+    </div>
+  `;
+}
+
+function renderLessonFlashcardWorkspace(lessonTitle, words, selectedIndex = 0) {
+  currentLessonTitleStr = lessonTitle;
+  currentLessonVocabWords = words || [];
+  currentLessonVocabIndex = Math.max(0, Math.min(selectedIndex, currentLessonVocabWords.length - 1));
+
+  const studyView = document.getElementById('flashcard-study-view');
+  if (!studyView) return;
+
+  const currentWord = currentLessonVocabWords[currentLessonVocabIndex];
+
+  studyView.innerHTML = `
+    <!-- Top Header Control Bar -->
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+      <button class="btn btn-secondary" onclick="window.returnToLessonsMap()" style="display: flex; align-items: center; gap: 8px; font-weight: 700; padding: 10px 18px; border-radius: var(--radius-md); background: rgba(255,255,255,0.08); border: 1px solid var(--border-glass);">
+        <i class="fa-solid fa-arrow-left"></i> Quay lại Bản đồ bài học
+      </button>
+
+      <div style="font-weight: 800; font-size: 1.15rem; color: #3b82f6; display: flex; align-items: center; gap: 8px;">
+        <i class="fa-solid fa-layer-group"></i> ${lessonTitle || 'Flashcard Bài Học'}
+      </div>
+    </div>
+
+    <!-- Hero Flashcard Stage (EXACTLY IMAGE 4) -->
+    <div class="hero-stage-wrapper">
+      <button class="stage-arrow-btn" onclick="window.navigateLessonFlashcard(-1)" title="Thẻ trước (&larr;)">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+
+      <div class="hero-flashcard-card" id="hero-flashcard-card">
+        ${renderLessonHeroCardContent(currentWord, currentLessonVocabIndex, currentLessonVocabWords.length)}
+      </div>
+
+      <button class="stage-arrow-btn" onclick="window.navigateLessonFlashcard(1)" title="Thẻ tiếp theo (&rarr;)">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+    </div>
+
+    <!-- Bottom Carousel / Mini Cards Grid (EXACTLY IMAGE 4) -->
+    <div class="bottom-list-card">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 8px;">
+        <div style="font-size: 1.15rem; font-weight: 800; color: #3b82f6; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-list-ul"></i> Danh sách từ vựng ( <span style="color: #60a5fa; font-weight: 800;">${currentLessonVocabWords.length} từ</span> )
+        </div>
+
+        <div style="font-size: 0.85rem; font-weight: 600; color: #94a3b8; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-keyboard"></i> Phím &larr; &rarr; để đổi thẻ | Phím Spacebar để nghe phát âm
+        </div>
+      </div>
+
+      <div class="mini-cards-grid">
+        ${currentLessonVocabWords.map((w, idx) => `
+          <div class="mini-rad-card ${idx === currentLessonVocabIndex ? 'active' : ''}" onclick="window.selectLessonFlashcardIndex(${idx})">
+            <div style="font-size: 1.6rem; font-weight: 800; font-family: var(--font-display); line-height: 1.2; margin-bottom: 4px; color: var(--text-primary);">
+              ${w.word || w.simplified || w.character || w.hanzi || ''}
+            </div>
+            <div style="font-size: 0.85rem; font-weight: 700; color: #3b82f6; margin-bottom: 2px;">
+              ${w.pinyin || ''}
+            </div>
+            <div style="font-size: 0.78rem; color: var(--text-secondary); max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+              ${w.meaning || w.definition || w.vietnamese || w.hanViet || ''}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+
+  // Attach HanziWriter
+  if (currentWord && (currentWord.word || currentWord.simplified || currentWord.character)) {
+    setTimeout(() => {
+      initLessonHanziWriter(currentWord.word || currentWord.simplified || currentWord.character);
+    }, 50);
+  }
+}
+
+window.returnToLessonsMap = function() {
+  isLessonVocabStudyMode = false;
+  switchTab('lessons');
+};
+
+window.navigateLessonFlashcard = function(dir) {
+  if (!currentLessonVocabWords || currentLessonVocabWords.length === 0) return;
+  let nextIdx = currentLessonVocabIndex + dir;
+  if (nextIdx < 0) nextIdx = currentLessonVocabWords.length - 1;
+  if (nextIdx >= currentLessonVocabWords.length) nextIdx = 0;
+  renderLessonFlashcardWorkspace(currentLessonTitleStr, currentLessonVocabWords, nextIdx);
+};
+
+window.selectLessonFlashcardIndex = function(idx) {
+  if (!currentLessonVocabWords || !currentLessonVocabWords[idx]) return;
+  renderLessonFlashcardWorkspace(currentLessonTitleStr, currentLessonVocabWords, idx);
+};
+
+window.speakLessonWord = function(text) {
+  if (!text) return;
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'zh-CN';
+    utterance.rate = 0.88;
+    window.speechSynthesis.speak(utterance);
+  }
+};
+
+let lessonWriterObj = null;
+function initLessonHanziWriter(char) {
+  const box = document.getElementById('lesson-hanzi-writer-box');
+  if (!box || !char) return;
+  box.innerHTML = '';
+  if (typeof HanziWriter !== 'undefined') {
+    try {
+      lessonWriterObj = HanziWriter.create('lesson-hanzi-writer-box', char.charAt(0), {
+        width: 140,
+        height: 140,
+        padding: 5,
+        strokeColor: '#2563eb',
+        outlineColor: 'rgba(255,255,255,0.15)',
+        showOutline: true,
+        showCharacter: true
+      });
+      lessonWriterObj.animateCharacter();
+    } catch(e) {
+      box.innerHTML = `<div style="font-size: 4rem; font-weight: 800; font-family: var(--font-display); color: var(--text-primary);">${char}</div>`;
+    }
+  } else {
+    box.innerHTML = `<div style="font-size: 4rem; font-weight: 800; font-family: var(--font-display); color: var(--text-primary);">${char}</div>`;
+  }
+}
+
+window.replayLessonHanziStrokes = function() {
+  if (lessonWriterObj) {
+    lessonWriterObj.animateCharacter();
+  }
+};
 
 function startLessonStudy(lesson, sliceWords) {
   if (!sliceWords || sliceWords.length === 0) {
@@ -7013,24 +7237,12 @@ function startLessonStudy(lesson, sliceWords) {
   const modalEl = document.getElementById('lesson-detail-popup-modal');
   if (modalEl) modalEl.style.display = 'none';
 
-  // Switch tab to flashcards without clearing study context or showing topics selection
+  // Switch tab to flashcards
   switchTab('flashcards', true);
 
-  const curr = activeLessonsCurriculum === 'yct' ? 'yct' : 'hsk';
-  const lvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : activeLessonsLevel;
-  
-  // Explicitly set notebook study context for this lesson
-  studyNotebookId = `${curr}:${lvl}`;
-  studySelectedLessons = [String(lesson.id)];
-  studyCustomCategory = null;
-
   const title = `Flashcard: ${lesson.title || ('Bài ' + lesson.id)}`;
-  const desc = `Học ${sliceWords.length} từ vựng thuộc ${lesson.title || ('Bài ' + lesson.id)}`;
 
-  // Start study session (calls applyFilters with our studySelectedLessons filter)
-  startStudySession('all', String(lvl), title, desc);
-
-  // HIDE ALL IMAGE 1 PANELS (Noise & Widgets)
+  // HIDE ALL NOISE PANELS (Image 2 search bar, widgets, etc.)
   const quickCards = document.querySelector('.quick-dashboard-cards');
   if (quickCards) quickCards.style.display = 'none';
 
@@ -7055,21 +7267,11 @@ function startLessonStudy(lesson, sliceWords) {
   const controlsDash = document.querySelector('.controls-dashboard');
   if (controlsDash) controlsDash.style.display = 'none';
 
-  // SHOW ONLY IMAGE 2 (Flashcard Study View & 3D Flip Card)
+  // SHOW ONLY IMAGE 4 FLASHCARD WORKSPACE
   const studyView = document.getElementById('flashcard-study-view');
   if (studyView) studyView.style.display = 'block';
 
-  const cardContainer = document.getElementById('flashcard-card-container');
-  if (cardContainer) cardContainer.style.display = 'block';
-
-  const typingContainer = document.getElementById('typing-card-container');
-  if (typingContainer) typingContainer.style.display = 'none';
-
-  // Update back button text and icon to return to Lesson Map
-  const backBtn = document.getElementById('back-to-decks-btn');
-  if (backBtn) {
-    backBtn.innerHTML = '<i class="fa-solid fa-arrow-left"></i> Quay lại Bản đồ bài học';
-  }
+  renderLessonFlashcardWorkspace(title, sliceWords, 0);
 
   const flashcardSec = document.getElementById('flashcard-section');
   if (flashcardSec) flashcardSec.scrollIntoView({ behavior: 'smooth' });
