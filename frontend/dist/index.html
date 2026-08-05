@@ -100,7 +100,7 @@
     window.toggleTheme = window.toggleTheme || function() {};
   </script>
   <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
-  <script type="module" crossorigin src="/assets/main-Q1RTAQwS.js"></script>
+  <script type="module" crossorigin src="/assets/main-DSImCPRJ.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/style-DNLW6IY9.css">
 </head>
 
@@ -2873,6 +2873,68 @@
       <div id="radicals-modal-body" style="padding: 20px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 16px;">
         <!-- Dynamic list of radical cards or comparison cards -->
       </div>
+    </div>
+  </div>
+
+  <!-- Modal Chi Tiết Bài Học khi nhấp vào Nút trên Bản đồ Saga -->
+  <div class="modal-overlay" id="lesson-detail-popup-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.82); backdrop-filter: blur(12px); z-index: 99999; align-items: center; justify-content: center; padding: 16px;">
+    <div class="modal-card glass-panel" style="background: var(--bg-primary, #0f172a); border: 1px solid rgba(255,255,255,0.18); border-radius: 24px; width: 100%; max-width: 580px; padding: 28px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); color: #ffffff; position: relative; display: flex; flex-direction: column; gap: 20px;">
+      
+      <!-- Modal Close Button -->
+      <button onclick="document.getElementById('lesson-detail-popup-modal').style.display='none'" style="position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; font-size: 1.2rem; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Modal Header -->
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <div id="modal-lesson-number-circle" style="background: linear-gradient(135deg, #10b981, #059669); color: white; width: 56px; height: 56px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 800; font-size: 1.6rem; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.35); flex-shrink: 0;">
+          1
+        </div>
+        <div>
+          <span class="lesson-badge hsk-badge-1" id="modal-lesson-badge-val" style="font-size: 0.78rem; padding: 3px 10px; border-radius: 99px;">HSK 1 (3.0)</span>
+          <h3 id="modal-lesson-title-val" style="font-size: 1.45rem; font-weight: 800; margin: 4px 0 0 0; color: #ffffff; font-family: var(--font-display);">Bài 1: 你好 - Xin chào</h3>
+        </div>
+      </div>
+
+      <p id="modal-lesson-desc-val" style="font-size: 0.95rem; color: #cbd5e1; margin: 0; line-height: 1.5;">
+        Học cách chào hỏi cơ bản, từ vựng thông dụng và cách nói lời xin lỗi.
+      </p>
+
+      <!-- Progress Bar inside Modal -->
+      <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); padding: 12px 16px; border-radius: 14px;">
+        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; color: #94a3b8; margin-bottom: 6px;">
+          <span>Tiến độ học bài này:</span>
+          <span id="modal-lesson-progress-text" style="color: #fbbf24;">0/9 từ (0%)</span>
+        </div>
+        <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 99px; overflow: hidden;">
+          <div id="modal-lesson-progress-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, #10b981, #3b82f6); border-radius: 99px; transition: width 0.3s;"></div>
+        </div>
+      </div>
+
+      <!-- Module Action Grid Buttons -->
+      <div class="lesson-modules-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 4px;">
+        <button id="modal-btn-mod-vocab" class="lesson-mod-btn mod-vocab" style="padding: 16px;">
+          <i class="fa-solid fa-book-bookmark" style="font-size: 1.3rem;"></i>
+          <span style="font-size: 1.05rem; font-weight: 800;">Từ Vựng</span>
+          <small id="modal-lesson-vocab-count">9 từ</small>
+        </button>
+        <button id="modal-btn-mod-grammar" class="lesson-mod-btn mod-grammar" style="padding: 16px;" onclick="window.showComingSoonNotice('Ngữ Pháp')">
+          <i class="fa-solid fa-spell-check" style="font-size: 1.3rem;"></i>
+          <span style="font-size: 1.05rem; font-weight: 800;">Ngữ Pháp</span>
+          <small style="background: rgba(0,0,0,0.25); color: #fff; padding: 1px 6px; border-radius: 99px;">Sắp ra mắt</small>
+        </button>
+        <button id="modal-btn-mod-text" class="lesson-mod-btn mod-text" style="padding: 16px;" onclick="window.showComingSoonNotice('Bài Khóa')">
+          <i class="fa-solid fa-comments" style="font-size: 1.3rem;"></i>
+          <span style="font-size: 1.05rem; font-weight: 800;">Bài Khóa</span>
+          <small style="background: rgba(0,0,0,0.25); color: #fff; padding: 1px 6px; border-radius: 99px;">Sắp ra mắt</small>
+        </button>
+        <button id="modal-btn-mod-review" class="lesson-mod-btn mod-review" style="padding: 16px;" onclick="window.showComingSoonNotice('Ôn Tập')">
+          <i class="fa-solid fa-circle-play" style="font-size: 1.3rem;"></i>
+          <span style="font-size: 1.05rem; font-weight: 800;">Ôn Tập</span>
+          <small style="background: rgba(0,0,0,0.25); color: #fff; padding: 1px 6px; border-radius: 99px;">Sắp ra mắt</small>
+        </button>
+      </div>
+
     </div>
   </div>
 

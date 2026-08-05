@@ -6608,6 +6608,63 @@ function renderLessonsList() {
     return true;
   });
 
+let activeLessonViewMode = 'map';
+
+window.switchLessonViewMode = function (mode) {
+  activeLessonViewMode = mode;
+  renderLessonsList();
+};
+
+window.openLessonDetailModal = function (lessonKey) {
+  const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : activeLessonsLevel;
+  const levelVocabs = vocabList.filter(w => {
+    if (w.isCustom) return false;
+    if (w.curriculum === 'yct' || w.hskVersion === 'yct') return false;
+    if (!matchLevel(w.level, currentLvl)) return false;
+    if ((w.hskVersion || '3.0') !== activeHskVersion) return false;
+    return true;
+  });
+
+  const sliceWords = levelVocabs.filter(w => String(w.lessonId || 1) === String(lessonKey));
+  if (sliceWords.length === 0) return;
+
+  const firstWord = sliceWords[0];
+  const title = firstWord.lessonTitle || firstWord.category || `Bài ${lessonKey}`;
+  const desc = firstWord.lessonDesc || `Ôn tập từ vựng bài học HSK Cấp ${currentLvl}`;
+  const memorizedCount = sliceWords.filter(w => w.isMemorized).length;
+  const pct = Math.round((memorizedCount / sliceWords.length) * 100);
+
+  const numCircle = document.getElementById('modal-lesson-number-circle');
+  const badgeVal = document.getElementById('modal-lesson-badge-val');
+  const titleVal = document.getElementById('modal-lesson-title-val');
+  const descVal = document.getElementById('modal-lesson-desc-val');
+  const progText = document.getElementById('modal-lesson-progress-text');
+  const progFill = document.getElementById('modal-lesson-progress-fill');
+  const vocabCount = document.getElementById('modal-lesson-vocab-count');
+  const btnVocab = document.getElementById('modal-btn-mod-vocab');
+
+  if (numCircle) numCircle.textContent = lessonKey.toString().replace(/\D/g, '') || lessonKey;
+  if (badgeVal) badgeVal.textContent = `HSK ${currentLvl === '7-9' ? '7-8-9' : currentLvl} (${activeHskVersion}) • Bài ${lessonKey}`;
+  if (titleVal) titleVal.textContent = title;
+  if (descVal) descVal.textContent = desc;
+  if (progText) progText.textContent = `${memorizedCount}/${sliceWords.length} từ (${pct}%)`;
+  if (progFill) progFill.style.width = `${pct}%`;
+  if (vocabCount) vocabCount.textContent = `${sliceWords.length} từ`;
+
+  if (btnVocab) {
+    btnVocab.onclick = function () {
+      const modalEl = document.getElementById('lesson-detail-popup-modal');
+      if (modalEl) modalEl.style.display = 'none';
+      startLessonStudy({ id: lessonKey, title }, sliceWords);
+    };
+  }
+
+  const modal = document.getElementById('lesson-detail-popup-modal');
+  if (modal) {
+    modal.style.display = 'flex';
+  }
+};
+
   // Group vocabulary dynamically by their lessonId field
   const lessonGroups = {};
   levelVocabs.forEach(w => {
@@ -6621,6 +6678,162 @@ function renderLessonsList() {
     const numB = parseInt(b.replace(/\D/g, '')) || 0;
     return numA - numB;
   });
+
+  // View Switcher Bar Header
+  const viewSwitcherHtml = `
+    <div style="grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 12px; background: rgba(15, 23, 42, 0.7); padding: 12px 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.12); backdrop-filter: blur(12px);">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; color: #fbbf24; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-map-location-dot" style="font-size: 1.3rem;"></i> BẢN ĐỒ BÀI HỌC HSK CẤP ${activeLessonsLevel === '7-9' ? '7-8-9' : activeLessonsLevel}
+        </span>
+      </div>
+      <div class="saga-view-toggle" style="display: flex; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.15); padding: 4px; border-radius: 12px; gap: 4px;">
+        <button class="saga-toggle-btn ${activeLessonViewMode === 'map' ? 'active' : ''}" onclick="window.switchLessonViewMode('map')" style="padding: 8px 16px; border-radius: 9px; font-weight: 800; border: none; cursor: pointer; transition: all 0.2s; ${activeLessonViewMode === 'map' ? 'background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);' : 'background: transparent; color: #94a3b8;'}">
+          <i class="fa-solid fa-route"></i> Bản đồ Game
+        </button>
+        <button class="saga-toggle-btn ${activeLessonViewMode === 'cards' ? 'active' : ''}" onclick="window.switchLessonViewMode('cards')" style="padding: 8px 16px; border-radius: 9px; font-weight: 800; border: none; cursor: pointer; transition: all 0.2s; ${activeLessonViewMode === 'cards' ? 'background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);' : 'background: transparent; color: #94a3b8;'}">
+          <i class="fa-solid fa-table-cells-large"></i> Danh sách Thẻ
+        </button>
+      </div>
+    </div>
+  `;
+
+  if (activeLessonViewMode === 'map') {
+    let mapNodesHtml = '';
+    let foundFirstActive = false;
+
+    uniqueLessonKeys.forEach((lessonKey, idx) => {
+      const sliceWords = lessonGroups[lessonKey] || [];
+      const wordsCount = sliceWords.length;
+      if (wordsCount === 0) return;
+
+      const firstWord = sliceWords[0];
+      const title = firstWord.lessonTitle || firstWord.category || `Bài ${lessonKey}`;
+      const memorizedCount = sliceWords.filter(w => w.isMemorized).length;
+      const pct = Math.round((memorizedCount / wordsCount) * 100);
+      const isCompleted = memorizedCount === wordsCount && wordsCount > 0;
+
+      // Sequential unlocking: Lesson 1 is always unlocked; subsequent lessons require previous lesson completed or 80%+
+      let isUnlocked = false;
+      if (idx === 0) {
+        isUnlocked = true;
+      } else {
+        const prevKey = uniqueLessonKeys[idx - 1];
+        const prevWords = lessonGroups[prevKey] || [];
+        const prevMem = prevWords.filter(w => w.isMemorized).length;
+        const prevPct = prevWords.length > 0 ? Math.round((prevMem / prevWords.length) * 100) : 0;
+        isUnlocked = prevPct >= 80 || prevMem === prevWords.length || isCompleted;
+      }
+
+      let isCurrentActive = false;
+      if (isUnlocked && !isCompleted && !foundFirstActive) {
+        isCurrentActive = true;
+        foundFirstActive = true;
+      }
+
+      // S-curve positioning
+      const posIndex = idx % 4;
+      let posStyle = 'align-self: center;';
+      if (posIndex === 0) posStyle = 'align-self: flex-start; margin-left: 18%;';
+      if (posIndex === 1) posStyle = 'align-self: center;';
+      if (posIndex === 2) posStyle = 'align-self: flex-end; margin-right: 18%;';
+      if (posIndex === 3) posStyle = 'align-self: center;';
+
+      // Circle Button Gradient Styling
+      let nodeStyle = '';
+      if (!isUnlocked) {
+        nodeStyle = 'background: linear-gradient(145deg, #334155, #1e293b); box-shadow: 0 8px 0 #0f172a; border-color: rgba(255,255,255,0.1); filter: grayscale(0.5); opacity: 0.85;';
+      } else if (isCompleted) {
+        nodeStyle = 'background: linear-gradient(145deg, #fbbf24, #d97706); box-shadow: 0 8px 0 #b45be6; border-color: #fef08a; color: #78350f;';
+      } else if (isCurrentActive) {
+        nodeStyle = 'background: linear-gradient(145deg, #10b981, #059669); box-shadow: 0 8px 0 #047857; border-color: #a7f3d0;';
+      } else {
+        nodeStyle = 'background: linear-gradient(145deg, #3b82f6, #1d4ed8); box-shadow: 0 8px 0 #1e40af; border-color: #bfdbfe;';
+      }
+
+      const numOnly = lessonKey.toString().replace(/\D/g, '') || lessonKey;
+
+      mapNodesHtml += `
+        <div class="saga-path-node-item" style="position: relative; display: flex; flex-direction: column; align-items: center; margin: 28px 0; z-index: 5; ${posStyle}">
+          
+          <!-- Bouncing Mascot Avatar above active node -->
+          ${isCurrentActive ? `
+            <div class="saga-mascot-bouncing" style="position: absolute; top: -50px; z-index: 20; filter: drop-shadow(0 6px 16px rgba(0,0,0,0.6));">
+              <img src="/assets/hongtai_dragon_mascot.png" style="width: 52px; height: 52px; object-fit: contain; animation: floatMascot 2s ease-in-out infinite;" alt="Mascot">
+            </div>
+          ` : ''}
+
+          <!-- Floating Gold Crown for 100% completed lesson -->
+          ${isCompleted ? `
+            <div style="position: absolute; top: -18px; font-size: 1.4rem; color: #fbbf24; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.6)); z-index: 10;">
+              <i class="fa-solid fa-crown"></i>
+            </div>
+          ` : ''}
+
+          <!-- Candy Crush Style 3D Round Circle Button -->
+          <button class="saga-node-circle ${!isUnlocked ? 'node-locked' : 'node-unlocked'} ${isCurrentActive ? 'active-pulse' : ''}"
+                  onclick="window.openLessonDetailModal('${lessonKey}')"
+                  title="Bài ${lessonKey}: ${title}"
+                  style="width: 84px; height: 84px; border-radius: 50%; font-family: var(--font-display); font-weight: 800; font-size: 1.6rem; color: #ffffff; position: relative; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); ${nodeStyle}">
+            ${!isUnlocked ? '<i class="fa-solid fa-lock" style="font-size: 1.3rem; color: #cbd5e1;"></i>' : `<span>${numOnly}</span>`}
+          </button>
+
+          <!-- 3 Gold Stars under Node -->
+          <div style="display: flex; gap: 4px; margin-top: 8px;">
+            <i class="fa-solid fa-star" style="font-size: 0.85rem; color: ${pct >= 33 ? '#fbbf24' : 'rgba(255,255,255,0.2)'}; text-shadow: 0 1px 3px rgba(0,0,0,0.6);"></i>
+            <i class="fa-solid fa-star" style="font-size: 0.95rem; color: ${pct >= 66 ? '#fbbf24' : 'rgba(255,255,255,0.2)'}; text-shadow: 0 1px 3px rgba(0,0,0,0.6); transform: translateY(-2px);"></i>
+            <i class="fa-solid fa-star" style="font-size: 0.85rem; color: ${pct === 100 ? '#fbbf24' : 'rgba(255,255,255,0.2)'}; text-shadow: 0 1px 3px rgba(0,0,0,0.6);"></i>
+          </div>
+
+          <!-- Lesson Tag Card -->
+          <div class="saga-node-tag-card" onclick="window.openLessonDetailModal('${lessonKey}')" style="margin-top: 8px; background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.18); border-radius: 14px; padding: 8px 16px; text-align: center; max-width: 220px; cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,0.4); transition: all 0.2s;">
+            <div style="font-weight: 800; font-size: 0.95rem; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--font-display);">${title}</div>
+            <div style="font-size: 0.78rem; color: #94a3b8; margin-top: 2px; font-weight: 600;">
+              ${memorizedCount}/${wordsCount} từ ${isCompleted ? '• 🎉 Đã xong' : isUnlocked ? `• ${pct}%` : '• 🔒 Khóa'}
+            </div>
+          </div>
+
+          <!-- Connector Path Line / Arrow to Next Node -->
+          ${idx < uniqueLessonKeys.length - 1 ? `
+            <div class="saga-connector-line" style="height: 24px; width: 3px; background: repeating-linear-gradient(to bottom, ${isUnlocked ? '#10b981' : 'rgba(255,255,255,0.2)'} 0, ${isUnlocked ? '#10b981' : 'rgba(255,255,255,0.2)'} 6px, transparent 6px, transparent 12px); margin: 8px 0; position: relative;">
+              <i class="fa-solid fa-chevron-down" style="position: absolute; bottom: -8px; left: -5px; font-size: 0.8rem; color: ${isUnlocked ? '#10b981' : 'rgba(255,255,255,0.3)'};"></i>
+            </div>
+          ` : ''}
+
+        </div>
+      `;
+    });
+
+    const sagaMapWrapper = `
+      <div style="grid-column: 1 / -1; width: 100%;">
+        ${viewSwitcherHtml}
+        <div class="lessons-saga-map-wrapper" style="background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.88)), url('/assets/saga_map_bg.png') center/cover no-repeat; border-radius: 28px; border: 1px solid rgba(255,255,255,0.18); padding: 40px 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden;">
+          <style>
+            @keyframes floatMascot {
+              0%, 100% { transform: translateY(0); }
+              50% { transform: translateY(-8px); }
+            }
+            .saga-node-circle:hover {
+              transform: scale(1.08) translateY(-4px);
+            }
+            .saga-node-circle:active {
+              transform: scale(0.96) translateY(2px);
+            }
+          </style>
+          ${mapNodesHtml}
+        </div>
+      </div>
+    `;
+
+    grid.innerHTML = sagaMapWrapper;
+    return;
+  }
+
+  // Cards List View Mode
+  const cardsHeaderHtml = document.createElement('div');
+  cardsHeaderHtml.style.cssText = 'grid-column: 1 / -1; width: 100%;';
+  cardsHeaderHtml.innerHTML = viewSwitcherHtml;
+  grid.appendChild(cardsHeaderHtml);
 
   uniqueLessonKeys.forEach(lessonKey => {
     const sliceWords = lessonGroups[lessonKey] || [];
