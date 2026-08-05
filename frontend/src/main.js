@@ -7294,11 +7294,6 @@ window.revealAllLessonCharHints = function(fullWord) {
       card.innerHTML = `<span style="font-size: 1.6rem; font-weight: 800; font-family: var(--font-display);">${chars[idx]}</span>`;
     }
   });
-  const inputEl = document.getElementById('lesson-typing-input');
-  if (inputEl) {
-    inputEl.value = fullWord;
-    window.checkLessonTypingInput(fullWord);
-  }
 };
 
 window.checkLessonTypingInput = function(targetChar) {
