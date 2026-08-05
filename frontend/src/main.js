@@ -4931,9 +4931,12 @@ window.showLearningFlashcard = function(index) {
     }
   });
 
-  // Auto scroll to item
-  if (listItems[index]) {
-    listItems[index].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  // Auto scroll to item inside list container ONLY (prevents page/modal viewport jumping)
+  const listContainer = document.getElementById('roadmap-learning-vocab-list');
+  if (listContainer && listItems[index]) {
+    const targetItem = listItems[index];
+    const scrollTop = targetItem.offsetTop - (listContainer.clientHeight / 2) + (targetItem.offsetHeight / 2);
+    listContainer.scrollTo({ top: Math.max(0, scrollTop), behavior: 'smooth' });
   }
 };
 

@@ -362,11 +362,13 @@ function renderMiniCardsGrid() {
 
   container.innerHTML = html;
 
-  // Scroll active mini card into view
+  // Scroll active mini card inside container ONLY (prevents page viewport jumping)
   setTimeout(() => {
+    const container = document.getElementById('mini-cards-grid');
     const activeEl = document.getElementById(`mini-card-${currentFlashcardIndex}`);
-    if (activeEl) {
-      activeEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    if (container && activeEl) {
+      const scrollLeft = activeEl.offsetLeft - (container.clientWidth / 2) + (activeEl.offsetWidth / 2);
+      container.scrollTo({ left: Math.max(0, scrollLeft), behavior: 'smooth' });
     }
   }, 100);
 }
