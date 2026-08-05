@@ -1602,9 +1602,15 @@ function startStudySession(status, level, title, desc) {
   if (titleEl) titleEl.textContent = title;
   if (descEl) descEl.textContent = desc;
 
-  // Hide deck selector, show study workspace
-  document.getElementById('deck-selection-view').style.display = 'none';
-  document.getElementById('flashcard-study-view').style.display = 'block';
+  // Hide deck selector & notebook dashboard, show study workspace
+  const deckSel = document.getElementById('deck-selection-view');
+  if (deckSel) deckSel.style.display = 'none';
+
+  const nbDash = document.getElementById('notebook-dashboard-view');
+  if (nbDash) nbDash.style.display = 'none';
+
+  const fcStudy = document.getElementById('flashcard-study-view');
+  if (fcStudy) fcStudy.style.display = 'block';
 
   // Apply filters to load cards (this already calls renderActiveCard inside)
   applyFilters();
@@ -6922,34 +6928,53 @@ window.openLessonDetailModal = function (lessonKey) {
 }
 
 function startLessonStudy(lesson, sliceWords) {
-  if (sliceWords.length === 0) {
+  if (!sliceWords || sliceWords.length === 0) {
     showToast('Danh sách từ vựng của bài học này đang được chuẩn bị!', true);
     return;
   }
 
-  // Switch tab to flashcards first (so its default showTopicsView doesn't override our dashboard view)
+  // Close detail popup modal if open
+  const modalEl = document.getElementById('lesson-detail-popup-modal');
+  if (modalEl) modalEl.style.display = 'none';
+
+  // Switch tab to flashcards
   switchTab('flashcards');
 
-  // Set active smart topic to HSK or YCT
-  activeSmartTopic = activeLessonsCurriculum === 'yct' ? 'yct' : 'hsk';
+  const curr = activeLessonsCurriculum === 'yct' ? 'yct' : 'hsk';
+  const lvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : activeLessonsLevel;
+  studyNotebookId = `${curr}:${lvl}`;
+  studySelectedLessons = [String(lesson.id)];
+  studyCustomCategory = null;
 
-  // Highlight/select only this lesson on the notebook dashboard
-  // Highlight/select only this lesson on the notebook dashboard (cast to String/Number safe)
-  selectedDashboardLessons = [String(lesson.id)];
+  const title = `Flashcard: ${lesson.title || ('Bài ' + lesson.id)}`;
+  const desc = `Học ${sliceWords.length} từ vựng thuộc ${lesson.title || ('Bài ' + lesson.id)}`;
 
-  // Open HSK/YCT Notebook Dashboard
-  showNotebookDashboardView(activeLessonsCurriculum === 'yct' ? `yct:${activeYctLevel}` : `hsk:${activeLessonsLevel}`, true);
+  startStudySession('all', lvl, title, desc);
 
-  // Scroll to workspace smoothly
+  const nbDash = document.getElementById('notebook-dashboard-view');
+  if (nbDash) nbDash.style.display = 'none';
+
   const flashcardSec = document.getElementById('flashcard-section');
   if (flashcardSec) flashcardSec.scrollIntoView({ behavior: 'smooth' });
 
-  showToast(`Đang hiển thị chi tiết bài học: ${lesson.title} 📖`);
+  showToast(`Bắt đầu học Flashcard: ${lesson.title || ('Bài ' + lesson.id)} 🎴`);
 }
 
 window.openLessonVocabStudy = function(lessonId) {
   const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : activeLessonsLevel;
-  startLessonStudy({ id: lessonId, title: `Bài ${lessonId}` }, vocabList.filter(w => !w.isCustom && matchLevel(w.level, currentLvl)));
+  const lessonVocabs = vocabList.filter(w => {
+    if (w.isCustom) return false;
+    const curr = (w.curriculum || 'hsk').toLowerCase();
+    if (activeLessonsCurriculum === 'yct') {
+      return (curr.includes('yct') || (w.hskVersion || '').toLowerCase().includes('yct')) && matchLevel(w.level, currentLvl) && String(w.lessonId || 1) === String(lessonId);
+    } else {
+      return !curr.includes('yct') && matchLevel(w.level, currentLvl) && (w.hskVersion || '3.0') === activeHskVersion && String(w.lessonId || 1) === String(lessonId);
+    }
+  });
+
+  const firstWord = lessonVocabs[0];
+  const title = firstWord ? (firstWord.lessonTitle || firstWord.category || `Bài ${lessonId}`) : `Bài ${lessonId}`;
+  startLessonStudy({ id: lessonId, title }, lessonVocabs);
 };
 
 window.openLessonGrammarStudy = function(lessonId) {
