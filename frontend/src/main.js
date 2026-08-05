@@ -3975,7 +3975,12 @@ function switchTab(tabId) {
   if (tabId === 'home') {
     setDisp(homeViewSec, 'block');
   }
-  else if (tabId === 'lessons' || tabId === 'roadmap') {
+  else if (tabId === 'roadmap') {
+    setDisp(roadmapSec, 'block');
+    setDisp(lessonsSec, 'none');
+    renderGamifiedRoadmapPath();
+  }
+  else if (tabId === 'lessons') {
     setDisp(lessonsSec, 'block');
     if (roadmapSec) roadmapSec.style.display = 'none';
     renderLessonsList();
@@ -4038,7 +4043,7 @@ function showHomeView() {
 }
 
 function showRoadmapView() {
-  switchTab('lessons');
+  switchTab('roadmap');
 }
 window.showRoadmapView = showRoadmapView;
 
