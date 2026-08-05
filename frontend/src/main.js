@@ -4376,33 +4376,7 @@ let currentRoadmapLearningVocabs = [];
 let currentRoadmapLearningIndex = 0;
 
 window.openRoadmapLearningView = function (ver, level) {
-  switchTab('roadmap-learning');
-
-  const hskVer = ver || activeRoadmapVersion || '3.0';
-  let targetLevel = /^\d+$/.test(level.toString()) ? parseInt(level) : level.toString();
-
-  // Fetch words for this level
-  const builtInVocabsAll = vocabList.filter(w => !w.isCustom);
-  currentRoadmapLearningVocabs = builtInVocabsAll.filter(w => {
-    const curr2 = (w.curriculum || 'hsk').toLowerCase();
-    const ver2 = (w.hskVersion || '3.0').toLowerCase();
-    if (hskVer === 'yct') return (curr2.includes('yct') || ver2.includes('yct')) && matchLevel(w.level, targetLevel);
-    if (hskVer === '2.0') return !curr2.includes('yct') && !ver2.includes('yct') && (ver2.includes('2') || ver2 === '2.0') && matchLevel(w.level, targetLevel);
-    return !curr2.includes('yct') && !ver2.includes('yct') && (ver2.includes('3') || ver2 === '3.0' || w.hskVersion === '3.0') && matchLevel(w.level, targetLevel);
-  });
-
-  const countEl = document.getElementById('learning-list-count');
-  if (countEl) countEl.textContent = currentRoadmapLearningVocabs.length;
-
-  renderRoadmapLearningList();
-
-  currentRoadmapLearningIndex = 0;
-  if (currentRoadmapLearningVocabs.length > 0) {
-    showLearningFlashcard(0);
-  } else {
-    const cardEl = document.getElementById('roadmap-learning-flashcard');
-    if (cardEl) cardEl.innerHTML = '<div style="color: var(--text-muted);">Không có từ vựng cho cấp độ này.</div>';
-  }
+  window.goToRoadmapLevel(ver, level);
 };
 
 window.renderRoadmapLearningList = function() {
