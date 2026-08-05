@@ -639,8 +639,12 @@ app.get('/api/leaderboard', async (req, res) => {
   }
 });
 
-// Admin: Reset toàn bộ dữ liệu người dùng (xóa MongoDB + RAM cache)
+// Admin: Reset toàn bộ dữ liệu người dùng (xóa MongoDB + RAM cache) - Cần secret header
 app.delete('/api/admin/reset-all', async (req, res) => {
+  const adminSecret = req.headers['x-admin-secret'];
+  if (!adminSecret || adminSecret !== (process.env.ADMIN_SECRET || 'hongtai_admin_secret_2026')) {
+    return res.status(403).json({ error: "Unauthorized admin action" });
+  }
   try {
     await User.deleteMany({});
     await Session.deleteMany({});
@@ -653,8 +657,12 @@ app.delete('/api/admin/reset-all', async (req, res) => {
   }
 });
 
-// Admin: Reset Bảng Xếp Hạng & Tiến Độ Tất Cả Học Viên
+// Admin: Reset Bảng Xếp Hạng & Tiến Độ Tất Cả Học Viên - Cần secret header
 app.all('/api/admin/reset-leaderboard', async (req, res) => {
+  const adminSecret = req.headers['x-admin-secret'];
+  if (!adminSecret || adminSecret !== (process.env.ADMIN_SECRET || 'hongtai_admin_secret_2026')) {
+    return res.status(403).json({ error: "Unauthorized admin action" });
+  }
   try {
     if (mongoose.connection.readyState === 1) {
       await User.updateMany({}, {

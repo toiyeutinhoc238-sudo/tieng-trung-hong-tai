@@ -9229,15 +9229,8 @@ if (document.readyState === 'loading') {
   }
 }
 
-// One-time leaderboard reset trigger to clear 100 points back to 0 points as requested
-if (!localStorage.getItem('lb_reset_v1')) {
-  localStorage.setItem('lb_reset_v1', 'true');
-  localStorage.removeItem('guest_progress');
-  localStorage.removeItem('user_memorized_words');
-  fetch(`${API_BASE_URL}/api/admin/reset-leaderboard`, { method: 'POST' })
-    .then(() => console.log('Leaderboard database reset to 0 points!'))
-    .catch(err => console.warn('Leaderboard reset request failed:', err));
-}
+// Reset trigger removed to prevent wiping user database on new sessions
+
 
 // --- 214 BỘ THỦ TIẾNG TRUNG CONTROLLER ---
 let activeRadicalCategory = '50 bộ 1';
