@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Quy Tắc Chuyển Âm Hán Việt Sang Pinyin | Hongtai Chinese</title>
+  <meta name="description" content="Hệ thống quy tắc chuyên sâu giúp suy đoán âm đọc Pinyin tiếng Trung dựa trên âm Hán Việt chuẩn xác.">
+  <link rel="canonical" href="https://tieng-trung-hong-tai-1.onrender.com/han-viet-rules.html" />
+  <link rel="icon" type="image/png" href="/assets/logo-CnsJJgQP.png">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+SC:wght@400;500;700;800&family=Outfit:wght@400;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <script>
+    (function () {
+      var t = localStorage.getItem('theme') || 'dark';
+      var bgUrl = t === 'light' ? "url('/assets/app_bg_day_v3.png')" : "url('/assets/app_bg_night_v3.png')";
+      document.documentElement.style.setProperty('background-image', bgUrl, 'important');
+      document.documentElement.style.setProperty('background-size', 'cover', 'important');
+      document.documentElement.style.setProperty('background-position', 'center center', 'important');
+      document.documentElement.style.setProperty('background-attachment', 'fixed', 'important');
+      document.documentElement.style.setProperty('background-repeat', 'no-repeat', 'important');
+
+      if (t === 'light') {
+        document.documentElement.classList.add('light-mode', 'light');
+        document.documentElement.classList.remove('dark');
+        if (document.body) {
+          document.body.classList.add('light-mode');
+          document.body.style.setProperty('background-image', bgUrl, 'important');
+        } else {
+          document.addEventListener('DOMContentLoaded', function () {
+            document.body.classList.add('light-mode');
+            document.body.style.setProperty('background-image', bgUrl, 'important');
+          });
+        }
+      } else {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light', 'light-mode');
+        if (document.body) {
+          document.body.style.setProperty('background-image', bgUrl, 'important');
+        } else {
+          document.addEventListener('DOMContentLoaded', function () {
+            document.body.style.setProperty('background-image', bgUrl, 'important');
+          });
+        }
+      }
+    })();
+  </script>
+
+  <style>
+    :root {
+      --rules-bg: transparent;
+      --rules-card: rgba(15, 23, 42, 0.28);
+      --rules-card-hover: rgba(30, 41, 59, 0.45);
+      --rules-border: rgba(255, 255, 255, 0.2);
+      --rules-primary: #3b82f6;
+      --rules-accent: #f59e0b;
+      --rules-success: #10b981;
+    }
+
+    body {
+      background: transparent !important;
+      color: #f8fafc;
+      font-family: 'Be Vietnam Pro', sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    .rules-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .rules-header {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+      border: 1px solid var(--rules-border);
+      border-radius: 20px;
+      padding: 32px;
+      margin-bottom: 28px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .rules-title-group h1 {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      font-size: 2.1rem;
+      font-weight: 800;
+      margin: 0 0 8px 0;
+      background: linear-gradient(135deg, #60a5fa, #a78bfa);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .rules-nav-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+    }
+
+    .tab-btn {
+      background: var(--rules-card);
+      border: 1px solid var(--rules-border);
+      color: #94a3b8;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-btn:hover {
+      background: var(--rules-card-hover);
+      color: #fff;
+    }
+
+    .tab-btn.active {
+      background: var(--rules-primary);
+      color: #fff;
+      border-color: var(--rules-primary);
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+    }
+
+    .section-content {
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .section-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .rule-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .rule-card {
+      background: var(--rules-card);
+      border: 1px solid var(--rules-border);
+      border-radius: 16px;
+      padding: 20px;
+      transition: all 0.2s ease;
+    }
+
+    .rule-card:hover {
+      transform: translateY(-3px);
+      background: var(--rules-card-hover);
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .rule-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .rule-badge {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--rules-primary);
+      background: rgba(59, 130, 246, 0.15);
+      padding: 4px 12px;
+      border-radius: 8px;
+    }
+
+    .audio-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .audio-btn:hover {
+      background: var(--rules-primary);
+      transform: scale(1.1);
+    }
+
+    .example-box {
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-top: 10px;
+      font-size: 0.88rem;
+    }
+
+    .example-box .zh {
+      font-family: 'Noto Sans SC', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #fff;
+    }
+
+    .search-box-wrap {
+      background: var(--rules-card);
+      border: 1px solid var(--rules-border);
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .search-box-wrap input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 1.05rem;
+      outline: none;
+    }
+  </style>
+  <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
+  <script type="module" crossorigin src="/assets/particles-Dl8CQUZ9.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/style-BX3cbp3Z.css">
+</head>
+
+<body>
+
+  <div class="rules-container">
+
+    <!-- Header Block -->
+    <div class="rules-header">
+      <div class="rules-title-group">
+        <h1><i class="fa-solid fa-language"></i> Quy Tắc Chuyển Âm & Phát Âm Tiếng Trung</h1>
+        <p style="color: #94a3b8; margin: 0; font-size: 0.95rem;">
+          Hệ thống suy đoán âm đọc Tiếng Trung từ âm Hán-Việt & Bảng phát âm Pinyin chuẩn giọng Bắc Kinh
+        </p>
+      </div>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <button id="particle-toggle-btn" class="particle-toggle-btn" onclick="window.toggleSeasonalParticles()" title="Bật/Tắt hiệu ứng mùa">
+          <i class="fa-solid fa-snowflake"></i>
+        </button>
+        <button id="theme-toggle" class="theme-toggle-btn-top" onclick="window.toggleTheme()" title="Chuyển đổi Giao diện Sáng/Tối">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+        <a href="/index.html" class="btn btn-outline" style="text-decoration:none;">
+          <i class="fa-solid fa-house"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Intelligent Lookup Converter Bar -->
+    <div class="search-box-wrap">
+      <i class="fa-solid fa-wand-magic-sparkles" style="color: var(--rules-accent); font-size: 1.3rem;"></i>
+      <input type="text" id="lookup-input"
+        placeholder="Nhập từ Hán-Việt hoặc chữ Hán bất kỳ (Ví dụ: Quốc, Học, Nam, Vương, 汉)..."
+        onkeyup="window.processHanVietLookup()">
+      <button class="btn btn-primary" onclick="window.processHanVietLookup()"><i
+          class="fa-solid fa-magnifying-glass"></i> Tra Quy Tắc Suy Âm</button>
+    </div>
+
+    <!-- VIP Voice Selection Control Bar (Rõ ràng & Nổi bật) -->
+    <div
+      style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(167, 139, 250, 0.12)); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 14px; padding: 14px 20px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.2);">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div
+          style="width: 36px; height: 36px; border-radius: 50%; background: #3b82f6; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
+          <i class="fa-solid fa-microphone"></i>
+        </div>
+        <div>
+          <div style="font-weight: 800; font-size: 0.95rem; color: #fff;">Cấu Hình Giọng Đọc Phát Âm (Voice Engine)
+          </div>
+          <div style="font-size: 0.8rem; color: #94a3b8;">Chọn giọng đọc AI chuẩn để nghe khi bấm vào từ vựng & bảng
+            phát âm</div>
+        </div>
+      </div>
+
+      <span style="font-size: 0.85rem; font-weight: 700; color: #10b981;">Giọng Đọc Chuẩn:</span>
+      <select id="voice-engine-select"
+        style="background: #0f172a; border: 1.5px solid #10b981; color: #fff; padding: 8px 16px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; outline: none; cursor: pointer;">
+        <option value="baidu-female" selected>🇨🇳 Baidu Nữ (Giọng Bắc Kinh chuẩn)</option>
+      </select>
+    </div>
+
+    <!-- Dynamic Result Box -->
+    <div id="lookup-result-box"
+      style="display: none; background: rgba(59, 130, 246, 0.1); border: 1px solid var(--rules-primary); padding: 18px 24px; border-radius: 16px; margin-bottom: 24px;">
+      <!-- Lookup Result Rendered Here -->
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="rules-nav-tabs">
+      <button class="tab-btn active" onclick="window.switchRulesTab('hanviet-consonants')">
+        <i class="fa-solid fa-arrow-right-arrow-left"></i> Chuyển Phụ Âm Hán-Việt
+      </button>
+      <button class="tab-btn" onclick="window.switchRulesTab('hanviet-vowels')">
+        <i class="fa-solid fa-sliders"></i> Chuyển Vận Âm & Thanh Điệu
+      </button>
+      <button class="tab-btn" onclick="window.switchRulesTab('pinyin-shengmu')">
+        <i class="fa-solid fa-font"></i> Bảng Thanh Âm (Phụ Âm Pinyin)
+      </button>
+      <button class="tab-btn" onclick="window.switchRulesTab('pinyin-yunmu')">
+        <i class="fa-solid fa-layer-group"></i> Bảng Vận Âm (Nguyên Âm)
+      </button>
+      <button class="tab-btn" onclick="window.switchRulesTab('tone-rules')">
+        <i class="fa-solid fa-chart-line"></i> Quy Tắc Biến Điệu Thực Tế
+      </button>
+    </div>
+
+    <!-- TAB 1: CHUYỂN PHỤ ÂM HÁN VIỆT -->
+    <div id="tab-hanviet-consonants" class="section-content active">
+      <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 16px; color: var(--rules-primary);">
+        <i class="fa-solid fa-bolt"></i> Quy Tắc Chuyển Phụ Âm Đầu từ Âm Hán-Việt ➔ Pinyin
+      </h3>
+      <div class="rule-card-grid">
+
+        <div class="rule-card">
+          <div class="rule-card-header">
+            <span class="rule-badge">h- ➔ h</span>
+            <button class="audio-btn" onclick="window.speakZh('h')"><i class="fa-solid fa-volume-high"></i></button>
+          </div>
+          <p style="color: #94a3b8; font-size: 0.88rem;">Âm đầu <b>h-</b> trong tiếng Việt gần như giữ nguyên thành
+            <b>h</b> trong Pinyin Tiếng Trung.
+          </p>
+          <div class="example-box">
+            <div><span class="zh">學</span> (Học) ➔ <b>xué / húe</b></div>
+            <div><span class="zh">海</span> (Hải) ➔ <b>hǎi</b></div>
+            <div><span class="zh">韓</span> (Hàn) ➔ <b>hán</b></div>
+          </div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-card-header">
+            <span class="rule-badge">c / k / qu ➔ g / k</span>
+            <button class="audio-btn" onclick="window.speakZh('g')"><i class="fa-solid fa-volume-high"></i></button>
+          </div>
+          <p style="color: #94a3b8; font-size: 0.88rem;">Âm đầu <b>c-, k-, qu-</b> chuyển thành nhóm gốc lưỡi <b>g</b>
+            (không bật hơi) hoặc <b>k</b> (bật hơi).</p>
+          <div class="example-box">
+            <div><span class="zh">國</span> (Quốc) ➔ <b>guó</b></div>
+            <div><span class="zh">高</span> (Cao) ➔ <b>gāo</b></div>
+            <div><span class="zh">公</span> (Công) ➔ <b>gōng</b></div>
+          </div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-card-header">
+            <span class="rule-badge">t / th ➔ d / t</span>
+            <button class="audio-btn" onclick="window.speakZh('d')"><i class="fa-solid fa-volume-high"></i></button>
+          </div>
+          <p style="color: #94a3b8; font-size: 0.88rem;">Âm <b>đ / t</b> Hán-Việt chuyển thành <b>d</b> (không bật),
+            <b>th</b> chuyển thành <b>t</b> (bật hơi).
+          </p>
+          <div class="example-box">
+            <div><span class="zh">多</span> (Đa) ➔ <b>duō</b></div>
+            <div><span class="zh">天</span> (Thiên) ➔ <b>tiān</b></div>
+            <div><span class="zh">大</span> (Đại) ➔ <b>dà</b></div>
+          </div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-card-header">
+            <span class="rule-badge">b / p ➔ b / p</span>
+            <button class="audio-btn" onclick="window.speakZh('b')"><i class="fa-solid fa-volume-high"></i></button>
+          </div>
+          <p style="color: #94a3b8; font-size: 0.88rem;">Âm môi <b>b, p</b> Hán-Việt tương ứng với <b>b</b> (không bật)
+            và <b>p</b> (bật hơi) Pinyin.</p>
+          <div class="example-box">
+            <div><span class="zh">不</span> (Bất) ➔ <b>bù</b></div>
+            <div><span class="zh">北</span> (Bắc) ➔ <b>běi</b></div>
+            <div><span class="zh">平</span> (Bình / Bình) ➔ <b>píng</b></div>
+          </div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-card-header">
+            <span class="rule-badge">nh ➔ r / n</span>
+            <button class="audio-btn" onclick="window.speakZh('ri')"><i class="fa-solid fa-volume-high"></i></button>
+          </div>
+          <p style="color: #94a3b8; font-size: 0.88rem;">Phụ âm <b>nh-</b> Hán-Việt thường chuyển thành <b>r-</b> hoặc
+            <b>n-</b> trong Pinyin.
+          </p>
+          <div class="example-box">
+            <div><span class="zh">日</span> (Nhật) ➔ <b>rì</b></div>
+            <div><span class="zh">人</span> (Nhân) ➔ <b>rén</b></div>
+            <div><span class="zh">年</span> (Niên / Năm) ➔ <b>nián</b></div>
+          </div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-card-header">
+            <span class="rule-badge">v ➔ w / y</span>
+            <button class="audio-btn" onclick="window.speakZh('wang')"><i class="fa-solid fa-volume-high"></i></button>
+          </div>
+          <p style="color: #94a3b8; font-size: 0.88rem;">Phụ âm <b>v-</b> Hán-Việt thường biến đổi thành <b>w-</b> hoặc
+            <b>y-</b> trong Tiếng Trung.
+          </p>
+          <div class="example-box">
+            <div><span class="zh">王</span> (Vương) ➔ <b>wáng</b></div>
+            <div><span class="zh">文</span> (Văn) ➔ <b>wén</b></div>
+            <div><span class="zh">远</span> (Viễn) ➔ <b>yuǎn</b></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB 2: CHUYỂN VẬN ÂM & THANH ĐIỆU -->
+    <div id="tab-hanviet-vowels" class="section-content">
+      <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 16px; color: var(--rules-accent);">
+        <i class="fa-solid fa-sliders"></i> Quy Tắc Chuyển Vận Âm & Thanh Điệu Hán-Việt
+      </h3>
+      <div class="rule-card-grid">
+        <div class="rule-card">
+          <div class="rule-card-header">
+            <span class="rule-badge" style="color: var(--rules-accent); background: rgba(245,158,11,0.15);">-ang / -an ➔
+              -ang / -an</span>
+          </div>
+          <p style="color: #94a3b8; font-size: 0.88rem;">Vần <b>-ang, -an</b> giữ nguyên vần tương ứng trong Tiếng
+            Trung.</p>
+          <div class="example-box">
+            <div><span class="zh">南</span> (Nam) ➔ <b>nán</b></div>
+            <div><span class="zh">康</span> (Khang) ➔ <b>kāng</b></div>
+          </div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-card-header">
+            <span class="rule-badge" style="color: var(--rules-accent); background: rgba(245,158,11,0.15);">Dấu Huyền /
+              Không dấu ➔ Thanh 1 / 2</span>
+          </div>
+          <p style="color: #94a3b8; font-size: 0.88rem;">Chữ Hán-Việt mang <b>dấu huyền</b> hoặc <b>không dấu</b> thường
+            suy ra Thanh 1 (ngang) hoặc Thanh 2 (sắc).</p>
+          <div class="example-box">
+            <div><span class="zh">天</span> (Thiên) ➔ <b>tiān (Thanh 1)</b></div>
+            <div><span class="zh">人</span> (Nhân) ➔ <b>rén (Thanh 2)</b></div>
+          </div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-card-header">
+            <span class="rule-badge" style="color: var(--rules-accent); background: rgba(245,158,11,0.15);">Dấu Hỏi /
+              Dấu Ngã ➔ Thanh 3</span>
+          </div>
+          <p style="color: #94a3b8; font-size: 0.88rem;">Chữ Hán-Việt mang <b>dấu hỏi (?)</b> hoặc <b>dấu ngã (~)</b> đa
+            số suy ra Thanh 3 (lượn xuống nâng lên).</p>
+          <div class="example-box">
+            <div><span class="zh">好</span> (Hảo) ➔ <b>hǎo (Thanh 3)</b></div>
+            <div><span class="zh">海</span> (Hải) ➔ <b>hǎi (Thanh 3)</b></div>
+          </div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-card-header">
+            <span class="rule-badge" style="color: var(--rules-accent); background: rgba(245,158,11,0.15);">Dấu Sắc /
+              Dấu Nặng ➔ Thanh 4</span>
+          </div>
+          <p style="color: #94a3b8; font-size: 0.88rem;">Chữ Hán-Việt mang <b>dấu sắc (')</b> hoặc <b>dấu nặng (.)</b>
+            tỷ lệ cao suy ra Thanh 4 (giật mạnh từ cao xuống).</p>
+          <div class="example-box">
+            <div><span class="zh">大</span> (Đại) ➔ <b>dà (Thanh 4)</b></div>
+            <div><span class="zh">國</span> (Quốc) ➔ <b>guó / guò (Thanh 4)</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: BẢNG THANH ÂM (PHỤ ÂM PINYIN) -->
+    <div id="tab-pinyin-shengmu" class="section-content">
+      <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 16px; color: var(--rules-success);">
+        <i class="fa-solid fa-font"></i> Bảng 21 Thanh Âm (Phụ Âm Đầu) Trong Pinyin
+      </h3>
+      <div class="rule-card-grid">
+        <div class="rule-card">
+          <div class="rule-card-header">
+            <span class="rule-badge" style="color: var(--rules-success); background: rgba(16,185,129,0.15);">Âm Môi (b,
+              p, m, f)</span>
+          </div>
+          <p style="color: #94a3b8; font-size: 0.88rem;"><b>b</b> (bô), <b>p</b> (phô - bật hơi), <b>m</b> (mô),
+            <b>f</b> (phô).
+          </p>
+          <div style="display: flex; gap: 8px; margin-top: 10px;">
+            <button class="btn btn-sm btn-outline" onclick="window.speakZh('bō')">b</button>
+            <button class="btn btn-sm btn-outline" onclick="window.speakZh('pō')">p</button>
+            <button class="btn btn-sm btn-outline" onclick="window.speakZh('mō')">m</button>
+            <button class="btn btn-sm btn-outline" onclick="window.speakZh('fō')">f</button>
+          </div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-card-header">
+            <span class="rule-badge" style="color: var(--rules-success); background: rgba(16,185,129,0.15);">Âm Đầu Lưỡi
+              (d, t, n, l)</span>
+          </div>
+          <p style="color: #94a3b8; font-size: 0.88rem;"><b>d</b> (tơ), <b>t</b> (thơ - bật hơi), <b>n</b> (nơ),
+            <b>l</b> (lơ).
+          </p>
+          <div style="display: flex; gap: 8px; margin-top: 10px;">
+            <button class="btn btn-sm btn-outline" onclick="window.speakZh('dē')">d</button>
+            <button class="btn btn-sm btn-outline" onclick="window.speakZh('tē')">t</button>
+            <button class="btn btn-sm btn-outline" onclick="window.speakZh('nē')">n</button>
+            <button class="btn btn-sm btn-outline" onclick="window.speakZh('lē')">l</button>
+          </div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-card-header">
+            <span class="rule-badge" style="color: var(--rules-success); background: rgba(16,185,129,0.15);">Âm Gốc Lưỡi
+              (g, k, h)</span>
+          </div>
+          <p style="color: #94a3b8; font-size: 0.88rem;"><b>g</b> (cơ), <b>k</b> (khơ - bật hơi), <b>h</b> (hơ).</p>
+          <div style="display: flex; gap: 8px; margin-top: 10px;">
+            <button class="btn btn-sm btn-outline" onclick="window.speakZh('gē')">g</button>
+            <button class="btn btn-sm btn-outline" onclick="window.speakZh('kē')">k</button>
+            <button class="btn btn-sm btn-outline" onclick="window.speakZh('hē')">h</button>
+          </div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-card-header">
+            <span class="rule-badge" style="color: var(--rules-success); background: rgba(16,185,129,0.15);">Âm Mặt Lưỡi
+              (j, q, x)</span>
+          </div>
+          <p style="color: #94a3b8; font-size: 0.88rem;"><b>j</b> (chi), <b>q</b> (chi - bật hơi), <b>x</b> (xi).</p>
+          <div style="display: flex; gap: 8px; margin-top: 10px;">
+            <button class="btn btn-sm btn-outline" onclick="window.speakZh('ji')">j</button>
+            <button class="btn btn-sm btn-outline" onclick="window.speakZh('qi')">q</button>
+            <button class="btn btn-sm btn-outline" onclick="window.speakZh('xi')">x</button>
+          </div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-card-header">
+            <span class="rule-badge" style="color: var(--rules-success); background: rgba(16,185,129,0.15);">Âm Uốn Lưỡi
+              (zh, ch, sh, r)</span>
+          </div>
+          <p style="color: #94a3b8; font-size: 0.88rem;"><b>zh</b> (trư), <b>ch</b> (trư - bật hơi), <b>sh</b> (sư),
+            <b>r</b> (rư).
+          </p>
+          <div style="display: flex; gap: 8px; margin-top: 10px;">
+            <button class="btn btn-sm btn-outline" onclick="window.speakZh('zhi')">zh</button>
+            <button class="btn btn-sm btn-outline" onclick="window.speakZh('chi')">ch</button>
+            <button class="btn btn-sm btn-outline" onclick="window.speakZh('shi')">sh</button>
+            <button class="btn btn-sm btn-outline" onclick="window.speakZh('ri')">r</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: BẢNG VẬN ÂM -->
+    <div id="tab-pinyin-yunmu" class="section-content">
+      <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 16px; color: #a78bfa;">
+        <i class="fa-solid fa-layer-group"></i> Bảng Vận Âm Đơn & Kép
+      </h3>
+      <div class="rule-card-grid">
+        <div class="rule-card">
+          <div class="rule-card-header">
+            <span class="rule-badge" style="color: #a78bfa; background: rgba(167,139,250,0.15);">6 Vận Âm Đơn
+              (Simple)</span>
+          </div>
+          <p style="color: #94a3b8; font-size: 0.88rem;">a, o, e, i, u, ü (nguyên âm cơ bản).</p>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
+            <button class="btn btn-sm btn-outline" onclick="window.speakZh('ā')">a</button>
+            <button class="btn btn-sm btn-outline" onclick="window.speakZh('ō')">o</button>
+            <button class="btn btn-sm btn-outline" onclick="window.speakZh('ē')">e</button>
+            <button class="btn btn-sm btn-outline" onclick="window.speakZh('yī')">i</button>
+            <button class="btn btn-sm btn-outline" onclick="window.speakZh('wū')">u</button>
+            <button class="btn btn-sm btn-outline" onclick="window.speakZh('yū')">ü</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: QUY TẮC BIẾN ĐIỆU THỰC TẾ -->
+    <div id="tab-tone-rules" class="section-content">
+      <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 16px; color: #f43f5e;">
+        <i class="fa-solid fa-chart-line"></i> Quy Tắc Biến Điệu Thanh 3, Chữ 不 (bù) & 一 (yī)
+      </h3>
+      <div class="rule-card-grid">
+        <div class="rule-card">
+          <div class="rule-card-header">
+            <span class="rule-badge" style="color: #f43f5e; background: rgba(244,63,94,0.15);">Hai Thanh 3 Đi Cùng
+              Nhau</span>
+            <button class="audio-btn" onclick="window.speakZh('nǐ hǎo')"><i
+                class="fa-solid fa-volume-high"></i></button>
+          </div>
+          <p style="color: #94a3b8; font-size: 0.88rem;">Khi 2 âm Thanh 3 đứng liền nhau: <b>Thanh 3 + Thanh 3 ➔ Thanh 2
+              + Thanh 3</b>.</p>
+          <div class="example-box">
+            <div><span class="zh">你好</span> <i>nǐ hǎo</i> ➔ đọc thành <b>ní hǎo</b></div>
+            <div><span class="zh">可以</span> <i>kě yǐ</i> ➔ đọc thành <b>ké yǐ</b></div>
+          </div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-card-header">
+            <span class="rule-badge" style="color: #f43f5e; background: rgba(244,63,94,0.15);">Biến Điệu Chữ 不
+              (bù)</span>
+            <button class="audio-btn" onclick="window.speakZh('bú shì')"><i
+                class="fa-solid fa-volume-high"></i></button>
+          </div>
+          <p style="color: #94a3b8; font-size: 0.88rem;">Chữ <b>不</b> vốn đọc thanh 4 (bù), nhưng khi đứng trước từ mang
+            <b>Thanh 4</b> thì đọc đổi thành <b>Thanh 2 (bú)</b>.
+          </p>
+          <div class="example-box">
+            <div><span class="zh">不是</span> <i>bù shì</i> ➔ đọc thành <b>bú shì</b></div>
+            <div><span class="zh">不对</span> <i>bù duì</i> ➔ đọc thành <b>bú duì</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    window.switchRulesTab = function (tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.section-content').forEach(sec => sec.classList.remove('active'));
+
+      event.currentTarget.classList.add('active');
+      document.getElementById('tab-' + tabId).classList.add('active');
+    };
+
+    let currentAudio = null;
+
+    window.speakZh = function (text) {
+      if (!text) return;
+
+      const selectEl = document.getElementById('voice-engine-select');
+      const voice = selectEl ? selectEl.value : 'baidu-female';
+
+      // Stop any currently playing audio
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio = null;
+      }
+
+      const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === ''
+        ? 'http://localhost:5000'
+        : 'https://tieng-trung-hong-tai.onrender.com';
+
+      const audioUrl = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(text)}&voice=${voice}`;
+      currentAudio = new Audio(audioUrl);
+      currentAudio.play().catch(err => {
+        console.warn('ElevenLabs/Baidu Audio Playback error, fallback to Web Speech:', err);
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'zh-CN';
+          utterance.rate = 0.85;
+          window.speechSynthesis.speak(utterance);
+        }
+      });
+    };
+
+    // Attach click listeners to all clickable word items & examples
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedVoice = localStorage.getItem('speech_voice');
+      const voiceSelect = document.getElementById('voice-engine-select');
+      if (savedVoice && voiceSelect) {
+        voiceSelect.value = savedVoice;
+      }
+
+      document.querySelectorAll('.example-box > div, .rule-badge, .example-box .zh').forEach(el => {
+        el.style.cursor = 'pointer';
+        el.title = 'Bấm để nghe phát âm giọng ElevenLabs AI';
+        el.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const zhChar = el.querySelector('.zh') ? el.querySelector('.zh').textContent : el.textContent;
+          const cleanText = zhChar.replace(/[^一-龥a-zA-Zāáǎàōóǒòēéěèīíǐìūúǔùǖǘǚǜ]/g, '');
+          if (cleanText) {
+            window.speakZh(cleanText);
+          }
+        });
+      });
+    });
+
+    window.processHanVietLookup = function () {
+      const val = document.getElementById('lookup-input').value.trim().toLowerCase();
+      const resultBox = document.getElementById('lookup-result-box');
+
+      if (!val) {
+        resultBox.style.display = 'none';
+        return;
+      }
+
+      resultBox.style.display = 'block';
+      let ruleTip = '';
+
+      if (val.startsWith('h')) {
+        ruleTip = `Âm Hán-Việt đầu <b>h-</b> tương ứng với âm <b>h-</b> hoặc <b>x-</b> trong Pinyin. Ví dụ: Hải ➔ hǎi, Học ➔ xué.`;
+      } else if (val.startsWith('c') || val.startsWith('k') || val.startsWith('qu')) {
+        ruleTip = `Âm Hán-Việt đầu <b>c / k / qu</b> tương ứng với âm gốc lưỡi <b>g</b> (không bật) hoặc <b>k</b> (bật) Pinyin. Ví dụ: Quốc ➔ guó, Cao ➔ gāo.`;
+      } else if (val.startsWith('d') || val.startsWith('t') || val.startsWith('th')) {
+        ruleTip = `Âm Hán-Việt đầu <b>đ/t/th</b> tương ứng với âm <b>d-</b> (không bật) hoặc <b>t-</b> (bật) Pinyin. Ví dụ: Thiên ➔ tiān, Đa ➔ duō.`;
+      } else if (val.startsWith('v')) {
+        ruleTip = `Âm Hán-Việt đầu <b>v-</b> chuyển đổi thành âm <b>w-</b> hoặc <b>y-</b> Pinyin. Ví dụ: Vương ➔ wáng, Văn ➔ wén.`;
+      } else {
+        ruleTip = `Tra cứu thành công quy tắc chuyển âm cho "<b>${val}</b>": Chữ Hán-Việt theo quy luật Thanh 1-2 (ngang/huyền), Thanh 3 (hỏi/ngã), Thanh 4 (sắc/nặng).`;
+      }
+
+      resultBox.innerHTML = `
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <h4 style="margin: 0 0 6px 0; font-size: 1.1rem; color: #fff;">Kết quả phân tích quy tắc cho từ: <span style="color: var(--rules-accent); font-weight: 800;">"${val}"</span></h4>
+            <div style="font-size: 0.9rem; color: #cbd5e1;">${ruleTip}</div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="window.speakZh('${val}')"><i class="fa-solid fa-volume-high"></i> Đọc mẫu</button>
+        </div>
+      `;
+    };
+  </script>
+</body>
+
+</html>

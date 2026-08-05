@@ -1,6 +1,16 @@
 // HSK Vocabulary Flashcard - Main Frontend Controller
-import './style.css';
-import radicalsData from './radicals_data.json';
+let radicalsData = { radicals: [], comparisons: [] };
+async function loadRadicalsData() {
+  try {
+    const res = await fetch('/src/radicals_data.json');
+    if (res.ok) {
+      radicalsData = await res.json();
+    }
+  } catch (e) {
+    console.warn("Could not load radicals_data.json:", e);
+  }
+}
+loadRadicalsData();
 
 // --- RADICAL LOOKUP HELPERS ---
 function findRadicalsForWord(word) {

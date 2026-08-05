@@ -1,5 +1,18 @@
-import './style.css';
-import radicalsData from './radicals_data.json';
+let radicalsData = { radicals: [], comparisons: [] };
+async function loadRadicalsData() {
+  try {
+    const res = await fetch('/src/radicals_data.json');
+    if (res.ok) {
+      radicalsData = await res.json();
+      if (typeof renderGridContent === 'function') {
+        renderGridContent();
+      }
+    }
+  } catch (e) {
+    console.warn("Could not load radicals_data.json:", e);
+  }
+}
+loadRadicalsData();
 
 let currentTab = '50 bộ (1)';
 let writerInstance = null;

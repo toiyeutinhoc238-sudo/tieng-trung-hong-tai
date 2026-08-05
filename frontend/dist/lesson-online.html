@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bài Học Online & Đọc Hiểu Tiếng Trung | Hongtai Chinese</title>
+  <meta name="description" content="Khóa học online tiếng Trung bài bản, đọc hiểu văn bản, đoạn thoại có phiên âm Pinyin và âm thanh luyện nghe.">
+  <link rel="canonical" href="https://tieng-trung-hong-tai-1.onrender.com/lesson-online.html" />
+  <link rel="icon" type="image/png" href="/assets/logo-CnsJJgQP.png">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <script>
+    (function () {
+      var t = localStorage.getItem('theme') || 'dark';
+      var bgUrl = t === 'light' ? "url('/assets/app_bg_day_v3.png')" : "url('/assets/app_bg_night_v3.png')";
+      document.documentElement.style.setProperty('background-image', bgUrl, 'important');
+      document.documentElement.style.setProperty('background-size', 'cover', 'important');
+      document.documentElement.style.setProperty('background-position', 'center center', 'important');
+      document.documentElement.style.setProperty('background-attachment', 'fixed', 'important');
+      document.documentElement.style.setProperty('background-repeat', 'no-repeat', 'important');
+
+      if (t === 'light') {
+        document.documentElement.classList.add('light-mode', 'light');
+        document.documentElement.classList.remove('dark');
+        if (document.body) {
+          document.body.classList.add('light-mode');
+          document.body.style.setProperty('background-image', bgUrl, 'important');
+        } else {
+          document.addEventListener('DOMContentLoaded', function () {
+            document.body.classList.add('light-mode');
+            document.body.style.setProperty('background-image', bgUrl, 'important');
+          });
+        }
+      } else {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light', 'light-mode');
+        if (document.body) {
+          document.body.style.setProperty('background-image', bgUrl, 'important');
+        } else {
+          document.addEventListener('DOMContentLoaded', function () {
+            document.body.style.setProperty('background-image', bgUrl, 'important');
+          });
+        }
+      }
+    })();
+
+    window.toggleTheme = function() {
+      var isLight = document.documentElement.classList.contains('light-mode') || document.documentElement.classList.contains('light');
+      var nextDark = isLight;
+      var bgUrl = nextDark ? "url('/assets/app_bg_night_v3.png')" : "url('/assets/app_bg_day_v3.png')";
+
+      document.documentElement.style.setProperty('background-image', bgUrl, 'important');
+      document.documentElement.style.setProperty('background-size', 'cover', 'important');
+      document.documentElement.style.setProperty('background-position', 'center center', 'important');
+      document.documentElement.style.setProperty('background-attachment', 'fixed', 'important');
+      document.documentElement.style.setProperty('background-repeat', 'no-repeat', 'important');
+
+      if (document.body) {
+        document.body.style.setProperty('background-image', bgUrl, 'important');
+        document.body.style.setProperty('background-size', 'cover', 'important');
+        document.body.style.setProperty('background-position', 'center center', 'important');
+        document.body.style.setProperty('background-attachment', 'fixed', 'important');
+        document.body.style.setProperty('background-repeat', 'no-repeat', 'important');
+      }
+
+      if (nextDark) {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light', 'light-mode');
+        if (document.body) {
+          document.body.classList.remove('light-mode', 'light');
+          document.body.classList.add('dark');
+        }
+        localStorage.setItem('theme', 'dark');
+        updateToggleBtns(false);
+      } else {
+        document.documentElement.classList.add('light', 'light-mode');
+        document.documentElement.classList.remove('dark');
+        if (document.body) {
+          document.body.classList.remove('dark');
+          document.body.classList.add('light-mode');
+        }
+        localStorage.setItem('theme', 'light');
+        updateToggleBtns(true);
+      }
+    };
+
+    function updateToggleBtns(isLight) {
+      var btns = document.querySelectorAll('#theme-toggle, #theme-toggle-btn, .theme-toggle-btn, .theme-toggle-btn-top');
+      btns.forEach(function(btn) {
+        if (btn.id === 'particle-toggle-btn' || btn.classList.contains('particle-toggle-btn')) return;
+        btn.innerHTML = isLight 
+          ? '<i class="fa-solid fa-moon" style="color:#d97706;"></i>' 
+          : '<i class="fa-solid fa-sun" style="color:#f59e0b;"></i>';
+      });
+    }
+
+    window.toggleSeasonalParticles = function() {
+      var current = localStorage.getItem('particles_enabled') !== 'false';
+      var next = !current;
+      localStorage.setItem('particles_enabled', next ? 'true' : 'false');
+      updateParticleToggleBtns(next);
+      var cv = document.getElementById('seasonal-particle-canvas');
+      if (cv) cv.style.display = next ? 'block' : 'none';
+      if (typeof showToast === 'function') {
+        showToast(next ? 'Đã BẬT hiệu ứng thời tiết mùa' : 'Đã TẮT hiệu ứng thời tiết mùa');
+      }
+    };
+
+    function updateParticleToggleBtns(enabled) {
+      var btns = document.querySelectorAll('#particle-toggle-btn, .particle-toggle-btn');
+      btns.forEach(function(btn) {
+        if (enabled) {
+          btn.classList.remove('particles-off');
+          btn.innerHTML = '<i class="fa-solid fa-snowflake" style="color: #60a5fa;"></i>';
+          btn.title = 'Tắt hiệu ứng rơi động (Đang BẬT)';
+        } else {
+          btn.classList.add('particles-off');
+          btn.innerHTML = '<i class="fa-solid fa-snowflake" style="opacity: 0.35; color: #94a3b8;"></i>';
+          btn.title = 'Bật hiệu ứng rơi động (Đang TẮT)';
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var isLight = document.documentElement.classList.contains('light-mode') || document.documentElement.classList.contains('light');
+      updateToggleBtns(isLight);
+      var enabled = localStorage.getItem('particles_enabled') !== 'false';
+      updateParticleToggleBtns(enabled);
+    });
+  </script>
+
+  <style>
+    .theme-toggle-btn-top {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #fbbf24;
+      padding: 8px 14px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+    .theme-toggle-btn-top:hover {
+      background: #f59e0b;
+      color: #000;
+    }
+    html.light-mode .theme-toggle-btn-top, body.light-mode .theme-toggle-btn-top {
+      background: #ffffff !important;
+      border: 1px solid #cbd5e1 !important;
+      color: #0f172a !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+    }
+    :root {
+      --bg-primary: #0b0f19;
+      --bg-secondary: #131c31;
+      --bg-card: #1e293b;
+      --border-glass: rgba(255, 255, 255, 0.1);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #3b82f6;
+      --accent-teal: #06b6d4;
+      --accent-purple: #8b5cf6;
+      --accent-gold: #fbbf24;
+      --success: #10b981;
+      --danger: #ef4444;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Be Vietnam Pro', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Navigation Header */
+    .header-bar {
+      height: 64px;
+      background: rgba(19, 28, 49, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-glass);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-glass);
+      color: var(--text-primary);
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .back-btn:hover {
+      background: var(--accent-blue);
+      color: #fff;
+    }
+
+    .lesson-badge {
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--accent-blue);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .lesson-main-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    /* Voice selector dropdown in header */
+    .header-voice-select {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-glass);
+      color: var(--text-primary);
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      outline: none;
+    }
+
+    /* Main Container */
+    .main-content {
+      max-width: 1000px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 20px 60px;
+      flex: 1;
+    }
+
+    /* Tabs Navigation */
+    .tabs-nav {
+      display: flex;
+      gap: 10px;
+      background: var(--bg-secondary);
+      padding: 6px;
+      border-radius: 14px;
+      border: 1px solid var(--border-glass);
+      margin-bottom: 24px;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      flex: 1;
+      min-width: 130px;
+      padding: 12px 16px;
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-weight: 700;
+      font-size: 0.95rem;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .tab-btn.active {
+      background: var(--accent-blue);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    /* Tab Content Sections */
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- SECTION 1: BÀI KHÓA --- */
+    .dialogue-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .dialogue-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .speaker-tag {
+      background: rgba(6, 182, 212, 0.15);
+      color: var(--accent-teal);
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .audio-play-btn {
+      background: rgba(59, 130, 246, 0.15);
+      border: none;
+      color: var(--accent-blue);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+
+    .audio-play-btn:hover {
+      background: var(--accent-blue);
+      color: #fff;
+      transform: scale(1.1);
+    }
+
+    .zh-text {
+      font-family: 'Noto Sans SC', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+
+    .pinyin-text {
+      font-size: 1.05rem;
+      color: var(--accent-gold);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .vi-text {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+
+    /* --- SECTION 2: TỪ VỰNG --- */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .vocab-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s;
+    }
+
+    .vocab-card:hover {
+      border-color: var(--accent-blue);
+      transform: translateY(-2px);
+    }
+
+    .vocab-word {
+      font-family: 'Noto Sans SC', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    .vocab-pinyin {
+      font-size: 1.1rem;
+      color: var(--accent-teal);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .vocab-type {
+      display: inline-block;
+      font-size: 0.75rem;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-secondary);
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+
+    .vocab-meaning {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 12px;
+    }
+
+    .vocab-example {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      background: rgba(0,0,0,0.2);
+      padding: 10px;
+      border-radius: 10px;
+      border-left: 3px solid var(--accent-purple);
+    }
+
+    /* --- SECTION 3: NGỮ PHÁP --- */
+    .grammar-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .grammar-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--accent-gold);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .grammar-formula {
+      background: rgba(139, 92, 246, 0.15);
+      border: 1px dashed var(--accent-purple);
+      color: #d8b4fe;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: 14px;
+    }
+
+    .grammar-explanation {
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .example-box {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 8px;
+    }
+
+    /* --- SECTION 4: BÀI TẬP --- */
+    .exercise-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .ex-q-num {
+      font-size: 0.85rem;
+      color: var(--accent-teal);
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .ex-question {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+
+    .ex-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 600px) {
+      .ex-options { grid-template-columns: 1fr; }
+    }
+
+    .ex-opt-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-glass);
+      color: var(--text-primary);
+      padding: 14px 16px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+    }
+
+    .ex-opt-btn:hover {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: var(--accent-blue);
+    }
+
+    .ex-opt-btn.correct {
+      background: rgba(16, 185, 129, 0.2) !important;
+      border-color: var(--success) !important;
+      color: #34d399 !important;
+      font-weight: 800;
+    }
+
+    .ex-opt-btn.wrong {
+      background: rgba(239, 68, 68, 0.2) !important;
+      border-color: var(--danger) !important;
+      color: #f87171 !important;
+    }
+
+    .ex-explanation {
+      margin-top: 14px;
+      padding: 12px;
+      background: rgba(16, 185, 129, 0.1);
+      border-left: 4px solid var(--success);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: #a7f3d0;
+      display: none;
+    }
+  </style>
+  <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
+  <script type="module" crossorigin src="/assets/particles-Dl8CQUZ9.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/style-BX3cbp3Z.css">
+</head>
+
+<body>
+
+  <!-- Top Header Bar -->
+  <header class="header-bar">
+    <div class="header-title-wrap">
+      <a href="/index.html" class="back-btn" title="Quay lại Dashboard">
+        <i class="fa-solid fa-arrow-left"></i>
+      </a>
+      <div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="lesson-badge" id="lesson-badge">HSK 1</span>
+          <span class="lesson-main-title" id="lesson-header-title">Bài 1: 你好 - Xin chào!</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Voice Selection & Theme Toggle -->
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <select id="select-voice" class="header-voice-select" style="border-color:#10b981;">
+        <option value="baidu-female" selected>🇨🇳 Baidu Nữ (Bắc Kinh chuẩn)</option>
+      </select>
+      <button id="particle-toggle-btn" class="particle-toggle-btn" onclick="window.toggleSeasonalParticles()" title="Bật/Tắt hiệu ứng mùa">
+        <i class="fa-solid fa-snowflake"></i>
+      </button>
+      <button id="theme-toggle" class="theme-toggle-btn-top" onclick="window.toggleTheme()" title="Chuyển đổi Giao diện Sáng/Tối">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Lesson View -->
+  <main class="main-content">
+
+    <!-- Tabs Bar -->
+    <nav class="tabs-nav">
+      <button class="tab-btn active" data-tab="text">
+        <i class="fa-solid fa-book-open"></i> 1. Bài Khóa
+      </button>
+      <button class="tab-btn" data-tab="vocab">
+        <i class="fa-solid fa-font"></i> 2. Từ Vựng
+      </button>
+      <button class="tab-btn" data-tab="grammar">
+        <i class="fa-solid fa-spell-check"></i> 3. Ngữ Pháp
+      </button>
+      <button class="tab-btn" data-tab="exercises">
+        <i class="fa-solid fa-pen-to-square"></i> 4. Bài Tập
+      </button>
+    </nav>
+
+    <!-- SECTION 1: BÀI KHÓA -->
+    <section id="tab-text" class="tab-content active">
+      <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-size: 1.1rem; color: var(--text-secondary);">Hội thoại trực tuyến:</h3>
+        <button id="play-all-text-btn" style="background: var(--accent-blue); color: #fff; border: none; padding: 8px 16px; border-radius: 10px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-circle-play"></i> Nghe Toàn Bài
+        </button>
+      </div>
+      <div id="dialogue-container">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+    <!-- SECTION 2: TỪ VỰNG -->
+    <section id="tab-vocab" class="tab-content">
+      <div class="vocab-grid" id="vocab-container">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+    <!-- SECTION 3: NGỮ PHÁP -->
+    <section id="tab-grammar" class="tab-content">
+      <div id="grammar-container">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+    <!-- SECTION 4: BÀI TẬP -->
+    <section id="tab-exercises" class="tab-content">
+      <div id="exercises-container">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    const API_BASE_URL = window.location.origin.includes('5173') 
+      ? 'http://localhost:5000' 
+      : window.location.origin;
+
+    let activeAudio = null;
+    let currentLessonData = null;
+
+    // --- TAB SWITCHING LOGIC ---
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+        btn.classList.add('active');
+        const targetTab = btn.dataset.tab;
+        document.getElementById(`tab-${targetTab}`).classList.add('active');
+      });
+    });
+
+    // --- AUDIO PLAYER (ELEVENLABS TTS) ---
+    function speakText(text) {
+      if (!text) return;
+      if (activeAudio) {
+        try { activeAudio.pause(); activeAudio.currentTime = 0; } catch (e) {}
+      }
+
+      const voice = 'baidu-female';
+      localStorage.setItem('speech_voice', 'baidu-female');
+      const cleanText = text.replace(/[A-Za-z0-9]/g, '').trim() || text;
+      const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(voice)}&_t=${Date.now()}`;
+
+      activeAudio = new Audio(url);
+      activeAudio.play().catch(err => {
+        console.warn("ElevenLabs audio play failed, falling back to WebSpeech:", err);
+        if (window.speechSynthesis) {
+          window.speechSynthesis.cancel();
+          const u = new SpeechSynthesisUtterance(cleanText);
+          u.lang = 'zh-CN';
+          u.rate = 0.9;
+          window.speechSynthesis.speak(u);
+        }
+      });
+    }
+
+    // --- FETCH LESSON CONTENT ---
+    async function loadLessonDetail() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const lessonId = urlParams.get('id') || 'hsk1_lesson1';
+
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/lesson-detail?id=${encodeURIComponent(lessonId)}`);
+        if (!res.ok) throw new Error("Failed to load");
+        currentLessonData = await res.json();
+        renderLessonUI(currentLessonData);
+      } catch (err) {
+        console.error("Error loading lesson:", err);
+      }
+    }
+
+    // --- RENDER LESSON UI ---
+    function renderLessonUI(data) {
+      if (!data || !data.sections) return;
+
+      document.getElementById('lesson-badge').textContent = data.level || 'HSK 1';
+      document.getElementById('lesson-header-title').textContent = data.title || 'Bài học Online';
+
+      // 1. Render Bài Khóa
+      const textContainer = document.getElementById('dialogue-container');
+      textContainer.innerHTML = '';
+      (data.sections.text || []).forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'dialogue-card';
+        card.innerHTML = `
+          <div class="dialogue-header">
+            <span class="speaker-tag"><i class="fa-solid fa-user"></i> ${item.speaker}</span>
+            <button class="audio-play-btn" onclick="speakText('${item.zh}')" title="Nghe phát âm">
+              <i class="fa-solid fa-volume-high"></i>
+            </button>
+          </div>
+          <div class="zh-text">${item.zh}</div>
+          <div class="pinyin-text">[ ${item.pinyin} ]</div>
+          <div class="vi-text">${item.vi}</div>
+        `;
+        textContainer.appendChild(card);
+      });
+
+      // 2. Render Từ Vựng
+      const vocabContainer = document.getElementById('vocab-container');
+      vocabContainer.innerHTML = '';
+      (data.sections.vocab || []).forEach(v => {
+        const card = document.createElement('div');
+        card.className = 'vocab-card';
+        card.innerHTML = `
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <span class="vocab-word">${v.word}</span>
+              <button class="audio-play-btn" onclick="speakText('${v.word}')" title="Nghe từ">
+                <i class="fa-solid fa-volume-high"></i>
+              </button>
+            </div>
+            <div class="vocab-pinyin">[ ${v.pinyin} ]</div>
+            <span class="vocab-type">${v.type}</span>
+            <div class="vocab-meaning">${v.meaning}</div>
+          </div>
+          ${v.example ? `<div class="vocab-example"><strong>Ví dụ:</strong> ${v.example}</div>` : ''}
+        `;
+        vocabContainer.appendChild(card);
+      });
+
+      // 3. Render Ngữ Pháp
+      const grammarContainer = document.getElementById('grammar-container');
+      grammarContainer.innerHTML = '';
+      (data.sections.grammar || []).forEach((g, idx) => {
+        const card = document.createElement('div');
+        card.className = 'grammar-card';
+
+        let examplesHtml = (g.examples || []).map(ex => `
+          <div class="example-box">
+            <div style="font-family: 'Noto Sans SC'; font-size: 1.15rem; font-weight: 700; color: #fff;">${ex.zh}</div>
+            <div style="color: var(--accent-gold); font-size: 0.9rem;">[ ${ex.pinyin} ]</div>
+            <div style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 2px;">${ex.vi}</div>
+          </div>
+        `).join('');
+
+        card.innerHTML = `
+          <div class="grammar-title"><i class="fa-solid fa-bookmark"></i> ${g.title}</div>
+          ${g.formula ? `<div class="grammar-formula">Công thức: ${g.formula}</div>` : ''}
+          <div class="grammar-explanation">${g.explanation}</div>
+          <div style="font-weight: 700; color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 8px;">VÍ DỤ MINH HỌA:</div>
+          ${examplesHtml}
+        `;
+        grammarContainer.appendChild(card);
+      });
+
+      // 4. Render Bài Tập
+      const exercisesContainer = document.getElementById('exercises-container');
+      exercisesContainer.innerHTML = '';
+      (data.sections.exercises || []).forEach((ex, idx) => {
+        const card = document.createElement('div');
+        card.className = 'exercise-card';
+
+        let optsHtml = (ex.options || []).map((opt, oIdx) => `
+          <button class="ex-opt-btn" onclick="checkExercise(this, ${oIdx}, ${ex.answer}, 'ex-exp-${idx}')">
+            ${String.fromCharCode(65 + oIdx)}. ${opt}
+          </button>
+        `).join('');
+
+        card.innerHTML = `
+          <div class="ex-q-num">Câu hỏi ${idx + 1}</div>
+          <div class="ex-question">${ex.question}</div>
+          <div class="ex-options">${optsHtml}</div>
+          <div class="ex-explanation" id="ex-exp-${idx}">
+            <strong>Giải thích:</strong> ${ex.explanation}
+          </div>
+        `;
+        exercisesContainer.appendChild(card);
+      });
+    }
+
+    // --- CHECK EXERCISE ANSWER ---
+    function checkExercise(btn, selectedIdx, correctIdx, expId) {
+      const parent = btn.closest('.ex-options');
+      const btns = parent.querySelectorAll('.ex-opt-btn');
+      btns.forEach(b => b.disabled = true);
+
+      if (selectedIdx === correctIdx) {
+        btn.classList.add('correct');
+      } else {
+        btn.classList.add('wrong');
+        btns[correctIdx].classList.add('correct');
+      }
+
+      const expEl = document.getElementById(expId);
+      if (expEl) expEl.style.display = 'block';
+    }
+
+    // --- PLAY ALL TEXT BUTTON ---
+    document.getElementById('play-all-text-btn').addEventListener('click', () => {
+      if (!currentLessonData || !currentLessonData.sections || !currentLessonData.sections.text) return;
+      const fullText = currentLessonData.sections.text.map(t => t.zh).join('。 ');
+      speakText(fullText);
+    });
+
+    // Initialize on load
+    loadLessonDetail();
+  </script>
+</body>
+
+</html>
