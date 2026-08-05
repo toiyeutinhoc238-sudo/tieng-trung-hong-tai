@@ -6788,7 +6788,7 @@ window.openLessonDetailModal = function (lessonKey) {
         e.stopPropagation();
         const modalEl = document.getElementById('lesson-detail-popup-modal');
         if (modalEl) modalEl.style.display = 'none';
-        window.location.href = `/quiz-game.html?lesson=${lessonKey}&level=${currentLvl}&version=${activeHskVersion}&autostart=1`;
+        window.location.href = `/quiz-game.html?lesson=${lessonKey}&level=${currentLvl}&version=${activeHskVersion}`;
       };
     }
   } else {
@@ -7206,7 +7206,7 @@ function renderLessonHeroCardContent(w, index, total) {
             `).join('')}
           </div>
 
-          <button onclick="window.revealAllLessonCharHints('${randAnswer.replace(/'/g, "\\'")}')" style="width: 100%; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; color: #ffffff; font-weight: 800; font-size: 0.95rem; padding: 11px; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4); transition: all 0.2s; letter-spacing: 0.5px;" onmousedown="this.style.transform='scale(0.98)'" onmouseup="this.style.transform='scale(1)'">
+          <button id="lesson-toggle-all-hints-btn" onclick="window.revealAllLessonCharHints('${randAnswer.replace(/'/g, "\\'")}')" style="width: 100%; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; color: #ffffff; font-weight: 800; font-size: 0.95rem; padding: 11px; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4); transition: all 0.2s; letter-spacing: 0.5px;" onmousedown="this.style.transform='scale(0.98)'" onmouseup="this.style.transform='scale(1)'">
             <i class="fa-solid fa-eye" style="margin-right: 6px;"></i> HIỆN GỢI Ý MẪU
           </button>
         </div>
@@ -7302,22 +7302,56 @@ window.returnToLessonsMap = function() {
 
 window.toggleLessonCharHint = function(btnEl, char) {
   if (!btnEl) return;
-  btnEl.style.background = '#ffffff';
-  btnEl.style.color = '#0f172a';
-  btnEl.innerHTML = `<span style="font-size: 1.6rem; font-weight: 800; font-family: var(--font-display);">${char}</span>`;
+  const isFlipped = btnEl.getAttribute('data-flipped') === 'true';
+  if (isFlipped) {
+    btnEl.setAttribute('data-flipped', 'false');
+    btnEl.style.background = 'rgba(255,255,255,0.08)';
+    btnEl.style.color = '#94a3b8';
+    btnEl.innerHTML = `<i class="fa-solid fa-eye"></i>`;
+  } else {
+    btnEl.setAttribute('data-flipped', 'true');
+    btnEl.style.background = '#ffffff';
+    btnEl.style.color = '#0f172a';
+    btnEl.innerHTML = `<span style="font-size: 1.6rem; font-weight: 800; font-family: var(--font-display);">${char}</span>`;
+  }
 };
 
 window.revealAllLessonCharHints = function(fullWord) {
   const container = document.getElementById('lesson-char-hints-container');
+  const toggleBtn = document.getElementById('lesson-toggle-all-hints-btn');
   if (!container) return;
+
+  const cards = container.querySelectorAll('.lesson-hint-card');
+  if (cards.length === 0) return;
+
+  const allFlipped = Array.from(cards).every(c => c.getAttribute('data-flipped') === 'true');
   const chars = fullWord.match(/[\u4e00-\u9fa5]/g) || fullWord.split('');
-  container.querySelectorAll('.lesson-hint-card').forEach((card, idx) => {
-    if (chars[idx]) {
-      card.style.background = '#ffffff';
-      card.style.color = '#0f172a';
-      card.innerHTML = `<span style="font-size: 1.6rem; font-weight: 800; font-family: var(--font-display);">${chars[idx]}</span>`;
+
+  cards.forEach((card, idx) => {
+    if (allFlipped) {
+      card.setAttribute('data-flipped', 'false');
+      card.style.background = 'rgba(255,255,255,0.08)';
+      card.style.color = '#94a3b8';
+      card.innerHTML = `<i class="fa-solid fa-eye"></i>`;
+    } else {
+      if (chars[idx]) {
+        card.setAttribute('data-flipped', 'true');
+        card.style.background = '#ffffff';
+        card.style.color = '#0f172a';
+        card.innerHTML = `<span style="font-size: 1.6rem; font-weight: 800; font-family: var(--font-display);">${chars[idx]}</span>`;
+      }
     }
   });
+
+  if (toggleBtn) {
+    if (allFlipped) {
+      toggleBtn.innerHTML = `<i class="fa-solid fa-eye" style="margin-right: 6px;"></i> HIỆN GỢI Ý MẪU`;
+      toggleBtn.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+    } else {
+      toggleBtn.innerHTML = `<i class="fa-solid fa-eye-slash" style="margin-right: 6px;"></i> ẨN GỢI Ý MẪU`;
+      toggleBtn.style.background = 'linear-gradient(135deg, #64748b, #475569)';
+    }
+  }
 };
 
 window.checkLessonTypingInput = function(validAnswers) {
