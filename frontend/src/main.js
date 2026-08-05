@@ -3975,9 +3975,13 @@ function switchTab(tabId) {
   if (tabId === 'home') {
     setDisp(homeViewSec, 'block');
   }
-  else if (tabId === 'lessons' || tabId === 'roadmap') {
+  else if (tabId === 'lessons') {
     setDisp(lessonsSec, 'block');
     renderLessonsList();
+  }
+  else if (tabId === 'roadmap') {
+    if (roadmapSec) roadmapSec.style.display = 'block';
+    renderGamifiedRoadmapPath();
   }
   else if (tabId === 'exams') {
     setDisp(examsSec, 'block');
