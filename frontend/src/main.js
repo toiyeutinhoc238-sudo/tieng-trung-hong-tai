@@ -1757,11 +1757,14 @@ function renderDetailedStatsTable() {
 }
 
 function renderCustomWordsTable() {
+  const customWordsListEl = document.getElementById('custom-words-list');
+  if (!customWordsListEl) return;
+
   const customs = vocabList.filter(w => w.isCustom && w.category === activeCustomList);
-  customWordsList.innerHTML = '';
+  customWordsListEl.innerHTML = '';
 
   if (customs.length === 0) {
-    customWordsList.innerHTML = `
+    customWordsListEl.innerHTML = `
       <tr>
         <td colspan="5" class="table-empty">Chưa có từ nào trong danh sách "${activeCustomList}". Hãy điền form bên trái để thêm!</td>
       </tr>
