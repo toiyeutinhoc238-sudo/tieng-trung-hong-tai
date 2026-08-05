@@ -1004,44 +1004,63 @@ function renderActiveCardLesson(current) {
   }
 }
 
-// Render Word Hint Cards with Eye Toggle (Matching Image 3)
+// Render Interactive Word Chips Bank (Nhấp chọn ghép câu trực tiếp - Theo góp ý chị)
 function renderLessonWordHintCards(sentence) {
-  const container = document.getElementById('lesson-word-hints-cards');
+  const container = document.getElementById('lesson-word-chips-container');
   const revealAllBtn = document.getElementById('lesson-reveal-all-words-btn');
+  const clearBtn = document.getElementById('lesson-clear-btn');
   if (!container) return;
 
-  // Split sentence into words/characters (ignoring punctuation)
+  // Clear input clear button handler
+  if (clearBtn) {
+    clearBtn.onclick = () => {
+      const inputEl = document.getElementById('lesson-typing-input');
+      if (inputEl) {
+        inputEl.value = '';
+        inputEl.style.borderColor = '#cbd5e1';
+      }
+      const feedbackCorrect = document.getElementById('lesson-feedback-correct');
+      const feedbackWrong = document.getElementById('lesson-feedback-wrong');
+      if (feedbackCorrect) feedbackCorrect.style.display = 'none';
+      if (feedbackWrong) feedbackWrong.style.display = 'none';
+
+      // Reset chips
+      container.querySelectorAll('.word-chip-btn').forEach(btn => {
+        btn.style.opacity = '1';
+        btn.style.transform = 'none';
+        btn.disabled = false;
+      });
+    };
+  }
+
+  // Clean sentence punctuation
   const cleanSentence = sentence.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '');
   if (!cleanSentence) {
-    container.parentElement.style.display = 'none';
+    if (container.parentElement) container.parentElement.style.display = 'none';
     return;
   }
-  container.parentElement.style.display = 'flex';
+  if (container.parentElement) container.parentElement.style.display = 'flex';
 
-  // Break sentence into 1 to 3 character word chunks
+  // Break sentence into 1 to 2 character word chunks
   const wordTokens = [];
   let idx = 0;
   while (idx < cleanSentence.length) {
-    // Pick chunk length 2 or 1
-    const chunkSize = (cleanSentence.length - idx >= 2 && Math.random() > 0.3) ? 2 : 1;
+    const chunkSize = (cleanSentence.length - idx >= 2) ? 2 : 1;
     wordTokens.push(cleanSentence.substring(idx, idx + chunkSize));
     idx += chunkSize;
   }
 
   let html = '';
   wordTokens.forEach((token, index) => {
-    const maskedDots = '.'.repeat(token.length);
     html += `
-      <div class="word-hint-card" data-word="${token}" data-masked="${maskedDots}" data-revealed="false" id="hint-card-${index}"
-        style="background: #ffffff; border: 2px solid #cbd5e1; border-radius: 12px; padding: 10px 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; min-width: 60px; box-shadow: 0 4px 10px rgba(0,0,0,0.04); cursor: pointer; user-select: none;"
-        onclick="window.toggleSingleWordHint(${index})">
-        <div style="background: rgba(59, 130, 246, 0.1); border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; color: #2563eb; font-size: 0.8rem;">
-          <i class="fa-regular fa-eye"></i>
-        </div>
-        <div class="hint-text" style="font-family: var(--font-chinese); font-size: 1.15rem; font-weight: 800; color: #0f172a; letter-spacing: 2px;">
-          ${maskedDots}
-        </div>
-      </div>
+      <button type="button" class="word-chip-btn" id="word-chip-${index}" data-word="${token}"
+        style="background: #ffffff; border: 2.5px solid #3b82f6; border-radius: 14px; padding: 10px 18px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15); cursor: pointer; transition: all 0.2s ease; user-select: none;"
+        onclick="window.insertWordChipToInput('${token}', this)"
+        onmouseover="this.style.transform='translateY(-2px) scale(1.04)'; this.style.borderColor='#2563eb';"
+        onmouseout="this.style.transform='none'; this.style.borderColor='#3b82f6';">
+        <span style="font-family: var(--font-chinese); font-size: 1.25rem; font-weight: 900; color: #1e293b;">${token}</span>
+        <i class="fa-solid fa-plus" style="font-size: 0.75rem; color: #2563eb;"></i>
+      </button>
     `;
   });
 
@@ -1049,50 +1068,36 @@ function renderLessonWordHintCards(sentence) {
 
   if (revealAllBtn) {
     revealAllBtn.onclick = () => {
-      wordTokens.forEach((_, i) => {
-        const card = document.getElementById(`hint-card-${i}`);
-        if (card) {
-          const word = card.getAttribute('data-word');
-          const hintText = card.querySelector('.hint-text');
-          if (hintText) {
-            hintText.textContent = word;
-            hintText.style.color = '#2563eb';
-          }
-          card.setAttribute('data-revealed', 'true');
-          card.style.borderColor = '#3b82f6';
-          card.style.background = '#eff6ff';
-        }
-      });
+      // Auto fill all words into input
+      const inputEl = document.getElementById('lesson-typing-input');
+      if (inputEl) {
+        inputEl.value = cleanSentence;
+        checkLessonTranslationAnswer();
+      }
     };
   }
 }
 
-window.toggleSingleWordHint = function(index) {
-  const card = document.getElementById(`hint-card-${index}`);
-  if (!card) return;
+window.insertWordChipToInput = function(word, btn) {
+  const inputEl = document.getElementById('lesson-typing-input');
+  if (!inputEl) return;
 
-  const isRevealed = card.getAttribute('data-revealed') === 'true';
-  const word = card.getAttribute('data-word');
-  const masked = card.getAttribute('data-masked');
-  const hintText = card.querySelector('.hint-text');
+  // Append word to input box
+  inputEl.value += word;
 
-  if (isRevealed) {
-    if (hintText) {
-      hintText.textContent = masked;
-      hintText.style.color = '#0f172a';
-    }
-    card.setAttribute('data-revealed', 'false');
-    card.style.borderColor = '#cbd5e1';
-    card.style.background = '#ffffff';
-  } else {
-    if (hintText) {
-      hintText.textContent = word;
-      hintText.style.color = '#2563eb';
-    }
-    card.setAttribute('data-revealed', 'true');
-    card.style.borderColor = '#3b82f6';
-    card.style.background = '#eff6ff';
+  // Visual disable on used chip
+  if (btn) {
+    btn.style.opacity = '0.5';
+    btn.style.transform = 'scale(0.95)';
   }
+
+  // Pronounce word chunk softly
+  if (typeof speakText === 'function') {
+    speakText(word);
+  }
+
+  // Auto check answer
+  checkLessonTranslationAnswer();
 };
 
 function normalizeTextForMatch(str) {
