@@ -7104,9 +7104,12 @@ function renderLessonHeroCardContent(w, index, total) {
   const meaning = w.meaning || w.definition || w.vietnamese || '';
   const hanviet = w.hanViet || w.han_viet || '';
   const category = w.category || w.pos || w.type || 'Từ vựng';
-  const exampleCn = w.example || w.example_cn || w.sentence || '';
-  const examplePy = w.examplePinyin || w.example_pinyin || '';
-  const exampleVi = w.exampleMeaning || w.example_vi || w.example_vietnamese || '';
+
+  const chineseChars = char.match(/[\u4e00-\u9fa5]/g) || [char.charAt(0)];
+
+  const exZh = w.example_zh || w.example_cn || w.example || w.sentence || (char === '你' ? '你好！' : (char === '您' ? '您好！' : (char === '老师' ? '王老师好！' : (char === '不客气' ? '不客气，这是我应该 gài 做的。' : `${char}！`))));
+  const exPy = w.example_pinyin || w.examplePy || w.examplePinyin || (char === '你' ? 'Nǐ hǎo!' : (char === '您' ? 'Nín hǎo!' : (char === '老师' ? 'Wáng lǎoshī hǎo!' : (char === '不客气' ? 'Bú kèqi, zhè shì wǒ yīnggāi zuò de.' : ''))));
+  const exVi = w.example_vi || w.example_vietnamese || w.exampleVi || (char === '你' ? 'Xin chào bạn!' : (char === '您' ? 'Xin chào ngài!' : (char === '老师' ? 'Chào Thầy/Cô Vương!' : (char === '不客气' ? 'Không có gì, đây là việc tôi nên làm.' : meaning))));
 
   return `
     <div style="display: flex; gap: 32px; align-items: flex-start; flex-wrap: wrap;">
@@ -7143,24 +7146,46 @@ function renderLessonHeroCardContent(w, index, total) {
         </div>
 
         ${w.note ? `
-          <div style="font-size: 0.88rem; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 10px 14px; border-radius: 12px; margin-bottom: 14px; border-left: 3px solid #3b82f6;">
+          <div style="font-size: 0.88rem; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 10px 14px; border-radius: 12px; margin-bottom: 12px; border-left: 3px solid #3b82f6;">
             <i class="fa-solid fa-circle-info" style="color: #3b82f6; margin-right: 6px;"></i> ${w.note}
           </div>
         ` : ''}
 
-        ${exampleCn ? `
-          <div style="background: rgba(37, 99, 235, 0.08); border: 1px dashed rgba(37, 99, 235, 0.3); border-radius: 14px; padding: 14px; margin-top: 12px;">
-            <div style="font-size: 0.8rem; font-weight: 800; color: #3b82f6; text-transform: uppercase; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between;">
-              <span><i class="fa-solid fa-pen-to-square"></i> VÍ DỤ</span>
-              <button onclick="window.speakLessonWord('${exampleCn}')" style="background: none; border: none; color: #3b82f6; cursor: pointer; font-size: 0.9rem;" title="Nghe câu ví dụ">
-                <i class="fa-solid fa-volume-high"></i> Nghe câu ví dụ
-              </button>
-            </div>
-            <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 2px;">${exampleCn}</div>
-            ${examplePy ? `<div style="font-size: 0.9rem; font-weight: 600; color: #3b82f6; margin-bottom: 4px;">${examplePy}</div>` : ''}
-            ${exampleVi ? `<div style="font-size: 0.88rem; color: var(--text-secondary);">${exampleVi}</div>` : ''}
+        <!-- 1. VÍ DỤ MINH HỌA -->
+        <div style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 14px; margin-top: 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.2);">
+          <div style="font-size: 0.82rem; font-weight: 800; color: #60a5fa; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+            <span><i class="fa-solid fa-image"></i> VÍ DỤ MINH HỌA:</span>
+            <button onclick="window.speakLessonWord('${exZh.replace(/'/g, "\\'")}')" style="background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59,130,246,0.4); color: #60a5fa; cursor: pointer; font-size: 0.82rem; border-radius: 8px; padding: 3px 10px; font-weight: 700; display: flex; align-items: center; gap: 6px;" title="Nghe câu ví dụ">
+              <i class="fa-solid fa-volume-high"></i> Nghe ví dụ
+            </button>
           </div>
-        ` : ''}
+          <div style="font-size: 1.15rem; font-weight: 800; color: #ffffff; font-family: var(--font-display); margin-bottom: 2px;">${exZh}</div>
+          ${exPy ? `<div style="font-size: 0.92rem; font-weight: 700; color: #60a5fa; margin-bottom: 4px;">${exPy}</div>` : ''}
+          <div style="font-size: 0.88rem; color: #cbd5e1; font-weight: 500;">${exVi}</div>
+        </div>
+
+        <!-- 2. DỊCH SANG TIẾNG TRUNG (Typing & Hint Cards) -->
+        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 14px; margin-top: 12px;">
+          <div style="font-size: 0.88rem; font-weight: 800; color: #38bdf8; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+            <span><i class="fa-solid fa-language"></i> Dịch sang tiếng Trung: <span style="color: #ffffff;">"${meaning}"</span></span>
+            <div id="lesson-typing-feedback"></div>
+          </div>
+
+          <input type="text" id="lesson-typing-input" placeholder="Gõ chữ Hán vào đây..." oninput="window.checkLessonTypingInput('${char.replace(/'/g, "\\'")}')" style="width: 100%; padding: 10px 14px; background: rgba(0,0,0,0.35); border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; color: #ffffff; font-size: 1.05rem; font-weight: 700; outline: none; transition: all 0.2s; margin-bottom: 10px;" />
+
+          <!-- Eye-icon Character Hint Cards -->
+          <div id="lesson-char-hints-container" style="display: flex; gap: 10px; justify-content: center; margin-bottom: 10px; flex-wrap: wrap;">
+            ${chineseChars.map((c, i) => `
+              <div class="lesson-hint-card" onclick="window.toggleLessonCharHint(this, '${c.replace(/'/g, "\\'")}')" title="Bấm để hiện chữ" style="width: 52px; height: 68px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #94a3b8; font-size: 1.2rem; transition: all 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.3);" onmouseenter="this.style.transform='translateY(-2px)'" onmouseleave="this.style.transform='translateY(0)'">
+                <i class="fa-solid fa-eye"></i>
+              </div>
+            `).join('')}
+          </div>
+
+          <button onclick="window.revealAllLessonCharHints('${char.replace(/'/g, "\\'")}')" style="width: 100%; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; color: #ffffff; font-weight: 800; font-size: 0.95rem; padding: 11px; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4); transition: all 0.2s; letter-spacing: 0.5px;" onmousedown="this.style.transform='scale(0.98)'" onmouseup="this.style.transform='scale(1)'">
+            <i class="fa-solid fa-eye" style="margin-right: 6px;"></i> HIỆN TẤT CẢ TỪ
+          </button>
+        </div>
       </div>
     </div>
   `;
@@ -7249,6 +7274,53 @@ function renderLessonFlashcardWorkspace(lessonTitle, words, selectedIndex = 0) {
 window.returnToLessonsMap = function() {
   isLessonVocabStudyMode = false;
   switchTab('lessons');
+};
+
+window.toggleLessonCharHint = function(btnEl, char) {
+  if (!btnEl) return;
+  btnEl.style.background = '#ffffff';
+  btnEl.style.color = '#0f172a';
+  btnEl.innerHTML = `<span style="font-size: 1.6rem; font-weight: 800; font-family: var(--font-display);">${char}</span>`;
+};
+
+window.revealAllLessonCharHints = function(fullWord) {
+  const container = document.getElementById('lesson-char-hints-container');
+  if (!container) return;
+  const chars = fullWord.match(/[\u4e00-\u9fa5]/g) || fullWord.split('');
+  container.querySelectorAll('.lesson-hint-card').forEach((card, idx) => {
+    if (chars[idx]) {
+      card.style.background = '#ffffff';
+      card.style.color = '#0f172a';
+      card.innerHTML = `<span style="font-size: 1.6rem; font-weight: 800; font-family: var(--font-display);">${chars[idx]}</span>`;
+    }
+  });
+  const inputEl = document.getElementById('lesson-typing-input');
+  if (inputEl) {
+    inputEl.value = fullWord;
+    window.checkLessonTypingInput(fullWord);
+  }
+};
+
+window.checkLessonTypingInput = function(targetChar) {
+  const inputEl = document.getElementById('lesson-typing-input');
+  const feedbackEl = document.getElementById('lesson-typing-feedback');
+  if (!inputEl || !feedbackEl) return;
+
+  const typed = inputEl.value.trim();
+  if (typed === targetChar) {
+    feedbackEl.innerHTML = `<span style="color: #10b981; font-weight: 800;"><i class="fa-solid fa-circle-check"></i> Chính xác!</span>`;
+    inputEl.style.borderColor = '#10b981';
+    window.speakLessonWord(targetChar);
+  } else if (typed.length > 0 && targetChar.startsWith(typed)) {
+    feedbackEl.innerHTML = `<span style="color: #fbbf24; font-weight: 700;"><i class="fa-solid fa-pen"></i> Đang gõ...</span>`;
+    inputEl.style.borderColor = '#fbbf24';
+  } else if (typed.length > 0) {
+    feedbackEl.innerHTML = `<span style="color: #ef4444; font-weight: 700;"><i class="fa-solid fa-circle-xmark"></i> Chưa đúng!</span>`;
+    inputEl.style.borderColor = '#ef4444';
+  } else {
+    feedbackEl.innerHTML = '';
+    inputEl.style.borderColor = 'rgba(255,255,255,0.2)';
+  }
 };
 
 window.navigateLessonFlashcard = function(dir) {
