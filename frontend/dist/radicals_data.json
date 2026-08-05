@@ -287,17 +287,6 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_27",
-      "radical": "己",
-      "variant": "",
-      "pinyin": "jǐ",
-      "name": "KỶ",
-      "meaning": "Bản thân mình",
-      "example": "已 (yǐ): Đã xong; 改 (gǎi): Sửa đổi; 巷 (xiàng): Ngõ",
-      "note": "Thường đứng ở vị trí bên phải, đóng vai trò định hình ý nghĩa về bản thân hoặc các khái niệm mang tính cá nhân.",
-      "category": "50 bộ (1)"
-    },
-    {
       "id": "rad_50_bộ_(1)_28",
       "radical": "干",
       "variant": "",
@@ -1607,17 +1596,6 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_46",
-      "radical": "手",
-      "variant": "扌",
-      "pinyin": "shǒu",
-      "name": "THỦ",
-      "meaning": "Tay",
-      "example": "提 (tí) - xách, 打 (dǎ) - đánh",
-      "note": "Chỉ các hành động của bàn tay, công việc lao động, cầm nắm.",
-      "category": "50 bộ (3)"
-    },
-    {
       "id": "rad_50_bộ_(3)_47",
       "radical": "香",
       "variant": "",
@@ -1670,7 +1648,7 @@
       "meaning": "số một",
       "example": "一 (yī - số một)",
       "note": "Thường nằm phía trên hoặc làm nét gạch ngang. Chỉ số đếm hoặc sự bắt đầu, liên quan đến các khái niệm đơn nhất.",
-      "category": "Còn lại"
+      "category": "50 bộ (3)"
     },
     {
       "id": "rad_Còn_lại_2",
@@ -2033,17 +2011,6 @@
       "meaning": "chim đuôi ngắn",
       "example": "雅 (yǎ - nhã nhặn)",
       "note": "Thường đứng bên phải. Chỉ các loài chim nhỏ, đuôi ngắn hoặc mô tả vẻ nhã nhặn, thanh cao.",
-      "category": "Còn lại"
-    },
-    {
-      "id": "rad_Còn_lại_35",
-      "radical": "面",
-      "variant": "",
-      "pinyin": "miàn",
-      "name": "CÁCH",
-      "meaning": "mặt, bề mặt",
-      "example": "面前 (miànqián - trước mặt)",
-      "note": "Thường làm bộ phận chính của chữ. Chỉ khuôn mặt, bề mặt hoặc phương diện của một vấn đề.",
       "category": "Còn lại"
     },
     {
