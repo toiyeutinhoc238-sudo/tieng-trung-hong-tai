@@ -22,10 +22,14 @@ fs.mkdir(AUDIO_CACHE_DIR, { recursive: true }).catch(err => {
 
 // Connect to MongoDB Atlas
 const MONGODB_URI = process.env.MONGODB_URI;
+mongoose.set('bufferCommands', false); // Disable 10-second buffering when disconnected
+
 if (!MONGODB_URI) {
   console.error("Warning: MONGODB_URI is not set in environment variables!");
 } else {
-  mongoose.connect(MONGODB_URI)
+  mongoose.connect(MONGODB_URI, {
+    serverSelectionTimeoutMS: 3000
+  })
     .then(() => console.log("MongoDB connected successfully."))
     .catch(err => console.error("MongoDB connection error:", err));
 }
@@ -111,10 +115,26 @@ async function readDatabase() {
   }
 }
 
-// Helper to read user_data.json
+// Helper to read user_data.json fallback from disk
+async function readUserDataFromFile() {
+  try {
+    const data = await fs.readFile(USER_DB_PATH, 'utf-8');
+    return JSON.parse(data);
+  } catch (err) {
+    return { users: {}, progress: {}, customWords: {}, sessions: {}, chats: {} };
+  }
+}
+
+// Helper to read user_data
 async function readUserData() {
   if (cachedUserData) {
     return cachedUserData;
+  }
+
+  // If MongoDB is not connected, use user_data.json file fallback immediately
+  if (mongoose.connection.readyState !== 1) {
+    const fileData = await readUserDataFromFile();
+    return fileData;
   }
 
   try {
@@ -148,16 +168,10 @@ async function readUserData() {
     });
 
     cachedUserData = { users, progress, customWords, sessions, chats, quizHistory };
-
-    // If MongoDB is completely empty (no users), perform migration from user_data.json
-    if (usersList.length === 0) {
-      await performDataMigration();
-    }
-
     return cachedUserData;
   } catch (error) {
-    console.error("Error reading database from MongoDB, returning skeleton:", error);
-    return { users: {}, progress: {}, customWords: {}, sessions: {}, chats: {} };
+    console.error("Error reading database from MongoDB, returning file fallback:", error);
+    return await readUserDataFromFile();
   }
 }
 
