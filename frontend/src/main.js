@@ -2,7 +2,10 @@
 let radicalsData = { radicals: [], comparisons: [] };
 async function loadRadicalsData() {
   try {
-    const res = await fetch('/src/radicals_data.json');
+    let res = await fetch('/radicals_data.json');
+    if (!res.ok) {
+      res = await fetch('/src/radicals_data.json');
+    }
     if (res.ok) {
       radicalsData = await res.json();
     }

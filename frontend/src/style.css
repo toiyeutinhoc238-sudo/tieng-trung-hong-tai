@@ -609,14 +609,17 @@ html.dark .brand-logo-img {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
+  font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-weight: 700;
   font-size: 0.95rem;
-  padding: 10px 20px;
+  line-height: 1.4;
+  padding: 10px 20px 12px 20px;
   border-radius: var(--radius-md);
   border: none;
   cursor: pointer;
   transition: all var(--transition-fast);
   gap: 8px;
+  overflow: visible !important;
 }
 
 /* Sidebar Custom Enhancements (NhaiTOPIK Style) */
