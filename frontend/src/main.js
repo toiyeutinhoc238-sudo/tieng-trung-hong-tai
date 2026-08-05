@@ -15,7 +15,98 @@ async function loadRadicalsData() {
 }
 loadRadicalsData();
 
-// --- RADICAL LOOKUP HELPERS ---
+// --- RADICAL LOOKUP HELPERS & ETYMOLOGY DICTIONARY MAP ---
+const CHARACTER_RADICAL_MAP = {
+  '王': [{ radical: '王', name: 'VƯƠNG', meaning: 'Vua, họ Vương' }],
+  '老': [{ radical: '老', variant: '耂', name: 'LÃO', meaning: 'Già, người già' }],
+  '师': [{ radical: '巾', name: 'CÂN', meaning: 'Khăn trùm' }],
+  '你': [{ radical: '人', variant: '亻', name: 'NHÂN', meaning: 'Người' }],
+  '好': [{ radical: '女', name: 'NỮ', meaning: 'Phụ nữ' }, { radical: '子', name: 'TỬ', meaning: 'Con cái' }],
+  '我': [{ radical: '戈', name: 'QUA', meaning: 'Binh khí cổ' }],
+  '们': [{ radical: '人', variant: '亻', name: 'NHÂN', meaning: 'Người' }],
+  '他': [{ radical: '人', variant: '亻', name: 'NHÂN', meaning: 'Người' }],
+  '她': [{ radical: '女', name: 'NỮ', meaning: 'Phụ nữ' }],
+  '它': [{ radical: '宀', name: 'MIÊN', meaning: 'Mái nhà' }],
+  '学': [{ radical: '子', name: 'TỬ', meaning: 'Trẻ con' }],
+  '习': [{ radical: '羽', name: 'VŨ', meaning: 'Lông chim' }],
+  '校': [{ radical: '木', name: 'MỘC', meaning: 'Cây gỗ' }],
+  '语': [{ radical: '言', variant: '讠', name: 'NGÔN', meaning: 'Lời nói' }],
+  '言': [{ radical: '言', variant: '讠', name: 'NGÔN', meaning: 'Lời nói' }],
+  '谢': [{ radical: '言', variant: '讠', name: 'NGÔN', meaning: 'Lời nói' }],
+  '话': [{ radical: '言', variant: '讠', name: 'NGÔN', meaning: 'Lời nói' }],
+  '说': [{ radical: '言', variant: '讠', name: 'NGÔN', meaning: 'Lời nói' }],
+  '请': [{ radical: '言', variant: '讠', name: 'NGÔN', meaning: 'Lời nói' }],
+  '读': [{ radical: '言', variant: '讠', name: 'NGÔN', meaning: 'Lời nói' }],
+  '识': [{ radical: '言', variant: '讠', name: 'NGÔN', meaning: 'Lời nói' }],
+  '认': [{ radical: '言', variant: '讠', name: 'NGÔN', meaning: 'Lời nói' }],
+  '吃': [{ radical: '口', name: 'KHẨU', meaning: 'Cái miệng' }],
+  '喝': [{ radical: '口', name: 'KHẨU', meaning: 'Cái miệng' }],
+  '叫': [{ radical: '口', name: 'KHẨU', meaning: 'Cái miệng' }],
+  '听': [{ radical: '口', name: 'KHẨU', meaning: 'Cái miệng' }],
+  '响': [{ radical: '口', name: 'KHẨU', meaning: 'Cái miệng' }],
+  '吗': [{ radical: '口', name: 'KHẨU', meaning: 'Cái miệng' }],
+  '呢': [{ radical: '口', name: 'KHẨU', meaning: 'Cái miệng' }],
+  '吧': [{ radical: '口', name: 'KHẨU', meaning: 'Cái miệng' }],
+  '汉': [{ radical: '水', variant: '氵', name: 'THỦY', meaning: 'Dòng nước' }],
+  '河': [{ radical: '水', variant: '氵', name: 'THỦY', meaning: 'Dòng nước' }],
+  '海': [{ radical: '水', variant: '氵', name: 'THỦY', meaning: 'Dòng nước' }],
+  '游': [{ radical: '水', variant: '氵', name: 'THỦY', meaning: 'Dòng nước' }],
+  '洗': [{ radical: '水', variant: '氵', name: 'THỦY', meaning: 'Dòng nước' }],
+  '没': [{ radical: '水', variant: '氵', name: 'THỦY', meaning: 'Dòng nước' }],
+  '漂': [{ radical: '水', variant: '氵', name: 'THỦY', meaning: 'Dòng nước' }],
+  '亮': [{ radical: '亠', name: 'ĐẦU', meaning: 'Nét đầu' }],
+  '情': [{ radical: '心', variant: '忄', name: 'TÂM', meaning: 'Quả tim, tình cảm' }],
+  '想': [{ radical: '心', name: 'TÂM', meaning: 'Quả tim, tư tưởng' }],
+  '思': [{ radical: '心', name: 'TÂM', meaning: 'Quả tim, suy nghĩ' }],
+  '忙': [{ radical: '心', variant: '忄', name: 'TÂM', meaning: 'Tâm trí bận rộn' }],
+  '快': [{ radical: '心', variant: '忄', name: 'TÂM', meaning: 'Tâm trạng vui vẻ/nhanh' }],
+  '打': [{ radical: '手', variant: '扌', name: 'THỦ', meaning: 'Cái tay' }],
+  '找': [{ radical: '手', variant: '扌', name: 'THỦ', meaning: 'Cái tay' }],
+  '拿': [{ radical: '手', name: 'THỦ', meaning: 'Cái tay' }],
+  '推': [{ radical: '手', variant: '扌', name: 'THỦ', meaning: 'Cái tay' }],
+  '拉': [{ radical: '手', variant: '扌', name: 'THỦ', meaning: 'Cái tay' }],
+  '热': [{ radical: '火', variant: '灬', name: 'HỎA', meaning: 'Ngọn lửa, sức nóng' }],
+  '点': [{ radical: '火', variant: '灬', name: 'HỎA', meaning: 'Ngọn lửa nhỏ' }],
+  '照': [{ radical: '火', variant: '灬', name: 'HỎA', meaning: 'Ánh sáng ngọn lửa' }],
+  '猫': [{ radical: '犬', variant: '犭', name: 'KHUYỂN', meaning: 'Con chó, loài thú' }],
+  '狗': [{ radical: '犬', variant: '犭', name: 'KHUYỂN', meaning: 'Con chó, loài thú' }],
+  '猪': [{ radical: '犬', variant: '犭', name: 'KHUYỂN', meaning: 'Con chó, loài thú' }],
+  '视': [{ radical: '示', variant: '礻', name: 'THỊ', meaning: 'Hiển thị, thần linh' }],
+  '礼': [{ radical: '示', variant: '礻', name: 'THỊ', meaning: 'Lễ nghi' }],
+  '裤': [{ radical: '衣', variant: '衤', name: 'Y', meaning: 'Áo quần' }],
+  '衫': [{ radical: '衣', variant: '衤', name: 'Y', meaning: 'Áo quần' }],
+  '衬': [{ radical: '衣', variant: '衤', name: 'Y', meaning: 'Áo quần' }],
+  '国': [{ radical: '囗', name: 'VI', meaning: 'Bao quanh' }],
+  '园': [{ radical: '囗', name: 'VI', meaning: 'Bao quanh' }],
+  '图': [{ radical: '囗', name: 'VI', meaning: 'Bao quanh' }],
+  '因': [{ radical: '囗', name: 'VI', meaning: 'Bao quanh' }],
+  '家': [{ radical: '宀', name: 'MIÊN', meaning: 'Mái nhà' }],
+  '字': [{ radical: '宀', name: 'MIÊN', meaning: 'Mái nhà' }],
+  '安': [{ radical: '宀', name: 'MIÊN', meaning: 'Mái nhà' }],
+  '客': [{ radical: '宀', name: 'MIÊN', meaning: 'Mái nhà' }],
+  '室': [{ radical: '宀', name: 'MIÊN', meaning: 'Mái nhà' }],
+  '休': [{ radical: '人', variant: '亻', name: 'NHÂN', meaning: 'Người dựa vào cây nghỉ' }],
+  '体': [{ radical: '人', variant: '亻', name: 'NHÂN', meaning: 'Cơ thể người' }],
+  '作': [{ radical: '人', variant: '亻', name: 'NHÂN', meaning: 'Hành động của người' }],
+  '做': [{ radical: '人', variant: '亻', name: 'NHÂN', meaning: 'Hành động của người' }],
+  '住': [{ radical: '人', variant: '亻', name: 'NHÂN', meaning: 'Nơi người ở' }],
+  '位': [{ radical: '人', variant: '亻', name: 'NHÂN', meaning: 'Vị trí của người' }],
+  '使': [{ radical: '人', variant: '亻', name: 'NHÂN', meaning: 'Sứ giả, con người' }],
+  '便': [{ radical: '人', variant: '亻', name: 'NHÂN', meaning: 'Thuận tiện' }],
+  '借': [{ radical: '人', variant: '亻', name: 'NHÂN', meaning: 'Mượn' }],
+  '假': [{ radical: '人', variant: '亻', name: 'NHÂN', meaning: 'Nghỉ phép' }],
+  '保': [{ radical: '人', variant: '亻', name: 'NHÂN', meaning: 'Bảo vệ' }],
+  '信': [{ radical: '人', variant: '亻', name: 'NHÂN', meaning: 'Lòng tin con người' }],
+  '修': [{ radical: '人', variant: '亻', name: 'NHÂN', meaning: 'Sửa chữa' }],
+  '健': [{ radical: '人', variant: '亻', name: 'NHÂN', meaning: 'Sức khỏe con người' }],
+  '康': [{ radical: '广', name: 'NGHIỄM', meaning: 'Mái nhà rộng' }],
+  '库': [{ radical: '广', name: 'NGHIỄM', meaning: 'Kho bãi' }],
+  '店': [{ radical: '广', name: 'NGHIỄM', meaning: 'Cửa hàng' }],
+  '座': [{ radical: '广', name: 'NGHIỄM', meaning: 'Chỗ ngồi' }],
+  '庭': [{ radical: '广', name: 'NGHIỄM', meaning: 'Sân nhà' }],
+  '床': [{ radical: '广', name: 'NGHIỄM', meaning: 'Cái giường' }]
+};
+
 function findRadicalsForWord(word) {
   if (!word || !radicalsData || !radicalsData.radicals) return [];
   const found = [];
@@ -23,7 +114,20 @@ function findRadicalsForWord(word) {
   const seenKeys = new Set();
 
   for (const char of chars) {
-    // 1. Try exact main radical match first (e.g. '王' matches '王')
+    // 1. Check curated etymological dictionary first
+    if (CHARACTER_RADICAL_MAP[char]) {
+      for (const item of CHARACTER_RADICAL_MAP[char]) {
+        const radMatch = radicalsData.radicals.find(r => r.radical === item.radical) || item;
+        const key = radMatch.id || (radMatch.radical + '_' + radMatch.name);
+        if (!seenKeys.has(key)) {
+          seenKeys.add(key);
+          found.push(radMatch);
+        }
+      }
+      continue;
+    }
+
+    // 2. Try exact main radical match in database
     const exactMain = radicalsData.radicals.find(r => r.radical === char);
     if (exactMain) {
       const key = exactMain.id || exactMain.radical;
@@ -34,7 +138,7 @@ function findRadicalsForWord(word) {
       continue;
     }
 
-    // 2. Try exact variant match
+    // 3. Try exact variant match in database
     const exactVar = radicalsData.radicals.find(r => r.variant && r.variant === char);
     if (exactVar) {
       const key = exactVar.id || exactVar.radical;
@@ -44,19 +148,8 @@ function findRadicalsForWord(word) {
       }
       continue;
     }
-
-    // 3. Try contained or example match
-    for (const rad of radicalsData.radicals) {
-      const key = rad.id || rad.radical;
-      if (seenKeys.has(key)) continue;
-
-      if ((rad.radical && char.includes(rad.radical)) || (rad.variant && char.includes(rad.variant)) || (rad.example && rad.example.includes(char))) {
-        seenKeys.add(key);
-        found.push(rad);
-        break;
-      }
-    }
   }
+
   return found;
 }
 
