@@ -7105,11 +7105,40 @@ function renderLessonHeroCardContent(w, index, total) {
   const hanviet = w.hanViet || w.han_viet || '';
   const category = w.category || w.pos || w.type || 'Từ vựng';
 
-  const chineseChars = char.match(/[\u4e00-\u9fa5]/g) || [char.charAt(0)];
+  // Extract all Chinese example sentences
+  const rawExamplesZh = (w.example_zh || w.example_cn || w.example || w.sentence || '').split(/(?<=[！!?。\n])\s*/).map(s => s.trim()).filter(Boolean);
+  const rawExamplesPy = (w.example_pinyin || w.examplePy || w.examplePinyin || '').split(/(?<=[!?.])\s*/).map(s => s.trim()).filter(Boolean);
+  const rawExamplesVi = (w.example_vi || w.example_vietnamese || w.exampleVi || '').split(/(?<=[!?.])\s*/).map(s => s.trim()).filter(Boolean);
 
-  const exZh = w.example_zh || w.example_cn || w.example || w.sentence || (char === '你' ? '你好！' : (char === '您' ? '您好！' : (char === '老师' ? '王老师好！' : (char === '不客气' ? '不客气，这是我应该 gài 做的。' : `${char}！`))));
-  const exPy = w.example_pinyin || w.examplePy || w.examplePinyin || (char === '你' ? 'Nǐ hǎo!' : (char === '您' ? 'Nín hǎo!' : (char === '老师' ? 'Wáng lǎoshī hǎo!' : (char === '不客气' ? 'Bú kèqi, zhè shì wǒ yīnggāi zuò de.' : ''))));
-  const exVi = w.example_vi || w.example_vietnamese || w.exampleVi || (char === '你' ? 'Xin chào bạn!' : (char === '您' ? 'Xin chào ngài!' : (char === '老师' ? 'Chào Thầy/Cô Vương!' : (char === '不客气' ? 'Không có gì, đây là việc tôi nên làm.' : meaning))));
+  if (rawExamplesZh.length === 0) {
+    if (char === '你') { rawExamplesZh.push('你好！'); rawExamplesPy.push('Nǐ hǎo!'); rawExamplesVi.push('Xin chào bạn!'); }
+    else if (char === '您') { rawExamplesZh.push('您好！'); rawExamplesPy.push('Nín hǎo!'); rawExamplesVi.push('Xin chào ngài!'); }
+    else if (char === '老师') { rawExamplesZh.push('王老师好！'); rawExamplesPy.push('Wáng lǎoshī hǎo!'); rawExamplesVi.push('Chào Thầy/Cô Vương!'); }
+    else if (char === '不客气') { rawExamplesZh.push('不客气！'); rawExamplesPy.push('Bú kèqi!'); rawExamplesVi.push('Không có gì!'); }
+    else { rawExamplesZh.push(`${char}！`); rawExamplesPy.push(''); rawExamplesVi.push(meaning); }
+  }
+
+  // Valid typing answers: the word itself OR any of the example sentences
+  const validAnswers = [char, ...rawExamplesZh];
+  const validAnswersJson = JSON.stringify(validAnswers).replace(/'/g, "\\'").replace(/"/g, '&quot;');
+
+  // Pick 1 random answer for character hint cards
+  const randAnswer = validAnswers[Math.floor(Math.random() * validAnswers.length)];
+  const hintChars = randAnswer.match(/[\u4e00-\u9fa5]/g) || [randAnswer.charAt(0)];
+
+  // Render all example sentences inside the VÍ DỤ MINH HỌA box
+  const examplesHtml = rawExamplesZh.map((zh, i) => `
+    <div style="${i > 0 ? 'margin-top: 10px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.12);' : ''}">
+      <div style="font-size: 1.15rem; font-weight: 800; color: #ffffff; font-family: var(--font-display); margin-bottom: 2px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+        <span>${zh}</span>
+        <button onclick="window.speakLessonWord('${zh.replace(/'/g, "\\'")}')" style="background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59,130,246,0.4); color: #60a5fa; cursor: pointer; font-size: 0.78rem; border-radius: 6px; padding: 2px 8px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;" title="Nghe câu này">
+          <i class="fa-solid fa-volume-high"></i> Nghe
+        </button>
+      </div>
+      ${rawExamplesPy[i] ? `<div style="font-size: 0.9rem; font-weight: 700; color: #60a5fa; margin-bottom: 2px;">${rawExamplesPy[i]}</div>` : ''}
+      <div style="font-size: 0.88rem; color: #cbd5e1; font-weight: 500;">${rawExamplesVi[i] || meaning}</div>
+    </div>
+  `).join('');
 
   return `
     <div style="display: flex; gap: 32px; align-items: flex-start; flex-wrap: wrap;">
@@ -7131,7 +7160,7 @@ function renderLessonHeroCardContent(w, index, total) {
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
           <div style="display: flex; align-items: center; gap: 10px;">
             <span style="font-size: 2.2rem; font-weight: 800; color: #3b82f6; font-family: var(--font-display);">${pinyin}</span>
-            <button class="top-circle-btn" onclick="window.speakLessonWord('${char}')" title="Nghe phát âm" style="width: 38px; height: 38px; background: rgba(59, 130, 246, 0.2); color: #3b82f6; border-color: rgba(59,130,246,0.4);">
+            <button class="top-circle-btn" onclick="window.speakLessonWord('${char.replace(/'/g, "\\'")}')" title="Nghe phát âm" style="width: 38px; height: 38px; background: rgba(59, 130, 246, 0.2); color: #3b82f6; border-color: rgba(59,130,246,0.4);">
               <i class="fa-solid fa-volume-high"></i>
             </button>
           </div>
@@ -7153,15 +7182,10 @@ function renderLessonHeroCardContent(w, index, total) {
 
         <!-- 1. VÍ DỤ MINH HỌA -->
         <div style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 14px; margin-top: 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.2);">
-          <div style="font-size: 0.82rem; font-weight: 800; color: #60a5fa; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
-            <span><i class="fa-solid fa-image"></i> VÍ DỤ MINH HỌA:</span>
-            <button onclick="window.speakLessonWord('${exZh.replace(/'/g, "\\'")}')" style="background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59,130,246,0.4); color: #60a5fa; cursor: pointer; font-size: 0.82rem; border-radius: 8px; padding: 3px 10px; font-weight: 700; display: flex; align-items: center; gap: 6px;" title="Nghe câu ví dụ">
-              <i class="fa-solid fa-volume-high"></i> Nghe ví dụ
-            </button>
+          <div style="font-size: 0.82rem; font-weight: 800; color: #60a5fa; text-transform: uppercase; margin-bottom: 8px;">
+            <i class="fa-solid fa-image"></i> VÍ DỤ MINH HỌA (${rawExamplesZh.length} ví dụ):
           </div>
-          <div style="font-size: 1.15rem; font-weight: 800; color: #ffffff; font-family: var(--font-display); margin-bottom: 2px;">${exZh}</div>
-          ${exPy ? `<div style="font-size: 0.92rem; font-weight: 700; color: #60a5fa; margin-bottom: 4px;">${exPy}</div>` : ''}
-          <div style="font-size: 0.88rem; color: #cbd5e1; font-weight: 500;">${exVi}</div>
+          ${examplesHtml}
         </div>
 
         <!-- 2. DỊCH SANG TIẾNG TRUNG (Typing & Hint Cards) -->
@@ -7171,19 +7195,19 @@ function renderLessonHeroCardContent(w, index, total) {
             <div id="lesson-typing-feedback"></div>
           </div>
 
-          <input type="text" id="lesson-typing-input" placeholder="Gõ chữ Hán vào đây..." oninput="window.checkLessonTypingInput('${char.replace(/'/g, "\\'")}')" style="width: 100%; padding: 10px 14px; background: rgba(0,0,0,0.35); border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; color: #ffffff; font-size: 1.05rem; font-weight: 700; outline: none; transition: all 0.2s; margin-bottom: 10px;" />
+          <input type="text" id="lesson-typing-input" placeholder="Gõ chữ Hán hoặc câu ví dụ vào đây..." oninput="window.checkLessonTypingInput(${validAnswersJson})" style="width: 100%; padding: 10px 14px; background: rgba(0,0,0,0.35); border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; color: #ffffff; font-size: 1.05rem; font-weight: 700; outline: none; transition: all 0.2s; margin-bottom: 10px;" />
 
-          <!-- Eye-icon Character Hint Cards -->
+          <!-- Eye-icon Character Hint Cards (Randomly generated hint) -->
           <div id="lesson-char-hints-container" style="display: flex; gap: 10px; justify-content: center; margin-bottom: 10px; flex-wrap: wrap;">
-            ${chineseChars.map((c, i) => `
+            ${hintChars.map((c, i) => `
               <div class="lesson-hint-card" onclick="window.toggleLessonCharHint(this, '${c.replace(/'/g, "\\'")}')" title="Bấm để hiện chữ" style="width: 52px; height: 68px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #94a3b8; font-size: 1.2rem; transition: all 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.3);" onmouseenter="this.style.transform='translateY(-2px)'" onmouseleave="this.style.transform='translateY(0)'">
                 <i class="fa-solid fa-eye"></i>
               </div>
             `).join('')}
           </div>
 
-          <button onclick="window.revealAllLessonCharHints('${char.replace(/'/g, "\\'")}')" style="width: 100%; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; color: #ffffff; font-weight: 800; font-size: 0.95rem; padding: 11px; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4); transition: all 0.2s; letter-spacing: 0.5px;" onmousedown="this.style.transform='scale(0.98)'" onmouseup="this.style.transform='scale(1)'">
-            <i class="fa-solid fa-eye" style="margin-right: 6px;"></i> HIỆN TẤT CẢ TỪ
+          <button onclick="window.revealAllLessonCharHints('${randAnswer.replace(/'/g, "\\'")}')" style="width: 100%; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; color: #ffffff; font-weight: 800; font-size: 0.95rem; padding: 11px; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4); transition: all 0.2s; letter-spacing: 0.5px;" onmousedown="this.style.transform='scale(0.98)'" onmouseup="this.style.transform='scale(1)'">
+            <i class="fa-solid fa-eye" style="margin-right: 6px;"></i> HIỆN GỢI Ý MẪU
           </button>
         </div>
       </div>
@@ -7296,17 +7320,36 @@ window.revealAllLessonCharHints = function(fullWord) {
   });
 };
 
-window.checkLessonTypingInput = function(targetChar) {
+window.checkLessonTypingInput = function(validAnswers) {
   const inputEl = document.getElementById('lesson-typing-input');
   const feedbackEl = document.getElementById('lesson-typing-feedback');
   if (!inputEl || !feedbackEl) return;
 
   const typed = inputEl.value.trim();
-  if (typed === targetChar) {
+  const cleanTyped = typed.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '').toLowerCase();
+
+  if (!Array.isArray(validAnswers)) {
+    validAnswers = [validAnswers];
+  }
+
+  // Check if typed string matches ANY valid answer
+  const exactAnswer = validAnswers.find(ans => {
+    if (!ans) return false;
+    const cleanAns = ans.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '').toLowerCase();
+    return cleanTyped === cleanAns;
+  });
+
+  const isPartialMatch = validAnswers.some(ans => {
+    if (!ans) return false;
+    const cleanAns = ans.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '').toLowerCase();
+    return cleanAns.startsWith(cleanTyped) && cleanTyped.length > 0;
+  });
+
+  if (exactAnswer) {
     feedbackEl.innerHTML = `<span style="color: #10b981; font-weight: 800;"><i class="fa-solid fa-circle-check"></i> Chính xác!</span>`;
     inputEl.style.borderColor = '#10b981';
-    window.speakLessonWord(targetChar);
-  } else if (typed.length > 0 && targetChar.startsWith(typed)) {
+    window.speakLessonWord(typed);
+  } else if (isPartialMatch) {
     feedbackEl.innerHTML = `<span style="color: #fbbf24; font-weight: 700;"><i class="fa-solid fa-pen"></i> Đang gõ...</span>`;
     inputEl.style.borderColor = '#fbbf24';
   } else if (typed.length > 0) {
