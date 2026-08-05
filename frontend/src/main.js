@@ -2484,6 +2484,29 @@ function setupEventListeners() {
   if (backToDecksBtn) {
     backToDecksBtn.addEventListener('click', () => {
       stopAutoplay();
+
+      // Restore normal flashcards elements display
+      const quickCards = document.querySelector('.quick-dashboard-cards');
+      if (quickCards) quickCards.style.display = 'grid';
+
+      const statsSummary = document.querySelector('.stats-summary-container');
+      if (statsSummary) statsSummary.style.display = 'block';
+
+      const controlsDash = document.querySelector('.controls-dashboard');
+      if (controlsDash) controlsDash.style.display = 'flex';
+
+      if (isLessonVocabStudyMode) {
+        isLessonVocabStudyMode = false;
+        studySelectedLessons = null;
+        studyNotebookId = null;
+        if (typeof returnToHskLevelSelection === 'function') {
+          switchTab('lessons');
+        } else {
+          switchTab('lessons');
+        }
+        return;
+      }
+
       studySelectedLessons = null;
       studyNotebookId = null;
       document.getElementById('flashcard-study-view').style.display = 'none';
@@ -6976,11 +6999,15 @@ window.openLessonDetailModal = function (lessonKey) {
   });
 }
 
+let isLessonVocabStudyMode = false;
+
 function startLessonStudy(lesson, sliceWords) {
   if (!sliceWords || sliceWords.length === 0) {
     showToast('Danh sách từ vựng của bài học này đang được chuẩn bị!', true);
     return;
   }
+
+  isLessonVocabStudyMode = true;
 
   // Close detail popup modal if open
   const modalEl = document.getElementById('lesson-detail-popup-modal');
@@ -7003,7 +7030,10 @@ function startLessonStudy(lesson, sliceWords) {
   // Start study session (calls applyFilters with our studySelectedLessons filter)
   startStudySession('all', String(lvl), title, desc);
 
-  // Hide selection/topic header controls and notebook dashboard, show ONLY flashcard card workspace
+  // HIDE ALL IMAGE 1 PANELS (Noise & Widgets)
+  const quickCards = document.querySelector('.quick-dashboard-cards');
+  if (quickCards) quickCards.style.display = 'none';
+
   const selectionView = document.getElementById('deck-selection-view');
   if (selectionView) selectionView.style.display = 'none';
 
@@ -7016,6 +7046,16 @@ function startLessonStudy(lesson, sliceWords) {
   const nbDash = document.getElementById('notebook-dashboard-view');
   if (nbDash) nbDash.style.display = 'none';
 
+  const statsSummary = document.querySelector('.stats-summary-container');
+  if (statsSummary) statsSummary.style.display = 'none';
+
+  const detailedStats = document.getElementById('detailed-stats-panel');
+  if (detailedStats) detailedStats.style.display = 'none';
+
+  const controlsDash = document.querySelector('.controls-dashboard');
+  if (controlsDash) controlsDash.style.display = 'none';
+
+  // SHOW ONLY IMAGE 2 (Flashcard Study View & 3D Flip Card)
   const studyView = document.getElementById('flashcard-study-view');
   if (studyView) studyView.style.display = 'block';
 
@@ -7024,6 +7064,12 @@ function startLessonStudy(lesson, sliceWords) {
 
   const typingContainer = document.getElementById('typing-card-container');
   if (typingContainer) typingContainer.style.display = 'none';
+
+  // Update back button text and icon to return to Lesson Map
+  const backBtn = document.getElementById('back-to-decks-btn');
+  if (backBtn) {
+    backBtn.innerHTML = '<i class="fa-solid fa-arrow-left"></i> Quay lại Bản đồ bài học';
+  }
 
   const flashcardSec = document.getElementById('flashcard-section');
   if (flashcardSec) flashcardSec.scrollIntoView({ behavior: 'smooth' });
@@ -8599,6 +8645,15 @@ function showTopicsView() {
   const studyView = document.getElementById('flashcard-study-view');
   const quizView = document.getElementById('quiz-study-view');
 
+  const quickCards = document.querySelector('.quick-dashboard-cards');
+  if (quickCards) quickCards.style.display = 'grid';
+
+  const statsSummary = document.querySelector('.stats-summary-container');
+  if (statsSummary) statsSummary.style.display = 'block';
+
+  const controlsDash = document.querySelector('.controls-dashboard');
+  if (controlsDash) controlsDash.style.display = 'flex';
+
   if (selectionView) selectionView.style.display = 'block';
   if (topicsView) topicsView.style.display = 'block';
   if (subdecksView) subdecksView.style.display = 'none';
@@ -8608,6 +8663,7 @@ function showTopicsView() {
 
   activeNotebook = null;
   studyNotebookId = null;
+  isLessonVocabStudyMode = false;
 }
 
 function showSubdecksView() {
