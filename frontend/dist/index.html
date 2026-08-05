@@ -98,7 +98,7 @@
     window.toggleTheme = window.toggleTheme || function() {};
   </script>
   <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
-  <script type="module" crossorigin src="/assets/main-DfG20pRm.js"></script>
+  <script type="module" crossorigin src="/assets/main-Wods_2DB.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/style-W53pWQxK.css">
 </head>
 
@@ -1483,9 +1483,9 @@
                   👉 Dịch sang tiếng Trung: <span id="lesson-prompt-text" style="color: #2563eb; font-weight: 900;">"Bạn có khỏe không?"</span>
                 </div>
 
-                <!-- Input Box for Chinese Translation with Quick Action Buttons -->
+                <!-- Input Box for Chinese Translation -->
                 <div style="display: flex; gap: 8px; align-items: center; position: relative; flex-wrap: wrap;">
-                  <input type="text" id="lesson-typing-input" aria-label="Nhập đáp án dịch câu tiếng Trung" placeholder="Gõ câu trả lời hoặc nhấp chọn các từ bên dưới..." autocomplete="off"
+                  <input type="text" id="lesson-typing-input" aria-label="Nhập đáp án dịch câu tiếng Trung" placeholder="Gõ chữ Hán vào đây..." autocomplete="off"
                     style="flex: 1; min-width: 220px; padding: 14px 20px; font-size: 1.15rem; border-radius: 16px; border: 2.5px solid #cbd5e1; outline: none; background: #ffffff; font-weight: 800; color: #0f172a; box-shadow: inset 0 2px 4px rgba(0,0,0,0.04); transition: border-color 0.2s ease;" />
                   
                   <button id="lesson-clear-btn" type="button" class="btn" title="Xóa tất cả chữ đã nhập"
@@ -1499,22 +1499,26 @@
                   </button>
                 </div>
 
-                <!-- Interactive Word Chips Bank (Hàng từ vựng chọn nhấp trực tiếp) -->
-                <div id="lesson-word-chips-wrapper" style="margin-top: 14px; background: rgba(241, 245, 249, 0.85); border: 2px dashed #cbd5e1; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 10px;">
-                  <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
-                    <span style="font-size: 0.88rem; font-weight: 800; color: #334155; display: flex; align-items: center; gap: 6px;">
-                      <i class="fa-solid fa-cubes text-primary"></i> <span>Gợi ý từ vựng trong câu (Nhấp từ để ghép vào ô):</span>
-                    </span>
-                    <button id="lesson-reveal-all-words-btn" type="button" class="btn btn-xs"
-                      style="background: #facc15; color: #0f172a; font-weight: 800; font-size: 0.78rem; border: 1.5px solid #eab308; border-radius: 20px; padding: 4px 12px; cursor: pointer; box-shadow: 0 2px 6px rgba(250, 204, 21, 0.25);">
-                      <i class="fa-solid fa-eye"></i> Hiện tất cả từ
-                    </button>
+                <!-- IMAGE 2 EXACT HINT SECTION (Thẻ con mắt + Chữ/Dấu chấm + Nút vàng) -->
+                <div id="lesson-image2-hint-section" style="margin-top: 14px; display: flex; flex-direction: column; gap: 12px; align-items: center; width: 100%;">
+                  
+                  <!-- Row of Vertical/Tall Cards matching Image 2 -->
+                  <div id="lesson-word-chips-container" style="display: flex; gap: 14px; flex-wrap: wrap; align-items: center; justify-content: center; width: 100%;">
+                    <!-- Dynamically rendered tall cards matching Image 2 -->
                   </div>
 
-                  <!-- Word Chips Row -->
-                  <div id="lesson-word-chips-container" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center; min-height: 48px;">
-                    <!-- Dynamically rendered word chips -->
+                  <!-- Instruction Text matching Image 2 -->
+                  <div style="font-size: 0.9rem; font-weight: 700; color: #64748b; text-align: center;">
+                    Nhấp vào biểu tượng con mắt để hiện từ
                   </div>
+
+                  <!-- Big Yellow Button matching Image 2 -->
+                  <button id="lesson-reveal-all-words-btn" type="button"
+                    style="width: 100%; background: #facc15; color: #000000; font-weight: 900; font-size: 1.05rem; border: 2.5px solid #000000; border-radius: 14px; padding: 14px 20px; cursor: pointer; box-shadow: 0 4px 0 #000000; transition: all 0.15s ease; text-transform: uppercase; letter-spacing: 0.5px;"
+                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 0 #000000';"
+                    onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 0 #000000';">
+                    HIỆN TẤT CẢ TỪ
+                  </button>
                 </div>
 
                 <!-- Feedback Badges & Standard Hint Controls -->

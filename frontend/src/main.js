@@ -1138,14 +1138,13 @@ function renderActiveCardLesson(current) {
   }
 }
 
-// Render Interactive Word Chips Bank (Nhấp chọn ghép câu trực tiếp - Theo góp ý chị)
+// Render Eye Hint Cards matching Image 2 EXACTLY
 function renderLessonWordHintCards(sentence) {
   const container = document.getElementById('lesson-word-chips-container');
   const revealAllBtn = document.getElementById('lesson-reveal-all-words-btn');
   const clearBtn = document.getElementById('lesson-clear-btn');
   if (!container) return;
 
-  // Clear input clear button handler
   if (clearBtn) {
     clearBtn.onclick = () => {
       const inputEl = document.getElementById('lesson-typing-input');
@@ -1158,16 +1157,17 @@ function renderLessonWordHintCards(sentence) {
       if (feedbackCorrect) feedbackCorrect.style.display = 'none';
       if (feedbackWrong) feedbackWrong.style.display = 'none';
 
-      // Reset chips
-      container.querySelectorAll('.word-chip-btn').forEach(btn => {
-        btn.style.opacity = '1';
-        btn.style.transform = 'none';
-        btn.disabled = false;
+      // Reset all cards
+      container.querySelectorAll('.image2-hint-card').forEach(card => {
+        card.setAttribute('data-revealed', 'false');
+        const dotsEl = card.querySelector('.card-dots');
+        const zhEl = card.querySelector('.card-zh');
+        if (dotsEl) dotsEl.style.display = 'block';
+        if (zhEl) zhEl.style.display = 'none';
       });
     };
   }
 
-  // Clean sentence punctuation
   const cleanSentence = sentence.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '');
   if (!cleanSentence) {
     if (container.parentElement) container.parentElement.style.display = 'none';
@@ -1175,7 +1175,7 @@ function renderLessonWordHintCards(sentence) {
   }
   if (container.parentElement) container.parentElement.style.display = 'flex';
 
-  // Break sentence into 1 to 2 character word chunks
+  // Break sentence into 1 to 2 or 3 character word chunks
   const wordTokens = [];
   let idx = 0;
   while (idx < cleanSentence.length) {
@@ -1186,15 +1186,30 @@ function renderLessonWordHintCards(sentence) {
 
   let html = '';
   wordTokens.forEach((token, index) => {
+    // Generate spaced dots matching char count, e.g. ". ." or ". . ."
+    const dotsFormatted = Array(token.length).fill('.').join(' ');
+
     html += `
-      <button type="button" class="word-chip-btn" id="word-chip-${index}" data-word="${token}"
-        style="background: #ffffff; border: 2.5px solid #3b82f6; border-radius: 14px; padding: 10px 18px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15); cursor: pointer; transition: all 0.2s ease; user-select: none;"
-        onclick="window.insertWordChipToInput('${token}', this)"
-        onmouseover="this.style.transform='translateY(-2px) scale(1.04)'; this.style.borderColor='#2563eb';"
-        onmouseout="this.style.transform='none'; this.style.borderColor='#3b82f6';">
-        <span style="font-family: var(--font-chinese); font-size: 1.25rem; font-weight: 900; color: #1e293b;">${token}</span>
-        <i class="fa-solid fa-plus" style="font-size: 0.75rem; color: #2563eb;"></i>
-      </button>
+      <div class="image2-hint-card" id="image2-card-${index}" data-word="${token}" data-revealed="false"
+        style="width: 76px; height: 96px; background: #ffffff; border: 2.5px solid #1e293b; border-radius: 16px; padding: 10px 8px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; box-shadow: 0 4px 10px rgba(0,0,0,0.08); cursor: pointer; user-select: none; transition: transform 0.15s ease;"
+        onclick="window.toggleImage2CardHint(${index})"
+        onmouseover="this.style.transform='translateY(-3px)';"
+        onmouseout="this.style.transform='none';">
+        
+        <!-- Eye Icon Circle at top matching Image 2 -->
+        <div style="width: 28px; height: 26px; border-radius: 50%; border: 1.5px solid #1e293b; display: flex; align-items: center; justify-content: center; background: #ffffff; color: #1e293b; font-size: 0.85rem;">
+          <i class="fa-regular fa-eye"></i>
+        </div>
+
+        <!-- Masked Dots or Revealed Chinese Word in middle/bottom matching Image 2 -->
+        <div class="card-dots" style="font-family: monospace, sans-serif; font-size: 1.4rem; font-weight: 900; color: #0f172a; letter-spacing: 2px; text-align: center; line-height: 1;">
+          ${dotsFormatted}
+        </div>
+
+        <div class="card-zh" style="display: none; font-family: var(--font-chinese); font-size: 1.15rem; font-weight: 900; color: #2563eb; text-align: center; word-break: break-all; line-height: 1.1;">
+          ${token}
+        </div>
+      </div>
     `;
   });
 
@@ -1202,7 +1217,18 @@ function renderLessonWordHintCards(sentence) {
 
   if (revealAllBtn) {
     revealAllBtn.onclick = () => {
-      // Auto fill all words into input
+      // Reveal all cards matching Image 2 & fill full input
+      wordTokens.forEach((_, i) => {
+        const card = document.getElementById(`image2-card-${i}`);
+        if (card) {
+          card.setAttribute('data-revealed', 'true');
+          const dotsEl = card.querySelector('.card-dots');
+          const zhEl = card.querySelector('.card-zh');
+          if (dotsEl) dotsEl.style.display = 'none';
+          if (zhEl) zhEl.style.display = 'block';
+        }
+      });
+
       const inputEl = document.getElementById('lesson-typing-input');
       if (inputEl) {
         inputEl.value = cleanSentence;
@@ -1212,26 +1238,31 @@ function renderLessonWordHintCards(sentence) {
   }
 }
 
-window.insertWordChipToInput = function(word, btn) {
+window.toggleImage2CardHint = function(index) {
+  const card = document.getElementById(`image2-card-${index}`);
+  if (!card) return;
+
+  const isRevealed = card.getAttribute('data-revealed') === 'true';
+  const word = card.getAttribute('data-word');
+  const dotsEl = card.querySelector('.card-dots');
+  const zhEl = card.querySelector('.card-zh');
   const inputEl = document.getElementById('lesson-typing-input');
-  if (!inputEl) return;
 
-  // Append word to input box
-  inputEl.value += word;
+  if (isRevealed) {
+    card.setAttribute('data-revealed', 'false');
+    if (dotsEl) dotsEl.style.display = 'block';
+    if (zhEl) zhEl.style.display = 'none';
+  } else {
+    card.setAttribute('data-revealed', 'true');
+    if (dotsEl) dotsEl.style.display = 'none';
+    if (zhEl) zhEl.style.display = 'block';
 
-  // Visual disable on used chip
-  if (btn) {
-    btn.style.opacity = '0.5';
-    btn.style.transform = 'scale(0.95)';
+    // Also append word to typing input
+    if (inputEl) {
+      inputEl.value += word;
+      checkLessonTranslationAnswer();
+    }
   }
-
-  // Pronounce word chunk softly
-  if (typeof speakText === 'function') {
-    speakText(word);
-  }
-
-  // Auto check answer
-  checkLessonTranslationAnswer();
 };
 
 function normalizeTextForMatch(str) {
