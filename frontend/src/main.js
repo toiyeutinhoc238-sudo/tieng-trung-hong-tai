@@ -3975,13 +3975,9 @@ function switchTab(tabId) {
   if (tabId === 'home') {
     setDisp(homeViewSec, 'block');
   }
-  else if (tabId === 'lessons') {
+  else if (tabId === 'lessons' || tabId === 'roadmap') {
     setDisp(lessonsSec, 'block');
     renderLessonsList();
-  }
-  else if (tabId === 'roadmap') {
-    if (roadmapSec) roadmapSec.style.display = 'block';
-    renderGamifiedRoadmapPath();
   }
   else if (tabId === 'exams') {
     setDisp(examsSec, 'block');
@@ -4027,7 +4023,7 @@ function switchTab(tabId) {
   document.querySelectorAll('.sidebar-item').forEach(item => {
     const itemTab = item.getAttribute('data-tab');
     if (itemTab) {
-      item.classList.toggle('active', itemTab === tabId);
+      item.classList.toggle('active', itemTab === tabId || ((tabId === 'lessons' || tabId === 'roadmap') && itemTab === 'roadmap'));
     }
   });
 
