@@ -4041,7 +4041,7 @@ function showHomeView() {
 }
 
 function showRoadmapView() {
-  switchTab('roadmap');
+  switchTab('lessons');
 }
 window.showRoadmapView = showRoadmapView;
 
