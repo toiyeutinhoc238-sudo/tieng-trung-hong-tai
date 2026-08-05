@@ -4320,7 +4320,8 @@ window.openRoadmapLearningView = function (ver, level) {
     return !curr2.includes('yct') && !ver2.includes('yct') && (ver2.includes('3') || ver2 === '3.0' || w.hskVersion === '3.0') && matchLevel(w.level, targetLevel);
   });
 
-  document.getElementById('learning-list-count').textContent = currentRoadmapLearningVocabs.length;
+  const countEl = document.getElementById('learning-list-count');
+  if (countEl) countEl.textContent = currentRoadmapLearningVocabs.length;
 
   renderRoadmapLearningList();
 
@@ -4328,7 +4329,8 @@ window.openRoadmapLearningView = function (ver, level) {
   if (currentRoadmapLearningVocabs.length > 0) {
     showLearningFlashcard(0);
   } else {
-    document.getElementById('roadmap-learning-flashcard').innerHTML = '<div style="color: var(--text-muted);">Không có từ vựng cho cấp độ này.</div>';
+    const cardEl = document.getElementById('roadmap-learning-flashcard');
+    if (cardEl) cardEl.innerHTML = '<div style="color: var(--text-muted);">Không có từ vựng cho cấp độ này.</div>';
   }
 };
 
