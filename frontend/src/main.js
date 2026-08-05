@@ -2167,12 +2167,24 @@ function resetCardOrientation() {
 }
 
 function showToast(message, isError = false) {
-  toastElement.textContent = message;
-  toastElement.style.borderLeftColor = isError ? 'var(--danger)' : 'var(--accent-blue)';
-  toastElement.classList.add('show');
+  let toastEl = document.getElementById('toast') || document.getElementById('toast-msg');
+  if (!toastEl) {
+    toastEl = document.createElement('div');
+    toastEl.id = 'toast';
+    toastEl.className = 'toast';
+    toastEl.style.cssText = 'position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(15, 23, 42, 0.95); color: #fff; padding: 12px 24px; border-radius: 12px; font-weight: 700; border-left: 4px solid var(--accent-blue, #3b82f6); box-shadow: 0 10px 30px rgba(0,0,0,0.4); opacity: 0; transition: all 0.3s ease; z-index: 999999; pointer-events: none;';
+    document.body.appendChild(toastEl);
+  }
+  toastEl.textContent = message;
+  toastEl.style.borderLeftColor = isError ? 'var(--danger, #ef4444)' : 'var(--accent-blue, #3b82f6)';
+  toastEl.classList.add('show');
+  toastEl.style.opacity = '1';
+  toastEl.style.transform = 'translateX(-50%) translateY(0)';
 
   setTimeout(() => {
-    toastElement.classList.remove('show');
+    toastEl.classList.remove('show');
+    toastEl.style.opacity = '0';
+    toastEl.style.transform = 'translateX(-50%) translateY(100px)';
   }, 2500);
 }
 
