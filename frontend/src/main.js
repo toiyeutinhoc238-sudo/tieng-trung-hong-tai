@@ -6682,7 +6682,10 @@ window.openLessonDetailModal = function (lessonKey) {
   // View Switcher Bar Header
   const viewSwitcherHtml = `
     <div style="grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 12px; background: rgba(15, 23, 42, 0.7); padding: 12px 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.12); backdrop-filter: blur(12px);">
-      <div style="display: flex; align-items: center; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+        <button onclick="window.showRoadmapView()" style="padding: 7px 14px; border-radius: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #ffffff; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.88rem; transition: all 0.2s;" onmouseenter="this.style.background='rgba(255,255,255,0.2)'" onmouseleave="this.style.background='rgba(255,255,255,0.1)'">
+          <i class="fa-solid fa-arrow-left"></i> Đổi Cấp Độ HSK
+        </button>
         <span style="font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; color: #fbbf24; display: flex; align-items: center; gap: 8px;">
           <i class="fa-solid fa-map-location-dot" style="font-size: 1.3rem;"></i> BẢN ĐỒ BÀI HỌC HSK CẤP ${activeLessonsLevel === '7-9' ? '7-8-9' : activeLessonsLevel}
         </span>
