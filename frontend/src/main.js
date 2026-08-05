@@ -1063,18 +1063,28 @@ function renderActiveCardLesson(current) {
   if (feedbackWrong) feedbackWrong.style.display = 'none';
   if (answerBox) answerBox.style.display = 'none';
 
-  const targetSentence = (current.example_zh || current.word).trim();
+  const egZh = (current.example_zh || '').trim();
+  const egVi = (current.example_vi || '').trim();
 
-  if (current.example_vi && current.example_zh) {
-    if (promptText) promptText.textContent = `"${current.example_vi}"`;
-    if (standardZhText) standardZhText.textContent = current.example_zh;
+  // Smart split Chinese & Vietnamese examples
+  const egZhLines = egZh ? egZh.split(/(?<=[！。？\n])\s*/).map(s => s.trim()).filter(Boolean) : [];
+  const egViLines = egVi ? egVi.split(/(?<=[.!?\n])\s*/).map(s => s.trim()).filter(Boolean) : [];
+
+  // Randomly select 1 of the example sentences if multiple examples exist
+  const randExIdx = (egZhLines.length > 0) ? Math.floor(Math.random() * egZhLines.length) : 0;
+  const targetZhSentence = egZhLines[randExIdx] || current.word;
+  const promptViSentence = egViLines[randExIdx] || current.meaning;
+
+  if (egZhLines.length > 0 && egViLines.length > 0) {
+    if (promptText) promptText.textContent = `"${promptViSentence}"`;
+    if (standardZhText) standardZhText.textContent = targetZhSentence;
   } else {
     if (promptText) promptText.textContent = `Dịch nghĩa từ: "${current.meaning}"`;
     if (standardZhText) standardZhText.textContent = current.word;
   }
 
-  // 6b. Render Word Hint Cards (Matching Image 3 UI design)
-  renderLessonWordHintCards(targetSentence);
+  // 6b. Render Word Hint Cards using the randomly selected target Chinese sentence
+  renderLessonWordHintCards(targetZhSentence);
 
   // 7. HanziWriter Tianzige Grid
   const targetContainer = document.getElementById('lesson-hanzi-target');
@@ -4692,8 +4702,11 @@ window.showLearningFlashcard = function(index) {
 
   // Only show translation exercise if an example sentence exists!
   const hasExercise = egZhLines.length > 0 && egViLines.length > 0;
-  const sentenceQ = egViLines[0] || egVi;
-  const sentenceAns = egZhLines[0] || egZh;
+  
+  // Randomly select 1 of the example sentences if multiple examples exist
+  const randExIdx = (egZhLines.length > 0) ? Math.floor(Math.random() * egZhLines.length) : 0;
+  const sentenceQ = egViLines[randExIdx] || egViLines[0] || egVi;
+  const sentenceAns = egZhLines[randExIdx] || egZhLines[0] || egZh;
 
   flashcard.style.opacity = '0';
   flashcard.style.transform = 'scale(0.98)';
