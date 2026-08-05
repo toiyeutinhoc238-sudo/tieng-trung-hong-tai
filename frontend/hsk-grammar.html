@@ -592,7 +592,10 @@
       if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '') {
         return 'http://localhost:5000';
       }
-      return window.location.origin || 'https://tieng-trung-hong-tai-1.onrender.com';
+      if (window.location.hostname.includes('tieng-trung-hong-tai-1.onrender.com')) {
+        return 'https://tiengtrunghongtai.online';
+      }
+      return window.location.origin || 'https://tiengtrunghongtai.online';
     }
 
     let audioCurrent = null;

@@ -446,7 +446,7 @@
     }
   </style>
   <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
-  <script type="module" crossorigin src="/assets/main-DGAqsO_b.js"></script>
+  <script type="module" crossorigin src="/assets/main-n_6C1oXR.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/style-DNLW6IY9.css">
 </head>
 
@@ -582,10 +582,9 @@
     const pageSize = 50;
     let currentPage = 1;
 
-    // Resolve dynamic API URL
     const API_BASE_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '')
       ? 'http://localhost:5000'
-      : (window.location.origin || 'https://tieng-trung-hong-tai-1.onrender.com');
+      : (window.location.hostname.includes('tieng-trung-hong-tai-1.onrender.com') ? 'https://tiengtrunghongtai.online' : (window.location.origin || 'https://tiengtrunghongtai.online'));
 
     // Auth headers builder
     function getAuthHeaders(customHeaders = {}) {

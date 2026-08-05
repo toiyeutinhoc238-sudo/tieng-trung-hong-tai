@@ -1044,7 +1044,7 @@
   <script>
     const API_BASE_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '')
       ? 'http://localhost:5000'
-      : (window.location.origin || 'https://tieng-trung-hong-tai-1.onrender.com');
+      : (window.location.hostname.includes('tieng-trung-hong-tai-1.onrender.com') ? 'https://tiengtrunghongtai.online' : (window.location.origin || 'https://tiengtrunghongtai.online'));
 
     const fallbackVocab = [
       { id: '1', word: '你好', pinyin: 'nǐ hǎo', meaning: 'xin chào', level: '1', curriculum: 'hsk' },

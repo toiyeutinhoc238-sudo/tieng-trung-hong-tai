@@ -189,9 +189,16 @@ let activeStatus = 'all'; // Status filter state: 'all', 'unmemorized', 'memoriz
 let searchQuery = '';     // Search query string
 let chineseVoice = null;  // Reference to Web Speech Chinese voice object
 let currentUser = null;   // Active authenticated user profile
-const API_BASE_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '')
-  ? 'http://localhost:5000'
-  : (window.location.origin || 'https://tieng-trung-hong-tai-1.onrender.com');
+function getResolvedApiBaseUrl() {
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '') {
+    return 'http://localhost:5000';
+  }
+  if (window.location.hostname.includes('tieng-trung-hong-tai-1.onrender.com')) {
+    return 'https://tiengtrunghongtai.online';
+  }
+  return window.location.origin || 'https://tiengtrunghongtai.online';
+}
+const API_BASE_URL = getResolvedApiBaseUrl();
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || 'your-google-client-id-here.apps.googleusercontent.com';
 
 const premiumMockData = [
@@ -9485,9 +9492,7 @@ window.loadRankPageData = function () {
   const container = document.getElementById('leaderboard-list-container');
   if (!container) return;
 
-  const API_BASE_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '')
-    ? 'http://localhost:5000'
-    : (window.location.origin || 'https://tieng-trung-hong-tai-1.onrender.com');
+  const API_BASE_URL = getResolvedApiBaseUrl();
 
   fetch(`${API_BASE_URL}/api/leaderboard`)
     .then(res => res.json())
@@ -9619,9 +9624,7 @@ window.showGrammarModal = function () {
   }
   modal.style.display = 'flex';
 
-  const API_BASE_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '')
-    ? 'http://localhost:5000'
-    : (window.location.origin || 'https://tieng-trung-hong-tai-1.onrender.com');
+  const API_BASE_URL = getResolvedApiBaseUrl();
 
   fetch(`${API_BASE_URL}/api/grammar/list`)
     .then(res => res.json())
@@ -9660,7 +9663,7 @@ window.showGrammarModal = function () {
 
 // Open grammar detail modal for a specific level
 window.openGrammarDetail = function(grammarKey, apiBase) {
-  const API_BASE_URL = apiBase || ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '') ? 'http://localhost:5000' : (window.location.origin || 'https://tieng-trung-hong-tai-1.onrender.com'));
+  const API_BASE_URL = apiBase || getResolvedApiBaseUrl();
   
   let detailModal = document.getElementById('grammar-detail-modal');
   if (!detailModal) {
