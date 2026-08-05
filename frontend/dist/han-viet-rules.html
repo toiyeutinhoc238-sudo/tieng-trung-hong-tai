@@ -673,9 +673,9 @@
         currentAudio = null;
       }
 
-      const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === ''
+      const API_BASE_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '')
         ? 'http://localhost:5000'
-        : 'https://tieng-trung-hong-tai.onrender.com';
+        : (window.location.origin || 'https://tieng-trung-hong-tai-1.onrender.com');
 
       const audioUrl = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(text)}&voice=${voice}`;
       currentAudio = new Audio(audioUrl);
