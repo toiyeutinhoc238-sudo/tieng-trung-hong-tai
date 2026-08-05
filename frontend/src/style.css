@@ -1674,25 +1674,27 @@ html.dark .brand-logo-img {
 /* Toast alert notification */
 .toast {
   position: fixed;
-  bottom: 24px;
-  left: 24px;
-  background-color: var(--bg-secondary);
-  color: var(--text-primary);
-  border: 1px solid var(--border-glass);
-  border-left: 4px solid var(--accent-blue);
+  bottom: 28px;
+  left: 50% !important;
+  transform: translateX(-50%) translateY(20px);
+  background-color: var(--bg-secondary, rgba(15, 23, 42, 0.95));
+  color: var(--text-primary, #ffffff);
+  border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.2));
+  border-left: 4px solid var(--accent-blue, #3b82f6);
   padding: 12px 24px;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
-  z-index: 1000;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  z-index: 999999;
   opacity: 0;
-  transform: translateY(20px);
   pointer-events: none;
-  transition: all var(--transition-normal);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+  max-width: 90vw;
 }
 
 .toast.show {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateX(-50%) translateY(0) !important;
 }
 
 /* Animations */
