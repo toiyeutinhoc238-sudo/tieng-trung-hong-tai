@@ -6788,7 +6788,7 @@ window.openLessonDetailModal = function (lessonKey) {
         e.stopPropagation();
         const modalEl = document.getElementById('lesson-detail-popup-modal');
         if (modalEl) modalEl.style.display = 'none';
-        window.location.href = `/quiz-game.html?lesson=${lessonKey}&level=${currentLvl}&version=${activeHskVersion}`;
+        window.location.href = `/quiz-game.html?lesson=${lessonKey}&level=${currentLvl}&version=${activeHskVersion}&autostart=1`;
       };
     }
   } else {
