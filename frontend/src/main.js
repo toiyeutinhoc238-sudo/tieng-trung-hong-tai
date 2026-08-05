@@ -4363,8 +4363,12 @@ window.goToRoadmapLevel = function (ver, level) {
   if (typeof updateVersionButtonsUI === 'function') updateVersionButtonsUI();
   if (typeof updateExamsVersionUI === 'function') updateExamsVersionUI();
 
-  // Switch to roadmap learning view
-  openRoadmapLearningView(hskVer, level);
+  // Switch to Lessons selection view showing Bài 1, Bài 2, Bài 3... for this HSK Level
+  switchTab('lessons');
+  const lessonsSection = document.getElementById('lessons-section');
+  if (lessonsSection) {
+    lessonsSection.scrollIntoView({ behavior: 'smooth' });
+  }
 };
 
 // --- ROADMAP LEARNING VIEW LOGIC ---
