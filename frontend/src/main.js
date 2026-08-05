@@ -2934,6 +2934,53 @@ function setupEventListeners() {
     });
   }
 
+window.toggleRoadmapEyeCard = function(index, targetSentence) {
+  const card = document.getElementById(`roadmap-eye-card-${index}`);
+  if (!card) return;
+
+  const isRevealed = card.getAttribute('data-revealed') === 'true';
+  const word = card.getAttribute('data-word');
+  const dotsEl = card.querySelector('.card-dots');
+  const zhEl = card.querySelector('.card-zh');
+  const inputEl = document.getElementById('roadmap-sentence-input');
+
+  if (isRevealed) {
+    card.setAttribute('data-revealed', 'false');
+    if (dotsEl) dotsEl.style.display = 'block';
+    if (zhEl) zhEl.style.display = 'none';
+  } else {
+    card.setAttribute('data-revealed', 'true');
+    if (dotsEl) dotsEl.style.display = 'none';
+    if (zhEl) zhEl.style.display = 'block';
+
+    if (inputEl) {
+      inputEl.value += word;
+      if (typeof handleRoadmapTranslationInput === 'function') {
+        handleRoadmapTranslationInput(targetSentence);
+      }
+    }
+  }
+};
+
+window.revealAllRoadmapEyeCards = function(targetSentence) {
+  const cards = document.querySelectorAll('.image2-hint-card[id^="roadmap-eye-card-"]');
+  cards.forEach(card => {
+    card.setAttribute('data-revealed', 'true');
+    const dotsEl = card.querySelector('.card-dots');
+    const zhEl = card.querySelector('.card-zh');
+    if (dotsEl) dotsEl.style.display = 'none';
+    if (zhEl) zhEl.style.display = 'block';
+  });
+
+  const inputEl = document.getElementById('roadmap-sentence-input');
+  if (inputEl) {
+    inputEl.value = targetSentence;
+    if (typeof handleRoadmapTranslationInput === 'function') {
+      handleRoadmapTranslationInput(targetSentence);
+    }
+  }
+};
+
   const typeSpeakExBtn = document.getElementById('type-speak-example-btn');
   if (typeSpeakExBtn) {
     typeSpeakExBtn.addEventListener('click', (e) => {
@@ -4710,26 +4757,79 @@ window.showLearningFlashcard = function(index) {
         </div>
       </div>
 
-      <!-- BOTTOM SECTION: DỊCH CÂU (CHỈ HIỂN THỊ KHI CÓ CÂU MẪU) -->
+      <!-- BOTTOM SECTION: DỊCH CÂU MATCHING IMAGE 2 EXACTLY -->
       ${hasExercise ? `
         <div style="border-top: 1px dashed rgba(255,255,255,0.15); padding-top: 18px; width: 100%; text-align: left;">
-          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; flex-wrap: wrap;">
-            <div style="display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 1rem; color: var(--text-color);">
-              <i class="fa-solid fa-language text-primary" style="font-size: 1.1rem;"></i>
-              <span>Dịch sang tiếng Trung:</span>
-              <span style="font-weight: 600; color: #38bdf8; font-size: 1rem; margin-left: 4px;">"${sentenceQ}"</span>
-            </div>
-
-            <button onclick="revealNextRoadmapHint('${sentenceAns.replace(/'/g, "\\'")}')" 
-              style="background: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.4); padding: 6px 14px; border-radius: 99px; font-weight: 700; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; transition: all 0.2s;">
-              <i class="fa-solid fa-lightbulb"></i> Gợi ý từ tiếp theo
-            </button>
+          
+          <!-- Prompt Row: Dịch sang tiếng Trung: "..." -->
+          <div style="display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1.05rem; color: var(--text-color); margin-bottom: 12px; flex-wrap: wrap;">
+            <i class="fa-solid fa-language text-primary" style="font-size: 1.15rem;"></i>
+            <span>Dịch sang tiếng Trung:</span>
+            <span style="font-weight: 800; color: #38bdf8; font-size: 1.05rem;">"${sentenceQ}"</span>
           </div>
 
-          <div style="position: relative;">
+          <!-- Clean Full Width Input Box matching Image 2 -->
+          <div style="position: relative; width: 100%; margin-bottom: 14px;">
             <input type="text" id="roadmap-sentence-input" placeholder="Gõ chữ Hán vào đây..." 
-              style="width: 100%; padding: 12px 16px; border-radius: 12px; border: 1.5px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.25); color: var(--text-color); font-size: 1.1rem; font-family: var(--font-hanzi); outline: none; transition: border-color 0.2s;"
+              style="width: 100%; padding: 14px 18px; border-radius: 14px; border: 2.5px solid rgba(255,255,255,0.25); background: rgba(15, 23, 42, 0.6); color: #ffffff; font-size: 1.15rem; font-family: var(--font-hanzi); font-weight: 800; outline: none; transition: border-color 0.2s ease;"
               oninput="handleRoadmapTranslationInput('${sentenceAns.replace(/'/g, "\\'")}')" />
+          </div>
+
+          <!-- IMAGE 2 HINT SECTION: Eye Cards + Text + Big Yellow Button -->
+          <div style="display: flex; flex-direction: column; gap: 12px; align-items: center; width: 100%;">
+            
+            <!-- Eye Cards Row -->
+            <div id="roadmap-eye-cards-row" style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: center; width: 100%;">
+              ${(() => {
+                const cleanSentenceAns = sentenceAns.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '');
+                const wordTokens = [];
+                let tokenIdx = 0;
+                while (tokenIdx < cleanSentenceAns.length) {
+                  const chunkSize = (cleanSentenceAns.length - tokenIdx >= 2) ? 2 : 1;
+                  wordTokens.push(cleanSentenceAns.substring(tokenIdx, tokenIdx + chunkSize));
+                  tokenIdx += chunkSize;
+                }
+                return wordTokens.map((token, index) => {
+                  const dotsFormatted = Array(token.length).fill('.').join(' ');
+                  return `
+                    <div class="image2-hint-card" id="roadmap-eye-card-${index}" data-word="${token}" data-revealed="false"
+                      style="width: 76px; height: 96px; background: #ffffff; border: 2.5px solid #1e293b; border-radius: 16px; padding: 10px 8px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; box-shadow: 0 4px 10px rgba(0,0,0,0.08); cursor: pointer; user-select: none; transition: transform 0.15s ease;"
+                      onclick="window.toggleRoadmapEyeCard(${index}, '${cleanSentenceAns.replace(/'/g, "\\'")}')"
+                      onmouseover="this.style.transform='translateY(-3px)';"
+                      onmouseout="this.style.transform='none';">
+                      
+                      <!-- Eye Icon Circle at top matching Image 2 -->
+                      <div style="width: 28px; height: 26px; border-radius: 50%; border: 1.5px solid #1e293b; display: flex; align-items: center; justify-content: center; background: #ffffff; color: #1e293b; font-size: 0.85rem;">
+                        <i class="fa-regular fa-eye"></i>
+                      </div>
+
+                      <!-- Masked Dots or Revealed Chinese Word in middle/bottom matching Image 2 -->
+                      <div class="card-dots" style="font-family: monospace, sans-serif; font-size: 1.4rem; font-weight: 900; color: #0f172a; letter-spacing: 2px; text-align: center; line-height: 1;">
+                        ${dotsFormatted}
+                      </div>
+
+                      <div class="card-zh" style="display: none; font-family: var(--font-chinese); font-size: 1.15rem; font-weight: 900; color: #2563eb; text-align: center; word-break: break-all; line-height: 1.1;">
+                        ${token}
+                      </div>
+                    </div>
+                  `;
+                }).join('');
+              })()}
+            </div>
+
+            <!-- Instruction Text matching Image 2 -->
+            <div style="font-size: 0.9rem; font-weight: 700; color: #94a3b8; text-align: center;">
+              Nhấp vào biểu tượng con mắt để hiện từ
+            </div>
+
+            <!-- Big Yellow Button matching Image 2 -->
+            <button id="roadmap-reveal-all-btn" type="button"
+              onclick="window.revealAllRoadmapEyeCards('${sentenceAns.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '').replace(/'/g, "\\'")}')"
+              style="width: 100%; background: #facc15; color: #000000; font-weight: 900; font-size: 1.05rem; border: 2.5px solid #000000; border-radius: 14px; padding: 14px 20px; cursor: pointer; box-shadow: 0 4px 0 #000000; transition: all 0.15s ease; text-transform: uppercase; letter-spacing: 0.5px;"
+              onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 0 #000000';"
+              onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 0 #000000';">
+              HIỆN TẤT CẢ TỪ
+            </button>
           </div>
 
           <!-- Real-time Character Matching Feedback (Green / Red) -->
