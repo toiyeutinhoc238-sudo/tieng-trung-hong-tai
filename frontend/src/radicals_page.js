@@ -312,8 +312,8 @@ function renderHeroFlashcard(r) {
     </div>
   `;
 
-  // Play audio
-  speakText(r.radical);
+  // Audio plays on user click only
+  // speakText(r.radical);
 
   // Init HanziWriter stroke animation for active radical
   setTimeout(() => {

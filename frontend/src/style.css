@@ -3,7 +3,7 @@
 :root {
   /* Fonts */
   --font-sans: 'Be Vietnam Pro', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-display: 'Outfit', 'Be Vietnam Pro', sans-serif;
+  --font-display: 'Be Vietnam Pro', sans-serif;
   --font-handwriting: 'Be Vietnam Pro', sans-serif;
   --font-chinese: 'Noto Sans SC', 'Microsoft YaHei', 'PingFang SC', sans-serif;
   --font-pinyin: 'Be Vietnam Pro', 'Inter', 'Segoe UI', Roboto, sans-serif;
@@ -24,7 +24,7 @@
 html {
   /* Fonts */
   --font-sans: 'Be Vietnam Pro', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-display: 'Outfit', 'Be Vietnam Pro', sans-serif;
+  --font-display: 'Be Vietnam Pro', sans-serif;
   --font-chinese: 'Noto Sans SC', 'Microsoft YaHei', 'PingFang SC', sans-serif;
   --font-pinyin: 'Be Vietnam Pro', 'Inter', 'Segoe UI', Roboto, sans-serif;
   

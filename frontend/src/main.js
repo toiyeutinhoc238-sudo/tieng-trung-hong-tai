@@ -935,6 +935,8 @@ function renderActiveCardLesson(current) {
   if (feedbackWrong) feedbackWrong.style.display = 'none';
   if (answerBox) answerBox.style.display = 'none';
 
+  const targetSentence = (current.example_zh || current.word).trim();
+
   if (current.example_vi && current.example_zh) {
     if (promptText) promptText.textContent = `"${current.example_vi}"`;
     if (standardZhText) standardZhText.textContent = current.example_zh;
@@ -942,6 +944,9 @@ function renderActiveCardLesson(current) {
     if (promptText) promptText.textContent = `Dịch nghĩa từ: "${current.meaning}"`;
     if (standardZhText) standardZhText.textContent = current.word;
   }
+
+  // 6b. Render Word Hint Cards (Matching Image 3 UI design)
+  renderLessonWordHintCards(targetSentence);
 
   // 7. HanziWriter Tianzige Grid
   const targetContainer = document.getElementById('lesson-hanzi-target');
@@ -996,6 +1001,105 @@ function renderActiveCardLesson(current) {
   }
 }
 
+// Render Word Hint Cards with Eye Toggle (Matching Image 3)
+function renderLessonWordHintCards(sentence) {
+  const container = document.getElementById('lesson-word-hints-cards');
+  const revealAllBtn = document.getElementById('lesson-reveal-all-words-btn');
+  if (!container) return;
+
+  // Split sentence into words/characters (ignoring punctuation)
+  const cleanSentence = sentence.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '');
+  if (!cleanSentence) {
+    container.parentElement.style.display = 'none';
+    return;
+  }
+  container.parentElement.style.display = 'flex';
+
+  // Break sentence into 1 to 3 character word chunks
+  const wordTokens = [];
+  let idx = 0;
+  while (idx < cleanSentence.length) {
+    // Pick chunk length 2 or 1
+    const chunkSize = (cleanSentence.length - idx >= 2 && Math.random() > 0.3) ? 2 : 1;
+    wordTokens.push(cleanSentence.substring(idx, idx + chunkSize));
+    idx += chunkSize;
+  }
+
+  let html = '';
+  wordTokens.forEach((token, index) => {
+    const maskedDots = '.'.repeat(token.length);
+    html += `
+      <div class="word-hint-card" data-word="${token}" data-masked="${maskedDots}" data-revealed="false" id="hint-card-${index}"
+        style="background: #ffffff; border: 2px solid #cbd5e1; border-radius: 12px; padding: 10px 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; min-width: 60px; box-shadow: 0 4px 10px rgba(0,0,0,0.04); cursor: pointer; user-select: none;"
+        onclick="window.toggleSingleWordHint(${index})">
+        <div style="background: rgba(59, 130, 246, 0.1); border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; color: #2563eb; font-size: 0.8rem;">
+          <i class="fa-regular fa-eye"></i>
+        </div>
+        <div class="hint-text" style="font-family: var(--font-chinese); font-size: 1.15rem; font-weight: 800; color: #0f172a; letter-spacing: 2px;">
+          ${maskedDots}
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+
+  if (revealAllBtn) {
+    revealAllBtn.onclick = () => {
+      wordTokens.forEach((_, i) => {
+        const card = document.getElementById(`hint-card-${i}`);
+        if (card) {
+          const word = card.getAttribute('data-word');
+          const hintText = card.querySelector('.hint-text');
+          if (hintText) {
+            hintText.textContent = word;
+            hintText.style.color = '#2563eb';
+          }
+          card.setAttribute('data-revealed', 'true');
+          card.style.borderColor = '#3b82f6';
+          card.style.background = '#eff6ff';
+        }
+      });
+    };
+  }
+}
+
+window.toggleSingleWordHint = function(index) {
+  const card = document.getElementById(`hint-card-${index}`);
+  if (!card) return;
+
+  const isRevealed = card.getAttribute('data-revealed') === 'true';
+  const word = card.getAttribute('data-word');
+  const masked = card.getAttribute('data-masked');
+  const hintText = card.querySelector('.hint-text');
+
+  if (isRevealed) {
+    if (hintText) {
+      hintText.textContent = masked;
+      hintText.style.color = '#0f172a';
+    }
+    card.setAttribute('data-revealed', 'false');
+    card.style.borderColor = '#cbd5e1';
+    card.style.background = '#ffffff';
+  } else {
+    if (hintText) {
+      hintText.textContent = word;
+      hintText.style.color = '#2563eb';
+    }
+    card.setAttribute('data-revealed', 'true');
+    card.style.borderColor = '#3b82f6';
+    card.style.background = '#eff6ff';
+  }
+};
+
+function normalizeTextForMatch(str) {
+  if (!str) return '';
+  return str.toString()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // strip diacritics / tones
+    .replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '') // strip punctuation
+    .toLowerCase();
+}
+
 function checkLessonTranslationAnswer() {
   if (!filteredList || filteredList.length === 0) return;
   const current = filteredList[currentIndex];
@@ -1004,13 +1108,28 @@ function checkLessonTranslationAnswer() {
   const inputEl = document.getElementById('lesson-typing-input');
   if (!inputEl) return;
 
-  const userText = inputEl.value.trim().replace(/[.,!?:;="'"()\[\]{}，。！？；：\s]/g, '');
-  const targetAnswer = (current.example_zh || current.word).trim().replace(/[.,!?:;="'"()\[\]{}，。！？；：\s]/g, '');
+  const rawInput = inputEl.value.trim();
+  const normUser = normalizeTextForMatch(rawInput);
+  const normTargetZh = normalizeTextForMatch(current.example_zh || current.word);
+  const normWordZh = normalizeTextForMatch(current.word);
+  const normPinyin = normalizeTextForMatch(current.pinyin);
+  const normMeaning = normalizeTextForMatch(current.meaning);
+  const normExampleVi = normalizeTextForMatch(current.example_vi);
 
   const feedbackCorrect = document.getElementById('lesson-feedback-correct');
   const feedbackWrong = document.getElementById('lesson-feedback-wrong');
 
-  if (userText.length > 0 && (userText === targetAnswer || targetAnswer.includes(userText))) {
+  const isMatch = normUser.length > 0 && (
+    normUser === normTargetZh ||
+    normTargetZh.includes(normUser) ||
+    normUser.includes(normTargetZh) ||
+    normUser === normWordZh ||
+    normUser === normPinyin ||
+    (normMeaning.length > 2 && normUser === normMeaning) ||
+    (normExampleVi.length > 2 && normUser === normExampleVi)
+  );
+
+  if (isMatch) {
     if (feedbackCorrect) feedbackCorrect.style.display = 'inline-flex';
     if (feedbackWrong) feedbackWrong.style.display = 'none';
     inputEl.style.borderColor = '#22c55e';

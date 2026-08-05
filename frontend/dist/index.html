@@ -98,8 +98,8 @@
     window.toggleTheme = window.toggleTheme || function() {};
   </script>
   <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
-  <script type="module" crossorigin src="/assets/main-EQ9c4aZI.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/style-BX3cbp3Z.css">
+  <script type="module" crossorigin src="/assets/main-CNqHX3d1.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/style-Cxkk3G0s.css">
 </head>
 
 <body>
@@ -1480,6 +1480,20 @@
                   <button id="lesson-check-btn" class="btn btn-primary"
                     style="padding: 14px 24px; border-radius: 16px; font-weight: 900; font-size: 1rem; cursor: pointer; white-space: nowrap;">
                     Kiểm Tra
+                  </button>
+                </div>
+
+                <!-- Word Hint Cards Container (Image 3 Dictation Hints) -->
+                <div id="lesson-word-hints-wrapper" style="margin-top: 12px; display: flex; flex-direction: column; gap: 10px;">
+                  <div style="font-size: 0.82rem; font-weight: 700; color: #64748b; display: flex; align-items: center; gap: 6px;">
+                    <i class="fa-regular fa-eye" style="color: #3b82f6;"></i> <span>Nhấp vào biểu tượng con mắt để hiện từ</span>
+                  </div>
+                  <div id="lesson-word-hints-cards" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                    <!-- Dynamically rendered word cards with eye icon -->
+                  </div>
+                  <button id="lesson-reveal-all-words-btn" type="button" class="btn"
+                    style="width: 100%; background: #facc15; color: #0f172a; font-weight: 900; font-size: 0.95rem; border: 2px solid #eab308; border-radius: 12px; padding: 10px 16px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 10px rgba(250, 204, 21, 0.3);">
+                    <i class="fa-solid fa-eye"></i> HIỆN TẤT CẢ TỪ
                   </button>
                 </div>
 
