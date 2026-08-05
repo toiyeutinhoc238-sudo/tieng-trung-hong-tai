@@ -418,22 +418,14 @@ ${l.example_zh.replaceAll(l.word," _____ ")}
         </button>
       </div>
     `,e.appendChild(y);return}if(i&&(i.style.display="none"),n&&(n.style.display="flex"),d&&(d.style.display="flex"),s){const u=s.querySelector('option[value="7-9"]');if(A==="2.0")u&&(window._hsk79OptionElement=u,u.remove()),Y.toString()==="7-9"&&(Y=1);else if(!u){if(!window._hsk79OptionElement){const y=document.createElement("option");y.value="7-9",y.id="hsk-level-79-option",y.textContent="Cấp HSK 7-8-9 (Cao cấp)",window._hsk79OptionElement=y}s.appendChild(window._hsk79OptionElement)}}if(s&&s.value!==Y.toString()&&(s.value=Y.toString()),o&&(Y>=4&&A==="2.0"?(o.style.display="flex",r&&(r.value=Oe)):(o.style.display="none",Oe="all",r&&(r.value="all"))),t){const u=x.filter(v=>!v.isCustom&&v.curriculum!=="yct"&&v.hskVersion!=="yct"&&K(v.level,Y)&&(v.hskVersion||"3.0")===A).length,y=u>0?`, ${u.toLocaleString()} từ vựng`:"",f=({"2.0":{1:"HSK 2.0 Cấp 1 - Sơ cấp dành cho người mới bắt đầu",2:"HSK 2.0 Cấp 2 - Sơ cấp nâng cao, giao tiếp đời sống cơ bản",3:"HSK 2.0 Cấp 3 - Trung cấp, giao tiếp tự tin các chủ đề học tập/công việc",4:"HSK 2.0 Cấp 4 - Trung cấp nâng cao, thảo luận nhiều chủ đề chuyên sâu",5:"HSK 2.0 Cấp 5 - Cao cấp, đọc báo chí xem phim và thuyết trình tự nhiên",6:"HSK 2.0 Cấp 6 - Thành thạo, đọc văn học và viết học thuật","7-9":"HSK 2.0 Cấp 7-8-9 - Nâng cao chuyên nghiệp, sử dụng ngôn ngữ tiếng Trung nước ngoài"},"3.0":{1:"HSK 3.0 Cấp 1 - Sơ cấp dành cho người mới bắt đầu",2:"HSK 3.0 Cấp 2 - Sơ cấp nâng cao",3:"HSK 3.0 Cấp 3 - Sơ cấp hoàn chỉnh",4:"HSK 3.0 Cấp 4 - Trung cấp cơ bản",5:"HSK 3.0 Cấp 5 - Trung cấp nâng cao",6:"HSK 3.0 Cấp 6 - Cao cấp","7-9":"HSK 3.0 Cấp 7-8-9 - Nâng cao chuyên nghiệp"}}[A]||{})[Y]||`HSK ${A} Cấp ${Y==="7-9"?"7-8-9":Y}`;t.textContent=`Mục tiêu: ${f}${y}`}const a=x.filter(u=>{if(u.isCustom||u.curriculum==="yct"||u.hskVersion==="yct"||!K(u.level,Y)||(u.hskVersion||"3.0")!==A)return!1;if((Y===4||Y===5)&&A==="2.0"&&Oe!=="all")if(u.volume){if(u.volume!==Oe)return!1}else{const y=Y===4?u.lessonId<=10:u.lessonId<=18;if(Oe==="thuong"&&!y||Oe==="ha"&&y)return!1}return!0});let m="map";window.switchLessonViewMode=function(u){m=u,Ae()},window.openLessonDetailModal=function(u){const y=ke==="yct"?fe:Y,f=x.filter(W=>!(W.isCustom||W.curriculum==="yct"||W.hskVersion==="yct"||!K(W.level,y)||(W.hskVersion||"3.0")!==A)).filter(W=>String(W.lessonId||1)===String(u));if(f.length===0)return;const v=f[0],b=v.lessonTitle||v.category||`Bài ${u}`,I=v.lessonDesc||`Ôn tập từ vựng bài học HSK Cấp ${y}`,H=f.filter(W=>W.isMemorized).length,T=Math.round(H/f.length*100),$=document.getElementById("modal-lesson-number-circle"),S=document.getElementById("modal-lesson-badge-val"),V=document.getElementById("modal-lesson-title-val"),_=document.getElementById("modal-lesson-desc-val"),C=document.getElementById("modal-lesson-progress-text"),P=document.getElementById("modal-lesson-progress-fill"),D=document.getElementById("modal-lesson-vocab-count"),O=document.getElementById("modal-btn-mod-vocab");$&&($.textContent=u.toString().replace(/\D/g,"")||u),S&&(S.textContent=`HSK ${y==="7-9"?"7-8-9":y} (${A}) • Bài ${u}`),V&&(V.textContent=b),_&&(_.textContent=I),C&&(C.textContent=`${H}/${f.length} từ (${T}%)`),P&&(P.style.width=`${T}%`),D&&(D.textContent=`${f.length} từ`),O&&(O.onclick=function(){const W=document.getElementById("lesson-detail-popup-modal");W&&(W.style.display="none"),Ut({id:u,title:b},f)});const me=document.getElementById("lesson-detail-popup-modal");me&&(me.style.display="flex")};const g={};a.forEach(u=>{const y=u.lessonId||1;g[y]||(g[y]=[]),g[y].push(u)});const c=Object.keys(g).sort((u,y)=>{const E=parseInt(u.replace(/\D/g,""))||0,f=parseInt(y.replace(/\D/g,""))||0;return E-f}),p=`
-    <div style="grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 12px; background: rgba(15, 23, 42, 0.85); padding: 12px 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(12px); position: relative; z-index: 100;">
+    <div style="grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; background: rgba(15, 23, 42, 0.85); padding: 14px 22px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(16px); position: relative; z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
       <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; position: relative; z-index: 101;">
-        <button onclick="event.preventDefault(); event.stopPropagation(); window.returnToHskLevelSelection();" style="padding: 8px 18px; border-radius: 12px; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: 1px solid rgba(255,255,255,0.3); color: #ffffff; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.92rem; transition: all 0.2s; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4); position: relative; z-index: 999; pointer-events: auto;" onmouseenter="this.style.transform='scale(1.05)'" onmouseleave="this.style.transform='scale(1)'">
+        <button onclick="event.preventDefault(); event.stopPropagation(); window.returnToHskLevelSelection();" style="padding: 10px 20px; border-radius: 14px; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: 1px solid rgba(255,255,255,0.3); color: #ffffff; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.95rem; transition: all 0.2s; box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4); position: relative; z-index: 999; pointer-events: auto;" onmouseenter="this.style.transform='scale(1.05)'" onmouseleave="this.style.transform='scale(1)'">
           <i class="fa-solid fa-arrow-left"></i> ⬅️ Đổi Cấp Độ HSK
         </button>
-        <span style="font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; color: #fbbf24; display: flex; align-items: center; gap: 8px;">
-          <i class="fa-solid fa-map-location-dot" style="font-size: 1.3rem;"></i> BẢN ĐỒ BÀI HỌC HSK CẤP ${Y==="7-9"?"7-8-9":Y}
+        <span style="font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; color: #fbbf24; display: flex; align-items: center; gap: 10px;">
+          <i class="fa-solid fa-map-location-dot" style="font-size: 1.35rem;"></i> BẢN ĐỒ BÀI HỌC HSK CẤP ${Y==="7-9"?"7-8-9":Y}
         </span>
-      </div>
-      <div class="saga-view-toggle" style="display: flex; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.15); padding: 4px; border-radius: 12px; gap: 4px;">
-        <button class="saga-toggle-btn ${m==="map"?"active":""}" onclick="window.switchLessonViewMode('map')" style="padding: 8px 16px; border-radius: 9px; font-weight: 800; border: none; cursor: pointer; transition: all 0.2s; ${m==="map"?"background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);":"background: transparent; color: #94a3b8;"}">
-          <i class="fa-solid fa-route"></i> Bản đồ Game
-        </button>
-        <button class="saga-toggle-btn ${m==="cards"?"active":""}" onclick="window.switchLessonViewMode('cards')" style="padding: 8px 16px; border-radius: 9px; font-weight: 800; border: none; cursor: pointer; transition: all 0.2s; ${m==="cards"?"background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);":"background: transparent; color: #94a3b8;"}">
-          <i class="fa-solid fa-table-cells-large"></i> Danh sách Thẻ
-        </button>
       </div>
     </div>
   `;if(m==="map"){let u="",y=!1;c.forEach((f,v)=>{const b=g[f]||[],I=b.length;if(I===0)return;const H=b[0],T=H.lessonTitle||H.category||`Bài ${f}`,$=b.filter(W=>W.isMemorized).length,S=Math.round($/I*100),V=$===I&&I>0;let _=!1;if(v===0)_=!0;else{const W=c[v-1],te=g[W]||[],yt=te.filter(zt=>zt.isMemorized).length;_=(te.length>0?Math.round(yt/te.length*100):0)>=80||yt===te.length||V}let C=!1;_&&!V&&!y&&(C=!0,y=!0);const P=v%4;let D="align-self: center;";P===0&&(D="align-self: flex-start; margin-left: 18%;"),P===1&&(D="align-self: center;"),P===2&&(D="align-self: flex-end; margin-right: 18%;"),P===3&&(D="align-self: center;");let O="";_?V?O="background: linear-gradient(145deg, #fbbf24, #d97706); box-shadow: 0 8px 0 #b45be6; border-color: #fef08a; color: #78350f;":C?O="background: linear-gradient(145deg, #10b981, #059669); box-shadow: 0 8px 0 #047857; border-color: #a7f3d0;":O="background: linear-gradient(145deg, #3b82f6, #1d4ed8); box-shadow: 0 8px 0 #1e40af; border-color: #bfdbfe;":O="background: linear-gradient(145deg, #334155, #1e293b); box-shadow: 0 8px 0 #0f172a; border-color: rgba(255,255,255,0.1); filter: grayscale(0.5); opacity: 0.85;";const me=f.toString().replace(/\D/g,"")||f;u+=`
@@ -469,7 +461,7 @@ ${l.example_zh.replaceAll(l.word," _____ ")}
           </div>
 
           <!-- Lesson Tag Card -->
-          <div class="saga-node-tag-card" onclick="window.openLessonDetailModal('${f}')" style="margin-top: 8px; background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.18); border-radius: 14px; padding: 8px 16px; text-align: center; max-width: 220px; cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,0.4); transition: all 0.2s;">
+          <div class="saga-node-tag-card" onclick="window.openLessonDetailModal('${f}')" style="margin-top: 8px; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border: 1px solid rgba(255,255,255,0.2); border-radius: 14px; padding: 8px 16px; text-align: center; max-width: 220px; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2); transition: all 0.2s;">
             <div style="font-weight: 800; font-size: 0.95rem; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--font-display);">${T}</div>
             <div style="font-size: 0.78rem; color: #94a3b8; margin-top: 2px; font-weight: 600;">
               ${$}/${I} từ ${V?"• 🎉 Đã xong":_?`• ${S}%`:"• 🔒 Khóa"}
@@ -487,19 +479,31 @@ ${l.example_zh.replaceAll(l.word," _____ ")}
       `});const E=`
       <div style="grid-column: 1 / -1; width: 100%;">
         ${p}
-        <div class="lessons-saga-map-wrapper" style="background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.88)), url('/assets/saga_map_bg.png') center/cover no-repeat; border-radius: 28px; border: 1px solid rgba(255,255,255,0.18); padding: 40px 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden;">
+        <div class="lessons-saga-map-wrapper" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 27, 75, 0.8) 50%, rgba(15, 23, 42, 0.9) 100%); backdrop-filter: blur(40px) saturate(200%); -webkit-backdrop-filter: blur(40px) saturate(200%); border-radius: 32px; border: 1px solid rgba(255,255,255,0.18); padding: 48px 24px; box-shadow: 0 30px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.25); display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden;">
+          
+          <!-- Liquid Glass Ambient Glowing Orbs -->
+          <div style="position: absolute; top: -100px; left: -100px; width: 350px; height: 350px; background: radial-gradient(circle, rgba(56, 189, 248, 0.35), transparent 70%); filter: blur(60px); pointer-events: none; border-radius: 50%; animation: liquidPulse 8s ease-in-out infinite alternate;"></div>
+          <div style="position: absolute; top: 40%; right: -120px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(168, 85, 247, 0.35), transparent 70%); filter: blur(70px); pointer-events: none; border-radius: 50%; animation: liquidPulse 10s ease-in-out infinite alternate-reverse;"></div>
+          <div style="position: absolute; bottom: -100px; left: 30%; width: 350px; height: 350px; background: radial-gradient(circle, rgba(16, 185, 129, 0.25), transparent 70%); filter: blur(60px); pointer-events: none; border-radius: 50%; animation: liquidPulse 9s ease-in-out infinite alternate;"></div>
+
           <style>
+            @keyframes liquidPulse {
+              0% { transform: scale(1) translateY(0); opacity: 0.6; }
+              100% { transform: scale(1.2) translateY(-20px); opacity: 0.9; }
+            }
             @keyframes floatMascot {
               0%, 100% { transform: translateY(0); }
               50% { transform: translateY(-8px); }
             }
             .saga-node-circle:hover {
               transform: scale(1.08) translateY(-4px);
+              box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 255, 255, 0.2) !important;
             }
             .saga-node-circle:active {
               transform: scale(0.96) translateY(2px);
             }
           </style>
+
           ${u}
         </div>
       </div>

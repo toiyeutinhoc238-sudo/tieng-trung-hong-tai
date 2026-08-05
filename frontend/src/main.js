@@ -6719,22 +6719,14 @@ window.openLessonDetailModal = function (lessonKey) {
 
   // View Switcher Bar Header
   const viewSwitcherHtml = `
-    <div style="grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 12px; background: rgba(15, 23, 42, 0.85); padding: 12px 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(12px); position: relative; z-index: 100;">
+    <div style="grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; background: rgba(15, 23, 42, 0.85); padding: 14px 22px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(16px); position: relative; z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
       <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; position: relative; z-index: 101;">
-        <button onclick="event.preventDefault(); event.stopPropagation(); window.returnToHskLevelSelection();" style="padding: 8px 18px; border-radius: 12px; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: 1px solid rgba(255,255,255,0.3); color: #ffffff; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.92rem; transition: all 0.2s; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4); position: relative; z-index: 999; pointer-events: auto;" onmouseenter="this.style.transform='scale(1.05)'" onmouseleave="this.style.transform='scale(1)'">
+        <button onclick="event.preventDefault(); event.stopPropagation(); window.returnToHskLevelSelection();" style="padding: 10px 20px; border-radius: 14px; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: 1px solid rgba(255,255,255,0.3); color: #ffffff; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.95rem; transition: all 0.2s; box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4); position: relative; z-index: 999; pointer-events: auto;" onmouseenter="this.style.transform='scale(1.05)'" onmouseleave="this.style.transform='scale(1)'">
           <i class="fa-solid fa-arrow-left"></i> ⬅️ Đổi Cấp Độ HSK
         </button>
-        <span style="font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; color: #fbbf24; display: flex; align-items: center; gap: 8px;">
-          <i class="fa-solid fa-map-location-dot" style="font-size: 1.3rem;"></i> BẢN ĐỒ BÀI HỌC HSK CẤP ${activeLessonsLevel === '7-9' ? '7-8-9' : activeLessonsLevel}
+        <span style="font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; color: #fbbf24; display: flex; align-items: center; gap: 10px;">
+          <i class="fa-solid fa-map-location-dot" style="font-size: 1.35rem;"></i> BẢN ĐỒ BÀI HỌC HSK CẤP ${activeLessonsLevel === '7-9' ? '7-8-9' : activeLessonsLevel}
         </span>
-      </div>
-      <div class="saga-view-toggle" style="display: flex; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.15); padding: 4px; border-radius: 12px; gap: 4px;">
-        <button class="saga-toggle-btn ${activeLessonViewMode === 'map' ? 'active' : ''}" onclick="window.switchLessonViewMode('map')" style="padding: 8px 16px; border-radius: 9px; font-weight: 800; border: none; cursor: pointer; transition: all 0.2s; ${activeLessonViewMode === 'map' ? 'background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);' : 'background: transparent; color: #94a3b8;'}">
-          <i class="fa-solid fa-route"></i> Bản đồ Game
-        </button>
-        <button class="saga-toggle-btn ${activeLessonViewMode === 'cards' ? 'active' : ''}" onclick="window.switchLessonViewMode('cards')" style="padding: 8px 16px; border-radius: 9px; font-weight: 800; border: none; cursor: pointer; transition: all 0.2s; ${activeLessonViewMode === 'cards' ? 'background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);' : 'background: transparent; color: #94a3b8;'}">
-          <i class="fa-solid fa-table-cells-large"></i> Danh sách Thẻ
-        </button>
       </div>
     </div>
   `;
@@ -6827,7 +6819,7 @@ window.openLessonDetailModal = function (lessonKey) {
           </div>
 
           <!-- Lesson Tag Card -->
-          <div class="saga-node-tag-card" onclick="window.openLessonDetailModal('${lessonKey}')" style="margin-top: 8px; background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.18); border-radius: 14px; padding: 8px 16px; text-align: center; max-width: 220px; cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,0.4); transition: all 0.2s;">
+          <div class="saga-node-tag-card" onclick="window.openLessonDetailModal('${lessonKey}')" style="margin-top: 8px; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border: 1px solid rgba(255,255,255,0.2); border-radius: 14px; padding: 8px 16px; text-align: center; max-width: 220px; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2); transition: all 0.2s;">
             <div style="font-weight: 800; font-size: 0.95rem; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--font-display);">${title}</div>
             <div style="font-size: 0.78rem; color: #94a3b8; margin-top: 2px; font-weight: 600;">
               ${memorizedCount}/${wordsCount} từ ${isCompleted ? '• 🎉 Đã xong' : isUnlocked ? `• ${pct}%` : '• 🔒 Khóa'}
@@ -6848,19 +6840,31 @@ window.openLessonDetailModal = function (lessonKey) {
     const sagaMapWrapper = `
       <div style="grid-column: 1 / -1; width: 100%;">
         ${viewSwitcherHtml}
-        <div class="lessons-saga-map-wrapper" style="background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.88)), url('/assets/saga_map_bg.png') center/cover no-repeat; border-radius: 28px; border: 1px solid rgba(255,255,255,0.18); padding: 40px 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden;">
+        <div class="lessons-saga-map-wrapper" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 27, 75, 0.8) 50%, rgba(15, 23, 42, 0.9) 100%); backdrop-filter: blur(40px) saturate(200%); -webkit-backdrop-filter: blur(40px) saturate(200%); border-radius: 32px; border: 1px solid rgba(255,255,255,0.18); padding: 48px 24px; box-shadow: 0 30px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.25); display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden;">
+          
+          <!-- Liquid Glass Ambient Glowing Orbs -->
+          <div style="position: absolute; top: -100px; left: -100px; width: 350px; height: 350px; background: radial-gradient(circle, rgba(56, 189, 248, 0.35), transparent 70%); filter: blur(60px); pointer-events: none; border-radius: 50%; animation: liquidPulse 8s ease-in-out infinite alternate;"></div>
+          <div style="position: absolute; top: 40%; right: -120px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(168, 85, 247, 0.35), transparent 70%); filter: blur(70px); pointer-events: none; border-radius: 50%; animation: liquidPulse 10s ease-in-out infinite alternate-reverse;"></div>
+          <div style="position: absolute; bottom: -100px; left: 30%; width: 350px; height: 350px; background: radial-gradient(circle, rgba(16, 185, 129, 0.25), transparent 70%); filter: blur(60px); pointer-events: none; border-radius: 50%; animation: liquidPulse 9s ease-in-out infinite alternate;"></div>
+
           <style>
+            @keyframes liquidPulse {
+              0% { transform: scale(1) translateY(0); opacity: 0.6; }
+              100% { transform: scale(1.2) translateY(-20px); opacity: 0.9; }
+            }
             @keyframes floatMascot {
               0%, 100% { transform: translateY(0); }
               50% { transform: translateY(-8px); }
             }
             .saga-node-circle:hover {
               transform: scale(1.08) translateY(-4px);
+              box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 255, 255, 0.2) !important;
             }
             .saga-node-circle:active {
               transform: scale(0.96) translateY(2px);
             }
           </style>
+
           ${mapNodesHtml}
         </div>
       </div>
