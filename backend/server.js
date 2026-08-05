@@ -71,6 +71,16 @@ const FRONTEND_DIR = path.join(__dirname, '..', 'frontend');
 const DIST_DIR = path.join(__dirname, '..', 'frontend', 'dist');
 const PUBLIC_DIR = path.join(__dirname, '..', 'frontend', 'public');
 
+// Force no-cache on HTML and SW files so browsers always pull latest builds
+app.use((req, res, next) => {
+  if (req.url === '/' || req.url.endsWith('.html') || req.url === '/sw.js' || req.url.includes('sw.js')) {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+  }
+  next();
+});
+
 // Explicit static asset routes for production & dev builds
 app.use('/assets', express.static(path.join(DIST_DIR, 'assets')));
 app.use('/assets', express.static(path.join(PUBLIC_DIR, 'assets')));
