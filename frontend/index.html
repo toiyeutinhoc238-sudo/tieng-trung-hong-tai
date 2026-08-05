@@ -81,6 +81,13 @@
 
   <!-- Google Sign-In Library -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script>
+    // Safe fallback function stubs while main JS module initializes
+    window.openZubiStatDetail = window.openZubiStatDetail || function(type) { console.log('Initializing dashboard stat detail:', type); };
+    window.switchTab = window.switchTab || function(tab) { console.log('Initializing tab:', tab); };
+    window.toggleSidebarCollapse = window.toggleSidebarCollapse || function() {};
+    window.toggleTheme = window.toggleTheme || function() {};
+  </script>
 </head>
 
 <body>

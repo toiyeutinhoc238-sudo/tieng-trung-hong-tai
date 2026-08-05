@@ -80,6 +80,13 @@
 
   <!-- Google Sign-In Library -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script>
+    // Safe fallback function stubs while main JS module initializes
+    window.openZubiStatDetail = window.openZubiStatDetail || function(type) { console.log('Initializing dashboard stat detail:', type); };
+    window.switchTab = window.switchTab || function(tab) { console.log('Initializing tab:', tab); };
+    window.toggleSidebarCollapse = window.toggleSidebarCollapse || function() {};
+    window.toggleTheme = window.toggleTheme || function() {};
+  </script>
   <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
   <script type="module" crossorigin src="/assets/main-EQ9c4aZI.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/style-BX3cbp3Z.css">
