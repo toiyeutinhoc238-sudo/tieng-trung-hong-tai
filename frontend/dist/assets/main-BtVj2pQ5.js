@@ -418,12 +418,12 @@ ${l.example_zh.replaceAll(l.word," _____ ")}
         </button>
       </div>
     `,e.appendChild(y);return}if(i&&(i.style.display="none"),n&&(n.style.display="flex"),d&&(d.style.display="flex"),s){const u=s.querySelector('option[value="7-9"]');if(A==="2.0")u&&(window._hsk79OptionElement=u,u.remove()),Y.toString()==="7-9"&&(Y=1);else if(!u){if(!window._hsk79OptionElement){const y=document.createElement("option");y.value="7-9",y.id="hsk-level-79-option",y.textContent="Cấp HSK 7-8-9 (Cao cấp)",window._hsk79OptionElement=y}s.appendChild(window._hsk79OptionElement)}}if(s&&s.value!==Y.toString()&&(s.value=Y.toString()),o&&(Y>=4&&A==="2.0"?(o.style.display="flex",r&&(r.value=Oe)):(o.style.display="none",Oe="all",r&&(r.value="all"))),t){const u=x.filter(v=>!v.isCustom&&v.curriculum!=="yct"&&v.hskVersion!=="yct"&&K(v.level,Y)&&(v.hskVersion||"3.0")===A).length,y=u>0?`, ${u.toLocaleString()} từ vựng`:"",f=({"2.0":{1:"HSK 2.0 Cấp 1 - Sơ cấp dành cho người mới bắt đầu",2:"HSK 2.0 Cấp 2 - Sơ cấp nâng cao, giao tiếp đời sống cơ bản",3:"HSK 2.0 Cấp 3 - Trung cấp, giao tiếp tự tin các chủ đề học tập/công việc",4:"HSK 2.0 Cấp 4 - Trung cấp nâng cao, thảo luận nhiều chủ đề chuyên sâu",5:"HSK 2.0 Cấp 5 - Cao cấp, đọc báo chí xem phim và thuyết trình tự nhiên",6:"HSK 2.0 Cấp 6 - Thành thạo, đọc văn học và viết học thuật","7-9":"HSK 2.0 Cấp 7-8-9 - Nâng cao chuyên nghiệp, sử dụng ngôn ngữ tiếng Trung nước ngoài"},"3.0":{1:"HSK 3.0 Cấp 1 - Sơ cấp dành cho người mới bắt đầu",2:"HSK 3.0 Cấp 2 - Sơ cấp nâng cao",3:"HSK 3.0 Cấp 3 - Sơ cấp hoàn chỉnh",4:"HSK 3.0 Cấp 4 - Trung cấp cơ bản",5:"HSK 3.0 Cấp 5 - Trung cấp nâng cao",6:"HSK 3.0 Cấp 6 - Cao cấp","7-9":"HSK 3.0 Cấp 7-8-9 - Nâng cao chuyên nghiệp"}}[A]||{})[Y]||`HSK ${A} Cấp ${Y==="7-9"?"7-8-9":Y}`;t.textContent=`Mục tiêu: ${f}${y}`}const a=x.filter(u=>{if(u.isCustom||u.curriculum==="yct"||u.hskVersion==="yct"||!K(u.level,Y)||(u.hskVersion||"3.0")!==A)return!1;if((Y===4||Y===5)&&A==="2.0"&&Oe!=="all")if(u.volume){if(u.volume!==Oe)return!1}else{const y=Y===4?u.lessonId<=10:u.lessonId<=18;if(Oe==="thuong"&&!y||Oe==="ha"&&y)return!1}return!0});let m="map";window.switchLessonViewMode=function(u){m=u,Ae()},window.openLessonDetailModal=function(u){const y=ke==="yct"?fe:Y,f=x.filter(W=>!(W.isCustom||W.curriculum==="yct"||W.hskVersion==="yct"||!K(W.level,y)||(W.hskVersion||"3.0")!==A)).filter(W=>String(W.lessonId||1)===String(u));if(f.length===0)return;const v=f[0],b=v.lessonTitle||v.category||`Bài ${u}`,I=v.lessonDesc||`Ôn tập từ vựng bài học HSK Cấp ${y}`,H=f.filter(W=>W.isMemorized).length,T=Math.round(H/f.length*100),$=document.getElementById("modal-lesson-number-circle"),S=document.getElementById("modal-lesson-badge-val"),V=document.getElementById("modal-lesson-title-val"),_=document.getElementById("modal-lesson-desc-val"),C=document.getElementById("modal-lesson-progress-text"),P=document.getElementById("modal-lesson-progress-fill"),D=document.getElementById("modal-lesson-vocab-count"),O=document.getElementById("modal-btn-mod-vocab");$&&($.textContent=u.toString().replace(/\D/g,"")||u),S&&(S.textContent=`HSK ${y==="7-9"?"7-8-9":y} (${A}) • Bài ${u}`),V&&(V.textContent=b),_&&(_.textContent=I),C&&(C.textContent=`${H}/${f.length} từ (${T}%)`),P&&(P.style.width=`${T}%`),D&&(D.textContent=`${f.length} từ`),O&&(O.onclick=function(){const W=document.getElementById("lesson-detail-popup-modal");W&&(W.style.display="none"),Ut({id:u,title:b},f)});const me=document.getElementById("lesson-detail-popup-modal");me&&(me.style.display="flex")};const g={};a.forEach(u=>{const y=u.lessonId||1;g[y]||(g[y]=[]),g[y].push(u)});const c=Object.keys(g).sort((u,y)=>{const E=parseInt(u.replace(/\D/g,""))||0,f=parseInt(y.replace(/\D/g,""))||0;return E-f}),p=`
-    <div style="grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; background: rgba(15, 23, 42, 0.85); padding: 14px 22px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(16px); position: relative; z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-      <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; position: relative; z-index: 101;">
-        <button onclick="event.preventDefault(); event.stopPropagation(); window.returnToHskLevelSelection();" style="padding: 10px 20px; border-radius: 14px; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: 1px solid rgba(255,255,255,0.3); color: #ffffff; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.95rem; transition: all 0.2s; box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4); position: relative; z-index: 999; pointer-events: auto;" onmouseenter="this.style.transform='scale(1.05)'" onmouseleave="this.style.transform='scale(1)'">
-          <i class="fa-solid fa-arrow-left"></i> ⬅️ Đổi Cấp Độ HSK
+    <div class="saga-header-bar" style="grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; background: rgba(15, 23, 42, 0.85); padding: 12px 22px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(16px); position: relative; z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+      <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap; position: relative; z-index: 101;">
+        <button onclick="event.preventDefault(); event.stopPropagation(); window.returnToHskLevelSelection();" title="Đổi Cấp Độ HSK" style="width: 42px; height: 42px; border-radius: 12px; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: 1px solid rgba(255,255,255,0.3); color: #ffffff; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; transition: all 0.2s; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4); position: relative; z-index: 999; pointer-events: auto;" onmouseenter="this.style.transform='scale(1.08)'" onmouseleave="this.style.transform='scale(1)'">
+          <i class="fa-solid fa-arrow-left"></i>
         </button>
-        <span style="font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; color: #fbbf24; display: flex; align-items: center; gap: 10px;">
+        <span class="saga-header-title" style="font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; color: #fbbf24; display: flex; align-items: center; gap: 10px;">
           <i class="fa-solid fa-map-location-dot" style="font-size: 1.35rem;"></i> BẢN ĐỒ BÀI HỌC HSK CẤP ${Y==="7-9"?"7-8-9":Y}
         </span>
       </div>
@@ -462,8 +462,8 @@ ${l.example_zh.replaceAll(l.word," _____ ")}
 
           <!-- Lesson Tag Card -->
           <div class="saga-node-tag-card" onclick="window.openLessonDetailModal('${f}')" style="margin-top: 8px; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border: 1px solid rgba(255,255,255,0.2); border-radius: 14px; padding: 8px 16px; text-align: center; max-width: 220px; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2); transition: all 0.2s;">
-            <div style="font-weight: 800; font-size: 0.95rem; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--font-display);">${T}</div>
-            <div style="font-size: 0.78rem; color: #94a3b8; margin-top: 2px; font-weight: 600;">
+            <div class="saga-tag-title" style="font-weight: 800; font-size: 0.95rem; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--font-display);">${T}</div>
+            <div class="saga-tag-sub" style="font-size: 0.78rem; color: #94a3b8; margin-top: 2px; font-weight: 600;">
               ${$}/${I} từ ${V?"• 🎉 Đã xong":_?`• ${S}%`:"• 🔒 Khóa"}
             </div>
           </div>
@@ -501,6 +501,49 @@ ${l.example_zh.replaceAll(l.word," _____ ")}
             }
             .saga-node-circle:active {
               transform: scale(0.96) translateY(2px);
+            }
+
+            /* Light mode Liquid Glass theme adaptation */
+            html.light-mode .lessons-saga-map-wrapper,
+            html.light .lessons-saga-map-wrapper,
+            body.light-mode .lessons-saga-map-wrapper {
+              background: linear-gradient(135deg, rgba(255, 255, 255, 0.78) 0%, rgba(238, 242, 255, 0.88) 50%, rgba(255, 255, 255, 0.82) 100%) !important;
+              border: 1px solid rgba(255, 255, 255, 0.8) !important;
+              box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+            }
+
+            html.light-mode .saga-header-bar,
+            html.light .saga-header-bar,
+            body.light-mode .saga-header-bar {
+              background: rgba(255, 255, 255, 0.85) !important;
+              border: 1px solid rgba(255, 255, 255, 0.8) !important;
+              box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+            }
+
+            html.light-mode .saga-header-title,
+            html.light .saga-header-title,
+            body.light-mode .saga-header-title {
+              color: #1e3a8a !important;
+            }
+
+            html.light-mode .saga-node-tag-card,
+            html.light .saga-node-tag-card,
+            body.light-mode .saga-node-tag-card {
+              background: rgba(255, 255, 255, 0.85) !important;
+              border: 1px solid rgba(255, 255, 255, 0.9) !important;
+              box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 1) !important;
+            }
+
+            html.light-mode .saga-tag-title,
+            html.light .saga-tag-title,
+            body.light-mode .saga-tag-title {
+              color: #0f172a !important;
+            }
+
+            html.light-mode .saga-tag-sub,
+            html.light .saga-tag-sub,
+            body.light-mode .saga-tag-sub {
+              color: #475569 !important;
             }
           </style>
 

@@ -6719,12 +6719,12 @@ window.openLessonDetailModal = function (lessonKey) {
 
   // View Switcher Bar Header
   const viewSwitcherHtml = `
-    <div style="grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; background: rgba(15, 23, 42, 0.85); padding: 14px 22px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(16px); position: relative; z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-      <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; position: relative; z-index: 101;">
-        <button onclick="event.preventDefault(); event.stopPropagation(); window.returnToHskLevelSelection();" style="padding: 10px 20px; border-radius: 14px; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: 1px solid rgba(255,255,255,0.3); color: #ffffff; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.95rem; transition: all 0.2s; box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4); position: relative; z-index: 999; pointer-events: auto;" onmouseenter="this.style.transform='scale(1.05)'" onmouseleave="this.style.transform='scale(1)'">
-          <i class="fa-solid fa-arrow-left"></i> ⬅️ Đổi Cấp Độ HSK
+    <div class="saga-header-bar" style="grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; background: rgba(15, 23, 42, 0.85); padding: 12px 22px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(16px); position: relative; z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+      <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap; position: relative; z-index: 101;">
+        <button onclick="event.preventDefault(); event.stopPropagation(); window.returnToHskLevelSelection();" title="Đổi Cấp Độ HSK" style="width: 42px; height: 42px; border-radius: 12px; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: 1px solid rgba(255,255,255,0.3); color: #ffffff; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; transition: all 0.2s; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4); position: relative; z-index: 999; pointer-events: auto;" onmouseenter="this.style.transform='scale(1.08)'" onmouseleave="this.style.transform='scale(1)'">
+          <i class="fa-solid fa-arrow-left"></i>
         </button>
-        <span style="font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; color: #fbbf24; display: flex; align-items: center; gap: 10px;">
+        <span class="saga-header-title" style="font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; color: #fbbf24; display: flex; align-items: center; gap: 10px;">
           <i class="fa-solid fa-map-location-dot" style="font-size: 1.35rem;"></i> BẢN ĐỒ BÀI HỌC HSK CẤP ${activeLessonsLevel === '7-9' ? '7-8-9' : activeLessonsLevel}
         </span>
       </div>
@@ -6820,8 +6820,8 @@ window.openLessonDetailModal = function (lessonKey) {
 
           <!-- Lesson Tag Card -->
           <div class="saga-node-tag-card" onclick="window.openLessonDetailModal('${lessonKey}')" style="margin-top: 8px; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border: 1px solid rgba(255,255,255,0.2); border-radius: 14px; padding: 8px 16px; text-align: center; max-width: 220px; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2); transition: all 0.2s;">
-            <div style="font-weight: 800; font-size: 0.95rem; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--font-display);">${title}</div>
-            <div style="font-size: 0.78rem; color: #94a3b8; margin-top: 2px; font-weight: 600;">
+            <div class="saga-tag-title" style="font-weight: 800; font-size: 0.95rem; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--font-display);">${title}</div>
+            <div class="saga-tag-sub" style="font-size: 0.78rem; color: #94a3b8; margin-top: 2px; font-weight: 600;">
               ${memorizedCount}/${wordsCount} từ ${isCompleted ? '• 🎉 Đã xong' : isUnlocked ? `• ${pct}%` : '• 🔒 Khóa'}
             </div>
           </div>
@@ -6862,6 +6862,49 @@ window.openLessonDetailModal = function (lessonKey) {
             }
             .saga-node-circle:active {
               transform: scale(0.96) translateY(2px);
+            }
+
+            /* Light mode Liquid Glass theme adaptation */
+            html.light-mode .lessons-saga-map-wrapper,
+            html.light .lessons-saga-map-wrapper,
+            body.light-mode .lessons-saga-map-wrapper {
+              background: linear-gradient(135deg, rgba(255, 255, 255, 0.78) 0%, rgba(238, 242, 255, 0.88) 50%, rgba(255, 255, 255, 0.82) 100%) !important;
+              border: 1px solid rgba(255, 255, 255, 0.8) !important;
+              box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+            }
+
+            html.light-mode .saga-header-bar,
+            html.light .saga-header-bar,
+            body.light-mode .saga-header-bar {
+              background: rgba(255, 255, 255, 0.85) !important;
+              border: 1px solid rgba(255, 255, 255, 0.8) !important;
+              box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+            }
+
+            html.light-mode .saga-header-title,
+            html.light .saga-header-title,
+            body.light-mode .saga-header-title {
+              color: #1e3a8a !important;
+            }
+
+            html.light-mode .saga-node-tag-card,
+            html.light .saga-node-tag-card,
+            body.light-mode .saga-node-tag-card {
+              background: rgba(255, 255, 255, 0.85) !important;
+              border: 1px solid rgba(255, 255, 255, 0.9) !important;
+              box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 1) !important;
+            }
+
+            html.light-mode .saga-tag-title,
+            html.light .saga-tag-title,
+            body.light-mode .saga-tag-title {
+              color: #0f172a !important;
+            }
+
+            html.light-mode .saga-tag-sub,
+            html.light .saga-tag-sub,
+            body.light-mode .saga-tag-sub {
+              color: #475569 !important;
             }
           </style>
 
