@@ -6738,6 +6738,43 @@ window.openLessonDetailModal = function (lessonKey) {
     };
   }
 
+  // Handle 'Ôn Tập' (Quiz Game) unlock logic based on 100% completion
+  const btnReview = document.getElementById('modal-btn-mod-review');
+  let reviewBadge = document.getElementById('modal-review-badge');
+  if (!reviewBadge && btnReview) {
+    reviewBadge = btnReview.querySelector('small');
+  }
+
+  if (pct === 100) {
+    if (reviewBadge) {
+      reviewBadge.textContent = 'Mở khóa Trắc nghiệm 🎮';
+      reviewBadge.style.background = '#10b981';
+      reviewBadge.style.color = '#ffffff';
+    }
+    if (btnReview) {
+      btnReview.style.opacity = '1';
+      btnReview.onclick = function (e) {
+        e.stopPropagation();
+        const modalEl = document.getElementById('lesson-detail-popup-modal');
+        if (modalEl) modalEl.style.display = 'none';
+        window.location.href = `/quiz-game.html?lesson=${lessonKey}&level=${currentLvl}&version=${activeHskVersion}`;
+      };
+    }
+  } else {
+    if (reviewBadge) {
+      reviewBadge.textContent = 'Cần 100%';
+      reviewBadge.style.background = 'rgba(0,0,0,0.25)';
+      reviewBadge.style.color = '#ffffff';
+    }
+    if (btnReview) {
+      btnReview.style.opacity = '0.85';
+      btnReview.onclick = function (e) {
+        e.stopPropagation();
+        showToast(`Bạn cần học đủ 100% từ vựng bài học này (hiện tại: ${pct}%) để mở khóa Ôn Tập Trắc Nghiệm!`, true);
+      };
+    }
+  }
+
   const modal = document.getElementById('lesson-detail-popup-modal');
   if (modal) {
     modal.style.display = 'flex';
@@ -7100,6 +7137,17 @@ function renderLessonFlashcardWorkspace(lessonTitle, words, selectedIndex = 0) {
 
   const currentWord = currentLessonVocabWords[currentLessonVocabIndex];
 
+  // Auto-mark word as studied and memorized when viewed to increase lesson progress
+  if (currentWord) {
+    currentWord.isStudied = true;
+    currentWord.isMemorized = true;
+    try {
+      const guestProgress = JSON.parse(localStorage.getItem('guest_progress') || '{}');
+      guestProgress[currentWord.id] = { isMemorized: true, isStudied: true, level: currentWord.level };
+      localStorage.setItem('guest_progress', JSON.stringify(guestProgress));
+    } catch(e) {}
+  }
+
   studyView.innerHTML = `
     <!-- Top Header Control Bar -->
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
@@ -7194,34 +7242,66 @@ window.speakLessonWord = function(text) {
   }
 };
 
-let lessonWriterObj = null;
-function initLessonHanziWriter(char) {
+let lessonWriterArray = [];
+
+function initLessonHanziWriter(wordStr) {
   const box = document.getElementById('lesson-hanzi-writer-box');
-  if (!box || !char) return;
+  if (!box || !wordStr) return;
   box.innerHTML = '';
+  lessonWriterArray = [];
+
+  // Extract Chinese characters
+  const chineseChars = wordStr.match(/[\u4e00-\u9fa5]/g) || [wordStr.charAt(0)];
+  const numChars = chineseChars.length;
+
+  // Dynamically calculate width based on character count
+  const boxWidth = Math.min(numChars * 130 + (numChars - 1) * 8 + 16, 540);
+  box.style.cssText = `width: ${boxWidth}px; height: 138px; background: rgba(255,255,255,0.06); border: 2px solid rgba(255,255,255,0.18); border-radius: 18px; display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 8px; position: relative; overflow-x: auto; padding: 4px; box-shadow: inset 0 0 20px rgba(0,0,0,0.2); transition: all 0.3s ease;`;
+
   if (typeof HanziWriter !== 'undefined') {
-    try {
-      lessonWriterObj = HanziWriter.create('lesson-hanzi-writer-box', char.charAt(0), {
-        width: 140,
-        height: 140,
-        padding: 5,
-        strokeColor: '#2563eb',
-        outlineColor: 'rgba(255,255,255,0.15)',
-        showOutline: true,
-        showCharacter: true
-      });
-      lessonWriterObj.animateCharacter();
-    } catch(e) {
-      box.innerHTML = `<div style="font-size: 4rem; font-weight: 800; font-family: var(--font-display); color: var(--text-primary);">${char}</div>`;
-    }
+    chineseChars.forEach((ch, idx) => {
+      const charDiv = document.createElement('div');
+      const divId = `lesson-hanzi-char-${idx}`;
+      charDiv.id = divId;
+      charDiv.style.cssText = 'width: 125px; height: 125px; flex-shrink: 0; background: rgba(0,0,0,0.12); border-radius: 12px; display: flex; align-items: center; justify-content: center;';
+      box.appendChild(charDiv);
+
+      try {
+        const writer = HanziWriter.create(divId, ch, {
+          width: 120,
+          height: 120,
+          padding: 4,
+          strokeColor: '#2563eb',
+          outlineColor: 'rgba(255,255,255,0.18)',
+          showOutline: true,
+          showCharacter: true
+        });
+        lessonWriterArray.push(writer);
+      } catch (e) {
+        charDiv.innerHTML = `<div style="font-size: 3.2rem; font-weight: 800; font-family: var(--font-display); color: var(--text-primary);">${ch}</div>`;
+      }
+    });
+
+    // Animate characters sequentially from left to right
+    animateSequentially(0);
   } else {
-    box.innerHTML = `<div style="font-size: 4rem; font-weight: 800; font-family: var(--font-display); color: var(--text-primary);">${char}</div>`;
+    box.innerHTML = `<div style="font-size: 3.5rem; font-weight: 800; font-family: var(--font-display); color: var(--text-primary);">${wordStr}</div>`;
+  }
+}
+
+function animateSequentially(idx) {
+  if (idx < lessonWriterArray.length && lessonWriterArray[idx]) {
+    lessonWriterArray[idx].animateCharacter({
+      onComplete: () => {
+        animateSequentially(idx + 1);
+      }
+    });
   }
 }
 
 window.replayLessonHanziStrokes = function() {
-  if (lessonWriterObj) {
-    lessonWriterObj.animateCharacter();
+  if (lessonWriterArray && lessonWriterArray.length > 0) {
+    animateSequentially(0);
   }
 };
 
