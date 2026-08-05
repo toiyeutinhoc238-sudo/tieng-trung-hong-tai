@@ -71,6 +71,15 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// Canonical Domain 301 Permanent Redirect for Googlebot & SEO
+app.use((req, res, next) => {
+  const host = req.headers.host || '';
+  if (host.includes('onrender.com')) {
+    return res.redirect(301, `https://tiengtrunghongtai.online${req.originalUrl}`);
+  }
+  next();
+});
+
 const FRONTEND_DIR = path.join(__dirname, '..', 'frontend');
 const DIST_DIR = path.join(__dirname, '..', 'frontend', 'dist');
 const PUBLIC_DIR = path.join(__dirname, '..', 'frontend', 'public');
