@@ -1140,10 +1140,34 @@ function renderActiveCardLesson(current) {
 
 // Render Eye Hint Cards matching Image 2 EXACTLY
 function renderLessonWordHintCards(sentence) {
-  const container = document.getElementById('lesson-word-chips-container');
+  let container = document.getElementById('lesson-word-chips-container');
+  let hintSection = document.getElementById('lesson-image2-hint-section');
+
+  // Dynamic fallback: If hintSection is missing (e.g. stale index.html in browser cache), create it!
+  if (!hintSection || !container) {
+    const inputEl = document.getElementById('lesson-typing-input');
+    if (inputEl && inputEl.parentElement) {
+      if (!hintSection) {
+        hintSection = document.createElement('div');
+        hintSection.id = 'lesson-image2-hint-section';
+        hintSection.style.cssText = 'margin-top: 14px; display: flex; flex-direction: column; gap: 12px; align-items: center; width: 100%;';
+        hintSection.innerHTML = `
+          <div id="lesson-word-chips-container" style="display: flex; gap: 14px; flex-wrap: wrap; align-items: center; justify-content: center; width: 100%;"></div>
+          <div style="font-size: 0.9rem; font-weight: 700; color: #64748b; text-align: center;">Nhấp vào biểu tượng con mắt để hiện từ</div>
+          <button id="lesson-reveal-all-words-btn" type="button"
+            style="width: 100%; background: #facc15; color: #000000; font-weight: 900; font-size: 1.05rem; border: 2.5px solid #000000; border-radius: 14px; padding: 14px 20px; cursor: pointer; box-shadow: 0 4px 0 #000000; transition: all 0.15s ease; text-transform: uppercase; letter-spacing: 0.5px;">
+            HIỆN TẤT CẢ TỪ
+          </button>
+        `;
+        inputEl.parentElement.after(hintSection);
+      }
+      container = document.getElementById('lesson-word-chips-container');
+    }
+  }
+
+  if (!container) return;
   const revealAllBtn = document.getElementById('lesson-reveal-all-words-btn');
   const clearBtn = document.getElementById('lesson-clear-btn');
-  if (!container) return;
 
   if (clearBtn) {
     clearBtn.onclick = () => {
@@ -1170,12 +1194,12 @@ function renderLessonWordHintCards(sentence) {
 
   const cleanSentence = sentence.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '');
   if (!cleanSentence) {
-    if (container.parentElement) container.parentElement.style.display = 'none';
+    if (hintSection) hintSection.style.display = 'none';
     return;
   }
-  if (container.parentElement) container.parentElement.style.display = 'flex';
+  if (hintSection) hintSection.style.display = 'flex';
 
-  // Break sentence into 1 to 2 or 3 character word chunks
+  // Break sentence into 1 to 2 character word chunks
   const wordTokens = [];
   let idx = 0;
   while (idx < cleanSentence.length) {
@@ -1186,7 +1210,7 @@ function renderLessonWordHintCards(sentence) {
 
   let html = '';
   wordTokens.forEach((token, index) => {
-    // Generate spaced dots matching char count, e.g. ". ." or ". . ."
+    // Spaced dots matching char count: e.g. ". ." or ". . ."
     const dotsFormatted = Array(token.length).fill('.').join(' ');
 
     html += `
