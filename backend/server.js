@@ -84,6 +84,13 @@ const FRONTEND_DIR = path.join(__dirname, '..', 'frontend');
 const DIST_DIR = path.join(__dirname, '..', 'frontend', 'dist');
 const PUBLIC_DIR = path.join(__dirname, '..', 'frontend', 'public');
 
+// Configure Cross-Origin headers for Google Identity Services OAuth & Iframe postMessage
+app.use((req, res, next) => {
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+  next();
+});
+
 // Force no-cache on HTML and SW files so browsers always pull latest builds
 app.use((req, res, next) => {
   if (req.url === '/' || req.url.endsWith('.html') || req.url === '/sw.js' || req.url.includes('sw.js')) {
