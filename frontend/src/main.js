@@ -4631,16 +4631,65 @@ window.handleRoadmapTranslationInput = function(targetAns) {
     return;
   }
 
-  // Strip spaces & punctuation for clean comparison
-  const cleanTarget = targetAns.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s]/g, '');
   const cleanTyped = typed.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s]/g, '');
+  if (!cleanTyped) {
+    feedbackEl.innerHTML = '';
+    return;
+  }
+
+  // Build list of all valid candidate targets for the current vocabulary word
+  const candidateTargets = [];
+  if (targetAns) {
+    candidateTargets.push(targetAns.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s]/g, ''));
+  }
+
+  const w = (typeof currentRoadmapLearningVocabs !== 'undefined' && currentRoadmapLearningVocabs[currentRoadmapLearningIndex]) ? currentRoadmapLearningVocabs[currentRoadmapLearningIndex] : null;
+  if (w) {
+    const egZh = w.example_zh || '';
+    const egZhLines = egZh ? egZh.split(/(?<=[！。？\n])\s*/).map(s => s.trim()).filter(Boolean) : [];
+    egZhLines.forEach(line => {
+      const clean = line.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s]/g, '');
+      if (clean && !candidateTargets.includes(clean)) candidateTargets.push(clean);
+    });
+    const cleanWord = (w.word || w.hanzi || '').replace(/[.,!?:;="'"()\[\]{}，。！？；：\s]/g, '');
+    if (cleanWord && !candidateTargets.includes(cleanWord)) candidateTargets.push(cleanWord);
+  }
+
+  // Find best matching candidate target
+  let bestCleanTarget = candidateTargets[0] || '';
+  
+  // 1. Exact match check
+  const exactMatch = candidateTargets.find(cand => cand === cleanTyped);
+  if (exactMatch) {
+    bestCleanTarget = exactMatch;
+  } else {
+    // 2. Prefix match check
+    const prefixMatch = candidateTargets.find(cand => cand.startsWith(cleanTyped));
+    if (prefixMatch) {
+      bestCleanTarget = prefixMatch;
+    } else {
+      // 3. Max overlap match
+      let maxOverlap = -1;
+      candidateTargets.forEach(cand => {
+        let overlap = 0;
+        for (let i = 0; i < Math.min(cleanTyped.length, cand.length); i++) {
+          if (cleanTyped[i] === cand[i]) overlap++;
+          else break;
+        }
+        if (overlap > maxOverlap) {
+          maxOverlap = overlap;
+          bestCleanTarget = cand;
+        }
+      });
+    }
+  }
 
   let html = '<div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">';
   
   let isFullMatch = true;
   for (let i = 0; i < cleanTyped.length; i++) {
     const userChar = cleanTyped[i];
-    const targetChar = cleanTarget[i];
+    const targetChar = bestCleanTarget[i];
 
     if (targetChar && userChar === targetChar) {
       html += `<span style="background: rgba(34, 197, 94, 0.2); color: #22c55e; border: 1.5px solid #22c55e; padding: 4px 12px; border-radius: 8px; font-weight: 700; font-family: var(--font-hanzi); font-size: 1.15rem;">${userChar}</span>`;
@@ -4650,7 +4699,7 @@ window.handleRoadmapTranslationInput = function(targetAns) {
     }
   }
 
-  if (cleanTyped.length === cleanTarget.length && isFullMatch) {
+  if (cleanTyped.length === bestCleanTarget.length && isFullMatch) {
     html += `<span style="color: #22c55e; font-weight: 700; display: flex; align-items: center; margin-left: 8px; font-size: 1rem;"><i class="fa-solid fa-circle-check" style="margin-right: 4px;"></i> Chính xác 100%! 🎉</span>`;
   }
 
