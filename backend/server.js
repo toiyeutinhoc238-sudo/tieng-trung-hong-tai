@@ -882,9 +882,14 @@ app.post('/api/vocabulary/toggle-memorized', async (req, res) => {
     const wordKey = wordId.toString();
     const currentProgress = userData.progress[email][wordKey] || { isMemorized: false, isStarred: false };
 
+    const nextMemorized = (req.body.isMemorized !== undefined) 
+      ? Boolean(req.body.isMemorized) 
+      : !currentProgress.isMemorized;
+
     userData.progress[email][wordKey] = {
       ...currentProgress,
-      isMemorized: !currentProgress.isMemorized
+      isMemorized: nextMemorized,
+      isStudied: true
     };
 
     await writeUserData(userData);

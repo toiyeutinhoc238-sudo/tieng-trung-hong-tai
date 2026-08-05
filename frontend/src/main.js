@@ -720,24 +720,26 @@ async function fetchVocabulary() {
       }
     });
 
-    // If guest, merge guest progress from localStorage
-    if (!currentUser) {
-      const guestProgress = JSON.parse(localStorage.getItem('guest_progress') || '{}');
-      vocabList = vocabList.map(w => {
-        const state = guestProgress[w.id];
-        const isMem = state ? !!state.isMemorized : !!w.isMemorized;
-        const isStar = state ? !!state.isStarred : !!w.isStarred;
-        const isWr = state ? !!state.isWrong : !!w.isWrong;
-        const isStd = state ? !!state.isStudied : !!w.isStudied;
-        return {
-          ...w,
-          isMemorized: isMem,
-          isStarred: isStar,
-          isWrong: isWr,
-          isStudied: isStd || isMem || isStar || isWr
-        };
-      });
-    }
+    // Merge user/guest progress from localStorage to ensure progress is never lost across login/logout
+    const userKey = currentUser ? (currentUser._id || currentUser.id || currentUser.email || 'user') : 'guest';
+    const userProg = JSON.parse(localStorage.getItem(`user_progress_${userKey}`) || '{}');
+    const guestProg = JSON.parse(localStorage.getItem('guest_progress') || '{}');
+    const mergedProg = { ...guestProg, ...userProg };
+
+    vocabList = vocabList.map(w => {
+      const state = mergedProg[w.id];
+      const isMem = state ? !!state.isMemorized : !!w.isMemorized;
+      const isStar = state ? !!state.isStarred : !!w.isStarred;
+      const isWr = state ? !!state.isWrong : !!w.isWrong;
+      const isStd = state ? !!state.isStudied : !!w.isStudied;
+      return {
+        ...w,
+        isMemorized: isMem,
+        isStarred: isStar,
+        isWrong: isWr,
+        isStudied: isStd || isMem || isStar || isWr
+      };
+    });
 
     initCustomLists();
     renderCustomLists();
@@ -875,6 +877,43 @@ async function toggleWordMemorized(id) {
     updateStats();
     if (studyMode !== 'type') {
       applyFilters(true);
+    }
+  }
+}
+
+async function markLessonWordMemorized(id) {
+  if (!id) return;
+  const index = vocabList.findIndex(w => w.id === id);
+  if (index !== -1) {
+    vocabList[index].isMemorized = true;
+    vocabList[index].isStudied = true;
+  }
+
+  const userKey = currentUser ? (currentUser._id || currentUser.id || currentUser.email || 'user') : 'guest';
+  const progressKey = `user_progress_${userKey}`;
+
+  try {
+    const userProg = JSON.parse(localStorage.getItem(progressKey) || '{}');
+    userProg[id] = { isMemorized: true, isStudied: true, level: vocabList[index] ? vocabList[index].level : '1' };
+    localStorage.setItem(progressKey, JSON.stringify(userProg));
+
+    const guestProg = JSON.parse(localStorage.getItem('guest_progress') || '{}');
+    guestProg[id] = { isMemorized: true, isStudied: true, level: vocabList[index] ? vocabList[index].level : '1' };
+    localStorage.setItem('guest_progress', JSON.stringify(guestProg));
+  } catch(e) {}
+
+  updateStats();
+
+  if (currentUser) {
+    try {
+      await fetch(API_BASE_URL + '/api/vocabulary/toggle-memorized', {
+        method: 'POST',
+        headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify({ id, isMemorized: true }),
+        credentials: 'include'
+      });
+    } catch(e) {
+      console.warn('Sync lesson word progress error:', e);
     }
   }
 }
@@ -3652,10 +3691,6 @@ async function handleCredentialResponse(response) {
         window.migrateGuestChatHistory();
       }
 
-      // Clear guest progress so it doesn't merge
-      localStorage.removeItem('guest_progress');
-      localStorage.removeItem('guest_custom_words');
-
       // Re-fetch vocabulary and reload user statistics
       await fetchVocabulary();
     } else {
@@ -3706,10 +3741,6 @@ async function handleLogout(e) {
   guestStudyTime = 0;
   guestStreak = 0;
   guestLastActive = '';
-
-  // Clear guest progress in local storage just in case
-  localStorage.removeItem('guest_progress');
-  localStorage.removeItem('guest_custom_words');
 
   // Re-fetch vocabulary to load guest state
   await fetchVocabulary();
@@ -7147,13 +7178,7 @@ function renderLessonFlashcardWorkspace(lessonTitle, words, selectedIndex = 0) {
 
   // Auto-mark word as studied and memorized when viewed to increase lesson progress
   if (currentWord) {
-    currentWord.isStudied = true;
-    currentWord.isMemorized = true;
-    try {
-      const guestProgress = JSON.parse(localStorage.getItem('guest_progress') || '{}');
-      guestProgress[currentWord.id] = { isMemorized: true, isStudied: true, level: currentWord.level };
-      localStorage.setItem('guest_progress', JSON.stringify(guestProgress));
-    } catch(e) {}
+    markLessonWordMemorized(currentWord.id);
   }
 
   studyView.innerHTML = `
