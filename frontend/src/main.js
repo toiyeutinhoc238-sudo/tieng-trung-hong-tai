@@ -6824,16 +6824,21 @@ window.openLessonDetailModal = function (lessonKey) {
       const pct = Math.round((memorizedCount / wordsCount) * 100);
       const isCompleted = memorizedCount === wordsCount && wordsCount > 0;
 
-      // Sequential unlocking: Lesson 1 is always unlocked; subsequent lessons require previous lesson completed or 80%+
+      // Get Quiz Game Stars for this lesson
+      const starKey = `quiz_stars_${activeHskVersion}_${activeLessonsLevel}_${lessonKey}`;
+      const quizStars = parseInt(localStorage.getItem(starKey) || '0', 10);
+
+      // Sequential unlocking: Lesson 1 (idx === 0) is always unlocked;
+      // Subsequent lessons require at least 1 star (prevQuizStars >= 1) from previous lesson's Quiz Game!
       let isUnlocked = false;
+      let prevKey = '';
       if (idx === 0) {
         isUnlocked = true;
       } else {
-        const prevKey = uniqueLessonKeys[idx - 1];
-        const prevWords = lessonGroups[prevKey] || [];
-        const prevMem = prevWords.filter(w => w.isMemorized).length;
-        const prevPct = prevWords.length > 0 ? Math.round((prevMem / prevWords.length) * 100) : 0;
-        isUnlocked = prevPct >= 80 || prevMem === prevWords.length || isCompleted;
+        prevKey = uniqueLessonKeys[idx - 1];
+        const prevStarKey = `quiz_stars_${activeHskVersion}_${activeLessonsLevel}_${prevKey}`;
+        const prevQuizStars = parseInt(localStorage.getItem(prevStarKey) || '0', 10);
+        isUnlocked = prevQuizStars >= 1;
       }
 
       let isCurrentActive = false;
@@ -6863,6 +6868,9 @@ window.openLessonDetailModal = function (lessonKey) {
       }
 
       const numOnly = lessonKey.toString().replace(/\D/g, '') || lessonKey;
+      const clickAction = isUnlocked
+        ? `window.openLessonDetailModal('${lessonKey}')`
+        : `showToast('Bạn cần thi Quiz Game và đạt ít nhất 1 Sao ở Bài ${prevKey} để mở khóa Bài ${lessonKey}!', true)`;
 
       mapNodesHtml += `
         <div class="saga-path-node-item" style="position: relative; display: flex; flex-direction: column; align-items: center; margin: 28px 0; z-index: 5; ${posStyle}">
@@ -6883,21 +6891,21 @@ window.openLessonDetailModal = function (lessonKey) {
 
           <!-- Candy Crush Style 3D Round Circle Button -->
           <button class="saga-node-circle ${!isUnlocked ? 'node-locked' : 'node-unlocked'} ${isCurrentActive ? 'active-pulse' : ''}"
-                  onclick="window.openLessonDetailModal('${lessonKey}')"
+                  onclick="${clickAction}"
                   title="Bài ${lessonKey}: ${title}"
                   style="width: 84px; height: 84px; border-radius: 50%; font-family: var(--font-display); font-weight: 800; font-size: 1.6rem; color: #ffffff; position: relative; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); ${nodeStyle}">
             ${!isUnlocked ? '<i class="fa-solid fa-lock" style="font-size: 1.3rem; color: #cbd5e1;"></i>' : `<span>${numOnly}</span>`}
           </button>
 
-          <!-- 3 Gold Stars under Node -->
+          <!-- 3 Gold Stars under Node (based on Quiz Game result) -->
           <div style="display: flex; gap: 4px; margin-top: 8px;">
-            <i class="fa-solid fa-star" style="font-size: 0.85rem; color: ${pct >= 33 ? '#fbbf24' : 'rgba(255,255,255,0.2)'}; text-shadow: 0 1px 3px rgba(0,0,0,0.6);"></i>
-            <i class="fa-solid fa-star" style="font-size: 0.95rem; color: ${pct >= 66 ? '#fbbf24' : 'rgba(255,255,255,0.2)'}; text-shadow: 0 1px 3px rgba(0,0,0,0.6); transform: translateY(-2px);"></i>
-            <i class="fa-solid fa-star" style="font-size: 0.85rem; color: ${pct === 100 ? '#fbbf24' : 'rgba(255,255,255,0.2)'}; text-shadow: 0 1px 3px rgba(0,0,0,0.6);"></i>
+            <i class="fa-solid fa-star" style="font-size: 0.85rem; color: ${quizStars >= 1 ? '#fbbf24' : 'rgba(255,255,255,0.2)'}; text-shadow: 0 1px 3px rgba(0,0,0,0.6);"></i>
+            <i class="fa-solid fa-star" style="font-size: 0.95rem; color: ${quizStars >= 2 ? '#fbbf24' : 'rgba(255,255,255,0.2)'}; text-shadow: 0 1px 3px rgba(0,0,0,0.6); transform: translateY(-2px);"></i>
+            <i class="fa-solid fa-star" style="font-size: 0.85rem; color: ${quizStars === 3 ? '#fbbf24' : 'rgba(255,255,255,0.2)'}; text-shadow: 0 1px 3px rgba(0,0,0,0.6);"></i>
           </div>
 
           <!-- Lesson Tag Card -->
-          <div class="saga-node-tag-card" onclick="window.openLessonDetailModal('${lessonKey}')" style="margin-top: 8px; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border: 1px solid rgba(255,255,255,0.2); border-radius: 14px; padding: 8px 16px; text-align: center; max-width: 220px; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2); transition: all 0.2s;">
+          <div class="saga-node-tag-card" onclick="${clickAction}" style="margin-top: 8px; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border: 1px solid rgba(255,255,255,0.2); border-radius: 14px; padding: 8px 16px; text-align: center; max-width: 220px; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2); transition: all 0.2s;">
             <div class="saga-tag-title" style="font-weight: 800; font-size: 0.95rem; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--font-display);">${title}</div>
             <div class="saga-tag-sub" style="font-size: 0.78rem; color: #94a3b8; margin-top: 2px; font-weight: 600;">
               ${memorizedCount}/${wordsCount} từ ${isCompleted ? '• 🎉 Đã xong' : isUnlocked ? `• ${pct}%` : '• 🔒 Khóa'}
@@ -7263,7 +7271,7 @@ function initLessonHanziWriter(wordStr) {
       const charDiv = document.createElement('div');
       const divId = `lesson-hanzi-char-${idx}`;
       charDiv.id = divId;
-      charDiv.style.cssText = 'width: 125px; height: 125px; flex-shrink: 0; background: rgba(0,0,0,0.12); border-radius: 12px; display: flex; align-items: center; justify-content: center;';
+      charDiv.style.cssText = 'width: 125px; height: 125px; flex-shrink: 0; background: transparent; display: flex; align-items: center; justify-content: center;';
       box.appendChild(charDiv);
 
       try {

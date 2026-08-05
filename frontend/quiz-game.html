@@ -1566,8 +1566,39 @@
 
     function endGame(title, desc) {
       clearInterval(timerInterval);
+
+      // Calculate Stars based on remaining hearts/lives
+      let earnedStars = 0;
+      if (hearts >= 3) {
+        earnedStars = 3;
+      } else if (hearts === 2) {
+        earnedStars = 2;
+      } else if (hearts === 1) {
+        earnedStars = 1;
+      } else {
+        earnedStars = 0;
+      }
+
+      // Parse URL Params for lesson, level, version
+      const urlParams = new URLSearchParams(window.location.search);
+      const qLesson = urlParams.get('lesson') || (selLesson ? selLesson.value : '');
+      const qLevel = urlParams.get('level') || (selLevel ? selLevel.value : '1');
+      const qVer = urlParams.get('version') || localStorage.getItem('active_hsk_version') || '3.0';
+
+      if (hearts > 0 && qLesson && qLevel) {
+        const starKey = `quiz_stars_${qVer}_${qLevel}_${qLesson}`;
+        const prevStars = parseInt(localStorage.getItem(starKey) || '0', 10);
+        if (earnedStars > prevStars) {
+          localStorage.setItem(starKey, earnedStars.toString());
+        }
+      }
+
+      const starsText = earnedStars > 0
+        ? `<div style="margin-top: 10px; font-size: 1.8rem; color: #fbbf24; filter: drop-shadow(0 2px 8px rgba(251, 191, 36, 0.5));">${'★'.repeat(earnedStars)}${'☆'.repeat(3 - earnedStars)} <span style="font-size: 1rem; font-weight: 800; color: #fff;">(${earnedStars}/3 Sao)</span></div>`
+        : `<div style="margin-top: 10px; font-size: 1rem; color: #ef4444; font-weight: 800;">❌ Thua cuộc (0 Sao) - Cần đạt ít nhất 1 Sao để mở khóa bài tiếp theo!</div>`;
+
       document.getElementById('go-title').textContent = title;
-      document.getElementById('go-desc').textContent = desc;
+      document.getElementById('go-desc').innerHTML = desc + starsText;
       document.getElementById('go-score').textContent = score;
       renderReviewList();
       goModal.style.display = 'flex';
