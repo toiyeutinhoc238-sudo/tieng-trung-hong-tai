@@ -3963,7 +3963,7 @@ function generateExam(level, setNumber) {
   return questions;
 }
 
-function switchTab(tabId) {
+function switchTab(tabId, skipShowTopics = false) {
   // Stop flashcard autoplay
   stopAutoplay();
 
@@ -4018,7 +4018,9 @@ function switchTab(tabId) {
   }
   else if (tabId === 'flashcards') {
     setDisp(flashcardSec, 'block');
-    showTopicsView();
+    if (!skipShowTopics) {
+      showTopicsView();
+    }
   }
   else if (tabId === 'dictionary') {
     setDisp(customSec, 'block');
@@ -6984,11 +6986,13 @@ function startLessonStudy(lesson, sliceWords) {
   const modalEl = document.getElementById('lesson-detail-popup-modal');
   if (modalEl) modalEl.style.display = 'none';
 
-  // Switch tab to flashcards
-  switchTab('flashcards');
+  // Switch tab to flashcards without clearing study context or showing topics selection
+  switchTab('flashcards', true);
 
   const curr = activeLessonsCurriculum === 'yct' ? 'yct' : 'hsk';
   const lvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : activeLessonsLevel;
+  
+  // Explicitly set notebook study context for this lesson
   studyNotebookId = `${curr}:${lvl}`;
   studySelectedLessons = [String(lesson.id)];
   studyCustomCategory = null;
@@ -6996,10 +7000,30 @@ function startLessonStudy(lesson, sliceWords) {
   const title = `Flashcard: ${lesson.title || ('Bài ' + lesson.id)}`;
   const desc = `Học ${sliceWords.length} từ vựng thuộc ${lesson.title || ('Bài ' + lesson.id)}`;
 
-  startStudySession('all', lvl, title, desc);
+  // Start study session (calls applyFilters with our studySelectedLessons filter)
+  startStudySession('all', String(lvl), title, desc);
+
+  // Hide selection/topic header controls and notebook dashboard, show ONLY flashcard card workspace
+  const selectionView = document.getElementById('deck-selection-view');
+  if (selectionView) selectionView.style.display = 'none';
+
+  const topicsView = document.getElementById('flashcard-topics-view');
+  if (topicsView) topicsView.style.display = 'none';
+
+  const subdecksView = document.getElementById('flashcard-subdecks-view');
+  if (subdecksView) subdecksView.style.display = 'none';
 
   const nbDash = document.getElementById('notebook-dashboard-view');
   if (nbDash) nbDash.style.display = 'none';
+
+  const studyView = document.getElementById('flashcard-study-view');
+  if (studyView) studyView.style.display = 'block';
+
+  const cardContainer = document.getElementById('flashcard-card-container');
+  if (cardContainer) cardContainer.style.display = 'block';
+
+  const typingContainer = document.getElementById('typing-card-container');
+  if (typingContainer) typingContainer.style.display = 'none';
 
   const flashcardSec = document.getElementById('flashcard-section');
   if (flashcardSec) flashcardSec.scrollIntoView({ behavior: 'smooth' });
