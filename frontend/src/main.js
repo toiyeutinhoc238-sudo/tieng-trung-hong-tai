@@ -2229,11 +2229,30 @@ function setupEventListeners() {
   document.querySelectorAll('.bottom-nav-item').forEach(item => {
     item.addEventListener('click', () => {
       const tabId = item.getAttribute('data-tab');
-      if (tabId) {
+      if (tabId === 'roadmap') {
+        if (window.returnToHskLevelSelection) {
+          window.returnToHskLevelSelection();
+        } else {
+          switchTab('roadmap');
+        }
+      } else if (tabId) {
         switchTab(tabId);
       }
     });
   });
+
+  const sidebarRoadmap = document.getElementById('sidebar-nav-roadmap');
+  if (sidebarRoadmap) {
+    sidebarRoadmap.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (window.returnToHskLevelSelection) {
+        window.returnToHskLevelSelection();
+      } else {
+        showRoadmapView();
+      }
+    });
+  }
 
   // Quiz mode exit
   const exitQuizBtn = document.getElementById('exit-quiz-btn');
@@ -4046,6 +4065,14 @@ function showRoadmapView() {
   switchTab('roadmap');
 }
 window.showRoadmapView = showRoadmapView;
+
+window.returnToHskLevelSelection = function() {
+  const roadmapSec = document.getElementById('roadmap-view-section');
+  const lessonsSec = document.getElementById('lessons-section');
+  if (lessonsSec) lessonsSec.style.display = 'none';
+  if (roadmapSec) roadmapSec.style.display = 'block';
+  switchTab('roadmap');
+};
 
 let activeRoadmapVersion = '3.0';
 
@@ -6688,7 +6715,7 @@ window.openLessonDetailModal = function (lessonKey) {
   const viewSwitcherHtml = `
     <div style="grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 12px; background: rgba(15, 23, 42, 0.85); padding: 12px 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(12px); position: relative; z-index: 100;">
       <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; position: relative; z-index: 101;">
-        <button onclick="event.preventDefault(); event.stopPropagation(); window.switchTab('roadmap');" style="padding: 8px 18px; border-radius: 12px; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: 1px solid rgba(255,255,255,0.3); color: #ffffff; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.92rem; transition: all 0.2s; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4); position: relative; z-index: 999; pointer-events: auto;" onmouseenter="this.style.transform='scale(1.05)'" onmouseleave="this.style.transform='scale(1)'">
+        <button onclick="event.preventDefault(); event.stopPropagation(); window.returnToHskLevelSelection();" style="padding: 8px 18px; border-radius: 12px; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: 1px solid rgba(255,255,255,0.3); color: #ffffff; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.92rem; transition: all 0.2s; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4); position: relative; z-index: 999; pointer-events: auto;" onmouseenter="this.style.transform='scale(1.05)'" onmouseleave="this.style.transform='scale(1)'">
           <i class="fa-solid fa-arrow-left"></i> ⬅️ Đổi Cấp Độ HSK
         </button>
         <span style="font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; color: #fbbf24; display: flex; align-items: center; gap: 8px;">
