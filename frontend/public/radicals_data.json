@@ -762,13 +762,24 @@
     {
       "id": "rad_50_bộ_(2)_20",
       "radical": "玉",
-      "variant": "王",
+      "variant": "⺩",
       "pinyin": "yù",
       "name": "NGỌC",
-      "meaning": "Đá quý",
-      "example": "珍 (zhēn) - quý giá, 珠 (zhū) - ngọc trai",
-      "note": "Chỉ đá quý, vẻ đẹp trong sáng và giá trị quý báu.",
+      "meaning": "Đá quý, ngọc bích",
+      "example": "珍 (zhēn) - quý giá, 珠 (zhū) - ngọc trai, 理 (lǐ) - lý trí",
+      "note": "Chỉ đá quý. Khi đứng bên trái nét ngang cuối cùng đổi thành nét hất nghiêng lên (⺩).",
       "category": "50 bộ (2)"
+    },
+    {
+      "id": "rad_vuong_1",
+      "radical": "王",
+      "variant": "",
+      "pinyin": "wáng",
+      "name": "VƯƠNG",
+      "meaning": "Vua, người đứng đầu, họ Vương",
+      "example": "王 (wáng) - vua/họ Vương, 皇 (huáng) - hoàng đế, 旺 (wàng) - thịnh vượng",
+      "note": "Bộ Vương tượng hình chiếc rìu quyền lực của vị vua cai trị đất nước.",
+      "category": "50 bộ (1)"
     },
     {
       "id": "rad_50_bộ_(2)_21",

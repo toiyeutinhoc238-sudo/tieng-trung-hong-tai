@@ -20,20 +20,40 @@ function findRadicalsForWord(word) {
   if (!word || !radicalsData || !radicalsData.radicals) return [];
   const found = [];
   const chars = Array.from(word);
-  const seenRads = new Set();
+  const seenKeys = new Set();
 
   for (const char of chars) {
+    // 1. Try exact main radical match first (e.g. '王' matches '王')
+    const exactMain = radicalsData.radicals.find(r => r.radical === char);
+    if (exactMain) {
+      const key = exactMain.id || exactMain.radical;
+      if (!seenKeys.has(key)) {
+        seenKeys.add(key);
+        found.push(exactMain);
+      }
+      continue;
+    }
+
+    // 2. Try exact variant match
+    const exactVar = radicalsData.radicals.find(r => r.variant && r.variant === char);
+    if (exactVar) {
+      const key = exactVar.id || exactVar.radical;
+      if (!seenKeys.has(key)) {
+        seenKeys.add(key);
+        found.push(exactVar);
+      }
+      continue;
+    }
+
+    // 3. Try contained or example match
     for (const rad of radicalsData.radicals) {
-      const key = rad.radical + '_' + (rad.variant || '');
-      if (seenRads.has(key)) continue;
+      const key = rad.id || rad.radical;
+      if (seenKeys.has(key)) continue;
 
-      const isExactMatch = rad.radical === char || rad.variant === char;
-      const isContained = (rad.radical && char.includes(rad.radical)) || (rad.variant && char.includes(rad.variant));
-      const isMentionedInExample = rad.example && rad.example.includes(char);
-
-      if (isExactMatch || isContained || isMentionedInExample) {
-        seenRads.add(key);
+      if ((rad.radical && char.includes(rad.radical)) || (rad.variant && char.includes(rad.variant)) || (rad.example && rad.example.includes(char))) {
+        seenKeys.add(key);
         found.push(rad);
+        break;
       }
     }
   }
@@ -978,6 +998,27 @@ function renderActiveCardLesson(current) {
       }
     } else {
       targetContainer.innerHTML = `<span style="font-size: 5rem; font-weight: 900; color: #ef4444;">${current.word}</span>`;
+    }
+  }
+
+  // 7b. Render Radicals Box in Left Column (Fills empty layout space)
+  const radsContainer = document.getElementById('lesson-radicals-badges-list');
+  const radsWrapper = document.getElementById('lesson-radicals-container-left');
+  if (radsContainer) {
+    const rads = findRadicalsForWord(current.word);
+    if (rads && rads.length > 0) {
+      if (radsWrapper) radsWrapper.style.display = 'flex';
+      radsContainer.innerHTML = rads.map(r => `
+        <div style="background: rgba(37, 99, 235, 0.08); border: 1.5px solid rgba(37, 99, 235, 0.22); border-radius: 10px; padding: 6px 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span style="font-family: var(--font-chinese); font-size: 1.2rem; font-weight: 900; color: #1d4ed8;">${r.variant ? `${r.radical} (${r.variant})` : r.radical}</span>
+            <span style="font-weight: 800; font-size: 0.85rem; color: #0f172a;">${r.name}</span>
+          </div>
+          <span style="font-size: 0.78rem; font-weight: 700; color: #475569;">${r.meaning}</span>
+        </div>
+      `).join('');
+    } else {
+      if (radsWrapper) radsWrapper.style.display = 'none';
     }
   }
 
