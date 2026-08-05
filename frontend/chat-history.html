@@ -16,11 +16,6 @@
   <meta name="apple-mobile-web-app-title" content="Hongtai Chinese">
   <link rel="apple-touch-icon" href="./src/assets/logo.png">
   <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch(() => {});
-      });
-    }
     (function () {
       var t = localStorage.getItem('theme') || 'dark';
       var bgUrl = t === 'light' ? "url('/assets/app_bg_day_v3.png')" : "url('/assets/app_bg_night_v3.png')";

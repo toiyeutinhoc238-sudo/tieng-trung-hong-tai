@@ -19,9 +19,16 @@
   <link rel="apple-touch-icon" href="/assets/logo-CnsJJgQP.png">
   <script>
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch(() => { });
+      navigator.serviceWorker.getRegistrations().then(registrations => {
+        for (let registration of registrations) {
+          registration.unregister();
+        }
       });
+      if ('caches' in window) {
+        caches.keys().then(names => {
+          for (let name of names) caches.delete(name);
+        });
+      }
     }
     (function () {
       var t = localStorage.getItem('theme') || 'dark';

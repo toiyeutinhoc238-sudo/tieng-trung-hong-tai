@@ -1,4 +1,4 @@
-// Self-destructing Service Worker to purge all old stale caches permanently
+// Self-destructing Service Worker to unregister itself and clear all caches permanently
 self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
@@ -8,12 +8,7 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((keys) => {
       return Promise.all(keys.map((key) => caches.delete(key)));
     }).then(() => {
-      return self.clients.claim();
+      return self.registration.unregister();
     })
   );
-});
-
-self.addEventListener('fetch', (event) => {
-  // Direct network pass-through (no stale caching)
-  return;
 });
