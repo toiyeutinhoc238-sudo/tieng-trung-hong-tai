@@ -247,18 +247,22 @@
 
     <div class="sidebar-menu-wrapper" style="overflow-y: auto; flex: 1; padding-right: 4px;">
 
-      <!-- DANH MỤC 1: HỌC TẬP -->
-      <div class="sidebar-section-label">Học Tập</div>
-      <ul class="sidebar-menu">
+      <!-- TRANG CHỦ -->
+      <ul class="sidebar-menu" style="margin-bottom: 12px;">
         <li class="sidebar-item active" data-tab="home" id="sidebar-nav-home" onclick="window.switchTab('home')">
           <i class="fa-solid fa-house"></i> <span>Trang chủ</span>
         </li>
+      </ul>
+
+      <!-- DANH MỤC 1: HỌC TẬP -->
+      <div class="sidebar-section-label">Học Tập</div>
+      <ul class="sidebar-menu" style="margin-bottom: 8px;">
         <li class="sidebar-item" data-tab="roadmap" id="sidebar-nav-roadmap" onclick="window.showRoadmapView()">
           <i class="fa-solid fa-route"></i> <span>Lộ trình</span>
         </li>
       </ul>
 
-      <!-- DANH MỤC 2: TỪ VỰNG (Dropdown) -->
+      <!-- Từ vựng (Dropdown) -->
       <div class="sidebar-group">
         <div class="sidebar-item sidebar-dropdown-toggle" onclick="window.toggleSidebarDropdown(this)">
           <i class="fa-solid fa-font"></i> <span>Từ vựng</span>
@@ -273,7 +277,7 @@
           </li>
           <li class="sidebar-subitem" onclick="window.showComingSoonNotice('Sổ tay từ vựng')">
             <i class="fa-solid fa-book-bookmark"></i> <span>Sổ tay từ vựng</span>
-            <span style="font-size: 0.7rem; color: #fbbf24; background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.4); padding: 1px 6px; border-radius: 6px; margin-left: auto;">Sắp ra mắt</span>
+            <span style="font-size: 0.68rem; background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); padding: 2px 6px; border-radius: 6px; font-weight: 700; margin-left: auto; white-space: nowrap;">Sắp ra mắt</span>
           </li>
           <li class="sidebar-subitem" onclick="window.location.href = '/hanzi-writer.html'">
             <i class="fa-solid fa-pen-nib"></i> <span>Luyện viết & In phiếu tập viết</span>
@@ -281,8 +285,8 @@
         </ul>
       </div>
 
-      <!-- DANH MỤC 3: NGỮ PHÁP (Dropdown) -->
-      <div class="sidebar-group">
+      <!-- Ngữ pháp (Dropdown) -->
+      <div class="sidebar-group" style="margin-bottom: 12px;">
         <div class="sidebar-item sidebar-dropdown-toggle" onclick="window.toggleSidebarDropdown(this)">
           <i class="fa-solid fa-spell-check"></i> <span>Ngữ pháp</span>
           <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
@@ -299,26 +303,59 @@
         </ul>
       </div>
 
-      <!-- DANH MỤC 4: ÔN TẬP & LUYỆN ĐỀ -->
-      <div class="sidebar-section-label">Ôn Tập & Luyện Đề</div>
-      <ul class="sidebar-menu">
-        <li class="sidebar-item" onclick="window.showComingSoonNotice('Ôn tập ngắt quãng (SRS)')">
-          <i class="fa-solid fa-rotate-left"></i> <span>Ôn tập ngắt quãng (SRS)</span>
+      <!-- DANH MỤC 2: KỸ NĂNG -->
+      <div class="sidebar-section-label">Kỹ Năng</div>
+      <ul class="sidebar-menu" style="margin-bottom: 12px;">
+        <li class="sidebar-item" onclick="window.showComingSoonNotice('Luyện nghe')">
+          <i class="fa-solid fa-headphones"></i> <span>Luyện nghe</span>
           <span style="font-size:0.68rem; background:rgba(245,158,11,0.2); color:#f59e0b; border:1px solid rgba(245,158,11,0.3); padding:2px 6px; border-radius:6px; font-weight:700; margin-left:auto; white-space:nowrap;">Sắp ra mắt</span>
         </li>
-        <li class="sidebar-item" data-tab="quiz" onclick="window.location.href = '/quiz-game.html'">
-          <i class="fa-solid fa-gamepad"></i> <span>Ôn tập trắc nghiệm</span>
+        <li class="sidebar-item" onclick="window.showComingSoonNotice('Luyện đọc')">
+          <i class="fa-solid fa-book-open"></i> <span>Luyện đọc</span>
+          <span style="font-size:0.68rem; background:rgba(245,158,11,0.2); color:#f59e0b; border:1px solid rgba(245,158,11,0.3); padding:2px 6px; border-radius:6px; font-weight:700; margin-left:auto; white-space:nowrap;">Sắp ra mắt</span>
         </li>
-        <li class="sidebar-item" onclick="window.switchTab('exams')">
-          <i class="fa-solid fa-file-signature"></i> <span>Luyện đề (117 Đề HSK)</span>
+        <li class="sidebar-item" onclick="window.location.href = '/hanzi-writer.html'">
+          <i class="fa-solid fa-pen-line"></i> <span>Luyện viết</span>
+        </li>
+        <li class="sidebar-item" onclick="window.showComingSoonNotice('Luyện dịch')">
+          <i class="fa-solid fa-language"></i> <span>Luyện dịch</span>
+          <span style="font-size:0.68rem; background:rgba(245,158,11,0.2); color:#f59e0b; border:1px solid rgba(245,158,11,0.3); padding:2px 6px; border-radius:6px; font-weight:700; margin-left:auto; white-space:nowrap;">Sắp ra mắt</span>
+        </li>
+        <li class="sidebar-item" onclick="window.showComingSoonNotice('Sắp xếp câu')">
+          <i class="fa-solid fa-arrow-down-short-wide"></i> <span>Sắp xếp câu</span>
+          <span style="font-size:0.68rem; background:rgba(245,158,11,0.2); color:#f59e0b; border:1px solid rgba(245,158,11,0.3); padding:2px 6px; border-radius:6px; font-weight:700; margin-left:auto; white-space:nowrap;">Sắp ra mắt</span>
+        </li>
+        <li class="sidebar-item" onclick="window.showComingSoonNotice('Tìm câu sai')">
+          <i class="fa-solid fa-bug"></i> <span>Tìm câu sai</span>
+          <span style="font-size:0.68rem; background:rgba(245,158,11,0.2); color:#f59e0b; border:1px solid rgba(245,158,11,0.3); padding:2px 6px; border-radius:6px; font-weight:700; margin-left:auto; white-space:nowrap;">Sắp ra mắt</span>
         </li>
       </ul>
 
-      <!-- DANH MỤC 6: CỘNG ĐỒNG & HỆ THỐNG -->
-      <div class="sidebar-section-label">Hệ Thống & Bảng Xếp Hạng</div>
+      <!-- DANH MỤC 3: LUYỆN ĐỀ -->
+      <div class="sidebar-section-label">Luyện Đề</div>
+      <ul class="sidebar-menu" style="margin-bottom: 12px;">
+        <li class="sidebar-item" onclick="window.switchTab('exams')">
+          <i class="fa-solid fa-file-signature"></i> <span>HSK (117 Đề)</span>
+        </li>
+        <li class="sidebar-item" onclick="window.showComingSoonNotice('Luyện đề HSKK')">
+          <i class="fa-solid fa-microphone"></i> <span>HSKK</span>
+          <span style="font-size:0.68rem; background:rgba(245,158,11,0.2); color:#f59e0b; border:1px solid rgba(245,158,11,0.3); padding:2px 6px; border-radius:6px; font-weight:700; margin-left:auto; white-space:nowrap;">Sắp ra mắt</span>
+        </li>
+      </ul>
+
+      <!-- DANH MỤC 4: CỘNG ĐỒNG -->
+      <div class="sidebar-section-label">Cộng Đồng</div>
       <ul class="sidebar-menu">
+        <li class="sidebar-item" onclick="window.showComingSoonNotice('Kho tài liệu')">
+          <i class="fa-solid fa-folder-open"></i> <span>Kho tài liệu</span>
+          <span style="font-size:0.68rem; background:rgba(245,158,11,0.2); color:#f59e0b; border:1px solid rgba(245,158,11,0.3); padding:2px 6px; border-radius:6px; font-weight:700; margin-left:auto; white-space:nowrap;">Sắp ra mắt</span>
+        </li>
+        <li class="sidebar-item" onclick="window.showComingSoonNotice('Diễn đàn thảo luận')">
+          <i class="fa-solid fa-comments"></i> <span>Thảo luận</span>
+          <span style="font-size:0.68rem; background:rgba(245,158,11,0.2); color:#f59e0b; border:1px solid rgba(245,158,11,0.3); padding:2px 6px; border-radius:6px; font-weight:700; margin-left:auto; white-space:nowrap;">Sắp ra mắt</span>
+        </li>
         <li class="sidebar-item" onclick="window.showLeaderboardModal()">
-          <i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> <span>Bảng xếp hạng</span>
+          <i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> <span>Xếp hạng</span>
         </li>
       </ul>
 
