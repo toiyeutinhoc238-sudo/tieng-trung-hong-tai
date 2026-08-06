@@ -6811,6 +6811,21 @@ window.openLessonDetailModal = function (lessonKey) {
     };
   }
 
+  const btnText = document.getElementById('modal-btn-mod-text');
+  if (btnText) {
+    const textBadge = btnText.querySelector('small');
+    if (textBadge) {
+      textBadge.textContent = 'Hội thoại 📖';
+      textBadge.style.background = '#0284c7';
+      textBadge.style.color = '#ffffff';
+    }
+    btnText.onclick = function () {
+      const modalEl = document.getElementById('lesson-detail-popup-modal');
+      if (modalEl) modalEl.style.display = 'none';
+      window.openLessonTextStudy(lessonKey);
+    };
+  }
+
   // Handle 'Ôn Tập' (Quiz Game) unlock logic based on 100% completion
   const btnReview = document.getElementById('modal-btn-mod-review');
   let reviewBadge = document.getElementById('modal-review-badge');
