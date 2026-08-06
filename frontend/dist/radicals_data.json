@@ -1,7 +1,7 @@
 {
   "radicals": [
     {
-      "id": "rad_50_bộ_(1)_1",
+      "id": 1,
       "radical": "人",
       "variant": "亻",
       "pinyin": "rén",
@@ -12,7 +12,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_2",
+      "id": 2,
       "radical": "儿",
       "variant": "",
       "pinyin": "ér",
@@ -23,7 +23,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_3",
+      "id": 3,
       "radical": "入",
       "variant": "",
       "pinyin": "rù",
@@ -34,7 +34,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_4",
+      "id": 4,
       "radical": "冂",
       "variant": "",
       "pinyin": "jiōng",
@@ -45,7 +45,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_5",
+      "id": 5,
       "radical": "冖",
       "variant": "",
       "pinyin": "mì",
@@ -56,7 +56,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_6",
+      "id": 6,
       "radical": "冫",
       "variant": "",
       "pinyin": "bīng",
@@ -67,7 +67,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_7",
+      "id": 7,
       "radical": "刀",
       "variant": "刂",
       "pinyin": "dāo",
@@ -78,7 +78,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_8",
+      "id": 8,
       "radical": "力",
       "variant": "",
       "pinyin": "lì",
@@ -89,7 +89,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_9",
+      "id": 9,
       "radical": "勹",
       "variant": "",
       "pinyin": "bāo",
@@ -100,7 +100,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_10",
+      "id": 10,
       "radical": "匚",
       "variant": "",
       "pinyin": "fāng",
@@ -111,7 +111,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_11",
+      "id": 11,
       "radical": "匸",
       "variant": "",
       "pinyin": "xì",
@@ -122,7 +122,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_12",
+      "id": 12,
       "radical": "卜",
       "variant": "",
       "pinyin": "bǔ",
@@ -133,7 +133,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_13",
+      "id": 13,
       "radical": "厂",
       "variant": "",
       "pinyin": "hǎn",
@@ -144,7 +144,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_14",
+      "id": 14,
       "radical": "又",
       "variant": "",
       "pinyin": "yòu",
@@ -155,7 +155,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_15",
+      "id": 15,
       "radical": "口",
       "variant": "",
       "pinyin": "kǒu",
@@ -166,7 +166,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_16",
+      "id": 16,
       "radical": "囗",
       "variant": "",
       "pinyin": "wéi",
@@ -177,7 +177,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_17",
+      "id": 17,
       "radical": "土",
       "variant": "",
       "pinyin": "tǔ",
@@ -188,7 +188,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_18",
+      "id": 18,
       "radical": "士",
       "variant": "",
       "pinyin": "shì",
@@ -199,7 +199,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_19",
+      "id": 19,
       "radical": "女",
       "variant": "",
       "pinyin": "nǚ",
@@ -210,7 +210,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_20",
+      "id": 20,
       "radical": "子",
       "variant": "",
       "pinyin": "zǐ",
@@ -221,7 +221,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_21",
+      "id": 21,
       "radical": "宀",
       "variant": "",
       "pinyin": "mián",
@@ -232,7 +232,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_22",
+      "id": 22,
       "radical": "小",
       "variant": "",
       "pinyin": "xiǎo",
@@ -243,7 +243,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_23",
+      "id": 23,
       "radical": "尢",
       "variant": "",
       "pinyin": "wāng",
@@ -254,7 +254,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_24",
+      "id": 24,
       "radical": "尸",
       "variant": "",
       "pinyin": "shī",
@@ -265,7 +265,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_25",
+      "id": 25,
       "radical": "山",
       "variant": "",
       "pinyin": "shān",
@@ -276,7 +276,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_26",
+      "id": 26,
       "radical": "工",
       "variant": "",
       "pinyin": "gōng",
@@ -287,7 +287,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_28",
+      "id": 27,
       "radical": "干",
       "variant": "",
       "pinyin": "gān",
@@ -298,7 +298,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_29",
+      "id": 28,
       "radical": "广",
       "variant": "",
       "pinyin": "yǎn",
@@ -309,7 +309,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_30",
+      "id": 29,
       "radical": "廴",
       "variant": "",
       "pinyin": "yǐn",
@@ -320,7 +320,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_31",
+      "id": 30,
       "radical": "彳",
       "variant": "",
       "pinyin": "chì",
@@ -331,7 +331,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_32",
+      "id": 31,
       "radical": "心",
       "variant": "忄",
       "pinyin": "xīn",
@@ -342,7 +342,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_33",
+      "id": 32,
       "radical": "户",
       "variant": "",
       "pinyin": "hù",
@@ -353,7 +353,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_34",
+      "id": 33,
       "radical": "手",
       "variant": "扌",
       "pinyin": "shǒu",
@@ -364,7 +364,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_35",
+      "id": 34,
       "radical": "日",
       "variant": "",
       "pinyin": "rì",
@@ -375,7 +375,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_36",
+      "id": 35,
       "radical": "月",
       "variant": "",
       "pinyin": "yuè",
@@ -386,7 +386,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_37",
+      "id": 36,
       "radical": "曰",
       "variant": "",
       "pinyin": "yuē",
@@ -397,7 +397,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_38",
+      "id": 37,
       "radical": "木",
       "variant": "",
       "pinyin": "mù",
@@ -408,7 +408,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_39",
+      "id": 38,
       "radical": "毛",
       "variant": "",
       "pinyin": "máo",
@@ -419,7 +419,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_40",
+      "id": 39,
       "radical": "气",
       "variant": "",
       "pinyin": "qì",
@@ -430,7 +430,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_41",
+      "id": 40,
       "radical": "水",
       "variant": "氵",
       "pinyin": "shuǐ",
@@ -441,7 +441,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_42",
+      "id": 41,
       "radical": "火",
       "variant": "灬",
       "pinyin": "huǒ",
@@ -452,7 +452,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_43",
+      "id": 42,
       "radical": "牛",
       "variant": "牜",
       "pinyin": "niú",
@@ -463,7 +463,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_44",
+      "id": 43,
       "radical": "犬",
       "variant": "犭",
       "pinyin": "quǎn",
@@ -474,7 +474,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_45",
+      "id": 44,
       "radical": "目",
       "variant": "",
       "pinyin": "mù",
@@ -485,7 +485,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_46",
+      "id": 45,
       "radical": "竹",
       "variant": "⺮",
       "pinyin": "zhú",
@@ -496,7 +496,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_47",
+      "id": 46,
       "radical": "艸",
       "variant": "艹",
       "pinyin": "cǎo",
@@ -507,7 +507,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_48",
+      "id": 47,
       "radical": "言",
       "variant": "讠",
       "pinyin": "yán",
@@ -518,7 +518,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_49",
+      "id": 48,
       "radical": "寸",
       "variant": "",
       "pinyin": "cùn",
@@ -529,7 +529,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(1)_50",
+      "id": 49,
       "radical": "生",
       "variant": "",
       "pinyin": "shēng",
@@ -540,7 +540,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(2)_1",
+      "id": 50,
       "radical": "亠",
       "variant": "",
       "pinyin": "tóu",
@@ -551,7 +551,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_2",
+      "id": 51,
       "radical": "八",
       "variant": "丷",
       "pinyin": "bā",
@@ -562,7 +562,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_3",
+      "id": 52,
       "radical": "己",
       "variant": "",
       "pinyin": "jǐ",
@@ -573,7 +573,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_4",
+      "id": 53,
       "radical": "凵",
       "variant": "",
       "pinyin": "kǎn",
@@ -584,7 +584,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_5",
+      "id": 54,
       "radical": "夕",
       "variant": "",
       "pinyin": "xī",
@@ -595,7 +595,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_6",
+      "id": 55,
       "radical": "大",
       "variant": "",
       "pinyin": "dà",
@@ -606,7 +606,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_7",
+      "id": 56,
       "radical": "巾",
       "variant": "",
       "pinyin": "jīn",
@@ -617,7 +617,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_8",
+      "id": 57,
       "radical": "彡",
       "variant": "",
       "pinyin": "shān",
@@ -628,7 +628,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_9",
+      "id": 58,
       "radical": "文",
       "variant": "",
       "pinyin": "wén",
@@ -639,7 +639,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_10",
+      "id": 59,
       "radical": "斗",
       "variant": "",
       "pinyin": "dǒu",
@@ -650,7 +650,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_11",
+      "id": 60,
       "radical": "斤",
       "variant": "",
       "pinyin": "jīn",
@@ -661,7 +661,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_12",
+      "id": 61,
       "radical": "方",
       "variant": "",
       "pinyin": "fāng",
@@ -672,7 +672,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_13",
+      "id": 62,
       "radical": "无",
       "variant": "",
       "pinyin": "wú",
@@ -683,7 +683,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_14",
+      "id": 63,
       "radical": "欠",
       "variant": "",
       "pinyin": "qiàn",
@@ -694,7 +694,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_15",
+      "id": 64,
       "radical": "殳",
       "variant": "",
       "pinyin": "shū",
@@ -705,7 +705,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_16",
+      "id": 65,
       "radical": "比",
       "variant": "",
       "pinyin": "bǐ",
@@ -716,7 +716,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_17",
+      "id": 66,
       "radical": "氏",
       "variant": "",
       "pinyin": "shì",
@@ -727,7 +727,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_18",
+      "id": 67,
       "radical": "爪",
       "variant": "爫",
       "pinyin": "zhǎo",
@@ -738,7 +738,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_19",
+      "id": 68,
       "radical": "父",
       "variant": "",
       "pinyin": "fù",
@@ -749,7 +749,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_20",
+      "id": 69,
       "radical": "玉",
       "variant": "⺩",
       "pinyin": "yù",
@@ -760,7 +760,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_vuong_1",
+      "id": 70,
       "radical": "王",
       "variant": "",
       "pinyin": "wáng",
@@ -771,7 +771,7 @@
       "category": "50 bộ (1)"
     },
     {
-      "id": "rad_50_bộ_(2)_21",
+      "id": 71,
       "radical": "瓜",
       "variant": "",
       "pinyin": "guā",
@@ -782,7 +782,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_22",
+      "id": 72,
       "radical": "用",
       "variant": "",
       "pinyin": "yòng",
@@ -793,7 +793,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_23",
+      "id": 73,
       "radical": "田",
       "variant": "",
       "pinyin": "tián",
@@ -804,7 +804,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_24",
+      "id": 74,
       "radical": "疋",
       "variant": "",
       "pinyin": "pǐ",
@@ -815,7 +815,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_25",
+      "id": 75,
       "radical": "疒",
       "variant": "",
       "pinyin": "nè",
@@ -826,7 +826,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_26",
+      "id": 76,
       "radical": "白",
       "variant": "",
       "pinyin": "bái",
@@ -837,7 +837,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_27",
+      "id": 77,
       "radical": "矢",
       "variant": "",
       "pinyin": "shǐ",
@@ -848,7 +848,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_28",
+      "id": 78,
       "radical": "石",
       "variant": "",
       "pinyin": "shí",
@@ -859,7 +859,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_29",
+      "id": 79,
       "radical": "禾",
       "variant": "",
       "pinyin": "hé",
@@ -870,7 +870,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_30",
+      "id": 80,
       "radical": "米",
       "variant": "",
       "pinyin": "mǐ",
@@ -881,7 +881,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_31",
+      "id": 81,
       "radical": "网",
       "variant": "罒",
       "pinyin": "wǎng",
@@ -892,7 +892,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_32",
+      "id": 82,
       "radical": "羊",
       "variant": "⺷",
       "pinyin": "yáng",
@@ -903,7 +903,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_33",
+      "id": 83,
       "radical": "羽",
       "variant": "",
       "pinyin": "yǔ",
@@ -914,7 +914,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_34",
+      "id": 84,
       "radical": "老",
       "variant": "耂",
       "pinyin": "lǎo",
@@ -925,7 +925,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_35",
+      "id": 85,
       "radical": "耳",
       "variant": "",
       "pinyin": "ěr",
@@ -936,7 +936,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_36",
+      "id": 86,
       "radical": "肉",
       "variant": "⺼ (nguyệt)",
       "pinyin": "ròu",
@@ -947,7 +947,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_37",
+      "id": 87,
       "radical": "自",
       "variant": "",
       "pinyin": "zì",
@@ -958,7 +958,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_38",
+      "id": 88,
       "radical": "舌",
       "variant": "",
       "pinyin": "shé",
@@ -969,7 +969,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_39",
+      "id": 89,
       "radical": "艮",
       "variant": "",
       "pinyin": "gèn",
@@ -980,7 +980,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_40",
+      "id": 90,
       "radical": "行",
       "variant": "",
       "pinyin": "xíng",
@@ -991,7 +991,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_41",
+      "id": 91,
       "radical": "衣",
       "variant": "衤",
       "pinyin": "yī",
@@ -1002,7 +1002,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_42",
+      "id": 92,
       "radical": "见",
       "variant": "",
       "pinyin": "jiàn",
@@ -1013,7 +1013,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_43",
+      "id": 93,
       "radical": "豕",
       "variant": "",
       "pinyin": "shǐ",
@@ -1024,7 +1024,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_44",
+      "id": 94,
       "radical": "贝",
       "variant": "",
       "pinyin": "bèi",
@@ -1035,7 +1035,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_45",
+      "id": 95,
       "radical": "走",
       "variant": "",
       "pinyin": "zǒu",
@@ -1046,7 +1046,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_46",
+      "id": 96,
       "radical": "足",
       "variant": "⻜",
       "pinyin": "zú",
@@ -1057,7 +1057,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_47",
+      "id": 97,
       "radical": "身",
       "variant": "",
       "pinyin": "shēn",
@@ -1068,7 +1068,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_48",
+      "id": 98,
       "radical": "辵",
       "variant": "⻌",
       "pinyin": "chuò",
@@ -1079,7 +1079,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_49",
+      "id": 99,
       "radical": "风",
       "variant": "",
       "pinyin": "fēng",
@@ -1090,7 +1090,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(2)_50",
+      "id": 100,
       "radical": "飞",
       "variant": "",
       "pinyin": "fēi",
@@ -1101,7 +1101,7 @@
       "category": "50 bộ (2)"
     },
     {
-      "id": "rad_50_bộ_(3)_1",
+      "id": 101,
       "radical": "二",
       "variant": "",
       "pinyin": "èr",
@@ -1112,7 +1112,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_2",
+      "id": 102,
       "radical": "匕",
       "variant": "",
       "pinyin": "bǐ",
@@ -1123,7 +1123,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_3",
+      "id": 103,
       "radical": "十",
       "variant": "",
       "pinyin": "shí",
@@ -1134,7 +1134,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_4",
+      "id": 104,
       "radical": "卩",
       "variant": "",
       "pinyin": "jié",
@@ -1145,7 +1145,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_5",
+      "id": 105,
       "radical": "厶",
       "variant": "",
       "pinyin": "sī",
@@ -1156,7 +1156,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_6",
+      "id": 106,
       "radical": "夊",
       "variant": "",
       "pinyin": "suī",
@@ -1167,7 +1167,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_7",
+      "id": 107,
       "radical": "夂",
       "variant": "",
       "pinyin": "zhōng",
@@ -1178,7 +1178,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_8",
+      "id": 108,
       "radical": "幺",
       "variant": "",
       "pinyin": "yāo",
@@ -1189,7 +1189,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_9",
+      "id": 109,
       "radical": "弓",
       "variant": "",
       "pinyin": "gōng",
@@ -1200,7 +1200,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_10",
+      "id": 110,
       "radical": "彐",
       "variant": "彑",
       "pinyin": "jì",
@@ -1211,7 +1211,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_11",
+      "id": 111,
       "radical": "戈",
       "variant": "",
       "pinyin": "gē",
@@ -1222,7 +1222,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_12",
+      "id": 112,
       "radical": "支",
       "variant": "",
       "pinyin": "zhī",
@@ -1233,7 +1233,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_13",
+      "id": 113,
       "radical": "攴",
       "variant": "攵",
       "pinyin": "pū",
@@ -1244,7 +1244,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_14",
+      "id": 114,
       "radical": "止",
       "variant": "",
       "pinyin": "zhǐ",
@@ -1255,7 +1255,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_15",
+      "id": 115,
       "radical": "爿",
       "variant": "",
       "pinyin": "qiáng",
@@ -1266,7 +1266,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_16",
+      "id": 116,
       "radical": "片",
       "variant": "",
       "pinyin": "piàn",
@@ -1277,7 +1277,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_17",
+      "id": 117,
       "radical": "牙",
       "variant": "",
       "pinyin": "yá",
@@ -1288,7 +1288,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_18",
+      "id": 118,
       "radical": "玄",
       "variant": "",
       "pinyin": "xuán",
@@ -1299,7 +1299,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_19",
+      "id": 119,
       "radical": "甘",
       "variant": "",
       "pinyin": "gān",
@@ -1310,7 +1310,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_20",
+      "id": 120,
       "radical": "皮",
       "variant": "",
       "pinyin": "pí",
@@ -1321,7 +1321,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_21",
+      "id": 121,
       "radical": "皿",
       "variant": "",
       "pinyin": "mǐn",
@@ -1332,7 +1332,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_22",
+      "id": 122,
       "radical": "矛",
       "variant": "",
       "pinyin": "máo",
@@ -1343,7 +1343,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_23",
+      "id": 123,
       "radical": "示",
       "variant": "礻",
       "pinyin": "shì",
@@ -1354,7 +1354,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_24",
+      "id": 124,
       "radical": "立",
       "variant": "",
       "pinyin": "lì",
@@ -1365,7 +1365,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_25",
+      "id": 125,
       "radical": "糸",
       "variant": "纟",
       "pinyin": "mì",
@@ -1376,7 +1376,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_26",
+      "id": 126,
       "radical": "至",
       "variant": "",
       "pinyin": "zhì",
@@ -1387,7 +1387,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_27",
+      "id": 127,
       "radical": "舟",
       "variant": "",
       "pinyin": "zhōu",
@@ -1398,7 +1398,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_28",
+      "id": 128,
       "radical": "色",
       "variant": "",
       "pinyin": "sè",
@@ -1409,7 +1409,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_29",
+      "id": 129,
       "radical": "虫",
       "variant": "",
       "pinyin": "chóng",
@@ -1420,7 +1420,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_30",
+      "id": 130,
       "radical": "血",
       "variant": "",
       "pinyin": "xuè",
@@ -1431,7 +1431,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_31",
+      "id": 131,
       "radical": "角",
       "variant": "",
       "pinyin": "jiǎo",
@@ -1442,7 +1442,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_32",
+      "id": 132,
       "radical": "车",
       "variant": "",
       "pinyin": "chē",
@@ -1453,7 +1453,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_33",
+      "id": 133,
       "radical": "辛",
       "variant": "",
       "pinyin": "xīn",
@@ -1464,7 +1464,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_34",
+      "id": 134,
       "radical": "邑",
       "variant": "阝",
       "pinyin": "yì",
@@ -1475,7 +1475,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_35",
+      "id": 135,
       "radical": "酉",
       "variant": "",
       "pinyin": "yǒu",
@@ -1486,7 +1486,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_36",
+      "id": 136,
       "radical": "金",
       "variant": "钅",
       "pinyin": "jīn",
@@ -1497,7 +1497,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_37",
+      "id": 137,
       "radical": "长",
       "variant": "",
       "pinyin": "cháng",
@@ -1508,7 +1508,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_38",
+      "id": 138,
       "radical": "门",
       "variant": "",
       "pinyin": "mén",
@@ -1519,7 +1519,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_39",
+      "id": 139,
       "radical": "阝",
       "variant": "",
       "pinyin": "fù",
@@ -1530,7 +1530,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_40",
+      "id": 140,
       "radical": "雨",
       "variant": "",
       "pinyin": "yǔ",
@@ -1541,7 +1541,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_41",
+      "id": 141,
       "radical": "青",
       "variant": "",
       "pinyin": "qīng",
@@ -1552,7 +1552,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_42",
+      "id": 142,
       "radical": "非",
       "variant": "",
       "pinyin": "fēi",
@@ -1563,7 +1563,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_43",
+      "id": 143,
       "radical": "面",
       "variant": "",
       "pinyin": "miàn",
@@ -1574,7 +1574,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_44",
+      "id": 144,
       "radical": "韦",
       "variant": "",
       "pinyin": "wéi",
@@ -1585,7 +1585,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_45",
+      "id": 145,
       "radical": "音",
       "variant": "",
       "pinyin": "yīn",
@@ -1596,7 +1596,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_47",
+      "id": 146,
       "radical": "香",
       "variant": "",
       "pinyin": "xiāng",
@@ -1607,7 +1607,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_48",
+      "id": 147,
       "radical": "高",
       "variant": "",
       "pinyin": "gāo",
@@ -1618,7 +1618,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_49",
+      "id": 148,
       "radical": "鱼",
       "variant": "",
       "pinyin": "yú",
@@ -1629,7 +1629,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_50_bộ_(3)_50",
+      "id": 149,
       "radical": "而",
       "variant": "",
       "pinyin": "ér",
@@ -1640,7 +1640,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_Còn_lại_1",
+      "id": 150,
       "radical": "一",
       "variant": "",
       "pinyin": "yī",
@@ -1651,7 +1651,7 @@
       "category": "50 bộ (3)"
     },
     {
-      "id": "rad_Còn_lại_2",
+      "id": 151,
       "radical": "丨",
       "variant": "",
       "pinyin": "gǔn",
@@ -1662,7 +1662,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_3",
+      "id": 152,
       "radical": "丶",
       "variant": "",
       "pinyin": "zhǔ",
@@ -1673,7 +1673,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_4",
+      "id": 153,
       "radical": "丿",
       "variant": "",
       "pinyin": "piě",
@@ -1684,7 +1684,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_5",
+      "id": 154,
       "radical": "乙",
       "variant": "⺄",
       "pinyin": "yǐ",
@@ -1695,7 +1695,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_6",
+      "id": 155,
       "radical": "亅",
       "variant": "",
       "pinyin": "jué",
@@ -1706,7 +1706,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_7",
+      "id": 156,
       "radical": "屮",
       "variant": "",
       "pinyin": "chè",
@@ -1717,7 +1717,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_8",
+      "id": 157,
       "radical": "巛",
       "variant": "川",
       "pinyin": "chuān",
@@ -1728,7 +1728,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_9",
+      "id": 158,
       "radical": "廾",
       "variant": "",
       "pinyin": "gǒng",
@@ -1739,7 +1739,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_10",
+      "id": 159,
       "radical": "弋",
       "variant": "",
       "pinyin": "yì",
@@ -1750,7 +1750,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_11",
+      "id": 160,
       "radical": "歹",
       "variant": "歺",
       "pinyin": "dǎi",
@@ -1761,7 +1761,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_12",
+      "id": 161,
       "radical": "毋",
       "variant": "",
       "pinyin": "wú",
@@ -1772,7 +1772,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_13",
+      "id": 162,
       "radical": "爻",
       "variant": "",
       "pinyin": "yáo",
@@ -1783,7 +1783,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_14",
+      "id": 163,
       "radical": "瓦",
       "variant": "",
       "pinyin": "wǎ",
@@ -1794,7 +1794,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_15",
+      "id": 164,
       "radical": "癶",
       "variant": "",
       "pinyin": "bō",
@@ -1805,7 +1805,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_16",
+      "id": 165,
       "radical": "禸",
       "variant": "",
       "pinyin": "róu",
@@ -1816,7 +1816,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_17",
+      "id": 166,
       "radical": "穴",
       "variant": "",
       "pinyin": "xuè",
@@ -1827,7 +1827,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_18",
+      "id": 167,
       "radical": "缶",
       "variant": "",
       "pinyin": "fǒu",
@@ -1838,7 +1838,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_19",
+      "id": 168,
       "radical": "耒",
       "variant": "",
       "pinyin": "lěi",
@@ -1849,7 +1849,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_20",
+      "id": 169,
       "radical": "聿",
       "variant": "⺼",
       "pinyin": "yù",
@@ -1860,7 +1860,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_21",
+      "id": 170,
       "radical": "臣",
       "variant": "",
       "pinyin": "chén",
@@ -1871,7 +1871,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_22",
+      "id": 171,
       "radical": "臼",
       "variant": "",
       "pinyin": "jiù",
@@ -1882,7 +1882,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_23",
+      "id": 172,
       "radical": "舛",
       "variant": "",
       "pinyin": "chuǎn",
@@ -1893,7 +1893,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_24",
+      "id": 173,
       "radical": "虍",
       "variant": "",
       "pinyin": "hū",
@@ -1904,7 +1904,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_25",
+      "id": 174,
       "radical": "襾",
       "variant": "ya",
       "pinyin": "yà",
@@ -1915,7 +1915,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_26",
+      "id": 175,
       "radical": "谷",
       "variant": "",
       "pinyin": "gǔ",
@@ -1926,7 +1926,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_27",
+      "id": 176,
       "radical": "豆",
       "variant": "",
       "pinyin": "dòu",
@@ -1937,7 +1937,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_28",
+      "id": 177,
       "radical": "豸",
       "variant": "",
       "pinyin": "zhì",
@@ -1948,7 +1948,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_29",
+      "id": 178,
       "radical": "赤",
       "variant": "",
       "pinyin": "chì",
@@ -1959,7 +1959,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_30",
+      "id": 179,
       "radical": "辰",
       "variant": "",
       "pinyin": "chén",
@@ -1970,7 +1970,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_31",
+      "id": 180,
       "radical": "釆",
       "variant": "",
       "pinyin": "biàn",
@@ -1981,7 +1981,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_32",
+      "id": 181,
       "radical": "里",
       "variant": "",
       "pinyin": "lǐ",
@@ -1992,7 +1992,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_33",
+      "id": 182,
       "radical": "隶",
       "variant": "",
       "pinyin": "dài",
@@ -2003,7 +2003,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_34",
+      "id": 183,
       "radical": "隹",
       "variant": "",
       "pinyin": "zhuī",
@@ -2014,7 +2014,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_36",
+      "id": 184,
       "radical": "韭",
       "variant": "",
       "pinyin": "jiǔ",
@@ -2025,7 +2025,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_37",
+      "id": 185,
       "radical": "頁",
       "variant": "页",
       "pinyin": "xiè",
@@ -2036,7 +2036,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_38",
+      "id": 186,
       "radical": "鬼",
       "variant": "",
       "pinyin": "guǐ",
@@ -2047,7 +2047,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_39",
+      "id": 187,
       "radical": "馬",
       "variant": "",
       "pinyin": "mǎ",
@@ -2058,7 +2058,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_40",
+      "id": 188,
       "radical": "骨",
       "variant": "",
       "pinyin": "gǔ",
@@ -2069,7 +2069,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_41",
+      "id": 189,
       "radical": "髟",
       "variant": "",
       "pinyin": "biāo",
@@ -2080,7 +2080,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_42",
+      "id": 190,
       "radical": "鬥",
       "variant": "",
       "pinyin": "dòu",
@@ -2091,7 +2091,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_43",
+      "id": 191,
       "radical": "鬯",
       "variant": "",
       "pinyin": "chàng",
@@ -2102,7 +2102,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_44",
+      "id": 192,
       "radical": "鬲",
       "variant": "",
       "pinyin": "lì",
@@ -2113,7 +2113,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_45",
+      "id": 193,
       "radical": "鳥",
       "variant": "",
       "pinyin": "niǎo",
@@ -2124,7 +2124,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_46",
+      "id": 194,
       "radical": "鹵",
       "variant": "",
       "pinyin": "lǔ",
@@ -2135,7 +2135,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_47",
+      "id": 195,
       "radical": "鹿",
       "variant": "",
       "pinyin": "lù",
@@ -2146,7 +2146,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_48",
+      "id": 196,
       "radical": "麥",
       "variant": "",
       "pinyin": "mài",
@@ -2157,7 +2157,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_49",
+      "id": 197,
       "radical": "麻",
       "variant": "",
       "pinyin": "má",
@@ -2168,7 +2168,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_50",
+      "id": 198,
       "radical": "黃",
       "variant": "",
       "pinyin": "huáng",
@@ -2179,7 +2179,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_51",
+      "id": 199,
       "radical": "黍",
       "variant": "",
       "pinyin": "shǔ",
@@ -2190,7 +2190,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_52",
+      "id": 200,
       "radical": "黑",
       "variant": "",
       "pinyin": "hēi",
@@ -2201,7 +2201,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_53",
+      "id": 201,
       "radical": "黹",
       "variant": "",
       "pinyin": "zhǐ",
@@ -2212,7 +2212,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_54",
+      "id": 202,
       "radical": "黽",
       "variant": "",
       "pinyin": "měng",
@@ -2223,7 +2223,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_55",
+      "id": 203,
       "radical": "鼎",
       "variant": "",
       "pinyin": "dǐng",
@@ -2234,7 +2234,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_56",
+      "id": 204,
       "radical": "鼓",
       "variant": "",
       "pinyin": "gǔ",
@@ -2245,7 +2245,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_57",
+      "id": 205,
       "radical": "鼠",
       "variant": "",
       "pinyin": "shǔ",
@@ -2256,7 +2256,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_58",
+      "id": 206,
       "radical": "鼻",
       "variant": "",
       "pinyin": "bí",
@@ -2267,7 +2267,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_59",
+      "id": 207,
       "radical": "齊",
       "variant": "",
       "pinyin": "qí",
@@ -2278,7 +2278,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_60",
+      "id": 208,
       "radical": "齒",
       "variant": "",
       "pinyin": "chǐ",
@@ -2289,7 +2289,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_61",
+      "id": 209,
       "radical": "龍",
       "variant": "",
       "pinyin": "lóng",
@@ -2300,7 +2300,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_62",
+      "id": 210,
       "radical": "龜",
       "variant": "",
       "pinyin": "guī",
@@ -2311,7 +2311,7 @@
       "category": "Còn lại"
     },
     {
-      "id": "rad_Còn_lại_63",
+      "id": 211,
       "radical": "龠",
       "variant": "",
       "pinyin": "yuè",
@@ -2319,6 +2319,39 @@
       "meaning": "sáo ba lỗ",
       "example": "龠 (yuè - sáo)",
       "note": "Thường nằm phía dưới. Chỉ các loại nhạc khí làm bằng ống tre hoặc sự hòa hợp, nhịp nhàng.",
+      "category": "Còn lại"
+    },
+    {
+      "id": 212,
+      "radical": "几",
+      "variant": "",
+      "pinyin": "jī",
+      "name": "Kỷ",
+      "meaning": "ghế nhỏ, bàn nhỏ",
+      "note": "Gồm 2 nét, chỉ cái ghế đẩu hoặc cái bàn nhỏ",
+      "example": "风, 凡",
+      "category": "Còn lại"
+    },
+    {
+      "id": 213,
+      "radical": "饣",
+      "variant": "食",
+      "pinyin": "shí",
+      "name": "Thực",
+      "meaning": "ăn, thức ăn",
+      "note": "Bộ thủ liên quan đến đồ ăn, ăn uống (cơm, món ăn)",
+      "example": "饭, 饱, 馆",
+      "category": "Còn lại"
+    },
+    {
+      "id": 214,
+      "radical": "革",
+      "variant": "",
+      "pinyin": "gé",
+      "name": "Cách",
+      "meaning": "da thuộc, cải cách",
+      "note": "Chỉ da thú đã qua xử lý thuộc da, hoặc cải cách",
+      "example": "鞋, 鞭, 鞅",
       "category": "Còn lại"
     }
   ],
