@@ -1203,11 +1203,22 @@
         pool = pool.filter(w => w.level && matchLevel(w.level, lvl));
       }
 
+      function cleanLessonTitle(rawTitle, lessonId) {
+        if (!rawTitle && !lessonId) return '';
+        if (!rawTitle) return `Bài ${lessonId}`;
+        let str = String(rawTitle).trim();
+        str = str.replace(/^(?:(Bài|Lesson)\s*\d+\s*[:\-–—]?\s*)+/gi, '').trim();
+        if (lessonId) {
+          return str ? `Bài ${lessonId}: ${str}` : `Bài ${lessonId}`;
+        }
+        return str ? `Bài ${str}` : '';
+      }
+
       // Populate lesson options
       const lMap = new Map();
       pool.forEach(w => {
         if (w.lessonId) {
-          const title = w.lessonTitle ? `Bài ${w.lessonId}: ${w.lessonTitle}` : `Bài ${w.lessonId}`;
+          const title = cleanLessonTitle(w.lessonTitle, w.lessonId);
           lMap.set(w.lessonId.toString(), title);
         }
       });

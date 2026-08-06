@@ -728,7 +728,7 @@
     }
   </style>
   <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
-  <script type="module" crossorigin src="/assets/main-BwbfGf9e.js"></script>
+  <script type="module" crossorigin src="/assets/main-CQ-3TvVx.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/style-BFjJBW8j.css">
 </head>
 
@@ -1132,6 +1132,17 @@
       const lvl = selLevel.value;
       selLesson.innerHTML = `<option value="all">Tất cả các bài (Mặc định)</option><option value="random">Random bài bất kì</option>`;
 
+      function cleanLessonTitle(rawTitle, lessonId) {
+        if (!rawTitle && !lessonId) return '';
+        if (!rawTitle) return `Bài ${lessonId}`;
+        let str = String(rawTitle).trim();
+        str = str.replace(/^(?:(Bài|Lesson)\s*\d+\s*[:\-–—]?\s*)+/gi, '').trim();
+        if (lessonId) {
+          return str ? `Bài ${lessonId}: ${str}` : `Bài ${lessonId}`;
+        }
+        return str ? `Bài ${str}` : '';
+      }
+
       let filtered = vocabData;
       if (lvl !== 'all') {
         if (lvl.startsWith('yct')) {
@@ -1152,7 +1163,7 @@
           const versionStr = yctFlag ? '' : ` [HSK ${ver}]`;
           const prefix = yctFlag ? `YCT ${w.level}` : (w.level ? `HSK ${w.level}${versionStr}` : '');
 
-          let rawTitle = w.lessonTitle || `Bài ${w.lessonId}`;
+          let rawTitle = cleanLessonTitle(w.lessonTitle, w.lessonId);
           const title = prefix ? `${prefix} - ${rawTitle}` : rawTitle;
           lMap.set(key, { val: key, title: title, lessonId: w.lessonId, level: w.level, isYct: yctFlag });
         }

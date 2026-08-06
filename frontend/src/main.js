@@ -13,7 +13,17 @@ async function loadRadicalsData() {
     console.warn("Could not load radicals_data.json:", e);
   }
 }
-loadRadicalsData();
+function cleanLessonTitle(rawTitle, lessonId) {
+  if (!rawTitle && !lessonId) return '';
+  if (!rawTitle) return `Bài ${lessonId}`;
+  let str = String(rawTitle).trim();
+  str = str.replace(/^(?:(Bài|Lesson)\s*\d+\s*[:\-–—]?\s*)+/gi, '').trim();
+  if (lessonId) {
+    return str ? `Bài ${lessonId}: ${str}` : `Bài ${lessonId}`;
+  }
+  return str ? `Bài ${str}` : '';
+}
+window.cleanLessonTitle = cleanLessonTitle;
 
 // --- MEANING CLEANING & NOTE EXTRACTION HELPERS ---
 function cleanMeaningText(m) {
@@ -6770,7 +6780,7 @@ window.openLessonDetailModal = function (lessonKey) {
   if (sliceWords.length === 0) return;
 
   const firstWord = sliceWords[0];
-  const title = firstWord.lessonTitle || firstWord.category || `Bài ${lessonKey}`;
+  const title = cleanLessonTitle(firstWord.lessonTitle || firstWord.category, lessonKey);
   const desc = firstWord.lessonDesc || `Ôn tập từ vựng bài học HSK Cấp ${currentLvl}`;
   const memorizedCount = sliceWords.filter(w => w.isMemorized).length;
   const pct = Math.round((memorizedCount / sliceWords.length) * 100);
@@ -6881,7 +6891,7 @@ window.openLessonDetailModal = function (lessonKey) {
       if (wordsCount === 0) return;
 
       const firstWord = sliceWords[0];
-      const title = firstWord.lessonTitle || firstWord.category || `Bài ${lessonKey}`;
+      const title = cleanLessonTitle(firstWord.lessonTitle || firstWord.category, lessonKey);
       const memorizedCount = sliceWords.filter(w => w.isMemorized).length;
       const pct = Math.round((memorizedCount / wordsCount) * 100);
       const isCompleted = memorizedCount === wordsCount && wordsCount > 0;
@@ -6954,7 +6964,7 @@ window.openLessonDetailModal = function (lessonKey) {
           <!-- Candy Crush Style 3D Round Circle Button -->
           <button class="saga-node-circle ${!isUnlocked ? 'node-locked' : 'node-unlocked'} ${isCurrentActive ? 'active-pulse' : ''}"
                   onclick="${clickAction}"
-                  title="Bài ${lessonKey}: ${title}"
+                  title="${title}"
                   style="width: 84px; height: 84px; border-radius: 50%; font-family: var(--font-display); font-weight: 800; font-size: 1.6rem; color: #ffffff; position: relative; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); ${nodeStyle}">
             ${!isUnlocked ? '<i class="fa-solid fa-lock" style="font-size: 1.3rem; color: #cbd5e1;"></i>' : `<span>${numOnly}</span>`}
           </button>
@@ -7078,7 +7088,7 @@ window.openLessonDetailModal = function (lessonKey) {
 
     // Retrieve title and desc directly from the first word of the group
     const firstWord = sliceWords[0];
-    const title = firstWord.lessonTitle || firstWord.category || `Bài ${lessonKey}`;
+    const title = cleanLessonTitle(firstWord.lessonTitle || firstWord.category, lessonKey);
     const desc = firstWord.lessonDesc || `Ôn tập từ vựng bài học HSK Cấp ${activeLessonsLevel}`;
     const badgeLevelStr = activeLessonsLevel === '7-9' ? '7-8-9' : activeLessonsLevel;
 
