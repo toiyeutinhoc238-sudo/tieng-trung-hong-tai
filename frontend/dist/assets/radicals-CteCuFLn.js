@@ -1,11 +1,11 @@
-import"./modulepreload-polyfill-B5Qt9EMX.js";import"./particles-Dl8CQUZ9.js";let u={radicals:[],comparisons:[]};async function q(){try{let e=await fetch("/radicals_data.json");e.ok||(e=await fetch("/src/radicals_data.json")),e.ok&&(u=await e.json(),typeof M=="function"&&M())}catch(e){console.warn("Could not load radicals_data.json:",e)}}q();let f="50 bộ (1)",W=null,z=null,v=0,p=[];function A(e){if(!e)return;const n=e.trim();if(!n)return;if(z){try{z.pause(),z.currentTime=0,z.src=""}catch{}z=null}const i=parseFloat(localStorage.getItem("speech_playback_rate"))||1,t=`${window.location.origin.includes("5173")?"http://localhost:5000":window.location.origin}/api/tts?text=${encodeURIComponent(n)}&voice=baidu-female`,s=new Audio(t);s.playbackRate=i,z=s,s.play().catch(d=>{console.warn("Retrying Baidu female voice audio playback...",d),setTimeout(()=>{s.play().catch(o=>{if(console.error("Audio playback error:",o),"speechSynthesis"in window){window.speechSynthesis.cancel();const y=new SpeechSynthesisUtterance(n);y.lang="zh-CN",y.rate=i,window.speechSynthesis.speak(y)}})},200)})}window.speakText=A;window.switchRadicalPageTab=function(e){f=e,Object.entries({"50 bộ (1)":"tab-50-1","50 bộ (2)":"tab-50-2","50 bộ (3)":"tab-50-3","Còn lại":"tab-rest","So sánh":"tab-comp"}).forEach(([i,a])=>{const t=document.getElementById(a);t&&(i===e?t.classList.add("active"):t.classList.remove("active"))}),M()};function M(){const e=document.getElementById("radicals-content-area");if(!e)return;const n=document.getElementById("print-mode-btn-text");if(n){let i=0,a="";f==="So sánh"?(i=(u.comparisons||[]).length,a=`Phân Biệt - ${i} Cặp`):f==="Còn lại"?(i=(u.radicals||[]).filter(t=>t.category==="Còn lại").length,a=`Còn Lại - ${i} Bộ`):(i=(u.radicals||[]).filter(t=>t.category===f).length,a=`${i||50} Bộ`),n.textContent=`In Phiếu Tập Tô (${a})`}if(f==="So sánh"){const i=u.comparisons||[];p=i.map((t,s)=>({id:`comp_${s}`,radical:`${t.rad1} / ${t.rad2}`,variant:"",pinyin:`${t.meaning1} vs ${t.meaning2}`,name:"Phân biệt",meaning:t.difference,note:t.difference,example:t.example,category:"So sánh"}));let a=`
+import"./modulepreload-polyfill-B5Qt9EMX.js";import"./particles-Dl8CQUZ9.js";let k={radicals:[],comparisons:[]};async function Y(){try{let e=await fetch("/radicals_data.json");e.ok||(e=await fetch("/src/radicals_data.json")),e.ok&&(k=await e.json(),typeof M=="function"&&M())}catch(e){console.warn("Could not load radicals_data.json:",e)}}Y();let f="50 bộ (1)",W=null,z=null,u=0,p=[];function A(e){if(!e)return;const i=e.trim();if(!i)return;if(z){try{z.pause(),z.currentTime=0,z.src=""}catch{}z=null}const n=parseFloat(localStorage.getItem("speech_playback_rate"))||1,l=`${window.location.origin.includes("5173")?"http://localhost:5000":window.location.origin}/api/tts?text=${encodeURIComponent(i)}&voice=baidu-female`,t=new Audio(l);t.playbackRate=n,z=t,t.play().catch(r=>{console.warn("Retrying Baidu female voice audio playback...",r),setTimeout(()=>{t.play().catch(o=>{if(console.error("Audio playback error:",o),"speechSynthesis"in window){window.speechSynthesis.cancel();const y=new SpeechSynthesisUtterance(i);y.lang="zh-CN",y.rate=n,window.speechSynthesis.speak(y)}})},200)})}window.speakText=A;window.switchRadicalPageTab=function(e){f=e,Object.entries({"50 bộ (1)":"tab-50-1","50 bộ (2)":"tab-50-2","50 bộ (3)":"tab-50-3","Còn lại":"tab-rest","So sánh":"tab-comp"}).forEach(([n,a])=>{const l=document.getElementById(a);l&&(n===e?l.classList.add("active"):l.classList.remove("active"))}),M()};function M(){const e=document.getElementById("radicals-content-area");if(!e)return;const i=document.querySelector(".print-mode-btn"),n=document.getElementById("print-mode-btn-text");if(f==="So sánh")i&&(i.style.display="none");else if(i&&(i.style.display="inline-flex"),n){let a=0,l="";f==="Còn lại"?(a=(k.radicals||[]).filter(t=>t.category==="Còn lại").length,l=`Còn Lại - ${a} Bộ`):(a=(k.radicals||[]).filter(t=>t.category===f).length,l=`${a||50} Bộ`),n.textContent=`In Phiếu Tập Tô (${l})`}if(f==="So sánh"){const a=k.comparisons||[];p=a.map((t,r)=>({id:`comp_${r}`,radical:`${t.rad1} / ${t.rad2}`,variant:"",pinyin:`${t.meaning1} vs ${t.meaning2}`,name:"Phân biệt",meaning:t.difference,note:t.difference,example:t.example,category:"So sánh"}));let l=`
       <div style="display: flex; flex-direction: column; gap: 16px;">
         <div style="background: rgba(37, 99, 235, 0.12); border: 1px solid rgba(37, 99, 235, 0.3); border-radius: 14px; padding: 14px 18px; color: var(--text-color); font-size: 0.93rem; display: flex; align-items: center; gap: 8px;">
           <i class="fa-solid fa-circle-info" style="color: #3b82f6; font-size: 1.1rem;"></i>
           <span>Tổng hợp 25 cặp bộ thủ có hình dáng tương đồng và bí quyết phân biệt chi tiết:</span>
         </div>
-    `;i.forEach((t,s)=>{a+=`
-        <div class="rad-card" onclick="window.openRadicalDetailByIndex(${s})">
+    `;a.forEach((t,r)=>{l+=`
+        <div class="rad-card" onclick="window.openRadicalDetailByIndex(${r})">
           <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.15); padding-bottom: 12px; flex-wrap: wrap; gap: 10px;">
             <div style="display: flex; align-items: center; gap: 14px;">
               <span style="background: rgba(37, 99, 235, 0.2); color: #3b82f6; border: 1.5px solid #2563eb; padding: 6px 16px; border-radius: 10px; font-weight: 800; font-family: var(--font-hanzi); font-size: 1.5rem;">
@@ -28,8 +28,8 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";import"./particles-Dl8CQUZ9.js";let
             </div>
           `:""}
         </div>
-      `}),a+="</div>",e.innerHTML=a}else{const i=(u.radicals||[]).filter(t=>t.category===f);p=i;let a='<div class="grid-container">';i.forEach((t,s)=>{a+=`
-        <div class="rad-card" onclick="window.openRadicalDetailByIndex(${s})">
+      `}),l+="</div>",e.innerHTML=l}else{const a=(k.radicals||[]).filter(t=>t.category===f);p=a;let l='<div class="grid-container">';a.forEach((t,r)=>{l+=`
+        <div class="rad-card" onclick="window.openRadicalDetailByIndex(${r})">
           <div style="display: flex; align-items: center; justify-content: space-between;">
             <div style="display: flex; align-items: baseline; gap: 8px;">
               <span style="font-family: var(--font-hanzi); font-size: 2.4rem; font-weight: 800; color: #2563eb;">
@@ -58,7 +58,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";import"./particles-Dl8CQUZ9.js";let
             </div>
           `:""}
         </div>
-      `}),a+="</div>",e.innerHTML=a}}window.startRadicalFlashcardMode=function(){const e=document.getElementById("radicals-grid-view"),n=document.getElementById("radicals-flashcard-view");e&&(e.style.display="none"),n&&(n.style.display="block"),window.scrollTo({top:0,behavior:"smooth"}),window.selectRadicalByIndex(0)};window.openRadicalDetailByIndex=function(e){const n=document.getElementById("radicals-grid-view"),i=document.getElementById("radicals-flashcard-view");n&&(n.style.display="none"),i&&(i.style.display="block"),window.scrollTo({top:0,behavior:"smooth"}),window.selectRadicalByIndex(e)};window.showGridView=function(){const e=document.getElementById("radicals-grid-view"),n=document.getElementById("radicals-flashcard-view");e&&(e.style.display="block"),n&&(n.style.display="none"),window.scrollTo({top:0,behavior:"smooth"})};window.selectRadicalByIndex=function(e){if(!p||p.length===0)return;e<0&&(e=p.length-1),e>=p.length&&(e=0),v=e;const n=p[v],i=document.getElementById("radicals-count-badge");i&&(i.textContent=`${p.length} ${f==="So sánh"?"cặp phân biệt":"bộ thủ"}`),J(n),Q()};window.nextRadicalFlashcard=function(){p.length>0&&window.selectRadicalByIndex(v+1)};window.prevRadicalFlashcard=function(){p.length>0&&window.selectRadicalByIndex(v-1)};function J(e){const n=document.getElementById("hero-card-content");!n||!e||(n.innerHTML=`
+      `}),l+="</div>",e.innerHTML=l}}window.startRadicalFlashcardMode=function(){const e=document.getElementById("radicals-grid-view"),i=document.getElementById("radicals-flashcard-view");e&&(e.style.display="none"),i&&(i.style.display="block"),window.scrollTo({top:0,behavior:"smooth"}),window.selectRadicalByIndex(0)};window.openRadicalDetailByIndex=function(e){const i=document.getElementById("radicals-grid-view"),n=document.getElementById("radicals-flashcard-view");i&&(i.style.display="none"),n&&(n.style.display="block"),window.scrollTo({top:0,behavior:"smooth"}),window.selectRadicalByIndex(e)};window.showGridView=function(){const e=document.getElementById("radicals-grid-view"),i=document.getElementById("radicals-flashcard-view");e&&(e.style.display="block"),i&&(i.style.display="none"),window.scrollTo({top:0,behavior:"smooth"})};window.selectRadicalByIndex=function(e){if(!p||p.length===0)return;e<0&&(e=p.length-1),e>=p.length&&(e=0),u=e;const i=p[u],n=document.getElementById("radicals-count-badge");n&&(n.textContent=`${p.length} ${f==="So sánh"?"cặp phân biệt":"bộ thủ"}`),J(i),Q()};window.nextRadicalFlashcard=function(){p.length>0&&window.selectRadicalByIndex(u+1)};window.prevRadicalFlashcard=function(){p.length>0&&window.selectRadicalByIndex(u-1)};function J(e){const i=document.getElementById("hero-card-content");!i||!e||(i.innerHTML=`
     <div style="display: flex; gap: 32px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; width: 100%;">
       
       <!-- Left Column: Tianzige Box + Stroke Play Button + Category Pill -->
@@ -117,19 +117,19 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";import"./particles-Dl8CQUZ9.js";let
 
       </div>
     </div>
-  `,setTimeout(()=>{const i=document.getElementById("hero-tianzige-box");if(i&&window.HanziWriter){i.innerHTML="";const a=(e.radical||"").split("/")[0].trim();W=window.HanziWriter.create("hero-tianzige-box",a,{width:170,height:170,padding:10,showOutline:!0,strokeColor:"#dc2626",outlineColor:"#cbd5e1",showCharacter:!0}),W.animateCharacter()}},50))}function Q(){const e=document.getElementById("mini-cards-grid");if(!e)return;let n="";p.forEach((i,a)=>{n+=`
-      <div class="mini-rad-card ${a===v?"active":""}" onclick="window.selectRadicalByIndex(${a})" id="mini-card-${a}">
+  `,setTimeout(()=>{const n=document.getElementById("hero-tianzige-box");if(n&&window.HanziWriter){n.innerHTML="";const a=(e.radical||"").split("/")[0].trim();W=window.HanziWriter.create("hero-tianzige-box",a,{width:170,height:170,padding:10,showOutline:!0,strokeColor:"#dc2626",outlineColor:"#cbd5e1",showCharacter:!0}),W.animateCharacter()}},50))}function Q(){const e=document.getElementById("mini-cards-grid");if(!e)return;let i="";p.forEach((n,a)=>{i+=`
+      <div class="mini-rad-card ${a===u?"active":""}" onclick="window.selectRadicalByIndex(${a})" id="mini-card-${a}">
         <div style="font-family: var(--font-hanzi); font-size: 2.1rem; font-weight: 800; color: #2563eb;">
-          ${i.radical}
+          ${n.radical}
         </div>
         <div style="font-family: var(--font-pinyin); font-size: 0.9rem; font-weight: 700; color: #0284c7; margin-top: 2px;">
-          ${i.pinyin}
+          ${n.pinyin}
         </div>
         <div style="font-size: 0.78rem; font-weight: 600; margin-top: 4px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;" class="hero-text-sub">
-          ${i.name}
+          ${n.name}
         </div>
       </div>
-    `}),e.innerHTML=n,setTimeout(()=>{const i=document.getElementById("mini-cards-grid"),a=document.getElementById(`mini-card-${v}`);if(i&&a){const t=a.offsetLeft-i.clientWidth/2+a.offsetWidth/2;i.scrollTo({left:Math.max(0,t),behavior:"smooth"})}},100)}window.animateRadicalStroke=function(){W&&W.animateCharacter()};document.addEventListener("keydown",e=>{const n=document.getElementById("radicals-flashcard-view");n&&n.style.display!=="none"&&(e.key==="ArrowLeft"?window.prevRadicalFlashcard():e.key==="ArrowRight"?window.nextRadicalFlashcard():(e.key===" "||e.key==="Spacebar")&&(e.preventDefault(),p[v]&&A(p[v].radical)))});document.addEventListener("DOMContentLoaded",()=>{M()});let P="all",_="fit_multi",F="4",O="2",U=!0,X=!0;window.printRadicalWorksheet=function(){openRadicalPrintWorksheetModal("all")};window.openRadicalPrintWorksheetModal=function(e="all"){P=e;let n=document.getElementById("print-radical-worksheet-modal");n||(n=document.createElement("div"),n.id="print-radical-worksheet-modal",n.style.cssText="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(11,15,25,0.92); z-index:9999999; align-items:center; justify-content:center; padding:16px; box-sizing:border-box; backdrop-filter:blur(8px);",document.body.appendChild(n));const i=document.getElementById("seasonal-particle-canvas");i&&(i.style.display="none"),n.innerHTML=`
+    `}),e.innerHTML=i,setTimeout(()=>{const n=document.getElementById("mini-cards-grid"),a=document.getElementById(`mini-card-${u}`);if(n&&a){const l=a.offsetLeft-n.clientWidth/2+a.offsetWidth/2;n.scrollTo({left:Math.max(0,l),behavior:"smooth"})}},100)}window.animateRadicalStroke=function(){W&&W.animateCharacter()};document.addEventListener("keydown",e=>{const i=document.getElementById("radicals-flashcard-view");i&&i.style.display!=="none"&&(e.key==="ArrowLeft"?window.prevRadicalFlashcard():e.key==="ArrowRight"?window.nextRadicalFlashcard():(e.key===" "||e.key==="Spacebar")&&(e.preventDefault(),p[u]&&A(p[u].radical)))});document.addEventListener("DOMContentLoaded",()=>{M()});let I="all",_="fit_multi",F="4",O="2",U=!0,X=!0;window.printRadicalWorksheet=function(){openRadicalPrintWorksheetModal("all")};window.openRadicalPrintWorksheetModal=function(e="all"){I=e;let i=document.getElementById("print-radical-worksheet-modal");i||(i=document.createElement("div"),i.id="print-radical-worksheet-modal",i.style.cssText="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(11,15,25,0.92); z-index:9999999; align-items:center; justify-content:center; padding:16px; box-sizing:border-box; backdrop-filter:blur(8px);",document.body.appendChild(i));const n=document.getElementById("seasonal-particle-canvas");n&&(n.style.display="none"),i.innerHTML=`
     <div style="background:#0f172a; border:1px solid rgba(255,255,255,0.15); border-radius:20px; max-width:980px; width:100%; max-height:95vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,0.6);">
       
       <!-- Thanh Tiêu Đề Modal -->
@@ -154,8 +154,8 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";import"./particles-Dl8CQUZ9.js";let
         <div style="display:flex; align-items:center; gap:6px;">
           <label style="font-weight:700; color:#f59e0b;"><i class="fa-solid fa-list-check"></i> Danh sách in:</label>
           <select id="radical-print-scope" onchange="updateRadicalWorksheetPreviewConfig()" style="background:#0f172a; border:1px solid #f59e0b; color:#fff; padding:4px 10px; border-radius:8px; font-weight:700; outline:none; cursor:pointer;">
-            <option value="all" ${P==="all"?"selected":""}>Tất cả (${f==="So sánh"?"25 Cặp Phân Biệt":f==="Còn lại"?"Còn Lại (64 Bộ)":f})</option>
-            <option value="single" ${P==="single"?"selected":""}>Chỉ bộ thủ đang chọn</option>
+            <option value="all" ${I==="all"?"selected":""}>Tất cả (${f==="So sánh"?"25 Cặp Phân Biệt":f==="Còn lại"?"Còn Lại (64 Bộ)":f})</option>
+            <option value="single" ${I==="single"?"selected":""}>Chỉ bộ thủ đang chọn</option>
           </select>
         </div>
 
@@ -210,9 +210,9 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";import"./particles-Dl8CQUZ9.js";let
         <!-- Dynamic printable content injected here -->
       </div>
     </div>
-  `,n.style.display="flex",updateRadicalWorksheetPreviewConfig()};window.closeRadicalPrintWorksheetModal=function(){const e=document.getElementById("print-radical-worksheet-modal");e&&(e.style.display="none");const n=document.getElementById("seasonal-particle-canvas");n&&localStorage.getItem("particles_enabled")!=="false"&&(n.style.display="block")};window.updateRadicalWorksheetPreviewConfig=function(){const e=document.getElementById("radical-print-scope"),n=document.getElementById("radical-print-layout"),i=document.getElementById("radical-print-rows"),a=document.getElementById("radical-print-trace-rows"),t=document.getElementById("radical-print-show-pinyin"),s=document.getElementById("radical-print-show-meaning");e&&(P=e.value),n&&(_=n.value),i&&(F=i.value),a&&(O=a.value),t&&(U=t.checked),s&&(X=s.checked);let d=[];if(f==="So sánh"?d=(u.comparisons||[]).map((o,y)=>({id:`comp_${y}`,radical:`${o.rad1}/${o.rad2}`,variant:"",pinyin:`${o.meaning1} vs ${o.meaning2}`,name:"Phân biệt",meaning:o.difference+(o.example?` (VD: ${o.example})`:""),category:"Phân biệt"})):f==="Còn lại"?d=(u.radicals||[]).filter(o=>o.category==="Còn lại"):(d=(u.radicals||[]).filter(o=>o.category===f),d.length===0&&(d=(u.radicals||[]).filter(o=>o.category==="50 bộ (1)"))),P==="single"&&p[v]){const o=p[v];if(o&&o.radical){const y=d.find(I=>I.radical===o.radical);d=y?[y]:[o]}else d=d.slice(0,1)}Z(d)};function Z(e){const n=document.getElementById("radical-print-worksheet-content-wrap");if(!n)return;const i=new Date,a=`${i.getDate()}/${i.getMonth()+1}/${i.getFullYear()}`,t=13,s=48,d=parseInt(F)||4,o=O,y=U,I=X;function j(l,r=""){return`
+  `,i.style.display="flex",updateRadicalWorksheetPreviewConfig()};window.closeRadicalPrintWorksheetModal=function(){const e=document.getElementById("print-radical-worksheet-modal");e&&(e.style.display="none");const i=document.getElementById("seasonal-particle-canvas");i&&localStorage.getItem("particles_enabled")!=="false"&&(i.style.display="block")};window.updateRadicalWorksheetPreviewConfig=function(){const e=document.getElementById("radical-print-scope"),i=document.getElementById("radical-print-layout"),n=document.getElementById("radical-print-rows"),a=document.getElementById("radical-print-trace-rows"),l=document.getElementById("radical-print-show-pinyin"),t=document.getElementById("radical-print-show-meaning");e&&(I=e.value),i&&(_=i.value),n&&(F=n.value),a&&(O=a.value),l&&(U=l.checked),t&&(X=t.checked);let r=[];if(f==="So sánh"?r=(k.comparisons||[]).map((o,y)=>({id:`comp_${y}`,radical:`${o.rad1}/${o.rad2}`,variant:"",pinyin:`${o.meaning1} vs ${o.meaning2}`,name:"Phân biệt",meaning:o.difference+(o.example?` (VD: ${o.example})`:""),category:"Phân biệt"})):f==="Còn lại"?r=(k.radicals||[]).filter(o=>o.category==="Còn lại"):(r=(k.radicals||[]).filter(o=>o.category===f),r.length===0&&(r=(k.radicals||[]).filter(o=>o.category==="50 bộ (1)"))),I==="single"&&p[u]){const o=p[u];if(o&&o.radical){const y=r.find(P=>P.radical===o.radical);r=y?[y]:[o]}else r=r.slice(0,1)}Z(r)};function Z(e){const i=document.getElementById("radical-print-worksheet-content-wrap");if(!i)return;const n=new Date,a=`${n.getDate()}/${n.getMonth()+1}/${n.getFullYear()}`,l=13,t=48,r=parseInt(F)||4,o=O,y=U,P=X;function j(d,s=""){return`
       <div style="
-        width:${l}px; height:${l}px;
+        width:${d}px; height:${d}px;
         border:1px solid #16a34a;
         position:relative;
         display:flex; align-items:center; justify-content:center;
@@ -220,19 +220,19 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";import"./particles-Dl8CQUZ9.js";let
         margin-right:-1px; margin-bottom:-1px;
         flex-shrink:0;
       ">
-        <svg style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;" viewBox="0 0 ${l} ${l}">
-          <line x1="0" y1="${l/2}" x2="${l}" y2="${l/2}" stroke="#86efac" stroke-dasharray="2,2" />
-          <line x1="${l/2}" y1="0" x2="${l/2}" y2="${l}" stroke="#86efac" stroke-dasharray="2,2" />
-          <line x1="0" y1="0" x2="${l}" y2="${l}" stroke="#dcfce7" stroke-dasharray="2,2" />
-          <line x1="${l}" y1="0" x2="0" y2="${l}" stroke="#dcfce7" stroke-dasharray="2,2" />
+        <svg style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;" viewBox="0 0 ${d} ${d}">
+          <line x1="0" y1="${d/2}" x2="${d}" y2="${d/2}" stroke="#86efac" stroke-dasharray="2,2" />
+          <line x1="${d/2}" y1="0" x2="${d/2}" y2="${d}" stroke="#86efac" stroke-dasharray="2,2" />
+          <line x1="0" y1="0" x2="${d}" y2="${d}" stroke="#dcfce7" stroke-dasharray="2,2" />
+          <line x1="${d}" y1="0" x2="0" y2="${d}" stroke="#dcfce7" stroke-dasharray="2,2" />
         </svg>
-        ${r}
-      </div>`}const N=[];let V="";if(_==="fit_multi"){let l=e.length,r=3;d<=2?r=5:d===3?r=4:d===4?r=3:d>=5&&(r=2);let g=Math.ceil(l/r)||1;const x=document.getElementById("modal-radical-print-total-pages");x&&(x.textContent=`${g} trang`);for(let m=0;m<g;m++){const w=e.slice(m*r,(m+1)*r);let B="";w.forEach((c,S)=>{const T=m*r+S,C=c.radical,h=c.radical+(c.variant?` / ${c.variant}`:""),H=C.match(/[\u4e00-\u9fa5]/g)||[C[0]];function L(b){let D="";for(let K=0;K<t;K++){let R=!1;(o==="all"||o==="1"&&b===0||o==="2"&&(b===0||b===1)||o==="3"&&(b===0||b===1||b===2))&&(R=!0);let G="";R&&(G=`<span style="
-                font-size:${s*.72}px;
+        ${s}
+      </div>`}const N=[];let V="";if(_==="fit_multi"){let d=e.length,s=3;r<=2?s=5:r===3?s=4:r===4?s=3:r>=5&&(s=2);let g=Math.ceil(d/s)||1;const x=document.getElementById("modal-radical-print-total-pages");x&&(x.textContent=`${g} trang`);for(let m=0;m<g;m++){const v=e.slice(m*s,(m+1)*s);let C="";v.forEach((c,S)=>{const T=m*s+S,B=c.radical,h=c.radical+(c.variant?` / ${c.variant}`:""),H=B.match(/[\u4e00-\u9fa5]/g)||[B[0]];function L(b){let D="";for(let K=0;K<l;K++){let R=!1;(o==="all"||o==="1"&&b===0||o==="2"&&(b===0||b===1)||o==="3"&&(b===0||b===1||b===2))&&(R=!0);let G="";R&&(G=`<span style="
+                font-size:${t*.72}px;
                 font-family:'LXGW WenKai Lite','Kaiti','STKaiti','Kai','PingFang SC','Noto Serif SC',serif;
                 font-weight:normal; color:#111827; opacity:0.18;
                 line-height:1; position:relative; z-index:2; pointer-events:none;
-              ">${C}</span>`),D+=j(s,G)}return`<div style="display:flex;">${D}</div>`}let $="";for(let b=0;b<d;b++)$+=L(b);const E=`radical-stroke-steps-modal-${T}`;N.push({id:E,wordChars:H});const Y=`
+              ">${B}</span>`),D+=j(t,G)}return`<div style="display:flex;">${D}</div>`}let $="";for(let b=0;b<r;b++)$+=L(b);const E=`radical-stroke-steps-modal-${T}`;N.push({id:E,wordChars:H});const q=`
           <div style="
             border:2px solid #22c55e; border-radius:8px;
             padding:8px 14px; margin-bottom:8px;
@@ -246,7 +246,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";import"./particles-Dl8CQUZ9.js";let
                   font-weight:bold; color:#111827; line-height:1;
                 ">${h}</span>
                 ${y&&c.pinyin?`<span style="font-size:1.05rem; font-weight:800; color:#ea580c;">${c.pinyin}</span>`:""}
-                ${I?`<span style="font-size:0.9rem; color:#374151; font-weight:700;">${c.name?`${c.name} (${c.meaning||""})`:c.meaning||""}</span>`:""}
+                ${P?`<span style="font-size:0.9rem; color:#374151; font-weight:700;">${c.name?`${c.name} (${c.meaning||""})`:c.meaning||""}</span>`:""}
               </div>
               <div style="font-size:0.75rem; color:#16a34a; font-weight:700; background:#f0fdf4; padding:3px 10px; border-radius:12px; border:1px solid #bbf7d0;">
                 ${c.category||"50 BỘ THỦ"}
@@ -258,23 +258,23 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";import"./particles-Dl8CQUZ9.js";let
                 <span style="font-size:0.75rem; color:#9ca3af;">Đang tải nét bút...</span>
               </div>
             </div>
-          </div>`;B+=`
+          </div>`;C+=`
           <div class="print-word-card" style="margin-bottom:18px; page-break-inside:avoid; break-inside:avoid;">
             <div style="font-size:0.75rem; font-weight:800; color:#16a34a; margin-bottom:4px;">
               Bộ thủ #${T+1}: ${c.radical}
             </div>
-            ${Y}
+            ${q}
             <div style="display:inline-flex; flex-direction:column; border:2px solid #22c55e; border-radius:6px; overflow:hidden; box-sizing:border-box; width:100%;">
               ${$}
             </div>
           </div>
-        `});const k=m===g-1;V+=`
+        `});const w=m===g-1;V+=`
         <div class="print-page-area" style="
           font-family:'Be Vietnam Pro','Segoe UI',sans-serif;
           padding:24px 28px;
           background:#fff; color:#000;
-          max-width:${t*s+80}px;
-          margin:0 auto ${k?"0":"30px"} auto;
+          max-width:${l*t+80}px;
+          margin:0 auto ${w?"0":"30px"} auto;
           box-shadow:0 10px 30px rgba(0,0,0,0.15);
           border-radius:12px;
           page-break-after: always;
@@ -300,7 +300,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";import"./particles-Dl8CQUZ9.js";let
           </div>
 
           <!-- DANH SÁCH CÁC THẺ BỘ THỦ GHÉP -->
-          ${B}
+          ${C}
 
           <!-- FOOTER -->
           <div style="margin-top:12px; border-top:1px dashed #86efac; padding-top:6px; display:flex; justify-content:space-between; font-size:0.72rem; color:#9ca3af; page-break-inside: avoid; break-inside: avoid;">
@@ -308,12 +308,12 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";import"./particles-Dl8CQUZ9.js";let
             <span style="font-weight:800; color:#f97316;">Tiếng Trung HongTai</span>
           </div>
         </div>
-      `}}else{const l=document.getElementById("modal-radical-print-total-pages");l&&(l.textContent=`${e.length} trang`),e.forEach((r,g)=>{const x=r.radical,m=r.radical+(r.variant?` / ${r.variant}`:""),w=x.match(/[\u4e00-\u9fa5]/g)||[x[0]];function B(h){let H="";for(let L=0;L<t;L++){let $=!1;(o==="all"||o==="1"&&h===0||o==="2"&&(h===0||h===1)||o==="3"&&(h===0||h===1||h===2))&&($=!0);let E="";$&&(E=`<span style="
-              font-size:${s*.72}px;
+      `}}else{const d=document.getElementById("modal-radical-print-total-pages");d&&(d.textContent=`${e.length} trang`),e.forEach((s,g)=>{const x=s.radical,m=s.radical+(s.variant?` / ${s.variant}`:""),v=x.match(/[\u4e00-\u9fa5]/g)||[x[0]];function C(h){let H="";for(let L=0;L<l;L++){let $=!1;(o==="all"||o==="1"&&h===0||o==="2"&&(h===0||h===1)||o==="3"&&(h===0||h===1||h===2))&&($=!0);let E="";$&&(E=`<span style="
+              font-size:${t*.72}px;
               font-family:'LXGW WenKai Lite','Kaiti','STKaiti','Kai','PingFang SC','Noto Serif SC',serif;
               font-weight:normal; color:#111827; opacity:0.18;
               line-height:1; position:relative; z-index:2; pointer-events:none;
-            ">${x}</span>`),H+=j(s,E)}return`<div style="display:flex;">${H}</div>`}let k="";for(let h=0;h<d;h++)k+=B(h);const c=`radical-stroke-steps-modal-${g}`;N.push({id:c,wordChars:w});const S=`
+            ">${x}</span>`),H+=j(t,E)}return`<div style="display:flex;">${H}</div>`}let w="";for(let h=0;h<r;h++)w+=C(h);const c=`radical-stroke-steps-modal-${g}`;N.push({id:c,wordChars:v});const S=`
         <div style="
           border:2px solid #22c55e; border-radius:8px;
           padding:12px 18px; margin-bottom:12px;
@@ -326,11 +326,11 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";import"./particles-Dl8CQUZ9.js";let
                 font-family:'LXGW WenKai Lite','Kaiti','STKaiti','Kai','PingFang SC','Noto Serif SC',serif;
                 font-weight:bold; color:#111827; line-height:1;
               ">${m}</span>
-              ${y&&r.pinyin?`<span style="font-size:1.15rem; font-weight:800; color:#ea580c;">${r.pinyin}</span>`:""}
-              ${I?`<span style="font-size:0.95rem; color:#374151; font-weight:600;">${r.name?`${r.name} (${r.meaning||""})`:r.meaning||""}</span>`:""}
+              ${y&&s.pinyin?`<span style="font-size:1.15rem; font-weight:800; color:#ea580c;">${s.pinyin}</span>`:""}
+              ${P?`<span style="font-size:0.95rem; color:#374151; font-weight:600;">${s.name?`${s.name} (${s.meaning||""})`:s.meaning||""}</span>`:""}
             </div>
             <div style="font-size:0.75rem; color:#16a34a; font-weight:700; background:#f0fdf4; padding:4px 12px; border-radius:12px; border:1px solid #bbf7d0;">
-              ${r.category||"50 BỘ THỦ"}
+              ${s.category||"50 BỘ THỦ"}
             </div>
           </div>
 
@@ -341,14 +341,14 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";import"./particles-Dl8CQUZ9.js";let
           </div>
         </div>`,T=`
         <div style="display:inline-flex; flex-direction:column; border:2px solid #22c55e; border-radius:6px; overflow:hidden; box-sizing:border-box; width:100%;">
-          ${k}
-        </div>`,C=g===e.length-1;V+=`
+          ${w}
+        </div>`,B=g===e.length-1;V+=`
         <div class="print-page-area" style="
           font-family:'Be Vietnam Pro','Segoe UI',sans-serif;
           padding:24px 28px;
           background:#fff; color:#000;
-          max-width:${t*s+80}px;
-          margin:0 auto ${C?"0":"30px"} auto;
+          max-width:${l*t+80}px;
+          margin:0 auto ${B?"0":"30px"} auto;
           box-shadow:0 10px 30px rgba(0,0,0,0.15);
           border-radius:12px;
           page-break-after: always;
@@ -387,12 +387,12 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";import"./particles-Dl8CQUZ9.js";let
             <span style="font-weight:800; color:#f97316;">Tiếng Trung HongTai</span>
           </div>
         </div>
-      `})}n.innerHTML=V,typeof HanziWriter<"u"&&N.forEach(l=>{const r=document.getElementById(l.id);if(!r)return;let g="",x=l.wordChars.length;l.wordChars.forEach(m=>{HanziWriter.loadCharacterData(m).then(w=>{if(w&&w.strokes){const B=w.strokes.length;let k='<div style="display:inline-flex; align-items:center; gap:5px; background:#f8fafc; padding:3px 8px; border-radius:6px; border:1px solid #e2e8f0;">';k+=`<span style="font-weight:bold; color:#111827; font-size:1.05rem; margin-right:4px;">${m}:</span>`;for(let c=1;c<=B;c++){const S=w.strokes.slice(0,c);let T="";S.forEach(C=>{T+=`<path d="${C}" fill="#111827" transform="scale(0.022, -0.022) translate(0, -900)" />`}),k+=`
+      `})}i.innerHTML=V,typeof HanziWriter<"u"&&N.forEach(d=>{const s=document.getElementById(d.id);if(!s)return;let g="",x=d.wordChars.length;d.wordChars.forEach(m=>{HanziWriter.loadCharacterData(m).then(v=>{if(v&&v.strokes){const C=v.strokes.length;let w='<div style="display:inline-flex; align-items:center; gap:5px; background:#f8fafc; padding:3px 8px; border-radius:6px; border:1px solid #e2e8f0;">';w+=`<span style="font-weight:bold; color:#111827; font-size:1.05rem; margin-right:4px;">${m}:</span>`;for(let c=1;c<=C;c++){const S=v.strokes.slice(0,c);let T="";S.forEach(B=>{T+=`<path d="${B}" fill="#111827" transform="scale(0.022, -0.022) translate(0, -900)" />`}),w+=`
                 <div style="display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px;">
                   <svg width="22" height="22" viewBox="0 0 24 24" style="overflow:visible;">
                     ${T}
                   </svg>
-                </div>`}k+="</div>",g+=k}x--,x===0&&(r.innerHTML=g||"")}).catch(w=>{x--,x===0&&!g&&(r.innerHTML="")})})})}window.triggerRadicalPrintWorksheet=function(){if(/iPad|iPhone|iPod/.test(navigator.userAgent)||navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1){window.print();return}const n=document.getElementById("radical-print-worksheet-content-wrap");if(!n){window.print();return}const i=window.open("","_blank","width=920,height=900");if(!i){window.print();return}const a=n.innerHTML;i.document.open(),i.document.write(`
+                </div>`}w+="</div>",g+=w}x--,x===0&&(s.innerHTML=g||"")}).catch(v=>{x--,x===0&&!g&&(s.innerHTML="")})})})}window.triggerRadicalPrintWorksheet=function(){if(/iPad|iPhone|iPod/.test(navigator.userAgent)||navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1){window.print();return}const i=document.getElementById("radical-print-worksheet-content-wrap");if(!i){window.print();return}const n=window.open("","_blank","width=920,height=900");if(!n){window.print();return}const a=i.innerHTML;n.document.open(),n.document.write(`
     <!DOCTYPE html>
     <html>
     <head>
@@ -445,4 +445,4 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";import"./particles-Dl8CQUZ9.js";let
       <\/script>
     </body>
     </html>
-  `),i.document.close()};
+  `),n.document.close()};

@@ -91,21 +91,25 @@ function renderGridContent() {
   const container = document.getElementById('radicals-content-area');
   if (!container) return;
 
+  const printBtn = document.querySelector('.print-mode-btn');
   const printBtnText = document.getElementById('print-mode-btn-text');
-  if (printBtnText) {
-    let count = 0;
-    let label = '';
-    if (currentTab === 'So sánh') {
-      count = (radicalsData.comparisons || []).length;
-      label = `Phân Biệt - ${count} Cặp`;
-    } else if (currentTab === 'Còn lại') {
-      count = (radicalsData.radicals || []).filter(r => r.category === 'Còn lại').length;
-      label = `Còn Lại - ${count} Bộ`;
-    } else {
-      count = (radicalsData.radicals || []).filter(r => r.category === currentTab).length;
-      label = `${count || 50} Bộ`;
+
+  if (currentTab === 'So sánh') {
+    if (printBtn) printBtn.style.display = 'none';
+  } else {
+    if (printBtn) printBtn.style.display = 'inline-flex';
+    if (printBtnText) {
+      let count = 0;
+      let label = '';
+      if (currentTab === 'Còn lại') {
+        count = (radicalsData.radicals || []).filter(r => r.category === 'Còn lại').length;
+        label = `Còn Lại - ${count} Bộ`;
+      } else {
+        count = (radicalsData.radicals || []).filter(r => r.category === currentTab).length;
+        label = `${count || 50} Bộ`;
+      }
+      printBtnText.textContent = `In Phiếu Tập Tô (${label})`;
     }
-    printBtnText.textContent = `In Phiếu Tập Tô (${label})`;
   }
 
   if (currentTab === 'So sánh') {
