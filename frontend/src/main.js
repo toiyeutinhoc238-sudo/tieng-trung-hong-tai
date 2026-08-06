@@ -3144,11 +3144,7 @@ window.revealAllRoadmapEyeCards = function(targetSentence) {
   const practiceMistakesBtn = document.getElementById('practice-mistakes-btn');
   if (practiceMistakesBtn) {
     practiceMistakesBtn.addEventListener('click', () => {
-      stopAutoplay();
-      studyCustomCategory = null;
-      studySelectedLessons = null;
-      startStudySession('wrong', 'all', 'Sổ tay từ làm sai', 'Ôn tập các từ vựng bạn đã trả lời sai');
-      showToast('Đang tải danh sách từ vựng làm sai!');
+      window.showComingSoonNotice('Sổ tay từ vựng');
     });
   }
 
@@ -3300,8 +3296,7 @@ window.revealAllRoadmapEyeCards = function(targetSentence) {
 
   if (topicPersonalBtn) {
     topicPersonalBtn.addEventListener('click', () => {
-      activeSmartTopic = 'personal';
-      showSubdecksView();
+      window.showComingSoonNotice('Sổ tay từ vựng');
     });
   }
   if (topicHskBtn) {
@@ -7720,7 +7715,8 @@ function initDictionaryView() {
       const activeView = document.getElementById(`dict-view-${tabId}`);
       if (activeView) {
         if (tabId === 'notebook') {
-          activeView.style.display = 'grid'; // Grid sidebar layout
+          window.showComingSoonNotice('Sổ tay từ vựng');
+          return;
         } else if (tabId === 'search') {
           activeView.style.display = 'grid';
         } else {
@@ -9344,12 +9340,20 @@ function createSubdeckCard(name, id, count, icon, color) {
   `;
 
   card.addEventListener('click', () => {
+    if (id === 'wrong' || id === 'starred' || (id && id.startsWith('custom:'))) {
+      window.showComingSoonNotice('Sổ tay từ vựng');
+      return;
+    }
     showNotebookDashboardView(id);
   });
   return card;
 }
 
 function openNotebookDashboard(notebookId) {
+  if (notebookId === 'wrong' || notebookId === 'starred' || (notebookId && notebookId.startsWith('custom:'))) {
+    window.showComingSoonNotice('Sổ tay từ vựng');
+    return;
+  }
   const titleEl = document.getElementById('dashboard-notebook-title');
   const descEl = document.getElementById('dashboard-notebook-desc');
 
