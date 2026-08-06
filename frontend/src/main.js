@@ -15,6 +15,31 @@ async function loadRadicalsData() {
 }
 loadRadicalsData();
 
+// --- MEANING CLEANING & NOTE EXTRACTION HELPERS ---
+function cleanMeaningText(m) {
+  if (!m) return '';
+  let str = String(m).trim();
+  str = str.replace(/^(.+?\([^\)]+\))\s*[\(（][^\)］]+[\)］]\s*$/, '$1').trim();
+  str = str.replace(/\s*[\(（](?:Ngôi|Chỉ|Có thể|Chào|Đáp|Dùng|Được|Quy tắc|Phủ|Trợ|Xem|Tôi|Thường|Thành|Biểu|Đặt|Khi|xem|dùng|nghĩa|thường|cấu trúc|biến điệu|Chương|Ví dụ|Hình|Đại từ|Tôn trọng)[^\)］]*[\)］]\s*$/gi, '').trim();
+  return str;
+}
+
+function extractNoteFromMeaning(m) {
+  if (!m) return '';
+  const str = String(m).trim();
+  const doubleMatch = str.match(/^.+?\([^\)]+\)\s*[\(（]([^\)］]+)[\)］]\s*$/);
+  if (doubleMatch) return doubleMatch[1].trim();
+
+  const singleMatch = str.match(/^.+?\s*[\(（]([^\)］]+)[\)］]\s*$/);
+  if (singleMatch) {
+    const parenText = singleMatch[1].trim();
+    if (/^(Ngôi|Chỉ|Có thể|Chào|Đáp|Dùng|Được|Quy tắc|Phủ|Trợ|Xem|Tôi|Thường|Thành|Biểu|Đặt|Khi|xem|dùng|nghĩa|thường|cấu trúc|biến điệu|Chương|Ví dụ|Hình|Đại từ|Tôn trọng)/i.test(parenText) || parenText.length > 15 || /[.!?；;:]/.test(parenText)) {
+      return parenText;
+    }
+  }
+  return '';
+}
+
 // --- RADICAL LOOKUP HELPERS & ETYMOLOGY DICTIONARY MAP ---
 const CHARACTER_RADICAL_MAP = {
   '王': [{ radical: '王', name: 'VƯƠNG', meaning: 'Vua, họ Vương' }],
@@ -1071,7 +1096,8 @@ function renderActiveCardLesson(current) {
 
   // 2. Meaning Text
   const meaningEl = document.getElementById('lesson-meaning-text');
-  if (meaningEl) meaningEl.textContent = current.meaning || '';
+  const cleanMeaning = cleanMeaningText(current.meaning || '');
+  if (meaningEl) meaningEl.textContent = cleanMeaning;
 
   // 3. Word Type Badge
   const wordTypeBadge = document.getElementById('lesson-wordtype-badge');
@@ -1086,8 +1112,9 @@ function renderActiveCardLesson(current) {
   // 5. Note / Usage Text
   const noteEl = document.getElementById('lesson-note-text');
   if (noteEl) {
-    if (current.note || current.description) {
-      noteEl.textContent = current.note || current.description;
+    const extractedNote = extractNoteFromMeaning(current.meaning);
+    if (current.note || current.description || extractedNote) {
+      noteEl.textContent = current.note || current.description || extractedNote;
     } else {
       noteEl.textContent = `Bài học từ vựng HSK ${current.level || 1} - Lộ trình học Tiếng Trung Hồng Thái`;
     }
@@ -1116,18 +1143,19 @@ function renderActiveCardLesson(current) {
   const egZhLines = egZh ? egZh.split(/(?<=[！。？\n])\s*/).map(s => s.trim()).filter(Boolean) : [];
   const egViLines = egVi ? egVi.split(/(?<=[.!?\n])\s*/).map(s => s.trim()).filter(Boolean) : [];
 
-  // Randomly select 1 of the example sentences if multiple examples exist
-  const randExIdx = (egZhLines.length > 0) ? Math.floor(Math.random() * egZhLines.length) : 0;
-  const targetZhSentence = egZhLines[randExIdx] || current.word;
-  const promptViSentence = egViLines[randExIdx] || current.meaning;
+  let targetZhSentence = current.word;
+  let promptViSentence = cleanMeaning;
 
-  if (egZhLines.length > 0 && egViLines.length > 0) {
-    if (promptText) promptText.textContent = `"${promptViSentence}"`;
-    if (standardZhText) standardZhText.textContent = targetZhSentence;
+  if (egZhLines.length > 0 && egViLines.length > 0 && egViLines[0] && egViLines[0] !== cleanMeaning) {
+    targetZhSentence = egZhLines[0];
+    promptViSentence = egViLines[0];
   } else {
-    if (promptText) promptText.textContent = `Dịch nghĩa từ: "${current.meaning}"`;
-    if (standardZhText) standardZhText.textContent = current.word;
+    targetZhSentence = current.word;
+    promptViSentence = cleanMeaning;
   }
+
+  if (promptText) promptText.textContent = `"${promptViSentence}"`;
+  if (standardZhText) standardZhText.textContent = targetZhSentence;
 
   // 6b. Render Word Hint Cards using the randomly selected target Chinese sentence
   renderLessonWordHintCards(targetZhSentence);
@@ -4827,7 +4855,9 @@ window.showLearningFlashcard = function(index) {
   const hz = w.word || w.hanzi || '---';
   const py = w.pinyin || '---';
   const pos = w.category || w.word_type || w.hanviet || 'Từ vựng';
-  const mn = w.meaning || '---';
+  const rawMeaning = w.meaning || '---';
+  const mn = cleanMeaningText(rawMeaning);
+  const extractedNote = extractNoteFromMeaning(rawMeaning);
   
   const egZh = w.example_zh || '';
   const egVi = w.example_vi || '';
@@ -4838,16 +4868,22 @@ window.showLearningFlashcard = function(index) {
   // Smart split Vietnamese examples by sentence-ending punctuation (. ! ?) or newline
   const egViLines = egVi ? egVi.split(/(?<=[.!?\n])\s*/).map(s => s.trim()).filter(Boolean) : [];
 
-  const rawUsage = w.explanation || w.usage || (egViLines[0] ? `Dùng trong câu: "${egViLines[0]}"` : '');
+  const rawUsage = w.note || w.explanation || w.usage || extractedNote || (egViLines[0] ? `Dùng trong câu: "${egViLines[0]}"` : '');
   const usageLines = rawUsage ? rawUsage.split(/\r?\n/).map(s => s.trim()).filter(Boolean) : [];
 
-  // Only show translation exercise if an example sentence exists!
-  const hasExercise = egZhLines.length > 0 && egViLines.length > 0;
+  // Always show translation exercise
+  const hasExercise = true;
   
-  // Randomly select 1 of the example sentences if multiple examples exist
-  const randExIdx = (egZhLines.length > 0) ? Math.floor(Math.random() * egZhLines.length) : 0;
-  const sentenceQ = egViLines[randExIdx] || egViLines[0] || egVi;
-  const sentenceAns = egZhLines[randExIdx] || egZhLines[0] || egZh;
+  // Align exercise prompt and target answer
+  let sentenceQ = mn;
+  let sentenceAns = hz;
+  if (egZhLines.length > 0 && egViLines.length > 0 && egViLines[0] && egViLines[0] !== mn) {
+    sentenceQ = egViLines[0];
+    sentenceAns = egZhLines[0];
+  } else {
+    sentenceQ = mn;
+    sentenceAns = hz;
+  }
 
   flashcard.style.opacity = '0';
   flashcard.style.transform = 'scale(0.98)';
@@ -7101,7 +7137,11 @@ function renderLessonHeroCardContent(w, index, total) {
 
   const char = w.word || w.simplified || w.character || w.hanzi || '';
   const pinyin = w.pinyin || '';
-  const meaning = w.meaning || w.definition || w.vietnamese || '';
+  const rawMeaning = w.meaning || w.definition || w.vietnamese || '';
+  const meaning = cleanMeaningText(rawMeaning);
+  const extractedNote = extractNoteFromMeaning(rawMeaning);
+  const noteText = w.note || w.explanation || extractedNote;
+
   const hanviet = w.hanViet || w.han_viet || '';
   const category = w.category || w.pos || w.type || 'Từ vựng';
 
@@ -7110,24 +7150,27 @@ function renderLessonHeroCardContent(w, index, total) {
   const rawExamplesPy = (w.example_pinyin || w.examplePy || w.examplePinyin || '').split(/(?<=[!?.])\s*/).map(s => s.trim()).filter(Boolean);
   const rawExamplesVi = (w.example_vi || w.example_vietnamese || w.exampleVi || '').split(/(?<=[!?.])\s*/).map(s => s.trim()).filter(Boolean);
 
-  if (rawExamplesZh.length === 0) {
-    if (char === '你') { rawExamplesZh.push('你好！'); rawExamplesPy.push('Nǐ hǎo!'); rawExamplesVi.push('Xin chào bạn!'); }
-    else if (char === '您') { rawExamplesZh.push('您好！'); rawExamplesPy.push('Nín hǎo!'); rawExamplesVi.push('Xin chào ngài!'); }
-    else if (char === '老师') { rawExamplesZh.push('王老师好！'); rawExamplesPy.push('Wáng lǎoshī hǎo!'); rawExamplesVi.push('Chào Thầy/Cô Vương!'); }
-    else if (char === '不客气') { rawExamplesZh.push('不客气！'); rawExamplesPy.push('Bú kèqi!'); rawExamplesVi.push('Không có gì!'); }
-    else { rawExamplesZh.push(`${char}！`); rawExamplesPy.push(''); rawExamplesVi.push(meaning); }
+  // Align exercise prompt and target answer
+  let exercisePrompt = meaning;
+  let targetAnswer = char;
+
+  if (rawExamplesZh.length > 0 && rawExamplesVi.length > 0 && rawExamplesVi[0] && rawExamplesVi[0] !== meaning) {
+    exercisePrompt = rawExamplesVi[0];
+    targetAnswer = rawExamplesZh[0];
+  } else {
+    exercisePrompt = meaning;
+    targetAnswer = char;
   }
 
-  // Valid typing answers: the word itself OR any of the example sentences
-  const validAnswers = [char, ...rawExamplesZh];
+  // Valid typing answers
+  const validAnswers = [targetAnswer, char, ...rawExamplesZh];
   const validAnswersJson = JSON.stringify(validAnswers).replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
-  // Pick 1 random answer for character hint cards
-  const randAnswer = validAnswers[Math.floor(Math.random() * validAnswers.length)];
-  const hintChars = randAnswer.match(/[\u4e00-\u9fa5]/g) || [randAnswer.charAt(0)];
+  // Hint cards matching targetAnswer
+  const hintChars = targetAnswer.match(/[\u4e00-\u9fa5]/g) || [targetAnswer.charAt(0)];
 
   // Render all example sentences inside the VÍ DỤ MINH HỌA box
-  const examplesHtml = rawExamplesZh.map((zh, i) => `
+  const examplesHtml = rawExamplesZh.length > 0 ? rawExamplesZh.map((zh, i) => `
     <div style="${i > 0 ? 'margin-top: 10px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.12);' : ''}">
       <div style="font-size: 1.15rem; font-weight: 800; color: #ffffff; font-family: var(--font-display); margin-bottom: 2px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
         <span>${zh}</span>
@@ -7138,7 +7181,7 @@ function renderLessonHeroCardContent(w, index, total) {
       ${rawExamplesPy[i] ? `<div style="font-size: 0.9rem; font-weight: 700; color: #60a5fa; margin-bottom: 2px;">${rawExamplesPy[i]}</div>` : ''}
       <div style="font-size: 0.88rem; color: #cbd5e1; font-weight: 500;">${rawExamplesVi[i] || meaning}</div>
     </div>
-  `).join('');
+  `).join('') : '';
 
   return `
     <div style="display: flex; gap: 32px; align-items: flex-start; flex-wrap: wrap;">
@@ -7174,24 +7217,26 @@ function renderLessonHeroCardContent(w, index, total) {
           ${meaning} ${hanviet ? `<span style="font-size: 1rem; color: #3b82f6; font-weight: 700;">(${hanviet})</span>` : ''}
         </div>
 
-        ${w.note ? `
+        ${noteText ? `
           <div style="font-size: 0.88rem; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 10px 14px; border-radius: 12px; margin-bottom: 12px; border-left: 3px solid #3b82f6;">
-            <i class="fa-solid fa-circle-info" style="color: #3b82f6; margin-right: 6px;"></i> ${w.note}
+            <i class="fa-solid fa-circle-info" style="color: #3b82f6; margin-right: 6px;"></i> ${noteText}
           </div>
         ` : ''}
 
         <!-- 1. VÍ DỤ MINH HỌA -->
-        <div style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 14px; margin-top: 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.2);">
-          <div style="font-size: 0.82rem; font-weight: 800; color: #60a5fa; text-transform: uppercase; margin-bottom: 8px;">
-            <i class="fa-solid fa-image"></i> VÍ DỤ MINH HỌA (${rawExamplesZh.length} ví dụ):
+        ${rawExamplesZh.length > 0 ? `
+          <div style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 14px; margin-top: 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.2);">
+            <div style="font-size: 0.82rem; font-weight: 800; color: #60a5fa; text-transform: uppercase; margin-bottom: 8px;">
+              <i class="fa-solid fa-image"></i> VÍ DỤ MINH HỌA (${rawExamplesZh.length} ví dụ):
+            </div>
+            ${examplesHtml}
           </div>
-          ${examplesHtml}
-        </div>
+        ` : ''}
 
         <!-- 2. DỊCH SANG TIẾNG TRUNG (Typing & Hint Cards) -->
         <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 14px; margin-top: 12px;">
           <div style="font-size: 0.88rem; font-weight: 800; color: #38bdf8; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
-            <span><i class="fa-solid fa-language"></i> Dịch sang tiếng Trung: <span style="color: #ffffff;">"${meaning}"</span></span>
+            <span><i class="fa-solid fa-language"></i> Dịch sang tiếng Trung: <span style="color: #ffffff;">"${exercisePrompt}"</span></span>
             <div id="lesson-typing-feedback"></div>
           </div>
 
@@ -7206,7 +7251,7 @@ function renderLessonHeroCardContent(w, index, total) {
             `).join('')}
           </div>
 
-          <button id="lesson-toggle-all-hints-btn" onclick="window.revealAllLessonCharHints('${randAnswer.replace(/'/g, "\\'")}')" style="width: 100%; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; color: #ffffff; font-weight: 800; font-size: 0.95rem; padding: 11px; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4); transition: all 0.2s; letter-spacing: 0.5px;" onmousedown="this.style.transform='scale(0.98)'" onmouseup="this.style.transform='scale(1)'">
+          <button id="lesson-toggle-all-hints-btn" onclick="window.revealAllLessonCharHints('${targetAnswer.replace(/'/g, "\\'")}')" style="width: 100%; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; color: #ffffff; font-weight: 800; font-size: 0.95rem; padding: 11px; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4); transition: all 0.2s; letter-spacing: 0.5px;" onmousedown="this.style.transform='scale(0.98)'" onmouseup="this.style.transform='scale(1)'">
             <i class="fa-solid fa-eye" style="margin-right: 6px;"></i> HIỆN GỢI Ý MẪU
           </button>
         </div>
