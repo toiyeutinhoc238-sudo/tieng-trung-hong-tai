@@ -7112,10 +7112,10 @@ window.openLessonDetailModal = function (lessonKey) {
           <span>Ngữ Pháp</span>
           <small style="background: rgba(0,0,0,0.25); color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">Sắp ra mắt</small>
         </button>
-        <button class="lesson-mod-btn mod-text" style="opacity: 0.85; position: relative;" onclick="event.stopPropagation(); window.showComingSoonNotice('Bài Khóa')">
+        <button class="lesson-mod-btn mod-text" onclick="event.stopPropagation(); window.openLessonTextStudy('${lessonKey}')">
           <i class="fa-solid fa-comments"></i>
           <span>Bài Khóa</span>
-          <small style="background: rgba(0,0,0,0.25); color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">Sắp ra mắt</small>
+          <small style="background: #0284c7; color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">Hội thoại 📖</small>
         </button>
         <button class="lesson-mod-btn mod-review" style="opacity: 0.85; position: relative;" onclick="event.stopPropagation(); window.showComingSoonNotice('Ôn Tập')">
           <i class="fa-solid fa-circle-play"></i>
@@ -7608,8 +7608,116 @@ window.openLessonGrammarStudy = function(lessonId) {
   showComingSoonNotice('Ngữ Pháp');
 };
 
-window.openLessonTextStudy = function(lessonId) {
-  showComingSoonNotice('Bài Khóa');
+window.openLessonTextStudy = async function(lessonId) {
+  const modalEl = document.getElementById('lesson-detail-popup-modal');
+  if (modalEl) modalEl.style.display = 'none';
+
+  let textsData = window._hsk1ReadingTexts;
+  if (!textsData) {
+    try {
+      const res = await fetch('/hsk1_reading_texts.json');
+      if (res.ok) {
+        textsData = await res.json();
+        window._hsk1ReadingTexts = textsData;
+      }
+    } catch(e) {
+      console.warn("Could not fetch hsk1_reading_texts.json:", e);
+    }
+  }
+
+  const numId = parseInt(String(lessonId).replace(/\D/g, ''), 10) || 1;
+  const lessonData = (textsData || []).find(l => Number(l.lessonId) === numId);
+
+  let modalContainer = document.getElementById('lesson-reading-text-modal');
+  if (!modalContainer) {
+    modalContainer = document.createElement('div');
+    modalContainer.id = 'lesson-reading-text-modal';
+    modalContainer.style.cssText = 'position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(15,23,42,0.85); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); z-index:99999; display:none; align-items:center; justify-content:center; padding:16px; box-sizing:border-box;';
+    document.body.appendChild(modalContainer);
+  }
+
+  if (!lessonData || !lessonData.dialogues || lessonData.dialogues.length === 0) {
+    showToast(`Nội dung Bài Khóa cho Bài ${lessonId} đang được cập nhật!`, true);
+    return;
+  }
+
+  let dialoguesHtml = '';
+  lessonData.dialogues.forEach((diag, dIdx) => {
+    let linesHtml = '';
+    diag.lines.forEach(line => {
+      const parts = line.split(/[:：]/);
+      let speaker = '';
+      let speech = line;
+      if (parts.length > 1 && parts[0].length <= 8) {
+        speaker = parts[0].trim();
+        speech = parts.slice(1).join('：').trim();
+      }
+
+      const cleanSpeechForAudio = speech.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+
+      linesHtml += `
+        <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:12px; font-size:1.15rem; line-height:1.6;">
+          ${speaker ? `
+            <span style="background:rgba(37,99,235,0.18); color:#60a5fa; border:1px solid rgba(59,130,246,0.3); padding:3px 10px; border-radius:8px; font-weight:800; font-size:0.9rem; flex-shrink:0;">
+              ${speaker}
+            </span>
+          ` : ''}
+          <div style="flex:1; color:#f8fafc; font-family:var(--font-hanzi); font-weight:600; word-break:break-word;">
+            ${speech}
+            <button onclick="window.speakText('${cleanSpeechForAudio}')" style="background:none; border:none; color:#38bdf8; cursor:pointer; margin-left:8px; font-size:0.95rem;" title="Phát âm">
+              <i class="fa-solid fa-volume-high"></i>
+            </button>
+          </div>
+        </div>
+      `;
+    });
+
+    let notesHtml = '';
+    if (diag.notes && diag.notes.length > 0) {
+      diag.notes.forEach(note => {
+        notesHtml += `
+          <div style="background:rgba(245,158,11,0.12); border-left:3px solid #f59e0b; padding:10px 14px; border-radius:0 10px 10px 0; margin-top:12px; font-size:0.92rem; color:#fef08a; line-height:1.5;">
+            <strong style="color:#fbbf24;"><i class="fa-solid fa-lightbulb" style="margin-right:6px;"></i> Chú ý:</strong> ${note}
+          </div>
+        `;
+      });
+    }
+
+    dialoguesHtml += `
+      <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.12); border-radius:18px; padding:20px; margin-bottom:20px; box-shadow:0 8px 24px rgba(0,0,0,0.3);">
+        <h4 style="color:#38bdf8; font-size:1.1rem; margin-top:0; margin-bottom:14px; font-family:var(--font-display); display:flex; align-items:center; gap:8px;">
+          <i class="fa-solid fa-comments" style="color:#38bdf8;"></i> ${diag.title || `Hội thoại ${dIdx + 1}`}
+        </h4>
+        ${linesHtml}
+        ${notesHtml}
+      </div>
+    `;
+  });
+
+  modalContainer.innerHTML = `
+    <div style="background:#0f172a; border:1px solid rgba(255,255,255,0.18); border-radius:22px; max-width:820px; width:100%; max-height:90vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 25px 60px rgba(0,0,0,0.7);">
+      
+      <div style="padding:16px 24px; border-bottom:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; align-items:center; background:rgba(30,41,59,0.9);">
+        <h3 style="color:#fff; font-size:1.2rem; margin:0; font-weight:800; display:flex; align-items:center; gap:10px; font-family:var(--font-display);">
+          <i class="fa-solid fa-book-open" style="color:#38bdf8;"></i> Bài Khóa - Bài ${numId}
+        </h3>
+        <button style="background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.25); color:#fff; padding:8px 18px; border-radius:99px; font-weight:700; cursor:pointer;" onclick="document.getElementById('lesson-reading-text-modal').style.display='none'">
+          <i class="fa-solid fa-xmark"></i> Đóng
+        </button>
+      </div>
+
+      <div style="flex:1; overflow-y:auto; padding:24px;">
+        ${dialoguesHtml}
+      </div>
+
+      <div style="padding:12px 24px; border-top:1px solid rgba(255,255,255,0.1); background:#1e293b; display:flex; justify-content:space-between; align-items:center; font-size:0.82rem; color:#94a3b8;">
+        <span>💡 Nhấp vào biểu tượng loa để nghe phát âm từng câu thoại.</span>
+        <span style="font-weight:700; color:#f97316;">Tiếng Trung HongTai</span>
+      </div>
+    </div>
+  `;
+
+  modalContainer.style.display = 'flex';
 };
 
 window.openLessonReviewStudy = function(lessonId) {
