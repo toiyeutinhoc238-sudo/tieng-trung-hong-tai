@@ -762,7 +762,8 @@ async function fetchVocabulary() {
     const mergedProg = { ...guestProg, ...userProg };
 
     vocabList = vocabList.map(w => {
-      const state = mergedProg[w.id];
+      // Dual lookup: check w.id, String(w.id), or w.word to ensure user progress is never lost
+      const state = mergedProg[w.id] || mergedProg[String(w.id)] || (w.word ? mergedProg[w.word] : null);
       const isMem = state ? !!state.isMemorized : !!w.isMemorized;
       const isStar = state ? !!state.isStarred : !!w.isStarred;
       const isWr = state ? !!state.isWrong : !!w.isWrong;

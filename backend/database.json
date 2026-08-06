@@ -278098,7 +278098,7 @@
     "lessonDesc": "Từ vựng HSK 6 Hạ (v2.0) Bài 20"
   },
   {
-    "id": 15348,
+    "id": 210,
     "word": "你",
     "pinyin": "nǐ",
     "meaning": "bạn",
@@ -278120,7 +278120,7 @@
     "isCustom": false
   },
   {
-    "id": 15349,
+    "id": 211,
     "word": "您",
     "pinyin": "nín",
     "meaning": "ngài, ông, bà (kính trọng)",
@@ -278142,7 +278142,7 @@
     "isCustom": false
   },
   {
-    "id": 15350,
+    "id": 212,
     "word": "们",
     "pinyin": "men",
     "meaning": "các (chỉ số nhiều)",
@@ -278164,7 +278164,7 @@
     "isCustom": false
   },
   {
-    "id": 15351,
+    "id": 213,
     "word": "你们",
     "pinyin": "nǐmen",
     "meaning": "Các bạn",
@@ -278186,7 +278186,7 @@
     "isCustom": false
   },
   {
-    "id": 15352,
+    "id": 214,
     "word": "大家",
     "pinyin": "dàjiā",
     "meaning": "mọi người",
@@ -278208,7 +278208,7 @@
     "isCustom": false
   },
   {
-    "id": 15353,
+    "id": 215,
     "word": "好",
     "pinyin": "hǎo",
     "meaning": "tốt, khỏe",
@@ -278230,7 +278230,7 @@
     "isCustom": false
   },
   {
-    "id": 15354,
+    "id": 216,
     "word": "你好",
     "pinyin": "nǐ hǎo",
     "meaning": "Xin chào",
@@ -278252,7 +278252,7 @@
     "isCustom": false
   },
   {
-    "id": 15355,
+    "id": 217,
     "word": "学生",
     "pinyin": "xuésheng",
     "meaning": "học sinh",
@@ -278274,7 +278274,7 @@
     "isCustom": false
   },
   {
-    "id": 15356,
+    "id": 218,
     "word": "老师",
     "pinyin": "lǎoshī",
     "meaning": "giáo viên",
@@ -278296,7 +278296,7 @@
     "isCustom": false
   },
   {
-    "id": 15357,
+    "id": 219,
     "word": "同学",
     "pinyin": "tóngxué",
     "meaning": "bạn cùng lớp",
@@ -278318,7 +278318,7 @@
     "isCustom": false
   },
   {
-    "id": 15358,
+    "id": 220,
     "word": "再见",
     "pinyin": "zàijiàn",
     "meaning": "tạm biệt",
@@ -278340,7 +278340,7 @@
     "isCustom": false
   },
   {
-    "id": 15359,
+    "id": 221,
     "word": "谢谢",
     "pinyin": "xièxie",
     "meaning": "cảm ơn",
@@ -278362,7 +278362,7 @@
     "isCustom": false
   },
   {
-    "id": 15360,
+    "id": 222,
     "word": "不客气",
     "pinyin": "bú kèqi",
     "meaning": "không có chi",
@@ -278384,7 +278384,7 @@
     "isCustom": false
   },
   {
-    "id": 15361,
+    "id": 223,
     "word": "王老师",
     "pinyin": "Wáng lǎoshī",
     "meaning": "Thầy/Cô Vương",
@@ -278406,7 +278406,7 @@
     "isCustom": false
   },
   {
-    "id": 15362,
+    "id": 224,
     "word": "请问",
     "pinyin": "qǐngwèn",
     "meaning": "xin hỏi",
@@ -278428,7 +278428,7 @@
     "isCustom": false
   },
   {
-    "id": 15363,
+    "id": 225,
     "word": "叫",
     "pinyin": "jiào",
     "meaning": "tên (là)",
@@ -278450,7 +278450,7 @@
     "isCustom": false
   },
   {
-    "id": 15364,
+    "id": 226,
     "word": "什么",
     "pinyin": "shénme",
     "meaning": "gì",
@@ -278472,7 +278472,7 @@
     "isCustom": false
   },
   {
-    "id": 15365,
+    "id": 227,
     "word": "名字",
     "pinyin": "míngzi",
     "meaning": "tên",
@@ -278494,7 +278494,7 @@
     "isCustom": false
   },
   {
-    "id": 15366,
+    "id": 228,
     "word": "我",
     "pinyin": "wǒ",
     "meaning": "tôi",
@@ -278516,7 +278516,7 @@
     "isCustom": false
   },
   {
-    "id": 15367,
+    "id": 229,
     "word": "不",
     "pinyin": "bù",
     "meaning": "không",
@@ -278538,7 +278538,7 @@
     "isCustom": false
   },
   {
-    "id": 15368,
+    "id": 230,
     "word": "是",
     "pinyin": "shì",
     "meaning": "là",
@@ -278560,7 +278560,7 @@
     "isCustom": false
   },
   {
-    "id": 15369,
+    "id": 231,
     "word": "对不起",
     "pinyin": "duìbuqǐ",
     "meaning": "xin lỗi",
@@ -278582,7 +278582,7 @@
     "isCustom": false
   },
   {
-    "id": 15370,
+    "id": 232,
     "word": "没关系",
     "pinyin": "méiguānxi",
     "meaning": "không sao",
@@ -278604,7 +278604,7 @@
     "isCustom": false
   },
   {
-    "id": 15371,
+    "id": 233,
     "word": "没事",
     "pinyin": "méishì",
     "meaning": "không có việc gì",
@@ -278626,7 +278626,7 @@
     "isCustom": false
   },
   {
-    "id": 15372,
+    "id": 234,
     "word": "很",
     "pinyin": "hěn",
     "meaning": "rất",
@@ -278648,7 +278648,7 @@
     "isCustom": false
   },
   {
-    "id": 15373,
+    "id": 235,
     "word": "高兴",
     "pinyin": "gāoxìng",
     "meaning": "vui",
@@ -278670,7 +278670,7 @@
     "isCustom": false
   },
   {
-    "id": 15374,
+    "id": 236,
     "word": "认识",
     "pinyin": "rènshi",
     "meaning": "quen biết",
@@ -278692,7 +278692,7 @@
     "isCustom": false
   },
   {
-    "id": 15375,
+    "id": 237,
     "word": "也",
     "pinyin": "yě",
     "meaning": "cũng",
@@ -278714,7 +278714,7 @@
     "isCustom": false
   },
   {
-    "id": 15376,
+    "id": 238,
     "word": "人",
     "pinyin": "rén",
     "meaning": "người",
@@ -278736,7 +278736,7 @@
     "isCustom": false
   },
   {
-    "id": 15377,
+    "id": 239,
     "word": "的",
     "pinyin": "de",
     "meaning": "",
@@ -278758,7 +278758,7 @@
     "isCustom": false
   },
   {
-    "id": 15378,
+    "id": 240,
     "word": "越南",
     "pinyin": "Yuènán",
     "meaning": "Việt Nam",
@@ -278780,7 +278780,7 @@
     "isCustom": false
   },
   {
-    "id": 15379,
+    "id": 241,
     "word": "中国",
     "pinyin": "Zhōngguó",
     "meaning": "Trung Quốc",
@@ -278802,7 +278802,7 @@
     "isCustom": false
   },
   {
-    "id": 15380,
+    "id": 242,
     "word": "法国",
     "pinyin": "Fǎguó",
     "meaning": "Pháp",
@@ -278824,7 +278824,7 @@
     "isCustom": false
   },
   {
-    "id": 15381,
+    "id": 243,
     "word": "泰国",
     "pinyin": "Tàiguó",
     "meaning": "Thái Lan",
@@ -278846,7 +278846,7 @@
     "isCustom": false
   },
   {
-    "id": 15382,
+    "id": 244,
     "word": "中文",
     "pinyin": "Zhōngwén",
     "meaning": "Tiếng Trung",
@@ -278868,7 +278868,7 @@
     "isCustom": false
   },
   {
-    "id": 15383,
+    "id": 245,
     "word": "这",
     "pinyin": "zhè",
     "meaning": "này",
@@ -278890,7 +278890,7 @@
     "isCustom": false
   },
   {
-    "id": 15384,
+    "id": 246,
     "word": "谁",
     "pinyin": "shéi",
     "meaning": "ai",
@@ -278912,7 +278912,7 @@
     "isCustom": false
   },
   {
-    "id": 15385,
+    "id": 247,
     "word": "女朋友",
     "pinyin": "nǚpéngyou",
     "meaning": "bạn gái",
@@ -278934,7 +278934,7 @@
     "isCustom": false
   },
   {
-    "id": 15386,
+    "id": 248,
     "word": "哪",
     "pinyin": "nǎ",
     "meaning": "nào",
@@ -278956,7 +278956,7 @@
     "isCustom": false
   },
   {
-    "id": 15387,
+    "id": 249,
     "word": "国",
     "pinyin": "guó",
     "meaning": "quốc gia",
@@ -278978,7 +278978,7 @@
     "isCustom": false
   },
   {
-    "id": 15388,
+    "id": 250,
     "word": "她",
     "pinyin": "tā",
     "meaning": "cô ấy",
@@ -279000,7 +279000,7 @@
     "isCustom": false
   },
   {
-    "id": 15389,
+    "id": 251,
     "word": "喂",
     "pinyin": "wèi",
     "meaning": "A lô (nghe đt)",
@@ -279022,7 +279022,7 @@
     "isCustom": false
   },
   {
-    "id": 15390,
+    "id": 252,
     "word": "姐姐",
     "pinyin": "jiějie",
     "meaning": "chị gái",
@@ -279044,7 +279044,7 @@
     "isCustom": false
   },
   {
-    "id": 15391,
+    "id": 253,
     "word": "工作",
     "pinyin": "gōngzuò",
     "meaning": "công việc/làm việc",
@@ -279066,7 +279066,7 @@
     "isCustom": false
   },
   {
-    "id": 15392,
+    "id": 254,
     "word": "还",
     "pinyin": "hái",
     "meaning": "vẫn/còn",
@@ -279088,7 +279088,7 @@
     "isCustom": false
   },
   {
-    "id": 15393,
+    "id": 255,
     "word": "忙",
     "pinyin": "máng",
     "meaning": "bận",
@@ -279110,7 +279110,7 @@
     "isCustom": false
   },
   {
-    "id": 15394,
+    "id": 256,
     "word": "吗",
     "pinyin": "ma",
     "meaning": "...không?… phải không?",
@@ -279132,7 +279132,7 @@
     "isCustom": false
   },
   {
-    "id": 15395,
+    "id": 257,
     "word": "对",
     "pinyin": "duì",
     "meaning": "Đúng/Phải",
@@ -279154,7 +279154,7 @@
     "isCustom": false
   },
   {
-    "id": 15396,
+    "id": 258,
     "word": "太",
     "pinyin": "tài",
     "meaning": "Quá/lắm",
@@ -279176,7 +279176,7 @@
     "isCustom": false
   },
   {
-    "id": 15397,
+    "id": 259,
     "word": "我们",
     "pinyin": "wǒmen",
     "meaning": "Chúng tôi/chúng ta",
@@ -279198,7 +279198,7 @@
     "isCustom": false
   },
   {
-    "id": 15398,
+    "id": 260,
     "word": "想",
     "pinyin": "xiǎng",
     "meaning": "Nhớ",
@@ -279220,7 +279220,7 @@
     "isCustom": false
   },
   {
-    "id": 15399,
+    "id": 261,
     "word": "有",
     "pinyin": "yǒu",
     "meaning": "có",
@@ -279242,7 +279242,7 @@
     "isCustom": false
   },
   {
-    "id": 15400,
+    "id": 262,
     "word": "多少",
     "pinyin": "duōshǎo",
     "meaning": "bao nhiêu",
@@ -279264,7 +279264,7 @@
     "isCustom": false
   },
   {
-    "id": 15401,
+    "id": 263,
     "word": "个",
     "pinyin": "-",
     "meaning": "cái, chiếc (lượng từ chung, dùng cho nhiều danh từ)",
@@ -279286,7 +279286,7 @@
     "isCustom": false
   },
   {
-    "id": 15402,
+    "id": 264,
     "word": "和",
     "pinyin": "hé",
     "meaning": "và",
@@ -279308,7 +279308,7 @@
     "isCustom": false
   },
   {
-    "id": 15403,
+    "id": 265,
     "word": "呢",
     "pinyin": "ne",
     "meaning": "còn... thì sao",
@@ -279330,7 +279330,7 @@
     "isCustom": false
   },
   {
-    "id": 15404,
+    "id": 266,
     "word": "没有",
     "pinyin": "méiyǒu",
     "meaning": "không có",
@@ -279352,7 +279352,7 @@
     "isCustom": false
   },
   {
-    "id": 15405,
+    "id": 267,
     "word": "家",
     "pinyin": "jiā",
     "meaning": "nhà, gia đình",
@@ -279374,7 +279374,7 @@
     "isCustom": false
   },
   {
-    "id": 15406,
+    "id": 268,
     "word": "几",
     "pinyin": "jǐ",
     "meaning": "mấy",
@@ -279396,7 +279396,7 @@
     "isCustom": false
   },
   {
-    "id": 15407,
+    "id": 269,
     "word": "口",
     "pinyin": "kǒu",
     "meaning": "nhân khẩu (lượng từ gia đình)",
@@ -279418,7 +279418,7 @@
     "isCustom": false
   },
   {
-    "id": 15408,
+    "id": 270,
     "word": "爸爸",
     "pinyin": "bàba",
     "meaning": "bố, ba",
@@ -279440,7 +279440,7 @@
     "isCustom": false
   },
   {
-    "id": 15409,
+    "id": 271,
     "word": "妈妈",
     "pinyin": "māma",
     "meaning": "mẹ",
@@ -279462,7 +279462,7 @@
     "isCustom": false
   },
   {
-    "id": 15410,
+    "id": 272,
     "word": "妹妹",
     "pinyin": "mèimei",
     "meaning": "em gái",
@@ -279484,7 +279484,7 @@
     "isCustom": false
   },
   {
-    "id": 15411,
+    "id": 273,
     "word": "哥哥",
     "pinyin": "gēge",
     "meaning": "anh trai",
@@ -279506,7 +279506,7 @@
     "isCustom": false
   },
   {
-    "id": 15412,
+    "id": 274,
     "word": "弟弟",
     "pinyin": "dìdi",
     "meaning": "em trai",
@@ -279528,7 +279528,7 @@
     "isCustom": false
   },
   {
-    "id": 15413,
+    "id": 275,
     "word": "孩子",
     "pinyin": "háizi",
     "meaning": "con, trẻ em",
@@ -279550,7 +279550,7 @@
     "isCustom": false
   },
   {
-    "id": 15414,
+    "id": 276,
     "word": "女儿",
     "pinyin": "nǚ'ér",
     "meaning": "con gái",
@@ -279572,7 +279572,7 @@
     "isCustom": false
   },
   {
-    "id": 15415,
+    "id": 277,
     "word": "儿子",
     "pinyin": "érzi",
     "meaning": "con trai",
@@ -279594,7 +279594,7 @@
     "isCustom": false
   },
   {
-    "id": 15416,
+    "id": 278,
     "word": "岁",
     "pinyin": "suì",
     "meaning": "tuổi",
@@ -279616,7 +279616,7 @@
     "isCustom": false
   },
   {
-    "id": 15417,
+    "id": 279,
     "word": "今年",
     "pinyin": "jīnnián",
     "meaning": "năm nay",
@@ -279638,7 +279638,7 @@
     "isCustom": false
   },
   {
-    "id": 15418,
+    "id": 280,
     "word": "多",
     "pinyin": "duō",
     "meaning": "bao nhiêu (hỏi tuổi)",
@@ -279660,7 +279660,7 @@
     "isCustom": false
   },
   {
-    "id": 15419,
+    "id": 281,
     "word": "大",
     "pinyin": "dà",
     "meaning": "lớn, già",
@@ -279682,7 +279682,7 @@
     "isCustom": false
   },
   {
-    "id": 15420,
+    "id": 282,
     "word": "今天",
     "pinyin": "jīntiān",
     "meaning": "hôm nay",
@@ -279704,7 +279704,7 @@
     "isCustom": false
   },
   {
-    "id": 15421,
+    "id": 283,
     "word": "号",
     "pinyin": "hào",
     "meaning": "ngày",
@@ -279726,7 +279726,7 @@
     "isCustom": false
   },
   {
-    "id": 15422,
+    "id": 284,
     "word": "月",
     "pinyin": "yuè",
     "meaning": "tháng",
@@ -279748,7 +279748,7 @@
     "isCustom": false
   },
   {
-    "id": 15423,
+    "id": 285,
     "word": "日",
     "pinyin": "rì",
     "meaning": "ngày",
@@ -279770,7 +279770,7 @@
     "isCustom": false
   },
   {
-    "id": 15424,
+    "id": 286,
     "word": "星期",
     "pinyin": "xīngqī",
     "meaning": "tuần, thứ",
@@ -279792,7 +279792,7 @@
     "isCustom": false
   },
   {
-    "id": 15425,
+    "id": 287,
     "word": "星期天",
     "pinyin": "xīngqītiān",
     "meaning": "Chủ nhật",
@@ -279814,7 +279814,7 @@
     "isCustom": false
   },
   {
-    "id": 15426,
+    "id": 288,
     "word": "休息",
     "pinyin": "xiūxi",
     "meaning": "nghỉ ngơi",
@@ -279836,7 +279836,7 @@
     "isCustom": false
   },
   {
-    "id": 15427,
+    "id": 289,
     "word": "会",
     "pinyin": "huì",
     "meaning": "biết",
@@ -279858,7 +279858,7 @@
     "isCustom": false
   },
   {
-    "id": 15428,
+    "id": 290,
     "word": "做饭",
     "pinyin": "zuòfàn",
     "meaning": "nấu ăn",
@@ -279880,7 +279880,7 @@
     "isCustom": false
   },
   {
-    "id": 15429,
+    "id": 291,
     "word": "做",
     "pinyin": "zuò",
     "meaning": "làm",
@@ -279902,7 +279902,7 @@
     "isCustom": false
   },
   {
-    "id": 15430,
+    "id": 292,
     "word": "面条儿",
     "pinyin": "miàntiáor",
     "meaning": "mì sợi",
@@ -279924,7 +279924,7 @@
     "isCustom": false
   },
   {
-    "id": 15431,
+    "id": 293,
     "word": "饺子",
     "pinyin": "jiǎozi",
     "meaning": "sủi cảo",
@@ -279946,7 +279946,7 @@
     "isCustom": false
   },
   {
-    "id": 15432,
+    "id": 294,
     "word": "一些",
     "pinyin": "yīxiē",
     "meaning": "một ít, một vài",
@@ -279968,7 +279968,7 @@
     "isCustom": false
   },
   {
-    "id": 15433,
+    "id": 295,
     "word": "菜",
     "pinyin": "cài",
     "meaning": "món ăn, rau",
@@ -279990,7 +279990,7 @@
     "isCustom": false
   },
   {
-    "id": 15434,
+    "id": 296,
     "word": "下班",
     "pinyin": "xiàbān",
     "meaning": "tan làm",
@@ -280012,7 +280012,7 @@
     "isCustom": false
   },
   {
-    "id": 15435,
+    "id": 297,
     "word": "新",
     "pinyin": "xīn",
     "meaning": "mới",
@@ -280034,7 +280034,7 @@
     "isCustom": false
   },
   {
-    "id": 15436,
+    "id": 298,
     "word": "电脑",
     "pinyin": "diànnǎo",
     "meaning": "máy tính",
@@ -280056,7 +280056,7 @@
     "isCustom": false
   },
   {
-    "id": 15437,
+    "id": 299,
     "word": "真",
     "pinyin": "zhēn",
     "meaning": "thật, thưch sự",
@@ -280078,7 +280078,7 @@
     "isCustom": false
   },
   {
-    "id": 15438,
+    "id": 300,
     "word": "好看",
     "pinyin": "hǎokàn",
     "meaning": "đẹp, hay",
@@ -280100,7 +280100,7 @@
     "isCustom": false
   },
   {
-    "id": 15439,
+    "id": 301,
     "word": "喜欢",
     "pinyin": "xǐhuan",
     "meaning": "thích",
@@ -280122,7 +280122,7 @@
     "isCustom": false
   },
   {
-    "id": 15440,
+    "id": 302,
     "word": "它",
     "pinyin": "tā",
     "meaning": "nó (vật/động vật)",
@@ -280144,7 +280144,7 @@
     "isCustom": false
   },
   {
-    "id": 15441,
+    "id": 303,
     "word": "手机",
     "pinyin": "shǒujī",
     "meaning": "điện thoại di động",
@@ -280166,7 +280166,7 @@
     "isCustom": false
   },
   {
-    "id": 15442,
+    "id": 304,
     "word": "电话",
     "pinyin": "diànhuà",
     "meaning": "điện thoại",
@@ -280188,7 +280188,7 @@
     "isCustom": false
   },
   {
-    "id": 15443,
+    "id": 305,
     "word": "号",
     "pinyin": "hào",
     "meaning": "số (điện thoại, thứ tự)",
@@ -280210,7 +280210,7 @@
     "isCustom": false
   },
   {
-    "id": 15444,
+    "id": 306,
     "word": "去",
     "pinyin": "qù",
     "meaning": "đi",
@@ -280232,7 +280232,7 @@
     "isCustom": false
   },
   {
-    "id": 15445,
+    "id": 307,
     "word": "哪儿",
     "pinyin": "nǎ'er",
     "meaning": "đâu, ở đâu",
@@ -280254,7 +280254,7 @@
     "isCustom": false
   },
   {
-    "id": 15446,
+    "id": 308,
     "word": "明天",
     "pinyin": "míngtiān",
     "meaning": "ngày mai",
@@ -280276,7 +280276,7 @@
     "isCustom": false
   },
   {
-    "id": 15447,
+    "id": 309,
     "word": "想",
     "pinyin": "xiǎng",
     "meaning": "muốn, nhớ, nghĩ",
@@ -280298,7 +280298,7 @@
     "isCustom": false
   },
   {
-    "id": 15448,
+    "id": 310,
     "word": "超市",
     "pinyin": "chāoshì",
     "meaning": "siêu thị",
@@ -280320,7 +280320,7 @@
     "isCustom": false
   },
   {
-    "id": 15449,
+    "id": 311,
     "word": "买",
     "pinyin": "mǎi",
     "meaning": "mua",
@@ -280342,7 +280342,7 @@
     "isCustom": false
   },
   {
-    "id": 15450,
+    "id": 312,
     "word": "东西",
     "pinyin": "dōngxi",
     "meaning": "đồ vật, thứ",
@@ -280364,7 +280364,7 @@
     "isCustom": false
   },
   {
-    "id": 15451,
+    "id": 313,
     "word": "些",
     "pinyin": "xiē",
     "meaning": "một vài, một ít",
@@ -280386,7 +280386,7 @@
     "isCustom": false
   },
   {
-    "id": 15452,
+    "id": 314,
     "word": "牛奶",
     "pinyin": "niúnǎi",
     "meaning": "sữa bò",
@@ -280408,7 +280408,7 @@
     "isCustom": false
   },
   {
-    "id": 15453,
+    "id": 315,
     "word": "吃",
     "pinyin": "chī",
     "meaning": "ăn",
@@ -280430,7 +280430,7 @@
     "isCustom": false
   },
   {
-    "id": 15454,
+    "id": 316,
     "word": "晚饭",
     "pinyin": "wǎnfàn",
     "meaning": "bữa tối",
@@ -280452,7 +280452,7 @@
     "isCustom": false
   },
   {
-    "id": 15455,
+    "id": 317,
     "word": "那边",
     "pinyin": "nàbiān",
     "meaning": "phía đó, đằng kia",
@@ -280474,7 +280474,7 @@
     "isCustom": false
   },
   {
-    "id": 15456,
+    "id": 318,
     "word": "包子",
     "pinyin": "bāozi",
     "meaning": "bánh bao",
@@ -280496,7 +280496,7 @@
     "isCustom": false
   },
   {
-    "id": 15457,
+    "id": 319,
     "word": "非常",
     "pinyin": "fēicháng",
     "meaning": "vô cùng, rất",
@@ -280518,7 +280518,7 @@
     "isCustom": false
   },
   {
-    "id": 15458,
+    "id": 320,
     "word": "好吃",
     "pinyin": "hǎochī",
     "meaning": "ngon",
@@ -280540,7 +280540,7 @@
     "isCustom": false
   },
   {
-    "id": 15459,
+    "id": 321,
     "word": "米饭",
     "pinyin": "mǐfàn",
     "meaning": "cơm",
@@ -280562,7 +280562,7 @@
     "isCustom": false
   },
   {
-    "id": 15460,
+    "id": 322,
     "word": "怎么",
     "pinyin": "zěnme",
     "meaning": "thế nào, làm sao",
@@ -280584,7 +280584,7 @@
     "isCustom": false
   },
   {
-    "id": 15461,
+    "id": 323,
     "word": "坐",
     "pinyin": "zuò",
     "meaning": "ngồi, đi (xe)",
@@ -280606,7 +280606,7 @@
     "isCustom": false
   },
   {
-    "id": 15462,
+    "id": 324,
     "word": "出租车",
     "pinyin": "chūzūchē",
     "meaning": "xe taxi",
@@ -280628,7 +280628,7 @@
     "isCustom": false
   },
   {
-    "id": 15463,
+    "id": 325,
     "word": "现在",
     "pinyin": "xiànzài",
     "meaning": "bây giờ",
@@ -280650,7 +280650,7 @@
     "isCustom": false
   },
   {
-    "id": 15464,
+    "id": 326,
     "word": "点",
     "pinyin": "diǎn",
     "meaning": "giờ",
@@ -280672,7 +280672,7 @@
     "isCustom": false
   },
   {
-    "id": 15465,
+    "id": 327,
     "word": "分",
     "pinyin": "fēn",
     "meaning": "phút",
@@ -280694,7 +280694,7 @@
     "isCustom": false
   },
   {
-    "id": 15466,
+    "id": 328,
     "word": "分钟",
     "pinyin": "fēnzhōng",
     "meaning": "phút",
@@ -280716,7 +280716,7 @@
     "isCustom": false
   },
   {
-    "id": 15467,
+    "id": 329,
     "word": "半",
     "pinyin": "bàn",
     "meaning": "rưỡi, một nửa",
@@ -280738,7 +280738,7 @@
     "isCustom": false
   },
   {
-    "id": 15468,
+    "id": 330,
     "word": "早上",
     "pinyin": "zǎoshang",
     "meaning": "sáng sớm",
@@ -280760,7 +280760,7 @@
     "isCustom": false
   },
   {
-    "id": 15469,
+    "id": 331,
     "word": "上午",
     "pinyin": "shàngwǔ",
     "meaning": "buổi sáng",
@@ -280782,7 +280782,7 @@
     "isCustom": false
   },
   {
-    "id": 15470,
+    "id": 332,
     "word": "下午",
     "pinyin": "xiàwǔ",
     "meaning": "buổi chiều",
@@ -280804,7 +280804,7 @@
     "isCustom": false
   },
   {
-    "id": 15471,
+    "id": 333,
     "word": "晚上",
     "pinyin": "wǎnshang",
     "meaning": "buổi tối",
@@ -280826,7 +280826,7 @@
     "isCustom": false
   },
   {
-    "id": 15472,
+    "id": 334,
     "word": "课",
     "pinyin": "kè",
     "meaning": "bài học, tiết học",
@@ -280848,7 +280848,7 @@
     "isCustom": false
   },
   {
-    "id": 15473,
+    "id": 335,
     "word": "见",
     "pinyin": "jiàn",
     "meaning": "gặp",
@@ -280870,7 +280870,7 @@
     "isCustom": false
   },
   {
-    "id": 15474,
+    "id": 336,
     "word": "吧",
     "pinyin": "ba",
     "meaning": "nhé, nhỉ",
@@ -280892,7 +280892,7 @@
     "isCustom": false
   },
   {
-    "id": 15475,
+    "id": 337,
     "word": "电影院",
     "pinyin": "diànyǐngyuàn",
     "meaning": "rạp chiếu phim",
@@ -280914,7 +280914,7 @@
     "isCustom": false
   },
   {
-    "id": 15476,
+    "id": 338,
     "word": "看",
     "pinyin": "kàn",
     "meaning": "xem",
@@ -280936,7 +280936,7 @@
     "isCustom": false
   },
   {
-    "id": 15477,
+    "id": 339,
     "word": "电影",
     "pinyin": "diànyǐng",
     "meaning": "phim",
@@ -280958,7 +280958,7 @@
     "isCustom": false
   },
   {
-    "id": 15478,
+    "id": 340,
     "word": "事",
     "pinyin": "shì",
     "meaning": "việc, sự việc",
@@ -280980,7 +280980,7 @@
     "isCustom": false
   },
   {
-    "id": 15479,
+    "id": 341,
     "word": "上课",
     "pinyin": "shàngkè",
     "meaning": "lên lớp, vào học",
@@ -281002,7 +281002,7 @@
     "isCustom": false
   },
   {
-    "id": 15480,
+    "id": 342,
     "word": "下课",
     "pinyin": "xiàkè",
     "meaning": "tan học",
@@ -281024,7 +281024,7 @@
     "isCustom": false
   },
   {
-    "id": 15481,
+    "id": 343,
     "word": "呢",
     "pinyin": "ne",
     "meaning": "thì sao",
@@ -281046,7 +281046,7 @@
     "isCustom": false
   },
   {
-    "id": 15482,
+    "id": 344,
     "word": "在",
     "pinyin": "zài",
     "meaning": "ở tại",
@@ -281068,7 +281068,7 @@
     "isCustom": false
   },
   {
-    "id": 15483,
+    "id": 345,
     "word": "家",
     "pinyin": "jiā",
     "meaning": "nhà",
@@ -281090,7 +281090,7 @@
     "isCustom": false
   },
   {
-    "id": 15484,
+    "id": 346,
     "word": "里",
     "pinyin": "lǐ/ li",
     "meaning": "bên trong",
@@ -281112,7 +281112,7 @@
     "isCustom": false
   },
   {
-    "id": 15485,
+    "id": 347,
     "word": "上班",
     "pinyin": "shàngbān",
     "meaning": "đi làm",
@@ -281134,7 +281134,7 @@
     "isCustom": false
   },
   {
-    "id": 15486,
+    "id": 348,
     "word": "医院",
     "pinyin": "yīyuàn",
     "meaning": "bệnh viện",
@@ -281156,7 +281156,7 @@
     "isCustom": false
   },
   {
-    "id": 15487,
+    "id": 349,
     "word": "店",
     "pinyin": "diàn",
     "meaning": "cửa hàng",
@@ -281178,7 +281178,7 @@
     "isCustom": false
   },
   {
-    "id": 15488,
+    "id": 350,
     "word": "后",
     "pinyin": "hòu",
     "meaning": "sau, sau đó",
@@ -281200,7 +281200,7 @@
     "isCustom": false
   },
   {
-    "id": 15489,
+    "id": 351,
     "word": "时间",
     "pinyin": "shíjiān",
     "meaning": "thời gian",
@@ -281222,7 +281222,7 @@
     "isCustom": false
   },
   {
-    "id": 15490,
+    "id": 352,
     "word": "房间",
     "pinyin": "fángjiān",
     "meaning": "phòng, căn phòng",
@@ -281244,7 +281244,7 @@
     "isCustom": false
   },
   {
-    "id": 15491,
+    "id": 353,
     "word": "外",
     "pinyin": "wài",
     "meaning": "bên ngoài",
@@ -281266,7 +281266,7 @@
     "isCustom": false
   },
   {
-    "id": 15492,
+    "id": 354,
     "word": "下",
     "pinyin": "xià",
     "meaning": "dưới/xuống",
@@ -281288,7 +281288,7 @@
     "isCustom": false
   },
   {
-    "id": 15493,
+    "id": 355,
     "word": "前",
     "pinyin": "qián",
     "meaning": "trước",
@@ -281310,7 +281310,7 @@
     "isCustom": false
   },
   {
-    "id": 15494,
+    "id": 356,
     "word": "只",
     "pinyin": "zhī",
     "meaning": "con",
@@ -281332,7 +281332,7 @@
     "isCustom": false
   },
   {
-    "id": 15495,
+    "id": 357,
     "word": "小",
     "pinyin": "xiǎo",
     "meaning": "nhỏ",
@@ -281354,7 +281354,7 @@
     "isCustom": false
   },
   {
-    "id": 15496,
+    "id": 358,
     "word": "猫",
     "pinyin": "māo",
     "meaning": "con mèo",
@@ -281376,7 +281376,7 @@
     "isCustom": false
   },
   {
-    "id": 15497,
+    "id": 359,
     "word": "没",
     "pinyin": "méi",
     "meaning": "không",
@@ -281398,7 +281398,7 @@
     "isCustom": false
   },
   {
-    "id": 15498,
+    "id": 360,
     "word": "看见",
     "pinyin": "kànjiàn",
     "meaning": "nhìn thấy",
@@ -281420,7 +281420,7 @@
     "isCustom": false
   },
   {
-    "id": 15499,
+    "id": 361,
     "word": "桌子",
     "pinyin": "zhuōzi",
     "meaning": "cái bàn",
@@ -281442,7 +281442,7 @@
     "isCustom": false
   },
   {
-    "id": 15500,
+    "id": 362,
     "word": "漂亮",
     "pinyin": "piàoliang",
     "meaning": "đẹp",
@@ -281464,7 +281464,7 @@
     "isCustom": false
   },
   {
-    "id": 15501,
+    "id": 363,
     "word": "在",
     "pinyin": "zài",
     "meaning": "ở",
@@ -281486,7 +281486,7 @@
     "isCustom": false
   },
   {
-    "id": 15502,
+    "id": 364,
     "word": "学校",
     "pinyin": "xuéxiào",
     "meaning": "trường học",
@@ -281508,7 +281508,7 @@
     "isCustom": false
   },
   {
-    "id": 15503,
+    "id": 365,
     "word": "书店",
     "pinyin": "shūdiàn",
     "meaning": "hiệu sách",
@@ -281530,7 +281530,7 @@
     "isCustom": false
   },
   {
-    "id": 15504,
+    "id": 366,
     "word": "能",
     "pinyin": "néng",
     "meaning": "có thể/có khả năng",
@@ -281552,7 +281552,7 @@
     "isCustom": false
   },
   {
-    "id": 15505,
+    "id": 367,
     "word": "到",
     "pinyin": "dào",
     "meaning": "đến",
@@ -281574,7 +281574,7 @@
     "isCustom": false
   },
   {
-    "id": 15506,
+    "id": 368,
     "word": "午饭",
     "pinyin": "wǔfàn",
     "meaning": "cơm trưa",
@@ -281596,7 +281596,7 @@
     "isCustom": false
   },
   {
-    "id": 15507,
+    "id": 369,
     "word": "饭",
     "pinyin": "fàn",
     "meaning": "cơm",
@@ -281618,7 +281618,7 @@
     "isCustom": false
   },
   {
-    "id": 15508,
+    "id": 370,
     "word": "大",
     "pinyin": "dà",
     "meaning": "lớn",
@@ -281640,7 +281640,7 @@
     "isCustom": false
   },
   {
-    "id": 15509,
+    "id": 371,
     "word": "病人",
     "pinyin": "bìngrén",
     "meaning": "bệnh nhân",
@@ -281662,7 +281662,7 @@
     "isCustom": false
   },
   {
-    "id": 15510,
+    "id": 372,
     "word": "多",
     "pinyin": "duō",
     "meaning": "nhiều",
@@ -281684,7 +281684,7 @@
     "isCustom": false
   },
   {
-    "id": 15511,
+    "id": 373,
     "word": "医生",
     "pinyin": "yīshēng",
     "meaning": "bác sĩ",
@@ -281706,7 +281706,7 @@
     "isCustom": false
   },
   {
-    "id": 15512,
+    "id": 374,
     "word": "工作",
     "pinyin": "gōngzuò",
     "meaning": "công việc/làm việc",
@@ -281728,7 +281728,7 @@
     "isCustom": false
   },
   {
-    "id": 15513,
+    "id": 375,
     "word": "前边",
     "pinyin": "qiánbian",
     "meaning": "phía trước",
@@ -281750,7 +281750,7 @@
     "isCustom": false
   },
   {
-    "id": 15514,
+    "id": 376,
     "word": "边",
     "pinyin": "biān",
     "meaning": "phía/bên",
@@ -281772,7 +281772,7 @@
     "isCustom": false
   },
   {
-    "id": 15515,
+    "id": 377,
     "word": "家",
     "pinyin": "jiā",
     "meaning": "Dùng cho cửa hàng, cơ quan, doanh nghiệp",
@@ -281794,7 +281794,7 @@
     "isCustom": false
   },
   {
-    "id": 15516,
+    "id": 378,
     "word": "那个",
     "pinyin": "nàge",
     "meaning": "cái kia/ cái đó",
@@ -281816,7 +281816,7 @@
     "isCustom": false
   },
   {
-    "id": 15517,
+    "id": 379,
     "word": "外边",
     "pinyin": "wàibiān",
     "meaning": "bên ngoài",
@@ -281838,7 +281838,7 @@
     "isCustom": false
   },
   {
-    "id": 15518,
+    "id": 380,
     "word": "椅子",
     "pinyin": "yǐzi",
     "meaning": "cái ghế",
@@ -281860,7 +281860,7 @@
     "isCustom": false
   },
   {
-    "id": 15519,
+    "id": 381,
     "word": "上",
     "pinyin": "shàng",
     "meaning": "phía trên",
@@ -281882,7 +281882,7 @@
     "isCustom": false
   },
   {
-    "id": 15520,
+    "id": 382,
     "word": "本",
     "pinyin": "běn",
     "meaning": "quyển",
@@ -281904,7 +281904,7 @@
     "isCustom": false
   },
   {
-    "id": 15521,
+    "id": 383,
     "word": "书",
     "pinyin": "shū",
     "meaning": "sách",
@@ -281926,7 +281926,7 @@
     "isCustom": false
   },
   {
-    "id": 15522,
+    "id": 384,
     "word": "那",
     "pinyin": "nà",
     "meaning": "kia",
@@ -281948,7 +281948,7 @@
     "isCustom": false
   },
   {
-    "id": 15523,
+    "id": 385,
     "word": "第",
     "pinyin": "dì",
     "meaning": "thứ",
@@ -281970,7 +281970,7 @@
     "isCustom": false
   },
   {
-    "id": 15524,
+    "id": 386,
     "word": "学习",
     "pinyin": "xuéxí",
     "meaning": "học tập",
@@ -281992,7 +281992,7 @@
     "isCustom": false
   },
   {
-    "id": 15525,
+    "id": 387,
     "word": "做",
     "pinyin": "zuò",
     "meaning": "làm",
@@ -282014,7 +282014,7 @@
     "isCustom": false
   },
   {
-    "id": 15526,
+    "id": 388,
     "word": "白天",
     "pinyin": "báitiān",
     "meaning": "ban ngày",
@@ -282036,7 +282036,7 @@
     "isCustom": false
   },
   {
-    "id": 15527,
+    "id": 389,
     "word": "读书",
     "pinyin": "dúshū",
     "meaning": "đọc sách/học",
@@ -282058,7 +282058,7 @@
     "isCustom": false
   },
   {
-    "id": 15528,
+    "id": 390,
     "word": "和",
     "pinyin": "hé",
     "meaning": "với, cùng",
@@ -282080,7 +282080,7 @@
     "isCustom": false
   },
   {
-    "id": 15529,
+    "id": 391,
     "word": "朋友",
     "pinyin": "péngyǒu",
     "meaning": "bạn bè",
@@ -282102,7 +282102,7 @@
     "isCustom": false
   },
   {
-    "id": 15530,
+    "id": 392,
     "word": "唱",
     "pinyin": "chàng",
     "meaning": "hát",
@@ -282124,7 +282124,7 @@
     "isCustom": false
   },
   {
-    "id": 15531,
+    "id": 393,
     "word": "歌",
     "pinyin": "gē",
     "meaning": "bài hát",
@@ -282146,7 +282146,7 @@
     "isCustom": false
   },
   {
-    "id": 15532,
+    "id": 394,
     "word": "好听",
     "pinyin": "hǎotīng",
     "meaning": "hay (âm thanh)",
@@ -282168,7 +282168,7 @@
     "isCustom": false
   },
   {
-    "id": 15533,
+    "id": 395,
     "word": "电视",
     "pinyin": "diànshì",
     "meaning": "tivi",
@@ -282190,7 +282190,7 @@
     "isCustom": false
   },
   {
-    "id": 15534,
+    "id": 396,
     "word": "狗",
     "pinyin": "gǒu",
     "meaning": "con chó",
@@ -282212,7 +282212,7 @@
     "isCustom": false
   },
   {
-    "id": 15535,
+    "id": 397,
     "word": "玩",
     "pinyin": "wán",
     "meaning": "chơi",
@@ -282234,7 +282234,7 @@
     "isCustom": false
   },
   {
-    "id": 15536,
+    "id": 398,
     "word": "杯子",
     "pinyin": "bēizi",
     "meaning": "cái cốc, cái ly",
@@ -282256,7 +282256,7 @@
     "isCustom": false
   },
   {
-    "id": 15537,
+    "id": 399,
     "word": "售货员",
     "pinyin": "shòuhuòyuán",
     "meaning": "nhân viên bán hàng",
@@ -282278,7 +282278,7 @@
     "isCustom": false
   },
   {
-    "id": 15538,
+    "id": 400,
     "word": "这边",
     "pinyin": "zhèbiān",
     "meaning": "phía này, bên này",
@@ -282300,7 +282300,7 @@
     "isCustom": false
   },
   {
-    "id": 15539,
+    "id": 401,
     "word": "钱",
     "pinyin": "qián",
     "meaning": "tiền",
@@ -282322,7 +282322,7 @@
     "isCustom": false
   },
   {
-    "id": 15540,
+    "id": 402,
     "word": "这些",
     "pinyin": "zhèxiē",
     "meaning": "những cái này",
@@ -282344,7 +282344,7 @@
     "isCustom": false
   },
   {
-    "id": 15541,
+    "id": 403,
     "word": "块",
     "pinyin": "kuài",
     "meaning": "đồng (đơn vị tiền tệ TQ)",
@@ -282366,7 +282366,7 @@
     "isCustom": false
   },
   {
-    "id": 15542,
+    "id": 404,
     "word": "那些",
     "pinyin": "nàxiē",
     "meaning": "những cái kia",
@@ -282388,7 +282388,7 @@
     "isCustom": false
   },
   {
-    "id": 15543,
+    "id": 405,
     "word": "这儿",
     "pinyin": "zhèr",
     "meaning": "ở đây",
@@ -282410,7 +282410,7 @@
     "isCustom": false
   },
   {
-    "id": 15544,
+    "id": 406,
     "word": "水果",
     "pinyin": "shuǐguǒ",
     "meaning": "trái cây",
@@ -282432,7 +282432,7 @@
     "isCustom": false
   },
   {
-    "id": 15545,
+    "id": 407,
     "word": "少",
     "pinyin": "shǎo",
     "meaning": "ít",
@@ -282454,7 +282454,7 @@
     "isCustom": false
   },
   {
-    "id": 15546,
+    "id": 408,
     "word": "斤",
     "pinyin": "jīn",
     "meaning": "cân ( 500 g)",
@@ -282476,7 +282476,7 @@
     "isCustom": false
   },
   {
-    "id": 15547,
+    "id": 409,
     "word": "苹果",
     "pinyin": "píngguǒ",
     "meaning": "quả táo",
@@ -282498,7 +282498,7 @@
     "isCustom": false
   },
   {
-    "id": 15548,
+    "id": 410,
     "word": "便宜",
     "pinyin": "piányí",
     "meaning": "rẻ",
@@ -282520,7 +282520,7 @@
     "isCustom": false
   },
   {
-    "id": 15549,
+    "id": 411,
     "word": "商店",
     "pinyin": "shāngdiàn",
     "meaning": "cửa hàng",
@@ -282542,7 +282542,7 @@
     "isCustom": false
   },
   {
-    "id": 15550,
+    "id": 412,
     "word": "衣服",
     "pinyin": "yīfu",
     "meaning": "quần áo",
@@ -282564,7 +282564,7 @@
     "isCustom": false
   },
   {
-    "id": 15551,
+    "id": 413,
     "word": "件",
     "pinyin": "jiàn",
     "meaning": "chiếc/cái",
@@ -282586,7 +282586,7 @@
     "isCustom": false
   },
   {
-    "id": 15552,
+    "id": 414,
     "word": "元",
     "pinyin": "yuán",
     "meaning": "đồng (nhân dân tệ)",
@@ -282608,7 +282608,7 @@
     "isCustom": false
   },
   {
-    "id": 15553,
+    "id": 415,
     "word": "怎么样",
     "pinyin": "zěnmeyàng",
     "meaning": "thế nào",
@@ -282630,7 +282630,7 @@
     "isCustom": false
   },
   {
-    "id": 15554,
+    "id": 416,
     "word": "穿",
     "pinyin": "chuān",
     "meaning": "Mặc",
@@ -282652,7 +282652,7 @@
     "isCustom": false
   },
   {
-    "id": 15555,
+    "id": 417,
     "word": "贵",
     "pinyin": "guì",
     "meaning": "đắt",
@@ -282674,7 +282674,7 @@
     "isCustom": false
   },
   {
-    "id": 15556,
+    "id": 418,
     "word": "女",
     "pinyin": "nǚ",
     "meaning": "nữ",
@@ -282696,7 +282696,7 @@
     "isCustom": false
   },
   {
-    "id": 15557,
+    "id": 419,
     "word": "男",
     "pinyin": "nán",
     "meaning": "nam",
@@ -282718,7 +282718,7 @@
     "isCustom": false
   },
   {
-    "id": 15558,
+    "id": 420,
     "word": "那儿",
     "pinyin": "nàr",
     "meaning": "ở kia, chỗ đó",
@@ -282740,7 +282740,7 @@
     "isCustom": false
   },
   {
-    "id": 15559,
+    "id": 421,
     "word": "时候",
     "pinyin": "shíhou",
     "meaning": "lúc/khi",
@@ -282762,7 +282762,7 @@
     "isCustom": false
   },
   {
-    "id": 15560,
+    "id": 422,
     "word": "饭店",
     "pinyin": "fàndiàn",
     "meaning": "nhà hàng, khách sạn",
@@ -282784,7 +282784,7 @@
     "isCustom": false
   },
   {
-    "id": 15561,
+    "id": 423,
     "word": "知道",
     "pinyin": "zhīdào",
     "meaning": "biết",
@@ -282806,7 +282806,7 @@
     "isCustom": false
   },
   {
-    "id": 15562,
+    "id": 424,
     "word": "正在",
     "pinyin": "zhèngzài",
     "meaning": "đang",
@@ -282828,7 +282828,7 @@
     "isCustom": false
   },
   {
-    "id": 15563,
+    "id": 425,
     "word": "找",
     "pinyin": "zhǎo",
     "meaning": "tìm",
@@ -282850,7 +282850,7 @@
     "isCustom": false
   },
   {
-    "id": 15564,
+    "id": 426,
     "word": "车",
     "pinyin": "chē",
     "meaning": "xe",
@@ -282872,7 +282872,7 @@
     "isCustom": false
   },
   {
-    "id": 15565,
+    "id": 427,
     "word": "开车",
     "pinyin": "kāichē",
     "meaning": "lái xe",
@@ -282894,7 +282894,7 @@
     "isCustom": false
   },
   {
-    "id": 15566,
+    "id": 428,
     "word": "在",
     "pinyin": "zài",
     "meaning": "Đang",
@@ -282916,7 +282916,7 @@
     "isCustom": false
   },
   {
-    "id": 15567,
+    "id": 429,
     "word": "读",
     "pinyin": "dú",
     "meaning": "đọc/học",
@@ -282938,7 +282938,7 @@
     "isCustom": false
   },
   {
-    "id": 15568,
+    "id": 430,
     "word": "大学",
     "pinyin": "dàxué",
     "meaning": "đại học",
@@ -282960,7 +282960,7 @@
     "isCustom": false
   },
   {
-    "id": 15569,
+    "id": 431,
     "word": "大学生",
     "pinyin": "dàxuéshēng",
     "meaning": "sinh viên",
@@ -282982,7 +282982,7 @@
     "isCustom": false
   },
   {
-    "id": 15570,
+    "id": 432,
     "word": "学",
     "pinyin": "xué",
     "meaning": "học",
@@ -283004,7 +283004,7 @@
     "isCustom": false
   },
   {
-    "id": 15571,
+    "id": 433,
     "word": "医",
     "pinyin": "yī",
     "meaning": "y, khoa y/y học",
@@ -283026,7 +283026,7 @@
     "isCustom": false
   },
   {
-    "id": 15572,
+    "id": 434,
     "word": "弟弟",
     "pinyin": "dìdi",
     "meaning": "em trai",
@@ -283048,7 +283048,7 @@
     "isCustom": false
   },
   {
-    "id": 15573,
+    "id": 435,
     "word": "起床",
     "pinyin": "qǐchuáng",
     "meaning": "thức dậy",
@@ -283070,7 +283070,7 @@
     "isCustom": false
   },
   {
-    "id": 15574,
+    "id": 436,
     "word": "睡觉",
     "pinyin": "shuìjiào",
     "meaning": "ngủ",
@@ -283092,7 +283092,7 @@
     "isCustom": false
   },
   {
-    "id": 15575,
+    "id": 437,
     "word": "睡",
     "pinyin": "shuì",
     "meaning": "ngủ",
@@ -283114,7 +283114,7 @@
     "isCustom": false
   },
   {
-    "id": 15576,
+    "id": 438,
     "word": "那里",
     "pinyin": "nàlǐ",
     "meaning": "chỗ kia",
@@ -283136,7 +283136,7 @@
     "isCustom": false
   },
   {
-    "id": 15577,
+    "id": 439,
     "word": "昨天",
     "pinyin": "zuótiān",
     "meaning": "hôm qua",
@@ -283158,7 +283158,7 @@
     "isCustom": false
   },
   {
-    "id": 15578,
+    "id": 440,
     "word": "问",
     "pinyin": "wèn",
     "meaning": "hỏi",
@@ -283180,7 +283180,7 @@
     "isCustom": false
   },
   {
-    "id": 15579,
+    "id": 441,
     "word": "对",
     "pinyin": "duì",
     "meaning": "với, đối với",
@@ -283202,7 +283202,7 @@
     "isCustom": false
   },
   {
-    "id": 15580,
+    "id": 442,
     "word": "说",
     "pinyin": "shuō",
     "meaning": "nói",
@@ -283224,7 +283224,7 @@
     "isCustom": false
   },
   {
-    "id": 15581,
+    "id": 443,
     "word": "要",
     "pinyin": "yào",
     "meaning": "muốn, phải",
@@ -283246,7 +283246,7 @@
     "isCustom": false
   },
   {
-    "id": 15582,
+    "id": 444,
     "word": "小朋友",
     "pinyin": "xiǎopéngyǒu",
     "meaning": "bạn nhỏ",
@@ -283268,7 +283268,7 @@
     "isCustom": false
   },
   {
-    "id": 15583,
+    "id": 445,
     "word": "天气",
     "pinyin": "tiānqì",
     "meaning": "thời tiết",
@@ -283290,7 +283290,7 @@
     "isCustom": false
   },
   {
-    "id": 15584,
+    "id": 446,
     "word": "这里",
     "pinyin": "zhèlǐ",
     "meaning": "ở đây",
@@ -283312,7 +283312,7 @@
     "isCustom": false
   },
   {
-    "id": 15585,
+    "id": 447,
     "word": "天",
     "pinyin": "tiān",
     "meaning": "trời/ngày",
@@ -283334,7 +283334,7 @@
     "isCustom": false
   },
   {
-    "id": 15586,
+    "id": 448,
     "word": "下雨",
     "pinyin": "xiàyǔ",
     "meaning": "mưa",
@@ -283356,7 +283356,7 @@
     "isCustom": false
   },
   {
-    "id": 15587,
+    "id": 449,
     "word": "了",
     "pinyin": "le",
     "meaning": "rồi",
@@ -283378,7 +283378,7 @@
     "isCustom": false
   },
   {
-    "id": 15588,
+    "id": 450,
     "word": "雨",
     "pinyin": "yǔ",
     "meaning": "mưa",
@@ -283400,7 +283400,7 @@
     "isCustom": false
   },
   {
-    "id": 15589,
+    "id": 451,
     "word": "有点儿",
     "pinyin": "yǒudiǎnr",
     "meaning": "hơi, hơi… một chút, có chút…",
@@ -283422,7 +283422,7 @@
     "isCustom": false
   },
   {
-    "id": 15590,
+    "id": 452,
     "word": "觉得",
     "pinyin": "juéde",
     "meaning": "cảm thấy",
@@ -283444,7 +283444,7 @@
     "isCustom": false
   },
   {
-    "id": 15591,
+    "id": 453,
     "word": "冷",
     "pinyin": "lěng",
     "meaning": "lạnh",
@@ -283466,7 +283466,7 @@
     "isCustom": false
   },
   {
-    "id": 15592,
+    "id": 454,
     "word": "下",
     "pinyin": "xià",
     "meaning": "xuống/rơi",
@@ -283488,7 +283488,7 @@
     "isCustom": false
   },
   {
-    "id": 15593,
+    "id": 455,
     "word": "雪",
     "pinyin": "xuě",
     "meaning": "tuyết",
@@ -283510,7 +283510,7 @@
     "isCustom": false
   },
   {
-    "id": 15594,
+    "id": 456,
     "word": "来",
     "pinyin": "lái",
     "meaning": "đến",
@@ -283532,7 +283532,7 @@
     "isCustom": false
   },
   {
-    "id": 15595,
+    "id": 457,
     "word": "公司",
     "pinyin": "gōngsī",
     "meaning": "công ty",
@@ -283554,7 +283554,7 @@
     "isCustom": false
   },
   {
-    "id": 15596,
+    "id": 458,
     "word": "生病",
     "pinyin": "shēngbìng",
     "meaning": "bị bệnh",
@@ -283576,7 +283576,7 @@
     "isCustom": false
   },
   {
-    "id": 15597,
+    "id": 459,
     "word": "看病",
     "pinyin": "kànbìng",
     "meaning": "khám bệnh",
@@ -283598,7 +283598,7 @@
     "isCustom": false
   },
   {
-    "id": 15598,
+    "id": 460,
     "word": "病",
     "pinyin": "bìng",
     "meaning": "bệnh",
@@ -283620,7 +283620,7 @@
     "isCustom": false
   },
   {
-    "id": 15599,
+    "id": 461,
     "word": "一点儿",
     "pinyin": "yīdiǎnr",
     "meaning": "một chút",
@@ -283642,7 +283642,7 @@
     "isCustom": false
   },
   {
-    "id": 15600,
+    "id": 462,
     "word": "药",
     "pinyin": "yào",
     "meaning": "thuốc",
@@ -283664,7 +283664,7 @@
     "isCustom": false
   },
   {
-    "id": 15601,
+    "id": 463,
     "word": "回",
     "pinyin": "huí",
     "meaning": "về",
@@ -283686,7 +283686,7 @@
     "isCustom": false
   },
   {
-    "id": 15602,
+    "id": 464,
     "word": "再",
     "pinyin": "zài",
     "meaning": "Sau đó, mới, lại",
@@ -283708,7 +283708,7 @@
     "isCustom": false
   },
   {
-    "id": 15603,
+    "id": 465,
     "word": "喝",
     "pinyin": "hē",
     "meaning": "uống",
@@ -283730,7 +283730,7 @@
     "isCustom": false
   },
   {
-    "id": 15604,
+    "id": 466,
     "word": "热",
     "pinyin": "rè",
     "meaning": "nóng",
@@ -283752,7 +283752,7 @@
     "isCustom": false
   },
   {
-    "id": 15605,
+    "id": 467,
     "word": "水",
     "pinyin": "shuǐ",
     "meaning": "nước",
@@ -283774,7 +283774,7 @@
     "isCustom": false
   },
   {
-    "id": 15606,
+    "id": 468,
     "word": "可以",
     "pinyin": "kěyǐ",
     "meaning": "có thể",
@@ -283796,7 +283796,7 @@
     "isCustom": false
   },
   {
-    "id": 15607,
+    "id": 469,
     "word": "再",
     "pinyin": "zài",
     "meaning": "lại, thêm nữa",
@@ -283818,7 +283818,7 @@
     "isCustom": false
   },
   {
-    "id": 15608,
+    "id": 470,
     "word": "问题",
     "pinyin": "wèntí",
     "meaning": "câu hỏi, vấn đề",
@@ -283840,7 +283840,7 @@
     "isCustom": false
   },
   {
-    "id": 15609,
+    "id": 471,
     "word": "卖",
     "pinyin": "mài",
     "meaning": "bán",
@@ -283862,7 +283862,7 @@
     "isCustom": false
   },
   {
-    "id": 15610,
+    "id": 472,
     "word": "打电话",
     "pinyin": "dǎ diànhuà",
     "meaning": "gọi điện thoại",
@@ -283884,7 +283884,7 @@
     "isCustom": false
   },
   {
-    "id": 15611,
+    "id": 473,
     "word": "一下",
     "pinyin": "yīxià",
     "meaning": "một chút",
@@ -283906,7 +283906,7 @@
     "isCustom": false
   },
   {
-    "id": 15612,
+    "id": 474,
     "word": "服务员",
     "pinyin": "fúwùyuán",
     "meaning": "nhân viên phục vụ",
@@ -283928,7 +283928,7 @@
     "isCustom": false
   },
   {
-    "id": 15613,
+    "id": 475,
     "word": "女士",
     "pinyin": "nǚshì",
     "meaning": "quý bà, cô",
@@ -283950,7 +283950,7 @@
     "isCustom": false
   },
   {
-    "id": 15614,
+    "id": 476,
     "word": "请",
     "pinyin": "qǐng",
     "meaning": "mời, xin vui lòng",
@@ -283972,7 +283972,7 @@
     "isCustom": false
   },
   {
-    "id": 15615,
+    "id": 477,
     "word": "坐",
     "pinyin": "zuò",
     "meaning": "ngồi",
@@ -283994,7 +283994,7 @@
     "isCustom": false
   },
   {
-    "id": 15616,
+    "id": 478,
     "word": "给",
     "pinyin": "gěi",
     "meaning": "cho, tặng",
@@ -284016,7 +284016,7 @@
     "isCustom": false
   },
   {
-    "id": 15617,
+    "id": 479,
     "word": "杯",
     "pinyin": "bēi",
     "meaning": "cốc, tách, ly",
@@ -284038,7 +284038,7 @@
     "isCustom": false
   },
   {
-    "id": 15618,
+    "id": 480,
     "word": "要",
     "pinyin": "yào",
     "meaning": "muốn, cần",
@@ -284060,7 +284060,7 @@
     "isCustom": false
   },
   {
-    "id": 15619,
+    "id": 481,
     "word": "早饭",
     "pinyin": "zǎofàn",
     "meaning": "bữa sáng",
@@ -284082,7 +284082,7 @@
     "isCustom": false
   },
   {
-    "id": 15620,
+    "id": 482,
     "word": "这个",
     "pinyin": "zhège",
     "meaning": "cái này",
@@ -284104,7 +284104,7 @@
     "isCustom": false
   },
   {
-    "id": 15621,
+    "id": 483,
     "word": "面包",
     "pinyin": "miànbāo",
     "meaning": "bánh mì",
@@ -284126,7 +284126,7 @@
     "isCustom": false
   },
   {
-    "id": 15622,
+    "id": 484,
     "word": "鸡蛋",
     "pinyin": "jīdàn",
     "meaning": "trứng gà",
@@ -284148,7 +284148,7 @@
     "isCustom": false
   },
   {
-    "id": 15623,
+    "id": 485,
     "word": "先生",
     "pinyin": "xiānsheng",
     "meaning": "ông, tiên sinh",
@@ -284170,7 +284170,7 @@
     "isCustom": false
   },
   {
-    "id": 15624,
+    "id": 486,
     "word": "一半",
     "pinyin": "yíbàn",
     "meaning": "một nửa",
@@ -284192,7 +284192,7 @@
     "isCustom": false
   },
   {
-    "id": 15625,
+    "id": 487,
     "word": "茶",
     "pinyin": "chá",
     "meaning": "trà",
@@ -284214,7 +284214,7 @@
     "isCustom": false
   },
   {
-    "id": 15626,
+    "id": 488,
     "word": "上",
     "pinyin": "shàng",
     "meaning": "phía trên, lên",
@@ -284236,7 +284236,7 @@
     "isCustom": false
   },
   {
-    "id": 15627,
+    "id": 489,
     "word": "火车",
     "pinyin": "huǒchē",
     "meaning": "tàu hỏa",
@@ -284258,7 +284258,7 @@
     "isCustom": false
   },
   {
-    "id": 15628,
+    "id": 490,
     "word": "中午",
     "pinyin": "zhōngwǔ",
     "meaning": "buổi trưa",
@@ -284280,7 +284280,7 @@
     "isCustom": false
   },
   {
-    "id": 15629,
+    "id": 491,
     "word": "开",
     "pinyin": "kāi",
     "meaning": "lái, mở",
@@ -284302,7 +284302,7 @@
     "isCustom": false
   },
   {
-    "id": 15630,
+    "id": 492,
     "word": "有些",
     "pinyin": "yǒuxiē",
     "meaning": "một số, có chút",
@@ -284324,7 +284324,7 @@
     "isCustom": false
   },
   {
-    "id": 15631,
+    "id": 493,
     "word": "有的",
     "pinyin": "yǒude",
     "meaning": "có cái, có người",
@@ -284346,7 +284346,7 @@
     "isCustom": false
   },
   {
-    "id": 15632,
+    "id": 494,
     "word": "了",
     "pinyin": "le",
     "meaning": "rồi",
@@ -284368,7 +284368,7 @@
     "isCustom": false
   },
   {
-    "id": 15633,
+    "id": 495,
     "word": "写",
     "pinyin": "xiě",
     "meaning": "viết",
@@ -284390,7 +284390,7 @@
     "isCustom": false
   },
   {
-    "id": 15634,
+    "id": 496,
     "word": "都",
     "pinyin": "dōu",
     "meaning": "đều",
@@ -284412,7 +284412,7 @@
     "isCustom": false
   },
   {
-    "id": 15635,
+    "id": 497,
     "word": "听见",
     "pinyin": "tīngjiàn",
     "meaning": "nghe thấy",
@@ -284434,7 +284434,7 @@
     "isCustom": false
   },
   {
-    "id": 15636,
+    "id": 498,
     "word": "不要",
     "pinyin": "bùyào",
     "meaning": "đừng, không muốn",
@@ -284456,7 +284456,7 @@
     "isCustom": false
   },
   {
-    "id": 15637,
+    "id": 499,
     "word": "说话",
     "pinyin": "shuōhuà",
     "meaning": "nói chuyện",
@@ -284478,7 +284478,7 @@
     "isCustom": false
   },
   {
-    "id": 15638,
+    "id": 500,
     "word": "听",
     "pinyin": "tīng",
     "meaning": "nghe",
@@ -284500,7 +284500,7 @@
     "isCustom": false
   },
   {
-    "id": 15639,
+    "id": 501,
     "word": "哪些",
     "pinyin": "nǎxiē",
     "meaning": "những cái nào",
@@ -284522,7 +284522,7 @@
     "isCustom": false
   },
   {
-    "id": 15640,
+    "id": 502,
     "word": "字",
     "pinyin": "zì",
     "meaning": "chữ",
@@ -284544,7 +284544,7 @@
     "isCustom": false
   },
   {
-    "id": 15641,
+    "id": 503,
     "word": "汉语",
     "pinyin": "hànyǔ",
     "meaning": "tiếng Hán",
@@ -284566,7 +284566,7 @@
     "isCustom": false
   },
   {
-    "id": 15642,
+    "id": 504,
     "word": "汉字",
     "pinyin": "hànzì",
     "meaning": "chữ Hán",
@@ -284588,7 +284588,7 @@
     "isCustom": false
   },
   {
-    "id": 15643,
+    "id": 505,
     "word": "明天",
     "pinyin": "míngtiān",
     "meaning": "ngày mai",
@@ -284610,7 +284610,7 @@
     "isCustom": false
   },
   {
-    "id": 15644,
+    "id": 506,
     "word": "中学",
     "pinyin": "zhōngxué",
     "meaning": "trường trung học",
@@ -284632,7 +284632,7 @@
     "isCustom": false
   },
   {
-    "id": 15645,
+    "id": 507,
     "word": "小学",
     "pinyin": "xiǎoxué",
     "meaning": "trường tiểu học",
@@ -284654,7 +284654,7 @@
     "isCustom": false
   },
   {
-    "id": 15646,
+    "id": 508,
     "word": "中学生",
     "pinyin": "zhōngxuéshēng",
     "meaning": "học sinh trung học",
@@ -284676,7 +284676,7 @@
     "isCustom": false
   },
   {
-    "id": 15647,
+    "id": 509,
     "word": "小学生",
     "pinyin": "xiǎoxuéshēng",
     "meaning": "học sinh tiểu học",
@@ -284698,7 +284698,7 @@
     "isCustom": false
   },
   {
-    "id": 15648,
+    "id": 510,
     "word": "上学",
     "pinyin": "shàngxué",
     "meaning": "đi học",
@@ -284720,7 +284720,7 @@
     "isCustom": false
   },
   {
-    "id": 15649,
+    "id": 511,
     "word": "他们",
     "pinyin": "tāmen",
     "meaning": "họ (nam hoặc nhóm hỗn hợp)",
@@ -284742,7 +284742,7 @@
     "isCustom": false
   },
   {
-    "id": 15650,
+    "id": 512,
     "word": "她们",
     "pinyin": "tāmen",
     "meaning": "họ (chỉ có nữ)",
@@ -284764,7 +284764,7 @@
     "isCustom": false
   },
   {
-    "id": 15651,
+    "id": 513,
     "word": "晚",
     "pinyin": "wǎn",
     "meaning": "muộn",
@@ -284786,7 +284786,7 @@
     "isCustom": false
   },
   {
-    "id": 15652,
+    "id": 514,
     "word": "爱",
     "pinyin": "ài",
     "meaning": "yêu, tình yêu",
@@ -284808,7 +284808,7 @@
     "isCustom": false
   },
   {
-    "id": 15653,
+    "id": 515,
     "word": "哪个",
     "pinyin": "nǎge",
     "meaning": "cái nào, người nào",
@@ -284830,7 +284830,7 @@
     "isCustom": false
   },
   {
-    "id": 15654,
+    "id": 516,
     "word": "去年",
     "pinyin": "qùnián",
     "meaning": "năm ngoái",
@@ -284852,7 +284852,7 @@
     "isCustom": false
   },
   {
-    "id": 15655,
+    "id": 517,
     "word": "男朋友",
     "pinyin": "nánpéngyǒu",
     "meaning": "bạn trai",
@@ -284874,7 +284874,7 @@
     "isCustom": false
   },
   {
-    "id": 15656,
+    "id": 518,
     "word": "几",
     "pinyin": "jǐ",
     "meaning": "vài, mấy",
@@ -284896,7 +284896,7 @@
     "isCustom": false
   },
   {
-    "id": 15657,
+    "id": 519,
     "word": "年",
     "pinyin": "nián",
     "meaning": "năm",
@@ -284918,7 +284918,7 @@
     "isCustom": false
   },
   {
-    "id": 15658,
+    "id": 520,
     "word": "好玩儿",
     "pinyin": "hǎowánr",
     "meaning": "thú vị, vui",
@@ -284940,7 +284940,7 @@
     "isCustom": false
   },
   {
-    "id": 15659,
+    "id": 521,
     "word": "西安",
     "pinyin": "Xī'ān",
     "meaning": "Tây An (địa danh)",
@@ -284962,7 +284962,7 @@
     "isCustom": false
   },
   {
-    "id": 15660,
+    "id": 522,
     "word": "北京",
     "pinyin": "Běijīng",
     "meaning": "Bắc Kinh (địa danh)",
@@ -284984,7 +284984,7 @@
     "isCustom": false
   },
   {
-    "id": 15661,
+    "id": 523,
     "word": "飞机",
     "pinyin": "fēijī",
     "meaning": "máy bay",
@@ -285006,7 +285006,7 @@
     "isCustom": false
   },
   {
-    "id": 15662,
+    "id": 524,
     "word": "要",
     "pinyin": "yào",
     "meaning": "cần, mất ( thời gian)",
@@ -285028,7 +285028,7 @@
     "isCustom": false
   },
   {
-    "id": 15663,
+    "id": 525,
     "word": "小时",
     "pinyin": "xiǎoshí",
     "meaning": "tiếng, giờ",
@@ -285050,7 +285050,7 @@
     "isCustom": false
   },
   {
-    "id": 15664,
+    "id": 526,
     "word": "家人",
     "pinyin": "jiārén",
     "meaning": "người nhà",
@@ -285072,7 +285072,7 @@
     "isCustom": false
   },
   {
-    "id": 15665,
+    "id": 527,
     "word": "时间",
     "pinyin": "shíjiān",
     "meaning": "thời gian",
@@ -285094,7 +285094,7 @@
     "isCustom": false
   },
   {
-    "id": 15666,
+    "id": 528,
     "word": "机场",
     "pinyin": "jīchǎng",
     "meaning": "sân bay",
@@ -285116,7 +285116,7 @@
     "isCustom": false
   },
   {
-    "id": 15667,
+    "id": 529,
     "word": "接",
     "pinyin": "jiē",
     "meaning": "đón",
@@ -285138,7 +285138,7 @@
     "isCustom": false
   },
   {
-    "id": 15668,
+    "id": 530,
     "word": "住",
     "pinyin": "zhù",
     "meaning": "ở, sống",
@@ -285160,7 +285160,7 @@
     "isCustom": false
   },
   {
-    "id": 15669,
+    "id": 531,
     "word": "早",
     "pinyin": "zǎo",
     "meaning": "sớm",
@@ -285182,7 +285182,7 @@
     "isCustom": false
   },
   {
-    "id": 15670,
+    "id": 532,
     "word": "那",
     "pinyin": "nà",
     "meaning": "Vậy thì, thế thì",
