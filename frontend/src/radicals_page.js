@@ -91,6 +91,23 @@ function renderGridContent() {
   const container = document.getElementById('radicals-content-area');
   if (!container) return;
 
+  const printBtnText = document.getElementById('print-mode-btn-text');
+  if (printBtnText) {
+    let count = 0;
+    let label = '';
+    if (currentTab === 'So sánh') {
+      count = (radicalsData.comparisons || []).length;
+      label = `Phân Biệt - ${count} Cặp`;
+    } else if (currentTab === 'Còn lại') {
+      count = (radicalsData.radicals || []).filter(r => r.category === 'Còn lại').length;
+      label = `Còn Lại - ${count} Bộ`;
+    } else {
+      count = (radicalsData.radicals || []).filter(r => r.category === currentTab).length;
+      label = `${count || 50} Bộ`;
+    }
+    printBtnText.textContent = `In Phiếu Tập Tô (${label})`;
+  }
+
   if (currentTab === 'So sánh') {
     const compList = radicalsData.comparisons || [];
     currentFlashcardList = compList.map((c, i) => ({
@@ -451,7 +468,7 @@ window.openRadicalPrintWorksheetModal = function(scope = 'all') {
         <div style="display:flex; align-items:center; gap:6px;">
           <label style="font-weight:700; color:#f59e0b;"><i class="fa-solid fa-list-check"></i> Danh sách in:</label>
           <select id="radical-print-scope" onchange="updateRadicalWorksheetPreviewConfig()" style="background:#0f172a; border:1px solid #f59e0b; color:#fff; padding:4px 10px; border-radius:8px; font-weight:700; outline:none; cursor:pointer;">
-            <option value="all" ${printRadicalScopeConfig === 'all' ? 'selected' : ''}>Tất cả bộ thủ (${currentTab})</option>
+            <option value="all" ${printRadicalScopeConfig === 'all' ? 'selected' : ''}>Tất cả (${currentTab === 'So sánh' ? '25 Cặp Phân Biệt' : currentTab === 'Còn lại' ? 'Còn Lại (64 Bộ)' : currentTab})</option>
             <option value="single" ${printRadicalScopeConfig === 'single' ? 'selected' : ''}>Chỉ bộ thủ đang chọn</option>
           </select>
         </div>
@@ -537,21 +554,31 @@ window.updateRadicalWorksheetPreviewConfig = function() {
   if (pinyinEl) printRadicalShowPinyin = pinyinEl.checked;
   if (meaningEl) printRadicalShowMeaning = meaningEl.checked;
 
-  let targetCategory = currentTab;
-  if (!targetCategory || targetCategory === 'So sánh' || targetCategory === 'Còn lại') {
-    targetCategory = '50 bộ (1)';
-  }
-
-  let list = (radicalsData.radicals || []).filter(r => r.category === targetCategory);
-  if (list.length === 0) {
-    list = (radicalsData.radicals || []).slice(0, 50);
+  let list = [];
+  if (currentTab === 'So sánh') {
+    list = (radicalsData.comparisons || []).map((c, i) => ({
+      id: `comp_${i}`,
+      radical: `${c.rad1}/${c.rad2}`,
+      variant: '',
+      pinyin: `${c.meaning1} vs ${c.meaning2}`,
+      name: 'Phân biệt',
+      meaning: c.difference + (c.example ? ` (VD: ${c.example})` : ''),
+      category: 'Phân biệt'
+    }));
+  } else if (currentTab === 'Còn lại') {
+    list = (radicalsData.radicals || []).filter(r => r.category === 'Còn lại');
+  } else {
+    list = (radicalsData.radicals || []).filter(r => r.category === currentTab);
+    if (list.length === 0) {
+      list = (radicalsData.radicals || []).filter(r => r.category === '50 bộ (1)');
+    }
   }
 
   if (printRadicalScopeConfig === 'single' && currentFlashcardList[currentFlashcardIndex]) {
     const singleObj = currentFlashcardList[currentFlashcardIndex];
     if (singleObj && singleObj.radical) {
-      list = list.filter(r => r.radical === singleObj.radical);
-      if (list.length === 0) list = [singleObj];
+      const found = list.find(r => r.radical === singleObj.radical);
+      list = found ? [found] : [singleObj];
     } else {
       list = list.slice(0, 1);
     }
@@ -619,7 +646,7 @@ function generateRadicalWorksheetHTML(listToPrint) {
         const itemIdx = p * cardsPerPage + cardIdx;
         const mainChar = target.radical;
         const charDisplay = target.radical + (target.variant ? ` / ${target.variant}` : '');
-        const wordChars = [mainChar];
+        const wordChars = mainChar.match(/[\u4e00-\u9fa5]/g) || [mainChar[0]];
 
         function buildRow(rowIdx) {
           let cells = '';
@@ -745,7 +772,7 @@ function generateRadicalWorksheetHTML(listToPrint) {
     listToPrint.forEach((target, pageIdx) => {
       const mainChar = target.radical;
       const charDisplay = target.radical + (target.variant ? ` / ${target.variant}` : '');
-      const wordChars = [mainChar];
+      const wordChars = mainChar.match(/[\u4e00-\u9fa5]/g) || [mainChar[0]];
 
       function buildRow(rowIdx) {
         let cells = '';
