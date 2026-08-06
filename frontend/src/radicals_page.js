@@ -401,6 +401,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 window.printRadicalWorksheet = function() {
+  // Clean up any old leftover nodes from DOM
+  const oldNode = document.getElementById('printable-radical-worksheet');
+  if (oldNode) oldNode.remove();
+
   let targetCategory = currentTab;
   if (!targetCategory || targetCategory === 'So sánh' || targetCategory === 'Còn lại') {
     targetCategory = '50 bộ (1)';
@@ -419,11 +423,15 @@ window.printRadicalWorksheet = function() {
     document.body.appendChild(printModal);
   }
 
-  printModal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(8px); z-index: 999999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;';
+  // Hide seasonal particles canvas if present
+  const particleCanvas = document.getElementById('seasonal-particle-canvas');
+  if (particleCanvas) particleCanvas.style.display = 'none';
+
+  printModal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(10px); z-index: 9999999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px; box-sizing: border-box;';
 
   const createTianzigeBox = (char = '', isFaint = false) => {
     return `
-      <div style="width: 32px; height: 32px; border: 1px solid #64748b; position: relative; display: flex; align-items: center; justify-content: center; box-sizing: border-box; background: #fff;">
+      <div style="width: 32px; height: 32px; border: 1px solid #64748b; position: relative; display: flex; align-items: center; justify-content: center; box-sizing: border-box; background: #fff; flex-shrink: 0;">
         <svg style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;" viewBox="0 0 32 32">
           <line x1="0" y1="16" x2="32" y2="16" stroke="#cbd5e1" stroke-dasharray="2,2" />
           <line x1="16" y1="0" x2="16" y2="32" stroke="#cbd5e1" stroke-dasharray="2,2" />
@@ -440,29 +448,30 @@ window.printRadicalWorksheet = function() {
     const charDisplay = item.radical + (item.variant ? ` / ${item.variant}` : '');
     const traceChar = item.variant || item.radical;
     
+    // Fill 15 boxes across full row
     let faintBoxes = '';
     let blankBoxes = '';
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 15; i++) {
       faintBoxes += createTianzigeBox(traceChar, true);
       blankBoxes += createTianzigeBox('', false);
     }
 
     rowsHtml += `
-      <div style="display: flex; align-items: stretch; border: 1px solid #94a3b8; border-radius: 6px; margin-bottom: 6px; page-break-inside: avoid; background: #fff;">
-        <div style="width: 140px; padding: 4px 8px; border-right: 1.5px solid #64748b; display: flex; flex-direction: column; justify-content: center; background: #f8fafc;">
+      <div style="display: flex; align-items: stretch; border: 1.5px solid #64748b; border-radius: 6px; margin-bottom: 8px; page-break-inside: avoid; background: #fff;">
+        <div style="width: 135px; min-width: 135px; padding: 6px 10px; border-right: 1.5px solid #64748b; display: flex; flex-direction: column; justify-content: center; background: #f8fafc; flex-shrink: 0;">
           <div style="font-size: 0.75rem; font-weight: 800; color: #2563eb;">STT ${index + 1}</div>
-          <div style="font-family: KaiTi, STKaiti, 'SimSun', serif; font-size: 1.5rem; font-weight: 900; color: #0f172a; line-height: 1.1; margin: 1px 0;">${charDisplay}</div>
-          <div style="font-size: 0.78rem; font-weight: 700; color: #334155;">${item.name || ''} (${item.meaning || ''})</div>
+          <div style="font-family: KaiTi, STKaiti, 'SimSun', serif; font-size: 1.6rem; font-weight: 900; color: #0f172a; line-height: 1.1; margin: 2px 0;">${charDisplay}</div>
+          <div style="font-size: 0.8rem; font-weight: 700; color: #334155;">${item.name || ''} (${item.meaning || ''})</div>
         </div>
 
-        <div style="flex: 1; padding: 4px 8px; display: flex; flex-direction: column; gap: 3px; justify-content: center;">
-          <div style="display: flex; gap: 3px; align-items: center;">
-            <span style="font-size: 0.65rem; font-weight: 700; color: #64748b; width: 44px;">Mờ:</span>
-            ${faintBoxes}
+        <div style="flex: 1; padding: 6px 8px; display: flex; flex-direction: column; gap: 4px; justify-content: center; overflow-x: auto;">
+          <div style="display: flex; gap: 3px; align-items: center; width: 100%;">
+            <span style="font-size: 0.7rem; font-weight: 800; color: #475569; width: 48px; flex-shrink: 0;">Mờ:</span>
+            <div style="display: flex; gap: 3px; flex-wrap: nowrap; overflow: hidden; flex: 1;">${faintBoxes}</div>
           </div>
-          <div style="display: flex; gap: 3px; align-items: center;">
-            <span style="font-size: 0.65rem; font-weight: 700; color: #64748b; width: 44px;">Trống:</span>
-            ${blankBoxes}
+          <div style="display: flex; gap: 3px; align-items: center; width: 100%;">
+            <span style="font-size: 0.7rem; font-weight: 800; color: #475569; width: 48px; flex-shrink: 0;">Trống:</span>
+            <div style="display: flex; gap: 3px; flex-wrap: nowrap; overflow: hidden; flex: 1;">${blankBoxes}</div>
           </div>
         </div>
       </div>
@@ -493,25 +502,25 @@ window.printRadicalWorksheet = function() {
     </style>
     
     <!-- Top Action Header inside Modal -->
-    <div class="no-print" style="width: 100%; max-width: 860px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 12px; flex-wrap: wrap;">
-      <div style="color: #ffffff; font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
-        <i class="fa-solid fa-file-pdf" style="color: #10b981;"></i> Xem Trước Phiếu Tập Tô A4 — ${targetCategory}
+    <div class="no-print" style="width: 100%; max-width: 880px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 12px; flex-wrap: wrap;">
+      <div style="color: #ffffff; font-weight: 800; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">
+        <i class="fa-solid fa-file-pdf" style="color: #10b981; font-size: 1.3rem;"></i> Xem Trước Phiếu Tập Tô A4 — ${targetCategory}
       </div>
       <div style="display: flex; gap: 10px;">
-        <button onclick="window.printWorksheetDocument()" style="background: linear-gradient(135deg, #10b981, #059669); color: #fff; border: none; padding: 8px 20px; border-radius: 99px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);">
+        <button onclick="window.printWorksheetDocument()" style="background: linear-gradient(135deg, #10b981, #059669); color: #fff; border: none; padding: 9px 22px; border-radius: 99px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4); font-size: 0.95rem;">
           <i class="fa-solid fa-print"></i> In Ngay / Tải PDF
         </button>
-        <button onclick="document.getElementById('printable-radical-worksheet-modal').style.display='none'" style="background: rgba(255, 255, 255, 0.15); color: #fff; border: 1px solid rgba(255, 255, 255, 0.25); padding: 8px 18px; border-radius: 99px; font-weight: 700; cursor: pointer;">
+        <button onclick="window.closePrintWorksheetModal()" style="background: rgba(255, 255, 255, 0.15); color: #fff; border: 1px solid rgba(255, 255, 255, 0.3); padding: 9px 20px; border-radius: 99px; font-weight: 700; cursor: pointer; font-size: 0.95rem;">
           Đóng
         </button>
       </div>
     </div>
 
     <!-- Paper Sheet Container (Always White Paper Background) -->
-    <div id="printable-radical-worksheet-content" style="background: #ffffff !important; color: #0f172a !important; max-width: 860px; width: 100%; border-radius: 14px; padding: 24px; box-shadow: 0 25px 60px rgba(0,0,0,0.6); max-height: 82vh; overflow-y: auto; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Be Vietnam Pro', sans-serif;">
-      <div style="text-align: center; border-bottom: 2px solid #0f172a; padding-bottom: 10px; margin-bottom: 14px;">
-        <h1 style="font-size: 1.25rem; font-weight: 800; margin: 0; text-transform: uppercase; color: #0f172a; letter-spacing: 0.3px; line-height: 1.3;">PHIẾU TẬP TÔ BỘ THỦ TIẾNG TRUNG — ${targetCategory.toUpperCase()}</h1>
-        <p style="font-size: 0.8rem; color: #475569; margin: 4px 0 0 0; font-weight: 700; letter-spacing: 0.2px;">TIẾNG TRUNG HỒNG THÁI — BẢNG 50 BỘ THỦ CỐ ĐỊNH (CHỮ HÁN & NGHĨA HÁN-VIỆT)</p>
+    <div id="printable-radical-worksheet-content" style="background: #ffffff !important; color: #0f172a !important; max-width: 880px; width: 100%; border-radius: 14px; padding: 24px; box-shadow: 0 25px 60px rgba(0,0,0,0.6); max-height: 82vh; overflow-y: auto; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Be Vietnam Pro', sans-serif;">
+      <div style="text-align: center; border-bottom: 2px solid #0f172a; padding-bottom: 10px; margin-bottom: 16px;">
+        <h1 style="font-size: 1.3rem; font-weight: 800; margin: 0; text-transform: uppercase; color: #0f172a; letter-spacing: 0.3px; line-height: 1.3;">PHIẾU TẬP TÔ BỘ THỦ TIẾNG TRUNG — ${targetCategory.toUpperCase()}</h1>
+        <p style="font-size: 0.82rem; color: #475569; margin: 4px 0 0 0; font-weight: 700; letter-spacing: 0.2px;">TIẾNG TRUNG HỒNG THÁI — BẢNG 50 BỘ THỦ CỐ ĐỊNH (CHỮ HÁN & NGHĨA HÁN-VIỆT)</p>
       </div>
 
       <div>
@@ -521,6 +530,15 @@ window.printRadicalWorksheet = function() {
   `;
 
   printModal.style.display = 'flex';
+};
+
+window.closePrintWorksheetModal = function() {
+  const printModal = document.getElementById('printable-radical-worksheet-modal');
+  if (printModal) printModal.style.display = 'none';
+  const particleCanvas = document.getElementById('seasonal-particle-canvas');
+  if (particleCanvas && localStorage.getItem('particles_enabled') !== 'false') {
+    particleCanvas.style.display = 'block';
+  }
 };
 
 window.printWorksheetDocument = function() {
