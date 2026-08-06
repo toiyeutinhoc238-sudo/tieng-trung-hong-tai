@@ -412,17 +412,19 @@ window.printRadicalWorksheet = function() {
     return;
   }
 
-  let printArea = document.getElementById('printable-radical-worksheet');
-  if (!printArea) {
-    printArea = document.createElement('div');
-    printArea.id = 'printable-radical-worksheet';
-    document.body.appendChild(printArea);
+  let printModal = document.getElementById('printable-radical-worksheet-modal');
+  if (!printModal) {
+    printModal = document.createElement('div');
+    printModal.id = 'printable-radical-worksheet-modal';
+    document.body.appendChild(printModal);
   }
+
+  printModal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(8px); z-index: 999999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;';
 
   const createTianzigeBox = (char = '', isFaint = false) => {
     return `
       <div style="width: 32px; height: 32px; border: 1px solid #64748b; position: relative; display: flex; align-items: center; justify-content: center; box-sizing: border-box; background: #fff;">
-        <svg style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;" viewBox="0 0 32 36">
+        <svg style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;" viewBox="0 0 32 32">
           <line x1="0" y1="16" x2="32" y2="16" stroke="#cbd5e1" stroke-dasharray="2,2" />
           <line x1="16" y1="0" x2="16" y2="32" stroke="#cbd5e1" stroke-dasharray="2,2" />
           <line x1="0" y1="0" x2="32" y2="32" stroke="#e2e8f0" stroke-dasharray="2,2" />
@@ -448,7 +450,7 @@ window.printRadicalWorksheet = function() {
     rowsHtml += `
       <div style="display: flex; align-items: stretch; border: 1px solid #94a3b8; border-radius: 6px; margin-bottom: 6px; page-break-inside: avoid; background: #fff;">
         <div style="width: 140px; padding: 4px 8px; border-right: 1.5px solid #64748b; display: flex; flex-direction: column; justify-content: center; background: #f8fafc;">
-          <div style="font-size: 0.75rem; font-weight: 800; color: #3b82f6;">STT ${index + 1}</div>
+          <div style="font-size: 0.75rem; font-weight: 800; color: #2563eb;">STT ${index + 1}</div>
           <div style="font-family: KaiTi, STKaiti, 'SimSun', serif; font-size: 1.5rem; font-weight: 900; color: #0f172a; line-height: 1.1; margin: 1px 0;">${charDisplay}</div>
           <div style="font-size: 0.78rem; font-weight: 700; color: #334155;">${item.name || ''} (${item.meaning || ''})</div>
         </div>
@@ -467,12 +469,12 @@ window.printRadicalWorksheet = function() {
     `;
   });
 
-  printArea.innerHTML = `
+  printModal.innerHTML = `
     <style>
       @media print {
         body * { visibility: hidden !important; }
-        #printable-radical-worksheet, #printable-radical-worksheet * { visibility: visible !important; }
-        #printable-radical-worksheet {
+        #printable-radical-worksheet-content, #printable-radical-worksheet-content * { visibility: visible !important; }
+        #printable-radical-worksheet-content {
           position: absolute !important;
           left: 0 !important;
           top: 0 !important;
@@ -480,15 +482,36 @@ window.printRadicalWorksheet = function() {
           padding: 8mm !important;
           box-sizing: border-box !important;
           background: #fff !important;
-          color: #000 !important;
+          color: #0f172a !important;
+          max-height: none !important;
+          overflow: visible !important;
+          box-shadow: none !important;
         }
+        .no-print { display: none !important; }
         @page { size: A4 portrait; margin: 6mm; }
       }
     </style>
-    <div style="padding: 10px; font-family: 'Inter', sans-serif; color: #0f172a;">
-      <div style="text-align: center; border-bottom: 2px solid #0f172a; padding-bottom: 8px; margin-bottom: 12px;">
-        <h1 style="font-size: 1.25rem; font-weight: 900; margin: 0; text-transform: uppercase; color: #0f172a;">PHIẾU TẬP TÔ BỘ THỦ TIẾNG TRUNG — ${targetCategory.toUpperCase()}</h1>
-        <p style="font-size: 0.78rem; color: #475569; margin: 2px 0 0 0; font-weight: 700;">TIẾNG TRUNG HỒNG THÁI — BẢNG 50 BỘ THỦ CỐ ĐỊNH (CHỮ HÁN & NGHĨA HÁN-VIỆT)</p>
+    
+    <!-- Top Action Header inside Modal -->
+    <div class="no-print" style="width: 100%; max-width: 860px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 12px; flex-wrap: wrap;">
+      <div style="color: #ffffff; font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+        <i class="fa-solid fa-file-pdf" style="color: #10b981;"></i> Xem Trước Phiếu Tập Tô A4 — ${targetCategory}
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <button onclick="window.printWorksheetDocument()" style="background: linear-gradient(135deg, #10b981, #059669); color: #fff; border: none; padding: 8px 20px; border-radius: 99px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);">
+          <i class="fa-solid fa-print"></i> In Ngay / Tải PDF
+        </button>
+        <button onclick="document.getElementById('printable-radical-worksheet-modal').style.display='none'" style="background: rgba(255, 255, 255, 0.15); color: #fff; border: 1px solid rgba(255, 255, 255, 0.25); padding: 8px 18px; border-radius: 99px; font-weight: 700; cursor: pointer;">
+          Đóng
+        </button>
+      </div>
+    </div>
+
+    <!-- Paper Sheet Container (Always White Paper Background) -->
+    <div id="printable-radical-worksheet-content" style="background: #ffffff !important; color: #0f172a !important; max-width: 860px; width: 100%; border-radius: 14px; padding: 24px; box-shadow: 0 25px 60px rgba(0,0,0,0.6); max-height: 82vh; overflow-y: auto; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Be Vietnam Pro', sans-serif;">
+      <div style="text-align: center; border-bottom: 2px solid #0f172a; padding-bottom: 10px; margin-bottom: 14px;">
+        <h1 style="font-size: 1.25rem; font-weight: 800; margin: 0; text-transform: uppercase; color: #0f172a; letter-spacing: 0.3px; line-height: 1.3;">PHIẾU TẬP TÔ BỘ THỦ TIẾNG TRUNG — ${targetCategory.toUpperCase()}</h1>
+        <p style="font-size: 0.8rem; color: #475569; margin: 4px 0 0 0; font-weight: 700; letter-spacing: 0.2px;">TIẾNG TRUNG HỒNG THÁI — BẢNG 50 BỘ THỦ CỐ ĐỊNH (CHỮ HÁN & NGHĨA HÁN-VIỆT)</p>
       </div>
 
       <div>
@@ -497,7 +520,9 @@ window.printRadicalWorksheet = function() {
     </div>
   `;
 
-  setTimeout(() => {
-    window.print();
-  }, 200);
+  printModal.style.display = 'flex';
+};
+
+window.printWorksheetDocument = function() {
+  window.print();
 };
