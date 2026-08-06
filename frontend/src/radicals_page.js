@@ -431,14 +431,14 @@ window.openRadicalPrintWorksheetModal = function(scope = 'all') {
       
       <!-- Thanh Tiêu Đề Modal -->
       <div class="no-print" style="padding:14px 20px; border-bottom:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; align-items:center; background:rgba(30,41,59,0.9); flex-wrap:wrap; gap:10px;">
-        <h3 style="color:#fff; font-size:1.1rem; margin:0; font-weight:700; display:flex; align-items:center; gap:8px;">
+        <h3 style="color:#fff; font-size:1.1rem; margin:0; font-weight:700; display:flex; align-items:center; gap:8px; font-family:'Be Vietnam Pro','Segoe UI',sans-serif;">
           <i class="fa-solid fa-print" style="color:#10b981;"></i> Xem Trước Phiếu In Tập Viết Bộ Thủ Tiếng Trung
         </h3>
         <div style="display:flex; gap:10px; align-items:center;">
-          <button style="background:linear-gradient(135deg, #10b981, #059669); border:none; color:#fff; padding:8px 20px; border-radius:99px; font-weight:800; cursor:pointer; display:flex; align-items:center; gap:6px; box-shadow:0 4px 14px rgba(16,185,129,0.4);" onclick="triggerRadicalPrintWorksheet()">
-            <i class="fa-solid fa-print"></i> In Ngay ( <span id="modal-radical-print-total-pages">1</span> trang)
+          <button style="background:linear-gradient(135deg, #10b981, #059669); border:none; color:#ffffff; padding:9px 22px; border-radius:99px; font-weight:700; font-family:'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; cursor:pointer; display:inline-flex; align-items:center; gap:8px; box-shadow:0 4px 14px rgba(16,185,129,0.4); font-size:0.95rem; text-transform:none; letter-spacing:0.2px;" onclick="triggerRadicalPrintWorksheet()">
+            <i class="fa-solid fa-print"></i> In Ngay (<span id="modal-radical-print-total-pages">1 trang</span>)
           </button>
-          <button style="background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.25); color:#fff; padding:8px 16px; border-radius:99px; font-weight:700; cursor:pointer;" onclick="closeRadicalPrintWorksheetModal()">
+          <button style="background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.25); color:#fff; padding:9px 18px; border-radius:99px; font-weight:700; font-family:'Be Vietnam Pro',sans-serif; cursor:pointer;" onclick="closeRadicalPrintWorksheetModal()">
             <i class="fa-solid fa-xmark"></i> Đóng
           </button>
         </div>
@@ -609,7 +609,7 @@ function generateRadicalWorksheetHTML(listToPrint) {
 
     let totalPages = Math.ceil(totalCards / cardsPerPage) || 1;
     const pageTotalEl = document.getElementById('modal-radical-print-total-pages');
-    if (pageTotalEl) pageTotalEl.textContent = `${totalCards} bộ thủ (${totalPages} trang)`;
+    if (pageTotalEl) pageTotalEl.textContent = `${totalPages} trang`;
 
     for (let p = 0; p < totalPages; p++) {
       const pageItems = listToPrint.slice(p * cardsPerPage, (p + 1) * cardsPerPage);
