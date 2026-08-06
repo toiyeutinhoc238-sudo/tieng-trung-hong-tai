@@ -195,7 +195,7 @@ export const VAN_MAU_DATA = {
 
 export const THANH_DIEU_DATA = {
   title: "Thanh Điệu (Tones in Chinese)",
-  description: "Tiếng Trung có 4 thanh điệu chính thể hiện sự thay đổi độ cao của giọng khi phát âm.",
+  description: "Tiếng Trung bao gồm 4 thanh điệu chính và 1 thanh nhẹ (khinh thanh) thể hiện sự thay đổi độ cao của giọng khi phát âm.",
   tones: [
     {
       name: "Thanh 1 (Thanh ngang)",
@@ -224,11 +224,18 @@ export const THANH_DIEU_DATA = {
       pitch: "51 (Cao nhất -> Thấp nhất)",
       guide: "Độ cao 51. Đổ dốc dứt khoát từ mức cao nhất xuống mức thấp nhất. Không đọc kéo dài như dấu huyền Việt mà phải đọc nhanh, nhấn mạnh.",
       examples: [{ pinyin: "mà", meaning: "Mắng" }, { pinyin: "fèi", meaning: "Phổi / Phí" }, { pinyin: "shù", meaning: "Cây / Số" }, { pinyin: "zhòng", meaning: "Nặng / Trồng" }]
+    },
+    {
+      name: "Thanh Nhẹ (Khinh thanh / Neutral Tone)",
+      symbol: "Không dấu (vd: a)",
+      pitch: "Nhẹ - Ngắn",
+      guide: "Không mang dấu thanh điệu. Phát âm nhẹ, ngắn, không nhấn giọng (thường xuất hiện ở âm tiết thứ 2 hoặc trợ từ).",
+      examples: [{ pinyin: "bàba", meaning: "Bố" }, { pinyin: "māma", meaning: "Mẹ" }, { pinyin: "xièxie", meaning: "Cảm ơn" }, { pinyin: "hǎode", meaning: "Được rồi" }]
     }
   ],
   rules: {
     placement: {
-      title: "Quy Tắc Đánh Dấu Thanh Điệu",
+      title: "Quy Tắc Đánh Dấu Thanh Điệu Chuẩn Mới Nhất",
       steps: [
         "Thanh điệu luôn được đánh trên nguyên âm chính (a, o, e, i, u, ü).",
         "Thứ tự ưu tiên nguyên âm: a > o > e > i > u > ü (Nếu có 'a' thì ưu tiên đánh lên 'a', không có 'a' thì xét 'o' hoặc 'e').",
@@ -237,22 +244,22 @@ export const THANH_DIEU_DATA = {
       ]
     },
     sandhi: {
-      title: "Quy Tắc Biến Điệu Thanh 3 (Nổi Tiếng)",
+      title: "Quy Tắc Biến Điệu Chuẩn Mới Nhất (3 + 3, 不, 一)",
       cases: [
         {
-          case_title: "Trường hợp 1: Hai thanh 3 đi liền nhau ( 3 + 3 )",
-          desc: "Âm tiết thứ nhất đọc thành thanh 2 ( 2 + 3 ).",
-          example: "Nǐ (thanh 3) + hǎo (thanh 3)  ==> Đọc là: Ní hǎo (thanh 2 + thanh 3)"
+          case_title: "1. Biến điệu Hai thanh 3 đi liền nhau ( 3 + 3 ➔ 2 + 3 )",
+          desc: "Khi 2 âm tiết thanh 3 đi cùng nhau, âm tiết thứ 1 đọc thành thanh 2 ( 2 + 3 ).",
+          example: "Nǐ (3) + hǎo (3) ==> Đọc là: Ní hǎo (2 + 3)"
         },
         {
-          case_title: "Trường hợp 2: Ba thanh 3 đi liền nhau có cấu trúc A + (B + C)",
-          desc: "Âm tiết thứ 2 (B) biến đổi thành thanh 2.",
-          example: "Wǒ (3) + hěn (3) hǎo (3) ==> Đọc là: Wǒ hén hǎo (3 + 2 + 3)"
+          case_title: "2. Biến điệu của phó từ \"不\" ( bù )",
+          desc: "Khi đứng trước từ mang thanh 4, \"不\" đọc đổi thành thanh 2 ( bú ). Khi đứng trước thanh 1, 2, 3 thì giữ nguyên thanh 4 ( bù ).",
+          example: "Bù + shì (4) ==> Đọc là: Bú shì | Bù + hǎo (3) ==> Đọc là: Bù hǎo"
         },
         {
-          case_title: "Trường hợp 3: Ba thanh 3 đi liền nhau có cấu trúc (A + B) + C",
-          desc: "Cả 2 âm tiết đầu (A và B) biến đổi thành thanh 2.",
-          example: "Mǎ (3) zhǎng (3) + hǎo (3) ==> Đọc là: Má zháng hǎo (2 + 2 + 3)"
+          case_title: "3. Biến điệu của số từ \"一\" ( yī )",
+          desc: "Đọc đơn lẻ là thanh 1 ( yī ). Khi đứng trước từ thanh 4 đọc thành thanh 2 ( yí ). Khi đứng trước từ thanh 1, 2, 3 đọc thành thanh 4 ( yì ).",
+          example: "Yī + yàng (4) ==> Đọc là: Yí yàng | Yī + tiān (1) ==> Đọc là: Yì tiān"
         }
       ]
     }

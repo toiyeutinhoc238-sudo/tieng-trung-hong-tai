@@ -3,7 +3,7 @@
     "id": 1,
     "word": "八",
     "pinyin": "bā",
-    "meaning": "Tám (số 8)",
+    "meaning": "Tám",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -16,7 +16,8 @@
     "example_vi": "Anh ấy đã mua tám quả táo.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "số 8"
   },
   {
     "id": 2,
@@ -41,7 +42,7 @@
     "id": 3,
     "word": "二",
     "pinyin": "èr",
-    "meaning": "Hai (số 2)",
+    "meaning": "Hai",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -54,7 +55,8 @@
     "example_vi": "Hôm nay là thứ ba.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "số 2"
   },
   {
     "id": 4,
@@ -79,7 +81,7 @@
     "id": 5,
     "word": "六",
     "pinyin": "liù",
-    "meaning": "Sáu (số 6)",
+    "meaning": "Sáu",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -92,7 +94,8 @@
     "example_vi": "Nhà tôi có sáu người.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "số 6"
   },
   {
     "id": 6,
@@ -136,7 +139,7 @@
     "id": 8,
     "word": "三",
     "pinyin": "sān",
-    "meaning": "Ba (số 3)",
+    "meaning": "Ba",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -149,13 +152,14 @@
     "example_vi": "Tôi có ba người bạn tốt.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "số 3"
   },
   {
     "id": 9,
     "word": "十",
     "pinyin": "shí",
-    "meaning": "Mười (số 10)",
+    "meaning": "Mười",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -168,13 +172,14 @@
     "example_vi": "Anh ấy mười tuổi đã biết bơi.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "số 10"
   },
   {
     "id": 10,
     "word": "一",
     "pinyin": "yī",
-    "meaning": "Một (số 1)",
+    "meaning": "Một",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -187,7 +192,8 @@
     "example_vi": "Tôi chỉ có một em gái.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "số 1"
   },
   {
     "id": 11,
@@ -364,7 +370,7 @@
     "id": 20,
     "word": "叫",
     "pinyin": "jiào",
-    "meaning": "tên (là)",
+    "meaning": "tên",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -377,7 +383,8 @@
     "example_vi": "Mọi người gọi anh ấy là Tiểu Vương.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "là"
   },
   {
     "id": 21,
@@ -611,7 +618,7 @@
     "id": 33,
     "word": "九",
     "pinyin": "jiǔ",
-    "meaning": "Chín (số 9)",
+    "meaning": "Chín",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -624,7 +631,8 @@
     "example_vi": "Lớp này có chín học sinh.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "số 9"
   },
   {
     "id": 34,
@@ -687,7 +695,7 @@
     "id": 37,
     "word": "七",
     "pinyin": "qī",
-    "meaning": "Bảy (số 7)",
+    "meaning": "Bảy",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -700,7 +708,8 @@
     "example_vi": "Tôi có bảy quyển sách.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "số 7"
   },
   {
     "id": 38,
@@ -1410,7 +1419,7 @@
     "id": 75,
     "word": "四",
     "pinyin": "sì",
-    "meaning": "Bốn (số 4)",
+    "meaning": "Bốn",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -1423,13 +1432,14 @@
     "example_vi": "Gia đình anh ấy có bốn người.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "số 4"
   },
   {
     "id": 76,
     "word": "五",
     "pinyin": "wǔ",
-    "meaning": "Năm (số 5)",
+    "meaning": "Năm",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -1442,7 +1452,8 @@
     "example_vi": "Hôm nay cô ấy đã mua năm quả táo.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "số 5"
   },
   {
     "id": 77,
@@ -1543,7 +1554,7 @@
     "id": 82,
     "word": "讠",
     "pinyin": "yán",
-    "meaning": "Bộ ngôn (giản thể)",
+    "meaning": "Bộ ngôn",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -1556,7 +1567,8 @@
     "example_vi": "",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "giản thể"
   },
   {
     "id": 83,
@@ -1638,7 +1650,7 @@
     "id": 87,
     "word": "个",
     "pinyin": "gè",
-    "meaning": "Cái, chiếc (lượng từ)",
+    "meaning": "Cái, chiếc",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -1651,7 +1663,8 @@
     "example_vi": "Tôi đã mua một chiếc điện thoại mới.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "lượng từ"
   },
   {
     "id": 88,
@@ -1676,7 +1689,7 @@
     "id": 89,
     "word": "块",
     "pinyin": "kuài",
-    "meaning": "đồng (đơn vị tiền tệ)",
+    "meaning": "đồng",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -1689,7 +1702,8 @@
     "example_vi": "Anh ấy đã mua ba chiếc đồng hồ. Quyển sách này bán năm đồng.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "đơn vị tiền tệ"
   },
   {
     "id": 90,
@@ -2797,7 +2811,7 @@
     "id": 148,
     "word": "亻",
     "pinyin": "rén",
-    "meaning": "Bộ nhân (đứng)",
+    "meaning": "Bộ nhân",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -2810,7 +2824,8 @@
     "example_vi": "",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "đứng"
   },
   {
     "id": 149,
@@ -3139,7 +3154,7 @@
     "id": 166,
     "word": "纟",
     "pinyin": "mì",
-    "meaning": "Bộ mịch (giản thể)",
+    "meaning": "Bộ mịch",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -3152,7 +3167,8 @@
     "example_vi": "",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "giản thể"
   },
   {
     "id": 167,
@@ -3995,7 +4011,7 @@
     "id": 211,
     "word": "您",
     "pinyin": "nín",
-    "meaning": "ngài, ông, bà (kính trọng)",
+    "meaning": "ngài, ông, bà",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -4015,7 +4031,7 @@
     "id": 212,
     "word": "们",
     "pinyin": "men",
-    "meaning": "các (chỉ số nhiều)",
+    "meaning": "các",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -4275,7 +4291,7 @@
     "id": 225,
     "word": "叫",
     "pinyin": "jiào",
-    "meaning": "tên (là), gọi (là)",
+    "meaning": "tên (là), gọi",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -4555,7 +4571,7 @@
     "id": 239,
     "word": "的",
     "pinyin": "de",
-    "meaning": "của (trợ từ sở hữu)",
+    "meaning": "của",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -4795,7 +4811,7 @@
     "id": 251,
     "word": "喂",
     "pinyin": "wèi",
-    "meaning": "A lô (nghe đt)",
+    "meaning": "A lô",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -4806,7 +4822,7 @@
     "category": "Thán từ",
     "example_zh": "喂，你好！",
     "example_vi": "A lô, bạn có ở nhà không?",
-    "note": "",
+    "note": "nghe đt",
     "isMemorized": false,
     "isStarred": false,
     "isCustom": false
@@ -5035,7 +5051,7 @@
     "id": 263,
     "word": "个",
     "pinyin": "-",
-    "meaning": "cái, chiếc (lượng từ chung, dùng cho nhiều danh từ)",
+    "meaning": "cái, chiếc",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -5375,7 +5391,7 @@
     "id": 280,
     "word": "多",
     "pinyin": "duō",
-    "meaning": "bao nhiêu (hỏi tuổi)",
+    "meaning": "bao nhiêu",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -5386,7 +5402,7 @@
     "category": "phó từ",
     "example_zh": "今天比昨天多了几个人。",
     "example_vi": "Hôm nay có nhiều người hơn hôm qua một chút.",
-    "note": "",
+    "note": "hỏi tuổi",
     "isMemorized": false,
     "isStarred": false,
     "isCustom": false
@@ -5815,7 +5831,7 @@
     "id": 302,
     "word": "它",
     "pinyin": "tā",
-    "meaning": "nó (vật/động vật)",
+    "meaning": "nó",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -5826,7 +5842,7 @@
     "category": "đại từ",
     "example_zh": "它是新电脑",
     "example_vi": "Đây là con mèo của tôi, nó rất đáng yêu.",
-    "note": "",
+    "note": "vật/động vật",
     "isMemorized": false,
     "isStarred": false,
     "isCustom": false
@@ -5875,7 +5891,7 @@
     "id": 305,
     "word": "号",
     "pinyin": "hào",
-    "meaning": "số (điện thoại, thứ tự)",
+    "meaning": "số",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -6215,7 +6231,7 @@
     "id": 322,
     "word": "怎么",
     "pinyin": "zěnme",
-    "meaning": "thế nào, làm sao (Hỏi cách thức)",
+    "meaning": "thế nào, làm sao",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -6235,7 +6251,7 @@
     "id": 323,
     "word": "坐",
     "pinyin": "zuò",
-    "meaning": "ngồi, đi (xe)",
+    "meaning": "ngồi, đi",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -6246,7 +6262,7 @@
     "category": "động từ",
     "example_zh": "请坐这里，老师马上来。",
     "example_vi": "Mời ngồi đây, thầy giáo sẽ đến ngay.",
-    "note": "",
+    "note": "xe",
     "isMemorized": false,
     "isStarred": false,
     "isCustom": false
@@ -6355,7 +6371,7 @@
     "id": 329,
     "word": "半",
     "pinyin": "bàn",
-    "meaning": "rưỡi, một nửa (30 phút)",
+    "meaning": "rưỡi, một nửa",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -6655,7 +6671,7 @@
     "id": 344,
     "word": "在",
     "pinyin": "zài",
-    "meaning": "ở tại (在+ địa điểm)",
+    "meaning": "ở tại",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -7655,7 +7671,7 @@
     "id": 394,
     "word": "好听",
     "pinyin": "hǎotīng",
-    "meaning": "hay (âm thanh)",
+    "meaning": "hay",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -7666,7 +7682,7 @@
     "category": "tính từ",
     "example_zh": "很好听",
     "example_vi": "Bài hát đó thật hay.",
-    "note": "",
+    "note": "âm thanh",
     "isMemorized": false,
     "isStarred": false,
     "isCustom": false
@@ -7835,7 +7851,7 @@
     "id": 403,
     "word": "块",
     "pinyin": "kuài",
-    "meaning": "đồng (đơn vị tiền tệ TQ)",
+    "meaning": "đồng",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -7935,7 +7951,7 @@
     "id": 408,
     "word": "斤",
     "pinyin": "jīn",
-    "meaning": "cân ( 500 g)",
+    "meaning": "cân",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -8055,7 +8071,7 @@
     "id": 414,
     "word": "元",
     "pinyin": "yuán",
-    "meaning": "đồng (nhân dân tệ)",
+    "meaning": "đồng",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -8195,7 +8211,7 @@
     "id": 421,
     "word": "时候",
     "pinyin": "shíhou",
-    "meaning": "lúc/khi (……的时候：khi/ lúc…)",
+    "meaning": "lúc/khi",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -8535,7 +8551,7 @@
     "id": 438,
     "word": "那里",
     "pinyin": "nàlǐ",
-    "meaning": "chỗ kia (=那儿)",
+    "meaning": "chỗ kia",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -8695,7 +8711,7 @@
     "id": 446,
     "word": "这里",
     "pinyin": "zhèlǐ",
-    "meaning": "ở đây (= 这儿)",
+    "meaning": "ở đây",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -8815,7 +8831,7 @@
     "id": 452,
     "word": "觉得",
     "pinyin": "juéde",
-    "meaning": "cảm thấy (Ý kiến cá nhân)",
+    "meaning": "cảm thấy",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -9115,7 +9131,7 @@
     "id": 467,
     "word": "水",
     "pinyin": "shuǐ",
-    "meaning": "nước (热水)",
+    "meaning": "nước",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -10195,7 +10211,7 @@
     "id": 521,
     "word": "西安",
     "pinyin": "Xī'ān",
-    "meaning": "Tây An (địa danh)",
+    "meaning": "Tây An",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -10206,7 +10222,7 @@
     "category": "danh từ",
     "example_zh": "西安很好玩儿。",
     "example_vi": "",
-    "note": "",
+    "note": "địa danh",
     "isMemorized": false,
     "isStarred": false,
     "isCustom": false
@@ -10215,7 +10231,7 @@
     "id": 522,
     "word": "北京",
     "pinyin": "Běijīng",
-    "meaning": "Bắc Kinh (địa danh)",
+    "meaning": "Bắc Kinh",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -10226,7 +10242,7 @@
     "category": "danh từ",
     "example_zh": "北京好玩儿吗？",
     "example_vi": "Bắc Kinh là thủ đô của Trung Quốc.",
-    "note": "",
+    "note": "địa danh",
     "isMemorized": false,
     "isStarred": false,
     "isCustom": false
@@ -10255,7 +10271,7 @@
     "id": 524,
     "word": "要",
     "pinyin": "yào",
-    "meaning": "cần, mất ( thời gian)",
+    "meaning": "cần, mất",
     "level": 1,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -10266,7 +10282,7 @@
     "category": "động từ năng nguyện",
     "example_zh": "坐出租车去北京要三十分钟。",
     "example_vi": "Bạn cần bao nhiêu thời gian?",
-    "note": "",
+    "note": "thời gian",
     "isMemorized": false,
     "isStarred": false,
     "isCustom": false
@@ -10778,7 +10794,7 @@
     "id": 551,
     "word": "打车",
     "pinyin": "dǎchē",
-    "meaning": "Bắt xe; gọi xe (taxi)",
+    "meaning": "Bắt xe; gọi xe",
     "level": 2,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -10791,7 +10807,8 @@
     "example_vi": "Chúng ta bắt xe đến sân bay.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "taxi"
   },
   {
     "id": 552,
@@ -11731,7 +11748,7 @@
     "id": 601,
     "word": "等",
     "pinyin": "děng",
-    "meaning": "Vân vân; v.v (liệt kê)",
+    "meaning": "Vân vân; v.v",
     "level": 2,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -11744,7 +11761,8 @@
     "example_vi": "Tôi thích ăn táo, chuối, cam, v.v.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "liệt kê"
   },
   {
     "id": 602,
@@ -11960,7 +11978,7 @@
     "id": 613,
     "word": "等",
     "pinyin": "děng",
-    "meaning": "Và v.v.; cấp bậc; (đơn vị)",
+    "meaning": "Và v.v.; cấp bậc;",
     "level": 2,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -11973,7 +11991,8 @@
     "example_vi": "Táo, chuối và v.v.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "đơn vị"
   },
   {
     "id": 614,
@@ -15021,7 +15040,7 @@
     "id": 774,
     "word": "只",
     "pinyin": "zhǐ",
-    "meaning": "Chỉ (trong phạm vi)",
+    "meaning": "Chỉ",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -15034,7 +15053,8 @@
     "example_vi": "Anh ấy chỉ uống cà phê, không uống trà.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "trong phạm vi"
   },
   {
     "id": 775,
@@ -15364,7 +15384,7 @@
     "id": 792,
     "word": "层",
     "pinyin": "céng",
-    "meaning": "Tầng (lầu)",
+    "meaning": "Tầng",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -15377,7 +15397,8 @@
     "example_vi": "Tôi sống ở tầng năm.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "lầu"
   },
   {
     "id": 793,
@@ -15896,7 +15917,7 @@
     "id": 820,
     "word": "骑",
     "pinyin": "qí",
-    "meaning": "Cưỡi (xe, ngựa)",
+    "meaning": "Cưỡi",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -15909,7 +15930,8 @@
     "example_vi": "Tôi biết đi xe đạp.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "xe, ngựa"
   },
   {
     "id": 821,
@@ -16333,7 +16355,7 @@
     "id": 843,
     "word": "封",
     "pinyin": "fēng",
-    "meaning": "Bức, phong (thư)",
+    "meaning": "Bức, phong",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -16346,7 +16368,8 @@
     "example_vi": "Anh ấy đã viết cho tôi một bức thư.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "thư"
   },
   {
     "id": 844,
@@ -16561,7 +16584,7 @@
     "id": 855,
     "word": "哈哈",
     "pinyin": "hāhā",
-    "meaning": "Ha ha (tiếng cười)",
+    "meaning": "Ha ha",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -16574,7 +16597,8 @@
     "example_vi": "Câu chuyện cười của anh ấy khiến tôi cười ha ha.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "tiếng cười"
   },
   {
     "id": 856,
@@ -16599,7 +16623,7 @@
     "id": 857,
     "word": "邮件",
     "pinyin": "yóujiàn",
-    "meaning": "Thư điện tử (Email)",
+    "meaning": "Thư điện tử",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -16612,13 +16636,14 @@
     "example_vi": "Tôi đã gửi cho bạn một email.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "Email"
   },
   {
     "id": 858,
     "word": "照",
     "pinyin": "zhào",
-    "meaning": "Chiếu sáng, chụp (ảnh)",
+    "meaning": "Chiếu sáng, chụp",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -16631,7 +16656,8 @@
     "example_vi": "Ánh nắng chiếu trên bãi cỏ.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "ảnh"
   },
   {
     "id": 859,
@@ -16732,7 +16758,7 @@
     "id": 864,
     "word": "封",
     "pinyin": "fēng",
-    "meaning": "Niêm phong, phong bì; phong (tước)",
+    "meaning": "Niêm phong, phong bì; phong",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -16745,7 +16771,8 @@
     "example_vi": "Vui lòng dán kín phong bì.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "tước"
   },
   {
     "id": 865,
@@ -18540,7 +18567,7 @@
     "id": 959,
     "word": "为了",
     "pinyin": "wèile",
-    "meaning": "Để, vì (mục đích)",
+    "meaning": "Để, vì",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -18553,7 +18580,8 @@
     "example_vi": "Để có sức khỏe, anh ấy bắt đầu chạy bộ.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "mục đích"
   },
   {
     "id": 960,
@@ -18730,7 +18758,7 @@
     "id": 969,
     "word": "页",
     "pinyin": "yè",
-    "meaning": "Trang (sách, giấy)",
+    "meaning": "Trang",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -18743,7 +18771,8 @@
     "example_vi": "Vui lòng lật đến trang 5.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "sách, giấy"
   },
   {
     "id": 970,
@@ -18901,7 +18930,7 @@
     "id": 978,
     "word": "句子",
     "pinyin": "jùzi",
-    "meaning": "Câu (ngữ pháp)",
+    "meaning": "Câu",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -18914,7 +18943,8 @@
     "example_vi": "",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "ngữ pháp"
   },
   {
     "id": 979,
@@ -19605,7 +19635,7 @@
     "id": 1015,
     "word": "为",
     "pinyin": "wéi",
-    "meaning": "Vì, vì (một mục đích)",
+    "meaning": "Vì, vì",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -19618,7 +19648,8 @@
     "example_vi": "Tôi cảm thấy vui vì bạn.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "một mục đích"
   },
   {
     "id": 1016,
@@ -20669,7 +20700,7 @@
     "id": 1071,
     "word": "节",
     "pinyin": "jié",
-    "meaning": "đoạn (bài học)",
+    "meaning": "đoạn",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -20682,7 +20713,8 @@
     "example_vi": "Đây là phần thứ ba trong bài.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "bài học"
   },
   {
     "id": 1072,
@@ -21753,7 +21785,7 @@
     "id": 1128,
     "word": "茶",
     "pinyin": "chá",
-    "meaning": "Trà (đồ uống)",
+    "meaning": "Trà",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -21766,7 +21798,8 @@
     "example_vi": "Tôi thích uống trà.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "đồ uống"
   },
   {
     "id": 1129,
@@ -23444,7 +23477,7 @@
     "id": 1217,
     "word": "打工",
     "pinyin": "dǎgōng",
-    "meaning": "Làm việc (bán thời gian)",
+    "meaning": "Làm việc",
     "level": 2,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -23457,7 +23490,8 @@
     "example_vi": "Anh ấy làm việc bán thời gian ở một quán cà phê.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "bán thời gian"
   },
   {
     "id": 1218,
@@ -23653,7 +23687,7 @@
     "id": 1228,
     "word": "单位",
     "pinyin": "dānwèi",
-    "meaning": "Đơn vị (công tác)",
+    "meaning": "Đơn vị",
     "level": 2,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -23666,7 +23700,8 @@
     "example_vi": "Đơn vị công tác của anh ấy ở trung tâm thành phố.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "công tác"
   },
   {
     "id": 1229,
@@ -23824,7 +23859,7 @@
     "id": 1237,
     "word": "得出",
     "pinyin": "déchū",
-    "meaning": "Rút ra (kết luận)",
+    "meaning": "Rút ra",
     "level": 2,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -23837,7 +23872,8 @@
     "example_vi": "Chúng ta có thể rút ra kết luận từ thí nghiệm.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "kết luận"
   },
   {
     "id": 1238,
@@ -24983,7 +25019,7 @@
     "id": 1298,
     "word": "家（科学家）",
     "pinyin": "jiā (kēxuéjiā)",
-    "meaning": "Nhà (nhà khoa học)",
+    "meaning": "Nhà",
     "level": 2,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -24996,7 +25032,8 @@
     "example_vi": "Anh ấy muốn trở thành nhà khoa học.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "nhà khoa học"
   },
   {
     "id": 1299,
@@ -25439,7 +25476,7 @@
     "id": 1322,
     "word": "就要",
     "pinyin": "jiùyào",
-    "meaning": "Sắp (làm gì đó)",
+    "meaning": "Sắp",
     "level": 2,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -25452,13 +25489,14 @@
     "example_vi": "Anh ấy sắp về rồi.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "làm gì đó"
   },
   {
     "id": 1323,
     "word": "举",
     "pinyin": "jǔ",
-    "meaning": "Nâng, giơ (tay)",
+    "meaning": "Nâng, giơ",
     "level": 2,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -25471,7 +25509,8 @@
     "example_vi": "Vui lòng giơ tay trả lời câu hỏi.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "tay"
   },
   {
     "id": 1324,
@@ -25496,7 +25535,7 @@
     "id": 1325,
     "word": "举行",
     "pinyin": "jǔxíng",
-    "meaning": "Tổ chức (họp, hoạt động)",
+    "meaning": "Tổ chức",
     "level": 2,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -25509,7 +25548,8 @@
     "example_vi": "Một cuộc thi ca hát đã được tổ chức ở trường.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "họp, hoạt động"
   },
   {
     "id": 1326,
@@ -25572,7 +25612,7 @@
     "id": 1329,
     "word": "科",
     "pinyin": "kē",
-    "meaning": "Ngành học, khoa (trong bệnh viện)",
+    "meaning": "Ngành học, khoa",
     "level": 2,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -25585,7 +25625,8 @@
     "example_vi": "Bạn học chuyên ngành gì?",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "trong bệnh viện"
   },
   {
     "id": 1330,
@@ -25629,7 +25670,7 @@
     "id": 1332,
     "word": "克",
     "pinyin": "kè",
-    "meaning": "Gram (đơn vị đo lường)",
+    "meaning": "Gram",
     "level": 2,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -25642,7 +25683,8 @@
     "example_vi": "Miếng sô-cô-la này nặng 100 gram.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "đơn vị đo lường"
   },
   {
     "id": 1333,
@@ -26868,7 +26910,7 @@
     "id": 1397,
     "word": "骑车",
     "pinyin": "qí chē",
-    "meaning": "Đi xe (đạp, máy)",
+    "meaning": "Đi xe",
     "level": 2,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -26881,7 +26923,8 @@
     "example_vi": "Tôi đi xe đi làm mỗi ngày.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "đạp, máy"
   },
   {
     "id": 1398,
@@ -26925,7 +26968,7 @@
     "id": 1400,
     "word": "千克",
     "pinyin": "qiānkè",
-    "meaning": "Kilogram (kg)",
+    "meaning": "Kilogram",
     "level": 2,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -26938,7 +26981,8 @@
     "example_vi": "Chiếc vali này nặng 10 kg.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "kg"
   },
   {
     "id": 1401,
@@ -27782,7 +27826,7 @@
     "id": 1445,
     "word": "熟",
     "pinyin": "shú/ \n/shóu",
-    "meaning": "Chín (trái cây)",
+    "meaning": "Chín",
     "level": 2,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -27795,7 +27839,8 @@
     "example_vi": "Những trái cây này đều đã chín.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "trái cây"
   },
   {
     "id": 1446,
@@ -31071,7 +31116,7 @@
     "id": 1618,
     "word": "保安",
     "pinyin": "bǎo’ān",
-    "meaning": "Bảo vệ (người)",
+    "meaning": "Bảo vệ",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -31084,7 +31129,8 @@
     "example_vi": "",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "người"
   },
   {
     "id": 1619,
@@ -31299,7 +31345,7 @@
     "id": 1630,
     "word": "背",
     "pinyin": "bēi",
-    "meaning": "Mang, đeo (trên lưng)",
+    "meaning": "Mang, đeo",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -31312,7 +31358,8 @@
     "example_vi": "Anh ấy đang đeo một cái cặp.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "trên lưng"
   },
   {
     "id": 1631,
@@ -31717,7 +31764,7 @@
     "id": 1652,
     "word": "播放",
     "pinyin": "bōfàng",
-    "meaning": "Phát (video, nhạc)",
+    "meaning": "Phát",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -31730,7 +31777,8 @@
     "example_vi": "Vui lòng phát bài hát này.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "video, nhạc"
   },
   {
     "id": 1653,
@@ -32840,7 +32888,7 @@
     "id": 1711,
     "word": "存",
     "pinyin": "cún",
-    "meaning": "Cất, giữ, gửi (tiền)",
+    "meaning": "Cất, giữ, gửi",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -32853,7 +32901,8 @@
     "example_vi": "Tôi đã gửi tiền vào ngân hàng rồi.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "tiền"
   },
   {
     "id": 1712,
@@ -33486,7 +33535,7 @@
     "id": 1745,
     "word": "订",
     "pinyin": "dìng",
-    "meaning": "Đặt (mua, vé)",
+    "meaning": "Đặt",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -33499,7 +33548,8 @@
     "example_vi": "Tôi đã đặt hai vé máy bay.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "mua, vé"
   },
   {
     "id": 1746,
@@ -37096,7 +37146,7 @@
     "id": 1935,
     "word": "金",
     "pinyin": "jīn",
-    "meaning": "Vàng (kim loại)",
+    "meaning": "Vàng",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -37109,7 +37159,8 @@
     "example_vi": "Chiếc nhẫn này làm bằng vàng.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "kim loại"
   },
   {
     "id": 1936,
@@ -37438,7 +37489,7 @@
     "id": 1953,
     "word": "精神",
     "pinyin": "jīngshen",
-    "meaning": "Tươi tỉnh (thần sắc)",
+    "meaning": "Tươi tỉnh",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -37451,7 +37502,8 @@
     "example_vi": "Hôm nay trông bạn rất tươi tắn đó.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "thần sắc"
   },
   {
     "id": 1954,
@@ -39243,7 +39295,7 @@
     "id": 2048,
     "word": "某",
     "pinyin": "mǒu",
-    "meaning": "Nào đó, một (không xác định)",
+    "meaning": "Nào đó, một",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -39256,7 +39308,8 @@
     "example_vi": "Một ngày nào đó chúng ta sẽ gặp lại.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "không xác định"
   },
   {
     "id": 2049,
@@ -39908,7 +39961,7 @@
     "id": 2083,
     "word": "皮",
     "pinyin": "pí",
-    "meaning": "Da (vỏ ngoài)",
+    "meaning": "Da",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -39921,7 +39974,8 @@
     "example_vi": "Vỏ bánh báo rất mỏng.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "vỏ ngoài"
   },
   {
     "id": 2084,
@@ -40193,7 +40247,7 @@
     "id": 2098,
     "word": "前往",
     "pinyin": "qiánwǎng",
-    "meaning": "đi đến, tới (nơi nào đó)",
+    "meaning": "đi đến, tới",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -40206,7 +40260,8 @@
     "example_vi": "Buổi chiều chúng tôi sẽ đi tới ga tàu",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "nơi nào đó"
   },
   {
     "id": 2099,
@@ -42644,7 +42699,7 @@
     "id": 2227,
     "word": "属",
     "pinyin": "shǔ",
-    "meaning": "Thuộc, thuộc về, tuổi (con giáp)",
+    "meaning": "Thuộc, thuộc về, tuổi",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -42657,7 +42712,8 @@
     "example_vi": "Quyển sách này thuộc về tôi.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "con giáp"
   },
   {
     "id": 2228,
@@ -45495,7 +45551,7 @@
     "id": 2377,
     "word": "演唱会",
     "pinyin": "yǎnchànghuì",
-    "meaning": "Buổi hòa nhạc, concert (ca nhạc)",
+    "meaning": "Buổi hòa nhạc, concert",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -45508,7 +45564,8 @@
     "example_vi": "Buổi hòa nhạc tối qua rất đặc sắc.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "ca nhạc"
   },
   {
     "id": 2378,
@@ -46237,7 +46294,7 @@
     "id": 2416,
     "word": "员(服务员)",
     "pinyin": "yuán (fúwùyuán)",
-    "meaning": "Nhân viên (phục vụ)",
+    "meaning": "Nhân viên",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -46250,7 +46307,8 @@
     "example_vi": "Người phục vụ nhanh chóng mang thức ăn ra cho chúng tôi.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "phục vụ"
   },
   {
     "id": 2417,
@@ -48502,7 +48560,7 @@
     "id": 2535,
     "word": "白酒",
     "pinyin": "báijiǔ",
-    "meaning": "Rượu trắng (rượu mạnh)",
+    "meaning": "Rượu trắng",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -48515,7 +48573,8 @@
     "example_vi": "Người Trung Quốc thường uống rượu trắng để ăn mừng lễ hội.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "rượu mạnh"
   },
   {
     "id": 2536,
@@ -48540,7 +48599,7 @@
     "id": 2537,
     "word": "办理",
     "pinyin": "bànlǐ",
-    "meaning": "Làm, giải quyết (thủ tục)",
+    "meaning": "Làm, giải quyết",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -48553,7 +48612,8 @@
     "example_vi": "Tôi phải đến ngân hàng làm thủ tục.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "thủ tục"
   },
   {
     "id": 2538,
@@ -48768,7 +48828,7 @@
     "id": 2549,
     "word": "倍",
     "pinyin": "bèi",
-    "meaning": "Lần (gấp bội)",
+    "meaning": "Lần",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -48781,13 +48841,14 @@
     "example_vi": "Sản lượng tăng gấp đôi.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "gấp bội"
   },
   {
     "id": 2550,
     "word": "本科",
     "pinyin": "běnkē",
-    "meaning": "Chương trình đại học (cử nhân)",
+    "meaning": "Chương trình đại học",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -48800,7 +48861,8 @@
     "example_vi": "Anh ấy đang học cử nhân.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "cử nhân"
   },
   {
     "id": 2551,
@@ -49909,7 +49971,7 @@
     "id": 2609,
     "word": "乘坐",
     "pinyin": "chéngzuò",
-    "meaning": "Đi (phương tiện)",
+    "meaning": "Đi",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -49922,7 +49984,8 @@
     "example_vi": "Xin đi xe buýt.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "phương tiện"
   },
   {
     "id": 2610,
@@ -51011,7 +51074,7 @@
     "id": 2667,
     "word": "道",
     "pinyin": "dào",
-    "meaning": "Đường, cách; (cho vật dài)",
+    "meaning": "Đường, cách;",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -51024,7 +51087,8 @@
     "example_vi": "Đây là cách đúng.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "cho vật dài"
   },
   {
     "id": 2668,
@@ -51562,7 +51626,7 @@
     "id": 2696,
     "word": "队",
     "pinyin": "duì",
-    "meaning": "Đội; (cho đội nhóm)",
+    "meaning": "Đội;",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -51575,7 +51639,8 @@
     "example_vi": "Đây là đội bóng đá.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "cho đội nhóm"
   },
   {
     "id": 2697,
@@ -52762,7 +52827,7 @@
     "id": 2759,
     "word": "高考",
     "pinyin": "gāokǎo",
-    "meaning": "Kỳ thi đại học (Gaokao)",
+    "meaning": "Kỳ thi đại học",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -52775,7 +52840,8 @@
     "example_vi": "Anh ấy đang chuẩn bị thi đại học.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "Gaokao"
   },
   {
     "id": 2760,
@@ -52952,7 +53018,7 @@
     "id": 2769,
     "word": "各位",
     "pinyin": "gèwèi",
-    "meaning": "Mọi người (lịch sự)",
+    "meaning": "Mọi người",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -52965,7 +53031,8 @@
     "example_vi": "Mọi người, chào mừng mọi người!",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "lịch sự"
   },
   {
     "id": 2770,
@@ -53427,7 +53494,7 @@
     "id": 2794,
     "word": "管",
     "pinyin": "guǎn",
-    "meaning": "Quản lý, quan tâm; ống; (đơn vị cho ống)",
+    "meaning": "Quản lý, quan tâm; ống;",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -53440,7 +53507,8 @@
     "example_vi": "Đừng quan tâm tôi.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "đơn vị cho ống"
   },
   {
     "id": 2795,
@@ -55764,7 +55832,7 @@
     "id": 2917,
     "word": "京剧",
     "pinyin": "jīngjù",
-    "meaning": "Kinh kịch (opera Bắc Kinh)",
+    "meaning": "Kinh kịch",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -55777,7 +55845,8 @@
     "example_vi": "Tôi thích xem Kinh kịch.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "opera Bắc Kinh"
   },
   {
     "id": 2918,
@@ -57076,7 +57145,7 @@
     "id": 2986,
     "word": "俩",
     "pinyin": "liǎ",
-    "meaning": "Hai (người)",
+    "meaning": "Hai",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -57089,7 +57158,8 @@
     "example_vi": "Hai chúng ta đi cùng.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "người"
   },
   {
     "id": 2987,
@@ -58672,7 +58742,7 @@
     "id": 3070,
     "word": "篇",
     "pinyin": "piān",
-    "meaning": "Bài (bài viết)",
+    "meaning": "Bài",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -58685,7 +58755,8 @@
     "example_vi": "Đây là một bài viết.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "bài viết"
   },
   {
     "id": 3071,
@@ -58843,7 +58914,7 @@
     "id": 3079,
     "word": "普通话",
     "pinyin": "pǔtōnghuà",
-    "meaning": "Tiếng phổ thông (Quan thoại)",
+    "meaning": "Tiếng phổ thông",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -58856,7 +58927,8 @@
     "example_vi": "Tôi nói tiếng phổ thông.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "Quan thoại"
   },
   {
     "id": 3080,
@@ -59261,7 +59333,7 @@
     "id": 3101,
     "word": "琴",
     "pinyin": "qín",
-    "meaning": "Đàn (nhạc cụ)",
+    "meaning": "Đàn",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -59274,7 +59346,8 @@
     "example_vi": "Cô ấy chơi đàn.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "nhạc cụ"
   },
   {
     "id": 3102,
@@ -60325,7 +60398,7 @@
     "id": 3157,
     "word": "身",
     "pinyin": "shēn",
-    "meaning": "Thân thể; bộ (quần áo)",
+    "meaning": "Thân thể; bộ",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -60338,7 +60411,8 @@
     "example_vi": "Chiều cao của anh ấy một mét tám.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "quần áo"
   },
   {
     "id": 3158,
@@ -61029,7 +61103,7 @@
     "id": 3194,
     "word": "收听",
     "pinyin": "shōutīng",
-    "meaning": "Nghe (đài)",
+    "meaning": "Nghe",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -61042,7 +61116,8 @@
     "example_vi": "Tôi nghe tin tức mỗi ngày.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "đài"
   },
   {
     "id": 3195,
@@ -61467,7 +61542,7 @@
     "id": 3217,
     "word": "死",
     "pinyin": "sǐ",
-    "meaning": "Chết; chết (cực kỳ)",
+    "meaning": "Chết; chết",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -61480,7 +61555,8 @@
     "example_vi": "Anh ấy cười chết đi được.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "cực kỳ"
   },
   {
     "id": 3218,
@@ -61619,7 +61695,7 @@
     "id": 3225,
     "word": "孙女",
     "pinyin": "sūnnǚ",
-    "meaning": "Cháu gái (con trai)",
+    "meaning": "Cháu gái",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -61632,13 +61708,14 @@
     "example_vi": "Cháu gái của tôi rất dễ thương.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "con trai"
   },
   {
     "id": 3226,
     "word": "孙子",
     "pinyin": "sūnzi",
-    "meaning": "Cháu trai (con trai)",
+    "meaning": "Cháu trai",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -61651,7 +61728,8 @@
     "example_vi": "Cháu trai đang chơi game.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "con trai"
   },
   {
     "id": 3227,
@@ -61809,7 +61887,7 @@
     "id": 3235,
     "word": "趟",
     "pinyin": "tàng",
-    "meaning": "Chuyến (đi)",
+    "meaning": "Chuyến",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -61822,7 +61900,8 @@
     "example_vi": "Tôi đi một chuyến Bắc Kinh.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "đi"
   },
   {
     "id": 3236,
@@ -64452,7 +64531,7 @@
     "id": 3374,
     "word": "夜",
     "pinyin": "yè",
-    "meaning": "Đêm; (đơn vị đêm)",
+    "meaning": "Đêm;",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -64465,7 +64544,8 @@
     "example_vi": "Đêm đã khuya rồi.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "đơn vị đêm"
   },
   {
     "id": 3375,
@@ -66524,7 +66604,7 @@
     "id": 3483,
     "word": "赚",
     "pinyin": "zhuàn",
-    "meaning": "Kiếm (tiền)",
+    "meaning": "Kiếm",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -66537,7 +66617,8 @@
     "example_vi": "Anh ấy kiếm được nhiều tiền.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "tiền"
   },
   {
     "id": 3484,
@@ -66980,7 +67061,7 @@
     "id": 3507,
     "word": "座",
     "pinyin": "zuò",
-    "meaning": "Ghế, chỗ ngồi; (đơn vị ghế)",
+    "meaning": "Ghế, chỗ ngồi;",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -66993,7 +67074,8 @@
     "example_vi": "Xin tìm chỗ ngồi.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "đơn vị ghế"
   },
   {
     "id": 3508,
@@ -67075,7 +67157,7 @@
     "id": 3512,
     "word": "岸",
     "pinyin": "àn",
-    "meaning": "Bờ (sông, biển)",
+    "meaning": "Bờ",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -67088,13 +67170,14 @@
     "example_vi": "Chúng tôi đứng trên bờ sông câu cá.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "sông, biển"
   },
   {
     "id": 3513,
     "word": "岸上",
     "pinyin": "ànshàng",
-    "meaning": "Trên bờ, bờ (nơi)",
+    "meaning": "Trên bờ, bờ",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -67107,7 +67190,8 @@
     "example_vi": "Con tàu cuối cùng cũng cập bờ.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "nơi"
   },
   {
     "id": 3514,
@@ -67171,7 +67255,7 @@
     "id": 3517,
     "word": "拜访",
     "pinyin": "bàifǎng",
-    "meaning": "Thăm, viếng thăm (trang trọng)",
+    "meaning": "Thăm, viếng thăm",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -67184,7 +67268,8 @@
     "example_vi": "Ngày mai tôi sẽ đi thăm thầy giáo.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "trang trọng"
   },
   {
     "id": 3518,
@@ -67818,7 +67903,7 @@
     "id": 3551,
     "word": "饼",
     "pinyin": "bǐng",
-    "meaning": "Bánh (dẹt, tròn)",
+    "meaning": "Bánh",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -67831,7 +67916,8 @@
     "example_vi": "Bánh trung thu là món ăn truyền thống dịp Trung thu.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "dẹt, tròn"
   },
   {
     "id": 3552,
@@ -68046,7 +68132,7 @@
     "id": 3563,
     "word": "不敢当",
     "pinyin": "bùgǎndāng",
-    "meaning": "Không dám nhận (lời khen)",
+    "meaning": "Không dám nhận",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -68059,7 +68145,8 @@
     "example_vi": "Ngài quá khen rồi, tôi không dám nhận.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "lời khen"
   },
   {
     "id": 3564,
@@ -68502,7 +68589,7 @@
     "id": 3587,
     "word": "册",
     "pinyin": "cè",
-    "meaning": "Cuốn (sách)",
+    "meaning": "Cuốn",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -68515,7 +68602,8 @@
     "example_vi": "Tôi mua ba cuốn từ điển.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "sách"
   },
   {
     "id": 3588,
@@ -68863,7 +68951,7 @@
     "id": 3606,
     "word": "称",
     "pinyin": "chēng",
-    "meaning": "Gọi, xưng hô; khen ngợi; cân (trọng lượng)",
+    "meaning": "Gọi, xưng hô; khen ngợi; cân",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -68876,7 +68964,8 @@
     "example_vi": "Chúng tôi đều gọi ông ấy là bác Vương.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "trọng lượng"
   },
   {
     "id": 3607,
@@ -68977,7 +69066,7 @@
     "id": 3612,
     "word": "承办",
     "pinyin": "chéngbàn",
-    "meaning": "Đảm nhận, tổ chức (sự kiện)",
+    "meaning": "Đảm nhận, tổ chức",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -68990,7 +69079,8 @@
     "example_vi": "Công ty này đảm nhận tổ chức hội nghị lần này.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "sự kiện"
   },
   {
     "id": 3613,
@@ -69015,7 +69105,7 @@
     "id": 3614,
     "word": "乘",
     "pinyin": "chéng",
-    "meaning": "Đi (xe, tàu...), nhân (toán)",
+    "meaning": "Đi (xe, tàu...), nhân",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -69028,7 +69118,8 @@
     "example_vi": "Tôi hàng ngày đi tàu điện ngầm đi làm.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "toán"
   },
   {
     "id": 3615,
@@ -69072,7 +69163,7 @@
     "id": 3617,
     "word": "乘坐",
     "pinyin": "chéngzuò",
-    "meaning": "Ngồi (xe, tàu...), đi (phương tiện)",
+    "meaning": "Ngồi (xe, tàu...), đi",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -69085,7 +69176,8 @@
     "example_vi": "Cô ấy thích đi tàu cao tốc du lịch.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "phương tiện"
   },
   {
     "id": 3618,
@@ -69376,7 +69468,7 @@
     "id": 3633,
     "word": "除夕",
     "pinyin": "chúxī",
-    "meaning": "Đêm giao thừa (Tết âm lịch)",
+    "meaning": "Đêm giao thừa",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -69389,7 +69481,8 @@
     "example_vi": "Tối giao thừa chúng tôi ăn cơm tất niên.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "Tết âm lịch"
   },
   {
     "id": 3634,
@@ -69433,7 +69526,7 @@
     "id": 3636,
     "word": "处分",
     "pinyin": "chǔfèn",
-    "meaning": "Kỷ luật, xử phạt (trong tổ chức)",
+    "meaning": "Kỷ luật, xử phạt",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -69446,13 +69539,14 @@
     "example_vi": "Nhà trường kỷ luật anh ấy cảnh cáo ghi hồ sơ.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "trong tổ chức"
   },
   {
     "id": 3637,
     "word": "处在",
     "pinyin": "chǔzài",
-    "meaning": "Nằm ở, đang ở (trạng thái)",
+    "meaning": "Nằm ở, đang ở",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -69465,7 +69559,8 @@
     "example_vi": "Chúng ta đang ở giai đoạn phát triển.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "trạng thái"
   },
   {
     "id": 3638,
@@ -69775,7 +69870,7 @@
     "id": 3654,
     "word": "达成",
     "pinyin": "dáchéng",
-    "meaning": "Đạt thành, đạt được (thỏa thuận)",
+    "meaning": "Đạt thành, đạt được",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -69788,7 +69883,8 @@
     "example_vi": "Hai bên cuối cùng đạt được thỏa thuận.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "thỏa thuận"
   },
   {
     "id": 3655,
@@ -70022,7 +70118,7 @@
     "id": 3667,
     "word": "大奖赛",
     "pinyin": "dàjiǎngsài",
-    "meaning": "Giải đua lớn (grand prix)",
+    "meaning": "Giải đua lớn",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -70035,7 +70131,8 @@
     "example_vi": "Xem giải đua F1 grand prix rất kích thích.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "grand prix"
   },
   {
     "id": 3668,
@@ -71087,7 +71184,7 @@
     "id": 3723,
     "word": "朵",
     "pinyin": "duǒ",
-    "meaning": "Bông (hoa), đám (mây)",
+    "meaning": "Bông (hoa), đám",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -71100,7 +71197,8 @@
     "example_vi": "Trên trời trôi vài đám mây trắng.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "mây"
   },
   {
     "id": 3724,
@@ -71355,7 +71453,7 @@
     "id": 3737,
     "word": "防治",
     "pinyin": "fángzhì",
-    "meaning": "Phòng và chữa (bệnh)",
+    "meaning": "Phòng và chữa",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -71368,7 +71466,8 @@
     "example_vi": "Chúng ta cần chú trọng phòng và chữa bệnh.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "bệnh"
   },
   {
     "id": 3738,
@@ -72687,7 +72786,7 @@
     "id": 3807,
     "word": "滚",
     "pinyin": "gǔn",
-    "meaning": "Lăn, cút đi (mắng)",
+    "meaning": "Lăn, cút đi",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -72700,7 +72799,8 @@
     "example_vi": "Nước sôi rồi, có thể pha trà được.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "mắng"
   },
   {
     "id": 3808,
@@ -73086,7 +73186,7 @@
     "id": 3828,
     "word": "胡同儿",
     "pinyin": "hútòngr",
-    "meaning": "Ngõ nhỏ (ở Bắc Kinh)",
+    "meaning": "Ngõ nhỏ",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -73099,13 +73199,14 @@
     "example_vi": "Bắc Kinh có rất nhiều ngõ nhỏ.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "ở Bắc Kinh"
   },
   {
     "id": 3829,
     "word": "胡子",
     "pinyin": "húzi",
-    "meaning": "Râu (mép, cằm)",
+    "meaning": "Râu",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -73118,7 +73219,8 @@
     "example_vi": "Anh ấy để râu.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "mép, cằm"
   },
   {
     "id": 3830,
@@ -73942,7 +74044,7 @@
     "id": 3873,
     "word": "价",
     "pinyin": "jià",
-    "meaning": "Giá (viết tắt của 价格)",
+    "meaning": "Giá",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -73955,7 +74057,8 @@
     "example_vi": "Giá này đắt quá.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "viết tắt của 价格"
   },
   {
     "id": 3874,
@@ -74113,7 +74216,7 @@
     "id": 3882,
     "word": "剪",
     "pinyin": "jiǎn",
-    "meaning": "Cắt (bằng kéo)",
+    "meaning": "Cắt",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -74126,7 +74229,8 @@
     "example_vi": "Cắt tóc giúp tôi.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "bằng kéo"
   },
   {
     "id": 3883,
@@ -74512,7 +74616,7 @@
     "id": 3903,
     "word": "戒",
     "pinyin": "jiè",
-    "meaning": "Cai, bỏ (thói quen xấu); giới (nhẫn)",
+    "meaning": "Cai, bỏ (thói quen xấu); giới",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -74525,7 +74629,8 @@
     "example_vi": "Anh ấy quyết tâm cai thuốc lá.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "nhẫn"
   },
   {
     "id": 3904,
@@ -75121,7 +75226,7 @@
     "id": 3935,
     "word": "烤鸭",
     "pinyin": "kǎoyā",
-    "meaning": "Vịt quay (Bắc Kinh)",
+    "meaning": "Vịt quay",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -75134,7 +75239,8 @@
     "example_vi": "Vịt quay Bắc Kinh rất nổi tiếng.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "Bắc Kinh"
   },
   {
     "id": 3936,
@@ -75274,7 +75380,7 @@
     "id": 3943,
     "word": "课题",
     "pinyin": "kètí",
-    "meaning": "Đề tài (nghiên cứu)",
+    "meaning": "Đề tài",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -75287,7 +75393,8 @@
     "example_vi": "Đề tài tốt nghiệp của tôi là trí tuệ nhân tạo.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "nghiên cứu"
   },
   {
     "id": 3944,
@@ -75369,7 +75476,7 @@
     "id": 3948,
     "word": "库",
     "pinyin": "kù",
-    "meaning": "Kho, thư viện (dữ liệu)",
+    "meaning": "Kho, thư viện",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -75382,7 +75489,8 @@
     "example_vi": "Công ty có kho lớn.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "dữ liệu"
   },
   {
     "id": 3949,
@@ -76300,7 +76408,7 @@
     "id": 3997,
     "word": "煤气",
     "pinyin": "méiqì",
-    "meaning": "Ga (than)",
+    "meaning": "Ga",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -76313,7 +76421,8 @@
     "example_vi": "Bếp dùng ga nấu ăn.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "than"
   },
   {
     "id": 3998,
@@ -76833,7 +76942,7 @@
     "id": 4025,
     "word": "年度",
     "pinyin": "niándù",
-    "meaning": "Hàng năm, năm (thống kê)",
+    "meaning": "Hàng năm, năm",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -76846,7 +76955,8 @@
     "example_vi": "Cầu thủ xuất sắc nhất năm",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "thống kê"
   },
   {
     "id": 4026,
@@ -76871,7 +76981,7 @@
     "id": 4027,
     "word": "年前",
     "pinyin": "niánqián",
-    "meaning": "Trước đây (bao nhiêu năm)",
+    "meaning": "Trước đây",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -76884,7 +76994,8 @@
     "example_vi": "Mười năm trước tôi làm việc ở đây.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "bao nhiêu năm"
   },
   {
     "id": 4028,
@@ -77308,7 +77419,7 @@
     "id": 4050,
     "word": "匹",
     "pinyin": "pǐ",
-    "meaning": "Con (ngựa); cuộn (vải)",
+    "meaning": "Con (ngựa); cuộn",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -77321,7 +77432,8 @@
     "example_vi": "Một con ngựa chạy rất nhanh.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "vải"
   },
   {
     "id": 4051,
@@ -77384,7 +77496,7 @@
     "id": 4054,
     "word": "频道",
     "pinyin": "píndào",
-    "meaning": "Kênh (TV, radio)",
+    "meaning": "Kênh",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -77397,7 +77509,8 @@
     "example_vi": "Chuyển sang kênh tin tức.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "TV, radio"
   },
   {
     "id": 4055,
@@ -77574,7 +77687,7 @@
     "id": 4064,
     "word": "泼",
     "pinyin": "pō",
-    "meaning": "Té, hắt (nước)",
+    "meaning": "Té, hắt",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -77587,7 +77700,8 @@
     "example_vi": "Cẩn thận đừng làm đổ nước ra.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "nước"
   },
   {
     "id": 4065,
@@ -78163,7 +78277,7 @@
     "id": 4095,
     "word": "瞧",
     "pinyin": "qiáo",
-    "meaning": "Nhìn (khẩu ngữ)",
+    "meaning": "Nhìn",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -78176,13 +78290,14 @@
     "example_vi": "Nhìn kìa, anh ấy đến rồi!",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "khẩu ngữ"
   },
   {
     "id": 4096,
     "word": "琴",
     "pinyin": "qín",
-    "meaning": "Đàn (tổng quát)",
+    "meaning": "Đàn",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -78195,7 +78310,8 @@
     "example_vi": "Cô ấy biết chơi piano.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "tổng quát"
   },
   {
     "id": 4097,
@@ -78391,7 +78507,7 @@
     "id": 4107,
     "word": "泉",
     "pinyin": "quán",
-    "meaning": "Suối (nước nóng)",
+    "meaning": "Suối",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -78404,7 +78520,8 @@
     "example_vi": "Suối nước nóng rất thoải mái.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "nước nóng"
   },
   {
     "id": 4108,
@@ -79076,7 +79193,7 @@
     "id": 4143,
     "word": "扇",
     "pinyin": "shàn",
-    "meaning": "Cánh (cửa, quạt)",
+    "meaning": "Cánh",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -79089,7 +79206,8 @@
     "example_vi": "Hai cánh cửa sổ",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "cửa, quạt"
   },
   {
     "id": 4144,
@@ -80540,7 +80658,7 @@
     "id": 4220,
     "word": "搜",
     "pinyin": "sōu",
-    "meaning": "Tìm kiếm (khẩu ngữ)",
+    "meaning": "Tìm kiếm",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -80553,7 +80671,8 @@
     "example_vi": "Tìm kiếm tài liệu một chút.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "khẩu ngữ"
   },
   {
     "id": 4221,
@@ -80597,7 +80716,7 @@
     "id": 4223,
     "word": "酸甜苦辣",
     "pinyin": "suāntiánkǔlà",
-    "meaning": "Ngọt bùi đắng cay (cuộc đời)",
+    "meaning": "Ngọt bùi đắng cay",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -80610,7 +80729,8 @@
     "example_vi": "Cuộc đời có đủ ngọt bùi đắng cay.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "cuộc đời"
   },
   {
     "id": 4224,
@@ -80787,7 +80907,7 @@
     "id": 4233,
     "word": "台风",
     "pinyin": "táifēng",
-    "meaning": "Bão (đài phong)",
+    "meaning": "Bão",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -80800,7 +80920,8 @@
     "example_vi": "Bão đến rồi.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "đài phong"
   },
   {
     "id": 4234,
@@ -81395,7 +81516,7 @@
     "id": 4265,
     "word": "兔",
     "pinyin": "tù",
-    "meaning": "Thỏ (viết tắt của 兔子)",
+    "meaning": "Thỏ",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -81408,7 +81529,8 @@
     "example_vi": "Ngọc Thỏ là con thỏ trên mặt trăng.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "viết tắt của 兔子"
   },
   {
     "id": 4266,
@@ -81509,7 +81631,7 @@
     "id": 4271,
     "word": "微博",
     "pinyin": "wēibó",
-    "meaning": "Weibo (mạng xã hội)",
+    "meaning": "Weibo",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -81522,7 +81644,8 @@
     "example_vi": "Tôi lướt Weibo mỗi ngày.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "mạng xã hội"
   },
   {
     "id": 4272,
@@ -81889,7 +82012,7 @@
     "id": 4291,
     "word": "屋",
     "pinyin": "wū",
-    "meaning": "Nhà (viết tắt của 屋子)",
+    "meaning": "Nhà",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -81902,7 +82025,8 @@
     "example_vi": "Ngôi nhà này cũ rồi.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "viết tắt của 屋子"
   },
   {
     "id": 4292,
@@ -82650,7 +82774,7 @@
     "id": 4331,
     "word": "小偷儿",
     "pinyin": "xiǎotōur",
-    "meaning": "Tên trộm (khẩu ngữ)",
+    "meaning": "Tên trộm",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -82663,7 +82787,8 @@
     "example_vi": "Cẩn thận tên trộm!",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "khẩu ngữ"
   },
   {
     "id": 4332,
@@ -82859,7 +82984,7 @@
     "id": 4342,
     "word": "行驶",
     "pinyin": "xíngshǐ",
-    "meaning": "Lái xe, chạy (xe)",
+    "meaning": "Lái xe, chạy",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -82872,7 +82997,8 @@
     "example_vi": "Xe đang chạy trên cao tốc.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "xe"
   },
   {
     "id": 4343,
@@ -83962,7 +84088,7 @@
     "id": 4400,
     "word": "硬件",
     "pinyin": "yìngjiàn",
-    "meaning": "Phần cứng (máy tính)",
+    "meaning": "Phần cứng",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -83975,7 +84101,8 @@
     "example_vi": "Phần cứng máy tính đã nâng cấp.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "máy tính"
   },
   {
     "id": 4401,
@@ -85046,7 +85173,7 @@
     "id": 4457,
     "word": "赠",
     "pinyin": "zèng",
-    "meaning": "Tặng (lễ vật)",
+    "meaning": "Tặng",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -85059,7 +85186,8 @@
     "example_vi": "Tặng người hoa hồng, tay còn dư hương.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "lễ vật"
   },
   {
     "id": 4458,
@@ -85236,7 +85364,7 @@
     "id": 4467,
     "word": "涨",
     "pinyin": "zhǎng",
-    "meaning": "Tăng (giá cả, nước)",
+    "meaning": "Tăng",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -85249,7 +85377,8 @@
     "example_vi": "Mực nước đang dâng.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "giá cả, nước"
   },
   {
     "id": 4468,
@@ -85521,7 +85650,7 @@
     "id": 4482,
     "word": "挣",
     "pinyin": "zhèng",
-    "meaning": "Kiếm (tiền)",
+    "meaning": "Kiếm",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -85534,7 +85663,8 @@
     "example_vi": "Anh ấy nỗ lực kiếm tiền nuôi gia đình.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "tiền"
   },
   {
     "id": 4483,
@@ -88029,7 +88159,7 @@
     "id": 4614,
     "word": "必修",
     "pinyin": "bìxiū",
-    "meaning": "Bắt buộc (môn học)",
+    "meaning": "Bắt buộc",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -88042,7 +88172,8 @@
     "example_vi": "Toán học là môn học bắt buộc.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "môn học"
   },
   {
     "id": 4615,
@@ -89967,7 +90098,7 @@
     "id": 4716,
     "word": "成",
     "pinyin": "chéng",
-    "meaning": "Một phần mười (10%)",
+    "meaning": "Một phần mười",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -89980,7 +90111,8 @@
     "example_vi": "Dự án này thành công chín phần mười.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "10%"
   },
   {
     "id": 4717,
@@ -92838,7 +92970,7 @@
     "id": 4867,
     "word": "跌",
     "pinyin": "diē",
-    "meaning": "Ngã, giảm (giá)",
+    "meaning": "Ngã, giảm",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -92851,7 +92983,8 @@
     "example_vi": "Giá cổ phiếu đột ngột giảm.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "giá"
   },
   {
     "id": 4868,
@@ -93884,7 +94017,7 @@
     "id": 4922,
     "word": "番",
     "pinyin": "fān",
-    "meaning": "Lần, phen (đếm hành động)",
+    "meaning": "Lần, phen",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -93897,7 +94030,8 @@
     "example_vi": "Tôi đã cố gắng một phen.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "đếm hành động"
   },
   {
     "id": 4923,
@@ -94207,7 +94341,7 @@
     "id": 4939,
     "word": "肥",
     "pinyin": "féi",
-    "meaning": "Béo (thịt, động vật)",
+    "meaning": "Béo",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -94220,7 +94354,8 @@
     "example_vi": "Miếng thịt này béo quá.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "thịt, động vật"
   },
   {
     "id": 4940,
@@ -94607,7 +94742,7 @@
     "id": 4960,
     "word": "服用",
     "pinyin": "fúyòng",
-    "meaning": "Uống (thuốc)",
+    "meaning": "Uống",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -94620,7 +94755,8 @@
     "example_vi": "Vui lòng uống thuốc này đúng giờ.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "thuốc"
   },
   {
     "id": 4961,
@@ -97802,7 +97938,7 @@
     "id": 5128,
     "word": "划",
     "pinyin": "huá",
-    "meaning": "Chèo (thuyền)",
+    "meaning": "Chèo",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -97815,7 +97951,8 @@
     "example_vi": "Chúng ta cùng chèo thuyền nhé.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "thuyền"
   },
   {
     "id": 5129,
@@ -98505,7 +98642,7 @@
     "id": 5165,
     "word": "机械",
     "pinyin": "jīxiè",
-    "meaning": "Máy móc; máy móc (tính chất)",
+    "meaning": "Máy móc; máy móc",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -98518,7 +98655,8 @@
     "example_vi": "Nhà máy đã nhập thiết bị máy móc mới.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "tính chất"
   },
   {
     "id": 5166,
@@ -100215,7 +100353,7 @@
     "id": 5255,
     "word": "戒指",
     "pinyin": "jièzhi",
-    "meaning": "Nhẫn (cưới)",
+    "meaning": "Nhẫn",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -100228,7 +100366,8 @@
     "example_vi": "Anh ấy tặng cô ấy một chiếc nhẫn kim cương.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "cưới"
   },
   {
     "id": 5256,
@@ -101032,7 +101171,7 @@
     "id": 5298,
     "word": "舅舅",
     "pinyin": "jiùjiu",
-    "meaning": "Cậu (anh/em trai mẹ)",
+    "meaning": "Cậu",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -101045,13 +101184,14 @@
     "example_vi": "Cậu tôi là bác sĩ.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "anh/em trai mẹ"
   },
   {
     "id": 5299,
     "word": "局",
     "pinyin": "jú",
-    "meaning": "Ván, hiệp (đánh cờ, bóng)",
+    "meaning": "Ván, hiệp",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -101064,7 +101204,8 @@
     "example_vi": "Ván đấu này chúng ta thắng.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "đánh cờ, bóng"
   },
   {
     "id": 5300,
@@ -101279,7 +101420,7 @@
     "id": 5311,
     "word": "卷",
     "pinyin": "juǎn",
-    "meaning": "Cuốn, cuộn; cuộn; cuộn (đơn vị)",
+    "meaning": "Cuốn, cuộn; cuộn; cuộn",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -101292,7 +101433,8 @@
     "example_vi": "Vui lòng cuộn poster lại.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "đơn vị"
   },
   {
     "id": 5312,
@@ -102477,7 +102619,7 @@
     "id": 5374,
     "word": "栏",
     "pinyin": "lán",
-    "meaning": "Lan can, cột (bài)",
+    "meaning": "Lan can, cột",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -102490,7 +102632,8 @@
     "example_vi": "Cột thể thao trên báo rất thú vị.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "bài"
   },
   {
     "id": 5375,
@@ -102781,7 +102924,7 @@
     "id": 5390,
     "word": "理科",
     "pinyin": "lǐkē",
-    "meaning": "Khoa học tự nhiên (lý khoa)",
+    "meaning": "Khoa học tự nhiên",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -102794,7 +102937,8 @@
     "example_vi": "Anh ấy học chuyên ngành khoa học tự nhiên.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "lý khoa"
   },
   {
     "id": 5391,
@@ -103066,7 +103210,7 @@
     "id": 5405,
     "word": "两岸",
     "pinyin": "liǎng’àn",
-    "meaning": "Hai bờ (eo biển)",
+    "meaning": "Hai bờ",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -103079,7 +103223,8 @@
     "example_vi": "Quan hệ hai bờ ngày càng tốt đẹp.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "eo biển"
   },
   {
     "id": 5406,
@@ -103161,7 +103306,7 @@
     "id": 5410,
     "word": "淋",
     "pinyin": "lín",
-    "meaning": "Tưới, dội (mưa ướt)",
+    "meaning": "Tưới, dội",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -103174,7 +103319,8 @@
     "example_vi": "Quần áo bị mưa làm ướt.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "mưa ướt"
   },
   {
     "id": 5411,
@@ -103314,7 +103460,7 @@
     "id": 5418,
     "word": "楼道",
     "pinyin": "lóudào",
-    "meaning": "Hành lang (tòa nhà)",
+    "meaning": "Hành lang",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -103327,7 +103473,8 @@
     "example_vi": "Không được để đồ lung tung trong hành lang.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "tòa nhà"
   },
   {
     "id": 5419,
@@ -103865,7 +104012,7 @@
     "id": 5447,
     "word": "嘛",
     "pinyin": "ma",
-    "meaning": "Trợ từ nhấn mạnh (rõ ràng rồi mà)",
+    "meaning": "Trợ từ nhấn mạnh",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -103878,7 +104025,8 @@
     "example_vi": "Đây là kiến thức cơ bản mà!",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "rõ ràng rồi mà"
   },
   {
     "id": 5448,
@@ -105691,7 +105839,7 @@
     "id": 5543,
     "word": "捧",
     "pinyin": "pěng",
-    "meaning": "Bưng hai tay; (lượng từ nắm)",
+    "meaning": "Bưng hai tay;",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -105704,7 +105852,8 @@
     "example_vi": "Cô ấy bưng một bó hoa bằng hai tay.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "lượng từ nắm"
   },
   {
     "id": 5544,
@@ -105900,7 +106049,7 @@
     "id": 5554,
     "word": "频道",
     "pinyin": "píndào",
-    "meaning": "Kênh (TV)",
+    "meaning": "Kênh",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -105913,7 +106062,8 @@
     "example_vi": "Đổi sang kênh khác đi.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "TV"
   },
   {
     "id": 5555,
@@ -106014,7 +106164,7 @@
     "id": 5560,
     "word": "平方",
     "pinyin": "píngfāng",
-    "meaning": "Bình phương; (lượng từ)",
+    "meaning": "Bình phương;",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -106027,7 +106177,8 @@
     "example_vi": "Căn phòng này có 20 mét vuông.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "lượng từ"
   },
   {
     "id": 5561,
@@ -106641,7 +106792,7 @@
     "id": 5593,
     "word": "千家万户",
     "pinyin": "qiānjiā-wànhù",
-    "meaning": "Ngàn nhà vạn hộ (mọi nhà)",
+    "meaning": "Ngàn nhà vạn hộ",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -106654,7 +106805,8 @@
     "example_vi": "Chính sách này mang lại lợi ích cho mọi nhà.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "mọi nhà"
   },
   {
     "id": 5594,
@@ -106755,7 +106907,7 @@
     "id": 5599,
     "word": "前者",
     "pinyin": "qiánzhě",
-    "meaning": "Người/vật trước (trong hai cái)",
+    "meaning": "Người/vật trước",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -106768,7 +106920,8 @@
     "example_vi": "Cái trước tốt hơn cái sau.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "trong hai cái"
   },
   {
     "id": 5600,
@@ -107496,7 +107649,7 @@
     "id": 5638,
     "word": "娶",
     "pinyin": "qǔ",
-    "meaning": "Cưới (vợ)",
+    "meaning": "Cưới",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -107509,7 +107662,8 @@
     "example_vi": "Anh ấy cưới một bác sĩ.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "vợ"
   },
   {
     "id": 5639,
@@ -107877,7 +108031,7 @@
     "id": 5658,
     "word": "人山人海",
     "pinyin": "rénshān-rénhǎi",
-    "meaning": "Người đông như nêm (biển người)",
+    "meaning": "Người đông như nêm",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -107890,7 +108044,8 @@
     "example_vi": "Quảng trường đông nghịt người.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "biển người"
   },
   {
     "id": 5659,
@@ -108542,7 +108697,7 @@
     "id": 5693,
     "word": "扫描",
     "pinyin": "sǎomiáo",
-    "meaning": "Quét (scan)",
+    "meaning": "Quét",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -108555,7 +108710,8 @@
     "example_vi": "Xin quét mã QR này.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "scan"
   },
   {
     "id": 5694,
@@ -108732,7 +108888,7 @@
     "id": 5703,
     "word": "扇",
     "pinyin": "shàn",
-    "meaning": "Cái (cửa, cửa sổ)",
+    "meaning": "Cái",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -108745,7 +108901,8 @@
     "example_vi": "Cánh cửa này rất nặng.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "cửa, cửa sổ"
   },
   {
     "id": 5704,
@@ -110651,7 +110808,7 @@
     "id": 5804,
     "word": "艘",
     "pinyin": "sōu",
-    "meaning": "Chiếc (để đếm tàu)",
+    "meaning": "Chiếc",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -110664,7 +110821,8 @@
     "example_vi": "Một chiếc tàu lớn neo ở cảng.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "để đếm tàu"
   },
   {
     "id": 5805,
@@ -110898,7 +111056,7 @@
     "id": 5817,
     "word": "台风",
     "pinyin": "táifēng",
-    "meaning": "Bão (cấp nhiệt đới)",
+    "meaning": "Bão",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -110911,7 +111069,8 @@
     "example_vi": "Bão sắp đổ bộ.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "cấp nhiệt đới"
   },
   {
     "id": 5818,
@@ -111050,7 +111209,7 @@
     "id": 5825,
     "word": "汤圆",
     "pinyin": "tāngyuán",
-    "meaning": "Bánh trôi (thang viên)",
+    "meaning": "Bánh trôi",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -111063,7 +111222,8 @@
     "example_vi": "Tết Nguyên Tiêu ăn bánh trôi.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "thang viên"
   },
   {
     "id": 5826,
@@ -111240,7 +111400,7 @@
     "id": 5835,
     "word": "特地",
     "pinyin": "tèdì",
-    "meaning": "Đặc biệt (vì mục đích)",
+    "meaning": "Đặc biệt",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -111253,7 +111413,8 @@
     "example_vi": "Tôi đặc biệt đến thăm bạn.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "vì mục đích"
   },
   {
     "id": 5836,
@@ -111906,7 +112067,7 @@
     "id": 5870,
     "word": "铜",
     "pinyin": "tóng",
-    "meaning": "Đồng (kim loại)",
+    "meaning": "Đồng",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -111919,7 +112080,8 @@
     "example_vi": "Cái cốc này làm bằng đồng.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "kim loại"
   },
   {
     "id": 5871,
@@ -112609,7 +112771,7 @@
     "id": 5907,
     "word": "哇",
     "pinyin": "wā",
-    "meaning": "Ồ, wow (cảm thán)",
+    "meaning": "Ồ, wow",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -112622,7 +112784,8 @@
     "example_vi": "Ồ, món quà này đẹp quá!",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "cảm thán"
   },
   {
     "id": 5908,
@@ -112742,7 +112905,7 @@
     "id": 5914,
     "word": "外甥",
     "pinyin": "wàisheng",
-    "meaning": "Cháu trai (con chị/em gái)",
+    "meaning": "Cháu trai",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -112755,7 +112918,8 @@
     "example_vi": "Cháu trai của tôi rất dễ thương.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "con chị/em gái"
   },
   {
     "id": 5915,
@@ -113350,7 +113514,7 @@
     "id": 5946,
     "word": "文科",
     "pinyin": "wénkē",
-    "meaning": "Khoa xã hội (văn khoa)",
+    "meaning": "Khoa xã hội",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -113363,7 +113527,8 @@
     "example_vi": "Anh ấy học chuyên ngành văn khoa.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "văn khoa"
   },
   {
     "id": 5947,
@@ -113673,7 +113838,7 @@
     "id": 5963,
     "word": "洗漱",
     "pinyin": "xǐshù",
-    "meaning": "Rửa ráy (mặt, răng)",
+    "meaning": "Rửa ráy",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -113686,7 +113851,8 @@
     "example_vi": "Mỗi sáng phải rửa ráy.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "mặt, răng"
   },
   {
     "id": 5964,
@@ -114110,7 +114276,7 @@
     "id": 5986,
     "word": "线",
     "pinyin": "xiàn",
-    "meaning": "Chỉ, đường thẳng; (đếm đường)",
+    "meaning": "Chỉ, đường thẳng;",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -114123,7 +114289,8 @@
     "example_vi": "Vẽ một đường thẳng.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "đếm đường"
   },
   {
     "id": 5987,
@@ -115251,7 +115418,7 @@
     "id": 6046,
     "word": "选修",
     "pinyin": "xuǎnxiū",
-    "meaning": "Tự chọn (môn học)",
+    "meaning": "Tự chọn",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -115264,7 +115431,8 @@
     "example_vi": "Tôi chọn môn vẽ.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "môn học"
   },
   {
     "id": 6047,
@@ -115802,7 +115970,7 @@
     "id": 6075,
     "word": "演奏",
     "pinyin": "yǎnzòu",
-    "meaning": "trình diễn (nhạc)",
+    "meaning": "trình diễn",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -115815,7 +115983,8 @@
     "example_vi": "Nghệ sĩ piano đang trình diễn bản nhạc nổi tiếng.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "nhạc"
   },
   {
     "id": 6076,
@@ -116467,7 +116636,7 @@
     "id": 6110,
     "word": "衣食住行",
     "pinyin": "yī-shí-zhù-xíng",
-    "meaning": "ăn mặc ở đi lại (nhu cầu cơ bản)",
+    "meaning": "ăn mặc ở đi lại",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -116480,7 +116649,8 @@
     "example_vi": "Ăn mặc ở đi lại là những nhu cầu cơ bản của con người.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "nhu cầu cơ bản"
   },
   {
     "id": 6111,
@@ -118558,7 +118728,7 @@
     "id": 6220,
     "word": "章",
     "pinyin": "zhāng",
-    "meaning": "Chương (sách)",
+    "meaning": "Chương",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -118571,7 +118741,8 @@
     "example_vi": "Cuốn sách này có mười chương.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "sách"
   },
   {
     "id": 6221,
@@ -119014,7 +119185,7 @@
     "id": 6244,
     "word": "睁",
     "pinyin": "zhēng",
-    "meaning": "Mở (mắt)",
+    "meaning": "Mở",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -119027,7 +119198,8 @@
     "example_vi": "Anh ấy mở mắt ra nhìn.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "mắt"
   },
   {
     "id": 6245,
@@ -119223,7 +119395,7 @@
     "id": 6255,
     "word": "枝",
     "pinyin": "zhī",
-    "meaning": "Cành; (đơn vị đếm cành)",
+    "meaning": "Cành;",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -119236,7 +119408,8 @@
     "example_vi": "Trên cây có một cành hoa đẹp.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "đơn vị đếm cành"
   },
   {
     "id": 6256,
@@ -119756,7 +119929,7 @@
     "id": 6283,
     "word": "中旬",
     "pinyin": "zhōng xún",
-    "meaning": "Giữa tháng (ngày 11-20)",
+    "meaning": "Giữa tháng",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -119769,7 +119942,8 @@
     "example_vi": "Kế hoạch sẽ hoàn thành vào giữa tháng.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "ngày 11-20"
   },
   {
     "id": 6284,
@@ -120062,7 +120236,7 @@
     "id": 6299,
     "word": "株",
     "pinyin": "zhū",
-    "meaning": "Cây (đơn vị đếm cây)",
+    "meaning": "Cây",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -120075,7 +120249,8 @@
     "example_vi": "Trong vườn có mười cây hồng.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "đơn vị đếm cây"
   },
   {
     "id": 6300,
@@ -121012,7 +121187,7 @@
     "id": 6349,
     "word": "粽子",
     "pinyin": "zòng zi",
-    "meaning": "Bánh chưng (zongzi)",
+    "meaning": "Bánh chưng",
     "level": 6,
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -121025,7 +121200,8 @@
     "example_vi": "Tết Đoan Ngọ phải ăn bánh chưng.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "zongzi"
   },
   {
     "id": 6350,
@@ -121430,7 +121606,7 @@
     "id": 6371,
     "word": "花花",
     "pinyin": "Huāhua",
-    "meaning": "Hoa Hoa (tên con mèo)",
+    "meaning": "Hoa Hoa",
     "level": 2,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -121443,7 +121619,8 @@
     "example_vi": "",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "tên con mèo"
   },
   {
     "id": 6372,
@@ -122114,7 +122291,7 @@
     "id": 6407,
     "word": "斤",
     "pinyin": "jīn",
-    "meaning": "Cân (đơn vị đo lường)",
+    "meaning": "Cân",
     "level": 2,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -122127,7 +122304,8 @@
     "example_vi": "Tôi mua một cân táo.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "đơn vị đo lường"
   },
   {
     "id": 6408,
@@ -122361,7 +122539,7 @@
     "id": 6420,
     "word": "接",
     "pinyin": "jiē",
-    "meaning": "nhận, nghe/trả lời (điện thoại)",
+    "meaning": "nhận, nghe/trả lời",
     "level": 2,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -122374,7 +122552,8 @@
     "example_vi": "Tôi ra sân bay đón bạn.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "điện thoại"
   },
   {
     "id": 6421,
@@ -123197,7 +123376,7 @@
     "id": 6464,
     "word": "小时",
     "pinyin": "xiǎoshí",
-    "meaning": "giờ (đồng hồ)",
+    "meaning": "giờ",
     "level": 2,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -123210,7 +123389,8 @@
     "example_vi": "Tôi đã đợi 1 tiếng.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "đồng hồ"
   },
   {
     "id": 6465,
@@ -124358,7 +124538,7 @@
     "id": 6525,
     "word": "杨笑笑",
     "pinyin": "Yáng Xiàoxiao",
-    "meaning": "Dương Tiểu Tiểu (tên người)",
+    "meaning": "Dương Tiểu Tiểu",
     "level": 2,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -124371,7 +124551,8 @@
     "example_vi": "",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "tên người"
   },
   {
     "id": 6526,
@@ -125669,7 +125850,7 @@
     "id": 6594,
     "word": "伞",
     "pinyin": "sǎn",
-    "meaning": "ô (dù)",
+    "meaning": "ô",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -125682,7 +125863,8 @@
     "example_vi": "",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "dù"
   },
   {
     "id": 6595,
@@ -126524,7 +126706,7 @@
     "id": 6639,
     "word": "照",
     "pinyin": "zhào",
-    "meaning": "chụp (ảnh)",
+    "meaning": "chụp",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -126537,7 +126719,8 @@
     "example_vi": "Đây là ảnh của tôi.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "ảnh"
   },
   {
     "id": 6640,
@@ -128025,7 +128208,7 @@
     "id": 6718,
     "word": "大山",
     "pinyin": "Dàshān",
-    "meaning": "Đại Sơn (tên người)",
+    "meaning": "Đại Sơn",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -128038,7 +128221,8 @@
     "example_vi": "",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "tên người"
   },
   {
     "id": 6719,
@@ -128861,7 +129045,7 @@
     "id": 6762,
     "word": "起飞",
     "pinyin": "qǐfēi",
-    "meaning": "cất cánh (máy bay)",
+    "meaning": "cất cánh",
     "level": 3,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -128874,7 +129058,8 @@
     "example_vi": "Máy bay sắp cất cánh rồi.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "máy bay"
   },
   {
     "id": 6763,
@@ -132649,7 +132834,7 @@
     "id": 6961,
     "word": "当",
     "pinyin": "dāng",
-    "meaning": "when, just at (a time or place)",
+    "meaning": "when, just at",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -132662,7 +132847,8 @@
     "example_vi": "Lớn lên anh ấy muốn trở thành bác sĩ.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "a time or place"
   },
   {
     "id": 6962,
@@ -132782,7 +132968,7 @@
     "id": 6968,
     "word": "交",
     "pinyin": "jiāo",
-    "meaning": "to make (friends)",
+    "meaning": "to make",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -132795,7 +132981,8 @@
     "example_vi": "Xin đưa quyển sách cho tôi.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "friends"
   },
   {
     "id": 6969,
@@ -138485,7 +138672,7 @@
     "id": 7268,
     "word": "躺",
     "pinyin": "tǎng",
-    "meaning": "to lie (on one's back)",
+    "meaning": "to lie",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -138498,7 +138685,8 @@
     "example_vi": "",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "on one's back"
   },
   {
     "id": 7269,
@@ -140521,7 +140709,7 @@
     "id": 7375,
     "word": "演出",
     "pinyin": "yǎnchū",
-    "meaning": "to perform, to put on (a show)",
+    "meaning": "to perform, to put on",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -140534,7 +140722,8 @@
     "example_vi": "Buổi biểu diễn này rất thành công.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "a show"
   },
   {
     "id": 7376,
@@ -140750,7 +140939,7 @@
     "id": 7387,
     "word": "乘坐",
     "pinyin": "chéngzuò",
-    "meaning": "to take (a vehicle), to ride (in a vehicle)",
+    "meaning": "to take (a vehicle), to ride",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -140763,7 +140952,8 @@
     "example_vi": "",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "in a vehicle"
   },
   {
     "id": 7388,
@@ -142061,7 +142251,7 @@
     "id": 7456,
     "word": "博士",
     "pinyin": "bóshì",
-    "meaning": "doctor (academic degree)",
+    "meaning": "doctor",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -142074,7 +142264,8 @@
     "example_vi": "",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "academic degree"
   },
   {
     "id": 7457,
@@ -143258,7 +143449,7 @@
     "id": 7519,
     "word": "香山",
     "pinyin": "Xiāng Shān",
-    "meaning": "the Fragrant Hill (in Beijing)",
+    "meaning": "the Fragrant Hill",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -143271,7 +143462,8 @@
     "example_vi": "",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "in Beijing"
   },
   {
     "id": 7520,
@@ -144284,7 +144476,7 @@
     "id": 7573,
     "word": "戴",
     "pinyin": "dài",
-    "meaning": "to wear (accessories)",
+    "meaning": "to wear",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -144297,7 +144489,8 @@
     "example_vi": "",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "accessories"
   },
   {
     "id": 7574,
@@ -145215,7 +145408,7 @@
     "id": 7622,
     "word": "首都",
     "pinyin": "shǒudū",
-    "meaning": "capital (of a country)",
+    "meaning": "capital",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -145228,7 +145421,8 @@
     "example_vi": "Hà Nội là thủ đô của Việt Nam.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "of a country"
   },
   {
     "id": 7623,
@@ -145405,7 +145599,7 @@
     "id": 7632,
     "word": "长江大桥",
     "pinyin": "Chángjiāng Dàqiáo",
-    "meaning": "Yangtze River Bridge (in Nanjing)",
+    "meaning": "Yangtze River Bridge",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -145418,7 +145612,8 @@
     "example_vi": "",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "in Nanjing"
   },
   {
     "id": 7633,
@@ -145709,7 +145904,7 @@
     "id": 7648,
     "word": "孙女",
     "pinyin": "sūnnǚ",
-    "meaning": "Cháu gái (nội)",
+    "meaning": "Cháu gái",
     "level": 4,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -145722,7 +145917,8 @@
     "example_vi": "",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "nội"
   },
   {
     "id": 7649,
@@ -153240,7 +153436,7 @@
     "id": 8044,
     "word": "播放",
     "pinyin": "bōfàng",
-    "meaning": "to broadcast, to play (music or videos)",
+    "meaning": "to broadcast, to play",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -153253,7 +153449,8 @@
     "example_vi": "Vui lòng phát bài hát này.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "music or videos"
   },
   {
     "id": 8045,
@@ -153525,7 +153722,7 @@
     "id": 8059,
     "word": "拍",
     "pinyin": "pāi",
-    "meaning": "to take (a photo), to shoot (a video)",
+    "meaning": "to take (a photo), to shoot",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -153538,7 +153735,8 @@
     "example_vi": "Anh ấy đã chụp một bức ảnh rất đẹp.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "a video"
   },
   {
     "id": 8060,
@@ -155463,7 +155661,7 @@
     "id": 8161,
     "word": "总裁",
     "pinyin": "zǒngcái",
-    "meaning": "president (of a company)",
+    "meaning": "president",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -155476,7 +155674,8 @@
     "example_vi": "",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "of a company"
   },
   {
     "id": 8162,
@@ -156186,7 +156385,7 @@
     "id": 8199,
     "word": "投篮",
     "pinyin": "tóu lán",
-    "meaning": "to shoot (a basket)",
+    "meaning": "to shoot",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -156199,7 +156398,8 @@
     "example_vi": "",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "a basket"
   },
   {
     "id": 8200,
@@ -161376,7 +161576,7 @@
     "id": 8472,
     "word": "翻",
     "pinyin": "fān",
-    "meaning": "to turn (over)",
+    "meaning": "to turn",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -161389,7 +161589,8 @@
     "example_vi": "",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "over"
   },
   {
     "id": 8473,
@@ -163694,7 +163895,7 @@
     "id": 8594,
     "word": "酒吧",
     "pinyin": "jiǔbā",
-    "meaning": "bar (for drinks)",
+    "meaning": "bar",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -163707,7 +163908,8 @@
     "example_vi": "",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "for drinks"
   },
   {
     "id": 8595,
@@ -163999,7 +164201,7 @@
     "id": 8610,
     "word": "系",
     "pinyin": "xì",
-    "meaning": "department (of a university)",
+    "meaning": "department",
     "level": 5,
     "curriculum": "hsk",
     "hskVersion": "2.0",
@@ -164012,7 +164214,8 @@
     "example_vi": "Xin hãy buộc chặt dây giày.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "of a university"
   },
   {
     "id": 8611,
@@ -174830,7 +175033,7 @@
     "id": 9180,
     "word": "去",
     "pinyin": "qù",
-    "meaning": "đi (đến)",
+    "meaning": "đi",
     "level": 1,
     "curriculum": "yct",
     "hskVersion": "3.0",
@@ -174843,7 +175046,8 @@
     "example_vi": "Anh ấy ăn xong rồi đi ngay.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "đến"
   },
   {
     "id": 9181,
@@ -176181,7 +176385,7 @@
     "id": 9251,
     "word": "好吃",
     "pinyin": "hǎochī",
-    "meaning": "ngon (thức ăn)",
+    "meaning": "ngon",
     "level": 2,
     "curriculum": "yct",
     "hskVersion": "yct",
@@ -176194,7 +176398,8 @@
     "example_vi": "Món ăn của nhà hàng này rất ngon.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "thức ăn"
   },
   {
     "id": 9252,
@@ -176469,7 +176674,7 @@
     "id": 9266,
     "word": "好喝",
     "pinyin": "hǎohē",
-    "meaning": "ngon (thức uống)",
+    "meaning": "ngon",
     "level": 2,
     "curriculum": "yct",
     "hskVersion": "yct",
@@ -176482,7 +176687,8 @@
     "example_vi": "",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "thức uống"
   },
   {
     "id": 9267,
@@ -176811,7 +177017,7 @@
     "id": 9284,
     "word": "香蕉",
     "pinyin": "xiāngjiāo",
-    "meaning": "chuối (tiêu)",
+    "meaning": "chuối",
     "level": 2,
     "curriculum": "yct",
     "hskVersion": "yct",
@@ -176824,7 +177030,8 @@
     "example_vi": "Chuối là một loại trái cây nhiệt đới.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "tiêu"
   },
   {
     "id": 9285,
@@ -177496,7 +177703,7 @@
     "id": 9320,
     "word": "让",
     "pinyin": "ràng",
-    "meaning": "để/cho/khiến (ai làm gì)",
+    "meaning": "để/cho/khiến",
     "level": 3,
     "curriculum": "yct",
     "hskVersion": "yct",
@@ -177509,7 +177716,8 @@
     "example_vi": "Chuyện này khiến tôi rất vui.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "ai làm gì"
   },
   {
     "id": 9321,
@@ -177878,7 +178086,7 @@
     "id": 9340,
     "word": "能",
     "pinyin": "néng",
-    "meaning": "có thể, được (có khả năng)",
+    "meaning": "có thể, được",
     "level": 3,
     "curriculum": "yct",
     "hskVersion": "yct",
@@ -177891,7 +178099,8 @@
     "example_vi": "Chúng ta nhất định có thể hoàn thành nhiệm vụ.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "có khả năng"
   },
   {
     "id": 9341,
@@ -178982,7 +179191,7 @@
     "id": 9398,
     "word": "小时",
     "pinyin": "xiǎoshí",
-    "meaning": "giờ/tiếng (đồng hồ)",
+    "meaning": "giờ/tiếng",
     "level": 4,
     "curriculum": "yct",
     "hskVersion": "yct",
@@ -178995,7 +179204,8 @@
     "example_vi": "Tôi đã đợi 1 tiếng.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "đồng hồ"
   },
   {
     "id": 9399,
@@ -179647,7 +179857,7 @@
     "id": 9433,
     "word": "开",
     "pinyin": "kāi",
-    "meaning": "lái (xe)",
+    "meaning": "lái",
     "level": 4,
     "curriculum": "yct",
     "hskVersion": "yct",
@@ -179660,7 +179870,8 @@
     "example_vi": "Anh ấy đang học lái xe.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "xe"
   },
   {
     "id": 9434,
@@ -179685,7 +179896,7 @@
     "id": 9435,
     "word": "条",
     "pinyin": "tiáo",
-    "meaning": "sợi, cái, con (lượng từ)",
+    "meaning": "sợi, cái, con",
     "level": 4,
     "curriculum": "yct",
     "hskVersion": "yct",
@@ -179698,7 +179909,8 @@
     "example_vi": "Chiếc quần này rất đẹp.",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "lượng từ"
   },
   {
     "id": 9436,
@@ -180141,7 +180353,7 @@
     "id": 9459,
     "word": "件",
     "pinyin": "jiàn",
-    "meaning": "chiếc, cái (lượng từ)",
+    "meaning": "chiếc, cái",
     "level": 4,
     "curriculum": "yct",
     "hskVersion": "yct",
@@ -180154,7 +180366,8 @@
     "example_vi": "",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "lượng từ"
   },
   {
     "id": 9460,
@@ -183903,7 +184116,7 @@
     "id": 9657,
     "word": "跳动",
     "pinyin": "tiàodòng",
-    "meaning": "đập (tim)",
+    "meaning": "đập",
     "level": "7-9",
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -183916,7 +184129,8 @@
     "example_vi": "",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "tim"
   },
   {
     "id": 9658,
@@ -229902,7 +230116,7 @@
     "id": 12078,
     "word": "行使",
     "pinyin": "xíngshǐ",
-    "meaning": "thực hiện (quyền)",
+    "meaning": "thực hiện",
     "level": "7-9",
     "curriculum": "hsk",
     "hskVersion": "3.0",
@@ -229915,7 +230129,8 @@
     "example_vi": "",
     "isMemorized": false,
     "isStarred": false,
-    "isCustom": false
+    "isCustom": false,
+    "note": "quyền"
   },
   {
     "id": 12079,
@@ -255673,7 +255888,7 @@
     "word": "遍布",
     "pinyin": "biànbù",
     "category": "động từ",
-    "meaning": "phân bố/rải rác (khắp nơi)",
+    "meaning": "phân bố/rải rác",
     "example": "",
     "exampleMeaning": "",
     "curriculum": "hsk",
@@ -255682,7 +255897,8 @@
     "volume": "thuong",
     "lessonId": 1,
     "lessonTitle": "HSK 6 Thượng (v2.0) - Bài 1",
-    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 1"
+    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 1",
+    "note": "khắp nơi"
   },
   {
     "id": 13442,
@@ -255817,7 +256033,7 @@
     "word": "拨",
     "pinyin": "bō",
     "category": "động từ",
-    "meaning": "gọi (điện thoại)",
+    "meaning": "gọi",
     "example": "",
     "exampleMeaning": "",
     "curriculum": "hsk",
@@ -255826,7 +256042,8 @@
     "volume": "thuong",
     "lessonId": 2,
     "lessonTitle": "HSK 6 Thượng (v2.0) - Bài 2",
-    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 2"
+    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 2",
+    "note": "điện thoại"
   },
   {
     "id": 13451,
@@ -256057,7 +256274,7 @@
     "word": "部位",
     "pinyin": "bùwèi",
     "category": "danh từ",
-    "meaning": "bộ phận (cơ thể)",
+    "meaning": "bộ phận",
     "example": "",
     "exampleMeaning": "",
     "curriculum": "hsk",
@@ -256066,7 +256283,8 @@
     "volume": "thuong",
     "lessonId": 2,
     "lessonTitle": "HSK 6 Thượng (v2.0) - Bài 2",
-    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 2"
+    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 2",
+    "note": "cơ thể"
   },
   {
     "id": 13466,
@@ -256669,7 +256887,7 @@
     "word": "乘",
     "pinyin": "chéng",
     "category": "giới từ",
-    "meaning": "thừa, nhân (dịp)",
+    "meaning": "thừa, nhân",
     "example": "",
     "exampleMeaning": "",
     "curriculum": "hsk",
@@ -256678,7 +256896,8 @@
     "volume": "thuong",
     "lessonId": 3,
     "lessonTitle": "HSK 6 Thượng (v2.0) - Bài 3",
-    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 3"
+    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 3",
+    "note": "dịp"
   },
   {
     "id": 13504,
@@ -257506,7 +257725,7 @@
     "word": "瞪",
     "pinyin": "dèng",
     "category": "động từ",
-    "meaning": "nhìn trừng trừng, trừng/trợn (mắt)",
+    "meaning": "nhìn trừng trừng, trừng/trợn",
     "example": "",
     "exampleMeaning": "",
     "curriculum": "hsk",
@@ -257515,7 +257734,8 @@
     "volume": "thuong",
     "lessonId": 4,
     "lessonTitle": "HSK 6 Thượng (v2.0) - Bài 4",
-    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 4"
+    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 4",
+    "note": "mắt"
   },
   {
     "id": 13556,
@@ -257796,7 +258016,7 @@
     "word": "栋",
     "pinyin": "dòng",
     "category": "lượng từ",
-    "meaning": "tòa (nhà)",
+    "meaning": "tòa",
     "example": "",
     "exampleMeaning": "",
     "curriculum": "hsk",
@@ -257805,7 +258025,8 @@
     "volume": "thuong",
     "lessonId": 4,
     "lessonTitle": "HSK 6 Thượng (v2.0) - Bài 4",
-    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 4"
+    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 4",
+    "note": "nhà"
   },
   {
     "id": 13574,
@@ -260909,7 +261130,7 @@
     "word": "镜头",
     "pinyin": "jìngtóu",
     "category": "danh từ",
-    "meaning": "ống kính, cảnh (quay phim), pô (ảnh)",
+    "meaning": "ống kính, cảnh (quay phim), pô",
     "example": "",
     "exampleMeaning": "",
     "curriculum": "hsk",
@@ -260918,7 +261139,8 @@
     "volume": "thuong",
     "lessonId": 9,
     "lessonTitle": "HSK 6 Thượng (v2.0) - Bài 9",
-    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 9"
+    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 9",
+    "note": "ảnh"
   },
   {
     "id": 13768,
@@ -262818,7 +263040,7 @@
     "word": "畔",
     "pinyin": "pàn",
     "category": "danh từ",
-    "meaning": "bờ, bên (sông, hồ)",
+    "meaning": "bờ, bên",
     "example": "",
     "exampleMeaning": "",
     "curriculum": "hsk",
@@ -262827,7 +263049,8 @@
     "volume": "thuong",
     "lessonId": 11,
     "lessonTitle": "HSK 6 Thượng (v2.0) - Bài 11",
-    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 11"
+    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 11",
+    "note": "sông, hồ"
   },
   {
     "id": 13887,
@@ -263746,7 +263969,7 @@
     "word": "犬",
     "pinyin": "quǎn",
     "category": "từ vựng",
-    "meaning": "chó/(khuyển)",
+    "meaning": "chó/",
     "example": "",
     "exampleMeaning": "",
     "curriculum": "hsk",
@@ -263755,7 +263978,8 @@
     "volume": "thuong",
     "lessonId": 12,
     "lessonTitle": "HSK 6 Thượng (v2.0) - Bài 12",
-    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 12"
+    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 12",
+    "note": "khuyển"
   },
   {
     "id": 13945,
@@ -264276,7 +264500,7 @@
     "word": "梢",
     "pinyin": "shāo",
     "category": "danh từ",
-    "meaning": "ngọn (cây)",
+    "meaning": "ngọn",
     "example": "",
     "exampleMeaning": "",
     "curriculum": "hsk",
@@ -264285,7 +264509,8 @@
     "volume": "thuong",
     "lessonId": 13,
     "lessonTitle": "HSK 6 Thượng (v2.0) - Bài 13",
-    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 13"
+    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 13",
+    "note": "cây"
   },
   {
     "id": 13978,
@@ -264842,7 +265067,7 @@
     "word": "书籍",
     "pinyin": "shūjí",
     "category": "danh từ",
-    "meaning": "sách vở (nói khái quát)",
+    "meaning": "sách vở",
     "example": "",
     "exampleMeaning": "",
     "curriculum": "hsk",
@@ -264851,7 +265076,8 @@
     "volume": "thuong",
     "lessonId": 14,
     "lessonTitle": "HSK 6 Thượng (v2.0) - Bài 14",
-    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 14"
+    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 14",
+    "note": "nói khái quát"
   },
   {
     "id": 14013,
@@ -265434,7 +265660,7 @@
     "word": "通缉",
     "pinyin": "tōngjī",
     "category": "động từ",
-    "meaning": "truy nã/truy bắt (tội phạm)",
+    "meaning": "truy nã/truy bắt",
     "example": "",
     "exampleMeaning": "",
     "curriculum": "hsk",
@@ -265443,7 +265669,8 @@
     "volume": "thuong",
     "lessonId": 15,
     "lessonTitle": "HSK 6 Thượng (v2.0) - Bài 15",
-    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 15"
+    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 15",
+    "note": "tội phạm"
   },
   {
     "id": 14050,
@@ -266237,7 +266464,7 @@
     "word": "馅儿",
     "pinyin": "xiànr",
     "category": "danh từ",
-    "meaning": "nhân (bánh)",
+    "meaning": "nhân",
     "example": "",
     "exampleMeaning": "",
     "curriculum": "hsk",
@@ -266246,7 +266473,8 @@
     "volume": "thuong",
     "lessonId": 16,
     "lessonTitle": "HSK 6 Thượng (v2.0) - Bài 16",
-    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 16"
+    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 16",
+    "note": "bánh"
   },
   {
     "id": 14100,
@@ -268960,7 +269188,7 @@
     "word": "拄",
     "pinyin": "zhǔ",
     "category": "động từ",
-    "meaning": "chống (gậy)",
+    "meaning": "chống",
     "example": "",
     "exampleMeaning": "",
     "curriculum": "hsk",
@@ -268969,7 +269197,8 @@
     "volume": "thuong",
     "lessonId": 19,
     "lessonTitle": "HSK 6 Thượng (v2.0) - Bài 19",
-    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 19"
+    "lessonDesc": "Từ vựng HSK 6 Thượng (v2.0) Bài 19",
+    "note": "gậy"
   },
   {
     "id": 14270,
@@ -272691,7 +272920,7 @@
     "word": "二氧化碳",
     "pinyin": "èryǎnghuàtàn",
     "category": "danh từ",
-    "meaning": "carbon dioxide (CO₂)",
+    "meaning": "carbon dioxide",
     "example": "",
     "exampleMeaning": "",
     "curriculum": "hsk",
@@ -272700,7 +272929,8 @@
     "volume": "ha",
     "lessonId": 24,
     "lessonTitle": "HSK 6 Hạ (v2.0) - Bài 4",
-    "lessonDesc": "Từ vựng HSK 6 Hạ (v2.0) Bài 4"
+    "lessonDesc": "Từ vựng HSK 6 Hạ (v2.0) Bài 4",
+    "note": "CO₂"
   },
   {
     "id": 14502,
@@ -273364,7 +273594,7 @@
     "word": "钙",
     "pinyin": "gài",
     "category": "danh từ",
-    "meaning": "canxi (calcium)",
+    "meaning": "canxi",
     "example": "",
     "exampleMeaning": "",
     "curriculum": "hsk",
@@ -273373,7 +273603,8 @@
     "volume": "ha",
     "lessonId": 25,
     "lessonTitle": "HSK 6 Hạ (v2.0) - Bài 5",
-    "lessonDesc": "Từ vựng HSK 6 Hạ (v2.0) Bài 5"
+    "lessonDesc": "Từ vựng HSK 6 Hạ (v2.0) Bài 5",
+    "note": "calcium"
   },
   {
     "id": 14544,
@@ -274650,7 +274881,7 @@
     "word": "荤",
     "pinyin": "hūn",
     "category": "danh từ",
-    "meaning": "món mặn (thịt hoặc cá)",
+    "meaning": "món mặn",
     "example": "",
     "exampleMeaning": "",
     "curriculum": "hsk",
@@ -274659,7 +274890,8 @@
     "volume": "ha",
     "lessonId": 27,
     "lessonTitle": "HSK 6 Hạ (v2.0) - Bài 7",
-    "lessonDesc": "Từ vựng HSK 6 Hạ (v2.0) Bài 7"
+    "lessonDesc": "Từ vựng HSK 6 Hạ (v2.0) Bài 7",
+    "note": "thịt hoặc cá"
   },
   {
     "id": 14624,
@@ -276035,7 +276267,7 @@
     "word": "勘探",
     "pinyin": "kāntàn",
     "category": "động từ",
-    "meaning": "thăm dò (để tìm quặng)",
+    "meaning": "thăm dò",
     "example": "",
     "exampleMeaning": "",
     "curriculum": "hsk",
@@ -276044,7 +276276,8 @@
     "volume": "ha",
     "lessonId": 28,
     "lessonTitle": "HSK 6 Hạ (v2.0) - Bài 8",
-    "lessonDesc": "Từ vựng HSK 6 Hạ (v2.0) Bài 8"
+    "lessonDesc": "Từ vựng HSK 6 Hạ (v2.0) Bài 8",
+    "note": "để tìm quặng"
   },
   {
     "id": 14710,
@@ -276678,7 +276911,7 @@
     "word": "理直气壮",
     "pinyin": "lǐzhí-qìzhuàng",
     "category": "từ vựng",
-    "meaning": "dõng dạc (nói)",
+    "meaning": "dõng dạc",
     "example": "",
     "exampleMeaning": "",
     "curriculum": "hsk",
@@ -276687,7 +276920,8 @@
     "volume": "ha",
     "lessonId": 29,
     "lessonTitle": "HSK 6 Hạ (v2.0) - Bài 9",
-    "lessonDesc": "Từ vựng HSK 6 Hạ (v2.0) Bài 9"
+    "lessonDesc": "Từ vựng HSK 6 Hạ (v2.0) Bài 9",
+    "note": "nói"
   },
   {
     "id": 14750,
@@ -276742,7 +276976,7 @@
     "word": "历代",
     "pinyin": "lìdài",
     "category": "danh từ",
-    "meaning": "các triều đại, các đời (phong kiến)",
+    "meaning": "các triều đại, các đời",
     "example": "",
     "exampleMeaning": "",
     "curriculum": "hsk",
@@ -276751,7 +276985,8 @@
     "volume": "ha",
     "lessonId": 29,
     "lessonTitle": "HSK 6 Hạ (v2.0) - Bài 9",
-    "lessonDesc": "Từ vựng HSK 6 Hạ (v2.0) Bài 9"
+    "lessonDesc": "Từ vựng HSK 6 Hạ (v2.0) Bài 9",
+    "note": "phong kiến"
   },
   {
     "id": 14754,
@@ -277578,7 +277813,7 @@
     "word": "墨水儿",
     "pinyin": "mòshuǐr",
     "category": "danh từ",
-    "meaning": "mực (để viết)",
+    "meaning": "mực",
     "example": "",
     "exampleMeaning": "",
     "curriculum": "hsk",
@@ -277587,7 +277822,8 @@
     "volume": "ha",
     "lessonId": 30,
     "lessonTitle": "HSK 6 Hạ (v2.0) - Bài 10",
-    "lessonDesc": "Từ vựng HSK 6 Hạ (v2.0) Bài 10"
+    "lessonDesc": "Từ vựng HSK 6 Hạ (v2.0) Bài 10",
+    "note": "để viết"
   },
   {
     "id": 14806,
@@ -280530,7 +280766,7 @@
     "word": "耸",
     "pinyin": "sǒng",
     "category": "động từ",
-    "meaning": "nhún (vai)",
+    "meaning": "nhún",
     "example": "",
     "exampleMeaning": "",
     "curriculum": "hsk",
@@ -280539,7 +280775,8 @@
     "volume": "ha",
     "lessonId": 33,
     "lessonTitle": "HSK 6 Hạ (v2.0) - Bài 13",
-    "lessonDesc": "Từ vựng HSK 6 Hạ (v2.0) Bài 13"
+    "lessonDesc": "Từ vựng HSK 6 Hạ (v2.0) Bài 13",
+    "note": "vai"
   },
   {
     "id": 14989,
@@ -281155,7 +281392,7 @@
     "word": "铜",
     "pinyin": "tóng",
     "category": "danh từ",
-    "meaning": "đồng (ký hiệu Cu)",
+    "meaning": "đồng",
     "example": "",
     "exampleMeaning": "",
     "curriculum": "hsk",
@@ -281164,7 +281401,8 @@
     "volume": "ha",
     "lessonId": 34,
     "lessonTitle": "HSK 6 Hạ (v2.0) - Bài 14",
-    "lessonDesc": "Từ vựng HSK 6 Hạ (v2.0) Bài 14"
+    "lessonDesc": "Từ vựng HSK 6 Hạ (v2.0) Bài 14",
+    "note": "ký hiệu Cu"
   },
   {
     "id": 15028,
@@ -283117,7 +283355,7 @@
     "word": "血压",
     "pinyin": "xuèyā",
     "category": "danh từ",
-    "meaning": "huyết áp (BP)",
+    "meaning": "huyết áp",
     "example": "",
     "exampleMeaning": "",
     "curriculum": "hsk",
@@ -283126,7 +283364,8 @@
     "volume": "ha",
     "lessonId": 36,
     "lessonTitle": "HSK 6 Hạ (v2.0) - Bài 16",
-    "lessonDesc": "Từ vựng HSK 6 Hạ (v2.0) Bài 16"
+    "lessonDesc": "Từ vựng HSK 6 Hạ (v2.0) Bài 16",
+    "note": "BP"
   },
   {
     "id": 15150,

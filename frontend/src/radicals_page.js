@@ -399,3 +399,105 @@ document.addEventListener('keydown', (e) => {
 document.addEventListener('DOMContentLoaded', () => {
   renderGridContent();
 });
+
+window.printRadicalWorksheet = function() {
+  let targetCategory = currentTab;
+  if (!targetCategory || targetCategory === 'So sánh' || targetCategory === 'Còn lại') {
+    targetCategory = '50 bộ (1)';
+  }
+
+  const list = (radicalsData.radicals || []).filter(r => r.category === targetCategory);
+  if (list.length === 0) {
+    alert('Không tìm thấy dữ liệu bộ thủ để in!');
+    return;
+  }
+
+  let printArea = document.getElementById('printable-radical-worksheet');
+  if (!printArea) {
+    printArea = document.createElement('div');
+    printArea.id = 'printable-radical-worksheet';
+    document.body.appendChild(printArea);
+  }
+
+  const createTianzigeBox = (char = '', isFaint = false) => {
+    return `
+      <div style="width: 32px; height: 32px; border: 1px solid #64748b; position: relative; display: flex; align-items: center; justify-content: center; box-sizing: border-box; background: #fff;">
+        <svg style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;" viewBox="0 0 32 36">
+          <line x1="0" y1="16" x2="32" y2="16" stroke="#cbd5e1" stroke-dasharray="2,2" />
+          <line x1="16" y1="0" x2="16" y2="32" stroke="#cbd5e1" stroke-dasharray="2,2" />
+          <line x1="0" y1="0" x2="32" y2="32" stroke="#e2e8f0" stroke-dasharray="2,2" />
+          <line x1="32" y1="0" x2="0" y2="32" stroke="#e2e8f0" stroke-dasharray="2,2" />
+        </svg>
+        ${char ? `<span style="font-family: KaiTi, STKaiti, 'SimSun', serif; font-size: 1.4rem; font-weight: 800; color: ${isFaint ? '#cbd5e1' : '#0f172a'}; z-index: 1;">${char}</span>` : ''}
+      </div>
+    `;
+  };
+
+  let rowsHtml = '';
+  list.forEach((item, index) => {
+    const charDisplay = item.radical + (item.variant ? ` / ${item.variant}` : '');
+    const traceChar = item.variant || item.radical;
+    
+    let faintBoxes = '';
+    let blankBoxes = '';
+    for (let i = 0; i < 8; i++) {
+      faintBoxes += createTianzigeBox(traceChar, true);
+      blankBoxes += createTianzigeBox('', false);
+    }
+
+    rowsHtml += `
+      <div style="display: flex; align-items: stretch; border: 1px solid #94a3b8; border-radius: 6px; margin-bottom: 6px; page-break-inside: avoid; background: #fff;">
+        <div style="width: 140px; padding: 4px 8px; border-right: 1.5px solid #64748b; display: flex; flex-direction: column; justify-content: center; background: #f8fafc;">
+          <div style="font-size: 0.75rem; font-weight: 800; color: #3b82f6;">STT ${index + 1}</div>
+          <div style="font-family: KaiTi, STKaiti, 'SimSun', serif; font-size: 1.5rem; font-weight: 900; color: #0f172a; line-height: 1.1; margin: 1px 0;">${charDisplay}</div>
+          <div style="font-size: 0.78rem; font-weight: 700; color: #334155;">${item.name || ''} (${item.meaning || ''})</div>
+        </div>
+
+        <div style="flex: 1; padding: 4px 8px; display: flex; flex-direction: column; gap: 3px; justify-content: center;">
+          <div style="display: flex; gap: 3px; align-items: center;">
+            <span style="font-size: 0.65rem; font-weight: 700; color: #64748b; width: 44px;">Mờ:</span>
+            ${faintBoxes}
+          </div>
+          <div style="display: flex; gap: 3px; align-items: center;">
+            <span style="font-size: 0.65rem; font-weight: 700; color: #64748b; width: 44px;">Trống:</span>
+            ${blankBoxes}
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  printArea.innerHTML = `
+    <style>
+      @media print {
+        body * { visibility: hidden !important; }
+        #printable-radical-worksheet, #printable-radical-worksheet * { visibility: visible !important; }
+        #printable-radical-worksheet {
+          position: absolute !important;
+          left: 0 !important;
+          top: 0 !important;
+          width: 100% !important;
+          padding: 8mm !important;
+          box-sizing: border-box !important;
+          background: #fff !important;
+          color: #000 !important;
+        }
+        @page { size: A4 portrait; margin: 6mm; }
+      }
+    </style>
+    <div style="padding: 10px; font-family: 'Inter', sans-serif; color: #0f172a;">
+      <div style="text-align: center; border-bottom: 2px solid #0f172a; padding-bottom: 8px; margin-bottom: 12px;">
+        <h1 style="font-size: 1.25rem; font-weight: 900; margin: 0; text-transform: uppercase; color: #0f172a;">PHIẾU TẬP TÔ BỘ THỦ TIẾNG TRUNG — ${targetCategory.toUpperCase()}</h1>
+        <p style="font-size: 0.78rem; color: #475569; margin: 2px 0 0 0; font-weight: 700;">TIẾNG TRUNG HỒNG THÁI — BẢNG 50 BỘ THỦ CỐ ĐỊNH (CHỮ HÁN & NGHĨA HÁN-VIỆT)</p>
+      </div>
+
+      <div>
+        ${rowsHtml}
+      </div>
+    </div>
+  `;
+
+  setTimeout(() => {
+    window.print();
+  }, 200);
+};

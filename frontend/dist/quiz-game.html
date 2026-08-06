@@ -1263,11 +1263,8 @@
       function cleanOptionFormat(str, type) {
         if (!str) return '';
         let s = str.trim();
-        if (type === 'zh-vi' || type === 'pinyin-vi' || type === 'audio-vi') {
-          // Remove trailing English inside parentheses and normalize
-          s = s.replace(/\([a-zA-Z\s,.-]+\)/g, '').trim();
-          return s;
-        } else if (type === 'zh-pinyin' || type === 'audio-pinyin') {
+        s = s.replace(/\([^)]*\)/g, '').replace(/（[^）]*）/g, '').trim();
+        if (type === 'zh-pinyin' || type === 'audio-pinyin') {
           s = s.replace(/[\[\]]/g, '').trim();
           return `[ ${s} ]`;
         }
