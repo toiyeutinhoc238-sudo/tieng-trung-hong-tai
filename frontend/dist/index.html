@@ -100,7 +100,7 @@
     window.toggleTheme = window.toggleTheme || function() {};
   </script>
   <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
-  <script type="module" crossorigin src="/assets/main-DaM1kBcN.js"></script>
+  <script type="module" crossorigin src="/assets/main-b6j_g1qZ.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/style-CQ82fZju.css">
 </head>
 
@@ -514,8 +514,7 @@
   <!-- Main Content Layout -->
   <main class="main-layout">
 
-    <!-- Dedicated Home View Section with Zubi / Invoice.io Dashboard Layout -->
-    <!-- Dedicated Home View Section (Redesigned per Mockup Image 3) -->
+    <!-- Dedicated Home View Section (Clean & 100% Real Database Data) -->
     <div id="home-view-section" class="home-dashboard-redesign" style="display: flex; flex-direction: column; gap: 24px; margin-bottom: 40px; width: 100%;">
 
       <!-- TOP BANNER (Hero Banner with Red Dragon Mascot from Logo & Colorful Title Blocks) -->
@@ -551,28 +550,54 @@
         </div>
       </div>
 
-      <!-- ROW 2: TOP STATS (2 Large Side-by-Side Cards) -->
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-        <!-- Stat Card 1: Streak -->
-        <div class="home-stat-card glass-panel" style="background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(16px); border: 1.5px solid rgba(255, 255, 255, 0.18); border-radius: 22px; padding: 24px 28px; display: flex; align-items: center; justify-content: center; gap: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-          <div style="width: 60px; height: 60px; border-radius: 50%; background: rgba(239, 68, 68, 0.18); border: 2px solid rgba(239, 68, 68, 0.35); color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 2rem; flex-shrink: 0; box-shadow: 0 0 20px rgba(239, 68, 68, 0.25);">
-            🔥
+      <!-- ROW 2: 4 REAL STAT CARDS (Connected to Real Database Metrics) -->
+      <div class="zubi-stat-cards-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px;">
+        <!-- Card 1: Completed Lessons -->
+        <div class="zubi-stat-card glass-panel" style="background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(16px); border: 1.5px solid rgba(255, 255, 255, 0.18); border-radius: 20px; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 10px 28px rgba(0,0,0,0.3);">
+          <div class="zubi-stat-top" style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="zubi-circle-icon pink" style="width: 44px; height: 44px; border-radius: 50%; background: rgba(236, 72, 153, 0.2); color: #ec4899; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+              <i class="fa-solid fa-clock-rotate-left"></i>
+            </div>
+            <i class="fa-regular fa-eye zubi-eye-icon" style="color: #94a3b8; font-size: 1.05rem; cursor: pointer;" title="Chi tiết bài hoàn thành" onclick="window.openZubiStatDetail('completed')"></i>
           </div>
-          <div style="text-align: left;">
-            <div style="font-size: 2.8rem; font-weight: 900; color: #f87171; line-height: 1; font-family: var(--font-display, sans-serif);" id="home-streak-val">1</div>
-            <div style="font-size: 0.95rem; font-weight: 700; color: #94a3b8; margin-top: 6px;">Ngày liên tiếp</div>
-          </div>
+          <div class="zubi-stat-val" id="zubi-completed-count" style="font-family: var(--font-display, sans-serif); font-size: 1.85rem; font-weight: 800; color: #ffffff; line-height: 1.1;">0 Bài</div>
+          <div class="zubi-stat-label" style="font-size: 0.85rem; font-weight: 600; color: #94a3b8;">Bài học đã hoàn thành</div>
         </div>
 
-        <!-- Stat Card 2: Perseverance Time -->
-        <div class="home-stat-card glass-panel" style="background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(16px); border: 1.5px solid rgba(255, 255, 255, 0.18); border-radius: 22px; padding: 24px 28px; display: flex; align-items: center; justify-content: center; gap: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-          <div style="width: 60px; height: 60px; border-radius: 50%; background: rgba(59, 130, 246, 0.18); border: 2px solid rgba(59, 130, 246, 0.35); color: #3b82f6; display: flex; align-items: center; justify-content: center; font-size: 2rem; flex-shrink: 0; box-shadow: 0 0 20px rgba(59, 130, 246, 0.25);">
-            🕒
+        <!-- Card 2: Study Time -->
+        <div class="zubi-stat-card glass-panel" style="background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(16px); border: 1.5px solid rgba(255, 255, 255, 0.18); border-radius: 20px; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 10px 28px rgba(0,0,0,0.3);">
+          <div class="zubi-stat-top" style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="zubi-circle-icon blue" style="width: 44px; height: 44px; border-radius: 50%; background: rgba(59, 130, 246, 0.2); color: #3b82f6; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+              <i class="fa-solid fa-clock"></i>
+            </div>
+            <i class="fa-regular fa-eye zubi-eye-icon" style="color: #94a3b8; font-size: 1.05rem; cursor: pointer;" title="Chi tiết thời gian học" onclick="window.openZubiStatDetail('time')"></i>
           </div>
-          <div style="text-align: left;">
-            <div style="font-size: 2.8rem; font-weight: 900; color: #60a5fa; line-height: 1; font-family: var(--font-display, sans-serif);" id="home-time-val">58 phút</div>
-            <div style="font-size: 0.95rem; font-weight: 700; color: #94a3b8; margin-top: 6px;">Giờ kiên trì</div>
+          <div class="zubi-stat-val" id="zubi-study-time-count" style="font-family: var(--font-display, sans-serif); font-size: 1.85rem; font-weight: 800; color: #ffffff; line-height: 1.1;">0 phút</div>
+          <div class="zubi-stat-label" style="font-size: 0.85rem; font-weight: 600; color: #94a3b8;">Thời gian tham gia học</div>
+        </div>
+
+        <!-- Card 3: Enrolled Lessons -->
+        <div class="zubi-stat-card glass-panel" style="background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(16px); border: 1.5px solid rgba(255, 255, 255, 0.18); border-radius: 20px; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 10px 28px rgba(0,0,0,0.3);">
+          <div class="zubi-stat-top" style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="zubi-circle-icon orange" style="width: 44px; height: 44px; border-radius: 50%; background: rgba(249, 115, 22, 0.2); color: #f97316; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+              <i class="fa-solid fa-hourglass-half"></i>
+            </div>
+            <i class="fa-regular fa-eye zubi-eye-icon" style="color: #94a3b8; font-size: 1.05rem; cursor: pointer;" title="Chi tiết bài đang học" onclick="window.openZubiStatDetail('enrolled')"></i>
           </div>
+          <div class="zubi-stat-val" id="zubi-enrolled-count" style="font-family: var(--font-display, sans-serif); font-size: 1.85rem; font-weight: 800; color: #ffffff; line-height: 1.1;">632 Bài</div>
+          <div class="zubi-stat-label" style="font-size: 0.85rem; font-weight: 600; color: #94a3b8;">Bài học đang theo học</div>
+        </div>
+
+        <!-- Card 4: Total Words in DB -->
+        <div class="zubi-stat-card glass-panel" style="background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(16px); border: 1.5px solid rgba(255, 255, 255, 0.18); border-radius: 20px; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 10px 28px rgba(0,0,0,0.3);">
+          <div class="zubi-stat-top" style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="zubi-circle-icon cyan" style="width: 44px; height: 44px; border-radius: 50%; background: rgba(2, 132, 199, 0.2); color: #38bdf8; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+              <i class="fa-solid fa-layer-group"></i>
+            </div>
+            <i class="fa-regular fa-eye zubi-eye-icon" style="color: #94a3b8; font-size: 1.05rem; cursor: pointer;" title="Chi tiết phân bổ từ vựng" onclick="window.openZubiStatDetail('words')"></i>
+          </div>
+          <div class="zubi-stat-val" id="zubi-total-words-count" style="font-family: var(--font-display, sans-serif); font-size: 1.85rem; font-weight: 800; color: #ffffff; line-height: 1.1;">14,827 Từ</div>
+          <div class="zubi-stat-label" style="font-size: 0.85rem; font-weight: 600; color: #94a3b8;">Tổng từ vựng HSK & YCT</div>
         </div>
       </div>
 
@@ -583,7 +608,7 @@
             <i class="fa-solid fa-chart-column" style="color: #38bdf8;"></i> Biểu Đồ Tiến Độ Học Trong Tuần
           </h3>
           <span style="font-size: 0.85rem; font-weight: 700; color: #34d399; background: rgba(16,185,129,0.18); padding: 4px 12px; border-radius: 99px; border: 1px solid rgba(16,185,129,0.3);">
-            <i class="fa-solid fa-circle-check"></i> Đang tự động ghi nhận
+            <i class="fa-solid fa-circle-check"></i> Tự động cập nhật từ cơ sở dữ liệu
           </span>
         </div>
 
@@ -628,70 +653,42 @@
         </div>
       </div>
 
-      <!-- ROW 4: BOTTOM 2 CARDS (Nội dung học phổ biến & Xếp hạng) -->
+      <!-- ROW 4: RECENT LESSON CARDS (REAL DATABASE CURRICULUM PROGRESS) -->
+      <div class="zubi-section-block" style="display: flex; flex-direction: column; gap: 16px;">
+        <div class="zubi-section-header">
+          <h2 class="zubi-section-title" style="font-family: var(--font-display, sans-serif); font-size: 1.35rem; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-clock-rotate-left" style="color: #60a5fa;"></i> Bài học gần đây (Tiến độ thực tế)
+          </h2>
+        </div>
+        <div class="zubi-recent-cards-grid" id="zubi-recent-cards-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+          <!-- Dynamically rendered real curriculum cards from database -->
+        </div>
+      </div>
+
+      <!-- ROW 5: BOTTOM 2 CARDS (Tổng quan giáo trình & Top 1 2 3 Leaderboard) -->
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-        <!-- Bottom Left: Nội dung học phổ biến -->
-        <div style="background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(20px); border: 1.5px solid rgba(255, 255, 255, 0.18); border-radius: 24px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); display: flex; flex-direction: column; gap: 16px;">
+        
+        <!-- Bottom Left: All Curriculum Overview Table -->
+        <div style="background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(20px); border: 1.5px solid rgba(255, 255, 255, 0.18); border-radius: 24px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); display: flex; flex-direction: column; gap: 16px; overflow-x: auto;">
           <h3 style="font-size: 1.15rem; font-weight: 800; color: #ffffff; margin: 0; display: flex; align-items: center; gap: 10px;">
-            <i class="fa-solid fa-graduation-cap" style="color: #38bdf8;"></i> Nội dung học phổ biến
+            <i class="fa-solid fa-table-list" style="color: #38bdf8;"></i> Tổng quan tất cả Giáo trình
           </h3>
-
-          <div style="display: flex; flex-direction: column; gap: 12px;">
-            <!-- Popular Item 1: Bài Khóa -->
-            <a href="/lesson-texts.html" style="text-decoration: none; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; transition: all 0.2s;" onmouseenter="this.style.borderColor='#38bdf8'; this.style.transform='translateY(-2px)'" onmouseleave="this.style.borderColor='rgba(255,255,255,0.12)'; this.style.transform='translateY(0)'">
-              <div style="display: flex; align-items: center; gap: 12px;">
-                <div style="width: 40px; height: 40px; border-radius: 12px; background: rgba(56, 189, 248, 0.2); color: #38bdf8; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
-                  <i class="fa-solid fa-book-open"></i>
-                </div>
-                <div>
-                  <div style="font-size: 0.98rem; font-weight: 800; color: #ffffff;">Đọc & Nghe Bài Khóa HSK</div>
-                  <div style="font-size: 0.8rem; color: #94a3b8;">15 Bài khóa hội thoại bối cảnh HSK 1 - HSK 6</div>
-                </div>
-              </div>
-              <i class="fa-solid fa-chevron-right" style="color: #38bdf8;"></i>
-            </a>
-
-            <!-- Popular Item 2: Từ vựng HSK -->
-            <a href="/detail-list.html" style="text-decoration: none; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; transition: all 0.2s;" onmouseenter="this.style.borderColor='#10b981'; this.style.transform='translateY(-2px)'" onmouseleave="this.style.borderColor='rgba(255,255,255,0.12)'; this.style.transform='translateY(0)'">
-              <div style="display: flex; align-items: center; gap: 12px;">
-                <div style="width: 40px; height: 40px; border-radius: 12px; background: rgba(16, 185, 129, 0.2); color: #10b981; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
-                  <i class="fa-solid fa-font"></i>
-                </div>
-                <div>
-                  <div style="font-size: 0.98rem; font-weight: 800; color: #ffffff;">Từ Vựng HSK 3.0 & 2.0</div>
-                  <div style="font-size: 0.8rem; color: #94a3b8;">15,242 từ vựng chuẩn kèm phát âm & ví dụ</div>
-                </div>
-              </div>
-              <i class="fa-solid fa-chevron-right" style="color: #10b981;"></i>
-            </a>
-
-            <!-- Popular Item 3: Bảng Phiên Âm Pinyin -->
-            <a href="/chinese-phonetics.html" style="text-decoration: none; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; transition: all 0.2s;" onmouseenter="this.style.borderColor='#a855f7'; this.style.transform='translateY(-2px)'" onmouseleave="this.style.borderColor='rgba(255,255,255,0.12)'; this.style.transform='translateY(0)'">
-              <div style="display: flex; align-items: center; gap: 12px;">
-                <div style="width: 40px; height: 40px; border-radius: 12px; background: rgba(168, 85, 247, 0.2); color: #c084fc; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
-                  <i class="fa-solid fa-table-cells"></i>
-                </div>
-                <div>
-                  <div style="font-size: 0.98rem; font-weight: 800; color: #ffffff;">Bảng Phiên Âm (Pinyin)</div>
-                  <div style="font-size: 0.8rem; color: #94a3b8;">21 Thanh mẫu & 36 Vận mẫu chuẩn Bắc Kinh</div>
-                </div>
-              </div>
-              <i class="fa-solid fa-chevron-right" style="color: #c084fc;"></i>
-            </a>
-
-            <!-- Popular Item 4: Bộ Thủ -->
-            <a href="/chinese-radicals.html" style="text-decoration: none; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; transition: all 0.2s;" onmouseenter="this.style.borderColor='#f59e0b'; this.style.transform='translateY(-2px)'" onmouseleave="this.style.borderColor='rgba(255,255,255,0.12)'; this.style.transform='translateY(0)'">
-              <div style="display: flex; align-items: center; gap: 12px;">
-                <div style="width: 40px; height: 40px; border-radius: 12px; background: rgba(245, 158, 11, 0.2); color: #fbbf24; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
-                  <i class="fa-solid fa-shapes"></i>
-                </div>
-                <div>
-                  <div style="font-size: 0.98rem; font-weight: 800; color: #ffffff;">214 Bộ Thủ Tiếng Trung</div>
-                  <div style="font-size: 0.8rem; color: #94a3b8;">Tra cứu nhanh ý nghĩa & cách ghép bộ thủ</div>
-                </div>
-              </div>
-              <i class="fa-solid fa-chevron-right" style="color: #fbbf24;"></i>
-            </a>
+          <div class="zubi-table-wrap" style="border-radius: 16px; padding: 10px; overflow-x: auto;">
+            <table class="zubi-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem;">
+              <thead>
+                <tr>
+                  <th class="zubi-th" style="padding: 12px 14px; font-size: 0.72rem; font-weight: 700;">CẤP ĐỘ</th>
+                  <th class="zubi-th" style="padding: 12px 14px; font-size: 0.72rem; font-weight: 700;">GIÁO TRÌNH</th>
+                  <th class="zubi-th" style="padding: 12px 14px; font-size: 0.72rem; font-weight: 700;">TỔNG TỪ</th>
+                  <th class="zubi-th" style="padding: 12px 14px; font-size: 0.72rem; font-weight: 700;">TIẾN ĐỘ</th>
+                  <th class="zubi-th" style="padding: 12px 14px; font-size: 0.72rem; font-weight: 700;">TRẠNG THÁI</th>
+                  <th class="zubi-th" style="padding: 12px 14px; font-size: 0.72rem; font-weight: 700;">HÀNH ĐỘNG</th>
+                </tr>
+              </thead>
+              <tbody id="zubi-table-body">
+                <!-- Dynamically rendered curriculum tier rows from DB -->
+              </tbody>
+            </table>
           </div>
         </div>
 
@@ -699,7 +696,7 @@
         <div style="background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(20px); border: 1.5px solid rgba(255, 255, 255, 0.18); border-radius: 24px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); display: flex; flex-direction: column; gap: 16px;">
           <div style="display: flex; justify-content: space-between; align-items: center;">
             <h3 style="font-size: 1.15rem; font-weight: 800; color: #ffffff; margin: 0; display: flex; align-items: center; gap: 10px;">
-              <i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> Xếp Hạng Học Viên
+              <i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> Xếp Hạng Học Viên (Top 1 2 3)
             </h3>
             <a href="/rank.html" style="font-size: 0.85rem; font-weight: 700; color: #38bdf8; text-decoration: none;">Xem tất cả &rarr;</a>
           </div>

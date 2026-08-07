@@ -9108,17 +9108,28 @@ function updateStatsUI() {
   const studyTimeEl = document.getElementById('welcome-study-time-val');
   const homeTimeEl = document.getElementById('home-time-val');
 
+  const zubiCompletedEl = document.getElementById('zubi-completed-count');
+  const zubiTimeEl = document.getElementById('zubi-study-time-count');
+  const zubiTotalWordsEl = document.getElementById('zubi-total-words-count');
+
   if (streakEl) streakEl.textContent = `${userStreak} ngày`;
   if (homeStreakEl) homeStreakEl.textContent = `${userStreak || 1}`;
 
   const minutes = Math.floor((userStudyTime + sessionStudyTime) / 60);
   if (studyTimeEl) studyTimeEl.textContent = `${minutes} phút`;
-  if (homeTimeEl) homeTimeEl.textContent = minutes > 0 ? `${minutes} phút` : '58 phút';
+  if (homeTimeEl) homeTimeEl.textContent = `${minutes} phút`;
+  if (zubiTimeEl) zubiTimeEl.textContent = `${minutes} phút`;
 
   const completedCount = calculateCompletedLessons();
   if (completedEl) completedEl.textContent = `${completedCount} bài`;
+  if (zubiCompletedEl) zubiCompletedEl.textContent = `${completedCount} Bài`;
+
+  if (zubiTotalWordsEl && Array.isArray(vocabList)) {
+    zubiTotalWordsEl.textContent = `${vocabList.length.toLocaleString()} Từ`;
+  }
 
   renderCourseCompletionDashboard();
+  renderZubiDashboardTableAndRecent();
   renderHomeLeaderboard();
 }
 
