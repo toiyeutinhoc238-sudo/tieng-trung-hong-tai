@@ -25,6 +25,7 @@ export default defineConfig({
         phonetics: resolve(__dirname, 'chinese-phonetics.html'),
         radicals: resolve(__dirname, 'chinese-radicals.html'),
         hanzi: resolve(__dirname, 'hanzi-writer.html'),
+        texts: resolve(__dirname, 'lesson-texts.html'),
         rank: resolve(__dirname, 'rank.html')
       }
     }
