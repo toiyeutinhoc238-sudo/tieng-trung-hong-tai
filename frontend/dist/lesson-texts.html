@@ -823,8 +823,6 @@
           </div>
         `;
 
-        setTimeout(() => speakText(curLine.speech), 300);
-
       } else if (currentMode === 'dictation') {
         if (linesList.length === 0) {
           box.innerHTML = `<div style="text-align:center; padding:40px; color:#94a3b8;">Chưa có dữ liệu chính tả.</div>`;
@@ -879,8 +877,6 @@
             </div>
           </div>
         `;
-
-        setTimeout(() => speakText(curLine.speech), 300);
 
       } else if (currentMode === 'translate') {
         if (linesList.length === 0) {
