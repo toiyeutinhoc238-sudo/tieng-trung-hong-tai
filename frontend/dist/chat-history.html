@@ -54,15 +54,21 @@
   <!-- Font and Stylesheets -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
   
   
   <style>
+    * {
+      font-family: 'Be Vietnam Pro', 'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
     body {
       background-color: var(--bg-primary);
       color: var(--text-primary);
-      font-family: var(--font-sans);
+      font-family: 'Be Vietnam Pro', 'Outfit', sans-serif !important;
       height: 100vh;
       overflow: hidden;
       display: flex;
@@ -83,7 +89,7 @@
     .threads-sidebar {
       width: 320px;
       min-width: 320px;
-      background: rgba(0, 0, 0, 0.15);
+      background: rgba(0, 0, 0, 0.18);
       border-right: 1px solid var(--border-glass);
       display: flex;
       flex-direction: column;
@@ -91,21 +97,24 @@
     }
 
     .sidebar-header {
-      padding: 20px;
+      padding: 16px 18px;
       border-bottom: 1px solid var(--border-glass);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 10px;
     }
 
     .sidebar-header h3 {
-      font-family: var(--font-display);
-      font-size: 1.15rem;
-      font-weight: 700;
+      font-family: 'Outfit', 'Be Vietnam Pro', sans-serif !important;
+      font-size: 1.1rem;
+      font-weight: 800;
       margin: 0;
       display: flex;
       align-items: center;
       gap: 8px;
+      color: #ffffff;
+      white-space: nowrap;
     }
 
     .threads-list {
@@ -429,16 +438,16 @@
     
     <!-- Left Sidebar -->
     <div class="threads-sidebar" id="threads-sidebar">
-      <div class="sidebar-header">
-        <h3 style="margin:0; font-size: 1.05rem; display: flex; align-items: center; gap: 6px;"><i class="fa-solid fa-clock-rotate-left text-primary"></i> Hội thoại</h3>
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <button id="theme-toggle" class="btn-theme-toggle" onclick="toggleTheme()" title="Chuyển đổi giao diện Sáng / Tối" style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-glass); color: var(--text-primary); width: 34px; height: 34px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 0.95rem; transition: all 0.2s;">
+      <div class="sidebar-header" style="padding: 16px 18px; border-bottom: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center; gap: 10px; background: rgba(15, 23, 42, 0.4);">
+        <h3 style="margin:0; font-family: 'Outfit', 'Be Vietnam Pro', sans-serif; font-size: 1.1rem; font-weight: 800; color: #ffffff; display: flex; align-items: center; gap: 8px; white-space: nowrap; flex-shrink: 0;"><i class="fa-solid fa-clock-rotate-left" style="color: #38bdf8;"></i> Hội thoại</h3>
+        <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
+          <button id="theme-toggle" class="btn-theme-toggle" onclick="toggleTheme()" title="Chuyển đổi giao diện Sáng / Tối" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #ffffff; width: 34px; height: 34px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem; transition: all 0.2s;">
             <i class="fa-solid fa-moon"></i>
           </button>
-          <a href="/index.html" class="btn-home-top" title="Quay về Trang Chủ" style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); color: var(--accent-blue); padding: 5px 12px; border-radius: 8px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; transition: all 0.2s;">
-            <i class="fa-solid fa-house"></i> Trang Chủ
+          <a href="/index.html" class="btn-home-top" title="Quay về Trang Chủ" style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); color: #38bdf8; width: 34px; height: 34px; border-radius: 8px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem; transition: all 0.2s;">
+            <i class="fa-solid fa-house"></i>
           </a>
-          <button id="new-thread-btn" class="btn-new-chat" title="Bắt đầu cuộc trò chuyện mới">
+          <button id="new-thread-btn" class="btn-new-chat" title="Bắt đầu cuộc trò chuyện mới" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; color: #ffffff; width: 34px; height: 34px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem; transition: all 0.2s; box-shadow: 0 4px 12px rgba(37,99,235,0.3);">
             <i class="fa-solid fa-plus"></i>
           </button>
         </div>
@@ -462,13 +471,13 @@
 
       <!-- Active Conversation Panel (Hidden initially) -->
       <div id="active-chat-panel" style="display: none; flex-direction: column; flex-grow: 1; height: 100%;">
-        <div class="chat-view-header" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-bottom: 1px solid var(--border-glass);">
-          <h4 class="chat-view-title" id="active-thread-title" style="margin: 0;">Cuộc trò chuyện chi tiết</h4>
+        <div class="chat-view-header" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-bottom: 1px solid var(--border-glass); background: rgba(15, 23, 42, 0.4);">
+          <h4 class="chat-view-title" id="active-thread-title" style="margin: 0; font-family: 'Outfit', 'Be Vietnam Pro', sans-serif; font-size: 1.05rem; font-weight: 700; color: #ffffff;">Cuộc trò chuyện chi tiết</h4>
           <div style="display: flex; align-items: center; gap: 8px;">
-            <button class="btn-theme-toggle" onclick="toggleTheme()" title="Chuyển đổi giao diện Sáng / Tối" style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-glass); color: var(--text-primary); width: 34px; height: 34px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 0.95rem; transition: all 0.2s;">
-              <i class="fa-solid fa-moon"></i>
+            <button class="btn-theme-toggle" onclick="toggleTheme()" title="Chuyển đổi giao diện Sáng / Tối" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #ffffff; padding: 6px 14px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: 0.82rem; font-weight: 600; transition: all 0.2s;">
+              <i class="fa-solid fa-moon"></i> Giao diện
             </button>
-            <a href="/index.html" class="btn-home-top" title="Quay về Trang Chủ" style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); color: var(--accent-blue); padding: 5px 12px; border-radius: 8px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; transition: all 0.2s;">
+            <a href="/index.html" class="btn-home-top" title="Quay về Trang Chủ" style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); color: #38bdf8; padding: 6px 14px; border-radius: 8px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; transition: all 0.2s;">
               <i class="fa-solid fa-house"></i> Trang Chủ
             </a>
           </div>
