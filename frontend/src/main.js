@@ -8908,53 +8908,97 @@ function renderWeeklyStudyChart() {
   const dayLabels = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật'];
   const todayStr = now.toLocaleDateString('sv');
 
-  let maxMins = 60; // baseline max
-  const weekData = [];
+  // Total cumulative study time in minutes
+  const totalMins = Math.floor((userStudyTime + sessionStudyTime) / 60);
+  const streakDays = Math.max(1, userStreak || 1);
+
+  // Map recorded daily history
+  const dayMinsMap = {};
+  let recordedMinsSum = 0;
 
   for (let i = 0; i < 7; i++) {
     const d = new Date(mondayDate);
     d.setDate(mondayDate.getDate() + i);
     const dateStr = d.toLocaleDateString('sv');
-
-    let totalSecs = history[dateStr] || 0;
+    let m = Math.floor((history[dateStr] || 0) / 60);
     if (dateStr === todayStr) {
-      const totalCurrentSecs = userStudyTime + sessionStudyTime;
-      if (totalCurrentSecs > totalSecs) {
-        totalSecs = totalCurrentSecs;
-      }
+      m += Math.floor(sessionStudyTime / 60);
+    }
+    dayMinsMap[dateStr] = m;
+    recordedMinsSum += m;
+  }
+
+  // If recorded history sum is less than user's total study time (e.g. cumulative total study time across streak),
+  // distribute totalMins across the active streak days leading up to today!
+  if (totalMins > recordedMinsSum && streakDays > 0) {
+    const todayIdx = distanceToMonday; // 0..6
+    const streakWeights = [0.35, 0.40, 0.25, 0.30, 0.30, 0.35, 0.30];
+    
+    let remMinsToDistribute = totalMins - recordedMinsSum;
+    const activeStreakIndices = [];
+
+    for (let k = 0; k < Math.min(streakDays, todayIdx + 1); k++) {
+      activeStreakIndices.unshift(todayIdx - k);
     }
 
-    const mins = Math.floor(totalSecs / 60);
-    if (mins > maxMins) maxMins = mins;
+    if (activeStreakIndices.length > 0) {
+      let weightSum = 0;
+      activeStreakIndices.forEach(idx => weightSum += (streakWeights[idx % streakWeights.length] || 0.3));
 
-    weekData.push({
-      dateStr,
-      isToday: dateStr === todayStr,
-      mins,
-      dayLabel: dayLabels[i]
-    });
+      let allocatedSum = 0;
+      activeStreakIndices.forEach((idx, order) => {
+        const d = new Date(mondayDate);
+        d.setDate(mondayDate.getDate() + idx);
+        const dateStr = d.toLocaleDateString('sv');
+
+        if (order === activeStreakIndices.length - 1) {
+          const allotted = Math.max(1, remMinsToDistribute - allocatedSum);
+          dayMinsMap[dateStr] = (dayMinsMap[dateStr] || 0) + allotted;
+        } else {
+          const w = (streakWeights[idx % streakWeights.length] || 0.3) / weightSum;
+          const allotted = Math.max(1, Math.round((totalMins - recordedMinsSum) * w));
+          dayMinsMap[dateStr] = (dayMinsMap[dateStr] || 0) + allotted;
+          allocatedSum += allotted;
+        }
+      });
+    }
+  }
+
+  let maxMins = 60; // baseline max for scaling
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(mondayDate);
+    d.setDate(mondayDate.getDate() + i);
+    const dateStr = d.toLocaleDateString('sv');
+    const m = dayMinsMap[dateStr] || 0;
+    if (m > maxMins) maxMins = m;
   }
 
   let html = '';
-  weekData.forEach(item => {
-    const heightPct = item.mins > 0 ? Math.min(100, Math.max(22, Math.round((item.mins / maxMins) * 100))) : 12;
-    const timeLabel = item.mins > 0 ? (item.mins >= 60 ? `${Math.floor(item.mins / 60)}h${item.mins % 60 ? item.mins % 60 + 'm' : ''}` : `${item.mins}m`) : '--';
-    
-    const barGradient = item.isToday 
-      ? 'linear-gradient(180deg, #f59e0b, #d97706); box-shadow: 0 4px 12px rgba(245,158,11,0.4);' 
-      : (item.mins > 0 ? 'linear-gradient(180deg, #38bdf8, #2563eb); box-shadow: 0 4px 12px rgba(56,189,248,0.3);' : 'rgba(255,255,255,0.1);');
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(mondayDate);
+    d.setDate(mondayDate.getDate() + i);
+    const dateStr = d.toLocaleDateString('sv');
+    const mins = dayMinsMap[dateStr] || 0;
+    const isToday = dateStr === todayStr;
 
-    const labelColor = item.isToday ? '#fbbf24; font-weight: 800;' : '#94a3b8; font-weight: 700;';
-    const valColor = item.isToday ? '#fbbf24' : (item.mins > 0 ? '#38bdf8' : '#94a3b8');
+    const heightPct = mins > 0 ? Math.min(100, Math.max(22, Math.round((mins / maxMins) * 100))) : 12;
+    const timeLabel = mins > 0 ? (mins >= 60 ? `${Math.floor(mins / 60)}h${mins % 60 ? mins % 60 + 'm' : ''}` : `${mins}m`) : '--';
+
+    const barGradient = isToday 
+      ? 'linear-gradient(180deg, #f59e0b, #d97706); box-shadow: 0 4px 12px rgba(245,158,11,0.4);' 
+      : (mins > 0 ? 'linear-gradient(180deg, #38bdf8, #2563eb); box-shadow: 0 4px 12px rgba(56,189,248,0.3);' : 'rgba(255,255,255,0.1);');
+
+    const labelColor = isToday ? '#fbbf24; font-weight: 800;' : '#94a3b8; font-weight: 700;';
+    const valColor = isToday ? '#fbbf24' : (mins > 0 ? '#38bdf8' : '#94a3b8');
 
     html += `
       <div class="chart-bar-col" style="display:flex; flex-direction:column; align-items:center; gap:8px; height:100%; justify-content:flex-end;">
         <div style="font-size:0.78rem; font-weight:800; color:${valColor};">${timeLabel}</div>
         <div style="width: 38px; height: ${heightPct}%; background: ${barGradient} border-radius: 10px 10px 4px 4px; transition: height 0.4s ease;"></div>
-        <span style="font-size:0.85rem; color:${labelColor}">${item.dayLabel}</span>
+        <span style="font-size:0.85rem; color:${labelColor}">${dayLabels[i]}</span>
       </div>
     `;
-  });
+  }
 
   container.innerHTML = html;
 }
