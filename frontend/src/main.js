@@ -8868,9 +8868,17 @@ function formatStudyTimeDisplay(totalMinutes) {
 }
 window.formatStudyTimeDisplay = formatStudyTimeDisplay;
 
+function getDailyStudyHistoryKey() {
+  if (currentUser && currentUser.email) {
+    return `daily_study_history_${currentUser.email}`;
+  }
+  return 'daily_study_history_guest';
+}
+
 function getDailyStudyHistory() {
   try {
-    const raw = localStorage.getItem('daily_study_history');
+    const key = getDailyStudyHistoryKey();
+    const raw = localStorage.getItem(key);
     return raw ? JSON.parse(raw) : {};
   } catch (e) {
     return {};
@@ -8879,7 +8887,8 @@ function getDailyStudyHistory() {
 
 function saveDailyStudyHistory(history) {
   try {
-    localStorage.setItem('daily_study_history', JSON.stringify(history));
+    const key = getDailyStudyHistoryKey();
+    localStorage.setItem(key, JSON.stringify(history));
   } catch (e) {}
 }
 
@@ -8908,55 +8917,23 @@ function renderWeeklyStudyChart() {
   const dayLabels = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật'];
   const todayStr = now.toLocaleDateString('sv');
 
-  // Total cumulative study time in minutes
-  const totalMins = Math.floor((userStudyTime + sessionStudyTime) / 60);
-  const streakDays = Math.max(1, userStreak || 1);
-
-  // Map recorded daily history
+  // Map 100% pure real CSDL recorded daily history
   const dayMinsMap = {};
+  let maxMins = 60; // baseline scale max
+
   for (let i = 0; i < 7; i++) {
     const d = new Date(mondayDate);
     d.setDate(mondayDate.getDate() + i);
     const dateStr = d.toLocaleDateString('sv');
-    dayMinsMap[dateStr] = Math.floor((history[dateStr] || 0) / 60);
-  }
 
-  // Today's actual time in current session / recorded today (EXACT 1m if user studied 1m today)
-  const todayRecordedMins = Math.max(dayMinsMap[todayStr] || 0, Math.floor(sessionStudyTime / 60));
-  dayMinsMap[todayStr] = todayRecordedMins;
-
-  // Remaining past cumulative minutes to distribute across previous active streak days
-  const pastRemMins = Math.max(0, totalMins - todayRecordedMins);
-  const prevStreakDays = streakDays - 1; // days before today in streak
-
-  if (pastRemMins > 0 && prevStreakDays > 0) {
-    const todayIdx = distanceToMonday; // 0..6
-    const prevIndices = [];
-    for (let k = 1; k <= Math.min(prevStreakDays, todayIdx); k++) {
-      prevIndices.unshift(todayIdx - k);
+    let recordedSecs = history[dateStr] || 0;
+    if (dateStr === todayStr) {
+      recordedSecs += sessionStudyTime;
     }
 
-    if (prevIndices.length > 0) {
-      const perDayMins = Math.floor(pastRemMins / prevIndices.length);
-      let remMins = pastRemMins % prevIndices.length;
-
-      prevIndices.forEach((idx, order) => {
-        const d = new Date(mondayDate);
-        d.setDate(mondayDate.getDate() + idx);
-        const dateStr = d.toLocaleDateString('sv');
-        const extra = order === prevIndices.length - 1 ? remMins : 0;
-        dayMinsMap[dateStr] = (dayMinsMap[dateStr] || 0) + perDayMins + extra;
-      });
-    }
-  }
-
-  let maxMins = 60; // baseline max for scaling bar heights
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(mondayDate);
-    d.setDate(mondayDate.getDate() + i);
-    const dateStr = d.toLocaleDateString('sv');
-    const m = dayMinsMap[dateStr] || 0;
-    if (m > maxMins) maxMins = m;
+    const mins = Math.floor(recordedSecs / 60);
+    dayMinsMap[dateStr] = mins;
+    if (mins > maxMins) maxMins = mins;
   }
 
   let html = '';
@@ -9834,18 +9811,24 @@ async function loadInitialStats() {
       });
       if (response.ok) {
         const stats = await response.json();
-        userStreak = stats.streak;
-        userStudyTime = stats.studyTime;
+        userStreak = stats.streak || 0;
+        userStudyTime = stats.studyTime || 0;
+
+        // Save user's exact backend CSDL dailyHistory
+        const userHistory = stats.dailyHistory || {};
+        saveDailyStudyHistory(userHistory);
       }
     } catch (err) {
       console.error('Failed to load user stats:', err);
     }
   } else {
-    // Pure in-memory reset for guest on load (loses progress on reload)
+    // Guest user reset
+    saveDailyStudyHistory({});
     userStudyTime = guestStudyTime;
     userStreak = guestStreak;
   }
   updateStatsUI();
+  renderWeeklyStudyChart();
 }
 
 // --- SMART FLASHCARD TOPICS & QUIZ LOGIC ---
