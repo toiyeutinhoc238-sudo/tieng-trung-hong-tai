@@ -9042,6 +9042,9 @@ async function syncStudyStats() {
         const stats = await response.json();
         userStreak = stats.streak;
         userStudyTime = stats.studyTime;
+        if (stats.dailyHistory && typeof stats.dailyHistory === 'object') {
+          saveDailyStudyHistory(stats.dailyHistory);
+        }
         updateStatsUI();
       }
     } catch (err) {

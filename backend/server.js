@@ -496,15 +496,21 @@ app.post('/api/user/stats/sync', async (req, res) => {
     userRecord.stats = {
       streak: 0,
       studyTime: 0,
-      lastActiveDate: ''
+      lastActiveDate: '',
+      dailyHistory: {}
     };
   }
-
-  if (typeof incrementStudyTime === 'number') {
-    userRecord.stats.studyTime += incrementStudyTime;
+  if (!userRecord.stats.dailyHistory) {
+    userRecord.stats.dailyHistory = {};
   }
 
   const todayStr = localDateStr || new Date().toISOString().split('T')[0];
+
+  if (typeof incrementStudyTime === 'number' && incrementStudyTime > 0) {
+    userRecord.stats.studyTime += incrementStudyTime;
+    userRecord.stats.dailyHistory[todayStr] = (userRecord.stats.dailyHistory[todayStr] || 0) + incrementStudyTime;
+  }
+
   const lastActiveStr = userRecord.stats.lastActiveDate;
 
   if (!lastActiveStr) {
