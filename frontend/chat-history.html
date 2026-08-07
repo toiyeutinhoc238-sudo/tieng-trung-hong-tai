@@ -60,16 +60,25 @@
   <link rel="stylesheet" href="/src/style.css">
   
   <style>
-    * {
-      font-family: 'Be Vietnam Pro', 'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+    body, button, input, select, textarea, div, span, h1, h2, h3, h4, h5, h6, a, p, li {
+      font-family: 'Be Vietnam Pro', 'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Explicitly preserve FontAwesome Icon Font Family */
+    i, .fa, .fas, .far, .fab, .fa-solid, .fa-regular, .fa-brands, [class*="fa-"] {
+      font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands", "FontAwesome" !important;
+      font-style: normal;
+      font-variant: normal;
+      text-rendering: auto;
+      line-height: 1;
     }
 
     body {
       background-color: var(--bg-primary);
       color: var(--text-primary);
-      font-family: 'Be Vietnam Pro', 'Outfit', sans-serif !important;
+      font-family: 'Be Vietnam Pro', 'Outfit', sans-serif;
       height: 100vh;
       overflow: hidden;
       display: flex;
