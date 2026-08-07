@@ -12,9 +12,7 @@
   <!-- Google Fonts & FontAwesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Noto+Sans+SC:wght@400;500;700;900&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
 
   <script>
@@ -107,14 +105,16 @@
       --bg-dark: #0b0f19;
       --bg-card: rgba(15, 23, 42, 0.75);
       --border-glass: rgba(255, 255, 255, 0.1);
-      --font-main: 'Be Vietnam Pro', -apple-system, sans-serif;
-      --font-hanzi: 'Noto Sans SC', sans-serif;
+      --font-main: 'Be Vietnam Pro', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-hanzi: 'Noto Sans SC', 'Be Vietnam Pro', sans-serif;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     body {
@@ -127,6 +127,11 @@
       color: #f8fafc;
       min-height: 100vh;
       padding: 16px;
+      line-height: 1.5;
+    }
+
+    button, input, select, textarea {
+      font-family: var(--font-main);
     }
 
     .container {
@@ -135,7 +140,7 @@
       margin: 0 auto;
     }
 
-    /* Header (Exact matching chinese-phonetics.html style) */
+    /* Header */
     .phonetics-header {
       display: flex;
       align-items: center;
@@ -172,7 +177,7 @@
 
     .title-group h1 {
       font-size: 1.6rem;
-      font-weight: 800;
+      font-weight: 700;
       background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
       -webkit-background-clip: text;
       background-clip: text;
@@ -180,6 +185,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      letter-spacing: -0.01em;
     }
 
     .title-group p {
@@ -198,7 +204,7 @@
       color: #fff;
       padding: 10px 18px;
       border-radius: 12px;
-      font-weight: 700;
+      font-weight: 600;
       cursor: pointer;
       text-decoration: none;
       display: inline-flex;
@@ -242,10 +248,10 @@
     /* 4 Hub Cards Grid Layout (2x2 Grid) */
     .hub-title {
       text-align: center;
-      font-size: 2rem;
-      font-weight: 900;
+      font-size: 1.9rem;
+      font-weight: 800;
       color: #f8fafc;
-      letter-spacing: -0.01em;
+      letter-spacing: 0.02em;
       margin-bottom: 1.5rem;
       text-transform: uppercase;
       background: linear-gradient(135deg, #f43f5e 0%, #fb923c 50%, #38bdf8 100%);
@@ -309,8 +315,8 @@
     }
 
     .hub-card-title {
-      font-size: 1.18rem;
-      font-weight: 800;
+      font-size: 1.15rem;
+      font-weight: 700;
       color: #ffffff;
       margin-bottom: 6px;
     }
@@ -322,10 +328,10 @@
     .hub-card-desc {
       font-size: 0.86rem;
       color: #94a3b8;
-      line-height: 1.4;
+      line-height: 1.45;
     }
 
-    /* Controls Panel */
+    /* Fixed Read-Only Controls Panel */
     .controls-panel {
       background: rgba(30, 41, 59, 0.8);
       backdrop-filter: blur(16px);
@@ -345,32 +351,35 @@
       border-color: #cbd5e1;
     }
 
-    .select-group {
+    .select-group-fixed {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
       flex-wrap: wrap;
     }
 
-    .custom-select {
-      background: rgba(15, 23, 42, 0.75);
-      border: 1.5px solid rgba(255, 255, 255, 0.2);
-      color: #ffffff;
-      padding: 10px 16px;
+    .fixed-badge-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1.5px solid rgba(255, 255, 255, 0.18);
+      padding: 8px 16px;
       border-radius: 12px;
-      font-weight: 700;
+      font-weight: 600;
       font-size: 0.95rem;
-      outline: none;
-      cursor: pointer;
+      color: #94a3b8;
+      user-select: none;
+      cursor: default;
     }
 
-    html.light-mode .custom-select {
-      background: #ffffff;
+    html.light-mode .fixed-badge-box {
+      background: #f1f5f9;
       border-color: #cbd5e1;
-      color: #0f172a;
+      color: #475569;
     }
 
-    /* Tabs */
+    /* Crisp Tabs */
     .mode-tabs-container {
       display: flex;
       gap: 10px;
@@ -380,12 +389,13 @@
     }
 
     .mode-tab-btn {
+      font-family: var(--font-main);
       background: rgba(255, 255, 255, 0.08);
       border: 1.5px solid rgba(255, 255, 255, 0.18);
-      color: #94a3b8;
+      color: #cbd5e1;
       padding: 12px 20px;
       border-radius: 14px;
-      font-weight: 800;
+      font-weight: 600;
       font-size: 0.95rem;
       cursor: pointer;
       display: inline-flex;
@@ -393,12 +403,13 @@
       gap: 10px;
       white-space: nowrap;
       transition: all 0.2s ease;
+      letter-spacing: 0.2px;
     }
 
     html.light-mode .mode-tab-btn {
       background: #ffffff;
       border-color: #cbd5e1;
-      color: #64748b;
+      color: #475569;
     }
 
     .mode-tab-btn:hover {
@@ -411,7 +422,8 @@
       background: linear-gradient(135deg, #2563eb, #1d4ed8);
       color: #ffffff;
       border-color: #3b82f6;
-      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+      font-weight: 700;
     }
 
     /* Workspace Box */
@@ -423,6 +435,7 @@
       padding: 28px;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
       min-height: 380px;
+      font-family: var(--font-main);
     }
 
     html.light-mode .workspace-box {
@@ -435,6 +448,10 @@
     .lesson-hint-card {
       user-select: none;
       transition: all 0.2s ease;
+    }
+
+    .hanzi-text {
+      font-family: var(--font-hanzi) !important;
     }
   </style>
   <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
@@ -476,7 +493,7 @@
           <i class="fa-solid fa-volume-high"></i>
         </div>
         <div>
-          <div style="font-weight: 700; font-size: 0.9rem; color: #f8fafc;">Giọng Đọc Chuẩn: <span style="color:#34d399;">🇨🇳 Baidu Nữ (Phát âm Bắc Kinh chuẩn)</span></div>
+          <div style="font-weight: 600; font-size: 0.9rem; color: #f8fafc;">Giọng Đọc Chuẩn: <span style="color:#34d399; font-weight:700;">🇨🇳 Baidu Nữ (Phát âm Bắc Kinh chuẩn)</span></div>
         </div>
       </div>
       <div style="font-size: 0.82rem; color: #94a3b8;"><i class="fa-solid fa-circle-check" style="color:#10b981;"></i> Đã tối ưu âm thanh phát âm AI</div>
@@ -511,27 +528,24 @@
       </div>
     </div>
 
-    <!-- Controls Selector Bar -->
+    <!-- Fixed Controls Read-Only Bar -->
     <div class="controls-panel">
-      <div class="select-group">
-        <label style="font-weight:800; font-size:0.95rem; color:#38bdf8;"><i class="fa-solid fa-layer-group"></i> Trình độ:</label>
-        <select id="hsk-level-select" class="custom-select" onchange="onLevelLessonChange()">
-          <option value="1">HSK 1</option>
-          <option value="2">HSK 2</option>
-          <option value="3">HSK 3</option>
-          <option value="4">HSK 4</option>
-          <option value="5">HSK 5</option>
-          <option value="6">HSK 6</option>
-        </select>
+      <div class="select-group-fixed">
+        <div class="fixed-badge-box">
+          <i class="fa-solid fa-layer-group" style="color:#38bdf8;"></i>
+          <span>Trình độ:</span>
+          <strong id="fixed-level-badge" style="color:#ffffff;">HSK 1</strong>
+        </div>
 
-        <label style="font-weight:800; font-size:0.95rem; color:#38bdf8; margin-left:12px;"><i class="fa-solid fa-book"></i> Bài học:</label>
-        <select id="lesson-id-select" class="custom-select" onchange="onLevelLessonChange()">
-          <!-- Dynamic options -->
-        </select>
+        <div class="fixed-badge-box">
+          <i class="fa-solid fa-book" style="color:#38bdf8;"></i>
+          <span>Bài học:</span>
+          <strong id="fixed-lesson-badge" style="color:#ffffff;">Bài 1</strong>
+        </div>
       </div>
 
-      <div style="font-weight:800; color:#38bdf8; font-size:1rem;" id="lesson-title-badge">
-        Bài Khóa HSK 1 - Bài 1
+      <div style="font-weight:700; color:#38bdf8; font-size:0.98rem; display:flex; align-items:center; gap:8px;" id="lesson-title-badge">
+        <i class="fa-solid fa-bookmark"></i> Bài Khóa HSK 1 - Bài 1
       </div>
     </div>
 
@@ -601,10 +615,13 @@
       if (urlParams.has('lesson')) {
         currentLessonId = parseInt(urlParams.get('lesson'), 10) || 1;
       }
+      if (urlParams.has('level')) {
+        currentLevel = parseInt(urlParams.get('level'), 10) || 1;
+      }
 
       await loadData();
-      populateLessonOptions();
-      onLevelLessonChange();
+      updateFixedBadges();
+      renderWorkspace();
     });
 
     async function loadData() {
@@ -618,33 +635,14 @@
       }
     }
 
-    function populateLessonOptions() {
-      const select = document.getElementById('lesson-id-select');
-      if (!select) return;
-      select.innerHTML = '';
+    function updateFixedBadges() {
+      const lvlBadge = document.getElementById('fixed-level-badge');
+      const lesBadge = document.getElementById('fixed-lesson-badge');
+      const titleBadge = document.getElementById('lesson-title-badge');
 
-      for (let i = 1; i <= 15; i++) {
-        const opt = document.createElement('option');
-        opt.value = i;
-        opt.textContent = `Bài ${i}`;
-        if (i === currentLessonId) opt.selected = true;
-        select.appendChild(opt);
-      }
-    }
-
-    function onLevelLessonChange() {
-      const lvlSelect = document.getElementById('hsk-level-select');
-      const lesSelect = document.getElementById('lesson-id-select');
-
-      currentLevel = parseInt(lvlSelect.value, 10) || 1;
-      currentLessonId = parseInt(lesSelect.value, 10) || 1;
-      currentLineIndex = 0;
-      currentScore = 0;
-
-      const badge = document.getElementById('lesson-title-badge');
-      if (badge) badge.textContent = `Bài Khóa HSK ${currentLevel} - Bài ${currentLessonId}`;
-
-      renderWorkspace();
+      if (lvlBadge) lvlBadge.textContent = `HSK ${currentLevel}`;
+      if (lesBadge) lesBadge.textContent = `Bài ${currentLessonId}`;
+      if (titleBadge) titleBadge.innerHTML = `<i class="fa-solid fa-bookmark"></i> Bài Khóa HSK ${currentLevel} - Bài ${currentLessonId}`;
     }
 
     function switchBkMode(mode) {
@@ -715,7 +713,7 @@
       const linesList = getLinesList(lessonData);
 
       if (!lessonData || !lessonData.dialogues || lessonData.dialogues.length === 0) {
-        box.innerHTML = `<div style="text-align:center; padding:60px; font-size:1.1rem; color:#94a3b8;">
+        box.innerHTML = `<div style="text-align:center; padding:60px; font-size:1.05rem; color:#94a3b8;">
           <i class="fa-solid fa-file-circle-exclamation" style="font-size:2.5rem; color:#fbbf24; margin-bottom:12px;"></i>
           <div>Nội dung Bài Khóa cho Bài ${currentLessonId} chuẩn HSK ${currentLevel} đang được cập nhật!</div>
         </div>`;
@@ -738,17 +736,17 @@
             const translation = bkLineTranslations[speech] || '';
 
             linesHtml += `
-              <div style="display:flex; align-items:flex-start; gap:14px; margin-bottom:16px; font-size:1.2rem; line-height:1.6; border-bottom:1px solid rgba(255,255,255,0.06); padding-bottom:12px;">
+              <div style="display:flex; align-items:flex-start; gap:14px; margin-bottom:16px; font-size:1.15rem; line-height:1.6; border-bottom:1px solid rgba(255,255,255,0.06); padding-bottom:12px;">
                 ${speaker ? `
-                  <span style="background:rgba(37,99,235,0.2); color:#60a5fa; border:1px solid rgba(59,130,246,0.35); padding:4px 12px; border-radius:10px; font-weight:800; font-size:0.9rem; flex-shrink:0;">
+                  <span style="background:rgba(37,99,235,0.2); color:#60a5fa; border:1px solid rgba(59,130,246,0.35); padding:4px 12px; border-radius:10px; font-weight:700; font-size:0.88rem; flex-shrink:0;">
                     ${speaker}
                   </span>
                 ` : ''}
-                <div style="flex:1; color:#f8fafc; font-family:var(--font-hanzi); font-weight:600; word-break:break-word;">
-                  <div>${speech}</div>
-                  ${translation ? `<div style="font-size:0.95rem; color:#94a3b8; font-weight:500; font-family:sans-serif; margin-top:4px;">${translation}</div>` : ''}
+                <div style="flex:1; color:#f8fafc; font-weight:500; word-break:break-word;">
+                  <div class="hanzi-text" style="font-size:1.25rem; font-weight:600;">${speech}</div>
+                  ${translation ? `<div style="font-size:0.95rem; color:#94a3b8; font-weight:400; margin-top:4px;">${translation}</div>` : ''}
                 </div>
-                <button onclick="speakText('${cleanSpeech}')" style="background:rgba(59,130,246,0.2); border:1px solid rgba(59,130,246,0.4); color:#38bdf8; cursor:pointer; padding:8px 16px; border-radius:10px; font-size:0.95rem; font-weight:700; flex-shrink:0;" title="Phát âm">
+                <button onclick="speakText('${cleanSpeech}')" style="background:rgba(59,130,246,0.2); border:1px solid rgba(59,130,246,0.4); color:#38bdf8; cursor:pointer; padding:8px 16px; border-radius:10px; font-size:0.92rem; font-weight:600; flex-shrink:0;" title="Phát âm">
                   <i class="fa-solid fa-volume-high"></i> Nghe
                 </button>
               </div>
@@ -759,7 +757,7 @@
           if (diag.notes && diag.notes.length > 0) {
             diag.notes.forEach(note => {
               notesHtml += `
-                <div style="background:rgba(245,158,11,0.12); border-left:4px solid #f59e0b; padding:12px 16px; border-radius:0 12px 12px 0; margin-top:14px; font-size:0.95rem; color:#fef08a; line-height:1.5;">
+                <div style="background:rgba(245,158,11,0.12); border-left:4px solid #f59e0b; padding:12px 16px; border-radius:0 12px 12px 0; margin-top:14px; font-size:0.92rem; color:#fef08a; line-height:1.5;">
                   <strong style="color:#fbbf24;"><i class="fa-solid fa-lightbulb" style="margin-right:6px;"></i> Chú ý:</strong> ${note}
                 </div>
               `;
@@ -768,7 +766,7 @@
 
           html += `
             <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.12); border-radius:20px; padding:24px; margin-bottom:24px; box-shadow:0 8px 24px rgba(0,0,0,0.3);">
-              <h3 style="color:#38bdf8; font-size:1.2rem; margin-top:0; margin-bottom:18px; font-family:var(--font-main); display:flex; align-items:center; gap:10px;">
+              <h3 style="color:#38bdf8; font-size:1.18rem; margin-top:0; margin-bottom:18px; font-weight:700; display:flex; align-items:center; gap:10px;">
                 <i class="fa-solid fa-comments" style="color:#38bdf8;"></i> ${diag.title || `Hội thoại ${dIdx + 1}`}
               </h3>
               ${linesHtml}
@@ -797,21 +795,21 @@
         box.innerHTML = `
           <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.12); border-radius:22px; padding:28px; text-align:center; max-width:680px; margin:0 auto;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-              <span style="font-size:0.95rem; font-weight:800; color:#38bdf8;"><i class="fa-solid fa-circle-question"></i> Câu ${currentLineIndex + 1} / ${linesList.length}</span>
-              <span style="font-size:0.95rem; font-weight:800; color:#10b981;"><i class="fa-solid fa-star"></i> Điểm: ${currentScore}</span>
+              <span style="font-size:0.92rem; font-weight:700; color:#38bdf8;"><i class="fa-solid fa-circle-question"></i> Câu ${currentLineIndex + 1} / ${linesList.length}</span>
+              <span style="font-size:0.92rem; font-weight:700; color:#10b981;"><i class="fa-solid fa-star"></i> Điểm: ${currentScore}</span>
             </div>
 
             <div style="margin-bottom:24px; padding:20px; background:rgba(15,23,42,0.6); border-radius:18px; border:1px solid rgba(255,255,255,0.1);">
-              <div style="font-size:1.1rem; font-weight:700; color:#cbd5e1; margin-bottom:16px;">Bấm nút loa bên dưới để nghe và chọn đáp án đúng:</div>
-              <button onclick="speakText('${cleanSpeech}')" style="background:linear-gradient(135deg, #2563eb, #1d4ed8); border:none; color:#ffffff; padding:16px 32px; border-radius:99px; font-weight:800; font-size:1.15rem; cursor:pointer; box-shadow:0 6px 20px rgba(37,99,235,0.4); display:inline-flex; align-items:center; gap:10px;">
-                <i class="fa-solid fa-volume-high" style="font-size:1.4rem;"></i> BẤM ĐỂ NGHE AUDIO
+              <div style="font-size:1.05rem; font-weight:600; color:#cbd5e1; margin-bottom:16px;">Bấm nút loa bên dưới để nghe và chọn đáp án đúng:</div>
+              <button onclick="speakText('${cleanSpeech}')" style="background:linear-gradient(135deg, #2563eb, #1d4ed8); border:none; color:#ffffff; padding:14px 28px; border-radius:99px; font-weight:700; font-size:1.05rem; cursor:pointer; box-shadow:0 6px 20px rgba(37,99,235,0.4); display:inline-flex; align-items:center; gap:10px;">
+                <i class="fa-solid fa-volume-high" style="font-size:1.3rem;"></i> BẤM ĐỂ NGHE AUDIO
               </button>
             </div>
 
             <div style="display:flex; flex-direction:column; gap:14px; margin-bottom:24px;">
               ${options.map((opt, oIdx) => `
-                <button class="bk-quiz-opt-btn" onclick="checkQuizAnswer('${opt.replace(/'/g, "\\'")}', '${curLine.speech.replace(/'/g, "\\'")}', this)" style="background:rgba(255,255,255,0.06); border:1.5px solid rgba(255,255,255,0.18); color:#f8fafc; padding:16px 22px; border-radius:16px; font-size:1.2rem; font-weight:700; cursor:pointer; font-family:var(--font-hanzi); text-align:left; transition:all 0.2s; display:flex; align-items:center; justify-content:space-between;">
-                  <span>${String.fromCharCode(65 + oIdx)}. ${opt}</span>
+                <button class="bk-quiz-opt-btn" onclick="checkQuizAnswer('${opt.replace(/'/g, "\\'")}', '${curLine.speech.replace(/'/g, "\\'")}', this)" style="background:rgba(255,255,255,0.06); border:1.5px solid rgba(255,255,255,0.18); color:#f8fafc; padding:16px 22px; border-radius:16px; font-size:1.15rem; font-weight:600; cursor:pointer; text-align:left; transition:all 0.2s; display:flex; align-items:center; justify-content:space-between;">
+                  <span class="hanzi-text">${String.fromCharCode(65 + oIdx)}. ${opt}</span>
                   <i class="fa-solid fa-circle-check opt-icon" style="opacity:0;"></i>
                 </button>
               `).join('')}
@@ -819,7 +817,7 @@
 
             <div id="quiz-feedback" style="min-height:36px; margin-bottom:18px;"></div>
 
-            <button id="quiz-next-btn" onclick="nextQuizQuestion(${linesList.length})" style="display:none; width:100%; background:linear-gradient(135deg, #10b981, #059669); border:none; color:#ffffff; padding:14px; border-radius:14px; font-weight:800; font-size:1.05rem; cursor:pointer;">
+            <button id="quiz-next-btn" onclick="nextQuizQuestion(${linesList.length})" style="display:none; width:100%; background:linear-gradient(135deg, #10b981, #059669); border:none; color:#ffffff; padding:14px; border-radius:14px; font-weight:700; font-size:1rem; cursor:pointer;">
               Câu tiếp theo <i class="fa-solid fa-arrow-right"></i>
             </button>
           </div>
@@ -840,23 +838,23 @@
         box.innerHTML = `
           <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.12); border-radius:22px; padding:28px; text-align:center; max-width:700px; margin:0 auto;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-              <span style="font-size:0.95rem; font-weight:800; color:#38bdf8;"><i class="fa-solid fa-headphones"></i> Câu ${currentLineIndex + 1} / ${linesList.length}</span>
-              ${curLine.speaker ? `<span style="background:rgba(37,99,235,0.2); color:#60a5fa; border:1px solid rgba(59,130,246,0.35); padding:4px 14px; border-radius:10px; font-weight:800; font-size:0.9rem;">Nhân vật: ${curLine.speaker}</span>` : ''}
+              <span style="font-size:0.92rem; font-weight:700; color:#38bdf8;"><i class="fa-solid fa-headphones"></i> Câu ${currentLineIndex + 1} / ${linesList.length}</span>
+              ${curLine.speaker ? `<span style="background:rgba(37,99,235,0.2); color:#60a5fa; border:1px solid rgba(59,130,246,0.35); padding:4px 14px; border-radius:10px; font-weight:700; font-size:0.88rem;">Nhân vật: ${curLine.speaker}</span>` : ''}
             </div>
 
             <div style="margin-bottom:24px;">
-              <button onclick="speakText('${cleanSpeech}')" style="background:linear-gradient(135deg, #3b82f6, #1d4ed8); border:none; color:#ffffff; padding:16px 32px; border-radius:99px; font-weight:800; font-size:1.15rem; cursor:pointer; box-shadow:0 6px 20px rgba(59,130,246,0.4); display:inline-flex; align-items:center; gap:10px;">
-                <i class="fa-solid fa-volume-high" style="font-size:1.4rem;"></i> BẤM ĐỂ NGHE AUDIO CÂU THOẠI
+              <button onclick="speakText('${cleanSpeech}')" style="background:linear-gradient(135deg, #3b82f6, #1d4ed8); border:none; color:#ffffff; padding:14px 28px; border-radius:99px; font-weight:700; font-size:1.05rem; cursor:pointer; box-shadow:0 6px 20px rgba(59,130,246,0.4); display:inline-flex; align-items:center; gap:10px;">
+                <i class="fa-solid fa-volume-high" style="font-size:1.3rem;"></i> BẤM ĐỂ NGHE AUDIO CÂU THOẠI
               </button>
             </div>
 
             <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.12); border-radius:18px; padding:22px; margin-bottom:24px;">
-              <div style="font-size:0.95rem; font-weight:800; color:#38bdf8; margin-bottom:12px; text-align:left; display:flex; justify-content:space-between;">
+              <div style="font-size:0.92rem; font-weight:700; color:#38bdf8; margin-bottom:12px; text-align:left; display:flex; justify-content:space-between;">
                 <span>Gõ lại câu bằng chữ Hán/Pinyin:</span>
                 <span id="dictation-feedback"></span>
               </div>
 
-              <input type="text" id="dictation-input" placeholder="Gõ câu vừa nghe được..." oninput="checkDictationInput('${cleanSpeech}')" style="width:100%; padding:14px 18px; background:rgba(0,0,0,0.4); border:2px solid rgba(255,255,255,0.2); border-radius:14px; color:#ffffff; font-size:1.2rem; font-weight:700; outline:none; margin-bottom:16px; box-sizing:border-box;" />
+              <input type="text" id="dictation-input" placeholder="Gõ câu vừa nghe được..." oninput="checkDictationInput('${cleanSpeech}')" class="hanzi-text" style="width:100%; padding:14px 18px; background:rgba(0,0,0,0.4); border:2px solid rgba(255,255,255,0.2); border-radius:14px; color:#ffffff; font-size:1.15rem; font-weight:600; outline:none; margin-bottom:16px; box-sizing:border-box;" />
 
               <div id="dictation-hint-cards" style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:14px;">
                 ${hintChars.map(c => `
@@ -866,16 +864,16 @@
                 `).join('')}
               </div>
 
-              <button onclick="revealAllHints('${cleanSpeech}')" style="width:100%; background:linear-gradient(135deg, #f59e0b, #d97706); border:none; color:#ffffff; font-weight:800; padding:12px; border-radius:12px; cursor:pointer;">
+              <button onclick="revealAllHints('${cleanSpeech}')" style="width:100%; background:linear-gradient(135deg, #f59e0b, #d97706); border:none; color:#ffffff; font-weight:700; padding:12px; border-radius:12px; cursor:pointer;">
                 <i class="fa-solid fa-eye"></i> HIỆN GỢI Ý MẪU
               </button>
             </div>
 
             <div style="display:flex; justify-content:space-between; gap:14px;">
-              <button onclick="navLine(-1, ${linesList.length})" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; padding:12px 22px; border-radius:12px; font-weight:700; cursor:pointer;">
+              <button onclick="navLine(-1, ${linesList.length})" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; padding:12px 22px; border-radius:12px; font-weight:600; cursor:pointer;">
                 &larr; Câu trước
               </button>
-              <button onclick="navLine(1, ${linesList.length})" style="background:#2563eb; border:none; color:#fff; padding:12px 28px; border-radius:12px; font-weight:800; cursor:pointer;">
+              <button onclick="navLine(1, ${linesList.length})" style="background:#2563eb; border:none; color:#fff; padding:12px 28px; border-radius:12px; font-weight:700; cursor:pointer;">
                 Câu tiếp theo &rarr;
               </button>
             </div>
@@ -898,26 +896,26 @@
         box.innerHTML = `
           <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.12); border-radius:22px; padding:28px; text-align:center; max-width:700px; margin:0 auto;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-              <span style="font-size:0.95rem; font-weight:800; color:#38bdf8;"><i class="fa-solid fa-language"></i> Câu ${currentLineIndex + 1} / ${linesList.length}</span>
-              ${curLine.speaker ? `<span style="background:rgba(37,99,235,0.2); color:#60a5fa; border:1px solid rgba(59,130,246,0.35); padding:4px 14px; border-radius:10px; font-weight:800; font-size:0.9rem;">${curLine.speaker}</span>` : ''}
+              <span style="font-size:0.92rem; font-weight:700; color:#38bdf8;"><i class="fa-solid fa-language"></i> Câu ${currentLineIndex + 1} / ${linesList.length}</span>
+              ${curLine.speaker ? `<span style="background:rgba(37,99,235,0.2); color:#60a5fa; border:1px solid rgba(59,130,246,0.35); padding:4px 14px; border-radius:10px; font-weight:700; font-size:0.88rem;">${curLine.speaker}</span>` : ''}
             </div>
 
             <div style="background:rgba(15,23,42,0.85); border:1.5px solid rgba(59,130,246,0.4); border-radius:18px; padding:22px; margin-bottom:24px; text-align:left;">
-              <div style="font-size:0.88rem; font-weight:800; color:#60a5fa; text-transform:uppercase; margin-bottom:8px;">
+              <div style="font-size:0.85rem; font-weight:700; color:#60a5fa; text-transform:uppercase; margin-bottom:8px;">
                 <i class="fa-solid fa-flag"></i> Câu tiếng Việt cần dịch:
               </div>
-              <div style="font-size:1.35rem; font-weight:800; color:#ffffff;">
+              <div style="font-size:1.25rem; font-weight:700; color:#ffffff;">
                 "${translationPrompt}"
               </div>
             </div>
 
             <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.12); border-radius:18px; padding:22px; margin-bottom:24px;">
-              <div style="font-size:0.95rem; font-weight:800; color:#38bdf8; margin-bottom:12px; text-align:left; display:flex; justify-content:space-between;">
+              <div style="font-size:0.92rem; font-weight:700; color:#38bdf8; margin-bottom:12px; text-align:left; display:flex; justify-content:space-between;">
                 <span>Dịch sang tiếng Trung:</span>
                 <span id="translate-feedback"></span>
               </div>
 
-              <input type="text" id="translate-input" placeholder="Gõ câu dịch tiếng Trung vào đây..." oninput="checkTranslateInput('${cleanSpeech}')" style="width:100%; padding:14px 18px; background:rgba(0,0,0,0.4); border:2px solid rgba(255,255,255,0.2); border-radius:14px; color:#ffffff; font-size:1.2rem; font-weight:700; outline:none; margin-bottom:16px; box-sizing:border-box;" />
+              <input type="text" id="translate-input" placeholder="Gõ câu dịch tiếng Trung vào đây..." oninput="checkTranslateInput('${cleanSpeech}')" class="hanzi-text" style="width:100%; padding:14px 18px; background:rgba(0,0,0,0.4); border:2px solid rgba(255,255,255,0.2); border-radius:14px; color:#ffffff; font-size:1.15rem; font-weight:600; outline:none; margin-bottom:16px; box-sizing:border-box;" />
 
               <div id="translate-hint-cards" style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:14px;">
                 ${hintChars.map(c => `
@@ -927,16 +925,16 @@
                 `).join('')}
               </div>
 
-              <button onclick="revealAllHints('${cleanSpeech}')" style="width:100%; background:linear-gradient(135deg, #f59e0b, #d97706); border:none; color:#ffffff; font-weight:800; padding:12px; border-radius:12px; cursor:pointer;">
+              <button onclick="revealAllHints('${cleanSpeech}')" style="width:100%; background:linear-gradient(135deg, #f59e0b, #d97706); border:none; color:#ffffff; font-weight:700; padding:12px; border-radius:12px; cursor:pointer;">
                 <i class="fa-solid fa-eye"></i> HIỆN GỢI Ý MẪU
               </button>
             </div>
 
             <div style="display:flex; justify-content:space-between; gap:14px;">
-              <button onclick="navLine(-1, ${linesList.length})" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; padding:12px 22px; border-radius:12px; font-weight:700; cursor:pointer;">
+              <button onclick="navLine(-1, ${linesList.length})" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; padding:12px 22px; border-radius:12px; font-weight:600; cursor:pointer;">
                 &larr; Câu trước
               </button>
-              <button onclick="navLine(1, ${linesList.length})" style="background:#2563eb; border:none; color:#fff; padding:12px 28px; border-radius:12px; font-weight:800; cursor:pointer;">
+              <button onclick="navLine(1, ${linesList.length})" style="background:#2563eb; border:none; color:#fff; padding:12px 28px; border-radius:12px; font-weight:700; cursor:pointer;">
                 Câu tiếp theo &rarr;
               </button>
             </div>
@@ -964,7 +962,7 @@
           btnEl.style.borderColor = '#10b981';
           btnEl.style.color = '#34d399';
         }
-        if (feedback) feedback.innerHTML = `<span style="color:#10b981; font-weight:800; font-size:1.15rem;"><i class="fa-solid fa-circle-check"></i> Chính xác! 🎉</span>`;
+        if (feedback) feedback.innerHTML = `<span style="color:#10b981; font-weight:700; font-size:1.1rem;"><i class="fa-solid fa-circle-check"></i> Chính xác! 🎉</span>`;
         currentScore += 10;
         speakText(target);
       } else {
@@ -973,7 +971,7 @@
           btnEl.style.borderColor = '#ef4444';
           btnEl.style.color = '#f87171';
         }
-        if (feedback) feedback.innerHTML = `<span style="color:#ef4444; font-weight:800; font-size:1.1rem;"><i class="fa-solid fa-circle-xmark"></i> Chưa đúng! Đáp án đúng là: ${target}</span>`;
+        if (feedback) feedback.innerHTML = `<span style="color:#ef4444; font-weight:700; font-size:1.05rem;"><i class="fa-solid fa-circle-xmark"></i> Chưa đúng! Đáp án đúng là: ${target}</span>`;
       }
 
       if (nextBtn) nextBtn.style.display = 'block';
@@ -993,14 +991,14 @@
       const cleanTarget = target.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '').toLowerCase();
 
       if (typed === cleanTarget) {
-        feedbackEl.innerHTML = `<span style="color:#10b981; font-weight:800;"><i class="fa-solid fa-circle-check"></i> Chính xác!</span>`;
+        feedbackEl.innerHTML = `<span style="color:#10b981; font-weight:700;"><i class="fa-solid fa-circle-check"></i> Chính xác!</span>`;
         inputEl.style.borderColor = '#10b981';
         speakText(target);
       } else if (cleanTarget.startsWith(typed) && typed.length > 0) {
-        feedbackEl.innerHTML = `<span style="color:#fbbf24; font-weight:700;"><i class="fa-solid fa-pen"></i> Đang gõ...</span>`;
+        feedbackEl.innerHTML = `<span style="color:#fbbf24; font-weight:600;"><i class="fa-solid fa-pen"></i> Đang gõ...</span>`;
         inputEl.style.borderColor = '#fbbf24';
       } else if (typed.length > 0) {
-        feedbackEl.innerHTML = `<span style="color:#ef4444; font-weight:700;"><i class="fa-solid fa-circle-xmark"></i> Chưa đúng</span>`;
+        feedbackEl.innerHTML = `<span style="color:#ef4444; font-weight:600;"><i class="fa-solid fa-circle-xmark"></i> Chưa đúng</span>`;
         inputEl.style.borderColor = '#ef4444';
       } else {
         feedbackEl.innerHTML = '';
@@ -1017,14 +1015,14 @@
       const cleanTarget = target.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '').toLowerCase();
 
       if (typed === cleanTarget) {
-        feedbackEl.innerHTML = `<span style="color:#10b981; font-weight:800;"><i class="fa-solid fa-circle-check"></i> Chính xác!</span>`;
+        feedbackEl.innerHTML = `<span style="color:#10b981; font-weight:700;"><i class="fa-solid fa-circle-check"></i> Chính xác!</span>`;
         inputEl.style.borderColor = '#10b981';
         speakText(target);
       } else if (cleanTarget.startsWith(typed) && typed.length > 0) {
-        feedbackEl.innerHTML = `<span style="color:#fbbf24; font-weight:700;"><i class="fa-solid fa-pen"></i> Đang gõ...</span>`;
+        feedbackEl.innerHTML = `<span style="color:#fbbf24; font-weight:600;"><i class="fa-solid fa-pen"></i> Đang gõ...</span>`;
         inputEl.style.borderColor = '#fbbf24';
       } else if (typed.length > 0) {
-        feedbackEl.innerHTML = `<span style="color:#ef4444; font-weight:700;"><i class="fa-solid fa-circle-xmark"></i> Chưa đúng</span>`;
+        feedbackEl.innerHTML = `<span style="color:#ef4444; font-weight:600;"><i class="fa-solid fa-circle-xmark"></i> Chưa đúng</span>`;
         inputEl.style.borderColor = '#ef4444';
       } else {
         feedbackEl.innerHTML = '';
@@ -1044,7 +1042,7 @@
         btnEl.setAttribute('data-flipped', 'true');
         btnEl.style.background = '#ffffff';
         btnEl.style.color = '#0f172a';
-        btnEl.innerHTML = `<span style="font-size: 1.5rem; font-weight: 800; font-family: var(--font-hanzi);">${char}</span>`;
+        btnEl.innerHTML = `<span style="font-size: 1.5rem; font-weight: 700; font-family: var(--font-hanzi);">${char}</span>`;
       }
     }
 
@@ -1065,7 +1063,7 @@
             card.setAttribute('data-flipped', 'true');
             card.style.background = '#ffffff';
             card.style.color = '#0f172a';
-            card.innerHTML = `<span style="font-size: 1.5rem; font-weight: 800; font-family: var(--font-hanzi);">${chars[idx]}</span>`;
+            card.innerHTML = `<span style="font-size: 1.5rem; font-weight: 700; font-family: var(--font-hanzi);">${chars[idx]}</span>`;
           }
         }
       });
