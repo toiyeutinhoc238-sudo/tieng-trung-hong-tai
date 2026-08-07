@@ -7175,7 +7175,10 @@ function renderLessonHeroCardContent(w, index, total) {
   let exercisePrompt = meaning;
   let targetAnswer = char;
 
-  if (rawExamplesZh.length > 0 && rawExamplesVi.length > 0 && rawExamplesVi[0] && rawExamplesVi[0] !== meaning) {
+  if (w.question && w.answer && String(w.question).trim() !== '') {
+    exercisePrompt = String(w.question).trim();
+    targetAnswer = String(w.answer).trim();
+  } else if (rawExamplesZh.length > 0 && rawExamplesVi.length > 0 && rawExamplesVi[0] && rawExamplesVi[0] !== meaning && rawExamplesVi[0] !== w.question) {
     exercisePrompt = rawExamplesVi[0];
     targetAnswer = rawExamplesZh[0];
   } else {
@@ -7185,97 +7188,115 @@ function renderLessonHeroCardContent(w, index, total) {
 
   // Valid typing answers
   const validAnswers = [targetAnswer, char, ...rawExamplesZh];
+  if (w.answer) validAnswers.push(w.answer);
   const validAnswersJson = JSON.stringify(validAnswers).replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
   // Hint cards matching targetAnswer
   const hintChars = targetAnswer.match(/[\u4e00-\u9fa5]/g) || [targetAnswer.charAt(0)];
 
   // Render all example sentences inside the VÍ DỤ MINH HỌA box
-  const examplesHtml = rawExamplesZh.length > 0 ? rawExamplesZh.map((zh, i) => `
-    <div style="${i > 0 ? 'margin-top: 10px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.12);' : ''}">
-      <div style="font-size: 1.15rem; font-weight: 800; color: #ffffff; font-family: var(--font-display); margin-bottom: 2px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-        <span>${zh}</span>
-        <button onclick="window.speakLessonWord('${zh.replace(/'/g, "\\'")}')" style="background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59,130,246,0.4); color: #60a5fa; cursor: pointer; font-size: 0.78rem; border-radius: 6px; padding: 2px 8px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;" title="Nghe câu này">
-          <i class="fa-solid fa-volume-high"></i> Nghe
-        </button>
-      </div>
-      ${rawExamplesPy[i] ? `<div style="font-size: 0.9rem; font-weight: 700; color: #60a5fa; margin-bottom: 2px;">${rawExamplesPy[i]}</div>` : ''}
-      <div style="font-size: 0.88rem; color: #cbd5e1; font-weight: 500;">${rawExamplesVi[i] || meaning}</div>
-    </div>
-  `).join('') : '';
+  const fallbackTranslations = {
+    '大家好': 'Chào mọi người',
+    '你们好': 'Chào các bạn',
+    '我不是老师': 'Tôi không phải là giáo viên.',
+    '老师好': 'Chào Thầy/Cô (giáo viên)!',
+    '学生们': 'Các bạn học sinh'
+  };
 
-  return `
-    <div style="display: flex; gap: 32px; align-items: flex-start; flex-wrap: wrap;">
-      <!-- Left: Stroke Writer Container -->
-      <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; min-width: 150px; margin: 0 auto;">
-        <div id="lesson-hanzi-writer-box" style="width: 150px; height: 150px; background: rgba(255,255,255,0.06); border: 2px solid rgba(255,255,255,0.18); border-radius: 18px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.2);">
-          <div style="font-size: 4rem; font-weight: 800; font-family: var(--font-display); color: var(--text-primary);">${char}</div>
-        </div>
-        <button class="btn btn-sm btn-outline-primary" onclick="window.replayLessonHanziStrokes()" style="border-radius: 10px; font-size: 0.82rem; font-weight: 700; padding: 6px 14px; gap: 6px; display: flex; align-items: center;">
-          <i class="fa-solid fa-pen-nib"></i> Phát lại nét
-        </button>
-        <div style="font-size: 0.8rem; font-weight: 700; color: #60a5fa; background: rgba(59, 130, 246, 0.15); padding: 4px 10px; border-radius: 99px;">
-          Thẻ ${index + 1} / ${total}
-        </div>
-      </div>
-
-      <!-- Right: Detailed Vocab Info -->
-      <div style="flex: 1; min-width: 260px;">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <span style="font-size: 2.2rem; font-weight: 800; color: #3b82f6; font-family: var(--font-display);">${pinyin}</span>
-            <button class="top-circle-btn" onclick="window.speakLessonWord('${char.replace(/'/g, "\\'")}')" title="Nghe phát âm" style="width: 38px; height: 38px; background: rgba(59, 130, 246, 0.2); color: #3b82f6; border-color: rgba(59,130,246,0.4);">
-              <i class="fa-solid fa-volume-high"></i>
-            </button>
-          </div>
-          <div style="display: flex; gap: 6px;">
-            <span class="hero-info-badge" style="font-size: 0.82rem; padding: 4px 10px;">${category}</span>
-            <span class="hero-info-badge" style="font-size: 0.82rem; padding: 4px 10px; background: rgba(168, 85, 247, 0.18); border-color: rgba(168, 85, 247, 0.35); color: #c084fc;">HSK ${activeLessonsLevel}</span>
-          </div>
-        </div>
-
-        <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin-bottom: 10px;">
-          ${meaning} ${hanviet ? `<span style="font-size: 1rem; color: #3b82f6; font-weight: 700;">(${hanviet})</span>` : ''}
-        </div>
-
-        ${noteText ? `
-          <div style="font-size: 0.88rem; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 10px 14px; border-radius: 12px; margin-bottom: 12px; border-left: 3px solid #3b82f6;">
-            <i class="fa-solid fa-circle-info" style="color: #3b82f6; margin-right: 6px;"></i> ${noteText}
-          </div>
-        ` : ''}
-
-        <!-- 1. VÍ DỤ MINH HỌA -->
-        ${rawExamplesZh.length > 0 ? `
-          <div style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 14px; margin-top: 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.2);">
-            <div style="font-size: 0.82rem; font-weight: 800; color: #60a5fa; text-transform: uppercase; margin-bottom: 8px;">
-              <i class="fa-solid fa-image"></i> VÍ DỤ MINH HỌA (${rawExamplesZh.length} ví dụ):
-            </div>
-            ${examplesHtml}
-          </div>
-        ` : ''}
-
-        <!-- 2. DỊCH SANG TIẾNG TRUNG (Typing & Hint Cards) -->
-        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 14px; margin-top: 12px;">
-          <div style="font-size: 0.88rem; font-weight: 800; color: #38bdf8; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
-            <span><i class="fa-solid fa-language"></i> Dịch sang tiếng Trung: <span style="color: #ffffff;">"${exercisePrompt}"</span></span>
-            <div id="lesson-typing-feedback"></div>
-          </div>
-
-          <input type="text" id="lesson-typing-input" placeholder="Gõ chữ Hán hoặc câu ví dụ vào đây..." oninput="window.checkLessonTypingInput(${validAnswersJson})" style="width: 100%; padding: 10px 14px; background: rgba(0,0,0,0.35); border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; color: #ffffff; font-size: 1.05rem; font-weight: 700; outline: none; transition: all 0.2s; margin-bottom: 10px;" />
-
-          <!-- Eye-icon Character Hint Cards (Randomly generated hint) -->
-          <div id="lesson-char-hints-container" style="display: flex; gap: 10px; justify-content: center; margin-bottom: 10px; flex-wrap: wrap;">
-            ${hintChars.map((c, i) => `
-              <div class="lesson-hint-card" onclick="window.toggleLessonCharHint(this, '${c.replace(/'/g, "\\'")}')" title="Bấm để hiện chữ" style="width: 52px; height: 68px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #94a3b8; font-size: 1.2rem; transition: all 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.3);" onmouseenter="this.style.transform='translateY(-2px)'" onmouseleave="this.style.transform='translateY(0)'">
-                <i class="fa-solid fa-eye"></i>
-              </div>
-            `).join('')}
-          </div>
-
-          <button id="lesson-toggle-all-hints-btn" onclick="window.revealAllLessonCharHints('${targetAnswer.replace(/'/g, "\\'")}')" style="width: 100%; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; color: #ffffff; font-weight: 800; font-size: 0.95rem; padding: 11px; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4); transition: all 0.2s; letter-spacing: 0.5px;" onmousedown="this.style.transform='scale(0.98)'" onmouseup="this.style.transform='scale(1)'">
-            <i class="fa-solid fa-eye" style="margin-right: 6px;"></i> HIỆN GỢI Ý MẪU
+  const examplesHtml = rawExamplesZh.length > 0 ? rawExamplesZh.map((zh, i) => {
+    let cleanVi = rawExamplesVi[i] || '';
+    if (!cleanVi || cleanVi === meaning || (w.question && cleanVi === w.question && zh.trim() !== String(w.answer).trim())) {
+      cleanVi = fallbackTranslations[zh.trim()] || (w.example_vi && w.example_vi !== meaning && w.example_vi !== w.question ? w.example_vi : '');
+    }
+    return `
+      <div style="${i > 0 ? 'margin-top: 10px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.12);' : ''}">
+        <div style="font-size: 1.15rem; font-weight: 800; color: #ffffff; font-family: var(--font-display); margin-bottom: 2px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+          <span>${zh}</span>
+          <button onclick="window.speakLessonWord('${zh.replace(/'/g, "\\'")}')" style="background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59,130,246,0.4); color: #60a5fa; cursor: pointer; font-size: 0.78rem; border-radius: 6px; padding: 2px 8px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;" title="Nghe câu này">
+            <i class="fa-solid fa-volume-high"></i> Nghe
           </button>
         </div>
+        ${rawExamplesPy[i] ? `<div style="font-size: 0.9rem; font-weight: 700; color: #60a5fa; margin-bottom: 2px;">${rawExamplesPy[i]}</div>` : ''}
+        ${cleanVi ? `<div style="font-size: 0.88rem; color: #cbd5e1; font-weight: 500;">${cleanVi}</div>` : ''}
+      </div>
+    `;
+  }).join('') : '';
+
+  return `
+    <div style="display: flex; flex-direction: column; gap: 20px; width: 100%;">
+      <!-- Top Grid: Stroke Box + Vocab Info -->
+      <div style="display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap; width: 100%;">
+        <!-- Left: Stroke Writer Container -->
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; min-width: 150px; margin: 0 auto;">
+          <div id="lesson-hanzi-writer-box" style="width: 150px; height: 150px; background: rgba(255,255,255,0.06); border: 2px solid rgba(255,255,255,0.18); border-radius: 18px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.2);">
+            <div style="font-size: 4rem; font-weight: 800; font-family: var(--font-display); color: var(--text-primary);">${char}</div>
+          </div>
+          <button class="btn btn-sm btn-outline-primary" onclick="window.replayLessonHanziStrokes()" style="border-radius: 10px; font-size: 0.82rem; font-weight: 700; padding: 6px 14px; gap: 6px; display: flex; align-items: center;">
+            <i class="fa-solid fa-pen-nib"></i> Phát lại nét
+          </button>
+          <div style="font-size: 0.8rem; font-weight: 700; color: #60a5fa; background: rgba(59, 130, 246, 0.15); padding: 4px 10px; border-radius: 99px;">
+            Thẻ ${index + 1} / ${total}
+          </div>
+        </div>
+
+        <!-- Right: Detailed Vocab Info -->
+        <div style="flex: 1; min-width: 260px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 2.2rem; font-weight: 800; color: #3b82f6; font-family: var(--font-display);">${pinyin}</span>
+              <button class="top-circle-btn" onclick="window.speakLessonWord('${char.replace(/'/g, "\\'")}')" title="Nghe phát âm" style="width: 38px; height: 38px; background: rgba(59, 130, 246, 0.2); color: #3b82f6; border-color: rgba(59,130,246,0.4);">
+                <i class="fa-solid fa-volume-high"></i>
+              </button>
+            </div>
+            <div style="display: flex; gap: 6px;">
+              <span class="hero-info-badge" style="font-size: 0.82rem; padding: 4px 10px;">${category}</span>
+              <span class="hero-info-badge" style="font-size: 0.82rem; padding: 4px 10px; background: rgba(168, 85, 247, 0.18); border-color: rgba(168, 85, 247, 0.35); color: #c084fc;">HSK ${activeLessonsLevel}</span>
+            </div>
+          </div>
+
+          <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin-bottom: 10px;">
+            ${meaning} ${hanviet ? `<span style="font-size: 1rem; color: #3b82f6; font-weight: 700;">(${hanviet})</span>` : ''}
+          </div>
+
+          ${noteText ? `
+            <div style="font-size: 0.88rem; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 10px 14px; border-radius: 12px; margin-bottom: 12px; border-left: 3px solid #3b82f6;">
+              <i class="fa-solid fa-circle-info" style="color: #3b82f6; margin-right: 6px;"></i> ${noteText}
+            </div>
+          ` : ''}
+
+          <!-- VÍ DỤ MINH HỌA -->
+          ${rawExamplesZh.length > 0 ? `
+            <div style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 14px; margin-top: 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.2);">
+              <div style="font-size: 0.82rem; font-weight: 800; color: #60a5fa; text-transform: uppercase; margin-bottom: 8px;">
+                <i class="fa-solid fa-image"></i> VÍ DỤ MINH HỌA (${rawExamplesZh.length} ví dụ):
+              </div>
+              ${examplesHtml}
+            </div>
+          ` : ''}
+        </div>
+      </div>
+
+      <!-- Bottom Full Width Container: DỊCH SANG TIẾNG TRUNG (Typing & Hint Cards) -->
+      <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.12); border-radius: 18px; padding: 18px 20px; width: 100%; box-sizing: border-box; box-shadow: 0 6px 20px rgba(0,0,0,0.25);">
+        <div style="font-size: 0.95rem; font-weight: 800; color: #38bdf8; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+          <span><i class="fa-solid fa-language"></i> Dịch sang tiếng Trung: <span style="color: #ffffff; font-weight: 800;">"${exercisePrompt}"</span></span>
+          <div id="lesson-typing-feedback"></div>
+        </div>
+
+        <input type="text" id="lesson-typing-input" placeholder="Gõ chữ Hán hoặc câu ví dụ vào đây..." oninput="window.checkLessonTypingInput(${validAnswersJson})" style="width: 100%; padding: 12px 16px; background: rgba(0,0,0,0.4); border: 2px solid rgba(255,255,255,0.2); border-radius: 14px; color: #ffffff; font-size: 1.1rem; font-weight: 700; outline: none; transition: all 0.2s; margin-bottom: 14px; box-sizing: border-box;" />
+
+        <!-- Eye-icon Character Hint Cards (Randomly generated hint) -->
+        <div id="lesson-char-hints-container" style="display: flex; gap: 10px; justify-content: center; margin-bottom: 14px; flex-wrap: wrap;">
+          ${hintChars.map((c, i) => `
+            <div class="lesson-hint-card" onclick="window.toggleLessonCharHint(this, '${c.replace(/'/g, "\\'")}')" title="Bấm để hiện chữ" style="width: 52px; height: 68px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #94a3b8; font-size: 1.2rem; transition: all 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.3);" onmouseenter="this.style.transform='translateY(-2px)'" onmouseleave="this.style.transform='translateY(0)'">
+              <i class="fa-solid fa-eye"></i>
+            </div>
+          `).join('')}
+        </div>
+
+        <button id="lesson-toggle-all-hints-btn" onclick="window.revealAllLessonCharHints('${targetAnswer.replace(/'/g, "\\'")}')" style="width: 100%; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; color: #ffffff; font-weight: 800; font-size: 0.95rem; padding: 12px; border-radius: 14px; cursor: pointer; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4); transition: all 0.2s; letter-spacing: 0.5px;" onmousedown="this.style.transform='scale(0.98)'" onmouseup="this.style.transform='scale(1)'">
+          <i class="fa-solid fa-eye" style="margin-right: 6px;"></i> HIỆN GỢI Ý MẪU
+        </button>
       </div>
     </div>
   `;
@@ -7602,25 +7623,405 @@ function startLessonStudy(lesson, sliceWords) {
   showToast(`Bắt đầu học Flashcard: ${lesson.title || ('Bài ' + lesson.id)} 🎴`);
 }
 
-window.openLessonVocabStudy = function(lessonId) {
-  const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : activeLessonsLevel;
-  const lessonVocabs = vocabList.filter(w => {
-    if (w.isCustom) return false;
-    const curr = (w.curriculum || 'hsk').toLowerCase();
-    if (activeLessonsCurriculum === 'yct') {
-      return (curr.includes('yct') || (w.hskVersion || '').toLowerCase().includes('yct')) && matchLevel(w.level, currentLvl) && String(w.lessonId || 1) === String(lessonId);
-    } else {
-      return !curr.includes('yct') && matchLevel(w.level, currentLvl) && (w.hskVersion || '3.0') === activeHskVersion && String(w.lessonId || 1) === String(lessonId);
+let currentBkData = null;
+let currentBkMode = 'read'; // 'read' | 'quiz' | 'dictation' | 'translate'
+let currentBkLineIndex = 0;
+let currentBkScore = 0;
+
+window.switchBkTab = function(mode) {
+  currentBkMode = mode;
+  currentBkLineIndex = 0;
+  currentBkScore = 0;
+  renderBkModalContent();
+};
+
+function getBkLinesList(lessonData) {
+  const lines = [];
+  if (!lessonData || !lessonData.dialogues) return lines;
+  lessonData.dialogues.forEach((diag, dIdx) => {
+    diag.lines.forEach((line, lIdx) => {
+      const parts = line.split(/[:：]/);
+      let speaker = '';
+      let speech = line;
+      if (parts.length > 1 && parts[0].length <= 8) {
+        speaker = parts[0].trim();
+        speech = parts.slice(1).join('：').trim();
+      }
+      if (speech && speech.trim().length > 0 && !speech.startsWith('听两遍') && !speech.startsWith('（')) {
+        lines.push({
+          dialogueTitle: diag.title || `Hội thoại ${dIdx + 1}`,
+          speaker,
+          speech: speech.trim(),
+          fullLine: line
+        });
+      }
+    });
+  });
+  return lines;
+}
+
+// Vietnamese translation dictionary for HSK 1 lesson text lines
+const bkLineTranslations = {
+  'AI小语，你好！': 'Chào AI Tiểu Ngữ!',
+  '王老师，你好！': 'Chào thầy/cô Vương!',
+  '大家好！': 'Chào mọi người!',
+  '老师，您好！': 'Chào Thầy/Cô ạ!',
+  '你们好！': 'Chào các bạn!',
+  '你好，小语！': 'Chào bạn, Tiểu Ngữ!',
+  '谢谢！': 'Cảm ơn!',
+  '不客气！': 'Không có chi!',
+  '同学们，再见！': 'Chào tạm biệt các em học sinh!',
+  '老师，再见！': 'Chào tạm biệt Thầy/Cô!',
+  '请问，你叫什么名字？': 'Xin hỏi, bạn tên là gì?',
+  '我叫陈天中。': 'Tôi tên là Trần Thiên Trung.',
+  '你好，安妮！': 'Chào bạn, An Ni!',
+  '你好，陈天中！我不是安妮，我是白家月。': 'Chào Trần Thiên Trung! Tôi không phải là An Ni, tôi là Bạch Gia Nguyệt.',
+  '对不起！': 'Xin lỗi!',
+  '没关系！': 'Không sao đâu!',
+  '你好，我叫李文。': 'Chào bạn, tôi tên là Lý Văn.',
+  '你好，我叫白家月。': 'Chào bạn, tôi tên là Bạch Gia Nguyệt.',
+  '很高兴认识你。': 'Rất vui được quen biết bạn.',
+  '认识你，我也很高兴。': 'Quen biết bạn, tôi cũng rất vui.',
+  '我们在哪儿见呢？': 'Chúng ta gặp nhau ở đâu nhỉ?',
+  '在学校书店前见吧。': 'Gặp nhau trước hiệu sách của trường đi.',
+  '好的。下午两点能到吗？': 'Được. 2 giờ chiều có đến được không?',
+  '我能到。我在学校吃午饭。': 'Tôi đến được. Tôi ăn trưa ở trường.'
+};
+
+function renderBkModalContent() {
+  const container = document.getElementById('lesson-reading-text-modal-body');
+  if (!container || !currentBkData) return;
+
+  const linesList = getBkLinesList(currentBkData);
+
+  // Update tab buttons state
+  ['read', 'quiz', 'dictation', 'translate'].forEach(m => {
+    const btn = document.getElementById(`bk-tab-${m}`);
+    if (btn) {
+      if (m === currentBkMode) btn.classList.add('active');
+      else btn.classList.remove('active');
     }
   });
 
-  const firstWord = lessonVocabs[0];
-  const title = firstWord ? (firstWord.lessonTitle || firstWord.category || `Bài ${lessonId}`) : `Bài ${lessonId}`;
-  startLessonStudy({ id: lessonId, title }, lessonVocabs);
+  if (currentBkMode === 'read') {
+    let dialoguesHtml = '';
+    currentBkData.dialogues.forEach((diag, dIdx) => {
+      let linesHtml = '';
+      diag.lines.forEach(line => {
+        const parts = line.split(/[:：]/);
+        let speaker = '';
+        let speech = line;
+        if (parts.length > 1 && parts[0].length <= 8) {
+          speaker = parts[0].trim();
+          speech = parts.slice(1).join('：').trim();
+        }
+        const cleanSpeech = speech.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        const translation = bkLineTranslations[speech] || '';
+
+        linesHtml += `
+          <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:14px; font-size:1.15rem; line-height:1.6; border-bottom:1px solid rgba(255,255,255,0.06); padding-bottom:10px;">
+            ${speaker ? `
+              <span style="background:rgba(37,99,235,0.18); color:#60a5fa; border:1px solid rgba(59,130,246,0.3); padding:4px 10px; border-radius:8px; font-weight:800; font-size:0.88rem; flex-shrink:0;">
+                ${speaker}
+              </span>
+            ` : ''}
+            <div style="flex:1; color:#f8fafc; font-family:var(--font-hanzi); font-weight:600; word-break:break-word;">
+              <div>${speech}</div>
+              ${translation ? `<div style="font-size:0.9rem; color:#94a3b8; font-weight:500; font-family:sans-serif; margin-top:2px;">${translation}</div>` : ''}
+            </div>
+            <button onclick="window.speakText('${cleanSpeech}')" style="background:rgba(59,130,246,0.2); border:1px solid rgba(59,130,246,0.4); color:#38bdf8; cursor:pointer; padding:6px 12px; border-radius:8px; font-size:0.9rem; font-weight:700; flex-shrink:0;" title="Phát âm">
+              <i class="fa-solid fa-volume-high"></i> Nghe
+            </button>
+          </div>
+        `;
+      });
+
+      let notesHtml = '';
+      if (diag.notes && diag.notes.length > 0) {
+        diag.notes.forEach(note => {
+          notesHtml += `
+            <div style="background:rgba(245,158,11,0.12); border-left:3px solid #f59e0b; padding:10px 14px; border-radius:0 10px 10px 0; margin-top:12px; font-size:0.92rem; color:#fef08a; line-height:1.5;">
+              <strong style="color:#fbbf24;"><i class="fa-solid fa-lightbulb" style="margin-right:6px;"></i> Chú ý:</strong> ${note}
+            </div>
+          `;
+        });
+      }
+
+      dialoguesHtml += `
+        <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.12); border-radius:18px; padding:20px; margin-bottom:20px; box-shadow:0 8px 24px rgba(0,0,0,0.3);">
+          <h4 style="color:#38bdf8; font-size:1.1rem; margin-top:0; margin-bottom:14px; font-family:var(--font-display); display:flex; align-items:center; gap:8px;">
+            <i class="fa-solid fa-comments" style="color:#38bdf8;"></i> ${diag.title || `Hội thoại ${dIdx + 1}`}
+          </h4>
+          ${linesHtml}
+          ${notesHtml}
+        </div>
+      `;
+    });
+
+    container.innerHTML = dialoguesHtml;
+  } else if (currentBkMode === 'quiz') {
+    // Mode 1: Nghe chọn đáp án đúng
+    if (linesList.length === 0) {
+      container.innerHTML = `<div style="text-align:center; padding:40px; color:#94a3b8;">Chưa có dữ liệu câu hỏi cho bài này.</div>`;
+      return;
+    }
+
+    const curLine = linesList[currentBkLineIndex % linesList.length];
+    const cleanSpeech = curLine.speech.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+
+    // Generate options: correct choice + 2 distractors
+    const otherLines = linesList.filter(l => l.speech !== curLine.speech);
+    const distractor1 = otherLines.length > 0 ? otherLines[0].speech : '你好！';
+    const distractor2 = otherLines.length > 1 ? otherLines[1].speech : '再见！';
+
+    const rawOptions = [curLine.speech, distractor1, distractor2];
+    // Deterministic shuffle based on line index
+    const options = [rawOptions[(currentBkLineIndex) % 3], rawOptions[(currentBkLineIndex + 1) % 3], rawOptions[(currentBkLineIndex + 2) % 3]];
+
+    container.innerHTML = `
+      <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.12); border-radius:20px; padding:24px; text-align:center; max-width:650px; margin:0 auto; box-shadow:0 10px 30px rgba(0,0,0,0.4);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+          <span style="font-size:0.9rem; font-weight:800; color:#38bdf8;"><i class="fa-solid fa-circle-question"></i> Câu ${currentBkLineIndex + 1} / ${linesList.length}</span>
+          <span style="font-size:0.9rem; font-weight:800; color:#10b981;"><i class="fa-solid fa-star"></i> Điểm: ${currentBkScore}</span>
+        </div>
+
+        <div style="margin-bottom:24px; padding:20px; background:rgba(15,23,42,0.6); border-radius:16px; border:1px solid rgba(255,255,255,0.1);">
+          <div style="font-size:1.05rem; font-weight:700; color:#cbd5e1; margin-bottom:14px;">Bấm nút loa bên dưới để nghe và chọn đáp án đúng:</div>
+          <button onclick="window.speakText('${cleanSpeech}')" style="background:linear-gradient(135deg, #2563eb, #1d4ed8); border:none; color:#ffffff; padding:14px 28px; border-radius:99px; font-weight:800; font-size:1.1rem; cursor:pointer; box-shadow:0 6px 20px rgba(37,99,235,0.4); display:inline-flex; align-items:center; gap:10px;" onmousedown="this.style.transform='scale(0.96)'" onmouseup="this.style.transform='scale(1)'">
+            <i class="fa-solid fa-volume-high" style="font-size:1.3rem;"></i> BẤM ĐỂ NGHE AUDIO
+          </button>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:20px;">
+          ${options.map((opt, oIdx) => `
+            <button class="bk-quiz-opt-btn" onclick="window.checkBkQuizAnswer('${opt.replace(/'/g, "\\'")}', '${curLine.speech.replace(/'/g, "\\'")}', this)" style="background:rgba(255,255,255,0.06); border:1.5px solid rgba(255,255,255,0.18); color:#f8fafc; padding:14px 20px; border-radius:14px; font-size:1.15rem; font-weight:700; cursor:pointer; font-family:var(--font-hanzi); text-align:left; transition:all 0.2s; display:flex; align-items:center; justify-content:space-between;">
+              <span>${String.fromCharCode(65 + oIdx)}. ${opt}</span>
+              <i class="fa-solid fa-circle-check opt-icon" style="opacity:0;"></i>
+            </button>
+          `).join('')}
+        </div>
+
+        <div id="bk-quiz-feedback" style="min-height:30px; margin-bottom:16px;"></div>
+
+        <button id="bk-quiz-next-btn" onclick="window.nextBkQuizQuestion(${linesList.length})" style="display:none; width:100%; background:linear-gradient(135deg, #10b981, #059669); border:none; color:#ffffff; padding:12px; border-radius:12px; font-weight:800; font-size:1rem; cursor:pointer;">
+          Câu tiếp theo <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    `;
+
+    // Auto play audio once modal loads
+    setTimeout(() => window.speakText(curLine.speech), 300);
+
+  } else if (currentBkMode === 'dictation') {
+    // Mode 2: Nghe nhập bài khóa
+    if (linesList.length === 0) {
+      container.innerHTML = `<div style="text-align:center; padding:40px; color:#94a3b8;">Chưa có dữ liệu bài khóa.</div>`;
+      return;
+    }
+
+    const curLine = linesList[currentBkLineIndex % linesList.length];
+    const cleanSpeech = curLine.speech.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    const hintChars = curLine.speech.match(/[\u4e00-\u9fa5]/g) || curLine.speech.split('');
+
+    container.innerHTML = `
+      <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.12); border-radius:20px; padding:24px; text-align:center; max-width:680px; margin:0 auto; box-shadow:0 10px 30px rgba(0,0,0,0.4);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+          <span style="font-size:0.9rem; font-weight:800; color:#38bdf8;"><i class="fa-solid fa-headphones"></i> Câu ${currentBkLineIndex + 1} / ${linesList.length}</span>
+          ${curLine.speaker ? `<span style="background:rgba(37,99,235,0.2); color:#60a5fa; border:1px solid rgba(59,130,246,0.3); padding:4px 12px; border-radius:8px; font-weight:800; font-size:0.85rem;">Nhân vật: ${curLine.speaker}</span>` : ''}
+        </div>
+
+        <div style="margin-bottom:20px;">
+          <button onclick="window.speakText('${cleanSpeech}')" style="background:linear-gradient(135deg, #3b82f6, #1d4ed8); border:none; color:#ffffff; padding:14px 28px; border-radius:99px; font-weight:800; font-size:1.1rem; cursor:pointer; box-shadow:0 6px 20px rgba(59,130,246,0.4); display:inline-flex; align-items:center; gap:10px;">
+            <i class="fa-solid fa-volume-high" style="font-size:1.3rem;"></i> BẤM ĐỂ NGHE AUDIO CÂU THOẠI
+          </button>
+        </div>
+
+        <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:18px; margin-bottom:20px;">
+          <div style="font-size:0.92rem; font-weight:800; color:#38bdf8; margin-bottom:10px; text-align:left; display:flex; justify-content:space-between;">
+            <span>Gõ lại câu bằng chữ Hán/Pinyin:</span>
+            <span id="bk-dictation-feedback"></span>
+          </div>
+
+          <input type="text" id="bk-dictation-input" placeholder="Gõ câu vừa nghe được..." oninput="window.checkBkDictationInput('${cleanSpeech}')" style="width:100%; padding:12px 16px; background:rgba(0,0,0,0.4); border:2px solid rgba(255,255,255,0.2); border-radius:12px; color:#ffffff; font-size:1.15rem; font-weight:700; outline:none; margin-bottom:14px; box-sizing:border-box;" />
+
+          <div id="bk-dictation-hint-cards" style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:12px;">
+            ${hintChars.map(c => `
+              <div class="lesson-hint-card" onclick="window.toggleLessonCharHint(this, '${c.replace(/'/g, "\\'")}')" style="width:48px; height:60px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#94a3b8; font-size:1.1rem;">
+                <i class="fa-solid fa-eye"></i>
+              </div>
+            `).join('')}
+          </div>
+
+          <button onclick="window.revealAllLessonCharHints('${cleanSpeech}')" style="width:100%; background:linear-gradient(135deg, #f59e0b, #d97706); border:none; color:#ffffff; font-weight:800; padding:10px; border-radius:10px; cursor:pointer;">
+            <i class="fa-solid fa-eye"></i> HIỆN GỢI Ý MẪU
+          </button>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; gap:12px;">
+          <button onclick="window.navBkLine(-1, ${linesList.length})" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; padding:10px 18px; border-radius:10px; font-weight:700; cursor:pointer;">
+            &larr; Câu trước
+          </button>
+          <button onclick="window.navBkLine(1, ${linesList.length})" style="background:#2563eb; border:none; color:#fff; padding:10px 22px; border-radius:10px; font-weight:800; cursor:pointer;">
+            Câu tiếp theo &rarr;
+          </button>
+        </div>
+      </div>
+    `;
+
+    setTimeout(() => window.speakText(curLine.speech), 300);
+
+  } else if (currentBkMode === 'translate') {
+    // Mode 3: Dịch bài khóa
+    if (linesList.length === 0) {
+      container.innerHTML = `<div style="text-align:center; padding:40px; color:#94a3b8;">Chưa có dữ liệu dịch.</div>`;
+      return;
+    }
+
+    const curLine = linesList[currentBkLineIndex % linesList.length];
+    const cleanSpeech = curLine.speech.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    const translationPrompt = bkLineTranslations[curLine.speech] || `Dịch câu thoại của ${curLine.speaker || 'nhân vật'}`;
+    const hintChars = curLine.speech.match(/[\u4e00-\u9fa5]/g) || curLine.speech.split('');
+
+    container.innerHTML = `
+      <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.12); border-radius:20px; padding:24px; text-align:center; max-width:680px; margin:0 auto; box-shadow:0 10px 30px rgba(0,0,0,0.4);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+          <span style="font-size:0.9rem; font-weight:800; color:#38bdf8;"><i class="fa-solid fa-language"></i> Câu ${currentBkLineIndex + 1} / ${linesList.length}</span>
+          ${curLine.speaker ? `<span style="background:rgba(37,99,235,0.2); color:#60a5fa; border:1px solid rgba(59,130,246,0.3); padding:4px 12px; border-radius:8px; font-weight:800; font-size:0.85rem;">${curLine.speaker}</span>` : ''}
+        </div>
+
+        <div style="background:rgba(15,23,42,0.8); border:1.5px solid rgba(59,130,246,0.4); border-radius:16px; padding:20px; margin-bottom:20px; text-align:left;">
+          <div style="font-size:0.85rem; font-weight:800; color:#60a5fa; text-transform:uppercase; margin-bottom:6px;">
+            <i class="fa-solid fa-flag"></i> Câu tiếng Việt cần dịch:
+          </div>
+          <div style="font-size:1.3rem; font-weight:800; color:#ffffff;">
+            "${translationPrompt}"
+          </div>
+        </div>
+
+        <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:18px; margin-bottom:20px;">
+          <div style="font-size:0.92rem; font-weight:800; color:#38bdf8; margin-bottom:10px; text-align:left; display:flex; justify-content:space-between;">
+            <span>Dịch sang tiếng Trung:</span>
+            <span id="bk-translate-feedback"></span>
+          </div>
+
+          <input type="text" id="bk-translate-input" placeholder="Gõ câu dịch tiếng Trung vào đây..." oninput="window.checkBkTranslateInput('${cleanSpeech}')" style="width:100%; padding:12px 16px; background:rgba(0,0,0,0.4); border:2px solid rgba(255,255,255,0.2); border-radius:12px; color:#ffffff; font-size:1.15rem; font-weight:700; outline:none; margin-bottom:14px; box-sizing:border-box;" />
+
+          <div id="bk-translate-hint-cards" style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:12px;">
+            ${hintChars.map(c => `
+              <div class="lesson-hint-card" onclick="window.toggleLessonCharHint(this, '${c.replace(/'/g, "\\'")}')" style="width:48px; height:60px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#94a3b8; font-size:1.1rem;">
+                <i class="fa-solid fa-eye"></i>
+              </div>
+            `).join('')}
+          </div>
+
+          <button onclick="window.revealAllLessonCharHints('${cleanSpeech}')" style="width:100%; background:linear-gradient(135deg, #f59e0b, #d97706); border:none; color:#ffffff; font-weight:800; padding:10px; border-radius:10px; cursor:pointer;">
+            <i class="fa-solid fa-eye"></i> HIỆN GỢI Ý MẪU
+          </button>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; gap:12px;">
+          <button onclick="window.navBkLine(-1, ${linesList.length})" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; padding:10px 18px; border-radius:10px; font-weight:700; cursor:pointer;">
+            &larr; Câu trước
+          </button>
+          <button onclick="window.navBkLine(1, ${linesList.length})" style="background:#2563eb; border:none; color:#fff; padding:10px 22px; border-radius:10px; font-weight:800; cursor:pointer;">
+            Câu tiếp theo &rarr;
+          </button>
+        </div>
+      </div>
+    `;
+  }
+}
+
+window.checkBkQuizAnswer = function(selected, target, btnEl) {
+  const feedback = document.getElementById('bk-quiz-feedback');
+  const nextBtn = document.getElementById('bk-quiz-next-btn');
+  const allBtns = document.querySelectorAll('.bk-quiz-opt-btn');
+
+  allBtns.forEach(b => {
+    b.disabled = true;
+    b.style.opacity = '0.7';
+  });
+
+  const cleanSel = selected.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '').toLowerCase();
+  const cleanTarget = target.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '').toLowerCase();
+
+  if (cleanSel === cleanTarget) {
+    if (btnEl) {
+      btnEl.style.background = 'rgba(16, 185, 129, 0.25)';
+      btnEl.style.borderColor = '#10b981';
+      btnEl.style.color = '#34d399';
+    }
+    if (feedback) feedback.innerHTML = `<span style="color:#10b981; font-weight:800; font-size:1.1rem;"><i class="fa-solid fa-circle-check"></i> Chính xác! 🎉</span>`;
+    currentBkScore += 10;
+    window.speakText(target);
+  } else {
+    if (btnEl) {
+      btnEl.style.background = 'rgba(239, 68, 68, 0.25)';
+      btnEl.style.borderColor = '#ef4444';
+      btnEl.style.color = '#f87171';
+    }
+    if (feedback) feedback.innerHTML = `<span style="color:#ef4444; font-weight:800; font-size:1.05rem;"><i class="fa-solid fa-circle-xmark"></i> Chưa đúng! Đáp án đúng là: ${target}</span>`;
+  }
+
+  if (nextBtn) nextBtn.style.display = 'block';
 };
 
-window.openLessonGrammarStudy = function(lessonId) {
-  showComingSoonNotice('Ngữ Pháp');
+window.nextBkQuizQuestion = function(totalLines) {
+  currentBkLineIndex = (currentBkLineIndex + 1) % totalLines;
+  renderBkModalContent();
+};
+
+window.checkBkDictationInput = function(target) {
+  const inputEl = document.getElementById('bk-dictation-input');
+  const feedbackEl = document.getElementById('bk-dictation-feedback');
+  if (!inputEl || !feedbackEl) return;
+
+  const typed = inputEl.value.trim().replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '').toLowerCase();
+  const cleanTarget = target.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '').toLowerCase();
+
+  if (typed === cleanTarget) {
+    feedbackEl.innerHTML = `<span style="color:#10b981; font-weight:800;"><i class="fa-solid fa-circle-check"></i> Chính xác!</span>`;
+    inputEl.style.borderColor = '#10b981';
+    window.speakText(target);
+  } else if (cleanTarget.startsWith(typed) && typed.length > 0) {
+    feedbackEl.innerHTML = `<span style="color:#fbbf24; font-weight:700;"><i class="fa-solid fa-pen"></i> Đang gõ...</span>`;
+    inputEl.style.borderColor = '#fbbf24';
+  } else if (typed.length > 0) {
+    feedbackEl.innerHTML = `<span style="color:#ef4444; font-weight:700;"><i class="fa-solid fa-circle-xmark"></i> Chưa đúng</span>`;
+    inputEl.style.borderColor = '#ef4444';
+  } else {
+    feedbackEl.innerHTML = '';
+    inputEl.style.borderColor = 'rgba(255,255,255,0.2)';
+  }
+};
+
+window.checkBkTranslateInput = function(target) {
+  const inputEl = document.getElementById('bk-translate-input');
+  const feedbackEl = document.getElementById('bk-translate-feedback');
+  if (!inputEl || !feedbackEl) return;
+
+  const typed = inputEl.value.trim().replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '').toLowerCase();
+  const cleanTarget = target.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '').toLowerCase();
+
+  if (typed === cleanTarget) {
+    feedbackEl.innerHTML = `<span style="color:#10b981; font-weight:800;"><i class="fa-solid fa-circle-check"></i> Chính xác!</span>`;
+    inputEl.style.borderColor = '#10b981';
+    window.speakText(target);
+  } else if (cleanTarget.startsWith(typed) && typed.length > 0) {
+    feedbackEl.innerHTML = `<span style="color:#fbbf24; font-weight:700;"><i class="fa-solid fa-pen"></i> Đang gõ...</span>`;
+    inputEl.style.borderColor = '#fbbf24';
+  } else if (typed.length > 0) {
+    feedbackEl.innerHTML = `<span style="color:#ef4444; font-weight:700;"><i class="fa-solid fa-circle-xmark"></i> Chưa đúng</span>`;
+    inputEl.style.borderColor = '#ef4444';
+  } else {
+    feedbackEl.innerHTML = '';
+    inputEl.style.borderColor = 'rgba(255,255,255,0.2)';
+  }
+};
+
+window.navBkLine = function(dir, totalLines) {
+  currentBkLineIndex = (currentBkLineIndex + dir + totalLines) % totalLines;
+  renderBkModalContent();
 };
 
 window.openLessonTextStudy = async function(lessonId) {
@@ -7656,62 +8057,15 @@ window.openLessonTextStudy = async function(lessonId) {
     return;
   }
 
-  let dialoguesHtml = '';
-  lessonData.dialogues.forEach((diag, dIdx) => {
-    let linesHtml = '';
-    diag.lines.forEach(line => {
-      const parts = line.split(/[:：]/);
-      let speaker = '';
-      let speech = line;
-      if (parts.length > 1 && parts[0].length <= 8) {
-        speaker = parts[0].trim();
-        speech = parts.slice(1).join('：').trim();
-      }
-
-      const cleanSpeechForAudio = speech.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-
-      linesHtml += `
-        <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:12px; font-size:1.15rem; line-height:1.6;">
-          ${speaker ? `
-            <span style="background:rgba(37,99,235,0.18); color:#60a5fa; border:1px solid rgba(59,130,246,0.3); padding:3px 10px; border-radius:8px; font-weight:800; font-size:0.9rem; flex-shrink:0;">
-              ${speaker}
-            </span>
-          ` : ''}
-          <div style="flex:1; color:#f8fafc; font-family:var(--font-hanzi); font-weight:600; word-break:break-word;">
-            ${speech}
-            <button onclick="window.speakText('${cleanSpeechForAudio}')" style="background:none; border:none; color:#38bdf8; cursor:pointer; margin-left:8px; font-size:0.95rem;" title="Phát âm">
-              <i class="fa-solid fa-volume-high"></i>
-            </button>
-          </div>
-        </div>
-      `;
-    });
-
-    let notesHtml = '';
-    if (diag.notes && diag.notes.length > 0) {
-      diag.notes.forEach(note => {
-        notesHtml += `
-          <div style="background:rgba(245,158,11,0.12); border-left:3px solid #f59e0b; padding:10px 14px; border-radius:0 10px 10px 0; margin-top:12px; font-size:0.92rem; color:#fef08a; line-height:1.5;">
-            <strong style="color:#fbbf24;"><i class="fa-solid fa-lightbulb" style="margin-right:6px;"></i> Chú ý:</strong> ${note}
-          </div>
-        `;
-      });
-    }
-
-    dialoguesHtml += `
-      <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.12); border-radius:18px; padding:20px; margin-bottom:20px; box-shadow:0 8px 24px rgba(0,0,0,0.3);">
-        <h4 style="color:#38bdf8; font-size:1.1rem; margin-top:0; margin-bottom:14px; font-family:var(--font-display); display:flex; align-items:center; gap:8px;">
-          <i class="fa-solid fa-comments" style="color:#38bdf8;"></i> ${diag.title || `Hội thoại ${dIdx + 1}`}
-        </h4>
-        ${linesHtml}
-        ${notesHtml}
-      </div>
-    `;
-  });
+  currentBkData = lessonData;
+  currentBkMode = 'read';
+  currentBkLineIndex = 0;
+  currentBkScore = 0;
 
   modalContainer.innerHTML = `
-    <div style="background:#0f172a; border:1px solid rgba(255,255,255,0.18); border-radius:22px; max-width:820px; width:100%; max-height:90vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 25px 60px rgba(0,0,0,0.7);">
+    <div style="background:#0f172a; border:1px solid rgba(255,255,255,0.18); border-radius:22px; max-width:880px; width:100%; max-height:92vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 25px 60px rgba(0,0,0,0.7);">
       
+      <!-- Top Modal Bar -->
       <div style="padding:16px 24px; border-bottom:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; align-items:center; background:rgba(30,41,59,0.9);">
         <h3 style="color:#fff; font-size:1.2rem; margin:0; font-weight:800; display:flex; align-items:center; gap:10px; font-family:var(--font-display);">
           <i class="fa-solid fa-book-open" style="color:#38bdf8;"></i> Bài Khóa - Bài ${numId}
@@ -7721,18 +8075,36 @@ window.openLessonTextStudy = async function(lessonId) {
         </button>
       </div>
 
-      <div style="flex:1; overflow-y:auto; padding:24px;">
-        ${dialoguesHtml}
+      <!-- 3-Part Mode Navigation Header Tabs -->
+      <div style="display:flex; gap:8px; border-bottom:1px solid rgba(255,255,255,0.12); padding:12px 20px; background:rgba(15,23,42,0.85); overflow-x:auto;">
+        <button id="bk-tab-read" onclick="window.switchBkTab('read')" class="bk-tab-btn active">
+          <i class="fa-solid fa-book-open"></i> Đọc Bài Khóa
+        </button>
+        <button id="bk-tab-quiz" onclick="window.switchBkTab('quiz')" class="bk-tab-btn">
+          <i class="fa-solid fa-circle-question"></i> 1. Nghe chọn đáp án đúng
+        </button>
+        <button id="bk-tab-dictation" onclick="window.switchBkTab('dictation')" class="bk-tab-btn">
+          <i class="fa-solid fa-headphones"></i> 2. Nghe nhập bài khóa
+        </button>
+        <button id="bk-tab-translate" onclick="window.switchBkTab('translate')" class="bk-tab-btn">
+          <i class="fa-solid fa-language"></i> 3. Dịch bài khóa
+        </button>
       </div>
 
+      <!-- Dynamic Mode Body Container -->
+      <div id="lesson-reading-text-modal-body" style="flex:1; overflow-y:auto; padding:24px;">
+      </div>
+
+      <!-- Modal Footer -->
       <div style="padding:12px 24px; border-top:1px solid rgba(255,255,255,0.1); background:#1e293b; display:flex; justify-content:space-between; align-items:center; font-size:0.82rem; color:#94a3b8;">
-        <span>💡 Nhấp vào biểu tượng loa để nghe phát âm từng câu thoại.</span>
+        <span>💡 Bạn có thể chọn giữa 3 phần luyện tập: Nghe chọn đáp án đúng, Nghe nhập bài khóa, và Dịch.</span>
         <span style="font-weight:700; color:#f97316;">Tiếng Trung HongTai</span>
       </div>
     </div>
   `;
 
   modalContainer.style.display = 'flex';
+  renderBkModalContent();
 };
 
 window.openLessonReviewStudy = function(lessonId) {
