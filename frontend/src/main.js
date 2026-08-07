@@ -8860,11 +8860,11 @@ function formatStudyTimeDisplay(totalMinutes) {
   const hours = Math.floor(mins / 60);
   const remMins = mins % 60;
   if (hours < 24) {
-    return remMins > 0 ? `${hours} tiếng ${remMins} phút` : `${hours} tiếng`;
+    return remMins > 0 ? `${hours} giờ ${remMins} phút` : `${hours} giờ`;
   }
   const days = Math.floor(hours / 24);
   const remHours = hours % 24;
-  return remHours > 0 ? `${days} ngày ${remHours} tiếng` : `${days} ngày`;
+  return remHours > 0 ? `${days} ngày ${remHours} giờ` : `${days} ngày`;
 }
 window.formatStudyTimeDisplay = formatStudyTimeDisplay;
 
@@ -8918,7 +8918,10 @@ function renderWeeklyStudyChart() {
 
     let totalSecs = history[dateStr] || 0;
     if (dateStr === todayStr) {
-      totalSecs += sessionStudyTime;
+      const totalCurrentSecs = userStudyTime + sessionStudyTime;
+      if (totalCurrentSecs > totalSecs) {
+        totalSecs = totalCurrentSecs;
+      }
     }
 
     const mins = Math.floor(totalSecs / 60);
