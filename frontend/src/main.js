@@ -8914,57 +8914,43 @@ function renderWeeklyStudyChart() {
 
   // Map recorded daily history
   const dayMinsMap = {};
-  let recordedMinsSum = 0;
-
   for (let i = 0; i < 7; i++) {
     const d = new Date(mondayDate);
     d.setDate(mondayDate.getDate() + i);
     const dateStr = d.toLocaleDateString('sv');
-    let m = Math.floor((history[dateStr] || 0) / 60);
-    if (dateStr === todayStr) {
-      m += Math.floor(sessionStudyTime / 60);
-    }
-    dayMinsMap[dateStr] = m;
-    recordedMinsSum += m;
+    dayMinsMap[dateStr] = Math.floor((history[dateStr] || 0) / 60);
   }
 
-  // If recorded history sum is less than user's total study time (e.g. cumulative total study time across streak),
-  // distribute totalMins across the active streak days leading up to today!
-  if (totalMins > recordedMinsSum && streakDays > 0) {
-    const todayIdx = distanceToMonday; // 0..6
-    const streakWeights = [0.35, 0.40, 0.25, 0.30, 0.30, 0.35, 0.30];
-    
-    let remMinsToDistribute = totalMins - recordedMinsSum;
-    const activeStreakIndices = [];
+  // Today's actual time in current session / recorded today (EXACT 1m if user studied 1m today)
+  const todayRecordedMins = Math.max(dayMinsMap[todayStr] || 0, Math.floor(sessionStudyTime / 60));
+  dayMinsMap[todayStr] = todayRecordedMins;
 
-    for (let k = 0; k < Math.min(streakDays, todayIdx + 1); k++) {
-      activeStreakIndices.unshift(todayIdx - k);
+  // Remaining past cumulative minutes to distribute across previous active streak days
+  const pastRemMins = Math.max(0, totalMins - todayRecordedMins);
+  const prevStreakDays = streakDays - 1; // days before today in streak
+
+  if (pastRemMins > 0 && prevStreakDays > 0) {
+    const todayIdx = distanceToMonday; // 0..6
+    const prevIndices = [];
+    for (let k = 1; k <= Math.min(prevStreakDays, todayIdx); k++) {
+      prevIndices.unshift(todayIdx - k);
     }
 
-    if (activeStreakIndices.length > 0) {
-      let weightSum = 0;
-      activeStreakIndices.forEach(idx => weightSum += (streakWeights[idx % streakWeights.length] || 0.3));
+    if (prevIndices.length > 0) {
+      const perDayMins = Math.floor(pastRemMins / prevIndices.length);
+      let remMins = pastRemMins % prevIndices.length;
 
-      let allocatedSum = 0;
-      activeStreakIndices.forEach((idx, order) => {
+      prevIndices.forEach((idx, order) => {
         const d = new Date(mondayDate);
         d.setDate(mondayDate.getDate() + idx);
         const dateStr = d.toLocaleDateString('sv');
-
-        if (order === activeStreakIndices.length - 1) {
-          const allotted = Math.max(1, remMinsToDistribute - allocatedSum);
-          dayMinsMap[dateStr] = (dayMinsMap[dateStr] || 0) + allotted;
-        } else {
-          const w = (streakWeights[idx % streakWeights.length] || 0.3) / weightSum;
-          const allotted = Math.max(1, Math.round((totalMins - recordedMinsSum) * w));
-          dayMinsMap[dateStr] = (dayMinsMap[dateStr] || 0) + allotted;
-          allocatedSum += allotted;
-        }
+        const extra = order === prevIndices.length - 1 ? remMins : 0;
+        dayMinsMap[dateStr] = (dayMinsMap[dateStr] || 0) + perDayMins + extra;
       });
     }
   }
 
-  let maxMins = 60; // baseline max for scaling
+  let maxMins = 60; // baseline max for scaling bar heights
   for (let i = 0; i < 7; i++) {
     const d = new Date(mondayDate);
     d.setDate(mondayDate.getDate() + i);
