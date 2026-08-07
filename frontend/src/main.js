@@ -8852,6 +8852,111 @@ let guestStudyTime = 0;
 let guestStreak = 0;
 let guestLastActive = '';
 
+function formatStudyTimeDisplay(totalMinutes) {
+  const mins = Math.max(0, parseInt(totalMinutes, 10) || 0);
+  if (mins < 60) {
+    return `${mins} phút`;
+  }
+  const hours = Math.floor(mins / 60);
+  const remMins = mins % 60;
+  if (hours < 24) {
+    return remMins > 0 ? `${hours} tiếng ${remMins} phút` : `${hours} tiếng`;
+  }
+  const days = Math.floor(hours / 24);
+  const remHours = hours % 24;
+  return remHours > 0 ? `${days} ngày ${remHours} tiếng` : `${days} ngày`;
+}
+window.formatStudyTimeDisplay = formatStudyTimeDisplay;
+
+function getDailyStudyHistory() {
+  try {
+    const raw = localStorage.getItem('daily_study_history');
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    return {};
+  }
+}
+
+function saveDailyStudyHistory(history) {
+  try {
+    localStorage.setItem('daily_study_history', JSON.stringify(history));
+  } catch (e) {}
+}
+
+function recordDailyStudyTime(secs) {
+  if (!secs || secs <= 0) return;
+  const todayStr = new Date().toLocaleDateString('sv'); // YYYY-MM-DD
+  const history = getDailyStudyHistory();
+  history[todayStr] = (history[todayStr] || 0) + secs;
+  saveDailyStudyHistory(history);
+  renderWeeklyStudyChart();
+}
+
+function renderWeeklyStudyChart() {
+  const container = document.getElementById('home-weekly-chart-bars');
+  if (!container) return;
+
+  const history = getDailyStudyHistory();
+  const now = new Date();
+
+  // Get Monday of current week
+  const dayOfWeek = now.getDay(); // 0 is Sunday, 1 is Monday, ...
+  const distanceToMonday = (dayOfWeek === 0 ? 6 : dayOfWeek - 1);
+  const mondayDate = new Date(now);
+  mondayDate.setDate(now.getDate() - distanceToMonday);
+
+  const dayLabels = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật'];
+  const todayStr = now.toLocaleDateString('sv');
+
+  let maxMins = 60; // baseline max
+  const weekData = [];
+
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(mondayDate);
+    d.setDate(mondayDate.getDate() + i);
+    const dateStr = d.toLocaleDateString('sv');
+
+    let totalSecs = history[dateStr] || 0;
+    if (dateStr === todayStr) {
+      totalSecs += sessionStudyTime;
+    }
+
+    const mins = Math.floor(totalSecs / 60);
+    if (mins > maxMins) maxMins = mins;
+
+    weekData.push({
+      dateStr,
+      isToday: dateStr === todayStr,
+      mins,
+      dayLabel: dayLabels[i]
+    });
+  }
+
+  let html = '';
+  weekData.forEach(item => {
+    const heightPct = item.mins > 0 ? Math.min(100, Math.max(22, Math.round((item.mins / maxMins) * 100))) : 12;
+    const timeLabel = item.mins > 0 ? (item.mins >= 60 ? `${Math.floor(item.mins / 60)}h${item.mins % 60 ? item.mins % 60 + 'm' : ''}` : `${item.mins}m`) : '--';
+    
+    const barGradient = item.isToday 
+      ? 'linear-gradient(180deg, #f59e0b, #d97706); box-shadow: 0 4px 12px rgba(245,158,11,0.4);' 
+      : (item.mins > 0 ? 'linear-gradient(180deg, #38bdf8, #2563eb); box-shadow: 0 4px 12px rgba(56,189,248,0.3);' : 'rgba(255,255,255,0.1);');
+
+    const labelColor = item.isToday ? '#fbbf24; font-weight: 800;' : '#94a3b8; font-weight: 700;';
+    const valColor = item.isToday ? '#fbbf24' : (item.mins > 0 ? '#38bdf8' : '#94a3b8');
+
+    html += `
+      <div class="chart-bar-col" style="display:flex; flex-direction:column; align-items:center; gap:8px; height:100%; justify-content:flex-end;">
+        <div style="font-size:0.78rem; font-weight:800; color:${valColor};">${timeLabel}</div>
+        <div style="width: 38px; height: ${heightPct}%; background: ${barGradient} border-radius: 10px 10px 4px 4px; transition: height 0.4s ease;"></div>
+        <span style="font-size:0.85rem; color:${labelColor}">${item.dayLabel}</span>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+window.renderWeeklyStudyChart = renderWeeklyStudyChart;
+
 function startStudyTimer() {
   if (activeTimer) clearInterval(activeTimer);
   activeTimer = setInterval(() => {
@@ -8860,20 +8965,18 @@ function startStudyTimer() {
 
       const totalSecs = userStudyTime + sessionStudyTime;
       const mins = Math.floor(totalSecs / 60);
+      const formattedText = formatStudyTimeDisplay(mins);
+
       const zubiStudyTime = document.getElementById('zubi-study-time-count');
-      if (zubiStudyTime) {
-        if (mins >= 1440) {
-          const days = Math.floor(mins / 1440);
-          const remHrs = Math.floor((mins % 1440) / 60);
-          zubiStudyTime.textContent = remHrs > 0 ? `${days} ngày ${remHrs} giờ` : `${days} ngày`;
-        } else if (mins >= 60) {
-          const hrs = Math.floor(mins / 60);
-          const remMins = mins % 60;
-          zubiStudyTime.textContent = remMins > 0 ? `${hrs} giờ ${remMins} phút` : `${hrs} giờ`;
-        } else {
-          const displayMins = Math.round(totalSecs / 60);
-          zubiStudyTime.textContent = `${displayMins} phút`;
-        }
+      const homeTime = document.getElementById('home-time-val');
+      const welcomeTime = document.getElementById('welcome-study-time-val');
+
+      if (zubiStudyTime) zubiStudyTime.textContent = formattedText;
+      if (homeTime) homeTime.textContent = formattedText;
+      if (welcomeTime) welcomeTime.textContent = formattedText;
+
+      if (sessionStudyTime % 5 === 0) {
+        renderWeeklyStudyChart();
       }
 
       if (sessionStudyTime >= 15) {
@@ -8887,6 +8990,8 @@ async function syncStudyStats() {
   const increment = sessionStudyTime;
   sessionStudyTime = 0;
   if (increment <= 0) return;
+
+  recordDailyStudyTime(increment);
 
   const todayStr = new Date().toLocaleDateString('sv'); // YYYY-MM-DD
 
@@ -9116,9 +9221,11 @@ function updateStatsUI() {
   if (homeStreakEl) homeStreakEl.textContent = `${userStreak || 1}`;
 
   const minutes = Math.floor((userStudyTime + sessionStudyTime) / 60);
-  if (studyTimeEl) studyTimeEl.textContent = `${minutes} phút`;
-  if (homeTimeEl) homeTimeEl.textContent = `${minutes} phút`;
-  if (zubiTimeEl) zubiTimeEl.textContent = `${minutes} phút`;
+  const formattedTime = formatStudyTimeDisplay(minutes);
+
+  if (studyTimeEl) studyTimeEl.textContent = formattedTime;
+  if (homeTimeEl) homeTimeEl.textContent = formattedTime;
+  if (zubiTimeEl) zubiTimeEl.textContent = formattedTime;
 
   const completedCount = calculateCompletedLessons();
   if (completedEl) completedEl.textContent = `${completedCount} bài`;
@@ -9130,6 +9237,7 @@ function updateStatsUI() {
 
   renderCourseCompletionDashboard();
   renderZubiDashboardTableAndRecent();
+  renderWeeklyStudyChart();
   renderHomeLeaderboard();
 }
 
@@ -9206,11 +9314,11 @@ function renderZubiDashboardTableAndRecent() {
 
       let badgeHtml = '';
       if (pct === 0) {
-        badgeHtml = `<span style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: rgba(239, 68, 68, 0.2); color: #f87171;">Chưa học</span>`;
+        badgeHtml = `<span style="white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 99px; font-size: 0.75rem; font-weight: 700; background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.25);"><i class="fa-regular fa-circle" style="font-size: 0.7rem;"></i> Chưa học</span>`;
       } else if (pct === 100) {
-        badgeHtml = `<span style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: rgba(16, 185, 129, 0.2); color: #34d399;">Đã thuộc 100%</span>`;
+        badgeHtml = `<span style="white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 99px; font-size: 0.75rem; font-weight: 700; background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35);"><i class="fa-solid fa-circle-check" style="font-size: 0.7rem;"></i> Đã thuộc 100%</span>`;
       } else {
-        badgeHtml = `<span style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: rgba(217, 119, 6, 0.2); color: #fbbf24;">Đang học ${pct}%</span>`;
+        badgeHtml = `<span style="white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 99px; font-size: 0.75rem; font-weight: 700; background: rgba(217, 119, 6, 0.2); color: #fbbf24; border: 1px solid rgba(217, 119, 6, 0.35);"><i class="fa-solid fa-spinner fa-spin-pulse" style="font-size: 0.7rem;"></i> Đang học ${pct}%</span>`;
       }
 
       rowsHtml += `
