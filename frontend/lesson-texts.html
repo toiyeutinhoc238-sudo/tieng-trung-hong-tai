@@ -622,6 +622,8 @@
       renderWorkspace();
     });
 
+    let allVocabDb = [];
+
     async function loadData() {
       try {
         const res = await fetch('/hsk1_reading_texts.json');
@@ -630,6 +632,15 @@
         }
       } catch (e) {
         console.warn("Error loading reading texts:", e);
+      }
+
+      try {
+        const resDb = await fetch('/api/words');
+        if (resDb.ok) {
+          allVocabDb = await resDb.json();
+        }
+      } catch (e) {
+        console.warn("Error loading vocab DB:", e);
       }
     }
 
@@ -671,7 +682,33 @@
     }
 
     function getLessonData() {
-      return (allReadingTexts || []).find(l => Number(l.lessonId) === currentLessonId) || {
+      const levelMatch = (allReadingTexts || []).find(l => (Number(l.level) === currentLevel || (currentLevel === 1 && !l.level)) && Number(l.lessonId) === currentLessonId);
+      if (levelMatch) return levelMatch;
+
+      if (Array.isArray(allVocabDb) && allVocabDb.length > 0) {
+        const levelWords = allVocabDb.filter(w => Number(w.level) === currentLevel && Number(w.lessonId) === currentLessonId && w.example_zh);
+        if (levelWords.length > 0) {
+          const lines = levelWords.map((w) => ({
+            dialogueTitle: w.lessonTitle || `Bài ${currentLessonId}`,
+            speaker: w.word,
+            speech: w.example_zh,
+            fullLine: `${w.word}：${w.example_zh}`,
+            meaning: w.example_vi || w.meaning,
+            pinyin: w.pinyin
+          }));
+          return {
+            lessonId: currentLessonId,
+            lessonTitle: levelWords[0].lessonTitle || `Bài ${currentLessonId}`,
+            dialogues: [{
+              title: `Bài tập bối cảnh HSK ${currentLevel} - Bài ${currentLessonId}`,
+              lines: lines.map(l => l.fullLine)
+            }],
+            dynamicLines: lines
+          };
+        }
+      }
+
+      return {
         lessonId: currentLessonId,
         lessonTitle: `Bài ${currentLessonId}`,
         dialogues: []
@@ -679,8 +716,12 @@
     }
 
     function getLinesList(lessonData) {
+      if (!lessonData) return [];
+      if (lessonData.dynamicLines) {
+        return lessonData.dynamicLines;
+      }
       const lines = [];
-      if (!lessonData || !lessonData.dialogues) return lines;
+      if (!lessonData.dialogues) return lines;
       lessonData.dialogues.forEach((diag, dIdx) => {
         diag.lines.forEach((line) => {
           const parts = line.split(/[:：]/);
