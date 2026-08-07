@@ -100,7 +100,7 @@
     window.toggleTheme = window.toggleTheme || function() {};
   </script>
   <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
-  <script type="module" crossorigin src="/assets/main-Cguak1TL.js"></script>
+  <script type="module" crossorigin src="/assets/main-DaM1kBcN.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/style-CQ82fZju.css">
 </head>
 
@@ -518,33 +518,36 @@
     <!-- Dedicated Home View Section (Redesigned per Mockup Image 3) -->
     <div id="home-view-section" class="home-dashboard-redesign" style="display: flex; flex-direction: column; gap: 24px; margin-bottom: 40px; width: 100%;">
 
-      <!-- TOP BANNER (Hero Banner with Red Dragon Mascot & Colorful Title Blocks) -->
-      <div class="home-hero-banner" style="background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(20px); border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 28px; padding: 28px 36px; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; overflow: hidden; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);">
+      <!-- TOP BANNER (Hero Banner with Red Dragon Mascot from Logo & Colorful Title Blocks) -->
+      <div class="home-hero-banner" style="background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(20px); border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 28px; padding: 28px 36px; display: flex; align-items: center; justify-content: center; gap: 24px; text-align: center; position: relative; overflow: hidden; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35); flex-wrap: wrap;">
         
-        <!-- Red Dragon Mascot Image (Left side / Center) -->
-        <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 12px;">
-          <img src="/assets/hongtai_dragon_mascot-Bx6bhbHF.png" alt="Rồng Con HongTai Mascot" style="height: 140px; width: auto; object-fit: contain; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3)); transform: scale(1.05); transition: transform 0.3s;" onmouseenter="this.style.transform='scale(1.1) rotate(2deg)'" onmouseleave="this.style.transform='scale(1.05) rotate(0deg)'">
+        <!-- Red Standing Dragon Mascot from logo.png -->
+        <div style="display: flex; justify-content: center; align-items: center;">
+          <img src="/assets/logo.png" alt="HongTai Dragon Logo" style="height: 120px; width: auto; max-width: 280px; object-fit: contain; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3)); transition: transform 0.3s ease;" onmouseenter="this.style.transform='scale(1.08) rotate(2deg)'" onmouseleave="this.style.transform='scale(1) rotate(0deg)'">
         </div>
 
-        <!-- Header Small Subtitle -->
-        <div style="font-family: var(--font-display, sans-serif); font-size: 1.15rem; font-weight: 800; color: #ef4444; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 8px; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
-          T I Ế N G &nbsp; T R U N G
-        </div>
+        <!-- Right Side / Title Column -->
+        <div style="display: flex; flex-direction: column; align-items: center;">
+          <!-- Header Small Subtitle -->
+          <div style="font-family: var(--font-display, sans-serif); font-size: 1.15rem; font-weight: 800; color: #ef4444; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 6px; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+            T I Ế N G &nbsp; T R U N G
+          </div>
 
-        <!-- Colorful Letter Blocks Title: H O N G T A I -->
-        <div class="hongtai-color-blocks" style="display: flex; gap: 10px; justify-content: center; align-items: center; margin-bottom: 12px; flex-wrap: wrap;">
-          <span class="color-block red">H</span>
-          <span class="color-block green">O</span>
-          <span class="color-block purple">N</span>
-          <span class="color-block orange">G</span>
-          <span class="color-block pink">T</span>
-          <span class="color-block blue">A</span>
-          <span class="color-block yellow">I</span>
-        </div>
+          <!-- Colorful Letter Blocks Title: H O N G T A I -->
+          <div class="hongtai-color-blocks" style="display: flex; gap: 8px; justify-content: center; align-items: center; margin-bottom: 10px; flex-wrap: wrap;">
+            <span class="color-block red">H</span>
+            <span class="color-block green">O</span>
+            <span class="color-block purple">N</span>
+            <span class="color-block orange">G</span>
+            <span class="color-block pink">T</span>
+            <span class="color-block blue">A</span>
+            <span class="color-block yellow">I</span>
+          </div>
 
-        <!-- Slogan -->
-        <div style="font-size: 1.05rem; font-weight: 700; color: #fbbf24; text-shadow: 0 1px 2px rgba(0,0,0,0.4);">
-          Ngôn ngữ mới - Cơ hội mới 🚀
+          <!-- Slogan -->
+          <div style="font-size: 1.05rem; font-weight: 700; color: #fbbf24; text-shadow: 0 1px 2px rgba(0,0,0,0.4);">
+            Ngôn ngữ mới - Cơ hội mới 🚀
+          </div>
         </div>
       </div>
 
@@ -692,7 +695,7 @@
           </div>
         </div>
 
-        <!-- Bottom Right: Xếp hạng (Leaderboard) -->
+        <!-- Bottom Right: Xếp hạng (Top 1, 2, 3 Leaderboard dynamically loaded from backend) -->
         <div style="background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(20px); border: 1.5px solid rgba(255, 255, 255, 0.18); border-radius: 24px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); display: flex; flex-direction: column; gap: 16px;">
           <div style="display: flex; justify-content: space-between; align-items: center;">
             <h3 style="font-size: 1.15rem; font-weight: 800; color: #ffffff; margin: 0; display: flex; align-items: center; gap: 10px;">
@@ -701,54 +704,9 @@
             <a href="/rank.html" style="font-size: 0.85rem; font-weight: 700; color: #38bdf8; text-decoration: none;">Xem tất cả &rarr;</a>
           </div>
 
+          <!-- Dynamic Top 1, 2, 3 Leaderboard List -->
           <div style="display: flex; flex-direction: column; gap: 10px;" id="home-leaderboard-list">
-            <!-- Rank 1 -->
-            <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(245,158,11,0.3); border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between;">
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 1.3rem;">🥇</span>
-                <div>
-                  <div style="font-size: 0.92rem; font-weight: 800; color: #ffffff;">Trần Thiên Trung</div>
-                  <div style="font-size: 0.78rem; color: #fbbf24;">100 ngày liên tiếp</div>
-                </div>
-              </div>
-              <span style="font-weight: 800; color: #10b981; font-size: 0.92rem;">+2,850 điểm</span>
-            </div>
-
-            <!-- Rank 2 -->
-            <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between;">
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 1.3rem;">🥈</span>
-                <div>
-                  <div style="font-size: 0.92rem; font-weight: 800; color: #ffffff;">Bạch Gia Nguyệt</div>
-                  <div style="font-size: 0.78rem; color: #cbd5e1;">88 ngày liên tiếp</div>
-                </div>
-              </div>
-              <span style="font-weight: 800; color: #10b981; font-size: 0.92rem;">+2,420 điểm</span>
-            </div>
-
-            <!-- Rank 3 -->
-            <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between;">
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 1.3rem;">🥉</span>
-                <div>
-                  <div style="font-size: 0.92rem; font-weight: 800; color: #ffffff;">Lý Văn</div>
-                  <div style="font-size: 0.78rem; color: #cbd5e1;">72 ngày liên tiếp</div>
-                </div>
-              </div>
-              <span style="font-weight: 800; color: #10b981; font-size: 0.92rem;">+1,980 điểm</span>
-            </div>
-
-            <!-- Rank 4 -->
-            <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between;">
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 0.9rem; font-weight: 800; color: #94a3b8; width: 22px; text-align: center;">4</span>
-                <div>
-                  <div style="font-size: 0.92rem; font-weight: 700; color: #ffffff;">An Ni</div>
-                  <div style="font-size: 0.78rem; color: #94a3b8;">54 ngày liên tiếp</div>
-                </div>
-              </div>
-              <span style="font-weight: 800; color: #38bdf8; font-size: 0.92rem;">+1,450 điểm</span>
-            </div>
+            <!-- Dynamically populated top 1, 2, 3 entries from /api/leaderboard -->
           </div>
         </div>
       </div>

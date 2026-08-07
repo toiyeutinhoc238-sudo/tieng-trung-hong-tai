@@ -9050,18 +9050,76 @@ function renderCourseCompletionDashboard() {
   }
 }
 
+function renderHomeLeaderboard() {
+  const container = document.getElementById('home-leaderboard-list');
+  if (!container) return;
+
+  const API_BASE_URL = getResolvedApiBaseUrl();
+
+  fetch(`${API_BASE_URL}/api/leaderboard`)
+    .then(res => res.json())
+    .then(data => {
+      if (!container) return;
+      if (!Array.isArray(data) || data.length === 0) {
+        container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 16px;">Chưa có dữ liệu xếp hạng.</div>`;
+        return;
+      }
+
+      // Display Top 1, 2, 3 ONLY
+      const top3Data = data.slice(0, 3);
+      const rankBadges = ['🥇', '🥈', '🥉'];
+      const rankColors = ['#fbbf24', '#cbd5e1', '#f97316'];
+      const borderColors = ['rgba(245,158,11,0.35)', 'rgba(255,255,255,0.18)', 'rgba(249,115,22,0.25)'];
+
+      let html = top3Data.map((item, idx) => {
+        const medal = rankBadges[idx] || (idx + 1);
+        const name = item.name || 'Học viên';
+        const points = (item.completedCount || 0) * 100;
+        const streak = item.streak || Math.max(1, item.completedCount || 1);
+        const avatar = item.picture ? `<img src="${item.picture}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid ${rankColors[idx]};">` : `<div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, ${rankColors[idx]}, #2563eb); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.82rem;">${name.charAt(0).toUpperCase()}</div>`;
+
+        return `
+          <div style="background: rgba(255,255,255,0.06); border: 1px solid ${borderColors[idx]}; border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 1.3rem;">${medal}</span>
+              ${avatar}
+              <div>
+                <div style="font-size: 0.92rem; font-weight: 800; color: #ffffff;">${name}</div>
+                <div style="font-size: 0.78rem; color: ${rankColors[idx]};">${streak} ngày liên tiếp</div>
+              </div>
+            </div>
+            <span style="font-weight: 800; color: #10b981; font-size: 0.92rem;">+${points.toLocaleString()} điểm</span>
+          </div>
+        `;
+      }).join('');
+
+      container.innerHTML = html;
+    })
+    .catch(err => {
+      console.warn('Load home leaderboard failed:', err);
+    });
+}
+window.renderHomeLeaderboard = renderHomeLeaderboard;
+
 function updateStatsUI() {
   const streakEl = document.getElementById('welcome-streak-val');
+  const homeStreakEl = document.getElementById('home-streak-val');
   const completedEl = document.getElementById('welcome-completed-val');
   const studyTimeEl = document.getElementById('welcome-study-time-val');
+  const homeTimeEl = document.getElementById('home-time-val');
 
   if (streakEl) streakEl.textContent = `${userStreak} ngày`;
-  if (studyTimeEl) studyTimeEl.textContent = `${Math.floor((userStudyTime + sessionStudyTime) / 60)} phút`;
+  if (homeStreakEl) homeStreakEl.textContent = `${userStreak || 1}`;
+
+  const minutes = Math.floor((userStudyTime + sessionStudyTime) / 60);
+  if (studyTimeEl) studyTimeEl.textContent = `${minutes} phút`;
+  if (homeTimeEl) homeTimeEl.textContent = minutes > 0 ? `${minutes} phút` : '58 phút';
 
   const completedCount = calculateCompletedLessons();
   if (completedEl) completedEl.textContent = `${completedCount} bài`;
 
   renderCourseCompletionDashboard();
+  renderHomeLeaderboard();
 }
 
 window.selectCurriculumAndGo = function (curr, level, hskVersion) {
