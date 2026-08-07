@@ -8970,10 +8970,12 @@ function startStudyTimer() {
       const zubiStudyTime = document.getElementById('zubi-study-time-count');
       const homeTime = document.getElementById('home-time-val');
       const welcomeTime = document.getElementById('welcome-study-time-val');
+      const modalTime = document.getElementById('zubi-modal-time-val');
 
       if (zubiStudyTime) zubiStudyTime.textContent = formattedText;
       if (homeTime) homeTime.textContent = formattedText;
       if (welcomeTime) welcomeTime.textContent = formattedText;
+      if (modalTime) modalTime.textContent = formattedText;
 
       if (sessionStudyTime % 5 === 0) {
         renderWeeklyStudyChart();
@@ -9170,30 +9172,32 @@ function renderHomeLeaderboard() {
         return;
       }
 
-      // Display Top 1, 2, 3 ONLY
-      const top3Data = data.slice(0, 3);
+      // Display Top 20 Learners
+      const top20Data = data.slice(0, 20);
       const rankBadges = ['🥇', '🥈', '🥉'];
       const rankColors = ['#fbbf24', '#cbd5e1', '#f97316'];
       const borderColors = ['rgba(245,158,11,0.35)', 'rgba(255,255,255,0.18)', 'rgba(249,115,22,0.25)'];
 
-      let html = top3Data.map((item, idx) => {
-        const medal = rankBadges[idx] || (idx + 1);
+      let html = top20Data.map((item, idx) => {
+        const medal = rankBadges[idx] || `<span style="font-size: 0.88rem; font-weight: 800; color: #94a3b8; width: 22px; text-align: center; display: inline-block;">${idx + 1}</span>`;
         const name = item.name || 'Học viên';
         const points = (item.completedCount || 0) * 100;
         const streak = item.streak || Math.max(1, item.completedCount || 1);
-        const avatar = item.picture ? `<img src="${item.picture}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid ${rankColors[idx]};">` : `<div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, ${rankColors[idx]}, #2563eb); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.82rem;">${name.charAt(0).toUpperCase()}</div>`;
+        const col = rankColors[idx] || '#38bdf8';
+        const borderCol = borderColors[idx] || 'rgba(255,255,255,0.08)';
+        const avatar = item.picture ? `<img src="${item.picture}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid ${col}; flex-shrink: 0;">` : `<div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, ${col}, #2563eb); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.82rem; flex-shrink: 0;">${name.charAt(0).toUpperCase()}</div>`;
 
         return `
-          <div style="background: rgba(255,255,255,0.06); border: 1px solid ${borderColors[idx]}; border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between;">
-            <div style="display: flex; align-items: center; gap: 10px;">
-              <span style="font-size: 1.3rem;">${medal}</span>
+          <div style="background: rgba(255,255,255,0.05); border: 1px solid ${borderCol}; border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+              <span style="font-size: 1.2rem; flex-shrink: 0;">${medal}</span>
               ${avatar}
-              <div>
-                <div style="font-size: 0.92rem; font-weight: 800; color: #ffffff;">${name}</div>
-                <div style="font-size: 0.78rem; color: ${rankColors[idx]};">${streak} ngày liên tiếp</div>
+              <div style="min-width: 0;">
+                <div style="font-size: 0.92rem; font-weight: 800; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${name}</div>
+                <div style="font-size: 0.78rem; color: ${col};">${streak} ngày liên tiếp</div>
               </div>
             </div>
-            <span style="font-weight: 800; color: #10b981; font-size: 0.92rem;">+${points.toLocaleString()} điểm</span>
+            <span style="font-weight: 800; color: #10b981; font-size: 0.9rem; flex-shrink: 0;">+${points.toLocaleString()} điểm</span>
           </div>
         `;
       }).join('');
@@ -9603,20 +9607,18 @@ window.openZubiStatDetail = function (type) {
     iconEl.innerHTML = '<i class="fa-solid fa-clock"></i>';
 
     const totalCurrentSecs = userStudyTime + sessionStudyTime;
-    const mins = Math.round(totalCurrentSecs / 60);
-    const hrs = Math.floor(mins / 60);
-    const remMins = mins % 60;
-    const timeDisplay = hrs > 0 ? `${hrs} giờ ${remMins} phút` : `${mins} phút`;
+    const mins = Math.floor(totalCurrentSecs / 60);
+    const timeDisplay = formatStudyTimeDisplay(mins);
 
     bodyEl.innerHTML = `
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
         <div style="background: rgba(59, 130, 246, 0.12); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 16px; padding: 18px; text-align: center;">
           <div style="font-size: 0.8rem; color: #60a5fa; font-weight: 700; text-transform: uppercase;">Tổng thời gian đã học</div>
-          <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-top: 6px;">${timeDisplay}</div>
+          <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-top: 6px;" id="zubi-modal-time-val">${timeDisplay}</div>
         </div>
         <div style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 16px; padding: 18px; text-align: center;">
           <div style="font-size: 0.8rem; color: #fbbf24; font-weight: 700; text-transform: uppercase;">Chuỗi ngày liên tục (Streak)</div>
-          <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-top: 6px;">🔥 ${userStreak} Ngày</div>
+          <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-top: 6px;">🔥 ${userStreak || 1} ngày</div>
         </div>
       </div>
       <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 18px; display: flex; gap: 14px; align-items: flex-start;">

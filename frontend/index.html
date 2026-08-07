@@ -515,36 +515,28 @@
     <!-- Dedicated Home View Section (Clean & 100% Real Database Data) -->
     <div id="home-view-section" class="home-dashboard-redesign" style="display: flex; flex-direction: column; gap: 24px; margin-bottom: 40px; width: 100%;">
 
-      <!-- TOP BANNER (Hero Banner with Red Dragon Mascot from Logo & Colorful Title Blocks) -->
-      <div class="home-hero-banner" style="background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(20px); border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 28px; padding: 28px 36px; display: flex; align-items: center; justify-content: center; gap: 24px; text-align: center; position: relative; overflow: hidden; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35); flex-wrap: wrap;">
+      <!-- TOP BANNER (Hero Banner with Clean Centered Title Blocks) -->
+      <div class="home-hero-banner" style="background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(20px); border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 28px; padding: 22px 32px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center; position: relative; overflow: hidden; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);">
         
-        <!-- Red Standing Dragon Mascot on transparent background (NO white rectangular canvas) -->
-        <div style="display: flex; justify-content: center; align-items: center;">
-          <img src="/assets/hongtai_dragon_mascot.png" alt="HongTai Dragon Mascot" style="height: 130px; width: auto; object-fit: contain; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3)); transition: transform 0.3s ease;" onmouseenter="this.style.transform='scale(1.08) rotate(2deg)'" onmouseleave="this.style.transform='scale(1) rotate(0deg)'">
+        <!-- Header Small Subtitle -->
+        <div style="font-family: var(--font-display, sans-serif); font-size: 1.15rem; font-weight: 800; color: #ef4444; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 2px; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+          T I Ế N G &nbsp; T R U N G
         </div>
 
-        <!-- Right Side / Title Column -->
-        <div style="display: flex; flex-direction: column; align-items: center;">
-          <!-- Header Small Subtitle -->
-          <div style="font-family: var(--font-display, sans-serif); font-size: 1.15rem; font-weight: 800; color: #ef4444; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 6px; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
-            T I Ế N G &nbsp; T R U N G
-          </div>
+        <!-- Colorful Letter Blocks Title: H O N G T A I -->
+        <div class="hongtai-color-blocks" style="display: flex; gap: 8px; justify-content: center; align-items: center; margin-bottom: 6px; flex-wrap: wrap;">
+          <span class="color-block red">H</span>
+          <span class="color-block green">O</span>
+          <span class="color-block purple">N</span>
+          <span class="color-block orange">G</span>
+          <span class="color-block pink">T</span>
+          <span class="color-block blue">A</span>
+          <span class="color-block yellow">I</span>
+        </div>
 
-          <!-- Colorful Letter Blocks Title: H O N G T A I -->
-          <div class="hongtai-color-blocks" style="display: flex; gap: 8px; justify-content: center; align-items: center; margin-bottom: 10px; flex-wrap: wrap;">
-            <span class="color-block red">H</span>
-            <span class="color-block green">O</span>
-            <span class="color-block purple">N</span>
-            <span class="color-block orange">G</span>
-            <span class="color-block pink">T</span>
-            <span class="color-block blue">A</span>
-            <span class="color-block yellow">I</span>
-          </div>
-
-          <!-- Slogan -->
-          <div style="font-size: 1.05rem; font-weight: 700; color: #fbbf24; text-shadow: 0 1px 2px rgba(0,0,0,0.4);">
-            Ngôn ngữ mới - Cơ hội mới 🚀
-          </div>
+        <!-- Slogan -->
+        <div style="font-size: 1.05rem; font-weight: 700; color: #fbbf24; text-shadow: 0 1px 2px rgba(0,0,0,0.4);">
+          Ngôn ngữ mới - Cơ hội mới 🚀
         </div>
       </div>
 
@@ -690,18 +682,18 @@
           </div>
         </div>
 
-        <!-- Bottom Right: Xếp hạng (Top 1, 2, 3 Leaderboard dynamically loaded from backend) -->
+        <!-- Bottom Right: Xếp hạng (Top 20 Leaderboard dynamically loaded from backend) -->
         <div style="background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(20px); border: 1.5px solid rgba(255, 255, 255, 0.18); border-radius: 24px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); display: flex; flex-direction: column; gap: 16px;">
           <div style="display: flex; justify-content: space-between; align-items: center;">
             <h3 style="font-size: 1.15rem; font-weight: 800; color: #ffffff; margin: 0; display: flex; align-items: center; gap: 10px;">
-              <i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> Xếp Hạng Học Viên (Top 1 2 3)
+              <i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> Xếp Hạng Học Viên
             </h3>
             <a href="/rank.html" style="font-size: 0.85rem; font-weight: 700; color: #38bdf8; text-decoration: none;">Xem tất cả &rarr;</a>
           </div>
 
-          <!-- Dynamic Top 1, 2, 3 Leaderboard List -->
-          <div style="display: flex; flex-direction: column; gap: 10px;" id="home-leaderboard-list">
-            <!-- Dynamically populated top 1, 2, 3 entries from /api/leaderboard -->
+          <!-- Dynamic Top 20 Leaderboard List with smooth scrollbar -->
+          <div style="display: flex; flex-direction: column; gap: 10px; max-height: 480px; overflow-y: auto; padding-right: 4px;" id="home-leaderboard-list">
+            <!-- Dynamically populated top 20 entries from /api/leaderboard -->
           </div>
         </div>
       </div>
