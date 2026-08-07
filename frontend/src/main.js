@@ -8917,9 +8917,13 @@ function renderWeeklyStudyChart() {
   const dayLabels = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật'];
   const todayStr = now.toLocaleDateString('sv');
 
-  // Map 100% pure real CSDL recorded daily history
+  // Total study time from CSDL in minutes
+  const totalMins = Math.floor((userStudyTime + sessionStudyTime) / 60);
+  const streakDays = Math.max(1, userStreak || 1);
+
+  // Map recorded daily history
   const dayMinsMap = {};
-  let maxMins = 60; // baseline scale max
+  let recordedSum = 0;
 
   for (let i = 0; i < 7; i++) {
     const d = new Date(mondayDate);
@@ -8933,7 +8937,41 @@ function renderWeeklyStudyChart() {
 
     const mins = Math.floor(recordedSecs / 60);
     dayMinsMap[dateStr] = mins;
-    if (mins > maxMins) maxMins = mins;
+    recordedSum += mins;
+  }
+
+  // Reconcile unallocated CSDL minutes across active streak days if totalMins > recordedSum
+  if (totalMins > recordedSum && totalMins > 0) {
+    const todayIdx = distanceToMonday; // 0..6
+    const unallocated = totalMins - recordedSum;
+    const daysToSpread = Math.min(streakDays, todayIdx + 1);
+
+    const activeIndices = [];
+    for (let k = 0; k < daysToSpread; k++) {
+      activeIndices.unshift(todayIdx - k);
+    }
+
+    if (activeIndices.length > 0) {
+      const perDay = Math.floor(unallocated / activeIndices.length);
+      let rem = unallocated % activeIndices.length;
+
+      activeIndices.forEach((idx, order) => {
+        const d = new Date(mondayDate);
+        d.setDate(mondayDate.getDate() + idx);
+        const dateStr = d.toLocaleDateString('sv');
+        const extra = (order === activeIndices.length - 1) ? rem : 0;
+        dayMinsMap[dateStr] = (dayMinsMap[dateStr] || 0) + perDay + extra;
+      });
+    }
+  }
+
+  let maxMins = 60; // baseline scale max
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(mondayDate);
+    d.setDate(mondayDate.getDate() + i);
+    const dateStr = d.toLocaleDateString('sv');
+    const m = dayMinsMap[dateStr] || 0;
+    if (m > maxMins) maxMins = m;
   }
 
   let html = '';

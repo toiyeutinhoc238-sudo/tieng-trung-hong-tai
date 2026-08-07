@@ -457,6 +457,38 @@ app.post('/api/auth/logout', async (req, res) => {
 });
 
 // GET endpoint to fetch user stats
+function ensureDailyHistoryIntegrity(stats) {
+  if (!stats) return;
+  if (!stats.dailyHistory) stats.dailyHistory = {};
+
+  const totalSecs = stats.studyTime || 0;
+  if (totalSecs <= 0) return;
+
+  let recordedSecs = 0;
+  Object.values(stats.dailyHistory).forEach(s => {
+    recordedSecs += (s || 0);
+  });
+
+  if (totalSecs > recordedSecs) {
+    const unallocated = totalSecs - recordedSecs;
+    const streak = Math.max(1, stats.streak || 1);
+    const todayStr = stats.lastActiveDate || new Date().toISOString().split('T')[0];
+    const todayDate = new Date(todayStr);
+
+    const daysToSpread = Math.min(streak, 7);
+    const perDaySecs = Math.floor(unallocated / daysToSpread);
+    let remSecs = unallocated % daysToSpread;
+
+    for (let k = daysToSpread - 1; k >= 0; k--) {
+      const d = new Date(todayDate);
+      d.setDate(todayDate.getDate() - k);
+      const dateKey = d.toISOString().split('T')[0];
+      const extra = (k === 0) ? remSecs : 0;
+      stats.dailyHistory[dateKey] = (stats.dailyHistory[dateKey] || 0) + perDaySecs + extra;
+    }
+  }
+}
+
 app.get('/api/user/stats', async (req, res) => {
   const email = getLoggedInUserEmail(req);
   if (!email) {
@@ -469,13 +501,19 @@ app.get('/api/user/stats', async (req, res) => {
     return res.status(404).json({ error: 'User not found' });
   }
 
-  const stats = userRecord.stats || {
-    streak: 0,
-    studyTime: 0,
-    lastActiveDate: ''
-  };
+  if (!userRecord.stats) {
+    userRecord.stats = {
+      streak: 0,
+      studyTime: 0,
+      lastActiveDate: '',
+      dailyHistory: {}
+    };
+  }
 
-  res.json(stats);
+  ensureDailyHistoryIntegrity(userRecord.stats);
+  await writeUserData(userData);
+
+  res.json(userRecord.stats);
 });
 
 // POST endpoint to update study time & calculate streak
@@ -530,6 +568,7 @@ app.post('/api/user/stats/sync', async (req, res) => {
     userRecord.stats.lastActiveDate = todayStr;
   }
 
+  ensureDailyHistoryIntegrity(userRecord.stats);
   await writeUserData(userData);
   res.json(userRecord.stats);
 });
