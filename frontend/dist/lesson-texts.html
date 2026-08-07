@@ -978,13 +978,72 @@
       renderWorkspace();
     }
 
+    function updateLessonCharHintCards(containerId, typedText, targetAnswer) {
+      const container = typeof containerId === 'string' ? document.getElementById(containerId) : containerId;
+      if (!container) return;
+
+      const cards = container.querySelectorAll('.lesson-hint-card');
+      if (cards.length === 0) return;
+
+      const cleanTyped = (typedText || '').replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '');
+      const cleanTarget = (targetAnswer || '').replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '');
+
+      const typedChars = cleanTyped.match(/[\u4e00-\u9fa5]/g) || cleanTyped.split('');
+      const targetChars = cleanTarget.match(/[\u4e00-\u9fa5]/g) || cleanTarget.split('');
+
+      cards.forEach((card, idx) => {
+        const targetChar = targetChars[idx] || card.getAttribute('data-char') || '';
+
+        if (idx < typedChars.length) {
+          const typedChar = typedChars[idx];
+          if (typedChar === targetChar) {
+            // Correct character for position idx: Auto-flip GREEN
+            card.setAttribute('data-flipped', 'true');
+            card.style.background = 'rgba(16, 185, 129, 0.25)';
+            card.style.border = '2px solid #10b981';
+            card.style.color = '#34d399';
+            card.style.boxShadow = '0 0 16px rgba(16, 185, 129, 0.4)';
+            card.innerHTML = `<span style="font-size: 1.5rem; font-weight: 800; font-family: var(--font-hanzi);">${targetChar}</span>`;
+          } else {
+            // Wrong character typed for position idx: Do NOT flip character, show RED
+            card.setAttribute('data-flipped', 'false');
+            card.style.background = 'rgba(239, 68, 68, 0.25)';
+            card.style.border = '2px solid #ef4444';
+            card.style.color = '#f87171';
+            card.style.boxShadow = '0 0 16px rgba(239, 68, 68, 0.4)';
+            card.innerHTML = `<i class="fa-solid fa-eye" style="color: #f87171;"></i>`;
+          }
+        } else {
+          // Position not typed yet
+          const isManualFlipped = card.getAttribute('data-manual-flipped') === 'true';
+          if (isManualFlipped) {
+            card.style.background = '#ffffff';
+            card.style.border = '1px solid rgba(255,255,255,0.2)';
+            card.style.color = '#0f172a';
+            card.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
+            card.innerHTML = `<span style="font-size: 1.5rem; font-weight: 800; font-family: var(--font-hanzi);">${targetChar}</span>`;
+          } else {
+            card.setAttribute('data-flipped', 'false');
+            card.style.background = 'rgba(255,255,255,0.08)';
+            card.style.border = '1px solid rgba(255,255,255,0.2)';
+            card.style.color = '#94a3b8';
+            card.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
+            card.innerHTML = `<i class="fa-solid fa-eye"></i>`;
+          }
+        }
+      });
+    }
+
     function checkDictationInput(target) {
       const inputEl = document.getElementById('dictation-input');
       const feedbackEl = document.getElementById('dictation-feedback');
       if (!inputEl || !feedbackEl) return;
 
-      const typed = inputEl.value.trim().replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '').toLowerCase();
+      const typedRaw = inputEl.value.trim();
+      const typed = typedRaw.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '').toLowerCase();
       const cleanTarget = target.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '').toLowerCase();
+
+      updateLessonCharHintCards('dictation-hint-cards', typedRaw, target);
 
       if (typed === cleanTarget) {
         feedbackEl.innerHTML = `<span style="color:#10b981; font-weight:700;"><i class="fa-solid fa-circle-check"></i> Chính xác!</span>`;
@@ -1007,8 +1066,11 @@
       const feedbackEl = document.getElementById('translate-feedback');
       if (!inputEl || !feedbackEl) return;
 
-      const typed = inputEl.value.trim().replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '').toLowerCase();
+      const typedRaw = inputEl.value.trim();
+      const typed = typedRaw.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '').toLowerCase();
       const cleanTarget = target.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '').toLowerCase();
+
+      updateLessonCharHintCards('translate-hint-cards', typedRaw, target);
 
       if (typed === cleanTarget) {
         feedbackEl.innerHTML = `<span style="color:#10b981; font-weight:700;"><i class="fa-solid fa-circle-check"></i> Chính xác!</span>`;
@@ -1028,16 +1090,18 @@
 
     function toggleHint(btnEl, char) {
       if (!btnEl) return;
-      const isFlipped = btnEl.getAttribute('data-flipped') === 'true';
+      const isFlipped = btnEl.getAttribute('data-manual-flipped') === 'true';
       if (isFlipped) {
-        btnEl.setAttribute('data-flipped', 'false');
+        btnEl.setAttribute('data-manual-flipped', 'false');
         btnEl.style.background = 'rgba(255,255,255,0.08)';
         btnEl.style.color = '#94a3b8';
+        btnEl.style.border = '1px solid rgba(255,255,255,0.2)';
         btnEl.innerHTML = `<i class="fa-solid fa-eye"></i>`;
       } else {
-        btnEl.setAttribute('data-flipped', 'true');
+        btnEl.setAttribute('data-manual-flipped', 'true');
         btnEl.style.background = '#ffffff';
         btnEl.style.color = '#0f172a';
+        btnEl.style.border = '1px solid rgba(255,255,255,0.2)';
         btnEl.innerHTML = `<span style="font-size: 1.5rem; font-weight: 700; font-family: var(--font-hanzi);">${char}</span>`;
       }
     }
@@ -1051,14 +1115,18 @@
       cards.forEach((card, idx) => {
         if (allFlipped) {
           card.setAttribute('data-flipped', 'false');
+          card.setAttribute('data-manual-flipped', 'false');
           card.style.background = 'rgba(255,255,255,0.08)';
           card.style.color = '#94a3b8';
+          card.style.border = '1px solid rgba(255,255,255,0.2)';
           card.innerHTML = `<i class="fa-solid fa-eye"></i>`;
         } else {
           if (chars[idx]) {
             card.setAttribute('data-flipped', 'true');
+            card.setAttribute('data-manual-flipped', 'true');
             card.style.background = '#ffffff';
             card.style.color = '#0f172a';
+            card.style.border = '1px solid rgba(255,255,255,0.2)';
             card.innerHTML = `<span style="font-size: 1.5rem; font-weight: 700; font-family: var(--font-hanzi);">${chars[idx]}</span>`;
           }
         }
