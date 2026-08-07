@@ -8024,87 +8024,12 @@ window.navBkLine = function(dir, totalLines) {
   renderBkModalContent();
 };
 
-window.openLessonTextStudy = async function(lessonId) {
+window.openLessonTextStudy = function(lessonId) {
   const modalEl = document.getElementById('lesson-detail-popup-modal');
   if (modalEl) modalEl.style.display = 'none';
 
-  let textsData = window._hsk1ReadingTexts;
-  if (!textsData) {
-    try {
-      const res = await fetch('/hsk1_reading_texts.json');
-      if (res.ok) {
-        textsData = await res.json();
-        window._hsk1ReadingTexts = textsData;
-      }
-    } catch(e) {
-      console.warn("Could not fetch hsk1_reading_texts.json:", e);
-    }
-  }
-
   const numId = parseInt(String(lessonId).replace(/\D/g, ''), 10) || 1;
-  const lessonData = (textsData || []).find(l => Number(l.lessonId) === numId);
-
-  let modalContainer = document.getElementById('lesson-reading-text-modal');
-  if (!modalContainer) {
-    modalContainer = document.createElement('div');
-    modalContainer.id = 'lesson-reading-text-modal';
-    modalContainer.style.cssText = 'position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(15,23,42,0.85); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); z-index:99999; display:none; align-items:center; justify-content:center; padding:16px; box-sizing:border-box;';
-    document.body.appendChild(modalContainer);
-  }
-
-  if (!lessonData || !lessonData.dialogues || lessonData.dialogues.length === 0) {
-    showToast(`Nội dung Bài Khóa cho Bài ${lessonId} đang được cập nhật!`, true);
-    return;
-  }
-
-  currentBkData = lessonData;
-  currentBkMode = 'read';
-  currentBkLineIndex = 0;
-  currentBkScore = 0;
-
-  modalContainer.innerHTML = `
-    <div style="background:#0f172a; border:1px solid rgba(255,255,255,0.18); border-radius:22px; max-width:880px; width:100%; max-height:92vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 25px 60px rgba(0,0,0,0.7);">
-      
-      <!-- Top Modal Bar -->
-      <div style="padding:16px 24px; border-bottom:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; align-items:center; background:rgba(30,41,59,0.9);">
-        <h3 style="color:#fff; font-size:1.2rem; margin:0; font-weight:800; display:flex; align-items:center; gap:10px; font-family:var(--font-display);">
-          <i class="fa-solid fa-book-open" style="color:#38bdf8;"></i> Bài Khóa - Bài ${numId}
-        </h3>
-        <button style="background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.25); color:#fff; padding:8px 18px; border-radius:99px; font-weight:700; cursor:pointer;" onclick="document.getElementById('lesson-reading-text-modal').style.display='none'">
-          <i class="fa-solid fa-xmark"></i> Đóng
-        </button>
-      </div>
-
-      <!-- 3-Part Mode Navigation Header Tabs -->
-      <div style="display:flex; gap:8px; border-bottom:1px solid rgba(255,255,255,0.12); padding:12px 20px; background:rgba(15,23,42,0.85); overflow-x:auto;">
-        <button id="bk-tab-read" onclick="window.switchBkTab('read')" class="bk-tab-btn active">
-          <i class="fa-solid fa-book-open"></i> Đọc Bài Khóa
-        </button>
-        <button id="bk-tab-quiz" onclick="window.switchBkTab('quiz')" class="bk-tab-btn">
-          <i class="fa-solid fa-circle-question"></i> 1. Nghe chọn đáp án đúng
-        </button>
-        <button id="bk-tab-dictation" onclick="window.switchBkTab('dictation')" class="bk-tab-btn">
-          <i class="fa-solid fa-headphones"></i> 2. Nghe nhập bài khóa
-        </button>
-        <button id="bk-tab-translate" onclick="window.switchBkTab('translate')" class="bk-tab-btn">
-          <i class="fa-solid fa-language"></i> 3. Dịch bài khóa
-        </button>
-      </div>
-
-      <!-- Dynamic Mode Body Container -->
-      <div id="lesson-reading-text-modal-body" style="flex:1; overflow-y:auto; padding:24px;">
-      </div>
-
-      <!-- Modal Footer -->
-      <div style="padding:12px 24px; border-top:1px solid rgba(255,255,255,0.1); background:#1e293b; display:flex; justify-content:space-between; align-items:center; font-size:0.82rem; color:#94a3b8;">
-        <span>💡 Bạn có thể chọn giữa 3 phần luyện tập: Nghe chọn đáp án đúng, Nghe nhập bài khóa, và Dịch.</span>
-        <span style="font-weight:700; color:#f97316;">Tiếng Trung HongTai</span>
-      </div>
-    </div>
-  `;
-
-  modalContainer.style.display = 'flex';
-  renderBkModalContent();
+  window.location.href = `/lesson-texts.html?lesson=${numId}`;
 };
 
 window.openLessonReviewStudy = function(lessonId) {
