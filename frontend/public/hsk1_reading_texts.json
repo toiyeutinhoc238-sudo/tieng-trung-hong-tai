@@ -128,13 +128,13 @@
             "speaker": "王一飞",
             "zh": "同学们，再见！",
             "pinyin": "tóng xué men ， zài jiàn ！",
-            "vi": "Tạm biệt các em học sinh!"
+            "vi": "Chào tạm biệt các em học sinh!"
           },
           {
             "speaker": "学生们",
             "zh": "老师，再见！",
             "pinyin": "lǎo shī ， zài jiàn ！",
-            "vi": "Tạm biệt Thầy/Cô!"
+            "vi": "Chào tạm biệt Thầy/Cô!"
           }
         ],
         "notes": [],
@@ -405,7 +405,7 @@
             "speaker": "安妮",
             "zh": "你的女朋友是哪国人？",
             "pinyin": "nǐ de nǚ péng yǒu shì nǎ guó rén ？",
-            "vi": "Bạn gái bạn là người nước nào?"
+            "vi": "Bạn gái của bạn là người nước nào?"
           },
           {
             "speaker": "陈天中",
@@ -639,19 +639,19 @@
             "speaker": "杨同乐",
             "zh": "这是您儿子吗？",
             "pinyin": "zhè shì nín ér zi ma ？",
-            "vi": "Đây là con trai cô à?"
+            "vi": "Đây là con trai cô ạ?"
           },
           {
             "speaker": "王一雪",
             "zh": "是的。我有两个孩子，一个儿子，一个女儿。",
             "pinyin": "shì de 。 wǒ yǒu liǎng gè hái zi ， yí gè ér zi ， yí gè nǚ ér 。",
-            "vi": "Đúng vậy. Tôi có 2 đứa con, 1 con trai, 1 con gái."
+            "vi": "Vâng. Tôi có 2 đứa con, 1 con trai và 1 con gái."
           },
           {
             "speaker": "杨同乐",
             "zh": "您儿子几岁？",
             "pinyin": "nín ér zi jǐ suì ？",
-            "vi": "Con trai cô mấy tuổi?"
+            "vi": "Con trai cô mấy tuổi rồi?"
           },
           {
             "speaker": "王一雪",
@@ -789,7 +789,7 @@
             "speaker": "杨同乐",
             "zh": "我会做面条儿、饺子，也会做一些菜。星期天我也做饭。",
             "pinyin": "wǒ huì zuò miàn tiáo ér 、 jiǎo zǐ ， yě huì zuò yì xiē cài 。 xīng qī tiān wǒ yě zuò fàn 。",
-            "vi": "Tôi biết làm mì, sủi cảo, cũng biết nấu một số món ăn. Chủ nhật tôi cũng nấu cơm."
+            "vi": "Tôi biết làm mì, sủi cảo, và nấu vài món ăn. Chủ nhật tôi cũng nấu cơm."
           }
         ],
         "notes": [],
@@ -846,19 +846,19 @@
             "speaker": "杨同乐",
             "zh": "是的，是我的新电脑。",
             "pinyin": "shì de ， shì wǒ de xīn diàn nǎo 。",
-            "vi": "Dịch nghĩa: 是的，是我的新电脑。"
+            "vi": "Đúng vậy, đây là máy tính mới của tôi."
           },
           {
             "speaker": "王一雪",
             "zh": "真好看！",
             "pinyin": "zhēn hǎo kàn ！",
-            "vi": "Dịch nghĩa: 真好看！"
+            "vi": "Rất đẹp!"
           },
           {
             "speaker": "杨同乐",
             "zh": "我也很喜欢它。",
             "pinyin": "wǒ yě hěn xǐ huan tā 。",
-            "vi": "Dịch nghĩa: 我也很喜欢它。"
+            "vi": "Tôi cũng rất thích nó."
           }
         ],
         "notes": [],
@@ -903,25 +903,25 @@
             "speaker": "李文",
             "zh": "家月，你的手机号是多少？",
             "pinyin": "jiā yuè ， nǐ de shǒu jī hào shì duō shǎo ？",
-            "vi": "Dịch nghĩa: 家月，你的手机号是多少？"
+            "vi": "Gia Nguyệt, số điện thoại của bạn là bao nhiêu?"
           },
           {
             "speaker": "白家月",
             "zh": "我的手机号是336014930190。",
             "pinyin": "wǒ de shǒu jī hào shì 3 3 6 0 1 4 9 3 0 1 9 0 。",
-            "vi": "Dịch nghĩa: 我的手机号是336014930190。"
+            "vi": "Số điện thoại của tôi là 336014930190."
           },
           {
             "speaker": "李文",
             "zh": "我的手机号是8613552721160。",
             "pinyin": "wǒ de shǒu jī hào shì 8 6 1 3 5 5 2 7 2 1 1 6 0 。",
-            "vi": "Dịch nghĩa: 我的手机号是8613552721160。"
+            "vi": "Số điện thoại của tôi là 8613552721160."
           },
           {
             "speaker": "白家月",
             "zh": "好的。",
             "pinyin": "hǎo de 。",
-            "vi": "Dịch nghĩa: 好的。"
+            "vi": "Được rồi."
           }
         ],
         "notes": [],
@@ -960,25 +960,25 @@
             "speaker": "陈天中",
             "zh": "家月，明天你去哪儿？",
             "pinyin": "jiā yuè ， míng tiān nǐ qù nǎ ér ？",
-            "vi": "Dịch nghĩa: 家月，明天你去哪儿？"
+            "vi": "Gia Nguyệt, ngày mai bạn đi đâu?"
           },
           {
             "speaker": "白家月",
             "zh": "我想去超市买东西。",
             "pinyin": "wǒ xiǎng qù chāo shì mǎi dōng xī 。",
-            "vi": "Dịch nghĩa: 我想去超市买东西。"
+            "vi": "Tôi muốn đi siêu thị mua ít đồ."
           },
           {
             "speaker": "陈天中",
             "zh": "你去超市买什么？",
             "pinyin": "nǐ qù chāo shì mǎi shén me ？",
-            "vi": "Dịch nghĩa: 你去超市买什么？"
+            "vi": "Bạn đi siêu thị mua gì thế?"
           },
           {
             "speaker": "白家月",
             "zh": "我想买些牛奶。",
             "pinyin": "wǒ xiǎng mǎi xiē niú nǎi 。",
-            "vi": "Dịch nghĩa: 我想买些牛奶。"
+            "vi": "Tôi muốn mua một ít sữa tươi."
           }
         ],
         "notes": [],
@@ -1017,37 +1017,37 @@
             "speaker": "王一雪",
             "zh": "星期天我们去哪儿吃晚饭？",
             "pinyin": "xīng qī tiān wǒ men qù nǎ ér chī wǎn fàn ？",
-            "vi": "Dịch nghĩa: 星期天我们去哪儿吃晚饭？"
+            "vi": "Chủ nhật chúng mình đi đâu ăn tối nhỉ?"
           },
           {
             "speaker": "刘明",
             "zh": "我还想去西安饭店。",
             "pinyin": "wǒ hái xiǎng qù xī ān fàn diàn 。",
-            "vi": "Dịch nghĩa: 我还想去西安饭店。"
+            "vi": "Tôi vẫn muốn đến nhà hàng Tây An."
           },
           {
             "speaker": "刘小雪",
             "zh": "那边的包子非常好吃，我想吃包子。",
             "pinyin": "nà biān de bāo zǐ fēi cháng hǎo chī ， wǒ xiǎng chī bāo zǐ 。",
-            "vi": "Dịch nghĩa: 那边的包子非常好吃，我想吃包子。"
+            "vi": "Bánh bao ở đằng đó ngon tuyệt vời, tôi muốn ăn bánh bao."
           },
           {
             "speaker": "刘小明",
             "zh": "妈妈，我想吃米饭，不想吃包子。",
             "pinyin": "mā ma ， wǒ xiǎng chī mǐ fàn ， bù xiǎng chī bāo zǐ 。",
-            "vi": "Dịch nghĩa: 妈妈，我想吃米饭，不想吃包子。"
+            "vi": "Mẹ ơi, con muốn ăn cơm, không muốn ăn bánh bao đâu."
           },
           {
             "speaker": "王一雪",
             "zh": "好的。我们怎么去？",
             "pinyin": "hǎo de 。 wǒ men zěn me qù ？",
-            "vi": "Dịch nghĩa: 好的。我们怎么去？"
+            "vi": "Được rồi. Chúng mình đi bằng gì?"
           },
           {
             "speaker": "刘明",
             "zh": "坐出租车去。",
             "pinyin": "zuò chū zū chē qù 。",
-            "vi": "Dịch nghĩa: 坐出租车去。"
+            "vi": "Đi bằng xe taxi nhé."
           }
         ],
         "notes": [],
@@ -1092,25 +1092,25 @@
             "speaker": "白家月",
             "zh": "现在几点？",
             "pinyin": "xiàn zài jǐ diǎn ？",
-            "vi": "Dịch nghĩa: 现在几点？"
+            "vi": "Bây giờ là mấy giờ?"
           },
           {
             "speaker": "安妮",
             "zh": "早上八点四十。",
             "pinyin": "zǎo shàng bā diǎn sì shí 。",
-            "vi": "Dịch nghĩa: 早上八点四十。"
+            "vi": "8 giờ 40 phút sáng."
           },
           {
             "speaker": "白家月",
             "zh": "我上午十点十分有课。",
             "pinyin": "wǒ shàng wǔ shí diǎn shí fēn yǒu kè 。",
-            "vi": "Dịch nghĩa: 我上午十点十分有课。"
+            "vi": "Sáng nay 10 giờ 10 phút tôi có tiết học."
           },
           {
             "speaker": "安妮",
             "zh": "好的，我们下午两点见吧。",
             "pinyin": "hǎo de ， wǒ men xià wǔ liǎng diǎn jiàn ba 。",
-            "vi": "Dịch nghĩa: 好的，我们下午两点见吧。"
+            "vi": "Được rồi, 2 giờ chiều chúng mình gặp nhau nhé."
           }
         ],
         "notes": [],
@@ -1149,25 +1149,25 @@
             "speaker": "李文",
             "zh": "下午我想去电影院看电影，你去吗？",
             "pinyin": "xià wǔ wǒ xiǎng qù diàn yǐng yuàn kàn diàn yǐng ， nǐ qù ma ？",
-            "vi": "Dịch nghĩa: 下午我想去电影院看电影，你去吗？"
+            "vi": "Chiều nay tôi muốn đi rạp xem phim, bạn đi không?"
           },
           {
             "speaker": "白家月",
             "zh": "我不想去，下午还有事。",
             "pinyin": "wǒ bù xiǎng qù ， xià wǔ hái yǒu shì 。",
-            "vi": "Dịch nghĩa: 我不想去，下午还有事。"
+            "vi": "Tôi không đi được rồi, chiều nay còn có việc."
           },
           {
             "speaker": "李文",
             "zh": "好的。明天呢？",
             "pinyin": "hǎo de 。 míng tiān ne ？",
-            "vi": "Dịch nghĩa: 好的。明天呢？"
+            "vi": "Được rồi. Còn ngày mai thì sao?"
           },
           {
             "speaker": "白家月",
             "zh": "我明天下午两点还上课呢，四点半下课。",
             "pinyin": "wǒ míng tiān xià wǔ liǎng diǎn hái shàng kè ne ， sì diǎn bàn xià kè 。",
-            "vi": "Dịch nghĩa: 我明天下午两点还上课呢，四点半下课。"
+            "vi": "Chiều mai 2 giờ tôi vẫn còn tiết học, 4 giờ rưỡi mới tan học."
           }
         ],
         "notes": [],
@@ -1206,43 +1206,43 @@
             "speaker": "5",
             "zh": "006：006：30",
             "pinyin": "0 0 6 ： 0 0 6 ： 3 0",
-            "vi": "Dịch nghĩa: 006：006：30"
+            "vi": "Bản dịch câu thoại: \"006：006：30\""
           },
           {
             "speaker": "王一雪",
             "zh": "喂，你在哪儿呢？",
             "pinyin": "wèi ， nǐ zài nǎ ér ne ？",
-            "vi": "Dịch nghĩa: 喂，你在哪儿呢？"
+            "vi": "Alo, bạn đang ở đâu thế?"
           },
           {
             "speaker": "刘明",
             "zh": "我在家里呢。",
             "pinyin": "wǒ zài jiā lǐ ne 。",
-            "vi": "Dịch nghĩa: 我在家里呢。"
+            "vi": "Tôi đang ở nhà."
           },
           {
             "speaker": "王一雪",
             "zh": "我晚上六点半下班。",
             "pinyin": "wǒ wǎn shàng liù diǎn bàn xià bān 。",
-            "vi": "Dịch nghĩa: 我晚上六点半下班。"
+            "vi": "Tối nay 6 giờ rưỡi tôi tan làm."
           },
           {
             "speaker": "刘明",
             "zh": "我八点去医院上班。",
             "pinyin": "wǒ bā diǎn qù yī yuàn shàng bān 。",
-            "vi": "Dịch nghĩa: 我八点去医院上班。"
+            "vi": "8 giờ tôi đi làm ở bệnh viện."
           },
           {
             "speaker": "王一雪",
             "zh": "好的，你去店里买些菜吧。",
             "pinyin": "hǎo de ， nǐ qù diàn lǐ mǎi xiē cài ba 。",
-            "vi": "Dịch nghĩa: 好的，你去店里买些菜吧。"
+            "vi": "Được rồi, bạn ghé cửa hàng mua ít thức ăn nhé."
           },
           {
             "speaker": "刘明",
             "zh": "好，我十分钟后去。",
             "pinyin": "hǎo ， wǒ shí fēn zhōng hòu qù 。",
-            "vi": "Dịch nghĩa: 好，我十分钟后去。"
+            "vi": "Được, 10 phút nữa tôi đi."
           }
         ],
         "notes": [],
@@ -1287,25 +1287,25 @@
             "speaker": "白家月",
             "zh": "房间外有一只小猫。",
             "pinyin": "fáng jiān wài yǒu yì zhī xiǎo māo 。",
-            "vi": "Dịch nghĩa: 房间外有一只小猫。"
+            "vi": "Bên ngoài phòng có một con mèo nhỏ."
           },
           {
             "speaker": "陈天中",
             "zh": "我没看见它在哪儿呢？",
             "pinyin": "wǒ méi kàn jiàn tā zài nǎ ér ne ？",
-            "vi": "Dịch nghĩa: 我没看见它在哪儿呢？"
+            "vi": "Tôi không nhìn thấy nó ở đâu cả?"
           },
           {
             "speaker": "白家月",
             "zh": "他在桌子下呢。",
             "pinyin": "tā zài zhuō zi xià ne 。",
-            "vi": "Dịch nghĩa: 他在桌子下呢。"
+            "vi": "Nó đang nằm dưới gầm bàn kìa."
           },
           {
             "speaker": "陈天中",
             "zh": "这只小猫真漂亮！",
             "pinyin": "zhè zhī xiǎo māo zhēn piào liang ！",
-            "vi": "Dịch nghĩa: 这只小猫真漂亮！"
+            "vi": "Con mèo nhỏ này xinh thật đấy!"
           }
         ],
         "notes": [],
@@ -1344,31 +1344,31 @@
             "speaker": "2",
             "zh": "002：303：00后",
             "pinyin": "0 0 2 ： 3 0 3 ： 0 0 hòu",
-            "vi": "Dịch nghĩa: 002：303：00后"
+            "vi": "Bản dịch câu thoại: \"002：303：00后\""
           },
           {
             "speaker": "白家月",
             "zh": "我们在哪儿见呢？",
             "pinyin": "wǒ men zài nǎ ér jiàn ne ？",
-            "vi": "Dịch nghĩa: 我们在哪儿见呢？"
+            "vi": "Chúng mình gặp nhau ở đâu nhỉ?"
           },
           {
             "speaker": "李文",
             "zh": "在学校书店前见吧。",
             "pinyin": "zài xué xiào shū diàn qián jiàn ba 。",
-            "vi": "Dịch nghĩa: 在学校书店前见吧。"
+            "vi": "Gặp nhau trước hiệu sách của trường đi."
           },
           {
             "speaker": "白家月",
             "zh": "好的。下午两点能到吗？",
             "pinyin": "hǎo de 。 xià wǔ liǎng diǎn néng dào ma ？",
-            "vi": "Dịch nghĩa: 好的。下午两点能到吗？"
+            "vi": "Được rồi. 2 giờ chiều có đến kịp không?"
           },
           {
             "speaker": "李文",
             "zh": "我能到。我在学校吃午饭。",
             "pinyin": "wǒ néng dào 。 wǒ zài xué xiào chī wǔ fàn 。",
-            "vi": "Dịch nghĩa: 我能到。我在学校吃午饭。"
+            "vi": "Tôi đến kịp chứ. Tôi ăn trưa ở trường luôn."
           }
         ],
         "notes": [],
@@ -1407,37 +1407,37 @@
             "speaker": "刘明",
             "zh": "小胡，还没吃饭呢？",
             "pinyin": "xiǎo hú ， hái méi chī fàn ne ？",
-            "vi": "Dịch nghĩa: 小胡，还没吃饭呢？"
+            "vi": "Tiểu Hồ, vẫn chưa ăn cơm à?"
           },
           {
             "speaker": "胡医生",
             "zh": "没吃呢。",
             "pinyin": "méi chī ne 。",
-            "vi": "Dịch nghĩa: 没吃呢。"
+            "vi": "Chưa ăn ạ."
           },
           {
             "speaker": "刘明",
             "zh": "大医院病人多，医生非常忙。",
             "pinyin": "dà yī yuàn bìng rén duō ， yī shēng fēi cháng máng 。",
-            "vi": "Dịch nghĩa: 大医院病人多，医生非常忙。"
+            "vi": "Bệnh viện lớn đông bệnh nhân, bác sĩ bận rộn lắm."
           },
           {
             "speaker": "胡医生",
             "zh": "是的。我爸爸也在医院工作，他也非常忙。",
             "pinyin": "shì de 。 wǒ bà ba yě zài yī yuàn gōng zuò ， tā yě fēi cháng máng 。",
-            "vi": "Dịch nghĩa: 是的。我爸爸也在医院工作，他也非常忙。"
+            "vi": "Đúng vậy. Bố tôi cũng làm việc ở bệnh viện, ông ấy cũng cực kỳ bận."
           },
           {
             "speaker": "刘明",
             "zh": "你家有两个医生？",
             "pinyin": "nǐ jiā yǒu liǎng gè yī shēng ？",
-            "vi": "Dịch nghĩa: 你家有两个医生？"
+            "vi": "Nhà bạn có tận 2 bác sĩ cơ à?"
           },
           {
             "speaker": "胡医生",
             "zh": "对。",
             "pinyin": "duì 。",
-            "vi": "Dịch nghĩa: 对。"
+            "vi": "Đúng vậy."
           }
         ],
         "notes": [
@@ -1484,25 +1484,25 @@
             "speaker": "李文",
             "zh": "学校前边有一家电影院。",
             "pinyin": "xué xiào qián biān yǒu yì jiā diàn yǐng yuàn 。",
-            "vi": "Dịch nghĩa: 学校前边有一家电影院。"
+            "vi": "Phía trước trường học có một rạp chiếu phim."
           },
           {
             "speaker": "白家月",
             "zh": "对。我们晚上去那个电影院看电影吧。",
             "pinyin": "duì 。 wǒ men wǎn shàng qù nà ge diàn yǐng yuàn kàn diàn yǐng ba 。",
-            "vi": "Dịch nghĩa: 对。我们晚上去那个电影院看电影吧。"
+            "vi": "Đúng rồi. Tối nay chúng mình đến rạp đó xem phim đi."
           },
           {
             "speaker": "李文",
             "zh": "好！我们七点在电影院外边见，好吗？",
             "pinyin": "hǎo ！ wǒ men qī diǎn zài diàn yǐng yuàn wài biān jiàn ， hǎo ma ？",
-            "vi": "Dịch nghĩa: 好！我们七点在电影院外边见，好吗？"
+            "vi": "Được! Chúng mình gặp nhau lúc 7 giờ trước cửa rạp nhé?"
           },
           {
             "speaker": "白家月",
             "zh": "好的，晚上七点见！",
             "pinyin": "hǎo de ， wǎn shàng qī diǎn jiàn ！",
-            "vi": "Dịch nghĩa: 好的，晚上七点见！"
+            "vi": "Được rồi, 7 giờ tối gặp nhé!"
           }
         ],
         "notes": [],
@@ -1541,25 +1541,25 @@
             "speaker": "白家月",
             "zh": "椅子上有一本中文书，那是谁的书？",
             "pinyin": "yǐ zi shàng yǒu yì běn zhōng wén shū ， nà shì shuí de shū ？",
-            "vi": "Dịch nghĩa: 椅子上有一本中文书，那是谁的书？"
+            "vi": "Trên ghế có một cuốn sách tiếng Trung, đó là sách của ai thế?"
           },
           {
             "speaker": "陈天中",
             "zh": "是我的书，谢谢。这是我的第二本中文书。",
             "pinyin": "shì wǒ de shū ， xiè xiè 。 zhè shì wǒ de dì èr běn zhōng wén shū 。",
-            "vi": "Dịch nghĩa: 是我的书，谢谢。这是我的第二本中文书。"
+            "vi": "Là sách của tôi, cảm ơn nhé. Đây là cuốn sách tiếng Trung thứ hai của tôi."
           },
           {
             "speaker": "白家月",
             "zh": "不客气。你明天上午在哪儿？",
             "pinyin": "bú kè qì 。 nǐ míng tiān shàng wǔ zài nǎ ér ？",
-            "vi": "Dịch nghĩa: 不客气。你明天上午在哪儿？"
+            "vi": "Không có chi. Sáng mai bạn ở đâu?"
           },
           {
             "speaker": "陈天中",
             "zh": "我明天上午在学校学习。",
             "pinyin": "wǒ míng tiān shàng wǔ zài xué xiào xué xí 。",
-            "vi": "Dịch nghĩa: 我明天上午在学校学习。"
+            "vi": "Sáng mai tôi học ở trường."
           }
         ],
         "notes": [],
@@ -1598,37 +1598,37 @@
             "speaker": "王一雪",
             "zh": "明天星期六，你做什么？",
             "pinyin": "míng tiān xīng qī liù ， nǐ zuò shén me ？",
-            "vi": "Dịch nghĩa: 明天星期六，你做什么？"
+            "vi": "Ngày mai là thứ Bảy, bạn làm gì?"
           },
           {
             "speaker": "杨同乐",
             "zh": "我白天在家里读书，晚上和朋友们去外边唱歌。",
             "pinyin": "wǒ bái tiān zài jiā lǐ dú shū ， wǎn shàng hé péng yǒu men qù wài biān chàng gē 。",
-            "vi": "Dịch nghĩa: 我白天在家里读书，晚上和朋友们去外边唱歌。"
+            "vi": "Ban ngày tôi ở nhà đọc sách, tối đi hát karaoke với bạn bè."
           },
           {
             "speaker": "王一雪",
             "zh": "你唱歌很好听。",
             "pinyin": "nǐ chàng gē hěn hǎo tīng 。",
-            "vi": "Dịch nghĩa: 你唱歌很好听。"
+            "vi": "Bạn hát rất hay đấy."
           },
           {
             "speaker": "杨同乐",
             "zh": "谢谢！您星期六做什么？",
             "pinyin": "xiè xiè ！ nín xīng qī liù zuò shén me ？",
-            "vi": "Dịch nghĩa: 谢谢！您星期六做什么？"
+            "vi": "Cảm ơn! Thứ Bảy thầy/cô làm gì ạ?"
           },
           {
             "speaker": "王一雪",
             "zh": "我在家里做饭、看电视，和孩子们、小狗玩。",
             "pinyin": "wǒ zài jiā lǐ zuò fàn 、 kàn diàn shì ， hé hái zi men 、 xiǎo gǒu wán 。",
-            "vi": "Dịch nghĩa: 我在家里做饭、看电视，和孩子们、小狗玩。"
+            "vi": "Tôi ở nhà nấu ăn, xem tivi và chơi với các con, chú chó nhỏ."
           },
           {
             "speaker": "杨同乐",
             "zh": "我也有一只小狗。",
             "pinyin": "wǒ yě yǒu yì zhī xiǎo gǒu 。",
-            "vi": "Dịch nghĩa: 我也有一只小狗。"
+            "vi": "Tôi cũng có một chú chó nhỏ."
           }
         ],
         "notes": [],
@@ -1673,31 +1673,31 @@
             "speaker": "王一雪",
             "zh": "请问，有杯子吗？",
             "pinyin": "qǐng wèn ， yǒu bēi zi ma ？",
-            "vi": "Dịch nghĩa: 请问，有杯子吗？"
+            "vi": "Xin hỏi, ở đây có bán cốc không?"
           },
           {
             "speaker": "售货员",
             "zh": "有，杯子在这边。",
             "pinyin": "yǒu ， bēi zi zài zhè biān 。",
-            "vi": "Dịch nghĩa: 有，杯子在这边。"
+            "vi": "Có ạ, cốc ở bên này."
           },
           {
             "speaker": "王一雪",
             "zh": "多少钱一个？",
             "pinyin": "duō shǎo qián yí gè ？",
-            "vi": "Dịch nghĩa: 多少钱一个？"
+            "vi": "Bao nhiêu tiền một cái?"
           },
           {
             "speaker": "售货员",
             "zh": "这些五块钱一个，那些10块钱一个。",
             "pinyin": "zhè xiē wǔ kuài qián yí gè ， nà xiē 1 0 kuài qián yí gè 。",
-            "vi": "Dịch nghĩa: 这些五块钱一个，那些10块钱一个。"
+            "vi": "Mấy cái này 5 tệ một cái, mấy cái kia 10 tệ một cái."
           },
           {
             "speaker": "王一雪",
             "zh": "我买这个吧。",
             "pinyin": "wǒ mǎi zhè ge ba 。",
-            "vi": "Dịch nghĩa: 我买这个吧。"
+            "vi": "Tôi mua cái này nhé."
           }
         ],
         "notes": [],
@@ -1736,31 +1736,31 @@
             "speaker": "王一雪",
             "zh": "这儿的水果真不少？",
             "pinyin": "zhè ér de shuǐ guǒ zhēn bù shǎo ？",
-            "vi": "Dịch nghĩa: 这儿的水果真不少？"
+            "vi": "Hoa quả ở đây nhiều thật đấy!"
           },
           {
             "speaker": "售货员",
             "zh": "您想买什么？",
             "pinyin": "nín xiǎng mǎi shén me ？",
-            "vi": "Dịch nghĩa: 您想买什么？"
+            "vi": "Chị muốn mua gì ạ?"
           },
           {
             "speaker": "王一雪",
             "zh": "我想买两斤苹果。",
             "pinyin": "wǒ xiǎng mǎi liǎng jīn píng guǒ 。",
-            "vi": "Dịch nghĩa: 我想买两斤苹果。"
+            "vi": "Tôi muốn mua 2 cân (1kg) táo."
           },
           {
             "speaker": "售货员",
             "zh": "苹果三块五一斤。这些七块二，七块钱吧。",
             "pinyin": "píng guǒ sān kuài wǔ yī jīn 。 zhè xiē qī kuài èr ， qī kuài qián ba 。",
-            "vi": "Dịch nghĩa: 苹果三块五一斤。这些七块二，七块钱吧。"
+            "vi": "Táo 3 tệ rưỡi một cân. Tổng cộng 7 tệ 2 hào, lấy chị 7 tệ thôi."
           },
           {
             "speaker": "王一雪",
             "zh": "好的，这儿的苹果真便宜！",
             "pinyin": "hǎo de ， zhè ér de píng guǒ zhēn pián yi ！",
-            "vi": "Dịch nghĩa: 好的，这儿的苹果真便宜！"
+            "vi": "Được rồi, táo ở đây rẻ thật đấy!"
           }
         ],
         "notes": [],
@@ -1799,37 +1799,37 @@
             "speaker": "王一雪",
             "zh": "这家商店衣服真多！这件一百元，怎么样？",
             "pinyin": "zhè jiā shāng diàn yī fu zhēn duō ！ zhè jiàn yì bǎi yuán ， zěn me yàng ？",
-            "vi": "Dịch nghĩa: 这家商店衣服真多！这件一百元，怎么样？"
+            "vi": "Cửa hàng này nhiều quần áo thật! Cái áo này 100 tệ, thấy thế nào?"
           },
           {
             "speaker": "刘明",
             "zh": "好看，也不贵。",
             "pinyin": "hǎo kàn ， yě bú guì 。",
-            "vi": "Dịch nghĩa: 好看，也不贵。"
+            "vi": "Đẹp lắm, cũng không đắt."
           },
           {
             "speaker": "王一雪",
             "zh": "小雪能穿，买一件吧。",
             "pinyin": "xiǎo xuě néng chuān ， mǎi yí jiàn ba 。",
-            "vi": "Dịch nghĩa: 小雪能穿，买一件吧。"
+            "vi": "Tiểu Tuyết mặc vừa đấy, mua một cái đi."
           },
           {
             "speaker": "刘明",
             "zh": "好的。小明能穿吗？",
             "pinyin": "hǎo de 。 xiǎo míng néng chuān ma ？",
-            "vi": "Dịch nghĩa: 好的。小明能穿吗？"
+            "vi": "Được. Tiểu Minh có mặc vừa không?"
           },
           {
             "speaker": "王一雪",
             "zh": "不能。这些是女孩子串的衣服，男孩子的衣服在那儿。",
             "pinyin": "bù néng 。 zhè xiē shì nǚ hái zi chuàn de yī fu ， nán hái zi de yī fu zài nà ér 。",
-            "vi": "Dịch nghĩa: 不能。这些是女孩子串的衣服，男孩子的衣服在那儿。"
+            "vi": "Không được. Mấy cái này là quần áo con gái, quần áo con trai ở đằng kia."
           },
           {
             "speaker": "刘明",
             "zh": "好的。",
             "pinyin": "hǎo de 。",
-            "vi": "Dịch nghĩa: 好的。"
+            "vi": "Được rồi."
           }
         ],
         "notes": [],
@@ -1874,25 +1874,25 @@
             "speaker": "王一飞",
             "zh": "喂，李文，你什么时候能到饭店？",
             "pinyin": "wèi ， lǐ wén ， nǐ shén me shí hòu néng dào fàn diàn ？",
-            "vi": "Dịch nghĩa: 喂，李文，你什么时候能到饭店？"
+            "vi": "Alo, Lý Văn, khi nào bạn mới tới nhà hàng?"
           },
           {
             "speaker": "李文",
             "zh": "还不知道，正在找呢。它是不是在超市后边？",
             "pinyin": "hái bù zhī dào ， zhèng zài zhǎo ne 。 tā shì bu shì zài chāo shì hòu biān ？",
-            "vi": "Dịch nghĩa: 还不知道，正在找呢。它是不是在超市后边？"
+            "vi": "Vẫn chưa biết nữa, đang tìm đây. Có phải nó nằm phía sau siêu thị không?"
           },
           {
             "speaker": "王一飞",
             "zh": "是的。你开车没开车？",
             "pinyin": "shì de 。 nǐ kāi chē méi kāi chē ？",
-            "vi": "Dịch nghĩa: 是的。你开车没开车？"
+            "vi": "Đúng rồi. Bạn có lái xe đi không?"
           },
           {
             "speaker": "李文",
             "zh": "我没开车，坐车呢。",
             "pinyin": "wǒ méi kāi chē ， zuò chē ne 。",
-            "vi": "Dịch nghĩa: 我没开车，坐车呢。"
+            "vi": "Tôi không lái xe, đang đi xe buýt/taxi."
           }
         ],
         "notes": [],
@@ -1931,25 +1931,25 @@
             "speaker": "王一飞",
             "zh": "你还在读大学吗？",
             "pinyin": "nǐ hái zài dú dà xué ma ？",
-            "vi": "Dịch nghĩa: 你还在读大学吗？"
+            "vi": "Bạn vẫn đang học đại học à?"
           },
           {
             "speaker": "李文",
             "zh": "对，我读大学呢，还是大学生。",
             "pinyin": "duì ， wǒ dú dà xué ne ， hái shì dà xué shēng 。",
-            "vi": "Dịch nghĩa: 对，我读大学呢，还是大学生。"
+            "vi": "Đúng vậy, tôi đang học đại học, vẫn là sinh viên."
           },
           {
             "speaker": "王一飞",
             "zh": "你们学习忙不忙？",
             "pinyin": "nǐ men xué xí máng bu máng ？",
-            "vi": "Dịch nghĩa: 你们学习忙不忙？"
+            "vi": "Các bạn học hành có bận không?"
           },
           {
             "speaker": "李文",
             "zh": "非常忙，我学医，我们的课都很多。",
             "pinyin": "fēi cháng máng ， wǒ xué yī ， wǒ men de kè dōu hěn duō 。",
-            "vi": "Dịch nghĩa: 非常忙，我学医，我们的课都很多。"
+            "vi": "Rất bận, tôi học ngành y, tiết học của chúng tôi rất nhiều."
           }
         ],
         "notes": [],
@@ -1988,37 +1988,37 @@
             "speaker": "刘明",
             "zh": "弟弟起床没起床呢？",
             "pinyin": "dì di qǐ chuáng méi qǐ chuáng ne ？",
-            "vi": "Dịch nghĩa: 弟弟起床没起床呢？"
+            "vi": "Em trai đã ngủ dậy chưa?"
           },
           {
             "speaker": "刘小雪",
             "zh": "起床呢，还在睡觉。",
             "pinyin": "qǐ chuáng ne ， hái zài shuì jiào 。",
-            "vi": "Dịch nghĩa: 起床呢，还在睡觉。"
+            "vi": "Ngủ dậy gì đâu, vẫn đang ngủ khò khò đấy."
           },
           {
             "speaker": "刘明",
             "zh": "还睡呢？他今天去不去那里？",
             "pinyin": "hái shuì ne ？ tā jīn tiān qù bu qù nà lǐ ？",
-            "vi": "Dịch nghĩa: 还睡呢？他今天去不去那里？"
+            "vi": "Vẫn còn ngủ à? Hôm nay em ấy có đi đến đó không?"
           },
           {
             "speaker": "刘小雪",
             "zh": "去哪里？",
             "pinyin": "qù nǎ lǐ ？",
-            "vi": "Dịch nghĩa: 去哪里？"
+            "vi": "Đi đâu cơ?"
           },
           {
             "speaker": "刘明",
             "zh": "去超市。",
             "pinyin": "qù chāo shì 。",
-            "vi": "Dịch nghĩa: 去超市。"
+            "vi": "Đi siêu thị."
           },
           {
             "speaker": "刘小雪",
             "zh": "我昨天问他，他对我说，他不去，他今天要和小朋友玩。",
             "pinyin": "wǒ zuó tiān wèn tā ， tā duì wǒ shuō ， tā bú qù ， tā jīn tiān yào hé xiǎo péng yǒu wán 。",
-            "vi": "Dịch nghĩa: 我昨天问他，他对我说，他不去，他今天要和小朋友玩。"
+            "vi": "Hôm qua tôi hỏi, em ấy bảo không đi, hôm nay em ấy hẹn chơi với các bạn nhỏ rồi."
           }
         ],
         "notes": [],
@@ -2063,25 +2063,25 @@
             "speaker": "王一雪",
             "zh": "今天天气怎么样？",
             "pinyin": "jīn tiān tiān qì zěn me yàng ？",
-            "vi": "Dịch nghĩa: 今天天气怎么样？"
+            "vi": "Thời tiết hôm nay thế nào?"
           },
           {
             "speaker": "王一飞",
             "zh": "这里的天不太好，下雨了。",
             "pinyin": "zhè lǐ de tiān bú tài hǎo ， xià yǔ le 。",
-            "vi": "Dịch nghĩa: 这里的天不太好，下雨了。"
+            "vi": "Thời tiết ở đây không tốt lắm, trời mưa rồi."
           },
           {
             "speaker": "王一雪",
             "zh": "雨大吗？",
             "pinyin": "yǔ dà ma ？",
-            "vi": "Dịch nghĩa: 雨大吗？"
+            "vi": "Mưa có to không?"
           },
           {
             "speaker": "王一飞",
             "zh": "有点儿大，我觉得很冷。",
             "pinyin": "yǒu diǎn er dà ， wǒ jué de hěn lěng 。",
-            "vi": "Dịch nghĩa: 有点儿大，我觉得很冷。"
+            "vi": "Khá to đấy, tôi cảm thấy rất lạnh."
           }
         ],
         "notes": [],
@@ -2120,25 +2120,25 @@
             "speaker": "王一雪",
             "zh": "昨天下雪了。",
             "pinyin": "zuó tiān xià xuě le 。",
-            "vi": "Dịch nghĩa: 昨天下雪了。"
+            "vi": "Hôm qua trời đổ tuyết rồi."
           },
           {
             "speaker": "杨同乐",
             "zh": "是的，太冷了。",
             "pinyin": "shì de ， tài lěng le 。",
-            "vi": "Dịch nghĩa: 是的，太冷了。"
+            "vi": "Đúng vậy, lạnh quá đi mất."
           },
           {
             "speaker": "王一雪",
             "zh": "你昨天没来公司，生病吗？",
             "pinyin": "nǐ zuó tiān méi lái gōng sī ， shēng bìng ma ？",
-            "vi": "Dịch nghĩa: 你昨天没来公司，生病吗？"
+            "vi": "Hôm qua bạn không đến công ty, bị ốm à?"
           },
           {
             "speaker": "杨同乐",
             "zh": "对，我昨天去医院看病了。",
             "pinyin": "duì ， wǒ zuó tiān qù yī yuàn kàn bìng le 。",
-            "vi": "Dịch nghĩa: 对，我昨天去医院看病了。"
+            "vi": "Đúng vậy, hôm qua tôi đi bệnh viện khám bệnh rồi."
           }
         ],
         "notes": [],
@@ -2177,37 +2177,37 @@
             "speaker": "杨同乐",
             "zh": "医生，我病了。",
             "pinyin": "yī shēng ， wǒ bìng le 。",
-            "vi": "Dịch nghĩa: 医生，我病了。"
+            "vi": "Bác sĩ ơi, tôi bị ốm rồi."
           },
           {
             "speaker": "胡医生",
             "zh": "我看看。你觉得怎么样？",
             "pinyin": "wǒ kàn kàn 。 nǐ jué de zěn me yàng ？",
-            "vi": "Dịch nghĩa: 我看看。你觉得怎么样？"
+            "vi": "Để tôi xem nào. Bạn cảm thấy thế nào?"
           },
           {
             "speaker": "杨同乐",
             "zh": "我很冷。",
             "pinyin": "wǒ hěn lěng 。",
-            "vi": "Dịch nghĩa: 我很冷。"
+            "vi": "Tôi cảm thấy rất lạnh."
           },
           {
             "speaker": "胡医生",
             "zh": "好的，吃一点儿药，今天休息半天吧。",
             "pinyin": "hǎo de ， chī yì diǎn ér yào ， jīn tiān xiū xi bàn tiān ba 。",
-            "vi": "Dịch nghĩa: 好的，吃一点儿药，今天休息半天吧。"
+            "vi": "Được rồi, uống chút thuốc và hôm nay nghỉ ngơi nửa ngày nhé."
           },
           {
             "speaker": "杨同乐",
             "zh": "好的。",
             "pinyin": "hǎo de 。",
-            "vi": "Dịch nghĩa: 好的。"
+            "vi": "Được rồi."
           },
           {
             "speaker": "胡医生",
             "zh": "回家后再喝些热水。",
             "pinyin": "huí jiā hòu zài hē xiē rè shuǐ 。",
-            "vi": "Dịch nghĩa: 回家后再喝些热水。"
+            "vi": "Về nhà nhớ uống thêm nhiều nước ấm."
           }
         ],
         "notes": [],
@@ -2252,25 +2252,25 @@
             "speaker": "白家月",
             "zh": "王老师，我可以再问您一个问题吗？",
             "pinyin": "wáng lǎo shī ， wǒ kě yǐ zài wèn nín yí gè wèn tí ma ？",
-            "vi": "Dịch nghĩa: 王老师，我可以再问您一个问题吗？"
+            "vi": "Thầy Vương ơi, em có thể hỏi thầy thêm một câu hỏi nữa không ạ?"
           },
           {
             "speaker": "王一飞",
             "zh": "可以。你有什么问题？",
             "pinyin": "kě yǐ 。 nǐ yǒu shén me wèn tí ？",
-            "vi": "Dịch nghĩa: 可以。你有什么问题？"
+            "vi": "Được chứ. Em có câu hỏi gì nào?"
           },
           {
             "speaker": "白家月",
             "zh": "那个小店卖不卖手机？",
             "pinyin": "nà ge xiǎo diàn mài bu mài shǒu jī ？",
-            "vi": "Dịch nghĩa: 那个小店卖不卖手机？"
+            "vi": "Cửa hàng nhỏ kia có bán điện thoại di động không ạ?"
           },
           {
             "speaker": "王一飞",
             "zh": "我不知道。你可以打电话问一下。",
             "pinyin": "wǒ bù zhī dào 。 nǐ kě yǐ dǎ diàn huà wèn yí xià 。",
-            "vi": "Dịch nghĩa: 我不知道。你可以打电话问一下。"
+            "vi": "Thầy không rõ nữa. Em có thể gọi điện thoại hỏi thử xem."
           }
         ],
         "notes": [],
@@ -2309,25 +2309,25 @@
             "speaker": "服务员",
             "zh": "女士，请坐！您和什么？",
             "pinyin": "nǚ shì ， qǐng zuò ！ nín hé shén me ？",
-            "vi": "Dịch nghĩa: 女士，请坐！您和什么？"
+            "vi": "Thưa quý khách, xin mời ngồi! Quý khách muốn uống gì ạ?"
           },
           {
             "speaker": "王一雪",
             "zh": "我看一下。请给我一杯牛奶。",
             "pinyin": "wǒ kàn yí xià 。 qǐng gěi wǒ yì bēi niú nǎi 。",
-            "vi": "Dịch nghĩa: 我看一下。请给我一杯牛奶。"
+            "vi": "Để tôi xem nào. Cho tôi một ly sữa tươi nhé."
           },
           {
             "speaker": "服务员",
             "zh": "好的。您还要什么？",
             "pinyin": "hǎo de 。 nín hái yào shén me ？",
-            "vi": "Dịch nghĩa: 好的。您还要什么？"
+            "vi": "Vâng ạ. Quý khách còn dùng thêm gì nữa không?"
           },
           {
             "speaker": "王一雪",
             "zh": "我还没吃早饭，再要这个面包和鸡蛋吧。",
             "pinyin": "wǒ hái méi chī zǎo fàn ， zài yào zhè ge miàn bāo hé jī dàn ba 。",
-            "vi": "Dịch nghĩa: 我还没吃早饭，再要这个面包和鸡蛋吧。"
+            "vi": "Tôi vẫn chưa ăn sáng, cho tôi thêm cái bánh mì và quả trứng này nữa nhé."
           }
         ],
         "notes": [],
@@ -2366,37 +2366,37 @@
             "speaker": "服务员",
             "zh": "先生，请坐！您要什么？",
             "pinyin": "xiān shēng ， qǐng zuò ！ nín yào shén me ？",
-            "vi": "Dịch nghĩa: 先生，请坐！您要什么？"
+            "vi": "Thưa quý khách, xin mời ngồi! Quý khách muốn dùng gì ạ?"
           },
           {
             "speaker": "刘明",
             "zh": "我要一斤饺子。",
             "pinyin": "wǒ yào yì jīn jiǎo zǐ 。",
-            "vi": "Dịch nghĩa: 我要一斤饺子。"
+            "vi": "Cho tôi 1 cân (500g) sủi cảo."
           },
           {
             "speaker": "服务员",
             "zh": "好的。一斤饺子40个。",
             "pinyin": "hǎo de 。 yì jīn jiǎo zǐ 4 0 gè 。",
-            "vi": "Dịch nghĩa: 好的。一斤饺子40个。"
+            "vi": "Vâng ạ. Một cân sủi cảo gồm 40 cái."
           },
           {
             "speaker": "刘明",
             "zh": "40个太多了，我要一半吧。",
             "pinyin": "4 0 gè tài duō le ， wǒ yào yí bàn ba 。",
-            "vi": "Dịch nghĩa: 40个太多了，我要一半吧。"
+            "vi": "40 cái nhiều quá, cho tôi lấy một nửa thôi."
           },
           {
             "speaker": "服务员",
             "zh": "半斤20个。您想喝什么？",
             "pinyin": "bàn jīn 2 0 gè 。 nín xiǎng hē shén me ？",
-            "vi": "Dịch nghĩa: 半斤20个。您想喝什么？"
+            "vi": "Nửa cân là 20 cái ạ. Quý khách muốn uống gì?"
           },
           {
             "speaker": "刘明",
             "zh": "请给我一杯茶吧。",
             "pinyin": "qǐng gěi wǒ yì bēi chá ba 。",
-            "vi": "Dịch nghĩa: 请给我一杯茶吧。"
+            "vi": "Cho tôi một ly trà nhé."
           }
         ],
         "notes": [],
@@ -2441,25 +2441,25 @@
             "speaker": "白家月",
             "zh": "你们上火车后看见王老师了吗？",
             "pinyin": "nǐ men shàng huǒ chē hòu kàn jiàn wáng lǎo shī le ma ？",
-            "vi": "Dịch nghĩa: 你们上火车后看见王老师了吗？"
+            "vi": "Sau khi lên tàu hỏa mọi người có nhìn thấy thầy Vương không?"
           },
           {
             "speaker": "陈天中",
             "zh": "没看见。中午车开后，有些人在看书，有些人睡觉了。",
             "pinyin": "méi kàn jiàn 。 zhōng wǔ chē kāi hòu ， yǒu xiē rén zài kàn shū ， yǒu xiē rén shuì jiào le 。",
-            "vi": "Dịch nghĩa: 没看见。中午车开后，有些人在看书，有些人睡觉了。"
+            "vi": "Không thấy. Buổi trưa sau khi tàu chạy, có người đọc sách, có người đi ngủ."
           },
           {
             "speaker": "白家月",
             "zh": "你呢？",
             "pinyin": "nǐ ne ？",
-            "vi": "Dịch nghĩa: 你呢？"
+            "vi": "Còn bạn thì sao?"
           },
           {
             "speaker": "陈天中",
             "zh": "我看了一个电影。",
             "pinyin": "wǒ kàn le yí gè diàn yǐng 。",
-            "vi": "Dịch nghĩa: 我看了一个电影。"
+            "vi": "Tôi đã xem một bộ phim."
           }
         ],
         "notes": [],
@@ -2498,31 +2498,31 @@
             "speaker": "王一飞",
             "zh": "你们会说汉语了，也会写汉字了吗？",
             "pinyin": "nǐ men huì shuō hàn yǔ le ， yě huì xiě hàn zì le ma ？",
-            "vi": "Dịch nghĩa: 你们会说汉语了，也会写汉字了吗？"
+            "vi": "Các bạn đã biết nói tiếng Trung rồi, thế đã biết viết chữ Hán chưa?"
           },
           {
             "speaker": "白家月",
             "zh": "我们都会写了。",
             "pinyin": "wǒ men dōu huì xiě le 。",
-            "vi": "Dịch nghĩa: 我们都会写了。"
+            "vi": "Chúng em đều biết viết rồi ạ."
           },
           {
             "speaker": "陈天中",
             "zh": "老师，我听不见。",
             "pinyin": "lǎo shī ， wǒ tīng bú jiàn 。",
-            "vi": "Dịch nghĩa: 老师，我听不见。"
+            "vi": "Thưa thầy/cô, em nghe không rõ ạ."
           },
           {
             "speaker": "王一飞",
             "zh": "请大家不要说话！请听说老师的问题：你们都会写哪些汉字了？",
             "pinyin": "qǐng dà jiā bú yào shuō huà ！ qǐng tīng shuō lǎo shī de wèn tí ： nǐ men dōu huì xiě nǎ xiē hàn zì le ？",
-            "vi": "Dịch nghĩa: 请大家不要说话！请听说老师的问题：你们都会写哪些汉字了？"
+            "vi": "Trật tự nào mọi người! Nghe thầy/cô hỏi nhé: Các em đã biết viết những chữ Hán nào rồi?"
           },
           {
             "speaker": "陈天中",
             "zh": "我会写这些字了，您看！",
             "pinyin": "wǒ huì xiě zhè xiē zì le ， nín kàn ！",
-            "vi": "Dịch nghĩa: 我会写这些字了，您看！"
+            "vi": "Em biết viết mớ chữ này rồi nè, thầy/cô xem này!"
           }
         ],
         "notes": [],
@@ -2561,37 +2561,37 @@
             "speaker": "刘明",
             "zh": "明年女儿上中学。",
             "pinyin": "míng nián nǚ ér shàng zhōng xué 。",
-            "vi": "Dịch nghĩa: 明年女儿上中学。"
+            "vi": "Sang năm con gái sẽ lên học cấp 2 (trung học)."
           },
           {
             "speaker": "王一雪",
             "zh": "对。儿子也上小学了。",
             "pinyin": "duì 。 ér zi yě shàng xiǎo xué le 。",
-            "vi": "Dịch nghĩa: 对。儿子也上小学了。"
+            "vi": "Đúng rồi. Con trai cũng vào tiểu học rồi."
           },
           {
             "speaker": "刘明",
             "zh": "我们家有了一个中学生。",
             "pinyin": "wǒ men jiā yǒu le yí gè zhōng xué shēng 。",
-            "vi": "Dịch nghĩa: 我们家有了一个中学生。"
+            "vi": "Nhà mình sắp có một học sinh trung học rồi đấy."
           },
           {
             "speaker": "王一雪",
             "zh": "还有了一个小学生。",
             "pinyin": "hái yǒu le yí gè xiǎo xué shēng 。",
-            "vi": "Dịch nghĩa: 还有了一个小学生。"
+            "vi": "Lại có thêm một học sinh tiểu học nữa chứ."
           },
           {
             "speaker": "刘明",
             "zh": "上学后，他们都忙了。",
             "pinyin": "shàng xué hòu ， tā men dōu máng le 。",
-            "vi": "Dịch nghĩa: 上学后，他们都忙了。"
+            "vi": "Sau khi đi học, lũ trẻ sẽ bận rộn lắm đây."
           },
           {
             "speaker": "王一雪",
             "zh": "是的。太晚了，睡觉吧。",
             "pinyin": "shì de 。 tài wǎn le ， shuì jiào ba 。",
-            "vi": "Dịch nghĩa: 是的。太晚了，睡觉吧。"
+            "vi": "Đúng thế. Trễ quá rồi, đi ngủ thôi em."
           }
         ],
         "notes": [],
@@ -2636,25 +2636,25 @@
             "speaker": "李文",
             "zh": "你们爱吃哪个菜？",
             "pinyin": "nǐ men ài chī nǎ gè cài ？",
-            "vi": "Dịch nghĩa: 你们爱吃哪个菜？"
+            "vi": "Mọi người thích ăn món nào?"
           },
           {
             "speaker": "白家月",
             "zh": "我喜欢这个，也喜欢那个。",
             "pinyin": "wǒ xǐ huan zhè ge ， yě xǐ huan nà ge 。",
-            "vi": "Dịch nghĩa: 我喜欢这个，也喜欢那个。"
+            "vi": "Tôi thích món này, cũng thích cả món kia nữa."
           },
           {
             "speaker": "陈天中",
             "zh": "这些菜都好好吃，还很好看。",
             "pinyin": "zhè xiē cài dōu hǎo hǎo chī ， hái hěn hǎo kàn 。",
-            "vi": "Dịch nghĩa: 这些菜都好好吃，还很好看。"
+            "vi": "Mấy món này ngon tuyệt cú mèo, nhìn lại còn đẹp mắt nữa."
           },
           {
             "speaker": "李文",
             "zh": "我爱吃中国菜，也喜欢做。大家多吃点儿。",
             "pinyin": "wǒ ài chī zhōng guó cài ， yě xǐ huan zuò 。 dà jiā duō chī diǎn ér 。",
-            "vi": "Dịch nghĩa: 我爱吃中国菜，也喜欢做。大家多吃点儿。"
+            "vi": "Tôi rất thích ăn món Trung Quốc, cũng thích tự tay nấu nữa. Mọi người ăn nhiều vào nhé!"
           }
         ],
         "notes": [],
@@ -2693,25 +2693,25 @@
             "speaker": "李文",
             "zh": "你们都想去哪儿？",
             "pinyin": "nǐ men dōu xiǎng qù nǎ ér ？",
-            "vi": "Dịch nghĩa: 你们都想去哪儿？"
+            "vi": "Các bạn đều muốn đi đâu chơi?"
           },
           {
             "speaker": "安妮",
             "zh": "去年我和男朋友去了西安，今年我想去北京。",
             "pinyin": "qù nián wǒ hé nán péng yǒu qù le xī ān ， jīn nián wǒ xiǎng qù běi jīng 。",
-            "vi": "Dịch nghĩa: 去年我和男朋友去了西安，今年我想去北京。"
+            "vi": "Năm ngoái tôi và bạn trai đã đi Tây An rồi, năm nay tôi muốn đi Bắc Kinh."
           },
           {
             "speaker": "白家月",
             "zh": "前几年我去了西安，非常好玩儿。今年我也想去北京。",
             "pinyin": "qián jǐ nián wǒ qù le xī ān ， fēi cháng hǎo wán ér 。 jīn nián wǒ yě xiǎng qù běi jīng 。",
-            "vi": "Dịch nghĩa: 前几年我去了西安，非常好玩儿。今年我也想去北京。"
+            "vi": "Mấy năm trước tôi có đi Tây An, vui cực kỳ luôn. Năm nay tôi cũng muốn đi Bắc Kinh."
           },
           {
             "speaker": "李文",
             "zh": "我和王老师都是北京人，北京非常漂亮。",
             "pinyin": "wǒ hé wáng lǎo shī dōu shì běi jīng rén ， běi jīng fēi cháng piào liang 。",
-            "vi": "Dịch nghĩa: 我和王老师都是北京人，北京非常漂亮。"
+            "vi": "Tôi và thầy Vương đều là người Bắc Kinh, Bắc Kinh đẹp lắm đấy."
           }
         ],
         "notes": [],
@@ -2750,37 +2750,37 @@
             "speaker": "王一飞",
             "zh": "你们的飞机到北京要几个小时？",
             "pinyin": "nǐ men de fēi jī dào běi jīng yào jǐ gè xiǎo shí ？",
-            "vi": "Dịch nghĩa: 你们的飞机到北京要几个小时？"
+            "vi": "Chuyến bay của các bạn đến Bắc Kinh mất mấy tiếng?"
           },
           {
             "speaker": "白家月",
             "zh": "九个小时。",
             "pinyin": "jiǔ gè xiǎo shí 。",
-            "vi": "Dịch nghĩa: 九个小时。"
+            "vi": "Mất 9 tiếng đồng hồ."
           },
           {
             "speaker": "王一飞",
             "zh": "我家人都在北京，星期天我姐姐也有时间，他可以去机场接你们，你们也可以住我家。",
             "pinyin": "wǒ jiā rén dōu zài běi jīng ， xīng qī tiān wǒ jiě jiě yě yǒu shí jiān ， tā kě yǐ qù jī chǎng jiē nǐ men ， nǐ men yě kě yǐ zhù wǒ jiā 。",
-            "vi": "Dịch nghĩa: 我家人都在北京，星期天我姐姐也有时间，他可以去机场接你们，你们也可以住我家。"
+            "vi": "Người nhà tôi đều ở Bắc Kinh, Chủ nhật chị gái tôi rảnh, chị ấy có thể ra sân bay đón các bạn, các bạn cũng có thể ở lại nhà tôi."
           },
           {
             "speaker": "安妮",
             "zh": "我们星期日早上八点到大兴机场，早不早？",
             "pinyin": "wǒ men xīng qī rì zǎo shàng bā diǎn dào dà xīng jī chǎng ， zǎo bu zǎo ？",
-            "vi": "Dịch nghĩa: 我们星期日早上八点到大兴机场，早不早？"
+            "vi": "Chúng tôi đến sân bay Đại Hưng lúc 8 giờ sáng Chủ nhật, có sớm quá không?"
           },
           {
             "speaker": "王一飞",
             "zh": "不早。",
             "pinyin": "bù zǎo 。",
-            "vi": "Dịch nghĩa: 不早。"
+            "vi": "Không sớm đâu."
           },
           {
             "speaker": "白家月",
             "zh": "谢谢老师！那我们和您姐姐在大兴机场见！",
             "pinyin": "xiè xiè lǎo shī ！ nà wǒ men hé nín jiě jie zài dà xīng jī chǎng jiàn ！",
-            "vi": "Dịch nghĩa: 谢谢老师！那我们和您姐姐在大兴机场见！"
+            "vi": "Cảm ơn thầy/cô! Vậy hẹn gặp chị gái thầy/cô ở sân bay Đại Hưng nhé!"
           }
         ],
         "notes": [],
