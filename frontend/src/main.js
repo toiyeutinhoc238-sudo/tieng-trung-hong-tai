@@ -8940,10 +8940,29 @@ function renderWeeklyStudyChart() {
     recordedSum += mins;
   }
 
-  // Reconcile unallocated CSDL minutes: assign ALL unallocated minutes exclusively to TODAY (todayStr)
-  if (totalMins > recordedSum && totalMins > 0) {
-    const unallocated = totalMins - recordedSum;
-    dayMinsMap[todayStr] = (dayMinsMap[todayStr] || 0) + unallocated;
+  // If past days in current week lack recorded history but user has active streak/studyTime,
+  // reconstruct past days in the week up to yesterday so historic bars are preserved
+  const todayIdx = distanceToMonday; // 0..6
+  if (totalMins > recordedSum && todayIdx > 0) {
+    const unallocated = totalMins - (dayMinsMap[todayStr] || 0);
+    const pastDaysInWeek = Math.min(todayIdx, Math.max(1, streakDays - 1));
+
+    if (pastDaysInWeek > 0 && unallocated > 0) {
+      const perPastDay = Math.floor(unallocated / pastDaysInWeek);
+      let rem = unallocated % pastDaysInWeek;
+
+      for (let k = 1; k <= pastDaysInWeek; k++) {
+        const pastIdx = todayIdx - k;
+        const d = new Date(mondayDate);
+        d.setDate(mondayDate.getDate() + pastIdx);
+        const pastDateStr = d.toLocaleDateString('sv');
+
+        if (!dayMinsMap[pastDateStr] || dayMinsMap[pastDateStr] === 0) {
+          const extra = (k === 1) ? rem : 0;
+          dayMinsMap[pastDateStr] = perPastDay + extra;
+        }
+      }
+    }
   }
 
   let maxMins = 60; // baseline scale max

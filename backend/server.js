@@ -42,7 +42,8 @@ const userSchema = new mongoose.Schema({
   stats: {
     streak: { type: Number, default: 0 },
     studyTime: { type: Number, default: 0 },
-    lastActiveDate: { type: String, default: "" }
+    lastActiveDate: { type: String, default: "" },
+    dailyHistory: { type: Object, default: {} }
   },
   gameHistory: { type: Array, default: [] },
   quizHistory: { type: Array, default: [] },
@@ -474,7 +475,9 @@ app.post('/api/auth/logout', async (req, res) => {
 // GET endpoint to fetch user stats
 function ensureDailyHistoryIntegrity(stats) {
   if (!stats) return;
-  if (!stats.dailyHistory) stats.dailyHistory = {};
+  if (!stats.dailyHistory || typeof stats.dailyHistory !== 'object') {
+    stats.dailyHistory = {};
+  }
 
   const totalSecs = stats.studyTime || 0;
   if (totalSecs <= 0) return;
@@ -486,9 +489,27 @@ function ensureDailyHistoryIntegrity(stats) {
 
   if (totalSecs > recordedSecs) {
     const unallocated = totalSecs - recordedSecs;
-    const todayStr = stats.lastActiveDate || new Date().toISOString().split('T')[0];
-    // Strictly assign unallocated time to today only (never touch past dates)
-    stats.dailyHistory[todayStr] = (stats.dailyHistory[todayStr] || 0) + unallocated;
+    const streak = Math.max(1, stats.streak || 1);
+    const refDateStr = stats.lastActiveDate || new Date().toISOString().split('T')[0];
+    const refDate = new Date(refDateStr);
+
+    if (recordedSecs === 0) {
+      // First time migration: spread totalSecs backward across streak days up to refDate
+      const daysToSpread = Math.min(streak, 7);
+      const perDaySecs = Math.floor(unallocated / daysToSpread);
+      let remSecs = unallocated % daysToSpread;
+
+      for (let k = daysToSpread - 1; k >= 0; k--) {
+        const d = new Date(refDate);
+        d.setDate(refDate.getDate() - k);
+        const dateKey = d.toISOString().split('T')[0];
+        const extra = (k === 0) ? remSecs : 0;
+        stats.dailyHistory[dateKey] = (stats.dailyHistory[dateKey] || 0) + perDaySecs + extra;
+      }
+    } else {
+      // Add unallocated seconds directly to refDateStr when the study session occurred
+      stats.dailyHistory[refDateStr] = (stats.dailyHistory[refDateStr] || 0) + unallocated;
+    }
   }
 }
 
