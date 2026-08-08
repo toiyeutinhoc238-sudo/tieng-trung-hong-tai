@@ -71,12 +71,27 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Canonical Domain 301 Permanent Redirect for Googlebot & SEO
+// Canonical Domain & Path 301 Permanent Redirect for Googlebot & SEO
 app.use((req, res, next) => {
   const host = req.headers.host || '';
-  if (host.includes('onrender.com')) {
+  const proto = req.headers['x-forwarded-proto'];
+
+  // 1. Redirect onrender.com or www.tiengtrunghongtai.online to tiengtrunghongtai.online
+  if (host.includes('onrender.com') || host.startsWith('www.')) {
     return res.redirect(301, `https://tiengtrunghongtai.online${req.originalUrl}`);
   }
+
+  // 2. Force HTTPS in production (Render reverse proxy)
+  if (proto && proto === 'http') {
+    return res.redirect(301, `https://${host}${req.originalUrl}`);
+  }
+
+  // 3. Redirect /index.html to / to eliminate duplicate home page indexing
+  if (req.path === '/index.html') {
+    const queryString = req.url.slice(req.path.length);
+    return res.redirect(301, `/${queryString}`);
+  }
+
   next();
 });
 
