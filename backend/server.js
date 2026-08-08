@@ -486,21 +486,9 @@ function ensureDailyHistoryIntegrity(stats) {
 
   if (totalSecs > recordedSecs) {
     const unallocated = totalSecs - recordedSecs;
-    const streak = Math.max(1, stats.streak || 1);
     const todayStr = stats.lastActiveDate || new Date().toISOString().split('T')[0];
-    const todayDate = new Date(todayStr);
-
-    const daysToSpread = Math.min(streak, 7);
-    const perDaySecs = Math.floor(unallocated / daysToSpread);
-    let remSecs = unallocated % daysToSpread;
-
-    for (let k = daysToSpread - 1; k >= 0; k--) {
-      const d = new Date(todayDate);
-      d.setDate(todayDate.getDate() - k);
-      const dateKey = d.toISOString().split('T')[0];
-      const extra = (k === 0) ? remSecs : 0;
-      stats.dailyHistory[dateKey] = (stats.dailyHistory[dateKey] || 0) + perDaySecs + extra;
-    }
+    // Strictly assign unallocated time to today only (never touch past dates)
+    stats.dailyHistory[todayStr] = (stats.dailyHistory[todayStr] || 0) + unallocated;
   }
 }
 

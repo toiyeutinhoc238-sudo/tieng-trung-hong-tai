@@ -8940,29 +8940,10 @@ function renderWeeklyStudyChart() {
     recordedSum += mins;
   }
 
-  // Reconcile unallocated CSDL minutes across active streak days if totalMins > recordedSum
+  // Reconcile unallocated CSDL minutes: assign ALL unallocated minutes exclusively to TODAY (todayStr)
   if (totalMins > recordedSum && totalMins > 0) {
-    const todayIdx = distanceToMonday; // 0..6
     const unallocated = totalMins - recordedSum;
-    const daysToSpread = Math.min(streakDays, todayIdx + 1);
-
-    const activeIndices = [];
-    for (let k = 0; k < daysToSpread; k++) {
-      activeIndices.unshift(todayIdx - k);
-    }
-
-    if (activeIndices.length > 0) {
-      const perDay = Math.floor(unallocated / activeIndices.length);
-      let rem = unallocated % activeIndices.length;
-
-      activeIndices.forEach((idx, order) => {
-        const d = new Date(mondayDate);
-        d.setDate(mondayDate.getDate() + idx);
-        const dateStr = d.toLocaleDateString('sv');
-        const extra = (order === activeIndices.length - 1) ? rem : 0;
-        dayMinsMap[dateStr] = (dayMinsMap[dateStr] || 0) + perDay + extra;
-      });
-    }
+    dayMinsMap[todayStr] = (dayMinsMap[todayStr] || 0) + unallocated;
   }
 
   let maxMins = 60; // baseline scale max
