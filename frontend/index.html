@@ -653,7 +653,7 @@
               Trong quá trình hoàn thiện trang web, tất cả những trải nghiệm học tập trên hệ thống sẽ được phục vụ <strong>hoàn toàn miễn phí 100%</strong>. Nếu mọi người cảm thấy ứng dụng hữu ích và muốn tiếp thêm động lực cho team duy trì & phát triển thêm nhiều tính năng mới, mọi người có thể ủng hộ dự án qua đường link ủng hộ bên dưới. Cảm ơn sự đồng hành của bạn! ❤️
             </p>
             <div style="display: flex; align-items: center; gap: 12px; margin-top: 4px;">
-              <button onclick="var m = document.getElementById('donate-project-modal'); if (m) m.style.display = 'flex';" style="background: linear-gradient(135deg, #ec4899, #be185d); color: #ffffff; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(236, 72, 153, 0.4); transition: transform 0.2s;">
+              <button onclick="openDonateModal()" style="background: linear-gradient(135deg, #ec4899, #be185d); color: #ffffff; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(236, 72, 153, 0.4); transition: transform 0.2s;">
                 <i class="fa-solid fa-heart"></i> Ủng Hộ Dự Án (Donate)
               </button>
             </div>
@@ -3020,6 +3020,8 @@
           <small style="background: rgba(0,0,0,0.25); color: #fff; padding: 1px 6px; border-radius: 99px;">Sắp ra mắt</small>
         </button>
       </div>
+    </div>
+  </div>
 
   <!-- Modal Ủng Hộ Dự Án (Donate Modal) -->
   <div class="modal-overlay" id="donate-project-modal" onclick="if(event.target === this) this.style.display='none';" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); z-index: 99999; align-items: center; justify-content: center; padding: 16px;">
