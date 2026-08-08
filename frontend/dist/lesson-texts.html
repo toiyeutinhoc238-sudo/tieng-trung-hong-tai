@@ -778,7 +778,8 @@
         return;
       }
 
-      const audioUrl = diagObj.audio || `/audio/hsk1_texts/${currentLessonId}-${currentDialogueId}.mp3`;
+      const audioIdx = (currentDialogueId * 2) - 1;
+      const audioUrl = diagObj.audio || `/audio/hsk1_texts/${currentLessonId}-${audioIdx}.mp3`;
       const lines = diagObj.lines || [];
 
       // MODE 1: QUIZ (1. Nghe chọn đáp án)

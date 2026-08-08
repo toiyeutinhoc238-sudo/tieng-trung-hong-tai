@@ -84,7 +84,7 @@ async function buildCleanTexts() {
         currentDiag = {
           id: targetIdx,
           title: `Bài Khóa ${targetIdx}`,
-          audio: `/audio/hsk1_texts/${currentLessonId}-${targetIdx}.mp3`,
+          audio: `/audio/hsk1_texts/${currentLessonId}-${(targetIdx * 2) - 1}.mp3`,
           lines: [],
           notes: [],
           quiz: null
@@ -102,7 +102,7 @@ async function buildCleanTexts() {
       currentDiag = {
         id: currentDialogueIndex,
         title: `Bài Khóa ${currentDialogueIndex}`,
-        audio: `/audio/hsk1_texts/${currentLessonId}-${currentDialogueIndex}.mp3`,
+        audio: `/audio/hsk1_texts/${currentLessonId}-${(currentDialogueIndex * 2) - 1}.mp3`,
         lines: [],
         notes: [],
         quiz: null
