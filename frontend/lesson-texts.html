@@ -265,29 +265,25 @@
       border-color: #cbd5e1;
     }
 
-    .select-group {
-      display: flex;
+    .fixed-badge-box {
+      display: inline-flex;
       align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .select-box {
+      gap: 8px;
       background: rgba(15, 23, 42, 0.8);
-      border: 1.5px solid rgba(255, 255, 255, 0.2);
-      color: #ffffff;
-      padding: 10px 16px;
+      border: 1.5px solid rgba(255, 255, 255, 0.18);
+      padding: 8px 16px;
       border-radius: 12px;
       font-weight: 700;
       font-size: 0.95rem;
-      outline: none;
-      cursor: pointer;
+      color: #94a3b8;
+      user-select: none;
+      cursor: default;
     }
 
-    html.light-mode .select-box {
-      background: #ffffff;
+    html.light-mode .fixed-badge-box {
+      background: #f8fafc;
       border-color: #cbd5e1;
-      color: #0f172a;
+      color: #334155;
     }
 
     /* Dialogue Selection Tabs */
@@ -394,7 +390,7 @@
     }
 
     html.light-mode .workspace-box {
-      background: rgba(255, 255, 255, 0.92);
+      background: rgba(255, 255, 255, 0.95);
       border-color: rgba(255, 255, 255, 0.95);
       color: #0f172a;
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
@@ -475,6 +471,87 @@
       user-select: none;
       transition: all 0.2s ease;
     }
+
+    /* COMPLETE LIGHT MODE THEME OVERRIDES */
+    html.light-mode body {
+      background-color: #f1f5f9 !important;
+      color: #0f172a !important;
+    }
+
+    html.light-mode .workspace-box {
+      background: rgba(255, 255, 255, 0.95) !important;
+      border-color: rgba(0, 0, 0, 0.12) !important;
+      color: #0f172a !important;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08) !important;
+    }
+
+    html.light-mode .controls-panel {
+      background: rgba(255, 255, 255, 0.95) !important;
+      border-color: rgba(0, 0, 0, 0.12) !important;
+      color: #0f172a !important;
+    }
+
+    html.light-mode [style*="background:rgba(30,41,59"],
+    html.light-mode [style*="background: rgba(30, 41, 59"],
+    html.light-mode [style*="background:rgba(15,23,42"],
+    html.light-mode [style*="background: rgba(15, 23, 42"] {
+      background: #ffffff !important;
+      border-color: #e2e8f0 !important;
+      color: #0f172a !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06) !important;
+    }
+
+    html.light-mode [style*="background:linear-gradient(135deg, rgba(56,189,248,0.15), rgba(30,41,59,0.8))"],
+    html.light-mode [style*="background: linear-gradient(135deg, rgba(56, 189, 248, 0.15)"] {
+      background: linear-gradient(135deg, #e0f2fe, #f1f5f9) !important;
+      border-color: #7dd3fc !important;
+    }
+
+    html.light-mode [style*="color:#ffffff"],
+    html.light-mode [style*="color: #ffffff"],
+    html.light-mode [style*="color:#f8fafc"],
+    html.light-mode [style*="color: #f8fafc"] {
+      color: #0f172a !important;
+    }
+
+    html.light-mode [style*="color:#cbd5e1"],
+    html.light-mode [style*="color: #cbd5e1"],
+    html.light-mode [style*="color:#94a3b8"],
+    html.light-mode [style*="color: #94a3b8"] {
+      color: #475569 !important;
+    }
+
+    html.light-mode .bk-quiz-opt-btn {
+      background: #f8fafc !important;
+      border-color: #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+
+    html.light-mode .bk-quiz-opt-btn:hover {
+      background: #e2e8f0 !important;
+      border-color: #0284c7 !important;
+    }
+
+    html.light-mode input[type="text"],
+    html.light-mode textarea {
+      background: #ffffff !important;
+      border-color: #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+
+    html.light-mode .chat-bubble.left {
+      background: #eff6ff !important;
+      border-color: #bfdbfe !important;
+    }
+
+    html.light-mode .chat-bubble.right {
+      background: #ecfdf5 !important;
+      border-color: #a7f3d0 !important;
+    }
+
+    html.light-mode .chat-zh { color: #0f172a !important; }
+    html.light-mode .chat-py { color: #d97706 !important; }
+    html.light-mode .chat-vi { color: #475569 !important; }
   </style>
 </head>
 
@@ -519,33 +596,24 @@
       <div style="font-size: 0.82rem; color: #94a3b8;"><i class="fa-solid fa-circle-check" style="color:#10b981;"></i> Đã tối ưu âm thanh phát âm AI</div>
     </div>
 
-    <!-- Controls Bar: Level & Lesson Selectors -->
+    <!-- Controls Bar: Locked/Read-Only Level & Lesson Badges (Khóa chọn theo lộ trình) -->
     <div class="controls-panel">
-      <div class="select-group">
-        <label style="font-weight: 700; color: #38bdf8; display: flex; align-items: center; gap: 6px;">
-          <i class="fa-solid fa-layer-group"></i> Cấp độ:
-        </label>
-        <select id="level-select" class="select-box" onchange="changeLevel(this.value)">
-          <option value="1" selected>HSK 1</option>
-          <option value="2">HSK 2</option>
-          <option value="3">HSK 3</option>
-        </select>
+      <div class="select-group" style="display: flex; align-items: center; gap: 14px;">
+        <div class="fixed-badge-box">
+          <i class="fa-solid fa-layer-group" style="color:#38bdf8;"></i>
+          <span>Trình độ:</span>
+          <strong id="fixed-level-badge" style="color:#38bdf8;">HSK 1</strong>
+        </div>
 
-        <label style="font-weight: 700; color: #38bdf8; display: flex; align-items: center; gap: 6px; margin-left: 12px;">
-          <i class="fa-solid fa-book-bookmark"></i> Bài học:
-        </label>
-        <select id="lesson-select" class="select-box" onchange="changeLesson(this.value)">
-          <!-- Generated 1 to 15 -->
-        </select>
+        <div class="fixed-badge-box">
+          <i class="fa-solid fa-book-bookmark" style="color:#fbbf24;"></i>
+          <span>Bài học:</span>
+          <strong id="fixed-lesson-badge" style="color:#fbbf24;">Bài 1</strong>
+        </div>
       </div>
 
-      <div style="display: flex; gap: 8px;">
-        <button onclick="navLesson(-1)" class="btn-close" style="padding: 8px 14px; font-size: 0.85rem;">
-          <i class="fa-solid fa-chevron-left"></i> Bài trước
-        </button>
-        <button onclick="navLesson(1)" class="btn-close" style="padding: 8px 14px; font-size: 0.85rem; background: rgba(56, 189, 248, 0.2); border-color: rgba(56, 189, 248, 0.4); color: #38bdf8;">
-          Bài tiếp <i class="fa-solid fa-chevron-right"></i>
-        </button>
+      <div style="font-weight:800; color:#38bdf8; font-size:1.05rem; display:flex; align-items:center; gap:8px;" id="lesson-title-badge">
+        <i class="fa-solid fa-bookmark"></i> Bài Khóa HSK 1 - Bài 1
       </div>
     </div>
 
@@ -599,16 +667,6 @@
     let completedChatLines = []; // Chat history for Dictation Mode
 
     document.addEventListener('DOMContentLoaded', async function () {
-      // Setup Lesson Selector Options (1 to 15)
-      const lesSelect = document.getElementById('lesson-select');
-      if (lesSelect) {
-        let opts = '';
-        for (let i = 1; i <= 15; i++) {
-          opts += `<option value="${i}">Bài ${i}</option>`;
-        }
-        lesSelect.innerHTML = opts;
-      }
-
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.has('lesson')) {
         currentLessonId = parseInt(urlParams.get('lesson'), 10) || 1;
@@ -617,10 +675,7 @@
         currentLevel = parseInt(urlParams.get('level'), 10) || 1;
       }
 
-      if (lesSelect) lesSelect.value = currentLessonId;
-      const lvlSelect = document.getElementById('level-select');
-      if (lvlSelect) lvlSelect.value = currentLevel;
-
+      updateFixedBadges();
       await loadData();
       renderWorkspace();
     });
@@ -636,30 +691,14 @@
       }
     }
 
-    function changeLevel(lvl) {
-      currentLevel = parseInt(lvl, 10) || 1;
-      currentLessonId = 1;
-      currentDialogueId = 1;
-      currentLineIndex = 0;
-      completedChatLines = [];
-      const lesSelect = document.getElementById('lesson-select');
-      if (lesSelect) lesSelect.value = 1;
-      renderWorkspace();
-    }
+    function updateFixedBadges() {
+      const lvlBadge = document.getElementById('fixed-level-badge');
+      const lesBadge = document.getElementById('fixed-lesson-badge');
+      const titleBadge = document.getElementById('lesson-title-badge');
 
-    function changeLesson(les) {
-      currentLessonId = parseInt(les, 10) || 1;
-      currentDialogueId = 1;
-      currentLineIndex = 0;
-      completedChatLines = [];
-      renderWorkspace();
-    }
-
-    function navLesson(dir) {
-      let nextLes = currentLessonId + dir;
-      if (nextLes < 1) nextLes = 15;
-      if (nextLes > 15) nextLes = 1;
-      changeLesson(nextLes);
+      if (lvlBadge) lvlBadge.textContent = `HSK ${currentLevel}`;
+      if (lesBadge) lesBadge.textContent = `Bài ${currentLessonId}`;
+      if (titleBadge) titleBadge.innerHTML = `<i class="fa-solid fa-bookmark"></i> Bài Khóa HSK ${currentLevel} - Bài ${currentLessonId}`;
     }
 
     function selectDialogue(diagId) {
@@ -876,7 +915,6 @@
         const cleanSpeech = curLine.zh.replace(/'/g, "\\'").replace(/"/g, '&quot;');
         const hintChars = curLine.zh.match(/[\u4e00-\u9fa5]/g) || curLine.zh.split('');
 
-        // Render Chat History on Left Column
         let chatHistoryHtml = completedChatLines.map((line, idx) => {
           const side = idx % 2 === 0 ? 'left' : 'right';
           return `
