@@ -22,7 +22,31 @@
           }
         ],
         "notes": [],
-        "quiz": null
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "options": [
+                "王一飞 và 小语",
+                "Chỉ có 1 người tự nói",
+                "Một nhóm người lạ"
+              ],
+              "answer": "王一飞 và 小语"
+            },
+            {
+              "id": 2,
+              "question": "（2）Mục đích chính của cuộc đối thoại là gì?",
+              "options": [
+                "Chào hỏi & Giao tiếp cơ bản",
+                "Hỏi đường đi bệnh viện",
+                "Mua đồ ở siêu thị"
+              ],
+              "answer": "Chào hỏi & Giao tiếp cơ bản"
+            }
+          ]
+        }
       },
       {
         "id": 2,
@@ -57,7 +81,31 @@
         "notes": [
           "您 là đại từ nhân xưng mang sắc thái trang trọng, được dùng để xưng hô với người lớn tuổi hoặc những người mà bạn kính trọng."
         ],
-        "quiz": null
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "options": [
+                "王一飞 và 学生们",
+                "Chỉ có 1 người tự nói",
+                "Một nhóm người lạ"
+              ],
+              "answer": "王一飞 và 学生们"
+            },
+            {
+              "id": 2,
+              "question": "（2）Câu thoại đầu tiên trong bài khóa là gì?",
+              "options": [
+                "\"大家好！\"",
+                "\"谢谢！\"",
+                "\"再见！\""
+              ],
+              "answer": "\"大家好！\""
+            }
+          ]
+        }
       },
       {
         "id": 3,
@@ -90,7 +138,31 @@
           }
         ],
         "notes": [],
-        "quiz": null
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "options": [
+                "学生们 và 小语",
+                "Chỉ có 1 người tự nói",
+                "Một nhóm người lạ"
+              ],
+              "answer": "学生们 và 小语"
+            },
+            {
+              "id": 2,
+              "question": "（2）Mục đích chính của cuộc đối thoại là gì?",
+              "options": [
+                "Chào hỏi & Giao tiếp cơ bản",
+                "Hỏi đường đi bệnh viện",
+                "Mua đồ ở siêu thị"
+              ],
+              "answer": "Chào hỏi & Giao tiếp cơ bản"
+            }
+          ]
+        }
       }
     ]
   },
@@ -119,7 +191,31 @@
         "notes": [
           "请问 là 1 kính ngưỡng được sử dụng khi đề nghị ai đó trả lời câu hỏi."
         ],
-        "quiz": null
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "options": [
+                "王一飞 và 陈天中",
+                "Chỉ có 1 người tự nói",
+                "Một nhóm người lạ"
+              ],
+              "answer": "王一飞 và 陈天中"
+            },
+            {
+              "id": 2,
+              "question": "（2）Nhân vật trong bài khóa đang trao đổi về thông tin gì?",
+              "options": [
+                "Hỏi tên & Xưng hô",
+                "Hỏi giá tiền mua sắm",
+                "Hỏi thời tiết hôm nay"
+              ],
+              "answer": "Hỏi tên & Xưng hô"
+            }
+          ]
+        }
       },
       {
         "id": 2,
@@ -154,7 +250,31 @@
         "notes": [
           "没关系 trong văn nói mọi người cũng dùng 没事 hoặc 没事没事."
         ],
-        "quiz": null
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "options": [
+                "陈天中 và 白家月",
+                "Chỉ có 1 người tự nói",
+                "Một nhóm người lạ"
+              ],
+              "answer": "陈天中 và 白家月"
+            },
+            {
+              "id": 2,
+              "question": "（2）Mục đích chính của cuộc đối thoại là gì?",
+              "options": [
+                "Chào hỏi & Giao tiếp cơ bản",
+                "Hỏi đường đi bệnh viện",
+                "Mua đồ ở siêu thị"
+              ],
+              "answer": "Chào hỏi & Giao tiếp cơ bản"
+            }
+          ]
+        }
       },
       {
         "id": 3,
@@ -187,7 +307,31 @@
           }
         ],
         "notes": [],
-        "quiz": null
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "options": [
+                "李文 và 白家月",
+                "Chỉ có 1 người tự nói",
+                "Một nhóm người lạ"
+              ],
+              "answer": "李文 và 白家月"
+            },
+            {
+              "id": 2,
+              "question": "（2）Mục đích chính của cuộc đối thoại là gì?",
+              "options": [
+                "Chào hỏi & Giao tiếp cơ bản",
+                "Hỏi đường đi bệnh viện",
+                "Mua đồ ở siêu thị"
+              ],
+              "answer": "Chào hỏi & Giao tiếp cơ bản"
+            }
+          ]
+        }
       }
     ]
   },
@@ -214,7 +358,31 @@
           }
         ],
         "notes": [],
-        "quiz": null
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "options": [
+                "李文 và 白家月",
+                "Chỉ có 1 người tự nói",
+                "Một nhóm người lạ"
+              ],
+              "answer": "李文 và 白家月"
+            },
+            {
+              "id": 2,
+              "question": "（2）Nội dung bài khóa xoay quanh chủ đề nào?",
+              "options": [
+                "Hỏi quốc tịch & Quê quán",
+                "Hỏi giờ giấc đi làm",
+                "Hỏi sở thích ăn uống"
+              ],
+              "answer": "Hỏi quốc tịch & Quê quán"
+            }
+          ]
+        }
       },
       {
         "id": 2,
@@ -247,7 +415,31 @@
           }
         ],
         "notes": [],
-        "quiz": null
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "options": [
+                "安妮 và 陈天中",
+                "Chỉ có 1 người tự nói",
+                "Một nhóm người lạ"
+              ],
+              "answer": "安妮 và 陈天中"
+            },
+            {
+              "id": 2,
+              "question": "（2）Câu thoại đầu tiên trong bài khóa là gì?",
+              "options": [
+                "\"这是谁？\"",
+                "\"谢谢！\"",
+                "\"再见！\""
+              ],
+              "answer": "\"这是谁？\""
+            }
+          ]
+        }
       },
       {
         "id": 3,
@@ -292,7 +484,31 @@
           }
         ],
         "notes": [],
-        "quiz": null
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "options": [
+                "王一雪 và 王一飞",
+                "Chỉ có 1 người tự nói",
+                "Một nhóm người lạ"
+              ],
+              "answer": "王一雪 và 王一飞"
+            },
+            {
+              "id": 2,
+              "question": "（2）Câu thoại đầu tiên trong bài khóa là gì?",
+              "options": [
+                "\"喂，一飞！\"",
+                "\"谢谢！\"",
+                "\"再见！\""
+              ],
+              "answer": "\"喂，一飞！\""
+            }
+          ]
+        }
       }
     ]
   },
@@ -331,7 +547,31 @@
           }
         ],
         "notes": [],
-        "quiz": null
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "options": [
+                "刘明 và 王一雪",
+                "Chỉ có 1 người tự nói",
+                "Một nhóm người lạ"
+              ],
+              "answer": "刘明 và 王一雪"
+            },
+            {
+              "id": 2,
+              "question": "（2）Câu thoại đầu tiên trong bài khóa là gì?",
+              "options": [
+                "\"一飞忙吗？\"",
+                "\"谢谢！\"",
+                "\"再见！\""
+              ],
+              "answer": "\"一飞忙吗？\""
+            }
+          ]
+        }
       },
       {
         "id": 2,
@@ -369,19 +609,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）杨同乐有一个（…..）",
+              "question": "（1）杨同乐有一个（……）。",
               "options": [
-                "妹妹姐姐哥哥"
+                "妹妹",
+                "姐姐",
+                "哥哥"
               ],
-              "answer": "妹妹姐姐哥哥"
+              "answer": "妹妹"
             },
             {
               "id": 2,
-              "question": "（2）杨同乐家有（…..）",
+              "question": "（2）杨同乐家有（……）。",
               "options": [
-                "两口人四口人五口人"
+                "两口人",
+                "四口人",
+                "五口人"
               ],
-              "answer": "两口人四口人五口人"
+              "answer": "四口人"
             }
           ]
         }
@@ -429,7 +673,31 @@
           }
         ],
         "notes": [],
-        "quiz": null
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）王一雪有（……）孩子。",
+              "options": [
+                "一个",
+                "两个",
+                "三个"
+              ],
+              "answer": "两个"
+            },
+            {
+              "id": 2,
+              "question": "（2）王一雪女儿今年（……）岁。",
+              "options": [
+                "五岁",
+                "十二岁",
+                "二十岁"
+              ],
+              "answer": "十二岁"
+            }
+          ]
+        }
       }
     ]
   },
@@ -468,7 +736,31 @@
           }
         ],
         "notes": [],
-        "quiz": null
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "options": [
+                "王一雪 và 刘明",
+                "Chỉ có 1 người tự nói",
+                "Một nhóm người lạ"
+              ],
+              "answer": "王一雪 và 刘明"
+            },
+            {
+              "id": 2,
+              "question": "（2）Câu thoại đầu tiên trong bài khóa là gì?",
+              "options": [
+                "\"今天几号？\"",
+                "\"谢谢！\"",
+                "\"再见！\""
+              ],
+              "answer": "\"今天几号？\""
+            }
+          ]
+        }
       },
       {
         "id": 2,
@@ -506,19 +798,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）杨同乐（…..）做饭。",
+              "question": "（1）杨同乐（……）做饭。",
               "options": [
-                "会不不会"
+                "会",
+                "不会",
+                "不想"
               ],
-              "answer": "会不不会"
+              "answer": "会"
             },
             {
               "id": 2,
-              "question": "（2）杨同乐（…..）也做饭。",
+              "question": "（2）杨同乐（……）也做饭。",
               "options": [
-                "星期三星期六星期日"
+                "星期三",
+                "星期六",
+                "星期日"
               ],
-              "answer": "星期三星期六星期日"
+              "answer": "星期日"
             }
           ]
         }
@@ -571,19 +867,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）杨同乐也 （…..）",
+              "question": "（1）杨同乐也（……）。",
               "options": [
-                "上班下班休息"
+                "上班",
+                "下班",
+                "休息"
               ],
-              "answer": "上班下班休息"
+              "answer": "下班"
             },
             {
               "id": 2,
-              "question": "（2）杨同乐有一个新（……）",
+              "question": "（2）杨同乐有一个新（……）。",
               "options": [
-                "名字工作电脑"
+                "名字",
+                "工作",
+                "电脑"
               ],
-              "answer": "名字工作电脑"
+              "answer": "电脑"
             }
           ]
         }
@@ -625,7 +925,31 @@
           }
         ],
         "notes": [],
-        "quiz": null
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "options": [
+                "李文 và 白家月",
+                "Chỉ có 1 người tự nói",
+                "Một nhóm người lạ"
+              ],
+              "answer": "李文 và 白家月"
+            },
+            {
+              "id": 2,
+              "question": "（2）Câu thoại đầu tiên trong bài khóa là gì?",
+              "options": [
+                "\"家月，你的手机号是多少？\"",
+                "\"谢谢！\"",
+                "\"再见！\""
+              ],
+              "answer": "\"家月，你的手机号是多少？\""
+            }
+          ]
+        }
       },
       {
         "id": 2,
@@ -663,19 +987,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）白家月（……）想去超市。",
+              "question": "（1）杨同乐认识（……）。",
               "options": [
-                "现在今天明天"
+                "刘明",
+                "李文",
+                "王一飞"
               ],
-              "answer": "现在今天明天"
+              "answer": "李文"
             },
             {
               "id": 2,
-              "question": "（2）白家月想买（……）",
+              "question": "（2）李文（……）手机号。",
               "options": [
-                "菜牛奶面条儿和牛奶"
+                "知道杨同乐的",
+                "不知道杨同乐 shelter",
+                "没有"
               ],
-              "answer": "菜牛奶面条儿和牛奶"
+              "answer": "知道杨同乐"
             }
           ]
         }
@@ -728,19 +1056,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）王一雪一家人想去西安饭店（……）。",
+              "question": "（1）刘明在打（……）。",
               "options": [
-                "吃早饭吃午饭吃晚饭"
+                "电话",
+                "电脑",
+                "电视"
               ],
-              "answer": "吃早饭吃午饭吃晚饭"
+              "answer": "电话"
             },
             {
               "id": 2,
-              "question": "（2）刘小明不想吃（……）。",
+              "question": "（2）刘明打给（……）。",
               "options": [
-                "米饭包子面条儿"
+                "王一飞",
+                "李文",
+                "杨同乐"
               ],
-              "answer": "米饭包子面条儿"
+              "answer": "王一飞"
             }
           ]
         }
@@ -782,7 +1114,31 @@
           }
         ],
         "notes": [],
-        "quiz": null
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "options": [
+                "白家月 và 安妮",
+                "Chỉ có 1 người tự nói",
+                "Một nhóm người lạ"
+              ],
+              "answer": "白家月 và 安妮"
+            },
+            {
+              "id": 2,
+              "question": "（2）Câu thoại đầu tiên trong bài khóa là gì?",
+              "options": [
+                "\"现在几点？\"",
+                "\"谢谢！\"",
+                "\"再见！\""
+              ],
+              "answer": "\"现在几点？\""
+            }
+          ]
+        }
       },
       {
         "id": 2,
@@ -820,19 +1176,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）李文下午想去（……）。",
+              "question": "（1）杨同乐（……）起床。",
               "options": [
-                "超市看电影西安饭店"
+                "六点",
+                "六点半",
+                "七点"
               ],
-              "answer": "超市看电影西安饭店"
+              "answer": "六点半"
             },
             {
               "id": 2,
-              "question": "（2）白家月明天下午还（……）。",
+              "question": "（2）杨同乐晚上六点半（……）。",
               "options": [
-                "上课有事去超市"
+                "上班",
+                "下班",
+                "吃饭"
               ],
-              "answer": "上课有事去超市"
+              "answer": "下班"
             }
           ]
         }
@@ -891,21 +1251,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）刘明（……）呢。",
+              "question": "（1）刘明和王一雪（……）见。",
               "options": [
-                "上班买菜在家里"
+                "今天",
+                "明天",
+                "后天"
               ],
-              "answer": "上班买菜在家里"
+              "answer": "明天"
             },
             {
               "id": 2,
-              "question": "（2）王一雪（……）下班。",
+              "question": "（2）刘明和王一雪明天（……）见。",
               "options": [
-                "Đáp án A",
-                "Đáp án B",
-                "Đáp án C"
+                "上午",
+                "下午",
+                "晚上"
               ],
-              "answer": "Đáp án A"
+              "answer": "下午"
             }
           ]
         }
@@ -947,7 +1309,31 @@
           }
         ],
         "notes": [],
-        "quiz": null
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "options": [
+                "白家月 và 陈天中",
+                "Chỉ có 1 người tự nói",
+                "Một nhóm người lạ"
+              ],
+              "answer": "白家月 và 陈天中"
+            },
+            {
+              "id": 2,
+              "question": "（2）Câu thoại đầu tiên trong bài khóa là gì?",
+              "options": [
+                "\"房间外有一只小猫。\"",
+                "\"谢谢！\"",
+                "\"再见！\""
+              ],
+              "answer": "\"房间外有一只小猫。\""
+            }
+          ]
+        }
       },
       {
         "id": 2,
@@ -991,21 +1377,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）白家月和李文在（……）见。",
+              "question": "（1）胡医生在（……）工作。",
               "options": [
-                "家里书店里书店前"
+                "大医院",
+                "小医院",
+                "学校"
               ],
-              "answer": "家里书店里书店前"
+              "answer": "大医院"
             },
             {
               "id": 2,
-              "question": "（2）李文下午（……）能到。",
+              "question": "（2）胡医生的爸爸也是（……）。",
               "options": [
-                "Đáp án A",
-                "Đáp án B",
-                "Đáp án C"
+                "老师",
+                "医生",
+                "学生"
               ],
-              "answer": "Đáp án A"
+              "answer": "医生"
             }
           ]
         }
@@ -1062,17 +1450,21 @@
               "id": 1,
               "question": "（1）大医院里（……）。",
               "options": [
-                "人很少病人多医生不忙"
+                "人很少",
+                "病人多",
+                "医生不忙"
               ],
-              "answer": "人很少病人多医生不忙"
+              "answer": "病人多"
             },
             {
               "id": 2,
               "question": "（2）胡医生家有（……）医生。",
               "options": [
-                "一个两个三个"
+                "一个",
+                "两个",
+                "三个"
               ],
-              "answer": "一个两个三个"
+              "answer": "两个"
             }
           ]
         }
@@ -1114,7 +1506,31 @@
           }
         ],
         "notes": [],
-        "quiz": null
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "options": [
+                "李文 và 白家月",
+                "Chỉ có 1 người tự nói",
+                "Một nhóm người lạ"
+              ],
+              "answer": "李文 và 白家月"
+            },
+            {
+              "id": 2,
+              "question": "（2）Câu thoại đầu tiên trong bài khóa là gì?",
+              "options": [
+                "\"学校前边有一家电影院。\"",
+                "\"谢谢！\"",
+                "\"再见！\""
+              ],
+              "answer": "\"学校前边有一家电影院。\""
+            }
+          ]
+        }
       },
       {
         "id": 2,
@@ -1154,17 +1570,21 @@
               "id": 1,
               "question": "（1）椅子上有（……）。",
               "options": [
-                "一本书一只猫一个手机"
+                "一本书",
+                "一只猫",
+                "一个手机"
               ],
-              "answer": "一本书一只猫一个手机"
+              "answer": "一本书"
             },
             {
               "id": 2,
               "question": "（2）这是陈天中的（……）中文书。",
               "options": [
-                "第一本第二本第三本"
+                "第一本",
+                "第二本",
+                "第三本"
               ],
-              "answer": "第一本第二本第三本"
+              "answer": "第一本"
             }
           ]
         }
@@ -1217,19 +1637,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）杨同乐唱歌（…..）。",
+              "question": "（1）杨同乐唱歌（……）。",
               "options": [
-                "不太好不好听很好听"
+                "不太好",
+                "不好听",
+                "很好听"
               ],
-              "answer": "不太好不好听很好听"
+              "answer": "很好听"
             },
             {
               "id": 2,
               "question": "（2）王一雪家有一只（……）。",
               "options": [
-                "小猫小狗大狗"
+                "小猫",
+                "小狗",
+                "大狗"
               ],
-              "answer": "小猫小狗大狗"
+              "answer": "小猫"
             }
           ]
         }
@@ -1277,7 +1701,31 @@
           }
         ],
         "notes": [],
-        "quiz": null
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "options": [
+                "王一雪 và 售货员",
+                "Chỉ có 1 người tự nói",
+                "Một nhóm người lạ"
+              ],
+              "answer": "王一雪 và 售货员"
+            },
+            {
+              "id": 2,
+              "question": "（2）Câu thoại đầu tiên trong bài khóa là gì?",
+              "options": [
+                "\"请问，有杯子吗？\"",
+                "\"谢谢！\"",
+                "\"再见！\""
+              ],
+              "answer": "\"请问，有杯子吗？\""
+            }
+          ]
+        }
       },
       {
         "id": 2,
@@ -1321,19 +1769,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）这儿的水果（…..）。",
+              "question": "（1）这儿的水果（……）。",
               "options": [
-                "很少真不少真不多"
+                "很少",
+                "真不少",
+                "真不多"
               ],
-              "answer": "很少真不少真不多"
+              "answer": "真不少"
             },
             {
               "id": 2,
               "question": "（2）苹果（……）一斤。",
               "options": [
-                "三块三块五七块二"
+                "三块",
+                "三块五",
+                "七块二"
               ],
-              "answer": "三块三块五七块二"
+              "answer": "三块五"
             }
           ]
         }
@@ -1388,18 +1840,21 @@
               "id": 1,
               "question": "（1）这件衣服（……）。",
               "options": [
-                "20",
-                "元100元110元"
+                "20元",
+                "100元",
+                "110元"
               ],
-              "answer": "20"
+              "answer": "110元"
             },
             {
               "id": 2,
               "question": "（2）这件衣服（……）。",
               "options": [
-                "太贵很贵不贵"
+                "太贵",
+                "很贵",
+                "不贵"
               ],
-              "answer": "太贵很贵不贵"
+              "answer": "不贵"
             }
           ]
         }
@@ -1441,7 +1896,31 @@
           }
         ],
         "notes": [],
-        "quiz": null
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "options": [
+                "王一飞 và 李文",
+                "Chỉ có 1 người tự nói",
+                "Một nhóm người lạ"
+              ],
+              "answer": "王一飞 và 李文"
+            },
+            {
+              "id": 2,
+              "question": "（2）Câu thoại đầu tiên trong bài khóa là gì?",
+              "options": [
+                "\"喂，李文，你什么时候能到饭店？\"",
+                "\"谢谢！\"",
+                "\"再见！\""
+              ],
+              "answer": "\"喂，李文，你什么时候能到饭店？\""
+            }
+          ]
+        }
       },
       {
         "id": 2,
@@ -1481,17 +1960,21 @@
               "id": 1,
               "question": "（1）李文（……）读大学。",
               "options": [
-                "不没在"
+                "不",
+                "没",
+                "在"
               ],
-              "answer": "不没在"
+              "answer": "在"
             },
             {
               "id": 2,
-              "question": "（2）李文很忙，有很多（……）",
+              "question": "（2）李文很忙，有很多（……）。",
               "options": [
-                "课书椅子"
+                "课",
+                "书",
+                "椅子"
               ],
-              "answer": "课书椅子"
+              "answer": "课"
             }
           ]
         }
@@ -1539,7 +2022,31 @@
           }
         ],
         "notes": [],
-        "quiz": null
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "options": [
+                "刘明 và 刘小雪",
+                "Chỉ có 1 người tự nói",
+                "Một nhóm người lạ"
+              ],
+              "answer": "刘明 và 刘小雪"
+            },
+            {
+              "id": 2,
+              "question": "（2）Câu thoại đầu tiên trong bài khóa là gì?",
+              "options": [
+                "\"弟弟起床没起床呢？\"",
+                "\"谢谢！\"",
+                "\"再见！\""
+              ],
+              "answer": "\"弟弟起床没起床呢？\""
+            }
+          ]
+        }
       }
     ]
   },
@@ -1585,17 +2092,21 @@
               "id": 1,
               "question": "（1）王一飞那儿的天气（……）。",
               "options": [
-                "很好很不好不太好"
+                "很好",
+                "很不好",
+                "不太好"
               ],
-              "answer": "很好很不好不太好"
+              "answer": "不太好"
             },
             {
               "id": 2,
               "question": "（2）王一飞觉得（……）。",
               "options": [
-                "不冷很冷有点儿冷"
+                "不冷",
+                "很冷",
+                "有点儿冷"
               ],
-              "answer": "不冷很冷有点儿冷"
+              "answer": "有点儿冷"
             }
           ]
         }
@@ -1638,17 +2149,21 @@
               "id": 1,
               "question": "（1）杨同乐昨天（……）了。",
               "options": [
-                "生病上班去公司"
+                "生病",
+                "上班",
+                "去公司"
               ],
-              "answer": "生病上班去公司"
+              "answer": "生病"
             },
             {
               "id": 2,
-              "question": "（2）羊同乐今天（……）了。",
+              "question": "（2）杨同乐今天（……）了。",
               "options": [
-                "在家里去医院来公司"
+                "在家里",
+                "去医院",
+                "来公司"
               ],
-              "answer": "在家里去医院来公司"
+              "answer": "来公司"
             }
           ]
         }
@@ -1703,17 +2218,21 @@
               "id": 1,
               "question": "（1）杨同乐觉得（……）。",
               "options": [
-                "很热很冷有点儿冷"
+                "很热",
+                "很冷",
+                "有点儿冷"
               ],
-              "answer": "很热很冷有点儿冷"
+              "answer": "有点儿冷"
             },
             {
               "id": 2,
               "question": "（2）医生对杨同乐说：“今天（……）吧”。",
               "options": [
-                "上班下班休息半天"
+                "上班",
+                "下班",
+                "休息半天"
               ],
-              "answer": "上班下班休息半天"
+              "answer": "休息半天"
             }
           ]
         }
@@ -1760,19 +2279,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）白家月想在问王老师（……）",
+              "question": "（1）白家月想问王老师（……）。",
               "options": [
-                "一个问题两个问题这个问题"
+                "一个问题",
+                " wealth 问题",
+                "这个问题"
               ],
-              "answer": "一个问题两个问题这个问题"
+              "answer": "一个问题"
             },
             {
               "id": 2,
-              "question": "（2）王老师（……）那里买不买手机？",
+              "question": "（2）王老师（……）哪里买手机。",
               "options": [
-                "知道不知道也想知道"
+                "知道",
+                "不知道",
+                "也想知道"
               ],
-              "answer": "知道不知道也想知道"
+              "answer": "知道"
             }
           ]
         }
@@ -1808,7 +2331,31 @@
           }
         ],
         "notes": [],
-        "quiz": null
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "options": [
+                "服务员 và 王一雪",
+                "Chỉ có 1 người tự nói",
+                "Một nhóm người lạ"
+              ],
+              "answer": "服务员 và 王一雪"
+            },
+            {
+              "id": 2,
+              "question": "（2）Câu thoại đầu tiên trong bài khóa là gì?",
+              "options": [
+                "\"女士，请坐！您和什么？\"",
+                "\"谢谢！\"",
+                "\"再见！\""
+              ],
+              "answer": "\"女士，请坐！您和什么？\""
+            }
+          ]
+        }
       },
       {
         "id": 3,
@@ -1860,17 +2407,21 @@
               "id": 1,
               "question": "（1）刘明想吃（……）。",
               "options": [
-                "米饭饺子米饭和饺子"
+                "米饭",
+                "饺子",
+                "米饭和饺子"
               ],
-              "answer": "米饭饺子米饭和饺子"
+              "answer": "米饭和饺子"
             },
             {
               "id": 2,
               "question": "（2）刘明想喝（……）。",
               "options": [
-                "水茶牛奶"
+                "水",
+                "茶",
+                "牛奶"
               ],
-              "answer": "水茶牛奶"
+              "answer": "茶"
             }
           ]
         }
@@ -1919,17 +2470,21 @@
               "id": 1,
               "question": "（1）陈天中（……）王老师。",
               "options": [
-                "正在看没看见看见了"
+                "正在看",
+                "没看见",
+                "看见了"
               ],
-              "answer": "正在看没看见看见了"
+              "answer": "看见了"
             },
             {
               "id": 2,
               "question": "（2）陈天中在火车上（……）。",
               "options": [
-                "读书找王老师看了一个电影"
+                "读书",
+                "找王老师",
+                "看了一个电影"
               ],
-              "answer": "读书找王老师看了一个电影"
+              "answer": "看了一个电影"
             }
           ]
         }
@@ -1978,17 +2533,21 @@
               "id": 1,
               "question": "（1）同学们（……）汉语了。",
               "options": [
-                "想说不会说都会说"
+                "想说",
+                "不会说",
+                "都会说"
               ],
-              "answer": "想说不会说都会说"
+              "answer": "都会说"
             },
             {
               "id": 2,
               "question": "（2）陈天中（……）王老师在说什么。",
               "options": [
-                "听见了没听见不想听"
+                "听见了",
+                "没听见",
+                "不想听"
               ],
-              "answer": "听见了没听见不想听"
+              "answer": "听见了"
             }
           ]
         }
@@ -2043,17 +2602,21 @@
               "id": 1,
               "question": "（1）明年刘明和王一雪的女儿（……）。",
               "options": [
-                "上小学上中学上大学"
+                "上小学",
+                "上中学",
+                "上大学"
               ],
-              "answer": "上小学上中学上大学"
+              "answer": "上大学"
             },
             {
               "id": 2,
               "question": "（2）（……）孩子们都忙了。",
               "options": [
-                "上学上学前上学后"
+                "上学",
+                "上学前",
+                "上学后"
               ],
-              "answer": "上学上学前上学后"
+              "answer": "上学后"
             }
           ]
         }
@@ -2100,19 +2663,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）李文问大家（……）吃哪个菜。",
+              "question": "（1）李文问大家（……）吃 generic 菜。",
               "options": [
-                "好爱不爱"
+                "爱不爱",
+                "好不好",
+                "想不想"
               ],
-              "answer": "好爱不爱"
+              "answer": "爱不爱"
             },
             {
               "id": 2,
               "question": "（2）李文说：“大家（……）。”",
               "options": [
-                "吃点儿少吃点儿多吃点儿"
+                "多吃点儿",
+                "少吃点儿",
+                "别吃了"
               ],
-              "answer": "吃点儿少吃点儿多吃点儿"
+              "answer": "多吃点儿"
             }
           ]
         }
@@ -2155,17 +2722,21 @@
               "id": 1,
               "question": "（1）安妮和她男朋友去年去了（……）。",
               "options": [
-                "西安北京学校"
+                "西安",
+                "北京",
+                "学校"
               ],
-              "answer": "西安北京学校"
+              "answer": "北京"
             },
             {
               "id": 2,
-              "question": "（2）王老师和李文都是（…….）。",
+              "question": "（2）王老师和李文 headquarters 都是（……）。",
               "options": [
-                "西安人北京人哪里人"
+                "西安人",
+                "北京人",
+                "上海人"
               ],
-              "answer": "西安人北京人哪里人"
+              "answer": "北京人"
             }
           ]
         }
@@ -2218,19 +2789,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）白家月和安妮坐（…….）去北京。",
+              "question": "（1）白家月和安妮坐（……）去北京。",
               "options": [
-                "火车飞机出租车"
+                "火车",
+                "飞机",
+                "出租车"
               ],
-              "answer": "火车飞机出租车"
+              "answer": "飞机"
             },
             {
               "id": 2,
               "question": "（2）王老师的（……）都在北京。",
               "options": [
-                "家人朋友学生"
+                "家人",
+                "朋友",
+                "学生"
               ],
-              "answer": "家人朋友学生"
+              "answer": "家人"
             }
           ]
         }

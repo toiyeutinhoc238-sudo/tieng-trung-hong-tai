@@ -783,21 +783,8 @@
 
       // MODE 1: QUIZ (1. Nghe chọn đáp án)
       if (currentMode === 'quiz') {
-        const quizObj = diagObj.quiz;
-        const questions = (quizObj && quizObj.questions && quizObj.questions.length > 0) ? quizObj.questions : [
-          {
-            id: 1,
-            question: "（1）Trong bài khóa có bao nhiêu nhân vật đang đối thoại?",
-            options: ["1 nhân vật", "2 nhân vật", "3 nhân vật"],
-            answer: "2 nhân vật"
-          },
-          {
-            id: 2,
-            question: "（2）Nội dung chính của hội thoại bài khóa là gì?",
-            options: ["Chào hỏi & Giới thiệu", "Hỏi đường đi", "Mua sắm hoa quả"],
-            answer: "Chào hỏi & Giới thiệu"
-          }
-        ];
+        const quizObj = diagObj.quiz || {};
+        const questions = (quizObj && quizObj.questions && quizObj.questions.length > 0) ? quizObj.questions : [];
 
         let qHtml = questions.map((q, qIdx) => {
           return `
