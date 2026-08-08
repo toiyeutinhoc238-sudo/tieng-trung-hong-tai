@@ -309,7 +309,7 @@ const explicitQuizzes = {
       {
         id: 1,
         question: "（1）白家月想问王老师（……）。",
-        options: ["一个问题", " wealth 问题", "这个问题"],
+        options: ["一个问题", "两个问题", "这个问题"],
         answer: "一个问题"
       },
       {
@@ -390,7 +390,7 @@ const explicitQuizzes = {
     questions: [
       {
         id: 1,
-        question: "（1）李文问大家（……）吃 generic 菜。",
+        question: "（1）李文问大家（……）吃这个菜。",
         options: ["爱不爱", "好不好", "想不想"],
         answer: "爱不爱"
       },
@@ -412,7 +412,7 @@ const explicitQuizzes = {
       },
       {
         id: 2,
-        question: "（2）王老师和李文 headquarters 都是（……）。",
+        question: "（2）王老师和李文都是（……）。",
         options: ["西安人", "北京人", "上海人"],
         answer: "北京人"
       }
