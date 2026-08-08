@@ -1,707 +1,2239 @@
 [
   {
     "lessonId": 1,
-    "lessonTitle": "Bài 1",
+    "lessonTitle": "Bài 1: AI小语，你好",
     "dialogues": [
       {
-        "title": "课文1",
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk1_texts/1-1.mp3",
         "lines": [
-          "王一飞：AI小语，你好！",
-          "小语：王老师，你好！"
+          {
+            "speaker": "王一飞",
+            "zh": "AI小语，你好！",
+            "pinyin": "A I xiǎo yǔ ， nǐ hǎo ！",
+            "vi": "Chào AI Tiểu Ngữ!"
+          },
+          {
+            "speaker": "小语",
+            "zh": "王老师，你好！",
+            "pinyin": "wáng lǎo shī ， nǐ hǎo ！",
+            "vi": "Chào thầy Vương!"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": null
       },
       {
-        "title": "课文二",
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk1_texts/1-2.mp3",
         "lines": [
-          "王一飞：大家好！",
-          "学生们：老师，您好！",
-          "小语：你们好！",
-          "学生们：你好，小语！"
+          {
+            "speaker": "王一飞",
+            "zh": "大家好！",
+            "pinyin": "dà jiā hǎo ！",
+            "vi": "Chào mọi người!"
+          },
+          {
+            "speaker": "学生们",
+            "zh": "老师，您好！",
+            "pinyin": "lǎo shī ， nín hǎo ！",
+            "vi": "Chào Thầy/Cô ạ!"
+          },
+          {
+            "speaker": "小语",
+            "zh": "你们好！",
+            "pinyin": "nǐ men hǎo ！",
+            "vi": "Chào các bạn!"
+          },
+          {
+            "speaker": "学生们",
+            "zh": "你好，小语！",
+            "pinyin": "nǐ hǎo ， xiǎo yǔ ！",
+            "vi": "Chào bạn, Tiểu Ngữ!"
+          }
         ],
         "notes": [
           "您 là đại từ nhân xưng mang sắc thái trang trọng, được dùng để xưng hô với người lớn tuổi hoặc những người mà bạn kính trọng."
-        ]
+        ],
+        "quiz": null
       },
       {
-        "title": "课文三",
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk1_texts/1-3.mp3",
         "lines": [
-          "学生们：谢谢！",
-          "小语：不客气！",
-          "王一飞：同学们，再见！",
-          "学生们：老师，再见！"
+          {
+            "speaker": "学生们",
+            "zh": "谢谢！",
+            "pinyin": "xiè xiè ！",
+            "vi": "Cảm ơn!"
+          },
+          {
+            "speaker": "小语",
+            "zh": "不客气！",
+            "pinyin": "bú kè qì ！",
+            "vi": "Không có chi!"
+          },
+          {
+            "speaker": "王一飞",
+            "zh": "同学们，再见！",
+            "pinyin": "tóng xué men ， zài jiàn ！",
+            "vi": "Tạm biệt các em học sinh!"
+          },
+          {
+            "speaker": "学生们",
+            "zh": "老师，再见！",
+            "pinyin": "lǎo shī ， zài jiàn ！",
+            "vi": "Tạm biệt Thầy/Cô!"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": null
       }
     ]
   },
   {
     "lessonId": 2,
-    "lessonTitle": "Bài 2",
+    "lessonTitle": "Bài 2: 我叫李文",
     "dialogues": [
       {
-        "title": "课文一",
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk1_texts/2-1.mp3",
         "lines": [
-          "王一飞：请问，你叫什么名字？",
-          "陈天中： 我叫陈天中。"
+          {
+            "speaker": "王一飞",
+            "zh": "请问，你叫什么名字？",
+            "pinyin": "qǐng wèn ， nǐ jiào shén me míng zì ？",
+            "vi": "Xin hỏi, bạn tên là gì?"
+          },
+          {
+            "speaker": "陈天中",
+            "zh": "我叫陈天中。",
+            "pinyin": "wǒ jiào chén tiān zhōng 。",
+            "vi": "Tôi tên là Trần Thiên Trung."
+          }
         ],
         "notes": [
           "请问 là 1 kính ngưỡng được sử dụng khi đề nghị ai đó trả lời câu hỏi."
-        ]
+        ],
+        "quiz": null
       },
       {
-        "title": "课文二",
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk1_texts/2-2.mp3",
         "lines": [
-          "陈天中：你好，安妮！",
-          "白家月：你好，陈天中！我不是安妮，我是白家月。",
-          "陈天中：对不起！",
-          "白家月：没关系！"
+          {
+            "speaker": "陈天中",
+            "zh": "你好，安妮！",
+            "pinyin": "nǐ hǎo ， ān nī ！",
+            "vi": "Chào bạn, An Ni!"
+          },
+          {
+            "speaker": "白家月",
+            "zh": "你好，陈天中！我不是安妮，我是白家月。",
+            "pinyin": "nǐ hǎo ， chén tiān zhōng ！ wǒ bú shì ān nī ， wǒ shì bái jiā yuè 。",
+            "vi": "Chào Trần Thiên Trung! Tôi không phải An Ni, tôi là Bạch Gia Nguyệt."
+          },
+          {
+            "speaker": "陈天中",
+            "zh": "对不起！",
+            "pinyin": "duì bù qǐ ！",
+            "vi": "Xin lỗi!"
+          },
+          {
+            "speaker": "白家月",
+            "zh": "没关系！",
+            "pinyin": "méi guān xì ！",
+            "vi": "Không sao đâu!"
+          }
         ],
         "notes": [
           "没关系 trong văn nói mọi người cũng dùng 没事 hoặc 没事没事."
-        ]
+        ],
+        "quiz": null
       },
       {
-        "title": "课文三",
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk1_texts/2-3.mp3",
         "lines": [
-          "李文：你好，我叫李文。",
-          "白家月：你好，我叫白家月。",
-          "李文：很高兴认识你。",
-          "白家月：认识你，我也很高兴。",
-          "白家月：我们在哪儿见呢？",
-          "李文：在学校书店前见吧。",
-          "白家月：好的。下午两点能到吗？",
-          "李文：我能到。我在学校吃午饭。"
+          {
+            "speaker": "李文",
+            "zh": "你好，我叫李文。",
+            "pinyin": "nǐ hǎo ， wǒ jiào lǐ wén 。",
+            "vi": "Chào bạn, tôi tên là Lý Văn."
+          },
+          {
+            "speaker": "白家月",
+            "zh": "你好，我叫白家月。",
+            "pinyin": "nǐ hǎo ， wǒ jiào bái jiā yuè 。",
+            "vi": "Chào bạn, tôi tên là Bạch Gia Nguyệt."
+          },
+          {
+            "speaker": "李文",
+            "zh": "很高兴认识你。",
+            "pinyin": "hěn gāo xìng rèn shi nǐ 。",
+            "vi": "Rất vui được quen biết bạn."
+          },
+          {
+            "speaker": "白家月",
+            "zh": "认识你，我也很高兴。",
+            "pinyin": "rèn shi nǐ ， wǒ yě hěn gāo xìng 。",
+            "vi": "Quen biết bạn, tôi cũng rất vui."
+          }
         ],
-        "notes": []
-      },
-      {
-        "title": "课文三",
-        "lines": [
-          "听两遍对话，选择正确答案",
-          "（1）大医院里（……）。",
-          "人很少病人多医生不忙",
-          "（2）胡医生家有（……）医生。",
-          "一个两个三个",
-          "刘明：小胡，还没吃饭呢？",
-          "胡医生：没吃呢。",
-          "刘明：大医院病人多，医生非常忙。",
-          "胡医生：是的。我爸爸也在医院工作，他也非常忙。",
-          "刘明：你家有两个医生？",
-          "胡医生：对。"
-        ],
-        "notes": [
-          "“小+ họ” là cách xưng hô thân mật với những người ít tuổi hơn mình"
-        ]
+        "notes": [],
+        "quiz": null
       }
     ]
   },
   {
     "lessonId": 3,
-    "lessonTitle": "Bài 3",
+    "lessonTitle": "Bài 3: 我是中国人",
     "dialogues": [
       {
-        "title": "课文一",
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk1_texts/3-1.mp3",
         "lines": [
-          "李文：我是中国人。",
-          "白家月：我是法国人。我的中文老师也是中国人。"
+          {
+            "speaker": "李文",
+            "zh": "我是中国人。",
+            "pinyin": "wǒ shì zhōng guó rén 。",
+            "vi": "Tôi là người Trung Quốc."
+          },
+          {
+            "speaker": "白家月",
+            "zh": "我是法国人。我的中文老师也是中国人。",
+            "pinyin": "wǒ shì fǎ guó rén 。 wǒ de zhōng wén lǎo shī yě shì zhōng guó rén 。",
+            "vi": "Tôi là người Pháp. Giáo viên tiếng Trung của tôi cũng là người Trung Quốc."
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": null
       },
       {
-        "title": "课文二",
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk1_texts/3-2.mp3",
         "lines": [
-          "安妮：这是谁？",
-          "陈天中：这是我女朋友。",
-          "安妮：你的女朋友是哪国人？",
-          "陈天中：她也是泰国人。"
+          {
+            "speaker": "安妮",
+            "zh": "这是谁？",
+            "pinyin": "zhè shì shuí ？",
+            "vi": "Đây là ai?"
+          },
+          {
+            "speaker": "陈天中",
+            "zh": "这是我女朋友。",
+            "pinyin": "zhè shì wǒ nǚ péng yǒu 。",
+            "vi": "Đây là bạn gái tôi."
+          },
+          {
+            "speaker": "安妮",
+            "zh": "你的女朋友是哪国人？",
+            "pinyin": "nǐ de nǚ péng yǒu shì nǎ guó rén ？",
+            "vi": "Bạn gái bạn là người nước nào?"
+          },
+          {
+            "speaker": "陈天中",
+            "zh": "她也是泰国人。",
+            "pinyin": "tā yě shì tài guó rén 。",
+            "vi": "Cô ấy cũng là người Thái Lan."
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": null
       },
       {
-        "title": "课文三",
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk1_texts/3-3.mp3",
         "lines": [
-          "王一雪：喂，一飞！",
-          "王一飞：姐姐！",
-          "王一雪：你工作还忙吗？",
-          "王一飞：对，还很忙。你也很忙吗？",
-          "王一雪：我不太忙。我们很想你。",
-          "王一飞：我也想你们。"
+          {
+            "speaker": "王一雪",
+            "zh": "喂，一飞！",
+            "pinyin": "wèi ， yì fēi ！",
+            "vi": "Alo, Nhất Phi!"
+          },
+          {
+            "speaker": "王一飞",
+            "zh": "姐姐！",
+            "pinyin": "jiě jie ！",
+            "vi": "Chị gái!"
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "你工作还忙吗？",
+            "pinyin": "nǐ gōng zuò hái máng ma ？",
+            "vi": "Công việc của em còn bận không?"
+          },
+          {
+            "speaker": "王一飞",
+            "zh": "对，还很忙。你也很忙吗？",
+            "pinyin": "duì ， hái hěn máng 。 nǐ yě hěn máng ma ？",
+            "vi": "Vâng, còn rất bận. Chị cũng rất bận à?"
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "我不太忙。我们很想你。",
+            "pinyin": "wǒ bú tài máng 。 wǒ men hěn xiǎng nǐ 。",
+            "vi": "Chị không bận lắm. Mọi người rất nhớ em."
+          },
+          {
+            "speaker": "王一飞",
+            "zh": "我也想你们。",
+            "pinyin": "wǒ yě xiǎng nǐ men 。",
+            "vi": "Em cũng rất nhớ mọi người."
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": null
       }
     ]
   },
   {
     "lessonId": 4,
-    "lessonTitle": "Bài 4",
+    "lessonTitle": "Bài 4: 我有两个孩子",
     "dialogues": [
       {
-        "title": "课文一",
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk1_texts/4-1.mp3",
         "lines": [
-          "刘明：一飞忙吗？",
-          "王一雪：他很忙。",
-          "刘明：他有多少个学生？？",
-          "王一雪：他有20个学生。"
+          {
+            "speaker": "刘明",
+            "zh": "一飞忙吗？",
+            "pinyin": "yì fēi máng ma ？",
+            "vi": "Nhất Phi có bận không?"
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "他很忙。",
+            "pinyin": "tā hěn máng 。",
+            "vi": "Cậu ấy rất bận."
+          },
+          {
+            "speaker": "刘明",
+            "zh": "他有多少个学生？？",
+            "pinyin": "tā yǒu duō shǎo gè xué shēng ？ ？",
+            "vi": "Thầy ấy có bao nhiêu học sinh?"
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "他有20个学生。",
+            "pinyin": "tā yǒu 2 0 gè xué shēng 。",
+            "vi": "Thầy ấy có 20 học sinh."
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": null
       },
       {
-        "title": "课文二",
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk1_texts/4-2.mp3",
         "lines": [
-          "拼两遍对话选择正确答案。",
-          "（1）杨同乐有一个（…..）",
-          "妹妹姐姐哥哥",
-          "（2）杨同乐家有（…..）",
-          "两口人四口人五口人",
-          "王一雪：我有两个哥哥，你呢？",
-          "杨同乐: 我没有哥哥。",
-          "王一雪：你家有几口人？",
-          "杨同乐：我家四口人，爸爸、妈妈、妹妹和我。"
+          {
+            "speaker": "王一雪",
+            "zh": "我有两个哥哥，你呢？",
+            "pinyin": "wǒ yǒu liǎng gè gē ge ， nǐ ne ？",
+            "vi": "Tôi có 2 người anh trai, còn bạn?"
+          },
+          {
+            "speaker": "杨同乐",
+            "zh": "我没有哥哥。",
+            "pinyin": "wǒ méi yǒu gē ge 。",
+            "vi": "Tôi không có anh trai."
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "你家有几口人？",
+            "pinyin": "nǐ jiā yǒu jǐ kǒu rén ？",
+            "vi": "Nhà bạn có mấy người?"
+          },
+          {
+            "speaker": "杨同乐",
+            "zh": "我家四口人，爸爸、妈妈、妹妹和我。",
+            "pinyin": "wǒ jiā sì kǒu rén ， bà ba 、 mā ma 、 mèi mei hé wǒ 。",
+            "vi": "Nhà tôi có 4 người: bố, mẹ, em gái và tôi."
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）杨同乐有一个（…..）",
+              "options": [
+                "妹妹姐姐哥哥"
+              ],
+              "answer": "妹妹姐姐哥哥"
+            },
+            {
+              "id": 2,
+              "question": "（2）杨同乐家有（…..）",
+              "options": [
+                "两口人四口人五口人"
+              ],
+              "answer": "两口人四口人五口人"
+            }
+          ]
+        }
       },
       {
-        "title": "课文三",
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk1_texts/4-3.mp3",
         "lines": [
-          "（1）王一雪有（…..）孩子",
-          "一个两个 三个",
-          "（2）王一雪女儿今年（…..）岁。",
-          "五 十二等你的二十",
-          "杨同乐：这是您儿子吗？",
-          "王一雪：是的。我有两个孩子，一个儿子，一个女儿。",
-          "杨同乐：您儿子几岁？",
-          "王一雪：他今年五岁。",
-          "杨同乐：你女儿多大？",
-          "王一飞：她今年12岁。"
+          {
+            "speaker": "杨同乐",
+            "zh": "这是您儿子吗？",
+            "pinyin": "zhè shì nín ér zi ma ？",
+            "vi": "Đây là con trai cô à?"
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "是的。我有两个孩子，一个儿子，一个女儿。",
+            "pinyin": "shì de 。 wǒ yǒu liǎng gè hái zi ， yí gè ér zi ， yí gè nǚ ér 。",
+            "vi": "Đúng vậy. Tôi có 2 đứa con, 1 con trai, 1 con gái."
+          },
+          {
+            "speaker": "杨同乐",
+            "zh": "您儿子几岁？",
+            "pinyin": "nín ér zi jǐ suì ？",
+            "vi": "Con trai cô mấy tuổi?"
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "他今年五岁。",
+            "pinyin": "tā jīn nián wǔ suì 。",
+            "vi": "Cháu năm nay 5 tuổi."
+          },
+          {
+            "speaker": "杨同乐",
+            "zh": "你女儿多大？",
+            "pinyin": "nǐ nǚ ér duō dà ？",
+            "vi": "Con gái cô bao nhiêu tuổi?"
+          },
+          {
+            "speaker": "王一飞",
+            "zh": "她今年12岁。",
+            "pinyin": "tā jīn nián 1 2 suì 。",
+            "vi": "Cháu năm nay 12 tuổi."
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": null
       }
     ]
   },
   {
     "lessonId": 5,
-    "lessonTitle": "Bài 5",
+    "lessonTitle": "Bài 5: 今天我休息",
     "dialogues": [
       {
-        "title": "课文一",
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk1_texts/5-1.mp3",
         "lines": [
-          "王一雪：今天几号？",
-          "刘明：今天9月8号。",
-          "王一雪：星期几？",
-          "刘明：星期日。今天我休息。"
+          {
+            "speaker": "王一雪",
+            "zh": "今天几号？",
+            "pinyin": "jīn tiān jǐ hào ？",
+            "vi": "Hôm nay ngày mấy?"
+          },
+          {
+            "speaker": "刘明",
+            "zh": "今天9月8号。",
+            "pinyin": "jīn tiān 9 yuè 8 hào 。",
+            "vi": "Hôm nay ngày 8 tháng 9."
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "星期几？",
+            "pinyin": "xīng qī jǐ ？",
+            "vi": "Thứ mấy?"
+          },
+          {
+            "speaker": "刘明",
+            "zh": "星期日。今天我休息。",
+            "pinyin": "xīng qī rì 。 jīn tiān wǒ xiū xi 。",
+            "vi": "Chủ nhật. Hôm nay tôi nghỉ làm."
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": null
       },
       {
-        "title": "课文二",
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk1_texts/5-2.mp3",
         "lines": [
-          "听两遍对话，选择正确答案",
-          "（1）杨同乐（…..）做饭。",
-          "会不不会",
-          "（2）杨同乐（…..）也做饭。",
-          "星期三星期六星期日",
-          "王一雪：你会做饭吗？",
-          "杨同乐：我会做。",
-          "王一雪：你会做什么？",
-          "杨同乐：我会做面条儿、饺子，也会做一些菜。星期天我也做饭。"
+          {
+            "speaker": "王一雪",
+            "zh": "你会做饭吗？",
+            "pinyin": "nǐ huì zuò fàn ma ？",
+            "vi": "Bạn biết nấu ăn không?"
+          },
+          {
+            "speaker": "杨同乐",
+            "zh": "我会做。",
+            "pinyin": "wǒ huì zuò 。",
+            "vi": "Tôi biết nấu."
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "你会做什么？",
+            "pinyin": "nǐ huì zuò shén me ？",
+            "vi": "Bạn biết nấu món gì?"
+          },
+          {
+            "speaker": "杨同乐",
+            "zh": "我会做面条儿、饺子，也会做一些菜。星期天我也做饭。",
+            "pinyin": "wǒ huì zuò miàn tiáo ér 、 jiǎo zǐ ， yě huì zuò yì xiē cài 。 xīng qī tiān wǒ yě zuò fàn 。",
+            "vi": "Tôi biết làm mì, sủi cảo, cũng biết nấu một số món ăn. Chủ nhật tôi cũng nấu cơm."
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）杨同乐（…..）做饭。",
+              "options": [
+                "会不不会"
+              ],
+              "answer": "会不不会"
+            },
+            {
+              "id": 2,
+              "question": "（2）杨同乐（…..）也做饭。",
+              "options": [
+                "星期三星期六星期日"
+              ],
+              "answer": "星期三星期六星期日"
+            }
+          ]
+        }
       },
       {
-        "title": "课文三",
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk1_texts/5-3.mp3",
         "lines": [
-          "听两遍对话，选择正确答案",
-          "（1）杨同乐也 （…..）",
-          "上班下班休息",
-          "（2）杨同乐有一个新（……）",
-          "名字工作电脑",
-          "王一雪：同乐，下班吗？",
-          "杨同乐：下班。",
-          "王一雪：这是你的新电脑吗？",
-          "杨同乐：是的，是我的新电脑。",
-          "王一雪：真好看！",
-          "杨同乐：我也很喜欢它。",
-          "王一雪：喂，你在哪儿呢？",
-          "刘明：我在家里呢。",
-          "王一雪：我晚上六点半下班。",
-          "刘明：我八点去医院上班。",
-          "王一雪：好的，你去店里买些菜吧。",
-          "刘明：好，我十分钟后去。"
+          {
+            "speaker": "王一雪",
+            "zh": "同乐，下班吗？",
+            "pinyin": "tóng lè ， xià bān ma ？",
+            "vi": "Đồng Lạc, tan làm chưa?"
+          },
+          {
+            "speaker": "杨同乐",
+            "zh": "下班。",
+            "pinyin": "xià bān 。",
+            "vi": "Tan làm rồi."
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "这是你的新电脑吗？",
+            "pinyin": "zhè shì nǐ de xīn diàn nǎo ma ？",
+            "vi": "Đây là máy tính mới của bạn à?"
+          },
+          {
+            "speaker": "杨同乐",
+            "zh": "是的，是我的新电脑。",
+            "pinyin": "shì de ， shì wǒ de xīn diàn nǎo 。",
+            "vi": "Dịch nghĩa: 是的，是我的新电脑。"
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "真好看！",
+            "pinyin": "zhēn hǎo kàn ！",
+            "vi": "Dịch nghĩa: 真好看！"
+          },
+          {
+            "speaker": "杨同乐",
+            "zh": "我也很喜欢它。",
+            "pinyin": "wǒ yě hěn xǐ huan tā 。",
+            "vi": "Dịch nghĩa: 我也很喜欢它。"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）杨同乐也 （…..）",
+              "options": [
+                "上班下班休息"
+              ],
+              "answer": "上班下班休息"
+            },
+            {
+              "id": 2,
+              "question": "（2）杨同乐有一个新（……）",
+              "options": [
+                "名字工作电脑"
+              ],
+              "answer": "名字工作电脑"
+            }
+          ]
+        }
       }
     ]
   },
   {
     "lessonId": 6,
-    "lessonTitle": "Bài 6",
+    "lessonTitle": "Bài 6: 你的手机号是多少？",
     "dialogues": [
       {
-        "title": "课文一",
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk1_texts/6-1.mp3",
         "lines": [
-          "李文：家月，你的手机号是多少？",
-          "白家月：我的手机号是336014930190。",
-          "李文：我的手机号是8613552721160。",
-          "白家月：好的。"
+          {
+            "speaker": "李文",
+            "zh": "家月，你的手机号是多少？",
+            "pinyin": "jiā yuè ， nǐ de shǒu jī hào shì duō shǎo ？",
+            "vi": "Dịch nghĩa: 家月，你的手机号是多少？"
+          },
+          {
+            "speaker": "白家月",
+            "zh": "我的手机号是336014930190。",
+            "pinyin": "wǒ de shǒu jī hào shì 3 3 6 0 1 4 9 3 0 1 9 0 。",
+            "vi": "Dịch nghĩa: 我的手机号是336014930190。"
+          },
+          {
+            "speaker": "李文",
+            "zh": "我的手机号是8613552721160。",
+            "pinyin": "wǒ de shǒu jī hào shì 8 6 1 3 5 5 2 7 2 1 1 6 0 。",
+            "vi": "Dịch nghĩa: 我的手机号是8613552721160。"
+          },
+          {
+            "speaker": "白家月",
+            "zh": "好的。",
+            "pinyin": "hǎo de 。",
+            "vi": "Dịch nghĩa: 好的。"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": null
       },
       {
-        "title": "课文二",
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk1_texts/6-2.mp3",
         "lines": [
-          "听两遍对话，选择正确答案",
-          "（1）白家月（……）想去超市。",
-          "现在今天明天",
-          "（2）白家月想买（……）",
-          "菜牛奶面条儿和牛奶",
-          "陈天中：家月，明天你去哪儿？",
-          "白家月：我想去超市买东西。",
-          "陈天中：你去超市买什么？",
-          "白家月：我想买些牛奶。"
+          {
+            "speaker": "陈天中",
+            "zh": "家月，明天你去哪儿？",
+            "pinyin": "jiā yuè ， míng tiān nǐ qù nǎ ér ？",
+            "vi": "Dịch nghĩa: 家月，明天你去哪儿？"
+          },
+          {
+            "speaker": "白家月",
+            "zh": "我想去超市买东西。",
+            "pinyin": "wǒ xiǎng qù chāo shì mǎi dōng xī 。",
+            "vi": "Dịch nghĩa: 我想去超市买东西。"
+          },
+          {
+            "speaker": "陈天中",
+            "zh": "你去超市买什么？",
+            "pinyin": "nǐ qù chāo shì mǎi shén me ？",
+            "vi": "Dịch nghĩa: 你去超市买什么？"
+          },
+          {
+            "speaker": "白家月",
+            "zh": "我想买些牛奶。",
+            "pinyin": "wǒ xiǎng mǎi xiē niú nǎi 。",
+            "vi": "Dịch nghĩa: 我想买些牛奶。"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）白家月（……）想去超市。",
+              "options": [
+                "现在今天明天"
+              ],
+              "answer": "现在今天明天"
+            },
+            {
+              "id": 2,
+              "question": "（2）白家月想买（……）",
+              "options": [
+                "菜牛奶面条儿和牛奶"
+              ],
+              "answer": "菜牛奶面条儿和牛奶"
+            }
+          ]
+        }
       },
       {
-        "title": "课文三",
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk1_texts/6-3.mp3",
         "lines": [
-          "听两遍对话，选择正确答案",
-          "（1）王一雪一家人想去西安饭店（……）。",
-          "吃早饭吃午饭吃晚饭",
-          "（2）刘小明不想吃（……）。",
-          "米饭包子面条儿",
-          "王一雪：星期天我们去哪儿吃晚饭？",
-          "刘明：我还想去西安饭店。",
-          "刘小雪：那边的包子非常好吃，我想吃包子。",
-          "刘小明：妈妈，我想吃米饭，不想吃包子。",
-          "王一雪：好的。我们怎么去？",
-          "刘明：坐出租车去。"
+          {
+            "speaker": "王一雪",
+            "zh": "星期天我们去哪儿吃晚饭？",
+            "pinyin": "xīng qī tiān wǒ men qù nǎ ér chī wǎn fàn ？",
+            "vi": "Dịch nghĩa: 星期天我们去哪儿吃晚饭？"
+          },
+          {
+            "speaker": "刘明",
+            "zh": "我还想去西安饭店。",
+            "pinyin": "wǒ hái xiǎng qù xī ān fàn diàn 。",
+            "vi": "Dịch nghĩa: 我还想去西安饭店。"
+          },
+          {
+            "speaker": "刘小雪",
+            "zh": "那边的包子非常好吃，我想吃包子。",
+            "pinyin": "nà biān de bāo zǐ fēi cháng hǎo chī ， wǒ xiǎng chī bāo zǐ 。",
+            "vi": "Dịch nghĩa: 那边的包子非常好吃，我想吃包子。"
+          },
+          {
+            "speaker": "刘小明",
+            "zh": "妈妈，我想吃米饭，不想吃包子。",
+            "pinyin": "mā ma ， wǒ xiǎng chī mǐ fàn ， bù xiǎng chī bāo zǐ 。",
+            "vi": "Dịch nghĩa: 妈妈，我想吃米饭，不想吃包子。"
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "好的。我们怎么去？",
+            "pinyin": "hǎo de 。 wǒ men zěn me qù ？",
+            "vi": "Dịch nghĩa: 好的。我们怎么去？"
+          },
+          {
+            "speaker": "刘明",
+            "zh": "坐出租车去。",
+            "pinyin": "zuò chū zū chē qù 。",
+            "vi": "Dịch nghĩa: 坐出租车去。"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）王一雪一家人想去西安饭店（……）。",
+              "options": [
+                "吃早饭吃午饭吃晚饭"
+              ],
+              "answer": "吃早饭吃午饭吃晚饭"
+            },
+            {
+              "id": 2,
+              "question": "（2）刘小明不想吃（……）。",
+              "options": [
+                "米饭包子面条儿"
+              ],
+              "answer": "米饭包子面条儿"
+            }
+          ]
+        }
       }
     ]
   },
   {
     "lessonId": 7,
-    "lessonTitle": "Bài 7",
+    "lessonTitle": "Bài 7: 我晚上六点半下班",
     "dialogues": [
       {
-        "title": "课文一",
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk1_texts/7-1.mp3",
         "lines": [
-          "白家月：现在几点？",
-          "安妮：早上八点四十。",
-          "白家月：我上午十点十分有课。",
-          "安妮：好的，我们下午两点见吧。"
+          {
+            "speaker": "白家月",
+            "zh": "现在几点？",
+            "pinyin": "xiàn zài jǐ diǎn ？",
+            "vi": "Dịch nghĩa: 现在几点？"
+          },
+          {
+            "speaker": "安妮",
+            "zh": "早上八点四十。",
+            "pinyin": "zǎo shàng bā diǎn sì shí 。",
+            "vi": "Dịch nghĩa: 早上八点四十。"
+          },
+          {
+            "speaker": "白家月",
+            "zh": "我上午十点十分有课。",
+            "pinyin": "wǒ shàng wǔ shí diǎn shí fēn yǒu kè 。",
+            "vi": "Dịch nghĩa: 我上午十点十分有课。"
+          },
+          {
+            "speaker": "安妮",
+            "zh": "好的，我们下午两点见吧。",
+            "pinyin": "hǎo de ， wǒ men xià wǔ liǎng diǎn jiàn ba 。",
+            "vi": "Dịch nghĩa: 好的，我们下午两点见吧。"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": null
       },
       {
-        "title": "课文二",
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk1_texts/7-2.mp3",
         "lines": [
-          "听两遍对话，选择正确答案",
-          "（1）李文下午想去（……）。",
-          "超市看电影西安饭店",
-          "（2）白家月明天下午还（……）。",
-          "上课有事去超市",
-          "李文：下午我想去电影院看电影，你去吗？",
-          "白家月：我不想去，下午还有事。",
-          "李文：好的。明天呢？",
-          "白家月：我明天下午两点还上课呢，四点半下课。"
+          {
+            "speaker": "李文",
+            "zh": "下午我想去电影院看电影，你去吗？",
+            "pinyin": "xià wǔ wǒ xiǎng qù diàn yǐng yuàn kàn diàn yǐng ， nǐ qù ma ？",
+            "vi": "Dịch nghĩa: 下午我想去电影院看电影，你去吗？"
+          },
+          {
+            "speaker": "白家月",
+            "zh": "我不想去，下午还有事。",
+            "pinyin": "wǒ bù xiǎng qù ， xià wǔ hái yǒu shì 。",
+            "vi": "Dịch nghĩa: 我不想去，下午还有事。"
+          },
+          {
+            "speaker": "李文",
+            "zh": "好的。明天呢？",
+            "pinyin": "hǎo de 。 míng tiān ne ？",
+            "vi": "Dịch nghĩa: 好的。明天呢？"
+          },
+          {
+            "speaker": "白家月",
+            "zh": "我明天下午两点还上课呢，四点半下课。",
+            "pinyin": "wǒ míng tiān xià wǔ liǎng diǎn hái shàng kè ne ， sì diǎn bàn xià kè 。",
+            "vi": "Dịch nghĩa: 我明天下午两点还上课呢，四点半下课。"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）李文下午想去（……）。",
+              "options": [
+                "超市看电影西安饭店"
+              ],
+              "answer": "超市看电影西安饭店"
+            },
+            {
+              "id": 2,
+              "question": "（2）白家月明天下午还（……）。",
+              "options": [
+                "上课有事去超市"
+              ],
+              "answer": "上课有事去超市"
+            }
+          ]
+        }
       },
       {
-        "title": "课文三",
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk1_texts/7-3.mp3",
         "lines": [
-          "听两遍对话，选择正确答案",
-          "（1）刘明（……）呢。",
-          "上班买菜在家里",
-          "（2）王一雪（……）下班。"
+          {
+            "speaker": "5",
+            "zh": "006：006：30",
+            "pinyin": "0 0 6 ： 0 0 6 ： 3 0",
+            "vi": "Dịch nghĩa: 006：006：30"
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "喂，你在哪儿呢？",
+            "pinyin": "wèi ， nǐ zài nǎ ér ne ？",
+            "vi": "Dịch nghĩa: 喂，你在哪儿呢？"
+          },
+          {
+            "speaker": "刘明",
+            "zh": "我在家里呢。",
+            "pinyin": "wǒ zài jiā lǐ ne 。",
+            "vi": "Dịch nghĩa: 我在家里呢。"
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "我晚上六点半下班。",
+            "pinyin": "wǒ wǎn shàng liù diǎn bàn xià bān 。",
+            "vi": "Dịch nghĩa: 我晚上六点半下班。"
+          },
+          {
+            "speaker": "刘明",
+            "zh": "我八点去医院上班。",
+            "pinyin": "wǒ bā diǎn qù yī yuàn shàng bān 。",
+            "vi": "Dịch nghĩa: 我八点去医院上班。"
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "好的，你去店里买些菜吧。",
+            "pinyin": "hǎo de ， nǐ qù diàn lǐ mǎi xiē cài ba 。",
+            "vi": "Dịch nghĩa: 好的，你去店里买些菜吧。"
+          },
+          {
+            "speaker": "刘明",
+            "zh": "好，我十分钟后去。",
+            "pinyin": "hǎo ， wǒ shí fēn zhōng hòu qù 。",
+            "vi": "Dịch nghĩa: 好，我十分钟后去。"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）刘明（……）呢。",
+              "options": [
+                "上班买菜在家里"
+              ],
+              "answer": "上班买菜在家里"
+            },
+            {
+              "id": 2,
+              "question": "（2）王一雪（……）下班。",
+              "options": [
+                "Đáp án A",
+                "Đáp án B",
+                "Đáp án C"
+              ],
+              "answer": "Đáp án A"
+            }
+          ]
+        }
       }
     ]
   },
   {
     "lessonId": 8,
-    "lessonTitle": "Bài 8",
+    "lessonTitle": "Bài 8: 我爸爸也在医院工作",
     "dialogues": [
       {
-        "title": "课文一",
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk1_texts/8-1.mp3",
         "lines": [
-          "白家月：房间外有一只小猫。",
-          "陈天中：我没看见它在哪儿呢？",
-          "白家月：他在桌子下呢。",
-          "陈天中：这只小猫真漂亮！"
+          {
+            "speaker": "白家月",
+            "zh": "房间外有一只小猫。",
+            "pinyin": "fáng jiān wài yǒu yì zhī xiǎo māo 。",
+            "vi": "Dịch nghĩa: 房间外有一只小猫。"
+          },
+          {
+            "speaker": "陈天中",
+            "zh": "我没看见它在哪儿呢？",
+            "pinyin": "wǒ méi kàn jiàn tā zài nǎ ér ne ？",
+            "vi": "Dịch nghĩa: 我没看见它在哪儿呢？"
+          },
+          {
+            "speaker": "白家月",
+            "zh": "他在桌子下呢。",
+            "pinyin": "tā zài zhuō zi xià ne 。",
+            "vi": "Dịch nghĩa: 他在桌子下呢。"
+          },
+          {
+            "speaker": "陈天中",
+            "zh": "这只小猫真漂亮！",
+            "pinyin": "zhè zhī xiǎo māo zhēn piào liang ！",
+            "vi": "Dịch nghĩa: 这只小猫真漂亮！"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": null
       },
       {
-        "title": "课文二",
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk1_texts/8-2.mp3",
         "lines": [
-          "听两遍对话，选择正确答案",
-          "（1）白家月和李文在（……）见。",
-          "家里书店里书店前",
-          "（2）李文下午（……）能到。"
+          {
+            "speaker": "2",
+            "zh": "002：303：00后",
+            "pinyin": "0 0 2 ： 3 0 3 ： 0 0 hòu",
+            "vi": "Dịch nghĩa: 002：303：00后"
+          },
+          {
+            "speaker": "白家月",
+            "zh": "我们在哪儿见呢？",
+            "pinyin": "wǒ men zài nǎ ér jiàn ne ？",
+            "vi": "Dịch nghĩa: 我们在哪儿见呢？"
+          },
+          {
+            "speaker": "李文",
+            "zh": "在学校书店前见吧。",
+            "pinyin": "zài xué xiào shū diàn qián jiàn ba 。",
+            "vi": "Dịch nghĩa: 在学校书店前见吧。"
+          },
+          {
+            "speaker": "白家月",
+            "zh": "好的。下午两点能到吗？",
+            "pinyin": "hǎo de 。 xià wǔ liǎng diǎn néng dào ma ？",
+            "vi": "Dịch nghĩa: 好的。下午两点能到吗？"
+          },
+          {
+            "speaker": "李文",
+            "zh": "我能到。我在学校吃午饭。",
+            "pinyin": "wǒ néng dào 。 wǒ zài xué xiào chī wǔ fàn 。",
+            "vi": "Dịch nghĩa: 我能到。我在学校吃午饭。"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）白家月和李文在（……）见。",
+              "options": [
+                "家里书店里书店前"
+              ],
+              "answer": "家里书店里书店前"
+            },
+            {
+              "id": 2,
+              "question": "（2）李文下午（……）能到。",
+              "options": [
+                "Đáp án A",
+                "Đáp án B",
+                "Đáp án C"
+              ],
+              "answer": "Đáp án A"
+            }
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk1_texts/8-3.mp3",
+        "lines": [
+          {
+            "speaker": "刘明",
+            "zh": "小胡，还没吃饭呢？",
+            "pinyin": "xiǎo hú ， hái méi chī fàn ne ？",
+            "vi": "Dịch nghĩa: 小胡，还没吃饭呢？"
+          },
+          {
+            "speaker": "胡医生",
+            "zh": "没吃呢。",
+            "pinyin": "méi chī ne 。",
+            "vi": "Dịch nghĩa: 没吃呢。"
+          },
+          {
+            "speaker": "刘明",
+            "zh": "大医院病人多，医生非常忙。",
+            "pinyin": "dà yī yuàn bìng rén duō ， yī shēng fēi cháng máng 。",
+            "vi": "Dịch nghĩa: 大医院病人多，医生非常忙。"
+          },
+          {
+            "speaker": "胡医生",
+            "zh": "是的。我爸爸也在医院工作，他也非常忙。",
+            "pinyin": "shì de 。 wǒ bà ba yě zài yī yuàn gōng zuò ， tā yě fēi cháng máng 。",
+            "vi": "Dịch nghĩa: 是的。我爸爸也在医院工作，他也非常忙。"
+          },
+          {
+            "speaker": "刘明",
+            "zh": "你家有两个医生？",
+            "pinyin": "nǐ jiā yǒu liǎng gè yī shēng ？",
+            "vi": "Dịch nghĩa: 你家有两个医生？"
+          },
+          {
+            "speaker": "胡医生",
+            "zh": "对。",
+            "pinyin": "duì 。",
+            "vi": "Dịch nghĩa: 对。"
+          }
+        ],
+        "notes": [
+          "“小+ họ” là cách xưng hô thân mật với những người ít tuổi hơn mình"
+        ],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）大医院里（……）。",
+              "options": [
+                "人很少病人多医生不忙"
+              ],
+              "answer": "人很少病人多医生不忙"
+            },
+            {
+              "id": 2,
+              "question": "（2）胡医生家有（……）医生。",
+              "options": [
+                "一个两个三个"
+              ],
+              "answer": "一个两个三个"
+            }
+          ]
+        }
       }
     ]
   },
   {
     "lessonId": 9,
-    "lessonTitle": "Bài 9",
+    "lessonTitle": "Bài 9: 我明天上午在学校学习",
     "dialogues": [
       {
-        "title": "课文一",
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk1_texts/9-1.mp3",
         "lines": [
-          "李文：学校前边有一家电影院。",
-          "白家月：对。我们晚上去那个电影院看电影吧。",
-          "李文：好！我们七点在电影院外边见，好吗？",
-          "白家月：好的，晚上七点见！"
+          {
+            "speaker": "李文",
+            "zh": "学校前边有一家电影院。",
+            "pinyin": "xué xiào qián biān yǒu yì jiā diàn yǐng yuàn 。",
+            "vi": "Dịch nghĩa: 学校前边有一家电影院。"
+          },
+          {
+            "speaker": "白家月",
+            "zh": "对。我们晚上去那个电影院看电影吧。",
+            "pinyin": "duì 。 wǒ men wǎn shàng qù nà ge diàn yǐng yuàn kàn diàn yǐng ba 。",
+            "vi": "Dịch nghĩa: 对。我们晚上去那个电影院看电影吧。"
+          },
+          {
+            "speaker": "李文",
+            "zh": "好！我们七点在电影院外边见，好吗？",
+            "pinyin": "hǎo ！ wǒ men qī diǎn zài diàn yǐng yuàn wài biān jiàn ， hǎo ma ？",
+            "vi": "Dịch nghĩa: 好！我们七点在电影院外边见，好吗？"
+          },
+          {
+            "speaker": "白家月",
+            "zh": "好的，晚上七点见！",
+            "pinyin": "hǎo de ， wǎn shàng qī diǎn jiàn ！",
+            "vi": "Dịch nghĩa: 好的，晚上七点见！"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": null
       },
       {
-        "title": "课文二",
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk1_texts/9-2.mp3",
         "lines": [
-          "听两遍对话，选择正确答案",
-          "（1）椅子上有（……）。",
-          "一本书一只猫一个手机",
-          "（2）这是陈天中的（……）中文书。",
-          "第一本第二本第三本",
-          "白家月：椅子上有一本中文书，那是谁的书？",
-          "陈天中：是我的书，谢谢。这是我的第二本中文书。",
-          "白家月：不客气。你明天上午在哪儿？",
-          "陈天中：我明天上午在学校学习。"
+          {
+            "speaker": "白家月",
+            "zh": "椅子上有一本中文书，那是谁的书？",
+            "pinyin": "yǐ zi shàng yǒu yì běn zhōng wén shū ， nà shì shuí de shū ？",
+            "vi": "Dịch nghĩa: 椅子上有一本中文书，那是谁的书？"
+          },
+          {
+            "speaker": "陈天中",
+            "zh": "是我的书，谢谢。这是我的第二本中文书。",
+            "pinyin": "shì wǒ de shū ， xiè xiè 。 zhè shì wǒ de dì èr běn zhōng wén shū 。",
+            "vi": "Dịch nghĩa: 是我的书，谢谢。这是我的第二本中文书。"
+          },
+          {
+            "speaker": "白家月",
+            "zh": "不客气。你明天上午在哪儿？",
+            "pinyin": "bú kè qì 。 nǐ míng tiān shàng wǔ zài nǎ ér ？",
+            "vi": "Dịch nghĩa: 不客气。你明天上午在哪儿？"
+          },
+          {
+            "speaker": "陈天中",
+            "zh": "我明天上午在学校学习。",
+            "pinyin": "wǒ míng tiān shàng wǔ zài xué xiào xué xí 。",
+            "vi": "Dịch nghĩa: 我明天上午在学校学习。"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）椅子上有（……）。",
+              "options": [
+                "一本书一只猫一个手机"
+              ],
+              "answer": "一本书一只猫一个手机"
+            },
+            {
+              "id": 2,
+              "question": "（2）这是陈天中的（……）中文书。",
+              "options": [
+                "第一本第二本第三本"
+              ],
+              "answer": "第一本第二本第三本"
+            }
+          ]
+        }
       },
       {
-        "title": "课文三",
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk1_texts/9-3.mp3",
         "lines": [
-          "听两遍对话，选择正确答案",
-          "（1）杨同乐唱歌（…..）。",
-          "不太好不好听很好听",
-          "（2）王一雪家有一只（……）。",
-          "小猫小狗大狗",
-          "王一雪：明天星期六，你做什么？",
-          "杨同乐：我白天在家里读书，晚上和朋友们去外边唱歌。",
-          "王一雪：你唱歌很好听。",
-          "杨同乐：谢谢！您星期六做什么？",
-          "王一雪：我在家里做饭、看电视，和孩子们、小狗玩。",
-          "杨同乐：我也有一只小狗。"
+          {
+            "speaker": "王一雪",
+            "zh": "明天星期六，你做什么？",
+            "pinyin": "míng tiān xīng qī liù ， nǐ zuò shén me ？",
+            "vi": "Dịch nghĩa: 明天星期六，你做什么？"
+          },
+          {
+            "speaker": "杨同乐",
+            "zh": "我白天在家里读书，晚上和朋友们去外边唱歌。",
+            "pinyin": "wǒ bái tiān zài jiā lǐ dú shū ， wǎn shàng hé péng yǒu men qù wài biān chàng gē 。",
+            "vi": "Dịch nghĩa: 我白天在家里读书，晚上和朋友们去外边唱歌。"
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "你唱歌很好听。",
+            "pinyin": "nǐ chàng gē hěn hǎo tīng 。",
+            "vi": "Dịch nghĩa: 你唱歌很好听。"
+          },
+          {
+            "speaker": "杨同乐",
+            "zh": "谢谢！您星期六做什么？",
+            "pinyin": "xiè xiè ！ nín xīng qī liù zuò shén me ？",
+            "vi": "Dịch nghĩa: 谢谢！您星期六做什么？"
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "我在家里做饭、看电视，和孩子们、小狗玩。",
+            "pinyin": "wǒ zài jiā lǐ zuò fàn 、 kàn diàn shì ， hé hái zi men 、 xiǎo gǒu wán 。",
+            "vi": "Dịch nghĩa: 我在家里做饭、看电视，和孩子们、小狗玩。"
+          },
+          {
+            "speaker": "杨同乐",
+            "zh": "我也有一只小狗。",
+            "pinyin": "wǒ yě yǒu yì zhī xiǎo gǒu 。",
+            "vi": "Dịch nghĩa: 我也有一只小狗。"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）杨同乐唱歌（…..）。",
+              "options": [
+                "不太好不好听很好听"
+              ],
+              "answer": "不太好不好听很好听"
+            },
+            {
+              "id": 2,
+              "question": "（2）王一雪家有一只（……）。",
+              "options": [
+                "小猫小狗大狗"
+              ],
+              "answer": "小猫小狗大狗"
+            }
+          ]
+        }
       }
     ]
   },
   {
     "lessonId": 10,
-    "lessonTitle": "Bài 10",
+    "lessonTitle": "Bài 10: 这儿的苹果正便宜！",
     "dialogues": [
       {
-        "title": "课文一",
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk1_texts/10-1.mp3",
         "lines": [
-          "王一雪：请问，有杯子吗？",
-          "售货员：有，杯子在这边。",
-          "王一雪：多少钱一个？",
-          "售货员：这些五块钱一个，那些10块钱一个。",
-          "王一雪：我买这个吧。"
+          {
+            "speaker": "王一雪",
+            "zh": "请问，有杯子吗？",
+            "pinyin": "qǐng wèn ， yǒu bēi zi ma ？",
+            "vi": "Dịch nghĩa: 请问，有杯子吗？"
+          },
+          {
+            "speaker": "售货员",
+            "zh": "有，杯子在这边。",
+            "pinyin": "yǒu ， bēi zi zài zhè biān 。",
+            "vi": "Dịch nghĩa: 有，杯子在这边。"
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "多少钱一个？",
+            "pinyin": "duō shǎo qián yí gè ？",
+            "vi": "Dịch nghĩa: 多少钱一个？"
+          },
+          {
+            "speaker": "售货员",
+            "zh": "这些五块钱一个，那些10块钱一个。",
+            "pinyin": "zhè xiē wǔ kuài qián yí gè ， nà xiē 1 0 kuài qián yí gè 。",
+            "vi": "Dịch nghĩa: 这些五块钱一个，那些10块钱一个。"
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "我买这个吧。",
+            "pinyin": "wǒ mǎi zhè ge ba 。",
+            "vi": "Dịch nghĩa: 我买这个吧。"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": null
       },
       {
-        "title": "课文二",
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk1_texts/10-2.mp3",
         "lines": [
-          "听两遍对话，选择正确答案",
-          "（1）这儿的水果（…..）。",
-          "很少真不少真不多",
-          "（2）苹果（……）一斤。",
-          "三块三块五七块二",
-          "王一雪：这儿的水果真不少？",
-          "售货员：您想买什么？",
-          "王一雪：我想买两斤苹果。",
-          "售货员：苹果三块五一斤。这些七块二，七块钱吧。",
-          "王一雪：好的，这儿的苹果真便宜！"
+          {
+            "speaker": "王一雪",
+            "zh": "这儿的水果真不少？",
+            "pinyin": "zhè ér de shuǐ guǒ zhēn bù shǎo ？",
+            "vi": "Dịch nghĩa: 这儿的水果真不少？"
+          },
+          {
+            "speaker": "售货员",
+            "zh": "您想买什么？",
+            "pinyin": "nín xiǎng mǎi shén me ？",
+            "vi": "Dịch nghĩa: 您想买什么？"
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "我想买两斤苹果。",
+            "pinyin": "wǒ xiǎng mǎi liǎng jīn píng guǒ 。",
+            "vi": "Dịch nghĩa: 我想买两斤苹果。"
+          },
+          {
+            "speaker": "售货员",
+            "zh": "苹果三块五一斤。这些七块二，七块钱吧。",
+            "pinyin": "píng guǒ sān kuài wǔ yī jīn 。 zhè xiē qī kuài èr ， qī kuài qián ba 。",
+            "vi": "Dịch nghĩa: 苹果三块五一斤。这些七块二，七块钱吧。"
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "好的，这儿的苹果真便宜！",
+            "pinyin": "hǎo de ， zhè ér de píng guǒ zhēn pián yi ！",
+            "vi": "Dịch nghĩa: 好的，这儿的苹果真便宜！"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）这儿的水果（…..）。",
+              "options": [
+                "很少真不少真不多"
+              ],
+              "answer": "很少真不少真不多"
+            },
+            {
+              "id": 2,
+              "question": "（2）苹果（……）一斤。",
+              "options": [
+                "三块三块五七块二"
+              ],
+              "answer": "三块三块五七块二"
+            }
+          ]
+        }
       },
       {
-        "title": "课文三",
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk1_texts/10-3.mp3",
         "lines": [
-          "听两遍对话，选择正确答案",
-          "（1）这件衣服（……）。",
-          "20 元100元110元",
-          "（2）这件衣服（……）。",
-          "太贵很贵不贵",
-          "王一雪：这家商店衣服真多！这件一百元，怎么样？",
-          "刘明：好看，也不贵。",
-          "王一雪：小雪能穿，买一件吧。",
-          "刘明：好的。小明能穿吗？",
-          "王一雪：不能。这些是女孩子串的衣服，男孩子的衣服在那儿。",
-          "刘明：好的。"
+          {
+            "speaker": "王一雪",
+            "zh": "这家商店衣服真多！这件一百元，怎么样？",
+            "pinyin": "zhè jiā shāng diàn yī fu zhēn duō ！ zhè jiàn yì bǎi yuán ， zěn me yàng ？",
+            "vi": "Dịch nghĩa: 这家商店衣服真多！这件一百元，怎么样？"
+          },
+          {
+            "speaker": "刘明",
+            "zh": "好看，也不贵。",
+            "pinyin": "hǎo kàn ， yě bú guì 。",
+            "vi": "Dịch nghĩa: 好看，也不贵。"
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "小雪能穿，买一件吧。",
+            "pinyin": "xiǎo xuě néng chuān ， mǎi yí jiàn ba 。",
+            "vi": "Dịch nghĩa: 小雪能穿，买一件吧。"
+          },
+          {
+            "speaker": "刘明",
+            "zh": "好的。小明能穿吗？",
+            "pinyin": "hǎo de 。 xiǎo míng néng chuān ma ？",
+            "vi": "Dịch nghĩa: 好的。小明能穿吗？"
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "不能。这些是女孩子串的衣服，男孩子的衣服在那儿。",
+            "pinyin": "bù néng 。 zhè xiē shì nǚ hái zi chuàn de yī fu ， nán hái zi de yī fu zài nà ér 。",
+            "vi": "Dịch nghĩa: 不能。这些是女孩子串的衣服，男孩子的衣服在那儿。"
+          },
+          {
+            "speaker": "刘明",
+            "zh": "好的。",
+            "pinyin": "hǎo de 。",
+            "vi": "Dịch nghĩa: 好的。"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）这件衣服（……）。",
+              "options": [
+                "20",
+                "元100元110元"
+              ],
+              "answer": "20"
+            },
+            {
+              "id": 2,
+              "question": "（2）这件衣服（……）。",
+              "options": [
+                "太贵很贵不贵"
+              ],
+              "answer": "太贵很贵不贵"
+            }
+          ]
+        }
       }
     ]
   },
   {
     "lessonId": 11,
-    "lessonTitle": "Bài 11",
+    "lessonTitle": "Bài 11: 我读大学呢",
     "dialogues": [
       {
-        "title": "课文一",
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk1_texts/11-1.mp3",
         "lines": [
-          "王一飞：喂，李文，你什么时候能到饭店？",
-          "李文：还不知道，正在找呢。它是不是在超市后边？",
-          "王一飞：是的。你开车没开车？",
-          "李文：我没开车，坐车呢。"
+          {
+            "speaker": "王一飞",
+            "zh": "喂，李文，你什么时候能到饭店？",
+            "pinyin": "wèi ， lǐ wén ， nǐ shén me shí hòu néng dào fàn diàn ？",
+            "vi": "Dịch nghĩa: 喂，李文，你什么时候能到饭店？"
+          },
+          {
+            "speaker": "李文",
+            "zh": "还不知道，正在找呢。它是不是在超市后边？",
+            "pinyin": "hái bù zhī dào ， zhèng zài zhǎo ne 。 tā shì bu shì zài chāo shì hòu biān ？",
+            "vi": "Dịch nghĩa: 还不知道，正在找呢。它是不是在超市后边？"
+          },
+          {
+            "speaker": "王一飞",
+            "zh": "是的。你开车没开车？",
+            "pinyin": "shì de 。 nǐ kāi chē méi kāi chē ？",
+            "vi": "Dịch nghĩa: 是的。你开车没开车？"
+          },
+          {
+            "speaker": "李文",
+            "zh": "我没开车，坐车呢。",
+            "pinyin": "wǒ méi kāi chē ， zuò chē ne 。",
+            "vi": "Dịch nghĩa: 我没开车，坐车呢。"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": null
       },
       {
-        "title": "课文二",
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk1_texts/11-2.mp3",
         "lines": [
-          "听两遍对话，选择正确答案",
-          "（1）李文（……）读大学。",
-          "不没在",
-          "（2）李文很忙，有很多（……）",
-          "课书椅子",
-          "王一飞：你还在读大学吗？",
-          "李文：对，我读大学呢，还是大学生。",
-          "王一飞：你们学习忙不忙？",
-          "李文：非常忙，我学医，我们的课都很多。"
+          {
+            "speaker": "王一飞",
+            "zh": "你还在读大学吗？",
+            "pinyin": "nǐ hái zài dú dà xué ma ？",
+            "vi": "Dịch nghĩa: 你还在读大学吗？"
+          },
+          {
+            "speaker": "李文",
+            "zh": "对，我读大学呢，还是大学生。",
+            "pinyin": "duì ， wǒ dú dà xué ne ， hái shì dà xué shēng 。",
+            "vi": "Dịch nghĩa: 对，我读大学呢，还是大学生。"
+          },
+          {
+            "speaker": "王一飞",
+            "zh": "你们学习忙不忙？",
+            "pinyin": "nǐ men xué xí máng bu máng ？",
+            "vi": "Dịch nghĩa: 你们学习忙不忙？"
+          },
+          {
+            "speaker": "李文",
+            "zh": "非常忙，我学医，我们的课都很多。",
+            "pinyin": "fēi cháng máng ， wǒ xué yī ， wǒ men de kè dōu hěn duō 。",
+            "vi": "Dịch nghĩa: 非常忙，我学医，我们的课都很多。"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）李文（……）读大学。",
+              "options": [
+                "不没在"
+              ],
+              "answer": "不没在"
+            },
+            {
+              "id": 2,
+              "question": "（2）李文很忙，有很多（……）",
+              "options": [
+                "课书椅子"
+              ],
+              "answer": "课书椅子"
+            }
+          ]
+        }
       },
       {
-        "title": "课文三",
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk1_texts/11-3.mp3",
         "lines": [
-          "（1）弟弟正在（……）。",
-          "玩起床睡觉",
-          "（2）爸爸问姐姐，弟弟（……）超市。",
-          "在去去不去",
-          "刘明：弟弟起床没起床呢？",
-          "刘小雪：起床呢，还在睡觉。",
-          "刘明：还睡呢？他今天去不去那里？",
-          "刘小雪：去哪里？",
-          "刘明：去超市。",
-          "刘小雪：我昨天问他，他对我说，他不去，他今天要和小朋友玩。"
+          {
+            "speaker": "刘明",
+            "zh": "弟弟起床没起床呢？",
+            "pinyin": "dì di qǐ chuáng méi qǐ chuáng ne ？",
+            "vi": "Dịch nghĩa: 弟弟起床没起床呢？"
+          },
+          {
+            "speaker": "刘小雪",
+            "zh": "起床呢，还在睡觉。",
+            "pinyin": "qǐ chuáng ne ， hái zài shuì jiào 。",
+            "vi": "Dịch nghĩa: 起床呢，还在睡觉。"
+          },
+          {
+            "speaker": "刘明",
+            "zh": "还睡呢？他今天去不去那里？",
+            "pinyin": "hái shuì ne ？ tā jīn tiān qù bu qù nà lǐ ？",
+            "vi": "Dịch nghĩa: 还睡呢？他今天去不去那里？"
+          },
+          {
+            "speaker": "刘小雪",
+            "zh": "去哪里？",
+            "pinyin": "qù nǎ lǐ ？",
+            "vi": "Dịch nghĩa: 去哪里？"
+          },
+          {
+            "speaker": "刘明",
+            "zh": "去超市。",
+            "pinyin": "qù chāo shì 。",
+            "vi": "Dịch nghĩa: 去超市。"
+          },
+          {
+            "speaker": "刘小雪",
+            "zh": "我昨天问他，他对我说，他不去，他今天要和小朋友玩。",
+            "pinyin": "wǒ zuó tiān wèn tā ， tā duì wǒ shuō ， tā bú qù ， tā jīn tiān yào hé xiǎo péng yǒu wán 。",
+            "vi": "Dịch nghĩa: 我昨天问他，他对我说，他不去，他今天要和小朋友玩。"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": null
       }
     ]
   },
   {
     "lessonId": 12,
-    "lessonTitle": "Bài 12",
+    "lessonTitle": "Bài 12: 昨天下雪了",
     "dialogues": [
       {
-        "title": "课文一",
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk1_texts/12-1.mp3",
         "lines": [
-          "听两遍对话，选择正确答案",
-          "（1）王一飞那儿的天气（……）。",
-          "很好很不好不太好",
-          "（2）王一飞觉得（……）。",
-          "不冷很冷有点儿冷",
-          "王一雪：今天天气怎么样？",
-          "王一飞：这里的天不太好，下雨了。",
-          "王一雪：雨大吗？",
-          "王一飞：有点儿大，我觉得很冷。"
+          {
+            "speaker": "王一雪",
+            "zh": "今天天气怎么样？",
+            "pinyin": "jīn tiān tiān qì zěn me yàng ？",
+            "vi": "Dịch nghĩa: 今天天气怎么样？"
+          },
+          {
+            "speaker": "王一飞",
+            "zh": "这里的天不太好，下雨了。",
+            "pinyin": "zhè lǐ de tiān bú tài hǎo ， xià yǔ le 。",
+            "vi": "Dịch nghĩa: 这里的天不太好，下雨了。"
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "雨大吗？",
+            "pinyin": "yǔ dà ma ？",
+            "vi": "Dịch nghĩa: 雨大吗？"
+          },
+          {
+            "speaker": "王一飞",
+            "zh": "有点儿大，我觉得很冷。",
+            "pinyin": "yǒu diǎn er dà ， wǒ jué de hěn lěng 。",
+            "vi": "Dịch nghĩa: 有点儿大，我觉得很冷。"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）王一飞那儿的天气（……）。",
+              "options": [
+                "很好很不好不太好"
+              ],
+              "answer": "很好很不好不太好"
+            },
+            {
+              "id": 2,
+              "question": "（2）王一飞觉得（……）。",
+              "options": [
+                "不冷很冷有点儿冷"
+              ],
+              "answer": "不冷很冷有点儿冷"
+            }
+          ]
+        }
       },
       {
-        "title": "课文二",
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk1_texts/12-2.mp3",
         "lines": [
-          "听两遍对话，选择正确答案",
-          "（1）杨同乐昨天（……）了。",
-          "生病上班去公司",
-          "（2）羊同乐今天（……）了。",
-          "在家里去医院来公司",
-          "王一雪：昨天下雪了。",
-          "杨同乐：是的，太冷了。",
-          "王一雪：你昨天没来公司，生病吗？",
-          "杨同乐：对，我昨天去医院看病了。"
+          {
+            "speaker": "王一雪",
+            "zh": "昨天下雪了。",
+            "pinyin": "zuó tiān xià xuě le 。",
+            "vi": "Dịch nghĩa: 昨天下雪了。"
+          },
+          {
+            "speaker": "杨同乐",
+            "zh": "是的，太冷了。",
+            "pinyin": "shì de ， tài lěng le 。",
+            "vi": "Dịch nghĩa: 是的，太冷了。"
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "你昨天没来公司，生病吗？",
+            "pinyin": "nǐ zuó tiān méi lái gōng sī ， shēng bìng ma ？",
+            "vi": "Dịch nghĩa: 你昨天没来公司，生病吗？"
+          },
+          {
+            "speaker": "杨同乐",
+            "zh": "对，我昨天去医院看病了。",
+            "pinyin": "duì ， wǒ zuó tiān qù yī yuàn kàn bìng le 。",
+            "vi": "Dịch nghĩa: 对，我昨天去医院看病了。"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）杨同乐昨天（……）了。",
+              "options": [
+                "生病上班去公司"
+              ],
+              "answer": "生病上班去公司"
+            },
+            {
+              "id": 2,
+              "question": "（2）羊同乐今天（……）了。",
+              "options": [
+                "在家里去医院来公司"
+              ],
+              "answer": "在家里去医院来公司"
+            }
+          ]
+        }
       },
       {
-        "title": "课文三",
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk1_texts/12-3.mp3",
         "lines": [
-          "听两遍对话，选择正确答案",
-          "（1）杨同乐觉得（……）。",
-          "很热很冷有点儿冷",
-          "（2）医生对杨同乐说：“今天（……）吧”。",
-          "上班下班休息半天",
-          "杨同乐：医生，我病了。",
-          "胡医生：我看看。你觉得怎么样？",
-          "杨同乐：我很冷。",
-          "胡医生：好的，吃一点儿药，今天休息半天吧。",
-          "杨同乐：好的。",
-          "胡医生：回家后再喝些热水。"
+          {
+            "speaker": "杨同乐",
+            "zh": "医生，我病了。",
+            "pinyin": "yī shēng ， wǒ bìng le 。",
+            "vi": "Dịch nghĩa: 医生，我病了。"
+          },
+          {
+            "speaker": "胡医生",
+            "zh": "我看看。你觉得怎么样？",
+            "pinyin": "wǒ kàn kàn 。 nǐ jué de zěn me yàng ？",
+            "vi": "Dịch nghĩa: 我看看。你觉得怎么样？"
+          },
+          {
+            "speaker": "杨同乐",
+            "zh": "我很冷。",
+            "pinyin": "wǒ hěn lěng 。",
+            "vi": "Dịch nghĩa: 我很冷。"
+          },
+          {
+            "speaker": "胡医生",
+            "zh": "好的，吃一点儿药，今天休息半天吧。",
+            "pinyin": "hǎo de ， chī yì diǎn ér yào ， jīn tiān xiū xi bàn tiān ba 。",
+            "vi": "Dịch nghĩa: 好的，吃一点儿药，今天休息半天吧。"
+          },
+          {
+            "speaker": "杨同乐",
+            "zh": "好的。",
+            "pinyin": "hǎo de 。",
+            "vi": "Dịch nghĩa: 好的。"
+          },
+          {
+            "speaker": "胡医生",
+            "zh": "回家后再喝些热水。",
+            "pinyin": "huí jiā hòu zài hē xiē rè shuǐ 。",
+            "vi": "Dịch nghĩa: 回家后再喝些热水。"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）杨同乐觉得（……）。",
+              "options": [
+                "很热很冷有点儿冷"
+              ],
+              "answer": "很热很冷有点儿冷"
+            },
+            {
+              "id": 2,
+              "question": "（2）医生对杨同乐说：“今天（……）吧”。",
+              "options": [
+                "上班下班休息半天"
+              ],
+              "answer": "上班下班休息半天"
+            }
+          ]
+        }
       }
     ]
   },
   {
     "lessonId": 13,
-    "lessonTitle": "Bài 13",
+    "lessonTitle": "Bài 13: 请给我一杯茶",
     "dialogues": [
       {
-        "title": "课文一",
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk1_texts/13-1.mp3",
         "lines": [
-          "听两遍对话，选择正确答案",
-          "（1）白家月想在问王老师（……）",
-          "一个问题两个问题这个问题",
-          "（2）王老师（……）那里买不买手机？",
-          "知道不知道也想知道",
-          "白家月：王老师，我可以再问您一个问题吗？",
-          "王一飞：可以。你有什么问题？",
-          "白家月：那个小店卖不卖手机？",
-          "王一飞：我不知道。你可以打电话问一下。"
+          {
+            "speaker": "白家月",
+            "zh": "王老师，我可以再问您一个问题吗？",
+            "pinyin": "wáng lǎo shī ， wǒ kě yǐ zài wèn nín yí gè wèn tí ma ？",
+            "vi": "Dịch nghĩa: 王老师，我可以再问您一个问题吗？"
+          },
+          {
+            "speaker": "王一飞",
+            "zh": "可以。你有什么问题？",
+            "pinyin": "kě yǐ 。 nǐ yǒu shén me wèn tí ？",
+            "vi": "Dịch nghĩa: 可以。你有什么问题？"
+          },
+          {
+            "speaker": "白家月",
+            "zh": "那个小店卖不卖手机？",
+            "pinyin": "nà ge xiǎo diàn mài bu mài shǒu jī ？",
+            "vi": "Dịch nghĩa: 那个小店卖不卖手机？"
+          },
+          {
+            "speaker": "王一飞",
+            "zh": "我不知道。你可以打电话问一下。",
+            "pinyin": "wǒ bù zhī dào 。 nǐ kě yǐ dǎ diàn huà wèn yí xià 。",
+            "vi": "Dịch nghĩa: 我不知道。你可以打电话问一下。"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）白家月想在问王老师（……）",
+              "options": [
+                "一个问题两个问题这个问题"
+              ],
+              "answer": "一个问题两个问题这个问题"
+            },
+            {
+              "id": 2,
+              "question": "（2）王老师（……）那里买不买手机？",
+              "options": [
+                "知道不知道也想知道"
+              ],
+              "answer": "知道不知道也想知道"
+            }
+          ]
+        }
       },
       {
-        "title": "课文二",
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk1_texts/13-2.mp3",
         "lines": [
-          "（1）王一雪要和（……）。",
-          "水茶牛奶",
-          "（2）王一雪还想吃（……）。",
-          "包子面条儿面包和鸡蛋",
-          "服务员：女士，请坐！您和什么？",
-          "王一雪：我看一下。请给我一杯牛奶。",
-          "服务员：好的。您还要什么？",
-          "王一雪：我还没吃早饭，再要这个面包和鸡蛋吧。"
+          {
+            "speaker": "服务员",
+            "zh": "女士，请坐！您和什么？",
+            "pinyin": "nǚ shì ， qǐng zuò ！ nín hé shén me ？",
+            "vi": "Dịch nghĩa: 女士，请坐！您和什么？"
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "我看一下。请给我一杯牛奶。",
+            "pinyin": "wǒ kàn yí xià 。 qǐng gěi wǒ yì bēi niú nǎi 。",
+            "vi": "Dịch nghĩa: 我看一下。请给我一杯牛奶。"
+          },
+          {
+            "speaker": "服务员",
+            "zh": "好的。您还要什么？",
+            "pinyin": "hǎo de 。 nín hái yào shén me ？",
+            "vi": "Dịch nghĩa: 好的。您还要什么？"
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "我还没吃早饭，再要这个面包和鸡蛋吧。",
+            "pinyin": "wǒ hái méi chī zǎo fàn ， zài yào zhè ge miàn bāo hé jī dàn ba 。",
+            "vi": "Dịch nghĩa: 我还没吃早饭，再要这个面包和鸡蛋吧。"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": null
       },
       {
-        "title": "课文三",
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk1_texts/13-3.mp3",
         "lines": [
-          "听两遍对话，选择正确答案",
-          "（1）刘明想吃（……）。",
-          "米饭饺子米饭和饺子",
-          "（2）刘明想喝（……）。",
-          "水茶牛奶",
-          "服务员：先生，请坐！您要什么？",
-          "刘明：我要一斤饺子。",
-          "服务员：好的。一斤饺子40个。",
-          "刘明：40个太多了，我要一半吧。",
-          "服务员：半斤20个。您想喝什么？",
-          "刘明：请给我一杯茶吧。"
+          {
+            "speaker": "服务员",
+            "zh": "先生，请坐！您要什么？",
+            "pinyin": "xiān shēng ， qǐng zuò ！ nín yào shén me ？",
+            "vi": "Dịch nghĩa: 先生，请坐！您要什么？"
+          },
+          {
+            "speaker": "刘明",
+            "zh": "我要一斤饺子。",
+            "pinyin": "wǒ yào yì jīn jiǎo zǐ 。",
+            "vi": "Dịch nghĩa: 我要一斤饺子。"
+          },
+          {
+            "speaker": "服务员",
+            "zh": "好的。一斤饺子40个。",
+            "pinyin": "hǎo de 。 yì jīn jiǎo zǐ 4 0 gè 。",
+            "vi": "Dịch nghĩa: 好的。一斤饺子40个。"
+          },
+          {
+            "speaker": "刘明",
+            "zh": "40个太多了，我要一半吧。",
+            "pinyin": "4 0 gè tài duō le ， wǒ yào yí bàn ba 。",
+            "vi": "Dịch nghĩa: 40个太多了，我要一半吧。"
+          },
+          {
+            "speaker": "服务员",
+            "zh": "半斤20个。您想喝什么？",
+            "pinyin": "bàn jīn 2 0 gè 。 nín xiǎng hē shén me ？",
+            "vi": "Dịch nghĩa: 半斤20个。您想喝什么？"
+          },
+          {
+            "speaker": "刘明",
+            "zh": "请给我一杯茶吧。",
+            "pinyin": "qǐng gěi wǒ yì bēi chá ba 。",
+            "vi": "Dịch nghĩa: 请给我一杯茶吧。"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）刘明想吃（……）。",
+              "options": [
+                "米饭饺子米饭和饺子"
+              ],
+              "answer": "米饭饺子米饭和饺子"
+            },
+            {
+              "id": 2,
+              "question": "（2）刘明想喝（……）。",
+              "options": [
+                "水茶牛奶"
+              ],
+              "answer": "水茶牛奶"
+            }
+          ]
+        }
       }
     ]
   },
   {
     "lessonId": 14,
-    "lessonTitle": "Bài 14",
+    "lessonTitle": "Bài 14: 我看了一个电影",
     "dialogues": [
       {
-        "title": "课文一",
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk1_texts/14-1.mp3",
         "lines": [
-          "听两遍对话，选择正确答案",
-          "（1）陈天中（……）王老师。",
-          "正在看没看见看见了",
-          "（2）陈天中在火车上（……）。",
-          "读书找王老师看了一个电影",
-          "白家月：你们上火车后看见王老师了吗？",
-          "陈天中：没看见。中午车开后，有些人在看书，有些人睡觉了。",
-          "白家月：你呢？",
-          "陈天中：我看了一个电影。"
+          {
+            "speaker": "白家月",
+            "zh": "你们上火车后看见王老师了吗？",
+            "pinyin": "nǐ men shàng huǒ chē hòu kàn jiàn wáng lǎo shī le ma ？",
+            "vi": "Dịch nghĩa: 你们上火车后看见王老师了吗？"
+          },
+          {
+            "speaker": "陈天中",
+            "zh": "没看见。中午车开后，有些人在看书，有些人睡觉了。",
+            "pinyin": "méi kàn jiàn 。 zhōng wǔ chē kāi hòu ， yǒu xiē rén zài kàn shū ， yǒu xiē rén shuì jiào le 。",
+            "vi": "Dịch nghĩa: 没看见。中午车开后，有些人在看书，有些人睡觉了。"
+          },
+          {
+            "speaker": "白家月",
+            "zh": "你呢？",
+            "pinyin": "nǐ ne ？",
+            "vi": "Dịch nghĩa: 你呢？"
+          },
+          {
+            "speaker": "陈天中",
+            "zh": "我看了一个电影。",
+            "pinyin": "wǒ kàn le yí gè diàn yǐng 。",
+            "vi": "Dịch nghĩa: 我看了一个电影。"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）陈天中（……）王老师。",
+              "options": [
+                "正在看没看见看见了"
+              ],
+              "answer": "正在看没看见看见了"
+            },
+            {
+              "id": 2,
+              "question": "（2）陈天中在火车上（……）。",
+              "options": [
+                "读书找王老师看了一个电影"
+              ],
+              "answer": "读书找王老师看了一个电影"
+            }
+          ]
+        }
       },
       {
-        "title": "课文二",
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk1_texts/14-2.mp3",
         "lines": [
-          "听两遍对话，选择正确答案",
-          "（1）同学们（……）汉语了。",
-          "想说不会说都会说",
-          "（2）陈天中（……）王老师在说什么。",
-          "听见了没听见不想听",
-          "王一飞：你们会说汉语了，也会写汉字了吗？",
-          "白家月：我们都会写了。",
-          "陈天中：老师，我听不见。",
-          "王一飞：请大家不要说话！请听说老师的问题：你们都会写哪些汉字了？",
-          "陈天中：我会写这些字了，您看！"
+          {
+            "speaker": "王一飞",
+            "zh": "你们会说汉语了，也会写汉字了吗？",
+            "pinyin": "nǐ men huì shuō hàn yǔ le ， yě huì xiě hàn zì le ma ？",
+            "vi": "Dịch nghĩa: 你们会说汉语了，也会写汉字了吗？"
+          },
+          {
+            "speaker": "白家月",
+            "zh": "我们都会写了。",
+            "pinyin": "wǒ men dōu huì xiě le 。",
+            "vi": "Dịch nghĩa: 我们都会写了。"
+          },
+          {
+            "speaker": "陈天中",
+            "zh": "老师，我听不见。",
+            "pinyin": "lǎo shī ， wǒ tīng bú jiàn 。",
+            "vi": "Dịch nghĩa: 老师，我听不见。"
+          },
+          {
+            "speaker": "王一飞",
+            "zh": "请大家不要说话！请听说老师的问题：你们都会写哪些汉字了？",
+            "pinyin": "qǐng dà jiā bú yào shuō huà ！ qǐng tīng shuō lǎo shī de wèn tí ： nǐ men dōu huì xiě nǎ xiē hàn zì le ？",
+            "vi": "Dịch nghĩa: 请大家不要说话！请听说老师的问题：你们都会写哪些汉字了？"
+          },
+          {
+            "speaker": "陈天中",
+            "zh": "我会写这些字了，您看！",
+            "pinyin": "wǒ huì xiě zhè xiē zì le ， nín kàn ！",
+            "vi": "Dịch nghĩa: 我会写这些字了，您看！"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）同学们（……）汉语了。",
+              "options": [
+                "想说不会说都会说"
+              ],
+              "answer": "想说不会说都会说"
+            },
+            {
+              "id": 2,
+              "question": "（2）陈天中（……）王老师在说什么。",
+              "options": [
+                "听见了没听见不想听"
+              ],
+              "answer": "听见了没听见不想听"
+            }
+          ]
+        }
       },
       {
-        "title": "课文三",
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk1_texts/14-3.mp3",
         "lines": [
-          "听两遍对话，选择正确答案",
-          "（1）明年刘明和王一雪的女儿（……）。",
-          "上小学上中学上大学",
-          "（2）（……）孩子们都忙了。",
-          "上学上学前上学后",
-          "刘明：明年女儿上中学。",
-          "王一雪：对。儿子也上小学了。",
-          "刘明：我们家有了一个中学生。",
-          "王一雪：还有了一个小学生。",
-          "刘明：上学后，他们都忙了。",
-          "王一雪：是的。太晚了，睡觉吧。"
+          {
+            "speaker": "刘明",
+            "zh": "明年女儿上中学。",
+            "pinyin": "míng nián nǚ ér shàng zhōng xué 。",
+            "vi": "Dịch nghĩa: 明年女儿上中学。"
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "对。儿子也上小学了。",
+            "pinyin": "duì 。 ér zi yě shàng xiǎo xué le 。",
+            "vi": "Dịch nghĩa: 对。儿子也上小学了。"
+          },
+          {
+            "speaker": "刘明",
+            "zh": "我们家有了一个中学生。",
+            "pinyin": "wǒ men jiā yǒu le yí gè zhōng xué shēng 。",
+            "vi": "Dịch nghĩa: 我们家有了一个中学生。"
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "还有了一个小学生。",
+            "pinyin": "hái yǒu le yí gè xiǎo xué shēng 。",
+            "vi": "Dịch nghĩa: 还有了一个小学生。"
+          },
+          {
+            "speaker": "刘明",
+            "zh": "上学后，他们都忙了。",
+            "pinyin": "shàng xué hòu ， tā men dōu máng le 。",
+            "vi": "Dịch nghĩa: 上学后，他们都忙了。"
+          },
+          {
+            "speaker": "王一雪",
+            "zh": "是的。太晚了，睡觉吧。",
+            "pinyin": "shì de 。 tài wǎn le ， shuì jiào ba 。",
+            "vi": "Dịch nghĩa: 是的。太晚了，睡觉吧。"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）明年刘明和王一雪的女儿（……）。",
+              "options": [
+                "上小学上中学上大学"
+              ],
+              "answer": "上小学上中学上大学"
+            },
+            {
+              "id": 2,
+              "question": "（2）（……）孩子们都忙了。",
+              "options": [
+                "上学上学前上学后"
+              ],
+              "answer": "上学上学前上学后"
+            }
+          ]
+        }
       }
     ]
   },
   {
     "lessonId": 15,
-    "lessonTitle": "Bài 15",
+    "lessonTitle": "Bài 15: 大兴机场见",
     "dialogues": [
       {
-        "title": "课文一",
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk1_texts/15-1.mp3",
         "lines": [
-          "听两遍对话，选择正确答案",
-          "（1）李文问大家（……）吃哪个菜。",
-          "好爱不爱",
-          "（2）李文说：“大家（……）。”",
-          "吃点儿少吃点儿多吃点儿",
-          "李文：你们爱吃哪个菜？",
-          "白家月：我喜欢这个，也喜欢那个。",
-          "陈天中：这些菜都好好吃，还很好看。",
-          "李文：我爱吃中国菜，也喜欢做。大家多吃点儿。"
+          {
+            "speaker": "李文",
+            "zh": "你们爱吃哪个菜？",
+            "pinyin": "nǐ men ài chī nǎ gè cài ？",
+            "vi": "Dịch nghĩa: 你们爱吃哪个菜？"
+          },
+          {
+            "speaker": "白家月",
+            "zh": "我喜欢这个，也喜欢那个。",
+            "pinyin": "wǒ xǐ huan zhè ge ， yě xǐ huan nà ge 。",
+            "vi": "Dịch nghĩa: 我喜欢这个，也喜欢那个。"
+          },
+          {
+            "speaker": "陈天中",
+            "zh": "这些菜都好好吃，还很好看。",
+            "pinyin": "zhè xiē cài dōu hǎo hǎo chī ， hái hěn hǎo kàn 。",
+            "vi": "Dịch nghĩa: 这些菜都好好吃，还很好看。"
+          },
+          {
+            "speaker": "李文",
+            "zh": "我爱吃中国菜，也喜欢做。大家多吃点儿。",
+            "pinyin": "wǒ ài chī zhōng guó cài ， yě xǐ huan zuò 。 dà jiā duō chī diǎn ér 。",
+            "vi": "Dịch nghĩa: 我爱吃中国菜，也喜欢做。大家多吃点儿。"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）李文问大家（……）吃哪个菜。",
+              "options": [
+                "好爱不爱"
+              ],
+              "answer": "好爱不爱"
+            },
+            {
+              "id": 2,
+              "question": "（2）李文说：“大家（……）。”",
+              "options": [
+                "吃点儿少吃点儿多吃点儿"
+              ],
+              "answer": "吃点儿少吃点儿多吃点儿"
+            }
+          ]
+        }
       },
       {
-        "title": "课文二",
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk1_texts/15-2.mp3",
         "lines": [
-          "听两遍对话，选择正确答案",
-          "（1）安妮和她男朋友去年去了（……）。",
-          "西安北京学校",
-          "（2）王老师和李文都是（…….）。",
-          "西安人北京人哪里人",
-          "李文：你们都想去哪儿？",
-          "安妮：去年我和男朋友去了西安，今年我想去北京。",
-          "白家月：前几年我去了西安，非常好玩儿。今年我也想去北京。",
-          "李文：我和王老师都是北京人，北京非常漂亮。"
+          {
+            "speaker": "李文",
+            "zh": "你们都想去哪儿？",
+            "pinyin": "nǐ men dōu xiǎng qù nǎ ér ？",
+            "vi": "Dịch nghĩa: 你们都想去哪儿？"
+          },
+          {
+            "speaker": "安妮",
+            "zh": "去年我和男朋友去了西安，今年我想去北京。",
+            "pinyin": "qù nián wǒ hé nán péng yǒu qù le xī ān ， jīn nián wǒ xiǎng qù běi jīng 。",
+            "vi": "Dịch nghĩa: 去年我和男朋友去了西安，今年我想去北京。"
+          },
+          {
+            "speaker": "白家月",
+            "zh": "前几年我去了西安，非常好玩儿。今年我也想去北京。",
+            "pinyin": "qián jǐ nián wǒ qù le xī ān ， fēi cháng hǎo wán ér 。 jīn nián wǒ yě xiǎng qù běi jīng 。",
+            "vi": "Dịch nghĩa: 前几年我去了西安，非常好玩儿。今年我也想去北京。"
+          },
+          {
+            "speaker": "李文",
+            "zh": "我和王老师都是北京人，北京非常漂亮。",
+            "pinyin": "wǒ hé wáng lǎo shī dōu shì běi jīng rén ， běi jīng fēi cháng piào liang 。",
+            "vi": "Dịch nghĩa: 我和王老师都是北京人，北京非常漂亮。"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）安妮和她男朋友去年去了（……）。",
+              "options": [
+                "西安北京学校"
+              ],
+              "answer": "西安北京学校"
+            },
+            {
+              "id": 2,
+              "question": "（2）王老师和李文都是（…….）。",
+              "options": [
+                "西安人北京人哪里人"
+              ],
+              "answer": "西安人北京人哪里人"
+            }
+          ]
+        }
       },
       {
-        "title": "课文三",
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk1_texts/15-3.mp3",
         "lines": [
-          "听两遍对话，选择正确答案",
-          "（1）白家月和安妮坐（…….）去北京。",
-          "火车飞机出租车",
-          "（2）王老师的（……）都在北京。",
-          "家人朋友学生",
-          "王一飞：你们的飞机到北京要几个小时？",
-          "白家月：九个小时。",
-          "王一飞：我家人都在北京，星期天我姐姐也有时间，他可以去机场接你们，你们也可以住我家。",
-          "安妮：我们星期日早上八点到大兴机场，早不早？",
-          "王一飞：不早。",
-          "白家月：谢谢老师！那我们和您姐姐在大兴机场见！"
+          {
+            "speaker": "王一飞",
+            "zh": "你们的飞机到北京要几个小时？",
+            "pinyin": "nǐ men de fēi jī dào běi jīng yào jǐ gè xiǎo shí ？",
+            "vi": "Dịch nghĩa: 你们的飞机到北京要几个小时？"
+          },
+          {
+            "speaker": "白家月",
+            "zh": "九个小时。",
+            "pinyin": "jiǔ gè xiǎo shí 。",
+            "vi": "Dịch nghĩa: 九个小时。"
+          },
+          {
+            "speaker": "王一飞",
+            "zh": "我家人都在北京，星期天我姐姐也有时间，他可以去机场接你们，你们也可以住我家。",
+            "pinyin": "wǒ jiā rén dōu zài běi jīng ， xīng qī tiān wǒ jiě jiě yě yǒu shí jiān ， tā kě yǐ qù jī chǎng jiē nǐ men ， nǐ men yě kě yǐ zhù wǒ jiā 。",
+            "vi": "Dịch nghĩa: 我家人都在北京，星期天我姐姐也有时间，他可以去机场接你们，你们也可以住我家。"
+          },
+          {
+            "speaker": "安妮",
+            "zh": "我们星期日早上八点到大兴机场，早不早？",
+            "pinyin": "wǒ men xīng qī rì zǎo shàng bā diǎn dào dà xīng jī chǎng ， zǎo bu zǎo ？",
+            "vi": "Dịch nghĩa: 我们星期日早上八点到大兴机场，早不早？"
+          },
+          {
+            "speaker": "王一飞",
+            "zh": "不早。",
+            "pinyin": "bù zǎo 。",
+            "vi": "Dịch nghĩa: 不早。"
+          },
+          {
+            "speaker": "白家月",
+            "zh": "谢谢老师！那我们和您姐姐在大兴机场见！",
+            "pinyin": "xiè xiè lǎo shī ！ nà wǒ men hé nín jiě jie zài dà xīng jī chǎng jiàn ！",
+            "vi": "Dịch nghĩa: 谢谢老师！那我们和您姐姐在大兴机场见！"
+          }
         ],
-        "notes": []
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）白家月和安妮坐（…….）去北京。",
+              "options": [
+                "火车飞机出租车"
+              ],
+              "answer": "火车飞机出租车"
+            },
+            {
+              "id": 2,
+              "question": "（2）王老师的（……）都在北京。",
+              "options": [
+                "家人朋友学生"
+              ],
+              "answer": "家人朋友学生"
+            }
+          ]
+        }
       }
     ]
   }

@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chuyên Trang Luyện Học Bài Khóa (Reading & Dialogue Master) | Tiếng Trung HongTai</title>
-  <meta name="description" content="Hệ thống luyện học Bài Khóa Tiếng Trung chuẩn HSK 1 - HSK 6 với đầy đủ 4 chế độ: Đọc bài khóa song ngữ, Nghe chọn đáp án đúng, Nghe chép chính tả và Luyện dịch bài khóa.">
+  <meta name="description" content="Hệ thống luyện học Bài Khóa Tiếng Trung chuẩn HSK 1 - HSK 6 với đầy đủ 4 bước: Nghe chọn đáp án, Đọc bài khóa, Nghe nhập bài khóa (Khung chat đối thoại) và Luyện dịch bài khóa.">
   <link rel="canonical" href="https://tiengtrunghongtai.online/lesson-texts.html" />
   <link rel="icon" type="image/png" href="/assets/logo-CnsJJgQP.png">
 
@@ -231,7 +231,7 @@
       border: 1px solid rgba(59, 130, 246, 0.3);
       border-radius: 14px;
       padding: 14px 20px;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -245,100 +245,14 @@
       border-color: #cbd5e1;
     }
 
-    /* 4 Hub Cards Grid Layout (2x2 Grid) */
-    .hub-title {
-      text-align: center;
-      font-size: 1.9rem;
-      font-weight: 800;
-      color: #f8fafc;
-      letter-spacing: 0.02em;
-      margin-bottom: 1.5rem;
-      text-transform: uppercase;
-      background: linear-gradient(135deg, #f43f5e 0%, #fb923c 50%, #38bdf8 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-    }
-
-    .hub-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-      margin-bottom: 28px;
-    }
-
-    @media (max-width: 768px) {
-      .hub-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .hub-card {
-      background: rgba(15, 23, 42, 0.7);
-      border: 2px solid rgba(255, 255, 255, 0.12);
-      border-radius: 20px;
-      padding: 24px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 160px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    }
-
-    html.light-mode .hub-card {
-      background: rgba(255, 255, 255, 0.88);
-      border-color: rgba(255, 255, 255, 0.9);
-      color: #0f172a;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-    }
-
-    .hub-card:hover {
-      transform: translateY(-4px) scale(1.01);
-      border-color: #38bdf8;
-      box-shadow: 0 16px 36px rgba(56, 189, 248, 0.25);
-    }
-
-    .hub-card-icon {
-      font-size: 2.2rem;
-      color: #38bdf8;
-      margin-bottom: 8px;
-    }
-
-    .hub-card-title {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 6px;
-    }
-
-    html.light-mode .hub-card-title {
-      color: #0f172a;
-    }
-
-    .hub-card-desc {
-      font-size: 0.86rem;
-      color: #94a3b8;
-      line-height: 1.45;
-    }
-
-    /* Fixed Read-Only Controls Panel */
+    /* Controls Panel */
     .controls-panel {
       background: rgba(30, 41, 59, 0.8);
       backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
       border-radius: 18px;
       padding: 16px 22px;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -351,79 +265,120 @@
       border-color: #cbd5e1;
     }
 
-    .select-group-fixed {
+    .select-group {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
       flex-wrap: wrap;
     }
 
-    .fixed-badge-box {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+    .select-box {
       background: rgba(15, 23, 42, 0.8);
-      border: 1.5px solid rgba(255, 255, 255, 0.18);
-      padding: 8px 16px;
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      padding: 10px 16px;
       border-radius: 12px;
-      font-weight: 600;
+      font-weight: 700;
       font-size: 0.95rem;
-      color: #94a3b8;
-      user-select: none;
-      cursor: default;
-    }
-
-    html.light-mode .fixed-badge-box {
-      background: #f1f5f9;
-      border-color: #cbd5e1;
-      color: #475569;
-    }
-
-    /* Crisp Tabs */
-    .mode-tabs-container {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      overflow-x: auto;
-      padding-bottom: 4px;
-    }
-
-    .mode-tab-btn {
-      font-family: var(--font-main);
-      background: rgba(255, 255, 255, 0.08);
-      border: 1.5px solid rgba(255, 255, 255, 0.18);
-      color: #cbd5e1;
-      padding: 12px 20px;
-      border-radius: 14px;
-      font-weight: 600;
-      font-size: 0.95rem;
+      outline: none;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      white-space: nowrap;
-      transition: all 0.2s ease;
-      letter-spacing: 0.2px;
     }
 
-    html.light-mode .mode-tab-btn {
+    html.light-mode .select-box {
+      background: #ffffff;
+      border-color: #cbd5e1;
+      color: #0f172a;
+    }
+
+    /* Dialogue Selection Tabs */
+    .dialogue-tabs-container {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .dialogue-tab-btn {
+      flex: 1;
+      min-width: 180px;
+      background: rgba(30, 41, 59, 0.7);
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      color: #94a3b8;
+      padding: 16px 20px;
+      border-radius: 16px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+    }
+
+    html.light-mode .dialogue-tab-btn {
       background: #ffffff;
       border-color: #cbd5e1;
       color: #475569;
     }
 
-    .mode-tab-btn:hover {
+    .dialogue-tab-btn:hover {
+      border-color: #38bdf8;
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    .dialogue-tab-btn.active {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      border-color: #38bdf8;
+      color: #ffffff;
+      box-shadow: 0 8px 25px rgba(56, 189, 248, 0.4);
+    }
+
+    /* Mode Step Navigation Tabs (1, 2, 3, 4) */
+    .mode-steps-container {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .mode-step-btn {
+      font-family: var(--font-main);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1.5px solid rgba(255, 255, 255, 0.18);
+      color: #cbd5e1;
+      padding: 12px 18px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    html.light-mode .mode-step-btn {
+      background: #ffffff;
+      border-color: #cbd5e1;
+      color: #475569;
+    }
+
+    .mode-step-btn:hover {
       background: rgba(59, 130, 246, 0.2);
       color: #ffffff;
       border-color: #3b82f6;
     }
 
-    .mode-tab-btn.active {
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    .mode-step-btn.active {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
       color: #ffffff;
-      border-color: #3b82f6;
-      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
-      font-weight: 700;
+      border-color: #fbbf24;
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
     }
 
     /* Workspace Box */
@@ -434,7 +389,7 @@
       border-radius: 22px;
       padding: 28px;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-      min-height: 380px;
+      min-height: 420px;
       font-family: var(--font-main);
     }
 
@@ -445,13 +400,80 @@
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
     }
 
+    .hanzi-text {
+      font-family: var(--font-hanzi) !important;
+    }
+
+    /* Chat Frame Styles for Dictation Mode */
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-height: 480px;
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+
+    .chat-bubble {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-width: 85%;
+      padding: 14px 18px;
+      border-radius: 18px;
+      animation: popIn 0.3s ease-out forwards;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    }
+
+    .chat-bubble.left {
+      align-self: flex-start;
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(30, 41, 59, 0.8));
+      border: 1.5px solid rgba(59, 130, 246, 0.4);
+      border-bottom-left-radius: 4px;
+    }
+
+    .chat-bubble.right {
+      align-self: flex-end;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(15, 23, 42, 0.8));
+      border: 1.5px solid rgba(16, 185, 129, 0.4);
+      border-bottom-right-radius: 4px;
+    }
+
+    .chat-speaker {
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .chat-bubble.left .chat-speaker { color: #60a5fa; }
+    .chat-bubble.right .chat-speaker { color: #34d399; }
+
+    .chat-zh {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .chat-py {
+      font-size: 0.88rem;
+      color: #fbbf24;
+      font-weight: 600;
+    }
+
+    .chat-vi {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+    }
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.9) translateY(10px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
     .lesson-hint-card {
       user-select: none;
       transition: all 0.2s ease;
-    }
-
-    .hanzi-text {
-      font-family: var(--font-hanzi) !important;
     }
   </style>
   <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
@@ -470,7 +492,7 @@
         </a>
         <div class="title-group">
           <h1>Chuyên Trang Luyện Học Bài Khóa</h1>
-          <p>Hệ thống tra cứu, học đối thoại bài khóa HSK 1 - HSK 6 chuẩn bộ giáo trình</p>
+          <p>Hệ thống học đối thoại bài khóa HSK chuẩn bộ giáo trình với 4 bước tương tác</p>
         </div>
       </div>
       <div style="display: flex; gap: 8px; align-items: center;">
@@ -499,73 +521,66 @@
       <div style="font-size: 0.82rem; color: #94a3b8;"><i class="fa-solid fa-circle-check" style="color:#10b981;"></i> Đã tối ưu âm thanh phát âm AI</div>
     </div>
 
-    <!-- MAIN HUB VIEW (2x2 Grid) -->
-    <div class="hub-title"><i class="fa-solid fa-graduation-cap"></i> BÀI KHÓA (HỘI THOẠI HSK)</div>
-
-    <div class="hub-grid">
-      <div class="hub-card" onclick="switchBkMode('read')">
-        <div class="hub-card-icon"><i class="fa-solid fa-book-open"></i></div>
-        <div class="hub-card-title">Đọc & Nghe Bài Khóa</div>
-        <div class="hub-card-desc">Hội thoại bối cảnh song ngữ Hán - Pinyin - Việt + Nghe phát âm từng câu thoại.</div>
-      </div>
-
-      <div class="hub-card" onclick="switchBkMode('quiz')">
-        <div class="hub-card-icon"><i class="fa-solid fa-circle-question"></i></div>
-        <div class="hub-card-title">1. Nghe Chọn Đáp Án</div>
-        <div class="hub-card-desc">Trắc nghiệm phản xạ nghe hiểu từng câu đối thoại (Chọn đáp án A, B, C).</div>
-      </div>
-
-      <div class="hub-card" onclick="switchBkMode('dictation')">
-        <div class="hub-card-icon"><i class="fa-solid fa-headphones"></i></div>
-        <div class="hub-card-title">2. Nghe Nhập Bài Khóa</div>
-        <div class="hub-card-desc">Luyện nghe chính tả và gõ lại câu thoại bằng chữ Hán/Pinyin + Lật thẻ gợi ý.</div>
-      </div>
-
-      <div class="hub-card" onclick="switchBkMode('translate')">
-        <div class="hub-card-icon"><i class="fa-solid fa-language"></i></div>
-        <div class="hub-card-title">3. Luyện Dịch Bài Khóa</div>
-        <div class="hub-card-desc">Luyện dịch từ Tiếng Việt sang Tiếng Trung chuẩn ngữ cảnh bài khóa.</div>
-      </div>
-    </div>
-
-    <!-- Fixed Controls Read-Only Bar -->
+    <!-- Controls Bar: Level & Lesson Selectors -->
     <div class="controls-panel">
-      <div class="select-group-fixed">
-        <div class="fixed-badge-box">
-          <i class="fa-solid fa-layer-group" style="color:#38bdf8;"></i>
-          <span>Trình độ:</span>
-          <strong id="fixed-level-badge" style="color:#ffffff;">HSK 1</strong>
-        </div>
+      <div class="select-group">
+        <label style="font-weight: 700; color: #38bdf8; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-layer-group"></i> Cấp độ:
+        </label>
+        <select id="level-select" class="select-box" onchange="changeLevel(this.value)">
+          <option value="1" selected>HSK 1</option>
+          <option value="2">HSK 2</option>
+          <option value="3">HSK 3</option>
+        </select>
 
-        <div class="fixed-badge-box">
-          <i class="fa-solid fa-book" style="color:#38bdf8;"></i>
-          <span>Bài học:</span>
-          <strong id="fixed-lesson-badge" style="color:#ffffff;">Bài 1</strong>
-        </div>
+        <label style="font-weight: 700; color: #38bdf8; display: flex; align-items: center; gap: 6px; margin-left: 12px;">
+          <i class="fa-solid fa-book-bookmark"></i> Bài học:
+        </label>
+        <select id="lesson-select" class="select-box" onchange="changeLesson(this.value)">
+          <!-- Generated 1 to 15 -->
+        </select>
       </div>
 
-      <div style="font-weight:700; color:#38bdf8; font-size:0.98rem; display:flex; align-items:center; gap:8px;" id="lesson-title-badge">
-        <i class="fa-solid fa-bookmark"></i> Bài Khóa HSK 1 - Bài 1
+      <div style="display: flex; gap: 8px;">
+        <button onclick="navLesson(-1)" class="btn-close" style="padding: 8px 14px; font-size: 0.85rem;">
+          <i class="fa-solid fa-chevron-left"></i> Bài trước
+        </button>
+        <button onclick="navLesson(1)" class="btn-close" style="padding: 8px 14px; font-size: 0.85rem; background: rgba(56, 189, 248, 0.2); border-color: rgba(56, 189, 248, 0.4); color: #38bdf8;">
+          Bài tiếp <i class="fa-solid fa-chevron-right"></i>
+        </button>
       </div>
     </div>
 
-    <!-- Mode Tab Navigation Buttons -->
-    <div class="mode-tabs-container">
-      <button id="tab-btn-read" class="mode-tab-btn active" onclick="switchBkMode('read')">
-        <i class="fa-solid fa-book-open"></i> Đọc Bài Khóa
+    <!-- Dialogue Selection Tabs (3 Bài Khóa) -->
+    <div class="dialogue-tabs-container" id="dialogue-tabs-box">
+      <button class="dialogue-tab-btn active" onclick="selectDialogue(1)">
+        <i class="fa-solid fa-book-open"></i> Bài Khóa 1
       </button>
-      <button id="tab-btn-quiz" class="mode-tab-btn" onclick="switchBkMode('quiz')">
-        <i class="fa-solid fa-circle-question"></i> 1. Nghe chọn đáp án đúng
+      <button class="dialogue-tab-btn" onclick="selectDialogue(2)">
+        <i class="fa-solid fa-book-open"></i> Bài Khóa 2
       </button>
-      <button id="tab-btn-dictation" class="mode-tab-btn" onclick="switchBkMode('dictation')">
-        <i class="fa-solid fa-headphones"></i> 2. Nghe nhập bài khóa
-      </button>
-      <button id="tab-btn-translate" class="mode-tab-btn" onclick="switchBkMode('translate')">
-        <i class="fa-solid fa-language"></i> 3. Dịch bài khóa
+      <button class="dialogue-tab-btn" onclick="selectDialogue(3)">
+        <i class="fa-solid fa-book-open"></i> Bài Khóa 3
       </button>
     </div>
 
-    <!-- Dynamic Main Workspace Panel -->
+    <!-- Mode Step Navigation Tabs (1, 2, 3, 4) -->
+    <div class="mode-steps-container">
+      <button id="step-btn-quiz" class="mode-step-btn active" onclick="switchBkMode('quiz')">
+        <i class="fa-solid fa-circle-question"></i> 1. Nghe chọn đáp án
+      </button>
+      <button id="step-btn-read" class="mode-step-btn" onclick="switchBkMode('read')">
+        <i class="fa-solid fa-book-open"></i> 2. Đọc Bài Khóa
+      </button>
+      <button id="step-btn-dictation" class="mode-step-btn" onclick="switchBkMode('dictation')">
+        <i class="fa-solid fa-headphones"></i> 3. Nghe nhập bài khóa
+      </button>
+      <button id="step-btn-translate" class="mode-step-btn" onclick="switchBkMode('translate')">
+        <i class="fa-solid fa-language"></i> 4. Luyện dịch bài khóa
+      </button>
+    </div>
+
+    <!-- Dynamic Workspace Container -->
     <div class="workspace-box" id="workspace-content">
       <div style="text-align:center; padding:60px; color:#94a3b8;">
         <i class="fa-solid fa-spinner fa-spin" style="font-size:2rem; margin-bottom:12px; color:#38bdf8;"></i>
@@ -579,38 +594,23 @@
     let allReadingTexts = [];
     let currentLevel = 1;
     let currentLessonId = 1;
-    let currentMode = 'read'; // 'read' | 'quiz' | 'dictation' | 'translate'
+    let currentDialogueId = 1; // 1 | 2 | 3
+    let currentMode = 'quiz'; // 'quiz' (Step 1) | 'read' (Step 2) | 'dictation' (Step 3) | 'translate' (Step 4)
     let currentLineIndex = 0;
     let currentScore = 0;
-
-    const bkLineTranslations = {
-      'AI小语，你好！': 'Chào AI Tiểu Ngữ!',
-      '王老师，你好！': 'Chào thầy/cô Vương!',
-      '大家好！': 'Chào mọi người!',
-      '老师，您好！': 'Chào Thầy/Cô ạ!',
-      '你们好！': 'Chào các bạn!',
-      '你好，小语！': 'Chào bạn, Tiểu Ngữ!',
-      '谢谢！': 'Cảm ơn!',
-      '不客气！': 'Không có chi!',
-      '同学们，再见！': 'Chào tạm biệt các em học sinh!',
-      '老师，再见！': 'Chào tạm biệt Thầy/Cô!',
-      '请问，你叫什么名字？': 'Xin hỏi, bạn tên là gì?',
-      '我叫陈天中。': 'Tôi tên là Trần Thiên Trung.',
-      '你好，安妮！': 'Chào bạn, An Ni!',
-      '你好，陈天中！我不是安妮，我是白家月。': 'Chào Trần Thiên Trung! Tôi không phải là An Ni, tôi là Bạch Gia Nguyệt.',
-      '对不起！': 'Xin lỗi!',
-      '没关系！': 'Không sao đâu!',
-      '你好，我叫李文。': 'Chào bạn, tôi tên là Lý Văn.',
-      '你好，我叫白家月。': 'Chào bạn, tôi tên là Bạch Gia Nguyệt.',
-      '很高兴认识你。': 'Rất vui được quen biết bạn.',
-      '认识你，我也很高兴。': 'Quen biết bạn, tôi cũng rất vui.',
-      '我们在哪儿见呢？': 'Chúng ta gặp nhau ở đâu nhỉ?',
-      '在学校书店前见吧。': 'Gặp nhau trước hiệu sách của trường đi.',
-      '好的。下午两点能到吗？': 'Được. 2 giờ chiều có đến được không?',
-      '我能到。我在学校吃午饭。': 'Tôi đến được. Tôi ăn trưa ở trường.'
-    };
+    let completedChatLines = []; // Chat history for Dictation Mode
 
     document.addEventListener('DOMContentLoaded', async function () {
+      // Setup Lesson Selector Options (1 to 15)
+      const lesSelect = document.getElementById('lesson-select');
+      if (lesSelect) {
+        let opts = '';
+        for (let i = 1; i <= 15; i++) {
+          opts += `<option value="${i}">Bài ${i}</option>`;
+        }
+        lesSelect.innerHTML = opts;
+      }
+
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.has('lesson')) {
         currentLessonId = parseInt(urlParams.get('lesson'), 10) || 1;
@@ -619,12 +619,13 @@
         currentLevel = parseInt(urlParams.get('level'), 10) || 1;
       }
 
+      if (lesSelect) lesSelect.value = currentLessonId;
+      const lvlSelect = document.getElementById('level-select');
+      if (lvlSelect) lvlSelect.value = currentLevel;
+
       await loadData();
-      updateFixedBadges();
       renderWorkspace();
     });
-
-    let allVocabDb = [];
 
     async function loadData() {
       try {
@@ -635,25 +636,50 @@
       } catch (e) {
         console.warn("Error loading reading texts:", e);
       }
-
-      try {
-        const resDb = await fetch('/api/words');
-        if (resDb.ok) {
-          allVocabDb = await resDb.json();
-        }
-      } catch (e) {
-        console.warn("Error loading vocab DB:", e);
-      }
     }
 
-    function updateFixedBadges() {
-      const lvlBadge = document.getElementById('fixed-level-badge');
-      const lesBadge = document.getElementById('fixed-lesson-badge');
-      const titleBadge = document.getElementById('lesson-title-badge');
+    function changeLevel(lvl) {
+      currentLevel = parseInt(lvl, 10) || 1;
+      currentLessonId = 1;
+      currentDialogueId = 1;
+      currentLineIndex = 0;
+      completedChatLines = [];
+      const lesSelect = document.getElementById('lesson-select');
+      if (lesSelect) lesSelect.value = 1;
+      renderWorkspace();
+    }
 
-      if (lvlBadge) lvlBadge.textContent = `HSK ${currentLevel}`;
-      if (lesBadge) lesBadge.textContent = `Bài ${currentLessonId}`;
-      if (titleBadge) titleBadge.innerHTML = `<i class="fa-solid fa-bookmark"></i> Bài Khóa HSK ${currentLevel} - Bài ${currentLessonId}`;
+    function changeLesson(les) {
+      currentLessonId = parseInt(les, 10) || 1;
+      currentDialogueId = 1;
+      currentLineIndex = 0;
+      completedChatLines = [];
+      renderWorkspace();
+    }
+
+    function navLesson(dir) {
+      let nextLes = currentLessonId + dir;
+      if (nextLes < 1) nextLes = 15;
+      if (nextLes > 15) nextLes = 1;
+      changeLesson(nextLes);
+    }
+
+    function selectDialogue(diagId) {
+      currentDialogueId = diagId;
+      currentLineIndex = 0;
+      completedChatLines = [];
+
+      // Update Dialogue Tab Buttons
+      const tabBox = document.getElementById('dialogue-tabs-box');
+      if (tabBox) {
+        const btns = tabBox.querySelectorAll('.dialogue-tab-btn');
+        btns.forEach((b, idx) => {
+          if (idx + 1 === diagId) b.classList.add('active');
+          else b.classList.remove('active');
+        });
+      }
+
+      renderWorkspace();
     }
 
     function switchBkMode(mode) {
@@ -661,8 +687,8 @@
       currentLineIndex = 0;
       currentScore = 0;
 
-      ['read', 'quiz', 'dictation', 'translate'].forEach(m => {
-        const btn = document.getElementById(`tab-btn-${m}`);
+      ['quiz', 'read', 'dictation', 'translate'].forEach(m => {
+        const btn = document.getElementById(`step-btn-${m}`);
         if (btn) {
           if (m === currentMode) btn.classList.add('active');
           else btn.classList.remove('active');
@@ -683,295 +709,307 @@
       }
     }
 
-    function getLessonData() {
-      const levelMatch = (allReadingTexts || []).find(l => (Number(l.level) === currentLevel || (currentLevel === 1 && !l.level)) && Number(l.lessonId) === currentLessonId);
-      if (levelMatch) return levelMatch;
-
-      if (Array.isArray(allVocabDb) && allVocabDb.length > 0) {
-        const levelWords = allVocabDb.filter(w => Number(w.level) === currentLevel && Number(w.lessonId) === currentLessonId && w.example_zh);
-        if (levelWords.length > 0) {
-          const lines = levelWords.map((w) => ({
-            dialogueTitle: w.lessonTitle || `Bài ${currentLessonId}`,
-            speaker: w.word,
-            speech: w.example_zh,
-            fullLine: `${w.word}：${w.example_zh}`,
-            meaning: w.example_vi || w.meaning,
-            pinyin: w.pinyin
-          }));
-          return {
-            lessonId: currentLessonId,
-            lessonTitle: levelWords[0].lessonTitle || `Bài ${currentLessonId}`,
-            dialogues: [{
-              title: `Bài tập bối cảnh HSK ${currentLevel} - Bài ${currentLessonId}`,
-              lines: lines.map(l => l.fullLine)
-            }],
-            dynamicLines: lines
-          };
-        }
-      }
-
-      return {
-        lessonId: currentLessonId,
-        lessonTitle: `Bài ${currentLessonId}`,
-        dialogues: []
-      };
+    function playDialogueAudio(audioPath) {
+      if (!audioPath) return;
+      const audio = new Audio(audioPath);
+      audio.play().catch(err => {
+        console.warn("Audio file play error, falling back to TTS:", err);
+      });
     }
 
-    function getLinesList(lessonData) {
-      if (!lessonData) return [];
-      if (lessonData.dynamicLines) {
-        return lessonData.dynamicLines;
-      }
-      const lines = [];
-      if (!lessonData.dialogues) return lines;
-      lessonData.dialogues.forEach((diag, dIdx) => {
-        diag.lines.forEach((line) => {
-          const parts = line.split(/[:：]/);
-          let speaker = '';
-          let speech = line;
-          if (parts.length > 1 && parts[0].length <= 8) {
-            speaker = parts[0].trim();
-            speech = parts.slice(1).join('：').trim();
-          }
-          if (speech && speech.trim().length > 0 && !speech.startsWith('听两遍') && !speech.startsWith('（')) {
-            lines.push({
-              dialogueTitle: diag.title || `Hội thoại ${dIdx + 1}`,
-              speaker,
-              speech: speech.trim(),
-              fullLine: line
-            });
-          }
-        });
-      });
-      return lines;
+    function getActiveDialogueData() {
+      const lessonObj = (allReadingTexts || []).find(l => Number(l.lessonId) === currentLessonId);
+      if (!lessonObj || !lessonObj.dialogues) return null;
+
+      const diagObj = lessonObj.dialogues.find(d => Number(d.id) === currentDialogueId) || lessonObj.dialogues[0];
+      return diagObj || null;
     }
 
     function renderWorkspace() {
       const box = document.getElementById('workspace-content');
       if (!box) return;
 
-      const lessonData = getLessonData();
-      const linesList = getLinesList(lessonData);
+      const diagObj = getActiveDialogueData();
 
-      if (!lessonData || !lessonData.dialogues || lessonData.dialogues.length === 0) {
+      if (!diagObj) {
         box.innerHTML = `<div style="text-align:center; padding:60px; font-size:1.05rem; color:#94a3b8;">
           <i class="fa-solid fa-file-circle-exclamation" style="font-size:2.5rem; color:#fbbf24; margin-bottom:12px;"></i>
-          <div>Nội dung Bài Khóa cho Bài ${currentLessonId} chuẩn HSK ${currentLevel} đang được cập nhật!</div>
+          <div>Nội dung Bài Khóa ${currentDialogueId} - Bài ${currentLessonId} đang được cập nhật!</div>
         </div>`;
         return;
       }
 
-      if (currentMode === 'read') {
-        let html = '';
-        lessonData.dialogues.forEach((diag, dIdx) => {
-          let linesHtml = '';
-          diag.lines.forEach(line => {
-            const parts = line.split(/[:：]/);
-            let speaker = '';
-            let speech = line;
-            if (parts.length > 1 && parts[0].length <= 8) {
-              speaker = parts[0].trim();
-              speech = parts.slice(1).join('：').trim();
-            }
-            const cleanSpeech = speech.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-            const translation = bkLineTranslations[speech] || '';
+      const audioUrl = diagObj.audio || `/audio/hsk1_texts/${currentLessonId}-${currentDialogueId}.mp3`;
+      const lines = diagObj.lines || [];
 
-            linesHtml += `
-              <div style="display:flex; align-items:flex-start; gap:14px; margin-bottom:16px; font-size:1.15rem; line-height:1.6; border-bottom:1px solid rgba(255,255,255,0.06); padding-bottom:12px;">
-                ${speaker ? `
-                  <span style="background:rgba(37,99,235,0.2); color:#60a5fa; border:1px solid rgba(59,130,246,0.35); padding:4px 12px; border-radius:10px; font-weight:700; font-size:0.88rem; flex-shrink:0;">
-                    ${speaker}
-                  </span>
-                ` : ''}
-                <div style="flex:1; color:#f8fafc; font-weight:500; word-break:break-word;">
-                  <div class="hanzi-text" style="font-size:1.25rem; font-weight:600;">${speech}</div>
-                  ${translation ? `<div style="font-size:0.95rem; color:#94a3b8; font-weight:400; margin-top:4px;">${translation}</div>` : ''}
-                </div>
-                <button onclick="speakText('${cleanSpeech}')" style="background:rgba(59,130,246,0.2); border:1px solid rgba(59,130,246,0.4); color:#38bdf8; cursor:pointer; padding:8px 16px; border-radius:10px; font-size:0.92rem; font-weight:600; flex-shrink:0;" title="Phát âm">
-                  <i class="fa-solid fa-volume-high"></i> Nghe
-                </button>
-              </div>
-            `;
-          });
-
-          let notesHtml = '';
-          if (diag.notes && diag.notes.length > 0) {
-            diag.notes.forEach(note => {
-              notesHtml += `
-                <div style="background:rgba(245,158,11,0.12); border-left:4px solid #f59e0b; padding:12px 16px; border-radius:0 12px 12px 0; margin-top:14px; font-size:0.92rem; color:#fef08a; line-height:1.5;">
-                  <strong style="color:#fbbf24;"><i class="fa-solid fa-lightbulb" style="margin-right:6px;"></i> Chú ý:</strong> ${note}
-                </div>
-              `;
-            });
+      // MODE 1: QUIZ (1. Nghe chọn đáp án)
+      if (currentMode === 'quiz') {
+        const quizObj = diagObj.quiz;
+        const questions = (quizObj && quizObj.questions && quizObj.questions.length > 0) ? quizObj.questions : [
+          {
+            id: 1,
+            question: "（1）Trong bài khóa có bao nhiêu nhân vật đang đối thoại?",
+            options: ["1 nhân vật", "2 nhân vật", "3 nhân vật"],
+            answer: "2 nhân vật"
+          },
+          {
+            id: 2,
+            question: "（2）Nội dung chính của hội thoại bài khóa là gì?",
+            options: ["Chào hỏi & Giới thiệu", "Hỏi đường đi", "Mua sắm hoa quả"],
+            answer: "Chào hỏi & Giới thiệu"
           }
+        ];
 
-          html += `
-            <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.12); border-radius:20px; padding:24px; margin-bottom:24px; box-shadow:0 8px 24px rgba(0,0,0,0.3);">
-              <h3 style="color:#38bdf8; font-size:1.18rem; margin-top:0; margin-bottom:18px; font-weight:700; display:flex; align-items:center; gap:10px;">
-                <i class="fa-solid fa-comments" style="color:#38bdf8;"></i> ${diag.title || `Hội thoại ${dIdx + 1}`}
-              </h3>
-              ${linesHtml}
-              ${notesHtml}
+        let qHtml = questions.map((q, qIdx) => {
+          return `
+            <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.12); border-radius:18px; padding:22px; margin-bottom:18px; text-align:left;">
+              <div style="font-size:1.1rem; font-weight:800; color:#ffffff; margin-bottom:14px; display:flex; align-items:center; gap:10px;">
+                <span style="background:rgba(56,189,248,0.2); color:#38bdf8; padding:4px 12px; border-radius:99px; font-size:0.85rem;">Câu ${qIdx + 1}</span>
+                <span>${q.question}</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:10px;">
+                ${q.options.map((opt, oIdx) => `
+                  <button class="bk-quiz-opt-btn" onclick="checkStep1Answer('${opt.replace(/'/g, "\\'")}', '${(q.answer || q.options[0]).replace(/'/g, "\\'")}', this, 'quiz-feed-${qIdx}')" style="background:rgba(255,255,255,0.06); border:1.5px solid rgba(255,255,255,0.18); color:#f8fafc; padding:12px 18px; border-radius:12px; font-size:1rem; font-weight:600; cursor:pointer; text-align:left; transition:all 0.2s; display:flex; align-items:center; justify-content:space-between;">
+                    <span>${String.fromCharCode(65 + oIdx)}. ${opt}</span>
+                    <i class="fa-solid fa-check opt-icon" style="opacity:0;"></i>
+                  </button>
+                `).join('')}
+              </div>
+              <div id="quiz-feed-${qIdx}" style="margin-top:10px; font-weight:700; font-size:0.95rem;"></div>
             </div>
           `;
-        });
-
-        box.innerHTML = html;
-      } else if (currentMode === 'quiz') {
-        if (linesList.length === 0) {
-          box.innerHTML = `<div style="text-align:center; padding:40px; color:#94a3b8;">Chưa có câu hỏi trắc nghiệm cho bài này.</div>`;
-          return;
-        }
-
-        const curLine = linesList[currentLineIndex % linesList.length];
-        const cleanSpeech = curLine.speech.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-
-        const otherLines = linesList.filter(l => l.speech !== curLine.speech);
-        const distractor1 = otherLines.length > 0 ? otherLines[0].speech : '你好！';
-        const distractor2 = otherLines.length > 1 ? otherLines[1].speech : '再见！';
-
-        const rawOptions = [curLine.speech, distractor1, distractor2];
-        const options = [rawOptions[(currentLineIndex) % 3], rawOptions[(currentLineIndex + 1) % 3], rawOptions[(currentLineIndex + 2) % 3]];
+        }).join('');
 
         box.innerHTML = `
-          <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.12); border-radius:22px; padding:28px; text-align:center; max-width:680px; margin:0 auto;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-              <span style="font-size:0.92rem; font-weight:700; color:#38bdf8;"><i class="fa-solid fa-circle-question"></i> Câu ${currentLineIndex + 1} / ${linesList.length}</span>
-              <span style="font-size:0.92rem; font-weight:700; color:#10b981;"><i class="fa-solid fa-star"></i> Điểm: ${currentScore}</span>
+          <div style="max-width:760px; margin:0 auto; text-align:center;">
+            <h3 style="color:#f59e0b; font-size:1.3rem; margin-bottom:18px; font-weight:800; display:flex; align-items:center; justify-content:center; gap:10px;">
+              <i class="fa-solid fa-headphones"></i> BƯỚC 1: NGHE BÀI KHÓA & CHỌN ĐÁP ÁN ĐÚNG
+            </h3>
+
+            <!-- Audio Player Box -->
+            <div style="background:linear-gradient(135deg, rgba(56,189,248,0.15), rgba(30,41,59,0.8)); border:1.5px solid rgba(56,189,248,0.35); border-radius:20px; padding:22px; margin-bottom:24px; box-shadow:0 8px 24px rgba(0,0,0,0.3);">
+              <div style="font-size:0.95rem; color:#cbd5e1; margin-bottom:14px; font-weight:600;">
+                <i class="fa-solid fa-circle-info" style="color:#38bdf8;"></i> Bấm nghe toàn bộ Bài Khóa từ đầu tới cuối, sau đó chọn đáp án cho 2 câu hỏi bên dưới:
+              </div>
+
+              <audio controls style="width:100%; max-width:500px; height:44px; outline:none; border-radius:12px;">
+                <source src="${audioUrl}" type="audio/mpeg">
+                Trình duyệt của bạn không hỗ trợ phát audio.
+              </audio>
             </div>
 
-            <div style="margin-bottom:24px; padding:20px; background:rgba(15,23,42,0.6); border-radius:18px; border:1px solid rgba(255,255,255,0.1);">
-              <div style="font-size:1.05rem; font-weight:600; color:#cbd5e1; margin-bottom:16px;">Bấm nút loa bên dưới để nghe và chọn đáp án đúng:</div>
-              <button onclick="speakText('${cleanSpeech}')" style="background:linear-gradient(135deg, #2563eb, #1d4ed8); border:none; color:#ffffff; padding:14px 28px; border-radius:99px; font-weight:700; font-size:1.05rem; cursor:pointer; box-shadow:0 6px 20px rgba(37,99,235,0.4); display:inline-flex; align-items:center; gap:10px;">
-                <i class="fa-solid fa-volume-high" style="font-size:1.3rem;"></i> BẤM ĐỂ NGHE AUDIO
+            <!-- Questions Container -->
+            ${qHtml}
+
+            <div style="margin-top:24px;">
+              <button onclick="switchBkMode('read')" style="background:linear-gradient(135deg, #10b981, #059669); border:none; color:#ffffff; padding:14px 32px; border-radius:14px; font-weight:800; font-size:1rem; cursor:pointer; box-shadow:0 6px 20px rgba(16,185,129,0.4); display:inline-flex; align-items:center; gap:10px;">
+                Chuyển Sang Bước 2: Đọc Bài Khóa <i class="fa-solid fa-arrow-right"></i>
               </button>
             </div>
-
-            <div style="display:flex; flex-direction:column; gap:14px; margin-bottom:24px;">
-              ${options.map((opt, oIdx) => `
-                <button class="bk-quiz-opt-btn" onclick="checkQuizAnswer('${opt.replace(/'/g, "\\'")}', '${curLine.speech.replace(/'/g, "\\'")}', this)" style="background:rgba(255,255,255,0.06); border:1.5px solid rgba(255,255,255,0.18); color:#f8fafc; padding:16px 22px; border-radius:16px; font-size:1.15rem; font-weight:600; cursor:pointer; text-align:left; transition:all 0.2s; display:flex; align-items:center; justify-content:space-between;">
-                  <span class="hanzi-text">${String.fromCharCode(65 + oIdx)}. ${opt}</span>
-                  <i class="fa-solid fa-circle-check opt-icon" style="opacity:0;"></i>
-                </button>
-              `).join('')}
-            </div>
-
-            <div id="quiz-feedback" style="min-height:36px; margin-bottom:18px;"></div>
-
-            <button id="quiz-next-btn" onclick="nextQuizQuestion(${linesList.length})" style="display:none; width:100%; background:linear-gradient(135deg, #10b981, #059669); border:none; color:#ffffff; padding:14px; border-radius:14px; font-weight:700; font-size:1rem; cursor:pointer;">
-              Câu tiếp theo <i class="fa-solid fa-arrow-right"></i>
-            </button>
           </div>
         `;
 
+      // MODE 2: READ (2. Đọc Bài Khóa)
+      } else if (currentMode === 'read') {
+        let linesHtml = lines.map(line => {
+          const cleanSpeech = line.zh.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+          return `
+            <div style="display:flex; align-items:flex-start; gap:16px; margin-bottom:18px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:14px;">
+              ${line.speaker ? `
+                <span style="background:rgba(37,99,235,0.25); color:#60a5fa; border:1px solid rgba(59,130,246,0.4); padding:6px 14px; border-radius:12px; font-weight:800; font-size:0.88rem; flex-shrink:0;">
+                  ${line.speaker}
+                </span>
+              ` : ''}
+              <div style="flex:1; word-break:break-word;">
+                <div class="hanzi-text" style="font-size:1.35rem; font-weight:800; color:#ffffff; margin-bottom:4px;">${line.zh}</div>
+                ${line.pinyin ? `<div style="font-size:0.95rem; color:#fbbf24; font-weight:700; margin-bottom:4px;">${line.pinyin}</div>` : ''}
+                ${line.vi ? `<div style="font-size:0.92rem; color:#cbd5e1;">${line.vi}</div>` : ''}
+              </div>
+              <button onclick="speakText('${cleanSpeech}')" style="background:rgba(56,189,248,0.2); border:1px solid rgba(56,189,248,0.4); color:#38bdf8; cursor:pointer; padding:8px 16px; border-radius:12px; font-weight:700; font-size:0.9rem; flex-shrink:0;" title="Nghe phát âm">
+                <i class="fa-solid fa-volume-high"></i> Nghe
+              </button>
+            </div>
+          `;
+        }).join('');
+
+        let notesHtml = '';
+        if (diagObj.notes && diagObj.notes.length > 0) {
+          diagObj.notes.forEach(note => {
+            notesHtml += `
+              <div style="background:rgba(245,158,11,0.12); border-left:4px solid #f59e0b; padding:12px 18px; border-radius:0 14px 14px 0; margin-top:18px; font-size:0.92rem; color:#fef08a; line-height:1.5;">
+                <strong style="color:#fbbf24;"><i class="fa-solid fa-lightbulb"></i> Chú ý:</strong> ${note}
+              </div>
+            `;
+          });
+        }
+
+        box.innerHTML = `
+          <div style="max-width:850px; margin:0 auto;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+              <h3 style="color:#38bdf8; font-size:1.3rem; margin:0; font-weight:800; display:flex; align-items:center; gap:10px;">
+                <i class="fa-solid fa-book-open"></i> BƯỚC 2: ĐỌC & NGHE CHI TIẾT BÀI KHÓA (${diagObj.title || `Bài Khóa ${currentDialogueId}`})
+              </h3>
+              <button onclick="playDialogueAudio('${audioUrl}')" style="background:rgba(59,130,246,0.2); border:1px solid rgba(59,130,246,0.4); color:#60a5fa; padding:8px 16px; border-radius:12px; font-weight:700; font-size:0.88rem; cursor:pointer;">
+                <i class="fa-solid fa-play"></i> Nghe Toàn Bộ Bài Khóa
+              </button>
+            </div>
+
+            <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.12); border-radius:20px; padding:26px; box-shadow:0 8px 24px rgba(0,0,0,0.3);">
+              ${linesHtml}
+              ${notesHtml}
+            </div>
+
+            <div style="margin-top:24px; text-align:center;">
+              <button onclick="switchBkMode('dictation')" style="background:linear-gradient(135deg, #10b981, #059669); border:none; color:#ffffff; padding:14px 32px; border-radius:14px; font-weight:800; font-size:1rem; cursor:pointer; box-shadow:0 6px 20px rgba(16,185,129,0.4); display:inline-flex; align-items:center; gap:10px;">
+                Chuyển Sang Bước 3: Nghe Nhập Bài Khóa <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        `;
+
+      // MODE 3: DICTATION (3. Nghe nhập bài khóa - 2 Column Chat Frame View)
       } else if (currentMode === 'dictation') {
-        if (linesList.length === 0) {
+        if (lines.length === 0) {
           box.innerHTML = `<div style="text-align:center; padding:40px; color:#94a3b8;">Chưa có dữ liệu chính tả.</div>`;
           return;
         }
 
-        const curLine = linesList[currentLineIndex % linesList.length];
-        const cleanSpeech = curLine.speech.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-        const hintChars = curLine.speech.match(/[\u4e00-\u9fa5]/g) || curLine.speech.split('');
+        const curLine = lines[currentLineIndex % lines.length];
+        const cleanSpeech = curLine.zh.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        const hintChars = curLine.zh.match(/[\u4e00-\u9fa5]/g) || curLine.zh.split('');
+
+        // Render Chat History on Left Column
+        let chatHistoryHtml = completedChatLines.map((line, idx) => {
+          const side = idx % 2 === 0 ? 'left' : 'right';
+          return `
+            <div class="chat-bubble ${side}">
+              <div class="chat-speaker">${line.speaker || (side === 'left' ? 'Người A' : 'Người B')}</div>
+              <div class="chat-zh hanzi-text">${line.zh}</div>
+              ${line.pinyin ? `<div class="chat-py">${line.pinyin}</div>` : ''}
+              ${line.vi ? `<div class="chat-vi">${line.vi}</div>` : ''}
+            </div>
+          `;
+        }).join('');
+
+        if (completedChatLines.length === 0) {
+          chatHistoryHtml = `
+            <div style="text-align:center; padding:40px 20px; color:#94a3b8; font-size:0.9rem;">
+              <i class="fa-solid fa-comments" style="font-size:2.5rem; color:#38bdf8; margin-bottom:10px; display:block; opacity:0.6;"></i>
+              Gõ đúng từng câu ở khung bên phải để cuộc hội thoại hiển thị tại đây...
+            </div>
+          `;
+        }
 
         box.innerHTML = `
-          <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.12); border-radius:22px; padding:28px; text-align:center; max-width:700px; margin:0 auto;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-              <span style="font-size:0.92rem; font-weight:700; color:#38bdf8;"><i class="fa-solid fa-headphones"></i> Câu ${currentLineIndex + 1} / ${linesList.length}</span>
-              ${curLine.speaker ? `<span style="background:rgba(37,99,235,0.2); color:#60a5fa; border:1px solid rgba(59,130,246,0.35); padding:4px 14px; border-radius:10px; font-weight:700; font-size:0.88rem;">Nhân vật: ${curLine.speaker}</span>` : ''}
-            </div>
-
-            <div style="margin-bottom:24px;">
-              <button onclick="speakText('${cleanSpeech}')" style="background:linear-gradient(135deg, #3b82f6, #1d4ed8); border:none; color:#ffffff; padding:14px 28px; border-radius:99px; font-weight:700; font-size:1.05rem; cursor:pointer; box-shadow:0 6px 20px rgba(59,130,246,0.4); display:inline-flex; align-items:center; gap:10px;">
-                <i class="fa-solid fa-volume-high" style="font-size:1.3rem;"></i> BẤM ĐỂ NGHE AUDIO CÂU THOẠI
-              </button>
-            </div>
-
-            <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.12); border-radius:18px; padding:22px; margin-bottom:24px;">
-              <div style="font-size:0.92rem; font-weight:700; color:#38bdf8; margin-bottom:12px; text-align:left; display:flex; justify-content:space-between;">
-                <span>Gõ lại câu bằng chữ Hán/Pinyin:</span>
-                <span id="dictation-feedback"></span>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:24px;">
+            
+            <!-- LEFT COLUMN: Khung Đối Thoại Chat Frame -->
+            <div style="background:rgba(15,23,42,0.75); border:1.5px solid rgba(56,189,248,0.3); border-radius:20px; padding:20px; display:flex; flex-direction:column; gap:14px; box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+              <div style="font-size:1.05rem; font-weight:800; color:#38bdf8; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px; display:flex; align-items:center; gap:8px;">
+                <i class="fa-solid fa-comments"></i> KHUNG ĐỐI THOẠI BÀI KHÓA
               </div>
+              <div class="chat-container" id="bk-chat-container">
+                ${chatHistoryHtml}
+              </div>
+            </div>
 
-              <input type="text" id="dictation-input" placeholder="Gõ câu vừa nghe được..." oninput="checkDictationInput('${cleanSpeech}')" class="hanzi-text" style="width:100%; padding:14px 18px; background:rgba(0,0,0,0.4); border:2px solid rgba(255,255,255,0.2); border-radius:14px; color:#ffffff; font-size:1.15rem; font-weight:600; outline:none; margin-bottom:16px; box-sizing:border-box;" />
+            <!-- RIGHT COLUMN: Khung Luyện Gõ / Nghe Chính Tả -->
+            <div style="background:rgba(30,41,59,0.7); border:1.5px solid rgba(255,255,255,0.15); border-radius:20px; padding:22px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                  <span style="font-size:0.9rem; font-weight:800; color:#f59e0b;"><i class="fa-solid fa-pen-to-square"></i> Câu ${currentLineIndex + 1} / ${lines.length}</span>
+                  ${curLine.speaker ? `<span style="background:rgba(37,99,235,0.25); color:#60a5fa; border:1px solid rgba(59,130,246,0.35); padding:4px 12px; border-radius:10px; font-weight:700; font-size:0.82rem;">Nhân vật: ${curLine.speaker}</span>` : ''}
+                </div>
 
-              <div id="dictation-hint-cards" style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:14px;">
-                ${hintChars.map(c => `
-                  <div class="lesson-hint-card" onclick="toggleHint(this, '${c.replace(/'/g, "\\'")}')" style="width:52px; height:68px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2); border-radius:12px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#94a3b8; font-size:1.2rem;">
-                    <i class="fa-solid fa-eye"></i>
+                <div style="text-align:center; margin-bottom:20px;">
+                  <button onclick="speakText('${cleanSpeech}')" style="background:linear-gradient(135deg, #3b82f6, #1d4ed8); border:none; color:#ffffff; padding:12px 24px; border-radius:99px; font-weight:700; font-size:0.95rem; cursor:pointer; box-shadow:0 6px 20px rgba(59,130,246,0.4); display:inline-flex; align-items:center; gap:8px;">
+                    <i class="fa-solid fa-volume-high"></i> BẤM ĐỂ NGHE CÂU THOẠI
+                  </button>
+                </div>
+
+                <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:18px; margin-bottom:18px;">
+                  <div style="font-size:0.88rem; font-weight:700; color:#38bdf8; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+                    <span>Gõ lại câu bằng chữ Hán/Pinyin:</span>
+                    <span id="dictation-feedback"></span>
                   </div>
-                `).join('')}
+
+                  <input type="text" id="dictation-input" placeholder="Gõ câu vừa nghe được..." oninput="checkDictationInput('${cleanSpeech}')" class="hanzi-text" style="width:100%; padding:12px 16px; background:rgba(0,0,0,0.4); border:2px solid rgba(255,255,255,0.2); border-radius:12px; color:#ffffff; font-size:1.1rem; font-weight:600; outline:none; margin-bottom:14px; box-sizing:border-box;" />
+
+                  <div id="dictation-hint-cards" style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:12px;">
+                    ${hintChars.map(c => `
+                      <div class="lesson-hint-card" onclick="toggleHint(this, '${c.replace(/'/g, "\\'")}')" style="width:46px; height:58px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#94a3b8; font-size:1.1rem;">
+                        <i class="fa-solid fa-eye"></i>
+                      </div>
+                    `).join('')}
+                  </div>
+
+                  <button onclick="revealAllHints('${cleanSpeech}')" style="width:100%; background:linear-gradient(135deg, #f59e0b, #d97706); border:none; color:#ffffff; font-weight:700; padding:10px; border-radius:10px; cursor:pointer; font-size:0.85rem;">
+                    <i class="fa-solid fa-eye"></i> HIỆN GỢI Ý MẪU
+                  </button>
+                </div>
               </div>
 
-              <button onclick="revealAllHints('${cleanSpeech}')" style="width:100%; background:linear-gradient(135deg, #f59e0b, #d97706); border:none; color:#ffffff; font-weight:700; padding:12px; border-radius:12px; cursor:pointer;">
-                <i class="fa-solid fa-eye"></i> HIỆN GỢI Ý MẪU
-              </button>
+              <div style="display:flex; justify-content:space-between; gap:12px; margin-top:12px;">
+                <button onclick="submitDictationLine()" style="width:100%; background:linear-gradient(135deg, #10b981, #059669); border:none; color:#ffffff; padding:12px; border-radius:12px; font-weight:800; font-size:0.95rem; cursor:pointer;">
+                  Xác nhận & Thêm vào hội thoại &rarr;
+                </button>
+              </div>
             </div>
 
-            <div style="display:flex; justify-content:space-between; gap:14px;">
-              <button onclick="navLine(-1, ${linesList.length})" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; padding:12px 22px; border-radius:12px; font-weight:600; cursor:pointer;">
-                &larr; Câu trước
-              </button>
-              <button onclick="navLine(1, ${linesList.length})" style="background:#2563eb; border:none; color:#fff; padding:12px 28px; border-radius:12px; font-weight:700; cursor:pointer;">
-                Câu tiếp theo &rarr;
-              </button>
-            </div>
           </div>
         `;
 
+      // MODE 4: TRANSLATE (4. Luyện dịch bài khóa: Tiếng Trung -> Tiếng Việt)
       } else if (currentMode === 'translate') {
-        if (linesList.length === 0) {
+        if (lines.length === 0) {
           box.innerHTML = `<div style="text-align:center; padding:40px; color:#94a3b8;">Chưa có dữ liệu dịch bài khóa.</div>`;
           return;
         }
 
-        const curLine = linesList[currentLineIndex % linesList.length];
-        const cleanSpeech = curLine.speech.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-        const translationPrompt = bkLineTranslations[curLine.speech] || `Dịch câu thoại của ${curLine.speaker || 'nhân vật'}`;
-        const hintChars = curLine.speech.match(/[\u4e00-\u9fa5]/g) || curLine.speech.split('');
+        const curLine = lines[currentLineIndex % lines.length];
+        const cleanSpeech = curLine.zh.replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
         box.innerHTML = `
-          <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.12); border-radius:22px; padding:28px; text-align:center; max-width:700px; margin:0 auto;">
+          <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.12); border-radius:22px; padding:28px; text-align:center; max-width:720px; margin:0 auto;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-              <span style="font-size:0.92rem; font-weight:700; color:#38bdf8;"><i class="fa-solid fa-language"></i> Câu ${currentLineIndex + 1} / ${linesList.length}</span>
-              ${curLine.speaker ? `<span style="background:rgba(37,99,235,0.2); color:#60a5fa; border:1px solid rgba(59,130,246,0.35); padding:4px 14px; border-radius:10px; font-weight:700; font-size:0.88rem;">${curLine.speaker}</span>` : ''}
+              <span style="font-size:0.92rem; font-weight:800; color:#38bdf8;"><i class="fa-solid fa-language"></i> BƯỚC 4: BÀI TẬP DỊCH (TIẾNG TRUNG ➔ TIẾNG VIỆT)</span>
+              <span style="font-size:0.88rem; font-weight:700; color:#fbbf24;">Câu ${currentLineIndex + 1} / ${lines.length}</span>
             </div>
 
-            <div style="background:rgba(15,23,42,0.85); border:1.5px solid rgba(59,130,246,0.4); border-radius:18px; padding:22px; margin-bottom:24px; text-align:left;">
-              <div style="font-size:0.85rem; font-weight:700; color:#60a5fa; text-transform:uppercase; margin-bottom:8px;">
-                <i class="fa-solid fa-flag"></i> Câu tiếng Việt cần dịch:
+            <!-- Chinese Sentence Box -->
+            <div style="background:rgba(15,23,42,0.85); border:1.5px solid rgba(56,189,248,0.4); border-radius:18px; padding:22px; margin-bottom:20px; text-align:left;">
+              <div style="font-size:0.82rem; font-weight:800; color:#38bdf8; text-transform:uppercase; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
+                <span>Câu tiếng Trung:</span>
+                <button onclick="speakText('${cleanSpeech}')" style="background:rgba(56,189,248,0.2); border:none; color:#38bdf8; padding:4px 10px; border-radius:8px; cursor:pointer; font-size:0.8rem;">
+                  <i class="fa-solid fa-volume-high"></i> Nghe
+                </button>
               </div>
-              <div style="font-size:1.25rem; font-weight:700; color:#ffffff;">
-                "${translationPrompt}"
-              </div>
+              <div class="hanzi-text" style="font-size:1.4rem; font-weight:800; color:#ffffff;">${curLine.zh}</div>
+              ${curLine.pinyin ? `<div style="font-size:0.95rem; color:#fbbf24; font-weight:600; margin-top:4px;">${curLine.pinyin}</div>` : ''}
             </div>
 
-            <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.12); border-radius:18px; padding:22px; margin-bottom:24px;">
-              <div style="font-size:0.92rem; font-weight:700; color:#38bdf8; margin-bottom:12px; text-align:left; display:flex; justify-content:space-between;">
-                <span>Dịch sang tiếng Trung:</span>
-                <span id="translate-feedback"></span>
+            <!-- Translation Input Panel -->
+            <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.12); border-radius:18px; padding:22px; margin-bottom:24px; text-align:left;">
+              <label style="font-size:0.9rem; font-weight:700; color:#cbd5e1; display:block; margin-bottom:8px;">
+                Nhập bản dịch Tiếng Việt của bạn:
+              </label>
+              <textarea id="translate-vi-input" rows="3" placeholder="Nhập câu dịch Tiếng Việt vào đây..." style="width:100%; padding:12px 16px; background:rgba(0,0,0,0.4); border:1.5px solid rgba(255,255,255,0.2); border-radius:12px; color:#ffffff; font-size:1rem; outline:none; resize:none; box-sizing:border-box; margin-bottom:14px;"></textarea>
+
+              <div id="translate-vi-feed" style="display:none; background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.3); border-radius:12px; padding:14px; margin-bottom:14px; font-size:0.95rem; color:#ffffff;">
+                <strong style="color:#34d399; display:block; margin-bottom:4px;"><i class="fa-solid fa-circle-check"></i> Bản dịch tham khảo chuẩn:</strong>
+                <div>"${curLine.vi || 'Chào bạn!'}"</div>
               </div>
 
-              <input type="text" id="translate-input" placeholder="Gõ câu dịch tiếng Trung vào đây..." oninput="checkTranslateInput('${cleanSpeech}')" class="hanzi-text" style="width:100%; padding:14px 18px; background:rgba(0,0,0,0.4); border:2px solid rgba(255,255,255,0.2); border-radius:14px; color:#ffffff; font-size:1.15rem; font-weight:600; outline:none; margin-bottom:16px; box-sizing:border-box;" />
-
-              <div id="translate-hint-cards" style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:14px;">
-                ${hintChars.map(c => `
-                  <div class="lesson-hint-card" onclick="toggleHint(this, '${c.replace(/'/g, "\\'")}')" style="width:52px; height:68px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2); border-radius:12px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#94a3b8; font-size:1.2rem;">
-                    <i class="fa-solid fa-eye"></i>
-                  </div>
-                `).join('')}
-              </div>
-
-              <button onclick="revealAllHints('${cleanSpeech}')" style="width:100%; background:linear-gradient(135deg, #f59e0b, #d97706); border:none; color:#ffffff; font-weight:700; padding:12px; border-radius:12px; cursor:pointer;">
-                <i class="fa-solid fa-eye"></i> HIỆN GỢI Ý MẪU
+              <button onclick="revealTranslationAnswer()" style="width:100%; background:rgba(56,189,248,0.2); border:1px solid rgba(56,189,248,0.4); color:#38bdf8; font-weight:800; padding:12px; border-radius:12px; cursor:pointer; font-size:0.92rem;">
+                <i class="fa-solid fa-eye"></i> Hiện Bản Dịch Chuẩn
               </button>
             </div>
 
             <div style="display:flex; justify-content:space-between; gap:14px;">
-              <button onclick="navLine(-1, ${linesList.length})" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; padding:12px 22px; border-radius:12px; font-weight:600; cursor:pointer;">
+              <button onclick="navLine(-1, ${lines.length})" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; padding:12px 22px; border-radius:12px; font-weight:600; cursor:pointer;">
                 &larr; Câu trước
               </button>
-              <button onclick="navLine(1, ${linesList.length})" style="background:#2563eb; border:none; color:#fff; padding:12px 28px; border-radius:12px; font-weight:700; cursor:pointer;">
+              <button onclick="navLine(1, ${lines.length})" style="background:#2563eb; border:none; color:#fff; padding:12px 28px; border-radius:12px; font-weight:700; cursor:pointer;">
                 Câu tiếp theo &rarr;
               </button>
             </div>
@@ -980,99 +1018,26 @@
       }
     }
 
-    function checkQuizAnswer(selected, target, btnEl) {
-      const feedback = document.getElementById('quiz-feedback');
-      const nextBtn = document.getElementById('quiz-next-btn');
-      const allBtns = document.querySelectorAll('.bk-quiz-opt-btn');
-
-      allBtns.forEach(b => {
-        b.disabled = true;
-        b.style.opacity = '0.7';
-      });
-
+    function checkStep1Answer(selected, answer, btnEl, feedId) {
+      const feed = document.getElementById(feedId);
       const cleanSel = selected.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '').toLowerCase();
-      const cleanTarget = target.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '').toLowerCase();
+      const cleanAns = answer.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '').toLowerCase();
 
-      if (cleanSel === cleanTarget) {
+      if (cleanSel === cleanAns) {
         if (btnEl) {
           btnEl.style.background = 'rgba(16, 185, 129, 0.25)';
           btnEl.style.borderColor = '#10b981';
           btnEl.style.color = '#34d399';
         }
-        if (feedback) feedback.innerHTML = `<span style="color:#10b981; font-weight:700; font-size:1.1rem;"><i class="fa-solid fa-circle-check"></i> Chính xác! 🎉</span>`;
-        currentScore += 10;
-        speakText(target);
+        if (feed) feed.innerHTML = `<span style="color:#10b981;"><i class="fa-solid fa-circle-check"></i> Chính xác!</span>`;
       } else {
         if (btnEl) {
           btnEl.style.background = 'rgba(239, 68, 68, 0.25)';
           btnEl.style.borderColor = '#ef4444';
           btnEl.style.color = '#f87171';
         }
-        if (feedback) feedback.innerHTML = `<span style="color:#ef4444; font-weight:700; font-size:1.05rem;"><i class="fa-solid fa-circle-xmark"></i> Chưa đúng! Đáp án đúng là: ${target}</span>`;
+        if (feed) feed.innerHTML = `<span style="color:#ef4444;"><i class="fa-solid fa-circle-xmark"></i> Chưa đúng! Đáp án đúng là: ${answer}</span>`;
       }
-
-      if (nextBtn) nextBtn.style.display = 'block';
-    }
-
-    function nextQuizQuestion(total) {
-      currentLineIndex = (currentLineIndex + 1) % total;
-      renderWorkspace();
-    }
-
-    function updateLessonCharHintCards(containerId, typedText, targetAnswer) {
-      const container = typeof containerId === 'string' ? document.getElementById(containerId) : containerId;
-      if (!container) return;
-
-      const cards = container.querySelectorAll('.lesson-hint-card');
-      if (cards.length === 0) return;
-
-      const cleanTyped = (typedText || '').replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '');
-      const cleanTarget = (targetAnswer || '').replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '');
-
-      const typedChars = cleanTyped.match(/[\u4e00-\u9fa5]/g) || cleanTyped.split('');
-      const targetChars = cleanTarget.match(/[\u4e00-\u9fa5]/g) || cleanTarget.split('');
-
-      cards.forEach((card, idx) => {
-        const targetChar = targetChars[idx] || card.getAttribute('data-char') || '';
-
-        if (idx < typedChars.length) {
-          const typedChar = typedChars[idx];
-          if (typedChar === targetChar) {
-            // Correct character for position idx: Auto-flip GREEN
-            card.setAttribute('data-flipped', 'true');
-            card.style.background = 'rgba(16, 185, 129, 0.25)';
-            card.style.border = '2px solid #10b981';
-            card.style.color = '#34d399';
-            card.style.boxShadow = '0 0 16px rgba(16, 185, 129, 0.4)';
-            card.innerHTML = `<span style="font-size: 1.5rem; font-weight: 800; font-family: var(--font-hanzi);">${targetChar}</span>`;
-          } else {
-            // Wrong character typed for position idx: Do NOT flip character, show RED
-            card.setAttribute('data-flipped', 'false');
-            card.style.background = 'rgba(239, 68, 68, 0.25)';
-            card.style.border = '2px solid #ef4444';
-            card.style.color = '#f87171';
-            card.style.boxShadow = '0 0 16px rgba(239, 68, 68, 0.4)';
-            card.innerHTML = `<i class="fa-solid fa-eye" style="color: #f87171;"></i>`;
-          }
-        } else {
-          // Position not typed yet
-          const isManualFlipped = card.getAttribute('data-manual-flipped') === 'true';
-          if (isManualFlipped) {
-            card.style.background = '#ffffff';
-            card.style.border = '1px solid rgba(255,255,255,0.2)';
-            card.style.color = '#0f172a';
-            card.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
-            card.innerHTML = `<span style="font-size: 1.5rem; font-weight: 800; font-family: var(--font-hanzi);">${targetChar}</span>`;
-          } else {
-            card.setAttribute('data-flipped', 'false');
-            card.style.background = 'rgba(255,255,255,0.08)';
-            card.style.border = '1px solid rgba(255,255,255,0.2)';
-            card.style.color = '#94a3b8';
-            card.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
-            card.innerHTML = `<i class="fa-solid fa-eye"></i>`;
-          }
-        }
-      });
     }
 
     function checkDictationInput(target) {
@@ -1102,31 +1067,84 @@
       }
     }
 
-    function checkTranslateInput(target) {
-      const inputEl = document.getElementById('translate-input');
-      const feedbackEl = document.getElementById('translate-feedback');
-      if (!inputEl || !feedbackEl) return;
+    function submitDictationLine() {
+      const diagObj = getActiveDialogueData();
+      if (!diagObj || !diagObj.lines) return;
 
-      const typedRaw = inputEl.value.trim();
-      const typed = typedRaw.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '').toLowerCase();
-      const cleanTarget = target.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '').toLowerCase();
+      const lines = diagObj.lines;
+      const curLine = lines[currentLineIndex % lines.length];
 
-      updateLessonCharHintCards('translate-hint-cards', typedRaw, target);
-
-      if (typed === cleanTarget) {
-        feedbackEl.innerHTML = `<span style="color:#10b981; font-weight:700;"><i class="fa-solid fa-circle-check"></i> Chính xác!</span>`;
-        inputEl.style.borderColor = '#10b981';
-        speakText(target);
-      } else if (cleanTarget.startsWith(typed) && typed.length > 0) {
-        feedbackEl.innerHTML = `<span style="color:#fbbf24; font-weight:600;"><i class="fa-solid fa-pen"></i> Đang gõ...</span>`;
-        inputEl.style.borderColor = '#fbbf24';
-      } else if (typed.length > 0) {
-        feedbackEl.innerHTML = `<span style="color:#ef4444; font-weight:600;"><i class="fa-solid fa-circle-xmark"></i> Chưa đúng</span>`;
-        inputEl.style.borderColor = '#ef4444';
-      } else {
-        feedbackEl.innerHTML = '';
-        inputEl.style.borderColor = 'rgba(255,255,255,0.2)';
+      // Add to completed chat lines
+      if (!completedChatLines.includes(curLine)) {
+        completedChatLines.push(curLine);
       }
+
+      currentLineIndex = (currentLineIndex + 1) % lines.length;
+      renderWorkspace();
+
+      // Smooth scroll chat container to bottom
+      setTimeout(() => {
+        const chatBox = document.getElementById('bk-chat-container');
+        if (chatBox) chatBox.scrollTop = chatBox.scrollHeight;
+      }, 100);
+    }
+
+    function revealTranslationAnswer() {
+      const feed = document.getElementById('translate-vi-feed');
+      if (feed) feed.style.display = 'block';
+    }
+
+    function updateLessonCharHintCards(containerId, typedText, targetAnswer) {
+      const container = typeof containerId === 'string' ? document.getElementById(containerId) : containerId;
+      if (!container) return;
+
+      const cards = container.querySelectorAll('.lesson-hint-card');
+      if (cards.length === 0) return;
+
+      const cleanTyped = (typedText || '').replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '');
+      const cleanTarget = (targetAnswer || '').replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '');
+
+      const typedChars = cleanTyped.match(/[\u4e00-\u9fa5]/g) || cleanTyped.split('');
+      const targetChars = cleanTarget.match(/[\u4e00-\u9fa5]/g) || cleanTarget.split('');
+
+      cards.forEach((card, idx) => {
+        const targetChar = targetChars[idx] || card.getAttribute('data-char') || '';
+
+        if (idx < typedChars.length) {
+          const typedChar = typedChars[idx];
+          if (typedChar === targetChar) {
+            card.setAttribute('data-flipped', 'true');
+            card.style.background = 'rgba(16, 185, 129, 0.25)';
+            card.style.border = '2px solid #10b981';
+            card.style.color = '#34d399';
+            card.style.boxShadow = '0 0 16px rgba(16, 185, 129, 0.4)';
+            card.innerHTML = `<span style="font-size: 1.3rem; font-weight: 800; font-family: var(--font-hanzi);">${targetChar}</span>`;
+          } else {
+            card.setAttribute('data-flipped', 'false');
+            card.style.background = 'rgba(239, 68, 68, 0.25)';
+            card.style.border = '2px solid #ef4444';
+            card.style.color = '#f87171';
+            card.style.boxShadow = '0 0 16px rgba(239, 68, 68, 0.4)';
+            card.innerHTML = `<i class="fa-solid fa-eye" style="color: #f87171;"></i>`;
+          }
+        } else {
+          const isManualFlipped = card.getAttribute('data-manual-flipped') === 'true';
+          if (isManualFlipped) {
+            card.style.background = '#ffffff';
+            card.style.border = '1px solid rgba(255,255,255,0.2)';
+            card.style.color = '#0f172a';
+            card.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
+            card.innerHTML = `<span style="font-size: 1.3rem; font-weight: 800; font-family: var(--font-hanzi);">${targetChar}</span>`;
+          } else {
+            card.setAttribute('data-flipped', 'false');
+            card.style.background = 'rgba(255,255,255,0.08)';
+            card.style.border = '1px solid rgba(255,255,255,0.2)';
+            card.style.color = '#94a3b8';
+            card.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
+            card.innerHTML = `<i class="fa-solid fa-eye"></i>`;
+          }
+        }
+      });
     }
 
     function toggleHint(btnEl, char) {
@@ -1143,7 +1161,7 @@
         btnEl.style.background = '#ffffff';
         btnEl.style.color = '#0f172a';
         btnEl.style.border = '1px solid rgba(255,255,255,0.2)';
-        btnEl.innerHTML = `<span style="font-size: 1.5rem; font-weight: 700; font-family: var(--font-hanzi);">${char}</span>`;
+        btnEl.innerHTML = `<span style="font-size: 1.3rem; font-weight: 800; font-family: var(--font-hanzi);">${char}</span>`;
       }
     }
 
@@ -1168,7 +1186,7 @@
             card.style.background = '#ffffff';
             card.style.color = '#0f172a';
             card.style.border = '1px solid rgba(255,255,255,0.2)';
-            card.innerHTML = `<span style="font-size: 1.5rem; font-weight: 700; font-family: var(--font-hanzi);">${chars[idx]}</span>`;
+            card.innerHTML = `<span style="font-size: 1.3rem; font-weight: 800; font-family: var(--font-hanzi);">${chars[idx]}</span>`;
           }
         }
       });
