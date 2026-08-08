@@ -27,23 +27,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "question": "（1）王一飞是对谁说话？",
               "options": [
-                "王一飞 và 小语",
-                "Chỉ có 1 người tự nói",
-                "Một nhóm người lạ"
+                "AI小语",
+                "王老师",
+                "同学们"
               ],
-              "answer": "王一飞 và 小语"
+              "answer": "AI小语"
             },
             {
               "id": 2,
-              "question": "（2）Mục đích chính của cuộc đối thoại là gì?",
+              "question": "（2）小语称呼王一飞什么？",
               "options": [
-                "Chào hỏi & Giao tiếp cơ bản",
-                "Hỏi đường đi bệnh viện",
-                "Mua đồ ở siêu thị"
+                "王老师",
+                "王同学",
+                "王医生"
               ],
-              "answer": "Chào hỏi & Giao tiếp cơ bản"
+              "answer": "王老师"
             }
           ]
         }
@@ -86,23 +86,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "question": "（1）王一飞第一句说了什么？",
               "options": [
-                "王一飞 và 学生们",
-                "Chỉ có 1 người tự nói",
-                "Một nhóm người lạ"
+                "大家好！",
+                "再见！",
+                "谢谢！"
               ],
-              "answer": "王一飞 và 学生们"
+              "answer": "大家好！"
             },
             {
               "id": 2,
-              "question": "（2）Câu thoại đầu tiên trong bài khóa là gì?",
+              "question": "（2）学生们对王老师说什么？",
               "options": [
-                "\"大家好！\"",
-                "\"谢谢！\"",
-                "\"再见！\""
+                "老师，您好！",
+                "老师，再见！",
+                "不客气！"
               ],
-              "answer": "\"大家好！\""
+              "answer": "老师，您好！"
             }
           ]
         }
@@ -143,23 +143,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "question": "（1）当学生们说“谢谢”时，小语回答什么？",
               "options": [
-                "学生们 và 小语",
-                "Chỉ có 1 người tự nói",
-                "Một nhóm người lạ"
+                "不客气！",
+                "没关系！",
+                "你好！"
               ],
-              "answer": "学生们 và 小语"
+              "answer": "不客气！"
             },
             {
               "id": 2,
-              "question": "（2）Mục đích chính của cuộc đối thoại là gì?",
+              "question": "（2）王一飞对同学们说什么？",
               "options": [
-                "Chào hỏi & Giao tiếp cơ bản",
-                "Hỏi đường đi bệnh viện",
-                "Mua đồ ở siêu thị"
+                "同学们，再见！",
+                "同学们，你好！",
+                "不客气！"
               ],
-              "answer": "Chào hỏi & Giao tiếp cơ bản"
+              "answer": "同学们，再见！"
             }
           ]
         }
@@ -196,23 +196,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "question": "（1）王一飞问对方什么？",
               "options": [
-                "王一飞 và 陈天中",
-                "Chỉ có 1 người tự nói",
-                "Một nhóm người lạ"
+                "叫什么名字",
+                "去哪儿",
+                "是哪国人"
               ],
-              "answer": "王一飞 và 陈天中"
+              "answer": "叫什么名字"
             },
             {
               "id": 2,
-              "question": "（2）Nhân vật trong bài khóa đang trao đổi về thông tin gì?",
+              "question": "（2）回答的人叫什么名字？",
               "options": [
-                "Hỏi tên & Xưng hô",
-                "Hỏi giá tiền mua sắm",
-                "Hỏi thời tiết hôm nay"
+                "陈天中",
+                "李文",
+                "白家月"
               ],
-              "answer": "Hỏi tên & Xưng hô"
+              "answer": "陈天中"
             }
           ]
         }
@@ -255,23 +255,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "question": "（1）说话的女士叫什么名字？",
               "options": [
-                "陈天中 và 白家月",
-                "Chỉ có 1 người tự nói",
-                "Một nhóm người lạ"
+                "白家月",
+                "安妮",
+                "小语"
               ],
-              "answer": "陈天中 và 白家月"
+              "answer": "白家月"
             },
             {
               "id": 2,
-              "question": "（2）Mục đích chính của cuộc đối thoại là gì?",
+              "question": "（2）陈天中说“对不起”后，白家月回答什么？",
               "options": [
-                "Chào hỏi & Giao tiếp cơ bản",
-                "Hỏi đường đi bệnh viện",
-                "Mua đồ ở siêu thị"
+                "没关系！",
+                "谢谢！",
+                "再见！"
               ],
-              "answer": "Chào hỏi & Giao tiếp cơ bản"
+              "answer": "没关系！"
             }
           ]
         }
@@ -312,23 +312,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "question": "（1）李文对白家月说了什么？",
               "options": [
-                "李文 và 白家月",
-                "Chỉ có 1 người tự nói",
-                "Một nhóm người lạ"
+                "很高兴认识你",
+                "对不起",
+                "再见"
               ],
-              "answer": "李文 và 白家月"
+              "answer": "很高兴认识你"
             },
             {
               "id": 2,
-              "question": "（2）Mục đích chính của cuộc đối thoại là gì?",
+              "question": "（2）白家月怎么回答？",
               "options": [
-                "Chào hỏi & Giao tiếp cơ bản",
-                "Hỏi đường đi bệnh viện",
-                "Mua đồ ở siêu thị"
+                "认识你，我也很高兴",
+                "我不是白家月",
+                "没关系"
               ],
-              "answer": "Chào hỏi & Giao tiếp cơ bản"
+              "answer": "认识你，我也很高兴"
             }
           ]
         }
@@ -363,23 +363,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "question": "（1）李文是哪国人？",
               "options": [
-                "李文 và 白家月",
-                "Chỉ có 1 người tự nói",
-                "Một nhóm người lạ"
+                "中国人",
+                "法国人",
+                "泰国人"
               ],
-              "answer": "李文 và 白家月"
+              "answer": "中国人"
             },
             {
               "id": 2,
-              "question": "（2）Nội dung bài khóa xoay quanh chủ đề nào?",
+              "question": "（2）白家月的中文老师是哪国人？",
               "options": [
-                "Hỏi quốc tịch & Quê quán",
-                "Hỏi giờ giấc đi làm",
-                "Hỏi sở thích ăn uống"
+                "中国人",
+                "法国人",
+                "美国人"
               ],
-              "answer": "Hỏi quốc tịch & Quê quán"
+              "answer": "中国人"
             }
           ]
         }
@@ -420,23 +420,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "question": "（1）陈天中的女朋友是哪国人？",
               "options": [
-                "安妮 và 陈天中",
-                "Chỉ có 1 người tự nói",
-                "Một nhóm người lạ"
+                "泰国人",
+                "中国人",
+                "法国人"
               ],
-              "answer": "安妮 và 陈天中"
+              "answer": "泰国人"
             },
             {
               "id": 2,
-              "question": "（2）Câu thoại đầu tiên trong bài khóa là gì?",
+              "question": "（2）陈天中介绍的人是谁？",
               "options": [
-                "\"这是谁？\"",
-                "\"谢谢！\"",
-                "\"再见！\""
+                "他的女朋友",
+                "他的老师",
+                "他的姐姐"
               ],
-              "answer": "\"这是谁？\""
+              "answer": "他的女朋友"
             }
           ]
         }
@@ -489,23 +489,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
+              "question": "（1）王一雪是王一飞的什么人？",
               "options": [
-                "王一雪 và 王一飞",
-                "Chỉ có 1 người tự nói",
-                "Một nhóm người lạ"
+                "姐姐",
+                "妹妹",
+                "老师"
               ],
-              "answer": "王一雪 và 王一飞"
+              "answer": "姐姐"
             },
             {
               "id": 2,
-              "question": "（2）Câu thoại đầu tiên trong bài khóa là gì?",
+              "question": "（2）王一飞的工作怎么样？",
               "options": [
-                "\"喂，一飞！\"",
-                "\"谢谢！\"",
-                "\"再见！\""
+                "还很忙",
+                "不太忙",
+                "不忙"
               ],
-              "answer": "\"喂，一飞！\""
+              "answer": "还很忙"
             }
           ]
         }
@@ -552,23 +552,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
-              "options": [
-                "刘明 và 王一雪",
-                "Chỉ có 1 người tự nói",
-                "Một nhóm người lạ"
-              ],
-              "answer": "刘明 và 王一雪"
-            },
-            {
-              "id": 2,
-              "question": "（2）Câu thoại đầu tiên trong bài khóa là gì?",
+              "question": "（1）Lượt nói đầu tiên trong file audio nghe thấy câu nào?",
               "options": [
                 "\"一飞忙吗？\"",
-                "\"谢谢！\"",
+                "\"对不起！\"",
                 "\"再见！\""
               ],
               "answer": "\"一飞忙吗？\""
+            },
+            {
+              "id": 2,
+              "question": "（2）Nội dung chính của cuộc thoại vừa nghe là gì?",
+              "options": [
+                "Giao tiếp & Trao đổi thông tin bài khóa",
+                "Hỏi đường đến siêu thị",
+                "Mua sắm hoa quả"
+              ],
+              "answer": "Giao tiếp & Trao đổi thông tin bài khóa"
             }
           ]
         }
@@ -741,23 +741,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
-              "options": [
-                "王一雪 và 刘明",
-                "Chỉ có 1 người tự nói",
-                "Một nhóm người lạ"
-              ],
-              "answer": "王一雪 và 刘明"
-            },
-            {
-              "id": 2,
-              "question": "（2）Câu thoại đầu tiên trong bài khóa là gì?",
+              "question": "（1）Lượt nói đầu tiên trong file audio nghe thấy câu nào?",
               "options": [
                 "\"今天几号？\"",
-                "\"谢谢！\"",
+                "\"对不起！\"",
                 "\"再见！\""
               ],
               "answer": "\"今天几号？\""
+            },
+            {
+              "id": 2,
+              "question": "（2）Nội dung chính của cuộc thoại vừa nghe là gì?",
+              "options": [
+                "Giao tiếp & Trao đổi thông tin bài khóa",
+                "Hỏi đường đến siêu thị",
+                "Mua sắm hoa quả"
+              ],
+              "answer": "Giao tiếp & Trao đổi thông tin bài khóa"
             }
           ]
         }
@@ -930,23 +930,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
-              "options": [
-                "李文 và 白家月",
-                "Chỉ có 1 người tự nói",
-                "Một nhóm người lạ"
-              ],
-              "answer": "李文 và 白家月"
-            },
-            {
-              "id": 2,
-              "question": "（2）Câu thoại đầu tiên trong bài khóa là gì?",
+              "question": "（1）Lượt nói đầu tiên trong file audio nghe thấy câu nào?",
               "options": [
                 "\"家月，你的手机号是多少？\"",
-                "\"谢谢！\"",
+                "\"对不起！\"",
                 "\"再见！\""
               ],
               "answer": "\"家月，你的手机号是多少？\""
+            },
+            {
+              "id": 2,
+              "question": "（2）Nội dung chính của cuộc thoại vừa nghe là gì?",
+              "options": [
+                "Giao tiếp & Trao đổi thông tin bài khóa",
+                "Hỏi đường đến siêu thị",
+                "Mua sắm hoa quả"
+              ],
+              "answer": "Giao tiếp & Trao đổi thông tin bài khóa"
             }
           ]
         }
@@ -997,13 +997,13 @@
             },
             {
               "id": 2,
-              "question": "（2）李文（……）手机号。",
+              "question": "（2）李文（……）杨同乐的手机号。",
               "options": [
-                "知道杨同乐的",
-                "不知道杨同乐 shelter",
+                "知道",
+                "不知道",
                 "没有"
               ],
-              "answer": "知道杨同乐"
+              "answer": "知道"
             }
           ]
         }
@@ -1119,23 +1119,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
-              "options": [
-                "白家月 và 安妮",
-                "Chỉ có 1 người tự nói",
-                "Một nhóm người lạ"
-              ],
-              "answer": "白家月 và 安妮"
-            },
-            {
-              "id": 2,
-              "question": "（2）Câu thoại đầu tiên trong bài khóa là gì?",
+              "question": "（1）Lượt nói đầu tiên trong file audio nghe thấy câu nào?",
               "options": [
                 "\"现在几点？\"",
-                "\"谢谢！\"",
+                "\"对不起！\"",
                 "\"再见！\""
               ],
               "answer": "\"现在几点？\""
+            },
+            {
+              "id": 2,
+              "question": "（2）Nội dung chính của cuộc thoại vừa nghe là gì?",
+              "options": [
+                "Giao tiếp & Trao đổi thông tin bài khóa",
+                "Hỏi đường đến siêu thị",
+                "Mua sắm hoa quả"
+              ],
+              "answer": "Giao tiếp & Trao đổi thông tin bài khóa"
             }
           ]
         }
@@ -1314,23 +1314,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
-              "options": [
-                "白家月 và 陈天中",
-                "Chỉ có 1 người tự nói",
-                "Một nhóm người lạ"
-              ],
-              "answer": "白家月 và 陈天中"
-            },
-            {
-              "id": 2,
-              "question": "（2）Câu thoại đầu tiên trong bài khóa là gì?",
+              "question": "（1）Lượt nói đầu tiên trong file audio nghe thấy câu nào?",
               "options": [
                 "\"房间外有一只小猫。\"",
-                "\"谢谢！\"",
+                "\"对不起！\"",
                 "\"再见！\""
               ],
               "answer": "\"房间外有一只小猫。\""
+            },
+            {
+              "id": 2,
+              "question": "（2）Nội dung chính của cuộc thoại vừa nghe là gì?",
+              "options": [
+                "Giao tiếp & Trao đổi thông tin bài khóa",
+                "Hỏi đường đến siêu thị",
+                "Mua sắm hoa quả"
+              ],
+              "answer": "Giao tiếp & Trao đổi thông tin bài khóa"
             }
           ]
         }
@@ -1511,23 +1511,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
-              "options": [
-                "李文 và 白家月",
-                "Chỉ có 1 người tự nói",
-                "Một nhóm người lạ"
-              ],
-              "answer": "李文 và 白家月"
-            },
-            {
-              "id": 2,
-              "question": "（2）Câu thoại đầu tiên trong bài khóa là gì?",
+              "question": "（1）Lượt nói đầu tiên trong file audio nghe thấy câu nào?",
               "options": [
                 "\"学校前边有一家电影院。\"",
-                "\"谢谢！\"",
+                "\"对不起！\"",
                 "\"再见！\""
               ],
               "answer": "\"学校前边有一家电影院。\""
+            },
+            {
+              "id": 2,
+              "question": "（2）Nội dung chính của cuộc thoại vừa nghe là gì?",
+              "options": [
+                "Giao tiếp & Trao đổi thông tin bài khóa",
+                "Hỏi đường đến siêu thị",
+                "Mua sắm hoa quả"
+              ],
+              "answer": "Giao tiếp & Trao đổi thông tin bài khóa"
             }
           ]
         }
@@ -1706,23 +1706,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
-              "options": [
-                "王一雪 và 售货员",
-                "Chỉ có 1 người tự nói",
-                "Một nhóm người lạ"
-              ],
-              "answer": "王一雪 và 售货员"
-            },
-            {
-              "id": 2,
-              "question": "（2）Câu thoại đầu tiên trong bài khóa là gì?",
+              "question": "（1）Lượt nói đầu tiên trong file audio nghe thấy câu nào?",
               "options": [
                 "\"请问，有杯子吗？\"",
-                "\"谢谢！\"",
+                "\"对不起！\"",
                 "\"再见！\""
               ],
               "answer": "\"请问，有杯子吗？\""
+            },
+            {
+              "id": 2,
+              "question": "（2）Nội dung chính của cuộc thoại vừa nghe là gì?",
+              "options": [
+                "Giao tiếp & Trao đổi thông tin bài khóa",
+                "Hỏi đường đến siêu thị",
+                "Mua sắm hoa quả"
+              ],
+              "answer": "Giao tiếp & Trao đổi thông tin bài khóa"
             }
           ]
         }
@@ -1901,23 +1901,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
-              "options": [
-                "王一飞 và 李文",
-                "Chỉ có 1 người tự nói",
-                "Một nhóm người lạ"
-              ],
-              "answer": "王一飞 và 李文"
-            },
-            {
-              "id": 2,
-              "question": "（2）Câu thoại đầu tiên trong bài khóa là gì?",
+              "question": "（1）Lượt nói đầu tiên trong file audio nghe thấy câu nào?",
               "options": [
                 "\"喂，李文，你什么时候能到饭店？\"",
-                "\"谢谢！\"",
+                "\"对不起！\"",
                 "\"再见！\""
               ],
               "answer": "\"喂，李文，你什么时候能到饭店？\""
+            },
+            {
+              "id": 2,
+              "question": "（2）Nội dung chính của cuộc thoại vừa nghe là gì?",
+              "options": [
+                "Giao tiếp & Trao đổi thông tin bài khóa",
+                "Hỏi đường đến siêu thị",
+                "Mua sắm hoa quả"
+              ],
+              "answer": "Giao tiếp & Trao đổi thông tin bài khóa"
             }
           ]
         }
@@ -2027,23 +2027,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
-              "options": [
-                "刘明 và 刘小雪",
-                "Chỉ có 1 người tự nói",
-                "Một nhóm người lạ"
-              ],
-              "answer": "刘明 và 刘小雪"
-            },
-            {
-              "id": 2,
-              "question": "（2）Câu thoại đầu tiên trong bài khóa là gì?",
+              "question": "（1）Lượt nói đầu tiên trong file audio nghe thấy câu nào?",
               "options": [
                 "\"弟弟起床没起床呢？\"",
-                "\"谢谢！\"",
+                "\"对不起！\"",
                 "\"再见！\""
               ],
               "answer": "\"弟弟起床没起床呢？\""
+            },
+            {
+              "id": 2,
+              "question": "（2）Nội dung chính của cuộc thoại vừa nghe là gì?",
+              "options": [
+                "Giao tiếp & Trao đổi thông tin bài khóa",
+                "Hỏi đường đến siêu thị",
+                "Mua sắm hoa quả"
+              ],
+              "answer": "Giao tiếp & Trao đổi thông tin bài khóa"
             }
           ]
         }
@@ -2282,7 +2282,7 @@
               "question": "（1）白家月想问王老师（……）。",
               "options": [
                 "一个问题",
-                "两个问题",
+                " wealth 问题",
                 "这个问题"
               ],
               "answer": "一个问题"
@@ -2336,23 +2336,23 @@
           "questions": [
             {
               "id": 1,
-              "question": "（1）Trong bài khóa có những ai đang nói chuyện với nhau?",
-              "options": [
-                "服务员 và 王一雪",
-                "Chỉ có 1 người tự nói",
-                "Một nhóm người lạ"
-              ],
-              "answer": "服务员 và 王一雪"
-            },
-            {
-              "id": 2,
-              "question": "（2）Câu thoại đầu tiên trong bài khóa là gì?",
+              "question": "（1）Lượt nói đầu tiên trong file audio nghe thấy câu nào?",
               "options": [
                 "\"女士，请坐！您和什么？\"",
-                "\"谢谢！\"",
+                "\"对不起！\"",
                 "\"再见！\""
               ],
               "answer": "\"女士，请坐！您和什么？\""
+            },
+            {
+              "id": 2,
+              "question": "（2）Nội dung chính của cuộc thoại vừa nghe là gì?",
+              "options": [
+                "Giao tiếp & Trao đổi thông tin bài khóa",
+                "Hỏi đường đến siêu thị",
+                "Mua sắm hoa quả"
+              ],
+              "answer": "Giao tiếp & Trao đổi thông tin bài khóa"
             }
           ]
         }
@@ -2730,7 +2730,7 @@
             },
             {
               "id": 2,
-              "question": "（2）王老师和李文都是（……）。",
+              "question": "（2）王老师和李文 headquarters 都是（……）。",
               "options": [
                 "西安人",
                 "北京人",
