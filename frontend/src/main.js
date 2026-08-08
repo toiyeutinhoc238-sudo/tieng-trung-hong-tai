@@ -9124,6 +9124,9 @@ function renderCourseCompletionDashboard() {
   const zubiEnrolled = document.getElementById('zubi-enrolled-count');
   const zubiTotalWords = document.getElementById('zubi-total-words-count');
   const zubiStudyTime = document.getElementById('zubi-study-time-count');
+  const zubiStreak = document.getElementById('zubi-streak-count');
+
+  if (zubiStreak) zubiStreak.textContent = `${userStreak || 1} Ngày`;
 
   const activeVocabs = vocabList.filter(w => !w.isCustom);
   const totalMemorized = activeVocabs.filter(w => w.isMemorized).length;
@@ -9270,10 +9273,12 @@ function updateStatsUI() {
 
   const zubiCompletedEl = document.getElementById('zubi-completed-count');
   const zubiTimeEl = document.getElementById('zubi-study-time-count');
+  const zubiStreakEl = document.getElementById('zubi-streak-count');
   const zubiTotalWordsEl = document.getElementById('zubi-total-words-count');
 
   if (streakEl) streakEl.textContent = `${userStreak} ngày`;
   if (homeStreakEl) homeStreakEl.textContent = `${userStreak || 1}`;
+  if (zubiStreakEl) zubiStreakEl.textContent = `${userStreak || 1} Ngày`;
 
   const minutes = Math.floor((userStudyTime + sessionStudyTime) / 60);
   const formattedTime = formatStudyTimeDisplay(minutes);
@@ -9677,6 +9682,38 @@ window.openZubiStatDetail = function (type) {
         <div>
           <strong style="color: #ffffff; font-size: 0.95rem;">Mẹo học hiệu quả:</strong>
           <p style="margin: 4px 0 0 0; color: #94a3b8; font-size: 0.85rem; line-height: 1.5;">Duy trì khoảng 15 - 20 phút lật thẻ Flashcard & làm bài tập mỗi ngày sẽ giúp bộ não ghi nhớ từ vựng lâu hơn gấp 3 lần so với dồn học 1 buổi kéo dài!</p>
+        </div>
+      </div>
+    `;
+
+  } else if (type === 'streak') {
+    titleEl.textContent = 'Ngày tham gia học (Streak)';
+    subtitleEl.textContent = 'Thống kê chuỗi ngày duy trì thói quen học tập liên tục';
+    iconEl.className = 'zubi-circle-icon orange';
+    iconEl.style.background = 'rgba(249, 115, 22, 0.2)';
+    iconEl.style.color = '#f97316';
+    iconEl.innerHTML = '<i class="fa-solid fa-fire"></i>';
+
+    const totalCurrentSecs = userStudyTime + sessionStudyTime;
+    const mins = Math.floor(totalCurrentSecs / 60);
+    const timeDisplay = formatStudyTimeDisplay(mins);
+
+    bodyEl.innerHTML = `
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+        <div style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 16px; padding: 18px; text-align: center;">
+          <div style="font-size: 0.8rem; color: #fbbf24; font-weight: 700; text-transform: uppercase;">Chuỗi ngày liên tục</div>
+          <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-top: 6px;">🔥 ${userStreak || 1} ngày</div>
+        </div>
+        <div style="background: rgba(59, 130, 246, 0.12); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 16px; padding: 18px; text-align: center;">
+          <div style="font-size: 0.8rem; color: #60a5fa; font-weight: 700; text-transform: uppercase;">Tổng thời gian học</div>
+          <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-top: 6px;">${timeDisplay}</div>
+        </div>
+      </div>
+      <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 18px; display: flex; gap: 14px; align-items: flex-start;">
+        <div style="width: 36px; height: 36px; border-radius: 50%; background: rgba(249, 115, 22, 0.2); color: #f97316; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.1rem;"><i class="fa-solid fa-fire"></i></div>
+        <div>
+          <strong style="color: #ffffff; font-size: 0.95rem;">Giữ vững thói quen học tập:</strong>
+          <p style="margin: 4px 0 0 0; color: #94a3b8; font-size: 0.85rem; line-height: 1.5;">Học mỗi ngày ít nhất 1 bài học hoặc 10 từ vựng để giữ lửa streak và tiếp thu kiến thức một cách tự nhiên nhất!</p>
         </div>
       </div>
     `;
@@ -11489,6 +11526,14 @@ window.switchRadicalTab = function(category) {
     bodyEl.innerHTML = html;
   }
 };
+
+window.openDonateModal = function () {
+  const modal = document.getElementById('donate-project-modal');
+  if (modal) {
+    modal.style.display = 'flex';
+  }
+};
+
 
 
 
