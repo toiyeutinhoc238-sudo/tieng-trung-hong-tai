@@ -427,12 +427,7 @@ ${d.example_zh.replaceAll(d.word," _____ ")}
   `;if(c==="map"){let p="",h=!1;l.forEach((f,v)=>{const b=g[f]||[],B=b.length;if(B===0)return;const I=b[0],$=Jt(I.lessonTitle||I.category,f),_=b.filter(Ke=>Ke.isMemorized).length,C=Math.round(_/B*100),H=_===B&&B>0,V=`quiz_stars_${N}_${F}_${f}`,S=parseInt(localStorage.getItem(V)||"0",10);let D=!1;!H&&!h&&(D=!0,h=!0);const W=v%4;let O="align-self: center;";W===0&&(O="align-self: flex-start; margin-left: 18%;"),W===1&&(O="align-self: center;"),W===2&&(O="align-self: flex-end; margin-right: 18%;"),W===3&&(O="align-self: center;");let ie="";H?ie="background: linear-gradient(145deg, #fbbf24, #d97706); box-shadow: 0 8px 0 #b45be6; border-color: #fef08a; color: #78350f;":D?ie="background: linear-gradient(145deg, #10b981, #059669); box-shadow: 0 8px 0 #047857; border-color: #a7f3d0;":ie="background: linear-gradient(145deg, #3b82f6, #1d4ed8); box-shadow: 0 8px 0 #1e40af; border-color: #bfdbfe;";const Z=f.toString().replace(/\D/g,"")||f,K=`window.openLessonDetailModal('${f}')`;p+=`
         <div class="saga-path-node-item" style="position: relative; display: flex; flex-direction: column; align-items: center; margin: 28px 0; z-index: 5; ${O}">
           
-          <!-- Bouncing Mascot Avatar above active node -->
-          ${D?`
-            <div class="saga-mascot-bouncing" style="position: absolute; top: -50px; z-index: 20; filter: drop-shadow(0 6px 16px rgba(0,0,0,0.6));">
-              <img src="/assets/hongtai_dragon_mascot.png" style="width: 52px; height: 52px; object-fit: contain; animation: floatMascot 2s ease-in-out infinite;" alt="Mascot">
-            </div>
-          `:""}
+
 
           <!-- Floating Gold Crown for 100% completed lesson -->
           ${H?`

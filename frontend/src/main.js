@@ -6922,12 +6922,7 @@ window.openLessonDetailModal = function (lessonKey) {
       mapNodesHtml += `
         <div class="saga-path-node-item" style="position: relative; display: flex; flex-direction: column; align-items: center; margin: 28px 0; z-index: 5; ${posStyle}">
           
-          <!-- Bouncing Mascot Avatar above active node -->
-          ${isCurrentActive ? `
-            <div class="saga-mascot-bouncing" style="position: absolute; top: -50px; z-index: 20; filter: drop-shadow(0 6px 16px rgba(0,0,0,0.6));">
-              <img src="/assets/hongtai_dragon_mascot.png" style="width: 52px; height: 52px; object-fit: contain; animation: floatMascot 2s ease-in-out infinite;" alt="Mascot">
-            </div>
-          ` : ''}
+
 
           <!-- Floating Gold Crown for 100% completed lesson -->
           ${isCompleted ? `
