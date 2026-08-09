@@ -194,7 +194,7 @@ export const VAN_MAU_DATA = {
 };
 
 export const THANH_DIEU_DATA = {
-  title: "Thanh Điệu (Tones in Chinese)",
+  title: "4 Thanh Điệu + 1 Thanh Nhẹ (Tones in Chinese)",
   description: "Tiếng Trung bao gồm 4 thanh điệu chính và 1 thanh nhẹ (khinh thanh) thể hiện sự thay đổi độ cao của giọng khi phát âm.",
   tones: [
     {
@@ -233,6 +233,17 @@ export const THANH_DIEU_DATA = {
       examples: [{ pinyin: "bàba", meaning: "Bố" }, { pinyin: "māma", meaning: "Mẹ" }, { pinyin: "xièxie", meaning: "Cảm ơn" }, { pinyin: "hǎode", meaning: "Được rồi" }]
     }
   ],
+  neutral_tone_guide: {
+    title: "Cách Phát Âm & Các Trường Hợp Đọc Thanh Nhẹ (Khinh Thanh)",
+    pronunciation: "Thanh nhẹ không mang dấu thanh điệu, đọc phát âm nhẹ, ngắn và chớm buông giọng. Độ cao phụ thuộc vào thanh điệu đứng trước: Đứng sau thanh 1, 2, 4 thì đọc trầm thấp nhẹ; đứng sau thanh 3 thì đọc vút cao dứt khoát nhẹ.",
+    cases: [
+      { case_title: "1. Từ xưng hô trùng điệp (Lặp danh từ thân thuộc)", desc: "Bố (bàba), Mẹ (māma), Anh trai (gēge), Chị gái (jiějie), Em gái (mèimei), Chú (shūshu)..." },
+      { case_title: "2. Hậu tố danh từ & đại từ nhân xưng", desc: "Đại từ số nhiều 们 (nǐmen, tāmen), hậu tố 子 (zhuōzi, píngzi, pízi), 头 (mótou)..." },
+      { case_title: "3. Trợ từ ngữ khí & Trợ từ kết cấu", desc: "Trợ từ cuối câu: 吗 (ma), 呢 (ne), 吧 (ba), 了 (le). Trợ từ kết cấu: 的 (de), 地 (de), 得 (de)." },
+      { case_title: "4. Hậu tố phương vị từ chỉ vị trí", desc: "Phương vị từ đứng sau danh từ: 上 (shang), 下 (xia), 里 (li), 边 (bian) (vd: 桌子上, 房间里, 外边)..." },
+      { case_title: "5. Động từ trùng điệp (Lặp động từ thử nghiệm)", desc: "Xem thử: 看看 (kànkan), Nghe thử: 听听 (tīngting), Bàn bạc: 讨论讨论 (tǎolùn taolun)..." }
+    ]
+  },
   rules: {
     placement: {
       title: "Quy Tắc Đánh Dấu Thanh Điệu Chuẩn Mới Nhất",

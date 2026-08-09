@@ -577,6 +577,9 @@
         <button id="theme-toggle-btn" class="btn-close theme-toggle-btn" onclick="window.toggleTheme()" title="Chuyển đổi Giao diện Sáng/Tối">
           <i class="fa-solid fa-moon" style="color:#60a5fa;"></i>
         </button>
+        <a href="/index.html#roadmap" class="btn-close" title="Quay lại Bản Đồ Lộ Trình" style="background: linear-gradient(135deg, #10b981, #059669); color: #ffffff; border: none; font-weight: 800; padding: 8px 16px; border-radius: 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(16,185,129,0.35);">
+          <i class="fa-solid fa-map-location-dot"></i> Bản Đồ Lộ Trình
+        </a>
         <a href="/index.html" class="btn-close" title="Trang Chủ" style="background: rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.3);">
           <i class="fa-solid fa-house"></i> Trang Chủ
         </a>
@@ -632,17 +635,17 @@
 
     <!-- Mode Step Navigation Tabs (1, 2, 3, 4) -->
     <div class="mode-steps-container">
-      <button id="step-btn-quiz" class="mode-step-btn active" onclick="switchBkMode('quiz')">
+      <button id="step-btn-quiz" class="mode-step-btn" onclick="switchBkMode('quiz')">
         <i class="fa-solid fa-circle-question"></i> 1. Nghe chọn đáp án
       </button>
-      <button id="step-btn-read" class="mode-step-btn" onclick="switchBkMode('read')">
-        <i class="fa-solid fa-book-open"></i> 2. Đọc Bài Khóa
-      </button>
-      <button id="step-btn-dictation" class="mode-step-btn" onclick="switchBkMode('dictation')">
-        <i class="fa-solid fa-headphones"></i> 3. Nghe nhập bài khóa
+      <button id="step-btn-dictation" class="mode-step-btn active" onclick="switchBkMode('dictation')">
+        <i class="fa-solid fa-headphones"></i> 2. Nghe nhập bài khóa
       </button>
       <button id="step-btn-translate" class="mode-step-btn" onclick="switchBkMode('translate')">
-        <i class="fa-solid fa-language"></i> 4. Luyện dịch bài khóa
+        <i class="fa-solid fa-language"></i> 3. Luyện dịch bài khóa
+      </button>
+      <button id="step-btn-read" class="mode-step-btn" onclick="switchBkMode('read')">
+        <i class="fa-solid fa-book-open"></i> 4. Đọc Bài Khóa
       </button>
     </div>
 
@@ -724,7 +727,7 @@
       currentLineIndex = 0;
       currentScore = 0;
 
-      ['quiz', 'read', 'dictation', 'translate'].forEach(m => {
+      ['quiz', 'dictation', 'translate', 'read'].forEach(m => {
         const btn = document.getElementById(`step-btn-${m}`);
         if (btn) {
           if (m === currentMode) btn.classList.add('active');
@@ -780,10 +783,32 @@
       const audioUrl = diagObj.audio || `/audio/hsk1_texts/${currentLessonId}-${audioIdx}.mp3`;
       const lines = diagObj.lines || [];
 
-      // MODE 1: QUIZ (1. Nghe chọn đáp án)
-      if (currentMode === 'quiz') {
-        const quizObj = diagObj.quiz || {};
-        const questions = (quizObj && quizObj.questions && quizObj.questions.length > 0) ? quizObj.questions : [];
+      // Check if dialogue has valid quiz questions
+      const quizObj = diagObj.quiz || {};
+      const questions = (quizObj && quizObj.questions && quizObj.questions.length > 0) ? quizObj.questions : [];
+      const hasValidQuiz = questions.length > 0;
+
+      const quizTabBtn = document.getElementById('step-btn-quiz');
+      if (quizTabBtn) {
+        if (hasValidQuiz) {
+          quizTabBtn.style.display = 'inline-flex';
+        } else {
+          quizTabBtn.style.display = 'none';
+          if (currentMode === 'quiz') {
+            currentMode = 'dictation';
+            ['quiz', 'dictation', 'translate', 'read'].forEach(m => {
+              const btn = document.getElementById(`step-btn-${m}`);
+              if (btn) {
+                if (m === currentMode) btn.classList.add('active');
+                else btn.classList.remove('active');
+              }
+            });
+          }
+        }
+      }
+
+      // 1. QUIZ (1. Nghe chọn đáp án - Hiển thị khi có câu hỏi)
+      if (currentMode === 'quiz' && hasValidQuiz) {
         window.activeStep1Questions = questions;
 
         let qHtml = questions.map((q, qIdx) => {
@@ -828,72 +853,14 @@
             ${qHtml}
 
             <div style="margin-top:24px;">
-              <button onclick="switchBkMode('read')" style="background:linear-gradient(135deg, #10b981, #059669); border:none; color:#ffffff; padding:14px 32px; border-radius:14px; font-weight:800; font-size:1rem; cursor:pointer; box-shadow:0 6px 20px rgba(16,185,129,0.4); display:inline-flex; align-items:center; gap:10px;">
-                Chuyển Sang Bước 2: Đọc Bài Khóa <i class="fa-solid fa-arrow-right"></i>
-              </button>
-            </div>
-          </div>
-        `;
-
-      // MODE 2: READ (2. Đọc Bài Khóa)
-      } else if (currentMode === 'read') {
-        let linesHtml = lines.map(line => {
-          const cleanSpeech = line.zh.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-          return `
-            <div style="display:flex; align-items:flex-start; gap:16px; margin-bottom:18px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:14px;">
-              ${line.speaker ? `
-                <span style="background:rgba(37,99,235,0.25); color:#60a5fa; border:1px solid rgba(59,130,246,0.4); padding:6px 14px; border-radius:12px; font-weight:800; font-size:0.88rem; flex-shrink:0;">
-                  ${line.speaker}
-                </span>
-              ` : ''}
-              <div style="flex:1; word-break:break-word;">
-                <div class="hanzi-text" style="font-size:1.35rem; font-weight:800; color:#ffffff; margin-bottom:4px;">${line.zh}</div>
-                ${line.pinyin ? `<div style="font-size:0.95rem; color:#fbbf24; font-weight:700; margin-bottom:4px;">${line.pinyin}</div>` : ''}
-                ${line.vi ? `<div style="font-size:0.92rem; color:#cbd5e1;">${line.vi}</div>` : ''}
-              </div>
-              <button onclick="speakText(decodeURIComponent('${encodeURIComponent(line.zh)}'))" style="background:rgba(56,189,248,0.2); border:1px solid rgba(56,189,248,0.4); color:#38bdf8; cursor:pointer; padding:8px 16px; border-radius:12px; font-weight:700; font-size:0.9rem; flex-shrink:0;" title="Nghe phát âm">
-                <i class="fa-solid fa-volume-high"></i> Nghe
-              </button>
-            </div>
-          `;
-        }).join('');
-
-        let notesHtml = '';
-        if (diagObj.notes && diagObj.notes.length > 0) {
-          diagObj.notes.forEach(note => {
-            notesHtml += `
-              <div style="background:rgba(245,158,11,0.12); border-left:4px solid #f59e0b; padding:12px 18px; border-radius:0 14px 14px 0; margin-top:18px; font-size:0.92rem; color:#fef08a; line-height:1.5;">
-                <strong style="color:#fbbf24;"><i class="fa-solid fa-lightbulb"></i> Chú ý:</strong> ${note}
-              </div>
-            `;
-          });
-        }
-
-        box.innerHTML = `
-          <div style="max-width:850px; margin:0 auto;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
-              <h3 style="color:#38bdf8; font-size:1.3rem; margin:0; font-weight:800; display:flex; align-items:center; gap:10px;">
-                <i class="fa-solid fa-book-open"></i> BƯỚC 2: ĐỌC & NGHE CHI TIẾT BÀI KHÓA (${diagObj.title || `Bài Khóa ${currentDialogueId}`})
-              </h3>
-              <button onclick="playDialogueAudio('${audioUrl}')" style="background:rgba(59,130,246,0.2); border:1px solid rgba(59,130,246,0.4); color:#60a5fa; padding:8px 16px; border-radius:12px; font-weight:700; font-size:0.88rem; cursor:pointer;">
-                <i class="fa-solid fa-play"></i> Nghe Toàn Bộ Bài Khóa
-              </button>
-            </div>
-
-            <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.12); border-radius:20px; padding:26px; box-shadow:0 8px 24px rgba(0,0,0,0.3);">
-              ${linesHtml}
-              ${notesHtml}
-            </div>
-
-            <div style="margin-top:24px; text-align:center;">
               <button onclick="switchBkMode('dictation')" style="background:linear-gradient(135deg, #10b981, #059669); border:none; color:#ffffff; padding:14px 32px; border-radius:14px; font-weight:800; font-size:1rem; cursor:pointer; box-shadow:0 6px 20px rgba(16,185,129,0.4); display:inline-flex; align-items:center; gap:10px;">
-                Chuyển Sang Bước 3: Nghe Nhập Bài Khóa <i class="fa-solid fa-arrow-right"></i>
+                Chuyển Sang Bước 2: Nghe Nhập Bài Khóa <i class="fa-solid fa-arrow-right"></i>
               </button>
             </div>
           </div>
         `;
 
-      // MODE 3: DICTATION (3. Nghe nhập bài khóa - 2 Column Chat Frame View)
+      // 2. DICTATION (Nghe nhập bài khóa)
       } else if (currentMode === 'dictation') {
         if (lines.length === 0) {
           box.innerHTML = `<div style="text-align:center; padding:40px; color:#94a3b8;">Chưa có dữ liệu chính tả.</div>`;
@@ -901,7 +868,6 @@
         }
 
         const curLine = lines[currentLineIndex % lines.length];
-        const cleanSpeech = curLine.zh.replace(/'/g, "\\'").replace(/"/g, '&quot;');
         const hintChars = curLine.zh.match(/[\u4e00-\u9fa5]/g) || curLine.zh.split('');
 
         let chatHistoryHtml = completedChatLines.map((line, idx) => {
@@ -982,9 +948,15 @@
             </div>
 
           </div>
+
+          <div style="margin-top:20px; text-align:center;">
+            <button onclick="switchBkMode('translate')" style="background:linear-gradient(135deg, #2563eb, #1d4ed8); border:none; color:#ffffff; padding:14px 32px; border-radius:14px; font-weight:800; font-size:0.98rem; cursor:pointer; display:inline-flex; align-items:center; gap:10px; box-shadow:0 6px 20px rgba(37,99,235,0.4);">
+              Chuyển Sang Bước 3: Luyện Dịch Bài Khóa <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
         `;
 
-      // MODE 4: TRANSLATE (4. Luyện dịch bài khóa: Tiếng Trung -> Tiếng Việt)
+      // 3. TRANSLATE (Luyện dịch bài khóa: Tiếng Trung -> Tiếng Việt)
       } else if (currentMode === 'translate') {
         if (lines.length === 0) {
           box.innerHTML = `<div style="text-align:center; padding:40px; color:#94a3b8;">Chưa có dữ liệu dịch bài khóa.</div>`;
@@ -992,12 +964,11 @@
         }
 
         const curLine = lines[currentLineIndex % lines.length];
-        const cleanSpeech = curLine.zh.replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
         box.innerHTML = `
           <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.12); border-radius:22px; padding:28px; text-align:center; max-width:720px; margin:0 auto;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-              <span style="font-size:0.92rem; font-weight:800; color:#38bdf8;"><i class="fa-solid fa-language"></i> BƯỚC 4: BÀI TẬP DỊCH (TIẾNG TRUNG ➔ TIẾNG VIỆT)</span>
+              <span style="font-size:0.92rem; font-weight:800; color:#38bdf8;"><i class="fa-solid fa-language"></i> BƯỚC 3: BÀI TẬP DỊCH (TIẾNG TRUNG ➔ TIẾNG VIỆT)</span>
               <span style="font-size:0.88rem; font-weight:700; color:#fbbf24;">Câu ${currentLineIndex + 1} / ${lines.length}</span>
             </div>
 
@@ -1005,7 +976,7 @@
             <div style="background:rgba(15,23,42,0.85); border:1.5px solid rgba(56,189,248,0.4); border-radius:18px; padding:22px; margin-bottom:20px; text-align:left;">
               <div style="font-size:0.82rem; font-weight:800; color:#38bdf8; text-transform:uppercase; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
                 <span>Câu tiếng Trung:</span>
-                <button onclick="speakText('${cleanSpeech}')" style="background:rgba(56,189,248,0.2); border:none; color:#38bdf8; padding:4px 10px; border-radius:8px; cursor:pointer; font-size:0.8rem;">
+                <button onclick="speakText(decodeURIComponent('${encodeURIComponent(curLine.zh)}'))" style="background:rgba(56,189,248,0.2); border:none; color:#38bdf8; padding:4px 10px; border-radius:8px; cursor:pointer; font-size:0.8rem;">
                   <i class="fa-solid fa-volume-high"></i> Nghe
                 </button>
               </div>
@@ -1030,13 +1001,76 @@
               </button>
             </div>
 
-            <div style="display:flex; justify-content:space-between; gap:14px;">
+            <div style="display:flex; justify-content:space-between; gap:14px; margin-bottom:24px;">
               <button onclick="navLine(-1, ${lines.length})" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; padding:12px 22px; border-radius:12px; font-weight:600; cursor:pointer;">
                 &larr; Câu trước
               </button>
               <button onclick="navLine(1, ${lines.length})" style="background:#2563eb; border:none; color:#fff; padding:12px 28px; border-radius:12px; font-weight:700; cursor:pointer;">
                 Câu tiếp theo &rarr;
               </button>
+            </div>
+
+            <div style="text-align:center;">
+              <button onclick="switchBkMode('read')" style="background:linear-gradient(135deg, #10b981, #059669); border:none; color:#ffffff; padding:14px 32px; border-radius:14px; font-weight:800; font-size:1rem; cursor:pointer; box-shadow:0 6px 20px rgba(16,185,129,0.4); display:inline-flex; align-items:center; gap:10px;">
+                Chuyển Sang Bước 4: Đọc Bài Khóa <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        `;
+
+      // 4. READ (Đọc Bài Khóa - Đã chuyển về BƯỚC CUỐI CÙNG)
+      } else if (currentMode === 'read') {
+        let linesHtml = lines.map(line => {
+          return `
+            <div style="display:flex; align-items:flex-start; gap:16px; margin-bottom:18px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:14px;">
+              ${line.speaker ? `
+                <span style="background:rgba(37,99,235,0.25); color:#60a5fa; border:1px solid rgba(59,130,246,0.4); padding:6px 14px; border-radius:12px; font-weight:800; font-size:0.88rem; flex-shrink:0;">
+                  ${line.speaker}
+                </span>
+              ` : ''}
+              <div style="flex:1; word-break:break-word;">
+                <div class="hanzi-text" style="font-size:1.35rem; font-weight:800; color:#ffffff; margin-bottom:4px;">${line.zh}</div>
+                ${line.pinyin ? `<div style="font-size:0.95rem; color:#fbbf24; font-weight:700; margin-bottom:4px;">${line.pinyin}</div>` : ''}
+                ${line.vi ? `<div style="font-size:0.92rem; color:#cbd5e1;">${line.vi}</div>` : ''}
+              </div>
+              <button onclick="speakText(decodeURIComponent('${encodeURIComponent(line.zh)}'))" style="background:rgba(56,189,248,0.2); border:1px solid rgba(56,189,248,0.4); color:#38bdf8; cursor:pointer; padding:8px 16px; border-radius:12px; font-weight:700; font-size:0.9rem; flex-shrink:0;" title="Nghe phát âm">
+                <i class="fa-solid fa-volume-high"></i> Nghe
+              </button>
+            </div>
+          `;
+        }).join('');
+
+        let notesHtml = '';
+        if (diagObj.notes && diagObj.notes.length > 0) {
+          diagObj.notes.forEach(note => {
+            notesHtml += `
+              <div style="background:rgba(245,158,11,0.12); border-left:4px solid #f59e0b; padding:12px 18px; border-radius:0 14px 14px 0; margin-top:18px; font-size:0.92rem; color:#fef08a; line-height:1.5;">
+                <strong style="color:#fbbf24;"><i class="fa-solid fa-lightbulb"></i> Chú ý:</strong> ${note}
+              </div>
+            `;
+          });
+        }
+
+        box.innerHTML = `
+          <div style="max-width:850px; margin:0 auto;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+              <h3 style="color:#38bdf8; font-size:1.3rem; margin:0; font-weight:800; display:flex; align-items:center; gap:10px;">
+                <i class="fa-solid fa-book-open"></i> BƯỚC 4: ĐỌC & NGHE CHI TIẾT BÀI KHÓA (${diagObj.title || `Bài Khóa ${currentDialogueId}`})
+              </h3>
+              <button onclick="playDialogueAudio('${audioUrl}')" style="background:rgba(59,130,246,0.2); border:1px solid rgba(59,130,246,0.4); color:#60a5fa; padding:8px 16px; border-radius:12px; font-weight:700; font-size:0.88rem; cursor:pointer;">
+                <i class="fa-solid fa-play"></i> Nghe Toàn Bộ Bài Khóa
+              </button>
+            </div>
+
+            <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.12); border-radius:20px; padding:26px; box-shadow:0 8px 24px rgba(0,0,0,0.3);">
+              ${linesHtml}
+              ${notesHtml}
+            </div>
+
+            <div style="margin-top:24px; text-align:center;">
+              <a href="/index.html#roadmap" style="background:linear-gradient(135deg, #10b981, #059669); border:none; color:#ffffff; padding:14px 32px; border-radius:14px; font-weight:800; font-size:1rem; cursor:pointer; box-shadow:0 6px 20px rgba(16,185,129,0.4); display:inline-flex; align-items:center; gap:10px; text-decoration:none;">
+                <i class="fa-solid fa-circle-check"></i> Hoàn Thành! Quay Lại Bản Đồ Lộ Trình <i class="fa-solid fa-map-location-dot"></i>
+              </a>
             </div>
           </div>
         `;

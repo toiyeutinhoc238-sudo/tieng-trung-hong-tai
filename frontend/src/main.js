@@ -7717,7 +7717,7 @@ function renderBkModalContent() {
   const linesList = getBkLinesList(currentBkData);
 
   // Update tab buttons state
-  ['read', 'quiz', 'dictation', 'translate'].forEach(m => {
+  ['quiz', 'dictation', 'translate', 'read'].forEach(m => {
     const btn = document.getElementById(`bk-tab-${m}`);
     if (btn) {
       if (m === currentBkMode) btn.classList.add('active');
