@@ -359,9 +359,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupEventListeners();
     initExams();
     initLessonsView();
-    initDictionaryView();
-    initChatbot();
-    showHomeView();
+    const urlParams = new URLSearchParams(window.location.search);
+    const targetTab = urlParams.get('tab') || (window.location.hash ? window.location.hash.replace('#', '') : '');
+    const targetLevel = urlParams.get('level');
+    const targetVersion = urlParams.get('version') || localStorage.getItem('active_hsk_version') || '3.0';
+
+    if (targetTab === 'lessons' || targetLevel) {
+      const lvl = targetLevel || 1;
+      goToRoadmapLevel(targetVersion, lvl);
+    } else if (targetTab === 'roadmap') {
+      showRoadmapView();
+    } else if (targetTab === 'exams') {
+      switchTab('exams');
+    } else if (targetTab === 'flashcards') {
+      switchTab('flashcards');
+    } else if (targetTab === 'dictionary') {
+      switchTab('dictionary');
+    } else {
+      showHomeView();
+    }
   } else {
     try {
       await fetchVocabulary();

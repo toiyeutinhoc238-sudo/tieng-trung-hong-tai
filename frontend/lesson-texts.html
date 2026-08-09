@@ -577,7 +577,7 @@
         <button id="theme-toggle-btn" class="btn-close theme-toggle-btn" onclick="window.toggleTheme()" title="Chuyển đổi Giao diện Sáng/Tối">
           <i class="fa-solid fa-moon" style="color:#60a5fa;"></i>
         </button>
-        <a href="/index.html#roadmap" class="btn-close" title="Quay lại Bản Đồ Lộ Trình" style="background: linear-gradient(135deg, #10b981, #059669); color: #ffffff; border: none; font-weight: 800; padding: 8px 16px; border-radius: 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(16,185,129,0.35);">
+        <a id="header-roadmap-btn" href="/index.html?tab=lessons&level=1" class="btn-close" title="Quay lại Bản Đồ Lộ Trình" style="background: linear-gradient(135deg, #10b981, #059669); color: #ffffff; border: none; font-weight: 800; padding: 8px 16px; border-radius: 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(16,185,129,0.35);">
           <i class="fa-solid fa-map-location-dot"></i> Bản Đồ Lộ Trình
         </a>
         <a href="/index.html" class="btn-close" title="Trang Chủ" style="background: rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.3);">
@@ -698,10 +698,12 @@
       const lvlBadge = document.getElementById('fixed-level-badge');
       const lesBadge = document.getElementById('fixed-lesson-badge');
       const titleBadge = document.getElementById('lesson-title-badge');
+      const headerRoadmapBtn = document.getElementById('header-roadmap-btn');
 
       if (lvlBadge) lvlBadge.textContent = `HSK ${currentLevel}`;
       if (lesBadge) lesBadge.textContent = `Bài ${currentLessonId}`;
       if (titleBadge) titleBadge.innerHTML = `<i class="fa-solid fa-bookmark"></i> Bài Khóa HSK ${currentLevel} - Bài ${currentLessonId}`;
+      if (headerRoadmapBtn) headerRoadmapBtn.href = `/index.html?tab=lessons&level=${currentLevel}`;
     }
 
     function selectDialogue(diagId) {
@@ -1068,7 +1070,7 @@
             </div>
 
             <div style="margin-top:24px; text-align:center;">
-              <a href="/index.html#roadmap" style="background:linear-gradient(135deg, #10b981, #059669); border:none; color:#ffffff; padding:14px 32px; border-radius:14px; font-weight:800; font-size:1rem; cursor:pointer; box-shadow:0 6px 20px rgba(16,185,129,0.4); display:inline-flex; align-items:center; gap:10px; text-decoration:none;">
+              <a href="/index.html?tab=lessons&level=${currentLevel}" style="background:linear-gradient(135deg, #10b981, #059669); border:none; color:#ffffff; padding:14px 32px; border-radius:14px; font-weight:800; font-size:1rem; cursor:pointer; box-shadow:0 6px 20px rgba(16,185,129,0.4); display:inline-flex; align-items:center; gap:10px; text-decoration:none;">
                 <i class="fa-solid fa-circle-check"></i> Hoàn Thành! Quay Lại Bản Đồ Lộ Trình <i class="fa-solid fa-map-location-dot"></i>
               </a>
             </div>
