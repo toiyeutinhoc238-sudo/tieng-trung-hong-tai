@@ -77,8 +77,9 @@ app.use((req, res, next) => {
   const host = req.headers.host || '';
   const proto = req.headers['x-forwarded-proto'];
 
-  // 1. Redirect onrender.com or www.tiengtrunghongtai.online to tiengtrunghongtai.online
+  // 1. If accessed directly via onrender.com or www., 301 redirect & set noindex for onrender.com
   if (host.includes('onrender.com') || host.startsWith('www.')) {
+    res.setHeader('X-Robots-Tag', 'noindex, follow');
     return res.redirect(301, `https://tiengtrunghongtai.online${req.originalUrl}`);
   }
 
@@ -92,6 +93,10 @@ app.use((req, res, next) => {
     const queryString = req.url.slice(req.path.length);
     return res.redirect(301, `/${queryString}`);
   }
+
+  // 4. Set HTTP Canonical Link header for all pages
+  const canonicalPath = req.path === '/index.html' ? '/' : req.path;
+  res.setHeader('Link', `<https://tiengtrunghongtai.online${canonicalPath}>; rel="canonical"`);
 
   next();
 });
