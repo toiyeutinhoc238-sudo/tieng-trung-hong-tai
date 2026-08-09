@@ -8917,16 +8917,10 @@ function renderWeeklyStudyChart() {
   const dayLabels = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật'];
   const todayStr = now.toLocaleDateString('sv');
 
-  // Total cumulative study time in minutes
-  const totalMins = Math.floor((userStudyTime + sessionStudyTime) / 60);
-  const streakDays = Math.max(1, userStreak || 1);
-
-  // 1. Gather seconds and calculate base minutes & fractions for current week
-  const daySecsMap = {};
-  const dayFracMap = {};
-  const dayBaseMinsMap = {};
-  let weekRecordedSecsSum = 0;
   const weekDateStrs = [];
+  const dayMinsMap = {};
+  let weekPastMinsSum = 0;
+  let weekSecsSum = 0;
 
   for (let i = 0; i < 7; i++) {
     const d = new Date(mondayDate);
@@ -8938,80 +8932,28 @@ function renderWeeklyStudyChart() {
     if (dateStr === todayStr) {
       recordedSecs += sessionStudyTime;
     }
+    weekSecsSum += recordedSecs;
 
-    daySecsMap[dateStr] = recordedSecs;
-    const baseM = Math.floor(recordedSecs / 60);
-    dayBaseMinsMap[dateStr] = baseM;
-    dayFracMap[dateStr] = recordedSecs % 60;
-
-    weekRecordedSecsSum += recordedSecs;
-  }
-
-  const dayMinsMap = { ...dayBaseMinsMap };
-
-  // Calculate target week minutes
-  let targetWeekMins = Math.floor(weekRecordedSecsSum / 60);
-
-  // If total study time belongs to this week and is larger than recorded week minutes
-  // (e.g. unallocated seconds or past days without full history), align targetWeekMins with totalMins
-  const todayIdx = distanceToMonday; // 0..6
-  if (totalMins > targetWeekMins && todayIdx >= 0) {
-    let priorHistorySecs = 0;
-    Object.keys(history).forEach(k => {
-      if (!weekDateStrs.includes(k)) {
-        priorHistorySecs += history[k] || 0;
-      }
-    });
-    const priorMins = Math.floor(priorHistorySecs / 60);
-    const maxPossibleWeekMins = Math.max(0, totalMins - priorMins);
-    targetWeekMins = Math.min(totalMins, maxPossibleWeekMins);
-  }
-
-  // Distribute remaining minutes to ensure sum(dayMinsMap) == targetWeekMins
-  let currentSum = 0;
-  Object.values(dayMinsMap).forEach(m => { currentSum += m; });
-
-  let remMins = targetWeekMins - currentSum;
-
-  if (remMins > 0) {
-    // First, fill unrecorded past days if any
-    const unrecordedPastDates = [];
-    for (let k = 1; k <= todayIdx; k++) {
-      const pastIdx = todayIdx - k;
-      const pastDateStr = weekDateStrs[pastIdx];
-      if (!daySecsMap[pastDateStr] || daySecsMap[pastDateStr] === 0) {
-        unrecordedPastDates.push(pastDateStr);
-      }
-    }
-
-    if (unrecordedPastDates.length > 0) {
-      const perPastDay = Math.floor(remMins / unrecordedPastDates.length);
-      let remPast = remMins % unrecordedPastDates.length;
-
-      unrecordedPastDates.forEach((pDate, idx) => {
-        const extra = perPastDay + (idx === 0 ? remPast : 0);
-        dayMinsMap[pDate] = (dayMinsMap[pDate] || 0) + extra;
-      });
-
-      currentSum = 0;
-      Object.values(dayMinsMap).forEach(m => { currentSum += m; });
-      remMins = targetWeekMins - currentSum;
+    if (dateStr === todayStr) {
+      dayMinsMap[dateStr] = 0;
+    } else {
+      // Past / future days in week:
+      // Unstudied days (0s) remain 0 ('--').
+      // Past studied days stay strictly fixed at Math.floor(recordedSecs / 60).
+      const mins = Math.floor(recordedSecs / 60);
+      dayMinsMap[dateStr] = mins;
+      weekPastMinsSum += mins;
     }
   }
 
-  if (remMins > 0) {
-    // Allocate leftover minutes based on highest fractional seconds (or recent days)
-    const sortedDates = [...weekDateStrs].sort((a, b) => {
-      if (dayFracMap[b] !== dayFracMap[a]) {
-        return dayFracMap[b] - dayFracMap[a];
-      }
-      return weekDateStrs.indexOf(b) - weekDateStrs.indexOf(a);
-    });
-
-    for (let i = 0; i < remMins; i++) {
-      const targetDate = sortedDates[i % sortedDates.length];
-      dayMinsMap[targetDate] = (dayMinsMap[targetDate] || 0) + 1;
-    }
+  // Today absorbs all current week minutes minus fixed past days,
+  // ensuring extra rounding minutes are credited ONLY to today.
+  const todaySecs = (history[todayStr] || 0) + sessionStudyTime;
+  if (todaySecs > 0) {
+    const weekTotalMins = Math.floor(weekSecsSum / 60);
+    dayMinsMap[todayStr] = Math.max(Math.floor(todaySecs / 60), weekTotalMins - weekPastMinsSum);
+  } else {
+    dayMinsMap[todayStr] = 0;
   }
 
   let maxMins = 60; // baseline scale max
