@@ -7799,6 +7799,8 @@ function renderBkModalContent() {
     const rawOptions = [curLine.speech, distractor1, distractor2];
     // Deterministic shuffle based on line index
     const options = [rawOptions[(currentBkLineIndex) % 3], rawOptions[(currentBkLineIndex + 1) % 3], rawOptions[(currentBkLineIndex + 2) % 3]];
+    window.currentBkQuizOptions = options;
+    window.currentBkQuizTarget = curLine.speech;
 
     container.innerHTML = `
       <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.12); border-radius:20px; padding:24px; text-align:center; max-width:650px; margin:0 auto; box-shadow:0 10px 30px rgba(0,0,0,0.4);">
@@ -7809,14 +7811,14 @@ function renderBkModalContent() {
 
         <div style="margin-bottom:24px; padding:20px; background:rgba(15,23,42,0.6); border-radius:16px; border:1px solid rgba(255,255,255,0.1);">
           <div style="font-size:1.05rem; font-weight:700; color:#cbd5e1; margin-bottom:14px;">Bấm nút loa bên dưới để nghe và chọn đáp án đúng:</div>
-          <button onclick="window.speakText('${cleanSpeech}')" style="background:linear-gradient(135deg, #2563eb, #1d4ed8); border:none; color:#ffffff; padding:14px 28px; border-radius:99px; font-weight:800; font-size:1.1rem; cursor:pointer; box-shadow:0 6px 20px rgba(37,99,235,0.4); display:inline-flex; align-items:center; gap:10px;" onmousedown="this.style.transform='scale(0.96)'" onmouseup="this.style.transform='scale(1)'">
+          <button onclick="window.speakText(decodeURIComponent('${encodeURIComponent(curLine.speech)}'))" style="background:linear-gradient(135deg, #2563eb, #1d4ed8); border:none; color:#ffffff; padding:14px 28px; border-radius:99px; font-weight:800; font-size:1.1rem; cursor:pointer; box-shadow:0 6px 20px rgba(37,99,235,0.4); display:inline-flex; align-items:center; gap:10px;" onmousedown="this.style.transform='scale(0.96)'" onmouseup="this.style.transform='scale(1)'">
             <i class="fa-solid fa-volume-high" style="font-size:1.3rem;"></i> BẤM ĐỂ NGHE AUDIO
           </button>
         </div>
 
         <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:20px;">
           ${options.map((opt, oIdx) => `
-            <button class="bk-quiz-opt-btn" onclick="window.checkBkQuizAnswer('${opt.replace(/'/g, "\\'")}', '${curLine.speech.replace(/'/g, "\\'")}', this)" style="background:rgba(255,255,255,0.06); border:1.5px solid rgba(255,255,255,0.18); color:#f8fafc; padding:14px 20px; border-radius:14px; font-size:1.15rem; font-weight:700; cursor:pointer; font-family:var(--font-hanzi); text-align:left; transition:all 0.2s; display:flex; align-items:center; justify-content:space-between;">
+            <button class="bk-quiz-opt-btn" onclick="window.checkBkQuizAnswer(${oIdx}, this)" style="background:rgba(255,255,255,0.06); border:1.5px solid rgba(255,255,255,0.18); color:#f8fafc; padding:14px 20px; border-radius:14px; font-size:1.15rem; font-weight:700; cursor:pointer; font-family:var(--font-hanzi); text-align:left; transition:all 0.2s; display:flex; align-items:center; justify-content:space-between;">
               <span>${String.fromCharCode(65 + oIdx)}. ${opt}</span>
               <i class="fa-solid fa-circle-check opt-icon" style="opacity:0;"></i>
             </button>
@@ -7954,7 +7956,10 @@ function renderBkModalContent() {
   }
 }
 
-window.checkBkQuizAnswer = function(selected, target, btnEl) {
+window.checkBkQuizAnswer = function(oIdx, btnEl) {
+  const options = window.currentBkQuizOptions || [];
+  const selected = options[oIdx] || '';
+  const target = window.currentBkQuizTarget || '';
   const feedback = document.getElementById('bk-quiz-feedback');
   const nextBtn = document.getElementById('bk-quiz-next-btn');
   const allBtns = document.querySelectorAll('.bk-quiz-opt-btn');

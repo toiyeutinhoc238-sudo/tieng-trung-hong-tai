@@ -786,6 +786,7 @@
       if (currentMode === 'quiz') {
         const quizObj = diagObj.quiz || {};
         const questions = (quizObj && quizObj.questions && quizObj.questions.length > 0) ? quizObj.questions : [];
+        window.activeStep1Questions = questions;
 
         let qHtml = questions.map((q, qIdx) => {
           return `
@@ -796,7 +797,7 @@
               </div>
               <div style="display:flex; flex-direction:column; gap:10px;">
                 ${q.options.map((opt, oIdx) => `
-                  <button class="bk-quiz-opt-btn" onclick="checkStep1Answer('${opt.replace(/'/g, "\\'")}', '${(q.answer || q.options[0]).replace(/'/g, "\\'")}', this, 'quiz-feed-${qIdx}')" style="background:rgba(255,255,255,0.06); border:1.5px solid rgba(255,255,255,0.18); color:#f8fafc; padding:12px 18px; border-radius:12px; font-size:1rem; font-weight:600; cursor:pointer; text-align:left; transition:all 0.2s; display:flex; align-items:center; justify-content:space-between;">
+                  <button class="bk-quiz-opt-btn" onclick="checkStep1Answer(${qIdx}, ${oIdx}, this, 'quiz-feed-${qIdx}')" style="background:rgba(255,255,255,0.06); border:1.5px solid rgba(255,255,255,0.18); color:#f8fafc; padding:12px 18px; border-radius:12px; font-size:1rem; font-weight:600; cursor:pointer; text-align:left; transition:all 0.2s; display:flex; align-items:center; justify-content:space-between;">
                     <span>${String.fromCharCode(65 + oIdx)}. ${opt}</span>
                     <i class="fa-solid fa-check opt-icon" style="opacity:0;"></i>
                   </button>
@@ -852,7 +853,7 @@
                 ${line.pinyin ? `<div style="font-size:0.95rem; color:#fbbf24; font-weight:700; margin-bottom:4px;">${line.pinyin}</div>` : ''}
                 ${line.vi ? `<div style="font-size:0.92rem; color:#cbd5e1;">${line.vi}</div>` : ''}
               </div>
-              <button onclick="speakText('${cleanSpeech}')" style="background:rgba(56,189,248,0.2); border:1px solid rgba(56,189,248,0.4); color:#38bdf8; cursor:pointer; padding:8px 16px; border-radius:12px; font-weight:700; font-size:0.9rem; flex-shrink:0;" title="Nghe phát âm">
+              <button onclick="speakText(decodeURIComponent('${encodeURIComponent(line.zh)}'))" style="background:rgba(56,189,248,0.2); border:1px solid rgba(56,189,248,0.4); color:#38bdf8; cursor:pointer; padding:8px 16px; border-radius:12px; font-weight:700; font-size:0.9rem; flex-shrink:0;" title="Nghe phát âm">
                 <i class="fa-solid fa-volume-high"></i> Nghe
               </button>
             </div>
@@ -948,7 +949,7 @@
                 </div>
 
                 <div style="text-align:center; margin-bottom:20px;">
-                  <button onclick="speakText('${cleanSpeech}')" style="background:linear-gradient(135deg, #3b82f6, #1d4ed8); border:none; color:#ffffff; padding:12px 24px; border-radius:99px; font-weight:700; font-size:0.95rem; cursor:pointer; box-shadow:0 6px 20px rgba(59,130,246,0.4); display:inline-flex; align-items:center; gap:8px;">
+                  <button onclick="speakText(decodeURIComponent('${encodeURIComponent(curLine.zh)}'))" style="background:linear-gradient(135deg, #3b82f6, #1d4ed8); border:none; color:#ffffff; padding:12px 24px; border-radius:99px; font-weight:700; font-size:0.95rem; cursor:pointer; box-shadow:0 6px 20px rgba(59,130,246,0.4); display:inline-flex; align-items:center; gap:8px;">
                     <i class="fa-solid fa-volume-high"></i> BẤM ĐỂ NGHE CÂU THOẠI
                   </button>
                 </div>
@@ -959,7 +960,7 @@
                     <span id="dictation-feedback"></span>
                   </div>
 
-                  <input type="text" id="dictation-input" placeholder="Gõ câu vừa nghe được..." oninput="checkDictationInput('${cleanSpeech}')" class="hanzi-text" style="width:100%; padding:12px 16px; background:rgba(0,0,0,0.4); border:2px solid rgba(255,255,255,0.2); border-radius:12px; color:#ffffff; font-size:1.1rem; font-weight:600; outline:none; margin-bottom:14px; box-sizing:border-box;" />
+                  <input type="text" id="dictation-input" placeholder="Gõ câu vừa nghe được..." oninput="checkDictationInput(decodeURIComponent('${encodeURIComponent(curLine.zh)}'))" class="hanzi-text" style="width:100%; padding:12px 16px; background:rgba(0,0,0,0.4); border:2px solid rgba(255,255,255,0.2); border-radius:12px; color:#ffffff; font-size:1.1rem; font-weight:600; outline:none; margin-bottom:14px; box-sizing:border-box;" />
 
                   <div id="dictation-hint-cards" style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:12px;">
                     ${hintChars.map(c => `
@@ -969,7 +970,7 @@
                     `).join('')}
                   </div>
 
-                  <button onclick="revealAllHints('${cleanSpeech}')" style="width:100%; background:linear-gradient(135deg, #f59e0b, #d97706); border:none; color:#ffffff; font-weight:700; padding:10px; border-radius:10px; cursor:pointer; font-size:0.85rem;">
+                  <button onclick="revealAllHints(decodeURIComponent('${encodeURIComponent(curLine.zh)}'))" style="width:100%; background:linear-gradient(135deg, #f59e0b, #d97706); border:none; color:#ffffff; font-weight:700; padding:10px; border-radius:10px; cursor:pointer; font-size:0.85rem;">
                     <i class="fa-solid fa-eye"></i> HIỆN GỢI Ý MẪU
                   </button>
                 </div>
@@ -1044,8 +1045,15 @@
       }
     }
 
-    function checkStep1Answer(selected, answer, btnEl, feedId) {
+    function checkStep1Answer(qIdx, oIdx, btnEl, feedId) {
       const feed = document.getElementById(feedId);
+      const questions = window.activeStep1Questions || [];
+      const q = questions[qIdx];
+      if (!q) return;
+
+      const selected = q.options[oIdx] || '';
+      const answer = q.answer || q.options[0] || '';
+
       const cleanSel = selected.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '').toLowerCase();
       const cleanAns = answer.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '').toLowerCase();
 
