@@ -943,6 +943,12 @@
           <div class="hub-text">Luyện Tập</div>
           <div class="hub-sub">Ôn Tập Trắc Nghiệm Nghe Âm</div>
         </div>
+
+        <div class="hub-card card-matran" onclick="openSection('matran')" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.18), rgba(14, 165, 233, 0.18)); border: 2px solid rgba(16, 185, 129, 0.35);">
+          <div class="hub-number" style="color: #34d399;"><i class="fa-solid fa-table-cells"></i></div>
+          <div class="hub-text" style="color: #38bdf8;">Bảng Ma Trận Pinyin</div>
+          <div class="hub-sub">Toàn bộ Phối Âm Thanh Mẫu x Vận Mẫu</div>
+        </div>
       </div>
     </div>
 
@@ -1067,6 +1073,10 @@
         titleEl.textContent = 'Luyện Tập Trắc Nghiệm Nghe Âm';
         badgeEl.textContent = 'Luyện Tập';
         renderLuyenTapView();
+      } else if (secKey === 'matran') {
+        titleEl.textContent = 'Bảng Ma Trận Phối Âm Pinyin Cập Nhật Mới';
+        badgeEl.textContent = 'Bảng Pinyin Full';
+        renderPinyinMatrixView();
       }
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1756,6 +1766,89 @@
           if (container) container.innerHTML = `<div style="text-align: center; color: #f87171; padding: 20px;">Khởi tạo bảng xếp hạng thất bại. Vui lòng thử lại sau!</div>`;
         });
     };
+
+    function renderPinyinMatrixView() {
+      const container = document.getElementById('section-body-content');
+      if (!container) return;
+
+      const thanhMauList = ['b', 'p', 'm', 'f', 'd', 't', 'n', 'l', 'g', 'k', 'h', 'j', 'q', 'x', 'zh', 'ch', 'sh', 'r', 'z', 'c', 's'];
+      const vanMauList = ['a', 'o', 'e', 'i', 'u', 'ü', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng', 'ong', 'ia', 'ie', 'iao', 'iu', 'ian', 'in', 'iang', 'ing', 'iong', 'ua', 'uo', 'uai', 'ui', 'uan', 'un', 'uang', 'ueng', 'üe', 'üan', 'ün'];
+
+      const comboRules = {
+        'b': ['a', 'o', 'e', 'i', 'u', 'ai', 'ei', 'ao', 'an', 'en', 'ang', 'eng', 'ie', 'iao', 'ian', 'in', 'ing'],
+        'p': ['a', 'o', 'e', 'i', 'u', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng', 'ie', 'iao', 'ian', 'in', 'ing'],
+        'm': ['a', 'o', 'e', 'i', 'u', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng', 'ie', 'iao', 'iu', 'ian', 'in', 'ing'],
+        'f': ['a', 'o', 'e', 'u', 'ei', 'ou', 'an', 'en', 'ang', 'eng'],
+        'd': ['a', 'e', 'i', 'u', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng', 'ong', 'ia', 'iao', 'iu', 'ian', 'ing', 'ua', 'uo', 'uan', 'un'],
+        't': ['a', 'e', 'i', 'u', 'ai', 'ei', 'ao', 'ou', 'an', 'eng', 'ong', 'ia', 'iao', 'ian', 'ing', 'uo', 'uan', 'un'],
+        'n': ['a', 'e', 'i', 'u', 'ü', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng', 'ong', 'ia', 'ie', 'iao', 'iu', 'ian', 'in', 'iang', 'ing', 'uo', 'uan', 'üe'],
+        'l': ['a', 'e', 'i', 'u', 'ü', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng', 'ong', 'ia', 'ie', 'iao', 'iu', 'ian', 'in', 'iang', 'ing', 'uo', 'uan', 'un', 'üe'],
+        'g': ['a', 'e', 'u', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng', 'ong', 'ua', 'uo', 'uai', 'ui', 'uan', 'un', 'uang'],
+        'k': ['a', 'e', 'u', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng', 'ong', 'ua', 'uo', 'uai', 'ui', 'uan', 'un', 'uang'],
+        'h': ['a', 'e', 'u', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng', 'ong', 'ua', 'uo', 'uai', 'ui', 'uan', 'un', 'uang'],
+        'j': ['i', 'ü', 'ia', 'ie', 'iao', 'iu', 'ian', 'in', 'iang', 'ing', 'iong', 'üe', 'üan', 'ün'],
+        'q': ['i', 'ü', 'ia', 'ie', 'iao', 'iu', 'ian', 'in', 'iang', 'ing', 'iong', 'üe', 'üan', 'ün'],
+        'x': ['i', 'ü', 'ia', 'ie', 'iao', 'iu', 'ian', 'in', 'iang', 'ing', 'iong', 'üe', 'üan', 'ün'],
+        'zh': ['a', 'e', 'i', 'u', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng', 'ong', 'ua', 'uo', 'uai', 'ui', 'uan', 'un', 'uang'],
+        'ch': ['a', 'e', 'i', 'u', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng', 'ong', 'ua', 'uo', 'uai', 'ui', 'uan', 'un', 'uang'],
+        'sh': ['a', 'e', 'i', 'u', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng', 'ua', 'uo', 'uai', 'ui', 'uan', 'un', 'uang'],
+        'r': ['e', 'i', 'u', 'ao', 'ou', 'an', 'en', 'ang', 'eng', 'ong', 'uo', 'ui', 'uan', 'un'],
+        'z': ['a', 'e', 'i', 'u', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng', 'ong', 'uo', 'ui', 'uan', 'un'],
+        'c': ['a', 'e', 'i', 'u', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng', 'ong', 'uo', 'ui', 'uan', 'un'],
+        's': ['a', 'e', 'i', 'u', 'ai', 'ei', 'ao', 'ou', 'an', 'en', 'ang', 'eng', 'ong', 'uo', 'ui', 'uan', 'un']
+      };
+
+      let html = `
+        <div style="margin-bottom: 20px; background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.25); border-radius: 16px; padding: 18px; color: #cbd5e1;">
+          <h3 style="margin: 0 0 8px 0; color: #34d399; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-volume-high"></i> Bảng Phối Âm Pinyin Tương Tác
+          </h3>
+          <p style="margin: 0; font-size: 0.9rem; line-height: 1.5;">
+            Bấm vào bất kỳ âm tiết nào trong ma trận dưới đây để nghe phát âm giọng đọc Bắc Kinh chuẩn (Baidu Nữ). Hàng ngang là <strong>Vận Mẫu (36)</strong>, hàng dọc là <strong>Thanh Mẫu (21)</strong>.
+          </p>
+        </div>
+
+        <div style="overflow-x: auto; max-width: 100%; border-radius: 16px; border: 1px solid var(--border-glass, rgba(255,255,255,0.1)); background: var(--bg-secondary, rgba(30,41,59,0.9)); shadow: 0 10px 30px rgba(0,0,0,0.3);">
+          <table style="width: 100%; border-collapse: collapse; text-align: center; font-size: 0.88rem;">
+            <thead>
+              <tr style="background: rgba(15,23,42,0.95); color: #38bdf8; border-bottom: 2px solid rgba(255,255,255,0.1);">
+                <th style="padding: 12px 16px; position: sticky; left: 0; background: #0f172a; z-index: 5; border-right: 2px solid rgba(255,255,255,0.1);">TM \\ VM</th>
+      `;
+
+      vanMauList.forEach(vm => {
+        html += `<th style="padding: 10px 14px; min-width: 52px; color: #fbbf24; font-weight: 700;">${vm}</th>`;
+      });
+      html += `</tr></thead><tbody>`;
+
+      thanhMauList.forEach((tm, idx) => {
+        const bgRow = idx % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent';
+        html += `<tr style="background: ${bgRow}; border-bottom: 1px solid rgba(255,255,255,0.05);">`;
+        html += `<td style="padding: 10px 14px; font-weight: 800; color: #38bdf8; position: sticky; left: 0; background: #0f172a; z-index: 4; border-right: 2px solid rgba(255,255,255,0.1);">${tm}</td>`;
+
+        const validVms = comboRules[tm] || [];
+        vanMauList.forEach(vm => {
+          if (validVms.includes(vm)) {
+            let pinyinSyllable = tm + vm;
+            if ((tm === 'j' || tm === 'q' || tm === 'x') && vm.startsWith('ü')) {
+              pinyinSyllable = tm + vm.replace('ü', 'u');
+            }
+            html += `
+              <td style="padding: 6px 4px;">
+                <button onclick="speakZhText('${pinyinSyllable}')" style="background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.25); color: #38bdf8; font-weight: 700; border-radius: 8px; padding: 6px 10px; cursor: pointer; transition: all 0.15s ease; width: 100%; font-size: 0.88rem;" onmouseover="this.style.background='#38bdf8'; this.style.color='#0f172a';" onmouseout="this.style.background='rgba(56, 189, 248, 0.12)'; this.style.color='#38bdf8';">
+                  ${pinyinSyllable}
+                </button>
+              </td>
+            `;
+          } else {
+            html += `<td style="padding: 6px 4px; color: rgba(255,255,255,0.1); font-size: 0.75rem;">-</td>`;
+          }
+        });
+        html += `</tr>`;
+      });
+
+      html += `</tbody></table></div>`;
+      container.innerHTML = html;
+    }
   </script>
   <script type="module" src="/src/particles.js"></script>
 </body>

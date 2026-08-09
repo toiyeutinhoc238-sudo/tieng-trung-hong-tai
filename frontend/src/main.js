@@ -4198,38 +4198,7 @@ function getUnlockedLevelsMap() {
 }
 
 function isLevelUnlocked(ver, level, levelIndex, levelsData, builtInVocabs) {
-  // Level 1 (first node) is always unlocked by default
-  if (levelIndex <= 0) return true;
-
-  // Check manual developer/admin override map
-  const overrideMap = getUnlockedLevelsMap();
-  const unlockedList = overrideMap[ver] || [];
-  if (unlockedList.includes(level) || unlockedList.includes(String(level)) || unlockedList.includes('all')) {
-    return true;
-  }
-
-  // Sequential progression: Level N is unlocked if Level N-1 is 100% completed
-  const prevLevelData = levelsData[levelIndex - 1];
-  if (!prevLevelData) return true;
-
-  const prevLevelWords = builtInVocabs.filter(w => {
-    const curr = (w.curriculum || 'hsk').toLowerCase();
-    const v = (w.hskVersion || '3.0').toLowerCase();
-    if (ver === 'yct') {
-      return (curr.includes('yct') || v.includes('yct')) && matchLevel(w.level, prevLevelData.level);
-    }
-    if (ver === '2.0') {
-      return !curr.includes('yct') && !v.includes('yct') && (v.includes('2') || v === '2.0') && matchLevel(w.level, prevLevelData.level);
-    }
-    return !curr.includes('yct') && !v.includes('yct') && (v.includes('3') || v === '3.0' || w.hskVersion === '3.0') && matchLevel(w.level, prevLevelData.level);
-  });
-
-  const prevTotal = prevLevelWords.length;
-  const prevMemorized = prevLevelWords.filter(w => w.isMemorized).length;
-
-  if (prevTotal > 0) {
-    return prevMemorized === prevTotal;
-  }
+  // All levels are unlocked by default as requested by user
   return true;
 }
 
@@ -6916,18 +6885,8 @@ window.openLessonDetailModal = function (lessonKey) {
       const starKey = `quiz_stars_${activeHskVersion}_${activeLessonsLevel}_${lessonKey}`;
       const quizStars = parseInt(localStorage.getItem(starKey) || '0', 10);
 
-      // Sequential unlocking: Lesson 1 (idx === 0) is always unlocked;
-      // Subsequent lessons require at least 1 star (prevQuizStars >= 1) from previous lesson's Quiz Game!
-      let isUnlocked = false;
-      let prevKey = '';
-      if (idx === 0) {
-        isUnlocked = true;
-      } else {
-        prevKey = uniqueLessonKeys[idx - 1];
-        const prevStarKey = `quiz_stars_${activeHskVersion}_${activeLessonsLevel}_${prevKey}`;
-        const prevQuizStars = parseInt(localStorage.getItem(prevStarKey) || '0', 10);
-        isUnlocked = prevQuizStars >= 1;
-      }
+      // All lessons are unlocked by default as requested by user
+      let isUnlocked = true;
 
       let isCurrentActive = false;
       if (isUnlocked && !isCompleted && !foundFirstActive) {
@@ -7122,10 +7081,10 @@ window.openLessonDetailModal = function (lessonKey) {
           <span>Từ Vựng</span>
           <small>${wordsCount} từ</small>
         </button>
-        <button class="lesson-mod-btn mod-grammar" style="opacity: 0.85; position: relative;" onclick="event.stopPropagation(); window.showComingSoonNotice('Ngữ Pháp')">
+        <button class="lesson-mod-btn mod-grammar" style="position: relative;" onclick="event.stopPropagation(); window.location.href='/hsk-grammar.html?level=' + (activeLessonsLevel || '1')">
           <i class="fa-solid fa-spell-check"></i>
           <span>Ngữ Pháp</span>
-          <small style="background: rgba(0,0,0,0.25); color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">Sắp ra mắt</small>
+          <small style="background: #2563eb; color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">Tra cứu 📖</small>
         </button>
         <button class="lesson-mod-btn mod-text" onclick="event.stopPropagation(); window.openLessonTextStudy('${lessonKey}')">
           <i class="fa-solid fa-comments"></i>

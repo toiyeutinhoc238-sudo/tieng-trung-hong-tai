@@ -4,24 +4,24 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css              */import"
 3. Khi ghép với n, l: Giữ nguyên 2 chấm (nǚ, lǚ).`,standalone_table:[{orig:"ü",solo:"yu"},{orig:"üe",solo:"yue"},{orig:"üan",solo:"yuan"},{orig:"ün",solo:"yun"}],items:[{char:"üe",detail:"Phát âm ü rồi lướt sang e.",note:"Đọc giống uy + ê.",examples:[{pinyin:"jué",meaning:"Cảm thấy"},{pinyin:"xué",meaning:"Học"},{pinyin:"yuè",meaning:"Mặt trăng / Tháng"},{pinyin:"lüè",meaning:"Lược bỏ"}]},{char:"üan",detail:"Phát âm ü rồi lướt sang an.",note:"Đọc giống uy + en (uyển).",examples:[{pinyin:"juān",meaning:"Quyên góp"},{pinyin:"xuān",meaning:"Tuyên bố"},{pinyin:"yuán",meaning:"Đồng tiền / Viên"},{pinyin:"quān",meaning:"Vòng tròn"}]},{char:"ün",detail:"Phát âm ü kết thúc bằng n.",note:"Đọc giống uy + n (uyn).",examples:[{pinyin:"jūn",meaning:"Quân đội"},{pinyin:"xūn",meaning:"Hôn / Huân"},{pinyin:"qūn",meaning:"Váy"},{pinyin:"yūn",meaning:"Choáng váng"}]}]},{id:"v_group5",name:"Nhóm 5: Vận Mẫu Ghép của u (8 âm)",standalone_rule:`Khi đứng độc lập (không có thanh mẫu đi kèm):
 • Với âm 'u' đơn: Thêm 'w' ở trước -> wu.
 • Với các vận mẫu còn lại: Đổi 'u' thành 'w' -> wa, wo, wai, wei, wan, wen, wang, weng.
-• Lưu ý quan trọng: uei và uen khi kết hợp với thanh mẫu thì được viết tắt là -ui và -un, nhưng cách đọc giữ nguyên.`,standalone_table:[{orig:"u",solo:"wu"},{orig:"ua",solo:"wa"},{orig:"uo",solo:"wo"},{orig:"uai",solo:"wai"},{orig:"uei",solo:"wei"},{orig:"uan",solo:"wan"},{orig:"uen",solo:"wen"},{orig:"uang",solo:"wang"},{orig:"ueng",solo:"weng"}],items:[{char:"ua",detail:"Phát âm u rồi lướt sang a.",note:"Giống qua / oa.",examples:[{pinyin:"huā",meaning:"Hoa"},{pinyin:"kuā",meaning:"Khen ngợi"},{pinyin:"shuā",meaning:"Bàn chải / Chải"}]},{char:"uo",detail:"Phát âm u rồi lướt sang o.",note:"Đọc giống u + ô (ua).",examples:[{pinyin:"duó",meaning:"Cướp"},{pinyin:"shuō",meaning:"Nói"},{pinyin:"guó",meaning:"Quốc gia"},{pinyin:"luó",meaning:"Cái chiêng"}]},{char:"uai",detail:"Phát âm u rồi lướt sang ai.",note:"Đọc giống oai.",examples:[{pinyin:"kuài",meaning:"Nhanh / Đồng"},{pinyin:"shuāi",meaning:"Ngã"},{pinyin:"huài",meaning:"Hỏng / Xấu"}]},{char:"uei (-ui)",detail:"Phát âm u lướt sang ei.",note:"Khi kết hợp với thanh mẫu thì được viết tắt là -ui nhưng cách đọc vẫn giữ nguyên (giống u + ây).",examples:[{pinyin:"duì",meaning:"Đúng / Đội"},{pinyin:"huí",meaning:"Về"},{pinyin:"kuí",meaning:"Khôi ngô"},{pinyin:"shuǐ",meaning:"Nước"}]},{char:"uan",detail:"Phát âm u rồi lướt sang an.",note:"Đọc giống oan.",examples:[{pinyin:"suān",meaning:"Chua"},{pinyin:"huān",meaning:"Hoan hỉ"},{pinyin:"kuān",meaning:"Rộng"},{pinyin:"duǎn",meaning:"Ngắn"}]},{char:"uen (-un)",detail:"Phát âm u lướt sang en.",note:"Khi kết hợp với thanh mẫu thì được viết tắt là -un nhưng cách đọc vẫn giữ nguyên (giống u + ân).",examples:[{pinyin:"lùn",meaning:"Bàn luận"},{pinyin:"shùn",meaning:"Thuận lợi"},{pinyin:"kùn",meaning:"Mệt buồn ngủ"},{pinyin:"cún",meaning:"Gửi tiết kiệm"}]},{char:"uang",detail:"Phát âm u rồi lướt sang ang.",note:"Đọc giống oang.",examples:[{pinyin:"huāng",meaning:"Hoảng hốt"},{pinyin:"kuāng",meaning:"Cái khung"},{pinyin:"shuāng",meaning:"Đôi / Sương"}]},{char:"ueng",detail:"Phát âm u rồi lướt sang eng.",note:"Đọc giống u + âng (ít gặp).",examples:[{pinyin:"wēng",meaning:"Ông lão"}]}]}],n_ng_tip:{title:"Mẹo Phân Biệt & Sửa Ngọng âm 'n' và 'ng'",sections:[{heading:"1. Phân biệt vị trí lưỡi:",bullets:['"n" là âm đầu lưỡi: Đầu lưỡi đặt chạm chân răng trên (lợi).','"ng" là âm cuống lưỡi: Đầu lưỡi thả lỏng, cuống lưỡi nâng cao chạm vòm họng mềm (ngạc mềm).']},{heading:"2. Khác biệt luồng hơi:",bullets:['"n" là âm mũi (đầu lưỡi): Luồng hơi thoát qua mũi, chặn ở đầu lưỡi.','"ng" là âm mũi (cuống lưỡi): Luồng hơi thoát qua mũi, chặn ở cuống lưỡi.']},{heading:"3. Bài tập:",bullets:['Tập đọc luân phiên: "an - ang", "en - eng", "in - ing".','Kiểm tra: Khi đọc "n", cảm nhận độ rung ở đầu lưỡi và chân răng. Khi đọc "ng", cảm nhận độ rung ở sâu trong họng (cuống lưỡi).']}]}},T={title:"Thanh Điệu (Tones in Chinese)",description:"Tiếng Trung bao gồm 4 thanh điệu chính và 1 thanh nhẹ (khinh thanh) thể hiện sự thay đổi độ cao của giọng khi phát âm.",tones:[{name:"Thanh 1 (Thanh ngang)",symbol:"¯ (vd: ā)",pitch:"55 (Cao - Ngang)",guide:"Độ cao ở mức 55 (cao nhất). Khi phát âm, kéo dài giọng đi ngang, giữ nguyên cao độ, không lên cũng không xuống.",examples:[{pinyin:"mā",meaning:"Mẹ"},{pinyin:"fēi",meaning:"Bay"},{pinyin:"shū",meaning:"Sách"},{pinyin:"zhōng",meaning:"Trung / Trung Quốc"}]},{name:"Thanh 2 (Thanh sắc)",symbol:"´ (vd: á)",pitch:"35 (Thấp -> Cao)",guide:"Độ cao 35. Âm thanh bắt đầu từ mức trung bình rồi vút nhanh lên cao dứt khoát (giống dấu sắc tiếng Việt nhưng từ thấp đi lên).",examples:[{pinyin:"má",meaning:"Cây đay / Tê"},{pinyin:"pí",meaning:"Da"},{pinyin:"wéi",meaning:"Vì / Làm"},{pinyin:"chóng",meaning:"Côn trùng"}]},{name:"Thanh 3 (Thanh hỏi / nặng)",symbol:"ˇ (vd: ǎ)",pitch:"214 (Xuống thấp -> Vút lên)",guide:"Độ cao 214. Giọng bắt đầu từ mức trung bình thấp, hạ xuống thấp nhất rồi vút lên cao, tạo cảm giác trầm rung dứt khoát.",examples:[{pinyin:"mǎ",meaning:"Con ngựa"},{pinyin:"fěi",meaning:"Phỉ / Ngọc"},{pinyin:"shǔ",meaning:"Đếm / Chuột"},{pinyin:"zhǒng",meaning:"Hạt giống"}]},{name:"Thanh 4 (Thanh huyền nhấn)",symbol:"` (vd: à)",pitch:"51 (Cao nhất -> Thấp nhất)",guide:"Độ cao 51. Đổ dốc dứt khoát từ mức cao nhất xuống mức thấp nhất. Không đọc kéo dài như dấu huyền Việt mà phải đọc nhanh, nhấn mạnh.",examples:[{pinyin:"mà",meaning:"Mắng"},{pinyin:"fèi",meaning:"Phổi / Phí"},{pinyin:"shù",meaning:"Cây / Số"},{pinyin:"zhòng",meaning:"Nặng / Trồng"}]},{name:"Thanh Nhẹ (Khinh thanh / Neutral Tone)",symbol:"Không dấu (vd: a)",pitch:"Nhẹ - Ngắn",guide:"Không mang dấu thanh điệu. Phát âm nhẹ, ngắn, không nhấn giọng (thường xuất hiện ở âm tiết thứ 2 hoặc trợ từ).",examples:[{pinyin:"bàba",meaning:"Bố"},{pinyin:"māma",meaning:"Mẹ"},{pinyin:"xièxie",meaning:"Cảm ơn"},{pinyin:"hǎode",meaning:"Được rồi"}]}],rules:{placement:{title:"Quy Tắc Đánh Dấu Thanh Điệu Chuẩn Mới Nhất",steps:["Thanh điệu luôn được đánh trên nguyên âm chính (a, o, e, i, u, ü).","Thứ tự ưu tiên nguyên âm: a > o > e > i > u > ü (Nếu có 'a' thì ưu tiên đánh lên 'a', không có 'a' thì xét 'o' hoặc 'e').","Trường hợp 'iu' hoặc 'ui': Dấu thanh điệu luôn đặt trên nguyên âm đứng SAU (vd: iú, uǐ).","Khi đánh dấu thanh điệu trên chữ 'i', phải bỏ dấu chấm trên đầu chữ 'i' (vd: ī, í, ǐ, ì)."]},sandhi:{title:"Quy Tắc Biến Điệu Chuẩn Mới Nhất (3 + 3, 不, 一)",cases:[{case_title:"1. Biến điệu Hai thanh 3 đi liền nhau ( 3 + 3 ➔ 2 + 3 )",desc:"Khi 2 âm tiết thanh 3 đi cùng nhau, âm tiết thứ 1 đọc thành thanh 2 ( 2 + 3 ).",example:"Nǐ (3) + hǎo (3) ==> Đọc là: Ní hǎo (2 + 3)"},{case_title:'2. Biến điệu của phó từ "不" ( bù )',desc:'Khi đứng trước từ mang thanh 4, "不" đọc đổi thành thanh 2 ( bú ). Khi đứng trước thanh 1, 2, 3 thì giữ nguyên thanh 4 ( bù ).',example:"Bù + shì (4) ==> Đọc là: Bú shì | Bù + hǎo (3) ==> Đọc là: Bù hǎo"},{case_title:'3. Biến điệu của số từ "一" ( yī )',desc:"Đọc đơn lẻ là thanh 1 ( yī ). Khi đứng trước từ thanh 4 đọc thành thanh 2 ( yí ). Khi đứng trước từ thanh 1, 2, 3 đọc thành thanh 4 ( yì ).",example:"Yī + yàng (4) ==> Đọc là: Yí yàng | Yī + tiān (1) ==> Đọc là: Yì tiān"}]}}},B=[{sound:"bā",options:["bā","pā","mā","fā"],correct:0},{sound:"pó",options:["bó","pó","mò","fó"],correct:1},{sound:"mǐ",options:["bǐ","pǐ","mǐ","fǐ"],correct:2},{sound:"fù",options:["bù","pù","mù","fù"],correct:3},{sound:"dā",options:["dā","tā","nā","lā"],correct:0},{sound:"tè",options:["dé","tè","nè","lè"],correct:1},{sound:"nǐ",options:["dǐ","tǐ","nǐ","lǐ"],correct:2},{sound:"lù",options:["dù","tù","nù","lù"],correct:3},{sound:"gē",options:["gē","kē","hē","lē"],correct:0},{sound:"kǔ",options:["gǔ","kǔ","hǔ","lǔ"],correct:1},{sound:"hā",options:["gā","kā","hā","lā"],correct:2},{sound:"jī",options:["jī","qī","xī","zhī"],correct:0},{sound:"qù",options:["jù","qù","xù","chù"],correct:1},{sound:"xiā",options:["jiā","qiā","xiā","shā"],correct:2},{sound:"zǎo",options:["zǎo","cǎo","sǎo","zhǎo"],correct:0},{sound:"cù",options:["zù","cù","sù","chù"],correct:1},{sound:"sè",options:["zè","cè","sè","shè"],correct:2},{sound:"zhǎo",options:["zǎo","cǎo","zhǎo","chǎo"],correct:2},{sound:"chā",options:["zā","cā","zhā","chā"],correct:3},{sound:"shù",options:["sù","cù","zù","shù"],correct:3},{sound:"rè",options:["lè","nè","shè","rè"],correct:3},{sound:"bàba",options:["bàba","pàpa","màma","fàfa"],correct:0},{sound:"nǐhǎo",options:["líhǎo","nǐhǎo","nǐhào","mǐhǎo"],correct:1},{sound:"lǎoshī",options:["nǎoshī","lǎoshī","rǎoshī","cǎoshī"],correct:1},{sound:"kāfèi",options:["gāfèi","kāfèi","hāfèi","pāfèi"],correct:1},{sound:"hénèi",options:["génèi","kénèi","hénèi","fénèi"],correct:2},{sound:"jīchǎng",options:["jīchǎng","qīchǎng","xīchǎng","zhīchǎng"],correct:0},{sound:"xīguā",options:["jīguā","qīguā","xīguā","shīguā"],correct:2},{sound:"zúqiú",options:["zúqiú","cúqiú","súqiú","zhúqiú"],correct:0},{sound:"cánjiā",options:["zánjiā","cánjiā","sánjiā","chánjiā"],correct:1},{sound:"zhòngguó",options:["zòngguó","còngguó","zhòngguó","chòngguó"],correct:2},{sound:"chūnjié",options:["zūnjié","cūnjié","zhūnjié","chūnjié"],correct:3},{sound:"shuǐguǒ",options:["suǐguǒ","cuǐguǒ","zuǐguǒ","shuǐguǒ"],correct:3},{sound:"rénmín",options:["lénmín","nénmín","shénmín","rénmín"],correct:3},{sound:"bān",options:["bān","bāng","bēn","bēng"],correct:0},{sound:"bāng",options:["bān","bāng","bēn","bēng"],correct:1},{sound:"lín",options:["lín","líng","lún","lóng"],correct:0},{sound:"líng",options:["lín","líng","lún","lóng"],correct:1},{sound:"gēn",options:["gān","gāng","gēn","gēng"],correct:2},{sound:"gēng",options:["gān","gāng","gēn","gēng"],correct:3},{sound:"jīn",options:["jīn","jīng","jūn","jī"],correct:0},{sound:"jīng",options:["jīn","jīng","jūn","jī"],correct:1},{sound:"xīn",options:["xīn","xīng","xūn","xī"],correct:0},{sound:"xīng",options:["xīn","xīng","xūn","xī"],correct:1},{sound:"ér",options:["ér","ěr","èr","érzi"],correct:0},{sound:"lüè",options:["lüè","nüè","jué","xué"],correct:0},{sound:"xué",options:["lüè","nüè","jué","xué"],correct:3},{sound:"yuán",options:["juān","xuān","yuán","quān"],correct:2},{sound:"huā",options:["huā","kuā","shuā","guā"],correct:0},{sound:"kuài",options:["huài","kuài","shuāi","guài"],correct:1},{sound:"duì",options:["tuì","duì","huí","shuǐ"],correct:1},{sound:"chōng",options:["zhōng","chōng","shōng","rōng"],correct:1},{sound:"quān",options:["juān","xuān","yuán","quān"],correct:3},{sound:"wēng",options:["wēng","dēng","tēng","nēng"],correct:0},{sound:"bāo",options:["bāo","pāo","māo","fāo"],correct:0},{sound:"pāo",options:["bāo","pāo","māo","fāo"],correct:1},{sound:"dōu",options:["dōu","tōu","nōu","lōu"],correct:0},{sound:"tōu",options:["dōu","tōu","nōu","lōu"],correct:1},{sound:"gān",options:["gān","kān","hān","lān"],correct:0},{sound:"kān",options:["gān","kān","hān","lān"],correct:1},{sound:"jiān",options:["jiān","qiān","xiān","zhān"],correct:0},{sound:"qiān",options:["jiān","qiān","xiān","zhān"],correct:1},{sound:"zān",options:["zān","cān","sān","zhān"],correct:0},{sound:"cān",options:["zān","cān","sān","zhān"],correct:1},{sound:"zhān",options:["zān","cān","zhān","chān"],correct:2},{sound:"chān",options:["zān","cān","zhān","chān"],correct:3},{sound:"mā",options:["mā","má","mǎ","mà"],correct:0},{sound:"má",options:["mā","má","mǎ","mà"],correct:1},{sound:"mǎ",options:["mā","má","mǎ","mà"],correct:2},{sound:"mà",options:["mā","má","mǎ","mà"],correct:3},{sound:"bā",options:["bā","bá","bǎ","bà"],correct:0},{sound:"bá",options:["bā","bá","bǎ","bà"],correct:1},{sound:"bǎ",options:["bā","bá","bǎ","bà"],correct:2},{sound:"bà",options:["bā","bá","bǎ","bà"],correct:3},{sound:"jī",options:["jī","jí","jǐ","jì"],correct:0},{sound:"jí",options:["jī","jí","jǐ","jì"],correct:1},{sound:"jǐ",options:["jī","jí","jǐ","jì"],correct:2},{sound:"jì",options:["jī","jí","jǐ","jì"],correct:3},{sound:"fúwù",options:["fúwù","fúyù","fúwǔ","fúyǔ"],correct:0},{sound:"mìshū",options:["mìsū","mìshū","mìzhū","mìchū"],correct:1},{sound:"dàtáng",options:["tàtáng","dàtáng","nàtáng","làtáng"],correct:1},{sound:"tútú",options:["dútú","tútú","nútú","lútú"],correct:1},{sound:"nǐhǎo",options:["líhǎo","nǐhǎo","nǐhào","mǐhǎo"],correct:1},{sound:"lúnchuán",options:["núnchuán","lúnchuán","rúnchuán","cúnchuán"],correct:1},{sound:"guójiā",options:["kuójiā","guójiā","huójiā","luójiā"],correct:1},{sound:"kělè",options:["gělè","kělè","hělè","lělè"],correct:1},{sound:"huǒguō",options:["guǒguō","kuǒguō","huǒguō","luǒguō"],correct:2},{sound:"jiéguǒ",options:["jiéguǒ","qiéguǒ","xiéguǒ","zhéguǒ"],correct:0},{sound:"qīn'ài",options:["jīn'ài","qīn'ài","xīn'ài","chīn'ài"],correct:1},{sound:"xuéxí",options:["juéxí","quéxí","xuéxí","shuéxí"],correct:2},{sound:"zìjǐ",options:["zìjǐ","cìjǐ","sìjǐ","zhìjǐ"],correct:0},{sound:"cóngqián",options:["zóngqián","cóngqián","sóngqián","chóngqián"],correct:1},{sound:"sānshí",options:["zānshí","cānshí","sānshí","shānshí"],correct:2},{sound:"chēzhàn",options:["zēzhàn","cēzhàn","zhēzhàn","chēzhàn"],correct:3},{sound:"rìběn",options:["lìběn","nìběn","shìběn","rìběn"],correct:3},{sound:"máobǐ",options:["náobǐ","láobǐ","máobǐ","páobǐ"],correct:2},{sound:"píngguǒ",options:["bíngguǒ","píngguǒ","míngguǒ","fíngguǒ"],correct:1},{sound:"báibǐ",options:["báibǐ","páibǐ","máibǐ","fáibǐ"],correct:0},{sound:"hǎochī",options:["kǎochī","hǎochī","gǎochī","bǎochī"],correct:1},{sound:"xuéxiào",options:["juéxiào","quéxiào","xuéxiào","xiuéxiào"],correct:2}];window.THANH_MAU_DATA=w;window.VAN_MAU_DATA=k;window.THANH_DIEU_DATA=T;window.LARGE_QUIZ_DATABASE=B;let b=0,x=0;function v(){return window.location.hostname==="localhost"||window.location.hostname==="127.0.0.1"||window.location.hostname===""?"http://localhost:5000":window.location.origin||"https://tieng-trung-hong-tai-1.onrender.com"}let y=null;window.speakZhText=function(i){if(!i)return;const e=String(i).replace(/['’]/g,"").trim(),n="baidu-female";y&&(y.pause(),y=null);const t=`${v()}/api/tts?text=${encodeURIComponent(e)}&voice=${n}`;y=new Audio(t),y.play().catch(a=>{console.warn("API Audio error, fallback to Web Speech:",a),N(e)})};function N(i){if("speechSynthesis"in window){window.speechSynthesis.cancel();const e=String(i).replace(/['’]/g,"").trim(),n=new SpeechSynthesisUtterance(e);n.lang="zh-CN",n.rate=.85,window.speechSynthesis.speak(n)}}window.stopAllAudio=function(){y&&(y.pause(),y.currentTime=0,y=null),"speechSynthesis"in window&&window.speechSynthesis.cancel(),document.querySelectorAll("video").forEach(i=>{try{i.pause(),i.currentTime=0}catch{}})};window.backToHub=function(){window.stopAllAudio(),document.getElementById("pinyin-main-hub").style.display="block",document.getElementById("section-reader-card").style.display="none",window.scrollTo({top:0,behavior:"smooth"})};window.openSection=function(i){window.stopAllAudio(),document.getElementById("pinyin-main-hub").style.display="none",document.getElementById("section-reader-card").style.display="block";const e=document.getElementById("section-title-text"),n=document.getElementById("section-badge-text");i==="thanhmau"?(e.textContent="21 Thanh Mẫu (Phụ Âm Đầu)",n.textContent="Thanh Mẫu",j()):i==="vanmau"?(e.textContent="36 Vận Mẫu (Nguyên Âm)",n.textContent="Vận Mẫu",$()):i==="thanhdieu"?(e.textContent="4 Thanh Điệu & Biến Điệu",n.textContent="Thanh Điệu",V()):i==="luyentap"&&(e.textContent="Luyện Tập Trắc Nghiệm Nghe Âm",n.textContent="Luyện Tập",renderLuyenTapView()),window.scrollTo({top:0,behavior:"smooth"})};window.toggleGroupNote=function(i){const e=document.getElementById(`group-note-${i}`),n=document.getElementById(`group-note-btn-${i}`);e&&(e.classList.contains("show")?(e.classList.remove("show"),n&&(n.innerHTML='<i class="fa-solid fa-chevron-down"></i> Hiện lưu ý nhóm')):(e.classList.add("show"),n&&(n.innerHTML='<i class="fa-solid fa-chevron-up"></i> Ẩn lưu ý nhóm')))};function z(i,e){const n=document.getElementById("section-body-content");let o="";if(e==="thanhmau"&&(o+=`
+• Lưu ý quan trọng: uei và uen khi kết hợp với thanh mẫu thì được viết tắt là -ui và -un, nhưng cách đọc giữ nguyên.`,standalone_table:[{orig:"u",solo:"wu"},{orig:"ua",solo:"wa"},{orig:"uo",solo:"wo"},{orig:"uai",solo:"wai"},{orig:"uei",solo:"wei"},{orig:"uan",solo:"wan"},{orig:"uen",solo:"wen"},{orig:"uang",solo:"wang"},{orig:"ueng",solo:"weng"}],items:[{char:"ua",detail:"Phát âm u rồi lướt sang a.",note:"Giống qua / oa.",examples:[{pinyin:"huā",meaning:"Hoa"},{pinyin:"kuā",meaning:"Khen ngợi"},{pinyin:"shuā",meaning:"Bàn chải / Chải"}]},{char:"uo",detail:"Phát âm u rồi lướt sang o.",note:"Đọc giống u + ô (ua).",examples:[{pinyin:"duó",meaning:"Cướp"},{pinyin:"shuō",meaning:"Nói"},{pinyin:"guó",meaning:"Quốc gia"},{pinyin:"luó",meaning:"Cái chiêng"}]},{char:"uai",detail:"Phát âm u rồi lướt sang ai.",note:"Đọc giống oai.",examples:[{pinyin:"kuài",meaning:"Nhanh / Đồng"},{pinyin:"shuāi",meaning:"Ngã"},{pinyin:"huài",meaning:"Hỏng / Xấu"}]},{char:"uei (-ui)",detail:"Phát âm u lướt sang ei.",note:"Khi kết hợp với thanh mẫu thì được viết tắt là -ui nhưng cách đọc vẫn giữ nguyên (giống u + ây).",examples:[{pinyin:"duì",meaning:"Đúng / Đội"},{pinyin:"huí",meaning:"Về"},{pinyin:"kuí",meaning:"Khôi ngô"},{pinyin:"shuǐ",meaning:"Nước"}]},{char:"uan",detail:"Phát âm u rồi lướt sang an.",note:"Đọc giống oan.",examples:[{pinyin:"suān",meaning:"Chua"},{pinyin:"huān",meaning:"Hoan hỉ"},{pinyin:"kuān",meaning:"Rộng"},{pinyin:"duǎn",meaning:"Ngắn"}]},{char:"uen (-un)",detail:"Phát âm u lướt sang en.",note:"Khi kết hợp với thanh mẫu thì được viết tắt là -un nhưng cách đọc vẫn giữ nguyên (giống u + ân).",examples:[{pinyin:"lùn",meaning:"Bàn luận"},{pinyin:"shùn",meaning:"Thuận lợi"},{pinyin:"kùn",meaning:"Mệt buồn ngủ"},{pinyin:"cún",meaning:"Gửi tiết kiệm"}]},{char:"uang",detail:"Phát âm u rồi lướt sang ang.",note:"Đọc giống oang.",examples:[{pinyin:"huāng",meaning:"Hoảng hốt"},{pinyin:"kuāng",meaning:"Cái khung"},{pinyin:"shuāng",meaning:"Đôi / Sương"}]},{char:"ueng",detail:"Phát âm u rồi lướt sang eng.",note:"Đọc giống u + âng (ít gặp).",examples:[{pinyin:"wēng",meaning:"Ông lão"}]}]}],n_ng_tip:{title:"Mẹo Phân Biệt & Sửa Ngọng âm 'n' và 'ng'",sections:[{heading:"1. Phân biệt vị trí lưỡi:",bullets:['"n" là âm đầu lưỡi: Đầu lưỡi đặt chạm chân răng trên (lợi).','"ng" là âm cuống lưỡi: Đầu lưỡi thả lỏng, cuống lưỡi nâng cao chạm vòm họng mềm (ngạc mềm).']},{heading:"2. Khác biệt luồng hơi:",bullets:['"n" là âm mũi (đầu lưỡi): Luồng hơi thoát qua mũi, chặn ở đầu lưỡi.','"ng" là âm mũi (cuống lưỡi): Luồng hơi thoát qua mũi, chặn ở cuống lưỡi.']},{heading:"3. Bài tập:",bullets:['Tập đọc luân phiên: "an - ang", "en - eng", "in - ing".','Kiểm tra: Khi đọc "n", cảm nhận độ rung ở đầu lưỡi và chân răng. Khi đọc "ng", cảm nhận độ rung ở sâu trong họng (cuống lưỡi).']}]}},T={title:"Thanh Điệu (Tones in Chinese)",description:"Tiếng Trung bao gồm 4 thanh điệu chính và 1 thanh nhẹ (khinh thanh) thể hiện sự thay đổi độ cao của giọng khi phát âm.",tones:[{name:"Thanh 1 (Thanh ngang)",symbol:"¯ (vd: ā)",pitch:"55 (Cao - Ngang)",guide:"Độ cao ở mức 55 (cao nhất). Khi phát âm, kéo dài giọng đi ngang, giữ nguyên cao độ, không lên cũng không xuống.",examples:[{pinyin:"mā",meaning:"Mẹ"},{pinyin:"fēi",meaning:"Bay"},{pinyin:"shū",meaning:"Sách"},{pinyin:"zhōng",meaning:"Trung / Trung Quốc"}]},{name:"Thanh 2 (Thanh sắc)",symbol:"´ (vd: á)",pitch:"35 (Thấp -> Cao)",guide:"Độ cao 35. Âm thanh bắt đầu từ mức trung bình rồi vút nhanh lên cao dứt khoát (giống dấu sắc tiếng Việt nhưng từ thấp đi lên).",examples:[{pinyin:"má",meaning:"Cây đay / Tê"},{pinyin:"pí",meaning:"Da"},{pinyin:"wéi",meaning:"Vì / Làm"},{pinyin:"chóng",meaning:"Côn trùng"}]},{name:"Thanh 3 (Thanh hỏi / nặng)",symbol:"ˇ (vd: ǎ)",pitch:"214 (Xuống thấp -> Vút lên)",guide:"Độ cao 214. Giọng bắt đầu từ mức trung bình thấp, hạ xuống thấp nhất rồi vút lên cao, tạo cảm giác trầm rung dứt khoát.",examples:[{pinyin:"mǎ",meaning:"Con ngựa"},{pinyin:"fěi",meaning:"Phỉ / Ngọc"},{pinyin:"shǔ",meaning:"Đếm / Chuột"},{pinyin:"zhǒng",meaning:"Hạt giống"}]},{name:"Thanh 4 (Thanh huyền nhấn)",symbol:"` (vd: à)",pitch:"51 (Cao nhất -> Thấp nhất)",guide:"Độ cao 51. Đổ dốc dứt khoát từ mức cao nhất xuống mức thấp nhất. Không đọc kéo dài như dấu huyền Việt mà phải đọc nhanh, nhấn mạnh.",examples:[{pinyin:"mà",meaning:"Mắng"},{pinyin:"fèi",meaning:"Phổi / Phí"},{pinyin:"shù",meaning:"Cây / Số"},{pinyin:"zhòng",meaning:"Nặng / Trồng"}]},{name:"Thanh Nhẹ (Khinh thanh / Neutral Tone)",symbol:"Không dấu (vd: a)",pitch:"Nhẹ - Ngắn",guide:"Không mang dấu thanh điệu. Phát âm nhẹ, ngắn, không nhấn giọng (thường xuất hiện ở âm tiết thứ 2 hoặc trợ từ).",examples:[{pinyin:"bàba",meaning:"Bố"},{pinyin:"māma",meaning:"Mẹ"},{pinyin:"xièxie",meaning:"Cảm ơn"},{pinyin:"hǎode",meaning:"Được rồi"}]}],rules:{placement:{title:"Quy Tắc Đánh Dấu Thanh Điệu Chuẩn Mới Nhất",steps:["Thanh điệu luôn được đánh trên nguyên âm chính (a, o, e, i, u, ü).","Thứ tự ưu tiên nguyên âm: a > o > e > i > u > ü (Nếu có 'a' thì ưu tiên đánh lên 'a', không có 'a' thì xét 'o' hoặc 'e').","Trường hợp 'iu' hoặc 'ui': Dấu thanh điệu luôn đặt trên nguyên âm đứng SAU (vd: iú, uǐ).","Khi đánh dấu thanh điệu trên chữ 'i', phải bỏ dấu chấm trên đầu chữ 'i' (vd: ī, í, ǐ, ì)."]},sandhi:{title:"Quy Tắc Biến Điệu Chuẩn Mới Nhất (3 + 3, 不, 一)",cases:[{case_title:"1. Biến điệu Hai thanh 3 đi liền nhau ( 3 + 3 ➔ 2 + 3 )",desc:"Khi 2 âm tiết thanh 3 đi cùng nhau, âm tiết thứ 1 đọc thành thanh 2 ( 2 + 3 ).",example:"Nǐ (3) + hǎo (3) ==> Đọc là: Ní hǎo (2 + 3)"},{case_title:'2. Biến điệu của phó từ "不" ( bù )',desc:'Khi đứng trước từ mang thanh 4, "不" đọc đổi thành thanh 2 ( bú ). Khi đứng trước thanh 1, 2, 3 thì giữ nguyên thanh 4 ( bù ).',example:"Bù + shì (4) ==> Đọc là: Bú shì | Bù + hǎo (3) ==> Đọc là: Bù hǎo"},{case_title:'3. Biến điệu của số từ "一" ( yī )',desc:"Đọc đơn lẻ là thanh 1 ( yī ). Khi đứng trước từ thanh 4 đọc thành thanh 2 ( yí ). Khi đứng trước từ thanh 1, 2, 3 đọc thành thanh 4 ( yì ).",example:"Yī + yàng (4) ==> Đọc là: Yí yàng | Yī + tiān (1) ==> Đọc là: Yì tiān"}]}}},B=[{sound:"bā",options:["bā","pā","mā","fā"],correct:0},{sound:"pó",options:["bó","pó","mò","fó"],correct:1},{sound:"mǐ",options:["bǐ","pǐ","mǐ","fǐ"],correct:2},{sound:"fù",options:["bù","pù","mù","fù"],correct:3},{sound:"dā",options:["dā","tā","nā","lā"],correct:0},{sound:"tè",options:["dé","tè","nè","lè"],correct:1},{sound:"nǐ",options:["dǐ","tǐ","nǐ","lǐ"],correct:2},{sound:"lù",options:["dù","tù","nù","lù"],correct:3},{sound:"gē",options:["gē","kē","hē","lē"],correct:0},{sound:"kǔ",options:["gǔ","kǔ","hǔ","lǔ"],correct:1},{sound:"hā",options:["gā","kā","hā","lā"],correct:2},{sound:"jī",options:["jī","qī","xī","zhī"],correct:0},{sound:"qù",options:["jù","qù","xù","chù"],correct:1},{sound:"xiā",options:["jiā","qiā","xiā","shā"],correct:2},{sound:"zǎo",options:["zǎo","cǎo","sǎo","zhǎo"],correct:0},{sound:"cù",options:["zù","cù","sù","chù"],correct:1},{sound:"sè",options:["zè","cè","sè","shè"],correct:2},{sound:"zhǎo",options:["zǎo","cǎo","zhǎo","chǎo"],correct:2},{sound:"chā",options:["zā","cā","zhā","chā"],correct:3},{sound:"shù",options:["sù","cù","zù","shù"],correct:3},{sound:"rè",options:["lè","nè","shè","rè"],correct:3},{sound:"bàba",options:["bàba","pàpa","màma","fàfa"],correct:0},{sound:"nǐhǎo",options:["líhǎo","nǐhǎo","nǐhào","mǐhǎo"],correct:1},{sound:"lǎoshī",options:["nǎoshī","lǎoshī","rǎoshī","cǎoshī"],correct:1},{sound:"kāfèi",options:["gāfèi","kāfèi","hāfèi","pāfèi"],correct:1},{sound:"hénèi",options:["génèi","kénèi","hénèi","fénèi"],correct:2},{sound:"jīchǎng",options:["jīchǎng","qīchǎng","xīchǎng","zhīchǎng"],correct:0},{sound:"xīguā",options:["jīguā","qīguā","xīguā","shīguā"],correct:2},{sound:"zúqiú",options:["zúqiú","cúqiú","súqiú","zhúqiú"],correct:0},{sound:"cánjiā",options:["zánjiā","cánjiā","sánjiā","chánjiā"],correct:1},{sound:"zhòngguó",options:["zòngguó","còngguó","zhòngguó","chòngguó"],correct:2},{sound:"chūnjié",options:["zūnjié","cūnjié","zhūnjié","chūnjié"],correct:3},{sound:"shuǐguǒ",options:["suǐguǒ","cuǐguǒ","zuǐguǒ","shuǐguǒ"],correct:3},{sound:"rénmín",options:["lénmín","nénmín","shénmín","rénmín"],correct:3},{sound:"bān",options:["bān","bāng","bēn","bēng"],correct:0},{sound:"bāng",options:["bān","bāng","bēn","bēng"],correct:1},{sound:"lín",options:["lín","líng","lún","lóng"],correct:0},{sound:"líng",options:["lín","líng","lún","lóng"],correct:1},{sound:"gēn",options:["gān","gāng","gēn","gēng"],correct:2},{sound:"gēng",options:["gān","gāng","gēn","gēng"],correct:3},{sound:"jīn",options:["jīn","jīng","jūn","jī"],correct:0},{sound:"jīng",options:["jīn","jīng","jūn","jī"],correct:1},{sound:"xīn",options:["xīn","xīng","xūn","xī"],correct:0},{sound:"xīng",options:["xīn","xīng","xūn","xī"],correct:1},{sound:"ér",options:["ér","ěr","èr","érzi"],correct:0},{sound:"lüè",options:["lüè","nüè","jué","xué"],correct:0},{sound:"xué",options:["lüè","nüè","jué","xué"],correct:3},{sound:"yuán",options:["juān","xuān","yuán","quān"],correct:2},{sound:"huā",options:["huā","kuā","shuā","guā"],correct:0},{sound:"kuài",options:["huài","kuài","shuāi","guài"],correct:1},{sound:"duì",options:["tuì","duì","huí","shuǐ"],correct:1},{sound:"chōng",options:["zhōng","chōng","shōng","rōng"],correct:1},{sound:"quān",options:["juān","xuān","yuán","quān"],correct:3},{sound:"wēng",options:["wēng","dēng","tēng","nēng"],correct:0},{sound:"bāo",options:["bāo","pāo","māo","fāo"],correct:0},{sound:"pāo",options:["bāo","pāo","māo","fāo"],correct:1},{sound:"dōu",options:["dōu","tōu","nōu","lōu"],correct:0},{sound:"tōu",options:["dōu","tōu","nōu","lōu"],correct:1},{sound:"gān",options:["gān","kān","hān","lān"],correct:0},{sound:"kān",options:["gān","kān","hān","lān"],correct:1},{sound:"jiān",options:["jiān","qiān","xiān","zhān"],correct:0},{sound:"qiān",options:["jiān","qiān","xiān","zhān"],correct:1},{sound:"zān",options:["zān","cān","sān","zhān"],correct:0},{sound:"cān",options:["zān","cān","sān","zhān"],correct:1},{sound:"zhān",options:["zān","cān","zhān","chān"],correct:2},{sound:"chān",options:["zān","cān","zhān","chān"],correct:3},{sound:"mā",options:["mā","má","mǎ","mà"],correct:0},{sound:"má",options:["mā","má","mǎ","mà"],correct:1},{sound:"mǎ",options:["mā","má","mǎ","mà"],correct:2},{sound:"mà",options:["mā","má","mǎ","mà"],correct:3},{sound:"bā",options:["bā","bá","bǎ","bà"],correct:0},{sound:"bá",options:["bā","bá","bǎ","bà"],correct:1},{sound:"bǎ",options:["bā","bá","bǎ","bà"],correct:2},{sound:"bà",options:["bā","bá","bǎ","bà"],correct:3},{sound:"jī",options:["jī","jí","jǐ","jì"],correct:0},{sound:"jí",options:["jī","jí","jǐ","jì"],correct:1},{sound:"jǐ",options:["jī","jí","jǐ","jì"],correct:2},{sound:"jì",options:["jī","jí","jǐ","jì"],correct:3},{sound:"fúwù",options:["fúwù","fúyù","fúwǔ","fúyǔ"],correct:0},{sound:"mìshū",options:["mìsū","mìshū","mìzhū","mìchū"],correct:1},{sound:"dàtáng",options:["tàtáng","dàtáng","nàtáng","làtáng"],correct:1},{sound:"tútú",options:["dútú","tútú","nútú","lútú"],correct:1},{sound:"nǐhǎo",options:["líhǎo","nǐhǎo","nǐhào","mǐhǎo"],correct:1},{sound:"lúnchuán",options:["núnchuán","lúnchuán","rúnchuán","cúnchuán"],correct:1},{sound:"guójiā",options:["kuójiā","guójiā","huójiā","luójiā"],correct:1},{sound:"kělè",options:["gělè","kělè","hělè","lělè"],correct:1},{sound:"huǒguō",options:["guǒguō","kuǒguō","huǒguō","luǒguō"],correct:2},{sound:"jiéguǒ",options:["jiéguǒ","qiéguǒ","xiéguǒ","zhéguǒ"],correct:0},{sound:"qīn'ài",options:["jīn'ài","qīn'ài","xīn'ài","chīn'ài"],correct:1},{sound:"xuéxí",options:["juéxí","quéxí","xuéxí","shuéxí"],correct:2},{sound:"zìjǐ",options:["zìjǐ","cìjǐ","sìjǐ","zhìjǐ"],correct:0},{sound:"cóngqián",options:["zóngqián","cóngqián","sóngqián","chóngqián"],correct:1},{sound:"sānshí",options:["zānshí","cānshí","sānshí","shānshí"],correct:2},{sound:"chēzhàn",options:["zēzhàn","cēzhàn","zhēzhàn","chēzhàn"],correct:3},{sound:"rìběn",options:["lìběn","nìběn","shìběn","rìběn"],correct:3},{sound:"máobǐ",options:["náobǐ","láobǐ","máobǐ","páobǐ"],correct:2},{sound:"píngguǒ",options:["bíngguǒ","píngguǒ","míngguǒ","fíngguǒ"],correct:1},{sound:"báibǐ",options:["báibǐ","páibǐ","máibǐ","fáibǐ"],correct:0},{sound:"hǎochī",options:["kǎochī","hǎochī","gǎochī","bǎochī"],correct:1},{sound:"xuéxiào",options:["juéxiào","quéxiào","xuéxiào","xiuéxiào"],correct:2}];window.THANH_MAU_DATA=w;window.VAN_MAU_DATA=k;window.THANH_DIEU_DATA=T;window.LARGE_QUIZ_DATABASE=B;let b=0,x=0;function v(){return window.location.hostname==="localhost"||window.location.hostname==="127.0.0.1"||window.location.hostname===""?"http://localhost:5000":window.location.origin||"https://tieng-trung-hong-tai-1.onrender.com"}let y=null;window.speakZhText=function(i){if(!i)return;const o=String(i).replace(/['’]/g,"").trim(),n="baidu-female";y&&(y.pause(),y=null);const t=`${v()}/api/tts?text=${encodeURIComponent(o)}&voice=${n}`;y=new Audio(t),y.play().catch(e=>{console.warn("API Audio error, fallback to Web Speech:",e),M(o)})};function M(i){if("speechSynthesis"in window){window.speechSynthesis.cancel();const o=String(i).replace(/['’]/g,"").trim(),n=new SpeechSynthesisUtterance(o);n.lang="zh-CN",n.rate=.85,window.speechSynthesis.speak(n)}}window.stopAllAudio=function(){y&&(y.pause(),y.currentTime=0,y=null),"speechSynthesis"in window&&window.speechSynthesis.cancel(),document.querySelectorAll("video").forEach(i=>{try{i.pause(),i.currentTime=0}catch{}})};window.backToHub=function(){window.stopAllAudio(),document.getElementById("pinyin-main-hub").style.display="block",document.getElementById("section-reader-card").style.display="none",window.scrollTo({top:0,behavior:"smooth"})};window.openSection=function(i){window.stopAllAudio(),document.getElementById("pinyin-main-hub").style.display="none",document.getElementById("section-reader-card").style.display="block";const o=document.getElementById("section-title-text"),n=document.getElementById("section-badge-text");i==="thanhmau"?(o.textContent="21 Thanh Mẫu (Phụ Âm Đầu)",n.textContent="Thanh Mẫu",j()):i==="vanmau"?(o.textContent="36 Vận Mẫu (Nguyên Âm)",n.textContent="Vận Mẫu",$()):i==="thanhdieu"?(o.textContent="4 Thanh Điệu & Biến Điệu",n.textContent="Thanh Điệu",q()):i==="luyentap"?(o.textContent="Luyện Tập Trắc Nghiệm Nghe Âm",n.textContent="Luyện Tập",renderLuyenTapView()):i==="matran"&&(o.textContent="Bảng Ma Trận Phối Âm Pinyin Cập Nhật Mới",n.textContent="Bảng Pinyin Full",V()),window.scrollTo({top:0,behavior:"smooth"})};window.toggleGroupNote=function(i){const o=document.getElementById(`group-note-${i}`),n=document.getElementById(`group-note-btn-${i}`);o&&(o.classList.contains("show")?(o.classList.remove("show"),n&&(n.innerHTML='<i class="fa-solid fa-chevron-down"></i> Hiện lưu ý nhóm')):(o.classList.add("show"),n&&(n.innerHTML='<i class="fa-solid fa-chevron-up"></i> Ẩn lưu ý nhóm')))};function z(i,o){const n=document.getElementById("section-body-content");let a="";if(o==="thanhmau"&&(a+=`
           <div style="margin-bottom: 20px; font-size: 0.88rem; color: #a7f3d0; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.25); padding: 10px 16px; border-radius: 12px; display: flex; align-items: center; gap: 8px;">
             <i class="fa-solid fa-lightbulb" style="color: #10b981;"></i>
             <span><strong>Ghi chú:</strong> Các âm tô màu xanh lá là âm <strong>BẬT HƠI</strong>.</span>
           </div>
-        `),i.groups.forEach((t,a)=>{o+=`
+        `),i.groups.forEach((t,e)=>{a+=`
           <div class="group-block" style="margin-bottom: 3rem;">
             <div class="group-subtitle">
               <i class="fa-solid fa-layer-group" style="color:#38bdf8;"></i> ${t.name}
             </div>
 
             <!-- Nút bấm ẩn/hiện Lưu ý dạng accordion gọn gàng -->
-            <button id="group-note-btn-${a}" class="group-note-toggle-btn" onclick="toggleGroupNote(${a})">
+            <button id="group-note-btn-${e}" class="group-note-toggle-btn" onclick="toggleGroupNote(${e})">
               <i class="fa-solid fa-chevron-down"></i> Xem lưu ý của nhóm
             </button>
 
             <!-- Lưu ý alert box (Mặc định ẩn, bấm mới hiện) -->
-            <div id="group-note-${a}" class="group-note-alert">
+            <div id="group-note-${e}" class="group-note-alert">
               <div style="font-weight: 700; margin-bottom: 8px; color: #f59e0b; display: flex; align-items: center; gap: 6px; font-size: 0.95rem;">
                 <i class="fa-solid fa-circle-info"></i> Chi tiết lưu ý nhóm:
               </div>
@@ -42,10 +42,10 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css              */import"
                       </tr>
                     </thead>
                     <tbody>
-                      ${t.standalone_table.map(s=>`
+                      ${t.standalone_table.map(r=>`
                         <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
-                          <td style="padding: 8px 14px; color: #cbd5e1; font-weight: 700;">${s.orig}</td>
-                          <td style="padding: 8px 14px; color: #f59e0b; font-weight: 800;">${s.solo}</td>
+                          <td style="padding: 8px 14px; color: #cbd5e1; font-weight: 700;">${r.orig}</td>
+                          <td style="padding: 8px 14px; color: #f59e0b; font-weight: 800;">${r.solo}</td>
                         </tr>
                       `).join("")}
                     </tbody>
@@ -57,19 +57,19 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css              */import"
 
             <!-- Top Row Sound Buttons (Hình 2) -->
             <div class="sound-buttons-row">
-              ${t.items.map((s,c)=>{const r=e==="thanhmau"&&(c===1||["p","t","k","q","c","ch"].includes(s.char));return`
-                  <div class="sound-btn-box ${r?"aspirated-green":""} ${a===b&&c===x?"selected":""}"
-                    onclick="selectSoundItem(${a}, ${c}, '${e}')">
-                    <span>${s.char}</span>
-                    ${r?'<span class="aspirated-tag">Bật hơi</span>':""}
+              ${t.items.map((r,c)=>{const s=o==="thanhmau"&&(c===1||["p","t","k","q","c","ch"].includes(r.char));return`
+                  <div class="sound-btn-box ${s?"aspirated-green":""} ${e===b&&c===x?"selected":""}"
+                    onclick="selectSoundItem(${e}, ${c}, '${o}')">
+                    <span>${r.char}</span>
+                    ${s?'<span class="aspirated-tag">Bật hơi</span>':""}
                   </div>
                 `}).join("")}
             </div>
 
             <!-- Detailed Inspector Panel -->
-            ${q(t.items[a===b?x:0],e)}
+            ${N(t.items[e===b?x:0],o)}
           </div>
-        `}),i.comparison_table){const t=i.comparison_table;o+=`
+        `}),i.comparison_table){const t=i.comparison_table;a+=`
           <div class="group-block">
             <div class="group-subtitle" style="color:#f59e0b;"><i class="fa-solid fa-code-compare"></i> ${t.title}</div>
             <div style="overflow-x:auto; border-radius:16px; border:1px solid var(--border-glass); background:rgba(15,23,42,0.6);">
@@ -82,28 +82,28 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css              */import"
                   </tr>
                 </thead>
                 <tbody>
-                  ${t.rows.map(a=>`
+                  ${t.rows.map(e=>`
                     <tr style="border-bottom:1px solid rgba(255,255,255,0.06);">
-                      <td style="padding:14px; font-weight:700; color:#fff;">${a.feature}</td>
-                      <td style="padding:14px; color:#cbd5e1;">${a.group4}</td>
-                      <td style="padding:14px; color:#cbd5e1;">${a.group5}</td>
+                      <td style="padding:14px; font-weight:700; color:#fff;">${e.feature}</td>
+                      <td style="padding:14px; color:#cbd5e1;">${e.group4}</td>
+                      <td style="padding:14px; color:#cbd5e1;">${e.group5}</td>
                     </tr>
                   `).join("")}
                 </tbody>
               </table>
             </div>
           </div>
-        `}if(i.n_ng_tip){const t=i.n_ng_tip;o+=`
+        `}if(i.n_ng_tip){const t=i.n_ng_tip;a+=`
           <div class="group-block" style="margin-top: 2.5rem;">
             <div class="group-subtitle" style="color: #f59e0b;"><i class="fa-solid fa-lightbulb"></i> ${t.title}</div>
             <div style="overflow-x: auto; border-radius: 16px; border: 1px solid var(--border-glass); background: rgba(15, 23, 42, 0.6); padding: 24px;">
-              ${t.sections.map(a=>`
+              ${t.sections.map(e=>`
                 <div style="margin-bottom: 18px;">
-                  <div style="font-weight: 800; color: #38bdf8; font-size: 1rem; margin-bottom: 8px;">${a.heading}</div>
+                  <div style="font-weight: 800; color: #38bdf8; font-size: 1rem; margin-bottom: 8px;">${e.heading}</div>
                   <ul style="list-style-type: none; padding-left: 4px;">
-                    ${a.bullets.map(s=>`
+                    ${e.bullets.map(r=>`
                       <li style="margin-bottom: 6px; line-height: 1.5; font-size: 0.92rem; color: #cbd5e1; display: flex; gap: 8px;">
-                        <span style="color: #f59e0b; font-weight: 800;">•</span> <span>${s}</span>
+                        <span style="color: #f59e0b; font-weight: 800;">•</span> <span>${r}</span>
                       </li>
                     `).join("")}
                   </ul>
@@ -111,7 +111,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css              */import"
               `).join("")}
             </div>
           </div>
-        `}n.innerHTML=o}function q(i,e){if(!i)return"";const n=i.examples||[],o=n[0]||{pinyin:"—"},t=n[1]||{pinyin:"—"},a=n[2]||{pinyin:"—"},s=n[3]||{pinyin:"—"};return`
+        `}n.innerHTML=a}function N(i,o){if(!i)return"";const n=i.examples||[],a=n[0]||{pinyin:"—"},t=n[1]||{pinyin:"—"},e=n[2]||{pinyin:"—"},r=n[3]||{pinyin:"—"};return`
         <div class="char-detail-inspector">
           <div class="inspector-top-grid">
             <!-- Cột 1: Ký tự to -->
@@ -133,17 +133,17 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css              */import"
             </div>
 
             <!-- Cột 3: Video / Hình mô phỏng khẩu hình chuẩn -->
-            ${(()=>{if(e==="thanhmau"){const r={b:"tm_01_b.mp4",p:"tm_02_p.mp4",m:"tm_03_m.mp4",f:"tm_04_f.mp4",d:"tm_05_d.mp4",t:"tm_06_t.mp4",n:"tm_07_n.mp4",l:"tm_08_l.mp4",g:"tm_09_g.mp4",k:"tm_10_k.mp4",h:"tm_11_h.mp4",j:"tm_12_j.mp4",q:"tm_13_q.mp4",x:"tm_14_x.mp4",zh:"tm_15_zh.mp4",ch:"tm_16_ch.mp4",sh:"tm_17_sh.mp4",r:"tm_18_r.mp4",z:"tm_19_z.mp4",c:"tm_20_c.mp4",s:"tm_21_s.mp4"}[i.char]||"tm_01_b.mp4";return`
+            ${(()=>{if(o==="thanhmau"){const s={b:"tm_01_b.mp4",p:"tm_02_p.mp4",m:"tm_03_m.mp4",f:"tm_04_f.mp4",d:"tm_05_d.mp4",t:"tm_06_t.mp4",n:"tm_07_n.mp4",l:"tm_08_l.mp4",g:"tm_09_g.mp4",k:"tm_10_k.mp4",h:"tm_11_h.mp4",j:"tm_12_j.mp4",q:"tm_13_q.mp4",x:"tm_14_x.mp4",zh:"tm_15_zh.mp4",ch:"tm_16_ch.mp4",sh:"tm_17_sh.mp4",r:"tm_18_r.mp4",z:"tm_19_z.mp4",c:"tm_20_c.mp4",s:"tm_21_s.mp4"}[i.char]||"tm_01_b.mp4";return`
                   <div class="mouth-diagram-box" style="text-align: center; background: rgba(30, 41, 59, 0.9); padding: 12px; border-radius: 16px; border: 1px solid rgba(59, 130, 246, 0.3);">
                     <div class="diagram-title" style="margin-bottom: 8px; font-weight: 800; color: #38bdf8; font-size: 0.88rem; display: flex; align-items: center; justify-content: center; gap: 6px;">
                       <i class="fa-solid fa-circle-play"></i> Mô Phỏng Khẩu Hình (${i.char})
                     </div>
                     <video controls autoplay loop muted style="width: 100%; max-height: 200px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); object-fit: contain;">
-                      <source src="/assets/phonetics/thanh_mau_split/${r}" type="video/mp4">
+                      <source src="/assets/phonetics/thanh_mau_split/${s}" type="video/mp4">
                       Trình duyệt không hỗ trợ xem video.
                     </video>
                   </div>
-                `}else if(e==="vanmau"){const c={a:"vm_01_a.mp4",o:"vm_02_o.mp4",e:"vm_03_e.mp4",i:"vm_04_i.mp4",u:"vm_05_u.mp4",ü:"vm_06_v_u.mp4",ai:"vm_07_ai.mp4",ei:"vm_08_ei.mp4",ao:"vm_09_ao.mp4",ou:"vm_10_ou.mp4",ia:"vm_11_ia.mp4",ie:"vm_12_ie.mp4",ua:"vm_13_ua.mp4",uo:"vm_14_uo.mp4",üe:"vm_15_ve_ue.mp4",iao:"vm_16_iao.mp4",iu:"vm_17_iu.mp4",iou:"vm_17_iu.mp4","iou (-iu)":"vm_17_iu.mp4",uai:"vm_18_uai.mp4",ui:"vm_19_ui.mp4",uei:"vm_19_ui.mp4","uei (-ui)":"vm_19_ui.mp4",an:"vm_20_an.mp4",en:"vm_21_en.mp4",in:"vm_22_in.mp4",ün:"vm_23_vn_un.mp4",ian:"vm_24_ian.mp4",uan:"vm_25_uan.mp4",üan:"vm_26_van_uan.mp4",un:"vm_27_un.mp4",uen:"vm_27_un.mp4","uen (-un)":"vm_27_un.mp4",ang:"vm_28_ang.mp4",eng:"vm_29_eng.mp4",ing:"vm_30_ing.mp4",ong:"vm_31_ong.mp4",iang:"vm_32_iang.mp4",uang:"vm_33_uang.mp4",iong:"vm_34_iong.mp4",ueng:"vm_35_ueng.mp4",er:"vm_36_er.mp4"},r=i.char||"",h=r.split(" ")[0].trim(),g=c[r]||c[h]||"vm_01_a.mp4";return`
+                `}else if(o==="vanmau"){const c={a:"vm_01_a.mp4",o:"vm_02_o.mp4",e:"vm_03_e.mp4",i:"vm_04_i.mp4",u:"vm_05_u.mp4",ü:"vm_06_v_u.mp4",ai:"vm_07_ai.mp4",ei:"vm_08_ei.mp4",ao:"vm_09_ao.mp4",ou:"vm_10_ou.mp4",ia:"vm_11_ia.mp4",ie:"vm_12_ie.mp4",ua:"vm_13_ua.mp4",uo:"vm_14_uo.mp4",üe:"vm_15_ve_ue.mp4",iao:"vm_16_iao.mp4",iu:"vm_17_iu.mp4",iou:"vm_17_iu.mp4","iou (-iu)":"vm_17_iu.mp4",uai:"vm_18_uai.mp4",ui:"vm_19_ui.mp4",uei:"vm_19_ui.mp4","uei (-ui)":"vm_19_ui.mp4",an:"vm_20_an.mp4",en:"vm_21_en.mp4",in:"vm_22_in.mp4",ün:"vm_23_vn_un.mp4",ian:"vm_24_ian.mp4",uan:"vm_25_uan.mp4",üan:"vm_26_van_uan.mp4",un:"vm_27_un.mp4",uen:"vm_27_un.mp4","uen (-un)":"vm_27_un.mp4",ang:"vm_28_ang.mp4",eng:"vm_29_eng.mp4",ing:"vm_30_ing.mp4",ong:"vm_31_ong.mp4",iang:"vm_32_iang.mp4",uang:"vm_33_uang.mp4",iong:"vm_34_iong.mp4",ueng:"vm_35_ueng.mp4",er:"vm_36_er.mp4"},s=i.char||"",l=s.split(" ")[0].trim(),g=c[s]||c[l]||"vm_01_a.mp4";return`
                   <div class="mouth-diagram-box" style="text-align: center; background: rgba(30, 41, 59, 0.9); padding: 12px; border-radius: 16px; border: 1px solid rgba(59, 130, 246, 0.3);">
                     <div class="diagram-title" style="margin-bottom: 8px; font-weight: 800; color: #38bdf8; font-size: 0.88rem; display: flex; align-items: center; justify-content: center; gap: 6px;">
                       <i class="fa-solid fa-circle-play"></i> Mô Phỏng Khẩu Hình (${i.char})
@@ -161,23 +161,23 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css              */import"
             <i class="fa-solid fa-volume-low"></i> Ví Dụ Thực Hành (Bấm vào để nghe phát âm)
           </div>
           <div class="examples-2x2-grid">
-            <div class="vd-box" onclick="speakZhText('${o.pinyin}')">
-              <span class="vd-pinyin">${o.pinyin}</span>
+            <div class="vd-box" onclick="speakZhText('${a.pinyin}')">
+              <span class="vd-pinyin">${a.pinyin}</span>
             </div>
             <div class="vd-box" onclick="speakZhText('${t.pinyin}')">
               <span class="vd-pinyin">${t.pinyin}</span>
             </div>
-            <div class="vd-box" onclick="speakZhText('${a.pinyin}')">
-              <span class="vd-pinyin">${a.pinyin}</span>
+            <div class="vd-box" onclick="speakZhText('${e.pinyin}')">
+              <span class="vd-pinyin">${e.pinyin}</span>
             </div>
-            <div class="vd-box" onclick="speakZhText('${s.pinyin}')">
-              <span class="vd-pinyin">${s.pinyin}</span>
+            <div class="vd-box" onclick="speakZhText('${r.pinyin}')">
+              <span class="vd-pinyin">${r.pinyin}</span>
             </div>
           </div>
         </div>
-      `}window.selectSoundItem=function(i,e,n){b=i,x=e,n==="thanhmau"?j():$()};function j(){z(w,"thanhmau")}function $(){z(k,"vanmau")}function V(){const i=document.getElementById("section-body-content"),e=T;let n=`
+      `}window.selectSoundItem=function(i,o,n){b=i,x=o,n==="thanhmau"?j():$()};function j(){z(w,"thanhmau")}function $(){z(k,"vanmau")}function q(){const i=document.getElementById("section-body-content"),o=T;let n=`
         <div class="group-block">
-          <p style="color:var(--text-sub); font-size:0.98rem; margin-bottom:1.5rem; line-height:1.6;">${e.description}</p>
+          <p style="color:var(--text-sub); font-size:0.98rem; margin-bottom:1.5rem; line-height:1.6;">${o.description}</p>
 
           <!-- Sơ đồ cao độ Thanh điệu từ file Word -->
           <div style="text-align: center; margin-bottom: 2rem; background: rgba(15, 23, 42, 0.6); padding: 18px; border-radius: 16px; border: 1px solid var(--border-glass);">
@@ -188,23 +188,23 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css              */import"
           </div>
 
           <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:1.5rem; margin-bottom:2rem;">
-            ${e.tones.map((o,t)=>`
+            ${o.tones.map((a,t)=>`
               <div class="tone-card-item" style="background:var(--bg-glass, rgba(15,23,42,0.6)); border:2px solid var(--border-glass); border-radius:18px; padding:1.5rem; border-top:5px solid #3b82f6; box-shadow: var(--shadow-sm);">
-                <div style="font-size:1.2rem; font-weight:800; margin-bottom:8px; color:var(--text-primary);">${o.name}</div>
+                <div style="font-size:1.2rem; font-weight:800; margin-bottom:8px; color:var(--text-primary);">${a.name}</div>
                 <div style="margin-bottom:10px;">
-                  <span style="font-size:0.8rem; font-weight:800; background:rgba(59,130,246,0.15); color:#2563eb; padding:4px 12px; border-radius:12px; border:1px solid rgba(59,130,246,0.3);">Độ cao: ${o.pitch}</span>
+                  <span style="font-size:0.8rem; font-weight:800; background:rgba(59,130,246,0.15); color:#2563eb; padding:4px 12px; border-radius:12px; border:1px solid rgba(59,130,246,0.3);">Độ cao: ${a.pitch}</span>
                 </div>
                 <div style="background:var(--bg-secondary, rgba(30,41,59,0.8)); border:1px solid var(--border-glass); padding:8px 14px; border-radius:10px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center;">
                   <span style="color:var(--text-secondary, #94a3b8); font-size:0.9rem; font-weight:700;">Dấu / Ký hiệu:</span>
-                  <span style="font-size:1.4rem; font-weight:800; color:#f59e0b;">${o.symbol}</span>
+                  <span style="font-size:1.4rem; font-weight:800; color:#f59e0b;">${a.symbol}</span>
                 </div>
-                <div style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:1.2rem; line-height:1.6;">${o.guide}</div>
+                <div style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:1.2rem; line-height:1.6;">${a.guide}</div>
                 <div>
                   <div style="font-size:0.75rem; font-weight:800; color:var(--text-muted); margin-bottom:8px; text-transform:uppercase;">VÍ DỤ THỰC HÀNH:</div>
                   <div style="display:flex; flex-direction:column; gap:8px;">
-                    ${o.examples.map(a=>`
-                      <div style="display:flex; justify-content:center; align-items:center; padding:10px 14px; background:var(--bg-secondary, rgba(30,41,59,0.9)); border:1px solid var(--border-glass); border-radius:12px; cursor:pointer;" onclick="speakZhText('${a.pinyin}')">
-                        <span style="font-weight:800; color:#1cb0f6; font-size:1.1rem;">${a.pinyin}</span>
+                    ${a.examples.map(e=>`
+                      <div style="display:flex; justify-content:center; align-items:center; padding:10px 14px; background:var(--bg-secondary, rgba(30,41,59,0.9)); border:1px solid var(--border-glass); border-radius:12px; cursor:pointer;" onclick="speakZhText('${e.pinyin}')">
+                        <span style="font-weight:800; color:#1cb0f6; font-size:1.1rem;">${e.pinyin}</span>
                       </div>
                     `).join("")}
                   </div>
@@ -215,21 +215,21 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css              */import"
         </div>
 
         <div class="group-block">
-          <div class="group-subtitle" style="color:#c084fc;"><i class="fa-solid fa-pen-fancy"></i> ${e.rules.placement.title}</div>
+          <div class="group-subtitle" style="color:#c084fc;"><i class="fa-solid fa-pen-fancy"></i> ${o.rules.placement.title}</div>
           <ul style="color:var(--text-secondary); font-size:0.95rem; line-height:1.8; margin-top:1rem; padding-left:1.4rem;">
-            ${e.rules.placement.steps.map(o=>`<li>${o}</li>`).join("")}
+            ${o.rules.placement.steps.map(a=>`<li>${a}</li>`).join("")}
           </ul>
         </div>
 
         <div class="group-block">
-          <div class="group-subtitle" style="color:#f59e0b;"><i class="fa-solid fa-shuffle"></i> ${e.rules.sandhi.title}</div>
+          <div class="group-subtitle" style="color:#f59e0b;"><i class="fa-solid fa-shuffle"></i> ${o.rules.sandhi.title}</div>
           <div style="display:grid; gap:1.2rem; margin-top:1.2rem;">
-            ${e.rules.sandhi.cases.map(o=>`
+            ${o.rules.sandhi.cases.map(a=>`
               <div style="background:var(--bg-glass, rgba(15,23,42,0.6)); padding:1.2rem; border-radius:14px; border-left:4px solid #f59e0b; border:1px solid var(--border-glass);">
-                <div style="font-weight:800; color:#d97706; font-size:1rem; margin-bottom:6px;">${o.case_title}</div>
-                <div style="color:var(--text-secondary); font-size:0.92rem; margin-bottom:10px;">${o.desc}</div>
-                <div style="background:var(--bg-secondary, rgba(30,41,59,0.9)); padding:8px 16px; border-radius:10px; font-weight:800; color:#1cb0f6; display:inline-block; font-size:0.92rem; cursor:pointer;" onclick="speakZhText(&quot;${(o.example||"").split("==>")[0].trim()}&quot;)">
-                  <i class="fa-solid fa-volume-high"></i> ${o.example}
+                <div style="font-weight:800; color:#d97706; font-size:1rem; margin-bottom:6px;">${a.case_title}</div>
+                <div style="color:var(--text-secondary); font-size:0.92rem; margin-bottom:10px;">${a.desc}</div>
+                <div style="background:var(--bg-secondary, rgba(30,41,59,0.9)); padding:8px 16px; border-radius:10px; font-weight:800; color:#1cb0f6; display:inline-block; font-size:0.92rem; cursor:pointer;" onclick="speakZhText(&quot;${(a.example||"").split("==>")[0].trim()}&quot;)">
+                  <i class="fa-solid fa-volume-high"></i> ${a.example}
                 </div>
               </div>
             `).join("")}
@@ -243,23 +243,23 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css              */import"
             <img src="/assets/phonetics/tone_sandhi_chart.png" alt="Sơ đồ quy tắc biến điệu thanh 3" style="max-width: 100%; height: auto; max-height: 400px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.12); object-fit: contain;">
           </div>
         </div>
-      `;i.innerHTML=n}window.renderLuyenTapView=function(){const i=document.getElementById("section-body-content"),n=[...window.LARGE_QUIZ_DATABASE||[]].sort(()=>Math.random()-.5);let o=0,t=3,a=0,s=!1,c=!1,r=0,h=0,g=0;async function p(l,d=!1){if(!(c||g===0)){c=!0;try{const m=v();await fetch(`${m}/api/quiz/save`,{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+(localStorage.getItem("session_token")||"")},body:JSON.stringify({score:l,stage:g,total:g,combo:h,mode:d?"Pinyin Listening Challenge (Bỏ dở)":"Pinyin Listening Challenge"}),credentials:"include"})}catch(m){console.warn("Lưu điểm số trắc nghiệm thất bại:",m)}}}const u=()=>{!c&&g>0&&p(o,!0)};window.addEventListener("beforeunload",u),window.checkQuizAnswer=function(l){if(s||t<=0)return;s=!0,g++;const d=n[a],m=document.getElementById("quiz-inline-feedback"),C=document.getElementById("quiz-next-btn");if(l===d.correct?(o+=10,r++,r>h&&(h=r),m.innerHTML=`
+      `;i.innerHTML=n}window.renderLuyenTapView=function(){const i=document.getElementById("section-body-content"),n=[...window.LARGE_QUIZ_DATABASE||[]].sort(()=>Math.random()-.5);let a=0,t=3,e=0,r=!1,c=!1,s=0,l=0,g=0;async function p(h,u=!1){if(!(c||g===0)){c=!0;try{const m=v();await fetch(`${m}/api/quiz/save`,{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+(localStorage.getItem("session_token")||"")},body:JSON.stringify({score:h,stage:g,total:g,combo:l,mode:u?"Pinyin Listening Challenge (Bỏ dở)":"Pinyin Listening Challenge"}),credentials:"include"})}catch(m){console.warn("Lưu điểm số trắc nghiệm thất bại:",m)}}}const d=()=>{!c&&g>0&&p(a,!0)};window.addEventListener("beforeunload",d),window.checkQuizAnswer=function(h){if(r||t<=0)return;r=!0,g++;const u=n[e],m=document.getElementById("quiz-inline-feedback"),C=document.getElementById("quiz-next-btn");if(h===u.correct?(a+=10,s++,s>l&&(l=s),m.innerHTML=`
             <div style="background: rgba(16, 185, 129, 0.15); border: 1.5px solid #10b981; color: #34d399; padding: 14px 20px; border-radius: 14px; font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 10px; animation: fadeIn 0.3s ease;">
-              <i class="fa-solid fa-circle-check fa-lg"></i> 🎉 Chính xác! (+10 điểm) - Âm đúng: <strong>${d.sound}</strong>
+              <i class="fa-solid fa-circle-check fa-lg"></i> 🎉 Chính xác! (+10 điểm) - Âm đúng: <strong>${u.sound}</strong>
             </div>
-          `):(t--,r=0,m.innerHTML=`
+          `):(t--,s=0,m.innerHTML=`
             <div style="background: rgba(239, 68, 68, 0.15); border: 1.5px solid #ef4444; color: #f87171; padding: 14px 20px; border-radius: 14px; font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 10px; animation: fadeIn 0.3s ease;">
-              <i class="fa-solid fa-circle-xmark fa-lg"></i> ❌ Chưa đúng! (-1 Mạng 💔) - Âm chính xác: <strong>${d.sound}</strong>
+              <i class="fa-solid fa-circle-xmark fa-lg"></i> ❌ Chưa đúng! (-1 Mạng 💔) - Âm chính xác: <strong>${u.sound}</strong>
             </div>
-          `),document.getElementById("quiz-score-num").innerText=o,document.getElementById("quiz-lives-container").innerHTML=f(t),t<=0){p(o),setTimeout(()=>{_(!1)},1200);return}C.style.display="inline-flex"},window.nextQuizQuestion=function(){if(a++,a>=n.length){p(o),_(!0);return}s=!1,renderQuizItem()};function f(l){let d="";for(let m=0;m<3;m++)m<l?d+='<i class="fa-solid fa-heart" style="color: #ef4444; font-size: 1.3rem;"></i> ':d+='<i class="fa-regular fa-heart" style="color: #64748b; font-size: 1.3rem;"></i> ';return d}function _(l){i.innerHTML=`
+          `),document.getElementById("quiz-score-num").innerText=a,document.getElementById("quiz-lives-container").innerHTML=f(t),t<=0){p(a),setTimeout(()=>{_(!1)},1200);return}C.style.display="inline-flex"},window.nextQuizQuestion=function(){if(e++,e>=n.length){p(a),_(!0);return}r=!1,renderQuizItem()};function f(h){let u="";for(let m=0;m<3;m++)m<h?u+='<i class="fa-solid fa-heart" style="color: #ef4444; font-size: 1.3rem;"></i> ':u+='<i class="fa-regular fa-heart" style="color: #64748b; font-size: 1.3rem;"></i> ';return u}function _(h){i.innerHTML=`
           <div style="max-width:600px; margin:0 auto; text-align:center; background:rgba(15,23,42,0.9); border:2px solid rgba(245,158,11,0.5); padding:40px 32px; border-radius:24px; box-shadow:0 12px 36px rgba(0,0,0,0.5);">
-            <div style="font-size:3rem; margin-bottom:12px;">${l?"🏆":"💀"}</div>
-            <h2 style="font-size:1.8rem; font-weight:900; color:#f59e0b; margin-bottom:8px;">${l?"XUẤT SẮC HOÀN THÀNH!":"TRÒ CHƠI KẾT THÚC!"}</h2>
-            <p style="color:#cbd5e1; font-size:1rem; margin-bottom:24px;">${l?"Bạn đã chinh phục toàn bộ câu hỏi nghe âm!":"Bạn đã dùng hết 3 mạng chơi."}</p>
+            <div style="font-size:3rem; margin-bottom:12px;">${h?"🏆":"💀"}</div>
+            <h2 style="font-size:1.8rem; font-weight:900; color:#f59e0b; margin-bottom:8px;">${h?"XUẤT SẮC HOÀN THÀNH!":"TRÒ CHƠI KẾT THÚC!"}</h2>
+            <p style="color:#cbd5e1; font-size:1rem; margin-bottom:24px;">${h?"Bạn đã chinh phục toàn bộ câu hỏi nghe âm!":"Bạn đã dùng hết 3 mạng chơi."}</p>
             
             <div style="background:rgba(30,41,59,0.8); border:1px solid var(--border-glass); border-radius:16px; padding:20px; margin-bottom:28px;">
               <div style="font-size:0.9rem; color:#94a3b8; font-weight:700; text-transform:uppercase;">Tổng Điểm Đạt Được</div>
-              <div style="font-size:2.8rem; font-weight:900; color:#38bdf8; margin-top:4px;">${o} <span style="font-size:1rem; color:#94a3b8;">ĐIỂM</span></div>
+              <div style="font-size:2.8rem; font-weight:900; color:#38bdf8; margin-top:4px;">${a} <span style="font-size:1rem; color:#94a3b8;">ĐIỂM</span></div>
             </div>
 
             <div style="display:flex; justify-content:center;">
@@ -268,7 +268,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css              */import"
               </button>
             </div>
           </div>
-        `}window.renderQuizItem=function(){const l=n[a];i.innerHTML=`
+        `}window.renderQuizItem=function(){const h=n[e];i.innerHTML=`
           <div style="max-width:640px; margin:0 auto; text-align:center; background:rgba(15,23,42,0.8); border:2px solid rgba(168,85,247,0.4); padding:32px; border-radius:24px; box-shadow:0 12px 36px rgba(0,0,0,0.4);">
             
             <!-- Thống kê Thanh Mạng Quizizz (3 Hearts) & Điểm Số -->
@@ -277,24 +277,24 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css              */import"
                 ${f(t)}
               </div>
               <div style="font-size:0.95rem; color:#94a3b8; font-weight:800;">
-                ĐIỂM: <span id="quiz-score-num" style="color:#34d399; font-size:1.25rem;">${o}</span>
+                ĐIỂM: <span id="quiz-score-num" style="color:#34d399; font-size:1.25rem;">${a}</span>
               </div>
             </div>
 
             <div style="font-size:1.05rem; font-weight:800; color:#c084fc; text-transform:uppercase; margin-bottom:12px; display:flex; align-items:center; justify-content:center; gap:8px;">
-              <i class="fa-solid fa-gamepad"></i> Thử Thách Nghe & Đoán Âm (Câu ${a+1}/${n.length})
+              <i class="fa-solid fa-gamepad"></i> Thử Thách Nghe & Đoán Âm (Câu ${e+1}/${n.length})
             </div>
             
-            <button onclick="speakZhText('${l.sound}')" style="background:linear-gradient(135deg, #a855f7, #6366f1); border:none; color:#fff; padding:16px 36px; border-radius:50px; font-size:1.15rem; font-weight:600; font-family:'Be Vietnam Pro', 'Outfit', sans-serif; text-transform:none; letter-spacing:0.2px; cursor:pointer; margin:14px 0; box-shadow:0 8px 24px rgba(168,85,247,0.4); display:inline-flex; align-items:center; gap:10px; transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            <button onclick="speakZhText('${h.sound}')" style="background:linear-gradient(135deg, #a855f7, #6366f1); border:none; color:#fff; padding:16px 36px; border-radius:50px; font-size:1.15rem; font-weight:600; font-family:'Be Vietnam Pro', 'Outfit', sans-serif; text-transform:none; letter-spacing:0.2px; cursor:pointer; margin:14px 0; box-shadow:0 8px 24px rgba(168,85,247,0.4); display:inline-flex; align-items:center; gap:10px; transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
               <i class="fa-solid fa-volume-high fa-lg"></i> Bấm Để Nghe Âm
             </button>
 
             <div style="font-size:0.95rem; color:#cbd5e1; margin-bottom:20px; font-weight:600;">Chọn đáp án Pinyin bạn nghe được:</div>
 
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:20px;">
-              ${l.options.map((d,m)=>`
+              ${h.options.map((u,m)=>`
                 <button onclick="checkQuizAnswer(${m})" style="background:rgba(30,41,59,0.9); border:1.5px solid rgba(255,255,255,0.15); color:#fff; padding:16px; border-radius:14px; font-size:1.45rem; font-weight:800; cursor:pointer; font-family:'Noto Sans SC', sans-serif; transition:all 0.2s;" onmouseover="this.style.borderColor='#a855f7'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.15)'; this.style.transform='translateY(0)'">
-                  ${d}
+                  ${u}
                 </button>
               `).join("")}
             </div>
@@ -325,16 +325,16 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css              */import"
               <div style="text-align: center; color: var(--text-muted); padding: 30px;"><i class="fa-solid fa-spinner fa-spin fa-2x"></i><br><br>Đang tải bục trao giải từ Server...</div>
             </div>
           </div>
-        `,document.body.appendChild(i)),i.style.display="flex";const e=v();fetch(`${e}/api/leaderboard`).then(n=>n.json()).then(n=>{const o=document.getElementById("leaderboard-list-container");if(!o)return;if(!Array.isArray(n)||n.length===0){o.innerHTML='<div style="text-align: center; color: var(--text-muted); padding: 30px;">Chưa có học viên nào hoàn thành bài học. Hãy là người đầu tiên lên bục vinh quang!</div>';return}const t=n.find(g=>g.rank===1)||n[0],a=n.length>1?n.find(g=>g.rank===2)||n[1]:null,s=n.length>2?n.find(g=>g.rank===3)||n[2]:null,c=n.filter(g=>g!==t&&g!==a&&g!==s);function r(g,p=52,u="#fbbf24"){return g?g.picture?`<img src="${g.picture}" style="width: ${p}px; height: ${p}px; border-radius: 50%; object-fit: cover; border: 3px solid ${u}; box-shadow: 0 0 12px ${u}80;">`:`<div style="width: ${p}px; height: ${p}px; border-radius: 50%; background: linear-gradient(135deg, ${u}, #2563eb); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: ${p*.4}px; border: 3px solid ${u}; box-shadow: 0 0 12px ${u}80;">${g.name?g.name.charAt(0).toUpperCase():"?"}</div>`:""}let h=`
+        `,document.body.appendChild(i)),i.style.display="flex";const o=v();fetch(`${o}/api/leaderboard`).then(n=>n.json()).then(n=>{const a=document.getElementById("leaderboard-list-container");if(!a)return;if(!Array.isArray(n)||n.length===0){a.innerHTML='<div style="text-align: center; color: var(--text-muted); padding: 30px;">Chưa có học viên nào hoàn thành bài học. Hãy là người đầu tiên lên bục vinh quang!</div>';return}const t=n.find(g=>g.rank===1)||n[0],e=n.length>1?n.find(g=>g.rank===2)||n[1]:null,r=n.length>2?n.find(g=>g.rank===3)||n[2]:null,c=n.filter(g=>g!==t&&g!==e&&g!==r);function s(g,p=52,d="#fbbf24"){return g?g.picture?`<img src="${g.picture}" style="width: ${p}px; height: ${p}px; border-radius: 50%; object-fit: cover; border: 3px solid ${d}; box-shadow: 0 0 12px ${d}80;">`:`<div style="width: ${p}px; height: ${p}px; border-radius: 50%; background: linear-gradient(135deg, ${d}, #2563eb); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: ${p*.4}px; border: 3px solid ${d}; box-shadow: 0 0 12px ${d}80;">${g.name?g.name.charAt(0).toUpperCase():"?"}</div>`:""}let l=`
             <div class="lb-podium-stage">
               
               <!-- Rank 2 Podium (Left) -->
-              <div class="lb-podium-slot rank-2-slot ${a?"":"empty"}">
-                ${a?`
+              <div class="lb-podium-slot rank-2-slot ${e?"":"empty"}">
+                ${e?`
                   <div class="lb-podium-crown">🥈</div>
-                  <div class="lb-podium-avatar-wrap">${r(a,52,"#94a3b8")}</div>
-                  <div class="lb-podium-user">${a.name}</div>
-                  <div class="lb-podium-score">${a.completedCount*100} Điểm</div>
+                  <div class="lb-podium-avatar-wrap">${s(e,52,"#94a3b8")}</div>
+                  <div class="lb-podium-user">${e.name}</div>
+                  <div class="lb-podium-score">${e.completedCount*100} Điểm</div>
                 `:'<div class="lb-podium-empty-txt">Đang chờ...</div>'}
                 <div class="lb-podium-stand p-2">
                   <span class="lb-podium-num">2</span>
@@ -345,7 +345,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css              */import"
               <div class="lb-podium-slot rank-1-slot ${t?"":"empty"}">
                 ${t?`
                   <div class="lb-podium-crown gold-crown">👑</div>
-                  <div class="lb-podium-avatar-wrap">${r(t,64,"#fbbf24")}</div>
+                  <div class="lb-podium-avatar-wrap">${s(t,64,"#fbbf24")}</div>
                   <div class="lb-podium-user gold-user">${t.name}</div>
                   <div class="lb-podium-score gold-score">${t.completedCount*100} Điểm</div>
                 `:'<div class="lb-podium-empty-txt">Đang chờ...</div>'}
@@ -355,12 +355,12 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css              */import"
               </div>
 
               <!-- Rank 3 Podium (Right) -->
-              <div class="lb-podium-slot rank-3-slot ${s?"":"empty"}">
-                ${s?`
+              <div class="lb-podium-slot rank-3-slot ${r?"":"empty"}">
+                ${r?`
                   <div class="lb-podium-crown">🥉</div>
-                  <div class="lb-podium-avatar-wrap">${r(s,48,"#e11d48")}</div>
-                  <div class="lb-podium-user">${s.name}</div>
-                  <div class="lb-podium-score">${s.completedCount*100} Điểm</div>
+                  <div class="lb-podium-avatar-wrap">${s(r,48,"#e11d48")}</div>
+                  <div class="lb-podium-user">${r.name}</div>
+                  <div class="lb-podium-score">${r.completedCount*100} Điểm</div>
                 `:'<div class="lb-podium-empty-txt">Đang chờ...</div>'}
                 <div class="lb-podium-stand p-3">
                   <span class="lb-podium-num">3</span>
@@ -368,9 +368,9 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css              */import"
               </div>
 
             </div>
-          `;c.length>0&&(h+='<div class="lb-rest-title">Bảng Xếp Hạng Tiếp Theo</div>',h+='<div class="lb-rest-list">',c.forEach((g,p)=>{const u=g.rank||p+4;h+=`
+          `;c.length>0&&(l+='<div class="lb-rest-title">Bảng Xếp Hạng Tiếp Theo</div>',l+='<div class="lb-rest-list">',c.forEach((g,p)=>{const d=g.rank||p+4;l+=`
                 <div class="leaderboard-item rank-rest">
-                  <span class="lb-rank-num">#${u}</span>
+                  <span class="lb-rank-num">#${d}</span>
                   ${g.picture?`<img src="${g.picture}" class="lb-row-avatar">`:`<div class="lb-row-avatar-placeholder">${g.name.charAt(0)}</div>`}
                   <div style="flex: 1; min-width: 0;">
                     <div class="lb-user-name">${g.name}</div>
@@ -381,4 +381,25 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css              */import"
                     <div class="lb-subtext">${g.studyTimeMinutes} phút</div>
                   </div>
                 </div>
-              `}),h+="</div>"),o.innerHTML=h}).catch(()=>{const n=document.getElementById("leaderboard-list-container");n&&(n.innerHTML='<div style="text-align: center; color: #f87171; padding: 20px;">Khởi tạo bảng xếp hạng thất bại. Vui lòng thử lại sau!</div>')})};
+              `}),l+="</div>"),a.innerHTML=l}).catch(()=>{const n=document.getElementById("leaderboard-list-container");n&&(n.innerHTML='<div style="text-align: center; color: #f87171; padding: 20px;">Khởi tạo bảng xếp hạng thất bại. Vui lòng thử lại sau!</div>')})};function V(){const i=document.getElementById("section-body-content");if(!i)return;const o=["b","p","m","f","d","t","n","l","g","k","h","j","q","x","zh","ch","sh","r","z","c","s"],n=["a","o","e","i","u","ü","ai","ei","ao","ou","an","en","ang","eng","ong","ia","ie","iao","iu","ian","in","iang","ing","iong","ua","uo","uai","ui","uan","un","uang","ueng","üe","üan","ün"],a={b:["a","o","e","i","u","ai","ei","ao","an","en","ang","eng","ie","iao","ian","in","ing"],p:["a","o","e","i","u","ai","ei","ao","ou","an","en","ang","eng","ie","iao","ian","in","ing"],m:["a","o","e","i","u","ai","ei","ao","ou","an","en","ang","eng","ie","iao","iu","ian","in","ing"],f:["a","o","e","u","ei","ou","an","en","ang","eng"],d:["a","e","i","u","ai","ei","ao","ou","an","en","ang","eng","ong","ia","iao","iu","ian","ing","ua","uo","uan","un"],t:["a","e","i","u","ai","ei","ao","ou","an","eng","ong","ia","iao","ian","ing","uo","uan","un"],n:["a","e","i","u","ü","ai","ei","ao","ou","an","en","ang","eng","ong","ia","ie","iao","iu","ian","in","iang","ing","uo","uan","üe"],l:["a","e","i","u","ü","ai","ei","ao","ou","an","en","ang","eng","ong","ia","ie","iao","iu","ian","in","iang","ing","uo","uan","un","üe"],g:["a","e","u","ai","ei","ao","ou","an","en","ang","eng","ong","ua","uo","uai","ui","uan","un","uang"],k:["a","e","u","ai","ei","ao","ou","an","en","ang","eng","ong","ua","uo","uai","ui","uan","un","uang"],h:["a","e","u","ai","ei","ao","ou","an","en","ang","eng","ong","ua","uo","uai","ui","uan","un","uang"],j:["i","ü","ia","ie","iao","iu","ian","in","iang","ing","iong","üe","üan","ün"],q:["i","ü","ia","ie","iao","iu","ian","in","iang","ing","iong","üe","üan","ün"],x:["i","ü","ia","ie","iao","iu","ian","in","iang","ing","iong","üe","üan","ün"],zh:["a","e","i","u","ai","ei","ao","ou","an","en","ang","eng","ong","ua","uo","uai","ui","uan","un","uang"],ch:["a","e","i","u","ai","ei","ao","ou","an","en","ang","eng","ong","ua","uo","uai","ui","uan","un","uang"],sh:["a","e","i","u","ai","ei","ao","ou","an","en","ang","eng","ua","uo","uai","ui","uan","un","uang"],r:["e","i","u","ao","ou","an","en","ang","eng","ong","uo","ui","uan","un"],z:["a","e","i","u","ai","ei","ao","ou","an","en","ang","eng","ong","uo","ui","uan","un"],c:["a","e","i","u","ai","ei","ao","ou","an","en","ang","eng","ong","uo","ui","uan","un"],s:["a","e","i","u","ai","ei","ao","ou","an","en","ang","eng","ong","uo","ui","uan","un"]};let t=`
+        <div style="margin-bottom: 20px; background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.25); border-radius: 16px; padding: 18px; color: #cbd5e1;">
+          <h3 style="margin: 0 0 8px 0; color: #34d399; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-volume-high"></i> Bảng Phối Âm Pinyin Tương Tác
+          </h3>
+          <p style="margin: 0; font-size: 0.9rem; line-height: 1.5;">
+            Bấm vào bất kỳ âm tiết nào trong ma trận dưới đây để nghe phát âm giọng đọc Bắc Kinh chuẩn (Baidu Nữ). Hàng ngang là <strong>Vận Mẫu (36)</strong>, hàng dọc là <strong>Thanh Mẫu (21)</strong>.
+          </p>
+        </div>
+
+        <div style="overflow-x: auto; max-width: 100%; border-radius: 16px; border: 1px solid var(--border-glass, rgba(255,255,255,0.1)); background: var(--bg-secondary, rgba(30,41,59,0.9)); shadow: 0 10px 30px rgba(0,0,0,0.3);">
+          <table style="width: 100%; border-collapse: collapse; text-align: center; font-size: 0.88rem;">
+            <thead>
+              <tr style="background: rgba(15,23,42,0.95); color: #38bdf8; border-bottom: 2px solid rgba(255,255,255,0.1);">
+                <th style="padding: 12px 16px; position: sticky; left: 0; background: #0f172a; z-index: 5; border-right: 2px solid rgba(255,255,255,0.1);">TM \\ VM</th>
+      `;n.forEach(e=>{t+=`<th style="padding: 10px 14px; min-width: 52px; color: #fbbf24; font-weight: 700;">${e}</th>`}),t+="</tr></thead><tbody>",o.forEach((e,r)=>{const c=r%2===0?"rgba(255,255,255,0.02)":"transparent";t+=`<tr style="background: ${c}; border-bottom: 1px solid rgba(255,255,255,0.05);">`,t+=`<td style="padding: 10px 14px; font-weight: 800; color: #38bdf8; position: sticky; left: 0; background: #0f172a; z-index: 4; border-right: 2px solid rgba(255,255,255,0.1);">${e}</td>`;const s=a[e]||[];n.forEach(l=>{if(s.includes(l)){let g=e+l;(e==="j"||e==="q"||e==="x")&&l.startsWith("ü")&&(g=e+l.replace("ü","u")),t+=`
+              <td style="padding: 6px 4px;">
+                <button onclick="speakZhText('${g}')" style="background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.25); color: #38bdf8; font-weight: 700; border-radius: 8px; padding: 6px 10px; cursor: pointer; transition: all 0.15s ease; width: 100%; font-size: 0.88rem;" onmouseover="this.style.background='#38bdf8'; this.style.color='#0f172a';" onmouseout="this.style.background='rgba(56, 189, 248, 0.12)'; this.style.color='#38bdf8';">
+                  ${g}
+                </button>
+              </td>
+            `}else t+='<td style="padding: 6px 4px; color: rgba(255,255,255,0.1); font-size: 0.75rem;">-</td>'}),t+="</tr>"}),t+="</tbody></table></div>",i.innerHTML=t}
