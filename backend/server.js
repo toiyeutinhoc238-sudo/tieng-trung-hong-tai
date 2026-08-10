@@ -66,20 +66,15 @@ let cachedUserData = null;
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors({
-  origin: true,
-  credentials: true
-}));
-app.use(express.json());
-
-// Canonical Domain & Path 301 Permanent Redirect for Googlebot & SEO
+// Canonical Domain & Path 301 Permanent Redirect for Googlebot & SEO (Must be before all middleware)
 app.use((req, res, next) => {
-  const host = req.headers.host || '';
-  const proto = req.headers['x-forwarded-proto'];
+  const rawHost = req.headers['x-forwarded-host'] || req.headers.host || req.hostname || '';
+  const host = String(rawHost).toLowerCase();
+  const proto = (req.headers['x-forwarded-proto'] || '').toLowerCase();
 
   // 1. If accessed directly via onrender.com or www., 301 redirect & set noindex for onrender.com
   if (host.includes('onrender.com') || host.startsWith('www.')) {
-    res.setHeader('X-Robots-Tag', 'noindex, follow');
+    res.setHeader('X-Robots-Tag', 'noindex, nofollow');
     return res.redirect(301, `https://tiengtrunghongtai.online${req.originalUrl}`);
   }
 
@@ -100,6 +95,12 @@ app.use((req, res, next) => {
 
   next();
 });
+
+app.use(cors({
+  origin: true,
+  credentials: true
+}));
+app.use(express.json());
 
 const FRONTEND_DIR = path.join(__dirname, '..', 'frontend');
 const DIST_DIR = path.join(__dirname, '..', 'frontend', 'dist');

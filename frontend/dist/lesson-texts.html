@@ -2,6 +2,11 @@
 <html lang="vi">
 
 <head>
+  <script>
+    if (window.location.hostname.includes('onrender.com') || window.location.hostname.startsWith('www.')) {
+      window.location.replace('https://tiengtrunghongtai.online' + window.location.pathname + window.location.search + window.location.hash);
+    }
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chuyên Trang Luyện Học Bài Khóa (Reading & Dialogue Master) | Tiếng Trung HongTai</title>
@@ -664,6 +669,7 @@
   <script>
     let allReadingTexts = [];
     let currentLevel = 1;
+    let currentVersion = '3.0';
     let currentLessonId = 1;
     let currentDialogueId = 1; // 1 | 2 | 3
     let currentMode = 'quiz'; // 'quiz' (Step 1) | 'read' (Step 2) | 'dictation' (Step 3) | 'translate' (Step 4)
@@ -678,6 +684,11 @@
       }
       if (urlParams.has('level')) {
         currentLevel = parseInt(urlParams.get('level'), 10) || 1;
+      }
+      if (urlParams.has('version')) {
+        currentVersion = urlParams.get('version') || '3.0';
+      } else {
+        currentVersion = localStorage.getItem('active_hsk_version') || '3.0';
       }
 
       updateFixedBadges();
@@ -702,10 +713,10 @@
       const titleBadge = document.getElementById('lesson-title-badge');
       const headerRoadmapBtn = document.getElementById('header-roadmap-btn');
 
-      if (lvlBadge) lvlBadge.textContent = `HSK ${currentLevel}`;
+      if (lvlBadge) lvlBadge.textContent = `HSK ${currentLevel} (${currentVersion})`;
       if (lesBadge) lesBadge.textContent = `Bài ${currentLessonId}`;
-      if (titleBadge) titleBadge.innerHTML = `<i class="fa-solid fa-bookmark"></i> Bài Khóa HSK ${currentLevel} - Bài ${currentLessonId}`;
-      if (headerRoadmapBtn) headerRoadmapBtn.href = `/index.html?tab=lessons&level=${currentLevel}`;
+      if (titleBadge) titleBadge.innerHTML = `<i class="fa-solid fa-bookmark"></i> Bài Khóa HSK ${currentLevel} (${currentVersion}) - Bài ${currentLessonId}`;
+      if (headerRoadmapBtn) headerRoadmapBtn.href = `/index.html?tab=lessons&level=${currentLevel}&version=${currentVersion}`;
     }
 
     function selectDialogue(diagId) {
@@ -1072,7 +1083,7 @@
             </div>
 
             <div style="margin-top:24px; text-align:center;">
-              <a href="/index.html?tab=lessons&level=${currentLevel}" style="background:linear-gradient(135deg, #10b981, #059669); border:none; color:#ffffff; padding:14px 32px; border-radius:14px; font-weight:800; font-size:1rem; cursor:pointer; box-shadow:0 6px 20px rgba(16,185,129,0.4); display:inline-flex; align-items:center; gap:10px; text-decoration:none;">
+              <a href="/index.html?tab=lessons&level=${currentLevel}&version=${currentVersion}" style="background:linear-gradient(135deg, #10b981, #059669); border:none; color:#ffffff; padding:14px 32px; border-radius:14px; font-weight:800; font-size:1rem; cursor:pointer; box-shadow:0 6px 20px rgba(16,185,129,0.4); display:inline-flex; align-items:center; gap:10px; text-decoration:none;">
                 <i class="fa-solid fa-circle-check"></i> Hoàn Thành! Quay Lại Bản Đồ Lộ Trình <i class="fa-solid fa-map-location-dot"></i>
               </a>
             </div>

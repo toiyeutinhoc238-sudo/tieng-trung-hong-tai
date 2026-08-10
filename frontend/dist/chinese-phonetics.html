@@ -2,6 +2,11 @@
 <html lang="vi">
 
 <head>
+  <script>
+    if (window.location.hostname.includes('onrender.com') || window.location.hostname.startsWith('www.')) {
+      window.location.replace('https://tiengtrunghongtai.online' + window.location.pathname + window.location.search + window.location.hash);
+    }
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bảng Phiên Âm Pinyin | Hongtai Chinese</title>
@@ -872,7 +877,7 @@
       color: #38bdf8;
     }
   </style>
-  <script type="module" crossorigin src="/assets/phonetics-BYIUL-DL.js"></script>
+  <script type="module" crossorigin src="/assets/phonetics-Dath9b8t.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
   <link rel="modulepreload" crossorigin href="/assets/particles-Dl8CQUZ9.js">
   <link rel="stylesheet" crossorigin href="/assets/style-DH3dYVvU.css">

@@ -2,19 +2,22 @@
 <html lang="vi">
 
 <head>
+  <script>
+    if (window.location.hostname.includes('onrender.com') || window.location.hostname.startsWith('www.')) {
+      window.location.replace('https://tiengtrunghongtai.online' + window.location.pathname + window.location.search + window.location.hash);
+    }
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ngữ Pháp HSK 1 đến HSK 6 Chuẩn | Hongtai Chinese</title>
-  <meta name="description" content="Tổng hợp toàn bộ ngữ pháp tiếng Trung HSK 1 đến HSK 6 có cấu trúc, ví dụ minh họa Pinyin, giải thích chi tiết dễ hiểu.">
+  <title>Sổ Tay Ngữ Pháp HSK Chuẩn 3.0 & 2.0 (HSK 1 đến HSK 6) | Tiếng Trung HongTai</title>
+  <meta name="description" content="Tổng hợp toàn bộ ngữ pháp tiếng Trung HSK 1 đến HSK 6 phân theo từng bài học chi tiết, có công thức, lưu ý, bảng đối chiếu, ví dụ Pinyin và phát âm chuẩn AI.">
   <link rel="canonical" href="https://tiengtrunghongtai.online/hsk-grammar.html" />
   <link rel="icon" type="image/png" href="/assets/logo-CnsJJgQP.png">
 
   <!-- Google Fonts & FontAwesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
 
   <script>
@@ -75,7 +78,7 @@
         document.documentElement.classList.add('dark');
         document.documentElement.classList.remove('light', 'light-mode');
         if (document.body) {
-          document.body.classList.remove('light', 'light-mode');
+          document.body.classList.remove('light-mode', 'light');
           document.body.classList.add('dark');
         }
         localStorage.setItem('theme', 'dark');
@@ -97,8 +100,8 @@
       btns.forEach(function (btn) {
         if (btn.id === 'particle-toggle-btn' || btn.classList.contains('particle-toggle-btn')) return;
         btn.innerHTML = isLight
-          ? '<i class="fa-solid fa-moon" style="color:#d97706;"></i>'
-          : '<i class="fa-solid fa-sun" style="color:#f59e0b;"></i>';
+          ? '<i class="fa-solid fa-sun" style="color:#f59e0b;"></i>'
+          : '<i class="fa-solid fa-moon" style="color:#60a5fa;"></i>';
       });
     }
 
@@ -109,9 +112,6 @@
       updateParticleToggleBtns(next);
       var cv = document.getElementById('seasonal-particle-canvas');
       if (cv) cv.style.display = next ? 'block' : 'none';
-      if (typeof showToast === 'function') {
-        showToast(next ? 'Đã BẬT hiệu ứng thời tiết mùa' : 'Đã TẮT hiệu ứng thời tiết mùa');
-      }
     };
 
     function updateParticleToggleBtns(enabled) {
@@ -137,88 +137,29 @@
     });
   </script>
 
-  <!-- Direct Embedded Extracted PDF Datasets -->
+  <!-- Structured Datasets -->
 
   <style>
-    .theme-toggle-btn-top {
-      background: rgba(245, 158, 11, 0.15);
-      border: 1px solid rgba(245, 158, 11, 0.4);
-      color: #fbbf24;
-      padding: 10px 16px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 0.88rem;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.2s ease;
-    }
-
-    .theme-toggle-btn-top:hover {
-      background: #f59e0b;
-      color: #000;
-    }
-
-    html.light-mode .theme-toggle-btn-top,
-    body.light-mode .theme-toggle-btn-top {
-      background: rgba(255, 255, 255, 0.65) !important;
-      backdrop-filter: blur(16px) !important;
-      -webkit-backdrop-filter: blur(16px) !important;
-      border: 1px solid rgba(255, 255, 255, 0.8) !important;
-      color: #0f172a !important;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
-    }
-
     :root {
       --bg-dark: #0b0f19;
-      --bg-card: rgba(15, 23, 42, 0.75);
-      --border-glass: rgba(255, 255, 255, 0.1);
+      --bg-card: rgba(15, 23, 42, 0.78);
+      --border-glass: rgba(255, 255, 255, 0.12);
       --primary: #3b82f6;
+      --primary-gradient: linear-gradient(135deg, #3b82f6, #1d4ed8);
       --accent: #f59e0b;
       --text-main: #f8fafc;
       --text-sub: #94a3b8;
+      --font-hanzi: 'Noto Sans SC', sans-serif;
     }
 
     html.light-mode body,
     body.light-mode {
       --bg-dark: #f1f5f9;
-      --bg-card: rgba(255, 255, 255, 0.68);
-      --border-glass: rgba(255, 255, 255, 0.85);
+      --bg-card: rgba(255, 255, 255, 0.85);
+      --border-glass: rgba(0, 0, 0, 0.1);
       --text-main: #0f172a;
       --text-sub: #475569;
       color: #0f172a;
-    }
-
-    html.light-mode .search-input,
-    html.light-mode .filter-select {
-      background: rgba(255, 255, 255, 0.8);
-      color: #0f172a;
-      border-color: #cbd5e1;
-    }
-
-    html.light-mode .grammar-card {
-      background: rgba(255, 255, 255, 0.68) !important;
-      backdrop-filter: blur(24px) saturate(180%) !important;
-      -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
-      border: 1px solid rgba(255, 255, 255, 0.85) !important;
-      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.08) !important;
-    }
-
-    html.dark .grammar-card {
-      background: rgba(15, 23, 42, 0.6) !important;
-      backdrop-filter: blur(24px) saturate(180%) !important;
-      -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
-      border: 1px solid rgba(255, 255, 255, 0.22) !important;
-      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.37) !important;
-    }
-
-    html.light-mode .grammar-title {
-      color: #0f172a;
-    }
-
-    html.light-mode .grammar-body {
-      color: #334155;
     }
 
     * {
@@ -228,252 +169,459 @@
     }
 
     body {
-      font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: var(--bg-dark);
-      background-image:
-        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.12) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(245, 158, 11, 0.08) 0px, transparent 50%);
-      background-attachment: fixed;
+      font-family: 'Be Vietnam Pro', sans-serif;
       color: var(--text-main);
       min-height: 100vh;
-      padding: 24px;
+      padding-bottom: 60px;
     }
 
     .container {
-      max-width: 1240px;
+      max-width: 1200px;
       margin: 0 auto;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
+      padding: 24px 20px;
     }
 
-    /* Header */
     .grammar-header {
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
       flex-wrap: wrap;
       gap: 16px;
-      padding: 24px;
-      background: var(--bg-card);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--border-glass);
-      border-radius: 20px;
-      margin-bottom: 24px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
 
     .brand-box {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
     }
 
     .brand-logo-img {
+      width: 48px;
       height: 48px;
-      width: auto;
-      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
 
     .title-group h1 {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       font-weight: 800;
-      background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+      color: var(--text-main);
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
-      display: flex;
-      align-items: center;
-      gap: 12px;
     }
 
     .title-group p {
+      font-size: 0.9rem;
       color: var(--text-sub);
-      font-size: 0.95rem;
       margin-top: 4px;
     }
 
-    /* Search & Filter Bar */
-    .controls-bar {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
+    .btn-action {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-glass);
+      color: var(--text-main);
+      padding: 9px 16px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: all 0.2s;
     }
 
-    .search-wrap {
+    .btn-action:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    /* Level Selector Tabs */
+    .level-tabs-container {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+    }
+
+    .level-tab-btn {
+      padding: 12px 24px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1.5px solid var(--border-glass);
+      border-radius: 14px;
+      color: var(--text-sub);
+      font-weight: 800;
+      font-size: 0.95rem;
+      cursor: pointer;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .level-tab-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+    }
+
+    .level-tab-btn.active {
+      background: var(--primary-gradient);
+      color: #ffffff;
+      border-color: #60a5fa;
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+    }
+
+    /* Filter & Quick Jump Bar */
+    .toolbar-bar {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-glass);
+      border-radius: 16px;
+      padding: 14px 18px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+
+    .search-box-wrapper {
       flex: 1;
-      min-width: 280px;
+      min-width: 260px;
       position: relative;
     }
 
-    .search-wrap i {
+    .search-box-wrapper i {
       position: absolute;
-      left: 16px;
+      left: 14px;
       top: 50%;
       transform: translateY(-50%);
-      color: var(--text-sub);
-      font-size: 1.1rem;
+      color: #94a3b8;
     }
 
-    .search-input {
+    .search-input-field {
       width: 100%;
-      padding: 14px 16px 14px 48px;
-      background: var(--bg-card);
+      background: rgba(15, 23, 42, 0.6);
       border: 1px solid var(--border-glass);
-      border-radius: 14px;
-      color: #fff;
+      border-radius: 12px;
+      padding: 10px 14px 10px 40px;
+      color: var(--text-main);
       font-size: 0.95rem;
       outline: none;
       transition: all 0.2s;
     }
 
-    .search-input:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    .search-input-field:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
     }
 
-    /* Navigation Tabs */
-    .level-tabs {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      padding-bottom: 8px;
-      margin-bottom: 24px;
-    }
-
-    .tab-btn {
-      padding: 12px 22px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-glass);
-      border-radius: 12px;
-      color: var(--text-sub);
-      font-weight: 700;
-      font-size: 0.95rem;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.2s;
+    .quick-tools-group {
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-wrap: wrap;
     }
 
-    .tab-btn:hover {
-      background: rgba(255, 255, 255, 0.1);
-      color: #fff;
-    }
-
-    .tab-btn.active {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary);
-      box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
-    }
-
-    /* Main Content Reader Container */
-    .reader-card {
+    /* Lesson Block */
+    .lesson-block {
       background: var(--bg-card);
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(14px);
       border: 1px solid var(--border-glass);
       border-radius: 20px;
-      padding: 32px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      min-height: 500px;
+      margin-bottom: 22px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+      transition: all 0.3s ease;
     }
 
-    .reader-header {
+    .lesson-block-header {
+      background: rgba(30, 41, 59, 0.7);
+      padding: 18px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid var(--border-glass);
-      padding-bottom: 18px;
-      margin-bottom: 24px;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      user-select: none;
     }
 
-    .reader-title {
-      font-size: 1.5rem;
+    .lesson-block-header:hover {
+      background: rgba(51, 65, 85, 0.7);
+    }
+
+    .lesson-title-area {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .lesson-number-pill {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: #ffffff;
       font-weight: 800;
-      color: #fff;
+      font-size: 0.85rem;
+      padding: 6px 14px;
+      border-radius: 20px;
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.35);
+    }
+
+    .lesson-title-text {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .lesson-points-count-badge {
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .lesson-body-content {
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Individual Grammar Point Card */
+    .grammar-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1.5px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.25s ease;
+    }
+
+    .grammar-card:hover {
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+
+    .grammar-card.expanded {
+      border-color: #38bdf8;
+      box-shadow: 0 6px 20px rgba(56, 189, 248, 0.15);
+    }
+
+    .grammar-card-header {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .grammar-card-header:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .grammar-card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #f8fafc;
       display: flex;
       align-items: center;
       gap: 12px;
     }
 
-    .level-badge {
-      font-size: 0.8rem;
-      font-weight: 800;
-      padding: 4px 12px;
-      border-radius: 20px;
+    .grammar-index-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
       background: rgba(59, 130, 246, 0.2);
       color: #60a5fa;
-      border: 1px solid rgba(59, 130, 246, 0.3);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.88rem;
+      flex-shrink: 0;
     }
 
-    /* Grammar Formatting Body */
-    .grammar-body {
-      font-size: 1.05rem;
-      line-height: 1.8;
+    .grammar-card-body {
+      padding: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+      background: rgba(15, 23, 42, 0.4);
+      animation: fadeIn 0.25s ease;
+    }
+
+    .grammar-card.expanded .grammar-card-body {
+      display: flex;
+    }
+
+    /* Explanation & Definition */
+    .explanation-box {
+      font-size: 0.96rem;
+      line-height: 1.65;
       color: #cbd5e1;
-      white-space: pre-wrap;
-      word-break: break-word;
     }
 
-    .grammar-body b,
-    .grammar-body strong {
-      color: #fbbf24;
-      font-weight: 700;
+    /* Formula Box */
+    .formula-card {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(147, 51, 234, 0.15));
+      border: 1.5px solid rgba(96, 165, 250, 0.35);
+      border-radius: 14px;
+      padding: 16px 20px;
     }
 
-    .grammar-body .zh-text {
-      color: #60a5fa;
-      font-size: 1.15rem;
-      font-weight: 700;
-      background: rgba(59, 130, 246, 0.1);
-      padding: 2px 6px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .grammar-body .zh-text:hover {
-      background: rgba(59, 130, 246, 0.25);
-    }
-
-    /* Audio Speaker Float Button */
-    .audio-btn {
-      background: rgba(245, 158, 11, 0.2);
-      border: 1px solid #f59e0b;
-      color: #fbbf24;
-      padding: 6px 12px;
-      border-radius: 8px;
-      cursor: pointer;
+    .formula-card-title {
       font-size: 0.85rem;
+      font-weight: 800;
+      color: #60a5fa;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .formula-card-code {
+      font-size: 1.05rem;
       font-weight: 700;
+      color: #fbbf24;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    /* Note Box */
+    .note-card {
+      background: rgba(245, 158, 11, 0.1);
+      border-left: 4px solid #f59e0b;
+      border-radius: 0 12px 12px 0;
+      padding: 14px 18px;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: #fde68a;
+    }
+
+    /* Tables */
+    .custom-grammar-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 8px;
+    }
+
+    .custom-grammar-table th {
+      background: rgba(30, 41, 59, 0.9);
+      color: #38bdf8;
+      font-weight: 700;
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .custom-grammar-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      color: #cbd5e1;
+    }
+
+    .custom-grammar-table tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* Examples Section */
+    .examples-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .example-item-card {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
       transition: all 0.2s;
     }
 
-    .audio-btn:hover {
-      background: #f59e0b;
-      color: #000;
+    .example-item-card:hover {
+      background: rgba(30, 41, 59, 0.9);
+      border-color: rgba(56, 189, 248, 0.3);
     }
 
-    .btn-close {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid var(--border-glass);
-      color: #fff;
-      padding: 10px 18px;
-      border-radius: 12px;
+    .example-zh {
+      font-family: var(--font-hanzi);
+      font-size: 1.15rem;
       font-weight: 700;
-      cursor: pointer;
+      color: #38bdf8;
     }
 
-    .btn-close:hover {
-      background: rgba(239, 68, 68, 0.2);
-      color: #ef4444;
-      border-color: #ef4444;
+    .example-pinyin {
+      font-size: 0.88rem;
+      color: #fbbf24;
+      margin-top: 2px;
+    }
+
+    .example-vi {
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      margin-top: 4px;
+    }
+
+    .btn-speak-audio {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+
+    .btn-speak-audio:hover {
+      background: #38bdf8;
+      color: #0f172a;
+      transform: scale(1.08);
+    }
+
+    /* Exercises Box */
+    .exercise-item-box {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-top: 8px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
-  <script type="module" crossorigin src="/assets/grammar-3DnhHl6g.js"></script>
+  <script type="module" crossorigin src="/assets/grammar-CuQwqUn1.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
   <link rel="modulepreload" crossorigin href="/assets/particles-Dl8CQUZ9.js">
   <link rel="stylesheet" crossorigin href="/assets/style-DH3dYVvU.css">
@@ -486,249 +634,80 @@
     <!-- Header -->
     <div class="grammar-header">
       <div class="brand-box">
-        <img class="brand-logo-img" src="/assets/logo-CnsJJgQP.png" alt="Tiếng Trung Hongtai Logo">
+        <a href="/index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+          <img class="brand-logo-img" src="/assets/logo-CnsJJgQP.png" alt="Tiếng Trung HongTai Logo">
+        </a>
         <div class="title-group">
-          <h1>Chuyên Trang Ngữ Pháp HSK (HSK 1 đến HSK 6)</h1>
-          <p>Hệ thống tra cứu, tổng hợp lý thuyết ngữ pháp toàn diện bóc tách từ bộ tài liệu chuẩn thi HSK</p>
+          <h1>Sổ Tay Ngữ Pháp Chuẩn HSK</h1>
+          <p>Hệ thống cấu trúc, ngữ pháp phân theo từng bài học kèm ví dụ tương tác phát âm</p>
         </div>
       </div>
+
       <div style="display: flex; gap: 8px; align-items: center;">
-        <button id="particle-toggle-btn" class="particle-toggle-btn" onclick="window.toggleSeasonalParticles()" title="Bật/Tắt hiệu ứng mùa">
-          <i class="fa-solid fa-snowflake"></i>
+        <button id="particle-toggle-btn" class="btn-action particle-toggle-btn" onclick="window.toggleSeasonalParticles()" title="Bật/Tắt hiệu ứng mùa">
+          <i class="fa-solid fa-snowflake" style="color: #38bdf8;"></i>
         </button>
-        <button id="theme-toggle" class="theme-toggle-btn-top" onclick="window.toggleTheme()"
-          title="Chuyển đổi Giao diện Sáng/Tối">
-          <i class="fa-solid fa-moon"></i>
+        <button id="theme-toggle" class="btn-action theme-toggle-btn-top" onclick="window.toggleTheme()" title="Chuyển đổi Giao diện Sáng/Tối">
+          <i class="fa-solid fa-moon" style="color: #60a5fa;"></i>
         </button>
-        <a href="/index.html" class="btn-close" title="Trang Chủ"
-          style="background: rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.3); text-decoration:none;">
-          <i class="fa-solid fa-house"></i>
+        <a href="/index.html" class="btn-action" title="Về Trang Chủ">
+          <i class="fa-solid fa-house"></i> Trang Chủ
         </a>
       </div>
     </div>
 
-    <!-- Search & Filter Controls -->
-  <div class="controls-bar">
-    <div class="search-wrap">
-      <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="text" id="search-grammar-input" class="search-input"
-        placeholder="Tim kiếm điểm ngữ pháp, từ khóa (Ví dụ: 把, 被, 比, 越来越, 结果补语)..." onkeyup="filterGrammarContent()">
-    </div>
-  </div>
-
-  <!-- VIP Voice Selection Control Bar (Nổi bật & Chuẩn ElevenLabs) -->
-  <div
-    style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(167, 139, 250, 0.12)); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 14px; padding: 14px 20px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.2);">
-    <div style="display: flex; align-items: center; gap: 10px;">
-      <div
-        style="width: 36px; height: 36px; border-radius: 50%; background: #3b82f6; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
-        <i class="fa-solid fa-microphone"></i>
-      </div>
-      <div>
-        <div style="font-weight: 800; font-size: 0.95rem; color: #fff;">Cấu Hình Giọng Đọc Phát Âm (Voice Engine)</div>
-        <div style="font-size: 0.8rem; color: #94a3b8;">Chọn giọng đọc AI chuẩn để nghe khi bấm vào ví dụ & chữ Hán ngữ
-          pháp</div>
-      </div>
+    <!-- Level Navigation Tabs -->
+    <div class="level-tabs-container" id="level-tabs-bar">
+      <button class="level-tab-btn active" onclick="switchLevel('hsk1')">
+        <i class="fa-solid fa-seedling"></i> HSK 1 (3.0 Mới)
+      </button>
+      <button class="level-tab-btn" onclick="switchLevel('hsk2')">
+        <i class="fa-solid fa-graduation-cap"></i> HSK 2
+      </button>
+      <button class="level-tab-btn" onclick="switchLevel('hsk3')">
+        <i class="fa-solid fa-book-bookmark"></i> HSK 3
+      </button>
+      <button class="level-tab-btn" onclick="switchLevel('hsk4')">
+        <i class="fa-solid fa-star"></i> HSK 4
+      </button>
+      <button class="level-tab-btn" onclick="switchLevel('hsk5')">
+        <i class="fa-solid fa-award"></i> HSK 5
+      </button>
+      <button class="level-tab-btn" onclick="switchLevel('hsk6')">
+        <i class="fa-solid fa-crown"></i> HSK 6
+      </button>
     </div>
 
-    <span style="font-size: 0.85rem; font-weight: 700; color: #10b981;">Giọng Đọc Chuẩn:</span>
-    <select id="grammar-voice-select"
-      style="background: #0f172a; border: 1.5px solid #10b981; color: #fff; padding: 8px 16px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; outline: none; cursor: pointer;">
-      <option value="baidu-female" selected>🇨🇳 Baidu Nữ (Giọng Bắc Kinh Chuẩn)</option>
-    </select>
-  </div>
-
-  <!-- Level Navigation Tabs -->
-  <div class="level-tabs">
-    <button class="tab-btn active" data-level="hsk1" onclick="switchLevelTab('hsk1')">
-      <i class="fa-solid fa-seedling"></i> HSK 1
-    </button>
-    <button class="tab-btn" data-level="hsk2" onclick="switchLevelTab('hsk2')">
-      <i class="fa-solid fa-graduation-cap"></i> HSK 2
-    </button>
-    <button class="tab-btn" data-level="hsk3" onclick="switchLevelTab('hsk3')">
-      <i class="fa-solid fa-book-bookmark"></i> HSK 3
-    </button>
-    <button class="tab-btn" data-level="hsk4" onclick="switchLevelTab('hsk4')">
-      <i class="fa-solid fa-star"></i> HSK 4
-    </button>
-    <button class="tab-btn" data-level="hsk5" onclick="switchLevelTab('hsk5')">
-      <i class="fa-solid fa-award"></i> HSK 5
-    </button>
-    <button class="tab-btn" data-level="hsk6" onclick="switchLevelTab('hsk6')">
-      <i class="fa-solid fa-crown"></i> HSK 6
-    </button>
-  </div>
-
-  <!-- Main Reader Display Area -->
-  <div class="reader-card">
-    <div class="reader-header">
-      <div class="reader-title">
-        <span id="current-title">Tổng Hợp Ngữ Pháp HSK 1</span>
-        <span id="current-badge" class="level-badge">HSK 1</span>
+    <!-- Toolbar: Search & Expand/Collapse Controls -->
+    <div class="toolbar-bar">
+      <div class="search-box-wrapper">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="search-input" class="search-input-field" placeholder="Tìm kiếm điểm ngữ pháp, cấu trúc, từ khóa (vd: 是, 有, 吗, 呢, 会, 时间, 方位词)..." oninput="handleSearch()">
       </div>
-      <div>
-        <a id="download-pdf-btn" href="/grammar-files/ngu phap hsk 1.pdf" download target="_blank" class="audio-btn"
-          style="text-decoration: none;">
-          <i class="fa-solid fa-file-pdf"></i> Tải File Sách PDF
+
+      <div class="quick-tools-group">
+        <button class="btn-action" onclick="toggleAllCards(true)">
+          <i class="fa-solid fa-angles-down"></i> Mở rộng tất cả
+        </button>
+        <button class="btn-action" onclick="toggleAllCards(false)">
+          <i class="fa-solid fa-angles-up"></i> Thu gọn tất cả
+        </button>
+        <a id="download-pdf-btn" href="/grammar-files/ngu phap hsk 1.pdf" download target="_blank" class="btn-action" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.3); color: #fbbf24;">
+          <i class="fa-solid fa-file-pdf"></i> Sách PDF
         </a>
       </div>
     </div>
 
-    <div id="grammar-content-box" class="grammar-body">
-      <div style="text-align: center; padding: 40px; color: var(--text-sub);">
-        <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
-        <p style="margin-top: 12px;">Đang tải toàn bộ dữ liệu ngữ pháp HSK...</p>
+    <!-- Main Dynamic Grammar Container -->
+    <div id="grammar-main-content">
+      <div style="text-align:center; padding: 60px; color: #94a3b8;">
+        <i class="fa-solid fa-spinner fa-spin fa-2x" style="color: #38bdf8; margin-bottom: 12px;"></i>
+        <div>Đang tải nội dung Sổ tay Ngữ Pháp...</div>
       </div>
     </div>
-  </div>
 
   </div>
-  <script>
-    let allGrammarData = {};
-    let currentActiveLevel = 'hsk1';
 
-    function getApiBaseUrl() {
-      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '') {
-        return 'http://localhost:5000';
-      }
-      if (window.location.hostname.includes('tieng-trung-hong-tai-1.onrender.com')) {
-        return 'https://tiengtrunghongtai.online';
-      }
-      return window.location.origin || 'https://tiengtrunghongtai.online';
-    }
-
-    let audioCurrent = null;
-    window.speakZhText = function (text) {
-      if (!text) return;
-
-      const selectEl = document.getElementById('grammar-voice-select');
-      const voice = selectEl ? selectEl.value : (localStorage.getItem('speech_voice') || 'baidu-female');
-      localStorage.setItem('speech_voice', voice);
-
-      if (audioCurrent) {
-        audioCurrent.pause();
-        audioCurrent = null;
-      }
-
-      const API_BASE_URL = getApiBaseUrl();
-      const audioUrl = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(text)}&voice=${voice}`;
-
-      audioCurrent = new Audio(audioUrl);
-      audioCurrent.play().catch(err => {
-        console.warn("ElevenLabs/Baidu Audio Playback error, fallback to Web Speech:", err);
-        if ('speechSynthesis' in window) {
-          window.speechSynthesis.cancel();
-          const u = new SpeechSynthesisUtterance(text);
-          u.lang = 'zh-CN';
-          u.rate = 0.85;
-          window.speechSynthesis.speak(u);
-        }
-      });
-    };
-
-    const pdfMap = {
-      'hsk1': `${getApiBaseUrl()}/grammar-files/ngu phap hsk 1.pdf`,
-      'hsk2': `${getApiBaseUrl()}/grammar-files/ngu phap hsk 2.pdf`,
-      'hsk3': `${getApiBaseUrl()}/grammar-files/ngu phap hsk 3.pdf`,
-      'hsk4': `${getApiBaseUrl()}/grammar-files/ngu phap hsk 4.pdf`,
-      'hsk5': `${getApiBaseUrl()}/grammar-files/ngu phap hsk 5.pdf`,
-      'hsk6': `${getApiBaseUrl()}/grammar-files/ngu phap hsk 6.pdf`
-    };
-
-        function initBuiltInGrammar() {
-      allGrammarData = {
-        'hsk1': { id: 'hsk1', level: 'HSK 1', title: 'Tổng Hợp Ngữ Pháp HSK 1 Chi Tiết', content: "第一课：AI小语，你好！\nCách chào hỏi\nCông thức chung: [Đối tượng được chào] + 好 (hǎo)\nCác ví dụ:\n- Chào bạn: 你好 (nǐ hǎo)\n- Chào ngài/ông/bà (kính trọng): 您好 (nín hǎo)\n- Chào mọi người: 大家好 (dàjiā hǎo)\n- Chào các bạn: 你们好 (nǐmen hǎo)\n- Chào thầy/cô: 老师好 (lǎoshī hǎo)\nLưu ý: Khi chào người lớn tuổi hoặc người cần tôn trọng, nên dù 您好 (nín hǎo) thay vì 你好 (nǐ hǎo).\n第二课：我叫李文\n1. Câu cơ bản: Chủ ngữ + Động từ + Tân ngữ (S + V + O)\nCông thức: S + V + O\nGiải thích: Đây là cấu trúc câu đơn giản nhất trong tiếng Trung.\nVí dụ:\n我爱你。(Wǒ ài nǐ.): Tôi yêu bạn.\n他喝茶。(Tā hē chá.): Anh ấy uống trà.\n2. Trạng ngữ thời gian và địa điểm\nCông thức: Thời gian + Chủ ngữ + Địa điểm + Động từ + Tân ngữ\nGiải thích: Trong tiếng Trung, trạng ngữ chỉ thời gian và địa điểm không bao giờ đứng cuối câu.\nVí dụ:\n我昨天在学校学习。(Wǒ zuótiān zài xuéxiào xuéxí.): Hôm qua tôi học ở trường.\n3. Vị trí của phó từ (不 - không, 很 - rất)\nCông thức: Chủ ngữ + Phó từ + Động từ/Tính từ\nVí dụ:\n他不喜欢。(Tā bù xǐhuan.): Anh ấy không thích.\n苹果很好。(Píngguǒ hěn hǎo.): Táo rất tốt.\n第三课：我是中国人\nCâu chữ “是” \nCâu chữ “是” được dùng để định danh người hoặc sự vật, hình thức phủ định là “不是”\nCông thức: S + (不)是 + O \nVí dụ:  我不是中国人，我是越南人\nTrợ từ kết câu 的\nTrợ từ kết câu “的” được đặt giữ định ngữ và trung tâm ngữ để diễn đạt mối quan hệ sở hữu \nCông thức: Định ngữ + 的 + Trung tâm ngữ\nVí dụ: \n你的名字\n你的老师\nTrong trường hợp trước “的” ( định ngữ) là đại từ nhân xưng, sau “的” (trung tâm ngữ) là từ chỉ quan hệ thân thuộc hoặc danh từ chỉ người, “的” có thể được lược bỏ.\nVí dụ: \n我老师】\n你同学\n我学生\n你妈妈\nBài tập: \nA: 这是我…… （Đáp án: 老师）\nB: 老师，您好！\nCâu hỏi “có… (hay) không?” sử dụng từ “吗” \n Công thức: S + V + O + 吗?\nGiải thích: Dùng để hỏi câu hỏi Có/Không (Yes/No).\nVí dụ:\n你是中国人吗？(Nǐ shì Zhōngguó rén ma?): Bạn là người Trung Quốc phải không?\nBài tập: \nDịch sang tiếng Trung: &quot;Bạn có bận không?&quot;  -&gt; (Đáp án: 你忙吗？)\n第四课：我有两个孩子\nCâu chữ “有”\n Giải thích: &quot;有&quot; (yǒu) nghĩa là &quot;có&quot; biểu thị sự sở hữu . Phủ định là &quot;没有&quot; (méiyǒu).\nCông thức: S + (没)有 + O\nVí dụ:\n我有两个孩子。(Wǒ yǒu liǎng gè háizi.): Tôi có hai đứa con.\n我没有姐姐。(Wǒ méiyǒu jiějie.): Tôi không có chị gái.\nBài tập:\nDịch: Tôi có hai con gái. Bạn có anh trai không?\n(Đáp án: 我有两个女儿。你有哥哥吗？)\nCách diễn đạt các con số\nTrong tiếng Trung Quốc, các con số có thể được viết dưới 2 dạng: số Ả Rập (1,2,3…) và chữ Hán (一，二，三...)\nCách viết và đọc các số từ 0-99 \n零 (líng)\n0\n一 (yī)\n1\n二 (èr)\n2\n三 (sān)\n3\n四 (sì)\n4\n五 (wǔ)\n5\n六 (liù)\n6\n七 (qī)\n7\n八 (bā)\n8\n九 (jiǔ)\n9\n十 (shí)\n10\n十一\n11\n十二\n12\n十三\n13\n十四\n14\n十五\n15\n十六\n16\n十七\n17\n十八\n18\n十九\n19\n二十\n20\n二十一\n21\n二十二\n22\n二十三\n23\n二十四\n24\n二十五\n25\n二十六\n26\n二十七\n27\n二十八\n28\n二十九\n29\n三十\n30\n三十一\n31\n三十二\n32\n三十三\n33\n三十四\n34\n三十五\n35\n三十六\n36\n三十七\n37\n三十八\n38\n三十九\n39\n四十\n40\n四十一\n41\n四十二\n42\n四十三\n43\n四十四\n44\n四十五\n45\n四十六\n46\n四十七\n47\n四十八\n48\n四十九\n49\n五十\n50\n五十一\n51\n五十二\n52\n五十三\n53\n五十四\n54\n五十五\n55\n五十六\n56\n五十七\n57\n五十八\n58\n五十九\n59\n六十\n60\n六十一\n61\n六十二\n62\n六十三\n63\n六十四\n64\n六十五\n65\n六十六\n66\n六十七\n67\n六十八\n68\n六十九\n69\n七十\n70\n七十一\n71\n七十二\n72\n七十三\n73\n七十四\n74\n七十五\n75\n七十六\n76\n七十七\n77\n七十八\n78\n七十九\n79\n八十\n80\n八十一\n81\n八十二\n82\n八十三\n83\n八十四\n84\n八十五\n85\n八十六\n86\n八十七\n87\n八十八\n88\n八十九\n89\n九十\n90\n九十一\n91\n九十二\n92\n九十三\n93\n九十四\n94\n九十五\n95\n九十六\n96\n九十七\n97\n九十八\n98\n九十九\n99\nCách viết và đọc các số từ 100-10000\nHàng chục ngàn\nHàng ngàn\nHàng Trăm \nHàng chục\nĐơn vị\n万\n千\n百\n十\nwàn \nqiān \nbǎi \nshí \nVí dụ: \n100: 一百 (yì bǎi)\n205: 二百零五 (èr bǎi líng wǔ)\n410: 四百一十 (sì bǎi yī shí)\n222: 二百二十二 (èr bǎi èr shí èr)\n777: 七百七十七 (qī bǎi qī shí qī)\n1000: 一千 (yì qiān)\n3008: 三千零八 (sān qiān líng bā)\n6067: 六千零六十七 (liù qiān líng liù shí qī)\n5490: 五千四百九十 (wǔ qiān sì bǎi jiǔ shí)\n9999: 九千九百九十九 (jiǔ qiān jiǔ bǎi jiǔ shí jiǔ)\n10000: 一万 (yí wàn)\nChú ý: Cách đọc và viết số 2\n Sử dụng 二 (èr)\nKhi đọc số, hàng đơn vị, hàng chục thì đọc là 二 (èr), hàng trăm có thể đọc là 二 (èr) hay 两 (liǎng) đều được, nhưng thường đọc là 二 (èr) nhiều hơn\n二十\n二百/两百\n二百二十二/ 两百二十二\nTrong phân số, số thập phân, số thứ tự, thứ, ngày, tháng, năm… đều đọc là 二 (èr)\nSử dụng 两 (liǎng)\nKhi đọc số, biểu thị số 2 cho đơn vị ngàn, chục ngàn trở lên đều đọc là 两 (liǎng)\n两千\n两万\n两万两千\nĐứng trước lượng từ\n两个人\n两本书\nTrợ từ ngữ khí “呢” （1）\nTrợ từ 呢 (ne) dùng để hỏi ngược lại về đối tượng/tình huống đã được nhắc đến trước đó.\nCấu trúc: [Đối tượng/Sự vật] + 呢?\nÝ nghĩa: &quot;Còn... thì sao?&quot; / &quot;Thế còn... thế nào?&quot;\nVí dụ:\n我是老师，你呢？: Tôi là giáo viên, còn bạn thì sao? \n我是越南人，你呢？\ndanh lượng từ và cấu trúc danh lượng\nCấu trúc: Số từ + Lượng từ + Danh từ\nNguyên tắc: Khi muốn chỉ số lượng của sự vật, bạn bắt buộc phải dùng lượng từ đứng giữa số từ và danh từ. Không được bỏ qua lượng từ.\nVí dụ:\n三 (số) + 个 (lượng từ) + 人 (danh từ) = 三个人 (Ba người)\n一 (số) + 本 (lượng từ) + 书 (danh từ) = 一本书 (Một quyển sách)\n两个学生\n四口人\nLưu ý: Mỗi danh từ thường đi với một lượng từ riêng. Nếu chưa rõ lượng từ, bạn có thể dùng 个 (gè) – đây là lượng từ phổ biến nhất, dùng được cho người và nhiều vật dụng khác.\n第五课：今天我休息\n1. Cách diễn đạt thời gian (1)\nTháng \n一月 (yī yuè): Tháng 1\n二月 (èr yuè): Tháng 2\n三月 (sān yuè): Tháng 3\n四月 (sì yuè): Tháng 4\n五月 (wǔ yuè): Tháng 5\n六月 (liù yuè): Tháng 6\n七月 (qī yuè): Tháng 7\n八月 (bā yuè): Tháng 8\n九月 (jiǔ yuè): Tháng 9\n十月 (shí yuè): Tháng 10\n十一月 (shí yī yuè): Tháng 11\n十二月 (shí èr yuè): Tháng 12\nThứ \n星期一 (xīngqī yī): Thứ 2\n星期二 (xīngqī èr): Thứ 3\n星期三 (xīngqī sān): Thứ 4\n星期四 (xīngqī sì): Thứ 5\n星期五 (xīngqī wǔ): Thứ 6\n星期六 (xīngqī liù): Thứ 7\n星期日 / 星期天 (xīngqī rì / tiān): Chủ nhật\nCông thức diễn đạt Năm - Tháng - Ngày - Thứ\nCông thức: [Năm]年 (nián) + [Tháng]月 (yuè) + [Ngày]日/号 (rì/hào) + [Thứ]星期 (xīngqī)\n(Lưu ý: Tiếng Trung sắp xếp theo thứ tự từ lớn đến bé, măm đọc từng số 1)\nVí dụ:\n2026年8月2日, 星期日 (èr líng èr liù nián bā yuè èr rì, xīngqī rì): Chủ nhật, ngày 2 tháng 8 năm 2026.\n5月15日, 星期二 (wǔ yuè shí wǔ rì, xīngqī èr): Thứ 3, ngày 15 tháng 5.\nBài tập: \nPhần 1: Sắp xếp các cụm từ thành câu hoàn chỉnh\n是 / 2026年 / 8月/ 今天 / 星期日/ 2日\n8月 / 明天 / 3日/ 星期一 / 是\n是/ 1日 / 8月/ 1日 / 星期六 / 昨天\n生日 / 12月 / 我的 / 是/ 20日\nĐáp án:\n今天是2026年8月2日，星期日。\n明天是8月3日，星期一。\n昨天是8月1日，星期六。\n我的生日是12月20日。\nPhần 2: Dịch từ Việt sang Trung\n(Sử dụng từ vựng: Hôm nay - 今天 / Hôm qua - 昨天 / Ngày mai - 明天)\nHôm nay là ngày 5 tháng 5.\nHôm qua là ngày 10 tháng 8, thứ sáu.\nNgày mai là thứ mấy?\nNgày mai là ngày 6 tháng 9, thứ bảy.\nSinh nhật tôi là ngày 20 tháng 12.\nĐáp án\n今天是5月5日。(Jīntiān shì wǔ yuè wǔ rì.)\n昨天是8月10日，星期五。(Zuótiān shì bā yuè shí hào, xīngqī wǔ.)\n明天星期几？(Míngtiān xīngqī jǐ?)\n明天是9月6日，星期六。(Míngtiān shì jiǔ yuè liù rì, xīngqī liù.)\n我的生日是12月20日。(Wǒ de shēngrì shì shí èr yuè èr shí rì.)\n2. Câu vị ngữ danh từ\nKhái niệm: Là loại câu dùng danh từ hoặc cụm danh từ làm vị ngữ để miêu tả, không cần dùng động từ &quot;是&quot;.\nCông thức: S + N (Danh từ)\nỨng dụng: Thường dùng để chỉ thời gian, ngày tháng, thời tiết, tuổi tác, giá cả.\nVí dụ:\n今天星期日 (Hôm nay là Chủ nhật)\n今天八月三号 (Hôm nay là ngày 3 tháng 8)\n我二十岁 (Tôi 20 tuổi)\n3. Động từ năng nguyện “会”\nGiải thích: Biểu thị khả năng hoặc kỹ năng làm được việc gì đó thông qua quá trình học tập hoặc luyện tập.\nCông thức:\nKhẳng định: S + 会 + V + O\nPhủ định: S + 不会 + V + O\nNghi vấn: S + 会 + V + O + 吗?\nVí dụ:\n我会说中文。(Wǒ huì shuō Zhòngwén): Tôi biết nói tiếng Trung.\n他不会开车。(Tā bù huì kāichē.): Anh ấy không biết lái xe.\n你会做饭吗？(Nǐ huì zuòfàn ma?): Bạn có biết nấu ăn không?\n第六课：你的手机话是多少?\nĐộng từ năng nguyện '想'\nGiải thích: Biểu thị mong muốn hoặc ý định làm một việc gì đó.\nCông thức:\nKhẳng định: S + 想 + V + O\nPhủ định: S + 不想 + V + O\nNghi vấn: S + 想 + V + O + 吗? / S + 想 + V + 什么?\nVí dụ:\n我想去超市。(Wǒ xiǎng qù chāoshì.): Tôi muốn đi siêu thị.\n妈妈不想买电脑。(Māma bù xiǎng mǎi diànnǎo.): Mẹ không muốn mua máy tính.\n你想吃什么？(Nǐ xiǎng chī shénme?): Bạn muốn ăn cái gì?\nCâu liên động (1)\n 1, Chỉ mục đích (Đi đâu để làm gì)\nCấu trúc: S + 去/来 + [Địa điểm] + V2 + O\nVí dụ:\n我去超市买东西。(Tôi đi siêu thị mua đồ.)\n他来学校学习。(Anh ấy đến trường học tập.)\n2, Chỉ phương thức (Làm bằng cách nào)\nCấu trúc: S + [Phương tiện/Cách thức] + V2 + [Địa điểm]\nVí dụ:\n我坐出租车去医院。(Tôi ngồi taxi đi bệnh viện.)\n他开车去超市。(Anh ấy lái xe đi siêu thị.)\nLưu ý: Trong câu liên động, các hành động diễn ra theo trình tự thời gian: Hành động 1 xảy ra trước (di chuyển hoặc cách thức), Hành động 2 xảy ra sau (mục đích). \nĐại từ nghi vấn “怎么”\n Giải thích: Dùng để hỏi về cách thức hoặc phương thức thực hiện hành động (Làm thế nào? Bằng cách nào?).\nCông thức: S + 怎么 + V + O?\nVí dụ (Từ vựng bài 1-6):\n你怎么去学校? (Nǐ zěnme qù xuéxiào?): Bạn đi đến trường bằng cách nào?\n你怎么去超市? (Nǐ zěnme qù chāoshì?): Bạn đi siêu thị bằng cách nào?\n这个电脑怎么买? (Zhège diànnǎo zěnme mǎi?): Máy tính này mua như thế nào?\n第七课：我晚上六点半下班\nCách diễn đạt thời gian (2)\na, sử dụng 点 và 分 để diễn tả thời điểm\nCông thức: [Số giờ] + 点 + [Số phút] + 分\nLưu ý:\n30 phút thường dùng 半 (bàn - rưỡi) thay cho 30 分.\nNếu số phút nhỏ hơn 10 (từ 1-9), bắt buộc phải có chữ 零 (líng) ở giữa.\nVí dụ:\n6:30: 六点半 (liù diǎn bàn)\n8:05: 八点零五分 (bā diǎn líng wǔ fēn) \nb, Sử dụng các danh từ chỉ thời gian như 上午，中午，下午，晚上 để diễn tả khoảng thời gian\nCác từ này (上午, 中午, 下午, 晚上) đóng vai trò là trạng ngữ chỉ thời gian.\nVị trí: Đứng trước hoặc sau Chủ ngữ (S).\nDanh sách từ vựng:\n上午 (shàngwǔ): Buổi sáng\n中午 (zhōngwǔ): Buổi trưa\n下午 (xiàwǔ): Buổi chiều\n晚上 (wǎnshang): Buổi tối\nVí dụ:\n晚上八点我下班。(Wǎnshang bā diǎn wǒ xiàbān.): 8 giờ tối tôi tan làm.\n我下午去看电影。(Wǒ xiàwǔ qù kàn diànyǐng.): Chiều nay tôi đi xem phim.\nBài tập:\nBài 1: Viết số giờ bằng tiếng Trung (Sử dụng 点 và 分)\nLưu ý: Nhớ quy tắc 30 phút = 半 (bàn) và phút từ 1-9 cần có 零 (líng).\n07:00 : ____________\n08:30 : ____________\n10:05 : ____________\n14:15 (2 giờ 15 phút chiều): ____________\n20:40 : ____________\nBài 2: Sắp xếp từ thành câu đúng (Vị trí của từ chỉ buổi)\nQuy tắc: Danh từ chỉ thời gian (上午, 中午, 下午, 晚上) đứng trước hoặc sau Chủ ngữ.\n我 / 去 / 电影院 / 下午 / 看电影 (Tôi chiều nay đi rạp chiếu phim xem phim)\n吃饭 / 晚上 / 七点 / 我们 (Chúng ta tối 7 giờ ăn cơm)\n上午 / 有 / 我 / 课 / 十点 (Sáng nay 10 giờ tôi có tiết học)\nBài 3: Dịch từ Việt sang Trung\nBây giờ là 6 giờ 30 phút sáng.\nTối nay 8 giờ tôi tan làm.\nTrưa nay tôi ăn cơm ở nhà hàng.\nĐÁP ÁN (Bạn làm xong hãy kiểm tra nhé!)\nBài 1:\n七点 (Qī diǎn)\n八点半 (Bā diǎn bàn)\n十点零五分 (Shí diǎn líng wǔ fēn)\n下午两点十五分 (Xiàwǔ liǎng diǎn shíwǔ fēn)\n晚上八点四十分 (Wǎnshang bā diǎn sìshí fēn)\nBài 2:\n我下午去电影院看电影。(Hoặc: 下午我去电影院看电影。)\n晚上七点我们吃饭。(Hoặc: 我们晚上七点吃饭。)\n上午十点我有课。(Hoặc: 我上午十点有课。)\nBài 3:\n现在是早上六点半。(Xiànzài shì zǎoshang liù diǎn bàn.)\n晚上八点我下班。(Wǎnshang bā diǎn wǒ xiàbān.)\n中午我在饭店吃饭。(Zhōngwǔ wǒ zài fàndiàn chīfàn.)\nTrợ từ ngữ khí “吧” （1）\n  Giải thích: Đặt cuối câu để biểu thị ý đề nghị, gợi ý, khuyên nhủ hoặc yêu cầu người nghe cùng thực hiện hành động (dịch là: nhé, nhỉ, đi, thôi).\nCông thức: S + V + O + 吧\nVí dụ (Từ vựng bài 1-6):\n我们去超市吧。(Wǒmen qù chāoshì ba.): Chúng ta đi siêu thị nhé.\n明天我们去书店吧。(Míngtiān wǒmen qù shūdiàn ba.): Ngày mai chúng ta đi nhà sách nhé.\n我们吃饭吧。(Wǒmen chīfàn ba.): Chúng ta ăn cơm thôi/đi.\nVị trí của phó từ, từ ngữ chỉ thời gian khi làm trạng ngữ \n Vị trí của phó từ (Ví dụ: 不, 很, 也)1\nPhó từ dùng để bổ nghĩa cho động từ hoặc tính từ, vị trí luôn đứng trước động từ hoặc tính từ.\nCông thức: S + Phó từ + V / Adj\nVí dụ:\n他不喜欢包子。(Anh ấy không thích bánh bao.)\n苹果很好。(Táo rất tốt.)\n我也想去。(Tôi cũng muốn đi.)\n Vị trí của từ ngữ chỉ thời gian (Ví dụ: 昨天, 今天, 明天)\nTrạng ngữ chỉ thời gian dùng để xác định thời điểm hành động xảy ra. Quy tắc quan trọng nhất trong tiếng Trung là không bao giờ đặt trạng ngữ thời gian ở cuối câu.\nCông thức: (S) + Thời gian + (S) + V + O(Có thể đứng trước hoặc sau Chủ ngữ)\nVí dụ:\n我昨天在学校学习。(Hôm qua tôi học ở trường.)\n今天我去超市。(Hôm nay tôi đi siêu thị.)\n明天我买手机。(Ngày mai tôi mua điện thoại.)\nLưu ý: Nếu trong câu có cả trạng ngữ thời gian và trạng ngữ địa điểm, trật tự ưu tiên là: Thời gian + Địa điểm + Động từ. \nTrợ từ ngữ khí 呢 （2）\nDùng cuối câu để biểu thị một sự thực đã được xác nhận. Nó giúp khẳng định thông tin mà người nói đưa ra là một thực tế. \nVí dụ: \n+我明天下午两点还上课呢。\n+ 妹妹会做列宁哥哥菜呢。 \n第八课：我爸爸也在医院工作\nPhương vị từ \n Phương vị từ trong tiếng Trung thường đứng sau danh từ để xác định vị trí của sự vật đó.\nCông thức: [Danh từ] + [Phương vị từ]\nVí dụ:\n桌子 (cái bàn) + 上 (trên) = 桌子上 (trên bàn)\n房间 (căn phòng) + 里 (trong) = 房间里 (trong phòng)\n超市 (siêu thị) + 前 (trước) = 超市前 (trước siêu thị)\nCác phương vị từ thường gặp\nPhương vị từ\nNghĩa\nVí dụ \n上 (shàng)\nTrên\n桌子上 (Trên bàn)\n下 (xià)\nDưới\n桌子下 (Dưới bàn)\n里 (lǐ)\nTrong\n房间里 (Trong phòng)\n外 (wài)\nNgoài\n房间外 (Ngoài phòng)\n前 (qián)\nTrước\n超市前 (Trước siêu thị)\n后 (hòu)\nSau\n家后 (Sau nhà)\nLưu ý: Bạn có thể thêm hậu tố 边 (biān) vào sau để chỉ phương hướng rõ ràng hơn, ví dụ: 前边 (phía trước), 外边 (phía bên ngoài) \nGiới từ“在”\n Giới từ “在” (zài) dùng để chỉ vị trí hoặc nơi chốn của người, sự vật hoặc nơi diễn ra hành động.\n1. Chỉ vị trí (đang ở đâu)\nCông thức: S + 在 + Địa điểm\nVí dụ:\n他在学校。(Anh ấy ở trường.)\n我不在家。(Tôi không ở nhà.)\n2. Chỉ nơi diễn ra hành động\nCông thức: S + 在 + Địa điểm + V + O\nVí dụ:\n我在房间里看电影。(Tôi xem phim ở trong phòng.)\n我昨天在学校学习。(Hôm qua tôi học ở trường.)\n他在医院工作。(Anh ấy làm việc ở bệnh viện.)\n3. Động từ năng nguyện “能”\n  Ý nghĩa: &quot;Có thể&quot;\n&quot;能&quot; dùng để biểu thị:\nKhả năng: biểu thị có năng lực, điều kiện hoặc khả năng làm một việc gì đó\nSự cho phép: Hỏi hoặc cấp phép làm gì đó.\n Công thức\nKhẳng định: S + 能 + V + O\nPhủ định: S + 不能 + V + O\nNghi vấn: S + 能 + V + O + 吗?\n Ví dụ\nKhả năng: 我明天能去超市。(Ngày mai tôi có thể đi siêu thị.)\nSự cho phép: 我能问你一个问题吗？(Tôi có thể hỏi bạn một câu hỏi không?)\nPhủ định: 你不能在这里看电影。(Bạn không thể/không được xem phim ở đây.)\n第九课：我明天上午在学校学习\nCâu tồn hiện (1)\na, Câu tồn hiện với “有” (yǒu) - Biểu thị sự tồn tại\nCấu trúc này dùng để thông báo rằng tại một địa điểm có người hoặc vật nào đó.\nCông thức: [Địa điểm] + 有 + [Số lượng/Lượng từ] + [Danh từ]\nÝ nghĩa: Tại [địa điểm] có [cái gì/ai].\nVí dụ (từ vựng bài 1-9):\n房间里有一只小猫。(Fángjiān lǐ yǒu yì zhī xiǎo māo - Trong phòng có một con mèo nhỏ.) \n超市前有一家电影院。(Chāoshì qián yǒu yì jiā diànyǐngyuàn - Trước siêu thị có một rạp chiếu phim.) \n医院里有很多病人。(Yīyuàn lǐ yǒu hěn duō bìngrén - Trong bệnh viện có rất nhiều bệnh nhân.) \n桌子上有一本书。(Zhuōzi shàng yǒu yì běn shū - Trên bàn có một quyển sách.) \nb, Câu tồn hiện với “是” (shì) - Biểu thị sự xác định\nCấu trúc này dùng để khẳng định hoặc xác định cái gì đó chính là cái nằm ở vị trí đó (thường dùng khi muốn giới thiệu cụ thể đó là cái gì/ai).\nCông thức: [Địa điểm] + 是 + [Danh từ]\nÝ nghĩa: Tại [địa điểm] chính là [cái gì/ai đó].\nVí dụ :\n前边是学校。(Qiánbian shì xuéxiào - Phía trước là trường học.) \n超市前是我的家。(Chāoshì qián shì wǒ de jiā - Trước siêu thị là nhà tôi.) \n那儿是我的房间。(Nàr shì wǒ de fángjiān - Chỗ kia là phòng của tôi.)\nTrật tự của từ ngữ chỉ thời gian và từ ngữ chỉ nơi chốn khi cùng làm trạng ngữ \n Trong tiếng Trung, khi trong câu xuất hiện cả trạng ngữ chỉ thời gian và trạng ngữ chỉ địa điểm, trật tự ưu tiên luôn tuân theo quy tắc: Thời gian đứng trước địa điểm.1\nCông thức:\n[Thời gian] + [Địa điểm] + [Động từ] + [Tân ngữ]\n(Lưu ý: Thời gian có thể đứng trước hoặc sau Chủ ngữ)\nVí dụ minh họa :\nTôi hôm qua học ở trường:\n我 (S) + 昨天 (Thời gian) + 在学校 (Địa điểm) + 学习 (V).\nHoặc: 昨天 (Thời gian) + 我 (S) + 在学校 (Địa điểm) + 学习 (V).\nNgày mai tôi đi siêu thị:\n我 (S) + 明天 (Thời gian) + 去超市 (Địa điểm + V).\nHoặc: 明天 (Thời gian) + 我 (S) + 去超市 (Địa điểm + V).\nTối nay 8 giờ tôi tan làm ở bệnh viện:\n我 (S) + 晚上八点 (Thời gian) + 在医院 (Địa điểm) + 下班 (V).\nMẹo ghi nhớ: Khi nào? (Thời gian) -&gt; Ở đâu? (Địa điểm) -&gt; Làm gì? (Động từ)\n“第” dùng để biểu thị số thứ tự \n  “第” (dì) được dùng để tạo thành số thứ tự, giúp xác định thứ tự, vị trí hoặc cấp bậc (ví dụ: thứ nhất, thứ hai, bài một, bài hai...).\nCông thức chung\n第 (dì) + Số từ + (Lượng từ) + Danh từ\nVí dụ:\n第一课 (Dì yī kè): Bài học số 1 (Bài 1).\n第二楼 (Dì èr lóu): Tầng 2.\n第三个 (Dì sān gè): Cái thứ 3.\n第十课：这儿的苹果真便宜！\nCách diễn đạt số tiền \n Trong tiếng Trung, cách nói tiền chia làm hai trường phái: Khẩu ngữ (nói chuyện hằng ngày) và Văn viết (trên hóa đơn/ngân hàng).\nDưới đây là bảng phân cấp đơn vị tiền tệ để bạn dễ so sánh:\nĐơn vị\nVăn nói (Khẩu ngữ)\nVăn viết (Trang trọng)\nGiá trị quy đổi\nĐơn vị chính\n块 (kuài)\n元 (yuán)\n1 đơn vị\nĐơn vị 1/10\n毛 (máo)\n角 (jiǎo)\n0.1 đơn vị\nĐơn vị 1/100\n分 (fēn)\n分 (fēn)\n0.01 đơn vị\nQuy tắc quy đổi:\n1 块 (kuài) = 10 毛 (máo)\n1 毛 (máo) = 10 分 (fēn)\nCách diễn đạt\n1. Các trường hợp cơ bản (chỉ có đơn vị 块)\nKhi số tiền là số chẵn, bạn chỉ cần đọc số và thêm 块.\n3 tệ: 3块 (Sān kuài)\n10 tệ: 10块 (Shí kuài)\n20 tệ: 20块 (Èrshí kuài)\n2. Trường hợp có số lẻ (块 và 毛)\nĐây là cách dùng phổ biến nhất khi mua đồ ăn, nước uống.\n1.5 tệ (1 đồng 5 hào): 1块5 (Yī kuài wǔ) hoặc 1块5毛 (Yī kuài wǔ máo)\n2.8 tệ (2 đồng 8 hào): 2块8 (Liǎng kuài bā) hoặc 2块8毛 (Liǎng kuài bā máo)\n3. Trường hợp có cả hào và xu (块, 毛, 分)\nKhi cần nói chính xác đến từng xu (đơn vị 分 - fēn).\n1.55 tệ (1 đồng 5 hào 5 xu): 1块5毛5 (Yī kuài wǔ máo wǔ fēn)\n3.26 tệ (3 đồng 2 hào 6 xu): 3块2毛6 (Sān kuài èr máo liù fēn)\n4. Trường hợp đặc biệt: Có số 0 ở giữa\nKhi có số 0 ở hàng hào (ví dụ 1.05 tệ), bạn phải thêm từ 零 (líng - không) để nối.\n1.05 tệ (1 đồng 0 hào 5 xu): 1块零5分 (Yī kuài líng wǔ fēn)\n5.02 tệ (5 đồng 0 hào 2 xu): 5块零2分 (Wǔ kuài líng èr fēn)\nChú ý:\nTrong khẩu ngữ hàng ngày, người Trung Quốc thường lược bỏ từ 毛 (máo) nếu sau đó có số khác. Ví dụ: 1块5 (Yī kuài wǔ) thay vì phải nói đầy đủ là 1块5毛.\nNếu không có xu (分), bạn có thể dừng lại ở số đếm cuối cùng.\nSố 2 ở đơn vị tiền tệ thường dùng 两 (liǎng) thay cho 二 (èr). Ví dụ: 2.5 tệ đọc là 两块五 (Liǎng kuài wǔ) sẽ nghe tự nhiên hơn.\n2. Câu vị ngữ tính từ \nTính từ có thể trực tiếp làm vị ngữ, trước tính từ có thể thêm phó từ chỉ mưc độ hay phó từ phủ định.\nKhẳng định: Chủ ngữ + (Phó từ mức độ như 很/真/非常) + Tính từ.\nVí dụ: 那个苹果好吃。\nPhủ định: Chủ ngữ + 不 + Tính từ.\nVí dụ: 我不忙 (Tôi không bận).\nNghi vấn: Chủ ngữ + Tính từ + 吗?\nVí dụ: 你忙吗？ (Bạn có bận không?)\n3. Đại từ nghi vấn “怎么样” \n    Đại từ nghi vấn “怎么样” (zěnmeyàng)  thường đặt ở cuối câu dùng để hỏi về trạng thái, tính chất của sự vật, tình hình sức khỏe/công việc, hoặc dùng để đưa ra lời gợi ý, hỏi ý kiến. \nVí dụ: \n这个杯子怎么样? (Cái cốc này thế nào? )\n这件衣服怎么样? (Bộ quần áo này thế nào? )\n我们去看电影，怎么样? (Chúng ta đi xem phim nhé?) \n第十一课：我读大学了\nCâu hỏi chính phản\nCâu hỏi chính phản dùng để đặt câu hỏi lựa chọn Có/Không (Yes/No).\nLưu ý quan trọng: Khi dùng dạng câu này, tuyệt đối không được dùng trợ từ &quot;吗&quot; ở cuối câu.\nCông thức\nVới động từ: S + V + 不/ 没 + V + (O)?\nVới tính từ: S + Adj + 不 + Adj?\nVí dụ: \n你想不想去超市？ \n你去没去学校？\n这件衣服好看不好看？\nPhó từ chỉ thời gian “在/正在”\nDùng để diễn tả hành động đang diễn ra tại thời điểm nói (tương đương với nghĩa &quot;đang&quot; trong tiếng Việt). \n正在 (zhèngzài): Nhấn mạnh hành động đang diễn ra ngay lúc này (cụ thể hơn). \n在 (zài): Dùng để mô tả hành động đang xảy ra.\nCông thức: S + (正在 / 在) + V + (O) + (呢) \n&quot;呢&quot; ở cuối câu thường được dùng trong khẩu ngữ để tăng tính tự nhiên, gần gũi.\nCâu phủ định (Hành động không đang diễn ra)\nKhi diễn tả &quot;không đang làm gì&quot;, bắt buộc dùng &quot;没 / 没有&quot; (méi / méiyǒu), tuyệt đối không được dùng &quot;不&quot;. \nĐộng từ năng nguyện “要”\nĐộng từ năng nguyện “要” (yào) trong tiếng Trung biểu thị mong muốn mạnh mẽ, ý định hoặc kế hoạch chắc chắn sẽ thực hiện (khác với “想” - chỉ là dự định trong đầu, chưa chắc chắn). \nVí dụ: \n他今天要和小朋友玩。\n妈妈要去超市。\n第十二课：昨天下雪了\nCâu phi chủ vị\nCâu phi chủ vị (còn gọi là câu không có cấu trúc chủ ngữ - vị ngữ) là những câu mà trong đó thành phần chủ ngữ (S) và vị ngữ (V) không rõ ràng hoặc không tồn tại. \nVí dụ: \n下雨了。 \n下雪了。 \n上课了。\n真漂亮！\nTrợ từ ngữ khí “了” (1)\nTrợ từ ngữ khí “了” (1) được dùng ở cuối câu để diễn tả sự thay đổi trạng thái hoặc một tình huống mới đã xảy ra.\n Khẳng định\nDiễn tả việc gì đó đã xảy ra hoặc trạng thái đã thay đổi.\nCông thức: S + V + 了\nVí dụ:\n下雨了。 (Xiàyǔ le): Trời mưa rồi. (Trước đó không mưa).\n我生病了。 (Wǒ shēngbìng le): Tôi bị ốm rồi. (Trước đó khỏe).\n我吃饭了。 (Wǒ chīfàn le): Tôi ăn cơm\nPhủ định\nKhi muốn diễn tả hành động chưa xảy ra hoặc không có sự thay đổi đó, bạn bắt buộc dùng “没(有)” và phải bỏ “了”.\nCông thức: S + 没(有) + V\nVí dụ:\nKhẳng định: 下雨了 (Trời mưa rồi) -&gt; Phủ định: 没下雨 (Không mưa / Chưa mưa).\nKhẳng định: 我吃饭了 (Tôi ăn cơm rồi) -&gt; Phủ định: 我没吃饭 (Tôi chưa ăn cơm).\nKhẳng định: 我看了一个电影 (Tôi đã xem một bộ phim) -&gt; Phủ định: 我没看电影 (Tôi không xem phim).\nCấu trúc “太……了”\nCấu trúc “太……了” dùng để biểu thị mức độ cao, thường dùng trong câu cảm thán để bày tỏ cảm xúc của người nói \nCông thức: S + 太 + Tính từ + 了\n2. Ví dụ \n太好了！ (Tài hǎo le!): Tốt quá! / Tuyệt quá!\n太漂亮了！ (Tài piàoliang le!): Đẹp quá!\n太贵了！ (Tài guì le!): Đắt quá!\n太冷了！ (Tài lěng le!): Lạnh quá!\n太好看了！ (Tài hǎokàn le!): Đẹp quá! / Hay quá!\n第十三课：请给我一杯茶\nĐộng từ năng nguyện “可以”\nĐộng từ năng nguyện “可以” (kěyǐ) trong tiếng Trung có nghĩa là &quot;có thể&quot;, dùng để biểu thị sự cho phép (được làm gì) hoặc khả năng (có thể thực hiện việc gì).\nKhẳng định: S + 可以 + V + O\nPhủ định: S + 不可以 + V + O\nNghi vấn: S + 可以 + V + O + 吗?\nVí dụ: \n我可以问你一个问题吗？(Wǒ kěyǐ wèn nǐ yīgè wèntí ma?) \n我可以坐这儿吗？(Wǒ kěyǐ zuò zhèr ma?) \n这儿不可以睡觉。(Zhèr bù kěyǐ shuìjiào.) \n你可以给我打个电话。(Nǐ kěyǐ gěi wǒ dǎ gè diànhuà.) \nCấu trúc “động từ+一下” \nCấu trúc &quot;Động từ + 一下&quot; dùng để làm mềm ngữ khí, khiến lời đề nghị hoặc yêu cầu trở nên nhẹ nhàng, lịch sự và tự nhiên hơn. Nó diễn tả việc thực hiện hành động trong thời gian ngắn hoặc &quot;thử&quot; làm gì đó. \nVí dụ: \n你可以打电话问一下。\n请休息一下。\n你看一下。\nCâu có hai tân ngữ (1)\nCâu có hai tân ngữ là loại câu mà động từ có thể kết hợp với hai tân ngữ cùng lúc: một tân ngữ chỉ người (tân ngữ gián tiếp) và một tân ngữ chỉ vật/sự việc (tân ngữ trực tiếp).\nCông thức chung: Chủ ngữ + Động từ + Tân ngữ chỉ người + Tân ngữ chỉ vậ\na. Động từ &quot;给&quot; (gěi - đưa/cho)\nTrong câu, &quot;给&quot; biểu thị hành động trao, đưa cho ai đó cái gì.\nCông thức: S + 给 + Người + Vật\nVí dụ :\n请给我一杯茶。\n你可以给我打个电话。\nb. Động từ &quot;问&quot; (wèn - hỏi)\nDùng để hỏi ai đó về điều gì hoặc hỏi ai đó một câu hỏi.\nCông thức: S + 问 + Người + Vật/Câu hỏi\nVí dụ :\n我可以问你一个问题吗？\n第十四课：我看了一个电影\nTrợ từ động thái “了” (2)\nTrợ từ động thái “了” (2) được đặt ngay sau động từ để biểu thị hành động đã xảy ra hoặc đã hoàn thành.\n. Công thức\nKhẳng định: S + V + 了 + (O)\nPhủ định: S + 没(有) + V + (O) (Lưu ý: Bắt buộc bỏ &quot;了&quot;)\nNghi vấn: S + V + 了 + O + 吗? (Hoặc V + 了 + O + 没有?)\nVí dụ: \n我看了一个电影。 (Wǒ kàn le yīgè diànyǐng.): Tôi đã xem một bộ phim. \n我买了新电脑。 (Wǒ mǎi le xīn diànnǎo.): Tôi đã mua máy tính mới. \n我没看电影。 (Wǒ méi kàn diànyǐng.): Tôi không xem phim / Tôi chưa xem phim.\nPhân biệt với “了” (1):\n“了” (1) đứng cuối câu (bài 12): Chỉ sự thay đổi trạng thái (Ví dụ: 下雨了 - Trời đã mưa rồi).\n“了” (2) đứng sau động từ (bài 14): Chỉ hành động đã hoàn thành.\nTừ li hợp\nTừ ly hợp (离合词) là những từ trong tiếng Trung có cấu tạo gồm 2 phần: Động từ (V) + Tân ngữ (O).Nguyên tắc quan trọng:\nCó thể tách rời: Khi muốn thêm trợ từ động thái (le, guo), từ chỉ số lượng, hoặc thời lượng, bạn phải chèn vào giữa V và O.\nKhông thêm tân ngữ phía sau: Vì bản thân từ đã chứa một tân ngữ, bạn không được thêm một tân ngữ khác vào sau từ đó.\nBảng từ ly hợp thường gặp (HSK 1):\nTừ ly hợp\nNghĩa\nVí dụ tách từ\n睡觉 (shuìjiào)\nĐi ngủ\n睡了一觉 (Đã ngủ một giấc)\n吃饭 (chīfàn)\nĂn cơm\n吃了一顿饭 (Đã ăn một bữa cơm)\n打电话 (dǎ diànhuà)\nGọi điện\n打了个电话 (Đã gọi một cuộc điện thoại)\n开车 (kāichē)\nLái xe\n开了两小时车 (Đã lái xe 2 tiếng)\n上课 (shàngkè)\nLên lớp\n上了一节课 (Đã lên một tiết học)\n下班 (xiàbān)\nTan làm\n下了班 (Đã tan làm)\n做饭 (zuòfàn)\nNấu ăn\n做了很多饭 (Đã nấu rất nhiều cơm)\nPhó từ chỉ phạm vi “都”\nPhó từ “都” (dōu) có nghĩa là “đều”, dùng để tổng kết tất cả đối tượng trong câu.\nVị trí:\nLuôn đứng sau chủ ngữ (phải ở dạng số nhiều) và đứng trước động từ/tính từ.\nCông thức:\nKhẳng định: Chủ ngữ (số nhiều) + 都 + Động từ/Tính từ.\nPhủ định: Chủ ngữ (số nhiều) + 都 + 不 + Động từ/Tính từ.\nVí dụ:\nKhẳng định:\n我们都喜欢吃苹果。 (Chúng tôi đều thích ăn táo.)\n他们都很忙。 (Họ đều rất bận.)\nPhủ định:\n我们都不想去超市。 (Chúng tôi đều không muốn đi siêu thị.)\nLưu ý: Chủ ngữ của “都” bắt buộc phải là số nhiều (ví dụ: 我们 - chúng tôi, 你们 - các bạn, 他们 - họ, hoặc A và B). \n第十五课：大兴机场见\nCâu ghép đẳng lập “……，还/也……”\nDùng để kết nối hai vế câu có cùng chủ ngữ, diễn tả việc vừa có tính chất/hành động này, lại vừa có tính chất/hành động kia.\nCông thức: Chủ ngữ + V/Adj 1 + ..., (Chủ ngữ) + 还/也 + V/Adj 2.\nCách dùng:\n也 (cũng): Liệt kê các trạng thái hoặc hành động tương đồng.\n还 (còn/lại còn): Bổ sung thêm thông tin hoặc nhấn mạnh một khía cạnh khác.\nVí dụ:\n他会做饭，也会开车。(Anh ấy biết nấu ăn, cũng biết lái xe.)\n这件衣服很好看，还很便宜。(Bộ quần áo này rất đẹp, lại còn rất rẻ.)" },
-        'hsk2': { id: 'hsk2', level: 'HSK 2', title: 'Tổng Hợp Ngữ Pháp HSK 2 Chi Tiết', content: "trọng)                    Chào ngài\nvị trí hoặc tuổi tác cao hơn, thể hiện sự kính   nín hǎo.\n您 nǐn  ngài (dùng để xưng hô với đối phương- người có 您好。\ntôi là Tiều Vương\nXin chào mọi người,\nXiǎo Wáng\ndàjiā hǎo, wǒ shì\n大家 dàjiā  mọi người                  大家好，我是小王。\ntự  âm\nHán Phiên Nghĩa                     Ví dụ\n，他们，她们 thì ngữ pháp tiếng trung HSK2 bạn cần nám thêm các đại từ nhân xưng sau:\nNgoài những đại từ nhân xưng đã xuất hiện ở cấp độ HSK 1 như: 我，你，我们，你们，他，她\nĐại từ nhân xưng\n1. Đại từ tiếng Trung\ntốt nhất.\ntheo. Vì thế đây sẽ là nơi đầy đủ tổng hợp ngữ pháp HSK 2 để các bạn ôn luyệnthi HSK 2\nBên cạnh đó sẽ là những gợi ý liên quan bổ sung giải thích thêm từng điểm ngữ pháp kèm\ncác bạn có thể tải file PDF của các tài liệu ngữ pháp cơ bản ở cuối bài viết.\nbạnmới bắt đầu học tiếng Trungthông qua bài viếttổng hợp ngữ pháp dưới đây. Ngoài ra,\nSau khi chinh phụcngữ pháp HSK 1, Zhong Ruan chiasẻ tiếpngữ pháp HSK 2cho các\n\n● 3 公斤 /3 gōngjīn/: 3 kg\nBiểu thị trọng lượng\n● ....\n● 第三/dì sān/: thứ 3\n● 第二/dì èr/:thứ 2\n● 第一/dì yī/: thứ nhất\n● 第+ số đếm\nBiểu thị thứ tự\n2. Chữ số trong ngữ pháp HSK 2\nCạn ly vì hạnh phúc của các bạn.\nWèi nǐmen de xìngfú gānbēi.\n为你们的幸福干杯。\nVí dụ:\nỞ ngữ pháp tiếng Trung HSK2 chúng ta cần nắm thêm cách dùng với từ 为/wèi: vì cài gì?\nCác đại từ nghi vấn đã học ỏ HSK 1 là: 谁，什么，哪，哪儿，多少，几，怎么，怎么样.\nĐại từ nghi vấn\nMỗi ngày anh ấy dậy lúc 5 giờ.\\\ntā měitiān 5 diǎn qǐchuáng.\n他每天5点起床。\nVí dụ:\n每/měi: mỗi\nĐại từ chỉ thị: 这，那，那儿，这儿，哪儿\nmèo\nChúng nó đều là\ntāmen dōu shì māo\n它们 tāmen đại từ ngôi thứ ba số nhiều, chỉ đồ vật, con vật  它们都是猫。\nNó là con mèo\ntā shì māo\n它 tā   đại từ ngôi thứ ba số ít, chỉ đồ vật, con vật    它是猫。\n\nPhó từ chỉ thời gian\nTôi và bạn bè cùng nhau học tập\nWǒ hé péngyǒu yīqǐ xuéxí\n我和朋友一起学习。\n一起 /yīqǐ /: cùng nhau\nPhó từ chỉ phạm vi\nTôi thích ăn bánh cảo nhất\nWǒ zuì xǐhuān chī jiǎozi.\n我最喜欢吃饺子。\n● 最 /zuì /: nhất\nCái váy này vô cùng đẹp\nZhè tiáo qúnzi fēicháng hǎokàn.\n这条裙子非常好看。\n● 非常 /fēicháng /: vô cùng\nPhó từ chỉ mức độ:\nBạn đừng ra ngoài\n/nǐ bié qù chūlái./\n你别去出来。\nPhó từ phủ định: 别/bié/: đừng làm gì\n4. Phó từ\n每次/měi cì/: mỗi lần\nDùng sau “每”\n等一下/děng yīxià/: đợi một chút\nDùng sau số từ\n3. Lượng từ\n\nPhó từ chỉ tần suất: 再 /zài/: lại, diễn tả sự lặp lại\nTiểu Mỹ thật xinh đẹp\nXiǎo Měi zhēn piàoliang\n小美真漂亮。\n● 真 /zhēn/: thật là\nAnh ấy vẫn chưa ăn xong\nTā hái méi chī wán.\n他还没吃完。\n● 还 /hái/: vẫn\nTôi cũng có 1 quyển sách như thế này\nwǒ yěyǒu yī běn zhèyàng de shū.\n我也有一本这样的书。\n● 也 /yě/: cũng\nPhó từ chỉ ngữ khí\n7 giờ là tôi đi học rồi\nwǒ 7 diǎn jiù shàngxuéle\n我7点就上学了。\nhành động trước\n● 就 /jiù /: là,mà,.. diễn ra sự việc sẽ diễn ra trong thời điểm đó, hoặc nối tiếp\nAnh ấy đã về nhà rồi\ntā yǐjīng huí jiāle\n他已经回家了。\n● 已经 /yǐjīng /: diễn tả hành động đã xảy ra\nTôi đang viết chữ Hán\nwǒ zhèngzài xiě hànzì\n我正在写汉字。\n● 正在 /zhèngzài /: diễn tả hành động đang diễn ra, nhấn mạnh quá trình\n\nviên\nTiều Vương cảm ơn giáo\ngǎnxiè.\nphương hướng)    Xiǎo Wáng xiàng lǎoshī\n向        xiàng hướng...(dùng để chỉ 小王向老师感谢。\nTôi cao hơn anh ấy.\nsánh)        wǒ bǐ tā gāo.\n比        bǐ   so với... (dùng để so  我比他高。\nrất tốt cho cơ thể.\nThường xuyên luyện tập\n+ động từ/ tính từ                     shēntǐ hěn hǎo\nChủ ngữ + 对 + tân ngữ                  jīngcháng duànliàn duì\n对        duì  đối với...      经常锻炼对身体很好。\n2km.\nTừ đây đến công viên còn\nhái yǒu 2 gōnglǐ\nCóng zhèlǐ dào gōngyuán\n从...         cóng  từ...đến        从这里到公园还有2公里。\nâm\nHán tự/ Cấu trúc   Phiên Nghĩa        Ví dụ\n6. Giới từ\ntā 70 suì le, dànshì shēntǐ hěn hǎ\n他70岁了，但是身体很好。\n● 但是 /dànshì/: nhưng mà\nBởi vì mưa rất to nên chúng tôi không thể đến công viên chạy bộ.\nyīnwèi yǔ hěn dà suǒyǐ wǒmen bùnéng qù gōngyuán pǎobù.\n因为雨很大所以我们不能去公园跑步。\n● 因为 /yīnwèi /...所以 /suǒyǐ/: Bời vì...thế nên\n5. Liên từ trong tiếng Trung\nNgày mai tôi lại đến\nWǒ míngtiān zài lái\n我明天再来。\n\n快睡觉吧。\n吧 /ba/: dùng trong câu biểu thị sự yêu cầu, thúc giục mang ngữ khí nhẹ nhàng\nTrợ từ ngữ khí\nBạn làm rất tốt.\nnǐ zuò dé hǎo\n你做得好。\nĐộng từ + 得 （ 很/非常/ 不...）+ tính từ\nhành động, trạng thái\nTrợ từ kết cấu: 得 (dé): dùng trong trường hợp muốn nhận xét hoặc đánh giá về một\n8. Trợ từ\nNgày mai có thể có gió lớn\nMíngtiān kěnéng fēng dà\n明天可能风大。\n● 可能 /kěnéng/: có khả năng\nTôi phải đi rồi.\nwǒ yào zǒule.\n我要走了。\n● 要 /yào/: phải\nĐợi tôi làm xong là có thể ăn rồi\nDěng wǒ zuò wán jiù kěyǐ chīle\n等我做完就可以吃了。\n● 可以/kěyǐ/: có thể\n7. Trợ động từ\ntôi rất xa\nTrường học cách nhà của\nXuéxiào lí wǒjiā hěn yuǎn.\n离        lí   cách....       学校离我家很远。\n\nchắn thì dùng trợ “吧” từ để hỏi\n● 吧 /ba/: Khi đối với một sự việc nào đó đã có dự đoán trước nhưng chưa chắc\n11. Câu nghi vấn\n唱歌 – 唱唱歌 /chàng chànggē/: ca hát\n● AAB\n学习学习 /xuéxí xuéxí/: Học tập\n● AB-AB\n试一试 /shì yī shì/: thử\n● A 一 A\nđều có thể lặp lại, nhưng chúng ta cần chú ý hình thức lặp lại và ngữ cảnh sử dụng.\nĐộng từ lặp lại dùng để biểu đạt động tác tiếp diễn trong thời gian ngắn. Đại đa số động từ\n10. Động từ trùng điệp\nwèi, nǐ hǎo\n喂，你好\n喂/wèi/: alo\n9. Thán từ\nwǒ lái guò Zhōngguó\n我来过中国。\nkhứ và không còn tiếp diễn ở hiện tại.\n● 过 /guò/: biểu thị động tác đã xong, hoàn tất hoặc biểu thị sự việc ở trong quán\nTā zài xuéxiào ménkǒu zhàn zhe\n他在学校门口站着。\n● 着 /zhe/: biểu thị sự tiếp diễn của động tác hay trạng thái\nTrợ từ động thái\nMau đi ngủ đi.\nkuài shuìjiào ba\n\nThật là ngon\nZhēn hào chī.\n真好吃。\n真/zhēn /: thật là\n13. Câu cảm thán\nĐừng ăn quá nhiều\nBùyào chī tài duō.\n不要吃太多。\nVí dụ:\n不要 /bùyào/ : biểu thị sự khuyên nhủ\n12. Câu cầu khiến\n8 giờ ngày mai gặp, được không?\nMíngtiān 8 diǎn jiàn, hǎo ma\n明天8点见，好吗？\n● 好吗 /hǎo ma/ : được không?\nBạn có ăn bánh bao không?\nnǐ chī bù chī bāozi?\n你吃不吃包子？\n● Câu hỏi chính phản\ntā wèishéme méi lái\n他为什么没来？\n● 为 什么 /wèishéme/: vì sao\nBạn là người Việt Nam nhỉ?\nNǐ shì yuènán rén ba\n你是越南人吧？\n\nBên ngoài đang đổ mưa\nwài miàn xià zhe yǔ\n外面下着雨。\n● 着 /zhe/: biểu thị sự tiếp diễn của hành động hay trạng thái\nMáy bay sắp cất cánh rồi\nfēijī yào qǐfēile\n飞机要起飞了。\n● 要 ...了/yào...le/ : biểu thị sự việc sắp xảy ra\nBọn họ đang đá bóng\nTāmen zhèngzài tī zúqiú\n他们正在踢足球。\n● 正在 /zhèngzài/: biểu thị hành động đang diễn ra\n15. Trạng thái của hành động\nAnh ấy lớn hơn tôi\nTā bǐ wǒ dà.\n他比我大。\nCâu so sánh: A比B+tính từ\n14. Các câu dạng đặc biệt" },
-        'hsk3': { id: 'hsk3', level: 'HSK 3', title: 'Tổng Hợp Ngữ Pháp HSK 3 Chi Tiết', content: "BNTT dùng để mô tả, đánh giá kết quả, mức độ, trạng thái của hành động.\n2. Bổ ngữ trạng thái (Trình độ) (BNTT)\nMẹ đã nấu cơm xong chưa?\nBạn tìm thấy chó của mình chưa?\n妈妈做 好今晚的饭 了没有？\nVD: 你 找 到 你的狗 了吗？\nNghi vấn: S + V + BNKQ + O +了吗/了没有？\nTôi chưa làm xong bài tập.\nTôi không thấy bạn gái của cậu.\n我 没 做 完 今天的作业。\nVD: 我 没有 看 到 你的女朋友。\nPhủ định: S + 没（有）V + BNKQ + O\nTôi rửa hoa quả xong rồi\nTôi tìm thấy kính của mình rồi.\n我 洗 好 水果了。\nVD: 我找 到 你的眼镜了！\nKhẳng định: S + V + BNKQ + O\nBNKQ dùng để nói rõ kết quả của hành động.\n1. Bổ ngữ kết quả (BNKQ)\nCác loại Bổ Ngữ thường gặp trong Ngữ pháp HSK 3\nNgoài ra, các bạn có thể tải file PDF kiến thức ngữ pháp HSK 3 cơ bản ở cuối bài viết.\nDưới đây là tổng hợp các chủ điểm thường gặp của “Ngữ pháp HSK3′′ trong tiếng Trung.\nchặng đường luyệnngữ pháp HSK 2.\nhọc tiếng Trungđược biên soạn kỹ sẽ là hành trangkiến thức tiếp theo sau khi kết thúc\nCửa ải HSK vẫn luôn chờ bạn, tài liệu tổng hợp ngữ pháp HSK 3 cho các bạnmới bắt đầu\nTổng hợp ngữ pháp HSK 3\n\nBạn có tìm thấy kính của tôi không?\nVD：你 找 得 到 我的眼镜吗？\nS + V + 得 + BNKN + O + 吗？\nVD: 你 找 得 到 找 不 到 我的眼镜？  Bạn có tìm thấy kính của tôi không?\nNghi vấn: S + V + 得 + BNKN + V + 不 + BNKN + O？\nTôi không tìm được bạn trai của mình\nVD: 我 找 不 到 我的男朋友了。\nPhủ định: S + V + 不 + BNKN+ O\nTôi nhìn rất rõ ràng chữ Hán mà bạn viết\nVD: 我 看 得 很清楚你写的汉字。\nKhẳng định:S + V + 得 + BNKN + O\nBổ ngữ khả năng nói về Động tác (V) có thể thực hiện được hay không.\n3. Bổ ngữ khả năng (BNKN)\nBạn nấu cơm có ngon không?\nVD: 你做饭做得好吃吗？\nS + （V）O + V + 得 + tính từ 不 tính từ？\nNghi vấn: S + （V）O + V + 得 + tính từ + 吗？\nTôi chạy không nhanh.\nVD： 我 跑得不快。\nPhủ định:S + （V）O + V + 得 + 不 + tính từ\nBạn học tiếng Anh giỏi quá\nVD： 我（学）英文 学 得 很好。\nS + （V） O + V + 得 + tính từ\nAnh ấy chạy nhanh quá\nVD： 他跑得很快。\nKhẳng định: S + V + 得 + tính từ？\n\n明天你坐公共汽车 回学校 来吧.\nNếu O chỉ nơi chốn:V + 上/下/进/出/回/过/起 + O + 来/去\nVD: 他们带 过去 了(Bọn họ mang qua đó rồi.)\nV + bổ ngữ phương hướng phức tạp\nĐộng từ phương hướng phức tạp – Ngữ pháp HSK 3\nra xa (去) người nói và miêu tả cụ thể hành động.\nBổ ngữ phương hướng phức tạp: Miêu tả phương hướng của động tác (V) đến gần (来) hay\nTôi mang bài tập đến rồi\n我带来作业了。\nVD：我带作业 来 了。\nV+来/去+O\nNếu O không chỉ nơi chốn: V + O + 来/去\nTôi đi về nhà rồi\nVD:我回家去了。\nNếu O chỉ nơi chốn: V + O + 来/去\nTôi đi qua đó.\n我过 去 吧。\nTôi về rồi.\n我回 来 了。\nV+来/去\nxa (去) người nói.\nBổ ngữ phương hướng đơn giản: Miêu tả phương hướng của động tác đến gần (来) hay ra\n4. Bổ ngữ phương hướng\n\nCâu sử dụng Giới từ\nBạn mặc chiếc váy này xem ra rất giống con gái\nVD：你穿这条裙子看起来很像一个女孩。\nNgoài ra: 看上去，看起来 có nghĩa “Xem ra”\nBạn có nhớ ra tôi là ai không?\nVD: 你能想起来我是谁吗？\nĐộng từ diễn tả người nào đó có hồi tưởng lại/nhớ lại (Dịch: Lại)\nV+起来\n(Chiếc xe kia càng đi càng chậm, bây giờ dừng lại rồi)\nVD: 那辆车越开越慢，现在停下来了。\nlại... (Dịch: Lại, xuống, đi...):\nNói về sự thay đổi trạng thái mạnh sang yếu, nhanh sang chậm,  chuyển động sang ngừng\nV/tính từ + 下来\n(Chữ Hán tôi viết bạn có nhìn ra không?)\nVD: 我写的汉字你能看出来吗？\nhiển thị ra\nVD: 我很快就画出来一只狗。(Tôi vẽ hình 1 con chó rất nhanh) Diễn tả sự phân biệt, bộc lộ,\nNói về sự xuất hiện của sự vật mới\nV+出来\nMột số bổ ngữ xu hướng phức tạp thường dùng:\n(Tôi mang quần áo của bạn qua rồi.)\nVD： 我 带 过 来 你的衣服了。\nV + 上/下/进/出/回/过/起 + 来/去 + O\nVD: 我带 过 你的衣服 来了。\nNếu O không chỉ nơi chốn: V + 上/下/进/出/回/过/起 + O +来/去\nNgày mai bạn đi xe bus về trường  đi\n\nVD:我把 你的衣服 放 进 行李箱了。  Tôi để quần áo của bạn vào trong vali rồi.\nCâu chữ 把 làm thay đổi vị trí tân ngữ (O):A 把 O 放/搬 ... + 到/在/进... + địa điểm\nBạn uống cà phê đi!\nVD：你把 咖啡喝吧！\nCâu chữ 把 cơ bản:A + 把 + O + V + thành phần khác\nđược tác động đến người hoặc sự vậy xác định.\nThường dùng để đưa ra mệnh lệnh, đề nghị..., dùng để chỉ hành động được  thực hiện\n5. Câu chữ 把\nTôi bị bố đánh rồi.\nVD: 我 被 爸爸 打 了。\nDùng để diễn tả nghĩa bị động:S + 被（让/叫） + O + V +thành phần khác.\n4. Câu chữ 被\nAnh ấy đối với tôi vô cùng tốt\nVD: 他 对 我非常好。\nA 对 B + thành phần khác.\nDùng để dẫn ra S đối xử, đối đãi, đối với thành phần phía sau như thế nào,  có tác dụng gì:\n3. Giới từ 对\nTôi cùng bạn cũ đến tiệm sách mua sách.\nVD: 我 跟 老朋友去书店买书。\nLà giới từ, đồng thời là danh từ, A và B cùng nhau làm gì đó, bằng 和. A 跟 B （一起）+V\n2. Giới từ 跟\nTôi mua cà phê cho bạn.\nVD：我给 你 买 咖啡。\nDùng khi nói làm việc gì cho ai đó:S 给 ĐẠI TỪ/ DANHTỪ + V\n1. Giới từ 给\nthành phần đứng sau.\nGiới từ là từ đặt trước danh từ/ cụm danh từ/ đại từ/ cụm đại từ, thường  dùng để giới thiệu\n\n5. 一边 V 一边 V\n(Em gái tôi vừa thông minh vừa đáng yêu)\nVD: 我的妹妹又聪明又可爱。\nDiễn tả hai đặc điểm, trạng thái cùng tồn tại ra ở một chủ từ  (Dịch: Vừa... vừa...)\n4. 又 Tính từ 又 Tính từ\n(Tôi càng ngày càng thích học tiếng Trung)\nVD: 我越来越喜欢学汉语。\nA thay đổi theo thời gian. (Dịch: Càng ngày càng)\n3. 越来越 Tính từ\ncàng chạy càng nhanh)\nB thay đổi theo sự thay đổi của A. (Dịch: Càng A càng B) VD：那辆车越跑越快。 (Cái xe đó\n2. 越 A 越 B\n（Tôi mệt lắm rồi, Cô ấy xinh đẹp quá）\nTính từ + 极了 （我累极了，她漂亮极了）\n了，太高兴了）\nCác phó từ mức độ: 很/ 非常/ 特别/ 真/ 不太/ 有点儿 + Tính từ Ngoài ra: 太 Tính từ 了（太好\n1. Phó từ mức độ\nNgữ pháp tiếng trung HSK 3 nâng cao\nVD: 你 把水果拿过来 (Bạn lấy hoa quả ra đây.)\nCâu chữ 把 dùng bổ ngữ xu hướng:A + 把 + O + V + bổngữ xu hướng\nBạn rửa sạch hoa quả đi.\nVD: 你 把 水果 洗 干净吧。\nCâu chữ 把 dùng bổ ngữ kết quả:A + 把 + O + V + bổngữ kết quả\nTôi trả tiền cho anh trai rồi\nVD: 我 把 钱 还 给 哥哥了。\nCâu chữ 把 làm thay đổi chủ sở hữu tân ngữ (O):A 把 O 送/还/借/带... + 给 + đại từ\n\nSo sánh hơn：A 比 B Tính từ （多了/得多/一些/一点儿/...）\n11. Câu so sánh\nHôm nay học tiếng Trung, ngày mai lại học tiếng Trung.\n汉语。\n再 + V : Hành động được lặp lại nhưng chưa xảy ra. (Dịch: Lại)   VD：今天学汉语，明天再学\nHôm qua ăn mì, hôm nay lại ăn mì\n条。\n又+ V ：Hành động được lặp lại và đã xảy ra rồi. (Dịch: Lại....)  VD：昨天吃面条，今天又吃面\n10. 又+V/再+V\nTôi có hừng thú với âm nhạc\nDiễn tả sự hứng thú với cái gì đó. (Dịch: S có hứng thú với...) VD：我对音乐很感兴趣。\n9. S + 对 + N +感兴趣/有兴趣\nVD： 我看着电视做作业。(Làm bài tập trong lúc xem tivi.) 我站着等她。（Đứng đợi cô ấy ）\nthức hành động thứ hai.\nDùng để diễn tả hai hành động xảy ra cùng lúc, trong đó hành động thứ  nhất là phương\n8. V1 + 着 +（O1）+ V2 +（O2）\nVD：桌子上放着一杯咖啡。(Trên bàn có 1 cốc cà phê)\nCâu tồn tại, diễn tả ở đâu đó có cái gì đó.\n7. Nơi chốn + V + 着 + số lượng danh\n(Mẹ tôi mỗi tối ăn cơm xong là xem tivi)\n我妈妈每天晚上吃了饭就看电视。\nVD：我回了家就睡觉。(Tôi về nhà là đi ngủ)\nDiễn tả hai hành động xảy ra liên tiếp.\n6. V1 了（O）就 V2...\n(Bạn gái tôi vừa nói vừa cười)\nVD：我女朋友一边说一边笑。\nDiễn tả hai động tác được thực hiện cùng lúc. (Dịch: Vừa... vừa...)\n\nTrừ bơi lội, thể loại vận động nào tôi cũng biết.\nVD: 除了游泳以外，什么运动我都会。\n(Dịch: Ngoài/trừ A ra, B đều.... ) (A không thuộc B)\n除 A 以外,B 都...\n14. 除了...(以外)，都/还/也...\nquả, sau đó về nhà làm bài tập\nVD: 你先吃饭，再去商店买点儿水果，然后回家做作业。  Tôi ăn cơm trước, rồi đi mua hoa\nDiễn tả thứ tự thực hiện các hành động.\n13. 先 V，再/又 V，然后 V\nMỗi ngày 8 giờ tôi dậy, hôm nay 7 giờ đã dậy rồi.\nVD: 我每天八点起床，今天我七点就起床了。\n(Dịch: Đã V, là V)\n就 + V (了): Diễn tả hành động xảy ra sớm, nhanh, thuận lợi.\nMỗi ngày 8 giờ tôi dậy, hôm nay 9 giờ mới dậy.\nVD: 我每天八点起床，今天我九点才起床。\n才 + V: Diễn tả hành động xảy ra muộn, chậm và không thuận lợi  (Dịch: mới ...)\n12. 才+V,就+V\nTôi với em trai tôi giống nhau\nVD:我跟我弟弟一样。\nSo sánh bằng：A 跟 B 一样 (+Tính từ)\nTôi không xinh đẹp bằng em gái\nVD: 我没有我妹妹那么漂亮。\nSo sánh kém: A 没有 B + （那么/多么）Tính từ\n(Hôm nay dưa hấu đắt hơn hôm qua 2 tệ)\n今天的西瓜比昨天贵两块钱。\nVD: 她学得比我好一些。(Cô ấy học tốt hơn tôi một chút)\n\nChỉ cần có thời gian thì tôi nhất định đi du lịch cùng bạn\nVD: 只要有时间，我一定就跟你去旅游。\nCâu điều kiện: Chỉ cần..., thì...\n18. 只要..., (S) 就...\nAnh ấy vui mừng nói với tôi, anh ấy đỗ đại học rồi\nVD: 他高高兴兴地告诉我，他考上大学了。\nTính từ 2 chữ cái AB: AABB (漂漂亮亮，高高兴兴...)\nTóc cô ấy dài, mắt to, đáng yêu quá đi!\nVD: 她头发长长的，眼睛大大的，可爱极了！\nTính từ 1 chữ cái A: AA 的 (红红的，长长的...)\n17. Tính từ lặp lại: Nghĩa tăng lên\nAnh ấy đẹp trau quá, có thể giưới thiệu làm quen không?\n们认识认识吗？\nĐộng từ 2 chữ cái AB: ABAB (认识认识，介绍介绍，锻炼锻炼...) VD: 他好帅，可以介绍我\nBạn xem quyển sách này xem, thấy sao?\nVD: 你看看这本书，觉得怎么样？\nA 一 A (走一走，读一读...)\nĐộng từ 1 chữ cái A: AA ( 试试，看看...)\n16. Động từ lặp lại: Nghĩa giảm đi\nNếu có tiền, tôi sẽ mua cho bạn 1 cái điện thoại mới.\nVD: 如果有钱的话，我就我给你买一个新手机。\nCâu điều kiện: Nếu ... thì...\n15. 如果...（的话），（S）就...\nTrừ tiếng Trung, tôi còn biết nói tiếng Anh, tiếng Nhật.\n我也会说英语，日语。\n除了 A (以外)，...还/也 B (Dịch: Ngoài A ra, vẫn/ còn B.... ) (A thuộc B) VD: 除了汉语以外，\n\n(S) 一 点儿 + 也/都 + 不 + Tính từ\nMột chút cà phê cũng chưa uống mà anh ấy đã đi rồi\nVD：他一 点儿咖啡都没喝就走了。\n(Với những thứ không đếm được)\n(S) 一 点儿 + (N) + 也/都 + 没/不 + thành phần khác\n(Một cái bánh bao tôi cũng không muốn ăn)\nVD：我一个面包也不想吃。\n(Với những thứ đếm được)\n(S) 一 lượng + (N) + 也/都 + 没/不 + thành phần khác\n23. Diễn tả sự phủ định hoàn toàn\nVD: 我看过这个电影了。(Tôi xem phim này rồi)\ntại. (Dịch: Đã, đã từng)\nNói về kinh nghiệm, trải nghiệm hoặc hành động gì đã xảy ra mà không  kéo dài đến hiện\n22. V + 过\nNhanh lên, tôi đã đợi cậu nửa tiếng đồng hồ rồi.\nVD: 快点儿，我都等你半个小时了。\nDùng nhấn mạnh hoặc diễn tả thái độ không hài lòng.\n21. 都...了\nSắp mưa rồi, chúng ta nhanh về thôi!\nVD: 快要下雨了，我们快回去吧！\nDùng để nói về hành động, sự việc gì đó sắp xảy ra.\n20. 要/快要/就要 .... 了\nTôi rất thích xem phim điện ảnh liên quan đến lịch sử Trung Quốc\nVD: 我很喜欢看关于中国历史的电影。\nGiới thiệu, dẫn ra đối tượng muốn nói đến (N thường là danh từ phức tạp).\n19. 关于+N\n\nđăng ký thông tin để Zhong Ruan tư vấn nhé:https://zhongruan.edu.vn\nnhé. Nếu bạn có bất kỳ vấn đề nào trong quá trình học ngữ pháp HSK 3, các bạn có thể\nTrên đây là bài viết tổng hợp chia sẻ ngữ pháp HSK 3, các bạn nhớ lưu về học và luyện tập\nCái bút chì này 3, 4 tệ.\nVD: 这个铅笔三四 块。\nSố từ liên tiếp + lượng + Danh từ\nTrường của chúng ta có khoảng 100 người\nVD: 我们学校有一百人左右。\nSố + lượng + 左右\n26. Diễn tả số ước lượng\nCho tôi một cốc trà hoặc là cà phê cũng được\nVD: 给我一杯茶或者咖啡也行\n或者： Dùng trong câu trần thuật. (Dịch: Hoặc)\nBạn thích trà hay là cà phê\nVD：你喜欢茶还是咖啡。\n还是： Dùng trong câu hỏi hoặc câu có hình thức nghi vấn. (Dịch: Hay là)\nĐều dùng để diễn tả sự lựa chọn.\n25. 还是 và 或者\nthể học tốt không?\nVD: 你不喜欢学习，能学好吗？→ Khẳng định sẽ “học không tốt” Cậu không thích học thì có\n能 + khẳng định + 吗？ → Phủ định\nCậu ngày nào cũng không vận động, có thể không béo à?\nVD: 你每天不运动，能不胖吗？→ Khẳng định sẽ “mập”\n能 + phủ định + 吗？ → Khẳng định\n24. Cấu trúc 能...吗？\nVD：我一点儿也不累。(Tôi không mệt chút nào)\n(Với tính từ)" },
-        'hsk4': { id: 'hsk4', level: 'HSK 4', title: 'Tổng Hợp Ngữ Pháp HSK 4 Chi Tiết', content: "桌子上摆着一瓶花。(zhuōzi shàng bǎizhe yī píng huā)\n– Biểu thị sự sắp đặt: 摆, 挂,写, 放, 画...\nTrên giường có 1 người đàn ông đang ngủ\n床上睡着一个男人。(chuáng shàng shuì zhe yīgè nánrén)\n– Biểu thị sự tồn tại: 停, 贴, 站, 睡, 躺, 躺, 住, 住\nPhía trước có một chiếc xe đang đến\n前面来了一辆汽车。(qián miàn láile yī liàng qìchē)\n– Biểu thị sự xuất hiện: 出 现, 出, 来...\nCấu trúc: Địa điểm + Động từ + 着/了/ bổ ngữ xu hướng +  tân ngữ\ntại của ở một sự vật, hiện tượng.\nCâu tồn tại là dạng câu thể hiện sự tồn tại hoặc xuất hiện. Biểu thị sự xuất hiện và đang tồn\n1. Câu tồn tại\n6. Phó từ liên kết\n5. Bổ ngữ khả năng\n4. Bổ ngữ xu hướng kép\n3. Câu chữ 被\n2. Câu chữ 把\n1. Câu tồn tại\nTrọng điểm ngữ pháp tiếng Trung HSK4\nqua bài này giúp các bạn có thêm kiến thức ôn luyện thi HSK 4 đạt kết quả cao nhất.\nnhớ. Các bạn có thể tải file PDF tài liệu ngữ pháp HSK 4 tại link ở cuối bài viết. Mong rằng,\nBài viết doZhong Ruantổng hợp biên soạn sau đâylà những trọng tâm kiến thức cần ghi\n3.\nkỹ sẽ là hành trang kiến thức tiếp theo sau khi kết thúc chặng đường luyện ngữ pháp HSK\nlà các kiến thức ngữ pháp HSK 4 cho các bạnmới bắtđầu học tiếng Trungđược biên soạn\nThật vậy, sau khi trải qua chặng đườngngữ pháp HSK3thì con đường kế tiếp bạn sẽ đi đó\nTổng hợp ngữ pháp HSK 4\n\n● Tân ngữ là sự vật bị xử lý\n❗Chú ý: Khi áp dụng câu chữ 把 bạn cần chú ý các vấn đề sau:\n– Phủ định: Chủ ngữ + 没+ 把 + Tân ngữ + Động từ + Thành phần khác\n– Khẳng định: Chủ ngữ + 把 + Tân ngữ + Động từ + Thành phần khác\nCấu trúc:\ntrong bài thi viết trong đề thi HSK4.\n“lấy cái gì đó để làm gì”. Câu chữ 把 là một trong số nội dung ngữ pháp thường xuất hiện\nĐược dùng để nhấn mạnh, làm nổi bật vào thành phần tân ngữ. Tương tự như tiếng Việt\n2. Ngữ pháp tiếng Trung về câu chữ 把\nKhi có trợ từ động thái 着 không dùng chung các phó từ 正在, 正, 在.\n恨, 哭, 笑, 洗, 扫, 知 道, 明白, 送, 还, 借...\nTrong câu tồn hiện không sử dụng các động từ: 吃, 喝, 看, 洗, 扫,洗, 扫, 听, 爱, 喜欢, 怕,\n● 书架上放着英文书。❌\n● 书架上放着两本书。☑\nTrong câu tồn hiện, tân ngữ chưa xác định. Ví dụ:\n● 桌子摆着一盘菜。☑\n● 在桌子上摆着一盘菜。❌\nnhư 上/ 下/ 里/外..., nhưng phía trước không được thêm giới từ như 从/ 在. Ví dụ\nChủ ngữ của câu tồn hiện luôn là địa điểm, phía sau thường có từ chỉ phương hướng\nChú ý:\nNhà tôi ở ngay cạnh trường học\n2. 我家在学校旁边 /wǒjiā zài xuéxiào pángbiān/\nTrong phòng chỉ có 1 cái giường .\n1. 房间里只有一个床 /fángjiān lǐ zhǐyǒu yīgè chuáng/\nVí dụ:\nCấu trúc: S+ 在、是、有+N\nBiểu thị sự vật đó đang tồn tại ngay tại một thời điểm nào đó.\nCâu tồn hiện với 在、是、有\nTrên bàn bày một bình hoa\n\n4. Bổ ngữ xu hướng kép\nBạn được trúng tuyển rồi.\n你被录取了 (nǐ bèi lùqǔle)\nXe của anh ấy bị trộm rồi\n他的车被偷了 (tā de chē bèi tōule)\nVí dụ:\n被 và 给; không thể lược bỏ khi dùng 叫 và 让.\n● 被, 给, 叫, 让: Biểu thị dạng bị động. Tân ngữ có thể lược bỏ trong trường hợp dùng\nbổ ngữ (trừ bổ ngữ khả năng)\n● Vị ngữ: Sau động từ phải kết hợp thêm trợ từ động thái (trừ trợ từ động thái 着 ) và\nnăng nguyện, phó từ hoặc trạng ngữ chỉ thời gian.\n● Trạng ngữ: Đều được đặt trước giới từ 被, chúng có thể là phó từ phủ định, động từ\n● Chủ ngữ: Được xác định\nCấu trúc: Chủ ngữ + 被 + Trạng ngữ + Động từ + Thành phần khác\ntố khác.\nngữ làm trạng ngữ biểu thị sự vật con người nhận được kết quả nào đó từ ảnh hưởng nhân\nCâu chữ 被 hay còn được gọi là câu bị động, là câu vị ngữ động từ dùng giới từ 被 và tân\ncần chú ý nắm chắc cách dùng, cấu trúc tránh việc áp dụng sai sang câu chữ 把.\nCâu chữ 被 là phần giúp bạn rất dễ ăn điểm trong số các ngữ pháp HSK4. Tuy nhiên bạn\n3. Câu chữ 被\nphải dùng câu chữ 把. Sau 到 và 在 thường là tân ngữ nơi chốn.\nTrong trường hợp sau động từ chính có bổ ngữ kết quả: 到, 在, 给, 成, 作, 为... nhất định\nTôi chưa xào trứng gà xong.\n我没把鸡蛋炒好。(wǒ méi bǎ jīdàn chǎo hǎo)\nBạn nên làm xong bài tập về nhà\n你 应 该 把 作业 做 完。(nǐ yīnggāi bǎ zuòyè zuò wán)\nVí dụ:\n● Ngoài ra, phó từ và động từ năng nguyện luôn đặt trước chữ 把.\ncâu chữ 把.\n● Các động từ “有, 在, 是, 像, 觉 得, 知 道, 喜 欢, 来, 去”  không được sử dụng trong\n● Động từ trong câu phải là động từ mang tân ngữ (Động từ cập vật)\n\nCâu nghi vấn của bổ ngữ khả năng là sự kết hợp giữa khẳng định và phủ định.\nNghi vấn:  S + V +得+ BNKN + V + 不+ BNKN？\nAnh ấy đứng xa quá, tôi nhìn không thấy\n=> 他 站太远了，我看不见。(tā zhàn tài yuǎnle, wǒ kàn bùjiàn)\n他 站太远了，我不能看见。\nVí dụ ：\nDùng phó từ 不 đứng trước động từ để tạo câu phủ định .\nPhủ định:  S + V +不+ Bổ ngữ khả năng\nTôi đọc hiểu được sách Tiếng Trung\n我看得懂中文书。(wǒ kàn dé dǒng zhōngwén shū)\nVí dụ：\nKhẳng định: S +V +得+ Bổ ngữ khả năng\nthường do động từ hoặc hình dung từ đảm nhận\nBổ ngữ khả năng dùng để chỉ khả năng thực hiện được hành động nào đó. Bổ ngữ này\n5. Bổ ngữ khả năng\nAnh ấy quyết định ngày mai là về trường học .\n他决定明天就回学校 (tā jué dìng míngtiān jiù huí xuéxiào)\nVí dụ:\n● 出来: Biểu đạt nhờ động tác mà động từ trước biểu thị có thể nhận ra hay nhận biết\n● 下去: Biểu đạt sự tiếp tục của hành động, động tác\ntrung hoặc biểu đạt hồi ức có kết quả\n● 起来: Biểu đạt động tác bắt đầu và tiếp tục thực hiện; biểu đạt sự phân tán đến tập\ntrong nhiều trường hợp. Cụ thể như sau:\nhướng tiến hành của động tác. Ngoài ra, bổ ngữ xu hướng kép được áp dụng mở rộng thêm\nTương tự như bổ ngữ xu hướng đơn, cách dùng bổ ngữ xu hướng kép cũng dựa vào xu\n下, 进, 出, 回, 过, 起 và 到.\nBổ ngữ xu hướng kép được tạo bởi bổ ngữ xu hướng đơn 来/ 去 kết hợp với động từ: 上,\nbổ ngữ xu hướng kép giúp bạn biết cách đặt câu chính xác.\nBổ ngữ xu hướng kép là nội dung ôn luyện ngữ pháp  HSK4 bạn cần nắm chắc. Hiểu đúng\n\n● Biểu thị có thể thực hiện động tác nào đó\n– 了 /liǎo/:\nTôi không thể tìm thấy hộ chiếu của cậu.\nVí dụ: 我找不着你的护照.(wǒ zhǎo bùzháo nǐ de hùzhào)\n● Biểu thị không đạt được mục đích hoặc kết quả nào đó.\nHôm nay hàng xóm cãi nhau, rất ồn, làm tôi chẳng thể nào ngủ được.\n(jīntiān, línjū chǎojià, hěn nào, wǒ shuì bùzháo)\nVí dụ: 今天，邻居吵架，很闹，我睡不着\n● Biểu thị khả năng có thể làm gì đó\n– 着 /zháo/\nCả ngày trời phải đi bộ, chân của tôi giờ đi không nổi nữa rồi.\nzhěng tiān yào zǒulù, xiànzài wǒ de tuǐ zǒu bù dòngle\n整天要走路，现在我的腿走不动了。\n● Biểu thị không còn đủ sức để làm việc gì (thường dùng ở dạng phủ định)\nHai người chúng tôi nhấc không nổi cái bàn này.\n我们俩抬不动这桌子 (wǒmen liǎ tái bù dòng zhè zhuōzi)\nVí dụ:\n● Biểu thị khả năng di chuyển một vật nào đó ra khỏi vị trí ban đầu.\n– 动 /dòng/\nMột số từ làm bổ ngữ khả năng\n❗ Chú ý: 了，着，过，把，被 không dùng với câu bổ ngữ khảnăng.\nBạn nghe hiểu lời giáo viên nói không?\n(lǎoshī shuō dehuà, nǐ tīng dé dǒng tīng bù dǒng)\n=> 老师说的话，你听得懂听不懂？\n老师说的话，你能听懂吗？\nVí dụ:\n\nVí dụ:\nthứ tự hành động, động tác\n先... 再 (又)... 然 后... 最 后... (....đã, rồi mới...., sau đó.... cuối cùng...): Dùng biểu thị\nNgoài tiếng Trung, cô ấy còn nói được tiếng Anh.\n(chúle hànyǔ yǐwài, tā hái huì shuō yīngwén)\n● 除了 汉语 以 外, 她 还 会 说 英文\nVí dụ:\nvấn đề khác.\n– 除 了... 以 外, 还... (Chúle... Yǐwài, hái...): Biểu đạt loại trừ thứ đã biết, bổ sung thêm\nNgoại trừ Tiểu Lí, tất cả các bạn đều tham gia tiệc tối.\n(Chúle xiǎo lǐ yǐwài, quán bān tóngxué dōu cānjiā wǎnhuì)\n● 除了小 李 以 外, 全 班 同 学 都 参加晚会 .\nVí dụ:\nmạnh cái thông thường\n– 除 了... 以 外, 都... (Chúle... Yǐwài, dōu...): Diễn tả sự loại trừ cái đặc thù muốn nhấn\nthi HSK4.\nđộ khó dần. Dưới đây là những phó từ giúp bạn rất nhiều trong việc làm bài thi đọc hiểu đề\nPhó từ là nội dung ngữ pháp tiếng Trung bạn sẽ được học xuyên suốt cả quá trình theo cấp\n6. Phó từ liên kết\nCậu nhớ được hết tên của 30 người không?\nnǐ néng jìdé zhù 30 gèrén de míngzì ma?\nVí dụ：你能记得住30个人的名字吗？\n– 住 /zhù/:Biểu thị sự vật nào đó cố định hoặc tồntại ở vị trí nào đó\nThức ăn nhiều quá, tôi ăn không hết được.\nVí dụ: 菜 太 多 了，我 吃 不 了 (Cài tài duōle, wǒ chī bù liǎo)\n● Biểu thị sự hoàn thành, kết thúc.\nHôm nay nhà tớ có việc nên không thể đi được rồi.\nVí dụ: 明 天 有 事 我 去 不 了(míngtiān yǒushì wǒ qù bù liǎo)\n\ngiải đáp mọi thắc mắc của bạn! Rất nhiều ƯU ĐÃI HỌC PHÍ đang chờ đón bạn!\nCác bạn có nhu cầu, hãy để lại thông tin dưới đây. Các tư vấn viên của chúng tôi sẵn sàng\nThành Đô.\nCô ấy đi Bắc Kinh trước, rồi mới đi Phúc Kiến, sau đó là du lịch Tam Á, cuối cùng là đến\ntā xiān qù Běijīng, zài qù Fújiàn, ránhòu yóulǎn Sānyà, zuìhòu qù Chéngdū\n她先去北京，再去福建，然后游览三亚，最后去成都." },
-        'hsk5': { id: 'hsk5', level: 'HSK 5', title: 'Tổng Hợp Ngữ Pháp HSK 5 Chi Tiết', content: "Ví dụ:\n● 朝/cháo/ : Biểu thị phương hướng của động tác\n3. Giới từ\n9%: 百分之九/bǎi fēn zhī jiǔ/\n⅕: 五分之 一 /wǔ fēn zhī yī/\nVí dụ:\n● Cấu trúc để đọc số thập phân và phần trăm là “......分之 /fēn zhī/......”\nSố thập phân và phần trăm\n2. Số từ\nMọi người phải hoàn thành công việc của cá nhân\ndàjiā yào rènzhēn wán chéng gèzì de gōngzuò\n大家要认真完成各自的 工作\nVí dụ:\n● 各 自/gèzì/: biểu thị tự mình, trong mọi phương diện đều chỉ là cá nhân\nCái gì đó, người nào đó\n某个 /mǒu gè/ 、某 人/mǒu rén/\nVí dụ:\n● 某/mǒu/: thường chỉ người hoặc sự vật không xác định, dùng trước danh từ\n1. Đại từ\nNgữ pháp tiếng Trung HSK5 cần nắm chắc\ntrọng tâm củangữ pháp tiếng trung HSK 5kèm filePDF ở cuối bài.\nnắm chắc ngữ pháp tiếng Trung của HSK 5 để có thể làm tốt bài thi. Dưới đây là những\ncũng cần lưu ý thêm, trong đề thi HSK 5 có phần viết 2 đoạn văn, vì thế các bạn cần phải\ncao cấp đó là bộ tài liệu tổng hợp ngữ pháp HSK 5. Các bạnmới bắt đầu học tiếng Trung\nSau bộ tài liệungữ pháp HSK 4thì tiếp sau đây,ZhongRuantiếp tục chia sẻ bộ tài liệu\nTổng hợp ngữ pháp HSK 5\n\nVí dụ:\n● 究竟/jiū jìng/: kết quả/rút cuộc/cuối cùng...\nTrương Linh rất thích đọc sách, thế là chị ấy làm một thẻ mượn sách\nzhāng líng hěn xǐhuān dú shū ， yú shì tā bàn le zhāng túshūkǎ 。\n张玲很喜欢读书 ，于是她办了张图书卡 。\nVí dụ:\n● 于是/yú shì/...\nTóm lại tất cả đều làm theo quy luật của thị trường.\nzǒngzhī yīqiè dōu àn zhào shìchǎng guīlǜ lái bàn\n总之 一切都按照市场规律来办\nVí dụ:\n● 总之 /zǒng zhī/ : Dùng để tổng kết lại đoạn văn trên, ý nghĩa là tóm lại là\n4. Liên từ\nTừ khi tôi đến Bắc Kinh, thân thể ngày càng tốt hơn.\nzì cóng wǒ dào běijīng yǐhòu, shēntǐ yuè lái yuè hǎole\n自从我到北京以后，身体越来越好了\nVí dụ:\n● 自从/zì cóng/ : Biểu thị một thời điểm nào đó, có thể dùng trước chủ ngữ.\nTôi đến từ nước Mỹ\nwǒ lái zì měiguó\n我来自美国\nVí dụ:\n● 自/zì/:có nghĩa giống từ 从. Dùng sau các từ như 来, 发, 寄,...\nĐi về phía trước\ncháo qián zǒu\n朝前走\n\nkhông thuận lợi.\nNgười nói đang lựa chọn giữa hai tùy chọn, tùy chọn thích hợp đầu tiên trong khi cả hai đều\nCấu trúc: 宁可...，也不.../nìngkě..., yě bù /\n● 宁可...，也不/也要... /nìngkě..., yě bù / yě yào.../\nCổ phiếu này không những không tăng giá, trái lại sụt giá.\nzhè zhǐ gǔpiào búdàn bù zhǎng ，fǎn ér xià diē le 。\n这只股票不但不涨，反而下跌了。\n● 不但不/bú dàn bù/......，反 而/fǎn ér/...: không những không......, trái lại.......\nThà làm một số việc có ý nghĩa, còn hơn lãng phí thời gian\nyǔ qí làngfèi shíjiān ， bùrú zuò xiē yǒu yìyi de shì 。\n与其浪费时间，不如做些有意义的事。\n● 与其/yǔ qí/......不如/bù rú/......:Thà......, còn hơn.......”\nCho dù trời có càng lạnh thì tôi cũng sẽ kiên trì tập luyện.\nTiānqì zài lěng , wǒ yě yào jiānchí duànliàn\n天气再冷，我也要坚持锻炼。\n● 再/zài/......也/yě/......: Cho dù .... cũng ......\nvì vậy các bạn cũng nên chú ý luyện tập  kết hợp với các cấu trúc dưới đây:\nHSK4. Đây là 2 ngữ pháp tiếng Trung thường xuất hiệntrong phần sắp xếp câu của HSK5\nHSK5 đó là câu chữ把và câu chữ被, các bạn có thểxem lại ở phầncấu trúc ngữ pháp của\nỞ ngữ pháp HSK5, có 2 cấu trúc quan trọng và cũng thường xuyên xuất hiện trong đề thi\n5. Các cấu trúc ngữ pháp HSK 5\nHọc sinh lớp sáu còn không biết làm đề này, huống hồ học sinh lớp bốn chứ！\n/liù nián jí de tóngxué dōu bú huì zuò zhè dào tí, hé kuàng sì nián jí de ya/\n六年级的同学都不会做这道题，何况四年级的呀！\n● 何况 /hé kuàng/:Hơn nữa/vả lại/huống hồ..\nRút cuộc anh làm sao thế ?\nnǐ jiū jìng zěn me le ？\n你究竟怎么了 ？\n\nTrẻ con thà không ăn để tiếp tục chơi.\n小孩子宁可不吃饭，也要继续玩。/Xiǎo háizi nìngkě bù chīfàn, yě yào jìxù wán./\nVí dụ:\nđịnh làm)\n宁可 + tùy chọn không thuận lợi, 也要 + điều gì đó (mà người nói mong muốn hoặc có ý\n● 宁可...，也要... /nìngkě..., yě yào.../\nTôi thà ly hôn còn hơn sống như thế này .\n我宁可离婚，也不这样度过日子。/Wǒ nìngkě líhūn, yě bù zhèyàng dùguò rìzi./\nVí dụ:" },
-        'hsk6': { id: 'hsk6', level: 'HSK 6', title: 'Tổng Hợp Ngữ Pháp HSK 6 Chi Tiết', content: "出最有营养的选择更为重要。\n目前，如果您担心自己的碳水化合物摄入量，那么关注您所吃的个别食物并在每个类别中做\n天吃水果的人患糖尿病的风险比不吃水果的人低 12%。\n至于水果，2017 年 4 月发表在 PLoS Medicine 杂志上的一项针对中国成年人的研究发现，每\n15%。\n吃三份全谷物可将冠心病风险降低 19%，将中风风险降低 12%，并将死于癌症的风险降低\n物，全谷物和水果。 2016 年 6 月发表在 BMJ 上的 45 项研究的荟萃分析得出的结论是，每天\n另一方面，吃正确类型的碳水化合物会显着降低疾病风险，其中包括两种最常见的碳水化合\nTổng hợp ngữ pháp HSK 6\ntâm tiếng Trung Zhong Ruan.\nbản tiếng Trung HSK 6 được thiết kế giáo án bài giảng dành cho các bạn học viên Trung\ncao kỹ năng đọc hiểu tiếng Trung HSK cấp 6 và cải thiện kỹ năng làm bài tập dịch thuật văn\nTổng hợp ngữ pháp HSK 6 giáo trình luyện thi tiếng Trung HSK 6 là nội dung bài tập nâng\ntrung HSK 6kèm file PDF ở cuối bài.\nđược kỳ thi HSK đạt điểm số tối đa. Dưới đây là những trọng tâm củangữ pháp tiếng\ntiếng Trung HSK 6 sẽ tiếp tục hỗ trợ giúp cho các bạnmới bắt đầu học tiếng Trungvượt qua\nSau bàingữ pháp HSK 5thì đây là bài cuối về tổnghợp ngữ pháp HSK 6 tài liệu luyện thi\nTổng hợp ngữ pháp HSK 6\n\n道疾病病例。一周后，他们确认新型冠状病毒 SARS-CoV-2 与最初的病例有关。案件群。\n中国卫生官员于 2019 年 12 月 31 日首次报告了与武汉市的海鲜和动物市场相关的急性呼吸\n美国国家过敏和感染疾病研究所 (NIAID) 及其落基山实验室制作了新型冠状病毒的新图像。\n欢的事情——跑步的关键。\n有跑步膝的症状，请注意您的膝盖疼痛并迅速进行护理以避免进一步受伤，这是继续做您喜\n通过采取一些措施来防止跑步引起的膝盖疼痛，您将能够继续锻炼而不会出现问题。如果您\n制的伸展和加强锻炼计划。\n决问题就可以缓解他们的症状。您的医生或物理治疗师可以针对跑步者膝关节的病因制定定\n康复是跑步膝治疗的另一个重要组成部分。研究发现，许多跑步膝的患者最终仅通过锻炼来解\n段冰袋也可以减轻膝盖疼痛。\n减少里程或暂时改用其他活动，例如游泳或骑自行车。跑步后抬高你的腿并在关节上放一小\n您可以采取的治疗跑步膝的最重要步骤之一就是少走几步。换句话说，放松跑步。您可能需要\n保在运动前充分伸展并穿上合身的优质跑鞋。\n以减轻膝盖的压力，逐渐增加跑步速度和距离，以及尽可能在相对柔软的表面上跑步。还要确\n根据美国骨科医师学会的说法，有几种方法可以防止跑步者膝盖受伤，包括减轻额外的体重\n您在跑步时弯曲和伸展腿时，可能会导致跑步膝。\n凹槽对齐，在该凹槽内的运动称为髌骨跟踪。如果您的膝盖骨在这个凹槽中不能正常移动，当\n在膝关节处，您的大腿骨（股骨）和胫骨（胫骨）结合在一起。您的膝盖骨（髌骨）与股骨底部的\n到膝盖有弹响或咔哒声。\n蹲下或爬楼梯时，您可能会感到膝盖疼痛。膝盖疼痛可能会感到钝痛或剧烈。您可能还会注意\n。这个问题通常会导致膝盖周围或膝盖后面疼痛。在膝盖弯曲坐下一段时间后，或者在跑步、\n研究发现，一种称为髌股关节疼痛综合征的病症，也称为“跑步膝”，占跑步者所有损伤的 25%\n运动员受伤情况的研究中，膝盖受伤是迄今为止最常见的。\n始跑步，包括参加马拉松的人数越来越多，与跑步相关的伤害也有所增加。在几项检查马拉松\n不幸的是，如果你经常跑步，你也很可能会出现膝盖疼痛。近几十年来，随着越来越多的人开\n方法。\n如果您喜欢跑步，您可能熟悉它可以提供的许多好处。这是在户外克服压力和保持体形的好\n水化合物来源，如全谷物、豆类、水果、蔬菜、坚果和种子。\n和大脑提供能量。比碳水化合物的数量更重要的是你吃的食物类型。坚持使用有益健康的碳\n碳水化合物是您的身体发挥最佳功能所需的三种常量营养素之一。他们的主要工作是为身体\n水化合物，”昌西博士说。\n不必害怕碳水化合物。 “碳水化合物的健康来源是那些以水果和全谷物等全食物为中心的碳\n吃低碳水化合物有很多不同的方法，其中大部分取决于你个人的碳水化合物目标，但你当然\n基础。\n交谈很重要。它还有助于与熟悉您所需方法的注册营养师建立联系，以确保您涵盖您的营养\n如果您对尝试低碳水化合物饮食感到好奇，那么在进行任何剧烈的饮食改变之前与您的医生\n\ndào xīgài yǒu dàn xiǎng huò kādá shēng.\nténgtòng. Xīgài téngtòng kěnéng huì gǎndào dùn tòng huò jùliè. Nín kěnéng hái huì zhùyì\nshíjiān hòu, huòzhě zài pǎobù, dūn xià huò pá lóutī shí, nín kěnéng huì gǎndào xīgài\nhuì dǎozhì xīgài zhōuwéi huò xīgài hòumiàn téngtòng. Zài xīgài wānqū zuò xià yīduàn\nchēng wèi “pǎobù xī”, zhàn pǎobù zhě suǒyǒu sǔnshāng de 25%. Zhège wèntí tōngcháng\nYánjiū fāxiàn, yī zhǒng chēng wèi bìngǔ guānjié téngtòng zònghé zhēng de bìngzhèng, yě\nwéizhǐ zuì chángjiàn de.\nmǎlāsōng yùndòngyuán shòushāng qíngkuàng de yánjiū zhōng, xīgài shòushāng shì qìjīn\nyuè lái yuè duō, yǔ pǎobù xiāngguān de shānghài yěyǒu suǒ zēngjiā. Zài jǐ xiàng jiǎnchá\nshí niánlái, suízhe yuè lái yuè duō de rén kāishǐ pǎobù, bāokuò cānjiā mǎlāsōng de rénshù\nBùxìng de shì, rúguǒ nǐ jīngcháng pǎobù, nǐ yě hěn kěnéng huì chūxiàn xīgài téngtòng. Jìn jǐ\nhùwài kèfú yālì hé bǎochí tǐxíng de hǎo fāngfǎ.\nRúguǒ nín xǐhuān pǎobù, nín kěnéng shúxī tā kěyǐ tígōng de xǔduō hǎochù. Zhè shì zài\nhé zhǒngzǐ.\nyǒuyì jiànkāng de tànshuǐ huàhéwù láiyuán, rú quán gǔwù, dòu lèi, shuǐguǒ, shūcài, jiānguǒ\ntànshuǐ huàhéwù de shùliàng gèng zhòngyào de shì nǐ chī de shíwù lèixíng. Jiānchí shǐyòng\nyíngyǎngsù zhī yī. Tāmen de zhǔyào gōngzuò shì wèi shēntǐ hé dànǎo tígōng néngliàng. Bǐ\nTànshuǐ huàhéwù shì nín de shēntǐ fāhuī zuì jiā gōngnéng suǒ xū de sān zhǒng chángliàng\nzhōngxīn de tànshuǐ huàhéwù,” chāng xī bóshì shuō.\nhuàhéwù de jiànkāng láiyuán shì nàxiē yǐ shuǐguǒ hé quán gǔwù děng quán shíwù wéi\nde tànshuǐ huàhéwù mùbiāo, dàn nǐ dāngrán bùbì hàipà tànshuǐ huàhéwù. “Tànshuǐ\nChī dī tànshuǐ huàhéwù yǒu hěnduō bùtóng de fāngfǎ, qízhōng dà bùfèn qǔjué yú nǐ gèrén\nyíngyǎng jīchǔ.\nshúxī nín suǒ xū fāngfǎ de zhùcè yíngyǎng shī jiànlì liánxì, yǐ quèbǎo nín hángài nín de\njùliè de yǐnshí gǎibiàn zhīqián yǔ nín de yīshēng jiāotán hěn zhòngyào. Tā hái yǒu zhù yú yǔ\nRúguǒ nín duì chángshì dī tànshuǐ huàhéwù yǐnshí gǎndào hàoqí, nàme zài jìnxíng rènhé\nzhòngyào.\nde gèbié shíwù bìng zài měi gè lèibié zhōng zuò chū zuì yǒu yíngyǎng de xuǎnzé gèng wéi\nMùqián, rúguǒ nín dānxīn zìjǐ de tànshuǐ huàhéwù shè rù liàng, nàme guānzhù nín suǒ chī\nfēngxiǎn bǐ bù chī shuǐguǒ de rén dī 12%.\nzhōngguó chéngnián rén de yánjiū fāxiàn, měitiān chī shuǐguǒ de rén huàn tángniàobìng de\nZhìyú shuǐguǒ,2017 nián 4 yuè fābiǎo zài PLoS Medicine zázhì shàng de yī xiàng zhēnduì\nzhòngfēng fēngxiǎn jiàngdī 12%, bìng jiàng sǐ yú áizhèng de fēngxiǎn jiàngdī 15%.\njiélùn shì, měitiān chī sān fèn quán gǔwù kě jiāng guàn xīnbìng fēngxiǎn jiàngdī 19%, jiàng\nshuǐguǒ. 2016 Nián 6 yuè fābiǎo zài BMJ shàng de 45 xiàng yánjiū de huìcuì fēnxī dé chū de\nfēngxiǎn, qízhōng bāokuò liǎng zhǒng zuì chángjiàn de tànshuǐ huàhéwù, quán gǔwù hé\nLìng yī fāngmiàn, chī zhèngquè lèixíng de tànshuǐ huàhéwù huì xiǎnzhe jiàngdī jíbìng\nngữ pháp HSK 6 giáo trình luyện thi tiếng Trung HSK 6.\nBài giảng hướng dẫn cách chú thích phiên âm tiếng Trung HSK ứng dụng thực tế Tổng hợp\n\nchuyện với bác sĩ trước khi thực hiện bất kỳ thay đổi chế độ ăn uống nào. Nó cũng giúp kết\nNếu bạn tò mò về việc thử áp dụng chế độ ăn ít carb, điều quan trọng là bạn phải nói\ntừng loại thực phẩm bạn đang ăn và đưa ra lựa chọn bổ dưỡng nhất trong mỗi loại.\nHiện tại, nếu bạn lo lắng về lượng carb của mình, điều quan trọng hơn là phải chú ý đến\nmắc bệnh tiểu đường thấp hơn 12% so với những người tránh ăn trái cây.\n2017 trên tạp chí PLoS Medicine cho thấy những người ăn trái cây hàng ngày có nguy cơ\nĐối với trái cây, một nghiên cứu về người lớn Trung Quốc được công bố vào tháng 4 năm\n19%, giảm nguy cơ đột quỵ xuống 12% và giảm nguy cơ tử vong do ung thư. 15 phần trăm.\nrằng ăn ba phần ngũ cốc nguyên hạt hàng ngày làm giảm nguy cơ bệnh tim mạch vành đến\ncủa 45 nghiên cứu, được công bố vào tháng 6 năm 2016 trên tạp chí The BMJ, kết luận\ncác loại carbs ác tính phổ biến nhất, ngũ cốc nguyên hạt và trái cây. Một phân tích tổng hợp\nMặt khác, ăn đúng loại carbs làm giảm đáng kể nguy cơ mắc bệnh, và bao gồm hai trong số\nhợp ngữ pháp HSK 6 giáo trình luyện thi tiếng Trung HSK 6.\nGiáo án bài tập luyện kỹ năng dịch văn bản tiếng Trung HSK 6 ứng dụng vào thực tế Tổng\nquèrèn xīnxíng guānzhuàng bìngdú SARS-CoV-2 yǔ zuìchū de bìnglì yǒuguān. Ànjiàn qún.\nhǎixiān hé dòngwù shìchǎng xiāngguān de jíxìng hūxīdào jíbìng bìnglì. Yīzhōu hòu, tāmen\nZhōngguó wèishēng guānyuán yú 2019 nián 12 yuè 31 rì shǒucì bàogàole yǔ wǔhàn shì dì\nxīnxíng guānzhuàng bìngdú dí xīn túxiàng.\nMěiguó guójiā guòmǐn hé gǎnrǎn jíbìng yánjiū suǒ (NIAID) jí qí luò jīshān shíyàn shì zhìzuòle\nxǐhuān de shìqíng——pǎobù de guānjiàn.\nde xīgài téngtòng bìng xùnsù jìnxíng hùlǐ yǐ bìmiǎn jìnyībù shòushāng, zhè shì jìxù zuò nín\nduànliàn ér bù huì chūxiàn wèntí. Rúguǒ nín yǒu pǎobù xī de zhèngzhuàng, qǐng zhùyì nín\nTōngguò cǎiqǔ yīxiē cuòshī lái fángzhǐ pǎobù yǐnqǐ de xīgài téngtòng, nín jiāng nénggòu jìxù\nbìngyīn zhìdìng dìngzhì de shēnzhǎn hé jiāqiáng duànliàn jìhuà.\nzhèngzhuàng. Nín de yīshēng huò wùlǐ zhìliáo shī kěyǐ zhēnduì pǎobù zhě xī guānjié de\npǎobù xī de huànzhě zuìzhōng jǐn tōngguò duànliàn lái jiějué wèntí jiù kěyǐ huǎnjiě tāmen de\nKāngfù shì pǎobù xī zhìliáo de lìng yīgè zhòngyào zǔchéng bùfèn. Yánjiū fāxiàn, xǔduō\nfàng yī xiǎoduàn bīngdài yě kěyǐ jiǎnqīng xīgài téngtòng.\nhuódòng, lìrú yóuyǒng huò qí zìxíngchē. Pǎobù hòu tái gāo nǐ de tuǐ bìng zài guānjié shàng\njù huàshuō, fàngsōng pǎobù. Nín kěnéng xūyào jiǎnshǎo lǐchéng huò zhànshí gǎi yòng qítā\nNín kěyǐ cǎiqǔ de zhìliáo pǎobù xī de zuì zhòngyào bùzhòu zhī yī jiùshì shǎo zǒu jǐ bù. Huàn\nzài yùndòng qián chōngfèn shēnzhǎn bìng chuān shàng hé shēn de yōuzhì pǎoxié.\nsùdù hé jùlí, yǐjí jǐn kěnéng zài xiāngduì róuruǎn de biǎomiàn shàng pǎobù. Hái yào quèbǎo\nshòushāng, bāokuò jiǎnqīng éwài de tǐzhòng yǐ jiǎnqīng xīgài de yālì, zhújiàn zēngjiā pǎobù\nGēnjù měiguó gǔkē yīshī xuéhuì de shuōfǎ, yǒu jǐ zhǒng fāngfǎ kěyǐ fángzhǐ pǎobù zhě xīgài\nnín zài pǎobù shí wānqū héshēnzhǎn tuǐ shí, kěnéng huì dǎozhì pǎobù xī.\ngēnzōng. Rúguǒ nín de xīgàigǔ zài zhège āo cáo zhōng bùnéng zhèngcháng yídòng, dāng\n(bìngǔ) yǔ gǔgǔ dǐbù de āo cáo duìqí, zài gāi āo cáo nèi de yùndòng chēng wèi bìn gǔ\nZài xī guānjié chù, nín de dàtuǐ gǔ (gǔgǔ) hé jìnggǔ (jìnggǔ) jiéhé zài yīqǐ. Nín de xīgàigǔ\n\nchạy cũng có thể làm giảm đau đầu gối.\nbơi lội hoặc đạp xe. Nâng cao chân và chườm túi lạnh lên khớp trong thời gian ngắn sau khi\nthể cần phải cắt giảm quãng đường đi hoặc tạm thời chuyển sang một hoạt động khác như\nngười chạy bộ là chỉ cần thực hiện ít bước hơn. Nói cách khác, giảm bớt việc chạy. Bạn có\nMột trong những bước quan trọng nhất mà bạn có thể thực hiện để điều trị đầu gối của\nchất lượng.\ncó thể. Ngoài ra, hãy nhớ kéo căng cơ trước khi tập luyện và mang giày chạy bộ vừa vặn,\nbạn, tăng dần tốc độ và khoảng cách chạy của bạn và chạy trên bề mặt tương đối mềm khi\ncủa vận động viên chạy, bao gồm giảm thêm cân để giảm bớt căng thẳng cho đầu gối của\nTheo Học viện bác sĩ phẫu thuật chỉnh hình Hoa Kỳ, có một số cách để ngăn chặn đầu gối\nrộng chân trong khi chạy, nó có thể gây ra đầu gối của người chạy.\nxương bánh chè của bạn không di chuyển đúng theo rãnh này, khi bạn uốn cong và mở\ncủa xương đùi và chuyển động trong rãnh này được gọi là theo dõi xương bánh chè. Nếu\nXương bánh chè (xương bánh chè) của bạn được căn chỉnh trong một rãnh ở dưới cùng\nTại khớp gối, xương đùi (xương đùi) và xương ống chân (xương chày) kết hợp với nhau.\nBạn cũng có thể nhận thấy cảm giác nhói hoặc nhói ở đầu gối.\nhoặc khi bạn chạy, ngồi xổm hoặc leo cầu thang. Đau đầu gối có thể âm ỉ hoặc đau nhói.\ncủa bạn. Bạn có thể cảm thấy đau đầu gối sau khi ngồi xuống một lúc với đầu gối cong,\nngười chạy bộ. Vấn đề này thường gây đau xung quanh hoặc ngay sau xương bánh chè\nđược gọi là “đầu gối của người chạy bộ”, chiếm tới 25% tổng số chấn thương phát triển ở\nNghiên cứu đã phát hiện ra rằng một tình trạng được gọi là hội chứng đau xương chậu, còn\nchấn thương đầu gối cho đến nay là phổ biến nhất.\ntăng lên. Trong một số nghiên cứu kiểm tra chấn thương ở vận động viên chạy marathon,\nlượng lớn hơn tham gia các cuộc chạy marathon, các chấn thương liên quan đến chạy đã\nTrong những thập kỷ gần đây, khi ngày càng có nhiều người tham gia chạy, bao gồm cả số\nThật không may, nếu bạn thường xuyên chạy bộ, bạn cũng có khả năng cao bị đau đầu gối.\ncách tuyệt vời để đánh bại căng thẳng và giữ gìn vóc dáng khi ở ngoài trời.\nNếu bạn thích chạy bộ, có lẽ bạn đã quen với nhiều lợi ích mà nó có thể mang lại. Đó là một\nchẳng hạn như ngũ cốc nguyên hạt, các loại đậu, trái cây, rau, quả hạch và hạt.\nsố lượng carbs là loại thực phẩm bạn đang ăn. Hãy ăn những nguồn carbs lành mạnh,\nnhất. Công việc chính của họ là cung cấp năng lượng cho cơ thể và não bộ. Quan trọng hơn\nCarbohydrate là một trong ba chất dinh dưỡng đa lượng mà cơ thể bạn cần để hoạt động tốt\nngũ cốc nguyên hạt.\nnguồn carbs lành mạnh là những nguồn xoay quanh thực phẩm nguyên hạt như trái cây và\ncá nhân của bạn, nhưng bạn chắc chắn không phải sợ carbs. Tiến sĩ Chauncey nói: “Các\nCó nhiều cách khác nhau để ăn low-carb và phần lớn điều đó phụ thuộc vào mục tiêu carb\ndinh dưỡng của mình.\nphương pháp tiếp cận mong muốn của bạn để đảm bảo rằng bạn đang bao gồm các cơ sở\nnối với một chuyên gia dinh dưỡng đã đăng ký-chuyên gia dinh dưỡng, người am hiểu về\n\nquan đến bệnh ban đầu này cụm trường hợp.\nnăm 2019. Một tuần sau, họ xác nhận rằng một loại coronavirus mới, SARS-CoV-2, có liên\ntính liên quan đến một chợ hải sản và động vật ở thành phố Vũ Hán vào ngày 31 tháng 12\nCác quan chức y tế Trung Quốc lần đầu tiên báo cáo các trường hợp mắc bệnh hô hấp cấp\nMountain của nó đã đưa ra những hình ảnh mới về loại coronavirus mới.\nViện Quốc gia về Bệnh Dị ứng và Nhiễm trùng (NIAID) và Phòng thí nghiệm Rocky\nchạy.\nchóng để tránh chấn thương thêm là chìa khóa để tiếp tục làm những gì bạn yêu thích –\nvận động viên điền kinh, hãy chú ý đến cơn đau đầu gối của bạn và chăm sóc nó nhanh\ntập luyện của mình mà không gặp vấn đề gì. Nếu bạn có các triệu chứng của đầu gối của\nBằng cách thực hiện một số bước để ngăn ngừa đau đầu gối do chạy, bạn sẽ có thể tiếp tục\nnguyên nhân gây ra khớp gối của vận động viên điền kinh của bạn.\nmột chương trình tùy chỉnh các bài tập kéo giãn và tăng cường sức mạnh cụ thể cho\ncác bài tập để giải quyết vấn đề. Bác sĩ hoặc chuyên gia vật lý trị liệu của bạn có thể tạo ra\nđộng viên điền kinh cuối cùng đã giảm bớt các triệu chứng của họ chỉ bằng cách thực hiện\nđộng viên điền kinh. Các nghiên cứu đã phát hiện ra rằng nhiều người bị đầu gối của vận\nPhục hồi chức năng là một thành phần quan trọng khác trong việc điều trị đầu gối của vận" }
-      };
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const savedVoice = localStorage.getItem('speech_voice');
-      const voiceSelect = document.getElementById('grammar-voice-select');
-      if (savedVoice && voiceSelect) {
-        voiceSelect.value = savedVoice;
-      }
-      initBuiltInGrammar();
-      renderGrammarContent(currentActiveLevel);
-      fetchGrammarData();
-    });
-
-    function fetchGrammarData() {
-      const API_BASE_URL = getApiBaseUrl();
-
-      fetch(`${API_BASE_URL}/api/grammar/full-content`)
-        .then(res => {
-          if (!res.ok) throw new Error('API response not ok');
-          return res.json();
-        })
-        .then(data => {
-          if (data && Object.keys(data).length > 0 && data.hsk1 && data.hsk1.content) {
-            allGrammarData = data;
-            renderGrammarContent(currentActiveLevel);
-          }
-        })
-        .catch(err => {
-          console.warn("API fetch failed, retaining full extracted dataset:", err);
-          renderGrammarContent(currentActiveLevel);
-        });
-    }
-
-    window.switchLevelTab = function (levelId) {
-      currentActiveLevel = levelId;
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        if (btn.getAttribute('data-level') === levelId) {
-          btn.classList.add('active');
-        } else {
-          btn.classList.remove('active');
-        }
-      });
-
-      document.getElementById('download-pdf-btn').href = pdfMap[levelId] || '#';
-      renderGrammarContent(levelId);
-    };
-
-    function renderGrammarContent(levelId, filterQuery = '') {
-      const item = allGrammarData[levelId];
-      const box = document.getElementById('grammar-content-box');
-      const titleEl = document.getElementById('current-title');
-      const badgeEl = document.getElementById('current-badge');
-
-      if (!item || !item.content) {
-        box.innerHTML = `<div style="text-align: center; padding: 30px;">Chưa có nội dung cho cấp độ này.</div>`;
-        return;
-      }
-
-      titleEl.textContent = item.title || `Tổng Hợp Ngữ Pháp ${levelId.toUpperCase()}`;
-      badgeEl.textContent = item.level || levelId.toUpperCase();
-
-      let text = item.content;
-
-      if (filterQuery) {
-        const lines = text.split('\n');
-        const matchedLines = lines.filter(l => l.toLowerCase().includes(filterQuery.toLowerCase()));
-        if (matchedLines.length > 0) {
-          text = `--- KẾT QUẢ TÌM KIẾM CHO TỪ KHÓA "${filterQuery}" (${matchedLines.length} DÒNG NỔI BẬT) ---\n\n` + matchedLines.join('\n');
-        } else {
-          text = `Không tìm thấy kết quả phù hợp cho từ khóa "${filterQuery}" trong ${item.level}.`;
-        }
-      }
-
-      // Format Chinese text highlighting
-      const formattedHtml = text.replace(/([一-龥]+)/g, '<span class="zh-text" onclick="speakZhText(\'$1\')">$1</span>');
-
-      box.innerHTML = formattedHtml;
-    }
-
-    window.filterGrammarContent = function () {
-      const query = document.getElementById('search-grammar-input').value.trim();
-      renderGrammarContent(currentActiveLevel, query);
-    };
-  </script>
 </body>
 
 </html>

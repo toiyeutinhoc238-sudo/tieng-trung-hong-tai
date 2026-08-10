@@ -4476,11 +4476,15 @@ window.goToRoadmapLevel = function (ver, level) {
   // Set version
   if (ver === 'yct') {
     activeHskVersion = 'yct';
+    activeRoadmapVersion = 'yct';
     activeLessonsCurriculum = 'yct';
     activeYctLevel = level.toString();
+    localStorage.setItem('active_hsk_version', 'yct');
   } else {
-    activeHskVersion = ver;
+    activeHskVersion = ver || '3.0';
+    activeRoadmapVersion = ver || '3.0';
     activeLessonsCurriculum = 'hsk';
+    localStorage.setItem('active_hsk_version', activeHskVersion);
     // Parse level correctly: '7-9' stays string, numbers become int
     activeLessonsLevel = /^\d+$/.test(level.toString()) ? parseInt(level) : level.toString();
   }
@@ -8072,7 +8076,9 @@ window.openLessonTextStudy = function(lessonId) {
   if (modalEl) modalEl.style.display = 'none';
 
   const numId = parseInt(String(lessonId).replace(/\D/g, ''), 10) || 1;
-  window.location.href = `/lesson-texts.html?lesson=${numId}`;
+  const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : (activeLessonsLevel || 1);
+  const currentVer = activeLessonsCurriculum === 'yct' ? 'yct' : (activeHskVersion || activeRoadmapVersion || '3.0');
+  window.location.href = `/lesson-texts.html?lesson=${numId}&level=${currentLvl}&version=${currentVer}`;
 };
 
 window.openLessonReviewStudy = function(lessonId) {
