@@ -74,8 +74,17 @@ app.use((req, res, next) => {
   const proto = (req.headers['x-forwarded-proto'] || '').toLowerCase();
 
   // 1. If accessed directly via onrender.com or www., 301 redirect & set noindex for onrender.com
+  //    Return a dedicated robots.txt for the Render domain that blocks all bots
   if (host.includes('onrender.com') || host.startsWith('www.')) {
+    // Serve a blocking robots.txt so Googlebot stops crawling the Render URL entirely
+    if (req.path === '/robots.txt') {
+      res.setHeader('Content-Type', 'text/plain');
+      res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+      return res.send('User-agent: *\nDisallow: /\n');
+    }
+    // For all other pages: set noindex + canonical then 301 permanent redirect
     res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+    res.setHeader('Link', `<https://tiengtrunghongtai.online${req.path}>; rel="canonical"`);
     return res.redirect(301, `https://tiengtrunghongtai.online${req.originalUrl}`);
   }
 
