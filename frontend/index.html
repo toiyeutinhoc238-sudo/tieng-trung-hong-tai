@@ -320,10 +320,6 @@
       <!-- DANH MỤC 2: KỸ NĂNG -->
       <div class="sidebar-section-label">Kỹ Năng</div>
       <ul class="sidebar-menu" style="margin-bottom: 8px;">
-        <li class="sidebar-item" onclick="window.showComingSoonNotice('Chuyên Trang Bài Khóa')">
-          <i class="fa-solid fa-book-open" style="color: #64748b;"></i> <span>Chuyên Trang Bài Khóa</span>
-          <span style="font-size:0.68rem; background:rgba(245,158,11,0.2); color:#f59e0b; border:1px solid rgba(245,158,11,0.3); padding:2px 6px; border-radius:6px; font-weight:700; margin-left:auto; white-space:nowrap;">🔒 Sắp ra mắt</span>
-        </li>
         <li class="sidebar-item" onclick="window.showComingSoonNotice('Luyện nghe & đọc')">
           <i class="fa-solid fa-headphones" style="color: #64748b;"></i> <span>Luyện nghe & đọc</span>
           <span style="font-size:0.68rem; background:rgba(245,158,11,0.2); color:#f59e0b; border:1px solid rgba(245,158,11,0.3); padding:2px 6px; border-radius:6px; font-weight:700; margin-left:auto; white-space:nowrap;">🔒 Sắp ra mắt</span>
@@ -2996,6 +2992,16 @@
         </div>
       </div>
 
+      <!-- Preview Trọng tâm Ngữ pháp bài này -->
+      <div id="modal-lesson-grammar-preview-box" style="display: none; background: rgba(56, 189, 248, 0.08); border: 1px dashed rgba(56, 189, 248, 0.35); border-radius: 14px; padding: 12px 16px;">
+        <div style="font-size: 0.85rem; font-weight: 700; color: #38bdf8; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+          <i class="fa-solid fa-spell-check"></i> <span id="modal-lesson-grammar-preview-title">Trọng tâm Ngữ pháp bài này:</span>
+        </div>
+        <ul id="modal-lesson-grammar-preview-list" style="margin: 0; padding-left: 20px; font-size: 0.88rem; color: #e2e8f0; line-height: 1.5;">
+          <!-- Dynamically populated -->
+        </ul>
+      </div>
+
       <!-- Module Action Grid Buttons -->
       <div class="lesson-modules-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 4px;">
         <button id="modal-btn-mod-vocab" class="lesson-mod-btn mod-vocab" style="padding: 16px;">
@@ -3006,7 +3012,7 @@
         <button id="modal-btn-mod-grammar" class="lesson-mod-btn mod-grammar" style="padding: 16px;" onclick="window.openLessonGrammarStudy(window.activeLessonId || '1')">
           <i class="fa-solid fa-spell-check" style="font-size: 1.3rem;"></i>
           <span style="font-size: 1.05rem; font-weight: 800;">Ngữ Pháp</span>
-          <small style="background: #2563eb; color: #fff; padding: 1px 6px; border-radius: 99px;">Tra cứu 📖</small>
+          <small style="background: linear-gradient(135deg, #0284c7, #2563eb); color: #fff; padding: 1px 8px; border-radius: 99px; font-weight: 700;">Học Ngữ Pháp 📖</small>
         </button>
         <button id="modal-btn-mod-text" class="lesson-mod-btn mod-text" style="padding: 16px;" onclick="window.openLessonTextStudy(window.activeLessonId || '1')">
           <i class="fa-solid fa-comments" style="font-size: 1.3rem;"></i>
@@ -3019,6 +3025,57 @@
           <small style="background: rgba(0,0,0,0.25); color: #fff; padding: 1px 6px; border-radius: 99px;">Sắp ra mắt</small>
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- Modal Học Ngữ Pháp Trực Tiếp Của Bài Học Trong Lộ Trình -->
+  <div class="modal-overlay" id="lesson-grammar-popup-modal" onclick="if(event.target === this) this.style.display='none';" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(16px); z-index: 999999; align-items: center; justify-content: center; padding: 16px;">
+    <div class="modal-card glass-panel" style="background: var(--bg-primary, #0f172a); border: 1.5px solid rgba(56, 189, 248, 0.3); border-radius: 26px; width: 100%; max-width: 860px; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 25px 60px rgba(0,0,0,0.65); color: #ffffff; position: relative; overflow: hidden;">
+      
+      <!-- Modal Header -->
+      <div style="padding: 20px 26px 16px 26px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; gap: 16px; background: rgba(255,255,255,0.02); flex-shrink: 0;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div id="grammar-modal-icon-badge" style="background: linear-gradient(135deg, #0284c7, #2563eb); color: white; width: 48px; height: 48px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 8px 20px rgba(37,99,235,0.35); flex-shrink: 0;">
+            <i class="fa-solid fa-spell-check"></i>
+          </div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2px;">
+              <span class="lesson-badge" id="grammar-modal-badge" style="background: rgba(37,99,235,0.25); color: #60a5fa; border: 1px solid rgba(37,99,235,0.4); font-size: 0.78rem; padding: 2px 10px; border-radius: 99px; font-weight: 700;">HSK 1 (3.0)</span>
+              <span id="grammar-modal-count-badge" style="background: rgba(16,185,129,0.2); color: #34d399; border: 1px solid rgba(16,185,129,0.3); font-size: 0.75rem; padding: 2px 8px; border-radius: 99px; font-weight: 700;">3 Điểm Ngữ Pháp</span>
+            </div>
+            <h3 id="grammar-modal-title" style="font-size: 1.35rem; font-weight: 800; margin: 0; color: #ffffff; font-family: var(--font-display);">Bài 1: AI小语，你好！</h3>
+          </div>
+        </div>
+        <button onclick="document.getElementById('lesson-grammar-popup-modal').style.display='none'" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; font-size: 1.2rem; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0;" title="Đóng (ESC)">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body (Scrollable) -->
+      <div id="grammar-modal-body" style="padding: 22px 26px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; flex: 1;">
+        <!-- Dynamically rendered grammar cards -->
+      </div>
+
+      <!-- Modal Footer Nav -->
+      <div style="padding: 14px 26px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; gap: 12px; background: rgba(15, 23, 42, 0.95); flex-shrink: 0; flex-wrap: wrap;">
+        <div style="display: flex; gap: 8px;">
+          <button id="grammar-modal-prev-btn" class="btn btn-secondary" style="padding: 9px 16px; border-radius: 12px; font-size: 0.88rem; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-arrow-left"></i> Bài trước
+          </button>
+          <button id="grammar-modal-next-btn" class="btn btn-secondary" style="padding: 9px 16px; border-radius: 12px; font-size: 0.88rem; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+            Bài tiếp <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button id="grammar-modal-so-tay-btn" class="btn-action" style="background: rgba(37,99,235,0.15); border-color: rgba(37,99,235,0.35); color: #60a5fa; padding: 9px 16px; border-radius: 12px; font-size: 0.88rem; font-weight: 700; cursor: pointer;">
+            <i class="fa-solid fa-book-bookmark"></i> Mở Sổ Tay Toàn Bộ
+          </button>
+          <button onclick="document.getElementById('lesson-grammar-popup-modal').style.display='none'" class="btn btn-primary" style="padding: 9px 20px; border-radius: 12px; font-size: 0.88rem; font-weight: 700;">
+            Đã Hiểu & Đóng
+          </button>
+        </div>
+      </div>
+
     </div>
   </div>
 

@@ -1,4 +1,8 @@
 // HSK Vocabulary Flashcard - Main Frontend Controller
+import { HSK1_STRUCTURED_GRAMMAR } from '../grammar_hsk1.js';
+if (typeof window !== 'undefined') {
+  window.HSK1_STRUCTURED_GRAMMAR = HSK1_STRUCTURED_GRAMMAR;
+}
 let radicalsData = { radicals: [], comparisons: [] };
 async function loadRadicalsData() {
   try {
@@ -6825,6 +6829,29 @@ window.openLessonDetailModal = function (lessonKey) {
   if (progFill) progFill.style.width = `${pct}%`;
   if (vocabCount) vocabCount.textContent = `${sliceWords.length} từ`;
 
+  // Render grammar preview in lesson detail modal
+  const numKey = parseInt(String(lessonKey).replace(/\D/g, ''), 10) || 1;
+  const grammarLesson = (String(currentLvl) === '1' && (activeHskVersion === '3.0' || !activeHskVersion)) ? (HSK1_STRUCTURED_GRAMMAR || []).find(l => l.lessonId === numKey) : null;
+  const grammarPreviewBox = document.getElementById('modal-lesson-grammar-preview-box');
+  const grammarPreviewList = document.getElementById('modal-lesson-grammar-preview-list');
+  const grammarPreviewTitle = document.getElementById('modal-lesson-grammar-preview-title');
+  if (grammarPreviewBox && grammarPreviewList) {
+    if (grammarLesson && grammarLesson.grammarPoints && grammarLesson.grammarPoints.length > 0) {
+      grammarPreviewBox.style.display = 'block';
+      if (grammarPreviewTitle) {
+        grammarPreviewTitle.textContent = `Trọng tâm Ngữ pháp bài này (${grammarLesson.grammarPoints.length} điểm):`;
+      }
+      grammarPreviewList.innerHTML = grammarLesson.grammarPoints.map((p, idx) => `
+        <li style="margin-bottom: 4px;">
+          <strong style="color: #ffffff;">${idx + 1}. ${p.title}</strong>
+          ${p.formula ? `<span style="color: #38bdf8; font-size: 0.8rem; margin-left: 6px; font-weight: 600;">[${p.formula.split('\n')[0]}]</span>` : ''}
+        </li>
+      `).join('');
+    } else {
+      grammarPreviewBox.style.display = 'none';
+    }
+  }
+
   if (btnVocab) {
     btnVocab.onclick = function () {
       const modalEl = document.getElementById('lesson-detail-popup-modal');
@@ -6836,9 +6863,10 @@ window.openLessonDetailModal = function (lessonKey) {
   const btnGrammar = document.getElementById('modal-btn-mod-grammar');
   if (btnGrammar) {
     const grammarBadge = btnGrammar.querySelector('small');
+    const ptCount = (grammarLesson && grammarLesson.grammarPoints) ? grammarLesson.grammarPoints.length : 0;
     if (grammarBadge) {
-      grammarBadge.textContent = 'Tra cứu 📖';
-      grammarBadge.style.background = '#2563eb';
+      grammarBadge.textContent = ptCount > 0 ? `${ptCount} điểm NP 📖` : 'Học Ngữ Pháp 📖';
+      grammarBadge.style.background = 'linear-gradient(135deg, #0284c7, #2563eb)';
       grammarBadge.style.color = '#ffffff';
     }
     btnGrammar.onclick = function () {
@@ -7147,7 +7175,7 @@ window.openLessonDetailModal = function (lessonKey) {
         <button class="lesson-mod-btn mod-grammar" style="position: relative;" onclick="event.stopPropagation(); window.openLessonGrammarStudy('${lessonKey}')">
           <i class="fa-solid fa-spell-check"></i>
           <span>Ngữ Pháp</span>
-          <small style="background: #2563eb; color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">Tra cứu 📖</small>
+          <small style="background: linear-gradient(135deg, #0284c7, #2563eb); color: #fff; padding: 1px 8px; border-radius: 99px; font-weight: 700;">Học Ngữ Pháp 📖</small>
         </button>
         <button class="lesson-mod-btn mod-text" onclick="event.stopPropagation(); window.openLessonTextStudy('${lessonKey}')">
           <i class="fa-solid fa-comments"></i>
@@ -8119,14 +8147,189 @@ window.navBkLine = function(dir, totalLines) {
   renderBkModalContent();
 };
 
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+window.openLessonGrammarModal = function(lessonKey) {
+  const modalEl = document.getElementById('lesson-grammar-popup-modal');
+  const numKey = parseInt(String(lessonKey).replace(/\D/g, ''), 10) || 1;
+  const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : (activeLessonsLevel || 1);
+  const currentVer = activeLessonsCurriculum === 'yct' ? 'yct' : (activeHskVersion || activeRoadmapVersion || '3.0');
+
+  // If not HSK 1 or no data ready yet
+  if (String(currentLvl) !== '1' || currentVer === 'yct' || currentVer === '2.0') {
+    showComingSoonNotice(`Ngữ Pháp HSK ${currentLvl}`);
+    return;
+  }
+
+  const lessonData = (HSK1_STRUCTURED_GRAMMAR || []).find(l => l.lessonId === numKey);
+  if (!lessonData || !lessonData.grammarPoints || lessonData.grammarPoints.length === 0) {
+    showToast(`Dữ liệu ngữ pháp Bài ${numKey} đang được cập nhật!`);
+    return;
+  }
+
+  if (!modalEl) {
+    window.location.href = `/hsk-grammar.html?level=1&lesson=${numKey}`;
+    return;
+  }
+
+  // Update Header info
+  const titleEl = document.getElementById('grammar-modal-title');
+  const badgeEl = document.getElementById('grammar-modal-badge');
+  const countBadgeEl = document.getElementById('grammar-modal-count-badge');
+  const bodyEl = document.getElementById('grammar-modal-body');
+
+  if (titleEl) titleEl.textContent = `Bài ${lessonData.lessonId}: ${lessonData.lessonTitleZh || ''}`;
+  if (badgeEl) badgeEl.textContent = `HSK 1 (3.0)`;
+  if (countBadgeEl) countBadgeEl.textContent = `${lessonData.grammarPoints.length} Điểm Ngữ Pháp`;
+
+  // Render grammar points
+  if (bodyEl) {
+    let cardsHtml = '';
+    lessonData.grammarPoints.forEach((pt, idx) => {
+      // Formula / Structure
+      let formulaHtml = '';
+      if (pt.formula) {
+        formulaHtml = `
+          <div style="background: rgba(56, 189, 248, 0.08); border-left: 4px solid #38bdf8; border-radius: 12px; padding: 12px 16px; margin: 12px 0;">
+            <div style="font-size: 0.8rem; font-weight: 800; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-code"></i> Cấu trúc / Công thức
+            </div>
+            <div style="font-family: var(--font-display, sans-serif); font-size: 1.02rem; font-weight: 700; color: #ffffff; white-space: pre-line; line-height: 1.5;">
+              ${escapeHtml(pt.formula)}
+            </div>
+          </div>
+        `;
+      }
+
+      // Explanation
+      let expHtml = '';
+      if (pt.explanation) {
+        expHtml = `
+          <div style="font-size: 0.95rem; color: #e2e8f0; line-height: 1.6; margin: 10px 0;">
+            ${escapeHtml(pt.explanation)}
+          </div>
+        `;
+      }
+
+      // Note
+      let noteHtml = '';
+      if (pt.note) {
+        noteHtml = `
+          <div style="background: rgba(245, 158, 11, 0.1); border-left: 4px solid #f59e0b; border-radius: 12px; padding: 10px 14px; margin: 10px 0;">
+            <div style="font-size: 0.8rem; font-weight: 800; color: #fbbf24; margin-bottom: 2px; display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-lightbulb"></i> Chú ý
+            </div>
+            <div style="font-size: 0.9rem; color: #fef08a; line-height: 1.5;">
+              ${escapeHtml(pt.note)}
+            </div>
+          </div>
+        `;
+      }
+
+      // Examples
+      let examplesHtml = '';
+      if (pt.examples && pt.examples.length > 0) {
+        let exItems = pt.examples.map(ex => {
+          const safeZh = (ex.zh || '').replace(/'/g, "\\'");
+          return `
+            <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; transition: all 0.2s;">
+              <div style="flex: 1;">
+                <div style="font-size: 1.18rem; font-weight: 700; color: #ffffff; font-family: 'Noto Sans SC', sans-serif; margin-bottom: 2px; letter-spacing: 0.5px;">
+                  ${escapeHtml(ex.zh || '')}
+                </div>
+                <div style="font-size: 0.92rem; color: #38bdf8; font-family: var(--font-display, sans-serif); font-weight: 600; margin-bottom: 2px;">
+                  ${escapeHtml(ex.pinyin || '')}
+                </div>
+                <div style="font-size: 0.88rem; color: #cbd5e1;">
+                  ${escapeHtml(ex.vi || '')}
+                </div>
+              </div>
+              <button onclick="window.speakText('${safeZh}')" style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); color: #38bdf8; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: all 0.2s;" title="Nghe phát âm">
+                <i class="fa-solid fa-volume-high"></i>
+              </button>
+            </div>
+          `;
+        }).join('');
+
+        examplesHtml = `
+          <div style="margin-top: 14px;">
+            <div style="font-size: 0.82rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-list-check"></i> Ví dụ minh họa (${pt.examples.length} câu)
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              ${exItems}
+            </div>
+          </div>
+        `;
+      }
+
+      cardsHtml += `
+        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px;">
+            <div style="width: 32px; height: 32px; border-radius: 10px; background: linear-gradient(135deg, #0284c7, #2563eb); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.95rem; flex-shrink: 0;">
+              ${idx + 1}
+            </div>
+            <h4 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #ffffff; font-family: var(--font-display, sans-serif);">
+              ${escapeHtml(pt.title || '')}
+            </h4>
+          </div>
+          ${formulaHtml}
+          ${expHtml}
+          ${noteHtml}
+          ${examplesHtml}
+        </div>
+      `;
+    });
+
+    bodyEl.innerHTML = cardsHtml;
+  }
+
+  // Prev / Next button handlers
+  const btnPrev = document.getElementById('grammar-modal-prev-btn');
+  const btnNext = document.getElementById('grammar-modal-next-btn');
+  const btnSoTay = document.getElementById('grammar-modal-so-tay-btn');
+
+  if (btnPrev) {
+    if (numKey > 1) {
+      btnPrev.style.display = 'inline-flex';
+      btnPrev.onclick = () => window.openLessonGrammarModal(numKey - 1);
+    } else {
+      btnPrev.style.display = 'none';
+    }
+  }
+
+  if (btnNext) {
+    if (numKey < (HSK1_STRUCTURED_GRAMMAR || []).length) {
+      btnNext.style.display = 'inline-flex';
+      btnNext.onclick = () => window.openLessonGrammarModal(numKey + 1);
+    } else {
+      btnNext.style.display = 'none';
+    }
+  }
+
+  if (btnSoTay) {
+    btnSoTay.onclick = () => {
+      window.location.href = `/hsk-grammar.html?level=1&lesson=${numKey}`;
+    };
+  }
+
+  modalEl.style.display = 'flex';
+};
+
 window.openLessonGrammarStudy = function(lessonId) {
   const modalEl = document.getElementById('lesson-detail-popup-modal');
   if (modalEl) modalEl.style.display = 'none';
 
   const numId = parseInt(String(lessonId).replace(/\D/g, ''), 10) || 1;
-  const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : (activeLessonsLevel || 1);
-  const currentVer = activeLessonsCurriculum === 'yct' ? 'yct' : (activeHskVersion || activeRoadmapVersion || '3.0');
-  window.location.href = `/hsk-grammar.html?level=${currentLvl}&lesson=${numId}&version=${currentVer}`;
+  window.openLessonGrammarModal(numId);
 };
 
 window.openLessonTextStudy = function(lessonId) {
