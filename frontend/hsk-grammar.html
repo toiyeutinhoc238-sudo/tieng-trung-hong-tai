@@ -839,7 +839,10 @@
         </div>
       </div>
 
-      <div style="display: flex; gap: 8px; align-items: center;">
+      <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+        <a id="btn-back-to-roadmap" href="/index.html?tab=lessons" class="btn-action" style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(2, 132, 199, 0.35)); border-color: rgba(56, 189, 248, 0.5); color: #38bdf8; font-weight: 700;" title="Quay lại Lộ Trình Học">
+          <i class="fa-solid fa-map-location-dot"></i> <span>Lộ Trình</span>
+        </a>
         <button id="particle-toggle-btn" class="btn-action particle-toggle-btn" onclick="window.toggleSeasonalParticles()" title="Bật/Tắt hiệu ứng mùa">
           <i class="fa-solid fa-snowflake" style="color: #38bdf8;"></i>
         </button>
@@ -858,19 +861,19 @@
         <i class="fa-solid fa-seedling"></i> HSK 1 (3.0 Mới)
       </button>
       <button class="level-tab-btn" onclick="switchLevel('hsk2')">
-        <i class="fa-solid fa-graduation-cap"></i> HSK 2
+        <i class="fa-solid fa-graduation-cap"></i> HSK 2 <small style="background: rgba(245,158,11,0.25); color: #fbbf24; border: 1px solid rgba(245,158,11,0.4); padding: 1px 6px; border-radius: 99px; font-size: 0.68rem; margin-left: 4px;">🔒 Sắp ra mắt</small>
       </button>
       <button class="level-tab-btn" onclick="switchLevel('hsk3')">
-        <i class="fa-solid fa-book-bookmark"></i> HSK 3
+        <i class="fa-solid fa-book-bookmark"></i> HSK 3 <small style="background: rgba(245,158,11,0.25); color: #fbbf24; border: 1px solid rgba(245,158,11,0.4); padding: 1px 6px; border-radius: 99px; font-size: 0.68rem; margin-left: 4px;">🔒 Sắp ra mắt</small>
       </button>
       <button class="level-tab-btn" onclick="switchLevel('hsk4')">
-        <i class="fa-solid fa-star"></i> HSK 4
+        <i class="fa-solid fa-star"></i> HSK 4 <small style="background: rgba(245,158,11,0.25); color: #fbbf24; border: 1px solid rgba(245,158,11,0.4); padding: 1px 6px; border-radius: 99px; font-size: 0.68rem; margin-left: 4px;">🔒 Sắp ra mắt</small>
       </button>
       <button class="level-tab-btn" onclick="switchLevel('hsk5')">
-        <i class="fa-solid fa-award"></i> HSK 5
+        <i class="fa-solid fa-award"></i> HSK 5 <small style="background: rgba(245,158,11,0.25); color: #fbbf24; border: 1px solid rgba(245,158,11,0.4); padding: 1px 6px; border-radius: 99px; font-size: 0.68rem; margin-left: 4px;">🔒 Sắp ra mắt</small>
       </button>
       <button class="level-tab-btn" onclick="switchLevel('hsk6')">
-        <i class="fa-solid fa-crown"></i> HSK 6
+        <i class="fa-solid fa-crown"></i> HSK 6 <small style="background: rgba(245,158,11,0.25); color: #fbbf24; border: 1px solid rgba(245,158,11,0.4); padding: 1px 6px; border-radius: 99px; font-size: 0.68rem; margin-left: 4px;">🔒 Sắp ra mắt</small>
       </button>
     </div>
 
@@ -1034,7 +1037,21 @@
       if (currentActiveLevel === 'hsk1') {
         renderHsk1Structured(mainBox);
       } else {
-        renderOtherHskLevel(mainBox, currentActiveLevel);
+        const lvlNum = currentActiveLevel.replace('hsk', '').toUpperCase();
+        mainBox.innerHTML = `
+          <div style="background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(16px); border: 1.5px solid rgba(255, 255, 255, 0.15); border-radius: 28px; padding: 60px 32px; text-align: center; box-shadow: 0 16px 40px rgba(0,0,0,0.4); max-width: 680px; margin: 40px auto;">
+            <div style="width: 80px; height: 80px; border-radius: 50%; background: rgba(245, 158, 11, 0.15); color: #fbbf24; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; margin: 0 auto 24px auto; box-shadow: 0 8px 24px rgba(245, 158, 11, 0.25);">
+              <i class="fa-solid fa-lock"></i>
+            </div>
+            <h2 style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-bottom: 12px; font-family: var(--font-display);">Ngữ Pháp HSK ${lvlNum} Đang Được Hoàn Thiện</h2>
+            <p style="color: #94a3b8; font-size: 1rem; line-height: 1.6; margin-bottom: 28px;">
+              Nội dung Sổ tay Ngữ Pháp chi tiết theo từng bài học cho cấp độ HSK ${lvlNum} đang được đội ngũ giáo viên Tiếng Trung HongTai biên soạn chuẩn hóa và kiểm duyệt kỹ lưỡng.
+            </p>
+            <button class="btn-action" onclick="switchLevel('hsk1')" style="background: linear-gradient(135deg, #0284c7, #2563eb); color: #ffffff; border: none; padding: 14px 32px; border-radius: 14px; font-weight: 800; font-size: 1rem; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(37,99,235,0.4);">
+              <i class="fa-solid fa-book-open"></i> Học Trọn Bộ Ngữ Pháp HSK 1 (15 Bài)
+            </button>
+          </div>
+        `;
       }
     }
 
@@ -1238,14 +1255,73 @@
       }
     }
 
+    function focusTargetLesson(targetLesson) {
+      if (!targetLesson) return;
+      const num = parseInt(String(targetLesson).replace(/\D/g, ''), 10) || targetLesson;
+
+      setTimeout(() => {
+        let block = document.getElementById(`block-Bài ${num}`) || document.getElementById(`block-Bài%${num}`);
+        if (!block) {
+          const blocks = document.querySelectorAll('.lesson-block');
+          for (let b of blocks) {
+            const pill = b.querySelector('.lesson-number-pill');
+            if (pill && pill.textContent.replace(/\D/g, '') === String(num)) {
+              block = b;
+              break;
+            }
+          }
+        }
+
+        if (block) {
+          // Ensure body is visible
+          const body = block.querySelector('.lesson-body-content');
+          if (body) body.style.display = 'flex';
+          const icon = block.querySelector('.lesson-chevron-icon');
+          if (icon) icon.className = 'fa-solid fa-chevron-up lesson-chevron-icon';
+
+          // Expand all grammar points in this lesson
+          block.querySelectorAll('.grammar-card').forEach(c => {
+            c.classList.add('expanded');
+            const ptChevron = c.querySelector('.point-chevron-icon');
+            if (ptChevron) ptChevron.className = 'fa-solid fa-chevron-up point-chevron-icon';
+          });
+
+          // Scroll into view
+          block.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+          // Visual highlight glow
+          block.style.transition = 'all 0.4s ease';
+          block.style.boxShadow = '0 0 25px rgba(56, 189, 248, 0.6), 0 0 10px rgba(59, 130, 246, 0.5)';
+          block.style.borderColor = '#38bdf8';
+          block.style.borderRadius = '20px';
+          setTimeout(() => {
+            block.style.boxShadow = '';
+            block.style.borderColor = '';
+          }, 3500);
+        }
+      }, 180);
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
       const reqLvl = urlParams.get('level');
+      const reqLesson = urlParams.get('lesson');
+      const reqVer = urlParams.get('version');
+
+      const roadmapBtn = document.getElementById('btn-back-to-roadmap');
+      if (roadmapBtn && reqLvl) {
+        roadmapBtn.href = `/index.html?tab=lessons&level=${reqLvl}${reqVer ? '&version=' + reqVer : ''}`;
+      }
+
       if (reqLvl && ['1','2','3','4','5','6','hsk1','hsk2','hsk3','hsk4','hsk5','hsk6'].includes(reqLvl.toLowerCase())) {
         const norm = reqLvl.startsWith('hsk') ? reqLvl.toLowerCase() : `hsk${reqLvl}`;
         window.switchLevel(norm);
       } else {
         renderGrammarView();
+      }
+
+      if (reqLesson) {
+        focusTargetLesson(reqLesson);
       }
     });
   </script>

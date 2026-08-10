@@ -14,9 +14,9 @@ export const FULL_STRUCTURED_GRAMMAR = {
             "id": "hsk1_b1_g1",
             "num": 1,
             "title": "Cách chào hỏi",
-            "explanation": null,
+            "explanation": "Trong tiếng Trung, cách chào hỏi thông dụng nhất là ghép đối tượng được chào với từ \"好\" (hǎo - tốt, lành).",
             "formula": "Công thức chung: \n[Đối tượng được chào] + 好 (hǎo)",
-            "note": "Khi chào người lớn tuổi hoặc người cần tôn trọng, nên dù 您好 (nín hǎo) thay vì 你好 (nǐ hǎo).",
+            "note": "Khi chào người lớn tuổi hoặc người cần tôn trọng, nên dùng 您好 (nín hǎo) thay vì 你好 (nǐ hǎo).",
             "examples": [
               {
                 "rawZh": "- 你好 (nǐ hǎo)",
@@ -64,7 +64,7 @@ export const FULL_STRUCTURED_GRAMMAR = {
             "id": "hsk1_b2_g1",
             "num": 1,
             "title": "Câu cơ bản: Chủ ngữ + Động từ + Tân ngữ (S + V + O)",
-            "explanation": "Đây là cấu trúc câu đơn giản nhất trong tiếng Trung.",
+            "explanation": "Đây là cấu trúc câu đơn giản nhất trong tiếng Trung để diễn đạt ai làm gì.",
             "formula": "S + V + O",
             "note": null,
             "examples": [
@@ -88,7 +88,7 @@ export const FULL_STRUCTURED_GRAMMAR = {
             "id": "hsk1_b2_g2",
             "num": 2,
             "title": "Trạng ngữ thời gian và địa điểm",
-            "explanation": "Trong tiếng Trung, trạng ngữ chỉ thời gian và địa điểm không bao giờ đứng cuối câu.",
+            "explanation": "Trong tiếng Trung, trạng ngữ chỉ thời gian và địa điểm luôn đứng trước động từ vị ngữ, không bao giờ đứng cuối câu.",
             "formula": "Thời gian + Chủ ngữ + Địa điểm + Động từ + Tân ngữ",
             "note": null,
             "examples": [
@@ -106,7 +106,7 @@ export const FULL_STRUCTURED_GRAMMAR = {
             "id": "hsk1_b2_g3",
             "num": 3,
             "title": "Vị trí của phó từ (不 - không, 很 - rất)",
-            "explanation": null,
+            "explanation": "Phó từ dùng để bổ nghĩa cho động từ hoặc tính từ, vị trí luôn đứng trước động từ hoặc tính từ đó.",
             "formula": "Chủ ngữ + Phó từ + Động từ/Tính từ",
             "note": null,
             "examples": [
@@ -114,13 +114,13 @@ export const FULL_STRUCTURED_GRAMMAR = {
                 "rawZh": "他不喜欢。(Tā bù xǐhuan.)",
                 "zh": "他不喜欢。",
                 "pinyin": "Tā bù xǐhuan.",
-                "vi": "Anh ấy không thích"
+                "vi": "Anh ấy không thích."
               },
               {
                 "rawZh": "苹果很好。(Píngguǒ hěn hǎo.)",
                 "zh": "苹果很好。",
                 "pinyin": "Píngguǒ hěn hǎo.",
-                "vi": "Táo rất tốt."
+                "vi": "Táo rất ngon/tốt."
               }
             ],
             "tables": null,
@@ -138,15 +138,21 @@ export const FULL_STRUCTURED_GRAMMAR = {
             "id": "hsk1_b3_g1",
             "num": 1,
             "title": "Câu chữ “是”",
-            "explanation": "Câu chữ “是” được dùng để định danh người hoặc sự vật, hình thức phủ định là “不是”",
+            "explanation": "Câu chữ “是” (shì) được dùng để định danh, giới thiệu người hoặc sự vật (là...). Hình thức phủ định là “不是” (bú shì - không phải là).",
             "formula": "S + (不)是 + O",
             "note": null,
             "examples": [
               {
-                "rawZh": "我不是中国人，我是越南人",
-                "zh": "我不是中国人，我是越南人",
-                "pinyin": "",
-                "vi": ""
+                "rawZh": "我不是中国人，我是越南人。(Wǒ bú shì Zhōngguó rén, wǒ shì Yuènán rén.)",
+                "zh": "我不是中国人，我是越南人。",
+                "pinyin": "Wǒ bú shì Zhōngguó rén, wǒ shì Yuènán rén.",
+                "vi": "Tôi không phải là người Trung Quốc, tôi là người Việt Nam."
+              },
+              {
+                "rawZh": "他是我的老师。(Tā shì wǒ de lǎoshī.)",
+                "zh": "他是我的老师。",
+                "pinyin": "Tā shì wǒ de lǎoshī.",
+                "vi": "Thầy ấy là giáo viên của tôi."
               }
             ],
             "tables": null,
@@ -155,46 +161,46 @@ export const FULL_STRUCTURED_GRAMMAR = {
           {
             "id": "hsk1_b3_g2",
             "num": 2,
-            "title": "Trợ từ kết câu 的",
-            "explanation": "Trợ từ kết câu “的” được đặt giữ định ngữ và trung tâm ngữ để diễn đạt mối quan hệ sở hữu",
+            "title": "Trợ từ kết cấu “的”",
+            "explanation": "Trợ từ kết cấu “的” (de) được đặt giữa định ngữ và trung tâm ngữ để diễn đạt mối quan hệ sở hữu (của...).",
             "formula": "Định ngữ + 的 + Trung tâm ngữ",
-            "note": "Trong trường hợp trước “的” ( định ngữ) là đại từ nhân xưng, sau “的” (trung tâm ngữ) là từ chỉ quan hệ thân thuộc hoặc danh từ chỉ người, “的” có thể được lược bỏ.",
+            "note": "Trong trường hợp trước “的” (định ngữ) là đại từ nhân xưng, sau “的” (trung tâm ngữ) là từ chỉ quan hệ thân thuộc hoặc danh từ chỉ người, “的” có thể được lược bỏ để câu tự nhiên hơn.",
             "examples": [
               {
-                "rawZh": "你的名字",
+                "rawZh": "你的名字 (nǐ de míngzi)",
                 "zh": "你的名字",
-                "pinyin": "",
-                "vi": ""
+                "pinyin": "nǐ de míngzi",
+                "vi": "Tên của bạn"
               },
               {
-                "rawZh": "你的老师",
+                "rawZh": "你的老师 (nǐ de lǎoshī)",
                 "zh": "你的老师",
-                "pinyin": "",
-                "vi": ""
+                "pinyin": "nǐ de lǎoshī",
+                "vi": "Thầy/cô giáo của bạn"
               },
               {
-                "rawZh": "我老师",
+                "rawZh": "我老师 (wǒ lǎoshī)",
                 "zh": "我老师",
-                "pinyin": "",
-                "vi": ""
+                "pinyin": "wǒ lǎoshī",
+                "vi": "Giáo viên của tôi (lược bỏ 的)"
               },
               {
-                "rawZh": "你同学",
+                "rawZh": "你同学 (nǐ tóngxué)",
                 "zh": "你同学",
-                "pinyin": "",
-                "vi": ""
+                "pinyin": "nǐ tóngxué",
+                "vi": "Bạn học của bạn (lược bỏ 的)"
               },
               {
-                "rawZh": "我学生",
+                "rawZh": "我学生 (wǒ xuésheng)",
                 "zh": "我学生",
-                "pinyin": "",
-                "vi": ""
+                "pinyin": "wǒ xuésheng",
+                "vi": "Học sinh của tôi (lược bỏ 的)"
               },
               {
-                "rawZh": "你妈妈",
+                "rawZh": "你妈妈 (nǐ māma)",
                 "zh": "你妈妈",
-                "pinyin": "",
-                "vi": ""
+                "pinyin": "nǐ māma",
+                "vi": "Mẹ của bạn (lược bỏ 的)"
               }
             ],
             "tables": null,
@@ -204,7 +210,7 @@ export const FULL_STRUCTURED_GRAMMAR = {
             "id": "hsk1_b3_g3",
             "num": 3,
             "title": "Câu hỏi “có… (hay) không?” sử dụng từ “吗”",
-            "explanation": "Dùng để hỏi câu hỏi Có/Không (Yes/No).",
+            "explanation": "Trợ từ nghi vấn “吗” (ma) đặt ở cuối câu trần thuật để tạo câu hỏi Có/Không (Yes/No Question).",
             "formula": "S + V + O + 吗?",
             "note": null,
             "examples": [
@@ -213,6 +219,12 @@ export const FULL_STRUCTURED_GRAMMAR = {
                 "zh": "你是中国人吗？",
                 "pinyin": "Nǐ shì Zhōngguó rén ma?",
                 "vi": "Bạn là người Trung Quốc phải không?"
+              },
+              {
+                "rawZh": "你喜欢喝茶吗？(Nǐ xǐhuan hē chá ma?)",
+                "zh": "你喜欢喝茶吗？",
+                "pinyin": "Nǐ xǐhuan hē chá ma?",
+                "vi": "Bạn có thích uống trà không?"
               }
             ],
             "tables": null,
@@ -230,7 +242,7 @@ export const FULL_STRUCTURED_GRAMMAR = {
             "id": "hsk1_b4_g1",
             "num": 1,
             "title": "Câu chữ “有”",
-            "explanation": "\"有\" (yǒu) nghĩa là \"có\" biểu thị sự sở hữu . \nPhủ định là \"没有\" (méiyǒu).",
+            "explanation": "“有” (yǒu) nghĩa là \"có\", biểu thị sự sở hữu. Phủ định bắt buộc dùng “没有” (méiyǒu), tuyệt đối không dùng \"不有\".",
             "formula": "S + (没)有 + O",
             "note": null,
             "examples": [
@@ -253,162 +265,189 @@ export const FULL_STRUCTURED_GRAMMAR = {
           {
             "id": "hsk1_b4_g2",
             "num": 2,
-            "title": "Cách diễn đạt các con số",
-            "explanation": "Trong tiếng Trung Quốc, các con số có thể được viết dưới 2 dạng: số Ả Rập (1,2,3…) và chữ Hán (一，二，三...)",
-            "formula": null,
-            "note": "Cách đọc và viết số 2\n- Sử dụng 二 (èr): Khi đọc số, hàng đơn vị, hàng chục thì đọc là 二 (èr), hàng trăm có thể đọc là 二 (èr) hay 两 (liǎng) đều được. Trong phân số, số thập phân, số thứ tự, thứ, ngày, tháng, năm… đều đọc là 二 (èr)\n- Sử dụng 两 (liǎng): Khi đọc số, biểu thị số 2 cho đơn vị ngàn, chục ngàn trở lên đều đọc là 两 (liǎng). Đứng trước lượng từ.",
+            "title": "Đại từ nghi vấn “几” và “多少”",
+            "explanation": "“几” (jǐ - mấy) dùng để hỏi số lượng nhỏ (thường dưới 10), bắt buộc phải có lượng từ đi kèm.\n“多少” (duōshao - bao nhiêu) dùng để hỏi số lượng lớn (thường trên 10 hoặc không giới hạn), lượng từ có thể có hoặc không.",
+            "formula": "几 + Lượng từ + Danh từ? \n多少 + (Lượng từ) + Danh từ?",
+            "note": null,
             "examples": [
               {
-                "rawZh": "一百 (yì bǎi)",
-                "zh": "一百",
-                "pinyin": "yì bǎi",
-                "vi": ""
+                "rawZh": "你有几个苹果？(Nǐ yǒu jǐ gè píngguǒ?)",
+                "zh": "你有几个苹果？",
+                "pinyin": "Nǐ yǒu jǐ gè píngguǒ?",
+                "vi": "Bạn có mấy quả táo?"
               },
               {
-                "rawZh": "二百零五 (èr bǎi líng wǔ)",
-                "zh": "二百零五",
-                "pinyin": "èr bǎi líng wǔ",
-                "vi": ""
-              },
-              {
-                "rawZh": "两个人",
-                "zh": "两个人",
-                "pinyin": "",
-                "vi": ""
-              },
-              {
-                "rawZh": "两本书",
-                "zh": "两本书",
-                "pinyin": "",
-                "vi": ""
+                "rawZh": "你们学校有多少个学生？(Nǐmen xuéxiào yǒu duōshao gè xuésheng?)",
+                "zh": "你们学校有多少个学生？",
+                "pinyin": "Nǐmen xuéxiào yǒu duōshao gè xuésheng?",
+                "vi": "Trường các bạn có bao nhiêu học sinh?"
               }
             ],
             "tables": [
               {
                 "title": "Bảng cách đọc và viết số từ 0 - 99",
                 "headers": [
-                  "Chữ Hán & Pinyin",
-                  "Số Ả Rập",
-                  "Chữ Hán & Pinyin",
-                  "Số Ả Rập"
+                  "Số",
+                  "Chữ Hán",
+                  "Pinyin",
+                  "Nghĩa",
+                  "Số",
+                  "Chữ Hán",
+                  "Pinyin",
+                  "Nghĩa"
                 ],
                 "rows": [
                   [
-                    "零 (líng)",
                     "0",
-                    "十 (shí)",
-                    "10"
+                    "零",
+                    "líng",
+                    "không",
+                    "20",
+                    "二十",
+                    "èrshí",
+                    "hai mươi"
                   ],
                   [
-                    "一 (yī)",
                     "1",
-                    "十一 (shíyī)",
-                    "11"
+                    "一",
+                    "yī",
+                    "một",
+                    "21",
+                    "二十一",
+                    "èrshíyī",
+                    "hai mươi mốt"
                   ],
                   [
-                    "二 (èr)",
                     "2",
-                    "二十 (èrshí)",
-                    "20"
+                    "二",
+                    "èr",
+                    "hai",
+                    "22",
+                    "二十二",
+                    "èrshíèr",
+                    "hai mươi hai"
                   ],
                   [
-                    "三 (sān)",
                     "3",
-                    "二十一 (èrshíyī)",
-                    "21"
+                    "三",
+                    "sān",
+                    "ba",
+                    "30",
+                    "三十",
+                    "sānshí",
+                    "ba mươi"
                   ],
                   [
-                    "四 (sì)",
                     "4",
-                    "三十 (sānshí)",
-                    "30"
+                    "四",
+                    "sì",
+                    "bốn",
+                    "40",
+                    "四十",
+                    "sìshí",
+                    "bốn mươi"
                   ],
                   [
-                    "五 (wǔ)",
                     "5",
-                    "四十 (sìshí)",
-                    "40"
+                    "五",
+                    "wǔ",
+                    "năm",
+                    "50",
+                    "五十",
+                    "wǔshí",
+                    "năm mươi"
                   ],
                   [
-                    "六 (liù)",
                     "6",
-                    "五十 (wǔshí)",
-                    "50"
+                    "六",
+                    "liù",
+                    "sáu",
+                    "60",
+                    "六十",
+                    "liùshí",
+                    "sáu mươi"
                   ],
                   [
-                    "七 (qī)",
                     "7",
-                    "六十 (liùshí)",
-                    "60"
+                    "七",
+                    "qī",
+                    "bảy",
+                    "70",
+                    "七十",
+                    "qīshí",
+                    "bảy mươi"
                   ],
                   [
-                    "八 (bā)",
                     "8",
-                    "七十 (qīshí)",
-                    "70"
+                    "八",
+                    "bā",
+                    "tám",
+                    "80",
+                    "八十",
+                    "bāshí",
+                    "tám mươi"
                   ],
                   [
-                    "九 (jiǔ)",
                     "9",
-                    "八十 (bāshí)",
-                    "80"
+                    "九",
+                    "jiǔ",
+                    "chín",
+                    "90",
+                    "九十",
+                    "jiǔshí",
+                    "chín mươi"
                   ],
                   [
-                    "... (Tiếp tục ghép)",
-                    "...",
-                    "九十九 (jiǔshíjiǔ)",
-                    "99"
-                  ]
-                ]
-              },
-              {
-                "title": "Bảng cách đọc và viết số lớn từ 100 - 10,000",
-                "headers": [
-                  "Hàng Chục Ngàn (万 wàn)",
-                  "Hàng Ngàn (千 qiān)",
-                  "Hàng Trăm (百 bǎi)",
-                  "Hàng Chục (十 shí)",
-                  "Đơn Vị (个 gè)"
-                ],
-                "rows": [
-                  [
-                    "10,000: 一万 (yí wàn)",
-                    "1,000: 一千 (yì qiān)",
-                    "100: 一百 (yì bǎi)",
-                    "10: 十 (shí)",
-                    "1: 一 (yī)"
-                  ],
-                  [
-                    "20,000: 两万 (liǎng wàn)",
-                    "3,008: 三千零八",
-                    "205: 二百零五",
-                    "410: 四百一十",
-                    "222: 二百二十二"
+                    "10",
+                    "十",
+                    "shí",
+                    "mười",
+                    "99",
+                    "九十九",
+                    "jiǔshíjiǔ",
+                    "chín mươi chín"
                   ]
                 ]
               }
             ],
-            "exercises": null
+            "exercises": [
+              {
+                "prompt": "Bài tập 1: Điền số thích hợp: 3 + 4 = ?",
+                "answer": "三加四等于七 (Sān jiā sì děngyú qī)"
+              },
+              {
+                "prompt": "Bài tập 2: Điền số thích hợp: 10 + 5 = ?",
+                "answer": "十加五等于十五 (Shí jiā wǔ děngyú shíwǔ)"
+              },
+              {
+                "prompt": "Bài tập 3: Hỏi số lượng nhỏ hơn 10: Bạn có mấy quyển sách?",
+                "answer": "你有几本书？ (Nǐ yǒu jǐ běn shū?)"
+              },
+              {
+                "prompt": "Bài tập 4: Hỏi số lượng lớn: Lớp bạn có bao nhiêu người?",
+                "answer": "你们班有多少人？ (Nǐmen bān yǒu duōshao rén?)"
+              }
+            ]
           },
           {
             "id": "hsk1_b4_g3",
             "num": 3,
-            "title": "Trợ từ ngữ khí “呢” （1）",
-            "explanation": "Trợ từ 呢 (ne) dùng để hỏi ngược lại về đối tượng/tình huống đã được nhắc đến trước đó.\nÝ nghĩa: \"Còn... thì sao?\" / \"Thế còn... thế nào?\"",
+            "title": "Trợ từ nghi vấn “呢” (1)",
+            "explanation": "Trợ từ 呢 (ne) dùng để hỏi ngược lại về đối tượng/tình huống đã được nhắc đến trước đó. Ý nghĩa: \"Còn... thì sao?\" / \"Thế còn... thế nào?\".",
             "formula": "[Đối tượng/Sự vật] + 呢?",
             "note": null,
             "examples": [
               {
-                "rawZh": "我是老师，你呢？",
+                "rawZh": "我是老师，你呢？(Wǒ shì lǎoshī, nǐ ne?)",
                 "zh": "我是老师，你呢？",
-                "pinyin": "",
+                "pinyin": "Wǒ shì lǎoshī, nǐ ne?",
                 "vi": "Tôi là giáo viên, còn bạn thì sao?"
               },
               {
-                "rawZh": "我是越南人，你呢？",
+                "rawZh": "我是越南人，你呢？(Wǒ shì Yuènán rén, nǐ ne?)",
                 "zh": "我是越南人，你呢？",
-                "pinyin": "",
-                "vi": ""
+                "pinyin": "Wǒ shì Yuènán rén, nǐ ne?",
+                "vi": "Tôi là người Việt Nam, còn bạn thì sao?"
               }
             ],
             "tables": null,
@@ -417,34 +456,34 @@ export const FULL_STRUCTURED_GRAMMAR = {
           {
             "id": "hsk1_b4_g4",
             "num": 4,
-            "title": "danh lượng từ và cấu trúc danh lượng",
+            "title": "Danh lượng từ và cấu trúc danh lượng",
             "explanation": "Nguyên tắc: Khi muốn chỉ số lượng của sự vật, bạn bắt buộc phải dùng lượng từ đứng giữa số từ và danh từ. Không được bỏ qua lượng từ.",
             "formula": "Số từ + Lượng từ + Danh từ",
             "note": "Mỗi danh từ thường đi với một lượng từ riêng. Nếu chưa rõ lượng từ, bạn có thể dùng 个 (gè) – đây là lượng từ phổ biến nhất, dùng được cho người và nhiều vật dụng khác.",
             "examples": [
               {
-                "rawZh": "三个人",
+                "rawZh": "三个人 (sān gè rén)",
                 "zh": "三个人",
-                "pinyin": "",
+                "pinyin": "sān gè rén",
                 "vi": "Ba người"
               },
               {
-                "rawZh": "一本书",
+                "rawZh": "一本书 (yī běn shū)",
                 "zh": "一本书",
-                "pinyin": "",
+                "pinyin": "yī běn shū",
                 "vi": "Một quyển sách"
               },
               {
-                "rawZh": "两个学生",
+                "rawZh": "两个学生 (liǎng gè xuésheng)",
                 "zh": "两个学生",
-                "pinyin": "",
-                "vi": ""
+                "pinyin": "liǎng gè xuésheng",
+                "vi": "Hai bạn học sinh"
               },
               {
-                "rawZh": "四口人",
+                "rawZh": "四口人 (sì kǒu rén)",
                 "zh": "四口人",
-                "pinyin": "",
-                "vi": ""
+                "pinyin": "sì kǒu rén",
+                "vi": "Bốn người (thường dùng chỉ nhân khẩu gia đình)"
               }
             ],
             "tables": null,
@@ -462,145 +501,51 @@ export const FULL_STRUCTURED_GRAMMAR = {
             "id": "hsk1_b5_g1",
             "num": 1,
             "title": "Cách diễn đạt thời gian (1)",
-            "explanation": "Công thức diễn đạt Năm - Tháng - Ngày - Thứ",
+            "explanation": "Công thức diễn đạt Năm - Tháng - Ngày - Thứ trong tiếng Trung.",
             "formula": "[Năm]年 (nián) + [Tháng]月 (yuè) + [Ngày]日/号 (rì/hào) + [Thứ]星期 (xīngqī)",
-            "note": "Tiếng Trung sắp xếp theo thứ tự từ lớn đến bé, măm đọc từng số 1",
+            "note": "Tiếng Trung sắp xếp theo thứ tự từ lớn đến bé (Năm -> Tháng -> Ngày -> Thứ). Năm được đọc tách từng chữ số một.",
             "examples": [
               {
-                "rawZh": "2026年8月2日, 星期日 (èr líng èr liù nián bā yuè èr rì, xīngqī rì)",
-                "zh": "2026年8月2日, 星期日",
+                "rawZh": "2026年8月2日，星期日 (èr líng èr liù nián bā yuè èr rì, xīngqī rì)",
+                "zh": "2026年8月2日，星期日",
                 "pinyin": "èr líng èr liù nián bā yuè èr rì, xīngqī rì",
                 "vi": "Chủ nhật, ngày 2 tháng 8 năm 2026."
               },
               {
-                "rawZh": "5月15日, 星期二 (wǔ yuè shí wǔ rì, xīngqī èr)",
-                "zh": "5月15日, 星期二",
+                "rawZh": "5月15日，星期二 (wǔ yuè shí wǔ rì, xīngqī èr)",
+                "zh": "5月15日，星期二",
                 "pinyin": "wǔ yuè shí wǔ rì, xīngqī èr",
                 "vi": "Thứ 3, ngày 15 tháng 5."
               }
             ],
-            "tables": [
-              {
-                "title": "Bảng 12 Tháng trong năm (月 yuè)",
-                "headers": [
-                  "Tháng",
-                  "Chữ Hán & Pinyin",
-                  "Tháng",
-                  "Chữ Hán & Pinyin"
-                ],
-                "rows": [
-                  [
-                    "Tháng 1",
-                    "一月 (yī yuè)",
-                    "Tháng 7",
-                    "七月 (qī yuè)"
-                  ],
-                  [
-                    "Tháng 2",
-                    "二月 (èr yuè)",
-                    "Tháng 8",
-                    "八月 (bā yuè)"
-                  ],
-                  [
-                    "Tháng 3",
-                    "三月 (sān yuè)",
-                    "Tháng 9",
-                    "九月 (jiǔ yuè)"
-                  ],
-                  [
-                    "Tháng 4",
-                    "四月 (sì yuè)",
-                    "Tháng 10",
-                    "十月 (shí yuè)"
-                  ],
-                  [
-                    "Tháng 5",
-                    "五月 (wǔ yuè)",
-                    "Tháng 11",
-                    "十一月 (shí yī yuè)"
-                  ],
-                  [
-                    "Tháng 6",
-                    "六月 (liù yuè)",
-                    "Tháng 12",
-                    "十二月 (shí èr yuè)"
-                  ]
-                ]
-              },
-              {
-                "title": "Bảng các Thứ trong tuần (星期 xīngqī)",
-                "headers": [
-                  "Thứ",
-                  "Chữ Hán & Pinyin",
-                  "Thứ",
-                  "Chữ Hán & Pinyin"
-                ],
-                "rows": [
-                  [
-                    "Thứ 2",
-                    "星期一 (xīngqī yī)",
-                    "Thứ 6",
-                    "星期五 (xīngqī wǔ)"
-                  ],
-                  [
-                    "Thứ 3",
-                    "星期二 (xīngqī èr)",
-                    "Thứ 7",
-                    "星期六 (xīngqī liù)"
-                  ],
-                  [
-                    "Thứ 4",
-                    "星期三 (xīngqī sān)",
-                    "Chủ Nhật",
-                    "星期日 / 星期天 (xīngqī rì / tiān)"
-                  ],
-                  [
-                    "Thứ 5",
-                    "星期四 (xīngqī sì)",
-                    "",
-                    ""
-                  ]
-                ]
-              }
-            ],
-            "exercises": [
-              {
-                "type": "Sắp xếp câu",
-                "prompt": "Sắp xếp: 是 / 2026年 / 8月/ 今天 / 星期日/ 2日",
-                "answer": "今天是2026年8月2日，星期日。"
-              },
-              {
-                "type": "Dịch câu",
-                "prompt": "Dịch: \"Hôm qua là ngày 10 tháng 8, thứ sáu.\"",
-                "answer": "昨天是8月10日，星期五。(Zuótiān shì bā yuè shí hào, xīngqī wǔ.)"
-              }
-            ]
+            "tables": null,
+            "exercises": null
           },
           {
             "id": "hsk1_b5_g2",
             "num": 2,
             "title": "Câu vị ngữ danh từ",
-            "explanation": "Khái niệm: Là loại câu dùng danh từ hoặc cụm danh từ làm vị ngữ để miêu tả, không cần dùng động từ \"是\".\nỨng dụng: Thường dùng để chỉ thời gian, ngày tháng, thời tiết, tuổi tác, giá cả.",
+            "explanation": "Khái niệm: Là loại câu dùng danh từ hoặc cụm danh từ làm vị ngữ để miêu tả, không cần dùng động từ \"是\". Ứng dụng: Thường dùng để chỉ thời gian, ngày tháng, thời tiết, tuổi tác, giá cả.",
             "formula": "S + N (Danh từ)",
             "note": null,
             "examples": [
               {
-                "rawZh": "今天星期日",
-                "zh": "今天星期日",
-                "pinyin": "",
-                "vi": "Hôm nay là Chủ nhật"
+                "rawZh": "今天星期日。(Jīntiān xīngqī rì.)",
+                "zh": "今天星期日。",
+                "pinyin": "Jīntiān xīngqī rì.",
+                "vi": "Hôm nay là Chủ nhật."
               },
               {
-                "rawZh": "今天八月三号",
-                "zh": "今天八月三号",
-                "pinyin": "",
-                "vi": "Hôm nay là ngày 3 tháng 8"
+                "rawZh": "今天八月三号。(Jīntiān bā yuè sān hào.)",
+                "zh": "今天八月三号。",
+                "pinyin": "Jīntiān bā yuè sān hào.",
+                "vi": "Hôm nay là ngày 3 tháng 8."
               },
               {
-                "rawZh": "我二十岁",
-                "zh": "我二十岁",
-                "pinyin": "",
-                "vi": "Tôi 20 tuổi"
+                "rawZh": "我二十岁。(Wǒ èrshí suì.)",
+                "zh": "我二十岁。",
+                "pinyin": "Wǒ èrshí suì.",
+                "vi": "Tôi 20 tuổi."
               }
             ],
             "tables": null,
@@ -610,14 +555,14 @@ export const FULL_STRUCTURED_GRAMMAR = {
             "id": "hsk1_b5_g3",
             "num": 3,
             "title": "Động từ năng nguyện “会”",
-            "explanation": "Biểu thị khả năng hoặc kỹ năng làm được việc gì đó thông qua quá trình học tập hoặc luyện tập.",
-            "formula": "Khẳng định: S + 会 + V + O\nPhủ định: S + 不会 + V + O\nNghi vấn: S + 会 + V + O + 吗?",
+            "explanation": "“会” (huì) biểu thị khả năng hoặc kỹ năng làm được việc gì đó thông qua quá trình học tập hoặc rèn luyện (biết làm gì).",
+            "formula": "Khẳng định: S + 会 + V + O \nPhủ định: S + 不会 + V + O \nNghi vấn: S + 会 + V + O + 吗?",
             "note": null,
             "examples": [
               {
-                "rawZh": "我会说中文。(Wǒ huì shuō Zhòngwén)",
+                "rawZh": "我会说中文。(Wǒ huì shuō Zhōngwén.)",
                 "zh": "我会说中文。",
-                "pinyin": "Wǒ huì shuō Zhòngwén",
+                "pinyin": "Wǒ huì shuō Zhōngwén.",
                 "vi": "Tôi biết nói tiếng Trung."
               },
               {
@@ -641,15 +586,15 @@ export const FULL_STRUCTURED_GRAMMAR = {
       {
         "lessonId": 6,
         "lessonKey": "Bài 6",
-        "lessonTitleZh": "你的手机话是多少?",
-        "lessonTitleFull": "Bài 6: 你的手机话是多少?",
+        "lessonTitleZh": "你的手机号是多少?",
+        "lessonTitleFull": "Bài 6: 你的手机号是多少?",
         "grammarPoints": [
           {
             "id": "hsk1_b6_g1",
             "num": 1,
-            "title": "Động từ năng nguyện '想'",
-            "explanation": "Biểu thị mong muốn hoặc ý định làm một việc gì đó.",
-            "formula": "Khẳng định: S + 想 + V + O\nPhủ định: S + 不想 + V + O\nNghi vấn: S + 想 + V + O + 吗? / S + 想 + V + 什么?",
+            "title": "Động từ năng nguyện “想”",
+            "explanation": "“想” (xiǎng) biểu thị mong muốn, ý định hoặc dự định làm một việc gì đó (muốn / nghĩ / nhớ).",
+            "formula": "Khẳng định: S + 想 + V + O \nPhủ định: S + 不想 + V + O \nNghi vấn: S + 想 + V + O + 吗? / S + 想 + V + 什么?",
             "note": null,
             "examples": [
               {
@@ -678,32 +623,32 @@ export const FULL_STRUCTURED_GRAMMAR = {
             "id": "hsk1_b6_g2",
             "num": 2,
             "title": "Câu liên động (1)",
-            "explanation": null,
-            "formula": "1, Chỉ mục đích (Đi đâu để làm gì)\nCấu trúc: S + 去/来 + [Địa điểm] + V2 + O\n2, Chỉ phương thức (Làm bằng cách nào)\nCấu trúc: S + [Phương tiện/Cách thức] + V2 + [Địa điểm]",
+            "explanation": "Câu liên động là câu có từ hai động từ trở lên cùng đi với một chủ ngữ, biểu thị mục đích (đi đâu để làm gì) hoặc phương thức thực hiện hành động.",
+            "formula": "1. Chỉ mục đích: S + 去/来 + [Địa điểm] + V2 + O \n2. Chỉ phương thức: S + [Phương tiện/Cách thức] + V2 + [Địa điểm]",
             "note": "Trong câu liên động, các hành động diễn ra theo trình tự thời gian: Hành động 1 xảy ra trước (di chuyển hoặc cách thức), Hành động 2 xảy ra sau (mục đích).",
             "examples": [
               {
-                "rawZh": "我去超市买东西。",
+                "rawZh": "我去超市买东西。(Wǒ qù chāoshì mǎi dōngxi.)",
                 "zh": "我去超市买东西。",
-                "pinyin": "",
+                "pinyin": "Wǒ qù chāoshì mǎi dōngxi.",
                 "vi": "Tôi đi siêu thị mua đồ."
               },
               {
-                "rawZh": "他来学校学习。",
+                "rawZh": "他来学校学习。(Tā lái xuéxiào xuéxí.)",
                 "zh": "他来学校学习。",
-                "pinyin": "",
+                "pinyin": "Tā lái xuéxiào xuéxí.",
                 "vi": "Anh ấy đến trường học tập."
               },
               {
-                "rawZh": "我坐出租车去医院。",
+                "rawZh": "我坐出租车去医院。(Wǒ zuò chūzūchē qù yīyuàn.)",
                 "zh": "我坐出租车去医院。",
-                "pinyin": "",
-                "vi": "Tôi ngồi taxi đi bệnh viện."
+                "pinyin": "Wǒ zuò chūzūchē qù yīyuàn.",
+                "vi": "Tôi đi taxi đến bệnh viện."
               },
               {
-                "rawZh": "他开车去超市。",
+                "rawZh": "他开车去超市。(Tā kāichē qù chāoshì.)",
                 "zh": "他开车去超市。",
-                "pinyin": "",
+                "pinyin": "Tā kāichē qù chāoshì.",
                 "vi": "Anh ấy lái xe đi siêu thị."
               }
             ],
@@ -714,25 +659,25 @@ export const FULL_STRUCTURED_GRAMMAR = {
             "id": "hsk1_b6_g3",
             "num": 3,
             "title": "Đại từ nghi vấn “怎么”",
-            "explanation": "Dùng để hỏi về cách thức hoặc phương thức thực hiện hành động (Làm thế nào? Bằng cách nào?).",
+            "explanation": "“怎么” (zěnme) dùng để hỏi về cách thức hoặc phương thức thực hiện hành động (Làm thế nào? Bằng cách nào? Đi như thế nào?).",
             "formula": "S + 怎么 + V + O?",
             "note": null,
             "examples": [
               {
-                "rawZh": "你怎么去学校? (Nǐ zěnme qù xuéxiào?)",
-                "zh": "你怎么去学校?",
+                "rawZh": "你怎么去学校？(Nǐ zěnme qù xuéxiào?)",
+                "zh": "你怎么去学校？",
                 "pinyin": "Nǐ zěnme qù xuéxiào?",
                 "vi": "Bạn đi đến trường bằng cách nào?"
               },
               {
-                "rawZh": "你怎么去超市? (Nǐ zěnme qù chāoshì?)",
-                "zh": "你怎么去超市?",
+                "rawZh": "你怎么去超市？(Nǐ zěnme qù chāoshì?)",
+                "zh": "你怎么去超市？",
                 "pinyin": "Nǐ zěnme qù chāoshì?",
                 "vi": "Bạn đi siêu thị bằng cách nào?"
               },
               {
-                "rawZh": "这个电脑怎么买? (Zhège diànnǎo zěnme mǎi?)",
-                "zh": "这个电脑怎么买?",
+                "rawZh": "这个电脑怎么买？(Zhège diànnǎo zěnme mǎi?)",
+                "zh": "这个电脑怎么买？",
                 "pinyin": "Zhège diànnǎo zěnme mǎi?",
                 "vi": "Máy tính này mua như thế nào?"
               }
@@ -752,33 +697,33 @@ export const FULL_STRUCTURED_GRAMMAR = {
             "id": "hsk1_b7_g1",
             "num": 1,
             "title": "Cách diễn đạt thời gian (2)",
-            "explanation": "a, sử dụng 点 và 分 để diễn tả thời điểm\nb, Sử dụng các danh từ chỉ thời gian như 上午，中午，下午，晚上 để diễn tả khoảng thời gian\nCác từ này (上午, 中午, 下午, 晚上) đóng vai trò là trạng ngữ chỉ thời gian.",
+            "explanation": "a. Sử dụng 点 (giờ) và 分 (phút) để diễn tả thời điểm cụ thể.\nb. Sử dụng các danh từ chỉ thời gian như 上午, 中午, 下午, 晚上 để diễn tả khoảng thời gian trong ngày làm trạng ngữ chỉ thời gian.",
             "formula": "[Số giờ] + 点 + [Số phút] + 分",
-            "note": "30 phút thường dùng 半 (bàn - rưỡi) thay cho 30 分. Nếu số phút nhỏ hơn 10 (từ 1-9), bắt buộc phải có chữ 零 (líng) ở giữa.\nVị trí (của danh từ chỉ thời gian): Đứng trước hoặc sau Chủ ngữ (S).",
+            "note": "30 phút thường dùng 半 (bàn - rưỡi) thay cho 30 分. Nếu số phút nhỏ hơn 10 (từ 1-9), bắt buộc phải có chữ 零 (líng) ở giữa.",
             "examples": [
               {
-                "rawZh": "6:30: 六点半 (liù diǎn bàn)",
-                "zh": "6",
+                "rawZh": "六点半 (liù diǎn bàn)",
+                "zh": "六点半",
                 "pinyin": "liù diǎn bàn",
-                "vi": "8 giờ tối tôi tan làm."
+                "vi": "6 giờ rưỡi (6:30)"
               },
               {
-                "rawZh": "8:05: 八点零五分 (bā diǎn líng wǔ fēn)",
-                "zh": "8",
+                "rawZh": "八点零五分 (bā diǎn líng wǔ fēn)",
+                "zh": "八点零五分",
                 "pinyin": "bā diǎn líng wǔ fēn",
-                "vi": "Chiều nay tôi đi xem phim."
+                "vi": "8 giờ 5 phút (8:05)"
               },
               {
                 "rawZh": "晚上八点我下班。(Wǎnshang bā diǎn wǒ xiàbān.)",
                 "zh": "晚上八点我下班。",
                 "pinyin": "Wǎnshang bā diǎn wǒ xiàbān.",
-                "vi": ""
+                "vi": "8 giờ tối tôi tan làm."
               },
               {
                 "rawZh": "我下午去看电影。(Wǒ xiàwǔ qù kàn diànyǐng.)",
                 "zh": "我下午去看电影。",
                 "pinyin": "Wǒ xiàwǔ qù kàn diànyǐng.",
-                "vi": ""
+                "vi": "Chiều nay tôi đi xem phim."
               }
             ],
             "tables": null,
@@ -787,8 +732,8 @@ export const FULL_STRUCTURED_GRAMMAR = {
           {
             "id": "hsk1_b7_g2",
             "num": 2,
-            "title": "Trợ từ ngữ khí “吧” （1）",
-            "explanation": "Đặt cuối câu để biểu thị ý đề nghị, gợi ý, khuyên nhủ hoặc yêu cầu người nghe cùng thực hiện hành động (dịch là: nhé, nhỉ, đi, thôi).",
+            "title": "Trợ từ ngữ khí “吧” (1)",
+            "explanation": "Đặt ở cuối câu để biểu thị ý đề nghị, gợi ý, khuyên nhủ hoặc yêu cầu người nghe cùng thực hiện hành động (dịch là: nhé, nhỉ, đi, thôi).",
             "formula": "S + V + O + 吧",
             "note": null,
             "examples": [
@@ -818,44 +763,44 @@ export const FULL_STRUCTURED_GRAMMAR = {
             "id": "hsk1_b7_g3",
             "num": 3,
             "title": "Vị trí của phó từ, từ ngữ chỉ thời gian khi làm trạng ngữ",
-            "explanation": "1. Vị trí của phó từ (Ví dụ: 不, 很, 也)\nPhó từ dùng để bổ nghĩa cho động từ hoặc tính từ, vị trí luôn đứng trước động từ hoặc tính từ.\n2. Vị trí của từ ngữ chỉ thời gian (Ví dụ: 昨天, 今天, 明天)\nTrạng ngữ chỉ thời gian dùng để xác định thời điểm hành động xảy ra. Quy tắc quan trọng nhất trong tiếng Trung là không bao giờ đặt trạng ngữ thời gian ở cuối câu.",
-            "formula": "1. S + Phó từ + V / Adj\n2. (S) + Thời gian + (S) + V + O (Có thể đứng trước hoặc sau Chủ ngữ)",
+            "explanation": "1. Phó từ (不, 很, 也) luôn đứng trước động từ hoặc tính từ.\n2. Trạng ngữ chỉ thời gian (昨天, 今天, 明天) có thể đứng trước hoặc sau chủ ngữ, tuyệt đối không đặt ở cuối câu.",
+            "formula": "1. S + Phó từ + V / Adj \n2. (Thời gian) + S + (Thời gian) + V + O",
             "note": "Nếu trong câu có cả trạng ngữ thời gian và trạng ngữ địa điểm, trật tự ưu tiên là: Thời gian + Địa điểm + Động từ.",
             "examples": [
               {
-                "rawZh": "他不喜欢包子。",
+                "rawZh": "他不喜欢包子。(Tā bù xǐhuan bāozi.)",
                 "zh": "他不喜欢包子。",
-                "pinyin": "",
+                "pinyin": "Tā bù xǐhuan bāozi.",
                 "vi": "Anh ấy không thích bánh bao."
               },
               {
-                "rawZh": "苹果很好。",
+                "rawZh": "苹果很好。(Píngguǒ hěn hǎo.)",
                 "zh": "苹果很好。",
-                "pinyin": "",
-                "vi": "Táo rất tốt."
+                "pinyin": "Píngguǒ hěn hǎo.",
+                "vi": "Táo rất ngon."
               },
               {
-                "rawZh": "我也想去。",
+                "rawZh": "我也想去。(Wǒ yě xiǎng qù.)",
                 "zh": "我也想去。",
-                "pinyin": "",
+                "pinyin": "Wǒ yě xiǎng qù.",
                 "vi": "Tôi cũng muốn đi."
               },
               {
-                "rawZh": "我昨天在学校学习。",
+                "rawZh": "我昨天在学校学习。(Wǒ zuótiān zài xuéxiào xuéxí.)",
                 "zh": "我昨天在学校学习。",
-                "pinyin": "",
+                "pinyin": "Wǒ zuótiān zài xuéxiào xuéxí.",
                 "vi": "Hôm qua tôi học ở trường."
               },
               {
-                "rawZh": "今天我去超市。",
+                "rawZh": "今天我去超市。(Jīntiān wǒ qù chāoshì.)",
                 "zh": "今天我去超市。",
-                "pinyin": "",
+                "pinyin": "Jīntiān wǒ qù chāoshì.",
                 "vi": "Hôm nay tôi đi siêu thị."
               },
               {
-                "rawZh": "明天我买手机。",
+                "rawZh": "明天我买手机。(Míngtiān wǒ mǎi shǒujī.)",
                 "zh": "明天我买手机。",
-                "pinyin": "",
+                "pinyin": "Míngtiān wǒ mǎi shǒujī.",
                 "vi": "Ngày mai tôi mua điện thoại."
               }
             ],
@@ -865,22 +810,22 @@ export const FULL_STRUCTURED_GRAMMAR = {
           {
             "id": "hsk1_b7_g4",
             "num": 4,
-            "title": "Trợ từ ngữ khí 呢 （2）",
-            "explanation": "Dùng cuối câu để biểu thị một sự thực đã được xác nhận. Nó giúp khẳng định thông tin mà người nói đưa ra là một thực tế.",
-            "formula": null,
+            "title": "Trợ từ ngữ khí “呢” (2)",
+            "explanation": "Dùng ở cuối câu trần thuật để biểu thị một sự thực đã được xác nhận, nhấn mạnh thông tin mà người nói đưa ra là một thực tế hiển nhiên.",
+            "formula": "S + V + ... + 呢",
             "note": null,
             "examples": [
               {
-                "rawZh": "我明天下午两点还上课呢。",
+                "rawZh": "我明天下午两点还上课呢。(Wǒ míngtiān xiàwǔ liǎng diǎn hái shàngkè ne.)",
                 "zh": "我明天下午两点还上课呢。",
-                "pinyin": "",
-                "vi": ""
+                "pinyin": "Wǒ míngtiān xiàwǔ liǎng diǎn hái shàngkè ne.",
+                "vi": "Chiều mai 2 giờ tôi vẫn còn phải đi học đấy."
               },
               {
-                "rawZh": "妹妹会做列宁哥哥菜呢。",
-                "zh": "妹妹会做列宁哥哥菜呢。",
-                "pinyin": "",
-                "vi": ""
+                "rawZh": "妹妹会做六七个菜呢。(Mèimei huì zuò liù qī gè cài ne.)",
+                "zh": "妹妹会做六七个菜呢。",
+                "pinyin": "Mèimei huì zuò liù qī gè cài ne.",
+                "vi": "Em gái còn biết nấu 6-7 món nữa đấy."
               }
             ],
             "tables": null,
@@ -897,117 +842,75 @@ export const FULL_STRUCTURED_GRAMMAR = {
           {
             "id": "hsk1_b8_g1",
             "num": 1,
-            "title": "Phương vị từ",
-            "explanation": "Phương vị từ trong tiếng Trung thường đứng sau danh từ để xác định vị trí của sự vật đó.",
-            "formula": "[Danh từ] + [Phương vị từ]",
-            "note": "Bạn có thể thêm hậu tố 边 (biān) vào sau để chỉ phương hướng rõ ràng hơn, ví dụ: 前边 (phía trước), 外边 (phía bên ngoài)",
+            "title": "Phương vị từ (上, 下, 里, 前, 后)",
+            "explanation": "Phương vị từ là từ chỉ vị trí, phương hướng. Khi kết hợp với danh từ chỉ sự vật/địa điểm, phương vị từ luôn đứng SAU danh từ để tạo thành cụm từ chỉ vị trí nơi chốn.",
+            "formula": "Danh từ + Phương vị từ (上 / 下 / 里 / 前 / 后)",
+            "note": null,
             "examples": [
               {
-                "rawZh": "桌子 (cái bàn) + 上 (trên) = 桌子上 (trên bàn)",
-                "zh": "桌子 (cái bàn) + 上 (trên) = 桌子上 (trên bàn)",
-                "pinyin": "cái bàn",
-                "vi": ""
+                "rawZh": "桌子上 (zhuōzi shang)",
+                "zh": "桌子上",
+                "pinyin": "zhuōzi shang",
+                "vi": "Trên bàn (桌子: cái bàn + 上: trên)"
               },
               {
-                "rawZh": "房间 (căn phòng) + 里 (trong) = 房间里 (trong phòng)",
-                "zh": "房间 (căn phòng) + 里 (trong) = 房间里 (trong phòng)",
-                "pinyin": "căn phòng",
-                "vi": ""
+                "rawZh": "房间里 (fángjiān lǐ)",
+                "zh": "房间里",
+                "pinyin": "fángjiān lǐ",
+                "vi": "Trong phòng (房间: căn phòng + 里: trong)"
               },
               {
-                "rawZh": "超市 (siêu thị) + 前 (trước) = 超市前 (trước siêu thị)",
-                "zh": "超市 (siêu thị) + 前 (trước) = 超市前 (trước siêu thị)",
-                "pinyin": "siêu thị",
-                "vi": ""
-              }
-            ],
-            "tables": [
+                "rawZh": "超市前 (chāoshì qián)",
+                "zh": "超市前",
+                "pinyin": "chāoshì qián",
+                "vi": "Trước siêu thị (超市: siêu thị + 前: trước)"
+              },
               {
-                "title": "Bảng các Phương vị từ thường gặp",
-                "headers": [
-                  "Phương vị từ",
-                  "Nghĩa tiếng Việt",
-                  "Ví dụ ghép câu",
-                  "Dịch nghĩa"
-                ],
-                "rows": [
-                  [
-                    "上 (shàng)",
-                    "Trên",
-                    "桌子上 (Zhuōzi shàng)",
-                    "Trên bàn"
-                  ],
-                  [
-                    "下 (xià)",
-                    "Dưới",
-                    "桌子下 (Zhuōzi xià)",
-                    "Dưới bàn"
-                  ],
-                  [
-                    "里 (lǐ)",
-                    "Trong",
-                    "房间里 (Fángjiān lǐ)",
-                    "Trong phòng"
-                  ],
-                  [
-                    "外 (wài)",
-                    "Ngoài",
-                    "房间外 (Fángjiān wài)",
-                    "Ngoài phòng"
-                  ],
-                  [
-                    "前 (qián)",
-                    "Trước",
-                    "超市前 (Chāoshì qián)",
-                    "Trước siêu thị"
-                  ],
-                  [
-                    "后 (hòu)",
-                    "Sau",
-                    "家后 (Jiā hòu)",
-                    "Sau nhà"
-                  ]
-                ]
+                "rawZh": "椅子下 (yǐzi xià)",
+                "zh": "椅子下",
+                "pinyin": "yǐzi xià",
+                "vi": "Dưới ghế (椅子: cái ghế + 下: dưới)"
               }
             ],
+            "tables": null,
             "exercises": null
           },
           {
             "id": "hsk1_b8_g2",
             "num": 2,
-            "title": "Giới từ“在”",
-            "explanation": "Giới từ “在” (zài) dùng để chỉ vị trí hoặc nơi chốn của người, sự vật hoặc nơi diễn ra hành động.",
-            "formula": "1. Chỉ vị trí (đang ở đâu): S + 在 + Địa điểm\n2. Chỉ nơi diễn ra hành động: S + 在 + Địa điểm + V + O",
+            "title": "Giới từ “在”",
+            "explanation": "Giới từ “在” (zài) dùng để chỉ vị trí, nơi chốn của người, sự vật hoặc nơi diễn ra hành động (ở / tại).",
+            "formula": "S + 在 + Địa điểm + V + O",
             "note": null,
             "examples": [
               {
-                "rawZh": "他在学校。",
+                "rawZh": "他在学校。(Tā zài xuéxiào.)",
                 "zh": "他在学校。",
-                "pinyin": "",
+                "pinyin": "Tā zài xuéxiào.",
                 "vi": "Anh ấy ở trường."
               },
               {
-                "rawZh": "我不在家。",
+                "rawZh": "我不在家。(Wǒ bú zài jiā.)",
                 "zh": "我不在家。",
-                "pinyin": "",
+                "pinyin": "Wǒ bú zài jiā.",
                 "vi": "Tôi không ở nhà."
               },
               {
-                "rawZh": "我在房间里看电影。",
+                "rawZh": "我在房间里看电影。(Wǒ zài fángjiān lǐ kàn diànyǐng.)",
                 "zh": "我在房间里看电影。",
-                "pinyin": "",
+                "pinyin": "Wǒ zài fángjiān lǐ kàn diànyǐng.",
                 "vi": "Tôi xem phim ở trong phòng."
               },
               {
-                "rawZh": "我昨天在学校学习。",
+                "rawZh": "我昨天在学校学习。(Wǒ zuótiān zài xuéxiào xuéxí.)",
                 "zh": "我昨天在学校学习。",
-                "pinyin": "",
+                "pinyin": "Wǒ zuótiān zài xuéxiào xuéxí.",
                 "vi": "Hôm qua tôi học ở trường."
               },
               {
-                "rawZh": "他在医院工作。",
+                "rawZh": "他在医院工作。(Tā zài yīyuàn gōngzuò.)",
                 "zh": "他在医院工作。",
-                "pinyin": "",
+                "pinyin": "Tā zài yīyuàn gōngzuò.",
                 "vi": "Anh ấy làm việc ở bệnh viện."
               }
             ],
@@ -1018,26 +921,26 @@ export const FULL_STRUCTURED_GRAMMAR = {
             "id": "hsk1_b8_g3",
             "num": 3,
             "title": "Động từ năng nguyện “能”",
-            "explanation": "Ý nghĩa: \"Có thể\"\n\"能\" dùng để biểu thị:\n- Khả năng: biểu thị có năng lực, điều kiện hoặc khả năng làm một việc gì đó\n- Sự cho phép: Hỏi hoặc cấp phép làm gì đó.",
-            "formula": "Khẳng định: S + 能 + V + O\nPhủ định: S + 不能 + V + O\nNghi vấn: S + 能 + V + O + 吗?",
+            "explanation": "“能” (néng - có thể) dùng để biểu thị năng lực, điều kiện khách quan hoặc sự cho phép làm một việc gì đó.",
+            "formula": "Khẳng định: S + 能 + V + O \nPhủ định: S + 不能 + V + O \nNghi vấn: S + 能 + V + O + 吗?",
             "note": null,
             "examples": [
               {
-                "rawZh": "我明天能去超市。",
+                "rawZh": "我明天能去超市。(Wǒ míngtiān néng qù chāoshì.)",
                 "zh": "我明天能去超市。",
-                "pinyin": "",
+                "pinyin": "Wǒ míngtiān néng qù chāoshì.",
                 "vi": "Ngày mai tôi có thể đi siêu thị."
               },
               {
-                "rawZh": "我能问你一个问题吗？",
+                "rawZh": "我能问你一个问题吗？(Wǒ néng wèn nǐ yīgè wèntí ma?)",
                 "zh": "我能问你一个问题吗？",
-                "pinyin": "",
+                "pinyin": "Wǒ néng wèn nǐ yīgè wèntí ma?",
                 "vi": "Tôi có thể hỏi bạn một câu hỏi không?"
               },
               {
-                "rawZh": "你不能在这里看电影。",
+                "rawZh": "你不能在这里看电影。(Nǐ bù néng zài zhèlǐ kàn diànyǐng.)",
                 "zh": "你不能在这里看电影。",
-                "pinyin": "",
+                "pinyin": "Nǐ bù néng zài zhèlǐ kàn diànyǐng.",
                 "vi": "Bạn không thể/không được xem phim ở đây."
               }
             ],
@@ -1056,50 +959,50 @@ export const FULL_STRUCTURED_GRAMMAR = {
             "id": "hsk1_b9_g1",
             "num": 1,
             "title": "Câu tồn hiện (1)",
-            "explanation": "a, Câu tồn hiện với “有” (yǒu) - Biểu thị sự tồn tại\nCấu trúc này dùng để thông báo rằng tại một địa điểm có người hoặc vật nào đó.\nb, Câu tồn hiện với “是” (shì) - Biểu thị sự xác định\nCấu trúc này dùng để khẳng định hoặc xác định cái gì đó chính là cái nằm ở vị trí đó (thường dùng khi muốn giới thiệu cụ thể đó là cái gì/ai).",
-            "formula": "a. [Địa điểm] + 有 + [Số lượng/Lượng từ] + [Danh từ]\nb. [Địa điểm] + 是 + [Danh từ]",
+            "explanation": "a. Câu tồn hiện với “有” (yǒu) - Biểu thị sự tồn tại: Tại một địa điểm có người hoặc vật nào đó.\nb. Câu tồn hiện với “是” (shì) - Biểu thị sự xác định: Khẳng định vật/người nằm ở vị trí đó chính là đối tượng được nhắc đến.",
+            "formula": "a. [Địa điểm] + 有 + [Số lượng/Lượng từ] + [Danh từ] \nb. [Địa điểm] + 是 + [Danh từ]",
             "note": null,
             "examples": [
               {
-                "rawZh": "房间里有一只小猫。(Fángjiān lǐ yǒu yì zhī xiǎo māo)",
+                "rawZh": "房间里有一只小猫。(Fángjiān lǐ yǒu yì zhī xiǎo māo.)",
                 "zh": "房间里有一只小猫。",
-                "pinyin": "Fángjiān lǐ yǒu yì zhī xiǎo māo",
+                "pinyin": "Fángjiān lǐ yǒu yì zhī xiǎo māo.",
                 "vi": "Trong phòng có một con mèo nhỏ."
               },
               {
-                "rawZh": "超市前有一家电影院。(Chāoshì qián yǒu yì jiā diànyǐngyuàn)",
+                "rawZh": "超市前有一家电影院。(Chāoshì qián yǒu yì jiā diànyǐngyuàn.)",
                 "zh": "超市前有一家电影院。",
-                "pinyin": "Chāoshì qián yǒu yì jiā diànyǐngyuàn",
+                "pinyin": "Chāoshì qián yǒu yì jiā diànyǐngyuàn.",
                 "vi": "Trước siêu thị có một rạp chiếu phim."
               },
               {
-                "rawZh": "医院里有很多病人。(Yīyuàn lǐ yǒu hěn duō bìngrén)",
+                "rawZh": "医院里有很多病人。(Yīyuàn lǐ yǒu hěn duō bìngrén.)",
                 "zh": "医院里有很多病人。",
-                "pinyin": "Yīyuàn lǐ yǒu hěn duō bìngrén",
+                "pinyin": "Yīyuàn lǐ yǒu hěn duō bìngrén.",
                 "vi": "Trong bệnh viện có rất nhiều bệnh nhân."
               },
               {
-                "rawZh": "桌子上有一本书。(Zhuōzi shàng yǒu yì běn shū)",
+                "rawZh": "桌子上有一本书。(Zhuōzi shàng yǒu yì běn shū.)",
                 "zh": "桌子上有一本书。",
-                "pinyin": "Zhuōzi shàng yǒu yì běn shū",
+                "pinyin": "Zhuōzi shàng yǒu yì běn shū.",
                 "vi": "Trên bàn có một quyển sách."
               },
               {
-                "rawZh": "前边是学校。(Qiánbian shì xuéxiào)",
+                "rawZh": "前边是学校。(Qiánbian shì xuéxiào.)",
                 "zh": "前边是学校。",
-                "pinyin": "Qiánbian shì xuéxiào",
+                "pinyin": "Qiánbian shì xuéxiào.",
                 "vi": "Phía trước là trường học."
               },
               {
-                "rawZh": "超市前是我的家。(Chāoshì qián shì wǒ de jiā)",
+                "rawZh": "超市前是我的家。(Chāoshì qián shì wǒ de jiā.)",
                 "zh": "超市前是我的家。",
-                "pinyin": "Chāoshì qián shì wǒ de jiā",
+                "pinyin": "Chāoshì qián shì wǒ de jiā.",
                 "vi": "Trước siêu thị là nhà tôi."
               },
               {
-                "rawZh": "那儿是我的房间。(Nàr shì wǒ de fángjiān)",
+                "rawZh": "那儿是我的房间。(Nàr shì wǒ de fángjiān.)",
                 "zh": "那儿是我的房间。",
-                "pinyin": "Nàr shì wǒ de fángjiān",
+                "pinyin": "Nàr shì wǒ de fángjiān.",
                 "vi": "Chỗ kia là phòng của tôi."
               }
             ],
@@ -1109,27 +1012,27 @@ export const FULL_STRUCTURED_GRAMMAR = {
           {
             "id": "hsk1_b9_g2",
             "num": 2,
-            "title": "Trật tự của từ ngữ chỉ thời gian và từ ngữ chỉ nơi chốn khi cùng làm trạng ngữ",
+            "title": "Trật tự của từ ngữ chỉ thời gian và nơi chốn khi cùng làm trạng ngữ",
             "explanation": "Trong tiếng Trung, khi trong câu xuất hiện cả trạng ngữ chỉ thời gian và trạng ngữ chỉ địa điểm, trật tự ưu tiên luôn tuân theo quy tắc: Thời gian đứng trước địa điểm.",
             "formula": "[Thời gian] + [Địa điểm] + [Động từ] + [Tân ngữ]",
-            "note": "Thời gian có thể đứng trước hoặc sau Chủ ngữ",
+            "note": "Thời gian có thể đứng trước hoặc sau Chủ ngữ.",
             "examples": [
               {
-                "rawZh": "昨天 (Thời gian) + 我 (S) + 在学校 (Địa điểm) + 学习 (V).",
-                "zh": "昨天 (Thời gian) + 我 (S) + 在学校 (Địa điểm) + 学习 (V).",
-                "pinyin": "Thời gian",
+                "rawZh": "昨天我在学校学习。(Zuótiān wǒ zài xuéxiào xuéxí.)",
+                "zh": "昨天我在学校学习。",
+                "pinyin": "Zuótiān wǒ zài xuéxiào xuéxí.",
                 "vi": "Hôm qua tôi học ở trường."
               },
               {
-                "rawZh": "明天 (Thời gian) + 我 (S) + 去超市 (Địa điểm + V).",
-                "zh": "明天 (Thời gian) + 我 (S) + 去超市 (Địa điểm + V).",
-                "pinyin": "Thời gian",
+                "rawZh": "明天我去超市。(Míngtiān wǒ qù chāoshì.)",
+                "zh": "明天我去超市。",
+                "pinyin": "Míngtiān wǒ qù chāoshì.",
                 "vi": "Ngày mai tôi đi siêu thị."
               },
               {
-                "rawZh": "我 (S) + 晚上八点 (Thời gian) + 在医院 (Địa điểm) + 下班 (V).",
-                "zh": "我 (S) + 晚上八点 (Thời gian) + 在医院 (Địa điểm) + 下班 (V).",
-                "pinyin": "S",
+                "rawZh": "我晚上八点在医院下班。(Wǒ wǎnshang bā diǎn zài yīyuàn xiàbān.)",
+                "zh": "我晚上八点在医院下班。",
+                "pinyin": "Wǒ wǎnshang bā diǎn zài yīyuàn xiàbān.",
                 "vi": "Tối nay 8 giờ tôi tan làm ở bệnh viện."
               }
             ],
@@ -1178,8 +1081,8 @@ export const FULL_STRUCTURED_GRAMMAR = {
             "id": "hsk1_b10_g1",
             "num": 1,
             "title": "Cách diễn đạt số tiền",
-            "explanation": "Trong tiếng Trung, cách nói tiền chia làm hai trường phái: Khẩu ngữ (nói chuyện hằng ngày) và Văn viết (trên hóa đơn/ngân hàng).\nĐơn vị chính: 块 (kuài) / 元 (yuán)\nĐơn vị 1/10: 毛 (máo) / 角 (jiǎo)\nĐơn vị 1/100: 分 (fēn) / 分 (fēn)\nQuy tắc quy đổi: 1 块 (kuài) = 10 毛 (máo), 1 毛 (máo) = 10 分 (fēn)",
-            "formula": "Cách diễn đạt: 1. Các trường hợp cơ bản (chỉ có đơn vị 块). 2. Trường hợp có số lẻ (块 và 毛). 3. Trường hợp có cả hào và xu (块, 毛, 分). 4. Trường hợp đặc biệt: Có số 0 ở giữa (thêm từ 零 (líng - không) để nối).",
+            "explanation": "Trong tiếng Trung, khẩu ngữ dùng 块 (kuài - đồng), 毛 (máo - hào), 分 (fēn - xu). Văn viết dùng 元 (yuán), 角 (jiǎo), 分 (fēn).\nQuy tắc quy đổi: 1 块 (kuài) = 10 毛 (máo), 1 毛 (máo) = 10 分 (fēn).",
+            "formula": "Cách diễn đạt: \n1. Đơn vị đồng: [Số] + 块 \n2. Có số lẻ: [Số] + 块 + [Số] + (毛) \n3. Đầy đủ: [Số] + 块 + [Số] + 毛 + [Số] + 分 \n4. Có số 0 ở giữa: thêm 零 (líng)",
             "note": null,
             "examples": [
               {
@@ -1207,64 +1110,34 @@ export const FULL_STRUCTURED_GRAMMAR = {
                 "vi": "1.05 tệ (1 đồng 0 hào 5 xu)"
               }
             ],
-            "tables": [
-              {
-                "title": "Bảng phân cấp đơn vị tiền tệ Trung Quốc",
-                "headers": [
-                  "Đơn vị",
-                  "Văn nói (Khẩu ngữ)",
-                  "Văn viết (Trang trọng)",
-                  "Giá trị quy đổi"
-                ],
-                "rows": [
-                  [
-                    "Đơn vị chính",
-                    "块 (kuài)",
-                    "元 (yuán)",
-                    "1 đơn vị tệ"
-                  ],
-                  [
-                    "Đơn vị 1/10",
-                    "毛 (máo)",
-                    "角 (jiǎo)",
-                    "0.1 đơn vị (Hào)"
-                  ],
-                  [
-                    "Đơn vị 1/100",
-                    "分 (fēn)",
-                    "分 (fēn)",
-                    "0.01 đơn vị (Xu)"
-                  ]
-                ]
-              }
-            ],
+            "tables": null,
             "exercises": null
           },
           {
             "id": "hsk1_b10_g2",
             "num": 2,
             "title": "Câu vị ngữ tính từ",
-            "explanation": "Tính từ có thể trực tiếp làm vị ngữ, trước tính từ có thể thêm phó từ chỉ mưc độ hay phó từ phủ định.",
-            "formula": "Khẳng định: Chủ ngữ + (Phó từ mức độ như 很/真/非常) + Tính từ.\nPhủ định: Chủ ngữ + 不 + Tính từ.\nNghi vấn: Chủ ngữ + Tính từ + 吗?",
+            "explanation": "Tính từ có thể trực tiếp làm vị ngữ trong câu. Trước tính từ khẳng định thường thêm phó từ chỉ mức độ (很, 真, 非常). Phủ định dùng \"不\".",
+            "formula": "Khẳng định: Chủ ngữ + (很/真/非常) + Tính từ \nPhủ định: Chủ ngữ + 不 + Tính từ \nNghi vấn: Chủ ngữ + Tính từ + 吗?",
             "note": null,
             "examples": [
               {
-                "rawZh": "那个苹果好吃。",
-                "zh": "那个苹果好吃。",
-                "pinyin": "",
-                "vi": "Tôi không bận"
+                "rawZh": "那个苹果很好吃。(Nàgè píngguǒ hěn hǎochī.)",
+                "zh": "那个苹果很好吃。",
+                "pinyin": "Nàgè píngguǒ hěn hǎochī.",
+                "vi": "Quả táo đó rất ngon."
               },
               {
-                "rawZh": "我不忙",
-                "zh": "我不忙",
-                "pinyin": "",
-                "vi": "Bạn có bận không?"
+                "rawZh": "我不忙。(Wǒ bù máng.)",
+                "zh": "我不忙。",
+                "pinyin": "Wǒ bù máng.",
+                "vi": "Tôi không bận."
               },
               {
-                "rawZh": "你忙吗？",
+                "rawZh": "你忙吗？(Nǐ máng ma?)",
                 "zh": "你忙吗？",
-                "pinyin": "",
-                "vi": ""
+                "pinyin": "Nǐ máng ma?",
+                "vi": "Bạn có bận không?"
               }
             ],
             "tables": null,
@@ -1274,27 +1147,27 @@ export const FULL_STRUCTURED_GRAMMAR = {
             "id": "hsk1_b10_g3",
             "num": 3,
             "title": "Đại từ nghi vấn “怎么样”",
-            "explanation": "Đại từ nghi vấn “怎么样” (zěnmeyàng) thường đặt ở cuối câu dùng để hỏi về trạng thái, tính chất của sự vật, tình hình sức khỏe/công việc, hoặc dùng để đưa ra lời gợi ý, hỏi ý kiến.",
-            "formula": null,
+            "explanation": "Đại từ nghi vấn “怎么样” (zěnmeyàng) thường đặt ở cuối câu dùng để hỏi về trạng thái, tính chất của sự vật, tình hình sức khỏe/công việc, hoặc dùng để đưa ra lời gợi ý, hỏi ý kiến (thế nào? được không?).",
+            "formula": "S + 怎么样? \nCâu đề nghị + 怎么样?",
             "note": null,
             "examples": [
               {
-                "rawZh": "这个杯子怎么样?",
-                "zh": "这个杯子怎么样?",
-                "pinyin": "",
+                "rawZh": "这个杯子怎么样？(Zhège bēizi zěnmeyàng?)",
+                "zh": "这个杯子怎么样？",
+                "pinyin": "Zhège bēizi zěnmeyàng?",
                 "vi": "Cái cốc này thế nào?"
               },
               {
-                "rawZh": "这件衣服怎么样?",
-                "zh": "这件衣服怎么样?",
-                "pinyin": "",
+                "rawZh": "这件衣服怎么样？(Zhè jiàn yīfu zěnmeyàng?)",
+                "zh": "这件衣服怎么样？",
+                "pinyin": "Zhè jiàn yīfu zěnmeyàng?",
                 "vi": "Bộ quần áo này thế nào?"
               },
               {
-                "rawZh": "我们去看电影，怎么样?",
-                "zh": "我们去看电影，怎么样?",
-                "pinyin": "",
-                "vi": "Chúng ta đi xem phim nhé?"
+                "rawZh": "我们去看电影，怎么样？(Wǒmen qù kàn diànyǐng, zěnmeyàng?)",
+                "zh": "我们去看电影，怎么样？",
+                "pinyin": "Wǒmen qù kàn diànyǐng, zěnmeyàng?",
+                "vi": "Chúng ta đi xem phim nhé, được không?"
               }
             ],
             "tables": null,
@@ -1312,27 +1185,27 @@ export const FULL_STRUCTURED_GRAMMAR = {
             "id": "hsk1_b11_g1",
             "num": 1,
             "title": "Câu hỏi chính phản",
-            "explanation": "Câu hỏi chính phản dùng để đặt câu hỏi lựa chọn Có/Không (Yes/No).",
-            "formula": "- Với động từ: S + V + 不/ 没 + V + (O)?\n- Với tính từ: S + Adj + 不 + Adj?",
-            "note": "Khi dùng dạng câu này, tuyệt đối không được dùng trợ từ \"吗\" ở cuối câu.",
+            "explanation": "Câu hỏi chính phản dùng hình thức khẳng định đi kèm phủ định để hỏi lựa chọn Có/Không (Yes/No).",
+            "formula": "- Với động từ: S + V + 不/没 + V + (O)? \n- Với tính từ: S + Adj + 不 + Adj?",
+            "note": "Khi dùng dạng câu hỏi chính phản, tuyệt đối không được dùng trợ từ \"吗\" ở cuối câu.",
             "examples": [
               {
-                "rawZh": "你想不想去超市？",
+                "rawZh": "你想不想去超市？(Nǐ xiǎng bu xiǎng qù chāoshì?)",
                 "zh": "你想不想去超市？",
-                "pinyin": "",
-                "vi": ""
+                "pinyin": "Nǐ xiǎng bu xiǎng qù chāoshì?",
+                "vi": "Bạn có muốn đi siêu thị không?"
               },
               {
-                "rawZh": "你去没去学校？",
+                "rawZh": "你去没去学校？(Nǐ qù mei qù xuéxiào?)",
                 "zh": "你去没去学校？",
-                "pinyin": "",
-                "vi": ""
+                "pinyin": "Nǐ qù mei qù xuéxiào?",
+                "vi": "Bạn đã đi đến trường chưa?"
               },
               {
-                "rawZh": "这件衣服好看不好看？",
+                "rawZh": "这件衣服好看不好看？(Zhè jiàn yīfu hǎokàn bu hǎokàn?)",
                 "zh": "这件衣服好看不好看？",
-                "pinyin": "",
-                "vi": ""
+                "pinyin": "Zhè jiàn yīfu hǎokàn bu hǎokàn?",
+                "vi": "Bộ quần áo này có đẹp không?"
               }
             ],
             "tables": null,
@@ -1342,10 +1215,29 @@ export const FULL_STRUCTURED_GRAMMAR = {
             "id": "hsk1_b11_g2",
             "num": 2,
             "title": "Phó từ chỉ thời gian “在/正在”",
-            "explanation": "Dùng để diễn tả hành động đang diễn ra tại thời điểm nói (tương đương với nghĩa \"đang\" trong tiếng Việt).\n- 正在 (zhèngzài): Nhấn mạnh hành động đang diễn ra ngay lúc này (cụ thể hơn).\n- 在 (zài): Dùng để mô tả hành động đang xảy ra.\nCâu phủ định (Hành động không đang diễn ra)\nKhi diễn tả \"không đang làm gì\", bắt buộc dùng \"没 / 没有\" (méi / méiyǒu), tuyệt đối không được dùng \"不\".",
+            "explanation": "Dùng để diễn tả hành động đang diễn ra tại thời điểm nói (đang...).\n- 正在 (zhèngzài): Nhấn mạnh hành động đang diễn ra ngay lúc này.\n- 在 (zài): Dùng để mô tả hành động đang xảy ra.\nPhủ định bắt buộc dùng \"没 / 没有\", tuyệt đối không được dùng \"不\".",
             "formula": "S + (正在 / 在) + V + (O) + (呢)",
             "note": "\"呢\" ở cuối câu thường được dùng trong khẩu ngữ để tăng tính tự nhiên, gần gũi.",
-            "examples": null,
+            "examples": [
+              {
+                "rawZh": "我正在做饭呢。(Wǒ zhèngzài zuòfàn ne.)",
+                "zh": "我正在做饭呢。",
+                "pinyin": "Wǒ zhèngzài zuòfàn ne.",
+                "vi": "Tôi đang nấu cơm đấy."
+              },
+              {
+                "rawZh": "他在看书。(Tā zài kànshū.)",
+                "zh": "他在看书。",
+                "pinyin": "Tā zài kànshū.",
+                "vi": "Anh ấy đang đọc sách."
+              },
+              {
+                "rawZh": "我没在睡觉。(Wǒ méi zài shuìjiào.)",
+                "zh": "我没在睡觉。",
+                "pinyin": "Wǒ méi zài shuìjiào.",
+                "vi": "Tôi không có đang ngủ."
+              }
+            ],
             "tables": null,
             "exercises": null
           },
@@ -1353,21 +1245,21 @@ export const FULL_STRUCTURED_GRAMMAR = {
             "id": "hsk1_b11_g3",
             "num": 3,
             "title": "Động từ năng nguyện “要”",
-            "explanation": "Động từ năng nguyện “要” (yào) trong tiếng Trung biểu thị mong muốn mạnh mẽ, ý định hoặc kế hoạch chắc chắn sẽ thực hiện (khác với “想” - chỉ là dự định trong đầu, chưa chắc chắn).",
-            "formula": null,
+            "explanation": "Động từ năng nguyện “要” (yào) trong tiếng Trung biểu thị mong muốn mạnh mẽ, quyết tâm, ý định hoặc kế hoạch chắc chắn sẽ thực hiện (sẽ / phải / muốn).",
+            "formula": "S + 要 + V + O",
             "note": null,
             "examples": [
               {
-                "rawZh": "他今天要和小朋友玩。",
+                "rawZh": "他今天要和小朋友玩。(Tā jīntiān yào hé xiǎopéngyou wán.)",
                 "zh": "他今天要和小朋友玩。",
-                "pinyin": "",
-                "vi": ""
+                "pinyin": "Tā jīntiān yào hé xiǎopéngyou wán.",
+                "vi": "Hôm nay cậu ấy sẽ chơi cùng các bạn nhỏ."
               },
               {
-                "rawZh": "妈妈要去超市。",
+                "rawZh": "妈妈要去超市。(Māma yào qù chāoshì.)",
                 "zh": "妈妈要去超市。",
-                "pinyin": "",
-                "vi": ""
+                "pinyin": "Māma yào qù chāoshì.",
+                "vi": "Mẹ muốn/sắp đi siêu thị."
               }
             ],
             "tables": null,
@@ -1385,33 +1277,33 @@ export const FULL_STRUCTURED_GRAMMAR = {
             "id": "hsk1_b12_g1",
             "num": 1,
             "title": "Câu phi chủ vị",
-            "explanation": "Câu phi chủ vị (còn gọi là câu không có cấu trúc chủ ngữ - vị ngữ) là những câu mà trong đó thành phần chủ ngữ (S) và vị ngữ (V) không rõ ràng hoặc không tồn tại.",
-            "formula": null,
+            "explanation": "Câu phi chủ vị là câu không có cấu trúc chủ ngữ - vị ngữ rõ ràng, thường dùng để mô tả hiện tượng tự nhiên, thời tiết, hoặc các câu cảm thán/thúc giục ngắn gọn.",
+            "formula": "V + 了 / Tính từ / Thán từ!",
             "note": null,
             "examples": [
               {
-                "rawZh": "下雨了。",
+                "rawZh": "下雨了。(Xiàyǔ le.)",
                 "zh": "下雨了。",
-                "pinyin": "",
-                "vi": ""
+                "pinyin": "Xiàyǔ le.",
+                "vi": "Trời mưa rồi."
               },
               {
-                "rawZh": "下雪了。",
+                "rawZh": "下雪了。(Xiàxuě le.)",
                 "zh": "下雪了。",
-                "pinyin": "",
-                "vi": ""
+                "pinyin": "Xiàxuě le.",
+                "vi": "Trời đổ tuyết rồi."
               },
               {
-                "rawZh": "上课了。",
+                "rawZh": "上课了。(Shàngkè le.)",
                 "zh": "上课了。",
-                "pinyin": "",
-                "vi": ""
+                "pinyin": "Shàngkè le.",
+                "vi": "Đến giờ vào lớp rồi."
               },
               {
-                "rawZh": "真漂亮！",
+                "rawZh": "真漂亮！(Zhēn piàoliang!)",
                 "zh": "真漂亮！",
-                "pinyin": "",
-                "vi": ""
+                "pinyin": "Zhēn piàoliang!",
+                "vi": "Thật là đẹp!"
               }
             ],
             "tables": null,
@@ -1421,45 +1313,45 @@ export const FULL_STRUCTURED_GRAMMAR = {
             "id": "hsk1_b12_g2",
             "num": 2,
             "title": "Trợ từ ngữ khí “了” (1)",
-            "explanation": "Trợ từ ngữ khí “了” (1) được dùng ở cuối câu để diễn tả sự thay đổi trạng thái hoặc một tình huống mới đã xảy ra.\n1. Khẳng định\nDiễn tả việc gì đó đã xảy ra hoặc trạng thái đã thay đổi.\n2. Phủ định\nKhi muốn diễn tả hành động chưa xảy ra hoặc không có sự thay đổi đó, bạn bắt buộc dùng “没(有)” và phải bỏ “了”.",
-            "formula": "1. Khẳng định: S + V + 了\n2. Phủ định: S + 没(有) + V",
+            "explanation": "Trợ từ ngữ khí “了” (1) được dùng ở cuối câu để diễn tả sự thay đổi trạng thái hoặc một tình huống mới đã xuất hiện (rồi...).\nTrong câu phủ định, bắt buộc dùng “没(有)” và phải bỏ “了”.",
+            "formula": "1. Khẳng định: S + V + 了 \n2. Phủ định: S + 没(有) + V",
             "note": null,
             "examples": [
               {
-                "rawZh": "下雨了。 (Xiàyǔ le)",
+                "rawZh": "下雨了。(Xiàyǔ le.)",
                 "zh": "下雨了。",
-                "pinyin": "Xiàyǔ le",
-                "vi": "Trời mưa rồi. (Trước đó không mưa)."
+                "pinyin": "Xiàyǔ le.",
+                "vi": "Trời mưa rồi (trước đó không mưa)."
               },
               {
-                "rawZh": "我生病了。 (Wǒ shēngbìng le)",
+                "rawZh": "我生病了。(Wǒ shēngbìng le.)",
                 "zh": "我生病了。",
-                "pinyin": "Wǒ shēngbìng le",
-                "vi": "Tôi bị ốm rồi. (Trước đó khỏe)."
+                "pinyin": "Wǒ shēngbìng le.",
+                "vi": "Tôi bị ốm rồi (trước đó khỏe)."
               },
               {
-                "rawZh": "我吃饭了。 (Wǒ chīfàn le)",
+                "rawZh": "我吃饭了。(Wǒ chīfàn le.)",
                 "zh": "我吃饭了。",
-                "pinyin": "Wǒ chīfàn le",
-                "vi": "Tôi ăn cơm"
+                "pinyin": "Wǒ chīfàn le.",
+                "vi": "Tôi ăn cơm rồi."
               },
               {
-                "rawZh": "没下雨",
-                "zh": "没下雨",
-                "pinyin": "",
-                "vi": "Không mưa / Chưa mưa"
+                "rawZh": "没下雨。(Méi xiàyǔ.)",
+                "zh": "没下雨。",
+                "pinyin": "Méi xiàyǔ.",
+                "vi": "Không mưa / Chưa mưa."
               },
               {
-                "rawZh": "我没吃饭",
-                "zh": "我没吃饭",
-                "pinyin": "",
-                "vi": "Tôi chưa ăn cơm"
+                "rawZh": "我没吃饭。(Wǒ méi chīfàn.)",
+                "zh": "我没吃饭。",
+                "pinyin": "Wǒ méi chīfàn.",
+                "vi": "Tôi chưa ăn cơm."
               },
               {
-                "rawZh": "我没看电影",
-                "zh": "我没看电影",
-                "pinyin": "",
-                "vi": "Tôi không xem phim"
+                "rawZh": "我没看电影。(Wǒ méi kàn diànyǐng.)",
+                "zh": "我没看电影。",
+                "pinyin": "Wǒ méi kàn diànyǐng.",
+                "vi": "Tôi không xem phim / Chưa xem phim."
               }
             ],
             "tables": null,
@@ -1469,36 +1361,36 @@ export const FULL_STRUCTURED_GRAMMAR = {
             "id": "hsk1_b12_g3",
             "num": 3,
             "title": "Cấu trúc “太……了”",
-            "explanation": "Cấu trúc “太……了” dùng để biểu thị mức độ cao, thường dùng trong câu cảm thán để bày tỏ cảm xúc của người nói",
+            "explanation": "Cấu trúc “太……了” (tài... le) dùng để biểu thị mức độ cực kỳ cao, thường dùng trong câu cảm thán để bày tỏ cảm xúc (quá / cực kỳ / lắm).",
             "formula": "S + 太 + Tính từ + 了",
             "note": null,
             "examples": [
               {
-                "rawZh": "太好了！ (Tài hǎo le!)",
+                "rawZh": "太好了！(Tài hǎo le!)",
                 "zh": "太好了！",
                 "pinyin": "Tài hǎo le!",
-                "vi": "Tốt quá! / Tuyệt quá!"
+                "vi": "Tốt quá! / Tuyệt vời quá!"
               },
               {
-                "rawZh": "太漂亮了！ (Tài piàoliang le!)",
+                "rawZh": "太漂亮了！(Tài piàoliang le!)",
                 "zh": "太漂亮了！",
                 "pinyin": "Tài piàoliang le!",
                 "vi": "Đẹp quá!"
               },
               {
-                "rawZh": "太贵了！ (Tài guì le!)",
+                "rawZh": "太贵了！(Tài guì le!)",
                 "zh": "太贵了！",
-                "pinyin": "Tài guì le!",
+                "pinyin": "太贵了！",
                 "vi": "Đắt quá!"
               },
               {
-                "rawZh": "太冷了！ (Tài lěng le!)",
+                "rawZh": "太冷了！(Tài lěng le!)",
                 "zh": "太冷了！",
                 "pinyin": "Tài lěng le!",
                 "vi": "Lạnh quá!"
               },
               {
-                "rawZh": "太好看了！ (Tài hǎokàn le!)",
+                "rawZh": "太好看了！(Tài hǎokàn le!)",
                 "zh": "太好看了！",
                 "pinyin": "Tài hǎokàn le!",
                 "vi": "Đẹp quá! / Hay quá!"
@@ -1519,33 +1411,33 @@ export const FULL_STRUCTURED_GRAMMAR = {
             "id": "hsk1_b13_g1",
             "num": 1,
             "title": "Động từ năng nguyện “可以”",
-            "explanation": "Động từ năng nguyện “可以” (kěyǐ) trong tiếng Trung có nghĩa là \"có thể\", dùng để biểu thị sự cho phép (được làm gì) hoặc khả năng (có thể thực hiện việc gì).",
-            "formula": "- Khẳng định: S + 可以 + V + O\n- Phủ định: S + 不可以 + V + O\n- Nghi vấn: S + 可以 + V + O + 吗?",
+            "explanation": "Động từ năng nguyện “可以” (kěyǐ) trong tiếng Trung có nghĩa là \"có thể\", dùng để biểu thị sự cho phép (được phép làm gì) hoặc khả năng (có thể làm việc gì).",
+            "formula": "- Khẳng định: S + 可以 + V + O \n- Phủ định: S + 不可以 + V + O \n- Nghi vấn: S + 可以 + V + O + 吗?",
             "note": null,
             "examples": [
               {
                 "rawZh": "我可以问你一个问题吗？(Wǒ kěyǐ wèn nǐ yīgè wèntí ma?)",
                 "zh": "我可以问你一个问题吗？",
                 "pinyin": "Wǒ kěyǐ wèn nǐ yīgè wèntí ma?",
-                "vi": ""
+                "vi": "Tôi có thể hỏi bạn một câu hỏi được không?"
               },
               {
                 "rawZh": "我可以坐这儿吗？(Wǒ kěyǐ zuò zhèr ma?)",
                 "zh": "我可以坐这儿吗？",
                 "pinyin": "Wǒ kěyǐ zuò zhèr ma?",
-                "vi": ""
+                "vi": "Tôi có thể ngồi ở đây được không?"
               },
               {
                 "rawZh": "这儿不可以睡觉。(Zhèr bù kěyǐ shuìjiào.)",
                 "zh": "这儿不可以睡觉。",
                 "pinyin": "Zhèr bù kěyǐ shuìjiào.",
-                "vi": ""
+                "vi": "Ở đây không được phép ngủ."
               },
               {
                 "rawZh": "你可以给我打个电话。(Nǐ kěyǐ gěi wǒ dǎ gè diànhuà.)",
                 "zh": "你可以给我打个电话。",
                 "pinyin": "Nǐ kěyǐ gěi wǒ dǎ gè diànhuà.",
-                "vi": ""
+                "vi": "Bạn có thể gọi điện thoại cho tôi."
               }
             ],
             "tables": null,
@@ -1554,28 +1446,28 @@ export const FULL_STRUCTURED_GRAMMAR = {
           {
             "id": "hsk1_b13_g2",
             "num": 2,
-            "title": "Cấu trúc “động từ+一下”",
-            "explanation": "Cấu trúc \"Động từ + 一下\" dùng để làm mềm ngữ khí, khiến lời đề nghị hoặc yêu cầu trở nên nhẹ nhàng, lịch sự và tự nhiên hơn. Nó diễn tả việc thực hiện hành động trong thời gian ngắn hoặc \"thử\" làm gì đó.",
+            "title": "Cấu trúc “Động từ + 一下”",
+            "explanation": "Cấu trúc \"Động từ + 一下\" (yíxià) dùng để làm mềm ngữ khí, khiến lời đề nghị hoặc yêu cầu trở nên nhẹ nhàng, lịch sự và tự nhiên hơn. Nó diễn tả việc thực hiện hành động trong thời gian ngắn hoặc \"thử làm\" điều gì đó.",
             "formula": "Động từ + 一下",
             "note": null,
             "examples": [
               {
-                "rawZh": "你可以打电话问一下。",
+                "rawZh": "你可以打电话问一下。(Nǐ kěyǐ dǎ diànhuà wèn yíxià.)",
                 "zh": "你可以打电话问一下。",
-                "pinyin": "",
-                "vi": ""
+                "pinyin": "Nǐ kěyǐ dǎ diànhuà wèn yíxià.",
+                "vi": "Bạn có thể gọi điện thoại hỏi một chút."
               },
               {
-                "rawZh": "请休息一下。",
+                "rawZh": "请休息一下。(Qǐng xiūxi yíxià.)",
                 "zh": "请休息一下。",
-                "pinyin": "",
-                "vi": ""
+                "pinyin": "Qǐng xiūxi yíxià.",
+                "vi": "Xin hãy nghỉ ngơi một lát."
               },
               {
-                "rawZh": "你看一下。",
+                "rawZh": "你看一下。(Nǐ kàn yíxià.)",
                 "zh": "你看一下。",
-                "pinyin": "",
-                "vi": ""
+                "pinyin": "Nǐ kàn yíxià.",
+                "vi": "Bạn xem qua một chút đi."
               }
             ],
             "tables": null,
@@ -1585,27 +1477,27 @@ export const FULL_STRUCTURED_GRAMMAR = {
             "id": "hsk1_b13_g3",
             "num": 3,
             "title": "Câu có hai tân ngữ (1)",
-            "explanation": "Câu có hai tân ngữ là loại câu mà động từ có thể kết hợp với hai tân ngữ cùng lúc: một tân ngữ chỉ người (tân ngữ gián tiếp) và một tân ngữ chỉ vật/sự việc (tân ngữ trực tiếp).\na. Động từ \"给\" (gěi - đưa/cho)\nTrong câu, \"给\" biểu thị hành động trao, đưa cho ai đó cái gì.\nb. Động từ \"问\" (wèn - hỏi)\nDùng để hỏi ai đó về điều gì hoặc hỏi ai đó một câu hỏi.",
-            "formula": "Công thức chung: Chủ ngữ + Động từ + Tân ngữ chỉ người + Tân ngữ chỉ vật\na. S + 给 + Người + Vật\nb. S + 问 + Người + Vật/Câu hỏi",
+            "explanation": "Câu có hai tân ngữ là loại câu mà động từ kết hợp với hai tân ngữ cùng lúc: một tân ngữ chỉ người (tân ngữ gián tiếp) và một tân ngữ chỉ vật/sự việc (tân ngữ trực tiếp).\na. Động từ \"给\" (gěi - đưa/cho)\nb. Động từ \"问\" (wèn - hỏi)",
+            "formula": "Chủ ngữ + Động từ + Tân ngữ chỉ người + Tân ngữ chỉ vật \na. S + 给 + Người + Vật \nb. S + 问 + Người + Vật/Câu hỏi",
             "note": null,
             "examples": [
               {
-                "rawZh": "请给我一杯茶。",
+                "rawZh": "请给我一杯茶。(Qǐng gěi wǒ yì bēi chá.)",
                 "zh": "请给我一杯茶。",
-                "pinyin": "",
-                "vi": ""
+                "pinyin": "Qǐng gěi wǒ yì bēi chá.",
+                "vi": "Xin hãy cho tôi một cốc trà."
               },
               {
-                "rawZh": "你可以给我打个电话。",
+                "rawZh": "你可以给我打个电话。(Nǐ kěyǐ gěi wǒ dǎ gè diànhuà.)",
                 "zh": "你可以给我打个电话。",
-                "pinyin": "",
-                "vi": ""
+                "pinyin": "Nǐ kěyǐ gěi wǒ dǎ gè diànhuà.",
+                "vi": "Bạn có thể gọi cho tôi một cuộc điện thoại."
               },
               {
-                "rawZh": "我可以问你一个问题吗？",
+                "rawZh": "我可以问你一个问题吗？(Wǒ kěyǐ wèn nǐ yīgè wèntí ma?)",
                 "zh": "我可以问你一个问题吗？",
-                "pinyin": "",
-                "vi": ""
+                "pinyin": "Wǒ kěyǐ wèn nǐ yīgè wèntí ma?",
+                "vi": "Tôi có thể hỏi bạn một câu hỏi không?"
               }
             ],
             "tables": null,
@@ -1624,23 +1516,23 @@ export const FULL_STRUCTURED_GRAMMAR = {
             "num": 1,
             "title": "Trợ từ động thái “了” (2)",
             "explanation": "Trợ từ động thái “了” (2) được đặt ngay sau động từ để biểu thị hành động đã xảy ra hoặc đã hoàn thành.",
-            "formula": "- Khẳng định: S + V + 了 + (O)\n- Phủ định: S + 没(有) + V + (O)\n- Nghi vấn: S + V + 了 + O + 吗? (Hoặc V + 了 + O + 没有?)",
-            "note": "Bắt buộc bỏ \"了\" trong câu phủ định.\nPhân biệt với “了” (1):\n- “了” (1) đứng cuối câu (bài 12): Chỉ sự thay đổi trạng thái (Ví dụ: 下雨了 - Trời đã mưa rồi).\n- “了” (2) đứng sau động từ (bài 14): Chỉ hành động đã hoàn thành.",
+            "formula": "- Khẳng định: S + V + 了 + (O) \n- Phủ định: S + 没(有) + V + (O) \n- Nghi vấn: S + V + 了 + O + 吗? (Hoặc V + 了 + O + 没有?)",
+            "note": "Bắt buộc bỏ \"了\" trong câu phủ định.\nPhân biệt: \n- “了” (1) đứng cuối câu (Bài 12): Chỉ sự thay đổi trạng thái.\n- “了” (2) đứng sau động từ (Bài 14): Chỉ hành động đã hoàn thành.",
             "examples": [
               {
-                "rawZh": "我看了一个电影。 (Wǒ kàn le yīgè diànyǐng.)",
+                "rawZh": "我看了一个电影。(Wǒ kàn le yīgè diànyǐng.)",
                 "zh": "我看了一个电影。",
                 "pinyin": "Wǒ kàn le yīgè diànyǐng.",
                 "vi": "Tôi đã xem một bộ phim."
               },
               {
-                "rawZh": "我买了新电脑。 (Wǒ mǎi le xīn diànnǎo.)",
+                "rawZh": "我买了新电脑。(Wǒ mǎi le xīn diànnǎo.)",
                 "zh": "我买了新电脑。",
                 "pinyin": "Wǒ mǎi le xīn diànnǎo.",
                 "vi": "Tôi đã mua máy tính mới."
               },
               {
-                "rawZh": "我没看电影。 (Wǒ méi kàn diànyǐng.)",
+                "rawZh": "我没看电影。(Wǒ méi kàn diànyǐng.)",
                 "zh": "我没看电影。",
                 "pinyin": "Wǒ méi kàn diànyǐng.",
                 "vi": "Tôi không xem phim / Tôi chưa xem phim."
@@ -1652,135 +1544,81 @@ export const FULL_STRUCTURED_GRAMMAR = {
           {
             "id": "hsk1_b14_g2",
             "num": 2,
-            "title": "Từ li hợp",
-            "explanation": "Từ ly hợp (离合词) là những từ trong tiếng Trung có cấu tạo gồm 2 phần: Động từ (V) + Tân ngữ (O).",
-            "formula": null,
-            "note": "Nguyên tắc quan trọng:\n1. Có thể tách rời: Khi muốn thêm trợ từ động thái (le, guo), từ chỉ số lượng, hoặc thời lượng, bạn phải chèn vào giữa V và O.\n2. Không thêm tân ngữ phía sau: Vì bản thân từ đã chứa một tân ngữ, bạn không được thêm một tân ngữ khác vào sau từ đó.",
+            "title": "Từ ly hợp (离合词)",
+            "explanation": "Từ ly hợp (离合词) là những từ trong tiếng Trung có cấu tạo gồm 2 phần: Động từ (V) + Tân ngữ (O). Khi dùng với trợ từ (le, guo) hoặc số lượng/thời lượng, bắt buộc chèn vào giữa V và O.",
+            "formula": "Động từ + (Số lượng/Thời lượng/Trợ từ 了) + Tân ngữ",
+            "note": "Nguyên tắc quan trọng: \n1. Có thể tách rời để chèn thành phần bổ nghĩa vào giữa.\n2. Không thêm tân ngữ trực tiếp phía sau vì bản thân từ đã chứa một tân ngữ.",
             "examples": [
               {
-                "rawZh": "睡了一觉",
+                "rawZh": "睡了一觉 (shuì le yí jiào)",
                 "zh": "睡了一觉",
-                "pinyin": "",
-                "vi": "Đã ngủ một giấc"
+                "pinyin": "shuì le yí jiào",
+                "vi": "Đã ngủ một giấc (睡觉: đi ngủ)"
               },
               {
-                "rawZh": "吃了一顿饭",
+                "rawZh": "吃了一顿饭 (chī le yí dùn fàn)",
                 "zh": "吃了一顿饭",
-                "pinyin": "",
-                "vi": "Đã ăn một bữa cơm"
+                "pinyin": "chī le yí dùn fàn",
+                "vi": "Đã ăn một bữa cơm (吃饭: ăn cơm)"
               },
               {
-                "rawZh": "打了个电话",
+                "rawZh": "打了个电话 (dǎ le gè diànhuà)",
                 "zh": "打了个电话",
-                "pinyin": "",
-                "vi": "Đã gọi một cuộc điện thoại"
+                "pinyin": "dǎ le gè diànhuà",
+                "vi": "Đã gọi một cuộc điện thoại (打电话: gọi điện thoại)"
               },
               {
-                "rawZh": "开了两小时车",
+                "rawZh": "开了两小时车 (kāi le liǎng xiǎoshí chē)",
                 "zh": "开了两小时车",
-                "pinyin": "",
-                "vi": "Đã lái xe 2 tiếng"
+                "pinyin": "kāi le liǎng xiǎoshí chē",
+                "vi": "Đã lái xe 2 tiếng (开车: lái xe)"
               },
               {
-                "rawZh": "上了一节课",
+                "rawZh": "上了一节课 (shàng le yì jié kè)",
                 "zh": "上了一节课",
-                "pinyin": "",
-                "vi": "Đã lên một tiết học"
+                "pinyin": "shàng le yì jié kè",
+                "vi": "Đã lên một tiết học (上课: lên lớp)"
               },
               {
-                "rawZh": "下了班",
+                "rawZh": "下了班 (xià le bān)",
                 "zh": "下了班",
-                "pinyin": "",
-                "vi": "Đã tan làm"
+                "pinyin": "xià le bān",
+                "vi": "Đã tan làm (下班: tan làm)"
               },
               {
-                "rawZh": "做了很多饭",
+                "rawZh": "做了很多饭 (zuò le hěn duō fàn)",
                 "zh": "做了很多饭",
-                "pinyin": "",
-                "vi": "Đã nấu rất nhiều cơm"
+                "pinyin": "zuò le hěn duō fàn",
+                "vi": "Đã nấu rất nhiều cơm (做饭: nấu cơm)"
               }
             ],
-            "tables": [
-              {
-                "title": "Bảng các Từ Ly Hợp thường gặp (HSK 1)",
-                "headers": [
-                  "Từ ly hợp",
-                  "Phiên âm",
-                  "Ý nghĩa",
-                  "Ví dụ tách từ (Chèn trợ từ/số lượng)"
-                ],
-                "rows": [
-                  [
-                    "睡觉",
-                    "shuìjiào",
-                    "Đi ngủ",
-                    "睡了一觉 (Đã ngủ một giấc)"
-                  ],
-                  [
-                    "吃饭",
-                    "chīfàn",
-                    "Ăn cơm",
-                    "吃了一顿饭 (Đã ăn một bữa cơm)"
-                  ],
-                  [
-                    "打电话",
-                    "dǎ diànhuà",
-                    "Gọi điện",
-                    "打了个电话 (Đã gọi một cuộc điện thoại)"
-                  ],
-                  [
-                    "开车",
-                    "kāichē",
-                    "Lái xe",
-                    "开了两小时车 (Đã lái xe 2 tiếng)"
-                  ],
-                  [
-                    "上课",
-                    "shàngkè",
-                    "Lên lớp",
-                    "上了一节课 (Đã lên một tiết học)"
-                  ],
-                  [
-                    "下班",
-                    "xiàbān",
-                    "Tan làm",
-                    "下了班 (Đã tan làm)"
-                  ],
-                  [
-                    "做饭",
-                    "zuòfàn",
-                    "Nấu ăn",
-                    "做了很多饭 (Đã nấu rất nhiều cơm)"
-                  ]
-                ]
-              }
-            ],
+            "tables": null,
             "exercises": null
           },
           {
             "id": "hsk1_b14_g3",
             "num": 3,
             "title": "Phó từ chỉ phạm vi “都”",
-            "explanation": "Phó từ “都” (dōu) có nghĩa là “đều”, dùng để tổng kết tất cả đối tượng trong câu.\nVị trí: Luôn đứng sau chủ ngữ (phải ở dạng số nhiều) và đứng trước động từ/tính từ.",
-            "formula": "Khẳng định: Chủ ngữ (số nhiều) + 都 + Động từ/Tính từ.\nPhủ định: Chủ ngữ (số nhiều) + 都 + 不 + Động từ/Tính từ.",
+            "explanation": "Phó từ “都” (dōu) có nghĩa là “đều”, dùng để tổng kết tất cả đối tượng trong câu. Vị trí: Luôn đứng sau chủ ngữ (ở dạng số nhiều) và đứng trước động từ/tính từ.",
+            "formula": "Khẳng định: Chủ ngữ (số nhiều) + 都 + Động từ/Tính từ \nPhủ định: Chủ ngữ (số nhiều) + 都 + 不 + Động từ/Tính từ",
             "note": "Chủ ngữ của “都” bắt buộc phải là số nhiều (ví dụ: 我们 - chúng tôi, 你们 - các bạn, 他们 - họ, hoặc A và B).",
             "examples": [
               {
-                "rawZh": "我们都喜欢吃苹果。",
+                "rawZh": "我们都喜欢吃苹果。(Wǒmen dōu xǐhuan chī píngguǒ.)",
                 "zh": "我们都喜欢吃苹果。",
-                "pinyin": "",
+                "pinyin": "Wǒmen dōu xǐhuan chī píngguǒ.",
                 "vi": "Chúng tôi đều thích ăn táo."
               },
               {
-                "rawZh": "他们都很忙。",
+                "rawZh": "他们都很忙。(Tāmen dōu hěn máng.)",
                 "zh": "他们都很忙。",
-                "pinyin": "",
+                "pinyin": "Tāmen dōu hěn máng.",
                 "vi": "Họ đều rất bận."
               },
               {
-                "rawZh": "我们都不想去超市。",
+                "rawZh": "我们都不想去超市。(Wǒmen dōu bù xiǎng qù chāoshì.)",
                 "zh": "我们都不想去超市。",
-                "pinyin": "",
+                "pinyin": "Wǒmen dōu bù xiǎng qù chāoshì.",
                 "vi": "Chúng tôi đều không muốn đi siêu thị."
               }
             ],
@@ -1799,20 +1637,20 @@ export const FULL_STRUCTURED_GRAMMAR = {
             "id": "hsk1_b15_g1",
             "num": 1,
             "title": "Câu ghép đẳng lập “……，还/也……”",
-            "explanation": "Dùng để kết nối hai vế câu có cùng chủ ngữ, diễn tả việc vừa có tính chất/hành động này, lại vừa có tính chất/hành động kia.\nCách dùng:\n- 也 (cũng): Liệt kê các trạng thái hoặc hành động tương đồng.\n- 还 (còn/lại còn): Bổ sung thêm thông tin hoặc nhấn mạnh một khía cạnh khác.",
-            "formula": "Chủ ngữ + V/Adj 1 + ..., (Chủ ngữ) + 还/也 + V/Adj 2.",
+            "explanation": "Dùng để kết nối hai vế câu có cùng chủ ngữ, diễn tả việc vừa có tính chất/hành động này, lại vừa có tính chất/hành động kia.\n- 也 (yě - cũng): Liệt kê các trạng thái hoặc hành động tương đồng.\n- 还 (hái - còn/lại còn): Bổ sung thêm thông tin hoặc nhấn mạnh một khía cạnh khác.",
+            "formula": "Chủ ngữ + V/Adj 1 + ..., (Chủ ngữ) + 还/也 + V/Adj 2",
             "note": null,
             "examples": [
               {
-                "rawZh": "他会做饭，也会开车。",
+                "rawZh": "他会做饭，也会开车。(Tā huì zuòfàn, yě huì kāichē.)",
                 "zh": "他会做饭，也会开车。",
-                "pinyin": "",
+                "pinyin": "Tā huì zuòfàn, yě huì kāichē.",
                 "vi": "Anh ấy biết nấu ăn, cũng biết lái xe."
               },
               {
-                "rawZh": "这件衣服很好看，还很便宜。",
+                "rawZh": "这件衣服很好看，还很便宜。(Zhè jiàn yīfu hěn hǎokàn, hái hěn piányi.)",
                 "zh": "这件衣服很好看，还很便宜。",
-                "pinyin": "",
+                "pinyin": "Zhè jiàn yīfu hěn hǎokàn, hái hěn piányi.",
                 "vi": "Bộ quần áo này rất đẹp, lại còn rất rẻ."
               }
             ],
@@ -3411,4 +3249,7 @@ export const FULL_STRUCTURED_GRAMMAR = {
     "rawContent": "出最有营养的选择更为重要。\r\n目前，如果您担心自己的碳水化合物摄入量，那么关注您所吃的个别食物并在每个类别中做\r\n天吃水果的人患糖尿病的风险比不吃水果的人低 12%。\r\n至于水果，2017 年 4 月发表在 PLoS Medicine 杂志上的一项针对中国成年人的研究发现，每\r\n15%。\r\n吃三份全谷物可将冠心病风险降低 19%，将中风风险降低 12%，并将死于癌症的风险降低\r\n物，全谷物和水果。 2016 年 6 月发表在 BMJ 上的 45 项研究的荟萃分析得出的结论是，每天\r\n另一方面，吃正确类型的碳水化合物会显着降低疾病风险，其中包括两种最常见的碳水化合\r\nTổng hợp ngữ pháp HSK 6\r\ntâm tiếng Trung Zhong Ruan.\r\nbản tiếng Trung HSK 6 được thiết kế giáo án bài giảng dành cho các bạn học viên Trung\r\ncao kỹ năng đọc hiểu tiếng Trung HSK cấp 6 và cải thiện kỹ năng làm bài tập dịch thuật văn\r\nTổng hợp ngữ pháp HSK 6 giáo trình luyện thi tiếng Trung HSK 6 là nội dung bài tập nâng\r\ntrung HSK 6kèm file PDF ở cuối bài.\r\nđược kỳ thi HSK đạt điểm số tối đa. Dưới đây là những trọng tâm củangữ pháp tiếng\r\ntiếng Trung HSK 6 sẽ tiếp tục hỗ trợ giúp cho các bạnmới bắt đầu học tiếng Trungvượt qua\r\nSau bàingữ pháp HSK 5thì đây là bài cuối về tổnghợp ngữ pháp HSK 6 tài liệu luyện thi\r\nTổng hợp ngữ pháp HSK 6\r\n----------------Page (0) Break----------------\r\n道疾病病例。一周后，他们确认新型冠状病毒 SARS-CoV-2 与最初的病例有关。案件群。\r\n中国卫生官员于 2019 年 12 月 31 日首次报告了与武汉市的海鲜和动物市场相关的急性呼吸\r\n美国国家过敏和感染疾病研究所 (NIAID) 及其落基山实验室制作了新型冠状病毒的新图像。\r\n欢的事情——跑步的关键。\r\n有跑步膝的症状，请注意您的膝盖疼痛并迅速进行护理以避免进一步受伤，这是继续做您喜\r\n通过采取一些措施来防止跑步引起的膝盖疼痛，您将能够继续锻炼而不会出现问题。如果您\r\n制的伸展和加强锻炼计划。\r\n决问题就可以缓解他们的症状。您的医生或物理治疗师可以针对跑步者膝关节的病因制定定\r\n康复是跑步膝治疗的另一个重要组成部分。研究发现，许多跑步膝的患者最终仅通过锻炼来解\r\n段冰袋也可以减轻膝盖疼痛。\r\n减少里程或暂时改用其他活动，例如游泳或骑自行车。跑步后抬高你的腿并在关节上放一小\r\n您可以采取的治疗跑步膝的最重要步骤之一就是少走几步。换句话说，放松跑步。您可能需要\r\n保在运动前充分伸展并穿上合身的优质跑鞋。\r\n以减轻膝盖的压力，逐渐增加跑步速度和距离，以及尽可能在相对柔软的表面上跑步。还要确\r\n根据美国骨科医师学会的说法，有几种方法可以防止跑步者膝盖受伤，包括减轻额外的体重\r\n您在跑步时弯曲和伸展腿时，可能会导致跑步膝。\r\n凹槽对齐，在该凹槽内的运动称为髌骨跟踪。如果您的膝盖骨在这个凹槽中不能正常移动，当\r\n在膝关节处，您的大腿骨（股骨）和胫骨（胫骨）结合在一起。您的膝盖骨（髌骨）与股骨底部的\r\n到膝盖有弹响或咔哒声。\r\n蹲下或爬楼梯时，您可能会感到膝盖疼痛。膝盖疼痛可能会感到钝痛或剧烈。您可能还会注意\r\n。这个问题通常会导致膝盖周围或膝盖后面疼痛。在膝盖弯曲坐下一段时间后，或者在跑步、\r\n研究发现，一种称为髌股关节疼痛综合征的病症，也称为“跑步膝”，占跑步者所有损伤的 25%\r\n运动员受伤情况的研究中，膝盖受伤是迄今为止最常见的。\r\n始跑步，包括参加马拉松的人数越来越多，与跑步相关的伤害也有所增加。在几项检查马拉松\r\n不幸的是，如果你经常跑步，你也很可能会出现膝盖疼痛。近几十年来，随着越来越多的人开\r\n方法。\r\n如果您喜欢跑步，您可能熟悉它可以提供的许多好处。这是在户外克服压力和保持体形的好\r\n水化合物来源，如全谷物、豆类、水果、蔬菜、坚果和种子。\r\n和大脑提供能量。比碳水化合物的数量更重要的是你吃的食物类型。坚持使用有益健康的碳\r\n碳水化合物是您的身体发挥最佳功能所需的三种常量营养素之一。他们的主要工作是为身体\r\n水化合物，”昌西博士说。\r\n不必害怕碳水化合物。 “碳水化合物的健康来源是那些以水果和全谷物等全食物为中心的碳\r\n吃低碳水化合物有很多不同的方法，其中大部分取决于你个人的碳水化合物目标，但你当然\r\n基础。\r\n交谈很重要。它还有助于与熟悉您所需方法的注册营养师建立联系，以确保您涵盖您的营养\r\n如果您对尝试低碳水化合物饮食感到好奇，那么在进行任何剧烈的饮食改变之前与您的医生\r\n----------------Page (1) Break----------------\r\ndào xīgài yǒu dàn xiǎng huò kādá shēng.\r\nténgtòng. Xīgài téngtòng kěnéng huì gǎndào dùn tòng huò jùliè. Nín kěnéng hái huì zhùyì\r\nshíjiān hòu, huòzhě zài pǎobù, dūn xià huò pá lóutī shí, nín kěnéng huì gǎndào xīgài\r\nhuì dǎozhì xīgài zhōuwéi huò xīgài hòumiàn téngtòng. Zài xīgài wānqū zuò xià yīduàn\r\nchēng wèi “pǎobù xī”, zhàn pǎobù zhě suǒyǒu sǔnshāng de 25%. Zhège wèntí tōngcháng\r\nYánjiū fāxiàn, yī zhǒng chēng wèi bìngǔ guānjié téngtòng zònghé zhēng de bìngzhèng, yě\r\nwéizhǐ zuì chángjiàn de.\r\nmǎlāsōng yùndòngyuán shòushāng qíngkuàng de yánjiū zhōng, xīgài shòushāng shì qìjīn\r\nyuè lái yuè duō, yǔ pǎobù xiāngguān de shānghài yěyǒu suǒ zēngjiā. Zài jǐ xiàng jiǎnchá\r\nshí niánlái, suízhe yuè lái yuè duō de rén kāishǐ pǎobù, bāokuò cānjiā mǎlāsōng de rénshù\r\nBùxìng de shì, rúguǒ nǐ jīngcháng pǎobù, nǐ yě hěn kěnéng huì chūxiàn xīgài téngtòng. Jìn jǐ\r\nhùwài kèfú yālì hé bǎochí tǐxíng de hǎo fāngfǎ.\r\nRúguǒ nín xǐhuān pǎobù, nín kěnéng shúxī tā kěyǐ tígōng de xǔduō hǎochù. Zhè shì zài\r\nhé zhǒngzǐ.\r\nyǒuyì jiànkāng de tànshuǐ huàhéwù láiyuán, rú quán gǔwù, dòu lèi, shuǐguǒ, shūcài, jiānguǒ\r\ntànshuǐ huàhéwù de shùliàng gèng zhòngyào de shì nǐ chī de shíwù lèixíng. Jiānchí shǐyòng\r\nyíngyǎngsù zhī yī. Tāmen de zhǔyào gōngzuò shì wèi shēntǐ hé dànǎo tígōng néngliàng. Bǐ\r\nTànshuǐ huàhéwù shì nín de shēntǐ fāhuī zuì jiā gōngnéng suǒ xū de sān zhǒng chángliàng\r\nzhōngxīn de tànshuǐ huàhéwù,” chāng xī bóshì shuō.\r\nhuàhéwù de jiànkāng láiyuán shì nàxiē yǐ shuǐguǒ hé quán gǔwù děng quán shíwù wéi\r\nde tànshuǐ huàhéwù mùbiāo, dàn nǐ dāngrán bùbì hàipà tànshuǐ huàhéwù. “Tànshuǐ\r\nChī dī tànshuǐ huàhéwù yǒu hěnduō bùtóng de fāngfǎ, qízhōng dà bùfèn qǔjué yú nǐ gèrén\r\nyíngyǎng jīchǔ.\r\nshúxī nín suǒ xū fāngfǎ de zhùcè yíngyǎng shī jiànlì liánxì, yǐ quèbǎo nín hángài nín de\r\njùliè de yǐnshí gǎibiàn zhīqián yǔ nín de yīshēng jiāotán hěn zhòngyào. Tā hái yǒu zhù yú yǔ\r\nRúguǒ nín duì chángshì dī tànshuǐ huàhéwù yǐnshí gǎndào hàoqí, nàme zài jìnxíng rènhé\r\nzhòngyào.\r\nde gèbié shíwù bìng zài měi gè lèibié zhōng zuò chū zuì yǒu yíngyǎng de xuǎnzé gèng wéi\r\nMùqián, rúguǒ nín dānxīn zìjǐ de tànshuǐ huàhéwù shè rù liàng, nàme guānzhù nín suǒ chī\r\nfēngxiǎn bǐ bù chī shuǐguǒ de rén dī 12%.\r\nzhōngguó chéngnián rén de yánjiū fāxiàn, měitiān chī shuǐguǒ de rén huàn tángniàobìng de\r\nZhìyú shuǐguǒ,2017 nián 4 yuè fābiǎo zài PLoS Medicine zázhì shàng de yī xiàng zhēnduì\r\nzhòngfēng fēngxiǎn jiàngdī 12%, bìng jiàng sǐ yú áizhèng de fēngxiǎn jiàngdī 15%.\r\njiélùn shì, měitiān chī sān fèn quán gǔwù kě jiāng guàn xīnbìng fēngxiǎn jiàngdī 19%, jiàng\r\nshuǐguǒ. 2016 Nián 6 yuè fābiǎo zài BMJ shàng de 45 xiàng yánjiū de huìcuì fēnxī dé chū de\r\nfēngxiǎn, qízhōng bāokuò liǎng zhǒng zuì chángjiàn de tànshuǐ huàhéwù, quán gǔwù hé\r\nLìng yī fāngmiàn, chī zhèngquè lèixíng de tànshuǐ huàhéwù huì xiǎnzhe jiàngdī jíbìng\r\nngữ pháp HSK 6 giáo trình luyện thi tiếng Trung HSK 6.\r\nBài giảng hướng dẫn cách chú thích phiên âm tiếng Trung HSK ứng dụng thực tế Tổng hợp\r\n----------------Page (2) Break----------------\r\nchuyện với bác sĩ trước khi thực hiện bất kỳ thay đổi chế độ ăn uống nào. Nó cũng giúp kết\r\nNếu bạn tò mò về việc thử áp dụng chế độ ăn ít carb, điều quan trọng là bạn phải nói\r\ntừng loại thực phẩm bạn đang ăn và đưa ra lựa chọn bổ dưỡng nhất trong mỗi loại.\r\nHiện tại, nếu bạn lo lắng về lượng carb của mình, điều quan trọng hơn là phải chú ý đến\r\nmắc bệnh tiểu đường thấp hơn 12% so với những người tránh ăn trái cây.\r\n2017 trên tạp chí PLoS Medicine cho thấy những người ăn trái cây hàng ngày có nguy cơ\r\nĐối với trái cây, một nghiên cứu về người lớn Trung Quốc được công bố vào tháng 4 năm\r\n19%, giảm nguy cơ đột quỵ xuống 12% và giảm nguy cơ tử vong do ung thư. 15 phần trăm.\r\nrằng ăn ba phần ngũ cốc nguyên hạt hàng ngày làm giảm nguy cơ bệnh tim mạch vành đến\r\ncủa 45 nghiên cứu, được công bố vào tháng 6 năm 2016 trên tạp chí The BMJ, kết luận\r\ncác loại carbs ác tính phổ biến nhất, ngũ cốc nguyên hạt và trái cây. Một phân tích tổng hợp\r\nMặt khác, ăn đúng loại carbs làm giảm đáng kể nguy cơ mắc bệnh, và bao gồm hai trong số\r\nhợp ngữ pháp HSK 6 giáo trình luyện thi tiếng Trung HSK 6.\r\nGiáo án bài tập luyện kỹ năng dịch văn bản tiếng Trung HSK 6 ứng dụng vào thực tế Tổng\r\nquèrèn xīnxíng guānzhuàng bìngdú SARS-CoV-2 yǔ zuìchū de bìnglì yǒuguān. Ànjiàn qún.\r\nhǎixiān hé dòngwù shìchǎng xiāngguān de jíxìng hūxīdào jíbìng bìnglì. Yīzhōu hòu, tāmen\r\nZhōngguó wèishēng guānyuán yú 2019 nián 12 yuè 31 rì shǒucì bàogàole yǔ wǔhàn shì dì\r\nxīnxíng guānzhuàng bìngdú dí xīn túxiàng.\r\nMěiguó guójiā guòmǐn hé gǎnrǎn jíbìng yánjiū suǒ (NIAID) jí qí luò jīshān shíyàn shì zhìzuòle\r\nxǐhuān de shìqíng——pǎobù de guānjiàn.\r\nde xīgài téngtòng bìng xùnsù jìnxíng hùlǐ yǐ bìmiǎn jìnyībù shòushāng, zhè shì jìxù zuò nín\r\nduànliàn ér bù huì chūxiàn wèntí. Rúguǒ nín yǒu pǎobù xī de zhèngzhuàng, qǐng zhùyì nín\r\nTōngguò cǎiqǔ yīxiē cuòshī lái fángzhǐ pǎobù yǐnqǐ de xīgài téngtòng, nín jiāng nénggòu jìxù\r\nbìngyīn zhìdìng dìngzhì de shēnzhǎn hé jiāqiáng duànliàn jìhuà.\r\nzhèngzhuàng. Nín de yīshēng huò wùlǐ zhìliáo shī kěyǐ zhēnduì pǎobù zhě xī guānjié de\r\npǎobù xī de huànzhě zuìzhōng jǐn tōngguò duànliàn lái jiějué wèntí jiù kěyǐ huǎnjiě tāmen de\r\nKāngfù shì pǎobù xī zhìliáo de lìng yīgè zhòngyào zǔchéng bùfèn. Yánjiū fāxiàn, xǔduō\r\nfàng yī xiǎoduàn bīngdài yě kěyǐ jiǎnqīng xīgài téngtòng.\r\nhuódòng, lìrú yóuyǒng huò qí zìxíngchē. Pǎobù hòu tái gāo nǐ de tuǐ bìng zài guānjié shàng\r\njù huàshuō, fàngsōng pǎobù. Nín kěnéng xūyào jiǎnshǎo lǐchéng huò zhànshí gǎi yòng qítā\r\nNín kěyǐ cǎiqǔ de zhìliáo pǎobù xī de zuì zhòngyào bùzhòu zhī yī jiùshì shǎo zǒu jǐ bù. Huàn\r\nzài yùndòng qián chōngfèn shēnzhǎn bìng chuān shàng hé shēn de yōuzhì pǎoxié.\r\nsùdù hé jùlí, yǐjí jǐn kěnéng zài xiāngduì róuruǎn de biǎomiàn shàng pǎobù. Hái yào quèbǎo\r\nshòushāng, bāokuò jiǎnqīng éwài de tǐzhòng yǐ jiǎnqīng xīgài de yālì, zhújiàn zēngjiā pǎobù\r\nGēnjù měiguó gǔkē yīshī xuéhuì de shuōfǎ, yǒu jǐ zhǒng fāngfǎ kěyǐ fángzhǐ pǎobù zhě xīgài\r\nnín zài pǎobù shí wānqū héshēnzhǎn tuǐ shí, kěnéng huì dǎozhì pǎobù xī.\r\ngēnzōng. Rúguǒ nín de xīgàigǔ zài zhège āo cáo zhōng bùnéng zhèngcháng yídòng, dāng\r\n(bìngǔ) yǔ gǔgǔ dǐbù de āo cáo duìqí, zài gāi āo cáo nèi de yùndòng chēng wèi bìn gǔ\r\nZài xī guānjié chù, nín de dàtuǐ gǔ (gǔgǔ) hé jìnggǔ (jìnggǔ) jiéhé zài yīqǐ. Nín de xīgàigǔ\r\n----------------Page (3) Break----------------\r\nchạy cũng có thể làm giảm đau đầu gối.\r\nbơi lội hoặc đạp xe. Nâng cao chân và chườm túi lạnh lên khớp trong thời gian ngắn sau khi\r\nthể cần phải cắt giảm quãng đường đi hoặc tạm thời chuyển sang một hoạt động khác như\r\nngười chạy bộ là chỉ cần thực hiện ít bước hơn. Nói cách khác, giảm bớt việc chạy. Bạn có\r\nMột trong những bước quan trọng nhất mà bạn có thể thực hiện để điều trị đầu gối của\r\nchất lượng.\r\ncó thể. Ngoài ra, hãy nhớ kéo căng cơ trước khi tập luyện và mang giày chạy bộ vừa vặn,\r\nbạn, tăng dần tốc độ và khoảng cách chạy của bạn và chạy trên bề mặt tương đối mềm khi\r\ncủa vận động viên chạy, bao gồm giảm thêm cân để giảm bớt căng thẳng cho đầu gối của\r\nTheo Học viện bác sĩ phẫu thuật chỉnh hình Hoa Kỳ, có một số cách để ngăn chặn đầu gối\r\nrộng chân trong khi chạy, nó có thể gây ra đầu gối của người chạy.\r\nxương bánh chè của bạn không di chuyển đúng theo rãnh này, khi bạn uốn cong và mở\r\ncủa xương đùi và chuyển động trong rãnh này được gọi là theo dõi xương bánh chè. Nếu\r\nXương bánh chè (xương bánh chè) của bạn được căn chỉnh trong một rãnh ở dưới cùng\r\nTại khớp gối, xương đùi (xương đùi) và xương ống chân (xương chày) kết hợp với nhau.\r\nBạn cũng có thể nhận thấy cảm giác nhói hoặc nhói ở đầu gối.\r\nhoặc khi bạn chạy, ngồi xổm hoặc leo cầu thang. Đau đầu gối có thể âm ỉ hoặc đau nhói.\r\ncủa bạn. Bạn có thể cảm thấy đau đầu gối sau khi ngồi xuống một lúc với đầu gối cong,\r\nngười chạy bộ. Vấn đề này thường gây đau xung quanh hoặc ngay sau xương bánh chè\r\nđược gọi là “đầu gối của người chạy bộ”, chiếm tới 25% tổng số chấn thương phát triển ở\r\nNghiên cứu đã phát hiện ra rằng một tình trạng được gọi là hội chứng đau xương chậu, còn\r\nchấn thương đầu gối cho đến nay là phổ biến nhất.\r\ntăng lên. Trong một số nghiên cứu kiểm tra chấn thương ở vận động viên chạy marathon,\r\nlượng lớn hơn tham gia các cuộc chạy marathon, các chấn thương liên quan đến chạy đã\r\nTrong những thập kỷ gần đây, khi ngày càng có nhiều người tham gia chạy, bao gồm cả số\r\nThật không may, nếu bạn thường xuyên chạy bộ, bạn cũng có khả năng cao bị đau đầu gối.\r\ncách tuyệt vời để đánh bại căng thẳng và giữ gìn vóc dáng khi ở ngoài trời.\r\nNếu bạn thích chạy bộ, có lẽ bạn đã quen với nhiều lợi ích mà nó có thể mang lại. Đó là một\r\nchẳng hạn như ngũ cốc nguyên hạt, các loại đậu, trái cây, rau, quả hạch và hạt.\r\nsố lượng carbs là loại thực phẩm bạn đang ăn. Hãy ăn những nguồn carbs lành mạnh,\r\nnhất. Công việc chính của họ là cung cấp năng lượng cho cơ thể và não bộ. Quan trọng hơn\r\nCarbohydrate là một trong ba chất dinh dưỡng đa lượng mà cơ thể bạn cần để hoạt động tốt\r\nngũ cốc nguyên hạt.\r\nnguồn carbs lành mạnh là những nguồn xoay quanh thực phẩm nguyên hạt như trái cây và\r\ncá nhân của bạn, nhưng bạn chắc chắn không phải sợ carbs. Tiến sĩ Chauncey nói: “Các\r\nCó nhiều cách khác nhau để ăn low-carb và phần lớn điều đó phụ thuộc vào mục tiêu carb\r\ndinh dưỡng của mình.\r\nphương pháp tiếp cận mong muốn của bạn để đảm bảo rằng bạn đang bao gồm các cơ sở\r\nnối với một chuyên gia dinh dưỡng đã đăng ký-chuyên gia dinh dưỡng, người am hiểu về\r\n----------------Page (4) Break----------------\r\nquan đến bệnh ban đầu này cụm trường hợp.\r\nnăm 2019. Một tuần sau, họ xác nhận rằng một loại coronavirus mới, SARS-CoV-2, có liên\r\ntính liên quan đến một chợ hải sản và động vật ở thành phố Vũ Hán vào ngày 31 tháng 12\r\nCác quan chức y tế Trung Quốc lần đầu tiên báo cáo các trường hợp mắc bệnh hô hấp cấp\r\nMountain của nó đã đưa ra những hình ảnh mới về loại coronavirus mới.\r\nViện Quốc gia về Bệnh Dị ứng và Nhiễm trùng (NIAID) và Phòng thí nghiệm Rocky\r\nchạy.\r\nchóng để tránh chấn thương thêm là chìa khóa để tiếp tục làm những gì bạn yêu thích –\r\nvận động viên điền kinh, hãy chú ý đến cơn đau đầu gối của bạn và chăm sóc nó nhanh\r\ntập luyện của mình mà không gặp vấn đề gì. Nếu bạn có các triệu chứng của đầu gối của\r\nBằng cách thực hiện một số bước để ngăn ngừa đau đầu gối do chạy, bạn sẽ có thể tiếp tục\r\nnguyên nhân gây ra khớp gối của vận động viên điền kinh của bạn.\r\nmột chương trình tùy chỉnh các bài tập kéo giãn và tăng cường sức mạnh cụ thể cho\r\ncác bài tập để giải quyết vấn đề. Bác sĩ hoặc chuyên gia vật lý trị liệu của bạn có thể tạo ra\r\nđộng viên điền kinh cuối cùng đã giảm bớt các triệu chứng của họ chỉ bằng cách thực hiện\r\nđộng viên điền kinh. Các nghiên cứu đã phát hiện ra rằng nhiều người bị đầu gối của vận\r\nPhục hồi chức năng là một thành phần quan trọng khác trong việc điều trị đầu gối của vận\r\n----------------Page (5) Break----------------\r\n"
   }
 };
-window.FULL_STRUCTURED_GRAMMAR = FULL_STRUCTURED_GRAMMAR;
+
+if (typeof window !== 'undefined') {
+  window.FULL_STRUCTURED_GRAMMAR = FULL_STRUCTURED_GRAMMAR;
+}

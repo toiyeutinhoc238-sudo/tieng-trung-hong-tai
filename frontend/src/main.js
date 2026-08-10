@@ -3686,10 +3686,7 @@ function initGoogleSignIn() {
 
   try {
     const signinBtnWrapper = document.getElementById('google-signin-button');
-    if (!signinBtnWrapper) return;
-
-    // Clear wrapper first in case of re-rendering
-    signinBtnWrapper.innerHTML = '';
+    const modalBtnWrapper = document.getElementById('modal-google-signin-button');
 
     google.accounts.id.initialize({
       client_id: GOOGLE_CLIENT_ID,
@@ -3698,21 +3695,48 @@ function initGoogleSignIn() {
       cancel_on_tap_outside: true
     });
 
-    google.accounts.id.renderButton(
-      signinBtnWrapper,
-      {
-        theme: document.documentElement.classList.contains('dark') ? 'filled_black' : 'outline',
-        size: 'medium',
-        type: 'standard',
-        shape: 'rectangular',
-        text: 'signin_with',
-        logo_alignment: 'left'
-      }
-    );
+    if (signinBtnWrapper) {
+      signinBtnWrapper.innerHTML = '';
+      google.accounts.id.renderButton(
+        signinBtnWrapper,
+        {
+          theme: document.documentElement.classList.contains('dark') ? 'filled_black' : 'outline',
+          size: 'medium',
+          type: 'standard',
+          shape: 'rectangular',
+          text: 'signin_with',
+          logo_alignment: 'left'
+        }
+      );
+    }
+
+    if (modalBtnWrapper) {
+      modalBtnWrapper.innerHTML = '';
+      google.accounts.id.renderButton(
+        modalBtnWrapper,
+        {
+          theme: 'filled_blue',
+          size: 'large',
+          type: 'standard',
+          shape: 'rectangular',
+          text: 'signin_with',
+          logo_alignment: 'left',
+          width: 300
+        }
+      );
+    }
   } catch (err) {
     console.error('Google Sign-In initialization failed:', err);
   }
 }
+
+window.openAuthRequiredModal = function() {
+  const modal = document.getElementById('auth-required-modal');
+  if (modal) {
+    modal.style.display = 'flex';
+    initGoogleSignIn();
+  }
+};
 
 // Google Sign-In Credential Callback
 async function handleCredentialResponse(response) {
@@ -3735,6 +3759,8 @@ async function handleCredentialResponse(response) {
       localStorage.setItem('user', JSON.stringify(currentUser));
       renderUserProfile();
       showToast(`Chào mừng ${currentUser.name} đã quay lại! 👋`);
+      const authModal = document.getElementById('auth-required-modal');
+      if (authModal) authModal.style.display = 'none';
 
       // Migrate guest chat history to user account
       if (typeof window.migrateGuestChatHistory === 'function') {
@@ -4214,8 +4240,12 @@ function getUnlockedLevelsMap() {
 }
 
 function isLevelUnlocked(ver, level, levelIndex, levelsData, builtInVocabs) {
-  // All levels are unlocked by default as requested by user
-  return true;
+  // Only HSK 1 and HSK 2 in HSK 3.0 are currently unlocked with structured lesson data
+  const v = ver || activeRoadmapVersion || '3.0';
+  if (v === '3.0' && (Number(level) === 1 || Number(level) === 2)) {
+    return true;
+  }
+  return false;
 }
 
 window.unlockRoadmapLevel = function(ver, level) {
@@ -4318,7 +4348,7 @@ function renderGamifiedRoadmapPath() {
     } else if (isUnlocked) {
       statusBadge = `<span class="roadmap-badge active-pulse"><i class="fa-solid fa-play"></i> Bắt đầu học</span>`;
     } else {
-      statusBadge = `<span class="roadmap-badge locked" style="background: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3);"><i class="fa-solid fa-lock"></i> Chưa mở khóa</span>`;
+      statusBadge = `<span class="roadmap-badge locked" style="background: rgba(245, 158, 11, 0.18); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4);"><i class="fa-solid fa-lock"></i> 🔒 Sắp ra mắt</span>`;
     }
 
     const nodeState = isCompleted ? 'node-done' : (isUnlocked ? 'node-active' : 'node-locked');
@@ -4342,8 +4372,8 @@ function renderGamifiedRoadmapPath() {
       `;
     } else {
       actionButtonsHtml = `
-        <button class="btn-node-start btn-node-locked" style="background: rgba(100, 116, 139, 0.35); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; border-radius: 12px; font-weight: 700; padding: 12px 20px; font-size: 0.88rem; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="goToRoadmapLevel('${hskVer}', '${item.level}')">
-          <i class="fa-solid fa-lock" style="color: #fca5a5;"></i> Cần hoàn thành ${prevItemName} trước
+        <button class="btn-node-start btn-node-locked" style="background: rgba(100, 116, 139, 0.35); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; border-radius: 12px; font-weight: 700; padding: 12px 20px; font-size: 0.88rem; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="window.showComingSoonNotice('Lộ trình bài học HSK ' + '${item.level}')">
+          <i class="fa-solid fa-lock" style="color: #fbbf24;"></i> Sắp ra mắt (Đang biên soạn)
         </button>
       `;
     }
@@ -4464,12 +4494,15 @@ window.goToRoadmapLevel = function (ver, level) {
 
   const nodeIndex = levelsData.findIndex(item => String(item.level) === String(level));
   const builtInVocabs = vocabList.filter(w => !w.isCustom);
+  if (!currentUser) {
+    window.openAuthRequiredModal();
+    return;
+  }
+
   const unlocked = isLevelUnlocked(hskVer, level, nodeIndex >= 0 ? nodeIndex : 0, levelsData, builtInVocabs);
 
   if (!unlocked) {
-    const prevItemName = nodeIndex > 0 ? levelsData[nodeIndex - 1].name : 'cấp trước';
-    const targetItemName = nodeIndex >= 0 ? levelsData[nodeIndex].name : `Cấp ${level}`;
-    showToast(`🔒 ${targetItemName} đang bị khóa! Bạn cần hoàn thành 100% từ vựng ở ${prevItemName} trước để mở khóa nhé! 🎯`, true);
+    window.showComingSoonNotice(`Lộ trình bài học HSK ${level}`);
     return;
   }
 
@@ -6800,6 +6833,21 @@ window.openLessonDetailModal = function (lessonKey) {
     };
   }
 
+  const btnGrammar = document.getElementById('modal-btn-mod-grammar');
+  if (btnGrammar) {
+    const grammarBadge = btnGrammar.querySelector('small');
+    if (grammarBadge) {
+      grammarBadge.textContent = 'Tra cứu 📖';
+      grammarBadge.style.background = '#2563eb';
+      grammarBadge.style.color = '#ffffff';
+    }
+    btnGrammar.onclick = function () {
+      const modalEl = document.getElementById('lesson-detail-popup-modal');
+      if (modalEl) modalEl.style.display = 'none';
+      window.openLessonGrammarStudy(lessonKey);
+    };
+  }
+
   const btnText = document.getElementById('modal-btn-mod-text');
   if (btnText) {
     const textBadge = btnText.querySelector('small');
@@ -7096,7 +7144,7 @@ window.openLessonDetailModal = function (lessonKey) {
           <span>Từ Vựng</span>
           <small>${wordsCount} từ</small>
         </button>
-        <button class="lesson-mod-btn mod-grammar" style="position: relative;" onclick="event.stopPropagation(); window.location.href='/hsk-grammar.html?level=' + (activeLessonsLevel || '1')">
+        <button class="lesson-mod-btn mod-grammar" style="position: relative;" onclick="event.stopPropagation(); window.openLessonGrammarStudy('${lessonKey}')">
           <i class="fa-solid fa-spell-check"></i>
           <span>Ngữ Pháp</span>
           <small style="background: #2563eb; color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">Tra cứu 📖</small>
@@ -8069,6 +8117,16 @@ window.checkBkTranslateInput = function(target) {
 window.navBkLine = function(dir, totalLines) {
   currentBkLineIndex = (currentBkLineIndex + dir + totalLines) % totalLines;
   renderBkModalContent();
+};
+
+window.openLessonGrammarStudy = function(lessonId) {
+  const modalEl = document.getElementById('lesson-detail-popup-modal');
+  if (modalEl) modalEl.style.display = 'none';
+
+  const numId = parseInt(String(lessonId).replace(/\D/g, ''), 10) || 1;
+  const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : (activeLessonsLevel || 1);
+  const currentVer = activeLessonsCurriculum === 'yct' ? 'yct' : (activeHskVersion || activeRoadmapVersion || '3.0');
+  window.location.href = `/hsk-grammar.html?level=${currentLvl}&lesson=${numId}&version=${currentVer}`;
 };
 
 window.openLessonTextStudy = function(lessonId) {
