@@ -734,8 +734,8 @@
   </style>
   <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
   <script type="module" crossorigin src="/assets/grammar_hsk1-BR1zgT-z.js"></script>
-  <script type="module" crossorigin src="/assets/main-D6obBdXf.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/style-DH3dYVvU.css">
+  <script type="module" crossorigin src="/assets/main-K4sRR95Q.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/style-D82hZwJ3.css">
 </head>
 
 <body>
@@ -843,6 +843,9 @@
           <!-- Dynamically rendered review items -->
         </div>
 
+        <!-- Next Lesson & Stepper Action Buttons -->
+        <div id="go-next-lesson-actions" style="margin-bottom: 12px; display: none; flex-direction: column; gap: 8px;"></div>
+
         <div style="display: flex; gap: 10px;">
           <button class="btn-primary" id="btn-restart" style="flex: 1;">Chơi Lại</button>
           <button class="btn-primary" id="btn-quit"
@@ -879,6 +882,9 @@
     <div class="timer-container">
       <div class="timer-fill" id="timer-bar"></div>
     </div>
+
+    <!-- UNIFIED LESSON STEPPER BAR (HIỂN THỊ KHI HỌC THEO BÀI) -->
+    <div id="quiz-lesson-stepper-bar" style="display: none; padding: 10px 20px 0 20px;"></div>
 
     <!-- MAIN PLAY AREA -->
     <div class="play-area">
@@ -1261,6 +1267,49 @@
       score = 0; hearts = 3; hudScore.textContent = score; updateHearts();
       setupModal.style.display = 'none';
 
+      // Render Stepper if played by lesson
+      const urlParams = new URLSearchParams(window.location.search);
+      const qLesson = urlParams.get('lesson') || (selLesson ? selLesson.value : '');
+      const qLevel = urlParams.get('level') || (selLevel ? selLevel.value : '1');
+      const qVer = urlParams.get('version') || localStorage.getItem('active_hsk_version') || '3.0';
+
+      const numLessonId = parseInt(String(qLesson).replace(/\D/g, ''), 10) || (qLesson !== 'all' && qLesson !== 'random' ? parseInt(qLesson, 10) : null);
+      const stepperEl = document.getElementById('quiz-lesson-stepper-bar');
+
+      if (stepperEl) {
+        if (numLessonId) {
+          stepperEl.style.display = 'block';
+          stepperEl.innerHTML = `
+            <div class="lesson-stepper-hub-bar" style="background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 18px; padding: 8px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; box-shadow: 0 10px 30px rgba(0,0,0,0.35);">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <a href="/index.html?tab=lessons&level=${qLevel}&version=${qVer}" target="_top" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #cbd5e1; padding: 6px 12px; border-radius: 10px; font-weight: 700; text-decoration: none; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 6px;">
+                  <i class="fa-solid fa-map-location-dot"></i> Lộ trình
+                </a>
+                <div style="font-weight: 800; font-size: 0.95rem; color: #fbbf24;">
+                  <i class="fa-solid fa-bookmark" style="color: #38bdf8;"></i> Ôn Tập Bài ${numLessonId}
+                </div>
+              </div>
+              <div class="lesson-stepper-tabs" style="display: flex; gap: 6px; flex-wrap: wrap;">
+                <a href="/index.html?tab=lessons&level=${qLevel}&version=${qVer}&openVocab=${numLessonId}" target="_top" class="stepper-tab-btn" style="padding: 6px 12px; font-size: 0.82rem; border-radius: 10px; text-decoration: none;">
+                  <i class="fa-solid fa-book-bookmark"></i> 1. Từ Vựng
+                </a>
+                <a href="/index.html?tab=lessons&level=${qLevel}&version=${qVer}&openGrammar=${numLessonId}" target="_top" class="stepper-tab-btn" style="padding: 6px 12px; font-size: 0.82rem; border-radius: 10px; text-decoration: none;">
+                  <i class="fa-solid fa-spell-check"></i> 2. Ngữ Pháp
+                </a>
+                <a href="/lesson-texts.html?lesson=${numLessonId}&level=${qLevel}&version=${qVer}" target="_top" class="stepper-tab-btn" style="padding: 6px 12px; font-size: 0.82rem; border-radius: 10px; text-decoration: none;">
+                  <i class="fa-solid fa-comments"></i> 3. Bài Khóa
+                </a>
+                <span class="stepper-tab-btn active active-quiz" style="padding: 6px 12px; font-size: 0.82rem; border-radius: 10px; background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; border-color: #fbbf24;">
+                  <i class="fa-solid fa-circle-play"></i> 4. Ôn Tập
+                </span>
+              </div>
+            </div>
+          `;
+        } else {
+          stepperEl.style.display = 'none';
+        }
+      }
+
       nextQuestion();
     }
 
@@ -1599,7 +1648,6 @@
       const qLesson = urlParams.get('lesson') || (selLesson ? selLesson.value : '');
       const qLevel = urlParams.get('level') || (selLevel ? selLevel.value : '1');
       const qVer = urlParams.get('version') || localStorage.getItem('active_hsk_version') || '3.0';
-
       if (hearts > 0 && qLesson && qLevel) {
         const starKey = `quiz_stars_${qVer}_${qLevel}_${qLesson}`;
         const prevStars = parseInt(localStorage.getItem(starKey) || '0', 10);
@@ -1616,6 +1664,37 @@
       document.getElementById('go-desc').innerHTML = desc + starsText;
       document.getElementById('go-score').textContent = score;
       renderReviewList();
+
+      // Next lesson actions
+      const actionsEl = document.getElementById('go-next-lesson-actions');
+      if (actionsEl) {
+        const numLessonId = parseInt(String(qLesson).replace(/\D/g, ''), 10);
+        if (numLessonId && numLessonId > 0) {
+          const nextLessonId = numLessonId + 1;
+          actionsEl.style.display = 'flex';
+          actionsEl.innerHTML = `
+            <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(59, 130, 246, 0.15)); border: 1.5px solid rgba(16, 185, 129, 0.35); border-radius: 16px; padding: 14px 16px; text-align: center; margin-bottom: 8px;">
+              <div style="font-size: 0.82rem; font-weight: 700; color: #34d399; margin-bottom: 2px;">
+                <i class="fa-solid fa-circle-check"></i> HOÀN THÀNH 4 BƯỚC BÀI ${numLessonId}
+              </div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: #ffffff; margin-bottom: 10px;">
+                Tiếp Tục Chinh Phục Bài ${nextLessonId}?
+              </div>
+              <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+                <a href="/lesson-texts.html?lesson=${numLessonId}&level=${qLevel}&version=${qVer}" target="_top" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #cbd5e1; padding: 8px 14px; border-radius: 10px; font-weight: 700; font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                  <i class="fa-solid fa-comments"></i> Xem Lại Bài Khóa
+                </a>
+                <a href="/index.html?tab=lessons&level=${qLevel}&version=${qVer}&openVocab=${nextLessonId}" target="_top" style="background: linear-gradient(135deg, #10b981, #059669); border: none; color: #ffffff; padding: 8px 18px; border-radius: 10px; font-weight: 800; font-size: 0.88rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(16,185,129,0.4);">
+                  <span>Học Bài ${nextLessonId}</span> <i class="fa-solid fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          `;
+        } else {
+          actionsEl.style.display = 'none';
+        }
+      }
+
       goModal.style.display = 'flex';
       playBeep(300, 'triangle', 0.5);
       saveGameHistory();

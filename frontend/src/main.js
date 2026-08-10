@@ -368,9 +368,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     const targetLevel = urlParams.get('level');
     const targetVersion = urlParams.get('version') || localStorage.getItem('active_hsk_version') || '3.0';
 
+    const openVocabLesson = urlParams.get('openVocab');
+    const openGrammarLesson = urlParams.get('openGrammar');
+
     if (targetTab === 'lessons' || targetLevel) {
       const lvl = targetLevel || 1;
       goToRoadmapLevel(targetVersion, lvl);
+      if (openVocabLesson) {
+        setTimeout(() => window.openLessonVocabStudy(openVocabLesson), 250);
+      } else if (openGrammarLesson) {
+        setTimeout(() => window.openLessonGrammarModal(openGrammarLesson), 250);
+      }
+    } else if (openVocabLesson) {
+      goToRoadmapLevel(targetVersion, targetLevel || 1);
+      setTimeout(() => window.openLessonVocabStudy(openVocabLesson), 250);
+    } else if (openGrammarLesson) {
+      goToRoadmapLevel(targetVersion, targetLevel || 1);
+      setTimeout(() => window.openLessonGrammarModal(openGrammarLesson), 250);
     } else if (targetTab === 'roadmap') {
       showRoadmapView();
     } else if (targetTab === 'exams') {
@@ -7352,6 +7366,71 @@ function renderLessonHeroCardContent(w, index, total) {
   `;
 }
 
+function renderLessonStepperNav(currentStep, lessonId, lessonTitle) {
+  const numId = parseInt(String(lessonId).replace(/\D/g, ''), 10) || 1;
+  const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : (activeLessonsLevel || 1);
+  const currentVer = activeLessonsCurriculum === 'yct' ? 'yct' : (activeHskVersion || activeRoadmapVersion || '3.0');
+  const titleDisplay = lessonTitle ? cleanLessonTitle(lessonTitle, numId) : `Bài ${numId}`;
+
+  return `
+    <div class="lesson-stepper-hub-bar">
+      <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <button onclick="window.returnToLessonsMap()" class="btn btn-secondary" style="padding: 8px 14px; border-radius: 12px; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #cbd5e1; cursor: pointer;">
+          <i class="fa-solid fa-map-location-dot"></i> Lộ trình
+        </button>
+        <div style="font-weight: 800; font-size: 1.02rem; color: #fbbf24; font-family: var(--font-display, sans-serif); display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-bookmark" style="color: #38bdf8;"></i> ${titleDisplay}
+        </div>
+      </div>
+
+      <!-- 4 Step Tabs -->
+      <div class="lesson-stepper-tabs">
+        <button onclick="window.goToLessonStep('vocab', '${numId}')" class="stepper-tab-btn ${currentStep === 'vocab' ? 'active active-vocab' : ''}" data-step="vocab" title="Bước 1: Học từ vựng Flashcard">
+          <i class="fa-solid fa-book-bookmark"></i> 1. Từ Vựng
+        </button>
+        <button onclick="window.goToLessonStep('grammar', '${numId}')" class="stepper-tab-btn ${currentStep === 'grammar' ? 'active active-grammar' : ''}" data-step="grammar" title="Bước 2: Học cấu trúc ngữ pháp">
+          <i class="fa-solid fa-spell-check"></i> 2. Ngữ Pháp
+        </button>
+        <button onclick="window.goToLessonStep('text', '${numId}')" class="stepper-tab-btn ${currentStep === 'text' ? 'active active-text' : ''}" data-step="text" title="Bước 3: Luyện đọc & nghe bài khóa">
+          <i class="fa-solid fa-comments"></i> 3. Bài Khóa
+        </button>
+        <button onclick="window.goToLessonStep('quiz', '${numId}')" class="stepper-tab-btn ${currentStep === 'quiz' ? 'active active-quiz' : ''}" data-step="quiz" title="Bước 4: Làm bài tập ôn tập trắc nghiệm">
+          <i class="fa-solid fa-circle-play"></i> 4. Ôn Tập
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+window.renderLessonStepperNav = renderLessonStepperNav;
+
+window.goToLessonStep = function(step, lessonId) {
+  if (!currentUser) {
+    window.openAuthRequiredModal();
+    return;
+  }
+  const numId = parseInt(String(lessonId).replace(/\D/g, ''), 10) || 1;
+  const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : (activeLessonsLevel || 1);
+  const currentVer = activeLessonsCurriculum === 'yct' ? 'yct' : (activeHskVersion || activeRoadmapVersion || '3.0');
+
+  // Close modals if open
+  const grammarModal = document.getElementById('lesson-grammar-popup-modal');
+  if (grammarModal && step !== 'grammar') grammarModal.style.display = 'none';
+
+  const detailModal = document.getElementById('lesson-detail-popup-modal');
+  if (detailModal) detailModal.style.display = 'none';
+
+  if (step === 'vocab') {
+    window.openLessonVocabStudy(numId);
+  } else if (step === 'grammar') {
+    window.openLessonGrammarModal(numId);
+  } else if (step === 'text') {
+    window.location.href = `/lesson-texts.html?lesson=${numId}&level=${currentLvl}&version=${currentVer}`;
+  } else if (step === 'quiz') {
+    window.location.href = `/quiz-game.html?lesson=${numId}&level=${currentLvl}&version=${currentVer}`;
+  }
+};
+
 function renderLessonFlashcardWorkspace(lessonTitle, words, selectedIndex = 0) {
   currentLessonTitleStr = lessonTitle;
   currentLessonVocabWords = words || [];
@@ -7361,6 +7440,8 @@ function renderLessonFlashcardWorkspace(lessonTitle, words, selectedIndex = 0) {
   if (!studyView) return;
 
   const currentWord = currentLessonVocabWords[currentLessonVocabIndex];
+  const firstWord = currentLessonVocabWords[0];
+  const currentLessonIdNum = (firstWord && firstWord.lessonId) ? parseInt(String(firstWord.lessonId).replace(/\D/g, ''), 10) : 1;
 
   // Auto-mark word as studied and memorized when viewed to increase lesson progress
   if (currentWord) {
@@ -7368,16 +7449,8 @@ function renderLessonFlashcardWorkspace(lessonTitle, words, selectedIndex = 0) {
   }
 
   studyView.innerHTML = `
-    <!-- Top Header Control Bar -->
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
-      <button class="btn btn-secondary" onclick="window.returnToLessonsMap()" style="display: flex; align-items: center; gap: 8px; font-weight: 700; padding: 10px 18px; border-radius: var(--radius-md); background: rgba(255,255,255,0.08); border: 1px solid var(--border-glass);">
-        <i class="fa-solid fa-arrow-left"></i> Quay lại Bản đồ bài học
-      </button>
-
-      <div style="font-weight: 800; font-size: 1.15rem; color: #3b82f6; display: flex; align-items: center; gap: 8px;">
-        <i class="fa-solid fa-layer-group"></i> ${lessonTitle || 'Flashcard Bài Học'}
-      </div>
-    </div>
+    <!-- Top Unified Lesson Stepper Bar -->
+    ${renderLessonStepperNav('vocab', currentLessonIdNum, currentLessonTitleStr)}
 
     <!-- Hero Flashcard Stage (EXACTLY IMAGE 4) -->
     <div class="hero-stage-wrapper">
@@ -7420,6 +7493,26 @@ function renderLessonFlashcardWorkspace(lessonTitle, words, selectedIndex = 0) {
             </div>
           </div>
         `).join('')}
+      </div>
+    </div>
+
+    <!-- Bottom Seamless Step Action Bar -->
+    <div style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(16, 185, 129, 0.15)); border: 1.5px solid rgba(56, 189, 248, 0.35); border-radius: 20px; padding: 18px 24px; margin-top: 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+      <div>
+        <div style="font-size: 0.85rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">
+          <i class="fa-solid fa-circle-check" style="color: #34d399;"></i> Đang Ở Bước 1: Từ Vựng
+        </div>
+        <div style="font-size: 1.12rem; font-weight: 800; color: #ffffff; font-family: var(--font-display);">
+          Học xong từ vựng? Tiếp tục sang Bước 2: Học Ngữ Pháp Bài Này!
+        </div>
+      </div>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <button onclick="window.returnToLessonsMap()" class="btn btn-secondary" style="padding: 12px 20px; border-radius: 14px; font-weight: 700; font-size: 0.92rem; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #cbd5e1; cursor: pointer;">
+          <i class="fa-solid fa-arrow-left"></i> Lộ Trình
+        </button>
+        <button onclick="window.goToLessonStep('grammar', '${currentLessonIdNum}')" class="btn btn-primary" style="padding: 12px 24px; border-radius: 14px; font-weight: 800; font-size: 0.95rem; background: linear-gradient(135deg, #0284c7, #2563eb); border: none; color: #ffffff; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 6px 20px rgba(37,99,235,0.45); transition: all 0.2s;">
+          <span>Tiếp: 2. Học Ngữ Pháp</span> <i class="fa-solid fa-arrow-right"></i>
+        </button>
       </div>
     </div>
   `;
@@ -8188,15 +8281,35 @@ window.openLessonGrammarModal = function(lessonKey) {
     return;
   }
 
-  // Update Header info
+  // Update Header info & Stepper
   const titleEl = document.getElementById('grammar-modal-title');
   const badgeEl = document.getElementById('grammar-modal-badge');
   const countBadgeEl = document.getElementById('grammar-modal-count-badge');
   const bodyEl = document.getElementById('grammar-modal-body');
+  const stepperContainer = document.getElementById('grammar-modal-stepper-container');
 
   if (titleEl) titleEl.textContent = `Bài ${lessonData.lessonId}: ${lessonData.lessonTitleZh || ''}`;
   if (badgeEl) badgeEl.textContent = `HSK 1 (3.0)`;
   if (countBadgeEl) countBadgeEl.textContent = `${lessonData.grammarPoints.length} Điểm Ngữ Pháp`;
+
+  if (stepperContainer) {
+    stepperContainer.innerHTML = `
+      <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+        <button onclick="window.goToLessonStep('vocab', '${numKey}')" class="stepper-tab-btn" data-step="vocab">
+          <i class="fa-solid fa-book-bookmark"></i> 1. Từ Vựng
+        </button>
+        <button onclick="window.goToLessonStep('grammar', '${numKey}')" class="stepper-tab-btn active active-grammar" data-step="grammar">
+          <i class="fa-solid fa-spell-check"></i> 2. Ngữ Pháp
+        </button>
+        <button onclick="window.goToLessonStep('text', '${numKey}')" class="stepper-tab-btn" data-step="text">
+          <i class="fa-solid fa-comments"></i> 3. Bài Khóa
+        </button>
+        <button onclick="window.goToLessonStep('quiz', '${numKey}')" class="stepper-tab-btn" data-step="quiz">
+          <i class="fa-solid fa-circle-play"></i> 4. Ôn Tập
+        </button>
+      </div>
+    `;
+  }
 
   // Render grammar points
   if (bodyEl) {
@@ -8300,10 +8413,20 @@ window.openLessonGrammarModal = function(lessonKey) {
     bodyEl.innerHTML = cardsHtml;
   }
 
-  // Prev / Next button handlers
+  // Prev / Next button handlers & Step Transitions
   const btnPrev = document.getElementById('grammar-modal-prev-btn');
   const btnNext = document.getElementById('grammar-modal-next-btn');
   const btnSoTay = document.getElementById('grammar-modal-so-tay-btn');
+  const btnStepVocab = document.getElementById('grammar-modal-step-vocab-btn');
+  const btnStepText = document.getElementById('grammar-modal-step-text-btn');
+
+  if (btnStepVocab) {
+    btnStepVocab.onclick = () => window.goToLessonStep('vocab', numKey);
+  }
+
+  if (btnStepText) {
+    btnStepText.onclick = () => window.goToLessonStep('text', numKey);
+  }
 
   if (btnPrev) {
     if (numKey > 1) {

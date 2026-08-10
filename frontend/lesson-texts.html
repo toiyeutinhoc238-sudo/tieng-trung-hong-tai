@@ -604,24 +604,31 @@
       <div style="font-size: 0.82rem; color: #94a3b8;"><i class="fa-solid fa-circle-check" style="color:#10b981;"></i> Đã tối ưu âm thanh phát âm AI</div>
     </div>
 
-    <!-- Controls Bar: Locked/Read-Only Level & Lesson Badges (Khóa chọn theo lộ trình) -->
-    <div class="controls-panel">
-      <div class="select-group" style="display: flex; align-items: center; gap: 14px;">
-        <div class="fixed-badge-box">
-          <i class="fa-solid fa-layer-group" style="color:#38bdf8;"></i>
-          <span>Trình độ:</span>
-          <strong id="fixed-level-badge" style="color:#38bdf8;">HSK 1</strong>
-        </div>
-
-        <div class="fixed-badge-box">
-          <i class="fa-solid fa-book-bookmark" style="color:#fbbf24;"></i>
-          <span>Bài học:</span>
-          <strong id="fixed-lesson-badge" style="color:#fbbf24;">Bài 1</strong>
+    <!-- Controls Bar & Unified 4-Step Stepper -->
+    <div class="lesson-stepper-hub-bar" style="background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 18px; padding: 10px 16px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; box-shadow: 0 10px 30px rgba(0,0,0,0.35);">
+      <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+        <a id="stepper-roadmap-btn" href="/index.html?tab=lessons&level=1" class="btn-close" style="padding: 8px 14px; border-radius: 12px; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; text-decoration: none;">
+          <i class="fa-solid fa-map-location-dot"></i> Lộ trình
+        </a>
+        <div style="font-weight: 800; font-size: 1.05rem; color: #fbbf24; display: flex; align-items: center; gap: 8px;" id="lesson-title-badge">
+          <i class="fa-solid fa-bookmark" style="color: #38bdf8;"></i> Bài Khóa HSK 1 - Bài 1
         </div>
       </div>
 
-      <div style="font-weight:800; color:#38bdf8; font-size:1.05rem; display:flex; align-items:center; gap:8px;" id="lesson-title-badge">
-        <i class="fa-solid fa-bookmark"></i> Bài Khóa HSK 1 - Bài 1
+      <!-- 4 Step Tabs -->
+      <div class="lesson-stepper-tabs" style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <button onclick="goToLessonStep('vocab')" class="stepper-tab-btn" style="padding: 8px 14px; border-radius: 12px; font-weight: 700; font-size: 0.88rem; cursor: pointer; border: 1.5px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.08); color: #cbd5e1; display: flex; align-items: center; gap: 6px; transition: all 0.2s;" title="Bước 1: Học từ vựng Flashcard">
+          <i class="fa-solid fa-book-bookmark"></i> 1. Từ Vựng
+        </button>
+        <button onclick="goToLessonStep('grammar')" class="stepper-tab-btn" style="padding: 8px 14px; border-radius: 12px; font-weight: 700; font-size: 0.88rem; cursor: pointer; border: 1.5px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.08); color: #cbd5e1; display: flex; align-items: center; gap: 6px; transition: all 0.2s;" title="Bước 2: Học cấu trúc ngữ pháp">
+          <i class="fa-solid fa-spell-check"></i> 2. Ngữ Pháp
+        </button>
+        <button class="stepper-tab-btn active" style="padding: 8px 14px; border-radius: 12px; font-weight: 700; font-size: 0.88rem; cursor: pointer; border: 1.5px solid #a78bfa; background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: #ffffff; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 16px rgba(139,92,246,0.45);" title="Bước 3: Luyện đọc & nghe bài khóa (Đang ở đây)">
+          <i class="fa-solid fa-comments"></i> 3. Bài Khóa
+        </button>
+        <button onclick="goToLessonStep('quiz')" class="stepper-tab-btn" style="padding: 8px 14px; border-radius: 12px; font-weight: 700; font-size: 0.88rem; cursor: pointer; border: 1.5px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.08); color: #cbd5e1; display: flex; align-items: center; gap: 6px; transition: all 0.2s;" title="Bước 4: Làm bài tập ôn tập trắc nghiệm">
+          <i class="fa-solid fa-circle-play"></i> 4. Ôn Tập
+        </button>
       </div>
     </div>
 
@@ -1080,15 +1087,42 @@
               ${notesHtml}
             </div>
 
-            <div style="margin-top:24px; text-align:center;">
-              <a href="/index.html?tab=lessons&level=${currentLevel}&version=${currentVersion}" style="background:linear-gradient(135deg, #10b981, #059669); border:none; color:#ffffff; padding:14px 32px; border-radius:14px; font-weight:800; font-size:1rem; cursor:pointer; box-shadow:0 6px 20px rgba(16,185,129,0.4); display:inline-flex; align-items:center; gap:10px; text-decoration:none;">
-                <i class="fa-solid fa-circle-check"></i> Hoàn Thành! Quay Lại Bản Đồ Lộ Trình <i class="fa-solid fa-map-location-dot"></i>
-              </a>
+            <!-- Bottom Seamless Step Action Bar -->
+            <div style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(245, 158, 11, 0.15)); border: 1.5px solid rgba(167, 139, 250, 0.35); border-radius: 20px; padding: 18px 24px; margin-top: 28px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+              <div>
+                <div style="font-size: 0.85rem; font-weight: 700; color: #c084fc; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">
+                  <i class="fa-solid fa-circle-check" style="color: #a78bfa;"></i> Đang Ở Bước 3: Bài Khóa
+                </div>
+                <div style="font-size: 1.12rem; font-weight: 800; color: #ffffff; font-family: var(--font-main);">
+                  Luyện xong hội thoại? Chuyển sang Bước 4: Làm Bài Ôn Tập / Kiểm Tra!
+                </div>
+              </div>
+              <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button onclick="goToLessonStep('grammar')" class="btn-close" style="padding: 12px 18px; border-radius: 14px; font-weight: 700; font-size: 0.9rem; cursor: pointer;">
+                  <i class="fa-solid fa-arrow-left"></i> Bước 2: Ngữ Pháp
+                </button>
+                <button onclick="goToLessonStep('quiz')" class="btn-close" style="padding: 12px 24px; border-radius: 14px; font-weight: 800; font-size: 0.95rem; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; color: #ffffff; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 6px 20px rgba(245, 158, 11, 0.45);">
+                  <span>Tiếp: 4. Ôn Tập & Kiểm Tra</span> <i class="fa-solid fa-arrow-right"></i>
+                </button>
+              </div>
             </div>
           </div>
         `;
       }
     }
+
+    function goToLessonStep(step) {
+      if (step === 'vocab') {
+        window.location.href = `/index.html?tab=lessons&level=${currentLevel}&version=${currentVersion}&openVocab=${currentLessonId}`;
+      } else if (step === 'grammar') {
+        window.location.href = `/index.html?tab=lessons&level=${currentLevel}&version=${currentVersion}&openGrammar=${currentLessonId}`;
+      } else if (step === 'text') {
+        // Already on lesson texts page
+      } else if (step === 'quiz') {
+        window.location.href = `/quiz-game.html?lesson=${currentLessonId}&level=${currentLevel}&version=${currentVersion}`;
+      }
+    }
+    window.goToLessonStep = goToLessonStep;
 
     function checkStep1Answer(qIdx, oIdx, btnEl, feedId) {
       const feed = document.getElementById(feedId);
