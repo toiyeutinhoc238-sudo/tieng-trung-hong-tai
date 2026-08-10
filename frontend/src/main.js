@@ -3611,21 +3611,20 @@ function getAuthHeaders(customHeaders = {}) {
 
 // --- AUTHENTICATION & LOGIN LOGIC ---
 
-// Fetch current user from session / local storage and initialize Google Sign-In SDK
+// Fetch current user from session / local storage (giữ đăng nhập vĩnh viễn, không tự động đăng xuất)
 async function initAuth() {
-  const SIX_HOURS_MS = 6 * 60 * 60 * 1000; // 6 tiếng = 21,600,000 miligiây
-  const now = Date.now();
-  const lastActive = localStorage.getItem('last_active_time');
-
-  // Kiểm tra quy định an toàn: Nếu đã 6 tiếng trở lên không truy cập -> Tự động đăng xuất
-  if (lastActive && (now - parseInt(lastActive, 10)) >= SIX_HOURS_MS) {
-    console.log('Phát hiện quá 6 tiếng không hoạt động, tiến hành tự động đăng xuất an toàn...');
-    localStorage.removeItem('last_active_time');
-    await handleLogout();
-    return;
+  // 1. Kiểm tra tài khoản đã lưu trên trình duyệt (giữ đăng nhập liên tục)
+  const savedUser = localStorage.getItem('user');
+  if (savedUser) {
+    try {
+      currentUser = JSON.parse(savedUser);
+      renderUserProfile();
+    } catch (e) {
+      console.warn("Parse saved user error:", e);
+    }
   }
 
-  // 1. Kiểm tra phiên đăng nhập thực tế với Server
+  // 2. Đồng bộ phiên đăng nhập với Server nếu có kết nối
   try {
     const res = await fetch(API_BASE_URL + '/api/auth/me', {
       headers: getAuthHeaders(),
@@ -3637,62 +3636,19 @@ async function initAuth() {
       if (data && data.user) {
         currentUser = data.user;
         localStorage.setItem('user', JSON.stringify(currentUser));
-        localStorage.setItem('last_active_time', now.toString()); // Cập nhật thời gian hoạt động gần nhất
         renderUserProfile();
-
-        // Thiết lập sự kiện cập nhật thời gian hoạt động khi người dùng tương tác
-        setupActivityListener();
-        return;
-      } else {
-        // Nếu Server báo chưa đăng nhập -> Xóa toàn bộ session cũ ở máy này
-        localStorage.removeItem('user');
-        localStorage.removeItem('session_token');
-        localStorage.removeItem('last_active_time');
-        currentUser = null;
-        renderUserProfile();
-        initGoogleSignIn();
         return;
       }
     }
   } catch (err) {
-    console.warn('Backend session retrieval failed, checking local storage:', err);
+    console.warn('Backend session retrieval failed, keeping local persistent user:', err);
   }
 
-  // 2. Nếu mất kết nối Backend, mới dùng session lưu tại máy (nếu có)
-  const savedUser = localStorage.getItem('user');
-  if (savedUser) {
-    try {
-      currentUser = JSON.parse(savedUser);
-      localStorage.setItem('last_active_time', now.toString());
-      renderUserProfile();
-      setupActivityListener();
-    } catch (e) {
-      localStorage.removeItem('user');
-      localStorage.removeItem('session_token');
-      localStorage.removeItem('last_active_time');
-      currentUser = null;
-      renderUserProfile();
-      initGoogleSignIn();
-    }
-  } else {
-    currentUser = null;
-    localStorage.removeItem('last_active_time');
+  // 3. Nếu chưa đăng nhập thì khởi tạo Google Sign-In
+  if (!currentUser) {
     renderUserProfile();
     initGoogleSignIn();
   }
-}
-
-// Cập nhật mốc thời gian hoạt động gần nhất khi người dùng click/gõ phím
-function setupActivityListener() {
-  const updateActivity = () => {
-    if (currentUser) {
-      localStorage.setItem('last_active_time', Date.now().toString());
-    }
-  };
-
-  window.addEventListener('click', updateActivity, { passive: true });
-  window.addEventListener('keydown', updateActivity, { passive: true });
-  window.addEventListener('scroll', updateActivity, { passive: true });
 }
 
 function initGoogleSignIn() {

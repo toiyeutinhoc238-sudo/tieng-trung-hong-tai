@@ -456,7 +456,8 @@ app.post('/api/auth/google', async (req, res) => {
   userData.sessions[sessionToken] = email;
   await writeUserData(userData);
 
-  res.setHeader('Set-Cookie', `session=${sessionToken}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${60 * 60 * 24 * 7}`);
+  // Set persistent session cookie (10 years)
+  res.setHeader('Set-Cookie', `session=${sessionToken}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${60 * 60 * 24 * 365 * 10}`);
 
   res.json({
     success: true,
