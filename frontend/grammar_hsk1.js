@@ -1077,7 +1077,7 @@ export const HSK1_STRUCTURED_GRAMMAR = [
         "num": 1,
         "title": "Cách diễn đạt số tiền",
         "explanation": "Trong tiếng Trung, khẩu ngữ dùng 块 (kuài - đồng), 毛 (máo - hào), 分 (fēn - xu). Văn viết dùng 元 (yuán), 角 (jiǎo), 分 (fēn).\nQuy tắc quy đổi: 1 块 (kuài) = 10 毛 (máo), 1 毛 (máo) = 10 分 (fēn).",
-        "formula": "Cách diễn đạt: \n1. Đơn vị đồng: [Số] + 块 \n2. Có số lẻ: [Số] + 块 + [Số] + (毛) \n3. Đầy đủ: [Số] + 块 + [Số] + 毛 + [Số] + 分 \n4. Có số 0 ở giữa: thêm 零 (líng)",
+        "formula": "[Số] + 块 (kuài) + [Số] + 毛 (máo) + [Số] + 分 (fēn)",
         "note": null,
         "examples": [
           {
