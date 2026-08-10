@@ -10,7 +10,7 @@ export const HSK1_STRUCTURED_GRAMMAR = [
         "num": 1,
         "title": "Cách chào hỏi",
         "explanation": "Trong tiếng Trung, cách chào hỏi thông dụng nhất là ghép đối tượng được chào với từ \"好\" (hǎo - tốt, lành).",
-        "formula": "Công thức chung: \n[Đối tượng được chào] + 好 (hǎo)",
+        "formula": "[Đối tượng được chào] + 好 (hǎo)",
         "note": "Khi chào người lớn tuổi hoặc người cần tôn trọng, nên dùng 您好 (nín hǎo) thay vì 你好 (nǐ hǎo).",
         "examples": [
           {

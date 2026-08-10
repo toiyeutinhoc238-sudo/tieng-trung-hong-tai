@@ -6855,12 +6855,22 @@ window.openLessonDetailModal = function (lessonKey) {
       if (grammarPreviewTitle) {
         grammarPreviewTitle.textContent = `Trọng tâm Ngữ pháp bài này (${grammarLesson.grammarPoints.length} điểm):`;
       }
-      grammarPreviewList.innerHTML = grammarLesson.grammarPoints.map((p, idx) => `
-        <li style="margin-bottom: 4px;">
-          <strong style="color: #ffffff;">${idx + 1}. ${p.title}</strong>
-          ${p.formula ? `<span style="color: #38bdf8; font-size: 0.8rem; margin-left: 6px; font-weight: 600;">[${p.formula.split('\n')[0]}]</span>` : ''}
-        </li>
-      `).join('');
+      grammarPreviewList.innerHTML = grammarLesson.grammarPoints.map((p, idx) => {
+        let fText = '';
+        if (p.formula) {
+          const cleanF = p.formula.replace(/^(Công thức chung|Cấu trúc|Công thức)\s*[:\-]?\s*/i, '').trim();
+          const firstLine = cleanF.split('\n').filter(l => l.trim().length > 0)[0] || '';
+          if (firstLine) {
+            fText = `<span style="color: #38bdf8; font-size: 0.82rem; margin-left: 6px; font-weight: 600;">[ ${firstLine} ]</span>`;
+          }
+        }
+        return `
+          <li style="margin-bottom: 6px; line-height: 1.4;">
+            <strong style="color: #ffffff;">${idx + 1}. ${p.title}</strong>
+            ${fText}
+          </li>
+        `;
+      }).join('');
     } else {
       grammarPreviewBox.style.display = 'none';
     }
