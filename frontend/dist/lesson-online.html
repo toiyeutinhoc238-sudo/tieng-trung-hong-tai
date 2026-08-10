@@ -182,6 +182,91 @@
       --danger: #ef4444;
     }
 
+    /* High-contrast Light Mode Overrides */
+    html.light-mode body,
+    body.light-mode {
+      --bg-primary: #f1f5f9;
+      --bg-secondary: #ffffff;
+      --bg-card: #ffffff;
+      --border-glass: #cbd5e1;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      background-color: #f1f5f9 !important;
+      color: #0f172a !important;
+    }
+
+    html.light-mode .header-bar {
+      background: rgba(255, 255, 255, 0.95) !important;
+      border-bottom: 1.5px solid #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+    html.light-mode .lesson-main-title {
+      color: #0f172a !important;
+    }
+    html.light-mode .back-btn {
+      background: #ffffff !important;
+      border-color: #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+    html.light-mode .header-voice-select {
+      background: #ffffff !important;
+      border-color: #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+    html.light-mode .tabs-nav {
+      background: #ffffff !important;
+      border: 1.5px solid #cbd5e1 !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+    }
+    html.light-mode .tab-btn {
+      color: #475569 !important;
+    }
+    html.light-mode .tab-btn:hover {
+      background: #f1f5f9 !important;
+      color: #0284c7 !important;
+    }
+    html.light-mode .tab-btn.active {
+      background: linear-gradient(135deg, #0284c7, #2563eb) !important;
+      color: #ffffff !important;
+    }
+    html.light-mode .dialogue-card,
+    html.light-mode .vocab-card,
+    html.light-mode .grammar-card,
+    html.light-mode .reading-card,
+    html.light-mode .exercise-card {
+      background: #ffffff !important;
+      border: 1.5px solid #cbd5e1 !important;
+      color: #0f172a !important;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.05) !important;
+    }
+    html.light-mode .hanzi-bubble,
+    html.light-mode .dialogue-line {
+      background: #f8fafc !important;
+      border: 1px solid #e2e8f0 !important;
+      color: #0f172a !important;
+    }
+    html.light-mode .pinyin-text {
+      color: #b45309 !important;
+      font-weight: 700 !important;
+    }
+    html.light-mode .viet-text {
+      color: #334155 !important;
+    }
+    html.light-mode .btn-play-audio {
+      background: #e0f2fe !important;
+      color: #0284c7 !important;
+      border: 1px solid #bae6fd !important;
+    }
+    html.light-mode .quiz-opt-btn {
+      background: #f8fafc !important;
+      border: 1.5px solid #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+    html.light-mode .quiz-opt-btn:hover {
+      background: #e0f2fe !important;
+      border-color: #0284c7 !important;
+    }
+
     * {
       margin: 0;
       padding: 0;

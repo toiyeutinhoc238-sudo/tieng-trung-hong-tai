@@ -72,6 +72,103 @@
       --rules-success: #10b981;
     }
 
+    /* High-contrast Light Mode Overrides */
+    html.light-mode body,
+    body.light-mode {
+      --rules-bg: #f1f5f9;
+      --rules-card: #ffffff;
+      --rules-card-hover: #f8fafc;
+      --rules-border: #cbd5e1;
+      color: #0f172a !important;
+    }
+
+    html.light-mode .rules-header {
+      background: linear-gradient(135deg, #ffffff, #f0f9ff) !important;
+      border: 1.5px solid #cbd5e1 !important;
+      color: #0f172a !important;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06) !important;
+    }
+
+    html.light-mode .rules-title-group h1 {
+      background: linear-gradient(135deg, #0284c7, #2563eb) !important;
+      -webkit-background-clip: text !important;
+      background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+    }
+
+    html.light-mode .rules-title-group p {
+      color: #475569 !important;
+    }
+
+    html.light-mode .tab-btn {
+      background: #ffffff !important;
+      border: 1.5px solid #cbd5e1 !important;
+      color: #475569 !important;
+    }
+
+    html.light-mode .tab-btn:hover {
+      background: #f1f5f9 !important;
+      color: #0284c7 !important;
+    }
+
+    html.light-mode .tab-btn.active {
+      background: linear-gradient(135deg, #0284c7, #2563eb) !important;
+      color: #ffffff !important;
+      border-color: #0284c7 !important;
+    }
+
+    html.light-mode .search-box-wrap {
+      background: #ffffff !important;
+      border: 1.5px solid #cbd5e1 !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+    }
+
+    html.light-mode .search-box-wrap input {
+      color: #0f172a !important;
+    }
+
+    html.light-mode .search-box-wrap input::placeholder {
+      color: #64748b !important;
+    }
+
+    html.light-mode .rule-card {
+      background: #ffffff !important;
+      border: 1.5px solid #cbd5e1 !important;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04) !important;
+    }
+
+    html.light-mode .rule-card:hover {
+      background: #f8fafc !important;
+      border-color: #38bdf8 !important;
+    }
+
+    html.light-mode .rule-badge {
+      background: #e0f2fe !important;
+      color: #0284c7 !important;
+    }
+
+    html.light-mode .example-box {
+      background: #f8fafc !important;
+      border: 1px solid #e2e8f0 !important;
+      color: #0f172a !important;
+    }
+
+    html.light-mode .example-box .zh {
+      color: #0284c7 !important;
+    }
+
+    html.light-mode .audio-btn {
+      background: #e0f2fe !important;
+      color: #0284c7 !important;
+      border: 1px solid #bae6fd !important;
+    }
+
+    html.light-mode .btn-close {
+      background: #ffffff !important;
+      border: 1px solid #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+
     body {
       background: transparent !important;
       color: #f8fafc;

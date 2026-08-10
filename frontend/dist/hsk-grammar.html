@@ -155,11 +155,208 @@
     html.light-mode body,
     body.light-mode {
       --bg-dark: #f1f5f9;
-      --bg-card: rgba(255, 255, 255, 0.85);
-      --border-glass: rgba(0, 0, 0, 0.1);
+      --bg-card: #ffffff;
+      --border-glass: #cbd5e1;
       --text-main: #0f172a;
       --text-sub: #475569;
-      color: #0f172a;
+      background: #f1f5f9 !important;
+      color: #0f172a !important;
+    }
+
+    /* ─── LIGHT MODE SPECIFIC OVERRIDES ─── */
+    html.light-mode .btn-action {
+      background: #ffffff !important;
+      border: 1px solid #cbd5e1 !important;
+      color: #0f172a !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+    }
+    html.light-mode .btn-action:hover {
+      background: #f8fafc !important;
+    }
+
+    /* Level Tabs */
+    html.light-mode .level-tab-btn {
+      background: #ffffff !important;
+      border: 1.5px solid #cbd5e1 !important;
+      color: #475569 !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+    }
+    html.light-mode .level-tab-btn:hover {
+      background: #f8fafc !important;
+      color: #0284c7 !important;
+      border-color: #38bdf8 !important;
+    }
+    html.light-mode .level-tab-btn.active {
+      background: linear-gradient(135deg, #0284c7, #2563eb) !important;
+      color: #ffffff !important;
+      border-color: #0284c7 !important;
+      box-shadow: 0 6px 18px rgba(2, 132, 199, 0.35) !important;
+    }
+
+    /* Toolbar & Search Bar */
+    html.light-mode .toolbar-bar {
+      background: #ffffff !important;
+      border: 1.5px solid #cbd5e1 !important;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06) !important;
+    }
+    html.light-mode .search-input-field {
+      background: #f8fafc !important;
+      border: 1.5px solid #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+    html.light-mode .search-input-field::placeholder {
+      color: #64748b !important;
+    }
+    html.light-mode .search-input-field:focus {
+      background: #ffffff !important;
+      border-color: #0284c7 !important;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15) !important;
+    }
+    html.light-mode .quick-tools-group .btn-action {
+      background: #f8fafc !important;
+      border: 1.5px solid #cbd5e1 !important;
+      color: #1e293b !important;
+    }
+    html.light-mode .quick-tools-group .btn-action:hover {
+      background: #e2e8f0 !important;
+    }
+    html.light-mode .quick-tools-group .btn-action[style*="f59e0b"],
+    html.light-mode #btn-export-pdf {
+      background: #fef3c7 !important;
+      border-color: #fde68a !important;
+      color: #b45309 !important;
+    }
+
+    /* Lesson Block */
+    html.light-mode .lesson-block {
+      background: #ffffff !important;
+      border: 1.5px solid #cbd5e1 !important;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06) !important;
+    }
+    html.light-mode .lesson-block-header {
+      background: #f8fafc !important;
+      border-bottom: 1.5px solid #e2e8f0 !important;
+      color: #0f172a !important;
+    }
+    html.light-mode .lesson-block-header:hover {
+      background: #f1f5f9 !important;
+    }
+    html.light-mode .lesson-title-text {
+      color: #0f172a !important;
+    }
+    html.light-mode .lesson-points-count-badge {
+      background: #e0f2fe !important;
+      color: #0284c7 !important;
+      border: 1px solid #bae6fd !important;
+    }
+    html.light-mode .lesson-block-header i.fa-chevron-down {
+      color: #64748b !important;
+    }
+
+    /* Grammar Card */
+    html.light-mode .grammar-card {
+      background: #ffffff !important;
+      border: 1.5px solid #e2e8f0 !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+    }
+    html.light-mode .grammar-card:hover {
+      border-color: #38bdf8 !important;
+    }
+    html.light-mode .grammar-card.expanded {
+      border-color: #0284c7 !important;
+      box-shadow: 0 6px 20px rgba(2, 132, 199, 0.12) !important;
+    }
+    html.light-mode .grammar-card-header {
+      background: #ffffff !important;
+    }
+    html.light-mode .grammar-card-header:hover {
+      background: #f8fafc !important;
+    }
+    html.light-mode .grammar-card-title {
+      color: #0f172a !important;
+    }
+    html.light-mode .grammar-index-badge {
+      background: #e0f2fe !important;
+      color: #0284c7 !important;
+      border-color: #bae6fd !important;
+    }
+    html.light-mode .grammar-card-header i.fa-chevron-down {
+      color: #64748b !important;
+    }
+    html.light-mode .grammar-card-body {
+      background: #f8fafc !important;
+      border-top: 1px solid #e2e8f0 !important;
+    }
+
+    /* Inner Components */
+    html.light-mode .explanation-box {
+      color: #334155 !important;
+    }
+    html.light-mode .formula-card {
+      background: #eff6ff !important;
+      border: 1.5px solid #bfdbfe !important;
+    }
+    html.light-mode .formula-card-title {
+      color: #1d4ed8 !important;
+    }
+    html.light-mode .formula-card-code {
+      color: #b45309 !important;
+      font-weight: 800 !important;
+    }
+    html.light-mode .note-card {
+      background: #fef3c7 !important;
+      border-left: 4px solid #f59e0b !important;
+      color: #92400e !important;
+    }
+    html.light-mode .custom-grammar-table {
+      background: #ffffff !important;
+      border: 1px solid #cbd5e1 !important;
+    }
+    html.light-mode .custom-grammar-table th {
+      background: #f1f5f9 !important;
+      color: #0369a1 !important;
+      border-bottom: 1.5px solid #cbd5e1 !important;
+    }
+    html.light-mode .custom-grammar-table td {
+      color: #334155 !important;
+      border-bottom: 1px solid #e2e8f0 !important;
+    }
+    html.light-mode .custom-grammar-table tr:nth-child(even) {
+      background: #f8fafc !important;
+    }
+    html.light-mode .example-item-card {
+      background: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03) !important;
+    }
+    html.light-mode .example-item-card:hover {
+      background: #f0f9ff !important;
+      border-color: #7dd3fc !important;
+    }
+    html.light-mode .example-zh {
+      color: #0284c7 !important;
+      font-weight: 800 !important;
+    }
+    html.light-mode .example-pinyin {
+      color: #b45309 !important;
+      font-weight: 700 !important;
+    }
+    html.light-mode .example-vi {
+      color: #334155 !important;
+    }
+    html.light-mode .btn-speak-audio {
+      background: #e0f2fe !important;
+      border: 1px solid #bae6fd !important;
+      color: #0284c7 !important;
+    }
+    html.light-mode .btn-speak-audio:hover {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+    }
+    html.light-mode .exercise-item-box {
+      background: #f0fdf4 !important;
+      border: 1px solid #bbf7d0 !important;
+      color: #065f46 !important;
     }
 
     * {

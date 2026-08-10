@@ -89,6 +89,82 @@
       flex-direction: column;
     }
 
+    /* High-contrast Light Mode Overrides */
+    html.light-mode body,
+    body.light-mode {
+      background-color: #f1f5f9 !important;
+      color: #0f172a !important;
+    }
+
+    html.light-mode .threads-sidebar {
+      background: #ffffff !important;
+      border-right: 1.5px solid #cbd5e1 !important;
+    }
+
+    html.light-mode .sidebar-header {
+      border-bottom: 1.5px solid #cbd5e1 !important;
+    }
+
+    html.light-mode .sidebar-header h3 {
+      color: #0f172a !important;
+    }
+
+    html.light-mode .thread-item {
+      color: #334155 !important;
+    }
+
+    html.light-mode .thread-item:hover {
+      background: #f1f5f9 !important;
+      color: #0284c7 !important;
+    }
+
+    html.light-mode .thread-item.active {
+      background: #e0f2fe !important;
+      border-color: #7dd3fc !important;
+      color: #0369a1 !important;
+    }
+
+    html.light-mode .chat-view {
+      background: #f8fafc !important;
+    }
+
+    html.light-mode .chat-view-header {
+      background: #ffffff !important;
+      border-bottom: 1.5px solid #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+
+    html.light-mode .chat-view-title {
+      color: #0f172a !important;
+    }
+
+    html.light-mode .message-bubble.assistant,
+    html.light-mode .message-assistant {
+      background: #ffffff !important;
+      border: 1.5px solid #e2e8f0 !important;
+      color: #0f172a !important;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05) !important;
+    }
+
+    html.light-mode .message-bubble.user,
+    html.light-mode .message-user {
+      background: linear-gradient(135deg, #0284c7, #2563eb) !important;
+      color: #ffffff !important;
+    }
+
+    html.light-mode .chat-input-area,
+    html.light-mode .chat-input-container {
+      background: #ffffff !important;
+      border-top: 1.5px solid #cbd5e1 !important;
+    }
+
+    html.light-mode .chat-input-field,
+    html.light-mode textarea.chat-input {
+      background: #f8fafc !important;
+      border: 1.5px solid #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+
     /* Page Layout */
     .history-container {
       display: flex;
