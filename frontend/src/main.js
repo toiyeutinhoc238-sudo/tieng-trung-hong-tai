@@ -7688,6 +7688,10 @@ window.replayLessonHanziStrokes = function() {
 };
 
 function startLessonStudy(lesson, sliceWords) {
+  if (!currentUser) {
+    window.openAuthRequiredModal();
+    return;
+  }
   if (!sliceWords || sliceWords.length === 0) {
     showToast('Danh sách từ vựng của bài học này đang được chuẩn bị!', true);
     return;
@@ -8158,6 +8162,10 @@ function escapeHtml(str) {
 }
 
 window.openLessonGrammarModal = function(lessonKey) {
+  if (!currentUser) {
+    window.openAuthRequiredModal();
+    return;
+  }
   const modalEl = document.getElementById('lesson-grammar-popup-modal');
   const numKey = parseInt(String(lessonKey).replace(/\D/g, ''), 10) || 1;
   const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : (activeLessonsLevel || 1);
@@ -8324,6 +8332,30 @@ window.openLessonGrammarModal = function(lessonKey) {
   modalEl.style.display = 'flex';
 };
 
+window.openLessonVocabStudy = function(lessonKey) {
+  if (!currentUser) {
+    window.openAuthRequiredModal();
+    return;
+  }
+  const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : activeLessonsLevel;
+  const levelVocabs = vocabList.filter(w => {
+    if (w.isCustom) return false;
+    if (w.curriculum === 'yct' || w.hskVersion === 'yct') return false;
+    if (!matchLevel(w.level, currentLvl)) return false;
+    if ((w.hskVersion || '3.0') !== activeHskVersion) return false;
+    return true;
+  });
+
+  const sliceWords = levelVocabs.filter(w => String(w.lessonId || 1) === String(lessonKey));
+  if (sliceWords.length === 0) {
+    showToast('Chưa có từ vựng cho bài học này!', true);
+    return;
+  }
+  const firstWord = sliceWords[0];
+  const title = cleanLessonTitle(firstWord.lessonTitle || firstWord.category, lessonKey);
+  startLessonStudy({ id: lessonKey, title }, sliceWords);
+};
+
 window.openLessonGrammarStudy = function(lessonId) {
   const modalEl = document.getElementById('lesson-detail-popup-modal');
   if (modalEl) modalEl.style.display = 'none';
@@ -8333,6 +8365,10 @@ window.openLessonGrammarStudy = function(lessonId) {
 };
 
 window.openLessonTextStudy = function(lessonId) {
+  if (!currentUser) {
+    window.openAuthRequiredModal();
+    return;
+  }
   const modalEl = document.getElementById('lesson-detail-popup-modal');
   if (modalEl) modalEl.style.display = 'none';
 
