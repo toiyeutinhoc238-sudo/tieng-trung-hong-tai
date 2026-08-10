@@ -140,6 +140,20 @@ app.get('/favicon.ico', (req, res) => {
   res.sendFile(icoPath);
 });
 
+app.get('/sitemap.xml', (req, res) => {
+  const sitemapPath = path.join(PUBLIC_DIR, 'sitemap.xml');
+  res.setHeader('Content-Type', 'application/xml; charset=UTF-8');
+  res.setHeader('Cache-Control', 'public, max-age=3600');
+  res.sendFile(sitemapPath);
+});
+
+app.get('/robots.txt', (req, res) => {
+  const robotsPath = path.join(PUBLIC_DIR, 'robots.txt');
+  res.setHeader('Content-Type', 'text/plain; charset=UTF-8');
+  res.setHeader('Cache-Control', 'public, max-age=3600');
+  res.sendFile(robotsPath);
+});
+
 // Disable caching for all API routes
 app.use('/api', (req, res, next) => {
   res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
