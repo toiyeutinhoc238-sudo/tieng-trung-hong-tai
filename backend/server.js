@@ -133,6 +133,13 @@ app.use(express.static(DIST_DIR));
 app.use(express.static(PUBLIC_DIR));
 app.use(express.static(FRONTEND_DIR));
 
+app.get('/favicon.ico', (req, res) => {
+  const icoPath = path.join(PUBLIC_DIR, 'favicon.ico');
+  res.setHeader('Content-Type', 'image/png');
+  res.setHeader('Cache-Control', 'public, max-age=86400');
+  res.sendFile(icoPath);
+});
+
 // Disable caching for all API routes
 app.use('/api', (req, res, next) => {
   res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
