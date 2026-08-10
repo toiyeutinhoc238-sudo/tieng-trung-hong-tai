@@ -287,6 +287,9 @@
     html.light-mode .group-block {
       color: #1e293b !important;
     }
+    html.light-mode .group-block p {
+      color: #334155 !important;
+    }
     html.light-mode .group-note-alert {
       background: rgba(16,185,129,0.06) !important;
       border-color: rgba(5,150,105,0.3) !important;
@@ -301,6 +304,102 @@
     html.light-mode .group-note-toggle-btn:hover {
       background: rgba(59,130,246,0.15) !important;
       color: #1e40af !important;
+    }
+
+    /* ─── LIGHT MODE: PINYIN MATRIX & PITCH CONTOUR HIGH CONTRAST ─── */
+    html.light-mode .matrix-notice-banner {
+      background: #f0fdf4 !important;
+      border: 1.5px solid #86efac !important;
+      color: #1e293b !important;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06) !important;
+    }
+    html.light-mode .matrix-notice-title {
+      color: #047857 !important;
+    }
+    html.light-mode .matrix-notice-desc {
+      color: #334155 !important;
+    }
+    html.light-mode .matrix-badge {
+      background: #e0f2fe !important;
+      color: #0284c7 !important;
+      border: 1px solid #7dd3fc !important;
+    }
+    html.light-mode .matrix-alert-box {
+      background: #fef3c7 !important;
+      border: 1px solid #fde68a !important;
+      color: #92400e !important;
+    }
+    html.light-mode .matrix-alert-box strong {
+      color: #78350f !important;
+    }
+    html.light-mode .matrix-table-wrap {
+      background: #ffffff !important;
+      border: 1px solid #cbd5e1 !important;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06) !important;
+    }
+    html.light-mode .matrix-table-wrap table thead tr {
+      background: #f8fafc !important;
+      border-bottom: 2px solid #cbd5e1 !important;
+    }
+    html.light-mode .matrix-table-wrap th.vm-header {
+      color: #b45309 !important;
+      font-weight: 800 !important;
+    }
+    html.light-mode .matrix-sticky-header {
+      background: #f1f5f9 !important;
+      color: #0369a1 !important;
+      border-right: 2px solid #cbd5e1 !important;
+    }
+    html.light-mode .matrix-sticky-cell {
+      background: #f8fafc !important;
+      color: #0284c7 !important;
+      border-right: 2px solid #cbd5e1 !important;
+      font-weight: 800 !important;
+    }
+    html.light-mode .matrix-cell-btn {
+      background: #f0f9ff !important;
+      border: 1px solid #bae6fd !important;
+      color: #0369a1 !important;
+      font-weight: 800 !important;
+    }
+    html.light-mode .matrix-cell-btn:hover {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+    }
+    html.light-mode .matrix-empty-cell {
+      color: #cbd5e1 !important;
+    }
+
+    /* ─── LIGHT MODE: THANH NHẸ PITCH CONTOUR CARDS ─── */
+    html.light-mode .neutral-pitch-main-card {
+      background: #ffffff !important;
+      border: 1.5px solid #86efac !important;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06) !important;
+    }
+    html.light-mode .neutral-pitch-title {
+      color: #047857 !important;
+    }
+    html.light-mode .neutral-pitch-subtitle {
+      color: #475569 !important;
+    }
+    html.light-mode .neutral-sub-card {
+      background: #f8fafc !important;
+      border: 1px solid #e2e8f0 !important;
+    }
+    html.light-mode .neutral-sub-card-text {
+      color: #334155 !important;
+    }
+    html.light-mode .neutral-svg-box {
+      background: #f1f5f9 !important;
+    }
+    html.light-mode .neutral-play-btn {
+      background: #e0f2fe !important;
+      border: 1px solid #bae6fd !important;
+      color: #0369a1 !important;
+    }
+    html.light-mode .neutral-play-btn:hover {
+      background: #0284c7 !important;
+      color: #ffffff !important;
     }
 
     /* ─── LIGHT MODE: INSPECTOR (Khi click vào âm) ─── */
@@ -977,11 +1076,14 @@
   <script type="module">
     import { THANH_MAU_DATA, VAN_MAU_DATA, THANH_DIEU_DATA } from './src/pinyin_data.js';
     import { LARGE_QUIZ_DATABASE } from './src/quiz_data.js';
+    import { PINYIN_TO_HANZI, convertPinyinToHanzi } from './src/pinyin_hanzi_map.js';
 
     window.THANH_MAU_DATA = THANH_MAU_DATA;
     window.VAN_MAU_DATA = VAN_MAU_DATA;
     window.THANH_DIEU_DATA = THANH_DIEU_DATA;
     window.LARGE_QUIZ_DATABASE = LARGE_QUIZ_DATABASE;
+    window.PINYIN_TO_HANZI = PINYIN_TO_HANZI;
+    window.convertPinyinToHanzi = convertPinyinToHanzi;
 
     let currentSection = 'hub';
     let selectedGroupIndex = 0;
@@ -998,7 +1100,8 @@
     window.speakZhText = function (text) {
       if (!text) return;
 
-      const cleanStr = String(text).replace(/['’]/g, '').trim();
+      const raw = String(text).replace(/['’]/g, '').trim();
+      const spokenText = convertPinyinToHanzi(raw) || raw;
       const voice = 'baidu-female'; // Cố định giọng Baidu Nữ chuẩn theo yêu cầu của chị
 
       if (audioCurrent) {
@@ -1007,19 +1110,20 @@
       }
 
       const API_BASE_URL = getApiBaseUrl();
-      const audioUrl = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanStr)}&voice=${voice}`;
+      const audioUrl = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(spokenText)}&voice=${voice}`;
       audioCurrent = new Audio(audioUrl);
       audioCurrent.play().catch(err => {
         console.warn("API Audio error, fallback to Web Speech:", err);
-        fallbackWebSpeech(cleanStr);
+        fallbackWebSpeech(spokenText);
       });
     };
 
     function fallbackWebSpeech(text) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
-        const cleanStr = String(text).replace(/['’]/g, '').trim();
-        const u = new SpeechSynthesisUtterance(cleanStr);
+        const raw = String(text).replace(/['’]/g, '').trim();
+        const spokenText = convertPinyinToHanzi(raw) || raw;
+        const u = new SpeechSynthesisUtterance(spokenText);
         u.lang = 'zh-CN';
         u.rate = 0.85;
         window.speechSynthesis.speak(u);
@@ -1257,8 +1361,11 @@
         <div class="char-detail-inspector">
           <div class="inspector-top-grid">
             <!-- Cột 1: Ký tự to -->
-            <div class="char-big-box">
+            <div class="char-big-box" onclick="speakZhText('${item.char}')" style="cursor: pointer;" title="Bấm để nghe phát âm: ${item.char}">
               <span class="char-big-symbol">${item.char}</span>
+              <div style="font-size: 0.78rem; color: #38bdf8; margin-top: 4px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                <i class="fa-solid fa-volume-high"></i> Nghe
+              </div>
             </div>
 
             <!-- Cột 2: Cách Đọc & Lưu Ý -->
@@ -1454,24 +1561,24 @@
             <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem;">${td.neutral_tone_guide.pronunciation}</p>
 
             <!-- SƠ ĐỒ CAO ĐỘ ÂM THANH CỦA THANH NHẸ (KHINH THANH) -->
-            <div style="background: rgba(15, 23, 42, 0.85); border: 1.5px solid rgba(52, 211, 153, 0.4); border-radius: 16px; padding: 20px; margin-bottom: 1.8rem; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
-              <div style="font-size: 1.05rem; font-weight: 800; color: #34d399; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+            <div class="neutral-pitch-main-card" style="background: rgba(15, 23, 42, 0.85); border: 1.5px solid rgba(52, 211, 153, 0.4); border-radius: 16px; padding: 20px; margin-bottom: 1.8rem; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
+              <div class="neutral-pitch-title" style="font-size: 1.05rem; font-weight: 800; color: #34d399; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
                 <i class="fa-solid fa-chart-line"></i> Bảng Vẽ Sơ Đồ Cao Độ Âm Thanh Thanh Nhẹ (Khinh Thanh)
               </div>
-              <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 16px;">
+              <div class="neutral-pitch-subtitle" style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 16px;">
                 Cao độ của âm mang thanh nhẹ thay đổi tùy theo thanh điệu của âm tiết đứng trước:
               </div>
 
               <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin-bottom: 18px;">
                 <!-- Card 1: Thanh 1 + Thanh nhẹ -->
-                <div style="background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+                <div class="neutral-sub-card" style="background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
                   <div>
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                      <span style="font-weight: 800; color: #38bdf8; font-size: 0.95rem;">1. Sau Thanh 1 (55)</span>
-                      <span style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">Độ cao: 2</span>
+                      <span style="font-weight: 800; color: #0284c7; font-size: 0.95rem;">1. Sau Thanh 1 (55)</span>
+                      <span style="background: rgba(56, 189, 248, 0.2); color: #0284c7; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">Độ cao: 2</span>
                     </div>
-                    <div style="font-size: 0.82rem; color: #cbd5e1; margin-bottom: 8px;">Âm trước ở mức cao nhất (55), âm sau rơi xuống mức <strong>2 (Trầm thấp nhẹ)</strong>.</div>
-                    <div style="height: 48px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; padding: 4px 8px; display: flex; align-items: center; justify-content: center; position: relative;">
+                    <div class="neutral-sub-card-text" style="font-size: 0.82rem; color: #cbd5e1; margin-bottom: 8px;">Âm trước ở mức cao nhất (55), âm sau rơi xuống mức <strong>2 (Trầm thấp nhẹ)</strong>.</div>
+                    <div class="neutral-svg-box" style="height: 48px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; padding: 4px 8px; display: flex; align-items: center; justify-content: center; position: relative;">
                       <svg width="100%" height="40" viewBox="0 0 160 40" style="overflow: visible;">
                         <line x1="10" y1="8" x2="70" y2="8" stroke="#38bdf8" stroke-width="4" stroke-linecap="round"/>
                         <circle cx="70" cy="8" r="4" fill="#38bdf8"/>
@@ -1483,24 +1590,24 @@
                     </div>
                   </div>
                   <div style="margin-top: 10px; display: flex; gap: 6px; flex-wrap: wrap;">
-                    <button onclick="speakZhText('māma')" style="flex: 1; min-width: 80px; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); color: #38bdf8; padding: 6px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
+                    <button class="neutral-play-btn" onclick="speakZhText('māma')" style="flex: 1; min-width: 80px; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); color: #38bdf8; padding: 6px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
                       <i class="fa-solid fa-volume-high"></i> 妈妈 māma
                     </button>
-                    <button onclick="speakZhText('gēge')" style="flex: 1; min-width: 80px; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); color: #38bdf8; padding: 6px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
+                    <button class="neutral-play-btn" onclick="speakZhText('gēge')" style="flex: 1; min-width: 80px; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); color: #38bdf8; padding: 6px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
                       <i class="fa-solid fa-volume-high"></i> 哥哥 gēge
                     </button>
                   </div>
                 </div>
 
                 <!-- Card 2: Thanh 2 + Thanh nhẹ -->
-                <div style="background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+                <div class="neutral-sub-card" style="background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
                   <div>
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                      <span style="font-weight: 800; color: #fbbf24; font-size: 0.95rem;">2. Sau Thanh 2 (35)</span>
-                      <span style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">Độ cao: 3</span>
+                      <span style="font-weight: 800; color: #d97706; font-size: 0.95rem;">2. Sau Thanh 2 (35)</span>
+                      <span style="background: rgba(245, 158, 11, 0.2); color: #d97706; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">Độ cao: 3</span>
                     </div>
-                    <div style="font-size: 0.82rem; color: #cbd5e1; margin-bottom: 8px;">Âm trước vút từ 3 lên 5, âm sau giữ ở mức <strong>3 (Trung bình nhẹ)</strong>.</div>
-                    <div style="height: 48px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; padding: 4px 8px; display: flex; align-items: center; justify-content: center; position: relative;">
+                    <div class="neutral-sub-card-text" style="font-size: 0.82rem; color: #cbd5e1; margin-bottom: 8px;">Âm trước vút từ 3 lên 5, âm sau giữ ở mức <strong>3 (Trung bình nhẹ)</strong>.</div>
+                    <div class="neutral-svg-box" style="height: 48px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; padding: 4px 8px; display: flex; align-items: center; justify-content: center; position: relative;">
                       <svg width="100%" height="40" viewBox="0 0 160 40" style="overflow: visible;">
                         <path d="M 15 28 Q 45 24 75 8" fill="none" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
                         <circle cx="75" cy="8" r="4" fill="#fbbf24"/>
@@ -1512,24 +1619,24 @@
                     </div>
                   </div>
                   <div style="margin-top: 10px; display: flex; gap: 6px; flex-wrap: wrap;">
-                    <button onclick="speakZhText('yéye')" style="flex: 1; min-width: 80px; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); color: #fbbf24; padding: 6px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
+                    <button class="neutral-play-btn" onclick="speakZhText('yéye')" style="flex: 1; min-width: 80px; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); color: #fbbf24; padding: 6px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
                       <i class="fa-solid fa-volume-high"></i> 爷爷 yéye
                     </button>
-                    <button onclick="speakZhText('péngyou')" style="flex: 1; min-width: 80px; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); color: #fbbf24; padding: 6px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
+                    <button class="neutral-play-btn" onclick="speakZhText('péngyou')" style="flex: 1; min-width: 80px; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); color: #fbbf24; padding: 6px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
                       <i class="fa-solid fa-volume-high"></i> 朋友 péngyou
                     </button>
                   </div>
                 </div>
 
                 <!-- Card 3: Thanh 3 + Thanh nhẹ -->
-                <div style="background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+                <div class="neutral-sub-card" style="background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
                   <div>
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                      <span style="font-weight: 800; color: #c084fc; font-size: 0.95rem;">3. Sau Thanh 3 (21)</span>
-                      <span style="background: rgba(168, 85, 247, 0.2); color: #c084fc; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">Độ cao: 4</span>
+                      <span style="font-weight: 800; color: #9333ea; font-size: 0.95rem;">3. Sau Thanh 3 (21)</span>
+                      <span style="background: rgba(168, 85, 247, 0.2); color: #9333ea; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">Độ cao: 4</span>
                     </div>
-                    <div style="font-size: 0.82rem; color: #cbd5e1; margin-bottom: 8px;">Âm trước hạ xuống thấp (21), âm sau <strong>vút lên mức 4 (Vút cao nhẹ)</strong>.</div>
-                    <div style="height: 48px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; padding: 4px 8px; display: flex; align-items: center; justify-content: center; position: relative;">
+                    <div class="neutral-sub-card-text" style="font-size: 0.82rem; color: #cbd5e1; margin-bottom: 8px;">Âm trước hạ xuống thấp (21), âm sau <strong>vút lên mức 4 (Vút cao nhẹ)</strong>.</div>
+                    <div class="neutral-svg-box" style="height: 48px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; padding: 4px 8px; display: flex; align-items: center; justify-content: center; position: relative;">
                       <svg width="100%" height="40" viewBox="0 0 160 40" style="overflow: visible;">
                         <path d="M 15 22 Q 40 34 70 34" fill="none" stroke="#c084fc" stroke-width="4" stroke-linecap="round"/>
                         <circle cx="70" cy="34" r="4" fill="#c084fc"/>
@@ -1541,24 +1648,24 @@
                     </div>
                   </div>
                   <div style="margin-top: 10px; display: flex; gap: 6px; flex-wrap: wrap;">
-                    <button onclick="speakZhText('nǎinai')" style="flex: 1; min-width: 80px; background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); color: #c084fc; padding: 6px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
+                    <button class="neutral-play-btn" onclick="speakZhText('nǎinai')" style="flex: 1; min-width: 80px; background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); color: #c084fc; padding: 6px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
                       <i class="fa-solid fa-volume-high"></i> 奶奶 nǎinai
                     </button>
-                    <button onclick="speakZhText('jiějie')" style="flex: 1; min-width: 80px; background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); color: #c084fc; padding: 6px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
+                    <button class="neutral-play-btn" onclick="speakZhText('jiějie')" style="flex: 1; min-width: 80px; background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); color: #c084fc; padding: 6px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
                       <i class="fa-solid fa-volume-high"></i> 姐姐 jiějie
                     </button>
                   </div>
                 </div>
 
                 <!-- Card 4: Thanh 4 + Thanh nhẹ -->
-                <div style="background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+                <div class="neutral-sub-card" style="background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
                   <div>
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                      <span style="font-weight: 800; color: #f87171; font-size: 0.95rem;">4. Sau Thanh 4 (51)</span>
-                      <span style="background: rgba(239, 68, 68, 0.2); color: #f87171; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">Độ cao: 1</span>
+                      <span style="font-weight: 800; color: #dc2626; font-size: 0.95rem;">4. Sau Thanh 4 (51)</span>
+                      <span style="background: rgba(239, 68, 68, 0.2); color: #dc2626; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">Độ cao: 1</span>
                     </div>
-                    <div style="font-size: 0.82rem; color: #cbd5e1; margin-bottom: 8px;">Âm trước đổ từ 5 xuống 1, âm sau ở mức <strong>1 (Thấp nhất chìm nhẹ)</strong>.</div>
-                    <div style="height: 48px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; padding: 4px 8px; display: flex; align-items: center; justify-content: center; position: relative;">
+                    <div class="neutral-sub-card-text" style="font-size: 0.82rem; color: #cbd5e1; margin-bottom: 8px;">Âm trước đổ từ 5 xuống 1, âm sau ở mức <strong>1 (Thấp nhất chìm nhẹ)</strong>.</div>
+                    <div class="neutral-svg-box" style="height: 48px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; padding: 4px 8px; display: flex; align-items: center; justify-content: center; position: relative;">
                       <svg width="100%" height="40" viewBox="0 0 160 40" style="overflow: visible;">
                         <line x1="15" y1="8" x2="70" y2="34" stroke="#f87171" stroke-width="4" stroke-linecap="round"/>
                         <circle cx="70" cy="34" r="4" fill="#f87171"/>
@@ -1570,10 +1677,10 @@
                     </div>
                   </div>
                   <div style="margin-top: 10px; display: flex; gap: 6px; flex-wrap: wrap;">
-                    <button onclick="speakZhText('bàba')" style="flex: 1; min-width: 80px; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; padding: 6px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
+                    <button class="neutral-play-btn" onclick="speakZhText('bàba')" style="flex: 1; min-width: 80px; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; padding: 6px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
                       <i class="fa-solid fa-volume-high"></i> 爸爸 bàba
                     </button>
-                    <button onclick="speakZhText('xièxie')" style="flex: 1; min-width: 80px; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; padding: 6px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
+                    <button class="neutral-play-btn" onclick="speakZhText('xièxie')" style="flex: 1; min-width: 80px; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; padding: 6px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
                       <i class="fa-solid fa-volume-high"></i> 谢谢 xièxie
                     </button>
                   </div>
@@ -1950,33 +2057,33 @@
       };
 
       let html = `
-        <div style="margin-bottom: 20px; background: rgba(16,185,129,0.08); border: 1.5px solid rgba(16,185,129,0.35); border-radius: 18px; padding: 20px; color: #cbd5e1; box-shadow: 0 4px 16px rgba(0,0,0,0.2);">
+        <div class="matrix-notice-banner" style="margin-bottom: 20px; background: rgba(16,185,129,0.08); border: 1.5px solid rgba(16,185,129,0.35); border-radius: 18px; padding: 20px; color: #cbd5e1; box-shadow: 0 4px 16px rgba(0,0,0,0.2);">
           <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 10px;">
-            <h3 style="margin: 0; color: #34d399; font-size: 1.15rem; font-weight: 800; display: flex; align-items: center; gap: 10px;">
+            <h3 class="matrix-notice-title" style="margin: 0; color: #34d399; font-size: 1.15rem; font-weight: 800; display: flex; align-items: center; gap: 10px;">
               <i class="fa-solid fa-table-cells"></i> Bảng Đối Chiếu Ma Trận Kết Hợp Thanh Mẫu & Vận Mẫu Pinyin
             </h3>
-            <span style="background: rgba(56,189,248,0.2); color: #38bdf8; border: 1px solid rgba(56,189,248,0.4); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;">
+            <span class="matrix-badge" style="background: rgba(56,189,248,0.2); color: #38bdf8; border: 1px solid rgba(56,189,248,0.4); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;">
               Tra cứu phối âm chuẩn
             </span>
           </div>
-          <p style="margin: 0 0 10px 0; font-size: 0.92rem; line-height: 1.6; color: #e2e8f0;">
+          <p class="matrix-notice-desc" style="margin: 0 0 10px 0; font-size: 0.92rem; line-height: 1.6; color: #e2e8f0;">
             Bảng ma trận này thể hiện trực quan toàn bộ các cặp <strong>Thanh Mẫu (21 âm đầu - hàng dọc)</strong> và <strong>Vận Mẫu (36 nguyên âm - hàng ngang)</strong> có thể kết hợp được với nhau trong tiếng Trung chuẩn. Những ô có dấu gạch <code>-</code> là những âm không tồn tại trong ngữ âm tiếng Trung.
           </p>
-          <div style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); padding: 10px 14px; border-radius: 10px; font-size: 0.86rem; color: #fde68a; display: flex; align-items: center; gap: 8px;">
+          <div class="matrix-alert-box" style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); padding: 10px 14px; border-radius: 10px; font-size: 0.86rem; color: #fde68a; display: flex; align-items: center; gap: 8px;">
             <i class="fa-solid fa-circle-info" style="color: #f59e0b;"></i>
-            <span><strong>Ghi chú phát âm:</strong> Bấm vào từng âm tiết để nghe phát âm minh họa theo Thanh 1. Âm tiết <code>j, q, x</code> khi ghép với <code>ü...</code> được viết thành <code>ju, qu, xu</code> theo quy tắc chính tả Pinyin.</span>
+            <span><strong>Ghi chú phát âm:</strong> Bấm vào từng âm tiết để nghe phát âm minh họa chuẩn theo giọng Bắc Kinh. Âm tiết <code>j, q, x</code> khi ghép với <code>ü...</code> được viết thành <code>ju, qu, xu</code> theo quy tắc chính tả Pinyin.</span>
           </div>
         </div>
 
-        <div style="overflow-x: auto; max-width: 100%; border-radius: 16px; border: 1px solid var(--border-glass, rgba(255,255,255,0.1)); background: var(--bg-secondary, rgba(30,41,59,0.9)); box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+        <div class="matrix-table-wrap" style="overflow-x: auto; max-width: 100%; border-radius: 16px; border: 1px solid var(--border-glass, rgba(255,255,255,0.1)); background: var(--bg-secondary, rgba(30,41,59,0.9)); box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
           <table style="width: 100%; border-collapse: collapse; text-align: center; font-size: 0.88rem;">
             <thead>
               <tr style="background: rgba(15,23,42,0.95); color: #38bdf8; border-bottom: 2px solid rgba(255,255,255,0.1);">
-                <th style="padding: 12px 16px; position: sticky; left: 0; background: #0f172a; z-index: 5; border-right: 2px solid rgba(255,255,255,0.1);">TM \\ VM</th>
+                <th class="matrix-sticky-header" style="padding: 12px 16px; position: sticky; left: 0; background: #0f172a; z-index: 5; border-right: 2px solid rgba(255,255,255,0.1);">TM \\ VM</th>
       `;
 
       vanMauList.forEach(vm => {
-        html += `<th style="padding: 10px 14px; min-width: 52px; color: #fbbf24; font-weight: 700;">${vm}</th>`;
+        html += `<th class="vm-header" style="padding: 10px 14px; min-width: 52px; color: #fbbf24; font-weight: 700;">${vm}</th>`;
       });
       html += `</tr></thead><tbody>`;
 
@@ -1999,7 +2106,7 @@
       thanhMauList.forEach((tm, idx) => {
         const bgRow = idx % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent';
         html += `<tr style="background: ${bgRow}; border-bottom: 1px solid rgba(255,255,255,0.05);">`;
-        html += `<td style="padding: 10px 14px; font-weight: 800; color: #38bdf8; position: sticky; left: 0; background: #0f172a; z-index: 4; border-right: 2px solid rgba(255,255,255,0.1);">${tm}</td>`;
+        html += `<td class="matrix-sticky-cell" style="padding: 10px 14px; font-weight: 800; color: #38bdf8; position: sticky; left: 0; background: #0f172a; z-index: 4; border-right: 2px solid rgba(255,255,255,0.1);">${tm}</td>`;
 
         const validVms = comboRules[tm] || [];
         vanMauList.forEach(vm => {
@@ -2011,13 +2118,13 @@
             const tone1Syllable = getTone1Pinyin(pinyinSyllable);
             html += `
               <td style="padding: 6px 4px;">
-                <button onclick="speakZhText('${tone1Syllable}')" title="Nghe phát âm: ${tone1Syllable}" style="background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.25); color: #38bdf8; font-weight: 700; border-radius: 8px; padding: 6px 10px; cursor: pointer; transition: all 0.15s ease; width: 100%; font-size: 0.88rem;" onmouseover="this.style.background='#38bdf8'; this.style.color='#0f172a';" onmouseout="this.style.background='rgba(56, 189, 248, 0.12)'; this.style.color='#38bdf8';">
+                <button class="matrix-cell-btn" onclick="speakZhText('${tone1Syllable}')" title="Nghe phát âm chuẩn: ${tone1Syllable}" style="background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.25); color: #38bdf8; font-weight: 700; border-radius: 8px; padding: 6px 10px; cursor: pointer; transition: all 0.15s ease; width: 100%; font-size: 0.88rem;">
                   ${pinyinSyllable}
                 </button>
               </td>
             `;
           } else {
-            html += `<td style="padding: 6px 4px; color: rgba(255,255,255,0.1); font-size: 0.75rem;">-</td>`;
+            html += `<td class="matrix-empty-cell" style="padding: 6px 4px; color: rgba(255,255,255,0.1); font-size: 0.75rem;">-</td>`;
           }
         });
         html += `</tr>`;

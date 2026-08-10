@@ -8,6 +8,7 @@ import { fileURLToPath } from 'url';
 import https from 'https';
 import mongoose from 'mongoose';
 import crypto from 'crypto';
+import { PINYIN_TO_HANZI, convertPinyinToHanzi } from '../frontend/src/pinyin_hanzi_map.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -1492,15 +1493,22 @@ app.post('/api/chat/migrate', async (req, res) => {
 // Helper to sanitize text for TTS engine (removes HTML, dialogue markers, pinyin in parens, etc.)
 function cleanTTSInput(str) {
   if (!str) return '';
-  return String(str)
+  let cleaned = String(str)
     .replace(/['’]/g, '')
     .replace(/<[^>]*>/g, '')
     .replace(/^[A-Z]:\s*/gm, '')
     .replace(/\n[A-Z]:\s*/g, '，')
     .replace(/_{2,}/g, ' ')
     .replace(/[\r\n]+/g, '，')
-    .replace(/([\u4e00-\u9fa5]+)\s*\([^\)]*\)/g, '$1')
+    .replace(/[\(（][^()（）]*[\)）]/g, '')
     .trim();
+
+  // If text is pure Pinyin (e.g. "long", "bā", "nǐhǎo", "b", "ia", etc.), convert to standard Chinese characters
+  if (!/[\u4e00-\u9fa5]/.test(cleaned) && typeof convertPinyinToHanzi === 'function') {
+    cleaned = convertPinyinToHanzi(cleaned);
+  }
+
+  return cleaned;
 }
 
 // Keep-Alive HTTPS Agent for zero-latency ElevenLabs API connection reuse
