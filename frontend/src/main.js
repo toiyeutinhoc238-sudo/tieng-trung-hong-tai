@@ -1,6 +1,7 @@
 // HSK Vocabulary Flashcard - Main Frontend Controller
 import { HSK1_STRUCTURED_GRAMMAR } from '../grammar_hsk1.js';
 import { HSK2_STRUCTURED_GRAMMAR } from '../grammar_hsk2.js';
+import './screen_drawing.js';
 if (typeof window !== 'undefined') {
   window.HSK1_STRUCTURED_GRAMMAR = HSK1_STRUCTURED_GRAMMAR;
   window.HSK2_STRUCTURED_GRAMMAR = HSK2_STRUCTURED_GRAMMAR;
@@ -7388,16 +7389,29 @@ function renderLessonStepperNav(currentStep, lessonId, lessonTitle) {
   const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : (activeLessonsLevel || 1);
   const currentVer = activeLessonsCurriculum === 'yct' ? 'yct' : (activeHskVersion || activeRoadmapVersion || '3.0');
   const titleDisplay = lessonTitle ? cleanLessonTitle(lessonTitle, numId) : `Bài ${numId}`;
+  const prevLessonNum = numId > 1 ? numId - 1 : null;
+  const nextLessonNum = numId + 1;
 
   return `
     <div class="lesson-stepper-hub-bar">
-      <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-        <button onclick="window.returnToLessonsMap()" class="btn btn-secondary" style="padding: 8px 14px; border-radius: 12px; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #cbd5e1; cursor: pointer;">
-          <i class="fa-solid fa-map-location-dot"></i> Lộ trình
+      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+        <button onclick="window.returnToLessonsMap()" class="btn btn-secondary" style="padding: 8px 12px; border-radius: 12px; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #cbd5e1; cursor: pointer;" title="Quay về Bản đồ Lộ trình">
+          <i class="fa-solid fa-map-location-dot"></i> <span class="nav-btn-label">Lộ trình</span>
         </button>
-        <div style="font-weight: 800; font-size: 1.02rem; color: #fbbf24; font-family: var(--font-display, sans-serif); display: flex; align-items: center; gap: 6px;">
+
+        ${prevLessonNum ? `
+          <button onclick="window.goToPrevLesson(${numId})" class="prev-lesson-hub-btn" title="Chuyển sang Bài ${prevLessonNum}">
+            <i class="fa-solid fa-arrow-left"></i> <span>Bài ${prevLessonNum}</span>
+          </button>
+        ` : ''}
+
+        <div style="font-weight: 800; font-size: 1.02rem; color: #fbbf24; font-family: var(--font-display, sans-serif); display: flex; align-items: center; gap: 6px; padding: 0 4px;">
           <i class="fa-solid fa-bookmark" style="color: #38bdf8;"></i> ${titleDisplay}
         </div>
+
+        <button onclick="window.goToNextLesson(${numId})" class="next-lesson-hub-btn" title="Chuyển sang Bài ${nextLessonNum}">
+          <span>Bài ${nextLessonNum}</span> <i class="fa-solid fa-arrow-right"></i>
+        </button>
       </div>
 
       <!-- 4 Step Tabs -->
@@ -7416,8 +7430,11 @@ function renderLessonStepperNav(currentStep, lessonId, lessonTitle) {
         </button>
       </div>
 
-      <!-- Fullscreen Action Button (Circular glass button matching theme/snowflake buttons) -->
+      <!-- Action Buttons (Drawing Pen & Fullscreen) -->
       <div style="display: flex; align-items: center; gap: 8px;">
+        <button class="fc-circle-btn" onclick="window.toggleScreenDrawing()" title="Bật/Tắt Bút vẽ màn hình (Phím D)" style="color: #ec4899;">
+          <i class="fa-solid fa-pen-nib"></i>
+        </button>
         <button id="fc-fullscreen-toggle-btn" class="fc-circle-btn ${isFlashcardFullscreen ? 'active-fullscreen' : ''}" onclick="window.toggleFlashcardFullscreen()" title="${isFlashcardFullscreen ? 'Thu nhỏ (Phím F hoặc Esc)' : 'Phóng to toàn màn hình (Phím F)'}">
           <i class="fa-solid ${isFlashcardFullscreen ? 'fa-compress' : 'fa-expand'}"></i>
         </button>
@@ -7427,6 +7444,57 @@ function renderLessonStepperNav(currentStep, lessonId, lessonTitle) {
 }
 
 window.renderLessonStepperNav = renderLessonStepperNav;
+
+window.goToNextLesson = function(currentLessonNum) {
+  const num = parseInt(String(currentLessonNum).replace(/\D/g, ''), 10) || 1;
+  const nextLessonId = num + 1;
+  const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : (activeLessonsLevel || 1);
+
+  const levelVocabs = vocabList.filter(w => {
+    if (w.isCustom) return false;
+    if (w.curriculum === 'yct' || w.hskVersion === 'yct') return false;
+    if (!matchLevel(w.level, currentLvl)) return false;
+    if ((w.hskVersion || '3.0') !== activeHskVersion) return false;
+    return true;
+  });
+
+  const nextWords = levelVocabs.filter(w => String(w.lessonId || 1) === String(nextLessonId));
+  if (nextWords.length === 0) {
+    // Check if there are any higher lesson numbers
+    const higherWords = levelVocabs.filter(w => (parseInt(String(w.lessonId || 1).replace(/\D/g, ''), 10) || 1) > num);
+    if (higherWords.length > 0) {
+      const nextFoundId = parseInt(String(higherWords[0].lessonId || 1).replace(/\D/g, ''), 10) || (num + 1);
+      if (typeof window.clearScreenDrawing === 'function') window.clearScreenDrawing();
+      window.openLessonVocabStudy(nextFoundId);
+    } else {
+      showToast(`🎉 Bạn đã hoàn thành bài cuối cùng của Cấp độ HSK ${currentLvl}!`);
+    }
+    return;
+  }
+
+  if (typeof window.clearScreenDrawing === 'function') {
+    window.clearScreenDrawing();
+  }
+
+  window.openLessonVocabStudy(nextLessonId);
+  showToast(`🚀 Đã chuyển sang Bài ${nextLessonId}`);
+};
+
+window.goToPrevLesson = function(currentLessonNum) {
+  const num = parseInt(String(currentLessonNum).replace(/\D/g, ''), 10) || 1;
+  if (num <= 1) {
+    showToast('Đây là bài học đầu tiên của cấp độ này!');
+    return;
+  }
+  const prevLessonId = num - 1;
+
+  if (typeof window.clearScreenDrawing === 'function') {
+    window.clearScreenDrawing();
+  }
+
+  window.openLessonVocabStudy(prevLessonId);
+  showToast(`⬅️ Đã chuyển về Bài ${prevLessonId}`);
+};
 
 window.goToLessonStep = function(step, lessonId) {
   if (!currentUser) {
@@ -7524,18 +7592,21 @@ function renderLessonFlashcardWorkspace(lessonTitle, words, selectedIndex = 0) {
     <div style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(16, 185, 129, 0.15)); border: 1.5px solid rgba(56, 189, 248, 0.35); border-radius: 20px; padding: 18px 24px; margin-top: 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
       <div>
         <div style="font-size: 0.85rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">
-          <i class="fa-solid fa-circle-check" style="color: #34d399;"></i> Đang Ở Bước 1: Từ Vựng
+          <i class="fa-solid fa-circle-check" style="color: #34d399;"></i> Đang Ở Bước 1: Từ Vựng (Bài ${currentLessonIdNum})
         </div>
         <div style="font-size: 1.12rem; font-weight: 800; color: #ffffff; font-family: var(--font-display);">
-          Học xong từ vựng? Tiếp tục sang Bước 2: Học Ngữ Pháp Bài Này!
+          Học xong từ vựng? Chọn bước tiếp theo:
         </div>
       </div>
       <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-        <button onclick="window.returnToLessonsMap()" class="btn btn-secondary" style="padding: 12px 20px; border-radius: 14px; font-weight: 700; font-size: 0.92rem; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #cbd5e1; cursor: pointer;">
+        <button onclick="window.returnToLessonsMap()" class="btn btn-secondary" style="padding: 12px 18px; border-radius: 14px; font-weight: 700; font-size: 0.92rem; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #cbd5e1; cursor: pointer;">
           <i class="fa-solid fa-arrow-left"></i> Lộ Trình
         </button>
-        <button onclick="window.goToLessonStep('grammar', '${currentLessonIdNum}')" class="btn btn-primary" style="padding: 12px 24px; border-radius: 14px; font-weight: 800; font-size: 0.95rem; background: linear-gradient(135deg, #0284c7, #2563eb); border: none; color: #ffffff; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 6px 20px rgba(37,99,235,0.45); transition: all 0.2s;">
-          <span>Tiếp: 2. Học Ngữ Pháp</span> <i class="fa-solid fa-arrow-right"></i>
+        <button onclick="window.goToLessonStep('grammar', '${currentLessonIdNum}')" class="btn btn-primary" style="padding: 12px 20px; border-radius: 14px; font-weight: 800; font-size: 0.92rem; background: linear-gradient(135deg, #0284c7, #2563eb); border: none; color: #ffffff; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 6px 20px rgba(37,99,235,0.45); transition: all 0.2s;">
+          <span>2. Học Ngữ Pháp</span> <i class="fa-solid fa-spell-check"></i>
+        </button>
+        <button onclick="window.goToNextLesson(${currentLessonIdNum})" class="next-lesson-big-btn" title="Chuyển nhanh sang từ vựng bài tiếp theo không cần quay lại lộ trình">
+          <span>Sang Bài ${currentLessonIdNum + 1}</span> <i class="fa-solid fa-arrow-right"></i>
         </button>
       </div>
     </div>

@@ -8363,6 +8363,424 @@ html.light-mode #radicals-flashcard-view.fullscreen-flashcard-active .hero-flash
   }
 }
 
+/* ==========================================================================
+   FLOATING SCREEN DRAWING & HANDWRITING NOTE TOOL
+   (Bong bóng Bút vẽ / Viết tay màn hình cho Giáo viên & Học viên)
+   ========================================================================== */
 
+/* Fullscreen Drawing Canvas Overlay */
+.screen-drawing-canvas {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 999998 !important;
+  pointer-events: none !important;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+  touch-action: none;
+}
 
+.screen-drawing-canvas.active {
+  pointer-events: auto !important;
+}
 
+.screen-drawing-canvas[data-mode="pen"],
+.screen-drawing-canvas[data-mode="highlighter"],
+.screen-drawing-canvas[data-mode="laser"] {
+  cursor: crosshair !important;
+}
+
+.screen-drawing-canvas[data-mode="eraser"] {
+  cursor: cell !important;
+}
+
+/* Floating Pen Bubble Widget (Bong bóng tròn nổi) */
+.screen-pen-floating-bubble {
+  position: fixed !important;
+  right: 24px !important;
+  bottom: 95px !important;
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 50% !important;
+  z-index: 999999 !important;
+  cursor: pointer !important;
+  background: linear-gradient(135deg, #ec4899, #8b5cf6) !important;
+  box-shadow: 0 8px 25px rgba(236, 72, 153, 0.45) !important;
+  border: 2px solid rgba(255, 255, 255, 0.35) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s, box-shadow 0.3s !important;
+  user-select: none !important;
+  touch-action: none !important;
+}
+
+.screen-pen-floating-bubble:hover {
+  transform: scale(1.14) !important;
+  box-shadow: 0 12px 30px rgba(236, 72, 153, 0.65) !important;
+}
+
+.screen-pen-floating-bubble.active {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  border-color: #34d399 !important;
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.55) !important;
+  animation: penBubblePulse 2s infinite ease-in-out;
+}
+
+@keyframes penBubblePulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(16, 185, 129, 0);
+  }
+}
+
+.screen-pen-floating-bubble .bubble-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 1.35rem;
+}
+
+.screen-pen-floating-bubble .bubble-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  font-size: 0.95rem;
+  background: rgba(15, 23, 42, 0.9);
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Floating Drawing Toolbar */
+.screen-drawing-toolbar {
+  position: fixed !important;
+  top: 18px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 999999 !important;
+  display: none;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 8px 14px !important;
+  background: rgba(15, 23, 42, 0.94) !important;
+  backdrop-filter: blur(28px) !important;
+  -webkit-backdrop-filter: blur(28px) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.22) !important;
+  border-radius: 50px !important;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.65) !important;
+  user-select: none !important;
+  max-width: 96vw !important;
+  overflow-x: auto !important;
+}
+
+.screen-drawing-toolbar.active {
+  display: flex !important;
+  animation: toolbarSlideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+@keyframes toolbarSlideDown {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -15px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+html.light-mode .screen-drawing-toolbar,
+body.light-mode .screen-drawing-toolbar {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-color: rgba(203, 213, 225, 0.9) !important;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15) !important;
+}
+
+.dt-drag-handle {
+  cursor: grab !important;
+  color: #64748b;
+  padding: 4px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.dt-drag-handle:active {
+  cursor: grabbing !important;
+}
+
+.dt-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dt-divider {
+  width: 1px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.16);
+  margin: 0 2px;
+}
+
+html.light-mode .dt-divider,
+body.light-mode .dt-divider {
+  background: rgba(203, 213, 225, 0.8);
+}
+
+.dt-btn {
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #cbd5e1;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+html.light-mode .dt-btn,
+body.light-mode .dt-btn {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+  color: #334155;
+}
+
+.dt-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+html.light-mode .dt-btn:hover,
+body.light-mode .dt-btn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.dt-btn.active {
+  background: linear-gradient(135deg, #0284c7, #2563eb) !important;
+  border-color: #38bdf8 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.45);
+}
+
+.dt-action-btn {
+  width: 36px;
+  padding: 0;
+  justify-content: center;
+}
+
+.dt-btn-clear {
+  background: rgba(239, 68, 68, 0.18) !important;
+  border-color: rgba(239, 68, 68, 0.35) !important;
+  color: #f87171 !important;
+  padding: 0 12px !important;
+}
+
+.dt-btn-clear:hover {
+  background: #ef4444 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.45) !important;
+}
+
+.dt-close-btn {
+  width: 36px;
+  padding: 0;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  color: #94a3b8;
+}
+
+.dt-close-btn:hover {
+  background: #ef4444 !important;
+  color: #ffffff !important;
+}
+
+/* Color Buttons */
+.dt-color-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.dt-color-btn:hover {
+  transform: scale(1.22);
+}
+
+.dt-color-btn.active {
+  transform: scale(1.28);
+  border-color: #ffffff !important;
+  box-shadow: 0 0 12px currentColor;
+}
+
+/* Custom Color Picker */
+.dt-color-picker-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.dt-color-picker-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.5);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 8px rgba(0,0,0,0.3);
+  flex-shrink: 0;
+}
+
+.dt-color-picker-btn:hover {
+  transform: scale(1.22);
+  box-shadow: 0 0 14px rgba(255,255,255,0.4);
+}
+
+/* Size Buttons */
+.dt-size-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #cbd5e1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.dt-size-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.dt-size-btn.active {
+  background: #2563eb;
+  border-color: #38bdf8;
+  color: #ffffff;
+}
+
+/* Mobile responsive toolbar */
+@media (max-width: 768px) {
+  .dt-label {
+    display: none;
+  }
+  .screen-drawing-toolbar {
+    padding: 6px 10px !important;
+    gap: 5px !important;
+    top: 10px !important;
+  }
+  .screen-pen-floating-bubble {
+    right: 16px !important;
+    bottom: 85px !important;
+    width: 50px !important;
+    height: 50px !important;
+  }
+}
+
+/* ==========================================================================
+   NEXT LESSON & PREVIOUS LESSON NAVIGATION BUTTONS
+   (Chuyển nhanh sang bài tiếp theo không cần quay lại lộ trình)
+   ========================================================================== */
+
+.next-lesson-hub-btn,
+.prev-lesson-hub-btn {
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.next-lesson-hub-btn {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.28));
+  border-color: rgba(52, 211, 153, 0.45);
+  color: #34d399;
+}
+
+.next-lesson-hub-btn:hover {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  color: #ffffff !important;
+  border-color: #34d399 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.45);
+}
+
+.prev-lesson-hub-btn:hover {
+  background: rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+html.light-mode .next-lesson-hub-btn,
+body.light-mode .next-lesson-hub-btn {
+  background: #dcfce7 !important;
+  border-color: #86efac !important;
+  color: #15803d !important;
+}
+
+html.light-mode .next-lesson-hub-btn:hover,
+body.light-mode .next-lesson-hub-btn:hover {
+  background: #16a34a !important;
+  color: #ffffff !important;
+}
+
+.next-lesson-big-btn {
+  padding: 12px 24px;
+  border-radius: 14px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  border: none !important;
+  color: #ffffff !important;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.next-lesson-big-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.6);
+}

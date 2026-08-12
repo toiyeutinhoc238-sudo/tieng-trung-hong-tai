@@ -1,0 +1,699 @@
+/**
+ * ==============================================================================
+ * SCREEN DRAWING & HANDWRITING NOTE TOOL (Bút Vẽ & Viết Tay Lên Màn Hình)
+ * Tiếng Trung Hồng Thái - Công cụ hỗ trợ giảng dạy trực quan trên mọi giao diện
+ * ==============================================================================
+ */
+
+class ScreenDrawingTool {
+  constructor() {
+    this.isActive = false;
+    this.isDrawing = false;
+    this.mode = 'pen'; // 'pen' | 'highlighter' | 'laser' | 'eraser'
+    this.color = '#ef4444'; // default red
+    this.lineWidth = 4;
+    this.history = [];
+    this.redoStack = [];
+    this.maxHistory = 20;
+    this.laserTrails = [];
+    this.laserAnimFrame = null;
+    this.isVisible = true;
+
+    // DOM Elements
+    this.canvas = null;
+    this.ctx = null;
+    this.bubble = null;
+    this.toolbar = null;
+
+    // Points buffer for smooth strokes
+    this.lastX = 0;
+    this.lastY = 0;
+
+    // Dragging state for toolbar & bubble
+    this.isDraggingBubble = false;
+    this.isDraggingToolbar = false;
+
+    this.init();
+  }
+
+  init() {
+    if (document.getElementById('screen-drawing-canvas-overlay')) return;
+
+    this.createCanvas();
+    this.createFloatingBubble();
+    this.createToolbar();
+    this.bindEvents();
+    this.initHotkeys();
+
+    // Export global functions
+    window.screenDrawingTool = this;
+    window.toggleScreenDrawing = (force) => this.toggle(force);
+    window.clearScreenDrawing = () => this.clear();
+    window.setScreenDrawingMode = (mode) => this.setMode(mode);
+    window.setScreenDrawingColor = (color) => this.setColor(color);
+    window.setScreenDrawingWidth = (width) => this.setWidth(width);
+  }
+
+  createCanvas() {
+    this.canvas = document.createElement('canvas');
+    this.canvas.id = 'screen-drawing-canvas-overlay';
+    this.canvas.className = 'screen-drawing-canvas';
+    document.body.appendChild(this.canvas);
+    this.ctx = this.canvas.getContext('2d', { willReadFrequently: true });
+    this.resizeCanvas();
+    window.addEventListener('resize', () => this.resizeCanvas());
+  }
+
+  resizeCanvas() {
+    if (!this.canvas) return;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    if (this.canvas.width === width && this.canvas.height === height) {
+      return;
+    }
+
+    let tempCanvas = null;
+    if (this.canvas.width > 0 && this.canvas.height > 0) {
+      tempCanvas = document.createElement('canvas');
+      tempCanvas.width = this.canvas.width;
+      tempCanvas.height = this.canvas.height;
+      const tCtx = tempCanvas.getContext('2d');
+      tCtx.drawImage(this.canvas, 0, 0);
+    }
+
+    this.canvas.width = width;
+    this.canvas.height = height;
+    this.canvas.style.width = width + 'px';
+    this.canvas.style.height = height + 'px';
+
+    this.ctx.lineCap = 'round';
+    this.ctx.lineJoin = 'round';
+
+    if (tempCanvas) {
+      this.ctx.drawImage(tempCanvas, 0, 0);
+    }
+  }
+
+  createFloatingBubble() {
+    this.bubble = document.createElement('div');
+    this.bubble.id = 'screen-pen-floating-bubble';
+    this.bubble.className = 'screen-pen-floating-bubble';
+    this.bubble.title = 'Bật/Tắt Bút viết tay lên màn hình (Phím D)';
+    this.bubble.innerHTML = `
+      <div class="bubble-inner">
+        <i class="fa-solid fa-pen-nib bubble-icon"></i>
+      </div>
+      <span class="bubble-badge" title="Chế độ giảng dạy">✏️</span>
+    `;
+
+    document.body.appendChild(this.bubble);
+  }
+
+  createToolbar() {
+    this.toolbar = document.createElement('div');
+    this.toolbar.id = 'screen-drawing-toolbar';
+    this.toolbar.className = 'screen-drawing-toolbar';
+    this.toolbar.style.display = 'none';
+
+    this.toolbar.innerHTML = `
+      <!-- Drag Handle -->
+      <div class="dt-drag-handle" title="Kéo để di chuyển thanh công cụ">
+        <i class="fa-solid fa-grip-vertical"></i>
+      </div>
+
+      <!-- Mode Buttons -->
+      <div class="dt-group dt-modes">
+        <button class="dt-btn active" data-mode="pen" title="Bút viết thường (Phím P)">
+          <i class="fa-solid fa-pen"></i>
+          <span class="dt-label">Bút</span>
+        </button>
+        <button class="dt-btn" data-mode="highlighter" title="Bút dạ quang / Tô sáng (Phím H)">
+          <i class="fa-solid fa-highlighter"></i>
+          <span class="dt-label">Dạ quang</span>
+        </button>
+        <button class="dt-btn" data-mode="laser" title="Bút laser chỉ điểm (Phím L)">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          <span class="dt-label">Laser</span>
+        </button>
+        <button class="dt-btn" data-mode="eraser" title="Tẩy nét vẽ (Phím E)">
+          <i class="fa-solid fa-eraser"></i>
+          <span class="dt-label">Tẩy</span>
+        </button>
+      </div>
+
+      <div class="dt-divider"></div>
+
+      <!-- Color Palette -->
+      <div class="dt-group dt-colors">
+        <button class="dt-color-btn active" data-color="#ef4444" style="background: #ef4444;" title="Đỏ"></button>
+        <button class="dt-color-btn" data-color="#fbbf24" style="background: #fbbf24;" title="Vàng"></button>
+        <button class="dt-color-btn" data-color="#10b981" style="background: #10b981;" title="Xanh lá"></button>
+        <button class="dt-color-btn" data-color="#38bdf8" style="background: #38bdf8;" title="Xanh dương"></button>
+        <button class="dt-color-btn" data-color="#c084fc" style="background: #c084fc;" title="Tím"></button>
+        <button class="dt-color-btn" data-color="#ff7f50" style="background: #ff7f50;" title="Cam"></button>
+        <button class="dt-color-btn" data-color="#facc15" style="background: #facc15;" title="Vàng chanh"></button>
+        <button class="dt-color-btn" data-color="#ffffff" style="background: #ffffff; border: 1.5px solid rgba(255,255,255,0.5);" title="Trắng"></button>
+        <button class="dt-color-btn" data-color="#000000" style="background: #000000;" title="Đen"></button>
+        <!-- Custom color picker -->
+        <label class="dt-color-picker-wrap" title="Chọn màu tùy ý">
+          <input type="color" id="dt-custom-color-input" value="#ef4444" style="opacity:0;position:absolute;width:0;height:0;">
+          <span class="dt-color-picker-btn" id="dt-custom-color-preview" style="background: conic-gradient(red, yellow, lime, cyan, blue, magenta, red);">
+            <i class="fa-solid fa-palette" style="font-size:0.72rem; color:#fff; text-shadow:0 1px 3px rgba(0,0,0,0.8);"></i>
+          </span>
+        </label>
+      </div>
+
+      <div class="dt-divider"></div>
+
+      <!-- Size Selector -->
+      <div class="dt-group dt-sizes">
+        <button class="dt-size-btn active" data-size="3" title="Nét mảnh (3px)">
+          <span style="width: 6px; height: 6px; border-radius: 50%; background: currentColor;"></span>
+        </button>
+        <button class="dt-size-btn" data-size="6" title="Nét vừa (6px)">
+          <span style="width: 10px; height: 10px; border-radius: 50%; background: currentColor;"></span>
+        </button>
+        <button class="dt-size-btn" data-size="12" title="Nét dày (12px)">
+          <span style="width: 16px; height: 16px; border-radius: 50%; background: currentColor;"></span>
+        </button>
+        <button class="dt-size-btn" data-size="24" title="Nét cực to (24px)">
+          <span style="width: 22px; height: 22px; border-radius: 50%; background: currentColor;"></span>
+        </button>
+      </div>
+
+      <div class="dt-divider"></div>
+
+      <!-- Actions -->
+      <div class="dt-group dt-actions">
+        <button class="dt-btn dt-action-btn" id="dt-undo-btn" title="Hoàn tác nét vẽ (Ctrl + Z)">
+          <i class="fa-solid fa-rotate-left"></i>
+        </button>
+        <button class="dt-btn dt-action-btn" id="dt-redo-btn" title="Làm lại nét vẽ (Ctrl + Y)">
+          <i class="fa-solid fa-rotate-right"></i>
+        </button>
+        <button class="dt-btn dt-action-btn dt-btn-clear" id="dt-clear-btn" title="Xóa sạch toàn bộ nét vẽ (Phím C)">
+          <i class="fa-solid fa-trash-can"></i>
+        </button>
+        <button class="dt-btn dt-action-btn" id="dt-vis-btn" title="Ẩn/Hiện nét vẽ">
+          <i class="fa-solid fa-eye"></i>
+        </button>
+        <button class="dt-btn dt-action-btn" id="dt-save-btn" title="Tải ảnh ghi chú / bài giảng">
+          <i class="fa-solid fa-camera"></i>
+        </button>
+      </div>
+
+      <div class="dt-divider"></div>
+
+      <!-- Close / Collapse Button -->
+      <button class="dt-btn dt-close-btn" id="dt-close-btn" title="Thu gọn / Đóng chế độ vẽ (Phím D hoặc ESC)">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    `;
+
+    document.body.appendChild(this.toolbar);
+  }
+
+  bindEvents() {
+    // Bubble Click
+    this.bubble.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (this.isDraggingBubble) return;
+      this.toggle();
+    });
+
+    // Make Bubble Draggable
+    this.makeDraggable(this.bubble, this.bubble, () => {
+      this.isDraggingBubble = true;
+    }, () => {
+      setTimeout(() => { this.isDraggingBubble = false; }, 80);
+    });
+
+    // Make Toolbar Draggable
+    const handle = this.toolbar.querySelector('.dt-drag-handle');
+    this.makeDraggable(this.toolbar, handle);
+
+    // Toolbar Tool Selection
+    this.toolbar.querySelectorAll('.dt-modes .dt-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.setMode(btn.dataset.mode);
+      });
+    });
+
+    // Color Selection
+    this.toolbar.querySelectorAll('.dt-color-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.setColor(btn.dataset.color);
+      });
+    });
+
+    // Size Selection
+    this.toolbar.querySelectorAll('.dt-size-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.setWidth(parseInt(btn.dataset.size, 10));
+      });
+    });
+
+    // Action Buttons
+    const undoBtn = document.getElementById('dt-undo-btn');
+    if (undoBtn) undoBtn.addEventListener('click', (e) => { e.stopPropagation(); this.undo(); });
+
+    const redoBtn = document.getElementById('dt-redo-btn');
+    if (redoBtn) redoBtn.addEventListener('click', (e) => { e.stopPropagation(); this.redo(); });
+
+    const clearBtn = document.getElementById('dt-clear-btn');
+    if (clearBtn) clearBtn.addEventListener('click', (e) => { e.stopPropagation(); this.clear(); });
+
+    const visBtn = document.getElementById('dt-vis-btn');
+    if (visBtn) visBtn.addEventListener('click', (e) => { e.stopPropagation(); this.toggleVisibility(); });
+
+    const saveBtn = document.getElementById('dt-save-btn');
+    if (saveBtn) saveBtn.addEventListener('click', (e) => { e.stopPropagation(); this.saveImage(); });
+
+    const closeBtn = document.getElementById('dt-close-btn');
+    if (closeBtn) closeBtn.addEventListener('click', (e) => { e.stopPropagation(); this.toggle(false); });
+
+    // Custom Color Picker
+    const customColorInput = document.getElementById('dt-custom-color-input');
+    const customColorPreview = document.getElementById('dt-custom-color-preview');
+    if (customColorInput) {
+      customColorInput.addEventListener('input', (e) => {
+        const newColor = e.target.value;
+        this.setColor(newColor);
+        // Deselect preset swatches
+        this.toolbar.querySelectorAll('.dt-color-btn').forEach(b => b.classList.remove('active'));
+        if (customColorPreview) {
+          customColorPreview.style.background = newColor;
+          customColorPreview.innerHTML = '';
+        }
+      });
+      customColorInput.addEventListener('change', (e) => {
+        const newColor = e.target.value;
+        this.setColor(newColor);
+        this.toolbar.querySelectorAll('.dt-color-btn').forEach(b => b.classList.remove('active'));
+        if (customColorPreview) {
+          customColorPreview.style.background = newColor;
+          customColorPreview.innerHTML = '';
+        }
+      });
+    }
+    if (customColorPreview) {
+      customColorPreview.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (customColorInput) customColorInput.click();
+      });
+    }
+
+    // Pointer Events on Canvas
+    this.canvas.addEventListener('pointerdown', (e) => this.handlePointerStart(e));
+    this.canvas.addEventListener('pointermove', (e) => this.handlePointerMove(e));
+    this.canvas.addEventListener('pointerup', (e) => this.handlePointerEnd(e));
+    this.canvas.addEventListener('pointercancel', (e) => this.handlePointerEnd(e));
+    this.canvas.addEventListener('pointerleave', (e) => this.handlePointerEnd(e));
+  }
+
+  makeDraggable(targetEl, handleEl, onDragStart, onDragEnd) {
+    let startX = 0, startY = 0, initLeft = 0, initTop = 0;
+    let dragging = false;
+
+    const dragStart = (e) => {
+      if (e.target.closest('button') && handleEl !== targetEl) return;
+      dragging = true;
+      const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+      const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+      startX = clientX;
+      startY = clientY;
+
+      const rect = targetEl.getBoundingClientRect();
+      initLeft = rect.left;
+      initTop = rect.top;
+
+      targetEl.style.right = 'auto';
+      targetEl.style.bottom = 'auto';
+      targetEl.style.left = initLeft + 'px';
+      targetEl.style.top = initTop + 'px';
+
+      if (onDragStart) onDragStart();
+      document.addEventListener('pointermove', dragMove);
+      document.addEventListener('pointerup', dragStop);
+    };
+
+    const dragMove = (e) => {
+      if (!dragging) return;
+      const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+      const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+      const dx = clientX - startX;
+      const dy = clientY - startY;
+
+      const newLeft = Math.max(10, Math.min(window.innerWidth - targetEl.offsetWidth - 10, initLeft + dx));
+      const newTop = Math.max(10, Math.min(window.innerHeight - targetEl.offsetHeight - 10, initTop + dy));
+
+      targetEl.style.left = newLeft + 'px';
+      targetEl.style.top = newTop + 'px';
+    };
+
+    const dragStop = () => {
+      if (!dragging) return;
+      dragging = false;
+      document.removeEventListener('pointermove', dragMove);
+      document.removeEventListener('pointerup', dragStop);
+      if (onDragEnd) onDragEnd();
+    };
+
+    handleEl.addEventListener('pointerdown', dragStart);
+  }
+
+  toggle(force) {
+    this.isActive = typeof force === 'boolean' ? force : !this.isActive;
+    this.canvas.classList.toggle('active', this.isActive);
+    this.bubble.classList.toggle('active', this.isActive);
+    this.toolbar.classList.toggle('active', this.isActive);
+    this.toolbar.style.display = this.isActive ? 'flex' : 'none';
+
+    document.body.classList.toggle('screen-drawing-active', this.isActive);
+
+    if (this.isActive) {
+      this.resizeCanvas();
+      this.showToast('✏️ Đã BẬT Bút vẽ màn hình! Bạn có thể viết, vẽ hoặc ghi chú tự do.');
+    }
+  }
+
+  setMode(mode) {
+    this.mode = mode;
+    this.toolbar.querySelectorAll('.dt-modes .dt-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.mode === mode);
+    });
+
+    this.canvas.setAttribute('data-mode', mode);
+  }
+
+  setColor(color) {
+    this.color = color;
+    this.toolbar.querySelectorAll('.dt-color-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.color === color);
+    });
+    // Reset custom color picker preview back to rainbow gradient when user picks a preset
+    const previewEl = document.getElementById('dt-custom-color-preview');
+    const inputEl = document.getElementById('dt-custom-color-input');
+    if (previewEl && this.toolbar.querySelector(`.dt-color-btn[data-color="${color}"]`)) {
+      previewEl.style.background = 'conic-gradient(red, yellow, lime, cyan, blue, magenta, red)';
+      previewEl.innerHTML = `<i class="fa-solid fa-palette" style="font-size:0.72rem; color:#fff; text-shadow:0 1px 3px rgba(0,0,0,0.8);"></i>`;
+    }
+    if (inputEl) inputEl.value = color;
+    if (this.mode === 'eraser') {
+      this.setMode('pen');
+    }
+  }
+
+  setWidth(width) {
+    this.lineWidth = width;
+    this.toolbar.querySelectorAll('.dt-size-btn').forEach(btn => {
+      btn.classList.toggle('active', parseInt(btn.dataset.size, 10) === width);
+    });
+  }
+
+  saveState() {
+    try {
+      const imgData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+      this.history.push(imgData);
+      if (this.history.length > this.maxHistory) {
+        this.history.shift();
+      }
+      this.redoStack = [];
+    } catch (e) {}
+  }
+
+  undo() {
+    if (this.history.length === 0) {
+      this.clear();
+      return;
+    }
+    try {
+      const currentState = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+      this.redoStack.push(currentState);
+      const previousState = this.history.pop();
+      this.ctx.putImageData(previousState, 0, 0);
+    } catch (e) {}
+  }
+
+  redo() {
+    if (this.redoStack.length === 0) return;
+    try {
+      const currentState = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+      this.history.push(currentState);
+      const nextState = this.redoStack.pop();
+      this.ctx.putImageData(nextState, 0, 0);
+    } catch (e) {}
+  }
+
+  clear() {
+    if (this.ctx && this.canvas) {
+      this.saveState();
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.laserTrails = [];
+      this.showToast('🗑️ Đã xóa sạch nét vẽ!');
+    }
+  }
+
+  toggleVisibility() {
+    this.isVisible = !this.isVisible;
+    this.canvas.style.opacity = this.isVisible ? '1' : '0';
+    const visBtn = document.getElementById('dt-vis-btn');
+    if (visBtn) {
+      visBtn.innerHTML = this.isVisible ? '<i class="fa-solid fa-eye"></i>' : '<i class="fa-solid fa-eye-slash" style="color: #ef4444;"></i>';
+    }
+  }
+
+  saveImage() {
+    if (!this.canvas) return;
+    try {
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = this.canvas.width;
+      tempCanvas.height = this.canvas.height;
+      const tCtx = tempCanvas.getContext('2d');
+
+      tCtx.fillStyle = 'rgba(15, 23, 42, 0.95)';
+      tCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+      tCtx.drawImage(this.canvas, 0, 0);
+
+      const dataUrl = tempCanvas.toDataURL('image/png');
+      const a = document.createElement('a');
+      a.href = dataUrl;
+      a.download = `tieng-trung-hong-tai-note-${Date.now()}.png`;
+      a.click();
+      this.showToast('📸 Đã lưu ảnh bài giảng!');
+    } catch (e) {
+      console.warn('Save image error:', e);
+    }
+  }
+
+  // Pointer drawing logic
+  handlePointerStart(e) {
+    if (!this.isActive) return;
+    e.preventDefault();
+    e.stopPropagation();
+
+    this.isDrawing = true;
+    this.saveState();
+
+    const rect = this.canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    this.lastX = x;
+    this.lastY = y;
+
+    if (this.mode === 'laser') {
+      this.addLaserPoint(x, y);
+      return;
+    }
+
+    this.setupContextStyles(e);
+
+    // Draw single dot on click/tap
+    this.ctx.beginPath();
+    const radius = Math.max(2, (this.lineWidth || 4) / 2);
+    this.ctx.arc(x, y, radius, 0, Math.PI * 2);
+    this.ctx.fill();
+  }
+
+  handlePointerMove(e) {
+    if (!this.isActive || !this.isDrawing) return;
+    e.preventDefault();
+    e.stopPropagation();
+
+    const rect = this.canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    if (this.mode === 'laser') {
+      this.addLaserPoint(x, y);
+      this.lastX = x;
+      this.lastY = y;
+      return;
+    }
+
+    this.setupContextStyles(e);
+
+    this.ctx.beginPath();
+    this.ctx.moveTo(this.lastX, this.lastY);
+    this.ctx.lineTo(x, y);
+    this.ctx.stroke();
+
+    this.lastX = x;
+    this.lastY = y;
+  }
+
+  handlePointerEnd(e) {
+    if (!this.isDrawing) return;
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    this.isDrawing = false;
+  }
+
+  setupContextStyles(e) {
+    let width = this.lineWidth;
+
+    if (e && e.pressure && e.pressure > 0) {
+      width = Math.max(2, this.lineWidth * e.pressure * 1.6);
+    }
+
+    this.ctx.lineCap = 'round';
+    this.ctx.lineJoin = 'round';
+
+    if (this.mode === 'pen') {
+      this.ctx.globalCompositeOperation = 'source-over';
+      this.ctx.strokeStyle = this.color;
+      this.ctx.fillStyle = this.color;
+      this.ctx.lineWidth = width;
+      this.ctx.globalAlpha = 1.0;
+      this.ctx.shadowBlur = 0;
+    } else if (this.mode === 'highlighter') {
+      this.ctx.globalCompositeOperation = 'source-over';
+      this.ctx.strokeStyle = this.color;
+      this.ctx.fillStyle = this.color;
+      this.ctx.lineWidth = Math.max(20, width * 4);
+      this.ctx.globalAlpha = 0.4;
+      this.ctx.shadowBlur = 0;
+    } else if (this.mode === 'eraser') {
+      this.ctx.globalCompositeOperation = 'destination-out';
+      this.ctx.lineWidth = Math.max(24, width * 4);
+      this.ctx.globalAlpha = 1.0;
+      this.ctx.shadowBlur = 0;
+    }
+  }
+
+  // Laser Pointer Trail with fading effect
+  addLaserPoint(x, y) {
+    this.laserTrails.push({
+      x,
+      y,
+      color: this.color,
+      width: Math.max(8, this.lineWidth * 2),
+      createdAt: Date.now()
+    });
+
+    if (!this.laserAnimFrame) {
+      this.startLaserAnimation();
+    }
+  }
+
+  startLaserAnimation() {
+    const loop = () => {
+      const now = Date.now();
+      const maxAge = 1200;
+
+      this.laserTrails = this.laserTrails.filter(pt => now - pt.createdAt < maxAge);
+
+      if (this.laserTrails.length > 0) {
+        this.ctx.save();
+        this.ctx.globalCompositeOperation = 'source-over';
+
+        for (let i = 0; i < this.laserTrails.length; i++) {
+          const pt = this.laserTrails[i];
+          const age = now - pt.createdAt;
+          const alpha = Math.max(0, 1 - (age / maxAge));
+
+          this.ctx.beginPath();
+          this.ctx.arc(pt.x, pt.y, pt.width * (alpha * 0.7 + 0.3), 0, Math.PI * 2);
+          this.ctx.fillStyle = pt.color;
+          this.ctx.globalAlpha = alpha * 0.85;
+          this.ctx.shadowColor = pt.color;
+          this.ctx.shadowBlur = 15;
+          this.ctx.fill();
+        }
+
+        this.ctx.restore();
+        this.laserAnimFrame = requestAnimationFrame(loop);
+      } else {
+        this.laserAnimFrame = null;
+      }
+    };
+
+    this.laserAnimFrame = requestAnimationFrame(loop);
+  }
+
+  initHotkeys() {
+    document.addEventListener('keydown', (e) => {
+      const targetTag = e.target && e.target.tagName ? e.target.tagName.toLowerCase() : '';
+      if (targetTag === 'input' || targetTag === 'textarea' || e.target.isContentEditable) {
+        return;
+      }
+
+      const key = e.key.toLowerCase();
+
+      if (key === 'd' && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        this.toggle();
+      } else if (key === 'c' && !e.ctrlKey && !e.metaKey && this.isActive) {
+        e.preventDefault();
+        this.clear();
+      } else if (key === 'e' && !e.ctrlKey && !e.metaKey && this.isActive) {
+        e.preventDefault();
+        this.setMode('eraser');
+      } else if (key === 'p' && !e.ctrlKey && !e.metaKey && this.isActive) {
+        e.preventDefault();
+        this.setMode('pen');
+      } else if (key === 'h' && !e.ctrlKey && !e.metaKey && this.isActive) {
+        e.preventDefault();
+        this.setMode('highlighter');
+      } else if (key === 'l' && !e.ctrlKey && !e.metaKey && this.isActive) {
+        e.preventDefault();
+        this.setMode('laser');
+      } else if (e.key === 'Escape' && this.isActive) {
+        e.preventDefault();
+        this.toggle(false);
+      } else if (key === 'z' && (e.ctrlKey || e.metaKey) && this.isActive) {
+        e.preventDefault();
+        if (e.shiftKey) {
+          this.redo();
+        } else {
+          this.undo();
+        }
+      } else if (key === 'y' && (e.ctrlKey || e.metaKey) && this.isActive) {
+        e.preventDefault();
+        this.redo();
+      }
+    });
+  }
+
+  showToast(msg) {
+    if (typeof window.showToast === 'function') {
+      window.showToast(msg);
+    }
+  }
+}
+
+// Auto-initialize when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => new ScreenDrawingTool());
+} else {
+  new ScreenDrawingTool();
+}
+
+export default ScreenDrawingTool;
