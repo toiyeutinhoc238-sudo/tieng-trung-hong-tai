@@ -721,11 +721,13 @@
       const lesBadge = document.getElementById('fixed-lesson-badge');
       const titleBadge = document.getElementById('lesson-title-badge');
       const headerRoadmapBtn = document.getElementById('header-roadmap-btn');
+      const stepperRoadmapBtn = document.getElementById('stepper-roadmap-btn');
 
       if (lvlBadge) lvlBadge.textContent = `HSK ${currentLevel} (${currentVersion})`;
       if (lesBadge) lesBadge.textContent = `Bài ${currentLessonId}`;
       if (titleBadge) titleBadge.innerHTML = `<i class="fa-solid fa-bookmark"></i> Bài Khóa HSK ${currentLevel} (${currentVersion}) - Bài ${currentLessonId}`;
       if (headerRoadmapBtn) headerRoadmapBtn.href = `/index.html?tab=lessons&level=${currentLevel}&version=${currentVersion}`;
+      if (stepperRoadmapBtn) stepperRoadmapBtn.href = `/index.html?tab=lessons&level=${currentLevel}&version=${currentVersion}`;
     }
 
     function selectDialogue(diagId) {
@@ -1137,7 +1139,7 @@
       if (step === 'vocab') {
         window.location.href = `/index.html?tab=lessons&level=${currentLevel}&version=${currentVersion}&openVocab=${currentLessonId}`;
       } else if (step === 'grammar') {
-        window.location.href = `/index.html?tab=lessons&level=${currentLevel}&version=${currentVersion}&openGrammar=${currentLessonId}`;
+        window.location.href = `/hsk-grammar.html?level=${currentLevel}&lesson=${currentLessonId}&version=${currentVersion}`;
       } else if (step === 'text') {
         // Already on lesson texts page
       } else if (step === 'quiz') {
