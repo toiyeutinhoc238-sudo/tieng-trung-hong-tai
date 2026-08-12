@@ -510,6 +510,43 @@ app.post('/api/auth/logout', async (req, res) => {
   res.json({ success: true });
 });
 
+// Helper to calculate streak from daily history
+function calculateStreakFromHistory(dailyHistory) {
+  if (!dailyHistory || typeof dailyHistory !== 'object') return 1;
+  const dates = Object.keys(dailyHistory)
+    .filter(d => (dailyHistory[d] || 0) > 0)
+    .sort();
+  if (dates.length === 0) return 1;
+
+  const today = new Date();
+  const todayStr = today.toISOString().split('T')[0];
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+  let startStr = null;
+  if (dates.includes(todayStr)) {
+    startStr = todayStr;
+  } else if (dates.includes(yesterdayStr)) {
+    startStr = yesterdayStr;
+  } else {
+    startStr = dates[dates.length - 1];
+  }
+
+  let streak = 0;
+  let checkDate = new Date(startStr);
+  while (true) {
+    const dateKey = checkDate.toISOString().split('T')[0];
+    if (dailyHistory[dateKey] && dailyHistory[dateKey] > 0) {
+      streak++;
+      checkDate.setDate(checkDate.getDate() - 1);
+    } else {
+      break;
+    }
+  }
+  return Math.max(streak, 1);
+}
+
 // GET endpoint to fetch user stats
 function ensureDailyHistoryIntegrity(stats) {
   if (!stats) return;
@@ -517,22 +554,24 @@ function ensureDailyHistoryIntegrity(stats) {
     stats.dailyHistory = {};
   }
 
-  const totalSecs = stats.studyTime || 0;
-  if (totalSecs <= 0) return;
-
   let recordedSecs = 0;
   Object.values(stats.dailyHistory).forEach(s => {
     recordedSecs += (s || 0);
   });
 
-  if (totalSecs > recordedSecs) {
+  const totalSecs = stats.studyTime || 0;
+
+  // 1. If stats.studyTime is smaller than sum of recorded history, sync it up!
+  if (recordedSecs > totalSecs) {
+    stats.studyTime = recordedSecs;
+  } else if (totalSecs > recordedSecs) {
+    // 2. If stats.studyTime has extra unallocated time, allocate it to history
     const unallocated = totalSecs - recordedSecs;
     const streak = Math.max(1, stats.streak || 1);
     const refDateStr = stats.lastActiveDate || new Date().toISOString().split('T')[0];
     const refDate = new Date(refDateStr);
 
     if (recordedSecs === 0) {
-      // First time migration: spread totalSecs backward across streak days up to refDate
       const daysToSpread = Math.min(streak, 7);
       const perDaySecs = Math.floor(unallocated / daysToSpread);
       let remSecs = unallocated % daysToSpread;
@@ -545,9 +584,14 @@ function ensureDailyHistoryIntegrity(stats) {
         stats.dailyHistory[dateKey] = (stats.dailyHistory[dateKey] || 0) + perDaySecs + extra;
       }
     } else {
-      // Add unallocated seconds directly to refDateStr when the study session occurred
       stats.dailyHistory[refDateStr] = (stats.dailyHistory[refDateStr] || 0) + unallocated;
     }
+  }
+
+  // 3. Ensure streak matches history
+  const calculatedStreak = calculateStreakFromHistory(stats.dailyHistory);
+  if (!stats.streak || stats.streak < calculatedStreak) {
+    stats.streak = calculatedStreak;
   }
 }
 

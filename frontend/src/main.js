@@ -3620,11 +3620,32 @@ async function initAuth() {
   if (savedUser) {
     try {
       currentUser = JSON.parse(savedUser);
-      renderUserProfile();
+      const userKey = currentUser._id || currentUser.id || currentUser.email || 'user';
+      const cachedStats = JSON.parse(localStorage.getItem(`user_stats_${userKey}`) || 'null');
+      if (cachedStats) {
+        userStreak = cachedStats.streak || 0;
+        userStudyTime = cachedStats.studyTime || 0;
+      }
     } catch (e) {
       console.warn("Parse saved user error:", e);
     }
   }
+
+  // Double check and calculate from dailyStudyHistory if userStudyTime is 0
+  const history = getDailyStudyHistory();
+  let totalHistorySecs = 0;
+  Object.values(history).forEach(s => { totalHistorySecs += (s || 0); });
+  if (totalHistorySecs > userStudyTime) {
+    userStudyTime = totalHistorySecs;
+  }
+  const calcStreak = calculateStreakFromHistory(history);
+  if (calcStreak > userStreak) {
+    userStreak = calcStreak;
+  }
+
+  renderUserProfile();
+  updateStatsUI();
+  renderWeeklyStudyChart();
 
   // 2. Đồng bộ phiên đăng nhập với Server nếu có kết nối
   try {
@@ -9241,6 +9262,43 @@ function formatStudyTimeDisplay(totalMinutes) {
 }
 window.formatStudyTimeDisplay = formatStudyTimeDisplay;
 
+function calculateStreakFromHistory(dailyHistory) {
+  if (!dailyHistory || typeof dailyHistory !== 'object') return 1;
+  const dates = Object.keys(dailyHistory)
+    .filter(d => (dailyHistory[d] || 0) > 0)
+    .sort();
+  if (dates.length === 0) return 1;
+
+  const today = new Date();
+  const todayStr = today.toLocaleDateString('sv');
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yesterdayStr = yesterday.toLocaleDateString('sv');
+
+  let startStr = null;
+  if (dates.includes(todayStr)) {
+    startStr = todayStr;
+  } else if (dates.includes(yesterdayStr)) {
+    startStr = yesterdayStr;
+  } else {
+    startStr = dates[dates.length - 1];
+  }
+
+  let streak = 0;
+  let checkDate = new Date(startStr);
+  while (true) {
+    const dateKey = checkDate.toLocaleDateString('sv');
+    if (dailyHistory[dateKey] && dailyHistory[dateKey] > 0) {
+      streak++;
+      checkDate.setDate(checkDate.getDate() - 1);
+    } else {
+      break;
+    }
+  }
+  return Math.max(streak, 1);
+}
+window.calculateStreakFromHistory = calculateStreakFromHistory;
+
 function getDailyStudyHistoryKey() {
   if (currentUser && currentUser.email) {
     return `daily_study_history_${currentUser.email}`;
@@ -9252,7 +9310,28 @@ function getDailyStudyHistory() {
   try {
     const key = getDailyStudyHistoryKey();
     const raw = localStorage.getItem(key);
-    return raw ? JSON.parse(raw) : {};
+    let history = raw ? JSON.parse(raw) : {};
+
+    // If user is logged in, also check if there was guest history to merge
+    if (currentUser && currentUser.email) {
+      const guestRaw = localStorage.getItem('daily_study_history_guest');
+      if (guestRaw) {
+        try {
+          const guestHistory = JSON.parse(guestRaw);
+          let merged = false;
+          for (const [dateStr, secs] of Object.entries(guestHistory)) {
+            if (secs && (!history[dateStr] || history[dateStr] < secs)) {
+              history[dateStr] = secs;
+              merged = true;
+            }
+          }
+          if (merged) {
+            localStorage.setItem(key, JSON.stringify(history));
+          }
+        } catch (e) {}
+      }
+    }
+    return history;
   } catch (e) {
     return {};
   }
@@ -9486,6 +9565,18 @@ function renderCourseCompletionDashboard() {
   const zubiStudyTime = document.getElementById('zubi-study-time-count');
   const zubiStreak = document.getElementById('zubi-streak-count');
 
+  // Ensure userStudyTime and streak are consistent with history
+  const history = getDailyStudyHistory();
+  let totalHistorySecs = 0;
+  Object.values(history).forEach(s => { totalHistorySecs += (s || 0); });
+  if (totalHistorySecs > userStudyTime) {
+    userStudyTime = totalHistorySecs;
+  }
+  const calcStreak = calculateStreakFromHistory(history);
+  if (calcStreak > userStreak) {
+    userStreak = calcStreak;
+  }
+
   if (zubiStreak) zubiStreak.textContent = `${userStreak || 1} Ngày`;
 
   const activeVocabs = vocabList.filter(w => !w.isCustom);
@@ -9625,6 +9716,17 @@ function renderHomeLeaderboard() {
 window.renderHomeLeaderboard = renderHomeLeaderboard;
 
 function updateStatsUI() {
+  const history = getDailyStudyHistory();
+  let totalHistorySecs = 0;
+  Object.values(history).forEach(s => { totalHistorySecs += (s || 0); });
+  if (totalHistorySecs > userStudyTime) {
+    userStudyTime = totalHistorySecs;
+  }
+  const calcStreak = calculateStreakFromHistory(history);
+  if (calcStreak > userStreak) {
+    userStreak = calcStreak;
+  }
+
   const streakEl = document.getElementById('welcome-streak-val');
   const homeStreakEl = document.getElementById('home-streak-val');
   const completedEl = document.getElementById('welcome-completed-val');
@@ -10239,6 +10341,7 @@ window.openZubiStatDetail = function (type) {
 
 async function loadInitialStats() {
   if (currentUser) {
+    const userKey = currentUser._id || currentUser.id || currentUser.email || 'user';
     try {
       const response = await fetch(API_BASE_URL + '/api/user/stats', {
         headers: getAuthHeaders(),
@@ -10256,12 +10359,28 @@ async function loadInitialStats() {
     } catch (err) {
       console.error('Failed to load user stats:', err);
     }
-  } else {
-    // Guest user reset
-    saveDailyStudyHistory({});
-    userStudyTime = guestStudyTime;
-    userStreak = guestStreak;
   }
+
+  // Integrity validation from dailyStudyHistory
+  const history = getDailyStudyHistory();
+  let totalHistorySecs = 0;
+  Object.values(history).forEach(s => { totalHistorySecs += (s || 0); });
+  if (totalHistorySecs > userStudyTime) {
+    userStudyTime = totalHistorySecs;
+  }
+  const calcStreak = calculateStreakFromHistory(history);
+  if (calcStreak > userStreak) {
+    userStreak = calcStreak;
+  }
+
+  if (currentUser) {
+    const userKey = currentUser._id || currentUser.id || currentUser.email || 'user';
+    localStorage.setItem(`user_stats_${userKey}`, JSON.stringify({
+      streak: userStreak,
+      studyTime: userStudyTime
+    }));
+  }
+
   updateStatsUI();
   renderWeeklyStudyChart();
 }

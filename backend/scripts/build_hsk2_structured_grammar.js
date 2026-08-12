@@ -940,7 +940,7 @@ console.log('Successfully written:', hsk2Path);
 const structPath = path.join(workspaceDir, 'frontend', 'grammar_structured.js');
 import(pathToFileURL(structPath).href).then(m => {
   const fullGrammar = m.FULL_STRUCTURED_GRAMMAR;
-  
+
   let hsk2TotalPoints = 0;
   HSK2_STRUCTURED_GRAMMAR.forEach(l => hsk2TotalPoints += l.grammarPoints.length);
 
