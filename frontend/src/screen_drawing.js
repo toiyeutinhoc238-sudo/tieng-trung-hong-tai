@@ -12,7 +12,9 @@ class ScreenDrawingTool {
     this.mode = 'pen'; // 'pen' | 'highlighter' | 'laser' | 'eraser'
     this.color = '#ef4444'; // default red
     this.lineWidth = 4;
-    this.eraserWidth = 28; // Default medium eraser size
+    this.highlighterWidth = 28; // Default medium highlighter size
+    this.laserWidth = 16;       // Default medium laser size
+    this.eraserWidth = 28;      // Default medium eraser size
     this.history = [];
     this.redoStack = [];
     this.maxHistory = 20;
@@ -260,16 +262,22 @@ class ScreenDrawingTool {
       });
     });
 
-    // Size Selection (Tùy chỉnh kích thước cho cả Bút vẽ và Cục tẩy)
+    // Size Selection (Tùy chỉnh kích thước riêng cho Bút vẽ, Dạ quang, Laser và Cục tẩy)
     this.toolbar.querySelectorAll('.dt-size-btn').forEach((btn, idx) => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        if (this.mode === 'eraser') {
-          const eraserSizes = [12, 28, 56, 110];
-          this.setEraserWidth(eraserSizes[idx]);
-        } else {
+        if (this.mode === 'pen') {
           const penSizes = [3, 6, 12, 24];
           this.setWidth(penSizes[idx]);
+        } else if (this.mode === 'highlighter') {
+          const hlSizes = [15, 28, 48, 80];
+          this.setHighlighterWidth(hlSizes[idx]);
+        } else if (this.mode === 'laser') {
+          const laserSizes = [8, 16, 30, 50];
+          this.setLaserWidth(laserSizes[idx]);
+        } else if (this.mode === 'eraser') {
+          const eraserSizes = [12, 28, 56, 110];
+          this.setEraserWidth(eraserSizes[idx]);
         }
       });
     });
@@ -456,6 +464,16 @@ class ScreenDrawingTool {
     this.updateSizeButtonsUI();
   }
 
+  setHighlighterWidth(width) {
+    this.highlighterWidth = width;
+    this.updateSizeButtonsUI();
+  }
+
+  setLaserWidth(width) {
+    this.laserWidth = width;
+    this.updateSizeButtonsUI();
+  }
+
   setEraserWidth(width) {
     this.eraserWidth = width;
     this.updateSizeButtonsUI();
@@ -467,41 +485,53 @@ class ScreenDrawingTool {
 
   updateSizeButtonsUI() {
     const sizeBtns = this.toolbar.querySelectorAll('.dt-size-btn');
-    if (this.mode === 'eraser') {
-      const eraserConfigs = [
+    let configs = [];
+    let currentVal = 0;
+
+    if (this.mode === 'pen') {
+      currentVal = this.lineWidth;
+      configs = [
+        { size: 3, title: 'Nét bút mảnh (3px)', dot: '6px' },
+        { size: 6, title: 'Nét bút vừa (6px)', dot: '10px' },
+        { size: 12, title: 'Nét bút dày (12px)', dot: '16px' },
+        { size: 24, title: 'Nét bút cực to (24px)', dot: '22px' }
+      ];
+    } else if (this.mode === 'highlighter') {
+      currentVal = this.highlighterWidth || 28;
+      configs = [
+        { size: 15, title: 'Bút dạ quang mảnh (15px) - Tô gạch chân / từ', dot: '6px' },
+        { size: 28, title: 'Bút dạ quang vừa (28px) - Tô cụm từ', dot: '10px' },
+        { size: 48, title: 'Bút dạ quang dày (48px) - Tô nổi bật cả câu', dot: '16px' },
+        { size: 80, title: 'Bút dạ quang cực to (80px) - Tô vùng lớn', dot: '22px' }
+      ];
+    } else if (this.mode === 'laser') {
+      currentVal = this.laserWidth || 16;
+      configs = [
+        { size: 8, title: 'Tia Laser mảnh (8px) - Chỉ điểm chi tiết', dot: '6px' },
+        { size: 16, title: 'Tia Laser vừa (16px) - Chỉ điểm chuẩn', dot: '10px' },
+        { size: 30, title: 'Tia Laser lớn (30px) - Nổi bật bài giảng', dot: '16px' },
+        { size: 50, title: 'Tia Laser cực lớn (50px) - Gây chú ý mạnh', dot: '22px' }
+      ];
+    } else if (this.mode === 'eraser') {
+      currentVal = this.eraserWidth || 28;
+      configs = [
         { size: 12, title: 'Cục tẩy nhỏ (12px) - Xóa chi tiết nhỏ', dot: '6px' },
         { size: 28, title: 'Cục tẩy vừa (28px) - Xóa chữ / nét vựng', dot: '10px' },
         { size: 56, title: 'Cục tẩy to (56px) - Xóa vùng lớn', dot: '16px' },
         { size: 110, title: 'Cục tẩy cực to (110px) - Xóa siêu tốc', dot: '22px' }
       ];
-      sizeBtns.forEach((btn, index) => {
-        const conf = eraserConfigs[index] || eraserConfigs[1];
-        btn.classList.toggle('active', this.eraserWidth === conf.size);
-        btn.setAttribute('title', conf.title);
-        const dotSpan = btn.querySelector('span');
-        if (dotSpan) {
-          dotSpan.style.width = conf.dot;
-          dotSpan.style.height = conf.dot;
-        }
-      });
-    } else {
-      const penConfigs = [
-        { size: 3, title: 'Nét mảnh (3px)', dot: '6px' },
-        { size: 6, title: 'Nét vừa (6px)', dot: '10px' },
-        { size: 12, title: 'Nét dày (12px)', dot: '16px' },
-        { size: 24, title: 'Nét cực to (24px)', dot: '22px' }
-      ];
-      sizeBtns.forEach((btn, index) => {
-        const conf = penConfigs[index] || penConfigs[0];
-        btn.classList.toggle('active', this.lineWidth === conf.size);
-        btn.setAttribute('title', conf.title);
-        const dotSpan = btn.querySelector('span');
-        if (dotSpan) {
-          dotSpan.style.width = conf.dot;
-          dotSpan.style.height = conf.dot;
-        }
-      });
     }
+
+    sizeBtns.forEach((btn, index) => {
+      const conf = configs[index] || configs[0];
+      btn.classList.toggle('active', currentVal === conf.size);
+      btn.setAttribute('title', conf.title);
+      const dotSpan = btn.querySelector('span');
+      if (dotSpan) {
+        dotSpan.style.width = conf.dot;
+        dotSpan.style.height = conf.dot;
+      }
+    });
   }
 
   updateEraserCursorPos(e) {
@@ -616,7 +646,12 @@ class ScreenDrawingTool {
 
     // Draw single dot on click/tap
     this.ctx.beginPath();
-    const radius = this.mode === 'eraser' ? ((this.eraserWidth || 28) / 2) : Math.max(2, (this.lineWidth || 4) / 2);
+    let radius = Math.max(2, (this.lineWidth || 4) / 2);
+    if (this.mode === 'eraser') {
+      radius = (this.eraserWidth || 28) / 2;
+    } else if (this.mode === 'highlighter') {
+      radius = (this.highlighterWidth || 28) / 2;
+    }
     this.ctx.arc(x, y, radius, 0, Math.PI * 2);
     this.ctx.fill();
   }
@@ -678,7 +713,7 @@ class ScreenDrawingTool {
       this.ctx.globalCompositeOperation = 'source-over';
       this.ctx.strokeStyle = this.color;
       this.ctx.fillStyle = this.color;
-      this.ctx.lineWidth = Math.max(20, width * 4);
+      this.ctx.lineWidth = this.highlighterWidth || 28;
       this.ctx.globalAlpha = 0.4;
       this.ctx.shadowBlur = 0;
     } else if (this.mode === 'eraser') {
@@ -695,7 +730,7 @@ class ScreenDrawingTool {
       x,
       y,
       color: this.color,
-      width: Math.max(8, this.lineWidth * 2),
+      width: this.laserWidth || 16,
       createdAt: Date.now()
     });
 
