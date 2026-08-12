@@ -524,10 +524,10 @@
       border: 2px solid #2563eb !important;
     }
   </style>
-  <script type="module" crossorigin src="/assets/radicals-CReXyhPi.js"></script>
+  <script type="module" crossorigin src="/assets/radicals-CidruxGo.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/style-DS26AI4y.js">
   <link rel="modulepreload" crossorigin href="/assets/particles-Dl8CQUZ9.js">
-  <link rel="modulepreload" crossorigin href="/assets/screen_drawing-BXoQtuaN.js">
+  <link rel="modulepreload" crossorigin href="/assets/screen_drawing-CfSu4Vl6.js">
   <link rel="stylesheet" crossorigin href="/assets/style-BB6JS4oH.css">
 </head>
 
@@ -641,6 +641,22 @@
       </div>
     </div>
 
+  </div>
+
+  <!-- Floating Theme & Fullscreen Toggle Widget (Bottom-Left) -->
+  <div id="floating-theme-widget" style="position: fixed; bottom: 24px; left: 24px; z-index: 9999999; display: flex; gap: 12px; align-items: center; touch-action: manipulation;">
+    <button id="floating-theme-toggle-btn" onclick="window.toggleTheme && window.toggleTheme()" title="Chuyển đổi Sáng/Tối"
+      style="width: 54px; height: 54px; border-radius: 50%; background: var(--bg-card, rgba(15,23,42,0.8)); border: 2px solid var(--border-glass, rgba(255,255,255,0.22)); color: var(--text-primary, #ffffff); font-size: 1.4rem; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); touch-action: manipulation; -webkit-tap-highlight-color: transparent;">
+      <i class="fa-solid fa-moon"></i>
+    </button>
+    <button id="particle-toggle-btn" class="particle-toggle-btn" onclick="window.toggleSeasonalParticles && window.toggleSeasonalParticles()" title="Bật/Tắt hiệu ứng mùa"
+      style="width: 54px; height: 54px; border-radius: 50%; background: var(--bg-card, rgba(15,23,42,0.8)); border: 2px solid var(--border-glass, rgba(255,255,255,0.22)); color: #60a5fa; font-size: 1.4rem; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); touch-action: manipulation; -webkit-tap-highlight-color: transparent;">
+      <i class="fa-solid fa-snowflake"></i>
+    </button>
+    <button id="floating-fullscreen-btn" class="fc-circle-btn" onclick="window.toggleAppFullscreen()" title="Bật/Tắt Toàn Màn Hình (Phím F)"
+      style="width: 54px; height: 54px; font-size: 1.4rem; touch-action: manipulation; -webkit-tap-highlight-color: transparent;">
+      <i class="fa-solid fa-expand"></i>
+    </button>
   </div>
 
   <script src="/assets/hanzi-writer.min.js"></script>

@@ -12,6 +12,7 @@ class ScreenDrawingTool {
     this.mode = 'pen'; // 'pen' | 'highlighter' | 'laser' | 'eraser'
     this.color = '#ef4444'; // default red
     this.lineWidth = 4;
+    this.eraserWidth = 28; // Default medium eraser size
     this.history = [];
     this.redoStack = [];
     this.maxHistory = 20;
@@ -24,6 +25,7 @@ class ScreenDrawingTool {
     this.ctx = null;
     this.bubble = null;
     this.toolbar = null;
+    this.eraserCursor = null;
 
     // Points buffer for smooth strokes
     this.lastX = 0;
@@ -258,11 +260,17 @@ class ScreenDrawingTool {
       });
     });
 
-    // Size Selection
-    this.toolbar.querySelectorAll('.dt-size-btn').forEach(btn => {
+    // Size Selection (Tùy chỉnh kích thước cho cả Bút vẽ và Cục tẩy)
+    this.toolbar.querySelectorAll('.dt-size-btn').forEach((btn, idx) => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        this.setWidth(parseInt(btn.dataset.size, 10));
+        if (this.mode === 'eraser') {
+          const eraserSizes = [12, 28, 56, 110];
+          this.setEraserWidth(eraserSizes[idx]);
+        } else {
+          const penSizes = [3, 6, 12, 24];
+          this.setWidth(penSizes[idx]);
+        }
       });
     });
 
@@ -318,10 +326,16 @@ class ScreenDrawingTool {
 
     // Pointer Events on Canvas
     this.canvas.addEventListener('pointerdown', (e) => this.handlePointerStart(e));
-    this.canvas.addEventListener('pointermove', (e) => this.handlePointerMove(e));
+    this.canvas.addEventListener('pointermove', (e) => {
+      this.updateEraserCursorPos(e);
+      this.handlePointerMove(e);
+    });
     this.canvas.addEventListener('pointerup', (e) => this.handlePointerEnd(e));
     this.canvas.addEventListener('pointercancel', (e) => this.handlePointerEnd(e));
-    this.canvas.addEventListener('pointerleave', (e) => this.handlePointerEnd(e));
+    this.canvas.addEventListener('pointerleave', (e) => {
+      if (this.eraserCursor) this.eraserCursor.style.display = 'none';
+      this.handlePointerEnd(e);
+    });
   }
 
   makeDraggable(targetEl, handleEl, onDragStart, onDragEnd) {
@@ -413,6 +427,10 @@ class ScreenDrawingTool {
     });
 
     this.canvas.setAttribute('data-mode', mode);
+    this.updateSizeButtonsUI();
+    if (mode !== 'eraser' && this.eraserCursor) {
+      this.eraserCursor.style.display = 'none';
+    }
   }
 
   setColor(color) {
@@ -435,9 +453,67 @@ class ScreenDrawingTool {
 
   setWidth(width) {
     this.lineWidth = width;
-    this.toolbar.querySelectorAll('.dt-size-btn').forEach(btn => {
-      btn.classList.toggle('active', parseInt(btn.dataset.size, 10) === width);
-    });
+    this.updateSizeButtonsUI();
+  }
+
+  setEraserWidth(width) {
+    this.eraserWidth = width;
+    this.updateSizeButtonsUI();
+    if (this.eraserCursor) {
+      this.eraserCursor.style.width = `${width}px`;
+      this.eraserCursor.style.height = `${width}px`;
+    }
+  }
+
+  updateSizeButtonsUI() {
+    const sizeBtns = this.toolbar.querySelectorAll('.dt-size-btn');
+    if (this.mode === 'eraser') {
+      const eraserConfigs = [
+        { size: 12, title: 'Cục tẩy nhỏ (12px) - Xóa chi tiết nhỏ', dot: '6px' },
+        { size: 28, title: 'Cục tẩy vừa (28px) - Xóa chữ / nét vựng', dot: '10px' },
+        { size: 56, title: 'Cục tẩy to (56px) - Xóa vùng lớn', dot: '16px' },
+        { size: 110, title: 'Cục tẩy cực to (110px) - Xóa siêu tốc', dot: '22px' }
+      ];
+      sizeBtns.forEach((btn, index) => {
+        const conf = eraserConfigs[index] || eraserConfigs[1];
+        btn.classList.toggle('active', this.eraserWidth === conf.size);
+        btn.setAttribute('title', conf.title);
+        const dotSpan = btn.querySelector('span');
+        if (dotSpan) {
+          dotSpan.style.width = conf.dot;
+          dotSpan.style.height = conf.dot;
+        }
+      });
+    } else {
+      const penConfigs = [
+        { size: 3, title: 'Nét mảnh (3px)', dot: '6px' },
+        { size: 6, title: 'Nét vừa (6px)', dot: '10px' },
+        { size: 12, title: 'Nét dày (12px)', dot: '16px' },
+        { size: 24, title: 'Nét cực to (24px)', dot: '22px' }
+      ];
+      sizeBtns.forEach((btn, index) => {
+        const conf = penConfigs[index] || penConfigs[0];
+        btn.classList.toggle('active', this.lineWidth === conf.size);
+        btn.setAttribute('title', conf.title);
+        const dotSpan = btn.querySelector('span');
+        if (dotSpan) {
+          dotSpan.style.width = conf.dot;
+          dotSpan.style.height = conf.dot;
+        }
+      });
+    }
+  }
+
+  updateEraserCursorPos(e) {
+    if (this.isActive && this.mode === 'eraser' && this.eraserCursor) {
+      this.eraserCursor.style.display = 'block';
+      this.eraserCursor.style.width = `${this.eraserWidth || 28}px`;
+      this.eraserCursor.style.height = `${this.eraserWidth || 28}px`;
+      this.eraserCursor.style.left = `${e.clientX}px`;
+      this.eraserCursor.style.top = `${e.clientY}px`;
+    } else if (this.eraserCursor) {
+      this.eraserCursor.style.display = 'none';
+    }
   }
 
   saveState() {
@@ -448,7 +524,7 @@ class ScreenDrawingTool {
         this.history.shift();
       }
       this.redoStack = [];
-    } catch (e) {}
+    } catch (e) { }
   }
 
   undo() {
@@ -461,7 +537,7 @@ class ScreenDrawingTool {
       this.redoStack.push(currentState);
       const previousState = this.history.pop();
       this.ctx.putImageData(previousState, 0, 0);
-    } catch (e) {}
+    } catch (e) { }
   }
 
   redo() {
@@ -471,7 +547,7 @@ class ScreenDrawingTool {
       this.history.push(currentState);
       const nextState = this.redoStack.pop();
       this.ctx.putImageData(nextState, 0, 0);
-    } catch (e) {}
+    } catch (e) { }
   }
 
   clear() {
@@ -540,7 +616,7 @@ class ScreenDrawingTool {
 
     // Draw single dot on click/tap
     this.ctx.beginPath();
-    const radius = Math.max(2, (this.lineWidth || 4) / 2);
+    const radius = this.mode === 'eraser' ? ((this.eraserWidth || 28) / 2) : Math.max(2, (this.lineWidth || 4) / 2);
     this.ctx.arc(x, y, radius, 0, Math.PI * 2);
     this.ctx.fill();
   }
@@ -607,7 +683,7 @@ class ScreenDrawingTool {
       this.ctx.shadowBlur = 0;
     } else if (this.mode === 'eraser') {
       this.ctx.globalCompositeOperation = 'destination-out';
-      this.ctx.lineWidth = Math.max(24, width * 4);
+      this.ctx.lineWidth = this.eraserWidth || 28;
       this.ctx.globalAlpha = 1.0;
       this.ctx.shadowBlur = 0;
     }
@@ -721,4 +797,157 @@ if (document.readyState === 'loading') {
   new ScreenDrawingTool();
 }
 
+/* ==============================================================================
+ * UNIVERSAL FULLSCREEN EVENT DELEGATION — ALL PAGES & DEVICES
+ * (Chuột PC + Cảm ứng Mobile/Tablet + Phím F / ESC)
+ *
+ * Định nghĩa hàm PLACEHOLDER tại đây.
+ * Trên index.html: main.js chạy sau và overwrite window.toggleAppFullscreen,
+ *   window.enterAppFullscreen, window.exitAppFullscreen bằng hàm canonical.
+ * Trên các trang khác (radicals, grammar...): hàm dưới đây được dùng trực tiếp.
+ * ============================================================================== */
+
+let _sdIsFullscreen = false;
+
+// Placeholder — sẽ bị ghi đè bởi main.js trên index.html
+if (!window.toggleAppFullscreen) {
+  window.toggleAppFullscreen = function (forceState) {
+    const isDocFs = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+    const targetState = typeof forceState === 'boolean' ? forceState : (!_sdIsFullscreen && !isDocFs);
+    if (targetState) {
+      window.enterAppFullscreen && window.enterAppFullscreen();
+    } else {
+      window.exitAppFullscreen && window.exitAppFullscreen(true);
+    }
+  };
+}
+
+if (!window.enterAppFullscreen) {
+  window.enterAppFullscreen = function () {
+    _sdIsFullscreen = true;
+    document.body.classList.add('flashcard-fullscreen-mode', 'app-fullscreen-mode');
+
+    ['flashcard-study-view', 'radical-study-workspace', 'radicals-flashcard-view', 'radical-detail-workspace'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('fullscreen-flashcard-active');
+    });
+
+    const docEl = document.documentElement;
+    try {
+      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        if (docEl.requestFullscreen) docEl.requestFullscreen().catch(() => { });
+        else if (docEl.webkitRequestFullscreen) docEl.webkitRequestFullscreen();
+        else if (docEl.msRequestFullscreen) docEl.msRequestFullscreen();
+      }
+    } catch (e) { }
+
+    _sdUpdateButtons();
+    if (typeof window.showToast === 'function') {
+      window.showToast('Đã mở toàn màn hình ⛶ (Phím Esc hoặc F để thu nhỏ)');
+    }
+  };
+}
+
+if (!window.exitAppFullscreen) {
+  window.exitAppFullscreen = function (callDocExit = true) {
+    _sdIsFullscreen = false;
+    document.body.classList.remove('flashcard-fullscreen-mode', 'app-fullscreen-mode');
+
+    ['flashcard-study-view', 'radical-study-workspace', 'radicals-flashcard-view', 'radical-detail-workspace'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('fullscreen-flashcard-active');
+    });
+
+    if (callDocExit) {
+      const isDocFs = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+      if (isDocFs) {
+        try {
+          if (document.exitFullscreen) document.exitFullscreen().catch(() => { });
+          else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+          else if (document.msExitFullscreen) document.msExitFullscreen();
+        } catch (e) { }
+      }
+    }
+
+    _sdUpdateButtons();
+  };
+}
+
+function _sdUpdateButtons() {
+  // Gọi updateFlashcardFullscreenButtons của main.js nếu có
+  if (typeof updateFlashcardFullscreenButtons === 'function') {
+    updateFlashcardFullscreenButtons();
+    return;
+  }
+  // Fallback cho các trang không có main.js
+  const isDocFs = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+  const activeState = _sdIsFullscreen || isDocFs;
+  document.querySelectorAll('.fc-fullscreen-toggle-btn, .fc-circle-btn, .card-fullscreen-quick-btn, #floating-fullscreen-btn, #radical-top-fullscreen-btn, #radical-fullscreen-toggle-btn').forEach(btn => {
+    btn.classList.toggle('active-fullscreen', activeState);
+    const icon = btn.querySelector('i');
+    if (icon) icon.className = `fa-solid ${activeState ? 'fa-compress' : 'fa-expand'}`;
+    btn.title = activeState ? 'Thu nhỏ toàn màn hình (Phím Esc)' : 'Phóng to toàn màn hình (Phím F)';
+  });
+}
+
+// fullscreenchange — sync state khi user nhấn ESC của browser
+['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(evtName => {
+  document.addEventListener(evtName, () => {
+    const isDocFs = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+    if (!isDocFs) {
+      // Exit fullscreen — gọi hàm canonical
+      const exitFn = window.exitFlashcardFullscreen || window.exitAppFullscreen;
+      if (exitFn) exitFn(false);
+    } else {
+      _sdUpdateButtons();
+    }
+  });
+});
+
+// Universal Event Delegation — 1 nơi duy nhất cho click + touch + keyboard
+(function setupUniversalFsDelegation() {
+  // Guard: nếu đã có main.js đăng ký delegation rồi thì không đăng ký nữa
+  if (window._fsDelegationRegistered) return;
+  window._fsDelegationRegistered = true;
+
+  let lastActionTime = 0;
+  const SELECTOR = '.fc-circle-btn, .fc-fullscreen-toggle-btn, .card-fullscreen-quick-btn, #floating-fullscreen-btn, #radical-top-fullscreen-btn, #radical-fullscreen-toggle-btn';
+
+  function onFsTrigger(e) {
+    const btn = e.target.closest(SELECTOR);
+    if (!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const now = Date.now();
+    if (now - lastActionTime < 350) return; // debounce 350ms
+    lastActionTime = now;
+    const fn = window.toggleFlashcardFullscreen || window.toggleAppFullscreen;
+    if (fn) fn();
+  }
+
+  document.addEventListener('click', onFsTrigger, true);
+  document.addEventListener('touchend', onFsTrigger, { passive: false, capture: true });
+
+  document.addEventListener('keydown', (e) => {
+    const isDocFs = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+    const isFs = isDocFs || _sdIsFullscreen;
+
+    if (e.key === 'Escape' && isFs) {
+      e.preventDefault();
+      const exitFn = window.exitFlashcardFullscreen || window.exitAppFullscreen;
+      if (exitFn) exitFn(true);
+    }
+    if ((e.key === 'f' || e.key === 'F') && !e.ctrlKey && !e.metaKey) {
+      const active = document.activeElement;
+      const tag = active ? active.tagName.toLowerCase() : '';
+      if (tag !== 'input' && tag !== 'textarea' && !active.isContentEditable) {
+        e.preventDefault();
+        const toggleFn = window.toggleFlashcardFullscreen || window.toggleAppFullscreen;
+        if (toggleFn) toggleFn();
+      }
+    }
+  });
+})();
+
 export default ScreenDrawingTool;
+

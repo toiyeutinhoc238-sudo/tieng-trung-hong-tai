@@ -7623,7 +7623,8 @@ function renderLessonFlashcardWorkspace(lessonTitle, words, selectedIndex = 0) {
 let isFlashcardFullscreen = false;
 
 window.toggleFlashcardFullscreen = function(forceState) {
-  const targetState = typeof forceState === 'boolean' ? forceState : !isFlashcardFullscreen;
+  const isDocFs = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+  const targetState = typeof forceState === 'boolean' ? forceState : (!isFlashcardFullscreen && !isDocFs);
   if (targetState) {
     window.enterFlashcardFullscreen();
   } else {
@@ -7632,69 +7633,103 @@ window.toggleFlashcardFullscreen = function(forceState) {
 };
 
 window.enterFlashcardFullscreen = function() {
-  const studyView = document.getElementById('flashcard-study-view');
-  if (!studyView) return;
-
   isFlashcardFullscreen = true;
-  document.body.classList.add('flashcard-fullscreen-mode');
-  studyView.classList.add('fullscreen-flashcard-active');
+  document.body.classList.add('flashcard-fullscreen-mode', 'app-fullscreen-mode');
+
+  const studyView = document.getElementById('flashcard-study-view');
+  if (studyView) {
+    studyView.classList.add('fullscreen-flashcard-active');
+  }
+
+  const radicalView = document.getElementById('radical-study-workspace') || document.getElementById('radicals-flashcard-view');
+  if (radicalView) {
+    radicalView.classList.add('fullscreen-flashcard-active');
+  }
+
+  // Request browser native fullscreen for complete viewport immersion
+  const docEl = document.documentElement;
+  try {
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+      if (docEl.requestFullscreen) {
+        docEl.requestFullscreen().catch(() => {});
+      } else if (docEl.webkitRequestFullscreen) {
+        docEl.webkitRequestFullscreen();
+      } else if (docEl.msRequestFullscreen) {
+        docEl.msRequestFullscreen();
+      }
+    }
+  } catch (e) {
+    console.warn('Native fullscreen request ignored:', e);
+  }
 
   updateFlashcardFullscreenButtons();
-  showToast('Đã mở toàn màn hình Flashcard (Nhấn nút hoặc Esc để thu nhỏ) ⛶');
+  showToast('Đã mở toàn màn hình (Bấm nút, phím F hoặc Esc để thu nhỏ) ⛶');
 };
 
 window.exitFlashcardFullscreen = function(callDocExit = true) {
-  const studyView = document.getElementById('flashcard-study-view');
   isFlashcardFullscreen = false;
-  document.body.classList.remove('flashcard-fullscreen-mode');
+  document.body.classList.remove('flashcard-fullscreen-mode', 'app-fullscreen-mode');
+
+  const studyView = document.getElementById('flashcard-study-view');
   if (studyView) {
     studyView.classList.remove('fullscreen-flashcard-active');
   }
+
+  const radicalView = document.getElementById('radical-study-workspace') || document.getElementById('radicals-flashcard-view');
+  if (radicalView) {
+    radicalView.classList.remove('fullscreen-flashcard-active');
+  }
+
+  if (callDocExit) {
+    const isDocFs = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+    if (isDocFs) {
+      try {
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+      } catch (e) {
+        console.warn('Native exit fullscreen ignored:', e);
+      }
+    }
+  }
+
   updateFlashcardFullscreenButtons();
 };
 
 function updateFlashcardFullscreenButtons() {
+  const isDocFs = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+  const activeState = isFlashcardFullscreen || isDocFs;
+
   const allFullscreenBtns = document.querySelectorAll('.fc-fullscreen-toggle-btn, .fc-circle-btn, .card-fullscreen-quick-btn, #floating-fullscreen-btn, #radical-top-fullscreen-btn, #radical-fullscreen-toggle-btn');
   allFullscreenBtns.forEach(btn => {
-    btn.classList.toggle('active-fullscreen', isFlashcardFullscreen);
+    btn.classList.toggle('active-fullscreen', activeState);
     const label = btn.querySelector('.fs-btn-label');
     if (label) {
-      label.textContent = isFlashcardFullscreen ? 'Thu Nhỏ' : 'Toàn Màn Hình';
+      label.textContent = activeState ? 'Thu Nhỏ' : 'Toàn Màn Hình';
     }
     const icon = btn.querySelector('i');
     if (icon) {
-      icon.className = `fa-solid ${isFlashcardFullscreen ? 'fa-compress' : 'fa-expand'}`;
+      icon.className = `fa-solid ${activeState ? 'fa-compress' : 'fa-expand'}`;
     }
-    btn.title = isFlashcardFullscreen ? 'Thu nhỏ (Nhấn lại hoặc Esc)' : 'Phóng to toàn màn hình (Phím F)';
+    btn.title = activeState ? 'Thu nhỏ toàn màn hình (Phím Esc)' : 'Phóng to toàn màn hình (Phím F)';
   });
 }
 
-// Global event delegation — works even after innerHTML re-renders
-(function setupFullscreenDelegation() {
-  // Touch end for buttons (fires before click, prevents double-fire)
-  document.addEventListener('touchend', (e) => {
-    const btn = e.target.closest('.fc-circle-btn, .fc-fullscreen-toggle-btn, .card-fullscreen-quick-btn, #floating-fullscreen-btn, #radical-top-fullscreen-btn, #radical-fullscreen-toggle-btn');
-    if (btn) {
-      e.preventDefault();
-      window.toggleFlashcardFullscreen();
-    }
-  }, { passive: false });
+// fullscreenchange listeners được xử lý bởi screen_drawing.js universal handler
 
-  // Keyboard: F to toggle, ESC to exit
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && isFlashcardFullscreen) {
-      e.preventDefault();
-      window.exitFlashcardFullscreen(false);
-    }
-    if ((e.key === 'f' || e.key === 'F') && !e.ctrlKey && !e.metaKey) {
-      const active = document.activeElement;
-      const tag = active ? active.tagName.toLowerCase() : '';
-      if (tag !== 'input' && tag !== 'textarea' && !active.isContentEditable) {
-        window.toggleFlashcardFullscreen();
-      }
-    }
-  });
-})();
+// Event delegation và keydown được xử lý duy nhất bởi screen_drawing.js (universal handler)
+// để tránh double-fire khi cả hai file cùng lắng nghe
+
+// Đồng bộ: screen_drawing.js sẽ gọi window.toggleAppFullscreen().
+// Chúng ta redirect nó về hàm canonical của main.js để dùng chung 1 state duy nhất.
+window.toggleAppFullscreen = window.toggleFlashcardFullscreen;
+window.enterAppFullscreen = window.enterFlashcardFullscreen;
+window.exitAppFullscreen = window.exitFlashcardFullscreen;
+
 
 window.returnToLessonsMap = function() {
   if (isFlashcardFullscreen) {
