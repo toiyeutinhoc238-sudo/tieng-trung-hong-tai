@@ -1,7 +1,9 @@
 // HSK Vocabulary Flashcard - Main Frontend Controller
 import { HSK1_STRUCTURED_GRAMMAR } from '../grammar_hsk1.js';
+import { HSK2_STRUCTURED_GRAMMAR } from '../grammar_hsk2.js';
 if (typeof window !== 'undefined') {
   window.HSK1_STRUCTURED_GRAMMAR = HSK1_STRUCTURED_GRAMMAR;
+  window.HSK2_STRUCTURED_GRAMMAR = HSK2_STRUCTURED_GRAMMAR;
 }
 let radicalsData = { radicals: [], comparisons: [] };
 async function loadRadicalsData() {
@@ -6801,7 +6803,9 @@ window.openLessonDetailModal = function (lessonKey) {
 
   // Render grammar preview in lesson detail modal
   const numKey = parseInt(String(lessonKey).replace(/\D/g, ''), 10) || 1;
-  const grammarLesson = (String(currentLvl) === '1' && (activeHskVersion === '3.0' || !activeHskVersion)) ? (HSK1_STRUCTURED_GRAMMAR || []).find(l => l.lessonId === numKey) : null;
+  const currentLvlStr = String(currentLvl);
+  const grammarList = currentLvlStr === '2' ? (HSK2_STRUCTURED_GRAMMAR || []) : (HSK1_STRUCTURED_GRAMMAR || []);
+  const grammarLesson = ((currentLvlStr === '1' || currentLvlStr === '2') && (activeHskVersion === '3.0' || !activeHskVersion)) ? grammarList.find(l => l.lessonId === numKey) : null;
   const grammarPreviewBox = document.getElementById('modal-lesson-grammar-preview-box');
   const grammarPreviewList = document.getElementById('modal-lesson-grammar-preview-list');
   const grammarPreviewTitle = document.getElementById('modal-lesson-grammar-preview-title');
@@ -8229,21 +8233,23 @@ window.openLessonGrammarModal = function(lessonKey) {
   const numKey = parseInt(String(lessonKey).replace(/\D/g, ''), 10) || 1;
   const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : (activeLessonsLevel || 1);
   const currentVer = activeLessonsCurriculum === 'yct' ? 'yct' : (activeHskVersion || activeRoadmapVersion || '3.0');
+  const lvlStr = String(currentLvl);
 
-  // If not HSK 1 or no data ready yet
-  if (String(currentLvl) !== '1' || currentVer === 'yct' || currentVer === '2.0') {
+  // If not HSK 1 or HSK 2 or no data ready yet
+  if ((lvlStr !== '1' && lvlStr !== '2') || currentVer === 'yct' || currentVer === '2.0') {
     showComingSoonNotice(`Ngữ Pháp HSK ${currentLvl}`);
     return;
   }
 
-  const lessonData = (HSK1_STRUCTURED_GRAMMAR || []).find(l => l.lessonId === numKey);
+  const grammarList = lvlStr === '2' ? (HSK2_STRUCTURED_GRAMMAR || []) : (HSK1_STRUCTURED_GRAMMAR || []);
+  const lessonData = grammarList.find(l => l.lessonId === numKey);
   if (!lessonData || !lessonData.grammarPoints || lessonData.grammarPoints.length === 0) {
     showToast(`Dữ liệu ngữ pháp Bài ${numKey} đang được cập nhật!`);
     return;
   }
 
   if (!modalEl) {
-    window.location.href = `/hsk-grammar.html?level=1&lesson=${numKey}`;
+    window.location.href = `/hsk-grammar.html?level=${lvlStr}&lesson=${numKey}`;
     return;
   }
 
@@ -8255,7 +8261,7 @@ window.openLessonGrammarModal = function(lessonKey) {
   const stepperContainer = document.getElementById('grammar-modal-stepper-container');
 
   if (titleEl) titleEl.textContent = `Bài ${lessonData.lessonId}: ${lessonData.lessonTitleZh || ''}`;
-  if (badgeEl) badgeEl.textContent = `HSK 1 (3.0)`;
+  if (badgeEl) badgeEl.textContent = `HSK ${lvlStr} (3.0)`;
   if (countBadgeEl) countBadgeEl.textContent = `${lessonData.grammarPoints.length} Điểm Ngữ Pháp`;
 
   if (stepperContainer) {
@@ -8404,7 +8410,7 @@ window.openLessonGrammarModal = function(lessonKey) {
   }
 
   if (btnNext) {
-    if (numKey < (HSK1_STRUCTURED_GRAMMAR || []).length) {
+    if (numKey < grammarList.length) {
       btnNext.style.display = 'inline-flex';
       btnNext.onclick = () => window.openLessonGrammarModal(numKey + 1);
     } else {
@@ -8414,7 +8420,7 @@ window.openLessonGrammarModal = function(lessonKey) {
 
   if (btnSoTay) {
     btnSoTay.onclick = () => {
-      window.location.href = `/hsk-grammar.html?level=1&lesson=${numKey}`;
+      window.location.href = `/hsk-grammar.html?level=${lvlStr}&lesson=${numKey}`;
     };
   }
 

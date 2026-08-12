@@ -861,7 +861,7 @@
         <i class="fa-solid fa-seedling"></i> HSK 1 (3.0 Mới)
       </button>
       <button class="level-tab-btn" onclick="switchLevel('hsk2')">
-        <i class="fa-solid fa-graduation-cap"></i> HSK 2 <small style="background: rgba(245,158,11,0.25); color: #fbbf24; border: 1px solid rgba(245,158,11,0.4); padding: 1px 6px; border-radius: 99px; font-size: 0.68rem; margin-left: 4px;">🔒 Sắp ra mắt</small>
+        <i class="fa-solid fa-graduation-cap"></i> HSK 2 (3.0 Mới)
       </button>
       <button class="level-tab-btn" onclick="switchLevel('hsk3')">
         <i class="fa-solid fa-book-bookmark"></i> HSK 3 <small style="background: rgba(245,158,11,0.25); color: #fbbf24; border: 1px solid rgba(245,158,11,0.4); padding: 1px 6px; border-radius: 99px; font-size: 0.68rem; margin-left: 4px;">🔒 Sắp ra mắt</small>
@@ -881,7 +881,7 @@
     <div class="toolbar-bar">
       <div class="search-box-wrapper">
         <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="search-input" class="search-input-field" placeholder="Tìm kiếm điểm ngữ pháp, cấu trúc, từ khóa (vd: 是, 有, 吗, 呢, 会, 时间, 方位词)..." oninput="handleSearch()">
+        <input type="text" id="search-input" class="search-input-field" placeholder="Tìm kiếm điểm ngữ pháp, cấu trúc, từ khóa (vd: 是, 有, 吗, 呢, 会, 吧, 比, 离, 着, 就要, 方向补语)..." oninput="handleSearch()">
       </div>
 
       <div class="quick-tools-group">
@@ -910,9 +910,11 @@
   <script type="module">
     import { FULL_STRUCTURED_GRAMMAR } from './grammar_structured.js';
     import { HSK1_STRUCTURED_GRAMMAR } from './grammar_hsk1.js';
+    import { HSK2_STRUCTURED_GRAMMAR } from './grammar_hsk2.js';
 
     window.FULL_STRUCTURED_GRAMMAR = FULL_STRUCTURED_GRAMMAR;
     window.HSK1_STRUCTURED_GRAMMAR = HSK1_STRUCTURED_GRAMMAR;
+    window.HSK2_STRUCTURED_GRAMMAR = HSK2_STRUCTURED_GRAMMAR;
 
     let currentActiveLevel = 'hsk1';
     let searchQuery = '';
@@ -1034,8 +1036,8 @@
       const mainBox = document.getElementById('grammar-main-content');
       if (!mainBox) return;
 
-      if (currentActiveLevel === 'hsk1') {
-        renderHsk1Structured(mainBox);
+      if (currentActiveLevel === 'hsk1' || currentActiveLevel === 'hsk2') {
+        renderStructuredLevel(mainBox, currentActiveLevel);
       } else {
         const lvlNum = currentActiveLevel.replace('hsk', '').toUpperCase();
         mainBox.innerHTML = `
@@ -1047,18 +1049,24 @@
             <p style="color: #94a3b8; font-size: 1rem; line-height: 1.6; margin-bottom: 28px;">
               Nội dung Sổ tay Ngữ Pháp chi tiết theo từng bài học cho cấp độ HSK ${lvlNum} đang được đội ngũ giáo viên Tiếng Trung HongTai biên soạn chuẩn hóa và kiểm duyệt kỹ lưỡng.
             </p>
-            <button class="btn-action" onclick="switchLevel('hsk1')" style="background: linear-gradient(135deg, #0284c7, #2563eb); color: #ffffff; border: none; padding: 14px 32px; border-radius: 14px; font-weight: 800; font-size: 1rem; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(37,99,235,0.4);">
-              <i class="fa-solid fa-book-open"></i> Học Trọn Bộ Ngữ Pháp HSK 1 (15 Bài)
-            </button>
+            <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+              <button class="btn-action" onclick="switchLevel('hsk1')" style="background: linear-gradient(135deg, #0284c7, #2563eb); color: #ffffff; border: none; padding: 14px 28px; border-radius: 14px; font-weight: 800; font-size: 1rem; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(37,99,235,0.4);">
+                <i class="fa-solid fa-seedling"></i> Học Ngữ Pháp HSK 1 (15 Bài)
+              </button>
+              <button class="btn-action" onclick="switchLevel('hsk2')" style="background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; border: none; padding: 14px 28px; border-radius: 14px; font-weight: 800; font-size: 1rem; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(16,185,129,0.4);">
+                <i class="fa-solid fa-graduation-cap"></i> Học Ngữ Pháp HSK 2 (15 Bài)
+              </button>
+            </div>
           </div>
         `;
       }
     }
 
-    function renderHsk1Structured(container) {
-      const lessons = window.HSK1_STRUCTURED_GRAMMAR || [];
+    function renderStructuredLevel(container, lvlKey) {
+      const lessons = lvlKey === 'hsk2' ? (window.HSK2_STRUCTURED_GRAMMAR || []) : (window.HSK1_STRUCTURED_GRAMMAR || []);
+      const lvlNum = lvlKey.replace('hsk', '').toUpperCase();
       if (lessons.length === 0) {
-        container.innerHTML = `<div style="text-align:center; padding:40px; color:#94a3b8;">Dữ liệu Ngữ Pháp HSK 1 đang được cập nhật...</div>`;
+        container.innerHTML = `<div style="text-align:center; padding:40px; color:#94a3b8;">Dữ liệu Ngữ Pháp HSK ${lvlNum} đang được cập nhật...</div>`;
         return;
       }
 
