@@ -7639,22 +7639,8 @@ window.enterFlashcardFullscreen = function() {
   document.body.classList.add('flashcard-fullscreen-mode');
   studyView.classList.add('fullscreen-flashcard-active');
 
-  // Request browser native fullscreen if available
-  const docEl = studyView || document.documentElement;
-  try {
-    if (docEl.requestFullscreen) {
-      docEl.requestFullscreen().catch(() => {});
-    } else if (docEl.webkitRequestFullscreen) {
-      docEl.webkitRequestFullscreen();
-    } else if (docEl.msRequestFullscreen) {
-      docEl.msRequestFullscreen();
-    }
-  } catch (e) {
-    console.warn('Native fullscreen request ignored:', e);
-  }
-
   updateFlashcardFullscreenButtons();
-  showToast('Đã mở toàn màn hình Flashcard (Nhấn F hoặc Esc để thu nhỏ) ⛶');
+  showToast('Đã mở toàn màn hình Flashcard (Nhấn nút hoặc Esc để thu nhỏ) ⛶');
 };
 
 window.exitFlashcardFullscreen = function(callDocExit = true) {
@@ -7664,24 +7650,6 @@ window.exitFlashcardFullscreen = function(callDocExit = true) {
   if (studyView) {
     studyView.classList.remove('fullscreen-flashcard-active');
   }
-
-  if (callDocExit) {
-    const isDocFs = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
-    if (isDocFs) {
-      try {
-        if (document.exitFullscreen) {
-          document.exitFullscreen().catch(() => {});
-        } else if (document.webkitExitFullscreen) {
-          document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) {
-          document.msExitFullscreen();
-        }
-      } catch (e) {
-        console.warn('Native exit fullscreen ignored:', e);
-      }
-    }
-  }
-
   updateFlashcardFullscreenButtons();
 };
 
@@ -7697,22 +7665,36 @@ function updateFlashcardFullscreenButtons() {
     if (icon) {
       icon.className = `fa-solid ${isFlashcardFullscreen ? 'fa-compress' : 'fa-expand'}`;
     }
-    btn.title = isFlashcardFullscreen ? 'Thu nhỏ (Phím F hoặc Esc)' : 'Phóng to toàn màn hình (Phím F)';
+    btn.title = isFlashcardFullscreen ? 'Thu nhỏ (Nhấn lại hoặc Esc)' : 'Phóng to toàn màn hình (Phím F)';
   });
 }
 
-// Sync with native fullscreen changes (e.g. user presses ESC in browser)
-document.addEventListener('fullscreenchange', handleNativeFullscreenChange);
-document.addEventListener('webkitfullscreenchange', handleNativeFullscreenChange);
-document.addEventListener('mozfullscreenchange', handleNativeFullscreenChange);
-document.addEventListener('MSFullscreenChange', handleNativeFullscreenChange);
+// Global event delegation — works even after innerHTML re-renders
+(function setupFullscreenDelegation() {
+  // Touch end for buttons (fires before click, prevents double-fire)
+  document.addEventListener('touchend', (e) => {
+    const btn = e.target.closest('.fc-circle-btn, .fc-fullscreen-toggle-btn, .card-fullscreen-quick-btn, #floating-fullscreen-btn, #radical-top-fullscreen-btn, #radical-fullscreen-toggle-btn');
+    if (btn) {
+      e.preventDefault();
+      window.toggleFlashcardFullscreen();
+    }
+  }, { passive: false });
 
-function handleNativeFullscreenChange() {
-  const isDocFs = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
-  if (!isDocFs && isFlashcardFullscreen) {
-    window.exitFlashcardFullscreen(false);
-  }
-}
+  // Keyboard: F to toggle, ESC to exit
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isFlashcardFullscreen) {
+      e.preventDefault();
+      window.exitFlashcardFullscreen(false);
+    }
+    if ((e.key === 'f' || e.key === 'F') && !e.ctrlKey && !e.metaKey) {
+      const active = document.activeElement;
+      const tag = active ? active.tagName.toLowerCase() : '';
+      if (tag !== 'input' && tag !== 'textarea' && !active.isContentEditable) {
+        window.toggleFlashcardFullscreen();
+      }
+    }
+  });
+})();
 
 window.returnToLessonsMap = function() {
   if (isFlashcardFullscreen) {

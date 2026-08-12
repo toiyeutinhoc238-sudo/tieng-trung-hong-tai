@@ -8114,6 +8114,12 @@ html.light .stepper-tab-btn:hover {
   flex-shrink: 0;
   text-decoration: none;
   padding: 0 !important;
+  /* Touch & pointer compatibility */
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent !important;
+  position: relative;
+  z-index: 9999;
+  user-select: none;
 }
 
 .fc-circle-btn:hover,

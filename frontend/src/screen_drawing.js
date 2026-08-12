@@ -215,14 +215,28 @@ class ScreenDrawingTool {
   }
 
   bindEvents() {
-    // Bubble Click — fires only when pointer didn't move enough to be a drag
+    let _wasDragged = false;
+
+    // Bubble Click — fires on mouse click (desktop), skips if was dragged
     this.bubble.addEventListener('click', (e) => {
+      if (_wasDragged) { _wasDragged = false; return; }
       e.stopPropagation();
       this.toggle();
     });
 
-    // Make Bubble Draggable (with 8px threshold — click still works)
-    this.makeDraggable(this.bubble, this.bubble);
+    // Bubble touchend — immediate response on mobile/tablet (no 300ms delay)
+    this.bubble.addEventListener('touchend', (e) => {
+      if (_wasDragged) { _wasDragged = false; return; }
+      e.preventDefault(); // prevent ghost click after touchend
+      e.stopPropagation();
+      this.toggle();
+    }, { passive: false });
+
+    // Make Bubble Draggable (with 8px threshold — sets _wasDragged when drag occurs)
+    this.makeDraggable(this.bubble, this.bubble,
+      () => { _wasDragged = false; },
+      () => { _wasDragged = true; }
+    );
 
     // Make Toolbar Draggable
     const handle = this.toolbar.querySelector('.dt-drag-handle');
