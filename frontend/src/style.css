@@ -8087,5 +8087,282 @@ html.light .stepper-tab-btn:hover {
   box-shadow: 0 4px 16px rgba(245, 158, 11, 0.45) !important;
 }
 
+/* ==========================================================================
+   FULLSCREEN FLASHCARD CIRCLE BUTTON & VIEWPORT MODE
+   (Thiết kế đồng bộ như nút Chuyển nền mặt trăng & Bông tuyết mùa)
+   ========================================================================== */
+
+/* Circular Fullscreen Buttons (Giống hệt nút đổi theme/tuyết) */
+.fc-circle-btn,
+.card-fullscreen-quick-btn,
+.top-fullscreen-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50% !important;
+  background: rgba(15, 23, 42, 0.8) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 2px solid rgba(255, 255, 255, 0.22) !important;
+  color: #38bdf8 !important;
+  font-size: 1.25rem !important;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  flex-shrink: 0;
+  text-decoration: none;
+  padding: 0 !important;
+}
+
+.fc-circle-btn:hover,
+.card-fullscreen-quick-btn:hover,
+.top-fullscreen-btn:hover {
+  transform: scale(1.15) !important;
+  border-color: #38bdf8 !important;
+  background: linear-gradient(135deg, #0284c7, #2563eb) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.5) !important;
+}
+
+.fc-circle-btn.active-fullscreen,
+.card-fullscreen-quick-btn.active-fullscreen,
+.top-fullscreen-btn.active-fullscreen {
+  background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+  border-color: #fbbf24 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 24px rgba(245, 158, 11, 0.55) !important;
+}
+
+/* Light mode support for circle buttons */
+html.light-mode .fc-circle-btn,
+html.light-mode .card-fullscreen-quick-btn,
+html.light-mode .top-fullscreen-btn,
+body.light-mode .fc-circle-btn,
+body.light-mode .card-fullscreen-quick-btn,
+body.light-mode .top-fullscreen-btn {
+  background: #ffffff !important;
+  border: 2px solid #cbd5e1 !important;
+  color: #0284c7 !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1) !important;
+}
+
+html.light-mode .fc-circle-btn:hover,
+html.light-mode .card-fullscreen-quick-btn:hover,
+html.light-mode .top-fullscreen-btn:hover,
+body.light-mode .fc-circle-btn:hover,
+body.light-mode .card-fullscreen-quick-btn:hover,
+body.light-mode .top-fullscreen-btn:hover {
+  background: linear-gradient(135deg, #0284c7, #2563eb) !important;
+  color: #ffffff !important;
+  border-color: #0284c7 !important;
+}
+
+/* Fullscreen Pill Button with Icon + Label */
+.fc-fullscreen-toggle-btn {
+  height: 42px;
+  border-radius: 50px !important;
+  background: rgba(15, 23, 42, 0.8) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 2px solid rgba(56, 189, 248, 0.35) !important;
+  color: #38bdf8 !important;
+  font-size: 0.92rem !important;
+  font-weight: 800 !important;
+  padding: 0 16px !important;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  white-space: nowrap;
+}
+
+.fc-fullscreen-toggle-btn:hover {
+  transform: scale(1.08) translateY(-1px) !important;
+  background: linear-gradient(135deg, #0284c7, #2563eb) !important;
+  color: #ffffff !important;
+  border-color: #38bdf8 !important;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.45) !important;
+}
+
+.fc-fullscreen-toggle-btn.active-fullscreen {
+  background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+  border-color: #fbbf24 !important;
+  color: #ffffff !important;
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.45) !important;
+}
+
+html.light-mode .fc-fullscreen-toggle-btn,
+body.light-mode .fc-fullscreen-toggle-btn {
+  background: #ffffff !important;
+  border: 2px solid #cbd5e1 !important;
+  color: #0284c7 !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-mode .fc-fullscreen-toggle-btn:hover,
+body.light-mode .fc-fullscreen-toggle-btn:hover {
+  background: linear-gradient(135deg, #0284c7, #2563eb) !important;
+  color: #ffffff !important;
+  border-color: #0284c7 !important;
+}
+
+/* Fullscreen Root Container & Viewport Overlay */
+body.flashcard-fullscreen-mode {
+  overflow: hidden !important;
+}
+
+#flashcard-study-view.fullscreen-flashcard-active,
+#radicals-flashcard-view.fullscreen-flashcard-active {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 999999 !important;
+  background: linear-gradient(135deg, #090d16 0%, #0f172a 45%, #1e1b4b 100%) !important;
+  padding: 16px 24px 32px 24px !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  overflow-y: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  animation: fullscreenFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+html.light-mode #flashcard-study-view.fullscreen-flashcard-active,
+body.light-mode #flashcard-study-view.fullscreen-flashcard-active,
+html.light-mode #radicals-flashcard-view.fullscreen-flashcard-active,
+body.light-mode #radicals-flashcard-view.fullscreen-flashcard-active {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 45%, #dbeafe 100%) !important;
+}
+
+@keyframes fullscreenFadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Fullscreen Stepper Bar & Header */
+#flashcard-study-view.fullscreen-flashcard-active .lesson-stepper-hub-bar,
+#radicals-flashcard-view.fullscreen-flashcard-active .radical-flashcard-header {
+  width: 100%;
+  max-width: 1200px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
+  border-radius: 18px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55);
+  margin-bottom: 20px;
+}
+
+html.light-mode #flashcard-study-view.fullscreen-flashcard-active .lesson-stepper-hub-bar {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(203, 213, 225, 0.9) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Fullscreen Hero Stage (Centered & Spacious) */
+#flashcard-study-view.fullscreen-flashcard-active .hero-stage-wrapper,
+#radicals-flashcard-view.fullscreen-flashcard-active .hero-stage-wrapper {
+  width: 100%;
+  max-width: 1250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin: 8px 0 28px 0;
+  flex: 1;
+}
+
+/* Fullscreen Hero Flashcard Card */
+#flashcard-study-view.fullscreen-flashcard-active .hero-flashcard-card,
+#radicals-flashcard-view.fullscreen-flashcard-active .hero-flashcard-card {
+  max-width: 1050px;
+  width: 100%;
+  padding: 34px 44px;
+  border-radius: 28px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(36px) saturate(190%);
+  -webkit-backdrop-filter: blur(36px) saturate(190%);
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+html.light-mode #flashcard-study-view.fullscreen-flashcard-active .hero-flashcard-card,
+html.light-mode #radicals-flashcard-view.fullscreen-flashcard-active .hero-flashcard-card {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Fullscreen Navigation Stage Arrow Buttons */
+#flashcard-study-view.fullscreen-flashcard-active .stage-arrow-btn,
+#radicals-flashcard-view.fullscreen-flashcard-active .stage-arrow-btn {
+  width: 58px;
+  height: 58px;
+  font-size: 1.45rem;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+#flashcard-study-view.fullscreen-flashcard-active .stage-arrow-btn:hover,
+#radicals-flashcard-view.fullscreen-flashcard-active .stage-arrow-btn:hover {
+  background: #2563eb !important;
+  border-color: #3b82f6 !important;
+  transform: scale(1.12);
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.5) !important;
+}
+
+/* Fullscreen Bottom Mini-Cards List */
+#flashcard-study-view.fullscreen-flashcard-active .bottom-list-card,
+#radicals-flashcard-view.fullscreen-flashcard-active .bottom-list-card {
+  width: 100%;
+  max-width: 1200px;
+  margin-bottom: 20px;
+}
+
+/* Responsive Fullscreen on Mobile / Tablet */
+@media (max-width: 768px) {
+  #flashcard-study-view.fullscreen-flashcard-active,
+  #radicals-flashcard-view.fullscreen-flashcard-active {
+    padding: 12px 10px 24px 10px !important;
+  }
+
+  #flashcard-study-view.fullscreen-flashcard-active .hero-flashcard-card,
+  #radicals-flashcard-view.fullscreen-flashcard-active .hero-flashcard-card {
+    padding: 20px 16px !important;
+    border-radius: 20px !important;
+  }
+
+  #flashcard-study-view.fullscreen-flashcard-active .hero-stage-wrapper {
+    gap: 8px;
+  }
+
+  #flashcard-study-view.fullscreen-flashcard-active .stage-arrow-btn {
+    width: 42px;
+    height: 42px;
+    font-size: 1.15rem;
+  }
+}
+
+
 
 

@@ -7416,11 +7416,10 @@ function renderLessonStepperNav(currentStep, lessonId, lessonTitle) {
         </button>
       </div>
 
-      <!-- Fullscreen Action Button -->
+      <!-- Fullscreen Action Button (Circular glass button matching theme/snowflake buttons) -->
       <div style="display: flex; align-items: center; gap: 8px;">
-        <button id="fc-fullscreen-toggle-btn" class="fc-fullscreen-toggle-btn ${isFlashcardFullscreen ? 'active-fullscreen' : ''}" onclick="window.toggleFlashcardFullscreen()" title="${isFlashcardFullscreen ? 'Thu nhỏ (Phím F hoặc Esc)' : 'Phóng to toàn màn hình (Phím F)'}">
+        <button id="fc-fullscreen-toggle-btn" class="fc-circle-btn ${isFlashcardFullscreen ? 'active-fullscreen' : ''}" onclick="window.toggleFlashcardFullscreen()" title="${isFlashcardFullscreen ? 'Thu nhỏ (Phím F hoặc Esc)' : 'Phóng to toàn màn hình (Phím F)'}">
           <i class="fa-solid ${isFlashcardFullscreen ? 'fa-compress' : 'fa-expand'}"></i>
-          <span class="fs-btn-label">${isFlashcardFullscreen ? 'Thu Nhỏ' : 'Toàn Màn Hình'}</span>
         </button>
       </div>
     </div>
@@ -7616,8 +7615,8 @@ window.exitFlashcardFullscreen = function(callDocExit = true) {
 };
 
 function updateFlashcardFullscreenButtons() {
-  const toggleBtns = document.querySelectorAll('.fc-fullscreen-toggle-btn');
-  toggleBtns.forEach(btn => {
+  const allFullscreenBtns = document.querySelectorAll('.fc-fullscreen-toggle-btn, .fc-circle-btn, .card-fullscreen-quick-btn, #floating-fullscreen-btn, #radical-top-fullscreen-btn, #radical-fullscreen-toggle-btn');
+  allFullscreenBtns.forEach(btn => {
     btn.classList.toggle('active-fullscreen', isFlashcardFullscreen);
     const label = btn.querySelector('.fs-btn-label');
     if (label) {
@@ -7628,15 +7627,6 @@ function updateFlashcardFullscreenButtons() {
       icon.className = `fa-solid ${isFlashcardFullscreen ? 'fa-compress' : 'fa-expand'}`;
     }
     btn.title = isFlashcardFullscreen ? 'Thu nhỏ (Phím F hoặc Esc)' : 'Phóng to toàn màn hình (Phím F)';
-  });
-
-  const quickBtns = document.querySelectorAll('.card-fullscreen-quick-btn');
-  quickBtns.forEach(btn => {
-    const icon = btn.querySelector('i');
-    if (icon) {
-      icon.className = `fa-solid ${isFlashcardFullscreen ? 'fa-compress' : 'fa-expand'}`;
-    }
-    btn.title = isFlashcardFullscreen ? 'Thu nhỏ (Esc)' : 'Toàn màn hình (F)';
   });
 }
 
