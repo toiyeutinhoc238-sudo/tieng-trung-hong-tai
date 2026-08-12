@@ -12,19 +12,19 @@
           {
             "speaker": "大卫",
             "zh": "请站在这儿。",
-            "pinyin": "zhàn",
+            "pinyin": "qǐng zhàn zài zhè ér 。",
             "vi": "Xin hãy đứng ở đây."
           },
           {
             "speaker": "李明",
             "zh": "我要去北京站。",
-            "pinyin": "zhàn",
+            "pinyin": "wǒ yào qù běi jīng zhàn 。",
             "vi": "Tôi muốn đi đến Ga Bắc Kinh."
           },
           {
             "speaker": "王老师",
             "zh": "我家在学校和公司中间。",
-            "pinyin": "zhōngjiān",
+            "pinyin": "wǒ jiā zài xué xiào hé gōng sī zhōng jiān 。",
             "vi": "Nhà tôi nằm giữa trường học và công ty."
           }
         ],
@@ -36,9 +36,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"站\" mang nghĩa là gì?",
               "options": [
-                "Quan trọng",
-                "Ở giữa, trung gian",
-                "Đứng"
+                "Mang, đeo",
+                "Đứng",
+                "Miền đông"
               ],
               "answer": "Đứng"
             },
@@ -46,9 +46,9 @@
               "id": 2,
               "question": "(2) Câu \"请站在这儿。\" được dịch đúng là:",
               "options": [
+                "Tôi đã nhận được một món quà.",
                 "Xin hãy đứng ở đây.",
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Ngày mai trời sẽ mưa to."
+                "Đây là một dịp quan trọng."
               ],
               "answer": "Xin hãy đứng ở đây."
             }
@@ -64,19 +64,19 @@
           {
             "speaker": "大卫",
             "zh": "学习汉语对我来说很重要。",
-            "pinyin": "zhòngyào",
+            "pinyin": "xué xí hàn yǔ duì wǒ lái shuō hěn zhòng yào 。",
             "vi": "Học tiếng Trung rất quan trọng đối với tôi."
           },
           {
             "speaker": "李明",
             "zh": "我需要你的(tô đỏ帮助)。",
-            "pinyin": "bāngzhù",
+            "pinyin": "wǒ xū yào nǐ de (tô đỏ bāng zhù )。",
             "vi": "Tôi cần sự giúp đỡ của bạn"
           },
           {
             "speaker": "王老师",
             "zh": "这条裤子很长。",
-            "pinyin": "cháng",
+            "pinyin": "zhè tiáo kù zǐ hěn cháng 。",
             "vi": "Cái quần này rất dài."
           }
         ],
@@ -88,9 +88,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"重要\" mang nghĩa là gì?",
               "options": [
-                "Đứng",
                 "Quan trọng",
-                "Trạm, ga"
+                "Con bò",
+                "Tăng cường"
               ],
               "answer": "Quan trọng"
             },
@@ -98,9 +98,9 @@
               "id": 2,
               "question": "(2) Câu \"学习汉语对我来说很重要。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
+                "Điện thoại của tôi hỏng rồi, cần phải sửa.",
                 "Học tiếng Trung rất quan trọng đối với tôi.",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Chúng ta đi dạo công viên nhé."
               ],
               "answer": "Học tiếng Trung rất quan trọng đối với tôi."
             }
@@ -116,19 +116,19 @@
           {
             "speaker": "大卫",
             "zh": "请记得带雨伞。",
-            "pinyin": "dài",
+            "pinyin": "qǐng jì de dài yǔ sǎn 。",
             "vi": "Xin nhớ mang theo ô."
           },
           {
             "speaker": "李明",
             "zh": "这条裤子太短了。",
-            "pinyin": "duǎn",
+            "pinyin": "zhè tiáo kù zǐ tài duǎn le 。",
             "vi": "Chiếc quần này quá ngắn."
           },
           {
             "speaker": "王老师",
             "zh": "我发现了一个很美的地方。",
-            "pinyin": "fāxiàn",
+            "pinyin": "wǒ fā xiàn le yí gè hěn měi de dì fāng 。",
             "vi": "Tôi phát hiện anh ấy không có ở nhà."
           }
         ],
@@ -141,8 +141,8 @@
               "question": "(1) Trong bài khóa, từ \"带\" mang nghĩa là gì?",
               "options": [
                 "Mang, đem theo",
-                "Đứng",
-                "Trạm, ga"
+                "Vui vẻ",
+                "Dám"
               ],
               "answer": "Mang, đem theo"
             },
@@ -151,8 +151,8 @@
               "question": "(2) Câu \"请记得带雨伞。\" được dịch đúng là:",
               "options": [
                 "Xin nhớ mang theo ô.",
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Ngày mai trời sẽ mưa to."
+                "Môi trường xung quanh rất yên tĩnh.",
+                "Tôi có cuộc họp lúc 3 giờ chiều."
               ],
               "answer": "Xin nhớ mang theo ô."
             }
@@ -168,19 +168,19 @@
           {
             "speaker": "大卫",
             "zh": "你今天好像很高兴。",
-            "pinyin": "hǎoxiàng",
+            "pinyin": "nǐ jīn tiān hǎo xiàng hěn gāo xìng 。",
             "vi": "Hôm nay bạn có vẻ rất vui."
           },
           {
             "speaker": "李明",
             "zh": "我要去办护照。",
-            "pinyin": "hùzhào",
+            "pinyin": "wǒ yào qù bàn hù zhào 。",
             "vi": "Tôi phải đi làm hộ chiếu."
           },
           {
             "speaker": "王老师",
             "zh": "我去机场接你。",
-            "pinyin": "jiē",
+            "pinyin": "wǒ qù jī chǎng jiē nǐ 。",
             "vi": "Tôi ra sân bay đón bạn."
           }
         ],
@@ -192,9 +192,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"好像\" mang nghĩa là gì?",
               "options": [
-                "Đứng",
-                "Hình như, dường như",
-                "Trạm, ga"
+                "Trả lời",
+                "Trả lại",
+                "Hình như, dường như"
               ],
               "answer": "Hình như, dường như"
             },
@@ -202,9 +202,9 @@
               "id": 2,
               "question": "(2) Câu \"你今天好像很高兴。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Hôm nay bạn có vẻ rất vui."
+                "Tôi sẽ luôn luôn ủng hộ quyết định của bạn.",
+                "Hôm nay bạn có vẻ rất vui.",
+                "Kế hoạch của chúng tôi đã hoàn thành."
               ],
               "answer": "Hôm nay bạn có vẻ rất vui."
             }
@@ -226,19 +226,19 @@
           {
             "speaker": "大卫",
             "zh": "你不用担心。",
-            "pinyin": "búyòng",
+            "pinyin": "nǐ bú yòng dān xīn 。",
             "vi": "Bạn không cần phải lo lắng."
           },
           {
             "speaker": "李明",
             "zh": "我现在很饿。",
-            "pinyin": "è",
+            "pinyin": "wǒ xiàn zài hěn è 。",
             "vi": "Bây giờ tôi rất đói."
           },
           {
             "speaker": "王老师",
             "zh": "我记不住这个汉字。",
-            "pinyin": "jì",
+            "pinyin": "wǒ jì bú zhù zhè ge hàn zì 。",
             "vi": "Tôi không nhớ được chữ Hán này."
           }
         ],
@@ -251,8 +251,8 @@
               "question": "(1) Trong bài khóa, từ \"不用\" mang nghĩa là gì?",
               "options": [
                 "Không cần; không phải",
-                "Trạm, ga",
-                "Đứng"
+                "Khát",
+                "Cuộc đàm phán"
               ],
               "answer": "Không cần; không phải"
             },
@@ -260,9 +260,9 @@
               "id": 2,
               "question": "(2) Câu \"你不用担心。\" được dịch đúng là:",
               "options": [
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Bạn không cần phải lo lắng.",
-                "Ngày mai trời sẽ mưa to."
+                "Tôi hôm nay phải đi làm nửa ngày.\n\nAnh đã đứng trước cửa đợi em rất lâu.",
+                "Dịch vụ của công ty này rất chuyên nghiệp.",
+                "Bạn không cần phải lo lắng."
               ],
               "answer": "Bạn không cần phải lo lắng."
             }
@@ -278,19 +278,19 @@
           {
             "speaker": "大卫",
             "zh": "我口渴了，想喝水。",
-            "pinyin": "kě",
+            "pinyin": "wǒ kǒu kě le ， xiǎng hē shuǐ 。",
             "vi": "Tôi khát nước rồi, muốn uống nước."
           },
           {
             "speaker": "李明",
             "zh": "我马上回来。",
-            "pinyin": "mǎshàng",
+            "pinyin": "wǒ mǎ shàng huí lái 。",
             "vi": "Tôi sẽ quay lại ngay lập tức."
           },
           {
             "speaker": "王老师",
             "zh": "你可以用我的手机。",
-            "pinyin": "yòng",
+            "pinyin": "nǐ kě yǐ yòng wǒ de shǒu jī 。",
             "vi": "Bạn có thể dùng điện thoại của tôi."
           }
         ],
@@ -302,8 +302,8 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"渴\" mang nghĩa là gì?",
               "options": [
-                "Đứng",
-                "Trạm, ga",
+                "Cảm thấy",
+                "Đồ nội thất",
                 "Khát"
               ],
               "answer": "Khát"
@@ -312,9 +312,9 @@
               "id": 2,
               "question": "(2) Câu \"我口渴了，想喝水。\" được dịch đúng là:",
               "options": [
-                "Tôi đang ở nhà nghỉ ngơi.",
+                "Họ đang sửa sang ngôi nhà cũ này.",
                 "Tôi khát nước rồi, muốn uống nước.",
-                "Ngày mai trời sẽ mưa to."
+                "Căn phòng của anh ấy rất sạch sẽ."
               ],
               "answer": "Tôi khát nước rồi, muốn uống nước."
             }
@@ -330,19 +330,19 @@
           {
             "speaker": "大卫",
             "zh": "请给我菜单。",
-            "pinyin": "càidān",
+            "pinyin": "qǐng gěi wǒ cài dān 。",
             "vi": "Xin vui lòng đưa cho tôi thực đơn."
           },
           {
             "speaker": "李明",
             "zh": "这里的交通很方便。",
-            "pinyin": "fāngbiàn",
+            "pinyin": "zhè lǐ de jiāo tōng hěn fāng biàn 。",
             "vi": "Giao thông ở đây rất thuận tiện."
           },
           {
             "speaker": "王老师",
             "zh": "我喜欢吃方便面。",
-            "pinyin": "fāngbiànmiàn",
+            "pinyin": "wǒ xǐ huan chī fāng biàn miàn 。",
             "vi": "Tôi thích ăn mì ăn liền."
           }
         ],
@@ -354,9 +354,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"菜单\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
                 "Thực đơn",
-                "Đứng"
+                "Trưởng thành, lớn lên",
+                "Mất đi, đánh mất"
               ],
               "answer": "Thực đơn"
             },
@@ -364,9 +364,9 @@
               "id": 2,
               "question": "(2) Câu \"请给我菜单。\" được dịch đúng là:",
               "options": [
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Ngày mai trời sẽ mưa to.",
-                "Xin vui lòng đưa cho tôi thực đơn."
+                "Bà đã lớn tuổi rồi, cần nghỉ ngơi nhiều hơn.",
+                "Xin vui lòng đưa cho tôi thực đơn.",
+                "Chính sách này rất có lợi cho nông dân."
               ],
               "answer": "Xin vui lòng đưa cho tôi thực đơn."
             }
@@ -382,19 +382,19 @@
           {
             "speaker": "大卫",
             "zh": "这家餐厅的服务很好。",
-            "pinyin": "fúwù",
+            "pinyin": "zhè jiā cān tīng de fú wù hěn hǎo 。",
             "vi": "Dịch vụ của nhà hàng này rất tốt."
           },
           {
             "speaker": "李明",
             "zh": "我们好久没见了。",
-            "pinyin": "hǎojiǔ",
+            "pinyin": "wǒ men hǎo jiǔ méi jiàn le 。",
             "vi": "Chúng ta lâu rồi không gặp."
           },
           {
             "speaker": "王老师",
             "zh": "我家有两只小鸡。",
-            "pinyin": "jī",
+            "pinyin": "wǒ jiā yǒu liǎng zhī xiǎo jī 。",
             "vi": "Nhà tôi có hai con gà con."
           }
         ],
@@ -406,9 +406,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"服务\" mang nghĩa là gì?",
               "options": [
-                "Đứng",
-                "Trạm, ga",
-                "Sự phục vụ, dịch vụ"
+                "toàn diện",
+                "Sự phục vụ, dịch vụ",
+                "Đầu óc, tư duy"
               ],
               "answer": "Sự phục vụ, dịch vụ"
             },
@@ -416,9 +416,9 @@
               "id": 2,
               "question": "(2) Câu \"这家餐厅的服务很好。\" được dịch đúng là:",
               "options": [
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Ngày mai trời sẽ mưa to.",
-                "Dịch vụ của nhà hàng này rất tốt."
+                "Dịch vụ của nhà hàng này rất tốt.",
+                "Họ vẫn chưa thu tiền thuê nhà.",
+                "Thầy giáo giảng rất sinh động, tôi hiểu ngay lập tức."
               ],
               "answer": "Dịch vụ của nhà hàng này rất tốt."
             }
@@ -440,19 +440,19 @@
           {
             "speaker": "大卫",
             "zh": "我买了一个碗。",
-            "pinyin": "wǎn",
+            "pinyin": "wǒ mǎi le yí gè wǎn 。",
             "vi": "Tôi đã mua một cái bát."
           },
           {
             "speaker": "李明",
             "zh": "你可以选这个。",
-            "pinyin": "xuǎn",
+            "pinyin": "nǐ kě yǐ xuǎn zhè ge 。",
             "vi": "Bạn có thể chọn cái này."
           },
           {
             "speaker": "王老师",
             "zh": "她又高又漂亮。",
-            "pinyin": "yòu",
+            "pinyin": "tā yòu gāo yòu piào liang 。",
             "vi": "Cô ấy vừa cao vừa xinh đẹp."
           }
         ],
@@ -464,9 +464,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"碗\" mang nghĩa là gì?",
               "options": [
-                "Đứng",
+                "Rất lâu",
                 "Cái bát",
-                "Trạm, ga"
+                "Yêu cầu"
               ],
               "answer": "Cái bát"
             },
@@ -474,9 +474,9 @@
               "id": 2,
               "question": "(2) Câu \"我买了一个碗。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
-                "Tôi đã mua một cái bát.",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Khu này cách trung tâm thành phố rất gần",
+                "Máy bay sắp cất cánh rồi.",
+                "Tôi đã mua một cái bát."
               ],
               "answer": "Tôi đã mua một cái bát."
             }
@@ -492,19 +492,19 @@
           {
             "speaker": "大卫",
             "zh": "他只喝咖啡，不喝茶。",
-            "pinyin": "zhǐ",
+            "pinyin": "tā zhī hē kā fēi ， bù hē chá 。",
             "vi": "Anh ấy chỉ uống cà phê, không uống trà."
           },
           {
             "speaker": "李明",
             "zh": "这个问题很简单。",
-            "pinyin": "jiǎndān",
+            "pinyin": "zhè ge wèn tí hěn jiǎn dān 。",
             "vi": "Vấn đề này rất đơn giản."
           },
           {
             "speaker": "王老师",
             "zh": "我刚去买了一双鞋。",
-            "pinyin": "shuāng",
+            "pinyin": "wǒ gāng qù mǎi le yì shuāng xié 。",
             "vi": "Tôi vừa mới đi mua một đôi giày."
           }
         ],
@@ -516,8 +516,8 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"只\" mang nghĩa là gì?",
               "options": [
-                "Đứng",
-                "Trạm, ga",
+                "Khởi động; bắt đầu",
+                "Kiên cường",
                 "Chỉ"
               ],
               "answer": "Chỉ"
@@ -526,8 +526,8 @@
               "id": 2,
               "question": "(2) Câu \"他只喝咖啡，不喝茶。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
-                "Tôi đang ở nhà nghỉ ngơi.",
+                "Anh ấy đã nhận được học bổng.",
+                "Công ty đang triển khai dự án mới.",
                 "Anh ấy chỉ uống cà phê, không uống trà."
               ],
               "answer": "Anh ấy chỉ uống cà phê, không uống trà."
@@ -544,19 +544,19 @@
           {
             "speaker": "大卫",
             "zh": "他们是一双恋人。",
-            "pinyin": "shuāng",
+            "pinyin": "tā men shì yì shuāng liàn rén 。",
             "vi": "Họ là một đôi tình nhân."
           },
           {
             "speaker": "李明",
             "zh": "双休日我喜欢在家休息。",
-            "pinyin": "shuāng",
+            "pinyin": "shuāng xiū rì wǒ xǐ huan zài jiā xiū xi 。",
             "vi": "Hai ngày cuối tuần tôi thích nghỉ ngơi ở nhà."
           },
           {
             "speaker": "王老师",
             "zh": "桌子上有一张纸。",
-            "pinyin": "zhāng",
+            "pinyin": "zhuō zi shàng yǒu yì zhāng zhǐ 。",
             "vi": "Trên bàn có một tờ giấy."
           }
         ],
@@ -569,8 +569,8 @@
               "question": "(1) Trong bài khóa, từ \"双\" mang nghĩa là gì?",
               "options": [
                 "Cặp, đôi",
-                "Trạm, ga",
-                "Đứng"
+                "Mặt",
+                "Giá cả"
               ],
               "answer": "Cặp, đôi"
             },
@@ -578,9 +578,9 @@
               "id": 2,
               "question": "(2) Câu \"他们是一双恋人。\" được dịch đúng là:",
               "options": [
-                "Tôi đang ở nhà nghỉ ngơi.",
                 "Họ là một đôi tình nhân.",
-                "Ngày mai trời sẽ mưa to."
+                "Họ dự định kết hôn vào năm sau.",
+                "Trời mưa, đi đường nhớ cẩn thận tránh bị trơn trượt."
               ],
               "answer": "Họ là một đôi tình nhân."
             }
@@ -596,19 +596,19 @@
           {
             "speaker": "大卫",
             "zh": "我只去过一次北京。",
-            "pinyin": "zhǐ",
+            "pinyin": "wǒ zhī qù guò yí cì běi jīng 。",
             "vi": "Tôi chỉ mới đến Bắc Kinh một lần."
           },
           {
             "speaker": "李明",
             "zh": "你太客气了。",
-            "pinyin": "kèqi",
+            "pinyin": "nǐ tài kè qì le 。",
             "vi": "Bạn khách khí quá."
           },
           {
             "speaker": "王老师",
             "zh": "先尝一口看看。",
-            "pinyin": "cháng",
+            "pinyin": "xiān cháng yì kǒu kàn kàn 。",
             "vi": "Nếm thử một miếng xem sao."
           }
         ],
@@ -620,9 +620,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"只\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
-                "Đứng",
-                "Chỉ, vẻn vẹn"
+                "Nhận, lãnh",
+                "Chỉ, vẻn vẹn",
+                "Luyện tập"
               ],
               "answer": "Chỉ, vẻn vẹn"
             },
@@ -630,9 +630,9 @@
               "id": 2,
               "question": "(2) Câu \"我只去过一次北京。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
                 "Tôi chỉ mới đến Bắc Kinh một lần.",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Ánh nắng chiếu trên bãi cỏ.",
+                "Quốc gia này có nhiều dầu mỏ."
               ],
               "answer": "Tôi chỉ mới đến Bắc Kinh một lần."
             }
@@ -654,19 +654,19 @@
           {
             "speaker": "大卫",
             "zh": "他们买了一套新房子。",
-            "pinyin": "fángzi",
+            "pinyin": "tā men mǎi le yí tào xīn fáng zi 。",
             "vi": "Họ đã mua một căn nhà mới."
           },
           {
             "speaker": "李明",
             "zh": "睡觉前别忘了关灯。",
-            "pinyin": "guān",
+            "pinyin": "shuì jiào qián bié wàng le guān dēng 。",
             "vi": "Trước khi ngủ đừng quên tắt đèn."
           },
           {
             "speaker": "王老师",
             "zh": "他有一个哥哥，还有一个妹妹。",
-            "pinyin": "hái",
+            "pinyin": "tā yǒu yí gè gē ge ， hái yǒu yí gè mèi mei 。",
             "vi": "Cậu ấy có một anh trai, còn có một em gái nữa."
           }
         ],
@@ -678,9 +678,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"房子\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
-                "Đứng",
-                "Căn nhà; nhà"
+                "Gỗ",
+                "Căn nhà; nhà",
+                "Quay lại, trở về"
               ],
               "answer": "Căn nhà; nhà"
             },
@@ -688,9 +688,9 @@
               "id": 2,
               "question": "(2) Câu \"他们买了一套新房子。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Họ đã mua một căn nhà mới."
+                "Tôi cảm thấy rất vui.",
+                "Họ đã mua một căn nhà mới.",
+                "Mỗi buổi sáng ba tôi đều đọc báo."
               ],
               "answer": "Họ đã mua một căn nhà mới."
             }
@@ -706,19 +706,19 @@
           {
             "speaker": "大卫",
             "zh": "她明天把书还给图书馆。",
-            "pinyin": "huán",
+            "pinyin": "tā míng tiān bǎ shū hái gěi tú shū guǎn 。",
             "vi": "Ngày mai cô ấy sẽ đem sách trả lại cho thư viện"
           },
           {
             "speaker": "李明",
             "zh": "我去办签证。",
-            "pinyin": "bàn",
+            "pinyin": "wǒ qù bàn qiān zhèng 。",
             "vi": "Tôi đi làm visa."
           },
           {
             "speaker": "王老师",
             "zh": "他昨天才回来。",
-            "pinyin": "cái",
+            "pinyin": "tā zuó tiān cái huí lái 。",
             "vi": "Anh ấy mới về hôm qua."
           }
         ],
@@ -730,9 +730,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"还\" mang nghĩa là gì?",
               "options": [
-                "Đứng",
-                "Trạm, ga",
-                "Trả lại"
+                "Trả lại",
+                "Tiến triển",
+                "Giao lộ, ngã tư"
               ],
               "answer": "Trả lại"
             },
@@ -740,9 +740,9 @@
               "id": 2,
               "question": "(2) Câu \"她明天把书还给图书馆。\" được dịch đúng là:",
               "options": [
+                "Chúng ta cùng nhau đối mặt với khó khăn.",
                 "Ngày mai cô ấy sẽ đem sách trả lại cho thư viện",
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Ngày mai trời sẽ mưa to."
+                "Tiền xe, học phí đều là một loại phí phải trả."
               ],
               "answer": "Ngày mai cô ấy sẽ đem sách trả lại cho thư viện"
             }
@@ -758,19 +758,19 @@
           {
             "speaker": "大卫",
             "zh": "我住在第五层。",
-            "pinyin": "céng",
+            "pinyin": "wǒ zhù zài dì wǔ céng 。",
             "vi": "Tôi sống ở tầng năm."
           },
           {
             "speaker": "李明",
             "zh": "教室里的灯开着呢。",
-            "pinyin": "dēng",
+            "pinyin": "jiào shì lǐ de dēng kāi zhe ne 。",
             "vi": "Đèn trong lớp vẫn còn bật."
           },
           {
             "speaker": "王老师",
             "zh": "花园。",
-            "pinyin": "huāyuán",
+            "pinyin": "huā yuán 。",
             "vi": "Vườn hoa"
           }
         ],
@@ -782,9 +782,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"层\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
                 "Tầng",
-                "Đứng"
+                "Phán đoán",
+                "Một lát"
               ],
               "answer": "Tầng"
             },
@@ -792,9 +792,9 @@
               "id": 2,
               "question": "(2) Câu \"我住在第五层。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Tôi sống ở tầng năm."
+                "Tôi sống ở tầng năm.",
+                "Tôi rất thích loại sách này.",
+                "Đội của chúng tôi đã thắng trận đấu."
               ],
               "answer": "Tôi sống ở tầng năm."
             }
@@ -810,19 +810,19 @@
           {
             "speaker": "大卫",
             "zh": "你要换衣服吗？",
-            "pinyin": "huàn",
+            "pinyin": "nǐ yào huàn yī fu ma ？",
             "vi": "Bạn có muốn thay quần áo không?"
           },
           {
             "speaker": "李明",
             "zh": "我听说他很忙。",
-            "pinyin": "tīngshuō",
+            "pinyin": "wǒ tīng shuō tā hěn máng 。",
             "vi": "Tôi nghe nói anh ấy rất bận."
           },
           {
             "speaker": "王老师",
             "zh": "我家有一台洗衣机。",
-            "pinyin": "xǐyījī",
+            "pinyin": "wǒ jiā yǒu yì tái xǐ yī jī 。",
             "vi": "Nhà tôi có một cái máy giặt."
           }
         ],
@@ -834,9 +834,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"换\" mang nghĩa là gì?",
               "options": [
-                "Đổi, thay đổi",
-                "Trạm, ga",
-                "Đứng"
+                "Trở thành, biến thành",
+                "Giá vé",
+                "Đổi, thay đổi"
               ],
               "answer": "Đổi, thay đổi"
             },
@@ -844,9 +844,9 @@
               "id": 2,
               "question": "(2) Câu \"你要换衣服吗？\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
+                "Hàng xóm rất thân thiện.",
                 "Bạn có muốn thay quần áo không?",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Cái bàn này rất chắc chắn."
               ],
               "answer": "Bạn có muốn thay quần áo không?"
             }
@@ -868,19 +868,19 @@
           {
             "speaker": "大卫",
             "zh": "我不要别的，只要那支钢笔。",
-            "pinyin": "bié de",
+            "pinyin": "wǒ bú yào bié de ， zhǐ yào nà zhī gāng bǐ 。",
             "vi": "Tôi không cần cái nào khác, chỉ cần cây bút đó."
           },
           {
             "speaker": "李明",
             "zh": "你的房间很干净。",
-            "pinyin": "gānjìng",
+            "pinyin": "nǐ de fáng jiān hěn gān jìng 。",
             "vi": "Phòng của bạn rất sạch sẽ."
           },
           {
             "speaker": "王老师",
             "zh": "你先去，我等一下再去。",
-            "pinyin": "xiān",
+            "pinyin": "nǐ xiān qù ， wǒ děng yí xià zài qù 。",
             "vi": "Bạn đi trước đi, tôi sẽ đi sau."
           }
         ],
@@ -892,9 +892,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"别的\" mang nghĩa là gì?",
               "options": [
-                "Đứng",
+                "Internet",
                 "Khác; cái khác",
-                "Trạm, ga"
+                "Dê, cừu"
               ],
               "answer": "Khác; cái khác"
             },
@@ -902,9 +902,9 @@
               "id": 2,
               "question": "(2) Câu \"我不要别的，只要那支钢笔。\" được dịch đúng là:",
               "options": [
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Ngày mai trời sẽ mưa to.",
-                "Tôi không cần cái nào khác, chỉ cần cây bút đó."
+                "Tôi đã đặt đồ ăn mang đi.",
+                "Tôi không cần cái nào khác, chỉ cần cây bút đó.",
+                "Họ đang xây một ngôi trường."
               ],
               "answer": "Tôi không cần cái nào khác, chỉ cần cây bút đó."
             }
@@ -920,19 +920,19 @@
           {
             "speaker": "大卫",
             "zh": "这两件衣服一样。",
-            "pinyin": "yíyàng",
+            "pinyin": "zhè liǎng jiàn yī fu yí yàng 。",
             "vi": "Hai bộ quần áo này giống nhau."
           },
           {
             "speaker": "李明",
             "zh": "这片大海很美丽。",
-            "pinyin": "hǎi",
+            "pinyin": "zhè piàn dà hǎi hěn měi lì 。",
             "vi": "Biển này rất đẹp."
           },
           {
             "speaker": "王老师",
             "zh": "欢迎你来我家玩。",
-            "pinyin": "huānyíng",
+            "pinyin": "huān yíng nǐ lái wǒ jiā wán 。",
             "vi": "Chào mừng bạn đến nhà tôi chơi."
           }
         ],
@@ -944,9 +944,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"一样\" mang nghĩa là gì?",
               "options": [
-                "Đứng",
-                "Trạm, ga",
-                "Giống nhau"
+                "Giống nhau",
+                "đánh giá, nhận xét",
+                "Cuối cùng"
               ],
               "answer": "Giống nhau"
             },
@@ -954,9 +954,9 @@
               "id": 2,
               "question": "(2) Câu \"这两件衣服一样。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
+                "Bạn đừng quá lo lắng!",
                 "Hai bộ quần áo này giống nhau.",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Anh ấy không chỉ biết hát mà còn biết nhảy."
               ],
               "answer": "Hai bộ quần áo này giống nhau."
             }
@@ -972,19 +972,19 @@
           {
             "speaker": "大卫",
             "zh": "我们的假期很长。",
-            "pinyin": "jiàqī",
+            "pinyin": "wǒ men de jià qī hěn cháng 。",
             "vi": "Kỳ nghỉ của chúng tôi rất dài."
           },
           {
             "speaker": "李明",
             "zh": "现在是三点一刻。",
-            "pinyin": "kè",
+            "pinyin": "xiàn zài shì sān diǎn yí kè 。",
             "vi": "Bây giờ là ba giờ mười lăm phút."
           },
           {
             "speaker": "王老师",
             "zh": "你对我们的服务满意吗？",
-            "pinyin": "mǎnyì",
+            "pinyin": "nǐ duì wǒ men de fú wù mǎn yì ma ？",
             "vi": "Bạn có hài lòng với dịch vụ của chúng tôi không?"
           }
         ],
@@ -996,9 +996,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"假期\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
-                "Đứng",
-                "Kỳ nghỉ"
+                "Kỳ nghỉ",
+                "Chi phí",
+                "Bẩn"
               ],
               "answer": "Kỳ nghỉ"
             },
@@ -1006,9 +1006,9 @@
               "id": 2,
               "question": "(2) Câu \"我们的假期很长。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
+                "Người phụ nữ đó là sếp của chúng tôi.",
                 "Kỳ nghỉ của chúng tôi rất dài.",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Đây là một máy pha cà phê tự động."
               ],
               "answer": "Kỳ nghỉ của chúng tôi rất dài."
             }
@@ -1024,19 +1024,19 @@
           {
             "speaker": "大卫",
             "zh": "树上有一只小鸟。",
-            "pinyin": "niǎo",
+            "pinyin": "shù shàng yǒu yì zhī xiǎo niǎo 。",
             "vi": "Trên cây có một con chim nhỏ."
           },
           {
             "speaker": "李明",
             "zh": "我会骑自行车。",
-            "pinyin": "qí",
+            "pinyin": "wǒ huì qí zì xíng chē 。",
             "vi": "Tôi biết đi xe đạp."
           },
           {
             "speaker": "王老师",
             "zh": "飞机马上起飞了。",
-            "pinyin": "qǐfēi",
+            "pinyin": "fēi jī mǎ shàng qǐ fēi le 。",
             "vi": "Máy bay sắp cất cánh rồi."
           }
         ],
@@ -1048,9 +1048,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"鸟\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
                 "Con chim",
-                "Đứng"
+                "Đương nhiên",
+                "Kể từ"
               ],
               "answer": "Con chim"
             },
@@ -1058,9 +1058,9 @@
               "id": 2,
               "question": "(2) Câu \"树上有一只小鸟。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
                 "Trên cây có một con chim nhỏ.",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Tôi yêu đất nước của tôi.",
+                "Tôi rất thích loại sách này."
               ],
               "answer": "Trên cây có một con chim nhỏ."
             }
@@ -1082,19 +1082,19 @@
           {
             "speaker": "大卫",
             "zh": "这本书特别有意思。",
-            "pinyin": "tèbié",
+            "pinyin": "zhè běn shū tè bié yǒu yì sī 。",
             "vi": "Cuốn sách này đặc biệt thú vị."
           },
           {
             "speaker": "李明",
             "zh": "这个菜的做法很特别。",
-            "pinyin": "tèbié",
+            "pinyin": "zhè ge cài de zuò fǎ hěn tè bié 。",
             "vi": "Phương pháp làm món ăn này rất đặc biệt"
           },
           {
             "speaker": "王老师",
             "zh": "你的相机很好看。",
-            "pinyin": "xiàngjī",
+            "pinyin": "nǐ de xiàng jī hěn hǎo kàn 。",
             "vi": "Máy ảnh của bạn trông rất đẹp."
           }
         ],
@@ -1106,9 +1106,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"特别\" mang nghĩa là gì?",
               "options": [
-                "Đứng",
-                "Đặc biệt, vô cùng, rất",
-                "Trạm, ga"
+                "Ghi chép",
+                "Thử, thử nghiệm",
+                "Đặc biệt, vô cùng, rất"
               ],
               "answer": "Đặc biệt, vô cùng, rất"
             },
@@ -1116,9 +1116,9 @@
               "id": 2,
               "question": "(2) Câu \"这本书特别有意思。\" được dịch đúng là:",
               "options": [
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Cuốn sách này đặc biệt thú vị.",
-                "Ngày mai trời sẽ mưa to."
+                "Quả dưa hấu này nặng hai kg.",
+                "Xin hãy đi dọc theo tuyến (đường) này.",
+                "Cuốn sách này đặc biệt thú vị."
               ],
               "answer": "Cuốn sách này đặc biệt thú vị."
             }
@@ -1134,19 +1134,19 @@
           {
             "speaker": "大卫",
             "zh": "你一定要小心。",
-            "pinyin": "yídìng",
+            "pinyin": "nǐ yí dìng yào xiǎo xīn 。",
             "vi": "Bạn nhất định phải cẩn thận."
           },
           {
             "speaker": "李明",
             "zh": "除了工作以外，我还学习。",
-            "pinyin": "yǐwài",
+            "pinyin": "chú le gōng zuò yǐ wài ， wǒ hái xué xí 。",
             "vi": "Ngoài công việc, tôi còn học tập."
           },
           {
             "speaker": "王老师",
             "zh": "我一直在学习汉语。",
-            "pinyin": "yìzhí",
+            "pinyin": "wǒ yì zhí zài xué xí hàn yǔ 。",
             "vi": "Tôi luôn học tiếng Trung."
           }
         ],
@@ -1158,9 +1158,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"一定\" mang nghĩa là gì?",
               "options": [
-                "Nhất định",
-                "Đứng",
-                "Trạm, ga"
+                "Gây hại, tổn hại",
+                "Giao lộ, ngã tư",
+                "Nhất định"
               ],
               "answer": "Nhất định"
             },
@@ -1169,8 +1169,8 @@
               "question": "(2) Câu \"你一定要小心。\" được dịch đúng là:",
               "options": [
                 "Bạn nhất định phải cẩn thận.",
-                "Ngày mai trời sẽ mưa to.",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Anh ấy livestream chơi game trên mạng mỗi ngày.",
+                "Mẹ chăm sóc tôi."
               ],
               "answer": "Bạn nhất định phải cẩn thận."
             }
@@ -1186,19 +1186,19 @@
           {
             "speaker": "大卫",
             "zh": "今晚的月亮很圆。",
-            "pinyin": "yuèliàng",
+            "pinyin": "jīn wǎn de yuè liàng hěn yuán 。",
             "vi": "Mặt trăng tối nay rất tròn."
           },
           {
             "speaker": "李明",
             "zh": "除了你, 谁我都不说。",
-            "pinyin": "chúle",
+            "pinyin": "chú le nǐ ,  shuí wǒ dōu bù shuō 。",
             "vi": "Ngoài bạn ra, tôi không nói với ai hết."
           },
           {
             "speaker": "王老师",
             "zh": "我们好久不见了。",
-            "pinyin": "jiǔ",
+            "pinyin": "wǒ men hǎo jiǔ bú jiàn le 。",
             "vi": "Lâu rồi chúng ta không gặp nhau."
           }
         ],
@@ -1211,8 +1211,8 @@
               "question": "(1) Trong bài khóa, từ \"月亮\" mang nghĩa là gì?",
               "options": [
                 "Mặt trăng",
-                "Trạm, ga",
-                "Đứng"
+                "cả khán phòng, toàn bộ khán giả",
+                "Phạm vi"
               ],
               "answer": "Mặt trăng"
             },
@@ -1220,9 +1220,9 @@
               "id": 2,
               "question": "(2) Câu \"今晚的月亮很圆。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Mặt trăng tối nay rất tròn."
+                "Mặt trăng tối nay rất tròn.",
+                "Vui lòng phát bài hát này.",
+                "Thầy giáo dạy chúng tôi cách phân biệt những chữ Hán này"
               ],
               "answer": "Mặt trăng tối nay rất tròn."
             }
@@ -1238,19 +1238,19 @@
           {
             "speaker": "大卫",
             "zh": "那是一匹白马。",
-            "pinyin": "mǎ",
+            "pinyin": "nà shì yì pǐ bái mǎ 。",
             "vi": "Đó là một con ngựa trắng."
           },
           {
             "speaker": "李明",
             "zh": "草原上有很多羊。",
-            "pinyin": "yáng",
+            "pinyin": "cǎo yuán shàng yǒu hěn duō yáng 。",
             "vi": "Trên thảo nguyên có rất nhiều dê."
           },
           {
             "speaker": "王老师",
             "zh": "我们住在那家宾馆。",
-            "pinyin": "bīnguǎn",
+            "pinyin": "wǒ men zhù zài nà jiā bīn guǎn 。",
             "vi": "Chúng tôi ở khách sạn đó."
           }
         ],
@@ -1262,9 +1262,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"马\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
-                "Đứng",
-                "Con ngựa"
+                "Con ngựa",
+                "Tiếp tục, kéo dài",
+                "Mới, vừa mới"
               ],
               "answer": "Con ngựa"
             },
@@ -1272,9 +1272,9 @@
               "id": 2,
               "question": "(2) Câu \"那是一匹白马。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
+                "Anh ấy rất có hứng thú với nghệ thuật.",
                 "Đó là một con ngựa trắng.",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Dân tộc Trung Hoa có lịch sử lâu đời."
               ],
               "answer": "Đó là một con ngựa trắng."
             }
@@ -1296,19 +1296,19 @@
           {
             "speaker": "大卫",
             "zh": "我的手机没电了。",
-            "pinyin": "diàn",
+            "pinyin": "wǒ de shǒu jī méi diàn le 。",
             "vi": "Điện thoại tôi hết pin rồi."
           },
           {
             "speaker": "李明",
             "zh": "这件衣服干了，可以穿了。",
-            "pinyin": "gān",
+            "pinyin": "zhè jiàn yī fu gān le ， kě yǐ chuān le 。",
             "vi": "Quần áo này khô rồi, có thể mặc rồi."
           },
           {
             "speaker": "王老师",
             "zh": "他总干乱我的计划。\n\n咱们干了这杯酒吧。",
-            "pinyin": "gàn",
+            "pinyin": "tā zǒng gān luàn wǒ de jì huà 。\n\n zán men gān le zhè bēi jiǔ bā 。",
             "vi": "Anh ấy luôn làm loạn kế hoạch của tôi.\n\nChúng ta uống cạn ly rượu này."
           }
         ],
@@ -1320,8 +1320,8 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"电\" mang nghĩa là gì?",
               "options": [
-                "Đứng",
-                "Trạm, ga",
+                "Sự tuyên truyền, hoạt động tuyên truyền",
+                "Ghi",
                 "Điện; pin; điện năng"
               ],
               "answer": "Điện; pin; điện năng"
@@ -1330,9 +1330,9 @@
               "id": 2,
               "question": "(2) Câu \"我的手机没电了。\" được dịch đúng là:",
               "options": [
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Ngày mai trời sẽ mưa to.",
-                "Điện thoại tôi hết pin rồi."
+                "Yêu cầu của giáo viên rất cao.",
+                "Điện thoại tôi hết pin rồi.",
+                "Cô ấy có tính cách rất lạc quan."
               ],
               "answer": "Điện thoại tôi hết pin rồi."
             }
@@ -1348,19 +1348,19 @@
           {
             "speaker": "大卫",
             "zh": "你会做中国菜吗？",
-            "pinyin": "huì",
+            "pinyin": "nǐ huì zuò zhōng guó cài ma ？",
             "vi": "Bạn biết nấu món Trung Quốc không?"
           },
           {
             "speaker": "李明",
             "zh": "那座山很高。",
-            "pinyin": "shān",
+            "pinyin": "nà zuò shān hěn gāo 。",
             "vi": "Ngọn núi đó rất cao."
           },
           {
             "speaker": "王老师",
             "zh": "这里有一棵大树。",
-            "pinyin": "shù",
+            "pinyin": "zhè lǐ yǒu yì kē dà shù 。",
             "vi": "Ở đây có một cái cây lớn."
           }
         ],
@@ -1372,9 +1372,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"会\" mang nghĩa là gì?",
               "options": [
+                "Hành lý",
                 "Sẽ; có; biết",
-                "Trạm, ga",
-                "Đứng"
+                "Xử lý"
               ],
               "answer": "Sẽ; có; biết"
             },
@@ -1382,9 +1382,9 @@
               "id": 2,
               "question": "(2) Câu \"你会做中国菜吗？\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Bạn biết nấu món Trung Quốc không?"
+                "Anh ấy dùng tiếng Trung biểu đạt suy nghĩ của mình.",
+                "Bạn biết nấu món Trung Quốc không?",
+                "Thời tiết đột nhiên trở lạnh rồi."
               ],
               "answer": "Bạn biết nấu món Trung Quốc không?"
             }
@@ -1400,19 +1400,19 @@
           {
             "speaker": "大卫",
             "zh": "冬天我会穿厚大衣。",
-            "pinyin": "dàyī",
+            "pinyin": "dōng tiān wǒ huì chuān hòu dà yī 。",
             "vi": "Mùa đông tôi sẽ mặc áo khoác dày."
           },
           {
             "speaker": "李明",
             "zh": "他给我写了一封信。",
-            "pinyin": "fēng",
+            "pinyin": "tā gěi wǒ xiě le yì fēng xìn 。",
             "vi": "Anh ấy đã viết cho tôi một bức thư."
           },
           {
             "speaker": "王老师",
             "zh": "你会说汉语吗？",
-            "pinyin": "huì",
+            "pinyin": "nǐ huì shuō hàn yǔ ma ？",
             "vi": "Bạn biết nói tiếng Trung không?"
           }
         ],
@@ -1424,9 +1424,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"大衣\" mang nghĩa là gì?",
               "options": [
-                "Đứng",
+                "Bị thương, tổn thương",
                 "Áo khoác dài",
-                "Trạm, ga"
+                "Thay đổi, biến đổi"
               ],
               "answer": "Áo khoác dài"
             },
@@ -1434,9 +1434,9 @@
               "id": 2,
               "question": "(2) Câu \"冬天我会穿厚大衣。\" được dịch đúng là:",
               "options": [
-                "Mùa đông tôi sẽ mặc áo khoác dày.",
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Ngày mai trời sẽ mưa to."
+                "Chúng ta cùng đi công viên nhé.",
+                "Ban nhạc của trường sẽ tham gia buổi biểu diễn.",
+                "Mùa đông tôi sẽ mặc áo khoác dày."
               ],
               "answer": "Mùa đông tôi sẽ mặc áo khoác dày."
             }
@@ -1452,19 +1452,19 @@
           {
             "speaker": "大卫",
             "zh": "她听到坏消息就很难过。",
-            "pinyin": "nánguò",
+            "pinyin": "tā tīng dào huài xiāo xī jiù hěn nán guò 。",
             "vi": "Cô ấy rất buồn khi nghe tin xấu."
           },
           {
             "speaker": "李明",
             "zh": "这件衣服太难看了。",
-            "pinyin": "nánkàn",
+            "pinyin": "zhè jiàn yī fu tài nán kàn le 。",
             "vi": "Bộ quần áo này quá xấu."
           },
           {
             "speaker": "王老师",
             "zh": "孩子会爬了。",
-            "pinyin": "pá",
+            "pinyin": "hái zi huì pá le 。",
             "vi": "Đứa bé đã biết bò."
           }
         ],
@@ -1476,9 +1476,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"难过\" mang nghĩa là gì?",
               "options": [
-                "Đứng",
-                "Trạm, ga",
-                "Buồn, khó chịu"
+                "Chúc",
+                "Buồn, khó chịu",
+                "Tươi đẹp, tốt đẹp"
               ],
               "answer": "Buồn, khó chịu"
             },
@@ -1486,9 +1486,9 @@
               "id": 2,
               "question": "(2) Câu \"她听到坏消息就很难过。\" được dịch đúng là:",
               "options": [
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Ngày mai trời sẽ mưa to.",
-                "Cô ấy rất buồn khi nghe tin xấu."
+                "Khuyết điểm của cô ấy chính là quá nóng vội.",
+                "Cô ấy rất buồn khi nghe tin xấu.",
+                "Nội dung của cuốn sách này rất quan trọng."
               ],
               "answer": "Cô ấy rất buồn khi nghe tin xấu."
             }
@@ -1510,19 +1510,19 @@
           {
             "speaker": "大卫",
             "zh": "你的鞋很好看。",
-            "pinyin": "xié",
+            "pinyin": "nǐ de xié hěn hǎo kàn 。",
             "vi": "Đôi giày của bạn rất đẹp."
           },
           {
             "speaker": "李明",
             "zh": "我喜欢听音乐。",
-            "pinyin": "yīnyuè",
+            "pinyin": "wǒ xǐ huan tīng yīn yuè 。",
             "vi": "Tôi thích nghe nhạc."
           },
           {
             "speaker": "王老师",
             "zh": "我喜欢照相。",
-            "pinyin": "zhào xiàng",
+            "pinyin": "wǒ xǐ huan zhào xiàng 。",
             "vi": "Tôi thích chụp ảnh."
           }
         ],
@@ -1534,9 +1534,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"鞋\" mang nghĩa là gì?",
               "options": [
-                "Đứng",
+                "Tận dụng",
                 "Giày",
-                "Trạm, ga"
+                "Khó"
               ],
               "answer": "Giày"
             },
@@ -1545,8 +1545,8 @@
               "question": "(2) Câu \"你的鞋很好看。\" được dịch đúng là:",
               "options": [
                 "Đôi giày của bạn rất đẹp.",
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Ngày mai trời sẽ mưa to."
+                "Cuộc sống của cô ấy rất phong phú.",
+                "Đứa trẻ này rất thông minh."
               ],
               "answer": "Đôi giày của bạn rất đẹp."
             }
@@ -1562,19 +1562,19 @@
           {
             "speaker": "大卫",
             "zh": "今天比较冷。",
-            "pinyin": "bǐjiào",
+            "pinyin": "jīn tiān bǐ jiào lěng 。",
             "vi": "Hôm nay khá lạnh."
           },
           {
             "speaker": "李明",
             "zh": "他讲的笑话让我哈哈大笑。",
-            "pinyin": "hāhā",
+            "pinyin": "tā jiǎng de xiào huà ràng wǒ hā hā dà xiào 。",
             "vi": "Câu chuyện cười của anh ấy khiến tôi cười ha ha."
           },
           {
             "speaker": "王老师",
             "zh": "比赛已经结束了。",
-            "pinyin": "jiéshù",
+            "pinyin": "bǐ sài yǐ jīng jié shù le 。",
             "vi": "Trận đấu đã kết thúc rồi."
           }
         ],
@@ -1586,9 +1586,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"比较\" mang nghĩa là gì?",
               "options": [
+                "Gọn gàng, ngăn nắp",
                 "Khá, tương đối",
-                "Trạm, ga",
-                "Đứng"
+                "Nào đó, một"
               ],
               "answer": "Khá, tương đối"
             },
@@ -1596,9 +1596,9 @@
               "id": 2,
               "question": "(2) Câu \"今天比较冷。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
-                "Hôm nay khá lạnh.",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Bạn là học sinh lớp mấy?",
+                "Tôi thích ăn cải trắng.",
+                "Hôm nay khá lạnh."
               ],
               "answer": "Hôm nay khá lạnh."
             }
@@ -1614,19 +1614,19 @@
           {
             "speaker": "大卫",
             "zh": "我给你发了一封邮件。",
-            "pinyin": "yóujiàn",
+            "pinyin": "wǒ gěi nǐ fā le yì fēng yóu jiàn 。",
             "vi": "Tôi đã gửi cho bạn một email."
           },
           {
             "speaker": "李明",
             "zh": "阳光照在草地上。",
-            "pinyin": "zhào",
+            "pinyin": "yáng guāng zhào zài cǎo dì shàng 。",
             "vi": "Ánh nắng chiếu trên bãi cỏ."
           },
           {
             "speaker": "王老师",
             "zh": "请照这个样子做。",
-            "pinyin": "zhào",
+            "pinyin": "qǐng zhào zhè ge yàng zi zuò 。",
             "vi": "Hãy làm theo mẫu này."
           }
         ],
@@ -1638,9 +1638,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"邮件\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
+                "Phương pháp",
                 "Thư điện tử",
-                "Đứng"
+                "Bắt, tóm, nắm"
               ],
               "answer": "Thư điện tử"
             },
@@ -1649,8 +1649,8 @@
               "question": "(2) Câu \"我给你发了一封邮件。\" được dịch đúng là:",
               "options": [
                 "Tôi đã gửi cho bạn một email.",
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Ngày mai trời sẽ mưa to."
+                "Cô ấy vừa ăn vừa đọc sách.",
+                "Cả thế giới đều đang chú ý đến việc này."
               ],
               "answer": "Tôi đã gửi cho bạn một email."
             }
@@ -1666,19 +1666,19 @@
           {
             "speaker": "大卫",
             "zh": "这是我的照片。",
-            "pinyin": "zhào",
+            "pinyin": "zhè shì wǒ de zhào piàn 。",
             "vi": "Đây là ảnh của tôi."
           },
           {
             "speaker": "李明",
             "zh": "我们终于成功了。",
-            "pinyin": "zhōngyú",
+            "pinyin": "wǒ men zhōng yú chéng gōng le 。",
             "vi": "Chúng tôi cuối cùng cũng thành công rồi."
           },
           {
             "speaker": "王老师",
             "zh": "她总是笑得很开心。",
-            "pinyin": "zǒngshì",
+            "pinyin": "tā zǒng shì xiào dé hěn kāi xīn 。",
             "vi": "Cô ấy lúc nào cũng cười rất vui."
           }
         ],
@@ -1690,9 +1690,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"照\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
                 "Ảnh chụp, giấy tờ, giấy phép",
-                "Đứng"
+                "Nhà máy",
+                "Giải quyết"
               ],
               "answer": "Ảnh chụp, giấy tờ, giấy phép"
             },
@@ -1700,9 +1700,9 @@
               "id": 2,
               "question": "(2) Câu \"这是我的照片。\" được dịch đúng là:",
               "options": [
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Ngày mai trời sẽ mưa to.",
-                "Đây là ảnh của tôi."
+                "Đây là ảnh của tôi.",
+                "Tôi không nhận ra con đường này",
+                "Anh ấy mới về hôm qua."
               ],
               "answer": "Đây là ảnh của tôi."
             }
@@ -1724,19 +1724,19 @@
           {
             "speaker": "大卫",
             "zh": "放假了，我们一起去玩吧。",
-            "pinyin": "fàngjià",
+            "pinyin": "fàng jià le ， wǒ men yì qǐ qù wán ba 。",
             "vi": "Nghỉ lễ rồi, chúng ta cùng đi chơi nhé."
           },
           {
             "speaker": "李明",
             "zh": "这个路口有很多车。",
-            "pinyin": "lùkǒu",
+            "pinyin": "zhè ge lù kǒu yǒu hěn duō chē 。",
             "vi": "Ngã tư này có rất nhiều xe."
           },
           {
             "speaker": "王老师",
             "zh": "这样做行不行？",
-            "pinyin": "xíng",
+            "pinyin": "zhè yàng zuò xíng bù xíng ？",
             "vi": "Làm như thế này được không?"
           }
         ],
@@ -1748,8 +1748,8 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"放假\" mang nghĩa là gì?",
               "options": [
-                "Đứng",
-                "Trạm, ga",
+                "Địa điểm; nơi chốn",
+                "Không những",
                 "Nghỉ, nghỉ lễ"
               ],
               "answer": "Nghỉ, nghỉ lễ"
@@ -1758,9 +1758,9 @@
               "id": 2,
               "question": "(2) Câu \"放假了，我们一起去玩吧。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
+                "Tôi thích chơi quần vợt.",
                 "Nghỉ lễ rồi, chúng ta cùng đi chơi nhé.",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Chuyên ngành của bạn là gì?"
               ],
               "answer": "Nghỉ lễ rồi, chúng ta cùng đi chơi nhé."
             }
@@ -1776,19 +1776,19 @@
           {
             "speaker": "大卫",
             "zh": "请安静一点儿！",
-            "pinyin": "ānjìng",
+            "pinyin": "qǐng ān jìng yì diǎn ér ！",
             "vi": "Xin hãy yên lặng một chút!"
           },
           {
             "speaker": "李明",
             "zh": "你必须每天练习说汉语。",
-            "pinyin": "bìxū",
+            "pinyin": "nǐ bì xū měi tiān liàn xí shuō hàn yǔ 。",
             "vi": "Bạn cần phải luyện tập nói tiếng Trung mỗi ngày."
           },
           {
             "speaker": "王老师",
             "zh": "这是一本常用的词典。",
-            "pinyin": "chángyòng",
+            "pinyin": "zhè shì yì běn cháng yòng de cí diǎn 。",
             "vi": "Đây là một cuốn từ điển thông dụng."
           }
         ],
@@ -1800,9 +1800,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"安静\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
-                "Yên tĩnh",
-                "Đứng"
+                "Thắng, vượt qua",
+                "Trong nước",
+                "Yên tĩnh"
               ],
               "answer": "Yên tĩnh"
             },
@@ -1811,8 +1811,8 @@
               "question": "(2) Câu \"请安静一点儿！\" được dịch đúng là:",
               "options": [
                 "Xin hãy yên lặng một chút!",
-                "Ngày mai trời sẽ mưa to.",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Tôi cảm thấy vui vì bạn.",
+                "Mùa xuân đến rồi, hoa đều nở."
               ],
               "answer": "Xin hãy yên lặng một chút!"
             }
@@ -1828,19 +1828,19 @@
           {
             "speaker": "大卫",
             "zh": "你打算什么时候去中国？",
-            "pinyin": "dǎsuàn",
+            "pinyin": "nǐ dǎ suàn shén me shí hòu qù zhōng guó ？",
             "vi": "Bạn dự định khi nào đi Trung Quốc?"
           },
           {
             "speaker": "李明",
             "zh": "我们俩不会分开的。",
-            "pinyin": "fēnkāi",
+            "pinyin": "wǒ men liǎ bú huì fēn kāi de 。",
             "vi": "Hai chúng ta sẽ không xa nhau đâu."
           },
           {
             "speaker": "王老师",
             "zh": "你该去休息了。",
-            "pinyin": "gāi",
+            "pinyin": "nǐ gāi qù xiū xi le 。",
             "vi": "Bạn nên đi nghỉ ngơi rồi."
           }
         ],
@@ -1852,9 +1852,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"打算\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
-                "Đứng",
-                "Dự định, kế hoạch"
+                "Dự định, kế hoạch",
+                "khuyết điểm, nhược điểm",
+                "Từ từ"
               ],
               "answer": "Dự định, kế hoạch"
             },
@@ -1862,9 +1862,9 @@
               "id": 2,
               "question": "(2) Câu \"你打算什么时候去中国？\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
                 "Bạn dự định khi nào đi Trung Quốc?",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Vui lòng viết thông tin vào bảng này.",
+                "Tôi không thích học ở trường đại học đó."
               ],
               "answer": "Bạn dự định khi nào đi Trung Quốc?"
             }
@@ -1880,19 +1880,19 @@
           {
             "speaker": "大卫",
             "zh": "后来他去了北京。",
-            "pinyin": "hòulái",
+            "pinyin": "hòu lái tā qù le běi jīng 。",
             "vi": "Sau này anh ấy đã đi Bắc Kinh."
           },
           {
             "speaker": "李明",
             "zh": "你别太着急！",
-            "pinyin": "jí",
+            "pinyin": "nǐ bié tài zháo jí ！",
             "vi": "Bạn đừng quá lo lắng!"
           },
           {
             "speaker": "王老师",
             "zh": "老师每天都检查我们的作业。",
-            "pinyin": "jiǎnchá",
+            "pinyin": "lǎo shī měi tiān dōu jiǎn chá wǒ men de zuò yè 。",
             "vi": "Giáo viên kiểm tra bài tập về nhà của chúng tôi mỗi ngày."
           }
         ],
@@ -1905,8 +1905,8 @@
               "question": "(1) Trong bài khóa, từ \"后来\" mang nghĩa là gì?",
               "options": [
                 "Sau này, về sau",
-                "Trạm, ga",
-                "Đứng"
+                "Chi phí",
+                "Mẹ, mẫu thân"
               ],
               "answer": "Sau này, về sau"
             },
@@ -1914,9 +1914,9 @@
               "id": 2,
               "question": "(2) Câu \"后来他去了北京。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
-                "Sau này anh ấy đã đi Bắc Kinh.",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Bạn trai của tôi là một người giàu có.",
+                "Trong ví tôi chỉ có một trăm tệ thôi.",
+                "Sau này anh ấy đã đi Bắc Kinh."
               ],
               "answer": "Sau này anh ấy đã đi Bắc Kinh."
             }
@@ -1938,19 +1938,19 @@
           {
             "speaker": "大卫",
             "zh": "小狗的毛很软。",
-            "pinyin": "máo",
+            "pinyin": "xiǎo gǒu de máo hěn ruǎn 。",
             "vi": "Lông của chú chó con rất mềm."
           },
           {
             "speaker": "李明",
             "zh": "我口袋里有一毛钱。",
-            "pinyin": "máo",
+            "pinyin": "wǒ kǒu dài lǐ yǒu yì máo qián 。",
             "vi": "Trong túi tôi có một hào."
           },
           {
             "speaker": "王老师",
             "zh": "我可以试一试吗？",
-            "pinyin": "shì",
+            "pinyin": "wǒ kě yǐ shì yi shì ma ？",
             "vi": "Tôi có thể thử một chút không?"
           }
         ],
@@ -1963,8 +1963,8 @@
               "question": "(1) Trong bài khóa, từ \"毛\" mang nghĩa là gì?",
               "options": [
                 "Lông, tóc",
-                "Trạm, ga",
-                "Đứng"
+                "Bị thương, tổn thương",
+                "Thuộc, thuộc về, tuổi"
               ],
               "answer": "Lông, tóc"
             },
@@ -1972,9 +1972,9 @@
               "id": 2,
               "question": "(2) Câu \"小狗的毛很软。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
+                "Thời tiết có chút thay đổi.",
                 "Lông của chú chó con rất mềm.",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Mặt trời mọc từ hướng Đông."
               ],
               "answer": "Lông của chú chó con rất mềm."
             }
@@ -1990,19 +1990,19 @@
           {
             "speaker": "大卫",
             "zh": "她不但会唱歌，还会跳舞。",
-            "pinyin": "búdàn",
+            "pinyin": "tā bú dàn huì chàng gē ， hái huì tiào wǔ 。",
             "vi": "Cô ấy không chỉ biết hát, mà còn biết nhảy."
           },
           {
             "speaker": "李明",
             "zh": "这双鞋的大小正合适。",
-            "pinyin": "dàxiǎo",
+            "pinyin": "zhè shuāng xié de dà xiǎo zhèng hé shì 。",
             "vi": "Đôi giày này có kích thước vừa vặn."
           },
           {
             "speaker": "王老师",
             "zh": "她不仅聪明，而且很努力。",
-            "pinyin": "érqiě",
+            "pinyin": "tā bù jǐn cōng ming ， ér qiě hěn nǔ lì 。",
             "vi": "Cô ấy không chỉ thông minh, hơn nữa còn rất chăm chỉ."
           }
         ],
@@ -2014,9 +2014,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"不但\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
-                "Đứng",
-                "Không những, không chỉ"
+                "Nội tâm",
+                "Không những, không chỉ",
+                "Mang, đeo"
               ],
               "answer": "Không những, không chỉ"
             },
@@ -2024,9 +2024,9 @@
               "id": 2,
               "question": "(2) Câu \"她不但会唱歌，还会跳舞。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
                 "Cô ấy không chỉ biết hát, mà còn biết nhảy.",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Phòng của bạn rất sạch sẽ.",
+                "Anh ấy đạt được nhiều thành tựu."
               ],
               "answer": "Cô ấy không chỉ biết hát, mà còn biết nhảy."
             }
@@ -2042,19 +2042,19 @@
           {
             "speaker": "大卫",
             "zh": "今天比昨天更冷。",
-            "pinyin": "gèng",
+            "pinyin": "jīn tiān bǐ zuó tiān gèng lěng 。",
             "vi": "Hôm nay lạnh hơn hôm qua."
           },
           {
             "speaker": "李明",
             "zh": "这个西瓜有两公斤。",
-            "pinyin": "gōngjīn",
+            "pinyin": "zhè ge xī guā yǒu liǎng gōng jīn 。",
             "vi": "Quả dưa hấu này nặng hai kg."
           },
           {
             "speaker": "王老师",
             "zh": "这件衣服很合适。",
-            "pinyin": "héshì",
+            "pinyin": "zhè jiàn yī fu hěn hé shì 。",
             "vi": "Bộ quần áo này rất phù hợp."
           }
         ],
@@ -2066,9 +2066,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"更\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
-                "Hơn, càng",
-                "Đứng"
+                "đi đến, tới",
+                "Phân công; bố trí",
+                "Hơn, càng"
               ],
               "answer": "Hơn, càng"
             },
@@ -2077,8 +2077,8 @@
               "question": "(2) Câu \"今天比昨天更冷。\" được dịch đúng là:",
               "options": [
                 "Hôm nay lạnh hơn hôm qua.",
-                "Ngày mai trời sẽ mưa to.",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Căn bệnh này là mối nguy hại của tất cả mọi người.",
+                "Anh ấy là đồng nghiệp của tôi."
               ],
               "answer": "Hôm nay lạnh hơn hôm qua."
             }
@@ -2094,19 +2094,19 @@
           {
             "speaker": "大卫",
             "zh": "黄色。",
-            "pinyin": "huángsè",
+            "pinyin": "huáng sè 。",
             "vi": "Màu vàng"
           },
           {
             "speaker": "李明",
             "zh": "我买了两斤苹果。",
-            "pinyin": "jìn",
+            "pinyin": "wǒ mǎi le liǎng jīn píng guǒ 。",
             "vi": "Tôi mua một cân táo."
           },
           {
             "speaker": "王老师",
             "zh": "电脑开机了。",
-            "pinyin": "kāijī",
+            "pinyin": "diàn nǎo kāi jī le 。",
             "vi": "Máy tính đã được bật."
           }
         ],
@@ -2118,9 +2118,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"黄色\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
-                "Đứng",
-                "Màu vàng"
+                "Màu vàng",
+                "Đồng nghiệp",
+                "Nuôi"
               ],
               "answer": "Màu vàng"
             },
@@ -2128,9 +2128,9 @@
               "id": 2,
               "question": "(2) Câu \"黄色。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Màu vàng"
+                "Màu vàng",
+                "Trong lớp có một nhóm trẻ em đang chơi trò chơi",
+                "Tôi chỉ mới đến Bắc Kinh một lần."
               ],
               "answer": "Màu vàng"
             }
@@ -2152,19 +2152,19 @@
           {
             "speaker": "大卫",
             "zh": "王医生每天都要看十到二十位病人。",
-            "pinyin": "bìngrén",
+            "pinyin": "wáng yī shēng měi tiān dōu yào kàn shí dào èr shí wèi bìng rén 。",
             "vi": "Bác sĩ Vương mỗi ngày đều phải khám từ 10 đến 20 bệnh nhân."
           },
           {
             "speaker": "李明",
             "zh": "我常去跑步。",
-            "pinyin": "cháng",
+            "pinyin": "wǒ cháng qù pǎo bù 。",
             "vi": "Tôi thường xuyên chạy bộ."
           },
           {
             "speaker": "王老师",
             "zh": "他正在学开车。",
-            "pinyin": "kāi",
+            "pinyin": "tā zhèng zài xué kāi chē 。",
             "vi": "Anh ấy đang học lái xe."
           }
         ],
@@ -2176,9 +2176,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"病人\" mang nghĩa là gì?",
               "options": [
-                "Đứng",
-                "Trạm, ga",
-                "Bệnh nhân; người bệnh"
+                "Tờ, tấm",
+                "Bệnh nhân; người bệnh",
+                "Tiệc tối"
               ],
               "answer": "Bệnh nhân; người bệnh"
             },
@@ -2186,9 +2186,9 @@
               "id": 2,
               "question": "(2) Câu \"王医生每天都要看十到二十位病人。\" được dịch đúng là:",
               "options": [
-                "Tôi đang ở nhà nghỉ ngơi.",
+                "Tôi cho rằng cách này rất tốt.",
                 "Bác sĩ Vương mỗi ngày đều phải khám từ 10 đến 20 bệnh nhân.",
-                "Ngày mai trời sẽ mưa to."
+                "Kế hoạch này đã được phê duyệt."
               ],
               "answer": "Bác sĩ Vương mỗi ngày đều phải khám từ 10 đến 20 bệnh nhân."
             }
@@ -2204,19 +2204,19 @@
           {
             "speaker": "大卫",
             "zh": "这两个城市的天气差不多。",
-            "pinyin": "chàbuduō",
+            "pinyin": "zhè liǎng gè chéng shì de tiān qì chà bù duō 。",
             "vi": "Thời tiết của hai thành phố này gần như giống nhau."
           },
           {
             "speaker": "李明",
             "zh": "奶奶明天就能出院了。",
-            "pinyin": "chūyuàn",
+            "pinyin": "nǎi nai míng tiān jiù néng chū yuàn le 。",
             "vi": "Ngày mai bà có thể xuất viện rồi."
           },
           {
             "speaker": "王老师",
             "zh": "他得了第一名。",
-            "pinyin": "dé",
+            "pinyin": "tā dé le dì yī míng 。",
             "vi": "Anh ấy đạt giải nhất."
           }
         ],
@@ -2228,9 +2228,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"差不多\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
-                "Đứng",
-                "Gần như, xấp xỉ"
+                "Gần như, xấp xỉ",
+                "khuyết điểm, nhược điểm",
+                "Trung bộ, phần giữa"
               ],
               "answer": "Gần như, xấp xỉ"
             },
@@ -2238,9 +2238,9 @@
               "id": 2,
               "question": "(2) Câu \"这两个城市的天气差不多。\" được dịch đúng là:",
               "options": [
+                "Tôi thường ngày không uống cà phê.",
                 "Thời tiết của hai thành phố này gần như giống nhau.",
-                "Ngày mai trời sẽ mưa to.",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Vấn đề này rất đơn giản."
               ],
               "answer": "Thời tiết của hai thành phố này gần như giống nhau."
             }
@@ -2256,19 +2256,19 @@
           {
             "speaker": "大卫",
             "zh": "他跑得很快。",
-            "pinyin": "de",
+            "pinyin": "tā pǎo dé hěn kuài 。",
             "vi": "Anh ấy chạy rất nhanh."
           },
           {
             "speaker": "李明",
             "zh": "这里的温度很低。",
-            "pinyin": "dī",
+            "pinyin": "zhè lǐ de wēn dù hěn dī 。",
             "vi": "Nhiệt độ ở đây rất thấp."
           },
           {
             "speaker": "王老师",
             "zh": "这个方法很好。",
-            "pinyin": "fāngfǎ",
+            "pinyin": "zhè ge fāng fǎ hěn hǎo 。",
             "vi": "Phương pháp này rất tốt."
           }
         ],
@@ -2281,8 +2281,8 @@
               "question": "(1) Trong bài khóa, từ \"得\" mang nghĩa là gì?",
               "options": [
                 "Được, có thể, đến",
-                "Trạm, ga",
-                "Đứng"
+                "Khóa học, môn học",
+                "Biểu hiện"
               ],
               "answer": "Được, có thể, đến"
             },
@@ -2290,9 +2290,9 @@
               "id": 2,
               "question": "(2) Câu \"他跑得很快。\" được dịch đúng là:",
               "options": [
+                "Vẻ đẹp của thiên nhiên.",
                 "Anh ấy chạy rất nhanh.",
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Ngày mai trời sẽ mưa to."
+                "Chúng ta cần tăng cường rèn luyện."
               ],
               "answer": "Anh ấy chạy rất nhanh."
             }
@@ -2308,19 +2308,19 @@
           {
             "speaker": "大卫",
             "zh": "他很关心我的健康。",
-            "pinyin": "guānxīn",
+            "pinyin": "tā hěn guān xīn wǒ de jiàn kāng 。",
             "vi": "Anh ấy rất quan tâm đến sức khỏe của tôi."
           },
           {
             "speaker": "李明",
             "zh": "运动让身体更健康。",
-            "pinyin": "jiànkāng",
+            "pinyin": "yùn dòng ràng shēn tǐ gèng jiàn kāng 。",
             "vi": "Tập thể dục giúp cơ thể khỏe mạnh hơn."
           },
           {
             "speaker": "王老师",
             "zh": "我今天很开心。",
-            "pinyin": "kāixīn",
+            "pinyin": "wǒ jīn tiān hěn kāi xīn 。",
             "vi": "Hôm nay tôi rất vui."
           }
         ],
@@ -2332,9 +2332,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"关心\" mang nghĩa là gì?",
               "options": [
-                "Quan tâm",
-                "Trạm, ga",
-                "Đứng"
+                "Phát sóng",
+                "Trả; chi trả",
+                "Quan tâm"
               ],
               "answer": "Quan tâm"
             },
@@ -2342,9 +2342,9 @@
               "id": 2,
               "question": "(2) Câu \"他很关心我的健康。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
                 "Anh ấy rất quan tâm đến sức khỏe của tôi.",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Anh ấy có một cơ hội việc làm rất tốt.",
+                "Nếu không cố gắng, bạn sẽ mất cơ hội."
               ],
               "answer": "Anh ấy rất quan tâm đến sức khỏe của tôi."
             }
@@ -2366,19 +2366,19 @@
           {
             "speaker": "大卫",
             "zh": "我习惯早上喝茶。",
-            "pinyin": "xíguàn",
+            "pinyin": "wǒ xí guàn zǎo shàng hē chá 。",
             "vi": "Tôi có thói quen uống trà buổi sáng."
           },
           {
             "speaker": "李明",
             "zh": "我心里很高兴。",
-            "pinyin": "xīn·lǐ",
+            "pinyin": "wǒ xīn lǐ hěn gāo xìng 。",
             "vi": "Trong lòng tôi rất vui."
           },
           {
             "speaker": "王老师",
             "zh": "以后我要学中文。",
-            "pinyin": "yǐhòu",
+            "pinyin": "yǐ hòu wǒ yào xué zhōng wén 。",
             "vi": "Sau này tôi muốn học tiếng Trung."
           }
         ],
@@ -2390,9 +2390,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"习惯\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
                 "Thói quen",
-                "Đứng"
+                "Cùng nhau",
+                "Họa sĩ"
               ],
               "answer": "Thói quen"
             },
@@ -2400,9 +2400,9 @@
               "id": 2,
               "question": "(2) Câu \"我习惯早上喝茶。\" được dịch đúng là:",
               "options": [
-                "Tôi đang ở nhà nghỉ ngơi.",
                 "Tôi có thói quen uống trà buổi sáng.",
-                "Ngày mai trời sẽ mưa to."
+                "Chúng ta đi đến chỗ đó xem thử.",
+                "Hôm nay khá lạnh."
               ],
               "answer": "Tôi có thói quen uống trà buổi sáng."
             }
@@ -2418,19 +2418,19 @@
           {
             "speaker": "大卫",
             "zh": "他生病了需要住院。",
-            "pinyin": "zhùyuàn",
+            "pinyin": "tā shēng bìng le xū yào zhù yuàn 。",
             "vi": "Anh ấy bị bệnh nên cần nhập viện."
           },
           {
             "speaker": "李明",
             "zh": "最近天气很冷。",
-            "pinyin": "zuìjìn",
+            "pinyin": "zuì jìn tiān qì hěn lěng 。",
             "vi": "Gần đây thời tiết rất lạnh."
           },
           {
             "speaker": "王老师",
             "zh": "他感冒了，不能来上课。",
-            "pinyin": "gǎnmào",
+            "pinyin": "tā gǎn mào le ， bù néng lái shàng kè 。",
             "vi": "Anh ấy bị cảm, không thể đến lớp."
           }
         ],
@@ -2442,9 +2442,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"住院\" mang nghĩa là gì?",
               "options": [
-                "Nhập viện",
-                "Trạm, ga",
-                "Đứng"
+                "Quốc gia",
+                "Cần, phải",
+                "Nhập viện"
               ],
               "answer": "Nhập viện"
             },
@@ -2452,9 +2452,9 @@
               "id": 2,
               "question": "(2) Câu \"他生病了需要住院。\" được dịch đúng là:",
               "options": [
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Anh ấy bị bệnh nên cần nhập viện.",
-                "Ngày mai trời sẽ mưa to."
+                "Cảm ơn sự phối hợp và ủng hộ của mọi người.",
+                "Ngày mai tôi phải chuyển nhà đi.",
+                "Anh ấy bị bệnh nên cần nhập viện."
               ],
               "answer": "Anh ấy bị bệnh nên cần nhập viện."
             }
@@ -2470,19 +2470,19 @@
           {
             "speaker": "大卫",
             "zh": "他最近吃太多了，变胖了。",
-            "pinyin": "pàng",
+            "pinyin": "tā zuì jìn chī tài duō le ， biàn pàng le 。",
             "vi": "Gần đây anh ấy ăn nhiều quá nên béo lên rồi."
           },
           {
             "speaker": "李明",
             "zh": "天气突然变冷了。",
-            "pinyin": "tūrán",
+            "pinyin": "tiān qì tū rán biàn lěng le 。",
             "vi": "Thời tiết đột nhiên trở lạnh rồi."
           },
           {
             "speaker": "王老师",
             "zh": "我喜欢这种类的花。",
-            "pinyin": "zhǒng",
+            "pinyin": "wǒ xǐ huan zhè zhǒng lèi de huā 。",
             "vi": "Tôi thích loại hoa này."
           }
         ],
@@ -2494,8 +2494,8 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"胖\" mang nghĩa là gì?",
               "options": [
-                "Đứng",
-                "Trạm, ga",
+                "Tinh thần, trí óc",
+                "Mối nguy hại, sự tổn hại",
                 "Mập, béo"
               ],
               "answer": "Mập, béo"
@@ -2504,9 +2504,9 @@
               "id": 2,
               "question": "(2) Câu \"他最近吃太多了，变胖了。\" được dịch đúng là:",
               "options": [
-                "Gần đây anh ấy ăn nhiều quá nên béo lên rồi.",
-                "Ngày mai trời sẽ mưa to.",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Công việc phát triển rất thuận lợi.",
+                "Chúng ta nên học hỏi những nền văn hóa khác nhau.",
+                "Gần đây anh ấy ăn nhiều quá nên béo lên rồi."
               ],
               "answer": "Gần đây anh ấy ăn nhiều quá nên béo lên rồi."
             }
@@ -2522,19 +2522,19 @@
           {
             "speaker": "大卫",
             "zh": "在过马路时，大家一定要注意安全。",
-            "pinyin": "zhùyì",
+            "pinyin": "zài guò mǎ lù shí ， dà jiā yí dìng yào zhù yì ān quán 。",
             "vi": "Khi qua đường, mọi người nhất định phải chú ý an toàn."
           },
           {
             "speaker": "李明",
             "zh": "价格很低。",
-            "pinyin": "dī",
+            "pinyin": "jià gé hěn dī 。",
             "vi": "Giá rất thấp."
           },
           {
             "speaker": "王老师",
             "zh": "我种了一棵树。",
-            "pinyin": "zhòng",
+            "pinyin": "wǒ zhǒng le yì kē shù 。",
             "vi": "Tôi trồng một cây."
           }
         ],
@@ -2546,9 +2546,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"注意\" mang nghĩa là gì?",
               "options": [
-                "Chú ý, để ý, lưu tâm",
-                "Đứng",
-                "Trạm, ga"
+                "Biểu đạt",
+                "Hướng về, về phía",
+                "Chú ý, để ý, lưu tâm"
               ],
               "answer": "Chú ý, để ý, lưu tâm"
             },
@@ -2556,9 +2556,9 @@
               "id": 2,
               "question": "(2) Câu \"在过马路时，大家一定要注意安全。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
+                "Dự kiến anh ấy sẽ đến vào tuần tới.",
                 "Khi qua đường, mọi người nhất định phải chú ý an toàn.",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Chúng tôi đang thử nghiệm một loại thuốc mới."
               ],
               "answer": "Khi qua đường, mọi người nhất định phải chú ý an toàn."
             }
@@ -2580,19 +2580,19 @@
           {
             "speaker": "大卫",
             "zh": "他得到了奖学金。",
-            "pinyin": "dédào",
+            "pinyin": "tā dé dào le jiǎng xué jīn 。",
             "vi": "Anh ấy đã nhận được học bổng."
           },
           {
             "speaker": "李明",
             "zh": "我每天六点回家。",
-            "pinyin": "huí",
+            "pinyin": "wǒ měi tiān liù diǎn huí jiā 。",
             "vi": "Tôi về nhà lúc 6 giờ mỗi ngày."
           },
           {
             "speaker": "王老师",
             "zh": "这个班的男生比女生多。",
-            "pinyin": "nánshēng",
+            "pinyin": "zhè ge bān de nán shēng bǐ nǚ shēng duō 。",
             "vi": "Nam sinh trong lớp này nhiều hơn nữ sinh."
           }
         ],
@@ -2604,9 +2604,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"得到\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
+                "World Cup",
                 "Đạt được; nhận được",
-                "Đứng"
+                "Câu hỏi khó, vấn đề khó"
               ],
               "answer": "Đạt được; nhận được"
             },
@@ -2614,9 +2614,9 @@
               "id": 2,
               "question": "(2) Câu \"他得到了奖学金。\" được dịch đúng là:",
               "options": [
+                "Mùa đông rất lạnh, bạn nên mặc nhiều quần áo vào.",
                 "Anh ấy đã nhận được học bổng.",
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Ngày mai trời sẽ mưa to."
+                "Thành phố Hồ Chí Minh có rất nhiều đồ ăn ngon."
               ],
               "answer": "Anh ấy đã nhận được học bổng."
             }
@@ -2632,19 +2632,19 @@
           {
             "speaker": "大卫",
             "zh": "今天我们一起参加游泳比赛。",
-            "pinyin": "cānjiā",
+            "pinyin": "jīn tiān wǒ men yì qǐ cān jiā yóu yǒng bǐ sài 。",
             "vi": "Hôm nay chúng tôi cùng nhau tham gia một cuộc thi bơi lội."
           },
           {
             "speaker": "李明",
             "zh": "他这次考试成绩很好。",
-            "pinyin": "chéngjì",
+            "pinyin": "tā zhè cì kǎo shì chéng jì hěn hǎo 。",
             "vi": "Thành tích kỳ thi lần này của anh ấy rất tốt."
           },
           {
             "speaker": "王老师",
             "zh": "他家里有好多书。",
-            "pinyin": "hǎoduō",
+            "pinyin": "tā jiā lǐ yǒu hǎo duō shū 。",
             "vi": "Nhà anh ấy có rất nhiều sách."
           }
         ],
@@ -2656,9 +2656,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"参加\" mang nghĩa là gì?",
               "options": [
+                "Hào",
                 "Tham gia",
-                "Trạm, ga",
-                "Đứng"
+                "Trà đen"
               ],
               "answer": "Tham gia"
             },
@@ -2666,9 +2666,9 @@
               "id": 2,
               "question": "(2) Câu \"今天我们一起参加游泳比赛。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
+                "Xin cho tôi thêm một chút nước.",
                 "Hôm nay chúng tôi cùng nhau tham gia một cuộc thi bơi lội.",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Xin vui lòng đưa cho tôi thực đơn."
               ],
               "answer": "Hôm nay chúng tôi cùng nhau tham gia một cuộc thi bơi lội."
             }
@@ -2684,19 +2684,19 @@
           {
             "speaker": "大卫",
             "zh": "我明天要回老家了。",
-            "pinyin": "huí",
+            "pinyin": "wǒ míng tiān yào huí lǎo jiā le 。",
             "vi": "Ngày mai tôi sẽ về quê."
           },
           {
             "speaker": "李明",
             "zh": "我的银行卡丢了。",
-            "pinyin": "kǎ",
+            "pinyin": "wǒ de yín háng kǎ diū le 。",
             "vi": "Thẻ ngân hàng của tôi bị mất rồi."
           },
           {
             "speaker": "王老师",
             "zh": "他每天都练习写汉字。",
-            "pinyin": "liàn",
+            "pinyin": "tā měi tiān dōu liàn xí xiě hàn zì 。",
             "vi": "Anh ấy luyện viết chữ Hán mỗi ngày."
           }
         ],
@@ -2708,8 +2708,8 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"回\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
-                "Đứng",
+                "Mỗi người; từng người",
+                "Liên hợp, liên minh",
                 "Quay lại, trở về"
               ],
               "answer": "Quay lại, trở về"
@@ -2718,9 +2718,9 @@
               "id": 2,
               "question": "(2) Câu \"我明天要回老家了。\" được dịch đúng là:",
               "options": [
-                "Ngày mai tôi sẽ về quê.",
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Ngày mai trời sẽ mưa to."
+                "Anh ấy có khả năng học rất tốt.",
+                "Anh ấy chào hỏi thầy giáo.",
+                "Ngày mai tôi sẽ về quê."
               ],
               "answer": "Ngày mai tôi sẽ về quê."
             }
@@ -2736,19 +2736,19 @@
           {
             "speaker": "大卫",
             "zh": "练习。",
-            "pinyin": "liànxí",
+            "pinyin": "liàn xí 。",
             "vi": "Luyện tập, rèn luyện"
           },
           {
             "speaker": "李明",
             "zh": "我们去球场玩吧。",
-            "pinyin": "qiúchǎng",
+            "pinyin": "wǒ men qù qiú chǎng wán ba 。",
             "vi": "Chúng ta đi sân bóng chơi nhé."
           },
           {
             "speaker": "王老师",
             "zh": "他受到(tô đỏ)了老师的表扬。",
-            "pinyin": "shòudào",
+            "pinyin": "tā shòu dào (tô đỏ) liǎo lǎo shī de biǎo yáng 。",
             "vi": "Anh ấy được cô giáo khen ngợi."
           }
         ],
@@ -2760,9 +2760,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"练习\" mang nghĩa là gì?",
               "options": [
-                "Đứng",
-                "Trạm, ga",
-                "Luyện tập, rèn luyện"
+                "Luyện tập, rèn luyện",
+                "Phương hướng",
+                "Quan niệm"
               ],
               "answer": "Luyện tập, rèn luyện"
             },
@@ -2770,9 +2770,9 @@
               "id": 2,
               "question": "(2) Câu \"练习。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Luyện tập, rèn luyện"
+                "Cả hai bên đều đồng ý với quyết định này.",
+                "Luyện tập, rèn luyện",
+                "Mặt cô đỏ bừng."
               ],
               "answer": "Luyện tập, rèn luyện"
             }
@@ -2794,19 +2794,19 @@
           {
             "speaker": "大卫",
             "zh": "我喜欢打网球。",
-            "pinyin": "wǎngqiú",
+            "pinyin": "wǒ xǐ huan dǎ wǎng qiú 。",
             "vi": "Tôi thích chơi quần vợt."
           },
           {
             "speaker": "李明",
             "zh": "我们的校园很大。",
-            "pinyin": "xiàoyuán",
+            "pinyin": "wǒ men de xiào yuán hěn dà 。",
             "vi": "Khuôn viên trường chúng tôi rất lớn."
           },
           {
             "speaker": "王老师",
             "zh": "太吵会影响学习。",
-            "pinyin": "yǐngxiǎng",
+            "pinyin": "tài chǎo huì yǐng xiǎng xué xí 。",
             "vi": "Quá ồn sẽ ảnh hưởng đến việc học."
           }
         ],
@@ -2818,9 +2818,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"网球\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
-                "Đứng",
-                "Quần vợt"
+                "Quần vợt",
+                "Đại sứ quán",
+                "Sự nghiệp"
               ],
               "answer": "Quần vợt"
             },
@@ -2828,9 +2828,9 @@
               "id": 2,
               "question": "(2) Câu \"我喜欢打网球。\" được dịch đúng là:",
               "options": [
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Tôi thích chơi quần vợt.",
-                "Ngày mai trời sẽ mưa to."
+                "Tôi thích uống canh gà.",
+                "Việt Nam đang hiện đại hóa.",
+                "Tôi thích chơi quần vợt."
               ],
               "answer": "Tôi thích chơi quần vợt."
             }
@@ -2846,19 +2846,19 @@
           {
             "speaker": "大卫",
             "zh": "这本书的内容很主要。",
-            "pinyin": "zhǔyào",
+            "pinyin": "zhè běn shū de nèi róng hěn zhǔ yào 。",
             "vi": "Nội dung của cuốn sách này rất quan trọng."
           },
           {
             "speaker": "李明",
             "zh": "我们明天有一个篮球比赛。",
-            "pinyin": "bǐsài",
+            "pinyin": "wǒ men míng tiān yǒu yí gè lán qiú bǐ sài 。",
             "vi": "Ngày mai chúng tôi có một cuộc thi bóng rổ."
           },
           {
             "speaker": "王老师",
             "zh": "她在考试中得分很高。",
-            "pinyin": "défēn",
+            "pinyin": "tā zài kǎo shì zhōng dé fēn hěn gāo 。",
             "vi": "Cô ấy đạt được điểm rất cao trong kỳ thi."
           }
         ],
@@ -2871,8 +2871,8 @@
               "question": "(1) Trong bài khóa, từ \"主要\" mang nghĩa là gì?",
               "options": [
                 "Chủ yếu",
-                "Đứng",
-                "Trạm, ga"
+                "Huấn luyện, đào tạo, rèn",
+                "Ngay lập tức"
               ],
               "answer": "Chủ yếu"
             },
@@ -2881,8 +2881,8 @@
               "question": "(2) Câu \"这本书的内容很主要。\" được dịch đúng là:",
               "options": [
                 "Nội dung của cuốn sách này rất quan trọng.",
-                "Ngày mai trời sẽ mưa to.",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Anh ấy học võ thuật từ nhỏ.",
+                "Trường học đã mua thiết bị giảng dạy mới"
               ],
               "answer": "Nội dung của cuốn sách này rất quan trọng."
             }
@@ -2898,19 +2898,19 @@
           {
             "speaker": "大卫",
             "zh": "明天考试，我有点紧张。",
-            "pinyin": "jǐnzhāng",
+            "pinyin": "míng tiān kǎo shì ， wǒ yǒu diǎn jǐn zhāng 。",
             "vi": "Mai thi rồi, tôi có hơi căng thẳng."
           },
           {
             "speaker": "李明",
             "zh": "他喜欢喝冰啤酒。",
-            "pinyin": "píjiǔ",
+            "pinyin": "tā xǐ huan hē bīng pí jiǔ 。",
             "vi": "Anh ấy thích uống bia lạnh."
           },
           {
             "speaker": "王老师",
             "zh": "世界上有很多国家。",
-            "pinyin": "shìjiè",
+            "pinyin": "shì jiè shàng yǒu hěn duō guó jiā 。",
             "vi": "Trên thế giới có rất nhiều quốc gia."
           }
         ],
@@ -2922,9 +2922,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"紧张\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
-                "Đứng",
-                "Căng thẳng"
+                "thân thiết, gần gũi, ân cần",
+                "Căng thẳng",
+                "Khởi động; bắt đầu"
               ],
               "answer": "Căng thẳng"
             },
@@ -2932,8 +2932,8 @@
               "id": 2,
               "question": "(2) Câu \"明天考试，我有点紧张。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
-                "Tôi đang ở nhà nghỉ ngơi.",
+                "Đây là một câu chuyện có thật.",
+                "Vui lòng đặt sách trở lại giá sách.",
                 "Mai thi rồi, tôi có hơi căng thẳng."
               ],
               "answer": "Mai thi rồi, tôi có hơi căng thẳng."
@@ -2950,19 +2950,19 @@
           {
             "speaker": "大卫",
             "zh": "为了健康，他开始跑步。",
-            "pinyin": "wèile",
+            "pinyin": "wèi le jiàn kāng ， tā kāi shǐ pǎo bù 。",
             "vi": "Để có sức khỏe, anh ấy bắt đầu chạy bộ."
           },
           {
             "speaker": "李明",
             "zh": "我只是说说而已。",
-            "pinyin": "zhǐshì",
+            "pinyin": "wǒ zhǐ shì shuō shuō ér yǐ 。",
             "vi": "Tôi chỉ là nói chơi thôi."
           },
           {
             "speaker": "王老师",
             "zh": "我很想去，只是没有时间。",
-            "pinyin": "zhǐshì",
+            "pinyin": "wǒ hěn xiǎng qù ， zhǐ shì méi yǒu shí jiān 。",
             "vi": "Tôi rất muốn đi, chỉ có điều là không có thời gian."
           }
         ],
@@ -2974,9 +2974,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"为了\" mang nghĩa là gì?",
               "options": [
+                "đi dạo, tản bộ",
                 "Để, vì",
-                "Trạm, ga",
-                "Đứng"
+                "thân thiết, gần gũi, ân cần"
               ],
               "answer": "Để, vì"
             },
@@ -2984,9 +2984,9 @@
               "id": 2,
               "question": "(2) Câu \"为了健康，他开始跑步。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Để có sức khỏe, anh ấy bắt đầu chạy bộ."
+                "Người làm ảo thuật đột nhiên biến mất.",
+                "Để có sức khỏe, anh ấy bắt đầu chạy bộ.",
+                "Một ngày nào đó chúng ta sẽ gặp lại."
               ],
               "answer": "Để có sức khỏe, anh ấy bắt đầu chạy bộ."
             }
@@ -3008,19 +3008,19 @@
           {
             "speaker": "大卫",
             "zh": "他今天状态很差。",
-            "pinyin": "chà",
+            "pinyin": "tā jīn tiān zhuàng tài hěn chà 。",
             "vi": "Trạng thái của anh hôm nay rất tệ."
           },
           {
             "speaker": "李明",
             "zh": "我明白你的意思。",
-            "pinyin": "míngbai",
+            "pinyin": "wǒ míng bái nǐ de yì sī 。",
             "vi": "Tôi hiểu ý của bạn."
           },
           {
             "speaker": "王老师",
             "zh": "这个问题很难回答。",
-            "pinyin": "nán",
+            "pinyin": "zhè ge wèn tí hěn nán huí dá 。",
             "vi": "Câu hỏi này rất khó trả lời."
           }
         ],
@@ -3032,9 +3032,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"差\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
-                "Đứng",
-                "Kém; tệ; không đạt"
+                "Kém; tệ; không đạt",
+                "Quan tâm, theo dõi",
+                "Tăng tốc"
               ],
               "answer": "Kém; tệ; không đạt"
             },
@@ -3043,8 +3043,8 @@
               "question": "(2) Câu \"他今天状态很差。\" được dịch đúng là:",
               "options": [
                 "Trạng thái của anh hôm nay rất tệ.",
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Ngày mai trời sẽ mưa to."
+                "Quyển sách này thuộc về tôi.",
+                "Đừng lo, có rất nhiều thời gian."
               ],
               "answer": "Trạng thái của anh hôm nay rất tệ."
             }
@@ -3060,19 +3060,19 @@
           {
             "speaker": "大卫",
             "zh": "你是几年级的学生？",
-            "pinyin": "niánjí",
+            "pinyin": "nǐ shì jǐ nián jí de xué shēng ？",
             "vi": "Bạn là học sinh lớp mấy?"
           },
           {
             "speaker": "李明",
             "zh": "他学习很认真。",
-            "pinyin": "rènzhēn",
+            "pinyin": "tā xué xí hěn rèn zhēn 。",
             "vi": "Anh ấy học rất chăm chỉ."
           },
           {
             "speaker": "王老师",
             "zh": "你会说几种外语？",
-            "pinyin": "wàiyǔ",
+            "pinyin": "nǐ huì shuō jǐ zhǒng wài yǔ ？",
             "vi": "Bạn biết nói mấy thứ tiếng nước ngoài?"
           }
         ],
@@ -3084,9 +3084,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"年级\" mang nghĩa là gì?",
               "options": [
-                "Đứng",
+                "Con cái",
                 "Niên khóa, cấp lớp",
-                "Trạm, ga"
+                "Nên, cần"
               ],
               "answer": "Niên khóa, cấp lớp"
             },
@@ -3094,9 +3094,9 @@
               "id": 2,
               "question": "(2) Câu \"你是几年级的学生？\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Bạn là học sinh lớp mấy?"
+                "Kế hoạch này rất khó thực hiện.",
+                "Bạn là học sinh lớp mấy?",
+                "Anh ấy phát ra âm thanh rất lớn.\n\nBạn đến muộn rồi, máy bay đi Bắc Kinh đã khởi hành cất cánh rồi."
               ],
               "answer": "Bạn là học sinh lớp mấy?"
             }
@@ -3112,19 +3112,19 @@
           {
             "speaker": "大卫",
             "zh": "请翻到第五页。",
-            "pinyin": "yè",
+            "pinyin": "qǐng fān dào dì wǔ yè 。",
             "vi": "Vui lòng lật đến trang 5."
           },
           {
             "speaker": "李明",
             "zh": "老师在办公室工作。",
-            "pinyin": "bàngōngshì",
+            "pinyin": "lǎo shī zài bàn gōng shì gōng zuò 。",
             "vi": "Giáo viên đang làm việc ở văn phòng."
           },
           {
             "speaker": "王老师",
             "zh": "上课时要认真做笔记。",
-            "pinyin": "bǐjì",
+            "pinyin": "shàng kè shí yào rèn zhēn zuò bǐ jì 。",
             "vi": "Trong lớp học phải ghi chép cẩn thận."
           }
         ],
@@ -3136,9 +3136,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"页\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
+                "Bị thương, tổn thương",
                 "Trang",
-                "Đứng"
+                "Khoa học kỹ thuật"
               ],
               "answer": "Trang"
             },
@@ -3146,9 +3146,9 @@
               "id": 2,
               "question": "(2) Câu \"请翻到第五页。\" được dịch đúng là:",
               "options": [
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Ngày mai trời sẽ mưa to.",
-                "Vui lòng lật đến trang 5."
+                "Tay cô ấy bị dao cắt trầy",
+                "Vui lòng lật đến trang 5.",
+                "Cô ấy đã đợi anh ấy đúng một tiếng đồng hồ."
               ],
               "answer": "Vui lòng lật đến trang 5."
             }
@@ -3164,19 +3164,19 @@
           {
             "speaker": "大卫",
             "zh": "这本书我看了三遍。",
-            "pinyin": "biàn",
+            "pinyin": "zhè běn shū wǒ kàn le sān biàn 。",
             "vi": "Quyển sách này tôi đã đọc ba lần."
           },
           {
             "speaker": "李明",
             "zh": "这些句子都是日常的对话。",
-            "pinyin": "duìhuà",
+            "pinyin": "zhè xiē jù zi dōu shì rì cháng de duì huà 。",
             "vi": "Những câu này được lấy từ các cuộc trò chuyện hàng ngày."
           },
           {
             "speaker": "王老师",
             "zh": "考试前要认真复习。",
-            "pinyin": "fùxí",
+            "pinyin": "kǎo shì qián yào rèn zhēn fù xí 。",
             "vi": "Trước kỳ thi phải ôn tập chăm chỉ."
           }
         ],
@@ -3188,9 +3188,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"遍\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
                 "Lần",
-                "Đứng"
+                "thường nhật, hàng ngày",
+                "Đi sâu vào, thâm nhập"
               ],
               "answer": "Lần"
             },
@@ -3198,9 +3198,9 @@
               "id": 2,
               "question": "(2) Câu \"这本书我看了三遍。\" được dịch đúng là:",
               "options": [
-                "Tôi đang ở nhà nghỉ ngơi.",
+                "Lông của chú chó con rất mềm.",
                 "Quyển sách này tôi đã đọc ba lần.",
-                "Ngày mai trời sẽ mưa to."
+                "Thầy giáo giảng rất rõ ràng."
               ],
               "answer": "Quyển sách này tôi đã đọc ba lần."
             }
@@ -3222,19 +3222,19 @@
           {
             "speaker": "大卫",
             "zh": "请读这个句子。",
-            "pinyin": "jù",
+            "pinyin": "qǐng dú zhè ge jù zi 。",
             "vi": "Hãy đọc câu này nhé!"
           },
           {
             "speaker": "李明",
             "zh": "句子。",
-            "pinyin": "jùzi",
+            "pinyin": "jù zi 。",
             "vi": "Câu"
           },
           {
             "speaker": "王老师",
             "zh": "我今年读三年级。",
-            "pinyin": "niánjí",
+            "pinyin": "wǒ jīn nián dú sān nián jí 。",
             "vi": "Năm nay tôi học lớp ba."
           }
         ],
@@ -3246,9 +3246,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"句\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
                 "Câu",
-                "Đứng"
+                "Biển",
+                "Gió"
               ],
               "answer": "Câu"
             },
@@ -3256,8 +3256,8 @@
               "id": 2,
               "question": "(2) Câu \"请读这个句子。\" được dịch đúng là:",
               "options": [
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Ngày mai trời sẽ mưa to.",
+                "Máy tính đã được bật.",
+                "Tốc độ truyền bá tin tức rất quan trọng.",
                 "Hãy đọc câu này nhé!"
               ],
               "answer": "Hãy đọc câu này nhé!"
@@ -3274,19 +3274,19 @@
           {
             "speaker": "大卫",
             "zh": "他努力学习汉语。",
-            "pinyin": "nǔlì",
+            "pinyin": "tā nǔ lì xué xí hàn yǔ 。",
             "vi": "Anh ấy nỗ lực học tiếng Trung."
           },
           {
             "speaker": "李明",
             "zh": "我看不清楚(tô đỏ)。",
-            "pinyin": "qīngchǔ",
+            "pinyin": "wǒ kàn bù qīng chǔ (tô đỏ)。",
             "vi": "Tôi nhìn không rõ."
           },
           {
             "speaker": "王老师",
             "zh": "我要提高汉语水平。",
-            "pinyin": "tígāo",
+            "pinyin": "wǒ yào tí gāo hàn yǔ shuǐ píng 。",
             "vi": "Tôi muốn nâng cao trình độ tiếng Trung."
           }
         ],
@@ -3298,9 +3298,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"努力\" mang nghĩa là gì?",
               "options": [
+                "Cân",
                 "Nỗ lực, cố gắng",
-                "Trạm, ga",
-                "Đứng"
+                "Tập trung"
               ],
               "answer": "Nỗ lực, cố gắng"
             },
@@ -3308,9 +3308,9 @@
               "id": 2,
               "question": "(2) Câu \"他努力学习汉语。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
                 "Anh ấy nỗ lực học tiếng Trung.",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Ngọn núi đó rất cao.",
+                "Tôi thường ngày không uống cà phê."
               ],
               "answer": "Anh ấy nỗ lực học tiếng Trung."
             }
@@ -3326,19 +3326,19 @@
           {
             "speaker": "大卫",
             "zh": "老师的要求很高。",
-            "pinyin": "yāoqiú",
+            "pinyin": "lǎo shī de yāo qiú hěn gāo 。",
             "vi": "Yêu cầu của giáo viên rất cao."
           },
           {
             "speaker": "李明",
             "zh": "这家店的衣服一般。",
-            "pinyin": "yìbān",
+            "pinyin": "zhè jiā diàn de yī fu yì bān 。",
             "vi": "Quần áo ở cửa hàng này bình thường."
           },
           {
             "speaker": "王老师",
             "zh": "今天的作业很多。",
-            "pinyin": "zuòyè",
+            "pinyin": "jīn tiān de zuò yè hěn duō 。",
             "vi": "Hôm nay có rất nhiều bài tập."
           }
         ],
@@ -3350,9 +3350,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"要求\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
                 "Yêu cầu",
-                "Đứng"
+                "Tính",
+                "Bị thương, tổn thương"
               ],
               "answer": "Yêu cầu"
             },
@@ -3360,9 +3360,9 @@
               "id": 2,
               "question": "(2) Câu \"老师的要求很高。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
+                "Hãy đặt sách lên bàn.",
                 "Yêu cầu của giáo viên rất cao.",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Đừng lo, có rất nhiều thời gian."
               ],
               "answer": "Yêu cầu của giáo viên rất cao."
             }
@@ -3378,19 +3378,19 @@
           {
             "speaker": "大卫",
             "zh": "请把书放在桌子上。",
-            "pinyin": "bǎ",
+            "pinyin": "qǐng bǎ shū fàng zài zhuō zi shàng 。",
             "vi": "Hãy đặt sách lên bàn."
           },
           {
             "speaker": "李明",
             "zh": "他买了(tô đỏ一把)伞。",
-            "pinyin": "bǎ",
+            "pinyin": "tā mǎi le (tô đỏ yì bǎ ) sǎn 。",
             "vi": "Anh ấy đã mua một cái ô."
           },
           {
             "speaker": "王老师",
             "zh": "你当然可以参加这个活动。",
-            "pinyin": "dāngrán",
+            "pinyin": "nǐ dāng rán kě yǐ cān jiā zhè ge huó dòng 。",
             "vi": "Đương nhiên bạn có thể tham gia hoạt động này."
           }
         ],
@@ -3402,9 +3402,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"把\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
                 "Đem, lấy",
-                "Đứng"
+                "Căn nhà, căn phòng",
+                "Cảnh sắc"
               ],
               "answer": "Đem, lấy"
             },
@@ -3412,9 +3412,9 @@
               "id": 2,
               "question": "(2) Câu \"请把书放在桌子上。\" được dịch đúng là:",
               "options": [
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Hãy đặt sách lên bàn.",
-                "Ngày mai trời sẽ mưa to."
+                "Tôi ra sân bay đón bạn.",
+                "Thầy giáo dạy chúng tôi cách phân biệt những chữ Hán này",
+                "Hãy đặt sách lên bàn."
               ],
               "answer": "Hãy đặt sách lên bàn."
             }
@@ -3436,19 +3436,19 @@
           {
             "speaker": "大卫",
             "zh": "这本书可能是别人的。",
-            "pinyin": "biérén",
+            "pinyin": "zhè běn shū kě néng shì bié rén de 。",
             "vi": "Ngoại trừ Tiểu Lệ ra, những người khác đều không muốn đi."
           },
           {
             "speaker": "李明",
             "zh": "会议的地点已经确定了。",
-            "pinyin": "dìdiǎn",
+            "pinyin": "huì yì de dì diǎn yǐ jīng què dìng le 。",
             "vi": "Địa điểm cuộc họp đã được xác định."
           },
           {
             "speaker": "王老师",
             "zh": "我们后天去北京。",
-            "pinyin": "hòutiān",
+            "pinyin": "wǒ men hòu tiān qù běi jīng 。",
             "vi": "Chúng tôi sẽ đi Bắc Kinh vào ngày kia."
           }
         ],
@@ -3460,9 +3460,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"别人\" mang nghĩa là gì?",
               "options": [
-                "Đứng",
-                "Trạm, ga",
-                "Người khác; người ta"
+                "Thực phẩm, thức ăn",
+                "Người khác; người ta",
+                "phân biệt"
               ],
               "answer": "Người khác; người ta"
             },
@@ -3470,9 +3470,9 @@
               "id": 2,
               "question": "(2) Câu \"这本书可能是别人的。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
                 "Ngoại trừ Tiểu Lệ ra, những người khác đều không muốn đi.",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Mưa cuối cùng đã ngừng rơi.",
+                "Thu nhập của công ty năm nay đã tăng lên."
               ],
               "answer": "Ngoại trừ Tiểu Lệ ra, những người khác đều không muốn đi."
             }
@@ -3488,19 +3488,19 @@
           {
             "speaker": "大卫",
             "zh": "我下午三点要开会。",
-            "pinyin": "kāi huì",
+            "pinyin": "wǒ xià wǔ sān diǎn yào kāi huì 。",
             "vi": "Tôi có cuộc họp lúc 3 giờ chiều."
           },
           {
             "speaker": "李明",
             "zh": "老师，今天我想请假。",
-            "pinyin": "qǐngjià",
+            "pinyin": "lǎo shī ， jīn tiān wǒ xiǎng qǐng jià 。",
             "vi": "Thầy ơi, hôm nay em muốn xin nghỉ."
           },
           {
             "speaker": "王老师",
             "zh": "你有办法吗？",
-            "pinyin": "bànfǎ",
+            "pinyin": "nǐ yǒu bàn fǎ ma ？",
             "vi": "Bạn có cách nào không?"
           }
         ],
@@ -3512,9 +3512,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"开会\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
-                "Họp, tổ chức cuộc họp",
-                "Đứng"
+                "Nổi tiếng",
+                "Thuộc, thuộc về, tuổi",
+                "Họp, tổ chức cuộc họp"
               ],
               "answer": "Họp, tổ chức cuộc họp"
             },
@@ -3522,9 +3522,9 @@
               "id": 2,
               "question": "(2) Câu \"我下午三点要开会。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Tôi có cuộc họp lúc 3 giờ chiều."
+                "Tôi có cuộc họp lúc 3 giờ chiều.",
+                "Nam sinh trong lớp này nhiều hơn nữ sinh.",
+                "Chúng tôi xuất phát lúc 8 giờ sáng."
               ],
               "answer": "Tôi có cuộc họp lúc 3 giờ chiều."
             }
@@ -3540,19 +3540,19 @@
           {
             "speaker": "大卫",
             "zh": "今天发货，明天送达。",
-            "pinyin": "fā",
+            "pinyin": "jīn tiān fā huò ， míng tiān sòng dá 。",
             "vi": "Gửi hàng hôm nay, giao hàng ngày mai."
           },
           {
             "speaker": "李明",
             "zh": "我们可以坐地铁或者打车去。",
-            "pinyin": "huò",
+            "pinyin": "wǒ men kě yǐ zuò dì tiě huò zhě dǎ chē qù 。",
             "vi": "Chúng ta có thể đi tàu điện ngầm hoặc bắt taxi."
           },
           {
             "speaker": "王老师",
             "zh": "或者。",
-            "pinyin": "huòzhě",
+            "pinyin": "huò zhě 。",
             "vi": "Hoặc là, hay là"
           }
         ],
@@ -3564,9 +3564,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"发\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
+                "Đối xử",
                 "Phát ra, gửi đi",
-                "Đứng"
+                "Chỉ, chỉ có"
               ],
               "answer": "Phát ra, gửi đi"
             },
@@ -3574,9 +3574,9 @@
               "id": 2,
               "question": "(2) Câu \"今天发货，明天送达。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Gửi hàng hôm nay, giao hàng ngày mai."
+                "Trong thư viện rất yên tĩnh.",
+                "Gửi hàng hôm nay, giao hàng ngày mai.",
+                "Tiền thuê nhà mỗi tháng rất đắt."
               ],
               "answer": "Gửi hàng hôm nay, giao hàng ngày mai."
             }
@@ -3592,19 +3592,19 @@
           {
             "speaker": "大卫",
             "zh": "他得到一个很好的工作机会。",
-            "pinyin": "jīhuì",
+            "pinyin": "tā dé dào yí gè hěn hǎo de gōng zuò jī huì 。",
             "vi": "Anh ấy có một cơ hội việc làm rất tốt."
           },
           {
             "speaker": "李明",
             "zh": "他是我们的经理。",
-            "pinyin": "jīnglǐ",
+            "pinyin": "tā shì wǒ men de jīng lǐ 。",
             "vi": "Anh ấy là giám đốc của chúng tôi."
           },
           {
             "speaker": "王老师",
             "zh": "我明天要离开北京了。",
-            "pinyin": "líkāi",
+            "pinyin": "wǒ míng tiān yào lí kāi běi jīng le 。",
             "vi": "Ngày mai tôi sẽ phải rời khỏi Bắc Kinh rồi."
           }
         ],
@@ -3616,9 +3616,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"机会\" mang nghĩa là gì?",
               "options": [
-                "Đứng",
-                "Trạm, ga",
-                "Cơ hội"
+                "Cơ hội",
+                "Cải tạo; sửa sang",
+                "Hữu ích, có ích"
               ],
               "answer": "Cơ hội"
             },
@@ -3627,8 +3627,8 @@
               "question": "(2) Câu \"他得到一个很好的工作机会。\" được dịch đúng là:",
               "options": [
                 "Anh ấy có một cơ hội việc làm rất tốt.",
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Ngày mai trời sẽ mưa to."
+                "Bọn trẻ đang vẽ hình.",
+                "Các bạn học sinh bày tỏ sự quan tâm nhiệt liệt đối với hoạt động mới"
               ],
               "answer": "Anh ấy có một cơ hội việc làm rất tốt."
             }
@@ -3650,19 +3650,19 @@
           {
             "speaker": "大卫",
             "zh": "你的声音很好听。",
-            "pinyin": "shēngyīn",
+            "pinyin": "nǐ de shēng yīn hěn hǎo tīng 。",
             "vi": "Giọng nói của bạn rất hay."
           },
           {
             "speaker": "李明",
             "zh": "他是我的同事。",
-            "pinyin": "tóngshì",
+            "pinyin": "tā shì wǒ de tóng shì 。",
             "vi": "Anh ấy là đồng nghiệp của tôi."
           },
           {
             "speaker": "王老师",
             "zh": "我为你准备了礼物。",
-            "pinyin": "wèi",
+            "pinyin": "wǒ wèi nǐ zhǔn bèi le lǐ wù 。",
             "vi": "Tôi đã chuẩn bị quà cho bạn."
           }
         ],
@@ -3674,9 +3674,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"声音\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
-                "Đứng",
-                "Âm thanh, giọng nói"
+                "Nội tâm",
+                "Âm thanh, giọng nói",
+                "thiếu, thiếu hụt"
               ],
               "answer": "Âm thanh, giọng nói"
             },
@@ -3684,9 +3684,9 @@
               "id": 2,
               "question": "(2) Câu \"你的声音很好听。\" được dịch đúng là:",
               "options": [
-                "Ngày mai trời sẽ mưa to.",
+                "Chúng ta ăn cơm đi.",
                 "Giọng nói của bạn rất hay.",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Anh ấy đang đeo một cái cặp."
               ],
               "answer": "Giọng nói của bạn rất hay."
             }
@@ -3702,19 +3702,19 @@
           {
             "speaker": "大卫",
             "zh": "我下周要休假。",
-            "pinyin": "xiūjià",
+            "pinyin": "wǒ xià zhōu yào xiū jià 。",
             "vi": "Tuần sau tôi sẽ nghỉ phép."
           },
           {
             "speaker": "李明",
             "zh": "我们只能等他回来。",
-            "pinyin": "zhǐnéng",
+            "pinyin": "wǒ men zhǐ néng děng tā huí lái 。",
             "vi": "Chúng ta chỉ có thể đợi anh ấy quay về."
           },
           {
             "speaker": "王老师",
             "zh": "上海是中国的一个大城市。",
-            "pinyin": "chéngshì",
+            "pinyin": "shàng hǎi shì zhōng guó de yí gè dài chéng shì 。",
             "vi": "Thượng Hải là một thành phố lớn của Trung Quốc."
           }
         ],
@@ -3726,9 +3726,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"休假\" mang nghĩa là gì?",
               "options": [
-                "Đứng",
-                "Trạm, ga",
-                "Nghỉ phép"
+                "Tổng cộng",
+                "Nghỉ phép",
+                "Cởi, tháo ra"
               ],
               "answer": "Nghỉ phép"
             },
@@ -3736,9 +3736,9 @@
               "id": 2,
               "question": "(2) Câu \"我下周要休假。\" được dịch đúng là:",
               "options": [
-                "Tuần sau tôi sẽ nghỉ phép.",
-                "Ngày mai trời sẽ mưa to.",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Anh ấy xếp hạng nhất trong cuộc thi.",
+                "Chúng ta cần tìm hiểu toàn diện về vấn đề này",
+                "Tuần sau tôi sẽ nghỉ phép."
               ],
               "answer": "Tuần sau tôi sẽ nghỉ phép."
             }
@@ -3754,19 +3754,19 @@
           {
             "speaker": "大卫",
             "zh": "明天上午有一个重要的会议。",
-            "pinyin": "huìyì",
+            "pinyin": "míng tiān shàng wǔ yǒu yí gè zhòng yào de huì yì 。",
             "vi": "Sáng mai có một cuộc họp quan trọng."
           },
           {
             "speaker": "李明",
             "zh": "他帮助我解决了问题。",
-            "pinyin": "jiějué",
+            "pinyin": "tā bāng zhù wǒ jiě jué le wèn tí 。",
             "vi": "Anh ấy giúp tôi giải quyết vấn đề."
           },
           {
             "speaker": "王老师",
             "zh": "我很怕黑。",
-            "pinyin": "pà",
+            "pinyin": "wǒ hěn pà hēi 。",
             "vi": "Tôi rất sợ bóng tối."
           }
         ],
@@ -3778,9 +3778,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"会议\" mang nghĩa là gì?",
               "options": [
-                "Trạm, ga",
-                "Đứng",
-                "Cuộc họp"
+                "Cuộc họp",
+                "Máy thu thanh, radio",
+                "Phát sóng trực tiếp, livestream"
               ],
               "answer": "Cuộc họp"
             },
@@ -3788,9 +3788,9 @@
               "id": 2,
               "question": "(2) Câu \"明天上午有一个重要的会议。\" được dịch đúng là:",
               "options": [
-                "Tôi đang ở nhà nghỉ ngơi.",
-                "Ngày mai trời sẽ mưa to.",
-                "Sáng mai có một cuộc họp quan trọng."
+                "Tốc độ của tàu hỏa rất nhanh.",
+                "Sáng mai có một cuộc họp quan trọng.",
+                "Những nữ sinh này thích vẽ."
               ],
               "answer": "Sáng mai có một cuộc họp quan trọng."
             }
@@ -3806,19 +3806,19 @@
           {
             "speaker": "大卫",
             "zh": "教室里有很多学生。",
-            "pinyin": "shì",
+            "pinyin": "jiào shì lǐ yǒu hěn duō xué shēng 。",
             "vi": "Trong phòng học có nhiều học sinh."
           },
           {
             "speaker": "李明",
             "zh": "他被大家推选为班长。",
-            "pinyin": "wéi",
+            "pinyin": "tā bèi dà jiā tuī xuǎn wèi bān zhǎng 。",
             "vi": "Anh ấy được mọi người bầu chọn làm lớp trưởng."
           },
           {
             "speaker": "王老师",
             "zh": "我为你感到高兴。",
-            "pinyin": "wéi",
+            "pinyin": "wǒ wèi nǐ gǎn dào gāo xìng 。",
             "vi": "Tôi cảm thấy vui vì bạn."
           }
         ],
@@ -3830,9 +3830,9 @@
               "id": 1,
               "question": "(1) Trong bài khóa, từ \"室\" mang nghĩa là gì?",
               "options": [
-                "Đứng",
-                "Phòng, căn phòng",
-                "Trạm, ga"
+                "Phức tạp",
+                "Lý luận",
+                "Phòng, căn phòng"
               ],
               "answer": "Phòng, căn phòng"
             },
@@ -3840,9 +3840,9 @@
               "id": 2,
               "question": "(2) Câu \"教室里有很多学生。\" được dịch đúng là:",
               "options": [
-                "Trong phòng học có nhiều học sinh.",
-                "Ngày mai trời sẽ mưa to.",
-                "Tôi đang ở nhà nghỉ ngơi."
+                "Dịp Tết tôi muốn ở cùng với người thân",
+                "Năng lực của anh ấy xứng đáng với vị trí này.",
+                "Trong phòng học có nhiều học sinh."
               ],
               "answer": "Trong phòng học có nhiều học sinh."
             }

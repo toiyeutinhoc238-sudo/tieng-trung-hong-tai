@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { pinyin } from 'pinyin-pro';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,8 +18,17 @@ function shuffle(array) {
   return arr;
 }
 
-// Build HSK 2
+// Generate Pinyin for a Chinese sentence
+function getFullPinyin(zhText) {
+  if (!zhText) return '';
+  return pinyin(zhText, { toneType: 'symbol', nonZh: 'consecutive' }).trim();
+}
+
+// Build HSK 2 Dialogues
 const hsk2Words = db.filter(w => (w.level === 2 || w.level === '2') && (w.hskVersion === '3.0' || !w.hskVersion));
+const allHsk2Examples = hsk2Words.filter(w => w.example_vi && w.example_vi.length > 5).map(w => w.example_vi);
+const allHsk2Meanings = Array.from(new Set(hsk2Words.map(w => w.meaning).filter(Boolean)));
+
 const hsk2Lessons = [];
 
 for (let l = 1; l <= 15; l++) {
@@ -34,37 +44,39 @@ for (let l = 1; l <= 15; l++) {
 
     if (chunk.length > 0) {
       chunk.forEach((w, idx) => {
+        const zh = w.example_zh || (w.word + '。');
         lines.push({
           speaker: speakers[idx % speakers.length],
-          zh: w.example_zh || (w.word + '。'),
-          pinyin: w.pinyin || '',
+          zh: zh,
+          pinyin: getFullPinyin(zh),
           vi: w.example_vi || w.meaning || ''
         });
       });
     } else {
+      const fallbackZh = '我们一起学习中文吧。';
       lines.push({
         speaker: '王老师',
-        zh: '我们一起学习吧。',
-        pinyin: 'wǒ men yì qǐ xué xí ba 。',
-        vi: 'Chúng ta cùng nhau học tập nhé.'
+        zh: fallbackZh,
+        pinyin: getFullPinyin(fallbackZh),
+        vi: 'Chúng ta cùng nhau học tiếng Trung nhé.'
       });
     }
 
     const mainWord = chunk[0] || words[0] || { word: '学习', meaning: 'học tập' };
-    const secondWord = chunk[1] || chunk[0] || { word: '朋友', meaning: 'bạn bè' };
+    
+    // Pick 2 realistic word meaning distractors
+    const otherMeanings = allHsk2Meanings.filter(m => m !== mainWord.meaning);
+    const distractorMeanings = shuffle(otherMeanings).slice(0, 2);
+    const q1Opts = shuffle([mainWord.meaning, distractorMeanings[0] || 'đi du lịch', distractorMeanings[1] || 'ăn cơm']);
 
-    // Select smart distractors
-    const otherWords = hsk2Words.filter(w => w.word !== mainWord.word && w.meaning !== mainWord.meaning);
-    const distractor1 = otherWords[0]?.meaning || 'Đi du lịch';
-    const distractor2 = otherWords[1]?.meaning || 'Uống trà';
-    const distractor3 = otherWords[2]?.meaning || 'Gọi taxi';
-    const distractor4 = otherWords[3]?.meaning || 'Ăn cơm';
-
-    const q1Opts = shuffle([mainWord.meaning, distractor1, distractor2]);
+    // Pick 2 realistic sentence translation distractors
+    const targetSentenceVi = lines[0]?.vi || mainWord.meaning;
+    const otherSentences = allHsk2Examples.filter(s => s !== targetSentenceVi);
+    const distractorSentences = shuffle(otherSentences).slice(0, 2);
     const q2Opts = shuffle([
-      lines[0]?.vi || mainWord.meaning,
-      'Chào buổi sáng mọi người!',
-      'Hẹn gặp lại vào ngày mai nhé!'
+      targetSentenceVi,
+      distractorSentences[0] || 'Tôi muốn đi trường học đón bạn.',
+      distractorSentences[1] || 'Hôm nay thời tiết rất đẹp.'
     ]);
 
     const questions = [
@@ -78,7 +90,7 @@ for (let l = 1; l <= 15; l++) {
         id: 2,
         question: `(2) Câu "${lines[0]?.zh || mainWord.word}" được dịch đúng là:`,
         options: q2Opts,
-        answer: lines[0]?.vi || mainWord.meaning
+        answer: targetSentenceVi
       }
     ];
 
@@ -107,10 +119,13 @@ const hsk2Dest1 = path.resolve(__dirname, '../../frontend/public/hsk2_reading_te
 const hsk2Dest2 = path.resolve(__dirname, '../../frontend/dist/hsk2_reading_texts.json');
 fs.writeFileSync(hsk2Dest1, JSON.stringify(hsk2Lessons, null, 2));
 fs.writeFileSync(hsk2Dest2, JSON.stringify(hsk2Lessons, null, 2));
-console.log('Saved HSK 2 Reading Texts with verified Quizzes to public & dist!');
+console.log('Saved HSK 2 Reading Texts with full Pinyin & authentic Quizzes!');
 
-// Build HSK 3
+// Build HSK 3 Dialogues
 const hsk3Words = db.filter(w => (w.level === 3 || w.level === '3') && (w.hskVersion === '3.0' || !w.hskVersion));
+const allHsk3Examples = hsk3Words.filter(w => w.example_vi && w.example_vi.length > 5).map(w => w.example_vi);
+const allHsk3Meanings = Array.from(new Set(hsk3Words.map(w => w.meaning).filter(Boolean)));
+
 const hsk3Lessons = [];
 
 for (let l = 1; l <= 18; l++) {
@@ -126,32 +141,39 @@ for (let l = 1; l <= 18; l++) {
 
     if (chunk.length > 0) {
       chunk.forEach((w, idx) => {
+        const zh = w.example_zh || (w.word + '。');
         lines.push({
           speaker: speakers[idx % speakers.length],
-          zh: w.example_zh || (w.word + '。'),
-          pinyin: w.pinyin || '',
+          zh: zh,
+          pinyin: getFullPinyin(zh),
           vi: w.example_vi || w.meaning || ''
         });
       });
     } else {
+      const fallbackZh = '没问题，我们一起准备吧。';
       lines.push({
         speaker: '李明',
-        zh: '没问题，我们一起准备吧。',
-        pinyin: 'méi wèn tí ， wǒ men yì qǐ zhǔn bèi ba 。',
+        zh: fallbackZh,
+        pinyin: getFullPinyin(fallbackZh),
         vi: 'Không vấn đề gì, chúng ta cùng chuẩn bị nhé.'
       });
     }
 
     const mainWord = chunk[0] || words[0] || { word: '准备', meaning: 'chuẩn bị' };
-    const otherWords = hsk3Words.filter(w => w.word !== mainWord.word && w.meaning !== mainWord.meaning);
-    const distractor1 = otherWords[0]?.meaning || 'Tham quan công viên';
-    const distractor2 = otherWords[1]?.meaning || 'Mua sắm ở siêu thị';
+    
+    // Pick 2 realistic word meaning distractors
+    const otherMeanings = allHsk3Meanings.filter(m => m !== mainWord.meaning);
+    const distractorMeanings = shuffle(otherMeanings).slice(0, 2);
+    const q1Opts = shuffle([mainWord.meaning, distractorMeanings[0] || 'giúp đỡ', distractorMeanings[1] || 'du lịch']);
 
-    const q1Opts = shuffle([mainWord.meaning, distractor1, distractor2]);
+    // Pick 2 realistic sentence translation distractors
+    const targetSentenceVi = lines[0]?.vi || mainWord.meaning;
+    const otherSentences = allHsk3Examples.filter(s => s !== targetSentenceVi);
+    const distractorSentences = shuffle(otherSentences).slice(0, 2);
     const q2Opts = shuffle([
-      lines[0]?.vi || mainWord.meaning,
-      'Tôi đang ở nhà nghỉ ngơi.',
-      'Ngày mai trời sẽ mưa to.'
+      targetSentenceVi,
+      distractorSentences[0] || 'Cuối tuần này bạn có kế hoạch gì không?',
+      distractorSentences[1] || 'Chúng tôi đang chuẩn bị cho cuộc họp ngày mai.'
     ]);
 
     const questions = [
@@ -165,7 +187,7 @@ for (let l = 1; l <= 18; l++) {
         id: 2,
         question: `(2) Câu "${lines[0]?.zh || mainWord.word}" được dịch đúng là:`,
         options: q2Opts,
-        answer: lines[0]?.vi || mainWord.meaning
+        answer: targetSentenceVi
       }
     ];
 
@@ -194,4 +216,4 @@ const hsk3Dest1 = path.resolve(__dirname, '../../frontend/public/hsk3_reading_te
 const hsk3Dest2 = path.resolve(__dirname, '../../frontend/dist/hsk3_reading_texts.json');
 fs.writeFileSync(hsk3Dest1, JSON.stringify(hsk3Lessons, null, 2));
 fs.writeFileSync(hsk3Dest2, JSON.stringify(hsk3Lessons, null, 2));
-console.log('Saved HSK 3 Reading Texts with verified Quizzes to public & dist!');
+console.log('Saved HSK 3 Reading Texts with full Pinyin & authentic Quizzes!');
