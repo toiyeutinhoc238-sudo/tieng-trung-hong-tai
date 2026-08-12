@@ -22,7 +22,7 @@
             "vi": "Mẹ cho tôi một quả táo."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "老师让我看书。",
             "pinyin": "ràng",
             "vi": "Thầy giáo bảo tôi đọc sách."
@@ -30,17 +30,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）就 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"就\" mang nghĩa là gì?",
               "options": [
                 "thì, liền, ngay",
-                "Không chính xác",
-                "Khác"
+                "cho",
+                "nhường, để cho, bảo"
               ],
               "answer": "thì, liền, ngay"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"我明天就去。\" được dịch đúng là:",
+              "options": [
+                "Ngày mai tôi đi liền.",
+                "Chào buổi sáng mọi người!",
+                "Hẹn gặp lại vào ngày mai nhé!"
+              ],
+              "answer": "Ngày mai tôi đi liền."
             }
           ]
         }
@@ -64,7 +74,7 @@
             "vi": "Tôi muốn đi một lần."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "我们去旅游。",
             "pinyin": "lǚyóu",
             "vi": "Chúng tôi đi du lịch."
@@ -72,17 +82,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）接 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"接\" mang nghĩa là gì?",
               "options": [
-                "đón, nhận",
-                "Không chính xác",
-                "Khác"
+                "cho",
+                "thì, liền, ngay",
+                "đón, nhận"
               ],
               "answer": "đón, nhận"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"我去学校接你。\" được dịch đúng là:",
+              "options": [
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Tôi đi trường học đón bạn.",
+                "Chào buổi sáng mọi người!"
+              ],
+              "answer": "Tôi đi trường học đón bạn."
             }
           ]
         }
@@ -106,7 +126,7 @@
             "vi": "Xin lỗi, tôi không biết."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "他已经去了。",
             "pinyin": "yǐjīng",
             "vi": "Anh ấy đã đi rồi."
@@ -114,17 +134,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）帮忙 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"帮忙\" mang nghĩa là gì?",
               "options": [
+                "cho",
                 "giúp đỡ",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay"
               ],
               "answer": "giúp đỡ"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"谢谢你帮忙。\" được dịch đúng là:",
+              "options": [
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Cảm ơn bạn đã giúp đỡ.",
+                "Chào buổi sáng mọi người!"
+              ],
+              "answer": "Cảm ơn bạn đã giúp đỡ."
             }
           ]
         }
@@ -148,7 +178,7 @@
             "vi": "Tôi giới thiệu bạn của tôi."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "我有时很忙。",
             "pinyin": "yǒushí",
             "vi": "Thỉnh thoảng tôi rất bận."
@@ -156,17 +186,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）那 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"那\" mang nghĩa là gì?",
               "options": [
+                "cho",
                 "vậy, thế thì",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay"
               ],
               "answer": "vậy, thế thì"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"那我不去了。\" được dịch đúng là:",
+              "options": [
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Vậy tôi không đi nữa.",
+                "Chào buổi sáng mọi người!"
+              ],
+              "answer": "Vậy tôi không đi nữa."
             }
           ]
         }
@@ -196,7 +236,7 @@
             "vi": "Tôi muốn đi, nhưng tôi rất bận."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "车站在哪儿？",
             "pinyin": "chēzhàn",
             "vi": "Trạm xe ở đâu?"
@@ -204,17 +244,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）公交车 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"公交车\" mang nghĩa là gì?",
               "options": [
                 "xe buýt",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay",
+                "cho"
               ],
               "answer": "xe buýt"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"我不喜欢坐公交车。\" được dịch đúng là:",
+              "options": [
+                "Chào buổi sáng mọi người!",
+                "Tôi không thích đi xe buýt.",
+                "Hẹn gặp lại vào ngày mai nhé!"
+              ],
+              "answer": "Tôi không thích đi xe buýt."
             }
           ]
         }
@@ -238,7 +288,7 @@
             "vi": "Tôi muốn gọi xe đi bệnh viện."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "还是我们去吃饭吧。",
             "pinyin": "háishì",
             "vi": "Tốt nhất là chúng ta đi ăn cơm đi."
@@ -246,17 +296,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）远 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"远\" mang nghĩa là gì?",
               "options": [
+                "thì, liền, ngay",
                 "xa",
-                "Không chính xác",
-                "Khác"
+                "cho"
               ],
               "answer": "xa"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"我家不远。\" được dịch đúng là:",
+              "options": [
+                "Nhà tôi không xa.",
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Chào buổi sáng mọi người!"
+              ],
+              "answer": "Nhà tôi không xa."
             }
           ]
         }
@@ -280,7 +340,7 @@
             "vi": "Bạn là ai vậy?"
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "两万。",
             "pinyin": "wàn",
             "vi": "Hai vạn."
@@ -288,17 +348,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）北京大学 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"北京大学\" mang nghĩa là gì?",
               "options": [
+                "cho",
                 "Đại học Bắc Kinh",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay"
               ],
               "answer": "Đại học Bắc Kinh"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"北京大学很大。\" được dịch đúng là:",
+              "options": [
+                "Chào buổi sáng mọi người!",
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Đại học Bắc Kinh rất lớn."
+              ],
+              "answer": "Đại học Bắc Kinh rất lớn."
             }
           ]
         }
@@ -322,7 +392,7 @@
             "vi": "Tôi xem phim trên mạng."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "他是外国人。",
             "pinyin": "wàiguó",
             "vi": "Anh ấy là người nước ngoài."
@@ -330,17 +400,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）名 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"名\" mang nghĩa là gì?",
               "options": [
                 "danh, tên, vị",
-                "Không chính xác",
-                "Khác"
+                "cho",
+                "thì, liền, ngay"
               ],
               "answer": "danh, tên, vị"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"他是一名医生。\" được dịch đúng là:",
+              "options": [
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Anh ấy là một bác sĩ.",
+                "Chào buổi sáng mọi người!"
+              ],
+              "answer": "Anh ấy là một bác sĩ."
             }
           ]
         }
@@ -370,7 +450,7 @@
             "vi": "Muộn thế này rồi, bạn đừng đi nữa."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "我看完了这本书。",
             "pinyin": "wán",
             "vi": "Tôi đã đọc xong quyển sách này."
@@ -378,17 +458,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）回来 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"回来\" mang nghĩa là gì?",
               "options": [
                 "trở về",
-                "Không chính xác",
-                "Khác"
+                "cho",
+                "thì, liền, ngay"
               ],
               "answer": "trở về"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"他什么时候回来？\" được dịch đúng là:",
+              "options": [
+                "Chào buổi sáng mọi người!",
+                "Khi nào anh ấy trở về?",
+                "Hẹn gặp lại vào ngày mai nhé!"
+              ],
+              "answer": "Khi nào anh ấy trở về?"
             }
           ]
         }
@@ -412,7 +502,7 @@
             "vi": "Tôi muốn đi ra ngoài chơi."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "我要洗衣服。",
             "pinyin": "xǐ",
             "vi": "Tôi phải giặt quần áo."
@@ -420,17 +510,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）一起 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"一起\" mang nghĩa là gì?",
               "options": [
                 "cùng nhau",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay",
+                "cho"
               ],
               "answer": "cùng nhau"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"我们一起去吃饭吧。\" được dịch đúng là:",
+              "options": [
+                "Chúng ta cùng nhau đi ăn cơm nhé.",
+                "Chào buổi sáng mọi người!",
+                "Hẹn gặp lại vào ngày mai nhé!"
+              ],
+              "answer": "Chúng ta cùng nhau đi ăn cơm nhé."
             }
           ]
         }
@@ -454,7 +554,7 @@
             "vi": "Giúp tôi cầm cái cốc một chút."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "洗手吃饭。",
             "pinyin": "shǒu",
             "vi": "Rửa tay ăn cơm."
@@ -462,17 +562,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）自己 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"自己\" mang nghĩa là gì?",
               "options": [
-                "tự mình/bản thân",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay",
+                "cho",
+                "tự mình/bản thân"
               ],
               "answer": "tự mình/bản thân"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"我自己去。\" được dịch đúng là:",
+              "options": [
+                "Chào buổi sáng mọi người!",
+                "Tôi tự mình đi.",
+                "Hẹn gặp lại vào ngày mai nhé!"
+              ],
+              "answer": "Tôi tự mình đi."
             }
           ]
         }
@@ -496,7 +606,7 @@
             "vi": "Chiếc điện thoại này khá tốt."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "这是送给你的礼物。",
             "pinyin": "sòng",
             "vi": "Đây là món quà tặng cho bạn."
@@ -504,17 +614,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）为什么 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"为什么\" mang nghĩa là gì?",
               "options": [
                 "tại sao",
-                "Không chính xác",
-                "Khác"
+                "cho",
+                "thì, liền, ngay"
               ],
               "answer": "tại sao"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"你为什么不来？\" được dịch đúng là:",
+              "options": [
+                "Chào buổi sáng mọi người!",
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Tại sao bạn không đến?"
+              ],
+              "answer": "Tại sao bạn không đến?"
             }
           ]
         }
@@ -544,7 +664,7 @@
             "vi": "Chúng ta đi trung tâm thương mại mua quần áo."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "我们进去吧。",
             "pinyin": "jìnqù",
             "vi": "Chúng ta đi vào đi."
@@ -552,17 +672,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）过 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"过\" mang nghĩa là gì?",
               "options": [
+                "cho",
                 "đã từng/qua",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay"
               ],
               "answer": "đã từng/qua"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"我去过北京。\" được dịch đúng là:",
+              "options": [
+                "Tôi đã từng đi Bắc Kinh.",
+                "Chào buổi sáng mọi người!",
+                "Hẹn gặp lại vào ngày mai nhé!"
+              ],
+              "answer": "Tôi đã từng đi Bắc Kinh."
             }
           ]
         }
@@ -586,7 +716,7 @@
             "vi": "Chiếc quần này rất đẹp."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "我喜欢白色。",
             "pinyin": "báisè",
             "vi": "Tôi thích màu trắng."
@@ -594,17 +724,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）条 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"条\" mang nghĩa là gì?",
               "options": [
-                "con/cái/chiếc",
-                "Không chính xác",
-                "Khác"
+                "cho",
+                "thì, liền, ngay",
+                "con/cái/chiếc"
               ],
               "answer": "con/cái/chiếc"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"一条裤子。\" được dịch đúng là:",
+              "options": [
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Một chiếc quần.",
+                "Chào buổi sáng mọi người!"
+              ],
+              "answer": "Một chiếc quần."
             }
           ]
         }
@@ -628,7 +768,7 @@
             "vi": "Bạn có thể thử một chút."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "这个红色的杯子是谁的？",
             "pinyin": "hóngsè",
             "vi": "Cái cốc màu đỏ này là của ai?"
@@ -636,17 +776,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）因为 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"因为\" mang nghĩa là gì?",
               "options": [
                 "bởi vì",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay",
+                "cho"
               ],
               "answer": "bởi vì"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"因为下雨，所以我没去。\" được dịch đúng là:",
+              "options": [
+                "Chào buổi sáng mọi người!",
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Bởi vì trời mưa, cho nên tôi không đi."
+              ],
+              "answer": "Bởi vì trời mưa, cho nên tôi không đi."
             }
           ]
         }
@@ -670,7 +820,7 @@
             "vi": "Cặp sách của tôi ở trên bàn."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "你过去看看。",
             "pinyin": "guòqù",
             "vi": "Bạn đi qua xem thử."
@@ -678,17 +828,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）所以 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"所以\" mang nghĩa là gì?",
               "options": [
+                "thì, liền, ngay",
                 "cho nên",
-                "Không chính xác",
-                "Khác"
+                "cho"
               ],
               "answer": "cho nên"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"因为下雨，所以我没去。\" được dịch đúng là:",
+              "options": [
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Bởi vì trời mưa, cho nên tôi không đi.",
+                "Chào buổi sáng mọi người!"
+              ],
+              "answer": "Bởi vì trời mưa, cho nên tôi không đi."
             }
           ]
         }
@@ -718,7 +878,7 @@
             "vi": "Bạn xuống đây đi."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "快上来！",
             "pinyin": "shànglái",
             "vi": "Mau lên đây!"
@@ -726,17 +886,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）快 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"快\" mang nghĩa là gì?",
               "options": [
-                "nhanh",
-                "Không chính xác",
-                "Khác"
+                "cho",
+                "thì, liền, ngay",
+                "nhanh"
               ],
               "answer": "nhanh"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"快走吧。\" được dịch đúng là:",
+              "options": [
+                "Chào buổi sáng mọi người!",
+                "Đi nhanh thôi.",
+                "Hẹn gặp lại vào ngày mai nhé!"
+              ],
+              "answer": "Đi nhanh thôi."
             }
           ]
         }
@@ -760,7 +930,7 @@
             "vi": "Dưới bàn có một con mèo."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "我喜欢吃面。",
             "pinyin": "miàn",
             "vi": "Tôi thích ăn mì."
@@ -768,17 +938,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）上去 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"上去\" mang nghĩa là gì?",
               "options": [
-                "lên (hướng ra xa người nói)",
-                "Không chính xác",
-                "Khác"
+                "cho",
+                "thì, liền, ngay",
+                "lên (hướng ra xa người nói)"
               ],
               "answer": "lên (hướng ra xa người nói)"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"我们上去吧。\" được dịch đúng là:",
+              "options": [
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Chúng ta lên đó đi.",
+                "Chào buổi sáng mọi người!"
+              ],
+              "answer": "Chúng ta lên đó đi."
             }
           ]
         }
@@ -802,7 +982,7 @@
             "vi": "Tôi đã đợi một lát."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "你下去吧。",
             "pinyin": "xiàqù",
             "vi": "Bạn đi xuống đó đi."
@@ -810,17 +990,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）等 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"等\" mang nghĩa là gì?",
               "options": [
+                "cho",
                 "đợi, chờ",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay"
               ],
               "answer": "đợi, chờ"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"请等我一下。\" được dịch đúng là:",
+              "options": [
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Xin đợi tôi một chút.",
+                "Chào buổi sáng mọi người!"
+              ],
+              "answer": "Xin đợi tôi một chút."
             }
           ]
         }
@@ -844,7 +1034,7 @@
             "vi": "Ông nội tôi năm nay 80 tuổi rồi."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "奶奶在看电视。",
             "pinyin": "nǎinai",
             "vi": "Bà nội đang xem tivi."
@@ -852,17 +1042,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）进来 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"进来\" mang nghĩa là gì?",
               "options": [
+                "cho",
                 "vào (hướng về phía người nói)",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay"
               ],
               "answer": "vào (hướng về phía người nói)"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"请进来。\" được dịch đúng là:",
+              "options": [
+                "Mời vào.",
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Chào buổi sáng mọi người!"
+              ],
+              "answer": "Mời vào."
             }
           ]
         }
@@ -892,7 +1092,7 @@
             "vi": "Tôi quên tên anh ấy rồi."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "他喜欢画画。",
             "pinyin": "huà",
             "vi": "Anh ấy thích vẽ tranh."
@@ -900,17 +1100,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）生日 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"生日\" mang nghĩa là gì?",
               "options": [
                 "sinh nhật",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay",
+                "cho"
               ],
               "answer": "sinh nhật"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"祝你生日快乐！\" được dịch đúng là:",
+              "options": [
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Chúc bạn sinh nhật vui vẻ!",
+                "Chào buổi sáng mọi người!"
+              ],
+              "answer": "Chúc bạn sinh nhật vui vẻ!"
             }
           ]
         }
@@ -934,7 +1144,7 @@
             "vi": "Chúng ta ăn bánh kem nhé."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "祝你新年快乐！",
             "pinyin": "kuàilè",
             "vi": "Chúc bạn năm mới vui vẻ!"
@@ -942,17 +1152,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）画笔 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"画笔\" mang nghĩa là gì?",
               "options": [
-                "cọ vẽ, bút vẽ",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay",
+                "cho",
+                "cọ vẽ, bút vẽ"
               ],
               "answer": "cọ vẽ, bút vẽ"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"我买了一支画笔。\" được dịch đúng là:",
+              "options": [
+                "Chào buổi sáng mọi người!",
+                "Tôi đã mua một cây bút vẽ.",
+                "Hẹn gặp lại vào ngày mai nhé!"
+              ],
+              "answer": "Tôi đã mua một cây bút vẽ."
             }
           ]
         }
@@ -976,7 +1196,7 @@
             "vi": "Chiếc quần này dài quá."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "鱼很好吃。",
             "pinyin": "yú",
             "vi": "Cá rất ngon."
@@ -984,17 +1204,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）打开 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"打开\" mang nghĩa là gì?",
               "options": [
-                "mở ra",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay",
+                "cho",
+                "mở ra"
               ],
               "answer": "mở ra"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"请打开书。\" được dịch đúng là:",
+              "options": [
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Chào buổi sáng mọi người!",
+                "Xin hãy mở sách ra."
+              ],
+              "answer": "Xin hãy mở sách ra."
             }
           ]
         }
@@ -1018,7 +1248,7 @@
             "vi": "Bạn đón sinh nhật như thế nào?"
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "他高兴地说。",
             "pinyin": "de",
             "vi": "Anh ấy vui vẻ nói."
@@ -1026,17 +1256,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）肉 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"肉\" mang nghĩa là gì?",
               "options": [
+                "cho",
                 "thịt",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay"
               ],
               "answer": "thịt"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"我喜欢吃牛肉。\" được dịch đúng là:",
+              "options": [
+                "Chào buổi sáng mọi người!",
+                "Tôi thích ăn thịt bò.",
+                "Hẹn gặp lại vào ngày mai nhé!"
+              ],
+              "answer": "Tôi thích ăn thịt bò."
             }
           ]
         }
@@ -1066,7 +1306,7 @@
             "vi": "Đi về phía trước."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "他跑得很快。",
             "pinyin": "pǎo",
             "vi": "Anh ấy chạy rất nhanh."
@@ -1074,17 +1314,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）从 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"从\" mang nghĩa là gì?",
               "options": [
                 "từ",
-                "Không chính xác",
-                "Khác"
+                "cho",
+                "thì, liền, ngay"
               ],
               "answer": "từ"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"我从学校回家。\" được dịch đúng là:",
+              "options": [
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Tôi từ trường về nhà.",
+                "Chào buổi sáng mọi người!"
+              ],
+              "answer": "Tôi từ trường về nhà."
             }
           ]
         }
@@ -1108,7 +1358,7 @@
             "vi": "Quả bóng rổ này là của tôi."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "你喜欢什么运动？",
             "pinyin": "yùndòng",
             "vi": "Bạn thích môn thể thao nào?"
@@ -1116,17 +1366,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）打 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"打\" mang nghĩa là gì?",
               "options": [
                 "đánh, chơi (môn thể thao dùng tay)",
-                "Không chính xác",
-                "Khác"
+                "cho",
+                "thì, liền, ngay"
               ],
               "answer": "đánh, chơi (môn thể thao dùng tay)"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"我喜欢打篮球。\" được dịch đúng là:",
+              "options": [
+                "Chào buổi sáng mọi người!",
+                "Tôi thích chơi bóng rổ.",
+                "Hẹn gặp lại vào ngày mai nhé!"
+              ],
+              "answer": "Tôi thích chơi bóng rổ."
             }
           ]
         }
@@ -1150,7 +1410,7 @@
             "vi": "Anh ấy đá bóng rất giỏi."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "她做得很好。",
             "pinyin": "de",
             "vi": "Cô ấy làm rất tốt."
@@ -1158,17 +1418,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）踢 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"踢\" mang nghĩa là gì?",
               "options": [
-                "đá, chơi (môn thể thao dùng chân)",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay",
+                "cho",
+                "đá, chơi (môn thể thao dùng chân)"
               ],
               "answer": "đá, chơi (môn thể thao dùng chân)"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"我们去踢足球吧。\" được dịch đúng là:",
+              "options": [
+                "Chào buổi sáng mọi người!",
+                "Chúng ta đi đá bóng đi.",
+                "Hẹn gặp lại vào ngày mai nhé!"
+              ],
+              "answer": "Chúng ta đi đá bóng đi."
             }
           ]
         }
@@ -1192,7 +1462,7 @@
             "vi": "Tôi không biết bơi."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "他游得很快。",
             "pinyin": "yóu",
             "vi": "Anh ấy bơi rất nhanh."
@@ -1200,17 +1470,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）跑步 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"跑步\" mang nghĩa là gì?",
               "options": [
                 "chạy bộ",
-                "Không chính xác",
-                "Khác"
+                "cho",
+                "thì, liền, ngay"
               ],
               "answer": "chạy bộ"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"早上我喜欢跑步。\" được dịch đúng là:",
+              "options": [
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Chào buổi sáng mọi người!",
+                "Buổi sáng tôi thích chạy bộ."
+              ],
+              "answer": "Buổi sáng tôi thích chạy bộ."
             }
           ]
         }
@@ -1240,7 +1520,7 @@
             "vi": "Trường học ở bên trái bệnh viện."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "你还记得我吗？",
             "pinyin": "jìde",
             "vi": "Bạn còn nhớ tôi không?"
@@ -1248,17 +1528,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）手表 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"手表\" mang nghĩa là gì?",
               "options": [
+                "cho",
                 "đồng hồ đeo tay",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay"
               ],
               "answer": "đồng hồ đeo tay"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"你的手表真漂亮。\" được dịch đúng là:",
+              "options": [
+                "Chào buổi sáng mọi người!",
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Đồng hồ của bạn thật đẹp."
+              ],
+              "answer": "Đồng hồ của bạn thật đẹp."
             }
           ]
         }
@@ -1282,7 +1572,7 @@
             "vi": "Bên phải là phòng của tôi."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "我喜欢看爱情片。",
             "pinyin": "àiqíngpiān",
             "vi": "Tôi thích xem phim tình cảm."
@@ -1290,17 +1580,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）比 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"比\" mang nghĩa là gì?",
               "options": [
-                "so với, hơn",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay",
+                "cho",
+                "so với, hơn"
               ],
               "answer": "so với, hơn"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"哥哥比我高。\" được dịch đúng là:",
+              "options": [
+                "Chào buổi sáng mọi người!",
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Anh trai cao hơn tôi."
+              ],
+              "answer": "Anh trai cao hơn tôi."
             }
           ]
         }
@@ -1324,7 +1624,7 @@
             "vi": "Bạn muốn gọi món gì?"
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "虽然下雨，但是我要去。",
             "pinyin": "suīrán",
             "vi": "Mặc dù trời mưa, nhưng tôi phải đi."
@@ -1332,17 +1632,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）有意思 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"有意思\" mang nghĩa là gì?",
               "options": [
                 "thú vị, hay",
-                "Không chính xác",
-                "Khác"
+                "cho",
+                "thì, liền, ngay"
               ],
               "answer": "thú vị, hay"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"这本书很有意思。\" được dịch đúng là:",
+              "options": [
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Cuốn sách này rất thú vị.",
+                "Chào buổi sáng mọi người!"
+              ],
+              "answer": "Cuốn sách này rất thú vị."
             }
           ]
         }
@@ -1366,7 +1676,7 @@
             "vi": "Anh ấy đã tiêu rất nhiều tiền."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "他的妻子是医生。",
             "pinyin": "qīzi",
             "vi": "Vợ anh ấy là bác sĩ."
@@ -1374,17 +1684,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）但是 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"但是\" mang nghĩa là gì?",
               "options": [
+                "cho",
                 "nhưng",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay"
               ],
               "answer": "nhưng"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"我想买，但是没有钱。\" được dịch đúng là:",
+              "options": [
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Chào buổi sáng mọi người!",
+                "Tôi muốn mua, nhưng không có tiền."
+              ],
+              "answer": "Tôi muốn mua, nhưng không có tiền."
             }
           ]
         }
@@ -1414,7 +1734,7 @@
             "vi": "Bên cạnh trường học có một bệnh viện."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "那个男孩儿是我弟弟。",
             "pinyin": "nánháir",
             "vi": "Bé trai đó là em trai tôi."
@@ -1422,17 +1742,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）坏 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"坏\" mang nghĩa là gì?",
               "options": [
                 "hỏng, xấu",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay",
+                "cho"
               ],
               "answer": "hỏng, xấu"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"我的手机坏了。\" được dịch đúng là:",
+              "options": [
+                "Điện thoại của tôi hỏng rồi.",
+                "Chào buổi sáng mọi người!",
+                "Hẹn gặp lại vào ngày mai nhé!"
+              ],
+              "answer": "Điện thoại của tôi hỏng rồi."
             }
           ]
         }
@@ -1456,7 +1786,7 @@
             "vi": "Dáng người anh ấy rất cao."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "天气那么热，别出去了。",
             "pinyin": "nàme",
             "vi": "Thời tiết nóng như vậy, đừng ra ngoài nữa."
@@ -1464,17 +1794,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）这样 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"这样\" mang nghĩa là gì?",
               "options": [
-                "như vậy, như thế này",
-                "Không chính xác",
-                "Khác"
+                "cho",
+                "thì, liền, ngay",
+                "như vậy, như thế này"
               ],
               "answer": "như vậy, như thế này"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"这样做不对。\" được dịch đúng là:",
+              "options": [
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Chào buổi sáng mọi người!",
+                "Làm như vậy không đúng."
+              ],
+              "answer": "Làm như vậy không đúng."
             }
           ]
         }
@@ -1498,7 +1838,7 @@
             "vi": "Tôi đợi bạn ở cổng trường."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "你想喝咖啡吗？",
             "pinyin": "kāfēi",
             "vi": "Bạn muốn uống cà phê không?"
@@ -1506,17 +1846,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）高 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"高\" mang nghĩa là gì?",
               "options": [
+                "thì, liền, ngay",
                 "cao",
-                "Không chính xác",
-                "Khác"
+                "cho"
               ],
               "answer": "cao"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"哥哥比我高。\" được dịch đúng là:",
+              "options": [
+                "Chào buổi sáng mọi người!",
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Anh trai cao hơn tôi."
+              ],
+              "answer": "Anh trai cao hơn tôi."
             }
           ]
         }
@@ -1540,7 +1890,7 @@
             "vi": "Nhà hàng đó cách đây rất gần."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "我每天走路去学校。",
             "pinyin": "zǒulù",
             "vi": "Tôi mỗi ngày đi bộ đến trường."
@@ -1548,17 +1898,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）离 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"离\" mang nghĩa là gì?",
               "options": [
+                "cho",
                 "cách",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay"
               ],
               "answer": "cách"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"我家离学校很近。\" được dịch đúng là:",
+              "options": [
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Nhà tôi cách trường học rất gần.",
+                "Chào buổi sáng mọi người!"
+              ],
+              "answer": "Nhà tôi cách trường học rất gần."
             }
           ]
         }
@@ -1588,7 +1948,7 @@
             "vi": "Mở cửa ra, là tôi đây."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "医院在学校后面。",
             "pinyin": "hòumiàn",
             "vi": "Bệnh viện ở phía sau trường học."
@@ -1596,17 +1956,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）开学 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"开学\" mang nghĩa là gì?",
               "options": [
                 "khai giảng, bắt đầu học",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay",
+                "cho"
               ],
               "answer": "khai giảng, bắt đầu học"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"下个星期我们开学。\" được dịch đúng là:",
+              "options": [
+                "Chào buổi sáng mọi người!",
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Tuần sau chúng tôi khai giảng."
+              ],
+              "answer": "Tuần sau chúng tôi khai giảng."
             }
           ]
         }
@@ -1630,7 +2000,7 @@
             "vi": "Bạn có thể giúp tôi không?"
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "明天我们有考试。",
             "pinyin": "kǎoshì",
             "vi": "Ngày mai chúng tôi có bài thi."
@@ -1638,17 +2008,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）笔 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"笔\" mang nghĩa là gì?",
               "options": [
-                "bút",
-                "Không chính xác",
-                "Khác"
+                "cho",
+                "thì, liền, ngay",
+                "bút"
               ],
               "answer": "bút"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"这是你的笔吗？\" được dịch đúng là:",
+              "options": [
+                "Đây là bút của bạn phải không?",
+                "Chào buổi sáng mọi người!",
+                "Hẹn gặp lại vào ngày mai nhé!"
+              ],
+              "answer": "Đây là bút của bạn phải không?"
             }
           ]
         }
@@ -1672,7 +2052,7 @@
             "vi": "Vở của bạn ở trên bàn."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "你写错了。",
             "pinyin": "cuò",
             "vi": "Bạn viết sai rồi."
@@ -1680,17 +2060,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）词 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"词\" mang nghĩa là gì?",
               "options": [
                 "từ, từ vựng",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay",
+                "cho"
               ],
               "answer": "từ, từ vựng"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"这个词是什么意思？\" được dịch đúng là:",
+              "options": [
+                "Chào buổi sáng mọi người!",
+                "Từ này có ý nghĩa gì?",
+                "Hẹn gặp lại vào ngày mai nhé!"
+              ],
+              "answer": "Từ này có ý nghĩa gì?"
             }
           ]
         }
@@ -1714,7 +2104,7 @@
             "vi": "Bạn uống trà hay uống cà phê?"
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "考试开始了吗？",
             "pinyin": "kǎoshì",
             "vi": "Bài thi bắt đầu chưa?"
@@ -1722,17 +2112,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）题 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"题\" mang nghĩa là gì?",
               "options": [
-                "câu hỏi, đề",
-                "Không chính xác",
-                "Khác"
+                "cho",
+                "thì, liền, ngay",
+                "câu hỏi, đề"
               ],
               "answer": "câu hỏi, đề"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"这个题很难。\" được dịch đúng là:",
+              "options": [
+                "Chào buổi sáng mọi người!",
+                "Câu hỏi này rất khó.",
+                "Hẹn gặp lại vào ngày mai nhé!"
+              ],
+              "answer": "Câu hỏi này rất khó."
             }
           ]
         }
@@ -1762,7 +2162,7 @@
             "vi": "Tay của tôi rất đau."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "我经常去超市。",
             "pinyin": "jīngcháng",
             "vi": "Tôi thường xuyên đi siêu thị."
@@ -1770,17 +2170,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）头 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"头\" mang nghĩa là gì?",
               "options": [
-                "đầu",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay",
+                "cho",
+                "đầu"
               ],
               "answer": "đầu"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"我头疼。\" được dịch đúng là:",
+              "options": [
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Tôi đau đầu.",
+                "Chào buổi sáng mọi người!"
+              ],
+              "answer": "Tôi đau đầu."
             }
           ]
         }
@@ -1804,7 +2214,7 @@
             "vi": "Cửa đang mở."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "我在路上。",
             "pinyin": "lùshang",
             "vi": "Tôi đang trên đường."
@@ -1812,17 +2222,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）动 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"动\" mang nghĩa là gì?",
               "options": [
+                "thì, liền, ngay",
                 "động, di chuyển",
-                "Không chính xác",
-                "Khác"
+                "cho"
               ],
               "answer": "động, di chuyển"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"别动！\" được dịch đúng là:",
+              "options": [
+                "Chào buổi sáng mọi người!",
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Đừng cử động!"
+              ],
+              "answer": "Đừng cử động!"
             }
           ]
         }
@@ -1846,7 +2266,7 @@
             "vi": "Mời vào."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "你吃药了吗？",
             "pinyin": "yào",
             "vi": "Bạn uống thuốc chưa?"
@@ -1854,17 +2274,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）慢 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"慢\" mang nghĩa là gì?",
               "options": [
-                "chậm",
-                "Không chính xác",
-                "Khác"
+                "cho",
+                "thì, liền, ngay",
+                "chậm"
               ],
               "answer": "chậm"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"你走得太慢了。\" được dịch đúng là:",
+              "options": [
+                "Chào buổi sáng mọi người!",
+                "Bạn đi quá chậm rồi.",
+                "Hẹn gặp lại vào ngày mai nhé!"
+              ],
+              "answer": "Bạn đi quá chậm rồi."
             }
           ]
         }
@@ -1888,7 +2318,7 @@
             "vi": "Lúc ăn cơm đừng xem điện thoại."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "我最喜欢吃苹果。",
             "pinyin": "zuì",
             "vi": "Tôi thích ăn táo nhất."
@@ -1896,17 +2326,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）身体 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"身体\" mang nghĩa là gì?",
               "options": [
+                "thì, liền, ngay",
                 "cơ thể, sức khỏe",
-                "Không chính xác",
-                "Khác"
+                "cho"
               ],
               "answer": "cơ thể, sức khỏe"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"你的身体好吗？\" được dịch đúng là:",
+              "options": [
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Sức khỏe của bạn tốt không?",
+                "Chào buổi sáng mọi người!"
+              ],
+              "answer": "Sức khỏe của bạn tốt không?"
             }
           ]
         }
@@ -1936,7 +2376,7 @@
             "vi": "Hôm nay là ngày nắng."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "他正在看书。",
             "pinyin": "zhèng",
             "vi": "Anh ấy đang đọc sách."
@@ -1944,17 +2384,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）事情 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"事情\" mang nghĩa là gì?",
               "options": [
                 "sự việc, sự tình",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay",
+                "cho"
               ],
               "answer": "sự việc, sự tình"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"很多事情。\" được dịch đúng là:",
+              "options": [
+                "Rất nhiều sự việc.",
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Chào buổi sáng mọi người!"
+              ],
+              "answer": "Rất nhiều sự việc."
             }
           ]
         }
@@ -1978,7 +2428,7 @@
             "vi": "Hôm nay là ngày âm u."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "他从小喜欢看书。",
             "pinyin": "cóngxiǎo",
             "vi": "Anh ấy từ nhỏ thích đọc sách."
@@ -1986,17 +2436,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）外面 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"外面\" mang nghĩa là gì?",
               "options": [
-                "bên ngoài",
-                "Không chính xác",
-                "Khác"
+                "cho",
+                "thì, liền, ngay",
+                "bên ngoài"
               ],
               "answer": "bên ngoài"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"外面下雨了。\" được dịch đúng là:",
+              "options": [
+                "Bên ngoài trời mưa rồi.",
+                "Chào buổi sáng mọi người!",
+                "Hẹn gặp lại vào ngày mai nhé!"
+              ],
+              "answer": "Bên ngoài trời mưa rồi."
             }
           ]
         }
@@ -2020,7 +2480,7 @@
             "vi": "Anh ấy ở tầng hai."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "公交车站。",
             "pinyin": "zhàn",
             "vi": "Trạm xe buýt."
@@ -2028,17 +2488,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）地铁 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"地铁\" mang nghĩa là gì?",
               "options": [
-                "tàu điện ngầm",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay",
+                "cho",
+                "tàu điện ngầm"
               ],
               "answer": "tàu điện ngầm"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"我坐地铁去上班。\" được dịch đúng là:",
+              "options": [
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Chào buổi sáng mọi người!",
+                "Tôi ngồi tàu điện ngầm đi làm."
+              ],
+              "answer": "Tôi ngồi tàu điện ngầm đi làm."
             }
           ]
         }
@@ -2064,17 +2534,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）小时候 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"小时候\" mang nghĩa là gì?",
               "options": [
-                "lúc nhỏ, khi còn nhỏ",
-                "Không chính xác",
-                "Khác"
+                "cho",
+                "thì, liền, ngay",
+                "lúc nhỏ, khi còn nhỏ"
               ],
               "answer": "lúc nhỏ, khi còn nhỏ"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"我小时候很喜欢游泳。\" được dịch đúng là:",
+              "options": [
+                "Lúc nhỏ tôi rất thích bơi.",
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Chào buổi sáng mọi người!"
+              ],
+              "answer": "Lúc nhỏ tôi rất thích bơi."
             }
           ]
         }
@@ -2104,7 +2584,7 @@
             "vi": "Anh ấy dạy tôi tiếng Trung."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "漂亮的花。",
             "pinyin": "huā",
             "vi": "Hoa đẹp."
@@ -2112,17 +2592,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）新年 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"新年\" mang nghĩa là gì?",
               "options": [
                 "năm mới",
-                "Không chính xác",
-                "Khác"
+                "cho",
+                "thì, liền, ngay"
               ],
               "answer": "năm mới"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"新年快乐！\" được dịch đúng là:",
+              "options": [
+                "Chúc mừng năm mới!",
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Chào buổi sáng mọi người!"
+              ],
+              "answer": "Chúc mừng năm mới!"
             }
           ]
         }
@@ -2146,7 +2636,7 @@
             "vi": "Trên bàn có một quyển sách."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "洗手间在哪儿？",
             "pinyin": "xǐshǒujiān",
             "vi": "Nhà vệ sinh ở đâu?"
@@ -2154,17 +2644,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）希望 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"希望\" mang nghĩa là gì?",
               "options": [
+                "thì, liền, ngay",
                 "hi vọng",
-                "Không chính xác",
-                "Khác"
+                "cho"
               ],
               "answer": "hi vọng"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"我希望明天是晴天。\" được dịch đúng là:",
+              "options": [
+                "Chào buổi sáng mọi người!",
+                "Tôi hi vọng ngày mai là ngày nắng.",
+                "Hẹn gặp lại vào ngày mai nhé!"
+              ],
+              "answer": "Tôi hi vọng ngày mai là ngày nắng."
             }
           ]
         }
@@ -2188,7 +2688,7 @@
             "vi": "nét bú, nét"
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "他可能不来了。",
             "pinyin": "kěnéng",
             "vi": "Anh ấy có lẽ không đến nữa."
@@ -2196,17 +2696,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）里面 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"里面\" mang nghĩa là gì?",
               "options": [
+                "cho",
                 "bên trong",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay"
               ],
               "answer": "bên trong"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"房间里面有人吗？\" được dịch đúng là:",
+              "options": [
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Chào buổi sáng mọi người!",
+                "Trong phòng có người không?"
+              ],
+              "answer": "Trong phòng có người không?"
             }
           ]
         }
@@ -2230,7 +2740,7 @@
             "vi": "Đừng làm như vậy."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "请告诉我。",
             "pinyin": "gàosu",
             "vi": "Xin hãy nói với tôi."
@@ -2238,17 +2748,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）上网 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"上网\" mang nghĩa là gì?",
               "options": [
+                "thì, liền, ngay",
                 "lên mạng",
-                "Không chính xác",
-                "Khác"
+                "cho"
               ],
               "answer": "lên mạng"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"我喜欢上网看电影。\" được dịch đúng là:",
+              "options": [
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Tôi thích lên mạng xem phim.",
+                "Chào buổi sáng mọi người!"
+              ],
+              "answer": "Tôi thích lên mạng xem phim."
             }
           ]
         }
@@ -2278,7 +2798,7 @@
             "vi": "Trong túi của tôi có rất nhiều sách."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "你们怎么过年？",
             "pinyin": "guònián",
             "vi": "Các bạn đón năm mới như thế nào?"
@@ -2286,17 +2806,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）站 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"站\" mang nghĩa là gì?",
               "options": [
                 "đứng",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay",
+                "cho"
               ],
               "answer": "đứng"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"门口站着一个人。\" được dịch đúng là:",
+              "options": [
+                "Ngoài cửa đang đứng một người.",
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Chào buổi sáng mọi người!"
+              ],
+              "answer": "Ngoài cửa đang đứng một người."
             }
           ]
         }
@@ -2320,7 +2850,7 @@
             "vi": "Vị giáo viên này dạy chúng tôi tiếng Trung."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "前面有一个超市。",
             "pinyin": "qiánmiàn",
             "vi": "Phía trước có một siêu thị."
@@ -2328,17 +2858,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）没意思 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"没意思\" mang nghĩa là gì?",
               "options": [
                 "vô vị, chán",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay",
+                "cho"
               ],
               "answer": "vô vị, chán"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"这个电影真没意思。\" được dịch đúng là:",
+              "options": [
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Bộ phim này thật vô vị.",
+                "Chào buổi sáng mọi người!"
+              ],
+              "answer": "Bộ phim này thật vô vị."
             }
           ]
         }
@@ -2362,7 +2902,7 @@
             "vi": "Đứa trẻ kia đang chạy."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "那个女孩儿真漂亮。",
             "pinyin": "nǚháir",
             "vi": "Bé gái kia thật đẹp."
@@ -2370,17 +2910,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）房子 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"房子\" mang nghĩa là gì?",
               "options": [
-                "ngôi nhà, căn nhà",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay",
+                "cho",
+                "ngôi nhà, căn nhà"
               ],
               "answer": "ngôi nhà, căn nhà"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"他的房子很大。\" được dịch đúng là:",
+              "options": [
+                "Chào buổi sáng mọi người!",
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Ngôi nhà của anh ấy rất lớn."
+              ],
+              "answer": "Ngôi nhà của anh ấy rất lớn."
             }
           ]
         }
@@ -2404,7 +2954,7 @@
             "vi": "Mắt của cô ấy rất to."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "姐姐喜欢跳舞。",
             "pinyin": "tiàowǔ",
             "vi": "Chị gái thích khiêu vũ."
@@ -2412,17 +2962,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）姓 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"姓\" mang nghĩa là gì?",
               "options": [
+                "cho",
                 "họ, mang họ",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay"
               ],
               "answer": "họ, mang họ"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"我姓王。\" được dịch đúng là:",
+              "options": [
+                "Chào buổi sáng mọi người!",
+                "Tôi họ Vương.",
+                "Hẹn gặp lại vào ngày mai nhé!"
+              ],
+              "answer": "Tôi họ Vương."
             }
           ]
         }
@@ -2452,7 +3012,7 @@
             "vi": "Ngày mai anh ấy ra nước ngoài."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "电影院的门票很贵。",
             "pinyin": "ménpiào",
             "vi": "Vé vào cửa rạp chiếu phim rất đắt."
@@ -2460,17 +3020,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）姓名 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"姓名\" mang nghĩa là gì?",
               "options": [
+                "thì, liền, ngay",
                 "họ tên",
-                "Không chính xác",
-                "Khác"
+                "cho"
               ],
               "answer": "họ tên"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"请告诉我你的姓名。\" được dịch đúng là:",
+              "options": [
+                "Chào buổi sáng mọi người!",
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Xin hãy nói cho tôi họ tên của bạn."
+              ],
+              "answer": "Xin hãy nói cho tôi họ tên của bạn."
             }
           ]
         }
@@ -2494,7 +3064,7 @@
             "vi": "Bên ngoài trời mưa rồi, đừng ra khỏi nhà."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "这条路很长。",
             "pinyin": "lù",
             "vi": "Con đường này rất dài."
@@ -2502,17 +3072,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）高中 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"高中\" mang nghĩa là gì?",
               "options": [
                 "trường cấp 3, trung học phổ thông",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay",
+                "cho"
               ],
               "answer": "trường cấp 3, trung học phổ thông"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"我在高中学习。\" được dịch đúng là:",
+              "options": [
+                "Tôi học ở trường cấp 3.",
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Chào buổi sáng mọi người!"
+              ],
+              "answer": "Tôi học ở trường cấp 3."
             }
           ]
         }
@@ -2536,7 +3116,7 @@
             "vi": "Tôi đi sân bay đón bạn."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "机票太贵了。",
             "pinyin": "jīpiào",
             "vi": "Vé máy bay đắt quá."
@@ -2544,17 +3124,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）颐和园 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"颐和园\" mang nghĩa là gì?",
               "options": [
                 "Di Hòa Viên",
-                "Không chính xác",
-                "Khác"
+                "thì, liền, ngay",
+                "cho"
               ],
               "answer": "Di Hòa Viên"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"颐和园在北京。\" được dịch đúng là:",
+              "options": [
+                "Di Hòa Viên ở Bắc Kinh.",
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Chào buổi sáng mọi người!"
+              ],
+              "answer": "Di Hòa Viên ở Bắc Kinh."
             }
           ]
         }
@@ -2578,7 +3168,7 @@
             "vi": "Anh ấy hình như ốm rồi."
           },
           {
-            "speaker": "王老师",
+            "speaker": "李明",
             "zh": "外面有一只鸟。",
             "pinyin": "niǎo",
             "vi": "Bên ngoài có một con chim."
@@ -2586,17 +3176,27 @@
         ],
         "notes": [],
         "quiz": {
-          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng cho 2 câu hỏi bên dưới:",
           "questions": [
             {
               "id": 1,
-              "question": "（1）飞 的意思是？",
+              "question": "(1) Trong bài khóa, từ \"飞\" mang nghĩa là gì?",
               "options": [
+                "thì, liền, ngay",
                 "bay",
-                "Không chính xác",
-                "Khác"
+                "cho"
               ],
               "answer": "bay"
+            },
+            {
+              "id": 2,
+              "question": "(2) Câu \"小鸟在飞。\" được dịch đúng là:",
+              "options": [
+                "Hẹn gặp lại vào ngày mai nhé!",
+                "Chào buổi sáng mọi người!",
+                "Con chim nhỏ đang bay."
+              ],
+              "answer": "Con chim nhỏ đang bay."
             }
           ]
         }
