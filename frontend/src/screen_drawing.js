@@ -215,19 +215,14 @@ class ScreenDrawingTool {
   }
 
   bindEvents() {
-    // Bubble Click
+    // Bubble Click — fires only when pointer didn't move enough to be a drag
     this.bubble.addEventListener('click', (e) => {
       e.stopPropagation();
-      if (this.isDraggingBubble) return;
       this.toggle();
     });
 
-    // Make Bubble Draggable
-    this.makeDraggable(this.bubble, this.bubble, () => {
-      this.isDraggingBubble = true;
-    }, () => {
-      setTimeout(() => { this.isDraggingBubble = false; }, 80);
-    });
+    // Make Bubble Draggable (with 8px threshold — click still works)
+    this.makeDraggable(this.bubble, this.bubble);
 
     // Make Toolbar Draggable
     const handle = this.toolbar.querySelector('.dt-drag-handle');
@@ -316,12 +311,15 @@ class ScreenDrawingTool {
   }
 
   makeDraggable(targetEl, handleEl, onDragStart, onDragEnd) {
+    const DRAG_THRESHOLD = 8; // px — move less than this = click, more = drag
     let startX = 0, startY = 0, initLeft = 0, initTop = 0;
-    let dragging = false;
+    let pointerDown = false;
+    let didDrag = false;
 
     const dragStart = (e) => {
       if (e.target.closest('button') && handleEl !== targetEl) return;
-      dragging = true;
+      pointerDown = true;
+      didDrag = false;
       const clientX = e.clientX || (e.touches && e.touches[0].clientX);
       const clientY = e.clientY || (e.touches && e.touches[0].clientY);
       startX = clientX;
@@ -331,22 +329,30 @@ class ScreenDrawingTool {
       initLeft = rect.left;
       initTop = rect.top;
 
-      targetEl.style.right = 'auto';
-      targetEl.style.bottom = 'auto';
-      targetEl.style.left = initLeft + 'px';
-      targetEl.style.top = initTop + 'px';
-
-      if (onDragStart) onDragStart();
       document.addEventListener('pointermove', dragMove);
       document.addEventListener('pointerup', dragStop);
     };
 
     const dragMove = (e) => {
-      if (!dragging) return;
+      if (!pointerDown) return;
       const clientX = e.clientX || (e.touches && e.touches[0].clientX);
       const clientY = e.clientY || (e.touches && e.touches[0].clientY);
       const dx = clientX - startX;
       const dy = clientY - startY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      // Only start actually dragging once threshold is crossed
+      if (!didDrag && dist < DRAG_THRESHOLD) return;
+
+      if (!didDrag) {
+        // First time crossing threshold — lock position and fire onDragStart
+        didDrag = true;
+        targetEl.style.right = 'auto';
+        targetEl.style.bottom = 'auto';
+        targetEl.style.left = initLeft + 'px';
+        targetEl.style.top = initTop + 'px';
+        if (onDragStart) onDragStart();
+      }
 
       const newLeft = Math.max(10, Math.min(window.innerWidth - targetEl.offsetWidth - 10, initLeft + dx));
       const newTop = Math.max(10, Math.min(window.innerHeight - targetEl.offsetHeight - 10, initTop + dy));
@@ -356,11 +362,16 @@ class ScreenDrawingTool {
     };
 
     const dragStop = () => {
-      if (!dragging) return;
-      dragging = false;
+      if (!pointerDown) return;
+      pointerDown = false;
       document.removeEventListener('pointermove', dragMove);
       document.removeEventListener('pointerup', dragStop);
-      if (onDragEnd) onDragEnd();
+      if (didDrag && onDragEnd) onDragEnd();
+      // If no drag happened, reset didDrag — the click event fires normally
+      if (!didDrag) {
+        // Nothing: let the natural click event on handleEl bubble through
+      }
+      didDrag = false;
     };
 
     handleEl.addEventListener('pointerdown', dragStart);

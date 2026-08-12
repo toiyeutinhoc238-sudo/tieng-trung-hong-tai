@@ -8414,7 +8414,8 @@ html.light-mode #radicals-flashcard-view.fullscreen-flashcard-active .hero-flash
   justify-content: center !important;
   transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s, box-shadow 0.3s !important;
   user-select: none !important;
-  touch-action: none !important;
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent !important;
 }
 
 .screen-pen-floating-bubble:hover {
