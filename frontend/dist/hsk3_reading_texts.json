@@ -1,0 +1,3392 @@
+[
+  {
+    "lessonId": 1,
+    "lessonTitle": "Bài 1: Giao tiếp văn phòng - 办公室",
+    "dialogues": [
+      {
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk3_texts/1-1.mp3",
+        "vocabAudio": "/audio/hsk3_texts/1-2.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "请站在这儿。",
+            "pinyin": "zhàn",
+            "vi": "Xin hãy đứng ở đây."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我要去北京站。",
+            "pinyin": "zhàn",
+            "vi": "Tôi muốn đi đến Ga Bắc Kinh."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "我家在学校和公司中间。",
+            "pinyin": "zhōngjiān",
+            "vi": "Nhà tôi nằm giữa trường học và công ty."
+          },
+          {
+            "speaker": "李明",
+            "zh": "学习汉语对我来说很重要。",
+            "pinyin": "zhòngyào",
+            "vi": "Học tiếng Trung rất quan trọng đối với tôi."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）站 的意思是？",
+              "options": [
+                "Đứng",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Đứng"
+            }
+          ]
+        }
+      },
+      {
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk3_texts/1-3.mp3",
+        "vocabAudio": "/audio/hsk3_texts/1-4.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "我需要你的(tô đỏ帮助)。",
+            "pinyin": "bāngzhù",
+            "vi": "Tôi cần sự giúp đỡ của bạn"
+          },
+          {
+            "speaker": "李明",
+            "zh": "这条裤子很长。",
+            "pinyin": "cháng",
+            "vi": "Cái quần này rất dài."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "请记得带雨伞。",
+            "pinyin": "dài",
+            "vi": "Xin nhớ mang theo ô."
+          },
+          {
+            "speaker": "李明",
+            "zh": "这条裤子太短了。",
+            "pinyin": "duǎn",
+            "vi": "Chiếc quần này quá ngắn."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）帮助 的意思是？",
+              "options": [
+                "Giúp đỡ",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Giúp đỡ"
+            }
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk3_texts/1-5.mp3",
+        "vocabAudio": "/audio/hsk3_texts/1-6.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "我发现了一个很美的地方。",
+            "pinyin": "fāxiàn",
+            "vi": "Tôi phát hiện anh ấy không có ở nhà."
+          },
+          {
+            "speaker": "李明",
+            "zh": "你今天好像很高兴。",
+            "pinyin": "hǎoxiàng",
+            "vi": "Hôm nay bạn có vẻ rất vui."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "我要去办护照。",
+            "pinyin": "hùzhào",
+            "vi": "Tôi phải đi làm hộ chiếu."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我去机场接你。",
+            "pinyin": "jiē",
+            "vi": "Tôi ra sân bay đón bạn."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）发现 的意思是？",
+              "options": [
+                "Phát hiện",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Phát hiện"
+            }
+          ]
+        }
+      },
+      {
+        "id": 4,
+        "title": "Bài Khóa 4",
+        "audio": "/audio/hsk3_texts/1-7.mp3",
+        "vocabAudio": "/audio/hsk3_texts/1-8.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "我想买一公斤米。\n\n我哥哥一米八。",
+            "pinyin": "mǐ",
+            "vi": "Tôi muốn mua một ký gạo.\n\nAnh trai tôi cao 1,8 mét."
+          },
+          {
+            "speaker": "李明",
+            "zh": "她看起来很年轻。",
+            "pinyin": "niánqīng",
+            "vi": "Cô ấy trông rất trẻ."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "她的头发很长。",
+            "pinyin": "tóufa",
+            "vi": "Tóc của cô ấy rất dài."
+          },
+          {
+            "speaker": "李明",
+            "zh": "你像你的哥哥。",
+            "pinyin": "xiàng",
+            "vi": "Bạn giống anh trai của bạn."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）米 的意思是？",
+              "options": [
+                "Gạo\n\nmét",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Gạo\n\nmét"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": 2,
+    "lessonTitle": "Bài 2: Kỳ nghỉ lý thú - 快乐假期 (Phần 1)",
+    "dialogues": [
+      {
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk3_texts/2-1.mp3",
+        "vocabAudio": "/audio/hsk3_texts/2-2.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "你不用担心。",
+            "pinyin": "búyòng",
+            "vi": "Bạn không cần phải lo lắng."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我现在很饿。",
+            "pinyin": "è",
+            "vi": "Bây giờ tôi rất đói."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "我记不住这个汉字。",
+            "pinyin": "jì",
+            "vi": "Tôi không nhớ được chữ Hán này."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我口渴了，想喝水。",
+            "pinyin": "kě",
+            "vi": "Tôi khát nước rồi, muốn uống nước."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）不用 的意思是？",
+              "options": [
+                "Không cần; không phải",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Không cần; không phải"
+            }
+          ]
+        }
+      },
+      {
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk3_texts/2-3.mp3",
+        "vocabAudio": "/audio/hsk3_texts/2-4.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "我马上回来。",
+            "pinyin": "mǎshàng",
+            "vi": "Tôi sẽ quay lại ngay lập tức."
+          },
+          {
+            "speaker": "李明",
+            "zh": "你可以用我的手机。",
+            "pinyin": "yòng",
+            "vi": "Bạn có thể dùng điện thoại của tôi."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "请给我菜单。",
+            "pinyin": "càidān",
+            "vi": "Xin vui lòng đưa cho tôi thực đơn."
+          },
+          {
+            "speaker": "李明",
+            "zh": "这里的交通很方便。",
+            "pinyin": "fāngbiàn",
+            "vi": "Giao thông ở đây rất thuận tiện."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）马上 的意思是？",
+              "options": [
+                "Ngay lập tức",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Ngay lập tức"
+            }
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk3_texts/2-5.mp3",
+        "vocabAudio": "/audio/hsk3_texts/2-6.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "我喜欢吃方便面。",
+            "pinyin": "fāngbiànmiàn",
+            "vi": "Tôi thích ăn mì ăn liền."
+          },
+          {
+            "speaker": "李明",
+            "zh": "这家餐厅的服务很好。",
+            "pinyin": "fúwù",
+            "vi": "Dịch vụ của nhà hàng này rất tốt."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "我们好久没见了。",
+            "pinyin": "hǎojiǔ",
+            "vi": "Chúng ta lâu rồi không gặp."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我家有两只小鸡。",
+            "pinyin": "jī",
+            "vi": "Nhà tôi có hai con gà con."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）方便面 的意思是？",
+              "options": [
+                "Mì ăn liền",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Mì ăn liền"
+            }
+          ]
+        }
+      },
+      {
+        "id": 4,
+        "title": "Bài Khóa 4",
+        "audio": "/audio/hsk3_texts/2-7.mp3",
+        "vocabAudio": "/audio/hsk3_texts/2-8.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "我不会用筷子。",
+            "pinyin": "kuàizi",
+            "vi": "Tôi không biết dùng đũa."
+          },
+          {
+            "speaker": "李明",
+            "zh": "她对客人非常热情。",
+            "pinyin": "rèqíng",
+            "vi": "Cô ấy rất nhiệt tình với khách."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "我点了外卖。",
+            "pinyin": "wàimài",
+            "vi": "Tôi đã đặt đồ ăn mang đi."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）筷子 的意思是？",
+              "options": [
+                "Đũa",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Đũa"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": 3,
+    "lessonTitle": "Bài 3: Kỳ nghỉ lý thú - 快乐假期 (Phần 2)",
+    "dialogues": [
+      {
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk3_texts/3-1.mp3",
+        "vocabAudio": "/audio/hsk3_texts/3-2.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "我买了一个碗。",
+            "pinyin": "wǎn",
+            "vi": "Tôi đã mua một cái bát."
+          },
+          {
+            "speaker": "李明",
+            "zh": "你可以选这个。",
+            "pinyin": "xuǎn",
+            "vi": "Bạn có thể chọn cái này."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "她又高又漂亮。",
+            "pinyin": "yòu",
+            "vi": "Cô ấy vừa cao vừa xinh đẹp."
+          },
+          {
+            "speaker": "李明",
+            "zh": "他只喝咖啡，不喝茶。",
+            "pinyin": "zhǐ",
+            "vi": "Anh ấy chỉ uống cà phê, không uống trà."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）碗 的意思是？",
+              "options": [
+                "Cái bát",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Cái bát"
+            }
+          ]
+        }
+      },
+      {
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk3_texts/3-3.mp3",
+        "vocabAudio": "/audio/hsk3_texts/3-4.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "这个问题很简单。",
+            "pinyin": "jiǎndān",
+            "vi": "Vấn đề này rất đơn giản."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我刚去买了一双鞋。",
+            "pinyin": "shuāng",
+            "vi": "Tôi vừa mới đi mua một đôi giày."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "他们是一双恋人。",
+            "pinyin": "shuāng",
+            "vi": "Họ là một đôi tình nhân."
+          },
+          {
+            "speaker": "李明",
+            "zh": "双休日我喜欢在家休息。",
+            "pinyin": "shuāng",
+            "vi": "Hai ngày cuối tuần tôi thích nghỉ ngơi ở nhà."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）简单 的意思是？",
+              "options": [
+                "Đơn giản",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Đơn giản"
+            }
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk3_texts/3-5.mp3",
+        "vocabAudio": "/audio/hsk3_texts/3-6.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "桌子上有一张纸。",
+            "pinyin": "zhāng",
+            "vi": "Trên bàn có một tờ giấy."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我只去过一次北京。",
+            "pinyin": "zhǐ",
+            "vi": "Tôi chỉ mới đến Bắc Kinh một lần."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "你太客气了。",
+            "pinyin": "kèqi",
+            "vi": "Bạn khách khí quá."
+          },
+          {
+            "speaker": "李明",
+            "zh": "先尝一口看看。",
+            "pinyin": "cháng",
+            "vi": "Nếm thử một miếng xem sao."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）张 的意思是？",
+              "options": [
+                "Tờ, tấm",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Tờ, tấm"
+            }
+          ]
+        }
+      },
+      {
+        "id": 4,
+        "title": "Bài Khóa 4",
+        "audio": "/audio/hsk3_texts/3-7.mp3",
+        "vocabAudio": "/audio/hsk3_texts/3-8.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "生日要吃蛋糕。",
+            "pinyin": "dàngāo",
+            "vi": "Sinh nhật phải ăn bánh ga tô."
+          },
+          {
+            "speaker": "李明",
+            "zh": "不必这么客气。",
+            "pinyin": "kèqi",
+            "vi": "Không cần khách sáo thế đâu."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "我想喝冷饮料。",
+            "pinyin": "yǐnliào",
+            "vi": "Tôi muốn uống đồ uống lạnh."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）蛋糕 的意思是？",
+              "options": [
+                "Bánh ga tô",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Bánh ga tô"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": 4,
+    "lessonTitle": "Bài 4: Mua sắm và Ẩm thực - 购物与美食",
+    "dialogues": [
+      {
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk3_texts/4-1.mp3",
+        "vocabAudio": "/audio/hsk3_texts/4-2.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "他们买了一套新房子。",
+            "pinyin": "fángzi",
+            "vi": "Họ đã mua một căn nhà mới."
+          },
+          {
+            "speaker": "李明",
+            "zh": "睡觉前别忘了关灯。",
+            "pinyin": "guān",
+            "vi": "Trước khi ngủ đừng quên tắt đèn."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "他有一个哥哥，还有一个妹妹。",
+            "pinyin": "hái",
+            "vi": "Cậu ấy có một anh trai, còn có một em gái nữa."
+          },
+          {
+            "speaker": "李明",
+            "zh": "她明天把书还给图书馆。",
+            "pinyin": "huán",
+            "vi": "Ngày mai cô ấy sẽ đem sách trả lại cho thư viện"
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）房子 的意思是？",
+              "options": [
+                "Căn nhà; nhà",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Căn nhà; nhà"
+            }
+          ]
+        }
+      },
+      {
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk3_texts/4-3.mp3",
+        "vocabAudio": "/audio/hsk3_texts/4-4.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "我去办签证。",
+            "pinyin": "bàn",
+            "vi": "Tôi đi làm visa."
+          },
+          {
+            "speaker": "李明",
+            "zh": "他昨天才回来。",
+            "pinyin": "cái",
+            "vi": "Anh ấy mới về hôm qua."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "我住在第五层。",
+            "pinyin": "céng",
+            "vi": "Tôi sống ở tầng năm."
+          },
+          {
+            "speaker": "李明",
+            "zh": "教室里的灯开着呢。",
+            "pinyin": "dēng",
+            "vi": "Đèn trong lớp vẫn còn bật."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）办 的意思是？",
+              "options": [
+                "Làm, xử lý",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Làm, xử lý"
+            }
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk3_texts/4-5.mp3",
+        "vocabAudio": "/audio/hsk3_texts/4-6.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "花园。",
+            "pinyin": "huāyuán",
+            "vi": "Vườn hoa"
+          },
+          {
+            "speaker": "李明",
+            "zh": "你要换衣服吗？",
+            "pinyin": "huàn",
+            "vi": "Bạn có muốn thay quần áo không?"
+          },
+          {
+            "speaker": "大卫",
+            "zh": "我听说他很忙。",
+            "pinyin": "tīngshuō",
+            "vi": "Tôi nghe nói anh ấy rất bận."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我家有一台洗衣机。",
+            "pinyin": "xǐyījī",
+            "vi": "Nhà tôi có một cái máy giặt."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）花园 的意思是？",
+              "options": [
+                "Vườn hoa",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Vườn hoa"
+            }
+          ]
+        }
+      },
+      {
+        "id": 4,
+        "title": "Bài Khóa 4",
+        "audio": "/audio/hsk3_texts/4-7.mp3",
+        "vocabAudio": "/audio/hsk3_texts/4-8.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "我用信用卡买东西。",
+            "pinyin": "xìnyòngkǎ",
+            "vi": "Tôi dùng thẻ tín dụng để mua đồ."
+          },
+          {
+            "speaker": "李明",
+            "zh": "他去银行取钱。",
+            "pinyin": "yínháng",
+            "vi": "Anh ấy đi ngân hàng rút tiền."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "咱们吃饭吧。",
+            "pinyin": "zánmen",
+            "vi": "Chúng ta ăn cơm đi."
+          },
+          {
+            "speaker": "李明",
+            "zh": "这张纸很白。",
+            "pinyin": "zhǐ",
+            "vi": "Tờ giấy này rất trắng."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）信用卡 的意思是？",
+              "options": [
+                "Thẻ tín dụng",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Thẻ tín dụng"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": 5,
+    "lessonTitle": "Bài 5: Sức khỏe và Thể thao - 健康与运动 (Phần 1)",
+    "dialogues": [
+      {
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk3_texts/5-1.mp3",
+        "vocabAudio": "/audio/hsk3_texts/5-2.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "我不要别的，只要那支钢笔。",
+            "pinyin": "bié de",
+            "vi": "Tôi không cần cái nào khác, chỉ cần cây bút đó."
+          },
+          {
+            "speaker": "李明",
+            "zh": "你的房间很干净。",
+            "pinyin": "gānjìng",
+            "vi": "Phòng của bạn rất sạch sẽ."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "你先去，我等一下再去。",
+            "pinyin": "xiān",
+            "vi": "Bạn đi trước đi, tôi sẽ đi sau."
+          },
+          {
+            "speaker": "李明",
+            "zh": "这两件衣服一样。",
+            "pinyin": "yíyàng",
+            "vi": "Hai bộ quần áo này giống nhau."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）别的 的意思是？",
+              "options": [
+                "Khác; cái khác",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Khác; cái khác"
+            }
+          ]
+        }
+      },
+      {
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk3_texts/5-3.mp3",
+        "vocabAudio": "/audio/hsk3_texts/5-4.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "这片大海很美丽。",
+            "pinyin": "hǎi",
+            "vi": "Biển này rất đẹp."
+          },
+          {
+            "speaker": "李明",
+            "zh": "欢迎你来我家玩。",
+            "pinyin": "huānyíng",
+            "vi": "Chào mừng bạn đến nhà tôi chơi."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "我们的假期很长。",
+            "pinyin": "jiàqī",
+            "vi": "Kỳ nghỉ của chúng tôi rất dài."
+          },
+          {
+            "speaker": "李明",
+            "zh": "现在是三点一刻。",
+            "pinyin": "kè",
+            "vi": "Bây giờ là ba giờ mười lăm phút."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）海 的意思是？",
+              "options": [
+                "Biển",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Biển"
+            }
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk3_texts/5-5.mp3",
+        "vocabAudio": "/audio/hsk3_texts/5-6.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "你对我们的服务满意吗？",
+            "pinyin": "mǎnyì",
+            "vi": "Bạn có hài lòng với dịch vụ của chúng tôi không?"
+          },
+          {
+            "speaker": "李明",
+            "zh": "树上有一只小鸟。",
+            "pinyin": "niǎo",
+            "vi": "Trên cây có một con chim nhỏ."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "我会骑自行车。",
+            "pinyin": "qí",
+            "vi": "Tôi biết đi xe đạp."
+          },
+          {
+            "speaker": "李明",
+            "zh": "飞机马上起飞了。",
+            "pinyin": "qǐfēi",
+            "vi": "Máy bay sắp cất cánh rồi."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）满意 的意思是？",
+              "options": [
+                "Hài lòng, thỏa mãn",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Hài lòng, thỏa mãn"
+            }
+          ]
+        }
+      },
+      {
+        "id": 4,
+        "title": "Bài Khóa 4",
+        "audio": "/audio/hsk3_texts/5-7.mp3",
+        "vocabAudio": "/audio/hsk3_texts/5-8.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "他是出租车司机。",
+            "pinyin": "sījī",
+            "vi": "Anh ấy là tài xế taxi."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）司机 的意思是？",
+              "options": [
+                "Tài xế",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Tài xế"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": 6,
+    "lessonTitle": "Bài 6: Sức khỏe và Thể thao - 健康与运动 (Phần 2)",
+    "dialogues": [
+      {
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk3_texts/6-1.mp3",
+        "vocabAudio": "/audio/hsk3_texts/6-2.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "这本书特别有意思。",
+            "pinyin": "tèbié",
+            "vi": "Cuốn sách này đặc biệt thú vị."
+          },
+          {
+            "speaker": "李明",
+            "zh": "这个菜的做法很特别。",
+            "pinyin": "tèbié",
+            "vi": "Phương pháp làm món ăn này rất đặc biệt"
+          },
+          {
+            "speaker": "大卫",
+            "zh": "你的相机很好看。",
+            "pinyin": "xiàngjī",
+            "vi": "Máy ảnh của bạn trông rất đẹp."
+          },
+          {
+            "speaker": "李明",
+            "zh": "你一定要小心。",
+            "pinyin": "yídìng",
+            "vi": "Bạn nhất định phải cẩn thận."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）特别 的意思是？",
+              "options": [
+                "Đặc biệt, vô cùng, rất",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Đặc biệt, vô cùng, rất"
+            }
+          ]
+        }
+      },
+      {
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk3_texts/6-3.mp3",
+        "vocabAudio": "/audio/hsk3_texts/6-4.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "除了工作以外，我还学习。",
+            "pinyin": "yǐwài",
+            "vi": "Ngoài công việc, tôi còn học tập."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我一直在学习汉语。",
+            "pinyin": "yìzhí",
+            "vi": "Tôi luôn học tiếng Trung."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "今晚的月亮很圆。",
+            "pinyin": "yuèliàng",
+            "vi": "Mặt trăng tối nay rất tròn."
+          },
+          {
+            "speaker": "李明",
+            "zh": "除了你, 谁我都不说。",
+            "pinyin": "chúle",
+            "vi": "Ngoài bạn ra, tôi không nói với ai hết."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）以外 的意思是？",
+              "options": [
+                "Ngoài ra",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Ngoài ra"
+            }
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk3_texts/6-5.mp3",
+        "vocabAudio": "/audio/hsk3_texts/6-6.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "我们好久不见了。",
+            "pinyin": "jiǔ",
+            "vi": "Lâu rồi chúng ta không gặp nhau."
+          },
+          {
+            "speaker": "李明",
+            "zh": "那是一匹白马。",
+            "pinyin": "mǎ",
+            "vi": "Đó là một con ngựa trắng."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "草原上有很多羊。",
+            "pinyin": "yáng",
+            "vi": "Trên thảo nguyên có rất nhiều dê."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我们住在那家宾馆。",
+            "pinyin": "bīnguǎn",
+            "vi": "Chúng tôi ở khách sạn đó."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）久 的意思是？",
+              "options": [
+                "Lâu, đã lâu",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Lâu, đã lâu"
+            }
+          ]
+        }
+      },
+      {
+        "id": 4,
+        "title": "Bài Khóa 4",
+        "audio": "/audio/hsk3_texts/6-7.mp3",
+        "vocabAudio": "/audio/hsk3_texts/6-8.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "他在木头上刻字。",
+            "pinyin": "kè",
+            "vi": "Anh ấy khắc chữ lên gỗ."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）刻 的意思是？",
+              "options": [
+                "Khắc, chạm",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Khắc, chạm"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": 7,
+    "lessonTitle": "Bài 7: Nhà cửa và Cuộc sống - Vị trí & Phòng (Phần 1)",
+    "dialogues": [
+      {
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk3_texts/7-1.mp3",
+        "vocabAudio": "/audio/hsk3_texts/7-2.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "我的手机没电了。",
+            "pinyin": "diàn",
+            "vi": "Điện thoại tôi hết pin rồi."
+          },
+          {
+            "speaker": "李明",
+            "zh": "这件衣服干了，可以穿了。",
+            "pinyin": "gān",
+            "vi": "Quần áo này khô rồi, có thể mặc rồi."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "他总干乱我的计划。\n\n咱们干了这杯酒吧。",
+            "pinyin": "gàn",
+            "vi": "Anh ấy luôn làm loạn kế hoạch của tôi.\n\nChúng ta uống cạn ly rượu này."
+          },
+          {
+            "speaker": "李明",
+            "zh": "你会做中国菜吗？",
+            "pinyin": "huì",
+            "vi": "Bạn biết nấu món Trung Quốc không?"
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）电 的意思是？",
+              "options": [
+                "Điện; pin; điện năng",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Điện; pin; điện năng"
+            }
+          ]
+        }
+      },
+      {
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk3_texts/7-3.mp3",
+        "vocabAudio": "/audio/hsk3_texts/7-4.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "那座山很高。",
+            "pinyin": "shān",
+            "vi": "Ngọn núi đó rất cao."
+          },
+          {
+            "speaker": "李明",
+            "zh": "这里有一棵大树。",
+            "pinyin": "shù",
+            "vi": "Ở đây có một cái cây lớn."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "冬天我会穿厚大衣。",
+            "pinyin": "dàyī",
+            "vi": "Mùa đông tôi sẽ mặc áo khoác dày."
+          },
+          {
+            "speaker": "李明",
+            "zh": "他给我写了一封信。",
+            "pinyin": "fēng",
+            "vi": "Anh ấy đã viết cho tôi một bức thư."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）山 的意思是？",
+              "options": [
+                "Núi",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Núi"
+            }
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk3_texts/7-5.mp3",
+        "vocabAudio": "/audio/hsk3_texts/7-6.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "你会说汉语吗？",
+            "pinyin": "huì",
+            "vi": "Bạn biết nói tiếng Trung không?"
+          },
+          {
+            "speaker": "李明",
+            "zh": "她听到坏消息就很难过。",
+            "pinyin": "nánguò",
+            "vi": "Cô ấy rất buồn khi nghe tin xấu."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "这件衣服太难看了。",
+            "pinyin": "nánkàn",
+            "vi": "Bộ quần áo này quá xấu."
+          },
+          {
+            "speaker": "李明",
+            "zh": "孩子会爬了。",
+            "pinyin": "pá",
+            "vi": "Đứa bé đã biết bò."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）会 的意思是？",
+              "options": [
+                "Có thể, biết",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Có thể, biết"
+            }
+          ]
+        }
+      },
+      {
+        "id": 4,
+        "title": "Bài Khóa 4",
+        "audio": "/audio/hsk3_texts/7-7.mp3",
+        "vocabAudio": "/audio/hsk3_texts/7-8.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "我收到了一份礼物。",
+            "pinyin": "shōudào",
+            "vi": "Tôi đã nhận được một món quà."
+          },
+          {
+            "speaker": "李明",
+            "zh": "他的水平很高。",
+            "pinyin": "shuǐpíng",
+            "vi": "Trình độ của anh ấy rất cao."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "今天太阳很大。",
+            "pinyin": "tàiyáng",
+            "vi": "Hôm nay trời rất nắng."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）收到 的意思是？",
+              "options": [
+                "Nhận được",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Nhận được"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": 8,
+    "lessonTitle": "Bài 8: Nhà cửa và Cuộc sống - Vị trí & Phòng (Phần 2)",
+    "dialogues": [
+      {
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk3_texts/8-1.mp3",
+        "vocabAudio": "/audio/hsk3_texts/8-2.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "你的鞋很好看。",
+            "pinyin": "xié",
+            "vi": "Đôi giày của bạn rất đẹp."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我喜欢听音乐。",
+            "pinyin": "yīnyuè",
+            "vi": "Tôi thích nghe nhạc."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "我喜欢照相。",
+            "pinyin": "zhào xiàng",
+            "vi": "Tôi thích chụp ảnh."
+          },
+          {
+            "speaker": "李明",
+            "zh": "今天比较冷。",
+            "pinyin": "bǐjiào",
+            "vi": "Hôm nay khá lạnh."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）鞋 的意思是？",
+              "options": [
+                "Giày",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Giày"
+            }
+          ]
+        }
+      },
+      {
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk3_texts/8-3.mp3",
+        "vocabAudio": "/audio/hsk3_texts/8-4.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "他讲的笑话让我哈哈大笑。",
+            "pinyin": "hāhā",
+            "vi": "Câu chuyện cười của anh ấy khiến tôi cười ha ha."
+          },
+          {
+            "speaker": "李明",
+            "zh": "比赛已经结束了。",
+            "pinyin": "jiéshù",
+            "vi": "Trận đấu đã kết thúc rồi."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "我给你发了一封邮件。",
+            "pinyin": "yóujiàn",
+            "vi": "Tôi đã gửi cho bạn một email."
+          },
+          {
+            "speaker": "李明",
+            "zh": "阳光照在草地上。",
+            "pinyin": "zhào",
+            "vi": "Ánh nắng chiếu trên bãi cỏ."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）哈哈 的意思是？",
+              "options": [
+                "Ha ha",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Ha ha"
+            }
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk3_texts/8-5.mp3",
+        "vocabAudio": "/audio/hsk3_texts/8-6.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "请照这个样子做。",
+            "pinyin": "zhào",
+            "vi": "Hãy làm theo mẫu này."
+          },
+          {
+            "speaker": "李明",
+            "zh": "这是我的照片。",
+            "pinyin": "zhào",
+            "vi": "Đây là ảnh của tôi."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "我们终于成功了。",
+            "pinyin": "zhōngyú",
+            "vi": "Chúng tôi cuối cùng cũng thành công rồi."
+          },
+          {
+            "speaker": "李明",
+            "zh": "她总是笑得很开心。",
+            "pinyin": "zǒngshì",
+            "vi": "Cô ấy lúc nào cũng cười rất vui."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）照 的意思是？",
+              "options": [
+                "Dựa theo, căn cứ vào",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Dựa theo, căn cứ vào"
+            }
+          ]
+        }
+      },
+      {
+        "id": 4,
+        "title": "Bài Khóa 4",
+        "audio": "/audio/hsk3_texts/8-7.mp3",
+        "vocabAudio": "/audio/hsk3_texts/8-8.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "衣服已经干了。",
+            "pinyin": "gān",
+            "vi": "Quần áo đã khô rồi."
+          },
+          {
+            "speaker": "李明",
+            "zh": "请封好信封。",
+            "pinyin": "fēng",
+            "vi": "Vui lòng dán kín phong bì."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）干 的意思是？",
+              "options": [
+                "Khô; đồ khô",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Khô; đồ khô"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": 9,
+    "lessonTitle": "Bài 9: Giao thông và Đi lại - Du lịch & Vé",
+    "dialogues": [
+      {
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk3_texts/9-1.mp3",
+        "vocabAudio": "/audio/hsk3_texts/9-2.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "放假了，我们一起去玩吧。",
+            "pinyin": "fàngjià",
+            "vi": "Nghỉ lễ rồi, chúng ta cùng đi chơi nhé."
+          },
+          {
+            "speaker": "李明",
+            "zh": "这个路口有很多车。",
+            "pinyin": "lùkǒu",
+            "vi": "Ngã tư này có rất nhiều xe."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "这样做行不行？",
+            "pinyin": "xíng",
+            "vi": "Làm như thế này được không?"
+          },
+          {
+            "speaker": "李明",
+            "zh": "请安静一点儿！",
+            "pinyin": "ānjìng",
+            "vi": "Xin hãy yên lặng một chút!"
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）放假 的意思是？",
+              "options": [
+                "Nghỉ, nghỉ lễ",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Nghỉ, nghỉ lễ"
+            }
+          ]
+        }
+      },
+      {
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk3_texts/9-3.mp3",
+        "vocabAudio": "/audio/hsk3_texts/9-4.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "你必须每天练习说汉语。",
+            "pinyin": "bìxū",
+            "vi": "Bạn cần phải luyện tập nói tiếng Trung mỗi ngày."
+          },
+          {
+            "speaker": "李明",
+            "zh": "这是一本常用的词典。",
+            "pinyin": "chángyòng",
+            "vi": "Đây là một cuốn từ điển thông dụng."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "你打算什么时候去中国？",
+            "pinyin": "dǎsuàn",
+            "vi": "Bạn dự định khi nào đi Trung Quốc?"
+          },
+          {
+            "speaker": "李明",
+            "zh": "我们俩不会分开的。",
+            "pinyin": "fēnkāi",
+            "vi": "Hai chúng ta sẽ không xa nhau đâu."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）必须 的意思是？",
+              "options": [
+                "Cần, phải",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Cần, phải"
+            }
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk3_texts/9-5.mp3",
+        "vocabAudio": "/audio/hsk3_texts/9-6.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "你该去休息了。",
+            "pinyin": "gāi",
+            "vi": "Bạn nên đi nghỉ ngơi rồi."
+          },
+          {
+            "speaker": "李明",
+            "zh": "后来他去了北京。",
+            "pinyin": "hòulái",
+            "vi": "Sau này anh ấy đã đi Bắc Kinh."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "你别太着急！",
+            "pinyin": "jí",
+            "vi": "Bạn đừng quá lo lắng!"
+          },
+          {
+            "speaker": "李明",
+            "zh": "老师每天都检查我们的作业。",
+            "pinyin": "jiǎnchá",
+            "vi": "Giáo viên kiểm tra bài tập về nhà của chúng tôi mỗi ngày."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）该 的意思是？",
+              "options": [
+                "Nên, cần",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Nên, cần"
+            }
+          ]
+        }
+      },
+      {
+        "id": 4,
+        "title": "Bài Khóa 4",
+        "audio": "/audio/hsk3_texts/9-7.mp3",
+        "vocabAudio": "/audio/hsk3_texts/9-8.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "如果下雨，我不去公园。",
+            "pinyin": "rúguǒ",
+            "vi": "Nếu trời mưa, tôi không đi công viên."
+          },
+          {
+            "speaker": "李明",
+            "zh": "过马路要小心。",
+            "pinyin": "xiǎoxīn",
+            "vi": "Qua đường phải cẩn thận."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "以前我住在北京。",
+            "pinyin": "yǐqián",
+            "vi": "Trước đây tôi sống ở Bắc Kinh."
+          },
+          {
+            "speaker": "李明",
+            "zh": "你越努力越成功。",
+            "pinyin": "yuè",
+            "vi": "Bạn càng nỗ lực càng thành công."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）如果 的意思是？",
+              "options": [
+                "Nếu như",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Nếu như"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": 10,
+    "lessonTitle": "Bài 10: Mối quan hệ và Giao tiếp - Hẹn hò & Gặp gỡ",
+    "dialogues": [
+      {
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk3_texts/10-1.mp3",
+        "vocabAudio": "/audio/hsk3_texts/10-2.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "小狗的毛很软。",
+            "pinyin": "máo",
+            "vi": "Lông của chú chó con rất mềm."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我口袋里有一毛钱。",
+            "pinyin": "máo",
+            "vi": "Trong túi tôi có một hào."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "我可以试一试吗？",
+            "pinyin": "shì",
+            "vi": "Tôi có thể thử một chút không?"
+          },
+          {
+            "speaker": "李明",
+            "zh": "她不但会唱歌，还会跳舞。",
+            "pinyin": "búdàn",
+            "vi": "Cô ấy không chỉ biết hát, mà còn biết nhảy."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）毛 的意思是？",
+              "options": [
+                "Lông, tóc",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Lông, tóc"
+            }
+          ]
+        }
+      },
+      {
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk3_texts/10-3.mp3",
+        "vocabAudio": "/audio/hsk3_texts/10-4.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "这双鞋的大小正合适。",
+            "pinyin": "dàxiǎo",
+            "vi": "Đôi giày này có kích thước vừa vặn."
+          },
+          {
+            "speaker": "李明",
+            "zh": "她不仅聪明，而且很努力。",
+            "pinyin": "érqiě",
+            "vi": "Cô ấy không chỉ thông minh, hơn nữa còn rất chăm chỉ."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "今天比昨天更冷。",
+            "pinyin": "gèng",
+            "vi": "Hôm nay lạnh hơn hôm qua."
+          },
+          {
+            "speaker": "李明",
+            "zh": "这个西瓜有两公斤。",
+            "pinyin": "gōngjīn",
+            "vi": "Quả dưa hấu này nặng hai kg."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）大小 的意思是？",
+              "options": [
+                "Kích thước, lớn nhỏ",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Kích thước, lớn nhỏ"
+            }
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk3_texts/10-5.mp3",
+        "vocabAudio": "/audio/hsk3_texts/10-6.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "这件衣服很合适。",
+            "pinyin": "héshì",
+            "vi": "Bộ quần áo này rất phù hợp."
+          },
+          {
+            "speaker": "李明",
+            "zh": "黄色。",
+            "pinyin": "huángsè",
+            "vi": "Màu vàng"
+          },
+          {
+            "speaker": "大卫",
+            "zh": "我买了两斤苹果。",
+            "pinyin": "jìn",
+            "vi": "Tôi mua một cân táo."
+          },
+          {
+            "speaker": "李明",
+            "zh": "电脑开机了。",
+            "pinyin": "kāijī",
+            "vi": "Máy tính đã được bật."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）合适 的意思是？",
+              "options": [
+                "Phù hợp",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Phù hợp"
+            }
+          ]
+        }
+      },
+      {
+        "id": 4,
+        "title": "Bài Khóa 4",
+        "audio": "/audio/hsk3_texts/10-7.mp3",
+        "vocabAudio": "/audio/hsk3_texts/10-8.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "他买了一辆新车。",
+            "pinyin": "liàng",
+            "vi": "Anh ấy đã mua một chiếc xe mới."
+          },
+          {
+            "speaker": "李明",
+            "zh": "这些书一共多少钱？",
+            "pinyin": "yígòng",
+            "vi": "Những quyển sách này tổng cộng bao nhiêu tiền?"
+          },
+          {
+            "speaker": "大卫",
+            "zh": "我每天骑自行车上学。",
+            "pinyin": "zìxíngchē",
+            "vi": "Tôi đi xe đạp đến trường mỗi ngày."
+          },
+          {
+            "speaker": "李明",
+            "zh": "夏天我常穿短裤。",
+            "pinyin": "duǎnkù",
+            "vi": "Vào mùa hè tôi thường mặc quần short."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）辆 的意思是？",
+              "options": [
+                "Chiếc",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Chiếc"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": 11,
+    "lessonTitle": "Bài 11: Thời tiết và Thiên nhiên - Khí hậu & Địa lý (Phần 1)",
+    "dialogues": [
+      {
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk3_texts/11-1.mp3",
+        "vocabAudio": "/audio/hsk3_texts/11-2.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "王医生每天都要看十到二十位病人。",
+            "pinyin": "bìngrén",
+            "vi": "Bác sĩ Vương mỗi ngày đều phải khám từ 10 đến 20 bệnh nhân."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我常去跑步。",
+            "pinyin": "cháng",
+            "vi": "Tôi thường xuyên chạy bộ."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "他正在学开车。",
+            "pinyin": "kāi",
+            "vi": "Anh ấy đang học lái xe."
+          },
+          {
+            "speaker": "李明",
+            "zh": "这两个城市的天气差不多。",
+            "pinyin": "chàbuduō",
+            "vi": "Thời tiết của hai thành phố này gần như giống nhau."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）病人 的意思是？",
+              "options": [
+                "Bệnh nhân; người bệnh",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Bệnh nhân; người bệnh"
+            }
+          ]
+        }
+      },
+      {
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk3_texts/11-3.mp3",
+        "vocabAudio": "/audio/hsk3_texts/11-4.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "奶奶明天就能出院了。",
+            "pinyin": "chūyuàn",
+            "vi": "Ngày mai bà có thể xuất viện rồi."
+          },
+          {
+            "speaker": "李明",
+            "zh": "他得了第一名。",
+            "pinyin": "dé",
+            "vi": "Anh ấy đạt giải nhất."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "他跑得很快。",
+            "pinyin": "de",
+            "vi": "Anh ấy chạy rất nhanh."
+          },
+          {
+            "speaker": "李明",
+            "zh": "这里的温度很低。",
+            "pinyin": "dī",
+            "vi": "Nhiệt độ ở đây rất thấp."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）出院 的意思是？",
+              "options": [
+                "Xuất viện",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Xuất viện"
+            }
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk3_texts/11-5.mp3",
+        "vocabAudio": "/audio/hsk3_texts/11-6.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "这个方法很好。",
+            "pinyin": "fāngfǎ",
+            "vi": "Phương pháp này rất tốt."
+          },
+          {
+            "speaker": "李明",
+            "zh": "他很关心我的健康。",
+            "pinyin": "guānxīn",
+            "vi": "Anh ấy rất quan tâm đến sức khỏe của tôi."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "运动让身体更健康。",
+            "pinyin": "jiànkāng",
+            "vi": "Tập thể dục giúp cơ thể khỏe mạnh hơn."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我今天很开心。",
+            "pinyin": "kāixīn",
+            "vi": "Hôm nay tôi rất vui."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）方法 的意思是？",
+              "options": [
+                "Phương pháp",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Phương pháp"
+            }
+          ]
+        }
+      },
+      {
+        "id": 4,
+        "title": "Bài Khóa 4",
+        "audio": "/audio/hsk3_texts/11-7.mp3",
+        "vocabAudio": "/audio/hsk3_texts/11-8.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "你还有其他问题吗？",
+            "pinyin": "qítā",
+            "vi": "Bạn còn câu hỏi nào khác không?"
+          },
+          {
+            "speaker": "李明",
+            "zh": "体育馆很大。",
+            "pinyin": "tǐyùguǎn",
+            "vi": "Nhà thi đấu thể thao rất lớn."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "我的腿有点疼。",
+            "pinyin": "tuǐ",
+            "vi": "Chân tôi hơi đau."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）其他 的意思是？",
+              "options": [
+                "Khác, những cái khác",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Khác, những cái khác"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": 12,
+    "lessonTitle": "Bài 12: Thời tiết và Thiên nhiên - Khí hậu & Địa lý (Phần 2)",
+    "dialogues": [
+      {
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk3_texts/12-1.mp3",
+        "vocabAudio": "/audio/hsk3_texts/12-2.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "我习惯早上喝茶。",
+            "pinyin": "xíguàn",
+            "vi": "Tôi có thói quen uống trà buổi sáng."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我心里很高兴。",
+            "pinyin": "xīn·lǐ",
+            "vi": "Trong lòng tôi rất vui."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "以后我要学中文。",
+            "pinyin": "yǐhòu",
+            "vi": "Sau này tôi muốn học tiếng Trung."
+          },
+          {
+            "speaker": "李明",
+            "zh": "他生病了需要住院。",
+            "pinyin": "zhùyuàn",
+            "vi": "Anh ấy bị bệnh nên cần nhập viện."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）习惯 的意思是？",
+              "options": [
+                "Thói quen",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Thói quen"
+            }
+          ]
+        }
+      },
+      {
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk3_texts/12-3.mp3",
+        "vocabAudio": "/audio/hsk3_texts/12-4.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "最近天气很冷。",
+            "pinyin": "zuìjìn",
+            "vi": "Gần đây thời tiết rất lạnh."
+          },
+          {
+            "speaker": "李明",
+            "zh": "他感冒了，不能来上课。",
+            "pinyin": "gǎnmào",
+            "vi": "Anh ấy bị cảm, không thể đến lớp."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "他最近吃太多了，变胖了。",
+            "pinyin": "pàng",
+            "vi": "Gần đây anh ấy ăn nhiều quá nên béo lên rồi."
+          },
+          {
+            "speaker": "李明",
+            "zh": "天气突然变冷了。",
+            "pinyin": "tūrán",
+            "vi": "Thời tiết đột nhiên trở lạnh rồi."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）最近 的意思是？",
+              "options": [
+                "Gần đây",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Gần đây"
+            }
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk3_texts/12-5.mp3",
+        "vocabAudio": "/audio/hsk3_texts/12-6.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "我喜欢这种类的花。",
+            "pinyin": "zhǒng",
+            "vi": "Tôi thích loại hoa này."
+          },
+          {
+            "speaker": "李明",
+            "zh": "在过马路时，大家一定要注意安全。",
+            "pinyin": "zhùyì",
+            "vi": "Khi qua đường, mọi người nhất định phải chú ý an toàn."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "价格很低。",
+            "pinyin": "dī",
+            "vi": "Giá rất thấp."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我种了一棵树。",
+            "pinyin": "zhòng",
+            "vi": "Tôi trồng một cây."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）种 的意思是？",
+              "options": [
+                "Loại, chủng loại",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Loại, chủng loại"
+            }
+          ]
+        }
+      },
+      {
+        "id": 4,
+        "title": "Bài Khóa 4",
+        "audio": "/audio/hsk3_texts/12-7.mp3",
+        "vocabAudio": "/audio/hsk3_texts/12-8.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "耳朵疼要去医院看看。",
+            "pinyin": "ěrduo",
+            "vi": "Tai đau phải đi bệnh viện khám."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我们去打羽毛球吧。",
+            "pinyin": "yǔmáoqiú",
+            "vi": "Chúng ta đi đánh cầu lông nhé."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）耳朵 的意思是？",
+              "options": [
+                "Tai",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Tai"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": 13,
+    "lessonTitle": "Bài 13: Sở thích và Nghệ thuật - Âm nhạc & Phim (Phần 1)",
+    "dialogues": [
+      {
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk3_texts/13-1.mp3",
+        "vocabAudio": "/audio/hsk3_texts/13-2.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "他得到了奖学金。",
+            "pinyin": "dédào",
+            "vi": "Anh ấy đã nhận được học bổng."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我每天六点回家。",
+            "pinyin": "huí",
+            "vi": "Tôi về nhà lúc 6 giờ mỗi ngày."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "这个班的男生比女生多。",
+            "pinyin": "nánshēng",
+            "vi": "Nam sinh trong lớp này nhiều hơn nữ sinh."
+          },
+          {
+            "speaker": "李明",
+            "zh": "今天我们一起参加游泳比赛。",
+            "pinyin": "cānjiā",
+            "vi": "Hôm nay chúng tôi cùng nhau tham gia một cuộc thi bơi lội."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）得到 的意思是？",
+              "options": [
+                "Đạt được; nhận được",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Đạt được; nhận được"
+            }
+          ]
+        }
+      },
+      {
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk3_texts/13-3.mp3",
+        "vocabAudio": "/audio/hsk3_texts/13-4.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "他这次考试成绩很好。",
+            "pinyin": "chéngjì",
+            "vi": "Thành tích kỳ thi lần này của anh ấy rất tốt."
+          },
+          {
+            "speaker": "李明",
+            "zh": "他家里有好多书。",
+            "pinyin": "hǎoduō",
+            "vi": "Nhà anh ấy có rất nhiều sách."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "我明天要回老家了。",
+            "pinyin": "huí",
+            "vi": "Ngày mai tôi sẽ về quê."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我的银行卡丢了。",
+            "pinyin": "kǎ",
+            "vi": "Thẻ ngân hàng của tôi bị mất rồi."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）成绩 的意思是？",
+              "options": [
+                "Thành tích",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Thành tích"
+            }
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk3_texts/13-5.mp3",
+        "vocabAudio": "/audio/hsk3_texts/13-6.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "他每天都练习写汉字。",
+            "pinyin": "liàn",
+            "vi": "Anh ấy luyện viết chữ Hán mỗi ngày."
+          },
+          {
+            "speaker": "李明",
+            "zh": "练习。",
+            "pinyin": "liànxí",
+            "vi": "Luyện tập, rèn luyện"
+          },
+          {
+            "speaker": "大卫",
+            "zh": "我们去球场玩吧。",
+            "pinyin": "qiúchǎng",
+            "vi": "Chúng ta đi sân bóng chơi nhé."
+          },
+          {
+            "speaker": "李明",
+            "zh": "他受到(tô đỏ)了老师的表扬。",
+            "pinyin": "shòudào",
+            "vi": "Anh ấy được cô giáo khen ngợi."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）练 的意思是？",
+              "options": [
+                "Luyện tập",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Luyện tập"
+            }
+          ]
+        }
+      },
+      {
+        "id": 4,
+        "title": "Bài Khóa 4",
+        "audio": "/audio/hsk3_texts/13-7.mp3",
+        "vocabAudio": "/audio/hsk3_texts/13-8.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "我喜欢体育运动。",
+            "pinyin": "tǐyù",
+            "vi": "Tôi thích các hoạt động thể thao."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）体育 的意思是？",
+              "options": [
+                "Thể thao",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Thể thao"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": 14,
+    "lessonTitle": "Bài 14: Sở thích và Nghệ thuật - Âm nhạc & Phim (Phần 2)",
+    "dialogues": [
+      {
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk3_texts/14-1.mp3",
+        "vocabAudio": "/audio/hsk3_texts/14-2.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "我喜欢打网球。",
+            "pinyin": "wǎngqiú",
+            "vi": "Tôi thích chơi quần vợt."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我们的校园很大。",
+            "pinyin": "xiàoyuán",
+            "vi": "Khuôn viên trường chúng tôi rất lớn."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "太吵会影响学习。",
+            "pinyin": "yǐngxiǎng",
+            "vi": "Quá ồn sẽ ảnh hưởng đến việc học."
+          },
+          {
+            "speaker": "李明",
+            "zh": "这本书的内容很主要。",
+            "pinyin": "zhǔyào",
+            "vi": "Nội dung của cuốn sách này rất quan trọng."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）网球 的意思是？",
+              "options": [
+                "Quần vợt",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Quần vợt"
+            }
+          ]
+        }
+      },
+      {
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk3_texts/14-3.mp3",
+        "vocabAudio": "/audio/hsk3_texts/14-4.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "我们明天有一个篮球比赛。",
+            "pinyin": "bǐsài",
+            "vi": "Ngày mai chúng tôi có một cuộc thi bóng rổ."
+          },
+          {
+            "speaker": "李明",
+            "zh": "她在考试中得分很高。",
+            "pinyin": "défēn",
+            "vi": "Cô ấy đạt được điểm rất cao trong kỳ thi."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "明天考试，我有点紧张。",
+            "pinyin": "jǐnzhāng",
+            "vi": "Mai thi rồi, tôi có hơi căng thẳng."
+          },
+          {
+            "speaker": "李明",
+            "zh": "他喜欢喝冰啤酒。",
+            "pinyin": "píjiǔ",
+            "vi": "Anh ấy thích uống bia lạnh."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）比赛 的意思是？",
+              "options": [
+                "Thi đấu, cuộc thi",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Thi đấu, cuộc thi"
+            }
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk3_texts/14-5.mp3",
+        "vocabAudio": "/audio/hsk3_texts/14-6.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "世界上有很多国家。",
+            "pinyin": "shìjiè",
+            "vi": "Trên thế giới có rất nhiều quốc gia."
+          },
+          {
+            "speaker": "李明",
+            "zh": "为了健康，他开始跑步。",
+            "pinyin": "wèile",
+            "vi": "Để có sức khỏe, anh ấy bắt đầu chạy bộ."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "我只是说说而已。",
+            "pinyin": "zhǐshì",
+            "vi": "Tôi chỉ là nói chơi thôi."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我很想去，只是没有时间。",
+            "pinyin": "zhǐshì",
+            "vi": "Tôi rất muốn đi, chỉ có điều là không có thời gian."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）世界 的意思是？",
+              "options": [
+                "Thế giới, toàn cầu",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Thế giới, toàn cầu"
+            }
+          ]
+        }
+      },
+      {
+        "id": 4,
+        "title": "Bài Khóa 4",
+        "audio": "/audio/hsk3_texts/14-7.mp3",
+        "vocabAudio": "/audio/hsk3_texts/14-8.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "我考试时很紧张。",
+            "pinyin": "jǐnzhāng",
+            "vi": "Tôi rất hồi hộp khi thi."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）紧张 的意思是？",
+              "options": [
+                "Căng thẳng, hồi hộp",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Căng thẳng, hồi hộp"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": 15,
+    "lessonTitle": "Bài 15: Học tập và Ngôn ngữ - Trường học & Sách (Phần 1)",
+    "dialogues": [
+      {
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk3_texts/15-1.mp3",
+        "vocabAudio": "/audio/hsk3_texts/15-2.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "他今天状态很差。",
+            "pinyin": "chà",
+            "vi": "Trạng thái của anh hôm nay rất tệ."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我明白你的意思。",
+            "pinyin": "míngbai",
+            "vi": "Tôi hiểu ý của bạn."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "这个问题很难回答。",
+            "pinyin": "nán",
+            "vi": "Câu hỏi này rất khó trả lời."
+          },
+          {
+            "speaker": "李明",
+            "zh": "你是几年级的学生？",
+            "pinyin": "niánjí",
+            "vi": "Bạn là học sinh lớp mấy?"
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）差 的意思是？",
+              "options": [
+                "Kém; tệ; không đạt",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Kém; tệ; không đạt"
+            }
+          ]
+        }
+      },
+      {
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk3_texts/15-3.mp3",
+        "vocabAudio": "/audio/hsk3_texts/15-4.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "他学习很认真。",
+            "pinyin": "rènzhēn",
+            "vi": "Anh ấy học rất chăm chỉ."
+          },
+          {
+            "speaker": "李明",
+            "zh": "你会说几种外语？",
+            "pinyin": "wàiyǔ",
+            "vi": "Bạn biết nói mấy thứ tiếng nước ngoài?"
+          },
+          {
+            "speaker": "大卫",
+            "zh": "请翻到第五页。",
+            "pinyin": "yè",
+            "vi": "Vui lòng lật đến trang 5."
+          },
+          {
+            "speaker": "李明",
+            "zh": "老师在办公室工作。",
+            "pinyin": "bàngōngshì",
+            "vi": "Giáo viên đang làm việc ở văn phòng."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）认真 的意思是？",
+              "options": [
+                "Chăm chỉ, nghiêm túc",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Chăm chỉ, nghiêm túc"
+            }
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk3_texts/15-5.mp3",
+        "vocabAudio": "/audio/hsk3_texts/15-6.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "上课时要认真做笔记。",
+            "pinyin": "bǐjì",
+            "vi": "Trong lớp học phải ghi chép cẩn thận."
+          },
+          {
+            "speaker": "李明",
+            "zh": "这本书我看了三遍。",
+            "pinyin": "biàn",
+            "vi": "Quyển sách này tôi đã đọc ba lần."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "这些句子都是日常的对话。",
+            "pinyin": "duìhuà",
+            "vi": "Những câu này được lấy từ các cuộc trò chuyện hàng ngày."
+          },
+          {
+            "speaker": "李明",
+            "zh": "考试前要认真复习。",
+            "pinyin": "fùxí",
+            "vi": "Trước kỳ thi phải ôn tập chăm chỉ."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）笔记 的意思是？",
+              "options": [
+                "Ghi",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Ghi"
+            }
+          ]
+        }
+      },
+      {
+        "id": 4,
+        "title": "Bài Khóa 4",
+        "audio": "/audio/hsk3_texts/15-7.mp3",
+        "vocabAudio": "/audio/hsk3_texts/15-8.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "黑板上写着你的名字。",
+            "pinyin": "hēibǎn",
+            "vi": "Trên bảng đen có viết tên bạn."
+          },
+          {
+            "speaker": "李明",
+            "zh": "老师讲得很清楚。",
+            "pinyin": "jiǎng",
+            "vi": "Thầy giáo giảng rất rõ ràng."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）黑板 的意思是？",
+              "options": [
+                "Bảng đen",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Bảng đen"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": 16,
+    "lessonTitle": "Bài 16: Học tập và Ngôn ngữ - Trường học & Sách (Phần 2)",
+    "dialogues": [
+      {
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk3_texts/16-1.mp3",
+        "vocabAudio": "/audio/hsk3_texts/16-2.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "请读这个句子。",
+            "pinyin": "jù",
+            "vi": "Hãy đọc câu này nhé!"
+          },
+          {
+            "speaker": "李明",
+            "zh": "句子。",
+            "pinyin": "jùzi",
+            "vi": "Câu"
+          },
+          {
+            "speaker": "大卫",
+            "zh": "我今年读三年级。",
+            "pinyin": "niánjí",
+            "vi": "Năm nay tôi học lớp ba."
+          },
+          {
+            "speaker": "李明",
+            "zh": "他努力学习汉语。",
+            "pinyin": "nǔlì",
+            "vi": "Anh ấy nỗ lực học tiếng Trung."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）句 的意思是？",
+              "options": [
+                "Câu",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Câu"
+            }
+          ]
+        }
+      },
+      {
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk3_texts/16-3.mp3",
+        "vocabAudio": "/audio/hsk3_texts/16-4.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "我看不清楚(tô đỏ)。",
+            "pinyin": "qīngchǔ",
+            "vi": "Tôi nhìn không rõ."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我要提高汉语水平。",
+            "pinyin": "tígāo",
+            "vi": "Tôi muốn nâng cao trình độ tiếng Trung."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "老师的要求很高。",
+            "pinyin": "yāoqiú",
+            "vi": "Yêu cầu của giáo viên rất cao."
+          },
+          {
+            "speaker": "李明",
+            "zh": "这家店的衣服一般。",
+            "pinyin": "yìbān",
+            "vi": "Quần áo ở cửa hàng này bình thường."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）清楚 的意思是？",
+              "options": [
+                "Rõ ràng",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Rõ ràng"
+            }
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk3_texts/16-5.mp3",
+        "vocabAudio": "/audio/hsk3_texts/16-6.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "今天的作业很多。",
+            "pinyin": "zuòyè",
+            "vi": "Hôm nay có rất nhiều bài tập."
+          },
+          {
+            "speaker": "李明",
+            "zh": "请把书放在桌子上。",
+            "pinyin": "bǎ",
+            "vi": "Hãy đặt sách lên bàn."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "他买了(tô đỏ一把)伞。",
+            "pinyin": "bǎ",
+            "vi": "Anh ấy đã mua một cái ô."
+          },
+          {
+            "speaker": "李明",
+            "zh": "你当然可以参加这个活动。",
+            "pinyin": "dāngrán",
+            "vi": "Đương nhiên bạn có thể tham gia hoạt động này."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）作业 的意思是？",
+              "options": [
+                "Bài tập",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Bài tập"
+            }
+          ]
+        }
+      },
+      {
+        "id": 4,
+        "title": "Bài Khóa 4",
+        "audio": "/audio/hsk3_texts/16-7.mp3",
+        "vocabAudio": "/audio/hsk3_texts/16-8.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "我打算后年去中国旅行。",
+            "pinyin": "hòunián",
+            "vi": "Tôi dự định đi Trung Quốc vào năm sau nữa."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）后年 的意思是？",
+              "options": [
+                "Năm sau nữa, hai năm sau",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Năm sau nữa, hai năm sau"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": 17,
+    "lessonTitle": "Bài 17: Công việc và Kinh doanh - Dự án & Họp (Phần 1)",
+    "dialogues": [
+      {
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk3_texts/17-1.mp3",
+        "vocabAudio": "/audio/hsk3_texts/17-2.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "这本书可能是别人的。",
+            "pinyin": "biérén",
+            "vi": "Ngoại trừ Tiểu Lệ ra, những người khác đều không muốn đi."
+          },
+          {
+            "speaker": "李明",
+            "zh": "会议的地点已经确定了。",
+            "pinyin": "dìdiǎn",
+            "vi": "Địa điểm cuộc họp đã được xác định."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "我们后天去北京。",
+            "pinyin": "hòutiān",
+            "vi": "Chúng tôi sẽ đi Bắc Kinh vào ngày kia."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我下午三点要开会。",
+            "pinyin": "kāi huì",
+            "vi": "Tôi có cuộc họp lúc 3 giờ chiều."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）别人 的意思是？",
+              "options": [
+                "Người khác; người ta",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Người khác; người ta"
+            }
+          ]
+        }
+      },
+      {
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk3_texts/17-3.mp3",
+        "vocabAudio": "/audio/hsk3_texts/17-4.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "老师，今天我想请假。",
+            "pinyin": "qǐngjià",
+            "vi": "Thầy ơi, hôm nay em muốn xin nghỉ."
+          },
+          {
+            "speaker": "李明",
+            "zh": "你有办法吗？",
+            "pinyin": "bànfǎ",
+            "vi": "Bạn có cách nào không?"
+          },
+          {
+            "speaker": "大卫",
+            "zh": "今天发货，明天送达。",
+            "pinyin": "fā",
+            "vi": "Gửi hàng hôm nay, giao hàng ngày mai."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我们可以坐地铁或者打车去。",
+            "pinyin": "huò",
+            "vi": "Chúng ta có thể đi tàu điện ngầm hoặc bắt taxi."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）请假 的意思是？",
+              "options": [
+                "Xin nghỉ phép",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Xin nghỉ phép"
+            }
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk3_texts/17-5.mp3",
+        "vocabAudio": "/audio/hsk3_texts/17-6.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "或者。",
+            "pinyin": "huòzhě",
+            "vi": "Hoặc là, hay là"
+          },
+          {
+            "speaker": "李明",
+            "zh": "他得到一个很好的工作机会。",
+            "pinyin": "jīhuì",
+            "vi": "Anh ấy có một cơ hội việc làm rất tốt."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "他是我们的经理。",
+            "pinyin": "jīnglǐ",
+            "vi": "Anh ấy là giám đốc của chúng tôi."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我明天要离开北京了。",
+            "pinyin": "líkāi",
+            "vi": "Ngày mai tôi sẽ phải rời khỏi Bắc Kinh rồi."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）或者 的意思是？",
+              "options": [
+                "Hoặc là, hay là",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Hoặc là, hay là"
+            }
+          ]
+        }
+      },
+      {
+        "id": 4,
+        "title": "Bài Khóa 4",
+        "audio": "/audio/hsk3_texts/17-7.mp3",
+        "vocabAudio": "/audio/hsk3_texts/17-8.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "我怕黑，不敢出门。",
+            "pinyin": "pà",
+            "vi": "Tôi sợ bóng tối, không dám ra ngoài."
+          },
+          {
+            "speaker": "李明",
+            "zh": "他的生活很简单。",
+            "pinyin": "shēnghuó",
+            "vi": "Cuộc sống của anh ấy rất đơn giản."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）怕 的意思是？",
+              "options": [
+                "Sợ",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Sợ"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "lessonId": 18,
+    "lessonTitle": "Bài 18: Công việc và Kinh doanh - Dự án & Họp (Phần 2)",
+    "dialogues": [
+      {
+        "id": 1,
+        "title": "Bài Khóa 1",
+        "audio": "/audio/hsk3_texts/18-1.mp3",
+        "vocabAudio": "/audio/hsk3_texts/18-2.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "你的声音很好听。",
+            "pinyin": "shēngyīn",
+            "vi": "Giọng nói của bạn rất hay."
+          },
+          {
+            "speaker": "李明",
+            "zh": "他是我的同事。",
+            "pinyin": "tóngshì",
+            "vi": "Anh ấy là đồng nghiệp của tôi."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "我为你准备了礼物。",
+            "pinyin": "wèi",
+            "vi": "Tôi đã chuẩn bị quà cho bạn."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我下周要休假。",
+            "pinyin": "xiūjià",
+            "vi": "Tuần sau tôi sẽ nghỉ phép."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）声音 的意思是？",
+              "options": [
+                "Âm thanh, giọng nói",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Âm thanh, giọng nói"
+            }
+          ]
+        }
+      },
+      {
+        "id": 2,
+        "title": "Bài Khóa 2",
+        "audio": "/audio/hsk3_texts/18-3.mp3",
+        "vocabAudio": "/audio/hsk3_texts/18-4.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "我们只能等他回来。",
+            "pinyin": "zhǐnéng",
+            "vi": "Chúng ta chỉ có thể đợi anh ấy quay về."
+          },
+          {
+            "speaker": "李明",
+            "zh": "上海是中国的一个大城市。",
+            "pinyin": "chéngshì",
+            "vi": "Thượng Hải là một thành phố lớn của Trung Quốc."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "明天上午有一个重要的会议。",
+            "pinyin": "huìyì",
+            "vi": "Sáng mai có một cuộc họp quan trọng."
+          },
+          {
+            "speaker": "李明",
+            "zh": "他帮助我解决了问题。",
+            "pinyin": "jiějué",
+            "vi": "Anh ấy giúp tôi giải quyết vấn đề."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）只能 的意思是？",
+              "options": [
+                "Chỉ có thể",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Chỉ có thể"
+            }
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "title": "Bài Khóa 3",
+        "audio": "/audio/hsk3_texts/18-5.mp3",
+        "vocabAudio": "/audio/hsk3_texts/18-6.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "我很怕黑。",
+            "pinyin": "pà",
+            "vi": "Tôi rất sợ bóng tối."
+          },
+          {
+            "speaker": "李明",
+            "zh": "教室里有很多学生。",
+            "pinyin": "shì",
+            "vi": "Trong phòng học có nhiều học sinh."
+          },
+          {
+            "speaker": "大卫",
+            "zh": "他被大家推选为班长。",
+            "pinyin": "wéi",
+            "vi": "Anh ấy được mọi người bầu chọn làm lớp trưởng."
+          },
+          {
+            "speaker": "李明",
+            "zh": "我为你感到高兴。",
+            "pinyin": "wéi",
+            "vi": "Tôi cảm thấy vui vì bạn."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）怕 的意思是？",
+              "options": [
+                "Sợ",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Sợ"
+            }
+          ]
+        }
+      },
+      {
+        "id": 4,
+        "title": "Bài Khóa 4",
+        "audio": "/audio/hsk3_texts/18-7.mp3",
+        "vocabAudio": "/audio/hsk3_texts/18-8.mp3",
+        "lines": [
+          {
+            "speaker": "大卫",
+            "zh": "请把信件投入邮箱。",
+            "pinyin": "yóuxiāng",
+            "vi": "Vui lòng bỏ thư vào hộp thư."
+          },
+          {
+            "speaker": "李明",
+            "zh": "他为老师。",
+            "pinyin": "wéi",
+            "vi": "Anh ấy là thầy giáo."
+          }
+        ],
+        "notes": [],
+        "quiz": {
+          "instruction": "Nghe file audio bài khóa và chọn đáp án đúng:",
+          "questions": [
+            {
+              "id": 1,
+              "question": "（1）邮箱 的意思是？",
+              "options": [
+                "Hộp thư",
+                "Không chính xác",
+                "Khác"
+              ],
+              "answer": "Hộp thư"
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

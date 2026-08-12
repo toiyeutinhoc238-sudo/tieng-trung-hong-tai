@@ -705,9 +705,13 @@
 
     async function loadData() {
       try {
-        const res = await fetch('/hsk1_reading_texts.json');
+        const file = `/hsk${currentLevel}_reading_texts.json`;
+        const res = await fetch(file);
         if (res.ok) {
           allReadingTexts = await res.json();
+        } else {
+          const fallbackRes = await fetch('/hsk1_reading_texts.json');
+          if (fallbackRes.ok) allReadingTexts = await fallbackRes.json();
         }
       } catch (e) {
         console.warn("Error loading reading texts:", e);
@@ -791,6 +795,24 @@
       const box = document.getElementById('workspace-content');
       if (!box) return;
 
+      const lessonObj = (allReadingTexts || []).find(l => Number(l.lessonId) === currentLessonId);
+
+      // Render dynamic dialogue tabs
+      const tabBox = document.getElementById('dialogue-tabs-box');
+      if (tabBox && lessonObj && lessonObj.dialogues && lessonObj.dialogues.length > 0) {
+        const numDialogues = lessonObj.dialogues.length;
+        let tabHtml = '';
+        for (let d = 1; d <= numDialogues; d++) {
+          const isActive = d === currentDialogueId ? 'active' : '';
+          tabHtml += `
+            <button class="dialogue-tab-btn ${isActive}" onclick="selectDialogue(${d})">
+              <i class="fa-solid fa-book-open"></i> Bài Khóa ${d}
+            </button>
+          `;
+        }
+        tabBox.innerHTML = tabHtml;
+      }
+
       const diagObj = getActiveDialogueData();
 
       if (!diagObj) {
@@ -802,7 +824,7 @@
       }
 
       const audioIdx = (currentDialogueId * 2) - 1;
-      const audioUrl = diagObj.audio || `/audio/hsk1_texts/${currentLessonId}-${audioIdx}.mp3`;
+      const audioUrl = diagObj.audio || `/audio/hsk${currentLevel}_texts/${currentLessonId}-${audioIdx}.mp3`;
       const lines = diagObj.lines || [];
 
       // Check if dialogue has valid quiz questions
