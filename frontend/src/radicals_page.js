@@ -400,6 +400,52 @@ window.animateRadicalStroke = function() {
   }
 };
 
+let isRadicalFullscreen = false;
+
+window.toggleRadicalFullscreen = function(forceState) {
+  const targetState = typeof forceState === 'boolean' ? forceState : !isRadicalFullscreen;
+  const flashcardView = document.getElementById('radicals-flashcard-view');
+  if (!flashcardView) return;
+
+  isRadicalFullscreen = targetState;
+  document.body.classList.toggle('flashcard-fullscreen-mode', isRadicalFullscreen);
+  flashcardView.classList.toggle('fullscreen-flashcard-active', isRadicalFullscreen);
+
+  const btn = document.getElementById('radical-fullscreen-toggle-btn');
+  if (btn) {
+    btn.classList.toggle('active-fullscreen', isRadicalFullscreen);
+    const label = btn.querySelector('.fs-btn-label');
+    if (label) label.textContent = isRadicalFullscreen ? 'Thu Nhỏ' : 'Toàn Màn Hình';
+    const icon = btn.querySelector('i');
+    if (icon) icon.className = `fa-solid ${isRadicalFullscreen ? 'fa-compress' : 'fa-expand'}`;
+    btn.title = isRadicalFullscreen ? 'Thu nhỏ (Phím F hoặc Esc)' : 'Phóng to toàn màn hình (Phím F)';
+  }
+
+  if (isRadicalFullscreen) {
+    try {
+      if (flashcardView.requestFullscreen) {
+        flashcardView.requestFullscreen().catch(() => {});
+      } else if (flashcardView.webkitRequestFullscreen) {
+        flashcardView.webkitRequestFullscreen();
+      }
+    } catch (e) {}
+  } else {
+    const isDocFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+    if (isDocFs) {
+      try {
+        if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+      } catch (e) {}
+    }
+  }
+};
+
+document.addEventListener('fullscreenchange', () => {
+  const isDocFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+  if (!isDocFs && isRadicalFullscreen) {
+    window.toggleRadicalFullscreen(false);
+  }
+});
+
 // Keyboard listener for Flashcard navigation
 document.addEventListener('keydown', (e) => {
   const flashcardView = document.getElementById('radicals-flashcard-view');
@@ -413,6 +459,12 @@ document.addEventListener('keydown', (e) => {
       if (currentFlashcardList[currentFlashcardIndex]) {
         speakText(currentFlashcardList[currentFlashcardIndex].radical);
       }
+    } else if (e.key === 'f' || e.key === 'F') {
+      e.preventDefault();
+      window.toggleRadicalFullscreen();
+    } else if (e.key === 'Escape' && isRadicalFullscreen) {
+      e.preventDefault();
+      window.toggleRadicalFullscreen(false);
     }
   }
 });

@@ -524,7 +524,7 @@
       border: 2px solid #2563eb !important;
     }
   </style>
-  <script type="module" crossorigin src="/assets/radicals-CteCuFLn.js"></script>
+  <script type="module" crossorigin src="/assets/radicals-BU1iVhnt.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
   <link rel="modulepreload" crossorigin href="/assets/particles-Dl8CQUZ9.js">
 </head>
@@ -590,9 +590,14 @@
     <div id="radicals-flashcard-view" style="display: none;">
       <!-- Flashcard Header Control Bar -->
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
-        <button class="back-list-btn" onclick="window.showGridView()">
-          <i class="fa-solid fa-arrow-left"></i> Quay lại danh sách
-        </button>
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <button class="back-list-btn" onclick="window.showGridView()">
+            <i class="fa-solid fa-arrow-left"></i> Quay lại danh sách
+          </button>
+          <button id="radical-fullscreen-toggle-btn" class="fc-fullscreen-toggle-btn" onclick="window.toggleRadicalFullscreen()" title="Phóng to toàn màn hình (Phím F)">
+            <i class="fa-solid fa-expand"></i> <span class="fs-btn-label">Toàn màn hình</span>
+          </button>
+        </div>
 
         <div style="font-weight: 800; font-size: 1.1rem; color: #3b82f6; display: flex; align-items: center; gap: 8px;">
           <i class="fa-solid fa-layer-group"></i> Chế Độ Học Flashcard Bộ Thủ
