@@ -2042,10 +2042,11 @@ async function ensureYtDlpBinary() {
 
 
 
+
 // Fast batch translation and Pinyin generator
 async function batchTranslateAndPinyin(speechItems) {
   const results = [];
-  const chunkSize = 8;
+  const chunkSize = 12;
 
   for (let i = 0; i < speechItems.length; i += chunkSize) {
     const chunk = speechItems.slice(i, i + chunkSize);
@@ -2088,125 +2089,19 @@ async function enhanceAndClassifyLesson(rawSpeechSegments, videoTitle, durationS
     return {
       level: "2",
       levelText: "HSK 2 - 3 (Cơ bản)",
-      category: "Đời Sống",
-      description: "Bài luyện nghe chép chính tả tiếng Trung.",
+      category: "Giao Tiếp",
+      description: `Bài luyện nghe chép chính tả ${videoTitle}`,
       sentences: []
     };
   }
 
-  const sampleItems = rawSpeechSegments.slice(0, 30).map((s, idx) => ({
-    id: idx + 1,
-    startTime: parseFloat(s.startTime.toFixed(2)),
-    endTime: parseFloat(s.endTime.toFixed(2)),
-    text: s.text
-  }));
+  // 1. Guaranteed robust base translation and Pinyin for every single segment across entire video
+  const baseSentences = await batchTranslateAndPinyin(rawSpeechSegments);
 
-  if (groqClient) {
-    try {
-      const prompt = `Bạn là một chuyên gia ngôn ngữ tiếng Trung và giáo viên HSK cao cấp.
-Dưới đây là tiêu đề video và danh sách các câu trích xuất từ âm thanh video:
-Tiêu đề video: "${videoTitle}"
-Thời lượng: ${durationSeconds} giây
-Danh sách câu:
-${JSON.stringify(sampleItems, null, 2)}
-
-HÃY THỰC HIỆN CÁC NHIỆM VỤ SAU:
-1. ĐÁNH GIÁ CHÍNH XÁC CẤP ĐỘ HSK (từ "1" đến "6") dựa trên độ phức tạp của từ vựng và ngữ pháp tiếng Trung của nội dung:
-   - HSK 1: Chào hỏi, số đếm, gia đình, đại từ cơ bản (你好, 谢谢, 叫什么, 几岁).
-   - HSK 2: Hoạt động hằng ngày, mua sắm cơ bản, phương hướng, thời gian.
-   - HSK 3: Giao tiếp đời sống đa dạng, nhà hàng, du lịch, cảm xúc, miêu tả chi tiết.
-   - HSK 4: Thảo luận chủ đề công việc, tin tức, văn hóa, quan điểm.
-   - HSK 5: Từ vựng trừu tượng, thành ngữ, văn phong chuyên sâu, kinh tế, xã hội.
-   - HSK 6: Chuyên ngành, văn học, từ vựng học thuật phức tạp.
-   - "hskLevel": chuỗi "1" đến "6".
-   - "levelText": ví dụ "HSK 1 (Sơ cấp)", "HSK 2 - 3 (Giao tiếp)", "HSK 4 (Trung cấp)", "HSK 5 (Nâng cao)".
-
-2. PHÂN LOẠI CHÍNH XÁC THỂ LOẠI (chọn đúng 1 trong các giá trị sau: "Âm Nhạc", "Giao Tiếp", "Ẩm Thực", "Du Lịch", "Hoạt Hình", "Phim Ảnh", "Công Việc", "Tin Tức", "Văn Hóa", "Đời Sống", "Khác"):
-   - "Âm Nhạc" nếu là bài hát, MV âm nhạc, lời nhạc, ballad.
-   - "Ẩm Thực" nếu là nhà hàng, gọi món ăn, đồ uống, trà đạo, nấu nướng.
-   - "Du Lịch" nếu là du lịch, đặt phòng khách sạn, hỏi đường, sân bay, ga tàu.
-   - "Giao Tiếp" nếu là hội thoại bài học, chào hỏi, làm quen, phản xạ thường ngày.
-   - "Hoạt Hình" nếu là phim hoạt hình, Peppa Pig, anime tiếng Trung.
-   - "Phim Ảnh" nếu là trích đoạn phim truyền hình, điện ảnh, kịch nói.
-   - "Công Việc" nếu là môi trường công sở, phỏng vấn xin việc, đàm phán, email.
-   - "Tin Tức" nếu là bản tin thời sự, phỏng vấn phóng viên, kinh tế.
-   - "Văn Hóa" nếu là phong tục truyền thống, lễ hội, lịch sử, thư pháp.
-   - "Đời Sống" nếu là vlog đời sống, mua sắm, mẹo vặt sinh hoạt.
-   - "Khác" nếu là nội dung tổng hợp khác.
-
-3. MÔ TẢ BÀI HỌC ("description"): 1 câu tiếng Việt súc tích, hấp dẫn.
-
-4. XỬ LÝ CHÍNH XÁC TỪNG CÂU:
-   - Nếu câu nguồn là tiếng Trung:
-     + "hanzi": chuẩn hóa thành Chữ Hán Giản Thể 100%, sửa các từ phát âm nhầm.
-     + "meaning": dịch sang Tiếng Việt chuẩn xác 100%, tự nhiên theo đúng ngữ cảnh hội thoại/lời bài hát.
-   - Nếu câu nguồn là tiếng Việt (video tiếng Việt):
-     + "hanzi": dịch sang Tiếng Trung Giản Thể chuẩn xác 100%, tự nhiên, đúng ngữ nghĩa.
-     + "meaning": giữ câu Tiếng Việt gốc hoặc chỉnh cho mượt mà.
-
-Trả về kết quả ở định dạng JSON DUY NHẤT (không markdown hay text thừa):
-{
-  "hskLevel": "2",
-  "levelText": "HSK 2 (Cơ bản)",
-  "category": "Giao Tiếp",
-  "description": "Luyện nghe hội thoại giao tiếp...",
-  "sentences": [
-    {
-      "id": 1,
-      "startTime": 0.0,
-      "endTime": 3.5,
-      "hanzi": "...",
-      "meaning": "..."
-    }
-  ]
-}`;
-
-      const completion = await groqClient.chat.completions.create({
-        model: 'llama-3.3-70b-versatile',
-        messages: [{ role: 'user', content: prompt }],
-        response_format: { type: 'json_object' }
-      });
-
-      const parsed = JSON.parse(completion.choices[0].message.content);
-      if (parsed.sentences && parsed.sentences.length > 0) {
-        const enrichedSentences = parsed.sentences.map((s, idx) => {
-          const original = sampleItems[idx] || {};
-          const hanzi = (s.hanzi || original.text || '').trim();
-          let py = '';
-          try {
-            py = pinyin(hanzi, { toneType: 'symbol' });
-          } catch (e) {}
-
-          return {
-            id: idx + 1,
-            startTime: typeof s.startTime === 'number' ? s.startTime : (original.startTime || 0),
-            endTime: typeof s.endTime === 'number' ? s.endTime : (original.endTime || 0),
-            hanzi,
-            pinyin: py,
-            meaning: s.meaning || 'Câu trong bài học',
-            keywords: [hanzi.slice(0, Math.min(2, hanzi.length))]
-          };
-        });
-
-        return {
-          level: String(parsed.hskLevel || '2'),
-          levelText: parsed.levelText || `HSK ${parsed.hskLevel || 2}`,
-          category: parsed.category || 'Giao Tiếp',
-          description: parsed.description || `Bài luyện nghe chép chính tả ${videoTitle}`,
-          sentences: enrichedSentences
-        };
-      }
-    } catch (llmErr) {
-      console.warn('[Dictation] AI linguistic enhancement error, falling back to heuristic:', llmErr.message);
-    }
-  }
-
-  // Fallback: batchTranslateAndPinyin + rule-based category & level
-  const sentences = await batchTranslateAndPinyin(rawSpeechSegments);
-  
+  // 2. Determine category via heuristic baseline
   let category = 'Giao Tiếp';
-  const lowerTitle = videoTitle.toLowerCase();
-  if (lowerTitle.includes('bài hát') || lowerTitle.includes('nhạc') || lowerTitle.includes('song') || lowerTitle.includes('music') || lowerTitle.includes('mv') || lowerTitle.includes('hát')) {
+  const lowerTitle = (videoTitle || '').toLowerCase();
+  if (lowerTitle.includes('bài hát') || lowerTitle.includes('nhạc') || lowerTitle.includes('song') || lowerTitle.includes('music') || lowerTitle.includes('mv') || lowerTitle.includes('hát') || lowerTitle.includes('bằng kiều') || lowerTitle.includes('ca sĩ') || lowerTitle.includes('trái tim')) {
     category = 'Âm Nhạc';
   } else if (lowerTitle.includes('ăn') || lowerTitle.includes('món') || lowerTitle.includes('nhà hàng') || lowerTitle.includes('uống') || lowerTitle.includes('trà') || lowerTitle.includes('nấu')) {
     category = 'Ẩm Thực';
@@ -2234,12 +2129,61 @@ Trả về kết quả ở định dạng JSON DUY NHẤT (không markdown hay t
   else if (lowerTitle.includes('hsk 5') || lowerTitle.includes('hsk5')) level = '5';
   else if (lowerTitle.includes('hsk 6') || lowerTitle.includes('hsk6')) level = '6';
 
+  let levelText = `HSK ${level}`;
+  let description = `Bài luyện nghe chép chính tả ${videoTitle}`;
+
+  // 3. Enhance with Groq LLaMA 3.3 70B for HSK classification and category precision
+  if (groqClient && baseSentences.length > 0) {
+    try {
+      const sampleItems = baseSentences.slice(0, 15).map(s => ({
+        id: s.id,
+        hanzi: s.hanzi,
+        meaning: s.meaning
+      }));
+
+      const prompt = `Bạn là một chuyên gia ngôn ngữ tiếng Trung và giáo viên HSK cao cấp.
+Dưới đây là tiêu đề video và các câu thoại/lời bài hát:
+Tiêu đề video: "${videoTitle}"
+Thời lượng: ${durationSeconds} giây
+Các câu mẫu:
+${JSON.stringify(sampleItems, null, 2)}
+
+HÃY PHÂN TÍCH VÀ TRẢ VỀ JSON:
+1. "hskLevel": Cấp độ HSK phù hợp nhất ("1" đến "6").
+2. "levelText": Tên cấp độ (ví dụ "HSK 2 - 3 (Cơ bản)", "HSK 3 (Giao tiếp)", "HSK 4 (Nâng cao)").
+3. "category": Chọn đúng 1 trong: "Âm Nhạc", "Giao Tiếp", "Ẩm Thực", "Du Lịch", "Hoạt Hình", "Phim Ảnh", "Công Việc", "Tin Tức", "Văn Hóa", "Đời Sống", "Khác".
+4. "description": 1 câu tóm tắt nội dung bài học tiếng Việt hấp dẫn.
+
+Trả về đúng JSON:
+{
+  "hskLevel": "2",
+  "levelText": "HSK 2 - 3",
+  "category": "Âm Nhạc",
+  "description": "..."
+}`;
+
+      const completion = await groqClient.chat.completions.create({
+        model: 'llama-3.3-70b-versatile',
+        messages: [{ role: 'user', content: prompt }],
+        response_format: { type: 'json_object' }
+      });
+
+      const parsed = JSON.parse(completion.choices[0].message.content);
+      if (parsed.hskLevel) level = String(parsed.hskLevel);
+      if (parsed.levelText) levelText = parsed.levelText;
+      if (parsed.category) category = parsed.category;
+      if (parsed.description) description = parsed.description;
+    } catch (llmErr) {
+      console.warn('[Dictation] AI classification LLM warn:', llmErr.message);
+    }
+  }
+
   return {
     level,
-    levelText: `HSK ${level}`,
+    levelText,
     category,
-    description: `Bài luyện nghe chép chính tả ${videoTitle}`,
-    sentences
+    description,
+    sentences: baseSentences
   };
 }
 
@@ -2262,32 +2206,40 @@ async function extractYouTubeDictation(youtubeId) {
     }
 
     // ----------------------------------------------------
-    // TIER 0: Direct YouTube Subtitles / Captions Track
+    // TIER 0: Direct YouTube Subtitles / Captions Track (only if full video covered)
     // ----------------------------------------------------
     try {
       const ytTranscript = await YoutubeTranscript.fetchTranscript(youtubeId);
       if (ytTranscript && ytTranscript.length > 0) {
-        console.log(`[Dictation] Tier 0 YouTube Captions Success (${ytTranscript.length} lines)`);
         const raw = ytTranscript.map((t, idx) => ({
           id: idx + 1,
           text: t.text,
           startTime: t.offset / 1000,
           endTime: (t.offset + t.duration) / 1000
         }));
-        const speech = consolidateSpeechSegments(raw);
-        const enhanced = await enhanceAndClassifyLesson(speech, videoTitle, duration);
-        if (enhanced.sentences && enhanced.sentences.length > 0) {
-          return {
-            success: true,
-            videoTitle,
-            duration,
-            level: enhanced.level,
-            levelText: enhanced.levelText,
-            category: enhanced.category,
-            description: enhanced.description,
-            tierUsed: 'Phụ Đề YouTube + AI HSK 📝✨',
-            sentences: enhanced.sentences
-          };
+
+        const lastTimestamp = raw[raw.length - 1]?.endTime || 0;
+        console.log(`[Dictation] Tier 0 YouTube Captions: ${ytTranscript.length} lines, up to ${lastTimestamp}s / total ${duration}s`);
+
+        // ONLY accept Tier 0 if it covers at least 75% of the video duration OR if duration is short (< 45s)
+        if (duration <= 45 || lastTimestamp >= duration * 0.75) {
+          const speech = consolidateSpeechSegments(raw);
+          const enhanced = await enhanceAndClassifyLesson(speech, videoTitle, duration);
+          if (enhanced.sentences && enhanced.sentences.length > 0) {
+            return {
+              success: true,
+              videoTitle,
+              duration,
+              level: enhanced.level,
+              levelText: enhanced.levelText,
+              category: enhanced.category,
+              description: enhanced.description,
+              tierUsed: 'Phụ Đề YouTube + AI HSK 📝✨',
+              sentences: enhanced.sentences
+            };
+          }
+        } else {
+          console.log(`[Dictation] Tier 0 captions only covered ${lastTimestamp.toFixed(1)}s of ${duration}s. Upgrading to Tier 1 Whisper for FULL 100% video transcription!`);
         }
       }
     } catch (e) {
@@ -2295,11 +2247,11 @@ async function extractYouTubeDictation(youtubeId) {
     }
 
     // ----------------------------------------------------
-    // TIER 1: Groq Whisper Large v3 via yt-dlp Audio Stream
+    // TIER 1: Groq Whisper Large v3 via yt-dlp Audio Stream (Full 100% video coverage)
     // ----------------------------------------------------
     const tempAudio = path.join(AUDIO_TEMP_DIR, `audio_${youtubeId}_${Date.now()}.m4a`);
     try {
-      console.log(`[Dictation] Tier 1: Downloading audio for ${youtubeId}...`);
+      console.log(`[Dictation] Tier 1: Downloading full audio for ${youtubeId}...`);
       await ytdlp.execPromise([
         videoUrl,
         '--extractor-args', 'youtube:player_client=android,ios',
@@ -2310,7 +2262,7 @@ async function extractYouTubeDictation(youtubeId) {
       ]);
 
       if (groqClient && existsSync(tempAudio)) {
-        console.log(`[Dictation] Transcribing with Groq Whisper Large v3...`);
+        console.log(`[Dictation] Transcribing FULL audio with Groq Whisper Large v3...`);
         const { createReadStream } = await import('fs');
         const transcription = await groqClient.audio.transcriptions.create({
           file: createReadStream(tempAudio),
@@ -2320,7 +2272,7 @@ async function extractYouTubeDictation(youtubeId) {
         });
 
         const segments = transcription.segments || [];
-        console.log(`[Dictation] Whisper extracted ${segments.length} segments, detected language: ${transcription.language}`);
+        console.log(`[Dictation] Whisper extracted ${segments.length} segments across full video, language: ${transcription.language}`);
 
         if (segments.length > 0) {
           const raw = segments.map((s, idx) => ({
