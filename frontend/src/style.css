@@ -8092,8 +8092,9 @@ html.light .stepper-tab-btn:hover {
    (Thiết kế đồng bộ như nút Chuyển nền mặt trăng & Bông tuyết mùa)
    ========================================================================== */
 
-/* Circular Fullscreen Buttons (Giống hệt nút đổi theme/tuyết) */
+/* Circular Action Buttons */
 .fc-circle-btn,
+.stepper-action-btn,
 .card-fullscreen-quick-btn,
 .top-fullscreen-btn {
   width: 44px;
@@ -8123,6 +8124,7 @@ html.light .stepper-tab-btn:hover {
 }
 
 .fc-circle-btn:hover,
+.stepper-action-btn:hover,
 .card-fullscreen-quick-btn:hover,
 .top-fullscreen-btn:hover {
   transform: scale(1.15) !important;
@@ -8133,6 +8135,7 @@ html.light .stepper-tab-btn:hover {
 }
 
 .fc-circle-btn.active-fullscreen,
+.stepper-action-btn.active-fullscreen,
 .card-fullscreen-quick-btn.active-fullscreen,
 .top-fullscreen-btn.active-fullscreen {
   background: linear-gradient(135deg, #f59e0b, #d97706) !important;
@@ -8143,9 +8146,11 @@ html.light .stepper-tab-btn:hover {
 
 /* Light mode support for circle buttons */
 html.light-mode .fc-circle-btn,
+html.light-mode .stepper-action-btn,
 html.light-mode .card-fullscreen-quick-btn,
 html.light-mode .top-fullscreen-btn,
 body.light-mode .fc-circle-btn,
+body.light-mode .stepper-action-btn,
 body.light-mode .card-fullscreen-quick-btn,
 body.light-mode .top-fullscreen-btn {
   background: #ffffff !important;

@@ -917,7 +917,7 @@ function _sdUpdateButtons() {
   // Fallback cho các trang không có main.js
   const isDocFs = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
   const activeState = _sdIsFullscreen || isDocFs;
-  document.querySelectorAll('.fc-fullscreen-toggle-btn, .fc-circle-btn, .card-fullscreen-quick-btn, #floating-fullscreen-btn, #radical-top-fullscreen-btn, #radical-fullscreen-toggle-btn').forEach(btn => {
+  document.querySelectorAll('.card-fullscreen-quick-btn, #radical-top-fullscreen-btn, #radical-fullscreen-toggle-btn').forEach(btn => {
     btn.classList.toggle('active-fullscreen', activeState);
     const icon = btn.querySelector('i');
     if (icon) icon.className = `fa-solid ${activeState ? 'fa-compress' : 'fa-expand'}`;
@@ -946,7 +946,7 @@ function _sdUpdateButtons() {
   window._fsDelegationRegistered = true;
 
   let lastActionTime = 0;
-  const SELECTOR = '.fc-circle-btn, .fc-fullscreen-toggle-btn, .card-fullscreen-quick-btn, #floating-fullscreen-btn, #radical-top-fullscreen-btn, #radical-fullscreen-toggle-btn';
+  const SELECTOR = '.card-fullscreen-quick-btn, #radical-top-fullscreen-btn, #radical-fullscreen-toggle-btn';
 
   function onFsTrigger(e) {
     const btn = e.target.closest(SELECTOR);

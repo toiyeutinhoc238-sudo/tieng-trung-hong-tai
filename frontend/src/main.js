@@ -7430,12 +7430,9 @@ function renderLessonStepperNav(currentStep, lessonId, lessonTitle) {
         </button>
       </div>
 
-      <!-- Action Buttons (Drawing Pen & Toggle Toolbar) -->
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <button class="fc-circle-btn" onclick="window.toggleScreenDrawing()" title="Bật/Tắt Bút vẽ màn hình (Phím D)" style="color: #ec4899;">
-          <i class="fa-solid fa-pen-nib"></i>
-        </button>
-        <button id="toggle-toolbar-btn" class="fc-circle-btn" onclick="window.toggleLessonToolbar()" title="Ẩn/Hiện thanh công cụ (Phím T)" style="color: #38bdf8;">
+      <!-- Action Button (Toggle Toolbar Only) -->
+      <div style="display: flex; align-items: center;">
+        <button id="toggle-toolbar-btn" class="stepper-action-btn" onclick="window.toggleLessonToolbar()" title="Ẩn/Hiện thanh công cụ (Phím T)" style="color: #38bdf8;">
           <i class="fa-solid fa-chevron-up"></i>
         </button>
       </div>
@@ -7542,6 +7539,125 @@ window.goToLessonStep = function(step, lessonId) {
   }
 };
 
+window.returnToLessonsMap = function() {
+  const modal = document.getElementById('lesson-detail-modal');
+  if (modal) {
+    modal.classList.remove('active');
+  }
+  const studyView = document.getElementById('flashcard-study-view');
+  if (studyView) {
+    studyView.style.display = 'none';
+  }
+  const decksView = document.getElementById('decks-view');
+  if (decksView) {
+    decksView.style.display = 'block';
+  }
+  const roadmapSec = document.getElementById('roadmap-journey-section');
+  if (roadmapSec) {
+    roadmapSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+};
+
+let isFlashcardFullscreen = false;
+
+window.toggleFlashcardFullscreen = function(forceState) {
+  const isDocFs = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+  const targetState = typeof forceState === 'boolean' ? forceState : (!isFlashcardFullscreen && !isDocFs);
+  if (targetState) {
+    window.enterFlashcardFullscreen();
+  } else {
+    window.exitFlashcardFullscreen(true);
+  }
+};
+
+window.enterFlashcardFullscreen = function() {
+  isFlashcardFullscreen = true;
+  document.body.classList.add('flashcard-fullscreen-mode', 'app-fullscreen-mode');
+
+  const studyView = document.getElementById('flashcard-study-view');
+  if (studyView) {
+    studyView.classList.add('fullscreen-flashcard-active');
+  }
+
+  const radicalView = document.getElementById('radical-study-workspace') || document.getElementById('radicals-flashcard-view');
+  if (radicalView) {
+    radicalView.classList.add('fullscreen-flashcard-active');
+  }
+
+  const docEl = document.documentElement;
+  try {
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+      if (docEl.requestFullscreen) {
+        docEl.requestFullscreen().catch(() => {});
+      } else if (docEl.webkitRequestFullscreen) {
+        docEl.webkitRequestFullscreen();
+      } else if (docEl.msRequestFullscreen) {
+        docEl.msRequestFullscreen();
+      }
+    }
+  } catch (e) {
+    console.warn('Native fullscreen request ignored:', e);
+  }
+
+  updateFlashcardFullscreenButtons();
+  if (typeof showToast === 'function') {
+    showToast('Đã mở toàn màn hình (Bấm nút trong thẻ, phím F hoặc Esc để thu nhỏ) ⛶');
+  }
+};
+
+window.exitFlashcardFullscreen = function(callDocExit = true) {
+  isFlashcardFullscreen = false;
+  document.body.classList.remove('flashcard-fullscreen-mode', 'app-fullscreen-mode');
+
+  const studyView = document.getElementById('flashcard-study-view');
+  if (studyView) {
+    studyView.classList.remove('fullscreen-flashcard-active');
+  }
+
+  const radicalView = document.getElementById('radical-study-workspace') || document.getElementById('radicals-flashcard-view');
+  if (radicalView) {
+    radicalView.classList.remove('fullscreen-flashcard-active');
+  }
+
+  if (callDocExit) {
+    const isDocFs = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+    if (isDocFs) {
+      try {
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+      } catch (e) {
+        console.warn('Native exit fullscreen ignored:', e);
+      }
+    }
+  }
+
+  updateFlashcardFullscreenButtons();
+};
+
+function updateFlashcardFullscreenButtons() {
+  const isDocFs = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+  const activeState = isFlashcardFullscreen || isDocFs;
+
+  const allFullscreenBtns = document.querySelectorAll('.card-fullscreen-quick-btn, #radical-top-fullscreen-btn, #radical-fullscreen-toggle-btn');
+  allFullscreenBtns.forEach(btn => {
+    btn.classList.toggle('active-fullscreen', activeState);
+    const label = btn.querySelector('.fs-btn-label');
+    if (label) {
+      label.textContent = activeState ? 'Thu Nhỏ' : 'Toàn Màn Hình';
+    }
+    const icon = btn.querySelector('i');
+    if (icon) {
+      icon.className = `fa-solid ${activeState ? 'fa-compress' : 'fa-expand'}`;
+    }
+    btn.title = activeState ? 'Thu nhỏ toàn màn hình (Phím Esc)' : 'Phóng to toàn màn hình (Phím F)';
+  });
+}
+
 function renderLessonFlashcardWorkspace(lessonTitle, words, selectedIndex = 0) {
   currentLessonTitleStr = lessonTitle;
   currentLessonVocabWords = words || [];
@@ -7637,105 +7753,6 @@ function renderLessonFlashcardWorkspace(lessonTitle, words, selectedIndex = 0) {
       initLessonHanziWriter(currentWord.word || currentWord.simplified || currentWord.character);
     }, 50);
   }
-}
-
-let isFlashcardFullscreen = false;
-
-window.toggleFlashcardFullscreen = function(forceState) {
-  const isDocFs = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
-  const targetState = typeof forceState === 'boolean' ? forceState : (!isFlashcardFullscreen && !isDocFs);
-  if (targetState) {
-    window.enterFlashcardFullscreen();
-  } else {
-    window.exitFlashcardFullscreen(true);
-  }
-};
-
-window.enterFlashcardFullscreen = function() {
-  isFlashcardFullscreen = true;
-  document.body.classList.add('flashcard-fullscreen-mode', 'app-fullscreen-mode');
-
-  const studyView = document.getElementById('flashcard-study-view');
-  if (studyView) {
-    studyView.classList.add('fullscreen-flashcard-active');
-  }
-
-  const radicalView = document.getElementById('radical-study-workspace') || document.getElementById('radicals-flashcard-view');
-  if (radicalView) {
-    radicalView.classList.add('fullscreen-flashcard-active');
-  }
-
-  // Request browser native fullscreen for complete viewport immersion
-  const docEl = document.documentElement;
-  try {
-    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-      if (docEl.requestFullscreen) {
-        docEl.requestFullscreen().catch(() => {});
-      } else if (docEl.webkitRequestFullscreen) {
-        docEl.webkitRequestFullscreen();
-      } else if (docEl.msRequestFullscreen) {
-        docEl.msRequestFullscreen();
-      }
-    }
-  } catch (e) {
-    console.warn('Native fullscreen request ignored:', e);
-  }
-
-  updateFlashcardFullscreenButtons();
-  showToast('Đã mở toàn màn hình (Bấm nút, phím F hoặc Esc để thu nhỏ) ⛶');
-};
-
-window.exitFlashcardFullscreen = function(callDocExit = true) {
-  isFlashcardFullscreen = false;
-  document.body.classList.remove('flashcard-fullscreen-mode', 'app-fullscreen-mode');
-
-  const studyView = document.getElementById('flashcard-study-view');
-  if (studyView) {
-    studyView.classList.remove('fullscreen-flashcard-active');
-  }
-
-  const radicalView = document.getElementById('radical-study-workspace') || document.getElementById('radicals-flashcard-view');
-  if (radicalView) {
-    radicalView.classList.remove('fullscreen-flashcard-active');
-  }
-
-  if (callDocExit) {
-    const isDocFs = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
-    if (isDocFs) {
-      try {
-        if (document.exitFullscreen) {
-          document.exitFullscreen().catch(() => {});
-        } else if (document.webkitExitFullscreen) {
-          document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) {
-          document.msExitFullscreen();
-        }
-      } catch (e) {
-        console.warn('Native exit fullscreen ignored:', e);
-      }
-    }
-  }
-
-  updateFlashcardFullscreenButtons();
-};
-
-function updateFlashcardFullscreenButtons() {
-  const isDocFs = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
-  const activeState = isFlashcardFullscreen || isDocFs;
-
-  const allFullscreenBtns = document.querySelectorAll('.fc-fullscreen-toggle-btn, .fc-circle-btn, .card-fullscreen-quick-btn, #floating-fullscreen-btn, #radical-top-fullscreen-btn, #radical-fullscreen-toggle-btn');
-  allFullscreenBtns.forEach(btn => {
-    btn.classList.toggle('active-fullscreen', activeState);
-    const label = btn.querySelector('.fs-btn-label');
-    if (label) {
-      label.textContent = activeState ? 'Thu Nhỏ' : 'Toàn Màn Hình';
-    }
-    const icon = btn.querySelector('i');
-    if (icon) {
-      icon.className = `fa-solid ${activeState ? 'fa-compress' : 'fa-expand'}`;
-    }
-    btn.title = activeState ? 'Thu nhỏ toàn màn hình (Phím Esc)' : 'Phóng to toàn màn hình (Phím F)';
-  });
 }
 
 // fullscreenchange listeners được xử lý bởi screen_drawing.js universal handler
