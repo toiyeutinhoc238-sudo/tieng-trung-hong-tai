@@ -1080,6 +1080,138 @@
       font-size: 1.5rem;
       cursor: pointer;
     }
+
+    /* Interactive Click-to-Lookup Word Card (eJOY Popover) */
+    .dict-word-popover {
+      position: fixed;
+      z-index: 100000;
+      background: rgba(15, 23, 42, 0.96);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      border-radius: 16px;
+      padding: 16px 20px;
+      min-width: 220px;
+      max-width: 320px;
+      color: var(--text-primary);
+      display: none;
+      animation: popoverFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes popoverFadeIn {
+      from { opacity: 0; transform: translateY(6px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .popover-word-title {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 2px;
+    }
+
+    .popover-hsk-badge {
+      font-size: 0.72rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ec4899, #8b5cf6);
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .popover-pinyin {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fbbf24;
+      margin-bottom: 6px;
+    }
+
+    .popover-meaning {
+      font-size: 0.9rem;
+      color: #e2e8f0;
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+
+    .popover-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .popover-btn {
+      flex: 1;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-glass);
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .popover-btn:hover {
+      background: rgba(56, 189, 248, 0.25);
+      border-color: #38bdf8;
+    }
+
+    /* In-Player Dual Subtitles Overlay Below Video */
+    .yt-in-player-dual-subs {
+      background: rgba(0, 0, 0, 0.85);
+      border-top: 1px solid var(--border-glass);
+      padding: 14px 20px;
+      text-align: center;
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .yt-sub-hanzi-line {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 4px;
+      letter-spacing: 0.03em;
+      line-height: 1.5;
+    }
+
+    .yt-sub-hanzi-word {
+      display: inline-block;
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .yt-sub-hanzi-word:hover {
+      background: rgba(56, 189, 248, 0.3);
+      color: #38bdf8;
+      transform: translateY(-2px);
+    }
+
+    .yt-sub-pinyin-line {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #38bdf8;
+      margin-bottom: 4px;
+    }
+
+    .yt-sub-meaning-line {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #cbd5e1;
+    }
   </style>
 </head>
 
@@ -1202,6 +1334,13 @@
         <div class="video-player-card">
           <div class="yt-player-responsive-wrap">
             <div id="yt-video-embed"></div>
+          </div>
+
+          <!-- Real-Time Dual Subtitles Display (eJOY Style) -->
+          <div class="yt-in-player-dual-subs" id="yt-in-player-dual-subs">
+            <div id="yt-overlay-hanzi" class="yt-sub-hanzi-line">Đang tải phụ đề...</div>
+            <div id="yt-overlay-pinyin" class="yt-sub-pinyin-line"></div>
+            <div id="yt-overlay-meaning" class="yt-sub-meaning-line"></div>
           </div>
 
           <!-- Smart Player Controls Bar -->
@@ -1542,6 +1681,21 @@
             </button>
           </div>
         </form>
+    <!-- Click-to-Lookup Word Card Popover (eJOY Style) -->
+    <div id="dict-word-popover" class="dict-word-popover">
+      <div class="popover-word-title">
+        <span id="popover-word-text">...</span>
+        <span id="popover-hsk-badge" class="popover-hsk-badge">HSK</span>
+      </div>
+      <div id="popover-pinyin-text" class="popover-pinyin">...</div>
+      <div id="popover-meaning-text" class="popover-meaning">Đang tra từ...</div>
+      <div class="popover-actions">
+        <button class="popover-btn" onclick="window.speakPopoverWord()">
+          <i class="fa-solid fa-volume-high" style="color: #10b981;"></i> Phát âm
+        </button>
+        <button class="popover-btn" id="btn-save-popover-word" onclick="window.savePopoverWordToFlashcard()">
+          <i class="fa-solid fa-bookmark" style="color: #fbbf24;"></i> Lưu Flashcard
+        </button>
       </div>
     </div>
 

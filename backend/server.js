@@ -2480,6 +2480,39 @@ app.delete('/api/dictation/lessons/:id', async (req, res) => {
   }
 });
 
+// POST /api/dict/lookup — Instant Chinese Word Dictionary Lookup for Subtitle Click-to-Translate
+app.post('/api/dict/lookup', async (req, res) => {
+  try {
+    const { word } = req.body || {};
+    if (!word || !word.trim()) {
+      return res.status(400).json({ error: 'Missing word parameter' });
+    }
+    const cleanWord = word.trim();
+    let py = '';
+    try { py = pinyin(cleanWord, { toneType: 'symbol' }); } catch (e) {}
+
+    const db = await readDatabase();
+    let hskLevel = null;
+    let foundDbMatch = db.find(w => w && (w.word === cleanWord || w.hanzi === cleanWord));
+    if (foundDbMatch) {
+      hskLevel = foundDbMatch.level || foundDbMatch.hsk || 'HSK';
+    }
+
+    const meaning = await translateText(cleanWord, 'zh-CN', 'vi');
+
+    res.json({
+      success: true,
+      word: cleanWord,
+      pinyin: py,
+      meaning: meaning,
+      hskLevel: hskLevel ? (String(hskLevel).startsWith('HSK') ? String(hskLevel) : `HSK ${hskLevel}`) : 'Từ vựng'
+    });
+  } catch (err) {
+    console.error("Dict lookup error:", err);
+    res.status(500).json({ error: 'Lookup failed' });
+  }
+});
+
 // Serve index.html or dist/index.html as root
 app.get('/', (req, res) => {
   const distIndex = path.join(DIST_DIR, 'index.html');

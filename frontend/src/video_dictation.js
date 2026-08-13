@@ -1995,6 +1995,7 @@ function startPlaybackWatcher() {
 
       // Update video progress meter or highlight
       updateSubtitleHighlight(curTime);
+      updateInPlayerDualSubtitles(curTime);
 
       // Auto pause at end of sentence
       if (autoPauseEnabled && curTime >= curSent.endTime) {
@@ -2461,14 +2462,116 @@ function updateSubtitleHighlight(curTime) {
   });
 }
 
-function renderClickableHanziSpans(text) {
+function updateInPlayerDualSubtitles(curTime) {
+  if (!currentLesson || !currentLesson.sentences) return;
+  const overlayHanzi = document.getElementById('yt-overlay-hanzi');
+  const overlayPinyin = document.getElementById('yt-overlay-pinyin');
+  const overlayMeaning = document.getElementById('yt-overlay-meaning');
+  if (!overlayHanzi) return;
+
+  const activeSentence = currentLesson.sentences.find(s => curTime >= s.startTime && curTime <= s.endTime);
+  if (activeSentence) {
+    overlayHanzi.innerHTML = renderInteractiveWords(activeSentence.hanzi);
+    if (overlayPinyin) overlayPinyin.textContent = activeSentence.pinyin || '';
+    if (overlayMeaning) overlayMeaning.textContent = activeSentence.meaning || '';
+  } else {
+    const curSent = currentLesson.sentences[currentSentenceIdx];
+    if (curSent) {
+      overlayHanzi.innerHTML = renderInteractiveWords(curSent.hanzi);
+      if (overlayPinyin) overlayPinyin.textContent = curSent.pinyin || '';
+      if (overlayMeaning) overlayMeaning.textContent = curSent.meaning || '';
+    }
+  }
+}
+
+let currentPopoverData = null;
+
+function renderInteractiveWords(text) {
   if (!text) return '';
   return text.split('').map(char => {
     if (/[\u4e00-\u9fa5]/.test(char)) {
-      return `<span class="hanzi-interactive-char" onclick="window.openHanziModal('${char}')" title="Bấm xem nét viết chữ ${char}">${char}</span>`;
+      return `<span class="yt-sub-hanzi-word" onclick="window.lookupWord(this, '${char}')" title="Bấm để tra từ 1-click">${char}</span>`;
     }
     return char;
   }).join('');
+}
+
+window.lookupWord = async function(element, word) {
+  if (!word || !word.trim()) return;
+  const cleanWord = word.trim();
+  currentPopoverData = { word: cleanWord, pinyin: '', meaning: '' };
+
+  const popover = document.getElementById('dict-word-popover');
+  const wordText = document.getElementById('popover-word-text');
+  const pinyinText = document.getElementById('popover-pinyin-text');
+  const meaningText = document.getElementById('popover-meaning-text');
+  const hskBadge = document.getElementById('popover-hsk-badge');
+
+  if (!popover) return;
+
+  if (wordText) wordText.textContent = cleanWord;
+  if (pinyinText) pinyinText.textContent = '...';
+  if (meaningText) meaningText.textContent = 'Đang tra từ điển...';
+  if (hskBadge) hskBadge.textContent = 'HSK';
+
+  // Position popover near element
+  const rect = element.getBoundingClientRect();
+  popover.style.display = 'block';
+  popover.style.top = `${Math.min(window.innerHeight - 190, rect.bottom + 8)}px`;
+  popover.style.left = `${Math.max(10, Math.min(window.innerWidth - 310, rect.left - 40))}px`;
+
+  // Fetch dictionary
+  try {
+    const res = await fetch('/api/dict/lookup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ word: cleanWord })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      currentPopoverData = data;
+      if (wordText) wordText.textContent = data.word || cleanWord;
+      if (pinyinText) pinyinText.textContent = data.pinyin || '';
+      if (meaningText) meaningText.textContent = data.meaning || 'Không tìm thấy định nghĩa';
+      if (hskBadge) hskBadge.textContent = data.hskLevel || 'Từ Vựng';
+    }
+  } catch (err) {
+    if (meaningText) meaningText.textContent = 'Lỗi tra từ.';
+  }
+};
+
+window.speakPopoverWord = function() {
+  if (currentPopoverData && currentPopoverData.word) {
+    speakChinese(currentPopoverData.word);
+  }
+};
+
+window.savePopoverWordToFlashcard = function() {
+  if (!currentPopoverData || !currentPopoverData.word) return;
+  try {
+    const email = getCurrentUserEmail();
+    const storageKey = `my_saved_flashcards_${email}`;
+    let saved = JSON.parse(localStorage.getItem(storageKey) || '[]');
+    if (!saved.some(item => item.word === currentPopoverData.word)) {
+      saved.push({
+        word: currentPopoverData.word,
+        pinyin: currentPopoverData.pinyin,
+        meaning: currentPopoverData.meaning,
+        hskLevel: currentPopoverData.hskLevel,
+        addedAt: new Date().toISOString()
+      });
+      localStorage.setItem(storageKey, JSON.stringify(saved));
+      showToast(`⭐ Đã lưu "${currentPopoverData.word}" vào Flashcard cá nhân!`);
+    } else {
+      showToast(`Từ "${currentPopoverData.word}" đã có trong Flashcard!`);
+    }
+  } catch (e) {
+    showToast(`Đã lưu "${currentPopoverData.word}" vào sổ từ vựng!`);
+  }
+};
+
+function renderClickableHanziSpans(text) {
+  return renderInteractiveWords(text);
 }
 
 function formatTime(secs) {
@@ -3692,13 +3795,25 @@ function setupEventListeners() {
     });
   }
 
-  // Keyboard Shortcuts (Space to replay, Enter to submit, Ctrl+H to hint)
+  // Dismiss Popover when clicking outside
+  document.addEventListener('click', (e) => {
+    const popover = document.getElementById('dict-word-popover');
+    if (popover && popover.style.display === 'block') {
+      if (!popover.contains(e.target) && !e.target.classList.contains('yt-sub-hanzi-word') && !e.target.classList.contains('hanzi-interactive-char')) {
+        popover.style.display = 'none';
+      }
+    }
+  });
+
+  // Global Hotkeys for Shadowing & Dictation (Space = Replay, ArrowLeft/Right = Prev/Next, P = AutoPause, S = Speed)
   document.addEventListener('keydown', (e) => {
     // If not in workspace, return
     const ws = document.getElementById('dict-workspace-view');
     if (!ws || ws.style.display === 'none') return;
 
-    if (e.code === 'Space' && (e.ctrlKey || e.target.tagName !== 'INPUT')) {
+    const isTyping = ['INPUT', 'TEXTAREA'].includes(e.target.tagName);
+
+    if (e.code === 'Space' && (!isTyping || e.ctrlKey)) {
       e.preventDefault();
       replaySnippet();
     } else if (e.key === 'Enter' && e.ctrlKey) {
@@ -3707,12 +3822,18 @@ function setupEventListeners() {
     } else if ((e.key === 'h' || e.key === 'H') && e.ctrlKey) {
       e.preventDefault();
       showHint();
-    } else if (e.key === 'ArrowRight' && e.ctrlKey) {
+    } else if (e.key === 'ArrowRight' && (e.ctrlKey || !isTyping)) {
       e.preventDefault();
       nextSentence();
-    } else if (e.key === 'ArrowLeft' && e.ctrlKey) {
+    } else if (e.key === 'ArrowLeft' && (e.ctrlKey || !isTyping)) {
       e.preventDefault();
       prevSentence();
+    } else if ((e.key === 'p' || e.key === 'P') && !isTyping) {
+      toggleAutoPause();
+    } else if ((e.key === 's' || e.key === 'S') && !isTyping) {
+      const speeds = [0.5, 0.75, 1.0];
+      const nextIdx = (speeds.indexOf(currentSpeed) + 1) % speeds.length;
+      setPlaybackSpeed(speeds[nextIdx]);
     }
   });
 
