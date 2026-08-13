@@ -353,6 +353,89 @@
       color: var(--text-muted);
     }
 
+    /* Custom / My Video Badges & Controls */
+    .dict-my-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(245, 158, 11, 0.18) !important;
+      color: #fbbf24 !important;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 800;
+    }
+
+    .btn-delete-custom-video {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #f87171;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-delete-custom-video:hover {
+      background: #ef4444;
+      color: #ffffff;
+      border-color: #ef4444;
+      transform: scale(1.08);
+    }
+
+    .dict-preview-card {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border-glass);
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .dict-preview-thumb {
+      width: 120px;
+      height: 68px;
+      object-fit: cover;
+      border-radius: 10px;
+      background: #000;
+      flex-shrink: 0;
+    }
+
+    .dict-subtitle-toolbar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .dict-subtitle-tool-btn {
+      padding: 5px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-glass);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+    }
+
+    .dict-subtitle-tool-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: var(--text-primary);
+    }
+
     /* WORKSPACE SCREEN (Player + Interactive Dictation) */
     .dict-workspace-view {
       display: none;
@@ -1017,7 +1100,13 @@
         </div>
       </a>
 
-      <div style="display: flex; align-items: center; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <!-- User Status Badge -->
+        <div id="dict-user-profile-badge" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-glass); padding: 6px 14px; border-radius: 50px; font-size: 0.82rem; font-weight: 700; color: var(--text-secondary);">
+          <i class="fa-solid fa-circle-user" style="color: #38bdf8; font-size: 1.05rem;"></i>
+          <span id="dict-user-name-display">Khách (Chưa đăng nhập)</span>
+        </div>
+
         <button class="btn btn-outline btn-sm" onclick="window.location.href='/'" title="Quay về trang chủ">
           <i class="fa-solid fa-house"></i> <span class="hide-mobile">Trang chủ</span>
         </button>
@@ -1043,6 +1132,9 @@
       <div class="dict-filter-bar">
         <div class="cat-pills-wrap">
           <button class="cat-pill-btn active" data-cat="all" data-level="all"><i class="fa-solid fa-layer-group"></i> Tất Cả</button>
+          <button class="cat-pill-btn" data-cat="my_videos" id="my-videos-pill" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.4); color: #fbbf24; font-weight: 800;">
+            <i class="fa-solid fa-user-check"></i> Video Của Tôi (<span id="my-videos-count">0</span>)
+          </button>
           <button class="cat-pill-btn" data-level="1"><i class="fa-solid fa-seedling"></i> HSK 1</button>
           <button class="cat-pill-btn" data-level="2"><i class="fa-solid fa-tree"></i> HSK 2</button>
           <button class="cat-pill-btn" data-level="3"><i class="fa-solid fa-mountain"></i> HSK 3</button>
@@ -1055,8 +1147,8 @@
           <div class="dict-search-wrap">
             <input type="text" id="dict-search-input" class="dict-search-input" placeholder="Tìm kiếm video bài học...">
           </div>
-          <button class="btn btn-primary btn-sm" onclick="window.openAddVideoModal()" style="white-space: nowrap; border-radius: 50px; padding: 10px 18px;">
-            <i class="fa-solid fa-plus"></i> Thêm Video
+          <button class="btn btn-primary btn-sm" onclick="window.openAddVideoModal()" style="white-space: nowrap; border-radius: 50px; padding: 10px 18px; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35); background: linear-gradient(135deg, #ef4444, #f97316); border: none;">
+            <i class="fa-brands fa-youtube"></i> Thêm Video YouTube
           </button>
         </div>
       </div>
@@ -1141,6 +1233,51 @@
               <!-- Rendered dynamically -->
             </div>
           </div>
+
+          <!-- Interactive Sentence Timing Fine-Tuner -->
+          <div id="dict-timing-adjuster-panel" class="dict-timing-panel" style="background: rgba(15, 23, 42, 0.75); border: 1px solid var(--border-glass); border-radius: 16px; padding: 14px 18px; margin-top: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 6px;">
+              <span style="font-size: 0.85rem; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-stopwatch"></i> CHỈNH MỐC NGẮT NHỊP CÂU HIỆN TẠI (CHUẨN TỪNG GIÂY)
+              </span>
+              <span id="timing-adjuster-current-pos" style="font-size: 0.78rem; font-weight: 700; color: #fbbf24;">
+                Giây video: 00:00.00
+              </span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+              <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 700; margin-bottom: 6px;">
+                  BẮT ĐẦU: <span id="timing-start-val" style="color: #38bdf8; font-size: 0.95rem; font-weight: 800;">0.00s</span>
+                </div>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                  <button class="btn btn-outline btn-sm" onclick="window.nudgeTiming('start', -0.2)" title="Lùi 0.2s">-0.2s</button>
+                  <button class="btn btn-outline btn-sm" onclick="window.nudgeTiming('start', 0.2)" title="Tiến 0.2s">+0.2s</button>
+                  <button class="btn btn-primary btn-sm" onclick="window.setTimingFromCurrent('start')" title="Lấy mốc giây video hiện tại làm điểm bắt đầu câu" style="font-size: 0.78rem;">📍 Lấy Giây Này</button>
+                </div>
+              </div>
+
+              <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 700; margin-bottom: 6px;">
+                  KẾT THÚC: <span id="timing-end-val" style="color: #10b981; font-size: 0.95rem; font-weight: 800;">0.00s</span>
+                </div>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                  <button class="btn btn-outline btn-sm" onclick="window.nudgeTiming('end', -0.2)" title="Lùi 0.2s">-0.2s</button>
+                  <button class="btn btn-outline btn-sm" onclick="window.nudgeTiming('end', 0.2)" title="Tiến 0.2s">+0.2s</button>
+                  <button class="btn btn-primary btn-sm" onclick="window.setTimingFromCurrent('end')" title="Lấy mốc giây video hiện tại làm điểm kết thúc câu" style="font-size: 0.78rem;">📍 Lấy Giây Này</button>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap;">
+              <button class="btn btn-outline btn-sm" onclick="window.replaySnippet()" title="Nghe thử đoạn vừa chỉnh">
+                <i class="fa-solid fa-play"></i> Nghe Thử Mốc Này
+              </button>
+              <button class="btn btn-primary btn-sm" onclick="window.saveAdjustedTiming()" style="background: linear-gradient(135deg, #10b981, #059669); border: none; font-weight: 800;">
+                <i class="fa-solid fa-floppy-disk"></i> Lưu Mốc Thời Gian
+              </button>
+            </div>
+          </div>
         </div>
 
         <!-- Right Column: Interactive Dictation Forms -->
@@ -1188,6 +1325,9 @@
             <div class="dict-action-toolbar">
               <button class="btn-submit-check" onclick="window.checkCurrentAnswer()" title="Kiểm tra đáp án (Phím Enter)">
                 <i class="fa-solid fa-circle-check"></i> <span>Kiểm Tra</span>
+              </button>
+              <button class="btn-dict-tool" id="dict-mic-btn" onclick="window.startSpeechRecognition()" title="Luyện nói theo video & so khớp độ chính xác giọng phát âm của bạn">
+                <i class="fa-solid fa-microphone" style="color: #ec4899;"></i> <span>Luyện Nói</span>
               </button>
               <button class="btn-dict-tool" onclick="window.showHint()" title="Gợi ý chữ cái đầu & Pinyin (Ctrl + H)">
                 <i class="fa-solid fa-lightbulb" style="color: #f59e0b;"></i> <span>Gợi Ý</span>
@@ -1282,54 +1422,104 @@
 
     <!-- MODAL: Add Custom YouTube Video -->
     <div id="dict-add-video-modal" class="modal-overlay">
-      <div class="modal-card modal-box" style="max-width: 600px;">
+      <div class="modal-card modal-box" style="max-width: 640px; border: 1px solid rgba(239, 68, 68, 0.35); box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
         <button class="modal-close-btn" onclick="window.closeAddVideoModal()">&times;</button>
-        <h3 style="margin-top: 0; font-size: 1.4rem; font-weight: 800;"><i class="fa-brands fa-youtube" style="color: #ef4444;"></i> Thêm Bài Luyện Chép Video Mới</h3>
-        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px;">Dán link YouTube và các câu thoại để tạo bài luyện chép cá nhân</p>
+        <h3 style="margin-top: 0; font-size: 1.4rem; font-weight: 800; display: flex; align-items: center; gap: 10px;">
+          <i class="fa-brands fa-youtube" style="color: #ef4444;"></i> Thêm Video YouTube Cá Nhân
+        </h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 18px;">
+          Dán bất kỳ link video YouTube nào (MV ca nhạc, phim ảnh, bài giảng, vlog...) để tự động tạo bài luyện chép chính tả và lưu vào tài khoản của bạn.
+        </p>
 
         <form id="custom-video-form">
+          <!-- YouTube URL Input -->
           <div style="margin-bottom: 14px;">
-            <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">Đường dẫn Link YouTube:</label>
-            <input type="text" id="custom-video-url" class="dict-search-input" placeholder="https://www.youtube.com/watch?v=..." required style="border-radius: 12px;">
+            <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">
+              <i class="fa-solid fa-link" style="color: #38bdf8;"></i> Đường Dẫn Link YouTube:
+            </label>
+            <input type="text" id="custom-video-url" class="dict-search-input" placeholder="https://www.youtube.com/watch?v=... hoặc https://youtu.be/..." required style="border-radius: 12px; width: 100%; box-sizing: border-box;" oninput="window.handleYouTubeUrlInput(this.value)">
           </div>
 
-          <div style="margin-bottom: 14px;">
-            <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">Tiêu đề bài học:</label>
-            <input type="text" id="custom-video-title" class="dict-search-input" placeholder="Ví dụ: Hội thoại đi du lịch Bắc Kinh..." required style="border-radius: 12px;">
+          <!-- Real-Time Video Preview Card -->
+          <div id="custom-video-preview-box" class="dict-preview-card" style="display: none;">
+            <img id="custom-video-preview-img" class="dict-preview-thumb" src="" alt="Thumbnail">
+            <div style="flex: 1; overflow: hidden;">
+              <div id="custom-video-preview-id" style="font-size: 0.85rem; font-weight: 800; color: #38bdf8;">YouTube ID: ...</div>
+              <div style="font-size: 0.78rem; color: #10b981; margin-top: 3px; font-weight: 700;">
+                <i class="fa-solid fa-circle-check"></i> Link YouTube hợp lệ — Đã sẵn sàng nạp video!
+              </div>
+            </div>
           </div>
 
+          <!-- Video Title -->
+          <div style="margin-bottom: 14px;">
+            <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">
+              <i class="fa-solid fa-heading" style="color: #fbbf24;"></i> Tiêu đề bài học / Tên Video:
+            </label>
+            <input type="text" id="custom-video-title" class="dict-search-input" placeholder="Ví dụ: Bài hát Ánh Trăng Nói Hộ Lòng Tôi..." required style="border-radius: 12px; width: 100%; box-sizing: border-box;">
+          </div>
+
+          <!-- Level & Category Grid -->
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
             <div>
-              <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">Cấp độ:</label>
-              <select id="custom-video-level" class="dict-search-input" style="border-radius: 12px;">
-                <option value="1">HSK 1 (Dễ)</option>
+              <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">Cấp độ phù hợp:</label>
+              <select id="custom-video-level" class="dict-search-input" style="border-radius: 12px; width: 100%;">
+                <option value="1">HSK 1 (Cơ bản)</option>
                 <option value="2">HSK 2</option>
-                <option value="3">HSK 3</option>
+                <option value="3" selected>HSK 3</option>
                 <option value="4">HSK 4</option>
                 <option value="5">HSK 5</option>
+                <option value="6">HSK 6 (Nâng cao)</option>
               </select>
             </div>
             <div>
-              <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">Chủ đề:</label>
-              <select id="custom-video-cat" class="dict-search-input" style="border-radius: 12px;">
-                <option value="Giao Tiếp">Giao Tiếp</option>
-                <option value="Âm Nhạc">Âm Nhạc</option>
-                <option value="Hoạt Hình">Hoạt Hình</option>
-                <option value="Đời Sống">Đời Sống</option>
+              <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">Chủ đề video:</label>
+              <select id="custom-video-cat" class="dict-search-input" style="border-radius: 12px; width: 100%;">
+                <option value="Âm Nhạc">Âm Nhạc / Bài Hát</option>
+                <option value="Giao Tiếp">Giao Tiếp Đời Sống</option>
+                <option value="Hoạt Hình">Phim Hoạt Hình</option>
+                <option value="Phim Ảnh">Phim Truyền Hình</option>
+                <option value="Đời Sống">Đời Sống / Du Lịch</option>
+                <option value="Tin Tức">Tin Tức / Phỏng Vấn</option>
+                <option value="Khác">Tổng Hợp Khác</option>
               </select>
             </div>
           </div>
 
+          <!-- Subtitle / Sentence Script Section -->
           <div style="margin-bottom: 20px;">
-            <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">
-              Danh sách câu thoại (Mỗi dòng 1 câu dạng: <code>Chữ Hán | Pinyin | Nghĩa</code>):
-            </label>
-            <textarea id="custom-video-subtitles" class="full-dictation-textarea" style="min-height: 120px; font-size: 0.9rem;" placeholder="你好 | Nǐ hǎo | Xin chào&#10;很高兴认识你 | Hěn gāoxìng rènshi nǐ | Rất vui được gặp bạn"></textarea>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+              <label style="font-size: 0.85rem; font-weight: 700;">
+                <i class="fa-solid fa-closed-captioning" style="color: #a78bfa;"></i> Danh sách câu thoại / Lời phụ đề:
+              </label>
+              <div class="dict-subtitle-toolbar">
+                <button type="button" class="dict-subtitle-tool-btn" id="btn-fetch-yt-subs" onclick="window.fetchYouTubeSubtitles()" style="background: rgba(239, 68, 68, 0.18); border-color: rgba(239, 68, 68, 0.4); color: #fca5a5; font-weight: 800;" title="Trích xuất phụ đề và mốc thời gian giọng nói thực tế từ YouTube">
+                  <i class="fa-brands fa-youtube"></i> Lấy Phụ Đề & Mốc Giọng Nói YouTube
+                </button>
+                <button type="button" class="dict-subtitle-tool-btn" onclick="window.autoGenerateSubtitlesPinyin()" title="Tự động thêm phiên âm Pinyin chuẩn cho các câu chữ Hán">
+                  <i class="fa-solid fa-wand-magic-sparkles" style="color: #fbbf24;"></i> Sinh Pinyin
+                </button>
+                <button type="button" class="dict-subtitle-tool-btn" onclick="window.fillSampleSubtitles()" title="Chèn câu mẫu thử nghiệm">
+                  <i class="fa-solid fa-lightbulb" style="color: #38bdf8;"></i> Mẫu câu
+                </button>
+                <button type="button" class="dict-subtitle-tool-btn" onclick="window.clearSubtitlesInput()" title="Xóa nội dung khung">
+                  <i class="fa-solid fa-eraser"></i> Xóa
+                </button>
+              </div>
+            </div>
+
+            <textarea id="custom-video-subtitles" class="full-dictation-textarea" style="min-height: 140px; font-size: 0.9rem; line-height: 1.6;" placeholder="Nhập mỗi dòng 1 câu theo định dạng:&#10;Chữ Hán | Pinyin | Nghĩa Tiếng Việt&#10;&#10;Ví dụ:&#10;你好 | Nǐ hǎo | Xin chào&#10;很高兴认识你 | Hěn gāoxìng rènshi nǐ | Rất vui được làm quen với bạn&#10;&#10;Hoặc chỉ cần dán lời tiếng Trung, bấm nút 'Sinh Pinyin Tự Động' ở trên!"></textarea>
+            <small style="color: var(--text-muted); font-size: 0.76rem; display: block; margin-top: 4px;">
+              💡 Mẹo: Bạn có thể nhập thời gian mốc như <code>[00:15 - 00:22] Chữ Hán | Pinyin | Nghĩa</code> để khớp chính xác từng giây trên video.
+            </small>
           </div>
 
+          <!-- Actions -->
           <div style="display: flex; gap: 10px; justify-content: flex-end;">
-            <button type="button" class="btn btn-outline" onclick="window.closeAddVideoModal()">Hủy</button>
-            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-save"></i> Tạo Bài Tập</button>
+            <button type="button" class="btn btn-outline" onclick="window.closeAddVideoModal()">Hủy Bỏ</button>
+            <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, #ef4444, #f97316); border: none; font-weight: 800; padding: 10px 22px; border-radius: 12px;">
+              <i class="fa-solid fa-cloud-arrow-up"></i> Lưu & Bắt Đầu Luyện Chép
+            </button>
           </div>
         </form>
       </div>
@@ -1337,8 +1527,10 @@
 
   </div>
 
-  <!-- Main JavaScript Engine for Video Dictation -->
+  <!-- Main JavaScript Engine for Video Dictation & Universal Drawing Tool -->
   <script type="module" src="./src/video_dictation.js"></script>
+  <script type="module" src="/src/particles.js"></script>
+  <script type="module" src="/src/screen_drawing.js"></script>
 
 </body>
 

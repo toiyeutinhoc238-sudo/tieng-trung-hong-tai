@@ -204,7 +204,7 @@ class ScreenDrawingTool {
         <button class="dt-btn dt-action-btn" id="dt-vis-btn" title="Ẩn/Hiện nét vẽ">
           <i class="fa-solid fa-eye"></i>
         </button>
-        <button class="dt-btn dt-action-btn" id="dt-save-btn" title="Tải ảnh ghi chú / bài giảng">
+        <button class="dt-btn dt-action-btn" id="dt-save-btn" title="Chụp & Cắt màn hình (Win + Shift + S / Shift + S)">
           <i class="fa-solid fa-camera"></i>
         </button>
       </div>
@@ -600,27 +600,258 @@ class ScreenDrawingTool {
     }
   }
 
-  async saveImage() {
-    try {
-      this.showToast('📸 Đang chụp màn hình bài giảng...');
+  // ==============================================================================
+  // ADVANCED SCREEN SNIPPING TOOL (100% Y hệt Windows + Shift + S & iOS Screenshot)
+  // ==============================================================================
 
-      // Save previous display styles to restore afterwards
+  playShutterSound() {
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+      const ctx = new AudioContext();
+      const now = ctx.currentTime;
+
+      // Tone 1 (Mechanical mirror flip)
+      const osc1 = ctx.createOscillator();
+      const gain1 = ctx.createGain();
+      osc1.type = 'triangle';
+      osc1.frequency.setValueAtTime(140, now);
+      osc1.frequency.exponentialRampToValueAtTime(35, now + 0.05);
+      gain1.gain.setValueAtTime(0.35, now);
+      gain1.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+      osc1.connect(gain1);
+      gain1.connect(ctx.destination);
+      osc1.start(now);
+      osc1.stop(now + 0.05);
+
+      // Tone 2 (High precision shutter click)
+      const osc2 = ctx.createOscillator();
+      const gain2 = ctx.createGain();
+      osc2.type = 'square';
+      osc2.frequency.setValueAtTime(750, now + 0.04);
+      osc2.frequency.exponentialRampToValueAtTime(120, now + 0.12);
+      gain2.gain.setValueAtTime(0.25, now + 0.04);
+      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+      osc2.connect(gain2);
+      gain2.connect(ctx.destination);
+      osc2.start(now + 0.04);
+      osc2.stop(now + 0.12);
+    } catch (e) {}
+  }
+
+  triggerShutterEffect() {
+    this.playShutterSound();
+
+    let flash = document.getElementById('screen-camera-flash');
+    if (!flash) {
+      flash = document.createElement('div');
+      flash.id = 'screen-camera-flash';
+      document.body.appendChild(flash);
+    }
+    flash.style.opacity = '0.9';
+    flash.style.display = 'block';
+
+    setTimeout(() => {
+      flash.style.opacity = '0';
+      setTimeout(() => {
+        if (flash && flash.parentNode) flash.parentNode.removeChild(flash);
+      }, 260);
+    }, 50);
+  }
+
+  saveImage() {
+    this.startSnipping();
+  }
+
+  startSnipping() {
+    // Remove any existing snipping overlay
+    this.cancelSnipping();
+
+    this.isSnipping = true;
+    const overlay = document.createElement('div');
+    overlay.id = 'screen-snipping-overlay';
+
+    overlay.innerHTML = `
+      <!-- Top Control Bar (Windows 11 Snipping Tool Style) -->
+      <div class="snipping-top-bar" id="snipping-top-bar">
+        <button class="snipping-mode-btn active" id="snip-mode-rect" title="Kéo thả chuột để cắt vùng tùy chọn">
+          <i class="fa-solid fa-crop-simple"></i> <span>Cắt Vùng Chữ Nhật</span>
+        </button>
+        <button class="snipping-mode-btn" id="snip-mode-fullscreen" title="Chụp toàn bộ màn hình ngay lập tức">
+          <i class="fa-solid fa-desktop"></i> <span>Toàn Màn Hình</span>
+        </button>
+        <button class="snipping-mode-btn" id="snip-mode-window" title="Chụp khung bài học / nội dung chính">
+          <i class="fa-solid fa-window-maximize"></i> <span>Khung Bài Học</span>
+        </button>
+        <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2); margin: 0 4px;"></div>
+        <button class="snipping-mode-btn" id="snip-mode-cancel" title="Hủy bỏ (Phím ESC)" style="color: #f87171;">
+          <i class="fa-solid fa-xmark"></i> <span>Hủy (ESC)</span>
+        </button>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    let snipMode = 'rect'; // 'rect' | 'fullscreen' | 'window'
+    let isSelecting = false;
+    let startX = 0;
+    let startY = 0;
+    let selectionBox = null;
+    let dimTag = null;
+
+    const btnRect = overlay.querySelector('#snip-mode-rect');
+    const btnFull = overlay.querySelector('#snip-mode-fullscreen');
+    const btnWin = overlay.querySelector('#snip-mode-window');
+    const btnCancel = overlay.querySelector('#snip-mode-cancel');
+
+    btnRect?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      snipMode = 'rect';
+      overlay.querySelectorAll('.snipping-mode-btn').forEach(b => b.classList.remove('active'));
+      btnRect.classList.add('active');
+    });
+
+    btnFull?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.cancelSnipping();
+      this.captureRegion(null);
+    });
+
+    btnWin?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.cancelSnipping();
+      const mainContent = document.querySelector('.hero-stage-card') || 
+                          document.querySelector('.dict-main-workspace-grid') || 
+                          document.querySelector('.dict-page-container') ||
+                          document.querySelector('.container') ||
+                          document.body;
+      const rect = mainContent.getBoundingClientRect();
+      this.captureRegion({
+        x: Math.max(0, rect.left),
+        y: Math.max(0, rect.top),
+        width: Math.min(window.innerWidth, rect.width),
+        height: Math.min(window.innerHeight, rect.height)
+      });
+    });
+
+    btnCancel?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.cancelSnipping();
+    });
+
+    // Pointer event dragging for rectangular selection
+    const handleStart = (e) => {
+      if (e.target.closest('#snipping-top-bar')) return;
+      e.preventDefault();
+      e.stopPropagation();
+
+      isSelecting = true;
+      startX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+      startY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+
+      if (!selectionBox) {
+        selectionBox = document.createElement('div');
+        selectionBox.id = 'snip-selection-box';
+        dimTag = document.createElement('div');
+        dimTag.id = 'snip-dim-tag';
+        selectionBox.appendChild(dimTag);
+        overlay.appendChild(selectionBox);
+      }
+
+      selectionBox.style.left = `${startX}px`;
+      selectionBox.style.top = `${startY}px`;
+      selectionBox.style.width = '0px';
+      selectionBox.style.height = '0px';
+      selectionBox.style.display = 'block';
+    };
+
+    const handleMove = (e) => {
+      if (!isSelecting || !selectionBox) return;
+      e.preventDefault();
+      e.stopPropagation();
+
+      const curX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : startX);
+      const curY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : startY);
+
+      const left = Math.min(startX, curX);
+      const top = Math.min(startY, curY);
+      const width = Math.abs(curX - startX);
+      const height = Math.abs(curY - startY);
+
+      selectionBox.style.left = `${left}px`;
+      selectionBox.style.top = `${top}px`;
+      selectionBox.style.width = `${width}px`;
+      selectionBox.style.height = `${height}px`;
+
+      if (dimTag) {
+        dimTag.textContent = `${Math.round(width)} × ${Math.round(height)} px`;
+      }
+    };
+
+    const handleEnd = (e) => {
+      if (!isSelecting) return;
+      isSelecting = false;
+
+      if (!selectionBox) {
+        this.cancelSnipping();
+        return;
+      }
+
+      const rect = selectionBox.getBoundingClientRect();
+      const width = rect.width;
+      const height = rect.height;
+      const left = rect.left;
+      const top = rect.top;
+
+      this.cancelSnipping();
+
+      if (width > 12 && height > 12) {
+        this.captureRegion({ x: left, y: top, width, height });
+      } else {
+        // Just clicked without dragging -> capture full screen
+        this.captureRegion(null);
+      }
+    };
+
+    overlay.addEventListener('mousedown', handleStart);
+    overlay.addEventListener('mousemove', handleMove);
+    overlay.addEventListener('mouseup', handleEnd);
+
+    overlay.addEventListener('touchstart', handleStart, { passive: false });
+    overlay.addEventListener('touchmove', handleMove, { passive: false });
+    overlay.addEventListener('touchend', handleEnd, { passive: false });
+  }
+
+  cancelSnipping() {
+    this.isSnipping = false;
+    const overlay = document.getElementById('screen-snipping-overlay');
+    if (overlay && overlay.parentNode) {
+      overlay.parentNode.removeChild(overlay);
+    }
+  }
+
+  async captureRegion(region = null) {
+    try {
+      // 1. Shutter camera flash + audio
+      this.triggerShutterEffect();
+
+      // 2. Hide all toolbars/canvas temporarily for clean shot
       const prevToolbarDisplay = this.toolbar ? this.toolbar.style.display : 'none';
       const prevBubbleDisplay = this.bubble ? this.bubble.style.display : 'none';
       const prevCanvasDisplay = this.canvas ? this.canvas.style.display : 'none';
       const eraserCursor = document.getElementById('screen-drawing-eraser-cursor');
       const prevCursorDisplay = eraserCursor ? eraserCursor.style.display : 'none';
 
-      // Temporarily hide UI overlays so screenshot is completely clean
       if (this.toolbar) this.toolbar.style.display = 'none';
       if (this.bubble) this.bubble.style.display = 'none';
       if (eraserCursor) eraserCursor.style.display = 'none';
       if (this.canvas) this.canvas.style.display = 'none';
 
-      // Small delay for DOM layout to settle before capture
+      // Wait a tick for paint
       await new Promise(r => setTimeout(r, 60));
 
       const targetEl = document.fullscreenElement || document.body;
+      const dpr = Math.min(window.devicePixelRatio || 1.5, 2);
 
       let pageCanvas = null;
       try {
@@ -628,7 +859,7 @@ class ScreenDrawingTool {
           useCORS: true,
           allowTaint: true,
           backgroundColor: null,
-          scale: Math.min(window.devicePixelRatio || 1.5, 2),
+          scale: dpr,
           logging: false,
           ignoreElements: (element) => {
             return (
@@ -636,17 +867,17 @@ class ScreenDrawingTool {
               element.id === 'screen-drawing-toolbar' ||
               element.id === 'screen-pen-floating-bubble' ||
               element.id === 'screen-drawing-eraser-cursor' ||
+              element.id === 'screen-snipping-overlay' ||
+              element.id === 'screen-camera-flash' ||
+              element.id === 'screen-snipping-preview-widget' ||
               element.id === 'screen-drawing-toast' ||
               element.id === 'lesson-toast' ||
-              element.id === 'toast' ||
-              element.classList?.contains('screen-drawing-canvas') ||
-              element.classList?.contains('screen-drawing-toolbar') ||
-              element.classList?.contains('screen-pen-floating-bubble')
+              element.id === 'toast'
             );
           }
         });
       } catch (domErr) {
-        console.warn('html2canvas capture fallback:', domErr);
+        console.warn('html2canvas capture error:', domErr);
       }
 
       // Restore UI elements immediately
@@ -655,35 +886,67 @@ class ScreenDrawingTool {
       if (eraserCursor) eraserCursor.style.display = prevCursorDisplay;
       if (this.canvas) this.canvas.style.display = prevCanvasDisplay;
 
-      // Composite page canvas and drawing canvas
-      const width = pageCanvas ? pageCanvas.width : (this.canvas ? this.canvas.width : window.innerWidth);
-      const height = pageCanvas ? pageCanvas.height : (this.canvas ? this.canvas.height : window.innerHeight);
+      // 3. Composite and Crop exact region
+      let finalCanvas = document.createElement('canvas');
+      const winW = window.innerWidth;
+      const winH = window.innerHeight;
 
-      const compositeCanvas = document.createElement('canvas');
-      compositeCanvas.width = width;
-      compositeCanvas.height = height;
-      const cCtx = compositeCanvas.getContext('2d');
+      if (region && region.width > 0 && region.height > 0) {
+        // Crop exact rectangular area
+        finalCanvas.width = region.width * dpr;
+        finalCanvas.height = region.height * dpr;
+        const fCtx = finalCanvas.getContext('2d');
 
-      if (pageCanvas) {
-        cCtx.drawImage(pageCanvas, 0, 0);
+        if (pageCanvas) {
+          // Draw sub-rectangle from pageCanvas
+          fCtx.drawImage(
+            pageCanvas,
+            region.x * dpr, region.y * dpr, region.width * dpr, region.height * dpr,
+            0, 0, finalCanvas.width, finalCanvas.height
+          );
+        } else {
+          fCtx.fillStyle = 'rgba(15, 23, 42, 0.95)';
+          fCtx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
+        }
+
+        // Overlay drawing strokes in that region
+        if (this.canvas && this.canvas.width > 0 && this.canvas.height > 0) {
+          fCtx.drawImage(
+            this.canvas,
+            region.x, region.y, region.width, region.height,
+            0, 0, finalCanvas.width, finalCanvas.height
+          );
+        }
       } else {
-        cCtx.fillStyle = 'rgba(15, 23, 42, 0.95)';
-        cCtx.fillRect(0, 0, width, height);
+        // Fullscreen capture
+        const width = pageCanvas ? pageCanvas.width : (this.canvas ? this.canvas.width : winW * dpr);
+        const height = pageCanvas ? pageCanvas.height : (this.canvas ? this.canvas.height : winH * dpr);
+        finalCanvas.width = width;
+        finalCanvas.height = height;
+        const fCtx = finalCanvas.getContext('2d');
+
+        if (pageCanvas) {
+          fCtx.drawImage(pageCanvas, 0, 0);
+        } else {
+          fCtx.fillStyle = 'rgba(15, 23, 42, 0.95)';
+          fCtx.fillRect(0, 0, width, height);
+        }
+
+        if (this.canvas && this.canvas.width > 0 && this.canvas.height > 0) {
+          fCtx.drawImage(this.canvas, 0, 0, width, height);
+        }
       }
 
-      // Overlay drawing strokes
-      if (this.canvas && this.canvas.width > 0 && this.canvas.height > 0) {
-        cCtx.drawImage(this.canvas, 0, 0, width, height);
-      }
-
-      // Convert composite canvas to PNG Blob
-      compositeCanvas.toBlob(async (blob) => {
+      // 4. Output to Blob -> Clipboard + Download + iOS/Windows Preview Widget
+      finalCanvas.toBlob(async (blob) => {
         if (!blob) {
-          this.showToast('Lỗi khi xuất ảnh màn hình!', true);
+          this.showToast('Lỗi khi xuất ảnh chụp màn hình!', true);
           return;
         }
 
-        // 1. Copy image directly to system clipboard (just like Win + Shift + S / PrintScreen)
+        const dataUrl = finalCanvas.toDataURL('image/png');
+
+        // Copy to system clipboard
         let clipboardCopied = false;
         try {
           if (navigator.clipboard && window.ClipboardItem) {
@@ -692,13 +955,13 @@ class ScreenDrawingTool {
             clipboardCopied = true;
           }
         } catch (clipErr) {
-          console.warn('Clipboard write permission denied or not supported:', clipErr);
+          console.warn('Clipboard write permission:', clipErr);
         }
 
-        // 2. Download high-res PNG file
+        // Auto download PNG file
         const now = new Date();
         const timeStr = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;
-        const filename = `tieng-trung-hong-tai-screenshot-${timeStr}.png`;
+        const filename = `tieng-trung-hong-tai-snip-${timeStr}.png`;
 
         const downloadUrl = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -709,18 +972,86 @@ class ScreenDrawingTool {
         document.body.removeChild(a);
         setTimeout(() => URL.revokeObjectURL(downloadUrl), 10000);
 
-        // 3. User feedback toast
-        if (clipboardCopied) {
-          this.showToast('📸 Đã chụp màn hình! Đã copy vào Clipboard (Ctrl + V để dán) & Tải file ảnh về máy 🎉');
-        } else {
-          this.showToast('📸 Đã chụp màn hình và Tải file ảnh về máy 🎉');
-        }
+        // Show floating iOS / Windows Snipping Preview Widget
+        this.showSnippingPreviewWidget(blob, dataUrl, filename, clipboardCopied);
+
       }, 'image/png');
 
-    } catch (e) {
-      console.error('Screenshot error:', e);
+    } catch (err) {
+      console.error('Capture region error:', err);
       this.showToast('Có lỗi xảy ra khi chụp màn hình!', true);
     }
+  }
+
+  showSnippingPreviewWidget(blob, dataUrl, filename, clipboardCopied) {
+    let widget = document.getElementById('screen-snipping-preview-widget');
+    if (widget && widget.parentNode) {
+      widget.parentNode.removeChild(widget);
+    }
+
+    widget = document.createElement('div');
+    widget.id = 'screen-snipping-preview-widget';
+    widget.innerHTML = `
+      <img src="${dataUrl}" class="snip-widget-thumb" alt="Ảnh chụp màn hình">
+      <div style="flex: 1; min-width: 0;">
+        <div class="snip-widget-title">
+          <i class="fa-solid fa-camera-retro" style="color: #38bdf8;"></i> Đã Chụp Màn Hình!
+        </div>
+        <div class="snip-widget-sub">
+          ${clipboardCopied ? 'Đã copy vào Clipboard (<strong>Ctrl + V</strong> để dán)' : 'Đã lưu file ảnh về máy của bạn'}
+        </div>
+        <div class="snip-widget-actions">
+          <button class="snip-widget-btn primary" id="snip-copy-again-btn" title="Sao chép ảnh vào Clipboard">
+            <i class="fa-solid fa-clipboard-check"></i> Copy lại
+          </button>
+          <button class="snip-widget-btn" id="snip-draw-btn" title="Mở bút vẽ ghi chú">
+            <i class="fa-solid fa-pen-nib"></i> Bút vẽ
+          </button>
+          <button class="snip-widget-btn" id="snip-close-widget-btn" title="Đóng" style="color: #94a3b8;">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(widget);
+
+    const btnCopy = widget.querySelector('#snip-copy-again-btn');
+    const btnDraw = widget.querySelector('#snip-draw-btn');
+    const btnClose = widget.querySelector('#snip-close-widget-btn');
+
+    btnCopy?.addEventListener('click', async () => {
+      try {
+        if (navigator.clipboard && window.ClipboardItem) {
+          const item = new ClipboardItem({ 'image/png': blob });
+          await navigator.clipboard.write([item]);
+          this.showToast('📋 Đã sao chép lại vào Clipboard! Nhấn Ctrl + V để dán');
+        }
+      } catch (e) {
+        this.showToast('Không thể sao chép vào Clipboard trên trình duyệt này', true);
+      }
+    });
+
+    btnDraw?.addEventListener('click', () => {
+      if (!this.isActive) this.toggle(true);
+      if (widget && widget.parentNode) widget.parentNode.removeChild(widget);
+    });
+
+    btnClose?.addEventListener('click', () => {
+      if (widget && widget.parentNode) widget.parentNode.removeChild(widget);
+    });
+
+    clearTimeout(this._widgetTimer);
+    this._widgetTimer = setTimeout(() => {
+      if (widget && widget.parentNode) {
+        widget.style.opacity = '0';
+        widget.style.transform = 'translateY(20px)';
+        widget.style.transition = 'all 0.3s ease';
+        setTimeout(() => {
+          if (widget && widget.parentNode) widget.parentNode.removeChild(widget);
+        }, 300);
+      }
+    }, 5500);
   }
 
   // Pointer drawing logic
@@ -884,6 +1215,20 @@ class ScreenDrawingTool {
       }
 
       const key = e.key.toLowerCase();
+
+      // Snipping Tool Shortcut (Win + Shift + S / Shift + S / PrintScreen / Ctrl + Shift + S)
+      if ((key === 's' && e.shiftKey) || e.key === 'PrintScreen') {
+        e.preventDefault();
+        this.startSnipping();
+        return;
+      }
+
+      // Cancel snipping tool if active on Esc
+      if (e.key === 'Escape' && this.isSnipping) {
+        e.preventDefault();
+        this.cancelSnipping();
+        return;
+      }
 
       if (key === 'd' && !e.ctrlKey && !e.metaKey) {
         e.preventDefault();

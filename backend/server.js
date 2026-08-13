@@ -1856,15 +1856,126 @@ app.post('/api/dictation/pinyin-helper', (req, res) => {
   }
 });
 
+// POST /api/dictation/fetch-subtitles — Lấy phụ đề và mốc thời gian giọng nói thực tế từ YouTube
+app.post('/api/dictation/fetch-subtitles', async (req, res) => {
+  const { youtubeId } = req.body || {};
+  if (!youtubeId) {
+    return res.status(400).json({ error: 'Missing youtubeId' });
+  }
+
+  try {
+    const videoUrl = `https://www.youtube.com/watch?v=${youtubeId}`;
+    const response = await fetch(videoUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8,vi;q=0.7'
+      }
+    });
+
+    if (!response.ok) {
+      return res.status(404).json({ error: 'Không thể kết nối tới video YouTube' });
+    }
+
+    const html = await response.text();
+    let playerResponse = null;
+
+    const match = html.match(/ytInitialPlayerResponse\s*=\s*({.+?});/);
+    if (match) {
+      try {
+        playerResponse = JSON.parse(match[1]);
+      } catch (e) {}
+    }
+
+    if (!playerResponse) {
+      const match2 = html.match(/"captions":\s*({.+?"captionTracks":\s*\[.+?\]})/);
+      if (match2) {
+        try {
+          const capObj = JSON.parse(match2[1]);
+          playerResponse = { captions: { playerCaptionsTracklistRenderer: capObj } };
+        } catch (e) {}
+      }
+    }
+
+    const captionTracks = playerResponse?.captions?.playerCaptionsTracklistRenderer?.captionTracks || [];
+    const videoTitle = playerResponse?.videoDetails?.title || '';
+
+    if (captionTracks.length === 0) {
+      return res.json({
+        success: false,
+        videoTitle,
+        message: 'Video này không có phụ đề tiếng Trung sẵn trên YouTube. Bạn có thể dán lời thoại và bấm nút Sinh Pinyin!',
+        sentences: []
+      });
+    }
+
+    // Prioritize Chinese track (zh, zh-Hans, zh-Hant, zh-CN, zh-TW), or first available
+    let targetTrack = captionTracks.find(t => t.languageCode && t.languageCode.toLowerCase().startsWith('zh')) || captionTracks[0];
+
+    const subUrl = targetTrack.baseUrl.includes('fmt=') ? targetTrack.baseUrl : targetTrack.baseUrl + '&fmt=json3';
+    const subRes = await fetch(subUrl);
+    let sentences = [];
+
+    if (subRes.ok) {
+      try {
+        const subData = await subRes.json();
+        const events = subData.events || [];
+        let curId = 1;
+        for (const ev of events) {
+          if (!ev.segs || ev.segs.length === 0) continue;
+          const text = ev.segs.map(s => s.utf8).join('').trim();
+          if (!text || text === '\n' || text.length === 0) continue;
+
+          const startTime = (ev.tStartMs || 0) / 1000;
+          const duration = (ev.dDurationMs || 3000) / 1000;
+          const endTime = startTime + duration;
+
+          let py = '';
+          try {
+            py = pinyin(text, { toneType: 'symbol' });
+          } catch (e) {}
+
+          sentences.push({
+            id: curId++,
+            startTime: parseFloat(startTime.toFixed(2)),
+            endTime: parseFloat(endTime.toFixed(2)),
+            hanzi: text,
+            pinyin: py,
+            meaning: 'Câu hội thoại trong video',
+            keywords: [text.slice(0, Math.min(2, text.length))]
+          });
+        }
+      } catch (jsonErr) {
+        console.warn("Sub JSON parse error:", jsonErr);
+      }
+    }
+
+    res.json({
+      success: true,
+      videoTitle,
+      trackName: targetTrack.name?.simpleText || targetTrack.languageCode,
+      sentences
+    });
+
+  } catch (err) {
+    console.error('Fetch subtitles error:', err);
+    res.status(500).json({ error: 'Lỗi khi trích xuất phụ đề YouTube' });
+  }
+});
+
 // POST /api/dictation/save-lesson — Lưu bài học video mới
 app.post('/api/dictation/save-lesson', async (req, res) => {
   try {
+    const email = getLoggedInUserEmail(req) || req.body.userEmail || 'guest';
     const newLesson = req.body;
     if (!newLesson || !newLesson.youtubeId || !newLesson.title) {
       return res.status(400).json({ error: 'Missing required lesson fields (youtubeId, title)' });
     }
+    newLesson.userEmail = email;
+    newLesson.isCustom = true;
+    newLesson.createdAt = newLesson.createdAt || new Date().toISOString();
+
     const lessons = await readDictationLessons();
-    const existingIndex = lessons.findIndex(l => l.id === newLesson.id || l.youtubeId === newLesson.youtubeId);
+    const existingIndex = lessons.findIndex(l => l.id === newLesson.id || (l.youtubeId === newLesson.youtubeId && l.userEmail === email));
     if (existingIndex >= 0) {
       lessons[existingIndex] = { ...lessons[existingIndex], ...newLesson };
     } else {
@@ -1878,6 +1989,24 @@ app.post('/api/dictation/save-lesson', async (req, res) => {
   } catch (err) {
     console.error("Error saving dictation lesson:", err);
     res.status(500).json({ error: 'Failed to save lesson' });
+  }
+});
+
+// DELETE /api/dictation/lessons/:id — Xóa bài học video tự thêm
+app.delete('/api/dictation/lessons/:id', async (req, res) => {
+  try {
+    const lessonId = req.params.id;
+    let lessons = await readDictationLessons();
+    const lesson = lessons.find(l => l.id === lessonId);
+    if (!lesson) {
+      return res.status(404).json({ error: 'Lesson not found' });
+    }
+    lessons = lessons.filter(l => l.id !== lessonId);
+    await fs.writeFile(DICTATION_DB_PATH, JSON.stringify(lessons, null, 2), 'utf-8');
+    res.json({ success: true, message: 'Lesson deleted successfully' });
+  } catch (err) {
+    console.error("Error deleting dictation lesson:", err);
+    res.status(500).json({ error: 'Failed to delete lesson' });
   }
 });
 

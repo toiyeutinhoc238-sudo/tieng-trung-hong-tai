@@ -620,6 +620,14 @@ function startPlaybackWatcher() {
       const curSent = currentLesson.sentences[currentSentenceIdx];
       if (!curSent) return;
 
+      // Update timing display in adjuster
+      const posEl = document.getElementById('timing-adjuster-current-pos');
+      if (posEl) {
+        const curMin = Math.floor(curTime / 60);
+        const curSec = (curTime % 60).toFixed(2);
+        posEl.textContent = `Giây video: ${String(curMin).padStart(2, '0')}:${String(curSec).padStart(5, '0')} (${curTime.toFixed(2)}s)`;
+      }
+
       // Update video progress meter or highlight
       updateSubtitleHighlight(curTime);
 
@@ -764,8 +772,9 @@ function renderCurrentSentence() {
     renderFullInput(sent);
   }
 
-  // Highlight Navigator List
+  // Highlight Navigator List & Update Timing Editor
   renderSentenceNavigator();
+  updateTimingDisplay();
   focusActiveInput();
 }
 
@@ -1199,6 +1208,472 @@ function showLessonCompletedModal() {
 }
 
 // ==========================================
+// USER AUTH & CUSTOM VIDEOS MANAGEMENT
+// ==========================================
+
+let currentUser = null;
+
+function initCurrentUser() {
+  try {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      currentUser = JSON.parse(userStr);
+    }
+  } catch (e) {
+    currentUser = null;
+  }
+  updateUserHeaderDisplay();
+}
+
+function getCurrentUserEmail() {
+  return currentUser?.email || 'guest';
+}
+
+function updateUserHeaderDisplay() {
+  const nameEl = document.getElementById('dict-user-name-display');
+  const badgeEl = document.getElementById('dict-user-profile-badge');
+  if (currentUser && currentUser.email) {
+    if (nameEl) nameEl.textContent = currentUser.name || currentUser.email.split('@')[0];
+    if (badgeEl) {
+      badgeEl.title = `Đang đăng nhập: ${currentUser.email}`;
+      badgeEl.style.borderColor = 'rgba(56, 189, 248, 0.5)';
+      badgeEl.style.background = 'rgba(56, 189, 248, 0.12)';
+      badgeEl.style.color = '#38bdf8';
+    }
+  } else {
+    if (nameEl) nameEl.textContent = 'Khách (Lưu trên máy này)';
+  }
+}
+
+function getLocalCustomVideos() {
+  const email = getCurrentUserEmail();
+  try {
+    const saved = localStorage.getItem(`custom_video_dictation_${email}`);
+    if (saved) {
+      const list = JSON.parse(saved);
+      if (Array.isArray(list)) return list;
+    }
+  } catch (e) {}
+  return [];
+}
+
+function saveLocalCustomVideos(videos) {
+  const email = getCurrentUserEmail();
+  try {
+    localStorage.setItem(`custom_video_dictation_${email}`, JSON.stringify(videos));
+  } catch (e) {}
+}
+
+function updateMyVideosBadge() {
+  const email = getCurrentUserEmail();
+  const count = allLessons.filter(l => l.isCustom === true || (l.userEmail && (l.userEmail === email || l.userEmail === 'guest'))).length;
+  const countEl = document.getElementById('my-videos-count');
+  if (countEl) countEl.textContent = count;
+}
+
+function extractYouTubeId(url) {
+  if (!url) return '';
+  const trimmed = url.trim();
+  if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) return trimmed;
+  const regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=|shorts\/|live\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+  const match = trimmed.match(regExp);
+  return match ? match[1] : '';
+}
+
+// Live YouTube input preview
+window.handleYouTubeUrlInput = function(val) {
+  const ytId = extractYouTubeId(val);
+  const previewBox = document.getElementById('custom-video-preview-box');
+  const previewImg = document.getElementById('custom-video-preview-img');
+  const previewId = document.getElementById('custom-video-preview-id');
+  const titleInput = document.getElementById('custom-video-title');
+
+  if (ytId) {
+    if (previewBox) previewBox.style.display = 'flex';
+    if (previewImg) previewImg.src = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+    if (previewId) previewId.textContent = `YouTube Video ID: ${ytId}`;
+    if (titleInput && !titleInput.value) {
+      titleInput.value = `Bài Luyện Nghe YouTube (${ytId})`;
+    }
+  } else {
+    if (previewBox) previewBox.style.display = 'none';
+  }
+};
+
+// Subtitle & YouTube Fetcher Tools
+window.fetchYouTubeSubtitles = async function() {
+  const urlInput = document.getElementById('custom-video-url')?.value.trim();
+  const ytId = extractYouTubeId(urlInput);
+
+  if (!ytId) {
+    showToast("Vui lòng dán link YouTube hợp lệ vào ô ở trên trước!", true);
+    document.getElementById('custom-video-url')?.focus();
+    return;
+  }
+
+  const btn = document.getElementById('btn-fetch-yt-subs');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang trích xuất giọng nói YouTube...';
+  }
+
+  showToast("🔍 Đang kết nối và trích xuất mốc câu giọng nói từ YouTube...");
+
+  try {
+    const res = await fetch('/api/dictation/fetch-subtitles', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ youtubeId: ytId })
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      if (data.success && Array.isArray(data.sentences) && data.sentences.length > 0) {
+        const titleInput = document.getElementById('custom-video-title');
+        if (titleInput && (!titleInput.value || titleInput.value.startsWith('Bài Luyện Nghe YouTube'))) {
+          titleInput.value = data.videoTitle || titleInput.value;
+        }
+
+        const lines = data.sentences.map(s => {
+          const sMin = Math.floor(s.startTime / 60);
+          const sSec = (s.startTime % 60).toFixed(2);
+          const eMin = Math.floor(s.endTime / 60);
+          const eSec = (s.endTime % 60).toFixed(2);
+          const sFormatted = `${String(sMin).padStart(2, '0')}:${String(sSec).padStart(5, '0')}`;
+          const eFormatted = `${String(eMin).padStart(2, '0')}:${String(eSec).padStart(5, '0')}`;
+          return `[${sFormatted} - ${eFormatted}] ${s.hanzi} | ${s.pinyin} | ${s.meaning || 'Câu hội thoại trong video'}`;
+        });
+
+        const textarea = document.getElementById('custom-video-subtitles');
+        if (textarea) {
+          textarea.value = lines.join('\n');
+        }
+
+        showToast(`✨ Đã nạp thành công ${data.sentences.length} câu thoại khớp chính xác giọng nói video! 🎉`);
+      } else {
+        showToast(data.message || "Video không có phụ đề sẵn, vui lòng dán lời thoại chữ Hán!", true);
+      }
+    } else {
+      showToast("Không thể kết nối lấy phụ đề YouTube tự động.", true);
+    }
+  } catch (err) {
+    console.error("Fetch subtitles error:", err);
+    showToast("Lỗi kết nối khi trích xuất phụ đề YouTube.", true);
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-brands fa-youtube"></i> Lấy Phụ Đề & Mốc Giọng Nói YouTube';
+    }
+  }
+};
+
+window.fillSampleSubtitles = function() {
+  const textarea = document.getElementById('custom-video-subtitles');
+  if (!textarea) return;
+  textarea.value = `[00:10 - 00:17] 你好！很高兴认识你。 | Nǐ hǎo! Hěn gāoxìng rènshi nǐ. | Xin chào! Rất vui được làm quen với bạn.
+[00:18 - 00:26] 你喜欢听中文歌吗？ | Nǐ xǐhuan tīng zhōngwén gē ma? | Bạn có thích nghe nhạc tiếng Trung không?
+[00:27 - 00:35] 我非常喜欢，每天都在练习听力。 | Wǒ fēicháng xǐhuan, měitiān dōu zài liànxí tīnglì. | Mình rất thích, mỗi ngày đều luyện nghe.`;
+  showToast("Đã chèn mẫu câu ví dụ! 📝");
+};
+
+window.clearSubtitlesInput = function() {
+  const textarea = document.getElementById('custom-video-subtitles');
+  if (textarea) {
+    textarea.value = '';
+    textarea.focus();
+  }
+};
+
+window.autoGenerateSubtitlesPinyin = async function() {
+  const textarea = document.getElementById('custom-video-subtitles');
+  if (!textarea || !textarea.value.trim()) {
+    showToast("Vui lòng nhập lời câu thoại chữ Hán trước!", true);
+    return;
+  }
+
+  showToast("Đang tự động sinh Pinyin chuẩn...");
+  const lines = textarea.value.split('\n');
+  const processedLines = [];
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) {
+      processedLines.push('');
+      continue;
+    }
+
+    const parts = trimmed.split('|').map(p => p.trim());
+    if (parts.length >= 2 && parts[1]) {
+      processedLines.push(trimmed);
+      continue;
+    }
+
+    let timePrefix = '';
+    let hanziText = parts[0] || '';
+    const timeMatch = hanziText.match(/^(\[[0-9:\s.-]+\]|[0-9:]+)\s*(.*)$/);
+    if (timeMatch) {
+      timePrefix = timeMatch[1] + ' ';
+      hanziText = timeMatch[2];
+    }
+
+    try {
+      const res = await fetch('/api/dictation/pinyin-helper', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: hanziText })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const generatedPinyin = data.pinyin || '';
+        const meaning = parts[2] || parts[1] || 'Câu luyện chép tiếng Trung';
+        processedLines.push(`${timePrefix}${hanziText} | ${generatedPinyin} | ${meaning}`);
+      } else {
+        processedLines.push(trimmed);
+      }
+    } catch (e) {
+      processedLines.push(trimmed);
+    }
+  }
+
+  textarea.value = processedLines.join('\n');
+  showToast("Đã sinh Pinyin tự động thành công! ✨");
+};
+
+// ==========================================
+// INTERACTIVE SENTENCE TIMING ADJUSTMENT
+// ==========================================
+
+window.nudgeTiming = function(type, delta) {
+  if (!currentLesson || !currentLesson.sentences[currentSentenceIdx]) return;
+  const sent = currentLesson.sentences[currentSentenceIdx];
+
+  if (type === 'start') {
+    sent.startTime = Math.max(0, parseFloat((sent.startTime + delta).toFixed(2)));
+    if (sent.startTime >= sent.endTime) sent.endTime = parseFloat((sent.startTime + 1.0).toFixed(2));
+  } else if (type === 'end') {
+    sent.endTime = Math.max(sent.startTime + 0.5, parseFloat((sent.endTime + delta).toFixed(2)));
+  }
+
+  updateTimingDisplay();
+  showToast(`Mốc ${type === 'start' ? 'bắt đầu' : 'kết thúc'}: ${type === 'start' ? sent.startTime : sent.endTime}s`);
+};
+
+window.setTimingFromCurrent = function(type) {
+  if (!ytPlayer || !ytPlayer.getCurrentTime || !currentLesson || !currentLesson.sentences[currentSentenceIdx]) return;
+  const curTime = parseFloat(ytPlayer.getCurrentTime().toFixed(2));
+  const sent = currentLesson.sentences[currentSentenceIdx];
+
+  if (type === 'start') {
+    sent.startTime = curTime;
+    if (sent.startTime >= sent.endTime) sent.endTime = parseFloat((sent.startTime + 2.0).toFixed(2));
+  } else if (type === 'end') {
+    sent.endTime = Math.max(sent.startTime + 0.5, curTime);
+  }
+
+  updateTimingDisplay();
+  showToast(`📍 Đã gán mốc ${type === 'start' ? 'Bắt Đầu' : 'Kết Thúc'} tại ${curTime}s`);
+};
+
+function updateTimingDisplay() {
+  if (!currentLesson || !currentLesson.sentences[currentSentenceIdx]) return;
+  const sent = currentLesson.sentences[currentSentenceIdx];
+
+  const startEl = document.getElementById('timing-start-val');
+  const endEl = document.getElementById('timing-end-val');
+  if (startEl) startEl.textContent = `${sent.startTime.toFixed(2)}s`;
+  if (endEl) endEl.textContent = `${sent.endTime.toFixed(2)}s`;
+}
+
+window.saveAdjustedTiming = function() {
+  if (!currentLesson) return;
+  const email = getCurrentUserEmail();
+
+  // Save to local storage
+  const localList = getLocalCustomVideos();
+  const idx = localList.findIndex(l => l.id === currentLesson.id);
+  if (idx >= 0) {
+    localList[idx] = currentLesson;
+    saveLocalCustomVideos(localList);
+  }
+
+  // Sync to server
+  fetch('/api/dictation/save-lesson', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(currentLesson)
+  }).catch(err => console.warn("Save timing error:", err));
+
+  renderSentenceNavigator();
+  showToast("💾 Đã lưu mốc thời gian câu thoại thành công! 100% Khớp giọng nói");
+};
+
+// ==========================================
+// HUMAN SPEECH RECOGNITION & SHADOWING
+// ==========================================
+
+function calculateSimilarity(str1, str2) {
+  const s1 = cleanStr(str1);
+  const s2 = cleanStr(str2);
+  if (!s1 || !s2) return 0;
+  if (s1 === s2) return 1.0;
+
+  const m = s1.length;
+  const n = s2.length;
+  const dp = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
+
+  for (let i = 0; i <= m; i++) dp[i][0] = i;
+  for (let j = 0; j <= n; j++) dp[0][j] = j;
+
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      if (s1[i - 1] === s2[j - 1]) {
+        dp[i][j] = dp[i - 1][j - 1];
+      } else {
+        dp[i][j] = 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]);
+      }
+    }
+  }
+
+  const distance = dp[m][n];
+  const maxLen = Math.max(m, n);
+  return Math.max(0, 1 - distance / maxLen);
+}
+
+let activeRecognition = null;
+
+window.startSpeechRecognition = function() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    showToast("Trình duyệt này chưa hỗ trợ nhận diện giọng nói Web Speech API (Vui lòng dùng Google Chrome / Edge)", true);
+    return;
+  }
+
+  const micBtn = document.getElementById('dict-mic-btn');
+  const sent = currentLesson?.sentences[currentSentenceIdx];
+  if (!sent) return;
+
+  if (activeRecognition) {
+    try { activeRecognition.stop(); } catch (e) {}
+    activeRecognition = null;
+    if (micBtn) {
+      micBtn.style.background = '';
+      micBtn.innerHTML = '<i class="fa-solid fa-microphone" style="color: #ec4899;"></i> <span>Luyện Nói</span>';
+    }
+    showToast("Đã tắt micro nhận diện");
+    return;
+  }
+
+  try {
+    const rec = new SpeechRecognition();
+    rec.lang = 'zh-CN';
+    rec.continuous = false;
+    rec.interimResults = true;
+    rec.maxAlternatives = 3;
+
+    if (micBtn) {
+      micBtn.style.background = 'rgba(236, 72, 153, 0.25)';
+      micBtn.innerHTML = '<i class="fa-solid fa-microphone-lines fa-beat" style="color: #f43f5e;"></i> <span>Đang Lắng Nghe...</span>';
+    }
+
+    showToast("🎙️ Hãy nói to câu tiếng Trung vào micro...");
+
+    rec.onresult = (event) => {
+      let spokenText = '';
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        spokenText += event.results[i][0].transcript;
+      }
+
+      if (event.results[0].isFinal) {
+        const similarity = calculateSimilarity(spokenText, sent.hanzi);
+        const percent = Math.round(similarity * 100);
+
+        const feedbackEl = document.getElementById('dict-action-feedback');
+        if (feedbackEl) {
+          feedbackEl.style.display = 'block';
+          if (percent >= 70) {
+            feedbackEl.className = 'dict-feedback-badge success';
+            feedbackEl.innerHTML = `🎯 Giọng bạn nói: <strong>"${spokenText}"</strong> — Độ chuẩn xác: <strong style="color: #34d399;">${percent}% (Rất Tốt!)</strong> 🎉`;
+            totalScore += 10;
+            currentStreak += 1;
+            userAnswers[sent.id] = { isCorrect: true, score: 10, userAnswer: spokenText };
+            document.getElementById('dict-score-counter').textContent = `${totalScore} điểm`;
+            document.getElementById('dict-streak-counter').textContent = `${currentStreak} 🔥`;
+            showToast(`🎉 Phát âm chuẩn ${percent}%! +10 Điểm`);
+          } else {
+            feedbackEl.className = 'dict-feedback-badge warning';
+            feedbackEl.innerHTML = `🎙️ Giọng bạn nói: <strong>"${spokenText}"</strong> — Độ chuẩn xác: <strong style="color: #fbbf24;">${percent}%</strong> (Mục tiêu: "${sent.hanzi}")`;
+            showToast(`Độ chuẩn xác ${percent}%, hãy nghe lại mẫu và thử nói lại nhé!`);
+          }
+        }
+      }
+    };
+
+    rec.onerror = (event) => {
+      console.warn("Speech error:", event.error);
+      if (micBtn) {
+        micBtn.style.background = '';
+        micBtn.innerHTML = '<i class="fa-solid fa-microphone" style="color: #ec4899;"></i> <span>Luyện Nói</span>';
+      }
+      activeRecognition = null;
+      if (event.error === 'not-allowed') {
+        showToast("Vui lòng cấp quyền Micro trên trình duyệt để luyện nói!", true);
+      }
+    };
+
+    rec.onend = () => {
+      if (micBtn) {
+        micBtn.style.background = '';
+        micBtn.innerHTML = '<i class="fa-solid fa-microphone" style="color: #ec4899;"></i> <span>Luyện Nói</span>';
+      }
+      activeRecognition = null;
+    };
+
+    activeRecognition = rec;
+    rec.start();
+  } catch (err) {
+    console.error("Speech Recognition start error:", err);
+    showToast("Không thể khởi động micro nhận diện giọng nói", true);
+  }
+};
+
+// Delete Custom Video
+window.deleteCustomVideo = async function(lessonId) {
+  const lesson = allLessons.find(l => l.id === lessonId);
+  const title = lesson ? lesson.title : 'video này';
+  if (!confirm(`Bạn có chắc chắn muốn xóa "${title}" khỏi danh sách video của bạn không?`)) {
+    return;
+  }
+
+  const email = getCurrentUserEmail();
+
+  // 1. Remove from allLessons
+  allLessons = allLessons.filter(l => l.id !== lessonId);
+  
+  // 2. Remove from localStorage
+  const localList = getLocalCustomVideos().filter(l => l.id !== lessonId);
+  saveLocalCustomVideos(localList);
+
+  // 3. Delete from backend
+  try {
+    await fetch(`/api/dictation/lessons/${lessonId}?userEmail=${encodeURIComponent(email)}`, {
+      method: 'DELETE'
+    });
+  } catch (e) {
+    console.warn("Delete server error:", e);
+  }
+
+  // 4. Update UI
+  updateMyVideosBadge();
+  const activeCatBtn = document.querySelector('.cat-pill-btn.active');
+  const cat = activeCatBtn?.dataset.cat || 'all';
+  const lvl = activeCatBtn?.dataset.level || 'all';
+  const searchVal = document.getElementById('dict-search-input')?.value.trim() || '';
+  filterLessons(cat, lvl, searchVal);
+
+  showToast("Đã xóa video khỏi danh sách của bạn! 🗑️");
+};
+
+// ==========================================
 // CATALOG & LESSON SELECTION
 // ==========================================
 
@@ -1207,18 +1682,39 @@ function renderCatalogGrid() {
   if (!grid) return;
 
   grid.innerHTML = '';
+  const email = getCurrentUserEmail();
+  const activeCatBtn = document.querySelector('.cat-pill-btn.active');
+  const isMyVideosTab = activeCatBtn?.dataset.cat === 'my_videos';
+
   if (filteredLessons.length === 0) {
-    grid.innerHTML = `
-      <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-muted);">
-        <i class="fa-solid fa-video-slash" style="font-size: 3rem; margin-bottom: 16px; opacity: 0.5;"></i>
-        <h3>Không tìm thấy video nào phù hợp</h3>
-        <p>Vui lòng thử chọn danh mục khác hoặc dán link YouTube để tạo bài mới!</p>
-      </div>
-    `;
+    if (isMyVideosTab) {
+      grid.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-muted); background: rgba(255,255,255,0.03); border: 1.5px dashed rgba(245, 158, 11, 0.4); border-radius: 20px;">
+          <i class="fa-brands fa-youtube" style="font-size: 3.5rem; color: #ef4444; margin-bottom: 16px; opacity: 0.85;"></i>
+          <h3 style="color: var(--text-primary); font-size: 1.3rem; margin-bottom: 8px;">Bạn chưa có video cá nhân nào</h3>
+          <p style="max-width: 500px; margin: 0 auto 20px; font-size: 0.92rem; color: var(--text-secondary);">
+            Dán bất kỳ link video YouTube yêu thích nào (MV, phim hoạt hình, hội thoại...) để tạo bài luyện nghe chép chính tả cá nhân hóa!
+          </p>
+          <button class="btn btn-primary" onclick="window.openAddVideoModal()" style="background: linear-gradient(135deg, #ef4444, #f97316); border: none; font-weight: 800; padding: 12px 28px; border-radius: 50px; box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);">
+            <i class="fa-solid fa-plus"></i> Thêm Video YouTube Ngay
+          </button>
+        </div>
+      `;
+    } else {
+      grid.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-muted);">
+          <i class="fa-solid fa-video-slash" style="font-size: 3rem; margin-bottom: 16px; opacity: 0.5;"></i>
+          <h3>Không tìm thấy video nào phù hợp</h3>
+          <p>Vui lòng thử chọn danh mục khác hoặc bấm nút [Thêm Video YouTube] ở trên để tạo bài mới!</p>
+        </div>
+      `;
+    }
     return;
   }
 
   filteredLessons.forEach(lesson => {
+    const isUserVideo = lesson.isCustom === true || (lesson.userEmail && (lesson.userEmail === email || lesson.userEmail === 'guest'));
+
     const card = document.createElement('div');
     card.className = 'dict-lesson-card glass-panel';
     card.innerHTML = `
@@ -1231,9 +1727,19 @@ function renderCatalogGrid() {
         </button>
       </div>
       <div class="dict-card-body">
-        <span class="dict-card-cat-badge"><i class="fa-solid fa-tag"></i> ${lesson.category || 'Tổng Hợp'}</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          ${isUserVideo 
+            ? `<span class="dict-card-cat-badge dict-my-badge"><i class="fa-solid fa-user-check"></i> Video Của Tôi</span>` 
+            : `<span class="dict-card-cat-badge"><i class="fa-solid fa-tag"></i> ${lesson.category || 'Tổng Hợp'}</span>`
+          }
+          ${isUserVideo ? `
+            <button class="btn-delete-custom-video" onclick="event.stopPropagation(); window.deleteCustomVideo('${lesson.id}')" title="Xóa video khỏi danh sách của bạn">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          ` : ''}
+        </div>
         <h3 class="dict-card-title">${lesson.title}</h3>
-        <p class="dict-card-desc">${lesson.description || ''}</p>
+        <p class="dict-card-desc">${lesson.description || 'Bài luyện nghe chép chính tả qua video YouTube.'}</p>
         <div class="dict-card-footer">
           <span class="dict-card-sentences-count"><i class="fa-solid fa-list-ol"></i> ${lesson.sentences?.length || 0} câu thoại</span>
           <button class="btn btn-primary btn-sm btn-start-study">
@@ -1252,8 +1758,17 @@ function renderCatalogGrid() {
 }
 
 function filterLessons(category = 'all', level = 'all', keyword = '') {
+  const email = getCurrentUserEmail();
   filteredLessons = allLessons.filter(l => {
-    const matchCat = (category === 'all') || (l.category === category);
+    let matchCat = false;
+    if (category === 'all') {
+      matchCat = true;
+    } else if (category === 'my_videos') {
+      matchCat = l.isCustom === true || (l.userEmail && (l.userEmail === email || l.userEmail === 'guest'));
+    } else {
+      matchCat = l.category === category;
+    }
+
     const matchLvl = (level === 'all') || (String(l.level) === String(level));
     const matchKey = !keyword || l.title.toLowerCase().includes(keyword.toLowerCase()) || (l.description && l.description.toLowerCase().includes(keyword.toLowerCase()));
     return matchCat && matchLvl && matchKey;
@@ -1319,6 +1834,20 @@ function closeAddVideoModal() {
   if (modal) modal.style.display = 'none';
 }
 
+function parseTimeToSeconds(timeStr) {
+  if (!timeStr) return null;
+  const parts = timeStr.trim().split(':').map(Number);
+  if (parts.some(isNaN)) return null;
+  if (parts.length === 2) {
+    return parts[0] * 60 + parts[1];
+  } else if (parts.length === 3) {
+    return parts[0] * 3600 + parts[1] * 60 + parts[2];
+  } else if (parts.length === 1) {
+    return parts[0];
+  }
+  return null;
+}
+
 async function handleSaveCustomVideo(e) {
   e.preventDefault();
   const urlInput = document.getElementById('custom-video-url').value.trim();
@@ -1328,13 +1857,8 @@ async function handleSaveCustomVideo(e) {
   const rawSubtitles = document.getElementById('custom-video-subtitles').value.trim();
 
   // Extract YouTube ID
-  let ytId = '';
-  const match = urlInput.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
-  if (match && match[1]) {
-    ytId = match[1];
-  } else if (urlInput.length === 11) {
-    ytId = urlInput;
-  } else {
+  const ytId = extractYouTubeId(urlInput);
+  if (!ytId) {
     showToast("Link YouTube không hợp lệ! Vui lòng kiểm tra lại.", true);
     return;
   }
@@ -1343,29 +1867,73 @@ async function handleSaveCustomVideo(e) {
   if (rawSubtitles) {
     const lines = rawSubtitles.split('\n').map(l => l.trim()).filter(Boolean);
     let curTime = 2.0;
-    lines.forEach((line, idx) => {
-      // Format expected: "Hanzi | Pinyin | Meaning" or simply "Hanzi"
-      const parts = line.split('|').map(p => p.trim());
+
+    for (let idx = 0; idx < lines.length; idx++) {
+      const line = lines[idx];
+      let startTime = curTime;
+      let endTime = curTime + 4.0;
+      let textLine = line;
+
+      // Check for timestamp bracket format: [00:12 - 00:18] or 0:15
+      const bracketMatch = line.match(/^\[\s*([\d:.]+)\s*(?:-|–|to)\s*([\d:.]+)\s*\]\s*(.*)$/i);
+      if (bracketMatch) {
+        const sTime = parseTimeToSeconds(bracketMatch[1]);
+        const eTime = parseTimeToSeconds(bracketMatch[2]);
+        if (sTime !== null) startTime = sTime;
+        if (eTime !== null && eTime > startTime) endTime = eTime;
+        textLine = bracketMatch[3].trim();
+      }
+
+      const parts = textLine.split('|').map(p => p.trim());
       const hanzi = parts[0] || '';
-      const pinyin = parts[1] || '';
-      const meaning = parts[2] || 'Câu hội thoại tiếng Trung';
-      const duration = Math.max(3, hanzi.length * 0.6);
+      let pinyin = parts[1] || '';
+      let meaning = parts[2] || (parts.length === 2 && !/[a-zA-Zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]/.test(parts[1]) ? parts[1] : 'Câu luyện chép tiếng Trung');
+
+      if (!pinyin && hanzi) {
+        try {
+          const res = await fetch('/api/dictation/pinyin-helper', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: hanzi })
+          });
+          if (res.ok) {
+            const d = await res.json();
+            pinyin = d.pinyin || '';
+          }
+        } catch (err) {}
+      }
+
+      const duration = Math.max(3, Math.min(10, hanzi.length * 0.55));
+      if (!bracketMatch) {
+        endTime = parseFloat((startTime + duration).toFixed(1));
+        curTime = endTime + 0.6;
+      }
+
+      const cleanHanzi = hanzi.replace(/[^\u4e00-\u9fa5]/g, '');
+      const keywords = [];
+      if (cleanHanzi.length >= 2) {
+        keywords.push(cleanHanzi.slice(0, Math.min(2, cleanHanzi.length)));
+        if (cleanHanzi.length >= 4) {
+          keywords.push(cleanHanzi.slice(2, 4));
+        }
+      } else if (cleanHanzi.length === 1) {
+        keywords.push(cleanHanzi);
+      }
 
       sentences.push({
         id: idx + 1,
-        startTime: parseFloat(curTime.toFixed(1)),
-        endTime: parseFloat((curTime + duration).toFixed(1)),
+        startTime: parseFloat(startTime.toFixed(1)),
+        endTime: parseFloat(endTime.toFixed(1)),
         hanzi: hanzi,
         pinyin: pinyin,
         meaning: meaning,
-        keywords: [hanzi.slice(0, Math.min(2, hanzi.length))]
+        keywords: keywords.length > 0 ? keywords : [hanzi.slice(0, 1)],
+        blankIndices: [0]
       });
-      curTime += duration + 0.5;
-    });
+    }
   }
 
   if (sentences.length === 0) {
-    // Default 1 sentence placeholder
     sentences.push({
       id: 1,
       startTime: 0,
@@ -1373,36 +1941,59 @@ async function handleSaveCustomVideo(e) {
       hanzi: "你好，欢迎学习中文！",
       pinyin: "Nǐ hǎo, huānyíng xuéxí zhōngwén!",
       meaning: "Xin chào, chào mừng bạn học tiếng Trung!",
-      keywords: ["你好", "中文"]
+      keywords: ["你好", "中文"],
+      blankIndices: [0]
     });
   }
 
+  const email = getCurrentUserEmail();
   const newLesson = {
     id: `dict_custom_${Date.now()}`,
-    title: titleInput || 'Bài Luyện Nghe Video Mới',
+    title: titleInput || `Video Luyện Chép (${ytId})`,
     youtubeId: ytId,
-    duration: '03:00',
+    duration: '03:30',
     level: levelInput,
     levelText: `HSK ${levelInput}`,
     category: catInput,
     thumbnail: `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`,
-    description: 'Bài luyện nghe chép chính tả tự thêm.',
+    description: `Video cá nhân được thêm bởi ${currentUser?.name || email}.`,
+    isCustom: true,
+    userEmail: email,
+    createdAt: new Date().toISOString(),
     sentences: sentences
   };
 
-  // Save to local state & server
+  // 1. Add to allLessons
   allLessons.unshift(newLesson);
-  filteredLessons = [...allLessons];
-  renderCatalogGrid();
-  closeAddVideoModal();
-  showToast("Thêm bài học YouTube thành công! 🎉");
 
-  // Sync with Backend
+  // 2. Save to local storage
+  const localList = getLocalCustomVideos();
+  localList.unshift(newLesson);
+  saveLocalCustomVideos(localList);
+
+  // 3. Sync to server
   fetch('/api/dictation/save-lesson', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(newLesson)
-  }).catch(err => console.warn("Sync new lesson to server:", err));
+  }).catch(err => console.warn("Sync new lesson error:", err));
+
+  // 4. Update UI
+  updateMyVideosBadge();
+  closeAddVideoModal();
+
+  // Reset form
+  document.getElementById('custom-video-form').reset();
+  const previewBox = document.getElementById('custom-video-preview-box');
+  if (previewBox) previewBox.style.display = 'none';
+
+  // Automatically switch to "Video Của Tôi" tab
+  document.querySelectorAll('.cat-pill-btn').forEach(b => b.classList.remove('active'));
+  const myPill = document.getElementById('my-videos-pill');
+  if (myPill) myPill.classList.add('active');
+
+  filterLessons('my_videos', 'all');
+  showToast("🎉 Đã thêm video vào danh sách của bạn thành công!");
 }
 
 // ==========================================
@@ -1410,25 +2001,40 @@ async function handleSaveCustomVideo(e) {
 // ==========================================
 
 async function initVideoDictationPage() {
+  initCurrentUser();
   initYouTubeAPI();
 
   // Fetch Lessons from Backend API
+  let serverLessons = [];
   try {
     const res = await fetch('/api/dictation/lessons');
     if (res.ok) {
       const data = await res.json();
       if (Array.isArray(data) && data.length > 0) {
-        allLessons = data;
+        serverLessons = data;
       } else {
-        allLessons = DEFAULT_LESSONS;
+        serverLessons = DEFAULT_LESSONS;
       }
     } else {
-      allLessons = DEFAULT_LESSONS;
+      serverLessons = DEFAULT_LESSONS;
     }
   } catch (e) {
     console.warn("Using default fallback lessons:", e);
-    allLessons = DEFAULT_LESSONS;
+    serverLessons = DEFAULT_LESSONS;
   }
+
+  // Merge server lessons with local custom lessons
+  const localCustom = getLocalCustomVideos();
+  const map = new Map();
+  serverLessons.forEach(l => map.set(l.id, l));
+  localCustom.forEach(l => {
+    if (!map.has(l.id)) {
+      map.set(l.id, l);
+    }
+  });
+
+  allLessons = Array.from(map.values());
+  updateMyVideosBadge();
 
   filteredLessons = [...allLessons];
   renderCatalogGrid();
@@ -1453,7 +2059,8 @@ function setupEventListeners() {
       btn.classList.add('active');
       const cat = btn.dataset.cat || 'all';
       const lvl = btn.dataset.level || 'all';
-      filterLessons(cat, lvl);
+      const searchVal = document.getElementById('dict-search-input')?.value.trim() || '';
+      filterLessons(cat, lvl, searchVal);
     });
   });
 
@@ -1518,6 +2125,7 @@ window.openLessonWorkspace = openLessonWorkspace;
 window.returnToCatalog = returnToCatalog;
 window.openAddVideoModal = openAddVideoModal;
 window.closeAddVideoModal = closeAddVideoModal;
+window.updateTimingDisplay = updateTimingDisplay;
 window.jumpToSentence = function(idx) {
   currentSentenceIdx = idx;
   renderCurrentSentence();

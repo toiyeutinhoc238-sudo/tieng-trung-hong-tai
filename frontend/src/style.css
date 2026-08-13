@@ -8793,6 +8793,196 @@ body.light-mode .dt-btn:hover {
 }
 
 /* ==========================================================================
+   ADVANCED SCREEN SNIPPING TOOL (Y hệt Windows + Shift + S & iOS Screenshot)
+   ========================================================================== */
+
+#screen-snipping-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999999 !important;
+  background: rgba(0, 0, 0, 0.48) !important;
+  cursor: crosshair !important;
+  user-select: none !important;
+  touch-action: none !important;
+}
+
+.snipping-top-bar {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(15, 23, 42, 0.94);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  z-index: 10000000;
+  pointer-events: auto;
+}
+
+.snipping-mode-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #cbd5e1;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.snipping-mode-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.snipping-mode-btn.active {
+  background: linear-gradient(135deg, #0284c7, #2563eb) !important;
+  border-color: #38bdf8 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.45);
+}
+
+.snipping-tip-badge {
+  color: #94a3b8;
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-left: 6px;
+}
+
+#snip-selection-box {
+  position: absolute;
+  border: 2px solid #38bdf8;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.48), 0 0 16px rgba(56, 189, 248, 0.8);
+  pointer-events: none;
+  z-index: 9999999;
+}
+
+#snip-dim-tag {
+  position: absolute;
+  bottom: -28px;
+  right: 0;
+  background: rgba(15, 23, 42, 0.9);
+  color: #38bdf8;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(56, 189, 248, 0.5);
+  white-space: nowrap;
+}
+
+#screen-camera-flash {
+  position: fixed !important;
+  inset: 0 !important;
+  background: #ffffff !important;
+  z-index: 100000000 !important;
+  pointer-events: none !important;
+  opacity: 0.85;
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Floating iOS / Windows Snipping Preview Card */
+#screen-snipping-preview-widget {
+  position: fixed !important;
+  bottom: 24px !important;
+  left: 24px !important;
+  background: rgba(15, 23, 42, 0.96) !important;
+  backdrop-filter: blur(28px) !important;
+  -webkit-backdrop-filter: blur(28px) !important;
+  border: 1.5px solid rgba(56, 189, 248, 0.6) !important;
+  border-radius: 20px !important;
+  padding: 14px 18px !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65) !important;
+  z-index: 99999999 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  max-width: 440px !important;
+  animation: snipSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+@keyframes snipSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.snip-widget-thumb {
+  width: 90px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  background: #000;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.snip-widget-title {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.snip-widget-sub {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.snip-widget-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.snip-widget-btn {
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+}
+
+.snip-widget-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.snip-widget-btn.primary {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #ffffff;
+  border: none;
+}
+
+/* ==========================================================================
    NEXT LESSON & PREVIOUS LESSON NAVIGATION BUTTONS
    (Chuyển nhanh sang bài tiếp theo không cần quay lại lộ trình)
    ========================================================================== */
