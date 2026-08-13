@@ -8232,7 +8232,7 @@ body.flashcard-fullscreen-mode {
   height: 100vh !important;
   z-index: 999999 !important;
   background: linear-gradient(135deg, #090d16 0%, #0f172a 45%, #1e1b4b 100%) !important;
-  padding: 16px 24px 32px 24px !important;
+  padding: 16px 20px 32px 20px !important;
   margin: 0 !important;
   box-sizing: border-box !important;
   overflow-y: auto !important;
@@ -8265,17 +8265,18 @@ body.light-mode #radicals-flashcard-view.fullscreen-flashcard-active {
 #flashcard-study-view.fullscreen-flashcard-active .lesson-stepper-hub-bar,
 #radicals-flashcard-view.fullscreen-flashcard-active .radical-flashcard-header {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1100px;
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(15, 23, 42, 0.92);
+  background: rgba(15, 23, 42, 0.94);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1.5px solid rgba(255, 255, 255, 0.22);
   border-radius: 18px;
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55);
-  margin-bottom: 20px;
+  margin-bottom: 16px;
+  box-sizing: border-box;
 }
 
 html.light-mode #flashcard-study-view.fullscreen-flashcard-active .lesson-stepper-hub-bar {
@@ -8288,27 +8289,30 @@ html.light-mode #flashcard-study-view.fullscreen-flashcard-active .lesson-steppe
 #flashcard-study-view.fullscreen-flashcard-active .hero-stage-wrapper,
 #radicals-flashcard-view.fullscreen-flashcard-active .hero-stage-wrapper {
   width: 100%;
-  max-width: 1250px;
+  max-width: 1100px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
-  margin: 8px 0 28px 0;
-  flex: 1;
+  gap: 14px;
+  margin: 4px 0 20px 0;
+  box-sizing: border-box;
 }
 
 /* Fullscreen Hero Flashcard Card */
 #flashcard-study-view.fullscreen-flashcard-active .hero-flashcard-card,
 #radicals-flashcard-view.fullscreen-flashcard-active .hero-flashcard-card {
-  max-width: 1050px;
+  flex: 1;
+  max-width: 880px;
   width: 100%;
-  padding: 34px 44px;
-  border-radius: 28px;
-  background: rgba(15, 23, 42, 0.85);
+  min-width: 0;
+  padding: 24px 28px;
+  border-radius: 24px;
+  background: rgba(15, 23, 42, 0.88);
   backdrop-filter: blur(36px) saturate(190%);
   -webkit-backdrop-filter: blur(36px) saturate(190%);
   border: 1.5px solid rgba(255, 255, 255, 0.22);
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  box-sizing: border-box;
 }
 
 html.light-mode #flashcard-study-view.fullscreen-flashcard-active .hero-flashcard-card,
@@ -8321,12 +8325,20 @@ html.light-mode #radicals-flashcard-view.fullscreen-flashcard-active .hero-flash
 /* Fullscreen Navigation Stage Arrow Buttons */
 #flashcard-study-view.fullscreen-flashcard-active .stage-arrow-btn,
 #radicals-flashcard-view.fullscreen-flashcard-active .stage-arrow-btn {
-  width: 58px;
-  height: 58px;
-  font-size: 1.45rem;
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  font-size: 1.3rem;
   background: rgba(255, 255, 255, 0.14);
   border: 1.5px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
 }
 
 #flashcard-study-view.fullscreen-flashcard-active .stage-arrow-btn:hover,
@@ -8341,21 +8353,22 @@ html.light-mode #radicals-flashcard-view.fullscreen-flashcard-active .hero-flash
 #flashcard-study-view.fullscreen-flashcard-active .bottom-list-card,
 #radicals-flashcard-view.fullscreen-flashcard-active .bottom-list-card {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1100px;
   margin-bottom: 20px;
+  box-sizing: border-box;
 }
 
 /* Responsive Fullscreen on Mobile / Tablet */
-@media (max-width: 768px) {
+@media (max-width: 868px) {
   #flashcard-study-view.fullscreen-flashcard-active,
   #radicals-flashcard-view.fullscreen-flashcard-active {
-    padding: 12px 10px 24px 10px !important;
+    padding: 10px 8px 24px 8px !important;
   }
 
   #flashcard-study-view.fullscreen-flashcard-active .hero-flashcard-card,
   #radicals-flashcard-view.fullscreen-flashcard-active .hero-flashcard-card {
-    padding: 20px 16px !important;
-    border-radius: 20px !important;
+    padding: 18px 14px !important;
+    border-radius: 18px !important;
   }
 
   #flashcard-study-view.fullscreen-flashcard-active .hero-stage-wrapper {

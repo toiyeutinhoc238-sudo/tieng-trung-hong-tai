@@ -73,18 +73,15 @@ app.use((req, res, next) => {
   const host = String(rawHost).toLowerCase();
   const proto = (req.headers['x-forwarded-proto'] || '').toLowerCase();
 
-  // 1. If accessed directly via onrender.com or www., 301 redirect & set noindex for onrender.com
-  //    Return a dedicated robots.txt for the Render domain that blocks all bots
+  // 1. If accessed directly via onrender.com or www., 301 redirect to primary domain (tiengtrunghongtai.online)
   if (host.includes('onrender.com') || host.startsWith('www.')) {
-    // Serve a blocking robots.txt so Googlebot stops crawling the Render URL entirely
+    // Serve valid robots.txt so Googlebot can crawl and verify 301 redirects
     if (req.path === '/robots.txt') {
-      res.setHeader('Content-Type', 'text/plain');
-      res.setHeader('X-Robots-Tag', 'noindex, nofollow');
-      return res.send('User-agent: *\nDisallow: /\n');
+      res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+      return res.send('User-agent: *\nAllow: /\n\nSitemap: https://tiengtrunghongtai.online/sitemap.xml\n');
     }
-    // For all other pages: set noindex + canonical then 301 permanent redirect
-    res.setHeader('X-Robots-Tag', 'noindex, nofollow');
-    res.setHeader('Link', `<https://tiengtrunghongtai.online${req.path}>; rel="canonical"`);
+    // 301 permanent redirect for all URLs
+    res.setHeader('Cache-Control', 'public, max-age=86400');
     return res.redirect(301, `https://tiengtrunghongtai.online${req.originalUrl}`);
   }
 

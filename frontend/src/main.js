@@ -7430,13 +7430,10 @@ function renderLessonStepperNav(currentStep, lessonId, lessonTitle) {
         </button>
       </div>
 
-      <!-- Action Buttons (Drawing Pen & Fullscreen) -->
+      <!-- Action Buttons (Drawing Pen) -->
       <div style="display: flex; align-items: center; gap: 8px;">
         <button class="fc-circle-btn" onclick="window.toggleScreenDrawing()" title="Bật/Tắt Bút vẽ màn hình (Phím D)" style="color: #ec4899;">
           <i class="fa-solid fa-pen-nib"></i>
-        </button>
-        <button id="fc-fullscreen-toggle-btn" class="fc-circle-btn ${isFlashcardFullscreen ? 'active-fullscreen' : ''}" onclick="window.toggleFlashcardFullscreen()" title="${isFlashcardFullscreen ? 'Thu nhỏ (Phím F hoặc Esc)' : 'Phóng to toàn màn hình (Phím F)'}">
-          <i class="fa-solid ${isFlashcardFullscreen ? 'fa-compress' : 'fa-expand'}"></i>
         </button>
       </div>
     </div>
