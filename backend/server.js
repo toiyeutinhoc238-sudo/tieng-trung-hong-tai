@@ -1844,6 +1844,92 @@ app.get('/api/dictation/lessons/:id', async (req, res) => {
   }
 });
 
+// Helper: Filter out non-speech sound effects & music cues
+function cleanHumanSpeechText(text) {
+  if (!text) return '';
+  let cleaned = text
+    .replace(/\[(?:Âm nhạc|Nhạc|tiếng nhạc|Music|music|Applause|Vỗ tay|Tiếng cười|Laughter|Tiếng ồn|Silence|Trống|Guitar|Piano|Hát|Singing|Cheering)\]/gi, '')
+    .replace(/\((?:Âm nhạc|Nhạc|tiếng nhạc|Music|music|Applause|Vỗ tay|Tiếng cười|Laughter|Tiếng ồn|Silence|nhạc nền|nhạc dạo)\)/gi, '')
+    .replace(/[♪♫♩♬★☆✦✧❤️👍🔥]+/g, '')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+  return cleaned;
+}
+
+// Helper: Consolidate fragmented speech chunks & apply vocal padding (0.18s pre-roll, 0.28s post-roll)
+function consolidateSpeechSegments(rawItems) {
+  if (!rawItems || rawItems.length === 0) return [];
+  const consolidated = [];
+  let currentGroup = null;
+
+  for (const item of rawItems) {
+    const cleanText = cleanHumanSpeechText(item.text);
+    if (!cleanText || cleanText.length < 1) continue; // Skip pure noise/music
+
+    if (!currentGroup) {
+      currentGroup = {
+        text: cleanText,
+        startTime: item.startTime,
+        endTime: item.endTime
+      };
+      continue;
+    }
+
+    const gap = item.startTime - currentGroup.endTime;
+    const isTerminal = /[.!?。！？\n]$/.test(currentGroup.text);
+    const isTooLong = (currentGroup.text.length + cleanText.length) > 50;
+
+    // Merge continuous syllables from the same speaker if pause < 0.85s
+    if (gap <= 0.85 && !isTerminal && !isTooLong) {
+      const glue = (currentGroup.text.endsWith(' ') || /[\u4e00-\u9fa5]/.test(currentGroup.text)) ? '' : ' ';
+      currentGroup.text += glue + cleanText;
+      currentGroup.endTime = Math.max(currentGroup.endTime, item.endTime);
+    } else {
+      consolidated.push(currentGroup);
+      currentGroup = {
+        text: cleanText,
+        startTime: item.startTime,
+        endTime: item.endTime
+      };
+    }
+  }
+
+  if (currentGroup && cleanHumanSpeechText(currentGroup.text)) {
+    consolidated.push(currentGroup);
+  }
+
+  // Apply vocal boundary cushions (0.18s pre-roll & 0.28s post-roll) to guarantee zero consonant/vowel truncation
+  return consolidated.map(item => {
+    const paddedStart = Math.max(0, parseFloat((item.startTime - 0.18).toFixed(2)));
+    const paddedEnd = parseFloat((item.endTime + 0.28).toFixed(2));
+    return {
+      text: item.text,
+      startTime: paddedStart,
+      endTime: paddedEnd
+    };
+  });
+}
+async function translateText(text, sourceLang = 'auto', targetLang = 'zh-CN') {
+  if (!text || !text.trim()) return '';
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURIComponent(text.trim())}`;
+    const res = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+      }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data) && Array.isArray(data[0])) {
+        return data[0].map(item => item[0]).join('').trim();
+      }
+    }
+  } catch (err) {
+    console.warn("Translation API error:", err);
+  }
+  return text;
+}
+
 // POST /api/dictation/pinyin-helper — Tự động sinh Pinyin cho đoạn văn
 app.post('/api/dictation/pinyin-helper', (req, res) => {
   try {
@@ -1856,7 +1942,75 @@ app.post('/api/dictation/pinyin-helper', (req, res) => {
   }
 });
 
-// POST /api/dictation/fetch-subtitles — Lấy phụ đề và mốc thời gian giọng nói thực tế từ YouTube
+// POST /api/dictation/auto-translate — Dịch câu Tiếng Việt sang Tiếng Trung + Pinyin hoặc ngược lại
+app.post('/api/dictation/auto-translate', async (req, res) => {
+  try {
+    const { text } = req.body || {};
+    if (!text || !text.trim()) {
+      return res.json({ success: false, processedText: '' });
+    }
+
+    const lines = text.split('\n');
+    const processedLines = [];
+
+    for (const rawLine of lines) {
+      const trimmed = rawLine.trim();
+      if (!trimmed) {
+        processedLines.push('');
+        continue;
+      }
+
+      // Check if line already has [time] or pipes
+      let timePrefix = '';
+      let contentText = trimmed;
+      const timeMatch = trimmed.match(/^(\[[0-9:\s.-]+\]|[0-9:]+)\s*(.*)$/);
+      if (timeMatch) {
+        timePrefix = timeMatch[1] + ' ';
+        contentText = timeMatch[2];
+      }
+
+      const parts = contentText.split('|').map(p => p.trim());
+      const mainText = parts[0] || '';
+
+      // Detect if mainText is Vietnamese/Latin vs Chinese Hanzi
+      const hasHanzi = /[\u4e00-\u9fa5]/.test(mainText);
+
+      if (!hasHanzi) {
+        // Source is Vietnamese / Latin -> Translate to Chinese + generate Pinyin
+        const translatedHanzi = await translateText(mainText, 'vi', 'zh-CN');
+        let py = '';
+        try {
+          py = pinyin(translatedHanzi, { toneType: 'symbol' });
+        } catch (e) {}
+        const meaning = parts[2] || parts[1] || mainText;
+        processedLines.push(`${timePrefix}${translatedHanzi} | ${py} | ${meaning}`);
+      } else {
+        // Source is Chinese Hanzi -> Generate Pinyin + translate to Vietnamese Meaning
+        let py = parts[1] || '';
+        if (!py) {
+          try {
+            py = pinyin(mainText, { toneType: 'symbol' });
+          } catch (e) {}
+        }
+        let meaning = parts[2] || '';
+        if (!meaning) {
+          meaning = await translateText(mainText, 'zh-CN', 'vi');
+        }
+        processedLines.push(`${timePrefix}${mainText} | ${py} | ${meaning}`);
+      }
+    }
+
+    res.json({
+      success: true,
+      processedText: processedLines.join('\n')
+    });
+  } catch (err) {
+    console.error("Auto translate error:", err);
+    res.status(500).json({ error: 'Failed to auto translate' });
+  }
+});
+
+// POST /api/dictation/fetch-subtitles — Lấy phụ đề và mốc thời gian giọng nói thực tế từ YouTube (Hỗ trợ Tiếng Việt & Tiếng Trung)
 app.post('/api/dictation/fetch-subtitles', async (req, res) => {
   const { youtubeId } = req.body || {};
   if (!youtubeId) {
@@ -1868,7 +2022,7 @@ app.post('/api/dictation/fetch-subtitles', async (req, res) => {
     const response = await fetch(videoUrl, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8,vi;q=0.7'
+        'Accept-Language': 'vi,zh-CN,zh;q=0.9,en;q=0.8'
       }
     });
 
@@ -1903,13 +2057,21 @@ app.post('/api/dictation/fetch-subtitles', async (req, res) => {
       return res.json({
         success: false,
         videoTitle,
-        message: 'Video này không có phụ đề tiếng Trung sẵn trên YouTube. Bạn có thể dán lời thoại và bấm nút Sinh Pinyin!',
+        message: 'Video này không có phụ đề sẵn trên YouTube. Bạn có thể dán lời thoại Tiếng Việt hoặc Tiếng Trung rồi bấm nút Dịch Sang Tiếng Trung!',
         sentences: []
       });
     }
 
-    // Prioritize Chinese track (zh, zh-Hans, zh-Hant, zh-CN, zh-TW), or first available
-    let targetTrack = captionTracks.find(t => t.languageCode && t.languageCode.toLowerCase().startsWith('zh')) || captionTracks[0];
+    // Smart Track Selector:
+    // 1. Chinese track (zh, zh-Hans, zh-Hant)
+    // 2. Vietnamese track (vi)
+    // 3. First available track
+    let targetTrack = captionTracks.find(t => t.languageCode && t.languageCode.toLowerCase().startsWith('zh')) ||
+                      captionTracks.find(t => t.languageCode && t.languageCode.toLowerCase().startsWith('vi')) ||
+                      captionTracks[0];
+
+    const isChineseTrack = targetTrack.languageCode && targetTrack.languageCode.toLowerCase().startsWith('zh');
+    const isVietnameseTrack = targetTrack.languageCode && targetTrack.languageCode.toLowerCase().startsWith('vi');
 
     const subUrl = targetTrack.baseUrl.includes('fmt=') ? targetTrack.baseUrl : targetTrack.baseUrl + '&fmt=json3';
     const subRes = await fetch(subUrl);
@@ -1919,7 +2081,8 @@ app.post('/api/dictation/fetch-subtitles', async (req, res) => {
       try {
         const subData = await subRes.json();
         const events = subData.events || [];
-        let curId = 1;
+        let rawItems = [];
+
         for (const ev of events) {
           if (!ev.segs || ev.segs.length === 0) continue;
           const text = ev.segs.map(s => s.utf8).join('').trim();
@@ -1929,19 +2092,49 @@ app.post('/api/dictation/fetch-subtitles', async (req, res) => {
           const duration = (ev.dDurationMs || 3000) / 1000;
           const endTime = startTime + duration;
 
+          rawItems.push({ text, startTime, endTime });
+        }
+
+        // Clean noise & consolidate broken syllables into complete human spoken sentences
+        const speechItems = consolidateSpeechSegments(rawItems);
+
+        // Process translation & Pinyin generation on clean vocal sentences
+        let curId = 1;
+        for (const item of speechItems) {
+          let hanzi = '';
           let py = '';
-          try {
-            py = pinyin(text, { toneType: 'symbol' });
-          } catch (e) {}
+          let meaning = '';
+
+          if (isChineseTrack) {
+            hanzi = item.text;
+            try {
+              py = pinyin(hanzi, { toneType: 'symbol' });
+            } catch (e) {}
+            meaning = await translateText(hanzi, 'zh-CN', 'vi');
+          } else if (isVietnameseTrack) {
+            // Spoken in Vietnamese -> Translate to accurate Chinese & generate Pinyin
+            meaning = item.text;
+            hanzi = await translateText(meaning, 'vi', 'zh-CN');
+            try {
+              py = pinyin(hanzi, { toneType: 'symbol' });
+            } catch (e) {}
+          } else {
+            // Other languages (e.g. English) -> Translate to Chinese & Vietnamese
+            meaning = await translateText(item.text, 'auto', 'vi');
+            hanzi = await translateText(item.text, 'auto', 'zh-CN');
+            try {
+              py = pinyin(hanzi, { toneType: 'symbol' });
+            } catch (e) {}
+          }
 
           sentences.push({
             id: curId++,
-            startTime: parseFloat(startTime.toFixed(2)),
-            endTime: parseFloat(endTime.toFixed(2)),
-            hanzi: text,
+            startTime: item.startTime,
+            endTime: item.endTime,
+            hanzi: hanzi || item.text,
             pinyin: py,
-            meaning: 'Câu hội thoại trong video',
-            keywords: [text.slice(0, Math.min(2, text.length))]
+            meaning: meaning || 'Câu hội thoại trong video',
+            keywords: [hanzi ? hanzi.slice(0, Math.min(2, hanzi.length)) : '']
           });
         }
       } catch (jsonErr) {
@@ -1953,6 +2146,7 @@ app.post('/api/dictation/fetch-subtitles', async (req, res) => {
       success: true,
       videoTitle,
       trackName: targetTrack.name?.simpleText || targetTrack.languageCode,
+      detectedLang: isVietnameseTrack ? 'Tiếng Việt 🇻🇳' : (isChineseTrack ? 'Tiếng Trung 🇨🇳' : targetTrack.languageCode),
       sentences
     });
 

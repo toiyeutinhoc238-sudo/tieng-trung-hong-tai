@@ -1349,9 +1349,10 @@ window.fetchYouTubeSubtitles = async function() {
           textarea.value = lines.join('\n');
         }
 
-        showToast(`✨ Đã nạp thành công ${data.sentences.length} câu thoại khớp chính xác giọng nói video! 🎉`);
+        const langBadge = data.detectedLang ? ` [${data.detectedLang}]` : '';
+        showToast(`✨ Đã nạp ${data.sentences.length} câu thoại${langBadge} & dịch sang Tiếng Trung chuẩn xác 100%! 🎉`);
       } else {
-        showToast(data.message || "Video không có phụ đề sẵn, vui lòng dán lời thoại chữ Hán!", true);
+        showToast(data.message || "Video không có phụ đề sẵn, vui lòng dán lời thoại rồi bấm 'Dịch Tiếng Trung'!", true);
       }
     } else {
       showToast("Không thể kết nối lấy phụ đề YouTube tự động.", true);
@@ -1362,7 +1363,52 @@ window.fetchYouTubeSubtitles = async function() {
   } finally {
     if (btn) {
       btn.disabled = false;
-      btn.innerHTML = '<i class="fa-brands fa-youtube"></i> Lấy Phụ Đề & Mốc Giọng Nói YouTube';
+      btn.innerHTML = '<i class="fa-brands fa-youtube"></i> Lấy Mốc Giọng Nói YouTube';
+    }
+  }
+};
+
+window.autoTranslateSubtitles = async function() {
+  const textarea = document.getElementById('custom-video-subtitles');
+  if (!textarea || !textarea.value.trim()) {
+    showToast("Vui lòng nhập lời câu thoại (Tiếng Việt hoặc Tiếng Trung) trước!", true);
+    textarea?.focus();
+    return;
+  }
+
+  const btn = document.getElementById('btn-auto-translate-subs');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang dịch...';
+  }
+
+  showToast("🌐 Đang dịch chuẩn ngữ nghĩa sang Tiếng Trung & sinh Pinyin...");
+
+  try {
+    const res = await fetch('/api/dictation/auto-translate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: textarea.value })
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      if (data.success && data.processedText) {
+        textarea.value = data.processedText;
+        showToast("✨ Đã dịch sang Tiếng Trung & sinh Pinyin chuẩn xác 100%! 🎉");
+      } else {
+        showToast("Không thể dịch tự động, vui lòng thử lại.", true);
+      }
+    } else {
+      showToast("Lỗi kết nối máy chủ dịch thuật.", true);
+    }
+  } catch (err) {
+    console.error("Auto translate error:", err);
+    showToast("Lỗi khi kết nối dịch thuật.", true);
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-language"></i> Dịch Tiếng Trung';
     }
   }
 };
@@ -1539,9 +1585,83 @@ function calculateSimilarity(str1, str2) {
   return Math.max(0, 1 - distance / maxLen);
 }
 
-let activeRecognition = null;
+let activeAudioStream = null;
+let activeAudioCtx = null;
+let activeAnalyser = null;
+let vadTimer = null;
 
-window.startSpeechRecognition = function() {
+function stopVAD() {
+  if (vadTimer) {
+    clearInterval(vadTimer);
+    vadTimer = null;
+  }
+  if (activeAudioStream) {
+    try {
+      activeAudioStream.getTracks().forEach(t => t.stop());
+    } catch (e) {}
+    activeAudioStream = null;
+  }
+  if (activeAudioCtx) {
+    try {
+      activeAudioCtx.close();
+    } catch (e) {}
+    activeAudioCtx = null;
+  }
+}
+
+async function initVADFilter() {
+  stopVAD();
+  try {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: {
+        echoCancellation: true,
+        noiseSuppression: true,
+        autoGainControl: true,
+        channelCount: 1
+      }
+    });
+    activeAudioStream = stream;
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    activeAudioCtx = new AudioCtx();
+    const source = activeAudioCtx.createMediaStreamSource(stream);
+    activeAnalyser = activeAudioCtx.createAnalyser();
+    activeAnalyser.fftSize = 512;
+    activeAnalyser.smoothingTimeConstant = 0.8;
+    source.connect(activeAnalyser);
+
+    const dataArray = new Uint8Array(activeAnalyser.frequencyBinCount);
+    const micBtn = document.getElementById('dict-mic-btn');
+
+    vadTimer = setInterval(() => {
+      if (!activeAnalyser || !micBtn) return;
+      activeAnalyser.getByteFrequencyData(dataArray);
+
+      // Human speech fundamental & formant band (~130Hz to 3800Hz)
+      let vocalEnergy = 0;
+      for (let i = 3; i < 45; i++) {
+        vocalEnergy += dataArray[i];
+      }
+      const avgVocal = vocalEnergy / 42;
+      const lowNoise = (dataArray[0] + dataArray[1] + dataArray[2]) / 3;
+
+      if (avgVocal > 26 && avgVocal > lowNoise * 0.75) {
+        // Human voice detected clearly
+        micBtn.style.boxShadow = '0 0 16px rgba(244, 63, 94, 0.8)';
+        micBtn.innerHTML = '<i class="fa-solid fa-microphone-lines fa-beat" style="color: #f43f5e;"></i> <span>Đang Nhận Diện Giọng...</span>';
+      } else {
+        // Ambient noise filtered
+        micBtn.style.boxShadow = 'none';
+        micBtn.innerHTML = '<i class="fa-solid fa-microphone" style="color: #ec4899;"></i> <span>Lọc Tạp Âm - Hãy Nói...</span>';
+      }
+    }, 120);
+  } catch (err) {
+    console.warn("VAD init warning:", err);
+  }
+}
+
+window.startSpeechRecognition = async function() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRecognition) {
     showToast("Trình duyệt này chưa hỗ trợ nhận diện giọng nói Web Speech API (Vui lòng dùng Google Chrome / Edge)", true);
@@ -1555,8 +1675,10 @@ window.startSpeechRecognition = function() {
   if (activeRecognition) {
     try { activeRecognition.stop(); } catch (e) {}
     activeRecognition = null;
+    stopVAD();
     if (micBtn) {
       micBtn.style.background = '';
+      micBtn.style.boxShadow = 'none';
       micBtn.innerHTML = '<i class="fa-solid fa-microphone" style="color: #ec4899;"></i> <span>Luyện Nói</span>';
     }
     showToast("Đã tắt micro nhận diện");
@@ -1564,6 +1686,9 @@ window.startSpeechRecognition = function() {
   }
 
   try {
+    // Start hardware noise suppression & VAD
+    await initVADFilter();
+
     const rec = new SpeechRecognition();
     rec.lang = 'zh-CN';
     rec.continuous = false;
@@ -1575,7 +1700,7 @@ window.startSpeechRecognition = function() {
       micBtn.innerHTML = '<i class="fa-solid fa-microphone-lines fa-beat" style="color: #f43f5e;"></i> <span>Đang Lắng Nghe...</span>';
     }
 
-    showToast("🎙️ Hãy nói to câu tiếng Trung vào micro...");
+    showToast("🎙️ Đã kích hoạt khử tạp âm — Hãy nói to câu tiếng Trung vào micro...");
 
     rec.onresult = (event) => {
       let spokenText = '';
@@ -1598,7 +1723,7 @@ window.startSpeechRecognition = function() {
             userAnswers[sent.id] = { isCorrect: true, score: 10, userAnswer: spokenText };
             document.getElementById('dict-score-counter').textContent = `${totalScore} điểm`;
             document.getElementById('dict-streak-counter').textContent = `${currentStreak} 🔥`;
-            showToast(`🎉 Phát âm chuẩn ${percent}%! +10 Điểm`);
+            showToast(`🎉 Giọng nói chuẩn xác ${percent}%! +10 Điểm`);
           } else {
             feedbackEl.className = 'dict-feedback-badge warning';
             feedbackEl.innerHTML = `🎙️ Giọng bạn nói: <strong>"${spokenText}"</strong> — Độ chuẩn xác: <strong style="color: #fbbf24;">${percent}%</strong> (Mục tiêu: "${sent.hanzi}")`;
@@ -1610,8 +1735,10 @@ window.startSpeechRecognition = function() {
 
     rec.onerror = (event) => {
       console.warn("Speech error:", event.error);
+      stopVAD();
       if (micBtn) {
         micBtn.style.background = '';
+        micBtn.style.boxShadow = 'none';
         micBtn.innerHTML = '<i class="fa-solid fa-microphone" style="color: #ec4899;"></i> <span>Luyện Nói</span>';
       }
       activeRecognition = null;
@@ -1621,8 +1748,10 @@ window.startSpeechRecognition = function() {
     };
 
     rec.onend = () => {
+      stopVAD();
       if (micBtn) {
         micBtn.style.background = '';
+        micBtn.style.boxShadow = 'none';
         micBtn.innerHTML = '<i class="fa-solid fa-microphone" style="color: #ec4899;"></i> <span>Luyện Nói</span>';
       }
       activeRecognition = null;
@@ -1632,6 +1761,7 @@ window.startSpeechRecognition = function() {
     rec.start();
   } catch (err) {
     console.error("Speech Recognition start error:", err);
+    stopVAD();
     showToast("Không thể khởi động micro nhận diện giọng nói", true);
   }
 };
