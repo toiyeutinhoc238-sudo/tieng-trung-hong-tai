@@ -2082,6 +2082,167 @@ async function batchTranslateAndPinyin(speechItems) {
   return results;
 }
 
+// AI Linguistic Refinement, HSK Difficulty Analyzer & Category Classifier
+async function enhanceAndClassifyLesson(rawSpeechSegments, videoTitle, durationSeconds) {
+  if (!Array.isArray(rawSpeechSegments) || rawSpeechSegments.length === 0) {
+    return {
+      level: "2",
+      levelText: "HSK 2 - 3 (Cơ bản)",
+      category: "Đời Sống",
+      description: "Bài luyện nghe chép chính tả tiếng Trung.",
+      sentences: []
+    };
+  }
+
+  const sampleItems = rawSpeechSegments.slice(0, 30).map((s, idx) => ({
+    id: idx + 1,
+    startTime: parseFloat(s.startTime.toFixed(2)),
+    endTime: parseFloat(s.endTime.toFixed(2)),
+    text: s.text
+  }));
+
+  if (groqClient) {
+    try {
+      const prompt = `Bạn là một chuyên gia ngôn ngữ tiếng Trung và giáo viên HSK cao cấp.
+Dưới đây là tiêu đề video và danh sách các câu trích xuất từ âm thanh video:
+Tiêu đề video: "${videoTitle}"
+Thời lượng: ${durationSeconds} giây
+Danh sách câu:
+${JSON.stringify(sampleItems, null, 2)}
+
+HÃY THỰC HIỆN CÁC NHIỆM VỤ SAU:
+1. ĐÁNH GIÁ CHÍNH XÁC CẤP ĐỘ HSK (từ "1" đến "6") dựa trên độ phức tạp của từ vựng và ngữ pháp tiếng Trung của nội dung:
+   - HSK 1: Chào hỏi, số đếm, gia đình, đại từ cơ bản (你好, 谢谢, 叫什么, 几岁).
+   - HSK 2: Hoạt động hằng ngày, mua sắm cơ bản, phương hướng, thời gian.
+   - HSK 3: Giao tiếp đời sống đa dạng, nhà hàng, du lịch, cảm xúc, miêu tả chi tiết.
+   - HSK 4: Thảo luận chủ đề công việc, tin tức, văn hóa, quan điểm.
+   - HSK 5: Từ vựng trừu tượng, thành ngữ, văn phong chuyên sâu, kinh tế, xã hội.
+   - HSK 6: Chuyên ngành, văn học, từ vựng học thuật phức tạp.
+   - "hskLevel": chuỗi "1" đến "6".
+   - "levelText": ví dụ "HSK 1 (Sơ cấp)", "HSK 2 - 3 (Giao tiếp)", "HSK 4 (Trung cấp)", "HSK 5 (Nâng cao)".
+
+2. PHÂN LOẠI CHÍNH XÁC THỂ LOẠI (chọn đúng 1 trong các giá trị sau: "Âm Nhạc", "Giao Tiếp", "Ẩm Thực", "Du Lịch", "Hoạt Hình", "Phim Ảnh", "Công Việc", "Tin Tức", "Văn Hóa", "Đời Sống", "Khác"):
+   - "Âm Nhạc" nếu là bài hát, MV âm nhạc, lời nhạc, ballad.
+   - "Ẩm Thực" nếu là nhà hàng, gọi món ăn, đồ uống, trà đạo, nấu nướng.
+   - "Du Lịch" nếu là du lịch, đặt phòng khách sạn, hỏi đường, sân bay, ga tàu.
+   - "Giao Tiếp" nếu là hội thoại bài học, chào hỏi, làm quen, phản xạ thường ngày.
+   - "Hoạt Hình" nếu là phim hoạt hình, Peppa Pig, anime tiếng Trung.
+   - "Phim Ảnh" nếu là trích đoạn phim truyền hình, điện ảnh, kịch nói.
+   - "Công Việc" nếu là môi trường công sở, phỏng vấn xin việc, đàm phán, email.
+   - "Tin Tức" nếu là bản tin thời sự, phỏng vấn phóng viên, kinh tế.
+   - "Văn Hóa" nếu là phong tục truyền thống, lễ hội, lịch sử, thư pháp.
+   - "Đời Sống" nếu là vlog đời sống, mua sắm, mẹo vặt sinh hoạt.
+   - "Khác" nếu là nội dung tổng hợp khác.
+
+3. MÔ TẢ BÀI HỌC ("description"): 1 câu tiếng Việt súc tích, hấp dẫn.
+
+4. XỬ LÝ CHÍNH XÁC TỪNG CÂU:
+   - Nếu câu nguồn là tiếng Trung:
+     + "hanzi": chuẩn hóa thành Chữ Hán Giản Thể 100%, sửa các từ phát âm nhầm.
+     + "meaning": dịch sang Tiếng Việt chuẩn xác 100%, tự nhiên theo đúng ngữ cảnh hội thoại/lời bài hát.
+   - Nếu câu nguồn là tiếng Việt (video tiếng Việt):
+     + "hanzi": dịch sang Tiếng Trung Giản Thể chuẩn xác 100%, tự nhiên, đúng ngữ nghĩa.
+     + "meaning": giữ câu Tiếng Việt gốc hoặc chỉnh cho mượt mà.
+
+Trả về kết quả ở định dạng JSON DUY NHẤT (không markdown hay text thừa):
+{
+  "hskLevel": "2",
+  "levelText": "HSK 2 (Cơ bản)",
+  "category": "Giao Tiếp",
+  "description": "Luyện nghe hội thoại giao tiếp...",
+  "sentences": [
+    {
+      "id": 1,
+      "startTime": 0.0,
+      "endTime": 3.5,
+      "hanzi": "...",
+      "meaning": "..."
+    }
+  ]
+}`;
+
+      const completion = await groqClient.chat.completions.create({
+        model: 'llama-3.3-70b-versatile',
+        messages: [{ role: 'user', content: prompt }],
+        response_format: { type: 'json_object' }
+      });
+
+      const parsed = JSON.parse(completion.choices[0].message.content);
+      if (parsed.sentences && parsed.sentences.length > 0) {
+        const enrichedSentences = parsed.sentences.map((s, idx) => {
+          const original = sampleItems[idx] || {};
+          const hanzi = (s.hanzi || original.text || '').trim();
+          let py = '';
+          try {
+            py = pinyin(hanzi, { toneType: 'symbol' });
+          } catch (e) {}
+
+          return {
+            id: idx + 1,
+            startTime: typeof s.startTime === 'number' ? s.startTime : (original.startTime || 0),
+            endTime: typeof s.endTime === 'number' ? s.endTime : (original.endTime || 0),
+            hanzi,
+            pinyin: py,
+            meaning: s.meaning || 'Câu trong bài học',
+            keywords: [hanzi.slice(0, Math.min(2, hanzi.length))]
+          };
+        });
+
+        return {
+          level: String(parsed.hskLevel || '2'),
+          levelText: parsed.levelText || `HSK ${parsed.hskLevel || 2}`,
+          category: parsed.category || 'Giao Tiếp',
+          description: parsed.description || `Bài luyện nghe chép chính tả ${videoTitle}`,
+          sentences: enrichedSentences
+        };
+      }
+    } catch (llmErr) {
+      console.warn('[Dictation] AI linguistic enhancement error, falling back to heuristic:', llmErr.message);
+    }
+  }
+
+  // Fallback: batchTranslateAndPinyin + rule-based category & level
+  const sentences = await batchTranslateAndPinyin(rawSpeechSegments);
+  
+  let category = 'Giao Tiếp';
+  const lowerTitle = videoTitle.toLowerCase();
+  if (lowerTitle.includes('bài hát') || lowerTitle.includes('nhạc') || lowerTitle.includes('song') || lowerTitle.includes('music') || lowerTitle.includes('mv') || lowerTitle.includes('hát')) {
+    category = 'Âm Nhạc';
+  } else if (lowerTitle.includes('ăn') || lowerTitle.includes('món') || lowerTitle.includes('nhà hàng') || lowerTitle.includes('uống') || lowerTitle.includes('trà') || lowerTitle.includes('nấu')) {
+    category = 'Ẩm Thực';
+  } else if (lowerTitle.includes('du lịch') || lowerTitle.includes('khách sạn') || lowerTitle.includes('sân bay') || lowerTitle.includes('tàu') || lowerTitle.includes('hỏi đường')) {
+    category = 'Du Lịch';
+  } else if (lowerTitle.includes('hoạt hình') || lowerTitle.includes('peppa') || lowerTitle.includes('anime') || lowerTitle.includes('cartoon')) {
+    category = 'Hoạt Hình';
+  } else if (lowerTitle.includes('phim') || lowerTitle.includes('movie') || lowerTitle.includes('drama') || lowerTitle.includes('điện ảnh')) {
+    category = 'Phim Ảnh';
+  } else if (lowerTitle.includes('công việc') || lowerTitle.includes('công sở') || lowerTitle.includes('phỏng vấn') || lowerTitle.includes('kinh doanh') || lowerTitle.includes('họp')) {
+    category = 'Công Việc';
+  } else if (lowerTitle.includes('tin tức') || lowerTitle.includes('thời sự') || lowerTitle.includes('news') || lowerTitle.includes('bản tin')) {
+    category = 'Tin Tức';
+  } else if (lowerTitle.includes('văn hóa') || lowerTitle.includes('lễ hội') || lowerTitle.includes('tết') || lowerTitle.includes('phong tục') || lowerTitle.includes('lịch sử')) {
+    category = 'Văn Hóa';
+  } else if (lowerTitle.includes('mua') || lowerTitle.includes('sắm') || lowerTitle.includes('vlog') || lowerTitle.includes('quần áo')) {
+    category = 'Đời Sống';
+  }
+
+  let level = '2';
+  if (lowerTitle.includes('hsk 1') || lowerTitle.includes('hsk1')) level = '1';
+  else if (lowerTitle.includes('hsk 2') || lowerTitle.includes('hsk2')) level = '2';
+  else if (lowerTitle.includes('hsk 3') || lowerTitle.includes('hsk3')) level = '3';
+  else if (lowerTitle.includes('hsk 4') || lowerTitle.includes('hsk4')) level = '4';
+  else if (lowerTitle.includes('hsk 5') || lowerTitle.includes('hsk5')) level = '5';
+  else if (lowerTitle.includes('hsk 6') || lowerTitle.includes('hsk6')) level = '6';
+
+  return {
+    level,
+    levelText: `HSK ${level}`,
+    category,
+    description: `Bài luyện nghe chép chính tả ${videoTitle}`,
+    sentences
+  };
+}
+
 // Master Unified YouTube Dictation Extractor
 async function extractYouTubeDictation(youtubeId) {
   let videoTitle = `Bài Luyện Nghe (${youtubeId})`;
@@ -2114,13 +2275,18 @@ async function extractYouTubeDictation(youtubeId) {
           endTime: (t.offset + t.duration) / 1000
         }));
         const speech = consolidateSpeechSegments(raw);
-        const sentences = await batchTranslateAndPinyin(speech);
-        if (sentences.length > 0) {
+        const enhanced = await enhanceAndClassifyLesson(speech, videoTitle, duration);
+        if (enhanced.sentences && enhanced.sentences.length > 0) {
           return {
             success: true,
             videoTitle,
-            tierUsed: 'Phụ Đề YouTube 📝',
-            sentences
+            duration,
+            level: enhanced.level,
+            levelText: enhanced.levelText,
+            category: enhanced.category,
+            description: enhanced.description,
+            tierUsed: 'Phụ Đề YouTube + AI HSK 📝✨',
+            sentences: enhanced.sentences
           };
         }
       }
@@ -2164,13 +2330,18 @@ async function extractYouTubeDictation(youtubeId) {
             endTime: s.end
           }));
           const speech = consolidateSpeechSegments(raw);
-          const sentences = await batchTranslateAndPinyin(speech);
-          if (sentences.length > 0) {
+          const enhanced = await enhanceAndClassifyLesson(speech, videoTitle, duration);
+          if (enhanced.sentences && enhanced.sentences.length > 0) {
             return {
               success: true,
               videoTitle,
-              tierUsed: 'Groq Whisper Large v3 ⚡',
-              sentences
+              duration,
+              level: enhanced.level,
+              levelText: enhanced.levelText,
+              category: enhanced.category,
+              description: enhanced.description,
+              tierUsed: 'Groq Whisper Large v3 + LLaMA 3.3 ⚡✨',
+              sentences: enhanced.sentences
             };
           }
         }
@@ -2192,11 +2363,15 @@ async function extractYouTubeDictation(youtubeId) {
     try {
       console.log(`[Dictation] Tier 2: AI Smart Generation based on video title & duration...`);
       const prompt = `Video YouTube có tiêu đề "${videoTitle}" với thời lượng ${duration} giây.
-Hãy tạo từ 6 đến 12 câu tiếng Trung chuẩn (kèm Pinyin và Nghĩa Tiếng Việt) phù hợp nhất với chủ đề của video để người học luyện nghe chép chính tả.
+Hãy phân tích nội dung, xác định chính xác CẤP ĐỘ HSK ("1" đến "6"), THỂ LOẠI ("Âm Nhạc", "Giao Tiếp", "Hoạt Hình", "Phim Ảnh", "Đời Sống", "Tin Tức", "Khám Phá") và tạo từ 8 đến 16 câu tiếng Trung chuẩn (kèm Pinyin và Nghĩa Tiếng Việt) phù hợp nhất với chủ đề của video để người học luyện nghe chép chính tả.
 Các mốc startTime và endTime cần trải đều trong khoảng thời lượng từ 0 đến ${duration} giây.
 
 Trả về JSON ĐÚNG định dạng duy nhất (không kèm markdown):
 {
+  "hskLevel": "2",
+  "levelText": "HSK 2 - 3 (Cơ bản)",
+  "category": "Giao Tiếp",
+  "description": "Bài học luyện nghe chép chính tả...",
   "sentences": [
     {
       "id": 1,
@@ -2218,6 +2393,11 @@ Trả về JSON ĐÚNG định dạng duy nhất (không kèm markdown):
         return {
           success: true,
           videoTitle,
+          duration,
+          level: String(generated.hskLevel || '2'),
+          levelText: generated.levelText || `HSK ${generated.hskLevel || 2}`,
+          category: generated.category || 'Giao Tiếp',
+          description: generated.description || `Bài luyện nghe chép chính tả ${videoTitle}`,
           tierUsed: 'AI Soạn Theo Chủ Đề Video ✨',
           sentences: generated.sentences.map((s, idx) => ({
             ...s,
