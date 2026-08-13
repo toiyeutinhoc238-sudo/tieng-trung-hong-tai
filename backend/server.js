@@ -2040,6 +2040,8 @@ async function ensureYtDlpBinary() {
   return YTDLP_PATH;
 }
 
+
+
 // Fast batch translation and Pinyin generator
 async function batchTranslateAndPinyin(speechItems) {
   const results = [];
@@ -2082,83 +2084,34 @@ async function batchTranslateAndPinyin(speechItems) {
 
 // Master Unified YouTube Dictation Extractor
 async function extractYouTubeDictation(youtubeId) {
-  await ensureYtDlpBinary();
-  const ytdlp = new ytdlpWrap(YTDLP_PATH);
-  const videoUrl = `https://www.youtube.com/watch?v=${youtubeId}`;
-
   let videoTitle = `Bài Luyện Nghe (${youtubeId})`;
   let duration = 60;
 
   try {
-    const meta = await ytdlp.getVideoInfo(videoUrl);
-    videoTitle = meta.title || videoTitle;
-    duration = meta.duration || duration;
-  } catch (e) {
-    console.warn(`[Dictation] Meta fetch warn:`, e.message);
-  }
+    await ensureYtDlpBinary();
+    const ytdlp = new ytdlpWrap(YTDLP_PATH);
+    const videoUrl = `https://www.youtube.com/watch?v=${youtubeId}`;
 
-  // ----------------------------------------------------
-  // TIER 0: Direct YouTube Subtitles / Captions Track
-  // ----------------------------------------------------
-  try {
-    const ytTranscript = await YoutubeTranscript.fetchTranscript(youtubeId);
-    if (ytTranscript && ytTranscript.length > 0) {
-      console.log(`[Dictation] Tier 0 YouTube Captions Success (${ytTranscript.length} lines)`);
-      const raw = ytTranscript.map((t, idx) => ({
-        id: idx + 1,
-        text: t.text,
-        startTime: t.offset / 1000,
-        endTime: (t.offset + t.duration) / 1000
-      }));
-      const speech = consolidateSpeechSegments(raw);
-      const sentences = await batchTranslateAndPinyin(speech);
-      if (sentences.length > 0) {
-        return {
-          success: true,
-          videoTitle,
-          tierUsed: 'Phụ Đề YouTube 📝',
-          sentences
-        };
-      }
+    try {
+      const meta = await ytdlp.getVideoInfo(videoUrl);
+      videoTitle = meta.title || videoTitle;
+      duration = meta.duration || duration;
+    } catch (e) {
+      console.warn(`[Dictation] Meta fetch warn:`, e.message);
     }
-  } catch (e) {
-    console.log(`[Dictation] No direct YouTube transcript for ${youtubeId}, progressing to AI Whisper...`);
-  }
 
-  // ----------------------------------------------------
-  // TIER 1: Groq Whisper Large v3 via yt-dlp Audio Stream
-  // ----------------------------------------------------
-  const tempAudio = path.join(AUDIO_TEMP_DIR, `audio_${youtubeId}_${Date.now()}.m4a`);
-  try {
-    console.log(`[Dictation] Tier 1: Downloading audio for ${youtubeId}...`);
-    await ytdlp.execPromise([
-      videoUrl,
-      '--extractor-args', 'youtube:player_client=android,ios',
-      '-f', 'ba/b',
-      '-o', tempAudio,
-      '--force-overwrites',
-      '--no-playlist'
-    ]);
-
-    if (groqClient) {
-      console.log(`[Dictation] Transcribing with Groq Whisper Large v3...`);
-      const { createReadStream } = await import('fs');
-      const transcription = await groqClient.audio.transcriptions.create({
-        file: createReadStream(tempAudio),
-        model: 'whisper-large-v3',
-        response_format: 'verbose_json',
-        timestamp_granularities: ['segment']
-      });
-
-      const segments = transcription.segments || [];
-      console.log(`[Dictation] Whisper extracted ${segments.length} segments, detected language: ${transcription.language}`);
-
-      if (segments.length > 0) {
-        const raw = segments.map((s, idx) => ({
+    // ----------------------------------------------------
+    // TIER 0: Direct YouTube Subtitles / Captions Track
+    // ----------------------------------------------------
+    try {
+      const ytTranscript = await YoutubeTranscript.fetchTranscript(youtubeId);
+      if (ytTranscript && ytTranscript.length > 0) {
+        console.log(`[Dictation] Tier 0 YouTube Captions Success (${ytTranscript.length} lines)`);
+        const raw = ytTranscript.map((t, idx) => ({
           id: idx + 1,
-          text: s.text,
-          startTime: s.start,
-          endTime: s.end
+          text: t.text,
+          startTime: t.offset / 1000,
+          endTime: (t.offset + t.duration) / 1000
         }));
         const speech = consolidateSpeechSegments(raw);
         const sentences = await batchTranslateAndPinyin(speech);
@@ -2166,16 +2119,70 @@ async function extractYouTubeDictation(youtubeId) {
           return {
             success: true,
             videoTitle,
-            tierUsed: 'Groq Whisper Large v3 ⚡',
+            tierUsed: 'Phụ Đề YouTube 📝',
             sentences
           };
         }
       }
+    } catch (e) {
+      console.log(`[Dictation] No direct YouTube transcript for ${youtubeId}, progressing to AI Whisper...`);
     }
-  } catch (err) {
-    console.warn(`[Dictation] Tier 1 Audio transcription error: ${err.message}`);
-  } finally {
-    await fs.unlink(tempAudio).catch(() => {});
+
+    // ----------------------------------------------------
+    // TIER 1: Groq Whisper Large v3 via yt-dlp Audio Stream
+    // ----------------------------------------------------
+    const tempAudio = path.join(AUDIO_TEMP_DIR, `audio_${youtubeId}_${Date.now()}.m4a`);
+    try {
+      console.log(`[Dictation] Tier 1: Downloading audio for ${youtubeId}...`);
+      await ytdlp.execPromise([
+        videoUrl,
+        '--extractor-args', 'youtube:player_client=android,ios',
+        '-f', 'ba/b',
+        '-o', tempAudio,
+        '--force-overwrites',
+        '--no-playlist'
+      ]);
+
+      if (groqClient && existsSync(tempAudio)) {
+        console.log(`[Dictation] Transcribing with Groq Whisper Large v3...`);
+        const { createReadStream } = await import('fs');
+        const transcription = await groqClient.audio.transcriptions.create({
+          file: createReadStream(tempAudio),
+          model: 'whisper-large-v3',
+          response_format: 'verbose_json',
+          timestamp_granularities: ['segment']
+        });
+
+        const segments = transcription.segments || [];
+        console.log(`[Dictation] Whisper extracted ${segments.length} segments, detected language: ${transcription.language}`);
+
+        if (segments.length > 0) {
+          const raw = segments.map((s, idx) => ({
+            id: idx + 1,
+            text: s.text,
+            startTime: s.start,
+            endTime: s.end
+          }));
+          const speech = consolidateSpeechSegments(raw);
+          const sentences = await batchTranslateAndPinyin(speech);
+          if (sentences.length > 0) {
+            return {
+              success: true,
+              videoTitle,
+              tierUsed: 'Groq Whisper Large v3 ⚡',
+              sentences
+            };
+          }
+        }
+      }
+    } catch (err) {
+      console.warn(`[Dictation] Tier 1 Audio transcription error: ${err.message}`);
+    } finally {
+      await fs.unlink(tempAudio).catch(() => {});
+    }
+
+  } catch (outerErr) {
+    console.warn(`[Dictation] Outer extraction error:`, outerErr.message);
   }
 
   // ----------------------------------------------------

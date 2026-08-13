@@ -835,7 +835,26 @@ class ScreenDrawingTool {
       // 1. Shutter camera flash + audio
       this.triggerShutterEffect();
 
-      // 2. Hide all toolbars/canvas temporarily for clean shot
+      // Current viewport scroll offsets
+      const scrollX = window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0;
+      const scrollY = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+      const winW = window.innerWidth;
+      const winH = window.innerHeight;
+
+      // Determine exact bounding box in Viewport coordinates (0 <= x < winW, 0 <= y < winH)
+      let cropX = 0;
+      let cropY = 0;
+      let cropW = winW;
+      let cropH = winH;
+
+      if (region && typeof region.width === 'number' && typeof region.height === 'number' && region.width > 5 && region.height > 5) {
+        cropX = Math.max(0, Math.min(winW - 5, Math.round(region.x)));
+        cropY = Math.max(0, Math.min(winH - 5, Math.round(region.y)));
+        cropW = Math.max(5, Math.min(winW - cropX, Math.round(region.width)));
+        cropH = Math.max(5, Math.min(winH - cropY, Math.round(region.height)));
+      }
+
+      // 2. Hide all toolbars/temporary UI for a clean capture
       const prevToolbarDisplay = this.toolbar ? this.toolbar.style.display : 'none';
       const prevBubbleDisplay = this.bubble ? this.bubble.style.display : 'none';
       const prevCanvasDisplay = this.canvas ? this.canvas.style.display : 'none';
@@ -850,17 +869,26 @@ class ScreenDrawingTool {
       // Wait a tick for paint
       await new Promise(r => setTimeout(r, 60));
 
-      const targetEl = document.fullscreenElement || document.body;
       const dpr = Math.min(window.devicePixelRatio || 1.5, 2);
+      const targetEl = document.fullscreenElement || document.body;
 
       let pageCanvas = null;
       try {
+        // Capture ONLY the selected rectangle in the current viewport!
         pageCanvas = await html2canvas(targetEl, {
           useCORS: true,
           allowTaint: true,
           backgroundColor: null,
           scale: dpr,
           logging: false,
+          x: cropX + scrollX,
+          y: cropY + scrollY,
+          width: cropW,
+          height: cropH,
+          scrollX: scrollX,
+          scrollY: scrollY,
+          windowWidth: document.documentElement.clientWidth || winW,
+          windowHeight: document.documentElement.clientHeight || winH,
           ignoreElements: (element) => {
             return (
               element.id === 'screen-drawing-canvas-overlay' ||
@@ -886,55 +914,32 @@ class ScreenDrawingTool {
       if (eraserCursor) eraserCursor.style.display = prevCursorDisplay;
       if (this.canvas) this.canvas.style.display = prevCanvasDisplay;
 
-      // 3. Composite and Crop exact region
-      let finalCanvas = document.createElement('canvas');
-      const winW = window.innerWidth;
-      const winH = window.innerHeight;
+      // 3. Composite Final Cropped Canvas
+      const finalCanvas = document.createElement('canvas');
+      finalCanvas.width = Math.round(cropW * dpr);
+      finalCanvas.height = Math.round(cropH * dpr);
+      const fCtx = finalCanvas.getContext('2d');
 
-      if (region && region.width > 0 && region.height > 0) {
-        // Crop exact rectangular area
-        finalCanvas.width = region.width * dpr;
-        finalCanvas.height = region.height * dpr;
-        const fCtx = finalCanvas.getContext('2d');
-
-        if (pageCanvas) {
-          // Draw sub-rectangle from pageCanvas
-          fCtx.drawImage(
-            pageCanvas,
-            region.x * dpr, region.y * dpr, region.width * dpr, region.height * dpr,
-            0, 0, finalCanvas.width, finalCanvas.height
-          );
-        } else {
-          fCtx.fillStyle = 'rgba(15, 23, 42, 0.95)';
-          fCtx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
-        }
-
-        // Overlay drawing strokes in that region
-        if (this.canvas && this.canvas.width > 0 && this.canvas.height > 0) {
-          fCtx.drawImage(
-            this.canvas,
-            region.x, region.y, region.width, region.height,
-            0, 0, finalCanvas.width, finalCanvas.height
-          );
-        }
+      // 3a. Draw underlying webpage content
+      if (pageCanvas && pageCanvas.width > 0 && pageCanvas.height > 0) {
+        fCtx.drawImage(
+          pageCanvas,
+          0, 0, pageCanvas.width, pageCanvas.height,
+          0, 0, finalCanvas.width, finalCanvas.height
+        );
       } else {
-        // Fullscreen capture
-        const width = pageCanvas ? pageCanvas.width : (this.canvas ? this.canvas.width : winW * dpr);
-        const height = pageCanvas ? pageCanvas.height : (this.canvas ? this.canvas.height : winH * dpr);
-        finalCanvas.width = width;
-        finalCanvas.height = height;
-        const fCtx = finalCanvas.getContext('2d');
+        // Fallback dark background if html2canvas is blocked
+        fCtx.fillStyle = '#0f172a';
+        fCtx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
+      }
 
-        if (pageCanvas) {
-          fCtx.drawImage(pageCanvas, 0, 0);
-        } else {
-          fCtx.fillStyle = 'rgba(15, 23, 42, 0.95)';
-          fCtx.fillRect(0, 0, width, height);
-        }
-
-        if (this.canvas && this.canvas.width > 0 && this.canvas.height > 0) {
-          fCtx.drawImage(this.canvas, 0, 0, width, height);
-        }
+      // 3b. Overlay handwriting/drawing strokes in that exact crop region
+      if (this.canvas && this.canvas.width > 0 && this.canvas.height > 0) {
+        fCtx.drawImage(
+          this.canvas,
+          cropX, cropY, cropW, cropH,
+          0, 0, finalCanvas.width, finalCanvas.height
+        );
       }
 
       // 4. Output to Blob -> Clipboard + Download + iOS/Windows Preview Widget
@@ -974,6 +979,7 @@ class ScreenDrawingTool {
 
         // Show floating iOS / Windows Snipping Preview Widget
         this.showSnippingPreviewWidget(blob, dataUrl, filename, clipboardCopied);
+        this.showToast('📸 Đã cắt và chụp vùng chọn thành công!');
 
       }, 'image/png');
 
