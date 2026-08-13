@@ -2187,22 +2187,53 @@ Trả về đúng JSON:
   };
 }
 
+function parseISO8601Duration(isoStr) {
+  if (!isoStr) return 60;
+  const match = isoStr.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+  if (!match) return 60;
+  const hours = parseInt(match[1] || '0', 10);
+  const minutes = parseInt(match[2] || '0', 10);
+  const seconds = parseInt(match[3] || '0', 10);
+  return hours * 3600 + minutes * 60 + seconds;
+}
+
 // Master Unified YouTube Dictation Extractor
 async function extractYouTubeDictation(youtubeId) {
   let videoTitle = `Bài Luyện Nghe (${youtubeId})`;
   let duration = 60;
 
   try {
+    // 1. Instant Official Google YouTube Data API v3 Metadata Resolution
+    if (process.env.YOUTUBE_API_KEY) {
+      try {
+        const ytApiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${youtubeId}&key=${process.env.YOUTUBE_API_KEY}`;
+        const ytRes = await fetch(ytApiUrl);
+        if (ytRes.ok) {
+          const ytData = await ytRes.json();
+          if (ytData.items && ytData.items.length > 0) {
+            const item = ytData.items[0];
+            videoTitle = item.snippet.title || videoTitle;
+            duration = parseISO8601Duration(item.contentDetails?.duration) || duration;
+            console.log(`[YouTube API v3] Fetched Official Metadata: "${videoTitle}" (${duration}s)`);
+          }
+        }
+      } catch (ytErr) {
+        console.warn('[YouTube API v3] Metadata fetch warn:', ytErr.message);
+      }
+    }
+
     await ensureYtDlpBinary();
     const ytdlp = new ytdlpWrap(YTDLP_PATH);
     const videoUrl = `https://www.youtube.com/watch?v=${youtubeId}`;
 
-    try {
-      const meta = await ytdlp.getVideoInfo(videoUrl);
-      videoTitle = meta.title || videoTitle;
-      duration = meta.duration || duration;
-    } catch (e) {
-      console.warn(`[Dictation] Meta fetch warn:`, e.message);
+    if (!videoTitle || videoTitle.startsWith('Bài Luyện Nghe')) {
+      try {
+        const meta = await ytdlp.getVideoInfo(videoUrl);
+        videoTitle = meta.title || videoTitle;
+        duration = meta.duration || duration;
+      } catch (e) {
+        console.warn(`[Dictation] yt-dlp meta fetch warn:`, e.message);
+      }
     }
 
     // ----------------------------------------------------
