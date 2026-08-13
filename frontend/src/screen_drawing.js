@@ -981,6 +981,16 @@ function _sdUpdateButtons() {
         if (toggleFn) toggleFn();
       }
     }
+    if ((e.key === 't' || e.key === 'T') && !e.ctrlKey && !e.metaKey) {
+      const active = document.activeElement;
+      const tag = active ? active.tagName.toLowerCase() : '';
+      if (tag !== 'input' && tag !== 'textarea' && !active.isContentEditable) {
+        if (typeof window.toggleLessonToolbar === 'function') {
+          e.preventDefault();
+          window.toggleLessonToolbar();
+        }
+      }
+    }
   });
 })();
 

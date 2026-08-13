@@ -7330,7 +7330,7 @@ function renderLessonHeroCardContent(w, index, total) {
             <div style="display: flex; align-items: center; gap: 6px;">
               <span class="hero-info-badge" style="font-size: 0.82rem; padding: 4px 10px;">${category}</span>
               <span class="hero-info-badge" style="font-size: 0.82rem; padding: 4px 10px; background: rgba(168, 85, 247, 0.18); border-color: rgba(168, 85, 247, 0.35); color: #c084fc;">HSK ${activeLessonsLevel}</span>
-              <button class="card-fullscreen-quick-btn" onclick="window.toggleFlashcardFullscreen()" title="${isFlashcardFullscreen ? 'Thu nhỏ (Esc)' : 'Phóng to toàn màn hình (Phím F)'}">
+              <button class="card-fullscreen-quick-btn ${isFlashcardFullscreen ? 'active-fullscreen' : ''}" onclick="window.toggleFlashcardFullscreen()" title="${isFlashcardFullscreen ? 'Thu nhỏ (Phím F hoặc Esc)' : 'Phóng to toàn màn hình (Phím F)'}">
                 <i class="fa-solid ${isFlashcardFullscreen ? 'fa-compress' : 'fa-expand'}"></i>
               </button>
             </div>
@@ -7430,10 +7430,13 @@ function renderLessonStepperNav(currentStep, lessonId, lessonTitle) {
         </button>
       </div>
 
-      <!-- Action Buttons (Drawing Pen) -->
+      <!-- Action Buttons (Drawing Pen & Toggle Toolbar) -->
       <div style="display: flex; align-items: center; gap: 8px;">
         <button class="fc-circle-btn" onclick="window.toggleScreenDrawing()" title="Bật/Tắt Bút vẽ màn hình (Phím D)" style="color: #ec4899;">
           <i class="fa-solid fa-pen-nib"></i>
+        </button>
+        <button id="toggle-toolbar-btn" class="fc-circle-btn" onclick="window.toggleLessonToolbar()" title="Ẩn/Hiện thanh công cụ (Phím T)" style="color: #38bdf8;">
+          <i class="fa-solid fa-chevron-up"></i>
         </button>
       </div>
     </div>
@@ -7441,6 +7444,25 @@ function renderLessonStepperNav(currentStep, lessonId, lessonTitle) {
 }
 
 window.renderLessonStepperNav = renderLessonStepperNav;
+
+window.toggleLessonToolbar = function() {
+  window._isStepperBarCollapsed = !window._isStepperBarCollapsed;
+  const bar = document.querySelector('.lesson-stepper-hub-bar');
+  const btn = document.getElementById('toggle-toolbar-btn');
+  if (bar) {
+    bar.classList.toggle('toolbar-collapsed', window._isStepperBarCollapsed);
+  }
+  if (btn) {
+    const icon = btn.querySelector('i');
+    if (icon) {
+      icon.className = `fa-solid ${window._isStepperBarCollapsed ? 'fa-chevron-down' : 'fa-chevron-up'}`;
+    }
+    btn.title = window._isStepperBarCollapsed ? 'Hiện thanh công cụ (Phím T)' : 'Ẩn thanh công cụ (Phím T)';
+  }
+  if (typeof showToast === 'function') {
+    showToast(window._isStepperBarCollapsed ? 'Đã thu gọn thanh công cụ (Phím T để mở)' : 'Đã hiện thanh công cụ');
+  }
+};
 
 window.goToNextLesson = function(currentLessonNum) {
   const num = parseInt(String(currentLessonNum).replace(/\D/g, ''), 10) || 1;
