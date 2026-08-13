@@ -10,11 +10,14 @@
     "preload-tts": "node scripts/preload_tts_cache.js"
   },
   "dependencies": {
+    "@distube/ytdl-core": "^4.16.12",
+    "@google/generative-ai": "^0.24.1",
     "@travisvn/edge-tts": "^1.0.2",
     "cheerio": "^1.2.0",
     "cors": "^2.8.5",
     "dotenv": "^17.4.2",
     "express": "^4.21.2",
+    "groq-sdk": "^1.5.0",
     "mammoth": "^1.12.0",
     "mongoose": "^9.7.3",
     "msedge-tts": "^2.0.7",

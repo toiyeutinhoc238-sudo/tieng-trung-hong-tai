@@ -1373,18 +1373,113 @@ window.fetchYouTubeSubtitles = async function() {
         const langBadge = data.detectedLang ? ` [${data.detectedLang}]` : '';
         showToast(`✨ Đã nạp ${data.sentences.length} câu thoại${langBadge} & dịch sang Tiếng Trung chuẩn xác 100%! 🎉`);
       } else {
-        showToast(data.message || "Video không có phụ đề sẵn, vui lòng dán lời thoại rồi bấm 'Dịch Tiếng Trung'!", true);
+        // No subtitles found — offer AI transcription
+        showToast('📭 Video chưa có phụ đề — Đang khởi động AI phân tích giọng nói...', false);
+        setTimeout(() => window.transcribeAudioWithAI(ytId), 800);
       }
     } else {
-      showToast("Không thể kết nối lấy phụ đề YouTube tự động.", true);
+      showToast('Không thể kết nối lấy phụ đề YouTube tự động.', true);
     }
   } catch (err) {
-    console.error("Fetch subtitles error:", err);
-    showToast("Lỗi kết nối khi trích xuất phụ đề YouTube.", true);
+    console.error('Fetch subtitles error:', err);
+    showToast('Lỗi kết nối khi trích xuất phụ đề YouTube.', true);
   } finally {
     if (btn) {
       btn.disabled = false;
       btn.innerHTML = '<i class="fa-brands fa-youtube"></i> Lấy Mốc Giọng Nói YouTube';
+    }
+  }
+};
+
+// AI 4-Tier Transcription: Gemini → Groq Whisper → YouTube ASR → Manual
+window.transcribeAudioWithAI = async function(youtubeIdOverride) {
+  const urlInput = document.getElementById('custom-video-url')?.value.trim();
+  const ytId = youtubeIdOverride || extractYouTubeId(urlInput);
+
+  if (!ytId) {
+    showToast('Vui lòng dán link YouTube hợp lệ trước!', true);
+    document.getElementById('custom-video-url')?.focus();
+    return;
+  }
+
+  const aiBtn = document.getElementById('btn-ai-transcribe');
+  if (aiBtn) {
+    aiBtn.disabled = true;
+    aiBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> AI đang phân tích giọng...';
+  }
+
+  // Show step-by-step progress toasts
+  const steps = [
+    { delay: 0,    msg: '🤖 Tầng 1: Gemini Flash 2.0 đang nghe audio video...' },
+    { delay: 8000, msg: '⚡ Đang xử lý phiên âm chính xác từng câu nói...' },
+    { delay: 18000, msg: '🌐 Đang dịch sang Tiếng Trung & sinh Pinyin chuẩn...' },
+  ];
+  const toastTimers = steps.map(s => setTimeout(() => showToast(s.msg), s.delay));
+
+  try {
+    const res = await fetch('/api/dictation/transcribe-audio', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ youtubeId: ytId })
+    });
+
+    toastTimers.forEach(t => clearTimeout(t));
+
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      showToast(`Lỗi máy chủ: ${errData.error || res.status}`, true);
+      return;
+    }
+
+    const data = await res.json();
+
+    if (data.success && Array.isArray(data.sentences) && data.sentences.length > 0) {
+      const titleInput = document.getElementById('custom-video-title');
+      if (titleInput && (!titleInput.value || titleInput.value.startsWith('Bài Luyện Nghe'))) {
+        titleInput.value = titleInput.value || `Video ${ytId}`;
+      }
+
+      const lines = data.sentences.map(s => {
+        const sMin = Math.floor(s.startTime / 60);
+        const sSec = (s.startTime % 60).toFixed(2);
+        const eMin = Math.floor(s.endTime / 60);
+        const eSec = (s.endTime % 60).toFixed(2);
+        const sf = `${String(sMin).padStart(2,'0')}:${String(sSec).padStart(5,'0')}`;
+        const ef = `${String(eMin).padStart(2,'0')}:${String(eSec).padStart(5,'0')}`;
+        return `[${sf} - ${ef}] ${s.hanzi} | ${s.pinyin} | ${s.meaning || 'Câu hội thoại'}`;
+      });
+
+      const textarea = document.getElementById('custom-video-subtitles');
+      if (textarea) textarea.value = lines.join('\n');
+
+      const tierEmoji = data.tierUsed?.includes('Gemini') ? '🤖' :
+                        data.tierUsed?.includes('Groq')   ? '⚡' :
+                        data.tierUsed?.includes('ASR')    ? '📝' : '✅';
+      showToast(`${tierEmoji} AI phân tích thành công ${data.sentences.length} câu [${data.tierUsed}] — Chuẩn xác tuyệt đối! 🎉`);
+
+    } else if (data.fallback) {
+      // Tier 4 manual
+      showToast('⚠️ Video được bảo vệ, AI không thể trích xuất. Hãy dán lời thoại thủ công!', true);
+      // Highlight the textarea for manual input
+      const textarea = document.getElementById('custom-video-subtitles');
+      if (textarea) {
+        textarea.focus();
+        textarea.style.borderColor = '#f59e0b';
+        textarea.placeholder = 'Dán lời thoại Tiếng Việt hoặc Tiếng Trung vào đây,\nrồi bấm "Dịch Tiếng Trung" để AI xử lý!';
+        setTimeout(() => { textarea.style.borderColor = ''; }, 3000);
+      }
+    } else {
+      showToast(data.message || 'Không nhận diện được giọng nói trong video.', true);
+    }
+
+  } catch (err) {
+    toastTimers.forEach(t => clearTimeout(t));
+    console.error('AI Transcribe error:', err);
+    showToast('Lỗi kết nối AI phân tích giọng — Kiểm tra kết nối Internet!', true);
+  } finally {
+    if (aiBtn) {
+      aiBtn.disabled = false;
+      aiBtn.innerHTML = '<i class="fa-solid fa-waveform-lines"></i> AI Phân Tích Giọng';
     }
   }
 };

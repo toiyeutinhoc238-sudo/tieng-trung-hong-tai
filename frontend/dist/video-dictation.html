@@ -1080,7 +1080,7 @@
       cursor: pointer;
     }
   </style>
-  <script type="module" crossorigin src="/assets/dictation-BecGAXhw.js"></script>
+  <script type="module" crossorigin src="/assets/dictation-Dpmk-3_G.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/style-DM8lpSJg.js">
   <link rel="modulepreload" crossorigin href="/assets/particles-Dl8CQUZ9.js">
   <link rel="modulepreload" crossorigin href="/assets/screen_drawing-D6QKvtIP.js">
@@ -1497,10 +1497,13 @@
                 <i class="fa-solid fa-closed-captioning" style="color: #a78bfa;"></i> Danh sách câu thoại / Phụ đề:
               </label>
               <div class="dict-subtitle-toolbar" style="gap: 5px; margin-bottom: 0;">
-                <button type="button" class="dict-subtitle-tool-btn" id="btn-fetch-yt-subs" onclick="window.fetchYouTubeSubtitles()" style="background: rgba(239, 68, 68, 0.18); border-color: rgba(239, 68, 68, 0.4); color: #fca5a5; font-weight: 800; padding: 4px 8px; font-size: 0.74rem;" title="Trích xuất phụ đề và mốc thời gian giọng nói thực tế từ YouTube (Hỗ trợ cả Tiếng Việt & Tiếng Trung)">
-                  <i class="fa-brands fa-youtube"></i> Lấy Mốc Giọng Nói YouTube
+                <button type="button" class="dict-subtitle-tool-btn" id="btn-fetch-yt-subs" onclick="window.fetchYouTubeSubtitles()" style="background: rgba(239, 68, 68, 0.18); border-color: rgba(239, 68, 68, 0.4); color: #fca5a5; font-weight: 800; padding: 4px 8px; font-size: 0.74rem;" title="Lấy phụ đề YouTube — tự chuyển sang AI nếu không có">
+                  <i class="fa-brands fa-youtube"></i> Lấy Mốc Giọng Nói
                 </button>
-                <button type="button" class="dict-subtitle-tool-btn" id="btn-auto-translate-subs" onclick="window.autoTranslateSubtitles()" style="background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.35); color: #38bdf8; font-weight: 800; padding: 4px 8px; font-size: 0.74rem;" title="Tự động dịch Tiếng Việt sang Tiếng Trung chuẩn + Sinh Pinyin">
+                <button type="button" class="dict-subtitle-tool-btn" id="btn-ai-transcribe" onclick="window.transcribeAudioWithAI()" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.22), rgba(236, 72, 153, 0.18)); border-color: rgba(139, 92, 246, 0.5); color: #c4b5fd; font-weight: 800; padding: 4px 8px; font-size: 0.74rem;" title="AI phân tích giọng nói trực tiếp — Gemini Flash 2.0 → Groq Whisper → YouTube ASR">
+                  <i class="fa-solid fa-microphone-lines" style="color: #c4b5fd;"></i> AI Phân Tích Giọng
+                </button>
+                <button type="button" class="dict-subtitle-tool-btn" id="btn-auto-translate-subs" onclick="window.autoTranslateSubtitles()" style="background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.35); color: #38bdf8; font-weight: 800; padding: 4px 8px; font-size: 0.74rem;" title="Dịch Tiếng Việt sang Tiếng Trung + Sinh Pinyin">
                   <i class="fa-solid fa-language"></i> Dịch Tiếng Trung
                 </button>
                 <button type="button" class="dict-subtitle-tool-btn" onclick="window.autoGenerateSubtitlesPinyin()" style="padding: 4px 8px; font-size: 0.74rem;" title="Tự động thêm phiên âm Pinyin chuẩn">

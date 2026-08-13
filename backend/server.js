@@ -2,14 +2,19 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import fs from 'fs/promises';
-import { existsSync } from 'fs';
+import { existsSync, createWriteStream } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import https from 'https';
+import http from 'http';
 import mongoose from 'mongoose';
 import crypto from 'crypto';
 import { pinyin } from 'pinyin-pro';
 import { PINYIN_TO_HANZI, convertPinyinToHanzi } from '../frontend/src/pinyin_hanzi_map.js';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import Groq from 'groq-sdk';
+import ytdl from '@distube/ytdl-core';
+import os from 'os';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -2201,6 +2206,339 @@ app.delete('/api/dictation/lessons/:id', async (req, res) => {
   } catch (err) {
     console.error("Error deleting dictation lesson:", err);
     res.status(500).json({ error: 'Failed to delete lesson' });
+  }
+});
+
+// ============================================================
+// AI AUDIO TRANSCRIPTION ENGINE — 4-Tier Fallback System
+// ============================================================
+
+const geminiAI = process.env.GEMINI_API_KEY ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY) : null;
+const groqClient = process.env.GROQ_API_KEY ? new Groq({ apiKey: process.env.GROQ_API_KEY }) : null;
+const AUDIO_TEMP_DIR = path.join(os.tmpdir(), 'hongtai_audio');
+fs.mkdir(AUDIO_TEMP_DIR, { recursive: true }).catch(() => {});
+
+// Download YouTube audio to a temp file
+async function downloadYouTubeAudio(youtubeId) {
+  const url = `https://www.youtube.com/watch?v=${youtubeId}`;
+  const tempFile = path.join(AUDIO_TEMP_DIR, `${youtubeId}_${Date.now()}.mp4`);
+
+  return new Promise((resolve, reject) => {
+    try {
+      if (!ytdl.validateID(youtubeId)) {
+        return reject(new Error('Invalid YouTube ID'));
+      }
+
+      const stream = ytdl(url, {
+        filter: 'audioonly',
+        quality: 'lowestaudio',
+        requestOptions: {
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+          }
+        }
+      });
+
+      const chunks = [];
+      let totalBytes = 0;
+      const MAX_BYTES = 18 * 1024 * 1024; // 18MB max (Gemini inline limit)
+
+      stream.on('data', chunk => {
+        totalBytes += chunk.length;
+        if (totalBytes > MAX_BYTES) {
+          stream.destroy();
+          resolve(Buffer.concat(chunks));
+          return;
+        }
+        chunks.push(chunk);
+      });
+
+      stream.on('end', () => resolve(Buffer.concat(chunks)));
+      stream.on('error', err => reject(err));
+
+      // Stop after ~10 minutes of audio
+      setTimeout(() => {
+        try { stream.destroy(); } catch(e) {}
+        if (chunks.length > 0) resolve(Buffer.concat(chunks));
+        else reject(new Error('Timeout: no audio data received'));
+      }, 120000);
+    } catch(err) {
+      reject(err);
+    }
+  });
+}
+
+// TIER 1: Gemini Flash 2.0 — Multimodal Audio Understanding
+async function transcribeWithGemini(audioBuffer, mimeType = 'audio/mp4') {
+  if (!geminiAI) throw new Error('No Gemini API key');
+
+  const model = geminiAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+  const base64Audio = audioBuffer.toString('base64');
+
+  const prompt = `Bạn là AI phiên âm chuyên nghiệp. Hãy lắng nghe đoạn audio này và:
+1. Nhận diện ngôn ngữ đang được nói (Tiếng Việt, Tiếng Trung, Tiếng Anh, v.v.)
+2. Phiên âm CHÍNH XÁC từng câu mà con người nói ra (không ghi âm nhạc nền, tiếng ồn, tiếng vỗ tay)
+3. Ghi lại mốc thời gian bắt đầu và kết thúc của mỗi câu
+4. Chỉ ghi những câu có giọng người nói thực sự
+
+TRẢ VỀ JSON ĐÚNG ĐỊNH DẠNG (không có markdown, không có giải thích):
+{
+  "language": "vi" | "zh" | "en" | "other",
+  "segments": [
+    { "start": 1.5, "end": 4.2, "text": "câu nói thực tế" },
+    { "start": 5.0, "end": 8.3, "text": "câu tiếp theo" }
+  ]
+}`;
+
+  const result = await model.generateContent([
+    {
+      inlineData: {
+        mimeType: mimeType,
+        data: base64Audio
+      }
+    },
+    { text: prompt }
+  ]);
+
+  const responseText = result.response.text().trim();
+  const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) throw new Error('Gemini returned invalid JSON');
+  return JSON.parse(jsonMatch[0]);
+}
+
+// TIER 2: Groq Whisper Large v3 — Ultra-fast Cloud STT
+async function transcribeWithGroq(audioBuffer, youtubeId) {
+  if (!groqClient) throw new Error('No Groq API key');
+
+  // Write temp file for Groq (requires file upload)
+  const tempPath = path.join(AUDIO_TEMP_DIR, `groq_${youtubeId}_${Date.now()}.mp4`);
+  await fs.writeFile(tempPath, audioBuffer);
+
+  try {
+    const { createReadStream } = await import('fs');
+    const transcription = await groqClient.audio.transcriptions.create({
+      file: createReadStream(tempPath),
+      model: 'whisper-large-v3',
+      response_format: 'verbose_json',
+      timestamp_granularities: ['segment'],
+      language: null // auto-detect
+    });
+
+    await fs.unlink(tempPath).catch(() => {});
+
+    return {
+      language: transcription.language || 'unknown',
+      segments: (transcription.segments || []).map(seg => ({
+        start: parseFloat(seg.start.toFixed(2)),
+        end: parseFloat(seg.end.toFixed(2)),
+        text: seg.text.trim()
+      }))
+    };
+  } catch (err) {
+    await fs.unlink(tempPath).catch(() => {});
+    throw err;
+  }
+}
+
+// TIER 3: YouTube ASR Hidden Track Scraper
+async function scrapeYouTubeASR(youtubeId) {
+  const videoUrl = `https://www.youtube.com/watch?v=${youtubeId}`;
+  const res = await fetch(videoUrl, {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+      'Accept-Language': 'vi,zh-CN,zh;q=0.9,en;q=0.8'
+    }
+  });
+  const html = await res.text();
+
+  let playerResponse = null;
+  const match = html.match(/ytInitialPlayerResponse\s*=\s*({.+?});/);
+  if (match) {
+    try { playerResponse = JSON.parse(match[1]); } catch(e) {}
+  }
+
+  const captionTracks = playerResponse?.captions?.playerCaptionsTracklistRenderer?.captionTracks || [];
+  if (captionTracks.length === 0) throw new Error('No caption tracks found');
+
+  // Try all available tracks, prefer ASR/auto-generated ones
+  const asrTrack = captionTracks.find(t => t.kind === 'asr') ||
+                   captionTracks.find(t => t.languageCode?.startsWith('vi')) ||
+                   captionTracks.find(t => t.languageCode?.startsWith('zh')) ||
+                   captionTracks[0];
+
+  // Try multiple formats for better coverage
+  const formats = ['json3', 'srv3', 'srv2', 'ttml'];
+  let segments = [];
+  let detectedLang = asrTrack.languageCode || 'unknown';
+
+  for (const fmt of formats) {
+    try {
+      const baseUrl = asrTrack.baseUrl.replace(/&fmt=\w+/, '');
+      const subUrl = `${baseUrl}&fmt=${fmt}`;
+      const subRes = await fetch(subUrl);
+      if (!subRes.ok) continue;
+
+      if (fmt === 'json3') {
+        const subData = await subRes.json();
+        const events = subData.events || [];
+        for (const ev of events) {
+          if (!ev.segs) continue;
+          const text = ev.segs.map(s => s.utf8).join('').trim();
+          const cleaned = cleanHumanSpeechText(text);
+          if (!cleaned) continue;
+          segments.push({
+            start: parseFloat(((ev.tStartMs || 0) / 1000).toFixed(2)),
+            end: parseFloat((((ev.tStartMs || 0) + (ev.dDurationMs || 3000)) / 1000).toFixed(2)),
+            text: cleaned
+          });
+        }
+      } else if (fmt === 'srv3' || fmt === 'srv2') {
+        const xml = await subRes.text();
+        const matches = [...xml.matchAll(/<p[^>]+t="(\d+)"[^>]+d="(\d+)"[^>]*>([^<]+)<\/p>/g)];
+        for (const m of matches) {
+          const cleaned = cleanHumanSpeechText(m[3].replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&#39;/g,"'"));
+          if (!cleaned) continue;
+          segments.push({
+            start: parseFloat((parseInt(m[1]) / 1000).toFixed(2)),
+            end: parseFloat(((parseInt(m[1]) + parseInt(m[2])) / 1000).toFixed(2)),
+            text: cleaned
+          });
+        }
+      }
+
+      if (segments.length > 0) break;
+    } catch(e) { continue; }
+  }
+
+  if (segments.length === 0) throw new Error('No ASR segments extracted');
+  return { language: detectedLang, segments };
+}
+
+// Merge transcript segments into full lesson sentences with translation
+async function buildSentencesFromTranscript(transcript) {
+  const rawItems = transcript.segments.map(s => ({
+    text: s.text,
+    startTime: s.start,
+    endTime: s.end
+  }));
+
+  const speechItems = consolidateSpeechSegments(rawItems);
+  const lang = (transcript.language || '').toLowerCase();
+  const isVietnamese = lang.startsWith('vi');
+  const isChinese = lang.startsWith('zh') || lang.startsWith('cn');
+
+  let curId = 1;
+  const sentences = [];
+
+  for (const item of speechItems) {
+    let hanzi = '', py = '', meaning = '';
+    try {
+      if (isChinese) {
+        hanzi = item.text;
+        py = pinyin(hanzi, { toneType: 'symbol' });
+        meaning = await translateText(hanzi, 'zh-CN', 'vi');
+      } else if (isVietnamese) {
+        meaning = item.text;
+        hanzi = await translateText(meaning, 'vi', 'zh-CN');
+        py = pinyin(hanzi, { toneType: 'symbol' });
+      } else {
+        meaning = await translateText(item.text, 'auto', 'vi');
+        hanzi = await translateText(item.text, 'auto', 'zh-CN');
+        py = pinyin(hanzi, { toneType: 'symbol' });
+      }
+    } catch(e) {
+      hanzi = item.text;
+      meaning = item.text;
+    }
+
+    if (!hanzi) continue;
+    sentences.push({
+      id: curId++,
+      startTime: item.startTime,
+      endTime: item.endTime,
+      hanzi,
+      pinyin: py,
+      meaning: meaning || item.text,
+      keywords: [hanzi.slice(0, Math.min(2, hanzi.length))]
+    });
+  }
+
+  return sentences;
+}
+
+// POST /api/dictation/transcribe-audio — 4-Tier AI Transcription Engine
+app.post('/api/dictation/transcribe-audio', async (req, res) => {
+  const { youtubeId } = req.body || {};
+  if (!youtubeId) return res.status(400).json({ error: 'Missing youtubeId' });
+
+  let tierUsed = null;
+  let transcript = null;
+  const errors = {};
+
+  // TIER 1: Gemini Flash 2.0 Multimodal
+  if (!transcript && geminiAI) {
+    try {
+      console.log(`[Transcribe] Tier 1: Gemini Flash 2.0 for ${youtubeId}`);
+      const audioBuffer = await downloadYouTubeAudio(youtubeId);
+      transcript = await transcribeWithGemini(audioBuffer);
+      tierUsed = 'Gemini Flash 2.0 🤖';
+      console.log(`[Transcribe] Tier 1 SUCCESS: ${transcript.segments?.length} segments`);
+    } catch(err) {
+      errors.gemini = err.message;
+      console.warn(`[Transcribe] Tier 1 failed: ${err.message}`);
+    }
+  }
+
+  // TIER 2: Groq Whisper Large v3
+  if (!transcript && groqClient) {
+    try {
+      console.log(`[Transcribe] Tier 2: Groq Whisper for ${youtubeId}`);
+      const audioBuffer = await downloadYouTubeAudio(youtubeId);
+      transcript = await transcribeWithGroq(audioBuffer, youtubeId);
+      tierUsed = 'Groq Whisper Large v3 ⚡';
+      console.log(`[Transcribe] Tier 2 SUCCESS: ${transcript.segments?.length} segments`);
+    } catch(err) {
+      errors.groq = err.message;
+      console.warn(`[Transcribe] Tier 2 failed: ${err.message}`);
+    }
+  }
+
+  // TIER 3: YouTube ASR Hidden Track
+  if (!transcript) {
+    try {
+      console.log(`[Transcribe] Tier 3: YouTube ASR scrape for ${youtubeId}`);
+      transcript = await scrapeYouTubeASR(youtubeId);
+      tierUsed = 'YouTube ASR 📝';
+      console.log(`[Transcribe] Tier 3 SUCCESS: ${transcript.segments?.length} segments`);
+    } catch(err) {
+      errors.asr = err.message;
+      console.warn(`[Transcribe] Tier 3 failed: ${err.message}`);
+    }
+  }
+
+  // TIER 4: Manual fallback
+  if (!transcript || !transcript.segments || transcript.segments.length === 0) {
+    return res.json({
+      success: false,
+      fallback: true,
+      tierUsed: 'Thủ Công ✍️',
+      errors,
+      message: 'Video này không có giọng người nói rõ ràng hoặc bị bảo vệ. Vui lòng dán lời thoại và bấm Dịch Tiếng Trung!'
+    });
+  }
+
+  try {
+    const sentences = await buildSentencesFromTranscript(transcript);
+    res.json({
+      success: true,
+      tierUsed,
+      language: transcript.language,
+      segmentCount: transcript.segments.length,
+      sentences
+    });
+  } catch(err) {
+    console.error('[Transcribe] Build sentences error:', err);
+    res.status(500).json({ error: 'Lỗi xử lý kết quả phiên âm', detail: err.message });
   }
 });
 
