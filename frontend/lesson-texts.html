@@ -585,6 +585,19 @@
     html.light-mode .chat-vi {
       color: #475569 !important;
     }
+
+    /* Pinyin Visibility Rules */
+    body.hide-pinyin .chat-py,
+    body.hide-pinyin .bk-pinyin-line,
+    body.hide-pinyin [data-role="pinyin"],
+    html.hide-pinyin .chat-py,
+    html.hide-pinyin .bk-pinyin-line,
+    html.hide-pinyin [data-role="pinyin"],
+    .hide-pinyin .chat-py,
+    .hide-pinyin .bk-pinyin-line,
+    .hide-pinyin [data-role="pinyin"] {
+      display: none !important;
+    }
   </style>
 </head>
 
@@ -603,7 +616,12 @@
           <p>Hệ thống học đối thoại bài khóa HSK chuẩn bộ giáo trình với 4 bước tương tác</p>
         </div>
       </div>
-      <div style="display: flex; gap: 8px; align-items: center;">
+      <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+        <button id="pinyin-toggle-btn" class="btn-close" onclick="window.togglePinyinVisibility()"
+          title="Bật/Tắt hiển thị Pinyin toàn bộ Bài Khóa" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.35); color: #fbbf24;">
+          <i class="fa-solid fa-eye" id="pinyin-toggle-icon"></i>
+          <span id="pinyin-toggle-label">Pinyin: BẬT</span>
+        </button>
         <button id="particle-toggle-btn" class="btn-close particle-toggle-btn"
           onclick="window.toggleSeasonalParticles()" title="Bật/Tắt hiệu ứng lá rơi động">
           <i class="fa-solid fa-snowflake" style="color:#38bdf8;"></i>
@@ -652,6 +670,11 @@
           id="lesson-title-badge">
           <i class="fa-solid fa-bookmark" style="color: #38bdf8;"></i> Bài Khóa HSK 1 - Bài 1
         </div>
+        <button id="pinyin-toggle-hub-btn" class="btn-close" onclick="window.togglePinyinVisibility()"
+          title="Bật/Tắt hiển thị Pinyin trong Bài Khóa" style="padding: 6px 12px; border-radius: 10px; font-weight: 700; font-size: 0.82rem; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.35); color: #fbbf24; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-eye" id="pinyin-hub-icon"></i>
+          <span id="pinyin-hub-label">Pinyin: BẬT</span>
+        </button>
       </div>
 
       <!-- 4 Step Tabs -->
@@ -994,7 +1017,7 @@
             <div class="chat-bubble ${side}">
               <div class="chat-speaker">${line.speaker || (side === 'left' ? 'Người A' : 'Người B')}</div>
               <div class="chat-zh hanzi-text">${line.zh}</div>
-              ${line.pinyin ? `<div class="chat-py">${line.pinyin}</div>` : ''}
+              ${line.pinyin ? `<div class="chat-py" data-role="pinyin">${line.pinyin}</div>` : ''}
               ${line.vi ? `<div class="chat-vi">${line.vi}</div>` : ''}
             </div>
           `;
@@ -1099,7 +1122,7 @@
                 </button>
               </div>
               <div class="hanzi-text" style="font-size:1.4rem; font-weight:800; color:#ffffff;">${curLine.zh}</div>
-              ${curLine.pinyin ? `<div style="font-size:0.95rem; color:#fbbf24; font-weight:600; margin-top:4px;">${curLine.pinyin}</div>` : ''}
+              ${curLine.pinyin ? `<div class="bk-pinyin-line" data-role="pinyin" style="font-size:0.95rem; color:#fbbf24; font-weight:600; margin-top:4px;">${curLine.pinyin}</div>` : ''}
             </div>
 
             <!-- Translation Input Panel -->
@@ -1148,7 +1171,7 @@
               ` : ''}
               <div style="flex:1; word-break:break-word;">
                 <div class="hanzi-text" style="font-size:1.35rem; font-weight:800; color:#ffffff; margin-bottom:4px;">${line.zh}</div>
-                ${line.pinyin ? `<div style="font-size:0.95rem; color:#fbbf24; font-weight:700; margin-bottom:4px;">${line.pinyin}</div>` : ''}
+                ${line.pinyin ? `<div class="bk-pinyin-line" data-role="pinyin" style="font-size:0.95rem; color:#fbbf24; font-weight:700; margin-bottom:4px;">${line.pinyin}</div>` : ''}
                 ${line.vi ? `<div style="font-size:0.92rem; color:#cbd5e1;">${line.vi}</div>` : ''}
               </div>
               <button onclick="speakText(decodeURIComponent('${encodeURIComponent(line.zh)}'))" style="background:rgba(56,189,248,0.2); border:1px solid rgba(56,189,248,0.4); color:#38bdf8; cursor:pointer; padding:8px 16px; border-radius:12px; font-weight:700; font-size:0.9rem; flex-shrink:0;" title="Nghe phát âm">
@@ -1407,6 +1430,71 @@
       currentLineIndex = (currentLineIndex + dir + total) % total;
       renderWorkspace();
     }
+
+    // Pinyin Visibility Management & Toast Notification
+    let showPinyin = localStorage.getItem('lesson_text_show_pinyin') !== 'false';
+
+    function initPinyinState() {
+      const saved = localStorage.getItem('lesson_text_show_pinyin');
+      showPinyin = saved !== 'false';
+      applyPinyinState(false);
+    }
+
+    function applyPinyinState(showToastNotice = false) {
+      if (showPinyin) {
+        document.body.classList.remove('hide-pinyin');
+        document.documentElement.classList.remove('hide-pinyin');
+      } else {
+        document.body.classList.add('hide-pinyin');
+        document.documentElement.classList.add('hide-pinyin');
+      }
+
+      const iconEls = [document.getElementById('pinyin-toggle-icon'), document.getElementById('pinyin-hub-icon')];
+      const labelEls = [document.getElementById('pinyin-toggle-label'), document.getElementById('pinyin-hub-label')];
+
+      iconEls.forEach(el => {
+        if (el) el.className = showPinyin ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash';
+      });
+
+      labelEls.forEach(el => {
+        if (el) el.textContent = showPinyin ? 'Pinyin: BẬT' : 'Pinyin: TẮT';
+      });
+
+      if (showToastNotice) {
+        showLessonToast(showPinyin ? '👁️ Đã BẬT hiển thị Pinyin bài khóa' : '🙈 Đã ẨN Pinyin bài khóa (tự thử thách khả năng đọc chữ Hán)');
+      }
+    }
+
+    window.togglePinyinVisibility = function () {
+      showPinyin = !showPinyin;
+      localStorage.setItem('lesson_text_show_pinyin', showPinyin ? 'true' : 'false');
+      applyPinyinState(true);
+    };
+
+    function showLessonToast(msg, isError = false) {
+      let t = document.getElementById('lesson-toast');
+      if (!t) {
+        t = document.createElement('div');
+        t.id = 'lesson-toast';
+        t.style.cssText = 'position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(15, 23, 42, 0.95); color: #ffffff; padding: 12px 24px; border-radius: 99px; font-weight: 700; font-size: 0.95rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1.5px solid rgba(56, 189, 248, 0.6); z-index: 999999; opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); display: flex; align-items: center; gap: 10px; backdrop-filter: blur(16px);';
+        document.body.appendChild(t);
+      }
+      t.innerHTML = msg;
+      t.style.borderColor = isError ? 'rgba(239, 68, 68, 0.7)' : 'rgba(56, 189, 248, 0.7)';
+      t.style.opacity = '1';
+      t.style.transform = 'translateX(-50%) translateY(0)';
+      clearTimeout(t._timer);
+      t._timer = setTimeout(() => {
+        t.style.opacity = '0';
+        t.style.transform = 'translateX(-50%) translateY(100px)';
+      }, 2500);
+    }
+    window.showToast = showLessonToast;
+
+    // Apply saved pinyin state on load
+    document.addEventListener('DOMContentLoaded', () => {
+      initPinyinState();
+    });
   </script>
   <script type="module" src="/src/particles.js"></script>
   <script type="module" src="/src/screen_drawing.js"></script>

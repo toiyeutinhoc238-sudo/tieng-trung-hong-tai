@@ -1,3 +1,5 @@
+import html2canvas from 'html2canvas';
+
 /**
  * ==============================================================================
  * SCREEN DRAWING & HANDWRITING NOTE TOOL (Bút Vẽ & Viết Tay Lên Màn Hình)
@@ -598,26 +600,126 @@ class ScreenDrawingTool {
     }
   }
 
-  saveImage() {
-    if (!this.canvas) return;
+  async saveImage() {
     try {
-      const tempCanvas = document.createElement('canvas');
-      tempCanvas.width = this.canvas.width;
-      tempCanvas.height = this.canvas.height;
-      const tCtx = tempCanvas.getContext('2d');
+      this.showToast('📸 Đang chụp màn hình bài giảng...');
 
-      tCtx.fillStyle = 'rgba(15, 23, 42, 0.95)';
-      tCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-      tCtx.drawImage(this.canvas, 0, 0);
+      // Save previous display styles to restore afterwards
+      const prevToolbarDisplay = this.toolbar ? this.toolbar.style.display : 'none';
+      const prevBubbleDisplay = this.bubble ? this.bubble.style.display : 'none';
+      const prevCanvasDisplay = this.canvas ? this.canvas.style.display : 'none';
+      const eraserCursor = document.getElementById('screen-drawing-eraser-cursor');
+      const prevCursorDisplay = eraserCursor ? eraserCursor.style.display : 'none';
 
-      const dataUrl = tempCanvas.toDataURL('image/png');
-      const a = document.createElement('a');
-      a.href = dataUrl;
-      a.download = `tieng-trung-hong-tai-note-${Date.now()}.png`;
-      a.click();
-      this.showToast('📸 Đã lưu ảnh bài giảng!');
+      // Temporarily hide UI overlays so screenshot is completely clean
+      if (this.toolbar) this.toolbar.style.display = 'none';
+      if (this.bubble) this.bubble.style.display = 'none';
+      if (eraserCursor) eraserCursor.style.display = 'none';
+      if (this.canvas) this.canvas.style.display = 'none';
+
+      // Small delay for DOM layout to settle before capture
+      await new Promise(r => setTimeout(r, 60));
+
+      const targetEl = document.fullscreenElement || document.body;
+
+      let pageCanvas = null;
+      try {
+        pageCanvas = await html2canvas(targetEl, {
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: null,
+          scale: Math.min(window.devicePixelRatio || 1.5, 2),
+          logging: false,
+          ignoreElements: (element) => {
+            return (
+              element.id === 'screen-drawing-canvas-overlay' ||
+              element.id === 'screen-drawing-toolbar' ||
+              element.id === 'screen-pen-floating-bubble' ||
+              element.id === 'screen-drawing-eraser-cursor' ||
+              element.id === 'screen-drawing-toast' ||
+              element.id === 'lesson-toast' ||
+              element.id === 'toast' ||
+              element.classList?.contains('screen-drawing-canvas') ||
+              element.classList?.contains('screen-drawing-toolbar') ||
+              element.classList?.contains('screen-pen-floating-bubble')
+            );
+          }
+        });
+      } catch (domErr) {
+        console.warn('html2canvas capture fallback:', domErr);
+      }
+
+      // Restore UI elements immediately
+      if (this.toolbar) this.toolbar.style.display = prevToolbarDisplay;
+      if (this.bubble) this.bubble.style.display = prevBubbleDisplay;
+      if (eraserCursor) eraserCursor.style.display = prevCursorDisplay;
+      if (this.canvas) this.canvas.style.display = prevCanvasDisplay;
+
+      // Composite page canvas and drawing canvas
+      const width = pageCanvas ? pageCanvas.width : (this.canvas ? this.canvas.width : window.innerWidth);
+      const height = pageCanvas ? pageCanvas.height : (this.canvas ? this.canvas.height : window.innerHeight);
+
+      const compositeCanvas = document.createElement('canvas');
+      compositeCanvas.width = width;
+      compositeCanvas.height = height;
+      const cCtx = compositeCanvas.getContext('2d');
+
+      if (pageCanvas) {
+        cCtx.drawImage(pageCanvas, 0, 0);
+      } else {
+        cCtx.fillStyle = 'rgba(15, 23, 42, 0.95)';
+        cCtx.fillRect(0, 0, width, height);
+      }
+
+      // Overlay drawing strokes
+      if (this.canvas && this.canvas.width > 0 && this.canvas.height > 0) {
+        cCtx.drawImage(this.canvas, 0, 0, width, height);
+      }
+
+      // Convert composite canvas to PNG Blob
+      compositeCanvas.toBlob(async (blob) => {
+        if (!blob) {
+          this.showToast('Lỗi khi xuất ảnh màn hình!', true);
+          return;
+        }
+
+        // 1. Copy image directly to system clipboard (just like Win + Shift + S / PrintScreen)
+        let clipboardCopied = false;
+        try {
+          if (navigator.clipboard && window.ClipboardItem) {
+            const item = new ClipboardItem({ 'image/png': blob });
+            await navigator.clipboard.write([item]);
+            clipboardCopied = true;
+          }
+        } catch (clipErr) {
+          console.warn('Clipboard write permission denied or not supported:', clipErr);
+        }
+
+        // 2. Download high-res PNG file
+        const now = new Date();
+        const timeStr = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;
+        const filename = `tieng-trung-hong-tai-screenshot-${timeStr}.png`;
+
+        const downloadUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = downloadUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(downloadUrl), 10000);
+
+        // 3. User feedback toast
+        if (clipboardCopied) {
+          this.showToast('📸 Đã chụp màn hình! Đã copy vào Clipboard (Ctrl + V để dán) & Tải file ảnh về máy 🎉');
+        } else {
+          this.showToast('📸 Đã chụp màn hình và Tải file ảnh về máy 🎉');
+        }
+      }, 'image/png');
+
     } catch (e) {
-      console.warn('Save image error:', e);
+      console.error('Screenshot error:', e);
+      this.showToast('Có lỗi xảy ra khi chụp màn hình!', true);
     }
   }
 
@@ -818,10 +920,27 @@ class ScreenDrawingTool {
     });
   }
 
-  showToast(msg) {
+  showToast(msg, isError = false) {
     if (typeof window.showToast === 'function') {
-      window.showToast(msg);
+      window.showToast(msg, isError);
+      return;
     }
+    let t = document.getElementById('screen-drawing-toast');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'screen-drawing-toast';
+      t.style.cssText = 'position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(15, 23, 42, 0.95); color: #ffffff; padding: 14px 28px; border-radius: 99px; font-weight: 700; font-size: 0.95rem; box-shadow: 0 12px 35px rgba(0,0,0,0.6); border: 1.5px solid rgba(56, 189, 248, 0.6); z-index: 99999999; opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); display: flex; align-items: center; gap: 10px; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); text-align: center; max-width: 90vw;';
+      document.body.appendChild(t);
+    }
+    t.innerHTML = msg;
+    t.style.borderColor = isError ? 'rgba(239, 68, 68, 0.7)' : 'rgba(56, 189, 248, 0.7)';
+    t.style.opacity = '1';
+    t.style.transform = 'translateX(-50%) translateY(0)';
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => {
+      t.style.opacity = '0';
+      t.style.transform = 'translateX(-50%) translateY(100px)';
+    }, 3200);
   }
 }
 

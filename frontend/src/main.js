@@ -7313,8 +7313,16 @@ function renderLessonHeroCardContent(w, index, total) {
           <button class="btn btn-sm btn-outline-primary" onclick="window.replayLessonHanziStrokes()" style="border-radius: 10px; font-size: 0.82rem; font-weight: 700; padding: 6px 14px; gap: 6px; display: flex; align-items: center;">
             <i class="fa-solid fa-pen-nib"></i> Phát lại nét
           </button>
-          <div style="font-size: 0.8rem; font-weight: 700; color: #60a5fa; background: rgba(59, 130, 246, 0.15); padding: 4px 10px; border-radius: 99px;">
-            Thẻ ${index + 1} / ${total}
+          <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 2px;">
+            <button class="stage-mini-nav-btn" onclick="window.navigateLessonFlashcard(-1)" title="Thẻ trước (←)" style="width: 32px; height: 32px; border-radius: 50%; background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.4); color: #60a5fa; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; transition: all 0.2s;" onmouseenter="this.style.background='rgba(59,130,246,0.4)'; this.style.transform='scale(1.08)';" onmouseleave="this.style.background='rgba(59,130,246,0.2)'; this.style.transform='scale(1)';">
+              <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <div style="font-size: 0.82rem; font-weight: 700; color: #60a5fa; background: rgba(59, 130, 246, 0.15); padding: 4px 12px; border-radius: 99px; border: 1px solid rgba(59, 130, 246, 0.3); white-space: nowrap;">
+              Thẻ ${index + 1} / ${total}
+            </div>
+            <button class="stage-mini-nav-btn" onclick="window.navigateLessonFlashcard(1)" title="Thẻ tiếp theo (→)" style="width: 32px; height: 32px; border-radius: 50%; background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.4); color: #60a5fa; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; transition: all 0.2s;" onmouseenter="this.style.background='rgba(59,130,246,0.4)'; this.style.transform='scale(1.08)';" onmouseleave="this.style.background='rgba(59,130,246,0.2)'; this.style.transform='scale(1)';">
+              <i class="fa-solid fa-chevron-right"></i>
+            </button>
           </div>
         </div>
 
