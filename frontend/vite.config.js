@@ -26,7 +26,8 @@ export default defineConfig({
         radicals: resolve(__dirname, 'chinese-radicals.html'),
         hanzi: resolve(__dirname, 'hanzi-writer.html'),
         texts: resolve(__dirname, 'lesson-texts.html'),
-        rank: resolve(__dirname, 'rank.html')
+        rank: resolve(__dirname, 'rank.html'),
+        dictation: resolve(__dirname, 'video-dictation.html')
       }
     }
   }

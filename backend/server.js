@@ -8,11 +8,13 @@ import { fileURLToPath } from 'url';
 import https from 'https';
 import mongoose from 'mongoose';
 import crypto from 'crypto';
+import { pinyin } from 'pinyin-pro';
 import { PINYIN_TO_HANZI, convertPinyinToHanzi } from '../frontend/src/pinyin_hanzi_map.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const DB_PATH = path.join(__dirname, 'database.json');
+const DICTATION_DB_PATH = path.join(__dirname, 'video_dictation_lessons.json');
 const USER_DB_PATH = path.join(__dirname, 'user_data.json');
 const AUDIO_CACHE_DIR = path.join(__dirname, 'audio_cache');
 
@@ -1799,6 +1801,83 @@ app.get('/api/grammar/detail/:key', async (req, res) => {
   } catch (err) {
     console.error("Error reading grammar detail:", err);
     res.status(500).json({ error: 'Failed to load grammar detail' });
+  }
+});
+
+// ==========================================
+// VIDEO DICTATION API (eJOY Video Dictation)
+// ==========================================
+
+async function readDictationLessons() {
+  try {
+    const data = await fs.readFile(DICTATION_DB_PATH, 'utf-8');
+    return JSON.parse(data);
+  } catch (error) {
+    console.error('Error reading video dictation database:', error);
+    return [];
+  }
+}
+
+// GET /api/dictation/lessons — Lấy danh sách video luyện chép chính tả
+app.get('/api/dictation/lessons', async (req, res) => {
+  try {
+    const lessons = await readDictationLessons();
+    res.json(lessons);
+  } catch (err) {
+    console.error("Error reading dictation lessons:", err);
+    res.status(500).json({ error: 'Failed to load dictation lessons' });
+  }
+});
+
+// GET /api/dictation/lessons/:id — Lấy chi tiết 1 bài học video
+app.get('/api/dictation/lessons/:id', async (req, res) => {
+  try {
+    const lessons = await readDictationLessons();
+    const lesson = lessons.find(l => l.id === req.params.id);
+    if (!lesson) {
+      return res.status(404).json({ error: 'Lesson not found' });
+    }
+    res.json(lesson);
+  } catch (err) {
+    console.error("Error fetching lesson:", err);
+    res.status(500).json({ error: 'Failed to load lesson' });
+  }
+});
+
+// POST /api/dictation/pinyin-helper — Tự động sinh Pinyin cho đoạn văn
+app.post('/api/dictation/pinyin-helper', (req, res) => {
+  try {
+    const { text } = req.body || {};
+    if (!text) return res.json({ pinyin: '' });
+    const py = pinyin(text, { toneType: 'symbol' });
+    res.json({ pinyin: py });
+  } catch (err) {
+    res.json({ pinyin: '' });
+  }
+});
+
+// POST /api/dictation/save-lesson — Lưu bài học video mới
+app.post('/api/dictation/save-lesson', async (req, res) => {
+  try {
+    const newLesson = req.body;
+    if (!newLesson || !newLesson.youtubeId || !newLesson.title) {
+      return res.status(400).json({ error: 'Missing required lesson fields (youtubeId, title)' });
+    }
+    const lessons = await readDictationLessons();
+    const existingIndex = lessons.findIndex(l => l.id === newLesson.id || l.youtubeId === newLesson.youtubeId);
+    if (existingIndex >= 0) {
+      lessons[existingIndex] = { ...lessons[existingIndex], ...newLesson };
+    } else {
+      if (!newLesson.id) {
+        newLesson.id = 'dict_custom_' + Date.now();
+      }
+      lessons.unshift(newLesson);
+    }
+    await fs.writeFile(DICTATION_DB_PATH, JSON.stringify(lessons, null, 2), 'utf-8');
+    res.json({ success: true, lesson: newLesson });
+  } catch (err) {
+    console.error("Error saving dictation lesson:", err);
+    res.status(500).json({ error: 'Failed to save lesson' });
   }
 });
 
