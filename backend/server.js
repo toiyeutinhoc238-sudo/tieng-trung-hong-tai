@@ -2098,8 +2098,6 @@ Trả về đúng JSON:
 // AI AUDIO & SUBTITLE ENGINE — Multi-Tier High Performance
 // ============================================================
 
-const groqClient = process.env.GROQ_API_KEY ? new Groq({ apiKey: process.env.GROQ_API_KEY }) : null;
-const geminiAI = process.env.GEMINI_API_KEY ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY) : null;
 const AUDIO_TEMP_DIR = path.join(os.tmpdir(), 'hongtai_audio');
 fs.mkdir(AUDIO_TEMP_DIR, { recursive: true }).catch(() => {});
 
