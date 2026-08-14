@@ -1870,7 +1870,7 @@ function consolidateSpeechSegments(rawItems) {
 
   for (const item of rawItems) {
     const cleanText = cleanHumanSpeechText(item.text);
-    if (!cleanText || cleanText.length < 1) continue; // Skip pure noise/music
+    if (!cleanText || cleanText.length < 1) continue;
 
     if (!currentGroup) {
       currentGroup = {
@@ -1882,11 +1882,12 @@ function consolidateSpeechSegments(rawItems) {
     }
 
     const gap = item.startTime - currentGroup.endTime;
-    const isTerminal = /[.!?。！？\n]$/.test(currentGroup.text);
-    const isTooLong = (currentGroup.text.length + cleanText.length) > 50;
+    const combinedDuration = item.endTime - currentGroup.startTime;
+    const isTerminal = /[.!?。！？\n]$/.test(currentGroup.text.trim());
+    const isTooLong = (currentGroup.text.length + cleanText.length) > 40;
+    const isTooLongInTime = combinedDuration > 8;
 
-    // Merge continuous syllables from the same speaker if pause < 0.85s
-    if (gap <= 0.85 && !isTerminal && !isTooLong) {
+    if (gap >= 0 && gap <= 0.5 && !isTerminal && !isTooLong && !isTooLongInTime) {
       const glue = (currentGroup.text.endsWith(' ') || /[\u4e00-\u9fa5]/.test(currentGroup.text)) ? '' : ' ';
       currentGroup.text += glue + cleanText;
       currentGroup.endTime = Math.max(currentGroup.endTime, item.endTime);
@@ -1904,7 +1905,6 @@ function consolidateSpeechSegments(rawItems) {
     consolidated.push(currentGroup);
   }
 
-  // Apply vocal boundary cushions (0.18s pre-roll & 0.28s post-roll) to guarantee zero consonant/vowel truncation
   return consolidated.map(item => {
     const paddedStart = Math.max(0, parseFloat((item.startTime - 0.18).toFixed(2)));
     const paddedEnd = parseFloat((item.endTime + 0.28).toFixed(2));
