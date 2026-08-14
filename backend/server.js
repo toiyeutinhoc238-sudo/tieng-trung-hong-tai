@@ -2166,49 +2166,6 @@ async function batchTranslateAndPinyin(speechItems) {
   return results;
 }
 
-// AI Master Linguistic Refinement, 100% Vietnamese Proofreader & HSK + Category Classifier
-async function enhanceAndClassifyLesson(rawSpeechSegments, videoTitle, durationSeconds) {
-  if (!Array.isArray(rawSpeechSegments) || rawSpeechSegments.length === 0) {
-    return {
-      level: "2",
-      levelText: "HSK 2 - 3 (Cơ bản)",
-      category: "Giao Tiếp",
-      description: `Bài luyện nghe chép chính tả ${videoTitle}`,
-      sentences: []
-    };
-  }
-
-  // Baseline category & level heuristics
-  let category = 'Giao Tiếp';
-  const lowerTitle = (videoTitle || '').toLowerCase();
-  if (lowerTitle.includes('bài hát') || lowerTitle.includes('nhạc') || lowerTitle.includes('song') || lowerTitle.includes('music') || lowerTitle.includes('mv') || lowerTitle.includes('hát') || lowerTitle.includes('bằng kiều') || lowerTitle.includes('ca sĩ') || lowerTitle.includes('trái tim')) {
-    category = 'Âm Nhạc';
-  } else if (lowerTitle.includes('ăn') || lowerTitle.includes('món') || lowerTitle.includes('nhà hàng') || lowerTitle.includes('uống') || lowerTitle.includes('trà') || lowerTitle.includes('nấu')) {
-    category = 'Ẩm Thực';
-  } else if (lowerTitle.includes('du lịch') || lowerTitle.includes('khách sạn') || lowerTitle.includes('sân bay') || lowerTitle.includes('tàu') || lowerTitle.includes('hỏi đường')) {
-    category = 'Du Lịch';
-  } else if (lowerTitle.includes('hoạt hình') || lowerTitle.includes('peppa') || lowerTitle.includes('anime') || lowerTitle.includes('cartoon')) {
-    category = 'Hoạt Hình';
-  } else if (lowerTitle.includes('phim') || lowerTitle.includes('movie') || lowerTitle.includes('drama') || lowerTitle.includes('điện ảnh')) {
-    category = 'Phim Ảnh';
-  } else if (lowerTitle.includes('công việc') || lowerTitle.includes('công sở') || lowerTitle.includes('phỏng vấn') || lowerTitle.includes('kinh doanh') || lowerTitle.includes('họp')) {
-    category = 'Công Việc';
-  } else if (lowerTitle.includes('tin tức') || lowerTitle.includes('thời sự') || lowerTitle.includes('news') || lowerTitle.includes('bản tin')) {
-    category = 'Tin Tức';
-  } else if (lowerTitle.includes('văn hóa') || lowerTitle.includes('lễ hội') || lowerTitle.includes('tết') || lowerTitle.includes('phong tục') || lowerTitle.includes('lịch sử')) {
-    category = 'Văn Hóa';
-  } else if (lowerTitle.includes('mua') || lowerTitle.includes('sắm') || lowerTitle.includes('vlog') || lowerTitle.includes('quần áo')) {
-    category = 'Đời Sống';
-  }
-
-  let level = '2';
-  if (lowerTitle.includes('hsk 1') || lowerTitle.includes('hsk1')) level = '1';
-  else if (lowerTitle.includes('hsk 2') || lowerTitle.includes('hsk2')) level = '2';
-  else if (lowerTitle.includes('hsk 3') || lowerTitle.includes('hsk3')) level = '3';
-  else if (lowerTitle.includes('hsk 4') || lowerTitle.includes('hsk4')) level = '4';
-  else if (lowerTitle.includes('hsk 5') || lowerTitle.includes('hsk5')) level = '5';
-  else if (lowerTitle.includes('hsk 6') || lowerTitle.includes('hsk6')) level = '6';
-
 // Universal Multi-Model LLM JSON Caller (LLaMA 3.3 70B -> LLaMA 3.1 8B -> Gemini 2.5 Flash)
 async function callLLMJson(prompt) {
   // 1. Try Groq LLaMA 3.3 70B
@@ -2263,6 +2220,49 @@ async function callLLMJson(prompt) {
 
   throw new Error('All AI LLM models unavailable');
 }
+
+// AI Master Linguistic Refinement, 100% Vietnamese Proofreader & HSK + Category Classifier
+async function enhanceAndClassifyLesson(rawSpeechSegments, videoTitle, durationSeconds) {
+  if (!Array.isArray(rawSpeechSegments) || rawSpeechSegments.length === 0) {
+    return {
+      level: "2",
+      levelText: "HSK 2 - 3 (Cơ bản)",
+      category: "Giao Tiếp",
+      description: `Bài luyện nghe chép chính tả ${videoTitle}`,
+      sentences: []
+    };
+  }
+
+  // Baseline category & level heuristics
+  let category = 'Giao Tiếp';
+  const lowerTitle = (videoTitle || '').toLowerCase();
+  if (lowerTitle.includes('bài hát') || lowerTitle.includes('nhạc') || lowerTitle.includes('song') || lowerTitle.includes('music') || lowerTitle.includes('mv') || lowerTitle.includes('hát') || lowerTitle.includes('bằng kiều') || lowerTitle.includes('ca sĩ') || lowerTitle.includes('trái tim')) {
+    category = 'Âm Nhạc';
+  } else if (lowerTitle.includes('ăn') || lowerTitle.includes('món') || lowerTitle.includes('nhà hàng') || lowerTitle.includes('uống') || lowerTitle.includes('trà') || lowerTitle.includes('nấu')) {
+    category = 'Ẩm Thực';
+  } else if (lowerTitle.includes('du lịch') || lowerTitle.includes('khách sạn') || lowerTitle.includes('sân bay') || lowerTitle.includes('tàu') || lowerTitle.includes('hỏi đường')) {
+    category = 'Du Lịch';
+  } else if (lowerTitle.includes('hoạt hình') || lowerTitle.includes('peppa') || lowerTitle.includes('anime') || lowerTitle.includes('cartoon')) {
+    category = 'Hoạt Hình';
+  } else if (lowerTitle.includes('phim') || lowerTitle.includes('movie') || lowerTitle.includes('drama') || lowerTitle.includes('điện ảnh')) {
+    category = 'Phim Ảnh';
+  } else if (lowerTitle.includes('công việc') || lowerTitle.includes('công sở') || lowerTitle.includes('phỏng vấn') || lowerTitle.includes('kinh doanh') || lowerTitle.includes('họp')) {
+    category = 'Công Việc';
+  } else if (lowerTitle.includes('tin tức') || lowerTitle.includes('thời sự') || lowerTitle.includes('news') || lowerTitle.includes('bản tin')) {
+    category = 'Tin Tức';
+  } else if (lowerTitle.includes('v văn hóa') || lowerTitle.includes('lễ hội') || lowerTitle.includes('tết') || lowerTitle.includes('phong tục') || lowerTitle.includes('lịch sử')) {
+    category = 'Văn Hóa';
+  } else if (lowerTitle.includes('mua') || lowerTitle.includes('sắm') || lowerTitle.includes('vlog') || lowerTitle.includes('quần áo')) {
+    category = 'Đời Sống';
+  }
+
+  let level = '2';
+  if (lowerTitle.includes('hsk 1') || lowerTitle.includes('hsk1')) level = '1';
+  else if (lowerTitle.includes('hsk 2') || lowerTitle.includes('hsk2')) level = '2';
+  else if (lowerTitle.includes('hsk 3') || lowerTitle.includes('hsk3')) level = '3';
+  else if (lowerTitle.includes('hsk 4') || lowerTitle.includes('hsk4')) level = '4';
+  else if (lowerTitle.includes('hsk 5') || lowerTitle.includes('hsk5')) level = '5';
+  else if (lowerTitle.includes('hsk 6') || lowerTitle.includes('hsk6')) level = '6';
 
 // Fallback Batch Translator & Pinyin Generator
 async function batchTranslateAndPinyin(rawSpeechSegments) {
