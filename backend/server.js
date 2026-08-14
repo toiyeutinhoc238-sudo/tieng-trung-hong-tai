@@ -2406,6 +2406,7 @@ async function extractYouTubeDictation(youtubeId) {
         const whisperLang = isChinese ? 'zh' : (isVietnamese ? 'vi' : undefined);
         const whisperPrompt = isChinese ? 'Chinese Mandarin dictation, 汉语, 汉字, 拼音, 中文' : (isVietnamese ? 'Lời bài hát tiếng Việt, câu thoại đàm thoại tiếng Việt' : undefined);
 
+        let transcription;
         try {
           transcription = await groqClient.audio.transcriptions.create({
             file: createReadStream(tempAudio),
