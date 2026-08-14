@@ -2648,28 +2648,51 @@ async function extractYouTubeDictation(youtubeId) {
         }
       }
 
-      // Try Android client without webpage fetching to bypass 429 datacenter IP blocks on Render
-      try {
-        await execFileAsync(ytDlpBinaryPath, [
-          videoUrl,
-          '--extractor-args', 'youtube:player_client=android;player_skip=webpage,configs',
-          '-f', 'ba/b',
-          '-o', tempAudio,
-          '--force-overwrites',
-          '--no-playlist',
-          ...cookieArgs
-        ], { timeout: 60000 });
-      } catch (errAndroid) {
-        console.warn(`[Dictation] Android client download warn, retrying android_creator/tv:`, errAndroid.message);
-        await execFileAsync(ytDlpBinaryPath, [
-          videoUrl,
-          '--extractor-args', 'youtube:player_client=android_creator,tv_embedded;player_skip=webpage,configs',
-          '-f', 'ba/b',
-          '-o', tempAudio,
-          '--force-overwrites',
-          '--no-playlist',
-          ...cookieArgs
-        ], { timeout: 60000 });
+      // Try downloading audio via yt-dlp (Priority: 1. Cookie-based standard download -> 2. Android client bypass)
+      let downloadSuccess = false;
+      if (cookieArgs.length > 0) {
+        try {
+          await execFileAsync(ytDlpBinaryPath, [
+            videoUrl,
+            '-f', 'ba/b/bestaudio/best',
+            '-o', tempAudio,
+            '--force-overwrites',
+            '--no-playlist',
+            ...cookieArgs
+          ], { timeout: 60000 });
+          downloadSuccess = existsSync(tempAudio);
+        } catch (eCookieDl) {
+          console.warn('[Dictation] Cookie audio download attempt warn:', eCookieDl.message);
+        }
+      }
+
+      if (!downloadSuccess) {
+        try {
+          await execFileAsync(ytDlpBinaryPath, [
+            videoUrl,
+            '--extractor-args', 'youtube:player_client=android;player_skip=webpage,configs',
+            '-f', 'ba/b/bestaudio/best',
+            '-o', tempAudio,
+            '--force-overwrites',
+            '--no-playlist'
+          ], { timeout: 60000 });
+          downloadSuccess = existsSync(tempAudio);
+        } catch (errAndroid) {
+          console.warn(`[Dictation] Android client download warn, retrying android_creator/tv:`, errAndroid.message);
+          try {
+            await execFileAsync(ytDlpBinaryPath, [
+              videoUrl,
+              '--extractor-args', 'youtube:player_client=android_creator,tv_embedded;player_skip=webpage,configs',
+              '-f', 'ba/b/bestaudio/best',
+              '-o', tempAudio,
+              '--force-overwrites',
+              '--no-playlist'
+            ], { timeout: 60000 });
+            downloadSuccess = existsSync(tempAudio);
+          } catch (eThird) {
+            console.warn(`[Dictation] All yt-dlp audio download strategies failed:`, eThird.message);
+          }
+        }
       }
 
       if (groqClient && existsSync(tempAudio)) {
