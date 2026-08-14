@@ -1211,8 +1211,55 @@
       font-weight: 600;
       color: #cbd5e1;
     }
+
+    /* Cross-Platform Mobile & Touch Optimization (iOS, Android, Windows Touch) */
+    @media (max-width: 768px) {
+      .dict-page-container {
+        padding: 12px 10px 80px;
+        padding-bottom: max(80px, env(safe-area-inset-bottom));
+      }
+      .dict-top-nav {
+        padding: 10px 14px;
+      }
+      .dict-brand-title {
+        font-size: 1rem;
+      }
+      .dict-brand img {
+        width: 32px;
+        height: 32px;
+      }
+      .dict-main-workspace-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .cloze-interactive-wrap {
+        font-size: 1.3rem;
+        line-height: 1.8;
+      }
+      .cloze-input-box {
+        font-size: 1.1rem;
+        min-width: 70px;
+        padding: 6px 8px;
+      }
+      .btn, .cat-pill-btn, .mode-tab-btn, .btn-dict-action, .speed-pill {
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .video-smart-toolbar {
+        padding: 12px 14px;
+      }
+      .yt-sub-hanzi-line {
+        font-size: 1.15rem;
+      }
+      .yt-sub-pinyin-line {
+        font-size: 0.85rem;
+      }
+      .yt-sub-meaning-line {
+        font-size: 0.82rem;
+      }
+    }
   </style>
-  <script type="module" crossorigin src="/assets/dictation-BifsKgD2.js"></script>
+  <script type="module" crossorigin src="/assets/dictation-CPcZh8ct.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/style-DM8lpSJg.js">
   <link rel="modulepreload" crossorigin href="/assets/particles-Dl8CQUZ9.js">
   <link rel="modulepreload" crossorigin href="/assets/screen_drawing-CB_ccKph.js">
