@@ -2236,7 +2236,7 @@ async function extractYouTubeDictation(youtubeId) {
 
     if (!videoTitle || videoTitle.startsWith('Bài Luyện Nghe')) {
       try {
-        const meta = await ytdlp.getVideoInfo(videoUrl);
+        const meta = await ytdlp.getVideoInfo([videoUrl, '--extractor-args', 'youtube:player_client=android,ios;player_skip=webpage,configs']);
         videoTitle = meta.title || videoTitle;
         duration = meta.duration || duration;
       } catch (e) {
@@ -2295,7 +2295,7 @@ async function extractYouTubeDictation(youtubeId) {
 
       await execFileAsync(ytDlpBinaryPath, [
         videoUrl,
-        '--extractor-args', 'youtube:player_client=android,web',
+        '--extractor-args', 'youtube:player_client=android,ios;player_skip=webpage,configs',
         '-f', 'ba/b',
         '-o', tempAudio,
         '--force-overwrites',
