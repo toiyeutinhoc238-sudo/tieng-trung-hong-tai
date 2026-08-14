@@ -2767,6 +2767,20 @@ async function extractYouTubeDictation(youtubeId) {
   }
 }
 
+// Helper: Parse timestamps in seconds safely from number, string, or MM:SS format
+function parseTimeSeconds(val, defaultVal = 0) {
+  if (typeof val === 'number' && !isNaN(val)) return val;
+  if (typeof val === 'string') {
+    const parts = val.split(':').map(Number);
+    if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+      return parts[0] * 60 + parts[1];
+    }
+    const num = parseFloat(val);
+    if (!isNaN(num)) return num;
+  }
+  return defaultVal;
+}
+
 // Zero-Failure AI Master Knowledge Synthesis Engine (Multi-Model AI)
 async function generateAIFallbackLesson(videoTitle, durationSeconds) {
   const duration = durationSeconds || 60;
@@ -2774,55 +2788,68 @@ async function generateAIFallbackLesson(videoTitle, durationSeconds) {
 
   try {
     const prompt = `Bạn là một chuyên gia giáo dục ngôn ngữ Tiếng Trung và giáo viên HSK cao cấp.
-Người dùng cần tạo một bài luyện nghe chép chính tả cho video YouTube: "${videoTitle}" (Thời lượng: ${duration} giây).
+Nhiệm vụ: Hãy biên soạn một bài học luyện nghe tiếng Trung gồm 15 đến 20 câu thoại/lời bài hát bám sát theo tựa đề video: "${videoTitle}" (Thời lượng: ${duration} giây).
 
-NHIỆM VỤ CỦA BẠN:
-1. Nếu đây là một bài hát (như Gió Nổi Rồi, Lạc Nhau Có Phải Muôn Đời, Nơi Pháo Hoa Rực Rỡ...): Bạn hãy trích xuất/soạn danh sách từ 12 đến 25 câu lời bài hát/câu thoại bám sát nội dung và tựa đề "${videoTitle}", phân bổ mốc thời gian trải đều từ 0s đến ${duration}s.
-2. "hanzi": BẮT BUỘC có Chữ Hán Giản Thể chuẩn xác (nếu là bài hát/tiếng Trung -> giữ đúng chữ Hán gốc; nếu là tiếng Việt -> dịch chuẩn xác sang Chữ Hán Giản Thể). TUYỆT ĐỐI KHÔNG ĐỂ TRỐNG.
-3. "vietnamese": Lời bài hát/dịch nghĩa Tiếng Việt chuẩn xác 100%, tự nhiên, đúng chính tả, giàu cảm xúc.
-4. "hskLevel": Cấp độ HSK phù hợp ("1", "2", "3", "4", "5", "6").
-5. "category": Chọn đúng 1 trong: "Âm Nhạc", "Giao Tiếp", "Ẩm Thực", "Du Lịch", "Hoạt Hình", "Phim Ảnh", "Công Việc", "Tin Tức", "Văn Hóa", "Đời Sống", "Khác".
-6. "description": 1 câu tóm tắt nội dung bài học.
+YÊU CẦU BẮT BUỘC:
+1. "hanzi": BẮT BUỘC là câu tiếng Trung bằng Chữ Hán Giản Thể (TUYỆT ĐỐI KHÔNG ĐƯỢC ĐỂ TRỐNG, KHÔNG ĐƯỢC ĐỂ RỖNG). Ví dụ: "我依然想念着那个人。"
+2. "vietnamese": Lời dịch tiếng Việt chuẩn xác, giàu cảm xúc, đúng chính tả.
+3. "startTime" & "endTime": Số giây phân bổ đều từ 0 đến ${duration}.
+4. "hskLevel": Cấp độ HSK ("1", "2", "3", "4", "5", "6").
+5. "category": "Âm Nhạc" hoặc "Giao Tiếp".
 
 BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
 {
   "hskLevel": "3",
   "category": "Âm Nhạc",
-  "description": "Luyện nghe tiếng Trung qua bài học ${videoTitle}",
   "sentences": [
     {
       "id": 1,
-      "startTime": 5.0,
+      "startTime": 0.0,
       "endTime": 15.0,
-      "hanzi": "...",
-      "vietnamese": "..."
+      "hanzi": "我忘不了那个曾深爱过的人。",
+      "vietnamese": "Tôi không thể nào quên được người từng yêu sâu đậm."
     }
   ]
 }`;
 
     const parsed = await callLLMJson(prompt);
+    let rawSentences = parsed.sentences || parsed.data || parsed.list || parsed.lyrics || [];
+    if (!Array.isArray(rawSentences) && typeof parsed === 'object') {
+      const arrayKey = Object.keys(parsed).find(k => Array.isArray(parsed[k]));
+      if (arrayKey) rawSentences = parsed[arrayKey];
+    }
+
     const sentences = [];
-    for (const s of (parsed.sentences || [])) {
-      let hanzi = s.hanzi || '';
-      let vietnamese = s.vietnamese || '';
+    const step = duration / Math.max(1, rawSentences.length);
+
+    for (let idx = 0; idx < rawSentences.length; idx++) {
+      const s = rawSentences[idx];
+      let hanzi = (s.hanzi || '').trim();
+      let vietnamese = (s.vietnamese || s.meaning || '').trim();
+      
       if (!hanzi && vietnamese) {
         hanzi = await translateText(vietnamese, 'vi', 'zh-CN');
       }
       if (!vietnamese && hanzi) {
         vietnamese = await translateText(hanzi, 'zh-CN', 'vi');
       }
-      if (!hanzi) continue;
+      if (!hanzi && !vietnamese) continue;
+      if (!hanzi) hanzi = vietnamese;
+
+      const sTime = parseTimeSeconds(s.startTime, parseFloat((idx * step).toFixed(2)));
+      const eTime = parseTimeSeconds(s.endTime, parseFloat(((idx + 1) * step).toFixed(2)));
 
       let py = '';
       try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) {}
+
       sentences.push({
-        id: s.id || (sentences.length + 1),
-        startTime: parseFloat(Number(s.startTime).toFixed(2)),
-        endTime: parseFloat(Number(s.endTime).toFixed(2)),
+        id: idx + 1,
+        startTime: parseFloat(sTime.toFixed(2)),
+        endTime: parseFloat(eTime.toFixed(2)),
         hanzi: hanzi,
         pinyin: py,
-        meaning: vietnamese,
-        keywords: [hanzi ? hanzi.slice(0, Math.min(2, hanzi.length)) : '']
+        meaning: vietnamese || hanzi,
+        keywords: [hanzi.slice(0, Math.min(2, hanzi.length))]
       });
     }
 
