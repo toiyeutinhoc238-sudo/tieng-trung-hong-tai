@@ -129,10 +129,40 @@ window.toggleSeasonalParticles = function() {
 
 // Universal Study Time Tracker across ALL HTML pages
 (function initGlobalStudyTracker() {
+  if (window.__hasMainStudyTimer) return;
   let sessionSecs = 0;
   const API_BASE_URL = window.location.origin.includes('5173') ? 'http://localhost:5000' : window.location.origin;
 
+  function recordLocalStudyTime(secs) {
+    if (!secs || secs <= 0) return;
+    const todayStr = new Date().toLocaleDateString('sv');
+    let userEmail = 'guest';
+    try {
+      const uRaw = localStorage.getItem('user');
+      if (uRaw) {
+        const u = JSON.parse(uRaw);
+        if (u && u.email) userEmail = u.email;
+      }
+    } catch (e) {}
+
+    const key = userEmail !== 'guest' ? `daily_study_history_${userEmail}` : 'daily_study_history_guest';
+    try {
+      const raw = localStorage.getItem(key);
+      const history = raw ? JSON.parse(raw) : {};
+      history[todayStr] = (history[todayStr] || 0) + secs;
+      localStorage.setItem(key, JSON.stringify(history));
+
+      // Also update user_stats cache in localStorage
+      const statsKey = userEmail !== 'guest' ? `user_stats_${userEmail}` : 'user_stats_guest';
+      const statsRaw = localStorage.getItem(statsKey);
+      const cachedStats = statsRaw ? JSON.parse(statsRaw) : { streak: 1, studyTime: 0 };
+      cachedStats.studyTime = (cachedStats.studyTime || 0) + secs;
+      localStorage.setItem(statsKey, JSON.stringify(cachedStats));
+    } catch (e) {}
+  }
+
   setInterval(() => {
+    if (window.__hasMainStudyTimer) return;
     if (document.hasFocus()) {
       sessionSecs++;
       if (sessionSecs >= 15) {
@@ -140,12 +170,40 @@ window.toggleSeasonalParticles = function() {
         sessionSecs = 0;
         const todayStr = new Date().toLocaleDateString('sv'); // YYYY-MM-DD
 
+        recordLocalStudyTime(increment);
+
+        const token = localStorage.getItem('session_token');
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+          headers['x-session-token'] = token;
+        }
+
         fetch(API_BASE_URL + '/api/user/stats/sync', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: headers,
           body: JSON.stringify({ incrementStudyTime: increment, localDateStr: todayStr }),
           credentials: 'include'
-        }).catch(() => { });
+        }).then(res => res.ok ? res.json() : null)
+          .then(stats => {
+            if (stats && stats.dailyHistory) {
+              let userEmail = null;
+              try {
+                const uRaw = localStorage.getItem('user');
+                if (uRaw) {
+                  const u = JSON.parse(uRaw);
+                  if (u && u.email) userEmail = u.email;
+                }
+              } catch (e) {}
+              if (userEmail) {
+                try {
+                  localStorage.setItem(`daily_study_history_${userEmail}`, JSON.stringify(stats.dailyHistory));
+                  localStorage.setItem(`user_stats_${userEmail}`, JSON.stringify({ streak: stats.streak, studyTime: stats.studyTime }));
+                } catch (e) {}
+              }
+            }
+          })
+          .catch(() => { });
       }
     }
   }, 1000);

@@ -9707,6 +9707,7 @@ function renderWeeklyStudyChart() {
 window.renderWeeklyStudyChart = renderWeeklyStudyChart;
 
 function startStudyTimer() {
+  window.__hasMainStudyTimer = true;
   if (activeTimer) clearInterval(activeTimer);
   activeTimer = setInterval(() => {
     if (document.hasFocus()) {
