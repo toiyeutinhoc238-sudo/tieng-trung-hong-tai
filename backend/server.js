@@ -2382,20 +2382,49 @@ async function extractYouTubeDictation(youtubeId) {
     // TIER 1: Groq Whisper Large v3 via yt-dlp Audio Stream (Full 100% video coverage)
     // ----------------------------------------------------
     const tempAudio = path.join(AUDIO_TEMP_DIR, `audio_${youtubeId}_${Date.now()}.m4a`);
+    let tempCookiesFile = null;
+
     try {
       const { execFile } = await import('child_process');
       const { promisify } = await import('util');
       const execFileAsync = promisify(execFile);
-      const ytDlpBinaryPath = path.join(__dirname, 'bin', process.platform === 'win32' ? 'yt-dlp.exe' : 'yt-dlp');
+      const ytDlpBinaryPath = await ensureYtDlpBinary();
 
-      await execFileAsync(ytDlpBinaryPath, [
-        videoUrl,
-        '--extractor-args', 'youtube:player_client=mweb,android,ios',
-        '-f', 'ba/b',
-        '-o', tempAudio,
-        '--force-overwrites',
-        '--no-playlist'
-      ], { timeout: 60000 });
+      const cookieArgs = [];
+      if (process.env.YOUTUBE_COOKIES || process.env.YOUTUBE_COOKIES_BASE64) {
+        try {
+          tempCookiesFile = path.join(AUDIO_TEMP_DIR, `cookies_${Date.now()}.txt`);
+          const cookieContent = process.env.YOUTUBE_COOKIES || Buffer.from(process.env.YOUTUBE_COOKIES_BASE64, 'base64').toString('utf-8');
+          await fs.writeFile(tempCookiesFile, cookieContent, 'utf-8');
+          cookieArgs.push('--cookies', tempCookiesFile);
+        } catch (eCookie) {
+          console.warn('[Dictation] Error writing cookies file:', eCookie.message);
+        }
+      }
+
+      // Try Android client without webpage fetching to bypass 429 datacenter IP blocks on Render
+      try {
+        await execFileAsync(ytDlpBinaryPath, [
+          videoUrl,
+          '--extractor-args', 'youtube:player_client=android;player_skip=webpage,configs',
+          '-f', 'ba/b',
+          '-o', tempAudio,
+          '--force-overwrites',
+          '--no-playlist',
+          ...cookieArgs
+        ], { timeout: 60000 });
+      } catch (errAndroid) {
+        console.warn(`[Dictation] Android client download warn, retrying android_creator/tv:`, errAndroid.message);
+        await execFileAsync(ytDlpBinaryPath, [
+          videoUrl,
+          '--extractor-args', 'youtube:player_client=android_creator,tv_embedded;player_skip=webpage,configs',
+          '-f', 'ba/b',
+          '-o', tempAudio,
+          '--force-overwrites',
+          '--no-playlist',
+          ...cookieArgs
+        ], { timeout: 60000 });
+      }
 
       if (groqClient && existsSync(tempAudio)) {
         console.log(`[Dictation] Transcribing FULL audio with Groq Whisper Large v3...`);
@@ -2472,6 +2501,9 @@ async function extractYouTubeDictation(youtubeId) {
       console.warn(`[Dictation] Tier 1 Audio transcription error: ${err.message}`);
     } finally {
       await fs.unlink(tempAudio).catch(() => {});
+      if (tempCookiesFile) {
+        await fs.unlink(tempCookiesFile).catch(() => {});
+      }
     }
 
   } catch (outerErr) {
