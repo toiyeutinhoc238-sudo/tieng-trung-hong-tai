@@ -2376,9 +2376,9 @@ async function extractYouTubeDictation(youtubeId) {
   let duration = 60;
 
   try {
-    // 1. Instant Official Google YouTube Data API v3 Metadata Resolution
-    if (process.env.YOUTUBE_API_KEY) {
-      try {
+    // 1. Instant Official Google YouTube Data API v3 or oEmbed Title Resolution
+    try {
+      if (process.env.YOUTUBE_API_KEY) {
         const ytApiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${youtubeId}&key=${process.env.YOUTUBE_API_KEY}`;
         const ytRes = await fetch(ytApiUrl);
         if (ytRes.ok) {
@@ -2390,8 +2390,26 @@ async function extractYouTubeDictation(youtubeId) {
             console.log(`[YouTube API v3] Fetched Official Metadata: "${videoTitle}" (${duration}s)`);
           }
         }
-      } catch (ytErr) {
-        console.warn('[YouTube API v3] Metadata fetch warn:', ytErr.message);
+      }
+    } catch (ytErr) {
+      console.warn('[YouTube API v3] Metadata fetch warn:', ytErr.message);
+    }
+
+    // Fallback to free YouTube oEmbed API if title is still default
+    if (!videoTitle || videoTitle.startsWith('Bài Luyện Nghe')) {
+      try {
+        const oEmbedRes = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${youtubeId}&format=json`, {
+          signal: AbortSignal.timeout(4000)
+        });
+        if (oEmbedRes.ok) {
+          const oData = await oEmbedRes.json();
+          if (oData.title) {
+            videoTitle = oData.title;
+            console.log(`[YouTube oEmbed] Resolved title: "${videoTitle}"`);
+          }
+        }
+      } catch (eOembed) {
+        console.warn('[YouTube oEmbed] warn:', eOembed.message);
       }
     }
 
@@ -2662,21 +2680,30 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
       });
 
       const parsed = JSON.parse(completion.choices[0].message.content);
-      const sentences = (parsed.sentences || []).map((s, idx) => {
-        let py = '';
-        if (s.hanzi) {
-          try { py = pinyin(s.hanzi, { toneType: 'symbol' }); } catch (e) {}
+      const sentences = [];
+      for (const s of (parsed.sentences || [])) {
+        let hanzi = s.hanzi || '';
+        let vietnamese = s.vietnamese || '';
+        if (!hanzi && vietnamese) {
+          hanzi = await translateText(vietnamese, 'vi', 'zh-CN');
         }
-        return {
-          id: s.id || (idx + 1),
+        if (!vietnamese && hanzi) {
+          vietnamese = await translateText(hanzi, 'zh-CN', 'vi');
+        }
+        if (!hanzi) continue;
+
+        let py = '';
+        try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) {}
+        sentences.push({
+          id: s.id || (sentences.length + 1),
           startTime: parseFloat(Number(s.startTime).toFixed(2)),
           endTime: parseFloat(Number(s.endTime).toFixed(2)),
-          hanzi: s.hanzi,
+          hanzi: hanzi,
           pinyin: py,
-          meaning: s.vietnamese,
-          keywords: [s.hanzi ? s.hanzi.slice(0, Math.min(2, s.hanzi.length)) : '']
-        };
-      }).filter(s => s.hanzi && s.meaning);
+          meaning: vietnamese,
+          keywords: [hanzi ? hanzi.slice(0, Math.min(2, hanzi.length)) : '']
+        });
+      }
 
       if (sentences.length > 0) {
         return {
