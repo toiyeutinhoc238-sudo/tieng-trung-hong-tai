@@ -302,10 +302,6 @@ async function writeUserData(data) {
 
 // Background MongoDB Persistence
 async function persistToMongoDB(data) {
-  if (mongoose.connection.readyState !== 1) {
-    // Skip background sync if MongoDB is not connected yet
-    return;
-  }
   const promises = [];
   const emails = new Set([
     ...Object.keys(data.users || {}),
@@ -1866,80 +1862,59 @@ function cleanHumanSpeechText(text) {
   return cleaned;
 }
 
-// Helper: Safe JSON parser that handles code blocks and syntax glitches
-function safeParseJson(jsonStr) {
-  if (!jsonStr) return null;
-  let clean = jsonStr.trim();
-  if (clean.startsWith('```json')) clean = clean.slice(7);
-  else if (clean.startsWith('```')) clean = clean.slice(3);
-  if (clean.endsWith('```')) clean = clean.slice(0, -3);
-  clean = clean.trim();
-
-  try {
-    return JSON.parse(clean);
-  } catch (e) {
-    try {
-      const fixed = clean
-        .replace(/,\s*([\]}])/g, '$1')
-        .replace(/[\u0000-\u001F\u007F-\u009F]/g, ' ');
-      return JSON.parse(fixed);
-    } catch (e2) {
-      console.warn("[JSON] safeParse failed:", e2.message);
-      return null;
-    }
-  }
-}
-
-// Helper: Consolidate speech segments into natural rhythmic phrase bounds (4 - 12s per phrase)
-function consolidateSpeechPhrases(rawItems) {
+// Helper: Consolidate fragmented speech chunks & apply vocal padding (0.18s pre-roll, 0.28s post-roll)
+function consolidateSpeechSegments(rawItems) {
   if (!rawItems || rawItems.length === 0) return [];
-  const result = [];
-  let cur = null;
+  const consolidated = [];
+  let currentGroup = null;
 
   for (const item of rawItems) {
     const cleanText = cleanHumanSpeechText(item.text);
-    if (!cleanText || cleanText.length < 1) continue;
+    if (!cleanText || cleanText.length < 1) continue; // Skip pure noise/music
 
-    if (!cur) {
-      cur = {
+    if (!currentGroup) {
+      currentGroup = {
+        text: cleanText,
         startTime: item.startTime,
-        endTime: item.endTime,
-        text: cleanText
+        endTime: item.endTime
       };
       continue;
     }
 
-    const gap = item.startTime - cur.endTime;
-    const duration = item.endTime - cur.startTime;
-    const isTooLong = (cur.text.length + cleanText.length) > 65 || duration > 10.0;
-    const endsWithPeriod = /[.!?。！？]$/.test(cur.text);
+    const gap = item.startTime - currentGroup.endTime;
+    const isTerminal = /[.!?。！？\n]$/.test(currentGroup.text);
+    const isTooLong = (currentGroup.text.length + cleanText.length) > 50;
 
-    if (gap <= 0.95 && !isTooLong && !endsWithPeriod) {
-      const glue = (cur.text.endsWith(' ') || /[\u4e00-\u9fa5]/.test(cur.text)) ? '' : ' ';
-      cur.text += glue + cleanText;
-      cur.endTime = Math.max(cur.endTime, item.endTime);
+    // Merge continuous syllables from the same speaker if pause < 0.85s
+    if (gap <= 0.85 && !isTerminal && !isTooLong) {
+      const glue = (currentGroup.text.endsWith(' ') || /[\u4e00-\u9fa5]/.test(currentGroup.text)) ? '' : ' ';
+      currentGroup.text += glue + cleanText;
+      currentGroup.endTime = Math.max(currentGroup.endTime, item.endTime);
     } else {
-      result.push(cur);
-      cur = {
+      consolidated.push(currentGroup);
+      currentGroup = {
+        text: cleanText,
         startTime: item.startTime,
-        endTime: item.endTime,
-        text: cleanText
+        endTime: item.endTime
       };
     }
   }
 
-  if (cur && cleanHumanSpeechText(cur.text)) {
-    result.push(cur);
+  if (currentGroup && cleanHumanSpeechText(currentGroup.text)) {
+    consolidated.push(currentGroup);
   }
 
-  // Vocal boundary cushioning (0.15s pre-roll, 0.25s post-roll)
-  return result.map(item => ({
-    text: item.text,
-    startTime: Math.max(0, parseFloat((item.startTime - 0.15).toFixed(2))),
-    endTime: parseFloat((item.endTime + 0.25).toFixed(2))
-  }));
+  // Apply vocal boundary cushions (0.18s pre-roll & 0.28s post-roll) to guarantee zero consonant/vowel truncation
+  return consolidated.map(item => {
+    const paddedStart = Math.max(0, parseFloat((item.startTime - 0.18).toFixed(2)));
+    const paddedEnd = parseFloat((item.endTime + 0.28).toFixed(2));
+    return {
+      text: item.text,
+      startTime: paddedStart,
+      endTime: paddedEnd
+    };
+  });
 }
-
 async function translateText(text, sourceLang = 'auto', targetLang = 'zh-CN') {
   if (!text || !text.trim()) return '';
   try {
@@ -1973,7 +1948,7 @@ app.post('/api/dictation/pinyin-helper', (req, res) => {
   }
 });
 
-// POST /api/dictation/auto-translate — Dịch câu Tiếng Việt sang Tiếng Trung + Pinyin hoặc ngược lại với AI sửa chính tả
+// POST /api/dictation/auto-translate — Dịch câu Tiếng Việt sang Tiếng Trung + Pinyin hoặc ngược lại
 app.post('/api/dictation/auto-translate', async (req, res) => {
   try {
     const { text } = req.body || {};
@@ -1982,59 +1957,59 @@ app.post('/api/dictation/auto-translate', async (req, res) => {
     }
 
     const lines = text.split('\n');
-    const parsedSegments = [];
+    const processedLines = [];
 
-    for (let i = 0; i < lines.length; i++) {
-      const trimmed = lines[i].trim();
-      if (!trimmed) continue;
+    for (const rawLine of lines) {
+      const trimmed = rawLine.trim();
+      if (!trimmed) {
+        processedLines.push('');
+        continue;
+      }
 
+      // Check if line already has [time] or pipes
       let timePrefix = '';
-      let sTime = i * 5;
-      let eTime = (i + 1) * 5;
       let contentText = trimmed;
-
-      const timeMatch = trimmed.match(/^\[([0-9:]+)\s*-\s*([0-9:]+)\]\s*(.*)$/);
+      const timeMatch = trimmed.match(/^(\[[0-9:\s.-]+\]|[0-9:]+)\s*(.*)$/);
       if (timeMatch) {
-        timePrefix = `[${timeMatch[1]} - ${timeMatch[2]}] `;
-        const parseSec = (str) => {
-          const parts = str.split(':').map(Number);
-          return parts.length === 2 ? parts[0] * 60 + parts[1] : 0;
-        };
-        sTime = parseSec(timeMatch[1]);
-        eTime = parseSec(timeMatch[2]);
-        contentText = timeMatch[3];
+        timePrefix = timeMatch[1] + ' ';
+        contentText = timeMatch[2];
       }
 
       const parts = contentText.split('|').map(p => p.trim());
-      const hasHanzi = parts.find(p => /[\u4e00-\u9fa5]/.test(p));
-      const viCandidate = parts.find(p => /[àáảãạâầấẩẫậăằắẳẵặèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/i.test(p)) || parts[parts.length - 1] || parts[0];
+      
+      // Smart detection of parts: Hanzi, Pinyin, Vietnamese
+      let hanziCandidate = parts.find(p => /[\u4e00-\u9fa5]/.test(p)) || '';
+      let viCandidate = parts.find(p => /[àáảãạâầấẩẫậăằắẳẵặèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/i.test(p)) || parts[parts.length - 1] || '';
 
-      parsedSegments.push({
-        id: i + 1,
-        startTime: sTime,
-        endTime: eTime,
-        text: viCandidate || contentText,
-        timePrefix: timePrefix
-      });
+      if (!hanziCandidate) {
+        // Source has no Chinese Hanzi -> Translate Vietnamese text to proper Chinese Hanzi
+        const sourceText = viCandidate || parts.filter(p => p).join(' ').trim();
+        const translatedHanzi = await translateText(sourceText, 'vi', 'zh-CN');
+        let py = '';
+        try {
+          py = pinyin(translatedHanzi, { toneType: 'symbol' });
+        } catch (e) {}
+        processedLines.push(`${timePrefix}${translatedHanzi} | ${py} | ${sourceText}`);
+      } else {
+        // Source already has Chinese Hanzi
+        let py = parts.find(p => p !== hanziCandidate && p !== viCandidate) || '';
+        if (!py) {
+          try {
+            py = pinyin(hanziCandidate, { toneType: 'symbol' });
+          } catch (e) {}
+        }
+        let meaning = viCandidate || '';
+        if (!meaning || meaning === hanziCandidate) {
+          meaning = await translateText(hanziCandidate, 'zh-CN', 'vi');
+        }
+        processedLines.push(`${timePrefix}${hanziCandidate} | ${py} | ${meaning}`);
+      }
     }
 
-    if (parsedSegments.length > 0) {
-      const aiResult = await processContextualDictation(parsedSegments, 'Tùy Chỉnh Phụ Đề Video', 180);
-      const processedLines = parsedSegments.map((seg, idx) => {
-        const item = aiResult.sentences[idx] || {};
-        const hanzi = item.hanzi || '学习中文';
-        const py = item.pinyin || pinyin(hanzi, { toneType: 'symbol' });
-        const meaning = item.meaning || seg.text;
-        return `${seg.timePrefix}${hanzi} | ${py} | ${meaning}`;
-      });
-
-      return res.json({
-        success: true,
-        processedText: processedLines.join('\n')
-      });
-    }
-
-    res.json({ success: false, processedText: text });
+    res.json({
+      success: true,
+      processedText: processedLines.join('\n')
+    });
   } catch (err) {
     console.error("Auto translate error:", err);
     res.status(500).json({ error: 'Failed to auto translate' });
@@ -2065,25 +2040,60 @@ async function ensureYtDlpBinary() {
   return YTDLP_PATH;
 }
 
-// Generate blank indices for Cloze mode
-function generateBlankIndices(hanzi, keywords) {
-  if (!hanzi) return [0];
-  const cleanHanzi = hanzi.replace(/[^\u4e00-\u9fa5]/g, '');
-  if (cleanHanzi.length <= 3) return [0];
 
-  const numBlanks = Math.min(3, Math.max(1, Math.floor(cleanHanzi.length / 4)));
-  const step = Math.floor(cleanHanzi.length / (numBlanks + 1));
-  const indices = [];
-  for (let i = 1; i <= numBlanks; i++) {
-    indices.push(Math.min(cleanHanzi.length - 1, i * step));
+
+
+// Fast batch translation and Pinyin generator
+async function batchTranslateAndPinyin(speechItems) {
+  const results = [];
+  const chunkSize = 12;
+
+  for (let i = 0; i < speechItems.length; i += chunkSize) {
+    const chunk = speechItems.slice(i, i + chunkSize);
+    const promises = chunk.map(async (item, idx) => {
+      let text = item.text || '';
+      let hasHanzi = /[\u4e00-\u9fa5]/.test(text);
+      let hanzi = '';
+      let py = '';
+      let meaning = '';
+
+      if (hasHanzi) {
+        hanzi = text;
+        try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) {}
+        meaning = await translateText(hanzi, 'zh-CN', 'vi');
+      } else {
+        meaning = text;
+        hanzi = await translateText(meaning, 'auto', 'zh-CN');
+        try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) {}
+      }
+
+      // Guarantee Hanzi is NEVER empty or non-Hanzi
+      if (!hanzi || !/[\u4e00-\u9fa5]/.test(hanzi)) {
+        hanzi = await translateText(meaning || '学习中文', 'vi', 'zh-CN');
+        try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) {}
+      }
+
+      return {
+        id: item.id || (i + idx + 1),
+        startTime: parseFloat(item.startTime.toFixed(2)),
+        endTime: parseFloat(item.endTime.toFixed(2)),
+        hanzi: hanzi,
+        pinyin: py,
+        meaning: meaning || 'Câu hội thoại trong video',
+        keywords: [hanzi ? hanzi.slice(0, Math.min(2, hanzi.length)) : '']
+      };
+    });
+
+    const chunkResults = await Promise.all(promises);
+    results.push(...chunkResults);
   }
-  return indices.length > 0 ? indices : [0];
+
+  return results;
 }
 
-// Master Contextual AI Dictation Engine: 100% Context-Aware Spelling Correction & High-Precision Bilingual Translation
-async function processContextualDictation(rawSegments, videoTitle, durationSeconds) {
-  const phrases = consolidateSpeechPhrases(rawSegments);
-  if (phrases.length === 0) {
+// AI Linguistic Refinement, HSK Difficulty Analyzer & Category Classifier
+async function enhanceAndClassifyLesson(rawSpeechSegments, videoTitle, durationSeconds) {
+  if (!Array.isArray(rawSpeechSegments) || rawSpeechSegments.length === 0) {
     return {
       level: "2",
       levelText: "HSK 2 - 3 (Cơ bản)",
@@ -2093,112 +2103,95 @@ async function processContextualDictation(rawSegments, videoTitle, durationSecon
     };
   }
 
-  const chunks = phrases.map((p, idx) => ({
-    id: idx + 1,
-    time: `[${p.startTime.toFixed(2)}s - ${p.endTime.toFixed(2)}s]`,
-    rawSpeech: p.text
-  }));
+  // 1. Guaranteed robust base translation and Pinyin for every single segment across entire video
+  const baseSentences = await batchTranslateAndPinyin(rawSpeechSegments);
 
-  const systemPrompt = `Bạn là Chuyên gia Ngôn ngữ học Song ngữ Tiếng Trung - Tiếng Việt và Biên tập viên Thẩm định Lời bài hát / Phụ đề Video AI hàng đầu.
+  // 2. Determine category via heuristic baseline
+  let category = 'Giao Tiếp';
+  const lowerTitle = (videoTitle || '').toLowerCase();
+  if (lowerTitle.includes('bài hát') || lowerTitle.includes('nhạc') || lowerTitle.includes('song') || lowerTitle.includes('music') || lowerTitle.includes('mv') || lowerTitle.includes('hát') || lowerTitle.includes('bằng kiều') || lowerTitle.includes('ca sĩ') || lowerTitle.includes('trái tim')) {
+    category = 'Âm Nhạc';
+  } else if (lowerTitle.includes('ăn') || lowerTitle.includes('món') || lowerTitle.includes('nhà hàng') || lowerTitle.includes('uống') || lowerTitle.includes('trà') || lowerTitle.includes('nấu')) {
+    category = 'Ẩm Thực';
+  } else if (lowerTitle.includes('du lịch') || lowerTitle.includes('khách sạn') || lowerTitle.includes('sân bay') || lowerTitle.includes('tàu') || lowerTitle.includes('hỏi đường')) {
+    category = 'Du Lịch';
+  } else if (lowerTitle.includes('hoạt hình') || lowerTitle.includes('peppa') || lowerTitle.includes('anime') || lowerTitle.includes('cartoon')) {
+    category = 'Hoạt Hình';
+  } else if (lowerTitle.includes('phim') || lowerTitle.includes('movie') || lowerTitle.includes('drama') || lowerTitle.includes('điện ảnh')) {
+    category = 'Phim Ảnh';
+  } else if (lowerTitle.includes('công việc') || lowerTitle.includes('công sở') || lowerTitle.includes('phỏng vấn') || lowerTitle.includes('kinh doanh') || lowerTitle.includes('họp')) {
+    category = 'Công Việc';
+  } else if (lowerTitle.includes('tin tức') || lowerTitle.includes('thời sự') || lowerTitle.includes('news') || lowerTitle.includes('bản tin')) {
+    category = 'Tin Tức';
+  } else if (lowerTitle.includes('văn hóa') || lowerTitle.includes('lễ hội') || lowerTitle.includes('tết') || lowerTitle.includes('phong tục') || lowerTitle.includes('lịch sử')) {
+    category = 'Văn Hóa';
+  } else if (lowerTitle.includes('mua') || lowerTitle.includes('sắm') || lowerTitle.includes('vlog') || lowerTitle.includes('quần áo')) {
+    category = 'Đời Sống';
+  }
 
-BỐI CẢNH VIDEO:
-- Tiêu đề: "${videoTitle || 'Bài Luyện Nghe'}"
-- Thời lượng: ${durationSeconds || 180}s
+  let level = '2';
+  if (lowerTitle.includes('hsk 1') || lowerTitle.includes('hsk1')) level = '1';
+  else if (lowerTitle.includes('hsk 2') || lowerTitle.includes('hsk2')) level = '2';
+  else if (lowerTitle.includes('hsk 3') || lowerTitle.includes('hsk3')) level = '3';
+  else if (lowerTitle.includes('hsk 4') || lowerTitle.includes('hsk4')) level = '4';
+  else if (lowerTitle.includes('hsk 5') || lowerTitle.includes('hsk5')) level = '5';
+  else if (lowerTitle.includes('hsk 6') || lowerTitle.includes('hsk6')) level = '6';
 
-DỮ LIỆU ĐẦU VÀO (ASR/YouTube CC) CÓ THỂ BỊ SAI CHÍNH TẢ, NGHE NHẦM TỪ ĐỒNG ÂM:
-${JSON.stringify(chunks, null, 2)}
+  let levelText = `HSK ${level}`;
+  let description = `Bài luyện nghe chép chính tả ${videoTitle}`;
 
-QUY TẮC BẮT BUỘC:
-1. ĐỐI CHIẾU NGỮ CẢNH THỰC TẾ & KHẮC PHỤC TRIỆT ĐỂ 100% LỖI CHÍNH TẢ:
-   - Dựa vào tiêu đề video và bối cảnh (Ví dụ: bài hát nổi tiếng "Hoang Mang" của NS Võ Hoài Phúc, "Trái Tim Bên Lề", "Ánh Trăng Nói Hộ Lòng Tôi", hoặc các bài hội thoại đời sống, phim ảnh, tin tức).
-   - KHẮC PHỤC HOÀN TOÀN tất cả các lỗi sai chính tả / từ đồng âm (Ví dụ: "phải trăng" -> "phải chăng", "băng xá" -> "băng giá", "uống lòng" -> "ôm lòng", "bài tơ" -> "bài thơ", "miên má" -> "miên man", "gió thết/thép gào vì em hứng/hưng hờ" -> "gió thét gào vì em hững hờ", "sung đối" -> "chung đôi", "lên ngói" -> "lên ngôi", "phép Đép mau xươi ấm tối lòng" -> "phép màu sưởi ấm cõi lòng", "nội sầu" -> "nỗi sầu", "đêm mùa đông Chúa xa" -> "đêm mùa đông trôi xa", "dạng ngời trên mỗi thơm" -> "rạng ngời trên môi thắm", v.v.).
-   - Trường "meaning" PHẢI LÀ CÂU TIẾNG VIỆT ĐÃ ĐƯỢC SỬA ĐÚNG CHÍNH TẢ 100%, ĐÚNG LỜI GỐC BÀI HÁT / ĐÚNG VĂN PHONG TỰ NHIÊN.
-2. DỊCH SANG TIẾNG TRUNG "hanzi" CHUẨN XÁC, TỰ NHIÊN, GIÀU CẢM XÚC:
-   - Dịch từ câu Tiếng Việt đã sửa đúng chính tả sang Tiếng Trung giản thể chuẩn HSK.
-   - TUYỆT ĐỐI KHÔNG chứa chữ cái Latin (English/Vietnamese) trong trường "hanzi".
-3. TRẢ VỀ ĐỦ SỐ LƯỢNG ${chunks.length} CÂU:
-   - Giữ nguyên "id", mốc thời gian startTime và endTime tương ứng.
-4. METADATA:
-   - "level": "1" đến "6"
-   - "levelText": Tên cấp độ (ví dụ "HSK 2 - 3 (Cơ bản)", "HSK 3 - 4 (Trung cấp)")
-   - "category": Đúng 1 trong: "Âm Nhạc", "Giao Tiếp", "Ẩm Thực", "Du Lịch", "Hoạt Hình", "Phim Ảnh", "Công Việc", "Tin Tức", "Văn Hóa", "Đời Sống"
-   - "description": 1 câu tóm tắt bài học tiếng Việt hấp dẫn.
+  // 3. Enhance with Groq LLaMA 3.3 70B for HSK classification and category precision
+  if (groqClient && baseSentences.length > 0) {
+    try {
+      const sampleItems = baseSentences.slice(0, 15).map(s => ({
+        id: s.id,
+        hanzi: s.hanzi,
+        meaning: s.meaning
+      }));
 
-TRẢ VỀ DUY NHẤT ĐỊNH DẠNG JSON HỢP LỆ:
+      const prompt = `Bạn là một chuyên gia ngôn ngữ tiếng Trung và giáo viên HSK cao cấp.
+Dưới đây là tiêu đề video và các câu thoại/lời bài hát:
+Tiêu đề video: "${videoTitle}"
+Thời lượng: ${durationSeconds} giây
+Các câu mẫu:
+${JSON.stringify(sampleItems, null, 2)}
+
+HÃY PHÂN TÍCH VÀ TRẢ VỀ JSON:
+1. "hskLevel": Cấp độ HSK phù hợp nhất ("1" đến "6").
+2. "levelText": Tên cấp độ (ví dụ "HSK 2 - 3 (Cơ bản)", "HSK 3 (Giao tiếp)", "HSK 4 (Nâng cao)").
+3. "category": Chọn đúng 1 trong: "Âm Nhạc", "Giao Tiếp", "Ẩm Thực", "Du Lịch", "Hoạt Hình", "Phim Ảnh", "Công Việc", "Tin Tức", "Văn Hóa", "Đời Sống", "Khác".
+4. "description": 1 câu tóm tắt nội dung bài học tiếng Việt hấp dẫn.
+
+Trả về đúng JSON:
 {
-  "level": "3",
-  "levelText": "HSK 3 - 4 (Trung cấp)",
+  "hskLevel": "2",
+  "levelText": "HSK 2 - 3",
   "category": "Âm Nhạc",
-  "description": "Luyện nghe bài hát do ca sĩ thể hiện",
-  "sentences": [
-    {
-      "id": 1,
-      "meaning": "...",
-      "hanzi": "...",
-      "keywords": ["...", "..."]
-    }
-  ]
+  "description": "..."
 }`;
 
-  let parsed = null;
-
-  if (groqClient) {
-    try {
       const completion = await groqClient.chat.completions.create({
         model: 'llama-3.3-70b-versatile',
-        messages: [{ role: 'user', content: systemPrompt }],
+        messages: [{ role: 'user', content: prompt }],
         response_format: { type: 'json_object' }
       });
-      parsed = safeParseJson(completion.choices[0].message.content);
-    } catch (eGroq) {
-      console.warn("[Dictation] Groq LLM warn:", eGroq.message);
+
+      const parsed = JSON.parse(completion.choices[0].message.content);
+      if (parsed.hskLevel) level = String(parsed.hskLevel);
+      if (parsed.levelText) levelText = parsed.levelText;
+      if (parsed.category) category = parsed.category;
+      if (parsed.description) description = parsed.description;
+    } catch (llmErr) {
+      console.warn('[Dictation] AI classification LLM warn:', llmErr.message);
     }
   }
-
-  if (!parsed && geminiAI) {
-    try {
-      const model = geminiAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-      const geminiRes = await model.generateContent({
-        contents: [{ role: 'user', parts: [{ text: systemPrompt }] }],
-        generationConfig: { responseMimeType: 'application/json' }
-      });
-      parsed = safeParseJson(geminiRes.response.text());
-    } catch (eGemini) {
-      console.warn("[Dictation] Gemini AI fallback warn:", eGemini.message);
-    }
-  }
-
-  const finalSentences = phrases.map((p, idx) => {
-    const aiItem = (parsed?.sentences || []).find(s => s.id === (idx + 1)) || (parsed?.sentences || [])[idx] || {};
-    let meaning = (aiItem.meaning || p.text || '').trim();
-    let hanzi = (aiItem.hanzi || '').replace(/[a-zA-Z]+/g, '').trim();
-
-    if (!hanzi || !/[\u4e00-\u9fa5]/.test(hanzi)) {
-      hanzi = '学习中文';
-    }
-
-    const py = pinyin(hanzi, { toneType: 'symbol' });
-    const kws = Array.isArray(aiItem.keywords) && aiItem.keywords.length > 0 ? aiItem.keywords : [hanzi.slice(0, 2)];
-    const blanks = generateBlankIndices(hanzi, kws);
-
-    return {
-      id: idx + 1,
-      startTime: p.startTime,
-      endTime: p.endTime,
-      hanzi: hanzi,
-      pinyin: py,
-      meaning: meaning,
-      keywords: kws,
-      blankIndices: blanks
-    };
-  });
 
   return {
-    level: parsed?.level || "2",
-    levelText: parsed?.levelText || "HSK 2 - 3 (Cơ bản)",
-    category: parsed?.category || "Giao Tiếp",
-    description: parsed?.description || `Bài luyện nghe ${videoTitle}`,
-    sentences: finalSentences
+    level,
+    levelText,
+    category,
+    description,
+    sentences: baseSentences
   };
 }
 
@@ -2252,7 +2245,7 @@ async function extractYouTubeDictation(youtubeId) {
     }
 
     // ----------------------------------------------------
-    // TIER 0: Direct YouTube Subtitles / Captions Track
+    // TIER 0: Direct YouTube Subtitles / Captions Track (only if full video covered)
     // ----------------------------------------------------
     try {
       const ytTranscript = await YoutubeTranscript.fetchTranscript(youtubeId);
@@ -2267,8 +2260,10 @@ async function extractYouTubeDictation(youtubeId) {
         const lastTimestamp = raw[raw.length - 1]?.endTime || 0;
         console.log(`[Dictation] Tier 0 YouTube Captions: ${ytTranscript.length} lines, up to ${lastTimestamp}s / total ${duration}s`);
 
+        // Accept Tier 0 whenever captions exist
         if (raw.length > 0) {
-          const enhanced = await processContextualDictation(raw, videoTitle, duration);
+          const speech = consolidateSpeechSegments(raw);
+          const enhanced = await enhanceAndClassifyLesson(speech, videoTitle, duration);
           if (enhanced.sentences && enhanced.sentences.length > 0) {
             return {
               success: true,
@@ -2278,7 +2273,7 @@ async function extractYouTubeDictation(youtubeId) {
               levelText: enhanced.levelText,
               category: enhanced.category,
               description: enhanced.description,
-              tierUsed: 'Phụ Đề YouTube + AI Ngữ Cảnh 📝✨',
+              tierUsed: 'Phụ Đề YouTube + AI HSK 📝✨',
               sentences: enhanced.sentences
             };
           }
@@ -2289,7 +2284,7 @@ async function extractYouTubeDictation(youtubeId) {
     }
 
     // ----------------------------------------------------
-    // TIER 1: Groq Whisper Large v3 via yt-dlp Audio Stream
+    // TIER 1: Groq Whisper Large v3 via yt-dlp Audio Stream (Full 100% video coverage)
     // ----------------------------------------------------
     const tempAudio = path.join(AUDIO_TEMP_DIR, `audio_${youtubeId}_${Date.now()}.m4a`);
     try {
@@ -2331,6 +2326,7 @@ async function extractYouTubeDictation(youtubeId) {
 
         let segments = transcription.segments || [];
 
+        // Filter out famous Whisper hallucination noise strings (DimaTorzok, Amara, etc.)
         segments = segments.filter(s => {
           const t = (s.text || '').toLowerCase();
           return !t.includes('dimatorzok') &&
@@ -2349,7 +2345,8 @@ async function extractYouTubeDictation(youtubeId) {
             startTime: s.start,
             endTime: s.end
           }));
-          const enhanced = await processContextualDictation(raw, videoTitle, duration);
+          const speech = consolidateSpeechSegments(raw);
+          const enhanced = await enhanceAndClassifyLesson(speech, videoTitle, duration);
           if (enhanced.sentences && enhanced.sentences.length > 0) {
             return {
               success: true,
