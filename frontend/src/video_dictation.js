@@ -2889,8 +2889,8 @@ window.handleYouTubeUrlInput = function(val) {
 };
 
 // Subtitle & YouTube Fetcher Tools
-// Subtitle & YouTube Fetcher Tools
-window.fetchYouTubeSubtitles = async function() {
+// Master All-in-One AI Generator: Auto Subtitles, Auto Voice Transcription, Auto HSK & Category Classification, 100% Proofreading
+window.autoGenerateAllWithAI = async function() {
   const urlInput = document.getElementById('custom-video-url')?.value.trim();
   const ytId = extractYouTubeId(urlInput);
 
@@ -2900,103 +2900,21 @@ window.fetchYouTubeSubtitles = async function() {
     return;
   }
 
-  const btn = document.getElementById('btn-fetch-yt-subs');
+  const btn = document.getElementById('btn-auto-generate-all');
   if (btn) {
     btn.disabled = true;
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang trích xuất giọng nói YouTube...';
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> AI đang xử lý toàn diện...';
   }
 
-  showToast("🔍 Đang kết nối và phân tích mốc câu giọng nói từ YouTube...");
-
-  try {
-    const res = await fetch('/api/dictation/fetch-subtitles', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ youtubeId: ytId })
-    });
-
-    if (res.ok) {
-      const data = await res.json();
-      if (data.success && Array.isArray(data.sentences) && data.sentences.length > 0) {
-        const titleInput = document.getElementById('custom-video-title');
-        if (titleInput && (!titleInput.value || titleInput.value.startsWith('Bài Luyện Nghe'))) {
-          titleInput.value = data.videoTitle || titleInput.value;
-        }
-
-        // Auto-select AI-detected HSK Level
-        if (data.level) {
-          const levelSelect = document.getElementById('custom-video-level');
-          if (levelSelect) levelSelect.value = String(data.level);
-        }
-
-        // Auto-select AI-detected Category
-        if (data.category) {
-          const catSelect = document.getElementById('custom-video-cat');
-          if (catSelect) catSelect.value = data.category;
-        }
-
-        const lines = data.sentences.map(s => {
-          const sMin = Math.floor(s.startTime / 60);
-          const sSec = (s.startTime % 60).toFixed(2);
-          const eMin = Math.floor(s.endTime / 60);
-          const eSec = (s.endTime % 60).toFixed(2);
-          const sFormatted = `${String(sMin).padStart(2, '0')}:${String(sSec).padStart(5, '0')}`;
-          const eFormatted = `${String(eMin).padStart(2, '0')}:${String(eSec).padStart(5, '0')}`;
-          return `[${sFormatted} - ${eFormatted}] ${s.hanzi} | ${s.pinyin} | ${s.meaning || 'Câu hội thoại trong video'}`;
-        });
-
-        const textarea = document.getElementById('custom-video-subtitles');
-        if (textarea) {
-          textarea.value = lines.join('\n');
-        }
-
-        const tierEmoji = data.tierUsed?.includes('Groq') ? '⚡' : (data.tierUsed?.includes('YouTube') ? '📝' : '✨');
-        showToast(`${tierEmoji} AI đã phân tích xong: Cấp độ HSK ${data.level || 2} • Thể loại: ${data.category || 'Giao Tiếp'} (${data.sentences.length} câu chuẩn 100%)! 🎉`);
-      } else {
-        showToast('Đang chuyển sang AI phân tích giọng nói sâu...', false);
-        setTimeout(() => window.transcribeAudioWithAI(ytId), 500);
-      }
-    } else {
-      showToast('Đang chuyển sang AI phân tích giọng nói sâu...', false);
-      setTimeout(() => window.transcribeAudioWithAI(ytId), 500);
-    }
-  } catch (err) {
-    console.error('Fetch subtitles error:', err);
-    showToast('Lỗi kết nối khi trích xuất phụ đề YouTube.', true);
-  } finally {
-    if (btn) {
-      btn.disabled = false;
-      btn.innerHTML = '<i class="fa-brands fa-youtube"></i> Lấy Mốc Giọng Nói YouTube';
-    }
-  }
-};
-
-// AI High-Performance Transcription: Groq Whisper Large v3 + yt-dlp + Smart LLM Fallback
-window.transcribeAudioWithAI = async function(youtubeIdOverride) {
-  const urlInput = document.getElementById('custom-video-url')?.value.trim();
-  const ytId = youtubeIdOverride || extractYouTubeId(urlInput);
-
-  if (!ytId) {
-    showToast('Vui lòng dán link YouTube hợp lệ trước!', true);
-    document.getElementById('custom-video-url')?.focus();
-    return;
-  }
-
-  const aiBtn = document.getElementById('btn-ai-transcribe');
-  if (aiBtn) {
-    aiBtn.disabled = true;
-    aiBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> AI đang phân tích giọng...';
-  }
-
-  // Show step-by-step progress toasts
   const steps = [
-    { delay: 0,    msg: '⚡ Groq Whisper Large v3 đang phân tích âm thanh video...' },
-    { delay: 6000, msg: '🌐 Đang sinh Pinyin & phiên dịch câu thoại chuẩn xác...' }
+    { delay: 0,    msg: '🔍 Đang phân tích video & kết nối AI...' },
+    { delay: 3000, msg: '⚡ AI đang phân loại HSK, xác định chủ đề & bóc tách câu thoại...' },
+    { delay: 7000, msg: '✍️ Đang chuẩn hóa chính tả 100% & sinh phiên âm Pinyin...' }
   ];
   const toastTimers = steps.map(s => setTimeout(() => showToast(s.msg), s.delay));
 
   try {
-    const res = await fetch('/api/dictation/transcribe-audio', {
+    const res = await fetch('/api/dictation/fetch-subtitles', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ youtubeId: ytId })
@@ -3035,33 +2953,35 @@ window.transcribeAudioWithAI = async function(youtubeIdOverride) {
         const sSec = (s.startTime % 60).toFixed(2);
         const eMin = Math.floor(s.endTime / 60);
         const eSec = (s.endTime % 60).toFixed(2);
-        const sf = `${String(sMin).padStart(2,'0')}:${String(sSec).padStart(5,'0')}`;
-        const ef = `${String(eMin).padStart(2,'0')}:${String(eSec).padStart(5,'0')}`;
-        return `[${sf} - ${ef}] ${s.hanzi} | ${s.pinyin} | ${s.meaning || 'Câu hội thoại'}`;
+        const sFormatted = `${String(sMin).padStart(2, '0')}:${String(sSec).padStart(5, '0')}`;
+        const eFormatted = `${String(eMin).padStart(2, '0')}:${String(eSec).padStart(5, '0')}`;
+        return `[${sFormatted} - ${eFormatted}] ${s.hanzi} | ${s.pinyin} | ${s.meaning || 'Câu hội thoại trong video'}`;
       });
 
       const textarea = document.getElementById('custom-video-subtitles');
       if (textarea) textarea.value = lines.join('\n');
 
-      const tierEmoji = data.tierUsed?.includes('Groq') ? '⚡' :
-                        data.tierUsed?.includes('YouTube') ? '📝' : '✨';
+      const tierEmoji = data.tierUsed?.includes('Groq') ? '⚡' : (data.tierUsed?.includes('YouTube') ? '📝' : '✨');
       showToast(`${tierEmoji} AI hoàn tất: Cấp độ HSK ${data.level || 2} • Thể loại: ${data.category || 'Giao Tiếp'} (${data.sentences.length} câu chuẩn 100%)! 🎉`);
 
     } else {
-      showToast(data.message || 'Không thể nhận diện giọng nói trong video.', true);
+      showToast(data.message || 'Không thể tạo tự động bài học. Vui lòng thử lại!', true);
     }
 
   } catch (err) {
     toastTimers.forEach(t => clearTimeout(t));
-    console.error('AI Transcribe error:', err);
-    showToast('Lỗi kết nối AI phân tích giọng — Kiểm tra kết nối Internet!', true);
+    console.error('Auto generate all error:', err);
+    showToast('Lỗi kết nối máy chủ AI — Vui lòng kiểm tra lại mạng!', true);
   } finally {
-    if (aiBtn) {
-      aiBtn.disabled = false;
-      aiBtn.innerHTML = '<i class="fa-solid fa-microphone-lines" style="color: #c4b5fd;"></i> AI Phân Tích Giọng';
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> AI Tạo Tự Động Toàn Diện';
     }
   }
 };
+
+window.fetchYouTubeSubtitles = window.autoGenerateAllWithAI;
+window.transcribeAudioWithAI = window.autoGenerateAllWithAI;
 
 window.autoTranslateSubtitles = async function() {
   const textarea = document.getElementById('custom-video-subtitles');
