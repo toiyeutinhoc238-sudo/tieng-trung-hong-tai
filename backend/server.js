@@ -2074,7 +2074,8 @@ Trả về đúng JSON:
 // AI AUDIO & SUBTITLE ENGINE — Multi-Tier High Performance
 // ============================================================
 
-const groqClient = process.env.GROQ_API_KEY ? new Groq({ apiKey: process.env.GROQ_API_KEY }) : null;
+const DEFAULT_GROQ_KEY = process.env.GROQ_API_KEY || (process.env.GROQ_KEY_FALLBACK ? Buffer.from(process.env.GROQ_KEY_FALLBACK, 'base64').toString('ascii') : null);
+const groqClient = (process.env.GROQ_API_KEY || DEFAULT_GROQ_KEY) ? new Groq({ apiKey: process.env.GROQ_API_KEY || DEFAULT_GROQ_KEY }) : null;
 const geminiAI = process.env.GEMINI_API_KEY ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY) : null;
 const AUDIO_TEMP_DIR = path.join(os.tmpdir(), 'hongtai_audio');
 fs.mkdir(AUDIO_TEMP_DIR, { recursive: true }).catch(() => {});
@@ -2088,10 +2089,14 @@ async function ensureYtDlpBinary() {
   await fs.mkdir(BIN_DIR, { recursive: true }).catch(() => {});
   if (!existsSync(YTDLP_PATH)) {
     console.log('[yt-dlp] Downloading standalone binary...');
-    await ytdlpWrap.downloadFromGithub(YTDLP_PATH, undefined, process.platform === 'win32' ? 'win32' : 'linux');
-    console.log('[yt-dlp] Downloaded to:', YTDLP_PATH);
+    try {
+      await ytdlpWrap.downloadFromGithub(YTDLP_PATH, undefined, process.platform === 'win32' ? 'win32' : 'linux');
+      console.log('[yt-dlp] Downloaded to:', YTDLP_PATH);
+    } catch (e) {
+      console.warn('[yt-dlp] Binary download warning:', e.message);
+    }
   }
-  if (process.platform !== 'win32') {
+  if (process.platform !== 'win32' && existsSync(YTDLP_PATH)) {
     await fs.chmod(YTDLP_PATH, 0o755).catch(() => {});
   }
   return YTDLP_PATH;
