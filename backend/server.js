@@ -2850,6 +2850,23 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
   };
 }
 
+// GET /api/dictation/debug-status — Kiểm tra chẩn đoán hệ thống AI & biến môi trường
+app.get('/api/dictation/debug-status', (req, res) => {
+  res.json({
+    status: 'online',
+    commit: 'latest',
+    hasGroqKey: !!process.env.GROQ_API_KEY,
+    hasGeminiKey: !!process.env.GEMINI_API_KEY,
+    hasYoutubeKey: !!process.env.YOUTUBE_API_KEY,
+    hasMongoUri: !!process.env.MONGODB_URI,
+    groqClientReady: !!groqClient,
+    genAIReady: !!genAI,
+    nodeVersion: process.version,
+    platform: process.platform,
+    timestamp: new Date().toISOString()
+  });
+});
+
 // POST /api/dictation/fetch-subtitles — Lấy phụ đề / mốc giọng nói YouTube
 app.post('/api/dictation/fetch-subtitles', async (req, res) => {
   const { youtubeId } = req.body || {};
