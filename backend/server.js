@@ -2187,27 +2187,113 @@ async function enhanceAndClassifyLesson(rawSpeechSegments, videoTitle, durationS
   else if (lowerTitle.includes('hsk 5') || lowerTitle.includes('hsk5')) level = '5';
   else if (lowerTitle.includes('hsk 6') || lowerTitle.includes('hsk6')) level = '6';
 
+// Universal Multi-Model LLM JSON Caller (LLaMA 3.3 70B -> LLaMA 3.1 8B -> Gemini 2.5 Flash)
+async function callLLMJson(prompt) {
+  // 1. Try Groq LLaMA 3.3 70B
+  if (groqClient) {
+    try {
+      const res = await groqClient.chat.completions.create({
+        model: 'llama-3.3-70b-versatile',
+        messages: [{ role: 'user', content: prompt }],
+        response_format: { type: 'json_object' }
+      });
+      return JSON.parse(res.choices[0].message.content);
+    } catch (e70b) {
+      console.warn('[LLM] LLaMA 3.3 70B limit/error, falling back to LLaMA 3.1 8B:', e70b.message);
+    }
+
+    // 2. Try Groq LLaMA 3.1 8B Instant (Separate daily quota & ultra-fast)
+    try {
+      const res = await groqClient.chat.completions.create({
+        model: 'llama-3.1-8b-instant',
+        messages: [{ role: 'user', content: prompt }],
+        response_format: { type: 'json_object' }
+      });
+      return JSON.parse(res.choices[0].message.content);
+    } catch (e8b) {
+      console.warn('[LLM] LLaMA 3.1 8B error, falling back to Gemini:', e8b.message);
+    }
+  }
+
+  // 3. Try Google Gemini Flash
+  if (genAI) {
+    try {
+      const model = genAI.getGenerativeModel({
+        model: 'gemini-2.5-flash',
+        generationConfig: { responseMimeType: 'application/json' }
+      });
+      const res = await model.generateContent(prompt);
+      return JSON.parse(res.response.text());
+    } catch (eGem) {
+      console.warn('[LLM] Gemini 2.5 Flash error, trying gemini-1.5-flash:', eGem.message);
+      try {
+        const model15 = genAI.getGenerativeModel({
+          model: 'gemini-1.5-flash',
+          generationConfig: { responseMimeType: 'application/json' }
+        });
+        const res15 = await model15.generateContent(prompt);
+        return JSON.parse(res15.response.text());
+      } catch (eGem15) {
+        console.warn('[LLM] All Gemini models failed:', eGem15.message);
+      }
+    }
+  }
+
+  throw new Error('All AI LLM models unavailable');
+}
+
+// Master Linguistic Proofreader & Classification Engine
+async function enhanceAndClassifyLesson(rawSpeechSegments, videoTitle, durationSeconds) {
+  if (!rawSpeechSegments || rawSpeechSegments.length === 0) {
+    return { level: '2', levelText: 'HSK 2', category: 'Giao Tiếp', description: '', sentences: [] };
+  }
+
+  const lowerTitle = (videoTitle || '').toLowerCase();
+  let category = 'Giao Tiếp';
+  if (lowerTitle.includes('bài hát') || lowerTitle.includes('nhạc') || lowerTitle.includes('ca sĩ') || lowerTitle.includes('music') || lowerTitle.includes('mv') || lowerTitle.includes('fancam') || lowerTitle.includes('lyric')) {
+    category = 'Âm Nhạc';
+  } else if (lowerTitle.includes('hội thoại') || lowerTitle.includes('giao tiếp') || lowerTitle.includes('nói')) {
+    category = 'Giao Tiếp';
+  } else if (lowerTitle.includes('ẩm thực') || lowerTitle.includes('món ăn') || lowerTitle.includes('nấu')) {
+    category = 'Ẩm Thực';
+  } else if (lowerTitle.includes('du lịch') || lowerTitle.includes('khám phá') || lowerTitle.includes('phượt')) {
+    category = 'Du Lịch';
+  } else if (lowerTitle.includes('hoạt hình') || lowerTitle.includes('anime') || lowerTitle.includes('cartoon')) {
+    category = 'Hoạt Hình';
+  } else if (lowerTitle.includes('phim') || lowerTitle.includes('movie') || lowerTitle.includes('cinema') || lowerTitle.includes('drama')) {
+    category = 'Phim Ảnh';
+  } else if (lowerTitle.includes('tin tức') || lowerTitle.includes('thời sự') || lowerTitle.includes('news')) {
+    category = 'Tin Tức';
+  }
+
+  let level = '2';
+  if (lowerTitle.includes('hsk 1') || lowerTitle.includes('hsk1')) level = '1';
+  else if (lowerTitle.includes('hsk 2') || lowerTitle.includes('hsk2')) level = '2';
+  else if (lowerTitle.includes('hsk 3') || lowerTitle.includes('hsk3')) level = '3';
+  else if (lowerTitle.includes('hsk 4') || lowerTitle.includes('hsk4')) level = '4';
+  else if (lowerTitle.includes('hsk 5') || lowerTitle.includes('hsk5')) level = '5';
+  else if (lowerTitle.includes('hsk 6') || lowerTitle.includes('hsk6')) level = '6';
+
   let levelText = `HSK ${level}`;
   let description = `Bài luyện nghe chép chính tả ${videoTitle}`;
 
-  // AI Deep Linguistic Proofreading, Translation & Classification via Groq LLaMA 3.3 70B
-  if (groqClient) {
-    try {
-      console.log(`[AI Master Engine] Refining & Proofreading ${rawSpeechSegments.length} sentences with Groq LLaMA 3.3 70B...`);
-      const chunkSize = 25;
-      const refinedSentences = [];
+  // AI Deep Linguistic Proofreading, Translation & Classification via Multi-LLM Engine
+  try {
+    console.log(`[AI Master Engine] Refining & Proofreading ${rawSpeechSegments.length} sentences with Multi-Model AI...`);
+    const chunkSize = 25;
+    const refinedSentences = [];
 
-      for (let i = 0; i < rawSpeechSegments.length; i += chunkSize) {
-        const chunk = rawSpeechSegments.slice(i, i + chunkSize);
-        const chunkItems = chunk.map((s, idx) => ({
-          id: s.id || (i + idx + 1),
-          startTime: s.startTime,
-          endTime: s.endTime,
-          text: s.text
-        }));
+    for (let i = 0; i < rawSpeechSegments.length; i += chunkSize) {
+      const chunk = rawSpeechSegments.slice(i, i + chunkSize);
+      const chunkItems = chunk.map((s, idx) => ({
+        id: s.id || (i + idx + 1),
+        startTime: s.startTime,
+        endTime: s.endTime,
+        text: s.text
+      }));
 
-        const isFirstChunk = (i === 0);
-        const prompt = `Bạn là một chuyên gia ngôn ngữ học Tiếng Trung và Tiếng Việt cao cấp.
+      const isFirstChunk = (i === 0);
+      const prompt = `Bạn là một chuyên gia ngôn ngữ học Tiếng Trung và Tiếng Việt cao cấp.
 Dưới đây là tiêu đề video "${videoTitle}" (${durationSeconds}s) và các câu thoại/lời bài hát thô được trích xuất từ âm thanh video.
 
 NHIỆM VỤ CỦA BẠN:
@@ -2233,19 +2319,13 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
   ]
 }`;
 
-        const completion = await groqClient.chat.completions.create({
-          model: 'llama-3.3-70b-versatile',
-          messages: [{ role: 'user', content: prompt }],
-          response_format: { type: 'json_object' }
-        });
-
-        const parsed = JSON.parse(completion.choices[0].message.content);
-        if (isFirstChunk) {
-          if (parsed.hskLevel) level = String(parsed.hskLevel);
-          if (parsed.category) category = parsed.category;
-          if (parsed.description) description = parsed.description;
-          levelText = `HSK ${level}`;
-        }
+      const parsed = await callLLMJson(prompt);
+      if (isFirstChunk) {
+        if (parsed.hskLevel) level = String(parsed.hskLevel);
+        if (parsed.category) category = parsed.category;
+        if (parsed.description) description = parsed.description;
+        levelText = `HSK ${level}`;
+      }
 
         if (Array.isArray(parsed.sentences)) {
           for (const s of parsed.sentences) {
@@ -2661,13 +2741,7 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
   ]
 }`;
 
-      const completion = await groqClient.chat.completions.create({
-        model: 'llama-3.3-70b-versatile',
-        messages: [{ role: 'user', content: prompt }],
-        response_format: { type: 'json_object' }
-      });
-
-      const parsed = JSON.parse(completion.choices[0].message.content);
+      const parsed = await callLLMJson(prompt);
       const sentences = [];
       for (const s of (parsed.sentences || [])) {
         let hanzi = s.hanzi || '';
