@@ -2300,6 +2300,66 @@ function parseISO8601Duration(isoStr) {
   return hours * 3600 + minutes * 60 + seconds;
 }
 
+function parseTranscriptAiText(txt) {
+  if (!txt || txt.includes('# No captions available') || txt.includes('no auto-generated captions')) {
+    return null;
+  }
+
+  const lines = txt.split('\n');
+  const rawParagraphs = [];
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('Source video:') || trimmed.startsWith('Language:') || trimmed.startsWith('Other available') || trimmed.startsWith('To request') || trimmed.startsWith('Interactive')) {
+      continue;
+    }
+
+    const timeMatch = trimmed.match(/^\[?(\d{1,2}):(\d{2})(?::(\d{2}))?\]?\s*(.*)$/);
+    if (timeMatch) {
+      const hOrM = parseInt(timeMatch[1], 10);
+      const mOrS = parseInt(timeMatch[2], 10);
+      const s = timeMatch[3] ? parseInt(timeMatch[3], 10) : 0;
+      const seconds = timeMatch[3] ? (hOrM * 3600 + mOrS * 60 + s) : (hOrM * 60 + mOrS);
+      const text = timeMatch[4];
+      if (text && text.length > 0) {
+        rawParagraphs.push({
+          startTime: seconds,
+          text: text
+        });
+      }
+    }
+  }
+
+  if (rawParagraphs.length === 0) return null;
+
+  const segments = [];
+  for (let i = 0; i < rawParagraphs.length; i++) {
+    const p = rawParagraphs[i];
+    const nextStart = (i < rawParagraphs.length - 1) ? rawParagraphs[i + 1].startTime : (p.startTime + 25);
+    const duration = Math.max(3, nextStart - p.startTime);
+
+    let parts = p.text.split(/♪|♫|\[[^\]]+\]/).map(s => s.trim()).filter(s => s.length > 0);
+    if (parts.length === 0) {
+      parts = p.text.split(/(?<=[.!?。！？\n])\s+/).map(s => s.trim()).filter(s => s.length > 0);
+    }
+    if (parts.length === 0) {
+      parts = [p.text];
+    }
+
+    const step = duration / parts.length;
+    parts.forEach((part, pIdx) => {
+      segments.push({
+        id: segments.length + 1,
+        startTime: parseFloat((p.startTime + pIdx * step).toFixed(2)),
+        endTime: parseFloat((p.startTime + (pIdx + 1) * step).toFixed(2)),
+        text: part
+      });
+    });
+  }
+
+  return segments.length > 0 ? segments : null;
+}
+
 // Master Unified YouTube Dictation Extractor
 async function extractYouTubeDictation(youtubeId) {
   let videoTitle = `Bài Luyện Nghe (${youtubeId})`;
@@ -2340,7 +2400,7 @@ async function extractYouTubeDictation(youtubeId) {
     }
 
     // ----------------------------------------------------
-    // TIER 0: Direct YouTube Subtitles / Captions Track (only if full video covered)
+    // TIER 0: Direct YouTube Subtitles / Captions Track
     // ----------------------------------------------------
     try {
       const ytTranscript = await YoutubeTranscript.fetchTranscript(youtubeId);
@@ -2355,7 +2415,6 @@ async function extractYouTubeDictation(youtubeId) {
         const lastTimestamp = raw[raw.length - 1]?.endTime || 0;
         console.log(`[Dictation] Tier 0 YouTube Captions: ${ytTranscript.length} lines, up to ${lastTimestamp}s / total ${duration}s`);
 
-        // Accept Tier 0 whenever captions exist
         if (raw.length > 0) {
           const speech = consolidateSpeechSegments(raw);
           const enhanced = await enhanceAndClassifyLesson(speech, videoTitle, duration);
@@ -2375,7 +2434,40 @@ async function extractYouTubeDictation(youtubeId) {
         }
       }
     } catch (e) {
-      console.log(`[Dictation] No direct YouTube transcript for ${youtubeId}, progressing to AI Whisper...`);
+      console.log(`[Dictation] Tier 0 direct transcript not available for ${youtubeId}, checking Tier 0.5...`);
+    }
+
+    // ----------------------------------------------------
+    // TIER 0.5: Proxy Caption Scraper (youtube-transcript.ai)
+    // ----------------------------------------------------
+    try {
+      const proxyRes = await fetch(`https://youtube-transcript.ai/transcript/${youtubeId}.txt`, {
+        signal: AbortSignal.timeout(6000)
+      });
+      if (proxyRes.ok) {
+        const proxyTxt = await proxyRes.text();
+        const proxySegments = parseTranscriptAiText(proxyTxt);
+        if (proxySegments && proxySegments.length > 0) {
+          console.log(`[Dictation] Tier 0.5 (youtube-transcript.ai) success: ${proxySegments.length} lines!`);
+          const speech = consolidateSpeechSegments(proxySegments);
+          const enhanced = await enhanceAndClassifyLesson(speech, videoTitle, duration);
+          if (enhanced.sentences && enhanced.sentences.length > 0) {
+            return {
+              success: true,
+              videoTitle,
+              duration,
+              level: enhanced.level,
+              levelText: enhanced.levelText,
+              category: enhanced.category,
+              description: enhanced.description,
+              tierUsed: 'Phụ Đề YouTube Proxy (AI) 📝✨',
+              sentences: enhanced.sentences
+            };
+          }
+        }
+      }
+    } catch (eProxy) {
+      console.log(`[Dictation] Tier 0.5 not available:`, eProxy.message);
     }
 
     // ----------------------------------------------------
