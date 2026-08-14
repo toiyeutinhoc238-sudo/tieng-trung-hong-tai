@@ -2390,7 +2390,7 @@ async function extractYouTubeDictation(youtubeId) {
 
       await execFileAsync(ytDlpBinaryPath, [
         videoUrl,
-        '--extractor-args', 'youtube:player_client=android,ios;player_skip=webpage,configs',
+        '--extractor-args', 'youtube:player_client=mweb,android,ios',
         '-f', 'ba/b',
         '-o', tempAudio,
         '--force-overwrites',
@@ -2400,27 +2400,23 @@ async function extractYouTubeDictation(youtubeId) {
       if (groqClient && existsSync(tempAudio)) {
         console.log(`[Dictation] Transcribing FULL audio with Groq Whisper Large v3...`);
         const { createReadStream } = await import('fs');
-        const isChineseLikely = /[\u4e00-\u9fa5]/.test(videoTitle) || /hsk|chinese|tiếng trung|trung quốc|hoa ngữ/i.test(videoTitle);
+        const isChinese = /[\u4e00-\u9fa5]/.test(videoTitle) || /hsk|chinese|tiếng trung|trung quốc|hoa ngữ/i.test(videoTitle);
+        const isVietnamese = /[\u00C0-\u1EF9]/.test(videoTitle) || /bài hát|nhạc|ca sĩ|bằng kiều|lyric|trái tim|hát|lời|đồi hoa/i.test(videoTitle);
+
+        const whisperLang = isChinese ? 'zh' : (isVietnamese ? 'vi' : undefined);
+        const whisperPrompt = isChinese ? 'Chinese Mandarin dictation, 汉语, 汉字, 拼音, 中文' : (isVietnamese ? 'Lời bài hát tiếng Việt, câu thoại đàm thoại tiếng Việt' : undefined);
+
         try {
-          if (isChineseLikely) {
-            transcription = await groqClient.audio.transcriptions.create({
-              file: createReadStream(tempAudio),
-              model: 'whisper-large-v3',
-              language: 'zh',
-              response_format: 'verbose_json',
-              timestamp_granularities: ['segment'],
-              prompt: 'Chinese Mandarin dictation, 汉语, 汉字, 拼音, 中文'
-            });
-          } else {
-            transcription = await groqClient.audio.transcriptions.create({
-              file: createReadStream(tempAudio),
-              model: 'whisper-large-v3',
-              response_format: 'verbose_json',
-              timestamp_granularities: ['segment']
-            });
-          }
+          transcription = await groqClient.audio.transcriptions.create({
+            file: createReadStream(tempAudio),
+            model: 'whisper-large-v3',
+            ...(whisperLang ? { language: whisperLang } : {}),
+            ...(whisperPrompt ? { prompt: whisperPrompt } : {}),
+            response_format: 'verbose_json',
+            timestamp_granularities: ['segment']
+          });
         } catch (eZh) {
-          console.warn(`[Dictation] Whisper initial transcription failed, retrying auto language:`, eZh.message);
+          console.warn(`[Dictation] Whisper initial transcription failed, retrying fallback:`, eZh.message);
           transcription = await groqClient.audio.transcriptions.create({
             file: createReadStream(tempAudio),
             model: 'whisper-large-v3',
@@ -2438,6 +2434,8 @@ async function extractYouTubeDictation(youtubeId) {
                  !t.includes('amara.org') &&
                  !t.includes('subtitles created by') &&
                  !t.includes('ghien mi go') &&
+                 !t.includes('ghiền mì gõ') &&
+                 !t.includes('subscribe') &&
                  !t.includes('субтитры') &&
                  !t.includes('белая ночь') &&
                  !t.includes('yoyo television series');
