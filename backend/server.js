@@ -2295,6 +2295,7 @@ async function extractYouTubeDictation(youtubeId) {
 
       await execFileAsync(ytDlpBinaryPath, [
         videoUrl,
+        '--extractor-args', 'youtube:player_client=android,web',
         '-f', 'ba/b',
         '-o', tempAudio,
         '--force-overwrites',
