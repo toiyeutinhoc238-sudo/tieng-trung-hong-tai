@@ -2581,13 +2581,13 @@ function updateInPlayerDualSubtitles(curTime) {
 
   const activeSentence = currentLesson.sentences.find(s => curTime >= s.startTime && curTime <= s.endTime);
   if (activeSentence) {
-    overlayHanzi.innerHTML = renderInteractiveWords(activeSentence.hanzi);
+    overlayHanzi.innerHTML = renderInteractiveWords(activeSentence.hanzi, activeSentence.words, curTime);
     if (overlayPinyin) overlayPinyin.textContent = activeSentence.pinyin || '';
     if (overlayMeaning) overlayMeaning.textContent = activeSentence.meaning || '';
   } else {
     const curSent = currentLesson.sentences[currentSentenceIdx];
     if (curSent) {
-      overlayHanzi.innerHTML = renderInteractiveWords(curSent.hanzi);
+      overlayHanzi.innerHTML = renderInteractiveWords(curSent.hanzi, curSent.words, curTime);
       if (overlayPinyin) overlayPinyin.textContent = curSent.pinyin || '';
       if (overlayMeaning) overlayMeaning.textContent = curSent.meaning || '';
     }
@@ -2596,12 +2596,21 @@ function updateInPlayerDualSubtitles(curTime) {
 
 let currentPopoverData = null;
 
-function renderInteractiveWords(text) {
+function renderInteractiveWords(text, wordsArray = [], curTime = 0) {
   if (!text) return '';
   if (/[\u4e00-\u9fa5]/.test(text)) {
-    return text.split('').map(char => {
+    return text.split('').map((char, idx) => {
       if (/[\u4e00-\u9fa5]/.test(char)) {
-        return `<span class="yt-sub-hanzi-word" onclick="window.lookupWord(this, '${char}')" title="Bấm để tra từ 1-click">${char}</span>`;
+        let isActive = false;
+        if (Array.isArray(wordsArray) && wordsArray.length > 0) {
+          const matched = wordsArray.find(w => {
+            const wClean = (w.word || '').trim();
+            return wClean.includes(char) && curTime >= (w.start - 0.05) && curTime <= (w.end + 0.1);
+          });
+          if (matched) isActive = true;
+        }
+        const activeClass = isActive ? ' karaoke-word-active' : '';
+        return `<span class="yt-sub-hanzi-word${activeClass}" onclick="window.lookupWord(this, '${char}')" title="Bấm để tra từ 1-click">${char}</span>`;
       }
       return char;
     }).join('');
@@ -2609,7 +2618,16 @@ function renderInteractiveWords(text) {
     return text.split(/(\s+|[^\w\s'])/).map(part => {
       if (/^[a-zA-Z0-9']+$/.test(part)) {
         const escaped = part.replace(/'/g, "\\'");
-        return `<span class="yt-sub-hanzi-word" onclick="window.lookupWord(this, '${escaped}')" title="Bấm để tra từ 1-click">${part}</span>`;
+        let isActive = false;
+        if (Array.isArray(wordsArray) && wordsArray.length > 0) {
+          const matched = wordsArray.find(w => {
+            const wClean = (w.word || '').trim().toLowerCase();
+            return wClean.includes(part.toLowerCase()) && curTime >= (w.start - 0.05) && curTime <= (w.end + 0.1);
+          });
+          if (matched) isActive = true;
+        }
+        const activeClass = isActive ? ' karaoke-word-active' : '';
+        return `<span class="yt-sub-hanzi-word${activeClass}" onclick="window.lookupWord(this, '${escaped}')" title="Bấm để tra từ 1-click">${part}</span>`;
       }
       return part;
     }).join('');

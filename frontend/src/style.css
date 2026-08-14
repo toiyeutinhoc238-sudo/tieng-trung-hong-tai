@@ -9057,3 +9057,14 @@ body.light-mode .next-lesson-hub-btn:hover {
   transform: translateY(-2px) scale(1.03);
   box-shadow: 0 8px 24px rgba(16, 185, 129, 0.6);
 }
+
+/* HIGH-PRECISION KARAOKE WORD-LEVEL HIGHLIGHT */
+.yt-sub-hanzi-word.karaoke-word-active {
+  color: #f59e0b !important;
+  font-weight: 900 !important;
+  text-shadow: 0 0 12px rgba(245, 158, 11, 0.9), 0 0 24px rgba(217, 119, 6, 0.7) !important;
+  transform: scale(1.15);
+  display: inline-block;
+  transition: all 0.08s ease-out;
+  border-bottom: 2px solid #f59e0b;
+}

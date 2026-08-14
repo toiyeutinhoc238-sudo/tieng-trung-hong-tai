@@ -1869,7 +1869,7 @@ function cleanHumanSpeechText(text) {
   return cleaned;
 }
 
-// Helper: Consolidate fragmented speech chunks & apply vocal padding (0.18s pre-roll, 0.28s post-roll)
+// Helper: Consolidate fragmented speech chunks & apply vocal padding (0.15s pre-roll, 0.25s post-roll)
 function consolidateSpeechSegments(rawItems) {
   if (!rawItems || rawItems.length === 0) return [];
   const consolidated = [];
@@ -1890,11 +1890,13 @@ function consolidateSpeechSegments(rawItems) {
 
     const gap = item.startTime - currentGroup.endTime;
     const combinedDuration = item.endTime - currentGroup.startTime;
-    const isTerminal = /[.!?。！？\n]$/.test(currentGroup.text.trim());
-    const isTooLong = (currentGroup.text.length + cleanText.length) > 40;
-    const isTooLongInTime = combinedDuration > 8;
+    const isTerminal = /[.!?。！？;\n]$/.test(currentGroup.text.trim());
+    const isClauseEnd = /[,，;；]$/.test(currentGroup.text.trim());
+    const isTooLong = (currentGroup.text.length + cleanText.length) > 35;
+    const isTooLongInTime = combinedDuration > 6.0;
 
-    if (gap >= 0 && gap <= 0.5 && !isTerminal && !isTooLong && !isTooLongInTime) {
+    // Merge if gap is small and not ending with sentence terminal punctuation or exceeding ideal max phrase length
+    if (gap >= 0 && gap <= 0.38 && !isTerminal && !(isClauseEnd && combinedDuration > 3.5) && !isTooLong && !isTooLongInTime) {
       const glue = (currentGroup.text.endsWith(' ') || /[\u4e00-\u9fa5]/.test(currentGroup.text)) ? '' : ' ';
       currentGroup.text += glue + cleanText;
       currentGroup.endTime = Math.max(currentGroup.endTime, item.endTime);
@@ -1913,8 +1915,8 @@ function consolidateSpeechSegments(rawItems) {
   }
 
   return consolidated.map(item => {
-    const paddedStart = Math.max(0, parseFloat((item.startTime - 0.18).toFixed(2)));
-    const paddedEnd = parseFloat((item.endTime + 0.28).toFixed(2));
+    const paddedStart = Math.max(0, parseFloat((item.startTime - 0.15).toFixed(2)));
+    const paddedEnd = parseFloat((item.endTime + 0.25).toFixed(2));
     return {
       text: item.text,
       startTime: paddedStart,
@@ -2351,15 +2353,21 @@ async function enhanceAndClassifyLesson(rawSpeechSegments, videoTitle, durationS
       }));
 
       const isFirstChunk = (i === 0);
-      const prompt = `Bạn là một chuyên gia ngôn ngữ học Tiếng Trung và Tiếng Việt cao cấp.
-Dưới đây là tiêu đề video "${videoTitle}" (${durationSeconds}s) và các câu thoại/lời bài hát thô được trích xuất từ âm thanh video.
+      const prompt = `Bạn là một chuyên gia ngôn ngữ học Tiếng Trung và Biên tập viên Tiếng Việt cao cấp.
+Dưới đây là tiêu đề video "${videoTitle}" (${durationSeconds}s) và danh sách các câu thoại/lời bài hát thô kèm mốc thời gian (startTime, endTime) trích xuất từ âm thanh.
 
-NHIỆM VỤ CỦA BẠN:
-1. "vietnamese": Chuẩn hóa chính tả Tiếng Việt 100% TUYỆT ĐỐI. KHỬ TRÙNG LẶP các từ bị lặp do tiếng vang ca sĩ/nhạc đệm, biến các câu thoại/lời bài hát thô thành những câu hoàn chỉnh, ngắn gọn, súc tích, tự nhiên và giàu cảm xúc.
-2. "hanzi": BẮT BUỘC có Chữ Hán Giản Thể tương ứng chuẩn xác 100% (dịch sát nghĩa, chuẩn ngữ pháp tiếng Trung, giàu chất thơ).
-${isFirstChunk ? `3. "hskLevel": Đánh giá cấp độ HSK phù hợp ("1", "2", "3", "4", "5", "6").
-4. "category": Chọn đúng 1 trong: "Âm Nhạc", "Giao Tiếp", "Ẩm Thực", "Du Lịch", "Hoạt Hình", "Phim Ảnh", "Công Việc", "Tin Tức", "Văn Hóa", "Đời Sống", "Khác".
-5. "description": 1 câu tóm tắt nội dung bài học tiếng Việt hấp dẫn.` : ''}
+NHIỆM VỤ BIÊN TẬP TỐI ƯU CỦA BẠN (Tương tự chuẩn ứng dụng eJOY):
+1. "vietnamese": 
+   - CHUẨN HÓA CHÍNH TẢ TIẾNG VIỆT 100%: Sửa toàn bộ lỗi nghe nhầm đồng âm từ ASR (ví dụ: thiếu dấu, sai chính tả vùng miền, từ teencode, từ bị nhận diện sai).
+   - VIẾT HOA ĐẦU CÂU & DẤU CÂU: Viết hoa chữ cái đầu tiên, thêm dấu chấm/dấu phẩy chuẩn ngữ pháp tiếng Việt.
+   - KHỬ NHIỄU & LẶP TỪ: Loại bỏ các từ bị lặp do tiếng vang ca sĩ/nhạc đệm hoặc âm thừa (ừm, à, ê).
+2. "hanzi": 
+   - BẮT BUỘC có Chữ Hán Giản Thể tương ứng chuẩn xác 100% ngữ nghĩa (sửa chữ Hán đồng âm bị ASR nhận diện sai, đảm bảo câu tiếng Trung tự nhiên, chuẩn ngữ pháp).
+3. "startTime" & "endTime": 
+   - Giữ nguyên mốc thời gian chính xác của câu.
+${isFirstChunk ? `4. "hskLevel": Đánh giá cấp độ HSK phù hợp ("1", "2", "3", "4", "5", "6").
+5. "category": Chọn đúng 1 trong: "Âm Nhạc", "Giao Tiếp", "Ẩm Thực", "Du Lịch", "Hoạt Hình", "Phim Ảnh", "Công Việc", "Tin Tức", "Văn Hóa", "Đời Sống", "Khác".
+6. "description": 1 câu tóm tắt nội dung bài học tiếng Việt hấp dẫn.` : ''}
 
 Danh sách câu thô cần xử lý:
 ${JSON.stringify(chunkItems, null, 2)}
@@ -2400,14 +2408,16 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
 
             let py = '';
             try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) {}
+            const origItem = chunkItems.find(c => c.id === s.id) || chunkItems[refinedSentences.length % Math.max(1, chunkItems.length)];
             refinedSentences.push({
               id: s.id || refinedSentences.length + 1,
-              startTime: parseFloat(Number(s.startTime).toFixed(2)),
-              endTime: parseFloat(Number(s.endTime).toFixed(2)),
+              startTime: parseFloat(Number(s.startTime || (origItem ? origItem.startTime : 0)).toFixed(3)),
+              endTime: parseFloat(Number(s.endTime || (origItem ? origItem.endTime : 0)).toFixed(3)),
               hanzi: hanzi,
               pinyin: py,
               meaning: vietnamese,
-              keywords: [hanzi ? hanzi.slice(0, Math.min(2, hanzi.length)) : '']
+              keywords: [hanzi ? hanzi.slice(0, Math.min(2, hanzi.length)) : ''],
+              words: origItem && Array.isArray(origItem.words) ? origItem.words : []
             });
           }
         }
@@ -2712,7 +2722,7 @@ async function extractYouTubeDictation(youtubeId) {
             ...(whisperLang ? { language: whisperLang } : {}),
             ...(whisperPrompt ? { prompt: whisperPrompt } : {}),
             response_format: 'verbose_json',
-            timestamp_granularities: ['segment']
+            timestamp_granularities: ['word', 'segment']
           });
         } catch (eZh) {
           console.warn(`[Dictation] Whisper initial transcription failed, retrying fallback:`, eZh.message);
@@ -2720,7 +2730,7 @@ async function extractYouTubeDictation(youtubeId) {
             file: createReadStream(tempAudio),
             model: 'whisper-large-v3',
             response_format: 'verbose_json',
-            timestamp_granularities: ['segment']
+            timestamp_granularities: ['word', 'segment']
           });
         }
 
@@ -2746,8 +2756,13 @@ async function extractYouTubeDictation(youtubeId) {
           const raw = segments.map((s, idx) => ({
             id: idx + 1,
             text: s.text,
-            startTime: s.start,
-            endTime: s.end
+            startTime: parseFloat(Number(s.start || 0).toFixed(3)),
+            endTime: parseFloat(Number(s.end || 0).toFixed(3)),
+            words: Array.isArray(s.words) ? s.words.map(w => ({
+              word: w.word,
+              start: parseFloat(Number(w.start || 0).toFixed(3)),
+              end: parseFloat(Number(w.end || 0).toFixed(3))
+            })) : []
           }));
           const speech = consolidateSpeechSegments(raw);
           const enhanced = await enhanceAndClassifyLesson(speech, videoTitle, duration);
