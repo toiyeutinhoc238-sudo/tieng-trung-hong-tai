@@ -2475,103 +2475,14 @@ async function extractYouTubeDictation(youtubeId) {
       await fs.unlink(tempAudio).catch(() => {});
     }
 
-    // Tier 3: Zero-Failure AI Synthesis Engine
-    console.log(`[Dictation] Tier 0 and Tier 1 completed without direct transcript. Activating Tier 3 AI Synthesis Engine...`);
-    return await generateAIFallbackLesson(videoTitle, duration);
-
   } catch (outerErr) {
     console.warn(`[Dictation] Outer extraction error:`, outerErr.message);
-    return await generateAIFallbackLesson(`Bài Luyện Nghe (${youtubeId})`, 60);
-  }
-}
-
-// Zero-Failure AI Synthesis Engine (Google YouTube Data API v3 + Groq LLaMA 3.3 70B)
-async function generateAIFallbackLesson(videoTitle, durationSeconds) {
-  const duration = durationSeconds || 60;
-  console.log(`[AI Master Engine] Synthesizing intelligent HSK lesson for "${videoTitle}" (${duration}s)...`);
-
-  if (groqClient) {
-    try {
-      const prompt = `Bạn là một chuyên gia giáo dục ngôn ngữ Tiếng Trung và giáo viên HSK cao cấp.
-Người dùng cần tạo một bài luyện nghe chép chính tả cho video YouTube: "${videoTitle}" (Thời lượng: ${duration} giây).
-
-NHIỆM VỤ CỦA BẠN:
-1. Tạo danh sách từ 8 đến 14 câu thoại luyện nghe tiếng Trung phù hợp với chủ đề video/bài hát này, phân bổ mốc thời gian từ 0s đến ${duration}s.
-2. "vietnamese": Dịch nghĩa Tiếng Việt chuẩn xác 100% tuyệt đối (viết hoa chữ cái đầu, ngữ pháp chuẩn, không sai chính tả).
-3. "hanzi": Chữ Hán Giản Thể chuẩn xác, tự nhiên theo văn phong tiếng Trung.
-4. "hskLevel": Cấp độ HSK phù hợp ("1", "2", "3", "4", "5", "6").
-5. "category": Chọn đúng 1 trong: "Âm Nhạc", "Giao Tiếp", "Ẩm Thực", "Du Lịch", "Hoạt Hình", "Phim Ảnh", "Công Việc", "Tin Tức", "Văn Hóa", "Đời Sống", "Khác".
-6. "description": 1 câu tóm tắt nội dung bài học.
-
-BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
-{
-  "hskLevel": "3",
-  "category": "Âm Nhạc",
-  "description": "Luyện nghe tiếng Trung qua bài học ${videoTitle}",
-  "sentences": [
-    {
-      "id": 1,
-      "startTime": 5.0,
-      "endTime": 15.0,
-      "hanzi": "...",
-      "vietnamese": "..."
-    }
-  ]
-}`;
-
-      const completion = await groqClient.chat.completions.create({
-        model: 'llama-3.3-70b-versatile',
-        messages: [{ role: 'user', content: prompt }],
-        response_format: { type: 'json_object' }
-      });
-
-      const parsed = JSON.parse(completion.choices[0].message.content);
-      const sentences = (parsed.sentences || []).map((s, idx) => {
-        let py = '';
-        try { py = pinyin(s.hanzi, { toneType: 'symbol' }); } catch (e) {}
-        return {
-          id: s.id || (idx + 1),
-          startTime: parseFloat(Number(s.startTime).toFixed(2)),
-          endTime: parseFloat(Number(s.endTime).toFixed(2)),
-          hanzi: s.hanzi,
-          pinyin: py,
-          meaning: s.vietnamese,
-          keywords: [s.hanzi ? s.hanzi.slice(0, Math.min(2, s.hanzi.length)) : '']
-        };
-      });
-
-      if (sentences.length > 0) {
-        return {
-          success: true,
-          videoTitle,
-          duration,
-          level: String(parsed.hskLevel || '3'),
-          levelText: `HSK ${parsed.hskLevel || '3'}`,
-          category: parsed.category || 'Giao Tiếp',
-          description: parsed.description || `Bài học luyện nghe ${videoTitle}`,
-          tierUsed: 'AI Trợ Lý HSK Thông Minh ✨',
-          sentences
-        };
-      }
-    } catch (e) {
-      console.warn('[AI Master Engine] Fallback lesson synthesis warn:', e.message);
-    }
   }
 
-  // Baseline fallback
+  // Return honest, clear message when real speech / captions cannot be fetched from video
   return {
-    success: true,
-    videoTitle,
-    duration,
-    level: "2",
-    levelText: "HSK 2",
-    category: "Giao Tiếp",
-    description: `Bài luyện nghe ${videoTitle}`,
-    tierUsed: 'Mẫu Luyện Nghe Cơ Bản ✨',
-    sentences: [
-      { id: 1, startTime: 0, endTime: 10, hanzi: "你好！很高兴认识你。", pinyin: "nǐ hǎo ！ hěn gāo xìng rèn shi nǐ 。", meaning: "Xin chào! Rất vui được làm quen với bạn.", keywords: ["你好"] },
-      { id: 2, startTime: 10, endTime: 25, hanzi: "我们一起努力学习汉语吧！", pinyin: "wǒ men yì qǐ nǔ lì xué xí hàn yǔ ba ！", meaning: "Chúng ta cùng nhau cố gắng học tiếng Trung nhé!", keywords: ["学习"] }
-    ]
+    success: false,
+    message: 'Không tìm thấy phụ đề hoặc giọng nói thực tế trong video này. Bạn có thể tự gõ câu thoại vào ô bên dưới rồi bấm "Dịch Thủ Công"!'
   };
 }
 
