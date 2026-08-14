@@ -1978,40 +1978,57 @@ function setupPlayerForVideo(youtubeId) {
 
 function startPlaybackWatcher() {
   stopPlaybackWatcher();
-  playbackWatcher = setInterval(() => {
-    if (!ytPlayer || !ytPlayer.getCurrentTime || !currentLesson) return;
-    try {
-      const curTime = ytPlayer.getCurrentTime();
-      const curSent = currentLesson.sentences[currentSentenceIdx];
-      if (!curSent) return;
 
-      // Update timing display in adjuster
-      const posEl = document.getElementById('timing-adjuster-current-pos');
-      if (posEl) {
-        const curMin = Math.floor(curTime / 60);
-        const curSec = (curTime % 60).toFixed(2);
-        posEl.textContent = `Giây video: ${String(curMin).padStart(2, '0')}:${String(curSec).padStart(5, '0')} (${curTime.toFixed(2)}s)`;
+  function updateFrame() {
+    if (ytPlayer && ytPlayer.getCurrentTime && currentLesson) {
+      try {
+        const curTime = ytPlayer.getCurrentTime();
+        const curSent = currentLesson.sentences[currentSentenceIdx];
+        if (curSent) {
+          // Update timing display in adjuster
+          const posEl = document.getElementById('timing-adjuster-current-pos');
+          if (posEl) {
+            const curMin = Math.floor(curTime / 60);
+            const curSec = (curTime % 60).toFixed(2);
+            posEl.textContent = `Giây video: ${String(curMin).padStart(2, '0')}:${String(curSec).padStart(5, '0')} (${curTime.toFixed(2)}s)`;
+          }
+
+          // Update video progress meter and 60fps active dual subtitles
+          updateSubtitleHighlight(curTime);
+          updateInPlayerDualSubtitles(curTime);
+
+          // Auto pause at end of sentence
+          if (autoPauseEnabled && isSentencePlaying && curTime >= curSent.endTime) {
+            ytPlayer.pauseVideo();
+            isSentencePlaying = false;
+            stopPlaybackWatcher();
+            focusActiveInput();
+            return;
+          }
+        }
+      } catch (e) {}
+    }
+
+    if (ytPlayer && ytPlayer.getPlayerState) {
+      const state = ytPlayer.getPlayerState();
+      if (state === YT.PlayerState.PLAYING || state === YT.PlayerState.BUFFERING) {
+        playbackWatcher = requestAnimationFrame(updateFrame);
+        return;
       }
+    }
+    playbackWatcher = null;
+  }
 
-      // Update video progress meter or highlight
-      updateSubtitleHighlight(curTime);
-      updateInPlayerDualSubtitles(curTime);
-
-      // Auto pause at end of sentence
-      if (autoPauseEnabled && curTime >= curSent.endTime) {
-        ytPlayer.pauseVideo();
-        stopPlaybackWatcher();
-        isSentencePlaying = false;
-        // Auto focus active input box for quick typing
-        focusActiveInput();
-      }
-    } catch (e) {}
-  }, 100);
+  playbackWatcher = requestAnimationFrame(updateFrame);
 }
 
 function stopPlaybackWatcher() {
   if (playbackWatcher) {
-    clearInterval(playbackWatcher);
+    if (typeof playbackWatcher === 'number') {
+      cancelAnimationFrame(playbackWatcher);
+    } else {
+      clearInterval(playbackWatcher);
+    }
     playbackWatcher = null;
   }
 }
@@ -2488,12 +2505,22 @@ let currentPopoverData = null;
 
 function renderInteractiveWords(text) {
   if (!text) return '';
-  return text.split('').map(char => {
-    if (/[\u4e00-\u9fa5]/.test(char)) {
-      return `<span class="yt-sub-hanzi-word" onclick="window.lookupWord(this, '${char}')" title="Bấm để tra từ 1-click">${char}</span>`;
-    }
-    return char;
-  }).join('');
+  if (/[\u4e00-\u9fa5]/.test(text)) {
+    return text.split('').map(char => {
+      if (/[\u4e00-\u9fa5]/.test(char)) {
+        return `<span class="yt-sub-hanzi-word" onclick="window.lookupWord(this, '${char}')" title="Bấm để tra từ 1-click">${char}</span>`;
+      }
+      return char;
+    }).join('');
+  } else {
+    return text.split(/(\s+|[^\w\s'])/).map(part => {
+      if (/^[a-zA-Z0-9']+$/.test(part)) {
+        const escaped = part.replace(/'/g, "\\'");
+        return `<span class="yt-sub-hanzi-word" onclick="window.lookupWord(this, '${escaped}')" title="Bấm để tra từ 1-click">${part}</span>`;
+      }
+      return part;
+    }).join('');
+  }
 }
 
 window.lookupWord = async function(element, word) {

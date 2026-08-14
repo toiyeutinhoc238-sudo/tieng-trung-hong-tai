@@ -1976,33 +1976,33 @@ app.post('/api/dictation/auto-translate', async (req, res) => {
       }
 
       const parts = contentText.split('|').map(p => p.trim());
-      const mainText = parts[0] || '';
+      
+      // Smart detection of parts: Hanzi, Pinyin, Vietnamese
+      let hanziCandidate = parts.find(p => /[\u4e00-\u9fa5]/.test(p)) || '';
+      let viCandidate = parts.find(p => /[àáảãạâầấẩẫậăằắẳẵặèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/i.test(p)) || parts[parts.length - 1] || '';
 
-      // Detect if mainText is Vietnamese/Latin vs Chinese Hanzi
-      const hasHanzi = /[\u4e00-\u9fa5]/.test(mainText);
-
-      if (!hasHanzi) {
-        // Source is Vietnamese / Latin -> Translate to Chinese + generate Pinyin
-        const translatedHanzi = await translateText(mainText, 'vi', 'zh-CN');
+      if (!hanziCandidate) {
+        // Source has no Chinese Hanzi -> Translate Vietnamese text to proper Chinese Hanzi
+        const sourceText = viCandidate || parts.filter(p => p).join(' ').trim();
+        const translatedHanzi = await translateText(sourceText, 'vi', 'zh-CN');
         let py = '';
         try {
           py = pinyin(translatedHanzi, { toneType: 'symbol' });
         } catch (e) {}
-        const meaning = parts[2] || parts[1] || mainText;
-        processedLines.push(`${timePrefix}${translatedHanzi} | ${py} | ${meaning}`);
+        processedLines.push(`${timePrefix}${translatedHanzi} | ${py} | ${sourceText}`);
       } else {
-        // Source is Chinese Hanzi -> Generate Pinyin + translate to Vietnamese Meaning
-        let py = parts[1] || '';
+        // Source already has Chinese Hanzi
+        let py = parts.find(p => p !== hanziCandidate && p !== viCandidate) || '';
         if (!py) {
           try {
-            py = pinyin(mainText, { toneType: 'symbol' });
+            py = pinyin(hanziCandidate, { toneType: 'symbol' });
           } catch (e) {}
         }
-        let meaning = parts[2] || '';
-        if (!meaning) {
-          meaning = await translateText(mainText, 'zh-CN', 'vi');
+        let meaning = viCandidate || '';
+        if (!meaning || meaning === hanziCandidate) {
+          meaning = await translateText(hanziCandidate, 'zh-CN', 'vi');
         }
-        processedLines.push(`${timePrefix}${mainText} | ${py} | ${meaning}`);
+        processedLines.push(`${timePrefix}${hanziCandidate} | ${py} | ${meaning}`);
       }
     }
 
@@ -2051,17 +2051,25 @@ async function batchTranslateAndPinyin(speechItems) {
   for (let i = 0; i < speechItems.length; i += chunkSize) {
     const chunk = speechItems.slice(i, i + chunkSize);
     const promises = chunk.map(async (item, idx) => {
-      const hasHanzi = /[\u4e00-\u9fa5]/.test(item.text);
-      let hanzi = item.text;
+      let text = item.text || '';
+      let hasHanzi = /[\u4e00-\u9fa5]/.test(text);
+      let hanzi = '';
       let py = '';
       let meaning = '';
 
       if (hasHanzi) {
+        hanzi = text;
         try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) {}
         meaning = await translateText(hanzi, 'zh-CN', 'vi');
       } else {
-        meaning = item.text;
+        meaning = text;
         hanzi = await translateText(meaning, 'auto', 'zh-CN');
+        try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) {}
+      }
+
+      // Guarantee Hanzi is NEVER empty or non-Hanzi
+      if (!hanzi || !/[\u4e00-\u9fa5]/.test(hanzi)) {
+        hanzi = await translateText(meaning || '学习中文', 'vi', 'zh-CN');
         try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) {}
       }
 
@@ -2069,7 +2077,7 @@ async function batchTranslateAndPinyin(speechItems) {
         id: item.id || (i + idx + 1),
         startTime: parseFloat(item.startTime.toFixed(2)),
         endTime: parseFloat(item.endTime.toFixed(2)),
-        hanzi: hanzi || item.text,
+        hanzi: hanzi,
         pinyin: py,
         meaning: meaning || 'Câu hội thoại trong video',
         keywords: [hanzi ? hanzi.slice(0, Math.min(2, hanzi.length)) : '']
@@ -2252,8 +2260,8 @@ async function extractYouTubeDictation(youtubeId) {
         const lastTimestamp = raw[raw.length - 1]?.endTime || 0;
         console.log(`[Dictation] Tier 0 YouTube Captions: ${ytTranscript.length} lines, up to ${lastTimestamp}s / total ${duration}s`);
 
-        // ONLY accept Tier 0 if it covers at least 75% of the video duration OR if duration is short (< 45s)
-        if (duration <= 45 || lastTimestamp >= duration * 0.75) {
+        // Accept Tier 0 whenever captions exist
+        if (raw.length > 0) {
           const speech = consolidateSpeechSegments(raw);
           const enhanced = await enhanceAndClassifyLesson(speech, videoTitle, duration);
           if (enhanced.sentences && enhanced.sentences.length > 0) {
@@ -2269,8 +2277,6 @@ async function extractYouTubeDictation(youtubeId) {
               sentences: enhanced.sentences
             };
           }
-        } else {
-          console.log(`[Dictation] Tier 0 captions only covered ${lastTimestamp.toFixed(1)}s of ${duration}s. Upgrading to Tier 1 Whisper for FULL 100% video transcription!`);
         }
       }
     } catch (e) {
@@ -2282,28 +2288,55 @@ async function extractYouTubeDictation(youtubeId) {
     // ----------------------------------------------------
     const tempAudio = path.join(AUDIO_TEMP_DIR, `audio_${youtubeId}_${Date.now()}.m4a`);
     try {
-      console.log(`[Dictation] Tier 1: Downloading full audio for ${youtubeId}...`);
-      await ytdlp.execPromise([
+      const { execFile } = await import('child_process');
+      const { promisify } = await import('util');
+      const execFileAsync = promisify(execFile);
+      const ytDlpBinaryPath = path.join(__dirname, 'bin', process.platform === 'win32' ? 'yt-dlp.exe' : 'yt-dlp');
+
+      await execFileAsync(ytDlpBinaryPath, [
         videoUrl,
-        '--extractor-args', 'youtube:player_client=android,ios',
         '-f', 'ba/b',
         '-o', tempAudio,
         '--force-overwrites',
         '--no-playlist'
-      ]);
+      ], { timeout: 60000 });
 
       if (groqClient && existsSync(tempAudio)) {
         console.log(`[Dictation] Transcribing FULL audio with Groq Whisper Large v3...`);
         const { createReadStream } = await import('fs');
-        const transcription = await groqClient.audio.transcriptions.create({
-          file: createReadStream(tempAudio),
-          model: 'whisper-large-v3',
-          response_format: 'verbose_json',
-          timestamp_granularities: ['segment']
+        let transcription;
+        try {
+          transcription = await groqClient.audio.transcriptions.create({
+            file: createReadStream(tempAudio),
+            model: 'whisper-large-v3',
+            language: 'zh',
+            response_format: 'verbose_json',
+            timestamp_granularities: ['segment'],
+            prompt: 'Chinese Mandarin dictation, 汉语, 汉字, 拼音, 中文'
+          });
+        } catch (eZh) {
+          console.warn(`[Dictation] Whisper zh transcription failed, trying auto language:`, eZh.message);
+          transcription = await groqClient.audio.transcriptions.create({
+            file: createReadStream(tempAudio),
+            model: 'whisper-large-v3',
+            response_format: 'verbose_json',
+            timestamp_granularities: ['segment']
+          });
+        }
+
+        let segments = transcription.segments || [];
+
+        // Filter out famous Whisper hallucination noise strings (DimaTorzok, Amara, etc.)
+        segments = segments.filter(s => {
+          const t = (s.text || '').toLowerCase();
+          return !t.includes('dimatorzok') &&
+                 !t.includes('amara.org') &&
+                 !t.includes('subtitles created by') &&
+                 !t.includes('ghien mi go') &&
+                 !t.includes('субтитры');
         });
 
-        const segments = transcription.segments || [];
-        console.log(`[Dictation] Whisper extracted ${segments.length} segments across full video, language: ${transcription.language}`);
+        console.log(`[Dictation] Whisper extracted ${segments.length} valid Chinese segments across full video`);
 
         if (segments.length > 0) {
           const raw = segments.map((s, idx) => ({
@@ -2346,23 +2379,27 @@ async function extractYouTubeDictation(youtubeId) {
     try {
       console.log(`[Dictation] Tier 2: AI Smart Generation based on video title & duration...`);
       const prompt = `Video YouTube có tiêu đề "${videoTitle}" với thời lượng ${duration} giây.
-Hãy phân tích nội dung, xác định chính xác CẤP ĐỘ HSK ("1" đến "6"), THỂ LOẠI ("Âm Nhạc", "Giao Tiếp", "Hoạt Hình", "Phim Ảnh", "Đời Sống", "Tin Tức", "Khám Phá") và tạo từ 8 đến 16 câu tiếng Trung chuẩn (kèm Pinyin và Nghĩa Tiếng Việt) phù hợp nhất với chủ đề của video để người học luyện nghe chép chính tả.
-Các mốc startTime và endTime cần trải đều trong khoảng thời lượng từ 0 đến ${duration} giây.
+Hãy phân tích nội dung, xác định chính xác CẤP ĐỘ HSK ("1" đến "6"), THỂ LOẠI ("Âm Nhạc", "Giao Tiếp", "Hoạt Hình", "Phim Ảnh", "Đời Sống", "Tin Tức", "Khám Phá") và tạo từ 8 đến 16 câu tiếng Trung chuẩn HSK (kèm Pinyin và Nghĩa Tiếng Việt) phù hợp nhất với chủ đề của video để người học luyện nghe chép chính tả.
+
+QUY TẮC BẮT BUỘC RẤT QUAN TRỌNG:
+1. Trường "hanzi" CHỈ ĐƯỢC CHỨA CHỮ HÁN CHUẨN (Chinese Characters, ví dụ: 凭魁, 冰冷之梦, 很好听, 歌曲). KHÔNG ĐƯỢC ĐỂ TRỐNG HÁN TỰ. KHÔNG ĐƯỢC dùng Pinyin trong trường "hanzi".
+2. KHÔNG ĐƯỢC phiên âm bồi từ tiếng Việt sang Pinyin (Ví dụ: KHÔNG ĐƯỢC viết "bǐng kūi" hay "cón mèng bāng jiá"). Hãy dịch ý nghĩa sang Tiếng Trung HSK chuẩn xác (Ví dụ: "Bằng Kiều" -> 凭魁, "Cơn mơ băng giá" -> 冰冷之梦, "Bài hát" -> 歌曲/歌, "Ca sĩ" -> 歌手).
+3. Các mốc startTime và endTime cần trải đều trong khoảng thời lượng từ 0 đến ${duration} giây.
 
 Trả về JSON ĐÚNG định dạng duy nhất (không kèm markdown):
 {
   "hskLevel": "2",
   "levelText": "HSK 2 - 3 (Cơ bản)",
-  "category": "Giao Tiếp",
+  "category": "Âm Nhạc",
   "description": "Bài học luyện nghe chép chính tả...",
   "sentences": [
     {
       "id": 1,
       "startTime": 5.0,
       "endTime": 12.0,
-      "hanzi": "chữ Hán ở đây",
-      "pinyin": "pinyin có dấu",
-      "meaning": "nghĩa tiếng Việt"
+      "hanzi": "凭魁是最好的歌手",
+      "pinyin": "píng kuí shì zuì hǎo de gē shǒu",
+      "meaning": "Bằng Kiều là một ca sĩ hay nhất"
     }
   ]
 }`;
@@ -2480,7 +2517,7 @@ app.delete('/api/dictation/lessons/:id', async (req, res) => {
   }
 });
 
-// POST /api/dict/lookup — Instant Chinese Word Dictionary Lookup for Subtitle Click-to-Translate
+// POST /api/dict/lookup — Instant Multi-language Word Dictionary Lookup for Subtitle Click-to-Translate
 app.post('/api/dict/lookup', async (req, res) => {
   try {
     const { word } = req.body || {};
@@ -2488,24 +2525,51 @@ app.post('/api/dict/lookup', async (req, res) => {
       return res.status(400).json({ error: 'Missing word parameter' });
     }
     const cleanWord = word.trim();
+    const isChinese = /[\u4e00-\u9fa5]/.test(cleanWord);
+
     let py = '';
-    try { py = pinyin(cleanWord, { toneType: 'symbol' }); } catch (e) {}
+    let meaning = '';
+    let wordTag = 'Từ vựng';
 
-    const db = await readDatabase();
-    let hskLevel = null;
-    let foundDbMatch = db.find(w => w && (w.word === cleanWord || w.hanzi === cleanWord));
-    if (foundDbMatch) {
-      hskLevel = foundDbMatch.level || foundDbMatch.hsk || 'HSK';
+    if (isChinese) {
+      try { py = pinyin(cleanWord, { toneType: 'symbol' }); } catch (e) {}
+
+      const db = await readDatabase();
+      let foundDbMatch = db.find(w => w && (w.word === cleanWord || w.hanzi === cleanWord));
+      if (foundDbMatch) {
+        wordTag = foundDbMatch.level || foundDbMatch.hsk || 'HSK';
+        if (!wordTag.toString().startsWith('HSK')) wordTag = `HSK ${wordTag}`;
+      } else {
+        wordTag = 'Từ vựng HSK';
+      }
+      meaning = await translateText(cleanWord, 'zh-CN', 'vi');
+    } else {
+      // English / Non-Chinese word lookup
+      wordTag = 'English';
+      meaning = await translateText(cleanWord, 'en', 'vi');
+      
+      // Fetch English IPA phonetics from free dictionary API
+      try {
+        const dictRes = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(cleanWord)}`);
+        if (dictRes.ok) {
+          const dictData = await dictRes.json();
+          if (Array.isArray(dictData) && dictData[0]) {
+            const entry = dictData[0];
+            const phonetic = entry.phonetic || (entry.phonetics && entry.phonetics.find(p => p.text)?.text);
+            if (phonetic) py = phonetic;
+            const pos = entry.meanings && entry.meanings[0]?.partOfSpeech;
+            if (pos) wordTag = pos.toUpperCase();
+          }
+        }
+      } catch (eDict) {}
     }
-
-    const meaning = await translateText(cleanWord, 'zh-CN', 'vi');
 
     res.json({
       success: true,
       word: cleanWord,
       pinyin: py,
-      meaning: meaning,
-      hskLevel: hskLevel ? (String(hskLevel).startsWith('HSK') ? String(hskLevel) : `HSK ${hskLevel}`) : 'Từ vựng'
+      meaning: meaning || 'Đang cập nhật nghĩa',
+      hskLevel: wordTag
     });
   } catch (err) {
     console.error("Dict lookup error:", err);
