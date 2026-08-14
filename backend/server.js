@@ -1948,7 +1948,7 @@ app.post('/api/dictation/pinyin-helper', (req, res) => {
   }
 });
 
-// POST /api/dictation/auto-translate — Dịch câu Tiếng Việt sang Tiếng Trung + Pinyin hoặc ngược lại
+// POST /api/dictation/auto-translate — Dịch & Chuẩn hóa chính tả Tiếng Việt + Tiếng Trung + Pinyin
 app.post('/api/dictation/auto-translate', async (req, res) => {
   try {
     const { text } = req.body || {};
@@ -1957,16 +1957,12 @@ app.post('/api/dictation/auto-translate', async (req, res) => {
     }
 
     const lines = text.split('\n');
-    const processedLines = [];
+    const inputItems = [];
 
-    for (const rawLine of lines) {
-      const trimmed = rawLine.trim();
-      if (!trimmed) {
-        processedLines.push('');
-        continue;
-      }
+    for (let i = 0; i < lines.length; i++) {
+      const trimmed = lines[i].trim();
+      if (!trimmed) continue;
 
-      // Check if line already has [time] or pipes
       let timePrefix = '';
       let contentText = trimmed;
       const timeMatch = trimmed.match(/^(\[[0-9:\s.-]+\]|[0-9:]+)\s*(.*)$/);
@@ -1975,34 +1971,92 @@ app.post('/api/dictation/auto-translate', async (req, res) => {
         contentText = timeMatch[2];
       }
 
-      const parts = contentText.split('|').map(p => p.trim());
-      
-      // Smart detection of parts: Hanzi, Pinyin, Vietnamese
+      inputItems.push({
+        index: i,
+        timePrefix,
+        rawText: contentText
+      });
+    }
+
+    if (inputItems.length === 0) {
+      return res.json({ success: true, processedText: text });
+    }
+
+    // Use Groq LLaMA 3.3 70B for Deep Proofreading & Translation
+    if (groqClient) {
+      try {
+        const prompt = `Bạn là một chuyên gia ngôn ngữ học Tiếng Trung và Tiếng Việt cao cấp.
+Nhiệm vụ: Chuẩn hóa chính tả Tiếng Việt 100% hoàn hảo và Dịch/Chuẩn hóa Chữ Hán Giản Thể cho các câu bên dưới.
+
+YÊU CẦU:
+1. "vietnamese": Chuẩn hóa chính tả Tiếng Việt tuyệt đối (sửa lỗi sai từ, teencode, thiếu dấu, viết hoa chữ cái đầu, dấu câu đúng ngữ pháp).
+2. "hanzi": BẮT BUỘC có Chữ Hán Giản Thể chuẩn xác ngữ nghĩa (nếu đầu vào là tiếng Việt -> dịch sang tiếng Trung; nếu đầu vào đã có tiếng Trung -> chuẩn hóa chữ Hán giản thể).
+
+Danh sách câu:
+${JSON.stringify(inputItems.map(item => ({ index: item.index, text: item.rawText })), null, 2)}
+
+Trả về đúng JSON:
+{
+  "results": [
+    {
+      "index": 0,
+      "hanzi": "...",
+      "vietnamese": "..."
+    }
+  ]
+}`;
+
+        const completion = await groqClient.chat.completions.create({
+          model: 'llama-3.3-70b-versatile',
+          messages: [{ role: 'user', content: prompt }],
+          response_format: { type: 'json_object' }
+        });
+
+        const parsed = JSON.parse(completion.choices[0].message.content);
+        if (Array.isArray(parsed.results) && parsed.results.length > 0) {
+          const resultMap = new Map(parsed.results.map(r => [r.index, r]));
+          const processed = inputItems.map(item => {
+            const r = resultMap.get(item.index);
+            const hanzi = r?.hanzi || item.rawText;
+            const vi = r?.vietnamese || item.rawText;
+            let py = '';
+            try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) {}
+            return `${item.timePrefix}${hanzi} | ${py} | ${vi}`;
+          });
+
+          return res.json({
+            success: true,
+            processedText: processed.join('\n')
+          });
+        }
+      } catch (llmErr) {
+        console.warn("[Auto-Translate] Groq LLM warn, falling back to base translator:", llmErr.message);
+      }
+    }
+
+    // Fallback Translation
+    const processedLines = [];
+    for (const item of inputItems) {
+      const parts = item.rawText.split('|').map(p => p.trim());
       let hanziCandidate = parts.find(p => /[\u4e00-\u9fa5]/.test(p)) || '';
       let viCandidate = parts.find(p => /[àáảãạâầấẩẫậăằắẳẵặèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/i.test(p)) || parts[parts.length - 1] || '';
 
       if (!hanziCandidate) {
-        // Source has no Chinese Hanzi -> Translate Vietnamese text to proper Chinese Hanzi
         const sourceText = viCandidate || parts.filter(p => p).join(' ').trim();
         const translatedHanzi = await translateText(sourceText, 'vi', 'zh-CN');
         let py = '';
-        try {
-          py = pinyin(translatedHanzi, { toneType: 'symbol' });
-        } catch (e) {}
-        processedLines.push(`${timePrefix}${translatedHanzi} | ${py} | ${sourceText}`);
+        try { py = pinyin(translatedHanzi, { toneType: 'symbol' }); } catch (e) {}
+        processedLines.push(`${item.timePrefix}${translatedHanzi} | ${py} | ${sourceText}`);
       } else {
-        // Source already has Chinese Hanzi
         let py = parts.find(p => p !== hanziCandidate && p !== viCandidate) || '';
         if (!py) {
-          try {
-            py = pinyin(hanziCandidate, { toneType: 'symbol' });
-          } catch (e) {}
+          try { py = pinyin(hanziCandidate, { toneType: 'symbol' }); } catch (e) {}
         }
         let meaning = viCandidate || '';
         if (!meaning || meaning === hanziCandidate) {
           meaning = await translateText(hanziCandidate, 'zh-CN', 'vi');
         }
-        processedLines.push(`${timePrefix}${hanziCandidate} | ${py} | ${meaning}`);
+        processedLines.push(`${item.timePrefix}${hanziCandidate} | ${py} | ${meaning}`);
       }
     }
 
@@ -2037,13 +2091,13 @@ async function ensureYtDlpBinary() {
     await ytdlpWrap.downloadFromGithub(YTDLP_PATH, undefined, process.platform === 'win32' ? 'win32' : 'linux');
     console.log('[yt-dlp] Downloaded to:', YTDLP_PATH);
   }
+  if (process.platform !== 'win32') {
+    await fs.chmod(YTDLP_PATH, 0o755).catch(() => {});
+  }
   return YTDLP_PATH;
 }
 
-
-
-
-// Fast batch translation and Pinyin generator
+// Fast batch translation and Pinyin generator (Fallback)
 async function batchTranslateAndPinyin(speechItems) {
   const results = [];
   const chunkSize = 12;
@@ -2067,7 +2121,6 @@ async function batchTranslateAndPinyin(speechItems) {
         try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) {}
       }
 
-      // Guarantee Hanzi is NEVER empty or non-Hanzi
       if (!hanzi || !/[\u4e00-\u9fa5]/.test(hanzi)) {
         hanzi = await translateText(meaning || '学习中文', 'vi', 'zh-CN');
         try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) {}
@@ -2091,7 +2144,7 @@ async function batchTranslateAndPinyin(speechItems) {
   return results;
 }
 
-// AI Linguistic Refinement, HSK Difficulty Analyzer & Category Classifier
+// AI Master Linguistic Refinement, 100% Vietnamese Proofreader & HSK + Category Classifier
 async function enhanceAndClassifyLesson(rawSpeechSegments, videoTitle, durationSeconds) {
   if (!Array.isArray(rawSpeechSegments) || rawSpeechSegments.length === 0) {
     return {
@@ -2103,10 +2156,7 @@ async function enhanceAndClassifyLesson(rawSpeechSegments, videoTitle, durationS
     };
   }
 
-  // 1. Guaranteed robust base translation and Pinyin for every single segment across entire video
-  const baseSentences = await batchTranslateAndPinyin(rawSpeechSegments);
-
-  // 2. Determine category via heuristic baseline
+  // Baseline category & level heuristics
   let category = 'Giao Tiếp';
   const lowerTitle = (videoTitle || '').toLowerCase();
   if (lowerTitle.includes('bài hát') || lowerTitle.includes('nhạc') || lowerTitle.includes('song') || lowerTitle.includes('music') || lowerTitle.includes('mv') || lowerTitle.includes('hát') || lowerTitle.includes('bằng kiều') || lowerTitle.includes('ca sĩ') || lowerTitle.includes('trái tim')) {
@@ -2140,52 +2190,97 @@ async function enhanceAndClassifyLesson(rawSpeechSegments, videoTitle, durationS
   let levelText = `HSK ${level}`;
   let description = `Bài luyện nghe chép chính tả ${videoTitle}`;
 
-  // 3. Enhance with Groq LLaMA 3.3 70B for HSK classification and category precision
-  if (groqClient && baseSentences.length > 0) {
+  // AI Deep Linguistic Proofreading, Translation & Classification via Groq LLaMA 3.3 70B
+  if (groqClient) {
     try {
-      const sampleItems = baseSentences.slice(0, 15).map(s => ({
-        id: s.id,
-        hanzi: s.hanzi,
-        meaning: s.meaning
-      }));
+      console.log(`[AI Master Engine] Refining & Proofreading ${rawSpeechSegments.length} sentences with Groq LLaMA 3.3 70B...`);
+      const chunkSize = 25;
+      const refinedSentences = [];
 
-      const prompt = `Bạn là một chuyên gia ngôn ngữ tiếng Trung và giáo viên HSK cao cấp.
-Dưới đây là tiêu đề video và các câu thoại/lời bài hát:
-Tiêu đề video: "${videoTitle}"
-Thời lượng: ${durationSeconds} giây
-Các câu mẫu:
-${JSON.stringify(sampleItems, null, 2)}
+      for (let i = 0; i < rawSpeechSegments.length; i += chunkSize) {
+        const chunk = rawSpeechSegments.slice(i, i + chunkSize);
+        const chunkItems = chunk.map((s, idx) => ({
+          id: s.id || (i + idx + 1),
+          startTime: s.startTime,
+          endTime: s.endTime,
+          text: s.text
+        }));
 
-HÃY PHÂN TÍCH VÀ TRẢ VỀ JSON:
-1. "hskLevel": Cấp độ HSK phù hợp nhất ("1" đến "6").
-2. "levelText": Tên cấp độ (ví dụ "HSK 2 - 3 (Cơ bản)", "HSK 3 (Giao tiếp)", "HSK 4 (Nâng cao)").
-3. "category": Chọn đúng 1 trong: "Âm Nhạc", "Giao Tiếp", "Ẩm Thực", "Du Lịch", "Hoạt Hình", "Phim Ảnh", "Công Việc", "Tin Tức", "Văn Hóa", "Đời Sống", "Khác".
-4. "description": 1 câu tóm tắt nội dung bài học tiếng Việt hấp dẫn.
+        const isFirstChunk = (i === 0);
+        const prompt = `Bạn là một chuyên gia ngôn ngữ học Tiếng Trung và Tiếng Việt cao cấp.
+Dưới đây là tiêu đề video "${videoTitle}" (${durationSeconds}s) và các câu thoại/lời bài hát được trích xuất từ âm thanh video.
 
-Trả về đúng JSON:
+NHIỆM VỤ CỦA BẠN:
+1. "vietnamese": Chuẩn hóa chính tả Tiếng Việt 100% TUYỆT ĐỐI (sửa toàn bộ lỗi teencode, thiếu dấu, sai chính tả, sai từ đồng âm, viết hoa đầu câu, dấu câu chuẩn xác, hành văn tự nhiên).
+2. "hanzi": BẮT BUỘC có Chữ Hán Giản Thể tương ứng chuẩn xác $100\\%$ (dịch sát nghĩa, chuẩn ngữ pháp tiếng Trung).
+${isFirstChunk ? `3. "hskLevel": Đánh giá cấp độ HSK phù hợp ("1", "2", "3", "4", "5", "6").
+4. "category": Chọn đúng 1 trong: "Âm Nhạc", "Giao Tiếp", "Ẩm Thực", "Du Lịch", "Hoạt Hình", "Phim Ảnh", "Công Việc", "Tin Tức", "Văn Hóa", "Đời Sống", "Khác".
+5. "description": 1 câu tóm tắt nội dung bài học tiếng Việt hấp dẫn.` : ''}
+
+Danh sách câu cần xử lý:
+${JSON.stringify(chunkItems, null, 2)}
+
+BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
 {
-  "hskLevel": "2",
-  "levelText": "HSK 2 - 3",
-  "category": "Âm Nhạc",
-  "description": "..."
+  ${isFirstChunk ? `"hskLevel": "2",\n  "category": "Giao Tiếp",\n  "description": "...",\n  ` : ''}"sentences": [
+    {
+      "id": 1,
+      "startTime": 0.0,
+      "endTime": 5.0,
+      "hanzi": "...",
+      "vietnamese": "..."
+    }
+  ]
 }`;
 
-      const completion = await groqClient.chat.completions.create({
-        model: 'llama-3.3-70b-versatile',
-        messages: [{ role: 'user', content: prompt }],
-        response_format: { type: 'json_object' }
-      });
+        const completion = await groqClient.chat.completions.create({
+          model: 'llama-3.3-70b-versatile',
+          messages: [{ role: 'user', content: prompt }],
+          response_format: { type: 'json_object' }
+        });
 
-      const parsed = JSON.parse(completion.choices[0].message.content);
-      if (parsed.hskLevel) level = String(parsed.hskLevel);
-      if (parsed.levelText) levelText = parsed.levelText;
-      if (parsed.category) category = parsed.category;
-      if (parsed.description) description = parsed.description;
+        const parsed = JSON.parse(completion.choices[0].message.content);
+        if (isFirstChunk) {
+          if (parsed.hskLevel) level = String(parsed.hskLevel);
+          if (parsed.category) category = parsed.category;
+          if (parsed.description) description = parsed.description;
+          levelText = `HSK ${level}`;
+        }
+
+        if (Array.isArray(parsed.sentences)) {
+          for (const s of parsed.sentences) {
+            if (!s.hanzi || !s.vietnamese) continue;
+            let py = '';
+            try { py = pinyin(s.hanzi, { toneType: 'symbol' }); } catch (e) {}
+            refinedSentences.push({
+              id: s.id || refinedSentences.length + 1,
+              startTime: parseFloat(Number(s.startTime).toFixed(2)),
+              endTime: parseFloat(Number(s.endTime).toFixed(2)),
+              hanzi: s.hanzi,
+              pinyin: py,
+              meaning: s.vietnamese,
+              keywords: [s.hanzi ? s.hanzi.slice(0, Math.min(2, s.hanzi.length)) : '']
+            });
+          }
+        }
+      }
+
+      if (refinedSentences.length > 0) {
+        return {
+          level,
+          levelText,
+          category,
+          description,
+          sentences: refinedSentences
+        };
+      }
     } catch (llmErr) {
-      console.warn('[Dictation] AI classification LLM warn:', llmErr.message);
+      console.warn('[AI Master Engine] Groq LLM refinement warn, falling back to base translation:', llmErr.message);
     }
   }
 
+  // Fallback to base translation if Groq LLM was unavailable
+  const baseSentences = await batchTranslateAndPinyin(rawSpeechSegments);
   return {
     level,
     levelText,
@@ -2305,18 +2400,27 @@ async function extractYouTubeDictation(youtubeId) {
       if (groqClient && existsSync(tempAudio)) {
         console.log(`[Dictation] Transcribing FULL audio with Groq Whisper Large v3...`);
         const { createReadStream } = await import('fs');
-        let transcription;
+        const isChineseLikely = /[\u4e00-\u9fa5]/.test(videoTitle) || /hsk|chinese|tiếng trung|trung quốc|hoa ngữ/i.test(videoTitle);
         try {
-          transcription = await groqClient.audio.transcriptions.create({
-            file: createReadStream(tempAudio),
-            model: 'whisper-large-v3',
-            language: 'zh',
-            response_format: 'verbose_json',
-            timestamp_granularities: ['segment'],
-            prompt: 'Chinese Mandarin dictation, 汉语, 汉字, 拼音, 中文'
-          });
+          if (isChineseLikely) {
+            transcription = await groqClient.audio.transcriptions.create({
+              file: createReadStream(tempAudio),
+              model: 'whisper-large-v3',
+              language: 'zh',
+              response_format: 'verbose_json',
+              timestamp_granularities: ['segment'],
+              prompt: 'Chinese Mandarin dictation, 汉语, 汉字, 拼音, 中文'
+            });
+          } else {
+            transcription = await groqClient.audio.transcriptions.create({
+              file: createReadStream(tempAudio),
+              model: 'whisper-large-v3',
+              response_format: 'verbose_json',
+              timestamp_granularities: ['segment']
+            });
+          }
         } catch (eZh) {
-          console.warn(`[Dictation] Whisper zh transcription failed, trying auto language:`, eZh.message);
+          console.warn(`[Dictation] Whisper initial transcription failed, retrying auto language:`, eZh.message);
           transcription = await groqClient.audio.transcriptions.create({
             file: createReadStream(tempAudio),
             model: 'whisper-large-v3',
@@ -2327,14 +2431,16 @@ async function extractYouTubeDictation(youtubeId) {
 
         let segments = transcription.segments || [];
 
-        // Filter out famous Whisper hallucination noise strings (DimaTorzok, Amara, etc.)
+        // Filter out famous Whisper hallucination noise strings (DimaTorzok, Amara, Russian/TV spam)
         segments = segments.filter(s => {
           const t = (s.text || '').toLowerCase();
           return !t.includes('dimatorzok') &&
                  !t.includes('amara.org') &&
                  !t.includes('subtitles created by') &&
                  !t.includes('ghien mi go') &&
-                 !t.includes('субтитры');
+                 !t.includes('субтитры') &&
+                 !t.includes('белая ночь') &&
+                 !t.includes('yoyo television series');
         });
 
         console.log(`[Dictation] Whisper extracted ${segments.length} valid Chinese segments across full video`);
