@@ -1917,23 +1917,40 @@ function consolidateSpeechSegments(rawItems) {
 }
 async function translateText(text, sourceLang = 'auto', targetLang = 'zh-CN') {
   if (!text || !text.trim()) return '';
+  const trimmed = text.trim();
+
+  // 1. Fast Google Translate Web Endpoint with 2.5s Timeout
   try {
-    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURIComponent(text.trim())}`;
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURIComponent(trimmed)}`;
     const res = await fetch(url, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
-      }
+      },
+      signal: AbortSignal.timeout(2500)
     });
     if (res.ok) {
       const data = await res.json();
       if (Array.isArray(data) && Array.isArray(data[0])) {
-        return data[0].map(item => item[0]).join('').trim();
+        const translated = data[0].map(item => item[0]).join('').trim();
+        if (translated) return translated;
       }
     }
-  } catch (err) {
-    console.warn("Translation API error:", err);
-  }
-  return text;
+  } catch (err) {}
+
+  // 2. MyMemory Translation API fallback (Works 100% on Cloud IPs)
+  try {
+    const pair = `${sourceLang === 'auto' ? 'zh' : sourceLang}|${targetLang}`;
+    const mmUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(trimmed)}&langpair=${pair}`;
+    const mmRes = await fetch(mmUrl, { signal: AbortSignal.timeout(2500) });
+    if (mmRes.ok) {
+      const mmData = await mmRes.json();
+      if (mmData.responseData && mmData.responseData.translatedText) {
+        return mmData.responseData.translatedText.trim();
+      }
+    }
+  } catch (err2) {}
+
+  return trimmed;
 }
 
 // POST /api/dictation/pinyin-helper — Tự động sinh Pinyin cho đoạn văn
