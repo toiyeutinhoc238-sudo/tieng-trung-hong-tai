@@ -2413,19 +2413,7 @@ async function extractYouTubeDictation(youtubeId) {
       }
     }
 
-    await ensureYtDlpBinary();
-    const ytdlp = new ytdlpWrap(YTDLP_PATH);
     const videoUrl = `https://www.youtube.com/watch?v=${youtubeId}`;
-
-    if (!videoTitle || videoTitle.startsWith('Bài Luyện Nghe')) {
-      try {
-        const meta = await ytdlp.getVideoInfo([videoUrl, '--extractor-args', 'youtube:player_client=android,ios;player_skip=webpage,configs']);
-        videoTitle = meta.title || videoTitle;
-        duration = meta.duration || duration;
-      } catch (e) {
-        console.warn(`[Dictation] yt-dlp meta fetch warn:`, e.message);
-      }
-    }
 
     // ----------------------------------------------------
     // TIER 0: Direct YouTube Subtitles / Captions Track
