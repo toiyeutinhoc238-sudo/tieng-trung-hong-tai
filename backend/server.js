@@ -24,6 +24,13 @@ const DICTATION_DB_PATH = path.join(__dirname, 'video_dictation_lessons.json');
 const USER_DB_PATH = path.join(__dirname, 'user_data.json');
 const AUDIO_CACHE_DIR = path.join(__dirname, 'audio_cache');
 
+// AI Clients initialization
+const groqApiKey = process.env.GROQ_API_KEY;
+const groqClient = groqApiKey ? new Groq({ apiKey: groqApiKey }) : null;
+
+const geminiApiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+const genAI = geminiApiKey ? new GoogleGenerativeAI(geminiApiKey) : null;
+
 // Ensure audio cache directory exists
 fs.mkdir(AUDIO_CACHE_DIR, { recursive: true }).catch(err => {
   console.error("Error creating audio_cache dir:", err);
