@@ -54,24 +54,24 @@ const LESSONS_METADATA = {
     15: { title: "Bài 15: Kế hoạch tương lai - 计划与未来", desc: "Thảo luận dự định tương lai, ước mơ và kế hoạch cuộc sống." }
   },
   3: {
-    1: { title: "Bài 1: Giao tiếp văn phòng - 办公室", desc: "Học từ vựng liên quan đến công việc, đồng nghiệp và công sở." },
-    2: { title: "Bài 2: Kỳ nghỉ lý thú - 快乐假期", desc: "Học từ vựng đi du lịch nước ngoài, hỏi đường và trải nghiệm văn hóa." },
-    3: { title: "Bài 3: Mua sắm và Ẩm thực - 购物与美食", desc: "Đặt món ăn tại nhà hàng, từ vựng các món ăn Trung Hoa nổi tiếng." },
-    4: { title: "Bài 4: Sức khỏe và Thể thao - 健康与运动", desc: "Thảo luận về sức khỏe, các bài tập thể dục và thói quen lành mạnh." },
-    5: { title: "Bài 5: Nhà cửa và Cuộc sống - Vị trí & Phòng", desc: "Mô tả cách bày trí phòng ốc, đồ gia dụng và dọn dẹp nhà cửa." },
-    6: { title: "Bài 6: Giao thông và Đi lại - Du lịch & Vé", desc: "Từ vựng về phương tiện giao thông công cộng, mua vé và ga tàu." },
-    7: { title: "Bài 7: Mối quan hệ và Giao tiếp - Hẹn hò & Gặp gỡ", desc: "Học từ vựng về giao tiếp xã hội, hẹn hò và kết nối bạn bè." },
-    8: { title: "Bài 8: Thời tiết và Thiên nhiên - Khí hậu & Địa lý", desc: "Mô tả các hiện tượng thời tiết phức tạp và danh lam thắng cảnh." },
-    9: { title: "Bài 9: Sở thích và Nghệ thuật - Âm nhạc & Phim", desc: "Nói về các sở thích cá nhân, nhạc cụ và các loại hình nghệ thuật." },
-    10: { title: "Bài 10: Học tập và Ngôn ngữ - Trường học & Sách", desc: "Từ vựng về việc học tiếng Trung, sử dụng từ điển và đọc sách." },
-    11: { title: "Bài 11: Công việc và Kinh doanh - Dự án & Họp", desc: "Thảo luận về các cuộc họp công sở, đàm phán và dự án." },
-    12: { title: "Bài 12: Mua sắm và Dịch vụ - Giá cả & Thanh toán", desc: "Học từ vựng thanh toán, giao dịch ngân hàng và hoàn trả hàng hóa." },
-    13: { title: "Bài 13: Động vật và Môi trường - Thú cưng & Bảo tồn", desc: "Nói về thế giới động vật, thú cưng và các vấn đề bảo vệ môi trường." },
-    14: { title: "Bài 14: Lịch sử và Văn hóa - Truyền thống & Di sản", desc: "Học về các ngày lễ hội cổ truyền và nét đẹp văn hóa Trung Hoa." },
-    15: { title: "Bài 15: Kế hoạch và Dự định - Tương lai & Ước mơ", desc: "Thảo luận về mục tiêu dài hạn, phỏng vấn xin việc và ước mơ." },
-    16: { title: "Bài 16: Cảm xúc và Thái độ - Suy nghĩ & Hành vi", desc: "Bày tỏ cảm xúc vui buồn, sự lo lắng, tự tin và thái độ sống." },
-    17: { title: "Bài 17: Khoa học và Công nghệ - Thiết bị & Internet", desc: "Từ vựng về sử dụng điện thoại thông minh, internet và công nghệ." },
-    18: { title: "Bài 18: Tổng kết và Ôn tập - HSK 3", desc: "Bài học ôn tập tổng hợp toàn bộ từ vựng cốt lõi của giáo trình HSK 3." }
+    1: { title: "Bài 1: 我们去机场接你们", desc: "Học từ vựng về đón tiếp người quen tại sân bay, nhận định chủ quan và ngoại hình." },
+    2: { title: "Bài 2: 你们想吃什么就点什么", desc: "Học từ vựng gọi món ăn, thực đơn, khẩu vị và ẩm thực Trung Hoa." },
+    3: { title: "Bài 3: 这个小区挺好的", desc: "Học từ vựng khu dân cư, nhà ở, môi trường sống và tiện ích xung quanh." },
+    4: { title: "Bài 4: 这家宾馆跟别的都不一样", desc: "Học từ vựng khách sạn, dịch vụ nghỉ dưỡng, so sánh và tiện nghi." },
+    5: { title: "Bài 5: 这样的照片才好看", desc: "Học từ vựng chụp ảnh, nghệ thuật, góc nhìn và thẩm mỹ." },
+    6: { title: "Bài 6: 高铁上还可以点外卖", desc: "Học từ vựng di chuyển bằng tàu cao tốc, đặt đồ ăn giao tận nơi và tiện ích công nghệ." },
+    7: { title: "Bài 7: 这条裙子比短裤子更好看", desc: "Học từ vựng thời trang, trang phục, thử đồ và so sánh sở thích." },
+    8: { title: "Bài 8: 今天我出院了", desc: "Học từ vựng sức khỏe, khám bệnh, xuất viện và chăm sóc cơ thể." },
+    9: { title: "Bài 9: 打不好没关系", desc: "Học từ vựng thể thao, rèn luyện thân thể, động viên và tinh thần thi đấu." },
+    10: { title: "Bài 10: 你明天再把书还给我", desc: "Học từ vựng học tập, mượn trả sách, sử dụng câu chữ 把 trong sinh hoạt." },
+    11: { title: "Bài 11: 看来你没办法解决这个问题", desc: "Học từ vựng giải quyết vấn đề, công việc, thảo luận và họp hành." },
+    12: { title: "Bài 12: 这个季节天气变化很快", desc: "Học từ vựng thời tiết 4 mùa, khí hậu và sự thay đổi môi trường." },
+    13: { title: "Bài 13: 我的新邻居来自英国", desc: "Học từ vựng làm quen hàng xóm, quốc tịch, giao tiếp xã hội và mời khách." },
+    14: { title: "Bài 14: 这本书被别人借走了", desc: "Học từ vựng thư viện, sách vở, câu bị động chữ 被." },
+    15: { title: "Bài 15: 我是半个南京人", desc: "Học từ vựng quê quán, văn hóa vùng miền và trải nghiệm bản địa." },
+    16: { title: "Bài 16: 我听说有的熊猫出国了", desc: "Học từ vựng động vật, bảo tồn thiên nhiên và tin tức thế giới." },
+    17: { title: "Bài 17: 我要多向认真的人学习", desc: "Học từ vựng thái độ học tập, noi gương người tài và phát triển bản thân." },
+    18: { title: "Bài 18: 我学会了包饺子", desc: "Học từ vựng văn hóa ẩm thực truyền thống, nấu nướng và gói sủi cảo." }
   }
 };
 

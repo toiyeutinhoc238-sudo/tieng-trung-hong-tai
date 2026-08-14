@@ -130,7 +130,10 @@ const hsk3Lessons = [];
 
 for (let l = 1; l <= 18; l++) {
   const words = hsk3Words.filter(w => Number(w.lessonId) === l);
-  const title = (words[0] && words[0].lessonTitle) ? `Bài ${l}: ${words[0].lessonTitle}` : `Bài ${l}`;
+  let title = (words[0] && words[0].lessonTitle) ? words[0].lessonTitle : `Bài ${l}`;
+  if (!title.toLowerCase().startsWith('bài')) {
+    title = `Bài ${l}: ${title}`;
+  }
   const dialogues = [];
 
   for (let d = 1; d <= 4; d++) {
