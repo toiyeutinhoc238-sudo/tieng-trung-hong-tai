@@ -2290,16 +2290,13 @@ function renderClozeInputs(sent) {
       inputWrap.innerHTML = `
         <input type="text" class="cloze-input-box" id="cloze-input-${idx}" 
                data-target="${t.text}" placeholder="[ ? ]" 
-               autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"
-               inputmode="text" enterkeyhint="done">
+               autocomplete="off" autocapitalize="off" spellcheck="false">
         <span class="cloze-pinyin-sub" id="cloze-pinyin-${idx}" style="display: none;"></span>
       `;
       container.appendChild(inputWrap);
 
       const input = inputWrap.querySelector('input');
       input.addEventListener('keydown', (e) => {
-        // Prevent premature submit while typing with Chinese/Pinyin IME on iOS/Android/Windows
-        if (e.isComposing || e.keyCode === 229) return;
         if (e.key === 'Enter') {
           e.preventDefault();
           checkCurrentAnswer();
@@ -2321,21 +2318,6 @@ function renderFullInput(sent) {
   if (inputEl) {
     inputEl.value = '';
     inputEl.placeholder = 'Nghe âm thanh và gõ toàn bộ câu bằng Chữ Hán hoặc Pinyin (Nhấn Enter để nộp)...';
-    inputEl.setAttribute('autocomplete', 'off');
-    inputEl.setAttribute('autocorrect', 'off');
-    inputEl.setAttribute('autocapitalize', 'none');
-    inputEl.setAttribute('spellcheck', 'false');
-    inputEl.setAttribute('inputmode', 'text');
-    inputEl.setAttribute('enterkeyhint', 'done');
-
-    // Remove older listeners
-    inputEl.onkeydown = (e) => {
-      if (e.isComposing || e.keyCode === 229) return;
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        checkCurrentAnswer();
-      }
-    };
     inputEl.focus();
   }
 }

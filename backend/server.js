@@ -2062,12 +2062,6 @@ async function ensureYtDlpBinary() {
     await ytdlpWrap.downloadFromGithub(YTDLP_PATH, undefined, process.platform === 'win32' ? 'win32' : 'linux');
     console.log('[yt-dlp] Downloaded to:', YTDLP_PATH);
   }
-  if (process.platform !== 'win32') {
-    try {
-      const fsSync = await import('fs');
-      fsSync.chmodSync(YTDLP_PATH, 0o755);
-    } catch (e) {}
-  }
   return YTDLP_PATH;
 }
 
@@ -2086,130 +2080,13 @@ function generateBlankIndices(hanzi, keywords) {
   return indices.length > 0 ? indices : [0];
 }
 
-// In-Memory HSK Vocabulary Map for Statistical Analysis
-let globalHskWordMap = new Map();
-let globalMaxHskWordLen = 1;
-
-async function initHskWordMap() {
-  try {
-    const db = await readDatabase();
-    if (Array.isArray(db)) {
-      db.forEach(item => {
-        if (item && item.word && item.level) {
-          const w = item.word.trim();
-          const lvl = parseInt(item.level, 10);
-          if (w && lvl >= 1 && lvl <= 6) {
-            if (!globalHskWordMap.has(w) || globalHskWordMap.get(w) > lvl) {
-              globalHskWordMap.set(w, lvl);
-            }
-            if (w.length > globalMaxHskWordLen) globalMaxHskWordLen = w.length;
-          }
-        }
-      });
-      console.log(`[HSK Classifier] Initialized ${globalHskWordMap.size} HSK dictionary words.`);
-    }
-  } catch (err) {
-    console.warn("[HSK Classifier] Init warn:", err.message);
-  }
-}
-initHskWordMap();
-
-// Determine HSK level based on statistical word distribution across the entire video transcript
-function calculateStatisticalHskLevel(sentences) {
-  const fullText = (sentences || []).map(s => s.hanzi || '').join(' ');
-  const cleanText = fullText.replace(/[^\u4e00-\u9fa5]/g, '');
-
-  if (!cleanText || globalHskWordMap.size === 0) {
-    return { level: "1", levelText: "HSK 1" };
-  }
-
-  const counts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
-  let i = 0;
-
-  while (i < cleanText.length) {
-    let matched = false;
-    for (let len = Math.min(globalMaxHskWordLen, cleanText.length - i); len >= 2; len--) {
-      const sub = cleanText.substr(i, len);
-      if (globalHskWordMap.has(sub)) {
-        const lvl = globalHskWordMap.get(sub);
-        counts[lvl]++;
-        i += len;
-        matched = true;
-        break;
-      }
-    }
-    if (!matched) {
-      const singleChar = cleanText[i];
-      if (globalHskWordMap.has(singleChar)) {
-        const lvl = globalHskWordMap.get(singleChar);
-        counts[lvl]++;
-      }
-      i++;
-    }
-  }
-
-  let dominantLevel = 1;
-  let maxCount = -1;
-  for (let lvl = 1; lvl <= 6; lvl++) {
-    if (counts[lvl] > maxCount) {
-      maxCount = counts[lvl];
-      dominantLevel = lvl;
-    }
-  }
-
-  return {
-    level: String(dominantLevel),
-    levelText: `HSK ${dominantLevel}`
-  };
-}
-
-// Classify Category directly from Dialogue Content + Video Title
-function classifyVideoTopicFromDialogue(sentences, videoTitle) {
-  const allDialogue = (sentences || []).map(s => `${s.hanzi || ''} ${s.meaning || ''}`).join(' ').toLowerCase();
-  const title = (videoTitle || '').toLowerCase();
-  const text = `${title} ${allDialogue}`;
-
-  if (text.includes('bài hát') || text.includes('ca khúc') || text.includes('nhạc') || text.includes('hát') || text.includes('giai điệu') || text.includes('mv') || text.includes('ca sĩ') || text.includes('tiếng hát') || text.includes('歌') || text.includes('唱') || text.includes('音乐') || text.includes('月亮代表我的心') || text.includes('甜蜜蜜')) {
-    return 'Âm Nhạc';
-  }
-  if (text.includes('ăn') || text.includes('món') || text.includes('nhà hàng') || text.includes('uống') || text.includes('trà') || text.includes('nấu') || text.includes('thực đơn') || text.includes('cháo') || text.includes('vịt quay') || text.includes('nước ép') || text.includes('bia') || text.includes('ngon') || text.includes('quán') || text.includes('cơm') || text.includes('菜') || text.includes('餐厅') || text.includes('烤鸭') || text.includes('吃') || text.includes('喝')) {
-    return 'Ẩm Thực';
-  }
-  if (text.includes('quần áo') || text.includes('áo sơ mi') || text.includes('giày') || text.includes('giá') || text.includes('mặc cả') || text.includes('mua sắm') || text.includes('chiết khấu') || text.includes('cửa hàng') || text.includes('hàng hóa') || text.includes('thử đồ') || text.includes('thanh toán') || text.includes('thắt lưng') || text.includes('ví') || text.includes('买') || text.includes('衣服') || text.includes('衬衫') || text.includes('鞋') || text.includes('购物') || text.includes('价格') || text.includes('便宜')) {
-    return 'Đời Sống';
-  }
-  if (text.includes('heo peppa') || text.includes('hoạt hình') || text.includes('peppa') || text.includes('george') || text.includes('vũng bùn') || text.includes('anime') || text.includes('cartoon') || text.includes('佩奇') || text.includes('乔治') || text.includes('小猪') || text.includes('泥坑') || text.includes('动画')) {
-    return 'Hoạt Hình';
-  }
-  if (text.includes('du lịch') || text.includes('khách sạn') || text.includes('sân bay') || text.includes('tàu hỏa') || text.includes('hỏi đường') || text.includes('vé máy bay') || text.includes('phong cảnh') || text.includes('chuyến đi') || text.includes('旅游') || text.includes('酒店') || text.includes('机场') || text.includes('火车') || text.includes('门票')) {
-    return 'Du Lịch';
-  }
-  if (text.includes('chào hỏi') || text.includes('làm quen') || text.includes('xin chào') || text.includes('tên là') || text.includes('bao nhiêu tuổi') || text.includes('người việt nam') || text.includes('người trung quốc') || text.includes('hỏi tên') || text.includes('你好') || text.includes('名字') || text.includes('认识') || text.includes('很高兴') || text.includes('初次见面')) {
-    return 'Giao Tiếp';
-  }
-  if (text.includes('công việc') || text.includes('công sở') || text.includes('phỏng vấn') || text.includes('kinh doanh') || text.includes('họp') || text.includes('văn phòng') || text.includes('đồng nghiệp') || text.includes('sếp') || text.includes('lương') || text.includes('工作') || text.includes('面试') || text.includes('开会') || text.includes('公司')) {
-    return 'Công Việc';
-  }
-  if (text.includes('tin tức') || text.includes('thời sự') || text.includes('bản tin') || text.includes('báo chí') || text.includes('phát thanh') || text.includes('truyền hình') || text.includes('news') || text.includes('新闻') || text.includes('报道')) {
-    return 'Tin Tức';
-  }
-  if (text.includes('phim') || text.includes('điện ảnh') || text.includes('diễn viên') || text.includes('đạo diễn') || text.includes('tập phim') || text.includes('movie') || text.includes('drama') || text.includes('电影') || text.includes('演员')) {
-    return 'Phim Ảnh';
-  }
-  if (text.includes('văn hóa') || text.includes('lễ hội') || text.includes('tết') || text.includes('phong tục') || text.includes('lịch sử') || text.includes('truyền thống') || text.includes('文化') || text.includes('节日') || text.includes('春节')) {
-    return 'Văn Hóa';
-  }
-
-  return 'Giao Tiếp';
-}
-
 // Master Contextual AI Dictation Engine: 100% Context-Aware Spelling Correction & High-Precision Bilingual Translation
 async function processContextualDictation(rawSegments, videoTitle, durationSeconds) {
   const phrases = consolidateSpeechPhrases(rawSegments);
   if (phrases.length === 0) {
     return {
-      level: "1",
-      levelText: "HSK 1",
+      level: "2",
+      levelText: "HSK 2 - 3 (Cơ bản)",
       category: "Giao Tiếp",
       description: `Bài luyện nghe chép chính tả ${videoTitle}`,
       sentences: []
@@ -2222,36 +2099,37 @@ async function processContextualDictation(rawSegments, videoTitle, durationSecon
     rawSpeech: p.text
   }));
 
-  const systemPrompt = `Bạn là Chuyên gia Ngôn ngữ học Song ngữ Tiếng Trung - Tiếng Việt và Giảng viên Cao cấp.
+  const systemPrompt = `Bạn là Chuyên gia Ngôn ngữ học Song ngữ Tiếng Trung - Tiếng Việt và Biên tập viên Thẩm định Lời bài hát / Phụ đề Video AI hàng đầu.
+
 BỐI CẢNH VIDEO:
 - Tiêu đề: "${videoTitle || 'Bài Luyện Nghe'}"
 - Thời lượng: ${durationSeconds || 180}s
 
-DỮ LIỆU ĐẦU VÀO TỪ GIỌNG NÓI VIDEO / PHỤ ĐỀ:
+DỮ LIỆU ĐẦU VÀO (ASR/YouTube CC) CÓ THỂ BỊ SAI CHÍNH TẢ, NGHE NHẦM TỪ ĐỒNG ÂM:
 ${JSON.stringify(chunks, null, 2)}
 
 QUY TẮC BẮT BUỘC:
-1. XỬ LÝ SONG NGỮ CHUẨN XÁC:
-   - Nếu dữ liệu đầu vào là Tiếng Trung (hoặc phiên âm):
-     -> "hanzi": Là câu chữ Hán giản thể chuẩn xác, mượt mà (TUYỆT ĐỐI KHÔNG chứa chữ cái Latin a-z).
-     -> "meaning": Dịch chuẩn nghĩa tiếng Việt tự nhiên, phù hợp bối cảnh.
-   - Nếu dữ liệu đầu vào là Tiếng Việt:
-     -> "meaning": Sửa đúng chính tả tiếng Việt 100% (Ví dụ: "phải trăng" -> "phải chăng", "băng xá" -> "băng giá", "uống lòng" -> "ôm lòng", "bài tơ" -> "bài thơ", "miên má" -> "miên man", "gió thết/thép gào" -> "gió thét gào", "phép Đép mau xươi ấm" -> "phép màu sưởi ấm cõi lòng", "nội sầu" -> "nỗi sầu", "đêm mùa đông Chúa xa" -> "đêm mùa đông trôi xa", "dạng ngời" -> "rạng ngời").
-     -> "hanzi": Dịch sang câu tiếng Hán giản thể chuẩn HSK.
-2. TRẢ VỀ ĐỦ SỐ LƯỢNG ${chunks.length} CÂU:
-   - Giữ nguyên "id" tương ứng (từ 1 đến ${chunks.length}).
-3. METADATA:
-   - "level": Phân loại HSK ("1", "2", "3", "4", "5", hoặc "6").
-   - "levelText": BẮT BUỘC chỉ là "HSK 1", "HSK 2", "HSK 3", "HSK 4", "HSK 5", hoặc "HSK 6" (KHÔNG có chữ gì phía sau).
-   - "category": Phân loại chủ đề dựa trên toàn bộ nội dung đoạn thoại của video (chọn đúng 1 trong: "Âm Nhạc", "Giao Tiếp", "Ẩm Thực", "Du Lịch", "Hoạt Hình", "Phim Ảnh", "Công Việc", "Tin Tức", "Văn Hóa", "Đời Sống").
+1. ĐỐI CHIẾU NGỮ CẢNH THỰC TẾ & KHẮC PHỤC TRIỆT ĐỂ 100% LỖI CHÍNH TẢ:
+   - Dựa vào tiêu đề video và bối cảnh (Ví dụ: bài hát nổi tiếng "Hoang Mang" của NS Võ Hoài Phúc, "Trái Tim Bên Lề", "Ánh Trăng Nói Hộ Lòng Tôi", hoặc các bài hội thoại đời sống, phim ảnh, tin tức).
+   - KHẮC PHỤC HOÀN TOÀN tất cả các lỗi sai chính tả / từ đồng âm (Ví dụ: "phải trăng" -> "phải chăng", "băng xá" -> "băng giá", "uống lòng" -> "ôm lòng", "bài tơ" -> "bài thơ", "miên má" -> "miên man", "gió thết/thép gào vì em hứng/hưng hờ" -> "gió thét gào vì em hững hờ", "sung đối" -> "chung đôi", "lên ngói" -> "lên ngôi", "phép Đép mau xươi ấm tối lòng" -> "phép màu sưởi ấm cõi lòng", "nội sầu" -> "nỗi sầu", "đêm mùa đông Chúa xa" -> "đêm mùa đông trôi xa", "dạng ngời trên mỗi thơm" -> "rạng ngời trên môi thắm", v.v.).
+   - Trường "meaning" PHẢI LÀ CÂU TIẾNG VIỆT ĐÃ ĐƯỢC SỬA ĐÚNG CHÍNH TẢ 100%, ĐÚNG LỜI GỐC BÀI HÁT / ĐÚNG VĂN PHONG TỰ NHIÊN.
+2. DỊCH SANG TIẾNG TRUNG "hanzi" CHUẨN XÁC, TỰ NHIÊN, GIÀU CẢM XÚC:
+   - Dịch từ câu Tiếng Việt đã sửa đúng chính tả sang Tiếng Trung giản thể chuẩn HSK.
+   - TUYỆT ĐỐI KHÔNG chứa chữ cái Latin (English/Vietnamese) trong trường "hanzi".
+3. TRẢ VỀ ĐỦ SỐ LƯỢNG ${chunks.length} CÂU:
+   - Giữ nguyên "id", mốc thời gian startTime và endTime tương ứng.
+4. METADATA:
+   - "level": "1" đến "6"
+   - "levelText": Tên cấp độ (ví dụ "HSK 2 - 3 (Cơ bản)", "HSK 3 - 4 (Trung cấp)")
+   - "category": Đúng 1 trong: "Âm Nhạc", "Giao Tiếp", "Ẩm Thực", "Du Lịch", "Hoạt Hình", "Phim Ảnh", "Công Việc", "Tin Tức", "Văn Hóa", "Đời Sống"
    - "description": 1 câu tóm tắt bài học tiếng Việt hấp dẫn.
 
 TRẢ VỀ DUY NHẤT ĐỊNH DẠNG JSON HỢP LỆ:
 {
-  "level": "1",
-  "levelText": "HSK 1",
+  "level": "3",
+  "levelText": "HSK 3 - 4 (Trung cấp)",
   "category": "Âm Nhạc",
-  "description": "Luyện nghe bài hát qua video",
+  "description": "Luyện nghe bài hát do ca sĩ thể hiện",
   "sentences": [
     {
       "id": 1,
@@ -2290,26 +2168,13 @@ TRẢ VỀ DUY NHẤT ĐỊNH DẠNG JSON HỢP LỆ:
     }
   }
 
-  const finalSentences = await Promise.all(phrases.map(async (p, idx) => {
+  const finalSentences = phrases.map((p, idx) => {
     const aiItem = (parsed?.sentences || []).find(s => s.id === (idx + 1)) || (parsed?.sentences || [])[idx] || {};
+    let meaning = (aiItem.meaning || p.text || '').trim();
     let hanzi = (aiItem.hanzi || '').replace(/[a-zA-Z]+/g, '').trim();
-    let meaning = (aiItem.meaning || '').trim();
 
-    const hasHanziInRaw = /[\u4e00-\u9fa5]/.test(p.text);
     if (!hanzi || !/[\u4e00-\u9fa5]/.test(hanzi)) {
-      if (hasHanziInRaw) {
-        hanzi = cleanHumanSpeechText(p.text);
-      } else {
-        hanzi = await translateText(p.text || '学习中文', 'auto', 'zh-CN');
-      }
-    }
-
-    if (!meaning || meaning === hanzi) {
-      if (hasHanziInRaw) {
-        meaning = await translateText(hanzi, 'zh-CN', 'vi');
-      } else {
-        meaning = cleanHumanSpeechText(p.text) || 'Câu hội thoại trong video';
-      }
+      hanzi = '学习中文';
     }
 
     const py = pinyin(hanzi, { toneType: 'symbol' });
@@ -2326,121 +2191,15 @@ TRẢ VỀ DUY NHẤT ĐỊNH DẠNG JSON HỢP LỆ:
       keywords: kws,
       blankIndices: blanks
     };
-  }));
-
-  // Calculate Statistical HSK Distribution from the entire transcript
-  const statisticalHsk = calculateStatisticalHskLevel(finalSentences);
-  const finalLevel = parsed?.level ? String(parsed.level).replace(/[^0-9]/g, '') || statisticalHsk.level : statisticalHsk.level;
-  const finalLevelText = `HSK ${finalLevel}`;
-
-  // Determine Dialogue Topic from actual transcribed sentences + title
-  const finalCategory = parsed?.category || classifyVideoTopicFromDialogue(finalSentences, videoTitle);
+  });
 
   return {
-    level: finalLevel,
-    levelText: finalLevelText,
-    category: finalCategory,
+    level: parsed?.level || "2",
+    levelText: parsed?.levelText || "HSK 2 - 3 (Cơ bản)",
+    category: parsed?.category || "Giao Tiếp",
     description: parsed?.description || `Bài luyện nghe ${videoTitle}`,
     sentences: finalSentences
   };
-}
-
-// Intelligent AI Generator fallback when direct audio / CC stream is blocked
-async function generateSmartLessonFromMetadata(videoTitle, durationSeconds) {
-  const numSentences = Math.max(5, Math.min(25, Math.floor((durationSeconds || 60) / 8)));
-  const prompt = `Bạn là Chuyên gia Ngôn ngữ Tiếng Trung và Giảng viên Biên soạn Khóa học Video Song ngữ hàng đầu.
-Người dùng muốn học và luyện nghe chép chính tả cho video YouTube:
-- Tiêu đề: "${videoTitle || 'Bài Luyện Nghe'}"
-- Thời lượng: ${durationSeconds || 60} giây
-
-HÃY SOẠN THẢO ${numSentences} CÂU THOẠI/LỜI BÀI HÁT TIẾNG TRUNG - TIẾNG VIỆT CHUẨN XÁC NHẤT ĐÚNG VỚI BỐI CẢNH CỦA VIDEO TRÊN (chia đều các mốc thời gian từ 0s đến ${durationSeconds || 60}s):
-
-YÊU CẦU:
-1. Nếu là bài hát nổi tiếng:
-   - Cung cấp lời gốc tiếng Việt chuẩn chính tả 100%.
-   - Dịch sang tiếng Trung ("hanzi") thơ mộng, chính xác.
-2. Nếu là phim ảnh/hoạt hình/hội thoại/bài giảng:
-   - Cung cấp các câu thoại tiếng Trung chuẩn tự nhiên, phân chia mốc thời gian đều.
-   - Dịch nghĩa tiếng Việt mượt mà.
-3. Chia mốc startTime và endTime tương ứng từ 0s đến ${durationSeconds || 60}s.
-
-TRẢ VỀ DUY NHẤT ĐỊNH DẠNG JSON HỢP LỆ:
-{
-  "level": "1",
-  "levelText": "HSK 1",
-  "category": "Âm Nhạc",
-  "description": "...",
-  "sentences": [
-    {
-      "id": 1,
-      "startTime": 0,
-      "endTime": 8.5,
-      "hanzi": "...",
-      "meaning": "...",
-      "keywords": ["..."]
-    }
-  ]
-}`;
-
-  let parsed = null;
-  if (groqClient) {
-    try {
-      const completion = await groqClient.chat.completions.create({
-        model: 'llama-3.3-70b-versatile',
-        messages: [{ role: 'user', content: prompt }],
-        response_format: { type: 'json_object' }
-      });
-      parsed = safeParseJson(completion.choices[0].message.content);
-    } catch (e) {
-      console.warn("[Dictation] Smart fallback Groq warn:", e.message);
-    }
-  }
-
-  if (!parsed && geminiAI) {
-    try {
-      const model = geminiAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-      const res = await model.generateContent({
-        contents: [{ role: 'user', parts: [{ text: prompt }] }],
-        generationConfig: { responseMimeType: 'application/json' }
-      });
-      parsed = safeParseJson(res.response.text());
-    } catch (e2) {
-      console.warn("[Dictation] Smart fallback Gemini warn:", e2.message);
-    }
-  }
-
-  if (parsed && Array.isArray(parsed.sentences) && parsed.sentences.length > 0) {
-    const finalSentences = parsed.sentences.map((s, idx) => {
-      let hanzi = (s.hanzi || '').replace(/[a-zA-Z]+/g, '').trim() || '学习中文';
-      const py = pinyin(hanzi, { toneType: 'symbol' });
-      const kws = Array.isArray(s.keywords) && s.keywords.length > 0 ? s.keywords : [hanzi.slice(0, 2)];
-      const blanks = generateBlankIndices(hanzi, kws);
-      return {
-        id: idx + 1,
-        startTime: parseFloat(Number(s.startTime || idx * 6).toFixed(2)),
-        endTime: parseFloat(Number(s.endTime || (idx + 1) * 6).toFixed(2)),
-        hanzi: hanzi,
-        pinyin: py,
-        meaning: s.meaning || 'Câu hội thoại',
-        keywords: kws,
-        blankIndices: blanks
-      };
-    });
-
-    const statHsk = calculateStatisticalHskLevel(finalSentences);
-    const finalLevel = parsed.level ? String(parsed.level).replace(/[^0-9]/g, '') || statHsk.level : statHsk.level;
-    const finalCategory = parsed.category || classifyVideoTopicFromDialogue(finalSentences, videoTitle);
-
-    return {
-      level: finalLevel,
-      levelText: `HSK ${finalLevel}`,
-      category: finalCategory,
-      description: parsed.description || `Bài luyện nghe ${videoTitle}`,
-      sentences: finalSentences
-    };
-  }
-
-  return null;
 }
 
 function parseISO8601Duration(isoStr) {
@@ -2479,11 +2238,11 @@ async function extractYouTubeDictation(youtubeId) {
     }
 
     await ensureYtDlpBinary();
+    const ytdlp = new ytdlpWrap(YTDLP_PATH);
     const videoUrl = `https://www.youtube.com/watch?v=${youtubeId}`;
 
     if (!videoTitle || videoTitle.startsWith('Bài Luyện Nghe')) {
       try {
-        const ytdlp = new ytdlpWrap(YTDLP_PATH);
         const meta = await ytdlp.getVideoInfo(videoUrl);
         videoTitle = meta.title || videoTitle;
         duration = meta.duration || duration;
@@ -2542,8 +2301,6 @@ async function extractYouTubeDictation(youtubeId) {
       await execFileAsync(ytDlpBinaryPath, [
         videoUrl,
         '-f', 'ba/b',
-        '--extractor-args', 'youtube:player_client=android,web',
-        '--no-check-certificates',
         '-o', tempAudio,
         '--force-overwrites',
         '--no-playlist'
@@ -2614,48 +2371,14 @@ async function extractYouTubeDictation(youtubeId) {
       await fs.unlink(tempAudio).catch(() => {});
     }
 
-    // ----------------------------------------------------
-    // TIER 2: Intelligent AI Audio & Speech Synthesis from Video Metadata (Guaranteed 100% Success)
-    // ----------------------------------------------------
-    console.log(`[Dictation] Engaging Tier 2 Intelligent AI Generator for "${videoTitle}" (${duration}s)...`);
-    const smartLesson = await generateSmartLessonFromMetadata(videoTitle, duration);
-    if (smartLesson && smartLesson.sentences && smartLesson.sentences.length > 0) {
-      return {
-        success: true,
-        videoTitle,
-        duration,
-        level: smartLesson.level,
-        levelText: smartLesson.levelText,
-        category: smartLesson.category,
-        description: smartLesson.description,
-        tierUsed: 'AI Ngữ Cảnh Tự Động ✨',
-        sentences: smartLesson.sentences
-      };
-    }
-
   } catch (outerErr) {
     console.warn(`[Dictation] Outer extraction error:`, outerErr.message);
   }
 
-  // Final fallback to guarantee no crashes
-  const smartLesson = await generateSmartLessonFromMetadata(videoTitle, duration);
-  if (smartLesson && smartLesson.sentences && smartLesson.sentences.length > 0) {
-    return {
-      success: true,
-      videoTitle,
-      duration,
-      level: smartLesson.level,
-      levelText: smartLesson.levelText,
-      category: smartLesson.category,
-      description: smartLesson.description,
-      tierUsed: 'AI Ngữ Cảnh Tự Động ✨',
-      sentences: smartLesson.sentences
-    };
-  }
-
+  // Return clean error status when real audio transcription / CC cannot be fetched
   return {
     success: false,
-    error: 'Không thể nhận diện giọng nói trong video. Vui lòng thử lại!'
+    error: 'Không thể trích xuất lời thực tế từ video này. Video không có phụ đề sẵn (CC) và hệ thống không thể tải được luồng âm thanh để AI Whisper nghe trực tiếp. Vui lòng thử liên kết YouTube khác có phụ đề!'
   };
 }
 
