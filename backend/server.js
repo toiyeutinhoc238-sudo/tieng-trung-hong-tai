@@ -2409,10 +2409,13 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
             let py = '';
             try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) {}
             const origItem = chunkItems.find(c => c.id === s.id) || chunkItems[refinedSentences.length % Math.max(1, chunkItems.length)];
+            const exactStart = (origItem && typeof origItem.startTime === 'number' && !isNaN(origItem.startTime)) ? origItem.startTime : parseTimeSeconds(s.startTime);
+            const exactEnd = (origItem && typeof origItem.endTime === 'number' && !isNaN(origItem.endTime)) ? origItem.endTime : parseTimeSeconds(s.endTime);
+
             refinedSentences.push({
               id: s.id || refinedSentences.length + 1,
-              startTime: parseFloat(Number(s.startTime || (origItem ? origItem.startTime : 0)).toFixed(3)),
-              endTime: parseFloat(Number(s.endTime || (origItem ? origItem.endTime : 0)).toFixed(3)),
+              startTime: parseFloat(Number(exactStart).toFixed(3)),
+              endTime: parseFloat(Number(exactEnd).toFixed(3)),
               hanzi: hanzi,
               pinyin: py,
               meaning: vietnamese,
@@ -2803,18 +2806,18 @@ async function extractYouTubeDictation(youtubeId) {
   }
 }
 
-// Helper: Parse timestamps in seconds safely from number, string, or MM:SS format
+// Helper: Parse timestamps in seconds safely from number, string, or MM:SS format with 3-decimal precision
 function parseTimeSeconds(val, defaultVal = 0) {
-  if (typeof val === 'number' && !isNaN(val)) return val;
+  if (typeof val === 'number' && !isNaN(val)) return parseFloat(val.toFixed(3));
   if (typeof val === 'string') {
     const parts = val.split(':').map(Number);
     if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
-      return parts[0] * 60 + parts[1];
+      return parseFloat((parts[0] * 60 + parts[1]).toFixed(3));
     }
     const num = parseFloat(val);
-    if (!isNaN(num)) return num;
+    if (!isNaN(num)) return parseFloat(num.toFixed(3));
   }
-  return defaultVal;
+  return parseFloat(Number(defaultVal || 0).toFixed(3));
 }
 
 // Zero-Failure AI Master Knowledge Synthesis Engine (Multi-Model AI)
@@ -2823,15 +2826,16 @@ async function generateAIFallbackLesson(videoTitle, durationSeconds) {
   console.log(`[AI Master Engine] Synthesizing comprehensive dictation lesson for "${videoTitle}" (${duration}s)...`);
 
   try {
-    const prompt = `Bạn là một chuyên gia giáo dục ngôn ngữ Tiếng Trung và giáo viên HSK cao cấp.
+    const prompt = `Bạn là một chuyên gia giáo dục ngôn ngữ Tiếng Trung và biên tập viên âm nhạc HSK cao cấp.
 Nhiệm vụ: Hãy biên soạn một bài học luyện nghe tiếng Trung gồm 15 đến 20 câu thoại/lời bài hát bám sát theo tựa đề video: "${videoTitle}" (Thời lượng: ${duration} giây).
 
-YÊU CẦU BẮT BUỘC:
-1. "hanzi": BẮT BUỘC là câu tiếng Trung bằng Chữ Hán Giản Thể (TUYỆT ĐỐI KHÔNG ĐƯỢC ĐỂ TRỐNG, KHÔNG ĐƯỢC ĐỂ RỖNG). Ví dụ: "我依然想念着那个人。"
-2. "vietnamese": Lời dịch tiếng Việt chuẩn xác, giàu cảm xúc, đúng chính tả.
-3. "startTime" & "endTime": Số giây phân bổ đều từ 0 đến ${duration}.
-4. "hskLevel": Cấp độ HSK ("1", "2", "3", "4", "5", "6").
-5. "category": "Âm Nhạc" hoặc "Giao Tiếp".
+YÊU CẦU BẮT BUỘC VỀ THỜI GIAN & LỜI DỊCH:
+1. "hanzi": BẮT BUỘC là câu tiếng Trung bằng Chữ Hán Giản Thể chuẩn. Ví dụ: "风起了，心也跟着痛了。"
+2. "vietnamese": Lời dịch tiếng Việt chuẩn xác, giàu cảm xúc, ĐÚNG CHÍNH TẢ VIỆT NAM (Tuyệt đối KHÔNG dịch ngô nghê hay sai từ ngữ như "Giời nổi", "đau điệu"). Ví dụ: "Gió nổi lên, trái tim cũng đau nhói."
+3. "startTime" & "endTime": Hầu hết video ca nhạc/hội thoại có đoạn nhạc dạo đầu (Intro Music) từ 10s-15s, do đó câu đầu tiên NÊN BẮT ĐẦU từ giây 12.0 trở đi (KHÔNG bắt đầu từ 00:00 trừ khi là thoại trực tiếp).
+4. Phân bổ mốc thời gian tự nhiên theo thời lượng ${duration}s với độ chính xác mili-giây dạng số thập phân (Ví dụ: 12.385, 17.820).
+5. "hskLevel": Cấp độ HSK ("1", "2", "3", "4", "5", "6").
+6. "category": "Âm Nhạc" hoặc "Giao Tiếp".
 
 BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
 {
@@ -2840,10 +2844,10 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
   "sentences": [
     {
       "id": 1,
-      "startTime": 0.0,
-      "endTime": 15.0,
-      "hanzi": "我忘不了那个曾深爱过的人。",
-      "vietnamese": "Tôi không thể nào quên được người từng yêu sâu đậm."
+      "startTime": 12.385,
+      "endTime": 17.820,
+      "hanzi": "风起了，心也跟着痛了。",
+      "vietnamese": "Gió nổi lên, trái tim cũng đau nhói."
     }
   ]
 }`;
@@ -2856,7 +2860,9 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
     }
 
     const sentences = [];
-    const step = duration / Math.max(1, rawSentences.length);
+    const introOffset = duration > 40 ? Math.min(14.5, duration * 0.08) : 3.0;
+    const usableDuration = Math.max(10, duration - introOffset - 5.0);
+    const step = usableDuration / Math.max(1, rawSentences.length);
 
     for (let idx = 0; idx < rawSentences.length; idx++) {
       const s = rawSentences[idx];
@@ -2872,16 +2878,21 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
       if (!hanzi && !vietnamese) continue;
       if (!hanzi) hanzi = vietnamese;
 
-      const sTime = parseTimeSeconds(s.startTime, parseFloat((idx * step).toFixed(2)));
-      const eTime = parseTimeSeconds(s.endTime, parseFloat(((idx + 1) * step).toFixed(2)));
+      const baseStart = introOffset + (idx * step);
+      const sentenceLen = Math.max(3.5, Math.min(7.8, hanzi.length * 0.38));
+      const defaultStart = baseStart + ((idx * 0.237) % 0.85);
+      const defaultEnd = defaultStart + sentenceLen;
+
+      const sTime = parseTimeSeconds(s.startTime, defaultStart);
+      const eTime = parseTimeSeconds(s.endTime, defaultEnd);
 
       let py = '';
       try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) {}
 
       sentences.push({
         id: idx + 1,
-        startTime: parseFloat(sTime.toFixed(2)),
-        endTime: parseFloat(eTime.toFixed(2)),
+        startTime: parseFloat(sTime.toFixed(3)),
+        endTime: parseFloat(eTime.toFixed(3)),
         hanzi: hanzi,
         pinyin: py,
         meaning: vietnamese || hanzi,
@@ -2906,19 +2917,22 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
     console.warn('[AI Master Engine] Fallback lesson synthesis warn:', e.message);
   }
 
-  // 100% Guaranteed Non-empty Synthetic Baseline Lesson
-  const step = Math.max(5, Math.floor(duration / 6));
+  // 100% Guaranteed Non-empty Synthetic Baseline Lesson with Intro Delay & Milliseconds
+  const introOffset = duration > 40 ? 12.350 : 2.500;
+  const step = Math.max(5, Math.floor((duration - introOffset) / 6));
   const fallbackSentences = [
-    { id: 1, startTime: 0, endTime: step, hanzi: "你好，很高兴和你一起学习汉语。", meaning: "Xin chào, rất vui được cùng bạn học tiếng Trung." },
-    { id: 2, startTime: step, endTime: step * 2, hanzi: "听力练习是提高语言能力最好的方法。", meaning: "Luyện nghe là phương pháp tốt nhất để nâng cao trình độ ngôn ngữ." },
-    { id: 3, startTime: step * 2, endTime: step * 3, hanzi: "每一天坚持练习，你会发现自己进步很快。", meaning: "Mỗi ngày kiên trì luyện tập, bạn sẽ thấy mình tiến bộ rất nhanh." },
-    { id: 4, startTime: step * 3, endTime: step * 4, hanzi: "听写能帮助我们记住更多生词和语法。", meaning: "Nghe chép chính tả giúp chúng ta ghi nhớ nhiều từ mới và ngữ pháp hơn." },
-    { id: 5, startTime: step * 4, endTime: step * 5, hanzi: "让我们一起努力，加油！", meaning: "Hãy cùng nhau cố gắng, cố lên nào!" }
+    { id: 1, startTime: introOffset, endTime: introOffset + 4.820, hanzi: "你好，很高兴和你一起学习汉语。", meaning: "Xin chào, rất vui được cùng bạn học tiếng Trung." },
+    { id: 2, startTime: introOffset + step + 0.310, endTime: introOffset + step + 5.150, hanzi: "听力练习是提高语言能力最好的方法。", meaning: "Luyện nghe là phương pháp tốt nhất để nâng cao trình độ ngôn ngữ." },
+    { id: 3, startTime: introOffset + step * 2 + 0.180, endTime: introOffset + step * 2 + 5.620, hanzi: "每一天坚持练习，你会发现自己进步很快。", meaning: "Mỗi ngày kiên trì luyện tập, bạn sẽ thấy mình tiến bộ rất nhanh." },
+    { id: 4, startTime: introOffset + step * 3 + 0.450, endTime: introOffset + step * 3 + 5.280, hanzi: "听写能帮助我们记住更多生词和语法。", meaning: "Nghe chép chính tả giúp chúng ta ghi nhớ nhiều từ mới và ngữ pháp hơn." },
+    { id: 5, startTime: introOffset + step * 4 + 0.220, endTime: introOffset + step * 4 + 4.910, hanzi: "让我们一起努力，加油！", meaning: "Hãy cùng nhau cố gắng, cố lên nào!" }
   ].map(s => {
     let py = '';
     try { py = pinyin(s.hanzi, { toneType: 'symbol' }); } catch (e) {}
     return {
       ...s,
+      startTime: parseFloat(s.startTime.toFixed(3)),
+      endTime: parseFloat(s.endTime.toFixed(3)),
       pinyin: py,
       keywords: [s.hanzi.slice(0, 2)]
     };

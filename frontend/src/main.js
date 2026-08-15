@@ -4261,12 +4261,8 @@ function getUnlockedLevelsMap() {
 }
 
 function isLevelUnlocked(ver, level, levelIndex, levelsData, builtInVocabs) {
-  // Only HSK 1 and HSK 2 in HSK 3.0 are currently unlocked with structured lesson data
-  const v = ver || activeRoadmapVersion || '3.0';
-  if (v === '3.0' && (Number(level) === 1 || Number(level) === 2)) {
-    return true;
-  }
-  return false;
+  // 100% ALL ROADMAP LEVELS UNLOCKED! (HSK 1, 2, 3, 4, 5, 6, 7-9, HSK 2.0, YCT)
+  return true;
 }
 
 window.unlockRoadmapLevel = function(ver, level) {

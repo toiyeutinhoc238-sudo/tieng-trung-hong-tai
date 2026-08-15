@@ -2968,11 +2968,11 @@ window.autoGenerateAllWithAI = async function() {
 
       const lines = data.sentences.map(s => {
         const sMin = Math.floor(s.startTime / 60);
-        const sSec = (s.startTime % 60).toFixed(2);
+        const sSec = (s.startTime % 60).toFixed(3);
         const eMin = Math.floor(s.endTime / 60);
-        const eSec = (s.endTime % 60).toFixed(2);
-        const sFormatted = `${String(sMin).padStart(2, '0')}:${String(sSec).padStart(5, '0')}`;
-        const eFormatted = `${String(eMin).padStart(2, '0')}:${String(eSec).padStart(5, '0')}`;
+        const eSec = (s.endTime % 60).toFixed(3);
+        const sFormatted = `${String(sMin).padStart(2, '0')}:${String(sSec).padStart(6, '0')}`;
+        const eFormatted = `${String(eMin).padStart(2, '0')}:${String(eSec).padStart(6, '0')}`;
         return `[${sFormatted} - ${eFormatted}] ${s.hanzi} | ${s.pinyin} | ${s.meaning || 'Câu hội thoại trong video'}`;
       });
 
@@ -3700,8 +3700,8 @@ async function handleSaveCustomVideo(e) {
 
       sentences.push({
         id: idx + 1,
-        startTime: parseFloat(startTime.toFixed(1)),
-        endTime: parseFloat(endTime.toFixed(1)),
+        startTime: parseFloat(startTime.toFixed(3)),
+        endTime: parseFloat(endTime.toFixed(3)),
         hanzi: hanzi,
         pinyin: pinyin,
         meaning: meaning,
