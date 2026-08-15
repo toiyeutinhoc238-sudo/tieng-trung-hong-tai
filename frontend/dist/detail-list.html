@@ -453,7 +453,7 @@
   <script type="module" crossorigin src="/assets/style-DsF-OCBB.js"></script>
   <script type="module" crossorigin src="/assets/grammar_hsk2-DmGaXK9a.js"></script>
   <script type="module" crossorigin src="/assets/screen_drawing-CB_ccKph.js"></script>
-  <script type="module" crossorigin src="/assets/main-By94k4FC.js"></script>
+  <script type="module" crossorigin src="/assets/main-C2sDhZs9.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/style-DXvIFRrg.css">
 </head>
 
@@ -1084,7 +1084,7 @@
     }
 
     let speechVoice = localStorage.getItem('speech_voice') || 'elevenlabs-adam';
-    let speechPlaybackRate = parseFloat(localStorage.getItem('speech_playback_rate') || '1.0');
+    let speechPlaybackRate = parseFloat(localStorage.getItem('speech_playback_rate') || '0.85');
     let activeAudioElement = null;
 
     function cleanFrontendSpeechText(text) {
@@ -1119,7 +1119,7 @@
       localStorage.setItem('speech_voice', 'baidu-female');
 
       const speedSelectEl = document.getElementById('tts-speed-select');
-      const currentSpeed = (speedSelectEl && speedSelectEl.value) ? parseFloat(speedSelectEl.value) : (parseFloat(localStorage.getItem('speech_playback_rate')) || 1.0);
+      const currentSpeed = (speedSelectEl && speedSelectEl.value) ? parseFloat(speedSelectEl.value) : (parseFloat(localStorage.getItem('speech_playback_rate')) || 0.85);
 
       const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(currentVoice)}&_t=${Date.now()}`;
       const audio = new Audio(url);

@@ -37,7 +37,7 @@ function speakText(text) {
     activeAudioElement = null;
   }
 
-  const currentSpeed = parseFloat(localStorage.getItem('speech_playback_rate')) || 1.0;
+  const currentSpeed = parseFloat(localStorage.getItem('speech_playback_rate')) || 0.85;
   const API_BASE_URL = window.location.origin.includes('5173') ? 'http://localhost:5000' : window.location.origin;
   const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=baidu-female`;
 

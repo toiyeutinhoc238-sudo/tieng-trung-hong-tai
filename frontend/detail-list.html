@@ -1080,7 +1080,7 @@
     }
 
     let speechVoice = localStorage.getItem('speech_voice') || 'elevenlabs-adam';
-    let speechPlaybackRate = parseFloat(localStorage.getItem('speech_playback_rate') || '1.0');
+    let speechPlaybackRate = parseFloat(localStorage.getItem('speech_playback_rate') || '0.85');
     let activeAudioElement = null;
 
     function cleanFrontendSpeechText(text) {
@@ -1115,7 +1115,7 @@
       localStorage.setItem('speech_voice', 'baidu-female');
 
       const speedSelectEl = document.getElementById('tts-speed-select');
-      const currentSpeed = (speedSelectEl && speedSelectEl.value) ? parseFloat(speedSelectEl.value) : (parseFloat(localStorage.getItem('speech_playback_rate')) || 1.0);
+      const currentSpeed = (speedSelectEl && speedSelectEl.value) ? parseFloat(speedSelectEl.value) : (parseFloat(localStorage.getItem('speech_playback_rate')) || 0.85);
 
       const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(currentVoice)}&_t=${Date.now()}`;
       const audio = new Audio(url);

@@ -9,7 +9,7 @@ let filteredLessons = [];
 let currentLesson = null;
 let currentSentenceIdx = 0;
 let currentMode = 'cloze'; // 'cloze' | 'full' | 'subtitles'
-let currentSpeed = 1.0;
+let currentSpeed = 0.85;
 let autoPauseEnabled = true;
 let isVideoBlurred = false;
 let userAnswers = {}; // { sentenceId: { isCorrect, score, userAnswer, blanks: [] } }
@@ -2303,12 +2303,21 @@ function renderClozeInputs(sent) {
         }
       });
     } else {
-      const staticSpan = document.createElement('span');
-      staticSpan.className = 'cloze-static-text';
-      staticSpan.textContent = t.text;
-      staticSpan.title = "Bấm để xem cách viết chữ";
-      staticSpan.addEventListener('click', () => openHanziModal(t.text));
-      container.appendChild(staticSpan);
+      const chars = (t.text || '').split('');
+      chars.forEach(char => {
+        const staticSpan = document.createElement('span');
+        staticSpan.className = 'cloze-static-text';
+        staticSpan.textContent = char;
+        if (/[\u4e00-\u9fa5]/.test(char)) {
+          staticSpan.title = `Bấm để xem thuận bút chữ '${char}'`;
+          staticSpan.style.cursor = 'pointer';
+          staticSpan.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openHanziModal(char);
+          });
+        }
+        container.appendChild(staticSpan);
+      });
     }
   });
 }
@@ -2749,36 +2758,74 @@ function calculateStringSimilarity(s1, s2) {
 
 function openHanziModal(character) {
   if (!character) return;
-  const char = character.charAt(0);
   const modal = document.getElementById('dict-hanzi-writer-modal');
   const targetCharEl = document.getElementById('hanzi-modal-char-title');
+  const tabsDiv = document.getElementById('hanzi-modal-char-tabs');
   const targetDiv = document.getElementById('hanzi-writer-target');
 
   if (!modal || !targetDiv) return;
 
-  targetDiv.innerHTML = '';
-  if (targetCharEl) targetCharEl.textContent = `Tập Viết Chữ: ${char}`;
-  modal.style.display = 'flex';
+  // Extract all Chinese characters from string
+  const hanziChars = (character.match(/[\u4e00-\u9fa5]/g) || [character.charAt(0)]);
+  let selectedChar = hanziChars[0] || '你';
 
-  if (window.HanziWriter) {
-    try {
-      activeHanziWriter = HanziWriter.create('hanzi-writer-target', char, {
-        width: 180,
-        height: 180,
-        padding: 10,
-        showOutline: true,
-        strokeColor: '#ef4444',
-        radicalColor: '#2563eb',
-        outlineColor: '#cbd5e1',
-        drawingWidth: 20
-      });
-      activeHanziWriter.animateCharacter();
-    } catch (e) {
+  function renderSingleChar(char) {
+    selectedChar = char;
+    targetDiv.innerHTML = '';
+    if (targetCharEl) targetCharEl.textContent = `Tập Viết Chữ: ${char}`;
+
+    if (window.HanziWriter) {
+      try {
+        activeHanziWriter = HanziWriter.create('hanzi-writer-target', char, {
+          width: 180,
+          height: 180,
+          padding: 10,
+          showOutline: true,
+          strokeColor: '#ef4444',
+          radicalColor: '#2563eb',
+          outlineColor: '#cbd5e1',
+          drawingWidth: 20
+        });
+        activeHanziWriter.animateCharacter();
+      } catch (e) {
+        targetDiv.innerHTML = `<span style="font-size: 5rem; font-weight: 900; color: #ef4444;">${char}</span>`;
+      }
+    } else {
       targetDiv.innerHTML = `<span style="font-size: 5rem; font-weight: 900; color: #ef4444;">${char}</span>`;
     }
-  } else {
-    targetDiv.innerHTML = `<span style="font-size: 5rem; font-weight: 900; color: #ef4444;">${char}</span>`;
+
+    // Highlight active tab button
+    if (tabsDiv) {
+      tabsDiv.querySelectorAll('.hanzi-tab-btn').forEach(btn => {
+        const isActive = btn.dataset.char === char;
+        btn.classList.toggle('btn-primary', isActive);
+        btn.classList.toggle('btn-outline', !isActive);
+      });
+    }
   }
+
+  // Render character tabs if multiple Hanzi characters
+  if (tabsDiv) {
+    tabsDiv.innerHTML = '';
+    if (hanziChars.length > 1) {
+      hanziChars.forEach((c) => {
+        const btn = document.createElement('button');
+        btn.className = `btn btn-xs ${c === selectedChar ? 'btn-primary' : 'btn-outline'} hanzi-tab-btn`;
+        btn.dataset.char = c;
+        btn.textContent = c;
+        btn.style.fontSize = '1rem';
+        btn.style.padding = '4px 10px';
+        btn.onclick = () => renderSingleChar(c);
+        tabsDiv.appendChild(btn);
+      });
+      tabsDiv.style.display = 'flex';
+    } else {
+      tabsDiv.style.display = 'none';
+    }
+  }
+
+  modal.style.display = 'flex';
+  renderSingleChar(selectedChar);
 }
 
 function animateCurrentHanzi() {

@@ -637,7 +637,7 @@ document.addEventListener('click', (e) => {
 // --- TEXT TO SPEECH (TTS) SETUP ---
 let speechVoice = localStorage.getItem('speech_voice') || 'baidu-female';
 localStorage.setItem('speech_voice', 'baidu-female');
-let speechPlaybackRate = parseFloat(localStorage.getItem('speech_playback_rate') || '1.0');
+let speechPlaybackRate = parseFloat(localStorage.getItem('speech_playback_rate') || '0.85');
 let activeAudioElement = null;
 
 function initVoices() {
@@ -700,7 +700,7 @@ function speakText(text) {
 
   // 2. Speed settings
   const speedSelectEl = document.getElementById('tts-speed-select');
-  const currentSpeed = (speedSelectEl && speedSelectEl.value) ? parseFloat(speedSelectEl.value) : (parseFloat(localStorage.getItem('speech_playback_rate')) || 1.0);
+  const currentSpeed = (speedSelectEl && speedSelectEl.value) ? parseFloat(speedSelectEl.value) : (parseFloat(localStorage.getItem('speech_playback_rate')) || 0.85);
   localStorage.setItem('speech_playback_rate', currentSpeed.toString());
 
   // 3. Request Baidu Female Voice MP3 stream from backend server
@@ -1223,7 +1223,7 @@ function renderActiveCardLesson(current) {
           strokeColor: '#ef4444',
           radicalColor: '#2563eb',
           outlineColor: '#fca5a5',
-          drawingWidth: 20,
+          strokeAnimationSpeed: 1.2,
           onLoadCharDataError: function(err) {
             targetContainer.innerHTML = `<span style="font-size: 4.5rem; font-weight: 900; color: #ef4444;">${current.word}</span>`;
           }
