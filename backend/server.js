@@ -2142,13 +2142,30 @@ const BIN_DIR = path.join(__dirname, 'bin');
 const YTDLP_PATH = path.join(BIN_DIR, process.platform === 'win32' ? 'yt-dlp.exe' : 'yt-dlp');
 const ytdlpWrap = YTDlpWrap.default || YTDlpWrap;
 
-// Ensure yt-dlp binary is present
+// Ensure yt-dlp binary is present and up-to-date
 async function ensureYtDlpBinary() {
   await fs.mkdir(BIN_DIR, { recursive: true }).catch(() => {});
-  if (!existsSync(YTDLP_PATH)) {
-    console.log('[yt-dlp] Downloading standalone binary...');
-    await ytdlpWrap.downloadFromGithub(YTDLP_PATH, undefined, process.platform === 'win32' ? 'win32' : 'linux');
-    console.log('[yt-dlp] Downloaded to:', YTDLP_PATH);
+  let needsDownload = !existsSync(YTDLP_PATH);
+  
+  if (existsSync(YTDLP_PATH)) {
+    try {
+      const stats = await fs.stat(YTDLP_PATH);
+      const ageInDays = (Date.now() - stats.mtimeMs) / (1000 * 60 * 60 * 24);
+      if (ageInDays > 3) {
+        console.log(`[yt-dlp] Binary is ${ageInDays.toFixed(1)} days old. Auto-updating to latest GitHub release...`);
+        needsDownload = true;
+      }
+    } catch (e) {}
+  }
+
+  if (needsDownload) {
+    console.log('[yt-dlp] Fetching latest standalone yt-dlp binary from GitHub...');
+    try {
+      await ytdlpWrap.downloadFromGithub(YTDLP_PATH, undefined, process.platform === 'win32' ? 'win32' : 'linux');
+      console.log('[yt-dlp] Successfully updated yt-dlp binary at:', YTDLP_PATH);
+    } catch (eDl) {
+      console.warn('[yt-dlp] Binary update attempt warn, keeping existing binary:', eDl.message);
+    }
   }
   if (process.platform !== 'win32') {
     await fs.chmod(YTDLP_PATH, 0o755).catch(() => {});
@@ -2798,20 +2815,20 @@ export async function extractYouTubeDictation(youtubeId) {
         try {
           await execFileAsync(ytDlpBinaryPath, [
             videoUrl,
-            '--extractor-args', 'youtube:player_client=android;player_skip=webpage,configs',
-            '-f', 'ba/b/bestaudio/best',
+            '--extractor-args', 'youtube:player_client=android,web',
+            '-f', 'ba/b*',
             '-o', tempAudio,
             '--force-overwrites',
             '--no-playlist'
           ], { timeout: 60000 });
           downloadSuccess = existsSync(tempAudio);
         } catch (errAndroid) {
-          console.warn(`[Dictation] Android client download warn, retrying android_creator/tv:`, errAndroid.message);
+          console.warn(`[Dictation] Android client download warn, retrying tv_embedded & ios:`, errAndroid.message);
           try {
             await execFileAsync(ytDlpBinaryPath, [
               videoUrl,
-              '--extractor-args', 'youtube:player_client=android_creator,tv_embedded;player_skip=webpage,configs',
-              '-f', 'ba/b/bestaudio/best',
+              '--extractor-args', 'youtube:player_client=tv_embedded,ios,mweb',
+              '-f', 'ba/b*',
               '-o', tempAudio,
               '--force-overwrites',
               '--no-playlist'
@@ -2820,6 +2837,44 @@ export async function extractYouTubeDictation(youtubeId) {
           } catch (eThird) {
             console.warn(`[Dictation] All yt-dlp audio download strategies failed:`, eThird.message);
           }
+        }
+      }
+
+      // TIER 1.4 Backup: Cobalt.tools API Direct Audio Proxy Downloader
+      if (!downloadSuccess) {
+        try {
+          console.log(`[Dictation] Attempting Cobalt API direct audio stream fetch for ${youtubeId}...`);
+          const cobRes = await fetch('https://api.cobalt.tools/api/json', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            },
+            body: JSON.stringify({
+              url: videoUrl,
+              downloadMode: 'audio',
+              audioFormat: 'm4a'
+            }),
+            signal: AbortSignal.timeout(10000)
+          });
+          if (cobRes.ok) {
+            const cobData = await cobRes.json();
+            const streamUrl = cobData.url || cobData.audio;
+            if (streamUrl) {
+              const audioFileRes = await fetch(streamUrl, { signal: AbortSignal.timeout(45000) });
+              if (audioFileRes.ok) {
+                const arrayBuffer = await audioFileRes.arrayBuffer();
+                await fs.writeFile(tempAudio, Buffer.from(arrayBuffer));
+                downloadSuccess = existsSync(tempAudio);
+                if (downloadSuccess) {
+                  console.log(`[Dictation] Successfully downloaded audio stream via Cobalt API! (${(arrayBuffer.byteLength / 1024 / 1024).toFixed(2)} MB)`);
+                }
+              }
+            }
+          }
+        } catch (eCob) {
+          console.warn('[Dictation] Cobalt API fetch warn:', eCob.message);
         }
       }
 
@@ -2888,13 +2943,17 @@ export async function extractYouTubeDictation(youtubeId) {
 
         let segments = transcription.segments || [];
 
-        // Filter out famous Whisper hallucination noise strings only (preserve all actual speech timestamps)
+        // Filter out famous Whisper hallucination noise strings & intro credit metadata
         segments = segments.filter(s => {
           const t = (s.text || '').toLowerCase();
           const origText = (s.text || '').trim();
+          const cleanNoSpace = origText.replace(/\s+/g, '');
 
-          // Drop pure metadata credit spam strings if alone
-          if (origText === '填词' || origText === '作词' || origText === '作曲' || origText === '编曲') {
+          // Drop pure metadata credit spam strings (e.g. "作词 汉语 汉语 作曲 汉语 编曲 汉语")
+          if (/^(作词|作曲|编曲|填词|演唱|歌手|字幕|汉语|english|music)+/i.test(cleanNoSpace)) {
+            return false;
+          }
+          if (/作词.*作曲|作曲.*编曲|编曲.*作词|汉语.*汉语|作词.*汉语|作曲.*汉语/i.test(origText)) {
             return false;
           }
 
@@ -3001,14 +3060,16 @@ async function generateAIFallbackLesson(videoTitle, durationSeconds) {
   console.log(`[AI Master Engine] Synthesizing comprehensive dictation lesson for "${videoTitle}" (${duration}s)...`);
 
   try {
-    const prompt = `Bạn là một chuyên gia giáo dục ngôn ngữ Tiếng Trung và biên tập viên âm nhạc HSK cao cấp.
-Nhiệm vụ: Hãy biên soạn một bài học luyện nghe tiếng Trung gồm 15 đến 20 câu thoại/lời bài hát bám sát theo tựa đề video: "${videoTitle}" (Thời lượng: ${duration} giây).
+    const prompt = `Bạn là Chuyên Gia Giáo Dục Ngôn Ngữ Tiếng Trung & Biên Tập Viên Âm Nhạc HSK Cao Cấp.
+Nhiệm vụ: Hãy biên soạn bài học luyện nghe tiếng Trung gồm 15 đến 20 câu thoại/lời bài hát chuẩn xác bám sát tựa đề video: "${videoTitle}" (Thời lượng: ${duration} giây).
 
-YÊU CẦU BẮT BUỘC VỀ THỜI GIAN & LỜI DỊCH:
-1. "hanzi": BẮT BUỘC là câu tiếng Trung bằng Chữ Hán Giản Thể chuẩn. Ví dụ: "风起了，心也跟着痛了。"
-2. "vietnamese": Lời dịch tiếng Việt chuẩn xác, giàu cảm xúc, ĐÚNG CHÍNH TẢ VIỆT NAM (Tuyệt đối KHÔNG dịch ngô nghê hay sai từ ngữ như "Giời nổi", "đau điệu"). Ví dụ: "Gió nổi lên, trái tim cũng đau nhói."
-3. "startTime" & "endTime": Hầu hết video ca nhạc/hội thoại có đoạn nhạc dạo đầu (Intro Music) từ 10s-15s, do đó câu đầu tiên NÊN BẮT ĐẦU từ giây 12.0 trở đi (KHÔNG bắt đầu từ 00:00 trừ khi là thoại trực tiếp).
-4. Phân bổ mốc thời gian tự nhiên theo thời lượng ${duration}s với độ chính xác mili-giây dạng số thập phân (Ví dụ: 12.385, 17.820).
+YÊU CẦU BẮT BUỘC VỀ THỜI GIAN ÂM NHẠC & CHÍNH TẢ:
+1. "hanzi": BẮT BUỘC là câu tiếng Trung bằng Chữ Hán Giản Thể chuẩn (Simplified Chinese) khớp chính xác với lời bài hát/thoại thực tế.
+2. "vietnamese": Dịch Tiếng Việt chuẩn xác, giàu cảm xúc, BẮT BUỘC 100% ĐÚNG CHÍNH TẢ VIỆT NAM (Sửa hết lỗi nhầm từ "xôi/sôi", "chô/chỗ", "nghe/nghề", "mặc/mặt", teencode, thiếu dấu).
+3. "startTime" & "endTime":
+   - QUAN TRỌNG VỀ ĐOẠN NHẠC DẠO (INTRO): Đối với các bài hát nổi tiếng (như "Gió Nổi Rồi" - 起风了 - 周深, "Sứ Thanh Hoa" - 青花瓷, "Nụ Cười Của Em"...), BẮT BUỘC phải xác định đúng thời điểm cất giọng hát câu đầu tiên của ca sĩ (Ví dụ: Bài "起风了" - 周深 cất giọng câu "这一路上走走停停" ở GIÂY THỨ 25.0s).
+   - Đặt câu id 1 BẮT ĐẦU ĐÚNG GIÂY CẤT GIỌNG THỰC TẾ TRÊN VIDEO!
+4. Phân bổ mốc thời gian tự nhiên theo thời lượng ${duration}s với độ chính xác mili-giây dạng số thập phân (Ví dụ: 25.000, 28.500).
 5. "hskLevel": Cấp độ HSK ("1", "2", "3", "4", "5", "6").
 6. "category": "Âm Nhạc" hoặc "Giao Tiếp".
 
