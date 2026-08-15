@@ -2984,31 +2984,128 @@ export async function extractYouTubeDictation(youtubeId, extractRawOnly = false)
         }
       }
 
-      if (groqClient && existsSync(tempAudio)) {
-        console.log(`[Dictation] Transcribing FULL audio with Groq Whisper Large v3...`);
-        const { createReadStream } = await import('fs');
-        const whisperPrompt = 'Chinese Mandarin 汉语 汉字, Pinyin, Song Lyrics, Conversation';
+      if (existsSync(tempAudio)) {
+        let segments = [];
+        let engineUsed = 'Groq Whisper Large v3';
 
-        let transcription;
-        try {
-          transcription = await groqClient.audio.transcriptions.create({
-            file: createReadStream(tempAudio),
-            model: 'whisper-large-v3',
-            prompt: whisperPrompt,
-            response_format: 'verbose_json',
-            timestamp_granularities: ['word', 'segment']
-          });
-        } catch (eZh) {
-          console.warn(`[Dictation] Whisper initial transcription failed, retrying fallback:`, eZh.message);
-          transcription = await groqClient.audio.transcriptions.create({
-            file: createReadStream(tempAudio),
-            model: 'whisper-large-v3',
-            response_format: 'verbose_json',
-            timestamp_granularities: ['word', 'segment']
-          });
+        // ----------------------------------------------------
+        // TIER 1.1: AssemblyAI (Universal Conformer-2 Engine - Ultimate Noise & Music Filtering)
+        // ----------------------------------------------------
+        const assemblyKey = process.env.ASSEMBLYAI_API_KEY;
+        if (assemblyKey) {
+          try {
+            console.log(`[Dictation] Transcribing with AssemblyAI (Noise/Music Filter Mode)...`);
+            const audioData = await fs.readFile(tempAudio);
+            
+            // Step 1: Upload audio buffer to AssemblyAI
+            const uploadRes = await fetch('https://api.assemblyai.com/v2/upload', {
+              method: 'POST',
+              headers: {
+                'authorization': assemblyKey,
+                'content-type': 'application/octet-stream'
+              },
+              body: audioData
+            });
+
+            if (uploadRes.ok) {
+              const { upload_url } = await uploadRes.json();
+              if (upload_url) {
+                // Step 2: Request transcription with speech model & Chinese language
+                const transcriptReq = await fetch('https://api.assemblyai.com/v2/transcript', {
+                  method: 'POST',
+                  headers: {
+                    'authorization': assemblyKey,
+                    'content-type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                    audio_url: upload_url,
+                    language_code: 'zh',
+                    punctuate: true,
+                    format_text: true
+                  })
+                });
+
+                if (transcriptReq.ok) {
+                  const { id: transcriptId } = await transcriptReq.json();
+                  
+                  // Step 3: Poll until complete (up to 45s)
+                  let pollAttempts = 0;
+                  while (pollAttempts < 30) {
+                    await new Promise(r => setTimeout(r, 1500));
+                    pollAttempts++;
+                    const pollRes = await fetch(`https://api.assemblyai.com/v2/transcript/${transcriptId}/sentences`, {
+                      headers: { 'authorization': assemblyKey }
+                    });
+
+                    if (pollRes.ok) {
+                      const pollData = await pollRes.json();
+                      if (Array.isArray(pollData.sentences) && pollData.sentences.length > 0) {
+                        segments = pollData.sentences.map(s => ({
+                          text: s.text,
+                          start: (s.start || 0) / 1000,
+                          end: (s.end || 0) / 1000,
+                          words: (s.words || []).map(w => ({
+                            word: w.text,
+                            start: (w.start || 0) / 1000,
+                            end: (w.end || 0) / 1000
+                          }))
+                        }));
+                        engineUsed = 'AssemblyAI Conformer-2 🎙️⚡';
+                        console.log(`[Dictation] AssemblyAI transcription succeeded: ${segments.length} sentences`);
+                        break;
+                      }
+                    } else if (pollRes.status === 404 || pollRes.status === 400) {
+                      // Check overall status
+                      const statusRes = await fetch(`https://api.assemblyai.com/v2/transcript/${transcriptId}`, {
+                        headers: { 'authorization': assemblyKey }
+                      });
+                      if (statusRes.ok) {
+                        const statusData = await statusRes.json();
+                        if (statusData.status === 'error') {
+                          console.warn(`[Dictation] AssemblyAI error:`, statusData.error);
+                          break;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          } catch (eAssembly) {
+            console.warn(`[Dictation] AssemblyAI warn:`, eAssembly.message);
+          }
         }
 
-        let segments = transcription.segments || [];
+        // ----------------------------------------------------
+        // TIER 1.2: Fallback to Groq Whisper Large v3
+        // ----------------------------------------------------
+        if (segments.length === 0 && groqClient) {
+          console.log(`[Dictation] Transcribing FULL audio with Groq Whisper Large v3...`);
+          const { createReadStream } = await import('fs');
+          const whisperPrompt = 'Chinese Mandarin 汉语 汉字, Pinyin, Song Lyrics, Conversation';
+
+          let transcription;
+          try {
+            transcription = await groqClient.audio.transcriptions.create({
+              file: createReadStream(tempAudio),
+              model: 'whisper-large-v3',
+              prompt: whisperPrompt,
+              response_format: 'verbose_json',
+              timestamp_granularities: ['word', 'segment']
+            });
+          } catch (eZh) {
+            console.warn(`[Dictation] Whisper initial transcription failed, retrying fallback:`, eZh.message);
+            transcription = await groqClient.audio.transcriptions.create({
+              file: createReadStream(tempAudio),
+              model: 'whisper-large-v3',
+              response_format: 'verbose_json',
+              timestamp_granularities: ['word', 'segment']
+            });
+          }
+
+          segments = transcription.segments || [];
+          engineUsed = 'Groq Whisper Large v3';
+        }
 
         // Filter out famous Whisper hallucination noise strings & intro credit metadata
         segments = segments.map(s => {
@@ -3058,7 +3155,7 @@ export async function extractYouTubeDictation(youtubeId, extractRawOnly = false)
               success: true,
               videoTitle,
               duration,
-              tierUsed: 'Groq Whisper Large v3 (Raw Extraction)',
+              tierUsed: `${engineUsed} (Raw Extraction)`,
               sentences: raw.map(s => ({
                 ...s,
                 hanzi: s.text, // populate hanzi with raw text so frontend formatting works
@@ -3078,7 +3175,7 @@ export async function extractYouTubeDictation(youtubeId, extractRawOnly = false)
               levelText: enhanced.levelText,
               category: enhanced.category,
               description: enhanced.description,
-              tierUsed: 'Groq Whisper Large v3 + LLaMA 3.3 ⚡✨',
+              tierUsed: `${engineUsed} + AI HSK 🎙️✨`,
               sentences: enhanced.sentences
             };
           }
