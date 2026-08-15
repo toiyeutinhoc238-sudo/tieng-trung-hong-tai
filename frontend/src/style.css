@@ -1675,6 +1675,7 @@ html.dark .brand-logo-img {
 .toast {
   position: fixed;
   bottom: 28px;
+  top: auto !important;
   left: 50% !important;
   transform: translateX(-50%) translateY(20px);
   background-color: var(--bg-secondary, rgba(15, 23, 42, 0.95));
@@ -1690,6 +1691,12 @@ html.dark .brand-logo-img {
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
   max-width: 90vw;
+  height: auto !important;
+  min-height: unset !important;
+  max-height: unset !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 .toast.show {
@@ -8276,6 +8283,8 @@ body.light-mode #radicals-flashcard-view.fullscreen-flashcard-active {
 #flashcard-study-view.fullscreen-flashcard-active .flashcard-filter-bar,
 #flashcard-study-view.fullscreen-flashcard-active .bottom-list-card,
 #flashcard-study-view.fullscreen-flashcard-active .vocab-grid-container,
+#flashcard-study-view.fullscreen-flashcard-active [style*="Đang Ở Bước 1"],
+#flashcard-study-view.fullscreen-flashcard-active .lesson-step-action-bar,
 #radicals-flashcard-view.fullscreen-flashcard-active .radical-flashcard-header,
 #radicals-flashcard-view.fullscreen-flashcard-active .bottom-list-card {
   display: none !important;
@@ -8294,11 +8303,11 @@ body.flashcard-fullscreen-mode #main-nav {
 #flashcard-study-view.fullscreen-flashcard-active .hero-stage-wrapper,
 #radicals-flashcard-view.fullscreen-flashcard-active .hero-stage-wrapper {
   width: 100% !important;
-  max-width: 1160px !important;
+  max-width: 95vw !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 20px !important;
+  gap: clamp(16px, 2.5vw, 40px) !important;
   margin: 0 auto !important;
   padding: 0 10px !important;
   box-sizing: border-box !important;
@@ -8309,15 +8318,15 @@ body.flashcard-fullscreen-mode #main-nav {
 #flashcard-study-view.fullscreen-flashcard-active .stage-arrow-btn,
 #radicals-flashcard-view.fullscreen-flashcard-active .stage-arrow-btn {
   display: flex !important;
-  width: 54px !important;
-  height: 54px !important;
+  width: 60px !important;
+  height: 60px !important;
   border-radius: 50% !important;
-  background: rgba(15, 23, 42, 0.82) !important;
+  background: rgba(15, 23, 42, 0.85) !important;
   backdrop-filter: blur(20px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
   border: 1.5px solid rgba(255, 255, 255, 0.25) !important;
   color: #ffffff !important;
-  font-size: 1.35rem !important;
+  font-size: 1.45rem !important;
   cursor: pointer !important;
   align-items: center !important;
   justify-content: center !important;
@@ -8355,12 +8364,12 @@ body.light-mode #radicals-flashcard-view.fullscreen-flashcard-active .stage-arro
   color: #ffffff !important;
 }
 
-/* Thẻ Flashcard chính khi phóng to (Hình 3) */
+/* Thẻ Flashcard chính khi phóng to (Tối ưu rộng mở trên Máy tính / Màn hình lớn) */
 #flashcard-study-view.fullscreen-flashcard-active .hero-flashcard-card,
 #radicals-flashcard-view.fullscreen-flashcard-active .hero-flashcard-card {
   width: 100% !important;
-  max-width: 960px !important;
-  padding: 32px 36px !important;
+  max-width: 1260px !important;
+  padding: clamp(24px, 3vh, 44px) clamp(28px, 3.5vw, 56px) !important;
   border-radius: 28px !important;
   background: rgba(15, 23, 42, 0.94) !important;
   backdrop-filter: blur(40px) saturate(200%) !important;
@@ -8368,6 +8377,13 @@ body.light-mode #radicals-flashcard-view.fullscreen-flashcard-active .stage-arro
   border: 1.5px solid rgba(255, 255, 255, 0.22) !important;
   box-shadow: 0 30px 90px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
   box-sizing: border-box !important;
+}
+
+@media (min-width: 1440px) {
+  #flashcard-study-view.fullscreen-flashcard-active .hero-flashcard-card,
+  #radicals-flashcard-view.fullscreen-flashcard-active .hero-flashcard-card {
+    max-width: 1420px !important;
+  }
 }
 
 html.light-mode #flashcard-study-view.fullscreen-flashcard-active .hero-flashcard-card,

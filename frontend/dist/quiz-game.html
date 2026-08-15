@@ -708,42 +708,106 @@
       filter: grayscale(1) opacity(0.5);
     }
 
-    /* In-game floating toast */
-    .toast {
-      position: absolute;
-      top: 70px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #fff;
-      color: #222;
-      padding: 10px 24px;
-      border-radius: 30px;
-      font-weight: 800;
-      font-size: 1rem;
-      opacity: 0;
-      transition: 0.3s;
-      pointer-events: none;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-      z-index: 50;
+    /* In-game floating feedback pill */
+    .quiz-toast,
+    #toast-msg {
+      position: fixed !important;
+      top: 24px !important;
+      bottom: auto !important;
+      left: 50% !important;
+      transform: translateX(-50%) translateY(-20px) !important;
+      background: rgba(15, 23, 42, 0.95) !important;
+      backdrop-filter: blur(20px) !important;
+      -webkit-backdrop-filter: blur(20px) !important;
+      color: #ffffff !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.25) !important;
+      border-left: 5px solid #22c55e !important;
+      padding: 10px 28px !important;
+      border-radius: 99px !important;
+      font-weight: 800 !important;
+      font-size: 1.15rem !important;
+      opacity: 0 !important;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      pointer-events: none !important;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6) !important;
+      z-index: 999999 !important;
+      white-space: nowrap !important;
+      height: auto !important;
+      min-height: unset !important;
+      max-height: unset !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
     }
 
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(15px);
+    .quiz-toast.show,
+    #toast-msg.show {
+      opacity: 1 !important;
+      transform: translateX(-50%) translateY(0) !important;
+    }
+
+    /* Large Monitor / iMac Responsive Expansion */
+    @media (min-width: 1024px) {
+      .app-container {
+        border-radius: 24px !important;
+        height: 94vh !important;
+        max-height: 920px !important;
+        width: 95vw !important;
+        max-width: 1280px !important;
+      }
+      .question-card {
+        padding: 36px 28px !important;
+        margin-bottom: 24px !important;
+      }
+      .q-text {
+        font-size: clamp(2.8rem, 4.2vw, 4.5rem) !important;
+      }
+      .answers-grid {
+        gap: 20px !important;
+      }
+      .ans-btn {
+        padding: 24px 28px !important;
+        font-size: clamp(1.3rem, 1.8vw, 1.85rem) !important;
+        min-height: 88px !important;
+      }
+      .ans-btn span {
+        font-size: clamp(1.3rem, 1.8vw, 1.85rem) !important;
+      }
+    }
+
+    @media (min-width: 1440px) {
+      .app-container {
+        max-width: 1440px !important;
+        max-height: 960px !important;
+      }
+      .question-card {
+        padding: 44px 36px !important;
+      }
+      .q-text {
+        font-size: clamp(3.2rem, 4.8vw, 5.2rem) !important;
+      }
+      .ans-btn {
+        padding: 28px 32px !important;
+        font-size: clamp(1.45rem, 2vw, 2.1rem) !important;
+        min-height: 98px !important;
+      }
+      .ans-btn span {
+        font-size: clamp(1.45rem, 2vw, 2.1rem) !important;
+      }
     }
   </style>
-  <script type="module" crossorigin src="/assets/style-DsF-OCBB.js"></script>
+  <script type="module" crossorigin src="/assets/style-a-eN-Jub.js"></script>
   <script type="module" crossorigin src="/assets/grammar_hsk2-DmGaXK9a.js"></script>
   <script type="module" crossorigin src="/assets/screen_drawing-oOIhKrv1.js"></script>
   <script type="module" crossorigin src="/assets/main-DVboV90W.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/style-DXvIFRrg.css">
+  <link rel="stylesheet" crossorigin href="/assets/style-DT_oCVSu.css">
 </head>
 
 <body>
 
   <div class="app-container">
 
-    <div class="toast" id="toast-msg">+10 Điểm!</div>
+    <div class="quiz-toast" id="toast-msg">+10 Điểm!</div>
 
     <!-- SETUP OVERLAY MODAL -->
     <div class="modal-overlay" id="setup-modal">
