@@ -1374,48 +1374,83 @@ app.post('/api/chat', async (req, res) => {
     return res.status(400).json({ error: 'Missing or invalid messages parameter' });
   }
 
-  const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
-
   // Get logged in user if any
   const email = getLoggedInUserEmail(req);
 
-  if (!GEMINI_API_KEY) {
-    // Return friendly Demo / Setup instructions if API Key is not set
-    return res.json({
-      reply: 'Chào bạn! Tôi là **Trợ lý AI Hongtai** 🐼. Hiện tại, máy chủ chưa được cấu hình API Key cho Gemini.\n\nĐể kích hoạt đầy đủ tính năng hội thoại và giải thích tiếng Trung, vui lòng tạo biến môi trường `GEMINI_API_KEY` trong file cấu hình `.env` hoặc trên hệ thống của bạn!'
-    });
-  }
-
   try {
-    // Format messages for Gemini generateContent structure
-    const contents = messages.map(msg => ({
-      role: msg.role === 'assistant' ? 'model' : 'user',
-      parts: [{ text: msg.content }]
-    }));
+    let reply = '';
+    const systemPrompt = 'Bạn là trợ lý AI học tiếng Trung đắc lực của thương hiệu "Tiếng Trung Hongtai". Bạn có phong cách nói chuyện thân thiện, chuyên nghiệp, tận tâm và thông thái. Bạn giúp học viên giải thích từ vựng HSK, các quy tắc phát âm Pinyin, cấu trúc ngữ pháp tiếng Trung, dịch thuật Anh-Trung-Việt và luyện giao tiếp. Hãy sử dụng định dạng Markdown rõ ràng, thụt lề hợp lý, xuống dòng sạch sẽ. Khi nói về thương hiệu, luôn tự xưng là "Trợ lý AI Hongtai".';
 
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        contents,
-        systemInstruction: {
-          parts: [{
-            text: 'Bạn là trợ lý AI học tiếng Trung đắc lực của thương hiệu "Tiếng Trung Hongtai". Bạn có phong cách nói chuyện thân thiện, chuyên nghiệp, tận tâm và thông thái. Bạn giúp học viên giải thích từ vựng HSK, các quy tắc phát âm Pinyin, cấu trúc ngữ pháp tiếng Trung, dịch thuật Anh-Trung-Việt và luyện giao tiếp. Hãy sử dụng định dạng Markdown rõ ràng, thụt lề hợp lý, xuống dòng sạch sẽ. Khi nói về thương hiệu, luôn tự xưng là "Trợ lý AI Hongtai".'
-          }]
+    // 1. Primary: Try Groq LLaMA 3.3 70B
+    if (groqClient) {
+      try {
+        const groqMsgs = [
+          { role: 'system', content: systemPrompt },
+          ...messages.map(m => ({ role: m.role === 'model' ? 'assistant' : m.role, content: m.content }))
+        ];
+        const completion = await groqClient.chat.completions.create({
+          model: 'llama-3.3-70b-versatile',
+          messages: groqMsgs,
+          temperature: 0.7,
+          max_tokens: 1500
+        });
+        reply = completion.choices[0]?.message?.content || '';
+      } catch (eGroq70b) {
+        console.warn('[Chat AI] Groq LLaMA 3.3 70B error, trying LLaMA 3.1 8B:', eGroq70b.message);
+        try {
+          const groqMsgs = [
+            { role: 'system', content: systemPrompt },
+            ...messages.map(m => ({ role: m.role === 'model' ? 'assistant' : m.role, content: m.content }))
+          ];
+          const completion = await groqClient.chat.completions.create({
+            model: 'llama-3.1-8b-instant',
+            messages: groqMsgs,
+            temperature: 0.7,
+            max_tokens: 1500
+          });
+          reply = completion.choices[0]?.message?.content || '';
+        } catch (eGroq8b) {
+          console.warn('[Chat AI] Groq LLaMA 3.1 8B error:', eGroq8b.message);
         }
-      })
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Gemini API error:', errorText);
-      throw new Error(`Gemini API returned status ${response.status}`);
+      }
     }
 
-    const data = await response.json();
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Xin lỗi bạn, tôi không thể xử lý yêu cầu lúc này. Vui lòng thử lại sau.';
+    // 2. Secondary: Try Gemini 1.5 Flash REST API if Groq failed or not present
+    const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || '';
+    if (!reply && GEMINI_API_KEY) {
+      try {
+        const contents = messages.map(msg => ({
+          role: msg.role === 'assistant' ? 'model' : 'user',
+          parts: [{ text: msg.content }]
+        }));
+
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents,
+            systemInstruction: { parts: [{ text: systemPrompt }] }
+          })
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          reply = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        }
+      } catch (eGem) {
+        console.warn('[Chat AI] Gemini REST call error:', eGem.message);
+      }
+    }
+
+    // 3. Fallback response if all AI calls fail
+    if (!reply) {
+      const lastUserMsg = (messages[messages.length - 1]?.content || '').toLowerCase();
+      if (lastUserMsg.includes('chào') || lastUserMsg.includes('hi') || lastUserMsg.includes('hello')) {
+        reply = 'Chào bạn! Tôi là **Trợ lý AI Hongtai** 🐼. Rất vui được đồng hành cùng bạn học Tiếng Trung hôm nay! Bạn cần giải thích từ vựng, ngữ pháp HSK hay dịch câu nào không?';
+      } else {
+        reply = 'Chào bạn, tôi là **Trợ lý AI Hongtai** 🐼. Yêu cầu của bạn đã được ghi nhận. Bạn có thể hỏi bất kỳ câu hỏi nào về từ vựng HSK, phiên âm Pinyin, hoặc cấu trúc ngữ pháp Tiếng Trung nhé!';
+      }
+    }
 
     let returnedThreadId = null;
 
@@ -2200,16 +2235,16 @@ async function callLLMJson(prompt) {
   if (genAI) {
     try {
       const model = genAI.getGenerativeModel({
-        model: 'gemini-2.5-flash',
+        model: 'gemini-1.5-flash',
         generationConfig: { responseMimeType: 'application/json' }
       });
       const res = await model.generateContent(prompt);
       return JSON.parse(res.response.text());
     } catch (eGem) {
-      console.warn('[LLM] Gemini 2.5 Flash error, trying gemini-1.5-flash:', eGem.message);
+      console.warn('[LLM] Gemini 1.5 Flash error, trying gemini-1.5-pro:', eGem.message);
       try {
         const model15 = genAI.getGenerativeModel({
-          model: 'gemini-1.5-flash',
+          model: 'gemini-1.5-pro',
           generationConfig: { responseMimeType: 'application/json' }
         });
         const res15 = await model15.generateContent(prompt);
@@ -2258,14 +2293,6 @@ async function enhanceAndClassifyLesson(rawSpeechSegments, videoTitle, durationS
     category = 'Đời Sống';
   }
 
-  let level = '2';
-  if (lowerTitle.includes('hsk 1') || lowerTitle.includes('hsk1')) level = '1';
-  else if (lowerTitle.includes('hsk 2') || lowerTitle.includes('hsk2')) level = '2';
-  else if (lowerTitle.includes('hsk 3') || lowerTitle.includes('hsk3')) level = '3';
-  else if (lowerTitle.includes('hsk 4') || lowerTitle.includes('hsk4')) level = '4';
-  else if (lowerTitle.includes('hsk 5') || lowerTitle.includes('hsk5')) level = '5';
-  else if (lowerTitle.includes('hsk 6') || lowerTitle.includes('hsk6')) level = '6';
-
 // Fallback Batch Translator & Pinyin Generator
 async function batchTranslateAndPinyin(rawSpeechSegments) {
   if (!rawSpeechSegments || !Array.isArray(rawSpeechSegments)) return [];
@@ -2304,12 +2331,16 @@ async function batchTranslateAndPinyin(rawSpeechSegments) {
 
 // Master Linguistic Proofreader & Classification Engine
 async function enhanceAndClassifyLesson(rawSpeechSegments, videoTitle, durationSeconds) {
+  let level = '2';
+  let levelText = 'HSK 2';
+  let category = 'Giao Tiếp';
+  let description = `Bài luyện nghe chép chính tả ${videoTitle || ''}`;
+
   if (!rawSpeechSegments || rawSpeechSegments.length === 0) {
-    return { level: '2', levelText: 'HSK 2', category: 'Giao Tiếp', description: '', sentences: [] };
+    return { level, levelText, category, description, sentences: [] };
   }
 
   const lowerTitle = (videoTitle || '').toLowerCase();
-  let category = 'Giao Tiếp';
   if (lowerTitle.includes('bài hát') || lowerTitle.includes('nhạc') || lowerTitle.includes('ca sĩ') || lowerTitle.includes('music') || lowerTitle.includes('mv') || lowerTitle.includes('fancam') || lowerTitle.includes('lyric')) {
     category = 'Âm Nhạc';
   } else if (lowerTitle.includes('hội thoại') || lowerTitle.includes('giao tiếp') || lowerTitle.includes('nói')) {
@@ -2326,7 +2357,6 @@ async function enhanceAndClassifyLesson(rawSpeechSegments, videoTitle, durationS
     category = 'Tin Tức';
   }
 
-  let level = '2';
   if (lowerTitle.includes('hsk 1') || lowerTitle.includes('hsk1')) level = '1';
   else if (lowerTitle.includes('hsk 2') || lowerTitle.includes('hsk2')) level = '2';
   else if (lowerTitle.includes('hsk 3') || lowerTitle.includes('hsk3')) level = '3';
@@ -2334,8 +2364,7 @@ async function enhanceAndClassifyLesson(rawSpeechSegments, videoTitle, durationS
   else if (lowerTitle.includes('hsk 5') || lowerTitle.includes('hsk5')) level = '5';
   else if (lowerTitle.includes('hsk 6') || lowerTitle.includes('hsk6')) level = '6';
 
-  let levelText = `HSK ${level}`;
-  let description = `Bài luyện nghe chép chính tả ${videoTitle}`;
+  levelText = `HSK ${level}`;
 
   // AI Deep Linguistic Proofreading, Translation & Classification via Multi-LLM Engine
   try {
@@ -2496,8 +2525,8 @@ function parseTranscriptAiText(txt) {
   const segments = [];
   for (let i = 0; i < rawParagraphs.length; i++) {
     const p = rawParagraphs[i];
-    const nextStart = (i < rawParagraphs.length - 1) ? rawParagraphs[i + 1].startTime : (p.startTime + 25);
-    const duration = Math.max(3, nextStart - p.startTime);
+    const endVal = (typeof p.endTime === 'number' && p.endTime > p.startTime) ? p.endTime : ((i < rawParagraphs.length - 1) ? rawParagraphs[i + 1].startTime : (p.startTime + 10));
+    const duration = Math.max(1, endVal - p.startTime);
 
     let parts = p.text.split(/♪|♫|\[[^\]]+\]/).map(s => s.trim()).filter(s => s.length > 0);
     if (parts.length === 0) {
@@ -2522,7 +2551,7 @@ function parseTranscriptAiText(txt) {
 }
 
 // Master Unified YouTube Dictation Extractor
-async function extractYouTubeDictation(youtubeId) {
+export async function extractYouTubeDictation(youtubeId) {
   let videoTitle = `Bài Luyện Nghe (${youtubeId})`;
   let duration = 60;
 
@@ -2812,8 +2841,7 @@ async function extractYouTubeDictation(youtubeId) {
               end: parseFloat(Number(w.end || 0).toFixed(3))
             })) : []
           }));
-          const speech = consolidateSpeechSegments(raw);
-          const enhanced = await enhanceAndClassifyLesson(speech, videoTitle, duration);
+          const enhanced = await enhanceAndClassifyLesson(raw, videoTitle, duration);
           if (enhanced.sentences && enhanced.sentences.length > 0) {
             return {
               success: true,
@@ -3164,6 +3192,14 @@ app.get('/', (req, res) => {
 });
 
 // Start Server
-app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
-});
+if (process.env.NO_SERVER_LISTEN !== 'true') {
+  app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+  }).on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.log(`[Server] Port ${PORT} already in use, skipping app.listen()`);
+    } else {
+      console.error('[Server] Listen error:', err);
+    }
+  });
+}
