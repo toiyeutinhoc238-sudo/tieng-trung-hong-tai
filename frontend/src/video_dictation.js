@@ -2983,7 +2983,7 @@ window.autoGenerateAllWithAI = async function() {
     const res = await fetch('/api/dictation/fetch-subtitles', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ youtubeId: ytId })
+      body: JSON.stringify({ youtubeId: ytId, extractRawOnly: true })
     });
 
     toastTimers.forEach(t => clearTimeout(t));
@@ -3021,14 +3021,14 @@ window.autoGenerateAllWithAI = async function() {
         const eSec = (s.endTime % 60).toFixed(3);
         const sFormatted = `${String(sMin).padStart(2, '0')}:${String(sSec).padStart(6, '0')}`;
         const eFormatted = `${String(eMin).padStart(2, '0')}:${String(eSec).padStart(6, '0')}`;
-        return `[${sFormatted} - ${eFormatted}] ${s.hanzi} | ${s.pinyin} | ${s.meaning || 'Câu hội thoại trong video'}`;
+        return `[${sFormatted} - ${eFormatted}] ${s.hanzi}`; // Note: hanzi holds raw text for extractRawOnly
       });
 
       const textarea = document.getElementById('custom-video-subtitles');
       if (textarea) textarea.value = lines.join('\n');
 
-      const tierEmoji = data.tierUsed?.includes('Groq') ? '⚡' : (data.tierUsed?.includes('YouTube') ? '📝' : '✨');
-      showToast(`${tierEmoji} AI hoàn tất: Cấp độ HSK ${data.level || 2} • Thể loại: ${data.category || 'Giao Tiếp'} (${data.sentences.length} câu chuẩn 100%)! 🎉`);
+      const tierEmoji = '⚡';
+      showToast(`${tierEmoji} Trích xuất âm thanh thành công! Hãy bấm '2. Dịch Tiếng Trung (LLM)' để hoàn thiện. 🎉`);
 
     } else {
       showToast(data.message || 'Không thể tạo tự động bài học. Vui lòng thử lại!', true);

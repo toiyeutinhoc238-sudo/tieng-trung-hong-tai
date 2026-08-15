@@ -2047,20 +2047,22 @@ app.post('/api/dictation/auto-translate', async (req, res) => {
     if (groqClient) {
       try {
         const prompt = `Bạn là một chuyên gia ngôn ngữ học Tiếng Trung và Tiếng Việt cao cấp.
-Nhiệm vụ: Chuẩn hóa chính tả Tiếng Việt 100% hoàn hảo và Dịch/Chuẩn hóa Chữ Hán Giản Thể cho các câu bên dưới.
+Nhiệm vụ: Bạn sẽ nhận được một danh sách các câu trích xuất thô từ âm thanh (có thể bị cắt vụn ngẫu nhiên). Hãy dịch/chuẩn hóa sang Chữ Hán Giản Thể và Tiếng Việt.
 
 YÊU CẦU:
-1. "vietnamese": Chuẩn hóa chính tả Tiếng Việt tuyệt đối (sửa lỗi sai từ, teencode, thiếu dấu, viết hoa chữ cái đầu, dấu câu đúng ngữ pháp).
-2. "hanzi": BẮT BUỘC có Chữ Hán Giản Thể chuẩn xác ngữ nghĩa (nếu đầu vào là tiếng Việt -> dịch sang tiếng Trung; nếu đầu vào đã có tiếng Trung -> chuẩn hóa chữ Hán giản thể).
+1. TỰ DO GỘP CÂU: Nếu các câu bị cắt vụn vô nghĩa, hãy GỘP các "index" liên tiếp lại thành 1 câu hoàn chỉnh (như 1 dòng lời bài hát chuẩn).
+2. "vietnamese": Dịch Tiếng Việt chuẩn chính tả 100% ngữ cảnh bài hát/video.
+3. "hanzi": BẮT BUỘC dùng Chữ Hán Giản Thể chuẩn xác khớp với âm thanh gốc.
 
 Danh sách câu:
-${JSON.stringify(inputItems.map(item => ({ index: item.index, text: item.rawText })), null, 2)}
+${JSON.stringify(inputItems.map(item => ({ index: item.index, timePrefix: item.timePrefix, text: item.rawText })), null, 2)}
 
 Trả về đúng JSON:
 {
   "results": [
     {
-      "index": 0,
+      "startIndex": 0,    // index của câu gốc đầu tiên được gộp
+      "endIndex": 1,      // index của câu gốc cuối cùng được gộp (nếu không gộp thì startIndex = endIndex)
       "hanzi": "...",
       "vietnamese": "..."
     }
@@ -2075,14 +2077,29 @@ Trả về đúng JSON:
 
         const parsed = JSON.parse(completion.choices[0].message.content);
         if (Array.isArray(parsed.results) && parsed.results.length > 0) {
-          const resultMap = new Map(parsed.results.map(r => [r.index, r]));
-          const processed = inputItems.map(item => {
-            const r = resultMap.get(item.index);
-            const hanzi = r?.hanzi || item.rawText;
-            const vi = r?.vietnamese || item.rawText;
+          const processed = parsed.results.map(r => {
+            const startItem = inputItems.find(i => i.index === r.startIndex) || inputItems[0];
+            const endItem = inputItems.find(i => i.index === r.endIndex) || startItem;
+            
+            let timePrefix = '';
+            if (startItem.timePrefix && endItem.timePrefix) {
+               // Extract times from e.g. "[00:25.000 - 00:27.000]"
+               const startMatch = startItem.timePrefix.match(/\[([0-9:\.]+) -/);
+               const endMatch = endItem.timePrefix.match(/- ([0-9:\.]+)\]/);
+               if (startMatch && endMatch) {
+                 timePrefix = `[${startMatch[1]} - ${endMatch[1]}] `;
+               } else {
+                 timePrefix = startItem.timePrefix;
+               }
+            } else {
+               timePrefix = startItem.timePrefix;
+            }
+
+            const hanzi = r.hanzi || '';
+            const vi = r.vietnamese || '';
             let py = '';
             try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) {}
-            return `${item.timePrefix}${hanzi} | ${py} | ${vi}`;
+            return `${timePrefix}${hanzi} | ${py} | ${vi}`;
           });
 
           return res.json({
@@ -2365,6 +2382,7 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
       "id": <BẮT BUỘC GIỮ NGUYÊN id CỦA CÂU TƯƠNG ỨNG TRONG DANH SÁCH THÔ>,
       "startTime": 0.0,
       "endTime": 5.0,
+      "raw_text": "<Chữ gốc chưa qua chỉnh sửa mà AI Whisper nghe được, bằng bất kỳ ngôn ngữ nào>",
       "hanzi": "...",
       "vietnamese": "..."
     }
@@ -2640,7 +2658,7 @@ function parseTranscriptAiText(txt) {
 }
 
 // Master Unified YouTube Dictation Extractor
-export async function extractYouTubeDictation(youtubeId) {
+export async function extractYouTubeDictation(youtubeId, extractRawOnly = false) {
   let videoTitle = `Bài Luyện Nghe (${youtubeId})`;
   let duration = 60;
 
@@ -2997,6 +3015,21 @@ export async function extractYouTubeDictation(youtubeId) {
               end: parseFloat(Number(w.end || 0).toFixed(3))
             })) : []
           }));
+          if (extractRawOnly) {
+            return {
+              success: true,
+              videoTitle,
+              duration,
+              tierUsed: 'Groq Whisper Large v3 (Raw Extraction)',
+              sentences: raw.map(s => ({
+                ...s,
+                hanzi: s.text, // populate hanzi with raw text so frontend formatting works
+                pinyin: '',
+                meaning: ''
+              }))
+            };
+          }
+
           const enhanced = await enhanceAndClassifyLesson(raw, videoTitle, duration);
           if (enhanced.sentences && enhanced.sentences.length > 0) {
             return {
@@ -3221,13 +3254,13 @@ app.get('/api/dictation/debug-status', (req, res) => {
 
 // POST /api/dictation/fetch-subtitles — Lấy phụ đề / mốc giọng nói YouTube
 app.post('/api/dictation/fetch-subtitles', async (req, res) => {
-  const { youtubeId } = req.body || {};
+  const { youtubeId, extractRawOnly } = req.body || {};
   if (!youtubeId) {
     return res.status(400).json({ error: 'Missing youtubeId' });
   }
 
   try {
-    const result = await extractYouTubeDictation(youtubeId);
+    const result = await extractYouTubeDictation(youtubeId, extractRawOnly);
     res.json(result);
   } catch (err) {
     console.error('Fetch subtitles error:', err);
