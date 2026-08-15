@@ -2921,6 +2921,8 @@ function updateMyVideosBadge() {
   const count = allLessons.filter(l => l.isCustom === true || (l.userEmail && (l.userEmail === email || l.userEmail === 'guest'))).length;
   const countEl = document.getElementById('my-videos-count');
   if (countEl) countEl.textContent = count;
+  const myOpt = document.getElementById('my-videos-opt');
+  if (myOpt) myOpt.textContent = `⭐ Video Của Tôi (${count})`;
 }
 
 function extractYouTubeId(url) {
@@ -3460,6 +3462,25 @@ window.startSpeechRecognition = function() {
   }
 };
 
+function getSelectedCategoryAndLevel() {
+  const select = document.getElementById('dict-category-filter');
+  if (select && select.value) {
+    const val = select.value;
+    if (val.startsWith('level:')) {
+      return { cat: 'all', lvl: val.replace('level:', '') };
+    }
+    if (val.startsWith('cat:')) {
+      return { cat: val.replace('cat:', ''), lvl: 'all' };
+    }
+    return { cat: 'all', lvl: 'all' };
+  }
+  const activeCatBtn = document.querySelector('.cat-pill-btn.active');
+  return {
+    cat: activeCatBtn?.dataset.cat || 'all',
+    lvl: activeCatBtn?.dataset.level || 'all'
+  };
+}
+
 // Delete Custom Video
 window.deleteCustomVideo = async function(lessonId) {
   const lesson = allLessons.find(l => l.id === lessonId);
@@ -3488,9 +3509,7 @@ window.deleteCustomVideo = async function(lessonId) {
 
   // 4. Update UI
   updateMyVideosBadge();
-  const activeCatBtn = document.querySelector('.cat-pill-btn.active');
-  const cat = activeCatBtn?.dataset.cat || 'all';
-  const lvl = activeCatBtn?.dataset.level || 'all';
+  const { cat, lvl } = getSelectedCategoryAndLevel();
   const searchVal = document.getElementById('dict-search-input')?.value.trim() || '';
   filterLessons(cat, lvl, searchVal);
 
@@ -3507,8 +3526,8 @@ function renderCatalogGrid() {
 
   grid.innerHTML = '';
   const email = getCurrentUserEmail();
-  const activeCatBtn = document.querySelector('.cat-pill-btn.active');
-  const isMyVideosTab = activeCatBtn?.dataset.cat === 'my_videos';
+  const { cat } = getSelectedCategoryAndLevel();
+  const isMyVideosTab = cat === 'my_videos';
 
   if (filteredLessons.length === 0) {
     if (isMyVideosTab) {
@@ -3876,7 +3895,17 @@ async function initVideoDictationPage() {
 }
 
 function setupEventListeners() {
-  // Level Tabs Filter
+  // Category Dropdown Filter
+  const filterSelect = document.getElementById('dict-category-filter');
+  if (filterSelect) {
+    filterSelect.addEventListener('change', () => {
+      const { cat, lvl } = getSelectedCategoryAndLevel();
+      const searchVal = document.getElementById('dict-search-input')?.value.trim() || '';
+      filterLessons(cat, lvl, searchVal);
+    });
+  }
+
+  // Level Tabs Filter (Pills fallback)
   document.querySelectorAll('.cat-pill-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       document.querySelectorAll('.cat-pill-btn').forEach(b => b.classList.remove('active'));
@@ -3892,9 +3921,7 @@ function setupEventListeners() {
   const searchInput = document.getElementById('dict-search-input');
   if (searchInput) {
     searchInput.addEventListener('input', (e) => {
-      const activeCatBtn = document.querySelector('.cat-pill-btn.active');
-      const cat = activeCatBtn?.dataset.cat || 'all';
-      const lvl = activeCatBtn?.dataset.level || 'all';
+      const { cat, lvl } = getSelectedCategoryAndLevel();
       filterLessons(cat, lvl, e.target.value.trim());
     });
   }

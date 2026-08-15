@@ -1212,7 +1212,7 @@
       color: #cbd5e1;
     }
   </style>
-  <script type="module" crossorigin src="/assets/dictation-CS7arUuL.js"></script>
+  <script type="module" crossorigin src="/assets/dictation-Ddiz1C50.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/style-DsF-OCBB.js">
   <link rel="modulepreload" crossorigin href="/assets/particles-Db85yIFy.js">
   <link rel="modulepreload" crossorigin href="/assets/screen_drawing-CB_ccKph.js">
@@ -1266,27 +1266,34 @@
 
       <!-- Filters & Actions -->
       <div class="dict-filter-bar">
-        <div class="cat-pills-wrap">
-          <button class="cat-pill-btn active" data-cat="all" data-level="all"><i class="fa-solid fa-layer-group"></i> Tất Cả</button>
-          <button class="cat-pill-btn" data-cat="my_videos" id="my-videos-pill" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.4); color: #fbbf24; font-weight: 800;">
-            <i class="fa-solid fa-user-check"></i> Video Của Tôi (<span id="my-videos-count">0</span>)
-          </button>
-          <button class="cat-pill-btn" data-level="1"><i class="fa-solid fa-seedling"></i> HSK 1</button>
-          <button class="cat-pill-btn" data-level="2"><i class="fa-solid fa-tree"></i> HSK 2</button>
-          <button class="cat-pill-btn" data-level="3"><i class="fa-solid fa-mountain"></i> HSK 3</button>
-          <button class="cat-pill-btn" data-level="4"><i class="fa-solid fa-gem"></i> HSK 4</button>
-          <button class="cat-pill-btn" data-level="5"><i class="fa-solid fa-crown"></i> HSK 5</button>
-          <button class="cat-pill-btn" data-level="6"><i class="fa-solid fa-dragon"></i> HSK 6</button>
-          <button class="cat-pill-btn" data-cat="Âm Nhạc"><i class="fa-solid fa-music"></i> Âm Nhạc</button>
-          <button class="cat-pill-btn" data-cat="Giao Tiếp"><i class="fa-solid fa-comments"></i> Giao Tiếp</button>
-          <button class="cat-pill-btn" data-cat="Ẩm Thực"><i class="fa-solid fa-utensils"></i> Ẩm Thực</button>
-          <button class="cat-pill-btn" data-cat="Du Lịch"><i class="fa-solid fa-plane-departure"></i> Du Lịch</button>
-          <button class="cat-pill-btn" data-cat="Hoạt Hình"><i class="fa-solid fa-film"></i> Hoạt Hình</button>
-          <button class="cat-pill-btn" data-cat="Phim Ảnh"><i class="fa-solid fa-clapperboard"></i> Phim Ảnh</button>
-          <button class="cat-pill-btn" data-cat="Công Việc"><i class="fa-solid fa-briefcase"></i> Công Việc</button>
-          <button class="cat-pill-btn" data-cat="Tin Tức"><i class="fa-solid fa-newspaper"></i> Tin Tức</button>
-          <button class="cat-pill-btn" data-cat="Văn Hóa"><i class="fa-solid fa-landmark"></i> Văn Hóa</button>
-          <button class="cat-pill-btn" data-cat="Đời Sống"><i class="fa-solid fa-heart-pulse"></i> Đời Sống</button>
+        <div class="dict-filter-select-wrap" style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+          <label for="dict-category-filter" style="font-size: 0.88rem; font-weight: 700; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; white-space: nowrap;">
+            <i class="fa-solid fa-filter" style="color: #38bdf8;"></i> Bộ Lọc:
+          </label>
+          <select id="dict-category-filter" class="dict-filter-select" style="background: var(--bg-card, rgba(15, 23, 42, 0.8)); color: var(--text-primary, #f8fafc); border: 1.5px solid var(--border-glass, rgba(255,255,255,0.18)); border-radius: 12px; padding: 9px 16px; font-weight: 700; font-size: 0.9rem; outline: none; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.15); backdrop-filter: blur(10px); transition: all 0.2s; min-width: 220px;">
+            <option value="all:all">🌐 Tất Cả Video</option>
+            <option value="cat:my_videos" id="my-videos-opt">⭐ Video Của Tôi (0)</option>
+            <optgroup label="── TRÌNH ĐỘ HSK ──">
+              <option value="level:1">🌱 HSK 1</option>
+              <option value="level:2">🌲 HSK 2</option>
+              <option value="level:3">🏔️ HSK 3</option>
+              <option value="level:4">💎 HSK 4</option>
+              <option value="level:5">👑 HSK 5</option>
+              <option value="level:6">🐉 HSK 6</option>
+            </optgroup>
+            <optgroup label="── CHỦ ĐỀ NỘI DUNG ──">
+              <option value="cat:Âm Nhạc">🎵 Âm Nhạc</option>
+              <option value="cat:Giao Tiếp">💬 Giao Tiếp</option>
+              <option value="cat:Ẩm Thực">🍴 Ẩm Thực</option>
+              <option value="cat:Du Lịch">✈️ Du Lịch</option>
+              <option value="cat:Hoạt Hình">🎞️ Hoạt Hình</option>
+              <option value="cat:Phim Ảnh">🎬 Phim Ảnh</option>
+              <option value="cat:Công Việc">💼 Công Việc</option>
+              <option value="cat:Tin Tức">📰 Tin Tức</option>
+              <option value="cat:Văn Hóa">🏛️ Văn Hóa</option>
+              <option value="cat:Đời Sống">❤️ Đời Sống</option>
+            </optgroup>
+          </select>
         </div>
 
         <div style="display: flex; gap: 10px; width: 100%; max-width: 500px; justify-content: flex-end;">

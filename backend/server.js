@@ -2315,19 +2315,23 @@ async function enhanceAndClassifyLesson(rawSpeechSegments, videoTitle, durationS
       }));
 
       const isFirstChunk = (i === 0);
-      const prompt = `Bạn là một chuyên gia ngôn ngữ học Tiếng Trung đa ngôn ngữ và Biên tập viên Âm nhạc/Hội thoại cao cấp.
-Dưới đây là tiêu đề video "${videoTitle}" (${durationSeconds}s) và danh sách các câu thoại/lời bài hát thô nhận diện từ âm thanh (có thể là Tiếng Trung Phổ Thông, Quảng Đông, Tiếng Việt, Tiếng Anh,...).
+      const prompt = `Bạn là Chuyên Gia Ngôn Ngữ Học Tiếng Trung & Biên Tập Viên Việt-Trung Cao Cấp.
+Dưới đây là tiêu đề video "${videoTitle}" (${durationSeconds}s) và danh sách các câu thoại/lời bài hát thô.
 
-NHIỆM VỤ CHỈNH SỬA & DỊCH THUẬT CHUẨN XÁC TUYỆT ĐỐI (Theo ngữ cảnh thực tế của video):
-1. "hanzi": 
-   - QUAN TRỌNG: BẮT BUỘC CHUYỂN ĐỔI / CHUẨN HÓA VỀ CHỮ HÁN GIẢN THỂ CHUẨN 100% KHỚP VỚI LỜI BÀI HÁT / CÂU THOẠI THỰC TẾ TRONG VIDEO.
-   - Sửa toàn bộ lỗi nghe nhầm đồng âm từ ASR (Chữ Hán bị sai nét, sai nghĩa, hoặc phiên âm sai).
-   - Nếu câu âm thanh gốc là Tiếng Việt/Tiếng Anh, BẮT BUỘC dịch sang Chữ Hán Giản Thể tự nhiên, đúng ngữ pháp tiếng Trung nhất.
-2. "vietnamese": 
-   - BẮT BUỘC LỜI DỊCH TIẾNG VIỆT CHUẨN XÁC 100% THEO NGỮ CẢNH: Viết hoa đầu câu, đúng chính tả tiếng Việt (xóa bỏ hoàn toàn lỗi ngô nghê, lỗi vùng miền, từ teencode hoặc âm thừa như ừm, à, ê).
-3. "startTime" & "endTime": 
+NHIỆM VỤ HIỆU ĐÍCH VÀ DỊCH THUẬT CHUẨN XÁC TUYỆT ĐỐI 100%:
+
+1. "vietnamese" (DỊCH TIẾNG VIỆT CHUẨN CHÍNH TẢ & NGỮ CẢNH):
+   - BẮT BUỘC SỬA HOÀN TOÀN TẤT CẢ LỖI CHÍNH TẢ TIẾNG VIỆT (ví dụ: sửa lỗi Telex/VNI, lỗi nhầm từ "xôi/sôi", "chô/chỗ", "nghe/nghề", "mặc/mặt", thiếu dấu, teencode).
+   - Viết hoa đầu câu, chấm phẩy đúng ngữ pháp, câu từ mượt mà giàu cảm xúc đúng theo nội dung thực tế của video.
+
+2. "hanzi" (CHỮ HÁN GIẢN THỂ CHUẨN XÁC 100% KHỚP NGỮ NGHĨA & ÂM THÀNH):
+   - QUAN TRỌNG: BẮT BUỘC dùng Chữ Hán Giản Thể chuẩn (Simplified Chinese).
+   - Đảm bảo Chữ Hán khớp chính xác với âm thanh hát/nói trong video và khớp đúng ngữ nghĩa với câu Tiếng Việt đã được sửa chính tả.
+   - Sửa triệt để các lỗi nghe nhầm đồng âm từ ASR (Chữ Hán sai nét, sai từ, hoặc sai ngữ pháp).
+
+3. "startTime" & "endTime":
    - Giữ nguyên mốc thời gian phát âm thực tế chính xác từng mili-giây.
-${isFirstChunk ? `4. "hskLevel": Đánh giá cấp độ HSK phù hợp ("1", "2", "3", "4", "5", "6").
+${isFirstChunk ? `4. "hskLevel": Cấp độ HSK phù hợp ("1", "2", "3", "4", "5", "6").
 5. "category": Chọn đúng 1 trong: "Âm Nhạc", "Giao Tiếp", "Ẩm Thực", "Du Lịch", "Hoạt Hình", "Phim Ảnh", "Công Việc", "Tin Tức", "Văn Hóa", "Đời Sống", "Khác".
 6. "description": 1 câu tóm tắt nội dung bài học tiếng Việt hấp dẫn.` : ''}
 
@@ -2434,7 +2438,18 @@ function postProcessAndSplitSentences(sentences) {
     const rawMeaning = cleanRepeatedPhrases(s.meaning || s.vietnamese || '');
     const startTime = typeof s.startTime === 'number' ? s.startTime : 0;
     const endTime = typeof s.endTime === 'number' ? s.endTime : (startTime + 5);
-    const duration = Math.max(1.2, endTime - startTime);
+
+    // Precision Lead-In (0.35s) & Lead-Out (0.25s) audio padding to eliminate speech onset lag & cut-offs
+    const LEAD_IN = 0.35;   // Start 0.35s early so initial vocal onset is never clipped
+    const LEAD_OUT = 0.25;  // Extend 0.25s late so trailing vocal resonance is preserved
+
+    const prevSeg = result.length > 0 ? result[result.length - 1] : null;
+    let paddedStart = Math.max(0, startTime - LEAD_IN);
+    if (prevSeg && paddedStart < prevSeg.endTime) {
+      paddedStart = prevSeg.endTime; // Continuous tight alignment without backward overlap
+    }
+    const paddedEnd = Math.max(paddedStart + 1.2, endTime + LEAD_OUT);
+    const duration = Math.max(1.2, paddedEnd - paddedStart);
 
     // Split on Chinese & Vietnamese punctuation marks (，, 。, ！, ？, ；, ,, ., !, ?, \n)
     const clausesHanzi = rawHanzi.split(/([，。！？；,\.!\?\n]+)/).filter(Boolean);
@@ -2481,8 +2496,8 @@ function postProcessAndSplitSentences(sentences) {
       }
       result.push({
         id: result.length + 1,
-        startTime: parseFloat(startTime.toFixed(3)),
-        endTime: parseFloat(endTime.toFixed(3)),
+        startTime: parseFloat(paddedStart.toFixed(3)),
+        endTime: parseFloat(paddedEnd.toFixed(3)),
         hanzi: rawHanzi,
         pinyin: py,
         meaning: rawMeaning,
@@ -2492,13 +2507,13 @@ function postProcessAndSplitSentences(sentences) {
     } else {
       // Proportionally assign timestamps to each short clause
       const totalChars = subLines.reduce((acc, l) => acc + l.length, 0) || 1;
-      let currStart = startTime;
+      let currStart = paddedStart;
 
       for (let idx = 0; idx < subLines.length; idx++) {
         const lineText = subLines[idx];
         const lineRatio = lineText.length / totalChars;
         const lineDuration = duration * lineRatio;
-        const lineEnd = (idx === subLines.length - 1) ? endTime : (currStart + lineDuration);
+        const lineEnd = (idx === subLines.length - 1) ? paddedEnd : (currStart + lineDuration);
 
         let linePy = '';
         try { linePy = pinyin(lineText, { toneType: 'symbol' }); } catch (e) {}
