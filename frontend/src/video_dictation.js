@@ -2585,12 +2585,10 @@ function updateInPlayerDualSubtitles(curTime) {
     if (overlayPinyin) overlayPinyin.textContent = activeSentence.pinyin || '';
     if (overlayMeaning) overlayMeaning.textContent = activeSentence.meaning || '';
   } else {
-    const curSent = currentLesson.sentences[currentSentenceIdx];
-    if (curSent) {
-      overlayHanzi.innerHTML = renderInteractiveWords(curSent.hanzi, curSent.words, curTime);
-      if (overlayPinyin) overlayPinyin.textContent = curSent.pinyin || '';
-      if (overlayMeaning) overlayMeaning.textContent = curSent.meaning || '';
-    }
+    // Only display subtitle when video playback time is within sentence active timing bounds
+    overlayHanzi.innerHTML = '';
+    if (overlayPinyin) overlayPinyin.textContent = '';
+    if (overlayMeaning) overlayMeaning.textContent = '';
   }
 }
 

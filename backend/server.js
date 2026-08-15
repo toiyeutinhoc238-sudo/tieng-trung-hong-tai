@@ -2544,15 +2544,34 @@ export async function extractYouTubeDictation(youtubeId) {
       }
 
       if (ytTranscript && ytTranscript.length > 0) {
-        const raw = ytTranscript.map((t, idx) => ({
+        const rawInitial = ytTranscript.map((t, idx) => ({
           id: idx + 1,
           text: t.text,
-          startTime: t.offset / 1000,
-          endTime: (t.offset + t.duration) / 1000
+          startTime: parseFloat((t.offset / 1000).toFixed(3)),
+          endTime: parseFloat(((t.offset + t.duration) / 1000).toFixed(3))
         }));
 
+        // Consolidate short 0.5s auto-caption fragments into natural full sentences
+        const raw = [];
+        let curr = null;
+        for (const seg of rawInitial) {
+          if (!curr) {
+            curr = { ...seg };
+            continue;
+          }
+          const gap = seg.startTime - curr.endTime;
+          if (gap >= -0.2 && gap < 0.8 && (curr.text + ' ' + seg.text).length < 75) {
+            curr.text = (curr.text + ' ' + seg.text).replace(/\s+/g, ' ').trim();
+            curr.endTime = seg.endTime;
+          } else {
+            raw.push(curr);
+            curr = { ...seg };
+          }
+        }
+        if (curr) raw.push(curr);
+
         const lastTimestamp = raw[raw.length - 1]?.endTime || 0;
-        console.log(`[Dictation] Tier 0 YouTube Captions: ${ytTranscript.length} lines, up to ${lastTimestamp}s / total ${duration}s`);
+        console.log(`[Dictation] Tier 0 YouTube Captions: ${raw.length} consolidated sentences from ${ytTranscript.length} raw lines, up to ${lastTimestamp}s / total ${duration}s`);
 
         if (raw.length > 0) {
           const enhanced = await enhanceAndClassifyLesson(raw, videoTitle, duration);
