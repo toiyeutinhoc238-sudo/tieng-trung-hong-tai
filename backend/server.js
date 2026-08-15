@@ -2763,9 +2763,16 @@ export async function extractYouTubeDictation(youtubeId) {
 
         let segments = transcription.segments || [];
 
-        // Filter out famous Whisper hallucination noise strings (DimaTorzok, Amara, Russian/TV spam)
+        // Filter out famous Whisper hallucination noise strings only (preserve all actual speech timestamps)
         segments = segments.filter(s => {
           const t = (s.text || '').toLowerCase();
+          const origText = (s.text || '').trim();
+
+          // Drop pure metadata credit spam strings if alone
+          if (origText === '填词' || origText === '作词' || origText === '作曲' || origText === '编曲') {
+            return false;
+          }
+
           return !t.includes('dimatorzok') &&
                  !t.includes('amara.org') &&
                  !t.includes('subtitles created by') &&
