@@ -3297,7 +3297,7 @@ app.post('/api/dictation/save-lesson', async (req, res) => {
     newLesson.createdAt = newLesson.createdAt || new Date().toISOString();
 
     const lessons = await readDictationLessons();
-    const existingIndex = lessons.findIndex(l => l.id === newLesson.id || (l.youtubeId === newLesson.youtubeId && l.userEmail === email));
+    const existingIndex = lessons.findIndex(l => l.youtubeId === newLesson.youtubeId && l.userEmail === email);
     if (existingIndex >= 0) {
       lessons[existingIndex] = { ...lessons[existingIndex], ...newLesson };
     } else {

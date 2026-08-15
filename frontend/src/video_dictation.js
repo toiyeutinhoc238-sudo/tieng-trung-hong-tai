@@ -3806,11 +3806,15 @@ async function handleSaveCustomVideo(e) {
     sentences: sentences
   };
 
+  // Deduplicate existing entry for this user and youtubeId
+  allLessons = allLessons.filter(l => !(l.youtubeId === ytId && l.userEmail === email));
+  let localList = getLocalCustomVideos();
+  localList = localList.filter(l => !(l.youtubeId === ytId && l.userEmail === email));
+
   // 1. Add to allLessons
   allLessons.unshift(newLesson);
 
   // 2. Save to local storage
-  const localList = getLocalCustomVideos();
   localList.unshift(newLesson);
   saveLocalCustomVideos(localList);
 
@@ -3868,11 +3872,19 @@ async function initVideoDictationPage() {
 
   // Merge server lessons with local custom lessons
   const localCustom = getLocalCustomVideos();
-  const map = new Map();
-  serverLessons.forEach(l => map.set(l.id, l));
+  const map = new Map(); // Key: ID
+  const ytEmailMap = new Set(); // Key: youtubeId_userEmail
+
+  serverLessons.forEach(l => {
+    map.set(l.id, l);
+    if (l.youtubeId && l.userEmail) ytEmailMap.add(`${l.youtubeId}_${l.userEmail}`);
+  });
+
   localCustom.forEach(l => {
-    if (!map.has(l.id)) {
+    const compositeKey = `${l.youtubeId}_${l.userEmail}`;
+    if (!map.has(l.id) && !ytEmailMap.has(compositeKey)) {
       map.set(l.id, l);
+      if (l.youtubeId && l.userEmail) ytEmailMap.add(compositeKey);
     }
   });
 
