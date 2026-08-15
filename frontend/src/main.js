@@ -12305,18 +12305,14 @@ window.fetchLiveCommunityStats = async function () {
     if (!res.ok) return;
     const data = await res.json();
 
-    if (totalEl && data.totalUsers) {
+    if (totalEl && data.totalUsers !== undefined) {
       totalEl.textContent = Number(data.totalUsers).toLocaleString('vi-VN') + ' Học viên';
     }
-    if (onlineEl && data.onlineUsers) {
+    if (onlineEl && data.onlineUsers !== undefined) {
       onlineEl.textContent = Number(data.onlineUsers).toLocaleString('vi-VN') + ' Đang online';
     }
   } catch (err) {
-    // Graceful fallback
-    const totalEl = document.getElementById('live-total-users-count');
-    const onlineEl = document.getElementById('live-online-users-count');
-    if (totalEl && totalEl.textContent === '--') totalEl.textContent = '3.480+ Học viên';
-    if (onlineEl && onlineEl.textContent === '--') onlineEl.textContent = '68 Đang online';
+    console.debug('Could not fetch real presence stats:', err);
   }
 };
 
