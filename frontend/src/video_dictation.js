@@ -2776,15 +2776,16 @@ function openHanziModal(character) {
 
     if (window.HanziWriter) {
       try {
+        const isDark = document.documentElement.classList.contains('dark');
         activeHanziWriter = HanziWriter.create('hanzi-writer-target', char, {
           width: 180,
           height: 180,
           padding: 10,
           showOutline: true,
-          strokeColor: '#ef4444',
-          radicalColor: '#2563eb',
-          outlineColor: '#cbd5e1',
-          drawingWidth: 20
+          strokeColor: '#2563eb',
+          radicalColor: '#ef4444',
+          outlineColor: isDark ? '#475569' : '#94a3b8',
+          strokeAnimationSpeed: 1.2
         });
         activeHanziWriter.animateCharacter();
       } catch (e) {

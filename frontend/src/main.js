@@ -1215,14 +1215,15 @@ function renderActiveCardLesson(current) {
     if (window.HanziWriter && current.word) {
       const charToDraw = current.word[0];
       try {
+        const isDark = document.documentElement.classList.contains('dark');
         activeLessonHanziWriter = HanziWriter.create('lesson-hanzi-target', charToDraw, {
           width: 160,
           height: 160,
           padding: 5,
           showOutline: true,
-          strokeColor: '#ef4444',
-          radicalColor: '#2563eb',
-          outlineColor: '#fca5a5',
+          strokeColor: '#2563eb',
+          radicalColor: '#ef4444',
+          outlineColor: isDark ? '#475569' : '#94a3b8',
           strokeAnimationSpeed: 1.2,
           onLoadCharDataError: function(err) {
             targetContainer.innerHTML = `<span style="font-size: 4.5rem; font-weight: 900; color: #ef4444;">${current.word}</span>`;
@@ -4679,6 +4680,7 @@ function renderLearningTianzige(word) {
   if (window.HanziWriter) {
     let loadedCount = 0;
 
+    const isDark = document.documentElement.classList.contains('dark');
     cleanChars.forEach((char, idx) => {
       try {
         const writer = HanziWriter.create(`roadmap-tianzige-target-${idx}`, char, {
@@ -4686,10 +4688,9 @@ function renderLearningTianzige(word) {
           height: cellSize - 8,
           padding: 4,
           showOutline: true,
-          strokeColor: '#dc2626',
-          radicalColor: '#2563eb',
-          outlineColor: '#cbd5e1',
-          drawingWidth: cellSize > 120 ? 16 : 12,
+          strokeColor: isDark ? '#38bdf8' : '#2563eb',
+          radicalColor: '#ef4444',
+          outlineColor: isDark ? '#475569' : '#94a3b8',
           onLoadCharDataSuccess: function() {
             try { writer.hideCharacter(); } catch(e){}
             if (currentRenderSeq !== roadmapAnimationSequence) return;
@@ -7990,13 +7991,15 @@ function initLessonHanziWriter(wordStr) {
       charDiv.style.cssText = 'width: 125px; height: 125px; flex-shrink: 0; background: transparent; display: flex; align-items: center; justify-content: center;';
       box.appendChild(charDiv);
 
+      const isDark = document.documentElement.classList.contains('dark');
       try {
         const writer = HanziWriter.create(divId, ch, {
           width: 120,
           height: 120,
           padding: 4,
-          strokeColor: '#2563eb',
-          outlineColor: 'rgba(255,255,255,0.18)',
+          strokeColor: isDark ? '#38bdf8' : '#2563eb',
+          radicalColor: '#ef4444',
+          outlineColor: isDark ? '#475569' : '#94a3b8',
           showOutline: true,
           showCharacter: true
         });
@@ -9116,7 +9119,7 @@ function selectDictWord(w) {
         height: 100,
         padding: 5,
         strokeColor: isDark ? '#38bdf8' : '#3b82f6',
-        outlineColor: isDark ? '#374151' : '#e5e7eb',
+        outlineColor: isDark ? '#475569' : '#94a3b8',
         drawingColor: '#10b981', // green for user drawing
         showOutline: true
       });
