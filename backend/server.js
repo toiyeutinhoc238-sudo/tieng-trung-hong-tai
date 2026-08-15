@@ -2353,18 +2353,18 @@ async function enhanceAndClassifyLesson(rawSpeechSegments, videoTitle, durationS
       }));
 
       const isFirstChunk = (i === 0);
-      const prompt = `Bạn là một chuyên gia ngôn ngữ học Tiếng Trung và Biên tập viên Tiếng Việt cao cấp.
-Dưới đây là tiêu đề video "${videoTitle}" (${durationSeconds}s) và danh sách các câu thoại/lời bài hát thô kèm mốc thời gian (startTime, endTime) trích xuất từ âm thanh.
+      const prompt = `Bạn là một chuyên gia ngôn ngữ học Tiếng Trung đa ngôn ngữ và Biên tập viên Âm nhạc/Hội thoại cao cấp.
+Dưới đây là tiêu đề video "${videoTitle}" (${durationSeconds}s) và danh sách các câu thoại/lời bài hát thô nhận diện từ âm thanh (có thể là Tiếng Trung Phổ Thông, Quảng Đông, Tiếng Việt, Tiếng Anh,...).
 
-NHIỆM VỤ BIÊN TẬP TỐI ƯU CỦA BẠN (Tương tự chuẩn ứng dụng eJOY):
-1. "vietnamese": 
-   - CHUẨN HÓA CHÍNH TẢ TIẾNG VIỆT 100%: Sửa toàn bộ lỗi nghe nhầm đồng âm từ ASR (ví dụ: thiếu dấu, sai chính tả vùng miền, từ teencode, từ bị nhận diện sai).
-   - VIẾT HOA ĐẦU CÂU & DẤU CÂU: Viết hoa chữ cái đầu tiên, thêm dấu chấm/dấu phẩy chuẩn ngữ pháp tiếng Việt.
-   - KHỬ NHIỄU & LẶP TỪ: Loại bỏ các từ bị lặp do tiếng vang ca sĩ/nhạc đệm hoặc âm thừa (ừm, à, ê).
-2. "hanzi": 
-   - BẮT BUỘC có Chữ Hán Giản Thể tương ứng chuẩn xác 100% ngữ nghĩa (sửa chữ Hán đồng âm bị ASR nhận diện sai, đảm bảo câu tiếng Trung tự nhiên, chuẩn ngữ pháp).
+NHIỆM VỤ CHỈNH SỬA & DỊCH THUẬT CHUẨN XÁC TUYỆT ĐỐI (Theo ngữ cảnh thực tế của video):
+1. "hanzi": 
+   - QUAN TRỌNG: BẮT BUỘC CHUYỂN ĐỔI / CHUẨN HÓA VỀ CHỮ HÁN GIẢN THỂ CHUẨN 100% KHỚP VỚI LỜI BÀI HÁT / CÂU THOẠI THỰC TẾ TRONG VIDEO.
+   - Sửa toàn bộ lỗi nghe nhầm đồng âm từ ASR (Chữ Hán bị sai nét, sai nghĩa, hoặc phiên âm sai).
+   - Nếu câu âm thanh gốc là Tiếng Việt/Tiếng Anh, BẮT BUỘC dịch sang Chữ Hán Giản Thể tự nhiên, đúng ngữ pháp tiếng Trung nhất.
+2. "vietnamese": 
+   - BẮT BUỘC LỜI DỊCH TIẾNG VIỆT CHUẨN XÁC 100% THEO NGỮ CẢNH: Viết hoa đầu câu, đúng chính tả tiếng Việt (xóa bỏ hoàn toàn lỗi ngô nghê, lỗi vùng miền, từ teencode hoặc âm thừa như ừm, à, ê).
 3. "startTime" & "endTime": 
-   - Giữ nguyên mốc thời gian chính xác của câu.
+   - Giữ nguyên mốc thời gian phát âm thực tế chính xác từng mili-giây.
 ${isFirstChunk ? `4. "hskLevel": Đánh giá cấp độ HSK phù hợp ("1", "2", "3", "4", "5", "6").
 5. "category": Chọn đúng 1 trong: "Âm Nhạc", "Giao Tiếp", "Ẩm Thực", "Du Lịch", "Hoạt Hình", "Phim Ảnh", "Công Việc", "Tin Tức", "Văn Hóa", "Đời Sống", "Khác".
 6. "description": 1 câu tóm tắt nội dung bài học tiếng Việt hấp dẫn.` : ''}
@@ -2567,10 +2567,21 @@ async function extractYouTubeDictation(youtubeId) {
     const videoUrl = `https://www.youtube.com/watch?v=${youtubeId}`;
 
     // ----------------------------------------------------
-    // TIER 0: Direct YouTube Subtitles / Captions Track
+    // TIER 0: Direct YouTube Subtitles / Captions Track (Multi-language fallback)
     // ----------------------------------------------------
     try {
-      const ytTranscript = await YoutubeTranscript.fetchTranscript(youtubeId);
+      let ytTranscript = null;
+      const langsToTry = ['zh-CN', 'zh', 'zh-TW', 'zh-HK', 'vi', 'en', null];
+      for (const lang of langsToTry) {
+        try {
+          ytTranscript = lang ? await YoutubeTranscript.fetchTranscript(youtubeId, { lang }) : await YoutubeTranscript.fetchTranscript(youtubeId);
+          if (ytTranscript && ytTranscript.length > 0) {
+            console.log(`[Dictation] YoutubeTranscript matched language '${lang || 'default'}': ${ytTranscript.length} lines`);
+            break;
+          }
+        } catch (eLang) {}
+      }
+
       if (ytTranscript && ytTranscript.length > 0) {
         const raw = ytTranscript.map((t, idx) => ({
           id: idx + 1,
@@ -2708,22 +2719,56 @@ async function extractYouTubeDictation(youtubeId) {
         }
       }
 
+      // TIER 1.5 Backup: Piped / Invidious API Direct Audio Downloader (bypasses Render IP block completely)
+      if (!downloadSuccess) {
+        const pipedInstances = [
+          `https://pipedapi.kavin.rocks/streams/${youtubeId}`,
+          `https://api.piped.video/streams/${youtubeId}`,
+          `https://pipedapi.mha.fi/streams/${youtubeId}`,
+          `https://inv.tux.pizza/api/v1/videos/${youtubeId}`
+        ];
+
+        for (const instUrl of pipedInstances) {
+          try {
+            console.log(`[Dictation] Attempting Piped/Invidious direct audio stream fetch from ${instUrl}...`);
+            const pRes = await fetch(instUrl, { signal: AbortSignal.timeout(8000) });
+            if (pRes.ok) {
+              const pData = await pRes.json();
+              const audioStreams = pData.audioStreams || pData.adaptiveFormats?.filter(f => f.type?.includes('audio')) || [];
+              if (audioStreams.length > 0) {
+                const bestStream = audioStreams.find(s => s.mimeType?.includes('audio/mp4') || s.format === 'M4A') || audioStreams[0];
+                const streamUrl = bestStream.url;
+                if (streamUrl) {
+                  const audioFileRes = await fetch(streamUrl, { signal: AbortSignal.timeout(45000) });
+                  if (audioFileRes.ok) {
+                    const arrayBuffer = await audioFileRes.arrayBuffer();
+                    await fs.writeFile(tempAudio, Buffer.from(arrayBuffer));
+                    downloadSuccess = existsSync(tempAudio);
+                    if (downloadSuccess) {
+                      console.log(`[Dictation] Successfully downloaded audio stream via Piped API! (${(arrayBuffer.byteLength / 1024 / 1024).toFixed(2)} MB)`);
+                      break;
+                    }
+                  }
+                }
+              }
+            }
+          } catch (ePiped) {
+            console.warn(`[Dictation] Piped instance ${instUrl} warn:`, ePiped.message);
+          }
+        }
+      }
+
       if (groqClient && existsSync(tempAudio)) {
         console.log(`[Dictation] Transcribing FULL audio with Groq Whisper Large v3...`);
         const { createReadStream } = await import('fs');
-        const isChinese = /[\u4e00-\u9fa5]/.test(videoTitle) || /hsk|chinese|tiếng trung|trung quốc|hoa ngữ/i.test(videoTitle);
-        const isVietnamese = /[\u00C0-\u1EF9]/.test(videoTitle) || /bài hát|nhạc|ca sĩ|bằng kiều|lyric|trái tim|hát|lời|đồi hoa/i.test(videoTitle);
-
-        const whisperLang = isChinese ? 'zh' : (isVietnamese ? 'vi' : undefined);
-        const whisperPrompt = isChinese ? 'Chinese Mandarin dictation, 汉语, 汉字, 拼音, 中文' : (isVietnamese ? 'Lời bài hát tiếng Việt, câu thoại đàm thoại tiếng Việt' : undefined);
+        const whisperPrompt = 'Universal multilingual audio transcription, Chinese Mandarin 汉语 汉字, Cantonese 粤语, Vietnamese, English lyrics and conversation, exact punctuation';
 
         let transcription;
         try {
           transcription = await groqClient.audio.transcriptions.create({
             file: createReadStream(tempAudio),
             model: 'whisper-large-v3',
-            ...(whisperLang ? { language: whisperLang } : {}),
-            ...(whisperPrompt ? { prompt: whisperPrompt } : {}),
+            prompt: whisperPrompt,
             response_format: 'verbose_json',
             timestamp_granularities: ['word', 'segment']
           });
