@@ -68,12 +68,18 @@ class ScreenDrawingTool {
     this.ctx = this.canvas.getContext('2d', { willReadFrequently: true });
     this.resizeCanvas();
     window.addEventListener('resize', () => this.resizeCanvas());
+    window.addEventListener('orientationchange', () => setTimeout(() => this.resizeCanvas(), 120));
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', () => this.resizeCanvas());
+      window.visualViewport.addEventListener('scroll', () => this.resizeCanvas());
+    }
   }
 
   resizeCanvas() {
     if (!this.canvas) return;
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+    const rect = this.canvas.getBoundingClientRect();
+    const width = Math.max(window.innerWidth, Math.round(rect.width || 0), document.documentElement.clientWidth || 0);
+    const height = Math.max(window.innerHeight, Math.round(rect.height || 0), document.documentElement.clientHeight || 0);
 
     if (this.canvas.width === width && this.canvas.height === height) {
       return;
@@ -90,14 +96,14 @@ class ScreenDrawingTool {
 
     this.canvas.width = width;
     this.canvas.height = height;
-    this.canvas.style.width = width + 'px';
-    this.canvas.style.height = height + 'px';
+    this.canvas.style.width = '100vw';
+    this.canvas.style.height = '100vh';
 
     this.ctx.lineCap = 'round';
     this.ctx.lineJoin = 'round';
 
     if (tempCanvas) {
-      this.ctx.drawImage(tempCanvas, 0, 0);
+      this.ctx.drawImage(tempCanvas, 0, 0, tempCanvas.width, tempCanvas.height, 0, 0, width, height);
     }
   }
 
@@ -1060,6 +1066,34 @@ class ScreenDrawingTool {
     }, 5500);
   }
 
+  // Compute exact pixel coordinates mapped from screen viewport into canvas buffer
+  getCanvasPoint(e) {
+    if (!this.canvas) return { x: 0, y: 0 };
+    const rect = this.canvas.getBoundingClientRect();
+
+    let clientX = e.clientX;
+    let clientY = e.clientY;
+
+    if (clientX === undefined && e.touches && e.touches.length > 0) {
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    } else if (clientX === undefined && e.changedTouches && e.changedTouches.length > 0) {
+      clientX = e.changedTouches[0].clientX;
+      clientY = e.changedTouches[0].clientY;
+    }
+
+    clientX = (typeof clientX === 'number' && !isNaN(clientX)) ? clientX : 0;
+    clientY = (typeof clientY === 'number' && !isNaN(clientY)) ? clientY : 0;
+
+    const scaleX = (rect.width && rect.width > 0) ? (this.canvas.width / rect.width) : 1;
+    const scaleY = (rect.height && rect.height > 0) ? (this.canvas.height / rect.height) : 1;
+
+    return {
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY
+    };
+  }
+
   // Pointer drawing logic
   handlePointerStart(e) {
     if (!this.isActive) return;
@@ -1069,9 +1103,7 @@ class ScreenDrawingTool {
     this.isDrawing = true;
     this.saveState();
 
-    const rect = this.canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const { x, y } = this.getCanvasPoint(e);
 
     this.lastX = x;
     this.lastY = y;
@@ -1100,9 +1132,7 @@ class ScreenDrawingTool {
     e.preventDefault();
     e.stopPropagation();
 
-    const rect = this.canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const { x, y } = this.getCanvasPoint(e);
 
     if (this.mode === 'laser') {
       this.addLaserPoint(x, y);

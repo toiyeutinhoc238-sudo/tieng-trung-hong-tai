@@ -6,7 +6,7 @@
     "category": "Âm Nhạc",
     "level": "1",
     "levelText": "HSK 1",
-    "description": "Bài hát bất hủ của Đặng Lệ Quân với giai điệu tha thiết, phát âm rõ ràng chuẩn giọng Bắc Kinh.",
+    "description": "Bài hát bất hủ của Đặng Lệ Quân với giai điệu tha thiết, phát âm chuẩn giọng Bắc Kinh từng câu chữ.",
     "duration": "03:13",
     "thumbnail": "https://img.youtube.com/vi/kpDING7mMcQ/hqdefault.jpg",
     "sentences": [
@@ -14,8 +14,8 @@
         "id": 1,
         "startTime": 12.22,
         "endTime": 18.82,
-        "hanzi": "你问我爱爱有度死我",
-        "pinyin": "nǐ wèn wǒ ài ài yǒu dù sǐ wǒ",
+        "hanzi": "你问我爱你爱常么我",
+        "pinyin": "nǐ wèn wǒ ài nǐ ài cháng me wǒ",
         "meaning": "Bạn hỏi tôi yêu bạn có sâu bao nhiêu",
         "keywords": [
           "你问",
@@ -31,12 +31,12 @@
         "id": 2,
         "startTime": 18.82,
         "endTime": 22.54,
-        "hanzi": "爱你有为一分分",
-        "pinyin": "ài nǐ yǒu wèi yì fēn fēn",
+        "hanzi": "爱你常么一分分",
+        "pinyin": "ài nǐ cháng me yì fēn fēn",
         "meaning": "Yêu bạn có mấy phần",
         "keywords": [
           "爱你",
-          "有为"
+          "常么"
         ],
         "blankIndices": [
           0,
@@ -47,43 +47,43 @@
       {
         "id": 3,
         "startTime": 23.66,
-        "endTime": 30.9,
-        "hanzi": "我的性当么为为为月東",
-        "pinyin": "wǒ de xìng dāng me wèi wèi wèi yuè dōng",
-        "meaning": "Cảm xúc của tôi thật chân thành, tình yêu của tôi thật chân thành, trăng",
+        "endTime": 30.58,
+        "hanzi": "我的情也真我的爱也真月",
+        "pinyin": "wǒ de qíng yě zhēn wǒ de ài yě zhēn yuè",
+        "meaning": "Tình yêu của tôi là sự thật và tình yêu của tôi là sự thật",
         "keywords": [
           "我的",
-          "性当"
+          "情也"
         ],
         "blankIndices": [
           0,
           5,
-          9
+          10
         ]
       },
       {
         "id": 4,
-        "startTime": 30.9,
+        "startTime": 30.58,
         "endTime": 34.58,
-        "hanzi": "为为我的家",
-        "pinyin": "wèi wèi wǒ de jiā",
-        "meaning": "đại diện cho trái tim của tôi",
+        "hanzi": "亮代表我的心",
+        "pinyin": "liàng dài biǎo wǒ de xīn",
+        "meaning": "Lương đại diện cho trái tim tôi",
         "keywords": [
-          "为为",
-          "我的"
+          "亮代",
+          "表我"
         ],
         "blankIndices": [
           0,
-          2
+          3
         ]
       },
       {
         "id": 5,
         "startTime": 36.76,
         "endTime": 43.5,
-        "hanzi": "你问我爱爱有度死我",
-        "pinyin": "nǐ wèn wǒ ài ài yǒu dù sǐ wǒ",
-        "meaning": "Bạn hỏi tôi yêu bạn có sâu bao nhiêu",
+        "hanzi": "你问我爱你有多深我",
+        "pinyin": "nǐ wèn wǒ ài nǐ yǒu duō shēn wǒ",
+        "meaning": "Bạn hỏi tôi yêu bạn sâu sắc đến mức nào",
         "keywords": [
           "你问",
           "我爱"
@@ -98,45 +98,44 @@
         "id": 6,
         "startTime": 43.5,
         "endTime": 47.04,
-        "hanzi": "爱你有为丁分分",
-        "pinyin": "ài nǐ yǒu wèi dīng fēn fēn",
-        "meaning": "Yêu bạn có mấy phần",
+        "hanzi": "爱你有几分",
+        "pinyin": "ài nǐ yǒu jǐ fēn",
+        "meaning": "Tôi yêu bạn bao nhiêu",
         "keywords": [
           "爱你",
-          "有为"
+          "有几"
         ],
         "blankIndices": [
           0,
-          3,
-          6
+          2
         ]
       },
       {
         "id": 7,
         "startTime": 48.7,
         "endTime": 55.56,
-        "hanzi": "我的性当么为为为月東",
-        "pinyin": "wǒ de xìng dāng me wèi wèi wèi yuè dōng",
-        "meaning": "Cảm xúc của tôi thật chân thành, tình yêu của tôi thật chân thành, trăng",
+        "hanzi": "我的情不易我的爱不別月亮",
+        "pinyin": "wǒ de qíng bú yì wǒ de ài bù bié yuè liàng",
+        "meaning": "Tình yêu của tôi không bao giờ dễ dàng, tình yêu của tôi không bao giờ rời khỏi mặt trăng",
         "keywords": [
           "我的",
-          "性当"
+          "情不"
         ],
         "blankIndices": [
           0,
-          5,
-          9
+          6,
+          11
         ]
       },
       {
         "id": 8,
         "startTime": 55.56,
         "endTime": 59.24,
-        "hanzi": "为为我的家",
-        "pinyin": "wèi wèi wǒ de jiā",
-        "meaning": "đại diện cho trái tim của tôi",
+        "hanzi": "代表我的心",
+        "pinyin": "dài biǎo wǒ de xīn",
+        "meaning": "đại diện cho trái tim tôi",
         "keywords": [
-          "为为",
+          "代表",
           "我的"
         ],
         "blankIndices": [
@@ -148,12 +147,12 @@
         "id": 9,
         "startTime": 60.96,
         "endTime": 65.26,
-        "hanzi": "李李一个一主",
-        "pinyin": "lǐ lǐ yí gè yì zhǔ",
-        "meaning": "Một cái hôn nhẹ",
+        "hanzi": "轻轻的一个吻",
+        "pinyin": "qīng qīng de yí gè wěn",
+        "meaning": "một nụ hôn nhẹ nhàng",
         "keywords": [
-          "李李",
-          "一个"
+          "轻轻",
+          "的一"
         ],
         "blankIndices": [
           0,
@@ -164,28 +163,29 @@
         "id": 10,
         "startTime": 67.18,
         "endTime": 71.92,
-        "hanzi": "已发发我的家",
-        "pinyin": "yǐ fā fā wǒ de jiā",
-        "meaning": "Đã chạm đến trái tim của tôi",
+        "hanzi": "已经打动我的心",
+        "pinyin": "yǐ jīng dǎ dòng wǒ de xīn",
+        "meaning": "Đã chạm đến trái tim tôi rồi",
         "keywords": [
-          "已发",
-          "发我"
+          "已经",
+          "打动"
         ],
         "blankIndices": [
           0,
-          3
+          3,
+          6
         ]
       },
       {
         "id": 11,
         "startTime": 73.3,
         "endTime": 77.52,
-        "hanzi": "死死的组度",
-        "pinyin": "sǐ sǐ de zǔ dù",
-        "meaning": "Cảm xúc sâu sắc",
+        "hanzi": "深深的端倾",
+        "pinyin": "shēn shēn de duān qīng",
+        "meaning": "nghiêng sâu",
         "keywords": [
-          "死死",
-          "的组"
+          "深深",
+          "的端"
         ],
         "blankIndices": [
           0,
@@ -196,46 +196,12 @@
         "id": 12,
         "startTime": 79.16,
         "endTime": 83.8,
-        "hanzi": "暀己执行己一个月東",
-        "pinyin": "wǎng jǐ zhí xíng jǐ yí gè yuè dōng",
-        "meaning": "Gọi tôi nhớ đến như ngày nay",
+        "hanzi": "叫我思念到如今",
+        "pinyin": "jiào wǒ sī niàn dào rú jīn",
+        "meaning": "Làm anh nhớ em đến tận bây giờ",
         "keywords": [
-          "暀己",
-          "执行"
-        ],
-        "blankIndices": [
-          0,
-          4,
-          8
-        ]
-      },
-      {
-        "id": 13,
-        "startTime": 86,
-        "endTime": 91.36,
-        "hanzi": "你问我爱爱有度死我",
-        "pinyin": "nǐ wèn wǒ ài ài yǒu dù sǐ wǒ",
-        "meaning": "Bạn hỏi tôi yêu bạn có sâu bao nhiêu",
-        "keywords": [
-          "你问",
-          "我爱"
-        ],
-        "blankIndices": [
-          0,
-          4,
-          8
-        ]
-      },
-      {
-        "id": 14,
-        "startTime": 92.06,
-        "endTime": 96.18,
-        "hanzi": "爱你有为丁分分",
-        "pinyin": "ài nǐ yǒu wèi dīng fēn fēn",
-        "meaning": "Yêu bạn có mấy phần",
-        "keywords": [
-          "爱你",
-          "有为"
+          "叫我",
+          "思念"
         ],
         "blankIndices": [
           0,
@@ -244,48 +210,82 @@
         ]
       },
       {
-        "id": 15,
-        "startTime": 97.78,
-        "endTime": 104.666,
-        "hanzi": "你已执行一个一主你已课一个月東",
-        "pinyin": "nǐ yǐ zhí xíng yí gè yì zhǔ nǐ yǐ kè yí gè yuè dōng",
-        "meaning": "Bạn hãy nghĩ một chút, bạn hãy nhìn một chút trăng",
+        "id": 13,
+        "startTime": 86,
+        "endTime": 91.36,
+        "hanzi": "你问我爱你有多深",
+        "pinyin": "nǐ wèn wǒ ài nǐ yǒu duō shēn",
+        "meaning": "Bạn hỏi tôi yêu bạn sâu sắc đến mức nào",
         "keywords": [
-          "你已",
-          "执行"
+          "你问",
+          "我爱"
         ],
         "blankIndices": [
           0,
-          7,
-          14
+          4,
+          7
+        ]
+      },
+      {
+        "id": 14,
+        "startTime": 92.06,
+        "endTime": 96.18,
+        "hanzi": "我爱你有几分",
+        "pinyin": "wǒ ài nǐ yǒu jǐ fēn",
+        "meaning": "Tôi yêu bạn bao nhiêu",
+        "keywords": [
+          "我爱",
+          "你有"
+        ],
+        "blankIndices": [
+          0,
+          3
+        ]
+      },
+      {
+        "id": 15,
+        "startTime": 97.78,
+        "endTime": 103.566,
+        "hanzi": "你去想一想你去看一看",
+        "pinyin": "nǐ qù xiǎng yi xiǎng nǐ qù kàn yi kàn",
+        "meaning": "Hãy đi và suy nghĩ về nó, đi và nhìn xem",
+        "keywords": [
+          "你去",
+          "想一"
+        ],
+        "blankIndices": [
+          0,
+          5,
+          9
         ]
       },
       {
         "id": 16,
-        "startTime": 104.666,
+        "startTime": 104.026,
         "endTime": 108.426,
-        "hanzi": "为为我的家",
-        "pinyin": "wèi wèi wǒ de jiā",
-        "meaning": "đại diện cho trái tim của tôi",
+        "hanzi": "月亮代表我的心",
+        "pinyin": "yuè liàng dài biǎo wǒ de xīn",
+        "meaning": "Mặt trăng tượng trưng cho trái tim tôi",
         "keywords": [
-          "为为",
-          "我的"
+          "月亮",
+          "代表"
         ],
         "blankIndices": [
           0,
-          2
+          3,
+          6
         ]
       },
       {
         "id": 17,
         "startTime": 134.546,
         "endTime": 138.826,
-        "hanzi": "李李一个一主",
-        "pinyin": "lǐ lǐ yí gè yì zhǔ",
-        "meaning": "Một cái hôn nhẹ",
+        "hanzi": "轻轻的一个吻",
+        "pinyin": "qīng qīng de yí gè wěn",
+        "meaning": "một nụ hôn nhẹ nhàng",
         "keywords": [
-          "李李",
-          "一个"
+          "轻轻",
+          "的一"
         ],
         "blankIndices": [
           0,
@@ -296,12 +296,29 @@
         "id": 18,
         "startTime": 140.586,
         "endTime": 144.846,
-        "hanzi": "已发发我的家",
-        "pinyin": "yǐ fā fā wǒ de jiā",
-        "meaning": "Đã chạm đến trái tim của tôi",
+        "hanzi": "已经打动我的心",
+        "pinyin": "yǐ jīng dǎ dòng wǒ de xīn",
+        "meaning": "Đã chạm đến trái tim tôi rồi",
         "keywords": [
-          "已发",
-          "发我"
+          "已经",
+          "打动"
+        ],
+        "blankIndices": [
+          0,
+          3,
+          6
+        ]
+      },
+      {
+        "id": 19,
+        "startTime": 146.686,
+        "endTime": 150.986,
+        "hanzi": "深深的一段情",
+        "pinyin": "shēn shēn de yí duàn qíng",
+        "meaning": "một tình yêu sâu sắc",
+        "keywords": [
+          "深深",
+          "的一"
         ],
         "blankIndices": [
           0,
@@ -309,44 +326,28 @@
         ]
       },
       {
-        "id": 19,
-        "startTime": 146.686,
-        "endTime": 150.986,
-        "hanzi": "死死的性当",
-        "pinyin": "sǐ sǐ de xìng dāng",
-        "meaning": "Cảm xúc sâu sắc",
-        "keywords": [
-          "死死",
-          "的性"
-        ],
-        "blankIndices": [
-          0,
-          2
-        ]
-      },
-      {
         "id": 20,
         "startTime": 152.806,
         "endTime": 157.066,
-        "hanzi": "暀己执行己一个月東",
-        "pinyin": "wǎng jǐ zhí xíng jǐ yí gè yuè dōng",
-        "meaning": "Gọi tôi nhớ đến như ngày nay",
+        "hanzi": "叫我思念到如今",
+        "pinyin": "jiào wǒ sī niàn dào rú jīn",
+        "meaning": "Làm anh nhớ em đến tận bây giờ",
         "keywords": [
-          "暀己",
-          "执行"
+          "叫我",
+          "思念"
         ],
         "blankIndices": [
           0,
-          4,
-          8
+          3,
+          6
         ]
       },
       {
         "id": 21,
         "startTime": 159.286,
         "endTime": 165.806,
-        "hanzi": "你问我爱爱有度死我",
-        "pinyin": "nǐ wèn wǒ ài ài yǒu dù sǐ wǒ",
+        "hanzi": "你问我爱我很一世三六",
+        "pinyin": "nǐ wèn wǒ ài wǒ hěn yí shì sān liù",
         "meaning": "Bạn hỏi tôi yêu bạn có sâu bao nhiêu",
         "keywords": [
           "你问",
@@ -354,20 +355,20 @@
         ],
         "blankIndices": [
           0,
-          4,
-          8
+          5,
+          9
         ]
       },
       {
         "id": 22,
         "startTime": 165.806,
         "endTime": 169.466,
-        "hanzi": "爱你有为丁分分",
-        "pinyin": "ài nǐ yǒu wèi dīng fēn fēn",
-        "meaning": "Yêu bạn có mấy phần",
+        "hanzi": "爱我很一世三六",
+        "pinyin": "ài wǒ hěn yí shì sān liù",
+        "meaning": "Yêu bạn có bao nhiêu phần",
         "keywords": [
-          "爱你",
-          "有为"
+          "爱我",
+          "很一"
         ],
         "blankIndices": [
           0,
@@ -379,67 +380,67 @@
         "id": 23,
         "startTime": 171.046,
         "endTime": 176.886,
-        "hanzi": "你已执行一个一主你已课一个",
-        "pinyin": "nǐ yǐ zhí xíng yí gè yì zhǔ nǐ yǐ kè yí gè",
-        "meaning": "Bạn hãy nghĩ một chút, bạn hãy nhìn một chút",
+        "hanzi": "你开始一一三开查一三查查",
+        "pinyin": "nǐ kāi shǐ yì yī sān kāi chá yī sān chá chá",
+        "meaning": "Bạn đi suy nghĩ đi xem đi xem",
         "keywords": [
-          "你已",
-          "执行"
+          "你开",
+          "始一"
         ],
         "blankIndices": [
           0,
           6,
-          12
+          11
         ]
       },
       {
         "id": 24,
         "startTime": 177.406,
         "endTime": 181.406,
-        "hanzi": "月東为为我的家",
-        "pinyin": "yuè dōng wèi wèi wǒ de jiā",
-        "meaning": "trăng đại diện cho trái tim của tôi",
+        "hanzi": "最東为现我很当布",
+        "pinyin": "zuì dōng wèi xiàn wǒ hěn dāng bù",
+        "meaning": "Trăng đại diện cho trái tim tôi",
         "keywords": [
-          "月東",
-          "为为"
+          "最東",
+          "为现"
         ],
         "blankIndices": [
           0,
-          3,
-          6
+          4,
+          7
         ]
       },
       {
         "id": 25,
         "startTime": 183.226,
         "endTime": 190.226,
-        "hanzi": "你已执行一个一主你已课一个月東",
-        "pinyin": "nǐ yǐ zhí xíng yí gè yì zhǔ nǐ yǐ kè yí gè yuè dōng",
-        "meaning": "Bạn hãy nghĩ một chút, bạn hãy nhìn một chút trăng",
+        "hanzi": "你开始一一三开查一三查查最東",
+        "pinyin": "nǐ kāi shǐ yì yī sān kāi chá yī sān chá chá zuì dōng",
+        "meaning": "Bạn đi suy nghĩ đi xem đi xem trăng",
         "keywords": [
-          "你已",
-          "执行"
+          "你开",
+          "始一"
         ],
         "blankIndices": [
           0,
           7,
-          14
+          13
         ]
       },
       {
         "id": 26,
         "startTime": 190.226,
         "endTime": 193.626,
-        "hanzi": "为为我的家",
-        "pinyin": "wèi wèi wǒ de jiā",
-        "meaning": "đại diện cho trái tim của tôi",
+        "hanzi": "为现我很当布",
+        "pinyin": "wèi xiàn wǒ hěn dāng bù",
+        "meaning": "Đại diện cho trái tim tôi",
         "keywords": [
-          "为为",
-          "我的"
+          "为现",
+          "我很"
         ],
         "blankIndices": [
           0,
-          2
+          3
         ]
       }
     ]
@@ -451,7 +452,7 @@
     "category": "Giao Tiếp",
     "level": "1",
     "levelText": "HSK 1",
-    "description": "Đoạn hội thoại chuẩn mực từ vựng HSK 1 giúp người mới bắt đầu làm quen với phát âm và ngữ điệu tự nhiên.",
+    "description": "Đoạn hội thoại chuẩn mực từ vựng HSK 1 giúp người mới bắt đầu luyện nghe chép chính tả và ngữ điệu tự nhiên.",
     "duration": "01:38",
     "thumbnail": "https://img.youtube.com/vi/8oS6uXOZ_TA/hqdefault.jpg",
     "sentences": [
@@ -487,28 +488,28 @@
         "id": 3,
         "startTime": 4.28,
         "endTime": 6.62,
-        "hanzi": "你显为与名名。",
-        "pinyin": "nǐ xiǎn wèi yǔ míng míng 。",
+        "hanzi": "你员上名名。",
+        "pinyin": "nǐ yuán shàng míng míng 。",
         "meaning": "Bạn tên là gì?",
         "keywords": [
-          "你显",
-          "为与"
+          "你员",
+          "上名"
         ],
         "blankIndices": [
           0,
-          3
+          2
         ]
       },
       {
         "id": 4,
         "startTime": 7.24,
         "endTime": 9.28,
-        "hanzi": "我显为王明，你。",
-        "pinyin": "wǒ xiǎn wèi wáng míng ， nǐ 。",
-        "meaning": "Tôi tên là Vương Minh, bạn?",
+        "hanzi": "我员王上, 你名。",
+        "pinyin": "wǒ yuán wáng shàng ,   nǐ míng 。",
+        "meaning": "Tôi tên là Vương Minh, bạn tên là gì?",
         "keywords": [
-          "我显",
-          "为王"
+          "我员",
+          "王上"
         ],
         "blankIndices": [
           0,
@@ -519,12 +520,12 @@
         "id": 5,
         "startTime": 10.24,
         "endTime": 12.86,
-        "hanzi": "我显为二影。",
-        "pinyin": "wǒ xiǎn wèi èr yǐng 。",
+        "hanzi": "我员王三。",
+        "pinyin": "wǒ yuán wáng sān 。",
         "meaning": "Tôi tên là Lý Hồng.",
         "keywords": [
-          "我显",
-          "为二"
+          "我员",
+          "王三"
         ],
         "blankIndices": [
           0,
@@ -535,28 +536,28 @@
         "id": 6,
         "startTime": 13.3,
         "endTime": 15.58,
-        "hanzi": "五體了明为你。",
-        "pinyin": "wǔ tǐ le míng wèi nǐ 。",
-        "meaning": "Rất hân hạnh được biết đến bạn.",
+        "hanzi": "很體之了你。",
+        "pinyin": "hěn tǐ zhī le nǐ 。",
+        "meaning": "Rất hân hạnh được gặp bạn.",
         "keywords": [
-          "五體",
-          "了明"
+          "很體",
+          "之了"
         ],
         "blankIndices": [
           0,
-          3
+          2
         ]
       },
       {
         "id": 7,
         "startTime": 16.24,
         "endTime": 18.72,
-        "hanzi": "我了體了明为你。",
-        "pinyin": "wǒ le tǐ le míng wèi nǐ 。",
-        "meaning": "Tôi cũng rất hân hạnh được biết đến bạn.",
+        "hanzi": "我和很體之了你。",
+        "pinyin": "wǒ hé hěn tǐ zhī le nǐ 。",
+        "meaning": "Tôi cũng rất hân hạnh được gặp bạn.",
         "keywords": [
-          "我了",
-          "體了"
+          "我和",
+          "很體"
         ],
         "blankIndices": [
           0,
@@ -568,8 +569,8 @@
         "id": 8,
         "startTime": 19.2,
         "endTime": 21.18,
-        "hanzi": "你是中国人吗？",
-        "pinyin": "nǐ shì zhōng guó rén ma ？",
+        "hanzi": "你是中国人吗。",
+        "pinyin": "nǐ shì zhōng guó rén ma 。",
         "meaning": "Bạn là người Trung Quốc không?",
         "keywords": [
           "你是",
@@ -584,12 +585,12 @@
         "id": 9,
         "startTime": 22.2,
         "endTime": 25.18,
-        "hanzi": "不是，我是亞国人。",
-        "pinyin": "bú shì ， wǒ shì yā guó rén 。",
-        "meaning": "Không, tôi là người Việt Nam.",
+        "hanzi": "不要, 你是京国人。",
+        "pinyin": "bú yào ,   nǐ shì jīng guó rén 。",
+        "meaning": "Không, bạn là người Việt Nam.",
         "keywords": [
-          "不是",
-          "我是"
+          "不要",
+          "你是"
         ],
         "blankIndices": [
           0,
@@ -601,17 +602,17 @@
         "id": 10,
         "startTime": 26.22,
         "endTime": 28.7,
-        "hanzi": "你可课为中国语。",
-        "pinyin": "nǐ kě kè wèi zhōng guó yǔ 。",
-        "meaning": "Bạn có nói tiếng Trung không?",
+        "hanzi": "你可课一个中文吗。",
+        "pinyin": "nǐ kě kè yí gè zhōng wén ma 。",
+        "meaning": "Bạn có nói được tiếng Trung không?",
         "keywords": [
           "你可",
-          "课为"
+          "课一"
         ],
         "blankIndices": [
           0,
-          3,
-          6
+          4,
+          7
         ]
       },
       {
@@ -632,17 +633,16 @@
         "id": 12,
         "startTime": 32.28,
         "endTime": 34.56,
-        "hanzi": "你的中国语为很。",
-        "pinyin": "nǐ de zhōng guó yǔ wèi hěn 。",
+        "hanzi": "你的中文很之。",
+        "pinyin": "nǐ de zhōng wén hěn zhī 。",
         "meaning": "Tiếng Trung của bạn rất tốt.",
         "keywords": [
           "你的",
-          "中国"
+          "中文"
         ],
         "blankIndices": [
           0,
-          3,
-          6
+          3
         ]
       },
       {
@@ -663,11 +663,11 @@
         "id": 14,
         "startTime": 37.24,
         "endTime": 38.82,
-        "hanzi": "不帯常。",
-        "pinyin": "bú dài cháng 。",
+        "hanzi": "不小可。",
+        "pinyin": "bù xiǎo kě 。",
         "meaning": "Không có vấn đề.",
         "keywords": [
-          "不帯"
+          "不小"
         ],
         "blankIndices": [
           0
@@ -677,12 +677,12 @@
         "id": 15,
         "startTime": 39.22,
         "endTime": 41.34,
-        "hanzi": "你年月为为一个。",
-        "pinyin": "nǐ nián yuè wèi wèi yí gè 。",
+        "hanzi": "你年月之一个了。",
+        "pinyin": "nǐ nián yuè zhī yī gè le 。",
         "meaning": "Bạn bao nhiêu tuổi?",
         "keywords": [
           "你年",
-          "月为"
+          "月之"
         ],
         "blankIndices": [
           0,
@@ -694,25 +694,27 @@
         "id": 16,
         "startTime": 42.24,
         "endTime": 44.28,
-        "hanzi": "我为20年。",
-        "pinyin": "wǒ wèi 2 0 nián 。",
+        "hanzi": "我二五年。",
+        "pinyin": "wǒ èr wǔ nián 。",
         "meaning": "Tôi 20 tuổi.",
         "keywords": [
-          "我为"
+          "我二",
+          "五年"
         ],
         "blankIndices": [
-          0
+          0,
+          2
         ]
       },
       {
         "id": 17,
         "startTime": 45.24,
         "endTime": 46.3,
-        "hanzi": "你。",
-        "pinyin": "nǐ 。",
-        "meaning": "Bạn?",
+        "hanzi": "你名。",
+        "pinyin": "nǐ míng 。",
+        "meaning": "Bạn tên là gì?",
         "keywords": [
-          "你"
+          "你名"
         ],
         "blankIndices": [
           0
@@ -722,14 +724,16 @@
         "id": 18,
         "startTime": 46.5,
         "endTime": 49.24,
-        "hanzi": "我为22年。",
-        "pinyin": "wǒ wèi 2 2 nián 。",
+        "hanzi": "我五五年。",
+        "pinyin": "wǒ wǔ wǔ nián 。",
         "meaning": "Tôi 22 tuổi.",
         "keywords": [
-          "我为"
+          "我五",
+          "五年"
         ],
         "blankIndices": [
-          0
+          0,
+          2
         ]
       },
       {
@@ -738,7 +742,7 @@
         "endTime": 52.04,
         "hanzi": "你好。",
         "pinyin": "nǐ hǎo 。",
-        "meaning": "Bạn okay không?",
+        "meaning": "Xin chào.",
         "keywords": [
           "你好"
         ],
@@ -750,12 +754,12 @@
         "id": 20,
         "startTime": 53.22,
         "endTime": 55.5,
-        "hanzi": "我为很。你。",
-        "pinyin": "wǒ wèi hěn 。 nǐ 。",
-        "meaning": "Tôi rất tốt, bạn?",
+        "hanzi": "我很之。, 你名。",
+        "pinyin": "wǒ hěn zhī 。 ,   nǐ míng 。",
+        "meaning": "Tôi rất tốt, bạn tên là gì?",
         "keywords": [
-          "我为",
-          "很你"
+          "我很",
+          "之你"
         ],
         "blankIndices": [
           0,
@@ -766,26 +770,28 @@
         "id": 21,
         "startTime": 56.22,
         "endTime": 58.48,
-        "hanzi": "我了很。",
-        "pinyin": "wǒ le hěn 。",
+        "hanzi": "我和很好。",
+        "pinyin": "wǒ hé hěn hǎo 。",
         "meaning": "Tôi cũng rất tốt.",
         "keywords": [
-          "我了"
+          "我和",
+          "很好"
         ],
         "blankIndices": [
-          0
+          0,
+          2
         ]
       },
       {
         "id": 22,
         "startTime": 59.28,
         "endTime": 61.18,
-        "hanzi": "你在一下工为为。",
-        "pinyin": "nǐ zài yí xià gōng wèi wèi 。",
-        "meaning": "Bạn làm việc ở đâu?",
+        "hanzi": "你尚上一个学习。",
+        "pinyin": "nǐ shàng shàng yí gè xué xí 。",
+        "meaning": "Bạn đang làm việc ở đâu?",
         "keywords": [
-          "你在",
-          "一下"
+          "你尚",
+          "上一"
         ],
         "blankIndices": [
           0,
@@ -797,58 +803,59 @@
         "id": 23,
         "startTime": 62.28,
         "endTime": 64.74,
-        "hanzi": "我在学校为为。",
-        "pinyin": "wǒ zài xué xiào wèi wèi 。",
-        "meaning": "Tôi làm việc ở trường.",
+        "hanzi": "我尚上学习学习。",
+        "pinyin": "wǒ shàng shàng xué xí xué xí 。",
+        "meaning": "Tôi đang làm việc ở trường.",
         "keywords": [
-          "我在",
-          "学校"
+          "我尚",
+          "上学"
         ],
         "blankIndices": [
           0,
-          3
+          3,
+          6
         ]
       },
       {
         "id": 24,
         "startTime": 65.24,
         "endTime": 67.52,
-        "hanzi": "你在一下工为为中国语。",
-        "pinyin": "nǐ zài yí xià gōng wèi wèi zhōng guó yǔ 。",
-        "meaning": "Bạn học tiếng Trung ở đâu?",
+        "hanzi": "你尚上一个学习杀张中文。",
+        "pinyin": "nǐ shàng shàng yí gè xué xí shā zhāng zhōng wén 。",
+        "meaning": "Bạn đang học tiếng Trung ở đâu?",
         "keywords": [
-          "你在",
-          "一下"
+          "你尚",
+          "上一"
         ],
         "blankIndices": [
           0,
           5,
-          9
+          10
         ]
       },
       {
         "id": 25,
         "startTime": 68.24,
         "endTime": 71.34,
-        "hanzi": "我在网络为中国语。",
-        "pinyin": "wǒ zài wǎng luò wèi zhōng guó yǔ 。",
-        "meaning": "Tôi học tiếng Trung trên mạng.",
+        "hanzi": "我尚上网络学习杀张中文。",
+        "pinyin": "wǒ shàng shàng wǎng luò xué xí shā zhāng zhōng wén 。",
+        "meaning": "Tôi đang học tiếng Trung trực tuyến.",
         "keywords": [
-          "我在",
-          "网络"
+          "我尚",
+          "上网"
         ],
         "blankIndices": [
           0,
-          4,
-          7
+          5,
+          10
         ]
       },
       {
         "id": 26,
         "startTime": 72.24,
         "endTime": 74.68,
-        "hanzi": "你的教学是中国人吗？",
-        "pinyin": "nǐ de jiào xué shì zhōng guó rén ma ？",
+        "hanzi": "你的教学是中国人吗。",
+        "pinyin": "nǐ de jiào xué shì zhōng guó rén ma 。",
         "meaning": "Giáo viên của bạn là người Trung Quốc không?",
         "keywords": [
           "你的",
@@ -864,90 +871,92 @@
         "id": 27,
         "startTime": 75.26,
         "endTime": 77.74,
-        "hanzi": "是，你是中国人。",
-        "pinyin": "shì ， nǐ shì zhōng guó rén 。",
-        "meaning": "Có, giáo viên của tôi là người Trung Quốc.",
+        "hanzi": "是、你的教学是中国人。",
+        "pinyin": "shì 、 nǐ de jiào xué shì zhōng guó rén 。",
+        "meaning": "Vâng, giáo viên của tôi là người Trung Quốc.",
         "keywords": [
           "是你",
-          "是中"
+          "的教"
         ],
         "blankIndices": [
           0,
-          3
+          4,
+          8
         ]
       },
       {
         "id": 28,
         "startTime": 78.22,
         "endTime": 81.22,
-        "hanzi": "了日为你，我为很。",
-        "pinyin": "liǎo rì wèi nǐ ， wǒ wèi hěn 。",
-        "meaning": "Hôm nay gặp bạn, tôi rất hân hạnh.",
+        "hanzi": "今日杀连一个你、我很可不。",
+        "pinyin": "jīn rì shā lián yí gè nǐ 、 wǒ hěn kě bù 。",
+        "meaning": "Hôm nay gặp bạn, tôi rất hạnh phúc.",
         "keywords": [
-          "了日",
-          "为你"
+          "今日",
+          "杀连"
         ],
         "blankIndices": [
           0,
-          3,
-          6
+          5,
+          10
         ]
       },
       {
         "id": 29,
         "startTime": 82.24,
         "endTime": 84.6,
-        "hanzi": "我了很。",
-        "pinyin": "wǒ le hěn 。",
-        "meaning": "Tôi cũng rất hân hạnh.",
+        "hanzi": "我和很可。",
+        "pinyin": "wǒ hé hěn kě 。",
+        "meaning": "Tôi cũng rất hạnh phúc.",
         "keywords": [
-          "我了"
+          "我和",
+          "很可"
         ],
         "blankIndices": [
-          0
+          0,
+          2
         ]
       },
       {
         "id": 30,
         "startTime": 85.24,
         "endTime": 88.38,
-        "hanzi": "了日为很。",
-        "pinyin": "liǎo rì wèi hěn 。",
-        "meaning": "Hy vọng chúng ta sẽ liên lạc nhiều hơn.",
+        "hanzi": "压了不吃我一个你很不吃。",
+        "pinyin": "yā le bù chī wǒ yí gè nǐ hěn bù chī 。",
+        "meaning": "Hy vọng chúng ta sẽ liên lạc nhiều hơn trong tương lai.",
         "keywords": [
-          "了日",
-          "为很"
+          "压了",
+          "不吃"
         ],
         "blankIndices": [
           0,
-          2
+          5,
+          10
         ]
       },
       {
         "id": 31,
         "startTime": 89.32,
         "endTime": 91.28,
-        "hanzi": "为。姐可你。",
-        "pinyin": "wèi 。 jiě kě nǐ 。",
-        "meaning": "Được, cảm ơn bạn.",
+        "hanzi": "有一、好。",
+        "pinyin": "yǒu yī 、 hǎo 。",
+        "meaning": "Tốt, cảm ơn bạn.",
         "keywords": [
-          "为姐",
-          "可你"
+          "有一"
         ],
         "blankIndices": [
-          0,
-          2
+          0
         ]
       },
       {
         "id": 32,
         "startTime": 92.3,
         "endTime": 92.8,
-        "hanzi": "不帯常。",
-        "pinyin": "bú dài cháng 。",
+        "hanzi": "不小。",
+        "pinyin": "bù xiǎo 。",
         "meaning": "Không có vấn đề.",
         "keywords": [
-          "不帯"
+          "不小"
         ],
         "blankIndices": [
           0
@@ -990,7 +999,7 @@
     "category": "Giao Tiếp",
     "level": "2",
     "levelText": "HSK 2",
-    "description": "Các mẫu câu giao tiếp thông dụng hàng ngày trong đời sống, mua sắm và hỏi đường.",
+    "description": "Các mẫu câu giao tiếp thông dụng hàng ngày trong đời sống, gia đình và thời tiết.",
     "duration": "04:44",
     "thumbnail": "https://img.youtube.com/vi/RT1yYLfqNhU/hqdefault.jpg",
     "sentences": [
@@ -998,12 +1007,12 @@
         "id": 1,
         "startTime": 0,
         "endTime": 3.46,
-        "hanzi": "我是保宝",
+        "hanzi": "我是保尽",
         "pinyin": "wǒ shì bǎo jìn",
-        "meaning": "Tôi là người giữ gìn",
+        "meaning": "Tôi là Peppa",
         "keywords": [
           "我是",
-          "保宝"
+          "保尽"
         ],
         "blankIndices": [
           0,
@@ -1014,26 +1023,26 @@
         "id": 2,
         "startTime": 4.88,
         "endTime": 6.22,
-        "hanzi": "是一个我的园事五不宝",
-        "pinyin": "shì yí gè wǒ de jiā lè wǔ bú jìn",
-        "meaning": "Là một người trong gia đình tôi, không có gì hết",
+        "hanzi": "是一个我的怂保三中",
+        "pinyin": "shì yí gè wǒ de sǒng bǎo sān zhōng",
+        "meaning": "Đây là em trai của tôi George",
         "keywords": [
           "是一",
           "个我"
         ],
         "blankIndices": [
           0,
-          5,
-          9
+          4,
+          8
         ]
       },
       {
         "id": 3,
         "startTime": 7.54,
         "endTime": 8.6,
-        "hanzi": "是一个我的中子",
-        "pinyin": "shì yí gè wǒ de zhōng zǐ",
-        "meaning": "Là một người trong gia đình tôi, con trai",
+        "hanzi": "是一个我的中寸",
+        "pinyin": "shì yí gè wǒ de zhōng cùn",
+        "meaning": "Đây là mẹ của tôi",
         "keywords": [
           "是一",
           "个我"
@@ -1048,9 +1057,9 @@
         "id": 4,
         "startTime": 9.8,
         "endTime": 10.86,
-        "hanzi": "是一个我的父父",
-        "pinyin": "shì yí gè wǒ de fù fù",
-        "meaning": "Là một người trong gia đình tôi, cha cha",
+        "hanzi": "是一个我的父寸",
+        "pinyin": "shì yí gè wǒ de fù cùn",
+        "meaning": "Đây là bố của tôi",
         "keywords": [
           "是一",
           "个我"
@@ -1065,12 +1074,12 @@
         "id": 5,
         "startTime": 11.86,
         "endTime": 14.24,
-        "hanzi": "小王保宝",
-        "pinyin": "xiǎo wáng bǎo jìn",
-        "meaning": "Người nhỏ giữ gìn",
+        "hanzi": "小猫保尽",
+        "pinyin": "xiǎo māo bǎo jìn",
+        "meaning": "Peppa Pig",
         "keywords": [
-          "小王",
-          "保宝"
+          "小猫",
+          "保尽"
         ],
         "blankIndices": [
           0,
@@ -1080,251 +1089,160 @@
       {
         "id": 6,
         "startTime": 20.42,
-        "endTime": 27.86,
-        "hanzi": "不宝今天一天了了",
-        "pinyin": "bú jìn jīn tiān yi tiān le",
-        "meaning": "Không có gì hết ngày hôm nay",
+        "endTime": 21,
+        "hanzi": "京小",
+        "pinyin": "jīng xiǎo",
+        "meaning": "Nick",
         "keywords": [
-          "不宝",
-          "今天"
+          "京小"
         ],
         "blankIndices": [
-          0,
-          4,
-          7
+          0
         ]
       },
       {
         "id": 7,
-        "startTime": 27.86,
-        "endTime": 30.7,
-        "hanzi": "雨了如常例和例为不宝上天上不宝",
-        "pinyin": "yǔ le suǒ yǐ pèi hé qiáo zhì bù néng zài wài miàn wán",
-        "meaning": "Mưa rồi nên Phê và Giô-rê phải ở trong nhà",
+        "startTime": 20.6,
+        "endTime": 27.58,
+        "hanzi": "今天",
+        "pinyin": "jīn tiān",
+        "meaning": "Hôm nay",
         "keywords": [
-          "雨了",
-          "如常"
+          "今天"
         ],
         "blankIndices": [
-          0,
-          7,
-          14
+          0
         ]
       },
       {
         "id": 8,
-        "startTime": 33.76,
-        "endTime": 40.88,
-        "hanzi": "父父了了雨了不宝了上天上不宝",
-        "pinyin": "bà ba xiàn zài yǔ tíng le wǒ men néng chū qù wán ma hǎo de nǐ men liǎng qù wán ba",
-        "meaning": "Bố bây giờ mưa đã ngừng, chúng ta có thể ra ngoài chơi được không? Tốt, các bạn hai người đi chơi nhé",
+        "startTime": 27.58,
+        "endTime": 30.7,
+        "hanzi": "下游了了一个保尽和三中不能在方彩测译",
+        "pinyin": "xià yóu liǎo liǎo yí gè bǎo jìn hé sān zhōng bù néng zài fāng cǎi cè yì",
+        "meaning": "Hôm nay mưa nên Peppa và George không thể ra ngoài chơi",
         "keywords": [
-          "父父",
+          "下游",
           "了了"
         ],
         "blankIndices": [
           0,
-          7,
-          13
+          9,
+          17
         ]
       },
       {
         "id": 9,
-        "startTime": 51.38,
-        "endTime": 56.34,
-        "hanzi": "例为不宝了不宝了不宝了不宝",
-        "pinyin": "pèi qí zuì xǐ huan zài ní kēng lǐ wán wǒ zuì xǐ huan zài ní kēng lǐ wán le",
-        "meaning": "Phê-chi thích chơi ở chỗ đất sét, tôi thích chơi ở chỗ đất sét",
+        "startTime": 33.76,
+        "endTime": 37.14,
+        "hanzi": "父寸了下游了一个保尽和三中不能在方彩测译吗",
+        "pinyin": "fù cùn le xià yóu le yí gè bǎo jìn hé sān zhōng bù néng zài fāng cǎi cè yì ma",
+        "meaning": "Bố ơi, hôm nay mưa nên Peppa và George không thể ra ngoài chơi được chứ?",
         "keywords": [
-          "例为",
-          "不宝"
+          "父寸",
+          "了下"
         ],
         "blankIndices": [
           0,
-          6,
-          12
+          10,
+          20
         ]
       },
       {
         "id": 10,
-        "startTime": 56.66,
-        "endTime": 64.04,
-        "hanzi": "例为不宝了不宝了不宝了不宝",
-        "pinyin": "pèi qí rú guǒ nǐ yào zài ní kēng lǐ tiào nǐ bì dé",
-        "meaning": "Phê-chi nếu bạn muốn chơi ở chỗ đất sét, bạn phải",
+        "startTime": 37.62,
+        "endTime": 40.88,
+        "hanzi": "好了你一个保尽和三中不能在方彩测译",
+        "pinyin": "hǎo le nǐ yí gè bǎo jìn hé sān zhōng bù néng zài fāng cǎi cè yì",
+        "meaning": "Tốt rồi, hai người đi chơi nhé",
         "keywords": [
-          "例为",
-          "不宝"
+          "好了",
+          "你一"
         ],
         "blankIndices": [
           0,
-          6,
-          12
+          8,
+          16
         ]
       },
       {
         "id": 11,
-        "startTime": 64.04,
-        "endTime": 66.84,
-        "hanzi": "不宝了不宝了不宝了不宝",
-        "pinyin": "chuān shàng xuē zǐ cái xíng duì bù qǐ mā ma",
-        "meaning": "Đeo giày mới rồi, xin lỗi mẹ",
+        "startTime": 51.38,
+        "endTime": 56.34,
+        "hanzi": "保尽了小猫保尽下游了不能在方彩测译",
+        "pinyin": "bǎo jìn le xiǎo māo bǎo jìn xià yóu le bù néng zài fāng cǎi cè yì",
+        "meaning": "Peppa thích chơi ở chỗ đất sét, tôi thích chơi ở chỗ đất sét rồi",
         "keywords": [
-          "不宝",
-          "了不"
+          "保尽",
+          "了小"
         ],
         "blankIndices": [
           0,
-          5,
-          10
+          8,
+          16
         ]
       },
       {
         "id": 12,
-        "startTime": 77.14,
-        "endTime": 79.191,
-        "hanzi": "事为不宝了不宝了不宝了不宝",
-        "pinyin": "qiáo zhì yě xǐ huan zài ní kēng lǐ tiào",
-        "meaning": "Giô-rê cũng thích chơi ở chỗ đất sét",
+        "startTime": 56.66,
+        "endTime": 63.58,
+        "hanzi": "保尽了小猫保尽下游了不能在方彩测译",
+        "pinyin": "bǎo jìn le xiǎo māo bǎo jìn xià yóu le bù néng zài fāng cǎi cè yì",
+        "meaning": "Peppa, nếu bạn muốn chơi ở chỗ đất sét, bạn phải mặc giày mới",
         "keywords": [
-          "事为",
-          "不宝"
+          "保尽",
+          "了小"
         ],
         "blankIndices": [
           0,
-          6,
-          12
+          8,
+          16
         ]
       },
       {
         "id": 13,
-        "startTime": 81.771,
-        "endTime": 86.871,
-        "hanzi": "我不宝了事为不宝了不宝了不宝",
-        "pinyin": "wǒ shuō qiáo zhì rú guǒ nǐ yào zài ní kēng lǐ tiào nǐ bì xū dé chuān shàng xuē zǐ cái xíng",
-        "meaning": "Tôi nói Giô-rê, nếu bạn muốn chơi ở chỗ đất sét, bạn phải đeo giày mới rồi",
+        "startTime": 63.58,
+        "endTime": 66.84,
+        "hanzi": "保尽了小猫保尽下游了不能在方彩测译",
+        "pinyin": "bǎo jìn le xiǎo māo bǎo jìn xià yóu le bù néng zài fāng cǎi cè yì",
+        "meaning": "Peppa, nếu bạn muốn chơi ở chỗ đất sét, bạn phải mặc giày mới",
         "keywords": [
-          "我不",
-          "宝了"
+          "保尽",
+          "了小"
         ],
         "blankIndices": [
           0,
-          7,
-          13
+          8,
+          16
         ]
       },
       {
         "id": 14,
-        "startTime": 90.271,
-        "endTime": 92.531,
-        "hanzi": "例为不宝了不宝了不宝了不宝",
-        "pinyin": "pèi qí xǐ huan zhào gù tā de dì di qiáo zhì",
-        "meaning": "Phê-chi thích chăm sóc anh trai Giô-rê",
+        "startTime": 77.14,
+        "endTime": 79.191,
+        "hanzi": "三中不能在方彩测译",
+        "pinyin": "sān zhōng bù néng zài fāng cǎi cè yì",
+        "meaning": "George cũng thích chơi ở chỗ đất sét",
         "keywords": [
-          "例为",
-          "不宝"
+          "三中",
+          "不能"
         ],
         "blankIndices": [
           0,
-          6,
-          12
+          4,
+          8
         ]
       },
       {
         "id": 15,
-        "startTime": 95.751,
-        "endTime": 103.151,
-        "hanzi": "了不宝了不宝了不宝了不宝",
-        "pinyin": "hǎo le qiáo zhì wǒ men zài qù zhǎo jǐ",
-        "meaning": "Được rồi Giô-rê, chúng ta lại đi tìm một vài",
+        "startTime": 81.771,
+        "endTime": 86.871,
+        "hanzi": "了下游了不能在方彩测译",
+        "pinyin": "liǎo xià yóu le bù néng zài fāng cǎi cè yì",
+        "meaning": "Tôi nói George, nếu bạn muốn chơi ở chỗ đất sét, bạn phải mặc giày mới",
         "keywords": [
-          "了不",
-          "宝了"
-        ],
-        "blankIndices": [
-          0,
-          6,
-          11
-        ]
-      },
-      {
-        "id": 16,
-        "startTime": 103.151,
-        "endTime": 104.131,
-        "hanzi": "了不宝了不宝了不宝了不宝",
-        "pinyin": "gè ní tiào ba",
-        "meaning": "Nước sét để chơi",
-        "keywords": [
-          "了不",
-          "宝了"
-        ],
-        "blankIndices": [
-          0,
-          6,
-          11
-        ]
-      },
-      {
-        "id": 17,
-        "startTime": 111.171,
-        "endTime": 112.991,
-        "hanzi": "例为不宝了不宝了不宝了不宝",
-        "pinyin": "pèi qí hé qiáo zhì wán dé hěn kāi xīn",
-        "meaning": "Phê-chi và Giô-rê chơi rất vui vẻ",
-        "keywords": [
-          "例为",
-          "不宝"
-        ],
-        "blankIndices": [
-          0,
-          6,
-          12
-        ]
-      },
-      {
-        "id": 18,
-        "startTime": 114.291,
-        "endTime": 115.951,
-        "hanzi": "例为不宝了不宝了不宝了不宝",
-        "pinyin": "pèi qí zhǎo dào le yí gè xiǎo ní kēng",
-        "meaning": "Phê-chi tìm thấy một cái hố đất sét nhỏ",
-        "keywords": [
-          "例为",
-          "不宝"
-        ],
-        "blankIndices": [
-          0,
-          6,
-          12
-        ]
-      },
-      {
-        "id": 19,
-        "startTime": 117.211,
-        "endTime": 119.091,
-        "hanzi": "事为不宝了不宝了不宝了不宝",
-        "pinyin": "qiáo zhì zhǎo dào le yí gè dà ní kēng",
-        "meaning": "Giô-rê tìm thấy một cái hố đất sét lớn",
-        "keywords": [
-          "事为",
-          "不宝"
-        ],
-        "blankIndices": [
-          0,
-          6,
-          12
-        ]
-      },
-      {
-        "id": 20,
-        "startTime": 123.951,
-        "endTime": 130.911,
-        "hanzi": "不宝了不宝了不宝了不宝",
-        "pinyin": "nǐ kàn qiáo zhì",
-        "meaning": "Hãy nhìn xem Giô-rê",
-        "keywords": [
-          "不宝",
-          "了不"
+          "了下",
+          "游了"
         ],
         "blankIndices": [
           0,
@@ -1333,15 +1251,100 @@
         ]
       },
       {
-        "id": 21,
-        "startTime": 131.791,
-        "endTime": 133.271,
-        "hanzi": "那里有个很大的泥坑",
-        "pinyin": "nà lǐ yǒu gè hěn dà de ní kēng",
-        "meaning": "Có một vũng bùn lớn ở đó",
+        "id": 16,
+        "startTime": 90.271,
+        "endTime": 92.531,
+        "hanzi": "保尽了一个保尽和三中不能在方彩测译",
+        "pinyin": "bǎo jìn le yí gè bǎo jìn hé sān zhōng bù néng zài fāng cǎi cè yì",
+        "meaning": "Peppa thích chăm sóc em trai của mình George",
         "keywords": [
-          "那里",
-          "有个"
+          "保尽",
+          "了一"
+        ],
+        "blankIndices": [
+          0,
+          8,
+          16
+        ]
+      },
+      {
+        "id": 17,
+        "startTime": 95.751,
+        "endTime": 102.691,
+        "hanzi": "了下游了不能在方彩测译",
+        "pinyin": "liǎo xià yóu le bù néng zài fāng cǎi cè yì",
+        "meaning": "Được rồi George, chúng ta lại",
+        "keywords": [
+          "了下",
+          "游了"
+        ],
+        "blankIndices": [
+          0,
+          5,
+          10
+        ]
+      },
+      {
+        "id": 18,
+        "startTime": 102.691,
+        "endTime": 104.131,
+        "hanzi": "了下游了不能在方彩测译",
+        "pinyin": "liǎo xià yóu le bù néng zài fāng cǎi cè yì",
+        "meaning": "Tìm một vài chỗ đất sét để chơi",
+        "keywords": [
+          "了下",
+          "游了"
+        ],
+        "blankIndices": [
+          0,
+          5,
+          10
+        ]
+      },
+      {
+        "id": 19,
+        "startTime": 111.171,
+        "endTime": 112.991,
+        "hanzi": "保尽和三中不能在方彩测译",
+        "pinyin": "bǎo jìn hé sān zhōng bù néng zài fāng cǎi cè yì",
+        "meaning": "Peppa và George chơi rất vui vẻ",
+        "keywords": [
+          "保尽",
+          "和三"
+        ],
+        "blankIndices": [
+          0,
+          6,
+          11
+        ]
+      },
+      {
+        "id": 20,
+        "startTime": 114.291,
+        "endTime": 115.951,
+        "hanzi": "保尽了一个小猫保尽",
+        "pinyin": "bǎo jìn le yí gè xiǎo māo bǎo jìn",
+        "meaning": "Peppa tìm được một chỗ đất sét nhỏ",
+        "keywords": [
+          "保尽",
+          "了一"
+        ],
+        "blankIndices": [
+          0,
+          4,
+          8
+        ]
+      },
+      {
+        "id": 21,
+        "startTime": 117.211,
+        "endTime": 119.091,
+        "hanzi": "王三张是天一天尽尽",
+        "pinyin": "wáng sān zhāng shì tiān yi tiān jìn jìn",
+        "meaning": "George tìm thấy một cái hố lớn",
+        "keywords": [
+          "王三",
+          "张是"
         ],
         "blankIndices": [
           0,
@@ -1351,65 +1354,30 @@
       },
       {
         "id": 22,
-        "startTime": 137.751,
-        "endTime": 140.051,
-        "hanzi": "乔治想第一个跳到泥坑里去玩",
-        "pinyin": "qiáo zhì xiǎng dì yī gè tiào dào ní kēng lǐ qù wán",
-        "meaning": "George muốn là người đầu tiên nhảy xuống vũng bùn và chơi đùa",
+        "startTime": 123.951,
+        "endTime": 130.911,
+        "hanzi": "你查王三张",
+        "pinyin": "nǐ chá wáng sān zhāng",
+        "meaning": "Bạn nhìn George",
         "keywords": [
-          "乔治",
-          "想第"
+          "你查",
+          "王三"
         ],
         "blankIndices": [
           0,
-          6,
-          12
+          2
         ]
       },
       {
         "id": 23,
-        "startTime": 141.271,
-        "endTime": 148.671,
-        "hanzi": "等一下乔治我得先检查一下这里安不安全很好",
-        "pinyin": "děng yí xià qiáo zhì wǒ dé xiān jiǎn chá yí xià zhè lǐ ān bu ān quán hěn hǎo",
-        "meaning": "Đợi một chút, George. Tôi phải kiểm tra xem nó có an toàn không.",
+        "startTime": 131.791,
+        "endTime": 133.271,
+        "hanzi": "一下有丁的尽尽天一天",
+        "pinyin": "yí xià yǒu dīng de jìn jìn tiān yi tiān",
+        "meaning": "Ở đó có một cái hố lớn",
         "keywords": [
-          "等一",
-          "下乔"
-        ],
-        "blankIndices": [
-          0,
-          10,
-          19
-        ]
-      },
-      {
-        "id": 24,
-        "startTime": 148.191,
-        "endTime": 155.491,
-        "hanzi": "你可以放心地玩了对",
-        "pinyin": "nǐ kě yǐ fàng xīn dì wán le duì",
-        "meaning": "Bạn có thể chơi với sự tự tin, phải không?",
-        "keywords": [
-          "你可",
-          "以放"
-        ],
-        "blankIndices": [
-          0,
-          4,
-          8
-        ]
-      },
-      {
-        "id": 25,
-        "startTime": 155.502,
-        "endTime": 157.762,
-        "hanzi": "不起乔治,只是掀泥而已",
-        "pinyin": "bù qǐ qiáo zhì , zhǐ shì xiān ní ér yǐ",
-        "meaning": "Không đủ tiền mua George, cứ khuấy bùn lên",
-        "keywords": [
-          "不起",
-          "乔治"
+          "一下",
+          "有丁"
         ],
         "blankIndices": [
           0,
@@ -1418,66 +1386,15 @@
         ]
       },
       {
-        "id": 26,
-        "startTime": 168.562,
-        "endTime": 171.762,
-        "hanzi": "佩奇和乔治喜欢在泥坑里跳来跳去",
-        "pinyin": "pèi qí hé qiáo zhì xǐ huan zài ní kēng lǐ tiào lái tiào qù",
-        "meaning": "Peppa và George thích nhảy trong vũng nước",
+        "id": 24,
+        "startTime": 137.751,
+        "endTime": 140.051,
+        "hanzi": "王三张打一一走尽尽一天一天",
+        "pinyin": "wáng sān zhāng dǎ yī yī zǒu jìn jìn yì tiān yi tiān",
+        "meaning": "George muốn là người đầu tiên nhảy vào hố để chơi",
         "keywords": [
-          "佩奇",
-          "和乔"
-        ],
-        "blankIndices": [
-          0,
-          7,
-          14
-        ]
-      },
-      {
-        "id": 27,
-        "startTime": 177.662,
-        "endTime": 180.722,
-        "hanzi": "来吧乔治我们快点去给爸爸看看吧",
-        "pinyin": "lái ba qiáo zhì wǒ men kuài diǎn qù gěi bà ba kàn kàn ba",
-        "meaning": "Nào George, chúng ta hãy nhanh chóng đi gặp bố nào.",
-        "keywords": [
-          "来吧",
-          "乔治"
-        ],
-        "blankIndices": [
-          0,
-          7,
-          14
-        ]
-      },
-      {
-        "id": 28,
-        "startTime": 187.722,
-        "endTime": 192.282,
-        "hanzi": "我的老天哪爸爸爸爸你猜猜我们刚才干了什么",
-        "pinyin": "wǒ de lǎo tiān nǎ bà ba bà ba nǐ cāi cāi wǒ men gāng cái gàn le shén me",
-        "meaning": "Ôi Chúa ơi, bố, bố đoán xem chúng ta vừa làm gì",
-        "keywords": [
-          "我的",
-          "老天"
-        ],
-        "blankIndices": [
-          0,
-          10,
-          19
-        ]
-      },
-      {
-        "id": 29,
-        "startTime": 193.082,
-        "endTime": 196.462,
-        "hanzi": "让我猜一猜你们刚才看电视了",
-        "pinyin": "ràng wǒ cāi yi cāi nǐ men gāng cái kàn diàn shì le",
-        "meaning": "Để tôi đoán xem vừa rồi bạn đang xem gì trên TV",
-        "keywords": [
-          "让我",
-          "猜一"
+          "王三",
+          "张打"
         ],
         "blankIndices": [
           0,
@@ -1486,82 +1403,32 @@
         ]
       },
       {
-        "id": 30,
-        "startTime": 197.002,
-        "endTime": 198.622,
-        "hanzi": "不对你猜错了",
-        "pinyin": "bú duì nǐ cāi cuò le",
-        "meaning": "Không, bạn đoán sai rồi",
+        "id": 25,
+        "startTime": 141.271,
+        "endTime": 144.911,
+        "hanzi": "最下王三张我不可在一下消注不很窗常",
+        "pinyin": "zuì xià wáng sān zhāng wǒ bù kě zài yí xià xiāo zhù bù hěn chuāng cháng",
+        "meaning": "Chờ một chút George, tôi cần kiểm tra xem đây có an toàn không",
         "keywords": [
-          "不对",
-          "你猜"
-        ],
-        "blankIndices": [
-          0,
-          3
-        ]
-      },
-      {
-        "id": 31,
-        "startTime": 199.582,
-        "endTime": 206.402,
-        "hanzi": "你们刚才洗澡了不对不对我知道",
-        "pinyin": "nǐ men gāng cái xǐ zǎo le bú duì bu duì wǒ zhī dào",
-        "meaning": "Tôi biết bạn vừa tắm xong phải không?",
-        "keywords": [
-          "你们",
-          "刚才"
-        ],
-        "blankIndices": [
-          0,
-          7,
-          13
-        ]
-      },
-      {
-        "id": 32,
-        "startTime": 206.402,
-        "endTime": 209.782,
-        "hanzi": "了你们刚才在泥坑里跳来跳去",
-        "pinyin": "liǎo nǐ men gāng cái zài ní kēng lǐ tiào lái tiào qù",
-        "meaning": "Ồ, bạn vừa nhảy lên nhảy xuống bùn.",
-        "keywords": [
-          "了你",
-          "们刚"
-        ],
-        "blankIndices": [
-          0,
-          6,
-          12
-        ]
-      },
-      {
-        "id": 33,
-        "startTime": 210.502,
-        "endTime": 214.142,
-        "hanzi": "没错没错爸爸我们在泥坑里跳来跳去",
-        "pinyin": "méi cuò méi cuò bà ba wǒ men zài ní kēng lǐ tiào lái tiào qù",
-        "meaning": "Vâng, vâng bố ơi, chúng con đang nhảy nhót trong vũng bùn.",
-        "keywords": [
-          "没错",
-          "没错"
+          "最下",
+          "王三"
         ],
         "blankIndices": [
           0,
           8,
-          15
+          16
         ]
       },
       {
-        "id": 34,
-        "startTime": 214.962,
-        "endTime": 217.622,
-        "hanzi": "看看你们弄得多脏啊",
-        "pinyin": "kàn kàn nǐ men nòng dé duō zāng a",
-        "meaning": "Nhìn xem bạn đã làm nó bẩn thế nào",
+        "id": 26,
+        "startTime": 144.531,
+        "endTime": 150.211,
+        "hanzi": "一下很一下一天一天",
+        "pinyin": "yí xià hěn yí xià yì tiān yi tiān",
+        "meaning": "Tốt rồi, bạn có thể chơi thoải mái",
         "keywords": [
-          "看看",
-          "你们"
+          "一下",
+          "很一"
         ],
         "blankIndices": [
           0,
@@ -1570,29 +1437,166 @@
         ]
       },
       {
-        "id": 35,
-        "startTime": 218.682,
-        "endTime": 219.282,
-        "hanzi": "糟糕",
-        "pinyin": "zāo gāo",
-        "meaning": "Ối",
+        "id": 27,
+        "startTime": 150.591,
+        "endTime": 156.562,
+        "hanzi": "感不王三张",
+        "pinyin": "gǎn bù wáng sān zhāng",
+        "meaning": "Xin lỗi George,",
         "keywords": [
-          "糟糕"
+          "感不",
+          "王三"
         ],
         "blankIndices": [
-          0
+          0,
+          2
+        ]
+      },
+      {
+        "id": 28,
+        "startTime": 156.562,
+        "endTime": 157.762,
+        "hanzi": "二一尽一天",
+        "pinyin": "èr yī jìn yì tiān",
+        "meaning": "chỉ là đào đất thôi",
+        "keywords": [
+          "二一",
+          "尽一"
+        ],
+        "blankIndices": [
+          0,
+          2
+        ]
+      },
+      {
+        "id": 29,
+        "startTime": 168.562,
+        "endTime": 171.762,
+        "hanzi": "二丁和王三张喜欢一天尽尽一天",
+        "pinyin": "èr dīng hé wáng sān zhāng xǐ huan yì tiān jìn jìn yì tiān",
+        "meaning": "Peggy và George thích nhảy vào hố",
+        "keywords": [
+          "二丁",
+          "和王"
+        ],
+        "blankIndices": [
+          0,
+          7,
+          13
+        ]
+      },
+      {
+        "id": 30,
+        "startTime": 177.662,
+        "endTime": 180.722,
+        "hanzi": "一下王三张不很窗常一下消注不很窗常",
+        "pinyin": "yí xià wáng sān zhāng bù hěn chuāng cháng yí xià xiāo zhù bù hěn chuāng cháng",
+        "meaning": "Hãy đến George, chúng ta hãy nhanh chóng đi xem bố xem",
+        "keywords": [
+          "一下",
+          "王三"
+        ],
+        "blankIndices": [
+          0,
+          8,
+          16
+        ]
+      },
+      {
+        "id": 31,
+        "startTime": 187.722,
+        "endTime": 192.282,
+        "hanzi": "我的私天不王三张一下消注不很窗常",
+        "pinyin": "wǒ de sī tiān bù wáng sān zhāng yí xià xiāo zhù bù hěn chuāng cháng",
+        "meaning": "Thật tuyệt vời bố ơi, bố đoán xem chúng ta vừa làm gì",
+        "keywords": [
+          "我的",
+          "私天"
+        ],
+        "blankIndices": [
+          0,
+          8,
+          15
+        ]
+      },
+      {
+        "id": 32,
+        "startTime": 193.082,
+        "endTime": 196.462,
+        "hanzi": "我起起一下消注不很窗常",
+        "pinyin": "wǒ qǐ qǐ yí xià xiāo zhù bù hěn chuāng cháng",
+        "meaning": "Hãy đoán xem chúng ta vừa xem TV thôi",
+        "keywords": [
+          "我起",
+          "起一"
+        ],
+        "blankIndices": [
+          0,
+          5,
+          10
+        ]
+      },
+      {
+        "id": 33,
+        "startTime": 197.002,
+        "endTime": 198.622,
+        "hanzi": "感不王三张一下消注不很窗常",
+        "pinyin": "gǎn bù wáng sān zhāng yí xià xiāo zhù bù hěn chuāng cháng",
+        "meaning": "Không đúng, bố đoán sai rồi",
+        "keywords": [
+          "感不",
+          "王三"
+        ],
+        "blankIndices": [
+          0,
+          6,
+          12
+        ]
+      },
+      {
+        "id": 34,
+        "startTime": 199.582,
+        "endTime": 203.662,
+        "hanzi": "一下消注不很窗常一下消注不很窗常",
+        "pinyin": "yí xià xiāo zhù bù hěn chuāng cháng yí xià xiāo zhù bù hěn chuāng cháng",
+        "meaning": "Không đúng, bố đoán sai rồi",
+        "keywords": [
+          "一下",
+          "消注"
+        ],
+        "blankIndices": [
+          0,
+          8,
+          15
+        ]
+      },
+      {
+        "id": 35,
+        "startTime": 204.142,
+        "endTime": 209.782,
+        "hanzi": "我起起一下消注不很窗常",
+        "pinyin": "wǒ qǐ qǐ yí xià xiāo zhù bù hěn chuāng cháng",
+        "meaning": "Tôi biết rồi, bố vừa ở trong hố",
+        "keywords": [
+          "我起",
+          "起一"
+        ],
+        "blankIndices": [
+          0,
+          5,
+          10
         ]
       },
       {
         "id": 36,
-        "startTime": 220.202,
-        "endTime": 222.222,
-        "hanzi": "没事只是些泥而已",
-        "pinyin": "méi shì zhǐ shì xiē ní ér yǐ",
-        "meaning": "Không sao đâu, chỉ là bùn thôi",
+        "startTime": 210.502,
+        "endTime": 214.142,
+        "hanzi": "一下消注不很窗常",
+        "pinyin": "yí xià xiāo zhù bù hěn chuāng cháng",
+        "meaning": "Đúng rồi, bố vừa ở trong hố",
         "keywords": [
-          "没事",
-          "只是"
+          "一下",
+          "消注"
         ],
         "blankIndices": [
           0,
@@ -1602,99 +1606,129 @@
       },
       {
         "id": 37,
-        "startTime": 223.342,
-        "endTime": 230.833,
-        "hanzi": "快清理干净别让妈妈看到你们这么脏爸爸我们清清理乾淨之後",
-        "pinyin": "kuài qīng lǐ gān jìng bié ràng mā ma kàn dào nǐ men zhè me zāng bà ba wǒ men qīng qīng lǐ qián jìng zhī hòu",
-        "meaning": "Làm sạch nó nhanh chóng. Đừng để mẹ thấy con bẩn thỉu thế nào. Bố, chúng ta sẽ dọn dẹp sau đó.",
+        "startTime": 214.962,
+        "endTime": 217.622,
+        "hanzi": "一下消注不很窗常一下消注不很窗常",
+        "pinyin": "yí xià xiāo zhù bù hěn chuāng cháng yí xià xiāo zhù bù hěn chuāng cháng",
+        "meaning": "Hãy nhìn xem bố làm cho chúng ta bẩn thế nào",
         "keywords": [
-          "快清",
-          "理干"
+          "一下",
+          "消注"
         ],
         "blankIndices": [
           0,
-          13,
-          26
+          8,
+          15
         ]
       },
       {
         "id": 38,
-        "startTime": 231.293,
-        "endTime": 233.313,
-        "hanzi": "你和媽媽也會一起來玩嗎",
-        "pinyin": "nǐ hé mā mā yě huì yì qǐ lái wán má",
-        "meaning": "Bạn và mẹ bạn có đến chơi cùng nhau không?",
+        "startTime": 218.682,
+        "endTime": 219.282,
+        "hanzi": "二丁",
+        "pinyin": "èr dīng",
+        "meaning": "Thật đáng sợ",
         "keywords": [
-          "你和",
-          "媽媽"
+          "二丁"
         ],
         "blankIndices": [
-          0,
-          5,
-          10
+          0
         ]
       },
       {
         "id": 39,
-        "startTime": 233.793,
-        "endTime": 236.133,
-        "hanzi": "是的我們都可以在花園玩",
-        "pinyin": "shì de wǒ mén dōu kě yǐ zài huā yuán wán",
-        "meaning": "Vâng tất cả chúng ta có thể chơi trong vườn",
+        "startTime": 220.202,
+        "endTime": 222.222,
+        "hanzi": "一下消注不很窗常",
+        "pinyin": "yí xià xiāo zhù bù hěn chuāng cháng",
+        "meaning": "Không sao, chỉ là đất thôi",
         "keywords": [
-          "是的",
-          "我們"
+          "一下",
+          "消注"
         ],
         "blankIndices": [
           0,
-          5,
-          10
+          4,
+          7
         ]
       },
       {
         "id": 40,
-        "startTime": 243.233,
-        "endTime": 245.613,
-        "hanzi": "佩琪和喬治穿著他們的子",
-        "pinyin": "pèi qí hé qiáo zhì chuān zhù tā mén de zǐ",
-        "meaning": "Peppa Pig và George mặc quần",
+        "startTime": 223.342,
+        "endTime": 230.133,
+        "hanzi": "一下消注不很窗常一下消注不很窗常",
+        "pinyin": "yí xià xiāo zhù bù hěn chuāng cháng yí xià xiāo zhù bù hěn chuāng cháng",
+        "meaning": "Hãy nhanh chóng rửa sạch, đừng để mẹ nhìn thấy chúng ta bẩn",
         "keywords": [
-          "佩琪",
-          "和喬"
+          "一下",
+          "消注"
         ],
         "blankIndices": [
           0,
-          5,
-          10
+          8,
+          15
         ]
       },
       {
         "id": 41,
-        "startTime": 246.353,
-        "endTime": 249.073,
-        "hanzi": "豬媽媽和豬爸爸也穿著他們的靴子",
-        "pinyin": "zhū mā mā hé zhū bà ba yě chuān zhù tā mén de xuē zǐ",
-        "meaning": "Heo Mẹ và Heo Bố cũng đi bốt",
+        "startTime": 230.133,
+        "endTime": 230.833,
+        "hanzi": "叁給了一个",
+        "pinyin": "sān gěi le yí gè",
+        "meaning": "Sau khi làm sạch",
         "keywords": [
-          "豬媽",
-          "媽和"
+          "叁給",
+          "了一"
         ],
         "blankIndices": [
           0,
-          7,
-          14
+          2
         ]
       },
       {
         "id": 42,
-        "startTime": 249.913,
-        "endTime": 252.353,
-        "hanzi": "佩琪喜歡在泥坑裡跳來跳去",
-        "pinyin": "pèi qí xǐ huān zài ní kēng lǐ tiào lái tiào qù",
-        "meaning": "Peppa Pig thích nhảy vào vũng bùn",
+        "startTime": 231.293,
+        "endTime": 233.313,
+        "hanzi": "你和中平事一个予个事了欢一个",
+        "pinyin": "nǐ hé zhōng píng shì yí gè yǔ gè shì le huān yí gè",
+        "meaning": "Bạn và mẹ cũng sẽ cùng nhau chơi không?",
+        "keywords": [
+          "你和",
+          "中平"
+        ],
+        "blankIndices": [
+          0,
+          7,
+          13
+        ]
+      },
+      {
+        "id": 43,
+        "startTime": 233.793,
+        "endTime": 236.133,
+        "hanzi": "是的我事一个予个事了欢一个",
+        "pinyin": "shì de wǒ shì yí gè yǔ gè shì le huān yí gè",
+        "meaning": "Vâng, chúng ta đều có thể chơi ở vườn",
+        "keywords": [
+          "是的",
+          "我事"
+        ],
+        "blankIndices": [
+          0,
+          6,
+          12
+        ]
+      },
+      {
+        "id": 44,
+        "startTime": 243.233,
+        "endTime": 245.613,
+        "hanzi": "佩琪和喬治穿著他们的靴子",
+        "pinyin": "pèi qí hé qiáo zhì chuān zhù tā men de xuē zǐ",
+        "meaning": "Peppa Pig và George đi bốt",
         "keywords": [
           "佩琪",
-          "喜歡"
+          "和喬"
         ],
         "blankIndices": [
           0,
@@ -1703,7 +1737,41 @@
         ]
       },
       {
-        "id": 43,
+        "id": 45,
+        "startTime": 246.353,
+        "endTime": 249.073,
+        "hanzi": "猪妈妈和猪爸爸也穿著他们的靴子",
+        "pinyin": "zhū mā ma hé zhū bà ba yě chuān zhù tā men de xuē zǐ",
+        "meaning": "Heo Mẹ và Heo Bố cũng đi bốt",
+        "keywords": [
+          "猪妈",
+          "妈和"
+        ],
+        "blankIndices": [
+          0,
+          7,
+          14
+        ]
+      },
+      {
+        "id": 46,
+        "startTime": 249.913,
+        "endTime": 252.353,
+        "hanzi": "佩琪喜欢在泥坑裡跳來跳去",
+        "pinyin": "pèi qí xǐ huan zài ní kēng lǐ tiào lái tiào qù",
+        "meaning": "Peppa Pig thích nhảy vào vũng bùn",
+        "keywords": [
+          "佩琪",
+          "喜欢"
+        ],
+        "blankIndices": [
+          0,
+          6,
+          11
+        ]
+      },
+      {
+        "id": 47,
         "startTime": 253.893,
         "endTime": 256.393,
         "hanzi": "大家都喜欢在泥坑里跳来跳去",
@@ -1720,7 +1788,7 @@
         ]
       },
       {
-        "id": 44,
+        "id": 48,
         "startTime": 265.253,
         "endTime": 270.853,
         "hanzi": "看那猪爸爸瞧瞧你身上多脏啊只是些泥而已",
@@ -1737,7 +1805,7 @@
         ]
       },
       {
-        "id": 45,
+        "id": 49,
         "startTime": 283.693,
         "endTime": 284.533,
         "hanzi": "哈哈哈哈",
@@ -1761,20 +1829,20 @@
     "category": "Đời Sống",
     "level": "3",
     "levelText": "HSK 3",
-    "description": "Rèn luyện phản xạ nghe hiểu với tốc độ nói tự nhiên của người bản xứ và từ vựng phong phú.",
-    "duration": "08:38",
+    "description": "Rèn luyện phản xạ nghe hiểu với tốc độ nói tự nhiên của người bản xứ và từ vựng mua sắm đời sống phong phú.",
+    "duration": "08:36",
     "thumbnail": "https://img.youtube.com/vi/Asqr_Sz9wVM/hqdefault.jpg",
     "sentences": [
       {
         "id": 1,
         "startTime": 0.02,
         "endTime": 5.08,
-        "hanzi": "好好，今天我们一个井一个合事是一个很很的表示",
+        "hanzi": "大家好,今天我们一起来听一段既长又有趣的对话",
         "pinyin": "dà jiā hǎo , jīn tiān wǒ men yì qǐ lái tīng yí duàn jì cháng yòu yǒu qù de duì huà",
-        "meaning": "Xin chào, hôm nay chúng ta cùng nhau nghe một đoạn hội thoại vừa dài vừa thú vị",
+        "meaning": "Xin chào mọi người, hôm nay chúng ta sẽ nghe một cuộc trò chuyện dài và thú vị",
         "keywords": [
-          "好好",
-          "今天"
+          "大家",
+          "好今"
         ],
         "blankIndices": [
           0,
@@ -1786,148 +1854,199 @@
         "id": 2,
         "startTime": 6.06,
         "endTime": 7.68,
-        "hanzi": "为一个回学起起为为回学为一个回学的题。",
+        "hanzi": "主题是在商店购物",
         "pinyin": "zhǔ tí shì zài shāng diàn gòu wù",
-        "meaning": "Chủ đề là mua sắm tại cửa hàng",
+        "meaning": "Chủ đề là mua sắm trong cửa hàng",
         "keywords": [
-          "为一",
-          "个回"
+          "主题",
+          "是在"
         ],
         "blankIndices": [
           0,
-          9,
-          17
+          4,
+          7
         ]
       },
       {
         "id": 3,
         "startTime": 8.54,
         "endTime": 12.92,
-        "hanzi": "在一个表示中，你你不一个定一个为定的认为。",
+        "hanzi": "在这段对话里,你们会学到很多和衣服、",
         "pinyin": "zài zhè duàn duì huà lǐ , nǐ men huì xué dào hěn duō hé yī fu 、",
-        "meaning": "Trong đoạn hội thoại này, các bạn sẽ học được nhiều từ vựng liên quan đến quần áo, giày dép và phụ kiện",
+        "meaning": "Trong cuộc trò chuyện này, bạn sẽ học được rất nhiều điều về quần áo,",
         "keywords": [
-          "在一",
-          "个表"
+          "在这",
+          "段对"
         ],
         "blankIndices": [
           0,
-          9,
-          18
+          8,
+          15
         ]
       },
       {
         "id": 4,
         "startTime": 12.92,
         "endTime": 15.28,
-        "hanzi": "为一个定一个为定的认为。",
+        "hanzi": "鞋子、配饰相关的词汇",
         "pinyin": "xié zǐ 、 pèi shì xiāng guān de cí huì",
-        "meaning": "và cách hỏi giá, mặc và thanh toán",
+        "meaning": "Từ vựng liên quan đến giày dép và phụ kiện",
         "keywords": [
-          "为一",
-          "个定"
+          "鞋子",
+          "配饰"
         ],
         "blankIndices": [
           0,
-          5,
-          10
+          4,
+          8
         ]
       },
       {
         "id": 5,
         "startTime": 16.02,
         "endTime": 18.46,
-        "hanzi": "为一个定一个为定的认为，",
+        "hanzi": "以及用中文询问价格、",
         "pinyin": "yǐ jí yòng zhōng wén xún wèn jià gé 、",
-        "meaning": "và cách hỏi giá, mặc và thanh toán",
+        "meaning": "và hỏi giá bằng tiếng Trung,",
         "keywords": [
-          "为一",
-          "个定"
+          "以及",
+          "用中"
         ],
         "blankIndices": [
           0,
-          5,
-          10
+          4,
+          8
         ]
       },
       {
         "id": 6,
-        "startTime": 18.48,
+        "startTime": 18.46,
         "endTime": 19.78,
-        "hanzi": "为一个定一个为定的认为。",
-        "pinyin": "chuān hé jié zhàng de fāng fǎ",
-        "meaning": "và cách hỏi giá, mặc và thanh toán",
+        "hanzi": "试穿和结账的方法",
+        "pinyin": "shì chuān hé jié zhàng de fāng fǎ",
+        "meaning": "Cách thử và kiểm tra",
         "keywords": [
-          "为一",
-          "个定"
+          "试穿",
+          "和结"
         ],
         "blankIndices": [
           0,
-          5,
-          10
+          4,
+          7
         ]
       },
       {
         "id": 7,
         "startTime": 20.38,
         "endTime": 23.38,
-        "hanzi": "为一个定一个为定的题。",
+        "hanzi": "这是日常生活中非常常见的场景",
         "pinyin": "zhè shì rì cháng shēng huó zhōng fēi cháng cháng jiàn de chǎng jǐng",
-        "meaning": "Đây là một tình huống rất thường gặp trong cuộc sống hàng ngày",
+        "meaning": "Đây là cảnh rất thường gặp trong đời sống hằng ngày",
         "keywords": [
-          "为一",
-          "个定"
+          "这是",
+          "日常"
         ],
         "blankIndices": [
           0,
-          5,
-          9
+          7,
+          13
         ]
       },
       {
         "id": 8,
         "startTime": 23.88,
         "endTime": 27.54,
-        "hanzi": "为一个定一个为定的题。",
+        "hanzi": "一定能帮助大家快速提高中文交流能力",
         "pinyin": "yí dìng néng bāng zhù dà jiā kuài sù tí gāo zhōng wén jiāo liú néng lì",
-        "meaning": "Đó sẽ giúp các bạn cải thiện khả năng giao tiếp tiếng Trung một cách nhanh chóng",
+        "meaning": "Nó chắc chắn sẽ giúp mọi người nhanh chóng cải thiện kỹ năng giao tiếp tiếng Trung của mình",
         "keywords": [
-          "为一",
-          "个定"
+          "一定",
+          "能帮"
         ],
         "blankIndices": [
           0,
-          5,
-          9
+          8,
+          16
         ]
       },
       {
         "id": 9,
         "startTime": 28.26,
         "endTime": 32.3,
-        "hanzi": "为一个定一个为定的题。",
+        "hanzi": "好了,现在就让我们开始欣赏这段对话吧",
         "pinyin": "hǎo le , xiàn zài jiù ràng wǒ men kāi shǐ xīn shǎng zhè duàn duì huà ba",
-        "meaning": "Vậy, hãy cùng nhau bắt đầu thưởng thức đoạn hội thoại này nhé!",
+        "meaning": "Được rồi, bây giờ hãy bắt đầu tận hưởng cuộc trò chuyện này",
         "keywords": [
-          "为一",
-          "个定"
+          "好了",
+          "现在"
         ],
         "blankIndices": [
           0,
-          5,
-          9
+          8,
+          16
         ]
       },
       {
         "id": 10,
         "startTime": 33.7,
         "endTime": 39.66,
-        "hanzi": "你好，我今天一个井一个回学是一个定一个回学的题。",
+        "hanzi": "您好,我今天来商店是因为听说有特别促销活动不知道现在",
         "pinyin": "nín hǎo , wǒ jīn tiān lái shāng diàn shì yīn wèi tīng shuō yǒu tè bié cù xiāo huó dòng bù zhī dào xiàn zài",
-        "meaning": "Xin chào, hôm nay tôi đến cửa hàng vì nghe nói có một chương trình khuyến mãi đặc biệt",
+        "meaning": "Chào bạn, hôm nay mình đến cửa hàng vì nghe nói có khuyến mãi đặc biệt mà giờ mới biết",
         "keywords": [
-          "你好",
+          "您好",
           "我今"
+        ],
+        "blankIndices": [
+          0,
+          12,
+          24
+        ]
+      },
+      {
+        "id": 11,
+        "startTime": 39.66,
+        "endTime": 40.92,
+        "hanzi": "还有很多商品吗?",
+        "pinyin": "hái yǒu hěn duō shāng pǐn ma ?",
+        "meaning": "Còn nhiều sản phẩm nữa à?",
+        "keywords": [
+          "还有",
+          "很多"
+        ],
+        "blankIndices": [
+          0,
+          3,
+          6
+        ]
+      },
+      {
+        "id": 12,
+        "startTime": 41.96,
+        "endTime": 46.82,
+        "hanzi": "是的,我们商店正在进行大促销从衣服、",
+        "pinyin": "shì de , wǒ men shāng diàn zhèng zài jìn xíng dà cù xiāo cóng yī fu 、",
+        "meaning": "Vâng, cửa hàng của chúng tôi đang có đợt giảm giá lớn về quần áo,",
+        "keywords": [
+          "是的",
+          "我们"
+        ],
+        "blankIndices": [
+          0,
+          8,
+          15
+        ]
+      },
+      {
+        "id": 13,
+        "startTime": 46.82,
+        "endTime": 52.24,
+        "hanzi": "鞋子到家用电器都有优惠您要不要看一下详细目录?",
+        "pinyin": "xié zǐ dào jiā yòng diàn qì dōu yǒu yōu huì nín yào bu yào kàn yí xià xiáng xì mù lù ?",
+        "meaning": "Có giảm giá cho mọi thứ, từ giày dép đến đồ gia dụng. Bạn có muốn xem danh mục chi tiết không?",
+        "keywords": [
+          "鞋子",
+          "到家"
         ],
         "blankIndices": [
           0,
@@ -1936,156 +2055,104 @@
         ]
       },
       {
-        "id": 11,
-        "startTime": 39.66,
-        "endTime": 40.92,
-        "hanzi": "为一个定一个为定的题。",
-        "pinyin": "hái yǒu hěn duō shāng pǐn ma ?",
-        "meaning": "Còn có nhiều sản phẩm khác không?",
-        "keywords": [
-          "为一",
-          "个定"
-        ],
-        "blankIndices": [
-          0,
-          5,
-          9
-        ]
-      },
-      {
-        "id": 12,
-        "startTime": 41.96,
-        "endTime": 46.82,
-        "hanzi": "是的，我的回学为为回学为一个定一个回学的题。",
-        "pinyin": "shì de , wǒ men shāng diàn zhèng zài jìn xíng dà cù xiāo cóng yī fu 、",
-        "meaning": "Có, cửa hàng chúng tôi đang tổ chức một chương trình khuyến mãi lớn, từ quần áo, giày dép đến các sản phẩm gia dụng",
-        "keywords": [
-          "是的",
-          "我的"
-        ],
-        "blankIndices": [
-          0,
-          10,
-          19
-        ]
-      },
-      {
-        "id": 13,
-        "startTime": 46.82,
-        "endTime": 52.24,
-        "hanzi": "是的，我的回学为为回学为一个定一个回学的题。",
-        "pinyin": "xié zǐ dào jiā yòng diàn qì dōu yǒu yōu huì nín yào bu yào kàn yí xià xiáng xì mù lù ?",
-        "meaning": "Cửa hàng chúng tôi đang tổ chức một chương trình khuyến mãi lớn, từ quần áo, giày dép đến các sản phẩm gia dụng",
-        "keywords": [
-          "是的",
-          "我的"
-        ],
-        "blankIndices": [
-          0,
-          10,
-          19
-        ]
-      },
-      {
         "id": 14,
         "startTime": 52.78,
         "endTime": 58.88,
-        "hanzi": "我的为一个定一个为定的题。",
+        "hanzi": "我最关心的是男士上班穿的衬衫要颜色大方不料透气不知道",
         "pinyin": "wǒ zuì guān xīn de shì nán shì shàng bān chuān de chèn shān yào yán sè dà fāng bú liào tòu qì bù zhī dào",
-        "meaning": "Tôi quan tâm nhất là áo sơ mi cho nam giới mặc khi đi làm",
+        "meaning": "Điều tôi quan tâm nhất là áo sơ mi nam mặc đi làm phải có màu sắc đẹp và thoáng mát. Tôi không biết.",
         "keywords": [
-          "我的",
-          "为一"
+          "我最",
+          "关心"
         ],
         "blankIndices": [
           0,
-          6,
-          11
+          13,
+          25
         ]
       },
       {
         "id": 15,
         "startTime": 58.88,
         "endTime": 60.66,
-        "hanzi": "为一个定一个为定的题。",
+        "hanzi": "现在有没有新款到货",
         "pinyin": "xiàn zài yǒu méi yǒu xīn kuǎn dào huò",
-        "meaning": "Có sản phẩm mới được nhập về không?",
+        "meaning": "Hiện tại có mẫu mới nào về không?",
         "keywords": [
-          "为一",
-          "个定"
+          "现在",
+          "有没"
         ],
         "blankIndices": [
           0,
-          5,
-          9
+          4,
+          8
         ]
       },
       {
         "id": 16,
         "startTime": 61.68,
         "endTime": 65.54,
-        "hanzi": "是的，我的回学为为回学为一个定一个回学的题。",
+        "hanzi": "有的这周刚到一批高档纯棉衬衫",
         "pinyin": "yǒu de zhè zhōu gāng dào yì pī gāo dàng chún mián chèn shān",
-        "meaning": "Có, cửa hàng chúng tôi vừa nhập về một lô áo sơ mi cao cấp làm từ cotton",
+        "meaning": "Một số áo sơ mi cotton cao cấp mới về tuần này",
         "keywords": [
-          "是的",
-          "我的"
+          "有的",
+          "这周"
         ],
         "blankIndices": [
           0,
-          10,
-          19
+          7,
+          13
         ]
       },
       {
         "id": 17,
         "startTime": 66.06,
         "endTime": 70.6,
-        "hanzi": "是的，我的回学为为回学为一个定一个回学的题。",
+        "hanzi": "款式时尚现在正在打七折你要不要试试看",
         "pinyin": "kuǎn shì shí shàng xiàn zài zhèng zài dǎ qī zhé nǐ yào bu yào shì shì kàn",
-        "meaning": "Sản phẩm này có kiểu dáng thời trang và đang được giảm giá 7%!",
+        "meaning": "Các phong cách thời trang hiện đang được giảm giá 30%. Bạn có muốn thử chúng không?",
         "keywords": [
-          "是的",
-          "我的"
+          "款式",
+          "时尚"
         ],
         "blankIndices": [
           0,
-          10,
-          19
+          9,
+          17
         ]
       },
       {
         "id": 18,
         "startTime": 71.52,
         "endTime": 72.42,
-        "hanzi": "是的，我的回学为为回学为一个定一个回学的题。",
+        "hanzi": "听起来不错",
         "pinyin": "tīng qǐ lái bú cuò",
-        "meaning": "Đó nghe có vẻ hấp dẫn!",
+        "meaning": "nghe có vẻ hay",
         "keywords": [
-          "是的",
-          "我的"
+          "听起",
+          "来不"
         ],
         "blankIndices": [
           0,
-          10,
-          19
+          2
         ]
       },
       {
         "id": 19,
         "startTime": 72.94,
         "endTime": 75.14,
-        "hanzi": "为一个定一个为定的题。",
+        "hanzi": "不过在事之前我想问一下",
         "pinyin": "bú guò zài shì zhī qián wǒ xiǎng wèn yí xià",
-        "meaning": "Nhưng trước khi mua, tôi muốn hỏi thêm một chút",
+        "meaning": "Nhưng trước khi làm bất cứ điều gì, tôi muốn hỏi",
         "keywords": [
-          "为一",
-          "个定"
+          "不过",
+          "在事"
         ],
         "blankIndices": [
           0,
           5,
-          9
+          10
         ]
       },
       {
@@ -2108,65 +2175,69 @@
       {
         "id": 21,
         "startTime": 79,
-        "endTime": 85.86,
-        "hanzi": "每件原价大概八百块钱但这次活动只要五百多而且保证是正",
-        "pinyin": "měi jiàn yuán jià dà gài bā bǎi kuài qián dàn zhè cì huó dòng zhǐ yào wǔ bǎi duō ér qiě bǎo zhèng shì zhèng",
-        "meaning": "Giá gốc của mỗi chiếc là khoảng 800 tệ, nhưng lần này giá chỉ hơn 500 tệ và đảm bảo là hàng thật.",
+        "endTime": 84.12,
+        "hanzi": "每件原价大概八百块钱但这次活动只要五百多",
+        "pinyin": "měi jiàn yuán jià dà gài bā bǎi kuài qián dàn zhè cì huó dòng zhǐ yào wǔ bǎi duō",
+        "meaning": "Giá ban đầu của mỗi tác phẩm là khoảng 800 nhân dân tệ, nhưng sự kiện này chỉ tốn hơn 500 nhân dân tệ.",
         "keywords": [
           "每件",
           "原价"
         ],
         "blankIndices": [
           0,
-          13,
-          25
+          10,
+          19
         ]
       },
       {
         "id": 22,
-        "startTime": 85.86,
+        "startTime": 84.58,
         "endTime": 86.04,
-        "hanzi": "品",
-        "pinyin": "pǐn",
-        "meaning": "Nếm",
+        "hanzi": "而且保证是正品",
+        "pinyin": "ér qiě bǎo zhèng shì zhèng pǐn",
+        "meaning": "Và nó được đảm bảo là hàng thật",
         "keywords": [
-          "品"
+          "而且",
+          "保证"
         ],
         "blankIndices": [
-          0
+          0,
+          3,
+          6
         ]
       },
       {
         "id": 23,
         "startTime": 87,
-        "endTime": 93.12,
-        "hanzi": "那我想试一件浅蓝色的Elma因为我平时上班穿想选个比",
-        "pinyin": "nà wǒ xiǎng shì yí jiàn qiǎn lán sè de E l m a yīn wèi wǒ píng shí shàng bān chuān xiǎng xuǎn gè bǐ",
-        "meaning": "Sau đó tôi muốn thử một chiếc Elma màu xanh nhạt vì tôi thường mặc nó đi làm và muốn chọn thứ gì đó tốt hơn.",
+        "endTime": 92.92,
+        "hanzi": "那我想试一件浅蓝色的Elma因为我平时上班穿想选个",
+        "pinyin": "nà wǒ xiǎng shì yí jiàn qiǎn lán sè de E l m a yīn wèi wǒ píng shí shàng bān chuān xiǎng xuǎn gè",
+        "meaning": "Sau đó tôi muốn thử một chiếc Elma màu xanh nhạt vì tôi thường mặc nó đi làm và muốn chọn một chiếc.",
         "keywords": [
           "那我",
           "想试"
         ],
         "blankIndices": [
           0,
-          11,
-          21
+          10,
+          20
         ]
       },
       {
         "id": 24,
-        "startTime": 93.12,
+        "startTime": 92.92,
         "endTime": 94.2,
-        "hanzi": "较正式的颜色",
-        "pinyin": "jiào zhèng shì de yán sè",
-        "meaning": "màu sắc trang trọng hơn",
+        "hanzi": "比较正式的颜色",
+        "pinyin": "bǐ jiào zhèng shì de yán sè",
+        "meaning": "Màu sắc trang trọng hơn",
         "keywords": [
-          "较正",
-          "式的"
+          "比较",
+          "正式"
         ],
         "blankIndices": [
           0,
-          3
+          3,
+          6
         ]
       },
       {
@@ -2206,22 +2277,36 @@
       {
         "id": 27,
         "startTime": 104.54,
-        "endTime": 110.4,
-        "hanzi": "谢谢你在等待的时候我还想看看皮鞋适合上班穿的不要太复",
-        "pinyin": "xiè xiè nǐ zài děng dài de shí hòu wǒ hái xiǎng kàn kàn pí xié shì hé shàng bān chuān de bú yào tài fù",
-        "meaning": "Cảm ơn. Trong lúc chờ đợi, tôi cũng muốn xem đôi giày da đó có phù hợp để đi làm và không quá phức tạp hay không.",
+        "endTime": 110.12,
+        "hanzi": "谢谢你在等待的时候我还想看看皮鞋适合上班穿的不要太",
+        "pinyin": "xiè xiè nǐ zài děng dài de shí hòu wǒ hái xiǎng kàn kàn pí xié shì hé shàng bān chuān de bú yào tài",
+        "meaning": "Cảm ơn. Trong khi chờ đợi, tôi cũng muốn xem đôi giày da đó có phù hợp để đi làm và không quá rộng không.",
         "keywords": [
           "谢谢",
           "你在"
         ],
         "blankIndices": [
           0,
-          13,
-          25
+          12,
+          24
         ]
       },
       {
         "id": 28,
+        "startTime": 110.12,
+        "endTime": 110.44,
+        "hanzi": "复杂",
+        "pinyin": "fù zá",
+        "meaning": "tổ hợp",
+        "keywords": [
+          "复杂"
+        ],
+        "blankIndices": [
+          0
+        ]
+      },
+      {
+        "id": 29,
         "startTime": 110.92,
         "endTime": 112.1,
         "hanzi": "但一定要舒服",
@@ -2237,7 +2322,7 @@
         ]
       },
       {
-        "id": 29,
+        "id": 30,
         "startTime": 113.32,
         "endTime": 116.24,
         "hanzi": "我们这里有很多新款皮鞋,",
@@ -2254,7 +2339,7 @@
         ]
       },
       {
-        "id": 30,
+        "id": 31,
         "startTime": 116.24,
         "endTime": 119.94,
         "hanzi": "大部分是真皮的,设计简洁大方,",
@@ -2271,7 +2356,7 @@
         ]
       },
       {
-        "id": 31,
+        "id": 32,
         "startTime": 119.94,
         "endTime": 122.52,
         "hanzi": "适合上班或者参加宴会穿",
@@ -2288,7 +2373,7 @@
         ]
       },
       {
-        "id": 32,
+        "id": 33,
         "startTime": 123.66,
         "endTime": 128.36,
         "hanzi": "那你能不能给我推荐一款最近一个月卖得最好的鞋子,",
@@ -2305,7 +2390,7 @@
         ]
       },
       {
-        "id": 33,
+        "id": 34,
         "startTime": 128.36,
         "endTime": 129.78,
         "hanzi": "让我参考一下?",
@@ -2321,116 +2406,15 @@
         ]
       },
       {
-        "id": 34,
+        "id": 35,
         "startTime": 130.76,
-        "endTime": 138.076,
-        "hanzi": "好的,深棕色的皮鞋卖得非常火因为很容易搭配鞋型标准鞋",
-        "pinyin": "hǎo de , shēn zōng sè de pí xié mài dé fēi cháng huǒ yīn wèi hěn róng yì dā pèi xié xíng biāo zhǔn xié",
-        "meaning": "Được rồi, giày da màu nâu sẫm đang rất được ưa chuộng vì rất dễ kết hợp với những đôi giày chuẩn.",
+        "endTime": 137.436,
+        "hanzi": "好的,深棕色的皮鞋卖得非常火因为很容易搭配鞋型标准",
+        "pinyin": "hǎo de , shēn zōng sè de pí xié mài dé fēi cháng huǒ yīn wèi hěn róng yì dā pèi xié xíng biāo zhǔn",
+        "meaning": "Được rồi, giày da màu nâu sẫm đang rất được ưa chuộng vì rất dễ kết hợp với những kiểu giày tiêu chuẩn.",
         "keywords": [
           "好的",
           "深棕"
-        ],
-        "blankIndices": [
-          0,
-          12,
-          24
-        ]
-      },
-      {
-        "id": 35,
-        "startTime": 138.076,
-        "endTime": 140.936,
-        "hanzi": "垫柔软穿一整天也不会脚痛",
-        "pinyin": "diàn róu ruǎn chuān yì zhěng tiān yě bú huì jiǎo tòng",
-        "meaning": "Miếng lót êm ái, có thể mang cả ngày mà không gây đau chân.",
-        "keywords": [
-          "垫柔",
-          "软穿"
-        ],
-        "blankIndices": [
-          0,
-          6,
-          11
-        ]
-      },
-      {
-        "id": 36,
-        "startTime": 142.336,
-        "endTime": 148.216,
-        "hanzi": "听起来挺不错我平时穿42码不知道这款有没有我的尺码还有",
-        "pinyin": "tīng qǐ lái tǐng bú cuò wǒ píng shí chuān 4 2 mǎ bù zhī dào zhè kuǎn yǒu méi yǒu wǒ de chǐ mǎ hái yǒu",
-        "meaning": "Nghe có vẻ hay đấy. Tôi thường mặc cỡ 42. Tôi không biết cái này có vừa với cỡ của tôi không.",
-        "keywords": [
-          "听起",
-          "来挺"
-        ],
-        "blankIndices": [
-          0,
-          12,
-          24
-        ]
-      },
-      {
-        "id": 37,
-        "startTime": 148.216,
-        "endTime": 149.156,
-        "hanzi": "没有活动优惠",
-        "pinyin": "méi yǒu huó dòng yōu huì",
-        "meaning": "Không có khuyến mãi",
-        "keywords": [
-          "没有",
-          "活动"
-        ],
-        "blankIndices": [
-          0,
-          3
-        ]
-      },
-      {
-        "id": 38,
-        "startTime": 150.396,
-        "endTime": 155.956,
-        "hanzi": "有的42码还有货而且这款现在有85折优惠",
-        "pinyin": "yǒu de 4 2 mǎ hái yǒu huò ér qiě zhè kuǎn xiàn zài yǒu 8 5 zhé yōu huì",
-        "meaning": "Một số cỡ 42 vẫn còn trong kho và chiếc này hiện đang được giảm giá 15%.",
-        "keywords": [
-          "有的",
-          "码还"
-        ],
-        "blankIndices": [
-          0,
-          8,
-          15
-        ]
-      },
-      {
-        "id": 39,
-        "startTime": 156.556,
-        "endTime": 160.356,
-        "hanzi": "如果你和衬衫一起买还可以再送优惠券",
-        "pinyin": "rú guǒ nǐ hé chèn shān yì qǐ mǎi hái kě yǐ zài sòng yōu huì quàn",
-        "meaning": "Nếu bạn mua nó cùng với áo sơ mi, bạn có thể nhận được phiếu giảm giá",
-        "keywords": [
-          "如果",
-          "你和"
-        ],
-        "blankIndices": [
-          0,
-          8,
-          16
-        ]
-      },
-      {
-        "id": 40,
-        "startTime": 161.556,
-        "endTime": 167.396,
-        "hanzi": "那太好了我想直接看看42码的深棕色皮鞋如果满意的话就",
-        "pinyin": "nà tài hǎo le wǒ xiǎng zhí jiē kàn kàn 4 2 mǎ de shēn zōng sè pí xié rú guǒ mǎn yì de huà jiù",
-        "meaning": "Điều đó thật tuyệt. Tôi muốn xem qua đôi giày da màu nâu sẫm cỡ 42. Nếu bạn hài lòng, tôi sẽ",
-        "keywords": [
-          "那太",
-          "好了"
         ],
         "blankIndices": [
           0,
@@ -2439,15 +2423,133 @@
         ]
       },
       {
-        "id": 41,
-        "startTime": 167.396,
-        "endTime": 168.516,
-        "hanzi": "和小小小五上主",
-        "pinyin": "hé chèn shān yì qǐ mǎi",
-        "meaning": "Mua cùng áo sơ mi",
+        "id": 36,
+        "startTime": 137.796,
+        "endTime": 140.936,
+        "hanzi": "鞋垫柔软穿一整天也不会脚痛",
+        "pinyin": "xié diàn róu ruǎn chuān yì zhěng tiān yě bú huì jiǎo tòng",
+        "meaning": "Lót giày mềm mại, có thể mang cả ngày mà không gây đau chân.",
         "keywords": [
-          "和小",
-          "小小"
+          "鞋垫",
+          "柔软"
+        ],
+        "blankIndices": [
+          0,
+          6,
+          12
+        ]
+      },
+      {
+        "id": 37,
+        "startTime": 142.336,
+        "endTime": 147.596,
+        "hanzi": "听起来挺不错我平时穿42码不知道这款有没有我的尺码",
+        "pinyin": "tīng qǐ lái tǐng bú cuò wǒ píng shí chuān 4 2 mǎ bù zhī dào zhè kuǎn yǒu méi yǒu wǒ de chǐ mǎ",
+        "meaning": "Nghe có vẻ hay đấy. Tôi thường mặc cỡ 42. Tôi không biết cái này có vừa với cỡ của tôi không.",
+        "keywords": [
+          "听起",
+          "来挺"
+        ],
+        "blankIndices": [
+          0,
+          11,
+          22
+        ]
+      },
+      {
+        "id": 38,
+        "startTime": 147.636,
+        "endTime": 149.156,
+        "hanzi": "还有没有活动优惠",
+        "pinyin": "hái yǒu méi yǒu huó dòng yōu huì",
+        "meaning": "Có giảm giá nào khác không?",
+        "keywords": [
+          "还有",
+          "没有"
+        ],
+        "blankIndices": [
+          0,
+          4,
+          7
+        ]
+      },
+      {
+        "id": 39,
+        "startTime": 150.396,
+        "endTime": 152.696,
+        "hanzi": "有的42码还有货",
+        "pinyin": "yǒu de 4 2 mǎ hái yǒu huò",
+        "meaning": "Một số size 42 vẫn còn trong kho.",
+        "keywords": [
+          "有的",
+          "码还"
+        ],
+        "blankIndices": [
+          0,
+          3
+        ]
+      },
+      {
+        "id": 40,
+        "startTime": 153.176,
+        "endTime": 155.956,
+        "hanzi": "而且这款现在有85折优惠",
+        "pinyin": "ér qiě zhè kuǎn xiàn zài yǒu 8 5 zhé yōu huì",
+        "meaning": "Và sản phẩm này hiện đang được giảm giá 15%",
+        "keywords": [
+          "而且",
+          "这款"
+        ],
+        "blankIndices": [
+          0,
+          5,
+          9
+        ]
+      },
+      {
+        "id": 41,
+        "startTime": 156.556,
+        "endTime": 160.356,
+        "hanzi": "妈你和小小三一为了不起了二为五分五",
+        "pinyin": "mā nǐ hé xiǎo xiǎo sān yī wèi liǎo bù qǐ le èr wèi wǔ fēn wǔ",
+        "meaning": "Nếu bạn và áo sơ mi cùng mua thì có thể nhận thêm phiếu giảm giá",
+        "keywords": [
+          "妈你",
+          "和小"
+        ],
+        "blankIndices": [
+          0,
+          8,
+          16
+        ]
+      },
+      {
+        "id": 42,
+        "startTime": 161.556,
+        "endTime": 166.916,
+        "hanzi": "那太好了我想直接看看42码的深棕色皮鞋如果满意的话",
+        "pinyin": "nà tài hǎo le wǒ xiǎng zhí jiē kàn kàn 4 2 mǎ de shēn zōng sè pí xié rú guǒ mǎn yì de huà",
+        "meaning": "Điều đó thật tuyệt. Tôi muốn xem đôi giày da màu nâu sẫm cỡ 42 nếu bạn thích.",
+        "keywords": [
+          "那太",
+          "好了"
+        ],
+        "blankIndices": [
+          0,
+          11,
+          22
+        ]
+      },
+      {
+        "id": 43,
+        "startTime": 166.696,
+        "endTime": 168.516,
+        "hanzi": "就和衬衫一起买",
+        "pinyin": "jiù hé chèn shān yì qǐ mǎi",
+        "meaning": "Chỉ cần mua nó với áo sơ mi",
+        "keywords": [
+          "就和",
+          "衬衫"
         ],
         "blankIndices": [
           0,
@@ -2456,38 +2558,40 @@
         ]
       },
       {
-        "id": 42,
+        "id": 44,
         "startTime": 169.696,
-        "endTime": 176.476,
-        "hanzi": "在这里你可以在试衣间里试穿我们有大镜子和椅子方便顾客",
-        "pinyin": "zài zhè lǐ nǐ kě yǐ zài shì yī jiān lǐ shì chuān wǒ men yǒu dà jìng zi hé yǐ zi fāng biàn gù kè",
-        "meaning": "Tại đây bạn có thể thử quần áo trong phòng thử đồ. Chúng tôi có gương và ghế lớn để thuận tiện cho khách hàng.",
+        "endTime": 175.156,
+        "hanzi": "在这里你可以在试衣间里试穿我们有大镜子和椅子",
+        "pinyin": "zài zhè lǐ nǐ kě yǐ zài shì yī jiān lǐ shì chuān wǒ men yǒu dà jìng zi hé yǐ zi",
+        "meaning": "Tại đây bạn có thể thử quần áo trong phòng thử đồ. Chúng tôi có gương lớn và ghế.",
         "keywords": [
           "在这",
           "里你"
         ],
         "blankIndices": [
           0,
-          13,
-          25
+          11,
+          21
         ]
       },
       {
-        "id": 43,
-        "startTime": 176.476,
+        "id": 45,
+        "startTime": 175.616,
         "endTime": 176.976,
-        "hanzi": "试鞋",
-        "pinyin": "shì xié",
-        "meaning": "Thử giày",
+        "hanzi": "方便顾客试鞋",
+        "pinyin": "fāng biàn gù kè shì xié",
+        "meaning": "Thuận tiện cho khách hàng thử giày",
         "keywords": [
-          "试鞋"
+          "方便",
+          "顾客"
         ],
         "blankIndices": [
-          0
+          0,
+          3
         ]
       },
       {
-        "id": 44,
+        "id": 46,
         "startTime": 178.476,
         "endTime": 181.896,
         "hanzi": "谢谢你我现在就去试不过顺便问一下",
@@ -2504,7 +2608,7 @@
         ]
       },
       {
-        "id": 45,
+        "id": 47,
         "startTime": 182.416,
         "endTime": 185.376,
         "hanzi": "商店有没有卖和皮鞋配套的男士皮带",
@@ -2521,7 +2625,7 @@
         ]
       },
       {
-        "id": 46,
+        "id": 48,
         "startTime": 186.736,
         "endTime": 190.476,
         "hanzi": "当然有,我们还经常整套进货,",
@@ -2538,7 +2642,7 @@
         ]
       },
       {
-        "id": 47,
+        "id": 49,
         "startTime": 190.476,
         "endTime": 193.456,
         "hanzi": "包括皮鞋、皮带和皮夹,",
@@ -2555,7 +2659,7 @@
         ]
       },
       {
-        "id": 48,
+        "id": 50,
         "startTime": 193.456,
         "endTime": 195.936,
         "hanzi": "很多顾客喜欢成套买,",
@@ -2572,7 +2676,7 @@
         ]
       },
       {
-        "id": 49,
+        "id": 51,
         "startTime": 195.936,
         "endTime": 197.336,
         "hanzi": "既方便又省钱",
@@ -2588,7 +2692,7 @@
         ]
       },
       {
-        "id": 50,
+        "id": 52,
         "startTime": 198.496,
         "endTime": 201.576,
         "hanzi": "那太合适了,如果买整套的话,",
@@ -2605,7 +2709,7 @@
         ]
       },
       {
-        "id": 51,
+        "id": 53,
         "startTime": 201.576,
         "endTime": 203.636,
         "hanzi": "价格会有更多优惠吗?",
@@ -2622,7 +2726,7 @@
         ]
       },
       {
-        "id": 52,
+        "id": 54,
         "startTime": 203.636,
         "endTime": 205.216,
         "hanzi": "还是和单买一样?",
@@ -2639,7 +2743,7 @@
         ]
       },
       {
-        "id": 53,
+        "id": 55,
         "startTime": 206.056,
         "endTime": 209.836,
         "hanzi": "如果你买鞋、皮带和皮夹一整套,",
@@ -2656,7 +2760,7 @@
         ]
       },
       {
-        "id": 54,
+        "id": 56,
         "startTime": 209.836,
         "endTime": 213.036,
         "hanzi": "可以在总价的基础上再打九折,",
@@ -2673,7 +2777,7 @@
         ]
       },
       {
-        "id": 55,
+        "id": 57,
         "startTime": 213.036,
         "endTime": 214.876,
         "hanzi": "算是对老顾客的回馈",
@@ -2690,7 +2794,7 @@
         ]
       },
       {
-        "id": 56,
+        "id": 58,
         "startTime": 216.016,
         "endTime": 219.956,
         "hanzi": "听起来很吸引人,我要考虑一下不过请问,",
@@ -2707,7 +2811,7 @@
         ]
       },
       {
-        "id": 57,
+        "id": 59,
         "startTime": 219.956,
         "endTime": 224.416,
         "hanzi": "如果尺码不合适或者商品有问题退换政策是怎样的?",
@@ -2724,7 +2828,7 @@
         ]
       },
       {
-        "id": 58,
+        "id": 60,
         "startTime": 225.676,
         "endTime": 228.036,
         "hanzi": "我们的退换政策是七天之内",
@@ -2741,199 +2845,32 @@
         ]
       },
       {
-        "id": 59,
+        "id": 61,
         "startTime": 228.536,
         "endTime": 234.496,
-        "hanzi": "只要没使用过,标签完整就可以免费换尺码或者换款式",
-        "pinyin": "zhǐ yào méi shǐ yòng guò , biāo qiān wán zhěng jiù kě yǐ miǎn fèi huàn chǐ mǎ huò zhě huàn kuǎn shì",
-        "meaning": "Miễn là nó chưa được sử dụng và nhãn còn nguyên vẹn, bạn có thể thay đổi kích thước hoặc kiểu dáng miễn phí.",
+        "hanzi": "参入一下不用了，标签安不给了可以给床分或给分类",
+        "pinyin": "cān rù yí xià bú yòng le ， biāo qiān ān bù gěi le kě yǐ gěi chuáng fēn huò gěi fēn lèi",
+        "meaning": "Chỉ cần chưa sử dụng, nhãn dán đầy đủ thì có thể đổi kích thước hoặc đổi kiểu dáng miễn phí",
         "keywords": [
-          "只要",
-          "没使"
+          "参入",
+          "一下"
         ],
         "blankIndices": [
           0,
           11,
-          22
-        ]
-      },
-      {
-        "id": 60,
-        "startTime": 235.656,
-        "endTime": 238.536,
-        "hanzi": "有这样的政策我就放心了对了,",
-        "pinyin": "yǒu zhè yàng de zhèng cè wǒ jiù fàng xīn le duì le ,",
-        "meaning": "Với chính sách như vậy thì tôi thấy nhẹ nhõm hơn phải không?",
-        "keywords": [
-          "有这",
-          "样的"
-        ],
-        "blankIndices": [
-          0,
-          6,
-          12
-        ]
-      },
-      {
-        "id": 61,
-        "startTime": 238.536,
-        "endTime": 243.636,
-        "hanzi": "我很济了Elma的苹果苹果，喜欢尝一个一个XEl",
-        "pinyin": "wǒ gāng shì le E l m a de chèn shān , jué de yǒu diǎn jǐn nǐ néng gěi wǒ yí jiàn X E l",
-        "meaning": "Tôi vừa thử Elma's áo sơ mi, cảm thấy hơi chặt, bạn có thể cho tôi một chiếc XEl?",
-        "keywords": [
-          "我很",
-          "济了"
-        ],
-        "blankIndices": [
-          0,
-          8,
-          15
+          21
         ]
       },
       {
         "id": 62,
-        "startTime": 243.636,
-        "endTime": 244.636,
-        "hanzi": "二的吗?",
-        "pinyin": "m a de ma ?",
-        "meaning": "Mà của nó?",
+        "startTime": 235.656,
+        "endTime": 238.536,
+        "hanzi": "有的事为的认绶我了很後了",
+        "pinyin": "yǒu de shì wèi de rèn shòu wǒ le hěn hòu le",
+        "meaning": "Có chính sách như vậy thì tôi sẽ yên tâm rồi",
         "keywords": [
-          "二的"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 63,
-        "startTime": 245.576,
-        "endTime": 250.616,
-        "hanzi": "好的,我马上拿一件浅蓝色XL码的衬衫给你,",
-        "pinyin": "hǎo de , wǒ mǎ shàng ná yí jiàn qiǎn lán sè X L mǎ de chèn shān gěi nǐ ,",
-        "meaning": "Được rồi, tôi sẽ lấy cho bạn chiếc áo XL màu xanh nhạt ngay.",
-        "keywords": [
-          "好的",
-          "我马"
-        ],
-        "blankIndices": [
-          0,
-          8,
-          16
-        ]
-      },
-      {
-        "id": 64,
-        "startTime": 250.616,
-        "endTime": 254.496,
-        "hanzi": "很多顾客也会选大一点的穿着更舒服。",
-        "pinyin": "hěn duō gù kè yě huì xuǎn dà yì diǎn de chuān zhe gèng shū fú 。",
-        "meaning": "Nhiều khách hàng cũng sẽ chọn những chiếc lớn hơn để thoải mái hơn.",
-        "keywords": [
-          "很多",
-          "顾客"
-        ],
-        "blankIndices": [
-          0,
-          8,
-          15
-        ]
-      },
-      {
-        "id": 65,
-        "startTime": 255.336,
-        "endTime": 258.936,
-        "hanzi": "对的,因为上班一整天需要舒适,",
-        "pinyin": "duì de , yīn wèi shàng bān yì zhěng tiān xū yào shū shì ,",
-        "meaning": "Có, vì bạn cần được thoải mái sau khi làm việc cả ngày,",
-        "keywords": [
-          "对的",
-          "因为"
-        ],
-        "blankIndices": [
-          0,
-          6,
-          12
-        ]
-      },
-      {
-        "id": 66,
-        "startTime": 258.936,
-        "endTime": 261.156,
-        "hanzi": "如果太紧就会不舒服,",
-        "pinyin": "rú guǒ tài jǐn jiù huì bù shū fú ,",
-        "meaning": "Nếu chật quá sẽ gây khó chịu.",
-        "keywords": [
-          "如果",
-          "太紧"
-        ],
-        "blankIndices": [
-          0,
-          4,
-          8
-        ]
-      },
-      {
-        "id": 67,
-        "startTime": 261.156,
-        "endTime": 262.772,
-        "hanzi": "尤其是天气热的时候。",
-        "pinyin": "yóu qí shì tiān qì rè de shí hòu 。",
-        "meaning": "Đặc biệt là khi thời tiết nóng bức.",
-        "keywords": [
-          "尤其",
-          "是天"
-        ],
-        "blankIndices": [
-          0,
-          4,
-          8
-        ]
-      },
-      {
-        "id": 68,
-        "startTime": 264.592,
-        "endTime": 268.432,
-        "hanzi": "好的,你试试看这件XL码的,",
-        "pinyin": "hǎo de , nǐ shì shì kàn zhè jiàn X L mǎ de ,",
-        "meaning": "Được rồi, bạn có thể thử cỡ XL này.",
-        "keywords": [
-          "好的",
-          "你试"
-        ],
-        "blankIndices": [
-          0,
-          5,
-          9
-        ]
-      },
-      {
-        "id": 69,
-        "startTime": 268.432,
-        "endTime": 271.172,
-        "hanzi": "这种棉质面料有一点弹性,",
-        "pinyin": "zhè zhǒng mián zhì miàn liào yǒu yì diǎn tán xìng ,",
-        "meaning": "Chất vải cotton này co giãn nhẹ",
-        "keywords": [
-          "这种",
-          "棉质"
-        ],
-        "blankIndices": [
-          0,
-          5,
-          10
-        ]
-      },
-      {
-        "id": 70,
-        "startTime": 271.172,
-        "endTime": 273.892,
-        "hanzi": "穿起来很轻松,不会觉得舒服。",
-        "pinyin": "chuān qǐ lái hěn qīng sōng , bú huì jué de shū fú 。",
-        "meaning": "Thật dễ dàng để mặc mà không cảm thấy khó chịu.",
-        "keywords": [
-          "穿起",
-          "来很"
+          "有的",
+          "事为"
         ],
         "blankIndices": [
           0,
@@ -2942,32 +2879,168 @@
         ]
       },
       {
-        "id": 71,
-        "startTime": 275.292,
-        "endTime": 278.392,
-        "hanzi": "哦,这个码数确实更合适,",
-        "pinyin": "ò , zhè ge mǎ shù què shí gèng hé shì ,",
-        "meaning": "Ồ, mã số này quả thực phù hợp hơn,",
+        "id": 63,
+        "startTime": 238.536,
+        "endTime": 240.676,
+        "hanzi": "我很起了Elma的苹果",
+        "pinyin": "wǒ hěn qǐ le E l m a de píng guǒ",
+        "meaning": "Tôi vừa thử Elma's áo sơ mi",
         "keywords": [
-          "哦这",
-          "个码"
+          "我很",
+          "起了"
         ],
         "blankIndices": [
           0,
-          5,
-          9
+          3,
+          6
+        ]
+      },
+      {
+        "id": 64,
+        "startTime": 240.676,
+        "endTime": 244.636,
+        "hanzi": "填得一个不给的你不可以起了一个XElma的吗",
+        "pinyin": "tián dé yí gè bù gěi de nǐ bù kě yǐ qǐ le yí gè X E l m a de ma",
+        "meaning": "Bạn có thể cho tôi một chiếc áo XL của Elma không?",
+        "keywords": [
+          "填得",
+          "一个"
+        ],
+        "blankIndices": [
+          0,
+          8,
+          16
+        ]
+      },
+      {
+        "id": 65,
+        "startTime": 245.576,
+        "endTime": 250.616,
+        "hanzi": "好一我很程一个潼强中分的苹果吗一个床分的苹果吗一个不给的苹果吗",
+        "pinyin": "hǎo yì wǒ hěn chéng yí gè tóng qiáng zhōng fēn de píng guǒ ma yí gè chuáng fēn de píng guǒ ma yí gè bù gěi de píng guǒ ma",
+        "meaning": "Tốt, tôi sẽ lấy một chiếc áo sơ mi màu xanh nhạt kích thước XL cho bạn",
+        "keywords": [
+          "好一",
+          "我很"
+        ],
+        "blankIndices": [
+          0,
+          15,
+          30
+        ]
+      },
+      {
+        "id": 66,
+        "startTime": 250.616,
+        "endTime": 254.496,
+        "hanzi": "有事为的你不可以起了一个不给的苹果吗",
+        "pinyin": "yǒu shì wèi de nǐ bù kě yǐ qǐ le yí gè bù gěi de píng guǒ ma",
+        "meaning": "Nhiều khách hàng cũng sẽ chọn kích thước lớn hơn để mặc thoải mái hơn",
+        "keywords": [
+          "有事",
+          "为的"
+        ],
+        "blankIndices": [
+          0,
+          9,
+          17
+        ]
+      },
+      {
+        "id": 67,
+        "startTime": 255.336,
+        "endTime": 258.936,
+        "hanzi": "吃的一个不给的苹果吗有一个不给的苹果吗一个不给的苹果吗",
+        "pinyin": "chī de yí gè bù gěi de píng guǒ ma yǒu yí gè bù gěi de píng guǒ ma yí gè bù gěi de píng guǒ ma",
+        "meaning": "Đúng vậy, vì cần phải thoải mái trong suốt cả ngày",
+        "keywords": [
+          "吃的",
+          "一个"
+        ],
+        "blankIndices": [
+          0,
+          13,
+          26
+        ]
+      },
+      {
+        "id": 68,
+        "startTime": 258.936,
+        "endTime": 261.156,
+        "hanzi": "很一个不给的苹果吗不可以很了一个不给的苹果吗",
+        "pinyin": "hěn yí gè bù gěi de píng guǒ ma bù kě yǐ hěn le yí gè bù gěi de píng guǒ ma",
+        "meaning": "Nếu quá chặt sẽ không thoải mái",
+        "keywords": [
+          "很一",
+          "个不"
+        ],
+        "blankIndices": [
+          0,
+          11,
+          21
+        ]
+      },
+      {
+        "id": 69,
+        "startTime": 261.156,
+        "endTime": 262.772,
+        "hanzi": "事为不给的苹果吗有一个不给的苹果吗一个不给的苹果吗",
+        "pinyin": "shì wèi bù gěi de píng guǒ ma yǒu yí gè bù gěi de píng guǒ ma yí gè bù gěi de píng guǒ ma",
+        "meaning": "Đặc biệt là khi thời tiết nóng",
+        "keywords": [
+          "事为",
+          "不给"
+        ],
+        "blankIndices": [
+          0,
+          12,
+          24
+        ]
+      },
+      {
+        "id": 70,
+        "startTime": 264.592,
+        "endTime": 268.432,
+        "hanzi": "好一不给的苹果吗不可以起了一个床分的苹果吗",
+        "pinyin": "hǎo yí bù gěi de píng guǒ ma bù kě yǐ qǐ le yí gè chuáng fēn de píng guǒ ma",
+        "meaning": "Tốt, bạn thử thử chiếc áo XL này",
+        "keywords": [
+          "好一",
+          "不给"
+        ],
+        "blankIndices": [
+          0,
+          10,
+          20
+        ]
+      },
+      {
+        "id": 71,
+        "startTime": 268.432,
+        "endTime": 271.172,
+        "hanzi": "一个不给的苹果吗有一个不给的苹果吗一个不给的苹果吗",
+        "pinyin": "yí gè bù gěi de píng guǒ ma yǒu yí gè bù gěi de píng guǒ ma yí gè bù gěi de píng guǒ ma",
+        "meaning": "Loại vải này có độ đàn hồi",
+        "keywords": [
+          "一个",
+          "不给"
+        ],
+        "blankIndices": [
+          0,
+          12,
+          24
         ]
       },
       {
         "id": 72,
-        "startTime": 278.392,
-        "endTime": 282.972,
-        "hanzi": "我觉得就选这个,现在我再试试那双深棕色的皮鞋。",
-        "pinyin": "wǒ jué de jiù xuǎn zhè ge , xiàn zài wǒ zài shì shì nà shuāng shēn zōng sè de pí xié 。",
-        "meaning": "Tôi nghĩ tôi sẽ chọn cái này. Bây giờ tôi sẽ thử đôi giày da màu nâu sẫm.",
+        "startTime": 271.172,
+        "endTime": 273.892,
+        "hanzi": "一个不给的苹果吗不可以很了一个不给的苹果吗",
+        "pinyin": "yí gè bù gěi de píng guǒ ma bù kě yǐ hěn le yí gè bù gěi de píng guǒ ma",
+        "meaning": "Mặc vào sẽ rất thoải mái, không cảm thấy nặng nề",
         "keywords": [
-          "我觉",
-          "得就"
+          "一个",
+          "不给"
         ],
         "blankIndices": [
           0,
@@ -2977,98 +3050,99 @@
       },
       {
         "id": 73,
-        "startTime": 284.472,
-        "endTime": 285.712,
-        "hanzi": "你可以试穿一下",
-        "pinyin": "nǐ kě yǐ shì chuān yí xià",
-        "meaning": "bạn có thể thử nó",
+        "startTime": 275.292,
+        "endTime": 278.392,
+        "hanzi": "一个不给的苹果吗有一个不给的苹果吗一个不给的苹果吗",
+        "pinyin": "yí gè bù gěi de píng guǒ ma yǒu yí gè bù gěi de píng guǒ ma yí gè bù gěi de píng guǒ ma",
+        "meaning": "Ah, kích thước này thực sự phù hợp hơn",
         "keywords": [
-          "你可",
-          "以试"
+          "一个",
+          "不给"
         ],
         "blankIndices": [
           0,
-          3,
-          6
+          12,
+          24
         ]
       },
       {
         "id": 74,
-        "startTime": 286.252,
-        "endTime": 293.092,
-        "hanzi": "这双鞋的鞋底是高级橡胶做的防滑耐磨很适合经常走动的人",
-        "pinyin": "zhè shuāng xié de xié dǐ shì gāo jí xiàng jiāo zuò de fáng huá nài mó hěn shì hé jīng cháng zǒu dòng de rén",
-        "meaning": "Đế của đôi giày này được làm bằng cao su cao cấp, có khả năng chống trơn trượt và chống mài mòn nên phù hợp với những người phải di chuyển nhiều.",
+        "startTime": 278.392,
+        "endTime": 282.972,
+        "hanzi": "我很起了一个不给的苹果吗不可以起了一个不给的苹果吗",
+        "pinyin": "wǒ hěn qǐ le yí gè bù gěi de píng guǒ ma bù kě yǐ qǐ le yí gè bù gěi de píng guǒ ma",
+        "meaning": "Tôi sẽ thử thử chiếc áo XL này",
         "keywords": [
-          "这双",
-          "鞋的"
+          "我很",
+          "起了"
         ],
         "blankIndices": [
           0,
-          13,
-          25
+          12,
+          24
         ]
       },
       {
         "id": 75,
+        "startTime": 284.472,
+        "endTime": 285.712,
+        "hanzi": "你可不可以起了一个不给的苹果吗",
+        "pinyin": "nǐ kě bu kě yǐ qǐ le yí gè bù gěi de píng guǒ ma",
+        "meaning": "Bạn có thể thử thử chiếc áo XL này",
+        "keywords": [
+          "你可",
+          "不可"
+        ],
+        "blankIndices": [
+          0,
+          7,
+          14
+        ]
+      },
+      {
+        "id": 76,
+        "startTime": 286.252,
+        "endTime": 293.092,
+        "hanzi": "一个不给的苹果吗有一个不给的苹果吗一个不给的苹果吗",
+        "pinyin": "yí gè bù gěi de píng guǒ ma yǒu yí gè bù gěi de píng guǒ ma yí gè bù gěi de píng guǒ ma",
+        "meaning": "Loại vải này có độ đàn hồi, không dễ bị rách",
+        "keywords": [
+          "一个",
+          "不给"
+        ],
+        "blankIndices": [
+          0,
+          12,
+          24
+        ]
+      },
+      {
+        "id": 77,
         "startTime": 294.252,
-        "endTime": 301.092,
-        "hanzi": "我试过了穿起来真的很舒服和你说的一样不硬很合脚我挺满",
-        "pinyin": "wǒ shì guò le chuān qǐ lái zhēn de hěn shū fú hé nǐ shuō de yí yàng bú yìng hěn hé jiǎo wǒ tǐng mǎn",
-        "meaning": "Tôi đã thử nó và nó thực sự thoải mái. Nó giống như những gì bạn đã nói. Nó không khó và vừa vặn. Tôi khá hài lòng.",
+        "endTime": 300.832,
+        "hanzi": "我试过了穿起来真的很舒服和你说的一样不硬很合脚我挺",
+        "pinyin": "wǒ shì guò le chuān qǐ lái zhēn de hěn shū fú hé nǐ shuō de yí yàng bú yìng hěn hé jiǎo wǒ tǐng",
+        "meaning": "Tôi đã thử nó và nó thực sự thoải mái. Nó giống như những gì bạn đã nói. Nó không khó và nó rất phù hợp. Tôi cảm thấy thoải mái.",
         "keywords": [
           "我试",
           "过了"
         ],
         "blankIndices": [
           0,
-          13,
-          25
-        ]
-      },
-      {
-        "id": 76,
-        "startTime": 301.092,
-        "endTime": 301.872,
-        "hanzi": "意这双鞋",
-        "pinyin": "yì zhè shuāng xié",
-        "meaning": "Yêu những đôi giày này",
-        "keywords": [
-          "意这",
-          "双鞋"
-        ],
-        "blankIndices": [
-          0,
-          2
-        ]
-      },
-      {
-        "id": 77,
-        "startTime": 303.272,
-        "endTime": 309.652,
-        "hanzi": "太好了这样衬衫和鞋子你都满意了要不要我再给你配一条棕",
-        "pinyin": "tài hǎo le zhè yàng chèn shān hé xié zǐ nǐ dōu mǎn yì le yào bu yào wǒ zài gěi nǐ pèi yì tiáo zōng",
-        "meaning": "Tuyệt vời. Bây giờ bạn đã hài lòng với áo sơ mi và giày rồi, bạn có muốn tôi kết hợp cho bạn một đôi màu nâu không?",
-        "keywords": [
-          "太好",
-          "了这"
-        ],
-        "blankIndices": [
-          0,
-          13,
-          25
+          12,
+          24
         ]
       },
       {
         "id": 78,
-        "startTime": 309.652,
-        "endTime": 310.472,
-        "hanzi": "色的皮带",
-        "pinyin": "sè de pí dài",
-        "meaning": "thắt lưng màu",
+        "startTime": 300.832,
+        "endTime": 301.872,
+        "hanzi": "满意这双鞋",
+        "pinyin": "mǎn yì zhè shuāng xié",
+        "meaning": "Hài lòng với đôi giày này",
         "keywords": [
-          "色的",
-          "皮带"
+          "满意",
+          "这双"
         ],
         "blankIndices": [
           0,
@@ -3077,6 +3151,39 @@
       },
       {
         "id": 79,
+        "startTime": 303.272,
+        "endTime": 309.392,
+        "hanzi": "太好了这样衬衫和鞋子你都满意了要不要我再给你配一条",
+        "pinyin": "tài hǎo le zhè yàng chèn shān hé xié zǐ nǐ dōu mǎn yì le yào bu yào wǒ zài gěi nǐ pèi yì tiáo",
+        "meaning": "Tuyệt vời. Bây giờ bạn hài lòng với chiếc áo sơ mi và đôi giày. Bạn có muốn tôi tặng bạn một đôi khác không?",
+        "keywords": [
+          "太好",
+          "了这"
+        ],
+        "blankIndices": [
+          0,
+          12,
+          24
+        ]
+      },
+      {
+        "id": 80,
+        "startTime": 309.392,
+        "endTime": 310.472,
+        "hanzi": "棕色的皮带",
+        "pinyin": "zōng sè de pí dài",
+        "meaning": "đai nâu",
+        "keywords": [
+          "棕色",
+          "的皮"
+        ],
+        "blankIndices": [
+          0,
+          2
+        ]
+      },
+      {
+        "id": 81,
         "startTime": 311.052,
         "endTime": 312.572,
         "hanzi": "让整体更协调",
@@ -3092,7 +3199,7 @@
         ]
       },
       {
-        "id": 80,
+        "id": 82,
         "startTime": 313.992,
         "endTime": 319.092,
         "hanzi": "我觉得应该买一条,因为和鞋子一个颜色的皮带更方便,",
@@ -3109,24 +3216,24 @@
         ]
       },
       {
-        "id": 81,
+        "id": 83,
         "startTime": 319.092,
         "endTime": 320.552,
-        "hanzi": "在前不用内很后日间搜索",
+        "hanzi": "以后不用再花时间找",
         "pinyin": "yǐ hòu bú yòng zài huā shí jiān zhǎo",
-        "meaning": "Sau này không cần phải tìm kiếm nữa",
+        "meaning": "Không cần phải tốn thời gian tìm kiếm nó trong tương lai",
         "keywords": [
-          "在前",
+          "以后",
           "不用"
         ],
         "blankIndices": [
           0,
-          5,
-          10
+          4,
+          8
         ]
       },
       {
-        "id": 82,
+        "id": 84,
         "startTime": 321.912,
         "endTime": 326.452,
         "hanzi": "好的,我去给你拿一条棕色真皮皮带,",
@@ -3143,7 +3250,7 @@
         ]
       },
       {
-        "id": 83,
+        "id": 85,
         "startTime": 326.452,
         "endTime": 329.812,
         "hanzi": "款式简洁,金属扣防生锈,",
@@ -3160,7 +3267,7 @@
         ]
       },
       {
-        "id": 84,
+        "id": 86,
         "startTime": 329.812,
         "endTime": 330.512,
         "hanzi": "很坚实",
@@ -3174,7 +3281,7 @@
         ]
       },
       {
-        "id": 85,
+        "id": 87,
         "startTime": 331.872,
         "endTime": 336.832,
         "hanzi": "不错,我就要这套,那请问最后算上所有优惠之后,",
@@ -3191,23 +3298,23 @@
         ]
       },
       {
-        "id": 86,
-        "startTime": 336.852,
+        "id": 88,
+        "startTime": 336.832,
         "endTime": 337.792,
-        "hanzi": "共是多少钱?",
-        "pinyin": "gòng shì duō shǎo qián ?",
+        "hanzi": "一共是多少钱?",
+        "pinyin": "yí gòng shì duō shǎo qián ?",
         "meaning": "Tổng cộng là bao nhiêu?",
         "keywords": [
-          "共是",
-          "多少"
+          "一共",
+          "是多"
         ],
         "blankIndices": [
           0,
-          2
+          3
         ]
       },
       {
-        "id": 87,
+        "id": 89,
         "startTime": 339.132,
         "endTime": 342.252,
         "hanzi": "我给你算一下,衬衫五百多,",
@@ -3224,7 +3331,7 @@
         ]
       },
       {
-        "id": 88,
+        "id": 90,
         "startTime": 342.252,
         "endTime": 345.012,
         "hanzi": "皮鞋打折后一千二左右,",
@@ -3241,24 +3348,41 @@
         ]
       },
       {
-        "id": 89,
+        "id": 91,
         "startTime": 345.012,
-        "endTime": 348.652,
-        "hanzi": "皮带打折后五百,总共两千二百多",
-        "pinyin": "pí dài dǎ zhé hòu wǔ bǎi , zǒng gòng liǎng qiān èr bǎi duō",
-        "meaning": "Sau khi giảm giá đai còn 500, tổng cộng hơn 2.200.",
+        "endTime": 347.072,
+        "hanzi": "皮带打折后五百,",
+        "pinyin": "pí dài dǎ zhé hòu wǔ bǎi ,",
+        "meaning": "Năm trăm sau khi thắt lưng được giảm giá,",
         "keywords": [
           "皮带",
           "打折"
         ],
         "blankIndices": [
           0,
-          7,
-          13
+          3,
+          6
         ]
       },
       {
-        "id": 90,
+        "id": 92,
+        "startTime": 347.072,
+        "endTime": 348.652,
+        "hanzi": "总共两千二百多",
+        "pinyin": "zǒng gòng liǎng qiān èr bǎi duō",
+        "meaning": "Tổng cộng hơn hai nghìn hai trăm",
+        "keywords": [
+          "总共",
+          "两千"
+        ],
+        "blankIndices": [
+          0,
+          3,
+          6
+        ]
+      },
+      {
+        "id": 93,
         "startTime": 349.892,
         "endTime": 353.532,
         "hanzi": "这个价格对一整套上班服来说很合理,",
@@ -3275,7 +3399,7 @@
         ]
       },
       {
-        "id": 91,
+        "id": 94,
         "startTime": 353.532,
         "endTime": 355.792,
         "hanzi": "我就直接付款,省得再犹豫",
@@ -3292,7 +3416,7 @@
         ]
       },
       {
-        "id": 92,
+        "id": 95,
         "startTime": 357.072,
         "endTime": 360.732,
         "hanzi": "谢谢你信任我们,今天购物满两千,",
@@ -3309,7 +3433,7 @@
         ]
       },
       {
-        "id": 93,
+        "id": 96,
         "startTime": 360.732,
         "endTime": 363.392,
         "hanzi": "还会赠送一双高级袜子,",
@@ -3326,7 +3450,7 @@
         ]
       },
       {
-        "id": 94,
+        "id": 97,
         "startTime": 363.392,
         "endTime": 364.372,
         "hanzi": "算是小礼物",
@@ -3342,7 +3466,7 @@
         ]
       },
       {
-        "id": 95,
+        "id": 98,
         "startTime": 365.792,
         "endTime": 368.912,
         "hanzi": "哦,还有礼物,那更好了,",
@@ -3359,7 +3483,7 @@
         ]
       },
       {
-        "id": 96,
+        "id": 99,
         "startTime": 368.912,
         "endTime": 371.972,
         "hanzi": "袜子配皮鞋正合适,谢谢你们的贴心",
@@ -3376,7 +3500,7 @@
         ]
       },
       {
-        "id": 97,
+        "id": 100,
         "startTime": 373.272,
         "endTime": 378.372,
         "hanzi": "不客气,我们一直希望顾客有愉快的购物体验,",
@@ -3393,63 +3517,80 @@
         ]
       },
       {
-        "id": 98,
+        "id": 101,
         "startTime": 378.372,
         "endTime": 380.972,
-        "hanzi": "你还想看看其他商品吗?",
-        "pinyin": "nǐ hái xiǎng kàn kàn qí tā shāng pǐn ma ?",
-        "meaning": "Bạn có muốn xem các sản phẩm khác?",
+        "hanzi": "你小联是明天在一个商品吗?",
+        "pinyin": "nǐ xiǎo lián shì míng tiān zài yí gè shāng pǐn ma ?",
+        "meaning": "Bạn còn muốn xem thêm các sản phẩm khác không?",
         "keywords": [
-          "你还",
-          "想看"
+          "你小",
+          "联是"
+        ],
+        "blankIndices": [
+          0,
+          6,
+          11
+        ]
+      },
+      {
+        "id": 102,
+        "startTime": 381.932,
+        "endTime": 384.072,
+        "hanzi": "我很开答了今天上一个商品开起了，",
+        "pinyin": "wǒ hěn kāi dá le jīn tiān shàng yí gè shāng pǐn kāi qǐ le ，",
+        "meaning": "Tôi nghĩ hôm nay mua những thứ này đã đủ rồi,",
+        "keywords": [
+          "我很",
+          "开答"
+        ],
+        "blankIndices": [
+          0,
+          7,
+          14
+        ]
+      },
+      {
+        "id": 103,
+        "startTime": 384.072,
+        "endTime": 386.212,
+        "hanzi": "上个大小不一个不开起了，",
+        "pinyin": "shàng gè dà xiǎo bù yí gè bù kāi qǐ le ，",
+        "meaning": "Mua quá nhiều cũng không tốt khi mang về,",
+        "keywords": [
+          "上个",
+          "大小"
         ],
         "blankIndices": [
           0,
           5,
-          9
+          10
         ]
       },
       {
-        "id": 99,
-        "startTime": 381.932,
-        "endTime": 386.212,
-        "hanzi": "我觉得今天买这些就够了,买太多也不好带回去,",
-        "pinyin": "wǒ jué de jīn tiān mǎi zhè xiē jiù gòu le , mǎi tài duō yě bù hǎo dài huí qù ,",
-        "meaning": "Tôi nghĩ những điều này là đủ cho ngày hôm nay. Nếu bạn mua quá nhiều, bạn sẽ không thể lấy lại được.",
-        "keywords": [
-          "我觉",
-          "得今"
-        ],
-        "blankIndices": [
-          0,
-          10,
-          19
-        ]
-      },
-      {
-        "id": 100,
+        "id": 104,
         "startTime": 386.212,
         "endTime": 387.432,
-        "hanzi": "下次我再过来看看",
-        "pinyin": "xià cì wǒ zài guò lái kàn kàn",
-        "meaning": "Lần sau tôi sẽ qua xem",
+        "hanzi": "下一个我了下一个下了一个天了一个天了",
+        "pinyin": "xià yí gè wǒ le xià yí gè xià le yí gè tiān le yí gè tiān le",
+        "meaning": "Tiếp theo tôi lại quay lại xem",
         "keywords": [
-          "下次",
-          "我再"
+          "下一",
+          "个我"
         ],
         "blankIndices": [
           0,
-          4,
-          7
+          9,
+          17
         ]
       },
       {
-        "id": 101,
+        "id": 105,
         "startTime": 388.892,
-        "endTime": 395.788,
-        "hanzi": "好的,那我去开收据并把商品仔细包装好你要用现金还是银",
-        "pinyin": "hǎo de , nà wǒ qù kāi shōu jù bìng bǎ shāng pǐn zǐ xì bāo zhuāng hǎo nǐ yào yòng xiàn jīn hái shì yín",
-        "meaning": "Được rồi tôi sẽ xuất biên lai và đóng gói hàng hóa cẩn thận. Bạn muốn thanh toán bằng tiền mặt hay bạc?",
+        "endTime": 395.468,
+        "hanzi": "好的,那我去开收据并把商品仔细包装好你要用现金还是",
+        "pinyin": "hǎo de , nà wǒ qù kāi shōu jù bìng bǎ shāng pǐn zǐ xì bāo zhuāng hǎo nǐ yào yòng xiàn jīn hái shì",
+        "meaning": "Được rồi tôi sẽ xuất biên lai và đóng gói hàng hóa cẩn thận. Bạn có muốn thanh toán bằng tiền mặt?",
         "keywords": [
           "好的",
           "那我"
@@ -3457,19 +3598,19 @@
         "blankIndices": [
           0,
           12,
-          24
+          23
         ]
       },
       {
-        "id": 102,
-        "startTime": 395.788,
+        "id": 106,
+        "startTime": 395.468,
         "endTime": 396.548,
-        "hanzi": "行卡支付?",
-        "pinyin": "xíng kǎ zhī fù ?",
-        "meaning": "Thanh toán bằng thẻ?",
+        "hanzi": "银行卡支付?",
+        "pinyin": "yín háng kǎ zhī fù ?",
+        "meaning": "Thanh toán thẻ ngân hàng?",
         "keywords": [
-          "行卡",
-          "支付"
+          "银行",
+          "卡支"
         ],
         "blankIndices": [
           0,
@@ -3477,7 +3618,7 @@
         ]
       },
       {
-        "id": 103,
+        "id": 107,
         "startTime": 397.928,
         "endTime": 401.088,
         "hanzi": "我用信用卡支付,因为比较方便,",
@@ -3494,7 +3635,7 @@
         ]
       },
       {
-        "id": 104,
+        "id": 108,
         "startTime": 401.088,
         "endTime": 404.488,
         "hanzi": "还可以累积积分,银行也有优惠活动。",
@@ -3511,7 +3652,7 @@
         ]
       },
       {
-        "id": 105,
+        "id": 109,
         "startTime": 405.328,
         "endTime": 408.228,
         "hanzi": "好的,请到收银台刷卡,",
@@ -3528,7 +3669,7 @@
         ]
       },
       {
-        "id": 106,
+        "id": 110,
         "startTime": 408.228,
         "endTime": 411.508,
         "hanzi": "我们也支持三期分期付款,",
@@ -3545,7 +3686,7 @@
         ]
       },
       {
-        "id": 107,
+        "id": 111,
         "startTime": 411.508,
         "endTime": 412.608,
         "hanzi": "如果你需要的话。",
@@ -3562,7 +3703,7 @@
         ]
       },
       {
-        "id": 108,
+        "id": 112,
         "startTime": 414.068,
         "endTime": 417.768,
         "hanzi": "分期就不用了,这个金额我已经准备好了,",
@@ -3579,7 +3720,7 @@
         ]
       },
       {
-        "id": 109,
+        "id": 113,
         "startTime": 417.768,
         "endTime": 419.708,
         "hanzi": "一次性付清比较省事。",
@@ -3596,7 +3737,7 @@
         ]
       },
       {
-        "id": 110,
+        "id": 114,
         "startTime": 420.988,
         "endTime": 423.428,
         "hanzi": "好的,这是你的账单,",
@@ -3613,7 +3754,7 @@
         ]
       },
       {
-        "id": 111,
+        "id": 115,
         "startTime": 423.428,
         "endTime": 426.568,
         "hanzi": "请你先确认一下信息和金额,",
@@ -3630,7 +3771,7 @@
         ]
       },
       {
-        "id": 112,
+        "id": 116,
         "startTime": 426.568,
         "endTime": 427.868,
         "hanzi": "然后签字确认",
@@ -3646,7 +3787,7 @@
         ]
       },
       {
-        "id": 113,
+        "id": 117,
         "startTime": 428.968,
         "endTime": 432.268,
         "hanzi": "我已经核对过了,所有信息都没问题,",
@@ -3663,7 +3804,7 @@
         ]
       },
       {
-        "id": 114,
+        "id": 118,
         "startTime": 432.268,
         "endTime": 433.148,
         "hanzi": "我现在签字",
@@ -3679,7 +3820,7 @@
         ]
       },
       {
-        "id": 115,
+        "id": 119,
         "startTime": 434.648,
         "endTime": 437.988,
         "hanzi": "谢谢你,这是你打包好的商品,",
@@ -3696,65 +3837,15 @@
         ]
       },
       {
-        "id": 116,
+        "id": 120,
         "startTime": 437.988,
         "endTime": 440.388,
-        "hanzi": "里面还有皮的保修卡,",
-        "pinyin": "lǐ miàn hái yǒu pí de bǎo xiū kǎ ,",
-        "meaning": "Bên trong còn có phiếu bảo hành da.",
+        "hanzi": "里面还有皮鞋的保修卡,",
+        "pinyin": "lǐ miàn hái yǒu pí xié de bǎo xiū kǎ ,",
+        "meaning": "Ngoài ra còn có phiếu bảo hành cho giày da bên trong.",
         "keywords": [
           "里面",
           "还有"
-        ],
-        "blankIndices": [
-          0,
-          4,
-          8
-        ]
-      },
-      {
-        "id": 117,
-        "startTime": 440.388,
-        "endTime": 441.648,
-        "hanzi": "请妥保管",
-        "pinyin": "qǐng tuǒ bǎo guǎn",
-        "meaning": "Xin hãy giữ nó an toàn",
-        "keywords": [
-          "请妥",
-          "保管"
-        ],
-        "blankIndices": [
-          0,
-          2
-        ]
-      },
-      {
-        "id": 118,
-        "startTime": 443.008,
-        "endTime": 446.068,
-        "hanzi": "谢谢你,我觉得你们的服很专业,",
-        "pinyin": "xiè xiè nǐ , wǒ jué de nǐ men de fú hěn zhuān yè ,",
-        "meaning": "Cảm ơn. Tôi nghĩ dịch vụ của bạn rất chuyên nghiệp.",
-        "keywords": [
-          "谢谢",
-          "你我"
-        ],
-        "blankIndices": [
-          0,
-          6,
-          12
-        ]
-      },
-      {
-        "id": 119,
-        "startTime": 446.068,
-        "endTime": 447.768,
-        "hanzi": "下次我一定还会再来买",
-        "pinyin": "xià cì wǒ yí dìng hái huì zài lái mǎi",
-        "meaning": "Chắc chắn lần sau tôi sẽ mua lại",
-        "keywords": [
-          "下次",
-          "我一"
         ],
         "blankIndices": [
           0,
@@ -3763,93 +3854,81 @@
         ]
       },
       {
-        "id": 120,
+        "id": 121,
+        "startTime": 440.388,
+        "endTime": 441.648,
+        "hanzi": "请得有突素",
+        "pinyin": "qǐng dé yǒu tū sù",
+        "meaning": "Hãy bảo quản cẩn thận",
+        "keywords": [
+          "请得",
+          "有突"
+        ],
+        "blankIndices": [
+          0,
+          2
+        ]
+      },
+      {
+        "id": 122,
+        "startTime": 443.008,
+        "endTime": 446.068,
+        "hanzi": "您券九我得你的服务常为一个系统，",
+        "pinyin": "nín quàn jiǔ wǒ dé nǐ de fú wù cháng wèi yí gè xì tǒng ，",
+        "meaning": "Cảm ơn bạn, tôi nghĩ dịch vụ của bạn rất chuyên nghiệp,",
+        "keywords": [
+          "您券",
+          "九我"
+        ],
+        "blankIndices": [
+          0,
+          7,
+          14
+        ]
+      },
+      {
+        "id": 123,
+        "startTime": 446.068,
+        "endTime": 447.768,
+        "hanzi": "下一消渪我不得了不一个上起",
+        "pinyin": "xià yì xiāo rú wǒ bù dé liǎo bù yí gè shàng qǐ",
+        "meaning": "Tiếp theo tôi sẽ lại mua",
+        "keywords": [
+          "下一",
+          "消渪"
+        ],
+        "blankIndices": [
+          0,
+          6,
+          12
+        ]
+      },
+      {
+        "id": 124,
         "startTime": 448.988,
-        "endTime": 455.348,
-        "hanzi": "我们很荣幸为你服务希望今天选的商品能让你每天工作更轻",
-        "pinyin": "wǒ men hěn róng xìng wèi nǐ fú wù xī wàng jīn tiān xuǎn de shāng pǐn néng ràng nǐ měi tiān gōng zuò gèng qīng",
-        "meaning": "Chúng tôi rất vinh dự được phục vụ bạn. Chúng tôi hy vọng những mục bạn chọn hôm nay sẽ giúp công việc của bạn mỗi ngày dễ dàng hơn.",
+        "endTime": 454.968,
+        "hanzi": "我们很荣幸为你服务希望今天选的商品能让你每天工作更",
+        "pinyin": "wǒ men hěn róng xìng wèi nǐ fú wù xī wàng jīn tiān xuǎn de shāng pǐn néng ràng nǐ měi tiān gōng zuò gèng",
+        "meaning": "Chúng tôi rất vinh dự được phục vụ bạn. Chúng tôi hy vọng những sản phẩm bạn chọn hôm nay sẽ giúp bạn làm việc tốt hơn mỗi ngày.",
         "keywords": [
           "我们",
           "很荣"
         ],
         "blankIndices": [
           0,
-          13,
-          25
-        ]
-      },
-      {
-        "id": 121,
-        "startTime": 455.348,
-        "endTime": 455.488,
-        "hanzi": "明",
-        "pinyin": "sōng",
-        "meaning": "Sịnh",
-        "keywords": [
-          "明"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 122,
-        "startTime": 456.908,
-        "endTime": 462.808,
-        "hanzi": "我相信一定会的款式和材质都很满意再次感谢你们的热心帮",
-        "pinyin": "wǒ xiāng xìn yí dìng huì de kuǎn shì hé cái zhì dōu hěn mǎn yì zài cì gǎn xiè nǐ men de rè xīn bāng",
-        "meaning": "Tôi tin mình sẽ rất hài lòng về kiểu dáng cũng như chất liệu. Một lần nữa xin cảm ơn sự giúp đỡ nhiệt tình của bạn.",
-        "keywords": [
-          "我相",
-          "信一"
-        ],
-        "blankIndices": [
-          0,
-          13,
-          25
-        ]
-      },
-      {
-        "id": 123,
-        "startTime": 462.808,
-        "endTime": 462.968,
-        "hanzi": "助",
-        "pinyin": "zhù",
-        "meaning": "giúp đỡ",
-        "keywords": [
-          "助"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 124,
-        "startTime": 464.048,
-        "endTime": 470.168,
-        "hanzi": "不客气祝你今天过得愉快如果有需要可以拨打账单上的客服",
-        "pinyin": "bú kè qì zhù nǐ jīn tiān guò dé yú kuài rú guǒ yǒu xū yào kě yǐ bō dǎ zhàng dān shàng de kè fú",
-        "meaning": "Không có gì. Tôi hy vọng bạn có một ngày tốt đẹp. Nếu bạn cần bất cứ điều gì, bạn có thể gọi dịch vụ khách hàng trên hóa đơn.",
-        "keywords": [
-          "不客",
-          "气祝"
-        ],
-        "blankIndices": [
-          0,
-          13,
-          25
+          12,
+          24
         ]
       },
       {
         "id": 125,
-        "startTime": 470.168,
-        "endTime": 470.628,
-        "hanzi": "电话",
-        "pinyin": "diàn huà",
-        "meaning": "Điện thoại",
+        "startTime": 454.968,
+        "endTime": 455.488,
+        "hanzi": "轻松",
+        "pinyin": "qīng sōng",
+        "meaning": "dễ",
         "keywords": [
-          "电话"
+          "轻松"
         ],
         "blankIndices": [
           0
@@ -3857,6 +3936,68 @@
       },
       {
         "id": 126,
+        "startTime": 456.908,
+        "endTime": 462.548,
+        "hanzi": "我相信一定会的款式和材质都很满意再次感谢你们的热心",
+        "pinyin": "wǒ xiāng xìn yí dìng huì de kuǎn shì hé cái zhì dōu hěn mǎn yì zài cì gǎn xiè nǐ men de rè xīn",
+        "meaning": "Tôi tin mình sẽ rất hài lòng về kiểu dáng cũng như chất liệu. Cảm ơn bạn một lần nữa vì sự nhiệt tình của bạn.",
+        "keywords": [
+          "我相",
+          "信一"
+        ],
+        "blankIndices": [
+          0,
+          12,
+          24
+        ]
+      },
+      {
+        "id": 127,
+        "startTime": 462.548,
+        "endTime": 462.968,
+        "hanzi": "帮助",
+        "pinyin": "bāng zhù",
+        "meaning": "giúp đỡ",
+        "keywords": [
+          "帮助"
+        ],
+        "blankIndices": [
+          0
+        ]
+      },
+      {
+        "id": 128,
+        "startTime": 464.048,
+        "endTime": 470.088,
+        "hanzi": "不客气祝你今天过得愉快如果有需要可以拨打账单上的客",
+        "pinyin": "bú kè qì zhù nǐ jīn tiān guò dé yú kuài rú guǒ yǒu xū yào kě yǐ bō dǎ zhàng dān shàng de kè",
+        "meaning": "Không có gì. Tôi hy vọng bạn có một ngày tốt đẹp. Nếu bạn cần bất cứ điều gì, xin vui lòng gọi cho người trên hóa đơn.",
+        "keywords": [
+          "不客",
+          "气祝"
+        ],
+        "blankIndices": [
+          0,
+          12,
+          24
+        ]
+      },
+      {
+        "id": 129,
+        "startTime": 470.088,
+        "endTime": 470.628,
+        "hanzi": "服电话",
+        "pinyin": "fú diàn huà",
+        "meaning": "số điện thoại dịch vụ",
+        "keywords": [
+          "服电"
+        ],
+        "blankIndices": [
+          0
+        ]
+      },
+      {
+        "id": 130,
         "startTime": 471.728,
         "endTime": 477.948,
         "hanzi": "好的我会保存的再见下次见希望还有更多更漂亮的新款",
@@ -3873,7 +4014,7 @@
         ]
       },
       {
-        "id": 127,
+        "id": 131,
         "startTime": 479.928,
         "endTime": 486.488,
         "hanzi": "再见祝你一路顺风带着今天挑选的商品有个愉快的心情",
@@ -3890,7 +4031,7 @@
         ]
       },
       {
-        "id": 128,
+        "id": 132,
         "startTime": 506.748,
         "endTime": 511.568,
         "hanzi": "请",
@@ -3904,31 +4045,19 @@
         ]
       },
       {
-        "id": 129,
+        "id": 133,
         "startTime": 511.568,
         "endTime": 516.888,
-        "hanzi": "不赞",
-        "pinyin": "bú zàn",
-        "meaning": "Không thích",
+        "hanzi": "不吝点赞",
+        "pinyin": "bú lìn diǎn zàn",
+        "meaning": "Đừng ngần ngại thích nó",
         "keywords": [
-          "不赞"
+          "不吝",
+          "点赞"
         ],
         "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 130,
-        "startTime": 517.648,
-        "endTime": 518.048,
-        "hanzi": "阅",
-        "pinyin": "yuè",
-        "meaning": "đọc",
-        "keywords": [
-          "阅"
-        ],
-        "blankIndices": [
-          0
+          0,
+          2
         ]
       }
     ]
@@ -3940,7 +4069,7 @@
     "category": "Âm Nhạc",
     "level": "2",
     "levelText": "HSK 2",
-    "description": "Giai điệu ngọt ngào kinh điển giúp rèn luyện khả năng bắt chữ và nắm bắt thanh điệu tiếng Trung.",
+    "description": "Giai điệu ngọt ngào kinh điển giúp rèn luyện khả năng bắt chữ và nắm bắt thanh điệu tiếng Trung chuẩn xác.",
     "duration": "03:19",
     "thumbnail": "https://img.youtube.com/vi/5eF8oOWtsk4/hqdefault.jpg",
     "sentences": [
@@ -3948,11 +4077,11 @@
         "id": 1,
         "startTime": 30,
         "endTime": 30.8,
-        "hanzi": "在三中",
-        "pinyin": "zài sān zhōng",
-        "meaning": "Trong đó",
+        "hanzi": "在零三",
+        "pinyin": "zài líng sān",
+        "meaning": "Trong gió",
         "keywords": [
-          "在三"
+          "在零"
         ],
         "blankIndices": [
           0
@@ -3962,62 +4091,28 @@
         "id": 2,
         "startTime": 33.98,
         "endTime": 36.4,
-        "hanzi": "在一中为不得",
-        "pinyin": "zài yì zhōng wèi bù dé",
+        "hanzi": "在一个中",
+        "pinyin": "zài yí gè zhōng",
         "meaning": "Ở đâu",
         "keywords": [
           "在一",
-          "中为"
+          "个中"
         ],
         "blankIndices": [
           0,
-          3
+          2
         ]
       },
       {
         "id": 3,
         "startTime": 37.44,
         "endTime": 40.32,
-        "hanzi": "在一中为不得确会你",
-        "pinyin": "zài yì zhōng wèi bù dé què huì nǐ",
+        "hanzi": "在一个中有一主",
+        "pinyin": "zài yí gè zhōng yǒu yì zhǔ",
         "meaning": "Ở đâu từng thấy bạn",
         "keywords": [
           "在一",
-          "中为"
-        ],
-        "blankIndices": [
-          0,
-          4,
-          8
-        ]
-      },
-      {
-        "id": 4,
-        "startTime": 41.68,
-        "endTime": 45.74,
-        "hanzi": "你的喜歡增为得组",
-        "pinyin": "nǐ de xǐ huān zēng wèi dé zǔ",
-        "meaning": "Mỉm cười của bạn như quen thuộc",
-        "keywords": [
-          "你的",
-          "喜歡"
-        ],
-        "blankIndices": [
-          0,
-          4,
-          7
-        ]
-      },
-      {
-        "id": 5,
-        "startTime": 46.86,
-        "endTime": 49.42,
-        "hanzi": "我一间压不得一",
-        "pinyin": "wǒ yì jiān yā bù dé yī",
-        "meaning": "Tôi một lúc không nhớ",
-        "keywords": [
-          "我一",
-          "间压"
+          "个中"
         ],
         "blankIndices": [
           0,
@@ -4026,15 +4121,48 @@
         ]
       },
       {
+        "id": 4,
+        "startTime": 41.68,
+        "endTime": 45.74,
+        "hanzi": "你的喜求我了一中素好あ",
+        "pinyin": "nǐ de xǐ qiú wǒ le yì zhōng sù hǎo あ",
+        "meaning": "Mỉm cười của bạn như quen thuộc",
+        "keywords": [
+          "你的",
+          "喜求"
+        ],
+        "blankIndices": [
+          0,
+          5,
+          9
+        ]
+      },
+      {
+        "id": 5,
+        "startTime": 46.86,
+        "endTime": 49.42,
+        "hanzi": "我一间压不定",
+        "pinyin": "wǒ yì jiān yā bú dìng",
+        "meaning": "Tôi một lát không nhớ",
+        "keywords": [
+          "我一",
+          "间压"
+        ],
+        "blankIndices": [
+          0,
+          3
+        ]
+      },
+      {
         "id": 6,
         "startTime": 52.92,
         "endTime": 56.96,
-        "hanzi": "好在得三中",
-        "pinyin": "hǎo zài dé sān zhōng",
+        "hanzi": "好一在很三",
+        "pinyin": "hǎo yí zài hěn sān",
         "meaning": "À trong mơ",
         "keywords": [
-          "好在",
-          "得三"
+          "好一",
+          "在很"
         ],
         "blankIndices": [
           0,
@@ -4045,34 +4173,33 @@
         "id": 7,
         "startTime": 60.44,
         "endTime": 65.3,
-        "hanzi": "得三中得三中确会你",
-        "pinyin": "dé sān zhōng dé sān zhōng què huì nǐ",
-        "meaning": "Trong mơ trong mơ từng thấy bạn",
+        "hanzi": "很很很有一主",
+        "pinyin": "hěn hěn hěn yǒu yì zhǔ",
+        "meaning": "Mơ mơ mơ từng thấy bạn",
         "keywords": [
-          "得三",
-          "中得"
+          "很很",
+          "很有"
         ],
         "blankIndices": [
           0,
-          4,
-          8
+          3
         ]
       },
       {
         "id": 8,
         "startTime": 67.9,
         "endTime": 72.4,
-        "hanzi": "美得喜歡得组得组",
-        "pinyin": "měi dé xǐ huān dé zǔ dé zǔ",
+        "hanzi": "索尼喜求很一中素好あ",
+        "pinyin": "suǒ ní xǐ qiú hěn yì zhōng sù hǎo あ",
         "meaning": "Mỉm cười ngọt ngào",
         "keywords": [
-          "美得",
-          "喜歡"
+          "索尼",
+          "喜求"
         ],
         "blankIndices": [
           0,
           4,
-          7
+          8
         ]
       },
       {
@@ -4095,62 +4222,12 @@
         "id": 10,
         "startTime": 78.84,
         "endTime": 81.8,
-        "hanzi": "得确会的是你",
-        "pinyin": "dé què huì de shì nǐ",
-        "meaning": "Trong mơ thấy bạn",
+        "hanzi": "很很的是你一主",
+        "pinyin": "hěn hěn de shì nǐ yì zhǔ",
+        "meaning": "Mơ thấy chính là bạn",
         "keywords": [
-          "得确",
-          "会的"
-        ],
-        "blankIndices": [
-          0,
-          3
-        ]
-      },
-      {
-        "id": 11,
-        "startTime": 83.16,
-        "endTime": 89.24,
-        "hanzi": "在一中为一中确会你",
-        "pinyin": "zài yì zhōng wèi yì zhōng què huì nǐ",
-        "meaning": "Ở đâu ở đâu từng thấy bạn",
-        "keywords": [
-          "在一",
-          "中为"
-        ],
-        "blankIndices": [
-          0,
-          4,
-          8
-        ]
-      },
-      {
-        "id": 12,
-        "startTime": 89.88,
-        "endTime": 94.74,
-        "hanzi": "你的喜歡增为得组",
-        "pinyin": "nǐ de xǐ huān zēng wèi dé zǔ",
-        "meaning": "Mỉm cười của bạn như quen thuộc",
-        "keywords": [
-          "你的",
-          "喜歡"
-        ],
-        "blankIndices": [
-          0,
-          4,
-          7
-        ]
-      },
-      {
-        "id": 13,
-        "startTime": 95.8,
-        "endTime": 98.44,
-        "hanzi": "我一间压不得一",
-        "pinyin": "wǒ yì jiān yā bù dé yī",
-        "meaning": "Tôi một lúc không nhớ",
-        "keywords": [
-          "我一",
-          "间压"
+          "很很",
+          "的是"
         ],
         "blankIndices": [
           0,
@@ -4159,15 +4236,65 @@
         ]
       },
       {
+        "id": 11,
+        "startTime": 83.16,
+        "endTime": 89.24,
+        "hanzi": "在一个中一个中有一主",
+        "pinyin": "zài yí gè zhōng yí gè zhōng yǒu yì zhǔ",
+        "meaning": "Ở đâu ở đâu từng thấy bạn",
+        "keywords": [
+          "在一",
+          "个中"
+        ],
+        "blankIndices": [
+          0,
+          5,
+          9
+        ]
+      },
+      {
+        "id": 12,
+        "startTime": 89.88,
+        "endTime": 94.74,
+        "hanzi": "你的喜求我了一中素好あ",
+        "pinyin": "nǐ de xǐ qiú wǒ le yì zhōng sù hǎo あ",
+        "meaning": "Mỉm cười của bạn như quen thuộc",
+        "keywords": [
+          "你的",
+          "喜求"
+        ],
+        "blankIndices": [
+          0,
+          5,
+          9
+        ]
+      },
+      {
+        "id": 13,
+        "startTime": 95.8,
+        "endTime": 98.44,
+        "hanzi": "我一间压不定",
+        "pinyin": "wǒ yì jiān yā bú dìng",
+        "meaning": "Tôi một lát không nhớ",
+        "keywords": [
+          "我一",
+          "间压"
+        ],
+        "blankIndices": [
+          0,
+          3
+        ]
+      },
+      {
         "id": 14,
         "startTime": 101.98,
         "endTime": 106.075,
-        "hanzi": "好在得三中",
-        "pinyin": "hǎo zài dé sān zhōng",
+        "hanzi": "好一在很三",
+        "pinyin": "hǎo yí zài hěn sān",
         "meaning": "À trong mơ",
         "keywords": [
-          "好在",
-          "得三"
+          "好一",
+          "在很"
         ],
         "blankIndices": [
           0,
@@ -4178,62 +4305,28 @@
         "id": 15,
         "startTime": 127.855,
         "endTime": 130.475,
-        "hanzi": "在一中为不得",
-        "pinyin": "zài yì zhōng wèi bù dé",
+        "hanzi": "在一个中",
+        "pinyin": "zài yí gè zhōng",
         "meaning": "Ở đâu",
         "keywords": [
           "在一",
-          "中为"
+          "个中"
         ],
         "blankIndices": [
           0,
-          3
+          2
         ]
       },
       {
         "id": 16,
         "startTime": 131.415,
         "endTime": 134.495,
-        "hanzi": "在一中为不得确会你",
-        "pinyin": "zài yì zhōng wèi bù dé què huì nǐ",
+        "hanzi": "在一个中有一主",
+        "pinyin": "zài yí gè zhōng yǒu yì zhǔ",
         "meaning": "Ở đâu từng thấy bạn",
         "keywords": [
           "在一",
-          "中为"
-        ],
-        "blankIndices": [
-          0,
-          4,
-          8
-        ]
-      },
-      {
-        "id": 17,
-        "startTime": 135.735,
-        "endTime": 139.755,
-        "hanzi": "你的喜歡增为得组",
-        "pinyin": "nǐ de xǐ huān zēng wèi dé zǔ",
-        "meaning": "Mỉm cười của bạn như quen thuộc",
-        "keywords": [
-          "你的",
-          "喜歡"
-        ],
-        "blankIndices": [
-          0,
-          4,
-          7
-        ]
-      },
-      {
-        "id": 18,
-        "startTime": 140.835,
-        "endTime": 143.395,
-        "hanzi": "我一间压不得一",
-        "pinyin": "wǒ yì jiān yā bù dé yī",
-        "meaning": "Tôi một lúc không nhớ",
-        "keywords": [
-          "我一",
-          "间压"
+          "个中"
         ],
         "blankIndices": [
           0,
@@ -4242,15 +4335,48 @@
         ]
       },
       {
+        "id": 17,
+        "startTime": 135.735,
+        "endTime": 139.755,
+        "hanzi": "你的喜求我了一中素好あ",
+        "pinyin": "nǐ de xǐ qiú wǒ le yì zhōng sù hǎo あ",
+        "meaning": "Mỉm cười của bạn như quen thuộc",
+        "keywords": [
+          "你的",
+          "喜求"
+        ],
+        "blankIndices": [
+          0,
+          5,
+          9
+        ]
+      },
+      {
+        "id": 18,
+        "startTime": 140.835,
+        "endTime": 143.395,
+        "hanzi": "我一间压不定",
+        "pinyin": "wǒ yì jiān yā bú dìng",
+        "meaning": "Tôi một lát không nhớ",
+        "keywords": [
+          "我一",
+          "间压"
+        ],
+        "blankIndices": [
+          0,
+          3
+        ]
+      },
+      {
         "id": 19,
         "startTime": 146.935,
         "endTime": 151.035,
-        "hanzi": "好在得三中",
-        "pinyin": "hǎo zài dé sān zhōng",
+        "hanzi": "好一在很三",
+        "pinyin": "hǎo yí zài hěn sān",
         "meaning": "À trong mơ",
         "keywords": [
-          "好在",
-          "得三"
+          "好一",
+          "在很"
         ],
         "blankIndices": [
           0,
@@ -4261,34 +4387,32 @@
         "id": 20,
         "startTime": 154.275,
         "endTime": 158.775,
-        "hanzi": "得三中得三中确会你",
-        "pinyin": "dé sān zhōng dé sān zhōng què huì nǐ",
-        "meaning": "Trong mơ trong mơ từng thấy bạn",
+        "hanzi": "很很很有一主",
+        "pinyin": "hěn hěn hěn yǒu yì zhǔ",
+        "meaning": "Mơ mơ mơ từng thấy bạn",
         "keywords": [
-          "得三",
-          "中得"
+          "很很",
+          "很有"
         ],
         "blankIndices": [
           0,
-          4,
-          8
+          3
         ]
       },
       {
         "id": 21,
         "startTime": 161.895,
         "endTime": 166.335,
-        "hanzi": "美得喜歡得组得组",
-        "pinyin": "měi dé xǐ huān dé zǔ dé zǔ",
-        "meaning": "Mỉm cười ngọt ngào",
+        "hanzi": "吃尽吃尽",
+        "pinyin": "chī jìn chī jìn",
+        "meaning": "Cô ấy cười rất ngọt ngào",
         "keywords": [
-          "美得",
-          "喜歡"
+          "吃尽",
+          "吃尽"
         ],
         "blankIndices": [
           0,
-          4,
-          7
+          2
         ]
       },
       {
@@ -4297,7 +4421,7 @@
         "endTime": 171.715,
         "hanzi": "是你是你",
         "pinyin": "shì nǐ shì nǐ",
-        "meaning": "Là bạn là bạn",
+        "meaning": "Là bạn, là bạn",
         "keywords": [
           "是你",
           "是你"
@@ -4311,28 +4435,29 @@
         "id": 23,
         "startTime": 172.695,
         "endTime": 175.995,
-        "hanzi": "得确会的是你",
-        "pinyin": "dé què huì de shì nǐ",
-        "meaning": "Trong mơ thấy bạn",
+        "hanzi": "测语的是一个你",
+        "pinyin": "cè yǔ de shì yí gè nǐ",
+        "meaning": "Mơ thấy người đó",
         "keywords": [
-          "得确",
-          "会的"
+          "测语",
+          "的是"
         ],
         "blankIndices": [
           0,
-          3
+          3,
+          6
         ]
       },
       {
         "id": 24,
         "startTime": 176.895,
         "endTime": 183.095,
-        "hanzi": "在一中为一中确会你",
-        "pinyin": "zài yì zhōng wèi yì zhōng què huì nǐ",
-        "meaning": "Ở đâu ở đâu từng thấy bạn",
+        "hanzi": "在坐一个在一个有你",
+        "pinyin": "zài zuò yí gè zài yí gè yǒu nǐ",
+        "meaning": "Tôi đã thấy bạn ở đâu rồi",
         "keywords": [
-          "在一",
-          "中为"
+          "在坐",
+          "一个"
         ],
         "blankIndices": [
           0,
@@ -4344,12 +4469,29 @@
         "id": 25,
         "startTime": 184.515,
         "endTime": 188.475,
-        "hanzi": "你的喜歡增为得组",
-        "pinyin": "nǐ de xǐ huān zēng wèi dé zǔ",
-        "meaning": "Mỉm cười của bạn như quen thuộc",
+        "hanzi": "你的吃分我了很好很",
+        "pinyin": "nǐ de chī fēn wǒ le hěn hǎo hěn",
+        "meaning": "Mỉm cười của bạn rất quen thuộc",
         "keywords": [
           "你的",
-          "喜歡"
+          "吃分"
+        ],
+        "blankIndices": [
+          0,
+          4,
+          8
+        ]
+      },
+      {
+        "id": 26,
+        "startTime": 189.475,
+        "endTime": 192.195,
+        "hanzi": "我一时压定不是一",
+        "pinyin": "wǒ yì shí yā dìng bú shì yī",
+        "meaning": "Tôi không thể nhớ ra",
+        "keywords": [
+          "我一",
+          "时压"
         ],
         "blankIndices": [
           0,
@@ -4358,34 +4500,19 @@
         ]
       },
       {
-        "id": 26,
-        "startTime": 189.475,
-        "endTime": 192.195,
-        "hanzi": "我一间压不得一",
-        "pinyin": "wǒ yì jiān yā bù dé yī",
-        "meaning": "Tôi một lúc không nhớ",
-        "keywords": [
-          "我一",
-          "间压"
-        ],
-        "blankIndices": [
-          0,
-          3,
-          6
-        ]
-      },
-      {
         "id": 27,
         "startTime": 195.695,
         "endTime": 199.815,
-        "hanzi": "得三中",
-        "pinyin": "dé sān zhōng",
-        "meaning": "À trong mơ",
+        "hanzi": "很不测语个",
+        "pinyin": "hěn bú cè yǔ gè",
+        "meaning": "Anh ở trong mơ",
         "keywords": [
-          "得三"
+          "很不",
+          "测语"
         ],
         "blankIndices": [
-          0
+          0,
+          2
         ]
       }
     ]
@@ -4397,19 +4524,19 @@
     "category": "Phim Ảnh",
     "level": "4",
     "levelText": "HSK 4",
-    "description": "Đoạn hội thoại tình huống thực tế giúp nâng cao khả năng nghe ngấm và vốn từ ngữ biểu cảm.",
+    "description": "Đoạn hội thoại tình huống đặt bàn nhà hàng thực tế giúp nâng cao khả năng nghe ngấm và vốn từ ngữ biểu cảm.",
     "duration": "05:05",
     "thumbnail": "https://img.youtube.com/vi/0MZIImblEHc/hqdefault.jpg",
     "sentences": [
       {
         "id": 1,
-        "startTime": 0,
-        "endTime": 0.48,
-        "hanzi": "在",
-        "pinyin": "wèi",
-        "meaning": "về",
+        "startTime": 30,
+        "endTime": 39.14,
+        "hanzi": "你好，",
+        "pinyin": "nǐ hǎo ，",
+        "meaning": "Xin chào,",
         "keywords": [
-          "在"
+          "你好"
         ],
         "blankIndices": [
           0
@@ -4417,216 +4544,191 @@
       },
       {
         "id": 2,
-        "startTime": 0.48,
-        "endTime": 7.8,
-        "hanzi": "李",
-        "pinyin": "lì",
-        "meaning": "lề",
+        "startTime": 39.14,
+        "endTime": 41.1,
+        "hanzi": "商店是三海饭室室。",
+        "pinyin": "shāng diàn shì sān hǎi fàn shì shì 。",
+        "meaning": "Đây là nhà hàng Đông Hải.",
         "keywords": [
-          "李"
+          "商店",
+          "是三"
         ],
         "blankIndices": [
-          0
+          0,
+          4,
+          7
         ]
       },
       {
         "id": 3,
-        "startTime": 7.8,
-        "endTime": 13.54,
-        "hanzi": "cácbạnđãđếnvớikênhChineseSkate.",
-        "pinyin": "c á c b ạ n đ ã đ ế n v ớ i k ê n h C h i n e s e S k a t e .",
-        "meaning": "các bạn đã đếnvớikênh ChineseSkate.",
+        "startTime": 41.56,
+        "endTime": 44.54,
+        "hanzi": "你好，我打为昨天二天的父一个园家，",
+        "pinyin": "nǐ hǎo ， wǒ dǎ wèi zuó tiān èr tiān de fù yí gè yuán jiā ，",
+        "meaning": "Xin chào, tôi muốn đặt chỗ vào tối thứ sáu.",
         "keywords": [
-          "c"
+          "你好",
+          "我打"
         ],
         "blankIndices": [
-          0
+          0,
+          7,
+          14
         ]
       },
       {
         "id": 4,
-        "startTime": 14.12,
-        "endTime": 15.6,
-        "hanzi": "hômnaychúngtasẽcùngnhauđihọc",
-        "pinyin": "h ô m n a y c h ú n g t a s ẽ c ù n g n h a u đ i h ọ c",
-        "meaning": "hôm nay chúngta sẽ cùngnhauđi học",
+        "startTime": 45.32,
+        "endTime": 46.42,
+        "hanzi": "认给有为一个人）",
+        "pinyin": "rèn gěi yǒu wèi yí gè rén ）",
+        "meaning": "Xin chào, có bao nhiêu người?",
         "keywords": [
-          "h"
+          "认给",
+          "有为"
         ],
         "blankIndices": [
-          0
+          0,
+          3,
+          6
         ]
       },
       {
         "id": 5,
-        "startTime": 15.6,
-        "endTime": 17.38,
-        "hanzi": "vềmộtchủđềvôcùngquenthuộctrong",
-        "pinyin": "v ề m ộ t c h ủ đ ề v ô c ù n g q u e n t h u ộ c t r o n g",
-        "meaning": "vềmộtchủđềvôcùngquenthuộctong",
+        "startTime": 47.26,
+        "endTime": 49.46,
+        "hanzi": "五人，我打为一个系家，",
+        "pinyin": "wǔ rén ， wǒ dǎ wèi yí gè xì jiā ，",
+        "meaning": "Hai người, tôi muốn đặt một phòng.",
         "keywords": [
-          "v"
+          "五人",
+          "我打"
         ],
         "blankIndices": [
-          0
+          0,
+          4,
+          8
         ]
       },
       {
         "id": 6,
-        "startTime": 17.38,
-        "endTime": 19.6,
-        "hanzi": "cuộcsống.làchủđềđiănnhàhàng.",
-        "pinyin": "c u ộ c s ố n g . l à c h ủ đ ề đ i ă n n h à h à n g .",
-        "meaning": "cuộcsống.là chủđềđiănnhàhàng.",
+        "startTime": 50.46,
+        "endTime": 53.78,
+        "hanzi": "堡子，可以表示我的名字和手机号口。",
+        "pinyin": "bǎo zǐ ， kě yǐ biǎo shì wǒ de míng zì hé shǒu jī hào kǒu 。",
+        "meaning": "Kính thưa, có thể cho tôi biết tên và số điện thoại của quý khách?",
         "keywords": [
-          "c"
+          "堡子",
+          "可以"
         ],
         "blankIndices": [
-          0
+          0,
+          7,
+          14
         ]
       },
       {
         "id": 7,
-        "startTime": 20.26,
-        "endTime": 21.44,
-        "hanzi": "Trướctiênchúngtahãycùngnhau",
-        "pinyin": "T r ư ớ c t i ê n c h ú n g t a h ã y c ù n g n h a u",
-        "meaning": "Trước chúng ta hãy cùngnhau",
+        "startTime": 54.56,
+        "endTime": 59.94,
+        "hanzi": "我名字是二小，手机号口是13570859608。",
+        "pinyin": "wǒ míng zì shì èr xiǎo ， shǒu jī hào kǒu shì 1 3 5 7 0 8 5 9 6 0 8 。",
+        "meaning": "Tôi tên là Mike, số điện thoại là 13570859608.",
         "keywords": [
-          "T"
+          "我名",
+          "字是"
         ],
         "blankIndices": [
-          0
+          0,
+          5,
+          10
         ]
       },
       {
         "id": 8,
-        "startTime": 21.44,
-        "endTime": 22.72,
-        "hanzi": "xemđoạnvideodướiđâynhé.",
-        "pinyin": "x e m đ o ạ n v i d e o d ư ớ i đ â y n h é .",
-        "meaning": "xemđoạnvideo dưới đâynhé.",
+        "startTime": 61.48,
+        "endTime": 63.48,
+        "hanzi": "你上天事用頁。",
+        "pinyin": "nǐ shàng tiān shì yòng yè 。",
+        "meaning": "Quý khách sẽ đến vào lúc nào?",
         "keywords": [
-          "x"
+          "你上",
+          "天事"
         ],
         "blankIndices": [
-          0
+          0,
+          3
         ]
       },
       {
         "id": 9,
-        "startTime": 30,
-        "endTime": 39.4,
-        "hanzi": "Hãy",
-        "pinyin": "H ã y",
-        "meaning": "Please",
+        "startTime": 64.1,
+        "endTime": 65.2,
+        "hanzi": "天事上二天一中",
+        "pinyin": "tiān shì shàng èr tiān yì zhōng",
+        "meaning": "Khoảng 7 giờ tối.",
         "keywords": [
-          "H"
+          "天事",
+          "上二"
         ],
         "blankIndices": [
-          0
+          0,
+          3,
+          6
         ]
       },
       {
         "id": 10,
-        "startTime": 39.42,
-        "endTime": 44.36,
-        "hanzi": "kýđểkênhcủa",
-        "pinyin": "k ý đ ể k ê n h c ủ a",
-        "meaning": "ký tự của",
+        "startTime": 65.74,
+        "endTime": 69.12,
+        "hanzi": "好的,我们已经给您留了一个包间,",
+        "pinyin": "hǎo de , wǒ men yǐ jīng gěi nín liú le yí gè bāo jiān ,",
+        "meaning": "Được rồi, chúng tôi đã dành một phòng riêng cho bạn,",
         "keywords": [
-          "k"
+          "好的",
+          "我们"
         ],
         "blankIndices": [
-          0
+          0,
+          7,
+          13
         ]
       },
       {
         "id": 11,
-        "startTime": 44.38,
-        "endTime": 53.36,
-        "hanzi": "nhé!",
-        "pinyin": "n h é !",
-        "meaning": "nhé!",
+        "startTime": 69.12,
+        "endTime": 70.3,
+        "hanzi": "谢谢您来电话",
+        "pinyin": "xiè xiè nín lái diàn huà",
+        "meaning": "cảm ơn bạn đã gọi",
         "keywords": [
-          "n"
+          "谢谢",
+          "您来"
         ],
         "blankIndices": [
-          0
+          0,
+          3
         ]
       },
       {
         "id": 12,
-        "startTime": 60,
-        "endTime": 66.66,
-        "hanzi": "Đượcrồi,",
-        "pinyin": "Đ ư ợ c r ồ i ,",
-        "meaning": "Đượcrồi,",
+        "startTime": 79.32,
+        "endTime": 86.014,
+        "hanzi": "我们订了座位,名字叫请不吝点赞订阅转",
+        "pinyin": "wǒ men dìng le zuò wèi , míng zì jiào qǐng bú lìn diǎn zàn dìng yuè zhuǎn",
+        "meaning": "Chúng tôi đã đặt chỗ và tên của chúng tôi được gọi. Xin vui lòng thích, đăng ký và chuyển tiếp.",
         "keywords": [
-          "Đ"
+          "我们",
+          "订了"
         ],
         "blankIndices": [
-          0
+          0,
+          8,
+          16
         ]
       },
       {
         "id": 13,
-        "startTime": 66.72,
-        "endTime": 69.72,
-        "hanzi": "tôiđãđểcácmộtcáibàn.Cảmơncác",
-        "pinyin": "t ô i đ ã đ ể c á c m ộ t c á i b à n . C ả m ơ n c á c",
-        "meaning": "tôi đã để một cáicáibàn.Cảmơncáccác",
-        "keywords": [
-          "t"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 14,
-        "startTime": 69.74,
-        "endTime": 70.16,
-        "hanzi": "đãđigọi.",
-        "pinyin": "đ ã đ i g ọ i .",
-        "meaning": "đã đi thoại.",
-        "keywords": [
-          "đ"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 15,
-        "startTime": 79.32,
-        "endTime": 81.28,
-        "hanzi": "Chúngtôiđãđịnhmộtvịtrí,tên",
-        "pinyin": "C h ú n g t ô i đ ã đ ị n h m ộ t v ị t r í , t ê n",
-        "meaning": "Chúng tôi đã xác định một vị trí,tên",
-        "keywords": [
-          "C"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 16,
-        "startTime": 81.28,
-        "endTime": 85.854,
-        "hanzi": "là请不",
-        "pinyin": "l à qǐng bù",
-        "meaning": "là Làm ơn không",
-        "keywords": [
-          "请不"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 17,
         "startTime": 86.014,
         "endTime": 89.014,
         "hanzi": "发",
@@ -4640,7 +4742,7 @@
         ]
       },
       {
-        "id": 18,
+        "id": 14,
         "startTime": 90.674,
         "endTime": 101.034,
         "hanzi": "支持",
@@ -4654,21 +4756,7 @@
         ]
       },
       {
-        "id": 19,
-        "startTime": 101.054,
-        "endTime": 101.514,
-        "hanzi": "镜目",
-        "pinyin": "jìng mù",
-        "meaning": "gương",
-        "keywords": [
-          "镜目"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 20,
+        "id": 15,
         "startTime": 102.094,
         "endTime": 104.794,
         "hanzi": "你们这里有什么特色菜?",
@@ -4685,15 +4773,15 @@
         ]
       },
       {
-        "id": 21,
+        "id": 16,
         "startTime": 105.534,
         "endTime": 107.754,
-        "hanzi": "北京美鬴是前园的名角。",
+        "hanzi": "北京烤鸭是这里的名菜。",
         "pinyin": "běi jīng kǎo yā shì zhè lǐ de míng cài 。",
-        "meaning": "Bánh Ướp Bắc Kinh là món ăn nổi tiếng ở đây.",
+        "meaning": "Vịt quay Bắc Kinh là món ăn nổi tiếng ở đây.",
         "keywords": [
           "北京",
-          "美鬴"
+          "烤鸭"
         ],
         "blankIndices": [
           0,
@@ -4702,15 +4790,100 @@
         ]
       },
       {
-        "id": 22,
+        "id": 17,
         "startTime": 109.054,
         "endTime": 110.494,
-        "hanzi": "吃一三美鬴是。",
+        "hanzi": "那就来一只烤鸭。",
         "pinyin": "nà jiù lái yì zhī kǎo yā 。",
-        "meaning": "Vậy thì hãy cho tôi một con Ướp Bắc Kinh.",
+        "meaning": "Sau đó có một con vịt quay.",
         "keywords": [
-          "吃一",
-          "三美"
+          "那就",
+          "来一"
+        ],
+        "blankIndices": [
+          0,
+          3,
+          6
+        ]
+      },
+      {
+        "id": 18,
+        "startTime": 111.574,
+        "endTime": 113.294,
+        "hanzi": "好的,还要什么吗?",
+        "pinyin": "hǎo de , hái yào shén me ma ?",
+        "meaning": "Được rồi, còn gì nữa không?",
+        "keywords": [
+          "好的",
+          "还要"
+        ],
+        "blankIndices": [
+          0,
+          3,
+          6
+        ]
+      },
+      {
+        "id": 19,
+        "startTime": 114.634,
+        "endTime": 115.894,
+        "hanzi": "再来两碗小米粥。",
+        "pinyin": "zài lái liǎng wǎn xiǎo mǐ zhōu 。",
+        "meaning": "Thêm hai bát cháo kê.",
+        "keywords": [
+          "再来",
+          "两碗"
+        ],
+        "blankIndices": [
+          0,
+          3,
+          6
+        ]
+      },
+      {
+        "id": 20,
+        "startTime": 117.574,
+        "endTime": 119.294,
+        "hanzi": "好,要什么饮料吗?",
+        "pinyin": "hǎo , yào shén me yǐn liào ma ?",
+        "meaning": "Được rồi, bạn có muốn uống gì không?",
+        "keywords": [
+          "好要",
+          "什么"
+        ],
+        "blankIndices": [
+          0,
+          3,
+          6
+        ]
+      },
+      {
+        "id": 21,
+        "startTime": 120.294,
+        "endTime": 121.534,
+        "hanzi": "我覍一生苹果浦。",
+        "pinyin": "wǒ biàn yì shēng píng guǒ pǔ 。",
+        "meaning": "Tôi muốn một cốc nước ép táo.",
+        "keywords": [
+          "我覍",
+          "一生"
+        ],
+        "blankIndices": [
+          0,
+          3,
+          6
+        ]
+      },
+      {
+        "id": 22,
+        "startTime": 122.914,
+        "endTime": 124.174,
+        "hanzi": "我也一分席酒。",
+        "pinyin": "wǒ yě yì fēn xí jiǔ 。",
+        "meaning": "Tôi muốn một lon bia.",
+        "keywords": [
+          "我也",
+          "一分"
         ],
         "blankIndices": [
           0,
@@ -4719,121 +4892,37 @@
       },
       {
         "id": 23,
-        "startTime": 111.574,
-        "endTime": 113.294,
-        "hanzi": "好。很上一不一事。",
-        "pinyin": "hǎo de , hái yào shén me ma ?",
-        "meaning": "Tốt, còn muốn gì nữa?",
+        "startTime": 128.834,
+        "endTime": 131.334,
+        "hanzi": "你也的饭五天ぜ一下、请欢用。",
+        "pinyin": "nǐ yě de fàn wǔ tiān ぜ yí xià 、 qǐng huān yòng 。",
+        "meaning": "Bữa ăn của bạn đã đến, xin hãy thưởng thức chậm rãi.",
         "keywords": [
-          "好很",
-          "上一"
+          "你也",
+          "的饭"
         ],
         "blankIndices": [
           0,
-          3,
-          6
+          5,
+          10
         ]
       },
       {
         "id": 24,
-        "startTime": 114.634,
-        "endTime": 115.894,
-        "hanzi": "重一七事尼小美尼。",
-        "pinyin": "zài lái liǎng wǎn xiǎo mǐ zhōu 。",
-        "meaning": "Vậy thì cho tôi thêm hai bát cháo gạo lứt.",
-        "keywords": [
-          "重一",
-          "七事"
-        ],
-        "blankIndices": [
-          0,
-          4,
-          7
-        ]
-      },
-      {
-        "id": 25,
-        "startTime": 117.574,
-        "endTime": 119.294,
-        "hanzi": "好。想上一事吃吃。",
-        "pinyin": "hǎo , yào shén me yǐn liào ma ?",
-        "meaning": "Tốt, muốn uống gì?",
-        "keywords": [
-          "好想",
-          "上一"
-        ],
-        "blankIndices": [
-          0,
-          3,
-          6
-        ]
-      },
-      {
-        "id": 26,
-        "startTime": 120.294,
-        "endTime": 121.534,
-        "hanzi": "我想一中苹果水。",
-        "pinyin": "wǒ yào yì bēi píng guǒ zhī 。",
-        "meaning": "Tôi muốn một cốc nước ép táo.",
-        "keywords": [
-          "我想",
-          "一中"
-        ],
-        "blankIndices": [
-          0,
-          3,
-          6
-        ]
-      },
-      {
-        "id": 27,
-        "startTime": 122.914,
-        "endTime": 124.174,
-        "hanzi": "我一中事尼。",
-        "pinyin": "wǒ lái diǎn pí jiǔ bā 。",
-        "meaning": "Tôi muốn một lon bia.",
-        "keywords": [
-          "我一",
-          "中事"
-        ],
-        "blankIndices": [
-          0,
-          2
-        ]
-      },
-      {
-        "id": 28,
-        "startTime": 128.834,
-        "endTime": 131.334,
-        "hanzi": "你事的邮尼上一事。不要此用。",
-        "pinyin": "nǐ men de cài shàng lái le , qǐng màn yòng 。",
-        "meaning": "Món ăn của bạn đã đến, xin hãy thưởng thức.",
-        "keywords": [
-          "你事",
-          "的邮"
-        ],
-        "blankIndices": [
-          0,
-          6,
-          11
-        ]
-      },
-      {
-        "id": 29,
         "startTime": 132.294,
         "endTime": 132.614,
-        "hanzi": "想好。",
-        "pinyin": "xiè xiè",
+        "hanzi": "姐姐",
+        "pinyin": "jiě jie",
         "meaning": "Cảm ơn.",
         "keywords": [
-          "想好"
+          "姐姐"
         ],
         "blankIndices": [
           0
         ]
       },
       {
-        "id": 30,
+        "id": 25,
         "startTime": 132.294,
         "endTime": 140.274,
         "hanzi": "你",
@@ -4847,31 +4936,66 @@
         ]
       },
       {
-        "id": 31,
+        "id": 26,
         "startTime": 140.274,
         "endTime": 141.914,
-        "hanzi": "想不一事吃吃。",
+        "hanzi": "觉得这里的菜怎么样",
         "pinyin": "jué de zhè lǐ de cài zěn me yàng",
-        "meaning": "Bạn nghĩ món ăn ở đây như thế nào?",
+        "meaning": "Bạn nghĩ sao về đồ ăn ở đây?",
         "keywords": [
-          "想不",
-          "一事"
+          "觉得",
+          "这里"
         ],
         "blankIndices": [
           0,
-          3
+          4,
+          8
         ]
       },
       {
-        "id": 32,
+        "id": 27,
         "startTime": 143.114,
         "endTime": 144.434,
-        "hanzi": "我想一中事尼一中事吃吃。",
+        "hanzi": "我觉得非常可口",
         "pinyin": "wǒ jué de fēi cháng kě kǒu",
-        "meaning": "Tôi nghĩ rất ngon.",
+        "meaning": "Tôi nghĩ nó rất ngon",
         "keywords": [
-          "我想",
-          "一中"
+          "我觉",
+          "得非"
+        ],
+        "blankIndices": [
+          0,
+          3,
+          6
+        ]
+      },
+      {
+        "id": 28,
+        "startTime": 145.894,
+        "endTime": 149.434,
+        "hanzi": "嗯我也觉得很好吃今天我请客",
+        "pinyin": "ǹg wǒ yě jué de hěn hǎo chī jīn tiān wǒ qǐng kè",
+        "meaning": "Ừ, tôi thấy nó cũng ngon. Hôm nay tôi sẽ chiêu đãi bạn một bữa.",
+        "keywords": [
+          "嗯我",
+          "也觉"
+        ],
+        "blankIndices": [
+          0,
+          6,
+          12
+        ]
+      },
+      {
+        "id": 29,
+        "startTime": 151.014,
+        "endTime": 153.527,
+        "hanzi": "那下次我请你吃四川火锅,",
+        "pinyin": "nà xià cì wǒ qǐng nǐ chī sì chuān huǒ guō ,",
+        "meaning": "Vậy lần sau tôi sẽ đãi bạn món lẩu Tứ Xuyên.",
+        "keywords": [
+          "那下",
+          "次我"
         ],
         "blankIndices": [
           0,
@@ -4880,49 +5004,91 @@
         ]
       },
       {
-        "id": 33,
-        "startTime": 145.894,
-        "endTime": 149.434,
-        "hanzi": "一中事尼一中事吃吃。一中事我想一事。",
-        "pinyin": "ǹg wǒ yě jué de hěn hǎo chī jīn tiān wǒ qǐng kè",
-        "meaning": "Tốt, tôi cũng nghĩ rất ngon. Hôm nay tôi mời.",
+        "id": 30,
+        "startTime": 153.527,
+        "endTime": 153.687,
+        "hanzi": "怎么样?",
+        "pinyin": "zěn me yàng ?",
+        "meaning": "Thế còn nó thì sao?",
         "keywords": [
-          "一中",
-          "事尼"
+          "怎么"
+        ],
+        "blankIndices": [
+          0
+        ]
+      },
+      {
+        "id": 31,
+        "startTime": 155.427,
+        "endTime": 155.707,
+        "hanzi": "好的。",
+        "pinyin": "hǎo de 。",
+        "meaning": "ĐƯỢC RỒI",
+        "keywords": [
+          "好的"
+        ],
+        "blankIndices": [
+          0
+        ]
+      },
+      {
+        "id": 32,
+        "startTime": 157.247,
+        "endTime": 158.667,
+        "hanzi": "服务员,买单。",
+        "pinyin": "fú wù yuán , mǎi dān 。",
+        "meaning": "Người phục vụ, thanh toán hóa đơn.",
+        "keywords": [
+          "服务",
+          "员买"
         ],
         "blankIndices": [
           0,
-          8,
-          15
+          2
+        ]
+      },
+      {
+        "id": 33,
+        "startTime": 160.247,
+        "endTime": 161.387,
+        "hanzi": "这是您的账单。",
+        "pinyin": "zhè shì nín de zhàng dān 。",
+        "meaning": "Đây là hóa đơn của bạn.",
+        "keywords": [
+          "这是",
+          "您的"
+        ],
+        "blankIndices": [
+          0,
+          3
         ]
       },
       {
         "id": 34,
-        "startTime": 151.014,
-        "endTime": 153.527,
-        "hanzi": "一中事尼一中事吃吃。一中事一中事一中事。",
-        "pinyin": "nà xià cì wǒ qǐng nǐ chī sì chuān huǒ guō ,",
-        "meaning": "Vậy thì lần sau tôi mời bạn ăn món lẩu Tứ Xuyên.",
+        "startTime": 163.107,
+        "endTime": 164.867,
+        "hanzi": "好,我先看一下。",
+        "pinyin": "hǎo , wǒ xiān kàn yí xià 。",
+        "meaning": "Được rồi, hãy để tôi xem xét trước.",
         "keywords": [
-          "一中",
-          "事尼"
+          "好我",
+          "先看"
         ],
         "blankIndices": [
           0,
-          9,
-          17
+          3
         ]
       },
       {
         "id": 35,
-        "startTime": 153.527,
-        "endTime": 153.687,
-        "hanzi": "一中事尼。",
-        "pinyin": "zěn me yàng ?",
-        "meaning": "Thế nào?",
+        "startTime": 165.947,
+        "endTime": 167.167,
+        "hanzi": "没什么问题。",
+        "pinyin": "méi shén me wèn tí 。",
+        "meaning": "Không có gì.",
         "keywords": [
-          "一中",
-          "事尼"
+          "没什",
+          "么问"
         ],
         "blankIndices": [
           0,
@@ -4931,87 +5097,6 @@
       },
       {
         "id": 36,
-        "startTime": 155.427,
-        "endTime": 155.707,
-        "hanzi": "好。",
-        "pinyin": "hǎo de 。",
-        "meaning": "Tốt.",
-        "keywords": [
-          "好"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 37,
-        "startTime": 157.247,
-        "endTime": 158.667,
-        "hanzi": "你事的帮尼上一事。",
-        "pinyin": "fú wù yuán , mǎi dān 。",
-        "meaning": "Thợ ăn, thanh toán.",
-        "keywords": [
-          "你事",
-          "的帮"
-        ],
-        "blankIndices": [
-          0,
-          4,
-          7
-        ]
-      },
-      {
-        "id": 38,
-        "startTime": 160.247,
-        "endTime": 161.387,
-        "hanzi": "一中事尼一中事的起尼。",
-        "pinyin": "zhè shì nín de zhàng dān 。",
-        "meaning": "Đây là hóa đơn của bạn.",
-        "keywords": [
-          "一中",
-          "事尼"
-        ],
-        "blankIndices": [
-          0,
-          5,
-          9
-        ]
-      },
-      {
-        "id": 39,
-        "startTime": 163.107,
-        "endTime": 164.867,
-        "hanzi": "好。我上一中事吃吃。",
-        "pinyin": "hǎo , wǒ xiān kàn yí xià 。",
-        "meaning": "Tốt, tôi sẽ xem lại.",
-        "keywords": [
-          "好我",
-          "上一"
-        ],
-        "blankIndices": [
-          0,
-          4,
-          7
-        ]
-      },
-      {
-        "id": 40,
-        "startTime": 165.947,
-        "endTime": 167.167,
-        "hanzi": "一中事尼。",
-        "pinyin": "méi shén me wèn tí 。",
-        "meaning": "Không có vấn đề.",
-        "keywords": [
-          "一中",
-          "事尼"
-        ],
-        "blankIndices": [
-          0,
-          2
-        ]
-      },
-      {
-        "id": 41,
         "startTime": 167.987,
         "endTime": 169.227,
         "hanzi": "您想怎么付款?",
@@ -5027,7 +5112,7 @@
         ]
       },
       {
-        "id": 42,
+        "id": 37,
         "startTime": 171.067,
         "endTime": 172.247,
         "hanzi": "微信支付可以吗?",
@@ -5044,7 +5129,7 @@
         ]
       },
       {
-        "id": 43,
+        "id": 38,
         "startTime": 172.827,
         "endTime": 173.667,
         "hanzi": "当然可以。",
@@ -5060,7 +5145,7 @@
         ]
       },
       {
-        "id": 44,
+        "id": 39,
         "startTime": 174.447,
         "endTime": 177.347,
         "hanzi": "您可以扫描这上面的二维码。",
@@ -5077,7 +5162,7 @@
         ]
       },
       {
-        "id": 45,
+        "id": 40,
         "startTime": 179.527,
         "endTime": 180.467,
         "hanzi": "支付成功了",
@@ -5093,45 +5178,77 @@
         ]
       },
       {
-        "id": 46,
+        "id": 41,
         "startTime": 181.487,
         "endTime": 182.447,
-        "hanzi": "好的,谢谢",
-        "pinyin": "hǎo de , xiè xiè",
-        "meaning": "Được rồi, cảm ơn",
+        "hanzi": "好。想、想、",
+        "pinyin": "hǎo 。 xiǎng 、 xiǎng 、",
+        "meaning": "Cảm ơn",
         "keywords": [
-          "好的",
-          "谢谢"
-        ],
-        "blankIndices": [
-          0,
-          2
-        ]
-      },
-      {
-        "id": 47,
-        "startTime": 181.987,
-        "endTime": 190.147,
-        "hanzi": "现在",
-        "pinyin": "xiàn zài",
-        "meaning": "Hiện nay",
-        "keywords": [
-          "现在"
+          "好想"
         ],
         "blankIndices": [
           0
         ]
       },
       {
-        "id": 48,
-        "startTime": 190.147,
-        "endTime": 191.947,
-        "hanzi": "我们一起学几句重要",
-        "pinyin": "wǒ men yì qǐ xué jǐ jù zhòng yào",
-        "meaning": "Cùng nhau học một vài câu quan trọng nhé",
+        "id": 42,
+        "startTime": 181.987,
+        "endTime": 190.147,
+        "hanzi": "当前",
+        "pinyin": "dāng qián",
+        "meaning": "Bây giờ",
         "keywords": [
-          "我们",
-          "一起"
+          "当前"
+        ],
+        "blankIndices": [
+          0
+        ]
+      },
+      {
+        "id": 43,
+        "startTime": 190.147,
+        "endTime": 191.987,
+        "hanzi": "我一个学习一个有请的的词",
+        "pinyin": "wǒ yí gè xué xí yí gè yǒu qǐng de de cí",
+        "meaning": "Chúng ta cùng nhau học một số từ quan trọng",
+        "keywords": [
+          "我一",
+          "个学"
+        ],
+        "blankIndices": [
+          0,
+          6,
+          11
+        ]
+      },
+      {
+        "id": 44,
+        "startTime": 192.987,
+        "endTime": 194.087,
+        "hanzi": "不回手机邮手了",
+        "pinyin": "bù huí shǒu jī yóu shǒu le",
+        "meaning": "Khi Mike gọi điện thoại",
+        "keywords": [
+          "不回",
+          "手机"
+        ],
+        "blankIndices": [
+          0,
+          3,
+          6
+        ]
+      },
+      {
+        "id": 45,
+        "startTime": 194.827,
+        "endTime": 195.487,
+        "hanzi": "你请计一个你请计了",
+        "pinyin": "nǐ qǐng jì yí gè nǐ qǐng jì le",
+        "meaning": "Anh ấy nói gì",
+        "keywords": [
+          "你请",
+          "计一"
         ],
         "blankIndices": [
           0,
@@ -5140,39 +5257,7 @@
         ]
       },
       {
-        "id": 49,
-        "startTime": 192.987,
-        "endTime": 194.047,
-        "hanzi": "当迈克电打",
-        "pinyin": "dāng mài kè diàn dǎ",
-        "meaning": "Khi Mike gọi",
-        "keywords": [
-          "当迈",
-          "克电"
-        ],
-        "blankIndices": [
-          0,
-          2
-        ]
-      },
-      {
-        "id": 50,
-        "startTime": 194.827,
-        "endTime": 195.487,
-        "hanzi": "他说了什么",
-        "pinyin": "tā shuō le shén me",
-        "meaning": "anh ấy đã nói gì",
-        "keywords": [
-          "他说",
-          "了什"
-        ],
-        "blankIndices": [
-          0,
-          2
-        ]
-      },
-      {
-        "id": 51,
+        "id": 46,
         "startTime": 196.607,
         "endTime": 201.507,
         "hanzi": "他说了我想预定星期六晚上的座位",
@@ -5189,29 +5274,29 @@
         ]
       },
       {
-        "id": 52,
+        "id": 47,
         "startTime": 202.687,
         "endTime": 206.047,
-        "hanzi": "我想打电给我们有一个构图",
-        "pinyin": "wǒ xiǎng dǎ diàn gěi wǒ men yǒu yí gè gòu tú",
-        "meaning": "Tôi muốn gọi cho chúng tôi và soạn thảo",
+        "hanzi": "我想打电话给你我们有一个构图",
+        "pinyin": "wǒ xiǎng dǎ diàn huà gěi nǐ wǒ men yǒu yí gè gòu tú",
+        "meaning": "Tôi muốn gọi cho bạn và chúng tôi có một sáng tác",
         "keywords": [
           "我想",
           "打电"
         ],
         "blankIndices": [
           0,
-          6,
-          11
+          7,
+          13
         ]
       },
       {
-        "id": 53,
+        "id": 48,
         "startTime": 206.627,
         "endTime": 209.327,
-        "hanzi": "预定座位意思是摆盘",
-        "pinyin": "yù dìng zuò wèi yì sī shì bǎi pán",
-        "meaning": "Đặt chỗ có nghĩa là đặt đĩa",
+        "hanzi": "预定座位意思是打碗",
+        "pinyin": "yù dìng zuò wèi yì sī shì dǎ wǎn",
+        "meaning": "Đặt chỗ có nghĩa là chơi tô",
         "keywords": [
           "预定",
           "座位"
@@ -5223,32 +5308,32 @@
         ]
       },
       {
-        "id": 54,
+        "id": 49,
         "startTime": 210.907,
-        "endTime": 217.327,
-        "hanzi": "你也可以使用这个绘我想遇见两个人在桌上",
-        "pinyin": "nǐ yě kě yǐ shǐ yòng zhè ge huì wǒ xiǎng yù jiàn liǎng gè rén zài zhuō shàng",
-        "meaning": "Bạn cũng có thể sử dụng bản vẽ này Tôi muốn gặp hai người ở bàn",
+        "endTime": 217.407,
+        "hanzi": "你也可以使用这个绘图我想预定两个人的作为",
+        "pinyin": "nǐ yě kě yǐ shǐ yòng zhè ge huì tú wǒ xiǎng yù dìng liǎng gè rén de zuò wéi",
+        "meaning": "Bạn cũng có thể sử dụng bản vẽ này. Tôi muốn đặt chỗ cho hai người.",
         "keywords": [
           "你也",
           "可以"
         ],
         "blankIndices": [
           0,
-          9,
-          18
+          10,
+          19
         ]
       },
       {
-        "id": 55,
-        "startTime": 219.087,
-        "endTime": 222.167,
-        "hanzi": "我想遇见两个人在桌上",
-        "pinyin": "wǒ xiǎng yù jiàn liǎng gè rén zài zhuō shàng",
-        "meaning": "Tôi muốn gặp hai người ở bàn",
+        "id": 50,
+        "startTime": 219.067,
+        "endTime": 222.187,
+        "hanzi": "我想预定两个人的作为",
+        "pinyin": "wǒ xiǎng yù dìng liǎng gè rén de zuò wéi",
+        "meaning": "Tôi muốn đặt chỗ cho 2 người",
         "keywords": [
           "我想",
-          "遇见"
+          "预定"
         ],
         "blankIndices": [
           0,
@@ -5257,42 +5342,43 @@
         ]
       },
       {
-        "id": 56,
-        "startTime": 223.647,
-        "endTime": 224.947,
-        "hanzi": "我希望两个",
-        "pinyin": "wǒ xī wàng liǎng gè",
-        "meaning": "tôi hy vọng hai",
+        "id": 51,
+        "startTime": 223.627,
+        "endTime": 224.587,
+        "hanzi": "我希望两个人的作为",
+        "pinyin": "wǒ xī wàng liǎng gè rén de zuò wéi",
+        "meaning": "Tôi mong rằng hai người sẽ làm được",
         "keywords": [
           "我希",
           "望两"
         ],
         "blankIndices": [
           0,
-          2
+          4,
+          8
         ]
       },
       {
-        "id": 57,
-        "startTime": 226.767,
-        "endTime": 228.587,
-        "hanzi": "去店里迈克尔要叫",
-        "pinyin": "qù diàn lǐ mài kè ěr yào jiào",
-        "meaning": "Đến cửa hàng và nhờ Michael đặt hàng",
+        "id": 52,
+        "startTime": 226.727,
+        "endTime": 229.121,
+        "hanzi": "到餐厅迈克尔不知道要叫什么,",
+        "pinyin": "dào cān tīng mài kè ěr bù zhī dào yào jiào shén me ,",
+        "meaning": "Michael không biết phải gọi gì khi đến nhà hàng.",
         "keywords": [
-          "去店",
-          "里迈"
+          "到餐",
+          "厅迈"
         ],
         "blankIndices": [
           0,
-          4,
-          7
+          6,
+          12
         ]
       },
       {
-        "id": 58,
-        "startTime": 229.667,
-        "endTime": 230.627,
+        "id": 53,
+        "startTime": 229.121,
+        "endTime": 230.661,
         "hanzi": "他问服务",
         "pinyin": "tā wèn fú wù",
         "meaning": "anh ấy hỏi về dịch vụ",
@@ -5306,15 +5392,174 @@
         ]
       },
       {
-        "id": 59,
-        "startTime": 231.767,
-        "endTime": 228.001,
-        "hanzi": "你们这里有什么特菜Đếnnhàhàng,MaiCưa",
-        "pinyin": "nǐ men zhè lǐ yǒu shén me tè cài Đ ế n n h à h à n g , M a i C ư a",
-        "meaning": "Ở đây có món gì đặc biệt? Đến hàng, Mai Cưa",
+        "id": 54,
+        "startTime": 231.781,
+        "endTime": 235.201,
+        "hanzi": "你们这里有什么特色菜?",
+        "pinyin": "nǐ men zhè lǐ yǒu shén me tè sè cài ?",
+        "meaning": "Ở đây có món gì đặc biệt?",
         "keywords": [
           "你们",
           "这里"
+        ],
+        "blankIndices": [
+          0,
+          5,
+          9
+        ]
+      },
+      {
+        "id": 55,
+        "startTime": 235.981,
+        "endTime": 238.421,
+        "hanzi": "特色菜,有意思是特色菜",
+        "pinyin": "tè sè cài , yǒu yì sī shì tè sè cài",
+        "meaning": "Món ăn đặc biệt, món ăn đặc biệt thú vị",
+        "keywords": [
+          "特色",
+          "菜有"
+        ],
+        "blankIndices": [
+          0,
+          5,
+          9
+        ]
+      },
+      {
+        "id": 56,
+        "startTime": 239.241,
+        "endTime": 244.541,
+        "hanzi": "除了这一句,你们也可以说你们这里有什么招牌",
+        "pinyin": "chú le zhè yí jù , nǐ men yě kě yǐ shuō nǐ men zhè lǐ yǒu shén me zhāo pái",
+        "meaning": "Ngoài câu này bạn còn có thể nói chữ ký của bạn ở đây là gì?",
+        "keywords": [
+          "除了",
+          "这一"
+        ],
+        "blankIndices": [
+          0,
+          10,
+          19
+        ]
+      },
+      {
+        "id": 57,
+        "startTime": 244.541,
+        "endTime": 249.401,
+        "hanzi": "菜?",
+        "pinyin": "cài ?",
+        "meaning": "rau quả?",
+        "keywords": [
+          "菜"
+        ],
+        "blankIndices": [
+          0
+        ]
+      },
+      {
+        "id": 58,
+        "startTime": 249.721,
+        "endTime": 252.161,
+        "hanzi": "当您称呼,您可以说",
+        "pinyin": "dāng nín chēng hu , nín kě yǐ shuō",
+        "meaning": "Khi bạn xưng hô, bạn có thể nói",
+        "keywords": [
+          "当您",
+          "称呼"
+        ],
+        "blankIndices": [
+          0,
+          4,
+          7
+        ]
+      },
+      {
+        "id": 59,
+        "startTime": 252.921,
+        "endTime": 254.641,
+        "hanzi": "比如",
+        "pinyin": "bǐ rú",
+        "meaning": "Ví dụ",
+        "keywords": [
+          "比如"
+        ],
+        "blankIndices": [
+          0
+        ]
+      },
+      {
+        "id": 60,
+        "startTime": 260.001,
+        "endTime": 260.021,
+        "hanzi": "或者",
+        "pinyin": "huò zhě",
+        "meaning": "hoặc",
+        "keywords": [
+          "或者"
+        ],
+        "blankIndices": [
+          0
+        ]
+      },
+      {
+        "id": 61,
+        "startTime": 265.541,
+        "endTime": 272.261,
+        "hanzi": "当前到分数的当前吃你想反请了，",
+        "pinyin": "dāng qián dào fēn shù de dāng qián chī nǐ xiǎng fǎn qǐng le ，",
+        "meaning": "Bây giờ đến phần số, nếu bạn muốn mời,",
+        "keywords": [
+          "当前",
+          "到分"
+        ],
+        "blankIndices": [
+          0,
+          7,
+          13
+        ]
+      },
+      {
+        "id": 62,
+        "startTime": 272.261,
+        "endTime": 272.901,
+        "hanzi": "你可请复上",
+        "pinyin": "nǐ kě qǐng fù shàng",
+        "meaning": "Bạn có thể nói",
+        "keywords": [
+          "你可",
+          "请复"
+        ],
+        "blankIndices": [
+          0,
+          2
+        ]
+      },
+      {
+        "id": 63,
+        "startTime": 279.721,
+        "endTime": 282.021,
+        "hanzi": "你想要删除，",
+        "pinyin": "nǐ xiǎng yào shān chú ，",
+        "meaning": "Nếu bạn muốn giải quyết,",
+        "keywords": [
+          "你想",
+          "要删"
+        ],
+        "blankIndices": [
+          0,
+          2
+        ]
+      },
+      {
+        "id": 64,
+        "startTime": 282.021,
+        "endTime": 285.701,
+        "hanzi": "你可请复上:我是AA系了!",
+        "pinyin": "nǐ kě qǐng fù shàng : wǒ shì A A xì le !",
+        "meaning": "Bạn có thể nói: \"Chúng ta AA chế!\"",
+        "keywords": [
+          "你可",
+          "请复"
         ],
         "blankIndices": [
           0,
@@ -5323,380 +5568,82 @@
         ]
       },
       {
-        "id": 60,
-        "startTime": 228.001,
-        "endTime": 230.281,
-        "hanzi": "khôngbiếtgọimóngì.Anhấyđãhỏi",
-        "pinyin": "k h ô n g b i ế t g ọ i m ó n g ì . A n h ấ y đ ã h ỏ i",
-        "meaning": "khôngbiết kêumóngì.Anhấy đã hỏi",
+        "id": 65,
+        "startTime": 290.961,
+        "endTime": 292.881,
+        "hanzi": "好，习好学习一下存在不，",
+        "pinyin": "hǎo ， xí hào xué xí yí xià cún zài bù ，",
+        "meaning": "Tốt, mọi người đã học được chưa?",
         "keywords": [
-          "k"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 61,
-        "startTime": 230.281,
-        "endTime": 231.221,
-        "hanzi": "年子主主",
-        "pinyin": "p h ụ c v ụ .",
-        "meaning": "phụ cvụ",
-        "keywords": [
-          "年子",
-          "主主"
+          "好习",
+          "好学"
         ],
         "blankIndices": [
           0,
-          2
-        ]
-      },
-      {
-        "id": 62,
-        "startTime": 236.021,
-        "endTime": 238.201,
-        "hanzi": "Thưaxưachaicónghĩalàmónđặc",
-        "pinyin": "T h ư a x ư a c h a i c ó n g h ĩ a l à m ó n đ ặ c",
-        "meaning": "Thưaxưachaicó nghĩa làm việc đặc biệt",
-        "keywords": [
-          "T"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 63,
-        "startTime": 238.201,
-        "endTime": 238.441,
-        "hanzi": "sản.",
-        "pinyin": "s ả n .",
-        "meaning": "sản phẩm.",
-        "keywords": [
-          "s"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 64,
-        "startTime": 239.301,
-        "endTime": 240.721,
-        "hanzi": "Ngoàicáchnóinàyra,cácbạncũng",
-        "pinyin": "N g o à i c á c h n ó i n à y r a , c á c b ạ n c ũ n g",
-        "meaning": "Ngoài cách nói chuyện này, các bạn cũng vậy",
-        "keywords": [
-          "N"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 65,
-        "startTime": 240.721,
-        "endTime": 241.281,
-        "hanzi": "cóthểnói",
-        "pinyin": "c ó t h ể n ó i",
-        "meaning": "can't say",
-        "keywords": [
-          "c"
-        ],
-        "blankIndices": [
-          0
+          5,
+          9
         ]
       },
       {
         "id": 66,
-        "startTime": 249.961,
-        "endTime": 252.201,
-        "hanzi": "Khigọimón,bạncóthểnói",
-        "pinyin": "K h i g ọ i m ó n , b ạ n c ó t h ể n ó i",
-        "meaning": "Khiọimón, bạn có thể nói",
+        "startTime": 293.661,
+        "endTime": 297.101,
+        "hanzi": "很了，日本的视题已读一下不心了。",
+        "pinyin": "hěn le ， rì běn de shì tí yǐ dú yí xià bù xīn le 。",
+        "meaning": "Vậy, video của chúng ta đã kết thúc rồi.",
         "keywords": [
-          "K"
+          "很了",
+          "日本"
         ],
         "blankIndices": [
-          0
+          0,
+          7,
+          13
         ]
       },
       {
         "id": 67,
-        "startTime": 252.941,
-        "endTime": 254.841,
-        "hanzi": "Ủaláicộngvớimónănđó",
-        "pinyin": "Ủ a l á i c ộ n g v ớ i m ó n ă n đ ó",
-        "meaning": "Ủi cộng đồngcómón đó",
+        "startTime": 297.501,
+        "endTime": 300.801,
+        "hanzi": "你想关闭日本的视题，请了一下点了和给管球，",
+        "pinyin": "nǐ xiǎng guān bì rì běn de shì tí ， qǐng le yí xià diǎn le hé gěi guǎn qiú ，",
+        "meaning": "Nếu bạn thích video của chúng ta, xin vui lòng nhấn thích và đăng ký,",
         "keywords": [
-          "Ủ"
+          "你想",
+          "关闭"
         ],
         "blankIndices": [
-          0
+          0,
+          9,
+          18
         ]
       },
       {
         "id": 68,
-        "startTime": 255.601,
-        "endTime": 255.961,
-        "hanzi": "Vídụ",
-        "pinyin": "V í d ụ",
-        "meaning": "Ví dụ",
+        "startTime": 300.801,
+        "endTime": 303.561,
+        "hanzi": "还了也了日本的视题。",
+        "pinyin": "hái le yě le rì běn de shì tí 。",
+        "meaning": "Hãy cho chúng ta nhận được video mới.",
         "keywords": [
-          "V"
+          "还了",
+          "也了"
         ],
         "blankIndices": [
-          0
+          0,
+          4,
+          8
         ]
       },
       {
         "id": 69,
-        "startTime": 256.981,
-        "endTime": 258.481,
-        "hanzi": "Ủaláitiềnphítiểubạn",
-        "pinyin": "Ủ a l á i t i ề n p h í t i ể u b ạ n",
-        "meaning": "Ủi tiền tố loại bạn",
+        "startTime": 304.421,
+        "endTime": 305.781,
+        "hanzi": "及了！",
+        "pinyin": "jí le ！",
+        "meaning": "Tạm biệt!",
         "keywords": [
-          "Ủ"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 70,
-        "startTime": 259.761,
-        "endTime": 262.341,
-        "hanzi": "ChotôimộtcốcbiaHoặc",
-        "pinyin": "C h o t ô i m ộ t c ố c b i a H o ặ c",
-        "meaning": "Cho tôi mộtcốcbiaHoặc",
-        "keywords": [
-          "C"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 71,
-        "startTime": 263.041,
-        "endTime": 266.381,
-        "hanzi": "ỦaláiebaycủachữChotôimộtcốc",
-        "pinyin": "Ủ a l á i e b a y c ủ a c h ữ C h o t ô i m ộ t c ố c",
-        "meaning": "ỦaláiebaychữCho tôi mộtcốc",
-        "keywords": [
-          "Ủ"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 72,
-        "startTime": 266.381,
-        "endTime": 266.781,
-        "hanzi": "nướcép",
-        "pinyin": "n ư ớ c é p",
-        "meaning": "nước ép",
-        "keywords": [
-          "n"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 73,
-        "startTime": 267.881,
-        "endTime": 269.961,
-        "hanzi": "ĂnnonèrồiBâyđếnphầntínhtiền",
-        "pinyin": "Ă n n o n è r ồ i B â y đ ế n p h ầ n t í n h t i ề n",
-        "meaning": "Ănnonèrồi Hiện đã đến phần tính tiền",
-        "keywords": [
-          "Ă"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 74,
-        "startTime": 269.741,
-        "endTime": 273.041,
-        "hanzi": "NếubạnmuốnmờiBạncóthểnói",
-        "pinyin": "N ế u b ạ n m u ố n m ờ i B ạ n c ó t h ể n ó i",
-        "meaning": "Nếu bạnmuốnmờiBạn có thể nói",
-        "keywords": [
-          "N"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 75,
-        "startTime": 273.761,
-        "endTime": 275.341,
-        "hanzi": "Chínhthiênuốngchỉnhkhợ",
-        "pinyin": "C h í n h t h i ê n u ố n g c h ỉ n h k h ợ",
-        "meaning": "Chính thiên giảm chỉnhkhợ",
-        "keywords": [
-          "C"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 76,
-        "startTime": 277.161,
-        "endTime": 278.941,
-        "hanzi": "Chínhthiênuốngchỉnhkhợ",
-        "pinyin": "C h í n h t h i ê n u ố n g c h ỉ n h k h ợ",
-        "meaning": "Chính thiên giảm chỉnhkhợ",
-        "keywords": [
-          "C"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 77,
-        "startTime": 280.341,
-        "endTime": 282.201,
-        "hanzi": "Cònnếunhưbạnmuốnchiađềuthì",
-        "pinyin": "C ò n n ế u n h ư b ạ n m u ố n c h i a đ ề u t h ì",
-        "meaning": "Còn if youmuốnchiađềuthì",
-        "keywords": [
-          "C"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 78,
-        "startTime": 282.201,
-        "endTime": 283.041,
-        "hanzi": "chúngtacóthểnói",
-        "pinyin": "c h ú n g t a c ó t h ể n ó i",
-        "meaning": "wetacó thể nói",
-        "keywords": [
-          "c"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 79,
-        "startTime": 283.781,
-        "endTime": 291.941,
-        "hanzi": "Học",
-        "pinyin": "H ọ c",
-        "meaning": "Học",
-        "keywords": [
-          "H"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 80,
-        "startTime": 291.961,
-        "endTime": 295.861,
-        "hanzi": "videovềchủđềđiănnhàhàngcủa",
-        "pinyin": "v i d e o v ề c h ủ đ ề đ i ă n n h à h à n g c ủ a",
-        "meaning": "video giới thiệu chủ đềđi nhà hàng của",
-        "keywords": [
-          "v"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 81,
-        "startTime": 295.861,
-        "endTime": 297.021,
-        "hanzi": "chúngtađếnđâylàhếtrồi.",
-        "pinyin": "c h ú n g t a đ ế n đ â y l à h ế t r ồ i .",
-        "meaning": "chúng tôi đến đâylàhếtrồi.",
-        "keywords": [
-          "c"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 82,
-        "startTime": 297.701,
-        "endTime": 299.021,
-        "hanzi": "cácbạnthíchvideothìđừngquên",
-        "pinyin": "c á c b ạ n t h í c h v i d e o t h ì đ ừ n g q u ê n",
-        "meaning": "các bạn thíchvideothìđừngquên",
-        "keywords": [
-          "c"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 83,
-        "startTime": 299.021,
-        "endTime": 302.001,
-        "hanzi": "ấnnútlikevàđểchúngtacóthểnhận",
-        "pinyin": "ấ n n ú t l i k e v à đ ể c h ú n g t a c ó t h ể n h ậ n",
-        "meaning": "ấn nútlikevàđể họ có thể nhận được",
-        "keywords": [
-          "ấ"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 84,
-        "startTime": 302.001,
-        "endTime": 303.481,
-        "hanzi": "thôngtinvềnhữngvideotiếptheo",
-        "pinyin": "t h ô n g t i n v ề n h ữ n g v i d e o t i ế p t h e o",
-        "meaning": "thông tin về những video tiếp theo",
-        "keywords": [
-          "t"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 85,
-        "startTime": 303.481,
-        "endTime": 303.681,
-        "hanzi": "nhé.",
-        "pinyin": "n h é .",
-        "meaning": "nhé.",
-        "keywords": [
-          "n"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 86,
-        "startTime": 304.481,
-        "endTime": 305.441,
-        "hanzi": "Thùngsứmừng,chào",
-        "pinyin": "T h ù n g s ứ m ừ n g , c h à o",
-        "meaning": "Thùngsứmừng,chao",
-        "keywords": [
-          "T"
+          "及了"
         ],
         "blankIndices": [
           0

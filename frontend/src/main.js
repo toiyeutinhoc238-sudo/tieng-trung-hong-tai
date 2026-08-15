@@ -698,14 +698,15 @@ function speakText(text) {
     activeAudioElement = null;
   }
 
-  // 2. Speed settings
+  // 2. Speed settings (Slightly slower for clear learning: default 0.78)
   const speedSelectEl = document.getElementById('tts-speed-select');
-  const currentSpeed = (speedSelectEl && speedSelectEl.value) ? parseFloat(speedSelectEl.value) : (parseFloat(localStorage.getItem('speech_playback_rate')) || 0.85);
+  let currentSpeed = (speedSelectEl && speedSelectEl.value) ? parseFloat(speedSelectEl.value) : (parseFloat(localStorage.getItem('speech_playback_rate')) || 0.78);
+  if (currentSpeed > 0.85) currentSpeed = 0.78;
   localStorage.setItem('speech_playback_rate', currentSpeed.toString());
 
-  // 3. Request Baidu Female Voice MP3 stream from backend server
+  // 3. Request Baidu Female Voice MP3 stream from backend server with speed=3 (chậm rãi, tròn vành rõ chữ)
   const currentVoice = 'baidu-female';
-  const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(currentVoice)}`;
+  const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(currentVoice)}&speed=3`;
   
   const audio = new Audio(url);
   audio.playbackRate = currentSpeed;
@@ -4997,11 +4998,16 @@ window.showLearningFlashcard = function(index) {
       ${hasExercise ? `
         <div style="border-top: 1px dashed rgba(255,255,255,0.15); padding-top: 18px; width: 100%; text-align: left;">
           
-          <!-- Prompt Row: Dịch sang tiếng Trung: "..." -->
-          <div style="display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 1.05rem; color: var(--text-color); margin-bottom: 12px; flex-wrap: wrap;">
-            <i class="fa-solid fa-language text-primary" style="font-size: 1.15rem;"></i>
-            <span>Dịch sang tiếng Trung:</span>
-            <span style="font-weight: 800; color: #38bdf8; font-size: 1.05rem;">"${sentenceQ}"</span>
+          <!-- Prompt Row: Dịch sang tiếng Trung: "..." with Nghe Audio Button -->
+          <div style="display: flex; align-items: center; justify-content: space-between; font-weight: 700; font-size: 1.05rem; color: var(--text-color); margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <i class="fa-solid fa-language text-primary" style="font-size: 1.15rem;"></i>
+              <span>Dịch sang tiếng Trung:</span>
+              <span style="font-weight: 800; color: #38bdf8; font-size: 1.05rem;">"${sentenceQ}"</span>
+            </div>
+            <button onclick="window.speakText('${sentenceAns.replace(/'/g, "\\'")}')" class="btn btn-sm" style="background: rgba(56, 189, 248, 0.18); border: 1.5px solid rgba(56, 189, 248, 0.4); color: #38bdf8; border-radius: 12px; padding: 4px 12px; font-size: 0.85rem; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;" title="Nghe phát âm câu mẫu" onmouseover="this.style.background='rgba(56, 189, 248, 0.3)'" onmouseout="this.style.background='rgba(56, 189, 248, 0.18)'">
+              <i class="fa-solid fa-volume-high"></i> Nghe
+            </button>
           </div>
 
           <!-- Clean Full Width Input Box matching Image 2 -->
@@ -7366,7 +7372,12 @@ function renderLessonHeroCardContent(w, index, total) {
       <!-- Bottom Full Width Container: DỊCH SANG TIẾNG TRUNG (Typing & Hint Cards) -->
       <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.12); border-radius: 18px; padding: 18px 20px; width: 100%; box-sizing: border-box; box-shadow: 0 6px 20px rgba(0,0,0,0.25);">
         <div style="font-size: 0.95rem; font-weight: 800; color: #38bdf8; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
-          <span><i class="fa-solid fa-language"></i> Dịch sang tiếng Trung: <span style="color: #ffffff; font-weight: 800;">"${exercisePrompt}"</span></span>
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <span><i class="fa-solid fa-language"></i> Dịch sang tiếng Trung: <span style="color: #ffffff; font-weight: 800;">"${exercisePrompt}"</span></span>
+            <button onclick="window.speakText('${targetAnswer.replace(/'/g, "\\'")}')" class="btn btn-sm" style="background: rgba(56, 189, 248, 0.18); border: 1.5px solid rgba(56, 189, 248, 0.4); color: #38bdf8; border-radius: 10px; padding: 3px 10px; font-size: 0.82rem; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s;" title="Nghe phát âm câu dịch mẫu" onmouseover="this.style.background='rgba(56, 189, 248, 0.3)'" onmouseout="this.style.background='rgba(56, 189, 248, 0.18)'">
+              <i class="fa-solid fa-volume-high"></i> Nghe
+            </button>
+          </div>
           <div id="lesson-typing-feedback"></div>
         </div>
 
@@ -8368,8 +8379,13 @@ function renderBkModalContent() {
         </div>
 
         <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:18px; margin-bottom:20px;">
-          <div style="font-size:0.92rem; font-weight:800; color:#38bdf8; margin-bottom:10px; text-align:left; display:flex; justify-content:space-between;">
-            <span>Dịch sang tiếng Trung:</span>
+          <div style="font-size:0.92rem; font-weight:800; color:#38bdf8; margin-bottom:10px; text-align:left; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+              <span>Dịch sang tiếng Trung:</span>
+              <button onclick="window.speakText('${cleanSpeech}')" style="background:rgba(56,189,248,0.18); border:1.5px solid rgba(56,189,248,0.4); color:#38bdf8; border-radius:8px; padding:3px 10px; font-size:0.8rem; font-weight:800; cursor:pointer; display:inline-flex; align-items:center; gap:5px; transition:all 0.2s;" title="Nghe phát âm câu mẫu">
+                <i class="fa-solid fa-volume-high"></i> Nghe
+              </button>
+            </div>
             <span id="bk-translate-feedback"></span>
           </div>
 

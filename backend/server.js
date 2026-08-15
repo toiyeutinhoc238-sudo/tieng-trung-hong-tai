@@ -1684,8 +1684,8 @@ async function fetchElevenLabsTTS(text, voiceId, apiKey) {
 }
 
 // Helper to fetch MP3 audio from Baidu Fanyi TTS (Native Beijing Mandarin Female)
-async function fetchBaiduTTS(text) {
-  const url = 'https://fanyi.baidu.com/gettts?lan=zh&text=' + encodeURIComponent(text) + '&spd=4&source=web&pit=9';
+async function fetchBaiduTTS(text, speed = '3') {
+  const url = 'https://fanyi.baidu.com/gettts?lan=zh&text=' + encodeURIComponent(text) + `&spd=${speed}&source=web&pit=9`;
   return new Promise((resolve, reject) => {
     https.get(url, {
       headers: {
@@ -1739,7 +1739,7 @@ async function fetchGoogleTTS(text) {
 
 // GET /api/tts - Native Chinese & ElevenLabs Multilingual AI Speech Engine
 app.get('/api/tts', async (req, res) => {
-  const { text, voice = 'baidu-female' } = req.query;
+  const { text, voice = 'baidu-female', speed = '3' } = req.query;
   if (!text) {
     return res.status(400).json({ error: 'Text parameter is required' });
   }
@@ -1749,7 +1749,7 @@ app.get('/api/tts', async (req, res) => {
     const rawText = String(text).trim();
     const cleanText = cleanTTSInput(rawText) || rawText;
 
-    const hash = crypto.createHash('md5').update(`v10_${safeVoice}_${cleanText}`).digest('hex');
+    const hash = crypto.createHash('md5').update(`v11_${safeVoice}_spd${speed}_${cleanText}`).digest('hex');
     const fileName = `${hash}.mp3`;
     const filePath = path.join(AUDIO_CACHE_DIR, fileName);
 
@@ -1762,7 +1762,7 @@ app.get('/api/tts', async (req, res) => {
     }
 
     if (!fileExists) {
-      let audioBuffer = await fetchBaiduTTS(cleanText);
+      let audioBuffer = await fetchBaiduTTS(cleanText, speed);
       if (!audioBuffer || audioBuffer.length < 100) {
         audioBuffer = await fetchGoogleTTS(cleanText);
       }
