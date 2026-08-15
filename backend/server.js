@@ -2346,8 +2346,11 @@ NHIỆM VỤ HIỆU ĐÍCH VÀ DỊCH THUẬT CHUẨN XÁC TUYỆT ĐỐI 100%:
    - Đảm bảo Chữ Hán khớp chính xác với âm thanh hát/nói trong video và khớp đúng ngữ nghĩa với câu Tiếng Việt đã được sửa chính tả.
    - Sửa triệt để các lỗi nghe nhầm đồng âm từ ASR (Chữ Hán sai nét, sai từ, hoặc sai ngữ pháp).
 
-3. "startTime" & "endTime":
-   - Giữ nguyên mốc thời gian phát âm thực tế chính xác từng mili-giây.
+3. "startTime" & "endTime" & "id":
+   - TỰ DO GỘP/CHIA CÂU THEO LỜI BÀI HÁT CHUẨN: Dựa vào kiến thức âm nhạc của bạn về bài hát này, hãy tái tạo lại cấu trúc dòng (lyrics) CHUẨN XÁC 100% như phụ đề MV gốc.
+   - Nếu các câu thô bị cắt vụn vô nghĩa, hãy GỘP chúng lại thành 1 dòng trọn vẹn ý nghĩa.
+   - "startTime" là thời gian bắt đầu của mảnh ghép đầu tiên, "endTime" là thời gian kết thúc của mảnh ghép cuối cùng.
+   - "id" hãy giữ nguyên theo id của mảnh ghép đầu tiên.
 ${isFirstChunk ? `4. "hskLevel": Cấp độ HSK phù hợp ("1", "2", "3", "4", "5", "6").
 5. "category": Chọn đúng 1 trong: "Âm Nhạc", "Giao Tiếp", "Ẩm Thực", "Du Lịch", "Hoạt Hình", "Phim Ảnh", "Công Việc", "Tin Tức", "Văn Hóa", "Đời Sống", "Khác".
 6. "description": 1 câu tóm tắt nội dung bài học tiếng Việt hấp dẫn.` : ''}
@@ -2359,7 +2362,7 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
 {
   ${isFirstChunk ? `"hskLevel": "2",\n  "category": "Âm Nhạc",\n  "description": "...",\n  ` : ''}"sentences": [
     {
-      "id": 1,
+      "id": <BẮT BUỘC GIỮ NGUYÊN id CỦA CÂU TƯƠNG ỨNG TRONG DANH SÁCH THÔ>,
       "startTime": 0.0,
       "endTime": 5.0,
       "hanzi": "...",
@@ -2377,9 +2380,12 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
       }
 
         if (Array.isArray(parsed.sentences)) {
-          for (let idx = 0; idx < chunk.length; idx++) {
-            const origItem = chunk[idx];
-            const s = parsed.sentences[idx] || {};
+          for (let idx = 0; idx < parsed.sentences.length; idx++) {
+            const s = parsed.sentences[idx];
+            if (!s) continue;
+            
+            // Match with original item to carry over 'words' array (for granular sync) if possible
+            const origItem = chunk.find(x => x.id == s.id) || chunk[idx] || {};
 
             let hanzi = s.hanzi || origItem.text || '';
             let vietnamese = s.vietnamese || origItem.text || '';
@@ -2394,13 +2400,19 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
 
             let py = '';
             try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) {}
-            const exactStart = (origItem && typeof origItem.startTime === 'number' && !isNaN(origItem.startTime)) ? origItem.startTime : parseTimeSeconds(s.startTime);
-            const exactEnd = (origItem && typeof origItem.endTime === 'number' && !isNaN(origItem.endTime)) ? origItem.endTime : parseTimeSeconds(s.endTime);
+            
+            // TRUST THE LLM's TIMESTAMPS: The LLM might have merged short fragments.
+            let exactStart = (s.startTime !== undefined && s.startTime !== null) ? parseTimeSeconds(s.startTime) : origItem.startTime;
+            let exactEnd = (s.endTime !== undefined && s.endTime !== null) ? parseTimeSeconds(s.endTime) : origItem.endTime;
+            
+            // Safety fallback if LLM omitted time
+            if (exactStart === undefined || isNaN(exactStart)) exactStart = 0;
+            if (exactEnd === undefined || isNaN(exactEnd)) exactEnd = exactStart + 3;
 
             refinedSentences.push({
               id: refinedSentences.length + 1,
-              startTime: parseFloat(Number(exactStart || 0).toFixed(3)),
-              endTime: parseFloat(Number(exactEnd || (exactStart + 3)).toFixed(3)),
+              startTime: parseFloat(Number(exactStart).toFixed(3)),
+              endTime: parseFloat(Number(exactEnd).toFixed(3)),
               hanzi: hanzi,
               pinyin: py,
               meaning: vietnamese,
@@ -2479,12 +2491,15 @@ function postProcessAndSplitSentences(sentences) {
       const part = clausesHanzi[i];
       if (/^[，。！？；,\.!\?\n]+$/.test(part)) {
         currentClause += part;
-        if (currentClause.trim().length > 0) {
+        // Only force a split on punctuation if the sentence is getting too long (e.g. > 35 chars)
+        // or if it's a hard stop like a period/exclamation AND it's reasonably long.
+        // For short song lyrics, keep them together!
+        if (currentClause.trim().length > 35) {
           subLines.push(currentClause.trim());
           currentClause = '';
         }
       } else {
-        if (currentClause.length + part.length > 15 && currentClause.trim().length > 0) {
+        if (currentClause.length + part.length > 45 && currentClause.trim().length > 0) {
           subLines.push(currentClause.trim());
           currentClause = part;
         } else {
@@ -2496,11 +2511,11 @@ function postProcessAndSplitSentences(sentences) {
       subLines.push(currentClause.trim());
     }
 
-    // If no punctuation or couldn't split, and text is longer than 18 chars, split by length
-    if (subLines.length <= 1 && rawHanzi.length > 18) {
+    // If no punctuation or couldn't split, and text is longer than 50 chars, split by length
+    if (subLines.length <= 1 && rawHanzi.length > 50) {
       const chars = rawHanzi.split('');
       subLines.length = 0;
-      const chunkSize = 12;
+      const chunkSize = 25;
       for (let k = 0; k < chars.length; k += chunkSize) {
         subLines.push(chars.slice(k, k + chunkSize).join(''));
       }
