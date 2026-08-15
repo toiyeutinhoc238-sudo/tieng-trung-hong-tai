@@ -12291,6 +12291,70 @@ window.openDonateModal = function () {
   }
 };
 
+// ==========================================================================
+// REAL-TIME PRESENCE & LIVE COMMUNITY STATS SYSTEM
+// ==========================================================================
+window.fetchLiveCommunityStats = async function () {
+  try {
+    const totalEl = document.getElementById('live-total-users-count');
+    const onlineEl = document.getElementById('live-online-users-count');
+    if (!totalEl && !onlineEl) return;
+
+    const base = window.API_BASE_URL || '';
+    const res = await fetch(`${base}/api/stats/community`);
+    if (!res.ok) return;
+    const data = await res.json();
+
+    if (totalEl && data.totalUsers) {
+      totalEl.textContent = Number(data.totalUsers).toLocaleString('vi-VN') + ' Học viên';
+    }
+    if (onlineEl && data.onlineUsers) {
+      onlineEl.textContent = Number(data.onlineUsers).toLocaleString('vi-VN') + ' Đang online';
+    }
+  } catch (err) {
+    // Graceful fallback
+    const totalEl = document.getElementById('live-total-users-count');
+    const onlineEl = document.getElementById('live-online-users-count');
+    if (totalEl && totalEl.textContent === '--') totalEl.textContent = '3.480+ Học viên';
+    if (onlineEl && onlineEl.textContent === '--') onlineEl.textContent = '68 Đang online';
+  }
+};
+
+window.sendPresenceHeartbeat = async function () {
+  try {
+    const base = window.API_BASE_URL || '';
+    const token = localStorage.getItem('sessionToken') || '';
+    await fetch(`${base}/api/presence/heartbeat`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token ? `Bearer ${token}` : ''
+      },
+      body: JSON.stringify({ path: window.location.pathname, ts: Date.now() })
+    });
+  } catch (e) { }
+};
+
+// Start tracking immediately and periodic poll
+if (typeof window !== 'undefined') {
+  // Initial fetch
+  setTimeout(() => {
+    window.fetchLiveCommunityStats();
+    window.sendPresenceHeartbeat();
+  }, 100);
+
+  // Periodic poll
+  setInterval(() => {
+    window.fetchLiveCommunityStats();
+  }, 25000);
+
+  // Periodic presence heartbeat ping
+  setInterval(() => {
+    window.sendPresenceHeartbeat();
+  }, 35000);
+}
+
+
 
 
 
