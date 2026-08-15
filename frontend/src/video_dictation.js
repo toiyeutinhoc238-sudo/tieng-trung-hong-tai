@@ -7274,8 +7274,8 @@ function renderCatalogGrid() {
           <p style="max-width: 500px; margin: 0 auto 20px; font-size: 0.92rem; color: var(--text-secondary);">
             Dán bất kỳ link video YouTube yêu thích nào (MV, phim hoạt hình, hội thoại...) để tạo bài luyện nghe chép chính tả cá nhân hóa!
           </p>
-          <button class="btn btn-primary" onclick="window.openAddVideoModal()" style="background: linear-gradient(135deg, #ef4444, #f97316); border: none; font-weight: 800; padding: 12px 28px; border-radius: 50px; box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);">
-            <i class="fa-solid fa-plus"></i> Thêm Video YouTube Ngay
+          <button class="btn btn-sm" onclick="window.openAddVideoModal()" style="background: rgba(255,255,255,0.08); border: 1.5px dashed rgba(245, 158, 11, 0.4); color: #cbd5e1; font-weight: 800; padding: 10px 24px; border-radius: 50px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
+            <i class="fa-solid fa-lock" style="color: #fbbf24;"></i> Thêm Video YouTube <span style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; padding: 2px 8px; border-radius: 20px; font-size: 0.72rem; font-weight: 800;">Sắp ra mắt</span>
           </button>
         </div>
       `;
@@ -7404,8 +7404,7 @@ function returnToCatalog() {
 // ==========================================
 
 function openAddVideoModal() {
-  const modal = document.getElementById('dict-add-video-modal');
-  if (modal) modal.style.display = 'flex';
+  showToast("🔒 Tính năng Thêm Video YouTube cá nhân đang được nâng cấp và sẽ sớm ra mắt! Hãy cùng đón chờ nhé. ✨", false);
 }
 
 function closeAddVideoModal() {
