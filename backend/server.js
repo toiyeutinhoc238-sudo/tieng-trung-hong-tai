@@ -2258,76 +2258,7 @@ async function callLLMJson(prompt) {
   throw new Error('All AI LLM models unavailable');
 }
 
-// AI Master Linguistic Refinement, 100% Vietnamese Proofreader & HSK + Category Classifier
-async function enhanceAndClassifyLesson(rawSpeechSegments, videoTitle, durationSeconds) {
-  if (!Array.isArray(rawSpeechSegments) || rawSpeechSegments.length === 0) {
-    return {
-      level: "2",
-      levelText: "HSK 2 - 3 (Cơ bản)",
-      category: "Giao Tiếp",
-      description: `Bài luyện nghe chép chính tả ${videoTitle}`,
-      sentences: []
-    };
-  }
 
-  // Baseline category & level heuristics
-  let category = 'Giao Tiếp';
-  const lowerTitle = (videoTitle || '').toLowerCase();
-  if (lowerTitle.includes('bài hát') || lowerTitle.includes('nhạc') || lowerTitle.includes('song') || lowerTitle.includes('music') || lowerTitle.includes('mv') || lowerTitle.includes('hát') || lowerTitle.includes('bằng kiều') || lowerTitle.includes('ca sĩ') || lowerTitle.includes('trái tim')) {
-    category = 'Âm Nhạc';
-  } else if (lowerTitle.includes('ăn') || lowerTitle.includes('món') || lowerTitle.includes('nhà hàng') || lowerTitle.includes('uống') || lowerTitle.includes('trà') || lowerTitle.includes('nấu')) {
-    category = 'Ẩm Thực';
-  } else if (lowerTitle.includes('du lịch') || lowerTitle.includes('khách sạn') || lowerTitle.includes('sân bay') || lowerTitle.includes('tàu') || lowerTitle.includes('hỏi đường')) {
-    category = 'Du Lịch';
-  } else if (lowerTitle.includes('hoạt hình') || lowerTitle.includes('peppa') || lowerTitle.includes('anime') || lowerTitle.includes('cartoon')) {
-    category = 'Hoạt Hình';
-  } else if (lowerTitle.includes('phim') || lowerTitle.includes('movie') || lowerTitle.includes('drama') || lowerTitle.includes('điện ảnh')) {
-    category = 'Phim Ảnh';
-  } else if (lowerTitle.includes('công việc') || lowerTitle.includes('công sở') || lowerTitle.includes('phỏng vấn') || lowerTitle.includes('kinh doanh') || lowerTitle.includes('họp')) {
-    category = 'Công Việc';
-  } else if (lowerTitle.includes('tin tức') || lowerTitle.includes('thời sự') || lowerTitle.includes('news') || lowerTitle.includes('bản tin')) {
-    category = 'Tin Tức';
-  } else if (lowerTitle.includes('v văn hóa') || lowerTitle.includes('lễ hội') || lowerTitle.includes('tết') || lowerTitle.includes('phong tục') || lowerTitle.includes('lịch sử')) {
-    category = 'Văn Hóa';
-  } else if (lowerTitle.includes('mua') || lowerTitle.includes('sắm') || lowerTitle.includes('vlog') || lowerTitle.includes('quần áo')) {
-    category = 'Đời Sống';
-  }
-
-// Fallback Batch Translator & Pinyin Generator
-async function batchTranslateAndPinyin(rawSpeechSegments) {
-  if (!rawSpeechSegments || !Array.isArray(rawSpeechSegments)) return [];
-  const results = [];
-  for (let i = 0; i < rawSpeechSegments.length; i++) {
-    const item = rawSpeechSegments[i];
-    const clean = (item.text || '').trim();
-    if (!clean) continue;
-
-    const isChinese = /[\u4e00-\u9fa5]/.test(clean);
-    let hanzi = clean;
-    let meaning = '';
-
-    if (isChinese) {
-      meaning = await translateText(clean, 'zh-CN', 'vi');
-    } else {
-      hanzi = await translateText(clean, 'auto', 'zh-CN');
-      meaning = clean;
-    }
-
-    let py = '';
-    try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) {}
-
-    results.push({
-      id: item.id || (i + 1),
-      startTime: parseFloat(Number(item.startTime || 0).toFixed(2)),
-      endTime: parseFloat(Number(item.endTime || 0).toFixed(2)),
-      hanzi: hanzi || clean,
-      pinyin: py,
-      meaning: meaning || clean,
-      keywords: [hanzi ? hanzi.slice(0, Math.min(2, hanzi.length)) : '']
-    });
-  }
-  return results;
-}
 
 // Master Linguistic Proofreader & Classification Engine
 async function enhanceAndClassifyLesson(rawSpeechSegments, videoTitle, durationSeconds) {
@@ -2423,10 +2354,13 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
       }
 
         if (Array.isArray(parsed.sentences)) {
-          for (const s of parsed.sentences) {
-            if (!s.vietnamese && !s.hanzi) continue;
-            let hanzi = s.hanzi || '';
-            let vietnamese = s.vietnamese || '';
+          for (let idx = 0; idx < chunk.length; idx++) {
+            const origItem = chunk[idx];
+            const s = parsed.sentences[idx] || {};
+
+            let hanzi = s.hanzi || origItem.text || '';
+            let vietnamese = s.vietnamese || origItem.text || '';
+
             if (!hanzi && vietnamese) {
               hanzi = await translateText(vietnamese, 'vi', 'zh-CN');
             }
@@ -2437,14 +2371,13 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
 
             let py = '';
             try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) {}
-            const origItem = chunkItems.find(c => c.id === s.id) || chunkItems[refinedSentences.length % Math.max(1, chunkItems.length)];
             const exactStart = (origItem && typeof origItem.startTime === 'number' && !isNaN(origItem.startTime)) ? origItem.startTime : parseTimeSeconds(s.startTime);
             const exactEnd = (origItem && typeof origItem.endTime === 'number' && !isNaN(origItem.endTime)) ? origItem.endTime : parseTimeSeconds(s.endTime);
 
             refinedSentences.push({
-              id: s.id || refinedSentences.length + 1,
-              startTime: parseFloat(Number(exactStart).toFixed(3)),
-              endTime: parseFloat(Number(exactEnd).toFixed(3)),
+              id: refinedSentences.length + 1,
+              startTime: parseFloat(Number(exactStart || 0).toFixed(3)),
+              endTime: parseFloat(Number(exactEnd || (exactStart + 3)).toFixed(3)),
               hanzi: hanzi,
               pinyin: py,
               meaning: vietnamese,
@@ -2467,17 +2400,16 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
     } catch (llmErr) {
       console.warn('[AI Master Engine] Groq LLM refinement warn, falling back to base translation:', llmErr.message);
     }
-  }
 
-  // Fallback to base translation if Groq LLM was unavailable
-  const baseSentences = await batchTranslateAndPinyin(rawSpeechSegments);
-  return {
-    level,
-    levelText,
-    category,
-    description,
-    sentences: baseSentences
-  };
+    // Fallback to base translation if Groq LLM was unavailable
+    const baseSentences = await batchTranslateAndPinyin(rawSpeechSegments);
+    return {
+      level,
+      levelText,
+      category,
+      description,
+      sentences: baseSentences
+    };
 }
 
 function parseISO8601Duration(isoStr) {
@@ -2623,8 +2555,7 @@ export async function extractYouTubeDictation(youtubeId) {
         console.log(`[Dictation] Tier 0 YouTube Captions: ${ytTranscript.length} lines, up to ${lastTimestamp}s / total ${duration}s`);
 
         if (raw.length > 0) {
-          const speech = consolidateSpeechSegments(raw);
-          const enhanced = await enhanceAndClassifyLesson(speech, videoTitle, duration);
+          const enhanced = await enhanceAndClassifyLesson(raw, videoTitle, duration);
           if (enhanced.sentences && enhanced.sentences.length > 0) {
             return {
               success: true,
@@ -2790,7 +2721,7 @@ export async function extractYouTubeDictation(youtubeId) {
       if (groqClient && existsSync(tempAudio)) {
         console.log(`[Dictation] Transcribing FULL audio with Groq Whisper Large v3...`);
         const { createReadStream } = await import('fs');
-        const whisperPrompt = 'Universal multilingual audio transcription, Chinese Mandarin 汉语 汉字, Cantonese 粤语, Vietnamese, English lyrics and conversation, exact punctuation';
+        const whisperPrompt = 'Chinese Mandarin 汉语 汉字, Pinyin, Song Lyrics, Conversation';
 
         let transcription;
         try {
