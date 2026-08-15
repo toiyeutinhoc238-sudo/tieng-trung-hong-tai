@@ -1896,11 +1896,14 @@ app.get('/api/dictation/lessons/:id', async (req, res) => {
 function cleanHumanSpeechText(text) {
   if (!text) return '';
   let cleaned = text
-    .replace(/\[(?:Âm nhạc|Nhạc|tiếng nhạc|Music|music|Applause|Vỗ tay|Tiếng cười|Laughter|Tiếng ồn|Silence|Trống|Guitar|Piano|Hát|Singing|Cheering)\]/gi, '')
-    .replace(/\((?:Âm nhạc|Nhạc|tiếng nhạc|Music|music|Applause|Vỗ tay|Tiếng cười|Laughter|Tiếng ồn|Silence|nhạc nền|nhạc dạo)\)/gi, '')
+    .replace(/[\[\(【（](?:Âm nhạc|Nhạc|tiếng nhạc|Music|music|Applause|Vỗ tay|Tiếng cười|Laughter|Tiếng ồn|Silence|Trống|Guitar|Piano|Hát|Singing|Cheering|音乐|伴奏|掌声|笑声|吉他|钢琴|欢呼)[\]\)】）]/gi, '')
     .replace(/[♪♫♩♬★☆✦✧❤️👍🔥]+/g, '')
     .replace(/\s{2,}/g, ' ')
     .trim();
+  
+  // If only punctuation or whitespace is left, return empty string
+  if (/^[\p{P}\s]*$/u.test(cleaned)) return '';
+  
   return cleaned;
 }
 
@@ -2721,10 +2724,10 @@ export async function extractYouTubeDictation(youtubeId, extractRawOnly = false)
       if (ytTranscript && ytTranscript.length > 0) {
         const rawInitial = ytTranscript.map((t, idx) => ({
           id: idx + 1,
-          text: t.text,
+          text: cleanHumanSpeechText(t.text),
           startTime: parseFloat((t.offset / 1000).toFixed(3)),
           endTime: parseFloat(((t.offset + t.duration) / 1000).toFixed(3))
-        }));
+        })).filter(t => t.text.length > 0);
 
         // Consolidate short 0.5s auto-caption fragments into natural full sentences
         const raw = [];
@@ -2749,6 +2752,21 @@ export async function extractYouTubeDictation(youtubeId, extractRawOnly = false)
         console.log(`[Dictation] Tier 0 YouTube Captions: ${raw.length} consolidated sentences from ${ytTranscript.length} raw lines, up to ${lastTimestamp}s / total ${duration}s`);
 
         if (raw.length > 0) {
+          if (extractRawOnly) {
+            return {
+              success: true,
+              videoTitle,
+              duration,
+              tierUsed: 'Phụ Đề Gốc YouTube (Raw Extraction)',
+              sentences: raw.map(s => ({
+                ...s,
+                hanzi: s.text,
+                pinyin: '',
+                meaning: ''
+              }))
+            };
+          }
+
           const enhanced = await enhanceAndClassifyLesson(raw, videoTitle, duration);
           if (enhanced.sentences && enhanced.sentences.length > 0) {
             return {
@@ -2782,6 +2800,22 @@ export async function extractYouTubeDictation(youtubeId, extractRawOnly = false)
         if (proxySegments && proxySegments.length > 0) {
           console.log(`[Dictation] Tier 0.5 (youtube-transcript.ai) success: ${proxySegments.length} lines!`);
           const speech = consolidateSpeechSegments(proxySegments);
+          
+          if (extractRawOnly) {
+            return {
+              success: true,
+              videoTitle,
+              duration,
+              tierUsed: 'Phụ Đề YouTube Proxy (Raw Extraction)',
+              sentences: speech.map(s => ({
+                ...s,
+                hanzi: s.text,
+                pinyin: '',
+                meaning: ''
+              }))
+            };
+          }
+
           const enhanced = await enhanceAndClassifyLesson(speech, videoTitle, duration);
           if (enhanced.sentences && enhanced.sentences.length > 0) {
             return {
@@ -2977,16 +3011,20 @@ export async function extractYouTubeDictation(youtubeId, extractRawOnly = false)
         let segments = transcription.segments || [];
 
         // Filter out famous Whisper hallucination noise strings & intro credit metadata
-        segments = segments.filter(s => {
-          const t = (s.text || '').toLowerCase();
-          const origText = (s.text || '').trim();
-          const cleanNoSpace = origText.replace(/\s+/g, '');
+        segments = segments.map(s => {
+          s.text = cleanHumanSpeechText(s.text);
+          return s;
+        }).filter(s => {
+          if (!s.text) return false;
+          
+          const t = s.text.toLowerCase();
+          const cleanNoSpace = s.text.replace(/\s+/g, '');
 
           // Drop pure metadata credit spam strings (e.g. "作词 汉语 汉语 作曲 汉语 编曲 汉语")
           if (/^(作词|作曲|编曲|填词|演唱|歌手|字幕|汉语|english|music)+/i.test(cleanNoSpace)) {
             return false;
           }
-          if (/作词.*作曲|作曲.*编曲|编曲.*作词|汉语.*汉语|作词.*汉语|作曲.*汉语/i.test(origText)) {
+          if (/作词.*作曲|作曲.*编曲|编曲.*作词|汉语.*汉语|作词.*汉语|作曲.*汉语/i.test(s.text)) {
             return false;
           }
 
