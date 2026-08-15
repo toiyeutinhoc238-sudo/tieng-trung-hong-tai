@@ -2205,12 +2205,13 @@ async function batchTranslateAndPinyin(speechItems) {
 
 // Universal Multi-Model LLM JSON Caller (LLaMA 3.3 70B -> LLaMA 3.1 8B -> Gemini 2.5 Flash)
 async function callLLMJson(prompt) {
-  // 1. Try Groq LLaMA 3.3 70B
+  // 1. Try Groq LLaMA 3.3 70B (Deterministic temperature 0)
   if (groqClient) {
     try {
       const res = await groqClient.chat.completions.create({
         model: 'llama-3.3-70b-versatile',
         messages: [{ role: 'user', content: prompt }],
+        temperature: 0,
         response_format: { type: 'json_object' }
       });
       return JSON.parse(res.choices[0].message.content);
@@ -2218,11 +2219,12 @@ async function callLLMJson(prompt) {
       console.warn('[LLM] LLaMA 3.3 70B limit/error, falling back to LLaMA 3.1 8B:', e70b.message);
     }
 
-    // 2. Try Groq LLaMA 3.1 8B Instant (Separate daily quota & ultra-fast)
+    // 2. Try Groq LLaMA 3.1 8B Instant (Deterministic temperature 0)
     try {
       const res = await groqClient.chat.completions.create({
         model: 'llama-3.1-8b-instant',
         messages: [{ role: 'user', content: prompt }],
+        temperature: 0,
         response_format: { type: 'json_object' }
       });
       return JSON.parse(res.choices[0].message.content);
@@ -2231,12 +2233,12 @@ async function callLLMJson(prompt) {
     }
   }
 
-  // 3. Try Google Gemini Flash
+  // 3. Try Google Gemini Flash (Deterministic temperature 0)
   if (genAI) {
     try {
       const model = genAI.getGenerativeModel({
         model: 'gemini-1.5-flash',
-        generationConfig: { responseMimeType: 'application/json' }
+        generationConfig: { responseMimeType: 'application/json', temperature: 0 }
       });
       const res = await model.generateContent(prompt);
       return JSON.parse(res.response.text());
@@ -2245,7 +2247,7 @@ async function callLLMJson(prompt) {
       try {
         const model15 = genAI.getGenerativeModel({
           model: 'gemini-1.5-pro',
-          generationConfig: { responseMimeType: 'application/json' }
+          generationConfig: { responseMimeType: 'application/json', temperature: 0 }
         });
         const res15 = await model15.generateContent(prompt);
         return JSON.parse(res15.response.text());
@@ -2823,16 +2825,19 @@ export async function extractYouTubeDictation(youtubeId) {
       }
     }
 
-    // ----------------------------------------------------
-    // TIER 2: Zero-Failure AI Master Knowledge Synthesis
-    // (Activates when video has no CC and live audio stream is blocked / noisy)
-    // ----------------------------------------------------
-    console.log(`[Dictation] Tier 0, 0.5 & 1 finished without direct transcript. Activating Tier 2 AI Master Knowledge Engine for: "${videoTitle}"`);
-    return await generateAIFallbackLesson(videoTitle, duration);
+    // If direct subtitles and ASR are not available, return failure rather than hallucinating generic lyrics
+    console.warn(`[Dictation] Could not extract direct subtitles or ASR for "${videoTitle}".`);
+    return {
+      success: false,
+      message: 'Không thể tự động trích xuất phụ đề cho video này. Video có thể không có phụ đề CC hoặc bị chặn luồng âm thanh.'
+    };
 
   } catch (outerErr) {
     console.warn(`[Dictation] Outer extraction error:`, outerErr.message);
-    return await generateAIFallbackLesson(`Bài Luyện Nghe (${youtubeId})`, 60);
+    return {
+      success: false,
+      message: 'Lỗi trích xuất phụ đề video. Vui lòng thử lại hoặc sử dụng tính năng Tạo Thủ Công.'
+    };
   }
 }
 
