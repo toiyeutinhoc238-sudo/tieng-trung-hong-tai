@@ -72,6 +72,8 @@ const User = mongoose.model('User', userSchema);
 const sessionSchema = new mongoose.Schema({
   _id: String, // sessionToken
   email: String,
+  createdAt: { type: Date, default: Date.now, expires: '7d' }
+});
 const Session = mongoose.model('Session', sessionSchema);
 
 const commentSchema = new mongoose.Schema({
