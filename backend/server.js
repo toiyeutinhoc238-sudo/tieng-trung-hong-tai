@@ -480,12 +480,12 @@ app.get('/api/exams/catalog', async (req, res) => {
 });
 
 // Helper functions for Admin & Super Admin resolution
-const SUPER_ADMINS = ['phanphiphu04@gmail.com', 'toiyeutinhoc238@gmail.com', 'thaihong162004@gmail.com', 'kailani'];
+const SUPER_ADMINS = ['phanphiphu04@gmail.com', 'toiyeutinhoc238@gmail.com', 'thaihong162004@gmail.com'];
 
 function isSuperAdmin(email) {
   if (!email) return false;
   const em = email.toLowerCase().trim();
-  return SUPER_ADMINS.some(admin => em === admin || em.includes('toiyeutinhoc238') || em.includes('phanphiphu') || em.includes('thaihong162004') || em.includes('kailani'));
+  return SUPER_ADMINS.some(admin => em === admin || em.includes('toiyeutinhoc238') || em.includes('phanphiphu') || em.includes('thaihong162004'));
 }
 
 function isUserAdmin(email, userData = null) {
