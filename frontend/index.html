@@ -2683,7 +2683,7 @@
   <!-- AI Chatbot Widget -->
   <div class="chatbot-widget" id="chatbot-widget">
     <!-- Chat Toggle Button -->
-    <button class="chatbot-toggle-btn" id="chatbot-toggle-btn" title="Trò chuyện với Trợ lý AI Hongtai">
+    <button class="chatbot-toggle-btn" id="chatbot-toggle-btn" onclick="window.toggleChatbotPanel ? window.toggleChatbotPanel() : (window.initChatbot && window.initChatbot(), window.toggleChatbotPanel && window.toggleChatbotPanel())" title="Trò chuyện với Trợ lý AI Hongtai">
       <i class="fa-solid fa-comments"></i>
       <span class="chatbot-badge" id="chatbot-badge">1</span>
     </button>
@@ -2710,7 +2710,7 @@
             style="display: none;">
             <i class="fa-solid fa-clock-rotate-left"></i>
           </button>
-          <button class="chatbot-close-btn" id="chatbot-close-btn" title="Đóng">
+          <button class="chatbot-close-btn" id="chatbot-close-btn" onclick="window.closeChatbotPanel && window.closeChatbotPanel()" title="Đóng">
             <i class="fa-solid fa-xmark"></i>
           </button>
         </div>

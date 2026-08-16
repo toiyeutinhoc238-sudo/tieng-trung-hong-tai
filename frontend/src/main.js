@@ -366,6 +366,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupEventListeners();
     initExams();
     initLessonsView();
+    initChatbot();
     const urlParams = new URLSearchParams(window.location.search);
     const targetTab = urlParams.get('tab') || (window.location.hash ? window.location.hash.replace('#', '') : '');
     const targetLevel = urlParams.get('level');
@@ -6493,19 +6494,22 @@ function initChatbot() {
   }
 
   // Toggle Chat Panel visibility
-  toggleBtn.addEventListener('click', () => {
+  window.toggleChatbotPanel = function () {
     const isHidden = panel.style.display === 'none';
     panel.style.display = isHidden ? 'flex' : 'none';
     if (isHidden) {
       if (badge) badge.style.display = 'none';
-      input.focus();
+      if (input) input.focus();
       scrollChatToBottom();
     }
-  });
+  };
 
-  closeBtn.addEventListener('click', () => {
+  window.closeChatbotPanel = function () {
     panel.style.display = 'none';
-  });
+  };
+
+  toggleBtn.onclick = window.toggleChatbotPanel;
+  closeBtn.onclick = window.closeChatbotPanel;
 
   // Header Actions listeners
   if (newBtn) {
@@ -6658,6 +6662,8 @@ function initChatbot() {
     scrollChatToBottom();
   }
 }
+
+window.initChatbot = initChatbot;
 
 // --- LESSONS VIEW CONTROLLER ---
 let activeLessonsLevel = 1;
