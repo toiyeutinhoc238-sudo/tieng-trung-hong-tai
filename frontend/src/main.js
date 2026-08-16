@@ -444,72 +444,78 @@ function initSeasonalParticles() {
   else if (month >= 7 && month <= 9) season = 'autumn'; // Tháng 7-9: Lá vàng thu
   else season = 'winter';                              // Tháng 10-12: Tuyết rơi
 
-  const particleCount = season === 'winter' ? 40 : 28;
+  // Optimize particle count for high 60fps performance without lag
+  const isMobile = window.innerWidth < 768;
+  const particleCount = isMobile ? 12 : 20;
   const particles = [];
 
   for (let i = 0; i < particleCount; i++) {
     particles.push({
       x: Math.random() * width,
       y: Math.random() * height,
-      size: season === 'winter' ? Math.random() * 3.5 + 2 : Math.random() * 7 + 5,
-      speedY: Math.random() * 1.2 + 0.5,
-      speedX: Math.sin(Math.random() * Math.PI) * 0.7,
+      size: season === 'winter' ? Math.random() * 3 + 2 : Math.random() * 6 + 4,
+      speedY: Math.random() * 1.0 + 0.4,
+      speedX: Math.sin(Math.random() * Math.PI) * 0.5,
       rotation: Math.random() * 360,
-      rotSpeed: (Math.random() - 0.5) * 1.5,
-      opacity: Math.random() * 0.65 + 0.35
+      rotSpeed: (Math.random() - 0.5) * 1.2,
+      opacity: Math.random() * 0.5 + 0.35
     });
   }
 
+  let animationFrameId = null;
   function render() {
+    if (document.hidden || localStorage.getItem('particles_enabled') === 'false') {
+      animationFrameId = setTimeout(() => requestAnimationFrame(render), 300);
+      return;
+    }
+
     ctx.clearRect(0, 0, width, height);
 
-    if (localStorage.getItem('particles_enabled') !== 'false') {
-      particles.forEach(p => {
-        p.y += p.speedY;
-        p.x += Math.sin(p.y * 0.01) * 0.5;
-        p.rotation += p.rotSpeed;
+    particles.forEach(p => {
+      p.y += p.speedY;
+      p.x += Math.sin(p.y * 0.01) * 0.4;
+      p.rotation += p.rotSpeed;
 
-        if (p.y > height + 20) {
-          p.y = -20;
-          p.x = Math.random() * width;
-        }
-        if (p.x > width + 20) p.x = -20;
-        if (p.x < -20) p.x = width + 20;
+      if (p.y > height + 20) {
+        p.y = -20;
+        p.x = Math.random() * width;
+      }
+      if (p.x > width + 20) p.x = -20;
+      if (p.x < -20) p.x = width + 20;
 
-        ctx.save();
-        ctx.translate(p.x, p.y);
-        ctx.rotate((p.rotation * Math.PI) / 180);
-        ctx.globalAlpha = p.opacity;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate((p.rotation * Math.PI) / 180);
+      ctx.globalAlpha = p.opacity;
 
-        if (season === 'winter') {
-          // Soft snowflakes
-          ctx.fillStyle = '#ffffff';
-          ctx.beginPath();
-          ctx.arc(0, 0, p.size, 0, Math.PI * 2);
-          ctx.fill();
-        } else if (season === 'spring') {
-          // Sakura petals
-          ctx.fillStyle = 'rgba(255, 183, 197, 0.85)';
-          ctx.beginPath();
-          ctx.ellipse(0, 0, p.size, p.size * 0.5, 0, 0, Math.PI * 2);
-          ctx.fill();
-        } else if (season === 'summer') {
-          // Summer green leaves
-          ctx.fillStyle = 'rgba(74, 222, 128, 0.8)';
-          ctx.beginPath();
-          ctx.ellipse(0, 0, p.size, p.size * 0.4, 0.4, 0, Math.PI * 2);
-          ctx.fill();
-        } else if (season === 'autumn') {
-          // Autumn golden maple leaves
-          ctx.fillStyle = 'rgba(245, 158, 11, 0.85)';
-          ctx.beginPath();
-          ctx.ellipse(0, 0, p.size, p.size * 0.5, 0.5, 0, Math.PI * 2);
-          ctx.fill();
-        }
+      if (season === 'winter') {
+        // Soft snowflakes
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(0, 0, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (season === 'spring') {
+        // Sakura petals
+        ctx.fillStyle = 'rgba(255, 183, 197, 0.85)';
+        ctx.beginPath();
+        ctx.ellipse(0, 0, p.size, p.size * 0.5, 0, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (season === 'summer') {
+        // Summer green leaves
+        ctx.fillStyle = 'rgba(74, 222, 128, 0.8)';
+        ctx.beginPath();
+        ctx.ellipse(0, 0, p.size, p.size * 0.4, 0.4, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (season === 'autumn') {
+        // Autumn golden maple leaves
+        ctx.fillStyle = 'rgba(245, 158, 11, 0.85)';
+        ctx.beginPath();
+        ctx.ellipse(0, 0, p.size, p.size * 0.5, 0.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
 
-        ctx.restore();
-      });
-    }
+      ctx.restore();
+    });
 
     requestAnimationFrame(render);
   }
@@ -11656,12 +11662,16 @@ function openNotebookDashboard(notebookId) {
 
   // Update Stats Widget
 
-  // Render HSK Lesson Selector Block if applicable (Ẩn khi đã vào bài học cụ thể)
+  // Render HSK Lesson Selector Block if applicable (Luôn hiển thị khi xem sổ tay HSK / YCT)
   const lessonContainer = document.getElementById('nb-hsk-lesson-selector-container');
   if (lessonContainer) {
-    if (notebookId.startsWith('hsk:') && selectedDashboardLessons.length === 0) {
+    if (notebookId.startsWith('hsk:') || notebookId.startsWith('yct:')) {
       lessonContainer.style.display = 'block';
       const lessonsList = document.getElementById('nb-hsk-lessons-list');
+      const countBadge = document.getElementById('nb-selected-lessons-count-badge');
+      const selectAllBtn = document.getElementById('nb-select-all-lessons-btn');
+      const deselectAllBtn = document.getElementById('nb-deselect-all-lessons-btn');
+
       if (lessonsList) {
         lessonsList.innerHTML = '';
 
@@ -11677,46 +11687,108 @@ function openNotebookDashboard(notebookId) {
         });
 
         const sortedLessonIds = Object.keys(uniqueLessons).map(Number).sort((a, b) => a - b);
+        const unlockedLessonIds = sortedLessonIds.filter(lId => isRoadmapLessonUnlocked(activeHskVersion, lvl, lId, sortedLessonIds));
 
-        // Add "All" button
-        const allBtn = document.createElement('button');
-        allBtn.className = `nb-lesson-pill ${selectedDashboardLessons.length === 0 ? 'active' : ''}`;
-        allBtn.textContent = 'Tất cả bài đã mở';
-        allBtn.addEventListener('click', () => {
-          selectedDashboardLessons = [];
-          openNotebookDashboard(notebookId); // Re-render
-        });
-        lessonsList.appendChild(allBtn);
+        // Function to update count badge
+        const updateCountBadge = () => {
+          if (countBadge) {
+            if (selectedDashboardLessons.length === 0) {
+              countBadge.textContent = 'Tất cả bài đã mở';
+            } else {
+              countBadge.textContent = `Đã chọn: ${selectedDashboardLessons.length} / ${unlockedLessonIds.length} bài`;
+            }
+          }
+        };
+        updateCountBadge();
 
-        // Add individual lesson buttons with lock state
+        // Select all action
+        if (selectAllBtn) {
+          selectAllBtn.onclick = (e) => {
+            e.preventDefault();
+            selectedDashboardLessons = [...unlockedLessonIds];
+            document.querySelectorAll('#nb-hsk-lessons-list .nb-lesson-check-card:not(.locked)').forEach(card => {
+              card.classList.add('selected');
+              const icon = card.querySelector('.nb-check-icon i');
+              if (icon) {
+                icon.className = 'fa-solid fa-square-check';
+              }
+            });
+            updateCountBadge();
+            updateNotebookDashboardStatsOnly(notebookId);
+            currentNotebookPage = 1;
+            renderNotebookWordsTable();
+          };
+        }
+
+        // Deselect all action
+        if (deselectAllBtn) {
+          deselectAllBtn.onclick = (e) => {
+            e.preventDefault();
+            selectedDashboardLessons = [];
+            document.querySelectorAll('#nb-hsk-lessons-list .nb-lesson-check-card').forEach(card => {
+              card.classList.remove('selected');
+              const icon = card.querySelector('.nb-check-icon i');
+              if (icon && !card.classList.contains('locked')) {
+                icon.className = 'fa-regular fa-square';
+              }
+            });
+            updateCountBadge();
+            updateNotebookDashboardStatsOnly(notebookId);
+            currentNotebookPage = 1;
+            renderNotebookWordsTable();
+          };
+        }
+
+        // Add individual lesson checkbox cards with lock state
         sortedLessonIds.forEach(lId => {
-          const btn = document.createElement('button');
+          const card = document.createElement('div');
+          const isUnlocked = unlockedLessonIds.includes(lId);
           const isSelected = selectedDashboardLessons.includes(lId);
-          const isUnlocked = isRoadmapLessonUnlocked(activeHskVersion, lvl, lId, sortedLessonIds);
-          btn.className = `nb-lesson-pill ${isSelected ? 'active' : ''} ${!isUnlocked ? 'pill-locked' : ''}`;
-          btn.innerHTML = `${!isUnlocked ? '<i class="fa-solid fa-lock" style="font-size: 0.72rem; color: #fbbf24; margin-right: 4px;"></i>' : ''}${uniqueLessons[lId]}${!isUnlocked ? ' (Khóa)' : ''}`;
-          btn.addEventListener('click', () => {
-            if (!isUnlocked) {
+
+          if (!isUnlocked) {
+            card.className = 'nb-lesson-check-card locked';
+            card.setAttribute('data-lesson-id', lId);
+            card.innerHTML = `
+              <span class="nb-check-icon"><i class="fa-solid fa-lock" style="color: #fbbf24;"></i></span>
+              <span class="nb-lesson-title" style="color: #94a3b8; font-style: italic;">${uniqueLessons[lId]}</span>
+              <span class="nb-lock-tag" style="font-size: 0.7rem; color: #fbbf24; background: rgba(245, 158, 11, 0.15); padding: 2px 6px; border-radius: 4px; font-weight: 700;">Khóa</span>
+            `;
+            card.addEventListener('click', () => {
               const idx = sortedLessonIds.findIndex(k => String(k) === String(lId));
               const prevKey = idx > 0 ? sortedLessonIds[idx - 1] : 1;
               showToast(`🔒 Bài ${lId} đang bị khóa trong Lộ trình! Vui lòng hoàn thành Bài ${prevKey} để mở khóa nhé.`, true);
-              return;
-            }
-            if (isSelected) {
-              selectedDashboardLessons = selectedDashboardLessons.filter(id => id !== lId);
-            } else {
-              selectedDashboardLessons.push(lId);
-            }
-            openNotebookDashboard(notebookId); // Re-render
-          });
-          lessonsList.appendChild(btn);
+            });
+          } else {
+            card.className = `nb-lesson-check-card ${isSelected ? 'selected' : ''}`;
+            card.setAttribute('data-lesson-id', lId);
+            card.innerHTML = `
+              <span class="nb-check-icon"><i class="fa-solid ${isSelected ? 'fa-square-check' : 'fa-regular fa-square'}"></i></span>
+              <span class="nb-lesson-title">${uniqueLessons[lId]}</span>
+            `;
+            card.addEventListener('click', () => {
+              const nowSelected = selectedDashboardLessons.includes(lId);
+              if (nowSelected) {
+                selectedDashboardLessons = selectedDashboardLessons.filter(id => id !== lId);
+                card.classList.remove('selected');
+                card.querySelector('.nb-check-icon i').className = 'fa-regular fa-square';
+              } else {
+                selectedDashboardLessons.push(lId);
+                card.classList.add('selected');
+                card.querySelector('.nb-check-icon i').className = 'fa-solid fa-square-check';
+              }
+
+              updateCountBadge();
+              updateNotebookDashboardStatsOnly(notebookId);
+              currentNotebookPage = 1;
+              renderNotebookWordsTable();
+            });
+          }
+          lessonsList.appendChild(card);
         });
       }
     } else {
       lessonContainer.style.display = 'none';
-      if (!notebookId.startsWith('hsk:')) {
-        selectedDashboardLessons = []; // Reset when leaving HSK notebook
-      }
+      selectedDashboardLessons = [];
     }
   }
 
@@ -11731,6 +11803,16 @@ function openNotebookDashboard(notebookId) {
   if (gridRow2) {
     gridRow2.style.gridTemplateColumns = isLeftColVisible ? '1.2fr 1fr' : '1fr';
   }
+
+  updateNotebookDashboardStatsOnly(notebookId);
+
+  currentNotebookPage = 1;
+  renderNotebookWordsTable();
+}
+
+function updateNotebookDashboardStatsOnly(notebookId) {
+  if (!notebookId) return;
+  const baseWords = getNotebookWords(notebookId);
 
   // Filter baseWords for statistics if specific HSK lessons are selected
   let wordsForStats = baseWords;
@@ -11758,12 +11840,9 @@ function openNotebookDashboard(notebookId) {
   if (nbStatStarred) nbStatStarred.textContent = starred;
   if (nbStatStudied) nbStatStudied.textContent = studied;
   if (nbStatUnstudied) nbStatUnstudied.textContent = unstudied;
-
-  currentNotebookPage = 1;
-  renderNotebookWordsTable();
 }
 
-// 4. Render vocabulary table for Notebook Dashboard
+// 4. Render vocabulary table for Notebook Dashboard with high-speed DocumentFragment
 function renderNotebookWordsTable() {
   const tbody = document.getElementById('nb-words-table-rows');
   const paginationInfo = document.getElementById('nb-pagination-info');
@@ -11797,9 +11876,9 @@ function renderNotebookWordsTable() {
   const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
   if (query) {
     words = words.filter(w =>
-      w.word.toLowerCase().includes(query) ||
-      w.pinyin.toLowerCase().includes(query) ||
-      w.meaning.toLowerCase().includes(query)
+      (w.word && w.word.toLowerCase().includes(query)) ||
+      (w.pinyin && w.pinyin.toLowerCase().includes(query)) ||
+      (w.meaning && w.meaning.toLowerCase().includes(query))
     );
   }
 
@@ -11820,6 +11899,7 @@ function renderNotebookWordsTable() {
   const endIdx = Math.min(startIdx + notebookPageSize, total);
 
   const pageWords = words.slice(startIdx, endIdx);
+  const fragment = document.createDocumentFragment();
 
   pageWords.forEach(w => {
     const tr = document.createElement('tr');
@@ -11835,12 +11915,12 @@ function renderNotebookWordsTable() {
     }
 
     tr.innerHTML = `
-      <td style="padding: 12px; font-family: var(--font-chinese); font-size: 1.15rem; font-weight: 700; color: var(--text-primary);">${w.word}</td>
-      <td style="padding: 12px; color: var(--accent-teal); font-weight: 500;">${w.pinyin}</td>
-      <td style="padding: 12px; color: var(--text-secondary);">${w.meaning}</td>
+      <td style="padding: 12px; font-family: var(--font-chinese); font-size: 1.15rem; font-weight: 700; color: var(--text-primary);">${w.word || ''}</td>
+      <td style="padding: 12px; color: var(--accent-teal); font-weight: 500;">${w.pinyin || ''}</td>
+      <td style="padding: 12px; color: var(--text-secondary);">${w.meaning || ''}</td>
       <td style="padding: 12px; text-align: center;">
         <div style="display: flex; gap: 8px; justify-content: center; align-items: center;">
-          <button class="btn btn-icon-only" title="Nghe phát âm" onclick="handleNotebookWordPlay('${w.word.replace(/'/g, "\\'")}')">
+          <button class="btn btn-icon-only" title="Nghe phát âm" onclick="handleNotebookWordPlay('${(w.word || '').replace(/'/g, "\\'")}')">
             <i class="fa-solid fa-volume-high text-primary"></i>
           </button>
           <button class="btn btn-icon-only" title="Đánh dấu đã học" onclick="handleNotebookWordToggleMemorized('${w.id}')">
@@ -11853,8 +11933,10 @@ function renderNotebookWordsTable() {
         </div>
       </td>
     `;
-    tbody.appendChild(tr);
+    fragment.appendChild(tr);
   });
+
+  tbody.appendChild(fragment);
 
   if (paginationInfo) {
     paginationInfo.textContent = `Hiển thị ${startIdx + 1} - ${endIdx} trong ${total} từ`;

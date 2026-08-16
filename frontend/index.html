@@ -1041,17 +1041,31 @@
             <!-- Left Column: Forms and lesson selectors -->
             <div id="nb-left-col-container" style="display: flex; flex-direction: column; gap: 24px;">
               <!-- HSK Lesson Selector Block (HSK notebook only) -->
-              <div class="glass-panel" id="nb-hsk-lesson-selector-container" style="padding: 24px; display: none;">
-                <h3
-                  style="font-size: 1.05rem; font-weight: 700; margin-bottom: 16px; color: var(--text-primary); font-family: var(--font-display); border-left: 4px solid var(--success); padding-left: 8px;">
-                  Lọc từ vựng theo bài học HSK
-                </h3>
-                <div style="display: flex; flex-direction: column; gap: 12px;">
-                  <span style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">Chọn bài học cần ôn
-                    tập (Chọn bài tùy ý):</span>
-                  <div id="nb-hsk-lessons-list"
-                    style="display: flex; flex-wrap: wrap; gap: 8px; max-height: 150px; overflow-y: auto; padding: 4px;">
-                    <!-- Dynamic lesson buttons loaded here -->
+              <div class="glass-panel" id="nb-hsk-lesson-selector-container" style="padding: 22px 24px; display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+                  <h3
+                    style="font-size: 1.05rem; font-weight: 700; margin: 0; color: var(--text-primary); font-family: var(--font-display); border-left: 4px solid var(--accent-blue); padding-left: 8px;">
+                    Lọc từ vựng theo bài học HSK
+                  </h3>
+                  <div style="display: flex; gap: 8px;">
+                    <button type="button" id="nb-select-all-lessons-btn" class="btn btn-sm btn-outline-primary"
+                      style="border-radius: 8px; padding: 4px 10px; font-size: 0.78rem; font-weight: 700; display: flex; align-items: center; gap: 4px;">
+                      <i class="fa-solid fa-check-double"></i> Chọn tất cả
+                    </button>
+                    <button type="button" id="nb-deselect-all-lessons-btn" class="btn btn-sm btn-outline"
+                      style="border-radius: 8px; padding: 4px 10px; font-size: 0.78rem; font-weight: 600; background: rgba(255,255,255,0.05); display: flex; align-items: center; gap: 4px;">
+                      <i class="fa-solid fa-xmark"></i> Bỏ chọn
+                    </button>
+                  </div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem; color: var(--text-secondary); font-weight: 500;">
+                    <span>Đánh dấu tick để chọn 1 hoặc nhiều bài học cần ôn tập:</span>
+                    <span id="nb-selected-lessons-count-badge" style="font-weight: 700; color: #38bdf8; font-size: 0.8rem; background: rgba(56, 189, 248, 0.12); padding: 2px 8px; border-radius: 6px;">Tất cả bài</span>
+                  </div>
+                  <div id="nb-hsk-lessons-list" class="custom-scrollbar"
+                    style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; max-height: 220px; overflow-y: auto; padding: 4px 2px;">
+                    <!-- Dynamic lesson checkbox cards loaded here -->
                   </div>
                 </div>
               </div>

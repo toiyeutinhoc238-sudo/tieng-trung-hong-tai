@@ -9399,5 +9399,106 @@ html.light-mode .subdeck-card-locked {
   border-color: rgba(245, 158, 11, 0.4) !important;
 }
 
+/* --- NEW LESSON CHECKBOX CARD SYSTEM --- */
+.nb-lesson-check-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1.5px solid var(--border-glass, rgba(255, 255, 255, 0.08));
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  font-size: 0.88rem;
+  color: var(--text-secondary, #cbd5e1);
+  transform: translateZ(0);
+}
+
+.nb-lesson-check-card:hover {
+  background: rgba(56, 189, 248, 0.08);
+  border-color: rgba(56, 189, 248, 0.35);
+  color: var(--text-primary, #ffffff);
+  transform: translateY(-1px);
+}
+
+.nb-lesson-check-card.selected {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(56, 189, 248, 0.12));
+  border-color: #38bdf8;
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(56, 189, 248, 0.15);
+}
+
+.nb-lesson-check-card .nb-check-icon {
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.nb-lesson-check-card.selected .nb-check-icon {
+  color: #38bdf8;
+  transform: scale(1.08);
+}
+
+.nb-lesson-check-card.locked {
+  cursor: not-allowed;
+  opacity: 0.65;
+  background: rgba(15, 23, 42, 0.4);
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.nb-lesson-check-card.locked:hover {
+  background: rgba(245, 158, 11, 0.06);
+  border-color: rgba(245, 158, 11, 0.4);
+  transform: none;
+}
+
+.nb-lesson-check-card .nb-lesson-title {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+html.light-mode .nb-lesson-check-card {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  color: #334155;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+html.light-mode .nb-lesson-check-card:hover {
+  background: #f0f9ff;
+  border-color: #38bdf8;
+  color: #0369a1;
+}
+
+html.light-mode .nb-lesson-check-card.selected {
+  background: #e0f2fe;
+  border-color: #0284c7;
+  color: #0369a1;
+}
+
+html.light-mode .nb-lesson-check-card.locked {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  opacity: 0.7;
+}
+
+/* GPU Acceleration for smooth, lag-free UI */
+.smart-custom-grid,
+.notebook-stats-grid,
+#nb-hsk-lessons-list,
+.smart-flashcard-config {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+
 
 
