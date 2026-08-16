@@ -13416,9 +13416,16 @@ window.renderDiscussionsList = function (discussions) {
       ? `<img src="${post.authorPicture}" alt="${safeAuthorName}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1.5px solid rgba(56,189,248,0.4);" onerror="this.outerHTML='<div class=\\'disc-default-avatar\\'>${initial}</div>'">`
       : `<div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #0284c7, #38bdf8); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; border: 1.5px solid rgba(255,255,255,0.2);">${initial}</div>`;
 
-    const adminBadge = isAdmin
-      ? `<span style="background: linear-gradient(135deg, #ef4444, #dc2626); color: white; font-size: 0.65rem; font-weight: 800; padding: 1px 6px; border-radius: 4px; display: inline-flex; align-items: center; gap: 3px;"><i class="fa-solid fa-shield-halved"></i> Giáo viên</span>`
-      : `<span style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; font-size: 0.65rem; font-weight: 700; padding: 1px 6px; border-radius: 4px;">Học viên</span>`;
+    let adminBadge = '';
+    if (post.isSuperAdmin || post.authorRole === 'super_admin' || isSuperAdmin(post.authorEmail)) {
+      adminBadge = `<span style="background: linear-gradient(135deg, #f43f5e, #e11d48); color: white; font-size: 0.65rem; font-weight: 800; padding: 1px 6px; border-radius: 4px; display: inline-flex; align-items: center; gap: 3px;"><i class="fa-solid fa-crown"></i> Super Admin</span>`;
+    } else if (post.authorRole === 'teacher' || (post.authorEmail && post.authorEmail.includes('hongtai'))) {
+      adminBadge = `<span style="background: linear-gradient(135deg, #0284c7, #2563eb); color: white; font-size: 0.65rem; font-weight: 800; padding: 1px 6px; border-radius: 4px; display: inline-flex; align-items: center; gap: 3px;"><i class="fa-solid fa-chalkboard-user"></i> Giáo viên</span>`;
+    } else if (post.isAdmin || post.authorRole === 'admin') {
+      adminBadge = `<span style="background: linear-gradient(135deg, #8b5cf6, #6366f1); color: white; font-size: 0.65rem; font-weight: 800; padding: 1px 6px; border-radius: 4px; display: inline-flex; align-items: center; gap: 3px;"><i class="fa-solid fa-shield-halved"></i> Quản trị viên</span>`;
+    } else {
+      adminBadge = `<span style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; font-size: 0.65rem; font-weight: 700; padding: 1px 6px; border-radius: 4px;">Học viên</span>`;
+    }
 
     const deleteBtnHtml = isOwner
       ? `<button type="button" class="btn btn-icon-only" title="Xóa bài viết" onclick="window.handleDeleteDiscussion('${post.id}')" style="width: 28px; height: 28px; border-radius: 6px; color: #ef4444; background: rgba(239, 68, 68, 0.1); border: none; cursor: pointer;">
@@ -13624,8 +13631,14 @@ window.togglePostComments = function (postId, focusInput) {
             ? `<img src="${c.authorPicture}" alt="${safeCAuthor}" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover;" onerror="this.outerHTML='<div class=\\'disc-mini-avatar\\'>${cInitial}</div>'">`
             : `<div style="width: 24px; height: 24px; border-radius: 50%; background: #0284c7; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700;">${cInitial}</div>`;
 
-          const isCAdmin = isUserAdmin(c.authorEmail);
-          const cAdminBadge = isCAdmin ? '<span style="color: #ef4444; font-size: 0.65rem; font-weight: 800;">[Giáo viên]</span>' : '';
+          let cAdminBadge = '';
+          if (c.isSuperAdmin || c.authorRole === 'super_admin' || isSuperAdmin(c.authorEmail)) {
+            cAdminBadge = '<span style="color: #f43f5e; font-size: 0.68rem; font-weight: 800;"><i class="fa-solid fa-crown"></i> [Super Admin]</span>';
+          } else if (c.authorRole === 'teacher' || (c.authorEmail && c.authorEmail.includes('hongtai'))) {
+            cAdminBadge = '<span style="color: #38bdf8; font-size: 0.68rem; font-weight: 800;"><i class="fa-solid fa-chalkboard-user"></i> [Giáo viên]</span>';
+          } else if (c.isAdmin || c.authorRole === 'admin') {
+            cAdminBadge = '<span style="color: #a855f7; font-size: 0.68rem; font-weight: 800;"><i class="fa-solid fa-shield-halved"></i> [Admin]</span>';
+          }
 
           return `
             <div class="disc-comment-item">

@@ -1971,29 +1971,54 @@ app.get('/api/discussions', async (req, res) => {
       items = items.slice((page - 1) * limit, page * limit);
     }
 
-    // Format response
-    const formatted = items.map(item => ({
-      id: item._id || item.id,
-      authorEmail: item.authorEmail,
-      authorName: item.authorName || 'Học viên Hongtai',
-      authorPicture: item.authorPicture || '',
-      category: item.category || 'feedback',
-      title: item.title || '',
-      content: item.content || '',
-      likesCount: (item.likes || []).length,
-      hasLiked: currentEmail ? (item.likes || []).includes(currentEmail) : false,
-      commentsCount: (item.comments || []).length,
-      comments: (item.comments || []).map(c => ({
-        id: c.id,
-        authorEmail: c.authorEmail,
-        authorName: c.authorName,
-        authorPicture: c.authorPicture,
-        content: c.content,
-        createdAt: c.createdAt
-      })),
-      isPinned: !!item.isPinned,
-      createdAt: item.createdAt
-    }));
+    const userData = await readUserData();
+    // Format response with live updated roles
+    const formatted = items.map(item => {
+      const authorEmail = (item.authorEmail || '').toLowerCase().trim();
+      const userRec = userData.users && userData.users[authorEmail];
+      const isSuper = isSuperAdmin(authorEmail);
+      const isTeacher = (userRec && userRec.role === 'teacher') || authorEmail.includes('hongtai');
+      const isAdmin = isSuper || isTeacher || (userRec && userRec.role === 'admin') || isUserAdmin(authorEmail, userData);
+      const authorRole = isSuper ? 'super_admin' : (userRec?.role || (isTeacher ? 'teacher' : (isAdmin ? 'admin' : 'user')));
+
+      return {
+        id: item._id || item.id,
+        authorEmail: item.authorEmail,
+        authorName: (userRec && userRec.name) || item.authorName || 'Học viên Hongtai',
+        authorPicture: (userRec && userRec.picture) || item.authorPicture || '',
+        authorRole,
+        isSuperAdmin: isSuper,
+        isAdmin,
+        category: item.category || 'feedback',
+        title: item.title || '',
+        content: item.content || '',
+        likesCount: (item.likes || []).length,
+        hasLiked: currentEmail ? (item.likes || []).includes(currentEmail) : false,
+        commentsCount: (item.comments || []).length,
+        comments: (item.comments || []).map(c => {
+          const cEmail = (c.authorEmail || '').toLowerCase().trim();
+          const cUserRec = userData.users && userData.users[cEmail];
+          const cIsSuper = isSuperAdmin(cEmail);
+          const cIsTeacher = (cUserRec && cUserRec.role === 'teacher') || cEmail.includes('hongtai');
+          const cIsAdmin = cIsSuper || cIsTeacher || (cUserRec && cUserRec.role === 'admin') || isUserAdmin(cEmail, userData);
+          const cRole = cIsSuper ? 'super_admin' : (cUserRec?.role || (cIsTeacher ? 'teacher' : (cIsAdmin ? 'admin' : 'user')));
+
+          return {
+            id: c.id,
+            authorEmail: c.authorEmail,
+            authorName: (cUserRec && cUserRec.name) || c.authorName,
+            authorPicture: (cUserRec && cUserRec.picture) || c.authorPicture,
+            authorRole: cRole,
+            isSuperAdmin: cIsSuper,
+            isAdmin: cIsAdmin,
+            content: c.content,
+            createdAt: c.createdAt
+          };
+        }),
+        isPinned: !!item.isPinned,
+        createdAt: item.createdAt
+      };
+    });
 
     res.json({ success: true, discussions: formatted });
   } catch (err) {
