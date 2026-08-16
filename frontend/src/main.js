@@ -13987,16 +13987,11 @@ window.renderAdminUsersTable = function () {
     if (isCurrentSuper) {
       if (u.isSuperAdmin) {
         actionBtnHtml = `<span style="font-size: 0.75rem; color: #f43f5e; font-weight: 700;"><i class="fa-solid fa-lock"></i> Cố định</span>`;
-      } else if (u.isAdmin || u.role === 'teacher' || u.role === 'admin') {
-        actionBtnHtml = `
-          <button type="button" onclick="window.handleChangeUserRole('${safeEmail}', 'user')" style="padding: 4px 10px; font-size: 0.72rem; font-weight: 700; border-radius: 6px; background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); cursor: pointer;">
-            <i class="fa-solid fa-user-minus"></i> Thu hồi
-          </button>
-        `;
       } else {
+        const currentRoleText = u.role === 'teacher' ? ' (GV)' : (u.role === 'admin' ? ' (Admin)' : '');
         actionBtnHtml = `
-          <button type="button" onclick="window.handleChangeUserRole('${safeEmail}', 'teacher')" style="padding: 4px 10px; font-size: 0.72rem; font-weight: 700; border-radius: 6px; background: rgba(14, 165, 233, 0.15); color: #38bdf8; border: 1px solid rgba(14, 165, 233, 0.3); cursor: pointer;">
-            <i class="fa-solid fa-user-shield"></i> Cấp GV
+          <button type="button" onclick="window.openRolePickerModal('${safeEmail}', '${u.role || 'user'}', '${safeName}')" style="padding: 5px 12px; font-size: 0.76rem; font-weight: 800; border-radius: 8px; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.35); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;">
+            <i class="fa-solid fa-shield-halved"></i> Cấp quyền${currentRoleText}
           </button>
         `;
       }
@@ -14042,6 +14037,83 @@ window.renderAdminUsersTable = function () {
   container.innerHTML = html;
 };
 
+window.openRolePickerModal = function (targetEmail, currentRole, targetName) {
+  let modal = document.getElementById('admin-role-picker-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'admin-role-picker-modal';
+    modal.style.cssText = 'position: fixed; inset: 0; z-index: 999999; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; padding: 16px;';
+    document.body.appendChild(modal);
+  }
+
+  modal.innerHTML = `
+    <div style="background: linear-gradient(180deg, #131d35 0%, #0d1527 100%); border: 1.5px solid rgba(56, 189, 248, 0.35); border-radius: 24px; width: 100%; max-width: 480px; padding: 26px; box-shadow: 0 25px 60px rgba(0,0,0,0.8); color: #ffffff; position: relative; display: flex; flex-direction: column; gap: 18px; animation: zoomIn 0.2s ease-out;">
+      <button type="button" onclick="document.getElementById('admin-role-picker-modal').style.display='none'" style="position: absolute; top: 18px; right: 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; font-size: 1.2rem; cursor: pointer; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 14px;">
+        <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #0284c7, #2563eb); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: white;">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div>
+          <h3 style="font-size: 1.15rem; font-weight: 800; color: #ffffff; margin: 0;">Phân Quyền Tài Khoản</h3>
+          <p style="font-size: 0.8rem; color: #94a3b8; margin: 2px 0 0 0;">${escapeHtml(targetName)} (${escapeHtml(targetEmail)})</p>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <!-- Option 1: Giáo viên -->
+        <div onclick="window.confirmChangeRole('${targetEmail}', 'teacher')" style="padding: 14px 16px; border-radius: 14px; background: ${currentRole === 'teacher' ? 'rgba(56, 189, 248, 0.2)' : 'rgba(30, 41, 59, 0.6)'}; border: 1.5px solid ${currentRole === 'teacher' ? '#38bdf8' : 'rgba(255,255,255,0.1)'}; cursor: pointer; display: flex; align-items: center; gap: 14px; transition: all 0.2s;">
+          <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(56, 189, 248, 0.15); color: #38bdf8; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+            <i class="fa-solid fa-chalkboard-user"></i>
+          </div>
+          <div style="flex: 1;">
+            <div style="font-weight: 800; color: #38bdf8; font-size: 0.92rem; display: flex; align-items: center; gap: 6px;">
+              🛡️ Giáo viên ${currentRole === 'teacher' ? '<span style="font-size: 0.7rem; background: #38bdf8; color: #000; padding: 1px 6px; border-radius: 99px; font-weight: 800;">Hiện tại</span>' : ''}
+            </div>
+            <div style="font-size: 0.78rem; color: #94a3b8; margin-top: 2px;">Dành cho giáo viên: quản lý bài học, huy hiệu Giáo viên, kiểm duyệt thảo luận.</div>
+          </div>
+        </div>
+
+        <!-- Option 2: Quản trị viên (Admin) -->
+        <div onclick="window.confirmChangeRole('${targetEmail}', 'admin')" style="padding: 14px 16px; border-radius: 14px; background: ${currentRole === 'admin' ? 'rgba(168, 85, 247, 0.2)' : 'rgba(30, 41, 59, 0.6)'}; border: 1.5px solid ${currentRole === 'admin' ? '#a855f7' : 'rgba(255,255,255,0.1)'}; cursor: pointer; display: flex; align-items: center; gap: 14px; transition: all 0.2s;">
+          <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(168, 85, 247, 0.15); color: #a855f7; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <div style="flex: 1;">
+            <div style="font-weight: 800; color: #a855f7; font-size: 0.92rem; display: flex; align-items: center; gap: 6px;">
+              👑 Quản trị viên (Admin) ${currentRole === 'admin' ? '<span style="font-size: 0.7rem; background: #a855f7; color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 800;">Hiện tại</span>' : ''}
+            </div>
+            <div style="font-size: 0.78rem; color: #94a3b8; margin-top: 2px;">Quản trị hệ thống, cấp quyền học viên, quản lý tài khoản và bài viết.</div>
+          </div>
+        </div>
+
+        <!-- Option 3: Học viên thông thường -->
+        <div onclick="window.confirmChangeRole('${targetEmail}', 'user')" style="padding: 14px 16px; border-radius: 14px; background: ${(!currentRole || currentRole === 'user') ? 'rgba(16, 185, 129, 0.15)' : 'rgba(30, 41, 59, 0.6)'}; border: 1.5px solid ${(!currentRole || currentRole === 'user') ? '#10b981' : 'rgba(255,255,255,0.1)'}; cursor: pointer; display: flex; align-items: center; gap: 14px; transition: all 0.2s;">
+          <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(16, 185, 129, 0.15); color: #34d399; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <div style="flex: 1;">
+            <div style="font-weight: 800; color: #34d399; font-size: 0.92rem; display: flex; align-items: center; gap: 6px;">
+              🎓 Học viên ${(!currentRole || currentRole === 'user') ? '<span style="font-size: 0.7rem; background: #10b981; color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 800;">Hiện tại</span>' : ''}
+            </div>
+            <div style="font-size: 0.78rem; color: #94a3b8; margin-top: 2px;">Tài khoản học viên thông thường, thu hồi các quyền quản trị viên nếu có.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  modal.style.display = 'flex';
+};
+
+window.confirmChangeRole = async function (targetEmail, newRole) {
+  const modal = document.getElementById('admin-role-picker-modal');
+  if (modal) modal.style.display = 'none';
+  await window.handleChangeUserRole(targetEmail, newRole);
+};
+
 window.handleGrantRoleSubmit = async function (e) {
   if (e) e.preventDefault();
 
@@ -14056,7 +14128,7 @@ window.handleGrantRoleSubmit = async function (e) {
   try {
     const res = await fetch(`${API_BASE_URL}/api/admin/users/role`, {
       method: 'POST',
-      headers: getAuthHeaders(),
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       credentials: 'include',
       body: JSON.stringify({ targetEmail: email, role })
     });
@@ -14074,13 +14146,13 @@ window.handleGrantRoleSubmit = async function (e) {
 };
 
 window.handleChangeUserRole = async function (targetEmail, newRole) {
-  const roleLabel = newRole === 'user' ? 'Học viên (Thu hồi quyền)' : 'Giáo viên';
+  const roleLabel = newRole === 'user' ? 'Học viên (Thu hồi quyền)' : (newRole === 'teacher' ? '🛡️ Giáo viên' : '👑 Quản trị viên');
   if (!confirm(`Bạn có chắc chắn muốn thay đổi quyền của tài khoản ${targetEmail} sang: ${roleLabel}?`)) return;
 
   try {
     const res = await fetch(`${API_BASE_URL}/api/admin/users/role`, {
       method: 'POST',
-      headers: getAuthHeaders(),
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       credentials: 'include',
       body: JSON.stringify({ targetEmail, role: newRole })
     });

@@ -2248,6 +2248,166 @@ app.delete('/api/discussions/:id', async (req, res) => {
   }
 });
 
+// ==========================================================================
+// ADMIN & LEARNER INTELLIGENCE API ENDPOINTS
+// ==========================================================================
+
+const SUPER_ADMINS = ['toiyeutinhoc238@gmail.com', 'phanphiphu04@gmail.com'];
+
+function isSuperAdmin(email) {
+  if (!email) return false;
+  return SUPER_ADMINS.some(sa => email.toLowerCase() === sa.toLowerCase());
+}
+
+function isUserAdmin(email, userData) {
+  if (!email) return false;
+  if (isSuperAdmin(email)) return true;
+  if (email.toLowerCase().includes('hongtai')) return true;
+  if (userData && userData.users && userData.users[email]) {
+    const role = userData.users[email].role;
+    if (role === 'admin' || role === 'teacher' || role === 'super_admin') return true;
+  }
+  return false;
+}
+
+// GET all registered learners with intelligence stats for admin dashboard
+app.get('/api/admin/users', async (req, res) => {
+  const currentEmail = getLoggedInUserEmail(req);
+  if (!currentEmail) {
+    return res.status(401).json({ error: 'Vui lòng đăng nhập.' });
+  }
+
+  const userData = await readUserData();
+  if (!isUserAdmin(currentEmail, userData)) {
+    return res.status(403).json({ error: 'Bạn không có quyền truy cập trang quản trị.' });
+  }
+
+  try {
+    let usersList = [];
+    if (mongoose.connection.readyState === 1) {
+      usersList = await User.find({}).lean();
+    } else {
+      usersList = Object.keys(userData.users || {}).map(email => ({
+        _id: email,
+        ...userData.users[email],
+        quizHistory: (userData.quizHistory && userData.quizHistory[email]) || [],
+        progress: (userData.progress && userData.progress[email]) || {}
+      }));
+    }
+
+    const now = Date.now();
+    const resultUsers = usersList.map(u => {
+      const email = u._id || u.email;
+      const isSuper = isSuperAdmin(email);
+      const isOnline = userPresenceMap.has(email) && (now - userPresenceMap.get(email) < 90000);
+      const lastSeen = userPresenceMap.get(email) || u.lastSeenTime || null;
+
+      const progress = u.progress || {};
+      let memorizedCount = 0;
+      let studiedCount = 0;
+      Object.values(progress).forEach(p => {
+        if (p && p.isMemorized) memorizedCount++;
+        if (p && p.isStudied) studiedCount++;
+      });
+
+      const quizHistory = u.quizHistory || [];
+      const quizScores = quizHistory.map(q => q.score || 0);
+      const highestQuizScore = quizScores.length > 0 ? Math.max(...quizScores) : 0;
+      const avgQuizScore = quizScores.length > 0 ? Math.round(quizScores.reduce((a, b) => a + b, 0) / quizScores.length) : 0;
+
+      return {
+        email,
+        name: u.name || email.split('@')[0],
+        picture: u.picture || '',
+        role: isSuper ? 'super_admin' : (u.role || (email.toLowerCase().includes('hongtai') ? 'teacher' : 'user')),
+        isSuperAdmin: isSuper,
+        isAdmin: isSuper || u.role === 'admin',
+        isOnline,
+        lastSeen,
+        streak: (u.stats && u.stats.streak) || 0,
+        studyTime: (u.stats && u.stats.studyTime) || 0,
+        quizCount: quizHistory.length,
+        highestQuizScore,
+        avgQuizScore,
+        memorizedWordsCount: memorizedCount,
+        studiedWordsCount: studiedCount
+      };
+    });
+
+    resultUsers.sort((a, b) => {
+      if (b.isOnline !== a.isOnline) return b.isOnline ? 1 : -1;
+      if (b.isSuperAdmin !== a.isSuperAdmin) return b.isSuperAdmin ? 1 : -1;
+      return (b.studyTime || 0) - (a.studyTime || 0);
+    });
+
+    const onlineCount = resultUsers.filter(u => u.isOnline).length;
+    const adminCount = resultUsers.filter(u => u.isAdmin || u.isSuperAdmin || u.role === 'teacher').length;
+    const totalHours = Math.round(resultUsers.reduce((sum, u) => sum + (u.studyTime || 0), 0) / 3600);
+
+    res.json({
+      success: true,
+      users: resultUsers,
+      totalCount: resultUsers.length,
+      onlineCount,
+      adminCount,
+      totalHours
+    });
+  } catch (err) {
+    console.error('Error fetching admin users:', err);
+    res.status(500).json({ error: 'Lỗi tải danh sách người học.' });
+  }
+});
+
+// POST update user role (Super Admin only)
+app.post('/api/admin/users/role', async (req, res) => {
+  const currentEmail = getLoggedInUserEmail(req);
+  if (!currentEmail) {
+    return res.status(401).json({ error: 'Vui lòng đăng nhập.' });
+  }
+
+  if (!isSuperAdmin(currentEmail)) {
+    return res.status(403).json({ error: 'Chỉ Super Admin mới có quyền thay đổi vai trò và phân quyền tài khoản.' });
+  }
+
+  const { targetEmail, role } = req.body;
+  if (!targetEmail || !role) {
+    return res.status(400).json({ error: 'Thiếu thông tin tài khoản hoặc vai trò cần cấp.' });
+  }
+
+  if (isSuperAdmin(targetEmail)) {
+    return res.status(400).json({ error: 'Không thể thay đổi quyền hạn của tài khoản Super Admin cố định.' });
+  }
+
+  const allowedRoles = ['teacher', 'admin', 'user'];
+  if (!allowedRoles.includes(role)) {
+    return res.status(400).json({ error: 'Vai trò không hợp lệ.' });
+  }
+
+  try {
+    if (mongoose.connection.readyState === 1) {
+      await User.updateOne({ _id: targetEmail }, { $set: { role } }, { upsert: true });
+    }
+
+    const userData = await readUserData();
+    if (!userData.users) userData.users = {};
+    if (!userData.users[targetEmail]) {
+      userData.users[targetEmail] = { name: targetEmail.split('@')[0], picture: '', stats: { streak: 0, studyTime: 0 } };
+    }
+    userData.users[targetEmail].role = role;
+    await writeUserData(userData);
+
+    const roleName = role === 'teacher' ? 'Giáo viên' : (role === 'admin' ? 'Quản trị viên' : 'Học viên');
+    res.json({
+      success: true,
+      message: `Đã cập nhật quyền của ${targetEmail} thành "${roleName}".`,
+      role
+    });
+  } catch (err) {
+    console.error('Error updating user role:', err);
+    res.status(500).json({ error: 'Lỗi cập nhật quyền người dùng.' });
+  }
+});
+
 // Helper to sanitize text for TTS engine (removes HTML, dialogue markers, pinyin in parens, etc.)
 function cleanTTSInput(str) {
   if (!str) return '';
