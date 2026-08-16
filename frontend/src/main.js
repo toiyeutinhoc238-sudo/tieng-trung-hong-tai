@@ -1991,8 +1991,8 @@ function applyFilters(preserveIndex = false) {
       const ids = new Set(notebookWords.map(x => x.id));
       if (!ids.has(w.id)) return false;
 
-      // Filter by studySelectedLessons if studying an HSK notebook
-      if (studyNotebookId.startsWith('hsk:') && studySelectedLessons && studySelectedLessons.length > 0) {
+      // Filter by studySelectedLessons if studying an HSK or YCT notebook
+      if ((studyNotebookId.startsWith('hsk:') || studyNotebookId.startsWith('yct:')) && studySelectedLessons && studySelectedLessons.length > 0) {
         if (!w.lessonId || !studySelectedLessons.some(id => String(id) === String(w.lessonId))) return false;
       }
     } else {
@@ -3435,7 +3435,7 @@ window.revealAllRoadmapEyeCards = function(targetSentence) {
     nbStartTypingBtn.addEventListener('click', () => {
       // Build the exact word list for current lesson/notebook directly (no heavy filter chain)
       let lessonWords = getNotebookWords(activeNotebook);
-      if (activeNotebook && activeNotebook.startsWith('hsk:') && selectedDashboardLessons.length > 0) {
+      if (activeNotebook && (activeNotebook.startsWith('hsk:') || activeNotebook.startsWith('yct:')) && selectedDashboardLessons.length > 0) {
         lessonWords = lessonWords.filter(w => w.lessonId && selectedDashboardLessons.some(id => String(id) === String(w.lessonId)));
       }
       if (lessonWords.length === 0) {
@@ -11019,20 +11019,15 @@ function renderCreateNbLevelPills() {
   }
 
   container.innerHTML = levels.map(l => {
-    const isUnlocked = (createNbVersion === 'premium') ? true : isLevelUnlocked(createNbVersion, l.id);
     return `
-      <button type="button" class="nb-picker-pill ${String(createNbLevel) === String(l.id) ? 'active' : ''} ${!isUnlocked ? 'pill-locked' : ''}" onclick="window.setCreateNbLevel('${l.id}', ${!isUnlocked})">
-        ${!isUnlocked ? '<i class="fa-solid fa-lock" style="font-size: 0.72rem; color: #fbbf24; margin-right: 4px;"></i>' : ''}${l.name}${!isUnlocked ? ' (Khóa)' : ''}
+      <button type="button" class="nb-picker-pill ${String(createNbLevel) === String(l.id) ? 'active' : ''}" onclick="window.setCreateNbLevel('${l.id}')">
+        ${l.name}
       </button>
     `;
   }).join('');
 }
 
-window.setCreateNbLevel = function(lvl, isLocked = false) {
-  if (isLocked) {
-    showToast('🔒 Cấp độ này đang tạm khóa để hoàn thiện và chuẩn hóa giáo trình!', true);
-    return;
-  }
+window.setCreateNbLevel = function(lvl) {
   createNbLevel = lvl;
   createNbLesson = 'all';
   renderCreateNbLevelPills();
@@ -11078,10 +11073,9 @@ function renderCreateNbLessonPills() {
 
   sortedLessonIds.forEach(id => {
     const lessonWords = baseWords.filter(w => String(w.lessonId || 1) === String(id));
-    const isUnlocked = isRoadmapLessonUnlocked(createNbVersion, createNbLevel, id, sortedLessonIds);
     html += `
-      <button type="button" class="nb-picker-pill ${String(createNbLesson) === String(id) ? 'active' : ''} ${!isUnlocked ? 'pill-locked' : ''}" onclick="window.setCreateNbLesson('${id}', ${!isUnlocked})">
-        ${!isUnlocked ? '<i class="fa-solid fa-lock" style="font-size: 0.72rem; color: #fbbf24; margin-right: 4px;"></i>' : ''}${uniqueLessons[id]} (${lessonWords.length})${!isUnlocked ? ' (Khóa)' : ''}
+      <button type="button" class="nb-picker-pill ${String(createNbLesson) === String(id) ? 'active' : ''}" onclick="window.setCreateNbLesson('${id}')">
+        ${uniqueLessons[id]} (${lessonWords.length})
       </button>
     `;
   });
@@ -11089,11 +11083,7 @@ function renderCreateNbLessonPills() {
   pillsWrap.innerHTML = html;
 }
 
-window.setCreateNbLesson = function(lessonId, isLocked = false) {
-  if (isLocked) {
-    showToast('🔒 Bài học này đang bị khóa trong Lộ trình! Vui lòng hoàn thành các bài trước để mở khóa.', true);
-    return;
-  }
+window.setCreateNbLesson = function(lessonId) {
   createNbLesson = lessonId;
   renderCreateNbLessonPills();
   window.renderCreateNbWordsList();
@@ -11430,21 +11420,6 @@ function showSubdecksView() {
 }
 
 function showNotebookDashboardView(notebookId, preserveLessons = false) {
-  // Security guard for locked levels
-  if (notebookId.startsWith('hsk:')) {
-    const lvl = notebookId.substring(4);
-    if (!isLevelUnlocked(activeHskVersion, lvl)) {
-      showToast(`🔒 HSK Cấp ${lvl} đang tạm khóa để hoàn thiện và chuẩn hóa giáo trình!`, true);
-      return;
-    }
-  } else if (notebookId.startsWith('yct:')) {
-    const lvl = notebookId.substring(4);
-    if (!isLevelUnlocked('yct', lvl)) {
-      showToast(`🔒 YCT Cấp ${lvl} đang tạm khóa để hoàn thiện giáo trình!`, true);
-      return;
-    }
-  }
-
   const selectionView = document.getElementById('deck-selection-view');
   const topicsView = document.getElementById('flashcard-topics-view');
   const subdecksView = document.getElementById('flashcard-subdecks-view');
@@ -11502,16 +11477,10 @@ function getNotebookWords(notebookId) {
     return vocabList.filter(w => w.isCustom && w.category === listName);
   } else if (notebookId.startsWith('hsk:')) {
     const lvl = notebookId.substring(4);
-    const lvlWords = vocabList.filter(w => !w.isCustom && matchLevel(w.level, lvl) && (w.hskVersion || '3.0') === activeHskVersion);
-    const uniqueLessons = {};
-    lvlWords.forEach(w => {
-      if (w.lessonId) uniqueLessons[w.lessonId] = true;
-    });
-    const sortedLessonIds = Object.keys(uniqueLessons).map(Number).sort((a, b) => a - b);
-    return lvlWords.filter(w => {
-      if (!w.lessonId) return true;
-      return isRoadmapLessonUnlocked(activeHskVersion, lvl, w.lessonId, sortedLessonIds);
-    });
+    return vocabList.filter(w => !w.isCustom && matchLevel(w.level, lvl) && (w.hskVersion || '3.0') === activeHskVersion);
+  } else if (notebookId.startsWith('yct:')) {
+    const lvl = notebookId.substring(4);
+    return vocabList.filter(w => !w.isCustom && (w.curriculum === 'yct' || w.hskVersion === 'yct') && String(w.level) === String(lvl));
   } else if (notebookId.startsWith('premium:')) {
     const category = notebookId.substring(8);
     let catName = '';
@@ -11567,20 +11536,17 @@ function renderSubdecksList() {
     if (activeHskVersion === 'yct') {
       for (let lvl = 1; lvl <= 4; lvl++) {
         const lvlWords = vocabList.filter(w => (w.curriculum === 'yct' || w.hskVersion === 'yct') && matchLevel(w.level, lvl));
-        const isUnlocked = isLevelUnlocked('yct', lvl);
-        grid.appendChild(createSubdeckCard(`YCT Cấp ${lvl}`, `yct:${lvl}`, lvlWords.length, 'fa-child', 'var(--accent-teal)', !isUnlocked));
+        grid.appendChild(createSubdeckCard(`YCT Cấp ${lvl}`, `yct:${lvl}`, lvlWords.length, 'fa-child', 'var(--accent-teal)', false));
       }
     } else {
       const maxLvl = 6;
       for (let lvl = 1; lvl <= maxLvl; lvl++) {
         const lvlWords = vocabList.filter(w => !w.isCustom && matchLevel(w.level, lvl) && (w.hskVersion || '3.0') === activeHskVersion);
-        const isUnlocked = isLevelUnlocked(activeHskVersion, lvl);
-        grid.appendChild(createSubdeckCard(`HSK Cấp ${lvl}`, `hsk:${lvl}`, lvlWords.length, 'fa-graduation-cap', 'var(--success)', !isUnlocked));
+        grid.appendChild(createSubdeckCard(`HSK Cấp ${lvl}`, `hsk:${lvl}`, lvlWords.length, 'fa-graduation-cap', 'var(--success)', false));
       }
       if (activeHskVersion === '3.0') {
         const hsk79Words = vocabList.filter(w => !w.isCustom && matchLevel(w.level, '7-9') && (w.hskVersion || '3.0') === activeHskVersion);
-        const is79Unlocked = isLevelUnlocked('3.0', '7-9');
-        grid.appendChild(createSubdeckCard(`HSK Cấp 7-8-9 (Cao cấp)`, `hsk:7-9`, hsk79Words.length, 'fa-award', '#a855f7', !is79Unlocked));
+        grid.appendChild(createSubdeckCard(`HSK Cấp 7-8-9 (Cao cấp)`, `hsk:7-9`, hsk79Words.length, 'fa-award', '#a855f7', false));
       }
     }
   }
@@ -11674,6 +11640,22 @@ function openNotebookDashboard(notebookId) {
       name = `Từ vựng HSK Cấp ${lvl}`;
       desc = `Toàn bộ từ vựng luyện thi HSK Cấp ${lvl}`;
     }
+  } else if (notebookId.startsWith('yct:')) {
+    const lvl = notebookId.substring(4);
+    if (selectedDashboardLessons && selectedDashboardLessons.length > 0) {
+      const uniqueLessons = {};
+      baseWords.forEach(w => {
+        if (w.lessonId) {
+          uniqueLessons[w.lessonId] = w.lessonTitle || `Bài ${w.lessonId}`;
+        }
+      });
+      const lessonNames = selectedDashboardLessons.map(id => uniqueLessons[id] || `Bài ${id}`).join(', ');
+      name = `Từ vựng YCT Cấp ${lvl} - ${lessonNames}`;
+      desc = `Các từ vựng thuộc ${lessonNames.toLowerCase()} của YCT Cấp ${lvl}`;
+    } else {
+      name = `Từ vựng YCT Cấp ${lvl}`;
+      desc = `Toàn bộ từ vựng luyện thi YCT Cấp ${lvl}`;
+    }
   } else if (notebookId.startsWith('premium:')) {
     const category = notebookId.substring(8);
     if (category === 'du-lich') {
@@ -11731,7 +11713,13 @@ function openNotebookDashboard(notebookId) {
         lessonsList.innerHTML = '';
 
         const lvl = notebookId.substring(4);
-        const allLvlWords = vocabList.filter(w => !w.isCustom && matchLevel(w.level, lvl) && (w.hskVersion || '3.0') === activeHskVersion);
+        const allLvlWords = vocabList.filter(w => {
+          if (w.isCustom) return false;
+          if (notebookId.startsWith('yct:')) {
+            return (w.curriculum === 'yct' || w.hskVersion === 'yct') && String(w.level) === String(lvl);
+          }
+          return matchLevel(w.level, lvl) && (w.hskVersion || '3.0') === activeHskVersion;
+        });
 
         // Find unique lessons
         const uniqueLessons = {};
@@ -11742,15 +11730,14 @@ function openNotebookDashboard(notebookId) {
         });
 
         const sortedLessonIds = Object.keys(uniqueLessons).map(Number).sort((a, b) => a - b);
-        const unlockedLessonIds = sortedLessonIds.filter(lId => isRoadmapLessonUnlocked(activeHskVersion, lvl, lId, sortedLessonIds));
 
         // Function to update count badge
         const updateCountBadge = () => {
           if (countBadge) {
             if (selectedDashboardLessons.length === 0) {
-              countBadge.textContent = 'Tất cả bài đã mở';
+              countBadge.textContent = 'Tất cả bài';
             } else {
-              countBadge.textContent = `Đã chọn: ${selectedDashboardLessons.length} / ${unlockedLessonIds.length} bài`;
+              countBadge.textContent = `Đã chọn: ${selectedDashboardLessons.length} / ${sortedLessonIds.length} bài`;
             }
           }
         };
@@ -11760,8 +11747,8 @@ function openNotebookDashboard(notebookId) {
         if (selectAllBtn) {
           selectAllBtn.onclick = (e) => {
             e.preventDefault();
-            selectedDashboardLessons = [...unlockedLessonIds];
-            document.querySelectorAll('#nb-hsk-lessons-list .nb-lesson-check-card:not(.locked)').forEach(card => {
+            selectedDashboardLessons = [...sortedLessonIds];
+            document.querySelectorAll('#nb-hsk-lessons-list .nb-lesson-check-card').forEach(card => {
               card.classList.add('selected');
               const icon = card.querySelector('.nb-check-icon i');
               if (icon) {
@@ -11783,7 +11770,7 @@ function openNotebookDashboard(notebookId) {
             document.querySelectorAll('#nb-hsk-lessons-list .nb-lesson-check-card').forEach(card => {
               card.classList.remove('selected');
               const icon = card.querySelector('.nb-check-icon i');
-              if (icon && !card.classList.contains('locked')) {
+              if (icon) {
                 icon.className = 'fa-regular fa-square';
               }
             });
@@ -11794,50 +11781,36 @@ function openNotebookDashboard(notebookId) {
           };
         }
 
-        // Add individual lesson checkbox cards with lock state
+        // Add individual lesson checkbox cards (All Unlocked)
         sortedLessonIds.forEach(lId => {
           const card = document.createElement('div');
-          const isUnlocked = unlockedLessonIds.includes(lId);
           const isSelected = selectedDashboardLessons.includes(lId);
 
-          if (!isUnlocked) {
-            card.className = 'nb-lesson-check-card locked';
-            card.setAttribute('data-lesson-id', lId);
-            card.innerHTML = `
-              <span class="nb-check-icon"><i class="fa-solid fa-lock" style="color: #fbbf24;"></i></span>
-              <span class="nb-lesson-title" style="color: #94a3b8; font-style: italic;">${uniqueLessons[lId]}</span>
-              <span class="nb-lock-tag" style="font-size: 0.7rem; color: #fbbf24; background: rgba(245, 158, 11, 0.15); padding: 2px 6px; border-radius: 4px; font-weight: 700;">Khóa</span>
-            `;
-            card.addEventListener('click', () => {
-              const idx = sortedLessonIds.findIndex(k => String(k) === String(lId));
-              const prevKey = idx > 0 ? sortedLessonIds[idx - 1] : 1;
-              showToast(`🔒 Bài ${lId} đang bị khóa trong Lộ trình! Vui lòng hoàn thành Bài ${prevKey} để mở khóa nhé.`, true);
-            });
-          } else {
-            card.className = `nb-lesson-check-card ${isSelected ? 'selected' : ''}`;
-            card.setAttribute('data-lesson-id', lId);
-            card.innerHTML = `
-              <span class="nb-check-icon"><i class="fa-solid ${isSelected ? 'fa-square-check' : 'fa-regular fa-square'}"></i></span>
-              <span class="nb-lesson-title">${uniqueLessons[lId]}</span>
-            `;
-            card.addEventListener('click', () => {
-              const nowSelected = selectedDashboardLessons.includes(lId);
-              if (nowSelected) {
-                selectedDashboardLessons = selectedDashboardLessons.filter(id => id !== lId);
-                card.classList.remove('selected');
-                card.querySelector('.nb-check-icon i').className = 'fa-regular fa-square';
-              } else {
-                selectedDashboardLessons.push(lId);
-                card.classList.add('selected');
-                card.querySelector('.nb-check-icon i').className = 'fa-solid fa-square-check';
-              }
+          card.className = `nb-lesson-check-card ${isSelected ? 'selected' : ''}`;
+          card.setAttribute('data-lesson-id', lId);
+          card.innerHTML = `
+            <span class="nb-check-icon"><i class="fa-solid ${isSelected ? 'fa-square-check' : 'fa-regular fa-square'}"></i></span>
+            <span class="nb-lesson-title">${uniqueLessons[lId]}</span>
+          `;
+          card.addEventListener('click', () => {
+            const nowSelected = selectedDashboardLessons.includes(lId);
+            if (nowSelected) {
+              selectedDashboardLessons = selectedDashboardLessons.filter(id => id !== lId);
+              card.classList.remove('selected');
+              const icon = card.querySelector('.nb-check-icon i');
+              if (icon) icon.className = 'fa-regular fa-square';
+            } else {
+              selectedDashboardLessons.push(lId);
+              card.classList.add('selected');
+              const icon = card.querySelector('.nb-check-icon i');
+              if (icon) icon.className = 'fa-solid fa-square-check';
+            }
 
-              updateCountBadge();
-              updateNotebookDashboardStatsOnly(notebookId);
-              currentNotebookPage = 1;
-              renderNotebookWordsTable();
-            });
-          }
+            updateCountBadge();
+            updateNotebookDashboardStatsOnly(notebookId);
+            currentNotebookPage = 1;
+            renderNotebookWordsTable();
+          });
           lessonsList.appendChild(card);
         });
       }
@@ -11869,9 +11842,9 @@ function updateNotebookDashboardStatsOnly(notebookId) {
   if (!notebookId) return;
   const baseWords = getNotebookWords(notebookId);
 
-  // Filter baseWords for statistics if specific HSK lessons are selected
+  // Filter baseWords for statistics if specific HSK / YCT lessons are selected
   let wordsForStats = baseWords;
-  if (notebookId.startsWith('hsk:') && selectedDashboardLessons.length > 0) {
+  if ((notebookId.startsWith('hsk:') || notebookId.startsWith('yct:')) && selectedDashboardLessons.length > 0) {
     wordsForStats = baseWords.filter(w => w.lessonId && selectedDashboardLessons.some(id => String(id) === String(w.lessonId)));
   }
 
@@ -11908,8 +11881,8 @@ function renderNotebookWordsTable() {
 
   let words = getNotebookWords(activeNotebook);
 
-  // Filter HSK dashboard lessons if selected
-  if (activeNotebook && activeNotebook.startsWith('hsk:') && selectedDashboardLessons.length > 0) {
+  // Filter HSK / YCT dashboard lessons if selected
+  if (activeNotebook && (activeNotebook.startsWith('hsk:') || activeNotebook.startsWith('yct:')) && selectedDashboardLessons.length > 0) {
     words = words.filter(w => w.lessonId && selectedDashboardLessons.some(id => String(id) === String(w.lessonId)));
   }
 
@@ -12225,8 +12198,8 @@ function startDirectTypingSession(words) {
 function startQuizSession() {
   let words = getNotebookWords(activeNotebook);
 
-  // Apply HSK lesson filters if selected
-  if (activeNotebook.startsWith('hsk:') && selectedDashboardLessons.length > 0) {
+  // Apply HSK / YCT lesson filters if selected
+  if ((activeNotebook.startsWith('hsk:') || activeNotebook.startsWith('yct:')) && selectedDashboardLessons.length > 0) {
     words = words.filter(w => w.lessonId && selectedDashboardLessons.some(id => String(id) === String(w.lessonId)));
   }
 
