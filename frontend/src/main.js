@@ -3904,6 +3904,33 @@ function renderUserProfile() {
     displayName.textContent = currentUser.name || 'Học viên';
     displayEmail.textContent = currentUser.email || 'demo@tiengtrunghongtai.com';
 
+    // Dynamically update profile role badge
+    const displayRole = document.getElementById('user-display-role') || document.querySelector('.app-sidebar .user-role-badge');
+    if (displayRole) {
+      const email = (currentUser.email || '').toLowerCase().trim();
+      const isSuper = email.includes('toiyeutinhoc238') || email.includes('phanphiphu') || currentUser.isSuperAdmin || currentUser.role === 'super_admin';
+      const isTeacher = currentUser.role === 'teacher' || email.includes('hongtai');
+      const isAdmin = isSuper || isTeacher || currentUser.isAdmin || currentUser.role === 'admin' || isUserAdmin(email);
+
+      if (isSuper) {
+        displayRole.innerHTML = '<i class="fa-solid fa-crown"></i> Super Admin';
+        displayRole.style.color = '#f43f5e';
+        displayRole.style.fontWeight = '800';
+      } else if (isTeacher) {
+        displayRole.innerHTML = '<i class="fa-solid fa-chalkboard-user"></i> Giáo viên';
+        displayRole.style.color = '#38bdf8';
+        displayRole.style.fontWeight = '800';
+      } else if (isAdmin) {
+        displayRole.innerHTML = '<i class="fa-solid fa-shield-halved"></i> Quản trị viên';
+        displayRole.style.color = '#a855f7';
+        displayRole.style.fontWeight = '800';
+      } else {
+        displayRole.innerHTML = '<i class="fa-solid fa-graduation-cap"></i> Học viên';
+        displayRole.style.color = 'var(--accent-blue)';
+        displayRole.style.fontWeight = '700';
+      }
+    }
+
     if (navChatHistoryLi) navChatHistoryLi.style.display = 'block';
 
     // Auto-reveal admin panel in sidebar if current user is admin/teacher

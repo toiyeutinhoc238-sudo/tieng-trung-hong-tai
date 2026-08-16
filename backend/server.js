@@ -1037,7 +1037,7 @@ app.get('/api/user/game-history', async (req, res) => {
     const userRecord = userData.users[email];
     const userHistory = (userRecord && userRecord.gameHistory) ? userRecord.gameHistory : [];
     const quizHistory = (userData.quizHistory && userData.quizHistory[email]) ? userData.quizHistory[email] : [];
-    
+
     // Gop va sap xep theo thoi gian playedAt moi nhat
     const combined = [...userHistory, ...quizHistory].sort((a, b) => new Date(b.playedAt) - new Date(a.playedAt));
     res.json(combined);
@@ -1327,8 +1327,8 @@ app.post('/api/vocabulary/toggle-memorized', async (req, res) => {
     const wordKey = wordId.toString();
     const currentProgress = userData.progress[email][wordKey] || { isMemorized: false, isStarred: false };
 
-    const nextMemorized = (req.body.isMemorized !== undefined) 
-      ? Boolean(req.body.isMemorized) 
+    const nextMemorized = (req.body.isMemorized !== undefined)
+      ? Boolean(req.body.isMemorized)
       : !currentProgress.isMemorized;
 
     userData.progress[email][wordKey] = {
@@ -1940,7 +1940,7 @@ app.get('/api/discussions', async (req, res) => {
       if (count === 0) {
         const defaultDiscussions = await readDiscussionsFromFile();
         if (defaultDiscussions.length > 0) {
-          await Discussion.insertMany(defaultDiscussions).catch(() => {});
+          await Discussion.insertMany(defaultDiscussions).catch(() => { });
         }
       }
 
@@ -2511,10 +2511,10 @@ function cleanHumanSpeechText(text) {
     .replace(/[♪♫♩♬★☆✦✧❤️👍🔥]+/g, '')
     .replace(/\s{2,}/g, ' ')
     .trim();
-  
+
   if (/^[\p{P}\s]*$/u.test(cleaned)) return '';
   if (isHallucinationText(cleaned)) return '';
-  
+
   return cleaned;
 }
 
@@ -2529,7 +2529,7 @@ export function extractPrecisionVoiceSegments(whisperData) {
       .map((s, idx) => {
         const text = cleanHumanSpeechText(s.text);
         let py = '';
-        try { py = pinyin(text, { toneType: 'symbol' }); } catch (e) {}
+        try { py = pinyin(text, { toneType: 'symbol' }); } catch (e) { }
         return {
           id: idx + 1,
           startTime: parseFloat(Number(s.start || 0).toFixed(3)),
@@ -2585,7 +2585,7 @@ export function extractPrecisionVoiceSegments(whisperData) {
     }
 
     // Filter repetitive loops (3+ same words in a row)
-    if (i >= 2 && curr.word === validWords[i-1].word && curr.word === validWords[i-2].word) {
+    if (i >= 2 && curr.word === validWords[i - 1].word && curr.word === validWords[i - 2].word) {
       continue;
     }
 
@@ -2651,7 +2651,7 @@ function buildSentenceFromWords(wordList, id) {
   const endTime = parseFloat(wordList[wordList.length - 1].end.toFixed(3));
 
   let py = '';
-  try { py = pinyin(rawText, { toneType: 'symbol' }); } catch (e) {}
+  try { py = pinyin(rawText, { toneType: 'symbol' }); } catch (e) { }
 
   return {
     id,
@@ -2738,7 +2738,7 @@ async function translateText(text, sourceLang = 'auto', targetLang = 'zh-CN') {
         if (translated) return translated;
       }
     }
-  } catch (err) {}
+  } catch (err) { }
 
   // 2. MyMemory Translation API fallback (Works 100% on Cloud IPs)
   try {
@@ -2751,7 +2751,7 @@ async function translateText(text, sourceLang = 'auto', targetLang = 'zh-CN') {
         return mmData.responseData.translatedText.trim();
       }
     }
-  } catch (err2) {}
+  } catch (err2) { }
 
   return trimmed;
 }
@@ -2837,9 +2837,9 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
           const r = parsed.results.find(res => res.index === item.index) || {};
           let hanzi = (r.hanzi || item.rawText || '').trim();
           let vi = (r.vietnamese || '').trim();
-          
+
           let py = '';
-          try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) {}
+          try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) { }
 
           return `${item.timePrefix}${hanzi} | ${py} | ${vi}`;
         });
@@ -2864,12 +2864,12 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
         const sourceText = viCandidate || parts.filter(p => p).join(' ').trim();
         const translatedHanzi = await translateText(sourceText, 'vi', 'zh-CN');
         let py = '';
-        try { py = pinyin(translatedHanzi, { toneType: 'symbol' }); } catch (e) {}
+        try { py = pinyin(translatedHanzi, { toneType: 'symbol' }); } catch (e) { }
         processedLines.push(`${item.timePrefix}${translatedHanzi} | ${py} | ${sourceText}`);
       } else {
         let py = parts.find(p => p !== hanziCandidate && p !== viCandidate) || '';
         if (!py) {
-          try { py = pinyin(hanziCandidate, { toneType: 'symbol' }); } catch (e) {}
+          try { py = pinyin(hanziCandidate, { toneType: 'symbol' }); } catch (e) { }
         }
         let meaning = viCandidate || '';
         if (!meaning || meaning === hanziCandidate) {
@@ -2894,7 +2894,7 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
 // ============================================================
 
 const AUDIO_TEMP_DIR = path.join(os.tmpdir(), 'hongtai_audio');
-fs.mkdir(AUDIO_TEMP_DIR, { recursive: true }).catch(() => {});
+fs.mkdir(AUDIO_TEMP_DIR, { recursive: true }).catch(() => { });
 
 const BIN_DIR = path.join(__dirname, 'bin');
 const YTDLP_PATH = path.join(BIN_DIR, process.platform === 'win32' ? 'yt-dlp.exe' : 'yt-dlp');
@@ -2902,9 +2902,9 @@ const ytdlpWrap = YTDlpWrap.default || YTDlpWrap;
 
 // Ensure yt-dlp binary is present and up-to-date
 async function ensureYtDlpBinary() {
-  await fs.mkdir(BIN_DIR, { recursive: true }).catch(() => {});
+  await fs.mkdir(BIN_DIR, { recursive: true }).catch(() => { });
   let needsDownload = !existsSync(YTDLP_PATH);
-  
+
   if (existsSync(YTDLP_PATH)) {
     try {
       const stats = await fs.stat(YTDLP_PATH);
@@ -2913,7 +2913,7 @@ async function ensureYtDlpBinary() {
         console.log(`[yt-dlp] Binary is ${ageInDays.toFixed(1)} days old. Auto-updating to latest GitHub release...`);
         needsDownload = true;
       }
-    } catch (e) {}
+    } catch (e) { }
   }
 
   if (needsDownload) {
@@ -2926,7 +2926,7 @@ async function ensureYtDlpBinary() {
     }
   }
   if (process.platform !== 'win32') {
-    await fs.chmod(YTDLP_PATH, 0o755).catch(() => {});
+    await fs.chmod(YTDLP_PATH, 0o755).catch(() => { });
   }
   return YTDLP_PATH;
 }
@@ -2947,17 +2947,17 @@ async function batchTranslateAndPinyin(speechItems) {
 
       if (hasHanzi) {
         hanzi = text;
-        try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) {}
+        try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) { }
         meaning = await translateText(hanzi, 'zh-CN', 'vi');
       } else {
         meaning = text;
         hanzi = await translateText(meaning, 'auto', 'zh-CN');
-        try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) {}
+        try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) { }
       }
 
       if (!hanzi || !/[\u4e00-\u9fa5]/.test(hanzi)) {
         hanzi = await translateText(meaning || '学习中文', 'vi', 'zh-CN');
-        try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) {}
+        try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) { }
       }
 
       return {
@@ -3130,73 +3130,73 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
         levelText = `HSK ${level}`;
       }
 
-        if (Array.isArray(parsed.sentences)) {
-          for (let idx = 0; idx < parsed.sentences.length; idx++) {
-            const s = parsed.sentences[idx];
-            if (!s) continue;
-            
-            const origItem = chunk.find(x => x.id == s.id) || chunk[idx] || {};
+      if (Array.isArray(parsed.sentences)) {
+        for (let idx = 0; idx < parsed.sentences.length; idx++) {
+          const s = parsed.sentences[idx];
+          if (!s) continue;
 
-            let hanzi = s.hanzi || origItem.hanzi || origItem.text || '';
-            let vietnamese = s.vietnamese || '';
+          const origItem = chunk.find(x => x.id == s.id) || chunk[idx] || {};
 
-            if (!hanzi && vietnamese) {
-              hanzi = await translateText(vietnamese, 'vi', 'zh-CN');
-            }
-            if (!vietnamese && hanzi) {
-              vietnamese = await translateText(hanzi, 'zh-CN', 'vi');
-            }
-            if (!hanzi) continue;
+          let hanzi = s.hanzi || origItem.hanzi || origItem.text || '';
+          let vietnamese = s.vietnamese || '';
 
-            let py = '';
-            try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) {}
-            
-            // STRICT TIMINGS: Always prioritize the physically measured audio VAD start/end timestamps
-            const exactStart = (origItem.startTime !== undefined && origItem.startTime !== null) 
-              ? origItem.startTime 
-              : parseTimeSeconds(s.startTime, 0);
-            const exactEnd = (origItem.endTime !== undefined && origItem.endTime !== null) 
-              ? origItem.endTime 
-              : parseTimeSeconds(s.endTime, exactStart + 3);
-
-            refinedSentences.push({
-              id: refinedSentences.length + 1,
-              startTime: parseFloat(Number(exactStart).toFixed(3)),
-              endTime: parseFloat(Number(exactEnd).toFixed(3)),
-              duration: parseFloat((Number(exactEnd) - Number(exactStart)).toFixed(3)),
-              hanzi: hanzi,
-              pinyin: py,
-              meaning: vietnamese,
-              keywords: [hanzi ? hanzi.slice(0, Math.min(2, hanzi.length)) : ''],
-              words: origItem && Array.isArray(origItem.words) ? origItem.words : []
-            });
+          if (!hanzi && vietnamese) {
+            hanzi = await translateText(vietnamese, 'vi', 'zh-CN');
           }
+          if (!vietnamese && hanzi) {
+            vietnamese = await translateText(hanzi, 'zh-CN', 'vi');
+          }
+          if (!hanzi) continue;
+
+          let py = '';
+          try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) { }
+
+          // STRICT TIMINGS: Always prioritize the physically measured audio VAD start/end timestamps
+          const exactStart = (origItem.startTime !== undefined && origItem.startTime !== null)
+            ? origItem.startTime
+            : parseTimeSeconds(s.startTime, 0);
+          const exactEnd = (origItem.endTime !== undefined && origItem.endTime !== null)
+            ? origItem.endTime
+            : parseTimeSeconds(s.endTime, exactStart + 3);
+
+          refinedSentences.push({
+            id: refinedSentences.length + 1,
+            startTime: parseFloat(Number(exactStart).toFixed(3)),
+            endTime: parseFloat(Number(exactEnd).toFixed(3)),
+            duration: parseFloat((Number(exactEnd) - Number(exactStart)).toFixed(3)),
+            hanzi: hanzi,
+            pinyin: py,
+            meaning: vietnamese,
+            keywords: [hanzi ? hanzi.slice(0, Math.min(2, hanzi.length)) : ''],
+            words: origItem && Array.isArray(origItem.words) ? origItem.words : []
+          });
         }
       }
-
-      if (refinedSentences.length > 0) {
-        const splitSentences = postProcessAndSplitSentences(refinedSentences);
-        return {
-          level,
-          levelText,
-          category,
-          description,
-          sentences: splitSentences
-        };
-      }
-    } catch (llmErr) {
-      console.warn('[AI Master Engine] Groq LLM refinement warn, falling back to base translation:', llmErr.message);
     }
 
-    // Fallback to base translation if Groq LLM was unavailable
-    const baseSentences = await batchTranslateAndPinyin(rawSpeechSegments);
-    return {
-      level,
-      levelText,
-      category,
-      description,
-      sentences: postProcessAndSplitSentences(baseSentences)
-    };
+    if (refinedSentences.length > 0) {
+      const splitSentences = postProcessAndSplitSentences(refinedSentences);
+      return {
+        level,
+        levelText,
+        category,
+        description,
+        sentences: splitSentences
+      };
+    }
+  } catch (llmErr) {
+    console.warn('[AI Master Engine] Groq LLM refinement warn, falling back to base translation:', llmErr.message);
+  }
+
+  // Fallback to base translation if Groq LLM was unavailable
+  const baseSentences = await batchTranslateAndPinyin(rawSpeechSegments);
+  return {
+    level,
+    levelText,
+    category,
+    description,
+    sentences: postProcessAndSplitSentences(baseSentences)
+  };
 }
 
 // Helper: Clean repetitive ASR loops (e.g. "xôi Tìm Về... xôi Tìm Về...")
@@ -3223,7 +3223,7 @@ function postProcessAndSplitSentences(sentences) {
 
     let py = s.pinyin || '';
     if (!py && rawHanzi) {
-      try { py = pinyin(rawHanzi, { toneType: 'symbol' }); } catch (e) {}
+      try { py = pinyin(rawHanzi, { toneType: 'symbol' }); } catch (e) { }
     }
 
     result.push({
@@ -3384,7 +3384,7 @@ export async function extractYouTubeDictation(youtubeId, extractRawOnly = false)
 
       // Try downloading audio via yt-dlp (Priority: 1. Android/Web client bypass -> 2. Cookie-based -> 3. TV/iOS client)
       let downloadSuccess = false;
-      
+
       // Strategy 1: High-Speed Android Client (Immune to cookie expiration & bot blocks)
       try {
         await execFileAsync(ytDlpBinaryPath, [
@@ -3506,7 +3506,7 @@ export async function extractYouTubeDictation(youtubeId, extractRawOnly = false)
                 }
               }
             }
-          } catch (ePiped) {}
+          } catch (ePiped) { }
         }
       }
 
@@ -3541,7 +3541,7 @@ export async function extractYouTubeDictation(youtubeId, extractRawOnly = false)
           try {
             console.log(`[Dictation] Transcribing with AssemblyAI (Speech Threshold & VAD Mode)...`);
             const audioData = await fs.readFile(tempAudio);
-            
+
             const uploadRes = await fetch('https://api.assemblyai.com/v2/upload', {
               method: 'POST',
               headers: {
@@ -3586,7 +3586,7 @@ export async function extractYouTubeDictation(youtubeId, extractRawOnly = false)
                           .map((s, idx) => {
                             const clean = cleanHumanSpeechText(s.text);
                             let py = '';
-                            try { py = pinyin(clean, { toneType: 'symbol' }); } catch (e) {}
+                            try { py = pinyin(clean, { toneType: 'symbol' }); } catch (e) { }
                             return {
                               id: idx + 1,
                               startTime: parseFloat(((s.start || 0) / 1000).toFixed(3)),
@@ -3646,9 +3646,9 @@ export async function extractYouTubeDictation(youtubeId, extractRawOnly = false)
     } catch (err) {
       console.warn(`[Dictation] Tier 1 Audio transcription error: ${err.message}`);
     } finally {
-      await fs.unlink(tempAudio).catch(() => {});
+      await fs.unlink(tempAudio).catch(() => { });
       if (tempCookiesFile) {
-        await fs.unlink(tempCookiesFile).catch(() => {});
+        await fs.unlink(tempCookiesFile).catch(() => { });
       }
     }
 
@@ -3666,7 +3666,7 @@ export async function extractYouTubeDictation(youtubeId, extractRawOnly = false)
             console.log(`[Dictation] YoutubeTranscript matched language '${lang || 'default'}': ${ytTranscript.length} lines`);
             break;
           }
-        } catch (eLang) {}
+        } catch (eLang) { }
       }
 
       if (ytTranscript && ytTranscript.length > 0) {
@@ -3813,7 +3813,7 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
       const s = rawSentences[idx];
       let hanzi = (s.hanzi || '').trim();
       let vietnamese = (s.vietnamese || s.meaning || '').trim();
-      
+
       if (!hanzi && vietnamese) {
         hanzi = await translateText(vietnamese, 'vi', 'zh-CN');
       }
@@ -3832,7 +3832,7 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
       const eTime = parseTimeSeconds(s.endTime, defaultEnd);
 
       let py = '';
-      try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) {}
+      try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) { }
 
       sentences.push({
         id: idx + 1,
@@ -3873,7 +3873,7 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
     { id: 5, startTime: introOffset + step * 4 + 0.220, endTime: introOffset + step * 4 + 4.910, hanzi: "让我们一起努力，加油！", meaning: "Hãy cùng nhau cố gắng, cố lên nào!" }
   ].map(s => {
     let py = '';
-    try { py = pinyin(s.hanzi, { toneType: 'symbol' }); } catch (e) {}
+    try { py = pinyin(s.hanzi, { toneType: 'symbol' }); } catch (e) { }
     return {
       ...s,
       startTime: parseFloat(s.startTime.toFixed(3)),
@@ -4008,7 +4008,7 @@ app.post('/api/dict/lookup', async (req, res) => {
     let wordTag = 'Từ vựng';
 
     if (isChinese) {
-      try { py = pinyin(cleanWord, { toneType: 'symbol' }); } catch (e) {}
+      try { py = pinyin(cleanWord, { toneType: 'symbol' }); } catch (e) { }
 
       const db = await readDatabase();
       let foundDbMatch = db.find(w => w && (w.word === cleanWord || w.hanzi === cleanWord));
@@ -4023,7 +4023,7 @@ app.post('/api/dict/lookup', async (req, res) => {
       // English / Non-Chinese word lookup
       wordTag = 'English';
       meaning = await translateText(cleanWord, 'en', 'vi');
-      
+
       // Fetch English IPA phonetics from free dictionary API
       try {
         const dictRes = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(cleanWord)}`);
@@ -4037,7 +4037,7 @@ app.post('/api/dict/lookup', async (req, res) => {
             if (pos) wordTag = pos.toUpperCase();
           }
         }
-      } catch (eDict) {}
+      } catch (eDict) { }
     }
 
     res.json({
