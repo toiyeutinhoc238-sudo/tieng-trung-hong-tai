@@ -113,11 +113,11 @@
     window.toggleSidebarCollapse = window.toggleSidebarCollapse || function() {};
     window.toggleTheme = window.toggleTheme || function() {};
   </script>
-  <script type="module" crossorigin src="/assets/style-DzP4uo9l.js"></script>
+  <script type="module" crossorigin src="/assets/style-Bemh3yQw.js"></script>
   <script type="module" crossorigin src="/assets/grammar_hsk2-DmGaXK9a.js"></script>
   <script type="module" crossorigin src="/assets/screen_drawing-oOIhKrv1.js"></script>
-  <script type="module" crossorigin src="/assets/main-i79aeBkd.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/style-D5jPbhvK.css">
+  <script type="module" crossorigin src="/assets/main-CsOkRlBc.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/style-DhJzT23J.css">
 </head>
 
 <body>
@@ -358,9 +358,9 @@
           <i class="fa-solid fa-folder-open" style="color: #64748b;"></i> <span>Kho tài liệu</span>
           <span style="font-size:0.68rem; background:rgba(245,158,11,0.2); color:#f59e0b; border:1px solid rgba(245,158,11,0.3); padding:2px 6px; border-radius:6px; font-weight:700; margin-left:auto; white-space:nowrap;">🔒 Sắp ra mắt</span>
         </li>
-        <li class="sidebar-item" onclick="window.showComingSoonNotice('Diễn đàn thảo luận')">
-          <i class="fa-solid fa-comments"></i> <span>Thảo luận</span>
-          <span style="font-size:0.68rem; background:rgba(245,158,11,0.2); color:#f59e0b; border:1px solid rgba(245,158,11,0.3); padding:2px 6px; border-radius:6px; font-weight:700; margin-left:auto; white-space:nowrap;">Sắp ra mắt</span>
+        <li class="sidebar-item" id="sidebar-discussion-btn" onclick="window.openDiscussionModal()" style="cursor: pointer;">
+          <i class="fa-solid fa-comments" style="color: #38bdf8;"></i> <span>Thảo luận &amp; Góp ý</span>
+          <span style="font-size:0.68rem; background:rgba(56,189,248,0.2); color:#38bdf8; border:1px solid rgba(56,189,248,0.4); padding:2px 6px; border-radius:6px; font-weight:700; margin-left:auto; white-space:nowrap;">Mới</span>
         </li>
         <li class="sidebar-item" onclick="window.showLeaderboardModal()">
           <i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> <span>Xếp hạng</span>
@@ -3412,6 +3412,109 @@
             <i class="fa-solid fa-floppy-disk"></i> Tạo &amp; Lưu Sổ Tay
           </button>
         </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL: CỘNG ĐỒNG THẢO LUẬN & GÓP Ý HONGTAI -->
+  <div id="discussion-forum-modal" style="display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0, 0, 0, 0.78); backdrop-filter: blur(10px); justify-content: center; align-items: center; padding: 16px;">
+    <div class="glass-panel custom-scrollbar" style="background: rgba(15, 23, 42, 0.92); border: 1.5px solid rgba(56, 189, 248, 0.3); border-radius: 20px; max-width: 920px; width: 100%; max-height: 92vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);">
+      
+      <!-- Modal Header -->
+      <div style="padding: 18px 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center; background: rgba(30, 41, 59, 0.6); flex-wrap: wrap; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #0284c7, #38bdf8); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: white; box-shadow: 0 4px 14px rgba(56, 189, 248, 0.35);">
+            <i class="fa-solid fa-comments"></i>
+          </div>
+          <div>
+            <h2 style="font-size: 1.25rem; font-weight: 800; color: #ffffff; margin: 0; font-family: var(--font-display); letter-spacing: -0.01em;">
+              Cộng Đồng Thảo Luận &amp; Góp Ý HONGTAI
+            </h2>
+            <p style="font-size: 0.8rem; color: #94a3b8; margin: 2px 0 0 0;">
+              Hỏi bài, trao đổi kinh nghiệm học tiếng Trung và gửi phản hồi / góp ý trực tiếp đến giáo viên
+            </p>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <button type="button" id="disc-create-post-toggle-btn" class="btn btn-primary" onclick="window.toggleCreateDiscussionForm()" style="padding: 8px 16px; border-radius: 10px; font-size: 0.85rem; font-weight: 700; background: linear-gradient(135deg, #10b981, #059669); border: none; box-shadow: 0 4px 12px rgba(16,185,129,0.3); display: flex; align-items: center; gap: 6px; cursor: pointer;">
+            <i class="fa-solid fa-pen-to-square"></i> Đăng bài / Góp ý
+          </button>
+          <button type="button" onclick="window.closeDiscussionModal()" class="btn btn-icon-only" style="width: 36px; height: 36px; border-radius: 10px; background: rgba(255, 255, 255, 0.08); color: #94a3b8; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none;">
+            <i class="fa-solid fa-xmark" style="font-size: 1.2rem;"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Create Post Drawer / Form Box (Initially Collapsed) -->
+      <div id="disc-create-form-container" style="display: none; padding: 20px 24px; background: rgba(30, 41, 59, 0.4); border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+        <form id="disc-create-post-form" onsubmit="window.handleCreateDiscussionSubmit(event)">
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: grid; grid-template-columns: 180px 1fr; gap: 12px;">
+              <div>
+                <label style="font-size: 0.76rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px; display: block;">Chuyên mục (*)</label>
+                <select id="disc-new-category" style="width: 100%; padding: 10px 12px; border-radius: 10px; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255,255,255,0.15); color: #ffffff; font-size: 0.86rem; outline: none;">
+                  <option value="feedback">💡 Góp ý &amp; Báo lỗi</option>
+                  <option value="study">💬 Thảo luận học tập</option>
+                  <option value="qa">❓ Hỏi đáp ngữ pháp</option>
+                  <option value="tips">🎉 Mẹo học &amp; HSK</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size: 0.76rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px; display: block;">Tiêu đề ngắn (Tùy chọn)</label>
+                <input type="text" id="disc-new-title" placeholder="Ví dụ: Góp ý thêm chế độ gõ Pinyin theo thời gian..." style="width: 100%; padding: 10px 14px; border-radius: 10px; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255,255,255,0.15); color: #ffffff; font-size: 0.88rem; outline: none;">
+              </div>
+            </div>
+
+            <div>
+              <label style="font-size: 0.76rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px; display: block;">Nội dung bài viết / góp ý (*)</label>
+              <textarea id="disc-new-content" rows="3" required placeholder="Chia sẻ suy nghĩ, câu hỏi hoặc ý kiến đóng góp của bạn cho trang web..." style="width: 100%; padding: 12px 14px; border-radius: 10px; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255,255,255,0.15); color: #ffffff; font-size: 0.88rem; outline: none; resize: vertical;"></textarea>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+              <button type="button" onclick="window.toggleCreateDiscussionForm(false)" class="btn btn-outline" style="padding: 8px 16px; border-radius: 10px; font-size: 0.82rem; font-weight: 600; cursor: pointer;">
+                Hủy
+              </button>
+              <button type="submit" id="disc-submit-btn" class="btn btn-primary" style="padding: 8px 20px; border-radius: 10px; font-size: 0.85rem; font-weight: 700; background: linear-gradient(135deg, #0284c7, #2563eb); border: none; box-shadow: 0 4px 12px rgba(37,99,235,0.35); display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                <i class="fa-solid fa-paper-plane"></i> Đăng bài
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Filter & Search Bar -->
+      <div style="padding: 12px 24px; background: rgba(15, 23, 42, 0.6); border-bottom: 1px solid rgba(255, 255, 255, 0.06); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <!-- Category Filter Pills -->
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;" id="disc-category-filter-container">
+          <button type="button" class="disc-filter-pill active" data-category="all" onclick="window.filterDiscussionCategory('all')">
+            Tất cả
+          </button>
+          <button type="button" class="disc-filter-pill" data-category="feedback" onclick="window.filterDiscussionCategory('feedback')">
+            💡 Góp ý &amp; Báo lỗi
+          </button>
+          <button type="button" class="disc-filter-pill" data-category="study" onclick="window.filterDiscussionCategory('study')">
+            💬 Thảo luận học tập
+          </button>
+          <button type="button" class="disc-filter-pill" data-category="qa" onclick="window.filterDiscussionCategory('qa')">
+            ❓ Hỏi đáp ngữ pháp
+          </button>
+          <button type="button" class="disc-filter-pill" data-category="tips" onclick="window.filterDiscussionCategory('tips')">
+            🎉 Mẹo học &amp; HSK
+          </button>
+        </div>
+
+        <!-- Search input -->
+        <div style="position: relative; min-width: 220px;">
+          <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 0.8rem;"></i>
+          <input type="text" id="disc-search-input" placeholder="Tìm kiếm bài viết..." oninput="window.handleDiscussionSearch(this.value)" style="width: 100%; padding: 6px 12px 6px 32px; font-size: 0.82rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #ffffff; outline: none;">
+        </div>
+      </div>
+
+      <!-- Discussions Stream Feed -->
+      <div id="disc-posts-stream" class="custom-scrollbar" style="flex: 1; overflow-y: auto; padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; min-height: 300px;">
+        <!-- Dynamic posts rendered here by JS -->
       </div>
 
     </div>

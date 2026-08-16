@@ -72,9 +72,31 @@ const User = mongoose.model('User', userSchema);
 const sessionSchema = new mongoose.Schema({
   _id: String, // sessionToken
   email: String,
-  createdAt: { type: Date, default: Date.now, expires: '7d' }
-});
 const Session = mongoose.model('Session', sessionSchema);
+
+const commentSchema = new mongoose.Schema({
+  id: String,
+  authorEmail: String,
+  authorName: String,
+  authorPicture: String,
+  content: String,
+  createdAt: { type: Date, default: Date.now }
+});
+
+const discussionSchema = new mongoose.Schema({
+  _id: String,
+  authorEmail: String,
+  authorName: String,
+  authorPicture: String,
+  category: { type: String, default: 'feedback' }, // 'feedback', 'study', 'qa', 'tips'
+  title: String,
+  content: String,
+  likes: { type: [String], default: [] },
+  comments: { type: [commentSchema], default: [] },
+  isPinned: { type: Boolean, default: false },
+  createdAt: { type: Date, default: Date.now }
+}, { timestamps: true });
+const Discussion = mongoose.model('Discussion', discussionSchema);
 
 // In-memory Cache for User Data
 let cachedUserData = null;
@@ -1683,6 +1705,297 @@ app.post('/api/chat/migrate', async (req, res) => {
     res.status(500).json({ error: 'Có lỗi xảy ra khi đồng bộ lịch sử hội thoại.' });
   }
 });
+
+// ==========================================================================
+// COMMUNITY DISCUSSIONS & FEEDBACK API ENDPOINTS
+// ==========================================================================
+
+const DISCUSSIONS_FILE_PATH = path.join(__dirname, 'discussions.json');
+
+async function readDiscussionsFromFile() {
+  try {
+    const data = await fs.readFile(DISCUSSIONS_FILE_PATH, 'utf-8');
+    return JSON.parse(data);
+  } catch (e) {
+    return [];
+  }
+}
+
+async function writeDiscussionsToFile(discussions) {
+  try {
+    await fs.writeFile(DISCUSSIONS_FILE_PATH, JSON.stringify(discussions, null, 2), 'utf-8');
+  } catch (e) {
+    console.error('Error saving discussions to file:', e);
+  }
+}
+
+// GET all discussions / feedbacks
+app.get('/api/discussions', async (req, res) => {
+  const currentEmail = getLoggedInUserEmail(req);
+  const { category, search, page = 1, limit = 25 } = req.query;
+
+  try {
+    let items = [];
+    if (mongoose.connection.readyState === 1) {
+      const query = {};
+      if (category && category !== 'all') {
+        query.category = category;
+      }
+      if (search && search.trim()) {
+        const regex = new RegExp(search.trim(), 'i');
+        query.$or = [{ title: regex }, { content: regex }, { authorName: regex }];
+      }
+
+      items = await Discussion.find(query)
+        .sort({ isPinned: -1, createdAt: -1 })
+        .skip((page - 1) * limit)
+        .limit(Number(limit))
+        .lean();
+    } else {
+      items = await readDiscussionsFromFile();
+      if (category && category !== 'all') {
+        items = items.filter(d => d.category === category);
+      }
+      if (search && search.trim()) {
+        const q = search.trim().toLowerCase();
+        items = items.filter(d => (d.title && d.title.toLowerCase().includes(q)) || (d.content && d.content.toLowerCase().includes(q)) || (d.authorName && d.authorName.toLowerCase().includes(q)));
+      }
+      items.sort((a, b) => (b.isPinned ? 1 : 0) - (a.isPinned ? 1 : 0) || new Date(b.createdAt) - new Date(a.createdAt));
+      items = items.slice((page - 1) * limit, page * limit);
+    }
+
+    // Format response
+    const formatted = items.map(item => ({
+      id: item._id || item.id,
+      authorEmail: item.authorEmail,
+      authorName: item.authorName || 'Học viên Hongtai',
+      authorPicture: item.authorPicture || '',
+      category: item.category || 'feedback',
+      title: item.title || '',
+      content: item.content || '',
+      likesCount: (item.likes || []).length,
+      hasLiked: currentEmail ? (item.likes || []).includes(currentEmail) : false,
+      commentsCount: (item.comments || []).length,
+      comments: (item.comments || []).map(c => ({
+        id: c.id,
+        authorEmail: c.authorEmail,
+        authorName: c.authorName,
+        authorPicture: c.authorPicture,
+        content: c.content,
+        createdAt: c.createdAt
+      })),
+      isPinned: !!item.isPinned,
+      createdAt: item.createdAt
+    }));
+
+    res.json({ success: true, discussions: formatted });
+  } catch (err) {
+    console.error('Error fetching discussions:', err);
+    res.status(500).json({ error: 'Không thể tải danh sách thảo luận.' });
+  }
+});
+
+// POST new discussion / feedback
+app.post('/api/discussions', async (req, res) => {
+  const currentEmail = getLoggedInUserEmail(req);
+  if (!currentEmail) {
+    return res.status(401).json({ error: 'Vui lòng đăng nhập tài khoản để đăng bài thảo luận & góp ý.' });
+  }
+
+  const { title, content, category = 'feedback' } = req.body;
+  if (!content || !content.trim()) {
+    return res.status(400).json({ error: 'Nội dung bài viết không được để trống.' });
+  }
+
+  try {
+    const userData = await readUserData();
+    const user = (userData.users && userData.users[currentEmail]) || {};
+    const authorName = user.name || currentEmail.split('@')[0];
+    const authorPicture = user.picture || '';
+
+    const newId = 'disc_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
+    const discussionData = {
+      _id: newId,
+      authorEmail: currentEmail,
+      authorName,
+      authorPicture,
+      category,
+      title: (title || '').trim(),
+      content: content.trim(),
+      likes: [],
+      comments: [],
+      isPinned: false,
+      createdAt: new Date()
+    };
+
+    if (mongoose.connection.readyState === 1) {
+      const disc = new Discussion(discussionData);
+      await disc.save();
+    }
+
+    const localList = await readDiscussionsFromFile();
+    localList.unshift(discussionData);
+    await writeDiscussionsToFile(localList);
+
+    res.json({
+      success: true,
+      discussion: {
+        id: newId,
+        authorEmail: currentEmail,
+        authorName,
+        authorPicture,
+        category,
+        title: discussionData.title,
+        content: discussionData.content,
+        likesCount: 0,
+        hasLiked: false,
+        commentsCount: 0,
+        comments: [],
+        isPinned: false,
+        createdAt: discussionData.createdAt
+      }
+    });
+  } catch (err) {
+    console.error('Error creating discussion:', err);
+    res.status(500).json({ error: 'Không thể đăng bài viết lúc này.' });
+  }
+});
+
+// POST toggle like on discussion
+app.post('/api/discussions/:id/like', async (req, res) => {
+  const currentEmail = getLoggedInUserEmail(req);
+  if (!currentEmail) {
+    return res.status(401).json({ error: 'Vui lòng đăng nhập để thả tim bài viết.' });
+  }
+
+  const { id } = req.params;
+
+  try {
+    let likes = [];
+    let hasLiked = false;
+
+    if (mongoose.connection.readyState === 1) {
+      const disc = await Discussion.findById(id);
+      if (!disc) return res.status(404).json({ error: 'Không tìm thấy bài viết.' });
+
+      const idx = disc.likes.indexOf(currentEmail);
+      if (idx !== -1) {
+        disc.likes.splice(idx, 1);
+        hasLiked = false;
+      } else {
+        disc.likes.push(currentEmail);
+        hasLiked = true;
+      }
+      await disc.save();
+      likes = disc.likes;
+    } else {
+      const localList = await readDiscussionsFromFile();
+      const disc = localList.find(d => (d._id === id || d.id === id));
+      if (!disc) return res.status(404).json({ error: 'Không tìm thấy bài viết.' });
+
+      if (!disc.likes) disc.likes = [];
+      const idx = disc.likes.indexOf(currentEmail);
+      if (idx !== -1) {
+        disc.likes.splice(idx, 1);
+        hasLiked = false;
+      } else {
+        disc.likes.push(currentEmail);
+        hasLiked = true;
+      }
+      await writeDiscussionsToFile(localList);
+      likes = disc.likes;
+    }
+
+    res.json({ success: true, likesCount: likes.length, hasLiked });
+  } catch (err) {
+    console.error('Error liking discussion:', err);
+    res.status(500).json({ error: 'Lỗi cập nhật lượt thích.' });
+  }
+});
+
+// POST comment on discussion
+app.post('/api/discussions/:id/comments', async (req, res) => {
+  const currentEmail = getLoggedInUserEmail(req);
+  if (!currentEmail) {
+    return res.status(401).json({ error: 'Vui lòng đăng nhập để bình luận.' });
+  }
+
+  const { id } = req.params;
+  const { content } = req.body;
+  if (!content || !content.trim()) {
+    return res.status(400).json({ error: 'Nội dung bình luận không được để trống.' });
+  }
+
+  try {
+    const userData = await readUserData();
+    const user = (userData.users && userData.users[currentEmail]) || {};
+    const authorName = user.name || currentEmail.split('@')[0];
+    const authorPicture = user.picture || '';
+
+    const newComment = {
+      id: 'cmt_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
+      authorEmail: currentEmail,
+      authorName,
+      authorPicture,
+      content: content.trim(),
+      createdAt: new Date()
+    };
+
+    if (mongoose.connection.readyState === 1) {
+      const disc = await Discussion.findById(id);
+      if (!disc) return res.status(404).json({ error: 'Không tìm thấy bài viết.' });
+      disc.comments.push(newComment);
+      await disc.save();
+    } else {
+      const localList = await readDiscussionsFromFile();
+      const disc = localList.find(d => (d._id === id || d.id === id));
+      if (!disc) return res.status(404).json({ error: 'Không tìm thấy bài viết.' });
+      if (!disc.comments) disc.comments = [];
+      disc.comments.push(newComment);
+      await writeDiscussionsToFile(localList);
+    }
+
+    res.json({ success: true, comment: newComment });
+  } catch (err) {
+    console.error('Error posting comment:', err);
+    res.status(500).json({ error: 'Không thể đăng bình luận lúc này.' });
+  }
+});
+
+// DELETE discussion
+app.delete('/api/discussions/:id', async (req, res) => {
+  const currentEmail = getLoggedInUserEmail(req);
+  if (!currentEmail) {
+    return res.status(401).json({ error: 'Vui lòng đăng nhập.' });
+  }
+
+  const { id } = req.params;
+
+  try {
+    const isAdmin = ['toiyeutinhoc238@gmail.com', 'phanphiphu04@gmail.com', 'hongtai'].some(admin => currentEmail.toLowerCase().includes(admin));
+
+    if (mongoose.connection.readyState === 1) {
+      const disc = await Discussion.findById(id);
+      if (!disc) return res.status(404).json({ error: 'Không tìm thấy bài viết.' });
+
+      if (disc.authorEmail !== currentEmail && !isAdmin) {
+        return res.status(403).json({ error: 'Bạn không có quyền xóa bài viết này.' });
+      }
+
+      await Discussion.findByIdAndDelete(id);
+    }
+
+    const localList = await readDiscussionsFromFile();
+    const updated = localList.filter(d => (d._id !== id && d.id !== id));
+    await writeDiscussionsToFile(updated);
+
+    res.json({ success: true, message: 'Đã xóa bài viết thành công.' });
+  } catch (err) {
+    console.error('Error deleting discussion:', err);
+    res.status(500).json({ error: 'Lỗi xóa bài viết.' });
+  }
+});
+
 // Helper to sanitize text for TTS engine (removes HTML, dialogue markers, pinyin in parens, etc.)
 function cleanTTSInput(str) {
   if (!str) return '';

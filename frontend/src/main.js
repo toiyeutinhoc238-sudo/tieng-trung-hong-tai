@@ -13160,13 +13160,522 @@ if (typeof window !== 'undefined') {
     window.fetchLiveCommunityStats();
   }, 25000);
 
-  // Periodic presence heartbeat ping
+// Periodic presence heartbeat ping
   setInterval(() => {
     window.sendPresenceHeartbeat();
   }, 35000);
 }
 
+// ==========================================================================
+// COMMUNITY DISCUSSION & FEEDBACK FORUM CLIENT MODULE
+// ==========================================================================
+let currentDiscussionCategory = 'all';
+let currentDiscussionSearchQuery = '';
+let discussionSyncInterval = null;
+let cachedDiscussionsList = [];
 
+function formatRelativeTime(dateStr) {
+  if (!dateStr) return '';
+  const now = new Date();
+  const date = new Date(dateStr);
+  const diffSec = Math.floor((now - date) / 1000);
 
+  if (diffSec < 45) return 'Vừa xong';
+  if (diffSec < 3600) return `${Math.floor(diffSec / 60)} phút trước`;
+  if (diffSec < 86400) return `${Math.floor(diffSec / 3600)} giờ trước`;
+  if (diffSec < 604800) return `${Math.floor(diffSec / 86400)} ngày trước`;
 
+  const d = date.getDate().toString().padStart(2, '0');
+  const m = (date.getMonth() + 1).toString().padStart(2, '0');
+  const y = date.getFullYear();
+  return `${d}/${m}/${y}`;
+}
+
+function getCategoryMeta(category) {
+  switch (category) {
+    case 'feedback':
+      return { label: '💡 Góp ý & Báo lỗi', className: 'disc-cat-feedback' };
+    case 'study':
+      return { label: '💬 Thảo luận học tập', className: 'disc-cat-study' };
+    case 'qa':
+      return { label: '❓ Hỏi đáp ngữ pháp', className: 'disc-cat-qa' };
+    case 'tips':
+      return { label: '🎉 Mẹo học & HSK', className: 'disc-cat-tips' };
+    default:
+      return { label: '💬 Thảo luận', className: 'disc-cat-study' };
+  }
+}
+
+function isUserAdmin(email) {
+  if (!email) return false;
+  const em = email.toLowerCase();
+  return em.includes('toiyeutinhoc238') || em.includes('phanphiphu') || em.includes('hongtai') || em.includes('admin');
+}
+
+window.openDiscussionModal = function () {
+  const modal = document.getElementById('discussion-forum-modal');
+  if (modal) {
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    window.fetchDiscussions(true);
+
+    if (discussionSyncInterval) clearInterval(discussionSyncInterval);
+    discussionSyncInterval = setInterval(() => {
+      if (modal.style.display !== 'none') {
+        window.fetchDiscussions(false);
+      }
+    }, 15000);
+  }
+};
+
+window.closeDiscussionModal = function () {
+  const modal = document.getElementById('discussion-forum-modal');
+  if (modal) {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+  if (discussionSyncInterval) {
+    clearInterval(discussionSyncInterval);
+    discussionSyncInterval = null;
+  }
+};
+
+window.toggleCreateDiscussionForm = function (forceState) {
+  const container = document.getElementById('disc-create-form-container');
+  if (!container) return;
+
+  const isCurrentlyOpen = container.style.display !== 'none';
+  const nextState = typeof forceState === 'boolean' ? forceState : !isCurrentlyOpen;
+
+  if (nextState && !currentUser) {
+    if (typeof window.showAuthModal === 'function') {
+      window.showAuthModal();
+    } else {
+      showToast('Vui lòng đăng nhập để đăng bài thảo luận & góp ý!', true);
+    }
+    return;
+  }
+
+  container.style.display = nextState ? 'block' : 'none';
+  if (nextState) {
+    const input = document.getElementById('disc-new-content');
+    if (input) input.focus();
+  }
+};
+
+window.filterDiscussionCategory = function (category) {
+  currentDiscussionCategory = category;
+  document.querySelectorAll('#disc-category-filter-container .disc-filter-pill').forEach(pill => {
+    if (pill.getAttribute('data-category') === category) {
+      pill.classList.add('active');
+    } else {
+      pill.classList.remove('active');
+    }
+  });
+  window.fetchDiscussions(true);
+};
+
+let searchDiscussionsDebounce = null;
+window.handleDiscussionSearch = function (query) {
+  clearTimeout(searchDiscussionsDebounce);
+  searchDiscussionsDebounce = setTimeout(() => {
+    currentDiscussionSearchQuery = query.trim();
+    window.fetchDiscussions(true);
+  }, 200);
+};
+
+window.fetchDiscussions = async function (showLoading) {
+  const stream = document.getElementById('disc-posts-stream');
+  if (!stream) return;
+
+  if (showLoading && cachedDiscussionsList.length === 0) {
+    stream.innerHTML = `
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px; color: #94a3b8; gap: 12px;">
+        <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; color: #38bdf8;"></i>
+        <span>Đang đồng bộ bài viết thảo luận & góp ý...</span>
+      </div>
+    `;
+  }
+
+  try {
+    let url = `${API_BASE_URL}/api/discussions?category=${currentDiscussionCategory}`;
+    if (currentDiscussionSearchQuery) {
+      url += `&search=${encodeURIComponent(currentDiscussionSearchQuery)}`;
+    }
+
+    const res = await fetch(url, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+      credentials: 'include'
+    });
+
+    if (!res.ok) throw new Error('Không thể tải bài viết');
+    const data = await res.json();
+    if (data.success && Array.isArray(data.discussions)) {
+      cachedDiscussionsList = data.discussions;
+      window.renderDiscussionsList(cachedDiscussionsList);
+    }
+  } catch (err) {
+    console.error('Fetch discussions error:', err);
+    if (showLoading) {
+      stream.innerHTML = `
+        <div style="text-align: center; padding: 36px; color: #94a3b8;">
+          <i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b; font-size: 1.5rem; margin-bottom: 8px;"></i>
+          <p>Không thể kết nối đến máy chủ thảo luận. Vui lòng thử lại sau.</p>
+        </div>
+      `;
+    }
+  }
+};
+
+window.renderDiscussionsList = function (discussions) {
+  const stream = document.getElementById('disc-posts-stream');
+  if (!stream) return;
+
+  if (discussions.length === 0) {
+    stream.innerHTML = `
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 24px; text-align: center; background: rgba(30, 41, 59, 0.3); border-radius: 16px; border: 1px dashed rgba(255, 255, 255, 0.1); gap: 12px;">
+        <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(56, 189, 248, 0.1); display: flex; align-items: center; justify-content: center; color: #38bdf8; font-size: 1.5rem;">
+          <i class="fa-regular fa-comment-dots"></i>
+        </div>
+        <h4 style="color: #ffffff; margin: 0; font-size: 1.05rem; font-weight: 700;">Chưa có bài viết nào trong chuyên mục này</h4>
+        <p style="color: #94a3b8; font-size: 0.85rem; margin: 0; max-width: 400px;">
+          Hãy là người đầu tiên đặt câu hỏi, chia sẻ kinh nghiệm hoặc gửi góp ý cho đội ngũ Tiếng Trung Hongtai nhé!
+        </p>
+        <button type="button" class="btn btn-primary" onclick="window.toggleCreateDiscussionForm(true)" style="margin-top: 8px; padding: 8px 18px; border-radius: 10px; font-size: 0.85rem; font-weight: 700; background: linear-gradient(135deg, #0284c7, #2563eb);">
+          <i class="fa-solid fa-pen-to-square"></i> Đăng bài đầu tiên
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+
+  discussions.forEach(post => {
+    const card = document.createElement('div');
+    card.className = 'disc-post-card';
+    card.id = `disc-post-${post.id}`;
+
+    const catMeta = getCategoryMeta(post.category);
+    const isAdmin = isUserAdmin(post.authorEmail);
+    const isOwner = currentUser && (currentUser.email === post.authorEmail || isUserAdmin(currentUser.email));
+    const timeAgo = formatRelativeTime(post.createdAt);
+
+    // Format author avatar
+    const initial = (post.authorName || 'U').charAt(0).toUpperCase();
+    const avatarHtml = post.authorPicture
+      ? `<img src="${post.authorPicture}" alt="${post.authorName}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1.5px solid rgba(56,189,248,0.4);" onerror="this.outerHTML='<div class=\\'disc-default-avatar\\'>${initial}</div>'">`
+      : `<div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #0284c7, #38bdf8); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; border: 1.5px solid rgba(255,255,255,0.2);">${initial}</div>`;
+
+    const adminBadge = isAdmin
+      ? `<span style="background: linear-gradient(135deg, #ef4444, #dc2626); color: white; font-size: 0.65rem; font-weight: 800; padding: 1px 6px; border-radius: 4px; display: inline-flex; align-items: center; gap: 3px;"><i class="fa-solid fa-shield-halved"></i> Giáo viên</span>`
+      : `<span style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; font-size: 0.65rem; font-weight: 700; padding: 1px 6px; border-radius: 4px;">Học viên</span>`;
+
+    const deleteBtnHtml = isOwner
+      ? `<button type="button" class="btn btn-icon-only" title="Xóa bài viết" onclick="window.handleDeleteDiscussion('${post.id}')" style="width: 28px; height: 28px; border-radius: 6px; color: #ef4444; background: rgba(239, 68, 68, 0.1); border: none; cursor: pointer;">
+          <i class="fa-solid fa-trash" style="font-size: 0.78rem;"></i>
+        </button>`
+      : '';
+
+    card.innerHTML = `
+      <!-- Post Top Header -->
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          ${avatarHtml}
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <span style="font-weight: 700; color: #ffffff; font-size: 0.95rem;">${post.authorName}</span>
+              ${adminBadge}
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-top: 2px;">
+              <span class="disc-cat-badge ${catMeta.className}">${catMeta.label}</span>
+              <span style="font-size: 0.75rem; color: #64748b;">${timeAgo}</span>
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          ${deleteBtnHtml}
+        </div>
+      </div>
+
+      <!-- Post Body -->
+      <div>
+        ${post.title ? `<h3 style="font-size: 1.05rem; font-weight: 800; color: #38bdf8; margin: 0 0 6px 0; font-family: var(--font-display);">${post.title}</h3>` : ''}
+        <div style="font-size: 0.9rem; color: #e2e8f0; line-height: 1.6; white-space: pre-wrap; word-break: break-word;">${post.content}</div>
+      </div>
+
+      <!-- Post Action Footer -->
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.06); flex-wrap: wrap; gap: 8px;">
+        <div style="display: flex; gap: 10px;">
+          <button type="button" class="disc-action-btn ${post.hasLiked ? 'liked' : ''}" id="disc-like-btn-${post.id}" onclick="window.handleToggleLikeDiscussion('${post.id}')">
+            <i class="fa-solid fa-heart"></i>
+            <span id="disc-like-count-${post.id}">${post.likesCount || 0}</span>
+          </button>
+          <button type="button" class="disc-action-btn" onclick="window.togglePostComments('${post.id}')">
+            <i class="fa-solid fa-comment"></i>
+            <span id="disc-cmt-count-${post.id}">${post.commentsCount || 0}</span> phản hồi
+          </button>
+        </div>
+        <button type="button" class="disc-action-btn" onclick="window.togglePostComments('${post.id}', true)" style="font-size: 0.78rem;">
+          <i class="fa-solid fa-reply"></i> Trả lời
+        </button>
+      </div>
+
+      <!-- Comments Thread Section (Initially Collapsed unless opened) -->
+      <div id="disc-comments-container-${post.id}" style="display: none; flex-direction: column; gap: 10px; margin-top: 4px; padding-top: 12px; border-top: 1px dashed rgba(255, 255, 255, 0.1);">
+        <div id="disc-comments-list-${post.id}" style="display: flex; flex-direction: column; gap: 8px; max-height: 220px; overflow-y: auto;">
+          <!-- Populated comments -->
+        </div>
+
+        <!-- Comment Input Box -->
+        <form onsubmit="window.handlePostCommentSubmit(event, '${post.id}')" style="display: flex; gap: 8px; margin-top: 4px;">
+          <input type="text" id="disc-cmt-input-${post.id}" required placeholder="Viết phản hồi / câu trả lời..." style="flex: 1; padding: 8px 12px; font-size: 0.85rem; border-radius: 8px; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255,255,255,0.15); color: #ffffff; outline: none;">
+          <button type="submit" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.82rem; font-weight: 700; border-radius: 8px; background: linear-gradient(135deg, #0284c7, #2563eb); border: none; display: flex; align-items: center; gap: 4px; cursor: pointer;">
+            <i class="fa-solid fa-paper-plane"></i> Gửi
+          </button>
+        </form>
+      </div>
+    `;
+
+    fragment.appendChild(card);
+  });
+
+  stream.innerHTML = '';
+  stream.appendChild(fragment);
+};
+
+window.handleCreateDiscussionSubmit = async function (e) {
+  if (e) e.preventDefault();
+
+  if (!currentUser) {
+    if (typeof window.showAuthModal === 'function') {
+      window.showAuthModal();
+    } else {
+      showToast('Vui lòng đăng nhập để đăng bài!', true);
+    }
+    return;
+  }
+
+  const category = document.getElementById('disc-new-category').value;
+  const title = document.getElementById('disc-new-title').value.trim();
+  const content = document.getElementById('disc-new-content').value.trim();
+  const submitBtn = document.getElementById('disc-submit-btn');
+
+  if (!content) {
+    showToast('Vui lòng nhập nội dung bài viết.', true);
+    return;
+  }
+
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang đăng...';
+  }
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/discussions`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ category, title, content }),
+      credentials: 'include'
+    });
+
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.error || 'Đăng bài thất bại');
+    }
+
+    const data = await res.json();
+    if (data.success && data.discussion) {
+      showToast('🎉 Đăng bài thảo luận & góp ý thành công!');
+      document.getElementById('disc-new-title').value = '';
+      document.getElementById('disc-new-content').value = '';
+      window.toggleCreateDiscussionForm(false);
+
+      // Prepend to cached list & re-render
+      cachedDiscussionsList.unshift(data.discussion);
+      window.renderDiscussionsList(cachedDiscussionsList);
+    }
+  } catch (err) {
+    console.error('Create discussion error:', err);
+    showToast(err.message || 'Lỗi khi đăng bài!', true);
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Đăng bài';
+    }
+  }
+};
+
+window.handleToggleLikeDiscussion = async function (postId) {
+  if (!currentUser) {
+    if (typeof window.showAuthModal === 'function') {
+      window.showAuthModal();
+    } else {
+      showToast('Vui lòng đăng nhập để thả tim bài viết!', true);
+    }
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/discussions/${postId}/like`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      credentials: 'include'
+    });
+
+    if (!res.ok) throw new Error('Không thể thả tim');
+    const data = await res.json();
+    if (data.success) {
+      const likeBtn = document.getElementById(`disc-like-btn-${postId}`);
+      const likeCount = document.getElementById(`disc-like-count-${postId}`);
+
+      if (likeBtn) {
+        if (data.hasLiked) {
+          likeBtn.classList.add('liked');
+        } else {
+          likeBtn.classList.remove('liked');
+        }
+      }
+      if (likeCount) {
+        likeCount.textContent = data.likesCount;
+      }
+
+      // Update in cache
+      const post = cachedDiscussionsList.find(d => d.id === postId);
+      if (post) {
+        post.likesCount = data.likesCount;
+        post.hasLiked = data.hasLiked;
+      }
+    }
+  } catch (err) {
+    console.error('Like error:', err);
+  }
+};
+
+window.togglePostComments = function (postId, focusInput) {
+  const container = document.getElementById(`disc-comments-container-${postId}`);
+  if (!container) return;
+
+  const isVisible = container.style.display === 'flex';
+  container.style.display = isVisible && !focusInput ? 'none' : 'flex';
+
+  if (container.style.display === 'flex') {
+    // Render comments list
+    const post = cachedDiscussionsList.find(d => d.id === postId);
+    const listEl = document.getElementById(`disc-comments-list-${postId}`);
+    if (listEl && post && Array.isArray(post.comments)) {
+      if (post.comments.length === 0) {
+        listEl.innerHTML = '<div style="font-size: 0.78rem; color: #94a3b8; font-style: italic; padding: 4px;">Chưa có phản hồi nào. Hãy viết phản hồi đầu tiên nhé!</div>';
+      } else {
+        listEl.innerHTML = post.comments.map(c => {
+          const cInitial = (c.authorName || 'U').charAt(0).toUpperCase();
+          const cAvatar = c.authorPicture
+            ? `<img src="${c.authorPicture}" alt="${c.authorName}" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover;" onerror="this.outerHTML='<div class=\\'disc-mini-avatar\\'>${cInitial}</div>'">`
+            : `<div style="width: 24px; height: 24px; border-radius: 50%; background: #0284c7; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700;">${cInitial}</div>`;
+
+          const isCAdmin = isUserAdmin(c.authorEmail);
+          const cAdminBadge = isCAdmin ? '<span style="color: #ef4444; font-size: 0.65rem; font-weight: 800;">[Giáo viên]</span>' : '';
+
+          return `
+            <div class="disc-comment-item">
+              ${cAvatar}
+              <div style="flex: 1;">
+                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 2px;">
+                  <span style="font-size: 0.82rem; font-weight: 700; color: #ffffff;">${c.authorName}</span>
+                  ${cAdminBadge}
+                  <span style="font-size: 0.7rem; color: #64748b; margin-left: auto;">${formatRelativeTime(c.createdAt)}</span>
+                </div>
+                <div style="font-size: 0.82rem; color: #cbd5e1; line-height: 1.4;">${c.content}</div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    if (focusInput) {
+      const input = document.getElementById(`disc-cmt-input-${postId}`);
+      if (input) input.focus();
+    }
+  }
+};
+
+window.handlePostCommentSubmit = async function (e, postId) {
+  if (e) e.preventDefault();
+
+  if (!currentUser) {
+    if (typeof window.showAuthModal === 'function') {
+      window.showAuthModal();
+    } else {
+      showToast('Vui lòng đăng nhập để bình luận!', true);
+    }
+    return;
+  }
+
+  const input = document.getElementById(`disc-cmt-input-${postId}`);
+  if (!input) return;
+  const content = input.value.trim();
+  if (!content) return;
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/discussions/${postId}/comments`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ content }),
+      credentials: 'include'
+    });
+
+    if (!res.ok) throw new Error('Không thể gửi bình luận');
+    const data = await res.json();
+    if (data.success && data.comment) {
+      input.value = '';
+
+      // Update post in cache
+      const post = cachedDiscussionsList.find(d => d.id === postId);
+      if (post) {
+        if (!post.comments) post.comments = [];
+        post.comments.push(data.comment);
+        post.commentsCount = post.comments.length;
+
+        const countEl = document.getElementById(`disc-cmt-count-${postId}`);
+        if (countEl) countEl.textContent = post.commentsCount;
+
+        // Re-render comments
+        window.togglePostComments(postId, false);
+      }
+      showToast('Đã gửi phản hồi thành công!');
+    }
+  } catch (err) {
+    console.error('Post comment error:', err);
+    showToast('Lỗi khi gửi bình luận!', true);
+  }
+};
+
+window.handleDeleteDiscussion = async function (postId) {
+  if (!confirm('Bạn có chắc chắn muốn xóa bài viết này không?')) return;
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/discussions/${postId}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders(),
+      credentials: 'include'
+    });
+
+    if (!res.ok) throw new Error('Không thể xóa bài viết');
+    const data = await res.json();
+    if (data.success) {
+      showToast('Đã xóa bài viết thành công.');
+      cachedDiscussionsList = cachedDiscussionsList.filter(d => d.id !== postId);
+      const card = document.getElementById(`disc-post-${postId}`);
+      if (card) card.remove();
+      if (cachedDiscussionsList.length === 0) {
+        window.renderDiscussionsList([]);
+      }
+    }
+  } catch (err) {
+    console.error('Delete discussion error:', err);
+    showToast('Lỗi khi xóa bài viết!', true);
+  }
+};
 
