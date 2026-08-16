@@ -4264,6 +4264,10 @@ function getUnlockedLevelsMap() {
 }
 
 function isLevelUnlocked(ver, level, levelIndex, levelsData, builtInVocabs) {
+  // YCT: Temporarily locked
+  if (ver === 'yct' || ver === 'YCT') {
+    return false;
+  }
   // HSK 2.0: Only Level 1 is verified and unlocked. Levels 2..6 are temporarily locked.
   if (ver === '2.0') {
     return String(level) === '1';
@@ -4273,7 +4277,7 @@ function isLevelUnlocked(ver, level, levelIndex, levelsData, builtInVocabs) {
     const lvlStr = String(level).trim();
     return ['1', '2', '3'].includes(lvlStr);
   }
-  return true;
+  return false;
 }
 
 window.unlockRoadmapLevel = function(ver, level) {
@@ -4400,7 +4404,7 @@ function renderGamifiedRoadmapPath() {
       `;
     } else {
       actionButtonsHtml = `
-        <button class="btn-node-start btn-node-locked" style="background: rgba(100, 116, 139, 0.35); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; border-radius: 12px; font-weight: 700; padding: 12px 20px; font-size: 0.88rem; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="window.showComingSoonNotice('Lộ trình HSK ' + '${item.level}' + (${hskVer === '2.0' ? "' (2.0)'" : "''"}))">
+        <button class="btn-node-start btn-node-locked" style="background: rgba(100, 116, 139, 0.35); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; border-radius: 12px; font-weight: 700; padding: 12px 20px; font-size: 0.88rem; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="window.showComingSoonNotice('Lộ trình ' + (${hskVer === 'yct' ? "'YCT Cấp ' + '" + item.level + "'" : "'HSK ' + '" + item.level + "'" + (hskVer === '2.0' ? "' (2.0)'" : "''")}))">
           <i class="fa-solid fa-lock" style="color: #fbbf24;"></i> Sắp ra mắt (Đang biên soạn)
         </button>
       `;
@@ -4530,7 +4534,7 @@ window.goToRoadmapLevel = function (ver, level) {
   const unlocked = isLevelUnlocked(hskVer, level, nodeIndex >= 0 ? nodeIndex : 0, levelsData, builtInVocabs);
 
   if (!unlocked) {
-    window.showComingSoonNotice(`Lộ trình bài học HSK ${level}${hskVer === '2.0' ? ' (2.0)' : ''}`);
+    window.showComingSoonNotice(`Lộ trình bài học ${hskVer === 'yct' ? `YCT Cấp ${level}` : `HSK ${level}${hskVer === '2.0' ? ' (2.0)' : ''}`}`);
     return;
   }
 
@@ -6664,53 +6668,31 @@ function renderLessonsList() {
     if (versionSelectorWrap) versionSelectorWrap.style.display = 'none';
     if (yctLevelContainer) yctLevelContainer.style.display = 'flex';
 
-    const yctVocabs = vocabList.filter(w =>
-      !w.isCustom &&
-      (w.curriculum === 'yct' || w.hskVersion === 'yct') &&
-      w.level.toString() === activeYctLevel.toString()
-    );
-
     if (objectivesText) {
-      objectivesText.textContent = `Mục tiêu: Ôn tập trọn bộ ${yctVocabs.length} từ vựng YCT Cấp ${activeYctLevel} dành cho thiếu nhi`;
+      objectivesText.textContent = `Mục tiêu: Giáo trình YCT - Tiếng Trung Thiếu nhi đang trong quá trình biên soạn & chuẩn hóa nội dung.`;
     }
 
-    if (yctVocabs.length === 0) {
-      grid.innerHTML = `
-        <div style="grid-column: 1 / -1; text-align: center; padding: 48px 24px; color: var(--text-muted); font-style: italic;">
-          Danh sách từ vựng YCT Cấp ${activeYctLevel} đang được tổng hợp! Vui lòng chờ ít phút.
+    grid.innerHTML = `
+      <div class="glass-panel" style="grid-column: 1 / -1; max-width: 650px; margin: 32px auto; padding: 36px 24px; text-align: center; border: 1.5px dashed rgba(245, 158, 11, 0.4); border-radius: 20px;">
+        <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(245, 158, 11, 0.15); color: #fbbf24; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 16px;">
+          <i class="fa-solid fa-lock"></i>
         </div>
-      `;
-      return;
-    }
-
-    // YCT is NOT categorized by lessons — render single direct YCT Level Deck Card
-    const card = document.createElement('div');
-    card.className = 'lesson-card glass-panel cartoon-lesson-card';
-    card.style.cssText = 'grid-column: 1 / -1; max-width: 600px; margin: 0 auto; width: 100%;';
-    card.innerHTML = `
-      <div class="lesson-card-header" style="text-align: center;">
-        <span class="lesson-badge hsk-badge-2" style="font-size: 0.9rem; padding: 6px 16px;">YCT Cấp ${activeYctLevel}</span>
-        <h3 class="lesson-title" style="margin-top: 10px; font-family: var(--font-display); font-size: 1.6rem; color: #fbbf24;">
-          Bộ Từ Vựng YCT Cấp ${activeYctLevel}
+        <h3 style="font-family: var(--font-display); font-size: 1.4rem; font-weight: 800; color: #ffffff; margin-bottom: 8px;">
+          Giáo trình YCT (Tiếng Trung Thiếu Nhi) Đang Tạm Khóa
         </h3>
-        <p class="lesson-desc" style="font-size: 1rem; color: #cbd5e1; margin-top: 6px;">
-          Tổng hợp đầy đủ ${yctVocabs.length} từ vựng chuẩn YCT Cấp ${activeYctLevel} dành cho thiếu nhi
+        <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-bottom: 24px;">
+          Nội dung từ vựng & bài học của giáo trình YCT đang được đội ngũ giáo viên Tiếng Trung Hồng Thái chuẩn hóa và kiểm duyệt kỹ lưỡng để đảm bảo độ chính xác cao nhất. Mời bạn trải nghiệm Lộ trình HSK 3.0 (Cấp 1 - 3) hoặc HSK 1 (2.0)!
         </p>
-      </div>
-      <div class="lesson-modules-grid" style="margin-top: 18px; display: flex; gap: 14px; justify-content: center;">
-        <button class="lesson-mod-btn mod-vocab" style="flex: 1; max-width: 220px; padding: 14px;" onclick="event.stopPropagation(); window.openYctLevelVocabStudy('${activeYctLevel}')">
-          <i class="fa-solid fa-book-bookmark" style="font-size: 1.2rem;"></i>
-          <span style="font-size: 1.05rem; font-weight: 800;">Học Từ Vựng</span>
-          <small>${yctVocabs.length} từ</small>
-        </button>
-        <button class="lesson-mod-btn mod-flashcard" style="flex: 1; max-width: 220px; padding: 14px; background: rgba(37, 99, 235, 0.25); border-color: rgba(37, 99, 235, 0.4);" onclick="event.stopPropagation(); window.startYctLevelFlashcard('${activeYctLevel}')">
-          <i class="fa-solid fa-layer-group" style="font-size: 1.2rem; color: #60a5fa;"></i>
-          <span style="font-size: 1.05rem; font-weight: 800; color: #ffffff;">Học Flashcard</span>
-          <small style="color: #93c5fd;">Thẻ ghi nhớ</small>
-        </button>
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+          <button class="btn btn-primary" onclick="goToRoadmapLevel('3.0', 1)" style="padding: 10px 20px; font-weight: 700; border-radius: 12px;">
+            <i class="fa-solid fa-graduation-cap"></i> Học HSK 1 (3.0)
+          </button>
+          <button class="btn btn-secondary" onclick="window.returnToHskLevelSelection()" style="padding: 10px 20px; font-weight: 700; border-radius: 12px; background: rgba(255,255,255,0.08);">
+            <i class="fa-solid fa-arrow-left"></i> Quay lại Lộ trình
+          </button>
+        </div>
       </div>
     `;
-    grid.appendChild(card);
     return;
   }
 
