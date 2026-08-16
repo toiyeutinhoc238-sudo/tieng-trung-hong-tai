@@ -3394,7 +3394,11 @@ window.revealAllRoadmapEyeCards = function(targetSentence) {
   }
   if (backToSubdecksBtn) {
     backToSubdecksBtn.addEventListener('click', () => {
-      showSubdecksView();
+      if (!activeNotebook || activeNotebook === 'starred' || activeNotebook === 'wrong' || activeNotebook.startsWith('custom:')) {
+        showTopicsView();
+      } else {
+        showSubdecksView();
+      }
     });
   }
 
@@ -11619,6 +11623,20 @@ function openNotebookDashboard(notebookId) {
 
   if (titleEl) titleEl.textContent = name;
   if (descEl) descEl.textContent = desc;
+
+  // Update Back Button Label dynamically
+  const backBtn = document.getElementById('back-to-subdecks-btn');
+  if (backBtn) {
+    if (notebookId === 'starred' || notebookId === 'wrong' || notebookId.startsWith('custom:')) {
+      backBtn.innerHTML = '<i class="fa-solid fa-arrow-left"></i> Quay lại chủ đề chính';
+    } else if (notebookId.startsWith('hsk:') || notebookId.startsWith('yct:')) {
+      backBtn.innerHTML = '<i class="fa-solid fa-arrow-left"></i> Quay lại danh sách cấp độ';
+    } else if (notebookId.startsWith('premium:')) {
+      backBtn.innerHTML = '<i class="fa-solid fa-arrow-left"></i> Quay lại danh sách chủ đề';
+    } else {
+      backBtn.innerHTML = '<i class="fa-solid fa-arrow-left"></i> Quay lại chủ đề chính';
+    }
+  }
 
   // Show/hide Add Word Form Container (Personal category subdecks only)
   const addFormContainer = document.getElementById('nb-add-word-form-container');
