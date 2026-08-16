@@ -3649,7 +3649,7 @@ window.revealAllRoadmapEyeCards = function(targetSentence) {
 
 function getAuthHeaders(customHeaders = {}) {
   const token = localStorage.getItem('session_token');
-  const headers = { ...customHeaders };
+  const headers = { 'Content-Type': 'application/json', ...customHeaders };
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
     headers['x-session-token'] = token;
