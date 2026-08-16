@@ -444,83 +444,93 @@ function initSeasonalParticles() {
   else if (month >= 7 && month <= 9) season = 'autumn'; // Tháng 7-9: Lá vàng thu
   else season = 'winter';                              // Tháng 10-12: Tuyết rơi
 
-  // Optimize particle count for high 60fps performance without lag
-  const isMobile = window.innerWidth < 768;
-  const particleCount = isMobile ? 12 : 20;
-  const particles = [];
+  // Hardware Profiler: Detect low-power/older chipsets automatically
+  const cores = navigator.hardwareConcurrency || 4;
+  const isLowEndDevice = cores <= 4 || window.innerWidth < 768;
+  const particleCount = isLowEndDevice ? (window.innerWidth < 480 ? 10 : 14) : 22;
+  const targetFps = isLowEndDevice ? 35 : 60;
+  const frameInterval = 1000 / targetFps;
 
+  const particles = [];
   for (let i = 0; i < particleCount; i++) {
     particles.push({
       x: Math.random() * width,
       y: Math.random() * height,
-      size: season === 'winter' ? Math.random() * 3 + 2 : Math.random() * 6 + 4,
-      speedY: Math.random() * 1.0 + 0.4,
-      speedX: Math.sin(Math.random() * Math.PI) * 0.5,
+      size: season === 'winter' ? (Math.random() * 2.5 + 2) : (Math.random() * 5 + 4),
+      speedY: Math.random() * 0.9 + 0.4,
+      speedX: Math.sin(Math.random() * Math.PI) * 0.4,
       rotation: Math.random() * 360,
-      rotSpeed: (Math.random() - 0.5) * 1.2,
-      opacity: Math.random() * 0.5 + 0.35
+      rotSpeed: (Math.random() - 0.5) * 1.0,
+      opacity: Math.random() * 0.4 + 0.35
     });
   }
 
+  let lastFrameTime = performance.now();
   let animationFrameId = null;
-  function render() {
+
+  function render(currentTime) {
     if (document.hidden || localStorage.getItem('particles_enabled') === 'false') {
       animationFrameId = setTimeout(() => requestAnimationFrame(render), 300);
       return;
     }
 
-    ctx.clearRect(0, 0, width, height);
+    const delta = currentTime - lastFrameTime;
+    if (delta >= frameInterval) {
+      lastFrameTime = currentTime - (delta % frameInterval);
 
-    particles.forEach(p => {
-      p.y += p.speedY;
-      p.x += Math.sin(p.y * 0.01) * 0.4;
-      p.rotation += p.rotSpeed;
+      ctx.clearRect(0, 0, width, height);
 
-      if (p.y > height + 20) {
-        p.y = -20;
-        p.x = Math.random() * width;
-      }
-      if (p.x > width + 20) p.x = -20;
-      if (p.x < -20) p.x = width + 20;
+      particles.forEach(p => {
+        p.y += p.speedY;
+        p.x += Math.sin(p.y * 0.01) * 0.35;
+        p.rotation += p.rotSpeed;
 
-      ctx.save();
-      ctx.translate(p.x, p.y);
-      ctx.rotate((p.rotation * Math.PI) / 180);
-      ctx.globalAlpha = p.opacity;
+        if (p.y > height + 20) {
+          p.y = -20;
+          p.x = Math.random() * width;
+        }
+        if (p.x > width + 20) p.x = -20;
+        if (p.x < -20) p.x = width + 20;
 
-      if (season === 'winter') {
-        // Soft snowflakes
-        ctx.fillStyle = '#ffffff';
-        ctx.beginPath();
-        ctx.arc(0, 0, p.size, 0, Math.PI * 2);
-        ctx.fill();
-      } else if (season === 'spring') {
-        // Sakura petals
-        ctx.fillStyle = 'rgba(255, 183, 197, 0.85)';
-        ctx.beginPath();
-        ctx.ellipse(0, 0, p.size, p.size * 0.5, 0, 0, Math.PI * 2);
-        ctx.fill();
-      } else if (season === 'summer') {
-        // Summer green leaves
-        ctx.fillStyle = 'rgba(74, 222, 128, 0.8)';
-        ctx.beginPath();
-        ctx.ellipse(0, 0, p.size, p.size * 0.4, 0.4, 0, Math.PI * 2);
-        ctx.fill();
-      } else if (season === 'autumn') {
-        // Autumn golden maple leaves
-        ctx.fillStyle = 'rgba(245, 158, 11, 0.85)';
-        ctx.beginPath();
-        ctx.ellipse(0, 0, p.size, p.size * 0.5, 0.5, 0, Math.PI * 2);
-        ctx.fill();
-      }
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate((p.rotation * Math.PI) / 180);
+        ctx.globalAlpha = p.opacity;
 
-      ctx.restore();
-    });
+        if (season === 'winter') {
+          // Soft snowflakes
+          ctx.fillStyle = '#ffffff';
+          ctx.beginPath();
+          ctx.arc(0, 0, p.size, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (season === 'spring') {
+          // Sakura petals
+          ctx.fillStyle = 'rgba(255, 183, 197, 0.85)';
+          ctx.beginPath();
+          ctx.ellipse(0, 0, p.size, p.size * 0.5, 0, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (season === 'summer') {
+          // Summer green leaves
+          ctx.fillStyle = 'rgba(74, 222, 128, 0.8)';
+          ctx.beginPath();
+          ctx.ellipse(0, 0, p.size, p.size * 0.4, 0.4, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (season === 'autumn') {
+          // Autumn golden maple leaves
+          ctx.fillStyle = 'rgba(245, 158, 11, 0.85)';
+          ctx.beginPath();
+          ctx.ellipse(0, 0, p.size, p.size * 0.5, 0.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        ctx.restore();
+      });
+    }
 
     requestAnimationFrame(render);
   }
 
-  render();
+  requestAnimationFrame(render);
   const enabled = localStorage.getItem('particles_enabled') !== 'false';
   updateParticleToggleBtns(enabled);
 }
@@ -3444,9 +3454,13 @@ window.revealAllRoadmapEyeCards = function(targetSentence) {
     nbAddWordForm.addEventListener('submit', handleNotebookAddWordForm);
   }
   if (nbSearchInput) {
+    let nbSearchDebounceTimer = null;
     nbSearchInput.addEventListener('input', () => {
-      currentNotebookPage = 1;
-      renderNotebookWordsTable();
+      clearTimeout(nbSearchDebounceTimer);
+      nbSearchDebounceTimer = setTimeout(() => {
+        currentNotebookPage = 1;
+        renderNotebookWordsTable();
+      }, 150);
     });
   }
 
