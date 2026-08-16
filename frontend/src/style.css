@@ -9123,3 +9123,250 @@ body.light-mode .next-lesson-hub-btn:hover {
   transition: all 0.08s ease-out;
   border-bottom: 2px solid #f59e0b;
 }
+
+/* ROADMAP VOCABULARY FAVORITE / PERSONAL NOTEBOOK STAR BUTTONS */
+.hero-star-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: 99px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  color: #94a3b8;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+
+.hero-star-btn:hover {
+  background: rgba(245, 158, 11, 0.18);
+  border-color: rgba(245, 158, 11, 0.5);
+  color: #fbbf24;
+  transform: translateY(-1px);
+}
+
+.hero-star-btn.active {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.28), rgba(217, 119, 6, 0.22)) !important;
+  border-color: #f59e0b !important;
+  color: #fbbf24 !important;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.4);
+}
+
+.hero-star-btn.active i {
+  color: #fbbf24 !important;
+  filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.7));
+}
+
+.hero-star-btn:active {
+  transform: scale(0.96);
+}
+
+.mini-card-star-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #94a3b8;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 5;
+}
+
+.mini-card-star-btn:hover {
+  background: rgba(245, 158, 11, 0.3);
+  border-color: rgba(245, 158, 11, 0.6);
+  color: #fbbf24;
+  transform: scale(1.15);
+}
+
+.mini-card-star-btn.active {
+  background: rgba(245, 158, 11, 0.28) !important;
+  border-color: #f59e0b !important;
+  color: #fbbf24 !important;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+}
+
+.mini-card-star-btn.active i {
+  color: #fbbf24 !important;
+  filter: drop-shadow(0 0 3px rgba(245, 158, 11, 0.7));
+}
+
+html.light-mode .hero-star-btn,
+body.light-mode .hero-star-btn {
+  background: rgba(0, 0, 0, 0.05) !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+  color: #64748b !important;
+}
+
+html.light-mode .hero-star-btn.active,
+body.light-mode .hero-star-btn.active {
+  background: rgba(254, 243, 199, 0.95) !important;
+  border-color: #d97706 !important;
+  color: #b45309 !important;
+}
+
+html.light-mode .mini-card-star-btn,
+body.light-mode .mini-card-star-btn {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  color: #94a3b8 !important;
+}
+
+html.light-mode .mini-card-star-btn.active,
+body.light-mode .mini-card-star-btn.active {
+  background: rgba(254, 243, 199, 0.95) !important;
+  border-color: #f59e0b !important;
+  color: #d97706 !important;
+}
+
+/* --- NOTEBOOK HUB & CREATION BUILDER STYLES --- */
+.btn-create-notebook-glow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  background: linear-gradient(135deg, #0284c7, #2563eb, #7c3aed);
+  background-size: 200% 200%;
+  color: #ffffff !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  border-radius: 14px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: 0 6px 24px rgba(37, 99, 235, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+  animation: createBtnGlowShift 5s ease infinite;
+}
+
+@keyframes createBtnGlowShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.btn-create-notebook-glow:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 32px rgba(37, 99, 235, 0.65);
+}
+
+.btn-create-notebook-glow:active {
+  transform: scale(0.98);
+}
+
+.topic-corner-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 99px;
+  border: 1px solid transparent;
+  letter-spacing: 0.3px;
+}
+
+.nb-picker-pill {
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.nb-picker-pill:hover {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.4);
+  color: #38bdf8;
+}
+
+.nb-picker-pill.active {
+  background: linear-gradient(135deg, #0284c7, #2563eb) !important;
+  border-color: #38bdf8 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.45);
+}
+
+.create-nb-word-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  transition: background 0.15s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.create-nb-word-row:hover {
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.create-nb-word-row.selected {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.custom-nb-hub-card {
+  background: rgba(15, 23, 42, 0.55);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.custom-nb-hub-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(56, 189, 248, 0.45);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+html.light-mode .nb-picker-pill {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.12);
+  color: #475569;
+}
+
+html.light-mode .nb-picker-pill.active {
+  background: #2563eb !important;
+  border-color: #2563eb !important;
+  color: #ffffff !important;
+}
+
+html.light-mode .create-nb-word-row {
+  border-bottom-color: rgba(0, 0, 0, 0.06);
+}
+
+html.light-mode .create-nb-word-row.selected {
+  background: #dcfce7 !important;
+}
+
+html.light-mode .custom-nb-hub-card {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border-color: rgba(226, 232, 240, 0.9) !important;
+  color: #0f172a !important;
+}
+
+

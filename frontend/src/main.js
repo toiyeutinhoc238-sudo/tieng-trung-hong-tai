@@ -2975,6 +2975,11 @@ function setupEventListeners() {
       } else if (key === 'f') {
         e.preventDefault();
         window.toggleFlashcardFullscreen();
+      } else if (key === 's') {
+        e.preventDefault();
+        if (typeof window.toggleLessonWordStar === 'function') {
+          window.toggleLessonWordStar();
+        }
       } else if (key === 'escape') {
         if (isFlashcardFullscreen) {
           e.preventDefault();
@@ -7388,6 +7393,10 @@ function renderLessonHeroCardContent(w, index, total) {
               </button>
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
+              <button id="hero-star-toggle-btn" class="hero-star-btn ${w.isStarred ? 'active' : ''}" onclick="window.toggleLessonWordStar('${w.id}')" title="${w.isStarred ? 'Bỏ yêu thích (Xóa khỏi Sổ tay cá nhân)' : 'Yêu thích (Tự động lưu vào Sổ tay cá nhân)'}">
+                <i class="${w.isStarred ? 'fa-solid' : 'fa-regular'} fa-star"></i>
+                <span id="hero-star-btn-label">${w.isStarred ? 'Đã lưu sổ tay' : 'Lưu vào sổ tay'}</span>
+              </button>
               <span class="hero-info-badge" style="font-size: 0.82rem; padding: 4px 10px;">${category}</span>
               <span class="hero-info-badge" style="font-size: 0.82rem; padding: 4px 10px; background: rgba(168, 85, 247, 0.18); border-color: rgba(168, 85, 247, 0.35); color: #c084fc;">HSK ${activeLessonsLevel}</span>
               <button class="card-fullscreen-quick-btn ${isFlashcardFullscreen ? 'active-fullscreen' : ''}" onclick="window.toggleFlashcardFullscreen()" title="${isFlashcardFullscreen ? 'Thu nhỏ (Phím F hoặc Esc)' : 'Phóng to toàn màn hình (Phím F)'}">
@@ -7575,6 +7584,59 @@ window.goToPrevLesson = function(currentLessonNum) {
 
   window.openLessonVocabStudy(prevLessonId);
   showToast(`⬅️ Đã chuyển về Bài ${prevLessonId}`);
+};
+
+window.toggleLessonWordStar = async function(wordId) {
+  const targetId = wordId || (currentLessonVocabWords[currentLessonVocabIndex] ? currentLessonVocabWords[currentLessonVocabIndex].id : null);
+  if (!targetId) return;
+
+  const w = vocabList.find(item => item.id === targetId);
+  const nextStarred = w ? !w.isStarred : true;
+
+  // Call the core toggleWordStarred function
+  await toggleWordStarred(targetId);
+
+  // Sync state in memory for lesson words
+  if (currentLessonVocabWords) {
+    const localWord = currentLessonVocabWords.find(item => item.id === targetId);
+    if (localWord) localWord.isStarred = nextStarred;
+  }
+
+  // Update hero star button UI if this word is currently displayed
+  const currentWord = currentLessonVocabWords[currentLessonVocabIndex];
+  if (currentWord && currentWord.id === targetId) {
+    const heroBtn = document.getElementById('hero-star-toggle-btn');
+    if (heroBtn) {
+      if (nextStarred) {
+        heroBtn.classList.add('active');
+        heroBtn.innerHTML = `<i class="fa-solid fa-star"></i> <span id="hero-star-btn-label">Đã lưu sổ tay</span>`;
+        heroBtn.title = 'Bỏ yêu thích (Xóa khỏi Sổ tay cá nhân)';
+      } else {
+        heroBtn.classList.remove('active');
+        heroBtn.innerHTML = `<i class="fa-regular fa-star"></i> <span id="hero-star-btn-label">Lưu vào sổ tay</span>`;
+        heroBtn.title = 'Yêu thích (Tự động lưu vào Sổ tay cá nhân)';
+      }
+    }
+  }
+
+  // Update mini cards UI
+  const miniCards = document.querySelectorAll('.mini-rad-card');
+  currentLessonVocabWords.forEach((item, idx) => {
+    if (item.id === targetId && miniCards[idx]) {
+      const miniStarBtn = miniCards[idx].querySelector('.mini-card-star-btn');
+      if (miniStarBtn) {
+        if (nextStarred) {
+          miniStarBtn.classList.add('active');
+          miniStarBtn.innerHTML = `<i class="fa-solid fa-star"></i>`;
+          miniStarBtn.title = 'Bỏ yêu thích (Xóa khỏi Sổ tay cá nhân)';
+        } else {
+          miniStarBtn.classList.remove('active');
+          miniStarBtn.innerHTML = `<i class="fa-regular fa-star"></i>`;
+          miniStarBtn.title = 'Yêu thích (Tự động lưu vào Sổ tay cá nhân)';
+        }
+      }
+    }
+  });
 };
 
 window.goToLessonStep = function(step, lessonId) {
@@ -7767,13 +7829,16 @@ function renderLessonFlashcardWorkspace(lessonTitle, words, selectedIndex = 0) {
         </div>
 
         <div style="font-size: 0.85rem; font-weight: 600; color: #94a3b8; display: flex; align-items: center; gap: 6px;">
-          <i class="fa-solid fa-keyboard"></i> Phím &larr; &rarr; để đổi thẻ | Phím Spacebar để nghe phát âm
+          <i class="fa-solid fa-keyboard"></i> Phím &larr; &rarr; để đổi thẻ | Spacebar nghe đọc | Phím S lưu sổ tay ⭐
         </div>
       </div>
 
       <div class="mini-cards-grid">
         ${currentLessonVocabWords.map((w, idx) => `
-          <div class="mini-rad-card ${idx === currentLessonVocabIndex ? 'active' : ''}" onclick="window.selectLessonFlashcardIndex(${idx})">
+          <div class="mini-rad-card ${idx === currentLessonVocabIndex ? 'active' : ''}" onclick="window.selectLessonFlashcardIndex(${idx})" style="position: relative;">
+            <button class="mini-card-star-btn ${w.isStarred ? 'active' : ''}" onclick="event.stopPropagation(); window.toggleLessonWordStar('${w.id}');" title="${w.isStarred ? 'Bỏ yêu thích (Xóa khỏi Sổ tay cá nhân)' : 'Yêu thích (Tự động lưu vào Sổ tay cá nhân)'}">
+              <i class="${w.isStarred ? 'fa-solid' : 'fa-regular'} fa-star"></i>
+            </button>
             <div style="font-size: 1.6rem; font-weight: 800; font-family: var(--font-display); line-height: 1.2; margin-bottom: 4px; color: var(--text-primary);">
               ${w.word || w.simplified || w.character || w.hanzi || ''}
             </div>
@@ -10720,6 +10785,437 @@ async function loadInitialStats() {
   renderWeeklyStudyChart();
 }
 
+// --- DYNAMIC NOTEBOOK BUILDER (TẠO SỔ TAY MỚI TỰ CHỌN TỪ VỰNG) ---
+let createNbVersion = '3.0';
+let createNbLevel = '1';
+let createNbLesson = 'all';
+let createNbSelectedWordsMap = new Map(); // wordId -> wordObj
+
+window.openCreateNotebookModal = function() {
+  const modal = document.getElementById('create-notebook-modal');
+  if (!modal) return;
+
+  const nameInput = document.getElementById('create-nb-name-input');
+  if (nameInput) nameInput.value = '';
+
+  const searchInput = document.getElementById('create-nb-word-search-input');
+  if (searchInput) searchInput.value = '';
+
+  createNbVersion = '3.0';
+  createNbLevel = '1';
+  createNbLesson = 'all';
+  createNbSelectedWordsMap.clear();
+
+  updateCreateNbPillsUI();
+  renderCreateNbLevelPills();
+  renderCreateNbLessonPills();
+  window.renderCreateNbWordsList();
+  updateCreateNbSelectedBadge();
+
+  modal.style.display = 'flex';
+};
+
+window.setCreateNbVersion = function(ver) {
+  createNbVersion = ver;
+  if (ver === 'premium') {
+    createNbLevel = 'Du lịch';
+  } else if (ver === 'yct') {
+    createNbLevel = '1';
+  } else {
+    createNbLevel = '1';
+  }
+  createNbLesson = 'all';
+
+  updateCreateNbPillsUI();
+  renderCreateNbLevelPills();
+  renderCreateNbLessonPills();
+  window.renderCreateNbWordsList();
+};
+
+function updateCreateNbPillsUI() {
+  const vPills = document.querySelectorAll('#create-nb-version-pills .nb-picker-pill');
+  vPills.forEach(p => {
+    p.classList.toggle('active', p.getAttribute('data-ver') === createNbVersion);
+  });
+}
+
+function renderCreateNbLevelPills() {
+  const container = document.getElementById('create-nb-level-pills');
+  if (!container) return;
+
+  let levels = [];
+  if (createNbVersion === '3.0') {
+    levels = [
+      { id: '1', name: 'HSK 1' },
+      { id: '2', name: 'HSK 2' },
+      { id: '3', name: 'HSK 3' },
+      { id: '4', name: 'HSK 4' },
+      { id: '5', name: 'HSK 5' },
+      { id: '6', name: 'HSK 6' },
+      { id: '7-9', name: 'HSK 7-8-9' }
+    ];
+  } else if (createNbVersion === '2.0') {
+    levels = [
+      { id: '1', name: 'HSK 1' },
+      { id: '2', name: 'HSK 2' },
+      { id: '3', name: 'HSK 3' },
+      { id: '4', name: 'HSK 4' },
+      { id: '5', name: 'HSK 5' },
+      { id: '6', name: 'HSK 6' }
+    ];
+  } else if (createNbVersion === 'yct') {
+    levels = [
+      { id: '1', name: 'YCT 1' },
+      { id: '2', name: 'YCT 2' },
+      { id: '3', name: 'YCT 3' },
+      { id: '4', name: 'YCT 4' }
+    ];
+  } else if (createNbVersion === 'premium') {
+    levels = [
+      { id: 'Du lịch', name: '✈️ Du lịch' },
+      { id: 'Công sở', name: '💼 Công sở' },
+      { id: 'Đàm phán', name: '🤝 Đàm phán' }
+    ];
+  }
+
+  container.innerHTML = levels.map(l => `
+    <button type="button" class="nb-picker-pill ${String(createNbLevel) === String(l.id) ? 'active' : ''}" onclick="window.setCreateNbLevel('${l.id}')">
+      ${l.name}
+    </button>
+  `).join('');
+}
+
+window.setCreateNbLevel = function(lvl) {
+  createNbLevel = lvl;
+  createNbLesson = 'all';
+  renderCreateNbLevelPills();
+  renderCreateNbLessonPills();
+  window.renderCreateNbWordsList();
+};
+
+function renderCreateNbLessonPills() {
+  const lessonContainer = document.getElementById('create-nb-lesson-container');
+  const pillsWrap = document.getElementById('create-nb-lesson-pills');
+  if (!lessonContainer || !pillsWrap) return;
+
+  if (createNbVersion === 'premium') {
+    lessonContainer.style.display = 'none';
+    return;
+  }
+
+  lessonContainer.style.display = 'flex';
+
+  // Find all available words for this version & level
+  const baseWords = vocabList.filter(w => {
+    if (w.isCustom) return false;
+    if (createNbVersion === 'yct') {
+      return (w.curriculum === 'yct' || w.hskVersion === 'yct') && String(w.level) === String(createNbLevel);
+    }
+    return (w.hskVersion || '3.0') === createNbVersion && w.curriculum !== 'yct' && matchLevel(w.level, createNbLevel);
+  });
+
+  const uniqueLessons = {};
+  baseWords.forEach(w => {
+    if (w.lessonId) {
+      uniqueLessons[w.lessonId] = w.lessonTitle || `Bài ${w.lessonId}`;
+    }
+  });
+
+  const sortedLessonIds = Object.keys(uniqueLessons).map(Number).sort((a, b) => a - b);
+
+  let html = `
+    <button type="button" class="nb-picker-pill ${createNbLesson === 'all' ? 'active' : ''}" onclick="window.setCreateNbLesson('all')">
+      Tất cả bài (${baseWords.length} từ)
+    </button>
+  `;
+
+  sortedLessonIds.forEach(id => {
+    const lessonWords = baseWords.filter(w => String(w.lessonId || 1) === String(id));
+    html += `
+      <button type="button" class="nb-picker-pill ${String(createNbLesson) === String(id) ? 'active' : ''}" onclick="window.setCreateNbLesson('${id}')">
+        ${uniqueLessons[id]} (${lessonWords.length})
+      </button>
+    `;
+  });
+
+  pillsWrap.innerHTML = html;
+}
+
+window.setCreateNbLesson = function(lessonId) {
+  createNbLesson = lessonId;
+  renderCreateNbLessonPills();
+  window.renderCreateNbWordsList();
+};
+
+function getFilteredWordsForCreatePicker() {
+  let list = vocabList.filter(w => !w.isCustom);
+
+  if (createNbVersion === 'premium') {
+    list = list.filter(w => w.level === 'premium');
+    if (createNbLevel) {
+      list = list.filter(w => w.category === createNbLevel);
+    }
+  } else if (createNbVersion === 'yct') {
+    list = list.filter(w => (w.curriculum === 'yct' || w.hskVersion === 'yct') && String(w.level) === String(createNbLevel));
+  } else {
+    list = list.filter(w => (w.hskVersion || '3.0') === createNbVersion && w.curriculum !== 'yct' && matchLevel(w.level, createNbLevel));
+    if (createNbLesson && createNbLesson !== 'all') {
+      list = list.filter(w => String(w.lessonId || 1) === String(createNbLesson));
+    }
+  }
+
+  const searchInput = document.getElementById('create-nb-word-search-input');
+  const q = searchInput ? searchInput.value.trim().toLowerCase() : '';
+  if (q) {
+    list = list.filter(w => {
+      const char = (w.word || w.simplified || w.character || '').toLowerCase();
+      const py = (w.pinyin || '').toLowerCase();
+      const vi = (w.meaning || w.definition || w.vietnamese || '').toLowerCase();
+      const hv = (w.hanViet || '').toLowerCase();
+      return char.includes(q) || py.includes(q) || vi.includes(q) || hv.includes(q);
+    });
+  }
+
+  return list;
+}
+
+window.renderCreateNbWordsList = function() {
+  const container = document.getElementById('create-nb-words-list-container');
+  const countEl = document.getElementById('create-nb-filter-matched-count');
+  if (!container) return;
+
+  const matchedWords = getFilteredWordsForCreatePicker();
+  if (countEl) countEl.textContent = `${matchedWords.length} từ phù hợp`;
+
+  if (matchedWords.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 32px 16px; color: #94a3b8; font-size: 0.9rem;">
+        <i class="fa-solid fa-folder-open" style="font-size: 2rem; margin-bottom: 8px; opacity: 0.5; display: block;"></i>
+        Không tìm thấy từ vựng nào phù hợp với bộ lọc hiện tại.
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = matchedWords.map(w => {
+    const isSelected = createNbSelectedWordsMap.has(w.id);
+    const char = w.word || w.simplified || w.character || '';
+    const py = w.pinyin || '';
+    const vi = w.meaning || w.definition || w.vietnamese || '';
+    const lvlText = (w.level === 'premium') ? w.category : `HSK ${w.level}`;
+
+    return `
+      <div class="create-nb-word-row ${isSelected ? 'selected' : ''}" onclick="window.toggleCreateNbWordSelection('${w.id}')">
+        <input type="checkbox" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation(); window.toggleCreateNbWordSelection('${w.id}')" style="width: 18px; height: 18px; cursor: pointer; accent-color: #10b981;">
+        <div style="font-size: 1.25rem; font-weight: 800; font-family: var(--font-display); color: #ffffff; min-width: 70px;">
+          ${char}
+        </div>
+        <div style="font-size: 0.88rem; font-weight: 700; color: #38bdf8; min-width: 100px;">
+          ${py}
+        </div>
+        <div style="font-size: 0.85rem; color: #cbd5e1; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+          ${vi}
+        </div>
+        <span style="font-size: 0.72rem; padding: 2px 8px; border-radius: 6px; background: rgba(255,255,255,0.06); color: #94a3b8; border: 1px solid rgba(255,255,255,0.1); white-space: nowrap;">
+          ${lvlText}
+        </span>
+        <button type="button" onclick="event.stopPropagation(); window.speakLessonWord('${char.replace(/'/g, "\\'")}')" style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); color: #38bdf8; border-radius: 8px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.75rem;">
+          <i class="fa-solid fa-volume-high"></i>
+        </button>
+      </div>
+    `;
+  }).join('');
+};
+
+window.toggleCreateNbWordSelection = function(wordId) {
+  if (createNbSelectedWordsMap.has(wordId)) {
+    createNbSelectedWordsMap.delete(wordId);
+  } else {
+    const w = vocabList.find(item => item.id === wordId);
+    if (w) createNbSelectedWordsMap.set(wordId, w);
+  }
+
+  updateCreateNbSelectedBadge();
+  window.renderCreateNbWordsList();
+};
+
+window.createNbSelectAllVisible = function(selectAll) {
+  const visible = getFilteredWordsForCreatePicker();
+  visible.forEach(w => {
+    if (selectAll) {
+      createNbSelectedWordsMap.set(w.id, w);
+    } else {
+      createNbSelectedWordsMap.delete(w.id);
+    }
+  });
+
+  updateCreateNbSelectedBadge();
+  window.renderCreateNbWordsList();
+};
+
+function updateCreateNbSelectedBadge() {
+  const count = createNbSelectedWordsMap.size;
+  const badge = document.getElementById('create-nb-total-selected-badge');
+  if (badge) badge.textContent = `${count} từ`;
+}
+
+window.submitCreateCustomNotebook = async function() {
+  const nameInput = document.getElementById('create-nb-name-input');
+  const name = nameInput ? nameInput.value.trim() : '';
+
+  if (!name) {
+    showToast('Vui lòng nhập tên cho sổ tay mới!', true);
+    if (nameInput) nameInput.focus();
+    return;
+  }
+
+  if (customLists.includes(name)) {
+    showToast('Tên sổ tay này đã tồn tại, vui lòng đặt tên khác!', true);
+    if (nameInput) nameInput.focus();
+    return;
+  }
+
+  if (createNbSelectedWordsMap.size === 0) {
+    showToast('Vui lòng tick chọn ít nhất 1 từ vựng để thêm vào sổ tay!', true);
+    return;
+  }
+
+  const selectedWords = Array.from(createNbSelectedWordsMap.values());
+
+  // 1. Add list to customLists
+  customLists.push(name);
+  const userKey = currentUser ? currentUser.email : 'guest';
+  localStorage.setItem(`custom_lists_${userKey}`, JSON.stringify(customLists));
+
+  // 2. Clone selected words with isCustom: true and category: name
+  const createdWords = [];
+  selectedWords.forEach(w => {
+    const clone = {
+      id: `custom_${Date.now()}_${Math.random().toString(36).substr(2, 7)}`,
+      word: w.word || w.simplified || w.character || '',
+      pinyin: w.pinyin || '',
+      meaning: w.meaning || w.definition || w.vietnamese || '',
+      hanViet: w.hanViet || '',
+      level: 'custom',
+      category: name,
+      explanation: w.explanation || w.note || '',
+      example_zh: w.example_zh || w.example || '',
+      example_pinyin: w.example_pinyin || '',
+      example_vi: w.example_vi || '',
+      isCustom: true,
+      isStarred: !!w.isStarred,
+      isStudied: false,
+      isMemorized: false,
+      isWrong: false
+    };
+    createdWords.push(clone);
+    vocabList.push(clone);
+  });
+
+  // Save custom words to localStorage
+  const guestCustom = JSON.parse(localStorage.getItem('guest_custom_words') || '[]');
+  guestCustom.push(...createdWords);
+  localStorage.setItem('guest_custom_words', JSON.stringify(guestCustom));
+
+  // Close modal
+  const modal = document.getElementById('create-notebook-modal');
+  if (modal) modal.style.display = 'none';
+
+  // Refresh UI
+  renderHubCustomNotebooks();
+  updateStats();
+  applyFilters();
+
+  showToast(`🎉 Đã tạo sổ tay "${name}" thành công với ${createdWords.length} từ vựng!`);
+
+  // Navigate directly into this notebook dashboard
+  showNotebookDashboardView(`custom:${name}`);
+};
+
+window.deleteCustomNotebook = function(name) {
+  if (name === 'Mặc định') return;
+  if (!confirm(`Bạn có chắc chắn muốn xóa sổ tay "${name}"? Các từ vựng trong sổ tay này sẽ bị xóa khỏi danh sách cá nhân.`)) return;
+
+  vocabList = vocabList.filter(w => !(w.isCustom && w.category === name));
+  customLists = customLists.filter(l => l !== name);
+
+  const userKey = currentUser ? currentUser.email : 'guest';
+  localStorage.setItem(`custom_lists_${userKey}`, JSON.stringify(customLists));
+
+  const guestCustom = JSON.parse(localStorage.getItem('guest_custom_words') || '[]');
+  const filteredGuest = guestCustom.filter(w => w.category !== name);
+  localStorage.setItem('guest_custom_words', JSON.stringify(filteredGuest));
+
+  renderHubCustomNotebooks();
+  showTopicsView();
+  showToast(`Đã xóa sổ tay "${name}".`);
+};
+
+function renderHubCustomNotebooks() {
+  const grid = document.getElementById('hub-custom-notebooks-grid');
+  const starredBadge = document.getElementById('hub-starred-badge');
+  const wrongBadge = document.getElementById('hub-wrong-badge');
+
+  // Update live counts on main hub cards
+  const starredCount = vocabList.filter(w => w.isStarred).length;
+  const wrongCount = vocabList.filter(w => w.isWrong).length;
+
+  if (starredBadge) starredBadge.textContent = `${starredCount} từ ⭐`;
+  if (wrongBadge) wrongBadge.textContent = `${wrongCount} từ sai`;
+
+  if (!grid) return;
+
+  // Filter custom lists (ignoring empty default if empty)
+  const validLists = customLists.filter(name => {
+    const count = vocabList.filter(w => w.isCustom && w.category === name).length;
+    return count > 0 || name !== 'Mặc định';
+  });
+
+  if (validLists.length === 0) {
+    grid.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 28px 16px; background: rgba(255,255,255,0.02); border: 1.5px dashed rgba(255,255,255,0.15); border-radius: 14px; color: #94a3b8;">
+        <i class="fa-solid fa-folder-plus" style="font-size: 2rem; color: #38bdf8; margin-bottom: 8px; display: block; opacity: 0.8;"></i>
+        <div style="font-weight: 700; font-size: 0.95rem; color: #ffffff; margin-bottom: 4px;">Bạn chưa có sổ tay tự tạo nào</div>
+        <div style="font-size: 0.82rem; margin-bottom: 12px;">Hãy bấm nút <strong>"+ Tạo Sổ Tay Mới"</strong> ở góc trên để tự chọn từ vựng HSK theo nhu cầu nhé!</div>
+        <button onclick="window.openCreateNotebookModal()" class="btn btn-sm btn-primary" style="border-radius: 10px; padding: 6px 16px; font-weight: 700; cursor: pointer;">
+          <i class="fa-solid fa-plus"></i> Tạo Sổ Tay Đầu Tiên
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  grid.innerHTML = validLists.map(name => {
+    const listWords = vocabList.filter(w => w.isCustom && w.category === name);
+    return `
+      <div class="custom-nb-hub-card">
+        <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(56, 189, 248, 0.15); color: #38bdf8; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;">
+              <i class="fa-solid fa-book"></i>
+            </div>
+            <div>
+              <h4 style="margin: 0; font-size: 0.98rem; font-weight: 800; color: var(--text-primary); font-family: var(--font-display);">${name}</h4>
+              <span style="font-size: 0.76rem; color: var(--text-secondary); font-weight: 600;">${listWords.length} từ vựng</span>
+            </div>
+          </div>
+          ${name !== 'Mặc định' ? `
+            <button onclick="event.stopPropagation(); window.deleteCustomNotebook('${name.replace(/'/g, "\\'")}')" title="Xóa sổ tay này" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.25); color: #f87171; border-radius: 8px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.78rem;">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          ` : ''}
+        </div>
+
+        <div style="display: flex; gap: 8px; margin-top: 4px;">
+          <button onclick="window.showNotebookDashboardView('custom:${name.replace(/'/g, "\\'")}')" class="btn btn-sm btn-primary" style="flex: 1; border-radius: 10px; font-weight: 700; font-size: 0.82rem; padding: 7px; cursor: pointer;">
+            <i class="fa-solid fa-play"></i> Vào Ôn Tập
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
 // --- SMART FLASHCARD TOPICS & QUIZ LOGIC ---
 
 // 1. Navigation functions
@@ -10732,13 +11228,13 @@ function showTopicsView() {
   const quizView = document.getElementById('quiz-study-view');
 
   const quickCards = document.querySelector('.quick-dashboard-cards');
-  if (quickCards) quickCards.style.display = 'grid';
+  if (quickCards) quickCards.style.display = 'none';
 
   const statsSummary = document.querySelector('.stats-summary-container');
-  if (statsSummary) statsSummary.style.display = 'block';
+  if (statsSummary) statsSummary.style.display = 'none';
 
   const controlsDash = document.querySelector('.controls-dashboard');
-  if (controlsDash) controlsDash.style.display = 'flex';
+  if (controlsDash) controlsDash.style.display = 'none';
 
   if (selectionView) selectionView.style.display = 'block';
   if (topicsView) topicsView.style.display = 'block';
@@ -10750,6 +11246,8 @@ function showTopicsView() {
   activeNotebook = null;
   studyNotebookId = null;
   isLessonVocabStudyMode = false;
+
+  renderHubCustomNotebooks();
 }
 
 function showSubdecksView() {
@@ -10820,6 +11318,11 @@ function showNotebookDashboardView(notebookId, preserveLessons = false) {
   openNotebookDashboard(notebookId);
 }
 
+window.showNotebookDashboardView = showNotebookDashboardView;
+window.showTopicsView = showTopicsView;
+window.showSubdecksView = showSubdecksView;
+window.renderHubCustomNotebooks = renderHubCustomNotebooks;
+
 // Helper: Get all words in a notebook
 function getNotebookWords(notebookId) {
   if (!notebookId) return [];
@@ -10868,6 +11371,20 @@ function renderSubdecksList() {
       const listWords = vocabList.filter(w => w.isCustom && w.category === listName);
       grid.appendChild(createSubdeckCard(listName, `custom:${listName}`, listWords.length, 'fa-folder', 'var(--accent-blue)'));
     });
+
+    // Create New Notebook Action Card
+    const createCard = document.createElement('div');
+    createCard.className = 'subdeck-card glass-panel';
+    createCard.style.cssText = 'padding: 24px; text-align: center; cursor: pointer; border-radius: var(--radius-lg); transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; border: 1.5px dashed rgba(56, 189, 248, 0.45); background: rgba(56, 189, 248, 0.05);';
+    createCard.onclick = () => window.openCreateNotebookModal();
+    createCard.innerHTML = `
+      <div style="width: 50px; height: 50px; border-radius: 50%; background: rgba(56, 189, 248, 0.15); color: #38bdf8; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
+        <i class="fa-solid fa-plus"></i>
+      </div>
+      <h4 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #38bdf8; font-family: var(--font-display);">+ Tạo Sổ Tay Mới</h4>
+      <p style="margin: 0; font-size: 0.82rem; color: var(--text-secondary);">Tự chọn từ vựng HSK gom vào sổ tay cá nhân</p>
+    `;
+    grid.appendChild(createCard);
   }
   else if (activeSmartTopic === 'hsk') {
     title.textContent = 'Danh sách Từ vựng';
