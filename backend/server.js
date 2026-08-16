@@ -1961,13 +1961,8 @@ app.get('/api/discussions', async (req, res) => {
   try {
     let items = [];
     if (mongoose.connection.readyState === 1) {
-      const count = await Discussion.countDocuments();
-      if (count === 0) {
-        const defaultDiscussions = await readDiscussionsFromFile();
-        if (defaultDiscussions.length > 0) {
-          await Discussion.insertMany(defaultDiscussions).catch(() => { });
-        }
-      }
+      // Purge any legacy sample post
+      await Discussion.deleteOne({ _id: 'disc_welcome_001' }).catch(() => { });
 
       const query = {};
       if (category && category !== 'all') {
