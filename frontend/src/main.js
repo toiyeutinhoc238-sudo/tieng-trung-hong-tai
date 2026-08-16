@@ -4285,6 +4285,51 @@ function isLevelUnlocked(ver, level, levelIndex, levelsData, builtInVocabs) {
   return false;
 }
 
+function isRoadmapLessonUnlocked(hskVersion, level, lessonKey, sortedLessonKeys) {
+  if (!sortedLessonKeys || sortedLessonKeys.length === 0) return true;
+  const lKeyStr = String(lessonKey);
+  const idx = sortedLessonKeys.findIndex(k => String(k) === lKeyStr);
+  
+  // Lesson 1 is always unlocked
+  if (idx <= 0) return true;
+
+  // Check previous lessons in sequence
+  for (let i = 0; i < idx; i++) {
+    const prevKey = sortedLessonKeys[i];
+    
+    // Check if user earned quiz stars
+    const starKey = `quiz_stars_${hskVersion}_${level}_${prevKey}`;
+    const quizStars = parseInt(localStorage.getItem(starKey) || '0', 10);
+
+    // Check vocabulary words memorized/studied in prevKey
+    const prevWords = vocabList.filter(w => {
+      if (w.isCustom) return false;
+      if (w.curriculum === 'yct' || w.hskVersion === 'yct') {
+        return (hskVersion === 'yct') && String(w.level) === String(level) && String(w.lessonId || 1) === String(prevKey);
+      }
+      const lvlMatch = String(w.level || '').replace('hsk', '').trim() === String(level).replace('hsk', '').trim();
+      return (w.hskVersion || '3.0') === hskVersion && lvlMatch && String(w.lessonId || 1) === String(prevKey);
+    });
+
+    if (prevWords.length === 0) continue;
+
+    const memorizedCount = prevWords.filter(w => w.isMemorized).length;
+    const studiedCount = prevWords.filter(w => w.isStudied || w.isMemorized || w.isWrong || w.isStarred).length;
+
+    const isPrevPassed = (quizStars >= 1) || 
+                         (memorizedCount >= Math.ceil(prevWords.length * 0.4)) || 
+                         (studiedCount >= Math.ceil(prevWords.length * 0.7));
+
+    if (!isPrevPassed) {
+      return false; // Chain broken: this lesson is locked
+    }
+  }
+
+  return true;
+}
+
+window.isRoadmapLessonUnlocked = isRoadmapLessonUnlocked;
+
 window.unlockRoadmapLevel = function(ver, level) {
   try {
     const map = getUnlockedLevelsMap();
@@ -6650,6 +6695,179 @@ let activeVolumeFilter = 'all';
 
 let activeYctLevel = 1;
 
+let activeLessonViewMode = 'map';
+
+window.switchLessonViewMode = function (mode) {
+  activeLessonViewMode = mode;
+  renderLessonsList();
+};
+
+window.openLessonDetailModal = function (lessonKey) {
+  const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : activeLessonsLevel;
+  const levelVocabs = vocabList.filter(w => {
+    if (w.isCustom) return false;
+    if (w.curriculum === 'yct' || w.hskVersion === 'yct') return false;
+    if (!matchLevel(w.level, currentLvl)) return false;
+    if ((w.hskVersion || '3.0') !== activeHskVersion) return false;
+    return true;
+  });
+
+  const uniqueLessons = {};
+  levelVocabs.forEach(w => {
+    if (w.lessonId) uniqueLessons[w.lessonId] = true;
+  });
+  const sortedLessonIds = Object.keys(uniqueLessons).map(Number).sort((a, b) => a - b);
+  const isUnlocked = isRoadmapLessonUnlocked(activeHskVersion, currentLvl, lessonKey, sortedLessonIds);
+  if (!isUnlocked) {
+    const idx = sortedLessonIds.findIndex(k => String(k) === String(lessonKey));
+    const prevKey = idx > 0 ? sortedLessonIds[idx - 1] : 1;
+    showToast(`🔒 Bài ${lessonKey} đang bị khóa! Vui lòng hoàn thành Bài ${prevKey} trong Lộ trình để mở khóa nhé.`, true);
+    return;
+  }
+
+  const sliceWords = levelVocabs.filter(w => String(w.lessonId || 1) === String(lessonKey));
+  if (sliceWords.length === 0) return;
+
+  const firstWord = sliceWords[0];
+  const title = cleanLessonTitle(firstWord.lessonTitle || firstWord.category, lessonKey);
+  const desc = firstWord.lessonDesc || `Ôn tập từ vựng bài học HSK Cấp ${currentLvl}`;
+  const memorizedCount = sliceWords.filter(w => w.isMemorized).length;
+  const pct = Math.round((memorizedCount / sliceWords.length) * 100);
+
+  const numCircle = document.getElementById('modal-lesson-number-circle');
+  const badgeVal = document.getElementById('modal-lesson-badge-val');
+  const titleVal = document.getElementById('modal-lesson-title-val');
+  const descVal = document.getElementById('modal-lesson-desc-val');
+  const progText = document.getElementById('modal-lesson-progress-text');
+  const progFill = document.getElementById('modal-lesson-progress-fill');
+  const vocabCount = document.getElementById('modal-lesson-vocab-count');
+  const btnVocab = document.getElementById('modal-btn-mod-vocab');
+
+  if (numCircle) numCircle.textContent = lessonKey.toString().replace(/\D/g, '') || lessonKey;
+  if (badgeVal) badgeVal.textContent = `HSK ${currentLvl === '7-9' ? '7-8-9' : currentLvl} (${activeHskVersion}) • Bài ${lessonKey}`;
+  if (titleVal) titleVal.textContent = title;
+  if (descVal) descVal.textContent = desc;
+  if (progText) progText.textContent = `${memorizedCount}/${sliceWords.length} từ (${pct}%)`;
+  if (progFill) progFill.style.width = `${pct}%`;
+  if (vocabCount) vocabCount.textContent = `${sliceWords.length} từ`;
+
+  // Render grammar preview in lesson detail modal
+  const numKey = parseInt(String(lessonKey).replace(/\D/g, ''), 10) || 1;
+  const currentLvlStr = String(currentLvl);
+  const grammarList = currentLvlStr === '2' ? (HSK2_STRUCTURED_GRAMMAR || []) : (HSK1_STRUCTURED_GRAMMAR || []);
+  const grammarLesson = ((currentLvlStr === '1' || currentLvlStr === '2') && (activeHskVersion === '3.0' || !activeHskVersion)) ? grammarList.find(l => l.lessonId === numKey) : null;
+  const grammarPreviewBox = document.getElementById('modal-lesson-grammar-preview-box');
+  const grammarPreviewList = document.getElementById('modal-lesson-grammar-preview-list');
+  const grammarPreviewTitle = document.getElementById('modal-lesson-grammar-preview-title');
+  if (grammarPreviewBox && grammarPreviewList) {
+    if (grammarLesson && grammarLesson.grammarPoints && grammarLesson.grammarPoints.length > 0) {
+      grammarPreviewBox.style.display = 'block';
+      if (grammarPreviewTitle) {
+        grammarPreviewTitle.textContent = `Trọng tâm Ngữ pháp bài này (${grammarLesson.grammarPoints.length} điểm):`;
+      }
+      grammarPreviewList.innerHTML = grammarLesson.grammarPoints.map((p, idx) => {
+        let fText = '';
+        if (p.formula) {
+          const cleanF = p.formula.replace(/^(Công thức chung|Cấu trúc|Công thức)\s*[:\-]?\s*/i, '').trim();
+          const firstLine = cleanF.split('\n').filter(l => l.trim().length > 0)[0] || '';
+          if (firstLine) {
+            fText = `<span style="color: #38bdf8; font-size: 0.82rem; margin-left: 6px; font-weight: 600;">[ ${firstLine} ]</span>`;
+          }
+        }
+        return `
+          <li style="margin-bottom: 6px; line-height: 1.4;">
+            <strong style="color: #ffffff;">${idx + 1}. ${p.title}</strong>
+            ${fText}
+          </li>
+        `;
+      }).join('');
+    } else {
+      grammarPreviewBox.style.display = 'none';
+    }
+  }
+
+  if (btnVocab) {
+    btnVocab.onclick = function () {
+      const modalEl = document.getElementById('lesson-detail-popup-modal');
+      if (modalEl) modalEl.style.display = 'none';
+      startLessonStudy({ id: lessonKey, title }, sliceWords);
+    };
+  }
+
+  const btnGrammar = document.getElementById('modal-btn-mod-grammar');
+  if (btnGrammar) {
+    const grammarBadge = btnGrammar.querySelector('small');
+    const ptCount = (grammarLesson && grammarLesson.grammarPoints) ? grammarLesson.grammarPoints.length : 0;
+    if (grammarBadge) {
+      grammarBadge.textContent = ptCount > 0 ? `${ptCount} điểm NP 📖` : 'Học Ngữ Pháp 📖';
+      grammarBadge.style.background = 'linear-gradient(135deg, #0284c7, #2563eb)';
+      grammarBadge.style.color = '#ffffff';
+    }
+    btnGrammar.onclick = function () {
+      const modalEl = document.getElementById('lesson-detail-popup-modal');
+      if (modalEl) modalEl.style.display = 'none';
+      window.openLessonGrammarStudy(lessonKey);
+    };
+  }
+
+  const btnText = document.getElementById('modal-btn-mod-text');
+  if (btnText) {
+    const textBadge = btnText.querySelector('small');
+    if (textBadge) {
+      textBadge.textContent = 'Hội thoại 📖';
+      textBadge.style.background = '#0284c7';
+      textBadge.style.color = '#ffffff';
+    }
+    btnText.onclick = function () {
+      const modalEl = document.getElementById('lesson-detail-popup-modal');
+      if (modalEl) modalEl.style.display = 'none';
+      window.openLessonTextStudy(lessonKey);
+    };
+  }
+
+  // Handle 'Ôn Tập' (Quiz Game) unlock logic based on 100% completion
+  const btnReview = document.getElementById('modal-btn-mod-review');
+  let reviewBadge = document.getElementById('modal-review-badge');
+  if (!reviewBadge && btnReview) {
+    reviewBadge = btnReview.querySelector('small');
+  }
+
+  if (pct === 100) {
+    if (reviewBadge) {
+      reviewBadge.textContent = 'Mở khóa Trắc nghiệm 🎮';
+      reviewBadge.style.background = '#10b981';
+      reviewBadge.style.color = '#ffffff';
+    }
+    if (btnReview) {
+      btnReview.style.opacity = '1';
+      btnReview.onclick = function (e) {
+        e.stopPropagation();
+        const modalEl = document.getElementById('lesson-detail-popup-modal');
+        if (modalEl) modalEl.style.display = 'none';
+        window.location.href = `/quiz-game.html?lesson=${lessonKey}&level=${currentLvl}&version=${activeHskVersion}`;
+      };
+    }
+  } else {
+    if (reviewBadge) {
+      reviewBadge.textContent = 'Cần 100%';
+      reviewBadge.style.background = 'rgba(0,0,0,0.25)';
+      reviewBadge.style.color = '#ffffff';
+    }
+    if (btnReview) {
+      btnReview.style.opacity = '0.85';
+      btnReview.onclick = function (e) {
+        e.stopPropagation();
+        showToast(`Bạn cần học đủ 100% từ vựng bài học này (hiện tại: ${pct}%) để mở khóa Ôn Tập Trắc Nghiệm!`, true);
+      };
+    }
+  }
+
+  const modal = document.getElementById('lesson-detail-popup-modal');
+  if (modal) {
+    modal.style.display = 'flex';
+  }
+};
+
 function renderLessonsList() {
   const grid = document.getElementById('lessons-cards-grid');
   const objectivesText = document.getElementById('lessons-objectives-text');
@@ -6808,7 +7026,6 @@ function renderLessonsList() {
 
   // Update objectives text - dynamically count words from vocabList
   if (objectivesText) {
-    // Count total words in this level/version
     const totalWordsInLevel = vocabList.filter(w =>
       !w.isCustom &&
       w.curriculum !== 'yct' && w.hskVersion !== 'yct' &&
@@ -6860,166 +7077,6 @@ function renderLessonsList() {
     return true;
   });
 
-let activeLessonViewMode = 'map';
-
-window.switchLessonViewMode = function (mode) {
-  activeLessonViewMode = mode;
-  renderLessonsList();
-};
-
-window.openLessonDetailModal = function (lessonKey) {
-  const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : activeLessonsLevel;
-  const levelVocabs = vocabList.filter(w => {
-    if (w.isCustom) return false;
-    if (w.curriculum === 'yct' || w.hskVersion === 'yct') return false;
-    if (!matchLevel(w.level, currentLvl)) return false;
-    if ((w.hskVersion || '3.0') !== activeHskVersion) return false;
-    return true;
-  });
-
-  const sliceWords = levelVocabs.filter(w => String(w.lessonId || 1) === String(lessonKey));
-  if (sliceWords.length === 0) return;
-
-  const firstWord = sliceWords[0];
-  const title = cleanLessonTitle(firstWord.lessonTitle || firstWord.category, lessonKey);
-  const desc = firstWord.lessonDesc || `Ôn tập từ vựng bài học HSK Cấp ${currentLvl}`;
-  const memorizedCount = sliceWords.filter(w => w.isMemorized).length;
-  const pct = Math.round((memorizedCount / sliceWords.length) * 100);
-
-  const numCircle = document.getElementById('modal-lesson-number-circle');
-  const badgeVal = document.getElementById('modal-lesson-badge-val');
-  const titleVal = document.getElementById('modal-lesson-title-val');
-  const descVal = document.getElementById('modal-lesson-desc-val');
-  const progText = document.getElementById('modal-lesson-progress-text');
-  const progFill = document.getElementById('modal-lesson-progress-fill');
-  const vocabCount = document.getElementById('modal-lesson-vocab-count');
-  const btnVocab = document.getElementById('modal-btn-mod-vocab');
-
-  if (numCircle) numCircle.textContent = lessonKey.toString().replace(/\D/g, '') || lessonKey;
-  if (badgeVal) badgeVal.textContent = `HSK ${currentLvl === '7-9' ? '7-8-9' : currentLvl} (${activeHskVersion}) • Bài ${lessonKey}`;
-  if (titleVal) titleVal.textContent = title;
-  if (descVal) descVal.textContent = desc;
-  if (progText) progText.textContent = `${memorizedCount}/${sliceWords.length} từ (${pct}%)`;
-  if (progFill) progFill.style.width = `${pct}%`;
-  if (vocabCount) vocabCount.textContent = `${sliceWords.length} từ`;
-
-  // Render grammar preview in lesson detail modal
-  const numKey = parseInt(String(lessonKey).replace(/\D/g, ''), 10) || 1;
-  const currentLvlStr = String(currentLvl);
-  const grammarList = currentLvlStr === '2' ? (HSK2_STRUCTURED_GRAMMAR || []) : (HSK1_STRUCTURED_GRAMMAR || []);
-  const grammarLesson = ((currentLvlStr === '1' || currentLvlStr === '2') && (activeHskVersion === '3.0' || !activeHskVersion)) ? grammarList.find(l => l.lessonId === numKey) : null;
-  const grammarPreviewBox = document.getElementById('modal-lesson-grammar-preview-box');
-  const grammarPreviewList = document.getElementById('modal-lesson-grammar-preview-list');
-  const grammarPreviewTitle = document.getElementById('modal-lesson-grammar-preview-title');
-  if (grammarPreviewBox && grammarPreviewList) {
-    if (grammarLesson && grammarLesson.grammarPoints && grammarLesson.grammarPoints.length > 0) {
-      grammarPreviewBox.style.display = 'block';
-      if (grammarPreviewTitle) {
-        grammarPreviewTitle.textContent = `Trọng tâm Ngữ pháp bài này (${grammarLesson.grammarPoints.length} điểm):`;
-      }
-      grammarPreviewList.innerHTML = grammarLesson.grammarPoints.map((p, idx) => {
-        let fText = '';
-        if (p.formula) {
-          const cleanF = p.formula.replace(/^(Công thức chung|Cấu trúc|Công thức)\s*[:\-]?\s*/i, '').trim();
-          const firstLine = cleanF.split('\n').filter(l => l.trim().length > 0)[0] || '';
-          if (firstLine) {
-            fText = `<span style="color: #38bdf8; font-size: 0.82rem; margin-left: 6px; font-weight: 600;">[ ${firstLine} ]</span>`;
-          }
-        }
-        return `
-          <li style="margin-bottom: 6px; line-height: 1.4;">
-            <strong style="color: #ffffff;">${idx + 1}. ${p.title}</strong>
-            ${fText}
-          </li>
-        `;
-      }).join('');
-    } else {
-      grammarPreviewBox.style.display = 'none';
-    }
-  }
-
-  if (btnVocab) {
-    btnVocab.onclick = function () {
-      const modalEl = document.getElementById('lesson-detail-popup-modal');
-      if (modalEl) modalEl.style.display = 'none';
-      startLessonStudy({ id: lessonKey, title }, sliceWords);
-    };
-  }
-
-  const btnGrammar = document.getElementById('modal-btn-mod-grammar');
-  if (btnGrammar) {
-    const grammarBadge = btnGrammar.querySelector('small');
-    const ptCount = (grammarLesson && grammarLesson.grammarPoints) ? grammarLesson.grammarPoints.length : 0;
-    if (grammarBadge) {
-      grammarBadge.textContent = ptCount > 0 ? `${ptCount} điểm NP 📖` : 'Học Ngữ Pháp 📖';
-      grammarBadge.style.background = 'linear-gradient(135deg, #0284c7, #2563eb)';
-      grammarBadge.style.color = '#ffffff';
-    }
-    btnGrammar.onclick = function () {
-      const modalEl = document.getElementById('lesson-detail-popup-modal');
-      if (modalEl) modalEl.style.display = 'none';
-      window.openLessonGrammarStudy(lessonKey);
-    };
-  }
-
-  const btnText = document.getElementById('modal-btn-mod-text');
-  if (btnText) {
-    const textBadge = btnText.querySelector('small');
-    if (textBadge) {
-      textBadge.textContent = 'Hội thoại 📖';
-      textBadge.style.background = '#0284c7';
-      textBadge.style.color = '#ffffff';
-    }
-    btnText.onclick = function () {
-      const modalEl = document.getElementById('lesson-detail-popup-modal');
-      if (modalEl) modalEl.style.display = 'none';
-      window.openLessonTextStudy(lessonKey);
-    };
-  }
-
-  // Handle 'Ôn Tập' (Quiz Game) unlock logic based on 100% completion
-  const btnReview = document.getElementById('modal-btn-mod-review');
-  let reviewBadge = document.getElementById('modal-review-badge');
-  if (!reviewBadge && btnReview) {
-    reviewBadge = btnReview.querySelector('small');
-  }
-
-  if (pct === 100) {
-    if (reviewBadge) {
-      reviewBadge.textContent = 'Mở khóa Trắc nghiệm 🎮';
-      reviewBadge.style.background = '#10b981';
-      reviewBadge.style.color = '#ffffff';
-    }
-    if (btnReview) {
-      btnReview.style.opacity = '1';
-      btnReview.onclick = function (e) {
-        e.stopPropagation();
-        const modalEl = document.getElementById('lesson-detail-popup-modal');
-        if (modalEl) modalEl.style.display = 'none';
-        window.location.href = `/quiz-game.html?lesson=${lessonKey}&level=${currentLvl}&version=${activeHskVersion}`;
-      };
-    }
-  } else {
-    if (reviewBadge) {
-      reviewBadge.textContent = 'Cần 100%';
-      reviewBadge.style.background = 'rgba(0,0,0,0.25)';
-      reviewBadge.style.color = '#ffffff';
-    }
-    if (btnReview) {
-      btnReview.style.opacity = '0.85';
-      btnReview.onclick = function (e) {
-        e.stopPropagation();
-        showToast(`Bạn cần học đủ 100% từ vựng bài học này (hiện tại: ${pct}%) để mở khóa Ôn Tập Trắc Nghiệm!`, true);
-      };
-    }
-  }
-
-  const modal = document.getElementById('lesson-detail-popup-modal');
-  if (modal) {
-    modal.style.display = 'flex';
-  }
-};
-
   // Group vocabulary dynamically by their lessonId field
   const lessonGroups = {};
   levelVocabs.forEach(w => {
@@ -7067,8 +7124,9 @@ window.openLessonDetailModal = function (lessonKey) {
       const starKey = `quiz_stars_${activeHskVersion}_${activeLessonsLevel}_${lessonKey}`;
       const quizStars = parseInt(localStorage.getItem(starKey) || '0', 10);
 
-      // All lessons are unlocked by default as requested by user
-      let isUnlocked = true;
+      // Check if lesson is unlocked based on roadmap progression
+      const prevKey = idx > 0 ? uniqueLessonKeys[idx - 1] : null;
+      const isUnlocked = isRoadmapLessonUnlocked(activeHskVersion, activeLessonsLevel, lessonKey, uniqueLessonKeys);
 
       let isCurrentActive = false;
       if (isUnlocked && !isCompleted && !foundFirstActive) {
@@ -7099,13 +7157,11 @@ window.openLessonDetailModal = function (lessonKey) {
       const numOnly = lessonKey.toString().replace(/\D/g, '') || lessonKey;
       const clickAction = isUnlocked
         ? `window.openLessonDetailModal('${lessonKey}')`
-        : `showToast('Bạn cần thi Quiz Game và đạt ít nhất 1 Sao ở Bài ${prevKey} để mở khóa Bài ${lessonKey}!', true)`;
+        : `showToast('Bạn cần học hoàn thành hoặc đạt ít nhất 1 Sao ở Bài ${prevKey} để mở khóa Bài ${lessonKey}!', true)`;
 
       mapNodesHtml += `
         <div class="saga-path-node-item" style="position: relative; display: flex; flex-direction: column; align-items: center; margin: 28px 0; z-index: 5; ${posStyle}">
           
-
-
           <!-- Floating Gold Crown for 100% completed lesson -->
           ${isCompleted ? `
             <div style="position: absolute; top: -18px; font-size: 1.4rem; color: #fbbf24; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.6)); z-index: 10;">
@@ -7129,10 +7185,10 @@ window.openLessonDetailModal = function (lessonKey) {
           </div>
 
           <!-- Lesson Tag Card -->
-          <div class="saga-node-tag-card" onclick="${clickAction}" style="margin-top: 8px; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border: 1px solid rgba(255,255,255,0.2); border-radius: 14px; padding: 8px 16px; text-align: center; max-width: 220px; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2); transition: all 0.2s;">
-            <div class="saga-tag-title" style="font-weight: 800; font-size: 0.95rem; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--font-display);">${title}</div>
-            <div class="saga-tag-sub" style="font-size: 0.78rem; color: #94a3b8; margin-top: 2px; font-weight: 600;">
-              ${memorizedCount}/${wordsCount} từ ${isCompleted ? '• 🎉 Đã xong' : isUnlocked ? `• ${pct}%` : '• 🔒 Khóa'}
+          <div class="saga-node-tag-card ${!isUnlocked ? 'tag-locked' : ''}" onclick="${clickAction}" style="margin-top: 8px; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border: 1px solid ${!isUnlocked ? 'rgba(245, 158, 11, 0.3)' : 'rgba(255,255,255,0.2)'}; border-radius: 14px; padding: 8px 16px; text-align: center; max-width: 220px; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2); transition: all 0.2s; ${!isUnlocked ? 'opacity: 0.85;' : ''}">
+            <div class="saga-tag-title" style="font-weight: 800; font-size: 0.95rem; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--font-display);">${!isUnlocked ? '<i class="fa-solid fa-lock" style="font-size: 0.75rem; color: #fbbf24; margin-right: 4px;"></i>' : ''}${title}</div>
+            <div class="saga-tag-sub" style="font-size: 0.78rem; color: ${!isUnlocked ? '#fbbf24' : '#94a3b8'}; margin-top: 2px; font-weight: 600;">
+              ${!isUnlocked ? '🔒 Bài học bị khóa' : `${memorizedCount}/${wordsCount} từ ${isCompleted ? '• 🎉 Đã xong' : `• ${pct}%`}`}
             </div>
           </div>
 
@@ -7186,7 +7242,7 @@ window.openLessonDetailModal = function (lessonKey) {
             html.light-mode .saga-header-bar,
             html.light .saga-header-bar,
             body.light-mode .saga-header-bar {
-              background: rgba(255, 255, 255, 0.85) !important;
+              background: rgba(255, 255, 255, 0.88) !important;
               border: 1px solid rgba(255, 255, 255, 0.8) !important;
               box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
             }
@@ -7233,10 +7289,13 @@ window.openLessonDetailModal = function (lessonKey) {
   cardsHeaderHtml.innerHTML = viewSwitcherHtml;
   grid.appendChild(cardsHeaderHtml);
 
-  uniqueLessonKeys.forEach(lessonKey => {
+  uniqueLessonKeys.forEach((lessonKey, idx) => {
     const sliceWords = lessonGroups[lessonKey] || [];
     const wordsCount = sliceWords.length;
     if (wordsCount === 0) return;
+
+    const isUnlocked = isRoadmapLessonUnlocked(activeHskVersion, activeLessonsLevel, lessonKey, uniqueLessonKeys);
+    const prevKey = idx > 0 ? uniqueLessonKeys[idx - 1] : null;
 
     // Retrieve title and desc directly from the first word of the group
     const firstWord = sliceWords[0];
@@ -7245,26 +7304,38 @@ window.openLessonDetailModal = function (lessonKey) {
     const badgeLevelStr = activeLessonsLevel === '7-9' ? '7-8-9' : activeLessonsLevel;
 
     const card = document.createElement('div');
-    card.className = 'lesson-card glass-panel cartoon-lesson-card';
+    card.className = `lesson-card glass-panel cartoon-lesson-card ${!isUnlocked ? 'lesson-card-locked' : ''}`;
+    if (!isUnlocked) {
+      card.style.opacity = '0.85';
+      card.style.borderColor = 'rgba(245, 158, 11, 0.3)';
+    }
+
     card.innerHTML = `
       <div class="lesson-card-header">
-        <span class="lesson-badge hsk-badge-${Math.min(activeLessonsLevel === '7-9' ? 6 : Number(activeLessonsLevel), 6)}">HSK ${badgeLevelStr} (${activeHskVersion}) • ${firstWord.category || ('Bài ' + lessonKey)}</span>
-        <h3 class="lesson-title" style="margin-top: 8px; font-family: var(--font-display); font-size: 1.3rem;">${title}</h3>
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+          <span class="lesson-badge hsk-badge-${Math.min(activeLessonsLevel === '7-9' ? 6 : Number(activeLessonsLevel), 6)}">HSK ${badgeLevelStr} (${activeHskVersion}) • ${firstWord.category || ('Bài ' + lessonKey)}</span>
+          ${!isUnlocked ? `
+            <span style="font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 99px; background: rgba(245, 158, 11, 0.18); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35); display: inline-flex; align-items: center; gap: 4px;">
+              <i class="fa-solid fa-lock" style="font-size: 0.65rem;"></i> Khóa
+            </span>
+          ` : ''}
+        </div>
+        <h3 class="lesson-title" style="margin-top: 8px; font-family: var(--font-display); font-size: 1.3rem;">${!isUnlocked ? '<i class="fa-solid fa-lock" style="font-size: 0.9rem; color: #fbbf24; margin-right: 6px;"></i>' : ''}${title}</h3>
         <p class="lesson-desc">${desc}</p>
       </div>
       <div class="lesson-modules-grid">
-        <button class="lesson-mod-btn mod-vocab" onclick="event.stopPropagation(); window.openLessonVocabStudy('${lessonKey}')">
-          <i class="fa-solid fa-book-bookmark"></i>
+        <button class="lesson-mod-btn mod-vocab" onclick="event.stopPropagation(); ${isUnlocked ? `window.openLessonVocabStudy('${lessonKey}')` : `showToast('Bạn cần hoàn thành Bài ${prevKey} để mở khóa!', true)`}">
+          <i class="fa-solid ${isUnlocked ? 'fa-book-bookmark' : 'fa-lock'}"></i>
           <span>Từ Vựng</span>
           <small>${wordsCount} từ</small>
         </button>
-        <button class="lesson-mod-btn mod-grammar" style="position: relative;" onclick="event.stopPropagation(); window.openLessonGrammarStudy('${lessonKey}')">
-          <i class="fa-solid fa-spell-check"></i>
+        <button class="lesson-mod-btn mod-grammar" style="position: relative;" onclick="event.stopPropagation(); ${isUnlocked ? `window.openLessonGrammarStudy('${lessonKey}')` : `showToast('Bạn cần hoàn thành Bài ${prevKey} để mở khóa!', true)`}">
+          <i class="fa-solid ${isUnlocked ? 'fa-spell-check' : 'fa-lock'}"></i>
           <span>Ngữ Pháp</span>
           <small style="background: linear-gradient(135deg, #0284c7, #2563eb); color: #fff; padding: 1px 8px; border-radius: 99px; font-weight: 700;">Học Ngữ Pháp 📖</small>
         </button>
-        <button class="lesson-mod-btn mod-text" onclick="event.stopPropagation(); window.openLessonTextStudy('${lessonKey}')">
-          <i class="fa-solid fa-comments"></i>
+        <button class="lesson-mod-btn mod-text" onclick="event.stopPropagation(); ${isUnlocked ? `window.openLessonTextStudy('${lessonKey}')` : `showToast('Bạn cần hoàn thành Bài ${prevKey} để mở khóa!', true)`}">
+          <i class="fa-solid ${isUnlocked ? 'fa-comments' : 'fa-lock'}"></i>
           <span>Bài Khóa</span>
           <small style="background: #0284c7; color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">Hội thoại 📖</small>
         </button>
@@ -7277,6 +7348,10 @@ window.openLessonDetailModal = function (lessonKey) {
     `;
 
     card.addEventListener('click', () => {
+      if (!isUnlocked) {
+        showToast(`🔒 Bạn cần hoàn thành Bài ${prevKey} để mở khóa Bài ${lessonKey}!`, true);
+        return;
+      }
       startLessonStudy({ id: lessonKey, title }, sliceWords);
     });
 
@@ -10878,14 +10953,21 @@ function renderCreateNbLevelPills() {
     ];
   }
 
-  container.innerHTML = levels.map(l => `
-    <button type="button" class="nb-picker-pill ${String(createNbLevel) === String(l.id) ? 'active' : ''}" onclick="window.setCreateNbLevel('${l.id}')">
-      ${l.name}
-    </button>
-  `).join('');
+  container.innerHTML = levels.map(l => {
+    const isUnlocked = (createNbVersion === 'premium') ? true : isLevelUnlocked(createNbVersion, l.id);
+    return `
+      <button type="button" class="nb-picker-pill ${String(createNbLevel) === String(l.id) ? 'active' : ''} ${!isUnlocked ? 'pill-locked' : ''}" onclick="window.setCreateNbLevel('${l.id}', ${!isUnlocked})">
+        ${!isUnlocked ? '<i class="fa-solid fa-lock" style="font-size: 0.72rem; color: #fbbf24; margin-right: 4px;"></i>' : ''}${l.name}${!isUnlocked ? ' (Khóa)' : ''}
+      </button>
+    `;
+  }).join('');
 }
 
-window.setCreateNbLevel = function(lvl) {
+window.setCreateNbLevel = function(lvl, isLocked = false) {
+  if (isLocked) {
+    showToast('🔒 Cấp độ này đang tạm khóa để hoàn thiện và chuẩn hóa giáo trình!', true);
+    return;
+  }
   createNbLevel = lvl;
   createNbLesson = 'all';
   renderCreateNbLevelPills();
@@ -10931,9 +11013,10 @@ function renderCreateNbLessonPills() {
 
   sortedLessonIds.forEach(id => {
     const lessonWords = baseWords.filter(w => String(w.lessonId || 1) === String(id));
+    const isUnlocked = isRoadmapLessonUnlocked(createNbVersion, createNbLevel, id, sortedLessonIds);
     html += `
-      <button type="button" class="nb-picker-pill ${String(createNbLesson) === String(id) ? 'active' : ''}" onclick="window.setCreateNbLesson('${id}')">
-        ${uniqueLessons[id]} (${lessonWords.length})
+      <button type="button" class="nb-picker-pill ${String(createNbLesson) === String(id) ? 'active' : ''} ${!isUnlocked ? 'pill-locked' : ''}" onclick="window.setCreateNbLesson('${id}', ${!isUnlocked})">
+        ${!isUnlocked ? '<i class="fa-solid fa-lock" style="font-size: 0.72rem; color: #fbbf24; margin-right: 4px;"></i>' : ''}${uniqueLessons[id]} (${lessonWords.length})${!isUnlocked ? ' (Khóa)' : ''}
       </button>
     `;
   });
@@ -10941,7 +11024,11 @@ function renderCreateNbLessonPills() {
   pillsWrap.innerHTML = html;
 }
 
-window.setCreateNbLesson = function(lessonId) {
+window.setCreateNbLesson = function(lessonId, isLocked = false) {
+  if (isLocked) {
+    showToast('🔒 Bài học này đang bị khóa trong Lộ trình! Vui lòng hoàn thành các bài trước để mở khóa.', true);
+    return;
+  }
   createNbLesson = lessonId;
   renderCreateNbLessonPills();
   window.renderCreateNbWordsList();
@@ -11278,6 +11365,21 @@ function showSubdecksView() {
 }
 
 function showNotebookDashboardView(notebookId, preserveLessons = false) {
+  // Security guard for locked levels
+  if (notebookId.startsWith('hsk:')) {
+    const lvl = notebookId.substring(4);
+    if (!isLevelUnlocked(activeHskVersion, lvl)) {
+      showToast(`🔒 HSK Cấp ${lvl} đang tạm khóa để hoàn thiện và chuẩn hóa giáo trình!`, true);
+      return;
+    }
+  } else if (notebookId.startsWith('yct:')) {
+    const lvl = notebookId.substring(4);
+    if (!isLevelUnlocked('yct', lvl)) {
+      showToast(`🔒 YCT Cấp ${lvl} đang tạm khóa để hoàn thiện giáo trình!`, true);
+      return;
+    }
+  }
+
   const selectionView = document.getElementById('deck-selection-view');
   const topicsView = document.getElementById('flashcard-topics-view');
   const subdecksView = document.getElementById('flashcard-subdecks-view');
@@ -11335,7 +11437,16 @@ function getNotebookWords(notebookId) {
     return vocabList.filter(w => w.isCustom && w.category === listName);
   } else if (notebookId.startsWith('hsk:')) {
     const lvl = notebookId.substring(4);
-    return vocabList.filter(w => !w.isCustom && matchLevel(w.level, lvl) && (w.hskVersion || '3.0') === activeHskVersion);
+    const lvlWords = vocabList.filter(w => !w.isCustom && matchLevel(w.level, lvl) && (w.hskVersion || '3.0') === activeHskVersion);
+    const uniqueLessons = {};
+    lvlWords.forEach(w => {
+      if (w.lessonId) uniqueLessons[w.lessonId] = true;
+    });
+    const sortedLessonIds = Object.keys(uniqueLessons).map(Number).sort((a, b) => a - b);
+    return lvlWords.filter(w => {
+      if (!w.lessonId) return true;
+      return isRoadmapLessonUnlocked(activeHskVersion, lvl, w.lessonId, sortedLessonIds);
+    });
   } else if (notebookId.startsWith('premium:')) {
     const category = notebookId.substring(8);
     let catName = '';
@@ -11391,17 +11502,20 @@ function renderSubdecksList() {
     if (activeHskVersion === 'yct') {
       for (let lvl = 1; lvl <= 4; lvl++) {
         const lvlWords = vocabList.filter(w => (w.curriculum === 'yct' || w.hskVersion === 'yct') && matchLevel(w.level, lvl));
-        grid.appendChild(createSubdeckCard(`YCT Cấp ${lvl}`, `yct:${lvl}`, lvlWords.length, 'fa-child', 'var(--accent-teal)'));
+        const isUnlocked = isLevelUnlocked('yct', lvl);
+        grid.appendChild(createSubdeckCard(`YCT Cấp ${lvl}`, `yct:${lvl}`, lvlWords.length, 'fa-child', 'var(--accent-teal)', !isUnlocked));
       }
     } else {
       const maxLvl = 6;
       for (let lvl = 1; lvl <= maxLvl; lvl++) {
         const lvlWords = vocabList.filter(w => !w.isCustom && matchLevel(w.level, lvl) && (w.hskVersion || '3.0') === activeHskVersion);
-        grid.appendChild(createSubdeckCard(`HSK Cấp ${lvl}`, `hsk:${lvl}`, lvlWords.length, 'fa-graduation-cap', 'var(--success)'));
+        const isUnlocked = isLevelUnlocked(activeHskVersion, lvl);
+        grid.appendChild(createSubdeckCard(`HSK Cấp ${lvl}`, `hsk:${lvl}`, lvlWords.length, 'fa-graduation-cap', 'var(--success)', !isUnlocked));
       }
       if (activeHskVersion === '3.0') {
         const hsk79Words = vocabList.filter(w => !w.isCustom && matchLevel(w.level, '7-9') && (w.hskVersion || '3.0') === activeHskVersion);
-        grid.appendChild(createSubdeckCard(`HSK Cấp 7-8-9 (Cao cấp)`, `hsk:7-9`, hsk79Words.length, 'fa-award', '#a855f7'));
+        const is79Unlocked = isLevelUnlocked('3.0', '7-9');
+        grid.appendChild(createSubdeckCard(`HSK Cấp 7-8-9 (Cao cấp)`, `hsk:7-9`, hsk79Words.length, 'fa-award', '#a855f7', !is79Unlocked));
       }
     }
   }
@@ -11414,35 +11528,47 @@ function renderSubdecksList() {
     ];
     topics.forEach(t => {
       const words = vocabList.filter(w => w.level === 'premium' && w.category === t.catName);
-      grid.appendChild(createSubdeckCard(t.name, t.id, words.length, t.icon, t.color));
+      grid.appendChild(createSubdeckCard(t.name, t.id, words.length, t.icon, t.color, false));
     });
   }
 }
 
-function createSubdeckCard(name, id, count, icon, color) {
+function createSubdeckCard(name, id, count, icon, color, isLocked = false) {
   const card = document.createElement('div');
-  card.className = 'topic-card glass-panel';
+  card.className = `topic-card glass-panel ${isLocked ? 'subdeck-card-locked' : ''}`;
   card.style.padding = '20px';
-  card.style.cursor = 'pointer';
+  card.style.cursor = isLocked ? 'not-allowed' : 'pointer';
   card.style.borderRadius = 'var(--radius-md)';
-  card.style.border = '1px solid var(--border-glass)';
+  card.style.border = isLocked ? '1px solid rgba(245, 158, 11, 0.35)' : '1px solid var(--border-glass)';
   card.style.transition = 'all 0.3s ease';
   card.style.display = 'flex';
   card.style.alignItems = 'center';
   card.style.gap = '16px';
+  card.style.position = 'relative';
 
   card.innerHTML = `
-    <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.03); color: ${color}; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; border: 1px solid var(--border-glass);">
-      <i class="fa-solid ${icon}"></i>
+    <div style="width: 48px; height: 48px; border-radius: 50%; background: ${isLocked ? 'rgba(245, 158, 11, 0.12)' : 'rgba(255,255,255,0.03)'}; color: ${isLocked ? '#fbbf24' : color}; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; border: 1px solid ${isLocked ? 'rgba(245, 158, 11, 0.3)' : 'var(--border-glass)'}; flex-shrink: 0;">
+      <i class="fa-solid ${isLocked ? 'fa-lock' : icon}"></i>
     </div>
     <div style="flex: 1; text-align: left;">
-      <h4 style="margin: 0; font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: var(--text-primary);">${name}</h4>
-      <span style="font-size: 0.78rem; color: var(--text-secondary);">${count} từ vựng</span>
+      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+        <h4 style="margin: 0; font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: ${isLocked ? '#cbd5e1' : 'var(--text-primary)'};">${name}</h4>
+        ${isLocked ? `
+          <span style="font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 99px; background: rgba(245, 158, 11, 0.18); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35); display: inline-flex; align-items: center; gap: 4px;">
+            <i class="fa-solid fa-lock" style="font-size: 0.65rem;"></i> Sắp ra mắt
+          </span>
+        ` : ''}
+      </div>
+      <span style="font-size: 0.78rem; color: var(--text-secondary);">${isLocked ? 'Đang hoàn thiện giáo trình' : `${count} từ vựng`}</span>
     </div>
-    <i class="fa-solid fa-chevron-right" style="color: var(--text-muted); font-size: 0.85rem;"></i>
+    <i class="fa-solid ${isLocked ? 'fa-lock' : 'fa-chevron-right'}" style="color: ${isLocked ? '#fbbf24' : 'var(--text-muted)'}; font-size: 0.85rem;"></i>
   `;
 
   card.addEventListener('click', () => {
+    if (isLocked) {
+      showToast(`🔒 ${name} đang được hoàn thiện và chuẩn hóa giáo trình, sẽ mở khóa sớm nhé!`, true);
+      return;
+    }
     showNotebookDashboardView(id);
   });
   return card;
@@ -11521,9 +11647,12 @@ function openNotebookDashboard(notebookId) {
       if (lessonsList) {
         lessonsList.innerHTML = '';
 
+        const lvl = notebookId.substring(4);
+        const allLvlWords = vocabList.filter(w => !w.isCustom && matchLevel(w.level, lvl) && (w.hskVersion || '3.0') === activeHskVersion);
+
         // Find unique lessons
         const uniqueLessons = {};
-        baseWords.forEach(w => {
+        allLvlWords.forEach(w => {
           if (w.lessonId) {
             uniqueLessons[w.lessonId] = w.lessonTitle || `Bài ${w.lessonId}`;
           }
@@ -11534,20 +11663,27 @@ function openNotebookDashboard(notebookId) {
         // Add "All" button
         const allBtn = document.createElement('button');
         allBtn.className = `nb-lesson-pill ${selectedDashboardLessons.length === 0 ? 'active' : ''}`;
-        allBtn.textContent = 'Tất cả bài học';
+        allBtn.textContent = 'Tất cả bài đã mở';
         allBtn.addEventListener('click', () => {
           selectedDashboardLessons = [];
           openNotebookDashboard(notebookId); // Re-render
         });
         lessonsList.appendChild(allBtn);
 
-        // Add individual lesson buttons
+        // Add individual lesson buttons with lock state
         sortedLessonIds.forEach(lId => {
           const btn = document.createElement('button');
           const isSelected = selectedDashboardLessons.includes(lId);
-          btn.className = `nb-lesson-pill ${isSelected ? 'active' : ''}`;
-          btn.textContent = uniqueLessons[lId];
+          const isUnlocked = isRoadmapLessonUnlocked(activeHskVersion, lvl, lId, sortedLessonIds);
+          btn.className = `nb-lesson-pill ${isSelected ? 'active' : ''} ${!isUnlocked ? 'pill-locked' : ''}`;
+          btn.innerHTML = `${!isUnlocked ? '<i class="fa-solid fa-lock" style="font-size: 0.72rem; color: #fbbf24; margin-right: 4px;"></i>' : ''}${uniqueLessons[lId]}${!isUnlocked ? ' (Khóa)' : ''}`;
           btn.addEventListener('click', () => {
+            if (!isUnlocked) {
+              const idx = sortedLessonIds.findIndex(k => String(k) === String(lId));
+              const prevKey = idx > 0 ? sortedLessonIds[idx - 1] : 1;
+              showToast(`🔒 Bài ${lId} đang bị khóa trong Lộ trình! Vui lòng hoàn thành Bài ${prevKey} để mở khóa nhé.`, true);
+              return;
+            }
             if (isSelected) {
               selectedDashboardLessons = selectedDashboardLessons.filter(id => id !== lId);
             } else {

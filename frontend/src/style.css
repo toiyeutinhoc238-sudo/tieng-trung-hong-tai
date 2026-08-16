@@ -9369,4 +9369,34 @@ html.light-mode .custom-nb-hub-card {
   color: #0f172a !important;
 }
 
+/* Locked Subdeck Cards & Pills */
+.subdeck-card-locked {
+  cursor: not-allowed !important;
+  opacity: 0.85 !important;
+  border-color: rgba(245, 158, 11, 0.35) !important;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.04), rgba(15, 23, 42, 0.6)) !important;
+}
+
+.subdeck-card-locked:hover {
+  transform: none !important;
+  border-color: rgba(245, 158, 11, 0.55) !important;
+  box-shadow: 0 4px 18px rgba(245, 158, 11, 0.2) !important;
+}
+
+.nb-picker-pill.pill-locked {
+  opacity: 0.75;
+  border-color: rgba(245, 158, 11, 0.25);
+}
+
+.nb-picker-pill.pill-locked:hover {
+  border-color: rgba(245, 158, 11, 0.4);
+  color: #fbbf24;
+}
+
+html.light-mode .subdeck-card-locked {
+  background: linear-gradient(135deg, rgba(254, 243, 199, 0.5), rgba(255, 255, 255, 0.9)) !important;
+  border-color: rgba(245, 158, 11, 0.4) !important;
+}
+
+
 
