@@ -363,6 +363,19 @@
         </li>
       </ul>
 
+      <!-- DANH MỤC 5: QUẢN TRỊ VIÊN (Tự động hiển thị khi là Admin / Giáo viên) -->
+      <div id="sidebar-admin-section" style="display: none; margin-top: 12px;">
+        <div class="sidebar-section-label" style="color: #f43f5e; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-crown" style="font-size: 0.75rem;"></i> Quản Trị Hệ Thống
+        </div>
+        <ul class="sidebar-menu">
+          <li class="sidebar-item" id="sidebar-admin-btn" onclick="window.openAdminManagementModal()" style="cursor: pointer; background: rgba(244, 63, 94, 0.08); border: 1px solid rgba(244, 63, 94, 0.25); border-radius: 10px;">
+            <i class="fa-solid fa-users-gear" style="color: #f43f5e;"></i> <span>Quản lý Học viên</span>
+            <span style="font-size:0.68rem; background:linear-gradient(135deg, #f43f5e, #e11d48); color:white; padding:2px 6px; border-radius:6px; font-weight:800; margin-left:auto; white-space:nowrap;">Admin</span>
+          </li>
+        </ul>
+      </div>
+
     </div>
 
     <div class="sidebar-footer">
@@ -3512,6 +3525,134 @@
       <!-- Discussions Stream Feed -->
       <div id="disc-posts-stream" class="custom-scrollbar" style="flex: 1; overflow-y: auto; padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; min-height: 300px;">
         <!-- Dynamic posts rendered here by JS -->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================== -->
+  <!-- ADMIN & LEARNER INTELLIGENCE MANAGEMENT MODAL -->
+  <!-- ========================================================================== -->
+  <div id="admin-management-modal" style="position: fixed; inset: 0; background: rgba(10, 15, 29, 0.85); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); display: none; z-index: 99999; align-items: center; justify-content: center; padding: 16px;">
+    <div style="width: 100%; max-width: 1100px; max-height: 92vh; background: linear-gradient(180deg, #131d35 0%, #0d1527 100%); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: 20px; box-shadow: 0 25px 60px -15px rgba(0,0,0,0.85), 0 0 40px rgba(244,63,94,0.15); display: flex; flex-direction: column; overflow: hidden; animation: zoomIn 0.25s ease-out;">
+      
+      <!-- Modal Header -->
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 18px 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); background: rgba(15, 23, 42, 0.6);">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, rgba(244,63,94,0.2), rgba(225,29,72,0.1)); display: flex; align-items: center; justify-content: center; color: #f43f5e; font-size: 1.3rem; border: 1px solid rgba(244,63,94,0.35);">
+            <i class="fa-solid fa-crown"></i>
+          </div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <h2 style="font-size: 1.2rem; font-weight: 800; color: #ffffff; margin: 0; font-family: var(--font-display);">Trung Tâm Quản Trị &amp; Người Học</h2>
+              <span id="admin-my-role-badge" style="font-size: 0.7rem; font-weight: 800; padding: 2px 8px; border-radius: 6px; background: linear-gradient(135deg, #f43f5e, #e11d48); color: white;">Super Admin</span>
+            </div>
+            <p style="font-size: 0.8rem; color: #94a3b8; margin: 2px 0 0 0;">Theo dõi trực tuyến (Online/Offline), điểm số, tiến độ học tập &amp; phân quyền quản trị viên</p>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <button type="button" onclick="window.fetchAdminUsersList(true)" class="btn btn-icon-only" title="Làm mới dữ liệu" style="width: 36px; height: 36px; border-radius: 10px; background: rgba(255,255,255,0.06); color: #38bdf8; border: 1px solid rgba(255,255,255,0.1); cursor: pointer;">
+            <i class="fa-solid fa-rotate"></i>
+          </button>
+          <button type="button" onclick="window.closeAdminManagementModal()" class="btn btn-icon-only" title="Đóng" style="width: 36px; height: 36px; border-radius: 10px; background: rgba(255,255,255,0.06); color: #94a3b8; border: 1px solid rgba(255,255,255,0.1); cursor: pointer;">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Top KPI Stats Row -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; padding: 18px 24px; background: rgba(10, 15, 29, 0.4); border-bottom: 1px solid rgba(255, 255, 255, 0.06);">
+        <!-- KPI 1 -->
+        <div style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 12px 16px; display: flex; align-items: center; gap: 14px;">
+          <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(56, 189, 248, 0.15); color: #38bdf8; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
+            <i class="fa-solid fa-users"></i>
+          </div>
+          <div>
+            <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">Tổng Học Viên</div>
+            <div id="admin-kpi-total-users" style="font-size: 1.25rem; font-weight: 800; color: #ffffff; line-height: 1.2;">0</div>
+          </div>
+        </div>
+
+        <!-- KPI 2 -->
+        <div style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(34, 197, 94, 0.2); border-radius: 14px; padding: 12px 16px; display: flex; align-items: center; gap: 14px;">
+          <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(34, 197, 94, 0.15); color: #22c55e; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; position: relative;">
+            <i class="fa-solid fa-signal"></i>
+            <span style="position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 8px #22c55e;"></span>
+          </div>
+          <div>
+            <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">Đang Trực Tuyến</div>
+            <div id="admin-kpi-online-users" style="font-size: 1.25rem; font-weight: 800; color: #22c55e; line-height: 1.2;">0</div>
+          </div>
+        </div>
+
+        <!-- KPI 3 -->
+        <div style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(244, 63, 94, 0.2); border-radius: 14px; padding: 12px 16px; display: flex; align-items: center; gap: 14px;">
+          <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(244, 63, 94, 0.15); color: #f43f5e; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <div>
+            <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">Quản Trị / Giáo Viên</div>
+            <div id="admin-kpi-admin-count" style="font-size: 1.25rem; font-weight: 800; color: #f43f5e; line-height: 1.2;">0</div>
+          </div>
+        </div>
+
+        <!-- KPI 4 -->
+        <div style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 14px; padding: 12px 16px; display: flex; align-items: center; gap: 14px;">
+          <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(245, 158, 11, 0.15); color: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
+            <i class="fa-solid fa-clock"></i>
+          </div>
+          <div>
+            <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">Tổng Giờ Học Tập</div>
+            <div id="admin-kpi-total-hours" style="font-size: 1.25rem; font-weight: 800; color: #f59e0b; line-height: 1.2;">0h</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Role Grant Box (Only visible for Super Admins) -->
+      <div id="admin-super-grant-container" style="display: none; padding: 14px 24px; background: rgba(244, 63, 94, 0.05); border-bottom: 1px dashed rgba(244, 63, 94, 0.2);">
+        <form onsubmit="window.handleGrantRoleSubmit(event)" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <span style="font-size: 0.85rem; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-user-plus" style="color: #f43f5e;"></i> Cấp quyền nhanh:
+          </span>
+          <input type="email" id="admin-grant-email-input" required placeholder="Nhập địa chỉ email người học (vd: hocvien@gmail.com)..." style="flex: 1; min-width: 250px; padding: 7px 12px; font-size: 0.85rem; border-radius: 8px; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255,255,255,0.15); color: #ffffff; outline: none;">
+          <select id="admin-grant-role-select" style="padding: 7px 12px; font-size: 0.85rem; border-radius: 8px; background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255,255,255,0.15); color: #ffffff; outline: none; cursor: pointer;">
+            <option value="teacher">🛡️ Giáo viên</option>
+            <option value="admin">👑 Quản trị viên (Admin)</option>
+          </select>
+          <button type="submit" class="btn btn-primary" style="padding: 7px 16px; font-size: 0.85rem; font-weight: 700; border-radius: 8px; background: linear-gradient(135deg, #f43f5e, #e11d48); border: none; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-check"></i> Cấp Quyền Ngay
+          </button>
+        </form>
+      </div>
+
+      <!-- Filter & Search Toolbar -->
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); background: rgba(15, 23, 42, 0.3); flex-wrap: wrap; gap: 12px;">
+        <!-- Filter Tabs -->
+        <div id="admin-filter-tabs-container" style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button type="button" class="disc-filter-pill active" data-admin-filter="all" onclick="window.filterAdminUsers('all')">
+            Tất cả (<span id="admin-tab-count-all">0</span>)
+          </button>
+          <button type="button" class="disc-filter-pill" data-admin-filter="online" onclick="window.filterAdminUsers('online')">
+            🟢 Đang Online (<span id="admin-tab-count-online">0</span>)
+          </button>
+          <button type="button" class="disc-filter-pill" data-admin-filter="admins" onclick="window.filterAdminUsers('admins')">
+            🛡️ Admin &amp; Giáo viên (<span id="admin-tab-count-admins">0</span>)
+          </button>
+          <button type="button" class="disc-filter-pill" data-admin-filter="users" onclick="window.filterAdminUsers('users')">
+            🎓 Học viên (<span id="admin-tab-count-users">0</span>)
+          </button>
+        </div>
+
+        <!-- Search input -->
+        <div style="position: relative; min-width: 240px;">
+          <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 0.8rem;"></i>
+          <input type="text" id="admin-user-search-input" placeholder="Tìm kiếm tên, email học viên..." oninput="window.handleAdminUserSearch(this.value)" style="width: 100%; padding: 6px 12px 6px 32px; font-size: 0.82rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #ffffff; outline: none;">
+        </div>
+      </div>
+
+      <!-- Users Table Container -->
+      <div id="admin-users-table-container" class="custom-scrollbar" style="flex: 1; overflow-y: auto; padding: 16px 24px; min-height: 320px;">
+        <!-- Rendered by JS -->
       </div>
 
     </div>

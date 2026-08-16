@@ -3906,6 +3906,13 @@ function renderUserProfile() {
 
     if (navChatHistoryLi) navChatHistoryLi.style.display = 'block';
 
+    // Auto-reveal admin panel in sidebar if current user is admin/teacher
+    const adminSection = document.getElementById('sidebar-admin-section');
+    const isAdminUser = currentUser && (currentUser.isAdmin || currentUser.isSuperAdmin || isUserAdmin(currentUser.email));
+    if (adminSection) {
+      adminSection.style.display = isAdminUser ? 'block' : 'none';
+    }
+
     if (typeof window.updateChatbotOnLogin === 'function') {
       window.updateChatbotOnLogin();
     }
@@ -3914,6 +3921,9 @@ function renderUserProfile() {
     authContainer.classList.add('logged-out');
 
     if (navChatHistoryLi) navChatHistoryLi.style.display = 'none';
+
+    const adminSection = document.getElementById('sidebar-admin-section');
+    if (adminSection) adminSection.style.display = 'none';
   }
 
   // Refresh exam grid with current user's scores if papers screen is open
@@ -13689,6 +13699,356 @@ window.handleDeleteDiscussion = async function (postId) {
   } catch (err) {
     console.error('Delete discussion error:', err);
     showToast('Lỗi khi xóa bài viết!', true);
+  }
+};
+
+// ==========================================================================
+// ADMIN & LEARNER INTELLIGENCE MANAGEMENT CLIENT MODULE
+// ==========================================================================
+let adminCachedUsersList = [];
+let currentAdminFilter = 'all';
+let currentAdminSearchQuery = '';
+let adminSyncInterval = null;
+
+function isSuperAdmin(email) {
+  if (!email) return false;
+  const em = email.toLowerCase().trim();
+  return em.includes('toiyeutinhoc238') || em.includes('phanphiphu');
+}
+
+window.openAdminManagementModal = function () {
+  const modal = document.getElementById('admin-management-modal');
+  if (!modal) return;
+
+  if (!currentUser || (!currentUser.isAdmin && !currentUser.isSuperAdmin && !isUserAdmin(currentUser.email))) {
+    showToast('Bạn không có quyền truy cập bảng quản trị viên!', true);
+    return;
+  }
+
+  const isSuper = !!currentUser.isSuperAdmin || isSuperAdmin(currentUser.email);
+  const badge = document.getElementById('admin-my-role-badge');
+  if (badge) {
+    badge.textContent = isSuper ? 'Super Admin (Toàn quyền)' : 'Giáo viên / Admin';
+  }
+
+  const superGrantBox = document.getElementById('admin-super-grant-container');
+  if (superGrantBox) {
+    superGrantBox.style.display = isSuper ? 'block' : 'none';
+  }
+
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  window.fetchAdminUsersList(true);
+
+  if (adminSyncInterval) clearInterval(adminSyncInterval);
+  adminSyncInterval = setInterval(() => {
+    if (modal.style.display !== 'none') {
+      window.fetchAdminUsersList(false);
+    }
+  }, 10000);
+};
+
+window.closeAdminManagementModal = function () {
+  const modal = document.getElementById('admin-management-modal');
+  if (modal) {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+  if (adminSyncInterval) {
+    clearInterval(adminSyncInterval);
+    adminSyncInterval = null;
+  }
+};
+
+// Global click listener to close admin modal on outside click
+document.addEventListener('click', (e) => {
+  const modal = document.getElementById('admin-management-modal');
+  if (modal && e.target === modal) {
+    window.closeAdminManagementModal();
+  }
+});
+
+window.fetchAdminUsersList = async function (showLoading) {
+  const container = document.getElementById('admin-users-table-container');
+  if (!container) return;
+
+  if (showLoading && adminCachedUsersList.length === 0) {
+    container.innerHTML = `
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px; color: #94a3b8; gap: 12px;">
+        <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; color: #f43f5e;"></i>
+        <span>Đang nạp dữ liệu toàn bộ học viên & phân quyền...</span>
+      </div>
+    `;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/admin/users`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+      credentials: 'include'
+    });
+
+    if (!res.ok) throw new Error('Không thể tải danh sách quản trị');
+    const data = await res.json();
+    if (data.success && Array.isArray(data.users)) {
+      adminCachedUsersList = data.users;
+
+      // Update KPI counters
+      const totalKpi = document.getElementById('admin-kpi-total-users');
+      const onlineKpi = document.getElementById('admin-kpi-online-users');
+      const adminKpi = document.getElementById('admin-kpi-admin-count');
+      const hoursKpi = document.getElementById('admin-kpi-total-hours');
+
+      if (totalKpi) totalKpi.textContent = data.totalUsers || adminCachedUsersList.length;
+      if (onlineKpi) onlineKpi.textContent = data.onlineCount || 0;
+      if (adminKpi) adminKpi.textContent = data.adminCount || 0;
+      if (hoursKpi) hoursKpi.textContent = `${data.totalStudyTimeHours || 0}h`;
+
+      // Update tab counts
+      const countAll = document.getElementById('admin-tab-count-all');
+      const countOnline = document.getElementById('admin-tab-count-online');
+      const countAdmins = document.getElementById('admin-tab-count-admins');
+      const countUsers = document.getElementById('admin-tab-count-users');
+
+      if (countAll) countAll.textContent = adminCachedUsersList.length;
+      if (countOnline) countOnline.textContent = adminCachedUsersList.filter(u => u.isOnline).length;
+      if (countAdmins) countAdmins.textContent = adminCachedUsersList.filter(u => u.isAdmin || u.isSuperAdmin).length;
+      if (countUsers) countUsers.textContent = adminCachedUsersList.filter(u => !u.isAdmin && !u.isSuperAdmin).length;
+
+      window.renderAdminUsersTable();
+    }
+  } catch (err) {
+    console.error('Fetch admin users error:', err);
+    if (showLoading) {
+      container.innerHTML = `
+        <div style="text-align: center; padding: 36px; color: #94a3b8;">
+          <i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b; font-size: 1.5rem; margin-bottom: 8px;"></i>
+          <p>Không thể kết nối đến máy chủ quản trị. Vui lòng kiểm tra quyền hạn tài khoản.</p>
+        </div>
+      `;
+    }
+  }
+};
+
+window.filterAdminUsers = function (filterKey) {
+  currentAdminFilter = filterKey;
+  document.querySelectorAll('#admin-filter-tabs-container .disc-filter-pill').forEach(btn => {
+    if (btn.getAttribute('data-admin-filter') === filterKey) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+  window.renderAdminUsersTable();
+};
+
+let adminSearchDebounce = null;
+window.handleAdminUserSearch = function (query) {
+  clearTimeout(adminSearchDebounce);
+  adminSearchDebounce = setTimeout(() => {
+    currentAdminSearchQuery = query.trim().toLowerCase();
+    window.renderAdminUsersTable();
+  }, 150);
+};
+
+window.renderAdminUsersTable = function () {
+  const container = document.getElementById('admin-users-table-container');
+  if (!container) return;
+
+  let filtered = [...adminCachedUsersList];
+
+  if (currentAdminFilter === 'online') {
+    filtered = filtered.filter(u => u.isOnline);
+  } else if (currentAdminFilter === 'admins') {
+    filtered = filtered.filter(u => u.isAdmin || u.isSuperAdmin);
+  } else if (currentAdminFilter === 'users') {
+    filtered = filtered.filter(u => !u.isAdmin && !u.isSuperAdmin);
+  }
+
+  if (currentAdminSearchQuery) {
+    filtered = filtered.filter(u =>
+      (u.name && u.name.toLowerCase().includes(currentAdminSearchQuery)) ||
+      (u.email && u.email.toLowerCase().includes(currentAdminSearchQuery))
+    );
+  }
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 48px; color: #94a3b8;">
+        <i class="fa-solid fa-user-slash" style="font-size: 2rem; margin-bottom: 10px; color: #64748b;"></i>
+        <p style="margin: 0; font-size: 0.95rem;">Không tìm thấy người học nào phù hợp với bộ lọc.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const isCurrentSuper = currentUser && (!!currentUser.isSuperAdmin || isSuperAdmin(currentUser.email));
+
+  let html = `
+    <table class="admin-users-table">
+      <thead>
+        <tr>
+          <th style="min-width: 220px;">Học Viên</th>
+          <th>Trạng Thái</th>
+          <th>Vai Trò &amp; Quyền Hạn</th>
+          <th>Điểm Thi &amp; Lộ Trình</th>
+          <th>Chuỗi Học 🔥</th>
+          <th>Thời Gian ⏱️</th>
+          ${isCurrentSuper ? '<th style="text-align: right; min-width: 140px;">Thao Tác Quyền</th>' : ''}
+        </tr>
+      </thead>
+      <tbody>
+  `;
+
+  filtered.forEach(u => {
+    const safeName = escapeHtml(u.name || 'Học viên');
+    const safeEmail = escapeHtml(u.email || '');
+    const initial = safeName.charAt(0).toUpperCase();
+
+    const avatarHtml = u.picture
+      ? `<img src="${u.picture}" alt="${safeName}" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.15);" onerror="this.outerHTML='<div style=\\'width:36px;height:36px;border-radius:50%;background:#0284c7;color:white;display:flex;align-items:center;justify-content:center;font-weight:700;\\'>${initial}</div>'">`
+      : `<div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #0284c7, #38bdf8); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;">${initial}</div>`;
+
+    // Status HTML
+    const statusHtml = u.isOnline
+      ? `<span class="admin-status-online"><span class="dot"></span> Online</span>`
+      : `<span class="admin-status-offline"><span class="dot"></span> ${u.lastSeen ? formatRelativeTime(u.lastSeen) : 'Chưa rõ'}</span>`;
+
+    // Role HTML
+    let roleBadge = '';
+    if (u.isSuperAdmin) {
+      roleBadge = `<span class="admin-role-badge admin-role-super"><i class="fa-solid fa-crown"></i> Super Admin</span>`;
+    } else if (u.role === 'teacher' || (u.email && u.email.includes('hongtai'))) {
+      roleBadge = `<span class="admin-role-badge admin-role-teacher"><i class="fa-solid fa-chalkboard-user"></i> Giáo viên</span>`;
+    } else if (u.isAdmin || u.role === 'admin') {
+      roleBadge = `<span class="admin-role-badge admin-role-admin"><i class="fa-solid fa-shield-halved"></i> Quản trị viên</span>`;
+    } else {
+      roleBadge = `<span class="admin-role-badge admin-role-user"><i class="fa-solid fa-graduation-cap"></i> Học viên</span>`;
+    }
+
+    // Scores & progress
+    const highestScoreHtml = u.quizCount > 0
+      ? `<span style="font-weight: 800; color: #22c55e;">${u.highestQuizScore}đ</span> <span style="font-size: 0.72rem; color: #94a3b8;">(${u.quizCount} đề)</span>`
+      : `<span style="font-size: 0.78rem; color: #64748b;">Chưa thi</span>`;
+
+    const wordsProgress = `<span style="font-size: 0.75rem; color: #38bdf8; display: block;">${u.memorizedWordsCount || 0} từ đã thuộc</span>`;
+
+    // Format study time
+    const studyHours = ((u.studyTime || 0) / 3600).toFixed(1);
+    const studyMins = Math.round(((u.studyTime || 0) % 3600) / 60);
+    const timeFormatted = u.studyTime > 3600 ? `${studyHours}h` : `${studyMins} phút`;
+
+    // Actions
+    let actionBtnHtml = '';
+    if (isCurrentSuper) {
+      if (u.isSuperAdmin) {
+        actionBtnHtml = `<span style="font-size: 0.75rem; color: #f43f5e; font-weight: 700;"><i class="fa-solid fa-lock"></i> Cố định</span>`;
+      } else if (u.isAdmin || u.role === 'teacher' || u.role === 'admin') {
+        actionBtnHtml = `
+          <button type="button" onclick="window.handleChangeUserRole('${safeEmail}', 'user')" style="padding: 4px 10px; font-size: 0.72rem; font-weight: 700; border-radius: 6px; background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); cursor: pointer;">
+            <i class="fa-solid fa-user-minus"></i> Thu hồi
+          </button>
+        `;
+      } else {
+        actionBtnHtml = `
+          <button type="button" onclick="window.handleChangeUserRole('${safeEmail}', 'teacher')" style="padding: 4px 10px; font-size: 0.72rem; font-weight: 700; border-radius: 6px; background: rgba(14, 165, 233, 0.15); color: #38bdf8; border: 1px solid rgba(14, 165, 233, 0.3); cursor: pointer;">
+            <i class="fa-solid fa-user-shield"></i> Cấp GV
+          </button>
+        `;
+      }
+    }
+
+    html += `
+      <tr class="admin-user-row">
+        <td>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            ${avatarHtml}
+            <div>
+              <div style="font-weight: 700; color: #ffffff; font-size: 0.88rem;">${safeName}</div>
+              <div style="font-size: 0.72rem; color: #94a3b8;">${safeEmail}</div>
+            </div>
+          </div>
+        </td>
+        <td>${statusHtml}</td>
+        <td>${roleBadge}</td>
+        <td>
+          <div>${highestScoreHtml}</div>
+          ${wordsProgress}
+        </td>
+        <td>
+          <span style="font-weight: 800; color: #f97316; font-size: 0.88rem;">
+            <i class="fa-solid fa-fire"></i> ${u.streak || 0} ngày
+          </span>
+        </td>
+        <td>
+          <span style="font-weight: 700; color: #e2e8f0; font-size: 0.85rem;">
+            ${timeFormatted}
+          </span>
+        </td>
+        ${isCurrentSuper ? `<td style="text-align: right;">${actionBtnHtml}</td>` : ''}
+      </tr>
+    `;
+  });
+
+  html += `
+      </tbody>
+    </table>
+  `;
+
+  container.innerHTML = html;
+};
+
+window.handleGrantRoleSubmit = async function (e) {
+  if (e) e.preventDefault();
+
+  const emailInput = document.getElementById('admin-grant-email-input');
+  const roleSelect = document.getElementById('admin-grant-role-select');
+  if (!emailInput || !roleSelect) return;
+
+  const email = emailInput.value.trim();
+  const role = roleSelect.value;
+  if (!email) return;
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/admin/users/role`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      credentials: 'include',
+      body: JSON.stringify({ targetEmail: email, role })
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Cấp quyền thất bại');
+
+    showToast(data.message || 'Cấp quyền thành công!');
+    emailInput.value = '';
+    window.fetchAdminUsersList(false);
+  } catch (err) {
+    console.error('Grant role error:', err);
+    showToast(err.message || 'Lỗi cấp quyền quản trị!', true);
+  }
+};
+
+window.handleChangeUserRole = async function (targetEmail, newRole) {
+  const roleLabel = newRole === 'user' ? 'Học viên (Thu hồi quyền)' : 'Giáo viên';
+  if (!confirm(`Bạn có chắc chắn muốn thay đổi quyền của tài khoản ${targetEmail} sang: ${roleLabel}?`)) return;
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/admin/users/role`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      credentials: 'include',
+      body: JSON.stringify({ targetEmail, role: newRole })
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Thay đổi quyền thất bại');
+
+    showToast(data.message || 'Cập nhật quyền thành công!');
+    window.fetchAdminUsersList(false);
+  } catch (err) {
+    console.error('Change role error:', err);
+    showToast(err.message || 'Lỗi cập nhật quyền!', true);
   }
 };
 
