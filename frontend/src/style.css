@@ -103,15 +103,17 @@ html.dark {
   --scrollbar-track: #131f24;
 }
 
-/* Global Reset */
+/* Global Reset & Zero-Delay Touch Responsiveness */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
-button, input, select, textarea {
+button, a, input, select, textarea, .btn, .nb-lesson-check-card, .topic-card, .mini-rad-card {
   font-family: inherit;
+  touch-action: manipulation;
 }
 
 html, body {
@@ -120,6 +122,7 @@ html, body {
   width: 100%;
   min-height: 100vh;
   overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 body {
