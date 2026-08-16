@@ -1479,30 +1479,37 @@ app.post('/api/chat', async (req, res) => {
       }
     }
 
-    // 2. Secondary: Try Gemini 1.5 Flash REST API if Groq failed or not present
+    // 2. Secondary: Try Google Gemini REST API if Groq failed or not present
     const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || '';
     if (!reply && GEMINI_API_KEY) {
-      try {
-        const contents = messages.map(msg => ({
-          role: msg.role === 'assistant' ? 'model' : 'user',
-          parts: [{ text: msg.content }]
-        }));
+      const geminiModels = ['gemini-2.5-flash', 'gemini-flash-latest', 'gemini-1.5-flash'];
+      const contents = messages.map(msg => ({
+        role: msg.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: msg.content }]
+      }));
 
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents,
-            systemInstruction: { parts: [{ text: systemPrompt }] }
-          })
-        });
+      for (const modelName of geminiModels) {
+        try {
+          const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-goog-api-key': GEMINI_API_KEY
+            },
+            body: JSON.stringify({
+              contents,
+              systemInstruction: { parts: [{ text: systemPrompt }] }
+            })
+          });
 
-        if (response.ok) {
-          const data = await response.json();
-          reply = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+          if (response.ok) {
+            const data = await response.json();
+            reply = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            if (reply) break;
+          }
+        } catch (eGem) {
+          console.warn(`[Chat AI] Gemini model ${modelName} call error:`, eGem.message);
         }
-      } catch (eGem) {
-        console.warn('[Chat AI] Gemini REST call error:', eGem.message);
       }
     }
 
