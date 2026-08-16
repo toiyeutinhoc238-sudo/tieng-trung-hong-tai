@@ -4268,6 +4268,11 @@ function isLevelUnlocked(ver, level, levelIndex, levelsData, builtInVocabs) {
   if (ver === '2.0') {
     return String(level) === '1';
   }
+  // HSK 3.0: Only Levels 1, 2, 3 are public and unlocked. Levels 4, 5, 6, 7-9 are temporarily locked.
+  if (ver === '3.0' || !ver || ver === 'hsk') {
+    const lvlStr = String(level).trim();
+    return ['1', '2', '3'].includes(lvlStr);
+  }
   return true;
 }
 
@@ -6775,6 +6780,35 @@ function renderLessonsList() {
         <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
           <button class="btn btn-primary" onclick="goToRoadmapLevel('2.0', 1)" style="padding: 10px 20px; font-weight: 700; border-radius: 12px;">
             <i class="fa-solid fa-graduation-cap"></i> Học HSK 1 (2.0)
+          </button>
+          <button class="btn btn-secondary" onclick="window.returnToHskLevelSelection()" style="padding: 10px 20px; font-weight: 700; border-radius: 12px; background: rgba(255,255,255,0.08);">
+            <i class="fa-solid fa-arrow-left"></i> Quay lại Lộ trình
+          </button>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  // HSK 3.0 Levels 4..7-9 Locked Guard
+  if ((activeHskVersion === '3.0' || !activeHskVersion) && !['1', '2', '3'].includes(String(activeLessonsLevel))) {
+    if (objectivesText) {
+      objectivesText.textContent = `Mục tiêu: HSK 3.0 Cấp ${activeLessonsLevel} đang trong quá trình biên soạn & chuẩn hóa nội dung.`;
+    }
+    grid.innerHTML = `
+      <div class="glass-panel" style="grid-column: 1 / -1; max-width: 650px; margin: 32px auto; padding: 36px 24px; text-align: center; border: 1.5px dashed rgba(245, 158, 11, 0.4); border-radius: 20px;">
+        <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(245, 158, 11, 0.15); color: #fbbf24; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 16px;">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <h3 style="font-family: var(--font-display); font-size: 1.4rem; font-weight: 800; color: #ffffff; margin-bottom: 8px;">
+          Cấp độ HSK ${activeLessonsLevel} (3.0) Đang Tạm Khóa
+        </h3>
+        <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-bottom: 24px;">
+          Nội dung từ vựng & bài học của HSK 3.0 Cấp ${activeLessonsLevel} đang được giáo viên Tiếng Trung Hồng Thái chuẩn hóa và kiểm duyệt kỹ lưỡng để đảm bảo độ chính xác cao nhất. Mời bạn trải nghiệm các cấp HSK 1, HSK 2, HSK 3!
+        </p>
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+          <button class="btn btn-primary" onclick="goToRoadmapLevel('3.0', 1)" style="padding: 10px 20px; font-weight: 700; border-radius: 12px;">
+            <i class="fa-solid fa-graduation-cap"></i> Học HSK 1 (3.0)
           </button>
           <button class="btn btn-secondary" onclick="window.returnToHskLevelSelection()" style="padding: 10px 20px; font-weight: 700; border-radius: 12px; background: rgba(255,255,255,0.08);">
             <i class="fa-solid fa-arrow-left"></i> Quay lại Lộ trình
@@ -10142,13 +10176,24 @@ function renderZubiDashboardTableAndRecent() {
       const memorized = tierWords.filter(w => w.isMemorized).length;
       const pct = Math.round((memorized / total) * 100);
 
+      const isTierUnlocked = isLevelUnlocked(tier.hskVer, tier.level, 0, [], builtInVocabs);
+
       let badgeHtml = '';
-      if (pct === 0) {
+      if (!isTierUnlocked) {
+        badgeHtml = `<span style="white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 99px; font-size: 0.75rem; font-weight: 700; background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3);"><i class="fa-solid fa-lock" style="font-size: 0.7rem;"></i> Sắp ra mắt</span>`;
+      } else if (pct === 0) {
         badgeHtml = `<span style="white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 99px; font-size: 0.75rem; font-weight: 700; background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.25);"><i class="fa-regular fa-circle" style="font-size: 0.7rem;"></i> Chưa học</span>`;
       } else if (pct === 100) {
         badgeHtml = `<span style="white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 99px; font-size: 0.75rem; font-weight: 700; background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35);"><i class="fa-solid fa-circle-check" style="font-size: 0.7rem;"></i> Đã thuộc 100%</span>`;
       } else {
         badgeHtml = `<span style="white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 99px; font-size: 0.75rem; font-weight: 700; background: rgba(217, 119, 6, 0.2); color: #fbbf24; border: 1px solid rgba(217, 119, 6, 0.35);"><i class="fa-solid fa-spinner fa-spin-pulse" style="font-size: 0.7rem;"></i> Đang học ${pct}%</span>`;
+      }
+
+      let btnHtml = '';
+      if (isTierUnlocked) {
+        btnHtml = `<button class="zubi-table-btn" style="background: rgba(59,130,246,0.15); color: #3b82f6; border: 1px solid rgba(59,130,246,0.3); padding: 6px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;" onclick="event.stopPropagation(); window.selectCurriculumAndGo('${tier.curriculumType}', '${tier.level}', '${tier.hskVer}')">Vào học <i class="fa-solid fa-arrow-right"></i></button>`;
+      } else {
+        btnHtml = `<button class="zubi-table-btn" style="background: rgba(100, 116, 139, 0.2); color: #94a3b8; border: 1px solid rgba(100, 116, 139, 0.3); padding: 6px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;" onclick="event.stopPropagation(); window.showComingSoonNotice('Lộ trình HSK ' + '${tier.level}' + (${tier.hskVer === '2.0' ? "' (2.0)'" : "''"}))"><i class="fa-solid fa-lock" style="color: #fbbf24;"></i> Khóa</button>`;
       }
 
       rowsHtml += `
@@ -10163,7 +10208,7 @@ function renderZubiDashboardTableAndRecent() {
           </td>
           <td class="zubi-td" style="padding: 14px 16px;">${badgeHtml}</td>
           <td class="zubi-td" style="padding: 14px 16px;">
-            <button class="zubi-table-btn" style="background: rgba(59,130,246,0.15); color: #3b82f6; border: 1px solid rgba(59,130,246,0.3); padding: 6px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;" onclick="event.stopPropagation(); window.selectCurriculumAndGo('${tier.curriculumType}', '${tier.level}', '${tier.hskVer}')">Vào học <i class="fa-solid fa-arrow-right"></i></button>
+            ${btnHtml}
           </td>
         </tr>
       `;
