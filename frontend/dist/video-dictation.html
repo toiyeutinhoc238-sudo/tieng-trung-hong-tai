@@ -1266,7 +1266,7 @@
         <div>
           <div class="dict-brand-title">
             <span>Tiếng Trung HongTai</span>
-            <span class="dict-hot-badge"><i class="fa-solid fa-fire"></i> Luyện Chép Video</span>
+            <span class="dict-hot-badge" style="background: rgba(245,158,11,0.2); color: #fbbf24; border: 1px solid rgba(245,158,11,0.4);"><i class="fa-solid fa-lock"></i> Sắp ra mắt</span>
           </div>
           <small style="color: var(--text-muted); font-size: 0.78rem;">Nghe - Nhận diện - Nhớ chữ Hán theo mốc video</small>
         </div>
@@ -1288,6 +1288,27 @@
         </button>
       </div>
     </header>
+
+    <!-- LOCKED BANNER -->
+    <div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(15, 23, 42, 0.7)); border: 1.5px dashed rgba(245, 158, 11, 0.45); border-radius: 20px; padding: 28px 24px; margin-bottom: 28px; text-align: center; backdrop-filter: blur(12px);">
+      <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(245, 158, 11, 0.2); color: #fbbf24; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 12px;">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      <h2 style="font-family: var(--font-display); font-size: 1.4rem; font-weight: 800; color: #ffffff; margin-bottom: 8px;">
+        Chức năng Luyện Chép Video Đang Tạm Khóa
+      </h2>
+      <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; max-width: 680px; margin: 0 auto 20px;">
+        Tính năng này đang được đội ngũ giáo viên Tiếng Trung Hồng Thái tạm khóa để kiểm duyệt, chuẩn hóa phụ đề và phiên âm Pinyin chuẩn xác nhất. Mời bạn trải nghiệm <strong>Lộ trình học HSK 3.0</strong> và <strong>Sổ tay từ vựng</strong> trên website!
+      </p>
+      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <button class="btn btn-primary" onclick="window.location.href='/'" style="padding: 10px 22px; font-weight: 700; border-radius: 12px;">
+          <i class="fa-solid fa-house"></i> Về Trang Chủ
+        </button>
+        <button class="btn btn-secondary" onclick="window.location.href='/detail-list.html'" style="padding: 10px 22px; font-weight: 700; border-radius: 12px; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3);">
+          <i class="fa-solid fa-book-bookmark"></i> Xem Sổ Tay Từ Vựng
+        </button>
+      </div>
+    </div>
 
     <!-- CATALOG VIEW: List of Lessons -->
     <section id="dict-catalog-view">

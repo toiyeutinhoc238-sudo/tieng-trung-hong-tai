@@ -631,26 +631,36 @@
       function syncDetailLevelSelectOptions() {
         const levelSelect = document.getElementById('detail-level-select');
         if (!levelSelect) return;
-        const opt79 = levelSelect.querySelector('option[value="7-9"]');
+
         if (activeHskVersion === '2.0') {
-          if (opt79) {
-            window._detailOpt79 = opt79;
-            opt79.remove();
-          }
-          if (activeLevel === '7-9') {
+          levelSelect.innerHTML = `
+            <option value="all">Cấp độ: Tất cả đã công khai (HSK 1)</option>
+            <option value="1">Cấp độ: HSK 1 (2.0)</option>
+            <option value="2" disabled style="color: #64748b;">Cấp độ: HSK 2 (🔒 Sắp ra mắt)</option>
+            <option value="3" disabled style="color: #64748b;">Cấp độ: HSK 3 (🔒 Sắp ra mắt)</option>
+            <option value="4" disabled style="color: #64748b;">Cấp độ: HSK 4 (🔒 Sắp ra mắt)</option>
+            <option value="5" disabled style="color: #64748b;">Cấp độ: HSK 5 (🔒 Sắp ra mắt)</option>
+            <option value="6" disabled style="color: #64748b;">Cấp độ: HSK 6 (🔒 Sắp ra mắt)</option>
+          `;
+          if (activeLevel !== '1' && activeLevel !== 'all') {
             activeLevel = 'all';
-            levelSelect.value = 'all';
           }
+          levelSelect.value = activeLevel;
         } else {
-          if (!opt79) {
-            if (!window._detailOpt79) {
-              const opt = document.createElement('option');
-              opt.value = '7-9';
-              opt.textContent = 'Cấp độ: HSK 7-8-9 (Cao cấp)';
-              window._detailOpt79 = opt;
-            }
-            levelSelect.appendChild(window._detailOpt79);
+          levelSelect.innerHTML = `
+            <option value="all">Cấp độ: Tất cả đã công khai (HSK 1 - 3)</option>
+            <option value="1">Cấp độ: HSK 1 (3.0)</option>
+            <option value="2">Cấp độ: HSK 2 (3.0)</option>
+            <option value="3">Cấp độ: HSK 3 (3.0)</option>
+            <option value="4" disabled style="color: #64748b;">Cấp độ: HSK 4 (🔒 Sắp ra mắt)</option>
+            <option value="5" disabled style="color: #64748b;">Cấp độ: HSK 5 (🔒 Sắp ra mắt)</option>
+            <option value="6" disabled style="color: #64748b;">Cấp độ: HSK 6 (🔒 Sắp ra mắt)</option>
+            <option value="7-9" disabled style="color: #64748b;">Cấp độ: HSK 7-8-9 (🔒 Sắp ra mắt)</option>
+          `;
+          if (!['1', '2', '3', 'all'].includes(String(activeLevel))) {
+            activeLevel = 'all';
           }
+          levelSelect.value = activeLevel;
         }
       }
 
@@ -876,6 +886,19 @@
         // HSK Version filter
         if (!w.isCustom && w.level !== 'premium' && (w.hskVersion || '3.0') !== activeHskVersion) {
           return false;
+        }
+
+        // Filter public levels only for built-in words
+        if (!w.isCustom && w.level !== 'premium') {
+          if (activeHskVersion === '2.0') {
+            // Only HSK 1 is public for 2.0
+            if (!matchLevel(w.level, '1')) return false;
+          } else {
+            // For 3.0: Only HSK 1, 2, 3 are public
+            const allowedLevels = ['1', '2', '3'];
+            const lvlStr = (w.level || '').toString().replace('hsk', '').trim();
+            if (!allowedLevels.includes(lvlStr)) return false;
+          }
         }
 
         // HSK Level filter

@@ -3214,7 +3214,7 @@ window.revealAllRoadmapEyeCards = function(targetSentence) {
   const practiceMistakesBtn = document.getElementById('practice-mistakes-btn');
   if (practiceMistakesBtn) {
     practiceMistakesBtn.addEventListener('click', () => {
-      window.showComingSoonNotice('Sổ tay từ vựng');
+      showNotebookDashboardView('wrong');
     });
   }
 
@@ -3366,7 +3366,8 @@ window.revealAllRoadmapEyeCards = function(targetSentence) {
 
   if (topicPersonalBtn) {
     topicPersonalBtn.addEventListener('click', () => {
-      window.showComingSoonNotice('Sổ tay từ vựng');
+      activeSmartTopic = 'personal';
+      showSubdecksView();
     });
   }
   if (topicHskBtn) {
@@ -4263,7 +4264,10 @@ function getUnlockedLevelsMap() {
 }
 
 function isLevelUnlocked(ver, level, levelIndex, levelsData, builtInVocabs) {
-  // 100% ALL ROADMAP LEVELS UNLOCKED! (HSK 1, 2, 3, 4, 5, 6, 7-9, HSK 2.0, YCT)
+  // HSK 2.0: Only Level 1 is verified and unlocked. Levels 2..6 are temporarily locked.
+  if (ver === '2.0') {
+    return String(level) === '1';
+  }
   return true;
 }
 
@@ -4391,7 +4395,7 @@ function renderGamifiedRoadmapPath() {
       `;
     } else {
       actionButtonsHtml = `
-        <button class="btn-node-start btn-node-locked" style="background: rgba(100, 116, 139, 0.35); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; border-radius: 12px; font-weight: 700; padding: 12px 20px; font-size: 0.88rem; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="window.showComingSoonNotice('Lộ trình bài học HSK ' + '${item.level}')">
+        <button class="btn-node-start btn-node-locked" style="background: rgba(100, 116, 139, 0.35); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; border-radius: 12px; font-weight: 700; padding: 12px 20px; font-size: 0.88rem; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="window.showComingSoonNotice('Lộ trình HSK ' + '${item.level}' + (${hskVer === '2.0' ? "' (2.0)'" : "''"}))">
           <i class="fa-solid fa-lock" style="color: #fbbf24;"></i> Sắp ra mắt (Đang biên soạn)
         </button>
       `;
@@ -4521,7 +4525,7 @@ window.goToRoadmapLevel = function (ver, level) {
   const unlocked = isLevelUnlocked(hskVer, level, nodeIndex >= 0 ? nodeIndex : 0, levelsData, builtInVocabs);
 
   if (!unlocked) {
-    window.showComingSoonNotice(`Lộ trình bài học HSK ${level}`);
+    window.showComingSoonNotice(`Lộ trình bài học HSK ${level}${hskVer === '2.0' ? ' (2.0)' : ''}`);
     return;
   }
 
@@ -6752,6 +6756,35 @@ function renderLessonsList() {
     }
   }
 
+  // HSK 2.0 Levels 2..6 Locked Guard
+  if (activeHskVersion === '2.0' && String(activeLessonsLevel) !== '1') {
+    if (objectivesText) {
+      objectivesText.textContent = `Mục tiêu: HSK 2.0 Cấp ${activeLessonsLevel} đang trong quá trình biên soạn & chuẩn hóa nội dung.`;
+    }
+    grid.innerHTML = `
+      <div class="glass-panel" style="grid-column: 1 / -1; max-width: 650px; margin: 32px auto; padding: 36px 24px; text-align: center; border: 1.5px dashed rgba(245, 158, 11, 0.4); border-radius: 20px;">
+        <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(245, 158, 11, 0.15); color: #fbbf24; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 16px;">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <h3 style="font-family: var(--font-display); font-size: 1.4rem; font-weight: 800; color: #ffffff; margin-bottom: 8px;">
+          Cấp độ HSK ${activeLessonsLevel} (2.0) Đang Tạm Khóa
+        </h3>
+        <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-bottom: 24px;">
+          Nội dung từ vựng & bài học của HSK 2.0 Cấp ${activeLessonsLevel} đang được giáo viên Tiếng Trung Hồng Thái chuẩn hóa và kiểm duyệt kỹ lưỡng để đảm bảo độ chính xác cao nhất.
+        </p>
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+          <button class="btn btn-primary" onclick="goToRoadmapLevel('2.0', 1)" style="padding: 10px 20px; font-weight: 700; border-radius: 12px;">
+            <i class="fa-solid fa-graduation-cap"></i> Học HSK 1 (2.0)
+          </button>
+          <button class="btn btn-secondary" onclick="window.returnToHskLevelSelection()" style="padding: 10px 20px; font-weight: 700; border-radius: 12px; background: rgba(255,255,255,0.08);">
+            <i class="fa-solid fa-arrow-left"></i> Quay lại Lộ trình
+          </button>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
   // Update objectives text - dynamically count words from vocabList
   if (objectivesText) {
     // Count total words in this level/version
@@ -8884,10 +8917,7 @@ function initDictionaryView() {
 
       const activeView = document.getElementById(`dict-view-${tabId}`);
       if (activeView) {
-        if (tabId === 'notebook') {
-          window.showComingSoonNotice('Sổ tay từ vựng');
-          return;
-        } else if (tabId === 'search') {
+        if (tabId === 'search') {
           activeView.style.display = 'grid';
         } else {
           activeView.style.display = 'block';
@@ -10869,20 +10899,12 @@ function createSubdeckCard(name, id, count, icon, color) {
   `;
 
   card.addEventListener('click', () => {
-    if (id === 'wrong' || id === 'starred' || (id && id.startsWith('custom:'))) {
-      window.showComingSoonNotice('Sổ tay từ vựng');
-      return;
-    }
     showNotebookDashboardView(id);
   });
   return card;
 }
 
 function openNotebookDashboard(notebookId) {
-  if (notebookId === 'wrong' || notebookId === 'starred' || (notebookId && notebookId.startsWith('custom:'))) {
-    window.showComingSoonNotice('Sổ tay từ vựng');
-    return;
-  }
   const titleEl = document.getElementById('dashboard-notebook-title');
   const descEl = document.getElementById('dashboard-notebook-desc');
 
