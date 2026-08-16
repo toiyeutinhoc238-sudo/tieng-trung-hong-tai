@@ -60,6 +60,8 @@ const userSchema = new mongoose.Schema({
   _id: String, // email
   name: String,
   picture: String,
+  role: { type: String, default: 'user' },
+  lastSeenTime: { type: Date, default: Date.now },
   stats: {
     streak: { type: Number, default: 0 },
     studyTime: { type: Number, default: 0 },
@@ -260,6 +262,8 @@ async function readUserData() {
       users[u._id] = {
         name: u.name,
         picture: u.picture,
+        role: u.role || 'user',
+        lastSeenTime: u.lastSeenTime || null,
         stats: u.stats,
         gameHistory: u.gameHistory || []
       };
@@ -350,13 +354,15 @@ async function persistToMongoDB(data) {
   ]);
 
   for (const email of emails) {
-    const u = data.users[email] || { name: "", picture: "", stats: { streak: 0, studyTime: 0, lastActiveDate: "" } };
+    const u = data.users[email] || { name: "", picture: "", role: "user", stats: { streak: 0, studyTime: 0, lastActiveDate: "" } };
     promises.push(User.replaceOne(
       { _id: email },
       {
         _id: email,
         name: u.name,
         picture: u.picture,
+        role: u.role || 'user',
+        lastSeenTime: u.lastSeenTime || new Date(),
         stats: u.stats,
         gameHistory: u.gameHistory || [],
         quizHistory: (data.quizHistory && data.quizHistory[email]) || [],
