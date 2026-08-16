@@ -2049,13 +2049,22 @@ app.get('/api/discussions', async (req, res) => {
 
 // POST new discussion / feedback
 app.post('/api/discussions', async (req, res) => {
-  const currentEmail = getLoggedInUserEmail(req);
+  let body = req.body;
+  if (typeof body === 'string') {
+    try { body = JSON.parse(body); } catch (e) { }
+  }
+  body = body || {};
+
+  const currentEmail = getLoggedInUserEmail(req) || body.userEmail || req.headers['x-user-email'];
   if (!currentEmail) {
     return res.status(401).json({ error: 'Vui lòng đăng nhập tài khoản để đăng bài thảo luận & góp ý.' });
   }
 
-  const { title, content, category = 'feedback' } = req.body;
-  if (!content || !content.trim()) {
+  const title = (body.title || '').trim();
+  const content = (body.content || '').trim();
+  const category = body.category || 'feedback';
+
+  if (!content) {
     return res.status(400).json({ error: 'Nội dung bài viết không được để trống.' });
   }
 
@@ -2072,8 +2081,8 @@ app.post('/api/discussions', async (req, res) => {
       authorName,
       authorPicture,
       category,
-      title: (title || '').trim(),
-      content: content.trim(),
+      title,
+      content,
       likes: [],
       comments: [],
       isPinned: false,
@@ -2096,6 +2105,8 @@ app.post('/api/discussions', async (req, res) => {
         authorEmail: currentEmail,
         authorName,
         authorPicture,
+        authorRole: isSuperAdmin(currentEmail) ? 'super_admin' : (user.role || (currentEmail.toLowerCase().includes('hongtai') ? 'teacher' : 'user')),
+        isSuperAdmin: isSuperAdmin(currentEmail),
         category,
         title: discussionData.title,
         content: discussionData.content,
