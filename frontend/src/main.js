@@ -3394,13 +3394,7 @@ window.revealAllRoadmapEyeCards = function(targetSentence) {
   }
   if (backToSubdecksBtn) {
     backToSubdecksBtn.addEventListener('click', () => {
-      if (activeNotebook && (activeNotebook.startsWith('hsk:') || activeNotebook.startsWith('yct:'))) {
-        switchTab('roadmap');
-        const roadmapSec = document.getElementById('roadmap-section');
-        if (roadmapSec) roadmapSec.scrollIntoView({ behavior: 'smooth' });
-      } else {
-        showSubdecksView();
-      }
+      showSubdecksView();
     });
   }
 
