@@ -2252,24 +2252,6 @@ app.delete('/api/discussions/:id', async (req, res) => {
 // ADMIN & LEARNER INTELLIGENCE API ENDPOINTS
 // ==========================================================================
 
-const SUPER_ADMINS = ['toiyeutinhoc238@gmail.com', 'phanphiphu04@gmail.com'];
-
-function isSuperAdmin(email) {
-  if (!email) return false;
-  return SUPER_ADMINS.some(sa => email.toLowerCase() === sa.toLowerCase());
-}
-
-function isUserAdmin(email, userData) {
-  if (!email) return false;
-  if (isSuperAdmin(email)) return true;
-  if (email.toLowerCase().includes('hongtai')) return true;
-  if (userData && userData.users && userData.users[email]) {
-    const role = userData.users[email].role;
-    if (role === 'admin' || role === 'teacher' || role === 'super_admin') return true;
-  }
-  return false;
-}
-
 // GET all registered learners with intelligence stats for admin dashboard
 app.get('/api/admin/users', async (req, res) => {
   const currentEmail = getLoggedInUserEmail(req);
