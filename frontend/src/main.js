@@ -3662,8 +3662,6 @@ function getAuthHeaders(customHeaders = {}) {
 
 // --- AUTHENTICATION & LOGIN LOGIC ---
 
-// --- AUTHENTICATION & LOGIN LOGIC ---
-
 // Fetch current user from session / local storage (giữ đăng nhập vĩnh viễn, không tự động đăng xuất)
 async function initAuth() {
   // 1. Kiểm tra tài khoản đã lưu trên trình duyệt (giữ đăng nhập liên tục)
