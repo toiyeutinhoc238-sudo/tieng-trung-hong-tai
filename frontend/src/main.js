@@ -3654,6 +3654,9 @@ function getAuthHeaders(customHeaders = {}) {
     headers['Authorization'] = `Bearer ${token}`;
     headers['x-session-token'] = token;
   }
+  if (currentUser && currentUser.email) {
+    headers['x-user-email'] = currentUser.email;
+  }
   return headers;
 }
 
@@ -6659,6 +6662,9 @@ function initChatbot() {
       };
       if (activeThreadId) {
         payload.threadId = activeThreadId;
+      }
+      if (currentUser && currentUser.email) {
+        payload.userEmail = currentUser.email;
       }
 
       const response = await fetch(API_BASE_URL + '/api/chat', {

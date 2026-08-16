@@ -615,6 +615,9 @@
         headers['Authorization'] = `Bearer ${token}`;
         headers['x-session-token'] = token;
       }
+      if (currentUser && currentUser.email) {
+        headers['x-user-email'] = currentUser.email;
+      }
       return headers;
     }
 
@@ -763,6 +766,16 @@
         if (currentUser) {
           localStorage.setItem('hongtai_threads_cache_' + currentUser.email, JSON.stringify(threads));
         }
+
+        // Auto select current active thread or first thread
+        if (Array.isArray(threads) && threads.length > 0) {
+          const storedActiveId = sessionStorage.getItem('hongtai_active_thread_id');
+          if (storedActiveId && threads.some(t => t.id === storedActiveId)) {
+            selectThread(storedActiveId);
+          } else if (!activeThreadId) {
+            selectThread(threads[0].id);
+          }
+        }
       } catch (err) {
         console.error('Error loading threads:', err);
         if (currentUser) {
@@ -770,6 +783,14 @@
           if (cached) {
             threads = JSON.parse(cached);
             renderThreadsList();
+            if (Array.isArray(threads) && threads.length > 0) {
+              const storedActiveId = sessionStorage.getItem('hongtai_active_thread_id');
+              if (storedActiveId && threads.some(t => t.id === storedActiveId)) {
+                selectThread(storedActiveId);
+              } else if (!activeThreadId) {
+                selectThread(threads[0].id);
+              }
+            }
             return;
           }
         }
@@ -1024,7 +1045,8 @@
           headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
           body: JSON.stringify({
             messages: messagesPayload,
-            threadId: activeThreadId
+            threadId: activeThreadId,
+            userEmail: currentUser ? currentUser.email : undefined
           }),
           credentials: 'include'
         });

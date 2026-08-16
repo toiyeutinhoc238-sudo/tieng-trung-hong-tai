@@ -273,6 +273,9 @@ async function readUserData() {
 
     sessionsList.forEach(s => {
       sessions[s._id] = s.email;
+      if (s._id && s.email) {
+        activeSessions.set(s._id, s.email);
+      }
     });
 
     cachedUserData = { users, progress, customWords, sessions, chats, quizHistory };
@@ -424,8 +427,21 @@ function getLoggedInUserEmail(req) {
     token = getSessionCookie(req);
   }
 
-  if (token && activeSessions.has(token)) {
-    return activeSessions.get(token);
+  if (token) {
+    if (activeSessions.has(token)) {
+      return activeSessions.get(token);
+    }
+    if (cachedUserData && cachedUserData.sessions && cachedUserData.sessions[token]) {
+      const email = cachedUserData.sessions[token];
+      activeSessions.set(token, email);
+      return email;
+    }
+  }
+
+  // 4. Fallback to custom x-user-email header
+  const customEmail = req.headers['x-user-email'];
+  if (customEmail && typeof customEmail === 'string' && customEmail.includes('@')) {
+    return customEmail.toLowerCase().trim();
   }
 
   return null;
@@ -1653,14 +1669,17 @@ app.delete('/api/vocabulary/:id', async (req, res) => {
 
 // POST endpoint for AI Chatbot
 app.post('/api/chat', async (req, res) => {
-  const { messages, threadId } = req.body;
+  const { messages, threadId, userEmail } = req.body;
 
   if (!messages || !Array.isArray(messages)) {
     return res.status(400).json({ error: 'Missing or invalid messages parameter' });
   }
 
   // Get logged in user if any
-  const email = getLoggedInUserEmail(req);
+  let email = getLoggedInUserEmail(req);
+  if (!email && userEmail && typeof userEmail === 'string' && userEmail.includes('@')) {
+    email = userEmail.toLowerCase().trim();
+  }
 
   try {
     let reply = '';
