@@ -13240,6 +13240,14 @@ window.closeDiscussionModal = function () {
   }
 };
 
+// Global click listener to close discussion modal on outside backdrop click
+document.addEventListener('click', (e) => {
+  const modal = document.getElementById('discussion-forum-modal');
+  if (modal && e.target === modal) {
+    window.closeDiscussionModal();
+  }
+});
+
 window.toggleCreateDiscussionForm = function (forceState) {
   const container = document.getElementById('disc-create-form-container');
   if (!container) return;
@@ -13363,9 +13371,12 @@ window.renderDiscussionsList = function (discussions) {
     const timeAgo = formatRelativeTime(post.createdAt);
 
     // Format author avatar
-    const initial = (post.authorName || 'U').charAt(0).toUpperCase();
+    const safeAuthorName = escapeHtml(post.authorName || 'Học viên');
+    const safeTitle = escapeHtml(post.title || '');
+    const safeContent = escapeHtml(post.content || '').replace(/\n/g, '<br>');
+    const initial = safeAuthorName.charAt(0).toUpperCase();
     const avatarHtml = post.authorPicture
-      ? `<img src="${post.authorPicture}" alt="${post.authorName}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1.5px solid rgba(56,189,248,0.4);" onerror="this.outerHTML='<div class=\\'disc-default-avatar\\'>${initial}</div>'">`
+      ? `<img src="${post.authorPicture}" alt="${safeAuthorName}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1.5px solid rgba(56,189,248,0.4);" onerror="this.outerHTML='<div class=\\'disc-default-avatar\\'>${initial}</div>'">`
       : `<div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #0284c7, #38bdf8); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; border: 1.5px solid rgba(255,255,255,0.2);">${initial}</div>`;
 
     const adminBadge = isAdmin
@@ -13385,7 +13396,7 @@ window.renderDiscussionsList = function (discussions) {
           ${avatarHtml}
           <div>
             <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-              <span style="font-weight: 700; color: #ffffff; font-size: 0.95rem;">${post.authorName}</span>
+              <span style="font-weight: 700; color: #ffffff; font-size: 0.95rem;">${safeAuthorName}</span>
               ${adminBadge}
             </div>
             <div style="display: flex; align-items: center; gap: 8px; margin-top: 2px;">
@@ -13401,8 +13412,8 @@ window.renderDiscussionsList = function (discussions) {
 
       <!-- Post Body -->
       <div>
-        ${post.title ? `<h3 style="font-size: 1.05rem; font-weight: 800; color: #38bdf8; margin: 0 0 6px 0; font-family: var(--font-display);">${post.title}</h3>` : ''}
-        <div style="font-size: 0.9rem; color: #e2e8f0; line-height: 1.6; white-space: pre-wrap; word-break: break-word;">${post.content}</div>
+        ${safeTitle ? `<h3 style="font-size: 1.05rem; font-weight: 800; color: #38bdf8; margin: 0 0 6px 0; font-family: var(--font-display);">${safeTitle}</h3>` : ''}
+        <div style="font-size: 0.9rem; color: #e2e8f0; line-height: 1.6; word-break: break-word;">${safeContent}</div>
       </div>
 
       <!-- Post Action Footer -->
@@ -13569,9 +13580,11 @@ window.togglePostComments = function (postId, focusInput) {
         listEl.innerHTML = '<div style="font-size: 0.78rem; color: #94a3b8; font-style: italic; padding: 4px;">Chưa có phản hồi nào. Hãy viết phản hồi đầu tiên nhé!</div>';
       } else {
         listEl.innerHTML = post.comments.map(c => {
-          const cInitial = (c.authorName || 'U').charAt(0).toUpperCase();
+          const safeCAuthor = escapeHtml(c.authorName || 'Học viên');
+          const safeCContent = escapeHtml(c.content || '').replace(/\n/g, '<br>');
+          const cInitial = safeCAuthor.charAt(0).toUpperCase();
           const cAvatar = c.authorPicture
-            ? `<img src="${c.authorPicture}" alt="${c.authorName}" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover;" onerror="this.outerHTML='<div class=\\'disc-mini-avatar\\'>${cInitial}</div>'">`
+            ? `<img src="${c.authorPicture}" alt="${safeCAuthor}" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover;" onerror="this.outerHTML='<div class=\\'disc-mini-avatar\\'>${cInitial}</div>'">`
             : `<div style="width: 24px; height: 24px; border-radius: 50%; background: #0284c7; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700;">${cInitial}</div>`;
 
           const isCAdmin = isUserAdmin(c.authorEmail);
@@ -13582,11 +13595,11 @@ window.togglePostComments = function (postId, focusInput) {
               ${cAvatar}
               <div style="flex: 1;">
                 <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 2px;">
-                  <span style="font-size: 0.82rem; font-weight: 700; color: #ffffff;">${c.authorName}</span>
+                  <span style="font-size: 0.82rem; font-weight: 700; color: #ffffff;">${safeCAuthor}</span>
                   ${cAdminBadge}
                   <span style="font-size: 0.7rem; color: #64748b; margin-left: auto;">${formatRelativeTime(c.createdAt)}</span>
                 </div>
-                <div style="font-size: 0.82rem; color: #cbd5e1; line-height: 1.4;">${c.content}</div>
+                <div style="font-size: 0.82rem; color: #cbd5e1; line-height: 1.4;">${safeCContent}</div>
               </div>
             </div>
           `;

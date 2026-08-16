@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import fs from 'fs/promises';
@@ -19,6 +19,11 @@ import os from 'os';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Load .env explicitly from backend directory or root
+dotenv.config({ path: path.join(__dirname, '.env') });
+dotenv.config();
+
 const DB_PATH = path.join(__dirname, 'database.json');
 const DICTATION_DB_PATH = path.join(__dirname, 'video_dictation_lessons.json');
 const USER_DB_PATH = path.join(__dirname, 'user_data.json');
@@ -1739,6 +1744,14 @@ app.get('/api/discussions', async (req, res) => {
   try {
     let items = [];
     if (mongoose.connection.readyState === 1) {
+      const count = await Discussion.countDocuments();
+      if (count === 0) {
+        const defaultDiscussions = await readDiscussionsFromFile();
+        if (defaultDiscussions.length > 0) {
+          await Discussion.insertMany(defaultDiscussions).catch(() => {});
+        }
+      }
+
       const query = {};
       if (category && category !== 'all') {
         query.category = category;
