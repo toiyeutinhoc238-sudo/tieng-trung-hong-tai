@@ -620,19 +620,39 @@ app.post('/api/auth/logout', async (req, res) => {
 // ============================================================
 // REAL-TIME USER PRESENCE & 100% REAL DATABASE STATS SYSTEM
 // ============================================================
-const livePresenceMap = new Map(); // clientId/IP -> timestamp
+const livePresenceMap = new Map(); // clientId/IP/token -> timestamp
 const userPresenceMap = new Map(); // normalized email -> timestamp
 
 function trackPresence(req) {
   try {
-    const email = getLoggedInUserEmail(req);
+    let email = getLoggedInUserEmail(req);
+    if (!email && req.body && req.body.email && typeof req.body.email === 'string' && req.body.email.includes('@')) {
+      email = req.body.email.toLowerCase().trim();
+    }
     const now = Date.now();
     if (email) {
-      userPresenceMap.set(email.toLowerCase().trim(), now);
+      const normEmail = email.toLowerCase().trim();
+      userPresenceMap.set(normEmail, now);
+      if (cachedUserData && cachedUserData.users && cachedUserData.users[normEmail]) {
+        cachedUserData.users[normEmail].lastSeenTime = new Date(now);
+      }
     }
+
     const rawIp = req.headers['x-forwarded-for']?.split(',')[0].trim() || req.socket?.remoteAddress || 'guest';
+    const clientId = (req.body && req.body.clientId) || req.headers['x-client-id'] || '';
     const authHeader = req.headers['authorization'] || req.headers['x-session-token'] || '';
-    const key = authHeader ? `user_${authHeader.substring(0, 32)}` : `ip_${rawIp}`;
+
+    let key;
+    if (email) {
+      key = `user_${email.toLowerCase().trim()}`;
+    } else if (authHeader) {
+      key = `token_${authHeader.substring(0, 32)}`;
+    } else if (clientId) {
+      key = `guest_${clientId}`;
+    } else {
+      key = `ip_${rawIp}`;
+    }
+
     livePresenceMap.set(key, now);
   } catch (e) { }
 }
@@ -682,12 +702,22 @@ app.get('/api/stats/community', async (req, res) => {
     totalUsers = 0;
   }
 
-  // 100% real active connection count from in-memory presence map (at least 1 for the active caller)
-  const onlineUsers = Math.max(1, livePresenceMap.size);
+  const now = Date.now();
+  let registeredOnlineCount = 0;
+  for (const [email, lastSeen] of userPresenceMap.entries()) {
+    if (now - lastSeen <= 120000) {
+      registeredOnlineCount++;
+    }
+  }
+
+  // Exact 100% real active connection count matching admin dashboard
+  const onlineUsers = registeredOnlineCount > 0 ? registeredOnlineCount : Math.max(1, livePresenceMap.size);
 
   res.json({
     totalUsers,
     onlineUsers,
+    registeredOnlineCount,
+    liveConnectionsCount: livePresenceMap.size,
     timestamp: Date.now()
   });
 });
@@ -716,9 +746,9 @@ app.get('/api/admin/users', async (req, res) => {
     const isAdmin = isUserAdmin(email, userData);
     const role = isSuper ? 'super_admin' : (u.role || (email.includes('hongtai') ? 'admin' : 'user'));
 
-    // Real-time online check: active in last 90 seconds
+    // Real-time online check: active in last 120 seconds
     const lastSeenTimestamp = userPresenceMap.get(email.toLowerCase().trim()) || (u.lastSeenTime ? new Date(u.lastSeenTime).getTime() : 0);
-    const isOnline = lastSeenTimestamp ? (now - lastSeenTimestamp <= 90000) : false;
+    const isOnline = lastSeenTimestamp ? (now - lastSeenTimestamp <= 120000) : false;
 
     // Exam scores and progress
     const stats = u.stats || {};
@@ -2256,148 +2286,6 @@ app.delete('/api/discussions/:id', async (req, res) => {
   } catch (err) {
     console.error('Error deleting discussion:', err);
     res.status(500).json({ error: 'Lỗi xóa bài viết.' });
-  }
-});
-
-// ==========================================================================
-// ADMIN & LEARNER INTELLIGENCE API ENDPOINTS
-// ==========================================================================
-
-// GET all registered learners with intelligence stats for admin dashboard
-app.get('/api/admin/users', async (req, res) => {
-  const currentEmail = getLoggedInUserEmail(req);
-  if (!currentEmail) {
-    return res.status(401).json({ error: 'Vui lòng đăng nhập.' });
-  }
-
-  const userData = await readUserData();
-  if (!isUserAdmin(currentEmail, userData)) {
-    return res.status(403).json({ error: 'Bạn không có quyền truy cập trang quản trị.' });
-  }
-
-  try {
-    let usersList = [];
-    if (mongoose.connection.readyState === 1) {
-      usersList = await User.find({}).lean();
-    } else {
-      usersList = Object.keys(userData.users || {}).map(email => ({
-        _id: email,
-        ...userData.users[email],
-        quizHistory: (userData.quizHistory && userData.quizHistory[email]) || [],
-        progress: (userData.progress && userData.progress[email]) || {}
-      }));
-    }
-
-    const now = Date.now();
-    const resultUsers = usersList.map(u => {
-      const email = u._id || u.email;
-      const isSuper = isSuperAdmin(email);
-      const isOnline = userPresenceMap.has(email) && (now - userPresenceMap.get(email) < 90000);
-      const lastSeen = userPresenceMap.get(email) || u.lastSeenTime || null;
-
-      const progress = u.progress || {};
-      let memorizedCount = 0;
-      let studiedCount = 0;
-      Object.values(progress).forEach(p => {
-        if (p && p.isMemorized) memorizedCount++;
-        if (p && p.isStudied) studiedCount++;
-      });
-
-      const quizHistory = u.quizHistory || [];
-      const quizScores = quizHistory.map(q => q.score || 0);
-      const highestQuizScore = quizScores.length > 0 ? Math.max(...quizScores) : 0;
-      const avgQuizScore = quizScores.length > 0 ? Math.round(quizScores.reduce((a, b) => a + b, 0) / quizScores.length) : 0;
-
-      return {
-        email,
-        name: u.name || email.split('@')[0],
-        picture: u.picture || '',
-        role: isSuper ? 'super_admin' : (u.role || (email.toLowerCase().includes('hongtai') ? 'teacher' : 'user')),
-        isSuperAdmin: isSuper,
-        isAdmin: isSuper || u.role === 'admin',
-        isOnline,
-        lastSeen,
-        streak: (u.stats && u.stats.streak) || 0,
-        studyTime: (u.stats && u.stats.studyTime) || 0,
-        quizCount: quizHistory.length,
-        highestQuizScore,
-        avgQuizScore,
-        memorizedWordsCount: memorizedCount,
-        studiedWordsCount: studiedCount
-      };
-    });
-
-    resultUsers.sort((a, b) => {
-      if (b.isOnline !== a.isOnline) return b.isOnline ? 1 : -1;
-      if (b.isSuperAdmin !== a.isSuperAdmin) return b.isSuperAdmin ? 1 : -1;
-      return (b.studyTime || 0) - (a.studyTime || 0);
-    });
-
-    const onlineCount = resultUsers.filter(u => u.isOnline).length;
-    const adminCount = resultUsers.filter(u => u.isAdmin || u.isSuperAdmin || u.role === 'teacher').length;
-    const totalHours = Math.round(resultUsers.reduce((sum, u) => sum + (u.studyTime || 0), 0) / 3600);
-
-    res.json({
-      success: true,
-      users: resultUsers,
-      totalCount: resultUsers.length,
-      onlineCount,
-      adminCount,
-      totalHours
-    });
-  } catch (err) {
-    console.error('Error fetching admin users:', err);
-    res.status(500).json({ error: 'Lỗi tải danh sách người học.' });
-  }
-});
-
-// POST update user role (Super Admin only)
-app.post('/api/admin/users/role', async (req, res) => {
-  const currentEmail = getLoggedInUserEmail(req);
-  if (!currentEmail) {
-    return res.status(401).json({ error: 'Vui lòng đăng nhập.' });
-  }
-
-  if (!isSuperAdmin(currentEmail)) {
-    return res.status(403).json({ error: 'Chỉ Super Admin mới có quyền thay đổi vai trò và phân quyền tài khoản.' });
-  }
-
-  const { targetEmail, role } = req.body;
-  if (!targetEmail || !role) {
-    return res.status(400).json({ error: 'Thiếu thông tin tài khoản hoặc vai trò cần cấp.' });
-  }
-
-  if (isSuperAdmin(targetEmail)) {
-    return res.status(400).json({ error: 'Không thể thay đổi quyền hạn của tài khoản Super Admin cố định.' });
-  }
-
-  const allowedRoles = ['teacher', 'admin', 'user'];
-  if (!allowedRoles.includes(role)) {
-    return res.status(400).json({ error: 'Vai trò không hợp lệ.' });
-  }
-
-  try {
-    if (mongoose.connection.readyState === 1) {
-      await User.updateOne({ _id: targetEmail }, { $set: { role } }, { upsert: true });
-    }
-
-    const userData = await readUserData();
-    if (!userData.users) userData.users = {};
-    if (!userData.users[targetEmail]) {
-      userData.users[targetEmail] = { name: targetEmail.split('@')[0], picture: '', stats: { streak: 0, studyTime: 0 } };
-    }
-    userData.users[targetEmail].role = role;
-    await writeUserData(userData);
-
-    const roleName = role === 'teacher' ? 'Giáo viên' : (role === 'admin' ? 'Quản trị viên' : 'Học viên');
-    res.json({
-      success: true,
-      message: `Đã cập nhật quyền của ${targetEmail} thành "${roleName}".`,
-      role
-    });
-  } catch (err) {
-    console.error('Error updating user role:', err);
-    res.status(500).json({ error: 'Lỗi cập nhật quyền người dùng.' });
   }
 });
 

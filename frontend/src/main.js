@@ -13106,10 +13106,10 @@ window.fetchLiveCommunityStats = async function () {
     const data = await res.json();
 
     if (totalEl && data.totalUsers !== undefined) {
-      totalEl.textContent = Number(data.totalUsers).toLocaleString('vi-VN') + ' Học viên';
+      totalEl.textContent = Number(data.totalUsers).toLocaleString('vi-VN');
     }
     if (onlineEl && data.onlineUsers !== undefined) {
-      onlineEl.textContent = Number(data.onlineUsers).toLocaleString('vi-VN') + ' Đang online';
+      onlineEl.textContent = Number(data.onlineUsers).toLocaleString('vi-VN');
     }
   } catch (err) {
     console.debug('Could not fetch real presence stats:', err);
@@ -13119,14 +13119,40 @@ window.fetchLiveCommunityStats = async function () {
 window.sendPresenceHeartbeat = async function () {
   try {
     const base = window.API_BASE_URL || '';
-    const token = localStorage.getItem('sessionToken') || '';
+    const token = localStorage.getItem('session_token') || localStorage.getItem('sessionToken') || '';
+    let clientId = localStorage.getItem('hongtai_client_id');
+    if (!clientId) {
+      clientId = 'client_' + Math.random().toString(36).substring(2, 12) + '_' + Date.now();
+      localStorage.setItem('hongtai_client_id', clientId);
+    }
+    const userEmail = (currentUser && currentUser.email) || '';
+    const headers = typeof getAuthHeaders === 'function'
+      ? getAuthHeaders({ 'Content-Type': 'application/json' })
+      : { 'Content-Type': 'application/json' };
+
+    if (token && !headers['Authorization']) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    if (token && !headers['x-session-token']) {
+      headers['x-session-token'] = token;
+    }
+    if (userEmail && !headers['x-user-email']) {
+      headers['x-user-email'] = userEmail;
+    }
+    if (clientId) {
+      headers['x-client-id'] = clientId;
+    }
+
     await fetch(`${base}/api/presence/heartbeat`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': token ? `Bearer ${token}` : ''
-      },
-      body: JSON.stringify({ path: window.location.pathname, ts: Date.now() })
+      headers: headers,
+      credentials: 'include',
+      body: JSON.stringify({
+        clientId: clientId,
+        email: userEmail,
+        path: window.location.pathname,
+        ts: Date.now()
+      })
     });
   } catch (e) { }
 };
@@ -13139,15 +13165,15 @@ if (typeof window !== 'undefined') {
     window.sendPresenceHeartbeat();
   }, 100);
 
-  // Periodic poll
+  // Periodic poll for community stats
   setInterval(() => {
     window.fetchLiveCommunityStats();
   }, 25000);
 
-// Periodic presence heartbeat ping
+  // Periodic presence heartbeat ping (keeps online status active)
   setInterval(() => {
     window.sendPresenceHeartbeat();
-  }, 35000);
+  }, 30000);
 }
 
 // ==========================================================================
