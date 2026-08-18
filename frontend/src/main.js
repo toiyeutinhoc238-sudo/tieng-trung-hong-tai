@@ -5931,7 +5931,7 @@ function initExams() {
 
 function setStudyMode(mode) {
   studyMode = mode;
-  switchStudyMode(mode);
+  _applyStudyModeUI(mode);
   stopAutoplay();
   renderActiveCard();
 }
