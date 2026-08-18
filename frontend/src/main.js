@@ -6171,12 +6171,12 @@ function renderActiveCardTyping(current) {
   if (hintBtn) {
     hintBtn.innerHTML = '<i class="fa-solid fa-eye"></i> Gợi ý Pinyin';
     hintBtn.disabled = false;
-    hintBtn.style.display = 'none';
+    hintBtn.style.display = 'inline-flex';
   }
 
   const typeRevealBtn = document.getElementById('type-reveal-btn');
   if (typeRevealBtn) {
-    typeRevealBtn.style.display = 'none';
+    typeRevealBtn.style.display = 'inline-flex';
   }
 
   const checkBtn = document.getElementById('type-check-btn');
@@ -6205,7 +6205,13 @@ async function handleTypingCheck() {
   // Alternative Answers Validation: Split database word by |, /, ;, or commas
   const correctAnswerStr = current.word.trim();
   const acceptableAnswers = correctAnswerStr.split(/[\/|;；,，、]+/).map(ans => ans.trim().toLowerCase());
-  const isCorrect = acceptableAnswers.includes(answer);
+  
+  const normInput = typeof normalizeTextForMatch === 'function' ? normalizeTextForMatch(answer) : answer.replace(/[\s\-_]/g, '');
+  const normWord = typeof normalizeTextForMatch === 'function' ? normalizeTextForMatch(current.word) : current.word.trim().toLowerCase();
+  const normPinyin = typeof normalizeTextForMatch === 'function' ? normalizeTextForMatch(current.pinyin) : (current.pinyin || '').trim().toLowerCase();
+
+  const isPinyinMatch = normInput.length > 0 && (normInput === normPinyin || answer === (current.pinyin || '').toLowerCase().trim());
+  const isCorrect = acceptableAnswers.includes(answer) || answer === current.word.toLowerCase().trim() || (normInput.length > 0 && normInput === normWord) || isPinyinMatch;
 
   if (answer === '') {
     feedback.textContent = 'Vui lòng nhập câu trả lời!';
