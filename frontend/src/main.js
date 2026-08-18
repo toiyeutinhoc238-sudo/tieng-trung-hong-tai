@@ -5925,68 +5925,7 @@ function initExams() {
 
 function setStudyMode(mode) {
   studyMode = mode;
-  const modeFlipBtn = document.getElementById('mode-flip-btn');
-  const modeTypeBtn = document.getElementById('mode-type-btn');
-  const cardViewportEl = document.querySelector('.card-viewport');
-
-  if (cardViewportEl) {
-    if (mode === 'type') {
-      cardViewportEl.classList.add('typing-mode-active');
-    } else {
-      cardViewportEl.classList.remove('typing-mode-active');
-    }
-  }
-
-  // Explicitly hide hints and reveal button in typing mode as requested
-  const typeHintBtn = document.getElementById('type-hint-pinyin-btn');
-  const typeRevealBtn = document.getElementById('type-reveal-btn');
-  if (typeHintBtn) {
-    typeHintBtn.style.display = 'none';
-  }
-  if (typeRevealBtn) {
-    typeRevealBtn.style.display = 'none';
-  }
-
-  // Explicitly hide/show bottom HUD buttons based on studyMode
-  const markMemorizedBtn = document.getElementById('mark-memorized-btn');
-  const markUnmemorizedBtn = document.getElementById('mark-unmemorized-btn');
-  const markStarredBtn = document.getElementById('mark-starred-btn');
-  if (mode === 'type') {
-    if (markMemorizedBtn) markMemorizedBtn.style.display = 'none';
-    if (markUnmemorizedBtn) markUnmemorizedBtn.style.display = 'none';
-    if (markStarredBtn) markStarredBtn.style.display = 'none';
-  } else {
-    if (markMemorizedBtn) markMemorizedBtn.style.display = 'flex';
-    if (markUnmemorizedBtn) markUnmemorizedBtn.style.display = 'flex';
-    if (markStarredBtn) markStarredBtn.style.display = 'flex';
-  }
-
-  if (modeFlipBtn && modeTypeBtn) {
-    if (mode === 'flip') {
-      modeFlipBtn.classList.add('active-mode');
-      modeFlipBtn.style.background = 'var(--accent-blue)';
-      modeFlipBtn.style.color = 'white';
-
-      modeTypeBtn.classList.remove('active-mode');
-      modeTypeBtn.style.background = 'transparent';
-      modeTypeBtn.style.color = 'var(--text-secondary)';
-
-      document.getElementById('flashcard-card').style.display = 'block';
-      document.getElementById('typing-card-container').style.display = 'none';
-    } else {
-      modeTypeBtn.classList.add('active-mode');
-      modeTypeBtn.style.background = 'var(--accent-blue)';
-      modeTypeBtn.style.color = 'white';
-
-      modeFlipBtn.classList.remove('active-mode');
-      modeFlipBtn.style.background = 'transparent';
-      modeFlipBtn.style.color = 'var(--text-secondary)';
-
-      document.getElementById('flashcard-card').style.display = 'none';
-      document.getElementById('typing-card-container').style.display = 'flex';
-    }
-  }
-
+  switchStudyMode(mode);
   stopAutoplay();
   renderActiveCard();
 }
@@ -8465,8 +8404,8 @@ function renderBkModalContent() {
       if (diag.notes && diag.notes.length > 0) {
         diag.notes.forEach(note => {
           notesHtml += `
-            <div style="background:rgba(245,158,11,0.12); border-left:3px solid #f59e0b; padding:10px 14px; border-radius:0 10px 10px 0; margin-top:12px; font-size:0.92rem; color:#fef08a; line-height:1.5;">
-              <strong style="color:#fbbf24;"><i class="fa-solid fa-lightbulb" style="margin-right:6px;"></i> Chú ý:</strong> ${note}
+            <div class="grammar-note-box" style="background:rgba(245,158,11,0.12); border-left:3px solid #f59e0b; padding:10px 14px; border-radius:0 10px 10px 0; margin-top:12px; font-size:0.92rem; color:var(--text-primary, #fef08a); line-height:1.5;">
+              <strong class="grammar-note-title" style="color:#d97706;"><i class="fa-solid fa-lightbulb" style="margin-right:6px;"></i> Chú ý:</strong> <span class="grammar-note-text">${note}</span>
             </div>
           `;
         });
@@ -8836,11 +8775,11 @@ window.openLessonGrammarModal = function(lessonKey) {
       let formulaHtml = '';
       if (pt.formula) {
         formulaHtml = `
-          <div style="background: rgba(56, 189, 248, 0.08); border-left: 4px solid #38bdf8; border-radius: 12px; padding: 12px 16px; margin: 12px 0;">
-            <div style="font-size: 0.8rem; font-weight: 800; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+          <div class="grammar-formula-box" style="background: rgba(56, 189, 248, 0.08); border-left: 4px solid #0284c7; border-radius: 12px; padding: 12px 16px; margin: 12px 0;">
+            <div class="grammar-formula-title" style="font-size: 0.8rem; font-weight: 800; color: #0284c7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
               <i class="fa-solid fa-code"></i> Cấu trúc / Công thức
             </div>
-            <div style="font-family: var(--font-display, sans-serif); font-size: 1.02rem; font-weight: 700; color: #ffffff; white-space: pre-line; line-height: 1.5;">
+            <div class="grammar-formula-text" style="font-family: var(--font-display, sans-serif); font-size: 1.02rem; font-weight: 700; color: var(--text-primary, #ffffff); white-space: pre-line; line-height: 1.5;">
               ${escapeHtml(pt.formula)}
             </div>
           </div>
@@ -8851,7 +8790,7 @@ window.openLessonGrammarModal = function(lessonKey) {
       let expHtml = '';
       if (pt.explanation) {
         expHtml = `
-          <div style="font-size: 0.95rem; color: #e2e8f0; line-height: 1.6; margin: 10px 0;">
+          <div class="grammar-exp-text" style="font-size: 0.95rem; color: var(--text-primary, #e2e8f0); line-height: 1.6; margin: 10px 0;">
             ${escapeHtml(pt.explanation)}
           </div>
         `;
@@ -8861,15 +8800,37 @@ window.openLessonGrammarModal = function(lessonKey) {
       let noteHtml = '';
       if (pt.note) {
         noteHtml = `
-          <div style="background: rgba(245, 158, 11, 0.1); border-left: 4px solid #f59e0b; border-radius: 12px; padding: 10px 14px; margin: 10px 0;">
-            <div style="font-size: 0.8rem; font-weight: 800; color: #fbbf24; margin-bottom: 2px; display: flex; align-items: center; gap: 6px;">
+          <div class="grammar-note-box" style="background: rgba(245, 158, 11, 0.12); border-left: 4px solid #f59e0b; border-radius: 12px; padding: 10px 14px; margin: 10px 0;">
+            <div class="grammar-note-title" style="font-size: 0.82rem; font-weight: 800; color: #d97706; margin-bottom: 3px; display: flex; align-items: center; gap: 6px;">
               <i class="fa-solid fa-lightbulb"></i> Chú ý
             </div>
-            <div style="font-size: 0.9rem; color: #fef08a; line-height: 1.5;">
+            <div class="grammar-note-text" style="font-size: 0.92rem; color: var(--text-primary, #fef08a); line-height: 1.5;">
               ${escapeHtml(pt.note)}
             </div>
           </div>
         `;
+      }
+
+      // Tables (e.g., bảng số từ 0 - 99 và số lớn >= 100)
+      let tablesHtml = '';
+      if (pt.tables && pt.tables.length > 0) {
+        tablesHtml = pt.tables.map(tbl => `
+          <div style="margin: 14px 0;">
+            <div style="font-weight: 800; color: #10b981; font-size: 0.92rem; margin-bottom: 6px; display:flex; align-items:center; gap:6px;">
+              <i class="fa-solid fa-table-list"></i> ${escapeHtml(tbl.title || 'Bảng tra cứu')}
+            </div>
+            <div style="overflow-x: auto; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+              <table class="custom-grammar-table">
+                <thead>
+                  <tr>${(tbl.headers || []).map(h => `<th>${escapeHtml(h)}</th>`).join('')}</tr>
+                </thead>
+                <tbody>
+                  ${(tbl.rows || []).map(r => `<tr>${(r || []).map(c => `<td>${escapeHtml(c)}</td>`).join('')}</tr>`).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `).join('');
       }
 
       // Examples
@@ -8878,19 +8839,19 @@ window.openLessonGrammarModal = function(lessonKey) {
         let exItems = pt.examples.map(ex => {
           const safeZh = (ex.zh || '').replace(/'/g, "\\'");
           return `
-            <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; transition: all 0.2s;">
+            <div class="grammar-example-item" style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; transition: all 0.2s;">
               <div style="flex: 1;">
-                <div style="font-size: 1.18rem; font-weight: 700; color: #ffffff; font-family: 'Noto Sans SC', sans-serif; margin-bottom: 2px; letter-spacing: 0.5px;">
+                <div class="grammar-ex-zh" style="font-size: 1.18rem; font-weight: 700; color: var(--text-primary, #ffffff); font-family: 'Noto Sans SC', sans-serif; margin-bottom: 2px; letter-spacing: 0.5px;">
                   ${escapeHtml(ex.zh || '')}
                 </div>
-                <div style="font-size: 0.92rem; color: #38bdf8; font-family: var(--font-display, sans-serif); font-weight: 600; margin-bottom: 2px;">
+                <div class="grammar-ex-py" style="font-size: 0.92rem; color: #0284c7; font-family: var(--font-display, sans-serif); font-weight: 600; margin-bottom: 2px;">
                   ${escapeHtml(ex.pinyin || '')}
                 </div>
-                <div style="font-size: 0.88rem; color: #cbd5e1;">
+                <div class="grammar-ex-vi" style="font-size: 0.88rem; color: var(--text-secondary, #cbd5e1);">
                   ${escapeHtml(ex.vi || '')}
                 </div>
               </div>
-              <button onclick="window.speakText('${safeZh}')" style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); color: #38bdf8; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: all 0.2s;" title="Nghe phát âm">
+              <button onclick="window.speakText('${safeZh}')" class="grammar-speak-btn" style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); color: #0284c7; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: all 0.2s;" title="Nghe phát âm">
                 <i class="fa-solid fa-volume-high"></i>
               </button>
             </div>
@@ -8899,7 +8860,7 @@ window.openLessonGrammarModal = function(lessonKey) {
 
         examplesHtml = `
           <div style="margin-top: 14px;">
-            <div style="font-size: 0.82rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+            <div style="font-size: 0.82rem; font-weight: 800; color: var(--text-muted, #94a3b8); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
               <i class="fa-solid fa-list-check"></i> Ví dụ minh họa (${pt.examples.length} câu)
             </div>
             <div style="display: flex; flex-direction: column; gap: 8px;">
@@ -8910,18 +8871,19 @@ window.openLessonGrammarModal = function(lessonKey) {
       }
 
       cardsHtml += `
-        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+        <div class="grammar-card-box" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
           <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px;">
             <div style="width: 32px; height: 32px; border-radius: 10px; background: linear-gradient(135deg, #0284c7, #2563eb); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.95rem; flex-shrink: 0;">
               ${idx + 1}
             </div>
-            <h4 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #ffffff; font-family: var(--font-display, sans-serif);">
+            <h4 class="grammar-card-title" style="margin: 0; font-size: 1.15rem; font-weight: 800; color: var(--text-primary, #ffffff); font-family: var(--font-display, sans-serif);">
               ${escapeHtml(pt.title || '')}
             </h4>
           </div>
           ${formulaHtml}
           ${expHtml}
           ${noteHtml}
+          ${tablesHtml}
           ${examplesHtml}
         </div>
       `;

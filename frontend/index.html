@@ -1151,7 +1151,8 @@
           </div>
 
           <!-- HSK Lesson Selector Block (HSK notebook only) -->
-          <div class="glass-panel" id="nb-hsk-lesson-selector-container" style="padding: 22px 24px; margin-bottom: 24px; display: none;">
+          <div class="glass-panel" id="nb-hsk-lesson-selector-container"
+            style="padding: 22px 24px; margin-bottom: 24px; display: none;">
             <div
               style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
               <h3
@@ -1179,10 +1180,12 @@
           </div>
 
           <!-- Add Word Form Block (Personal notebook only) -->
-          <div class="glass-panel" id="nb-add-word-form-container" style="padding: 24px; margin-bottom: 24px; display: none;">
+          <div class="glass-panel" id="nb-add-word-form-container"
+            style="padding: 24px; margin-bottom: 24px; display: none;">
             <h3
               style="font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; color: var(--text-primary); font-family: var(--font-display); border-left: 4px solid var(--accent-teal); padding-left: 10px;">
-              <i class="fa-solid fa-pen-to-square" style="color: var(--accent-teal);"></i> Thêm từ vựng mới vào sổ tay này
+              <i class="fa-solid fa-pen-to-square" style="color: var(--accent-teal);"></i> Thêm từ vựng mới vào sổ tay
+              này
             </h3>
             <form id="nb-add-word-form"
               style="display: grid; grid-template-columns: repeat(3, 1fr) 1fr; gap: 16px; align-items: end;">
@@ -1192,12 +1195,14 @@
                   style="width: 100%; padding: 10px 14px; font-size: 0.9rem; border-radius: var(--radius-md); border: 1px solid var(--border-glass); background: rgba(0,0,0,0.2); color: var(--text-primary); outline: none;">
               </div>
               <div style="display: flex; flex-direction: column; gap: 6px;">
-                <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">Bính âm Pinyin (*)</label>
+                <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">Bính âm Pinyin
+                  (*)</label>
                 <input type="text" id="nb-add-word-pinyin" placeholder="Ví dụ: xuéxí" required
                   style="width: 100%; padding: 10px 14px; font-size: 0.9rem; border-radius: var(--radius-md); border: 1px solid var(--border-glass); background: rgba(0,0,0,0.2); color: var(--text-primary); outline: none;">
               </div>
               <div style="display: flex; flex-direction: column; gap: 6px;">
-                <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">Nghĩa tiếng Việt (*)</label>
+                <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">Nghĩa tiếng Việt
+                  (*)</label>
                 <input type="text" id="nb-add-word-vi" placeholder="Ví dụ: học tập" required
                   style="width: 100%; padding: 10px 14px; font-size: 0.9rem; border-radius: var(--radius-md); border: 1px solid var(--border-glass); background: rgba(0,0,0,0.2); color: var(--text-primary); outline: none;">
               </div>
@@ -1209,15 +1214,16 @@
               <!-- Optional row -->
               <div style="grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                 <div style="display: flex; flex-direction: column; gap: 6px;">
-                  <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">Giải nghĩa thêm (Không bắt buộc)</label>
+                  <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">Giải nghĩa thêm
+                    (Không bắt buộc)</label>
                   <input type="text" id="nb-add-word-desc"
                     placeholder="Ví dụ: từ loại động từ, chỉ việc thu nhận kiến thức"
                     style="width: 100%; padding: 8px 12px; font-size: 0.82rem; border-radius: var(--radius-md); border: 1px solid var(--border-glass); background: rgba(0,0,0,0.15); color: var(--text-primary); outline: none;">
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 6px;">
-                  <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">Ví dụ ngữ cảnh (Dùng '|' để tách câu Hoa | câu Việt)</label>
-                  <input type="text" id="nb-add-word-example"
-                    placeholder="Ví dụ: 我喜欢学习汉语。 | Tôi thích học tiếng Trung."
+                  <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);">Ví dụ ngữ cảnh
+                    (Dùng '|' để tách câu Hoa | câu Việt)</label>
+                  <input type="text" id="nb-add-word-example" placeholder="Ví dụ: 我喜欢学习汉语。 | Tôi thích học tiếng Trung."
                     style="width: 100%; padding: 8px 12px; font-size: 0.82rem; border-radius: var(--radius-md); border: 1px solid var(--border-glass); background: rgba(0,0,0,0.15); color: var(--text-primary); outline: none;">
                 </div>
               </div>
@@ -1231,7 +1237,8 @@
               style="position: absolute; top: 24px; left: 0; width: 4px; height: 28px; background: #e11d48; border-radius: 0 4px 4px 0;">
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px;">
+            <div
+              style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px;">
               <h3
                 style="font-size: 1.2rem; font-weight: 800; color: var(--text-primary); font-family: var(--font-display); padding-left: 12px; margin: 0; display: flex; align-items: center; gap: 8px;">
                 <i class="fa-solid fa-graduation-cap" style="color: #e11d48;"></i> Phương thức ôn tập của bạn
@@ -1239,7 +1246,8 @@
             </div>
 
             <!-- Filters & Limit Selectors Row (Horizontal) -->
-            <div style="display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; margin-bottom: 22px; padding: 14px 16px; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-glass); border-radius: 12px;">
+            <div
+              style="display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; margin-bottom: 22px; padding: 14px 16px; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-glass); border-radius: 12px;">
               <!-- Filter Selector -->
               <div style="display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 280px;">
                 <label
@@ -1250,11 +1258,14 @@
                   <button type="button" class="btn btn-outline filter-btn active-filter" data-filter="all"
                     style="padding: 6px 14px; border-radius: 8px; font-size: 0.84rem; font-weight: 600;">Tất cả</button>
                   <button type="button" class="btn btn-outline filter-btn" data-filter="unstudied"
-                    style="padding: 6px 14px; border-radius: 8px; font-size: 0.84rem; font-weight: 600;">Chưa học</button>
+                    style="padding: 6px 14px; border-radius: 8px; font-size: 0.84rem; font-weight: 600;">Chưa
+                    học</button>
                   <button type="button" class="btn btn-outline filter-btn" data-filter="unmemorized"
-                    style="padding: 6px 14px; border-radius: 8px; font-size: 0.84rem; font-weight: 600;">Chưa thuộc</button>
+                    style="padding: 6px 14px; border-radius: 8px; font-size: 0.84rem; font-weight: 600;">Chưa
+                    thuộc</button>
                   <button type="button" class="btn btn-outline filter-btn" data-filter="starred"
-                    style="padding: 6px 14px; border-radius: 8px; font-size: 0.84rem; font-weight: 600;">Yêu thích ⭐</button>
+                    style="padding: 6px 14px; border-radius: 8px; font-size: 0.84rem; font-weight: 600;">Yêu thích
+                    ⭐</button>
                 </div>
               </div>
 
@@ -1290,7 +1301,9 @@
                   <strong
                     style="display: block; font-size: 1.08rem; font-family: var(--font-display); color: var(--text-primary); margin-bottom: 4px;">Thẻ
                     Lật Flashcard</strong>
-                  <span style="font-size: 0.82rem; color: var(--text-secondary); font-weight: 500; line-height: 1.35; display: block;">Học qua lật thẻ từ
+                  <span
+                    style="font-size: 0.82rem; color: var(--text-secondary); font-weight: 500; line-height: 1.35; display: block;">Học
+                    qua lật thẻ từ
                     vựng truyền thống</span>
                 </div>
               </button>
@@ -1306,7 +1319,9 @@
                   <strong
                     style="display: block; font-size: 1.08rem; font-family: var(--font-display); color: var(--text-primary); margin-bottom: 4px;">Luyện
                     Gõ Chữ & Nghĩa</strong>
-                  <span style="font-size: 0.82rem; color: var(--text-secondary); font-weight: 500; line-height: 1.35; display: block;">Gõ chữ Hán hoặc
+                  <span
+                    style="font-size: 0.82rem; color: var(--text-secondary); font-weight: 500; line-height: 1.35; display: block;">Gõ
+                    chữ Hán hoặc
                     điền nghĩa tự chấm điểm</span>
                 </div>
               </button>
@@ -1322,7 +1337,9 @@
                   <strong
                     style="display: block; font-size: 1.08rem; font-family: var(--font-display); color: var(--text-primary); margin-bottom: 4px;">Đấu
                     Trường Từ Vựng 🎮</strong>
-                  <span style="font-size: 0.82rem; color: var(--text-secondary); font-weight: 500; line-height: 1.35; display: block;">Trò chơi quả bom
+                  <span
+                    style="font-size: 0.82rem; color: var(--text-secondary); font-weight: 500; line-height: 1.35; display: block;">Trò
+                    chơi quả bom
                     phản xạ từ vựng HSK</span>
                 </div>
               </button>
@@ -1950,8 +1967,8 @@
             </div>
 
             <!-- Typing Mode Container (Hidden by default) -->
-            <div class="typing-card-container glass-panel" id="typing-card-container"
-              style="display: none; width: 100%; height: 100%; border-radius: var(--radius-xl); padding: 32px; flex-direction: column; justify-content: space-between; border: 1px solid var(--border-glass); background: var(--card-bg-front); box-sizing: border-box; position: absolute; top: 0; left: 0; z-index: 10;">
+            <div class="typing-card-container" id="typing-card-container"
+              style="display: none; width: 100%; height: 360px; border-radius: var(--radius-xl); padding: 32px; flex-direction: column; justify-content: space-between; border: 1px solid var(--border-glass); box-sizing: border-box;">
               <div class="card-header-tags"
                 style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
                 <span class="badge badge-level" id="type-card-level">HSK 1</span>
@@ -1987,7 +2004,7 @@
                   style="display: none; width: 100%; max-width: 440px; margin-top: 4px; flex-direction: column; align-items: center;">
                   <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
                     <span id="type-revealed-word"
-                      style="font-family: var(--font-chinese); font-size: 1.8rem; font-weight: 700; color: var(--text-primary);">学习</span>
+                      style="font-family: var(--font-chinese); font-size: 1.8rem; font-weight: 700; color: var(--text-primary);"></span>
                     <span id="type-revealed-pinyin"
                       style="font-family: var(--font-display); font-size: 1.15rem; color: var(--accent-teal);">xuéxí</span>
                     <button id="type-speak-btn" class="speak-btn circle-btn"

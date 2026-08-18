@@ -965,15 +965,27 @@
 
   <script>
     // --- CONFIG ---
-    const API_BASE_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '')
-      ? 'http://localhost:5000'
-      : (window.location.origin || 'https://tieng-trung-hong-tai-1.onrender.com');
+    function getApiBaseUrl() {
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '') {
+        return window.location.port === '5173' ? '' : 'http://localhost:5000';
+      }
+      return '';
+    }
+    const API_BASE_URL = getApiBaseUrl();
 
     const fallbackVocab = [
-      { id: '1', word: '学习', pinyin: 'xuéxí', meaning: 'học tập', level: '1' },
-      { id: '2', word: '谢谢', pinyin: 'xièxie', meaning: 'cảm ơn', level: '1' },
-      { id: '3', word: '苹果', pinyin: 'píngguǒ', meaning: 'quả táo', level: '1' },
-      { id: '4', word: '中国', pinyin: 'Zhōngguó', meaning: 'Trung Quốc', level: '1' }
+      { id: '1', word: '学习', pinyin: 'xuéxí', meaning: 'học tập', level: '1', lessonId: '1' },
+      { id: '2', word: '谢谢', pinyin: 'xièxie', meaning: 'cảm ơn', level: '1', lessonId: '1' },
+      { id: '3', word: '你好', pinyin: 'nǐ hǎo', meaning: 'xin chào', level: '1', lessonId: '1' },
+      { id: '4', word: '再见', pinyin: 'zàijiàn', meaning: 'tạm biệt', level: '1', lessonId: '1' },
+      { id: '5', word: '苹果', pinyin: 'píngguǒ', meaning: 'quả táo', level: '1', lessonId: '2' },
+      { id: '6', word: '中国', pinyin: 'Zhōngguó', meaning: 'Trung Quốc', level: '1', lessonId: '2' },
+      { id: '7', word: '老师', pinyin: 'lǎoshī', meaning: 'thầy cô giáo', level: '1', lessonId: '3' },
+      { id: '8', word: '朋友', pinyin: 'péngyou', meaning: 'bạn bè', level: '1', lessonId: '3' },
+      { id: '9', word: '高兴', pinyin: 'gāoxìng', meaning: 'vui vẻ', level: '1', lessonId: '4' },
+      { id: '10', word: '喝水', pinyin: 'hē shuǐ', meaning: 'uống nước', level: '1', lessonId: '4' },
+      { id: '11', word: '吃饭', pinyin: 'chī fàn', meaning: 'ăn cơm', level: '1', lessonId: '5' },
+      { id: '12', word: '工作', pinyin: 'gōngzuò', meaning: 'công việc / làm việc', level: '1', lessonId: '5' }
     ];
 
     // --- GLOBALS ---
@@ -1040,7 +1052,7 @@
 
     const selVoice = document.getElementById('sel-voice');
     if (selVoice) {
-      const savedVoice = localStorage.getItem('speech_voice') || 'elevenlabs-adam';
+      const savedVoice = localStorage.getItem('speech_voice') || 'baidu-female';
       const optExists = Array.from(selVoice.options).some(o => o.value === savedVoice);
       if (optExists) selVoice.value = savedVoice;
       selVoice.addEventListener('change', () => {
@@ -1050,25 +1062,18 @@
 
     function speak(text) {
       if (!text) return;
-      const selectedVoice = selVoice ? selVoice.value : (localStorage.getItem('speech_voice') || 'elevenlabs-adam');
-      localStorage.setItem('speech_voice', selectedVoice);
-
       if (activeAudio) {
         try { activeAudio.pause(); activeAudio.currentTime = 0; activeAudio.src = ''; } catch (e) { }
         activeAudio = null;
       }
-
-      if (selectedVoice.startsWith('elevenlabs-')) {
-        const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(selectedVoice)}&_t=${Date.now()}`;
-        const audio = new Audio(url);
-        activeAudio = audio;
-        audio.play().catch(err => {
-          console.warn("ElevenLabs audio error, fallback to WebSpeech", err);
-          fallbackWebSpeech(text);
-        });
-      } else {
-        fallbackWebSpeech(text);
-      }
+      const cleanText = text.replace(/<[^>]*>/g, '').trim();
+      const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=baidu-female&speed=3&_t=${Date.now()}`;
+      const audio = new Audio(url);
+      activeAudio = audio;
+      audio.play().catch(err => {
+        console.warn("API Audio play failed, falling back to WebSpeech:", err);
+        fallbackWebSpeech(cleanText);
+      });
     }
 
     function fallbackWebSpeech(text) {
@@ -1100,7 +1105,6 @@
         }
       } catch (e) { }
 
-      // 2. Fetch fresh user profile from session API
       try {
         const t = localStorage.getItem('session_token');
         const headers = t ? { 'Authorization': `Bearer ${t}`, 'x-session-token': t } : {};
@@ -1140,10 +1144,28 @@
         const t = localStorage.getItem('session_token');
         const headers = t ? { 'Authorization': `Bearer ${t}`, 'x-session-token': t } : {};
         const res = await fetch(API_BASE_URL + '/api/vocabulary', { headers });
-        if (!res.ok) throw new Error();
-        vocabData = await res.json();
-        if (!vocabData || vocabData.length < 4) vocabData = fallbackVocab;
-      } catch (e) { vocabData = fallbackVocab; }
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) {
+            vocabData = data;
+          }
+        }
+      } catch (e) {
+        console.warn("Could not fetch vocabulary from server, checking local fallback:", e);
+      }
+
+      if (!vocabData || vocabData.length < 4) {
+        try {
+          const cached = JSON.parse(localStorage.getItem('cached_vocabulary') || '[]');
+          if (Array.isArray(cached) && cached.length >= 4) {
+            vocabData = cached;
+          }
+        } catch (e) { }
+      }
+
+      if (!vocabData || vocabData.length < 4) {
+        vocabData = fallbackVocab;
+      }
 
       vocabData = vocabData.filter(w => w && w.word && w.meaning && w.pinyin);
 
@@ -1371,17 +1393,22 @@
         }
       }
 
-      if (pool.length < 4) pool = vocabData; // Fallback
+      if (pool.length < 4) {
+        const fallbackPool = vocabData.filter(w => w && w.word && w.meaning);
+        pool = fallbackPool.length >= 4 ? fallbackPool : fallbackVocab;
+      }
 
       currentPool = pool;
       distractorPool = vocabData.length >= 4 ? vocabData : fallbackVocab;
       remainingQs = shuffle(currentPool);
+      if (remainingQs.length === 0) {
+        remainingQs = shuffle(fallbackVocab);
+      }
 
       score = 0; hearts = 3; hudScore.textContent = score; updateHearts();
       setupModal.style.display = 'none';
 
       // Render Stepper if played by lesson
-      const urlParams = new URLSearchParams(window.location.search);
       const qLesson = urlParams.get('lesson') || (selLesson ? selLesson.value : '');
       const qLevel = urlParams.get('level') || (selLevel ? selLevel.value : '1');
       const qVer = urlParams.get('version') || localStorage.getItem('active_hsk_version') || '3.0';
@@ -1815,7 +1842,6 @@
 
     loadVocab();
   </script>
-  <script type="module" src="/src/main.js"></script>
 </body>
 
 </html>
