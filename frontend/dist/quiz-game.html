@@ -696,16 +696,44 @@
       pointer-events: none;
     }
 
-    .ans-btn.correct {
-      filter: brightness(1.2);
-      outline: 4px solid #fff;
-      outline-offset: -4px;
-      z-index: 10;
-      transform: scale(1.02);
+    @keyframes wrongShake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
     }
 
+    .ans-btn.selected-wrong {
+      background: #ef4444 !important;
+      box-shadow: 0 8px 0 #991b1b !important;
+      color: #ffffff !important;
+      outline: 4px solid #fca5a5 !important;
+      outline-offset: -4px;
+      z-index: 10;
+      transform: scale(1.02) !important;
+      animation: wrongShake 0.35s ease-in-out !important;
+      filter: none !important;
+      opacity: 1 !important;
+    }
+
+    .ans-btn.show-correct,
+    .ans-btn.selected-correct,
+    .ans-btn.correct {
+      background: #22c55e !important;
+      box-shadow: 0 8px 0 #15803d !important;
+      color: #ffffff !important;
+      outline: 4px solid #86efac !important;
+      outline-offset: -4px;
+      z-index: 11;
+      transform: scale(1.03) !important;
+      filter: none !important;
+      opacity: 1 !important;
+    }
+
+    .ans-btn.dimmed,
     .ans-btn.wrong {
-      filter: grayscale(1) opacity(0.5);
+      opacity: 0.35 !important;
+      filter: grayscale(0.85) !important;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.2) !important;
     }
 
     /* In-game floating feedback pill */
@@ -1289,7 +1317,10 @@
     });
 
     btnStart.addEventListener('click', startGame);
-    btnRestart.addEventListener('click', () => { goModal.style.display = 'none'; setupModal.style.display = 'flex'; });
+    btnRestart.addEventListener('click', () => {
+      goModal.style.display = 'none';
+      startGame();
+    });
     btnQuit.addEventListener('click', () => {
       saveGameHistory();
       setTimeout(() => {
@@ -1408,43 +1439,47 @@
       score = 0; hearts = 3; hudScore.textContent = score; updateHearts();
       setupModal.style.display = 'none';
 
-      // Render Stepper if played by lesson
-      const qLesson = urlParams.get('lesson') || (selLesson ? selLesson.value : '');
-      const qLevel = urlParams.get('level') || (selLevel ? selLevel.value : '1');
-      const qVer = urlParams.get('version') || localStorage.getItem('active_hsk_version') || '3.0';
-
-      const numLessonId = parseInt(String(qLesson).replace(/\D/g, ''), 10) || (qLesson !== 'all' && qLesson !== 'random' ? parseInt(qLesson, 10) : null);
+      // Render Stepper ONLY if played directly by roadmap lesson
+      const isRoadmapMode = (urlParams.get('source') === 'roadmap' || (urlParams.get('lesson') && !urlParams.get('notebook') && !urlParams.get('lessons'))) && !urlParams.get('filter');
       const stepperEl = document.getElementById('quiz-lesson-stepper-bar');
 
       if (stepperEl) {
-        if (numLessonId) {
-          stepperEl.style.display = 'block';
-          stepperEl.innerHTML = `
-            <div class="lesson-stepper-hub-bar" style="background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 18px; padding: 8px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; box-shadow: 0 10px 30px rgba(0,0,0,0.35);">
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <a href="/index.html?tab=lessons&level=${qLevel}&version=${qVer}" target="_top" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #cbd5e1; padding: 6px 12px; border-radius: 10px; font-weight: 700; text-decoration: none; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 6px;">
-                  <i class="fa-solid fa-map-location-dot"></i> Lộ trình
-                </a>
-                <div style="font-weight: 800; font-size: 0.95rem; color: #fbbf24;">
-                  <i class="fa-solid fa-bookmark" style="color: #38bdf8;"></i> Ôn Tập Bài ${numLessonId}
+        if (isRoadmapMode) {
+          const qLesson = urlParams.get('lesson') || (selLesson ? selLesson.value : '');
+          const qLevel = urlParams.get('level') || (selLevel ? selLevel.value : '1');
+          const qVer = urlParams.get('version') || localStorage.getItem('active_hsk_version') || '3.0';
+          const numLessonId = parseInt(String(qLesson).replace(/\D/g, ''), 10);
+          if (numLessonId) {
+            stepperEl.style.display = 'block';
+            stepperEl.innerHTML = `
+              <div class="lesson-stepper-hub-bar" style="background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 18px; padding: 8px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; box-shadow: 0 10px 30px rgba(0,0,0,0.35);">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <a href="/index.html?tab=lessons&level=${qLevel}&version=${qVer}" target="_top" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #cbd5e1; padding: 6px 12px; border-radius: 10px; font-weight: 700; text-decoration: none; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 6px;">
+                    <i class="fa-solid fa-map-location-dot"></i> Lộ trình
+                  </a>
+                  <div style="font-weight: 800; font-size: 0.95rem; color: #fbbf24;">
+                    <i class="fa-solid fa-bookmark" style="color: #38bdf8;"></i> Ôn Tập Bài ${numLessonId}
+                  </div>
+                </div>
+                <div class="lesson-stepper-tabs" style="display: flex; gap: 6px; flex-wrap: wrap;">
+                  <a href="/index.html?tab=lessons&level=${qLevel}&version=${qVer}&openVocab=${numLessonId}" target="_top" class="stepper-tab-btn" style="padding: 6px 12px; font-size: 0.82rem; border-radius: 10px; text-decoration: none;">
+                    <i class="fa-solid fa-book-bookmark"></i> 1. Từ Vựng
+                  </a>
+                  <a href="/index.html?tab=lessons&level=${qLevel}&version=${qVer}&openGrammar=${numLessonId}" target="_top" class="stepper-tab-btn" style="padding: 6px 12px; font-size: 0.82rem; border-radius: 10px; text-decoration: none;">
+                    <i class="fa-solid fa-spell-check"></i> 2. Ngữ Pháp
+                  </a>
+                  <a href="/lesson-texts.html?lesson=${numLessonId}&level=${qLevel}&version=${qVer}" target="_top" class="stepper-tab-btn" style="padding: 6px 12px; font-size: 0.82rem; border-radius: 10px; text-decoration: none;">
+                    <i class="fa-solid fa-comments"></i> 3. Bài Khóa
+                  </a>
+                  <span class="stepper-tab-btn active active-quiz" style="padding: 6px 12px; font-size: 0.82rem; border-radius: 10px; background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; border-color: #fbbf24;">
+                    <i class="fa-solid fa-circle-play"></i> 4. Ôn Tập
+                  </span>
                 </div>
               </div>
-              <div class="lesson-stepper-tabs" style="display: flex; gap: 6px; flex-wrap: wrap;">
-                <a href="/index.html?tab=lessons&level=${qLevel}&version=${qVer}&openVocab=${numLessonId}" target="_top" class="stepper-tab-btn" style="padding: 6px 12px; font-size: 0.82rem; border-radius: 10px; text-decoration: none;">
-                  <i class="fa-solid fa-book-bookmark"></i> 1. Từ Vựng
-                </a>
-                <a href="/index.html?tab=lessons&level=${qLevel}&version=${qVer}&openGrammar=${numLessonId}" target="_top" class="stepper-tab-btn" style="padding: 6px 12px; font-size: 0.82rem; border-radius: 10px; text-decoration: none;">
-                  <i class="fa-solid fa-spell-check"></i> 2. Ngữ Pháp
-                </a>
-                <a href="/lesson-texts.html?lesson=${numLessonId}&level=${qLevel}&version=${qVer}" target="_top" class="stepper-tab-btn" style="padding: 6px 12px; font-size: 0.82rem; border-radius: 10px; text-decoration: none;">
-                  <i class="fa-solid fa-comments"></i> 3. Bài Khóa
-                </a>
-                <span class="stepper-tab-btn active active-quiz" style="padding: 6px 12px; font-size: 0.82rem; border-radius: 10px; background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; border-color: #fbbf24;">
-                  <i class="fa-solid fa-circle-play"></i> 4. Ôn Tập
-                </span>
-              </div>
-            </div>
-          `;
+            `;
+          } else {
+            stepperEl.style.display = 'none';
+          }
         } else {
           stepperEl.style.display = 'none';
         }
@@ -1582,19 +1617,26 @@
       btns.forEach(b => b.classList.add('disabled'));
 
       if (isCorrect) {
-        btn.classList.add('correct');
+        if (btn) btn.classList.add('selected-correct');
         score += Math.max(10, Math.floor((timer / timerMax) * 50));
         hudScore.textContent = score;
         playBeep(1200, 'sine', 0.15);
         showToast("Tuyệt vời!", true);
 
-        btns.forEach(b => { if (b !== btn) b.classList.add('wrong'); });
+        btns.forEach(b => {
+          if (b !== btn) b.classList.add('dimmed');
+        });
         setTimeout(nextQuestion, 1500);
       } else {
-        if (btn) btn.classList.add('wrong');
+        if (btn) {
+          btn.classList.add('selected-wrong');
+        }
         btns.forEach(b => {
-          if (b.dataset.correct === 'true') b.classList.add('correct');
-          else if (b !== btn) b.classList.add('wrong');
+          if (b.dataset.correct === 'true') {
+            b.classList.add('show-correct');
+          } else if (b !== btn) {
+            b.classList.add('dimmed');
+          }
         });
 
         hearts--;
@@ -1785,51 +1827,66 @@
 
       // Parse URL Params for lesson, level, version
       const urlParams = new URLSearchParams(window.location.search);
-      const qLesson = urlParams.get('lesson') || (selLesson ? selLesson.value : '');
-      const qLevel = urlParams.get('level') || (selLevel ? selLevel.value : '1');
-      const qVer = urlParams.get('version') || localStorage.getItem('active_hsk_version') || '3.0';
-      if (hearts > 0 && qLesson && qLevel) {
-        const starKey = `quiz_stars_${qVer}_${qLevel}_${qLesson}`;
-        const prevStars = parseInt(localStorage.getItem(starKey) || '0', 10);
-        if (earnedStars > prevStars) {
-          localStorage.setItem(starKey, earnedStars.toString());
-        }
-      }
+      const isRoadmapMode = (urlParams.get('source') === 'roadmap' || (urlParams.get('lesson') && !urlParams.get('notebook') && !urlParams.get('lessons'))) && !urlParams.get('filter');
 
-      const starsText = earnedStars > 0
-        ? `<div style="margin-top: 10px; font-size: 1.8rem; color: #fbbf24; filter: drop-shadow(0 2px 8px rgba(251, 191, 36, 0.5));">${'★'.repeat(earnedStars)}${'☆'.repeat(3 - earnedStars)} <span style="font-size: 1rem; font-weight: 800; color: #fff;">(${earnedStars}/3 Sao)</span></div>`
-        : `<div style="margin-top: 10px; font-size: 1rem; color: #ef4444; font-weight: 800;">❌ Thua cuộc (0 Sao) - Cần đạt ít nhất 1 Sao để mở khóa bài tiếp theo!</div>`;
+      let starsText = '';
+      if (isRoadmapMode) {
+        const qLesson = urlParams.get('lesson') || (selLesson ? selLesson.value : '');
+        const qLevel = urlParams.get('level') || (selLevel ? selLevel.value : '1');
+        const qVer = urlParams.get('version') || localStorage.getItem('active_hsk_version') || '3.0';
+        if (hearts > 0 && qLesson && qLevel) {
+          const starKey = `quiz_stars_${qVer}_${qLevel}_${qLesson}`;
+          const prevStars = parseInt(localStorage.getItem(starKey) || '0', 10);
+          if (earnedStars > prevStars) {
+            localStorage.setItem(starKey, earnedStars.toString());
+          }
+        }
+        starsText = earnedStars > 0
+          ? `<div style="margin-top: 10px; font-size: 1.8rem; color: #fbbf24; filter: drop-shadow(0 2px 8px rgba(251, 191, 36, 0.5));">${'★'.repeat(earnedStars)}${'☆'.repeat(3 - earnedStars)} <span style="font-size: 1rem; font-weight: 800; color: #fff;">(${earnedStars}/3 Sao)</span></div>`
+          : `<div style="margin-top: 10px; font-size: 1rem; color: #ef4444; font-weight: 800;">❌ Thua cuộc (0 Sao) - Cần đạt ít nhất 1 Sao để mở khóa bài tiếp theo!</div>`;
+      } else {
+        starsText = earnedStars > 0
+          ? `<div style="margin-top: 10px; font-size: 1.8rem; color: #fbbf24; filter: drop-shadow(0 2px 8px rgba(251, 191, 36, 0.5));">${'★'.repeat(earnedStars)}${'☆'.repeat(3 - earnedStars)} <span style="font-size: 1rem; font-weight: 800; color: #fff;">(Hoàn thành xuất sắc)</span></div>`
+          : `<div style="margin-top: 10px; font-size: 1rem; color: #ef4444; font-weight: 800;">❌ Kết thúc lượt ôn tập - Hãy luyện tập lại để ghi nhớ từ vựng tốt hơn nhé!</div>`;
+      }
 
       document.getElementById('go-title').textContent = title;
       document.getElementById('go-desc').innerHTML = desc + starsText;
       document.getElementById('go-score').textContent = score;
       renderReviewList();
 
-      // Next lesson actions
+      // Next lesson actions (only in Roadmap mode)
       const actionsEl = document.getElementById('go-next-lesson-actions');
       if (actionsEl) {
-        const numLessonId = parseInt(String(qLesson).replace(/\D/g, ''), 10);
-        if (numLessonId && numLessonId > 0) {
-          const nextLessonId = numLessonId + 1;
-          actionsEl.style.display = 'flex';
-          actionsEl.innerHTML = `
-            <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(59, 130, 246, 0.15)); border: 1.5px solid rgba(16, 185, 129, 0.35); border-radius: 16px; padding: 14px 16px; text-align: center; margin-bottom: 8px;">
-              <div style="font-size: 0.82rem; font-weight: 700; color: #34d399; margin-bottom: 2px;">
-                <i class="fa-solid fa-circle-check"></i> HOÀN THÀNH 4 BƯỚC BÀI ${numLessonId}
+        if (isRoadmapMode) {
+          const qLesson = urlParams.get('lesson') || (selLesson ? selLesson.value : '');
+          const qLevel = urlParams.get('level') || (selLevel ? selLevel.value : '1');
+          const qVer = urlParams.get('version') || localStorage.getItem('active_hsk_version') || '3.0';
+          const numLessonId = parseInt(String(qLesson).replace(/\D/g, ''), 10);
+          if (numLessonId && numLessonId > 0) {
+            const nextLessonId = numLessonId + 1;
+            actionsEl.style.display = 'flex';
+            actionsEl.innerHTML = `
+              <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(59, 130, 246, 0.15)); border: 1.5px solid rgba(16, 185, 129, 0.35); border-radius: 16px; padding: 14px 16px; text-align: center; margin-bottom: 8px;">
+                <div style="font-size: 0.82rem; font-weight: 700; color: #34d399; margin-bottom: 2px;">
+                  <i class="fa-solid fa-circle-check"></i> HOÀN THÀNH 4 BƯỚC BÀI ${numLessonId}
+                </div>
+                <div style="font-size: 1.05rem; font-weight: 800; color: #ffffff; margin-bottom: 10px;">
+                  Tiếp Tục Chinh Phục Bài ${nextLessonId}?
+                </div>
+                <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+                  <a href="/lesson-texts.html?lesson=${numLessonId}&level=${qLevel}&version=${qVer}" target="_top" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #cbd5e1; padding: 8px 14px; border-radius: 10px; font-weight: 700; font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                    <i class="fa-solid fa-comments"></i> Xem Lại Bài Khóa
+                  </a>
+                  <a href="/index.html?tab=lessons&level=${qLevel}&version=${qVer}&openVocab=${nextLessonId}" target="_top" style="background: linear-gradient(135deg, #10b981, #059669); border: none; color: #ffffff; padding: 8px 18px; border-radius: 10px; font-weight: 800; font-size: 0.88rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(16,185,129,0.4);">
+                    <span>Học Bài ${nextLessonId}</span> <i class="fa-solid fa-arrow-right"></i>
+                  </a>
+                </div>
               </div>
-              <div style="font-size: 1.05rem; font-weight: 800; color: #ffffff; margin-bottom: 10px;">
-                Tiếp Tục Chinh Phục Bài ${nextLessonId}?
-              </div>
-              <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
-                <a href="/lesson-texts.html?lesson=${numLessonId}&level=${qLevel}&version=${qVer}" target="_top" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #cbd5e1; padding: 8px 14px; border-radius: 10px; font-weight: 700; font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
-                  <i class="fa-solid fa-comments"></i> Xem Lại Bài Khóa
-                </a>
-                <a href="/index.html?tab=lessons&level=${qLevel}&version=${qVer}&openVocab=${nextLessonId}" target="_top" style="background: linear-gradient(135deg, #10b981, #059669); border: none; color: #ffffff; padding: 8px 18px; border-radius: 10px; font-weight: 800; font-size: 0.88rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(16,185,129,0.4);">
-                  <span>Học Bài ${nextLessonId}</span> <i class="fa-solid fa-arrow-right"></i>
-                </a>
-              </div>
-            </div>
-          `;
+            `;
+          } else {
+            actionsEl.style.display = 'none';
+          }
         } else {
           actionsEl.style.display = 'none';
         }

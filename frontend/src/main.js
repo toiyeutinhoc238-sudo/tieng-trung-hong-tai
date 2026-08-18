@@ -3605,14 +3605,15 @@ window.revealAllRoadmapEyeCards = function(targetSentence) {
       const gamePlayView = document.getElementById('game-play-view');
       if (gamePlayView) gamePlayView.style.display = 'none';
 
-      const deckSelectionView = document.getElementById('deck-selection-view');
-      if (deckSelectionView) deckSelectionView.style.display = 'block';
-
       const iframe = document.getElementById('game-play-iframe');
       if (iframe) iframe.src = '';
 
       if (activeNotebook) {
-        openNotebookDashboard(activeNotebook);
+        showNotebookDashboardView(activeNotebook, true);
+      } else if (activeSmartTopic) {
+        showSubdecksView();
+      } else {
+        showTopicsView();
       }
     });
   }
@@ -3623,18 +3624,23 @@ window.revealAllRoadmapEyeCards = function(targetSentence) {
       const gamePlayView = document.getElementById('game-play-view');
       if (gamePlayView) gamePlayView.style.display = 'none';
 
-      const deckSelectionView = document.getElementById('deck-selection-view');
-      if (deckSelectionView) deckSelectionView.style.display = 'block';
-
       const iframe = document.getElementById('game-play-iframe');
       if (iframe) iframe.src = '';
+
+      if (activeNotebook) {
+        showNotebookDashboardView(activeNotebook, true);
+      } else if (activeSmartTopic) {
+        showSubdecksView();
+      } else {
+        showTopicsView();
+      }
       return;
     }
     if (event.data && event.data.type === 'VOCAB_STATE_UPDATED') {
       console.log('Real-time sync: Vocab state updated in game, refreshing data...');
       await fetchVocabulary();
       if (activeNotebook) {
-        openNotebookDashboard(activeNotebook);
+        showNotebookDashboardView(activeNotebook, true);
       }
     }
   });
