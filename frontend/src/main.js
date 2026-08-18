@@ -324,7 +324,7 @@ const totalCardNum = document.getElementById('total-card-num');
 const learningProgress = document.getElementById('learning-progress');
 const progressPercentage = document.getElementById('progress-percentage');
 const emptyState = document.getElementById('empty-state');
-const cardViewport = document.querySelector('.flashcard-card-container');
+const cardViewport = document.querySelector('.card-viewport');
 const cardHudControls = document.getElementById('card-hud-controls');
 const cardPageIndicator = document.getElementById('card-page-indicator');
 
@@ -1543,13 +1543,16 @@ function renderActiveCard() {
   }
 
   if (studyMode === 'lesson') {
+    _applyStudyModeUI('lesson');
     renderActiveCardLesson(current);
     return;
   }
   if (studyMode === 'type') {
+    _applyStudyModeUI('type');
     renderActiveCardTyping(current);
     return;
   }
+  _applyStudyModeUI('flip');
 
   const getLevelLabel = (w) => {
     if (w.isCustom) return 'Cá nhân';
