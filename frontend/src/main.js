@@ -1979,7 +1979,13 @@ function matchLevel(wLevel, targetLevel) {
 function applyFilters(preserveIndex = false) {
   const previousWordId = (filteredList.length > 0 && currentIndex < filteredList.length) ? filteredList[currentIndex].id : null;
 
-  const newList = vocabList.filter(w => {
+  // Optimized: Pre-compute source list outside the loop (prevents O(N^2) browser freeze)
+  let sourceList = vocabList;
+  if (studyNotebookId) {
+    sourceList = getNotebookWords(studyNotebookId);
+  }
+
+  const newList = sourceList.filter(w => {
     // Check HSK Version first for standard HSK words
     if (!w.isCustom && w.level !== 'premium' && (w.hskVersion || '3.0') !== activeHskVersion) {
       return false;
@@ -1987,10 +1993,6 @@ function applyFilters(preserveIndex = false) {
 
     // If studying a specific notebook
     if (studyNotebookId) {
-      const notebookWords = getNotebookWords(studyNotebookId);
-      const ids = new Set(notebookWords.map(x => x.id));
-      if (!ids.has(w.id)) return false;
-
       // Filter by studySelectedLessons if studying an HSK or YCT notebook
       if ((studyNotebookId.startsWith('hsk:') || studyNotebookId.startsWith('yct:')) && studySelectedLessons && studySelectedLessons.length > 0) {
         if (!w.lessonId || !studySelectedLessons.some(id => String(id) === String(w.lessonId))) return false;
@@ -3433,16 +3435,7 @@ window.revealAllRoadmapEyeCards = function(targetSentence) {
   }
   if (nbStartTypingBtn) {
     nbStartTypingBtn.addEventListener('click', () => {
-      // Build the exact word list for current lesson/notebook directly (no heavy filter chain)
-      let lessonWords = getNotebookWords(activeNotebook);
-      if (activeNotebook && (activeNotebook.startsWith('hsk:') || activeNotebook.startsWith('yct:')) && selectedDashboardLessons.length > 0) {
-        lessonWords = lessonWords.filter(w => w.lessonId && selectedDashboardLessons.some(id => String(id) === String(w.lessonId)));
-      }
-      if (lessonWords.length === 0) {
-        showToast('Không có từ vựng nào trong bài học này!', true);
-        return;
-      }
-      startDirectTypingSession(lessonWords);
+      startStudySessionFromNotebook('type');
     });
   }
   if (nbStartQuizBtn) {
@@ -11820,17 +11813,7 @@ function openNotebookDashboard(notebookId) {
     }
   }
 
-  // Toggle Left Column visibility & adjust grid layout dynamically
-  const leftCol = document.getElementById('nb-left-col-container');
-  const gridRow2 = document.getElementById('nb-row2-grid-container');
-  const isLeftColVisible = (addFormContainer && addFormContainer.style.display !== 'none') || (lessonContainer && lessonContainer.style.display !== 'none');
-
-  if (leftCol) {
-    leftCol.style.display = isLeftColVisible ? 'flex' : 'none';
-  }
-  if (gridRow2) {
-    gridRow2.style.gridTemplateColumns = isLeftColVisible ? '1.2fr 1fr' : '1fr';
-  }
+  updateNotebookDashboardStatsOnly(notebookId);
 
   updateNotebookDashboardStatsOnly(notebookId);
 
@@ -12141,8 +12124,8 @@ function startStudySessionFromNotebook(mode) {
   const notebookName = document.getElementById('dashboard-notebook-title')?.textContent || '';
   const notebookDesc = document.getElementById('dashboard-notebook-desc')?.textContent || '';
 
-  // Pass HSK lesson selections if studying HSK
-  if (activeNotebook.startsWith('hsk:')) {
+  // Pass HSK or YCT lesson selections if studying HSK / YCT
+  if (activeNotebook.startsWith('hsk:') || activeNotebook.startsWith('yct:')) {
     studySelectedLessons = selectedDashboardLessons.length > 0 ? [...selectedDashboardLessons] : null;
   } else {
     studySelectedLessons = null;
@@ -12518,15 +12501,19 @@ function updateExamsVersionUI() {
   }
 }
 
-// 8. Launch Embedded game arena
 function startGameArenaFromNotebook() {
   if (!activeNotebook) return;
 
   let levelParam = 'all';
   if (activeNotebook.startsWith('hsk:')) {
     const levelStr = activeNotebook.split(':')[1];
-    if (levelStr && ['1', '2', '3', '4'].includes(levelStr)) {
+    if (levelStr && ['1', '2', '3', '4', '5', '6'].includes(levelStr)) {
       levelParam = levelStr;
+    }
+  } else if (activeNotebook.startsWith('yct:')) {
+    const levelStr = activeNotebook.split(':')[1];
+    if (levelStr) {
+      levelParam = `yct${levelStr}`;
     }
   }
 
@@ -12538,14 +12525,20 @@ function startGameArenaFromNotebook() {
   const deckSelectionView = document.getElementById('deck-selection-view');
   if (deckSelectionView) deckSelectionView.style.display = 'none';
 
+  const notebookDashboardView = document.getElementById('notebook-dashboard-view');
+  if (notebookDashboardView) notebookDashboardView.style.display = 'none';
+
+  const flashcardStudyView = document.getElementById('flashcard-study-view');
+  if (flashcardStudyView) flashcardStudyView.style.display = 'none';
+
   const gamePlayView = document.getElementById('game-play-view');
   if (gamePlayView) gamePlayView.style.display = 'block';
 
-  const hskVer = currentCurriculum.includes('HSK 3.0') ? '3.0' : '2.0';
+  const hskVer = activeHskVersion || '3.0';
 
   const iframe = document.getElementById('game-play-iframe');
   if (iframe) {
-    iframe.src = `quiz-game.html?level=${levelParam}&lessons=${lessonsParam}&filter=${dashboardActiveFilter}&notebook=${activeNotebook}&version=${hskVer}`;
+    iframe.src = `quiz-game.html?level=${encodeURIComponent(levelParam)}&lessons=${encodeURIComponent(lessonsParam)}&filter=${encodeURIComponent(dashboardActiveFilter)}&notebook=${encodeURIComponent(activeNotebook)}&version=${encodeURIComponent(hskVer)}&autostart=1`;
   }
 };
 

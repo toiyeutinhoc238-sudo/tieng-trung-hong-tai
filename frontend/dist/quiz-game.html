@@ -796,11 +796,11 @@
       }
     }
   </style>
-  <script type="module" crossorigin src="/assets/style-DK3Pqs7v.js"></script>
-  <script type="module" crossorigin src="/assets/grammar_hsk2-DmGaXK9a.js"></script>
+  <script type="module" crossorigin src="/assets/style-CA7ZVVXk.js"></script>
+  <script type="module" crossorigin src="/assets/grammar_hsk2-BaBhdkIt.js"></script>
   <script type="module" crossorigin src="/assets/screen_drawing-oOIhKrv1.js"></script>
-  <script type="module" crossorigin src="/assets/main-CnnHSv5I.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/style-_F7-NLkp.css">
+  <script type="module" crossorigin src="/assets/main-DPh3jUQ7.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/style-Cr1thw-o.css">
 </head>
 
 <body>
@@ -1183,6 +1183,10 @@
           if (opt) selLesson.value = opt.value;
         }
       }
+      
+      if (autoStart === '1' || autoStart === 'true' || autoStart === true) {
+        startGame();
+      }
     }
 
     function matchLevel(wLevel, targetLevel) {
@@ -1288,6 +1292,12 @@
       const lvl = selLevel.value;
       const lsn = selLesson.value;
 
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlLessons = urlParams.get('lessons') || urlParams.get('lesson');
+      const urlNotebook = urlParams.get('notebook');
+      const urlFilter = urlParams.get('filter');
+      const urlVersion = urlParams.get('version') || '3.0';
+
       if (lvl !== 'all') {
         if (lvl.startsWith('yct')) {
           const y = lvl.replace('yct', '');
@@ -1297,7 +1307,30 @@
         }
       }
 
-      if (lsn !== 'all' && lsn !== 'random') {
+      if (urlNotebook) {
+        if (urlNotebook === 'wrong') {
+          pool = pool.filter(w => w.isWrong);
+        } else if (urlNotebook === 'starred') {
+          pool = pool.filter(w => w.isStarred);
+        } else if (urlNotebook.startsWith('custom:')) {
+          const cat = urlNotebook.substring(7);
+          pool = pool.filter(w => w.isCustom && w.category === cat);
+        } else if (urlNotebook.startsWith('premium:')) {
+          const cat = urlNotebook.substring(8);
+          const catMap = { 'du-lich': 'Du lịch', 'cong-so': 'Công sở', 'dam-phan': 'Đàm phán' };
+          pool = pool.filter(w => w.level === 'premium' && w.category === (catMap[cat] || cat));
+        }
+      }
+
+      if (urlLessons && urlLessons !== 'all') {
+        const lessonArr = urlLessons.split(',').map(s => s.trim().replace(/\D/g, '')).filter(Boolean);
+        if (lessonArr.length > 0) {
+          const filteredByLessons = pool.filter(w => w.lessonId && lessonArr.includes(String(w.lessonId)));
+          if (filteredByLessons.length > 0) {
+            pool = filteredByLessons;
+          }
+        }
+      } else if (lsn !== 'all' && lsn !== 'random') {
         if (lsn.includes('_')) {
           const parts = lsn.split('_');
           if (parts.length === 4) {
@@ -1320,6 +1353,25 @@
         if (ids.length > 0) {
           const rid = ids[Math.floor(Math.random() * ids.length)];
           pool = pool.filter(w => w.lessonId == rid);
+        }
+      }
+
+      if (urlFilter) {
+        if (urlFilter === 'studied') {
+          const stPool = pool.filter(w => w.isStudied);
+          if (stPool.length >= 4) pool = stPool;
+        } else if (urlFilter === 'unstudied') {
+          const unPool = pool.filter(w => !w.isStudied);
+          if (unPool.length >= 4) pool = unPool;
+        } else if (urlFilter === 'memorized') {
+          const memPool = pool.filter(w => w.isMemorized);
+          if (memPool.length >= 4) pool = memPool;
+        } else if (urlFilter === 'unmemorized') {
+          const unmemPool = pool.filter(w => w.isStudied && !w.isMemorized);
+          if (unmemPool.length >= 4) pool = unmemPool;
+        } else if (urlFilter === 'starred') {
+          const starPool = pool.filter(w => w.isStarred);
+          if (starPool.length >= 4) pool = starPool;
         }
       }
 

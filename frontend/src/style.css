@@ -1151,6 +1151,7 @@ html.dark .brand-logo-img {
 .flashcard-card-container {
   width: 100%;
   perspective: 1200px;
+  -webkit-perspective: 1200px;
   height: 360px;
 }
 
@@ -1159,6 +1160,7 @@ html.dark .brand-logo-img {
   height: 100%;
   position: relative;
   transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
   transition: transform var(--transition-slow);
   cursor: pointer;
 }
@@ -1166,6 +1168,7 @@ html.dark .brand-logo-img {
 /* Flipped trigger class */
 .flashcard-card.flipped {
   transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
 }
 
 .card-side {
@@ -1176,6 +1179,8 @@ html.dark .brand-logo-img {
   height: 100%;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
   border-radius: var(--radius-xl);
   padding: 32px;
   display: flex;
@@ -1189,11 +1194,26 @@ html.dark .brand-logo-img {
 /* Front & Back specific background styling */
 .card-front {
   background: var(--card-bg-front);
+  transform: rotateY(0deg);
+  -webkit-transform: rotateY(0deg);
+  z-index: 2;
 }
 
 .card-back {
   background: var(--card-bg-back);
   transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+  z-index: 1;
+}
+
+.flashcard-card.flipped .card-front {
+  z-index: 1;
+  pointer-events: none;
+}
+
+.flashcard-card.flipped .card-back {
+  z-index: 2;
+  pointer-events: auto;
 }
 
 /* Card Header tags */
