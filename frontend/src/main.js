@@ -4328,64 +4328,15 @@ function getUnlockedLevelsMap() {
 }
 
 function isLevelUnlocked(ver, level, levelIndex, levelsData, builtInVocabs) {
-  // YCT: Temporarily locked
-  if (ver === 'yct' || ver === 'YCT') {
-    return false;
-  }
-  // HSK 2.0: Only Level 1 is verified and unlocked. Levels 2..6 are temporarily locked.
-  if (ver === '2.0') {
-    return String(level) === '1';
-  }
-  // HSK 3.0: Only Levels 1, 2, 3 are public and unlocked. Levels 4, 5, 6, 7-9 are temporarily locked.
-  if (ver === '3.0' || !ver || ver === 'hsk') {
-    const lvlStr = String(level).trim();
-    return ['1', '2', '3'].includes(lvlStr);
-  }
-  return false;
+  // All levels in HSK 3.0, HSK 2.0, and YCT are open and unlocked for full learning
+  return true;
 }
 
 function isRoadmapLessonUnlocked(hskVersion, level, lessonKey, sortedLessonKeys) {
-  if (!sortedLessonKeys || sortedLessonKeys.length === 0) return true;
-  const lKeyStr = String(lessonKey);
-  const idx = sortedLessonKeys.findIndex(k => String(k) === lKeyStr);
-  
-  // Lesson 1 is always unlocked
-  if (idx <= 0) return true;
-
-  // Check previous lessons in sequence
-  for (let i = 0; i < idx; i++) {
-    const prevKey = sortedLessonKeys[i];
-    
-    // Check if user earned quiz stars
-    const starKey = `quiz_stars_${hskVersion}_${level}_${prevKey}`;
-    const quizStars = parseInt(localStorage.getItem(starKey) || '0', 10);
-
-    // Check vocabulary words memorized/studied in prevKey
-    const prevWords = vocabList.filter(w => {
-      if (w.isCustom) return false;
-      if (w.curriculum === 'yct' || w.hskVersion === 'yct') {
-        return (hskVersion === 'yct') && String(w.level) === String(level) && String(w.lessonId || 1) === String(prevKey);
-      }
-      const lvlMatch = String(w.level || '').replace('hsk', '').trim() === String(level).replace('hsk', '').trim();
-      return (w.hskVersion || '3.0') === hskVersion && lvlMatch && String(w.lessonId || 1) === String(prevKey);
-    });
-
-    if (prevWords.length === 0) continue;
-
-    const memorizedCount = prevWords.filter(w => w.isMemorized).length;
-    const studiedCount = prevWords.filter(w => w.isStudied || w.isMemorized || w.isWrong || w.isStarred).length;
-
-    const isPrevPassed = (quizStars >= 1) || 
-                         (memorizedCount >= Math.ceil(prevWords.length * 0.4)) || 
-                         (studiedCount >= Math.ceil(prevWords.length * 0.7));
-
-    if (!isPrevPassed) {
-      return false; // Chain broken: this lesson is locked
-    }
-  }
-
+  // All lessons in the roadmap are freely unlocked and accessible
   return true;
 }
+
 
 window.isRoadmapLessonUnlocked = isRoadmapLessonUnlocked;
 
@@ -7414,8 +7365,9 @@ function renderLessonHeroCardContent(w, index, total) {
   if (w.answer) validAnswers.push(w.answer);
   const validAnswersJson = JSON.stringify(validAnswers).replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
-  // Hint cards matching targetAnswer
-  const hintChars = targetAnswer.match(/[\u4e00-\u9fa5]/g) || [targetAnswer.charAt(0)];
+  // Hint cards matching targetAnswer (supports Hanzi, numbers 0-9, alphanumeric)
+  const hintChars = targetAnswer.match(/[\u4e00-\u9fa5\u3400-\u4dbfa-zA-Z0-9]/g) || Array.from(targetAnswer).filter(c => !/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`、“”‘’（）《》〈〉【】]/u.test(c)) || [targetAnswer.charAt(0)];
+
 
   // Render all example sentences inside the VÍ DỤ MINH HỌA box
   const fallbackTranslations = {
@@ -8017,11 +7969,11 @@ window.updateLessonCharHintCards = function(containerId, typedText, targetAnswer
   const cards = container.querySelectorAll('.lesson-hint-card');
   if (cards.length === 0) return;
 
-  const cleanTyped = (typedText || '').replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '');
-  const cleanTarget = (targetAnswer || '').replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '');
+  const cleanTyped = (typedText || '').replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`、“”‘’（）《》〈〉【】]/gu, '');
+  const cleanTarget = (targetAnswer || '').replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`、“”‘’（）《》〈〉【】]/gu, '');
 
-  const typedChars = cleanTyped.match(/[\u4e00-\u9fa5]/g) || cleanTyped.split('');
-  const targetChars = cleanTarget.match(/[\u4e00-\u9fa5]/g) || cleanTarget.split('');
+  const typedChars = cleanTyped.match(/[\u4e00-\u9fa5\u3400-\u4dbfa-zA-Z0-9]/g) || Array.from(cleanTyped).filter(c => !/\s/.test(c));
+  const targetChars = cleanTarget.match(/[\u4e00-\u9fa5\u3400-\u4dbfa-zA-Z0-9]/g) || Array.from(cleanTarget).filter(c => !/\s/.test(c));
 
   cards.forEach((card, idx) => {
     const targetChar = targetChars[idx] || card.getAttribute('data-char') || '';
@@ -8075,7 +8027,8 @@ window.revealAllLessonCharHints = function(fullWord) {
   if (cards.length === 0) return;
 
   const allFlipped = Array.from(cards).every(c => c.getAttribute('data-flipped') === 'true');
-  const chars = fullWord.match(/[\u4e00-\u9fa5]/g) || fullWord.split('');
+  const chars = fullWord.match(/[\u4e00-\u9fa5\u3400-\u4dbfa-zA-Z0-9]/g) || Array.from(fullWord).filter(c => !/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`、“”‘’（）《》〈〉【】]/u.test(c));
+
 
   cards.forEach((card, idx) => {
     if (allFlipped) {
@@ -8502,7 +8455,7 @@ function renderBkModalContent() {
 
     const curLine = linesList[currentBkLineIndex % linesList.length];
     const cleanSpeech = curLine.speech.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-    const hintChars = curLine.speech.match(/[\u4e00-\u9fa5]/g) || curLine.speech.split('');
+    const hintChars = curLine.speech.match(/[\u4e00-\u9fa5\u3400-\u4dbfa-zA-Z0-9]/g) || Array.from(curLine.speech).filter(c => !/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`、“”‘’（）《》〈〉【】]/u.test(c));
 
     container.innerHTML = `
       <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.12); border-radius:20px; padding:24px; text-align:center; max-width:680px; margin:0 auto; box-shadow:0 10px 30px rgba(0,0,0,0.4);">
@@ -8561,7 +8514,8 @@ function renderBkModalContent() {
     const curLine = linesList[currentBkLineIndex % linesList.length];
     const cleanSpeech = curLine.speech.replace(/'/g, "\\'").replace(/"/g, '&quot;');
     const translationPrompt = bkLineTranslations[curLine.speech] || `Dịch câu thoại của ${curLine.speaker || 'nhân vật'}`;
-    const hintChars = curLine.speech.match(/[\u4e00-\u9fa5]/g) || curLine.speech.split('');
+    const hintChars = curLine.speech.match(/[\u4e00-\u9fa5\u3400-\u4dbfa-zA-Z0-9]/g) || Array.from(curLine.speech).filter(c => !/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`、“”‘’（）《》〈〉【】]/u.test(c));
+
 
     container.innerHTML = `
       <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.12); border-radius:20px; padding:24px; text-align:center; max-width:680px; margin:0 auto; box-shadow:0 10px 30px rgba(0,0,0,0.4);">
