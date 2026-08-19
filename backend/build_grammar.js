@@ -45,31 +45,93 @@ function parseGrammarContent(rawText, level) {
   // Remove page break markers
   const cleanLines = lines.filter(l => !l.startsWith('----------------Page'));
   
-  // Try to extract structured grammar points
   const points = [];
-  let currentPoint = null;
-  let currentExamples = [];
-
-  // Patterns to detect section headers (numbered, Vietnamese heading patterns)
-  const headingPatterns = [
-    /^(\d+)\.\s+(.+)$/,           // "1. Đại từ nhân xưng"
-    /^([A-Z]{2,})[\s:](.+)$/,    // "PHÓ TỪ", "LIÊN TỪ"
-    /^([A-ZĐÀÁẢÃẠ][A-ZĐÀÁỂÉÈÊỈÍÌÏỊÒÓÔÕỢỚÕÙÚƯỪỨữỵỷỹĂÂŨảãạĩóôõúùủưựừứệểẹẻẽ\s]+)$/,  // All-caps Vietnamese
-  ];
-  
-  // A simpler approach: split by keyword topics found in the text
-  const sectionMarkers = [
-    /ĐẠI TỪ/i, /SỐ TỪ/i, /LƯỢNG TỪ/i, /CHỮ SỐ/i, /PHÓ TỪ/i, /TRỢ TỪ/i,
-    /TRỢ ĐỘNG TỪ/i, /GIỚI TỪ/i, /LIÊN TỪ/i, /CÂU NGHI VẤN/i, /CÂU TRẦN THUẬT/i,
-    /CÂU CẢM THÁN/i, /CÂU CẦU KHIẾN/i, /CÁC DẠNG CÂU/i, /TRẠNG THÁI/i,
-    /BỔ NGỮ/i, /ĐỊA ĐIỂM/i, /THỜI GIAN/i, /CẤU TRÚC/i, /MẪU CÂU/i,
-  ];
-  
-  // Flatten to single string for section-based parsing
   const fullText = cleanLines.join('\n');
+
+  // ─── VER2 FORMAT: 第X课 headers + 💡 grammar points ───────────────────────
+  const hasEmojiPoints = cleanLines.some(l => l.startsWith('💡'));
   
-  // Extract all content
-  // Find numbered points like "1. XXX" or "2. XXX" etc.
+  if (hasEmojiPoints) {
+    let lessonTitle = '';
+    
+    for (let i = 0; i < cleanLines.length; i++) {
+      const line = cleanLines[i];
+      
+      // Detect lesson header: 第X课：...
+      if (line.match(/^第[一二三四五六七八九十百零千万\d]+课[:：]/)) {
+        lessonTitle = line;
+        continue;
+      }
+      
+      // Grammar point starts with 💡
+      if (line.startsWith('💡')) {
+        const pointTitle = line.replace(/^💡\s*/, '').trim();
+        const pointLines = [];
+        
+        let j = i + 1;
+        while (j < cleanLines.length) {
+          const next = cleanLines[j];
+          if (next.startsWith('💡') || next.match(/^第[一二三四五六七八九十百零千万\d]+课[:：]/)) break;
+          pointLines.push(next);
+          j++;
+        }
+        
+        // Parse example table and explanation
+        const examplePairs = [];
+        const explanationLines = [];
+        let inTable = false;
+        let tableZh = null;
+        
+        for (let k = 0; k < pointLines.length; k++) {
+          const pl = pointLines[k];
+          if (pl === 'Ví dụ' || pl === 'Tiếng Trung' || pl === 'Nghĩa' || pl === 'Phiên âm') {
+            inTable = true;
+            continue;
+          }
+          if (inTable) {
+            if (pl.match(/[\u4e00-\u9fff]/u)) {
+              tableZh = pl;
+            } else if (tableZh && pl.match(/^[a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ\s,\.]+$/i)) {
+              // Pinyin row - skip
+            } else if (tableZh) {
+              examplePairs.push({ zh: tableZh, vi: pl });
+              tableZh = null;
+            }
+          } else {
+            if (pl.match(/[\u4e00-\u9fff]/u)) {
+              examplePairs.push({ zh: pl, vi: '' });
+            } else {
+              explanationLines.push(pl);
+            }
+          }
+        }
+        
+        const formattedExamples = examplePairs.slice(0, 6).map(p =>
+          p.vi ? `${p.zh} → ${p.vi}` : p.zh
+        );
+        
+        const fullTitle = lessonTitle
+          ? `[${lessonTitle}] ${pointTitle}`
+          : pointTitle;
+        
+        points.push({
+          id: `pt_${i}_${pointTitle.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase().slice(0, 30)}`,
+          title: fullTitle,
+          lessonHeader: lessonTitle,
+          pointName: pointTitle,
+          explanation: explanationLines.join(' ').slice(0, 800),
+          examples: formattedExamples,
+          rawLines: pointLines,
+        });
+        
+        i = j - 1;
+      }
+    }
+    
+    if (points.length > 0) return points;
+  }
+
+  // ─── LEGACY FORMAT: numbered sections ──────────────────────────────────────
   const numberedSections = [];
   let lastIdx = -1;
   
@@ -86,7 +148,6 @@ function parseGrammarContent(rawText, level) {
     }
   });
   
-  // Build sections from numbered headings
   if (numberedSections.length > 1) {
     for (let i = 0; i < numberedSections.length; i++) {
       const section = numberedSections[i];
@@ -94,8 +155,8 @@ function parseGrammarContent(rawText, level) {
       const sectionLines = cleanLines.slice(section.idx, nextIdx);
       
       const examples = sectionLines.filter(l => {
-        return l.match(/[一-龯]/u) || // Chinese chars
-               l.match(/\/[a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]+\//i) || // Pinyin
+        return l.match(/[\u4e00-\u9fff]/u) ||
+               l.match(/\/[a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]+\//i) ||
                l.startsWith('Ví dụ') ||
                l.startsWith('●') || l.startsWith('–') || l.startsWith('-');
       });
@@ -111,56 +172,15 @@ function parseGrammarContent(rawText, level) {
         examples: examples.slice(0, 6),
       });
     }
+    return points;
   }
   
-  // If not enough structured points found, create a single full-content point
-  if (points.length < 2) {
-    // Split by topic keywords and create cards
-    const topicCards = [];
-    let buffer = [];
-    let currentTitle = `Tổng hợp ngữ pháp ${level}`;
-    
-    for (const line of cleanLines) {
-      const isHeading = (
-        line.match(/^\d+\.\s+[A-ZĐÀÁẢÃẠ]/) ||
-        line.match(/^[A-ZĐÀÁẢÃ\s]{4,}$/) ||
-        line.includes('Đại từ') || line.includes('Phó từ') || line.includes('Liên từ') ||
-        line.includes('Bổ ngữ') || line.includes('Cấu trúc') || line.includes('Câu chữ') ||
-        (line.length < 60 && line.match(/[A-ZĐÀÁẢÃẠ]/) && !line.includes('/') && !line.match(/[一-龯]/u))
-      );
-      
-      if (isHeading && buffer.length > 3) {
-        topicCards.push({
-          id: `${currentTitle.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase()}`,
-          title: currentTitle,
-          explanation: buffer.filter(l => !l.match(/[一-龯]/u)).join(' ').slice(0, 400),
-          examples: buffer.filter(l => l.match(/[一-龯]/u) || l.match(/\/[a-zāáǎà]+\//i)).slice(0, 5),
-        });
-        buffer = [];
-        currentTitle = line;
-      } else {
-        buffer.push(line);
-      }
-    }
-    
-    if (buffer.length > 0) {
-      topicCards.push({
-        id: `${currentTitle.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase()}_last`,
-        title: currentTitle,
-        explanation: buffer.filter(l => !l.match(/[一-龯]/u)).join(' ').slice(0, 400),
-        examples: buffer.filter(l => l.match(/[一-龯]/u) || l.match(/\/[a-zāáǎà]+\//i)).slice(0, 5),
-      });
-    }
-    
-    return topicCards.length > 0 ? topicCards : [{
-      id: 'full_content',
-      title: `Ngữ pháp ${level}`,
-      explanation: fullText.slice(0, 800),
-      examples: [],
-    }];
-  }
-  
-  return points;
+  return [{
+    id: 'full_content',
+    title: `Ngữ pháp ${level}`,
+    explanation: fullText.slice(0, 800),
+    examples: [],
+  }];
 }
 
 const result = {};
