@@ -1990,8 +1990,14 @@ function applyFilters(preserveIndex = false) {
 
   const newList = sourceList.filter(w => {
     // Check HSK Version first for standard HSK words
-    if (!w.isCustom && w.level !== 'premium' && (w.hskVersion || '3.0') !== activeHskVersion) {
-      return false;
+    if (!w.isCustom && w.level !== 'premium') {
+      if (studyNotebookId && (studyNotebookId === 'wrong' || studyNotebookId === 'starred' || studyNotebookId.startsWith('custom:') || studyNotebookId.startsWith('premium:'))) {
+        // Keep all user saved words in personal decks
+      } else if (studyNotebookId && studyNotebookId.startsWith('yct:')) {
+        // YCT deck
+      } else {
+        if ((w.hskVersion || '3.0') !== activeHskVersion) return false;
+      }
     }
 
     // If studying a specific notebook
@@ -2523,7 +2529,7 @@ function setupEventListeners() {
       if (renderLevel === 'all') {
         renderLevel = '1';
       }
-      const levelWords = vocabList.filter(w => !w.isCustom && w.level.toString() === renderLevel);
+      const levelWords = vocabList.filter(w => !w.isCustom && w.level.toString() === renderLevel && (w.hskVersion || '3.0') === activeHskVersion);
       const uniqueLessonIds = [...new Set(levelWords.map(w => w.lessonId).filter(Boolean))];
       smartSelectedLessons = uniqueLessonIds;
       smartSelectedSubDeck = null;
@@ -4555,48 +4561,6 @@ function renderGamifiedRoadmapPath() {
 window.renderGamifiedRoadmapPath = renderGamifiedRoadmapPath;
 window.goToRoadmapLevel = function (ver, level) {
   const hskVer = ver || activeRoadmapVersion || '3.0';
-  let levelsData = [];
-  if (hskVer === 'yct') {
-    levelsData = [
-      { level: 1, name: 'YCT Cấp 1' },
-      { level: 2, name: 'YCT Cấp 2' },
-      { level: 3, name: 'YCT Cấp 3' },
-      { level: 4, name: 'YCT Cấp 4' }
-    ];
-  } else if (hskVer === '2.0') {
-    levelsData = [
-      { level: 1, name: 'HSK 1 (2.0)' },
-      { level: 2, name: 'HSK 2 (2.0)' },
-      { level: 3, name: 'HSK 3 (2.0)' },
-      { level: 4, name: 'HSK 4 (2.0)' },
-      { level: 5, name: 'HSK 5 (2.0)' },
-      { level: 6, name: 'HSK 6 (2.0)' }
-    ];
-  } else {
-    levelsData = [
-      { level: 1, name: 'HSK 1 (3.0)' },
-      { level: 2, name: 'HSK 2 (3.0)' },
-      { level: 3, name: 'HSK 3 (3.0)' },
-      { level: 4, name: 'HSK 4 (3.0)' },
-      { level: 5, name: 'HSK 5 (3.0)' },
-      { level: 6, name: 'HSK 6 (3.0)' },
-      { level: '7-9', name: 'New HSK 7-9 (3.0)' }
-    ];
-  }
-
-  const nodeIndex = levelsData.findIndex(item => String(item.level) === String(level));
-  const builtInVocabs = vocabList.filter(w => !w.isCustom);
-  if (!currentUser) {
-    window.openAuthRequiredModal();
-    return;
-  }
-
-  const unlocked = isLevelUnlocked(hskVer, level, nodeIndex >= 0 ? nodeIndex : 0, levelsData, builtInVocabs);
-
-  if (!unlocked) {
-    window.showComingSoonNotice(`Lộ trình bài học ${hskVer === 'yct' ? `YCT Cấp ${level}` : `HSK ${level}${hskVer === '2.0' ? ' (2.0)' : ''}`}`);
-    return;
-  }
 
   // Set version
   if (ver === 'yct') {
@@ -4618,7 +4582,7 @@ window.goToRoadmapLevel = function (ver, level) {
   if (typeof updateVersionButtonsUI === 'function') updateVersionButtonsUI();
   if (typeof updateExamsVersionUI === 'function') updateExamsVersionUI();
 
-  // Switch to Lessons selection view showing Bài 1, Bài 2, Bài 3... for this HSK Level
+  // Switch to Lessons selection view showing Bài 1, Bài 2, Bài 3... for this Level
   switchTab('lessons');
   const lessonsSection = document.getElementById('lessons-section');
   if (lessonsSection) {
@@ -6854,215 +6818,156 @@ function renderLessonsList() {
     if (versionSelectorWrap) versionSelectorWrap.style.display = 'none';
     if (yctLevelContainer) yctLevelContainer.style.display = 'flex';
 
+    const currentYctLvl = activeYctLevel || 1;
+    const yctVocabs = vocabList.filter(w => !w.isCustom && (w.curriculum === 'yct' || w.hskVersion === 'yct') && matchLevel(w.level, currentYctLvl));
+
     if (objectivesText) {
-      objectivesText.textContent = `Mục tiêu: Giáo trình YCT - Tiếng Trung Thiếu nhi đang trong quá trình biên soạn & chuẩn hóa nội dung.`;
+      objectivesText.textContent = `Mục tiêu: Giáo trình YCT Cấp ${currentYctLvl} - Tiếng Trung Thiếu nhi (${yctVocabs.length} từ vựng)`;
     }
 
-    grid.innerHTML = `
-      <div class="glass-panel" style="grid-column: 1 / -1; max-width: 650px; margin: 32px auto; padding: 36px 24px; text-align: center; border: 1.5px dashed rgba(245, 158, 11, 0.4); border-radius: 20px;">
-        <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(245, 158, 11, 0.15); color: #fbbf24; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 16px;">
-          <i class="fa-solid fa-lock"></i>
-        </div>
-        <h3 style="font-family: var(--font-display); font-size: 1.4rem; font-weight: 800; color: #ffffff; margin-bottom: 8px;">
-          Giáo trình YCT (Tiếng Trung Thiếu Nhi) Đang Tạm Khóa
-        </h3>
-        <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-bottom: 24px;">
-          Nội dung từ vựng & bài học của giáo trình YCT đang được đội ngũ giáo viên Tiếng Trung Hồng Thái chuẩn hóa và kiểm duyệt kỹ lưỡng để đảm bảo độ chính xác cao nhất. Mời bạn trải nghiệm Lộ trình HSK 3.0 (Cấp 1 - 3) hoặc HSK 1 (2.0)!
-        </p>
-        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-          <button class="btn btn-primary" onclick="goToRoadmapLevel('3.0', 1)" style="padding: 10px 20px; font-weight: 700; border-radius: 12px;">
-            <i class="fa-solid fa-graduation-cap"></i> Học HSK 1 (3.0)
-          </button>
-          <button class="btn btn-secondary" onclick="window.returnToHskLevelSelection()" style="padding: 10px 20px; font-weight: 700; border-radius: 12px; background: rgba(255,255,255,0.08);">
-            <i class="fa-solid fa-arrow-left"></i> Quay lại Lộ trình
-          </button>
-        </div>
-      </div>
-    `;
-    return;
-  }
+    // Group YCT vocabulary dynamically by their lessonId field
+    var levelVocabs = yctVocabs;
+    var lessonGroups = {};
+    levelVocabs.forEach(w => {
+      const les = w.lessonId || 1;
+      if (!lessonGroups[les]) lessonGroups[les] = [];
+      lessonGroups[les].push(w);
+    });
 
-  // HSK Curriculum Mode
-  if (yctLevelContainer) yctLevelContainer.style.display = 'none';
-  if (lessonsLevelContainer) lessonsLevelContainer.style.display = 'flex';
-  if (versionSelectorWrap) versionSelectorWrap.style.display = 'flex';
+    var uniqueLessonKeys = Object.keys(lessonGroups).sort((a, b) => {
+      const numA = parseInt(String(a).replace(/\D/g, '')) || 0;
+      const numB = parseInt(String(b).replace(/\D/g, '')) || 0;
+      return numA - numB;
+    });
+  } else {
+    // HSK Curriculum Mode
+    if (yctLevelContainer) yctLevelContainer.style.display = 'none';
+    if (lessonsLevelContainer) lessonsLevelContainer.style.display = 'flex';
+    if (versionSelectorWrap) versionSelectorWrap.style.display = 'flex';
 
-  // Toggle HSK 7-8-9 option physically in DOM (only available in HSK 3.0)
-  if (levelSelect) {
-    const existingOpt = levelSelect.querySelector('option[value="7-9"]');
-    if (activeHskVersion === '2.0') {
-      if (existingOpt) {
-        window._hsk79OptionElement = existingOpt;
-        existingOpt.remove();
-      }
-      if (activeLessonsLevel.toString() === '7-9') {
-        activeLessonsLevel = 1;
-      }
-    } else {
-      if (!existingOpt) {
-        if (!window._hsk79OptionElement) {
-          const opt = document.createElement('option');
-          opt.value = '7-9';
-          opt.id = 'hsk-level-79-option';
-          opt.textContent = 'Cấp HSK 7-8-9 (Cao cấp)';
-          window._hsk79OptionElement = opt;
+    // Toggle HSK 7-8-9 option physically in DOM (only available in HSK 3.0)
+    if (levelSelect) {
+      const existingOpt = levelSelect.querySelector('option[value="7-9"]');
+      if (activeHskVersion === '2.0') {
+        if (existingOpt) {
+          window._hsk79OptionElement = existingOpt;
+          existingOpt.remove();
         }
-        levelSelect.appendChild(window._hsk79OptionElement);
-      }
-    }
-  }
-
-  // Sync level select value
-  if (levelSelect && levelSelect.value !== activeLessonsLevel.toString()) {
-    levelSelect.value = activeLessonsLevel.toString();
-  }
-
-  // Toggle Volume Dropdown visibility for HSK 4-9 (v2.0)
-  if (volumePillsContainer) {
-    if (activeLessonsLevel >= 4 && activeHskVersion === '2.0') {
-      volumePillsContainer.style.display = 'flex';
-      if (volumeSelect) volumeSelect.value = activeVolumeFilter;
-    } else {
-      volumePillsContainer.style.display = 'none';
-      activeVolumeFilter = 'all';
-      if (volumeSelect) volumeSelect.value = 'all';
-    }
-  }
-
-  // HSK 2.0 Levels 2..6 Locked Guard
-  if (activeHskVersion === '2.0' && String(activeLessonsLevel) !== '1') {
-    if (objectivesText) {
-      objectivesText.textContent = `Mục tiêu: HSK 2.0 Cấp ${activeLessonsLevel} đang trong quá trình biên soạn & chuẩn hóa nội dung.`;
-    }
-    grid.innerHTML = `
-      <div class="glass-panel" style="grid-column: 1 / -1; max-width: 650px; margin: 32px auto; padding: 36px 24px; text-align: center; border: 1.5px dashed rgba(245, 158, 11, 0.4); border-radius: 20px;">
-        <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(245, 158, 11, 0.15); color: #fbbf24; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 16px;">
-          <i class="fa-solid fa-lock"></i>
-        </div>
-        <h3 style="font-family: var(--font-display); font-size: 1.4rem; font-weight: 800; color: #ffffff; margin-bottom: 8px;">
-          Cấp độ HSK ${activeLessonsLevel} (2.0) Đang Tạm Khóa
-        </h3>
-        <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-bottom: 24px;">
-          Nội dung từ vựng & bài học của HSK 2.0 Cấp ${activeLessonsLevel} đang được giáo viên Tiếng Trung Hồng Thái chuẩn hóa và kiểm duyệt kỹ lưỡng để đảm bảo độ chính xác cao nhất.
-        </p>
-        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-          <button class="btn btn-primary" onclick="goToRoadmapLevel('2.0', 1)" style="padding: 10px 20px; font-weight: 700; border-radius: 12px;">
-            <i class="fa-solid fa-graduation-cap"></i> Học HSK 1 (2.0)
-          </button>
-          <button class="btn btn-secondary" onclick="window.returnToHskLevelSelection()" style="padding: 10px 20px; font-weight: 700; border-radius: 12px; background: rgba(255,255,255,0.08);">
-            <i class="fa-solid fa-arrow-left"></i> Quay lại Lộ trình
-          </button>
-        </div>
-      </div>
-    `;
-    return;
-  }
-
-  // HSK 3.0 Levels 4..7-9 Locked Guard
-  if ((activeHskVersion === '3.0' || !activeHskVersion) && !['1', '2', '3'].includes(String(activeLessonsLevel))) {
-    if (objectivesText) {
-      objectivesText.textContent = `Mục tiêu: HSK 3.0 Cấp ${activeLessonsLevel} đang trong quá trình biên soạn & chuẩn hóa nội dung.`;
-    }
-    grid.innerHTML = `
-      <div class="glass-panel" style="grid-column: 1 / -1; max-width: 650px; margin: 32px auto; padding: 36px 24px; text-align: center; border: 1.5px dashed rgba(245, 158, 11, 0.4); border-radius: 20px;">
-        <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(245, 158, 11, 0.15); color: #fbbf24; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 16px;">
-          <i class="fa-solid fa-lock"></i>
-        </div>
-        <h3 style="font-family: var(--font-display); font-size: 1.4rem; font-weight: 800; color: #ffffff; margin-bottom: 8px;">
-          Cấp độ HSK ${activeLessonsLevel} (3.0) Đang Tạm Khóa
-        </h3>
-        <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-bottom: 24px;">
-          Nội dung từ vựng & bài học của HSK 3.0 Cấp ${activeLessonsLevel} đang được giáo viên Tiếng Trung Hồng Thái chuẩn hóa và kiểm duyệt kỹ lưỡng để đảm bảo độ chính xác cao nhất. Mời bạn trải nghiệm các cấp HSK 1, HSK 2, HSK 3!
-        </p>
-        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-          <button class="btn btn-primary" onclick="goToRoadmapLevel('3.0', 1)" style="padding: 10px 20px; font-weight: 700; border-radius: 12px;">
-            <i class="fa-solid fa-graduation-cap"></i> Học HSK 1 (3.0)
-          </button>
-          <button class="btn btn-secondary" onclick="window.returnToHskLevelSelection()" style="padding: 10px 20px; font-weight: 700; border-radius: 12px; background: rgba(255,255,255,0.08);">
-            <i class="fa-solid fa-arrow-left"></i> Quay lại Lộ trình
-          </button>
-        </div>
-      </div>
-    `;
-    return;
-  }
-
-  // Update objectives text - dynamically count words from vocabList
-  if (objectivesText) {
-    const totalWordsInLevel = vocabList.filter(w =>
-      !w.isCustom &&
-      w.curriculum !== 'yct' && w.hskVersion !== 'yct' &&
-      matchLevel(w.level, activeLessonsLevel) &&
-      (w.hskVersion || '3.0') === activeHskVersion
-    ).length;
-    const totalStr = totalWordsInLevel > 0 ? `, ${totalWordsInLevel.toLocaleString()} từ vựng` : '';
-
-    const levelDescMap = {
-      '2.0': {
-        1: `HSK 2.0 Cấp 1 - Sơ cấp dành cho người mới bắt đầu`,
-        2: `HSK 2.0 Cấp 2 - Sơ cấp nâng cao, giao tiếp đời sống cơ bản`,
-        3: `HSK 2.0 Cấp 3 - Trung cấp, giao tiếp tự tin các chủ đề học tập/công việc`,
-        4: `HSK 2.0 Cấp 4 - Trung cấp nâng cao, thảo luận nhiều chủ đề chuyên sâu`,
-        5: `HSK 2.0 Cấp 5 - Cao cấp, đọc báo chí xem phim và thuyết trình tự nhiên`,
-        6: `HSK 2.0 Cấp 6 - Thành thạo, đọc văn học và viết học thuật`,
-        '7-9': `HSK 2.0 Cấp 7-8-9 - Nâng cao chuyên nghiệp, sử dụng ngôn ngữ tiếng Trung nước ngoài`,
-      },
-      '3.0': {
-        1: `HSK 3.0 Cấp 1 - Sơ cấp dành cho người mới bắt đầu`,
-        2: `HSK 3.0 Cấp 2 - Sơ cấp nâng cao`,
-        3: `HSK 3.0 Cấp 3 - Sơ cấp hoàn chỉnh`,
-        4: `HSK 3.0 Cấp 4 - Trung cấp cơ bản`,
-        5: `HSK 3.0 Cấp 5 - Trung cấp nâng cao`,
-        6: `HSK 3.0 Cấp 6 - Cao cấp`,
-        '7-9': `HSK 3.0 Cấp 7-8-9 - Nâng cao chuyên nghiệp`,
-      }
-    };
-    const desc = (levelDescMap[activeHskVersion] || {})[activeLessonsLevel]
-      || `HSK ${activeHskVersion} Cấp ${activeLessonsLevel === '7-9' ? '7-8-9' : activeLessonsLevel}`;
-    objectivesText.textContent = `Mục tiêu: ${desc}${totalStr}`;
-  }
-
-  // Filter HSK level vocabulary
-  const levelVocabs = vocabList.filter(w => {
-    if (w.isCustom) return false;
-    if (w.curriculum === 'yct' || w.hskVersion === 'yct') return false;
-    if (!matchLevel(w.level, activeLessonsLevel)) return false;
-    if ((w.hskVersion || '3.0') !== activeHskVersion) return false;
-    if ((activeLessonsLevel === 4 || activeLessonsLevel === 5) && activeHskVersion === '2.0' && activeVolumeFilter !== 'all') {
-      if (w.volume) {
-        if (w.volume !== activeVolumeFilter) return false;
+        if (activeLessonsLevel.toString() === '7-9') {
+          activeLessonsLevel = 1;
+        }
       } else {
-        const isThuong = activeLessonsLevel === 4 ? (w.lessonId <= 10) : (w.lessonId <= 18);
-        if (activeVolumeFilter === 'thuong' && !isThuong) return false;
-        if (activeVolumeFilter === 'ha' && isThuong) return false;
+        if (!existingOpt) {
+          if (!window._hsk79OptionElement) {
+            const opt = document.createElement('option');
+            opt.value = '7-9';
+            opt.id = 'hsk-level-79-option';
+            opt.textContent = 'Cấp HSK 7-8-9 (Cao cấp)';
+            window._hsk79OptionElement = opt;
+          }
+          levelSelect.appendChild(window._hsk79OptionElement);
+        }
       }
     }
-    return true;
-  });
 
-  // Group vocabulary dynamically by their lessonId field
-  const lessonGroups = {};
-  levelVocabs.forEach(w => {
-    const les = w.lessonId || 1;
-    if (!lessonGroups[les]) lessonGroups[les] = [];
-    lessonGroups[les].push(w);
-  });
+    // Sync level select value
+    if (levelSelect && levelSelect.value !== activeLessonsLevel.toString()) {
+      levelSelect.value = activeLessonsLevel.toString();
+    }
 
-  const uniqueLessonKeys = Object.keys(lessonGroups).sort((a, b) => {
-    const numA = parseInt(a.replace(/\D/g, '')) || 0;
-    const numB = parseInt(b.replace(/\D/g, '')) || 0;
-    return numA - numB;
-  });
+    // Toggle Volume Dropdown visibility for HSK 4-9 (v2.0)
+    if (volumePillsContainer) {
+      if (activeLessonsLevel >= 4 && activeHskVersion === '2.0') {
+        volumePillsContainer.style.display = 'flex';
+        if (volumeSelect) volumeSelect.value = activeVolumeFilter;
+      } else {
+        volumePillsContainer.style.display = 'none';
+        activeVolumeFilter = 'all';
+        if (volumeSelect) volumeSelect.value = 'all';
+      }
+    }
+
+    // Update objectives text - dynamically count words from vocabList
+    if (objectivesText) {
+      const totalWordsInLevel = vocabList.filter(w =>
+        !w.isCustom &&
+        w.curriculum !== 'yct' && w.hskVersion !== 'yct' &&
+        matchLevel(w.level, activeLessonsLevel) &&
+        (w.hskVersion || '3.0') === activeHskVersion
+      ).length;
+      const totalStr = totalWordsInLevel > 0 ? `, ${totalWordsInLevel.toLocaleString()} từ vựng` : '';
+
+      const levelDescMap = {
+        '2.0': {
+          1: `HSK 2.0 Cấp 1 - Sơ cấp dành cho người mới bắt đầu`,
+          2: `HSK 2.0 Cấp 2 - Sơ cấp nâng cao, giao tiếp đời sống cơ bản`,
+          3: `HSK 2.0 Cấp 3 - Trung cấp, giao tiếp tự tin các chủ đề học tập/công việc`,
+          4: `HSK 2.0 Cấp 4 - Trung cấp nâng cao, thảo luận nhiều chủ đề chuyên sâu`,
+          5: `HSK 2.0 Cấp 5 - Cao cấp, đọc báo chí xem phim và thuyết trình tự nhiên`,
+          6: `HSK 2.0 Cấp 6 - Thành thạo, đọc văn học và viết học thuật`,
+          '7-9': `HSK 2.0 Cấp 7-8-9 - Nâng cao chuyên nghiệp, sử dụng ngôn ngữ tiếng Trung nước ngoài`,
+        },
+        '3.0': {
+          1: `HSK 3.0 Cấp 1 - Sơ cấp dành cho người mới bắt đầu`,
+          2: `HSK 3.0 Cấp 2 - Sơ cấp nâng cao`,
+          3: `HSK 3.0 Cấp 3 - Sơ cấp hoàn chỉnh`,
+          4: `HSK 3.0 Cấp 4 - Trung cấp cơ bản`,
+          5: `HSK 3.0 Cấp 5 - Trung cấp nâng cao`,
+          6: `HSK 3.0 Cấp 6 - Cao cấp`,
+          '7-9': `HSK 3.0 Cấp 7-8-9 - Nâng cao chuyên nghiệp`,
+        }
+      };
+      const desc = (levelDescMap[activeHskVersion] || {})[activeLessonsLevel]
+        || `HSK ${activeHskVersion} Cấp ${activeLessonsLevel === '7-9' ? '7-8-9' : activeLessonsLevel}`;
+      objectivesText.textContent = `Mục tiêu: ${desc}${totalStr}`;
+    }
+
+    // Filter HSK level vocabulary
+    var levelVocabs = vocabList.filter(w => {
+      if (w.isCustom) return false;
+      if (w.curriculum === 'yct' || w.hskVersion === 'yct') return false;
+      if (!matchLevel(w.level, activeLessonsLevel)) return false;
+      if ((w.hskVersion || '3.0') !== activeHskVersion) return false;
+      if ((activeLessonsLevel === 4 || activeLessonsLevel === 5) && activeHskVersion === '2.0' && activeVolumeFilter !== 'all') {
+        if (w.volume) {
+          if (w.volume !== activeVolumeFilter) return false;
+        } else {
+          const isThuong = activeLessonsLevel === 4 ? (w.lessonId <= 10) : (w.lessonId <= 18);
+          if (activeVolumeFilter === 'thuong' && !isThuong) return false;
+          if (activeVolumeFilter === 'ha' && isThuong) return false;
+        }
+      }
+      return true;
+    });
+
+    // Group vocabulary dynamically by their lessonId field
+    var lessonGroups = {};
+    levelVocabs.forEach(w => {
+      const les = w.lessonId || 1;
+      if (!lessonGroups[les]) lessonGroups[les] = [];
+      lessonGroups[les].push(w);
+    });
+
+    var uniqueLessonKeys = Object.keys(lessonGroups).sort((a, b) => {
+      const numA = parseInt(String(a).replace(/\D/g, '')) || 0;
+      const numB = parseInt(String(b).replace(/\D/g, '')) || 0;
+      return numA - numB;
+    });
+  }
+
+  const mapHeaderTitle = activeLessonsCurriculum === 'yct'
+    ? `BẢN ĐỒ BÀI HỌC YCT CẤP ${activeYctLevel}`
+    : `BẢN ĐỒ BÀI HỌC HSK CẤP ${activeLessonsLevel === '7-9' ? '7-8-9' : activeLessonsLevel} (${activeHskVersion})`;
 
   // View Switcher Bar Header
   const viewSwitcherHtml = `
     <div class="saga-header-bar" style="grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; background: rgba(15, 23, 42, 0.85); padding: 12px 22px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(16px); position: relative; z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
       <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap; position: relative; z-index: 101;">
-        <button onclick="event.preventDefault(); event.stopPropagation(); window.returnToHskLevelSelection();" title="Đổi Cấp Độ HSK" style="width: 42px; height: 42px; border-radius: 12px; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: 1px solid rgba(255,255,255,0.3); color: #ffffff; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; transition: all 0.2s; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4); position: relative; z-index: 999; pointer-events: auto;" onmouseenter="this.style.transform='scale(1.08)'" onmouseleave="this.style.transform='scale(1)'">
+        <button onclick="event.preventDefault(); event.stopPropagation(); window.returnToHskLevelSelection();" title="Đổi Cấp Độ" style="width: 42px; height: 42px; border-radius: 12px; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: 1px solid rgba(255,255,255,0.3); color: #ffffff; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; transition: all 0.2s; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4); position: relative; z-index: 999; pointer-events: auto;" onmouseenter="this.style.transform='scale(1.08)'" onmouseleave="this.style.transform='scale(1)'">
           <i class="fa-solid fa-arrow-left"></i>
         </button>
         <span class="saga-header-title" style="font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; color: #fbbf24; display: flex; align-items: center; gap: 10px;">
-          <i class="fa-solid fa-map-location-dot" style="font-size: 1.35rem;"></i> BẢN ĐỒ BÀI HỌC HSK CẤP ${activeLessonsLevel === '7-9' ? '7-8-9' : activeLessonsLevel}
+          <i class="fa-solid fa-map-location-dot" style="font-size: 1.35rem;"></i> ${mapHeaderTitle}
         </span>
       </div>
     </div>
@@ -12469,7 +12374,7 @@ function startGameArenaFromNotebook() {
 
   const iframe = document.getElementById('game-play-iframe');
   if (iframe) {
-    iframe.src = `quiz-game.html?level=${encodeURIComponent(levelParam)}&lessons=${encodeURIComponent(lessonsParam)}&filter=${encodeURIComponent(dashboardActiveFilter)}&notebook=${encodeURIComponent(activeNotebook)}&version=${encodeURIComponent(hskVer)}&autostart=1`;
+    iframe.src = `quiz-game.html?level=${encodeURIComponent(levelParam)}&lessons=${encodeURIComponent(lessonsParam)}&filter=${encodeURIComponent(dashboardActiveFilter)}&notebook=${encodeURIComponent(activeNotebook)}&version=${encodeURIComponent(hskVer)}`;
   }
 };
 

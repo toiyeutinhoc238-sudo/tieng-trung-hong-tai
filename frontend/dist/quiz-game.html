@@ -1182,27 +1182,22 @@
         console.warn("Could not fetch vocabulary from server, checking local fallback:", e);
       }
 
-      if (!vocabData || vocabData.length < 4) {
-        try {
-          const cached = JSON.parse(localStorage.getItem('cached_vocabulary') || '[]');
-          if (Array.isArray(cached) && cached.length >= 4) {
-            vocabData = cached;
-          }
-        } catch (e) { }
-      }
-
-      if (!vocabData || vocabData.length < 4) {
-        vocabData = fallbackVocab;
-      }
-
-      vocabData = vocabData.filter(w => w && w.word && w.meaning && w.pinyin);
-
       // Read URL parameters if embedded from main dashboard
       const params = new URLSearchParams(window.location.search);
       const urlLevel = params.get('level');
       const urlLesson = params.get('lesson') || params.get('lessons');
-      const urlVersion = params.get('version') || '3.0';
+      const urlVersion = params.get('version') || localStorage.getItem('active_hsk_version') || '3.0';
+      const urlMode = params.get('mode');
       const autoStart = params.get('autostart') || params.get('auto');
+
+      if (urlMode) {
+        const targetBtn = document.querySelector(`.mode-btn[data-mode="${urlMode}"]`);
+        if (targetBtn) {
+          document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+          targetBtn.classList.add('active');
+          currentMode = urlMode;
+        }
+      }
 
       if (urlLevel && urlLevel !== 'all' && urlLevel !== 'null' && urlLevel !== 'undefined') {
         const targetVal = urlLevel.toLowerCase().replace('hsk', '');
@@ -1257,6 +1252,7 @@
 
     function updateLessons() {
       const lvl = selLevel.value;
+      const urlVersion = new URLSearchParams(window.location.search).get('version') || localStorage.getItem('active_hsk_version') || '3.0';
       selLesson.innerHTML = `<option value="all">Tất cả các bài (Mặc định)</option><option value="random">Random bài bất kì</option>`;
 
       function cleanLessonTitle(rawTitle, lessonId) {
@@ -1276,7 +1272,7 @@
           const y = lvl.replace('yct', '');
           filtered = vocabData.filter(w => isYct(w) && matchLevel(w.level, y));
         } else {
-          filtered = vocabData.filter(w => !isYct(w) && w.level && matchLevel(w.level, lvl));
+          filtered = vocabData.filter(w => !isYct(w) && w.level && matchLevel(w.level, lvl) && (w.isCustom || (w.hskVersion || '3.0') === urlVersion));
         }
       }
 
@@ -1285,7 +1281,7 @@
         if (w.lessonId) {
           const yctFlag = isYct(w);
           const typePrefix = yctFlag ? 'yct' : 'hsk';
-          const ver = yctFlag ? '' : (w.hskVersion || '3.0');
+          const ver = yctFlag ? '' : (w.hskVersion || urlVersion);
           const key = `${typePrefix}_${w.level || ''}_${w.lessonId}_${ver}`;
           const versionStr = yctFlag ? '' : ` [HSK ${ver}]`;
           const prefix = yctFlag ? `YCT ${w.level}` : (w.level ? `HSK ${w.level}${versionStr}` : '');
@@ -1308,10 +1304,11 @@
     selLevel.addEventListener('change', updateLessons);
 
     document.getElementById('mode-selector').addEventListener('click', e => {
-      if (e.target.classList.contains('mode-btn')) {
+      const btn = e.target.closest('.mode-btn');
+      if (btn) {
         document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-        e.target.classList.add('active');
-        currentMode = e.target.dataset.mode;
+        btn.classList.add('active');
+        currentMode = btn.dataset.mode;
         playBeep(600, 'sine', 0.1);
       }
     });
@@ -1345,15 +1342,17 @@
       const urlLessons = urlParams.get('lessons') || urlParams.get('lesson');
       const urlNotebook = urlParams.get('notebook');
       const urlFilter = urlParams.get('filter');
-      const urlVersion = urlParams.get('version') || '3.0';
+      const urlVersion = urlParams.get('version') || localStorage.getItem('active_hsk_version') || '3.0';
 
       if (lvl !== 'all') {
         if (lvl.startsWith('yct')) {
           const y = lvl.replace('yct', '');
           pool = pool.filter(w => isYct(w) && matchLevel(w.level, y));
         } else {
-          pool = pool.filter(w => !isYct(w) && w.level && matchLevel(w.level, lvl));
+          pool = pool.filter(w => !isYct(w) && w.level && matchLevel(w.level, lvl) && (w.isCustom || (w.hskVersion || '3.0') === urlVersion));
         }
+      } else if (!urlNotebook || urlNotebook.startsWith('hsk:')) {
+        pool = pool.filter(w => w.isCustom || isYct(w) || (w.hskVersion || '3.0') === urlVersion);
       }
 
       if (urlNotebook) {
@@ -1374,7 +1373,7 @@
       if (urlLessons && urlLessons !== 'all') {
         const lessonArr = urlLessons.split(',').map(s => s.trim().replace(/\D/g, '')).filter(Boolean);
         if (lessonArr.length > 0) {
-          const filteredByLessons = pool.filter(w => w.lessonId && lessonArr.includes(String(w.lessonId)));
+          const filteredByLessons = pool.filter(w => w.lessonId && lessonArr.includes(String(w.lessonId)) && (w.isCustom || isYct(w) || (w.hskVersion || '3.0') === urlVersion));
           if (filteredByLessons.length > 0) {
             pool = filteredByLessons;
           }
@@ -1392,10 +1391,10 @@
             pool = pool.filter(w => w.lessonId == lId && (w.level == lLevel || !lLevel) && isYct(w) === targetYct);
           } else {
             const [lLevel, lId] = parts;
-            pool = pool.filter(w => w.lessonId == lId && (w.level == lLevel || !lLevel));
+            pool = pool.filter(w => w.lessonId == lId && (w.level == lLevel || !lLevel) && (w.isCustom || (w.hskVersion || '3.0') === urlVersion));
           }
         } else {
-          pool = pool.filter(w => w.lessonId == lsn);
+          pool = pool.filter(w => w.lessonId == lsn && (w.isCustom || isYct(w) || (w.hskVersion || '3.0') === urlVersion));
         }
       } else if (lsn === 'random') {
         const ids = [...new Set(pool.map(w => w.lessonId).filter(Boolean))];
@@ -1537,9 +1536,11 @@
         return !/\b(B\.C\.|Period|stress|pressure|the|and|of|to|in|is|for|with|on|at|from|by|an|or)\b/i.test(str);
       }
 
+      const curVer = activeQ.hskVersion || urlVersion || '3.0';
+      const isQYct = isYct(activeQ);
       let candidates = currentPool.filter(w => w.id !== activeQ.id && w.meaning !== activeQ.meaning && isVietnameseMeaning(w.meaning));
       if (candidates.length < 3) {
-        const sameLevel = vocabData.filter(w => matchLevel(w.level, activeQ.level) && w.id !== activeQ.id && w.meaning !== activeQ.meaning && isVietnameseMeaning(w.meaning));
+        const sameLevel = vocabData.filter(w => matchLevel(w.level, activeQ.level) && isYct(w) === isQYct && (isQYct || w.isCustom || (w.hskVersion || '3.0') === curVer) && w.id !== activeQ.id && w.meaning !== activeQ.meaning && isVietnameseMeaning(w.meaning));
         candidates.push(...sameLevel);
       }
       if (candidates.length < 3) {
