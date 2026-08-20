@@ -1612,6 +1612,34 @@
           meaning: activeQ.meaning,
           isCorrect: isCorrect
         });
+
+        // Record word progress for notebook & dashboard
+        try {
+          const userKey = localStorage.getItem('current_user_email') || 'guest';
+          const userProg = JSON.parse(localStorage.getItem(`user_progress_${userKey}`) || '{}');
+          const guestProg = JSON.parse(localStorage.getItem('guest_progress') || '{}');
+          const qId = activeQ.id || activeQ.word;
+
+          if (!userProg[qId]) userProg[qId] = {};
+          userProg[qId].isStudied = true;
+          if (isCorrect) {
+            userProg[qId].isMemorized = true;
+            userProg[qId].isWrong = false;
+          } else {
+            userProg[qId].isWrong = true;
+          }
+          localStorage.setItem(`user_progress_${userKey}`, JSON.stringify(userProg));
+
+          if (!guestProg[qId]) guestProg[qId] = {};
+          guestProg[qId].isStudied = true;
+          if (isCorrect) {
+            guestProg[qId].isMemorized = true;
+            guestProg[qId].isWrong = false;
+          } else {
+            guestProg[qId].isWrong = true;
+          }
+          localStorage.setItem('guest_progress', JSON.stringify(guestProg));
+        } catch (eProg) {}
       }
 
       const btns = ansGrid.querySelectorAll('.ans-btn');

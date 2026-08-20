@@ -1532,6 +1532,11 @@ function renderActiveCard() {
   const current = filteredList[currentIndex];
   if (!current) return;
 
+  // Mark word as studied upon card presentation
+  if (!current.isStudied) {
+    markWordAsStudied(current.id);
+  }
+
   // Update Indicator & Progress Fill
   if (currentCardNum) currentCardNum.textContent = currentIndex + 1;
   if (totalCardNum) totalCardNum.textContent = filteredList.length;
@@ -8582,11 +8587,7 @@ function escapeHtml(str) {
     .replace(/'/g, '&#039;');
 }
 
-window.openLessonGrammarModal = function(lessonKey) {
-  if (!currentUser) {
-    window.openAuthRequiredModal();
-    return;
-  }
+window.openLessonGrammarModal = function(lessonKey, initialPointIdx = 0) {
   const modalEl = document.getElementById('lesson-grammar-popup-modal');
   const numKey = parseInt(String(lessonKey).replace(/\D/g, ''), 10) || 1;
   const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : (activeLessonsLevel || 1);
@@ -8641,19 +8642,47 @@ window.openLessonGrammarModal = function(lessonKey) {
     `;
   }
 
-  // Render grammar points
-  if (bodyEl) {
-    let cardsHtml = '';
-    lessonData.grammarPoints.forEach((pt, idx) => {
+  // Render grammar points tabbed like Bài Khóa (NP 1, NP 2, NP 3...)
+  window.renderGrammarModalPointView = function(pointIdx) {
+    const pts = lessonData.grammarPoints;
+    const total = pts.length;
+    const isAll = pointIdx === 'all';
+    const activeNum = typeof pointIdx === 'number' ? Math.max(0, Math.min(pointIdx, total - 1)) : 0;
+
+    // Build Mục lục Tabs (like Bài Khóa Đoạn 1, Đoạn 2...)
+    let tabsHtml = `
+      <div class="grammar-point-tabs-bar" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; background: rgba(15, 23, 42, 0.6); padding: 8px 12px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.08);">
+    `;
+
+    pts.forEach((p, i) => {
+      const isCur = !isAll && activeNum === i;
+      const shortTitle = p.title.length > 28 ? (p.title.slice(0, 26) + '...') : p.title;
+      tabsHtml += `
+        <button class="grammar-pt-tab-btn ${isCur ? 'active' : ''}" onclick="window.renderGrammarModalPointView(${i})" style="flex: 1; min-width: 140px; padding: 10px 14px; border-radius: 12px; border: 1.5px solid ${isCur ? '#38bdf8' : 'rgba(255,255,255,0.1)'}; background: ${isCur ? 'linear-gradient(135deg, #0284c7, #2563eb)' : 'rgba(255,255,255,0.03)'}; color: ${isCur ? '#ffffff' : '#cbd5e1'}; font-weight: 700; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; box-shadow: ${isCur ? '0 4px 14px rgba(37,99,235,0.35)' : 'none'};">
+          <span style="background: ${isCur ? '#ffffff' : 'rgba(59,130,246,0.2)'}; color: ${isCur ? '#1e40af' : '#60a5fa'}; font-size: 0.72rem; font-weight: 800; padding: 2px 7px; border-radius: 6px;">NP ${i + 1}</span>
+          <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(shortTitle)}</span>
+        </button>
+      `;
+    });
+
+    tabsHtml += `
+        <button class="grammar-pt-tab-btn ${isAll ? 'active' : ''}" onclick="window.renderGrammarModalPointView('all')" style="padding: 10px 16px; border-radius: 12px; border: 1.5px solid ${isAll ? '#38bdf8' : 'rgba(255,255,255,0.1)'}; background: ${isAll ? 'linear-gradient(135deg, #0284c7, #2563eb)' : 'rgba(255,255,255,0.03)'}; color: ${isAll ? '#ffffff' : '#cbd5e1'}; font-weight: 700; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s;">
+          <i class="fa-solid fa-list-ul"></i> <span>Tất cả (${total})</span>
+        </button>
+      </div>
+    `;
+
+    // Helper to render a single grammar point card
+    function renderPointCard(pt, idx) {
       // Formula / Structure
       let formulaHtml = '';
       if (pt.formula) {
         formulaHtml = `
-          <div class="grammar-formula-box" style="background: rgba(56, 189, 248, 0.08); border-left: 4px solid #0284c7; border-radius: 12px; padding: 12px 16px; margin: 12px 0;">
-            <div class="grammar-formula-title" style="font-size: 0.8rem; font-weight: 800; color: #0284c7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-code"></i> Cấu trúc / Công thức
+          <div class="grammar-formula-box" style="background: linear-gradient(135deg, rgba(2, 132, 199, 0.12), rgba(37, 99, 235, 0.08)); border: 1.5px solid rgba(56, 189, 248, 0.35); border-left: 5px solid #0284c7; border-radius: 14px; padding: 14px 18px; margin: 14px 0;">
+            <div class="grammar-formula-title" style="font-size: 0.82rem; font-weight: 800; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-compass-drafting"></i> Cấu trúc / Công thức chuẩn:
             </div>
-            <div class="grammar-formula-text" style="font-family: var(--font-display, sans-serif); font-size: 1.02rem; font-weight: 700; color: var(--text-primary, #ffffff); white-space: pre-line; line-height: 1.5;">
+            <div class="grammar-formula-text" style="font-family: var(--font-display, sans-serif); font-size: 1.08rem; font-weight: 700; color: #fbbf24; white-space: pre-line; line-height: 1.6;">
               ${escapeHtml(pt.formula)}
             </div>
           </div>
@@ -8664,8 +8693,13 @@ window.openLessonGrammarModal = function(lessonKey) {
       let expHtml = '';
       if (pt.explanation) {
         expHtml = `
-          <div class="grammar-exp-text" style="font-size: 0.95rem; color: var(--text-primary, #e2e8f0); line-height: 1.6; margin: 10px 0;">
-            ${escapeHtml(pt.explanation)}
+          <div class="grammar-exp-box" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 14px 18px; margin: 12px 0;">
+            <div style="font-size: 0.82rem; font-weight: 800; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-lightbulb"></i> Giải thích & Cách dùng:
+            </div>
+            <div class="grammar-exp-text" style="font-size: 0.98rem; color: var(--text-primary, #e2e8f0); line-height: 1.7;">
+              ${escapeHtml(pt.explanation)}
+            </div>
           </div>
         `;
       }
@@ -8674,26 +8708,26 @@ window.openLessonGrammarModal = function(lessonKey) {
       let noteHtml = '';
       if (pt.note) {
         noteHtml = `
-          <div class="grammar-note-box" style="background: rgba(245, 158, 11, 0.12); border-left: 4px solid #f59e0b; border-radius: 12px; padding: 10px 14px; margin: 10px 0;">
-            <div class="grammar-note-title" style="font-size: 0.82rem; font-weight: 800; color: #d97706; margin-bottom: 3px; display: flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-lightbulb"></i> Chú ý
+          <div class="grammar-note-box" style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-left: 5px solid #f59e0b; border-radius: 14px; padding: 12px 18px; margin: 12px 0;">
+            <div class="grammar-note-title" style="font-size: 0.82rem; font-weight: 800; color: #fbbf24; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-triangle-exclamation"></i> Chú ý & Mẹo nhớ:
             </div>
-            <div class="grammar-note-text" style="font-size: 0.92rem; color: var(--text-primary, #fef08a); line-height: 1.5;">
+            <div class="grammar-note-text" style="font-size: 0.93rem; color: #fef08a; line-height: 1.6;">
               ${escapeHtml(pt.note)}
             </div>
           </div>
         `;
       }
 
-      // Tables (e.g., bảng số từ 0 - 99 và số lớn >= 100)
+      // Tables
       let tablesHtml = '';
       if (pt.tables && pt.tables.length > 0) {
         tablesHtml = pt.tables.map(tbl => `
-          <div style="margin: 14px 0;">
-            <div style="font-weight: 800; color: #10b981; font-size: 0.92rem; margin-bottom: 6px; display:flex; align-items:center; gap:6px;">
-              <i class="fa-solid fa-table-list"></i> ${escapeHtml(tbl.title || 'Bảng tra cứu')}
+          <div style="margin: 16px 0;">
+            <div style="font-weight: 800; color: #34d399; font-size: 0.92rem; margin-bottom: 8px; display:flex; align-items:center; gap:6px;">
+              <i class="fa-solid fa-table-list"></i> ${escapeHtml(tbl.title || 'Bảng tra cứu & Đối chiếu')}
             </div>
-            <div style="overflow-x: auto; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+            <div style="overflow-x: auto; border-radius: 14px; border: 1px solid rgba(255,255,255,0.12);">
               <table class="custom-grammar-table">
                 <thead>
                   <tr>${(tbl.headers || []).map(h => `<th>${escapeHtml(h)}</th>`).join('')}</tr>
@@ -8713,19 +8747,19 @@ window.openLessonGrammarModal = function(lessonKey) {
         let exItems = pt.examples.map(ex => {
           const safeZh = (ex.zh || '').replace(/'/g, "\\'");
           return `
-            <div class="grammar-example-item" style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; transition: all 0.2s;">
+            <div class="grammar-example-item" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 14px; transition: all 0.2s;">
               <div style="flex: 1;">
-                <div class="grammar-ex-zh" style="font-size: 1.18rem; font-weight: 700; color: var(--text-primary, #ffffff); font-family: 'Noto Sans SC', sans-serif; margin-bottom: 2px; letter-spacing: 0.5px;">
+                <div class="grammar-ex-zh" style="font-size: 1.25rem; font-weight: 700; color: #38bdf8; font-family: 'Noto Sans SC', sans-serif; margin-bottom: 3px; letter-spacing: 0.5px;">
                   ${escapeHtml(ex.zh || '')}
                 </div>
-                <div class="grammar-ex-py" style="font-size: 0.92rem; color: #0284c7; font-family: var(--font-display, sans-serif); font-weight: 600; margin-bottom: 2px;">
+                <div class="grammar-ex-py" style="font-size: 0.95rem; color: #fbbf24; font-family: var(--font-display, sans-serif); font-weight: 600; margin-bottom: 3px;">
                   ${escapeHtml(ex.pinyin || '')}
                 </div>
-                <div class="grammar-ex-vi" style="font-size: 0.88rem; color: var(--text-secondary, #cbd5e1);">
+                <div class="grammar-ex-vi" style="font-size: 0.92rem; color: #cbd5e1;">
                   ${escapeHtml(ex.vi || '')}
                 </div>
               </div>
-              <button onclick="window.speakText('${safeZh}')" class="grammar-speak-btn" style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); color: #0284c7; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: all 0.2s;" title="Nghe phát âm">
+              <button onclick="window.speakText('${safeZh}')" class="grammar-speak-btn" style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: all 0.2s;" title="Nghe phát âm chuẩn">
                 <i class="fa-solid fa-volume-high"></i>
               </button>
             </div>
@@ -8733,38 +8767,73 @@ window.openLessonGrammarModal = function(lessonKey) {
         }).join('');
 
         examplesHtml = `
-          <div style="margin-top: 14px;">
-            <div style="font-size: 0.82rem; font-weight: 800; color: var(--text-muted, #94a3b8); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-list-check"></i> Ví dụ minh họa (${pt.examples.length} câu)
+          <div style="margin-top: 18px;">
+            <div style="font-size: 0.85rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-list-check" style="color: #38bdf8;"></i> Ví dụ minh họa (${pt.examples.length} câu)
             </div>
-            <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; flex-direction: column; gap: 10px;">
               ${exItems}
             </div>
           </div>
         `;
       }
 
-      cardsHtml += `
-        <div class="grammar-card-box" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
-          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px;">
-            <div style="width: 32px; height: 32px; border-radius: 10px; background: linear-gradient(135deg, #0284c7, #2563eb); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.95rem; flex-shrink: 0;">
-              ${idx + 1}
-            </div>
-            <h4 class="grammar-card-title" style="margin: 0; font-size: 1.15rem; font-weight: 800; color: var(--text-primary, #ffffff); font-family: var(--font-display, sans-serif);">
-              ${escapeHtml(pt.title || '')}
-            </h4>
+      // Point Sub-Navigation inside card (only when viewing single point)
+      let subNavHtml = '';
+      if (!isAll) {
+        subNavHtml = `
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.08); flex-wrap: wrap; gap: 10px;">
+            <button onclick="window.renderGrammarModalPointView(${idx - 1})" ${idx === 0 ? 'disabled style="opacity:0.35; cursor:not-allowed;"' : ''} class="btn btn-secondary btn-sm" style="padding: 8px 16px; font-weight: 700; border-radius: 12px; display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-arrow-left"></i> NP ${idx} (Trước)
+            </button>
+            <span style="font-size: 0.88rem; color: #94a3b8; font-weight: 700;">
+              Điểm ${idx + 1} / ${total}
+            </span>
+            <button onclick="window.renderGrammarModalPointView(${idx + 1})" ${idx === total - 1 ? 'disabled style="opacity:0.35; cursor:not-allowed;"' : ''} class="btn btn-secondary btn-sm" style="padding: 8px 16px; font-weight: 700; border-radius: 12px; display: flex; align-items: center; gap: 6px;">
+              NP ${idx + 2} (Tiếp) <i class="fa-solid fa-arrow-right"></i>
+            </button>
           </div>
+        `;
+      }
+
+      return `
+        <div class="grammar-card-box cartoon-grammar-card" style="background: rgba(15, 23, 42, 0.7); border: 1.5px solid rgba(255, 255, 255, 0.12); border-radius: 24px; padding: 24px; box-shadow: 0 12px 32px rgba(0,0,0,0.35); position: relative; overflow: hidden; margin-bottom: 16px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 16px; border-bottom: 1.5px solid rgba(255,255,255,0.1); padding-bottom: 14px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="padding: 6px 14px; border-radius: 12px; background: linear-gradient(135deg, #0284c7, #2563eb); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; flex-shrink: 0; box-shadow: 0 4px 12px rgba(37,99,235,0.4);">
+                NP ${pt.num || (idx + 1)}
+              </div>
+              <h4 class="grammar-card-title" style="margin: 0; font-size: 1.3rem; font-weight: 800; color: var(--text-primary, #ffffff); font-family: var(--font-display, sans-serif);">
+                ${escapeHtml(pt.title || '')}
+              </h4>
+            </div>
+            <span style="font-size: 0.8rem; font-weight: 700; padding: 4px 10px; border-radius: 99px; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3);">
+              Điểm ${idx + 1} / ${total}
+            </span>
+          </div>
+
           ${formulaHtml}
           ${expHtml}
           ${noteHtml}
           ${tablesHtml}
           ${examplesHtml}
+          ${subNavHtml}
         </div>
       `;
-    });
+    }
 
-    bodyEl.innerHTML = cardsHtml;
-  }
+    let cardsContentHtml = '';
+    if (isAll) {
+      cardsContentHtml = pts.map((pt, i) => renderPointCard(pt, i)).join('');
+    } else {
+      cardsContentHtml = renderPointCard(pts[activeNum], activeNum);
+    }
+
+    bodyEl.innerHTML = tabsHtml + cardsContentHtml;
+  };
+
+  // Initial render
+  window.renderGrammarModalPointView(initialPointIdx);
 
   // Prev / Next button handlers & Step Transitions
   const btnPrev = document.getElementById('grammar-modal-prev-btn');
@@ -8809,10 +8878,6 @@ window.openLessonGrammarModal = function(lessonKey) {
 };
 
 window.openLessonVocabStudy = function(lessonKey) {
-  if (!currentUser) {
-    window.openAuthRequiredModal();
-    return;
-  }
   const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : activeLessonsLevel;
   const levelVocabs = vocabList.filter(w => {
     if (w.isCustom) return false;
@@ -8841,10 +8906,6 @@ window.openLessonGrammarStudy = function(lessonId) {
 };
 
 window.openLessonTextStudy = function(lessonId) {
-  if (!currentUser) {
-    window.openAuthRequiredModal();
-    return;
-  }
   const modalEl = document.getElementById('lesson-detail-popup-modal');
   if (modalEl) modalEl.style.display = 'none';
 
@@ -11671,7 +11732,7 @@ function updateNotebookDashboardStatsOnly(notebookId) {
   const memorized = wordsForStats.filter(w => w.isMemorized).length;
   const studied = wordsForStats.filter(w => w.isStudied || w.isMemorized || w.isWrong || w.isStarred).length;
   const unstudied = total - studied;
-  const unmemorized = total - memorized;
+  const unmemorized = wordsForStats.filter(w => (w.isStudied || w.isWrong) && !w.isMemorized).length;
   const starred = wordsForStats.filter(w => w.isStarred).length;
 
   const nbStatTotal = document.getElementById('nb-stat-total');
@@ -11713,7 +11774,7 @@ function renderNotebookWordsTable() {
   } else if (dashboardActiveFilter === 'memorized') {
     words = words.filter(w => w.isMemorized);
   } else if (dashboardActiveFilter === 'unmemorized') {
-    words = words.filter(w => !w.isMemorized);
+    words = words.filter(w => (w.isStudied || w.isWrong) && !w.isMemorized);
   } else if (dashboardActiveFilter === 'starred') {
     words = words.filter(w => w.isStarred);
   }
@@ -13812,17 +13873,28 @@ window.renderAdminUsersTable = function () {
 
     // Actions
     let actionBtnHtml = '';
+    const historyBtnHtml = `
+      <button type="button" onclick="window.openStudentHistoryDetail('${safeEmail}')" style="padding: 5px 10px; font-size: 0.76rem; font-weight: 700; border-radius: 8px; background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.35); cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s;" title="Xem lịch sử học theo từng ngày">
+        <i class="fa-solid fa-chart-line"></i> Nhật ký
+      </button>
+    `;
+
     if (isCurrentSuper) {
       if (u.isSuperAdmin) {
-        actionBtnHtml = `<span style="font-size: 0.75rem; color: #f43f5e; font-weight: 700;"><i class="fa-solid fa-lock"></i> Cố định</span>`;
+        actionBtnHtml = `<div style="display: flex; gap: 6px; justify-content: flex-end; align-items: center;">${historyBtnHtml} <span style="font-size: 0.75rem; color: #f43f5e; font-weight: 700;"><i class="fa-solid fa-lock"></i> Super</span></div>`;
       } else {
         const currentRoleText = u.role === 'teacher' ? ' (GV)' : (u.role === 'admin' ? ' (Admin)' : '');
         actionBtnHtml = `
-          <button type="button" onclick="window.openRolePickerModal('${safeEmail}', '${u.role || 'user'}', '${safeName}')" style="padding: 5px 12px; font-size: 0.76rem; font-weight: 800; border-radius: 8px; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.35); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;">
-            <i class="fa-solid fa-shield-halved"></i> Cấp quyền${currentRoleText}
-          </button>
+          <div style="display: flex; gap: 6px; justify-content: flex-end; align-items: center;">
+            ${historyBtnHtml}
+            <button type="button" onclick="window.openRolePickerModal('${safeEmail}', '${u.role || 'user'}', '${safeName}')" style="padding: 5px 12px; font-size: 0.76rem; font-weight: 800; border-radius: 8px; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.35); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;">
+              <i class="fa-solid fa-shield-halved"></i> Cấp quyền${currentRoleText}
+            </button>
+          </div>
         `;
       }
+    } else {
+      actionBtnHtml = historyBtnHtml;
     }
 
     html += `
@@ -13852,7 +13924,7 @@ window.renderAdminUsersTable = function () {
             ${timeFormatted}
           </span>
         </td>
-        ${isCurrentSuper ? `<td style="text-align: right;">${actionBtnHtml}</td>` : ''}
+        <td style="text-align: right;">${actionBtnHtml}</td>
       </tr>
     `;
   });
@@ -13863,6 +13935,100 @@ window.renderAdminUsersTable = function () {
   `;
 
   container.innerHTML = html;
+};
+
+window.openStudentHistoryDetail = function(userEmail) {
+  const user = adminCachedUsersList.find(u => u.email === userEmail);
+  if (!user) {
+    showToast('Không tìm thấy dữ liệu học viên!', true);
+    return;
+  }
+
+  let modal = document.getElementById('admin-user-history-detail-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'admin-user-history-detail-modal';
+    modal.style.cssText = 'position: fixed; inset: 0; z-index: 999999; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; padding: 16px;';
+    document.body.appendChild(modal);
+  }
+
+  const safeName = escapeHtml(user.name || 'Học viên');
+  const safeEmail = escapeHtml(user.email || '');
+  const dailyHistory = user.dailyHistory || {};
+  const dates = Object.keys(dailyHistory).sort().reverse();
+
+  let dailyRowsHtml = '';
+  if (dates.length === 0) {
+    dailyRowsHtml = `<tr><td colspan="2" style="text-align: center; padding: 24px; color: #94a3b8;">Học viên chưa có nhật ký học tập chi tiết theo ngày.</td></tr>`;
+  } else {
+    dailyRowsHtml = dates.map(d => {
+      const sec = dailyHistory[d] || 0;
+      const mins = (sec / 60).toFixed(1);
+      return `
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+          <td style="padding: 10px 14px; font-weight: 700; color: #38bdf8;"><i class="fa-regular fa-calendar-check" style="margin-right: 6px;"></i> ${escapeHtml(d)}</td>
+          <td style="padding: 10px 14px; font-weight: 700; color: #fbbf24; text-align: right;">${mins} phút (${sec}s)</td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  const totalMins = Math.round((user.studyTime || 0) / 60);
+
+  modal.innerHTML = `
+    <div style="background: linear-gradient(180deg, #131d35 0%, #0d1527 100%); border: 1.5px solid rgba(56, 189, 248, 0.35); border-radius: 24px; width: 100%; max-width: 580px; max-height: 88vh; padding: 24px; box-shadow: 0 25px 60px rgba(0,0,0,0.85); color: #ffffff; position: relative; display: flex; flex-direction: column; gap: 16px; overflow: hidden;">
+      <button type="button" onclick="document.getElementById('admin-user-history-detail-modal').style.display='none'" style="position: absolute; top: 18px; right: 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; font-size: 1.2rem; cursor: pointer; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div style="display: flex; align-items: center; gap: 14px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 14px;">
+        <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #0284c7, #2563eb); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: white; flex-shrink: 0;">
+          <i class="fa-solid fa-user-graduate"></i>
+        </div>
+        <div>
+          <h3 style="font-size: 1.2rem; font-weight: 800; color: #ffffff; margin: 0;">Lịch Sử Học Tập Chi Tiết</h3>
+          <p style="font-size: 0.85rem; color: #94a3b8; margin: 2px 0 0 0;">${safeName} (${safeEmail})</p>
+        </div>
+      </div>
+
+      <!-- Quick KPI Badges -->
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 10px; text-align: center;">
+          <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Chuỗi Học</div>
+          <div style="font-size: 1.2rem; font-weight: 800; color: #f97316; margin-top: 2px;"><i class="fa-solid fa-fire"></i> ${user.streak || 0} ngày</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 10px; text-align: center;">
+          <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Tổng Thời Gian</div>
+          <div style="font-size: 1.2rem; font-weight: 800; color: #38bdf8; margin-top: 2px;"><i class="fa-solid fa-clock"></i> ${totalMins} phút</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 10px; text-align: center;">
+          <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Đã Thuộc</div>
+          <div style="font-size: 1.2rem; font-weight: 800; color: #22c55e; margin-top: 2px;"><i class="fa-solid fa-circle-check"></i> ${user.memorizedWordsCount || user.totalWordsMemorized || 0} từ</div>
+        </div>
+      </div>
+
+      <!-- Daily History Breakdown Table -->
+      <div style="font-weight: 800; font-size: 0.92rem; color: #ffffff; display: flex; align-items: center; gap: 8px;">
+        <i class="fa-solid fa-calendar-days" style="color: #38bdf8;"></i> Nhật ký thời gian học theo ngày (${dates.length} ngày hoạt động):
+      </div>
+
+      <div style="flex: 1; overflow-y: auto; max-height: 280px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2);">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem;">
+          <thead>
+            <tr style="background: rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.1); color: #cbd5e1;">
+              <th style="padding: 10px 14px; text-align: left; font-weight: 800;">Ngày Học</th>
+              <th style="padding: 10px 14px; text-align: right; font-weight: 800;">Thời Gian Luyện Tập</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${dailyRowsHtml}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+
+  modal.style.display = 'flex';
 };
 
 window.openRolePickerModal = function (targetEmail, currentRole, targetName) {

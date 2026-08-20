@@ -617,6 +617,83 @@ app.post('/api/auth/logout', async (req, res) => {
   res.json({ success: true });
 });
 
+// GET /api/admin/users & /api/admin/users-activity — Lấy toàn bộ danh sách & lịch sử hoạt động học viên
+app.get(['/api/admin/users', '/api/admin/users-activity'], async (req, res) => {
+  try {
+    const userData = await readUserData();
+    const usersObj = userData.users || {};
+    const progressObj = userData.progress || {};
+
+    const now = Date.now();
+    let totalStudyTimeSec = 0;
+    let onlineCount = 0;
+    let adminCount = 0;
+
+    const usersList = Object.keys(usersObj).map(email => {
+      const u = usersObj[email] || {};
+      const userProg = progressObj[email] || {};
+
+      const totalWordsStudied = Object.values(userProg).filter(p => p && (p.isStudied || p.isMemorized || p.isWrong || p.isStarred)).length;
+      const totalWordsMemorized = Object.values(userProg).filter(p => p && p.isMemorized).length;
+
+      const studyTime = u.stats?.studyTime || 0;
+      totalStudyTimeSec += studyTime;
+
+      const isSuper = isSuperAdmin(email);
+      const isAdmin = isUserAdmin(email, userData);
+      if (isAdmin || isSuper) adminCount++;
+
+      // Check online status within last 5 minutes
+      const lastSeenTime = u.lastSeenTime ? new Date(u.lastSeenTime).getTime() : 0;
+      const isOnline = (now - lastSeenTime) < 5 * 60 * 1000;
+      if (isOnline) onlineCount++;
+
+      return {
+        email: email,
+        name: u.name || 'Học viên',
+        picture: u.picture || '',
+        role: isSuper ? 'super_admin' : (u.role || (email.includes('hongtai') ? 'admin' : 'user')),
+        isSuperAdmin: isSuper,
+        isAdmin: isAdmin,
+        isOnline: isOnline,
+        lastSeen: u.lastSeenTime || null,
+        lastSeenTime: u.lastSeenTime || null,
+        streak: u.stats?.streak || 0,
+        studyTime: studyTime,
+        studyTimeSeconds: studyTime,
+        studyTimeMinutes: Math.round(studyTime / 60),
+        lastActiveDate: u.stats?.lastActiveDate || '',
+        dailyHistory: u.stats?.dailyHistory || {},
+        memorizedWordsCount: totalWordsMemorized,
+        totalWordsStudied: totalWordsStudied,
+        totalWordsMemorized: totalWordsMemorized,
+        quizCount: (u.gameHistory || []).length,
+        highestQuizScore: (u.gameHistory || []).reduce((max, g) => Math.max(max, g.score || 0), 0),
+        gameHistory: u.gameHistory || []
+      };
+    });
+
+    // Sort by lastSeenTime / lastActiveDate descending
+    usersList.sort((a, b) => {
+      const timeA = a.lastSeenTime ? new Date(a.lastSeenTime).getTime() : 0;
+      const timeB = b.lastSeenTime ? new Date(b.lastSeenTime).getTime() : 0;
+      return timeB - timeA;
+    });
+
+    res.json({
+      success: true,
+      totalUsers: usersList.length,
+      onlineCount: onlineCount,
+      adminCount: adminCount,
+      totalStudyTimeHours: parseFloat((totalStudyTimeSec / 3600).toFixed(1)),
+      users: usersList
+    });
+  } catch (err) {
+    console.error("Error fetching user activities:", err);
+    res.status(500).json({ error: 'Failed to fetch user activities' });
+  }
+});
+
 // ============================================================
 // REAL-TIME USER PRESENCE & 100% REAL DATABASE STATS SYSTEM
 // ============================================================

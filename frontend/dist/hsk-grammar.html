@@ -818,7 +818,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
   </style>
-  <script type="module" crossorigin src="/assets/grammar-DTDBuXff.js"></script>
+  <script type="module" crossorigin src="/assets/grammar-stuEP5PW.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
   <link rel="modulepreload" crossorigin href="/assets/grammar_hsk2-B6FgImKU.js">
   <link rel="modulepreload" crossorigin href="/assets/particles-Db85yIFy.js">
@@ -888,6 +888,9 @@
       </div>
 
       <div class="quick-tools-group">
+        <button class="btn-action" onclick="window.openTocModal()" style="background: linear-gradient(135deg, rgba(2, 132, 199, 0.25), rgba(37, 99, 235, 0.35)); border-color: rgba(56, 189, 248, 0.5); color: #38bdf8; font-weight: 800;">
+          <i class="fa-solid fa-list-ol"></i> Mục Lục Điểm NP
+        </button>
         <button class="btn-action" onclick="toggleAllCards(true)">
           <i class="fa-solid fa-angles-down"></i> Mở rộng tất cả
         </button>
@@ -908,6 +911,29 @@
       </div>
     </div>
 
+  </div>
+
+  <!-- Modal Mục Lục Điểm Ngữ Pháp (TOC) -->
+  <div class="modal-overlay" id="grammar-toc-modal" onclick="if(event.target === this) this.style.display='none';" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); z-index: 999999; align-items: center; justify-content: center; padding: 16px;">
+    <div class="modal-card glass-panel" style="background: var(--bg-card); border: 1.5px solid rgba(56, 189, 248, 0.3); border-radius: 24px; width: 100%; max-width: 780px; max-height: 88vh; display: flex; flex-direction: column; box-shadow: 0 25px 60px rgba(0,0,0,0.6); color: var(--text-main); position: relative; overflow: hidden;">
+      <div style="padding: 18px 24px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; gap: 12px; background: rgba(255,255,255,0.02); flex-shrink: 0;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #0284c7, #2563eb); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+            <i class="fa-solid fa-list-ol"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; font-family: var(--font-display);">Mục Lục Điểm Ngữ Pháp</h3>
+            <p style="margin: 0; font-size: 0.82rem; color: var(--text-sub);" id="toc-modal-sub">Danh sách toàn bộ các bài học và điểm ngữ pháp trọng tâm</p>
+          </div>
+        </div>
+        <button onclick="document.getElementById('grammar-toc-modal').style.display='none'" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; font-size: 1.2rem; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;" title="Đóng (ESC)">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div id="grammar-toc-modal-list" style="padding: 20px 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; flex: 1;">
+        <!-- Dynamically rendered list of lessons and points -->
+      </div>
+    </div>
   </div>
 
 </body>

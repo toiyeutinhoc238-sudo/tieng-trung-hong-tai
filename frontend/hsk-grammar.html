@@ -885,6 +885,9 @@
       </div>
 
       <div class="quick-tools-group">
+        <button class="btn-action" onclick="window.openTocModal()" style="background: linear-gradient(135deg, rgba(2, 132, 199, 0.25), rgba(37, 99, 235, 0.35)); border-color: rgba(56, 189, 248, 0.5); color: #38bdf8; font-weight: 800;">
+          <i class="fa-solid fa-list-ol"></i> Mục Lục Điểm NP
+        </button>
         <button class="btn-action" onclick="toggleAllCards(true)">
           <i class="fa-solid fa-angles-down"></i> Mở rộng tất cả
         </button>
@@ -905,6 +908,29 @@
       </div>
     </div>
 
+  </div>
+
+  <!-- Modal Mục Lục Điểm Ngữ Pháp (TOC) -->
+  <div class="modal-overlay" id="grammar-toc-modal" onclick="if(event.target === this) this.style.display='none';" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); z-index: 999999; align-items: center; justify-content: center; padding: 16px;">
+    <div class="modal-card glass-panel" style="background: var(--bg-card); border: 1.5px solid rgba(56, 189, 248, 0.3); border-radius: 24px; width: 100%; max-width: 780px; max-height: 88vh; display: flex; flex-direction: column; box-shadow: 0 25px 60px rgba(0,0,0,0.6); color: var(--text-main); position: relative; overflow: hidden;">
+      <div style="padding: 18px 24px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; gap: 12px; background: rgba(255,255,255,0.02); flex-shrink: 0;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #0284c7, #2563eb); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+            <i class="fa-solid fa-list-ol"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; font-family: var(--font-display);">Mục Lục Điểm Ngữ Pháp</h3>
+            <p style="margin: 0; font-size: 0.82rem; color: var(--text-sub);" id="toc-modal-sub">Danh sách toàn bộ các bài học và điểm ngữ pháp trọng tâm</p>
+          </div>
+        </div>
+        <button onclick="document.getElementById('grammar-toc-modal').style.display='none'" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; font-size: 1.2rem; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;" title="Đóng (ESC)">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div id="grammar-toc-modal-list" style="padding: 20px 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; flex: 1;">
+        <!-- Dynamically rendered list of lessons and points -->
+      </div>
+    </div>
   </div>
 
   <script type="module">
@@ -1062,6 +1088,81 @@
       }
     }
 
+    window._lessonActiveNpMap = {};
+
+    window.openTocModal = function() {
+      const modal = document.getElementById('grammar-toc-modal');
+      const listEl = document.getElementById('grammar-toc-modal-list');
+      const subEl = document.getElementById('toc-modal-sub');
+      if (!modal || !listEl) return;
+
+      const lessons = currentActiveLevel === 'hsk2' ? (window.HSK2_STRUCTURED_GRAMMAR || []) : (window.HSK1_STRUCTURED_GRAMMAR || []);
+      const lvlNum = currentActiveLevel.replace('hsk', '').toUpperCase();
+      if (subEl) subEl.textContent = `Danh sách 15 bài học và ${lessons.reduce((acc, l) => acc + (l.grammarPoints?.length || 0), 0)} điểm ngữ pháp HSK ${lvlNum} (3.0)`;
+
+      let html = '';
+      lessons.forEach(les => {
+        html += `
+          <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 14px 18px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="background: #0284c7; color: #fff; font-weight: 800; font-size: 0.78rem; padding: 2px 8px; border-radius: 6px;">${les.lessonKey}</span>
+                <strong style="font-size: 1rem; color: var(--text-main); font-family: var(--font-display);">${les.lessonTitleZh}</strong>
+              </div>
+              <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">${les.grammarPoints.length} điểm NP</span>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              ${les.grammarPoints.map((p, idx) => `
+                <button onclick="window.jumpToLessonPoint('${les.lessonId}', ${idx})" style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.25); color: #38bdf8; padding: 6px 12px; border-radius: 10px; font-size: 0.82rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;" onmouseenter="this.style.background='rgba(56, 189, 248, 0.25)'" onmouseleave="this.style.background='rgba(56, 189, 248, 0.1)'">
+                  <span style="background: #0284c7; color: #fff; font-size: 0.68rem; padding: 1px 5px; border-radius: 4px;">NP ${idx + 1}</span>
+                  <span>${escapeHtml(p.title)}</span>
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      });
+
+      listEl.innerHTML = html;
+      modal.style.display = 'flex';
+    };
+
+    window.jumpToLessonPoint = function(lessonId, pointIdx) {
+      const modal = document.getElementById('grammar-toc-modal');
+      if (modal) modal.style.display = 'none';
+
+      window._lessonActiveNpMap[lessonId] = pointIdx;
+      renderGrammarView();
+
+      setTimeout(() => {
+        const block = document.getElementById(`block-Bài ${lessonId}`) || document.getElementById(`lesson-body-${lessonId}`);
+        if (block) {
+          block.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          block.style.boxShadow = '0 0 25px rgba(56, 189, 248, 0.6)';
+          block.style.borderColor = '#38bdf8';
+          setTimeout(() => {
+            block.style.boxShadow = '';
+            block.style.borderColor = '';
+          }, 3000);
+        }
+      }, 150);
+    };
+
+    window.selectLessonNpTab = function(lessonId, targetPointIdx) {
+      window._lessonActiveNpMap[lessonId] = targetPointIdx;
+      renderGrammarView();
+    };
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
     function renderStructuredLevel(container, lvlKey) {
       const lessons = lvlKey === 'hsk2' ? (window.HSK2_STRUCTURED_GRAMMAR || []) : (window.HSK1_STRUCTURED_GRAMMAR || []);
       const lvlNum = lvlKey.replace('hsk', '').toUpperCase();
@@ -1098,8 +1199,189 @@
       let html = '';
       filteredLessons.forEach(les => {
         const isSearchActive = !!searchQuery;
-        const bodyDisplay = isSearchActive ? 'flex' : 'flex';
-        const chevronClass = isSearchActive ? 'fa-solid fa-chevron-up lesson-chevron-icon' : 'fa-solid fa-chevron-up lesson-chevron-icon';
+        const bodyDisplay = 'flex';
+        const chevronClass = 'fa-solid fa-chevron-up lesson-chevron-icon';
+        const activePointVal = isSearchActive ? 'all' : (window._lessonActiveNpMap[les.lessonId] !== undefined ? window._lessonActiveNpMap[les.lessonId] : 0);
+        const isAll = activePointVal === 'all';
+        const activeIdx = typeof activePointVal === 'number' ? Math.max(0, Math.min(activePointVal, les.grammarPoints.length - 1)) : 0;
+        const totalPoints = les.grammarPoints.length;
+
+        // Render point card helper
+        function renderPointDetail(point, idx) {
+          // Formula
+          let formulaHtml = '';
+          if (point.formula) {
+            formulaHtml = `
+              <div class="formula-card" style="background: linear-gradient(135deg, rgba(2, 132, 199, 0.12), rgba(37, 99, 235, 0.08)); border: 1.5px solid rgba(56, 189, 248, 0.35); border-left: 5px solid #0284c7; border-radius: 14px; padding: 14px 18px; margin: 12px 0;">
+                <div class="formula-card-title" style="font-size: 0.82rem; font-weight: 800; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+                  <i class="fa-solid fa-compass-drafting"></i> Cấu trúc / Công thức chuẩn:
+                </div>
+                <div class="formula-card-code" style="font-family: var(--font-display, sans-serif); font-size: 1.08rem; font-weight: 700; color: #fbbf24; white-space: pre-line; line-height: 1.6;">${escapeHtml(point.formula)}</div>
+              </div>
+            `;
+          }
+
+          // Explanation
+          let expHtml = '';
+          if (point.explanation) {
+            expHtml = `
+              <div class="explanation-box" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 14px 18px; margin: 12px 0;">
+                <div style="font-weight: 800; color: #38bdf8; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+                  <i class="fa-solid fa-lightbulb"></i> Giải thích & Cách dùng:
+                </div>
+                <div style="font-size: 0.98rem; color: var(--text-main); line-height: 1.7;">${escapeHtml(point.explanation)}</div>
+              </div>
+            `;
+          }
+
+          // Note
+          let noteHtml = '';
+          if (point.note) {
+            noteHtml = `
+              <div class="note-card" style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-left: 5px solid #f59e0b; border-radius: 14px; padding: 12px 18px; margin: 12px 0;">
+                <div style="font-weight: 800; color: #fbbf24; font-size: 0.82rem; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                  <i class="fa-solid fa-triangle-exclamation"></i> Lưu ý & Mẹo nhớ:
+                </div>
+                <div style="font-size: 0.93rem; color: #fef08a; line-height: 1.6;">${escapeHtml(point.note)}</div>
+              </div>
+            `;
+          }
+
+          // Tables
+          let tablesHtml = '';
+          if (point.tables && point.tables.length > 0) {
+            tablesHtml = point.tables.map(tbl => `
+              <div style="margin: 16px 0;">
+                <div style="font-weight: 800; color: #34d399; font-size: 0.92rem; margin-bottom: 8px; display:flex; align-items:center; gap:6px;">
+                  <i class="fa-solid fa-table-list"></i> ${escapeHtml(tbl.title || 'Bảng tra cứu & Đối chiếu')}
+                </div>
+                <div style="overflow-x: auto; border-radius: 14px; border: 1px solid rgba(255,255,255,0.12);">
+                  <table class="custom-grammar-table">
+                    <thead>
+                      <tr>${(tbl.headers || []).map(h => `<th>${escapeHtml(h)}</th>`).join('')}</tr>
+                    </thead>
+                    <tbody>
+                      ${(tbl.rows || []).map(r => `<tr>${(r || []).map(c => `<td>${escapeHtml(c)}</td>`).join('')}</tr>`).join('')}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            `).join('');
+          }
+
+          // Examples
+          let examplesHtml = '';
+          if (point.examples && point.examples.length > 0) {
+            examplesHtml = `
+              <div style="margin-top: 18px;">
+                <div style="font-weight: 800; color: #94a3b8; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+                  <i class="fa-solid fa-headphones" style="color: #38bdf8;"></i> Ví dụ minh họa & Luyện phát âm:
+                </div>
+                <div class="examples-container" style="display: flex; flex-direction: column; gap: 10px;">
+                  ${point.examples.map(ex => {
+                    const safeZh = (ex.zh || '').replace(/'/g, "\\'");
+                    return `
+                      <div class="example-item-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 14px; transition: all 0.2s;">
+                        <div style="flex: 1;">
+                          <div class="example-zh" style="font-size: 1.25rem; font-weight: 700; color: #38bdf8; font-family: 'Noto Sans SC', sans-serif; margin-bottom: 3px; letter-spacing: 0.5px;">${escapeHtml(ex.zh)}</div>
+                          ${ex.pinyin ? `<div class="example-pinyin" style="font-size: 0.95rem; color: #fbbf24; font-family: var(--font-display, sans-serif); font-weight: 600; margin-bottom: 3px;">${escapeHtml(ex.pinyin)}</div>` : ''}
+                          ${ex.vi ? `<div class="example-vi" style="font-size: 0.92rem; color: #cbd5e1;">${escapeHtml(ex.vi)}</div>` : ''}
+                        </div>
+                        <button class="btn-speak-audio" onclick="speakZhText('${safeZh}')" style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: all 0.2s;" title="Nghe phát âm giọng Baidu chuẩn">
+                          <i class="fa-solid fa-volume-high"></i>
+                        </button>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+            `;
+          }
+
+          // Exercises
+          let exercisesHtml = '';
+          if (point.exercises && point.exercises.length > 0) {
+            exercisesHtml = `
+              <div style="margin-top: 16px;">
+                <div style="font-weight: 800; color: #10b981; font-size: 0.88rem; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                  <i class="fa-solid fa-pencil"></i> Bài tập áp dụng:
+                </div>
+                ${point.exercises.map(exer => `
+                  <div class="exercise-item-box" style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
+                    <div style="font-weight: 700; color: #e2e8f0; margin-bottom: 4px;">${escapeHtml(exer.prompt)}</div>
+                    <div style="font-size: 0.88rem; color: #34d399;"><strong>Đáp án:</strong> ${escapeHtml(exer.answer)}</div>
+                  </div>
+                `).join('')}
+              </div>
+            `;
+          }
+
+          // In-card sub-navigation
+          let inCardNavHtml = '';
+          if (!isAll) {
+            inCardNavHtml = `
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.08); flex-wrap: wrap; gap: 10px;">
+                <button onclick="window.selectLessonNpTab('${les.lessonId}', ${idx - 1})" ${idx === 0 ? 'disabled style="opacity:0.35; cursor:not-allowed;"' : ''} class="btn-action" style="padding: 8px 16px; font-weight: 700; border-radius: 12px; font-size: 0.85rem;">
+                  <i class="fa-solid fa-chevron-left"></i> NP ${idx} (Trước)
+                </button>
+                <span style="font-size: 0.88rem; color: #94a3b8; font-weight: 700;">
+                  Điểm ${idx + 1} / ${totalPoints}
+                </span>
+                <button onclick="window.selectLessonNpTab('${les.lessonId}', ${idx + 1})" ${idx === totalPoints - 1 ? 'disabled style="opacity:0.35; cursor:not-allowed;"' : ''} class="btn-action" style="padding: 8px 16px; font-weight: 700; border-radius: 12px; font-size: 0.85rem;">
+                  NP ${idx + 2} (Tiếp) <i class="fa-solid fa-chevron-right"></i>
+                </button>
+              </div>
+            `;
+          }
+
+          return `
+            <div class="grammar-card expanded" id="card-${point.id}" style="background: rgba(15, 23, 42, 0.7); border: 1.5px solid rgba(255, 255, 255, 0.12); border-radius: 20px; padding: 22px; margin-bottom: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 12px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <span style="background: linear-gradient(135deg, #0284c7, #2563eb); color: #fff; font-weight: 800; font-size: 0.95rem; padding: 4px 12px; border-radius: 10px; box-shadow: 0 4px 12px rgba(37,99,235,0.35);">NP ${point.num || (idx + 1)}</span>
+                  <h4 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: var(--text-main); font-family: var(--font-display);">${escapeHtml(point.title)}</h4>
+                </div>
+                <span style="font-size: 0.8rem; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.15); padding: 4px 10px; border-radius: 99px;">
+                  Điểm ${idx + 1} / ${totalPoints}
+                </span>
+              </div>
+
+              ${formulaHtml}
+              ${expHtml}
+              ${noteHtml}
+              ${tablesHtml}
+              ${examplesHtml}
+              ${exercisesHtml}
+              ${inCardNavHtml}
+            </div>
+          `;
+        }
+
+        // Build NP tab buttons like Bài Khóa (Đoạn 1, Đoạn 2...)
+        const tabsBarHtml = `
+          <div class="lesson-np-tabs-bar" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; background: rgba(15, 23, 42, 0.6); padding: 8px 12px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.08);">
+            ${les.grammarPoints.map((p, i) => {
+              const isCur = !isAll && activeIdx === i;
+              const shortTitle = p.title.length > 28 ? (p.title.slice(0, 26) + '...') : p.title;
+              return `
+                <button class="lesson-np-tab-btn ${isCur ? 'active' : ''}" onclick="selectLessonNpTab('${les.lessonId}', ${i})" style="flex: 1; min-width: 140px; padding: 10px 14px; border-radius: 12px; border: 1.5px solid ${isCur ? '#38bdf8' : 'rgba(255,255,255,0.1)'}; background: ${isCur ? 'linear-gradient(135deg, #0284c7, #2563eb)' : 'rgba(255,255,255,0.03)'}; color: ${isCur ? '#ffffff' : '#cbd5e1'}; font-weight: 700; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; box-shadow: ${isCur ? '0 4px 14px rgba(37,99,235,0.35)' : 'none'};">
+                  <span style="background: ${isCur ? '#ffffff' : 'rgba(59,130,246,0.2)'}; color: ${isCur ? '#1e40af' : '#60a5fa'}; font-size: 0.72rem; font-weight: 800; padding: 2px 7px; border-radius: 6px;">NP ${i + 1}</span>
+                  <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(shortTitle)}</span>
+                </button>
+              `;
+            }).join('')}
+            <button class="lesson-np-tab-btn ${isAll ? 'active' : ''}" onclick="selectLessonNpTab('${les.lessonId}', 'all')" style="padding: 10px 16px; border-radius: 12px; border: 1.5px solid ${isAll ? '#38bdf8' : 'rgba(255,255,255,0.1)'}; background: ${isAll ? 'linear-gradient(135deg, #0284c7, #2563eb)' : 'rgba(255,255,255,0.03)'}; color: ${isAll ? '#ffffff' : '#cbd5e1'}; font-weight: 700; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s;">
+              <i class="fa-solid fa-list-ul"></i> <span>Tất cả (${totalPoints})</span>
+            </button>
+          </div>
+        `;
+
+        let cardsBodyHtml = '';
+        if (isAll) {
+          cardsBodyHtml = les.grammarPoints.map((pt, i) => renderPointDetail(pt, i)).join('');
+        } else {
+          cardsBodyHtml = renderPointDetail(les.grammarPoints[activeIdx], activeIdx);
+        }
 
         html += `
           <div class="lesson-block" id="block-${les.lessonKey}">
@@ -1112,101 +1394,9 @@
               <i id="lesson-chevron-${les.lessonId}" class="${chevronClass}" style="color:#94a3b8;"></i>
             </div>
 
-            <div class="lesson-body-content" id="lesson-body-${les.lessonId}" style="display: ${bodyDisplay};">
-              ${les.grammarPoints.map(point => `
-                <div class="grammar-card ${isSearchActive ? 'expanded' : ''}" id="card-${point.id}">
-                  <div class="grammar-card-header" onclick="toggleGrammarPointCard('${point.id}')">
-                    <div class="grammar-card-title">
-                      <span class="grammar-index-badge">#${point.num}</span>
-                      <span>${point.title}</span>
-                    </div>
-                    <i id="chevron-${point.id}" class="fa-solid ${isSearchActive ? 'fa-chevron-up' : 'fa-chevron-down'} point-chevron-icon" style="color:#94a3b8;"></i>
-                  </div>
-
-                  <div class="grammar-card-body">
-                    ${point.explanation ? `
-                      <div class="explanation-box">
-                        <div style="font-weight:700; color:#38bdf8; margin-bottom:4px; display:flex; align-items:center; gap:6px;">
-                          <i class="fa-solid fa-lightbulb"></i> Giải thích & Khái niệm:
-                        </div>
-                        <div>${point.explanation}</div>
-                      </div>
-                    ` : ''}
-
-                    ${point.formula ? `
-                      <div class="formula-card">
-                        <div class="formula-card-title">
-                          <i class="fa-solid fa-compass-drafting"></i> Cấu trúc / Công thức chuẩn:
-                        </div>
-                        <div class="formula-card-code">${point.formula}</div>
-                      </div>
-                    ` : ''}
-
-                    ${point.note ? `
-                      <div class="note-card">
-                        <div style="font-weight:800; margin-bottom:4px; display:flex; align-items:center; gap:6px;">
-                          <i class="fa-solid fa-triangle-exclamation"></i> Lưu ý quan trọng:
-                        </div>
-                        <div>${point.note}</div>
-                      </div>
-                    ` : ''}
-
-                    ${point.tables && point.tables.length > 0 ? point.tables.map(tbl => `
-                      <div style="margin-top: 10px;">
-                        <div style="font-weight: 800; color: #34d399; font-size: 0.95rem; margin-bottom: 6px; display:flex; align-items:center; gap:6px;">
-                          <i class="fa-solid fa-table-list"></i> ${tbl.title}
-                        </div>
-                        <div style="overflow-x: auto;">
-                          <table class="custom-grammar-table">
-                            <thead>
-                              <tr>${tbl.headers.map(h => `<th>${h}</th>`).join('')}</tr>
-                            </thead>
-                            <tbody>
-                              ${tbl.rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    `).join('') : ''}
-
-                    ${point.examples && point.examples.length > 0 ? `
-                      <div style="margin-top:8px;">
-                        <div style="font-weight:800; color:#fbbf24; font-size:0.9rem; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
-                          <i class="fa-solid fa-headphones"></i> Ví dụ minh họa & luyện phát âm:
-                        </div>
-                        <div class="examples-container">
-                          ${point.examples.map(ex => `
-                            <div class="example-item-card">
-                              <div style="flex:1;">
-                                <div class="example-zh">${ex.zh}</div>
-                                ${ex.pinyin ? `<div class="example-pinyin">${ex.pinyin}</div>` : ''}
-                                ${ex.vi ? `<div class="example-vi">${ex.vi}</div>` : ''}
-                              </div>
-                              <button class="btn-speak-audio" onclick="speakZhText('${ex.zh}')" title="Nghe phát âm giọng Baidu chuẩn">
-                                <i class="fa-solid fa-volume-high"></i>
-                              </button>
-                            </div>
-                          `).join('')}
-                        </div>
-                      </div>
-                    ` : ''}
-
-                    ${point.exercises && point.exercises.length > 0 ? `
-                      <div style="margin-top:10px;">
-                        <div style="font-weight:800; color:#10b981; font-size:0.9rem; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
-                          <i class="fa-solid fa-pencil"></i> Bài tập áp dụng:
-                        </div>
-                        ${point.exercises.map(exer => `
-                          <div class="exercise-item-box">
-                            <div style="font-weight:700; color:#e2e8f0; margin-bottom:4px;">${exer.prompt}</div>
-                            <div style="font-size:0.88rem; color:#34d399;"><strong>Đáp án:</strong> ${exer.answer}</div>
-                          </div>
-                        `).join('')}
-                      </div>
-                    ` : ''}
-                  </div>
-                </div>
-              `).join('')}
+            <div class="lesson-body-content" id="lesson-body-${les.lessonId}" style="display: ${bodyDisplay}; padding: 18px 22px;">
+              ${tabsBarHtml}
+              ${cardsBodyHtml}
             </div>
           </div>
         `;
@@ -1286,13 +1476,6 @@
           if (body) body.style.display = 'flex';
           const icon = block.querySelector('.lesson-chevron-icon');
           if (icon) icon.className = 'fa-solid fa-chevron-up lesson-chevron-icon';
-
-          // Expand all grammar points in this lesson
-          block.querySelectorAll('.grammar-card').forEach(c => {
-            c.classList.add('expanded');
-            const ptChevron = c.querySelector('.point-chevron-icon');
-            if (ptChevron) ptChevron.className = 'fa-solid fa-chevron-up point-chevron-icon';
-          });
 
           // Scroll into view
           block.scrollIntoView({ behavior: 'smooth', block: 'start' });

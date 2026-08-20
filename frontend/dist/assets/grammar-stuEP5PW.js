@@ -1,4 +1,4 @@
-import"./modulepreload-polyfill-B5Qt9EMX.js";import{H as x,a as k}from"./grammar_hsk2-B6FgImKU.js";/* empty css              */import"./particles-Db85yIFy.js";import"./screen_drawing-oOIhKrv1.js";const d={hsk1:{level:"HSK 1",title:"Tổng Hợp Ngữ Pháp HSK 1 Chuẩn 3.0 (15 Bài Học Chi Tiết Chuẩn VER 3)",totalPoints:43,lessons:[{lessonId:1,lessonKey:"Bài 1",lessonTitleZh:"AI小语，你好！",lessonTitleFull:"Bài 1: AI小语，你好！ (Chào hỏi trong tiếng Trung)",grammarPoints:[{id:"hsk1_b1_g1",num:1,title:"Cách chào hỏi trong tiếng Trung",explanation:'Trong tiếng Trung, câu chào hỏi cơ bản nhất được tạo thành bằng cách ghép đối tượng được chào với tính từ "好" (hǎo). Khi chào người lớn tuổi, cấp trên hoặc người cần bày tỏ sự tôn kính đặc biệt, ta dùng đại từ "您" (nín) thay cho "你" (nǐ).',formula:"[Đối tượng được chào] + 好 (hǎo)",note:"Khi hai thanh 3 đi liền nhau (như 你 nǐ + 好 hǎo), thanh 3 thứ nhất sẽ biến điệu đọc thành thanh 2: /ní hǎo/.",examples:[{rawZh:"你好！ (Chào bạn!)",zh:"你好！",pinyin:"Nǐ hǎo!",vi:"Chào bạn! / Chào cậu!"},{rawZh:"您好！ (Chào ngài/ông/bà - kính trọng)",zh:"您好！",pinyin:"Nín hǎo!",vi:"Chào ngài / Chào ông / Chào bà (thể hiện sự tôn kính)."},{rawZh:"大家好！ (Chào mọi người!)",zh:"大家好！",pinyin:"Dàjiā hǎo!",vi:"Chào tất cả mọi người!"},{rawZh:"你们好！ (Chào các bạn!)",zh:"你们好！",pinyin:"Nǐmen hǎo!",vi:"Chào các bạn! / Chào mọi người!"},{rawZh:"老师好！ (Chào thầy/cô!)",zh:"老师好！",pinyin:"Lǎoshī hǎo!",vi:"Em chào thầy / Em chào cô giáo ạ!"}],tables:[{title:"Bảng tổng hợp các câu chào hỏi thông dụng (HSK 1)",headers:["Chữ Hán","Phiên âm (Pinyin)","Ý nghĩa tiếng Việt","Đối tượng & Hoàn cảnh áp dụng"],rows:[["你好","nǐ hǎo","Chào bạn / Chào cậu","Bạn bè, người ngang hàng hoặc nhỏ tuổi"],["您好","nín hǎo","Chào ngài / ông / bà","Người lớn tuổi, thầy cô, đối tác, khách hàng"],["大家好","dàjiā hǎo","Chào mọi người","Chào một nhóm đông người, hội trường"],["你们好","nǐmen hǎo","Chào các bạn","Chào từ 2 người trở lên"],["老师好","lǎoshī hǎo","Chào thầy / cô","Học sinh chào giáo viên"]]}],exercises:[{type:"Chọn đáp án đúng",prompt:"Khi gặp thầy giáo vào buổi sáng, bạn nên nói câu nào lịch sự nhất?",options:["A. 你好！","B. 老师好！ / 老师您好！","C. 大家好！"],answer:"B. 老师好！ / 老师您好！"}]}]},{lessonId:2,lessonKey:"Bài 2",lessonTitleZh:"我叫李文",lessonTitleFull:"Bài 2: 我叫李文 (Cấu trúc câu cơ bản & Trạng ngữ)",grammarPoints:[{id:"hsk1_b2_g1",num:1,title:"Câu trần thuật cơ bản: Chủ ngữ + Động từ + Tân ngữ (S + V + O)",explanation:"Đây là cấu trúc câu đơn giản và nền tảng nhất trong ngữ pháp tiếng Trung, hoàn toàn tương tự trật tự ngữ pháp trong tiếng Việt.",formula:"Chủ ngữ (S) + Động từ (V) + Tân ngữ (O)",note:'Động từ "叫" (jiào) vừa có nghĩa là "kêu, gọi", vừa có nghĩa là "tên là" khi theo sau là tên riêng.',examples:[{rawZh:"我爱你。(Wǒ ài nǐ.)",zh:"我爱你。",pinyin:"Wǒ ài nǐ.",vi:"Tôi yêu bạn / Anh yêu em."},{rawZh:"他喝茶。(Tā hē chá.)",zh:"他喝茶。",pinyin:"Tā hē chá.",vi:"Anh ấy uống trà."},{rawZh:"我叫李文。(Wǒ jiào Lǐ Wén.)",zh:"我叫李文。",pinyin:"Wǒ jiào Lǐ Wén.",vi:"Tôi tên là Lý Văn."}],tables:null,exercises:null},{id:"hsk1_b2_g2",num:2,title:"Trạng ngữ chỉ Thời gian và Địa điểm",explanation:"Quy tắc vàng trong tiếng Trung: Trạng ngữ chỉ thời gian và trạng ngữ chỉ địa điểm LUÔN LUÔN đứng TRƯỚC động từ vị ngữ, KHÔNG BAO GIỜ được đặt ở cuối câu như tiếng Việt hay tiếng Anh.",formula:`Thời gian + Chủ ngữ + (在 + Địa điểm) + Động từ + Tân ngữ
+import"./modulepreload-polyfill-B5Qt9EMX.js";import{H as Z,a as P}from"./grammar_hsk2-B6FgImKU.js";/* empty css              */import"./particles-Db85yIFy.js";import"./screen_drawing-oOIhKrv1.js";const K={hsk1:{level:"HSK 1",title:"Tổng Hợp Ngữ Pháp HSK 1 Chuẩn 3.0 (15 Bài Học Chi Tiết Chuẩn VER 3)",totalPoints:43,lessons:[{lessonId:1,lessonKey:"Bài 1",lessonTitleZh:"AI小语，你好！",lessonTitleFull:"Bài 1: AI小语，你好！ (Chào hỏi trong tiếng Trung)",grammarPoints:[{id:"hsk1_b1_g1",num:1,title:"Cách chào hỏi trong tiếng Trung",explanation:'Trong tiếng Trung, câu chào hỏi cơ bản nhất được tạo thành bằng cách ghép đối tượng được chào với tính từ "好" (hǎo). Khi chào người lớn tuổi, cấp trên hoặc người cần bày tỏ sự tôn kính đặc biệt, ta dùng đại từ "您" (nín) thay cho "你" (nǐ).',formula:"[Đối tượng được chào] + 好 (hǎo)",note:"Khi hai thanh 3 đi liền nhau (như 你 nǐ + 好 hǎo), thanh 3 thứ nhất sẽ biến điệu đọc thành thanh 2: /ní hǎo/.",examples:[{rawZh:"你好！ (Chào bạn!)",zh:"你好！",pinyin:"Nǐ hǎo!",vi:"Chào bạn! / Chào cậu!"},{rawZh:"您好！ (Chào ngài/ông/bà - kính trọng)",zh:"您好！",pinyin:"Nín hǎo!",vi:"Chào ngài / Chào ông / Chào bà (thể hiện sự tôn kính)."},{rawZh:"大家好！ (Chào mọi người!)",zh:"大家好！",pinyin:"Dàjiā hǎo!",vi:"Chào tất cả mọi người!"},{rawZh:"你们好！ (Chào các bạn!)",zh:"你们好！",pinyin:"Nǐmen hǎo!",vi:"Chào các bạn! / Chào mọi người!"},{rawZh:"老师好！ (Chào thầy/cô!)",zh:"老师好！",pinyin:"Lǎoshī hǎo!",vi:"Em chào thầy / Em chào cô giáo ạ!"}],tables:[{title:"Bảng tổng hợp các câu chào hỏi thông dụng (HSK 1)",headers:["Chữ Hán","Phiên âm (Pinyin)","Ý nghĩa tiếng Việt","Đối tượng & Hoàn cảnh áp dụng"],rows:[["你好","nǐ hǎo","Chào bạn / Chào cậu","Bạn bè, người ngang hàng hoặc nhỏ tuổi"],["您好","nín hǎo","Chào ngài / ông / bà","Người lớn tuổi, thầy cô, đối tác, khách hàng"],["大家好","dàjiā hǎo","Chào mọi người","Chào một nhóm đông người, hội trường"],["你们好","nǐmen hǎo","Chào các bạn","Chào từ 2 người trở lên"],["老师好","lǎoshī hǎo","Chào thầy / cô","Học sinh chào giáo viên"]]}],exercises:[{type:"Chọn đáp án đúng",prompt:"Khi gặp thầy giáo vào buổi sáng, bạn nên nói câu nào lịch sự nhất?",options:["A. 你好！","B. 老师好！ / 老师您好！","C. 大家好！"],answer:"B. 老师好！ / 老师您好！"}]}]},{lessonId:2,lessonKey:"Bài 2",lessonTitleZh:"我叫李文",lessonTitleFull:"Bài 2: 我叫李文 (Cấu trúc câu cơ bản & Trạng ngữ)",grammarPoints:[{id:"hsk1_b2_g1",num:1,title:"Câu trần thuật cơ bản: Chủ ngữ + Động từ + Tân ngữ (S + V + O)",explanation:"Đây là cấu trúc câu đơn giản và nền tảng nhất trong ngữ pháp tiếng Trung, hoàn toàn tương tự trật tự ngữ pháp trong tiếng Việt.",formula:"Chủ ngữ (S) + Động từ (V) + Tân ngữ (O)",note:'Động từ "叫" (jiào) vừa có nghĩa là "kêu, gọi", vừa có nghĩa là "tên là" khi theo sau là tên riêng.',examples:[{rawZh:"我爱你。(Wǒ ài nǐ.)",zh:"我爱你。",pinyin:"Wǒ ài nǐ.",vi:"Tôi yêu bạn / Anh yêu em."},{rawZh:"他喝茶。(Tā hē chá.)",zh:"他喝茶。",pinyin:"Tā hē chá.",vi:"Anh ấy uống trà."},{rawZh:"我叫李文。(Wǒ jiào Lǐ Wén.)",zh:"我叫李文。",pinyin:"Wǒ jiào Lǐ Wén.",vi:"Tôi tên là Lý Văn."}],tables:null,exercises:null},{id:"hsk1_b2_g2",num:2,title:"Trạng ngữ chỉ Thời gian và Địa điểm",explanation:"Quy tắc vàng trong tiếng Trung: Trạng ngữ chỉ thời gian và trạng ngữ chỉ địa điểm LUÔN LUÔN đứng TRƯỚC động từ vị ngữ, KHÔNG BAO GIỜ được đặt ở cuối câu như tiếng Việt hay tiếng Anh.",formula:`Thời gian + Chủ ngữ + (在 + Địa điểm) + Động từ + Tân ngữ
 (hoặc: Chủ ngữ + Thời gian + (在 + Địa điểm) + Động từ + Tân ngữ)`,note:"Thời gian có thể linh hoạt đứng trước hoặc ngay sau Chủ ngữ, nhưng phải luôn đứng trước Động từ.",examples:[{rawZh:"我昨天在学校学习。(Wǒ zuótiān zài xuéxiào xuéxí.)",zh:"我昨天在学校学习。",pinyin:"Wǒ zuótiān zài xuéxiào xuéxí.",vi:"Hôm qua tôi học ở trường."},{rawZh:"老师今天在家里休息。(Lǎoshī jīntiān zài jiālǐ xiūxi.)",zh:"老师今天在家里休息。",pinyin:"Lǎoshī jīntiān zài jiālǐ xiūxi.",vi:"Hôm nay thầy giáo nghỉ ngơi ở nhà."},{rawZh:"姐姐明天在北京工作。(Jiějie míngtiān zài Běijīng gōngzuò.)",zh:"姐姐明天在北京工作。",pinyin:"Jiějie míngtiān zài Běijīng gōngzuò.",vi:"Chị gái ngày mai làm việc ở Bắc Kinh."}],tables:null,exercises:[{type:"Sắp xếp câu",prompt:"Sắp xếp: 学习 / 在学校 / 我 / 今天",answer:"我今天在学校学习。 / 今天我在学校学习。"}]},{id:"hsk1_b2_g3",num:3,title:"Vị trí của phó từ trong câu (不, 很, 也...)",explanation:"Các phó từ phủ định (不 bù), phó từ chỉ mức độ (很 hěn), hoặc phó từ liên kết (也 yě) luôn đứng TRƯỚC Động từ hoặc Tính từ mà chúng bổ nghĩa.",formula:"Chủ ngữ + Phó từ (不 / 很 / 也) + Động từ / Tính từ",note:'Khi có cả "也" và "不", "也" luôn đứng trước "不" (Ví dụ: 我也不去 - Tôi cũng không đi).',examples:[{rawZh:"他不喜⽵。(Tā bù xǐhuan.)",zh:"他不喜⽵。",pinyin:"Tā bù xǐhuan.",vi:"Anh ấy không thích."},{rawZh:"苹果很好。(Píngguǒ hěn hǎo.)",zh:"苹果很好。",pinyin:"Píngguǒ hěn hǎo.",vi:"Táo rất ngon / rất tốt."},{rawZh:"我也认识他。(Wǒ yě rènshi tā.)",zh:"我也认识他。",pinyin:"Wǒ yě rènshi tā.",vi:"Tôi cũng quen biết anh ấy."}],tables:null,exercises:null}]},{lessonId:3,lessonKey:"Bài 3",lessonTitleZh:"我是中国人",lessonTitleFull:"Bài 3: 我是中国人 (Câu chữ 是, Trợ từ 的 & Câu hỏi 吗)",grammarPoints:[{id:"hsk1_b3_g1",num:1,title:"Câu chữ “是” (Khẳng định & Phủ định “不是”)",explanation:'Câu chữ "是" (shì) tương đương với từ "là" trong tiếng Việt, dùng để định danh người, sự vật, quốc tịch, nghề nghiệp. Hình thức phủ định là thêm "不" trước "是" tạo thành "不是" (bú shì).',formula:`Khẳng định: Chủ ngữ + 是 + Tân ngữ
 Phủ định: Chủ ngữ + 不是 + Tân ngữ`,note:'Từ "不" (bù - thanh 4) khi đứng trước "是" (shì - thanh 4) sẽ biến điệu đọc thành thanh 2: /bú shì/.',examples:[{rawZh:"我是越南人。(Wǒ shì Yuènán rén.)",zh:"我是越南人。",pinyin:"Wǒ shì Yuènán rén.",vi:"Tôi là người Việt Nam."},{rawZh:"我不是中国人。(Wǒ bú shì Zhōngguó rén.)",zh:"我不是中国人。",pinyin:"Wǒ bú shì Zhōngguó rén.",vi:"Tôi không phải là người Trung Quốc."},{rawZh:"她是我的老师。(Tā shì wǒ de lǎoshī.)",zh:"她是我的老师。",pinyin:"Tā shì wǒ de lǎoshī.",vi:"Cô ấy là giáo viên của tôi."}],tables:null,exercises:null},{id:"hsk1_b3_g2",num:2,title:"Trợ từ kết cấu “的” (Biểu thị mối quan hệ sở hữu)",explanation:'Trợ từ kết cấu "的" (de) đặt giữa Định ngữ (thành phần bổ nghĩa) và Trung tâm ngữ (đối tượng chính) để biểu thị quan hệ sở hữu (nghĩa là "của").',formula:"Định ngữ (Chủ sở hữu) + 的 + Trung tâm ngữ (Vật/Người sở hữu)",note:'Quy tắc lược bỏ "的": Khi định ngữ là đại từ nhân xưng (我, 你, 他...) và trung tâm ngữ là từ chỉ quan hệ thân thuộc (bố, mẹ, thầy cô, bạn bè), ta có thể lược bỏ "的" (Ví dụ: 我老师, 你同学, 我学生, 你妈妈).',examples:[{rawZh:"你的名字 (Nǐ de míngzi)",zh:"你的名字",pinyin:"Nǐ de míngzi",vi:"Tên của bạn"},{rawZh:"你的老师 (Nǐ de lǎoshī)",zh:"你的老师",pinyin:"Nǐ de lǎoshī",vi:"Giáo viên của bạn (có thể nói gọn: 你老师)"},{rawZh:"我的同学 (Wǒ de tóngxué)",zh:"我的同学",pinyin:"Wǒ de tóngxué",vi:"Bạn học của tôi (có thể nói gọn: 我同学)"}],tables:null,exercises:null},{id:"hsk1_b3_g3",num:3,title:"Câu hỏi Có/Không sử dụng trợ từ ngữ khí “吗”",explanation:'Trợ từ ngữ khí "吗" (ma) được đặt ở cuối một câu trần thuật để biến câu đó thành câu nghi vấn Yes/No (nghĩa là: "...phải không?", "...không?").',formula:"Câu trần thuật (S + V + O) + 吗?",note:"Khi trả lời, chỉ cần dùng trực tiếp động từ/tính từ (khẳng định) hoặc 不 + động từ/tính từ (phủ định).",examples:[{rawZh:"你是中国人吗？(Nǐ shì Zhōngguó rén ma?)",zh:"你是中国人吗？",pinyin:"Nǐ shì Zhōngguó rén ma?",vi:"Bạn là người Trung Quốc phải không?"},{rawZh:"你忙吗？(Nǐ máng ma?)",zh:"你忙吗？",pinyin:"Nǐ máng ma?",vi:"Bạn có bận không?"},{rawZh:"你想我吗？(Nǐ xiǎng wǒ ma?)",zh:"你想我吗？",pinyin:"Nǐ xiǎng wǒ ma?",vi:"Bạn có nhớ tôi không?"}],tables:null,exercises:null}]},{lessonId:4,lessonKey:"Bài 4",lessonTitleZh:"我有两个孩子",lessonTitleFull:"Bài 4: 我有两个孩子 (Câu chữ 有, Số đếm 0-10.000 & Danh lượng)",grammarPoints:[{id:"hsk1_b4_g1",num:1,title:"Câu chữ “有” (Biểu thị sự sở hữu & Tồn tại)",explanation:'Động từ "有" (yǒu) có nghĩa là "có", dùng để biểu thị sự sở hữu. Hình thức phủ định bắt buộc phải dùng "没有" (méiyǒu), tuyệt đối không được dùng "不有".',formula:`Khẳng định: Chủ ngữ + 有 + Tân ngữ
 Phủ định: Chủ ngữ + 没有 + Tân ngữ
@@ -822,7 +822,7 @@ các bài tập để giải quyết vấn đề. Bác sĩ hoặc chuyên gia v�
 động viên điền kinh. Các nghiên cứu đã phát hiện ra rằng nhiều người bị đầu gối của vận\r
 Phục hồi chức năng là một thành phần quan trọng khác trong việc điều trị đầu gối của vận\r
 ----------------Page (5) Break----------------\r
-`}};window.FULL_STRUCTURED_GRAMMAR=d;window.FULL_STRUCTURED_GRAMMAR=d;window.HSK1_STRUCTURED_GRAMMAR=x;window.HSK2_STRUCTURED_GRAMMAR=k;let p="hsk1",o="",s=null;function T(){return window.location.hostname==="localhost"||window.location.hostname==="127.0.0.1"||window.location.hostname===""?"http://localhost:5000":window.location.origin||"https://tieng-trung-hong-tai-1.onrender.com"}window.speakZhText=function(h){if(!h)return;const n=String(h).replace(/['’]/g,"").trim(),i="baidu-female";s&&(s.pause(),s=null);const g=`${T()}/api/tts?text=${encodeURIComponent(n)}&voice=${i}`;s=new Audio(g),s.play().catch(u=>{console.warn("API Audio error, fallback to Web Speech:",u),z(n)})};function z(h){if("speechSynthesis"in window){window.speechSynthesis.cancel();const n=new SpeechSynthesisUtterance(h);n.lang="zh-CN",n.rate=.85,window.speechSynthesis.speak(n)}}window.switchLevel=function(h){p=h,o="";const n=document.getElementById("search-input");n&&(n.value=""),document.querySelectorAll(".level-tab-btn").forEach(g=>{var u;(u=g.getAttribute("onclick"))!=null&&u.includes(`'${h}'`)?g.classList.add("active"):g.classList.remove("active")});const c=document.getElementById("download-pdf-btn");if(c){const g=h.replace("hsk","");c.href=`/grammar-files/ngu phap hsk ${g}.pdf`}y()};window.handleSearch=function(){const h=document.getElementById("search-input");o=h?h.value.trim().toLowerCase():"",y()};window.toggleLessonBlock=function(h){const n=document.getElementById(`lesson-body-${h}`),i=document.getElementById(`lesson-chevron-${h}`);if(!n)return;const c=n.style.display==="none";n.style.display=c?"flex":"none",i&&(i.className=c?"fa-solid fa-chevron-up":"fa-solid fa-chevron-down")};window.toggleGrammarPointCard=function(h){const n=document.getElementById(`card-${h}`),i=document.getElementById(`chevron-${h}`);if(!n)return;n.classList.contains("expanded")?(n.classList.remove("expanded"),i&&(i.className="fa-solid fa-chevron-down")):(n.classList.add("expanded"),i&&(i.className="fa-solid fa-chevron-up"))};window.toggleAllCards=function(h){document.querySelectorAll(".lesson-body-content").forEach(n=>{n.style.display=h?"flex":"none"}),document.querySelectorAll(".lesson-chevron-icon").forEach(n=>{n.className=h?"fa-solid fa-chevron-up lesson-chevron-icon":"fa-solid fa-chevron-down lesson-chevron-icon"}),document.querySelectorAll(".grammar-card").forEach(n=>{h?n.classList.add("expanded"):n.classList.remove("expanded")}),document.querySelectorAll(".point-chevron-icon").forEach(n=>{n.className=h?"fa-solid fa-chevron-up point-chevron-icon":"fa-solid fa-chevron-down point-chevron-icon"})};function y(){const h=document.getElementById("grammar-main-content");if(h)if(p==="hsk1"||p==="hsk2")C(h,p);else{const n=p.replace("hsk","").toUpperCase();h.innerHTML=`
+`}};window.FULL_STRUCTURED_GRAMMAR=K;window.FULL_STRUCTURED_GRAMMAR=K;window.HSK1_STRUCTURED_GRAMMAR=Z;window.HSK2_STRUCTURED_GRAMMAR=P;let y="hsk1",b="",v=null;function A(){return window.location.hostname==="localhost"||window.location.hostname==="127.0.0.1"||window.location.hostname===""?"http://localhost:5000":window.location.origin||"https://tieng-trung-hong-tai-1.onrender.com"}window.speakZhText=function(h){if(!h)return;const n=String(h).replace(/['’]/g,"").trim(),i="baidu-female";v&&(v.pause(),v=null);const r=`${A()}/api/tts?text=${encodeURIComponent(n)}&voice=${i}`;v=new Audio(r),v.play().catch(a=>{console.warn("API Audio error, fallback to Web Speech:",a),_(n)})};function _(h){if("speechSynthesis"in window){window.speechSynthesis.cancel();const n=new SpeechSynthesisUtterance(h);n.lang="zh-CN",n.rate=.85,window.speechSynthesis.speak(n)}}window.switchLevel=function(h){y=h,b="";const n=document.getElementById("search-input");n&&(n.value=""),document.querySelectorAll(".level-tab-btn").forEach(r=>{var a;(a=r.getAttribute("onclick"))!=null&&a.includes(`'${h}'`)?r.classList.add("active"):r.classList.remove("active")});const g=document.getElementById("download-pdf-btn");if(g){const r=h.replace("hsk","");g.href=`/grammar-files/ngu phap hsk ${r}.pdf`}k()};window.handleSearch=function(){const h=document.getElementById("search-input");b=h?h.value.trim().toLowerCase():"",k()};window.toggleLessonBlock=function(h){const n=document.getElementById(`lesson-body-${h}`),i=document.getElementById(`lesson-chevron-${h}`);if(!n)return;const g=n.style.display==="none";n.style.display=g?"flex":"none",i&&(i.className=g?"fa-solid fa-chevron-up":"fa-solid fa-chevron-down")};window.toggleGrammarPointCard=function(h){const n=document.getElementById(`card-${h}`),i=document.getElementById(`chevron-${h}`);if(!n)return;n.classList.contains("expanded")?(n.classList.remove("expanded"),i&&(i.className="fa-solid fa-chevron-down")):(n.classList.add("expanded"),i&&(i.className="fa-solid fa-chevron-up"))};window.toggleAllCards=function(h){document.querySelectorAll(".lesson-body-content").forEach(n=>{n.style.display=h?"flex":"none"}),document.querySelectorAll(".lesson-chevron-icon").forEach(n=>{n.className=h?"fa-solid fa-chevron-up lesson-chevron-icon":"fa-solid fa-chevron-down lesson-chevron-icon"}),document.querySelectorAll(".grammar-card").forEach(n=>{h?n.classList.add("expanded"):n.classList.remove("expanded")}),document.querySelectorAll(".point-chevron-icon").forEach(n=>{n.className=h?"fa-solid fa-chevron-up point-chevron-icon":"fa-solid fa-chevron-down point-chevron-icon"})};function k(){const h=document.getElementById("grammar-main-content");if(h)if(y==="hsk1"||y==="hsk2")M(h,y);else{const n=y.replace("hsk","").toUpperCase();h.innerHTML=`
           <div style="background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(16px); border: 1.5px solid rgba(255, 255, 255, 0.15); border-radius: 28px; padding: 60px 32px; text-align: center; box-shadow: 0 16px 40px rgba(0,0,0,0.4); max-width: 680px; margin: 40px auto;">
             <div style="width: 80px; height: 80px; border-radius: 50%; background: rgba(245, 158, 11, 0.15); color: #fbbf24; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; margin: 0 auto 24px auto; box-shadow: 0 8px 24px rgba(245, 158, 11, 0.25);">
               <i class="fa-solid fa-lock"></i>
@@ -840,118 +840,157 @@ Phục hồi chức năng là một thành phần quan trọng khác trong việ
               </button>
             </div>
           </div>
-        `}}function C(h,n){const i=n==="hsk2"?window.HSK2_STRUCTURED_GRAMMAR||[]:window.HSK1_STRUCTURED_GRAMMAR||[],c=n.replace("hsk","").toUpperCase();if(i.length===0){h.innerHTML=`<div style="text-align:center; padding:40px; color:#94a3b8;">Dữ liệu Ngữ Pháp HSK ${c} đang được cập nhật...</div>`;return}let g=i;if(o&&(g=i.map(r=>{const l=r.grammarPoints.filter(e=>`${e.title} ${e.explanation||""} ${e.formula||""} ${e.note||""} ${(e.examples||[]).map(t=>t.zh+" "+t.pinyin+" "+t.vi).join(" ")}`.toLowerCase().includes(o));return{...r,grammarPoints:l}}).filter(r=>r.grammarPoints.length>0)),g.length===0){h.innerHTML=`
-          <div style="text-align:center; padding:50px; background:var(--bg-card); border-radius:18px; border:1px solid var(--border-glass);">
-            <i class="fa-solid fa-magnifying-glass" style="font-size:2.5rem; color:#94a3b8; margin-bottom:12px;"></i>
-            <div style="font-size:1.1rem; font-weight:700; color:#f8fafc;">Không tìm thấy điểm ngữ pháp phù hợp với từ khóa "${o}"</div>
-            <div style="font-size:0.9rem; color:#94a3b8; margin-top:6px;">Hãy thử tìm kiếm bằng từ khóa khác hoặc bấm nút Thu gọn/Mở rộng.</div>
-          </div>
-        `;return}let u="";g.forEach(r=>{const l=!!o;u+=`
-          <div class="lesson-block" id="block-${r.lessonKey}">
-            <div class="lesson-block-header" onclick="toggleLessonBlock('${r.lessonId}')">
-              <div class="lesson-title-area">
-                <span class="lesson-number-pill">${r.lessonKey}</span>
-                <span class="lesson-title-text">${r.lessonTitleZh}</span>
-                <span class="lesson-points-count-badge">${r.grammarPoints.length} điểm ngữ pháp</span>
+        `}}window._lessonActiveNpMap={};window.openTocModal=function(){const h=document.getElementById("grammar-toc-modal"),n=document.getElementById("grammar-toc-modal-list"),i=document.getElementById("toc-modal-sub");if(!h||!n)return;const g=y==="hsk2"?window.HSK2_STRUCTURED_GRAMMAR||[]:window.HSK1_STRUCTURED_GRAMMAR||[],r=y.replace("hsk","").toUpperCase();i&&(i.textContent=`Danh sách 15 bài học và ${g.reduce((t,p)=>{var o;return t+(((o=p.grammarPoints)==null?void 0:o.length)||0)},0)} điểm ngữ pháp HSK ${r} (3.0)`);let a="";g.forEach(t=>{a+=`
+          <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 14px 18px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="background: #0284c7; color: #fff; font-weight: 800; font-size: 0.78rem; padding: 2px 8px; border-radius: 6px;">${t.lessonKey}</span>
+                <strong style="font-size: 1rem; color: var(--text-main); font-family: var(--font-display);">${t.lessonTitleZh}</strong>
               </div>
-              <i id="lesson-chevron-${r.lessonId}" class="fa-solid fa-chevron-up lesson-chevron-icon" style="color:#94a3b8;"></i>
+              <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">${t.grammarPoints.length} điểm NP</span>
             </div>
-
-            <div class="lesson-body-content" id="lesson-body-${r.lessonId}" style="display: flex;">
-              ${r.grammarPoints.map(t=>`
-                <div class="grammar-card ${l?"expanded":""}" id="card-${t.id}">
-                  <div class="grammar-card-header" onclick="toggleGrammarPointCard('${t.id}')">
-                    <div class="grammar-card-title">
-                      <span class="grammar-index-badge">#${t.num}</span>
-                      <span>${t.title}</span>
-                    </div>
-                    <i id="chevron-${t.id}" class="fa-solid ${l?"fa-chevron-up":"fa-chevron-down"} point-chevron-icon" style="color:#94a3b8;"></i>
-                  </div>
-
-                  <div class="grammar-card-body">
-                    ${t.explanation?`
-                      <div class="explanation-box">
-                        <div style="font-weight:700; color:#38bdf8; margin-bottom:4px; display:flex; align-items:center; gap:6px;">
-                          <i class="fa-solid fa-lightbulb"></i> Giải thích & Khái niệm:
-                        </div>
-                        <div>${t.explanation}</div>
-                      </div>
-                    `:""}
-
-                    ${t.formula?`
-                      <div class="formula-card">
-                        <div class="formula-card-title">
-                          <i class="fa-solid fa-compass-drafting"></i> Cấu trúc / Công thức chuẩn:
-                        </div>
-                        <div class="formula-card-code">${t.formula}</div>
-                      </div>
-                    `:""}
-
-                    ${t.note?`
-                      <div class="note-card">
-                        <div style="font-weight:800; margin-bottom:4px; display:flex; align-items:center; gap:6px;">
-                          <i class="fa-solid fa-triangle-exclamation"></i> Lưu ý quan trọng:
-                        </div>
-                        <div>${t.note}</div>
-                      </div>
-                    `:""}
-
-                    ${t.tables&&t.tables.length>0?t.tables.map(a=>`
-                      <div style="margin-top: 10px;">
-                        <div style="font-weight: 800; color: #34d399; font-size: 0.95rem; margin-bottom: 6px; display:flex; align-items:center; gap:6px;">
-                          <i class="fa-solid fa-table-list"></i> ${a.title}
-                        </div>
-                        <div style="overflow-x: auto;">
-                          <table class="custom-grammar-table">
-                            <thead>
-                              <tr>${a.headers.map(m=>`<th>${m}</th>`).join("")}</tr>
-                            </thead>
-                            <tbody>
-                              ${a.rows.map(m=>`<tr>${m.map(v=>`<td>${v}</td>`).join("")}</tr>`).join("")}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    `).join(""):""}
-
-                    ${t.examples&&t.examples.length>0?`
-                      <div style="margin-top:8px;">
-                        <div style="font-weight:800; color:#fbbf24; font-size:0.9rem; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
-                          <i class="fa-solid fa-headphones"></i> Ví dụ minh họa & luyện phát âm:
-                        </div>
-                        <div class="examples-container">
-                          ${t.examples.map(a=>`
-                            <div class="example-item-card">
-                              <div style="flex:1;">
-                                <div class="example-zh">${a.zh}</div>
-                                ${a.pinyin?`<div class="example-pinyin">${a.pinyin}</div>`:""}
-                                ${a.vi?`<div class="example-vi">${a.vi}</div>`:""}
-                              </div>
-                              <button class="btn-speak-audio" onclick="speakZhText('${a.zh}')" title="Nghe phát âm giọng Baidu chuẩn">
-                                <i class="fa-solid fa-volume-high"></i>
-                              </button>
-                            </div>
-                          `).join("")}
-                        </div>
-                      </div>
-                    `:""}
-
-                    ${t.exercises&&t.exercises.length>0?`
-                      <div style="margin-top:10px;">
-                        <div style="font-weight:800; color:#10b981; font-size:0.9rem; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
-                          <i class="fa-solid fa-pencil"></i> Bài tập áp dụng:
-                        </div>
-                        ${t.exercises.map(a=>`
-                          <div class="exercise-item-box">
-                            <div style="font-weight:700; color:#e2e8f0; margin-bottom:4px;">${a.prompt}</div>
-                            <div style="font-size:0.88rem; color:#34d399;"><strong>Đáp án:</strong> ${a.answer}</div>
-                          </div>
-                        `).join("")}
-                      </div>
-                    `:""}
-                  </div>
-                </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              ${t.grammarPoints.map((p,o)=>`
+                <button onclick="window.jumpToLessonPoint('${t.lessonId}', ${o})" style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.25); color: #38bdf8; padding: 6px 12px; border-radius: 10px; font-size: 0.82rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;" onmouseenter="this.style.background='rgba(56, 189, 248, 0.25)'" onmouseleave="this.style.background='rgba(56, 189, 248, 0.1)'">
+                  <span style="background: #0284c7; color: #fff; font-size: 0.68rem; padding: 1px 5px; border-radius: 4px;">NP ${o+1}</span>
+                  <span>${u(p.title)}</span>
+                </button>
               `).join("")}
             </div>
           </div>
-        `}),h.innerHTML=u}function w(h){if(!h)return;const n=parseInt(String(h).replace(/\D/g,""),10)||h;setTimeout(()=>{let i=document.getElementById(`block-Bài ${n}`)||document.getElementById(`block-Bài%${n}`);if(!i){const c=document.querySelectorAll(".lesson-block");for(let g of c){const u=g.querySelector(".lesson-number-pill");if(u&&u.textContent.replace(/\D/g,"")===String(n)){i=g;break}}}if(i){const c=i.querySelector(".lesson-body-content");c&&(c.style.display="flex");const g=i.querySelector(".lesson-chevron-icon");g&&(g.className="fa-solid fa-chevron-up lesson-chevron-icon"),i.querySelectorAll(".grammar-card").forEach(u=>{u.classList.add("expanded");const r=u.querySelector(".point-chevron-icon");r&&(r.className="fa-solid fa-chevron-up point-chevron-icon")}),i.scrollIntoView({behavior:"smooth",block:"start"}),i.style.transition="all 0.4s ease",i.style.boxShadow="0 0 25px rgba(56, 189, 248, 0.6), 0 0 10px rgba(59, 130, 246, 0.5)",i.style.borderColor="#38bdf8",i.style.borderRadius="20px",setTimeout(()=>{i.style.boxShadow="",i.style.borderColor=""},3500)}},180)}document.addEventListener("DOMContentLoaded",()=>{const h=new URLSearchParams(window.location.search),n=h.get("level"),i=h.get("lesson"),c=h.get("version"),g=document.getElementById("btn-back-to-roadmap");if(g&&n&&(g.href=`/index.html?tab=lessons&level=${n}${c?"&version="+c:""}`),n&&["1","2","3","4","5","6","hsk1","hsk2","hsk3","hsk4","hsk5","hsk6"].includes(n.toLowerCase())){const u=n.startsWith("hsk")?n.toLowerCase():`hsk${n}`;window.switchLevel(u)}else y();i&&w(i)});
+        `}),n.innerHTML=a,h.style.display="flex"};window.jumpToLessonPoint=function(h,n){const i=document.getElementById("grammar-toc-modal");i&&(i.style.display="none"),window._lessonActiveNpMap[h]=n,k(),setTimeout(()=>{const g=document.getElementById(`block-Bài ${h}`)||document.getElementById(`lesson-body-${h}`);g&&(g.scrollIntoView({behavior:"smooth",block:"start"}),g.style.boxShadow="0 0 25px rgba(56, 189, 248, 0.6)",g.style.borderColor="#38bdf8",setTimeout(()=>{g.style.boxShadow="",g.style.borderColor=""},3e3))},150)};window.selectLessonNpTab=function(h,n){window._lessonActiveNpMap[h]=n,k()};function u(h){return h?String(h).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"):""}function M(h,n){const i=n==="hsk2"?window.HSK2_STRUCTURED_GRAMMAR||[]:window.HSK1_STRUCTURED_GRAMMAR||[],g=n.replace("hsk","").toUpperCase();if(i.length===0){h.innerHTML=`<div style="text-align:center; padding:40px; color:#94a3b8;">Dữ liệu Ngữ Pháp HSK ${g} đang được cập nhật...</div>`;return}let r=i;if(b&&(r=i.map(t=>{const p=t.grammarPoints.filter(o=>`${o.title} ${o.explanation||""} ${o.formula||""} ${o.note||""} ${(o.examples||[]).map(m=>m.zh+" "+m.pinyin+" "+m.vi).join(" ")}`.toLowerCase().includes(b));return{...t,grammarPoints:p}}).filter(t=>t.grammarPoints.length>0)),r.length===0){h.innerHTML=`
+          <div style="text-align:center; padding:50px; background:var(--bg-card); border-radius:18px; border:1px solid var(--border-glass);">
+            <i class="fa-solid fa-magnifying-glass" style="font-size:2.5rem; color:#94a3b8; margin-bottom:12px;"></i>
+            <div style="font-size:1.1rem; font-weight:700; color:#f8fafc;">Không tìm thấy điểm ngữ pháp phù hợp với từ khóa "${b}"</div>
+            <div style="font-size:0.9rem; color:#94a3b8; margin-top:6px;">Hãy thử tìm kiếm bằng từ khóa khác hoặc bấm nút Thu gọn/Mở rộng.</div>
+          </div>
+        `;return}let a="";r.forEach(t=>{const p=!!b,o="flex",C="fa-solid fa-chevron-up lesson-chevron-icon",m=p?"all":window._lessonActiveNpMap[t.lessonId]!==void 0?window._lessonActiveNpMap[t.lessonId]:0,d=m==="all",w=typeof m=="number"?Math.max(0,Math.min(m,t.grammarPoints.length-1)):0,T=t.grammarPoints.length;function V(c,e){let s="";c.formula&&(s=`
+              <div class="formula-card" style="background: linear-gradient(135deg, rgba(2, 132, 199, 0.12), rgba(37, 99, 235, 0.08)); border: 1.5px solid rgba(56, 189, 248, 0.35); border-left: 5px solid #0284c7; border-radius: 14px; padding: 14px 18px; margin: 12px 0;">
+                <div class="formula-card-title" style="font-size: 0.82rem; font-weight: 800; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+                  <i class="fa-solid fa-compass-drafting"></i> Cấu trúc / Công thức chuẩn:
+                </div>
+                <div class="formula-card-code" style="font-family: var(--font-display, sans-serif); font-size: 1.08rem; font-weight: 700; color: #fbbf24; white-space: pre-line; line-height: 1.6;">${u(c.formula)}</div>
+              </div>
+            `);let z="";c.explanation&&(z=`
+              <div class="explanation-box" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 14px 18px; margin: 12px 0;">
+                <div style="font-weight: 800; color: #38bdf8; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+                  <i class="fa-solid fa-lightbulb"></i> Giải thích & Cách dùng:
+                </div>
+                <div style="font-size: 0.98rem; color: var(--text-main); line-height: 1.7;">${u(c.explanation)}</div>
+              </div>
+            `);let B="";c.note&&(B=`
+              <div class="note-card" style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-left: 5px solid #f59e0b; border-radius: 14px; padding: 12px 18px; margin: 12px 0;">
+                <div style="font-weight: 800; color: #fbbf24; font-size: 0.82rem; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                  <i class="fa-solid fa-triangle-exclamation"></i> Lưu ý & Mẹo nhớ:
+                </div>
+                <div style="font-size: 0.93rem; color: #fef08a; line-height: 1.6;">${u(c.note)}</div>
+              </div>
+            `);let S="";c.tables&&c.tables.length>0&&(S=c.tables.map(l=>`
+              <div style="margin: 16px 0;">
+                <div style="font-weight: 800; color: #34d399; font-size: 0.92rem; margin-bottom: 8px; display:flex; align-items:center; gap:6px;">
+                  <i class="fa-solid fa-table-list"></i> ${u(l.title||"Bảng tra cứu & Đối chiếu")}
+                </div>
+                <div style="overflow-x: auto; border-radius: 14px; border: 1px solid rgba(255,255,255,0.12);">
+                  <table class="custom-grammar-table">
+                    <thead>
+                      <tr>${(l.headers||[]).map(x=>`<th>${u(x)}</th>`).join("")}</tr>
+                    </thead>
+                    <tbody>
+                      ${(l.rows||[]).map(x=>`<tr>${(x||[]).map(j=>`<td>${u(j)}</td>`).join("")}</tr>`).join("")}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            `).join(""));let N="";c.examples&&c.examples.length>0&&(N=`
+              <div style="margin-top: 18px;">
+                <div style="font-weight: 800; color: #94a3b8; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+                  <i class="fa-solid fa-headphones" style="color: #38bdf8;"></i> Ví dụ minh họa & Luyện phát âm:
+                </div>
+                <div class="examples-container" style="display: flex; flex-direction: column; gap: 10px;">
+                  ${c.examples.map(l=>{const x=(l.zh||"").replace(/'/g,"\\'");return`
+                      <div class="example-item-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 14px; transition: all 0.2s;">
+                        <div style="flex: 1;">
+                          <div class="example-zh" style="font-size: 1.25rem; font-weight: 700; color: #38bdf8; font-family: 'Noto Sans SC', sans-serif; margin-bottom: 3px; letter-spacing: 0.5px;">${u(l.zh)}</div>
+                          ${l.pinyin?`<div class="example-pinyin" style="font-size: 0.95rem; color: #fbbf24; font-family: var(--font-display, sans-serif); font-weight: 600; margin-bottom: 3px;">${u(l.pinyin)}</div>`:""}
+                          ${l.vi?`<div class="example-vi" style="font-size: 0.92rem; color: #cbd5e1;">${u(l.vi)}</div>`:""}
+                        </div>
+                        <button class="btn-speak-audio" onclick="speakZhText('${x}')" style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: all 0.2s;" title="Nghe phát âm giọng Baidu chuẩn">
+                          <i class="fa-solid fa-volume-high"></i>
+                        </button>
+                      </div>
+                    `}).join("")}
+                </div>
+              </div>
+            `);let D="";c.exercises&&c.exercises.length>0&&(D=`
+              <div style="margin-top: 16px;">
+                <div style="font-weight: 800; color: #10b981; font-size: 0.88rem; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                  <i class="fa-solid fa-pencil"></i> Bài tập áp dụng:
+                </div>
+                ${c.exercises.map(l=>`
+                  <div class="exercise-item-box" style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 12px; padding: 12px 16px; margin-bottom: 8px;">
+                    <div style="font-weight: 700; color: #e2e8f0; margin-bottom: 4px;">${u(l.prompt)}</div>
+                    <div style="font-size: 0.88rem; color: #34d399;"><strong>Đáp án:</strong> ${u(l.answer)}</div>
+                  </div>
+                `).join("")}
+              </div>
+            `);let q="";return d||(q=`
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.08); flex-wrap: wrap; gap: 10px;">
+                <button onclick="window.selectLessonNpTab('${t.lessonId}', ${e-1})" ${e===0?'disabled style="opacity:0.35; cursor:not-allowed;"':""} class="btn-action" style="padding: 8px 16px; font-weight: 700; border-radius: 12px; font-size: 0.85rem;">
+                  <i class="fa-solid fa-chevron-left"></i> NP ${e} (Trước)
+                </button>
+                <span style="font-size: 0.88rem; color: #94a3b8; font-weight: 700;">
+                  Điểm ${e+1} / ${T}
+                </span>
+                <button onclick="window.selectLessonNpTab('${t.lessonId}', ${e+1})" ${e===T-1?'disabled style="opacity:0.35; cursor:not-allowed;"':""} class="btn-action" style="padding: 8px 16px; font-weight: 700; border-radius: 12px; font-size: 0.85rem;">
+                  NP ${e+2} (Tiếp) <i class="fa-solid fa-chevron-right"></i>
+                </button>
+              </div>
+            `),`
+            <div class="grammar-card expanded" id="card-${c.id}" style="background: rgba(15, 23, 42, 0.7); border: 1.5px solid rgba(255, 255, 255, 0.12); border-radius: 20px; padding: 22px; margin-bottom: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 12px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <span style="background: linear-gradient(135deg, #0284c7, #2563eb); color: #fff; font-weight: 800; font-size: 0.95rem; padding: 4px 12px; border-radius: 10px; box-shadow: 0 4px 12px rgba(37,99,235,0.35);">NP ${c.num||e+1}</span>
+                  <h4 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: var(--text-main); font-family: var(--font-display);">${u(c.title)}</h4>
+                </div>
+                <span style="font-size: 0.8rem; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.15); padding: 4px 10px; border-radius: 99px;">
+                  Điểm ${e+1} / ${T}
+                </span>
+              </div>
+
+              ${s}
+              ${z}
+              ${B}
+              ${S}
+              ${N}
+              ${D}
+              ${q}
+            </div>
+          `}const H=`
+          <div class="lesson-np-tabs-bar" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; background: rgba(15, 23, 42, 0.6); padding: 8px 12px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.08);">
+            ${t.grammarPoints.map((c,e)=>{const s=!d&&w===e,z=c.title.length>28?c.title.slice(0,26)+"...":c.title;return`
+                <button class="lesson-np-tab-btn ${s?"active":""}" onclick="selectLessonNpTab('${t.lessonId}', ${e})" style="flex: 1; min-width: 140px; padding: 10px 14px; border-radius: 12px; border: 1.5px solid ${s?"#38bdf8":"rgba(255,255,255,0.1)"}; background: ${s?"linear-gradient(135deg, #0284c7, #2563eb)":"rgba(255,255,255,0.03)"}; color: ${s?"#ffffff":"#cbd5e1"}; font-weight: 700; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; box-shadow: ${s?"0 4px 14px rgba(37,99,235,0.35)":"none"};">
+                  <span style="background: ${s?"#ffffff":"rgba(59,130,246,0.2)"}; color: ${s?"#1e40af":"#60a5fa"}; font-size: 0.72rem; font-weight: 800; padding: 2px 7px; border-radius: 6px;">NP ${e+1}</span>
+                  <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${u(z)}</span>
+                </button>
+              `}).join("")}
+            <button class="lesson-np-tab-btn ${d?"active":""}" onclick="selectLessonNpTab('${t.lessonId}', 'all')" style="padding: 10px 16px; border-radius: 12px; border: 1.5px solid ${d?"#38bdf8":"rgba(255,255,255,0.1)"}; background: ${d?"linear-gradient(135deg, #0284c7, #2563eb)":"rgba(255,255,255,0.03)"}; color: ${d?"#ffffff":"#cbd5e1"}; font-weight: 700; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s;">
+              <i class="fa-solid fa-list-ul"></i> <span>Tất cả (${T})</span>
+            </button>
+          </div>
+        `;let f="";d?f=t.grammarPoints.map((c,e)=>V(c,e)).join(""):f=V(t.grammarPoints[w],w),a+=`
+          <div class="lesson-block" id="block-${t.lessonKey}">
+            <div class="lesson-block-header" onclick="toggleLessonBlock('${t.lessonId}')">
+              <div class="lesson-title-area">
+                <span class="lesson-number-pill">${t.lessonKey}</span>
+                <span class="lesson-title-text">${t.lessonTitleZh}</span>
+                <span class="lesson-points-count-badge">${t.grammarPoints.length} điểm ngữ pháp</span>
+              </div>
+              <i id="lesson-chevron-${t.lessonId}" class="${C}" style="color:#94a3b8;"></i>
+            </div>
+
+            <div class="lesson-body-content" id="lesson-body-${t.lessonId}" style="display: ${o}; padding: 18px 22px;">
+              ${H}
+              ${f}
+            </div>
+          </div>
+        `}),h.innerHTML=a}function $(h){if(!h)return;const n=parseInt(String(h).replace(/\D/g,""),10)||h;setTimeout(()=>{let i=document.getElementById(`block-Bài ${n}`)||document.getElementById(`block-Bài%${n}`);if(!i){const g=document.querySelectorAll(".lesson-block");for(let r of g){const a=r.querySelector(".lesson-number-pill");if(a&&a.textContent.replace(/\D/g,"")===String(n)){i=r;break}}}if(i){const g=i.querySelector(".lesson-body-content");g&&(g.style.display="flex");const r=i.querySelector(".lesson-chevron-icon");r&&(r.className="fa-solid fa-chevron-up lesson-chevron-icon"),i.scrollIntoView({behavior:"smooth",block:"start"}),i.style.transition="all 0.4s ease",i.style.boxShadow="0 0 25px rgba(56, 189, 248, 0.6), 0 0 10px rgba(59, 130, 246, 0.5)",i.style.borderColor="#38bdf8",i.style.borderRadius="20px",setTimeout(()=>{i.style.boxShadow="",i.style.borderColor=""},3500)}},180)}document.addEventListener("DOMContentLoaded",()=>{const h=new URLSearchParams(window.location.search),n=h.get("level"),i=h.get("lesson"),g=h.get("version"),r=document.getElementById("btn-back-to-roadmap");if(r&&n&&(r.href=`/index.html?tab=lessons&level=${n}${g?"&version="+g:""}`),n&&["1","2","3","4","5","6","hsk1","hsk2","hsk3","hsk4","hsk5","hsk6"].includes(n.toLowerCase())){const a=n.startsWith("hsk")?n.toLowerCase():`hsk${n}`;window.switchLevel(a)}else k();i&&$(i)});
