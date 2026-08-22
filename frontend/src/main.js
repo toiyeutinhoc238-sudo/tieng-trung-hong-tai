@@ -6675,12 +6675,40 @@ window.closeLessonExtraVideoModal = function () {
   const modal = document.getElementById('lesson-extra-video-modal');
   const iframe = document.getElementById('extra-video-iframe');
   if (iframe) {
-    iframe.src = ''; // Stop playback immediately
+    try {
+      iframe.contentWindow?.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+      iframe.contentWindow?.postMessage('{"event":"command","func":"stopVideo","args":""}', '*');
+    } catch (e) {}
+    iframe.src = 'about:blank';
+    iframe.removeAttribute('src');
+    // Replace element with clean clone to forcefully kill background audio thread
+    const clone = iframe.cloneNode(false);
+    clone.src = '';
+    iframe.parentNode?.replaceChild(clone, iframe);
   }
   if (modal) {
     modal.style.display = 'none';
   }
 };
+
+// Global escape key & navigation unload listeners to stop video audio
+if (!window._extraVideoGlobalListenersAttached) {
+  window._extraVideoGlobalListenersAttached = true;
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const vModal = document.getElementById('lesson-extra-video-modal');
+      if (vModal && vModal.style.display !== 'none') {
+        window.closeLessonExtraVideoModal();
+      }
+    }
+  });
+  window.addEventListener('beforeunload', () => {
+    window.closeLessonExtraVideoModal();
+  });
+  window.addEventListener('pagehide', () => {
+    window.closeLessonExtraVideoModal();
+  });
+}
 
 window.openLessonDetailModal = function (lessonKey) {
   const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : activeLessonsLevel;
@@ -7700,7 +7728,11 @@ window.goToLessonStep = function(step, lessonId) {
   const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : (activeLessonsLevel || 1);
   const currentVer = activeLessonsCurriculum === 'yct' ? 'yct' : (activeHskVersion || activeRoadmapVersion || '3.0');
 
-  // Close modals if open
+  // Close modals & stop any playing video if open
+  if (step !== 'video') {
+    window.closeLessonExtraVideoModal?.();
+  }
+
   const grammarModal = document.getElementById('lesson-grammar-popup-modal');
   if (grammarModal && step !== 'grammar') grammarModal.style.display = 'none';
 

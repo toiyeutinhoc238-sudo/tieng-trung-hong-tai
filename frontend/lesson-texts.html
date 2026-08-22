@@ -874,13 +874,40 @@
       const modal = document.getElementById('lesson-extra-video-modal');
       const iframe = document.getElementById('extra-video-iframe');
       if (iframe) {
-        iframe.src = '';
+        try {
+          iframe.contentWindow?.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+          iframe.contentWindow?.postMessage('{"event":"command","func":"stopVideo","args":""}', '*');
+        } catch (e) {}
+        iframe.src = 'about:blank';
+        iframe.removeAttribute('src');
+        const clone = iframe.cloneNode(false);
+        clone.src = '';
+        iframe.parentNode?.replaceChild(clone, iframe);
       }
       if (modal) {
         modal.style.display = 'none';
       }
     }
     window.closeLessonExtraVideoModal = closeLessonExtraVideoModal;
+
+    // Global escape key & navigation unload listeners to stop video audio
+    if (!window._extraVideoGlobalListenersAttached) {
+      window._extraVideoGlobalListenersAttached = true;
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          const vModal = document.getElementById('lesson-extra-video-modal');
+          if (vModal && vModal.style.display !== 'none') {
+            window.closeLessonExtraVideoModal();
+          }
+        }
+      });
+      window.addEventListener('beforeunload', () => {
+        window.closeLessonExtraVideoModal?.();
+      });
+      window.addEventListener('pagehide', () => {
+        window.closeLessonExtraVideoModal?.();
+      });
+    }
 
     async function loadData() {
       try {
