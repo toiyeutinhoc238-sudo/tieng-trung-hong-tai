@@ -6832,13 +6832,17 @@ window.openLessonDetailModal = function (lessonKey) {
       extraVideoBox.style.display = 'block';
       if (extraVideoTitle) extraVideoTitle.textContent = videoObj.title || 'Video Bài Giảng Đi Kèm';
       if (extraVideoDesc) extraVideoDesc.textContent = videoObj.desc || 'Xem video hướng dẫn bài học chuẩn ngữ âm và tình huống thực tế.';
+      
+      const handleOpenVideo = function (e) {
+        if (e) e.stopPropagation();
+        const modalEl = document.getElementById('lesson-detail-popup-modal');
+        if (modalEl) modalEl.style.display = 'none';
+        window.openLessonExtraVideoModal(lessonKey, currentLvl, activeHskVersion);
+      };
+
+      extraVideoBox.onclick = handleOpenVideo;
       if (extraVideoBtn) {
-        extraVideoBtn.onclick = function (e) {
-          e.stopPropagation();
-          const modalEl = document.getElementById('lesson-detail-popup-modal');
-          if (modalEl) modalEl.style.display = 'none';
-          window.openLessonExtraVideoModal(lessonKey, currentLvl, activeHskVersion);
-        };
+        extraVideoBtn.onclick = handleOpenVideo;
       }
     } else {
       extraVideoBox.style.display = 'none';

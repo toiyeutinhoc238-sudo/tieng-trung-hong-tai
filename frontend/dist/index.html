@@ -120,8 +120,8 @@
   <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
   <script type="module" crossorigin src="/assets/grammar_hsk2-B6FgImKU.js"></script>
   <script type="module" crossorigin src="/assets/screen_drawing-oOIhKrv1.js"></script>
-  <script type="module" crossorigin src="/assets/main-jfMxACNl.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/style-CC9OhBle.css">
+  <script type="module" crossorigin src="/assets/main-B0G6rOF4.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/style-CveQ47JV.css">
 </head>
 
 <body>
@@ -978,7 +978,8 @@
                   style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin: 0 0 4px 0;">
                   Sổ tay Chủ đề Cao cấp</h3>
                 <p style="color: var(--text-secondary); font-size: 0.82rem; margin: 0; line-height: 1.5;">
-                  35 chủ đề phong phú: Động từ ly hợp, Quán dụng ngữ, Lượng từ, Ẩm thực, Đồ dùng, Tính cách, Giao tiếp...
+                  35 chủ đề phong phú: Động từ ly hợp, Quán dụng ngữ, Lượng từ, Ẩm thực, Đồ dùng, Tính cách, Giao
+                  tiếp...
                 </p>
               </div>
               <div class="topic-action-link"
@@ -3319,29 +3320,30 @@
       </div>
 
       <!-- Preview Video Bài Giảng Đi Kèm (Tìm hiểu thêm) -->
-      <div id="modal-lesson-extra-video-box"
-        style="display: none; background: linear-gradient(135deg, rgba(239, 68, 68, 0.12), rgba(30, 41, 59, 0.7)); border: 1.5px solid rgba(239, 68, 68, 0.35); border-radius: 16px; padding: 14px 18px;">
+      <div id="modal-lesson-extra-video-box" class="lesson-extra-video-card"
+        style="display: none; background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(30, 41, 59, 0.85)); border: 1.5px solid rgba(239, 68, 68, 0.5); border-radius: 16px; padding: 14px 18px; cursor: pointer; transition: all 0.3s ease;">
         <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
           <div style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 220px;">
-            <div
-              style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #ef4444, #dc2626); color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4); flex-shrink: 0;">
+            <div class="video-icon-anim"
+              style="width: 46px; height: 46px; border-radius: 14px; background: linear-gradient(135deg, #ef4444, #dc2626); color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.5); flex-shrink: 0;">
               <i class="fa-brands fa-youtube"></i>
             </div>
             <div>
               <div
-                style="font-weight: 800; font-size: 0.95rem; color: #ffffff; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                style="font-weight: 800; font-size: 0.98rem; color: #ffffff; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
                 <span id="modal-lesson-video-title">Video Bài Giảng Đi Kèm</span>
                 <span
-                  style="background: rgba(239, 68, 68, 0.2); color: #f87171; font-size: 0.72rem; padding: 1px 6px; border-radius: 6px; font-weight: 800;">Tìm
-                  hiểu thêm</span>
+                  style="background: rgba(239, 68, 68, 0.25); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); font-size: 0.72rem; padding: 2px 8px; border-radius: 99px; font-weight: 800; display: inline-flex; align-items: center; gap: 4px;">
+                  <span class="live-dot"></span> Tìm hiểu thêm
+                </span>
               </div>
-              <div id="modal-lesson-video-desc-text" style="font-size: 0.82rem; color: #cbd5e1; margin-top: 2px;">
+              <div id="modal-lesson-video-desc-text" style="font-size: 0.84rem; color: #cbd5e1; margin-top: 3px; line-height: 1.4;">
                 Xem video hướng dẫn bài học chuẩn ngữ âm và tình huống thực tế.
               </div>
             </div>
           </div>
           <button id="modal-btn-open-video" class="btn btn-primary"
-            style="padding: 9px 18px; border-radius: 12px; font-weight: 800; font-size: 0.88rem; background: linear-gradient(135deg, #ef4444, #dc2626); border: none; color: #ffffff; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 14px rgba(239,68,68,0.4); transition: all 0.2s;">
+            style="padding: 10px 20px; border-radius: 12px; font-weight: 800; font-size: 0.9rem; background: linear-gradient(135deg, #ef4444, #dc2626); border: none; color: #ffffff; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 16px rgba(239,68,68,0.5); transition: all 0.25s;">
             <i class="fa-solid fa-play"></i> Xem Video
           </button>
         </div>
