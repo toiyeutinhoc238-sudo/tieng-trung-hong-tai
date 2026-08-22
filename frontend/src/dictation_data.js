@@ -1,4 +1,9 @@
-[
+/**
+ * Tiếng Trung HongTai - 8 Official Video Dictation Lessons
+ * 100% Matched with 'Nội dung Video.xlsx' and Exact AI Whisper Timestamps
+ */
+
+export const DICTATION_LESSONS = [
   {
     "id": "dict_v1_lifa",
     "youtubeId": "x8hxgoX41bQ",
@@ -1218,4 +1223,4 @@
       }
     ]
   }
-]
+];

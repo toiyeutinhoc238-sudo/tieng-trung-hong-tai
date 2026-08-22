@@ -320,11 +320,11 @@
       <!-- DANH MỤC 2: KỸ NĂNG -->
       <div class="sidebar-section-label">Kỹ Năng</div>
       <ul class="sidebar-menu" style="margin-bottom: 8px;">
-        <li class="sidebar-item" onclick="window.showComingSoonNotice('Luyện Chép Video')">
-          <i class="fa-brands fa-youtube" style="color: #64748b; font-size: 1.1rem;"></i> <span>Luyện Chép Video</span>
+        <li class="sidebar-item" onclick="window.location.href = '/video-dictation.html'">
+          <i class="fa-brands fa-youtube" style="color: #ef4444; font-size: 1.1rem;"></i> <span>Luyện Chép Video</span>
           <span
-            style="font-size:0.68rem; background:rgba(245,158,11,0.2); color:#f59e0b; border:1px solid rgba(245,158,11,0.3); padding:2px 6px; border-radius:6px; font-weight:700; margin-left:auto; white-space:nowrap;">🔒
-            Sắp ra mắt</span>
+            style="font-size:0.68rem; background:linear-gradient(135deg, #ef4444, #f97316); color:#fff; padding:2px 7px; border-radius:6px; font-weight:800; margin-left:auto; white-space:nowrap;">🔥
+            8 Video</span>
         </li>
         <li class="sidebar-item" onclick="window.showComingSoonNotice('Luyện nghe & đọc')">
           <i class="fa-solid fa-headphones" style="color: #64748b;"></i> <span>Luyện nghe & đọc</span>
@@ -745,6 +745,30 @@
                 style="background: linear-gradient(135deg, #ec4899, #be185d); color: #ffffff; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(236, 72, 153, 0.4); transition: transform 0.2s;">
                 <i class="fa-solid fa-heart"></i> Ủng Hộ Dự Án (Donate)
               </button>
+            </div>
+          </div>
+
+          <!-- Announcement: Ra mắt Tính năng Luyện Chép Video Mới -->
+          <div
+            style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.14), rgba(15, 23, 42, 0.65)); border: 1.5px solid rgba(239, 68, 68, 0.35); border-radius: 20px; padding: 22px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.25);">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span
+                  style="background: linear-gradient(135deg, #ef4444, #f97316); color: #ffffff; font-size: 0.78rem; font-weight: 800; padding: 4px 12px; border-radius: 99px; text-transform: uppercase;">
+                  🔥 MỚI RA MẮT
+                </span>
+                <h4 style="font-size: 1.15rem; font-weight: 800; color: #ffffff; margin: 0;">🎬 Luyện Chép Chính Tả Video (Video Dictation)</h4>
+              </div>
+              <span style="font-size: 0.8rem; color: #f87171; font-weight: 700;"><i class="fa-brands fa-youtube"></i> 8 Video Khẩu Ngữ Thực Tế</span>
+            </div>
+            <p style="font-size: 0.95rem; color: #e2e8f0; margin: 0; line-height: 1.65;">
+              Trải nghiệm phương pháp học phản xạ nghe chép chuẩn phong cách <strong>eJOY / DailyDictation</strong>: Vừa xem video ngắn thực tế, vừa luyện chép điền từ hoặc gõ cả câu với <strong>AI chấm điểm thông minh</strong> và phụ đề song ngữ 60fps đồng bộ thời gian thực!
+            </p>
+            <div style="display: flex; align-items: center; gap: 10px; margin-top: 4px; flex-wrap: wrap;">
+              <a href="/video-dictation.html"
+                style="background: linear-gradient(135deg, #ef4444, #dc2626); color: #ffffff; padding: 10px 22px; border-radius: 12px; font-weight: 800; font-size: 0.9rem; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4); transition: transform 0.2s;">
+                <i class="fa-solid fa-play"></i> Bắt Đầu Luyện Chép Video Ngay
+              </a>
             </div>
           </div>
 
@@ -3337,7 +3361,8 @@
                   <span class="live-dot"></span> Tìm hiểu thêm
                 </span>
               </div>
-              <div id="modal-lesson-video-desc-text" style="font-size: 0.84rem; color: #cbd5e1; margin-top: 3px; line-height: 1.4;">
+              <div id="modal-lesson-video-desc-text"
+                style="font-size: 0.84rem; color: #cbd5e1; margin-top: 3px; line-height: 1.4;">
                 Xem video hướng dẫn bài học chuẩn ngữ âm và tình huống thực tế.
               </div>
             </div>

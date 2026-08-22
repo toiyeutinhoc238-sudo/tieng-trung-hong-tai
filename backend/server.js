@@ -479,6 +479,17 @@ app.get('/api/exams/catalog', async (req, res) => {
   }
 });
 
+// GET /api/dictation/lessons - Return Video Dictation lessons from video_dictation_lessons.json
+app.get('/api/dictation/lessons', async (req, res) => {
+  try {
+    const dictationData = await fs.readFile(DICTATION_DB_PATH, 'utf-8');
+    res.json(JSON.parse(dictationData));
+  } catch (error) {
+    console.error('Error reading video_dictation_lessons.json:', error);
+    res.status(500).json({ error: 'Failed to load dictation lessons' });
+  }
+});
+
 // Helper functions for Admin & Super Admin resolution
 const SUPER_ADMINS = ['phanphiphu04@gmail.com', 'toiyeutinhoc238@gmail.com', 'thaihong162004@gmail.com'];
 
