@@ -2,12 +2,14 @@
 import { HSK1_STRUCTURED_GRAMMAR } from '../grammar_hsk1.js';
 import { HSK2_STRUCTURED_GRAMMAR } from '../grammar_hsk2.js';
 import { HSK_LESSON_EXTRA_VIDEOS, getLessonExtraVideo } from './lesson_videos.js';
+import { PREMIUM_WORDS } from './premium_topics_data.js';
 import './screen_drawing.js';
 if (typeof window !== 'undefined') {
   window.HSK1_STRUCTURED_GRAMMAR = HSK1_STRUCTURED_GRAMMAR;
   window.HSK2_STRUCTURED_GRAMMAR = HSK2_STRUCTURED_GRAMMAR;
   window.HSK_LESSON_EXTRA_VIDEOS = HSK_LESSON_EXTRA_VIDEOS;
   window.getLessonExtraVideo = getLessonExtraVideo;
+  window.PREMIUM_WORDS = PREMIUM_WORDS;
 }
 let radicalsData = { radicals: [], comparisons: [] };
 async function loadRadicalsData() {
@@ -246,37 +248,60 @@ function getResolvedApiBaseUrl() {
 const API_BASE_URL = getResolvedApiBaseUrl();
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || 'your-google-client-id-here.apps.googleusercontent.com';
 
-const premiumMockData = [
-  // Du lịch
-  { id: 'prem_1', word: '旅游', pinyin: 'lǚyóu', meaning: 'du lịch', level: 'premium', category: 'Du lịch', explanation: 'Chỉ hoạt động đi tham quan, vui chơi ở nơi khác.', example_zh: '我们去中国旅游。', example_vi: 'Chúng tôi đi du lịch Trung Quốc.', isCustom: false, isMemorized: false, isStarred: false, isWrong: false },
-  { id: 'prem_2', word: '飞机', pinyin: 'fēijī', meaning: 'máy bay', level: 'premium', category: 'Du lịch', explanation: 'Phương tiện bay trên không.', example_zh: '坐飞机很快。', example_vi: 'Đi máy bay rất nhanh.', isCustom: false, isMemorized: false, isStarred: false, isWrong: false },
-  { id: 'prem_3', word: '酒店', pinyin: 'jiǔdiàn', meaning: 'khách sạn', level: 'premium', category: 'Du lịch', explanation: 'Nơi lưu trú cho khách du lịch.', example_zh: '这家酒店很干净。', example_vi: 'Khách sạn này rất sạch sẽ.', isCustom: false, isMemorized: false, isStarred: false, isWrong: false },
-  { id: 'prem_4', word: '门票', pinyin: 'ménpiào', meaning: 'vé vào cổng', level: 'premium', category: 'Du lịch', explanation: 'Vé để vào các điểm tham quan.', example_zh: '景点的门票很贵。', example_vi: 'Vé vào cổng của điểm tham quan rất đắt.', isCustom: false, isMemorized: false, isStarred: false, isWrong: false },
-  { id: 'prem_5', word: '行李', pinyin: 'xíngli', meaning: 'hành lý', level: 'premium', category: 'Du lịch', explanation: 'Đồ đạc mang theo khi đi xa.', example_zh: '我的行李在哪儿？', example_vi: 'Hành lý của tôi ở đâu?', isCustom: false, isMemorized: false, isStarred: false, isWrong: false },
-  { id: 'prem_6', word: '导游', pinyin: 'dǎoyóu', meaning: 'hướng dẫn viên du lịch', level: 'premium', category: 'Du lịch', explanation: 'Người dẫn đoàn và giới thiệu cảnh đẹp.', example_zh: '他是我们的导游。', example_vi: 'Anh ấy là hướng dẫn viên của chúng tôi.', isCustom: false, isMemorized: false, isStarred: false, isWrong: false },
-  { id: 'prem_7', word: '护照', pinyin: 'hùzhào', meaning: 'hộ chiếu', level: 'premium', category: 'Du lịch', explanation: 'Giấy tờ thông hành quốc tế.', example_zh: '请出示你的护照。', example_vi: 'Vui lòng xuất trình hộ chiếu của bạn.', isCustom: false, isMemorized: false, isStarred: false, isWrong: false },
-  { id: 'prem_8', word: '景点', pinyin: 'jǐngdiǎn', meaning: 'địa điểm tham quan', level: 'premium', category: 'Du lịch', explanation: 'Nơi có phong cảnh đẹp để ngắm nhìn.', example_zh: '这个景点很有名。', example_vi: 'Địa điểm tham quan này rất nổi tiếng.', isCustom: false, isMemorized: false, isStarred: false, isWrong: false },
+export const PREMIUM_TOPICS_CONFIG = [
+  // 1. Ngữ pháp & Cấu trúc đặc biệt
+  { name: 'Động từ Ly Hợp', id: 'premium:dong-tu-ly-hop', icon: 'fa-bolt', color: '#ec4899', catName: 'Động từ ly hợp', desc: '231 động từ có kết cấu ly hợp có thể tách rời và chèn tân ngữ, bổ ngữ' },
+  { name: 'Quán Dụng Ngữ', id: 'premium:quan-dung-ngu', icon: 'fa-quote-left', color: '#8b5cf6', catName: 'Quán dụng ngữ', desc: '267 quán dụng ngữ và cụm từ cố định thông dụng trong đời sống' },
+  { name: 'Tổng Hợp Lượng Từ', id: 'premium:luong-tu', icon: 'fa-cubes', color: '#3b82f6', catName: 'Lượng từ', desc: '96 lượng từ thông dụng kèm cách dùng và ví dụ minh họa chi tiết' },
+  { name: 'Động Từ Thông Dụng', id: 'premium:dong-tu-thong-dung', icon: 'fa-person-walking', color: '#06b6d4', catName: 'Động từ thông dụng', desc: '76 động từ then chốt thường dùng nhất trong tiếng Trung' },
+  { name: 'Giới Từ & Liên Từ', id: 'premium:gioi-tu-lien-tu', icon: 'fa-link', color: '#6366f1', catName: 'Giới từ liên từ', desc: '100 giới từ và liên từ kết nối câu chuẩn xác' },
 
-  // Giao tiếp công sở
-  { id: 'prem_9', word: '加班', pinyin: 'jiābān', meaning: 'làm tăng ca / làm thêm giờ', level: 'premium', category: 'Công sở', explanation: 'Làm việc ngoài giờ quy định.', example_zh: '今天我要加班。', example_vi: 'Hôm nay tôi phải làm tăng ca.', isCustom: false, isMemorized: false, isStarred: false, isWrong: false },
-  { id: 'prem_10', word: '会议', pinyin: 'huìyì', meaning: 'cuộc họp / hội nghị', level: 'premium', category: 'Công sở', explanation: 'Buổi gặp mặt thảo luận công việc.', example_zh: '下午两点有会议。', example_vi: 'Chiều hai giờ có cuộc họp.', isCustom: false, isMemorized: false, isStarred: false, isWrong: false },
-  { id: 'prem_11', word: '报告', pinyin: 'bàogào', meaning: 'báo cáo', level: 'premium', category: 'Công sở', explanation: 'Trình bày kết quả công việc bằng văn bản hoặc lời nói.', example_zh: '我已经写好报告了。', example_vi: 'Tôi đã viết xong báo cáo rồi.', isCustom: false, isMemorized: false, isStarred: false, isWrong: false },
-  { id: 'prem_12', word: '同事', pinyin: 'tóngshì', meaning: 'đồng nghiệp', level: 'premium', category: 'Công sở', explanation: 'Người cùng làm việc trong một cơ quan.', example_zh: '他是我的新同事。', example_vi: 'Anh ấy là đồng nghiệp mới của tôi.', isCustom: false, isMemorized: false, isStarred: false, isWrong: false },
-  { id: 'prem_13', word: '出差', pinyin: 'chūchāi', meaning: 'đi công tác', level: 'premium', category: 'Công sở', explanation: 'Đi làm việc ở nơi khác theo phân công.', example_zh: '下周我要去北京出差。', example_vi: 'Tuần tới tôi phải đi công tác Bắc Kinh.', isCustom: false, isMemorized: false, isStarred: false, isWrong: false },
-  { id: 'prem_14', word: '请假', pinyin: 'qǐngjià', meaning: 'xin nghỉ phép', level: 'premium', category: 'Công sở', explanation: 'Xin phép nghỉ làm.', example_zh: '我想请假一天。', example_vi: 'Tôi muốn xin nghỉ phép một ngày.', isCustom: false, isMemorized: false, isStarred: false, isWrong: false },
-  { id: 'prem_15', word: '薪水', pinyin: 'xīnshuǐ', meaning: 'tiền lương', level: 'premium', category: 'Công sở', explanation: 'Tiền công trả cho người lao động.', example_zh: '这儿的薪水还可以。', example_vi: 'Lương ở đây cũng được.', isCustom: false, isMemorized: false, isStarred: false, isWrong: false },
-  { id: 'prem_16', word: '退休', pinyin: 'tuìxiū', meaning: 'nghỉ hưu', level: 'premium', category: 'Công sở', explanation: 'Nghỉ làm việc khi đến tuổi quy định.', example_zh: '我爸爸明年就退休了。', example_vi: 'Bố tôi năm tới sẽ nghỉ hưu.', isCustom: false, isMemorized: false, isStarred: false, isWrong: false },
+  // 2. Con người, Tính cách & Cảm xúc
+  { name: 'Bộ Phận Cơ Thể', id: 'premium:bo-phan-co-the', icon: 'fa-hand', color: '#f97316', catName: 'Bộ phận cơ thể', desc: '99 từ vựng chỉ các bộ phận trên cơ thể người' },
+  { name: 'Vẻ Ngoài & Ngoại Hình', id: 'premium:ve-ngoai', icon: 'fa-person', color: '#0ea5e9', catName: 'Vẻ ngoài', desc: '76 từ vựng mô tả diện mạo, vóc dáng và thần thái' },
+  { name: 'Tính Cách & Phẩm Chất', id: 'premium:tinh-cach', icon: 'fa-brain', color: '#a855f7', catName: 'Tính cách', desc: '140 từ vựng miêu tả tính cách, đạo đức và tâm lý' },
+  { name: 'Cảm Xúc & Tâm Trạng', id: 'premium:cam-xuc', icon: 'fa-face-smile', color: '#f59e0b', catName: 'Cảm xúc', desc: '104 từ vựng chỉ cảm xúc vui, buồn, phấn khởi, lo âu' },
+  { name: 'Gia Đình & Người Thân', id: 'premium:gia-dinh', icon: 'fa-people-roof', color: '#14b8a6', catName: 'Gia đình', desc: '66 từ vựng xưng hô gia đình và dòng họ nội ngoại' },
 
-  // Đàm phán thương mại
-  { id: 'prem_17', word: '合作', pinyin: 'hézuò', meaning: 'hợp tác', level: 'premium', category: 'Đàm phán', explanation: 'Cùng chung sức làm việc vì mục đích chung.', example_zh: '祝 chúng ta hợp tác vui vẻ！', example_vi: 'Chúc chúng ta hợp tác vui vẻ!', isCustom: false, isMemorized: false, isStarred: false, isWrong: false },
-  { id: 'prem_18', word: '合同', pinyin: 'hétong', meaning: 'hợp đồng', level: 'premium', category: 'Đàm phán', explanation: 'Văn bản ký kết thỏa thuận giữa các bên.', example_zh: '我们在合同上签字了。', example_vi: 'Chúng tôi đã ký tên trên hợp đồng.', isCustom: false, isMemorized: false, isStarred: false, isWrong: false },
-  { id: 'prem_19', word: '价格', pinyin: 'jiàgé', meaning: 'giá cả', level: 'premium', category: 'Đàm phán', explanation: 'Giá của hàng hóa.', example_zh: '我们可以讨论一下价格。', example_vi: 'Chúng ta có thể thảo luận một chút về giá cả.', isCustom: false, isMemorized: false, isStarred: false, isWrong: false },
-  { id: 'prem_20', word: '客户', pinyin: 'kèhù', meaning: 'khách hàng', level: 'premium', category: 'Đàm phán', explanation: 'Đối tác mua hàng hoặc sử dụng dịch vụ.', example_zh: '这位是我们的重要客户。', example_vi: 'Vị này là khách hàng quan trọng của chúng tôi.', isCustom: false, isMemorized: false, isStarred: false, isWrong: false },
-  { id: 'prem_21', word: '折扣', pinyin: 'zhékòu', meaning: 'chiết khấu / giảm giá', level: 'premium', category: 'Đàm phán', explanation: 'Giảm bớt giá của hàng hóa.', example_zh: '如果买得多，有折扣吗？', example_vi: 'Nếu mua nhiều thì có giảm giá không?', isCustom: false, isMemorized: false, isStarred: false, isWrong: false },
-  { id: 'prem_22', word: '谈判', pinyin: 'tánpàn', meaning: 'đàm phán', level: 'premium', category: 'Đàm phán', explanation: 'Trao đổi, thỏa thuận điều kiện giữa các bên.', example_zh: '谈判进行得很顺利。', example_vi: 'Cuộc đàm phán diễn ra rất thuận lợi.', isCustom: false, isMemorized: false, isStarred: false, isWrong: false },
-  { id: 'prem_23', word: '发票', pinyin: 'fāpiào', meaning: 'hóa đơn', level: 'premium', category: 'Đàm phán', explanation: 'Chứng từ mua bán hàng hóa.', example_zh: '请给我开一张发票。', example_vi: 'Vui lòng xuất cho tôi một tờ hóa đơn.', isCustom: false, isMemorized: false, isStarred: false, isWrong: false },
-  { id: 'prem_24', word: '定金', pinyin: 'dìngjīn', meaning: 'tiền đặt cọc', level: 'premium', category: 'Đàm phán', explanation: 'Tiền trả trước để bảo đảm thực hiện hợp đồng.', example_zh: '我们需要先付定金。', example_vi: 'Chúng ta cần thanh toán tiền cọc trước.', isCustom: false, isMemorized: false, isStarred: false, isWrong: false }
+  // 3. Ẩm thực, Đồ dùng & Cuộc sống hàng ngày
+  { name: 'Món Ăn & Ẩm Thực', id: 'premium:do-an', icon: 'fa-utensils', color: '#eab308', catName: 'Đồ ăn', desc: '84 từ vựng món ăn, nguyên liệu và cách thưởng thức' },
+  { name: 'Đồ Uống & Trà Nước', id: 'premium:do-uong', icon: 'fa-mug-hot', color: '#8b5cf6', catName: 'Đồ uống', desc: '100 loại thức uống, trà, bia, nước ép và đồ pha chế' },
+  { name: 'Trái Cây & Hoa Quả', id: 'premium:trai-cay', icon: 'fa-apple-whole', color: '#ef4444', catName: 'Trái cây', desc: '61 loại trái cây tươi ngon trong đời sống' },
+  { name: 'Rau Củ & Nông Sản', id: 'premium:rau-cu', icon: 'fa-carrot', color: '#22c55e', catName: 'Rau củ', desc: '100 loại rau xanh, củ quả và nông sản dinh dưỡng' },
+  { name: 'Hải Sản Tươi Sống', id: 'premium:hai-san', icon: 'fa-fish', color: '#0284c7', catName: 'Hải sản', desc: '79 từ vựng về các loại cá, tôm, cua, mực và hải sản' },
+  { name: 'Gia Vị & Nêm Nếm', id: 'premium:gia-vi', icon: 'fa-bowl-rice', color: '#d97706', catName: 'Gia vị', desc: '95 gia vị tạo nên hương vị đặc trưng món ăn' },
+
+  // 4. Nhà cửa, Học tập & Công việc
+  { name: 'Đồ Dùng Nhà Bếp', id: 'premium:nha-bep', icon: 'fa-kitchen-set', color: '#f97316', catName: 'Nhà bếp', desc: '66 thiết bị và vật dụng trong gian bếp' },
+  { name: 'Đồ Dùng Phòng Ngủ', id: 'premium:phong-ngu', icon: 'fa-bed', color: '#8b5cf6', catName: 'Phòng ngủ', desc: '50 đồ nội thất và vật dụng nghỉ ngơi phòng ngủ' },
+  { name: 'Đồ Dùng Nhà Tắm', id: 'premium:nha-tam', icon: 'fa-bath', color: '#06b6d4', catName: 'Nhà tắm', desc: '49 vật dụng vệ sinh cá nhân và nhà tắm' },
+  { name: 'Dụng Cụ Học Tập', id: 'premium:dung-cu-hoc-tap', icon: 'fa-pencil', color: '#10b981', catName: 'Dụng cụ học tập', desc: '50 đồ dùng sách vở, văn phòng phẩm' },
+  { name: 'Môn Học & Ngành Học', id: 'premium:mon-hoc', icon: 'fa-book-open', color: '#3b82f6', catName: 'Môn học', desc: '50 môn học và lĩnh vực đào tạo' },
+  { name: 'Nghề Nghiệp & Việc Làm', id: 'premium:nghe-nghiep', icon: 'fa-user-tie', color: '#3b82f6', catName: 'Nghề nghiệp', desc: '80 ngành nghề phổ biến trong xã hội hiện đại' },
+
+  // 5. Thiên nhiên, Động vật, Màu sắc & Xã hội
+  { name: 'Thế Giới Động Vật', id: 'premium:dong-vat', icon: 'fa-paw', color: '#84cc16', catName: 'Động vật', desc: '80 loài thú nuôi, gia súc và động vật hoang dã' },
+  { name: 'Các Loài Hoa', id: 'premium:hoa', icon: 'fa-seedling', color: '#f43f5e', catName: 'Hoa', desc: '50 loài hoa tươi đẹp ngát hương' },
+  { name: 'Thời Tiết & Khí Hậu', id: 'premium:thoi-tiet', icon: 'fa-cloud-sun', color: '#f59e0b', catName: 'Thời tiết', desc: '99 từ vựng hiện tượng thời tiết bốn mùa' },
+  { name: 'Màu Sắc & Sắc Thái', id: 'premium:mau-sac', icon: 'fa-palette', color: '#6366f1', catName: 'Màu sắc', desc: '80 màu sắc cơ bản và sắc thái nghệ thuật' },
+  { name: 'Địa Điểm & Công Trình', id: 'premium:dia-diem', icon: 'fa-location-dot', color: '#10b981', catName: 'Địa điểm', desc: '70 địa điểm công cộng, du lịch và tiện ích' },
+  { name: 'Phương Tiện Giao Thông', id: 'premium:giao-thong', icon: 'fa-car', color: '#0284c7', catName: 'Phương tiện giao thông', desc: '89 phương tiện đi lại trên bộ, thủy và hàng không' },
+  { name: 'Sở Thích & Giải Trí', id: 'premium:so-thich', icon: 'fa-heart', color: '#f43f5e', catName: 'Sở thích', desc: '80 từ vựng hoạt động giải trí, thể thao và sở thích' },
+  { name: 'Ngày Lễ & Lễ Hội', id: 'premium:ngay-le', icon: 'fa-gift', color: '#ec4899', catName: 'Ngày lễ', desc: '41 ngày lễ truyền thống và hiện đại Trung - Việt' },
+  { name: 'Bệnh & Y Tế Sức Khỏe', id: 'premium:benh', icon: 'fa-house-medical', color: '#ef4444', catName: 'Bệnh', desc: '60 thuật ngữ y tế, triệu chứng và bệnh thông thường' },
+  { name: 'Thương Hiệu Nổi Tiếng', id: 'premium:thuong-hieu', icon: 'fa-tag', color: '#e11d48', catName: 'Thương hiệu nổi tiếng', desc: '100 nhãn hàng, thương hiệu lớn toàn cầu và Trung Quốc' },
+
+  // 6. Giao tiếp thương mại & Du lịch
+  { name: 'Du Lịch Trung Quốc', id: 'premium:du-lich', icon: 'fa-plane', color: 'var(--accent-teal)', catName: 'Du lịch', desc: 'Từ vựng thông dụng khi đi du lịch, hỏi đường và tham quan' },
+  { name: 'Giao Tiếp Công Sở', id: 'premium:cong-so', icon: 'fa-briefcase', color: 'var(--accent-purple)', catName: 'Công sở', desc: 'Từ vựng văn phòng, báo cáo, đồng nghiệp và xin nghỉ phép' },
+  { name: 'Đàm Phán Thương Mại', id: 'premium:dam-phan', icon: 'fa-handshake', color: 'var(--warning)', catName: 'Đàm phán', desc: 'Từ vựng đàm phán hợp đồng, giá cả, chiết khấu và hợp tác' }
 ];
+
+if (typeof window !== 'undefined') {
+  window.PREMIUM_TOPICS_CONFIG = PREMIUM_TOPICS_CONFIG;
+}
+
+const premiumMockData = (typeof PREMIUM_WORDS !== 'undefined' && Array.isArray(PREMIUM_WORDS) && PREMIUM_WORDS.length > 0) ? PREMIUM_WORDS : [];
 
 // --- ENHANCEMENT STATE MANAGEMENT ---
 let studyMode = 'lesson';       // 'lesson', 'flip', or 'type'
@@ -11246,11 +11271,9 @@ function getNotebookWords(notebookId) {
     return vocabList.filter(w => !w.isCustom && (w.curriculum === 'yct' || w.hskVersion === 'yct') && String(w.level) === String(lvl));
   } else if (notebookId.startsWith('premium:')) {
     const category = notebookId.substring(8);
-    let catName = '';
-    if (category === 'du-lich') catName = 'Du lịch';
-    else if (category === 'cong-so') catName = 'Công sở';
-    else if (category === 'dam-phan') catName = 'Đàm phán';
-    return vocabList.filter(w => w.level === 'premium' && w.category === catName);
+    const target = (typeof PREMIUM_TOPICS_CONFIG !== 'undefined' ? PREMIUM_TOPICS_CONFIG : []).find(t => t.id === notebookId || t.id === `premium:${category}` || t.catName.toLowerCase() === category.toLowerCase());
+    const catName = target ? target.catName : category;
+    return vocabList.filter(w => w.level === 'premium' && (w.category === catName || w.category === target?.name));
   }
   return [];
 }
@@ -11314,14 +11337,10 @@ function renderSubdecksList() {
     }
   }
   else if (activeSmartTopic === 'premium') {
-    title.textContent = 'Danh sách Chủ đề Cao cấp';
-    const topics = [
-      { name: 'Du lịch Trung Quốc', id: 'premium:du-lich', icon: 'fa-plane', color: 'var(--accent-teal)', catName: 'Du lịch' },
-      { name: 'Giao tiếp Công sở', id: 'premium:cong-so', icon: 'fa-briefcase', color: 'var(--accent-purple)', catName: 'Công sở' },
-      { name: 'Đàm phán Thương mại', id: 'premium:dam-phan', icon: 'fa-handshake', color: 'var(--warning)', catName: 'Đàm phán' }
-    ];
+    title.textContent = 'Danh sách Chủ đề Cao cấp (35 Chủ đề)';
+    const topics = typeof PREMIUM_TOPICS_CONFIG !== 'undefined' ? PREMIUM_TOPICS_CONFIG : [];
     topics.forEach(t => {
-      const words = vocabList.filter(w => w.level === 'premium' && w.category === t.catName);
+      const words = vocabList.filter(w => w.level === 'premium' && (w.category === t.catName || w.category === t.name));
       grid.appendChild(createSubdeckCard(t.name, t.id, words.length, t.icon, t.color, false));
     });
   }
@@ -11420,16 +11439,14 @@ function openNotebookDashboard(notebookId) {
       desc = `Toàn bộ từ vựng luyện thi YCT Cấp ${lvl}`;
     }
   } else if (notebookId.startsWith('premium:')) {
-    const category = notebookId.substring(8);
-    if (category === 'du-lich') {
-      name = 'Chủ đề: Du lịch Trung Quốc';
-      desc = 'Từ vựng thông dụng nhất khi đi du lịch và hỏi đường';
-    } else if (category === 'cong-so') {
-      name = 'Chủ đề: Giao tiếp Công sở';
-      desc = 'Từ vựng văn phòng, báo cáo, đồng nghiệp và xin nghỉ phép';
-    } else if (category === 'dam-phan') {
-      name = 'Chủ đề: Đàm phán Thương mại';
-      desc = 'Từ vựng đàm phán hợp đồng, giá cả, chiết khấu và hợp tác';
+    const target = (typeof PREMIUM_TOPICS_CONFIG !== 'undefined' ? PREMIUM_TOPICS_CONFIG : []).find(t => t.id === notebookId);
+    if (target) {
+      name = `Chủ đề: ${target.name}`;
+      desc = target.desc || `Tổng hợp ${baseWords.length} từ vựng thuộc chủ đề ${target.name}`;
+    } else {
+      const category = notebookId.substring(8);
+      name = `Chủ đề: ${category}`;
+      desc = `Tổng hợp ${baseWords.length} từ vựng thuộc chủ đề này`;
     }
   }
 

@@ -1380,8 +1380,8 @@
           pool = pool.filter(w => w.isCustom && w.category === cat);
         } else if (urlNotebook.startsWith('premium:')) {
           const cat = urlNotebook.substring(8);
-          const catMap = { 'du-lich': 'Du lịch', 'cong-so': 'Công sở', 'dam-phan': 'Đàm phán' };
-          pool = pool.filter(w => w.level === 'premium' && w.category === (catMap[cat] || cat));
+          const slugify = (s) => (s || '').toLowerCase().replace(/đ/g, 'd').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+          pool = pool.filter(w => w.level === 'premium' && (w.category === cat || slugify(w.category) === cat || slugify(w.category) === slugify(cat)));
         }
       }
 
