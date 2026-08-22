@@ -4311,6 +4311,44 @@ html.dark .lesson-card {
   transform: translateY(3px);
 }
 
+.lesson-mod-btn.mod-video {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #ffffff;
+  box-shadow: 0 4px 0 #b91c1c;
+}
+.lesson-mod-btn.mod-video:hover {
+  background: linear-gradient(135deg, #f87171, #ef4444);
+}
+.lesson-mod-btn.mod-video:active {
+  box-shadow: 0 1px 0 #b91c1c;
+  transform: translateY(3px);
+}
+
+.stepper-extra-video-btn {
+  background: rgba(239, 68, 68, 0.15) !important;
+  border-color: rgba(239, 68, 68, 0.4) !important;
+  color: #fca5a5 !important;
+  transition: all 0.2s ease !important;
+}
+.stepper-extra-video-btn:hover {
+  background: rgba(239, 68, 68, 0.3) !important;
+  border-color: #ef4444 !important;
+  color: #ffffff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
+}
+.stepper-extra-video-btn:active {
+  transform: scale(0.96);
+}
+
+html.light-mode .stepper-extra-video-btn,
+body.light-mode .stepper-extra-video-btn {
+  background: #fef2f2 !important;
+  border-color: #fca5a5 !important;
+  color: #dc2626 !important;
+}
+
+
 .lesson-badge {
   align-self: flex-start;
   background: rgba(229, 62, 62, 0.06);

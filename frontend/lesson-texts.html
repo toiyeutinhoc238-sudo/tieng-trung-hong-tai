@@ -732,6 +732,11 @@
           title="Bước 4: Làm bài tập ôn tập trắc nghiệm">
           <i class="fa-solid fa-circle-play"></i> 4. Ôn Tập
         </button>
+        <button id="stepper-extra-video-btn" onclick="goToLessonStep('video')" class="stepper-tab-btn stepper-extra-video-btn"
+          style="display: none; padding: 8px 14px; border-radius: 12px; font-weight: 700; font-size: 0.88rem; cursor: pointer; border: 1.5px solid rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.15); color: #fca5a5; align-items: center; gap: 6px; transition: all 0.2s;"
+          title="Tìm hiểu thêm - Xem video bài giảng đi kèm">
+          <i class="fa-brands fa-youtube" style="color: #ef4444;"></i> Tìm hiểu thêm
+        </button>
       </div>
     </div>
 
@@ -804,6 +809,79 @@
       renderWorkspace();
     });
 
+    const HSK_LESSON_EXTRA_VIDEOS = {
+      "3.0": {
+        "1": {
+          1: { youtubeId: "g-0HdaYr-f4", url: "https://youtu.be/g-0HdaYr-f4", title: "Bài 1: AI小语，你好！ (Chào hỏi trong tiếng Trung)", desc: "Video bài giảng chi tiết Bài 1 - HSK 1 Chuẩn 3.0" },
+          2: { youtubeId: "oYcVrAhwE7Q", url: "https://youtu.be/oYcVrAhwE7Q", title: "Bài 2: 这是什么？ (Đây là cái gì?)", desc: "Video bài giảng chi tiết Bài 2 - HSK 1 Chuẩn 3.0" },
+          4: { youtubeId: "4TnHieg2A5s", url: "https://youtu.be/4TnHieg2A5s", title: "Bài 4: 你喝什么？ (Bạn uống gì?)", desc: "Video bài giảng chi tiết Bài 4 - HSK 1 Chuẩn 3.0" },
+          5: { youtubeId: "EMQ5TAM5J6M", url: "https://youtu.be/EMQ5TAM5J6M", title: "Bài 5: 我有三个苹果 (Tôi có 3 quả táo)", desc: "Video bài giảng chi tiết Bài 5 - HSK 1 Chuẩn 3.0" },
+          7: { youtubeId: "FdA_DivfzBY", url: "https://youtu.be/FdA_DivfzBY", title: "Bài 7: 我会说汉语 (Tôi biết nói tiếng Trung)", desc: "Video bài giảng chi tiết Bài 7 - HSK 1 Chuẩn 3.0" },
+          13: { youtubeId: "ldUATGMt2nc", url: "https://youtu.be/ldUATGMt2nc", title: "Bài 13: 请给我一杯茶 (Làm ơn cho tôi một cốc trà)", desc: "Video bài giảng chi tiết Bài 13 - HSK 1 Chuẩn 3.0" },
+          15: { youtubeId: "S9kSsDBM8Mw", url: "https://youtu.be/S9kSsDBM8Mw", title: "Bài 15: 大兴机场见 (Hẹn gặp ở sân bay Đại Hưng)", desc: "Video bài giảng chi tiết Bài 15 - HSK 1 Chuẩn 3.0" }
+        }
+      }
+    };
+
+    function getLessonExtraVideo(level, lessonId, version = '3.0') {
+      const ver = String(version || '3.0');
+      const lvl = String(level || '1');
+      const numId = parseInt(String(lessonId).replace(/\D/g, ''), 10) || 1;
+      const verObj = HSK_LESSON_EXTRA_VIDEOS[ver];
+      if (!verObj) return null;
+      const lvlObj = verObj[lvl];
+      if (!lvlObj) return null;
+      return lvlObj[numId] || null;
+    }
+    window.getLessonExtraVideo = getLessonExtraVideo;
+
+    function openLessonExtraVideoModal(lessonKey, level, version) {
+      const numId = parseInt(String(lessonKey || currentLessonId).replace(/\D/g, ''), 10) || 1;
+      const lvl = String(level || currentLevel);
+      const ver = String(version || currentVersion);
+
+      const videoObj = getLessonExtraVideo(lvl, numId, ver);
+      if (!videoObj) {
+        if (typeof showToast === 'function') {
+          showToast(`Bài ${numId} hiện chưa có video tìm hiểu thêm. Hệ thống sẽ cập nhật sớm!`, true);
+        }
+        return;
+      }
+
+      const modal = document.getElementById('lesson-extra-video-modal');
+      const iframe = document.getElementById('extra-video-iframe');
+      const badge = document.getElementById('extra-video-badge');
+      const title = document.getElementById('extra-video-title');
+      const desc = document.getElementById('extra-video-desc');
+      const ytLink = document.getElementById('extra-video-yt-link');
+
+      if (badge) badge.textContent = `HSK ${lvl} (${ver}) • Bài ${numId}`;
+      if (title) title.textContent = videoObj.title || `Bài ${numId} (HSK ${lvl})`;
+      if (desc) desc.textContent = videoObj.desc || 'Video bài giảng trực quan, phát âm khẩu hình chuẩn và giải thích ngữ cảnh bài học.';
+      if (ytLink) ytLink.href = videoObj.url || `https://youtu.be/${videoObj.youtubeId}`;
+
+      if (iframe) {
+        iframe.src = `https://www.youtube.com/embed/${videoObj.youtubeId}?autoplay=1&rel=0&enablejsapi=1`;
+      }
+
+      if (modal) {
+        modal.style.display = 'flex';
+      }
+    }
+    window.openLessonExtraVideoModal = openLessonExtraVideoModal;
+
+    function closeLessonExtraVideoModal() {
+      const modal = document.getElementById('lesson-extra-video-modal');
+      const iframe = document.getElementById('extra-video-iframe');
+      if (iframe) {
+        iframe.src = '';
+      }
+      if (modal) {
+        modal.style.display = 'none';
+      }
+    }
+    window.closeLessonExtraVideoModal = closeLessonExtraVideoModal;
+
     async function loadData() {
       try {
         const file = `/hsk${currentLevel}_reading_texts.json`;
@@ -825,12 +903,18 @@
       const titleBadge = document.getElementById('lesson-title-badge');
       const headerRoadmapBtn = document.getElementById('header-roadmap-btn');
       const stepperRoadmapBtn = document.getElementById('stepper-roadmap-btn');
+      const stepperVideoBtn = document.getElementById('stepper-extra-video-btn');
 
       if (lvlBadge) lvlBadge.textContent = `HSK ${currentLevel} (${currentVersion})`;
       if (lesBadge) lesBadge.textContent = `Bài ${currentLessonId}`;
       if (titleBadge) titleBadge.innerHTML = `<i class="fa-solid fa-bookmark"></i> Bài Khóa HSK ${currentLevel} (${currentVersion}) - Bài ${currentLessonId}`;
       if (headerRoadmapBtn) headerRoadmapBtn.href = `/index.html?tab=lessons&level=${currentLevel}&version=${currentVersion}`;
       if (stepperRoadmapBtn) stepperRoadmapBtn.href = `/index.html?tab=lessons&level=${currentLevel}&version=${currentVersion}`;
+
+      const extraVid = getLessonExtraVideo(currentLevel, currentLessonId, currentVersion);
+      if (stepperVideoBtn) {
+        stepperVideoBtn.style.display = extraVid ? 'inline-flex' : 'none';
+      }
     }
 
     function selectDialogue(diagId) {
@@ -1252,6 +1336,11 @@
                 </div>
               </div>
               <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                ${getLessonExtraVideo(currentLevel, currentLessonId, currentVersion) ? `
+                  <button onclick="goToLessonStep('video')" class="btn-close" style="padding: 12px 18px; border-radius: 14px; font-weight: 700; font-size: 0.9rem; cursor: pointer; background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4); color: #fca5a5; display: inline-flex; align-items: center; gap: 6px;" title="Xem video bài giảng đi kèm">
+                    <i class="fa-brands fa-youtube" style="color:#ef4444;"></i> Tìm hiểu thêm
+                  </button>
+                ` : ''}
                 <button onclick="goToLessonStep('grammar')" class="btn-close" style="padding: 12px 18px; border-radius: 14px; font-weight: 700; font-size: 0.9rem; cursor: pointer;">
                   <i class="fa-solid fa-arrow-left"></i> Bước 2: Ngữ Pháp
                 </button>
@@ -1274,6 +1363,8 @@
         // Already on lesson texts page
       } else if (step === 'quiz') {
         window.location.href = `/quiz-game.html?lesson=${currentLessonId}&level=${currentLevel}&version=${currentVersion}`;
+      } else if (step === 'video') {
+        openLessonExtraVideoModal(currentLessonId, currentLevel, currentVersion);
       }
     }
     window.goToLessonStep = goToLessonStep;
@@ -1530,6 +1621,56 @@
       initPinyinState();
     });
   </script>
+
+  <!-- Modal Video Bài Giảng Đi Kèm (Tìm hiểu thêm) -->
+  <div class="modal-overlay" id="lesson-extra-video-modal" onclick="if(event.target === this) window.closeLessonExtraVideoModal();"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); z-index: 100000; align-items: center; justify-content: center; padding: 16px;">
+    <div class="modal-card glass-panel"
+      style="background: var(--bg-primary, #0f172a); border: 1.5px solid rgba(255,255,255,0.18); border-radius: 24px; width: 100%; max-width: 820px; padding: 24px; box-shadow: 0 30px 70px rgba(0,0,0,0.6); color: #ffffff; position: relative; display: flex; flex-direction: column; gap: 16px; max-height: 92vh; overflow-y: auto;">
+      
+      <!-- Modal Close Button -->
+      <button onclick="window.closeLessonExtraVideoModal()"
+        style="position: absolute; top: 18px; right: 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #cbd5e1; font-size: 1.2rem; cursor: pointer; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s; z-index: 10;"
+        title="Đóng (ESC)">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Header info -->
+      <div style="display: flex; align-items: center; gap: 14px; padding-right: 48px;">
+        <div style="width: 48px; height: 48px; border-radius: 14px; background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4); flex-shrink: 0;">
+          <i class="fa-brands fa-youtube"></i>
+        </div>
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <span class="lesson-badge" id="extra-video-badge" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.35); font-size: 0.78rem; padding: 2px 10px; border-radius: 99px; font-weight: 700;">HSK 1 (3.0) • Bài 1</span>
+            <span style="font-size: 0.78rem; color: #38bdf8; font-weight: 700;"><i class="fa-solid fa-circle-play"></i> Video Tìm hiểu thêm</span>
+          </div>
+          <h3 id="extra-video-title" style="font-size: 1.3rem; font-weight: 800; margin: 4px 0 0 0; color: #ffffff; font-family: var(--font-display, sans-serif);">Bài 1: AI小语，你好！</h3>
+        </div>
+      </div>
+
+      <!-- 16:9 Video Player Container -->
+      <div style="position: relative; width: 100%; padding-top: 56.25%; background: #000; border-radius: 18px; overflow: hidden; border: 1.5px solid rgba(255,255,255,0.12); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+        <iframe id="extra-video-iframe" src="" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+
+      <!-- Description & Action buttons -->
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 4px;">
+        <p id="extra-video-desc" style="font-size: 0.92rem; color: #94a3b8; margin: 0; flex: 1; min-width: 240px; line-height: 1.5;">
+          Video bài giảng trực quan, phát âm khẩu hình chuẩn và giải thích ngữ cảnh bài học.
+        </p>
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <a id="extra-video-yt-link" href="#" target="_blank" class="btn btn-secondary" style="padding: 10px 16px; border-radius: 12px; font-weight: 700; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #cbd5e1;">
+            <i class="fa-brands fa-youtube" style="color: #ef4444;"></i> Xem trên YouTube
+          </a>
+          <button onclick="window.closeLessonExtraVideoModal()" class="btn btn-primary" style="padding: 10px 20px; border-radius: 12px; font-weight: 800; font-size: 0.88rem; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border: none; color: #fff; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 14px rgba(37,99,235,0.4);">
+            <i class="fa-solid fa-check"></i> Đã Hiểu
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script type="module" src="/src/particles.js"></script>
   <script type="module" src="/src/screen_drawing.js"></script>
 </body>

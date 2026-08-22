@@ -476,14 +476,29 @@
     }
 
     .hearts {
-      color: #e21b3c;
-      font-size: 1.1rem;
+      color: #ef4444 !important;
+      font-size: 1.25rem;
       display: flex;
-      gap: 4px;
+      gap: 6px;
+      align-items: center;
     }
 
-    .hearts .lost {
-      color: #555;
+    .hearts i,
+    .hearts .fa-heart,
+    #hearts-container i {
+      color: #ef4444 !important;
+      font-size: 1.25rem;
+      filter: drop-shadow(0 2px 8px rgba(239, 68, 68, 0.65)) !important;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .hearts .lost,
+    .hearts i.lost,
+    #hearts-container i.lost {
+      color: #94a3b8 !important;
+      opacity: 0.3 !important;
+      filter: none !important;
+      transform: scale(0.85);
     }
 
     .score-box {
@@ -824,7 +839,7 @@
       }
     }
   </style>
-  <link rel="stylesheet" crossorigin href="/assets/style-2tkIhQB7.css">
+  <link rel="stylesheet" crossorigin href="/assets/style-CC9OhBle.css">
 </head>
 
 <body>
@@ -950,9 +965,9 @@
         <div class="player-details">
           <h4 id="player-name">Người học</h4>
           <div class="hearts" id="hearts-container">
-            <i class="fa-solid fa-heart"></i>
-            <i class="fa-solid fa-heart"></i>
-            <i class="fa-solid fa-heart"></i>
+            <i class="fa-solid fa-heart" style="color: #ef4444 !important; font-size: 1.25rem;"></i>
+            <i class="fa-solid fa-heart" style="color: #ef4444 !important; font-size: 1.25rem;"></i>
+            <i class="fa-solid fa-heart" style="color: #ef4444 !important; font-size: 1.25rem;"></i>
           </div>
         </div>
       </div>
@@ -1464,7 +1479,7 @@
                   <a href="/index.html?tab=lessons&level=${qLevel}&version=${qVer}&openVocab=${numLessonId}" target="_top" class="stepper-tab-btn" style="padding: 6px 12px; font-size: 0.82rem; border-radius: 10px; text-decoration: none;">
                     <i class="fa-solid fa-book-bookmark"></i> 1. Từ Vựng
                   </a>
-                  <a href="/index.html?tab=lessons&level=${qLevel}&version=${qVer}&openGrammar=${numLessonId}" target="_top" class="stepper-tab-btn" style="padding: 6px 12px; font-size: 0.82rem; border-radius: 10px; text-decoration: none;">
+                  <a href="/hsk-grammar.html?level=${qLevel}&lesson=${numLessonId}&version=${qVer}" target="_top" class="stepper-tab-btn" style="padding: 6px 12px; font-size: 0.82rem; border-radius: 10px; text-decoration: none;">
                     <i class="fa-solid fa-spell-check"></i> 2. Ngữ Pháp
                   </a>
                   <a href="/lesson-texts.html?lesson=${numLessonId}&level=${qLevel}&version=${qVer}" target="_top" class="stepper-tab-btn" style="padding: 6px 12px; font-size: 0.82rem; border-radius: 10px; text-decoration: none;">
@@ -1684,8 +1699,19 @@
     function updateHearts() {
       const hs = heartsContainer.querySelectorAll('i');
       hs.forEach((h, i) => {
-        if (i < hearts) h.classList.remove('lost');
-        else h.classList.add('lost');
+        if (i < hearts) {
+          h.classList.remove('lost');
+          h.style.setProperty('color', '#ef4444', 'important');
+          h.style.setProperty('opacity', '1', 'important');
+          h.style.setProperty('filter', 'drop-shadow(0 2px 8px rgba(239, 68, 68, 0.65))', 'important');
+          h.style.transform = 'scale(1)';
+        } else {
+          h.classList.add('lost');
+          h.style.setProperty('color', '#94a3b8', 'important');
+          h.style.setProperty('opacity', '0.3', 'important');
+          h.style.setProperty('filter', 'none', 'important');
+          h.style.transform = 'scale(0.85)';
+        }
       });
     }
 

@@ -1,10 +1,13 @@
 // HSK Vocabulary Flashcard - Main Frontend Controller
 import { HSK1_STRUCTURED_GRAMMAR } from '../grammar_hsk1.js';
 import { HSK2_STRUCTURED_GRAMMAR } from '../grammar_hsk2.js';
+import { HSK_LESSON_EXTRA_VIDEOS, getLessonExtraVideo } from './lesson_videos.js';
 import './screen_drawing.js';
 if (typeof window !== 'undefined') {
   window.HSK1_STRUCTURED_GRAMMAR = HSK1_STRUCTURED_GRAMMAR;
   window.HSK2_STRUCTURED_GRAMMAR = HSK2_STRUCTURED_GRAMMAR;
+  window.HSK_LESSON_EXTRA_VIDEOS = HSK_LESSON_EXTRA_VIDEOS;
+  window.getLessonExtraVideo = getLessonExtraVideo;
 }
 let radicalsData = { radicals: [], comparisons: [] };
 async function loadRadicalsData() {
@@ -6634,6 +6637,51 @@ window.switchLessonViewMode = function (mode) {
   renderLessonsList();
 };
 
+window.openLessonExtraVideoModal = function (lessonKey, level, version) {
+  const numId = parseInt(String(lessonKey).replace(/\D/g, ''), 10) || 1;
+  const lvl = level ? String(level) : (activeLessonsCurriculum === 'yct' ? String(activeYctLevel) : String(activeLessonsLevel || 1));
+  const ver = version || activeHskVersion || '3.0';
+
+  const videoObj = getLessonExtraVideo(lvl, numId, ver);
+  if (!videoObj) {
+    if (typeof showToast === 'function') {
+      showToast(`Bài ${numId} hiện chưa có video tìm hiểu thêm. Hệ thống sẽ cập nhật sớm!`, true);
+    }
+    return;
+  }
+
+  const modal = document.getElementById('lesson-extra-video-modal');
+  const iframe = document.getElementById('extra-video-iframe');
+  const badge = document.getElementById('extra-video-badge');
+  const title = document.getElementById('extra-video-title');
+  const desc = document.getElementById('extra-video-desc');
+  const ytLink = document.getElementById('extra-video-yt-link');
+
+  if (badge) badge.textContent = `HSK ${lvl} (${ver}) • Bài ${numId}`;
+  if (title) title.textContent = videoObj.title || `Bài ${numId} (HSK ${lvl})`;
+  if (desc) desc.textContent = videoObj.desc || 'Video bài giảng trực quan, phát âm khẩu hình chuẩn và giải thích ngữ cảnh bài học.';
+  if (ytLink) ytLink.href = videoObj.url || `https://youtu.be/${videoObj.youtubeId}`;
+
+  if (iframe) {
+    iframe.src = `https://www.youtube.com/embed/${videoObj.youtubeId}?autoplay=1&rel=0&enablejsapi=1`;
+  }
+
+  if (modal) {
+    modal.style.display = 'flex';
+  }
+};
+
+window.closeLessonExtraVideoModal = function () {
+  const modal = document.getElementById('lesson-extra-video-modal');
+  const iframe = document.getElementById('extra-video-iframe');
+  if (iframe) {
+    iframe.src = ''; // Stop playback immediately
+  }
+  if (modal) {
+    modal.style.display = 'none';
+  }
+};
+
 window.openLessonDetailModal = function (lessonKey) {
   const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : activeLessonsLevel;
   const levelVocabs = vocabList.filter(w => {
@@ -6715,6 +6763,46 @@ window.openLessonDetailModal = function (lessonKey) {
       }).join('');
     } else {
       grammarPreviewBox.style.display = 'none';
+    }
+  }
+
+  // Handle Extra Video / Tìm hiểu thêm preview
+  const videoObj = getLessonExtraVideo(currentLvl, numKey, activeHskVersion);
+  const extraVideoBox = document.getElementById('modal-lesson-extra-video-box');
+  const extraVideoBtn = document.getElementById('modal-btn-open-video');
+  const extraVideoTitle = document.getElementById('modal-lesson-video-title');
+  const extraVideoDesc = document.getElementById('modal-lesson-video-desc-text');
+  const btnModVideo = document.getElementById('modal-btn-mod-video');
+
+  if (extraVideoBox) {
+    if (videoObj) {
+      extraVideoBox.style.display = 'block';
+      if (extraVideoTitle) extraVideoTitle.textContent = videoObj.title || 'Video Bài Giảng Đi Kèm';
+      if (extraVideoDesc) extraVideoDesc.textContent = videoObj.desc || 'Xem video hướng dẫn bài học chuẩn ngữ âm và tình huống thực tế.';
+      if (extraVideoBtn) {
+        extraVideoBtn.onclick = function (e) {
+          e.stopPropagation();
+          const modalEl = document.getElementById('lesson-detail-popup-modal');
+          if (modalEl) modalEl.style.display = 'none';
+          window.openLessonExtraVideoModal(lessonKey, currentLvl, activeHskVersion);
+        };
+      }
+    } else {
+      extraVideoBox.style.display = 'none';
+    }
+  }
+
+  if (btnModVideo) {
+    if (videoObj) {
+      btnModVideo.style.display = 'flex';
+      btnModVideo.onclick = function (e) {
+        e.stopPropagation();
+        const modalEl = document.getElementById('lesson-detail-popup-modal');
+        if (modalEl) modalEl.style.display = 'none';
+        window.openLessonExtraVideoModal(lessonKey, currentLvl, activeHskVersion);
+      };
+    } else {
+      btnModVideo.style.display = 'none';
     }
   }
 
@@ -7183,6 +7271,8 @@ function renderLessonsList() {
       card.style.borderColor = 'rgba(245, 158, 11, 0.3)';
     }
 
+    const extraVid = getLessonExtraVideo(activeLessonsLevel, lessonKey, activeHskVersion);
+
     card.innerHTML = `
       <div class="lesson-card-header">
         <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
@@ -7217,6 +7307,13 @@ function renderLessonsList() {
           <span>Ôn Tập</span>
           <small style="background: rgba(0,0,0,0.25); color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">Sắp ra mắt</small>
         </button>
+        ${extraVid ? `
+          <button class="lesson-mod-btn mod-video" style="grid-column: 1 / -1; flex-direction: row; gap: 8px; padding: 10px 14px;" onclick="event.stopPropagation(); window.openLessonExtraVideoModal('${lessonKey}', '${activeLessonsLevel}', '${activeHskVersion}')" title="Tìm hiểu thêm - Xem video bài giảng đi kèm">
+            <i class="fa-brands fa-youtube" style="color: #ffffff; font-size: 1.15rem;"></i>
+            <span style="font-size: 0.95rem; font-weight: 800;">Tìm hiểu thêm</span>
+            <small style="background: rgba(0,0,0,0.25); color: #fff; padding: 2px 8px; border-radius: 99px; font-weight: 700; margin-left: auto;">Video bài giảng 🎬</small>
+          </button>
+        ` : ''}
       </div>
     `;
 
@@ -7414,6 +7511,7 @@ function renderLessonStepperNav(currentStep, lessonId, lessonTitle) {
   const titleDisplay = lessonTitle ? cleanLessonTitle(lessonTitle, numId) : `Bài ${numId}`;
   const prevLessonNum = numId > 1 ? numId - 1 : null;
   const nextLessonNum = numId + 1;
+  const extraVid = getLessonExtraVideo(currentLvl, numId, currentVer);
 
   return `
     <div class="lesson-stepper-hub-bar">
@@ -7437,7 +7535,7 @@ function renderLessonStepperNav(currentStep, lessonId, lessonTitle) {
         </button>
       </div>
 
-      <!-- 4 Step Tabs -->
+      <!-- 4 Step Tabs + Tìm hiểu thêm -->
       <div class="lesson-stepper-tabs">
         <button onclick="window.goToLessonStep('vocab', '${numId}')" class="stepper-tab-btn ${currentStep === 'vocab' ? 'active active-vocab' : ''}" data-step="vocab" title="Bước 1: Học từ vựng Flashcard">
           <i class="fa-solid fa-book-bookmark"></i> 1. Từ Vựng
@@ -7451,6 +7549,11 @@ function renderLessonStepperNav(currentStep, lessonId, lessonTitle) {
         <button onclick="window.goToLessonStep('quiz', '${numId}')" class="stepper-tab-btn ${currentStep === 'quiz' ? 'active active-quiz' : ''}" data-step="quiz" title="Bước 4: Làm bài tập ôn tập trắc nghiệm">
           <i class="fa-solid fa-circle-play"></i> 4. Ôn Tập
         </button>
+        ${extraVid ? `
+          <button onclick="window.goToLessonStep('video', '${numId}')" class="stepper-tab-btn stepper-extra-video-btn ${currentStep === 'video' ? 'active' : ''}" data-step="video" title="Tìm hiểu thêm - Xem video bài giảng đi kèm">
+            <i class="fa-brands fa-youtube" style="color: #ef4444;"></i> Tìm hiểu thêm
+          </button>
+        ` : ''}
       </div>
 
       <!-- Action Button (Toggle Toolbar Only) -->
@@ -7607,11 +7710,13 @@ window.goToLessonStep = function(step, lessonId) {
   if (step === 'vocab') {
     window.openLessonVocabStudy(numId);
   } else if (step === 'grammar') {
-    window.openLessonGrammarModal(numId);
+    window.location.href = `/hsk-grammar.html?level=${currentLvl}&lesson=${numId}&version=${currentVer}`;
   } else if (step === 'text') {
     window.location.href = `/lesson-texts.html?lesson=${numId}&level=${currentLvl}&version=${currentVer}`;
   } else if (step === 'quiz') {
     window.location.href = `/quiz-game.html?lesson=${numId}&level=${currentLvl}&version=${currentVer}`;
+  } else if (step === 'video') {
+    window.openLessonExtraVideoModal(numId, currentLvl, currentVer);
   }
 };
 
@@ -8588,7 +8693,6 @@ function escapeHtml(str) {
 }
 
 window.openLessonGrammarModal = function(lessonKey, initialPointIdx = 0) {
-  const modalEl = document.getElementById('lesson-grammar-popup-modal');
   const numKey = parseInt(String(lessonKey).replace(/\D/g, ''), 10) || 1;
   const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : (activeLessonsLevel || 1);
   const currentVer = activeLessonsCurriculum === 'yct' ? 'yct' : (activeHskVersion || activeRoadmapVersion || '3.0');
@@ -8600,281 +8704,18 @@ window.openLessonGrammarModal = function(lessonKey, initialPointIdx = 0) {
     return;
   }
 
-  const grammarList = lvlStr === '2' ? (HSK2_STRUCTURED_GRAMMAR || []) : (HSK1_STRUCTURED_GRAMMAR || []);
-  const lessonData = grammarList.find(l => l.lessonId === numKey);
-  if (!lessonData || !lessonData.grammarPoints || lessonData.grammarPoints.length === 0) {
-    showToast(`Dữ liệu ngữ pháp Bài ${numKey} đang được cập nhật!`);
-    return;
-  }
+  // Navigate to comfortable full-page workspace (Hình 2 style)
+  window.location.href = `/hsk-grammar.html?level=${lvlStr}&lesson=${numKey}&version=${currentVer}`;
+};
 
-  if (!modalEl) {
-    window.location.href = `/hsk-grammar.html?level=${lvlStr}&lesson=${numKey}`;
-    return;
-  }
+window.openLessonGrammarStudy = function(lessonId) {
+  const modalEl = document.getElementById('lesson-detail-popup-modal');
+  if (modalEl) modalEl.style.display = 'none';
 
-  // Update Header info & Stepper
-  const titleEl = document.getElementById('grammar-modal-title');
-  const badgeEl = document.getElementById('grammar-modal-badge');
-  const countBadgeEl = document.getElementById('grammar-modal-count-badge');
-  const bodyEl = document.getElementById('grammar-modal-body');
-  const stepperContainer = document.getElementById('grammar-modal-stepper-container');
-
-  if (titleEl) titleEl.textContent = `Bài ${lessonData.lessonId}: ${lessonData.lessonTitleZh || ''}`;
-  if (badgeEl) badgeEl.textContent = `HSK ${lvlStr} (3.0)`;
-  if (countBadgeEl) countBadgeEl.textContent = `${lessonData.grammarPoints.length} Điểm Ngữ Pháp`;
-
-  if (stepperContainer) {
-    stepperContainer.innerHTML = `
-      <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
-        <button onclick="window.goToLessonStep('vocab', '${numKey}')" class="stepper-tab-btn" data-step="vocab">
-          <i class="fa-solid fa-book-bookmark"></i> 1. Từ Vựng
-        </button>
-        <button onclick="window.goToLessonStep('grammar', '${numKey}')" class="stepper-tab-btn active active-grammar" data-step="grammar">
-          <i class="fa-solid fa-spell-check"></i> 2. Ngữ Pháp
-        </button>
-        <button onclick="window.goToLessonStep('text', '${numKey}')" class="stepper-tab-btn" data-step="text">
-          <i class="fa-solid fa-comments"></i> 3. Bài Khóa
-        </button>
-        <button onclick="window.goToLessonStep('quiz', '${numKey}')" class="stepper-tab-btn" data-step="quiz">
-          <i class="fa-solid fa-circle-play"></i> 4. Ôn Tập
-        </button>
-      </div>
-    `;
-  }
-
-  // Render grammar points tabbed like Bài Khóa (NP 1, NP 2, NP 3...)
-  window.renderGrammarModalPointView = function(pointIdx) {
-    const pts = lessonData.grammarPoints;
-    const total = pts.length;
-    const isAll = pointIdx === 'all';
-    const activeNum = typeof pointIdx === 'number' ? Math.max(0, Math.min(pointIdx, total - 1)) : 0;
-
-    // Build Mục lục Tabs (like Bài Khóa Đoạn 1, Đoạn 2...)
-    let tabsHtml = `
-      <div class="grammar-point-tabs-bar" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; background: rgba(15, 23, 42, 0.6); padding: 8px 12px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.08);">
-    `;
-
-    pts.forEach((p, i) => {
-      const isCur = !isAll && activeNum === i;
-      const shortTitle = p.title.length > 28 ? (p.title.slice(0, 26) + '...') : p.title;
-      tabsHtml += `
-        <button class="grammar-pt-tab-btn ${isCur ? 'active' : ''}" onclick="window.renderGrammarModalPointView(${i})" style="flex: 1; min-width: 140px; padding: 10px 14px; border-radius: 12px; border: 1.5px solid ${isCur ? '#38bdf8' : 'rgba(255,255,255,0.1)'}; background: ${isCur ? 'linear-gradient(135deg, #0284c7, #2563eb)' : 'rgba(255,255,255,0.03)'}; color: ${isCur ? '#ffffff' : '#cbd5e1'}; font-weight: 700; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; box-shadow: ${isCur ? '0 4px 14px rgba(37,99,235,0.35)' : 'none'};">
-          <span style="background: ${isCur ? '#ffffff' : 'rgba(59,130,246,0.2)'}; color: ${isCur ? '#1e40af' : '#60a5fa'}; font-size: 0.72rem; font-weight: 800; padding: 2px 7px; border-radius: 6px;">NP ${i + 1}</span>
-          <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(shortTitle)}</span>
-        </button>
-      `;
-    });
-
-    tabsHtml += `
-        <button class="grammar-pt-tab-btn ${isAll ? 'active' : ''}" onclick="window.renderGrammarModalPointView('all')" style="padding: 10px 16px; border-radius: 12px; border: 1.5px solid ${isAll ? '#38bdf8' : 'rgba(255,255,255,0.1)'}; background: ${isAll ? 'linear-gradient(135deg, #0284c7, #2563eb)' : 'rgba(255,255,255,0.03)'}; color: ${isAll ? '#ffffff' : '#cbd5e1'}; font-weight: 700; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s;">
-          <i class="fa-solid fa-list-ul"></i> <span>Tất cả (${total})</span>
-        </button>
-      </div>
-    `;
-
-    // Helper to render a single grammar point card
-    function renderPointCard(pt, idx) {
-      // Formula / Structure
-      let formulaHtml = '';
-      if (pt.formula) {
-        formulaHtml = `
-          <div class="grammar-formula-box" style="background: linear-gradient(135deg, rgba(2, 132, 199, 0.12), rgba(37, 99, 235, 0.08)); border: 1.5px solid rgba(56, 189, 248, 0.35); border-left: 5px solid #0284c7; border-radius: 14px; padding: 14px 18px; margin: 14px 0;">
-            <div class="grammar-formula-title" style="font-size: 0.82rem; font-weight: 800; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-compass-drafting"></i> Cấu trúc / Công thức chuẩn:
-            </div>
-            <div class="grammar-formula-text" style="font-family: var(--font-display, sans-serif); font-size: 1.08rem; font-weight: 700; color: #fbbf24; white-space: pre-line; line-height: 1.6;">
-              ${escapeHtml(pt.formula)}
-            </div>
-          </div>
-        `;
-      }
-
-      // Explanation
-      let expHtml = '';
-      if (pt.explanation) {
-        expHtml = `
-          <div class="grammar-exp-box" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 14px 18px; margin: 12px 0;">
-            <div style="font-size: 0.82rem; font-weight: 800; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-lightbulb"></i> Giải thích & Cách dùng:
-            </div>
-            <div class="grammar-exp-text" style="font-size: 0.98rem; color: var(--text-primary, #e2e8f0); line-height: 1.7;">
-              ${escapeHtml(pt.explanation)}
-            </div>
-          </div>
-        `;
-      }
-
-      // Note
-      let noteHtml = '';
-      if (pt.note) {
-        noteHtml = `
-          <div class="grammar-note-box" style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-left: 5px solid #f59e0b; border-radius: 14px; padding: 12px 18px; margin: 12px 0;">
-            <div class="grammar-note-title" style="font-size: 0.82rem; font-weight: 800; color: #fbbf24; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-triangle-exclamation"></i> Chú ý & Mẹo nhớ:
-            </div>
-            <div class="grammar-note-text" style="font-size: 0.93rem; color: #fef08a; line-height: 1.6;">
-              ${escapeHtml(pt.note)}
-            </div>
-          </div>
-        `;
-      }
-
-      // Tables
-      let tablesHtml = '';
-      if (pt.tables && pt.tables.length > 0) {
-        tablesHtml = pt.tables.map(tbl => `
-          <div style="margin: 16px 0;">
-            <div style="font-weight: 800; color: #34d399; font-size: 0.92rem; margin-bottom: 8px; display:flex; align-items:center; gap:6px;">
-              <i class="fa-solid fa-table-list"></i> ${escapeHtml(tbl.title || 'Bảng tra cứu & Đối chiếu')}
-            </div>
-            <div style="overflow-x: auto; border-radius: 14px; border: 1px solid rgba(255,255,255,0.12);">
-              <table class="custom-grammar-table">
-                <thead>
-                  <tr>${(tbl.headers || []).map(h => `<th>${escapeHtml(h)}</th>`).join('')}</tr>
-                </thead>
-                <tbody>
-                  ${(tbl.rows || []).map(r => `<tr>${(r || []).map(c => `<td>${escapeHtml(c)}</td>`).join('')}</tr>`).join('')}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        `).join('');
-      }
-
-      // Examples
-      let examplesHtml = '';
-      if (pt.examples && pt.examples.length > 0) {
-        let exItems = pt.examples.map(ex => {
-          const safeZh = (ex.zh || '').replace(/'/g, "\\'");
-          return `
-            <div class="grammar-example-item" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 14px; transition: all 0.2s;">
-              <div style="flex: 1;">
-                <div class="grammar-ex-zh" style="font-size: 1.25rem; font-weight: 700; color: #38bdf8; font-family: 'Noto Sans SC', sans-serif; margin-bottom: 3px; letter-spacing: 0.5px;">
-                  ${escapeHtml(ex.zh || '')}
-                </div>
-                <div class="grammar-ex-py" style="font-size: 0.95rem; color: #fbbf24; font-family: var(--font-display, sans-serif); font-weight: 600; margin-bottom: 3px;">
-                  ${escapeHtml(ex.pinyin || '')}
-                </div>
-                <div class="grammar-ex-vi" style="font-size: 0.92rem; color: #cbd5e1;">
-                  ${escapeHtml(ex.vi || '')}
-                </div>
-              </div>
-              <button onclick="window.speakText('${safeZh}')" class="grammar-speak-btn" style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: all 0.2s;" title="Nghe phát âm chuẩn">
-                <i class="fa-solid fa-volume-high"></i>
-              </button>
-            </div>
-          `;
-        }).join('');
-
-        examplesHtml = `
-          <div style="margin-top: 18px;">
-            <div style="font-size: 0.85rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-list-check" style="color: #38bdf8;"></i> Ví dụ minh họa (${pt.examples.length} câu)
-            </div>
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-              ${exItems}
-            </div>
-          </div>
-        `;
-      }
-
-      // Point Sub-Navigation inside card (only when viewing single point)
-      let subNavHtml = '';
-      if (!isAll) {
-        subNavHtml = `
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.08); flex-wrap: wrap; gap: 10px;">
-            <button onclick="window.renderGrammarModalPointView(${idx - 1})" ${idx === 0 ? 'disabled style="opacity:0.35; cursor:not-allowed;"' : ''} class="btn btn-secondary btn-sm" style="padding: 8px 16px; font-weight: 700; border-radius: 12px; display: flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-arrow-left"></i> NP ${idx} (Trước)
-            </button>
-            <span style="font-size: 0.88rem; color: #94a3b8; font-weight: 700;">
-              Điểm ${idx + 1} / ${total}
-            </span>
-            <button onclick="window.renderGrammarModalPointView(${idx + 1})" ${idx === total - 1 ? 'disabled style="opacity:0.35; cursor:not-allowed;"' : ''} class="btn btn-secondary btn-sm" style="padding: 8px 16px; font-weight: 700; border-radius: 12px; display: flex; align-items: center; gap: 6px;">
-              NP ${idx + 2} (Tiếp) <i class="fa-solid fa-arrow-right"></i>
-            </button>
-          </div>
-        `;
-      }
-
-      return `
-        <div class="grammar-card-box cartoon-grammar-card" style="background: rgba(15, 23, 42, 0.7); border: 1.5px solid rgba(255, 255, 255, 0.12); border-radius: 24px; padding: 24px; box-shadow: 0 12px 32px rgba(0,0,0,0.35); position: relative; overflow: hidden; margin-bottom: 16px;">
-          <div style="display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 16px; border-bottom: 1.5px solid rgba(255,255,255,0.1); padding-bottom: 14px; flex-wrap: wrap;">
-            <div style="display: flex; align-items: center; gap: 12px;">
-              <div style="padding: 6px 14px; border-radius: 12px; background: linear-gradient(135deg, #0284c7, #2563eb); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; flex-shrink: 0; box-shadow: 0 4px 12px rgba(37,99,235,0.4);">
-                NP ${pt.num || (idx + 1)}
-              </div>
-              <h4 class="grammar-card-title" style="margin: 0; font-size: 1.3rem; font-weight: 800; color: var(--text-primary, #ffffff); font-family: var(--font-display, sans-serif);">
-                ${escapeHtml(pt.title || '')}
-              </h4>
-            </div>
-            <span style="font-size: 0.8rem; font-weight: 700; padding: 4px 10px; border-radius: 99px; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3);">
-              Điểm ${idx + 1} / ${total}
-            </span>
-          </div>
-
-          ${formulaHtml}
-          ${expHtml}
-          ${noteHtml}
-          ${tablesHtml}
-          ${examplesHtml}
-          ${subNavHtml}
-        </div>
-      `;
-    }
-
-    let cardsContentHtml = '';
-    if (isAll) {
-      cardsContentHtml = pts.map((pt, i) => renderPointCard(pt, i)).join('');
-    } else {
-      cardsContentHtml = renderPointCard(pts[activeNum], activeNum);
-    }
-
-    bodyEl.innerHTML = tabsHtml + cardsContentHtml;
-  };
-
-  // Initial render
-  window.renderGrammarModalPointView(initialPointIdx);
-
-  // Prev / Next button handlers & Step Transitions
-  const btnPrev = document.getElementById('grammar-modal-prev-btn');
-  const btnNext = document.getElementById('grammar-modal-next-btn');
-  const btnSoTay = document.getElementById('grammar-modal-so-tay-btn');
-  const btnStepVocab = document.getElementById('grammar-modal-step-vocab-btn');
-  const btnStepText = document.getElementById('grammar-modal-step-text-btn');
-
-  if (btnStepVocab) {
-    btnStepVocab.onclick = () => window.goToLessonStep('vocab', numKey);
-  }
-
-  if (btnStepText) {
-    btnStepText.onclick = () => window.goToLessonStep('text', numKey);
-  }
-
-  if (btnPrev) {
-    if (numKey > 1) {
-      btnPrev.style.display = 'inline-flex';
-      btnPrev.onclick = () => window.openLessonGrammarModal(numKey - 1);
-    } else {
-      btnPrev.style.display = 'none';
-    }
-  }
-
-  if (btnNext) {
-    if (numKey < grammarList.length) {
-      btnNext.style.display = 'inline-flex';
-      btnNext.onclick = () => window.openLessonGrammarModal(numKey + 1);
-    } else {
-      btnNext.style.display = 'none';
-    }
-  }
-
-  if (btnSoTay) {
-    btnSoTay.onclick = () => {
-      window.location.href = `/hsk-grammar.html?level=${lvlStr}&lesson=${numKey}`;
-    };
-  }
-
-  modalEl.style.display = 'flex';
+  const numId = parseInt(String(lessonId).replace(/\D/g, ''), 10) || 1;
+  const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : (activeLessonsLevel || 1);
+  const currentVer = activeLessonsCurriculum === 'yct' ? 'yct' : (activeHskVersion || activeRoadmapVersion || '3.0');
+  window.location.href = `/hsk-grammar.html?level=${currentLvl}&lesson=${numId}&version=${currentVer}`;
 };
 
 window.openLessonVocabStudy = function(lessonKey) {
