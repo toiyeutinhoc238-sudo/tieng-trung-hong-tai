@@ -181,9 +181,13 @@ function speakChinese(text) {
 
 // Convenience: speak the current lesson's sentence (used by inline onclick in HTML)
 function speakCurrentSentence() {
-  const hanzi = currentLesson?.sentences?.[currentSentenceIdx]?.hanzi;
-  if (hanzi) speakChinese(hanzi);
-  else showToast('Vui lòng chọn một bài học trước!', true);
+  const sent = currentLesson?.sentences?.[currentSentenceIdx];
+  if (sent) {
+    const info = getSentenceDisplayInfo(sent);
+    speakChinese(info.cleanHanzi);
+  } else {
+    showToast('Vui lòng chọn một bài học trước!', true);
+  }
 }
 
 // ==========================================
@@ -286,7 +290,6 @@ function startPlaybackWatcher() {
             lastPausedSentenceIdx = currentSentenceIdx;
             isSentencePlaying = false;
             stopPlaybackWatcher();
-            focusActiveInput();
             return;
           }
         }

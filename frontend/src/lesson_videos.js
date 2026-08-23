@@ -7,44 +7,44 @@ export const HSK_LESSON_EXTRA_VIDEOS = {
       1: {
         youtubeId: "g-0HdaYr-f4",
         url: "https://youtu.be/g-0HdaYr-f4",
-        title: "Bài 1: AI小语，你好！ (AI Tiểu Ngữ, xin chào!)",
-        desc: "Video bài giảng chi tiết Bài 1 giáo trình HSK 1 chuẩn 3.0: Hướng dẫn phát âm, chào hỏi cơ bản, từ vựng và khẩu hình chuẩn."
+        title: "Bài 1: Phiên âm tiếng Trung Quốc",
+        desc: ""
       },
       2: {
         youtubeId: "oYcVrAhwE7Q",
         url: "https://youtu.be/oYcVrAhwE7Q",
-        title: "Bài 2: 我叫李文 (Tôi tên là Lý Văn)",
-        desc: "Video bài giảng chi tiết Bài 2 giáo trình HSK 1 chuẩn 3.0: Giới thiệu họ tên, quốc tịch và làm quen bạn bè."
+        title: "Bài 2: Tên tiếng Trung các nước trên thế giới",
+        desc: ""
       },
       4: {
         youtubeId: "4TnHieg2A5s",
         url: "https://youtu.be/4TnHieg2A5s",
-        title: "Bài 4: 我有两个孩子 (Tôi có hai đứa con)",
-        desc: "Video bài giảng chi tiết Bài 4 giáo trình HSK 1 chuẩn 3.0: Cấu trúc câu chữ 有, số lượng, cách diễn đạt số đếm và thành viên gia đình."
+        title: "Bài 4: Cách hỏi tuổi",
+        desc: ""
       },
       5: {
         youtubeId: "EMQ5TAM5J6M",
         url: "https://youtu.be/EMQ5TAM5J6M",
-        title: "Bài 5: 今天我休息 (Hôm nay tôi nghỉ ngơi)",
-        desc: "Video bài giảng chi tiết Bài 5 giáo trình HSK 1 chuẩn 3.0: Thời gian ngày tháng, thứ trong tuần, kỹ năng làm bếp và sinh hoạt hàng ngày."
+        title: "Bài 5: Bánh sủi cảo",
+        desc: ""
       },
       7: {
         youtubeId: "FdA_DivfzBY",
         url: "https://youtu.be/FdA_DivfzBY",
-        title: "Bài 7: 我晚上六点半下班 (Tối 6 rưỡi tôi tan làm)",
-        desc: "Video bài giảng chi tiết Bài 7 giáo trình HSK 1 chuẩn 3.0: Cách nói giờ giấc, lịch trình sinh hoạt và công việc trong ngày."
+        title: "Bài 7: Học chữ Hán",
+        desc: ""
       },
       13: {
         youtubeId: "ldUATGMt2nc",
         url: "https://youtu.be/ldUATGMt2nc",
-        title: "Bài 13: 请给我一杯茶 (Làm ơn cho tôi một cốc trà)",
-        desc: "Video bài giảng chi tiết Bài 13 giáo trình HSK 1 chuẩn 3.0: Cấu trúc câu cầu khiến lịch sự 请, câu hai tân ngữ và gọi đồ uống."
+        title: "Bài 13: Trà Trung Quốc",
+        desc: ""
       },
       15: {
         youtubeId: "S9kSsDBM8Mw",
         url: "https://youtu.be/S9kSsDBM8Mw",
-        title: "Bài 15: 大兴机场见 (Hẹn gặp ở sân bay Đại Hưng)",
-        desc: "Video bài giảng chi tiết Bài 15 giáo trình HSK 1 chuẩn 3.0: Địa điểm, phương hướng, cách hẹn gặp và tổng kết khóa HSK 1."
+        title: "Bài 15: Bắc Kinh chào đón bạn",
+        desc: ""
       }
     }
   }

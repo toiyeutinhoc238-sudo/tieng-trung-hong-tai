@@ -87,11 +87,22 @@
   </script>
 
   <style>
+    /* Ensure Full Smooth Mobile & Tablet Scrolling */
+    html, body {
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+      height: auto !important;
+      min-height: 100% !important;
+    }
+
     /* Dedicated Styling for Video Dictation Workspace */
     .dict-page-container {
       max-width: 1320px;
       margin: 0 auto;
       padding: 24px 20px 80px;
+      min-height: 100vh;
+      overflow: visible !important;
     }
 
     /* Top Navigation Header */
@@ -3409,6 +3420,9 @@
             </button>
           </div>
         </form>
+      </div>
+    </div>
+
     <!-- Click-to-Lookup Word Card Popover (eJOY Style) -->
     <div id="dict-word-popover" class="dict-word-popover">
       <div class="popover-word-title">

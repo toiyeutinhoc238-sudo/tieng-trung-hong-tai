@@ -6687,7 +6687,7 @@ window.openLessonExtraVideoModal = function (lessonKey, level, version) {
 
   if (badge) badge.textContent = `HSK ${lvl} (${ver}) • Bài ${numId}`;
   if (title) title.textContent = videoObj.title || `Bài ${numId} (HSK ${lvl})`;
-  if (desc) desc.textContent = videoObj.desc || 'Video bài giảng trực quan, phát âm khẩu hình chuẩn và giải thích ngữ cảnh bài học.';
+  if (desc) desc.style.display = 'none';
   if (ytLink) ytLink.href = videoObj.url || `https://youtu.be/${videoObj.youtubeId}`;
 
   if (iframe) {
@@ -6833,7 +6833,7 @@ window.openLessonDetailModal = function (lessonKey) {
   if (extraVideoBox) {
     if (videoObj) {
       extraVideoBox.style.display = 'block';
-      const cleanTitle = (title ? `Bài ${lessonKey}: ${title}` : (videoObj.title || `Video Bài Giảng Bài ${lessonKey}`));
+      const cleanTitle = videoObj.title || (title ? (title.startsWith('Bài') ? title : `Bài ${lessonKey}: ${title}`) : `Bài ${lessonKey}`);
       if (extraVideoTitle) extraVideoTitle.textContent = cleanTitle;
       if (extraVideoDesc) extraVideoDesc.style.display = 'none';
       

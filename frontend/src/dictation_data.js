@@ -282,9 +282,9 @@ export const DICTATION_LESSONS = [
         "startTime": 0,
         "endTime": 5.58,
         "duration": 5.58,
-        "hanzi": "妈妈：你是我生的，我不会的东西我不要求你会，而我会的东西，我相信你也一定会。",
-        "pinyin": "mā ma ： nǐ shì wǒ shēng de ， wǒ bú huì de dōng xī wǒ bú yāo qiú nǐ huì ， ér wǒ huì de dōng xī ， wǒ xiāng xìn nǐ yě yí dìng huì 。",
-        "meaning": "Mẹ: Con là do mẹ sinh ra, thứ mẹ không biết thì mẹ không ép con phải biết; nhưng thứ mẹ biết, mẹ tin chắc con cũng sẽ biết.",
+        "hanzi": "你是我生的，我不会的东西我不要求你会，而我会的东西，我相信你也一定会。",
+        "pinyin": "nǐ shì wǒ shēng de ， wǒ bú huì de dōng xī wǒ bú yāo qiú nǐ huì ， ér wǒ huì de dōng xī ， wǒ xiāng xìn nǐ yě yí dìng huì 。",
+        "meaning": "Con là do mẹ sinh ra, thứ mẹ không biết thì mẹ không ép con phải biết; nhưng thứ mẹ biết, mẹ tin chắc con cũng sẽ biết.",
         "keywords": [
           "要求",
           "相信"
@@ -298,9 +298,9 @@ export const DICTATION_LESSONS = [
         "startTime": 5.58,
         "endTime": 8.5,
         "duration": 2.92,
-        "hanzi": "小初：学习是这世界上最不自由的事了。",
-        "pinyin": "xiǎo chū ： xué xí shì zhè shì jiè shàng zuì bú zì yóu de shì le 。",
-        "meaning": "Tiểu Sơ: Học là chuyện mất tự do nhất trên đời này.",
+        "hanzi": "学习是这世界上最不自由的事了。",
+        "pinyin": "xué xí shì zhè shì jiè shàng zuì bú zì yóu de shì le 。",
+        "meaning": "Học là chuyện mất tự do nhất trên đời này.",
         "keywords": [
           "学习",
           "世界上",
@@ -315,9 +315,9 @@ export const DICTATION_LESSONS = [
         "startTime": 8.5,
         "endTime": 15.76,
         "duration": 7.26,
-        "hanzi": "妈妈：哎，当你学会了怎么学习，想学什么就学什么，需要学什么就学什么，就自由了。",
-        "pinyin": "mā ma ： āi ， dāng nǐ xué huì le zěn me xué xí ， xiǎng xué shén me jiù xué shén me ， xū yào xué shén me jiù xué shén me ， jiù zì yóu le 。",
-        "meaning": "Mẹ: Khi con đã học được cách học rồi, muốn học gì thì học nấy, cần học gì thì học nấy, lúc đó con sẽ tự do.",
+        "hanzi": "哎，当你学会了怎么学习，想学什么就学什么，需要学什么就学什么，就自由了。",
+        "pinyin": "āi ， dāng nǐ xué huì le zěn me xué xí ， xiǎng xué shén me jiù xué shén me ， xū yào xué shén me jiù xué shén me ， jiù zì yóu le 。",
+        "meaning": "Khi con đã học được cách học rồi, muốn học gì thì học nấy, cần học gì thì học nấy, lúc đó con sẽ tự do.",
         "keywords": [
           "学会",
           "怎么学习",
@@ -332,9 +332,9 @@ export const DICTATION_LESSONS = [
         "startTime": 15.76,
         "endTime": 19.28,
         "duration": 3.52,
-        "hanzi": "小初：妈妈，你跟我们班同学的妈妈不一样。",
-        "pinyin": "xiǎo chū ： mā ma ， nǐ gēn wǒ men bān tóng xué de mā ma bù yí yàng 。",
-        "meaning": "Tiểu Sơ: Mẹ chẳng giống mẹ của các bạn trong lớp con chút nào.",
+        "hanzi": "妈妈，你跟我们班同学的妈妈不一样。",
+        "pinyin": "mā ma ， nǐ gēn wǒ men bān tóng xué de mā ma bù yí yàng 。",
+        "meaning": "Mẹ chẳng giống mẹ của các bạn trong lớp con chút nào.",
         "keywords": [
           "同学",
           "不一样"
@@ -348,9 +348,9 @@ export const DICTATION_LESSONS = [
         "startTime": 19.28,
         "endTime": 20.04,
         "duration": 0.76,
-        "hanzi": "妈妈：怎么不一样？",
-        "pinyin": "mā ma ： zěn me bù yí yàng ？",
-        "meaning": "Mẹ: Không giống thế nào?",
+        "hanzi": "怎么不一样？",
+        "pinyin": "zěn me bù yí yàng ？",
+        "meaning": "Không giống thế nào?",
         "keywords": [
           "怎么"
         ],
@@ -363,9 +363,9 @@ export const DICTATION_LESSONS = [
         "startTime": 20.04,
         "endTime": 27,
         "duration": 6.96,
-        "hanzi": "小初：你从来都不吼我，我总感觉你在套路我，可到底是怎么套路，我又说不上来。",
-        "pinyin": "xiǎo chū ： nǐ cóng lái dōu bù hǒu wǒ ， wǒ zǒng gǎn jué nǐ zài tào lù wǒ ， kě dào dǐ shì zěn me tào lù ， wǒ yòu shuō bú shàng lái 。",
-        "meaning": "Tiểu Sơ: Mẹ chưa bao giờ quát mắng con. Con cứ thấy mẹ đang \"dùng chiêu\" với con, nhưng là chiêu gì thì con không nói rõ được.",
+        "hanzi": "你从来都不吼我，我总感觉你在套路我，可到底是怎么套路，我又说不上来。",
+        "pinyin": "nǐ cóng lái dōu bù hǒu wǒ ， wǒ zǒng gǎn jué nǐ zài tào lù wǒ ， kě dào dǐ shì zěn me tào lù ， wǒ yòu shuō bú shàng lái 。",
+        "meaning": "Mẹ chưa bao giờ quát mắng con. Con cứ thấy mẹ đang \"dùng chiêu\" với con, nhưng là chiêu gì thì con không nói rõ được.",
         "keywords": [
           "吼我",
           "套路",
@@ -380,9 +380,9 @@ export const DICTATION_LESSONS = [
         "startTime": 27,
         "endTime": 28.96,
         "duration": 1.96,
-        "hanzi": "妈妈：我告诉你我怎么套路你的。",
-        "pinyin": "mā ma ： wǒ gào sù nǐ wǒ zěn me tào lù nǐ de 。",
-        "meaning": "Mẹ: Để mẹ kể con nghe mẹ đã \"dùng chiêu\" thế nào nhé.",
+        "hanzi": "我告诉你我怎么套路你的。",
+        "pinyin": "wǒ gào sù nǐ wǒ zěn me tào lù nǐ de 。",
+        "meaning": "Để mẹ kể con nghe mẹ đã \"dùng chiêu\" thế nào nhé.",
         "keywords": [
           "告诉",
           "套路"
@@ -410,9 +410,9 @@ export const DICTATION_LESSONS = [
         "startTime": 0.42,
         "endTime": 5.28,
         "duration": 4.86,
-        "hanzi": "妈妈：小初，妈妈跟你说啊，金属的东西一定不能放微波炉，记住了吗？",
-        "pinyin": "mā ma ： xiǎo chū ， mā mā gēn nǐ shuō a ， jīn shǔ de dōng xī yí dìng bù néng fàng wēi bō lú ， jì zhù le ma ？",
-        "meaning": "Mẹ: Tiểu Sơ, mẹ dặn này, đồ kim loại tuyệt đối không được cho vào lò vi sóng, nhớ chưa?",
+        "hanzi": "小初，妈妈跟你说啊，金属的东西一定不能放微波炉，记住了吗？",
+        "pinyin": "xiǎo chū ， mā mā gēn nǐ shuō a ， jīn shǔ de dōng xī yí dìng bù néng fàng wēi bō lú ， jì zhù le ma ？",
+        "meaning": "Tiểu Sơ, mẹ dặn này, đồ kim loại tuyệt đối không được cho vào lò vi sóng, nhớ chưa?",
         "keywords": [
           "金属",
           "微波炉",
@@ -427,9 +427,9 @@ export const DICTATION_LESSONS = [
         "startTime": 5.4,
         "endTime": 5.76,
         "duration": 0.36,
-        "hanzi": "小初：为什么？",
-        "pinyin": "xiǎo chū ： wèi shén me ？",
-        "meaning": "Tiểu Sơ: Tại sao ạ?",
+        "hanzi": "为什么？",
+        "pinyin": "wèi shén me ？",
+        "meaning": "Tại sao ạ?",
         "keywords": [
           "为什么"
         ],
@@ -442,9 +442,9 @@ export const DICTATION_LESSONS = [
         "startTime": 6.24,
         "endTime": 7.52,
         "duration": 1.28,
-        "hanzi": "妈妈：因为会爆炸呀。",
-        "pinyin": "mā ma ： yīn wèi huì bào zhà ya 。",
-        "meaning": "Mẹ: Vì nó sẽ phát nổ đấy.",
+        "hanzi": "因为会爆炸呀。",
+        "pinyin": "yīn wèi huì bào zhà ya 。",
+        "meaning": "Vì nó sẽ phát nổ đấy.",
         "keywords": [
           "爆炸"
         ],
@@ -457,9 +457,9 @@ export const DICTATION_LESSONS = [
         "startTime": 7.52,
         "endTime": 11.6,
         "duration": 4.08,
-        "hanzi": "爸爸：不是，她又不做饭，你跟她说这些干嘛呀？",
-        "pinyin": "bà ba ： bú shì ， tā yòu bú zuò fàn ， nǐ gēn tā shuō zhè xiē gān ma ya ？",
-        "meaning": "Bố: Kìa, con bé có nấu ăn đâu, em nói mấy chuyện này với con làm gì?",
+        "hanzi": "不是，她又不做饭，你跟她说这些干嘛呀？",
+        "pinyin": "bú shì ， tā yòu bú zuò fàn ， nǐ gēn tā shuō zhè xiē gān ma ya ？",
+        "meaning": "Kìa, con bé có nấu ăn đâu, em nói mấy chuyện này với con làm gì?",
         "keywords": [
           "做饭",
           "干嘛"
@@ -473,9 +473,9 @@ export const DICTATION_LESSONS = [
         "startTime": 11.7,
         "endTime": 12.64,
         "duration": 0.94,
-        "hanzi": "妈妈：生活常识呀。",
-        "pinyin": "mā ma ： shēng huó cháng shí ya 。",
-        "meaning": "Mẹ: Thường thức đời sống mà anh.",
+        "hanzi": "生活常识呀。",
+        "pinyin": "shēng huó cháng shí ya 。",
+        "meaning": "Thường thức đời sống mà anh.",
         "keywords": [
           "生活常识"
         ],
@@ -488,9 +488,9 @@ export const DICTATION_LESSONS = [
         "startTime": 12.64,
         "endTime": 16,
         "duration": 3.36,
-        "hanzi": "小初：妈妈，牛奶洒了。",
-        "pinyin": "xiǎo chū ： mā ma ， niú nǎi sǎ le 。",
-        "meaning": "Tiểu Sơ: Mẹ ơi, sữa bị đổ ra rồi.",
+        "hanzi": "妈妈，牛奶洒了。",
+        "pinyin": "mā ma ， niú nǎi sǎ le 。",
+        "meaning": "Mẹ ơi, sữa bị đổ ra rồi.",
         "keywords": [
           "牛奶",
           "洒了"
@@ -504,9 +504,9 @@ export const DICTATION_LESSONS = [
         "startTime": 16.64,
         "endTime": 21.18,
         "duration": 4.54,
-        "hanzi": "妈妈：没关系啊，妈上次教你怎么洗来着，对不对？你还记得吗？",
-        "pinyin": "mā ma ： méi guān xì a ， mā shàng cì jiào nǐ zěn me xǐ lái zhe ， duì bu duì ？ nǐ hái jì de ma ？",
-        "meaning": "Mẹ: Không sao đâu, lần trước mẹ dạy con cách giặt thế nào nhỉ, đúng không? Con còn nhớ không?",
+        "hanzi": "没关系啊，妈上次教你怎么洗来着，对不对？你还记得吗？",
+        "pinyin": "méi guān xì a ， mā shàng cì jiào nǐ zěn me xǐ lái zhe ， duì bu duì ？ nǐ hái jì de ma ？",
+        "meaning": "Không sao đâu, lần trước mẹ dạy con cách giặt thế nào nhỉ, đúng không? Con còn nhớ không?",
         "keywords": [
           "没关系",
           "怎么洗",
@@ -521,9 +521,9 @@ export const DICTATION_LESSONS = [
         "startTime": 21.58,
         "endTime": 22.8,
         "duration": 1.22,
-        "hanzi": "小初：嗯，记得。",
-        "pinyin": "xiǎo chū ： ǹg ， jì de 。",
-        "meaning": "Tiểu Sơ: Dạ, nhớ ạ.",
+        "hanzi": "嗯，记得。",
+        "pinyin": "ǹg ， jì de 。",
+        "meaning": "Dạ, nhớ ạ.",
         "keywords": [
           "记得"
         ],
@@ -536,9 +536,9 @@ export const DICTATION_LESSONS = [
         "startTime": 22.8,
         "endTime": 25.5,
         "duration": 2.7,
-        "hanzi": "爸爸：让她自己洗啊？",
-        "pinyin": "bà ba ： ràng tā zì jǐ xǐ a ？",
-        "meaning": "Bố: Em để con bé tự giặt thật đấy à?",
+        "hanzi": "让她自己洗啊？",
+        "pinyin": "ràng tā zì jǐ xǐ a ？",
+        "meaning": "Em để con bé tự giặt thật đấy à?",
         "keywords": [
           "自己洗"
         ],
@@ -551,9 +551,9 @@ export const DICTATION_LESSONS = [
         "startTime": 25.6,
         "endTime": 26.98,
         "duration": 1.38,
-        "hanzi": "妈妈：她洗不干净我再洗。",
-        "pinyin": "mā ma ： tā xǐ bù gān jìng wǒ zài xǐ 。",
-        "meaning": "Mẹ: Con giặt chưa sạch thì em giặt lại.",
+        "hanzi": "她洗不干净我再洗。",
+        "pinyin": "tā xǐ bù gān jìng wǒ zài xǐ 。",
+        "meaning": "Con giặt chưa sạch thì em giặt lại.",
         "keywords": [
           "洗不干净",
           "再洗"
@@ -567,9 +567,9 @@ export const DICTATION_LESSONS = [
         "startTime": 26.98,
         "endTime": 28.48,
         "duration": 1.5,
-        "hanzi": "爸爸：她才几岁啊？",
-        "pinyin": "bà ba ： tā cái jǐ suì a ？",
-        "meaning": "Bố: Con bé mới mấy tuổi chứ?",
+        "hanzi": "她才几岁啊？",
+        "pinyin": "tā cái jǐ suì a ？",
+        "meaning": "Con bé mới mấy tuổi chứ?",
         "keywords": [
           "才几岁"
         ],
@@ -582,9 +582,9 @@ export const DICTATION_LESSONS = [
         "startTime": 28.48,
         "endTime": 30.52,
         "duration": 2.04,
-        "hanzi": "妈妈：自理能力就是要从小培养。",
-        "pinyin": "mā ma ： zì lǐ néng lì jiù shì yào cóng xiǎo péi yǎng 。",
-        "meaning": "Mẹ: Khả năng tự lập là phải rèn từ nhỏ.",
+        "hanzi": "自理能力就是要从小培养。",
+        "pinyin": "zì lǐ néng lì jiù shì yào cóng xiǎo péi yǎng 。",
+        "meaning": "Khả năng tự lập là phải rèn từ nhỏ.",
         "keywords": [
           "自理能力",
           "从小培养"
@@ -612,9 +612,9 @@ export const DICTATION_LESSONS = [
         "startTime": 0.72,
         "endTime": 4.48,
         "duration": 3.76,
-        "hanzi": "妈妈：小初初，妈妈要工作了，要不要过来帮帮忙？",
-        "pinyin": "mā ma ： xiǎo chū chū ， mā ma yào gōng zuò le ， yào bu yào guò lái bāng bāng máng ？",
-        "meaning": "Mẹ: Tiểu Sơ ơi, mẹ chuẩn bị làm việc, con có muốn qua phụ mẹ một tay không?",
+        "hanzi": "小初初，妈妈要工作了，要不要过来帮帮忙？",
+        "pinyin": "xiǎo chū chū ， mā ma yào gōng zuò le ， yào bu yào guò lái bāng bāng máng ？",
+        "meaning": "Tiểu Sơ ơi, mẹ chuẩn bị làm việc, con có muốn qua phụ mẹ một tay không?",
         "keywords": [
           "工作",
           "帮帮忙"
@@ -628,9 +628,9 @@ export const DICTATION_LESSONS = [
         "startTime": 4.62,
         "endTime": 5.32,
         "duration": 0.7,
-        "hanzi": "小初：好啊。",
-        "pinyin": "xiǎo chū ： hǎo a 。",
-        "meaning": "Tiểu Sơ: Dạ có!",
+        "hanzi": "好啊。",
+        "pinyin": "hǎo a 。",
+        "meaning": "Dạ có!",
         "keywords": [
           "好啊"
         ],
@@ -643,9 +643,9 @@ export const DICTATION_LESSONS = [
         "startTime": 5.32,
         "endTime": 13.36,
         "duration": 8.04,
-        "hanzi": "妈妈：把那本书打开，翻第37页……对了，谢谢你。",
-        "pinyin": "mā ma ： bǎ nà běn shū dǎ kāi ， fān dì 3 7 yè … … duì le ， xiè xiè nǐ 。",
-        "meaning": "Mẹ: Mở quyển sách kia ra lật đến trang 37 giúp mẹ nhé... Đúng rồi, cảm ơn con gái.",
+        "hanzi": "把那本书打开，翻第37页……对了，谢谢你。",
+        "pinyin": "bǎ nà běn shū dǎ kāi ， fān dì 3 7 yè … … duì le ， xiè xiè nǐ 。",
+        "meaning": "Mở quyển sách kia ra lật đến trang 37 giúp mẹ nhé... Đúng rồi, cảm ơn con gái.",
         "keywords": [
           "打开",
           "翻",
@@ -660,9 +660,9 @@ export const DICTATION_LESSONS = [
         "startTime": 13.36,
         "endTime": 17.4,
         "duration": 4.04,
-        "hanzi": "妈妈：小初，你的兔兔去另外一个世界了。",
-        "pinyin": "mā ma ： xiǎo chū ， nǐ de tù tù qù lìng wài yí gè shì jiè le 。",
-        "meaning": "Mẹ: Tiểu Sơ à, thỏ con của con đã sang một thế giới khác rồi.",
+        "hanzi": "小初，你的兔兔去另外一个世界了。",
+        "pinyin": "xiǎo chū ， nǐ de tù tù qù lìng wài yí gè shì jiè le 。",
+        "meaning": "Tiểu Sơ à, thỏ con của con đã sang một thế giới khác rồi.",
         "keywords": [
           "兔兔",
           "另外一个世界"
@@ -676,9 +676,9 @@ export const DICTATION_LESSONS = [
         "startTime": 17.4,
         "endTime": 20.92,
         "duration": 3.52,
-        "hanzi": "小初：妈妈，蒲公英为什么会变成小毛毛？",
-        "pinyin": "xiǎo chū ： mā ma ， pú gōng yīng wèi shén me huì biàn chéng xiǎo máo máo ？",
-        "meaning": "Tiểu Sơ: Mẹ ơi, sao bồ công anh lại biến thành những sợi lông nhỏ thế này ạ?",
+        "hanzi": "妈妈，蒲公英为什么会变成小毛毛？",
+        "pinyin": "mā ma ， pú gōng yīng wèi shén me huì biàn chéng xiǎo máo máo ？",
+        "meaning": "Mẹ ơi, sao bồ công anh lại biến thành những sợi lông nhỏ thế này ạ?",
         "keywords": [
           "蒲公英",
           "变成",
@@ -693,9 +693,9 @@ export const DICTATION_LESSONS = [
         "startTime": 21.36,
         "endTime": 25.84,
         "duration": 4.48,
-        "hanzi": "妈妈：因为它们身上背着那个小伞，风一吹就能飘到好远好远的地方。",
-        "pinyin": "mā ma ： yīn wèi tā men shēn shàng bèi zhe nà ge xiǎo sǎn ， fēng yì chuī jiù néng piāo dào hǎo yuǎn hǎo yuǎn de dì fāng 。",
-        "meaning": "Mẹ: Vì trên mình chúng mang theo một chiếc ô nhỏ, chỉ cần gió thổi qua là có thể bay đến nơi rất xa, rất xa.",
+        "hanzi": "因为它们身上背着那个小伞，风一吹就能飘到好远好远的地方。",
+        "pinyin": "yīn wèi tā men shēn shàng bèi zhe nà ge xiǎo sǎn ， fēng yì chuī jiù néng piāo dào hǎo yuǎn hǎo yuǎn de dì fāng 。",
+        "meaning": "Vì trên mình chúng mang theo một chiếc ô nhỏ, chỉ cần gió thổi qua là có thể bay đến nơi rất xa, rất xa.",
         "keywords": [
           "背着",
           "小伞",
@@ -711,9 +711,9 @@ export const DICTATION_LESSONS = [
         "startTime": 25.84,
         "endTime": 28.06,
         "duration": 2.22,
-        "hanzi": "小初：为什么要去很远的地方？",
-        "pinyin": "xiǎo chū ： wèi shén me yào qù hěn yuǎn de dì fāng ？",
-        "meaning": "Tiểu Sơ: Sao chúng lại phải bay đi xa thế ạ?",
+        "hanzi": "为什么要去很远的地方？",
+        "pinyin": "wèi shén me yào qù hěn yuǎn de dì fāng ？",
+        "meaning": "Sao chúng lại phải bay đi xa thế ạ?",
         "keywords": [
           "很远的地方"
         ],
@@ -726,9 +726,9 @@ export const DICTATION_LESSONS = [
         "startTime": 28.06,
         "endTime": 30.12,
         "duration": 2.06,
-        "hanzi": "妈妈：它们想看看不同的世界吧。",
-        "pinyin": "mā ma ： tā men xiǎng kàn kàn bù tóng de shì jiè ba 。",
-        "meaning": "Mẹ: Chắc là vì chúng muốn nhìn ngắm những thế giới khác biệt đấy.",
+        "hanzi": "它们想看看不同的世界吧。",
+        "pinyin": "tā men xiǎng kàn kàn bù tóng de shì jiè ba 。",
+        "meaning": "Chắc là vì chúng muốn nhìn ngắm những thế giới khác biệt đấy.",
         "keywords": [
           "看看",
           "不同的世界"
@@ -756,9 +756,9 @@ export const DICTATION_LESSONS = [
         "startTime": 0.7,
         "endTime": 9.72,
         "duration": 9.02,
-        "hanzi": "爸爸：我有没有跟你说不要乱碰？你为什么不听话？！",
-        "pinyin": "bà ba ： wǒ yǒu méi yǒu gēn nǐ shuō bú yào luàn pèng ？ nǐ wèi shén me bù tīng huà ？ ！",
-        "meaning": "Bố: Bố dặn con không được nghịch lung tung rồi cơ mà? Sao con không nghe lời hả?!",
+        "hanzi": "我有没有跟你说不要乱碰？你为什么不听话？！",
+        "pinyin": "wǒ yǒu méi yǒu gēn nǐ shuō bú yào luàn pèng ？ nǐ wèi shén me bù tīng huà ？ ！",
+        "meaning": "Bố dặn con không được nghịch lung tung rồi cơ mà? Sao con không nghe lời hả?!",
         "keywords": [
           "乱碰",
           "不听话"
@@ -772,9 +772,9 @@ export const DICTATION_LESSONS = [
         "startTime": 9.72,
         "endTime": 27.74,
         "duration": 18.02,
-        "hanzi": "妈妈：怎么了？烫到了？哎呀，不哭不哭，妈妈给你买书了。",
-        "pinyin": "mā mā ： zěn me le ？ tàng dào le ？ āi yā ， bù kū bu kū ， mā ma gěi nǐ mǎi shū le 。",
-        "meaning": "Mẹ: Sao thế con? Bị bỏng à? Không khóc không khóc, mẹ mua sách cho con rồi này.",
+        "hanzi": "怎么了？烫到了？哎呀，不哭不哭，妈妈给你买书了。",
+        "pinyin": "zěn me le ？ tàng dào le ？ āi yā ， bù kū bu kū ， mā ma gěi nǐ mǎi shū le 。",
+        "meaning": "Sao thế con? Bị bỏng à? Không khóc không khóc, mẹ mua sách cho con rồi này.",
         "keywords": [
           "烫到了",
           "不哭",
@@ -789,9 +789,9 @@ export const DICTATION_LESSONS = [
         "startTime": 27.74,
         "endTime": 30.1,
         "duration": 2.36,
-        "hanzi": "爸爸：我想了一下，你还是不要去上班了。",
-        "pinyin": "bà ba ： wǒ xiǎng le yí xià ， nǐ hái shì bú yào qù shàng bān le 。",
-        "meaning": "Bố: Anh nghĩ kỹ rồi, tốt nhất em đừng đi làm nữa.",
+        "hanzi": "我想了一下，你还是不要去上班了。",
+        "pinyin": "wǒ xiǎng le yí xià ， nǐ hái shì bú yào qù shàng bān le 。",
+        "meaning": "Anh nghĩ kỹ rồi, tốt nhất em đừng đi làm nữa.",
         "keywords": [
           "想了一下",
           "上班"
@@ -805,9 +805,9 @@ export const DICTATION_LESSONS = [
         "startTime": 30.1,
         "endTime": 40.38,
         "duration": 10.28,
-        "hanzi": "妈妈：小初，帮妈妈把这包东西打开好不好？回你自己房间拿着啊。",
-        "pinyin": "mā ma ： xiǎo chū ， bāng mā ma bǎ zhè bāo dōng xī dǎ kāi hǎo bu hǎo ？ huí nǐ zì jǐ fáng jiān ná zhe a 。",
-        "meaning": "Mẹ: Tiểu Sơ à, con giúp mẹ mở gói đồ này ra được không? Cầm về phòng con nhé.",
+        "hanzi": "小初，帮妈妈把这包东西打开好不好？回你自己房间拿着啊。",
+        "pinyin": "xiǎo chū ， bāng mā ma bǎ zhè bāo dōng xī dǎ kāi hǎo bu hǎo ？ huí nǐ zì jǐ fáng jiān ná zhe a 。",
+        "meaning": "Tiểu Sơ à, con giúp mẹ mở gói đồ này ra được không? Cầm về phòng con nhé.",
         "keywords": [
           "打开",
           "房间",
@@ -822,9 +822,9 @@ export const DICTATION_LESSONS = [
         "startTime": 50.06,
         "endTime": 57.64,
         "duration": 7.58,
-        "hanzi": "妈妈（独白）：小初，你第一次听到“离婚”这个词的时候，刚刚4岁。",
+        "hanzi": "小初，你第一次听到“离婚”这个词的时候，刚刚4岁。",
         "pinyin": "mā ma （ dú bái ） ： xiǎo chū ， nǐ dì yī cì tīng dào “ lí hūn ” zhè ge cí de shí hòu ， gāng gāng 4 suì 。",
-        "meaning": "Mẹ (Độc thoại): Tiểu Sơ, lần đầu tiên con nghe thấy từ \"ly hôn\", con mới tròn 4 tuổi.",
+        "meaning": "Tiểu Sơ, lần đầu tiên con nghe thấy từ \"ly hôn\", con mới tròn 4 tuổi.",
         "keywords": [
           "第一次",
           "离婚",
@@ -924,9 +924,9 @@ export const DICTATION_LESSONS = [
         "startTime": 0,
         "endTime": 1.62,
         "duration": 1.62,
-        "hanzi": "妈妈：小初，想吃什么？",
-        "pinyin": "mā ma ： xiǎo chū ， xiǎng chī shén me ？",
-        "meaning": "Mẹ: Tiểu Sơ, muốn ăn gì nào?",
+        "hanzi": "小初，想吃什么？",
+        "pinyin": "xiǎo chū ， xiǎng chī shén me ？",
+        "meaning": "Tiểu Sơ, muốn ăn gì nào?",
         "keywords": [
           "想吃什么"
         ],
@@ -939,9 +939,9 @@ export const DICTATION_LESSONS = [
         "startTime": 1.74,
         "endTime": 2.2,
         "duration": 0.46,
-        "hanzi": "小初：披萨！",
-        "pinyin": "xiǎo chū ： pī sà ！",
-        "meaning": "Tiểu Sơ: Pizza ạ!",
+        "hanzi": "披萨！",
+        "pinyin": "pī sà ！",
+        "meaning": "Pizza ạ!",
         "keywords": [
           "披萨"
         ],
@@ -954,9 +954,9 @@ export const DICTATION_LESSONS = [
         "startTime": 2.68,
         "endTime": 3.58,
         "duration": 0.9,
-        "hanzi": "妈妈：妈妈想吃汉堡包。",
-        "pinyin": "mā ma ： mā ma xiǎng chī hàn bǎo bāo 。",
-        "meaning": "Mẹ: Nhưng mẹ muốn ăn hamburger.",
+        "hanzi": "妈妈想吃汉堡包。",
+        "pinyin": "mā ma xiǎng chī hàn bǎo bāo 。",
+        "meaning": "Nhưng mẹ muốn ăn hamburger.",
         "keywords": [
           "汉堡包"
         ],
@@ -969,9 +969,9 @@ export const DICTATION_LESSONS = [
         "startTime": 3.58,
         "endTime": 8.08,
         "duration": 4.5,
-        "hanzi": "小初：石头剪刀布！",
-        "pinyin": "xiǎo chū ： shí tou jiǎn dāo bù ！",
-        "meaning": "Tiểu Sơ: Oẳn tù tì đi mẹ!",
+        "hanzi": "石头剪刀布！",
+        "pinyin": "shí tou jiǎn dāo bù ！",
+        "meaning": "Oẳn tù tì đi mẹ!",
         "keywords": [
           "石头剪刀布"
         ],
@@ -984,9 +984,9 @@ export const DICTATION_LESSONS = [
         "startTime": 8.66,
         "endTime": 10.32,
         "duration": 1.66,
-        "hanzi": "妈妈：赢了！吃汉堡，哼！",
-        "pinyin": "mā ma ： yíng le ！ chī hàn bǎo ， hēng ！",
-        "meaning": "Mẹ: Thắng rồi! Ăn hamburger nhé, hứ!",
+        "hanzi": "赢了！吃汉堡，哼！",
+        "pinyin": "yíng le ！ chī hàn bǎo ， hēng ！",
+        "meaning": "Thắng rồi! Ăn hamburger nhé, hứ!",
         "keywords": [
           "赢了",
           "吃汉堡"
@@ -1000,9 +1000,9 @@ export const DICTATION_LESSONS = [
         "startTime": 10.32,
         "endTime": 15.18,
         "duration": 4.86,
-        "hanzi": "小初：妈妈，看爸爸给我买的新裙子！",
-        "pinyin": "xiǎo chū ： mā ma ， kàn bà ba gěi wǒ mǎi de xīn qún zǐ ！",
-        "meaning": "Tiểu Sơ: Mẹ xem này, váy mới bố mua cho con đấy!",
+        "hanzi": "妈妈，看爸爸给我买的新裙子！",
+        "pinyin": "mā ma ， kàn bà ba gěi wǒ mǎi de xīn qún zǐ ！",
+        "meaning": "Mẹ xem này, váy mới bố mua cho con đấy!",
         "keywords": [
           "新裙子"
         ],
@@ -1015,9 +1015,9 @@ export const DICTATION_LESSONS = [
         "startTime": 15.18,
         "endTime": 30.96,
         "duration": 15.78,
-        "hanzi": "妈妈：你看爸爸对你这么好，你要多关心关心爸爸是不是？你陪爸爸多住一段时间好不好？妈妈给你个任务：每天监督爸爸按时吃饭，不能熬夜，晚上陪爸爸出去散散步什么的，行不行？能不能做到？",
-        "pinyin": "mā ma ： nǐ kàn bà ba duì nǐ zhè me hǎo ， nǐ yào duō guān xīn guān xīn bà ba shì bu shì ？ nǐ péi bà ba duō zhù yí duàn shí jiān hǎo bu hǎo ？ mā ma gěi nǐ gè rèn wu ： měi tiān jiān dū bà ba àn shí chī fàn ， bù néng áo yè ， wǎn shàng péi bà ba chū qù sàn sàn bù shén me de ， xíng bù xíng ？ néng bu néng zuò dào ？",
-        "meaning": "Mẹ: Con thấy bố đối tốt với con chưa, con cũng phải quan tâm bố nhiều hơn có đúng không? Con ở với bố thêm một thời gian nhé? Mẹ giao cho con một nhiệm vụ: Hàng ngày nhắc bố ăn cơm đúng giờ, không được thức khuya, buổi tối rủ bố ra ngoài đi dạo, được không con? Có làm được không?",
+        "hanzi": "你看爸爸对你这么好，你要多关心关心爸爸是不是？你陪爸爸多住一段时间好不好？妈妈给你个任务：每天监督爸爸按时吃饭，不能熬夜，晚上陪爸爸出去散散步什么的，行不行？能不能做到？",
+        "pinyin": "nǐ kàn bà ba duì nǐ zhè me hǎo ， nǐ yào duō guān xīn guān xīn bà ba shì bu shì ？ nǐ péi bà ba duō zhù yí duàn shí jiān hǎo bu hǎo ？ mā ma gěi nǐ gè rèn wu ： měi tiān jiān dū bà ba àn shí chī fàn ， bù néng áo yè ， wǎn shàng péi bà ba chū qù sàn sàn bù shén me de ， xíng bù xíng ？ néng bu néng zuò dào ？",
+        "meaning": "Con thấy bố đối tốt với con chưa, con cũng phải quan tâm bố nhiều hơn có đúng không? Con ở với bố thêm một thời gian nhé? Mẹ giao cho con một nhiệm vụ: Hàng ngày nhắc bố ăn cơm đúng giờ, không được thức khuya, buổi tối rủ bố ra ngoài đi dạo, được không con? Có làm được không?",
         "keywords": [
           "关心",
           "任务",
@@ -1034,9 +1034,9 @@ export const DICTATION_LESSONS = [
         "startTime": 30.96,
         "endTime": 31.3,
         "duration": 0.34,
-        "hanzi": "小初：嗯！",
-        "pinyin": "xiǎo chū ： ǹg ！",
-        "meaning": "Tiểu Sơ: Dạ được!",
+        "hanzi": "嗯！",
+        "pinyin": "ǹg ！",
+        "meaning": "Dạ được!",
         "keywords": [
           "嗯"
         ],
@@ -1049,9 +1049,9 @@ export const DICTATION_LESSONS = [
         "startTime": 31.3,
         "endTime": 33.82,
         "duration": 2.52,
-        "hanzi": "妈妈：拉钩钩，哎呀小初真棒！",
-        "pinyin": "mā ma ： lā gōu gōu ， āi yā xiǎo chū zhēn bàng ！",
-        "meaning": "Mẹ: Móc ngoéo nào, Tiểu Sơ giỏi quá!",
+        "hanzi": "拉钩钩，哎呀小初真棒！",
+        "pinyin": "lā gōu gōu ， āi yā xiǎo chū zhēn bàng ！",
+        "meaning": "Móc ngoéo nào, Tiểu Sơ giỏi quá!",
         "keywords": [
           "拉钩钩",
           "真棒"
@@ -1065,9 +1065,9 @@ export const DICTATION_LESSONS = [
         "startTime": 33.82,
         "endTime": 37.66,
         "duration": 3.84,
-        "hanzi": "小初：妈，怎么我就没遗传到你的英语细胞呢？",
-        "pinyin": "xiǎo chū ： mā ， zěn me wǒ jiù méi yí chuán dào nǐ de yīng yǔ xì bāo ne ？",
-        "meaning": "Tiểu Sơ: Mẹ ơi, sao con chẳng thừa hưởng được chút gen tiếng Anh nào từ mẹ thế nhỉ?",
+        "hanzi": "妈，怎么我就没遗传到你的英语细胞呢？",
+        "pinyin": "mā ， zěn me wǒ jiù méi yí chuán dào nǐ de yīng yǔ xì bāo ne ？",
+        "meaning": "Mẹ ơi, sao con chẳng thừa hưởng được chút gen tiếng Anh nào từ mẹ thế nhỉ?",
         "keywords": [
           "遗传",
           "英语细胞"
@@ -1081,9 +1081,9 @@ export const DICTATION_LESSONS = [
         "startTime": 37.66,
         "endTime": 47.62,
         "duration": 9.96,
-        "hanzi": "妈妈：那每个人天赋不一样啊，你不随你爸吗？你看你逻辑思维能力多强，动手能力多强，是不是？你看你做这些模型，多棒啊！",
-        "pinyin": "mā ma ： nà měi gè rén tiān fù bù yí yàng a ， nǐ bù suí nǐ bà ma ？ nǐ kàn nǐ luó jí sī wéi néng lì duō qiáng ， dòng shǒu néng lì duō qiáng ， shì bu shì ？ nǐ kàn nǐ zuò zhè xiē mó xíng ， duō bàng a ！",
-        "meaning": "Mẹ: Năng khiếu của mỗi người đâu có giống nhau. Chẳng phải con giống bố sao? Con nhìn xem tư duy logic của con mạnh thế nào, đôi tay khéo léo ra sao, đúng không? Con nhìn mấy mô hình con làm này, tuyệt vời biết bao!",
+        "hanzi": "那每个人天赋不一样啊，你不随你爸吗？你看你逻辑思维能力多强，动手能力多强，是不是？你看你做这些模型，多棒啊！",
+        "pinyin": "nà měi gè rén tiān fù bù yí yàng a ， nǐ bù suí nǐ bà ma ？ nǐ kàn nǐ luó jí sī wéi néng lì duō qiáng ， dòng shǒu néng lì duō qiáng ， shì bu shì ？ nǐ kàn nǐ zuò zhè xiē mó xíng ， duō bàng a ！",
+        "meaning": "Năng khiếu của mỗi người đâu có giống nhau. Chẳng phải con giống bố sao? Con nhìn xem tư duy logic của con mạnh thế nào, đôi tay khéo léo ra sao, đúng không? Con nhìn mấy mô hình con làm này, tuyệt vời biết bao!",
         "keywords": [
           "天赋",
           "逻辑思维",
@@ -1099,9 +1099,9 @@ export const DICTATION_LESSONS = [
         "startTime": 47.62,
         "endTime": 54.52,
         "duration": 6.9,
-        "hanzi": "小初：爸，你知道为什么我妈那么聪明一人，唯独在做饭这事上不上进吗？",
-        "pinyin": "xiǎo chū ： bà ， nǐ zhī dào wèi shén me wǒ mā nà me cōng ming yì rén ， wéi dú zài zuò fàn zhè shì shàng bu shàng jìn ma ？",
-        "meaning": "Bố: Bố, bố có biết vì sao mẹ con thông minh như thế mà duy chỉ có chuyện nấu ăn là mẹ chẳng chịu tiến bộ không?",
+        "hanzi": "爸，你知道为什么我妈那么聪明一人，唯独在做饭这事上不上进吗？",
+        "pinyin": "bà ， nǐ zhī dào wèi shén me wǒ mā nà me cōng ming yì rén ， wéi dú zài zuò fàn zhè shì shàng bu shàng jìn ma ？",
+        "meaning": "Bố, bố có biết vì sao mẹ con thông minh như thế mà duy chỉ có chuyện nấu ăn là mẹ chẳng chịu tiến bộ không?",
         "keywords": [
           "聪明",
           "唯独",
@@ -1116,9 +1116,9 @@ export const DICTATION_LESSONS = [
         "startTime": 54.52,
         "endTime": 54.94,
         "duration": 0.42,
-        "hanzi": "爸爸：为什么呀？",
-        "pinyin": "bà ba ： wèi shén me ya ？",
-        "meaning": "Bố: Sao thế con?",
+        "hanzi": "为什么呀？",
+        "pinyin": "wèi shén me ya ？",
+        "meaning": "Sao thế con?",
         "keywords": [
           "为什么"
         ],
@@ -1131,9 +1131,9 @@ export const DICTATION_LESSONS = [
         "startTime": 54.94,
         "endTime": 61.06,
         "duration": 6.12,
-        "hanzi": "小初：她说：人必须允许自己有缺点，如果每件事都苛责自己，就活得太累了。",
-        "pinyin": "xiǎo chū ： tā shuō ： rén bì xū yǔn xǔ zì jǐ yǒu quē diǎn ， rú guǒ měi jiàn shì dōu kē zé zì jǐ ， jiù huó dé tài lèi le 。",
-        "meaning": "Tiểu Sơ: Mẹ bảo là: Con người ta phải cho phép bản thân có khuyết điểm, nếu chuyện gì cũng tự trách móc bản thân thì sống mệt mỏi lắm.",
+        "hanzi": "她说：人必须允许自己有缺点，如果每件事都苛责自己，就活得太累了。",
+        "pinyin": "tā shuō ： rén bì xū yǔn xǔ zì jǐ yǒu quē diǎn ， rú guǒ měi jiàn shì dōu kē zé zì jǐ ， jiù huó dé tài lèi le 。",
+        "meaning": "Mẹ bảo là: Con người ta phải cho phép bản thân có khuyết điểm, nếu chuyện gì cũng tự trách móc bản thân thì sống mệt mỏi lắm.",
         "keywords": [
           "允许",
           "缺点",
@@ -1149,9 +1149,9 @@ export const DICTATION_LESSONS = [
         "startTime": 61.06,
         "endTime": 62.06,
         "duration": 1,
-        "hanzi": "爸爸：说的有道理。",
-        "pinyin": "bà ba ： shuō de yǒu dào lǐ 。",
-        "meaning": "Bố: Mẹ nói có lý đấy.",
+        "hanzi": "说的有道理。",
+        "pinyin": "shuō de yǒu dào lǐ 。",
+        "meaning": "Mẹ nói có lý đấy.",
         "keywords": [
           "有道理"
         ],
@@ -1164,9 +1164,9 @@ export const DICTATION_LESSONS = [
         "startTime": 69.12,
         "endTime": 73.06,
         "duration": 3.94,
-        "hanzi": "小初：妈妈，你给爸爸做碗长寿面吧，就当将功补过了。",
-        "pinyin": "xiǎo chū ： mā ma ， nǐ gěi bà ba zuò wǎn cháng shòu miàn ba ， jiù dāng jiāng gōng bǔ guò le 。",
-        "meaning": "Tiểu Sơ: Mẹ ơi, mẹ nấu cho bố bát mì trường thọ đi, coi như lấy công chuộc tội.",
+        "hanzi": "妈妈，你给爸爸做碗长寿面吧，就当将功补过了。",
+        "pinyin": "mā ma ， nǐ gěi bà ba zuò wǎn cháng shòu miàn ba ， jiù dāng jiāng gōng bǔ guò le 。",
+        "meaning": "Mẹ ơi, mẹ nấu cho bố bát mì trường thọ đi, coi như lấy công chuộc tội.",
         "keywords": [
           "长寿面",
           "将功补过"
@@ -1180,9 +1180,9 @@ export const DICTATION_LESSONS = [
         "startTime": 73.06,
         "endTime": 75.64,
         "duration": 2.58,
-        "hanzi": "妈妈：想不想跟妈妈一起给爸爸做个长寿面？",
-        "pinyin": "mā ma ： xiǎng bu xiǎng gēn mā ma yì qǐ gěi bà ba zuò gè cháng shòu miàn ？",
-        "meaning": "Mẹ: Thế con có muốn cùng mẹ làm mì trường thọ cho bố không?",
+        "hanzi": "想不想跟妈妈一起给爸爸做个长寿面？",
+        "pinyin": "xiǎng bu xiǎng gēn mā ma yì qǐ gěi bà ba zuò gè cháng shòu miàn ？",
+        "meaning": "Thế con có muốn cùng mẹ làm mì trường thọ cho bố không?",
         "keywords": [
           "一起",
           "长寿面"
@@ -1196,9 +1196,9 @@ export const DICTATION_LESSONS = [
         "startTime": 75.64,
         "endTime": 77.02,
         "duration": 1.38,
-        "hanzi": "小初：那我帮你洗菜吧！",
-        "pinyin": "xiǎo chū ： nà wǒ bāng nǐ xǐ cài ba ！",
-        "meaning": "Tiểu Sơ: Thế để con phụ mẹ rửa rau nhé!",
+        "hanzi": "那我帮你洗菜吧！",
+        "pinyin": "nà wǒ bāng nǐ xǐ cài ba ！",
+        "meaning": "Thế để con phụ mẹ rửa rau nhé!",
         "keywords": [
           "洗菜"
         ],
