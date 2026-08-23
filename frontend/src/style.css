@@ -13665,6 +13665,510 @@ html.dark .cannon-pinyin-input {
   box-shadow: 0 0 12px rgba(56, 189, 248, 0.4) !important;
 }
 
+/* ==========================================================================
+   MASTER DUAL-THEME CONTRAST & LIGHT MODE REFINEMENT SYSTEM
+   Guarantees 100% crystal-clear readability & contrast across all pages & modals
+   ========================================================================== */
+
+/* 1. ADMIN & LEARNER INTELLIGENCE MANAGEMENT MODAL */
+html.dark .admin-users-table th {
+  background: rgba(15, 23, 42, 0.95) !important;
+  color: #e2e8f0 !important;
+  font-weight: 800 !important;
+  font-size: 0.78rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.12) !important;
+  padding: 12px 14px !important;
+}
+
+html.dark .admin-users-table td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+  padding: 12px 14px !important;
+}
+
+html:not(.dark) #admin-management-modal,
+html.light-mode #admin-management-modal {
+  background: rgba(15, 23, 42, 0.6) !important;
+}
+
+html:not(.dark) #admin-management-modal > div,
+html.light-mode #admin-management-modal > div {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18), 0 0 30px rgba(244, 63, 94, 0.1) !important;
+  color: #0f172a !important;
+}
+
+html:not(.dark) #admin-management-modal h2,
+html.light-mode #admin-management-modal h2 {
+  color: #0f172a !important;
+}
+
+html:not(.dark) #admin-management-modal p,
+html.light-mode #admin-management-modal p {
+  color: #64748b !important;
+}
+
+html:not(.dark) #admin-management-modal > div > div:first-child,
+html.light-mode #admin-management-modal > div > div:first-child {
+  background: #f8fafc !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+html:not(.dark) #admin-management-modal .btn-icon-only,
+html.light-mode #admin-management-modal .btn-icon-only {
+  background: rgba(0, 0, 0, 0.05) !important;
+  color: #334155 !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+html:not(.dark) #admin-management-modal .btn-icon-only:hover,
+html.light-mode #admin-management-modal .btn-icon-only:hover {
+  background: rgba(0, 0, 0, 0.1) !important;
+  color: #0f172a !important;
+}
+
+/* KPI Cards in Admin Modal */
+html:not(.dark) #admin-management-modal > div > div:nth-child(2),
+html.light-mode #admin-management-modal > div > div:nth-child(2) {
+  background: #f1f5f9 !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+html:not(.dark) #admin-management-modal > div > div:nth-child(2) > div,
+html.light-mode #admin-management-modal > div > div:nth-child(2) > div {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04) !important;
+}
+
+html:not(.dark) #admin-kpi-total-users,
+html.light-mode #admin-kpi-total-users {
+  color: #0f172a !important;
+}
+
+/* Quick Grant Section */
+html:not(.dark) #admin-super-grant-container,
+html.light-mode #admin-super-grant-container {
+  background: #fff1f2 !important;
+  border-bottom: 1px dashed #fecdd3 !important;
+}
+
+html:not(.dark) #admin-super-grant-container span,
+html.light-mode #admin-super-grant-container span {
+  color: #9f1239 !important;
+}
+
+html:not(.dark) #admin-grant-email-input,
+html.light-mode #admin-grant-email-input {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+html:not(.dark) #admin-grant-email-input::placeholder,
+html.light-mode #admin-grant-email-input::placeholder {
+  color: #94a3b8 !important;
+}
+
+html:not(.dark) #admin-grant-role-select,
+html.light-mode #admin-grant-role-select {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+/* Filter Toolbar & Search */
+html:not(.dark) #admin-management-modal > div > div:nth-of-type(4),
+html.light-mode #admin-management-modal > div > div:nth-of-type(4) {
+  background: #f8fafc !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+html:not(.dark) #admin-user-search-input,
+html.light-mode #admin-user-search-input {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+html:not(.dark) #admin-user-search-input::placeholder,
+html.light-mode #admin-user-search-input::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Users Table in Light Mode */
+html:not(.dark) #admin-users-table-container,
+html.light-mode #admin-users-table-container {
+  background: #ffffff !important;
+}
+
+html:not(.dark) .admin-users-table,
+html.light-mode .admin-users-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+html:not(.dark) .admin-users-table th,
+html.light-mode .admin-users-table th {
+  background: #f1f5f9 !important;
+  color: #334155 !important;
+  font-weight: 800 !important;
+  font-size: 0.78rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  border-bottom: 2px solid #e2e8f0 !important;
+  padding: 12px 14px !important;
+}
+
+html:not(.dark) .admin-user-row,
+html.light-mode .admin-user-row {
+  background: #ffffff !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+}
+
+html:not(.dark) .admin-user-row:hover,
+html.light-mode .admin-user-row:hover {
+  background: #f8fafc !important;
+}
+
+html:not(.dark) .admin-user-row td,
+html.light-mode .admin-user-row td {
+  color: #1e293b !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  padding: 12px 14px !important;
+}
+
+html:not(.dark) .admin-user-row div[style*="color: #ffffff"],
+html.light-mode .admin-user-row div[style*="color: #ffffff"] {
+  color: #0f172a !important;
+}
+
+html:not(.dark) .admin-user-row span[style*="color: #e2e8f0"],
+html.light-mode .admin-user-row span[style*="color: #e2e8f0"] {
+  color: #334155 !important;
+}
+
+html:not(.dark) .admin-status-offline,
+html.light-mode .admin-status-offline {
+  color: #64748b !important;
+}
+
+/* 2. STUDENT HISTORY DETAIL MODAL */
+html:not(.dark) #admin-user-history-detail-modal > div,
+html.light-mode #admin-user-history-detail-modal > div {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18) !important;
+  color: #0f172a !important;
+}
+
+html:not(.dark) #admin-user-history-detail-modal h3,
+html.light-mode #admin-user-history-detail-modal h3 {
+  color: #0f172a !important;
+}
+
+html:not(.dark) #admin-user-history-detail-modal p,
+html.light-mode #admin-user-history-detail-modal p {
+  color: #64748b !important;
+}
+
+html:not(.dark) #admin-user-history-detail-modal div[style*="border-bottom: 1px solid rgba(255,255,255,0.1)"],
+html.light-mode #admin-user-history-detail-modal div[style*="border-bottom: 1px solid rgba(255,255,255,0.1)"] {
+  border-bottom-color: #e2e8f0 !important;
+}
+
+html:not(.dark) #admin-user-history-detail-modal div[style*="background: rgba(255,255,255,0.03)"],
+html.light-mode #admin-user-history-detail-modal div[style*="background: rgba(255,255,255,0.03)"] {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+html:not(.dark) #admin-user-history-detail-modal div[style*="background: rgba(0,0,0,0.2)"],
+html.light-mode #admin-user-history-detail-modal div[style*="background: rgba(0,0,0,0.2)"] {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+html:not(.dark) #admin-user-history-detail-modal table tr,
+html.light-mode #admin-user-history-detail-modal table tr {
+  border-bottom: 1px solid #f1f5f9 !important;
+}
+
+html:not(.dark) #admin-user-history-detail-modal table thead tr,
+html.light-mode #admin-user-history-detail-modal table thead tr {
+  background: #f1f5f9 !important;
+  color: #334155 !important;
+  border-bottom: 2px solid #e2e8f0 !important;
+}
+
+html:not(.dark) #admin-user-history-detail-modal table td,
+html.light-mode #admin-user-history-detail-modal table td {
+  color: #1e293b !important;
+}
+
+html:not(.dark) #admin-user-history-detail-modal button[style*="position: absolute"],
+html.light-mode #admin-user-history-detail-modal button[style*="position: absolute"] {
+  background: #f1f5f9 !important;
+  color: #475569 !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+/* 3. ROLE PICKER MODAL */
+html:not(.dark) #admin-role-picker-modal > div,
+html.light-mode #admin-role-picker-modal > div {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18) !important;
+  color: #0f172a !important;
+}
+
+html:not(.dark) #admin-role-picker-modal h3,
+html.light-mode #admin-role-picker-modal h3 {
+  color: #0f172a !important;
+}
+
+html:not(.dark) #admin-role-picker-modal p,
+html.light-mode #admin-role-picker-modal p {
+  color: #64748b !important;
+}
+
+html:not(.dark) #admin-role-picker-modal button[style*="position: absolute"],
+html.light-mode #admin-role-picker-modal button[style*="position: absolute"] {
+  background: #f1f5f9 !important;
+  color: #475569 !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+html:not(.dark) #admin-role-picker-modal select,
+html.light-mode #admin-role-picker-modal select {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+/* 4. COMMUNITY DISCUSSION FORUM MODAL */
+html:not(.dark) #discussion-forum-modal .glass-panel,
+html.light-mode #discussion-forum-modal .glass-panel {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18) !important;
+  color: #0f172a !important;
+}
+
+html:not(.dark) #discussion-forum-modal h2,
+html.light-mode #discussion-forum-modal h2 {
+  color: #0f172a !important;
+}
+
+html:not(.dark) #discussion-forum-modal p,
+html.light-mode #discussion-forum-modal p {
+  color: #64748b !important;
+}
+
+html:not(.dark) #discussion-forum-modal > div > div:first-child,
+html.light-mode #discussion-forum-modal > div > div:first-child {
+  background: #f8fafc !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+html:not(.dark) #disc-create-form-container,
+html.light-mode #disc-create-form-container {
+  background: #f1f5f9 !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+html:not(.dark) #disc-create-form-container label,
+html.light-mode #disc-create-form-container label {
+  color: #475569 !important;
+}
+
+html:not(.dark) #disc-new-category,
+html:not(.dark) #disc-new-title,
+html:not(.dark) #disc-new-content,
+html.light-mode #disc-new-category,
+html.light-mode #disc-new-title,
+html.light-mode #disc-new-content {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+html:not(.dark) #disc-new-title::placeholder,
+html:not(.dark) #disc-new-content::placeholder,
+html.light-mode #disc-new-title::placeholder,
+html.light-mode #disc-new-content::placeholder {
+  color: #94a3b8 !important;
+}
+
+html:not(.dark) #discussion-forum-modal > div > div:nth-of-type(3),
+html.light-mode #discussion-forum-modal > div > div:nth-of-type(3) {
+  background: #f8fafc !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+html:not(.dark) #disc-search-input,
+html.light-mode #disc-search-input {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+html:not(.dark) #disc-search-input::placeholder,
+html.light-mode #disc-search-input::placeholder {
+  color: #94a3b8 !important;
+}
+
+html:not(.dark) #disc-posts-stream,
+html.light-mode #disc-posts-stream {
+  background: #f8fafc !important;
+}
+
+html:not(.dark) .disc-post-card,
+html.light-mode .disc-post-card {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
+  color: #0f172a !important;
+}
+
+html:not(.dark) .disc-post-title,
+html.light-mode .disc-post-title {
+  color: #0f172a !important;
+}
+
+html:not(.dark) .disc-post-content,
+html.light-mode .disc-post-content {
+  color: #334155 !important;
+}
+
+html:not(.dark) .disc-post-author,
+html.light-mode .disc-post-author {
+  color: #0f172a !important;
+}
+
+html:not(.dark) .disc-comment-box,
+html.light-mode .disc-comment-box {
+  background: #f8fafc !important;
+  border-top: 1px solid #e2e8f0 !important;
+}
+
+html:not(.dark) .disc-cmt-item,
+html.light-mode .disc-cmt-item {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #1e293b !important;
+}
+
+html:not(.dark) .disc-cmt-input,
+html.light-mode .disc-cmt-input {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+/* 5. FILTER PILLS & BUTTONS */
+html:not(.dark) .disc-filter-pill,
+html.light-mode .disc-filter-pill {
+  background: #ffffff !important;
+  color: #475569 !important;
+  border: 1.5px solid #e2e8f0 !important;
+  font-weight: 700 !important;
+}
+
+html:not(.dark) .disc-filter-pill:hover,
+html.light-mode .disc-filter-pill:hover {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+
+html:not(.dark) .disc-filter-pill.active,
+html.light-mode .disc-filter-pill.active {
+  background: linear-gradient(135deg, #0284c7, #2563eb) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3) !important;
+}
+
+/* 6. CREATE NOTEBOOK MODAL */
+html:not(.dark) #create-notebook-modal > div,
+html.light-mode #create-notebook-modal > div {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18) !important;
+  color: #0f172a !important;
+}
+
+html:not(.dark) #create-notebook-modal h2,
+html.light-mode #create-notebook-modal h2 {
+  color: #0f172a !important;
+}
+
+html:not(.dark) #create-notebook-modal p,
+html:not(.dark) #create-notebook-modal label,
+html.light-mode #create-notebook-modal p,
+html.light-mode #create-notebook-modal label {
+  color: #475569 !important;
+}
+
+html:not(.dark) #create-nb-name,
+html:not(.dark) #create-nb-desc,
+html:not(.dark) #create-nb-word-search,
+html.light-mode #create-nb-name,
+html.light-mode #create-nb-desc,
+html.light-mode #create-nb-word-search {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+html:not(.dark) #create-nb-words-checklist,
+html.light-mode #create-nb-words-checklist {
+  background: #f8fafc !important;
+  border: 1.5px solid #e2e8f0 !important;
+}
+
+html:not(.dark) #create-notebook-modal div[style*="border-top: 1px solid rgba(255,255,255,0.12)"],
+html.light-mode #create-notebook-modal div[style*="border-top: 1px solid rgba(255,255,255,0.12)"] {
+  border-top-color: #e2e8f0 !important;
+}
+
+html:not(.dark) #create-notebook-modal div[style*="color: #e2e8f0"],
+html.light-mode #create-notebook-modal div[style*="color: #e2e8f0"] {
+  color: #1e293b !important;
+}
+
+/* 7. UNIVERSAL INPUTS & TEXT CONTRAST FOR LIGHT MODE */
+html:not(.dark) select,
+html.light-mode select {
+  color: #0f172a;
+  background-color: #ffffff;
+}
+
+html:not(.dark) input[type="text"],
+html:not(.dark) input[type="email"],
+html:not(.dark) input[type="search"],
+html:not(.dark) textarea,
+html.light-mode input[type="text"],
+html.light-mode input[type="email"],
+html.light-mode input[type="search"],
+html.light-mode textarea {
+  color: #0f172a;
+}
+
+html:not(.dark) .custom-scrollbar::-webkit-scrollbar-thumb,
+html.light-mode .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+}
+
+html:not(.dark) .custom-scrollbar::-webkit-scrollbar-thumb:hover,
+html.light-mode .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+
 
 
 
