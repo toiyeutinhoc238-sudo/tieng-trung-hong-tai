@@ -347,6 +347,7 @@ export class CannonGameEngine {
 
   bindEvents() {
     const topBackBtn = this.container.querySelector('#cannon-top-back-btn');
+    const backHubTopBtn = this.container.querySelector('#cannon-back-hub-top-btn');
     const inputEl = this.container.querySelector('#cannon-pinyin-input');
     const fireBtn = this.container.querySelector('#cannon-fire-btn');
     const pauseBtn = this.container.querySelector('#cannon-pause-btn');
@@ -354,6 +355,20 @@ export class CannonGameEngine {
     const retryBtn = this.container.querySelector('#cannon-retry-btn');
     const backHubBtn = this.container.querySelector('#cannon-back-hub-btn');
     const finishBtn = this.container.querySelector('#cannon-finish-btn');
+
+    if (topBackBtn) {
+      topBackBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.stopAndExit();
+      });
+    }
+
+    if (backHubTopBtn) {
+      backHubTopBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.stopAndExit();
+      });
+    }
 
     if (inputEl) {
       inputEl.addEventListener('input', () => this.handleInput(inputEl.value));
@@ -439,6 +454,16 @@ export class CannonGameEngine {
   }
 
   start() {
+    if (this.animFrameId) {
+      cancelAnimationFrame(this.animFrameId);
+      this.animFrameId = null;
+    }
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
+
+    this.isStopping = false;
     this.isRunning = true;
     this.isPaused = false;
     this.score = 0;
@@ -450,6 +475,25 @@ export class CannonGameEngine {
     this.wordsDestroyedCount = 0;
     this.lastFrameTime = performance.now();
     this.spawnTimer = 0;
+
+    this.slowMoTimer = 0;
+    this.score2xTimer = 0;
+    this.shieldTimer = 0;
+    this.hasShield = false;
+
+    const overlay = this.container.querySelector('#cannon-modal-overlay');
+    if (overlay) {
+      overlay.style.setProperty('display', 'none', 'important');
+    }
+    const wordsLayer = this.container.querySelector('#cannon-words-layer');
+    if (wordsLayer) wordsLayer.innerHTML = '';
+    const fxLayer = this.container.querySelector('#cannon-fx-layer');
+    if (fxLayer) fxLayer.innerHTML = '';
+    const inputEl = this.container.querySelector('#cannon-pinyin-input');
+    if (inputEl) {
+      inputEl.value = '';
+      setTimeout(() => inputEl.focus(), 60);
+    }
 
     this.updateHUD();
     this.startTimers();
@@ -641,13 +685,14 @@ export class CannonGameEngine {
   }
 
   attemptShoot(inputVal) {
-    const norm = normalizePinyin(inputVal);
+    const raw = (inputVal || '').trim();
+    const norm = normalizePinyin(raw);
     const inputEl = this.container.querySelector('#cannon-pinyin-input');
-    if (!norm) return;
+    if (!raw) return;
 
-    // Find lowest matching word that is not already targeted or destroyed
+    // Find lowest matching word by pinyin OR by exact hanzi character
     const eligibleWords = this.activeWords
-      .filter(w => !w.isDestroyed && !w.isTargeted && w.normPinyin === norm)
+      .filter(w => !w.isDestroyed && !w.isTargeted && ((norm && w.normPinyin === norm) || w.word === raw))
       .sort((a, b) => b.y - a.y);
 
     if (eligibleWords.length > 0) {

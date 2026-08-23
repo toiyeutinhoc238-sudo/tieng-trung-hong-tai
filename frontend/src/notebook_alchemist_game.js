@@ -385,6 +385,11 @@ export class AlchemistGameEngine {
   }
 
   start() {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
+
     this.isStopping = false;
     this.isRunning = true;
     this.isPaused = false;
@@ -420,19 +425,17 @@ export class AlchemistGameEngine {
   }
 
   getDecompositionForWord(word) {
-    if (!word) return ['日', '月'];
-    // Check single character dictionary
+    if (!word) return { char: '明', parts: ['日', '月'] };
+    // Check characters in word
     for (let char of word) {
       if (RADICAL_DECOMPOSITIONS[char]) {
         return { char: char, parts: RADICAL_DECOMPOSITIONS[char] };
       }
     }
-    // Dynamic fallbacks
-    const firstChar = word[0] || '明';
-    if (RADICAL_DECOMPOSITIONS[firstChar]) {
-      return { char: firstChar, parts: RADICAL_DECOMPOSITIONS[firstChar] };
-    }
-    return { char: firstChar, parts: ['亻', '木'] };
+    // Pick a valid decomposed character
+    const knownChars = Object.keys(RADICAL_DECOMPOSITIONS);
+    const fallbackChar = knownChars[Math.floor(Math.random() * knownChars.length)] || '明';
+    return { char: fallbackChar, parts: RADICAL_DECOMPOSITIONS[fallbackChar] };
   }
 
   nextQuestion() {

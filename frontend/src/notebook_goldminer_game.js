@@ -135,8 +135,11 @@ export class GoldMinerGameEngine {
             <span class="hud-value" id="miner-timer-val">01:00</span>
           </div>
 
-          <div style="margin-left: auto; display: flex; gap: 8px;">
+          <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
             <button type="button" id="miner-pause-btn" class="btn btn-outline btn-sm" title="Tạm dừng"><i class="fa-solid fa-pause"></i></button>
+            <button type="button" id="miner-back-hub-top-btn" class="btn btn-secondary btn-sm" title="Đổi trò chơi khác" style="display: flex; align-items: center; gap: 6px; font-weight: 700; border-radius: 50px; padding: 6px 14px;">
+              <i class="fa-solid fa-arrow-left"></i> Đổi Game
+            </button>
             <button type="button" id="miner-exit-btn" class="btn btn-outline btn-sm" title="Thoát về sổ tay"><i class="fa-solid fa-xmark"></i></button>
           </div>
         </div>
@@ -220,6 +223,7 @@ export class GoldMinerGameEngine {
 
   bindEvents() {
     const topBackBtn = this.container.querySelector('#miner-top-back-btn');
+    const backHubTopBtn = this.container.querySelector('#miner-back-hub-top-btn');
     const pauseBtn = this.container.querySelector('#miner-pause-btn');
     const exitBtn = this.container.querySelector('#miner-exit-btn');
     const retryBtn = this.container.querySelector('#miner-retry-btn');
@@ -229,6 +233,7 @@ export class GoldMinerGameEngine {
     const tntBtn = this.container.querySelector('#miner-tnt-btn');
 
     if (topBackBtn) topBackBtn.addEventListener('click', () => this.stopAndExit());
+    if (backHubTopBtn) backHubTopBtn.addEventListener('click', () => this.stopAndExit());
     if (pauseBtn) pauseBtn.addEventListener('click', () => this.togglePause());
     if (exitBtn) exitBtn.addEventListener('click', () => {
       this.stopAndExit();
@@ -272,6 +277,16 @@ export class GoldMinerGameEngine {
   }
 
   start() {
+    if (this.animFrameId) {
+      cancelAnimationFrame(this.animFrameId);
+      this.animFrameId = null;
+    }
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
+
+    this.isStopping = false;
     this.isRunning = true;
     this.isPaused = false;
     this.score = 0;
@@ -282,6 +297,12 @@ export class GoldMinerGameEngine {
     this.targetsGrabbedCount = 0;
     this.lastFrameTime = performance.now();
 
+    const overlay = this.container.querySelector('#miner-modal-overlay');
+    if (overlay) {
+      overlay.style.setProperty('display', 'none', 'important');
+    }
+
+    this.initCanvas();
     this.resetHook();
     this.spawnLevelItems();
     this.updateHUD();

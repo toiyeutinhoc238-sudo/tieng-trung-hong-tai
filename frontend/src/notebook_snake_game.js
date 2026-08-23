@@ -147,8 +147,11 @@ export class SnakeGameEngine {
             </div>
           </div>
 
-          <div style="margin-left: auto; display: flex; gap: 8px;">
+          <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
             <button type="button" id="snake-pause-btn" class="btn btn-outline btn-sm" title="Tạm dừng"><i class="fa-solid fa-pause"></i></button>
+            <button type="button" id="snake-back-hub-top-btn" class="btn btn-secondary btn-sm" title="Đổi trò chơi khác" style="display: flex; align-items: center; gap: 6px; font-weight: 700; border-radius: 50px; padding: 6px 14px;">
+              <i class="fa-solid fa-arrow-left"></i> Đổi Game
+            </button>
             <button type="button" id="snake-exit-btn" class="btn btn-outline btn-sm" title="Thoát về sổ tay"><i class="fa-solid fa-xmark"></i></button>
           </div>
         </div>
@@ -341,6 +344,7 @@ export class SnakeGameEngine {
 
   bindEvents() {
     const topBackBtn = this.container.querySelector('#snake-top-back-btn');
+    const backHubTopBtn = this.container.querySelector('#snake-back-hub-top-btn');
     const pauseBtn = this.container.querySelector('#snake-pause-btn');
     const exitBtn = this.container.querySelector('#snake-exit-btn');
     const retryBtn = this.container.querySelector('#snake-retry-btn');
@@ -349,6 +353,13 @@ export class SnakeGameEngine {
 
     if (topBackBtn) {
       topBackBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.stopAndExit();
+      });
+    }
+
+    if (backHubTopBtn) {
+      backHubTopBtn.addEventListener('click', (e) => {
         e.preventDefault();
         this.stopAndExit();
       });
@@ -900,6 +911,15 @@ export class SnakeGameEngine {
   }
 
   start() {
+    if (this.animFrameId) {
+      cancelAnimationFrame(this.animFrameId);
+      this.animFrameId = null;
+    }
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
+
     this.isStopping = false;
     this.isRunning = true;
     this.isPaused = false;
@@ -909,6 +929,11 @@ export class SnakeGameEngine {
     this.lives = 3;
     this.wordsEatenCorrect = 0;
     this.timeLeft = 60;
+    this.invincibleTimer = 0;
+    this.powerups = [];
+    this.obstacles = [];
+    this.apples = [];
+
     this.snake = [
       { x: 5, y: 7 },
       { x: 4, y: 7 },
@@ -916,8 +941,8 @@ export class SnakeGameEngine {
     ];
     this.dir = { x: 1, y: 0 };
     this.nextDir = { x: 1, y: 0 };
-    this.foods = [];
-    this.eatenQueue = 0;
+    this.lastTickTime = performance.now();
+    this.calculateSpeed();
 
     const overlay = this.container.querySelector('#snake-modal-overlay');
     if (overlay) {
@@ -925,9 +950,10 @@ export class SnakeGameEngine {
     }
 
     this.initCanvas();
-    this.nextTargetWord();
+    this.spawnObstacles();
+    this.nextWordQuestion();
     this.updateHUD();
-    this.startLoop();
+    this.animFrameId = requestAnimationFrame((t) => this.loop(t));
   }
 
   gameOver(isVictory) {

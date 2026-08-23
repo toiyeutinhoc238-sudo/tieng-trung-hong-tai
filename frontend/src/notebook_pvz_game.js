@@ -47,8 +47,11 @@ export class PvZGameEngine {
     this.activeMowers = []; // Running mowers
     this.particleEffects = [];
 
-    // Selected plant seed card
+    // Selected plant seed card & hover tile
     this.selectedSeedType = null;
+    this.hoveredRow = null;
+    this.hoveredCol = null;
+    this.isStopping = false;
 
     // Available Plants Definitions (PvZ 1 Classic Roster - All Unlocked)
     this.plantDefs = {
@@ -356,21 +359,31 @@ export class PvZGameEngine {
 
   bindEvents() {
     const pauseBtn = this.container.querySelector('#pvz-pause-btn');
+    const backHubTopBtn = this.container.querySelector('#pvz-back-hub-top-btn');
     const exitBtn = this.container.querySelector('#pvz-exit-btn');
     const shovelBtn = this.container.querySelector('#pvz-shovel-btn');
 
     if (pauseBtn) pauseBtn.addEventListener('click', () => this.togglePause());
-    if (exitBtn) exitBtn.addEventListener('click', () => {
-      this.stopAndExit();
-      if (typeof window.exitNotebookGamesHub === 'function') window.exitNotebookGamesHub();
-    });
+    if (backHubTopBtn) {
+      backHubTopBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.stopAndExit();
+      });
+    }
+    if (exitBtn) {
+      exitBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.stopAndExit();
+        if (typeof window.exitNotebookGamesHub === 'function') window.exitNotebookGamesHub();
+      });
+    }
 
     if (shovelBtn) {
       shovelBtn.addEventListener('click', () => {
         this.selectedSeedType = this.selectedSeedType === 'shovel' ? null : 'shovel';
         this.updateSeedSelectionUI();
         if (this.selectedSeedType === 'shovel') {
-          this.showToast('⛏️ Đã chọn Xẻng: Click vào ô có cây để đào bỏ!');
+          this.showToast('⛏️ Đã chọn Xẻng: Click vào ô cỏ có cây để đào bỏ!');
         }
       });
     }
@@ -395,10 +408,14 @@ export class PvZGameEngine {
 
         this.selectedSeedType = this.selectedSeedType === type ? null : type;
         this.updateSeedSelectionUI();
+        if (this.selectedSeedType) {
+          this.sfx.playPlant();
+          this.showToast(`🌱 Đã chọn ${pDef.name}: Click vào ô đất trống trên sân cỏ để trồng!`);
+        }
       });
     });
 
-    // Lawn grid cell placement
+    // Lawn grid cell direct placement (DOM cells)
     this.container.querySelectorAll('.pvz-lawn-cell').forEach(cell => {
       cell.addEventListener('click', (e) => {
         e.preventDefault();
@@ -408,14 +425,52 @@ export class PvZGameEngine {
       });
     });
 
-    // Canvas click for sun collecting
+    // Canvas click & touch interaction
     const canvas = this.container.querySelector('#pvz-canvas');
     if (canvas) {
-      canvas.addEventListener('click', (e) => {
+      const getCanvasCoords = (clientX, clientY) => {
         const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        this.handleCanvasClick(x, y);
+        const scaleX = (canvas.width || 900) / (rect.width || 1);
+        const scaleY = (canvas.height || 450) / (rect.height || 1);
+        return {
+          x: (clientX - rect.left) * scaleX,
+          y: (clientY - rect.top) * scaleY
+        };
+      };
+
+      canvas.addEventListener('click', (e) => {
+        e.preventDefault();
+        const pos = getCanvasCoords(e.clientX, e.clientY);
+        this.handleCanvasClick(pos.x, pos.y);
+      });
+
+      canvas.addEventListener('touchstart', (e) => {
+        if (e.touches && e.touches.length > 0) {
+          e.preventDefault();
+          const pos = getCanvasCoords(e.touches[0].clientX, e.touches[0].clientY);
+          this.handleCanvasClick(pos.x, pos.y);
+        }
+      }, { passive: false });
+
+      canvas.addEventListener('mousemove', (e) => {
+        const pos = getCanvasCoords(e.clientX, e.clientY);
+        const mowerWidth = 48;
+        const cWidth = canvas.width || 900;
+        const cHeight = canvas.height || 450;
+        if (pos.x >= mowerWidth && pos.x <= cWidth && pos.y >= 0 && pos.y <= cHeight) {
+          const cellWidth = (cWidth - mowerWidth) / 9;
+          const cellHeight = cHeight / 5;
+          this.hoveredRow = Math.min(4, Math.max(0, Math.floor(pos.y / cellHeight)));
+          this.hoveredCol = Math.min(8, Math.max(0, Math.floor((pos.x - mowerWidth) / cellWidth)));
+        } else {
+          this.hoveredRow = null;
+          this.hoveredCol = null;
+        }
+      });
+
+      canvas.addEventListener('mouseleave', () => {
+        this.hoveredRow = null;
+        this.hoveredCol = null;
       });
     }
 
@@ -429,13 +484,14 @@ export class PvZGameEngine {
     const lawn = this.container.querySelector('#pvz-lawn-container');
     if (!canvas || !lawn) return;
 
-    canvas.width = lawn.clientWidth || 900;
-    canvas.height = lawn.clientHeight || 450;
+    canvas.width = Math.max(720, lawn.clientWidth || 900);
+    canvas.height = Math.max(400, lawn.clientHeight || 450);
     this.canvasWidth = canvas.width;
     this.canvasHeight = canvas.height;
   }
 
   start() {
+    this.isStopping = false;
     this.isRunning = true;
     this.isPaused = false;
     this.score = 0;
@@ -446,6 +502,11 @@ export class PvZGameEngine {
     this.streak = 0;
     this.maxStreak = 0;
 
+    const overlay = this.container.querySelector('#pvz-modal-overlay');
+    if (overlay) {
+      overlay.style.setProperty('display', 'none', 'important');
+    }
+
     this.grid = Array(5).fill(null).map(() => Array(9).fill(null));
     this.plants = [];
     this.zombies = [];
@@ -455,6 +516,8 @@ export class PvZGameEngine {
     this.activeMowers = [];
     this.particleEffects = [];
     this.selectedSeedType = null;
+    this.hoveredRow = null;
+    this.hoveredCol = null;
 
     Object.keys(this.plantDefs).forEach(k => {
       this.seedCooldowns[k] = 0;
@@ -614,11 +677,11 @@ export class PvZGameEngine {
   }
 
   handleCanvasClick(x, y) {
-    // 1. Check click on falling suns
+    // 1. Check click on falling suns (highest priority)
     for (let i = this.fallingSuns.length - 1; i >= 0; i--) {
       const sun = this.fallingSuns[i];
       const dist = Math.hypot(sun.x - x, sun.y - y);
-      if (dist <= 40) {
+      if (dist <= 42) {
         this.suns += 25;
         this.sfx.playSun();
         this.createExplosionFX(sun.x, sun.y);
@@ -628,32 +691,46 @@ export class PvZGameEngine {
       }
     }
 
-    // 2. Check click on zombies to pronounce vocab word
+    const canvas = this.container.querySelector('#pvz-canvas');
+    const cWidth = canvas ? canvas.width : (this.canvasWidth || 900);
+    const cHeight = canvas ? canvas.height : (this.canvasHeight || 450);
+    const mowerWidth = 48;
+
+    // 2. Check click on lawn grid cells when a seed or shovel is selected
+    if (this.selectedSeedType) {
+      if (x >= mowerWidth && x <= cWidth && y >= 0 && y <= cHeight) {
+        const cellWidth = (cWidth - mowerWidth) / 9;
+        const cellHeight = cHeight / 5;
+
+        const r = Math.min(4, Math.max(0, Math.floor(y / cellHeight)));
+        const c = Math.min(8, Math.max(0, Math.floor((x - mowerWidth) / cellWidth)));
+
+        this.handleCellClick(r, c);
+        return;
+      }
+    }
+
+    // 3. Check click on zombies to pronounce vocab word
     for (let i = 0; i < this.zombies.length; i++) {
       const z = this.zombies[i];
       const dist = Math.hypot(z.x - x, z.y - y);
-      if (dist <= 38) {
+      if (dist <= 40) {
         if (window.speakText) window.speakText(z.word);
         this.showToast(`🔊 ${z.word} (${z.pinyin}): ${z.meaning}`);
         return;
       }
     }
 
-    // 3. Check click on lawn grid cells to plant / shovel
-    const lawn = this.container.querySelector('#pvz-lawn-container');
-    if (!lawn) return;
-    const lawnWidth = lawn.clientWidth || 850;
-    const lawnHeight = lawn.clientHeight || 440;
-    const mowerWidth = 48;
-
-    if (x >= mowerWidth && x <= lawnWidth && y >= 0 && y <= lawnHeight) {
-      const cellWidth = (lawnWidth - mowerWidth) / 9;
-      const cellHeight = lawnHeight / 5;
-
+    // 4. If clicked on a planted plant without seed selected -> show info toast
+    if (x >= mowerWidth && x <= cWidth && y >= 0 && y <= cHeight) {
+      const cellWidth = (cWidth - mowerWidth) / 9;
+      const cellHeight = cHeight / 5;
       const r = Math.min(4, Math.max(0, Math.floor(y / cellHeight)));
       const c = Math.min(8, Math.max(0, Math.floor((x - mowerWidth) / cellWidth)));
-
-      this.handleCellClick(r, c);
+      if (this.grid[r] && this.grid[r][c]) {
+        const p = this.grid[r][c];
+        this.showToast(`🌱 ${p.name} (${p.zh}) - Máu: ${Math.ceil(p.hp)}/${p.maxHp}`);
+      }
     }
   }
 
@@ -1204,6 +1281,36 @@ export class PvZGameEngine {
       ctx.fill();
       ctx.restore();
     });
+
+    // Draw Hover Target & Plant Preview (When user is placing a plant/shovel)
+    if (this.selectedSeedType && this.hoveredRow !== null && this.hoveredCol !== null) {
+      const hx = mowerWidth + this.hoveredCol * cellWidth;
+      const hy = this.hoveredRow * cellHeight;
+      const cx = hx + cellWidth / 2;
+      const cy = hy + cellHeight / 2;
+
+      ctx.save();
+      const isOccupied = !!(this.grid[this.hoveredRow] && this.grid[this.hoveredRow][this.hoveredCol]);
+      if (this.selectedSeedType === 'shovel') {
+        ctx.fillStyle = isOccupied ? 'rgba(239, 68, 68, 0.35)' : 'rgba(245, 158, 11, 0.2)';
+        ctx.strokeStyle = isOccupied ? '#ef4444' : '#f59e0b';
+      } else {
+        ctx.fillStyle = isOccupied ? 'rgba(239, 68, 68, 0.35)' : 'rgba(34, 197, 94, 0.35)';
+        ctx.strokeStyle = isOccupied ? '#ef4444' : '#22c55e';
+      }
+      ctx.lineWidth = 2.5;
+      ctx.fillRect(hx + 2, hy + 2, cellWidth - 4, cellHeight - 4);
+      ctx.strokeRect(hx + 2, hy + 2, cellWidth - 4, cellHeight - 4);
+
+      // Draw ghost preview icon
+      const icon = this.selectedSeedType === 'shovel' ? '⛏️' : (this.plantDefs[this.selectedSeedType]?.icon || '🌱');
+      ctx.font = '28px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.globalAlpha = 0.75;
+      ctx.fillText(icon, cx, cy);
+      ctx.restore();
+    }
   }
 
   updateHUD() {
@@ -1225,118 +1332,6 @@ export class PvZGameEngine {
         card.classList.toggle('affordable', this.suns >= pDef.cost);
       }
     });
-  }
-
-  bindEvents() {
-    const pauseBtn = this.container.querySelector('#pvz-pause-btn');
-    const backHubTopBtn = this.container.querySelector('#pvz-back-hub-top-btn');
-    const exitBtn = this.container.querySelector('#pvz-exit-btn');
-    const shovelBtn = this.container.querySelector('#pvz-shovel-btn');
-
-    if (pauseBtn) pauseBtn.addEventListener('click', () => this.togglePause());
-    if (backHubTopBtn) {
-      backHubTopBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        this.stopAndExit();
-      });
-    }
-    if (exitBtn) {
-      exitBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        this.stopAndExit();
-        if (typeof window.exitNotebookGamesHub === 'function') window.exitNotebookGamesHub();
-      });
-    }
-
-    if (shovelBtn) {
-      shovelBtn.addEventListener('click', () => {
-        this.selectedSeedType = this.selectedSeedType === 'shovel' ? null : 'shovel';
-        this.updateSeedSelectionUI();
-        if (this.selectedSeedType === 'shovel') {
-          this.showToast('⛏️ Đã chọn Xẻng: Click vào ô có cây để đào bỏ!');
-        }
-      });
-    }
-
-    // Seed cards selection
-    this.container.querySelectorAll('.pvz-seed-card').forEach(card => {
-      card.addEventListener('click', (e) => {
-        e.preventDefault();
-        const type = card.dataset.type;
-        const pDef = this.plantDefs[type];
-        if (!pDef) return;
-
-        if (this.suns < pDef.cost) {
-          this.showToast(`⚠️ Không đủ Mặt Trời! Cần ${pDef.cost}☀️ (Hiện có ${this.suns}☀️)`);
-          return;
-        }
-
-        if (this.seedCooldowns[type] > 0) {
-          this.showToast('⏳ Cây đang trong thời gian hồi chiêu!');
-          return;
-        }
-
-        this.selectedSeedType = this.selectedSeedType === type ? null : type;
-        this.updateSeedSelectionUI();
-      });
-    });
-  }
-
-  start() {
-    this.isStopping = false;
-    this.isRunning = true;
-    this.isPaused = false;
-    this.score = 0;
-    this.suns = 150;
-    this.wave = 1;
-    this.zombiesKilled = 0;
-    this.wordsMasteredCount = 0;
-    this.streak = 0;
-    this.maxStreak = 0;
-
-    const overlay = this.container.querySelector('#pvz-modal-overlay');
-    if (overlay) {
-      overlay.style.setProperty('display', 'none', 'important');
-    }
-
-    this.grid = Array(5).fill(null).map(() => Array(9).fill(null));
-    this.plants = [];
-    this.zombies = [];
-    this.projectiles = [];
-    this.fallingSuns = [];
-    this.lawnmowers = [true, true, true, true, true];
-    this.activeMowers = [];
-    this.particleEffects = [];
-    this.selectedSeedType = null;
-
-    Object.keys(this.plantDefs).forEach(k => {
-      this.seedCooldowns[k] = 0;
-    });
-
-    this.initCanvasSize();
-    this.updateLawnmowerVisuals();
-    this.nextVocabQuestion();
-    this.updateHUD();
-
-    this.sunDropTimer = 0;
-    this.zombieSpawnTimer = 3000;
-    this.zombiesInWaveLeft = 8;
-    this.lastTime = performance.now();
-
-    if (this.animFrameId) cancelAnimationFrame(this.animFrameId);
-    this.animFrameId = requestAnimationFrame((t) => this.loop(t));
-
-    this.showToast('🌻 SẴN SÀNG! Trồng cây và giải từ vựng để đẩy lùi đàn Zombie!');
-  }
-
-  updateSeedSelectionUI() {
-    this.container.querySelectorAll('.pvz-seed-card').forEach(c => {
-      c.classList.toggle('selected', c.dataset.type === this.selectedSeedType);
-    });
-    const shovelBtn = this.container.querySelector('#pvz-shovel-btn');
-    if (shovelBtn) {
-      shovelBtn.classList.toggle('active', this.selectedSeedType === 'shovel');
-    }
   }
 
   showToast(msg) {

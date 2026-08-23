@@ -123,8 +123,11 @@ export class MahjongGameEngine {
             <span class="hud-value" id="mahjong-timer-val">01:30</span>
           </div>
 
-          <div style="margin-left: auto; display: flex; gap: 8px;">
+          <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
             <button type="button" id="mahjong-pause-btn" class="btn btn-outline btn-sm" title="Tạm dừng"><i class="fa-solid fa-pause"></i></button>
+            <button type="button" id="mahjong-back-hub-top-btn" class="btn btn-secondary btn-sm" title="Đổi trò chơi khác" style="display: flex; align-items: center; gap: 6px; font-weight: 700; border-radius: 50px; padding: 6px 14px;">
+              <i class="fa-solid fa-arrow-left"></i> Đổi Game
+            </button>
             <button type="button" id="mahjong-exit-btn" class="btn btn-outline btn-sm" title="Thoát về sổ tay"><i class="fa-solid fa-xmark"></i></button>
           </div>
         </div>
@@ -223,6 +226,7 @@ export class MahjongGameEngine {
 
   bindEvents() {
     const topBackBtn = this.container.querySelector('#mahjong-top-back-btn');
+    const backHubTopBtn = this.container.querySelector('#mahjong-back-hub-top-btn');
     const pauseBtn = this.container.querySelector('#mahjong-pause-btn');
     const exitBtn = this.container.querySelector('#mahjong-exit-btn');
     const retryBtn = this.container.querySelector('#mahjong-retry-btn');
@@ -234,6 +238,7 @@ export class MahjongGameEngine {
     const bombBtn = this.container.querySelector('#tool-bomb');
 
     if (topBackBtn) topBackBtn.addEventListener('click', () => this.stopAndExit());
+    if (backHubTopBtn) backHubTopBtn.addEventListener('click', () => this.stopAndExit());
     if (pauseBtn) pauseBtn.addEventListener('click', () => this.togglePause());
     if (exitBtn) exitBtn.addEventListener('click', () => {
       this.stopAndExit();
@@ -252,6 +257,12 @@ export class MahjongGameEngine {
   }
 
   start() {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
+
+    this.isStopping = false;
     this.isRunning = true;
     this.isPaused = false;
     this.score = 0;
@@ -262,6 +273,11 @@ export class MahjongGameEngine {
     this.shuffleCount = 3;
     this.bombCount = 2;
     this.selectedTile = null;
+
+    const overlay = this.container.querySelector('#mahjong-modal-overlay');
+    if (overlay) {
+      overlay.style.setProperty('display', 'none', 'important');
+    }
 
     this.initBoard();
     this.updateHUD();

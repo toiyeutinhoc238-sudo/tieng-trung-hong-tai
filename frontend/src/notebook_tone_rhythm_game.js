@@ -144,8 +144,11 @@ export class ToneRhythmGameEngine {
             <span class="hud-value" id="rhythm-timer-val">01:00</span>
           </div>
 
-          <div style="margin-left: auto; display: flex; gap: 8px;">
+          <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
             <button type="button" id="rhythm-pause-btn" class="btn btn-outline btn-sm" title="Tạm dừng"><i class="fa-solid fa-pause"></i></button>
+            <button type="button" id="rhythm-back-hub-top-btn" class="btn btn-secondary btn-sm" title="Đổi trò chơi khác" style="display: flex; align-items: center; gap: 6px; font-weight: 700; border-radius: 50px; padding: 6px 14px;">
+              <i class="fa-solid fa-arrow-left"></i> Đổi Game
+            </button>
             <button type="button" id="rhythm-exit-btn" class="btn btn-outline btn-sm" title="Thoát về sổ tay"><i class="fa-solid fa-xmark"></i></button>
           </div>
         </div>
@@ -242,6 +245,7 @@ export class ToneRhythmGameEngine {
 
   bindEvents() {
     const topBackBtn = this.container.querySelector('#rhythm-top-back-btn');
+    const backHubTopBtn = this.container.querySelector('#rhythm-back-hub-top-btn');
     const pauseBtn = this.container.querySelector('#rhythm-pause-btn');
     const exitBtn = this.container.querySelector('#rhythm-exit-btn');
     const retryBtn = this.container.querySelector('#rhythm-retry-btn');
@@ -249,6 +253,7 @@ export class ToneRhythmGameEngine {
     const finishBtn = this.container.querySelector('#rhythm-finish-btn');
 
     if (topBackBtn) topBackBtn.addEventListener('click', () => this.stopAndExit());
+    if (backHubTopBtn) backHubTopBtn.addEventListener('click', () => this.stopAndExit());
     if (pauseBtn) pauseBtn.addEventListener('click', () => this.togglePause());
     if (exitBtn) exitBtn.addEventListener('click', () => {
       this.stopAndExit();
@@ -289,6 +294,15 @@ export class ToneRhythmGameEngine {
   }
 
   start() {
+    if (this.animFrameId) {
+      cancelAnimationFrame(this.animFrameId);
+      this.animFrameId = null;
+    }
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
+
     this.isStopping = false;
     this.isRunning = true;
     this.isPaused = false;
@@ -305,6 +319,10 @@ export class ToneRhythmGameEngine {
     const overlay = this.container.querySelector('#rhythm-modal-overlay');
     if (overlay) {
       overlay.style.setProperty('display', 'none', 'important');
+    }
+    const layer = this.container.querySelector('#rhythm-notes-layer');
+    if (layer) {
+      layer.innerHTML = '';
     }
 
     this.updateHUD();
