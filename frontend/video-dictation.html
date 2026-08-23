@@ -472,7 +472,7 @@
       color: var(--text-primary);
     }
 
-    /* WORKSPACE SCREEN (Player + Interactive Dictation) */
+    /* WORKSPACE SCREEN (Player + Interactive Dictation - New Layout) */
     .dict-workspace-view {
       display: none;
     }
@@ -503,62 +503,95 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      transition: all 0.2s;
     }
 
     .btn-return-catalog:hover {
       background: rgba(255, 255, 255, 0.15);
+      transform: translateX(-2px);
     }
 
+    /* 3 Mode Switch Tabs (Top Right) */
     .mode-switch-tabs {
       display: flex;
-      background: rgba(0, 0, 0, 0.25);
-      padding: 4px;
-      border-radius: 14px;
-      border: 1px solid var(--border-glass);
-      gap: 4px;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 5px;
+      border-radius: 16px;
+      border: 1.5px solid var(--border-glass);
+      gap: 6px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
     }
 
     .mode-tab-btn {
-      padding: 8px 16px;
-      border-radius: 10px;
+      padding: 9px 18px;
+      border-radius: 12px;
       border: none;
       background: transparent;
       color: var(--text-secondary);
-      font-size: 0.85rem;
-      font-weight: 700;
+      font-size: 0.88rem;
+      font-weight: 800;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.25s ease;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
+    }
+
+    .mode-tab-btn:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.06);
     }
 
     .mode-tab-btn.active {
-      background: var(--accent-blue);
-      color: #fff;
-      box-shadow: 0 2px 8px rgba(28, 176, 246, 0.4);
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+    }
+
+    .mode-tab-btn[data-mode="dictation"].active {
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+    }
+
+    .mode-tab-btn[data-mode="dubbing"].active {
+      background: linear-gradient(135deg, #ec4899, #db2777);
+      box-shadow: 0 4px 14px rgba(236, 72, 153, 0.4);
     }
 
     /* Workspace 2-Columns Grid */
     .dict-main-workspace-grid {
       display: grid;
-      grid-template-columns: 1.15fr 0.95fr;
+      grid-template-columns: 1.22fr 0.88fr;
       gap: 24px;
       align-items: start;
     }
 
-    @media (max-width: 992px) {
+    @media (max-width: 1080px) {
       .dict-main-workspace-grid {
         grid-template-columns: 1fr;
       }
     }
 
-    /* Left Column: Video Player */
+    .workspace-left-col {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .workspace-right-col {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Left Column: Video Player Card */
     .video-player-card {
       border-radius: 20px;
       overflow: hidden;
       background: var(--bg-card);
       border: 1px solid var(--border-glass);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
     }
 
     .yt-player-responsive-wrap {
@@ -578,31 +611,73 @@
       transition: filter 0.3s ease;
     }
 
+    /* Video Blackout Curtain (When "Ẩn video" is checked) */
+    .yt-video-curtain {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, #1e293b 0%, #0b0f19 100%);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .curtain-icon {
+      font-size: 3.5rem;
+      color: #38bdf8;
+      margin-bottom: 14px;
+    }
+
+    .curtain-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #f8fafc;
+      margin-bottom: 6px;
+    }
+
+    .curtain-sub {
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+
     .video-smart-toolbar {
-      padding: 16px 20px;
+      padding: 14px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
       flex-wrap: wrap;
-      background: rgba(0, 0, 0, 0.15);
+      background: rgba(0, 0, 0, 0.25);
       border-top: 1px solid var(--border-glass);
     }
 
+    .toolbar-nav-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
     .btn-replay-large {
-      padding: 10px 20px;
+      padding: 9px 18px;
       border-radius: 12px;
       background: linear-gradient(135deg, #10b981, #059669);
       color: #fff;
       font-weight: 800;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       border: none;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 8px;
       box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
-      transition: transform 0.15s ease;
+      transition: all 0.2s ease;
     }
 
     .btn-replay-large:hover {
@@ -611,7 +686,7 @@
 
     .speed-pills-group {
       display: flex;
-      background: rgba(0, 0, 0, 0.2);
+      background: rgba(0, 0, 0, 0.3);
       border-radius: 10px;
       border: 1px solid var(--border-glass);
       padding: 2px;
@@ -619,25 +694,28 @@
     }
 
     .speed-pill {
-      padding: 6px 12px;
+      padding: 5px 10px;
       border-radius: 8px;
       border: none;
       background: transparent;
       color: var(--text-secondary);
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 700;
       cursor: pointer;
+      transition: all 0.15s;
     }
 
     .speed-pill.active {
-      background: var(--accent-blue);
-      color: #fff;
+      background: #38bdf8;
+      color: #0f172a;
+      font-weight: 800;
     }
 
     .video-toggle-options {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
+      align-items: center;
     }
 
     .toggle-opt-btn {
@@ -646,436 +724,819 @@
       border: 1px solid var(--border-glass);
       background: rgba(255, 255, 255, 0.05);
       color: var(--text-secondary);
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 6px;
+      user-select: none;
+      transition: all 0.2s;
+    }
+
+    .toggle-opt-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--text-primary);
     }
 
     .toggle-opt-btn.active {
-      background: rgba(59, 130, 246, 0.15);
-      color: var(--accent-blue);
-      border-color: var(--accent-blue);
+      background: rgba(59, 130, 246, 0.2);
+      color: #38bdf8;
+      border-color: #38bdf8;
     }
 
-    /* Timeline Sentence Navigator List */
-    .dict-timeline-navigator {
-      padding: 16px 20px;
-      max-height: 280px;
-      overflow-y: auto;
-    }
-
-    .dict-timeline-title {
-      font-size: 0.85rem;
-      font-weight: 800;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 12px;
-    }
-
-    .dict-nav-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 14px;
-      border-radius: 10px;
-      margin-bottom: 6px;
+    .checkbox-opt-btn input {
       cursor: pointer;
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid transparent;
-      transition: all 0.2s ease;
+      accent-color: #38bdf8;
     }
 
-    .dict-nav-item:hover {
-      background: rgba(255, 255, 255, 0.06);
-    }
-
-    .dict-nav-item.active {
-      background: rgba(28, 176, 246, 0.15);
-      border-color: var(--accent-blue);
-    }
-
-    .nav-idx-badge {
-      font-weight: 800;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      width: 24px;
-    }
-
-    .nav-time-badge {
-      font-size: 0.75rem;
-      font-weight: 700;
-      background: rgba(0, 0, 0, 0.3);
-      padding: 3px 8px;
-      border-radius: 6px;
-      color: var(--text-secondary);
-    }
-
-    .nav-snippet-text {
-      flex: 1;
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--text-primary);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    /* Right Column: Interactive Dictation Workspace */
-    .dict-interactive-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .dict-stats-hud {
-      display: flex;
+    /* Custom Checkbox Pills (Used across Shadowing & Subtitles) */
+    .custom-chk-pill {
+      display: inline-flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 14px 20px;
-      border-radius: 16px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-glass);
-    }
-
-    .dict-hud-left {
-      display: flex;
-      flex-direction: column;
       gap: 6px;
-    }
-
-    .dict-hud-progress-bar {
-      width: 140px;
-      height: 8px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .dict-hud-progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #10b981, #3b82f6);
-      width: 0%;
-      transition: width 0.3s ease;
-    }
-
-    .dict-hud-badges {
-      display: flex;
-      gap: 12px;
-    }
-
-    .hud-pill {
-      font-size: 0.85rem;
-      font-weight: 800;
       padding: 6px 14px;
       border-radius: 20px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      border: 1px solid var(--border-glass);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s;
     }
 
-    .hud-score {
-      background: rgba(245, 158, 11, 0.15);
-      color: #f59e0b;
-      border: 1px solid rgba(245, 158, 11, 0.3);
+    .custom-chk-pill:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-primary);
     }
 
-    .hud-streak {
-      background: rgba(239, 68, 68, 0.15);
-      color: #ef4444;
-      border: 1px solid rgba(239, 68, 68, 0.3);
+    .custom-chk-pill input {
+      accent-color: #10b981;
+      cursor: pointer;
+      width: 14px;
+      height: 14px;
     }
 
-    /* Target Sentence Card */
-    .target-sentence-card {
-      padding: 26px 24px;
+    .custom-chk-pill.sm {
+      padding: 4px 10px;
+      font-size: 0.76rem;
+    }
+
+    /* =========================================
+       MODE 1: SHADOWING STYLING (Image 4)
+       ========================================= */
+    .mode-practice-card {
       border-radius: 20px;
       background: var(--bg-card);
       border: 1px solid var(--border-glass);
+      padding: 22px 24px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     }
 
-    .target-meaning-label {
-      font-size: 0.8rem;
-      font-weight: 800;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 6px;
-    }
-
-    .target-meaning-text {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      line-height: 1.4;
-      margin-bottom: 18px;
-    }
-
-    .target-pinyin-hint-box {
-      background: rgba(59, 130, 246, 0.1);
-      border: 1px dashed var(--accent-blue);
-      border-radius: 12px;
-      padding: 10px 16px;
-      color: var(--accent-blue);
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 18px;
-    }
-
-    /* Cloze Interactive Input Boxes */
-    .cloze-interactive-wrap {
+    .shadow-toggles-bar {
       display: flex;
+      gap: 10px;
       flex-wrap: wrap;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.7rem;
-      font-weight: 800;
-      line-height: 2;
-      margin-bottom: 22px;
-    }
-
-    .cloze-static-text {
-      color: var(--text-primary);
-      cursor: pointer;
-      transition: color 0.15s;
-    }
-
-    .cloze-static-text:hover {
-      color: var(--accent-blue);
-      text-decoration: underline;
-    }
-
-    .cloze-input-pill-wrap {
-      display: inline-flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .cloze-input-box {
-      font-size: 1.35rem;
-      font-weight: 800;
-      padding: 8px 14px;
-      border-radius: 12px;
-      border: 2px solid var(--accent-blue);
-      background: rgba(0, 0, 0, 0.25);
-      color: var(--text-primary);
-      text-align: center;
-      min-width: 90px;
-      max-width: 140px;
-      outline: none;
-      transition: all 0.2s ease;
-    }
-
-    .cloze-input-box:focus {
-      border-color: #38bdf8;
-      box-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
-    }
-
-    .cloze-input-box.input-correct {
-      border-color: #10b981;
-      background: rgba(16, 185, 129, 0.15);
-      color: #10b981;
-    }
-
-    .cloze-input-box.error-pulse {
-      border-color: #ef4444;
-      animation: errorShake 0.4s ease;
-    }
-
-    @keyframes errorShake {
-      0%, 100% { transform: translateX(0); }
-      20%, 60% { transform: translateX(-6px); }
-      40%, 80% { transform: translateX(6px); }
-    }
-
-    /* Full Sentence Textarea */
-    .full-dictation-textarea {
-      width: 100%;
-      min-height: 110px;
-      padding: 16px;
-      border-radius: 14px;
-      border: 2px solid var(--border-glass);
-      background: rgba(0, 0, 0, 0.25);
-      color: var(--text-primary);
-      font-size: 1.25rem;
-      font-weight: 700;
-      outline: none;
-      resize: vertical;
       margin-bottom: 18px;
     }
 
-    .full-dictation-textarea:focus {
-      border-color: var(--accent-blue);
-    }
-
-    /* Feedback Badges */
-    .dict-feedback-badge {
-      padding: 12px 18px;
-      border-radius: 12px;
-      font-weight: 800;
-      font-size: 0.95rem;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 18px;
-    }
-
-    .dict-feedback-badge.success {
-      background: rgba(16, 185, 129, 0.15);
-      color: #10b981;
-      border: 1px solid rgba(16, 185, 129, 0.3);
-    }
-
-    .dict-feedback-badge.error {
-      background: rgba(239, 68, 68, 0.15);
-      color: #ef4444;
-      border: 1px solid rgba(239, 68, 68, 0.3);
-    }
-
-    /* Solution Box */
-    .dict-solution-card {
+    .shadow-sentence-box {
+      padding: 22px 20px;
+      border-radius: 16px;
       background: rgba(0, 0, 0, 0.3);
       border: 1px solid var(--border-glass);
-      border-radius: 14px;
-      padding: 18px;
+      text-align: center;
       margin-bottom: 20px;
     }
 
-    .solution-hanzi {
-      font-size: 1.8rem;
-      font-weight: 900;
-      color: #f59e0b;
-      margin-bottom: 6px;
-    }
-
-    .solution-pinyin {
-      font-size: 1.05rem;
+    .shadow-pinyin-text {
+      font-size: 1.15rem;
       font-weight: 700;
-      color: var(--accent-blue);
-      margin-bottom: 6px;
+      color: #38bdf8;
+      margin-bottom: 8px;
+      min-height: 24px;
     }
 
-    .solution-meaning {
-      font-size: 0.95rem;
-      color: var(--text-secondary);
+    .shadow-hanzi-text {
+      font-size: 2.1rem;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: 0.04em;
+      line-height: 1.4;
+      margin-bottom: 10px;
+      min-height: 48px;
     }
 
-    /* Interactive Hanzi Character Spans */
-    .hanzi-interactive-char {
-      display: inline-block;
-      cursor: pointer;
-      padding: 0 2px;
-      border-radius: 4px;
-      transition: all 0.15s ease;
+    .shadow-meaning-text {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #cbd5e1;
+      line-height: 1.4;
+      min-height: 22px;
     }
 
-    .hanzi-interactive-char:hover {
-      background: rgba(239, 68, 68, 0.2);
-      color: #ef4444;
-      transform: scale(1.15);
-    }
-
-    /* Action Control Buttons */
-    .dict-action-toolbar {
+    .shadow-action-controls {
       display: flex;
-      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 16px;
       flex-wrap: wrap;
     }
 
-    .btn-submit-check {
-      flex: 1;
+    .btn-shadow-action {
       padding: 12px 24px;
+      border-radius: 16px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      border: 1px solid var(--border-glass);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-evaluate {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    }
+
+    .btn-evaluate:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.5);
+    }
+
+    .btn-playback {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-primary);
+    }
+
+    .btn-playback:hover {
+      background: rgba(255, 255, 255, 0.16);
+      transform: translateY(-2px);
+    }
+
+    /* Big Center Mic Button */
+    .btn-shadow-mic {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #ffffff;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.45);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .btn-shadow-mic:hover {
+      transform: scale(1.08);
+      box-shadow: 0 10px 28px rgba(16, 185, 129, 0.6);
+    }
+
+    .btn-shadow-mic .mic-icon {
+      font-size: 1.6rem;
+      margin-bottom: 2px;
+    }
+
+    .btn-shadow-mic .mic-label {
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .btn-shadow-mic.recording {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      border-color: #fee2e2;
+      animation: micPulsing 1.4s infinite;
+    }
+
+    @keyframes micPulsing {
+      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.75); transform: scale(1); }
+      60% { box-shadow: 0 0 0 18px rgba(239, 68, 68, 0); transform: scale(1.06); }
+      100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); transform: scale(1); }
+    }
+
+    .recording-live-bar {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1.5px solid rgba(239, 68, 68, 0.4);
+      border-radius: 12px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .recording-pulse-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ef4444;
+      animation: pulseDot 1s infinite alternate;
+    }
+
+    @keyframes pulseDot {
+      from { opacity: 0.4; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1.2); }
+    }
+
+    .recording-text {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fca5a5;
+      flex: 1;
+    }
+
+    .recording-timer {
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: #ef4444;
+      font-family: monospace;
+    }
+
+    .btn-stop-rec-inline {
+      padding: 5px 12px;
+      border-radius: 8px;
+      background: #ef4444;
+      color: #fff;
+      font-size: 0.76rem;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Assessment / Pronunciation Review Card */
+    .assessment-result-card {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1.5px solid var(--border-glass);
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin-top: 14px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .assessment-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-glass);
+      padding-bottom: 12px;
+    }
+
+    .assessment-score-badge {
+      font-size: 1.2rem;
+      font-weight: 900;
+      padding: 6px 14px;
+      border-radius: 12px;
+      background: rgba(16, 185, 129, 0.2);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .assessment-score-badge.low {
+      background: rgba(245, 158, 11, 0.2);
+      color: #f59e0b;
+      border-color: rgba(245, 158, 11, 0.4);
+    }
+
+    .assessment-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .assessment-audio-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 600px) {
+      .assessment-audio-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .audio-col {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border-glass);
+    }
+
+    .audio-label {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .btn-play-rec, .btn-play-model {
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border: 1px solid var(--border-glass);
+      transition: all 0.2s;
+    }
+
+    .btn-play-rec {
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      border-color: rgba(56, 189, 248, 0.35);
+    }
+
+    .btn-play-rec:hover {
+      background: #38bdf8;
+      color: #0f172a;
+    }
+
+    .btn-play-model {
+      background: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+      border-color: rgba(16, 185, 129, 0.35);
+    }
+
+    .btn-play-model:hover {
+      background: #10b981;
+      color: #ffffff;
+    }
+
+    .assessment-comparison-box {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.9rem;
+    }
+
+    .comp-row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .comp-tag {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      min-width: 80px;
+    }
+
+    .comp-spoken {
+      color: #fbbf24;
+      font-weight: 700;
+    }
+
+    .comp-target {
+      color: var(--text-primary);
+      font-weight: 800;
+      font-size: 1.1rem;
+    }
+
+    .char-match-correct {
+      color: #34d399;
+    }
+
+    .char-match-wrong {
+      color: #f87171;
+      text-decoration: underline;
+    }
+
+    /* =========================================
+       MODE 2: NGHE - CHÉP STYLING (Image 3)
+       ========================================= */
+    .dictation-meaning-prompt {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      padding: 10px 14px;
+      background: rgba(56, 189, 248, 0.08);
+      border-radius: 12px;
+      border-left: 4px solid #38bdf8;
+    }
+
+    .dictation-input-wrap {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .dictation-main-input {
+      flex: 1;
+      padding: 12px 18px;
+      border-radius: 14px;
+      border: 2px solid var(--border-glass);
+      background: rgba(0, 0, 0, 0.3);
+      color: var(--text-primary);
+      font-size: 1.1rem;
+      font-weight: 700;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .dictation-main-input:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.3);
+    }
+
+    .btn-check-input {
+      padding: 12px 22px;
       border-radius: 14px;
       background: linear-gradient(135deg, #2563eb, #1d4ed8);
       color: #fff;
       font-weight: 800;
-      font-size: 1.05rem;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+      transition: all 0.2s;
+    }
+
+    .btn-check-input:hover {
+      transform: translateY(-2px);
+    }
+
+    .dictation-char-tiles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 20px;
+      padding: 14px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 14px;
+      min-height: 56px;
+      align-items: center;
+    }
+
+    .dict-tile-box {
+      width: 44px;
+      height: 48px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1.5px solid var(--border-glass);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--text-primary);
+      transition: all 0.2s;
+    }
+
+    .dict-tile-box.revealed {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: #38bdf8;
+      color: #38bdf8;
+    }
+
+    .dict-tile-box.correct {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: #10b981;
+      color: #10b981;
+    }
+
+    .btn-orange-hint {
+      width: 100%;
+      padding: 14px 20px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 900;
       border: none;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
-      min-width: 140px;
+      gap: 10px;
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+      transition: all 0.25s ease;
+      letter-spacing: 0.04em;
     }
 
-    .btn-dict-tool {
-      padding: 12px 18px;
-      border-radius: 14px;
+    .btn-orange-hint:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.55);
+    }
+
+    /* =========================================
+       MODE 3: LỒNG TIẾNG STYLING (Image 2)
+       ========================================= */
+    .dubbing-content-box {
+      padding: 20px;
+      border-radius: 16px;
+      background: rgba(0, 0, 0, 0.3);
       border: 1px solid var(--border-glass);
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--text-primary);
-      font-weight: 700;
-      font-size: 0.9rem;
-      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    .dubbing-box-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .dubbing-badge {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #ec4899;
+      text-transform: uppercase;
       display: flex;
       align-items: center;
       gap: 6px;
     }
 
-    .btn-dict-tool:hover {
-      background: rgba(255, 255, 255, 0.15);
+    .dubbing-role-tag {
+      font-size: 0.74rem;
+      font-weight: 800;
+      background: rgba(236, 72, 153, 0.2);
+      color: #f472b6;
+      padding: 3px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(236, 72, 153, 0.4);
     }
 
-    /* Full Subtitles Mode View */
-    .subs-mode-container {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+    .dubbing-hanzi {
+      font-size: 1.85rem;
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1.4;
+      margin-bottom: 6px;
     }
 
-    .subs-full-row {
-      padding: 16px 20px;
-      border-radius: 14px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-glass);
-      transition: all 0.2s ease;
-    }
-
-    .subs-full-row.highlight-row {
-      border-color: var(--accent-blue);
-      background: rgba(28, 176, 246, 0.15);
-    }
-
-    .subs-row-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .dubbing-pinyin {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #38bdf8;
       margin-bottom: 8px;
     }
 
-    .subs-row-num {
+    .dubbing-meaning {
+      font-size: 0.95rem;
+      color: #cbd5e1;
+    }
+
+    .dubbing-controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .dubbing-role-select-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dubbing-role-select {
+      background: rgba(0, 0, 0, 0.3);
+      color: var(--text-primary);
+      border: 1px solid var(--border-glass);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-weight: 700;
+      font-size: 0.84rem;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .btn-dub-mic {
+      background: linear-gradient(135deg, #ec4899, #be185d);
+      box-shadow: 0 8px 24px rgba(236, 72, 153, 0.45);
+    }
+
+    .btn-play-dub {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+    }
+
+    /* =========================================
+       RIGHT COLUMN: NỘI DUNG & GHI CHÚ
+       ========================================= */
+    .workspace-side-card {
+      border-radius: 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .side-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      background: rgba(0, 0, 0, 0.25);
+      border-bottom: 1px solid var(--border-glass);
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s;
+    }
+
+    .side-card-header:hover {
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .side-card-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-card-collapse {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+    }
+
+    .workspace-side-card.collapsed .btn-card-collapse i {
+      transform: rotate(-90deg);
+    }
+
+    .workspace-side-card.collapsed .side-card-body {
+      display: none;
+    }
+
+    .side-card-body {
+      padding: 18px 20px;
+    }
+
+    .transcript-toggles-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .transcript-sentences-list {
+      max-height: 380px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-right: 4px;
+    }
+
+    .transcript-row {
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .transcript-row:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .transcript-row.active {
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+    }
+
+    .transcript-row-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .transcript-row-idx {
+      font-size: 0.75rem;
       font-weight: 800;
       color: var(--text-muted);
     }
 
-    .subs-row-time {
-      font-size: 0.8rem;
+    .transcript-row-time {
+      font-size: 0.72rem;
+      font-weight: 700;
       color: var(--text-secondary);
+      background: rgba(0, 0, 0, 0.3);
+      padding: 2px 6px;
+      border-radius: 4px;
     }
 
-    .subs-row-hanzi {
-      font-size: 1.4rem;
+    .transcript-row-hanzi {
+      font-size: 1.15rem;
       font-weight: 800;
       color: var(--text-primary);
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
 
-    .subs-row-pinyin {
-      font-size: 0.95rem;
+    .transcript-row-pinyin {
+      font-size: 0.85rem;
       font-weight: 700;
-      color: var(--accent-blue);
-      margin-bottom: 4px;
+      color: #38bdf8;
+      margin-bottom: 2px;
     }
 
-    .subs-row-meaning {
-      font-size: 0.9rem;
+    .transcript-row-meaning {
+      font-size: 0.82rem;
       color: var(--text-secondary);
+    }
+
+    /* Notebook Styling for Ghi Chú Card */
+    .notebook-wrap {
+      position: relative;
+    }
+
+    .notebook-textarea {
+      width: 100%;
+      min-height: 180px;
+      border-radius: 12px;
+      padding: 14px 16px;
+      border: 1px solid var(--border-glass);
+      background: rgba(0, 0, 0, 0.25);
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      line-height: 1.8rem;
+      background-image: linear-gradient(transparent, transparent 1.75rem, rgba(255, 255, 255, 0.08) 1.75rem, rgba(255, 255, 255, 0.08) 1.8rem);
+      background-size: 100% 1.8rem;
+      outline: none;
+      resize: vertical;
+      font-family: inherit;
+    }
+
+    .notebook-textarea:focus {
+      border-color: #10b981;
+    }
+
+    .notebook-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 8px;
+    }
+
+    .notes-save-status {
+      font-size: 0.75rem;
+      color: #10b981;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-clear-notes {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.82rem;
+      padding: 4px;
+      border-radius: 6px;
+      transition: color 0.2s;
+    }
+
+    .btn-clear-notes:hover {
+      color: #ef4444;
     }
 
     /* Modals */
@@ -1370,9 +1831,9 @@
       </div>
     </section>
 
-    <!-- WORKSPACE VIEW: Player & Interactive Dictation -->
+    <!-- WORKSPACE VIEW: Player & Interactive Workspace (New Layout matching Sketches) -->
     <section id="dict-workspace-view" class="dict-workspace-view">
-      <!-- Breadcrumb & Mode Selector -->
+      <!-- Breadcrumb & 3 Mode Selector Tabs (Top Right) -->
       <div class="workspace-top-bar">
         <div class="workspace-breadcrumb">
           <button class="btn-return-catalog" onclick="window.returnToCatalog()">
@@ -1384,224 +1845,300 @@
           </div>
         </div>
 
+        <!-- 3 Mode Tabs: Shadowing | Nghe - chép | Lồng tiếng -->
         <div class="mode-switch-tabs">
-          <button class="mode-tab-btn active" data-mode="cloze" onclick="window.switchMode('cloze')">
-            <i class="fa-solid fa-square-pen"></i> Chép Điền Từ
+          <button class="mode-tab-btn active" data-mode="shadowing" onclick="window.switchMode('shadowing')">
+            <i class="fa-solid fa-microphone-lines"></i> Shadowing
           </button>
-          <button class="mode-tab-btn" data-mode="full" onclick="window.switchMode('full')">
-            <i class="fa-solid fa-keyboard"></i> Chép Cả Câu
+          <button class="mode-tab-btn" data-mode="dictation" onclick="window.switchMode('dictation')">
+            <i class="fa-solid fa-pen-to-square"></i> Nghe - chép
           </button>
-          <button class="mode-tab-btn" data-mode="subtitles" onclick="window.switchMode('subtitles')">
-            <i class="fa-solid fa-closed-captioning"></i> Phụ Đề Song Ngữ
+          <button class="mode-tab-btn" data-mode="dubbing" onclick="window.switchMode('dubbing')">
+            <i class="fa-solid fa-clapperboard"></i> Lồng tiếng
           </button>
         </div>
       </div>
 
-      <!-- Main Grid -->
+      <!-- Main 2-Column Grid -->
       <div class="dict-main-workspace-grid">
-        <!-- Left Column: Video Player & Smart Toolbar -->
-        <div class="video-player-card">
-          <div class="yt-player-responsive-wrap">
-            <div id="yt-video-embed"></div>
-          </div>
-
-          <!-- Real-Time Dual Subtitles Display (eJOY Style) -->
-          <div class="yt-in-player-dual-subs" id="yt-in-player-dual-subs">
-            <div id="yt-overlay-hanzi" class="yt-sub-hanzi-line">Đang tải phụ đề...</div>
-            <div id="yt-overlay-pinyin" class="yt-sub-pinyin-line"></div>
-            <div id="yt-overlay-meaning" class="yt-sub-meaning-line"></div>
-          </div>
-
-          <!-- Smart Player Controls Bar -->
-          <div class="video-smart-toolbar">
-            <div style="display: flex; gap: 8px; align-items: center;">
-              <button class="btn btn-icon-only" onclick="window.prevSentence()" title="Câu trước (Ctrl + Mũi tên trái)">
-                <i class="fa-solid fa-backward-step"></i>
-              </button>
-              <button class="btn-replay-large" onclick="window.replaySnippet()" title="Nghe lại câu hiện tại (Phím Space)">
-                <i class="fa-solid fa-rotate-left"></i> <span>Nghe Lại Câu</span>
-              </button>
-              <button class="btn btn-icon-only" onclick="window.nextSentence()" title="Câu tiếp theo (Ctrl + Mũi tên phải)">
-                <i class="fa-solid fa-forward-step"></i>
-              </button>
-            </div>
-
-            <!-- Playback Speed Pills -->
-            <div class="speed-pills-group">
-              <button class="speed-pill" data-speed="0.5" onclick="window.setPlaybackSpeed(0.5)">0.5x</button>
-              <button class="speed-pill" data-speed="0.75" onclick="window.setPlaybackSpeed(0.75)">0.75x</button>
-              <button class="speed-pill active" data-speed="0.85" onclick="window.setPlaybackSpeed(0.85)">0.85x (Học)</button>
-              <button class="speed-pill" data-speed="1.0" onclick="window.setPlaybackSpeed(1.0)">1.0x</button>
-            </div>
-
-            <!-- Toggles (Auto Pause & Blur) -->
-            <div class="video-toggle-options">
-              <button id="toggle-autopause-btn" class="toggle-opt-btn active" onclick="window.toggleAutoPause()" title="Tự động dừng ở cuối mỗi câu">
-                <i class="fa-solid fa-pause"></i> <span>Tự Dừng Câu: BẬT</span>
-              </button>
-              <button id="toggle-blur-btn" class="toggle-opt-btn" onclick="window.toggleVideoBlur()" title="Làm mờ video để tập trung luyện nghe">
-                <i class="fa-solid fa-eye-slash"></i> <span>Làm Mờ Video</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Sentence Navigator List -->
-          <div class="dict-timeline-navigator">
-            <div class="dict-timeline-title"><i class="fa-solid fa-list-ol"></i> Danh sách các mốc câu thoại:</div>
-            <div id="dict-sentence-navigator-list">
-              <!-- Rendered dynamically -->
-            </div>
-          </div>
-
-          <!-- Interactive Sentence Timing Fine-Tuner -->
-          <div id="dict-timing-adjuster-panel" class="dict-timing-panel" style="background: rgba(15, 23, 42, 0.75); border: 1px solid var(--border-glass); border-radius: 16px; padding: 14px 18px; margin-top: 16px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 6px;">
-              <span style="font-size: 0.85rem; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 6px;">
-                <i class="fa-solid fa-stopwatch"></i> CHỈNH MỐC NGẮT NHỊP CÂU HIỆN TẠI (CHUẨN TỪNG GIÂY)
-              </span>
-              <span id="timing-adjuster-current-pos" style="font-size: 0.78rem; font-weight: 700; color: #fbbf24;">
-                Giây video: 00:00.00
-              </span>
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
-              <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
-                <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 700; margin-bottom: 6px;">
-                  BẮT ĐẦU: <span id="timing-start-val" style="color: #38bdf8; font-size: 0.95rem; font-weight: 800;">0.00s</span>
-                </div>
-                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                  <button class="btn btn-outline btn-sm" onclick="window.nudgeTiming('start', -0.2)" title="Lùi 0.2s">-0.2s</button>
-                  <button class="btn btn-outline btn-sm" onclick="window.nudgeTiming('start', 0.2)" title="Tiến 0.2s">+0.2s</button>
-                  <button class="btn btn-primary btn-sm" onclick="window.setTimingFromCurrent('start')" title="Lấy mốc giây video hiện tại làm điểm bắt đầu câu" style="font-size: 0.78rem;">📍 Lấy Giây Này</button>
-                </div>
-              </div>
-
-              <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
-                <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 700; margin-bottom: 6px;">
-                  KẾT THÚC: <span id="timing-end-val" style="color: #10b981; font-size: 0.95rem; font-weight: 800;">0.00s</span>
-                </div>
-                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                  <button class="btn btn-outline btn-sm" onclick="window.nudgeTiming('end', -0.2)" title="Lùi 0.2s">-0.2s</button>
-                  <button class="btn btn-outline btn-sm" onclick="window.nudgeTiming('end', 0.2)" title="Tiến 0.2s">+0.2s</button>
-                  <button class="btn btn-primary btn-sm" onclick="window.setTimingFromCurrent('end')" title="Lấy mốc giây video hiện tại làm điểm kết thúc câu" style="font-size: 0.78rem;">📍 Lấy Giây Này</button>
-                </div>
+        <!-- Left Column: Video + Controls + Mode Practice Area -->
+        <div class="workspace-left-col">
+          <div class="video-player-card">
+            <div class="yt-player-responsive-wrap">
+              <div id="yt-video-embed"></div>
+              <!-- Video Blackout Curtain (When "Ẩn video" is checked) -->
+              <div id="yt-video-curtain" class="yt-video-curtain" style="display: none;">
+                <i class="fa-solid fa-headphones-simple fa-fade curtain-icon"></i>
+                <div class="curtain-title">Chế Độ Luyện Nghe Thuần Túy (Ẩn Video)</div>
+                <div class="curtain-sub">Tập trung lắng nghe âm thanh và ngữ điệu tự nhiên</div>
               </div>
             </div>
 
-            <div style="display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap;">
-              <button class="btn btn-outline btn-sm" onclick="window.replaySnippet()" title="Nghe thử đoạn vừa chỉnh">
-                <i class="fa-solid fa-play"></i> Nghe Thử Mốc Này
+            <!-- Smart Player Controls Bar -->
+            <div class="video-smart-toolbar">
+              <div class="toolbar-nav-group">
+                <button class="btn btn-icon-only" onclick="window.prevSentence()" title="Câu trước (Phím Mũi tên trái)">
+                  <i class="fa-solid fa-backward-step"></i>
+                </button>
+                <button class="btn-replay-large" onclick="window.replaySnippet()" title="Nghe lại câu hiện tại (Phím Space)">
+                  <i class="fa-solid fa-rotate-left"></i> <span>Nghe Lại Câu</span>
+                </button>
+                <button class="btn btn-icon-only" onclick="window.nextSentence()" title="Câu tiếp theo (Phím Mũi tên phải)">
+                  <i class="fa-solid fa-forward-step"></i>
+                </button>
+              </div>
+
+              <!-- Playback Speed Pills -->
+              <div class="speed-pills-group">
+                <button class="speed-pill" data-speed="0.5" onclick="window.setPlaybackSpeed(0.5)">0.5x</button>
+                <button class="speed-pill" data-speed="0.75" onclick="window.setPlaybackSpeed(0.75)">0.75x</button>
+                <button class="speed-pill active" data-speed="0.85" onclick="window.setPlaybackSpeed(0.85)">0.85x (Học)</button>
+                <button class="speed-pill" data-speed="1.0" onclick="window.setPlaybackSpeed(1.0)">1.0x</button>
+              </div>
+
+              <!-- Toggles: Auto Pause, Blur, Hide Video -->
+              <div class="video-toggle-options">
+                <button id="toggle-autopause-btn" class="toggle-opt-btn active" onclick="window.toggleAutoPause()" title="Tự động dừng ở cuối mỗi câu">
+                  <i class="fa-solid fa-pause"></i> <span>Tự Dừng Câu: BẬT</span>
+                </button>
+                <button id="toggle-blur-btn" class="toggle-opt-btn" onclick="window.toggleVideoBlur()" title="Làm mờ video để tập trung luyện nghe">
+                  <i class="fa-solid fa-eye-slash"></i> <span>Làm Mờ Video</span>
+                </button>
+                <label class="toggle-opt-btn checkbox-opt-btn" title="Ẩn video hoàn toàn để tập trung thính giác">
+                  <input type="checkbox" id="toggle-hide-video-cb" onchange="window.toggleHideVideo(this.checked)">
+                  <i class="fa-solid fa-video-slash"></i> <span>Ẩn video</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- ================= MODE 1: SHADOWING (Image 4) ================= -->
+          <div id="mode-panel-shadowing" class="mode-practice-card">
+            <!-- Visibility Toggles Bar -->
+            <div class="shadow-toggles-bar">
+              <label class="custom-chk-pill">
+                <input type="checkbox" id="chk-shadow-hide-pinyin" onchange="window.toggleShadowPinyin(this.checked)">
+                <span><i class="fa-solid fa-eye-slash"></i> Ẩn pinyin</span>
+              </label>
+              <label class="custom-chk-pill">
+                <input type="checkbox" id="chk-shadow-hide-hanzi" onchange="window.toggleShadowHanzi(this.checked)">
+                <span><i class="fa-solid fa-eye-slash"></i> Ẩn chữ</span>
+              </label>
+              <label class="custom-chk-pill">
+                <input type="checkbox" id="chk-shadow-hide-meaning" onchange="window.toggleShadowMeaning(this.checked)">
+                <span><i class="fa-solid fa-eye-slash"></i> Ẩn nghĩa</span>
+              </label>
+            </div>
+
+            <!-- Target Sentence Display Box -->
+            <div class="shadow-sentence-box">
+              <div id="shadow-pinyin-display" class="shadow-pinyin-text">...</div>
+              <div id="shadow-hanzi-display" class="shadow-hanzi-text">...</div>
+              <div id="shadow-meaning-display" class="shadow-meaning-text">...</div>
+            </div>
+
+            <!-- Action Control Bar (Chấm điểm | Mic to tròn | Nghe lại) -->
+            <div class="shadow-action-controls">
+              <button class="btn-shadow-action btn-evaluate" onclick="window.evaluatePronunciation()" title="Chấm điểm và phân tích phát âm câu này">
+                <i class="fa-solid fa-square-check"></i> <span>Chấm Điểm</span>
               </button>
-              <button class="btn btn-primary btn-sm" onclick="window.saveAdjustedTiming()" style="background: linear-gradient(135deg, #10b981, #059669); border: none; font-weight: 800;">
-                <i class="fa-solid fa-floppy-disk"></i> Lưu Mốc Thời Gian
+
+              <!-- Big Center Mic Button -->
+              <button id="btn-shadow-mic" class="btn-shadow-mic" onclick="window.toggleSpeechRecording()" title="Nhấn để Bắt đầu nói / Nhấn lại để Dừng & Chấm điểm">
+                <i class="fa-solid fa-microphone mic-icon"></i>
+                <span class="mic-label">Mic</span>
               </button>
+
+              <button id="btn-shadow-playback" class="btn-shadow-action btn-playback" onclick="window.playUserOrModelAudio()" title="Nghe lại giọng ghi âm của bạn / giọng mẫu">
+                <i class="fa-solid fa-rotate-left"></i> <span>Nghe Lại</span>
+              </button>
+            </div>
+
+            <!-- Recording Live Status Bar (Visible during recording) -->
+            <div id="shadow-recording-live-bar" class="recording-live-bar" style="display: none;">
+              <div class="recording-pulse-dot"></div>
+              <span class="recording-text">Đang thu âm... Bấm nút Mic một lần nữa khi nói xong</span>
+              <span id="shadow-recording-timer" class="recording-timer">00:03</span>
+              <button class="btn-stop-rec-inline" onclick="window.toggleSpeechRecording()">Dừng lại & Chấm điểm</button>
+            </div>
+
+            <!-- Speech Assessment Result Card (Clear & Detailed) -->
+            <div id="shadow-assessment-card" class="assessment-result-card" style="display: none;">
+              <div class="assessment-header">
+                <div class="assessment-score-badge" id="assessment-score-badge">
+                  <i class="fa-solid fa-award"></i> <span id="assessment-score-val">0%</span>
+                </div>
+                <div class="assessment-title" id="assessment-verdict-text">Đang phân tích...</div>
+              </div>
+
+              <div class="assessment-audio-row">
+                <div class="audio-col">
+                  <span class="audio-label"><i class="fa-solid fa-microphone"></i> Giọng ghi âm của bạn:</span>
+                  <div id="user-audio-player-wrap">
+                    <button class="btn-play-rec" onclick="window.playUserRecordingAudio()">
+                      <i class="fa-solid fa-play"></i> Nghe lại giọng bạn
+                    </button>
+                  </div>
+                </div>
+                <div class="audio-col">
+                  <span class="audio-label"><i class="fa-solid fa-volume-high"></i> Giọng đọc chuẩn mẫu:</span>
+                  <button class="btn-play-model" onclick="window.speakCurrentSentence()">
+                    <i class="fa-solid fa-volume-high"></i> Nghe mẫu chuẩn
+                  </button>
+                </div>
+              </div>
+
+              <div class="assessment-comparison-box">
+                <div class="comp-row">
+                  <span class="comp-tag">Bạn đã nói:</span>
+                  <span id="assessment-spoken-text" class="comp-spoken">...</span>
+                </div>
+                <div class="comp-row">
+                  <span class="comp-tag">Mục tiêu:</span>
+                  <div id="assessment-target-breakdown" class="comp-target">...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ================= MODE 2: NGHE - CHÉP (Image 3) ================= -->
+          <div id="mode-panel-dictation" class="mode-practice-card" style="display: none;">
+            <div class="dictation-meaning-prompt" id="dictation-meaning-prompt">
+              <i class="fa-solid fa-language"></i> <span id="dictation-meaning-text">...</span>
+            </div>
+
+            <!-- Large Input Box -->
+            <div class="dictation-input-wrap">
+              <input type="text" id="dictation-user-input" class="dictation-main-input" placeholder="Gõ chữ Hán hoặc câu ví dụ vào đây (Nhấn Enter để kiểm tra)..." autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter') window.checkDictationAnswer()">
+              <button class="btn-check-input" onclick="window.checkDictationAnswer()">
+                <i class="fa-solid fa-circle-check"></i> Kiểm tra
+              </button>
+            </div>
+
+            <!-- Character Hint / Blank Tiles -->
+            <div class="dictation-char-tiles" id="dictation-char-tiles">
+              <!-- Tiles rendered dynamically: [?] [?] [?] [?] -->
+            </div>
+
+            <!-- Dictation Action Feedback -->
+            <div id="dictation-feedback-box" class="dict-feedback-badge" style="display: none;"></div>
+
+            <!-- Bottom Orange Button: Hiện Gợi Ý Mẫu -->
+            <div class="dictation-bottom-actions">
+              <button class="btn-orange-hint" onclick="window.showDictationHint()">
+                <i class="fa-solid fa-lightbulb"></i> HIỆN GỢI Ý MẪU
+              </button>
+            </div>
+
+            <!-- Solution Box if revealed -->
+            <div id="dictation-solution-box" class="dict-solution-card" style="display: none;">
+              <div class="target-meaning-label" style="color: #f59e0b;"><i class="fa-solid fa-check-double"></i> Đáp Án Chuẩn:</div>
+              <div id="dictation-sol-hanzi" class="solution-hanzi"></div>
+              <div id="dictation-sol-pinyin" class="solution-pinyin"></div>
+              <div id="dictation-sol-meaning" class="solution-meaning"></div>
+            </div>
+          </div>
+
+          <!-- ================= MODE 3: LỒNG TIẾNG (Image 2) ================= -->
+          <div id="mode-panel-dubbing" class="mode-practice-card" style="display: none;">
+            <!-- Dialogue Content Box -->
+            <div class="dubbing-content-box">
+              <div class="dubbing-box-header">
+                <span class="dubbing-badge"><i class="fa-solid fa-clapperboard"></i> Nội dung câu thoại</span>
+                <span id="dubbing-role-display" class="dubbing-role-tag">Nhân vật A</span>
+              </div>
+              <div id="dubbing-hanzi-text" class="dubbing-hanzi">...</div>
+              <div id="dubbing-pinyin-text" class="dubbing-pinyin">...</div>
+              <div id="dubbing-meaning-text" class="dubbing-meaning">...</div>
+            </div>
+
+            <!-- Bottom Row: Nhân vật | Mic | Phát -->
+            <div class="dubbing-controls-row">
+              <div class="dubbing-role-select-wrap">
+                <label for="dubbing-role-selector" style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);"><i class="fa-solid fa-user-tag"></i> Nhân vật:</label>
+                <select id="dubbing-role-selector" class="dubbing-role-select" onchange="window.selectDubRole(this.value)">
+                  <option value="role_a">Nhân vật A (Nam/Nữ chính)</option>
+                  <option value="role_b">Nhân vật B (Đối thoại)</option>
+                  <option value="all">Tất cả nhân vật</option>
+                </select>
+              </div>
+
+              <!-- Big Center Mic Button for Dubbing -->
+              <button id="btn-dub-mic" class="btn-shadow-mic btn-dub-mic" onclick="window.toggleDubRecording()" title="Thu âm lồng tiếng cho câu này">
+                <i class="fa-solid fa-microphone mic-icon"></i>
+                <span class="mic-label">Mic</span>
+              </button>
+
+              <!-- Phát / Preview Dubbing -->
+              <button class="btn-shadow-action btn-play-dub" onclick="window.previewDubbing()" title="Phát lại video kèm giọng lồng tiếng của bạn">
+                <i class="fa-solid fa-play"></i> <span>Phát</span>
+              </button>
+            </div>
+
+            <!-- Dubbing Status & Preview Bar -->
+            <div id="dubbing-status-bar" class="recording-live-bar" style="display: none; margin-top: 16px;">
+              <div class="recording-pulse-dot"></div>
+              <span id="dubbing-status-msg" class="recording-text">Đang thu âm lồng tiếng... Khớp khẩu hình video</span>
+              <span id="dubbing-timer" class="recording-timer">00:03</span>
             </div>
           </div>
         </div>
 
-        <!-- Right Column: Interactive Dictation Forms -->
-        <div class="dict-interactive-panel">
-          <!-- Stats HUD -->
-          <div class="dict-stats-hud">
-            <div class="dict-hud-left">
-              <span id="dict-sentence-progress-text" style="font-weight: 800; font-size: 0.9rem;">Câu 1 / 8</span>
-              <div class="dict-hud-progress-bar">
-                <div id="dict-sentence-progress-fill" class="dict-hud-progress-fill"></div>
+        <!-- Right Column: Card 1 (Nội dung) & Card 2 (Ghi chú) -->
+        <div class="workspace-right-col">
+          <!-- CARD 1: NỘI DUNG (Transcript & Full Subtitles) -->
+          <div class="workspace-side-card" id="card-subtitles-content">
+            <div class="side-card-header" onclick="window.toggleSideCard('card-subtitles-content')">
+              <div class="side-card-title">
+                <i class="fa-solid fa-file-lines" style="color: #38bdf8;"></i>
+                <span>Nội dung</span>
+              </div>
+              <button class="btn-card-collapse" title="Thu gọn / Mở rộng">
+                <i class="fa-solid fa-chevron-down toggle-chevron"></i>
+              </button>
+            </div>
+
+            <div class="side-card-body">
+              <!-- Checkbox Toggles -->
+              <div class="transcript-toggles-bar">
+                <label class="custom-chk-pill sm">
+                  <input type="checkbox" id="chk-transcript-hide-pinyin" onchange="window.toggleTranscriptPinyin(this.checked)">
+                  <span><i class="fa-solid fa-eye-slash"></i> Ẩn pinyin</span>
+                </label>
+                <label class="custom-chk-pill sm">
+                  <input type="checkbox" id="chk-transcript-hide-meaning" onchange="window.toggleTranscriptMeaning(this.checked)">
+                  <span><i class="fa-solid fa-eye-slash"></i> Ẩn nghĩa</span>
+                </label>
+              </div>
+
+              <!-- Sentence List Scroll Container -->
+              <div class="transcript-sentences-list" id="transcript-sentences-list">
+                <!-- Rendered dynamically by JS -->
               </div>
             </div>
-
-            <div class="dict-hud-badges">
-              <span class="hud-pill hud-score"><i class="fa-solid fa-star"></i> <span id="dict-score-counter">0 điểm</span></span>
-              <span class="hud-pill hud-streak"><i class="fa-solid fa-fire"></i> <span id="dict-streak-counter">0 🔥</span></span>
-            </div>
           </div>
 
-          <!-- CLOZE & FULL DICTATION MODES -->
-          <div id="workspace-cloze-mode" class="target-sentence-card">
-            <div class="target-meaning-label"><i class="fa-solid fa-language"></i> Nghĩa Tiếng Việt:</div>
-            <div id="target-sentence-meaning" class="target-meaning-text">...</div>
-
-            <!-- Pinyin Hint (Revealed on Hint Click) -->
-            <div id="target-sentence-pinyin-hint" class="target-pinyin-hint-box" style="display: none;"></div>
-
-            <!-- Interactive Inputs -->
-            <div class="cloze-interactive-wrap" id="cloze-interactive-container">
-              <!-- Interactive blank pills rendered here -->
-            </div>
-
-            <!-- Feedback Badge -->
-            <div id="dict-action-feedback" class="dict-feedback-badge" style="display: none;"></div>
-
-            <!-- Solution Box (Revealed on Reveal Click) -->
-            <div id="dict-solution-box" class="dict-solution-card" style="display: none;">
-              <div class="target-meaning-label" style="color: #f59e0b;"><i class="fa-solid fa-check-double"></i> Đáp Án Chuẩn:</div>
-              <div id="solution-hanzi-text" class="solution-hanzi"></div>
-              <div id="solution-pinyin-text" class="solution-pinyin"></div>
-              <div id="solution-meaning-text" class="solution-meaning"></div>
-            </div>
-
-            <!-- Action Toolbar -->
-            <div class="dict-action-toolbar">
-              <button class="btn-submit-check" onclick="window.checkCurrentAnswer()" title="Kiểm tra đáp án (Phím Enter)">
-                <i class="fa-solid fa-circle-check"></i> <span>Kiểm Tra</span>
-              </button>
-              <button class="btn-dict-tool" onclick="window.replaySnippet()" title="Nghe lại đoạn âm thanh video (0.8x)">
-                <i class="fa-solid fa-rotate-left" style="color: #38bdf8;"></i> <span>Nghe Lại Video</span>
-              </button>
-              <button class="btn-dict-tool" onclick="window.speakCurrentSentence()" title="Nghe AI phát âm mẫu chuẩn giọng Bắc Kinh">
-                <i class="fa-solid fa-volume-high" style="color: #10b981;"></i> <span>Đọc Mẫu</span>
-              </button>
-              <button class="btn-dict-tool" id="dict-mic-btn" onclick="window.startSpeechRecognition()" title="Luyện nói theo video">
-                <i class="fa-solid fa-microphone" style="color: #ec4899;"></i> <span>Luyện Nói</span>
-              </button>
-              <button class="btn-dict-tool" onclick="window.showHint()" title="Gợi ý chữ cái đầu & Pinyin">
-                <i class="fa-solid fa-lightbulb" style="color: #f59e0b;"></i> <span>Gợi Ý</span>
-              </button>
-              <button class="btn-dict-tool" onclick="window.revealAnswer()" title="Xem đáp án chuẩn">
-                <i class="fa-solid fa-eye" style="color: #a855f7;"></i> <span>Đáp Án</span>
+          <!-- CARD 2: GHI CHÚ (Personal Notes Notebook) -->
+          <div class="workspace-side-card" id="card-user-notes">
+            <div class="side-card-header" onclick="window.toggleSideCard('card-user-notes')">
+              <div class="side-card-title">
+                <i class="fa-solid fa-book-bookmark" style="color: #10b981;"></i>
+                <span>Ghi chú</span>
+              </div>
+              <button class="btn-card-collapse" title="Thu gọn / Mở rộng">
+                <i class="fa-solid fa-chevron-down toggle-chevron"></i>
               </button>
             </div>
-          </div>
 
-          <!-- FULL DICTATION MODE -->
-          <div id="workspace-full-mode" class="target-sentence-card" style="display: none;">
-            <div class="target-meaning-label"><i class="fa-solid fa-language"></i> Nghĩa Tiếng Việt:</div>
-            <div class="target-meaning-text" id="full-mode-meaning">Lắng nghe và gõ lại toàn bộ câu thoại</div>
-
-            <textarea id="full-dictation-input" class="full-dictation-textarea" placeholder="Nghe âm thanh và gõ lại bằng Chữ Hán hoặc Pinyin (Nhấn Enter để nộp)..."></textarea>
-
-            <div class="dict-action-toolbar">
-              <button class="btn-submit-check" onclick="window.checkCurrentAnswer()">
-                <i class="fa-solid fa-circle-check"></i> <span>Kiểm Tra</span>
-              </button>
-              <button class="btn-dict-tool" onclick="window.replaySnippet()" title="Nghe lại đoạn âm thanh video (0.8x)">
-                <i class="fa-solid fa-rotate-left" style="color: #38bdf8;"></i> <span>Nghe Lại Video</span>
-              </button>
-              <button class="btn-dict-tool" onclick="window.speakCurrentSentence()" title="Nghe AI phát âm mẫu chuẩn giọng Bắc Kinh">
-                <i class="fa-solid fa-volume-high" style="color: #10b981;"></i> <span>Đọc Mẫu</span>
-              </button>
-              <button class="btn-dict-tool" onclick="window.showHint()">
-                <i class="fa-solid fa-lightbulb" style="color: #f59e0b;"></i> <span>Gợi Ý</span>
-              </button>
-              <button class="btn-dict-tool" onclick="window.revealAnswer()">
-                <i class="fa-solid fa-eye" style="color: #a855f7;"></i> <span>Đáp Án</span>
-              </button>
+            <div class="side-card-body">
+              <div class="notebook-wrap">
+                <textarea id="lesson-notes-textarea" class="notebook-textarea" placeholder="Ghi chép từ vựng mới, ngữ pháp hoặc lưu ý cho video này... (Tự động lưu)" oninput="window.handleNotesInput(this.value)"></textarea>
+                <div class="notebook-footer">
+                  <span id="notes-save-status" class="notes-save-status"><i class="fa-solid fa-cloud-check"></i> Đã tự động lưu</span>
+                  <button class="btn-clear-notes" onclick="window.clearCurrentNotes()" title="Xóa ghi chú"><i class="fa-solid fa-trash-can"></i></button>
+                </div>
+              </div>
             </div>
-          </div>
-
-          <!-- SUBTITLES EXPLORER MODE -->
-          <div id="workspace-subs-mode" class="subs-mode-container" style="display: none;">
-            <div id="subs-mode-full-list">
-              <!-- Full Subtitles List -->
-            </div>
-          </div>
-
-          <!-- Lesson Notes & Vocabulary Explanation Box -->
-          <div id="workspace-lesson-note-box" style="display: none; margin-top: 18px; background: rgba(30, 41, 59, 0.7); border: 1.5px solid rgba(56, 189, 248, 0.35); border-radius: 16px; padding: 16px 20px;">
-            <div style="font-size: 0.95rem; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-              <i class="fa-solid fa-book-open-reader"></i> Ghi Chú Từ Vựng & Kiến Thức Mở Rộng:
-            </div>
-            <div id="workspace-lesson-note-content" style="font-size: 0.88rem; color: #e2e8f0; line-height: 1.6; white-space: pre-wrap;"></div>
           </div>
         </div>
       </div>

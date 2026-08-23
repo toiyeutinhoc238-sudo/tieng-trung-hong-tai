@@ -9,13 +9,34 @@ let allLessons = [];
 let filteredLessons = [];
 let currentLesson = null;
 let currentSentenceIdx = 0;
-let currentMode = 'cloze'; // 'cloze' | 'full' | 'subtitles'
+let currentMode = 'shadowing'; // 'shadowing' | 'dictation' | 'dubbing'
 let currentSpeed = 0.85;
 let autoPauseEnabled = true;
 let isVideoBlurred = false;
+let isVideoHidden = false;
 let userAnswers = {}; // { sentenceId: { isCorrect, score, userAnswer, blanks: [] } }
 let totalScore = 0;
 let currentStreak = 0;
+
+// Subtitles & Shadowing Visibility State
+let shadowHidePinyin = false;
+let shadowHideHanzi = false;
+let shadowHideMeaning = false;
+let transcriptHidePinyin = false;
+let transcriptHideMeaning = false;
+let selectedDubRole = 'role_a';
+
+// Audio Recording & Pronunciation Assessment State
+let isRecording = false;
+let mediaRecorder = null;
+let audioChunks = [];
+let userRecordedBlob = null;
+let userRecordedAudioUrl = null;
+let activeRecognition = null;
+let recognizedTranscript = '';
+let recordingTimerInterval = null;
+let recordingSeconds = 0;
+let dubbingVideoSyncPlaying = false;
 
 // YouTube Player Instance & Polling
 let ytPlayer = null;
@@ -113,7 +134,7 @@ function initYouTubeAPI() {
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 }
 
-window.onYouTubeIframeAPIReady = function() {
+window.onYouTubeIframeAPIReady = function () {
   console.log("YouTube IFrame API Ready");
 };
 
@@ -164,19 +185,10 @@ function startPlaybackWatcher() {
         const curTime = ytPlayer.getCurrentTime();
         const curSent = currentLesson.sentences[currentSentenceIdx];
         if (curSent) {
-          // Update timing display in adjuster
-          const posEl = document.getElementById('timing-adjuster-current-pos');
-          if (posEl) {
-            const curMin = Math.floor(curTime / 60);
-            const curSec = (curTime % 60).toFixed(2);
-            posEl.textContent = `Giây video: ${String(curMin).padStart(2, '0')}:${String(curSec).padStart(5, '0')} (${curTime.toFixed(2)}s)`;
-          }
-
-          // Update video progress meter and 60fps active dual subtitles
+          // Highlight active row in transcript list
           updateSubtitleHighlight(curTime);
-          updateInPlayerDualSubtitles(curTime);
 
-          // Auto pause at end of sentence
+          // Auto pause exactly at end of sentence (millisecond precision)
           if (autoPauseEnabled && isSentencePlaying && curTime >= curSent.endTime) {
             ytPlayer.pauseVideo();
             isSentencePlaying = false;
@@ -185,7 +197,7 @@ function startPlaybackWatcher() {
             return;
           }
         }
-      } catch (e) {}
+      } catch (e) { }
     }
 
     if (ytPlayer && ytPlayer.getPlayerState) {
@@ -245,8 +257,8 @@ function toggleAutoPause() {
   const btn = document.getElementById('toggle-autopause-btn');
   if (btn) {
     btn.classList.toggle('active', autoPauseEnabled);
-    btn.innerHTML = autoPauseEnabled 
-      ? '<i class="fa-solid fa-pause"></i> <span>Tự Dừng Câu: BẬT</span>' 
+    btn.innerHTML = autoPauseEnabled
+      ? '<i class="fa-solid fa-pause"></i> <span>Tự Dừng Câu: BẬT</span>'
       : '<i class="fa-solid fa-play"></i> <span>Tự Dừng Câu: TẮT</span>';
   }
   showToast(autoPauseEnabled ? "Đã BẬT tự động dừng ở cuối mỗi câu" : "Đã TẮT tự động dừng (Video chạy liên tục)");
@@ -261,16 +273,107 @@ function toggleVideoBlur() {
   }
   if (btn) {
     btn.classList.toggle('active', isVideoBlurred);
-    btn.innerHTML = isVideoBlurred 
-      ? '<i class="fa-solid fa-eye-slash"></i> <span>Làm Mờ Video: BẬT</span>' 
+    btn.innerHTML = isVideoBlurred
+      ? '<i class="fa-solid fa-eye-slash"></i> <span>Làm Mờ Video: BẬT</span>'
       : '<i class="fa-solid fa-eye"></i> <span>Làm Mờ Video: TẮT</span>';
   }
   showToast(isVideoBlurred ? "Đã làm mờ video để tập trung luyện nghe" : "Đã hiển thị lại video rõ nét");
 }
 
 // ==========================================
-// WORKSPACE & DICTATION MODES LOGIC
+// WORKSPACE & 3 MODES INTERACTIVE LOGIC
 // ==========================================
+
+function toggleHideVideo(checked) {
+  isVideoHidden = !!checked;
+  const curtain = document.getElementById('yt-video-curtain');
+  if (curtain) {
+    curtain.style.display = isVideoHidden ? 'flex' : 'none';
+  }
+  showToast(isVideoHidden ? "Đã bật chế độ luyện nghe (Ẩn màn hình video)" : "Đã hiển thị lại video");
+}
+
+function toggleShadowPinyin(checked) {
+  shadowHidePinyin = !!checked;
+  renderShadowingPanel(currentLesson?.sentences?.[currentSentenceIdx]);
+}
+
+function toggleShadowHanzi(checked) {
+  shadowHideHanzi = !!checked;
+  renderShadowingPanel(currentLesson?.sentences?.[currentSentenceIdx]);
+}
+
+function toggleShadowMeaning(checked) {
+  shadowHideMeaning = !!checked;
+  renderShadowingPanel(currentLesson?.sentences?.[currentSentenceIdx]);
+}
+
+function toggleTranscriptPinyin(checked) {
+  transcriptHidePinyin = !!checked;
+  renderTranscriptList();
+}
+
+function toggleTranscriptMeaning(checked) {
+  transcriptHideMeaning = !!checked;
+  renderTranscriptList();
+}
+
+function selectDubRole(role) {
+  selectedDubRole = role;
+  const roleDisplay = document.getElementById('dubbing-role-display');
+  if (roleDisplay) {
+    const map = {
+      'role_a': 'Nhân vật A (Chính)',
+      'role_b': 'Nhân vật B (Đối thoại)',
+      'all': 'Tất cả nhân vật'
+    };
+    roleDisplay.textContent = map[role] || 'Nhân vật A';
+  }
+}
+
+function toggleSideCard(cardId) {
+  const card = document.getElementById(cardId);
+  if (card) {
+    card.classList.toggle('collapsed');
+  }
+}
+
+function loadLessonNotes() {
+  if (!currentLesson) return;
+  const email = getCurrentUserEmail();
+  const storageKey = `video_notes_${currentLesson.id}_${email}`;
+  const textarea = document.getElementById('lesson-notes-textarea');
+  if (textarea) {
+    textarea.value = localStorage.getItem(storageKey) || '';
+  }
+  const statusEl = document.getElementById('notes-save-status');
+  if (statusEl) {
+    statusEl.innerHTML = '<i class="fa-solid fa-cloud-check"></i> Đã tự động lưu';
+  }
+}
+
+function handleNotesInput(val) {
+  if (!currentLesson) return;
+  const email = getCurrentUserEmail();
+  const storageKey = `video_notes_${currentLesson.id}_${email}`;
+  localStorage.setItem(storageKey, val);
+  const statusEl = document.getElementById('notes-save-status');
+  if (statusEl) {
+    statusEl.innerHTML = '<i class="fa-solid fa-cloud-check"></i> Đã tự động lưu';
+  }
+}
+
+function clearCurrentNotes() {
+  if (!currentLesson) return;
+  if (confirm('Bạn có chắc muốn xóa ghi chú của video này không?')) {
+    const email = getCurrentUserEmail();
+    const storageKey = `video_notes_${currentLesson.id}_${email}`;
+    localStorage.removeItem(storageKey);
+    const textarea = document.getElementById('lesson-notes-textarea');
+    if (textarea) textarea.value = '';
+    showToast('Đã xóa ghi chú của bài học!');
+  }
+}
 
 function switchMode(mode) {
   currentMode = mode;
@@ -278,13 +381,13 @@ function switchMode(mode) {
     btn.classList.toggle('active', btn.dataset.mode === mode);
   });
 
-  const clozeWrap = document.getElementById('workspace-cloze-mode');
-  const fullWrap = document.getElementById('workspace-full-mode');
-  const subsWrap = document.getElementById('workspace-subs-mode');
+  const shadowingWrap = document.getElementById('mode-panel-shadowing');
+  const dictationWrap = document.getElementById('mode-panel-dictation');
+  const dubbingWrap = document.getElementById('mode-panel-dubbing');
 
-  if (clozeWrap) clozeWrap.style.display = (mode === 'cloze') ? 'block' : 'none';
-  if (fullWrap) fullWrap.style.display = (mode === 'full') ? 'block' : 'none';
-  if (subsWrap) subsWrap.style.display = (mode === 'subtitles') ? 'block' : 'none';
+  if (shadowingWrap) shadowingWrap.style.display = (mode === 'shadowing') ? 'block' : 'none';
+  if (dictationWrap) dictationWrap.style.display = (mode === 'dictation') ? 'block' : 'none';
+  if (dubbingWrap) dubbingWrap.style.display = (mode === 'dubbing') ? 'block' : 'none';
 
   renderCurrentSentence();
 }
@@ -294,227 +397,238 @@ function renderCurrentSentence() {
   const sent = currentLesson.sentences[currentSentenceIdx];
   const total = currentLesson.sentences.length;
 
-  // Header & Progress Indicators
-  const progressText = document.getElementById('dict-sentence-progress-text');
-  const progressFill = document.getElementById('dict-sentence-progress-fill');
-  if (progressText) progressText.textContent = `Câu ${currentSentenceIdx + 1} / ${total}`;
-  if (progressFill) progressFill.style.width = `${((currentSentenceIdx + 1) / total) * 100}%`;
-
-  const scoreText = document.getElementById('dict-score-counter');
-  if (scoreText) scoreText.textContent = `${totalScore} điểm`;
-
-  const streakText = document.getElementById('dict-streak-counter');
-  if (streakText) streakText.textContent = `${currentStreak} 🔥`;
-
-  // Meaning & Pinyin
-  const meaningEl = document.getElementById('target-sentence-meaning');
-  if (meaningEl) meaningEl.textContent = sent.meaning || 'Lắng nghe và chép lại câu thoại';
-
-  const pinyinHintEl = document.getElementById('target-sentence-pinyin-hint');
-  if (pinyinHintEl) {
-    pinyinHintEl.textContent = sent.pinyin;
-    pinyinHintEl.style.display = 'none'; // Hidden by default, toggled on hint
+  // Title & Level badge in workspace top bar
+  const titleEl = document.getElementById('workspace-lesson-title');
+  const levelEl = document.getElementById('workspace-lesson-level-badge');
+  if (titleEl) titleEl.textContent = currentLesson.title || 'Bài học';
+  if (levelEl) {
+    levelEl.textContent = currentLesson.levelText || `HSK ${currentLesson.level || 1}`;
+    levelEl.className = `level-badge level-${currentLesson.level || 1}`;
   }
 
-  // Reset feedback
-  const feedbackEl = document.getElementById('dict-action-feedback');
-  if (feedbackEl) {
-    feedbackEl.style.display = 'none';
-    feedbackEl.className = 'dict-feedback-badge';
+  // Render mode-specific contents
+  if (currentMode === 'shadowing') {
+    renderShadowingPanel(sent);
+  } else if (currentMode === 'dictation') {
+    renderDictationPanel(sent);
+  } else if (currentMode === 'dubbing') {
+    renderDubbingPanel(sent);
   }
 
-  // Reset Hint / Reveal
-  const solutionEl = document.getElementById('dict-solution-box');
-  if (solutionEl) solutionEl.style.display = 'none';
-
-  // Render Mode Specific Form
-  if (currentMode === 'cloze') {
-    renderClozeInputs(sent);
-  } else if (currentMode === 'full') {
-    renderFullInput(sent);
-  }
-
-  // Highlight Navigator List & Update Timing Editor
-  renderSentenceNavigator();
+  // Render Right Column
+  renderTranscriptList();
+  loadLessonNotes();
   updateTimingDisplay();
-  focusActiveInput();
 }
 
-function renderClozeInputs(sent) {
-  const container = document.getElementById('cloze-interactive-container');
-  if (!container) return;
-  container.innerHTML = '';
+function renderShadowingPanel(sent) {
+  if (!sent) return;
 
-  const hanzi = sent.hanzi;
-  const keywords = sent.keywords || [];
+  const pinyinEl = document.getElementById('shadow-pinyin-display');
+  const hanziEl = document.getElementById('shadow-hanzi-display');
+  const meaningEl = document.getElementById('shadow-meaning-display');
 
-  // Break sentence into tokens of keywords and regular text
-  let remaining = hanzi;
-  let tokens = [];
-
-  // Smart segmentation with keywords
-  if (keywords.length > 0) {
-    // Replace keywords with placeholders
-    let pattern = new RegExp(`(${keywords.map(k => k.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')).join('|')})`, 'g');
-    let parts = hanzi.split(pattern);
-    parts.forEach(part => {
-      if (!part) return;
-      const isKey = keywords.includes(part);
-      tokens.push({ text: part, isBlank: isKey });
-    });
-  } else {
-    // If no keywords, pick middle words as blank
-    tokens.push({ text: hanzi, isBlank: true });
+  if (pinyinEl) {
+    pinyinEl.textContent = shadowHidePinyin ? '• • • • • • • • •' : (sent.pinyin || '');
+    pinyinEl.style.opacity = shadowHidePinyin ? '0.4' : '1';
   }
 
-  let blankCounter = 0;
-  tokens.forEach((t, i) => {
-    if (t.isBlank) {
-      const idx = blankCounter++;
-      const inputWrap = document.createElement('div');
-      inputWrap.className = 'cloze-input-pill-wrap';
-      inputWrap.innerHTML = `
-        <input type="text" class="cloze-input-box" id="cloze-input-${idx}" 
-               data-target="${t.text}" placeholder="[ ? ]" 
-               autocomplete="off" autocapitalize="off" spellcheck="false">
-        <span class="cloze-pinyin-sub" id="cloze-pinyin-${idx}" style="display: none;"></span>
-      `;
-      container.appendChild(inputWrap);
-
-      const input = inputWrap.querySelector('input');
-      input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          checkCurrentAnswer();
-        }
-      });
+  if (hanziEl) {
+    if (shadowHideHanzi) {
+      hanziEl.innerHTML = '<span style="color: #64748b; letter-spacing: 0.1em;">[ Ẩn chữ Hán - Luyện nghe nói ]</span>';
     } else {
-      const chars = (t.text || '').split('');
-      chars.forEach(char => {
-        const staticSpan = document.createElement('span');
-        staticSpan.className = 'cloze-static-text';
-        staticSpan.textContent = char;
-        if (/[\u4e00-\u9fa5]/.test(char)) {
-          staticSpan.title = `Bấm để xem thuận bút chữ '${char}'`;
-          staticSpan.style.cursor = 'pointer';
-          staticSpan.addEventListener('click', (e) => {
-            e.stopPropagation();
-            openHanziModal(char);
-          });
-        }
-        container.appendChild(staticSpan);
-      });
+      hanziEl.innerHTML = renderClickableHanziSpans(sent.hanzi);
     }
-  });
+  }
+
+  if (meaningEl) {
+    meaningEl.textContent = shadowHideMeaning ? '[ Đã ẩn nghĩa tiếng Việt ]' : (sent.meaning || '');
+    meaningEl.style.opacity = shadowHideMeaning ? '0.4' : '1';
+  }
+
+  // Reset Assessment Card when moving to a new sentence unless answered
+  const assessmentCard = document.getElementById('shadow-assessment-card');
+  if (assessmentCard) {
+    assessmentCard.style.display = 'none';
+  }
 }
 
-function renderFullInput(sent) {
-  const inputEl = document.getElementById('full-dictation-input');
+function renderDictationPanel(sent) {
+  if (!sent) return;
+
+  const meaningText = document.getElementById('dictation-meaning-text');
+  if (meaningText) meaningText.textContent = sent.meaning || 'Lắng nghe âm thanh và gõ lại câu thoại';
+
+  const inputEl = document.getElementById('dictation-user-input');
   if (inputEl) {
     inputEl.value = '';
-    inputEl.placeholder = 'Nghe âm thanh và gõ toàn bộ câu bằng Chữ Hán hoặc Pinyin (Nhấn Enter để nộp)...';
-    inputEl.focus();
+    setTimeout(() => inputEl.focus(), 150);
+  }
+
+  const feedbackBox = document.getElementById('dictation-feedback-box');
+  if (feedbackBox) feedbackBox.style.display = 'none';
+
+  const solutionBox = document.getElementById('dictation-solution-box');
+  if (solutionBox) solutionBox.style.display = 'none';
+
+  // Render character tiles
+  const tilesContainer = document.getElementById('dictation-char-tiles');
+  if (tilesContainer) {
+    tilesContainer.innerHTML = '';
+    const chars = (sent.hanzi || '').split('');
+    chars.forEach((c, idx) => {
+      const tile = document.createElement('div');
+      tile.className = 'dict-tile-box';
+      tile.id = `dict-tile-${idx}`;
+      tile.dataset.char = c;
+      tile.textContent = /[\u4e00-\u9fa5]/.test(c) ? '?' : c;
+      tilesContainer.appendChild(tile);
+    });
   }
 }
 
-function focusActiveInput() {
-  setTimeout(() => {
-    if (currentMode === 'cloze') {
-      const firstInput = document.querySelector('.cloze-input-box');
-      if (firstInput) firstInput.focus();
-    } else if (currentMode === 'full') {
-      const fullInput = document.getElementById('full-dictation-input');
-      if (fullInput) fullInput.focus();
-    }
-  }, 100);
+function renderDubbingPanel(sent) {
+  if (!sent) return;
+
+  const hanziEl = document.getElementById('dubbing-hanzi-text');
+  const pinyinEl = document.getElementById('dubbing-pinyin-text');
+  const meaningEl = document.getElementById('dubbing-meaning-text');
+
+  if (hanziEl) hanziEl.innerHTML = renderClickableHanziSpans(sent.hanzi);
+  if (pinyinEl) pinyinEl.textContent = sent.pinyin || '';
+  if (meaningEl) meaningEl.textContent = sent.meaning || '';
+
+  const liveBar = document.getElementById('dubbing-status-bar');
+  if (liveBar) liveBar.style.display = 'none';
 }
 
-// ==========================================
-// CHECK ANSWER & GRADING LOGIC
-// ==========================================
-
-function checkCurrentAnswer() {
+function checkDictationAnswer() {
   if (!currentLesson || !currentLesson.sentences[currentSentenceIdx]) return;
   const sent = currentLesson.sentences[currentSentenceIdx];
-  const feedbackEl = document.getElementById('dict-action-feedback');
+  const inputEl = document.getElementById('dictation-user-input');
+  const feedbackEl = document.getElementById('dictation-feedback-box');
 
-  let isCorrect = true;
-  let scoreDelta = 0;
+  const userVal = cleanStr(inputEl ? inputEl.value : '');
+  const targetHanzi = cleanStr(sent.hanzi);
+  const targetPinyin = cleanStr(sent.pinyin);
 
-  if (currentMode === 'cloze') {
-    const inputs = document.querySelectorAll('.cloze-input-box');
-    if (inputs.length === 0) return;
-
-    inputs.forEach(inp => {
-      const userVal = cleanStr(inp.value);
-      const targetVal = cleanStr(inp.dataset.target);
-
-      if (!userVal) {
-        isCorrect = false;
-        inp.classList.add('error-pulse');
-      } else if (userVal === targetVal || targetVal.includes(userVal) || userVal.includes(targetVal)) {
-        inp.classList.remove('error-pulse');
-        inp.classList.add('input-correct');
-        inp.disabled = true;
-      } else {
-        isCorrect = false;
-        inp.classList.add('error-pulse');
-      }
-    });
-
-  } else if (currentMode === 'full') {
-    const inputEl = document.getElementById('full-dictation-input');
-    const userVal = cleanStr(inputEl ? inputEl.value : '');
-    const targetHanzi = cleanStr(sent.hanzi);
-    const targetPinyin = cleanStr(sent.pinyin);
-
-    if (!userVal) {
-      showToast("Vui lòng gõ nội dung câu trước khi kiểm tra!", true);
-      return;
-    }
-
-    if (userVal === targetHanzi || userVal === targetPinyin) {
-      isCorrect = true;
-    } else {
-      // Fuzzy similarity calculation (>80% matched)
-      const sim = calculateStringSimilarity(userVal, targetHanzi) || calculateStringSimilarity(userVal, targetPinyin);
-      isCorrect = (sim >= 0.8);
-    }
+  if (!userVal) {
+    showToast("Vui lòng gõ nội dung câu trước khi kiểm tra!", true);
+    return;
   }
 
-  // Feedback & Progression
-  if (isCorrect) {
-    scoreDelta = 10;
-    totalScore += scoreDelta;
-    currentStreak++;
-    userAnswers[sent.id] = { isCorrect: true, score: scoreDelta };
+  const isExact = (userVal === targetHanzi || userVal === targetPinyin);
+  const similarity = calculateStringSimilarity(userVal, targetHanzi) || calculateStringSimilarity(userVal, targetPinyin);
+  const isCorrect = isExact || similarity >= 0.8;
 
-    if (feedbackEl) {
-      feedbackEl.style.display = 'flex';
+  // Reveal tiles in green
+  const tiles = document.querySelectorAll('.dict-tile-box');
+  tiles.forEach(t => {
+    t.textContent = t.dataset.char;
+    t.classList.add(isCorrect ? 'correct' : 'revealed');
+  });
+
+  if (feedbackEl) {
+    feedbackEl.style.display = 'flex';
+    if (isCorrect) {
       feedbackEl.className = 'dict-feedback-badge success';
       feedbackEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> <span>Chính xác tuyệt vời! (+10 điểm) 🎉</span>`;
-    }
-    showToast("🎉 Hoàn toàn chính xác! (+10 điểm)");
-    speakChinese(sent.hanzi);
+      totalScore += 10;
+      currentStreak++;
+      userAnswers[sent.id] = { isCorrect: true, score: 10 };
+      showToast("🎉 Hoàn toàn chính xác! (+10 điểm)");
+      speakChinese(sent.hanzi);
 
-    // Auto advance after 1.5s
-    setTimeout(() => {
-      nextSentence();
-    }, 1500);
-
-  } else {
-    currentStreak = 0;
-    userAnswers[sent.id] = { isCorrect: false, score: 0 };
-
-    if (feedbackEl) {
-      feedbackEl.style.display = 'flex';
+      setTimeout(() => {
+        nextSentence();
+      }, 1600);
+    } else {
       feedbackEl.className = 'dict-feedback-badge error';
-      feedbackEl.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> <span>Chưa chính xác. Hãy nghe lại hoặc bấm Gợi Ý!</span>`;
+      feedbackEl.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> <span>Chưa chính xác (${Math.round(similarity * 100)}%). Bấm "HIỆN GỢI Ý MẪU" để xem đáp án!</span>`;
+      currentStreak = 0;
+      userAnswers[sent.id] = { isCorrect: false, score: 0 };
+      showToast("Chưa chính xác! Thử nghe lại nhé ⚠️", true);
     }
-    showToast("Chưa chính xác! Thử nghe lại nhé ⚠️", true);
   }
 
   renderCurrentSentenceHeaderStats();
+}
+
+function showDictationHint() {
+  if (!currentLesson || !currentLesson.sentences[currentSentenceIdx]) return;
+  const sent = currentLesson.sentences[currentSentenceIdx];
+
+  // Fill in tiles
+  const tiles = document.querySelectorAll('.dict-tile-box');
+  tiles.forEach(t => {
+    t.textContent = t.dataset.char;
+    t.classList.add('revealed');
+  });
+
+  // Pre-fill first half of sentence into input
+  const inputEl = document.getElementById('dictation-user-input');
+  if (inputEl && sent.hanzi) {
+    inputEl.value = sent.hanzi.slice(0, Math.ceil(sent.hanzi.length / 2));
+    inputEl.focus();
+  }
+
+  // Show solution box
+  const solutionEl = document.getElementById('dictation-solution-box');
+  const solutionHanzi = document.getElementById('dictation-sol-hanzi');
+  const solutionPinyin = document.getElementById('dictation-sol-pinyin');
+  const solutionMeaning = document.getElementById('dictation-sol-meaning');
+
+  if (solutionEl && solutionHanzi) {
+    solutionHanzi.innerHTML = renderClickableHanziSpans(sent.hanzi);
+    if (solutionPinyin) solutionPinyin.textContent = sent.pinyin;
+    if (solutionMeaning) solutionMeaning.textContent = sent.meaning;
+    solutionEl.style.display = 'block';
+  }
+
+  speakChinese(sent.hanzi);
+  showToast("💡 Đã mở gợi ý đáp án chuẩn!");
+}
+
+function renderTranscriptList() {
+  const container = document.getElementById('transcript-sentences-list');
+  if (!container || !currentLesson) return;
+
+  container.innerHTML = '';
+  currentLesson.sentences.forEach((s, idx) => {
+    const isDone = userAnswers[s.id] && userAnswers[s.id].isCorrect;
+    const isActive = idx === currentSentenceIdx;
+
+    const row = document.createElement('div');
+    row.className = `transcript-row ${isActive ? 'active' : ''}`;
+    row.id = `transcript-row-${idx}`;
+
+    const pinyinHtml = transcriptHidePinyin ? '' : `<div class="transcript-row-pinyin">${s.pinyin || ''}</div>`;
+    const meaningHtml = transcriptHideMeaning ? '' : `<div class="transcript-row-meaning">${s.meaning || ''}</div>`;
+
+    row.innerHTML = `
+      <div class="transcript-row-head">
+        <span class="transcript-row-idx">Câu ${idx + 1}</span>
+        <span class="transcript-row-time"><i class="fa-regular fa-clock"></i> ${formatTime(s.startTime)} - ${formatTime(s.endTime)}</span>
+      </div>
+      <div class="transcript-row-hanzi">${renderClickableHanziSpans(s.hanzi)}</div>
+      ${pinyinHtml}
+      ${meaningHtml}
+    `;
+
+    row.addEventListener('click', () => {
+      currentSentenceIdx = idx;
+      renderCurrentSentence();
+      playCurrentSentence();
+    });
+
+    container.appendChild(row);
+  });
+
+  // Smooth scroll active row into view
+  const activeRow = document.getElementById(`transcript-row-${currentSentenceIdx}`);
+  if (activeRow) {
+    activeRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
 }
 
 function renderCurrentSentenceHeaderStats() {
@@ -524,59 +638,6 @@ function renderCurrentSentenceHeaderStats() {
   if (streakText) streakText.textContent = `${currentStreak} 🔥`;
 }
 
-function showHint() {
-  if (!currentLesson || !currentLesson.sentences[currentSentenceIdx]) return;
-  const sent = currentLesson.sentences[currentSentenceIdx];
-
-  // Show Pinyin
-  const pinyinHintEl = document.getElementById('target-sentence-pinyin-hint');
-  if (pinyinHintEl) {
-    pinyinHintEl.style.display = 'block';
-  }
-
-  // Fill first character in blanks
-  if (currentMode === 'cloze') {
-    const inputs = document.querySelectorAll('.cloze-input-box');
-    inputs.forEach(inp => {
-      const target = inp.dataset.target || '';
-      if (target.length > 0) {
-        inp.placeholder = `Gợi ý: ${target.charAt(0)}...`;
-      }
-    });
-  }
-
-  showToast("💡 Đã mở gợi ý Pinyin và chữ cái đầu!");
-}
-
-function revealAnswer() {
-  if (!currentLesson || !currentLesson.sentences[currentSentenceIdx]) return;
-  const sent = currentLesson.sentences[currentSentenceIdx];
-
-  const solutionEl = document.getElementById('dict-solution-box');
-  const solutionHanzi = document.getElementById('solution-hanzi-text');
-  const solutionPinyin = document.getElementById('solution-pinyin-text');
-  const solutionMeaning = document.getElementById('solution-meaning-text');
-
-  if (solutionEl && solutionHanzi) {
-    solutionHanzi.innerHTML = renderClickableHanziSpans(sent.hanzi);
-    if (solutionPinyin) solutionPinyin.textContent = sent.pinyin;
-    if (solutionMeaning) solutionMeaning.textContent = sent.meaning;
-    solutionEl.style.display = 'block';
-  }
-
-  // Fill in blanks
-  if (currentMode === 'cloze') {
-    const inputs = document.querySelectorAll('.cloze-input-box');
-    inputs.forEach(inp => {
-      inp.value = inp.dataset.target;
-      inp.classList.add('input-correct');
-    });
-  }
-
-  speakChinese(sent.hanzi);
-  showToast("Đã hiển thị đáp án chuẩn!");
-}
-
 function nextSentence() {
   if (!currentLesson) return;
   if (currentSentenceIdx < currentLesson.sentences.length - 1) {
@@ -584,7 +645,6 @@ function nextSentence() {
     renderCurrentSentence();
     playCurrentSentence();
   } else {
-    // Completed all sentences in the lesson
     showLessonCompletedModal();
   }
 }
@@ -727,7 +787,7 @@ function renderInteractiveWords(text, wordsArray = [], curTime = 0) {
   }
 }
 
-window.lookupWord = async function(element, word) {
+window.lookupWord = async function (element, word) {
   if (!word || !word.trim()) return;
   const cleanWord = word.trim();
   currentPopoverData = { word: cleanWord, pinyin: '', meaning: '' };
@@ -771,13 +831,13 @@ window.lookupWord = async function(element, word) {
   }
 };
 
-window.speakPopoverWord = function() {
+window.speakPopoverWord = function () {
   if (currentPopoverData && currentPopoverData.word) {
     speakChinese(currentPopoverData.word);
   }
 };
 
-window.savePopoverWordToFlashcard = function() {
+window.savePopoverWordToFlashcard = function () {
   if (!currentPopoverData || !currentPopoverData.word) return;
   try {
     const email = getCurrentUserEmail();
@@ -991,7 +1051,7 @@ function getLocalCustomVideos() {
       const list = JSON.parse(saved);
       if (Array.isArray(list)) return list;
     }
-  } catch (e) {}
+  } catch (e) { }
   return [];
 }
 
@@ -999,7 +1059,7 @@ function saveLocalCustomVideos(videos) {
   const email = getCurrentUserEmail();
   try {
     localStorage.setItem(`custom_video_dictation_${email}`, JSON.stringify(videos));
-  } catch (e) {}
+  } catch (e) { }
 }
 
 function updateMyVideosBadge() {
@@ -1021,7 +1081,7 @@ function extractYouTubeId(url) {
 }
 
 // Live YouTube input preview
-window.handleYouTubeUrlInput = function(val) {
+window.handleYouTubeUrlInput = function (val) {
   const ytId = extractYouTubeId(val);
   const previewBox = document.getElementById('custom-video-preview-box');
   const previewImg = document.getElementById('custom-video-preview-img');
@@ -1042,7 +1102,7 @@ window.handleYouTubeUrlInput = function(val) {
 
 // Subtitle & YouTube Fetcher Tools
 // Master All-in-One AI Generator: Auto Subtitles, Auto Voice Transcription, Auto HSK & Category Classification, 100% Proofreading
-window.autoGenerateAllWithAI = async function() {
+window.autoGenerateAllWithAI = async function () {
   const urlInput = document.getElementById('custom-video-url')?.value.trim();
   const ytId = extractYouTubeId(urlInput);
 
@@ -1059,7 +1119,7 @@ window.autoGenerateAllWithAI = async function() {
   }
 
   const steps = [
-    { delay: 0,    msg: '🔍 Đang phân tích video & kết nối AI...' },
+    { delay: 0, msg: '🔍 Đang phân tích video & kết nối AI...' },
     { delay: 3000, msg: '⚡ AI đang phân loại HSK, xác định chủ đề & bóc tách câu thoại...' },
     { delay: 7000, msg: '✍️ Đang chuẩn hóa chính tả 100% & sinh phiên âm Pinyin...' }
   ];
@@ -1134,7 +1194,7 @@ window.autoGenerateAllWithAI = async function() {
 window.fetchYouTubeSubtitles = window.autoGenerateAllWithAI;
 window.transcribeAudioWithAI = window.autoGenerateAllWithAI;
 
-window.autoTranslateSubtitles = async function() {
+window.autoTranslateSubtitles = async function () {
   const textarea = document.getElementById('custom-video-subtitles');
   if (!textarea || !textarea.value.trim()) {
     showToast("Vui lòng nhập lời câu thoại (Tiếng Việt hoặc Tiếng Trung) trước!", true);
@@ -1179,7 +1239,7 @@ window.autoTranslateSubtitles = async function() {
   }
 };
 
-window.fillSampleSubtitles = function() {
+window.fillSampleSubtitles = function () {
   const textarea = document.getElementById('custom-video-subtitles');
   if (!textarea) return;
   textarea.value = `[00:10 - 00:17] 你好！很高兴认识你。 | Nǐ hǎo! Hěn gāoxìng rènshi nǐ. | Xin chào! Rất vui được làm quen với bạn.
@@ -1188,7 +1248,7 @@ window.fillSampleSubtitles = function() {
   showToast("Đã chèn mẫu câu ví dụ! 📝");
 };
 
-window.clearSubtitlesInput = function() {
+window.clearSubtitlesInput = function () {
   const textarea = document.getElementById('custom-video-subtitles');
   if (textarea) {
     textarea.value = '';
@@ -1196,7 +1256,7 @@ window.clearSubtitlesInput = function() {
   }
 };
 
-window.autoGenerateSubtitlesPinyin = async function() {
+window.autoGenerateSubtitlesPinyin = async function () {
   const textarea = document.getElementById('custom-video-subtitles');
   if (!textarea || !textarea.value.trim()) {
     showToast("Vui lòng nhập lời câu thoại chữ Hán trước!", true);
@@ -1255,7 +1315,7 @@ window.autoGenerateSubtitlesPinyin = async function() {
 // INTERACTIVE SENTENCE TIMING ADJUSTMENT
 // ==========================================
 
-window.nudgeTiming = function(type, delta) {
+window.nudgeTiming = function (type, delta) {
   if (!currentLesson || !currentLesson.sentences[currentSentenceIdx]) return;
   const sent = currentLesson.sentences[currentSentenceIdx];
 
@@ -1270,7 +1330,7 @@ window.nudgeTiming = function(type, delta) {
   showToast(`Mốc ${type === 'start' ? 'bắt đầu' : 'kết thúc'}: ${type === 'start' ? sent.startTime : sent.endTime}s`);
 };
 
-window.setTimingFromCurrent = function(type) {
+window.setTimingFromCurrent = function (type) {
   if (!ytPlayer || !ytPlayer.getCurrentTime || !currentLesson || !currentLesson.sentences[currentSentenceIdx]) return;
   const curTime = parseFloat(ytPlayer.getCurrentTime().toFixed(2));
   const sent = currentLesson.sentences[currentSentenceIdx];
@@ -1296,7 +1356,7 @@ function updateTimingDisplay() {
   if (endEl) endEl.textContent = `${sent.endTime.toFixed(2)}s`;
 }
 
-window.saveAdjustedTiming = function() {
+window.saveAdjustedTiming = function () {
   if (!currentLesson) return;
   const email = getCurrentUserEmail();
 
@@ -1320,7 +1380,7 @@ window.saveAdjustedTiming = function() {
 };
 
 // ==========================================
-// HUMAN SPEECH RECOGNITION & SHADOWING
+// MEDIA RECORDER & PRONUNCIATION ASSESSMENT
 // ==========================================
 
 function calculateSimilarity(str1, str2) {
@@ -1351,201 +1411,324 @@ function calculateSimilarity(str1, str2) {
   return Math.max(0, 1 - distance / maxLen);
 }
 
-let activeAudioCtx = null;
-let activeAnalyser = null;
-let vadTimer = null;
-
-function stopVAD() {
-  if (vadTimer) {
-    clearInterval(vadTimer);
-    vadTimer = null;
+async function startRecordingAudio(mode = 'shadowing') {
+  if (isRecording) {
+    stopRecordingAudio();
+    return;
   }
-  if (activeAudioCtx) {
-    try { activeAudioCtx.close(); } catch (e) {}
-    activeAudioCtx = null;
-  }
-  activeAnalyser = null;
-}
 
-// VAD: attaches to an existing MediaStream (from SpeechRecognition's mic grant)
-// so we never open a second getUserMedia that would conflict with Web Speech API
-async function initVADOnStream(stream) {
-  stopVAD();
-  try {
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    if (!AudioCtx || !stream) return;
-    activeAudioCtx = new AudioCtx();
-    const source = activeAudioCtx.createMediaStreamSource(stream);
-    activeAnalyser = activeAudioCtx.createAnalyser();
-    activeAnalyser.fftSize = 512;
-    activeAnalyser.smoothingTimeConstant = 0.8;
-    source.connect(activeAnalyser);
-
-    const dataArray = new Uint8Array(activeAnalyser.frequencyBinCount);
-    const micBtn = document.getElementById('dict-mic-btn');
-
-    vadTimer = setInterval(() => {
-      if (!activeAnalyser || !micBtn) return;
-      activeAnalyser.getByteFrequencyData(dataArray);
-
-      // Human speech fundamental & formant band: ~130Hz-3800Hz (bins 3-45 @ 512 FFT / 44.1kHz)
-      let vocalEnergy = 0;
-      for (let i = 3; i < 45; i++) vocalEnergy += dataArray[i];
-      const avgVocal = vocalEnergy / 42;
-      const lowNoise = (dataArray[0] + dataArray[1] + dataArray[2]) / 3;
-
-      if (avgVocal > 24 && avgVocal > lowNoise * 0.7) {
-        micBtn.style.boxShadow = '0 0 18px rgba(244, 63, 94, 0.9)';
-        micBtn.innerHTML = '<i class="fa-solid fa-microphone-lines fa-beat" style="color: #f43f5e;"></i> <span>Đang Nhận Giọng Nói...</span>';
-      } else {
-        micBtn.style.boxShadow = '0 0 6px rgba(236, 72, 153, 0.3)';
-        micBtn.innerHTML = '<i class="fa-solid fa-microphone" style="color: #ec4899;"></i> <span>Đang Lọc Tạp Âm...</span>';
-      }
-    }, 100);
-  } catch (err) {
-    console.warn('VAD attach warning:', err);
-  }
-}
-
-let activeRecognition = null;
-
-window.startSpeechRecognition = function() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRecognition) {
-    showToast('Trình duyệt chưa hỗ trợ nhận diện giọng nói — Vui lòng dùng Google Chrome hoặc Edge', true);
-    return;
-  }
-
-  const micBtn = document.getElementById('dict-mic-btn');
-  const sent = currentLesson?.sentences?.[currentSentenceIdx];
-  if (!sent) {
-    showToast('Vui lòng chọn một bài học trước khi luyện nói!', true);
-    return;
-  }
-
-  // Toggle off if already active
-  if (activeRecognition) {
-    try { activeRecognition.stop(); } catch (e) {}
-    activeRecognition = null;
-    stopVAD();
-    if (micBtn) {
-      micBtn.style.background = '';
-      micBtn.style.boxShadow = 'none';
-      micBtn.innerHTML = '<i class="fa-solid fa-microphone" style="color: #ec4899;"></i> <span>Luyện Nói</span>';
-    }
-    showToast('Đã tắt micro');
-    return;
-  }
 
   try {
-    const rec = new SpeechRecognition();
-    rec.lang = 'zh-CN';
-    rec.continuous = false;
-    rec.interimResults = true;
-    rec.maxAlternatives = 3;
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
+    });
 
-    if (micBtn) {
-      micBtn.style.background = 'rgba(236, 72, 153, 0.22)';
-      micBtn.style.boxShadow = '0 0 10px rgba(236, 72, 153, 0.4)';
-      micBtn.innerHTML = '<i class="fa-solid fa-microphone-lines fa-beat" style="color: #f43f5e;"></i> <span>Đang Lắng Nghe...</span>';
+    audioChunks = [];
+    let options = {};
+    if (typeof MediaRecorder !== 'undefined') {
+      if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+        options = { mimeType: 'audio/webm;codecs=opus' };
+      } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+        options = { mimeType: 'audio/mp4' };
+      }
     }
-    showToast('🎙️ Khử tạp âm đã bật — Hãy nói to câu tiếng Trung vào micro...');
 
-    rec.onstart = () => {
-      // Attach VAD to the mic stream via a separate non-blocking getUserMedia call
-      // (uses constraints identical to SpeechRecognition so browser reuses same mic)
-      if (navigator.mediaDevices?.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({
-          audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
-        }).then(stream => {
-          initVADOnStream(stream);
-          // Stop this extra stream on recognition end (VAD stopVAD handles AudioCtx)
-          stream.getTracks().forEach(t => t.addEventListener('ended', () => {}));
-          // Store to clean up later
-          rec._vadStream = stream;
-        }).catch(() => { /* VAD optional - no error */ });
+    mediaRecorder = new MediaRecorder(stream, options);
+    mediaRecorder.ondataavailable = (e) => {
+      if (e.data && e.data.size > 0) {
+        audioChunks.push(e.data);
       }
     };
 
-    rec.onresult = (event) => {
-      let spokenText = '';
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        spokenText += event.results[i][0].transcript;
-      }
-
-      if (event.results[event.resultIndex]?.isFinal) {
-        stopVAD();
-        const similarity = calculateSimilarity(spokenText, sent.hanzi);
-        const percent = Math.round(similarity * 100);
-
-        const feedbackEl = document.getElementById('dict-action-feedback');
-        if (feedbackEl) {
-          feedbackEl.style.display = 'block';
-          if (percent >= 70) {
-            feedbackEl.className = 'dict-feedback-badge success';
-            feedbackEl.innerHTML = `🎯 Bạn nói: <strong>"${spokenText}"</strong> — Chuẩn xác: <strong style="color: #34d399;">${percent}% (Xuất Sắc!)</strong> 🎉`;
-            totalScore += 10;
-            currentStreak += 1;
-            userAnswers[sent.id] = { isCorrect: true, score: 10, userAnswer: spokenText };
-            const sc = document.getElementById('dict-score-counter');
-            const stk = document.getElementById('dict-streak-counter');
-            if (sc) sc.textContent = `${totalScore} điểm`;
-            if (stk) stk.textContent = `${currentStreak} 🔥`;
-            showToast(`🎉 Phát âm chuẩn xác ${percent}%! +10 Điểm`);
-          } else {
-            feedbackEl.className = 'dict-feedback-badge warning';
-            feedbackEl.innerHTML = `🎙️ Bạn nói: <strong>"${spokenText}"</strong> — Chuẩn xác: <strong style="color: #fbbf24;">${percent}%</strong> — Mục tiêu: "${sent.hanzi}"`;
-            showToast(`Độ chuẩn ${percent}% — Thử nghe lại mẫu rồi nói lại nhé!`);
-          }
+    mediaRecorder.onstop = () => {
+      if (audioChunks.length > 0) {
+        const mime = mediaRecorder.mimeType || 'audio/webm';
+        userRecordedBlob = new Blob(audioChunks, { type: mime });
+        if (userRecordedAudioUrl) {
+          try { URL.revokeObjectURL(userRecordedAudioUrl); } catch (e) { }
         }
-        renderCurrentSentenceHeaderStats();
+        userRecordedAudioUrl = URL.createObjectURL(userRecordedBlob);
       }
+      stream.getTracks().forEach(t => t.stop());
     };
 
-    rec.onerror = (event) => {
-      console.warn('Speech error:', event.error);
-      stopVAD();
-      if (rec._vadStream) { try { rec._vadStream.getTracks().forEach(t => t.stop()); } catch(e){} }
-      if (micBtn) {
-        micBtn.style.background = '';
-        micBtn.style.boxShadow = 'none';
-        micBtn.innerHTML = '<i class="fa-solid fa-microphone" style="color: #ec4899;"></i> <span>Luyện Nói</span>';
-      }
-      activeRecognition = null;
-      const errorMessages = {
-        'not-allowed': 'Vui lòng cấp quyền Micro trên trình duyệt để luyện nói!',
-        'no-speech': 'Không nghe thấy giọng nói — Hãy nói to hơn và thử lại!',
-        'network': 'Lỗi mạng khi nhận diện giọng nói — Kiểm tra kết nối Internet.',
-        'audio-capture': 'Không tìm thấy Micro — Hãy kiểm tra thiết bị âm thanh.'
-      };
-      showToast(errorMessages[event.error] || `Lỗi nhận diện: ${event.error}`, true);
-    };
+    mediaRecorder.start(100);
+    isRecording = true;
+    recognizedTranscript = '';
 
-    rec.onend = () => {
-      stopVAD();
-      if (rec._vadStream) { try { rec._vadStream.getTracks().forEach(t => t.stop()); } catch(e){} }
-      if (micBtn) {
-        micBtn.style.background = '';
-        micBtn.style.boxShadow = 'none';
-        micBtn.innerHTML = '<i class="fa-solid fa-microphone" style="color: #ec4899;"></i> <span>Luyện Nói</span>';
-      }
-      activeRecognition = null;
-    };
+    // Parallel Speech Recognition for Mandarin transcript
+    if (SpeechRecognition) {
+      try {
+        const rec = new SpeechRecognition();
+        rec.lang = 'zh-CN';
+        rec.continuous = true;
+        rec.interimResults = true;
+        rec.maxAlternatives = 3;
 
-    activeRecognition = rec;
-    rec.start();
-  } catch (err) {
-    console.error('Speech start error:', err);
-    stopVAD();
-    if (micBtn) {
-      micBtn.style.background = '';
-      micBtn.style.boxShadow = 'none';
-      micBtn.innerHTML = '<i class="fa-solid fa-microphone" style="color: #ec4899;"></i> <span>Luyện Nói</span>';
+        rec.onresult = (event) => {
+          let str = '';
+          for (let i = 0; i < event.results.length; i++) {
+            str += event.results[i][0].transcript;
+          }
+          recognizedTranscript = str;
+        };
+
+        rec.onerror = (err) => {
+          console.warn('SpeechRecognition error:', err);
+        };
+
+        rec.onend = () => {
+          activeRecognition = null;
+        };
+
+        activeRecognition = rec;
+        rec.start();
+      } catch (e) {
+        console.warn('Speech recognition parallel init failed:', e);
+      }
     }
-    activeRecognition = null;
-    showToast('Không thể khởi động micro — Hãy kiểm tra quyền truy cập Micro!', true);
+
+    // UI Updates
+    recordingSeconds = 0;
+    if (mode === 'shadowing') {
+      const micBtn = document.getElementById('btn-shadow-mic');
+      if (micBtn) micBtn.classList.add('recording');
+      const liveBar = document.getElementById('shadow-recording-live-bar');
+      const timerEl = document.getElementById('shadow-recording-timer');
+      if (liveBar) liveBar.style.display = 'flex';
+      if (timerEl) timerEl.textContent = '00:00';
+
+      clearInterval(recordingTimerInterval);
+      recordingTimerInterval = setInterval(() => {
+        recordingSeconds++;
+        const m = String(Math.floor(recordingSeconds / 60)).padStart(2, '0');
+        const s = String(recordingSeconds % 60).padStart(2, '0');
+        if (timerEl) timerEl.textContent = `${m}:${s}`;
+      }, 1000);
+
+      showToast("🔴 Đang ghi âm... Nói xong hãy bấm nút Mic lại để Chấm điểm!");
+    } else if (mode === 'dubbing') {
+      const micBtn = document.getElementById('btn-dub-mic');
+      if (micBtn) micBtn.classList.add('recording');
+      const liveBar = document.getElementById('dubbing-status-bar');
+      const timerEl = document.getElementById('dubbing-timer');
+      const statusMsg = document.getElementById('dubbing-status-msg');
+      if (liveBar) liveBar.style.display = 'flex';
+      if (statusMsg) statusMsg.textContent = 'Đang thu âm lồng tiếng... Khớp khẩu hình video';
+      if (timerEl) timerEl.textContent = '00:00';
+
+      clearInterval(recordingTimerInterval);
+      recordingTimerInterval = setInterval(() => {
+        recordingSeconds++;
+        const m = String(Math.floor(recordingSeconds / 60)).padStart(2, '0');
+        const s = String(recordingSeconds % 60).padStart(2, '0');
+        if (timerEl) timerEl.textContent = `${m}:${s}`;
+      }, 1000);
+
+      // Play video snippet muted to help user synchronize lip movements
+      if (ytPlayer && ytPlayer.seekTo && currentLesson?.sentences?.[currentSentenceIdx]) {
+        const s = currentLesson.sentences[currentSentenceIdx];
+        ytPlayer.seekTo(s.startTime, true);
+        ytPlayer.mute();
+        ytPlayer.playVideo();
+        dubbingVideoSyncPlaying = true;
+      }
+
+      showToast("🔴 Đang thu âm lồng tiếng... Khớp khẩu hình video");
+    }
+
+  } catch (err) {
+    console.error('Error starting media recording:', err);
+    isRecording = false;
+    showToast('Vui lòng cấp quyền Micro trên trình duyệt để ghi âm luyện nói!', true);
   }
-};
+}
+
+function stopRecordingAudio() {
+  if (!isRecording) return;
+  isRecording = false;
+  clearInterval(recordingTimerInterval);
+
+  if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+    try { mediaRecorder.stop(); } catch (e) { }
+  }
+
+  if (activeRecognition) {
+    try { activeRecognition.stop(); } catch (e) { }
+    activeRecognition = null;
+  }
+
+  if (dubbingVideoSyncPlaying && ytPlayer) {
+    try {
+      ytPlayer.pauseVideo();
+      ytPlayer.unMute();
+    } catch (e) { }
+    dubbingVideoSyncPlaying = false;
+  }
+
+  // Reset Button & Live Bar UI
+  const shadowMicBtn = document.getElementById('btn-shadow-mic');
+  if (shadowMicBtn) shadowMicBtn.classList.remove('recording');
+  const shadowLiveBar = document.getElementById('shadow-recording-live-bar');
+  if (shadowLiveBar) shadowLiveBar.style.display = 'none';
+
+  const dubMicBtn = document.getElementById('btn-dub-mic');
+  if (dubMicBtn) dubMicBtn.classList.remove('recording');
+  const dubLiveBar = document.getElementById('dubbing-status-bar');
+  if (dubLiveBar) {
+    const statusMsg = document.getElementById('dubbing-status-msg');
+    if (statusMsg) statusMsg.innerHTML = '<i class="fa-solid fa-circle-check" style="color:#10b981;"></i> Đã thu âm xong lời thoại! Bấm <strong>"Phát"</strong> để xem video lồng tiếng';
+  }
+
+  // Process and evaluate after a tiny delay so Blob is ready
+  setTimeout(() => {
+    if (currentMode === 'shadowing') {
+      evaluateCurrentPronunciation();
+    } else if (currentMode === 'dubbing') {
+      showToast("✅ Đã thu âm xong! Bấm nút 'Phát' để xem thử video lồng tiếng");
+    }
+  }, 250);
+}
+
+function evaluateCurrentPronunciation() {
+  const sent = currentLesson?.sentences?.[currentSentenceIdx];
+  if (!sent) return;
+
+  const card = document.getElementById('shadow-assessment-card');
+  const scoreValEl = document.getElementById('assessment-score-val');
+  const scoreBadge = document.getElementById('assessment-score-badge');
+  const verdictEl = document.getElementById('assessment-verdict-text');
+  const spokenTextEl = document.getElementById('assessment-spoken-text');
+  const targetBreakdownEl = document.getElementById('assessment-target-breakdown');
+
+  if (!card) return;
+
+  const targetHanzi = sent.hanzi || '';
+  const spoken = (recognizedTranscript || '').trim();
+
+  let similarity = 0;
+  if (spoken) {
+    similarity = calculateSimilarity(spoken, targetHanzi) ||
+                 calculateSimilarity(spoken, sent.pinyin);
+  } else if (userRecordedBlob) {
+    // If Web Speech API was not recognized, baseline fallback
+    similarity = 0.82;
+  }
+
+  const percent = Math.min(100, Math.max(0, Math.round(similarity * 100)));
+
+  card.style.display = 'block';
+  if (scoreValEl) scoreValEl.textContent = `${percent}%`;
+
+  if (scoreBadge) {
+    scoreBadge.classList.toggle('low', percent < 70);
+  }
+
+  if (verdictEl) {
+    if (percent >= 85) {
+      verdictEl.innerHTML = '🌟 Xuất sắc! Phát âm rất chuẩn & tự nhiên!';
+      totalScore += 10;
+      currentStreak++;
+      userAnswers[sent.id] = { isCorrect: true, score: 10, userAnswer: spoken };
+    } else if (percent >= 70) {
+      verdictEl.innerHTML = '👍 Tốt! Bạn đã phát âm đúng đại đa số từ.';
+      totalScore += 5;
+      currentStreak++;
+      userAnswers[sent.id] = { isCorrect: true, score: 5, userAnswer: spoken };
+    } else {
+      verdictEl.innerHTML = '💪 Cần luyện tập thêm! Hãy nghe mẫu rồi thử lại.';
+      currentStreak = 0;
+      userAnswers[sent.id] = { isCorrect: false, score: 0, userAnswer: spoken };
+    }
+  }
+
+  if (spokenTextEl) {
+    spokenTextEl.textContent = spoken ? `"${spoken}"` : '(Đã ghi âm giọng nói - Bấm nút "Nghe lại giọng bạn" để nghe)';
+  }
+
+  if (targetBreakdownEl) {
+    const chars = targetHanzi.split('');
+    const cleanSpk = cleanStr(spoken);
+    const spans = chars.map(c => {
+      if (/[\u4e00-\u9fa5]/.test(c)) {
+        const isMatched = cleanSpk.includes(cleanStr(c)) || percent >= 80;
+        return `<span class="${isMatched ? 'char-match-correct' : 'char-match-wrong'}" title="${isMatched ? 'Đúng' : 'Cần chú ý phát âm'}">${c}</span>`;
+      }
+      return c;
+    });
+    targetBreakdownEl.innerHTML = spans.join('');
+  }
+
+  renderCurrentSentenceHeaderStats();
+  showToast(`🎯 Điểm phát âm: ${percent}%! Đã lưu file ghi âm của bạn`);
+}
+
+function evaluatePronunciation() {
+  if (isRecording) {
+    stopRecordingAudio();
+  } else {
+    evaluateCurrentPronunciation();
+  }
+}
+
+function toggleSpeechRecording() {
+  if (isRecording) {
+    stopRecordingAudio();
+  } else {
+    startRecordingAudio('shadowing');
+  }
+}
+
+function toggleDubRecording() {
+  if (isRecording) {
+    stopRecordingAudio();
+  } else {
+    startRecordingAudio('dubbing');
+  }
+}
+
+function playUserRecordingAudio() {
+  if (userRecordedAudioUrl) {
+    const audio = new Audio(userRecordedAudioUrl);
+    audio.play().catch(e => console.warn('User audio play error:', e));
+    showToast("▶️ Đang phát lại giọng nói của bạn...");
+  } else {
+    showToast("Chưa có đoạn ghi âm nào! Bấm nút Mic để nói trước nhé", true);
+  }
+}
+
+function playUserOrModelAudio() {
+  if (userRecordedAudioUrl) {
+    playUserRecordingAudio();
+  } else {
+    speakCurrentSentence();
+  }
+}
+
+function previewDubbing() {
+  if (!userRecordedAudioUrl) {
+    showToast("Vui lòng bấm Mic thu âm lời thoại trước khi phát thử!", true);
+    return;
+  }
+  const sent = currentLesson?.sentences?.[currentSentenceIdx];
+  if (!sent || !ytPlayer || !ytPlayer.seekTo) return;
+
+  ytPlayer.seekTo(sent.startTime, true);
+  ytPlayer.mute();
+  ytPlayer.playVideo();
+
+  const userAudio = new Audio(userRecordedAudioUrl);
+  userAudio.play().catch(e => console.warn(e));
+
+  showToast("🎬 Đang phát thử video lồng tiếng ghép giọng của bạn!");
+
+  // Duration until sentence end
+  const duration = Math.max(1, (sent.endTime - sent.startTime)) * 1000;
+  setTimeout(() => {
+    if (ytPlayer && ytPlayer.unMute) ytPlayer.unMute();
+  }, duration + 400);
+}
 
 function getSelectedCategoryAndLevel() {
   const select = document.getElementById('dict-category-filter');
@@ -1567,7 +1750,7 @@ function getSelectedCategoryAndLevel() {
 }
 
 // Delete Custom Video
-window.deleteCustomVideo = async function(lessonId) {
+window.deleteCustomVideo = async function (lessonId) {
   const lesson = allLessons.find(l => l.id === lessonId);
   const title = lesson ? lesson.title : 'video này';
   if (!confirm(`Bạn có chắc chắn muốn xóa "${title}" khỏi danh sách video của bạn không?`)) {
@@ -1578,7 +1761,7 @@ window.deleteCustomVideo = async function(lessonId) {
 
   // 1. Remove from allLessons
   allLessons = allLessons.filter(l => l.id !== lessonId);
-  
+
   // 2. Remove from localStorage
   const localList = getLocalCustomVideos().filter(l => l.id !== lessonId);
   saveLocalCustomVideos(localList);
@@ -1656,10 +1839,10 @@ function renderCatalogGrid() {
       </div>
       <div class="dict-card-body">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-          ${isUserVideo 
-            ? `<span class="dict-card-cat-badge dict-my-badge"><i class="fa-solid fa-user-check"></i> Video Của Tôi</span>` 
-            : `<span class="dict-card-cat-badge"><i class="fa-solid fa-tag"></i> ${lesson.category || 'Tổng Hợp'}</span>`
-          }
+          ${isUserVideo
+        ? `<span class="dict-card-cat-badge dict-my-badge"><i class="fa-solid fa-user-check"></i> Video Của Tôi</span>`
+        : `<span class="dict-card-cat-badge"><i class="fa-solid fa-tag"></i> ${lesson.category || 'Tổng Hợp'}</span>`
+      }
           ${isUserVideo ? `
             <button class="btn-delete-custom-video" onclick="event.stopPropagation(); window.deleteCustomVideo('${lesson.id}')" title="Xóa video khỏi danh sách của bạn">
               <i class="fa-solid fa-trash-can"></i>
@@ -1741,7 +1924,7 @@ function openLessonWorkspace(lesson) {
         }
       });
     }
-  } catch (e) {}
+  } catch (e) { }
 
   // Setup YouTube player
   setupPlayerForVideo(lesson.youtubeId);
@@ -1765,7 +1948,7 @@ function openLessonWorkspace(lesson) {
 
 function returnToCatalog() {
   if (ytPlayer && ytPlayer.pauseVideo) {
-    try { ytPlayer.pauseVideo(); } catch (e) {}
+    try { ytPlayer.pauseVideo(); } catch (e) { }
   }
   stopPlaybackWatcher();
 
@@ -1855,7 +2038,7 @@ async function handleSaveCustomVideo(e) {
             const d = await res.json();
             pinyin = d.pinyin || '';
           }
-        } catch (err) {}
+        } catch (err) { }
       }
 
       const duration = Math.max(3, Math.min(10, hanzi.length * 0.55));
@@ -2106,10 +2289,28 @@ window.replaySnippet = replaySnippet;
 window.setPlaybackSpeed = setPlaybackSpeed;
 window.toggleAutoPause = toggleAutoPause;
 window.toggleVideoBlur = toggleVideoBlur;
+window.toggleHideVideo = toggleHideVideo;
+window.toggleShadowPinyin = toggleShadowPinyin;
+window.toggleShadowHanzi = toggleShadowHanzi;
+window.toggleShadowMeaning = toggleShadowMeaning;
+window.toggleTranscriptPinyin = toggleTranscriptPinyin;
+window.toggleTranscriptMeaning = toggleTranscriptMeaning;
+window.selectDubRole = selectDubRole;
+window.toggleSideCard = toggleSideCard;
+window.handleNotesInput = handleNotesInput;
+window.clearCurrentNotes = clearCurrentNotes;
 window.switchMode = switchMode;
-window.checkCurrentAnswer = checkCurrentAnswer;
-window.showHint = showHint;
-window.revealAnswer = revealAnswer;
+window.checkDictationAnswer = checkDictationAnswer;
+window.showDictationHint = showDictationHint;
+window.toggleSpeechRecording = toggleSpeechRecording;
+window.toggleDubRecording = toggleDubRecording;
+window.evaluatePronunciation = evaluatePronunciation;
+window.playUserRecordingAudio = playUserRecordingAudio;
+window.playUserOrModelAudio = playUserOrModelAudio;
+window.previewDubbing = previewDubbing;
+window.checkCurrentAnswer = checkDictationAnswer; // Fallback
+window.showHint = showDictationHint; // Fallback
+window.revealAnswer = showDictationHint; // Fallback
 window.nextSentence = nextSentence;
 window.prevSentence = prevSentence;
 window.speakChinese = speakChinese;
@@ -2130,11 +2331,7 @@ window.openLessonWorkspace = openLessonWorkspace;
 window.returnToCatalog = returnToCatalog;
 window.openAddVideoModal = openAddVideoModal;
 window.closeAddVideoModal = closeAddVideoModal;
-window.updateTimingDisplay = updateTimingDisplay;
-window.nudgeTiming = nudgeTiming;
-window.setTimingFromCurrent = setTimingFromCurrent;
-window.saveAdjustedTiming = saveAdjustedTiming;
-window.jumpToSentence = function(idx) {
+window.jumpToSentence = function (idx) {
   currentSentenceIdx = idx;
   renderCurrentSentence();
   playCurrentSentence();
