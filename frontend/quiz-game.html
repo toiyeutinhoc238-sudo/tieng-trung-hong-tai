@@ -1385,62 +1385,74 @@
         }
       }
 
-      if (urlLessons && urlLessons !== 'all') {
-        const lessonArr = urlLessons.split(',').map(s => s.trim().replace(/\D/g, '')).filter(Boolean);
+      if (lsn && lsn !== 'all' && lsn !== 'random') {
+        if (lsn.includes('_')) {
+          const parts = lsn.split('_');
+          if (parts.length >= 3) {
+            const type = parts[0];
+            const lLevel = parts[1];
+            const lId = parseInt(parts[2].replace(/\D/g, '')) || parts[2];
+            const lVer = parts[3] || urlVersion;
+            const targetYct = (type === 'yct');
+            const filteredByLsn = pool.filter(w => {
+              const numId = parseInt(String(w.lessonId).replace(/\D/g, '')) || w.lessonId;
+              const matchLsn = (String(numId) === String(lId));
+              const matchLvl = (!lLevel || matchLevel(w.level, lLevel));
+              const matchYct = isYct(w) === targetYct;
+              const matchVer = targetYct || (w.hskVersion || '3.0') === lVer || w.isCustom;
+              return matchLsn && matchLvl && matchYct && matchVer;
+            });
+            if (filteredByLsn.length > 0) pool = filteredByLsn;
+          }
+        } else {
+          const numLsn = parseInt(String(lsn).replace(/\D/g, '')) || lsn;
+          const filteredByLsn = pool.filter(w => {
+            const numId = parseInt(String(w.lessonId).replace(/\D/g, '')) || w.lessonId;
+            return String(numId) === String(numLsn);
+          });
+          if (filteredByLsn.length > 0) pool = filteredByLsn;
+        }
+      } else if (urlLessons && urlLessons !== 'all') {
+        const lessonArr = urlLessons.split(',').map(s => parseInt(s.trim().replace(/\D/g, ''))).filter(Boolean);
         if (lessonArr.length > 0) {
-          const filteredByLessons = pool.filter(w => w.lessonId && lessonArr.includes(String(w.lessonId)) && (w.isCustom || isYct(w) || (w.hskVersion || '3.0') === urlVersion));
+          const filteredByLessons = pool.filter(w => {
+            const numId = parseInt(String(w.lessonId).replace(/\D/g, '')) || w.lessonId;
+            return lessonArr.includes(numId);
+          });
           if (filteredByLessons.length > 0) {
             pool = filteredByLessons;
           }
-        }
-      } else if (lsn !== 'all' && lsn !== 'random') {
-        if (lsn.includes('_')) {
-          const parts = lsn.split('_');
-          if (parts.length === 4) {
-            const [type, lLevel, lId, lVer] = parts;
-            const targetYct = (type === 'yct');
-            pool = pool.filter(w => w.lessonId == lId && (w.level == lLevel || !lLevel) && isYct(w) === targetYct && (targetYct || (w.hskVersion || '3.0') === lVer));
-          } else if (parts.length === 3) {
-            const [type, lLevel, lId] = parts;
-            const targetYct = (type === 'yct');
-            pool = pool.filter(w => w.lessonId == lId && (w.level == lLevel || !lLevel) && isYct(w) === targetYct);
-          } else {
-            const [lLevel, lId] = parts;
-            pool = pool.filter(w => w.lessonId == lId && (w.level == lLevel || !lLevel) && (w.isCustom || (w.hskVersion || '3.0') === urlVersion));
-          }
-        } else {
-          pool = pool.filter(w => w.lessonId == lsn && (w.isCustom || isYct(w) || (w.hskVersion || '3.0') === urlVersion));
         }
       } else if (lsn === 'random') {
         const ids = [...new Set(pool.map(w => w.lessonId).filter(Boolean))];
         if (ids.length > 0) {
           const rid = ids[Math.floor(Math.random() * ids.length)];
-          pool = pool.filter(w => w.lessonId == rid);
+          pool = pool.filter(w => String(w.lessonId) === String(rid));
         }
       }
 
       if (urlFilter) {
         if (urlFilter === 'studied') {
           const stPool = pool.filter(w => w.isStudied);
-          if (stPool.length >= 4) pool = stPool;
+          if (stPool.length > 0) pool = stPool;
         } else if (urlFilter === 'unstudied') {
           const unPool = pool.filter(w => !w.isStudied);
-          if (unPool.length >= 4) pool = unPool;
+          if (unPool.length > 0) pool = unPool;
         } else if (urlFilter === 'memorized') {
           const memPool = pool.filter(w => w.isMemorized);
-          if (memPool.length >= 4) pool = memPool;
+          if (memPool.length > 0) pool = memPool;
         } else if (urlFilter === 'unmemorized') {
           const unmemPool = pool.filter(w => w.isStudied && !w.isMemorized);
-          if (unmemPool.length >= 4) pool = unmemPool;
+          if (unmemPool.length > 0) pool = unmemPool;
         } else if (urlFilter === 'starred') {
           const starPool = pool.filter(w => w.isStarred);
-          if (starPool.length >= 4) pool = starPool;
+          if (starPool.length > 0) pool = starPool;
         }
       }
 
-      if (pool.length < 4) {
+      if (pool.length === 0) {
         const fallbackPool = vocabData.filter(w => w && w.word && w.meaning);
-        pool = fallbackPool.length >= 4 ? fallbackPool : fallbackVocab;
+        pool = fallbackPool.length > 0 ? fallbackPool : fallbackVocab;
       }
 
       currentPool = pool;

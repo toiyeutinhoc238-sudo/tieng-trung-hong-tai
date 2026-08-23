@@ -765,23 +765,8 @@
       {
         "id": 2,
         "startTime": 9.72,
-        "endTime": 20.36,
-        "duration": 10.64,
-        "hanzi": "小初：（大哭）……",
-        "pinyin": "xiǎo chū ： （ dà kū ） … …",
-        "meaning": "Tiểu Sơ: (Khóc lớn)...",
-        "keywords": [
-          "大哭"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 3,
-        "startTime": 20.36,
         "endTime": 27.74,
-        "duration": 7.38,
+        "duration": 18.02,
         "hanzi": "妈妈：怎么了？烫到了？哎呀，不哭不哭，妈妈给你买书了。",
         "pinyin": "mā mā ： zěn me le ？ tàng dào le ？ āi yā ， bù kū bu kū ， mā ma gěi nǐ mǎi shū le 。",
         "meaning": "Mẹ: Sao thế con? Bị bỏng à? Không khóc không khóc, mẹ mua sách cho con rồi này.",

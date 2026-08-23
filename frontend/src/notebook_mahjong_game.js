@@ -1,19 +1,21 @@
 /**
- * Tiếng Trung HongTai - Notebook Mini-Game 4: MẠT CHƯỢC NỐI CẶP THẦN TỐC (Hanzi Mahjong / Onet)
- * Giai đoạn: Thử nghiệm nội bộ (Beta Super Admin)
+ * Tiếng Trung HongTai - Notebook Mini-Game 4: MẠT CHƯỢC NỐI CẶP THẦN TỐC (Hanzi Mahjong / Onet Connect)
+ * Giai đoạn: Hoàn thiện nâng cao & Tối ưu hóa trải nghiệm siêu mượt mà
  */
 
 class MahjongSoundFX {
   constructor() {
     this.ctx = null;
   }
+
   init() {
     if (!this.ctx) {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       if (AudioContext) this.ctx = new AudioContext();
     }
   }
-  playTone(freq, type, duration, endFreq = null) {
+
+  playTone(freq, type, duration, endFreq = null, gainVal = 0.18) {
     try {
       this.init();
       if (!this.ctx) return;
@@ -25,63 +27,88 @@ class MahjongSoundFX {
       if (endFreq) {
         osc.frequency.exponentialRampToValueAtTime(endFreq, this.ctx.currentTime + duration);
       }
-      gain.gain.setValueAtTime(0.18, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + duration);
+      gain.gain.setValueAtTime(gainVal, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
       osc.connect(gain);
       gain.connect(this.ctx.destination);
       osc.start();
       osc.stop(this.ctx.currentTime + duration);
     } catch (e) {}
   }
+
   playSelect() {
-    this.playTone(400, 'sine', 0.08, 600);
+    this.playTone(480, 'sine', 0.09, 680, 0.15);
   }
+
   playMatch() {
-    this.playTone(523.25, 'triangle', 0.12, 783.99); // C5 to G5
+    // Two-tone chime
+    this.playTone(523.25, 'triangle', 0.18, 659.25, 0.22); // C5 -> E5
+    setTimeout(() => {
+      this.playTone(783.99, 'sine', 0.25, 1046.5, 0.25); // G5 -> C6
+    }, 60);
   }
+
   playMismatch() {
-    this.playTone(200, 'sawtooth', 0.2, 120);
+    this.playTone(220, 'sawtooth', 0.18, 140, 0.16);
   }
+
   playPowerup() {
-    this.playTone(450, 'sine', 0.25, 900);
+    this.playTone(400, 'sine', 0.28, 880, 0.22);
+  }
+
+  playBomb() {
+    this.playTone(180, 'sawtooth', 0.35, 60, 0.3);
   }
 }
+
+const DEFAULT_MAHJONG_WORDS = [
+  { word: '苹果', pinyin: 'píngguǒ', meaning: 'quả táo' },
+  { word: '香蕉', pinyin: 'xiāngjiāo', meaning: 'quả chuối' },
+  { word: '西瓜', pinyin: 'xīguā', meaning: 'dưa hấu' },
+  { word: '葡萄', pinyin: 'pútao', meaning: 'quả nho' },
+  { word: '学校', pinyin: 'xuéxiào', meaning: 'trường học' },
+  { word: '老师', pinyin: 'lǎoshī', meaning: 'giáo viên' },
+  { word: '学生', pinyin: 'xuéshēng', meaning: 'học sinh' },
+  { word: '朋友', pinyin: 'péngyou', meaning: 'bạn bè' },
+  { word: '汉语', pinyin: 'hànyǔ', meaning: 'tiếng Hán' },
+  { word: '谢谢', pinyin: 'xièxie', meaning: 'cảm ơn' },
+  { word: '再见', pinyin: 'zàijiàn', meaning: 'tạm biệt' },
+  { word: '喜欢', pinyin: 'xǐhuan', meaning: 'thích' },
+  { word: '喝茶', pinyin: 'hē chá', meaning: 'uống trà' },
+  { word: '吃饭', pinyin: 'chī fàn', meaning: 'ăn cơm' },
+  { word: '中国', pinyin: 'zhōngguó', meaning: 'Trung Quốc' },
+  { word: '高兴', pinyin: 'gāoxìng', meaning: 'vui vẻ' }
+];
 
 export class MahjongGameEngine {
   constructor(containerEl, wordsList, onExitCallback) {
     this.container = containerEl;
-    this.rawWords = wordsList && wordsList.length >= 4 ? wordsList : [
-      { word: '苹果', pinyin: 'píngguǒ', meaning: 'quả táo' },
-      { word: '香蕉', pinyin: 'xiāngjiāo', meaning: 'quả chuối' },
-      { word: '西瓜', pinyin: 'xīguā', meaning: 'dưa hấu' },
-      { word: '葡萄', pinyin: 'pútao', meaning: 'quả nho' },
-      { word: '学校', pinyin: 'xuéxiào', meaning: 'trường học' },
-      { word: '老师', pinyin: 'lǎoshī', meaning: 'giáo viên' },
-      { word: '学生', pinyin: 'xuéshēng', meaning: 'học sinh' },
-      { word: '朋友', pinyin: 'péngyou', meaning: 'bạn bè' }
-    ];
+    this.rawWords = Array.isArray(wordsList) && wordsList.length >= 4 ? wordsList : DEFAULT_MAHJONG_WORDS;
     this.onExit = onExitCallback;
     this.sfx = new MahjongSoundFX();
 
-    // Grid Dimensions (including 1 cell padding border for Onet outside-routing)
+    // 6 rows x 8 cols total (includes 1-cell perimeter for outside routing)
+    // Active playable grid: 4 rows x 6 cols = 24 tiles = 12 pairs
     this.rows = 6;
-    this.cols = 6;
-    this.grid = []; // 2D array [row][col]
+    this.cols = 8;
+    this.grid = [];
 
-    // Game Core State
+    // Core State
     this.score = 0;
     this.combo = 0;
     this.maxCombo = 0;
-    this.timeLeft = 90;
+    this.timeLeft = 100;
     this.pairsLeft = 0;
     this.totalPairs = 0;
     this.isPaused = false;
     this.isRunning = false;
+    this.isStopping = false;
 
     // Selection
     this.selectedTile = null; // { r, c }
+    this.isResolvingMatch = false;
 
-    // Helpers
+    // Powerups
     this.hintCount = 3;
     this.shuffleCount = 3;
     this.bombCount = 2;
@@ -120,7 +147,7 @@ export class MahjongGameEngine {
 
           <div class="hud-item hud-timer">
             <i class="fa-solid fa-clock" style="color: #38bdf8;"></i>
-            <span class="hud-value" id="mahjong-timer-val">01:30</span>
+            <span class="hud-value" id="mahjong-timer-val">01:40</span>
           </div>
 
           <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
@@ -182,7 +209,7 @@ export class MahjongGameEngine {
 
             <div class="mahjong-rules-tip">
               <strong>💡 QUY TẮC NỐI:</strong><br>
-              Nối 2 quân cùng từ vựng (Chữ Hán ↔ Pinyin hoặc Chữ Hán ↔ Nghĩa) theo đường không quá 3 đoạn gấp khúc.
+              Nối 2 quân cùng từ vựng (Chữ Hán ↔ Nghĩa hoặc Chữ Hán ↔ Pinyin) theo đường đi không quá 2 góc gập (3 đoạn thẳng).
             </div>
           </div>
         </div>
@@ -268,11 +295,12 @@ export class MahjongGameEngine {
     this.score = 0;
     this.combo = 0;
     this.maxCombo = 0;
-    this.timeLeft = 90;
+    this.timeLeft = 100;
     this.hintCount = 3;
     this.shuffleCount = 3;
     this.bombCount = 2;
     this.selectedTile = null;
+    this.isResolvingMatch = false;
 
     const overlay = this.container.querySelector('#mahjong-modal-overlay');
     if (overlay) {
@@ -298,45 +326,52 @@ export class MahjongGameEngine {
   }
 
   initBoard() {
-    // Generate pairs of tiles: 6x6 board inside = 16 pairs (32 tiles total + 4 empty/bonus or 18 pairs = 36 tiles)
-    const totalTiles = (this.rows - 2) * (this.cols - 2); // 4x4 inner = 16 tiles (8 pairs) or 6x6 inner = 18 pairs
-    const pairsNeeded = totalTiles / 2;
+    // Inner grid: (rows - 2) * (cols - 2) = 4 * 6 = 24 tiles -> 12 pairs
+    const innerRows = this.rows - 2;
+    const innerCols = this.cols - 2;
+    const totalInnerTiles = innerRows * innerCols; // 24
+    const pairsNeeded = totalInnerTiles / 2; // 12
+
     this.totalPairs = pairsNeeded;
     this.pairsLeft = pairsNeeded;
 
     const tilesList = [];
     for (let i = 0; i < pairsNeeded; i++) {
-      const wordObj = this.rawWords[i % this.rawWords.length];
+      const wordObj = this.rawWords[i % this.rawWords.length] || DEFAULT_MAHJONG_WORDS[i % DEFAULT_MAHJONG_WORDS.length];
       const pairId = 'pair_' + i;
 
-      // Tile 1: Hanzi
+      const cleanWord = wordObj.word || wordObj.text || '汉字';
+      const cleanPinyin = wordObj.pinyin || 'hànzì';
+      const cleanMeaning = wordObj.meaning || wordObj.vietnamese || 'từ vựng';
+
+      // Tile 1: Always Chinese Hanzi
       tilesList.push({
         pairId: pairId,
-        word: wordObj.word,
-        text: wordObj.word,
+        word: cleanWord,
+        text: cleanWord,
         type: 'hanzi',
-        pinyin: wordObj.pinyin,
-        meaning: wordObj.meaning
+        pinyin: cleanPinyin,
+        meaning: cleanMeaning
       });
 
-      // Tile 2: Alternates between Pinyin and Meaning
-      if (i % 2 === 0) {
+      // Tile 2: Alternate between Meaning (70%) and Pinyin (30%) for great educational balance
+      if (i % 3 === 0) {
         tilesList.push({
           pairId: pairId,
-          word: wordObj.word,
-          text: wordObj.pinyin,
+          word: cleanWord,
+          text: cleanPinyin,
           type: 'pinyin',
-          pinyin: wordObj.pinyin,
-          meaning: wordObj.meaning
+          pinyin: cleanPinyin,
+          meaning: cleanMeaning
         });
       } else {
         tilesList.push({
           pairId: pairId,
-          word: wordObj.word,
-          text: wordObj.meaning,
+          word: cleanWord,
+          text: cleanMeaning,
           type: 'meaning',
-          pinyin: wordObj.pinyin,
-          meaning: wordObj.meaning
+          pinyin: cleanPinyin,
+          meaning: cleanMeaning
         });
       }
     }
@@ -344,21 +379,50 @@ export class MahjongGameEngine {
     // Shuffle tiles
     tilesList.sort(() => 0.5 - Math.random());
 
-    // Initialize 2D grid with 0 padding for outer border paths
+    // Initialize 2D grid with null borders (row 0, row rows-1, col 0, col cols-1)
     this.grid = [];
     for (let r = 0; r < this.rows; r++) {
       this.grid[r] = [];
       for (let c = 0; c < this.cols; c++) {
         if (r === 0 || r === this.rows - 1 || c === 0 || c === this.cols - 1) {
-          this.grid[r][c] = null; // empty border for routing
+          this.grid[r][c] = null; // empty perimeter for routing
         } else {
           const item = tilesList.pop();
-          this.grid[r][c] = item || null;
+          this.grid[r][c] = item ? { ...item, r, c } : null;
         }
       }
     }
 
+    // Ensure there's at least one valid move initially
+    this.ensureSolvableBoard();
     this.renderBoard();
+  }
+
+  ensureSolvableBoard() {
+    let moves = this.findAnyValidPair();
+    let attempts = 0;
+    while (!moves && attempts < 10) {
+      // Shuffle inner tiles
+      const innerItems = [];
+      for (let r = 1; r < this.rows - 1; r++) {
+        for (let c = 1; c < this.cols - 1; c++) {
+          if (this.grid[r][c]) innerItems.push(this.grid[r][c]);
+        }
+      }
+      innerItems.sort(() => 0.5 - Math.random());
+      for (let r = 1; r < this.rows - 1; r++) {
+        for (let c = 1; c < this.cols - 1; c++) {
+          if (this.grid[r][c]) {
+            const item = innerItems.pop();
+            item.r = r;
+            item.c = c;
+            this.grid[r][c] = item;
+          }
+        }
+      }
+      moves = this.findAnyValidPair();
+      attempts++;
+    }
   }
 
   renderBoard() {
@@ -375,16 +439,19 @@ export class MahjongGameEngine {
         const tile = document.createElement('button');
         tile.type = 'button';
         tile.id = `tile_${r}_${c}`;
-        tile.className = `mahjong-tile type-${item ? item.type : 'empty'}`;
+        tile.className = `mahjong-tile ${item ? 'type-' + item.type : 'cleared'}`;
 
         if (item) {
+          const tagLabel = item.type === 'hanzi' ? 'HÁN' : item.type === 'pinyin' ? 'PINYIN' : 'NGHĨA';
           tile.innerHTML = `
             <span class="tile-inner-text">${item.text}</span>
-            <span class="tile-type-tag">${item.type === 'hanzi' ? 'HÁN' : item.type === 'pinyin' ? 'PINYIN' : 'NGHĨA'}</span>
+            <span class="tile-type-tag">${tagLabel}</span>
           `;
-          tile.addEventListener('click', () => this.handleTileClick(r, c));
+          tile.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.handleTileClick(r, c);
+          });
         } else {
-          tile.classList.add('cleared');
           tile.disabled = true;
         }
 
@@ -396,19 +463,20 @@ export class MahjongGameEngine {
   }
 
   handleTileClick(r, c) {
+    if (this.isResolvingMatch || !this.isRunning || this.isPaused) return;
     const clickedItem = this.grid[r][c];
     if (!clickedItem) return;
 
-    this.sfx.playSelect();
-
     if (!this.selectedTile) {
       // First tile selected
+      this.sfx.playSelect();
       this.selectedTile = { r, c };
       this.updateSelectionHighlights();
     } else {
-      // Second tile selected
+      // Second tile clicked
       if (this.selectedTile.r === r && this.selectedTile.c === c) {
-        // Deselect
+        // Deselect current
+        this.sfx.playSelect();
         this.selectedTile = null;
         this.updateSelectionHighlights();
         return;
@@ -418,22 +486,35 @@ export class MahjongGameEngine {
       const firstItem = this.grid[firstTile.r][firstTile.c];
 
       if (firstItem && firstItem.pairId === clickedItem.pairId) {
-        // Check Onet path (at most 2 turns)
+        // Same pair vocabulary! Check if path is valid (<= 2 turns)
         const path = this.findOnetPath(firstTile.r, firstTile.c, r, c);
         if (path) {
           this.handleMatch(firstTile, { r, c }, path);
         } else {
+          // Blocked path
           this.sfx.playMismatch();
-          this.showToast('Không có đường nối thông thoáng! (Tối đa 2 góc gập)');
+          this.triggerTileShake(r, c);
+          this.showToast('⚠️ Bị cản đường! Nối không quá 2 góc gập.');
           this.selectedTile = { r, c };
           this.updateSelectionHighlights();
         }
       } else {
-        // Mismatch
+        // Different vocabulary pair
         this.sfx.playMismatch();
+        this.triggerTileShake(r, c);
         this.selectedTile = { r, c };
         this.updateSelectionHighlights();
       }
+    }
+  }
+
+  triggerTileShake(r, c) {
+    const tileEl = this.container.querySelector(`#tile_${r}_${c}`);
+    if (tileEl) {
+      tileEl.classList.remove('shake-tile');
+      void tileEl.offsetWidth; // force reflow
+      tileEl.classList.add('shake-tile');
+      setTimeout(() => tileEl.classList.remove('shake-tile'), 380);
     }
   }
 
@@ -445,25 +526,27 @@ export class MahjongGameEngine {
     }
   }
 
-  // Classic Onet 3-Line / 2-Turn Path Algorithm
+  // ==========================================
+  // ONET 3-LINE / 2-TURN PATHFINDING ALGORITHM
+  // ==========================================
   findOnetPath(r1, c1, r2, c2) {
-    // Direct Line (0 turn)
+    // 1. Direct Line (0 turn)
     if (this.canConnectDirect(r1, c1, r2, c2)) {
       return [{ r: r1, c: c1 }, { r: r2, c: c2 }];
     }
 
-    // 1 Turn (L shape)
-    // Corner 1: (r1, c2)
+    // 2. One Turn (L shape - 1 turn)
+    // Corner A: (r1, c2)
     if (this.isEmptyCell(r1, c2) && this.canConnectDirect(r1, c1, r1, c2) && this.canConnectDirect(r1, c2, r2, c2)) {
       return [{ r: r1, c: c1 }, { r: r1, c: c2 }, { r: r2, c: c2 }];
     }
-    // Corner 2: (r2, c1)
+    // Corner B: (r2, c1)
     if (this.isEmptyCell(r2, c1) && this.canConnectDirect(r1, c1, r2, c1) && this.canConnectDirect(r2, c1, r2, c2)) {
       return [{ r: r1, c: c1 }, { r: r2, c: c1 }, { r: r2, c: c2 }];
     }
 
-    // 2 Turns (Z or U shape)
-    // Scan horizontal lines
+    // 3. Two Turns (Z or U shape - 2 turns)
+    // Scan horizontal channels (from col 0 to cols-1)
     for (let c = 0; c < this.cols; c++) {
       if (c === c1 || c === c2) continue;
       if (this.isEmptyCell(r1, c) && this.isEmptyCell(r2, c)) {
@@ -473,7 +556,7 @@ export class MahjongGameEngine {
       }
     }
 
-    // Scan vertical lines
+    // Scan vertical channels (from row 0 to rows-1)
     for (let r = 0; r < this.rows; r++) {
       if (r === r1 || r === r2) continue;
       if (this.isEmptyCell(r, c1) && this.isEmptyCell(r, c2)) {
@@ -512,63 +595,178 @@ export class MahjongGameEngine {
   }
 
   handleMatch(tile1, tile2, path) {
+    this.isResolvingMatch = true;
     const item1 = this.grid[tile1.r][tile1.c];
     this.sfx.playMatch();
 
-    this.score += 20 + this.combo * 5;
+    this.score += 25 + this.combo * 10;
     this.combo++;
     this.pairsLeft--;
     if (this.combo > this.maxCombo) this.maxCombo = this.combo;
 
-    // Draw Laser beam line on canvas
+    // Highlight matched glow
+    const el1 = this.container.querySelector(`#tile_${tile1.r}_${tile1.c}`);
+    const el2 = this.container.querySelector(`#tile_${tile2.r}_${tile2.c}`);
+    if (el1) el1.classList.add('matched-glow');
+    if (el2) el2.classList.add('matched-glow');
+
+    // Draw Smooth Neon Laser beam
     this.drawLaserPath(path);
 
-    if (window.speakText && item1) window.speakText(item1.word);
+    // Pronounce Hanzi
+    if (window.speakText && item1) {
+      window.speakText(item1.word);
+    }
 
-    // Clear grid positions
-    this.grid[tile1.r][tile1.c] = null;
-    this.grid[tile2.r][tile2.c] = null;
-    this.selectedTile = null;
+    // Vanish animation after brief laser show
+    setTimeout(() => {
+      if (el1) el1.classList.add('matched-vanish');
+      if (el2) el2.classList.add('matched-vanish');
+    }, 180);
 
     setTimeout(() => {
       this.clearLaserPath();
+      this.grid[tile1.r][tile1.c] = null;
+      this.grid[tile2.r][tile2.c] = null;
+      this.selectedTile = null;
+      this.isResolvingMatch = false;
+
       this.renderBoard();
       this.updateHUD();
 
       if (this.pairsLeft <= 0) {
         this.gameOver(true);
+      } else {
+        // Auto check if any valid moves remain
+        const remainingMoves = this.findAnyValidPair();
+        if (!remainingMoves && this.pairsLeft > 0) {
+          this.showToast('🔄 Tự động xáo trộn cờ vì không còn đường đi!');
+          this.autoShuffleBoard();
+        }
       }
-    }, 280);
+    }, 380);
+  }
+
+  // ==========================================
+  // LASER BEAM RENDERING ENGINE (ULTRA SMOOTH)
+  // ==========================================
+  getPointCoordinates(r, c) {
+    const container = this.container.querySelector('#mahjong-board-container');
+    const gridEl = this.container.querySelector('#mahjong-tiles-grid');
+    if (!container || !gridEl) return { x: 0, y: 0 };
+
+    const cRect = container.getBoundingClientRect();
+    const gRect = gridEl.getBoundingClientRect();
+
+    const tileEl = this.container.querySelector(`#tile_${r}_${c}`);
+    if (tileEl) {
+      const tRect = tileEl.getBoundingClientRect();
+      return {
+        x: tRect.left + tRect.width / 2 - cRect.left,
+        y: tRect.top + tRect.height / 2 - cRect.top
+      };
+    }
+
+    // For perimeter outer boundary points (r=0, r=rows-1, c=0, c=cols-1)
+    const innerCols = this.cols - 2;
+    const innerRows = this.rows - 2;
+    const cellW = gRect.width / innerCols;
+    const cellH = gRect.height / innerRows;
+
+    let x = 0;
+    let y = 0;
+
+    if (c === 0) {
+      x = gRect.left - cRect.left - 18;
+    } else if (c === this.cols - 1) {
+      x = gRect.right - cRect.left + 18;
+    } else {
+      x = gRect.left - cRect.left + (c - 1 + 0.5) * cellW;
+    }
+
+    if (r === 0) {
+      y = gRect.top - cRect.top - 18;
+    } else if (r === this.rows - 1) {
+      y = gRect.bottom - cRect.top + 18;
+    } else {
+      y = gRect.top - cRect.top + (r - 1 + 0.5) * cellH;
+    }
+
+    return { x, y };
   }
 
   drawLaserPath(path) {
     const canvas = this.container.querySelector('#mahjong-line-canvas');
-    const board = this.container.querySelector('#mahjong-tiles-grid');
-    if (!canvas || !board || !path) return;
+    const container = this.container.querySelector('#mahjong-board-container');
+    if (!canvas || !container || !path || path.length < 2) return;
 
-    const bRect = board.getBoundingClientRect();
-    canvas.width = bRect.width;
-    canvas.height = bRect.height;
+    const cRect = container.getBoundingClientRect();
+    canvas.width = cRect.width;
+    canvas.height = cRect.height;
     const ctx = canvas.getContext('2d');
 
-    const cellW = bRect.width / (this.cols - 2);
-    const cellH = bRect.height / (this.rows - 2);
+    const points = path.map(p => this.getPointCoordinates(p.r, p.c));
 
-    ctx.strokeStyle = '#38bdf8';
-    ctx.lineWidth = 4;
-    ctx.lineCap = 'round';
-    ctx.shadowColor = '#0284c7';
-    ctx.shadowBlur = 10;
+    // Clear previous
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    // Layer 1: Wide Soft Neon Halo
+    ctx.save();
     ctx.beginPath();
-    path.forEach((pt, idx) => {
-      // Map coordinate from 0..rows-1 to inner bounds
-      const x = (pt.c - 0.5) * cellW;
-      const y = (pt.r - 0.5) * cellH;
-      if (idx === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
+    points.forEach((pt, idx) => {
+      if (idx === 0) ctx.moveTo(pt.x, pt.y);
+      else ctx.lineTo(pt.x, pt.y);
     });
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.lineWidth = 14;
+    ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+    ctx.shadowColor = '#38bdf8';
+    ctx.shadowBlur = 18;
     ctx.stroke();
+    ctx.restore();
+
+    // Layer 2: Radiant Electric Core
+    ctx.save();
+    ctx.beginPath();
+    points.forEach((pt, idx) => {
+      if (idx === 0) ctx.moveTo(pt.x, pt.y);
+      else ctx.lineTo(pt.x, pt.y);
+    });
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = '#22d3ee';
+    ctx.shadowColor = '#06b6d4';
+    ctx.shadowBlur = 8;
+    ctx.stroke();
+    ctx.restore();
+
+    // Layer 3: Blazing White Hot Center
+    ctx.save();
+    ctx.beginPath();
+    points.forEach((pt, idx) => {
+      if (idx === 0) ctx.moveTo(pt.x, pt.y);
+      else ctx.lineTo(pt.x, pt.y);
+    });
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.lineWidth = 2.2;
+    ctx.strokeStyle = '#ffffff';
+    ctx.stroke();
+    ctx.restore();
+
+    // Glowing Node Circles at corners and endpoints
+    points.forEach((pt) => {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(pt.x, pt.y, 6, 0, Math.PI * 2);
+      ctx.fillStyle = '#ffffff';
+      ctx.shadowColor = '#38bdf8';
+      ctx.shadowBlur = 12;
+      ctx.fill();
+      ctx.restore();
+    });
   }
 
   clearLaserPath() {
@@ -579,13 +777,10 @@ export class MahjongGameEngine {
     }
   }
 
-  useHint() {
-    if (this.hintCount <= 0) {
-      this.showToast('Đã dùng hết Kính Lúp gợi ý!');
-      return;
-    }
-
-    // Find any valid pair
+  // ==========================================
+  // POWERUPS & HELPERS
+  // ==========================================
+  findAnyValidPair() {
     for (let r1 = 1; r1 < this.rows - 1; r1++) {
       for (let c1 = 1; c1 < this.cols - 1; c1++) {
         const item1 = this.grid[r1][c1];
@@ -599,24 +794,39 @@ export class MahjongGameEngine {
 
             const path = this.findOnetPath(r1, c1, r2, c2);
             if (path) {
-              this.hintCount--;
-              this.sfx.playPowerup();
-              const el1 = this.container.querySelector(`#tile_${r1}_${c1}`);
-              const el2 = this.container.querySelector(`#tile_${r2}_${c2}`);
-              if (el1) el1.classList.add('hint-pulse');
-              if (el2) el2.classList.add('hint-pulse');
-              this.updateHUD();
-              this.showToast('🔍 Đã tìm thấy 1 cặp có thể nối!');
-              return;
+              return { tile1: { r: r1, c: c1 }, tile2: { r: r2, c: c2 }, path };
             }
           }
         }
       }
     }
-    this.showToast('Không còn cặp nối trực tiếp, hãy dùng Gió Lốc đảo bài!');
+    return null;
+  }
+
+  useHint() {
+    if (!this.isRunning || this.isPaused) return;
+    if (this.hintCount <= 0) {
+      this.showToast('Đã dùng hết Kính Lúp gợi ý!');
+      return;
+    }
+
+    const match = this.findAnyValidPair();
+    if (match) {
+      this.hintCount--;
+      this.sfx.playPowerup();
+      const el1 = this.container.querySelector(`#tile_${match.tile1.r}_${match.tile1.c}`);
+      const el2 = this.container.querySelector(`#tile_${match.tile2.r}_${match.tile2.c}`);
+      if (el1) el1.classList.add('hint-pulse');
+      if (el2) el2.classList.add('hint-pulse');
+      this.updateHUD();
+      this.showToast('🔍 Đã tìm thấy 1 cặp có thể nối!');
+    } else {
+      this.showToast('Không còn cặp nối trực tiếp, hãy dùng Gió Lốc đảo bài!');
+    }
   }
 
   useShuffle() {
+    if (!this.isRunning || this.isPaused) return;
     if (this.shuffleCount <= 0) {
       this.showToast('Đã dùng hết Gió Lốc đảo bài!');
       return;
@@ -624,7 +834,12 @@ export class MahjongGameEngine {
 
     this.shuffleCount--;
     this.sfx.playPowerup();
+    this.autoShuffleBoard();
+    this.updateHUD();
+    this.showToast('🌪️ Đã xáo trộn lại toàn bộ bàn cờ!');
+  }
 
+  autoShuffleBoard() {
     const currentTiles = [];
     for (let r = 1; r < this.rows - 1; r++) {
       for (let c = 1; c < this.cols - 1; c++) {
@@ -637,18 +852,21 @@ export class MahjongGameEngine {
     for (let r = 1; r < this.rows - 1; r++) {
       for (let c = 1; c < this.cols - 1; c++) {
         if (this.grid[r][c]) {
-          this.grid[r][c] = currentTiles.pop();
+          const item = currentTiles.pop();
+          item.r = r;
+          item.c = c;
+          this.grid[r][c] = item;
         }
       }
     }
 
+    this.ensureSolvableBoard();
     this.selectedTile = null;
     this.renderBoard();
-    this.updateHUD();
-    this.showToast('🌪️ Đã xáo trộn lại toàn bộ bàn cờ!');
   }
 
   useBomb() {
+    if (!this.isRunning || this.isPaused) return;
     if (this.bombCount <= 0) {
       this.showToast('Đã dùng hết Bom Thần Kỳ!');
       return;
@@ -665,6 +883,7 @@ export class MahjongGameEngine {
             const item2 = this.grid[r2][c2];
             if (item2 && item1.pairId === item2.pairId) {
               this.bombCount--;
+              this.sfx.playBomb();
               this.handleMatch({ r: r1, c: c1 }, { r: r2, c: c2 }, [{ r: r1, c: c1 }, { r: r2, c: c2 }]);
               this.showToast('💣 Bom Thần Kỳ đã hóa giải 1 cặp!');
               return;
@@ -696,110 +915,6 @@ export class MahjongGameEngine {
     if (bHint) bHint.textContent = `x${this.hintCount}`;
     if (bShuffle) bShuffle.textContent = `x${this.shuffleCount}`;
     if (bBomb) bBomb.textContent = `x${this.bombCount}`;
-  }
-
-  start() {
-    this.isStopping = false;
-    this.isRunning = true;
-    this.isPaused = false;
-    this.score = 0;
-    this.combo = 0;
-    this.maxCombo = 0;
-    this.timeLeft = 90;
-    this.hintCount = 3;
-    this.shuffleCount = 3;
-    this.bombCount = 2;
-    this.selectedTile = null;
-
-    const overlay = this.container.querySelector('#mahjong-modal-overlay');
-    if (overlay) {
-      overlay.style.setProperty('display', 'none', 'important');
-    }
-
-    this.initBoard();
-    this.updateHUD();
-    this.startTimers();
-  }
-
-  startTimers() {
-    if (this.timerInterval) clearInterval(this.timerInterval);
-    this.timerInterval = setInterval(() => {
-      if (!this.isRunning || this.isPaused) return;
-      this.timeLeft--;
-
-      if (this.timeLeft <= 0) {
-        this.gameOver(false);
-      }
-      this.updateHUD();
-    }, 1000);
-  }
-
-  initBoard() {
-    // Generate pairs of tiles: 6x6 board inside = 16 pairs (32 tiles total + 4 empty/bonus or 18 pairs = 36 tiles)
-    const totalTiles = (this.rows - 2) * (this.cols - 2); // 4x4 inner = 16 tiles (8 pairs) or 6x6 inner = 18 pairs
-    const pairsNeeded = totalTiles / 2;
-    this.totalPairs = pairsNeeded;
-    this.pairsLeft = pairsNeeded;
-
-    const tilesList = [];
-    for (let i = 0; i < pairsNeeded; i++) {
-      const wordObj = this.rawWords[i % this.rawWords.length];
-      const pairId = 'pair_' + i;
-
-      // Tile 1: Hanzi
-      tilesList.push({
-        pairId: pairId,
-        word: wordObj.word,
-        text: wordObj.word,
-        type: 'hanzi',
-        pinyin: wordObj.pinyin,
-        meaning: wordObj.meaning
-      });
-
-      // Tile 2: Alternates between Pinyin and Meaning
-      if (i % 2 === 0) {
-        tilesList.push({
-          pairId: pairId,
-          word: wordObj.word,
-          text: wordObj.pinyin,
-          type: 'pinyin',
-          pinyin: wordObj.pinyin,
-          meaning: wordObj.meaning
-        });
-      } else {
-        tilesList.push({
-          pairId: pairId,
-          word: wordObj.word,
-          text: wordObj.meaning,
-          type: 'meaning',
-          pinyin: wordObj.pinyin,
-          meaning: wordObj.meaning
-        });
-      }
-    }
-
-    // Shuffle tiles
-    tilesList.sort(() => 0.5 - Math.random());
-
-    // Place into inner grid
-    let idx = 0;
-    this.grid = Array(this.rows).fill(null).map(() => Array(this.cols).fill(null));
-
-    for (let r = 1; r < this.rows - 1; r++) {
-      for (let c = 1; c < this.cols - 1; c++) {
-        if (idx < tilesList.length) {
-          this.grid[r][c] = {
-            ...tilesList[idx],
-            row: r,
-            col: c,
-            matched: false
-          };
-          idx++;
-        }
-      }
-    }
-
-    this.renderBoardDOM();
   }
 
   showToast(msg) {

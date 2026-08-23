@@ -6833,8 +6833,9 @@ window.openLessonDetailModal = function (lessonKey) {
   if (extraVideoBox) {
     if (videoObj) {
       extraVideoBox.style.display = 'block';
-      if (extraVideoTitle) extraVideoTitle.textContent = videoObj.title || 'Video Bài Giảng Đi Kèm';
-      if (extraVideoDesc) extraVideoDesc.textContent = videoObj.desc || 'Xem video hướng dẫn bài học chuẩn ngữ âm và tình huống thực tế.';
+      const cleanTitle = (title ? `Bài ${lessonKey}: ${title}` : (videoObj.title || `Video Bài Giảng Bài ${lessonKey}`));
+      if (extraVideoTitle) extraVideoTitle.textContent = cleanTitle;
+      if (extraVideoDesc) extraVideoDesc.style.display = 'none';
       
       const handleOpenVideo = function (e) {
         if (e) e.stopPropagation();

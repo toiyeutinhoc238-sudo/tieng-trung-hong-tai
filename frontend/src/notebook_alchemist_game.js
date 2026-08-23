@@ -3,83 +3,256 @@
  * Giai đoạn: Thử nghiệm nội bộ (Beta Super Admin)
  */
 
-// Common Character-to-Radical Decomposition Database for Chinese Learning
+// Extensive Character-to-Radical Decomposition Database for Chinese Learning (200+ HSK Hanzi)
 const RADICAL_DECOMPOSITIONS = {
-  '明': ['日', '月'],
-  '好': ['女', '子'],
-  '休': ['亻', '木'],
-  '林': ['木', '木'],
-  '森': ['木', '木', '木'],
-  '泪': ['氵', '目'],
-  '相': ['木', '目'],
-  '河': ['氵', '可'],
-  '江': ['氵', '工'],
-  '海': ['氵', '每'],
-  '清': ['氵', '青'],
-  '晴': ['日', '青'],
-  '请': ['讠', '青'],
-  '情': ['忄', '青'],
-  '校': ['木', '交'],
-  '桥': ['木', '乔'],
-  '和': ['禾', '口'],
-  '种': ['禾', '中'],
-  '秋': ['禾', '火'],
-  '炎': ['火', '火'],
-  '灭': ['一', '火'],
-  '灯': ['火', '丁'],
-  '想': ['相', '心'],
-  '您': ['你', '心'],
-  '们': ['亻', '门'],
-  '他': ['亻', '也'],
-  '她': ['女', '也'],
-  '地': ['土', '也'],
-  '池': ['氵', '也'],
-  '时': ['日', '寸'],
-  '村': ['木', '寸'],
-  '过': ['辶', '寸'],
-  '打': ['扌', '丁'],
-  '找': ['扌', '戈'],
-  '把': ['扌', '巴'],
-  '爸': ['父', '巴'],
-  '吧': ['口', '巴'],
-  '花': ['艹', '化'],
-  '草': ['艹', '早'],
-  '茶': ['艹', '人', '木'],
-  '药': ['艹', '约'],
-  '学': ['⺌', '冖', '子'],
-  '字': ['宀', '子'],
-  '家': ['宀', '豕'],
-  '安': ['宀', '女'],
-  '看': ['手', '目'],
-  '听': ['口', '斤'],
-  '吃': ['口', '乞'],
-  '叫': ['口', '丩'],
-  '唱': ['口', '昌'],
-  '喝': ['口', '曷'],
-  '问': ['门', '口'],
-  '间': ['门', '日'],
-  '闭': ['门', '才'],
-  '闪': ['门', '人'],
+  // Bộ Ngôn (言 / 讠)
+  '课': ['讠', '果'],
   '语': ['讠', '吾'],
   '话': ['讠', '舌'],
   '读': ['讠', '卖'],
   '说': ['讠', '兑'],
-  '课': ['讠', '果'],
+  '请': ['讠', '青'],
   '谢': ['讠', '身', '寸'],
+  '识': ['讠', '只'],
+  '认': ['讠', '人'],
+  '谁': ['讠', '隹'],
+  '记': ['讠', '己'],
+  '许': ['讠', '午'],
+  '让': ['讠', '上'],
+  '该': ['讠', '亥'],
+  '试': ['讠', '式'],
+  '词': ['讠', '司'],
+  '讲': ['讠', '井'],
+
+  // Bộ Nhân (人 / 亻)
+  '你': ['亻', '尔'],
+  '他': ['亻', '也'],
+  '们': ['亻', '门'],
+  '休': ['亻', '木'],
+  '体': ['亻', '本'],
+  '住': ['亻', '主'],
+  '位': ['亻', '立'],
+  '件': ['亻', '牛'],
+  '保': ['亻', '呆'],
+  '便': ['亻', '更'],
+  '信': ['亻', '言'],
+  '俩': ['亻', '两'],
+  '倒': ['亻', '到'],
+  '借': ['亻', '昔'],
+  '做': ['亻', '故'],
+  '作': ['亻', '乍'],
+  '化': ['亻', '匕'],
+  '代': ['亻', '弋'],
+
+  // Bộ Nhật / Nguyệt / Minh (日 / 月 / 木)
+  '明': ['日', '月'],
+  '晴': ['日', '青'],
+  '时': ['日', '寸'],
+  '早': ['日', '十'],
+  '星': ['日', '生'],
+  '晚': ['日', '免'],
+  '昨': ['日', '乍'],
+  '暖': ['日', '爰'],
+  '相': ['木', '目'],
+  '林': ['木', '木'],
+  '森': ['木', '木', '木'],
+  '校': ['木', '交'],
+  '桥': ['木', '乔'],
+  '机': ['木', '几'],
+  '杯': ['木', '不'],
+  '树': ['木', '又', '寸'],
+  '李': ['木', '子'],
+  '板': ['木', '反'],
+  '极': ['木', '及'],
+  '椅': ['木', '奇'],
+  '桌': ['卜', '日', '木'],
+  '朋': ['月', '月'],
+  '脸': ['月', '佥'],
+  '腿': ['月', '退'],
+  '脚': ['月', '去', '卩'],
+  '肚': ['月', '土'],
+  '胖': ['月', '半'],
+  '服': ['月', '卩', '又'],
+
+  // Bộ Nữ (女) & Bộ Phụ (父)
+  '好': ['女', '子'],
+  '她': ['女', '也'],
+  '妈': ['女', '马'],
+  '姐': ['女', '且'],
+  '妹': ['女', '未'],
+  '奶': ['女', '乃'],
+  '姓': ['女', '生'],
+  '姑': ['女', '古'],
+  '姨': ['女', '夷'],
+  '爸': ['父', '巴'],
+  '爷': ['父', '卩'],
+
+  // Bộ Thủy / Băng (氵 / 冫)
+  '河': ['氵', '可'],
+  '江': ['氵', '工'],
+  '海': ['氵', '每'],
+  '湖': ['氵', '古', '月'],
+  '池': ['氵', '也'],
+  '汉': ['氵', '又'],
+  '洗': ['氵', '先'],
+  '清': ['氵', '青'],
+  '泪': ['氵', '目'],
+  '游': ['氵', '方', '子'],
+  '漂': ['氵', '票'],
   '冷': ['冫', '令'],
   '冰': ['冫', '水'],
   '凉': ['冫', '京'],
   '冬': ['夂', '冫'],
+
+  // Bộ Thảo (艹) & Hòa (禾) & Trúc (⺮)
+  '草': ['艹', '早'],
+  '花': ['艹', '化'],
+  '茶': ['艹', '人', '木'],
+  '药': ['艹', '约'],
+  '苹': ['艹', '平'],
+  '菜': ['艹', '爫', '木'],
+  '蓝': ['艹', '监'],
+  '英': ['艹', '央'],
+  '节': ['艹', '卩'],
+  '和': ['禾', '口'],
+  '种': ['禾', '中'],
+  '秋': ['禾', '火'],
+  '秒': ['禾', '少'],
+  '租': ['禾', '且'],
+  '科': ['禾', '斗'],
+  '程': ['禾', '呈'],
+  '笔': ['⺮', '毛'],
+  '笑': ['⺮', '夭'],
+  '等': ['⺮', '寺'],
+  '第': ['⺮', '弟'],
+  '答': ['⺮', '合'],
+  '管': ['⺮', '官'],
+  '箱': ['⺮', '相'],
+  '篇': ['⺮', '扁'],
+  '符': ['⺮', '付'],
+
+  // Bộ Miên / Quán (宀 / 冖 / 囗 / 门)
+  '学': ['⺌', '冖', '子'],
+  '字': ['宀', '子'],
+  '家': ['宀', '豕'],
+  '安': ['宀', '女'],
+  '客': ['宀', '各'],
+  '室': ['宀', '至'],
+  '定': ['宀', '正'],
+  '写': ['冖', '与'],
+  '军': ['冖', '车'],
+  '国': ['囗', '玉'],
+  '园': ['囗', '元'],
+  '因': ['囗', '大'],
+  '团': ['囗', '才'],
+  '问': ['门', '口'],
+  '间': ['门', '日'],
+  '闭': ['门', '才'],
+  '闪': ['门', '人'],
+  '阔': ['门', '活'],
+
+  // Bộ Khẩu (口) & Thủ (扌 / 手) & Tâm (心 / 忄)
+  '吃': ['口', '乞'],
+  '喝': ['口', '曷'],
+  '唱': ['口', '昌'],
+  '听': ['口', '斤'],
+  '叫': ['口', '丩'],
+  '吧': ['口', '巴'],
+  '吗': ['口', '马'],
+  '呢': ['口', '尼'],
+  '响': ['口', '向'],
+  '打': ['扌', '丁'],
+  '找': ['扌', '戈'],
+  '把': ['扌', '巴'],
+  '抱': ['扌', '包'],
+  '提': ['扌', '是'],
+  '掉': ['扌', '卓'],
+  '推': ['扌', '隹'],
+  '拉': ['扌', '立'],
+  '看': ['手', '目'],
+  '想': ['相', '心'],
+  '您': ['你', '心'],
+  '思': ['田', '心'],
+  '情': ['忄', '青'],
+  '忙': ['忄', '亡'],
+  '快': ['忄', '夬'],
+  '慢': ['忄', '曼'],
+
+  // Bộ Hỏa (火 / 灬) & Thực (饣) & Túc (⻊) & Khuyển (犭) & Dực (羽)
+  '炎': ['火', '火'],
+  '灯': ['火', '丁'],
+  '灭': ['一', '火'],
+  '烧': ['火', '尧'],
+  '热': ['执', '灬'],
+  '照': ['昭', '灬'],
+  '点': ['占', '灬'],
+  '黑': ['里', '灬'],
   '饭': ['饣', '反'],
   '饮': ['饣', '欠'],
   '饱': ['饣', '包'],
+  '馆': ['饣', '官'],
+  '饺': ['饣', '交'],
   '跑': ['⻊', '包'],
-  '抱': ['扌', '包'],
+  '跳': ['⻊', '兆'],
+  '踢': ['⻊', '易'],
+  '路': ['⻊', '各'],
+  '跟': ['⻊', '艮'],
+  '狗': ['犭', '句'],
+  '猫': ['犭', '苗'],
+  '猪': ['犭', '者'],
+  '鸡': ['又', '鸟'],
+  '鸭': ['甲', '鸟'],
+  '鹅': ['我', '鸟'],
+
+  // Bộ Quai xước (辶) & Mịch (纟) & Thổ (土) & Điền (田) & Mỹ (美)
+  '过': ['辶', '寸'],
+  '进': ['辶', '井'],
+  '远': ['辶', '元'],
+  '近': ['辶', '斤'],
+  '送': ['辶', '关'],
+  '还': ['辶', '不'],
+  '边': ['辶', '力'],
+  '迟': ['辶', '尺'],
+  '道': ['辶', '首'],
+  '通': ['辶', '甬'],
   '红': ['纟', '工'],
   '给': ['纟', '合'],
   '绿': ['纟', '录'],
-  '结': ['纟', '吉']
+  '结': ['纟', '吉'],
+  '细': ['纟', '田'],
+  '级': ['纟', '及'],
+  '线': ['纟', '戋'],
+  '练': ['纟', '东'],
+  '地': ['土', '也'],
+  '场': ['土', '昜'],
+  '城': ['土', '成'],
+  '块': ['土', '夬'],
+  '男': ['田', '力'],
+  '累': ['田', '糸'],
+  '界': ['田', '介'],
+  '美': ['⺶', '大'],
+  '友': ['𠂇', '又']
 };
+
+// High-quality single-character fallback dictionary when rawWords contains isolated unknown symbols
+const FALLBACK_SINGLE_WORDS = [
+  { word: '课', pinyin: 'kè', meaning: 'bài học, tiết học', parts: ['讠', '果'] },
+  { word: '明', pinyin: 'míng', meaning: 'sáng sủa, rõ ràng', parts: ['日', '月'] },
+  { word: '好', pinyin: 'hǎo', meaning: 'tốt, đẹp, hay', parts: ['女', '子'] },
+  { word: '休', pinyin: 'xiū', meaning: 'nghỉ ngơi', parts: ['亻', '木'] },
+  { word: '谢', pinyin: 'xiè', meaning: 'cảm ơn', parts: ['讠', '身', '寸'] },
+  { word: '茶', pinyin: 'chá', meaning: 'trà, nước chè', parts: ['艹', '人', '木'] },
+  { word: '学', pinyin: 'xué', meaning: 'học tập', parts: ['⺌', '冖', '子'] },
+  { word: '草', pinyin: 'cǎo', meaning: 'cỏ', parts: ['艹', '早'] },
+  { word: '河', pinyin: 'hé', meaning: 'con sông', parts: ['氵', '可'] },
+  { word: '晴', pinyin: 'qíng', meaning: 'trời nắng ráo', parts: ['日', '青'] },
+  { word: '打', pinyin: 'dǎ', meaning: 'đánh, gõ', parts: ['扌', '丁'] },
+  { word: '看', pinyin: 'kàn', meaning: 'nhìn, xem', parts: ['手', '目'] },
+  { word: '听', pinyin: 'tīng', meaning: 'nghe', parts: ['口', '斤'] },
+  { word: '吃', pinyin: 'chī', meaning: 'ăn', parts: ['口', '乞'] },
+  { word: '跑', pinyin: 'pǎo', meaning: 'chạy bộ', parts: ['⻊', '包'] },
+  { word: '饭', pinyin: 'fàn', meaning: 'cơm, bữa ăn', parts: ['饣', '反'] }
+];
 
 class AlchemistSoundFX {
   constructor() {
@@ -112,7 +285,7 @@ class AlchemistSoundFX {
     } catch (e) {}
   }
   playBubble() {
-    this.playTone(300, 'sine', 0.1, 550);
+    this.playTone(320, 'sine', 0.1, 580);
   }
   playSuccess() {
     this.playTone(440, 'triangle', 0.15, 660);
@@ -129,15 +302,15 @@ class AlchemistSoundFX {
 export class AlchemistGameEngine {
   constructor(containerEl, wordsList, onExitCallback) {
     this.container = containerEl;
-    this.rawWords = wordsList && wordsList.length >= 2 ? wordsList : [
+    this.rawWords = wordsList && wordsList.length >= 1 ? wordsList : [
+      { word: '课', pinyin: 'kè', meaning: 'bài học, tiết học' },
+      { word: '美国', pinyin: 'Měiguó', meaning: 'Nước Mỹ' },
       { word: '明', pinyin: 'míng', meaning: 'sáng sủa, rõ ràng' },
       { word: '好', pinyin: 'hǎo', meaning: 'tốt, đẹp' },
+      { word: '老师', pinyin: 'lǎoshī', meaning: 'thầy cô giáo' },
       { word: '休', pinyin: 'xiū', meaning: 'nghỉ ngơi' },
-      { word: '河', pinyin: 'hé', meaning: 'con sông' },
-      { word: '晴', pinyin: 'qíng', meaning: 'trời nắng ráo' },
-      { word: '请', pinyin: 'qǐng', meaning: 'mời, xin vui lòng' },
-      { word: '打', pinyin: 'dǎ', meaning: 'đánh, gõ' },
-      { word: '看', pinyin: 'kàn', meaning: 'nhìn, xem' }
+      { word: '学生', pinyin: 'xuéshēng', meaning: 'học sinh' },
+      { word: '苹果', pinyin: 'píngguǒ', meaning: 'quả táo' }
     ];
     this.onExit = onExitCallback;
     this.sfx = new AlchemistSoundFX();
@@ -148,16 +321,17 @@ export class AlchemistGameEngine {
     this.maxStreak = 0;
     this.lives = 3;
     this.maxLives = 3;
-    this.timeLeft = 75;
+    this.timeLeft = 80;
     this.isPaused = false;
     this.isRunning = false;
     this.craftedCount = 0;
 
     // Current Target & Cauldron State
     this.currentTarget = null;
-    this.targetRadicals = [];
     this.cauldronSlots = []; // items currently in cauldron
-    this.availableRadicals = []; // radicals shown on the shelf
+    this.availableRadicals = []; // items shown on shelf
+    this.isRevealed = false;
+    this.isProcessing = false;
 
     this.timerInterval = null;
 
@@ -202,7 +376,7 @@ export class AlchemistGameEngine {
 
           <div class="hud-item hud-timer">
             <i class="fa-solid fa-clock" style="color: #38bdf8;"></i>
-            <span class="hud-value" id="alchemist-timer-val">01:15</span>
+            <span class="hud-value" id="alchemist-timer-val">01:20</span>
           </div>
 
           <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
@@ -216,13 +390,30 @@ export class AlchemistGameEngine {
 
         <!-- MAIN ARENA LAYOUT -->
         <div class="alchemist-arena-grid">
-          <!-- LEFT: TARGET CHARACTER DISPLAY -->
+          <!-- LEFT: TARGET QUESTION CARD (ACTIVE RECALL - NO SPOILER ANSWER) -->
           <div class="alchemist-target-card">
-            <div class="alchemist-quest-tag">MỤC TIÊU CẦN LUYỆN THÀNH</div>
+            <div class="alchemist-quest-tag" id="alchemist-quest-type-tag">
+              <i class="fa-solid fa-flask"></i> LUYỆN BỘ THỦ CHỮ HÁN
+            </div>
             
             <div class="alchemist-target-main">
-              <div class="target-zh-glow" id="alchemist-target-zh">明</div>
-              <div class="target-pinyin-glow" id="alchemist-target-pinyin">(míng)</div>
+              <!-- MYSTERY TARGET ORB -->
+              <div class="target-mystery-box">
+                <div class="target-mystery-orb" id="alchemist-mystery-orb">
+                  <span class="mystery-question-mark">?</span>
+                  <span class="revealed-hanzi" id="alchemist-revealed-hanzi">明</span>
+                </div>
+              </div>
+
+              <!-- PINYIN & AUDIO -->
+              <div class="target-pinyin-wrap">
+                <div class="target-pinyin-glow" id="alchemist-target-pinyin">(míng)</div>
+                <button type="button" id="alchemist-audio-hint-btn" class="pinyin-speaker-btn" title="Nghe phát âm">
+                  <i class="fa-solid fa-volume-high"></i>
+                </button>
+              </div>
+
+              <!-- VIETNAMESE MEANING (CHALLENGE PROMPT) -->
               <div class="target-meaning-box">
                 <span class="meaning-label">Nghĩa tiếng Việt:</span>
                 <div class="meaning-val" id="alchemist-target-meaning">sáng sủa, rõ ràng</div>
@@ -230,17 +421,17 @@ export class AlchemistGameEngine {
             </div>
 
             <div class="alchemist-hint-box">
-              <i class="fa-solid fa-wand-magic-sparkles" style="color: #c084fc;"></i>
-              <span>Chọn các bộ thủ từ kệ nguyên liệu để hợp nhất tạo nên chữ Hán trên!</span>
+              <i class="fa-solid fa-wand-magic-sparkles" style="color: #c084fc; font-size: 1.1rem; flex-shrink: 0;"></i>
+              <span>Nhớ cách viết của từ mang nghĩa này, rồi chọn các mảnh ghép nạp vào vạc luyện kim!</span>
             </div>
           </div>
 
-          <!-- CENTER: MAGICAL CAULDRON (VẠC LUYỆN KIM) -->
+          <!-- CENTER: MAGICAL CAULDRON (DYNAMIC WIDE POT) -->
           <div class="alchemist-cauldron-container">
             <div class="cauldron-aura"></div>
             
             <!-- CAULDRON VISUAL -->
-            <div class="cauldron-pot">
+            <div class="cauldron-pot slots-2" id="alchemist-cauldron-pot">
               <div class="cauldron-rim"></div>
               <div class="cauldron-liquid" id="cauldron-liquid">
                 <div class="cauldron-bubble b1"></div>
@@ -248,22 +439,9 @@ export class AlchemistGameEngine {
                 <div class="cauldron-bubble b3"></div>
               </div>
               
-              <!-- SLOTS FOR CHOSEN RADICALS -->
+              <!-- DYNAMIC SLOTS FOR CHOSEN RADICALS / CHARACTERS -->
               <div class="cauldron-slots-wrap" id="cauldron-slots-wrap">
-                <!-- Slot 1 -->
-                <div class="cauldron-slot" data-index="0" id="slot-0">
-                  <span class="slot-placeholder">?</span>
-                </div>
-                <div class="slot-plus">+</div>
-                <!-- Slot 2 -->
-                <div class="cauldron-slot" data-index="1" id="slot-1">
-                  <span class="slot-placeholder">?</span>
-                </div>
-                <!-- Optional Slot 3 -->
-                <div class="slot-plus slot-plus-3" style="display: none;">+</div>
-                <div class="cauldron-slot slot-3" data-index="2" id="slot-2" style="display: none;">
-                  <span class="slot-placeholder">?</span>
-                </div>
+                <!-- Dynamically populated slots -->
               </div>
             </div>
 
@@ -278,15 +456,15 @@ export class AlchemistGameEngine {
             </div>
           </div>
 
-          <!-- RIGHT / BOTTOM: INGREDIENTS SHELF (BỘ THỦ NGUYÊN LIỆU) -->
+          <!-- RIGHT: INGREDIENTS SHELF (BỘ THỦ / CHỮ NGUYÊN LIỆU) -->
           <div class="alchemist-shelf-card">
             <div class="shelf-title">
-              <i class="fa-solid fa-gem" style="color: #38bdf8;"></i> KỆ BỘ THỦ NGUYÊN LIỆU
+              <i class="fa-solid fa-gem" style="color: #38bdf8;"></i> KỆ NGUYÊN LIỆU CHIẾT TỰ
             </div>
-            <div class="shelf-hint">Nhấp vào thẻ bộ thủ để nạp vào vạc luyện kim</div>
+            <div class="shelf-hint">Nhấp vào nguyên liệu để nạp vào vạc luyện kim</div>
 
             <div class="radicals-grid" id="radicals-shelf-grid">
-              <!-- Dynamically populated radical buttons -->
+              <!-- Dynamically populated radical crystal buttons -->
             </div>
           </div>
         </div>
@@ -331,15 +509,21 @@ export class AlchemistGameEngine {
   bindEvents() {
     const pauseBtn = this.container.querySelector('#alchemist-pause-btn');
     const backHubTopBtn = this.container.querySelector('#alchemist-back-hub-top-btn');
+    const topBackBtn = this.container.querySelector('#alchemist-top-back-btn');
     const exitBtn = this.container.querySelector('#alchemist-exit-btn');
     const retryBtn = this.container.querySelector('#alchemist-retry-btn');
     const backHubBtn = this.container.querySelector('#alchemist-back-hub-btn');
     const finishBtn = this.container.querySelector('#alchemist-finish-btn');
     const clearBtn = this.container.querySelector('#btn-clear-cauldron');
     const fuseBtn = this.container.querySelector('#btn-fuse-cauldron');
+    const audioBtn = this.container.querySelector('#alchemist-audio-hint-btn');
 
     if (pauseBtn) {
       pauseBtn.addEventListener('click', () => this.togglePause());
+    }
+
+    if (topBackBtn) {
+      topBackBtn.addEventListener('click', () => this.stopAndExit());
     }
 
     if (backHubTopBtn) {
@@ -382,6 +566,14 @@ export class AlchemistGameEngine {
     if (fuseBtn) {
       fuseBtn.addEventListener('click', () => this.attemptFusion());
     }
+
+    if (audioBtn) {
+      audioBtn.addEventListener('click', () => {
+        if (this.currentTarget && this.currentTarget.fullWord && window.speakText) {
+          window.speakText(this.currentTarget.fullWord);
+        }
+      });
+    }
   }
 
   start() {
@@ -393,6 +585,7 @@ export class AlchemistGameEngine {
     this.isStopping = false;
     this.isRunning = true;
     this.isPaused = false;
+    this.isProcessing = false;
     this.score = 0;
     this.streak = 0;
     this.maxStreak = 0;
@@ -402,7 +595,7 @@ export class AlchemistGameEngine {
     if (overlay) {
       overlay.style.setProperty('display', 'none', 'important');
     }
-    this.timeLeft = 75;
+    this.timeLeft = 80;
     this.craftedCount = 0;
     this.cauldronSlots = [];
 
@@ -424,65 +617,147 @@ export class AlchemistGameEngine {
     }, 1000);
   }
 
-  getDecompositionForWord(word) {
-    if (!word) return { char: '明', parts: ['日', '月'] };
-    // Check characters in word
-    for (let char of word) {
-      if (RADICAL_DECOMPOSITIONS[char]) {
-        return { char: char, parts: RADICAL_DECOMPOSITIONS[char] };
-      }
+  /**
+   * Smart Word Decomposition Engine
+   * Ensures 100% data integrity between Word, Pinyin, and Meaning!
+   */
+  decomposeWordTarget(rawObj) {
+    if (!rawObj || !rawObj.word) {
+      const fb = FALLBACK_SINGLE_WORDS[Math.floor(Math.random() * FALLBACK_SINGLE_WORDS.length)];
+      return {
+        type: 'radical',
+        fullWord: fb.word,
+        pinyin: fb.pinyin,
+        meaning: fb.meaning,
+        requiredParts: fb.parts
+      };
     }
-    // Pick a valid decomposed character
-    const knownChars = Object.keys(RADICAL_DECOMPOSITIONS);
-    const fallbackChar = knownChars[Math.floor(Math.random() * knownChars.length)] || '明';
-    return { char: fallbackChar, parts: RADICAL_DECOMPOSITIONS[fallbackChar] };
+
+    const cleanWord = rawObj.word.trim();
+
+    // CASE 1: Multi-character compound word (2+ syllables, e.g. 美国, 老师, 苹果, 喜欢, 电脑)
+    if (cleanWord.length >= 2) {
+      return {
+        type: 'compound',
+        fullWord: cleanWord,
+        pinyin: rawObj.pinyin || '',
+        meaning: rawObj.meaning || 'Từ ghép',
+        requiredParts: cleanWord.split('')
+      };
+    }
+
+    // CASE 2: Single-character word (1 Hanzi, e.g. 课, 好, 明, 休, 谢, 茶)
+    if (RADICAL_DECOMPOSITIONS[cleanWord]) {
+      return {
+        type: 'radical',
+        fullWord: cleanWord,
+        pinyin: rawObj.pinyin || '',
+        meaning: rawObj.meaning || 'Từ đơn',
+        requiredParts: RADICAL_DECOMPOSITIONS[cleanWord]
+      };
+    }
+
+    // CASE 3: Single character not found in RADICAL_DECOMPOSITIONS -> Pick from FALLBACK with matched pinyin & meaning
+    const fb = FALLBACK_SINGLE_WORDS[Math.floor(Math.random() * FALLBACK_SINGLE_WORDS.length)];
+    return {
+      type: 'radical',
+      fullWord: fb.word,
+      pinyin: fb.pinyin,
+      meaning: fb.meaning,
+      requiredParts: fb.parts
+    };
   }
 
   nextQuestion() {
     this.cauldronSlots = [];
+    this.isRevealed = false;
+    this.isProcessing = false;
     
     // Pick random target from rawWords
     const randomObj = this.rawWords[Math.floor(Math.random() * this.rawWords.length)];
-    const decomp = this.getDecompositionForWord(randomObj.word);
+    this.currentTarget = this.decomposeWordTarget(randomObj);
 
-    this.currentTarget = {
-      fullWord: randomObj.word,
-      char: decomp.char,
-      pinyin: randomObj.pinyin,
-      meaning: randomObj.meaning,
-      requiredParts: decomp.parts
-    };
-
-    // Update target displays
-    const zhEl = this.container.querySelector('#alchemist-target-zh');
+    // Update target card displays (ACTIVE RECALL: NO SPOILER ANSWER!)
+    const questTag = this.container.querySelector('#alchemist-quest-type-tag');
+    const mysteryOrb = this.container.querySelector('#alchemist-mystery-orb');
+    const revealedHanzi = this.container.querySelector('#alchemist-revealed-hanzi');
     const pyEl = this.container.querySelector('#alchemist-target-pinyin');
     const mnEl = this.container.querySelector('#alchemist-target-meaning');
 
-    if (zhEl) zhEl.textContent = this.currentTarget.char;
-    if (pyEl) pyEl.textContent = `(${this.currentTarget.pinyin})`;
-    if (mnEl) mnEl.textContent = this.currentTarget.meaning;
-
-    // Configure Cauldron Slots (2 or 3)
-    const neededCount = this.currentTarget.requiredParts.length;
-    const slot3 = this.container.querySelector('#slot-2');
-    const plus3 = this.container.querySelector('.slot-plus-3');
-    if (slot3 && plus3) {
-      slot3.style.display = neededCount >= 3 ? 'flex' : 'none';
-      plus3.style.display = neededCount >= 3 ? 'block' : 'none';
+    if (questTag) {
+      if (this.currentTarget.type === 'compound') {
+        questTag.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> LUYỆN TỪ VỰNG GHÉP`;
+      } else {
+        questTag.innerHTML = `<i class="fa-solid fa-flask"></i> LUYỆN BỘ THỦ CHIẾT TỰ`;
+      }
     }
 
-    // Build Shelf of Radical Ingredients (Correct parts + Distractors)
-    const distractorPool = ['氵', '木', '日', '月', '亻', '口', '女', '子', '讠', '心', '扌', '火', '门', '辶', '艹', '土', '纟', '饣', '禾', '目'];
+    if (mysteryOrb) {
+      mysteryOrb.classList.remove('revealed');
+    }
+    if (revealedHanzi) {
+      revealedHanzi.textContent = this.currentTarget.fullWord;
+    }
+    if (pyEl) {
+      pyEl.textContent = this.currentTarget.pinyin ? `(${this.currentTarget.pinyin})` : '';
+    }
+    if (mnEl) {
+      mnEl.textContent = this.currentTarget.meaning;
+    }
+
+    // Configure Dynamic Cauldron Pot & Slots
+    this.setupCauldronSlots();
+
+    // Build Shelf of Radical / Character Ingredients
+    this.buildIngredientsShelf();
+
+    this.renderShelf();
+    this.updateCauldronDisplay();
+  }
+
+  setupCauldronSlots() {
+    const neededCount = this.currentTarget.requiredParts.length;
+    const pot = this.container.querySelector('#alchemist-cauldron-pot');
+    const wrap = this.container.querySelector('#cauldron-slots-wrap');
+    if (!wrap) return;
+
+    // Adjust Cauldron Width Class
+    if (pot) {
+      pot.className = `cauldron-pot slots-${Math.min(4, Math.max(2, neededCount))}`;
+    }
+
+    // Generate Dynamic Slots HTML
+    let slotsHTML = '';
+    for (let i = 0; i < neededCount; i++) {
+      if (i > 0) {
+        slotsHTML += `<div class="slot-plus">+</div>`;
+      }
+      slotsHTML += `
+        <div class="cauldron-slot" data-index="${i}" id="slot-${i}" title="Nhấp để gỡ nguyên liệu">
+          <span class="slot-placeholder">?</span>
+        </div>
+      `;
+    }
+    wrap.innerHTML = slotsHTML;
+  }
+
+  buildIngredientsShelf() {
     const correctParts = [...this.currentTarget.requiredParts];
-    const neededDistractorsCount = Math.max(6, 10 - correctParts.length);
+    const neededDistractorsCount = Math.max(6, 9 - correctParts.length);
+
+    let distractorPool = [];
+    if (this.currentTarget.type === 'compound') {
+      // Pick other Chinese characters for multi-character compound mode
+      distractorPool = ['中', '美', '国', '人', '大', '小', '老', '师', '学', '生', '朋', '友', '苹', '果', '电', '脑', '天', '气', '汉', '语', '喜', '欢', '北', '京', '吃', '饭', '喝', '水', '看', '书', '高', '兴'];
+    } else {
+      // Pick radicals for single character decomposition mode
+      distractorPool = ['氵', '木', '日', '月', '亻', '口', '女', '子', '讠', '心', '忄', '扌', '火', '门', '辶', '艹', '土', '纟', '饣', '禾', '目', '宀', '夂', '⻊', '父', '巴', '果', '青', '吾', '舌'];
+    }
 
     const filteredDistractors = distractorPool.filter(r => !correctParts.includes(r));
     const shuffledDistractors = [...filteredDistractors].sort(() => 0.5 - Math.random()).slice(0, neededDistractorsCount);
 
     this.availableRadicals = [...correctParts, ...shuffledDistractors].sort(() => 0.5 - Math.random());
-
-    this.renderShelf();
-    this.updateCauldronDisplay();
   }
 
   renderShelf() {
@@ -490,7 +765,7 @@ export class AlchemistGameEngine {
     if (!grid) return;
 
     grid.innerHTML = '';
-    this.availableRadicals.forEach((rad, idx) => {
+    this.availableRadicals.forEach((rad) => {
       const card = document.createElement('button');
       card.type = 'button';
       card.className = 'radical-crystal-btn';
@@ -499,7 +774,9 @@ export class AlchemistGameEngine {
         <span class="rad-sparkle">✨</span>
       `;
       card.addEventListener('click', () => {
-        this.addRadicalToCauldron(rad);
+        if (!this.isProcessing) {
+          this.addRadicalToCauldron(rad);
+        }
       });
       grid.appendChild(card);
     });
@@ -508,7 +785,7 @@ export class AlchemistGameEngine {
   addRadicalToCauldron(rad) {
     const maxSlots = this.currentTarget.requiredParts.length;
     if (this.cauldronSlots.length >= maxSlots) {
-      this.showToast('Vạc đã đầy! Nhấn Luyện Hóa hoặc Đổ Lại.');
+      this.showToast('Vạc đã đủ nguyên liệu! Nhấn LUYỆN HÓA hoặc Đổ Lại.');
       return;
     }
 
@@ -523,6 +800,7 @@ export class AlchemistGameEngine {
   }
 
   removeSlotItem(index) {
+    if (this.isProcessing) return;
     if (this.cauldronSlots[index]) {
       this.cauldronSlots.splice(index, 1);
       this.updateCauldronDisplay();
@@ -530,13 +808,14 @@ export class AlchemistGameEngine {
   }
 
   clearCauldron() {
+    if (this.isProcessing) return;
     this.cauldronSlots = [];
     this.updateCauldronDisplay();
   }
 
   updateCauldronDisplay() {
     const maxSlots = this.currentTarget ? this.currentTarget.requiredParts.length : 2;
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < maxSlots; i++) {
       const slotEl = this.container.querySelector(`#slot-${i}`);
       if (slotEl) {
         const item = this.cauldronSlots[i];
@@ -554,33 +833,58 @@ export class AlchemistGameEngine {
   }
 
   attemptFusion() {
-    if (!this.currentTarget) return;
-    const required = [...this.currentTarget.requiredParts].sort();
-    const current = [...this.cauldronSlots].sort();
+    if (!this.currentTarget || this.isProcessing) return;
+    if (this.cauldronSlots.length === 0) {
+      this.showToast('Hãy chọn các bộ thủ / mảnh ghép trên kệ nạp vào vạc trước!');
+      return;
+    }
 
-    const isMatch = required.length === current.length && required.every((val, idx) => val === current[idx]);
+    this.isProcessing = true;
+
+    // Compare strictly or ordered depending on mode
+    const required = [...this.currentTarget.requiredParts];
+    const current = [...this.cauldronSlots];
+
+    let isMatch = false;
+    if (this.currentTarget.type === 'compound') {
+      // For compound words (like 美国), sequence matters [美] + [国]
+      isMatch = required.length === current.length && required.every((val, idx) => val === current[idx]);
+    } else {
+      // For radicals decomposition (like 课 = 讠 + 果), order can be flexible
+      const reqSorted = [...required].sort();
+      const curSorted = [...current].sort();
+      isMatch = reqSorted.length === curSorted.length && reqSorted.every((val, idx) => val === curSorted[idx]);
+    }
 
     const liquid = this.container.querySelector('#cauldron-liquid');
+    const mysteryOrb = this.container.querySelector('#alchemist-mystery-orb');
 
     if (isMatch) {
       // SUCCESS!
       this.sfx.playSuccess();
       if (liquid) liquid.classList.add('fusion-success');
       
-      const pts = 30 + this.streak * 5;
+      // Reveal the mysterious Chinese character with golden/emerald glow!
+      if (mysteryOrb) mysteryOrb.classList.add('revealed');
+
+      const pts = 35 + this.streak * 5;
       this.score += pts;
       this.streak++;
       this.craftedCount++;
       if (this.streak > this.maxStreak) this.maxStreak = this.streak;
 
-      if (window.speakText) window.speakText(this.currentTarget.fullWord);
-      this.showToast(`✨ Luyện Thành Công Chữ「${this.currentTarget.char}」! +${pts} Điểm`);
+      // Pronounce the word
+      if (window.speakText) {
+        try { window.speakText(this.currentTarget.fullWord); } catch(e) {}
+      }
+
+      this.showToast(`✨ Luyện Thành Công:「${this.currentTarget.fullWord}」! +${pts} Điểm`);
 
       setTimeout(() => {
         if (liquid) liquid.classList.remove('fusion-success');
         this.nextQuestion();
         this.updateHUD();
-      }, 700);
+      }, 1200);
 
     } else {
       // FAIL!
@@ -588,16 +892,17 @@ export class AlchemistGameEngine {
       if (liquid) liquid.classList.add('fusion-fail');
       this.lives--;
       this.streak = 0;
-      this.showToast('💨 Hợp thể thất bại! Sai thành phần bộ thủ.', true);
+      this.showToast('💨 Hợp thể thất bại! Sai thành phần, hãy thử lại.', true);
 
       setTimeout(() => {
         if (liquid) liquid.classList.remove('fusion-fail');
         this.clearCauldron();
+        this.isProcessing = false;
         if (this.lives <= 0) {
           this.gameOver(false);
         }
         this.updateHUD();
-      }, 600);
+      }, 750);
     }
   }
 

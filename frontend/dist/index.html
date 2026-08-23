@@ -120,8 +120,8 @@
   <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
   <script type="module" crossorigin src="/assets/grammar_hsk2-B6FgImKU.js"></script>
   <script type="module" crossorigin src="/assets/screen_drawing-oOIhKrv1.js"></script>
-  <script type="module" crossorigin src="/assets/main-CUd9k1RB.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/style-Rznue_PX.css">
+  <script type="module" crossorigin src="/assets/main-pJCjC_mn.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/style-C9cOK5W0.css">
 </head>
 
 <body>
@@ -320,17 +320,17 @@
       <!-- DANH MỤC 2: KỸ NĂNG -->
       <div class="sidebar-section-label">Kỹ Năng</div>
       <ul class="sidebar-menu" style="margin-bottom: 8px;">
-        <li class="sidebar-item" onclick="window.location.href = '/video-dictation.html'">
-          <i class="fa-brands fa-youtube" style="color: #ef4444; font-size: 1.1rem;"></i> <span>Luyện Chép Video</span>
+        <li class="sidebar-item" onclick="window.location.href = '/video-dictation.html?mode=shadowing'">
+          <i class="fa-solid fa-microphone-lines" style="color: #10b981; font-size: 1.1rem;"></i> <span>Shadowing</span>
           <span
-            style="font-size:0.68rem; background:linear-gradient(135deg, #ef4444, #f97316); color:#fff; padding:2px 7px; border-radius:6px; font-weight:800; margin-left:auto; white-space:nowrap;">🔥
+            style="font-size:0.68rem; background:linear-gradient(135deg, #10b981, #059669); color:#fff; padding:2px 7px; border-radius:6px; font-weight:800; margin-left:auto; white-space:nowrap;">🔥
             8 Video</span>
         </li>
-        <li class="sidebar-item" onclick="window.showComingSoonNotice('Luyện nghe & đọc')">
-          <i class="fa-solid fa-headphones" style="color: #64748b;"></i> <span>Luyện nghe & đọc</span>
+        <li class="sidebar-item" onclick="window.location.href = '/video-dictation.html?mode=dictation'">
+          <i class="fa-solid fa-pen-to-square" style="color: #38bdf8; font-size: 1.1rem;"></i> <span>Nghe Chép</span>
           <span
-            style="font-size:0.68rem; background:rgba(245,158,11,0.2); color:#f59e0b; border:1px solid rgba(245,158,11,0.3); padding:2px 6px; border-radius:6px; font-weight:700; margin-left:auto; white-space:nowrap;">🔒
-            Sắp ra mắt</span>
+            style="font-size:0.68rem; background:linear-gradient(135deg, #0284c7, #2563eb); color:#fff; padding:2px 7px; border-radius:6px; font-weight:800; margin-left:auto; white-space:nowrap;">🔥
+            8 Video</span>
         </li>
         <li class="sidebar-item" onclick="window.showComingSoonNotice('Luyện viết')">
           <i class="fa-solid fa-pen-line" style="color: #64748b;"></i> <span>Luyện viết</span>
@@ -773,21 +773,21 @@
           </div>
 
           <!-- Announcement 2: Cập nhật chức năng mới -->
-          <div
-            style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(15, 23, 42, 0.6)); border: 1.5px solid rgba(56, 189, 248, 0.3); border-radius: 20px; padding: 22px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.2);">
+          <div class="announcement-glass-card"
+            style="border-radius: 20px; padding: 22px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 4px 18px rgba(0,0,0,0.08);">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
               <div style="display: flex; align-items: center; gap: 10px;">
                 <span
-                  style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; font-size: 0.78rem; font-weight: 800; padding: 4px 12px; border-radius: 99px; border: 1px solid rgba(56, 189, 248, 0.4); text-transform: uppercase;">
+                  style="background: #0284c7; color: #ffffff; font-size: 0.78rem; font-weight: 800; padding: 4px 12px; border-radius: 99px; text-transform: uppercase;">
                   <i class="fa-solid fa-rocket"></i> HỆ THỐNG
                 </span>
-                <h4 style="font-size: 1.1rem; font-weight: 800; color: #ffffff; margin: 0;">🚀 Cập nhật tính năng mới
+                <h4 style="font-size: 1.1rem; font-weight: 800; margin: 0; color: var(--text-primary);">🚀 Cập nhật tính năng mới
                   &amp; Kho dữ liệu HSK 3.0, HSK 2.0, YCT</h4>
               </div>
-              <span style="font-size: 0.8rem; color: #38bdf8; font-weight: 700;"><i
+              <span style="font-size: 0.82rem; color: #0284c7; font-weight: 800;"><i
                   class="fa-regular fa-calendar-check"></i> Bản phát hành mới</span>
             </div>
-            <p style="font-size: 0.95rem; color: #e2e8f0; margin: 0; line-height: 1.65;">
+            <p style="font-size: 0.95rem; color: var(--text-secondary); margin: 0; line-height: 1.65;">
               Website đã cập nhật toàn diện kho giáo trình chuẩn <strong>HSK 3.0</strong>, <strong>HSK 2.0</strong> và
               <strong>YCT Tiếng Trung Thiếu Nhi</strong> với hơn <strong>14.800+ từ vựng</strong> chọn lọc. Tích hợp
               trọn bộ công cụ học tập thông minh: <strong>Lộ trình bài học Gamification</strong>, <strong>Sổ tay từ vựng
@@ -797,36 +797,36 @@
             </p>
             <div style="display: flex; align-items: center; gap: 10px; margin-top: 4px; flex-wrap: wrap;">
               <a href="/detail-list.html"
-                style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.35); padding: 9px 18px; border-radius: 12px; font-weight: 700; font-size: 0.88rem; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s;">
+                style="background: linear-gradient(135deg, #0284c7, #0369a1); color: #ffffff !important; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 800; font-size: 0.9rem; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(2,132,199,0.35); transition: all 0.2s;">
                 <i class="fa-solid fa-book-open"></i> Xem Danh Sách Từ Vựng
               </a>
               <button type="button" onclick="switchTab('flashcards')"
-                style="background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.35); padding: 9px 18px; border-radius: 12px; font-weight: 700; font-size: 0.88rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s;">
+                style="background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #ffffff !important; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(124,58,237,0.35); transition: all 0.2s;">
                 <i class="fa-solid fa-book-bookmark"></i> Mở Mục Sổ Tay
               </button>
               <button type="button" onclick="switchTab('roadmap')"
-                style="background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); padding: 9px 18px; border-radius: 12px; font-weight: 700; font-size: 0.88rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s;">
+                style="background: linear-gradient(135deg, #059669, #047857); color: #ffffff !important; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(5,150,105,0.35); transition: all 0.2s;">
                 <i class="fa-solid fa-map-location-dot"></i> Vào Lộ Trình Học
               </button>
             </div>
           </div>
 
           <!-- Announcement 3: Mẹo Học Tập -->
-          <div
-            style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(15, 23, 42, 0.6)); border: 1.5px solid rgba(245, 158, 11, 0.25); border-radius: 20px; padding: 22px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.2);">
+          <div class="announcement-glass-card"
+            style="border-radius: 20px; padding: 22px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 4px 18px rgba(0,0,0,0.08);">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
               <div style="display: flex; align-items: center; gap: 10px;">
                 <span
-                  style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; font-size: 0.78rem; font-weight: 800; padding: 4px 12px; border-radius: 99px; border: 1px solid rgba(245, 158, 11, 0.4); text-transform: uppercase;">
+                  style="background: #d97706; color: #ffffff; font-size: 0.78rem; font-weight: 800; padding: 4px 12px; border-radius: 99px; text-transform: uppercase;">
                   <i class="fa-solid fa-lightbulb"></i> MẸO HỌC
                 </span>
-                <h4 style="font-size: 1.1rem; font-weight: 800; color: #ffffff; margin: 0;">💡 Phương pháp học ghi nhớ
+                <h4 style="font-size: 1.1rem; font-weight: 800; margin: 0; color: var(--text-primary);">💡 Phương pháp học ghi nhớ
                   từ vựng &amp; chữ Hán hiệu quả gấp 3 lần</h4>
               </div>
-              <span style="font-size: 0.8rem; color: #fbbf24; font-weight: 700;"><i class="fa-solid fa-fire"></i> Bí
+              <span style="font-size: 0.82rem; color: #d97706; font-weight: 800;"><i class="fa-solid fa-fire"></i> Bí
                 quyết học tập</span>
             </div>
-            <p style="font-size: 0.95rem; color: #e2e8f0; line-height: 1.65; margin: 0;">
+            <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.65; margin: 0;">
               Dành đều đặn <strong>15 - 30 phút mỗi ngày</strong> để học theo Lộ trình giúp duy trì <strong>Chuỗi ngày
                 học (Streak)</strong> và cải thiện phản xạ tiếng Trung rõ rệt. Hãy kết hợp linh hoạt giữa chế độ
               <em>"Flashcard lật thẻ"</em> để nạp từ mới, chế độ <em>"Luyện gõ chữ Hán"</em> để nhớ mặt chữ và thi đấu
@@ -3335,16 +3335,8 @@
             </div>
             <div>
               <div
-                style="font-weight: 800; font-size: 0.98rem; color: #ffffff; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-                <span id="modal-lesson-video-title">Video Bài Giảng Đi Kèm</span>
-                <span
-                  style="background: rgba(239, 68, 68, 0.25); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); font-size: 0.72rem; padding: 2px 8px; border-radius: 99px; font-weight: 800; display: inline-flex; align-items: center; gap: 4px;">
-                  <span class="live-dot"></span> Tìm hiểu thêm
-                </span>
-              </div>
-              <div id="modal-lesson-video-desc-text"
-                style="font-size: 0.84rem; color: #cbd5e1; margin-top: 3px; line-height: 1.4;">
-                Xem video hướng dẫn bài học chuẩn ngữ âm và tình huống thực tế.
+                style="font-weight: 800; font-size: 1.02rem; color: #ffffff; display: flex; align-items: center; gap: 8px;">
+                <span id="modal-lesson-video-title">Video Bài Giảng</span>
               </div>
             </div>
           </div>

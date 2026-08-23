@@ -80,16 +80,16 @@ export class SnakeGameEngine {
     this.invincibleTimer = 0;
     this.powerups = [];
 
-    // Grid config
-    this.cols = 24;
-    this.rows = 16;
-    this.cellSize = 32;
+    // Grid config (optimized for larger cells & clear text badges)
+    this.cols = 20;
+    this.rows = 14;
+    this.cellSize = 40;
 
     // Snake State
     this.snake = [
-      { x: 10, y: 8 },
-      { x: 9, y: 8 },
-      { x: 8, y: 8 }
+      { x: 6, y: 7 },
+      { x: 5, y: 7 },
+      { x: 4, y: 7 }
     ];
     this.dir = { x: 1, y: 0 };
     this.nextDir = { x: 1, y: 0 };
@@ -115,12 +115,12 @@ export class SnakeGameEngine {
         <!-- TOP HUD -->
         <div class="snake-hud-bar">
           <button type="button" id="snake-top-back-btn" class="btn btn-outline btn-sm" style="display: flex; align-items: center; gap: 6px; font-weight: 700; border-radius: 50px;">
-            <i class="fa-solid fa-arrow-left"></i> Quay lại chọn game
+            <i class="fa-solid fa-arrow-left"></i> Chọn game khác
           </button>
 
           <div class="hud-item-title">
             <span class="snake-badge-icon">🐍</span>
-            <strong>NUÔI RẮN</strong>
+            <strong>NUÔI RẮN TỪ VỰNG</strong>
           </div>
 
           <div class="hud-item hud-level-badge" id="snake-level-badge">CẤP 1</div>
@@ -148,36 +148,65 @@ export class SnakeGameEngine {
           </div>
 
           <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
-            <button type="button" id="snake-pause-btn" class="btn btn-outline btn-sm" title="Tạm dừng"><i class="fa-solid fa-pause"></i></button>
-            <button type="button" id="snake-back-hub-top-btn" class="btn btn-secondary btn-sm" title="Đổi trò chơi khác" style="display: flex; align-items: center; gap: 6px; font-weight: 700; border-radius: 50px; padding: 6px 14px;">
-              <i class="fa-solid fa-arrow-left"></i> Đổi Game
-            </button>
+            <button type="button" id="snake-pause-btn" class="btn btn-outline btn-sm" title="Tạm dừng"><i class="fa-solid fa-pause"></i> Tạm dừng</button>
             <button type="button" id="snake-exit-btn" class="btn btn-outline btn-sm" title="Thoát về sổ tay"><i class="fa-solid fa-xmark"></i></button>
           </div>
         </div>
 
         <!-- MAIN ARENA & SIDEBAR -->
         <div class="snake-arena-layout">
-          <!-- BATTLEFIELD / CANVAS -->
-          <div class="snake-canvas-container" id="snake-canvas-container">
-            <!-- TARGET WORD PROMPT CARD (FIXED TOP CENTER) -->
-            <div class="snake-target-card" id="snake-target-card">
-              <div class="target-sub-label">TỪ VỰNG</div>
-              <div class="target-zh" id="target-zh-text">勤奋</div>
-              <div class="target-pinyin" id="target-pinyin-text">(qínfèn)</div>
-              <div class="target-goal-text">HÃY ĂN NGHĨA: <span class="highlight-meaning" id="target-meaning-text">chăm chỉ</span></div>
+          <!-- BATTLEFIELD / CANVAS & CONTROLS -->
+          <div class="snake-battle-column">
+            <!-- TARGET WORD PROMPT BANNER (NO LEAKED ANSWER) -->
+            <div class="snake-target-banner" id="snake-target-card">
+              <div class="target-badge-label"><i class="fa-solid fa-bullseye"></i> TỪ VỰNG CẦN TÌM NGHĨA</div>
+              <div class="target-word-row">
+                <span class="target-zh" id="target-zh-text">勤奋</span>
+                <span class="target-pinyin" id="target-pinyin-text">(qínfèn)</span>
+              </div>
+              <div class="target-action-hint">
+                <i class="fa-solid fa-apple-whole" style="color: #ef4444;"></i> Hãy lái rắn ăn quả có <strong>NGHĨA TIẾNG VIỆT ĐÚNG</strong> bên dưới!
+              </div>
             </div>
 
-            <!-- CANVAS -->
-            <canvas id="snake-canvas" class="snake-canvas"></canvas>
+            <!-- CANVAS CONTAINER -->
+            <div class="snake-canvas-container" id="snake-canvas-container">
+              <canvas id="snake-canvas" class="snake-canvas"></canvas>
+            </div>
 
-            <!-- MOBILE VIRTUAL D-PAD -->
-            <div class="snake-mobile-dpad">
-              <button type="button" class="dpad-btn dpad-up" data-dir="up"><i class="fa-solid fa-chevron-up"></i></button>
-              <div class="dpad-mid-row">
-                <button type="button" class="dpad-btn dpad-left" data-dir="left"><i class="fa-solid fa-chevron-left"></i></button>
-                <button type="button" class="dpad-btn dpad-down" data-dir="down"><i class="fa-solid fa-chevron-down"></i></button>
-                <button type="button" class="dpad-btn dpad-right" data-dir="right"><i class="fa-solid fa-chevron-right"></i></button>
+            <!-- CONTROLS & D-PAD (TOUCH / MOUSE / KEYBOARD) -->
+            <div class="snake-controls-panel">
+              <div class="snake-dpad-wrapper">
+                <div class="dpad-row dpad-row-top">
+                  <button type="button" class="dpad-btn dpad-up" data-dir="up" title="Đi Lên (Phím Mũi Tên Lên hoặc W)">
+                    <i class="fa-solid fa-chevron-up"></i>
+                    <span>Lên</span>
+                  </button>
+                </div>
+                <div class="dpad-row dpad-row-mid">
+                  <button type="button" class="dpad-btn dpad-left" data-dir="left" title="Sang Trái (Phím Mũi Tên Trái hoặc A)">
+                    <i class="fa-solid fa-chevron-left"></i>
+                    <span>Trái</span>
+                  </button>
+                  <button type="button" class="dpad-btn dpad-down" data-dir="down" title="Đi Xuống (Phím Mũi Tên Xuống hoặc S)">
+                    <i class="fa-solid fa-chevron-down"></i>
+                    <span>Xuống</span>
+                  </button>
+                  <button type="button" class="dpad-btn dpad-right" data-dir="right" title="Sang Phải (Phím Mũi Tên Phải hoặc D)">
+                    <i class="fa-solid fa-chevron-right"></i>
+                    <span>Phải</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="snake-keys-guide">
+                <div class="guide-title"><i class="fa-solid fa-gamepad"></i> Hướng Dẫn Điều Khiển</div>
+                <div class="guide-tags">
+                  <span class="guide-tag"><kbd>⬆️</kbd><kbd>⬅️</kbd><kbd>⬇️</kbd><kbd>➡️</kbd> Phím mũi tên</span>
+                  <span class="guide-tag"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> Bàn phím chữ</span>
+                  <span class="guide-tag"><i class="fa-solid fa-hand-pointer"></i> Vuốt màn hình cảm ứng</span>
+                  <span class="guide-tag"><kbd>Space</kbd> Tạm dừng</span>
+                </div>
               </div>
             </div>
           </div>
@@ -185,15 +214,17 @@ export class SnakeGameEngine {
           <!-- RIGHT SIDEBAR: INSTRUCTIONS & ITEMS -->
           <div class="snake-sidebar">
             <div class="snake-sidebar-card">
-              <div class="sidebar-sec-title">VỊ TRÍ TỪ VỰNG</div>
+              <div class="sidebar-sec-title"><i class="fa-solid fa-compass"></i> CÁCH LÁI RẮN & CHƠI</div>
               <ul class="sidebar-bullets">
-                <li>Hiển thị cố định ở phía trên màn chơi, ở giữa, không bị che khuất tầm nhìn.</li>
-                <li>Người chơi luôn quan sát được từ và nghĩa cần tìm.</li>
+                <li><strong>Bước 1:</strong> Nhìn từ vựng Chữ Hán & Pinyin hiển thị trên ô mục tiêu màu xanh phía trên.</li>
+                <li><strong>Bước 2:</strong> Dùng <strong>phím mũi tên / WASD</strong>, <strong>vuốt ngón tay</strong> hoặc <strong>bấm nút D-Pad</strong> để chuyển hướng con rắn.</li>
+                <li><strong>Bước 3:</strong> Lái rắn ăn quả táo có <strong>nghĩa tiếng Việt đúng</strong> của từ đó để tích lũy chuỗi 10 điểm lên cấp!</li>
+                <li><strong>Cảnh báo:</strong> Tránh đâm vào thân rắn, tránh đâm vào đá/bụi rậm và không ăn nhầm nghĩa sai kẻo mất Tim 💔!</li>
               </ul>
             </div>
 
             <div class="snake-sidebar-card" style="margin-top: 14px;">
-              <div class="sidebar-sec-title">VẬT PHẨM MAY MẮN</div>
+              <div class="sidebar-sec-title"><i class="fa-solid fa-wand-magic-sparkles"></i> VẬT PHẨM MAY MẮN</div>
               
               <div class="powerup-item-row">
                 <div class="p-icon" style="background: rgba(239, 68, 68, 0.15); color: #ef4444;"><i class="fa-solid fa-heart"></i></div>
@@ -225,7 +256,7 @@ export class SnakeGameEngine {
         <!-- BOTTOM PANEL: DETAILED RULES & LEVEL PROGRESSION -->
         <div class="snake-footer-rules">
           <div class="snake-rules-main-card">
-            <div class="rules-title">CÁCH CHƠI</div>
+            <div class="rules-title">QUY TẮC TÍNH ĐIỂM & TIẾN TRÌNH</div>
             
             <div class="snake-rules-flow-grid">
               <div class="flow-block flow-correct">
@@ -334,8 +365,8 @@ export class SnakeGameEngine {
     this.ctx = this.canvas.getContext('2d');
 
     const container = this.container.querySelector('#snake-canvas-container');
-    const width = Math.min(840, container.clientWidth || 800);
-    const height = Math.round(width * (16 / 24));
+    const width = Math.min(840, Math.max(320, (container ? container.clientWidth : 800) || 800));
+    const height = Math.round(width * (this.rows / this.cols));
 
     this.canvas.width = width;
     this.canvas.height = height;
@@ -344,7 +375,6 @@ export class SnakeGameEngine {
 
   bindEvents() {
     const topBackBtn = this.container.querySelector('#snake-top-back-btn');
-    const backHubTopBtn = this.container.querySelector('#snake-back-hub-top-btn');
     const pauseBtn = this.container.querySelector('#snake-pause-btn');
     const exitBtn = this.container.querySelector('#snake-exit-btn');
     const retryBtn = this.container.querySelector('#snake-retry-btn');
@@ -353,13 +383,6 @@ export class SnakeGameEngine {
 
     if (topBackBtn) {
       topBackBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        this.stopAndExit();
-      });
-    }
-
-    if (backHubTopBtn) {
-      backHubTopBtn.addEventListener('click', (e) => {
         e.preventDefault();
         this.stopAndExit();
       });
@@ -432,8 +455,43 @@ export class SnakeGameEngine {
     };
     window.addEventListener('keydown', this.keyHandler);
 
-    // Virtual D-Pad buttons (touch + click support)
+    // Touch Swipe Gestures on Canvas
+    if (this.canvas) {
+      let touchStartX = 0;
+      let touchStartY = 0;
+      this.touchStartHandler = (e) => {
+        if (e.touches && e.touches[0]) {
+          touchStartX = e.touches[0].clientX;
+          touchStartY = e.touches[0].clientY;
+        }
+      };
+      this.touchEndHandler = (e) => {
+        if (!this.isRunning || this.isPaused) return;
+        if (e.changedTouches && e.changedTouches[0]) {
+          const dx = e.changedTouches[0].clientX - touchStartX;
+          const dy = e.changedTouches[0].clientY - touchStartY;
+          const minSwipeDist = 18;
+
+          if (Math.abs(dx) > Math.abs(dy)) {
+            if (Math.abs(dx) > minSwipeDist) {
+              if (dx > 0 && this.dir.x === 0) this.nextDir = { x: 1, y: 0 };
+              else if (dx < 0 && this.dir.x === 0) this.nextDir = { x: -1, y: 0 };
+            }
+          } else {
+            if (Math.abs(dy) > minSwipeDist) {
+              if (dy > 0 && this.dir.y === 0) this.nextDir = { x: 0, y: 1 };
+              else if (dy < 0 && this.dir.y === 0) this.nextDir = { x: 0, y: -1 };
+            }
+          }
+        }
+      };
+      this.canvas.addEventListener('touchstart', this.touchStartHandler, { passive: true });
+      this.canvas.addEventListener('touchend', this.touchEndHandler, { passive: true });
+    }
+
+    // Directional D-Pad buttons (touch + click support)
     const handleDirAction = (dir) => {
+      if (!this.isRunning || this.isPaused) return;
       if (dir === 'up' && this.dir.y === 0) this.nextDir = { x: 0, y: -1 };
       else if (dir === 'down' && this.dir.y === 0) this.nextDir = { x: 0, y: 1 };
       else if (dir === 'left' && this.dir.x === 0) this.nextDir = { x: -1, y: 0 };
@@ -444,54 +502,33 @@ export class SnakeGameEngine {
       const dir = btn.dataset.dir;
       btn.addEventListener('touchstart', (e) => {
         e.preventDefault();
+        btn.classList.add('active');
         handleDirAction(dir);
+      }, { passive: false });
+
+      btn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        btn.classList.remove('active');
       }, { passive: false });
 
       btn.addEventListener('mousedown', (e) => {
         e.preventDefault();
+        btn.classList.add('active');
         handleDirAction(dir);
       });
+      btn.addEventListener('mouseup', () => btn.classList.remove('active'));
+      btn.addEventListener('mouseleave', () => btn.classList.remove('active'));
     });
 
     this.resizeHandler = () => this.initCanvas();
     window.addEventListener('resize', this.resizeHandler);
   }
 
-  start() {
-    this.isRunning = true;
-    this.isPaused = false;
-    this.level = 1;
-    this.streak = 0;
-    this.score = 0;
-    this.lives = 3;
-    this.invincibleTimer = 0;
-    this.wordsEatenCorrect = 0;
-    this.lastTickTime = performance.now();
-
-    this.resetSnake();
-    this.spawnObstacles();
-    this.nextWordQuestion();
-
-    this.updateHUD();
-    this.startTimers();
-    this.loop(performance.now());
-  }
-
-  startTimers() {
-    if (this.timerInterval) clearInterval(this.timerInterval);
-    this.timerInterval = setInterval(() => {
-      if (!this.isRunning || this.isPaused) return;
-      if (this.invincibleTimer > 0) {
-        this.invincibleTimer--;
-      }
-    }, 1000);
-  }
-
   resetSnake() {
     this.snake = [
-      { x: 8, y: 8 },
-      { x: 7, y: 8 },
-      { x: 6, y: 8 }
+      { x: 6, y: 7 },
+      { x: 5, y: 7 },
+      { x: 4, y: 7 }
     ];
     this.dir = { x: 1, y: 0 };
     this.nextDir = { x: 1, y: 0 };
@@ -504,9 +541,9 @@ export class SnakeGameEngine {
 
   spawnObstacles() {
     this.obstacles = [];
-    const count = (this.level - 1) * 3;
+    const count = (this.level - 1) * 2;
     for (let i = 0; i < count; i++) {
-      let pos = this.getRandomEmptyCell();
+      let pos = this.getRandomEmptyCell(2);
       if (pos) {
         this.obstacles.push({
           type: i % 2 === 0 ? 'rock' : 'bush',
@@ -530,7 +567,7 @@ export class SnakeGameEngine {
 
     this.apples = [];
 
-    let pos = this.getRandomEmptyCell();
+    let pos = this.getRandomEmptyCell(2.5);
     if (pos) {
       this.apples.push({
         word: randomTarget.word,
@@ -542,7 +579,7 @@ export class SnakeGameEngine {
     }
 
     distractors.forEach(d => {
-      let dPos = this.getRandomEmptyCell();
+      let dPos = this.getRandomEmptyCell(2.5);
       if (dPos) {
         this.apples.push({
           word: d.word,
@@ -555,7 +592,7 @@ export class SnakeGameEngine {
     });
 
     if (this.powerups.length === 0 && Math.random() < 0.28) {
-      let pPos = this.getRandomEmptyCell();
+      let pPos = this.getRandomEmptyCell(2);
       if (pPos) {
         const types = ['heal', 'x2', 'shield'];
         const pType = types[Math.floor(Math.random() * types.length)];
@@ -564,19 +601,31 @@ export class SnakeGameEngine {
     }
   }
 
-  getRandomEmptyCell() {
-    for (let tries = 0; tries < 100; tries++) {
-      const rx = Math.floor(Math.random() * (this.cols - 2)) + 1;
-      const ry = Math.floor(Math.random() * (this.rows - 2)) + 1;
+  getRandomEmptyCell(minDistFromApples = 2) {
+    for (let tries = 0; tries < 200; tries++) {
+      const rx = Math.floor(Math.random() * (this.cols - 4)) + 2;
+      const ry = Math.floor(Math.random() * (this.rows - 4)) + 2;
 
-      const onSnake = this.snake.some(s => s.x === rx && s.y === ry);
-      const onApple = this.apples.some(a => a.x === rx && a.y === ry);
-      const onObs = this.obstacles.some(o => o.x === rx && o.y === ry);
-      const onPow = this.powerups.some(p => p.x === rx && p.y === ry);
+      const onSnake = this.snake.some(s => Math.abs(s.x - rx) <= 1 && Math.abs(s.y - ry) <= 1);
+      const onApple = this.apples.some(a => {
+        const dist = Math.hypot(a.x - rx, a.y - ry);
+        return dist < (minDistFromApples || 2.2);
+      });
+      const onObs = this.obstacles.some(o => Math.abs(o.x - rx) <= 1 && Math.abs(o.y - ry) <= 1);
+      const onPow = this.powerups.some(p => Math.abs(p.x - rx) <= 1 && Math.abs(p.y - ry) <= 1);
 
       if (!onSnake && !onApple && !onObs && !onPow) {
         return { x: rx, y: ry };
       }
+    }
+
+    for (let tries = 0; tries < 50; tries++) {
+      const rx = Math.floor(Math.random() * (this.cols - 2)) + 1;
+      const ry = Math.floor(Math.random() * (this.rows - 2)) + 1;
+      const onSnake = this.snake.some(s => s.x === rx && s.y === ry);
+      const onApple = this.apples.some(a => a.x === rx && a.y === ry);
+      const onObs = this.obstacles.some(o => o.x === rx && o.y === ry);
+      if (!onSnake && !onApple && !onObs) return { x: rx, y: ry };
     }
     return null;
   }
@@ -585,11 +634,9 @@ export class SnakeGameEngine {
     if (!this.currentQuestion) return;
     const zhEl = this.container.querySelector('#target-zh-text');
     const pyEl = this.container.querySelector('#target-pinyin-text');
-    const mnEl = this.container.querySelector('#target-meaning-text');
 
     if (zhEl) zhEl.textContent = this.currentQuestion.word;
     if (pyEl) pyEl.textContent = `(${this.currentQuestion.pinyin})`;
-    if (mnEl) mnEl.textContent = this.currentQuestion.meaning;
   }
 
   loop(currentTime) {
@@ -788,10 +835,12 @@ export class SnakeGameEngine {
     const h = this.canvas.height;
     const cs = this.cellSize;
 
-    ctx.fillStyle = '#f8f9fa';
+    // Board background
+    ctx.fillStyle = '#f8fafc';
     ctx.fillRect(0, 0, w, h);
 
-    ctx.strokeStyle = 'rgba(203, 213, 225, 0.45)';
+    // Subtle grid lines
+    ctx.strokeStyle = 'rgba(226, 232, 240, 0.8)';
     ctx.lineWidth = 1;
     for (let c = 0; c <= this.cols; c++) {
       ctx.beginPath();
@@ -806,6 +855,7 @@ export class SnakeGameEngine {
       ctx.stroke();
     }
 
+    // Obstacles
     this.obstacles.forEach(o => {
       const ox = o.x * cs + cs / 2;
       const oy = o.y * cs + cs / 2;
@@ -815,13 +865,14 @@ export class SnakeGameEngine {
       ctx.fillText(o.type === 'rock' ? '🪨' : '🌿', ox, oy);
     });
 
+    // Powerups
     this.powerups.forEach(p => {
       const px = p.x * cs + cs / 2;
       const py = p.y * cs + cs / 2;
       ctx.save();
       ctx.beginPath();
       ctx.arc(px, py, cs * 0.45, 0, Math.PI * 2);
-      ctx.fillStyle = p.type === 'heal' ? 'rgba(239, 68, 68, 0.2)' : p.type === 'x2' ? 'rgba(245, 158, 11, 0.2)' : 'rgba(56, 189, 248, 0.2)';
+      ctx.fillStyle = p.type === 'heal' ? 'rgba(239, 68, 68, 0.25)' : p.type === 'x2' ? 'rgba(245, 158, 11, 0.25)' : 'rgba(56, 189, 248, 0.25)';
       ctx.fill();
       ctx.font = `${cs * 0.65}px sans-serif`;
       ctx.textAlign = 'center';
@@ -830,71 +881,137 @@ export class SnakeGameEngine {
       ctx.restore();
     });
 
+    // Apples / Fruits (ALL neutral appearance - NO LEAKING ANSWER)
     this.apples.forEach(a => {
       const ax = a.x * cs + cs / 2;
       const ay = a.y * cs + cs / 2;
 
       ctx.save();
+
+      // 1. Shiny Juicy Red Apple Body (Uniform for all apples)
+      const grad = ctx.createRadialGradient(ax - 3, ay - 6, 2, ax, ay - 4, cs * 0.44);
+      grad.addColorStop(0, '#ff6b6b');
+      grad.addColorStop(0.65, '#ef4444');
+      grad.addColorStop(1, '#b91c1c');
+
       ctx.beginPath();
-      ctx.arc(ax, ay - 4, cs * 0.48, 0, Math.PI * 2);
-      ctx.fillStyle = a.isCorrect ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255, 255, 255, 0.9)';
+      ctx.arc(ax, ay - 4, cs * 0.42, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.22)';
+      ctx.shadowBlur = 5;
+      ctx.shadowOffsetY = 2;
       ctx.fill();
-      ctx.strokeStyle = a.isCorrect ? '#10b981' : '#cbd5e1';
+      ctx.shadowColor = 'transparent';
+
+      // 2. Glossy Highlight
+      ctx.beginPath();
+      ctx.ellipse(ax - 4, ay - 9, cs * 0.14, cs * 0.08, -Math.PI / 4, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+      ctx.fill();
+
+      // 3. Stem
+      ctx.beginPath();
+      ctx.moveTo(ax, ay - cs * 0.42 - 2);
+      ctx.quadraticCurveTo(ax + 2, ay - cs * 0.42 - 6, ax + 4, ay - cs * 0.42 - 7);
+      ctx.strokeStyle = '#78350f';
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+
+      // 4. Green Leaf
+      ctx.beginPath();
+      ctx.ellipse(ax + 5, ay - cs * 0.42 - 4, 4.5, 2.8, Math.PI / 4, 0, Math.PI * 2);
+      ctx.fillStyle = '#22c55e';
+      ctx.fill();
+
+      // 5. Spacious Pill Badge for Meaning - FULL TEXT, NEVER CUT OFF
+      const meaningText = (a.meaning || '').trim();
+      const fontSize = cs > 36 ? 12 : 11;
+      ctx.font = `bold ${fontSize}px "Lexend", system-ui, sans-serif`;
+      const textMetrics = ctx.measureText(meaningText);
+      const pillWidth = Math.max(cs * 1.6, textMetrics.width + 16);
+      const pillHeight = cs > 36 ? 24 : 20;
+      const pillX = ax - pillWidth / 2;
+      const pillY = ay + cs * 0.22;
+
+      // Badge container
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.18)';
+      ctx.shadowBlur = 4;
+      ctx.shadowOffsetY = 2;
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.roundRect(pillX, pillY, pillWidth, pillHeight, pillHeight / 2);
+      ctx.fill();
+      ctx.shadowColor = 'transparent';
+
+      // Badge border
+      ctx.strokeStyle = '#64748b';
       ctx.lineWidth = 1.5;
       ctx.stroke();
 
-      ctx.fillStyle = '#22c55e';
-      ctx.beginPath();
-      ctx.ellipse(ax + 4, ay - cs * 0.45, 4, 2, Math.PI / 4, 0, Math.PI * 2);
-      ctx.fill();
-
+      // Badge text
       ctx.fillStyle = '#0f172a';
-      ctx.font = 'bold 11px system-ui, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
+      ctx.fillText(meaningText, ax, pillY + pillHeight / 2);
 
-      let displayMeaning = a.meaning || '';
-      if (displayMeaning.length > 8) displayMeaning = displayMeaning.substring(0, 7) + '..';
-      ctx.fillText(displayMeaning, ax, ay);
       ctx.restore();
     });
 
+    // Snake Body & Head
     this.snake.forEach((segment, idx) => {
       const sx = segment.x * cs;
       const sy = segment.y * cs;
 
       ctx.save();
       if (idx === 0) {
-        ctx.fillStyle = '#22c55e';
+        // Snake Head
+        ctx.fillStyle = '#16a34a';
         ctx.beginPath();
-        ctx.roundRect(sx + 2, sy + 2, cs - 4, cs - 4, 8);
+        ctx.roundRect(sx + 2, sy + 2, cs - 4, cs - 4, 10);
         ctx.fill();
 
+        // Eyes oriented by direction
         ctx.fillStyle = '#ffffff';
-        const eyeOffsetX = this.dir.x === 0 ? 6 : this.dir.x > 0 ? 18 : 6;
-        const eyeOffsetY = this.dir.y === 0 ? 6 : this.dir.y > 0 ? 18 : 6;
+        let eye1X = sx + 10, eye1Y = sy + 10, eye2X = sx + 10, eye2Y = sy + cs - 10;
+        if (this.dir.x > 0) {
+          eye1X = sx + cs - 10; eye1Y = sy + 10;
+          eye2X = sx + cs - 10; eye2Y = sy + cs - 10;
+        } else if (this.dir.x < 0) {
+          eye1X = sx + 10; eye1Y = sy + 10;
+          eye2X = sx + 10; eye2Y = sy + cs - 10;
+        } else if (this.dir.y > 0) {
+          eye1X = sx + 10; eye1Y = sy + cs - 10;
+          eye2X = sx + cs - 10; eye2Y = sy + cs - 10;
+        } else if (this.dir.y < 0) {
+          eye1X = sx + 10; eye1Y = sy + 10;
+          eye2X = sx + cs - 10; eye2Y = sy + 10;
+        }
+
         ctx.beginPath();
-        ctx.arc(sx + eyeOffsetX, sy + 8, 3, 0, Math.PI * 2);
-        ctx.arc(sx + eyeOffsetX, sy + 18, 3, 0, Math.PI * 2);
+        ctx.arc(eye1X, eye1Y, 3.5, 0, Math.PI * 2);
+        ctx.arc(eye2X, eye2Y, 3.5, 0, Math.PI * 2);
         ctx.fill();
 
         ctx.fillStyle = '#000000';
         ctx.beginPath();
-        ctx.arc(sx + eyeOffsetX, sy + 8, 1.5, 0, Math.PI * 2);
-        ctx.arc(sx + eyeOffsetX, sy + 18, 1.5, 0, Math.PI * 2);
+        ctx.arc(eye1X, eye1Y, 1.8, 0, Math.PI * 2);
+        ctx.arc(eye2X, eye2Y, 1.8, 0, Math.PI * 2);
         ctx.fill();
 
+        // Shield aura if invincible
         if (this.invincibleTimer > 0) {
           ctx.strokeStyle = '#38bdf8';
           ctx.lineWidth = 3;
           ctx.beginPath();
-          ctx.arc(sx + cs / 2, sy + cs / 2, cs * 0.7, 0, Math.PI * 2);
+          ctx.arc(sx + cs / 2, sy + cs / 2, cs * 0.72, 0, Math.PI * 2);
           ctx.stroke();
         }
       } else {
-        ctx.fillStyle = idx % 2 === 0 ? '#4ade80' : '#86efac';
+        // Body segments
+        ctx.fillStyle = idx % 2 === 0 ? '#22c55e' : '#4ade80';
         ctx.beginPath();
-        ctx.roundRect(sx + 3, sy + 3, cs - 6, cs - 6, 6);
+        ctx.roundRect(sx + 3, sy + 3, cs - 6, cs - 6, 8);
         ctx.fill();
       }
       ctx.restore();
@@ -905,7 +1022,7 @@ export class SnakeGameEngine {
     this.isPaused = !this.isPaused;
     const pauseBtn = this.container.querySelector('#snake-pause-btn');
     if (pauseBtn) {
-      pauseBtn.innerHTML = `<i class="fa-solid fa-${this.isPaused ? 'play' : 'pause'}"></i>`;
+      pauseBtn.innerHTML = `<i class="fa-solid fa-${this.isPaused ? 'play' : 'pause'}"></i> ${this.isPaused ? 'Tiếp tục' : 'Tạm dừng'}`;
     }
     this.showFloatingMessage(this.isPaused ? 'Đã tạm dừng game ⏸' : 'Tiếp tục chơi ▶️');
   }
@@ -935,9 +1052,9 @@ export class SnakeGameEngine {
     this.apples = [];
 
     this.snake = [
+      { x: 6, y: 7 },
       { x: 5, y: 7 },
-      { x: 4, y: 7 },
-      { x: 3, y: 7 }
+      { x: 4, y: 7 }
     ];
     this.dir = { x: 1, y: 0 };
     this.nextDir = { x: 1, y: 0 };
@@ -953,6 +1070,14 @@ export class SnakeGameEngine {
     this.spawnObstacles();
     this.nextWordQuestion();
     this.updateHUD();
+
+    this.timerInterval = setInterval(() => {
+      if (!this.isRunning || this.isPaused) return;
+      if (this.invincibleTimer > 0) {
+        this.invincibleTimer--;
+      }
+    }, 1000);
+
     this.animFrameId = requestAnimationFrame((t) => this.loop(t));
   }
 
@@ -973,7 +1098,7 @@ export class SnakeGameEngine {
       overlay.style.setProperty('display', 'flex', 'important');
       if (icon) icon.textContent = isVictory ? '👑' : '🐍';
       if (title) title.textContent = isVictory ? 'Vua Nuôi Rắn Từ Vựng!' : 'Hết Tim - Game Over!';
-      if (desc) desc.textContent = isVictory ? 'Bạn đã xuất sắc vượt qua toàn bộ 5 Cấp độ thử thách!' : 'Hãy chú ý quan sát mục tiêu và ăn đúng quả táo nhé!';
+      if (desc) desc.textContent = isVictory ? 'Bạn đã xuất sắc vượt qua toàn bộ 5 Cấp độ thử thách!' : 'Hãy chú ý quan sát từ vựng và chọn đúng quả táo nhé!';
       if (resLevel) resLevel.textContent = `CẤP ${this.level}`;
       if (resScore) resScore.textContent = this.score;
       if (resWords) resWords.textContent = this.wordsEatenCorrect || 0;
@@ -1035,6 +1160,12 @@ export class SnakeGameEngine {
     if (this.resizeHandler) {
       window.removeEventListener('resize', this.resizeHandler);
       this.resizeHandler = null;
+    }
+    if (this.canvas && this.touchStartHandler) {
+      this.canvas.removeEventListener('touchstart', this.touchStartHandler);
+      this.canvas.removeEventListener('touchend', this.touchEndHandler);
+      this.touchStartHandler = null;
+      this.touchEndHandler = null;
     }
     const cb = this.onExit;
     this.onExit = null;

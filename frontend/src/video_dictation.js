@@ -23,9 +23,12 @@ let currentStreak = 0;
 let shadowHidePinyin = false;
 let shadowHideHanzi = false;
 let shadowHideMeaning = false;
+let shadowSubMode = 'sentence'; // 'sentence' | 'passage'
+let shadowPassageHidePinyin = false;
+let shadowPassageHideMeaning = false;
 let transcriptHidePinyin = false;
 let transcriptHideMeaning = false;
-let selectedDubRole = 'role_a';
+let selectedDubRole = 'all';
 
 // Audio Recording & Pronunciation Assessment State
 let isRecording = false;
@@ -38,12 +41,26 @@ let recognizedTranscript = '';
 let recordingTimerInterval = null;
 let recordingSeconds = 0;
 let dubbingVideoSyncPlaying = false;
+let dubbingPreviewPlaying = false;
+let dubbingPreviewAudio = null;
+
+// Passage Recording State
+let isPassageRecording = false;
+let passageMediaRecorder = null;
+let passageAudioChunks = [];
+let passageRecordedBlob = null;
+let passageRecordedAudioUrl = null;
+let passageActiveRecognition = null;
+let passageRecognizedTranscript = '';
+let passageRecordingTimerInterval = null;
+let passageRecordingSeconds = 0;
 
 // YouTube Player Instance & Polling
 let ytPlayer = null;
 let isPlayerReady = false;
 let playbackWatcher = null;
 let isSentencePlaying = false;
+let lastPausedSentenceIdx = -1;
 let activeHanziWriter = null;
 
 // Built-in Fallback Lessons Data
@@ -55,8 +72,56 @@ function cleanStr(s) {
   if (!s) return '';
   return s.toString().toLowerCase()
     .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Remove accents if pinyin
-    .replace(/[，。？！, .?!'’"“”]/g, "")
+    .replace(/[，。？！, .?!'’"“”：:]/g, "")
     .trim();
+}
+
+// Helper: Extract speaker prefix (e.g. "妈妈：" or "小初:" or "A:" or "Mẹ:")
+function parseSpeakerAndText(text) {
+  if (!text) return { speaker: '', text: '' };
+  const str = text.trim();
+  // Match các dạng dấu 2 chấm: ASCII :, full-width ：, middle dot ·, và khoảng trắng đặc biệt
+  const match = str.match(/^([^\uff1a:\n]{1,15})[\uff1a:]\s*(.+)$/s);
+  if (match) {
+    const spk = match[1].trim();
+    const txt = match[2].trim();
+    // Chỉ nhận dạng speaker nếu phần trước dấu : ngắn hợp lý (không phải cả câu)
+    if (spk.length >= 1 && spk.length <= 10 && txt.length > 0) {
+      return { speaker: spk, text: txt };
+    }
+  }
+  return { speaker: '', text: str };
+}
+
+// Helper: Extract speaker and clean content for a sentence across Hanzi, Pinyin, and Vietnamese Meaning
+function getSentenceDisplayInfo(sent) {
+  if (!sent) return { speaker: '', rawHanzi: '', rawPinyin: '', rawMeaning: '', cleanHanzi: '', cleanPinyin: '', cleanMeaning: '' };
+  const parsedHanzi = parseSpeakerAndText(sent.hanzi);
+  const parsedPinyin = parseSpeakerAndText(sent.pinyin);
+  const parsedMeaning = parseSpeakerAndText(sent.meaning);
+
+  const speaker = parsedHanzi.speaker || parsedMeaning.speaker || parsedPinyin.speaker || '';
+  let cleanHanzi = parsedHanzi.text || sent.hanzi || '';
+  let cleanPinyin = parsedPinyin.text || sent.pinyin || '';
+  let cleanMeaning = parsedMeaning.text || sent.meaning || '';
+
+  // Bỏ các chú thích hành động/âm thanh trong ngoặc đơn nếu có (như （大哭）, (Khóc), （独白）) và dấu chấm lửng
+  const hanziWithoutBracket = cleanHanzi.replace(/（[^）]*）|\([^)]*\)/g, '').replace(/[……\.]{2,}/g, '').trim();
+  if (hanziWithoutBracket.length > 0) {
+    cleanHanzi = hanziWithoutBracket;
+    cleanPinyin = cleanPinyin.replace(/（[^）]*）|\([^)]*\)/g, '').replace(/[……\.]{2,}/g, '').trim();
+    cleanMeaning = cleanMeaning.replace(/（[^）]*）|\([^)]*\)/g, '').replace(/[……\.]{2,}/g, '').trim();
+  }
+
+  return {
+    speaker,
+    rawHanzi: sent.hanzi || '',
+    rawPinyin: sent.pinyin || '',
+    rawMeaning: sent.meaning || '',
+    cleanHanzi,
+    cleanPinyin,
+    cleanMeaning
+  };
 }
 
 // Toast notification
@@ -181,24 +246,72 @@ function startPlaybackWatcher() {
   stopPlaybackWatcher();
 
   function updateFrame() {
-    if (ytPlayer && ytPlayer.getCurrentTime && currentLesson) {
+    if (ytPlayer && ytPlayer.getCurrentTime && currentLesson && currentLesson.sentences && currentLesson.sentences.length > 0) {
       try {
         const curTime = ytPlayer.getCurrentTime();
-        const curSent = currentLesson.sentences[currentSentenceIdx];
-        if (curSent) {
-          // Highlight active row in transcript list
-          updateSubtitleHighlight(curTime);
 
-          // Auto pause exactly at end of sentence (millisecond precision)
-          if (autoPauseEnabled && isSentencePlaying && curTime >= curSent.endTime) {
+        // 1. Detect active sentence from curTime if video is playing continuously
+        let activeIdx = currentLesson.sentences.findIndex(s => curTime >= s.startTime - 0.05 && curTime < s.endTime);
+        if (activeIdx === -1) {
+          const nextIdx = currentLesson.sentences.findIndex(s => s.startTime > curTime);
+          if (nextIdx > 0 && curTime >= currentLesson.sentences[nextIdx - 1].endTime) {
+            activeIdx = nextIdx - 1;
+          } else if (nextIdx === -1 && curTime >= currentLesson.sentences[currentLesson.sentences.length - 1].startTime) {
+            activeIdx = currentLesson.sentences.length - 1;
+          }
+        }
+
+        // 2. Auto sync currentSentenceIdx when playing continuously
+        if (activeIdx !== -1 && activeIdx !== currentSentenceIdx) {
+          currentSentenceIdx = activeIdx;
+          lastPausedSentenceIdx = -1; // Reset pause guard for new sentence
+          renderCurrentSentence();
+        }
+
+        // 3. Highlight transcript and passage
+        updateSubtitleHighlight(curTime);
+        updateShadowPassageHighlight(curTime);
+
+        // 4. Real-time Dubbing Karaoke & Pacing
+        if (currentMode === 'dubbing' && (dubbingVideoSyncPlaying || dubbingPreviewPlaying)) {
+          updateDubbingKaraoke(curTime);
+        }
+
+        // 5. Auto pause at the end of each sentence
+        const isPassageMode = (currentMode === 'shadowing' && shadowSubMode === 'passage');
+        if (autoPauseEnabled && !isPassageMode && currentLesson.sentences[currentSentenceIdx]) {
+          const curSent = currentLesson.sentences[currentSentenceIdx];
+          if (curTime >= curSent.endTime - 0.08 && lastPausedSentenceIdx !== currentSentenceIdx) {
             ytPlayer.pauseVideo();
+            lastPausedSentenceIdx = currentSentenceIdx;
             isSentencePlaying = false;
             stopPlaybackWatcher();
             focusActiveInput();
             return;
           }
         }
-      } catch (e) { }
+
+        // 6. Dubbing recording auto-stop when reaching sentence end
+        if (dubbingVideoSyncPlaying && currentLesson.sentences[currentSentenceIdx]) {
+          const curSent = currentLesson.sentences[currentSentenceIdx];
+          if (curTime >= curSent.endTime) {
+            stopRecordingAudio();
+            return;
+          }
+        }
+
+        // 7. Dubbing preview auto-stop when reaching sentence end
+        if (dubbingPreviewPlaying && currentLesson.sentences[currentSentenceIdx]) {
+          const curSent = currentLesson.sentences[currentSentenceIdx];
+          if (curTime >= curSent.endTime) {
+            stopDubbingPreview();
+            return;
+          }
+        }
+
+      } catch (e) {
+        console.warn("Watcher frame error:", e);
+      }
     }
 
     if (ytPlayer && ytPlayer.getPlayerState) {
@@ -413,13 +526,37 @@ function renderLessonVocabNotes() {
         <button class="btn-vocab-tool" onclick="window.speakChinese('${escapedWord}')" title="Nghe phát âm chuẩn">
           <i class="fa-solid fa-volume-high"></i>
         </button>
-        <button class="btn-vocab-tool" onclick="window.openHanziModal('${escapedWord}')" title="Xem thứ tự nét viết chữ Hán">
-          <i class="fa-solid fa-pen-nib"></i>
+        <button class="btn-vocab-tool" onclick="window.saveVocabWordToNotebook('${escapedWord}', '${(item.pinyin||'').replace(/'/g, "\\'")}', '${(item.meaning||'').replace(/'/g, "\\'")}')" title="Thêm vào Sổ tay từ vựng / Flashcard">
+          <i class="fa-solid fa-bookmark" style="color: #fbbf24;"></i>
         </button>
       </div>
     `;
     container.appendChild(row);
   });
+}
+
+function saveVocabWordToNotebook(word, pinyin, meaning) {
+  if (!word) return;
+  try {
+    const email = getCurrentUserEmail();
+    const storageKey = `my_saved_flashcards_${email}`;
+    let saved = JSON.parse(localStorage.getItem(storageKey) || '[]');
+    if (!saved.some(item => item.word === word)) {
+      saved.push({
+        word: word,
+        pinyin: pinyin || '',
+        meaning: meaning || '',
+        hskLevel: currentLesson?.levelText || 'Từ Vựng Video',
+        addedAt: new Date().toISOString()
+      });
+      localStorage.setItem(storageKey, JSON.stringify(saved));
+      showToast(`⭐ Đã thêm "${word}" vào Sổ tay từ vựng cá nhân!`);
+    } else {
+      showToast(`Từ "${word}" đã có trong Sổ tay từ vựng của bạn!`);
+    }
+  } catch (e) {
+    showToast(`⭐ Đã thêm "${word}" vào sổ từ vựng!`);
+  }
 }
 
 function loadLessonNotes() {
@@ -508,13 +645,21 @@ function renderCurrentSentence() {
 
 function renderShadowingPanel(sent) {
   if (!sent) return;
+  const info = getSentenceDisplayInfo(sent);
+
+  const speakerBadgeWrap = document.getElementById('shadow-speaker-badge-wrap');
+  const speakerBadge = document.getElementById('shadow-speaker-badge');
+  // Ẩn badge nhân vật trong shadowing - không cần hiển thị tên người nói
+  if (speakerBadgeWrap) {
+    speakerBadgeWrap.style.display = 'none';
+  }
 
   const pinyinEl = document.getElementById('shadow-pinyin-display');
   const hanziEl = document.getElementById('shadow-hanzi-display');
   const meaningEl = document.getElementById('shadow-meaning-display');
 
   if (pinyinEl) {
-    pinyinEl.textContent = shadowHidePinyin ? '• • • • • • • • •' : (sent.pinyin || '');
+    pinyinEl.textContent = shadowHidePinyin ? '• • • • • • • • •' : info.cleanPinyin;
     pinyinEl.style.opacity = shadowHidePinyin ? '0.4' : '1';
   }
 
@@ -522,24 +667,335 @@ function renderShadowingPanel(sent) {
     if (shadowHideHanzi) {
       hanziEl.innerHTML = '<span style="color: #64748b; letter-spacing: 0.1em;">[ Ẩn chữ Hán - Luyện nghe nói ]</span>';
     } else {
-      hanziEl.innerHTML = renderClickableHanziSpans(sent.hanzi);
+      // Chỉ hiển thị phần text của câu (bỏ prefix nhân vật nếu có)
+      hanziEl.innerHTML = renderClickableHanziSpans(info.cleanHanzi);
     }
   }
 
   if (meaningEl) {
-    meaningEl.textContent = shadowHideMeaning ? '[ Đã ẩn nghĩa tiếng Việt ]' : (sent.meaning || '');
+    meaningEl.textContent = shadowHideMeaning ? '[ Đã ẩn nghĩa tiếng Việt ]' : info.cleanMeaning;
     meaningEl.style.opacity = shadowHideMeaning ? '0.4' : '1';
   }
 
-  // Reset Assessment Card when moving to a new sentence unless answered
+  // Reset Assessment Card khi chuyển sang câu mới
   const assessmentCard = document.getElementById('shadow-assessment-card');
   if (assessmentCard) {
     assessmentCard.style.display = 'none';
+    // Xóa nút Câu tiếp cũ nếu có
+    const oldNextBtn = document.getElementById('shadow-assessment-next-wrap');
+    if (oldNextBtn) oldNextBtn.remove();
   }
+
+  if (shadowSubMode === 'passage') {
+    renderShadowPassageList();
+  }
+}
+
+// Sub-mode Switcher: Thoại Từng Câu vs Thoại Toàn Bài Văn
+function setShadowSubMode(mode) {
+  shadowSubMode = mode;
+  const btnSent = document.getElementById('btn-shadow-submode-sentence');
+  const btnPass = document.getElementById('btn-shadow-submode-passage');
+  const wrapSent = document.getElementById('shadow-sentence-submode-wrap');
+  const wrapPass = document.getElementById('shadow-passage-submode-wrap');
+
+  if (btnSent) btnSent.classList.toggle('active', mode === 'sentence');
+  if (btnPass) btnPass.classList.toggle('active', mode === 'passage');
+
+  if (wrapSent) wrapSent.style.display = mode === 'sentence' ? 'block' : 'none';
+  if (wrapPass) wrapPass.style.display = mode === 'passage' ? 'block' : 'none';
+
+  if (mode === 'passage') {
+    renderShadowPassageList();
+  } else {
+    renderCurrentSentence();
+  }
+}
+
+function toggleShadowPassagePinyin(checked) {
+  shadowPassageHidePinyin = checked;
+  renderShadowPassageList();
+}
+
+function toggleShadowPassageMeaning(checked) {
+  shadowPassageHideMeaning = checked;
+  renderShadowPassageList();
+}
+
+function renderShadowPassageList() {
+  const container = document.getElementById('shadow-full-passage-list');
+  if (!container || !currentLesson || !currentLesson.sentences) return;
+
+  container.innerHTML = '';
+  currentLesson.sentences.forEach((s, idx) => {
+    const info = getSentenceDisplayInfo(s);
+    const isActive = idx === currentSentenceIdx;
+
+    const row = document.createElement('div');
+    row.className = `passage-dialogue-row ${isActive ? 'active' : ''}`;
+    row.id = `passage-row-${idx}`;
+
+    const speakerHtml = info.speaker
+      ? `<span class="passage-speaker-pill">${info.speaker}</span>`
+      : `<span class="passage-speaker-pill" style="background: rgba(56,189,248,0.2); color:#38bdf8; border-color: rgba(56,189,248,0.4);">#${idx + 1}</span>`;
+
+    const pinyinHtml = shadowPassageHidePinyin ? '' : `<div class="passage-pinyin-line">${info.cleanPinyin}</div>`;
+    const meaningHtml = shadowPassageHideMeaning ? '' : `<div class="passage-meaning-line">${info.cleanMeaning}</div>`;
+
+    row.innerHTML = `
+      <div class="passage-speaker-col">
+        ${speakerHtml}
+      </div>
+      <div class="passage-text-col">
+        <div class="passage-hanzi-line">${renderClickableHanziSpans(info.cleanHanzi)}</div>
+        ${pinyinHtml}
+        ${meaningHtml}
+      </div>
+    `;
+
+    row.addEventListener('click', () => {
+      currentSentenceIdx = idx;
+      lastPausedSentenceIdx = -1;
+      renderCurrentSentence();
+      playCurrentSentence();
+    });
+
+    container.appendChild(row);
+  });
+}
+
+function updateShadowPassageHighlight(curTime) {
+  if (!currentLesson || !currentLesson.sentences) return;
+  const rows = document.querySelectorAll('.passage-dialogue-row');
+  currentLesson.sentences.forEach((s, idx) => {
+    if (curTime >= s.startTime && curTime <= s.endTime) {
+      rows[idx]?.classList.add('active');
+    } else {
+      rows[idx]?.classList.remove('active');
+    }
+  });
+}
+
+function playFullPassage() {
+  if (!currentLesson || !currentLesson.sentences || currentLesson.sentences.length === 0) return;
+  const firstSent = currentLesson.sentences[0];
+  if (ytPlayer && ytPlayer.seekTo) {
+    ytPlayer.seekTo(firstSent.startTime, true);
+    ytPlayer.setPlaybackRate(currentSpeed);
+    ytPlayer.playVideo();
+    isSentencePlaying = true;
+    startPlaybackWatcher();
+    showToast("▶️ Đang phát video toàn bộ bài học!");
+  }
+}
+
+async function togglePassageRecording() {
+  if (isPassageRecording) {
+    stopPassageRecording();
+  } else {
+    startPassageRecording();
+  }
+}
+
+async function startPassageRecording() {
+  if (isPassageRecording) return;
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
+    });
+
+    passageAudioChunks = [];
+    let options = {};
+    if (typeof MediaRecorder !== 'undefined') {
+      if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+        options = { mimeType: 'audio/webm;codecs=opus' };
+      } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+        options = { mimeType: 'audio/mp4' };
+      }
+    }
+
+    passageMediaRecorder = new MediaRecorder(stream, options);
+    passageMediaRecorder.ondataavailable = (e) => {
+      if (e.data && e.data.size > 0) {
+        passageAudioChunks.push(e.data);
+      }
+    };
+
+    passageMediaRecorder.onstop = () => {
+      if (passageAudioChunks.length > 0) {
+        const mime = passageMediaRecorder.mimeType || 'audio/webm';
+        passageRecordedBlob = new Blob(passageAudioChunks, { type: mime });
+        if (passageRecordedAudioUrl) {
+          try { URL.revokeObjectURL(passageRecordedAudioUrl); } catch (e) { }
+        }
+        passageRecordedAudioUrl = URL.createObjectURL(passageRecordedBlob);
+      }
+      stream.getTracks().forEach(t => t.stop());
+    };
+
+    passageMediaRecorder.start(100);
+    isPassageRecording = true;
+    passageRecognizedTranscript = '';
+
+    if (SpeechRecognition) {
+      try {
+        const rec = new SpeechRecognition();
+        rec.lang = 'zh-CN';
+        rec.continuous = true;
+        rec.interimResults = true;
+        rec.maxAlternatives = 3;
+
+        rec.onresult = (event) => {
+          let str = '';
+          for (let i = 0; i < event.results.length; i++) {
+            str += event.results[i][0].transcript;
+          }
+          passageRecognizedTranscript = str;
+        };
+
+        rec.onerror = (err) => {
+          console.warn('Passage SpeechRecognition error:', err);
+        };
+
+        rec.onend = () => {
+          passageActiveRecognition = null;
+        };
+
+        passageActiveRecognition = rec;
+        rec.start();
+      } catch (e) { }
+    }
+
+    // UI
+    const micBtn = document.getElementById('btn-passage-mic');
+    if (micBtn) micBtn.classList.add('recording');
+    const liveBar = document.getElementById('shadow-passage-recording-live-bar');
+    const timerEl = document.getElementById('shadow-passage-recording-timer');
+    if (liveBar) liveBar.style.display = 'flex';
+    if (timerEl) timerEl.textContent = '00:00';
+
+    passageRecordingSeconds = 0;
+    clearInterval(passageRecordingTimerInterval);
+    passageRecordingTimerInterval = setInterval(() => {
+      passageRecordingSeconds++;
+      const m = String(Math.floor(passageRecordingSeconds / 60)).padStart(2, '0');
+      const s = String(passageRecordingSeconds % 60).padStart(2, '0');
+      if (timerEl) timerEl.textContent = `${m}:${s}`;
+    }, 1000);
+
+    // Play full passage video simultaneously
+    playFullPassage();
+    showToast("🔴 Đang ghi âm toàn bài văn... Đọc theo video!");
+
+  } catch (err) {
+    console.error('Error passage recording:', err);
+    isPassageRecording = false;
+    showToast('Vui lòng cấp quyền Micro trên trình duyệt để ghi âm toàn bài!', true);
+  }
+}
+
+function stopPassageRecording() {
+  if (!isPassageRecording) return;
+  isPassageRecording = false;
+  clearInterval(passageRecordingTimerInterval);
+
+  if (passageMediaRecorder && passageMediaRecorder.state !== 'inactive') {
+    try { passageMediaRecorder.stop(); } catch (e) { }
+  }
+
+  if (passageActiveRecognition) {
+    try { passageActiveRecognition.stop(); } catch (e) { }
+    passageActiveRecognition = null;
+  }
+
+  const micBtn = document.getElementById('btn-passage-mic');
+  if (micBtn) micBtn.classList.remove('recording');
+  const liveBar = document.getElementById('shadow-passage-recording-live-bar');
+  if (liveBar) liveBar.style.display = 'none';
+
+  setTimeout(() => {
+    evaluatePassagePronunciation();
+  }, 250);
+}
+
+function playPassageRecordingAudio() {
+  if (passageRecordedAudioUrl) {
+    const audio = new Audio(passageRecordedAudioUrl);
+    audio.play().catch(e => console.warn(e));
+    showToast("▶️ Đang phát lại toàn bộ bài thu âm của bạn...");
+  } else {
+    showToast("Chưa có đoạn thu âm toàn bài nào! Bấm Mic để thu âm trước", true);
+  }
+}
+
+function evaluatePassagePronunciation() {
+  if (!currentLesson || !currentLesson.sentences || currentLesson.sentences.length === 0) return;
+
+  const card = document.getElementById('shadow-passage-assessment-card');
+  const scoreValEl = document.getElementById('passage-assessment-score-val');
+  const verdictEl = document.getElementById('passage-assessment-verdict-text');
+  const spokenEl = document.getElementById('passage-assessment-spoken-text');
+  const targetEl = document.getElementById('passage-assessment-target-text');
+
+  if (!card) return;
+
+  // Build target passage text
+  const targetPassage = currentLesson.sentences
+    .map(s => getSentenceDisplayInfo(s).cleanHanzi)
+    .join(' ');
+
+  const spoken = (passageRecognizedTranscript || '').trim();
+
+  let similarity = 0;
+  if (spoken) {
+    similarity = calculateSimilarity(spoken, targetPassage);
+  } else {
+    // Không có giọng nói được nhận diện -> 0 điểm
+    similarity = 0;
+  }
+
+  const percent = Math.min(100, Math.max(0, Math.round(similarity * 100)));
+
+  card.style.display = 'block';
+  if (scoreValEl) scoreValEl.textContent = `${percent}%`;
+
+  if (verdictEl) {
+    if (!spoken) {
+      verdictEl.innerHTML = '⚠️ Chưa nhận diện được giọng đọc tiếng Trung. Bạn hãy bấm Mic và đọc to rõ ràng theo bài nhé!';
+    } else if (percent >= 85) {
+      verdictEl.innerHTML = '🌟 Xuất sắc! Phát âm toàn bài rất lưu loát & tự nhiên!';
+      totalScore += 25;
+      currentStreak += 3;
+    } else if (percent >= 70) {
+      verdictEl.innerHTML = '👍 Tốt! Bài đọc của bạn khá hoàn chỉnh.';
+      totalScore += 15;
+      currentStreak += 1;
+    } else {
+      verdictEl.innerHTML = '💪 Cần luyện tập thêm độ liền mạch & ngữ điệu!';
+    }
+  }
+
+  if (spokenEl) {
+    spokenEl.textContent = spoken ? `"${spoken}"` : '(Đã ghi âm bài đọc của bạn - Bấm nút "Nghe Lại" để kiểm tra)';
+  }
+
+  if (targetEl) {
+    targetEl.textContent = targetPassage;
+  }
+
+  renderCurrentSentenceHeaderStats();
+  showToast(`📊 Điểm tổng thể cả bài: ${percent}%!`);
 }
 
 function renderDictationPanel(sent) {
   if (!sent) return;
+  const info = getSentenceDisplayInfo(sent);
+
+  const speakerWrap = document.getElementById('dictation-speaker-wrap');
+  // Ẩn badge nhân vật - không cần hiển thị tên người nói
+  if (speakerWrap) speakerWrap.style.display = 'none';
 
   const inputEl = document.getElementById('dictation-user-input');
   if (inputEl) {
@@ -554,11 +1010,11 @@ function renderDictationPanel(sent) {
   const solutionBox = document.getElementById('dictation-solution-box');
   if (solutionBox) solutionBox.style.display = 'none';
 
-  // Render character slot tiles
+  // Render character slot tiles ONLY for cleanHanzi
   const tilesContainer = document.getElementById('dictation-char-tiles');
   if (tilesContainer) {
     tilesContainer.innerHTML = '';
-    const chars = (sent.hanzi || '').split('');
+    const chars = (info.cleanHanzi || '').split('');
     chars.forEach((c, idx) => {
       const tile = document.createElement('div');
       const isPunct = /[，。？！、：；“”‘’!?,.:;'" ]/.test(c);
@@ -571,33 +1027,64 @@ function renderDictationPanel(sent) {
     });
   }
 
-  // Render Virtual Character Keyboard (Bàn phím chữ Hán ảo - Hình 2)
-  renderVirtualKeyboard(sent);
+  // Render Virtual Character Keyboard ONLY for cleanHanzi
+  renderVirtualKeyboard(info.cleanHanzi);
 }
 
-function renderVirtualKeyboard(sent) {
+function renderVirtualKeyboard(cleanHanziText) {
   const vkGrid = document.getElementById('dict-vk-grid');
-  if (!vkGrid || !sent) return;
+  if (!vkGrid) return;
 
   vkGrid.innerHTML = '';
 
   // Extract Hanzi characters (filtering out punctuation)
-  const hanziChars = (sent.hanzi || '').split('').filter(c => /[\u4e00-\u9fa5a-zA-Z0-9]/.test(c));
+  const hanziChars = (cleanHanziText || '').split('').filter(c => /[\u4e00-\u9fa5a-zA-Z0-9]/.test(c));
 
   // Shuffled or arranged list of characters
   const displayChars = [...hanziChars];
   displayChars.sort(() => Math.random() - 0.5);
 
-  displayChars.forEach((char, idx) => {
+  displayChars.forEach((char, btnIdx) => {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'dict-vk-btn';
     btn.textContent = char;
+    btn.dataset.char = char;
+    btn.dataset.btnIdx = String(btnIdx);
     btn.onclick = (e) => {
       e.preventDefault();
       inputDictationChar(char);
     };
     vkGrid.appendChild(btn);
+  });
+}
+
+function updateVirtualKeyboardUsage(currentInputVal) {
+  const vkGrid = document.getElementById('dict-vk-grid');
+  if (!vkGrid) return;
+
+  const buttons = Array.from(vkGrid.querySelectorAll('.dict-vk-btn'));
+  const inputChars = (currentInputVal || '').split('').filter(c => /[\u4e00-\u9fa5a-zA-Z0-9]/.test(c));
+
+  // Count instances of each character currently in input
+  const usedCounts = {};
+  inputChars.forEach(c => {
+    usedCounts[c] = (usedCounts[c] || 0) + 1;
+  });
+
+  // Track consumed buttons so matching buttons hide
+  const consumedCounts = {};
+  buttons.forEach(btn => {
+    const char = btn.dataset.char;
+    const needed = usedCounts[char] || 0;
+    const currentConsumed = consumedCounts[char] || 0;
+
+    if (currentConsumed < needed) {
+      btn.classList.add('used');
+      consumedCounts[char] = currentConsumed + 1;
+    } else {
+      btn.classList.remove('used');
+    }
   });
 }
 
@@ -631,8 +1118,12 @@ function clearDictationInput() {
 function handleDictationRealtimeInput(val) {
   if (!currentLesson || !currentLesson.sentences[currentSentenceIdx]) return;
   const sent = currentLesson.sentences[currentSentenceIdx];
-  const targetChars = (sent.hanzi || '').split('');
+  const info = getSentenceDisplayInfo(sent);
+  const targetChars = (info.cleanHanzi || '').split('');
   const userChars = (val || '').split('');
+
+  // Update virtual keyboard visibility so used letters disappear (Hình 4)
+  updateVirtualKeyboardUsage(val);
 
   let correctCount = 0;
   let hanziTargetCount = 0;
@@ -665,8 +1156,8 @@ function handleDictationRealtimeInput(val) {
 
   // Check if fully completed correctly
   const cleanInput = cleanStr(val);
-  const cleanTarget = cleanStr(sent.hanzi);
-  const cleanPinyinTarget = cleanStr(sent.pinyin);
+  const cleanTarget = cleanStr(info.cleanHanzi);
+  const cleanPinyinTarget = cleanStr(info.cleanPinyin);
 
   const isFullMatch = (cleanInput === cleanTarget) || (cleanInput === cleanPinyinTarget) || (hanziTargetCount > 0 && correctCount >= hanziTargetCount);
 
@@ -676,6 +1167,7 @@ function handleDictationRealtimeInput(val) {
 }
 
 function onDictationCompletedSuccess(sent) {
+  const info = getSentenceDisplayInfo(sent);
   const feedbackEl = document.getElementById('dictation-feedback-box');
   const solutionEl = document.getElementById('dictation-solution-box');
   const solutionHanzi = document.getElementById('dictation-sol-hanzi');
@@ -697,9 +1189,10 @@ function onDictationCompletedSuccess(sent) {
 
   // REVEAL SOLUTION & VIETNAMESE MEANING ONLY NOW (Hình 2 & 3)
   if (solutionEl && solutionHanzi) {
-    solutionHanzi.innerHTML = renderClickableHanziSpans(sent.hanzi);
-    if (solutionPinyin) solutionPinyin.textContent = sent.pinyin || '';
-    if (solutionMeaning) solutionMeaning.textContent = sent.meaning || '';
+    const prefixHtml = info.speaker ? `<span class="dialogue-speaker-badge" style="margin-right: 8px;"><i class="fa-solid fa-user-tag"></i> ${info.speaker}</span>` : '';
+    solutionHanzi.innerHTML = prefixHtml + renderClickableHanziSpans(info.cleanHanzi);
+    if (solutionPinyin) solutionPinyin.textContent = info.cleanPinyin;
+    if (solutionMeaning) solutionMeaning.textContent = info.cleanMeaning;
     solutionEl.style.display = 'block';
   }
 
@@ -708,22 +1201,128 @@ function onDictationCompletedSuccess(sent) {
     currentStreak++;
     userAnswers[sent.id] = { isCorrect: true, score: 10 };
     showToast("🎉 Hoàn toàn chính xác! (+10 điểm)");
-    speakChinese(sent.hanzi);
+    speakChinese(info.cleanHanzi);
   }
 
   renderCurrentSentenceHeaderStats();
 }
 
+function updateDubbingKaraoke(curTime) {
+  if (!currentLesson || !currentLesson.sentences[currentSentenceIdx]) return;
+  const sent = currentLesson.sentences[currentSentenceIdx];
+  const info = getSentenceDisplayInfo(sent);
+  const text = info.cleanHanzi;
+  if (!text) return;
+
+  const totalDuration = Math.max(0.1, sent.endTime - sent.startTime);
+  const elapsed = Math.max(0, curTime - sent.startTime);
+  const progress = Math.min(1, Math.max(0, elapsed / totalDuration));
+
+  // Pacing bar fill
+  const pacingFill = document.getElementById('dubbing-pacing-fill');
+  if (pacingFill) {
+    pacingFill.style.width = `${(progress * 100).toFixed(1)}%`;
+  }
+
+  // Character glowing karaoke
+  const charCount = text.length;
+  const activeCharIdx = Math.floor(progress * charCount);
+
+  for (let i = 0; i < charCount; i++) {
+    const charEl = document.getElementById(`dub-char-${i}`);
+    if (!charEl) continue;
+
+    if (i < activeCharIdx) {
+      charEl.className = 'karaoke-char passed';
+    } else if (i === activeCharIdx) {
+      charEl.className = 'karaoke-char active-glow';
+    } else {
+      charEl.className = 'karaoke-char';
+    }
+  }
+}
+
+function stopDubbingPreview() {
+  dubbingPreviewPlaying = false;
+  if (dubbingPreviewAudio) {
+    try {
+      dubbingPreviewAudio.pause();
+      dubbingPreviewAudio.currentTime = 0;
+    } catch (e) { }
+    dubbingPreviewAudio = null;
+  }
+  if (ytPlayer) {
+    try {
+      ytPlayer.pauseVideo();
+      ytPlayer.unMute();
+    } catch (e) { }
+  }
+  const pacingFill = document.getElementById('dubbing-pacing-fill');
+  if (pacingFill) pacingFill.style.width = '0%';
+}
+
+function populateDubbingRoles(lesson) {
+  const select = document.getElementById('dubbing-role-selector');
+  if (!select || !lesson || !lesson.sentences) return;
+
+  const speakers = [];
+  lesson.sentences.forEach(s => {
+    const info = getSentenceDisplayInfo(s);
+    if (info.speaker && !speakers.includes(info.speaker)) {
+      speakers.push(info.speaker);
+    }
+  });
+
+  select.innerHTML = '<option value="all">Tất cả nhân vật</option>';
+
+  speakers.forEach(spk => {
+    const opt = document.createElement('option');
+    opt.value = spk;
+    opt.textContent = `Nhân vật: ${spk}`;
+    select.appendChild(opt);
+  });
+
+  if (speakers.length === 0) {
+    const optA = document.createElement('option');
+    optA.value = 'role_a';
+    optA.textContent = 'Nhân vật A (Nam/Nữ chính)';
+    select.appendChild(optA);
+
+    const optB = document.createElement('option');
+    optB.value = 'role_b';
+    optB.textContent = 'Nhân vật B (Đối thoại)';
+    select.appendChild(optB);
+  }
+}
+
 function renderDubbingPanel(sent) {
   if (!sent) return;
+  const info = getSentenceDisplayInfo(sent);
+
+  const speakerBadgeWrap = document.getElementById('dubbing-speaker-tag-wrap');
+  const speakerBadge = document.getElementById('dubbing-speaker-badge');
+  if (speakerBadgeWrap && speakerBadge) {
+    if (info.speaker) {
+      speakerBadge.innerHTML = `<i class="fa-solid fa-user-tag"></i> ${info.speaker}`;
+      speakerBadgeWrap.style.display = 'block';
+    } else {
+      speakerBadgeWrap.style.display = 'none';
+    }
+  }
 
   const hanziEl = document.getElementById('dubbing-hanzi-text');
   const pinyinEl = document.getElementById('dubbing-pinyin-text');
   const meaningEl = document.getElementById('dubbing-meaning-text');
 
-  if (hanziEl) hanziEl.innerHTML = renderClickableHanziSpans(sent.hanzi);
-  if (pinyinEl) pinyinEl.textContent = sent.pinyin || '';
-  if (meaningEl) meaningEl.textContent = sent.meaning || '';
+  if (hanziEl) {
+    const chars = (info.cleanHanzi || '').split('');
+    hanziEl.innerHTML = chars.map((c, idx) => `<span class="karaoke-char" id="dub-char-${idx}">${c}</span>`).join('');
+  }
+  if (pinyinEl) pinyinEl.textContent = info.cleanPinyin;
+  if (meaningEl) meaningEl.textContent = info.cleanMeaning;
+
+  const pacingFill = document.getElementById('dubbing-pacing-fill');
+  if (pacingFill) pacingFill.style.width = '0%';
 
   const liveBar = document.getElementById('dubbing-status-bar');
   if (liveBar) liveBar.style.display = 'none';
@@ -732,12 +1331,18 @@ function renderDubbingPanel(sent) {
 function checkDictationAnswer() {
   if (!currentLesson || !currentLesson.sentences[currentSentenceIdx]) return;
   const sent = currentLesson.sentences[currentSentenceIdx];
+  const info = getSentenceDisplayInfo(sent);
   const inputEl = document.getElementById('dictation-user-input');
   const feedbackEl = document.getElementById('dictation-feedback-box');
 
-  const userVal = cleanStr(inputEl ? inputEl.value : '');
-  const targetHanzi = cleanStr(sent.hanzi);
-  const targetPinyin = cleanStr(sent.pinyin);
+  // Lấy giá trị input và tự động bỏ prefix nhân vật nếu user gõ nhầm vào
+  let rawInput = inputEl ? inputEl.value : '';
+  const parsedInput = parseSpeakerAndText(rawInput);
+  if (parsedInput.speaker) rawInput = parsedInput.text;
+
+  const userVal = cleanStr(rawInput);
+  const targetHanzi = cleanStr(info.cleanHanzi);
+  const targetPinyin = cleanStr(info.cleanPinyin);
 
   if (!userVal) {
     showToast("Vui lòng gõ chữ hoặc bấm chọn phím chữ bên dưới!", true);
@@ -751,7 +1356,6 @@ function checkDictationAnswer() {
   if (isCorrect) {
     onDictationCompletedSuccess(sent);
   } else {
-    // Re-verify tiles
     handleDictationRealtimeInput(inputEl ? inputEl.value : '');
     if (feedbackEl) {
       feedbackEl.style.display = 'flex';
@@ -769,6 +1373,7 @@ function checkDictationAnswer() {
 function showDictationHint() {
   if (!currentLesson || !currentLesson.sentences[currentSentenceIdx]) return;
   const sent = currentLesson.sentences[currentSentenceIdx];
+  const info = getSentenceDisplayInfo(sent);
 
   // Fill in tiles
   const tiles = document.querySelectorAll('.dict-tile-box');
@@ -779,8 +1384,8 @@ function showDictationHint() {
 
   // Pre-fill first half of sentence into input
   const inputEl = document.getElementById('dictation-user-input');
-  if (inputEl && sent.hanzi) {
-    inputEl.value = sent.hanzi.slice(0, Math.ceil(sent.hanzi.length / 2));
+  if (inputEl && info.cleanHanzi) {
+    inputEl.value = info.cleanHanzi.slice(0, Math.ceil(info.cleanHanzi.length / 2));
     inputEl.focus();
   }
 
@@ -791,13 +1396,14 @@ function showDictationHint() {
   const solutionMeaning = document.getElementById('dictation-sol-meaning');
 
   if (solutionEl && solutionHanzi) {
-    solutionHanzi.innerHTML = renderClickableHanziSpans(sent.hanzi);
-    if (solutionPinyin) solutionPinyin.textContent = sent.pinyin;
-    if (solutionMeaning) solutionMeaning.textContent = sent.meaning;
+    const prefixHtml = info.speaker ? `<span class="dialogue-speaker-badge" style="margin-right: 8px;"><i class="fa-solid fa-user-tag"></i> ${info.speaker}</span>` : '';
+    solutionHanzi.innerHTML = prefixHtml + renderClickableHanziSpans(info.cleanHanzi);
+    if (solutionPinyin) solutionPinyin.textContent = info.cleanPinyin;
+    if (solutionMeaning) solutionMeaning.textContent = info.cleanMeaning;
     solutionEl.style.display = 'block';
   }
 
-  speakChinese(sent.hanzi);
+  speakChinese(info.cleanHanzi);
   showToast("💡 Đã mở gợi ý đáp án chuẩn!");
 }
 
@@ -807,6 +1413,7 @@ function renderTranscriptList() {
 
   container.innerHTML = '';
   currentLesson.sentences.forEach((s, idx) => {
+    const info = getSentenceDisplayInfo(s);
     const isDone = userAnswers[s.id] && userAnswers[s.id].isCorrect;
     const isActive = idx === currentSentenceIdx;
 
@@ -814,21 +1421,24 @@ function renderTranscriptList() {
     row.className = `transcript-row ${isActive ? 'active' : ''}`;
     row.id = `transcript-row-${idx}`;
 
-    const pinyinHtml = transcriptHidePinyin ? '' : `<div class="transcript-row-pinyin">${s.pinyin || ''}</div>`;
-    const meaningHtml = transcriptHideMeaning ? '' : `<div class="transcript-row-meaning">${s.meaning || ''}</div>`;
+    const speakerTag = info.speaker ? `<span class="dialogue-speaker-badge" style="font-size: 0.72rem; padding: 1px 6px; margin-bottom: 2px;"><i class="fa-solid fa-user-tag"></i> ${info.speaker}</span> ` : '';
+
+    const pinyinHtml = transcriptHidePinyin ? '' : `<div class="transcript-row-pinyin">${info.cleanPinyin}</div>`;
+    const meaningHtml = transcriptHideMeaning ? '' : `<div class="transcript-row-meaning">${info.cleanMeaning}</div>`;
 
     row.innerHTML = `
       <div class="transcript-row-head">
         <span class="transcript-row-idx">Câu ${idx + 1}</span>
         <span class="transcript-row-time"><i class="fa-regular fa-clock"></i> ${formatTime(s.startTime)} - ${formatTime(s.endTime)}</span>
       </div>
-      <div class="transcript-row-hanzi">${renderClickableHanziSpans(s.hanzi)}</div>
+      <div class="transcript-row-hanzi">${speakerTag}${renderClickableHanziSpans(info.cleanHanzi)}</div>
       ${pinyinHtml}
       ${meaningHtml}
     `;
 
     row.addEventListener('click', () => {
       currentSentenceIdx = idx;
+      lastPausedSentenceIdx = -1;
       renderCurrentSentence();
       playCurrentSentence();
     });
@@ -854,6 +1464,7 @@ function nextSentence() {
   if (!currentLesson) return;
   if (currentSentenceIdx < currentLesson.sentences.length - 1) {
     currentSentenceIdx++;
+    lastPausedSentenceIdx = -1;
     renderCurrentSentence();
     playCurrentSentence();
   } else {
@@ -865,6 +1476,7 @@ function prevSentence() {
   if (!currentLesson) return;
   if (currentSentenceIdx > 0) {
     currentSentenceIdx--;
+    lastPausedSentenceIdx = -1;
     renderCurrentSentence();
     playCurrentSentence();
   } else {
@@ -1806,6 +2418,7 @@ function stopRecordingAudio() {
 function evaluateCurrentPronunciation() {
   const sent = currentLesson?.sentences?.[currentSentenceIdx];
   if (!sent) return;
+  const info = getSentenceDisplayInfo(sent);
 
   const card = document.getElementById('shadow-assessment-card');
   const scoreValEl = document.getElementById('assessment-score-val');
@@ -1816,16 +2429,16 @@ function evaluateCurrentPronunciation() {
 
   if (!card) return;
 
-  const targetHanzi = sent.hanzi || '';
+  const targetHanzi = info.cleanHanzi;
   const spoken = (recognizedTranscript || '').trim();
 
   let similarity = 0;
   if (spoken) {
     similarity = calculateSimilarity(spoken, targetHanzi) ||
-      calculateSimilarity(spoken, sent.pinyin);
-  } else if (userRecordedBlob) {
-    // If Web Speech API was not recognized, baseline fallback
-    similarity = 0.82;
+      calculateSimilarity(spoken, info.cleanPinyin);
+  } else {
+    // Không có giọng đọc được nhận diện -> 0 điểm
+    similarity = 0;
   }
 
   const percent = Math.min(100, Math.max(0, Math.round(similarity * 100)));
@@ -1838,7 +2451,11 @@ function evaluateCurrentPronunciation() {
   }
 
   if (verdictEl) {
-    if (percent >= 85) {
+    if (!spoken) {
+      verdictEl.innerHTML = '⚠️ Chưa nhận diện được giọng đọc tiếng Trung. Bạn hãy bấm Mic và đọc to rõ ràng theo câu mẫu nhé!';
+      currentStreak = 0;
+      userAnswers[sent.id] = { isCorrect: false, score: 0, userAnswer: '' };
+    } else if (percent >= 85) {
       verdictEl.innerHTML = '🌟 Xuất sắc! Phát âm rất chuẩn & tự nhiên!';
       totalScore += 10;
       currentStreak++;
@@ -1870,6 +2487,16 @@ function evaluateCurrentPronunciation() {
       return c;
     });
     targetBreakdownEl.innerHTML = spans.join('');
+  }
+
+  // Thêm nút Câu tiếp theo sau khi chấm điểm
+  const existingNextBtn = document.getElementById('shadow-assessment-next-wrap');
+  if (!existingNextBtn && card) {
+    const wrap = document.createElement('div');
+    wrap.id = 'shadow-assessment-next-wrap';
+    wrap.style.cssText = 'display: flex; justify-content: center; margin-top: 14px;';
+    wrap.innerHTML = `<button onclick="window.nextSentence()" style="background: linear-gradient(135deg, #10b981, #059669); border: none; color: #fff; font-weight: 800; padding: 10px 24px; border-radius: 12px; font-size: 0.92rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(16,185,129,0.35);"><i class="fa-solid fa-arrow-right"></i> Câu tiếp theo</button>`;
+    card.appendChild(wrap);
   }
 
   renderCurrentSentenceHeaderStats();
@@ -1926,20 +2553,18 @@ function previewDubbing() {
   const sent = currentLesson?.sentences?.[currentSentenceIdx];
   if (!sent || !ytPlayer || !ytPlayer.seekTo) return;
 
+  stopDubbingPreview();
+
   ytPlayer.seekTo(sent.startTime, true);
   ytPlayer.mute();
   ytPlayer.playVideo();
+  dubbingPreviewPlaying = true;
+  startPlaybackWatcher();
 
-  const userAudio = new Audio(userRecordedAudioUrl);
-  userAudio.play().catch(e => console.warn(e));
+  dubbingPreviewAudio = new Audio(userRecordedAudioUrl);
+  dubbingPreviewAudio.play().catch(e => console.warn(e));
 
-  showToast("🎬 Đang phát thử video lồng tiếng ghép giọng của bạn!");
-
-  // Duration until sentence end
-  const duration = Math.max(1, (sent.endTime - sent.startTime)) * 1000;
-  setTimeout(() => {
-    if (ytPlayer && ytPlayer.unMute) ytPlayer.unMute();
-  }, duration + 400);
+  showToast("🎬 Đang phát video lồng tiếng kèm nhịp Karaoke & giọng của bạn!");
 }
 
 function getSelectedCategoryAndLevel() {
@@ -1947,17 +2572,21 @@ function getSelectedCategoryAndLevel() {
   if (select && select.value) {
     const val = select.value;
     if (val.startsWith('level:')) {
-      return { cat: 'all', lvl: val.replace('level:', '') };
+      return { cat: 'all', lvl: val.replace('level:', ''), status: 'all' };
     }
     if (val.startsWith('cat:')) {
-      return { cat: val.replace('cat:', ''), lvl: 'all' };
+      return { cat: val.replace('cat:', ''), lvl: 'all', status: 'all' };
     }
-    return { cat: 'all', lvl: 'all' };
+    if (val.startsWith('status:')) {
+      return { cat: 'all', lvl: 'all', status: val.replace('status:', '') };
+    }
+    return { cat: 'all', lvl: 'all', status: 'all' };
   }
   const activeCatBtn = document.querySelector('.cat-pill-btn.active');
   return {
     cat: activeCatBtn?.dataset.cat || 'all',
-    lvl: activeCatBtn?.dataset.level || 'all'
+    lvl: activeCatBtn?.dataset.level || 'all',
+    status: 'all'
   };
 }
 
@@ -1995,6 +2624,40 @@ window.deleteCustomVideo = async function (lessonId) {
 
   showToast("Đã xóa video khỏi danh sách của bạn! 🗑️");
 };
+
+// ==========================================
+// COMPLETED VIDEOS TRACKING (Hình 3 & 4)
+// ==========================================
+
+function getCompletedVideos() {
+  const email = getCurrentUserEmail();
+  try {
+    return JSON.parse(localStorage.getItem(`completed_dictation_videos_${email}`) || '[]');
+  } catch {
+    return [];
+  }
+}
+
+function isLessonCompleted(lessonId) {
+  return getCompletedVideos().includes(lessonId);
+}
+
+function toggleLessonCompleted(lessonId, event) {
+  if (event) event.stopPropagation();
+  const email = getCurrentUserEmail();
+  const storageKey = `completed_dictation_videos_${email}`;
+  let list = getCompletedVideos();
+  const idx = list.indexOf(lessonId);
+  if (idx !== -1) {
+    list.splice(idx, 1);
+    showToast("Đã bỏ đánh dấu hoàn thành!");
+  } else {
+    list.push(lessonId);
+    showToast("🎉 Đã lưu video vào danh sách ĐÃ HOÀN THÀNH!");
+  }
+  localStorage.setItem(storageKey, JSON.stringify(list));
+  renderCatalogGrid();
+}
 
 // ==========================================
 // CATALOG & LESSON SELECTION
@@ -2037,36 +2700,42 @@ function renderCatalogGrid() {
 
   filteredLessons.forEach(lesson => {
     const isUserVideo = lesson.isCustom === true || (lesson.userEmail && (lesson.userEmail === email || lesson.userEmail === 'guest'));
+    const isCompleted = isLessonCompleted(lesson.id);
 
     const card = document.createElement('div');
-    card.className = 'dict-lesson-card glass-panel';
+    card.className = `dict-lesson-card glass-panel ${isCompleted ? 'lesson-completed' : ''}`;
     card.innerHTML = `
       <div class="dict-card-thumb-wrap">
         <img src="${lesson.thumbnail || `https://img.youtube.com/vi/${lesson.youtubeId}/hqdefault.jpg`}" alt="${lesson.title}" loading="lazy">
         <span class="dict-card-dur-badge"><i class="fa-regular fa-clock"></i> ${lesson.duration || '03:00'}</span>
         <span class="dict-card-level-badge level-${lesson.level || '1'}">${lesson.levelText || `HSK ${lesson.level || 1}`}</span>
-        <button class="dict-card-play-overlay-btn" title="Bắt đầu luyện chép">
+        ${isCompleted ? `<span class="dict-completed-badge" style="position: absolute; top: 10px; left: 10px; z-index: 4;"><i class="fa-solid fa-circle-check"></i> Đã Xong</span>` : ''}
+        <button class="dict-card-play-overlay-btn" title="Bắt đầu luyện tập">
           <i class="fa-solid fa-play"></i>
         </button>
       </div>
       <div class="dict-card-body">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
           ${isUserVideo
         ? `<span class="dict-card-cat-badge dict-my-badge"><i class="fa-solid fa-user-check"></i> Video Của Tôi</span>`
         : `<span class="dict-card-cat-badge"><i class="fa-solid fa-tag"></i> ${lesson.category || 'Tổng Hợp'}</span>`
       }
-          ${isUserVideo ? `
-            <button class="btn-delete-custom-video" onclick="event.stopPropagation(); window.deleteCustomVideo('${lesson.id}')" title="Xóa video khỏi danh sách của bạn">
-              <i class="fa-solid fa-trash-can"></i>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <button class="btn-toggle-completed ${isCompleted ? 'completed' : ''}" onclick="event.stopPropagation(); window.toggleLessonCompleted('${lesson.id}', event)" title="${isCompleted ? 'Bỏ đánh dấu hoàn thành' : 'Đánh dấu đã hoàn thành'}">
+              <i class="fa-solid ${isCompleted ? 'fa-circle-check' : 'fa-check'}"></i> ${isCompleted ? 'Đã học' : 'Xong'}
             </button>
-          ` : ''}
+            ${isUserVideo ? `
+              <button class="btn-delete-custom-video" onclick="event.stopPropagation(); window.deleteCustomVideo('${lesson.id}')" title="Xóa video khỏi danh sách của bạn">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            ` : ''}
+          </div>
         </div>
-        <h3 class="dict-card-title">${lesson.title}</h3>
-        <p class="dict-card-desc">${lesson.description || 'Bài luyện nghe chép chính tả qua video YouTube.'}</p>
+        <h3 class="dict-card-title" style="margin-bottom: 12px;">${lesson.title}</h3>
         <div class="dict-card-footer">
           <span class="dict-card-sentences-count"><i class="fa-solid fa-list-ol"></i> ${lesson.sentences?.length || 0} câu thoại</span>
-          <button class="btn btn-primary btn-sm btn-start-study">
-            <i class="fa-solid fa-pencil"></i> Luyện Chép
+          <button class="btn btn-primary btn-sm btn-start-study" style="${currentMode === 'shadowing' ? 'background: linear-gradient(135deg, #10b981, #059669);' : ''}">
+            <i class="fa-solid ${currentMode === 'shadowing' ? 'fa-microphone' : 'fa-pencil'}"></i> ${currentMode === 'shadowing' ? 'Luyện Shadowing' : 'Luyện Nghe Chép'}
           </button>
         </div>
       </div>
@@ -2080,8 +2749,9 @@ function renderCatalogGrid() {
   });
 }
 
-function filterLessons(category = 'all', level = 'all', keyword = '') {
+function filterLessons(category = 'all', level = 'all', keyword = '', status = 'all') {
   const email = getCurrentUserEmail();
+  const completedList = getCompletedVideos();
   filteredLessons = allLessons.filter(l => {
     let matchCat = false;
     if (category === 'all') {
@@ -2094,7 +2764,13 @@ function filterLessons(category = 'all', level = 'all', keyword = '') {
 
     const matchLvl = (level === 'all') || (String(l.level) === String(level));
     const matchKey = !keyword || l.title.toLowerCase().includes(keyword.toLowerCase()) || (l.description && l.description.toLowerCase().includes(keyword.toLowerCase()));
-    return matchCat && matchLvl && matchKey;
+    
+    let matchStatus = true;
+    const isDone = completedList.includes(l.id);
+    if (status === 'completed') matchStatus = isDone;
+    if (status === 'uncompleted') matchStatus = !isDone;
+
+    return matchCat && matchLvl && matchKey && matchStatus;
   });
   renderCatalogGrid();
 }
@@ -2102,9 +2778,11 @@ function filterLessons(category = 'all', level = 'all', keyword = '') {
 function openLessonWorkspace(lesson) {
   currentLesson = lesson;
   currentSentenceIdx = 0;
+  lastPausedSentenceIdx = -1;
   totalScore = 0;
   currentStreak = 0;
   userAnswers = {};
+  shadowSubMode = 'sentence';
 
   const catalogView = document.getElementById('dict-catalog-view');
   const workspaceView = document.getElementById('dict-workspace-view');
@@ -2121,6 +2799,16 @@ function openLessonWorkspace(lesson) {
     levelBadge.textContent = lesson.levelText || `HSK ${lesson.level || 1}`;
     levelBadge.className = `level-badge level-${lesson.level || '1'}`;
   }
+
+  // Update Completed Button in Workspace
+  updateWorkspaceCompletedButton();
+
+  // Switch to selected mode (shadowing or dictation)
+  switchMode(currentMode || 'shadowing');
+
+  // Populate Dubbing roles from speakers
+  populateDubbingRoles(lesson);
+  setShadowSubMode('sentence');
 
   // Load custom timing adjustments cache if exists
   try {
@@ -2156,6 +2844,23 @@ function openLessonWorkspace(lesson) {
 
   // Scroll to workspace top
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateWorkspaceCompletedButton() {
+  const btn = document.getElementById('workspace-btn-toggle-completed');
+  const textEl = document.getElementById('workspace-btn-completed-text');
+  if (!btn || !currentLesson) return;
+  const isDone = isLessonCompleted(currentLesson.id);
+  btn.classList.toggle('completed', isDone);
+  if (textEl) {
+    textEl.textContent = isDone ? '✓ Đã hoàn thành' : 'Đánh dấu đã học';
+  }
+}
+
+function toggleCurrentLessonCompleted() {
+  if (!currentLesson) return;
+  toggleLessonCompleted(currentLesson.id);
+  updateWorkspaceCompletedButton();
 }
 
 function returnToCatalog() {
@@ -2398,6 +3103,31 @@ async function initVideoDictationPage() {
   allLessons = Array.from(map.values());
   updateMyVideosBadge();
 
+  // Check URL mode parameter (shadowing vs dictation)
+  const params = new URLSearchParams(window.location.search);
+  const urlMode = params.get('mode');
+  if (urlMode === 'shadowing' || urlMode === 'dictation') {
+    currentMode = urlMode;
+    // Update active tab buttons if present
+    document.querySelectorAll('.mode-tab-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.mode === currentMode);
+    });
+
+    // Update Banner Texts dynamically
+    const bannerTag = document.getElementById('dict-banner-tag');
+    const bannerTitle = document.getElementById('dict-banner-title');
+    const heading = document.getElementById('dict-catalog-heading');
+    if (urlMode === 'shadowing') {
+      if (bannerTag) bannerTag.innerHTML = '<i class="fa-solid fa-microphone-lines"></i> LUYỆN SHADOWING BẢN XỨ';
+      if (bannerTitle) bannerTitle.textContent = 'Luyện Phản Xạ Nói & Shadowing Video';
+      if (heading) heading.innerHTML = '<i class="fa-solid fa-microphone-lines" style="color: #10b981;"></i> Video Luyện Shadowing';
+    } else if (urlMode === 'dictation') {
+      if (bannerTag) bannerTag.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> LUYỆN NGHE CHÉP CHÍNH TẢ';
+      if (bannerTitle) bannerTitle.textContent = 'Luyện Nghe Chép Chính Tả Video';
+      if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square" style="color: #38bdf8;"></i> Video Luyện Nghe Chép';
+    }
+  }
+
   filteredLessons = [...allLessons];
   renderCatalogGrid();
 
@@ -2405,7 +3135,6 @@ async function initVideoDictationPage() {
   setupEventListeners();
 
   // Check URL params (e.g. ?lesson=dict_lesson_1)
-  const params = new URLSearchParams(window.location.search);
   const lessonId = params.get('lesson');
   if (lessonId) {
     const target = allLessons.find(l => l.id === lessonId);
@@ -2418,9 +3147,9 @@ function setupEventListeners() {
   const filterSelect = document.getElementById('dict-category-filter');
   if (filterSelect) {
     filterSelect.addEventListener('change', () => {
-      const { cat, lvl } = getSelectedCategoryAndLevel();
+      const { cat, lvl, status } = getSelectedCategoryAndLevel();
       const searchVal = document.getElementById('dict-search-input')?.value.trim() || '';
-      filterLessons(cat, lvl, searchVal);
+      filterLessons(cat, lvl, searchVal, status);
     });
   }
 
@@ -2432,7 +3161,7 @@ function setupEventListeners() {
       const cat = btn.dataset.cat || 'all';
       const lvl = btn.dataset.level || 'all';
       const searchVal = document.getElementById('dict-search-input')?.value.trim() || '';
-      filterLessons(cat, lvl, searchVal);
+      filterLessons(cat, lvl, searchVal, 'all');
     });
   });
 
@@ -2440,8 +3169,8 @@ function setupEventListeners() {
   const searchInput = document.getElementById('dict-search-input');
   if (searchInput) {
     searchInput.addEventListener('input', (e) => {
-      const { cat, lvl } = getSelectedCategoryAndLevel();
-      filterLessons(cat, lvl, e.target.value.trim());
+      const { cat, lvl, status } = getSelectedCategoryAndLevel();
+      filterLessons(cat, lvl, e.target.value.trim(), status);
     });
   }
 
@@ -2505,6 +3234,13 @@ window.toggleHideVideo = toggleHideVideo;
 window.toggleShadowPinyin = toggleShadowPinyin;
 window.toggleShadowHanzi = toggleShadowHanzi;
 window.toggleShadowMeaning = toggleShadowMeaning;
+window.setShadowSubMode = setShadowSubMode;
+window.toggleShadowPassagePinyin = toggleShadowPassagePinyin;
+window.toggleShadowPassageMeaning = toggleShadowPassageMeaning;
+window.playFullPassage = playFullPassage;
+window.togglePassageRecording = togglePassageRecording;
+window.playPassageRecordingAudio = playPassageRecordingAudio;
+window.evaluatePassagePronunciation = evaluatePassagePronunciation;
 window.toggleTranscriptPinyin = toggleTranscriptPinyin;
 window.toggleTranscriptMeaning = toggleTranscriptMeaning;
 window.selectDubRole = selectDubRole;
@@ -2524,11 +3260,13 @@ window.evaluatePronunciation = evaluatePronunciation;
 window.playUserRecordingAudio = playUserRecordingAudio;
 window.playUserOrModelAudio = playUserOrModelAudio;
 window.previewDubbing = previewDubbing;
+window.stopDubbingPreview = stopDubbingPreview;
 window.checkCurrentAnswer = checkDictationAnswer; // Fallback
 window.showHint = showDictationHint; // Fallback
 window.revealAnswer = showDictationHint; // Fallback
 window.nextSentence = nextSentence;
 window.prevSentence = prevSentence;
+window.saveVocabWordToNotebook = saveVocabWordToNotebook;
 window.speakChinese = speakChinese;
 window.speakCurrentSentence = speakCurrentSentence;
 window.openHanziModal = openHanziModal;
@@ -2549,9 +3287,15 @@ window.openAddVideoModal = openAddVideoModal;
 window.closeAddVideoModal = closeAddVideoModal;
 window.jumpToSentence = function (idx) {
   currentSentenceIdx = idx;
+  lastPausedSentenceIdx = -1;
   renderCurrentSentence();
   playCurrentSentence();
 };
+
+window.toggleLessonCompleted = toggleLessonCompleted;
+window.toggleCurrentLessonCompleted = toggleCurrentLessonCompleted;
+window.getCompletedVideos = getCompletedVideos;
+window.isLessonCompleted = isLessonCompleted;
 
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {
@@ -2559,3 +3303,4 @@ if (document.readyState === 'loading') {
 } else {
   initVideoDictationPage();
 }
+
