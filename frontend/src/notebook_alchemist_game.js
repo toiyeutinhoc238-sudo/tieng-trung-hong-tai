@@ -647,6 +647,19 @@ export class AlchemistGameEngine {
       if (resScore) resScore.textContent = this.score;
       if (resStreak) resStreak.textContent = this.maxStreak;
       if (resWords) resWords.textContent = this.craftedCount;
+
+      const retryBtn = overlay.querySelector('#alchemist-retry-btn');
+      const backHubBtn = overlay.querySelector('#alchemist-back-hub-btn');
+      const finishBtn = overlay.querySelector('#alchemist-finish-btn');
+
+      if (retryBtn) retryBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.restart(); };
+      if (backHubBtn) backHubBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.stopAndExit(); };
+      if (finishBtn) finishBtn.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.stopAndExit();
+        if (typeof window.exitNotebookGamesHub === 'function') window.exitNotebookGamesHub();
+      };
     }
   }
 

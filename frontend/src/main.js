@@ -12312,23 +12312,22 @@ window.exitNotebookGamesHub = function() {
     showTopicsView();
   }
 
-  if (activeNotebookGamesHubInstance && activeNotebookGamesHubInstance.currentGameEngine) {
-    if (activeNotebookGamesHubInstance.currentGameEngine.stopAndExit) {
-      activeNotebookGamesHubInstance.currentGameEngine.stopAndExit();
+  if (activeNotebookGamesHubInstance) {
+    if (activeNotebookGamesHubInstance.currentGameEngine && activeNotebookGamesHubInstance.currentGameEngine.stopAndExit) {
+      try { activeNotebookGamesHubInstance.currentGameEngine.stopAndExit(); } catch {}
+    }
+    if (activeNotebookGamesHubInstance.exitHub) {
+      try { activeNotebookGamesHubInstance.exitHub(); } catch {}
     }
   }
   activeNotebookGamesHubInstance = null;
+
+  const hubMount = document.getElementById('notebook-games-hub-mount');
+  if (hubMount) hubMount.innerHTML = '';
 };
 
 function startGameArenaFromNotebook() {
   if (!activeNotebook) return;
-
-  const isSuper = currentUser && (!!currentUser.isSuperAdmin || currentUser.role === 'super_admin' || isSuperAdmin(currentUser.email));
-
-  if (!isSuper) {
-    showToast('🎮 Mini-Game Sổ Tay đang trong giai đoạn thử nghiệm nội bộ (Dành riêng cho Super Admin). Sắp ra mắt!', true);
-    return;
-  }
 
   // Get current words for active notebook
   let words = getNotebookWords(activeNotebook);
@@ -12351,8 +12350,8 @@ function startGameArenaFromNotebook() {
     words = words.filter(w => w.isStarred);
   }
 
-  if (words.length < 4) {
-    showToast('Cần ít nhất 4 từ vựng trong sổ tay này để mở trò chơi!', true);
+  if (words.length < 2) {
+    showToast('Cần ít nhất 2 từ vựng trong sổ tay này để mở trò chơi!', true);
     return;
   }
 
@@ -12373,13 +12372,21 @@ function startGameArenaFromNotebook() {
 
   const hubMount = document.getElementById('notebook-games-hub-mount');
   if (hubMount) {
-    if (activeNotebookGamesHubInstance && activeNotebookGamesHubInstance.exitHub) {
-      activeNotebookGamesHubInstance.exitHub();
+    if (activeNotebookGamesHubInstance) {
+      if (activeNotebookGamesHubInstance.currentGameEngine && activeNotebookGamesHubInstance.currentGameEngine.stopAndExit) {
+        try { activeNotebookGamesHubInstance.currentGameEngine.stopAndExit(); } catch {}
+      }
+      if (activeNotebookGamesHubInstance.exitHub) {
+        try { activeNotebookGamesHubInstance.exitHub(); } catch {}
+      }
     }
+    hubMount.innerHTML = '';
     activeNotebookGamesHubInstance = new NotebookGamesHub(hubMount, {
       words: words,
       title: notebookTitle,
       desc: notebookDesc,
+      notebookKey: activeNotebook,
+      hskVersion: activeHskVersion,
       currentUser: currentUser,
       onExit: () => {
         window.exitNotebookGamesHub();

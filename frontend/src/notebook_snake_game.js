@@ -920,6 +920,19 @@ export class SnakeGameEngine {
       if (resLevel) resLevel.textContent = `CẤP ${this.level}`;
       if (resScore) resScore.textContent = this.score;
       if (resWords) resWords.textContent = this.wordsEatenCorrect || 0;
+
+      const retryBtn = overlay.querySelector('#snake-retry-btn');
+      const backHubBtn = overlay.querySelector('#snake-back-hub-btn');
+      const finishBtn = overlay.querySelector('#snake-finish-btn');
+
+      if (retryBtn) retryBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.restart(); };
+      if (backHubBtn) backHubBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.stopAndExit(); };
+      if (finishBtn) finishBtn.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.stopAndExit();
+        if (typeof window.exitNotebookGamesHub === 'function') window.exitNotebookGamesHub();
+      };
     }
   }
 

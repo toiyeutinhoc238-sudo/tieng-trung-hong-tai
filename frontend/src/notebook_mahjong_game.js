@@ -717,6 +717,19 @@ export class MahjongGameEngine {
       if (resScore) resScore.textContent = this.score;
       if (resCombo) resCombo.textContent = this.maxCombo;
       if (resPairs) resPairs.textContent = this.totalPairs - this.pairsLeft;
+
+      const retryBtn = overlay.querySelector('#mahjong-retry-btn');
+      const backHubBtn = overlay.querySelector('#mahjong-back-hub-btn');
+      const finishBtn = overlay.querySelector('#mahjong-finish-btn');
+
+      if (retryBtn) retryBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.restart(); };
+      if (backHubBtn) backHubBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.stopAndExit(); };
+      if (finishBtn) finishBtn.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.stopAndExit();
+        if (typeof window.exitNotebookGamesHub === 'function') window.exitNotebookGamesHub();
+      };
     }
   }
 

@@ -547,16 +547,11 @@ export class CannonGameEngine {
         <div class="word-dash-line"></div>
       `;
 
-      // Allow clicking directly on word card to trigger hit
+      // Click on word card to speak pronunciation and focus input (do NOT auto-shoot)
       el.addEventListener('click', () => {
-        const idx = this.activeWords.findIndex(w => w.id === wordId);
-        if (idx !== -1) {
-          const w = this.activeWords[idx];
-          this.aimCannonAt(w.x, w.y);
-          this.fireProjectile(w.x, w.y, () => {
-            this.handleHitWord(idx);
-          });
-        }
+        if (window.speakText) window.speakText(randomWordObj.word);
+        const inp = this.container.querySelector('#cannon-pinyin-input');
+        if (inp) inp.focus();
       });
 
       layer.appendChild(el);
@@ -654,13 +649,18 @@ export class CannonGameEngine {
     const inputEl = this.container.querySelector('#cannon-pinyin-input');
     if (!norm) return;
 
-    const targetIdx = this.activeWords.findIndex(w => w.normPinyin === norm);
+    // Find lowest matching word that is not already targeted or destroyed
+    const eligibleWords = this.activeWords
+      .filter(w => !w.isDestroyed && !w.isTargeted && w.normPinyin === norm)
+      .sort((a, b) => b.y - a.y);
 
-    if (targetIdx !== -1) {
-      const target = this.activeWords[targetIdx];
+    if (eligibleWords.length > 0) {
+      const target = eligibleWords[0];
+      target.isTargeted = true;
+
       this.aimCannonAt(target.x, target.y);
       this.fireProjectile(target.x, target.y, () => {
-        this.handleHitWord(targetIdx);
+        this.handleHitWord(target);
       });
       if (inputEl) inputEl.value = '';
     } else {
@@ -706,11 +706,14 @@ export class CannonGameEngine {
     requestAnimationFrame(animateBullet);
   }
 
-  handleHitWord(idx) {
-    const item = this.activeWords[idx];
-    if (!item) return;
+  handleHitWord(targetItem) {
+    if (!targetItem || targetItem.isDestroyed) return;
+    targetItem.isDestroyed = true;
 
-    if (item.type === 'normal') {
+    const idx = this.activeWords.findIndex(w => w.id === targetItem.id);
+    if (idx === -1) return;
+
+    if (targetItem.type === 'normal') {
       this.sfx.playHit();
       const mult = this.score2xTimer > 0 ? 2 : 1;
       const pts = 10 * mult;
@@ -719,9 +722,9 @@ export class CannonGameEngine {
       this.wordsDestroyedCount = (this.wordsDestroyedCount || 0) + 1;
       if (this.combo > this.maxCombo) this.maxCombo = this.combo;
 
-      this.showFloatingText(item.x, item.y, `+${pts}`, '#10b981');
-      if (window.speakText) window.speakText(item.word);
-    } else if (item.type === 'bonus') {
+      this.showFloatingText(targetItem.x, targetItem.y, `+${pts}`, '#10b981');
+      if (window.speakText) window.speakText(targetItem.word);
+    } else if (targetItem.type === 'bonus') {
       this.sfx.playHit();
       const mult = this.score2xTimer > 0 ? 2 : 1;
       const pts = 25 * mult;
@@ -730,22 +733,22 @@ export class CannonGameEngine {
       this.wordsDestroyedCount = (this.wordsDestroyedCount || 0) + 1;
       if (this.combo > this.maxCombo) this.maxCombo = this.combo;
 
-      this.showFloatingText(item.x, item.y, `⭐ +${pts} (+5 Combo)`, '#fbbf24');
-      if (window.speakText) window.speakText(item.word);
-    } else if (item.type === 'bomb') {
+      this.showFloatingText(targetItem.x, targetItem.y, `⭐ +${pts} (+5 Combo)`, '#fbbf24');
+      if (window.speakText) window.speakText(targetItem.word);
+    } else if (targetItem.type === 'bomb') {
       this.sfx.playBomb();
       if (!this.hasShield) {
         this.score = Math.max(0, this.score - 10);
         this.combo = 0;
-        this.showFloatingText(item.x, item.y, `💣 NỔ BOM! -10 (Mất Combo)`, '#ef4444');
+        this.showFloatingText(targetItem.x, targetItem.y, `💣 NỔ BOM! -10 (Mất Combo)`, '#ef4444');
       } else {
         this.hasShield = false;
         this.shieldTimer = 0;
-        this.showFloatingText(item.x, item.y, `🛡️ Lá Chắn Đã Hút Bom!`, '#38bdf8');
+        this.showFloatingText(targetItem.x, targetItem.y, `🛡️ Lá Chắn Đã Hút Bom!`, '#38bdf8');
       }
     }
 
-    this.createExplosion(item.x + 40, item.y + 20, item.type);
+    this.createExplosion(targetItem.x + 40, targetItem.y + 20, targetItem.type);
     this.destroyWordByIndex(idx, true);
     this.updateHUD();
   }
@@ -894,6 +897,19 @@ export class CannonGameEngine {
       if (resScore) resScore.textContent = this.score;
       if (resCombo) resCombo.textContent = this.maxCombo;
       if (resWords) resWords.textContent = this.wordsDestroyedCount || 0;
+
+      const retryBtn = overlay.querySelector('#cannon-retry-btn');
+      const backHubBtn = overlay.querySelector('#cannon-back-hub-btn');
+      const finishBtn = overlay.querySelector('#cannon-finish-btn');
+
+      if (retryBtn) retryBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.restart(); };
+      if (backHubBtn) backHubBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.stopAndExit(); };
+      if (finishBtn) finishBtn.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.stopAndExit();
+        if (typeof window.exitNotebookGamesHub === 'function') window.exitNotebookGamesHub();
+      };
     }
   }
 
@@ -915,9 +931,22 @@ export class CannonGameEngine {
 
   stopAndExit() {
     this.isRunning = false;
-    if (this.timerInterval) clearInterval(this.timerInterval);
-    if (this.animFrameId) cancelAnimationFrame(this.animFrameId);
-    window.removeEventListener('keydown', this.keyHandler);
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
+    if (this.animFrameId) {
+      cancelAnimationFrame(this.animFrameId);
+      this.animFrameId = null;
+    }
+    if (this.keyHandler) {
+      window.removeEventListener('keydown', this.keyHandler);
+      this.keyHandler = null;
+    }
+    const wordsLayer = this.container.querySelector('#cannon-words-layer');
+    if (wordsLayer) wordsLayer.innerHTML = '';
+    const fxLayer = this.container.querySelector('#cannon-fx-layer');
+    if (fxLayer) fxLayer.innerHTML = '';
     if (this.onExit) this.onExit();
   }
 }

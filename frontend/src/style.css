@@ -11461,6 +11461,46 @@ html.dark .stepper-notes {
   gap: 20px;
 }
 
+.card-quiz-highlight {
+  border-top: 4px solid #6366f1 !important;
+  background: linear-gradient(145deg, rgba(99, 102, 241, 0.15), rgba(17, 24, 39, 0.85)) !important;
+  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.25) !important;
+  border-color: rgba(99, 102, 241, 0.3) !important;
+}
+
+.card-quiz-highlight:hover {
+  border-color: #818cf8 !important;
+  box-shadow: 0 16px 40px rgba(99, 102, 241, 0.4) !important;
+  transform: translateY(-4px) !important;
+}
+
+.card-locked-beta {
+  position: relative !important;
+  opacity: 0.85 !important;
+  border-style: dashed !important;
+}
+
+.card-locked-beta:hover {
+  opacity: 0.95 !important;
+}
+
+.card-locked-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(245, 158, 11, 0.25);
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  color: #fbbf24;
+  padding: 4px 10px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
 .card-alchemist {
   border-top: 4px solid #a855f7;
 }
@@ -12272,6 +12312,747 @@ html.dark .stepper-notes {
   background: linear-gradient(135deg, #ef4444, #b91c1c);
   box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
 }
+
+/* ==========================================================================
+   MINI-GAMES RESULT MODAL OVERLAY & BUTTONS (ALL 6 GAMES)
+   ========================================================================== */
+
+.cannon-modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(11, 15, 25, 0.88) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  z-index: 100000 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 20px !important;
+  box-sizing: border-box !important;
+  pointer-events: auto !important;
+}
+
+.cannon-result-card {
+  background: #111827 !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 24px !important;
+  padding: 32px 28px !important;
+  max-width: 480px !important;
+  width: 100% !important;
+  text-align: center !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(59, 130, 246, 0.25) !important;
+  position: relative !important;
+  z-index: 100001 !important;
+  pointer-events: auto !important;
+  animation: resultModalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
+}
+
+@keyframes resultModalPop {
+  0% { transform: scale(0.85); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.result-icon {
+  font-size: 3.5rem !important;
+  margin-bottom: 12px !important;
+  display: inline-block !important;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5)) !important;
+}
+
+.result-title {
+  font-size: 1.5rem !important;
+  font-weight: 900 !important;
+  color: #ffffff !important;
+  margin: 0 0 8px 0 !important;
+}
+
+.result-desc {
+  font-size: 0.9rem !important;
+  color: #94a3b8 !important;
+  margin: 0 0 20px 0 !important;
+  line-height: 1.5 !important;
+}
+
+.result-stats-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 10px !important;
+  margin-bottom: 18px !important;
+}
+
+.stat-pill {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 14px !important;
+  padding: 10px 6px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+.stat-pill .label {
+  font-size: 0.72rem !important;
+  color: #94a3b8 !important;
+  font-weight: 600 !important;
+}
+
+.stat-pill .val {
+  font-size: 1.25rem !important;
+  font-weight: 900 !important;
+  color: #38bdf8 !important;
+}
+
+.result-beta-note {
+  background: rgba(245, 158, 11, 0.1) !important;
+  border: 1px solid rgba(245, 158, 11, 0.25) !important;
+  border-radius: 12px !important;
+  padding: 8px 12px !important;
+  font-size: 0.78rem !important;
+  color: #fbbf24 !important;
+  margin-bottom: 20px !important;
+  line-height: 1.4 !important;
+}
+
+.cannon-result-card button {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  position: relative !important;
+  z-index: 100002 !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  transition: all 0.15s ease !important;
+}
+
+.cannon-result-card button:hover {
+  transform: translateY(-2px) scale(1.03) !important;
+}
+
+.cannon-result-card button:active {
+  transform: translateY(1px) scale(0.98) !important;
+}
+
+/* ==========================================================================
+   PLANTS VS ZOMBIES (PVZ 1) HANZI DEFENSE GAME STYLES
+   ========================================================================== */
+
+.card-pvz {
+  border-top: 4px solid #22c55e !important;
+  background: linear-gradient(145deg, rgba(34, 197, 94, 0.12), rgba(17, 24, 39, 0.85)) !important;
+  box-shadow: 0 10px 30px rgba(34, 197, 94, 0.2) !important;
+}
+
+.card-pvz:hover {
+  border-color: #4ade80 !important;
+  box-shadow: 0 16px 40px rgba(34, 197, 94, 0.35) !important;
+}
+
+.pvz-game-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  user-select: none;
+}
+
+.pvz-top-hud {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 8px 14px;
+  flex-wrap: wrap;
+}
+
+.pvz-sun-counter-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1.5px solid rgba(245, 158, 11, 0.4);
+  border-radius: 12px;
+  padding: 6px 14px;
+}
+
+.pvz-sun-counter-box .sun-icon {
+  font-size: 1.6rem;
+  filter: drop-shadow(0 2px 6px rgba(245, 158, 11, 0.6));
+}
+
+.pvz-sun-counter-box .sun-val {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: #fbbf24;
+}
+
+.pvz-seeds-bar {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 2px;
+  flex: 1;
+}
+
+.pvz-seed-card {
+  position: relative;
+  width: 62px;
+  height: 70px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 2px;
+  cursor: pointer;
+  opacity: 0.45;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.pvz-seed-card.affordable {
+  opacity: 1;
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.4);
+}
+
+.pvz-seed-card.selected {
+  border-color: #fbbf24 !important;
+  box-shadow: 0 0 14px rgba(251, 191, 36, 0.6) !important;
+  transform: translateY(-3px) scale(1.05);
+}
+
+.pvz-seed-card .seed-icon {
+  font-size: 1.5rem;
+}
+
+.pvz-seed-card .seed-name {
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #cbd5e1;
+  text-align: center;
+  line-height: 1;
+}
+
+.pvz-seed-card .seed-cost {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #fbbf24;
+}
+
+.seed-cooldown-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0%;
+  background: rgba(0, 0, 0, 0.65);
+  border-radius: 0 0 8px 8px;
+  pointer-events: none;
+  transition: height 0.1s linear;
+}
+
+.pvz-top-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.pvz-shovel-btn.active {
+  background: #f59e0b !important;
+  color: #000 !important;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.8) !important;
+}
+
+.pvz-lawn-container {
+  position: relative;
+  width: 100%;
+  height: 440px;
+  background: #15803d;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.5), 0 12px 30px rgba(0, 0, 0, 0.4);
+  display: flex;
+}
+
+.pvz-mowers-column {
+  width: 48px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.3);
+  border-right: 2px dashed rgba(255, 255, 255, 0.2);
+  z-index: 5;
+}
+
+.pvz-mower-slot {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pvz-lawnmower {
+  font-size: 2rem;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+}
+
+.pvz-lawn-grid {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.pvz-lawn-row {
+  flex: 1;
+  display: flex;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.pvz-lawn-cell {
+  flex: 1;
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.pvz-lawn-cell.cell-dark {
+  background: #166534;
+}
+
+.pvz-lawn-cell.cell-light {
+  background: #15803d;
+}
+
+.pvz-lawn-cell:hover {
+  background: rgba(74, 222, 128, 0.35) !important;
+}
+
+.pvz-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto;
+  cursor: crosshair;
+  z-index: 10;
+}
+
+.pvz-vocab-combat-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+  border: 1.5px solid rgba(59, 130, 246, 0.35);
+  border-radius: 16px;
+  padding: 12px 18px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  flex-wrap: wrap;
+}
+
+.vocab-prompt-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.vocab-tag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #38bdf8;
+  letter-spacing: 0.5px;
+}
+
+.vocab-q-text {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #ffffff;
+}
+
+.vocab-q-text .vocab-py {
+  font-size: 1.05rem;
+  color: #fbbf24;
+  font-weight: 700;
+  margin-left: 6px;
+}
+
+.vocab-answers-grid {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+  flex-wrap: wrap;
+}
+
+.pvz-vocab-btn {
+  flex: 1;
+  min-width: 120px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  color: #ffffff;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.pvz-vocab-btn:hover {
+  background: rgba(59, 130, 246, 0.25);
+  border-color: #3b82f6;
+  transform: translateY(-2px);
+}
+
+.pvz-vocab-btn.correct {
+  background: #10b981 !important;
+  border-color: #34d399 !important;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.6) !important;
+}
+
+.pvz-vocab-btn.wrong {
+  background: #ef4444 !important;
+  border-color: #f87171 !important;
+}
+
+.vocab-streak-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 12px;
+  padding: 6px 12px;
+}
+
+/* ==========================================================================
+   GAME 1: CANNON DEFENSE (BẮN PHÁO PINYIN) HIGH CONTRAST STYLES
+   ========================================================================== */
+
+.cannon-game-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  user-select: none;
+}
+
+.cannon-top-hud {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #0f172a !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 16px;
+  padding: 10px 16px;
+  flex-wrap: wrap;
+}
+
+.hud-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff !important;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.hud-value {
+  color: #38bdf8 !important;
+  font-weight: 900;
+  font-size: 1.1rem;
+}
+
+.cannon-main-stage {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .cannon-main-stage {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cannon-playfield {
+  position: relative;
+  background: radial-gradient(circle at 50% 100%, #1e1b4b 0%, #0f172a 70%) !important;
+  border: 2px solid rgba(99, 102, 241, 0.3) !important;
+  border-radius: 20px;
+  height: 480px;
+  overflow: hidden;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6), 0 10px 30px rgba(0,0,0,0.4);
+}
+
+.cannon-words-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto;
+}
+
+.cannon-word-card {
+  position: absolute;
+  padding: 8px 16px;
+  border-radius: 12px;
+  background: #1e293b !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transform: translateZ(0);
+  transition: transform 0.1s ease;
+  z-index: 5;
+}
+
+.cannon-word-card.type-normal {
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.35);
+}
+
+.cannon-word-card.type-bomb {
+  border-color: #ef4444 !important;
+  background: #450a0a !important;
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.5);
+}
+
+.cannon-word-card.type-bonus {
+  border-color: #fbbf24 !important;
+  background: #451a03 !important;
+  box-shadow: 0 0 14px rgba(251, 191, 36, 0.5);
+}
+
+.cannon-word-card .word-zh {
+  font-size: 1.25rem !important;
+  font-weight: 900 !important;
+  color: #ffffff !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.cannon-sidebar {
+  background: #0f172a !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 20px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cannon-shop-title {
+  font-size: 0.85rem !important;
+  font-weight: 900 !important;
+  color: #fbbf24 !important;
+  letter-spacing: 0.5px;
+  text-align: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cannon-skills-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cannon-skill-card {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  background: #1e293b !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 14px !important;
+  padding: 10px 12px !important;
+  cursor: pointer !important;
+  opacity: 0.55 !important;
+  text-align: left !important;
+  transition: all 0.15s ease !important;
+}
+
+.cannon-skill-card.affordable {
+  opacity: 1 !important;
+  border-color: #38bdf8 !important;
+  background: #1e293b !important;
+  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25) !important;
+}
+
+.cannon-skill-card.affordable:hover {
+  transform: translateY(-2px) !important;
+  border-color: #60a5fa !important;
+}
+
+.skill-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.skill-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.skill-name {
+  font-size: 0.85rem !important;
+  font-weight: 900 !important;
+  color: #ffffff !important;
+  letter-spacing: 0.3px;
+}
+
+.skill-desc {
+  font-size: 0.72rem !important;
+  color: #cbd5e1 !important;
+  line-height: 1.2;
+}
+
+.skill-cost-badge {
+  font-size: 0.82rem !important;
+  font-weight: 900 !important;
+  color: #fbbf24 !important;
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  padding: 3px 6px;
+  border-radius: 8px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.cannon-sidebar-combo-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #1e293b !important;
+  border: 1px solid rgba(249, 115, 22, 0.35) !important;
+  border-radius: 14px;
+  padding: 10px 14px;
+}
+
+.cannon-mascot-box {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mascot-tip {
+  font-size: 0.75rem !important;
+  color: #e2e8f0 !important;
+  line-height: 1.4;
+}
+
+.mascot-dragon-img {
+  font-size: 1.8rem;
+}
+
+.cannon-footer-rules {
+  background: #0f172a !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 18px;
+  padding: 16px 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 640px) {
+  .cannon-footer-rules {
+    grid-template-columns: 1fr;
+  }
+}
+
+.rules-title {
+  font-size: 0.85rem !important;
+  font-weight: 900 !important;
+  color: #fbbf24 !important;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+.word-types-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.word-type-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #1e293b !important;
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.word-type-item p {
+  font-size: 0.78rem !important;
+  color: #cbd5e1 !important;
+  margin: 0;
+  flex: 1;
+}
+
+.rules-list {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 0.8rem !important;
+  color: #cbd5e1 !important;
+  line-height: 1.6;
+}
+
+.cannon-input-bar {
+  display: flex;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #0f172a !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 16px;
+}
+
+.cannon-pinyin-input {
+  flex: 1;
+  background: #1e293b !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+}
+
+.cannon-pinyin-input:focus {
+  border-color: #38bdf8 !important;
+  outline: none;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.4) !important;
+}
+
+
 
 
 

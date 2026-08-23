@@ -1,7 +1,6 @@
 /**
- * Tiếng Trung HongTai - In-Notebook Games Hub Coordinator (Arcade 6 Mini-Games)
- * Tích hợp 6 Mini-Game học tập Native trực tiếp vào Sổ tay từ vựng
- * Giới hạn thử nghiệm: Super Admin Only
+ * Tiếng Trung HongTai - In-Notebook Games Hub Coordinator (Arcade 8 Mini-Games)
+ * Tích hợp Đấu Trường Quiz Game (Unlocked All) + 7 Mini-Game Arcade Native (Beta Super Admin)
  */
 
 import { CannonGameEngine } from './notebook_cannon_game.js';
@@ -10,6 +9,7 @@ import { AlchemistGameEngine } from './notebook_alchemist_game.js';
 import { MahjongGameEngine } from './notebook_mahjong_game.js';
 import { ToneRhythmGameEngine } from './notebook_tone_rhythm_game.js';
 import { GoldMinerGameEngine } from './notebook_goldminer_game.js';
+import { PvZGameEngine } from './notebook_pvz_game.js';
 
 function isSuperAdminUser(user) {
   if (!user) return false;
@@ -24,11 +24,14 @@ export class NotebookGamesHub {
     this.words = options.words || [];
     this.notebookTitle = options.title || 'Sổ tay Từ Vựng';
     this.notebookDesc = options.desc || 'Ôn tập tương tác trực tiếp';
+    this.notebookKey = options.notebookKey || '';
+    this.hskVersion = options.hskVersion || '3.0';
     this.currentUser = options.currentUser || null;
     this.onExit = options.onExit || (() => {});
 
     this.currentGameEngine = null;
     this.activeGameType = null;
+    this.messageListener = null;
 
     this.render();
   }
@@ -45,19 +48,22 @@ export class NotebookGamesHub {
               <i class="fa-solid fa-arrow-left"></i> Quay Lại Sổ Tay
             </button>
             <div>
-              <h2 class="games-hub-title"><i class="fa-solid fa-gamepad" style="color: #ec4899;"></i> Game Ôn Tập Sổ Tay (6 Mini-Games)</h2>
+              <h2 class="games-hub-title"><i class="fa-solid fa-gamepad" style="color: #ec4899;"></i> Game Ôn Tập Sổ Tay</h2>
               <p class="games-hub-sub">${this.notebookTitle} • ${this.words.length} từ vựng khả dụng</p>
             </div>
           </div>
 
           <div class="hub-header-badge">
-            <span class="beta-pill"><i class="fa-solid fa-crown" style="color: #fbbf24;"></i> Beta Thử Nghiệm Super Admin</span>
+            ${isSuper
+              ? '<span class="beta-pill"><i class="fa-solid fa-crown" style="color: #fbbf24;"></i> Super Admin (8 Games)</span>'
+              : '<span class="beta-pill" style="background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.4); color: #34d399;"><i class="fa-solid fa-circle-check"></i> Chế Độ Ôn Tập (Không Tính Điểm)</span>'
+            }
           </div>
         </div>
 
         <!-- MAIN HUB BODY -->
         <div id="games-hub-content" class="games-hub-content">
-          ${isSuper ? this.renderSelectorCards() : this.renderAccessDeniedCard()}
+          ${this.renderSelectorCards(isSuper)}
         </div>
       </div>
     `;
@@ -65,7 +71,7 @@ export class NotebookGamesHub {
     this.bindHubEvents();
   }
 
-  renderSelectorCards() {
+  renderSelectorCards(isSuper) {
     return `
       <div class="games-selector-container">
         <div class="games-selector-intro">
@@ -74,8 +80,46 @@ export class NotebookGamesHub {
         </div>
 
         <div class="games-selector-grid-6">
+          <!-- CARD GAME 0: QUIZ GAME (UNLOCKED ALL) -->
+          <div class="game-choice-card card-quiz-highlight" id="btn-choose-quiz" style="cursor: pointer;">
+            <div class="card-tag" style="background: rgba(99, 102, 241, 0.25); color: #a5b4fc; border-color: rgba(99, 102, 241, 0.45);">
+              ⭐ GAME ĐỀ XUẤT • TRẮC NGHIỆM 4 ĐÁP ÁN
+            </div>
+            <div class="card-icon-hero">🎮 ⚡</div>
+            <h3 class="card-title">Đấu Trường Quiz Game</h3>
+            <p class="card-desc">
+              Trò chơi trắc nghiệm 4 đáp án kiểu Quizizz kinh điển! Ôn tập nhận diện chữ Hán, Pinyin, nghĩa tiếng Việt và phản xạ nghe âm thanh với chuỗi Combo nhân điểm!
+            </p>
+            <div class="card-features">
+              <span><i class="fa-solid fa-brain"></i> 4 Lựa chọn nhanh</span>
+              <span><i class="fa-solid fa-shield-halved"></i> Ôn tập tự do (Không trừ điểm)</span>
+            </div>
+            <button type="button" class="btn btn-primary game-launch-btn" style="background: linear-gradient(135deg, #6366f1, #4f46e5); box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);">
+              Chơi Quiz Game Ngay <i class="fa-solid fa-play"></i>
+            </button>
+          </div>
+
+          <!-- CARD GAME PVZ: PLANTS VS ZOMBIES 1 -->
+          <div class="game-choice-card card-pvz ${!isSuper ? 'card-locked-beta' : ''}" id="btn-choose-pvz" style="cursor: pointer;">
+            ${!isSuper ? '<div class="card-locked-badge"><i class="fa-solid fa-lock"></i> Beta Admin</div>' : ''}
+            <div class="card-tag" style="background: rgba(34, 197, 94, 0.2); color: #4ade80; border-color: rgba(34, 197, 94, 0.4);">🌻 PLANTS VS ZOMBIES 1 • CHIẾN THUẬT</div>
+            <div class="card-icon-hero">🌻 🧟</div>
+            <h3 class="card-title">Đại Chiến Zombie Từ Vựng</h3>
+            <p class="card-desc">
+              Thủ thành sân cỏ 5 làn kinh điển PvZ 1! Trồng <strong>9 loại cây</strong> bảo vệ ngôi nhà trước đàn Zombie. Giải từ vựng nhận <strong>+75☀️ Mặt Trời</strong> và bão đạn liên thanh!
+            </p>
+            <div class="card-features">
+              <span><i class="fa-solid fa-seedling"></i> 9 Cây trồng PvZ 1</span>
+              <span><i class="fa-solid fa-bolt"></i> Giải từ nạp +75☀️</span>
+            </div>
+            <button type="button" class="btn btn-primary game-launch-btn" style="background: linear-gradient(135deg, #22c55e, #15803d);">
+              ${isSuper ? 'Chơi Plants vs Zombies <i class="fa-solid fa-play"></i>' : '<i class="fa-solid fa-lock"></i> Thử Nghiệm Admin'}
+            </button>
+          </div>
+
           <!-- CARD GAME 1: CANNON -->
-          <div class="game-choice-card card-cannon" id="btn-choose-cannon" style="cursor: pointer;">
+          <div class="game-choice-card card-cannon ${!isSuper ? 'card-locked-beta' : ''}" id="btn-choose-cannon" style="cursor: pointer;">
+            ${!isSuper ? '<div class="card-locked-badge"><i class="fa-solid fa-lock"></i> Beta Admin</div>' : ''}
             <div class="card-tag">PHẢN XẠ PINYIN & BẢN ĐỒ BOM</div>
             <div class="card-icon-hero">💥 🚀</div>
             <h3 class="card-title">Bắn Pháo Pinyin</h3>
@@ -86,11 +130,14 @@ export class NotebookGamesHub {
               <span><i class="fa-solid fa-bolt"></i> Luyện gõ Pinyin</span>
               <span><i class="fa-solid fa-snowflake"></i> Kỹ năng làm chậm</span>
             </div>
-            <button type="button" class="btn btn-primary game-launch-btn">Chơi Bắn Pháo <i class="fa-solid fa-play"></i></button>
+            <button type="button" class="btn btn-primary game-launch-btn">
+              ${isSuper ? 'Chơi Bắn Pháo <i class="fa-solid fa-play"></i>' : '<i class="fa-solid fa-lock"></i> Thử Nghiệm Admin'}
+            </button>
           </div>
 
           <!-- CARD GAME 2: SNAKE -->
-          <div class="game-choice-card card-snake" id="btn-choose-snake" style="cursor: pointer;">
+          <div class="game-choice-card card-snake ${!isSuper ? 'card-locked-beta' : ''}" id="btn-choose-snake" style="cursor: pointer;">
+            ${!isSuper ? '<div class="card-locked-badge"><i class="fa-solid fa-lock"></i> Beta Admin</div>' : ''}
             <div class="card-tag" style="background: rgba(16, 185, 129, 0.2); color: #34d399; border-color: rgba(16, 185, 129, 0.4);">NHẬN DIỆN MẶT CHỮ & NGHĨA</div>
             <div class="card-icon-hero">🐍 🍏</div>
             <h3 class="card-title">Nuôi Rắn Từ Vựng</h3>
@@ -101,11 +148,14 @@ export class NotebookGamesHub {
               <span><i class="fa-solid fa-book-open"></i> Nhớ nghĩa tiếng Việt</span>
               <span><i class="fa-solid fa-layer-group"></i> 5 Cấp độ thử thách</span>
             </div>
-            <button type="button" class="btn btn-primary game-launch-btn" style="background: linear-gradient(135deg, #10b981, #059669);">Chơi Nuôi Rắn <i class="fa-solid fa-play"></i></button>
+            <button type="button" class="btn btn-primary game-launch-btn" style="background: linear-gradient(135deg, #10b981, #059669);">
+              ${isSuper ? 'Chơi Nuôi Rắn <i class="fa-solid fa-play"></i>' : '<i class="fa-solid fa-lock"></i> Thử Nghiệm Admin'}
+            </button>
           </div>
 
           <!-- CARD GAME 3: ALCHEMIST -->
-          <div class="game-choice-card card-alchemist" id="btn-choose-alchemist" style="cursor: pointer;">
+          <div class="game-choice-card card-alchemist ${!isSuper ? 'card-locked-beta' : ''}" id="btn-choose-alchemist" style="cursor: pointer;">
+            ${!isSuper ? '<div class="card-locked-badge"><i class="fa-solid fa-lock"></i> Beta Admin</div>' : ''}
             <div class="card-tag" style="background: rgba(168, 85, 247, 0.2); color: #c084fc; border-color: rgba(168, 85, 247, 0.4);">CHIẾT TỰ & BỘ THỦ</div>
             <div class="card-icon-hero">⚗️ ✨</div>
             <h3 class="card-title">Lò Luyện Chiết Tự</h3>
@@ -116,11 +166,14 @@ export class NotebookGamesHub {
               <span><i class="fa-solid fa-gem"></i> Nhớ sâu gốc rễ bộ thủ</span>
               <span><i class="fa-solid fa-wand-magic-sparkles"></i> Luyện hợp thể chữ</span>
             </div>
-            <button type="button" class="btn btn-primary game-launch-btn" style="background: linear-gradient(135deg, #a855f7, #7e22ce);">Chơi Luyện Chữ <i class="fa-solid fa-play"></i></button>
+            <button type="button" class="btn btn-primary game-launch-btn" style="background: linear-gradient(135deg, #a855f7, #7e22ce);">
+              ${isSuper ? 'Chơi Luyện Chữ <i class="fa-solid fa-play"></i>' : '<i class="fa-solid fa-lock"></i> Thử Nghiệm Admin'}
+            </button>
           </div>
 
           <!-- CARD GAME 4: MAHJONG -->
-          <div class="game-choice-card card-mahjong" id="btn-choose-mahjong" style="cursor: pointer;">
+          <div class="game-choice-card card-mahjong ${!isSuper ? 'card-locked-beta' : ''}" id="btn-choose-mahjong" style="cursor: pointer;">
+            ${!isSuper ? '<div class="card-locked-badge"><i class="fa-solid fa-lock"></i> Beta Admin</div>' : ''}
             <div class="card-tag" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border-color: rgba(245, 158, 11, 0.4);">PHẢN XẠ NỐI CẶP ONET</div>
             <div class="card-icon-hero">🀄 🔍</div>
             <h3 class="card-title">Mạt Chược Nối Từ</h3>
@@ -131,11 +184,14 @@ export class NotebookGamesHub {
               <span><i class="fa-solid fa-link"></i> Nối đường gấp khúc</span>
               <span><i class="fa-solid fa-shuffle"></i> Gió lốc & Bom hỗ trợ</span>
             </div>
-            <button type="button" class="btn btn-primary game-launch-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706);">Chơi Mạt Chược <i class="fa-solid fa-play"></i></button>
+            <button type="button" class="btn btn-primary game-launch-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+              ${isSuper ? 'Chơi Mạt Chược <i class="fa-solid fa-play"></i>' : '<i class="fa-solid fa-lock"></i> Thử Nghiệm Admin'}
+            </button>
           </div>
 
           <!-- CARD GAME 5: RHYTHM -->
-          <div class="game-choice-card card-rhythm" id="btn-choose-rhythm" style="cursor: pointer;">
+          <div class="game-choice-card card-rhythm ${!isSuper ? 'card-locked-beta' : ''}" id="btn-choose-rhythm" style="cursor: pointer;">
+            ${!isSuper ? '<div class="card-locked-badge"><i class="fa-solid fa-lock"></i> Beta Admin</div>' : ''}
             <div class="card-tag" style="background: rgba(236, 72, 153, 0.2); color: #f472b6; border-color: rgba(236, 72, 153, 0.4);">ÂM NHẠC & BẮT THANH ĐIỆU</div>
             <div class="card-icon-hero">🎵 🎹</div>
             <h3 class="card-title">Phím Đàn Thanh Điệu</h3>
@@ -146,11 +202,14 @@ export class NotebookGamesHub {
               <span><i class="fa-solid fa-headphones"></i> Luyện đôi tai bắt thanh điệu</span>
               <span><i class="fa-solid fa-fire"></i> Chuỗi Fever Mode</span>
             </div>
-            <button type="button" class="btn btn-primary game-launch-btn" style="background: linear-gradient(135deg, #ec4899, #be185d);">Chơi Phím Đàn <i class="fa-solid fa-play"></i></button>
+            <button type="button" class="btn btn-primary game-launch-btn" style="background: linear-gradient(135deg, #ec4899, #be185d);">
+              ${isSuper ? 'Chơi Phím Đàn <i class="fa-solid fa-play"></i>' : '<i class="fa-solid fa-lock"></i> Thử Nghiệm Admin'}
+            </button>
           </div>
 
           <!-- CARD GAME 6: GOLD MINER -->
-          <div class="game-choice-card card-miner" id="btn-choose-miner" style="cursor: pointer;">
+          <div class="game-choice-card card-miner ${!isSuper ? 'card-locked-beta' : ''}" id="btn-choose-miner" style="cursor: pointer;">
+            ${!isSuper ? '<div class="card-locked-badge"><i class="fa-solid fa-lock"></i> Beta Admin</div>' : ''}
             <div class="card-tag" style="background: rgba(14, 165, 233, 0.2); color: #38bdf8; border-color: rgba(14, 165, 233, 0.4);">CĂN GÓC THẢ NEO & TRƯỜNG NGHĨA</div>
             <div class="card-icon-hero">⛏️ 💎</div>
             <h3 class="card-title">Thợ Mỏ Đào Vàng</h3>
@@ -161,31 +220,18 @@ export class NotebookGamesHub {
               <span><i class="fa-solid fa-anchor"></i> Căn góc mỏ neo</span>
               <span><i class="fa-solid fa-coins"></i> Vượt 3 màn đào vàng</span>
             </div>
-            <button type="button" class="btn btn-primary game-launch-btn" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">Chơi Đào Vàng <i class="fa-solid fa-play"></i></button>
+            <button type="button" class="btn btn-primary game-launch-btn" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">
+              ${isSuper ? 'Chơi Đào Vàng <i class="fa-solid fa-play"></i>' : '<i class="fa-solid fa-lock"></i> Thử Nghiệm Admin'}
+            </button>
           </div>
         </div>
       </div>
     `;
   }
 
-  renderAccessDeniedCard() {
-    return `
-      <div class="games-access-denied-card">
-        <div style="font-size: 3.5rem; margin-bottom: 14px;">🔒</div>
-        <h3 style="font-size: 1.4rem; font-weight: 800; color: #fbbf24; margin-bottom: 8px;">Tính Năng Đang Thử Nghiệm Nội Bộ</h3>
-        <p style="color: #cbd5e1; font-size: 0.95rem; max-width: 520px; margin: 0 auto 20px auto; line-height: 1.6;">
-          Hệ thống <strong>6 Mini-Game Sổ Tay Arcade</strong> hiện đang trong giai đoạn thử nghiệm nội bộ dành riêng cho tài khoản <strong>Super Admin</strong>.
-          <br><br>
-          Tính năng sẽ sớm được phát hành chính thức cho toàn bộ học viên!
-        </p>
-        <button type="button" id="btn-denied-back" class="btn btn-primary" style="padding: 10px 24px; border-radius: 50px; font-weight: 800; cursor: pointer;">
-          Quay lại Sổ tay
-        </button>
-      </div>
-    `;
-  }
-
   bindHubEvents() {
+    const isSuper = isSuperAdminUser(this.currentUser);
+
     const backBtn = this.container.querySelector('#games-hub-back-btn');
     if (backBtn) {
       backBtn.addEventListener('click', (e) => {
@@ -194,16 +240,18 @@ export class NotebookGamesHub {
       });
     }
 
-    const deniedBack = this.container.querySelector('#btn-denied-back');
-    if (deniedBack) {
-      deniedBack.addEventListener('click', (e) => {
+    // Quiz Game card (Unlocked for everyone)
+    const quizCard = this.container.querySelector('#btn-choose-quiz');
+    if (quizCard) {
+      quizCard.addEventListener('click', (e) => {
         e.preventDefault();
-        this.exitHub();
+        this.launchGame('quiz');
       });
     }
 
-    // Connect all 6 Game Cards
-    const games = [
+    // Native Mini-Games
+    const nativeGames = [
+      { id: '#btn-choose-pvz', type: 'pvz' },
       { id: '#btn-choose-cannon', type: 'cannon' },
       { id: '#btn-choose-snake', type: 'snake' },
       { id: '#btn-choose-alchemist', type: 'alchemist' },
@@ -212,12 +260,18 @@ export class NotebookGamesHub {
       { id: '#btn-choose-miner', type: 'miner' }
     ];
 
-    games.forEach(g => {
+    nativeGames.forEach(g => {
       const card = this.container.querySelector(g.id);
       if (card) {
         card.addEventListener('click', (e) => {
           e.preventDefault();
-          this.launchGame(g.type);
+          if (isSuper) {
+            this.launchGame(g.type);
+          } else {
+            if (typeof window.showToast === 'function') {
+              window.showToast('🔒 Trò chơi này đang trong giai đoạn thử nghiệm nội bộ cho Super Admin. Bạn hãy chơi Đấu Trường Quiz Game nhé!', true);
+            }
+          }
         });
       }
     });
@@ -235,12 +289,66 @@ export class NotebookGamesHub {
     if (!contentArea) return;
 
     this.activeGameType = gameType;
+
+    if (gameType === 'quiz') {
+      const params = new URLSearchParams();
+      params.set('source', 'notebook');
+      params.set('no_score', 'true');
+      if (this.notebookKey) params.set('notebook', this.notebookKey);
+      if (this.hskVersion) params.set('version', this.hskVersion);
+
+      contentArea.innerHTML = `
+        <div class="embedded-quiz-wrapper" style="width: 100%; display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 14px; padding: 8px 16px;">
+            <button type="button" id="btn-quiz-return-hub" class="btn btn-secondary btn-sm" style="display: flex; align-items: center; gap: 6px; border-radius: 50px; font-weight: 700; cursor: pointer;">
+              <i class="fa-solid fa-arrow-left"></i> Đổi Trò Chơi
+            </button>
+            <div style="font-size: 0.9rem; font-weight: 800; color: #fbbf24; display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-gamepad" style="color: #6366f1;"></i> Đấu Trường Quiz Game (Ôn Tập Sổ Tay)
+            </div>
+            <button type="button" id="btn-quiz-exit-all" class="btn btn-outline btn-sm" style="border-radius: 50px; font-weight: 700; cursor: pointer;">
+              <i class="fa-solid fa-book-bookmark"></i> Sổ Tay
+            </button>
+          </div>
+          <iframe id="notebook-quiz-iframe" src="/quiz-game.html?${params.toString()}" style="width: 100%; height: 750px; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 18px; background: #0f172a;" frameborder="0" allow="autoplay"></iframe>
+        </div>
+      `;
+
+      const returnHubBtn = contentArea.querySelector('#btn-quiz-return-hub');
+      if (returnHubBtn) {
+        returnHubBtn.onclick = (e) => {
+          e.preventDefault();
+          this.returnToSelector();
+        };
+      }
+
+      const exitAllBtn = contentArea.querySelector('#btn-quiz-exit-all');
+      if (exitAllBtn) {
+        exitAllBtn.onclick = (e) => {
+          e.preventDefault();
+          this.exitHub();
+        };
+      }
+
+      if (!this.messageListener) {
+        this.messageListener = (event) => {
+          if (event.data && (event.data.type === 'CLOSE_GAME_IFRAME' || event.data.type === 'EXIT_GAME')) {
+            this.returnToSelector();
+          }
+        };
+        window.addEventListener('message', this.messageListener);
+      }
+      return;
+    }
+
     contentArea.innerHTML = '<div id="game-active-viewport" class="game-active-viewport"></div>';
     const viewport = contentArea.querySelector('#game-active-viewport');
 
     const onExit = () => this.returnToSelector();
 
-    if (gameType === 'cannon') {
+    if (gameType === 'pvz') {
+      this.currentGameEngine = new PvZGameEngine(viewport, this.words, onExit);
+    } else if (gameType === 'cannon') {
       this.currentGameEngine = new CannonGameEngine(viewport, this.words, onExit);
     } else if (gameType === 'snake') {
       this.currentGameEngine = new SnakeGameEngine(viewport, this.words, onExit);
@@ -265,6 +373,10 @@ export class NotebookGamesHub {
     }
     this.currentGameEngine = null;
     this.activeGameType = null;
+    if (this.messageListener) {
+      window.removeEventListener('message', this.messageListener);
+      this.messageListener = null;
+    }
     this.render();
   }
 
@@ -274,6 +386,10 @@ export class NotebookGamesHub {
     }
     this.currentGameEngine = null;
     this.activeGameType = null;
+    if (this.messageListener) {
+      window.removeEventListener('message', this.messageListener);
+      this.messageListener = null;
+    }
     if (this.onExit) {
       this.onExit();
     }

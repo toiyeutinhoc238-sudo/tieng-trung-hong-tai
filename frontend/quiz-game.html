@@ -1799,6 +1799,14 @@
     }
 
     function saveGameHistory() {
+      // If played from notebook review mode or no_score=true, DO NOT save score or send to server
+      const urlParams = new URLSearchParams(window.location.search);
+      const isNotebookMode = urlParams.get('source') === 'notebook' || urlParams.get('no_score') === 'true' || urlParams.get('notebook') || urlParams.get('review_mode') === 'true';
+      if (isNotebookMode) {
+        console.log("Notebook practice mode: skipping game history and rank score sync.");
+        return;
+      }
+
       if (!playedHistory || playedHistory.length === 0) return;
       const playedCount = playedHistory.length;
       const levelVal = selLevel ? selLevel.value : 'all';

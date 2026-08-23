@@ -567,6 +567,19 @@ export class ToneRhythmGameEngine {
       if (resScore) resScore.textContent = this.score;
       if (resCombo) resCombo.textContent = this.maxCombo;
       if (resNotes) resNotes.textContent = this.notesHitCount;
+
+      const retryBtn = overlay.querySelector('#rhythm-retry-btn');
+      const backHubBtn = overlay.querySelector('#rhythm-back-hub-btn');
+      const finishBtn = overlay.querySelector('#rhythm-finish-btn');
+
+      if (retryBtn) retryBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.restart(); };
+      if (backHubBtn) backHubBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.stopAndExit(); };
+      if (finishBtn) finishBtn.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.stopAndExit();
+        if (typeof window.exitNotebookGamesHub === 'function') window.exitNotebookGamesHub();
+      };
     }
   }
 

@@ -718,6 +718,19 @@ export class GoldMinerGameEngine {
       if (resLevel) resLevel.textContent = `MÀN ${this.level}`;
       if (resScore) resScore.textContent = `$${this.score}`;
       if (resWords) resWords.textContent = this.targetsGrabbedCount;
+
+      const retryBtn = overlay.querySelector('#miner-retry-btn');
+      const backHubBtn = overlay.querySelector('#miner-back-hub-btn');
+      const finishBtn = overlay.querySelector('#miner-finish-btn');
+
+      if (retryBtn) retryBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.restart(); };
+      if (backHubBtn) backHubBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.stopAndExit(); };
+      if (finishBtn) finishBtn.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.stopAndExit();
+        if (typeof window.exitNotebookGamesHub === 'function') window.exitNotebookGamesHub();
+      };
     }
   }
 
