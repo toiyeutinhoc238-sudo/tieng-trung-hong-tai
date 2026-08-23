@@ -152,9 +152,12 @@ export class CannonGameEngine {
             <span class="hud-value" id="cannon-timer-val">01:00</span>
           </div>
 
-          <div style="margin-left: auto; display: flex; gap: 8px;">
-            <button id="cannon-pause-btn" class="btn btn-outline btn-sm" title="Tạm dừng"><i class="fa-solid fa-pause"></i></button>
-            <button id="cannon-exit-btn" class="btn btn-outline btn-sm" title="Thoát về sổ tay"><i class="fa-solid fa-xmark"></i></button>
+          <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+            <button type="button" id="cannon-pause-btn" class="btn btn-outline btn-sm" title="Tạm dừng"><i class="fa-solid fa-pause"></i></button>
+            <button type="button" id="cannon-back-hub-top-btn" class="btn btn-secondary btn-sm" title="Đổi trò chơi khác" style="display: flex; align-items: center; gap: 6px; font-weight: 700; border-radius: 50px; padding: 6px 14px;">
+              <i class="fa-solid fa-arrow-left"></i> Đổi Game
+            </button>
+            <button type="button" id="cannon-exit-btn" class="btn btn-outline btn-sm" title="Thoát về sổ tay"><i class="fa-solid fa-xmark"></i></button>
           </div>
         </div>
 
@@ -351,13 +354,6 @@ export class CannonGameEngine {
     const retryBtn = this.container.querySelector('#cannon-retry-btn');
     const backHubBtn = this.container.querySelector('#cannon-back-hub-btn');
     const finishBtn = this.container.querySelector('#cannon-finish-btn');
-
-    if (topBackBtn) {
-      topBackBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        this.stopAndExit();
-      });
-    }
 
     if (inputEl) {
       inputEl.addEventListener('input', () => this.handleInput(inputEl.value));
@@ -930,6 +926,8 @@ export class CannonGameEngine {
   }
 
   stopAndExit() {
+    if (this.isStopping) return;
+    this.isStopping = true;
     this.isRunning = false;
     if (this.timerInterval) {
       clearInterval(this.timerInterval);
@@ -947,6 +945,10 @@ export class CannonGameEngine {
     if (wordsLayer) wordsLayer.innerHTML = '';
     const fxLayer = this.container.querySelector('#cannon-fx-layer');
     if (fxLayer) fxLayer.innerHTML = '';
-    if (this.onExit) this.onExit();
+    const cb = this.onExit;
+    this.onExit = null;
+    if (typeof cb === 'function') {
+      cb();
+    }
   }
 }

@@ -12313,14 +12313,12 @@ window.exitNotebookGamesHub = function() {
   }
 
   if (activeNotebookGamesHubInstance) {
-    if (activeNotebookGamesHubInstance.currentGameEngine && activeNotebookGamesHubInstance.currentGameEngine.stopAndExit) {
-      try { activeNotebookGamesHubInstance.currentGameEngine.stopAndExit(); } catch {}
-    }
-    if (activeNotebookGamesHubInstance.exitHub) {
-      try { activeNotebookGamesHubInstance.exitHub(); } catch {}
+    const hub = activeNotebookGamesHubInstance;
+    activeNotebookGamesHubInstance = null;
+    if (hub.currentGameEngine && hub.currentGameEngine.stopAndExit) {
+      try { hub.currentGameEngine.stopAndExit(); } catch {}
     }
   }
-  activeNotebookGamesHubInstance = null;
 
   const hubMount = document.getElementById('notebook-games-hub-mount');
   if (hubMount) hubMount.innerHTML = '';
@@ -12373,11 +12371,10 @@ function startGameArenaFromNotebook() {
   const hubMount = document.getElementById('notebook-games-hub-mount');
   if (hubMount) {
     if (activeNotebookGamesHubInstance) {
-      if (activeNotebookGamesHubInstance.currentGameEngine && activeNotebookGamesHubInstance.currentGameEngine.stopAndExit) {
-        try { activeNotebookGamesHubInstance.currentGameEngine.stopAndExit(); } catch {}
-      }
-      if (activeNotebookGamesHubInstance.exitHub) {
-        try { activeNotebookGamesHubInstance.exitHub(); } catch {}
+      const hub = activeNotebookGamesHubInstance;
+      activeNotebookGamesHubInstance = null;
+      if (hub.currentGameEngine && hub.currentGameEngine.stopAndExit) {
+        try { hub.currentGameEngine.stopAndExit(); } catch {}
       }
     }
     hubMount.innerHTML = '';

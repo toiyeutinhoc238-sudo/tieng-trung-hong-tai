@@ -266,7 +266,10 @@ export class PvZGameEngine {
               <i class="fa-solid fa-trowel"></i> XẺNG
             </button>
             <button type="button" id="pvz-pause-btn" class="btn btn-outline btn-sm" title="Tạm dừng"><i class="fa-solid fa-pause"></i></button>
-            <button type="button" id="pvz-exit-btn" class="btn btn-outline btn-sm" title="Thoát"><i class="fa-solid fa-xmark"></i></button>
+            <button type="button" id="pvz-back-hub-top-btn" class="btn btn-secondary btn-sm" title="Đổi trò chơi khác" style="display: flex; align-items: center; gap: 6px; font-weight: 700; border-radius: 50px; padding: 6px 14px;">
+              <i class="fa-solid fa-arrow-left"></i> Đổi Game
+            </button>
+            <button type="button" id="pvz-exit-btn" class="btn btn-outline btn-sm" title="Quay lại Sổ tay"><i class="fa-solid fa-xmark"></i></button>
           </div>
         </div>
 
@@ -1224,6 +1227,71 @@ export class PvZGameEngine {
     });
   }
 
+  bindEvents() {
+    const pauseBtn = this.container.querySelector('#pvz-pause-btn');
+    const backHubTopBtn = this.container.querySelector('#pvz-back-hub-top-btn');
+    const exitBtn = this.container.querySelector('#pvz-exit-btn');
+    const shovelBtn = this.container.querySelector('#pvz-shovel-btn');
+
+    if (pauseBtn) pauseBtn.addEventListener('click', () => this.togglePause());
+    if (backHubTopBtn) {
+      backHubTopBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.stopAndExit();
+      });
+    }
+    if (exitBtn) {
+      exitBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.stopAndExit();
+        if (typeof window.exitNotebookGamesHub === 'function') window.exitNotebookGamesHub();
+      });
+    }
+
+    if (shovelBtn) {
+      shovelBtn.addEventListener('click', () => {
+        this.selectedSeedType = this.selectedSeedType === 'shovel' ? null : 'shovel';
+        this.updateSeedSelectionUI();
+        if (this.selectedSeedType === 'shovel') {
+          this.showToast('⛏️ Đã chọn Xẻng: Click vào ô có cây để đào bỏ!');
+        }
+      });
+    }
+
+    // Seed cards selection
+    this.container.querySelectorAll('.pvz-seed-card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        e.preventDefault();
+        const type = card.dataset.type;
+        const pDef = this.plantDefs[type];
+        if (!pDef) return;
+
+        if (this.suns < pDef.cost) {
+          this.showToast(`⚠️ Không đủ Mặt Trời! Cần ${pDef.cost}☀️ (Hiện có ${this.suns}☀️)`);
+          return;
+        }
+
+        if (this.seedCooldowns[type] > 0) {
+          this.showToast('⏳ Cây đang trong thời gian hồi chiêu!');
+          return;
+        }
+
+        this.selectedSeedType = this.selectedSeedType === type ? null : type;
+        this.updateSeedSelectionUI();
+      });
+    });
+  }
+
+  updateSeedSelectionUI() {
+    this.container.querySelectorAll('.pvz-seed-card').forEach(c => {
+      c.classList.toggle('selected', c.dataset.type === this.selectedSeedType);
+    });
+    const shovelBtn = this.container.querySelector('#pvz-shovel-btn');
+    if (shovelBtn) {
+      shovelBtn.classList.toggle('active', this.selectedSeedType === 'shovel');
+    }
+  }
+
   showToast(msg) {
     if (typeof window.showToast === 'function') {
       window.showToast(msg);
@@ -1241,7 +1309,10 @@ export class PvZGameEngine {
 
   gameOver(isVictory) {
     this.isRunning = false;
-    if (this.animFrameId) cancelAnimationFrame(this.animFrameId);
+    if (this.animFrameId) {
+      cancelAnimationFrame(this.animFrameId);
+      this.animFrameId = null;
+    }
 
     const overlay = this.container.querySelector('#pvz-modal-overlay');
     const icon = this.container.querySelector('#pvz-result-icon');
@@ -1282,9 +1353,21 @@ export class PvZGameEngine {
   }
 
   stopAndExit() {
+    if (this.isStopping) return;
+    this.isStopping = true;
     this.isRunning = false;
-    if (this.animFrameId) cancelAnimationFrame(this.animFrameId);
-    if (this.resizeHandler) window.removeEventListener('resize', this.resizeHandler);
-    if (this.onExit) this.onExit();
+    if (this.animFrameId) {
+      cancelAnimationFrame(this.animFrameId);
+      this.animFrameId = null;
+    }
+    if (this.resizeHandler) {
+      window.removeEventListener('resize', this.resizeHandler);
+      this.resizeHandler = null;
+    }
+    const cb = this.onExit;
+    this.onExit = null;
+    if (typeof cb === 'function') {
+      cb();
+    }
   }
 }

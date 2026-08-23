@@ -740,8 +740,17 @@ export class MahjongGameEngine {
   }
 
   stopAndExit() {
+    if (this.isStopping) return;
+    this.isStopping = true;
     this.isRunning = false;
-    if (this.timerInterval) clearInterval(this.timerInterval);
-    if (this.onExit) this.onExit();
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
+    const cb = this.onExit;
+    this.onExit = null;
+    if (typeof cb === 'function') {
+      cb();
+    }
   }
 }

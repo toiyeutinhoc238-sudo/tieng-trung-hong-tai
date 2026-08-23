@@ -943,11 +943,29 @@ export class SnakeGameEngine {
   }
 
   stopAndExit() {
+    if (this.isStopping) return;
+    this.isStopping = true;
     this.isRunning = false;
-    if (this.timerInterval) clearInterval(this.timerInterval);
-    if (this.animFrameId) cancelAnimationFrame(this.animFrameId);
-    window.removeEventListener('keydown', this.keyHandler);
-    if (this.resizeHandler) window.removeEventListener('resize', this.resizeHandler);
-    if (this.onExit) this.onExit();
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
+    if (this.animFrameId) {
+      cancelAnimationFrame(this.animFrameId);
+      this.animFrameId = null;
+    }
+    if (this.keyHandler) {
+      window.removeEventListener('keydown', this.keyHandler);
+      this.keyHandler = null;
+    }
+    if (this.resizeHandler) {
+      window.removeEventListener('resize', this.resizeHandler);
+      this.resizeHandler = null;
+    }
+    const cb = this.onExit;
+    this.onExit = null;
+    if (typeof cb === 'function') {
+      cb();
+    }
   }
 }

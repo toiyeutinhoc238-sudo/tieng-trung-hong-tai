@@ -205,8 +205,11 @@ export class AlchemistGameEngine {
             <span class="hud-value" id="alchemist-timer-val">01:15</span>
           </div>
 
-          <div style="margin-left: auto; display: flex; gap: 8px;">
+          <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
             <button type="button" id="alchemist-pause-btn" class="btn btn-outline btn-sm" title="Tạm dừng"><i class="fa-solid fa-pause"></i></button>
+            <button type="button" id="alchemist-back-hub-top-btn" class="btn btn-secondary btn-sm" title="Đổi trò chơi khác" style="display: flex; align-items: center; gap: 6px; font-weight: 700; border-radius: 50px; padding: 6px 14px;">
+              <i class="fa-solid fa-arrow-left"></i> Đổi Game
+            </button>
             <button type="button" id="alchemist-exit-btn" class="btn btn-outline btn-sm" title="Thoát về sổ tay"><i class="fa-solid fa-xmark"></i></button>
           </div>
         </div>
@@ -326,8 +329,8 @@ export class AlchemistGameEngine {
   }
 
   bindEvents() {
-    const topBackBtn = this.container.querySelector('#alchemist-top-back-btn');
     const pauseBtn = this.container.querySelector('#alchemist-pause-btn');
+    const backHubTopBtn = this.container.querySelector('#alchemist-back-hub-top-btn');
     const exitBtn = this.container.querySelector('#alchemist-exit-btn');
     const retryBtn = this.container.querySelector('#alchemist-retry-btn');
     const backHubBtn = this.container.querySelector('#alchemist-back-hub-btn');
@@ -335,12 +338,15 @@ export class AlchemistGameEngine {
     const clearBtn = this.container.querySelector('#btn-clear-cauldron');
     const fuseBtn = this.container.querySelector('#btn-fuse-cauldron');
 
-    if (topBackBtn) {
-      topBackBtn.addEventListener('click', () => this.stopAndExit());
-    }
-
     if (pauseBtn) {
       pauseBtn.addEventListener('click', () => this.togglePause());
+    }
+
+    if (backHubTopBtn) {
+      backHubTopBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.stopAndExit();
+      });
     }
 
     if (exitBtn) {
@@ -378,9 +384,31 @@ export class AlchemistGameEngine {
     }
   }
 
+  restart() {
+    const overlay = this.container.querySelector('#alchemist-modal-overlay');
+    if (overlay) overlay.style.display = 'none';
+    this.start();
+  }
+
+  stopAndExit() {
+    if (this.isStopping) return;
+    this.isStopping = true;
+    this.isRunning = false;
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
+    const cb = this.onExit;
+    this.onExit = null;
+    if (typeof cb === 'function') {
+      cb();
+    }
+  }
+
   start() {
     this.isRunning = true;
     this.isPaused = false;
+    this.isStopping = false;
     this.score = 0;
     this.streak = 0;
     this.maxStreak = 0;
