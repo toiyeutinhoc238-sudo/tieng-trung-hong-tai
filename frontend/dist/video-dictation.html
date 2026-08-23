@@ -738,27 +738,82 @@
     .toolbar-nav-group {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .btn-nav-step {
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
+      max-width: 44px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1.5px solid var(--border-glass, rgba(255, 255, 255, 0.2));
+      color: var(--text-primary, #ffffff);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-nav-step:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: #38bdf8;
+      border-color: #38bdf8;
+      transform: translateY(-1px);
+    }
+
+    .btn-nav-step:active {
+      transform: scale(0.95);
+    }
+
+    html.light-mode .btn-nav-step,
+    html:not(.dark) .btn-nav-step {
+      background: #ffffff !important;
+      border: 1.5px solid #cbd5e1 !important;
+      color: #0f172a !important;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    html.light-mode .btn-nav-step:hover,
+    html:not(.dark) .btn-nav-step:hover {
+      background: #f1f5f9 !important;
+      border-color: #0284c7 !important;
+      color: #0284c7 !important;
     }
 
     .btn-replay-large {
-      padding: 9px 18px;
+      height: 44px;
+      padding: 0 22px;
       border-radius: 12px;
       background: linear-gradient(135deg, #10b981, #059669);
-      color: #fff;
+      color: #ffffff;
       font-weight: 800;
-      font-size: 0.92rem;
+      font-size: 0.95rem;
       border: none;
       cursor: pointer;
-      display: flex;
+      display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
       box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
-      transition: all 0.2s ease;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .btn-replay-large:hover {
-      transform: scale(1.04);
+      background: linear-gradient(135deg, #059669, #047857);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(16, 185, 129, 0.5);
+    }
+
+    .btn-replay-large:active {
+      transform: scale(0.96);
     }
 
     .speed-pills-group {
@@ -1490,35 +1545,68 @@
     }
 
     .dict-tile-box {
-      min-width: 40px;
-      height: 48px;
-      padding: 0 8px;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1.5px solid var(--border-glass);
+      min-width: 44px;
+      height: 50px;
+      padding: 0 10px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1.5px solid var(--border-glass, rgba(255, 255, 255, 0.2));
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.3rem;
-      font-weight: 900;
-      color: var(--text-muted);
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text-primary, #ffffff);
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .dict-tile-box.pending {
+      color: #94a3b8;
     }
 
     .dict-tile-box.correct {
-      background: rgba(16, 185, 129, 0.22) !important;
+      background: rgba(16, 185, 129, 0.25) !important;
       border-color: #10b981 !important;
       color: #10b981 !important;
-      box-shadow: 0 0 12px rgba(16, 185, 129, 0.35);
-      transform: scale(1.05);
+      box-shadow: 0 0 14px rgba(16, 185, 129, 0.35);
+      transform: scale(1.04);
     }
 
     .dict-tile-box.wrong {
-      background: rgba(239, 68, 68, 0.22) !important;
+      background: rgba(239, 68, 68, 0.25) !important;
       border-color: #ef4444 !important;
       color: #ef4444 !important;
-      box-shadow: 0 0 12px rgba(239, 68, 68, 0.35);
+      box-shadow: 0 0 14px rgba(239, 68, 68, 0.35);
       animation: tileShake 0.3s ease;
+    }
+
+    html.light-mode .dict-tile-box,
+    html:not(.dark) .dict-tile-box {
+      background: #ffffff !important;
+      border: 1.5px solid #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+
+    html.light-mode .dict-tile-box.pending,
+    html:not(.dark) .dict-tile-box.pending {
+      color: #64748b !important;
+    }
+
+    html.light-mode .dict-tile-box.correct,
+    html:not(.dark) .dict-tile-box.correct {
+      background: #dcfce7 !important;
+      border-color: #16a34a !important;
+      color: #15803d !important;
+      box-shadow: 0 2px 10px rgba(22, 163, 74, 0.25);
+    }
+
+    html.light-mode .dict-tile-box.wrong,
+    html:not(.dark) .dict-tile-box.wrong {
+      background: #fee2e2 !important;
+      border-color: #dc2626 !important;
+      color: #b91c1c !important;
+      box-shadow: 0 2px 10px rgba(220, 38, 38, 0.25);
     }
 
     @keyframes tileShake {
@@ -1528,17 +1616,28 @@
     }
 
     .dict-tile-box.revealed {
-      background: rgba(56, 189, 248, 0.15);
+      background: rgba(56, 189, 248, 0.18);
       border-color: #38bdf8;
-      color: #38bdf8;
+      color: #0284c7;
     }
 
     .dict-tile-box.punct {
-      border-style: dashed;
-      color: var(--text-secondary);
-      background: transparent;
-      min-width: 24px;
-      padding: 0 4px;
+      border: 1.5px solid #cbd5e1;
+      color: #64748b !important;
+      background: rgba(0, 0, 0, 0.04);
+      min-width: 32px;
+      height: 50px;
+      padding: 0 6px;
+      font-size: 1.25rem;
+      font-weight: 700;
+      opacity: 0.9;
+    }
+
+    html.light-mode .dict-tile-box.punct,
+    html:not(.dark) .dict-tile-box.punct {
+      background: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+      color: #475569 !important;
     }
 
     /* Virtual Character Keyboard (Hình 2) */
@@ -2609,7 +2708,7 @@
       border: 1px solid #e2e8f0 !important;
     }
   </style>
-  <script type="module" crossorigin src="/assets/dictation-D3Doa4rc.js"></script>
+  <script type="module" crossorigin src="/assets/dictation-CaKtMZiw.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
   <link rel="modulepreload" crossorigin href="/assets/particles-Db85yIFy.js">
   <link rel="modulepreload" crossorigin href="/assets/screen_drawing-oOIhKrv1.js">
@@ -2654,33 +2753,32 @@
       </div>
     </header>
 
-    <!-- HERO INTRO BANNER -->
-    <div class="dict-hero-banner" id="dict-hero-banner">
-      <div style="flex: 1; min-width: 280px;">
-        <div id="dict-banner-tag" style="display: inline-flex; align-items: center; gap: 6px; background: rgba(239, 68, 68, 0.18); color: #ef4444; padding: 4px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 800; margin-bottom: 8px;">
-          <i class="fa-solid fa-sparkles"></i> PHƯƠNG PHÁP SHADOWING & DICTATION ĐỈNH CAO
-        </div>
-        <h2 id="dict-banner-title" style="font-size: 1.35rem; font-weight: 800; color: var(--text-primary); margin: 0 0 6px 0;">
-          Luyện Shadowing & Nghe Chép Chính Tả Video
-        </h2>
-        <p id="dict-banner-desc" style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.5; margin: 0;">
-          Luyện thính giác phản xạ, tra cứu thuận bút chữ Hán, kiểm tra Pinyin và ghi nhớ ngữ cảnh qua các trích đoạn phim <em>Câu chuyện hoa hồng</em> và hội thoại đời sống thực tế!
-        </p>
-      </div>
-      <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-        <div class="dict-banner-stat-box">
-          <div style="font-size: 1.35rem; font-weight: 900; color: #0284c7;">8</div>
-          <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">Video Tuyển Chọn</div>
-        </div>
-        <div class="dict-banner-stat-box">
-          <div style="font-size: 1.35rem; font-weight: 900; color: #10b981;">64+</div>
-          <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">Câu Thoại Chuẩn</div>
-        </div>
-      </div>
-    </div>
-
     <!-- CATALOG VIEW: List of Lessons -->
     <section id="dict-catalog-view">
+      <!-- HERO INTRO BANNER -->
+      <div class="dict-hero-banner" id="dict-hero-banner">
+        <div style="flex: 1; min-width: 280px;">
+          <div id="dict-banner-tag" style="display: inline-flex; align-items: center; gap: 6px; background: rgba(239, 68, 68, 0.18); color: #ef4444; padding: 4px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 800; margin-bottom: 8px;">
+            <i class="fa-solid fa-sparkles"></i> PHƯƠNG PHÁP SHADOWING & DICTATION ĐỈNH CAO
+          </div>
+          <h2 id="dict-banner-title" style="font-size: 1.35rem; font-weight: 800; color: var(--text-primary); margin: 0 0 6px 0;">
+            Luyện Shadowing & Nghe Chép Chính Tả Video
+          </h2>
+          <p id="dict-banner-desc" style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.5; margin: 0;">
+            Luyện thính giác phản xạ, tra cứu thuận bút chữ Hán, kiểm tra Pinyin và ghi nhớ ngữ cảnh qua các trích đoạn phim <em>Câu chuyện hoa hồng</em> và hội thoại đời sống thực tế!
+          </p>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <div class="dict-banner-stat-box">
+            <div style="font-size: 1.35rem; font-weight: 900; color: #0284c7;">8</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">Video Tuyển Chọn</div>
+          </div>
+          <div class="dict-banner-stat-box">
+            <div style="font-size: 1.35rem; font-weight: 900; color: #10b981;">64+</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">Câu Thoại Chuẩn</div>
+          </div>
+        </div>
+      </div>
       <div style="margin-bottom: 24px;">
         <h1 id="dict-catalog-heading" style="font-size: 1.8rem; font-weight: 800; margin: 0 0 8px 0; color: var(--text-primary); display: flex; align-items: center; gap: 10px;">
           <i class="fa-brands fa-youtube" style="color: #ef4444;"></i> Video Luyện Tập
@@ -2790,13 +2888,13 @@
             <!-- Smart Player Controls Bar -->
             <div class="video-smart-toolbar">
               <div class="toolbar-nav-group">
-                <button class="btn btn-icon-only" onclick="window.prevSentence()" title="Câu trước (Phím Mũi tên trái)">
+                <button class="btn-nav-step" onclick="window.prevSentence()" title="Câu trước (Phím Mũi tên trái)">
                   <i class="fa-solid fa-backward-step"></i>
                 </button>
                 <button class="btn-replay-large" onclick="window.replaySnippet()" title="Nghe lại câu hiện tại (Phím Space)">
                   <i class="fa-solid fa-rotate-left"></i> <span>Nghe Lại Câu</span>
                 </button>
-                <button class="btn-icon-only" onclick="window.nextSentence()" title="Câu tiếp theo (Phím Mũi tên phải)">
+                <button class="btn-nav-step" onclick="window.nextSentence()" title="Câu tiếp theo (Phím Mũi tên phải)">
                   <i class="fa-solid fa-forward-step"></i>
                 </button>
               </div>
