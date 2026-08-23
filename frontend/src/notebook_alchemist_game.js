@@ -384,35 +384,19 @@ export class AlchemistGameEngine {
     }
   }
 
-  restart() {
-    const overlay = this.container.querySelector('#alchemist-modal-overlay');
-    if (overlay) overlay.style.display = 'none';
-    this.start();
-  }
-
-  stopAndExit() {
-    if (this.isStopping) return;
-    this.isStopping = true;
-    this.isRunning = false;
-    if (this.timerInterval) {
-      clearInterval(this.timerInterval);
-      this.timerInterval = null;
-    }
-    const cb = this.onExit;
-    this.onExit = null;
-    if (typeof cb === 'function') {
-      cb();
-    }
-  }
-
   start() {
+    this.isStopping = false;
     this.isRunning = true;
     this.isPaused = false;
-    this.isStopping = false;
     this.score = 0;
     this.streak = 0;
     this.maxStreak = 0;
     this.lives = 3;
+
+    const overlay = this.container.querySelector('#alchemist-modal-overlay');
+    if (overlay) {
+      overlay.style.setProperty('display', 'none', 'important');
+    }
     this.timeLeft = 75;
     this.craftedCount = 0;
     this.cauldronSlots = [];
@@ -668,7 +652,7 @@ export class AlchemistGameEngine {
     const resWords = this.container.querySelector('#alchemist-res-words');
 
     if (overlay) {
-      overlay.style.display = 'flex';
+      overlay.style.setProperty('display', 'flex', 'important');
       if (icon) icon.textContent = isVictory ? '🏆' : '💨';
       if (title) title.textContent = isVictory ? 'Nhà Giả Kim Xuất Sắc!' : 'Hết Tim - Luyện Thất Bại!';
       if (desc) desc.textContent = isVictory ? 'Bạn đã hoàn thành thời gian thử nghiệm và chế tạo nhiều chữ Hán!' : 'Hãy chú ý quan sát các nét bộ thủ cấu thành chữ Hán nhé!';
@@ -680,26 +664,54 @@ export class AlchemistGameEngine {
       const backHubBtn = overlay.querySelector('#alchemist-back-hub-btn');
       const finishBtn = overlay.querySelector('#alchemist-finish-btn');
 
-      if (retryBtn) retryBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.restart(); };
-      if (backHubBtn) backHubBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.stopAndExit(); };
-      if (finishBtn) finishBtn.onclick = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        this.stopAndExit();
-        if (typeof window.exitNotebookGamesHub === 'function') window.exitNotebookGamesHub();
-      };
+      if (retryBtn) {
+        retryBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.restart();
+        };
+      }
+      if (backHubBtn) {
+        backHubBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.stopAndExit();
+        };
+      }
+      if (finishBtn) {
+        finishBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.stopAndExit();
+          if (typeof window.exitNotebookGamesHub === 'function') {
+            window.exitNotebookGamesHub();
+          }
+        };
+      }
     }
   }
 
   restart() {
     const overlay = this.container.querySelector('#alchemist-modal-overlay');
-    if (overlay) overlay.style.display = 'none';
+    if (overlay) {
+      overlay.style.setProperty('display', 'none', 'important');
+    }
     this.start();
   }
 
   stopAndExit() {
     this.isRunning = false;
-    if (this.timerInterval) clearInterval(this.timerInterval);
-    if (this.onExit) this.onExit();
+    this.isStopping = true;
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
+    const overlay = this.container.querySelector('#alchemist-modal-overlay');
+    if (overlay) {
+      overlay.style.setProperty('display', 'none', 'important');
+    }
+    if (typeof this.onExit === 'function') {
+      this.onExit();
+    }
   }
 }

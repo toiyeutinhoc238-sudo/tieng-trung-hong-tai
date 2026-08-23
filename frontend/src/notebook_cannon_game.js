@@ -872,6 +872,186 @@ export class CannonGameEngine {
     this.showToast(this.isPaused ? 'Đã tạm dừng game ⏸' : 'Tiếp tục chơi ▶️');
   }
 
+  start() {
+    this.isStopping = false;
+    this.isRunning = true;
+    this.isPaused = false;
+    this.score = 0;
+    this.combo = 0;
+    this.maxCombo = 0;
+    this.lives = 3;
+    this.timeLeft = 60;
+    this.activeWords = [];
+    this.wordsDestroyedCount = 0;
+    this.lastFrameTime = performance.now();
+    this.spawnTimer = 0;
+
+    const overlay = this.container.querySelector('#cannon-modal-overlay');
+    if (overlay) {
+      overlay.style.setProperty('display', 'none', 'important');
+    }
+
+    this.updateHUD();
+    this.startTimers();
+    this.loop(performance.now());
+  }
+
+  startTimers() {
+    if (this.timerInterval) clearInterval(this.timerInterval);
+    this.timerInterval = setInterval(() => {
+      if (!this.isRunning || this.isPaused) return;
+      this.timeLeft--;
+
+      if (this.slowMoTimer > 0) this.slowMoTimer--;
+      if (this.score2xTimer > 0) this.score2xTimer--;
+      if (this.shieldTimer > 0) {
+        this.shieldTimer--;
+        if (this.shieldTimer === 0) this.hasShield = false;
+      }
+      this.updateBuffBanner();
+
+      if (this.timeLeft <= 0) {
+        this.gameOver(true);
+      }
+      this.updateHUD();
+    }, 1000);
+  }
+
+  updateBuffBanner() {
+    const banner = this.container.querySelector('#cannon-buff-banner');
+    if (!banner) return;
+    const buffs = [];
+    if (this.slowMoTimer > 0) buffs.push(`❄️ Mưa Băng (${this.slowMoTimer}s)`);
+    if (this.score2xTimer > 0) buffs.push(`⭐ Nhân Đôi Điểm (${this.score2xTimer}s)`);
+    if (this.shieldTimer > 0) buffs.push(`🛡️ Khiên Bảo Vệ (${this.shieldTimer}s)`);
+
+    if (buffs.length > 0) {
+      banner.style.display = 'block';
+      banner.innerHTML = buffs.join(' &nbsp;|&nbsp; ');
+    } else {
+      banner.style.display = 'none';
+    }
+  }
+
+  spawnWord() {
+    if (this.activeWords.length >= 7) return;
+    const playfield = this.container.querySelector('#cannon-playfield');
+    if (!playfield) return;
+    const rect = playfield.getBoundingClientRect();
+    const width = rect.width || 600;
+
+    // Pick a random word from notebook words
+    const randomWordObj = this.words[Math.floor(Math.random() * this.words.length)];
+    const wordTypeRoll = Math.random();
+    let type = 'normal';
+    if (wordTypeRoll < 0.18) type = 'bomb';
+    else if (wordTypeRoll < 0.32) type = 'bonus';
+
+    const wordEl = document.createElement('div');
+    wordEl.className = `cannon-word-card ${type}`;
+    const pyDisplay = randomWordObj.pinyin ? `<span class="word-py">${randomWordObj.pinyin}</span>` : '';
+    const meaningDisplay = randomWordObj.meaning ? `<span class="word-mn">${randomWordObj.meaning}</span>` : '';
+    const bombIcon = type === 'bomb' ? '<span class="bomb-badge">💣</span> ' : '';
+    const bonusIcon = type === 'bonus' ? '<span class="bonus-badge">⭐</span> ' : '';
+
+    wordEl.innerHTML = `
+      <div class="word-zh">${bombIcon}${bonusIcon}${randomWordObj.word}</div>
+      ${pyDisplay}
+      ${meaningDisplay}
+    `;
+
+    const margin = 30;
+    const spawnX = margin + Math.random() * (width - margin * 2 - 120);
+    const spawnY = -20;
+
+    const baseSpeed = 45 + (60 - this.timeLeft) * 0.8; // Accelerate as time elapses
+    const speed = baseSpeed * (0.85 + Math.random() * 0.35);
+
+    const wordItem = {
+      id: Date.now() + Math.random(),
+      wordObj: randomWordObj,
+      type: type,
+      x: spawnX,
+      y: spawnY,
+      speed: speed,
+      el: wordEl
+    };
+
+    const wordsLayer = this.container.querySelector('#cannon-words-layer');
+    if (wordsLayer) {
+      wordsLayer.appendChild(wordEl);
+      this.activeWords.push(wordItem);
+      this.updateWordElementPosition(wordItem);
+    }
+  }
+
+  updateWordElementPosition(item) {
+    if (item.el) {
+      item.el.style.transform = `translate3d(${item.x}px, ${item.y}px, 0)`;
+    }
+  }
+
+  loop(currentTime) {
+    if (!this.isRunning) return;
+
+    if (!this.isPaused) {
+      const dt = (currentTime - this.lastFrameTime) / 1000;
+      this.lastFrameTime = currentTime;
+
+      // Spawning timer
+      this.spawnTimer += dt * 1000;
+      const spawnInterval = Math.max(1200, 2500 - (60 - this.timeLeft) * 25);
+      if (this.spawnTimer >= spawnInterval) {
+        this.spawnTimer = 0;
+        this.spawnWord();
+      }
+
+      // Update falling words
+      const playfield = this.container.querySelector('#cannon-playfield');
+      const groundY = playfield ? playfield.clientHeight - 80 : 440;
+      const wordsLayer = this.container.querySelector('#cannon-words-layer');
+
+      for (let i = this.activeWords.length - 1; i >= 0; i--) {
+        const item = this.activeWords[i];
+        const effectiveSpeed = this.slowMoTimer > 0 ? item.speed * 0.45 : item.speed;
+        item.y += effectiveSpeed * dt;
+        this.updateWordElementPosition(item);
+
+        // Check if word hits bottom
+        if (item.y >= groundY) {
+          if (item.el && item.el.parentNode) {
+            item.el.parentNode.removeChild(item.el);
+          }
+          this.activeWords.splice(i, 1);
+
+          if (item.type === 'normal' || item.type === 'bonus') {
+            // Player loses a life unless shield active
+            if (this.hasShield) {
+              this.showFloatingText(item.x, groundY, '🛡️ ĐÃ CHẶN!', '#38bdf8');
+            } else {
+              this.lives--;
+              this.combo = 0;
+              this.playExplosionEffect(item.x, groundY, '#ef4444');
+              this.shakePlayfield();
+              if (this.lives <= 0) {
+                this.gameOver(false);
+                return;
+              }
+            }
+          } else if (item.type === 'bomb') {
+            // Bomb safely expired without penalty
+            this.showFloatingText(item.x, groundY, '💣 AN TOÀN!', '#94a3b8');
+          }
+          this.updateHUD();
+        }
+      }
+    } else {
+      this.lastFrameTime = currentTime;
+    }
+
+    this.animFrameId = requestAnimationFrame((t) => this.loop(t));
+  }
+
   gameOver(isVictory) {
     this.isRunning = false;
     if (this.timerInterval) clearInterval(this.timerInterval);
@@ -886,7 +1066,7 @@ export class CannonGameEngine {
     const resWords = this.container.querySelector('#res-words');
 
     if (overlay) {
-      overlay.style.display = 'flex';
+      overlay.style.setProperty('display', 'flex', 'important');
       if (icon) icon.textContent = isVictory ? '🏆' : '💥';
       if (title) title.textContent = isVictory ? 'Chiến Thắng Xuất Sắc!' : 'Hết Mạng - Game Over!';
       if (desc) desc.textContent = isVictory ? 'Bạn đã bảo vệ thành công và sống sót hết 60 giây!' : 'Đừng nản lòng! Hãy gõ pinyin thật nhanh và né bom nhé.';
@@ -898,20 +1078,38 @@ export class CannonGameEngine {
       const backHubBtn = overlay.querySelector('#cannon-back-hub-btn');
       const finishBtn = overlay.querySelector('#cannon-finish-btn');
 
-      if (retryBtn) retryBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.restart(); };
-      if (backHubBtn) backHubBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.stopAndExit(); };
-      if (finishBtn) finishBtn.onclick = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        this.stopAndExit();
-        if (typeof window.exitNotebookGamesHub === 'function') window.exitNotebookGamesHub();
-      };
+      if (retryBtn) {
+        retryBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.restart();
+        };
+      }
+      if (backHubBtn) {
+        backHubBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.stopAndExit();
+        };
+      }
+      if (finishBtn) {
+        finishBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.stopAndExit();
+          if (typeof window.exitNotebookGamesHub === 'function') {
+            window.exitNotebookGamesHub();
+          }
+        };
+      }
     }
   }
 
   restart() {
     const overlay = this.container.querySelector('#cannon-modal-overlay');
-    if (overlay) overlay.style.display = 'none';
+    if (overlay) {
+      overlay.style.setProperty('display', 'none', 'important');
+    }
     const wordsLayer = this.container.querySelector('#cannon-words-layer');
     if (wordsLayer) wordsLayer.innerHTML = '';
     const fxLayer = this.container.querySelector('#cannon-fx-layer');
@@ -926,9 +1124,8 @@ export class CannonGameEngine {
   }
 
   stopAndExit() {
-    if (this.isStopping) return;
-    this.isStopping = true;
     this.isRunning = false;
+    this.isStopping = true;
     if (this.timerInterval) {
       clearInterval(this.timerInterval);
       this.timerInterval = null;

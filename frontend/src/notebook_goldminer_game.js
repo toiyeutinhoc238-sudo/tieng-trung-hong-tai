@@ -700,7 +700,6 @@ export class GoldMinerGameEngine {
   gameOver(isVictory) {
     this.isRunning = false;
     if (this.timerInterval) clearInterval(this.timerInterval);
-    if (this.animFrameId) cancelAnimationFrame(this.animFrameId);
 
     const overlay = this.container.querySelector('#miner-modal-overlay');
     const icon = this.container.querySelector('#miner-result-icon');
@@ -711,7 +710,7 @@ export class GoldMinerGameEngine {
     const resWords = this.container.querySelector('#miner-res-words');
 
     if (overlay) {
-      overlay.style.display = 'flex';
+      overlay.style.setProperty('display', 'flex', 'important');
       if (icon) icon.textContent = isVictory ? '👑' : '⛏️';
       if (title) title.textContent = isVictory ? 'Vua Mỏ Vàng Từ Vựng!' : 'Chưa Đạt Chỉ Tiêu Vàng!';
       if (desc) desc.textContent = isVictory ? 'Bạn đã xuất sắc hoàn thành toàn bộ 3 màn đào vàng!' : 'Hãy căn góc thật chuẩn và dùng TNT phá đá để kéo nhanh hơn nhé!';
@@ -723,27 +722,44 @@ export class GoldMinerGameEngine {
       const backHubBtn = overlay.querySelector('#miner-back-hub-btn');
       const finishBtn = overlay.querySelector('#miner-finish-btn');
 
-      if (retryBtn) retryBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.restart(); };
-      if (backHubBtn) backHubBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.stopAndExit(); };
-      if (finishBtn) finishBtn.onclick = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        this.stopAndExit();
-        if (typeof window.exitNotebookGamesHub === 'function') window.exitNotebookGamesHub();
-      };
+      if (retryBtn) {
+        retryBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.restart();
+        };
+      }
+      if (backHubBtn) {
+        backHubBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.stopAndExit();
+        };
+      }
+      if (finishBtn) {
+        finishBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.stopAndExit();
+          if (typeof window.exitNotebookGamesHub === 'function') {
+            window.exitNotebookGamesHub();
+          }
+        };
+      }
     }
   }
 
   restart() {
     const overlay = this.container.querySelector('#miner-modal-overlay');
-    if (overlay) overlay.style.display = 'none';
+    if (overlay) {
+      overlay.style.setProperty('display', 'none', 'important');
+    }
     this.start();
   }
 
   stopAndExit() {
-    if (this.isStopping) return;
-    this.isStopping = true;
     this.isRunning = false;
+    this.isStopping = true;
     if (this.timerInterval) {
       clearInterval(this.timerInterval);
       this.timerInterval = null;
@@ -757,10 +773,12 @@ export class GoldMinerGameEngine {
       window.removeEventListener('resize', this.resizeHandler);
       this.resizeHandler = null;
     }
-    const cb = this.onExit;
-    this.onExit = null;
-    if (typeof cb === 'function') {
-      cb();
+    const overlay = this.container.querySelector('#miner-modal-overlay');
+    if (overlay) {
+      overlay.style.setProperty('display', 'none', 'important');
+    }
+    if (typeof this.onExit === 'function') {
+      this.onExit();
     }
   }
 }

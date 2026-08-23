@@ -339,6 +339,89 @@ function toggleSideCard(cardId) {
   }
 }
 
+function renderLessonVocabNotes() {
+  const container = document.getElementById('lesson-vocab-notes-list');
+  if (!container || !currentLesson) return;
+
+  container.innerHTML = '';
+  const items = [];
+
+  // 1. Parse currentLesson.note if present
+  if (currentLesson.note && currentLesson.note.trim()) {
+    const lines = currentLesson.note.split('\n').map(l => l.trim()).filter(Boolean);
+    lines.forEach(line => {
+      const cleanLine = line.replace(/^[-*•]\s*/, '').trim();
+      const match = cleanLine.match(/^([^\(:\-]+)(?:\s*\(([^)]+)\))?\s*[:\-–]\s*(.+)$/);
+      if (match) {
+        items.push({
+          word: match[1].trim(),
+          pinyin: match[2] ? match[2].trim() : '',
+          meaning: match[3].trim()
+        });
+      } else {
+        items.push({
+          word: cleanLine.slice(0, 8),
+          pinyin: '',
+          meaning: cleanLine
+        });
+      }
+    });
+  }
+
+  // 2. If no items from note, aggregate unique keywords from sentences
+  if (items.length === 0 && currentLesson.sentences) {
+    const seen = new Set();
+    currentLesson.sentences.forEach(s => {
+      if (Array.isArray(s.keywords)) {
+        s.keywords.forEach(kw => {
+          const kClean = kw.trim();
+          if (kClean && !seen.has(kClean)) {
+            seen.add(kClean);
+            items.push({
+              word: kClean,
+              pinyin: '',
+              meaning: `Trích xuất từ câu: "${s.meaning}"`
+            });
+          }
+        });
+      }
+    });
+  }
+
+  if (items.length === 0) {
+    container.innerHTML = `
+      <div style="padding: 14px; text-align: center; color: var(--text-muted); font-size: 0.85rem;">
+        <i class="fa-solid fa-circle-info"></i> Video này tập trung vào phản xạ luyện nghe khẩu ngữ trực tiếp.
+      </div>
+    `;
+    return;
+  }
+
+  items.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'vocab-item-row';
+    const escapedWord = item.word.replace(/'/g, "\\'");
+    row.innerHTML = `
+      <div class="vocab-item-main">
+        <div class="vocab-item-header">
+          <span class="vocab-item-hanzi">${item.word}</span>
+          ${item.pinyin ? `<span class="vocab-item-pinyin">${item.pinyin}</span>` : ''}
+        </div>
+        <div class="vocab-item-meaning">${item.meaning}</div>
+      </div>
+      <div class="vocab-item-actions">
+        <button class="btn-vocab-tool" onclick="window.speakChinese('${escapedWord}')" title="Nghe phát âm chuẩn">
+          <i class="fa-solid fa-volume-high"></i>
+        </button>
+        <button class="btn-vocab-tool" onclick="window.openHanziModal('${escapedWord}')" title="Xem thứ tự nét viết chữ Hán">
+          <i class="fa-solid fa-pen-nib"></i>
+        </button>
+      </div>
+    `;
+    container.appendChild(row);
+  });
+}
+
 function loadLessonNotes() {
   if (!currentLesson) return;
   const email = getCurrentUserEmail();
@@ -351,6 +434,7 @@ function loadLessonNotes() {
   if (statusEl) {
     statusEl.innerHTML = '<i class="fa-solid fa-cloud-check"></i> Đã tự động lưu';
   }
+  renderLessonVocabNotes();
 }
 
 function handleNotesInput(val) {
@@ -366,7 +450,7 @@ function handleNotesInput(val) {
 
 function clearCurrentNotes() {
   if (!currentLesson) return;
-  if (confirm('Bạn có chắc muốn xóa ghi chú của video này không?')) {
+  if (confirm('Bạn có chắc muốn xóa ghi chú cá nhân của video này không?')) {
     const email = getCurrentUserEmail();
     const storageKey = `video_notes_${currentLesson.id}_${email}`;
     localStorage.removeItem(storageKey);
@@ -416,7 +500,7 @@ function renderCurrentSentence() {
     renderDubbingPanel(sent);
   }
 
-  // Render Right Column
+  // Render Columns
   renderTranscriptList();
   loadLessonNotes();
   updateTimingDisplay();
@@ -457,9 +541,6 @@ function renderShadowingPanel(sent) {
 function renderDictationPanel(sent) {
   if (!sent) return;
 
-  const meaningText = document.getElementById('dictation-meaning-text');
-  if (meaningText) meaningText.textContent = sent.meaning || 'Lắng nghe âm thanh và gõ lại câu thoại';
-
   const inputEl = document.getElementById('dictation-user-input');
   if (inputEl) {
     inputEl.value = '';
@@ -469,23 +550,168 @@ function renderDictationPanel(sent) {
   const feedbackBox = document.getElementById('dictation-feedback-box');
   if (feedbackBox) feedbackBox.style.display = 'none';
 
+  // Hide solution box & Vietnamese meaning until completed
   const solutionBox = document.getElementById('dictation-solution-box');
   if (solutionBox) solutionBox.style.display = 'none';
 
-  // Render character tiles
+  // Render character slot tiles
   const tilesContainer = document.getElementById('dictation-char-tiles');
   if (tilesContainer) {
     tilesContainer.innerHTML = '';
     const chars = (sent.hanzi || '').split('');
     chars.forEach((c, idx) => {
       const tile = document.createElement('div');
-      tile.className = 'dict-tile-box';
+      const isPunct = /[，。？！、：；“”‘’!?,.:;'" ]/.test(c);
+      tile.className = `dict-tile-box ${isPunct ? 'punct' : 'pending'}`;
       tile.id = `dict-tile-${idx}`;
       tile.dataset.char = c;
-      tile.textContent = /[\u4e00-\u9fa5]/.test(c) ? '?' : c;
+      tile.dataset.idx = idx;
+      tile.textContent = isPunct ? c : '?';
       tilesContainer.appendChild(tile);
     });
   }
+
+  // Render Virtual Character Keyboard (Bàn phím chữ Hán ảo - Hình 2)
+  renderVirtualKeyboard(sent);
+}
+
+function renderVirtualKeyboard(sent) {
+  const vkGrid = document.getElementById('dict-vk-grid');
+  if (!vkGrid || !sent) return;
+
+  vkGrid.innerHTML = '';
+
+  // Extract Hanzi characters (filtering out punctuation)
+  const hanziChars = (sent.hanzi || '').split('').filter(c => /[\u4e00-\u9fa5a-zA-Z0-9]/.test(c));
+
+  // Shuffled or arranged list of characters
+  const displayChars = [...hanziChars];
+  displayChars.sort(() => Math.random() - 0.5);
+
+  displayChars.forEach((char, idx) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'dict-vk-btn';
+    btn.textContent = char;
+    btn.onclick = (e) => {
+      e.preventDefault();
+      inputDictationChar(char);
+    };
+    vkGrid.appendChild(btn);
+  });
+}
+
+function inputDictationChar(char) {
+  const inputEl = document.getElementById('dictation-user-input');
+  if (!inputEl) return;
+
+  inputEl.value += char;
+  handleDictationRealtimeInput(inputEl.value);
+  inputEl.focus();
+}
+
+function deleteLastDictationChar() {
+  const inputEl = document.getElementById('dictation-user-input');
+  if (!inputEl || !inputEl.value) return;
+
+  inputEl.value = inputEl.value.slice(0, -1);
+  handleDictationRealtimeInput(inputEl.value);
+  inputEl.focus();
+}
+
+function clearDictationInput() {
+  const inputEl = document.getElementById('dictation-user-input');
+  if (inputEl) {
+    inputEl.value = '';
+    handleDictationRealtimeInput('');
+    inputEl.focus();
+  }
+}
+
+function handleDictationRealtimeInput(val) {
+  if (!currentLesson || !currentLesson.sentences[currentSentenceIdx]) return;
+  const sent = currentLesson.sentences[currentSentenceIdx];
+  const targetChars = (sent.hanzi || '').split('');
+  const userChars = (val || '').split('');
+
+  let correctCount = 0;
+  let hanziTargetCount = 0;
+
+  targetChars.forEach((targetChar, idx) => {
+    const tile = document.getElementById(`dict-tile-${idx}`);
+    if (!tile) return;
+
+    const isPunct = /[，。？！、：；“”‘’!?,.:;'" ]/.test(targetChar);
+    if (!isPunct) hanziTargetCount++;
+
+    if (idx < userChars.length) {
+      const userChar = userChars[idx];
+      const isMatch = (userChar === targetChar) || (isPunct && userChar === ' ');
+
+      if (isMatch) {
+        tile.className = 'dict-tile-box correct';
+        tile.textContent = targetChar;
+        if (!isPunct) correctCount++;
+      } else {
+        tile.className = 'dict-tile-box wrong';
+        tile.textContent = userChar;
+      }
+    } else {
+      // Not typed yet
+      tile.className = `dict-tile-box ${isPunct ? 'punct' : 'pending'}`;
+      tile.textContent = isPunct ? targetChar : '?';
+    }
+  });
+
+  // Check if fully completed correctly
+  const cleanInput = cleanStr(val);
+  const cleanTarget = cleanStr(sent.hanzi);
+  const cleanPinyinTarget = cleanStr(sent.pinyin);
+
+  const isFullMatch = (cleanInput === cleanTarget) || (cleanInput === cleanPinyinTarget) || (hanziTargetCount > 0 && correctCount >= hanziTargetCount);
+
+  if (isFullMatch) {
+    onDictationCompletedSuccess(sent);
+  }
+}
+
+function onDictationCompletedSuccess(sent) {
+  const feedbackEl = document.getElementById('dictation-feedback-box');
+  const solutionEl = document.getElementById('dictation-solution-box');
+  const solutionHanzi = document.getElementById('dictation-sol-hanzi');
+  const solutionPinyin = document.getElementById('dictation-sol-pinyin');
+  const solutionMeaning = document.getElementById('dictation-sol-meaning');
+
+  // Turn all tiles green
+  const tiles = document.querySelectorAll('.dict-tile-box');
+  tiles.forEach(t => {
+    t.textContent = t.dataset.char;
+    t.className = 'dict-tile-box correct';
+  });
+
+  if (feedbackEl) {
+    feedbackEl.style.display = 'flex';
+    feedbackEl.className = 'dict-feedback-badge success';
+    feedbackEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> <span>Chính xác tuyệt vời! (+10 điểm) 🎉</span>`;
+  }
+
+  // REVEAL SOLUTION & VIETNAMESE MEANING ONLY NOW (Hình 2 & 3)
+  if (solutionEl && solutionHanzi) {
+    solutionHanzi.innerHTML = renderClickableHanziSpans(sent.hanzi);
+    if (solutionPinyin) solutionPinyin.textContent = sent.pinyin || '';
+    if (solutionMeaning) solutionMeaning.textContent = sent.meaning || '';
+    solutionEl.style.display = 'block';
+  }
+
+  if (!userAnswers[sent.id] || !userAnswers[sent.id].isCorrect) {
+    totalScore += 10;
+    currentStreak++;
+    userAnswers[sent.id] = { isCorrect: true, score: 10 };
+    showToast("🎉 Hoàn toàn chính xác! (+10 điểm)");
+    speakChinese(sent.hanzi);
+  }
+
+  renderCurrentSentenceHeaderStats();
 }
 
 function renderDubbingPanel(sent) {
@@ -514,7 +740,7 @@ function checkDictationAnswer() {
   const targetPinyin = cleanStr(sent.pinyin);
 
   if (!userVal) {
-    showToast("Vui lòng gõ nội dung câu trước khi kiểm tra!", true);
+    showToast("Vui lòng gõ chữ hoặc bấm chọn phím chữ bên dưới!", true);
     return;
   }
 
@@ -522,30 +748,15 @@ function checkDictationAnswer() {
   const similarity = calculateStringSimilarity(userVal, targetHanzi) || calculateStringSimilarity(userVal, targetPinyin);
   const isCorrect = isExact || similarity >= 0.8;
 
-  // Reveal tiles in green
-  const tiles = document.querySelectorAll('.dict-tile-box');
-  tiles.forEach(t => {
-    t.textContent = t.dataset.char;
-    t.classList.add(isCorrect ? 'correct' : 'revealed');
-  });
-
-  if (feedbackEl) {
-    feedbackEl.style.display = 'flex';
-    if (isCorrect) {
-      feedbackEl.className = 'dict-feedback-badge success';
-      feedbackEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> <span>Chính xác tuyệt vời! (+10 điểm) 🎉</span>`;
-      totalScore += 10;
-      currentStreak++;
-      userAnswers[sent.id] = { isCorrect: true, score: 10 };
-      showToast("🎉 Hoàn toàn chính xác! (+10 điểm)");
-      speakChinese(sent.hanzi);
-
-      setTimeout(() => {
-        nextSentence();
-      }, 1600);
-    } else {
+  if (isCorrect) {
+    onDictationCompletedSuccess(sent);
+  } else {
+    // Re-verify tiles
+    handleDictationRealtimeInput(inputEl ? inputEl.value : '');
+    if (feedbackEl) {
+      feedbackEl.style.display = 'flex';
       feedbackEl.className = 'dict-feedback-badge error';
-      feedbackEl.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> <span>Chưa chính xác (${Math.round(similarity * 100)}%). Bấm "HIỆN GỢI Ý MẪU" để xem đáp án!</span>`;
+      feedbackEl.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> <span>Chưa chính xác (${Math.round(similarity * 100)}%). Hãy xem các ô chữ màu đỏ để sửa lại nhé!</span>`;
       currentStreak = 0;
       userAnswers[sent.id] = { isCorrect: false, score: 0 };
       showToast("Chưa chính xác! Thử nghe lại nhé ⚠️", true);
@@ -2303,6 +2514,10 @@ window.clearCurrentNotes = clearCurrentNotes;
 window.switchMode = switchMode;
 window.checkDictationAnswer = checkDictationAnswer;
 window.showDictationHint = showDictationHint;
+window.inputDictationChar = inputDictationChar;
+window.deleteLastDictationChar = deleteLastDictationChar;
+window.clearDictationInput = clearDictationInput;
+window.handleDictationRealtimeInput = handleDictationRealtimeInput;
 window.toggleSpeechRecording = toggleSpeechRecording;
 window.toggleDubRecording = toggleDubRecording;
 window.evaluatePronunciation = evaluatePronunciation;

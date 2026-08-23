@@ -682,6 +682,110 @@ export class MahjongGameEngine {
     if (bBomb) bBomb.textContent = `x${this.bombCount}`;
   }
 
+  start() {
+    this.isStopping = false;
+    this.isRunning = true;
+    this.isPaused = false;
+    this.score = 0;
+    this.combo = 0;
+    this.maxCombo = 0;
+    this.timeLeft = 90;
+    this.hintCount = 3;
+    this.shuffleCount = 3;
+    this.bombCount = 2;
+    this.selectedTile = null;
+
+    const overlay = this.container.querySelector('#mahjong-modal-overlay');
+    if (overlay) {
+      overlay.style.setProperty('display', 'none', 'important');
+    }
+
+    this.initBoard();
+    this.updateHUD();
+    this.startTimers();
+  }
+
+  startTimers() {
+    if (this.timerInterval) clearInterval(this.timerInterval);
+    this.timerInterval = setInterval(() => {
+      if (!this.isRunning || this.isPaused) return;
+      this.timeLeft--;
+
+      if (this.timeLeft <= 0) {
+        this.gameOver(false);
+      }
+      this.updateHUD();
+    }, 1000);
+  }
+
+  initBoard() {
+    // Generate pairs of tiles: 6x6 board inside = 16 pairs (32 tiles total + 4 empty/bonus or 18 pairs = 36 tiles)
+    const totalTiles = (this.rows - 2) * (this.cols - 2); // 4x4 inner = 16 tiles (8 pairs) or 6x6 inner = 18 pairs
+    const pairsNeeded = totalTiles / 2;
+    this.totalPairs = pairsNeeded;
+    this.pairsLeft = pairsNeeded;
+
+    const tilesList = [];
+    for (let i = 0; i < pairsNeeded; i++) {
+      const wordObj = this.rawWords[i % this.rawWords.length];
+      const pairId = 'pair_' + i;
+
+      // Tile 1: Hanzi
+      tilesList.push({
+        pairId: pairId,
+        word: wordObj.word,
+        text: wordObj.word,
+        type: 'hanzi',
+        pinyin: wordObj.pinyin,
+        meaning: wordObj.meaning
+      });
+
+      // Tile 2: Alternates between Pinyin and Meaning
+      if (i % 2 === 0) {
+        tilesList.push({
+          pairId: pairId,
+          word: wordObj.word,
+          text: wordObj.pinyin,
+          type: 'pinyin',
+          pinyin: wordObj.pinyin,
+          meaning: wordObj.meaning
+        });
+      } else {
+        tilesList.push({
+          pairId: pairId,
+          word: wordObj.word,
+          text: wordObj.meaning,
+          type: 'meaning',
+          pinyin: wordObj.pinyin,
+          meaning: wordObj.meaning
+        });
+      }
+    }
+
+    // Shuffle tiles
+    tilesList.sort(() => 0.5 - Math.random());
+
+    // Place into inner grid
+    let idx = 0;
+    this.grid = Array(this.rows).fill(null).map(() => Array(this.cols).fill(null));
+
+    for (let r = 1; r < this.rows - 1; r++) {
+      for (let c = 1; c < this.cols - 1; c++) {
+        if (idx < tilesList.length) {
+          this.grid[r][c] = {
+            ...tilesList[idx],
+            row: r,
+            col: c,
+            matched: false
+          };
+          idx++;
+        }
+      }
+    }
+
+    this.renderBoardDOM();
+  }
+
   showToast(msg) {
     if (typeof window.showToast === 'function') {
       window.showToast(msg);
@@ -710,7 +814,7 @@ export class MahjongGameEngine {
     const resPairs = this.container.querySelector('#mahjong-res-pairs');
 
     if (overlay) {
-      overlay.style.display = 'flex';
+      overlay.style.setProperty('display', 'flex', 'important');
       if (icon) icon.textContent = isVictory ? '👑' : '⏰';
       if (title) title.textContent = isVictory ? 'Đại Sư Mạt Chược!' : 'Hết Giờ - Game Over!';
       if (desc) desc.textContent = isVictory ? 'Bạn đã xuất sắc nối sạch toàn bộ cặp bài trong thời gian quy định!' : 'Hãy tận dụng Kính Lúp và Gió Lốc để nối nhanh hơn nhé!';
@@ -722,35 +826,54 @@ export class MahjongGameEngine {
       const backHubBtn = overlay.querySelector('#mahjong-back-hub-btn');
       const finishBtn = overlay.querySelector('#mahjong-finish-btn');
 
-      if (retryBtn) retryBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.restart(); };
-      if (backHubBtn) backHubBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.stopAndExit(); };
-      if (finishBtn) finishBtn.onclick = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        this.stopAndExit();
-        if (typeof window.exitNotebookGamesHub === 'function') window.exitNotebookGamesHub();
-      };
+      if (retryBtn) {
+        retryBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.restart();
+        };
+      }
+      if (backHubBtn) {
+        backHubBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.stopAndExit();
+        };
+      }
+      if (finishBtn) {
+        finishBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.stopAndExit();
+          if (typeof window.exitNotebookGamesHub === 'function') {
+            window.exitNotebookGamesHub();
+          }
+        };
+      }
     }
   }
 
   restart() {
     const overlay = this.container.querySelector('#mahjong-modal-overlay');
-    if (overlay) overlay.style.display = 'none';
+    if (overlay) {
+      overlay.style.setProperty('display', 'none', 'important');
+    }
     this.start();
   }
 
   stopAndExit() {
-    if (this.isStopping) return;
-    this.isStopping = true;
     this.isRunning = false;
+    this.isStopping = true;
     if (this.timerInterval) {
       clearInterval(this.timerInterval);
       this.timerInterval = null;
     }
-    const cb = this.onExit;
-    this.onExit = null;
-    if (typeof cb === 'function') {
-      cb();
+    const overlay = this.container.querySelector('#mahjong-modal-overlay');
+    if (overlay) {
+      overlay.style.setProperty('display', 'none', 'important');
+    }
+    if (typeof this.onExit === 'function') {
+      this.onExit();
     }
   }
 }

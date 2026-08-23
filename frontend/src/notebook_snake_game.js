@@ -899,6 +899,37 @@ export class SnakeGameEngine {
     this.showFloatingMessage(this.isPaused ? 'Đã tạm dừng game ⏸' : 'Tiếp tục chơi ▶️');
   }
 
+  start() {
+    this.isStopping = false;
+    this.isRunning = true;
+    this.isPaused = false;
+    this.level = 1;
+    this.streak = 0;
+    this.score = 0;
+    this.lives = 3;
+    this.wordsEatenCorrect = 0;
+    this.timeLeft = 60;
+    this.snake = [
+      { x: 5, y: 7 },
+      { x: 4, y: 7 },
+      { x: 3, y: 7 }
+    ];
+    this.dir = { x: 1, y: 0 };
+    this.nextDir = { x: 1, y: 0 };
+    this.foods = [];
+    this.eatenQueue = 0;
+
+    const overlay = this.container.querySelector('#snake-modal-overlay');
+    if (overlay) {
+      overlay.style.setProperty('display', 'none', 'important');
+    }
+
+    this.initCanvas();
+    this.nextTargetWord();
+    this.updateHUD();
+    this.startLoop();
+  }
+
   gameOver(isVictory) {
     this.isRunning = false;
     if (this.timerInterval) clearInterval(this.timerInterval);
@@ -913,7 +944,7 @@ export class SnakeGameEngine {
     const resWords = this.container.querySelector('#snake-res-words');
 
     if (overlay) {
-      overlay.style.display = 'flex';
+      overlay.style.setProperty('display', 'flex', 'important');
       if (icon) icon.textContent = isVictory ? '👑' : '🐍';
       if (title) title.textContent = isVictory ? 'Vua Nuôi Rắn Từ Vựng!' : 'Hết Tim - Game Over!';
       if (desc) desc.textContent = isVictory ? 'Bạn đã xuất sắc vượt qua toàn bộ 5 Cấp độ thử thách!' : 'Hãy chú ý quan sát mục tiêu và ăn đúng quả táo nhé!';
@@ -925,27 +956,44 @@ export class SnakeGameEngine {
       const backHubBtn = overlay.querySelector('#snake-back-hub-btn');
       const finishBtn = overlay.querySelector('#snake-finish-btn');
 
-      if (retryBtn) retryBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.restart(); };
-      if (backHubBtn) backHubBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.stopAndExit(); };
-      if (finishBtn) finishBtn.onclick = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        this.stopAndExit();
-        if (typeof window.exitNotebookGamesHub === 'function') window.exitNotebookGamesHub();
-      };
+      if (retryBtn) {
+        retryBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.restart();
+        };
+      }
+      if (backHubBtn) {
+        backHubBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.stopAndExit();
+        };
+      }
+      if (finishBtn) {
+        finishBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.stopAndExit();
+          if (typeof window.exitNotebookGamesHub === 'function') {
+            window.exitNotebookGamesHub();
+          }
+        };
+      }
     }
   }
 
   restart() {
     const overlay = this.container.querySelector('#snake-modal-overlay');
-    if (overlay) overlay.style.display = 'none';
+    if (overlay) {
+      overlay.style.setProperty('display', 'none', 'important');
+    }
     this.start();
   }
 
   stopAndExit() {
-    if (this.isStopping) return;
-    this.isStopping = true;
     this.isRunning = false;
+    this.isStopping = true;
     if (this.timerInterval) {
       clearInterval(this.timerInterval);
       this.timerInterval = null;

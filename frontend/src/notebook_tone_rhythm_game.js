@@ -289,6 +289,7 @@ export class ToneRhythmGameEngine {
   }
 
   start() {
+    this.isStopping = false;
     this.isRunning = true;
     this.isPaused = false;
     this.score = 0;
@@ -300,6 +301,11 @@ export class ToneRhythmGameEngine {
     this.activeNotes = [];
     this.spawnTimer = 0;
     this.lastFrameTime = performance.now();
+
+    const overlay = this.container.querySelector('#rhythm-modal-overlay');
+    if (overlay) {
+      overlay.style.setProperty('display', 'none', 'important');
+    }
 
     this.updateHUD();
     this.startTimers();
@@ -329,175 +335,183 @@ export class ToneRhythmGameEngine {
 
     const note = {
       id: noteId,
-      word: randomObj.word,
-      pinyin: randomObj.pinyin,
-      meaning: randomObj.meaning,
-      tone: tone, // 1, 2, 3, 4
+      wordObj: randomObj,
+      lane: tone, // 1, 2, 3, 4
       y: -50,
-      speed: 130 + (60 - this.timeLeft) * 1.5,
-      hasSpoken: false,
+      speed: 160 + (60 - this.timeLeft) * 1.5, // gradual increase
+      hit: false,
       el: null
     };
 
     const layer = this.container.querySelector('#rhythm-notes-layer');
-    if (layer) {
-      const el = document.createElement('div');
-      el.id = noteId;
-      el.className = `rhythm-note note-tone-${tone}`;
-      el.style.top = `${note.y}px`;
-      el.style.left = `${(tone - 1) * 25}%`;
+    if (!layer) return;
 
-      el.innerHTML = `
-        <div class="note-zh">${randomObj.word}</div>
-        <div class="note-pinyin">${randomObj.pinyin}</div>
-      `;
+    const el = document.createElement('div');
+    el.className = `rhythm-falling-note note-lane-${tone}`;
+    el.id = noteId;
+    el.innerHTML = `
+      <div class="note-char">${randomObj.word}</div>
+      <div class="note-pinyin">${randomObj.pinyin}</div>
+    `;
 
-      layer.appendChild(el);
-      note.el = el;
-    }
+    // Position horizontally based on lane (0%, 25%, 50%, 75%)
+    el.style.left = `${(tone - 1) * 25}%`;
+    el.style.top = `-50px`;
 
+    layer.appendChild(el);
+    note.el = el;
     this.activeNotes.push(note);
   }
 
   loop(currentTime) {
     if (!this.isRunning) return;
-    if (this.isPaused) {
+
+    if (!this.isPaused) {
+      const dt = (currentTime - this.lastFrameTime) / 1000;
       this.lastFrameTime = currentTime;
-      this.animFrameId = requestAnimationFrame((t) => this.loop(t));
-      return;
-    }
 
-    const dt = (currentTime - this.lastFrameTime) / 1000;
-    this.lastFrameTime = currentTime;
-
-    this.spawnTimer += dt;
-    if (this.spawnTimer >= this.spawnInterval) {
-      this.spawnTimer = 0;
-      this.spawnNote();
-    }
-
-    const highway = this.container.querySelector('#rhythm-highway');
-    const hitZoneY = highway ? highway.clientHeight - 110 : 380;
-    const missLimitY = highway ? highway.clientHeight - 30 : 450;
-
-    for (let i = this.activeNotes.length - 1; i >= 0; i--) {
-      const note = this.activeNotes[i];
-      note.y += note.speed * dt;
-
-      if (note.el) {
-        note.el.style.top = `${note.y}px`;
+      // Spawn note periodically
+      this.spawnTimer += dt * 1000;
+      const spawnInterval = Math.max(900, 1800 - (60 - this.timeLeft) * 15);
+      if (this.spawnTimer >= spawnInterval) {
+        this.spawnTimer = 0;
+        this.spawnNote();
       }
 
-      // Voice trigger when approaching judgment line
-      if (!note.hasSpoken && note.y >= hitZoneY - 120) {
-        note.hasSpoken = true;
-        if (window.speakText) window.speakText(note.word);
-      }
+      // Update notes
+      const highway = this.container.querySelector('#rhythm-highway');
+      const trackHeight = highway ? highway.clientHeight : 440;
 
-      // Missed note falling off screen
-      if (note.y >= missLimitY) {
-        this.handleMiss(i);
+      for (let i = this.activeNotes.length - 1; i >= 0; i--) {
+        const note = this.activeNotes[i];
+        note.y += note.speed * dt;
+
+        if (note.el) {
+          note.el.style.transform = `translate3d(0, ${note.y}px, 0)`;
+        }
+
+        // Missed note (passed hit zone completely)
+        if (note.y > trackHeight - 20 && !note.hit) {
+          if (note.el && note.el.parentNode) {
+            note.el.parentNode.removeChild(note.el);
+          }
+          this.activeNotes.splice(i, 1);
+          this.triggerMiss(note.lane);
+        }
       }
+    } else {
+      this.lastFrameTime = currentTime;
     }
 
     this.animFrameId = requestAnimationFrame((t) => this.loop(t));
   }
 
   triggerLaneHit(lane) {
-    this.sfx.playHit(lane);
+    if (!this.isRunning || this.isPaused) return;
 
-    // Visual ripple effect on pad
+    // Visual pad effect
     const pad = this.container.querySelector(`#pad-${lane}`);
     if (pad) {
-      pad.classList.add('active-hit');
-      setTimeout(() => pad.classList.remove('active-hit'), 150);
+      pad.classList.add('hit-active');
+      setTimeout(() => pad.classList.remove('hit-active'), 120);
     }
 
     const highway = this.container.querySelector('#rhythm-highway');
-    const hitZoneY = highway ? highway.clientHeight - 110 : 380;
+    const trackHeight = highway ? highway.clientHeight : 440;
+    const targetHitY = trackHeight - 75;
 
-    // Check closest note in this lane
-    let closestIdx = -1;
-    let closestDist = 999;
+    // Find nearest note in this lane
+    let nearestNote = null;
+    let minDiff = Infinity;
+    let nearestIdx = -1;
 
     for (let i = 0; i < this.activeNotes.length; i++) {
       const note = this.activeNotes[i];
-      if (note.tone === lane) {
-        const dist = Math.abs(note.y - hitZoneY);
-        if (dist < closestDist) {
-          closestDist = dist;
-          closestIdx = i;
+      if (note.lane === lane && !note.hit) {
+        const diff = Math.abs(note.y - targetHitY);
+        if (diff < minDiff) {
+          minDiff = diff;
+          nearestNote = note;
+          nearestIdx = i;
         }
       }
     }
 
-    if (closestIdx !== -1 && closestDist <= 75) {
-      // Perfect or Great
-      const isPerfect = closestDist <= 35;
-      this.handleHitSuccess(closestIdx, isPerfect);
+    if (nearestNote && minDiff < 90) {
+      // Perfect or Good Hit!
+      nearestNote.hit = true;
+      if (nearestNote.el && nearestNote.el.parentNode) {
+        nearestNote.el.parentNode.removeChild(nearestNote.el);
+      }
+      this.activeNotes.splice(nearestIdx, 1);
+
+      const isPerfect = minDiff < 40;
+      const pts = (isPerfect ? 30 : 15) * (this.isFeverMode ? 4 : 1);
+      this.score += pts;
+      this.combo++;
+      if (this.combo > this.maxCombo) this.maxCombo = this.combo;
+      this.notesHitCount++;
+
+      this.sfx.playHit(lane);
+      this.showHitFeedback(lane, isPerfect ? 'PERFECT! 🌟' : 'GOOD! ✨', isPerfect ? '#fbbf24' : '#38bdf8');
+
+      if (this.combo % 8 === 0 && !this.isFeverMode) {
+        this.triggerFever();
+      }
+
+      this.updateHUD();
     } else {
-      // False hit in wrong timing or lane
-      this.showJudgmentFloatingText(lane, 'MISS', '#ef4444');
+      // Mistimed or empty hit
+      this.triggerMiss(lane);
     }
   }
 
-  handleHitSuccess(idx, isPerfect) {
-    const note = this.activeNotes[idx];
-    if (!note) return;
-
-    this.sfx.playPerfect();
-    this.notesHitCount++;
-    this.combo++;
-    if (this.combo > this.maxCombo) this.maxCombo = this.combo;
-
-    const multiplier = this.combo >= 20 ? 4 : this.combo >= 10 ? 3 : this.combo >= 5 ? 2 : 1;
-    const basePts = isPerfect ? 100 : 60;
-    const pts = basePts * multiplier;
-    this.score += pts;
-
-    const text = isPerfect ? `PERFECT! +${pts}` : `GREAT! +${pts}`;
-    const color = isPerfect ? '#fbbf24' : '#38bdf8';
-    this.showJudgmentFloatingText(note.tone, text, color);
-
-    if (note.el) note.el.remove();
-    this.activeNotes.splice(idx, 1);
-
-    this.updateHUD();
-  }
-
-  handleMiss(idx) {
-    const note = this.activeNotes[idx];
-    if (!note) return;
+  triggerMiss(lane) {
+    this.combo = 0;
+    this.lives--;
+    this.isFeverMode = false;
+    const feverBanner = this.container.querySelector('#rhythm-fever-banner');
+    if (feverBanner) feverBanner.style.display = 'none';
 
     this.sfx.playMiss();
-    this.lives--;
-    this.combo = 0;
-
-    this.showJudgmentFloatingText(note.tone, 'MISS 💔', '#ef4444');
-    if (note.el) note.el.remove();
-    this.activeNotes.splice(idx, 1);
+    this.showHitFeedback(lane, 'MISS ❌', '#ef4444');
 
     if (this.lives <= 0) {
       this.gameOver(false);
+      return;
     }
     this.updateHUD();
   }
 
-  showJudgmentFloatingText(lane, text, color) {
-    const layer = this.container.querySelector('#rhythm-notes-layer');
+  triggerFever() {
+    this.isFeverMode = true;
+    this.sfx.playFever();
+    const banner = this.container.querySelector('#rhythm-fever-banner');
+    if (banner) {
+      banner.style.display = 'block';
+      setTimeout(() => {
+        if (this.isFeverMode) {
+          this.isFeverMode = false;
+          banner.style.display = 'none';
+        }
+      }, 8000);
+    }
+  }
+
+  showHitFeedback(lane, text, color) {
     const highway = this.container.querySelector('#rhythm-highway');
-    if (!layer || !highway) return;
+    if (!highway) return;
 
-    const hitZoneY = highway.clientHeight - 120;
     const el = document.createElement('div');
-    el.className = 'rhythm-floating-judge';
-    el.textContent = text;
-    el.style.left = `${(lane - 1) * 25 + 5}%`;
-    el.style.top = `${hitZoneY}px`;
+    el.className = 'rhythm-hit-feedback';
+    el.style.left = `${(lane - 1) * 25 + 12.5}%`;
     el.style.color = color;
+    el.textContent = text;
 
-    layer.appendChild(el);
-    setTimeout(() => el.remove(), 700);
+    highway.appendChild(el);
+    setTimeout(() => {
+      if (el.parentNode) el.parentNode.removeChild(el);
+    }, 800);
   }
 
   updateHUD() {
@@ -560,7 +574,7 @@ export class ToneRhythmGameEngine {
     const resNotes = this.container.querySelector('#rhythm-res-notes');
 
     if (overlay) {
-      overlay.style.display = 'flex';
+      overlay.style.setProperty('display', 'flex', 'important');
       if (icon) icon.textContent = isVictory ? '🏆' : '💔';
       if (title) title.textContent = isVictory ? 'Bậc Thầy Thanh Điệu!' : 'Hết Tim - Game Over!';
       if (desc) desc.textContent = isVictory ? 'Bạn đã hoàn thành xuất sắc bản nhạc và phân biệt thanh điệu siêu chuẩn!' : 'Hãy lắng nghe thanh điệu thật kỹ để bắt trọn nhịp nhé!';
@@ -572,29 +586,46 @@ export class ToneRhythmGameEngine {
       const backHubBtn = overlay.querySelector('#rhythm-back-hub-btn');
       const finishBtn = overlay.querySelector('#rhythm-finish-btn');
 
-      if (retryBtn) retryBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.restart(); };
-      if (backHubBtn) backHubBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.stopAndExit(); };
-      if (finishBtn) finishBtn.onclick = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        this.stopAndExit();
-        if (typeof window.exitNotebookGamesHub === 'function') window.exitNotebookGamesHub();
-      };
+      if (retryBtn) {
+        retryBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.restart();
+        };
+      }
+      if (backHubBtn) {
+        backHubBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.stopAndExit();
+        };
+      }
+      if (finishBtn) {
+        finishBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.stopAndExit();
+          if (typeof window.exitNotebookGamesHub === 'function') {
+            window.exitNotebookGamesHub();
+          }
+        };
+      }
     }
   }
 
   restart() {
     const overlay = this.container.querySelector('#rhythm-modal-overlay');
-    if (overlay) overlay.style.display = 'none';
+    if (overlay) {
+      overlay.style.setProperty('display', 'none', 'important');
+    }
     const layer = this.container.querySelector('#rhythm-notes-layer');
     if (layer) layer.innerHTML = '';
     this.start();
   }
 
   stopAndExit() {
-    if (this.isStopping) return;
-    this.isStopping = true;
     this.isRunning = false;
+    this.isStopping = true;
     if (this.timerInterval) {
       clearInterval(this.timerInterval);
       this.timerInterval = null;
@@ -604,10 +635,12 @@ export class ToneRhythmGameEngine {
       this.animFrameId = null;
     }
     window.removeEventListener('keydown', this.keyHandler);
-    const cb = this.onExit;
-    this.onExit = null;
-    if (typeof cb === 'function') {
-      cb();
+    const overlay = this.container.querySelector('#rhythm-modal-overlay');
+    if (overlay) {
+      overlay.style.setProperty('display', 'none', 'important');
+    }
+    if (typeof this.onExit === 'function') {
+      this.onExit();
     }
   }
 }

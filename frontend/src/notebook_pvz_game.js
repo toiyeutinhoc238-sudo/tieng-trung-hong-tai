@@ -1282,6 +1282,53 @@ export class PvZGameEngine {
     });
   }
 
+  start() {
+    this.isStopping = false;
+    this.isRunning = true;
+    this.isPaused = false;
+    this.score = 0;
+    this.suns = 150;
+    this.wave = 1;
+    this.zombiesKilled = 0;
+    this.wordsMasteredCount = 0;
+    this.streak = 0;
+    this.maxStreak = 0;
+
+    const overlay = this.container.querySelector('#pvz-modal-overlay');
+    if (overlay) {
+      overlay.style.setProperty('display', 'none', 'important');
+    }
+
+    this.grid = Array(5).fill(null).map(() => Array(9).fill(null));
+    this.plants = [];
+    this.zombies = [];
+    this.projectiles = [];
+    this.fallingSuns = [];
+    this.lawnmowers = [true, true, true, true, true];
+    this.activeMowers = [];
+    this.particleEffects = [];
+    this.selectedSeedType = null;
+
+    Object.keys(this.plantDefs).forEach(k => {
+      this.seedCooldowns[k] = 0;
+    });
+
+    this.initCanvasSize();
+    this.updateLawnmowerVisuals();
+    this.nextVocabQuestion();
+    this.updateHUD();
+
+    this.sunDropTimer = 0;
+    this.zombieSpawnTimer = 3000;
+    this.zombiesInWaveLeft = 8;
+    this.lastTime = performance.now();
+
+    if (this.animFrameId) cancelAnimationFrame(this.animFrameId);
+    this.animFrameId = requestAnimationFrame((t) => this.loop(t));
+
+    this.showToast('🌻 SẴN SÀNG! Trồng cây và giải từ vựng để đẩy lùi đàn Zombie!');
+  }
+
   updateSeedSelectionUI() {
     this.container.querySelectorAll('.pvz-seed-card').forEach(c => {
       c.classList.toggle('selected', c.dataset.type === this.selectedSeedType);
@@ -1323,7 +1370,7 @@ export class PvZGameEngine {
     const resWords = this.container.querySelector('#pvz-res-words');
 
     if (overlay) {
-      overlay.style.display = 'flex';
+      overlay.style.setProperty('display', 'flex', 'important');
       if (icon) icon.textContent = isVictory ? '🌻' : '🧟';
       if (title) title.textContent = isVictory ? 'Bảo Vệ Sân Vườn Thành Công!' : 'Zombies Ate Your Brains!';
       if (desc) desc.textContent = isVictory ? 'Bạn đã xuất sắc đẩy lùi 3 đợt Zombie và củng cố toàn bộ từ vựng!' : 'Đừng nản lòng! Hãy giải từ vựng thật nhanh để có nhiều Mặt Trời trồng cây nhé!';
@@ -1335,27 +1382,44 @@ export class PvZGameEngine {
       const backHubBtn = overlay.querySelector('#pvz-back-hub-btn');
       const finishBtn = overlay.querySelector('#pvz-finish-btn');
 
-      if (retryBtn) retryBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.restart(); };
-      if (backHubBtn) backHubBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.stopAndExit(); };
-      if (finishBtn) finishBtn.onclick = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        this.stopAndExit();
-        if (typeof window.exitNotebookGamesHub === 'function') window.exitNotebookGamesHub();
-      };
+      if (retryBtn) {
+        retryBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.restart();
+        };
+      }
+      if (backHubBtn) {
+        backHubBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.stopAndExit();
+        };
+      }
+      if (finishBtn) {
+        finishBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.stopAndExit();
+          if (typeof window.exitNotebookGamesHub === 'function') {
+            window.exitNotebookGamesHub();
+          }
+        };
+      }
     }
   }
 
   restart() {
     const overlay = this.container.querySelector('#pvz-modal-overlay');
-    if (overlay) overlay.style.display = 'none';
+    if (overlay) {
+      overlay.style.setProperty('display', 'none', 'important');
+    }
     this.start();
   }
 
   stopAndExit() {
-    if (this.isStopping) return;
-    this.isStopping = true;
     this.isRunning = false;
+    this.isStopping = true;
     if (this.animFrameId) {
       cancelAnimationFrame(this.animFrameId);
       this.animFrameId = null;
@@ -1364,10 +1428,12 @@ export class PvZGameEngine {
       window.removeEventListener('resize', this.resizeHandler);
       this.resizeHandler = null;
     }
-    const cb = this.onExit;
-    this.onExit = null;
-    if (typeof cb === 'function') {
-      cb();
+    const overlay = this.container.querySelector('#pvz-modal-overlay');
+    if (overlay) {
+      overlay.style.setProperty('display', 'none', 'important');
+    }
+    if (typeof this.onExit === 'function') {
+      this.onExit();
     }
   }
 }
