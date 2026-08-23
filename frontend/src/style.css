@@ -11451,6 +11451,828 @@ html.dark .stepper-notes {
   color: #94a3b8;
 }
 
+/* ==========================================================================
+   6-GAME ARCADE SELECTOR GRID & CARDS
+   ========================================================================== */
+
+.games-selector-grid-6 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.card-alchemist {
+  border-top: 4px solid #a855f7;
+}
+.card-alchemist:hover {
+  border-color: #c084fc;
+  box-shadow: 0 12px 32px rgba(168, 85, 247, 0.2);
+}
+
+.card-mahjong {
+  border-top: 4px solid #f59e0b;
+}
+.card-mahjong:hover {
+  border-color: #fbbf24;
+  box-shadow: 0 12px 32px rgba(245, 158, 11, 0.2);
+}
+
+.card-rhythm {
+  border-top: 4px solid #ec4899;
+}
+.card-rhythm:hover {
+  border-color: #f472b6;
+  box-shadow: 0 12px 32px rgba(236, 72, 153, 0.2);
+}
+
+.card-miner {
+  border-top: 4px solid #0ea5e9;
+}
+.card-miner:hover {
+  border-color: #38bdf8;
+  box-shadow: 0 12px 32px rgba(14, 165, 233, 0.2);
+}
+
+/* ==========================================================================
+   GAME 3: HANZI ALCHEMIST (LÒ LUYỆN CHIẾT TỰ)
+   ========================================================================== */
+
+.alchemist-game-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.alchemist-arena-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr 300px;
+  gap: 16px;
+  align-items: stretch;
+}
+
+@media (max-width: 980px) {
+  .alchemist-arena-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.alchemist-target-card {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid var(--border-glass);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.alchemist-quest-tag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #c084fc;
+  background: rgba(168, 85, 247, 0.15);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  padding: 4px 12px;
+  border-radius: 50px;
+  margin-bottom: 16px;
+}
+
+.target-zh-glow {
+  font-size: 4.5rem;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 0 0 20px rgba(168, 85, 247, 0.8), 0 0 40px rgba(192, 132, 252, 0.4);
+  line-height: 1.1;
+}
+
+.target-pinyin-glow {
+  font-size: 1.2rem;
+  color: #38bdf8;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.target-meaning-box {
+  margin-top: 14px;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  width: 100%;
+}
+
+.target-meaning-box .meaning-label {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  display: block;
+}
+
+.target-meaning-box .meaning-val {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #fbbf24;
+  margin-top: 2px;
+}
+
+.alchemist-hint-box {
+  margin-top: auto;
+  padding-top: 16px;
+  font-size: 0.78rem;
+  color: #94a3b8;
+  line-height: 1.4;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Magical Cauldron */
+.alchemist-cauldron-container {
+  background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  min-height: 380px;
+}
+
+.cauldron-aura {
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.25) 0%, transparent 70%);
+  filter: blur(20px);
+  animation: auraPulse 3s infinite ease-in-out;
+  pointer-events: none;
+}
+
+@keyframes auraPulse {
+  0%, 100% { transform: scale(0.9); opacity: 0.6; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+
+.cauldron-pot {
+  width: 260px;
+  height: 180px;
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  border: 4px solid #475569;
+  border-radius: 20px 20px 100px 100px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6), inset 0 -10px 25px rgba(168, 85, 247, 0.4);
+}
+
+.cauldron-rim {
+  position: absolute;
+  top: -12px;
+  left: -10px;
+  right: -10px;
+  height: 24px;
+  background: #334155;
+  border: 3px solid #64748b;
+  border-radius: 50px;
+}
+
+.cauldron-liquid {
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  background: linear-gradient(180deg, #7e22ce 0%, #3b0764 100%);
+  border-radius: 0 0 90px 90px;
+  opacity: 0.85;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.cauldron-liquid.fusion-success {
+  background: linear-gradient(180deg, #10b981 0%, #064e3b 100%);
+  box-shadow: 0 0 30px #10b981;
+}
+
+.cauldron-liquid.fusion-fail {
+  background: linear-gradient(180deg, #64748b 0%, #1e293b 100%);
+  box-shadow: 0 0 20px #ef4444;
+}
+
+.cauldron-bubble {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  animation: bubbleUp 2s infinite ease-in;
+}
+.cauldron-bubble.b1 { width: 14px; height: 14px; left: 30px; bottom: 10px; animation-delay: 0s; }
+.cauldron-bubble.b2 { width: 10px; height: 10px; left: 120px; bottom: 10px; animation-delay: 0.6s; }
+.cauldron-bubble.b3 { width: 18px; height: 18px; left: 190px; bottom: 10px; animation-delay: 1.2s; }
+
+@keyframes bubbleUp {
+  0% { transform: translateY(0) scale(0.5); opacity: 0; }
+  50% { opacity: 0.8; }
+  100% { transform: translateY(-110px) scale(1.2); opacity: 0; }
+}
+
+.cauldron-slots-wrap {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cauldron-slot {
+  width: 58px;
+  height: 58px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 2px dashed rgba(192, 132, 252, 0.6);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #c084fc;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
+}
+
+.cauldron-slot.filled {
+  border-style: solid;
+  border-color: #a855f7;
+  background: rgba(168, 85, 247, 0.2);
+  color: #ffffff;
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.6);
+}
+
+.slot-placeholder {
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 1.2rem;
+}
+
+.slot-plus {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #c084fc;
+}
+
+.cauldron-actions {
+  display: flex;
+  gap: 14px;
+  margin-top: 24px;
+  z-index: 5;
+}
+
+.btn-fuse-glow {
+  background: linear-gradient(135deg, #a855f7, #6b21a8);
+  color: white;
+  border-radius: 50px;
+  padding: 10px 24px;
+  font-weight: 800;
+  box-shadow: 0 4px 16px rgba(168, 85, 247, 0.5);
+  transition: all 0.2s ease;
+}
+
+.btn-fuse-glow:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 6px 22px rgba(168, 85, 247, 0.7);
+}
+
+/* Ingredients Shelf */
+.alchemist-shelf-card {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid var(--border-glass);
+  border-radius: 20px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.shelf-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #38bdf8;
+  margin-bottom: 4px;
+}
+
+.shelf-hint {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-bottom: 14px;
+}
+
+.radicals-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  overflow-y: auto;
+  max-height: 320px;
+  padding-right: 4px;
+}
+
+.radical-crystal-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 12px;
+  padding: 12px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.radical-crystal-btn:hover {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: #38bdf8;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+}
+
+.radical-crystal-btn .rad-char {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #ffffff;
+}
+
+.radical-crystal-btn .rad-sparkle {
+  font-size: 0.65rem;
+  opacity: 0.7;
+}
+
+/* ==========================================================================
+   GAME 4: HANZI MAHJONG (MẠT CHƯỢC NỐI TỪ)
+   ========================================================================== */
+
+.mahjong-game-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mahjong-arena-layout {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 16px;
+}
+
+@media (max-width: 860px) {
+  .mahjong-arena-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mahjong-board-container {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid var(--border-glass);
+  border-radius: 20px;
+  padding: 20px;
+  position: relative;
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mahjong-line-canvas {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.mahjong-tiles-grid {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+  max-width: 600px;
+  z-index: 5;
+}
+
+.mahjong-tile {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border: 2px solid #334155;
+  border-radius: 12px;
+  padding: 10px 4px;
+  min-height: 68px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  position: relative;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.mahjong-tile:hover {
+  transform: translateY(-2px);
+  border-color: #38bdf8;
+  box-shadow: 0 6px 14px rgba(56, 189, 248, 0.25);
+}
+
+.mahjong-tile.selected {
+  border-color: #fbbf24;
+  background: rgba(245, 158, 11, 0.15);
+  transform: scale(1.05);
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.6);
+}
+
+.mahjong-tile.hint-pulse {
+  animation: hintPulseAnim 0.6s infinite alternate;
+}
+
+@keyframes hintPulseAnim {
+  0% { transform: scale(1); border-color: #38bdf8; }
+  100% { transform: scale(1.08); border-color: #22c55e; box-shadow: 0 0 20px #22c55e; }
+}
+
+.mahjong-tile.cleared {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.tile-inner-text {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #ffffff;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.tile-type-tag {
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-top: 4px;
+  letter-spacing: 0.5px;
+}
+
+.mahjong-tile.type-hanzi .tile-type-tag {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+}
+.mahjong-tile.type-pinyin .tile-type-tag {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+}
+.mahjong-tile.type-meaning .tile-type-tag {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+}
+
+.mahjong-tools-panel {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid var(--border-glass);
+  border-radius: 20px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tool-sec-title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #cbd5e1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 8px;
+}
+
+.mahjong-tool-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: inherit;
+  text-align: left;
+}
+
+.mahjong-tool-card:hover {
+  transform: translateX(4px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #38bdf8;
+}
+
+.tool-icon {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.tool-info {
+  flex-grow: 1;
+}
+
+.tool-name {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.tool-desc {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+.tool-badge {
+  font-size: 0.9rem;
+  font-weight: 900;
+  color: #fbbf24;
+}
+
+.mahjong-rules-tip {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  line-height: 1.4;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ==========================================================================
+   GAME 5: TONE RHYTHM MASTER (PHÍM ĐÀN THANH ĐIỆU)
+   ========================================================================== */
+
+.rhythm-game-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.rhythm-arena-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rhythm-fever-banner {
+  background: linear-gradient(90deg, #ec4899, #f43f5e, #fbbf24);
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 0.95rem;
+  padding: 6px 24px;
+  border-radius: 50px;
+  margin-bottom: 10px;
+  animation: feverPulse 0.5s infinite alternate;
+}
+
+@keyframes feverPulse {
+  0% { transform: scale(1); box-shadow: 0 0 10px #ec4899; }
+  100% { transform: scale(1.05); box-shadow: 0 0 25px #fbbf24; }
+}
+
+.rhythm-highway {
+  width: 100%;
+  max-width: 580px;
+  height: 480px;
+  background: linear-gradient(180deg, #090d16 0%, #0f172a 100%);
+  border: 2px solid rgba(236, 72, 153, 0.3);
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+
+.rhythm-notes-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.rhythm-note {
+  position: absolute;
+  width: 25%;
+  padding: 10px 4px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  z-index: 5;
+  transition: transform 0.05s linear;
+}
+
+.rhythm-note.note-tone-1 {
+  background: linear-gradient(135deg, #0284c7, #38bdf8);
+  border: 2px solid #38bdf8;
+  color: #ffffff;
+}
+.rhythm-note.note-tone-2 {
+  background: linear-gradient(135deg, #059669, #34d399);
+  border: 2px solid #34d399;
+  color: #ffffff;
+}
+.rhythm-note.note-tone-3 {
+  background: linear-gradient(135deg, #d97706, #fbbf24);
+  border: 2px solid #fbbf24;
+  color: #0f172a;
+}
+.rhythm-note.note-tone-4 {
+  background: linear-gradient(135deg, #e11d48, #f43f5e);
+  border: 2px solid #f43f5e;
+  color: #ffffff;
+}
+
+.note-zh { font-size: 1.3rem; line-height: 1.1; }
+.note-pinyin { font-size: 0.75rem; opacity: 0.9; }
+
+.rhythm-hit-zone {
+  position: absolute;
+  bottom: 85px;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+}
+
+.hit-indicator {
+  flex: 1;
+  height: 100%;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+.hit-indicator.hit-lane-1 { background: rgba(56, 189, 248, 0.4); }
+.hit-indicator.hit-lane-2 { background: rgba(52, 211, 153, 0.4); }
+.hit-indicator.hit-lane-3 { background: rgba(251, 191, 36, 0.4); }
+.hit-indicator.hit-lane-4 { background: rgba(244, 63, 94, 0.4); }
+
+.rhythm-pads-row {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 85px;
+  display: flex;
+  background: rgba(15, 23, 42, 0.95);
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.rhythm-pad {
+  flex: 1;
+  border: none;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.rhythm-pad:last-child { border-right: none; }
+
+.rhythm-pad .pad-symbol {
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+.rhythm-pad.pad-1 .pad-symbol { color: #38bdf8; }
+.rhythm-pad.pad-2 .pad-symbol { color: #34d399; }
+.rhythm-pad.pad-3 .pad-symbol { color: #fbbf24; }
+.rhythm-pad.pad-4 .pad-symbol { color: #f43f5e; }
+
+.pad-title {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #cbd5e1;
+}
+
+.pad-key {
+  font-size: 0.65rem;
+  color: #64748b;
+}
+
+.rhythm-pad.active-hit {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(0.96);
+}
+
+.rhythm-floating-judge {
+  position: absolute;
+  font-size: 1.1rem;
+  font-weight: 900;
+  animation: floatFadeUp 0.7s forwards ease-out;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+  z-index: 15;
+}
+
+/* ==========================================================================
+   GAME 6: GOLD MINER VOCAB (THỢ MỎ ĐÀO VÀNG)
+   ========================================================================== */
+
+.miner-game-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.miner-arena-container {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid var(--border-glass);
+  border-radius: 20px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.miner-quest-banner {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  border-radius: 50px;
+  padding: 8px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  z-index: 5;
+}
+
+.quest-title-tag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  background: #f59e0b;
+  color: #0f172a;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.quest-text-wrap {
+  font-size: 0.92rem;
+  color: #ffffff;
+}
+
+.quest-highlight {
+  color: #fbbf24;
+  font-weight: 800;
+}
+
+.miner-canvas {
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  max-width: 100%;
+}
+
+.miner-action-bar {
+  display: flex;
+  gap: 14px;
+  margin-top: 14px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.miner-launch-btn {
+  flex-grow: 1;
+  padding: 12px;
+  font-weight: 800;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  box-shadow: 0 4px 14px rgba(14, 165, 233, 0.4);
+}
+
+.miner-tnt-btn {
+  padding: 12px 20px;
+  font-weight: 800;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
+}
+
 
 
 
