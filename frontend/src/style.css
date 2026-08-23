@@ -10772,23 +10772,29 @@ html.dark .cannon-input-hint {
   display: flex;
   align-items: center;
   gap: 10px;
-  cursor: not-allowed;
-  opacity: 0.5;
+  cursor: pointer;
+  opacity: 0.7;
   transition: all 0.2s ease;
   text-align: left;
   color: inherit;
 }
 
+.cannon-skill-card:hover {
+  transform: translateX(4px);
+  background: rgba(255, 255, 255, 0.08);
+}
+
 .cannon-skill-card.affordable {
   opacity: 1;
   cursor: pointer;
-  border-color: rgba(56, 189, 248, 0.4);
-  background: rgba(56, 189, 248, 0.06);
+  border-color: rgba(56, 189, 248, 0.5);
+  background: rgba(56, 189, 248, 0.1);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
 }
 
 .cannon-skill-card.affordable:hover {
-  transform: translateX(4px);
-  background: rgba(56, 189, 248, 0.15);
+  transform: translateX(4px) scale(1.02);
+  background: rgba(56, 189, 248, 0.2);
   border-color: #38bdf8;
 }
 

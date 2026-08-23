@@ -2400,6 +2400,7 @@ function showToast(message, isError = false) {
     toastEl.classList.remove('show');
   }, 2500);
 }
+window.showToast = showToast;
 
 // --- EVENT LISTENERS ---
 function setupEventListeners() {
@@ -12296,6 +12297,29 @@ function updateExamsVersionUI() {
 
 let activeNotebookGamesHubInstance = null;
 
+window.exitNotebookGamesHub = function() {
+  const gamePlayView = document.getElementById('game-play-view');
+  if (gamePlayView) gamePlayView.style.display = 'none';
+
+  const deckSelectionView = document.getElementById('deck-selection-view');
+  if (deckSelectionView) deckSelectionView.style.display = 'block';
+
+  if (activeNotebook) {
+    showNotebookDashboardView(activeNotebook, true);
+  } else if (activeSmartTopic) {
+    showSubdecksView();
+  } else {
+    showTopicsView();
+  }
+
+  if (activeNotebookGamesHubInstance && activeNotebookGamesHubInstance.currentGameEngine) {
+    if (activeNotebookGamesHubInstance.currentGameEngine.stopAndExit) {
+      activeNotebookGamesHubInstance.currentGameEngine.stopAndExit();
+    }
+  }
+  activeNotebookGamesHubInstance = null;
+};
+
 function startGameArenaFromNotebook() {
   if (!activeNotebook) return;
 
@@ -12358,9 +12382,7 @@ function startGameArenaFromNotebook() {
       desc: notebookDesc,
       currentUser: currentUser,
       onExit: () => {
-        if (gamePlayView) gamePlayView.style.display = 'none';
-        if (notebookDashboardView) notebookDashboardView.style.display = 'block';
-        activeNotebookGamesHubInstance = null;
+        window.exitNotebookGamesHub();
       }
     });
   }

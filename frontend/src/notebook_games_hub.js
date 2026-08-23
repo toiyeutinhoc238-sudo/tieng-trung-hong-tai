@@ -24,7 +24,7 @@ export class NotebookGamesHub {
     this.onExit = options.onExit || (() => {});
 
     this.currentGameEngine = null;
-    this.activeGameType = null; // 'cannon' | 'snake' | null
+    this.activeGameType = null;
 
     this.render();
   }
@@ -37,7 +37,7 @@ export class NotebookGamesHub {
         <!-- HUB TOP BAR -->
         <div class="games-hub-header">
           <div class="hub-header-left">
-            <button id="games-hub-back-btn" class="btn btn-outline btn-sm" style="display: flex; align-items: center; gap: 8px; border-radius: 50px; font-weight: 700;">
+            <button type="button" id="games-hub-back-btn" class="btn btn-secondary btn-sm" style="display: flex; align-items: center; gap: 8px; border-radius: 50px; font-weight: 700; padding: 8px 18px; cursor: pointer; z-index: 10;">
               <i class="fa-solid fa-arrow-left"></i> Quay Lại Sổ Tay
             </button>
             <div>
@@ -71,7 +71,7 @@ export class NotebookGamesHub {
 
         <div class="games-selector-grid">
           <!-- CARD GAME 1: CANNON -->
-          <div class="game-choice-card card-cannon" id="btn-choose-cannon">
+          <div class="game-choice-card card-cannon" id="btn-choose-cannon" style="cursor: pointer;">
             <div class="card-tag">PHẢN XẠ PINYIN & BẢN ĐỒ BOM</div>
             <div class="card-icon-hero">💥 🚀</div>
             <h3 class="card-title">Bắn Pháo Từ Vựng</h3>
@@ -83,11 +83,11 @@ export class NotebookGamesHub {
               <span><i class="fa-solid fa-snowflake"></i> Kỹ năng làm chậm</span>
               <span><i class="fa-solid fa-shield"></i> Né bom bẫy</span>
             </div>
-            <button class="btn btn-primary game-launch-btn">Chơi Bắn Pháo <i class="fa-solid fa-play"></i></button>
+            <button type="button" class="btn btn-primary game-launch-btn" id="btn-launch-cannon-inner">Chơi Bắn Pháo <i class="fa-solid fa-play"></i></button>
           </div>
 
           <!-- CARD GAME 2: SNAKE -->
-          <div class="game-choice-card card-snake" id="btn-choose-snake">
+          <div class="game-choice-card card-snake" id="btn-choose-snake" style="cursor: pointer;">
             <div class="card-tag" style="background: rgba(16, 185, 129, 0.2); color: #34d399; border-color: rgba(16, 185, 129, 0.4);">NHẬN DIỆN MẶT CHỮ & NGHĨA</div>
             <div class="card-icon-hero">🐍 🍏</div>
             <h3 class="card-title">Nuôi Rắn Từ Vựng</h3>
@@ -99,7 +99,7 @@ export class NotebookGamesHub {
               <span><i class="fa-solid fa-heart"></i> Hồi tim & X2 chuỗi</span>
               <span><i class="fa-solid fa-layer-group"></i> 5 Cấp độ thử thách</span>
             </div>
-            <button class="btn btn-primary game-launch-btn" style="background: linear-gradient(135deg, #10b981, #059669);">Chơi Nuôi Rắn <i class="fa-solid fa-play"></i></button>
+            <button type="button" class="btn btn-primary game-launch-btn" id="btn-launch-snake-inner" style="background: linear-gradient(135deg, #10b981, #059669);">Chơi Nuôi Rắn <i class="fa-solid fa-play"></i></button>
           </div>
         </div>
       </div>
@@ -116,7 +116,7 @@ export class NotebookGamesHub {
           <br><br>
           Tính năng sẽ sớm được phát hành chính thức cho toàn bộ học viên!
         </p>
-        <button id="btn-denied-back" class="btn btn-primary" style="padding: 10px 24px; border-radius: 50px; font-weight: 800;">
+        <button type="button" id="btn-denied-back" class="btn btn-primary" style="padding: 10px 24px; border-radius: 50px; font-weight: 800; cursor: pointer;">
           Quay lại Sổ tay
         </button>
       </div>
@@ -126,22 +126,34 @@ export class NotebookGamesHub {
   bindHubEvents() {
     const backBtn = this.container.querySelector('#games-hub-back-btn');
     if (backBtn) {
-      backBtn.addEventListener('click', () => this.exitHub());
+      backBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.exitHub();
+      });
     }
 
     const deniedBack = this.container.querySelector('#btn-denied-back');
     if (deniedBack) {
-      deniedBack.addEventListener('click', () => this.exitHub());
+      deniedBack.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.exitHub();
+      });
     }
 
     const cannonCard = this.container.querySelector('#btn-choose-cannon');
     if (cannonCard) {
-      cannonCard.addEventListener('click', () => this.launchGame('cannon'));
+      cannonCard.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.launchGame('cannon');
+      });
     }
 
     const snakeCard = this.container.querySelector('#btn-choose-snake');
     if (snakeCard) {
-      snakeCard.addEventListener('click', () => this.launchGame('snake'));
+      snakeCard.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.launchGame('snake');
+      });
     }
   }
 
@@ -188,6 +200,11 @@ export class NotebookGamesHub {
     }
     this.currentGameEngine = null;
     this.activeGameType = null;
-    if (this.onExit) this.onExit();
+    if (this.onExit) {
+      this.onExit();
+    }
+    if (typeof window.exitNotebookGamesHub === 'function') {
+      window.exitNotebookGamesHub();
+    }
   }
 }

@@ -34,7 +34,7 @@ class SnakeSoundFX {
     } catch (e) {}
   }
   playEatCorrect() {
-    this.playTone(523.25, 'triangle', 0.12, 659.25); // C5 to E5
+    this.playTone(523.25, 'triangle', 0.12, 659.25);
   }
   playEatWrong() {
     this.playTone(180, 'sawtooth', 0.25, 90);
@@ -67,17 +67,18 @@ export class SnakeGameEngine {
     // Game Core State
     this.level = 1;
     this.maxLevel = 5;
-    this.streak = 0; // 0 to 10
+    this.streak = 0;
     this.maxStreakNeeded = 10;
     this.score = 0;
     this.lives = 3;
     this.maxLives = 3;
     this.isPaused = false;
     this.isRunning = false;
+    this.wordsEatenCorrect = 0;
 
     // Power-up Buffs
-    this.invincibleTimer = 0; // In seconds
-    this.powerups = []; // { type: 'heal'|'x2'|'shield', x, y, el }
+    this.invincibleTimer = 0;
+    this.powerups = [];
 
     // Grid config
     this.cols = 24;
@@ -94,11 +95,11 @@ export class SnakeGameEngine {
     this.nextDir = { x: 1, y: 0 };
 
     // Targets & Obstacles
-    this.currentQuestion = null; // { word, pinyin, meaning }
-    this.apples = []; // [{ word, meaning, isCorrect, x, y }]
-    this.obstacles = []; // [{ type: 'rock'|'bush', x, y }]
+    this.currentQuestion = null;
+    this.apples = [];
+    this.obstacles = [];
 
-    this.tickInterval = 220; // ms per step (speeds up as level increases)
+    this.tickInterval = 220;
     this.lastTickTime = 0;
     this.animFrameId = null;
     this.timerInterval = null;
@@ -113,6 +114,10 @@ export class SnakeGameEngine {
       <div class="snake-game-wrapper">
         <!-- TOP HUD -->
         <div class="snake-hud-bar">
+          <button type="button" id="snake-top-back-btn" class="btn btn-outline btn-sm" style="display: flex; align-items: center; gap: 6px; font-weight: 700; border-radius: 50px;">
+            <i class="fa-solid fa-arrow-left"></i> Quay lại chọn game
+          </button>
+
           <div class="hud-item-title">
             <span class="snake-badge-icon">🐍</span>
             <strong>NUÔI RẮN</strong>
@@ -143,8 +148,8 @@ export class SnakeGameEngine {
           </div>
 
           <div style="margin-left: auto; display: flex; gap: 8px;">
-            <button id="snake-pause-btn" class="btn btn-outline btn-sm" title="Tạm dừng"><i class="fa-solid fa-pause"></i></button>
-            <button id="snake-exit-btn" class="btn btn-outline btn-sm" title="Thoát game"><i class="fa-solid fa-xmark"></i></button>
+            <button type="button" id="snake-pause-btn" class="btn btn-outline btn-sm" title="Tạm dừng"><i class="fa-solid fa-pause"></i></button>
+            <button type="button" id="snake-exit-btn" class="btn btn-outline btn-sm" title="Thoát về sổ tay"><i class="fa-solid fa-xmark"></i></button>
           </div>
         </div>
 
@@ -165,11 +170,11 @@ export class SnakeGameEngine {
 
             <!-- MOBILE VIRTUAL D-PAD -->
             <div class="snake-mobile-dpad">
-              <button class="dpad-btn dpad-up" data-dir="up"><i class="fa-solid fa-chevron-up"></i></button>
+              <button type="button" class="dpad-btn dpad-up" data-dir="up"><i class="fa-solid fa-chevron-up"></i></button>
               <div class="dpad-mid-row">
-                <button class="dpad-btn dpad-left" data-dir="left"><i class="fa-solid fa-chevron-left"></i></button>
-                <button class="dpad-btn dpad-down" data-dir="down"><i class="fa-solid fa-chevron-down"></i></button>
-                <button class="dpad-btn dpad-right" data-dir="right"><i class="fa-solid fa-chevron-right"></i></button>
+                <button type="button" class="dpad-btn dpad-left" data-dir="left"><i class="fa-solid fa-chevron-left"></i></button>
+                <button type="button" class="dpad-btn dpad-down" data-dir="down"><i class="fa-solid fa-chevron-down"></i></button>
+                <button type="button" class="dpad-btn dpad-right" data-dir="right"><i class="fa-solid fa-chevron-right"></i></button>
               </div>
             </div>
           </div>
@@ -199,7 +204,7 @@ export class SnakeGameEngine {
                 <div class="p-icon" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24;"><i class="fa-solid fa-coins"></i></div>
                 <div>
                   <div class="p-title">X2 CHUỖI</div>
-                  <div class="p-desc">Nhân đôi chuỗi hiện tại (ví dụ: 6 → 12).</div>
+                  <div class="p-desc">Nhân đôi chuỗi hiện tại (ví dụ: 5 → 10).</div>
                 </div>
               </div>
 
@@ -309,9 +314,10 @@ export class SnakeGameEngine {
               <i class="fa-solid fa-flask"></i> <strong>Chế độ thử nghiệm:</strong> Điểm số và thành tích không lưu vào hồ sơ trong giai đoạn Beta Super Admin.
             </div>
 
-            <div style="display: flex; gap: 12px; justify-content: center; margin-top: 20px;">
-              <button id="snake-retry-btn" class="btn btn-primary" style="padding: 10px 24px; font-weight: 800;"><i class="fa-solid fa-rotate-right"></i> Chơi Lại</button>
-              <button id="snake-finish-btn" class="btn btn-outline" style="padding: 10px 20px; font-weight: 700;">Quay Lại Sổ Tay</button>
+            <div style="display: flex; gap: 12px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
+              <button type="button" id="snake-retry-btn" class="btn btn-primary" style="padding: 10px 20px; font-weight: 800;"><i class="fa-solid fa-rotate-right"></i> Chơi Lại</button>
+              <button type="button" id="snake-back-hub-btn" class="btn btn-secondary" style="padding: 10px 18px; font-weight: 700;"><i class="fa-solid fa-gamepad"></i> Đổi Trò Chơi</button>
+              <button type="button" id="snake-finish-btn" class="btn btn-outline" style="padding: 10px 18px; font-weight: 700;"><i class="fa-solid fa-book-bookmark"></i> Quay Lại Sổ Tay</button>
             </div>
           </div>
         </div>
@@ -324,10 +330,9 @@ export class SnakeGameEngine {
     if (!this.canvas) return;
     this.ctx = this.canvas.getContext('2d');
 
-    // Make canvas responsive to container width
     const container = this.container.querySelector('#snake-canvas-container');
     const width = Math.min(840, container.clientWidth || 800);
-    const height = Math.round(width * (16 / 24)); // 24:16 aspect ratio
+    const height = Math.round(width * (16 / 24));
 
     this.canvas.width = width;
     this.canvas.height = height;
@@ -335,15 +340,62 @@ export class SnakeGameEngine {
   }
 
   bindEvents() {
+    const topBackBtn = this.container.querySelector('#snake-top-back-btn');
     const pauseBtn = this.container.querySelector('#snake-pause-btn');
     const exitBtn = this.container.querySelector('#snake-exit-btn');
     const retryBtn = this.container.querySelector('#snake-retry-btn');
+    const backHubBtn = this.container.querySelector('#snake-back-hub-btn');
     const finishBtn = this.container.querySelector('#snake-finish-btn');
 
-    if (pauseBtn) pauseBtn.addEventListener('click', () => this.togglePause());
-    if (exitBtn) exitBtn.addEventListener('click', () => this.stopAndExit());
-    if (retryBtn) retryBtn.addEventListener('click', () => this.restart());
-    if (finishBtn) finishBtn.addEventListener('click', () => this.stopAndExit());
+    if (topBackBtn) {
+      topBackBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.stopAndExit();
+      });
+    }
+
+    if (pauseBtn) {
+      pauseBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.togglePause();
+      });
+    }
+
+    if (exitBtn) {
+      exitBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (typeof window.exitNotebookGamesHub === 'function') {
+          this.stopAndExit();
+          window.exitNotebookGamesHub();
+        } else {
+          this.stopAndExit();
+        }
+      });
+    }
+
+    if (retryBtn) {
+      retryBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.restart();
+      });
+    }
+
+    if (backHubBtn) {
+      backHubBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.stopAndExit();
+      });
+    }
+
+    if (finishBtn) {
+      finishBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.stopAndExit();
+        if (typeof window.exitNotebookGamesHub === 'function') {
+          window.exitNotebookGamesHub();
+        }
+      });
+    }
 
     // Arrow keys & WASD
     this.keyHandler = (e) => {
@@ -369,19 +421,29 @@ export class SnakeGameEngine {
     };
     window.addEventListener('keydown', this.keyHandler);
 
-    // Virtual D-Pad buttons
+    // Virtual D-Pad buttons (touch + click support)
+    const handleDirAction = (dir) => {
+      if (dir === 'up' && this.dir.y === 0) this.nextDir = { x: 0, y: -1 };
+      else if (dir === 'down' && this.dir.y === 0) this.nextDir = { x: 0, y: 1 };
+      else if (dir === 'left' && this.dir.x === 0) this.nextDir = { x: -1, y: 0 };
+      else if (dir === 'right' && this.dir.x === 0) this.nextDir = { x: 1, y: 0 };
+    };
+
     this.container.querySelectorAll('.dpad-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
+      const dir = btn.dataset.dir;
+      btn.addEventListener('touchstart', (e) => {
         e.preventDefault();
-        const dir = btn.dataset.dir;
-        if (dir === 'up' && this.dir.y === 0) this.nextDir = { x: 0, y: -1 };
-        else if (dir === 'down' && this.dir.y === 0) this.nextDir = { x: 0, y: 1 };
-        else if (dir === 'left' && this.dir.x === 0) this.nextDir = { x: -1, y: 0 };
-        else if (dir === 'right' && this.dir.x === 0) this.nextDir = { x: 1, y: 0 };
+        handleDirAction(dir);
+      }, { passive: false });
+
+      btn.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        handleDirAction(dir);
       });
     });
 
-    window.addEventListener('resize', () => this.initCanvas());
+    this.resizeHandler = () => this.initCanvas();
+    window.addEventListener('resize', this.resizeHandler);
   }
 
   start() {
@@ -426,13 +488,12 @@ export class SnakeGameEngine {
   }
 
   calculateSpeed() {
-    // Level 1: 220ms, Level 5: 120ms
     this.tickInterval = Math.max(110, 220 - (this.level - 1) * 25);
   }
 
   spawnObstacles() {
     this.obstacles = [];
-    const count = (this.level - 1) * 3; // Level 1 has 0 obstacles, Level 5 has 12
+    const count = (this.level - 1) * 3;
     for (let i = 0; i < count; i++) {
       let pos = this.getRandomEmptyCell();
       if (pos) {
@@ -452,15 +513,12 @@ export class SnakeGameEngine {
     this.currentQuestion = randomTarget;
     this.updateTargetPrompt();
 
-    // Pick 3-4 distractors
     const otherWords = this.rawWords.filter(w => w.word !== randomTarget.word);
     const shuffled = [...otherWords].sort(() => 0.5 - Math.random());
     const distractors = shuffled.slice(0, 3);
 
-    // Spawn 1 correct apple + 3 incorrect apples
     this.apples = [];
 
-    // Correct Apple
     let pos = this.getRandomEmptyCell();
     if (pos) {
       this.apples.push({
@@ -472,7 +530,6 @@ export class SnakeGameEngine {
       });
     }
 
-    // Distractor Apples
     distractors.forEach(d => {
       let dPos = this.getRandomEmptyCell();
       if (dPos) {
@@ -486,7 +543,6 @@ export class SnakeGameEngine {
       }
     });
 
-    // 25% chance to spawn a lucky power-up if none on map
     if (this.powerups.length === 0 && Math.random() < 0.28) {
       let pPos = this.getRandomEmptyCell();
       if (pPos) {
@@ -502,13 +558,9 @@ export class SnakeGameEngine {
       const rx = Math.floor(Math.random() * (this.cols - 2)) + 1;
       const ry = Math.floor(Math.random() * (this.rows - 2)) + 1;
 
-      // Check snake
       const onSnake = this.snake.some(s => s.x === rx && s.y === ry);
-      // Check apples
       const onApple = this.apples.some(a => a.x === rx && a.y === ry);
-      // Check obstacles
       const onObs = this.obstacles.some(o => o.x === rx && o.y === ry);
-      // Check powerups
       const onPow = this.powerups.some(p => p.x === rx && p.y === ry);
 
       if (!onSnake && !onApple && !onObs && !onPow) {
@@ -547,30 +599,25 @@ export class SnakeGameEngine {
     this.dir = this.nextDir;
     const head = { x: this.snake[0].x + this.dir.x, y: this.snake[0].y + this.dir.y };
 
-    // Wall collision (wrap around smoothly or wall bounce)
     if (head.x < 0) head.x = this.cols - 1;
     if (head.x >= this.cols) head.x = 0;
     if (head.y < 0) head.y = this.rows - 1;
     if (head.y >= this.rows) head.y = 0;
 
-    // Self-collision
     const hitSelf = this.snake.slice(1).some(s => s.x === head.x && s.y === head.y);
     if (hitSelf) {
       this.handleMistake('Đâm trúng thân rắn!');
       return;
     }
 
-    // Obstacle collision
     const hitObs = this.obstacles.find(o => o.x === head.x && o.y === head.y);
     if (hitObs) {
       this.handleMistake('Đâm trúng chướng ngại vật!');
       return;
     }
 
-    // Move snake
     this.snake.unshift(head);
 
-    // Check Apple eaten
     const appleIdx = this.apples.findIndex(a => a.x === head.x && a.y === head.y);
     if (appleIdx !== -1) {
       const apple = this.apples[appleIdx];
@@ -578,10 +625,9 @@ export class SnakeGameEngine {
         this.handleEatCorrect(apple);
       } else {
         this.handleEatWrong(apple);
-        this.snake.pop(); // Do not grow on wrong
+        this.snake.pop();
       }
     } else {
-      // Check Power-up eaten
       const powIdx = this.powerups.findIndex(p => p.x === head.x && p.y === head.y);
       if (powIdx !== -1) {
         this.handleEatPowerup(this.powerups[powIdx]);
@@ -674,7 +720,6 @@ export class SnakeGameEngine {
       this.spawnObstacles();
       this.nextWordQuestion();
     } else {
-      // Victory: Completed Level 5!
       this.gameOver(true);
     }
     this.updateHUD();
@@ -697,7 +742,6 @@ export class SnakeGameEngine {
     if (streakText) streakText.textContent = `${this.streak}/10`;
     if (scoreVal) scoreVal.textContent = this.score;
 
-    // Update beads
     if (beadsContainer) {
       beadsContainer.innerHTML = '';
       for (let i = 0; i < 10; i++) {
@@ -707,7 +751,6 @@ export class SnakeGameEngine {
       }
     }
 
-    // Update hearts
     if (livesContainer) {
       livesContainer.innerHTML = '';
       for (let i = 0; i < this.maxLives; i++) {
@@ -718,7 +761,6 @@ export class SnakeGameEngine {
       }
     }
 
-    // Update stepper pills
     for (let i = 1; i <= 5; i++) {
       const pill = this.container.querySelector(`#step-lvl-${i}`);
       if (pill) {
@@ -735,11 +777,9 @@ export class SnakeGameEngine {
     const h = this.canvas.height;
     const cs = this.cellSize;
 
-    // Clear background
     ctx.fillStyle = '#f8f9fa';
     ctx.fillRect(0, 0, w, h);
 
-    // Subtle grid lines (like graph notebook paper in wireframe)
     ctx.strokeStyle = 'rgba(203, 213, 225, 0.45)';
     ctx.lineWidth = 1;
     for (let c = 0; c <= this.cols; c++) {
@@ -755,7 +795,6 @@ export class SnakeGameEngine {
       ctx.stroke();
     }
 
-    // Draw Obstacles (🪨 Rocks, 🌿 Bushes)
     this.obstacles.forEach(o => {
       const ox = o.x * cs + cs / 2;
       const oy = o.y * cs + cs / 2;
@@ -765,7 +804,6 @@ export class SnakeGameEngine {
       ctx.fillText(o.type === 'rock' ? '🪨' : '🌿', ox, oy);
     });
 
-    // Draw Power-ups
     this.powerups.forEach(p => {
       const px = p.x * cs + cs / 2;
       const py = p.y * cs + cs / 2;
@@ -781,13 +819,11 @@ export class SnakeGameEngine {
       ctx.restore();
     });
 
-    // Draw Apples with Meaning labels
     this.apples.forEach(a => {
       const ax = a.x * cs + cs / 2;
       const ay = a.y * cs + cs / 2;
 
       ctx.save();
-      // Apple icon background
       ctx.beginPath();
       ctx.arc(ax, ay - 4, cs * 0.48, 0, Math.PI * 2);
       ctx.fillStyle = a.isCorrect ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255, 255, 255, 0.9)';
@@ -796,39 +832,33 @@ export class SnakeGameEngine {
       ctx.lineWidth = 1.5;
       ctx.stroke();
 
-      // Apple leaf
       ctx.fillStyle = '#22c55e';
       ctx.beginPath();
       ctx.ellipse(ax + 4, ay - cs * 0.45, 4, 2, Math.PI / 4, 0, Math.PI * 2);
       ctx.fill();
 
-      // Meaning text inside apple
       ctx.fillStyle = '#0f172a';
       ctx.font = 'bold 11px system-ui, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
 
-      // Truncate long words
       let displayMeaning = a.meaning || '';
       if (displayMeaning.length > 8) displayMeaning = displayMeaning.substring(0, 7) + '..';
       ctx.fillText(displayMeaning, ax, ay);
       ctx.restore();
     });
 
-    // Draw Snake
     this.snake.forEach((segment, idx) => {
       const sx = segment.x * cs;
       const sy = segment.y * cs;
 
       ctx.save();
       if (idx === 0) {
-        // Head
         ctx.fillStyle = '#22c55e';
         ctx.beginPath();
         ctx.roundRect(sx + 2, sy + 2, cs - 4, cs - 4, 8);
         ctx.fill();
 
-        // Eyes
         ctx.fillStyle = '#ffffff';
         const eyeOffsetX = this.dir.x === 0 ? 6 : this.dir.x > 0 ? 18 : 6;
         const eyeOffsetY = this.dir.y === 0 ? 6 : this.dir.y > 0 ? 18 : 6;
@@ -843,7 +873,6 @@ export class SnakeGameEngine {
         ctx.arc(sx + eyeOffsetX, sy + 18, 1.5, 0, Math.PI * 2);
         ctx.fill();
 
-        // Invincible Aura Glow if active
         if (this.invincibleTimer > 0) {
           ctx.strokeStyle = '#38bdf8';
           ctx.lineWidth = 3;
@@ -852,7 +881,6 @@ export class SnakeGameEngine {
           ctx.stroke();
         }
       } else {
-        // Body with cute texture spots
         ctx.fillStyle = idx % 2 === 0 ? '#4ade80' : '#86efac';
         ctx.beginPath();
         ctx.roundRect(sx + 3, sy + 3, cs - 6, cs - 6, 6);
@@ -906,6 +934,7 @@ export class SnakeGameEngine {
     if (this.timerInterval) clearInterval(this.timerInterval);
     if (this.animFrameId) cancelAnimationFrame(this.animFrameId);
     window.removeEventListener('keydown', this.keyHandler);
+    if (this.resizeHandler) window.removeEventListener('resize', this.resizeHandler);
     if (this.onExit) this.onExit();
   }
 }

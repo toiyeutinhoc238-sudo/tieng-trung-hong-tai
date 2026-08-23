@@ -3,7 +3,6 @@
  * Giai đoạn: Thử nghiệm nội bộ (Beta Super Admin)
  */
 
-// Helper to remove accents/tones from Pinyin for flexible typing
 function normalizePinyin(str) {
   if (!str) return '';
   return str
@@ -15,7 +14,6 @@ function normalizePinyin(str) {
     .trim();
 }
 
-// Simple Audio FX Synthesizer using Web Audio API
 class GameSoundFX {
   constructor() {
     this.ctx = null;
@@ -85,27 +83,25 @@ export class CannonGameEngine {
     this.maxCombo = 0;
     this.lives = 3;
     this.maxLives = 3;
-    this.timeLeft = 60; // 60s survival mode
+    this.timeLeft = 60;
     this.isRunning = false;
     this.isPaused = false;
     this.lastFrameTime = 0;
     this.spawnTimer = 0;
-    this.spawnInterval = 2.4; // seconds
+    this.spawnInterval = 2.3;
+    this.wordsDestroyedCount = 0;
 
     // Active Falling Words
-    this.activeWords = []; // { id, word, pinyin, normPinyin, meaning, type: 'normal'|'bomb'|'bonus', x, y, speed, el }
+    this.activeWords = [];
 
-    // Projectiles
-    this.projectiles = [];
-
-    // Active Buffs
-    this.slowMoTimer = 0; // Ice Rain
-    this.score2xTimer = 0; // Double Score
-    this.shieldTimer = 0; // Shield against 1 error
+    // Buffs
+    this.slowMoTimer = 0;
+    this.score2xTimer = 0;
+    this.shieldTimer = 0;
     this.hasShield = false;
 
-    // Cannon State
-    this.cannonAngle = 0; // degrees
+    // Cannon Angle
+    this.cannonAngle = 0;
 
     this.timerInterval = null;
     this.animFrameId = null;
@@ -119,6 +115,10 @@ export class CannonGameEngine {
       <div class="cannon-game-wrapper">
         <!-- TOP HUD -->
         <div class="cannon-hud-bar">
+          <button id="cannon-top-back-btn" class="btn btn-outline btn-sm" style="display: flex; align-items: center; gap: 6px; font-weight: 700; border-radius: 50px;">
+            <i class="fa-solid fa-arrow-left"></i> Quay lại chọn game
+          </button>
+
           <div class="hud-item hud-score">
             <i class="fa-solid fa-star" style="color: #fbbf24;"></i>
             <div class="hud-content">
@@ -154,7 +154,7 @@ export class CannonGameEngine {
 
           <div style="margin-left: auto; display: flex; gap: 8px;">
             <button id="cannon-pause-btn" class="btn btn-outline btn-sm" title="Tạm dừng"><i class="fa-solid fa-pause"></i></button>
-            <button id="cannon-exit-btn" class="btn btn-outline btn-sm" title="Thoát game"><i class="fa-solid fa-xmark"></i></button>
+            <button id="cannon-exit-btn" class="btn btn-outline btn-sm" title="Thoát về sổ tay"><i class="fa-solid fa-xmark"></i></button>
           </div>
         </div>
 
@@ -181,11 +181,11 @@ export class CannonGameEngine {
             <!-- INPUT BAR -->
             <div class="cannon-input-bar">
               <div class="cannon-input-wrap">
-                <input type="text" id="cannon-pinyin-input" class="cannon-pinyin-input" placeholder="Nhập pinyin..." autocomplete="off" autofocus />
-                <button id="cannon-fire-btn" class="cannon-fire-btn" title="Bắn nhanh"><i class="fa-solid fa-bullseye"></i> BẮN (Space)</button>
+                <input type="text" id="cannon-pinyin-input" class="cannon-pinyin-input" placeholder="Nhập pinyin của chữ..." autocomplete="off" autofocus />
+                <button type="button" id="cannon-fire-btn" class="cannon-fire-btn" title="Bắn nhanh"><i class="fa-solid fa-bullseye"></i> BẮN (Space)</button>
               </div>
               <div class="cannon-input-hint">
-                Gõ đúng <strong>từ thường</strong> để ghi điểm. Tránh gõ <strong>từ chứa bom</strong>!
+                Gõ đúng <strong>từ thường</strong> để ghi điểm. Tránh gõ <strong>từ chứa bom 💣</strong>!
               </div>
             </div>
           </div>
@@ -201,7 +201,7 @@ export class CannonGameEngine {
 
             <div class="cannon-skills-list">
               <!-- Skill 1: Mưa Băng -->
-              <button class="cannon-skill-card" id="skill-ice" data-cost="10" title="Nhấn để kích hoạt (Phím 1)">
+              <button type="button" class="cannon-skill-card" id="skill-ice" data-cost="10" title="Nhấn để kích hoạt (Phím 1)">
                 <div class="skill-icon-box" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8;">
                   <i class="fa-solid fa-snowflake"></i>
                 </div>
@@ -213,7 +213,7 @@ export class CannonGameEngine {
               </button>
 
               <!-- Skill 2: Tim Hồi Sinh -->
-              <button class="cannon-skill-card" id="skill-heal" data-cost="20" title="Nhấn để kích hoạt (Phím 2)">
+              <button type="button" class="cannon-skill-card" id="skill-heal" data-cost="20" title="Nhấn để kích hoạt (Phím 2)">
                 <div class="skill-icon-box" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">
                   <i class="fa-solid fa-heart"></i>
                 </div>
@@ -225,7 +225,7 @@ export class CannonGameEngine {
               </button>
 
               <!-- Skill 3: Nhân Điểm -->
-              <button class="cannon-skill-card" id="skill-x2" data-cost="30" title="Nhấn để kích hoạt (Phím 3)">
+              <button type="button" class="cannon-skill-card" id="skill-x2" data-cost="30" title="Nhấn để kích hoạt (Phím 3)">
                 <div class="skill-icon-box" style="background: rgba(168, 85, 247, 0.15); color: #a855f7;">
                   <i class="fa-solid fa-star"></i>
                 </div>
@@ -237,7 +237,7 @@ export class CannonGameEngine {
               </button>
 
               <!-- Skill 4: Lá Chắn -->
-              <button class="cannon-skill-card" id="skill-shield" data-cost="20" title="Nhấn để kích hoạt (Phím 4)">
+              <button type="button" class="cannon-skill-card" id="skill-shield" data-cost="20" title="Nhấn để kích hoạt (Phím 4)">
                 <div class="skill-icon-box" style="background: rgba(148, 163, 184, 0.15); color: #94a3b8;">
                   <i class="fa-solid fa-shield-halved"></i>
                 </div>
@@ -331,9 +331,10 @@ export class CannonGameEngine {
               <i class="fa-solid fa-flask"></i> <strong>Chế độ thử nghiệm:</strong> Điểm số và thành tích không lưu vào hồ sơ trong giai đoạn Beta Super Admin.
             </div>
 
-            <div style="display: flex; gap: 12px; justify-content: center; margin-top: 20px;">
-              <button id="cannon-retry-btn" class="btn btn-primary" style="padding: 10px 24px; font-weight: 800;"><i class="fa-solid fa-rotate-right"></i> Chơi Lại</button>
-              <button id="cannon-finish-btn" class="btn btn-outline" style="padding: 10px 20px; font-weight: 700;">Quay Lại Sổ Tay</button>
+            <div style="display: flex; gap: 12px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
+              <button type="button" id="cannon-retry-btn" class="btn btn-primary" style="padding: 10px 20px; font-weight: 800;"><i class="fa-solid fa-rotate-right"></i> Chơi Lại</button>
+              <button type="button" id="cannon-back-hub-btn" class="btn btn-secondary" style="padding: 10px 18px; font-weight: 700;"><i class="fa-solid fa-gamepad"></i> Đổi Trò Chơi</button>
+              <button type="button" id="cannon-finish-btn" class="btn btn-outline" style="padding: 10px 18px; font-weight: 700;"><i class="fa-solid fa-book-bookmark"></i> Quay Lại Sổ Tay</button>
             </div>
           </div>
         </div>
@@ -342,12 +343,21 @@ export class CannonGameEngine {
   }
 
   bindEvents() {
+    const topBackBtn = this.container.querySelector('#cannon-top-back-btn');
     const inputEl = this.container.querySelector('#cannon-pinyin-input');
     const fireBtn = this.container.querySelector('#cannon-fire-btn');
     const pauseBtn = this.container.querySelector('#cannon-pause-btn');
     const exitBtn = this.container.querySelector('#cannon-exit-btn');
     const retryBtn = this.container.querySelector('#cannon-retry-btn');
+    const backHubBtn = this.container.querySelector('#cannon-back-hub-btn');
     const finishBtn = this.container.querySelector('#cannon-finish-btn');
+
+    if (topBackBtn) {
+      topBackBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.stopAndExit();
+      });
+    }
 
     if (inputEl) {
       inputEl.addEventListener('input', () => this.handleInput(inputEl.value));
@@ -360,30 +370,59 @@ export class CannonGameEngine {
     }
 
     if (fireBtn) {
-      fireBtn.addEventListener('click', () => {
+      fireBtn.addEventListener('click', (e) => {
+        e.preventDefault();
         if (inputEl) this.attemptShoot(inputEl.value.trim());
       });
     }
 
     if (pauseBtn) {
-      pauseBtn.addEventListener('click', () => this.togglePause());
+      pauseBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.togglePause();
+      });
     }
 
     if (exitBtn) {
-      exitBtn.addEventListener('click', () => this.stopAndExit());
+      exitBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (typeof window.exitNotebookGamesHub === 'function') {
+          this.stopAndExit();
+          window.exitNotebookGamesHub();
+        } else {
+          this.stopAndExit();
+        }
+      });
     }
 
     if (retryBtn) {
-      retryBtn.addEventListener('click', () => this.restart());
+      retryBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.restart();
+      });
+    }
+
+    if (backHubBtn) {
+      backHubBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.stopAndExit();
+      });
     }
 
     if (finishBtn) {
-      finishBtn.addEventListener('click', () => this.stopAndExit());
+      finishBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.stopAndExit();
+        if (typeof window.exitNotebookGamesHub === 'function') {
+          window.exitNotebookGamesHub();
+        }
+      });
     }
 
     // Skills buttons
     this.container.querySelectorAll('.cannon-skill-card').forEach(btn => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
         const id = btn.id;
         if (id === 'skill-ice') this.activateSkill('ice');
         else if (id === 'skill-heal') this.activateSkill('heal');
@@ -395,12 +434,10 @@ export class CannonGameEngine {
     // Keyboard shortcuts (1, 2, 3, 4 for skills)
     this.keyHandler = (e) => {
       if (!this.isRunning || this.isPaused) return;
-      if (e.target && e.target.id === 'cannon-pinyin-input') {
-        if (e.key === '1' && e.altKey) this.activateSkill('ice');
-        if (e.key === '2' && e.altKey) this.activateSkill('heal');
-        if (e.key === '3' && e.altKey) this.activateSkill('x2');
-        if (e.key === '4' && e.altKey) this.activateSkill('shield');
-      }
+      if (e.key === '1' && (e.altKey || e.ctrlKey)) { e.preventDefault(); this.activateSkill('ice'); }
+      if (e.key === '2' && (e.altKey || e.ctrlKey)) { e.preventDefault(); this.activateSkill('heal'); }
+      if (e.key === '3' && (e.altKey || e.ctrlKey)) { e.preventDefault(); this.activateSkill('x2'); }
+      if (e.key === '4' && (e.altKey || e.ctrlKey)) { e.preventDefault(); this.activateSkill('shield'); }
     };
     window.addEventListener('keydown', this.keyHandler);
   }
@@ -429,7 +466,6 @@ export class CannonGameEngine {
       if (!this.isRunning || this.isPaused) return;
       this.timeLeft--;
 
-      // Buff timers decrement
       if (this.slowMoTimer > 0) this.slowMoTimer--;
       if (this.score2xTimer > 0) this.score2xTimer--;
       if (this.shieldTimer > 0) {
@@ -439,7 +475,7 @@ export class CannonGameEngine {
       this.updateBuffBanner();
 
       if (this.timeLeft <= 0) {
-        this.gameOver(true); // Victory survival!
+        this.gameOver(true);
       }
       this.updateHUD();
     }, 1000);
@@ -466,20 +502,19 @@ export class CannonGameEngine {
     const playfield = this.container.querySelector('#cannon-playfield');
     if (!playfield) return;
     const rect = playfield.getBoundingClientRect();
-    const maxWidth = Math.max(260, rect.width - 160);
+    const maxWidth = Math.max(240, rect.width - 150);
 
     const randomWordObj = this.rawWords[Math.floor(Math.random() * this.rawWords.length)];
     if (!randomWordObj) return;
 
-    // 65% normal, 20% bomb, 15% bonus
     const randType = Math.random();
     let type = 'normal';
     if (randType < 0.20) type = 'bomb';
     else if (randType < 0.35) type = 'bonus';
 
     const wordId = 'word_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
-    const xPos = 20 + Math.random() * maxWidth;
-    const yPos = -40;
+    const xPos = 15 + Math.random() * maxWidth;
+    const yPos = -35;
     const speed = (28 + Math.random() * 22) * (1 + (60 - this.timeLeft) * 0.008);
 
     const wordItem = {
@@ -495,7 +530,6 @@ export class CannonGameEngine {
       el: null
     };
 
-    // Create DOM element
     const layer = this.container.querySelector('#cannon-words-layer');
     if (layer) {
       const el = document.createElement('div');
@@ -512,6 +546,19 @@ export class CannonGameEngine {
         <div class="word-zh">${iconHtml} ${randomWordObj.word}</div>
         <div class="word-dash-line"></div>
       `;
+
+      // Allow clicking directly on word card to trigger hit
+      el.addEventListener('click', () => {
+        const idx = this.activeWords.findIndex(w => w.id === wordId);
+        if (idx !== -1) {
+          const w = this.activeWords[idx];
+          this.aimCannonAt(w.x, w.y);
+          this.fireProjectile(w.x, w.y, () => {
+            this.handleHitWord(idx);
+          });
+        }
+      });
+
       layer.appendChild(el);
       wordItem.el = el;
     }
@@ -530,7 +577,6 @@ export class CannonGameEngine {
     const dt = (currentTime - this.lastFrameTime) / 1000;
     this.lastFrameTime = currentTime;
 
-    // Spawning logic
     this.spawnTimer += dt;
     const effectiveInterval = this.slowMoTimer > 0 ? this.spawnInterval * 1.8 : this.spawnInterval;
     if (this.spawnTimer >= effectiveInterval) {
@@ -538,7 +584,6 @@ export class CannonGameEngine {
       this.spawnWord();
     }
 
-    // Move falling words
     const playfield = this.container.querySelector('#cannon-playfield');
     const bottomLimit = playfield ? playfield.clientHeight - 130 : 500;
     const speedMod = this.slowMoTimer > 0 ? 0.45 : 1.0;
@@ -551,10 +596,8 @@ export class CannonGameEngine {
         item.el.style.top = `${item.y}px`;
       }
 
-      // Word reached bottom
       if (item.y >= bottomLimit) {
         if (item.type === 'normal' || item.type === 'bonus') {
-          // Missed word -> lose combo & life
           if (!this.hasShield) {
             this.lives--;
             this.combo = 0;
@@ -570,7 +613,6 @@ export class CannonGameEngine {
             return;
           }
         }
-        // Bomb reaching bottom harmlessly dissolves
         this.destroyWordByIndex(i, false);
         this.updateHUD();
       }
@@ -583,7 +625,6 @@ export class CannonGameEngine {
     const norm = normalizePinyin(val);
     if (!norm) return;
 
-    // Check if any word matches
     const target = this.activeWords.find(w => w.normPinyin === norm);
     if (target) {
       this.aimCannonAt(target.x, target.y);
@@ -623,7 +664,6 @@ export class CannonGameEngine {
       });
       if (inputEl) inputEl.value = '';
     } else {
-      // Wrong typing penalty or no match
       this.sfx.playTone(180, 'sine', 0.08);
     }
   }
@@ -646,9 +686,8 @@ export class CannonGameEngine {
     bullet.style.top = `${startY}px`;
     fxLayer.appendChild(bullet);
 
-    // Laser beam animation
     const startTime = performance.now();
-    const duration = 120; // 120ms projectile speed
+    const duration = 120;
 
     const animateBullet = (now) => {
       const p = Math.min(1, (now - startTime) / duration);
@@ -694,7 +733,6 @@ export class CannonGameEngine {
       this.showFloatingText(item.x, item.y, `⭐ +${pts} (+5 Combo)`, '#fbbf24');
       if (window.speakText) window.speakText(item.word);
     } else if (item.type === 'bomb') {
-      // Hit a bomb -> Penalty!
       this.sfx.playBomb();
       if (!this.hasShield) {
         this.score = Math.max(0, this.score - 10);
@@ -750,7 +788,7 @@ export class CannonGameEngine {
 
     if (this.combo < cost) {
       this.sfx.playTone(150, 'square', 0.1);
-      this.showToast(`Cần ${cost} Combo để kích hoạt kỹ năng này!`);
+      this.showToast(`Cần ${cost} Combo để mở khóa kỹ năng này (Hiện có: ${this.combo} Combo)!`);
       return;
     }
 
@@ -793,13 +831,11 @@ export class CannonGameEngine {
     if (comboVal) comboVal.textContent = this.combo;
     if (sidebarComboVal) sidebarComboVal.textContent = this.combo;
 
-    // Fill combo percentage (max 30 for max skill)
     if (comboFill) {
       const pct = Math.min(100, (this.combo / 30) * 100);
       comboFill.style.width = `${pct}%`;
     }
 
-    // Hearts display
     if (livesContainer) {
       livesContainer.innerHTML = '';
       for (let i = 0; i < this.maxLives; i++) {
@@ -810,14 +846,12 @@ export class CannonGameEngine {
       }
     }
 
-    // Timer formatted mm:ss
     if (timerVal) {
       const min = Math.floor(this.timeLeft / 60);
       const sec = this.timeLeft % 60;
       timerVal.textContent = `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
     }
 
-    // Update skill buttons enabled/disabled states
     this.container.querySelectorAll('.cannon-skill-card').forEach(btn => {
       const cost = parseInt(btn.dataset.cost, 10) || 0;
       btn.classList.toggle('affordable', this.combo >= cost);
