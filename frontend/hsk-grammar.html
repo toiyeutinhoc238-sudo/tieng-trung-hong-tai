@@ -897,9 +897,6 @@
         <button class="btn-action" onclick="toggleAllCards(false)">
           <i class="fa-solid fa-angles-up"></i> Thu gọn tất cả
         </button>
-        <a id="download-pdf-btn" href="/grammar-files/ngu phap hsk 1.pdf" download target="_blank" class="btn-action" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.3); color: #fbbf24;">
-          <i class="fa-solid fa-file-pdf"></i> Sách PDF
-        </a>
       </div>
     </div>
 
@@ -1000,13 +997,6 @@
           btn.classList.remove('active');
         }
       });
-
-      // Update PDF download link
-      const pdfBtn = document.getElementById('download-pdf-btn');
-      if (pdfBtn) {
-        const num = lvlKey.replace('hsk', '');
-        pdfBtn.href = `/grammar-files/ngu phap hsk ${num}.pdf`;
-      }
 
       renderGrammarView();
     };

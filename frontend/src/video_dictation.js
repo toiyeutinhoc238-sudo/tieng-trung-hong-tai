@@ -1,4 +1,5 @@
 import { DICTATION_LESSONS } from './dictation_data.js';
+import './particles.js';
 /**
  * Tiếng Trung HongTai - Video Dictation Engine (Luyện Nghe Chép Chính Tả Video)
  * Architecture inspired by eJOY / DailyDictation / LingoClip
@@ -1610,7 +1611,7 @@ function evaluateCurrentPronunciation() {
   let similarity = 0;
   if (spoken) {
     similarity = calculateSimilarity(spoken, targetHanzi) ||
-                 calculateSimilarity(spoken, sent.pinyin);
+      calculateSimilarity(spoken, sent.pinyin);
   } else if (userRecordedBlob) {
     // If Web Speech API was not recognized, baseline fallback
     similarity = 0.82;
