@@ -120,8 +120,8 @@
   <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
   <script type="module" crossorigin src="/assets/grammar_hsk2-B6FgImKU.js"></script>
   <script type="module" crossorigin src="/assets/screen_drawing-oOIhKrv1.js"></script>
-  <script type="module" crossorigin src="/assets/main-B0G6rOF4.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/style-CveQ47JV.css">
+  <script type="module" crossorigin src="/assets/main-DMGrN-HD.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/style-ySw2zYQk.css">
 </head>
 
 <body>
@@ -1355,7 +1355,7 @@
                 </div>
               </button>
 
-              <!-- Game Arena button -->
+              <!-- Mini-Games Hub button -->
               <button type="button" id="nb-start-game-arena-btn" class="study-method-card game-arena-card"
                 style="display: flex; align-items: center; text-align: left; padding: 18px 20px; border-radius: 14px; border: 1.5px solid #ec4899; background: rgba(236, 72, 153, 0.06); cursor: pointer; transition: all 0.25s ease; width: 100%;">
                 <div class="method-icon-wrap"
@@ -1363,13 +1363,13 @@
                   <i class="fa-solid fa-gamepad"></i>
                 </div>
                 <div>
-                  <strong
-                    style="display: block; font-size: 1.08rem; font-family: var(--font-display); color: var(--text-primary); margin-bottom: 4px;">Đấu
-                    Trường Từ Vựng 🎮</strong>
+                  <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                    <strong
+                      style="font-size: 1.08rem; font-family: var(--font-display); color: var(--text-primary);">Game Ôn Tập 🎮</strong>
+                    <span class="badge-beta-tag" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); font-size: 0.68rem; font-weight: 800; padding: 1px 6px; border-radius: 4px;"><i class="fa-solid fa-crown"></i> Beta Admin</span>
+                  </div>
                   <span
-                    style="font-size: 0.82rem; color: var(--text-secondary); font-weight: 500; line-height: 1.35; display: block;">Trò
-                    chơi quả bom
-                    phản xạ từ vựng HSK</span>
+                    style="font-size: 0.82rem; color: var(--text-secondary); font-weight: 500; line-height: 1.35; display: block; margin-top: 4px;">Bắn Pháo Pinyin & Nuôi Rắn Từ Vựng</span>
                 </div>
               </button>
 
@@ -1527,28 +1527,9 @@
         </div>
       </div>
 
-      <!-- GAME PLAY VIEW -->
+      <!-- NOTEBOOK MINI-GAMES VIEW (NATIVE CANVAS/DOM ENGINE) -->
       <div id="game-play-view" style="display: none; padding-top: 10px;">
-        <!-- Back Navigation & Header -->
-        <div class="study-header"
-          style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
-          <button id="game-play-back-btn" class="btn btn-secondary"
-            style="display: flex; align-items: center; gap: 8px; font-weight: 600; padding: 10px 16px; border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass);">
-            <i class="fa-solid fa-arrow-left"></i> Quay lại Dashboard
-          </button>
-
-          <div class="study-deck-title-wrap" style="text-align: right;">
-            <h2 class="section-title" style="margin: 0; font-size: 1.6rem;">Đấu Trường Từ Vựng HSK</h2>
-            <p class="section-desc" style="margin: 4px 0 0 0; color: var(--text-secondary); font-size: 0.85rem;">Ôn tập
-              phản xạ từ vựng vui nhộn</p>
-          </div>
-        </div>
-
-        <!-- Game Iframe Container -->
-        <div class="glass-panel"
-          style="padding: 0; border-radius: 24px; overflow: hidden; height: 780px; position: relative; border: 1px solid var(--border-glass); background: #0b0f19;">
-          <iframe id="game-play-iframe" src="" style="width: 100%; height: 100%; border: none;"></iframe>
-        </div>
+        <div id="notebook-games-hub-mount"></div>
       </div>
 
       <!-- FLASHCARD STUDY VIEW -->

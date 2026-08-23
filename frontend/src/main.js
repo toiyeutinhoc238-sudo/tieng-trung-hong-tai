@@ -3,6 +3,7 @@ import { HSK1_STRUCTURED_GRAMMAR } from '../grammar_hsk1.js';
 import { HSK2_STRUCTURED_GRAMMAR } from '../grammar_hsk2.js';
 import { HSK_LESSON_EXTRA_VIDEOS, getLessonExtraVideo } from './lesson_videos.js';
 import { PREMIUM_WORDS } from './premium_topics_data.js';
+import { NotebookGamesHub } from './notebook_games_hub.js';
 import './screen_drawing.js';
 if (typeof window !== 'undefined') {
   window.HSK1_STRUCTURED_GRAMMAR = HSK1_STRUCTURED_GRAMMAR;
@@ -10,6 +11,7 @@ if (typeof window !== 'undefined') {
   window.HSK_LESSON_EXTRA_VIDEOS = HSK_LESSON_EXTRA_VIDEOS;
   window.getLessonExtraVideo = getLessonExtraVideo;
   window.PREMIUM_WORDS = PREMIUM_WORDS;
+  window.NotebookGamesHub = NotebookGamesHub;
 }
 let radicalsData = { radicals: [], comparisons: [] };
 async function loadRadicalsData() {
@@ -12292,26 +12294,46 @@ function updateExamsVersionUI() {
   }
 }
 
+let activeNotebookGamesHubInstance = null;
+
 function startGameArenaFromNotebook() {
   if (!activeNotebook) return;
 
-  let levelParam = 'all';
-  if (activeNotebook.startsWith('hsk:')) {
-    const levelStr = activeNotebook.split(':')[1];
-    if (levelStr && ['1', '2', '3', '4', '5', '6'].includes(levelStr)) {
-      levelParam = levelStr;
-    }
-  } else if (activeNotebook.startsWith('yct:')) {
-    const levelStr = activeNotebook.split(':')[1];
-    if (levelStr) {
-      levelParam = `yct${levelStr}`;
-    }
+  const isSuper = currentUser && (!!currentUser.isSuperAdmin || currentUser.role === 'super_admin' || isSuperAdmin(currentUser.email));
+
+  if (!isSuper) {
+    showToast('🎮 Mini-Game Sổ Tay đang trong giai đoạn thử nghiệm nội bộ (Dành riêng cho Super Admin). Sắp ra mắt!', true);
+    return;
   }
 
-  let lessonsParam = 'all';
-  if (selectedDashboardLessons && selectedDashboardLessons.length > 0) {
-    lessonsParam = selectedDashboardLessons.join(',');
+  // Get current words for active notebook
+  let words = getNotebookWords(activeNotebook);
+
+  // Filter lessons if selected
+  if ((activeNotebook.startsWith('hsk:') || activeNotebook.startsWith('yct:')) && selectedDashboardLessons && selectedDashboardLessons.length > 0) {
+    words = words.filter(w => w.lessonId && selectedDashboardLessons.some(id => String(id) === String(w.lessonId)));
   }
+
+  // Filter by active dashboard filter
+  if (dashboardActiveFilter === 'studied') {
+    words = words.filter(w => w.isStudied);
+  } else if (dashboardActiveFilter === 'unstudied') {
+    words = words.filter(w => !w.isStudied);
+  } else if (dashboardActiveFilter === 'memorized') {
+    words = words.filter(w => w.isMemorized);
+  } else if (dashboardActiveFilter === 'unmemorized') {
+    words = words.filter(w => w.isStudied && !w.isMemorized);
+  } else if (dashboardActiveFilter === 'starred') {
+    words = words.filter(w => w.isStarred);
+  }
+
+  if (words.length < 4) {
+    showToast('Cần ít nhất 4 từ vựng trong sổ tay này để mở trò chơi!', true);
+    return;
+  }
+
+  const notebookTitle = document.getElementById('dashboard-notebook-title')?.textContent || 'Sổ tay Từ Vựng';
+  const notebookDesc = document.getElementById('dashboard-notebook-desc')?.textContent || '';
 
   const deckSelectionView = document.getElementById('deck-selection-view');
   if (deckSelectionView) deckSelectionView.style.display = 'none';
@@ -12325,13 +12347,24 @@ function startGameArenaFromNotebook() {
   const gamePlayView = document.getElementById('game-play-view');
   if (gamePlayView) gamePlayView.style.display = 'block';
 
-  const hskVer = activeHskVersion || '3.0';
-
-  const iframe = document.getElementById('game-play-iframe');
-  if (iframe) {
-    iframe.src = `quiz-game.html?level=${encodeURIComponent(levelParam)}&lessons=${encodeURIComponent(lessonsParam)}&filter=${encodeURIComponent(dashboardActiveFilter)}&notebook=${encodeURIComponent(activeNotebook)}&version=${encodeURIComponent(hskVer)}`;
+  const hubMount = document.getElementById('notebook-games-hub-mount');
+  if (hubMount) {
+    if (activeNotebookGamesHubInstance && activeNotebookGamesHubInstance.exitHub) {
+      activeNotebookGamesHubInstance.exitHub();
+    }
+    activeNotebookGamesHubInstance = new NotebookGamesHub(hubMount, {
+      words: words,
+      title: notebookTitle,
+      desc: notebookDesc,
+      currentUser: currentUser,
+      onExit: () => {
+        if (gamePlayView) gamePlayView.style.display = 'none';
+        if (notebookDashboardView) notebookDashboardView.style.display = 'block';
+        activeNotebookGamesHubInstance = null;
+      }
+    });
   }
-};
+}
 
 window.openAboutModal = function () {
   const modal = document.getElementById('about-hongtai-modal');
