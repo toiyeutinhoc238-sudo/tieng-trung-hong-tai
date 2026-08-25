@@ -565,11 +565,11 @@ export class SnakeGameEngine {
   }
 
   resetSnake() {
-    this.snake = [
-      { x: 6, y: 7 },
-      { x: 5, y: 7 },
-      { x: 4, y: 7 }
-    ];
+    const baseLength = 3 + Math.max(0, this.level - 1);
+    this.snake = [];
+    for (let i = 0; i < baseLength; i++) {
+      this.snake.push({ x: 6 - i, y: 7 });
+    }
     this.dir = { x: 1, y: 0 };
     this.nextDir = { x: 1, y: 0 };
     this.calculateSpeed();
@@ -595,21 +595,25 @@ export class SnakeGameEngine {
   }
 
   nextWordQuestion() {
-    const randomTarget = this.rawWords[Math.floor(Math.random() * this.rawWords.length)];
-    if (!randomTarget) return;
+    if (!this.wordQueue || this.wordQueue.length === 0) {
+      // Đã hoàn thành toàn bộ danh sách từ vựng mà không bị lặp lại!
+      this.gameOver(true);
+      return;
+    }
 
-    this.currentQuestion = randomTarget;
+    const nextTarget = this.wordQueue.pop();
+    this.currentQuestion = nextTarget;
     this.updateTargetPrompt();
 
     // Phát âm từ vựng ngay khi xuất hiện câu hỏi mục tiêu
     if (typeof window.speakText === 'function') {
       try {
-        window.speakText(randomTarget.word);
+        window.speakText(nextTarget.word);
       } catch (e) {}
     }
 
-    const otherWords = this.rawWords.filter(w => w.word !== randomTarget.word);
-    const shuffled = [...otherWords].sort(() => 0.5 - Math.random());
+    const otherWords = this.rawWords.filter(w => w.word !== nextTarget.word);
+    const shuffled = [...otherWords].sort(() => Math.random() - 0.5);
     const distractors = shuffled.slice(0, 3);
 
     this.apples = [];
@@ -617,8 +621,8 @@ export class SnakeGameEngine {
     let pos = this.getRandomEmptyCell(2.5);
     if (pos) {
       this.apples.push({
-        word: randomTarget.word,
-        meaning: randomTarget.meaning,
+        word: nextTarget.word,
+        meaning: nextTarget.meaning,
         isCorrect: true,
         x: pos.x,
         y: pos.y
@@ -727,6 +731,12 @@ export class SnakeGameEngine {
     if (appleIdx !== -1) {
       const apple = this.apples[appleIdx];
       if (apple.isCorrect) {
+        const willLevelUp = (this.streak + 1 >= this.maxStreakNeeded);
+        if (!willLevelUp) {
+          // Trong quá trình chơi bình thường (chuỗi 1-9): RẮN KHÔNG DÀI RA
+          this.snake.pop();
+        }
+        // Khi đạt chuỗi 10 (Lên cấp): RẮN MỚI DÀI THÊM 1 KHÚC (không pop)
         this.handleEatCorrect(apple);
       } else {
         this.handleEatWrong(apple);
@@ -818,7 +828,7 @@ export class SnakeGameEngine {
     if (this.level < this.maxLevel) {
       this.level++;
       this.streak = 0;
-      this.showFloatingMessage(`🎉 LÊN CẤP ${this.level}! Tốc độ tăng tốc!`);
+      this.showFloatingMessage(`🎉 LÊN CẤP ${this.level}! Rắn dài thêm 1 khúc & tăng tốc!`);
       this.calculateSpeed();
       this.spawnObstacles();
       this.nextWordQuestion();
@@ -919,144 +929,94 @@ export class SnakeGameEngine {
       ctx.arc(px, py, cs * 0.45, 0, Math.PI * 2);
       ctx.fillStyle = p.type === 'heal' ? 'rgba(239, 68, 68, 0.25)' : p.type === 'x2' ? 'rgba(245, 158, 11, 0.25)' : 'rgba(56, 189, 248, 0.25)';
       ctx.fill();
-      ctx.font = `${cs * 0.65}px sans-serif`;
+      ctx.font = `${cs * 0.7}px sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(p.type === 'heal' ? '❤️' : p.type === 'x2' ? '🪙' : '🛡️', px, py);
+      ctx.fillText(p.type === 'heal' ? '💚' : p.type === 'x2' ? '🪙' : '🛡️', px, py);
       ctx.restore();
     });
 
-    // Apples / Fruits (ALL neutral appearance - NO LEAKING ANSWER)
+    // Apples (Word Targets & Distractors)
     this.apples.forEach(a => {
       const ax = a.x * cs + cs / 2;
       const ay = a.y * cs + cs / 2;
 
-      ctx.save();
-
-      // 1. Shiny Juicy Red Apple Body (Uniform for all apples)
-      const grad = ctx.createRadialGradient(ax - 3, ay - 6, 2, ax, ay - 4, cs * 0.44);
-      grad.addColorStop(0, '#ff6b6b');
-      grad.addColorStop(0.65, '#ef4444');
-      grad.addColorStop(1, '#b91c1c');
-
-      ctx.beginPath();
-      ctx.arc(ax, ay - 4, cs * 0.42, 0, Math.PI * 2);
-      ctx.fillStyle = grad;
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.22)';
-      ctx.shadowBlur = 5;
-      ctx.shadowOffsetY = 2;
-      ctx.fill();
-      ctx.shadowColor = 'transparent';
-
-      // 2. Glossy Highlight
-      ctx.beginPath();
-      ctx.ellipse(ax - 4, ay - 9, cs * 0.14, cs * 0.08, -Math.PI / 4, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-      ctx.fill();
-
-      // 3. Stem
-      ctx.beginPath();
-      ctx.moveTo(ax, ay - cs * 0.42 - 2);
-      ctx.quadraticCurveTo(ax + 2, ay - cs * 0.42 - 6, ax + 4, ay - cs * 0.42 - 7);
-      ctx.strokeStyle = '#78350f';
-      ctx.lineWidth = 2;
-      ctx.lineCap = 'round';
-      ctx.stroke();
-
-      // 4. Green Leaf
-      ctx.beginPath();
-      ctx.ellipse(ax + 5, ay - cs * 0.42 - 4, 4.5, 2.8, Math.PI / 4, 0, Math.PI * 2);
-      ctx.fillStyle = '#22c55e';
-      ctx.fill();
-
-      // 5. Spacious Pill Badge for Meaning - FULL TEXT, NEVER CUT OFF
-      const meaningText = (a.meaning || '').trim();
-      const fontSize = cs > 36 ? 12 : 11;
-      ctx.font = `bold ${fontSize}px "Lexend", system-ui, sans-serif`;
-      const textMetrics = ctx.measureText(meaningText);
-      const pillWidth = Math.max(cs * 1.6, textMetrics.width + 16);
-      const pillHeight = cs > 36 ? 24 : 20;
-      const pillX = ax - pillWidth / 2;
-      const pillY = ay + cs * 0.22;
-
-      // Badge container
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.18)';
-      ctx.shadowBlur = 4;
-      ctx.shadowOffsetY = 2;
-      ctx.fillStyle = '#ffffff';
-      ctx.beginPath();
-      ctx.roundRect(pillX, pillY, pillWidth, pillHeight, pillHeight / 2);
-      ctx.fill();
-      ctx.shadowColor = 'transparent';
-
-      // Badge border
-      ctx.strokeStyle = '#64748b';
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-
-      // Badge text
-      ctx.fillStyle = '#0f172a';
+      // Draw Apple Icon
+      ctx.font = `${cs * 0.75}px sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(meaningText, ax, pillY + pillHeight / 2);
+      ctx.fillText('🍎', ax, ay - 6);
 
+      // Draw Meaning Badge Underneath
+      ctx.save();
+      const text = a.meaning || '';
+      ctx.font = 'bold 12px Inter, sans-serif';
+      const textMetrics = ctx.measureText(text);
+      const textWidth = Math.max(textMetrics.width + 14, 46);
+      const badgeH = 20;
+
+      ctx.fillStyle = '#ffffff';
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.25)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.roundRect(ax - textWidth / 2, ay + 8, textWidth, badgeH, 6);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#1e293b';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(text, ax, ay + 18);
       ctx.restore();
     });
 
-    // Snake Body & Head
-    this.snake.forEach((segment, idx) => {
-      const sx = segment.x * cs;
-      const sy = segment.y * cs;
+    // Draw Snake
+    this.snake.forEach((seg, idx) => {
+      const sx = seg.x * cs;
+      const sy = seg.y * cs;
+      const pad = 2;
 
       ctx.save();
       if (idx === 0) {
-        // Snake Head
-        ctx.fillStyle = '#16a34a';
+        // Head
+        ctx.fillStyle = this.invincibleTimer > 0 ? '#38bdf8' : '#22c55e';
         ctx.beginPath();
-        ctx.roundRect(sx + 2, sy + 2, cs - 4, cs - 4, 10);
+        ctx.roundRect(sx + pad, sy + pad, cs - pad * 2, cs - pad * 2, 8);
         ctx.fill();
 
-        // Eyes oriented by direction
+        // Eyes
         ctx.fillStyle = '#ffffff';
-        let eye1X = sx + 10, eye1Y = sy + 10, eye2X = sx + 10, eye2Y = sy + cs - 10;
-        if (this.dir.x > 0) {
-          eye1X = sx + cs - 10; eye1Y = sy + 10;
-          eye2X = sx + cs - 10; eye2Y = sy + cs - 10;
-        } else if (this.dir.x < 0) {
-          eye1X = sx + 10; eye1Y = sy + 10;
-          eye2X = sx + 10; eye2Y = sy + cs - 10;
-        } else if (this.dir.y > 0) {
-          eye1X = sx + 10; eye1Y = sy + cs - 10;
-          eye2X = sx + cs - 10; eye2Y = sy + cs - 10;
-        } else if (this.dir.y < 0) {
-          eye1X = sx + 10; eye1Y = sy + 10;
-          eye2X = sx + cs - 10; eye2Y = sy + 10;
+        const eyeOffset = 6;
+        let eye1 = { x: sx + cs / 2 - eyeOffset, y: sy + cs / 2 - eyeOffset };
+        let eye2 = { x: sx + cs / 2 + eyeOffset, y: sy + cs / 2 - eyeOffset };
+
+        if (this.dir.x === 1) {
+          eye1 = { x: sx + cs - 8, y: sy + 8 };
+          eye2 = { x: sx + cs - 8, y: sy + cs - 8 };
+        } else if (this.dir.x === -1) {
+          eye1 = { x: sx + 8, y: sy + 8 };
+          eye2 = { x: sx + 8, y: sy + cs - 8 };
+        } else if (this.dir.y === 1) {
+          eye1 = { x: sx + 8, y: sy + cs - 8 };
+          eye2 = { x: sx + cs - 8, y: sy + cs - 8 };
         }
 
         ctx.beginPath();
-        ctx.arc(eye1X, eye1Y, 3.5, 0, Math.PI * 2);
-        ctx.arc(eye2X, eye2Y, 3.5, 0, Math.PI * 2);
+        ctx.arc(eye1.x, eye1.y, 3, 0, Math.PI * 2);
+        ctx.arc(eye2.x, eye2.y, 3, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.fillStyle = '#000000';
+        ctx.fillStyle = '#0f172a';
         ctx.beginPath();
-        ctx.arc(eye1X, eye1Y, 1.8, 0, Math.PI * 2);
-        ctx.arc(eye2X, eye2Y, 1.8, 0, Math.PI * 2);
+        ctx.arc(eye1.x, eye1.y, 1.5, 0, Math.PI * 2);
+        ctx.arc(eye2.x, eye2.y, 1.5, 0, Math.PI * 2);
         ctx.fill();
-
-        // Shield aura if invincible
-        if (this.invincibleTimer > 0) {
-          ctx.strokeStyle = '#38bdf8';
-          ctx.lineWidth = 3;
-          ctx.beginPath();
-          ctx.arc(sx + cs / 2, sy + cs / 2, cs * 0.72, 0, Math.PI * 2);
-          ctx.stroke();
-        }
       } else {
-        // Body segments
-        ctx.fillStyle = idx % 2 === 0 ? '#22c55e' : '#4ade80';
+        // Body segment
+        const greenShade = idx % 2 === 0 ? '#4ade80' : '#86efac';
+        ctx.fillStyle = this.invincibleTimer > 0 ? 'rgba(56, 189, 248, 0.75)' : greenShade;
         ctx.beginPath();
-        ctx.roundRect(sx + 3, sy + 3, cs - 6, cs - 6, 8);
+        ctx.roundRect(sx + pad, sy + pad, cs - pad * 2, cs - pad * 2, 6);
         ctx.fill();
       }
       ctx.restore();
@@ -1090,19 +1050,15 @@ export class SnakeGameEngine {
     this.score = 0;
     this.lives = 3;
     this.wordsEatenCorrect = 0;
+    this.totalWordsCount = this.rawWords.length;
+    this.wordQueue = [...this.rawWords].sort(() => Math.random() - 0.5);
     this.timeLeft = 60;
     this.invincibleTimer = 0;
     this.powerups = [];
     this.obstacles = [];
     this.apples = [];
 
-    this.snake = [
-      { x: 6, y: 7 },
-      { x: 5, y: 7 },
-      { x: 4, y: 7 }
-    ];
-    this.dir = { x: 1, y: 0 };
-    this.nextDir = { x: 1, y: 0 };
+    this.resetSnake();
     this.lastTickTime = performance.now();
     this.calculateSpeed();
 
@@ -1143,10 +1099,10 @@ export class SnakeGameEngine {
       overlay.style.setProperty('display', 'flex', 'important');
       if (icon) icon.textContent = isVictory ? '👑' : '🐍';
       if (title) title.textContent = isVictory ? 'Vua Nuôi Rắn Từ Vựng!' : 'Hết Tim - Game Over!';
-      if (desc) desc.textContent = isVictory ? 'Bạn đã xuất sắc vượt qua toàn bộ 5 Cấp độ thử thách!' : 'Hãy chú ý quan sát từ vựng và chọn đúng quả táo nhé!';
+      if (desc) desc.textContent = isVictory ? `Bạn đã xuất sắc hoàn thành toàn bộ ${this.wordsEatenCorrect}/${this.totalWordsCount} từ vựng!` : 'Hãy chú ý quan sát từ vựng và chọn đúng quả táo nhé!';
       if (resLevel) resLevel.textContent = `CẤP ${this.level}`;
       if (resScore) resScore.textContent = this.score;
-      if (resWords) resWords.textContent = this.wordsEatenCorrect || 0;
+      if (resWords) resWords.textContent = `${this.wordsEatenCorrect || 0}/${this.totalWordsCount || 0}`;
 
       const retryBtn = overlay.querySelector('#snake-retry-btn');
       const backHubBtn = overlay.querySelector('#snake-back-hub-btn');

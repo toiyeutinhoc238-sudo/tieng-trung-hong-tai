@@ -8,7 +8,6 @@ import { SnakeGameEngine } from './notebook_snake_game.js';
 import { AlchemistGameEngine } from './notebook_alchemist_game.js';
 import { MahjongGameEngine } from './notebook_mahjong_game.js';
 import { ToneRhythmGameEngine } from './notebook_tone_rhythm_game.js';
-import { GoldMinerGameEngine } from './notebook_goldminer_game.js';
 
 function isSuperAdminUser(user) {
   if (!user) return false;
@@ -61,7 +60,7 @@ export class NotebookGamesHub {
           </div>
 
           <div class="hub-header-badge">
-            <span class="beta-pill" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.4); color: #fbbf24;"><i class="fa-solid fa-wand-magic-sparkles"></i> Đầy đủ 7 Trò Chơi Ôn Luyện (Miễn Phí)</span>
+            <span class="beta-pill" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.4); color: #fbbf24;"><i class="fa-solid fa-wand-magic-sparkles"></i> Đầy đủ 6 Trò Chơi Ôn Luyện (Miễn Phí)</span>
           </div>
         </div>
 
@@ -79,7 +78,7 @@ export class NotebookGamesHub {
     return `
       <div class="games-selector-container">
         <div class="games-selector-intro">
-          <h3>Chọn 1 trong 7 trò chơi để bắt đầu ôn luyện từ vựng</h3>
+          <h3>Chọn 1 trong 6 trò chơi để bắt đầu ôn luyện từ vựng</h3>
           <p>Học tập và rèn luyện phản xạ nhẹ nhàng từ <strong>${this.notebookTitle}</strong>, không tính điểm xếp hạng hay khóa cấp!</p>
         </div>
 
@@ -185,23 +184,6 @@ export class NotebookGamesHub {
               Chơi Phím Đàn <i class="fa-solid fa-play"></i>
             </button>
           </div>
-
-          <!-- CARD GAME 6: GOLD MINER -->
-          <div class="game-choice-card card-miner" id="btn-choose-miner" style="cursor: pointer;">
-            <div class="card-tag">CĂN GÓC THẢ NEO & TRƯỜNG NGHĨA</div>
-            <div class="card-icon-hero">⛏️ 💎</div>
-            <h3 class="card-title">Thợ Mỏ Đào Vàng</h3>
-            <p class="card-desc">
-              Canh góc lắc mỏ neo thả dây kéo đúng các thỏi vàng mang từ vựng mục tiêu, kéo kim cương và dùng thuốc nổ TNT phá bỏ tảng đá nặng!
-            </p>
-            <div class="card-features">
-              <span><i class="fa-solid fa-anchor"></i> Căn góc mỏ neo</span>
-              <span><i class="fa-solid fa-coins"></i> Vượt 3 màn đào vàng</span>
-            </div>
-            <button type="button" class="btn btn-primary game-launch-btn" style="background: linear-gradient(135deg, #0284c7, #0369a1); color: #ffffff;">
-              Chơi Đào Vàng <i class="fa-solid fa-play"></i>
-            </button>
-          </div>
         </div>
       </div>
     `;
@@ -231,8 +213,7 @@ export class NotebookGamesHub {
       { id: '#btn-choose-snake', type: 'snake' },
       { id: '#btn-choose-alchemist', type: 'alchemist' },
       { id: '#btn-choose-mahjong', type: 'mahjong' },
-      { id: '#btn-choose-rhythm', type: 'rhythm' },
-      { id: '#btn-choose-miner', type: 'miner' }
+      { id: '#btn-choose-rhythm', type: 'rhythm' }
     ];
 
     nativeGames.forEach(g => {
@@ -263,7 +244,16 @@ export class NotebookGamesHub {
       const params = new URLSearchParams();
       params.set('source', 'notebook');
       params.set('no_score', 'true');
-      if (this.notebookKey) params.set('notebook', this.notebookKey);
+      if (this.notebookKey) {
+        params.set('notebook', this.notebookKey);
+        if (this.notebookKey.startsWith('hsk:')) {
+          params.set('level', this.notebookKey.replace('hsk:', ''));
+        } else if (this.notebookKey.startsWith('yct:')) {
+          params.set('level', 'yct' + this.notebookKey.replace('yct:', ''));
+        } else if (!isNaN(this.notebookKey)) {
+          params.set('level', this.notebookKey);
+        }
+      }
       if (this.hskVersion) params.set('version', this.hskVersion);
 
       contentArea.innerHTML = `
@@ -325,8 +315,6 @@ export class NotebookGamesHub {
       this.currentGameEngine = new MahjongGameEngine(viewport, this.words, onExit);
     } else if (gameType === 'rhythm') {
       this.currentGameEngine = new ToneRhythmGameEngine(viewport, this.words, onExit);
-    } else if (gameType === 'miner') {
-      this.currentGameEngine = new GoldMinerGameEngine(viewport, this.words, onExit);
     }
 
     if (this.currentGameEngine && this.currentGameEngine.start) {

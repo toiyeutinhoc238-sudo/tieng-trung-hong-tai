@@ -133,6 +133,16 @@ export class MahjongGameEngine {
             <strong style="color: #10b981;">MẠT CHƯỢC NỐI TỪ</strong>
           </div>
 
+          <div class="hud-item" id="mahjong-level-badge" style="background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: #10b981; font-weight: 800; padding: 3px 10px; border-radius: 20px; font-size: 0.82rem;">
+            MÀN 1/1
+          </div>
+
+          <div class="hud-item hud-progress" style="display: flex; align-items: center; gap: 5px;">
+            <i class="fa-solid fa-book-open" style="color: #818cf8;"></i>
+            <span class="hud-label">TIẾN TRÌNH:</span>
+            <span class="hud-value" id="mahjong-progress-val">0/0 từ</span>
+          </div>
+
           <div class="hud-item hud-score">
             <i class="fa-solid fa-star" style="color: #fbbf24;"></i>
             <span class="hud-label">ĐIỂM:</span>
@@ -302,6 +312,13 @@ export class MahjongGameEngine {
     this.selectedTile = null;
     this.isResolvingMatch = false;
 
+    this.totalWordsCount = (this.rawWords || []).length;
+    this.totalLevels = Math.max(1, Math.ceil(this.totalWordsCount / 12));
+    this.currentLevel = 1;
+    this.unplayedWordsPool = [...(this.rawWords || [])].sort(() => Math.random() - 0.5);
+    this.totalUniqueWordsCleared = 0;
+    this.currentLevelNewWordsCount = 0;
+
     const overlay = this.container.querySelector('#mahjong-modal-overlay');
     if (overlay) {
       overlay.style.setProperty('display', 'none', 'important');
@@ -332,13 +349,31 @@ export class MahjongGameEngine {
     const totalInnerTiles = innerRows * innerCols; // 24
     const pairsNeeded = totalInnerTiles / 2; // 12
 
+    if (!this.unplayedWordsPool || this.unplayedWordsPool.length === 0) {
+      this.gameOver(true);
+      return;
+    }
+
+    // Lấy tối đa 12 từ mới từ kho từ vựng chưa ôn
+    const newWords = this.unplayedWordsPool.splice(0, Math.min(pairsNeeded, this.unplayedWordsPool.length));
+    this.currentLevelNewWordsCount = newWords.length;
+
+    // Nếu màn cuối còn ít hơn 12 từ (ví dụ còn 4 từ), lấy thêm các từ trong danh sách để lấp đầy 12 cặp (24 quân)
+    const activeWordsForBoard = [...newWords];
+    let fillIdx = 0;
+    while (activeWordsForBoard.length < pairsNeeded) {
+      const fallbackWord = this.rawWords[fillIdx % this.rawWords.length] || DEFAULT_MAHJONG_WORDS[fillIdx % DEFAULT_MAHJONG_WORDS.length];
+      activeWordsForBoard.push(fallbackWord);
+      fillIdx++;
+    }
+
     this.totalPairs = pairsNeeded;
     this.pairsLeft = pairsNeeded;
 
     const tilesList = [];
     for (let i = 0; i < pairsNeeded; i++) {
-      const wordObj = this.rawWords[i % this.rawWords.length] || DEFAULT_MAHJONG_WORDS[i % DEFAULT_MAHJONG_WORDS.length];
-      const pairId = 'pair_' + i;
+      const wordObj = activeWordsForBoard[i];
+      const pairId = 'pair_' + i + '_' + Date.now();
 
       const cleanWord = wordObj.word || wordObj.text || '汉字';
       const cleanPinyin = wordObj.pinyin || 'hànzì';
@@ -635,7 +670,22 @@ export class MahjongGameEngine {
       this.updateHUD();
 
       if (this.pairsLeft <= 0) {
-        this.gameOver(true);
+        this.totalUniqueWordsCleared += this.currentLevelNewWordsCount;
+        if (this.unplayedWordsPool && this.unplayedWordsPool.length > 0) {
+          // QUA MÀN TIẾP THEO
+          this.currentLevel++;
+          this.sfx.playPowerup();
+          this.timeLeft = Math.min(150, this.timeLeft + 50); // Thêm 50s thưởng
+          this.hintCount = Math.min(5, this.hintCount + 1);
+          this.shuffleCount = Math.min(5, this.shuffleCount + 1);
+          this.bombCount = Math.min(4, this.bombCount + 1);
+          this.showToast(`🎉 XUẤT SẮC QUA MÀN ${this.currentLevel - 1}! Sang Màn ${this.currentLevel}/${this.totalLevels} (${this.unplayedWordsPool.length} từ tiếp theo)...`);
+          this.initBoard();
+          this.updateHUD();
+        } else {
+          // HOÀN THÀNH TẤT CẢ CÁC MÀN
+          this.gameOver(true);
+        }
       } else {
         // Auto check if any valid moves remain
         const remainingMoves = this.findAnyValidPair();
@@ -898,6 +948,8 @@ export class MahjongGameEngine {
     const scoreVal = this.container.querySelector('#mahjong-score-val');
     const pairsVal = this.container.querySelector('#mahjong-pairs-val');
     const timerVal = this.container.querySelector('#mahjong-timer-val');
+    const levelBadge = this.container.querySelector('#mahjong-level-badge');
+    const progressVal = this.container.querySelector('#mahjong-progress-val');
 
     const bHint = this.container.querySelector('#badge-hint');
     const bShuffle = this.container.querySelector('#badge-shuffle');
@@ -905,6 +957,13 @@ export class MahjongGameEngine {
 
     if (scoreVal) scoreVal.textContent = this.score;
     if (pairsVal) pairsVal.textContent = `${this.pairsLeft}/${this.totalPairs}`;
+    if (levelBadge) levelBadge.textContent = `MÀN ${this.currentLevel}/${this.totalLevels}`;
+
+    if (progressVal) {
+      const currentMatchedInLevel = Math.floor((this.totalPairs - this.pairsLeft) * (this.currentLevelNewWordsCount / this.totalPairs));
+      const totalDone = Math.min(this.totalWordsCount, this.totalUniqueWordsCleared + currentMatchedInLevel);
+      progressVal.textContent = `${totalDone}/${this.totalWordsCount} từ`;
+    }
 
     if (timerVal) {
       const min = Math.floor(this.timeLeft / 60);
@@ -947,11 +1006,11 @@ export class MahjongGameEngine {
     if (overlay) {
       overlay.style.setProperty('display', 'flex', 'important');
       if (icon) icon.textContent = isVictory ? '👑' : '⏰';
-      if (title) title.textContent = isVictory ? 'Đại Sư Mạt Chược!' : 'Hết Giờ - Game Over!';
-      if (desc) desc.textContent = isVictory ? 'Bạn đã xuất sắc nối sạch toàn bộ cặp bài trong thời gian quy định!' : 'Hãy tận dụng Kính Lúp và Gió Lốc để nối nhanh hơn nhé!';
+      if (title) title.textContent = isVictory ? 'Đại Sư Mạt Chược - Hoàn Thành Xuất Sắc!' : 'Hết Giờ - Game Over!';
+      if (desc) desc.textContent = isVictory ? `Bạn đã xuất sắc vượt qua toàn bộ ${this.totalLevels} Màn chơi và hoàn thành ${this.totalWordsCount}/${this.totalWordsCount} từ vựng!` : 'Hãy tận dụng Kính Lúp và Gió Lốc để nối nhanh hơn nhé!';
       if (resScore) resScore.textContent = this.score;
       if (resCombo) resCombo.textContent = this.maxCombo;
-      if (resPairs) resPairs.textContent = this.totalPairs - this.pairsLeft;
+      if (resPairs) resPairs.textContent = `${this.totalWordsCount}/${this.totalWordsCount} từ (${this.currentLevel} Màn)`;
 
       const retryBtn = overlay.querySelector('#mahjong-retry-btn');
       const backHubBtn = overlay.querySelector('#mahjong-back-hub-btn');

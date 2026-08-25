@@ -928,6 +928,8 @@ export class CannonGameEngine {
     this.timeLeft = 60;
     this.activeWords = [];
     this.wordsDestroyedCount = 0;
+    this.totalWordsCount = (this.rawWords || []).length;
+    this.wordQueue = [...(this.rawWords || [])].sort(() => Math.random() - 0.5);
     this.lastFrameTime = performance.now();
     this.spawnTimer = 0;
 
@@ -985,8 +987,17 @@ export class CannonGameEngine {
     const rect = playfield.getBoundingClientRect();
     const width = rect.width || 600;
 
-    // Pick a random word from notebook words
-    const randomWordObj = this.words[Math.floor(Math.random() * this.words.length)];
+    if (!this.wordQueue || this.wordQueue.length === 0) {
+      if (this.activeWords.length === 0) {
+        this.gameOver(true);
+      }
+      return;
+    }
+
+    // Pick next unique word from queue
+    const randomWordObj = this.wordQueue.pop();
+    if (!randomWordObj) return;
+
     const wordTypeRoll = Math.random();
     let type = 'normal';
     if (wordTypeRoll < 0.18) type = 'bomb';
@@ -1087,6 +1098,11 @@ export class CannonGameEngine {
             // Bomb safely expired without penalty
             this.showFloatingText(item.x, groundY, '💣 AN TOÀN!', '#94a3b8');
           }
+
+          if (this.wordQueue.length === 0 && this.activeWords.length === 0) {
+            this.gameOver(true);
+            return;
+          }
           this.updateHUD();
         }
       }
@@ -1114,10 +1130,10 @@ export class CannonGameEngine {
       overlay.style.setProperty('display', 'flex', 'important');
       if (icon) icon.textContent = isVictory ? '🏆' : '💥';
       if (title) title.textContent = isVictory ? 'Chiến Thắng Xuất Sắc!' : 'Hết Mạng - Game Over!';
-      if (desc) desc.textContent = isVictory ? 'Bạn đã bảo vệ thành công và sống sót hết 60 giây!' : 'Đừng nản lòng! Hãy gõ pinyin thật nhanh và né bom nhé.';
+      if (desc) desc.textContent = isVictory ? `Bạn đã hoàn thành xuất sắc toàn bộ ${this.wordsDestroyedCount || this.totalWordsCount}/${this.totalWordsCount} từ vựng!` : 'Đừng nản lòng! Hãy gõ pinyin thật nhanh và né bom nhé.';
       if (resScore) resScore.textContent = this.score;
       if (resCombo) resCombo.textContent = this.maxCombo;
-      if (resWords) resWords.textContent = this.wordsDestroyedCount || 0;
+      if (resWords) resWords.textContent = `${this.wordsDestroyedCount || 0}/${this.totalWordsCount || 0}`;
 
       const retryBtn = overlay.querySelector('#cannon-retry-btn');
       const backHubBtn = overlay.querySelector('#cannon-back-hub-btn');

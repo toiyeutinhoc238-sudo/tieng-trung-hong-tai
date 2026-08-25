@@ -185,23 +185,21 @@
 
     html.light-mode .app-container,
     body.light-mode .app-container {
-      background: rgba(255, 255, 255, 0.3) !important;
-      backdrop-filter: blur(20px) saturate(180%) !important;
-      -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-      border: 1px solid rgba(255, 255, 255, 0.6) !important;
-      box-shadow: 0 10px 40px rgba(31, 38, 135, 0.08) !important;
+      background: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08) !important;
     }
 
     html.light-mode .modal-overlay,
     body.light-mode .modal-overlay {
-      background: rgba(255, 255, 255, 0.1) !important;
-      backdrop-filter: blur(8px) !important;
-      -webkit-backdrop-filter: blur(8px) !important;
+      background: rgba(0, 0, 0, 0.65) !important;
+      backdrop-filter: blur(4px) !important;
+      -webkit-backdrop-filter: blur(4px) !important;
     }
 
     html.light-mode .top-bar {
-      background: rgba(255, 255, 255, 0.5) !important;
-      border-bottom-color: rgba(255, 255, 255, 0.6) !important;
+      background: #ffffff !important;
+      border-bottom: 1px solid #e2e8f0 !important;
     }
 
     html.light-mode .player-details h4,
@@ -211,29 +209,26 @@
     }
 
     html.light-mode .score-value {
-      background: rgba(255, 255, 255, 0.7) !important;
+      background: #f8fafc !important;
       color: #0f172a !important;
-      border: 1px solid rgba(255, 255, 255, 0.8) !important;
+      border: 1px solid #cbd5e1 !important;
       font-weight: 800 !important;
     }
 
     html.light-mode .timer-container {
-      background: rgba(226, 232, 240, 0.5) !important;
+      background: #e2e8f0 !important;
     }
 
     html.light-mode .play-area {
-      background: rgba(255, 255, 255, 0.35) !important;
-      backdrop-filter: blur(16px) !important;
+      background: #ffffff !important;
     }
 
     html.light-mode .modal-content,
     body.light-mode .modal-content {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(230, 240, 255, 0.4) 100%) !important;
-      backdrop-filter: blur(28px) saturate(180%) !important;
-      -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+      background: #ffffff !important;
       color: #0f172a !important;
-      border: 1px solid rgba(255, 255, 255, 0.85) !important;
-      box-shadow: 0 20px 50px rgba(31, 38, 135, 0.12), inset 0 1px 1px rgba(255, 255, 255, 0.9) !important;
+      border: 1px solid #e2e8f0 !important;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15) !important;
     }
 
     html.light-mode .modal-title {
@@ -302,15 +297,13 @@
       max-width: 1000px;
       height: 100%;
       max-height: 800px;
-      background: rgba(11, 15, 25, 0.5) !important;
-      backdrop-filter: blur(28px) saturate(200%) !important;
-      -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
+      background: #0f172a !important;
       border: 1px solid rgba(255, 255, 255, 0.18) !important;
       display: flex;
       flex-direction: column;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5) !important;
     }
 
     @media (min-width: 1024px) {
@@ -320,16 +313,16 @@
       }
     }
 
-    /* Modals overlays (Dark Liquid Glass) */
+    /* Modals overlays */
     .modal-overlay {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.45) !important;
-      backdrop-filter: blur(12px) !important;
-      -webkit-backdrop-filter: blur(12px) !important;
+      background: rgba(0, 0, 0, 0.65) !important;
+      backdrop-filter: blur(4px) !important;
+      -webkit-backdrop-filter: blur(4px) !important;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -338,9 +331,7 @@
     }
 
     .modal-content {
-      background: rgba(15, 23, 42, 0.72) !important;
-      backdrop-filter: blur(32px) saturate(200%) !important;
-      -webkit-backdrop-filter: blur(32px) saturate(200%) !important;
+      background: #1e293b !important;
       color: #ffffff !important;
       border-radius: 24px;
       padding: 28px 30px;
@@ -350,7 +341,7 @@
       overflow-y: auto;
       text-align: center;
       border: 1px solid rgba(255, 255, 255, 0.22) !important;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6) !important;
     }
 
     .modal-title {
@@ -839,7 +830,7 @@
       }
     }
   </style>
-  <link rel="stylesheet" crossorigin href="/assets/style-DiSz73nM.css">
+  <link rel="stylesheet" crossorigin href="/assets/style-BO3n-QmP.css">
 </head>
 
 <body>
@@ -868,6 +859,14 @@
           </div>
         </div>
         <div class="modal-desc">Đấu trường trắc nghiệm phản xạ từ vựng</div>
+
+        <div class="form-group">
+          <label class="form-label">Phiên bản Giáo Trình HSK</label>
+          <select id="sel-version" class="form-select">
+            <option value="3.0">HSK 3.0 (Mới nhất 2026 - Chuẩn 9 Cấp)</option>
+            <option value="2.0">HSK 2.0 (Giáo trình 6 Cấp Cũ)</option>
+          </select>
+        </div>
 
         <div class="form-group">
           <label class="form-label">Giáo trình & Cấp độ</label>
@@ -1051,6 +1050,7 @@
     // --- DOM ELEMENTS ---
     const setupModal = document.getElementById('setup-modal');
     const goModal = document.getElementById('gameover-modal');
+    const selVersion = document.getElementById('sel-version');
     const selLevel = document.getElementById('sel-level');
     const selLesson = document.getElementById('sel-lesson');
     const btnStart = document.getElementById('btn-start');
@@ -1202,8 +1202,17 @@
       const urlLevel = params.get('level');
       const urlLesson = params.get('lesson') || params.get('lessons');
       const urlVersion = params.get('version') || localStorage.getItem('active_hsk_version') || '3.0';
+      const urlNotebook = params.get('notebook');
       const urlMode = params.get('mode');
       const autoStart = params.get('autostart') || params.get('auto');
+
+      if (selVersion) {
+        selVersion.value = urlVersion === '2.0' ? '2.0' : '3.0';
+        selVersion.addEventListener('change', () => {
+          localStorage.setItem('active_hsk_version', selVersion.value);
+          updateLessons();
+        });
+      }
 
       if (urlMode) {
         const targetBtn = document.querySelector(`.mode-btn[data-mode="${urlMode}"]`);
@@ -1218,6 +1227,16 @@
         const targetVal = urlLevel.toLowerCase().replace('hsk', '');
         const opt = Array.from(selLevel.options).find(o => o.value === targetVal || o.value === urlLevel || o.value === `hsk${targetVal}`);
         if (opt) selLevel.value = opt.value;
+      } else if (urlNotebook) {
+        if (urlNotebook.startsWith('hsk:')) {
+          const targetVal = urlNotebook.replace('hsk:', '');
+          const opt = Array.from(selLevel.options).find(o => o.value === targetVal || o.value === `hsk${targetVal}`);
+          if (opt) selLevel.value = opt.value;
+        } else if (urlNotebook.startsWith('yct:')) {
+          const targetVal = 'yct' + urlNotebook.replace('yct:', '');
+          const opt = Array.from(selLevel.options).find(o => o.value === targetVal);
+          if (opt) selLevel.value = opt.value;
+        }
       }
 
       updateLessons();
@@ -1267,7 +1286,7 @@
 
     function updateLessons() {
       const lvl = selLevel.value;
-      const urlVersion = new URLSearchParams(window.location.search).get('version') || localStorage.getItem('active_hsk_version') || '3.0';
+      const currentVersion = selVersion ? selVersion.value : (new URLSearchParams(window.location.search).get('version') || localStorage.getItem('active_hsk_version') || '3.0');
       selLesson.innerHTML = `<option value="all">Tất cả các bài (Mặc định)</option><option value="random">Random bài bất kì</option>`;
 
       function cleanLessonTitle(rawTitle, lessonId) {
@@ -1287,8 +1306,10 @@
           const y = lvl.replace('yct', '');
           filtered = vocabData.filter(w => isYct(w) && matchLevel(w.level, y));
         } else {
-          filtered = vocabData.filter(w => !isYct(w) && w.level && matchLevel(w.level, lvl) && (w.isCustom || (w.hskVersion || '3.0') === urlVersion));
+          filtered = vocabData.filter(w => !isYct(w) && w.level && matchLevel(w.level, lvl) && (w.isCustom || (w.hskVersion || '3.0') === currentVersion));
         }
+      } else {
+        filtered = vocabData.filter(w => isYct(w) || w.isCustom || (w.hskVersion || '3.0') === currentVersion);
       }
 
       const lMap = new Map();
@@ -1296,7 +1317,7 @@
         if (w.lessonId) {
           const yctFlag = isYct(w);
           const typePrefix = yctFlag ? 'yct' : 'hsk';
-          const ver = yctFlag ? '' : (w.hskVersion || urlVersion);
+          const ver = yctFlag ? '' : (w.hskVersion || currentVersion);
           const key = `${typePrefix}_${w.level || ''}_${w.lessonId}_${ver}`;
           const versionStr = yctFlag ? '' : ` [HSK ${ver}]`;
           const prefix = yctFlag ? `YCT ${w.level}` : (w.level ? `HSK ${w.level}${versionStr}` : '');
@@ -1358,16 +1379,23 @@
       const urlNotebook = urlParams.get('notebook');
       const urlFilter = urlParams.get('filter');
       const urlVersion = urlParams.get('version') || localStorage.getItem('active_hsk_version') || '3.0';
+      const currentVersion = selVersion ? selVersion.value : (urlVersion || '3.0');
 
       if (lvl !== 'all') {
         if (lvl.startsWith('yct')) {
           const y = lvl.replace('yct', '');
           pool = pool.filter(w => isYct(w) && matchLevel(w.level, y));
         } else {
-          pool = pool.filter(w => !isYct(w) && w.level && matchLevel(w.level, lvl) && (w.isCustom || (w.hskVersion || '3.0') === urlVersion));
+          pool = pool.filter(w => !isYct(w) && w.level && matchLevel(w.level, lvl) && (w.isCustom || (w.hskVersion || '3.0') === currentVersion));
         }
-      } else if (!urlNotebook || urlNotebook.startsWith('hsk:')) {
-        pool = pool.filter(w => w.isCustom || isYct(w) || (w.hskVersion || '3.0') === urlVersion);
+      } else if (urlNotebook && urlNotebook.startsWith('hsk:')) {
+        const targetLvl = urlNotebook.replace('hsk:', '');
+        pool = pool.filter(w => !isYct(w) && matchLevel(w.level, targetLvl) && (w.isCustom || (w.hskVersion || '3.0') === currentVersion));
+      } else if (urlNotebook && urlNotebook.startsWith('yct:')) {
+        const targetLvl = urlNotebook.replace('yct:', '');
+        pool = pool.filter(w => isYct(w) && matchLevel(w.level, targetLvl));
+      } else {
+        pool = pool.filter(w => w.isCustom || isYct(w) || (w.hskVersion || '3.0') === currentVersion);
       }
 
       if (urlNotebook) {
@@ -1561,7 +1589,12 @@
         // Smart distractor selection: prioritize currentPool, then same level, filter out English text
         function isVietnameseMeaning(str) {
           if (!str) return false;
-          return !/\b(B\.C\.|Period|stress|pressure|the|and|of|to|in|is|for|with|on|at|from|by|an|or)\b/i.test(str);
+          const s = String(str).trim();
+          const hasVi = /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ]/i.test(s);
+          if (hasVi) return true;
+          if (/^(xe taxi|email|bi-a|say xe|tivi|vali|cola|bia|bida|new york)$/i.test(s)) return true;
+          if (/\b(the|and|of|to|in|is|for|with|on|at|from|by|an|or|a|not|all|always|state|status|law|love|feeling|touch|move|enough|overtime|accept|person|name|family|city|country|place|time)\b/i.test(s)) return false;
+          return true;
         }
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -1572,6 +1605,9 @@
         if (candidates.length < 3) {
           const sameLevel = vocabData.filter(w => w && matchLevel(w.level, activeQ.level) && isYct(w) === isQYct && (isQYct || w.isCustom || (w.hskVersion || '3.0') === curVer) && w.id !== activeQ.id && w.meaning !== activeQ.meaning && isVietnameseMeaning(w.meaning));
           candidates.push(...sameLevel);
+        }
+        if (candidates.length < 3) {
+          candidates.push(...vocabData.filter(w => w && (isQYct ? isYct(w) : (w.hskVersion || '3.0') === curVer) && w.id !== activeQ.id && w.meaning !== activeQ.meaning && isVietnameseMeaning(w.meaning)));
         }
         if (candidates.length < 3) {
           candidates.push(...vocabData.filter(w => w && w.id !== activeQ.id && w.meaning !== activeQ.meaning && isVietnameseMeaning(w.meaning)));

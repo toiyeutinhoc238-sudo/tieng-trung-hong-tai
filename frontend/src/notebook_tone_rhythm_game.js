@@ -298,25 +298,19 @@ export class ToneRhythmGameEngine {
 
   buildSyllableDeck() {
     this.syllableDeck = [];
-    // Shuffle raw words first
+    // Shuffle raw words once to ensure no duplicate repetitions
     const shuffled = [...this.rawWords].sort(() => Math.random() - 0.5);
     shuffled.forEach(w => {
       const syllables = decomposeWordToSyllables(w);
       this.syllableDeck.push(...syllables);
     });
-
-    // If deck is still small, duplicate and shuffle
-    if (this.syllableDeck.length < 15) {
-      const more = [...this.syllableDeck];
-      this.syllableDeck.push(...more, ...more);
-    }
+    this.totalSyllablesCount = this.syllableDeck.length;
     this.deckIndex = 0;
   }
 
   getNextSyllable() {
     if (this.deckIndex >= this.syllableDeck.length) {
-      this.buildSyllableDeck();
-      this.deckIndex = 0;
+      return null;
     }
     const item = this.syllableDeck[this.deckIndex];
     this.deckIndex++;
@@ -766,18 +760,25 @@ export class ToneRhythmGameEngine {
   spawnNote() {
     if (this.activeNotes.length >= 6) return;
     const syllable = this.getNextSyllable();
-    if (!syllable) return;
+    if (!syllable) {
+      if (this.activeNotes.length === 0) {
+        this.gameOver(true);
+      }
+      return;
+    }
 
-    const tone = syllable.tone; // 1, 2, 3, 4, or 0
     const noteId = 'rnote_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
 
     // Speed increases slightly over time
     const speed = this.baseSpeed + (60 - this.timeLeft) * 0.5;
 
+    // VỊ TRÍ RẢI NGẪU NHIÊN: Chọn ngẫu nhiên 1 trong 5 làn (0, 1, 2, 3, 4) hoàn toàn độc lập với thanh điệu
+    const randomLaneIndex = Math.floor(Math.random() * 5);
+
     const note = {
       id: noteId,
       syllable: syllable,
-      lane: tone, // 1, 2, 3, 4, or 0
+      laneIndex: randomLaneIndex,
       y: -65,
       speed: speed,
       hit: false,
@@ -788,12 +789,11 @@ export class ToneRhythmGameEngine {
     if (!layer) return;
 
     const el = document.createElement('div');
-    el.className = `rhythm-falling-note note-lane-${tone}`;
+    // KHÔNG gán class màu sắc của thanh điệu để tránh lộ đáp án trước
+    el.className = 'rhythm-falling-note';
     el.id = noteId;
 
-    // Lane index mapping for position: 1->0%, 2->20%, 3->40%, 4->60%, 0->80%
-    const laneIndex = tone === 0 ? 4 : (tone - 1);
-    el.style.left = `${laneIndex * 20}%`;
+    el.style.left = `${randomLaneIndex * 20 + 0.75}%`;
     el.style.top = `-65px`;
 
     el.innerHTML = `
@@ -839,8 +839,13 @@ export class ToneRhythmGameEngine {
             note.el.parentNode.removeChild(note.el);
           }
           this.activeNotes.splice(i, 1);
-          this.triggerMiss(note.lane);
+          this.triggerMiss(note.laneIndex, 'BỎ LỠ! ❌');
         }
+      }
+
+      if (this.deckIndex >= this.syllableDeck.length && this.activeNotes.length === 0) {
+        this.gameOver(true);
+        return;
       }
     } else {
       this.lastFrameTime = currentTime;
@@ -849,81 +854,106 @@ export class ToneRhythmGameEngine {
     this.animFrameId = requestAnimationFrame((t) => this.loop(t));
   }
 
-  triggerLaneHit(lane) {
+  triggerLaneHit(pressedTone) {
     if (!this.isRunning || this.isPaused) return;
 
-    // Visual pad effect & beam flash
-    const pad = this.container.querySelector(`#pad-${lane}`);
+    // Visual pad effect & beam flash for the pressed key
+    const pad = this.container.querySelector(`#pad-${pressedTone}`);
     if (pad) {
       pad.classList.add('hit-active');
-      setTimeout(() => pad.classList.remove('hit-active'), 120);
+      setTimeout(() => pad.classList.remove('hit-active'), 140);
     }
 
-    const beam = this.container.querySelector(`#hit-beam-${lane}`);
+    const beam = this.container.querySelector(`#hit-beam-${pressedTone}`);
     if (beam) {
       beam.classList.add('active-beam');
       setTimeout(() => beam.classList.remove('active-beam'), 150);
     }
 
+    // Tìm nốt đang rơi thấp nhất gần vạch đích nhất
+    const eligibleNotes = this.activeNotes.filter(n => !n.hit && n.y > -50).sort((a, b) => b.y - a.y);
+    if (eligibleNotes.length === 0) return;
+
+    const targetNote = eligibleNotes[0];
     const highway = this.container.querySelector('#rhythm-highway');
     const trackHeight = highway ? highway.clientHeight : 480;
     const targetHitY = trackHeight - 88;
+    const diff = Math.abs(targetNote.y - targetHitY);
 
-    // Find nearest falling note matching this lane
-    let nearestNote = null;
-    let minDiff = Infinity;
-    let nearestIdx = -1;
-
-    for (let i = 0; i < this.activeNotes.length; i++) {
-      const note = this.activeNotes[i];
-      if (note.lane === lane && !note.hit) {
-        const diff = Math.abs(note.y - targetHitY);
-        if (diff < minDiff) {
-          minDiff = diff;
-          nearestNote = note;
-          nearestIdx = i;
-        }
+    if (pressedTone === targetNote.syllable.tone) {
+      // ✅ ĐÚNG THANH ĐIỆU: Đổi màu xanh/vàng phát sáng rồi biến mất!
+      targetNote.hit = true;
+      if (targetNote.el) {
+        targetNote.el.classList.add('correct-hit');
       }
-    }
 
-    // Hit judgment window (PERFECT < 45px, GOOD < 95px)
-    if (nearestNote && minDiff < 95) {
-      nearestNote.hit = true;
-      if (nearestNote.el && nearestNote.el.parentNode) {
-        nearestNote.el.parentNode.removeChild(nearestNote.el);
+      // Phát âm thanh synth thanh điệu & TTS chữ Hán
+      this.sfx.playToneTrack(pressedTone);
+      this.sfx.playPerfectChord();
+      if (typeof window.speakText === 'function') {
+        window.speakText(targetNote.syllable.char);
       }
-      this.activeNotes.splice(nearestIdx, 1);
 
-      const isPerfect = minDiff < 45;
-      const pts = (isPerfect ? 30 : 15) * (this.isFeverMode ? 4 : 1);
+      const isPerfect = diff < 65;
+      const pts = (isPerfect ? 30 : 20) * (this.isFeverMode ? 4 : 1);
       this.score += pts;
       this.combo++;
       if (this.combo > this.maxCombo) this.maxCombo = this.combo;
       this.notesHitCount++;
 
-      // Play harmonic audio synth
-      this.sfx.playToneTrack(lane);
-      if (isPerfect) this.sfx.playPerfectChord();
-
-      // Pronounce Chinese character via TTS
-      if (typeof window.speakText === 'function') {
-        window.speakText(nearestNote.syllable.char);
-      }
-
-      this.showHitFeedback(lane, isPerfect ? 'PERFECT! 🌟' : 'GOOD! ✨', isPerfect ? '#fbbf24' : '#38bdf8');
+      this.showHitFeedback(targetNote.laneIndex, isPerfect ? `PERFECT! 🌟 +${pts}` : `CHÍNH XÁC! ✨ +${pts}`, isPerfect ? '#fbbf24' : '#34d399');
 
       if (this.combo >= 8 && !this.isFeverMode) {
         this.triggerFever();
       }
 
+      setTimeout(() => {
+        if (targetNote.el && targetNote.el.parentNode) {
+          targetNote.el.parentNode.removeChild(targetNote.el);
+        }
+        const idx = this.activeNotes.indexOf(targetNote);
+        if (idx !== -1) this.activeNotes.splice(idx, 1);
+
+        if (this.deckIndex >= this.syllableDeck.length && this.activeNotes.length === 0) {
+          this.gameOver(true);
+        }
+      }, 180);
+
       this.updateHUD();
     } else {
-      // Mistimed or pressed empty lane
-      this.triggerMiss(lane);
+      // ❌ SAI THANH ĐIỆU: Nốt đổi màu đỏ, rung lắc, trừ 1 Tim & mất Combo!
+      if (targetNote.el) {
+        targetNote.el.classList.add('wrong-hit');
+        setTimeout(() => {
+          if (targetNote.el) targetNote.el.classList.remove('wrong-hit');
+        }, 380);
+      }
+
+      const arena = this.container.querySelector('#rhythm-highway');
+      if (arena) {
+        arena.classList.add('rhythm-screen-shake');
+        setTimeout(() => arena.classList.remove('rhythm-screen-shake'), 380);
+      }
+
+      this.sfx.playMiss();
+      this.lives--;
+      this.combo = 0;
+      this.isFeverMode = false;
+      const feverBanner = this.container.querySelector('#rhythm-fever-banner');
+      if (feverBanner) feverBanner.style.display = 'none';
+
+      const correctName = targetNote.syllable.tone === 0 ? 'Thanh Nhẹ' : `Thanh ${targetNote.syllable.tone}`;
+      this.showHitFeedback(targetNote.laneIndex, `SAI! ❌ (Là ${correctName}) -1 Tim 💔`, '#ef4444');
+
+      if (this.lives <= 0) {
+        this.gameOver(false);
+        return;
+      }
+      this.updateHUD();
     }
   }
 
-  triggerMiss(lane) {
+  triggerMiss(laneIndex = 2, label = 'MISS ❌') {
     this.combo = 0;
     this.lives--;
     this.isFeverMode = false;
@@ -931,7 +961,7 @@ export class ToneRhythmGameEngine {
     if (feverBanner) feverBanner.style.display = 'none';
 
     this.sfx.playMiss();
-    this.showHitFeedback(lane, 'MISS ❌', '#ef4444');
+    this.showHitFeedback(laneIndex, label, '#ef4444');
 
     if (this.lives <= 0) {
       this.gameOver(false);
@@ -955,21 +985,20 @@ export class ToneRhythmGameEngine {
     }
   }
 
-  showHitFeedback(lane, text, color) {
+  showHitFeedback(laneIndex, text, color) {
     const highway = this.container.querySelector('#rhythm-highway');
     if (!highway) return;
 
     const el = document.createElement('div');
     el.className = 'rhythm-hit-feedback';
-    const laneIndex = lane === 0 ? 4 : (lane - 1);
-    el.style.left = `${laneIndex * 20 + 10}%`;
+    el.style.left = `${laneIndex * 20 + 1}%`;
     el.style.color = color;
     el.textContent = text;
 
     highway.appendChild(el);
     setTimeout(() => {
       if (el.parentNode) el.parentNode.removeChild(el);
-    }, 700);
+    }, 850);
   }
 
   updateHUD() {
@@ -1030,10 +1059,10 @@ export class ToneRhythmGameEngine {
       overlay.style.setProperty('display', 'flex', 'important');
       if (icon) icon.textContent = isVictory ? '🏆' : '💔';
       if (title) title.textContent = isVictory ? 'Bậc Thầy Thanh Điệu!' : 'Hết Tim - Cố Gắng Nhé!';
-      if (desc) desc.textContent = isVictory ? 'Bạn đã bắt trọn các thanh điệu theo tiết tấu cực kỳ chính xác!' : 'Hãy chú ý dấu thanh điệu trên Pinyin và luyện tập lại nhé!';
+      if (desc) desc.textContent = isVictory ? `Bạn đã xuất sắc bắt trọn toàn bộ ${this.notesHitCount || this.totalSyllablesCount}/${this.totalSyllablesCount} âm tiết từ vựng!` : 'Hãy chú ý dấu thanh điệu trên Pinyin và luyện tập lại nhé!';
       if (resScore) resScore.textContent = this.score;
       if (resCombo) resCombo.textContent = this.maxCombo;
-      if (resNotes) resNotes.textContent = this.notesHitCount;
+      if (resNotes) resNotes.textContent = `${this.notesHitCount || 0}/${this.totalSyllablesCount || 0}`;
 
       const retryBtn = overlay.querySelector('#rhythm-retry-btn');
       const backHubBtn = overlay.querySelector('#rhythm-back-hub-btn');

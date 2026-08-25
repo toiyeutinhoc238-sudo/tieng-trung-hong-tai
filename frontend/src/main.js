@@ -7117,7 +7117,7 @@ function renderLessonsList() {
 
   // View Switcher Bar Header
   const viewSwitcherHtml = `
-    <div class="saga-header-bar" style="grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; background: rgba(15, 23, 42, 0.85); padding: 12px 22px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(16px); position: relative; z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+    <div class="saga-header-bar" style="grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; background: var(--bg-secondary, #1e293b); padding: 12px 22px; border-radius: 18px; border: 1px solid var(--border-glass, rgba(255,255,255,0.18)); position: relative; z-index: 100; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
       <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap; position: relative; z-index: 101;">
         <button onclick="event.preventDefault(); event.stopPropagation(); window.returnToHskLevelSelection();" title="Đổi Cấp Độ" style="width: 42px; height: 42px; border-radius: 12px; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: 1px solid rgba(255,255,255,0.3); color: #ffffff; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; transition: all 0.2s; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4); position: relative; z-index: 999; pointer-events: auto;" onmouseenter="this.style.transform='scale(1.08)'" onmouseleave="this.style.transform='scale(1)'">
           <i class="fa-solid fa-arrow-left"></i>
@@ -7209,9 +7209,9 @@ function renderLessonsList() {
           </div>
 
           <!-- Lesson Tag Card -->
-          <div class="saga-node-tag-card ${!isUnlocked ? 'tag-locked' : ''}" onclick="${clickAction}" style="margin-top: 8px; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border: 1px solid ${!isUnlocked ? 'rgba(245, 158, 11, 0.3)' : 'rgba(255,255,255,0.2)'}; border-radius: 14px; padding: 8px 16px; text-align: center; max-width: 220px; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2); transition: all 0.2s; ${!isUnlocked ? 'opacity: 0.85;' : ''}">
-            <div class="saga-tag-title" style="font-weight: 800; font-size: 0.95rem; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--font-display);">${!isUnlocked ? '<i class="fa-solid fa-lock" style="font-size: 0.75rem; color: #fbbf24; margin-right: 4px;"></i>' : ''}${title}</div>
-            <div class="saga-tag-sub" style="font-size: 0.78rem; color: ${!isUnlocked ? '#fbbf24' : '#94a3b8'}; margin-top: 2px; font-weight: 600;">
+          <div class="saga-node-tag-card ${!isUnlocked ? 'tag-locked' : ''}" onclick="${clickAction}" style="margin-top: 8px; background: var(--bg-secondary, #1e293b); border: 1px solid ${!isUnlocked ? 'rgba(245, 158, 11, 0.3)' : 'var(--border-glass, rgba(255,255,255,0.2))'}; border-radius: 14px; padding: 8px 16px; text-align: center; max-width: 220px; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.2); transition: all 0.2s; ${!isUnlocked ? 'opacity: 0.85;' : ''}">
+            <div class="saga-tag-title" style="font-weight: 800; font-size: 0.95rem; color: var(--text-primary, #ffffff); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--font-display);">${!isUnlocked ? '<i class="fa-solid fa-lock" style="font-size: 0.75rem; color: #fbbf24; margin-right: 4px;"></i>' : ''}${title}</div>
+            <div class="saga-tag-sub" style="font-size: 0.78rem; color: ${!isUnlocked ? '#fbbf24' : 'var(--text-secondary, #94a3b8)'}; margin-top: 2px; font-weight: 600;">
               ${!isUnlocked ? '🔒 Bài học bị khóa' : `${memorizedCount}/${wordsCount} từ ${isCompleted ? '• 🎉 Đã xong' : `• ${pct}%`}`}
             </div>
           </div>
@@ -7230,18 +7230,9 @@ function renderLessonsList() {
     const sagaMapWrapper = `
       <div style="grid-column: 1 / -1; width: 100%;">
         ${viewSwitcherHtml}
-        <div class="lessons-saga-map-wrapper" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 27, 75, 0.8) 50%, rgba(15, 23, 42, 0.9) 100%); backdrop-filter: blur(40px) saturate(200%); -webkit-backdrop-filter: blur(40px) saturate(200%); border-radius: 32px; border: 1px solid rgba(255,255,255,0.18); padding: 48px 24px; box-shadow: 0 30px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.25); display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden;">
+        <div class="lessons-saga-map-wrapper" style="background: var(--bg-secondary, #1e293b); border-radius: 32px; border: 1px solid var(--border-glass, rgba(255,255,255,0.18)); padding: 48px 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden;">
           
-          <!-- Liquid Glass Ambient Glowing Orbs -->
-          <div style="position: absolute; top: -100px; left: -100px; width: 350px; height: 350px; background: radial-gradient(circle, rgba(56, 189, 248, 0.35), transparent 70%); filter: blur(60px); pointer-events: none; border-radius: 50%; animation: liquidPulse 8s ease-in-out infinite alternate;"></div>
-          <div style="position: absolute; top: 40%; right: -120px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(168, 85, 247, 0.35), transparent 70%); filter: blur(70px); pointer-events: none; border-radius: 50%; animation: liquidPulse 10s ease-in-out infinite alternate-reverse;"></div>
-          <div style="position: absolute; bottom: -100px; left: 30%; width: 350px; height: 350px; background: radial-gradient(circle, rgba(16, 185, 129, 0.25), transparent 70%); filter: blur(60px); pointer-events: none; border-radius: 50%; animation: liquidPulse 9s ease-in-out infinite alternate;"></div>
-
           <style>
-            @keyframes liquidPulse {
-              0% { transform: scale(1) translateY(0); opacity: 0.6; }
-              100% { transform: scale(1.2) translateY(-20px); opacity: 0.9; }
-            }
             @keyframes floatMascot {
               0%, 100% { transform: translateY(0); }
               50% { transform: translateY(-8px); }
@@ -7254,13 +7245,13 @@ function renderLessonsList() {
               transform: scale(0.96) translateY(2px);
             }
 
-            /* Light mode Liquid Glass theme adaptation */
+            /* Light mode theme adaptation */
             html.light-mode .lessons-saga-map-wrapper,
             html.light .lessons-saga-map-wrapper,
             body.light-mode .lessons-saga-map-wrapper {
-              background: linear-gradient(135deg, rgba(255, 255, 255, 0.78) 0%, rgba(238, 242, 255, 0.88) 50%, rgba(255, 255, 255, 0.82) 100%) !important;
-              border: 1px solid rgba(255, 255, 255, 0.8) !important;
-              box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+              background: #ffffff !important;
+              border: 1px solid #e2e8f0 !important;
+              box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
             }
 
             html.light-mode .saga-header-bar,
@@ -10256,14 +10247,14 @@ function renderZubiDashboardTableAndRecent() {
       }
 
       cardsHtml += `
-        <div class="zubi-recent-card" style="backdrop-filter: blur(24px) saturate(180%); border-radius: 16px; padding: 20px 22px; box-shadow: 0 4px 16px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.12); display: flex; flex-direction: column; gap: 14px; cursor: pointer;" onclick="window.goToRoadmapLevel('${les.hskVer}', '${les.level}')">
+        <div class="zubi-recent-card" style="border-radius: 16px; padding: 20px 22px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); border: 1px solid var(--border-glass, rgba(255,255,255,0.12)); display: flex; flex-direction: column; gap: 14px; cursor: pointer;" onclick="window.goToRoadmapLevel('${les.hskVer}', '${les.level}')">
           <div class="recent-card-top" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
-            <div class="recent-title" style="font-weight: 700; font-size: 0.95rem; color: #f8fafc; line-height: 1.3;">${les.icon} ${les.name}</div>
+            <div class="recent-title" style="font-weight: 700; font-size: 0.95rem; line-height: 1.3;">${les.icon} ${les.name}</div>
           </div>
           <div class="recent-val green-text" style="font-family: var(--font-display,sans-serif); font-size: 1.6rem; font-weight: 800; color: #10b981;">${count.toLocaleString()} từ vựng</div>
           <div class="recent-card-footer" style="display: flex; justify-content: space-between; align-items: center;">
             <span style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: ${pillBg}; color: ${pillColor};">${pillText}</span>
-            <span style="font-size: 0.8rem; color: #94a3b8; font-weight: 500;">${todayStr}</span>
+            <span style="font-size: 0.8rem; color: var(--text-muted, #94a3b8); font-weight: 500;">${todayStr}</span>
           </div>
         </div>
       `;
@@ -12497,7 +12488,7 @@ window.showGameHubGuideModal = function () {
       </div>
 
       <h3 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 8px; color: #fbbf24;">
-        Đấu Trường 7 Trò Chơi Ôn Tập
+        Đấu Trường 6 Trò Chơi Ôn Tập
       </h3>
 
       <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 14px; padding: 14px 16px; margin: 16px 0 22px 0; text-align: left;">
@@ -12506,7 +12497,7 @@ window.showGameHubGuideModal = function () {
           <span>Vào <strong>Sổ tay từ vựng</strong> để biết thêm chi tiết và chọn bài học bạn muốn chơi game ôn tập nhé!</span>
         </div>
         <div style="font-size: 0.82rem; color: #94a3b8; margin-top: 10px; line-height: 1.45; padding-left: 26px;">
-          🐍 Nuôi Rắn • ⛏️ Đào Vàng • 🀄 Mạt Chược • 💥 Bắn Pháo • ⚗️ Giả Kim • 🎵 Phím Đàn • ⚡ Quizizz
+          🐍 Nuôi Rắn • 🀄 Mạt Chược • 💥 Bắn Pháo • ⚗️ Giả Kim • 🎵 Phím Đàn • ⚡ Quizizz
         </div>
       </div>
 

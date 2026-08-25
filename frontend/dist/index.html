@@ -120,8 +120,8 @@
   <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
   <script type="module" crossorigin src="/assets/grammar_hsk1_v2-a5qmjeDV.js"></script>
   <script type="module" crossorigin src="/assets/screen_drawing-oOIhKrv1.js"></script>
-  <script type="module" crossorigin src="/assets/main-BUqSV2yz.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/style-DiSz73nM.css">
+  <script type="module" crossorigin src="/assets/main-DYswTbox.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/style-BO3n-QmP.css">
 </head>
 
 <body>
@@ -317,14 +317,14 @@
         </li>
       </ul>
 
-      <!-- DANH MỤC: TRÒ CHƠI ÔN TẬP (7 TRÒ CHƠI) -->
+      <!-- DANH MỤC: TRÒ CHƠI ÔN TẬP (6 TRÒ CHƠI) -->
       <div class="sidebar-section-label">Trò Chơi</div>
       <ul class="sidebar-menu" style="margin-bottom: 12px;">
         <li class="sidebar-item" id="sidebar-nav-games" onclick="window.showGameHubGuideModal()" style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
           <i class="fa-solid fa-gamepad" style="color: #f59e0b; font-size: 1.15rem; flex-shrink: 0;"></i>
           <span style="white-space: nowrap; flex: 1; min-width: 0;">Trò Chơi</span>
           <span
-            style="font-size:0.68rem; background:linear-gradient(135deg, #f59e0b, #d97706); color:#fff; padding:2px 7px; border-radius:6px; font-weight:800; margin-left:auto; flex-shrink: 0; white-space:nowrap;">🔥 7 Game</span>
+            style="font-size:0.68rem; background:linear-gradient(135deg, #f59e0b, #d97706); color:#fff; padding:2px 7px; border-radius:6px; font-weight:800; margin-left:auto; flex-shrink: 0; white-space:nowrap;">🔥 6 Game</span>
         </li>
       </ul>
 
@@ -765,21 +765,21 @@
         <div style="display: flex; flex-direction: column; gap: 18px;">
 
           <!-- Announcement 1: Trải nghiệm Miễn phí & Ủng hộ -->
-          <div
-            style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(15, 23, 42, 0.6)); border: 1.5px solid rgba(16, 185, 129, 0.3); border-radius: 20px; padding: 22px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.2);">
+          <div class="announcement-glass-card announcement-donate-card"
+            style="border-radius: 20px; padding: 22px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
               <div style="display: flex; align-items: center; gap: 10px;">
                 <span
-                  style="background: rgba(16, 185, 129, 0.2); color: #34d399; font-size: 0.78rem; font-weight: 800; padding: 4px 12px; border-radius: 99px; border: 1px solid rgba(16, 185, 129, 0.4); text-transform: uppercase;">
+                  style="background: rgba(16, 185, 129, 0.2); color: #059669; font-size: 0.78rem; font-weight: 800; padding: 4px 12px; border-radius: 99px; border: 1px solid rgba(16, 185, 129, 0.4); text-transform: uppercase;">
                   <i class="fa-solid fa-star"></i> ĐẶC BIỆT
                 </span>
-                <h4 style="font-size: 1.1rem; font-weight: 800; color: #ffffff; margin: 0;">🎁 Trải nghiệm toàn bộ tính
+                <h4 class="announcement-title" style="font-size: 1.1rem; font-weight: 800; margin: 0; color: var(--text-primary);">🎁 Trải nghiệm toàn bộ tính
                   năng HOÀN TOÀN MIỄN PHÍ</h4>
               </div>
-              <span style="font-size: 0.8rem; color: #94a3b8; font-weight: 600;"><i class="fa-regular fa-clock"></i> Mới
+              <span class="announcement-time" style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;"><i class="fa-regular fa-clock"></i> Mới
                 cập nhật</span>
             </div>
-            <p style="font-size: 0.95rem; color: #e2e8f0; line-height: 1.6; margin: 0;">
+            <p class="announcement-desc" style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
               Trong quá trình nâng cấp và phát triển nền tảng, toàn bộ bài học, kho từ vựng và các công cụ học tập trên
               hệ thống được phục vụ <strong>hoàn toàn miễn phí 100%</strong>. Nếu bạn cảm thấy ứng dụng hữu ích và muốn
               tiếp thêm động lực cho team duy trì máy chủ &amp; liên tục cập nhật bài học mới, bạn có thể ủng hộ dự án
@@ -794,19 +794,19 @@
           </div>
 
           <!-- Announcement: Ra mắt Tính năng Luyện Chép Video Mới -->
-          <div
-            style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.14), rgba(15, 23, 42, 0.65)); border: 1.5px solid rgba(239, 68, 68, 0.35); border-radius: 20px; padding: 22px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.25);">
+          <div class="announcement-glass-card announcement-dictation-card"
+            style="border-radius: 20px; padding: 22px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
               <div style="display: flex; align-items: center; gap: 10px;">
                 <span
                   style="background: linear-gradient(135deg, #ef4444, #f97316); color: #ffffff; font-size: 0.78rem; font-weight: 800; padding: 4px 12px; border-radius: 99px; text-transform: uppercase;">
                   🔥 MỚI RA MẮT
                 </span>
-                <h4 style="font-size: 1.15rem; font-weight: 800; color: #ffffff; margin: 0;">🎬 Luyện Chép Chính Tả Video (Video Dictation)</h4>
+                <h4 class="announcement-title" style="font-size: 1.15rem; font-weight: 800; margin: 0; color: var(--text-primary);">🎬 Luyện Chép Chính Tả Video (Video Dictation)</h4>
               </div>
-              <span style="font-size: 0.8rem; color: #f87171; font-weight: 700;"><i class="fa-brands fa-youtube"></i> 8 Video Khẩu Ngữ Thực Tế</span>
+              <span style="font-size: 0.8rem; color: #ef4444; font-weight: 700;"><i class="fa-brands fa-youtube"></i> 8 Video Khẩu Ngữ Thực Tế</span>
             </div>
-            <p style="font-size: 0.95rem; color: #e2e8f0; margin: 0; line-height: 1.65;">
+            <p class="announcement-desc" style="font-size: 0.95rem; color: var(--text-secondary); margin: 0; line-height: 1.65;">
               Trải nghiệm phương pháp học phản xạ nghe chép chuẩn phong cách <strong>eJOY / DailyDictation</strong>: Vừa xem video ngắn thực tế, vừa luyện chép điền từ hoặc gõ cả câu với <strong>AI chấm điểm thông minh</strong> và phụ đề song ngữ 60fps đồng bộ thời gian thực!
             </p>
             <div style="display: flex; align-items: center; gap: 10px; margin-top: 4px; flex-wrap: wrap;">

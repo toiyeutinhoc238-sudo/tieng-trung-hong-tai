@@ -598,6 +598,8 @@ export class AlchemistGameEngine {
     this.timeLeft = 80;
     this.craftedCount = 0;
     this.cauldronSlots = [];
+    this.totalWordsCount = (this.rawWords || []).length;
+    this.wordQueue = [...(this.rawWords || [])].sort(() => Math.random() - 0.5);
 
     this.nextQuestion();
     this.updateHUD();
@@ -673,8 +675,14 @@ export class AlchemistGameEngine {
     this.isRevealed = false;
     this.isProcessing = false;
     
-    // Pick random target from rawWords
-    const randomObj = this.rawWords[Math.floor(Math.random() * this.rawWords.length)];
+    if (!this.wordQueue || this.wordQueue.length === 0) {
+      // Đã hoàn thành toàn bộ danh sách từ vựng mà không lặp lại
+      this.gameOver(true);
+      return;
+    }
+
+    // Pick next target from wordQueue
+    const randomObj = this.wordQueue.pop();
     this.currentTarget = this.decomposeWordTarget(randomObj);
 
     // Update target card displays (ACTIVE RECALL: NO SPOILER ANSWER!)
@@ -963,10 +971,10 @@ export class AlchemistGameEngine {
       overlay.style.setProperty('display', 'flex', 'important');
       if (icon) icon.textContent = isVictory ? '🏆' : '💨';
       if (title) title.textContent = isVictory ? 'Nhà Giả Kim Xuất Sắc!' : 'Hết Tim - Luyện Thất Bại!';
-      if (desc) desc.textContent = isVictory ? 'Bạn đã hoàn thành thời gian thử nghiệm và chế tạo nhiều chữ Hán!' : 'Hãy chú ý quan sát các nét bộ thủ cấu thành chữ Hán nhé!';
+      if (desc) desc.textContent = isVictory ? `Bạn đã xuất sắc chiết tự và ghép thành công toàn bộ ${this.craftedCount || this.totalWordsCount}/${this.totalWordsCount} từ vựng!` : 'Hãy chú ý quan sát các nét bộ thủ cấu thành chữ Hán nhé!';
       if (resScore) resScore.textContent = this.score;
       if (resStreak) resStreak.textContent = this.maxStreak;
-      if (resWords) resWords.textContent = this.craftedCount;
+      if (resWords) resWords.textContent = `${this.craftedCount || 0}/${this.totalWordsCount || 0}`;
 
       const retryBtn = overlay.querySelector('#alchemist-retry-btn');
       const backHubBtn = overlay.querySelector('#alchemist-back-hub-btn');

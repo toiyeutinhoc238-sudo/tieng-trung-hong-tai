@@ -34,10 +34,10 @@ html {
   --radius-xl: 36px;
   
   /* Cartoon Colors (Vibrant, Friendly & Engaging for Students) */
-  --bg-primary: transparent;
-  --bg-secondary: rgba(255, 255, 255, 0.65);
-  --bg-card: rgba(255, 255, 255, 0.65);
-  --bg-glass: rgba(255, 255, 255, 0.65);
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --bg-glass: #ffffff;
   
   --border-glass: #e5e7eb;
   --border-glass-hover: #58cc02;
@@ -79,10 +79,10 @@ html {
 }
 
 html.dark {
-  --bg-primary: transparent;
-  --bg-secondary: rgba(15, 23, 42, 0.55);
-  --bg-card: rgba(15, 23, 42, 0.55);
-  --bg-glass: rgba(15, 23, 42, 0.55);
+  --bg-primary: #0b0f19;
+  --bg-secondary: #1e293b;
+  --bg-card: #1e293b;
+  --bg-glass: #1e293b;
   
   --border-glass: #2b4550;
   --border-glass-hover: #58cc02;
@@ -91,8 +91,8 @@ html.dark {
   --text-secondary: #94a3b8;
   --text-muted: #64748b;
   
-  --card-bg-front: rgba(15, 23, 42, 0.55);
-  --card-bg-back: rgba(15, 23, 42, 0.55);
+  --card-bg-front: #1e293b;
+  --card-bg-back: #1e293b;
   
   --shadow-sm: 0 3px 0 rgba(0,0,0,0.2);
   --shadow-md: 0 5px 0 rgba(0,0,0,0.3);
@@ -155,13 +155,11 @@ a {
   text-decoration: none;
 }
 
-/* Glassmorphism & Cartoon Card Utilities */
+/* Card Utilities */
 .glass-panel {
   background: var(--bg-glass);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 2px solid var(--border-glass);
-  box-shadow: var(--shadow-md);
+  border: 1.5px solid var(--border-glass);
+  box-shadow: var(--shadow-sm);
   border-radius: var(--radius-lg);
   transition: all var(--transition-normal);
 }
@@ -200,10 +198,8 @@ a {
   top: 0;
   left: 0;
   z-index: 200;
-  background: rgba(15, 23, 42, 0.6) !important;
-  backdrop-filter: blur(24px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
-  border-right: 1px solid rgba(255, 255, 255, 0.15) !important;
+  background: var(--bg-secondary) !important;
+  border-right: 1px solid var(--border-glass) !important;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -216,9 +212,7 @@ a {
   top: 0;
   z-index: 100;
   height: var(--nav-height);
-  background: var(--bg-glass);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: var(--bg-secondary);
   border-bottom: 1px solid var(--border-glass);
   box-shadow: var(--shadow-sm);
   transition: all var(--transition-normal);
@@ -5308,35 +5302,29 @@ html:not(.dark) #zubi-hero-tip {
 }
 
 html:not(.dark) .zubi-dashboard-table-container {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.58) 0%, rgba(225, 238, 255, 0.42) 100%) !important;
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-  border-color: rgba(255, 255, 255, 0.85) !important;
-  box-shadow: 0 10px 32px rgba(31, 38, 135, 0.08) !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
 }
 
 html:not(.dark) .zubi-table th,
 html:not(.dark) .zubi-th {
-  background: rgba(255, 255, 255, 0.45) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
+  background: #f8fafc !important;
   color: #0f172a !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.8) !important;
+  border-bottom: 1px solid #e2e8f0 !important;
 }
 
 html:not(.dark) .zubi-table td,
 html:not(.dark) .zubi-td {
   color: #1e293b !important;
-  border-bottom-color: rgba(255, 255, 255, 0.5) !important;
+  border-bottom-color: #f1f5f9 !important;
 }
 
 html:not(.dark) #zubi-stat-modal > div,
 html:not(.dark) #about-hongtai-modal > div {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.65) 0%, rgba(230, 240, 255, 0.48) 100%) !important;
-  backdrop-filter: blur(24px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
-  border-color: rgba(255, 255, 255, 0.85) !important;
-  box-shadow: 0 25px 50px rgba(31, 38, 135, 0.12) !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15) !important;
   color: #1e293b !important;
 }
 
@@ -5353,26 +5341,24 @@ html:not(.dark) #about-hongtai-modal p {
 
 /* About Hongtai Modal Theme Styles */
 html.dark #about-hongtai-modal .about-quote-box {
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95)) !important;
+  background: #1e293b !important;
   color: #f1f5f9 !important;
   border-left-color: #38bdf8 !important;
 }
 html:not(.dark) #about-hongtai-modal .about-quote-box {
-  background: rgba(255, 255, 255, 0.6) !important;
-  backdrop-filter: blur(12px) !important;
+  background: #f0f9ff !important;
   color: #0f172a !important;
   border-left-color: #0284c7 !important;
 }
 
 html.dark #about-hongtai-modal .about-card-box {
-  background: rgba(15, 23, 42, 0.6) !important;
+  background: #1e293b !important;
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
   color: #cbd5e1 !important;
 }
 html:not(.dark) #about-hongtai-modal .about-card-box {
-  background: rgba(255, 255, 255, 0.55) !important;
-  backdrop-filter: blur(12px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
   color: #334155 !important;
 }
 
@@ -5388,8 +5374,7 @@ html.dark #about-hongtai-modal .about-mission-box {
   border: 1px solid rgba(239, 68, 68, 0.3) !important;
 }
 html:not(.dark) #about-hongtai-modal .about-mission-box {
-  background: rgba(254, 242, 242, 0.7) !important;
-  backdrop-filter: blur(12px) !important;
+  background: #fef2f2 !important;
   border: 1px solid #fca5a5 !important;
 }
 
@@ -5414,13 +5399,13 @@ html:not(.dark) #about-hongtai-modal .about-mission-box p {
 }
 
 html.dark #about-hongtai-modal .about-modal-footer {
-  background: rgba(15, 23, 42, 0.5) !important;
+  background: #1e293b !important;
   border-top-color: rgba(255, 255, 255, 0.1) !important;
   color: #94a3b8 !important;
 }
 html:not(.dark) #about-hongtai-modal .about-modal-footer {
-  background: rgba(255, 255, 255, 0.5) !important;
-  border-top-color: rgba(255, 255, 255, 0.8) !important;
+  background: #f8fafc !important;
+  border-top-color: #e2e8f0 !important;
   color: #64748b !important;
 }
 
@@ -5433,31 +5418,25 @@ html:not(.dark) .zubi-section-title {
 }
 
 html.dark .zubi-table-wrap {
-  background: rgba(30, 41, 59, 0.65) !important;
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  background: #1e293b !important;
   border: 1px solid rgba(255, 255, 255, 0.12) !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
 }
 html:not(.dark) .zubi-table-wrap {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.58) 0%, rgba(225, 238, 255, 0.42) 100%) !important;
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.85) !important;
-  box-shadow: 0 10px 30px rgba(31, 38, 135, 0.08) !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
 }
 
 html.dark .zubi-th {
   color: #cbd5e1 !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-  background: rgba(15, 23, 42, 0.4) !important;
+  background: #0f172a !important;
 }
 html:not(.dark) .zubi-th {
   color: #0f172a !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.8) !important;
-  background: rgba(255, 255, 255, 0.45) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  background: #f8fafc !important;
 }
 
 html.dark .zubi-td {
@@ -5466,7 +5445,7 @@ html.dark .zubi-td {
 }
 html:not(.dark) .zubi-td {
   color: #1e293b !important;
-  border-bottom: 1px solid rgba(241, 245, 249, 0.9) !important;
+  border-bottom: 1px solid #f1f5f9 !important;
 }
 
 html.dark .zubi-td-bold {
@@ -5534,7 +5513,7 @@ html:not(.dark) .exam-mode-tab.active {
 
 /* ===== Exam Library Cards ===== */
 .exam-lib-card {
-  background: rgba(255,255,255,0.05);
+  background: #1e293b;
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 14px;
   padding: 18px 20px;
@@ -5552,24 +5531,20 @@ html:not(.dark) .exam-mode-tab.active {
 html:not(.dark) .exam-lib-card,
 html.light-mode .exam-lib-card,
 html.light .exam-lib-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.58) 0%, rgba(225, 238, 255, 0.42) 100%) !important;
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.85) !important;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.9) !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
 }
 
 html.dark .exam-lib-card {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.65) 0%, rgba(30, 41, 59, 0.5) 100%) !important;
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.22) !important;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 1px rgba(255, 255, 255, 0.15) !important;
+  background: #1e293b !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
 }
 
 html:not(.dark) .exam-lib-card:hover {
   border-color: #ff2a5f !important;
-  box-shadow: 0 10px 35px rgba(255,42,95,0.18) !important;
+  box-shadow: 0 8px 25px rgba(255,42,95,0.15) !important;
 }
 
 .exam-lib-card-level-badge {
@@ -6665,14 +6640,12 @@ html.dark #leaderboard-modal {
   font-family: var(--font-display);
 }
 
-/* Light Mode Podium Liquid Glass Styles */
+/* Light Mode Podium Styles */
 html.light-mode .leaderboard-modal-content,
 html:not(.dark) .leaderboard-modal-content {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.82) 0%, rgba(225, 238, 255, 0.65) 100%) !important;
-  backdrop-filter: blur(28px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
-  border: 2.5px solid rgba(255, 255, 255, 0.95) !important;
-  box-shadow: 0 20px 60px rgba(31, 38, 135, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.95) !important;
+  background: #ffffff !important;
+  border: 1.5px solid #e2e8f0 !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15) !important;
   color: #0f172a !important;
 }
 
@@ -6688,26 +6661,26 @@ html:not(.dark) .lb-subtitle {
 
 html.light-mode .p-1,
 html:not(.dark) .p-1 {
-  background: linear-gradient(180deg, rgba(254, 243, 199, 0.9) 0%, rgba(251, 191, 36, 0.6) 100%) !important;
-  border: 2px solid rgba(245, 158, 11, 0.7) !important;
+  background: #fef3c7 !important;
+  border: 2px solid #f59e0b !important;
   color: #b45309 !important;
-  box-shadow: 0 10px 25px rgba(217, 119, 6, 0.22) !important;
+  box-shadow: 0 6px 18px rgba(217, 119, 6, 0.18) !important;
 }
 
 html.light-mode .p-2,
 html:not(.dark) .p-2 {
-  background: linear-gradient(180deg, rgba(241, 245, 249, 0.9) 0%, rgba(203, 213, 225, 0.6) 100%) !important;
-  border: 2px solid rgba(148, 163, 184, 0.7) !important;
+  background: #f1f5f9 !important;
+  border: 2px solid #94a3b8 !important;
   color: #475569 !important;
-  box-shadow: 0 8px 20px rgba(71, 85, 105, 0.15) !important;
+  box-shadow: 0 6px 18px rgba(71, 85, 105, 0.12) !important;
 }
 
 html.light-mode .p-3,
 html:not(.dark) .p-3 {
-  background: linear-gradient(180deg, rgba(254, 226, 226, 0.9) 0%, rgba(252, 165, 165, 0.6) 100%) !important;
-  border: 2px solid rgba(239, 68, 68, 0.6) !important;
+  background: #fee2e2 !important;
+  border: 2px solid #f87171 !important;
   color: #b91c1c !important;
-  box-shadow: 0 8px 20px rgba(225, 29, 72, 0.15) !important;
+  box-shadow: 0 6px 18px rgba(225, 29, 72, 0.12) !important;
 }
 
 html.light-mode .gold-user,
@@ -6730,13 +6703,11 @@ html:not(.dark) .lb-podium-score {
   color: #2563eb !important;
 }
 
-/* Dark Mode Podium Liquid Glass Styles */
+/* Dark Mode Podium Styles */
 html.dark .leaderboard-modal-content {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.75) 100%) !important;
-  backdrop-filter: blur(28px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
-  border: 2px solid rgba(255, 255, 255, 0.22) !important;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.15) !important;
+  background: #1e293b !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6) !important;
   color: #ffffff !important;
 }
 
@@ -7364,16 +7335,14 @@ html.dark .info-sub-card,
 html.dark .group-block,
 html.dark .char-detail-inspector,
 html.dark .vd-box,
-html.dark .modal-content,
+html.dark .modal-content:not(#game-hub-guide-modal *),
 html.dark .vocab-panel,
 html.dark .filter-section,
 html.dark .writing-workshop,
 html.dark .sidebar-profile-card {
-  background: rgba(15, 23, 42, 0.6) !important;
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.22) !important;
-  box-shadow: 0 10px 32px 0 rgba(0, 0, 0, 0.37) !important;
+  background: #1e293b !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.3) !important;
   color: #ffffff !important;
 }
 
@@ -7391,11 +7360,11 @@ html.dark .text-secondary {
 
 /* ─── GLOBAL ABSOLUTE LIGHT MODE TEXT & ROADMAP OVERRIDES ─── */
 html.light-mode {
-  --bg-primary: #f1f5f9;
+  --bg-primary: #f8fafc;
   --bg-secondary: #ffffff;
-  --bg-glass: rgba(255, 255, 255, 0.9);
-  --border-glass: rgba(0, 0, 0, 0.1);
-  --border-glass-hover: rgba(0, 0, 0, 0.2);
+  --bg-glass: #ffffff;
+  --border-glass: #e2e8f0;
+  --border-glass-hover: #cbd5e1;
   --text-primary: #0f172a;
   --text-secondary: #334155;
   --text-muted: #64748b;
@@ -7450,7 +7419,7 @@ html.light-mode [style*="color:#64748b"] {
   color: #334155 !important;
 }
 
-/* Tự động chuyển nền tối sẫm inline style sang nền Liquid Glass mờ */
+/* Tự động chuyển nền tối sẫm inline style sang nền trắng thông thường khi ở chế độ SÁNG */
 html.light-mode [style*="background: rgba(15,23,42"],
 html.light-mode [style*="background:rgba(15,23,42"],
 html.light-mode [style*="background: rgba(15, 23, 42"],
@@ -7470,23 +7439,20 @@ html.light-mode [style*="background: rgba(30, 41, 59, 0.95)"],
 html.light-mode [style*="background: rgba(30,41,59,0.95)"],
 html.light-mode [style*="background: rgba(30, 41, 59, 0.6)"],
 html.light-mode [style*="background: rgba(30,41,59,0.6)"] {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.62) 0%, rgba(225, 238, 255, 0.45) 100%) !important;
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-  border-color: rgba(255, 255, 255, 0.85) !important;
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
   color: #0f172a !important;
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.08) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
 }
 
 /* ─── ROADMAP SPECIFIC LIGHT MODE OVERRIDES ─── */
 html.light-mode .roadmap-ver-pill {
-  background: rgba(255, 255, 255, 0.6) !important;
-  backdrop-filter: blur(12px) !important;
-  border-color: rgba(255, 255, 255, 0.8) !important;
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
   color: #334155 !important;
 }
 html.light-mode .roadmap-ver-pill:hover {
-  background: rgba(255, 255, 255, 0.85) !important;
+  background: #f1f5f9 !important;
   color: #0f172a !important;
 }
 html.light-mode .roadmap-ver-pill.active {
@@ -7498,12 +7464,10 @@ html.light-mode .roadmap-ver-pill.active {
 
 /* Roadmap Level Nodes & Cards in Light Mode */
 html.light-mode .node-info-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.62) 0%, rgba(225, 238, 255, 0.45) 100%) !important;
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
   color: #0f172a !important;
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.08) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
 }
 html.light-mode .node-card-title {
   color: #0f172a !important;
@@ -7522,11 +7486,9 @@ html.light-mode .app-sidebar,
 html.light .app-sidebar,
 html:not(.dark) .app-sidebar,
 body.light-mode .app-sidebar {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.42) 0%, rgba(220, 235, 255, 0.28) 100%) !important;
-  backdrop-filter: blur(24px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
-  border-right: 1px solid rgba(255, 255, 255, 0.75) !important;
-  box-shadow: 0 10px 35px rgba(31, 38, 135, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.9), inset -1px 0 0 rgba(255, 255, 255, 0.5) !important;
+  background: #ffffff !important;
+  border-right: 1px solid #e2e8f0 !important;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.04) !important;
 }
 html.light-mode .sidebar-section-label {
   color: #64748b !important;
@@ -7588,18 +7550,17 @@ body.dark .nb-lesson-pill:hover {
   top: 16px;
   left: 16px;
   z-index: 999;
-  background: var(--bg-glass, rgba(15, 23, 42, 0.88));
-  backdrop-filter: blur(16px);
+  background: var(--bg-glass, #ffffff);
 }
 
 /* =======================================================
-   LIGHT MODE iOS 26 LIQUID GLASSMORPHISM
+   LIGHT MODE STANDARD SOLID PANELS
    ======================================================= */
 html.light-mode, body.light-mode, html.light {
-  --bg-primary: #f1f5f9;
-  --bg-secondary: rgba(255, 255, 255, 0.7);
-  --bg-glass: rgba(255, 255, 255, 0.68);
-  --border-glass: rgba(255, 255, 255, 0.8);
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-glass: #ffffff;
+  --border-glass: #e2e8f0;
   --text-primary: #0f172a;
   --text-secondary: #334155;
   --text-muted: #64748b;
@@ -7612,7 +7573,7 @@ html.light-mode body, body.light-mode {
   transition: background 0.5s ease-in-out;
 }
 
-/* Đảm bảo toàn bộ thẻ panel, card, modal ở chế độ sáng dùng iOS 26 Liquid Glass */
+/* Toàn bộ thẻ panel, card, modal ở chế độ sáng dùng màu trắng thông thường */
 html.light-mode .glass-panel,
 html.light-mode .voice-control-bar,
 html.light-mode .zubi-stat-card,
@@ -7622,18 +7583,16 @@ html.light-mode .info-sub-card,
 html.light-mode .group-block,
 html.light-mode .char-detail-inspector,
 html.light-mode .vd-box,
-html.light-mode .modal-content,
+html.light-mode .modal-content:not(#game-hub-guide-modal *),
 html.light-mode .vocab-panel,
 html.light-mode .filter-section,
 html.light-mode .writing-workshop,
 html.light-mode .sidebar-profile-card,
 html.light-mode .user-profile,
 html.light-mode .google-acc-card {
-  background: rgba(255, 255, 255, 0.68) !important;
-  backdrop-filter: blur(24px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.85) !important;
-  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.08) !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
   color: #0f172a !important;
 }
 .sidebar-expand-float-btn {
@@ -7642,17 +7601,15 @@ html.light-mode .google-acc-card {
   top: 16px;
   left: 16px;
   z-index: 999;
-  background: var(--bg-glass, rgba(15, 23, 42, 0.88));
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.18));
-  color: var(--text-primary, #ffffff);
+  background: var(--bg-glass, #ffffff);
+  border: 1px solid var(--border-glass, #e2e8f0);
+  color: var(--text-primary, #0f172a);
   padding: 8px 18px;
   border-radius: 30px;
   font-weight: 700;
   font-size: 0.88rem;
   cursor: pointer;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   align-items: center;
   gap: 8px;
   transition: all 0.25s ease;
@@ -7735,10 +7692,10 @@ body.sidebar-collapsed .sidebar-expand-float-btn {
 }
 
 /* Cartoon Modal Windows & Dialogs */
-.modal-content, .zubi-stat-card, .glass-panel, .card, .dashboard-card {
+.modal-content:not(#game-hub-guide-modal *), .zubi-stat-card, .glass-panel, .card, .dashboard-card {
   border-radius: 24px !important;
-  border: 2px solid var(--border-glass, #e2e8f0) !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), 0 4px 0 rgba(0, 0, 0, 0.05) !important;
+  border: 1.5px solid var(--border-glass, #e2e8f0) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08) !important;
 }
 
 /* Gamified Badges */
@@ -7808,7 +7765,7 @@ body.sidebar-collapsed .zubi-dashboard-container {
   max-width: 100% !important;
 }
 
-/* 3. Dark Mode iOS 26 Liquid Glass Panels */
+/* 3. Dark Mode Panels */
 html.dark .zubi-header-banner,
 html.dark .zubi-stat-card,
 html.dark .zubi-recent-card,
@@ -7819,7 +7776,7 @@ html.dark .controls-dashboard,
 html.dark .review-banner,
 html.dark .deck-card,
 html.dark .notebook-card,
-html.dark .modal-content,
+html.dark .modal-content:not(#game-hub-guide-modal *),
 html.dark .sidebar-profile-card,
 html.dark .google-acc-card,
 html.dark .pinyin-card,
@@ -7853,15 +7810,13 @@ html.dark #deck-selection-view,
 html.dark #roadmap-view-section,
 html.dark #flashcard-section,
 html.dark #custom-section {
-  background: rgba(15, 23, 42, 0.28) !important;
-  backdrop-filter: blur(6px) saturate(160%) !important;
-  -webkit-backdrop-filter: blur(6px) saturate(160%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.25) !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25) !important;
+  background: #1e293b !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
   color: #ffffff !important;
 }
 
-/* 4. Light Mode iOS 26 Liquid Glass Panels */
+/* 4. Light Mode Panels */
 html.light-mode .zubi-header-banner,
 html.light-mode .zubi-stat-card,
 html.light-mode .zubi-recent-card,
@@ -7872,7 +7827,7 @@ html.light-mode .controls-dashboard,
 html.light-mode .review-banner,
 html.light-mode .deck-card,
 html.light-mode .notebook-card,
-html.light-mode .modal-content,
+html.light-mode .modal-content:not(#game-hub-guide-modal *),
 html.light-mode .sidebar-profile-card,
 html.light-mode .google-acc-card,
 html.light-mode .pinyin-card,
@@ -7906,11 +7861,9 @@ html.light-mode #deck-selection-view,
 html.light-mode #roadmap-view-section,
 html.light-mode #flashcard-section,
 html.light-mode #custom-section {
-  background: rgba(255, 255, 255, 0.38) !important;
-  backdrop-filter: blur(6px) saturate(160%) !important;
-  -webkit-backdrop-filter: blur(6px) saturate(160%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.75) !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08) !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
   color: #0f172a !important;
 }
 
@@ -7958,9 +7911,7 @@ html.light-mode .stage-arrow-btn {
 }
 
 .hero-flashcard-card {
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  background: #1e293b;
   border: 1.5px solid rgba(255, 255, 255, 0.18);
   border-radius: 26px;
   padding: 32px 38px;
@@ -8001,8 +7952,8 @@ html.light-mode .stage-arrow-btn {
 }
 
 html.light-mode .hero-flashcard-card {
-  background: rgba(255, 255, 255, 0.88) !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.95) !important;
+  background: #ffffff !important;
+  border: 1.5px solid #e2e8f0 !important;
   color: #0f172a !important;
   box-shadow: 0 20px 50px rgba(0,0,0,0.08) !important;
 }
@@ -10421,15 +10372,6 @@ html.dark .card-rhythm {
   background: linear-gradient(145deg, rgba(236, 72, 153, 0.15), rgba(17, 24, 39, 0.85)) !important;
 }
 
-.card-miner {
-  border-top: 4px solid #0284c7 !important;
-  background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 100%) !important;
-}
-html.dark .card-miner {
-  border-color: #38bdf8 !important;
-  background: linear-gradient(145deg, rgba(56, 189, 248, 0.15), rgba(17, 24, 39, 0.85)) !important;
-}
-
 .card-locked-beta {
   opacity: 0.82;
   filter: grayscale(0.2);
@@ -10478,11 +10420,6 @@ html.dark .card-miner {
   color: #be185d;
   border: 1px solid #fbcfe8;
 }
-.card-miner .card-tag {
-  background: #e0f2fe;
-  color: #0369a1;
-  border: 1px solid #bae6fd;
-}
 
 /* Card Tag Colors (Dark Mode) */
 html.dark .card-quiz-highlight .card-tag {
@@ -10514,11 +10451,6 @@ html.dark .card-rhythm .card-tag {
   background: rgba(236, 72, 153, 0.25);
   color: #f472b6;
   border-color: rgba(236, 72, 153, 0.45);
-}
-html.dark .card-miner .card-tag {
-  background: rgba(56, 189, 248, 0.25);
-  color: #38bdf8;
-  border-color: rgba(56, 189, 248, 0.45);
 }
 
 .card-icon-hero {
@@ -11906,14 +11838,6 @@ html.dark .stepper-notes {
   box-shadow: 0 12px 32px rgba(236, 72, 153, 0.2);
 }
 
-.card-miner {
-  border-top: 4px solid #0ea5e9;
-}
-.card-miner:hover {
-  border-color: #38bdf8;
-  box-shadow: 0 12px 32px rgba(14, 165, 233, 0.2);
-}
-
 /* ==========================================================================
    GAME 3: HANZI ALCHEMIST (LÒ LUYỆN CHIẾT TỰ)
    ========================================================================== */
@@ -12863,11 +12787,13 @@ html.dark .speed-opt-btn {
 }
 .highway-lane-track:last-child { border-right: none; }
 
-.highway-lane-track.lane-1-bg { background: linear-gradient(180deg, rgba(2, 132, 199, 0.02) 0%, rgba(2, 132, 199, 0.08) 100%); }
-.highway-lane-track.lane-2-bg { background: linear-gradient(180deg, rgba(5, 150, 105, 0.02) 0%, rgba(5, 150, 105, 0.08) 100%); }
-.highway-lane-track.lane-3-bg { background: linear-gradient(180deg, rgba(217, 119, 6, 0.02) 0%, rgba(217, 119, 6, 0.08) 100%); }
-.highway-lane-track.lane-4-bg { background: linear-gradient(180deg, rgba(225, 29, 72, 0.02) 0%, rgba(225, 29, 72, 0.08) 100%); }
-.highway-lane-track.lane-0-bg { background: linear-gradient(180deg, rgba(124, 58, 237, 0.02) 0%, rgba(124, 58, 237, 0.08) 100%); }
+.highway-lane-track.lane-1-bg,
+.highway-lane-track.lane-2-bg,
+.highway-lane-track.lane-3-bg,
+.highway-lane-track.lane-4-bg,
+.highway-lane-track.lane-0-bg { 
+  background: transparent; 
+}
 
 .rhythm-notes-layer {
   position: absolute;
@@ -12878,48 +12804,58 @@ html.dark .speed-opt-btn {
   pointer-events: none;
 }
 
-/* Falling note cards (20% width for 5 lanes) */
+/* Falling note cards (Uniform, NO spoiler colors) */
 .rhythm-falling-note {
   position: absolute;
-  width: 20%;
-  padding: 6px 3px;
-  border-radius: 12px;
+  width: 18.5%;
+  padding: 8px 4px;
+  border-radius: 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-weight: 800;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  border: 2px solid rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
   z-index: 5;
   box-sizing: border-box;
   text-align: center;
   will-change: transform;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.rhythm-falling-note.note-lane-1 {
-  background: linear-gradient(135deg, #0284c7, #38bdf8);
-  border: 2px solid #7dd3fc;
-  color: #ffffff;
+.rhythm-falling-note.correct-hit {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  border-color: #34d399 !important;
+  box-shadow: 0 0 25px rgba(52, 211, 153, 0.85) !important;
+  transform: scale(1.18) !important;
 }
-.rhythm-falling-note.note-lane-2 {
-  background: linear-gradient(135deg, #059669, #34d399);
-  border: 2px solid #6ee7b7;
-  color: #ffffff;
+
+.rhythm-falling-note.wrong-hit {
+  background: linear-gradient(135deg, #ef4444, #b91c1c) !important;
+  border-color: #f87171 !important;
+  box-shadow: 0 0 25px rgba(239, 68, 68, 0.85) !important;
+  animation: noteShake 0.35s ease;
 }
-.rhythm-falling-note.note-lane-3 {
-  background: linear-gradient(135deg, #d97706, #fbbf24);
-  border: 2px solid #fde047;
-  color: #0f172a;
+
+@keyframes noteShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
 }
-.rhythm-falling-note.note-lane-4 {
-  background: linear-gradient(135deg, #e11d48, #f43f5e);
-  border: 2px solid #fda4af;
-  color: #ffffff;
+
+.rhythm-screen-shake {
+  animation: rhythmHighwayShake 0.35s ease;
 }
-.rhythm-falling-note.note-lane-0 {
-  background: linear-gradient(135deg, #7c3aed, #a855f7);
-  border: 2px solid #d8b4fe;
-  color: #ffffff;
+
+@keyframes rhythmHighwayShake {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-4px, 3px); }
+  40% { transform: translate(4px, -3px); }
+  60% { transform: translate(-3px, 2px); }
+  80% { transform: translate(3px, -2px); }
 }
 
 .note-char {
@@ -13192,202 +13128,6 @@ html.dark .guide-tone-table th, html.dark .guide-tone-table td {
   .note-word-ctx {
     display: none;
   }
-}
-
-/* ==========================================================================
-   GAME 6: GOLD MINER VOCAB (THỢ MỎ ĐÀO VÀNG)
-   ========================================================================== */
-
-.miner-game-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.miner-arena-container {
-  background: #ffffff;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 20px;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-}
-
-html.dark .miner-arena-container {
-  background: rgba(15, 23, 42, 0.85);
-  border-color: var(--border-glass);
-}
-
-.miner-quest-banner {
-  background: #eff6ff;
-  border: 1.5px solid #bfdbfe;
-  border-radius: 50px;
-  padding: 8px 24px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
-  z-index: 5;
-}
-
-html.dark .miner-quest-banner {
-  background: rgba(0, 0, 0, 0.6);
-  border-color: rgba(251, 191, 36, 0.4);
-}
-
-.quest-title-tag {
-  font-size: 0.72rem;
-  font-weight: 800;
-  background: #2563eb;
-  color: #ffffff;
-  padding: 2px 8px;
-  border-radius: 4px;
-}
-
-html.dark .quest-title-tag {
-  background: #f59e0b;
-  color: #0f172a;
-}
-
-.quest-text-wrap {
-  font-size: 0.92rem;
-  color: #1e3a8a;
-}
-
-html.dark .quest-text-wrap {
-  color: #ffffff;
-}
-
-.quest-highlight {
-  color: #d97706;
-  font-weight: 800;
-}
-
-html.dark .quest-highlight {
-  color: #fbbf24;
-}
-
-.miner-canvas {
-  border-radius: 14px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-  max-width: 100%;
-}
-
-.miner-action-bar {
-  display: flex;
-  gap: 14px;
-  margin-top: 14px;
-  width: 100%;
-  max-width: 600px;
-}
-
-.miner-launch-btn {
-  flex-grow: 1;
-  padding: 12px;
-  font-weight: 800;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #0ea5e9, #0284c7);
-  box-shadow: 0 4px 14px rgba(14, 165, 233, 0.4);
-  color: #ffffff;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.1s, box-shadow 0.1s;
-}
-
-.miner-launch-btn:active {
-  transform: scale(0.97);
-}
-
-.miner-tnt-btn {
-  padding: 12px 20px;
-  font-weight: 800;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #ef4444, #b91c1c);
-  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
-  color: #ffffff;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.1s, box-shadow 0.1s;
-}
-
-.miner-tnt-btn:active {
-  transform: scale(0.97);
-}
-
-.miner-buff-banner {
-  background: linear-gradient(90deg, #f59e0b, #ef4444);
-  color: #ffffff;
-  padding: 6px 16px;
-  border-radius: 50px;
-  font-size: 0.82rem;
-  font-weight: 800;
-  margin-bottom: 8px;
-  box-shadow: 0 0 15px rgba(245, 158, 11, 0.6);
-  animation: pulseBuff 1s infinite alternate;
-}
-
-@keyframes pulseBuff {
-  from { transform: scale(0.98); }
-  to { transform: scale(1.02); }
-}
-
-/* Screen Shake on TNT explosion */
-.miner-screen-shake {
-  animation: minerShake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-}
-
-@keyframes minerShake {
-  10%, 90% { transform: translate3d(-3px, 0, 0); }
-  20%, 80% { transform: translate3d(4px, 0, 0); }
-  30%, 50%, 70% { transform: translate3d(-5px, 0, 0); }
-  40%, 60% { transform: translate3d(5px, 0, 0); }
-}
-
-/* Tutorial Guide Modal */
-.miner-guide-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(8px);
-  z-index: 100010;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-}
-
-.miner-guide-card {
-  background: #ffffff;
-  border-radius: 20px;
-  padding: 24px;
-  max-width: 580px;
-  width: 100%;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-  border: 1.5px solid #e2e8f0;
-  color: #1e293b;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-html.dark .miner-guide-card {
-  background: #0f172a;
-  border-color: rgba(255, 255, 255, 0.1);
-  color: #f1f5f9;
-}
-
-.miner-guide-card code {
-  background: rgba(245, 158, 11, 0.15);
-  color: #d97706;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-weight: 700;
-}
-
-html.dark .miner-guide-card code {
-  color: #fbbf24;
 }
 
 /* ==========================================================================
@@ -14483,10 +14223,18 @@ html.light-mode .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
 
-/* Announcement Cards High Contrast */
+/* Announcement Cards High Contrast & Solid Styling */
 .announcement-glass-card {
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+  background: #1e293b;
   border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.announcement-donate-card {
+  border: 1.5px solid rgba(16, 185, 129, 0.4) !important;
+}
+
+.announcement-dictation-card {
+  border: 1.5px solid rgba(239, 68, 68, 0.4) !important;
 }
 
 html.light-mode .announcement-glass-card,
@@ -14494,6 +14242,35 @@ html:not(.dark) .announcement-glass-card {
   background: #ffffff !important;
   border: 1.5px solid #e2e8f0 !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+}
+
+html.light-mode .announcement-donate-card,
+html:not(.dark) .announcement-donate-card {
+  background: #ffffff !important;
+  border: 1.5px solid #10b981 !important;
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.1) !important;
+}
+
+html.light-mode .announcement-dictation-card,
+html:not(.dark) .announcement-dictation-card {
+  background: #ffffff !important;
+  border: 1.5px solid #ef4444 !important;
+  box-shadow: 0 4px 20px rgba(239, 68, 68, 0.1) !important;
+}
+
+html.light-mode .announcement-title,
+html:not(.dark) .announcement-title {
+  color: #0f172a !important;
+}
+
+html.light-mode .announcement-desc,
+html:not(.dark) .announcement-desc {
+  color: #334155 !important;
+}
+
+html.light-mode .announcement-time,
+html:not(.dark) .announcement-time {
+  color: #64748b !important;
 }
 
 /* Light Mode Header & Outline Button Contrast (Hình 3) */
