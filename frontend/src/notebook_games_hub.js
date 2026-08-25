@@ -52,16 +52,16 @@ export class NotebookGamesHub {
         <div class="games-hub-header">
           <div class="hub-header-left">
             <button type="button" id="games-hub-back-btn" class="btn btn-secondary btn-sm" style="display: flex; align-items: center; gap: 8px; border-radius: 50px; font-weight: 700; padding: 8px 18px; cursor: pointer; z-index: 10;">
-              <i class="fa-solid fa-arrow-left"></i> Quay Lại Sổ Tay
+              <i class="fa-solid fa-arrow-left"></i> Quay Lại
             </button>
             <div>
-              <h2 class="games-hub-title"><i class="fa-solid fa-gamepad" style="color: #ec4899;"></i> Game Ôn Tập Sổ Tay</h2>
-              <p class="games-hub-sub">${this.notebookTitle} • ${this.words.length} từ vựng khả dụng</p>
+              <h2 class="games-hub-title"><i class="fa-solid fa-gamepad" style="color: #f59e0b;"></i> Trò Chơi Ôn Tập Từ Vựng</h2>
+              <p class="games-hub-sub">${this.notebookTitle} • ${this.words.length} từ vựng khả dụng • Ôn luyện tự do (Không tính xếp hạng)</p>
             </div>
           </div>
 
           <div class="hub-header-badge">
-            <span class="beta-pill" style="background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.4); color: #34d399;"><i class="fa-solid fa-circle-check"></i> Đầy đủ 7 Trò Chơi Ôn Tập (Miễn Phí)</span>
+            <span class="beta-pill" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.4); color: #fbbf24;"><i class="fa-solid fa-wand-magic-sparkles"></i> Đầy đủ 7 Trò Chơi Ôn Luyện (Miễn Phí)</span>
           </div>
         </div>
 
@@ -79,8 +79,8 @@ export class NotebookGamesHub {
     return `
       <div class="games-selector-container">
         <div class="games-selector-intro">
-          <h3>Chọn trò chơi để bắt đầu ôn tập thực chiến</h3>
-          <p>Dữ liệu câu hỏi được lấy trực tiếp từ <strong>${this.notebookTitle}</strong> giúp bạn rèn luyện phản xạ toàn diện!</p>
+          <h3>Chọn 1 trong 7 trò chơi để bắt đầu ôn luyện từ vựng</h3>
+          <p>Học tập và rèn luyện phản xạ nhẹ nhàng từ <strong>${this.notebookTitle}</strong>, không tính điểm xếp hạng hay khóa cấp!</p>
         </div>
 
         <div class="games-selector-grid-6">

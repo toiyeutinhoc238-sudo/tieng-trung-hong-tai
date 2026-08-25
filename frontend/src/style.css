@@ -11401,6 +11401,39 @@ html.dark .target-pinyin {
   color: #38bdf8;
 }
 
+.target-speak-btn {
+  background: rgba(2, 132, 199, 0.12);
+  border: 1.5px solid rgba(2, 132, 199, 0.35);
+  color: #0284c7;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  margin-left: 6px;
+}
+.target-speak-btn:hover {
+  background: #0284c7;
+  color: #ffffff;
+  transform: scale(1.1);
+}
+.target-speak-btn:active {
+  transform: scale(0.92);
+}
+html.dark .target-speak-btn {
+  background: rgba(56, 189, 248, 0.18);
+  border-color: rgba(56, 189, 248, 0.4);
+  color: #38bdf8;
+}
+html.dark .target-speak-btn:hover {
+  background: #38bdf8;
+  color: #0f172a;
+}
+
 .target-action-hint {
   font-size: 0.88rem;
   font-weight: 700;

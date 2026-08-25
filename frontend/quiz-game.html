@@ -554,9 +554,9 @@
       border: 1px solid rgba(255, 255, 255, 0.75);
       color: #0f172a;
       border-radius: 18px;
-      padding: 40px 20px;
+      padding: 30px 16px 20px 16px;
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       position: relative;
       box-shadow: 0 8px 25px rgba(31, 38, 135, 0.08);
     }
@@ -1515,96 +1515,117 @@
     }
 
     function nextQuestion() {
-      if (remainingQs.length === 0) return endGame("Chiến Thắng!", "Bạn đã hoàn thành xuất sắc!");
+      try {
+        if (remainingQs.length === 0) return endGame("Chiến Thắng!", "Bạn đã hoàn thành xuất sắc!");
 
-      answered = false;
-      activeQ = remainingQs.pop();
+        answered = false;
+        activeQ = remainingQs.pop();
 
-      let mode = currentMode;
-      if (mode === 'mix') {
-        const ms = ['zh-vi', 'vi-zh', 'zh-pinyin', 'pinyin-zh', 'pinyin-vi', 'audio-zh', 'audio-vi', 'audio-pinyin'];
-        mode = ms[Math.floor(Math.random() * ms.length)];
-      }
-
-      // Clean and unify formatting for options
-      function cleanOptionFormat(str, type) {
-        if (!str) return '';
-        let s = str.trim();
-        s = s.replace(/\([^)]*\)/g, '').replace(/（[^）]*）/g, '').trim();
-        if (type === 'zh-pinyin' || type === 'audio-pinyin') {
-          s = s.replace(/[\[\]]/g, '').trim();
-          return `[ ${s} ]`;
+        let mode = currentMode;
+        if (mode === 'mix') {
+          const ms = ['zh-vi', 'vi-zh', 'zh-pinyin', 'pinyin-zh', 'pinyin-vi', 'audio-zh', 'audio-vi', 'audio-pinyin'];
+          mode = ms[Math.floor(Math.random() * ms.length)];
         }
-        return s;
-      }
 
-      let pPrompt = "Tìm nghĩa của từ";
-      let pQ = activeQ.word;
-      let rawAns = activeQ.meaning;
-      qText.classList.remove('vi');
-
-      if (mode === 'zh-vi') { pPrompt = "Tìm nghĩa Việt"; pQ = activeQ.word; rawAns = activeQ.meaning; }
-      else if (mode === 'vi-zh') { pPrompt = "Tìm chữ Hán"; pQ = cleanOptionFormat(activeQ.meaning, 'zh-vi'); rawAns = activeQ.word; qText.classList.add('vi'); }
-      else if (mode === 'zh-pinyin') { pPrompt = "Tìm Pinyin"; pQ = activeQ.word; rawAns = activeQ.pinyin; }
-      else if (mode === 'pinyin-zh') { pPrompt = "Tìm chữ Hán"; pQ = `[ ${activeQ.pinyin.replace(/[\[\]]/g, '')} ]`; rawAns = activeQ.word; qText.classList.add('vi'); }
-      else if (mode === 'pinyin-vi') { pPrompt = "Tìm nghĩa Việt"; pQ = `[ ${activeQ.pinyin.replace(/[\[\]]/g, '')} ]`; rawAns = activeQ.meaning; qText.classList.add('vi'); }
-      else if (mode === 'audio-zh') { pPrompt = "🔊 Nghe âm ➔ Tìm chữ Hán"; pQ = "🔊 (Bấm loa để nghe lại)"; rawAns = activeQ.word; qText.classList.add('vi'); }
-      else if (mode === 'audio-vi') { pPrompt = "🎧 Nghe âm ➔ Tìm nghĩa Việt"; pQ = "🎧 (Bấm loa để nghe lại)"; rawAns = activeQ.meaning; qText.classList.add('vi'); }
-      else if (mode === 'audio-pinyin') { pPrompt = "👂 Nghe âm ➔ Tìm Pinyin"; pQ = "👂 (Bấm loa để nghe lại)"; rawAns = activeQ.pinyin; qText.classList.add('vi'); }
-
-      const pAns = cleanOptionFormat(rawAns, mode);
-      qType.textContent = pPrompt;
-      qText.textContent = pQ;
-      speak(activeQ.word);
-
-      // Smart distractor selection: prioritize currentPool, then same level, filter out English text
-      function isVietnameseMeaning(str) {
-        if (!str) return false;
-        return !/\b(B\.C\.|Period|stress|pressure|the|and|of|to|in|is|for|with|on|at|from|by|an|or)\b/i.test(str);
-      }
-
-      const curVer = activeQ.hskVersion || urlVersion || '3.0';
-      const isQYct = isYct(activeQ);
-      let candidates = currentPool.filter(w => w.id !== activeQ.id && w.meaning !== activeQ.meaning && isVietnameseMeaning(w.meaning));
-      if (candidates.length < 3) {
-        const sameLevel = vocabData.filter(w => matchLevel(w.level, activeQ.level) && isYct(w) === isQYct && (isQYct || w.isCustom || (w.hskVersion || '3.0') === curVer) && w.id !== activeQ.id && w.meaning !== activeQ.meaning && isVietnameseMeaning(w.meaning));
-        candidates.push(...sameLevel);
-      }
-      if (candidates.length < 3) {
-        candidates.push(...vocabData.filter(w => w.id !== activeQ.id && w.meaning !== activeQ.meaning && isVietnameseMeaning(w.meaning)));
-      }
-
-      const seenAns = new Set([pAns]);
-      const distOpts = [];
-      for (const c of shuffle(candidates)) {
-        let rawVal = '';
-        if (mode === 'zh-vi' || mode === 'pinyin-vi' || mode === 'audio-vi') rawVal = c.meaning;
-        else if (mode === 'vi-zh' || mode === 'pinyin-zh' || mode === 'audio-zh') rawVal = c.word;
-        else if (mode === 'zh-pinyin' || mode === 'audio-pinyin') rawVal = c.pinyin;
-
-        const val = cleanOptionFormat(rawVal, mode);
-        if (val && !seenAns.has(val)) {
-          seenAns.add(val);
-          distOpts.push(val);
-          if (distOpts.length === 3) break;
+        // Clean and unify formatting for options
+        function cleanOptionFormat(str, type) {
+          if (!str) return '';
+          let s = String(str).trim();
+          s = s.replace(/\([^)]*\)/g, '').replace(/（[^）]*）/g, '').trim();
+          if (type === 'zh-pinyin' || type === 'audio-pinyin') {
+            s = s.replace(/[\[\]]/g, '').trim();
+            return `[ ${s} ]`;
+          }
+          return s;
         }
+
+        let pPrompt = "Tìm nghĩa của từ";
+        let pQ = activeQ.word;
+        let rawAns = activeQ.meaning;
+        qText.classList.remove('vi');
+
+        if (mode === 'zh-vi') { pPrompt = "Tìm nghĩa Việt"; pQ = activeQ.word; rawAns = activeQ.meaning; }
+        else if (mode === 'vi-zh') { pPrompt = "Tìm chữ Hán"; pQ = cleanOptionFormat(activeQ.meaning, 'zh-vi'); rawAns = activeQ.word; qText.classList.add('vi'); }
+        else if (mode === 'zh-pinyin') { pPrompt = "Tìm Pinyin"; pQ = activeQ.word; rawAns = activeQ.pinyin; }
+        else if (mode === 'pinyin-zh') { pPrompt = "Tìm chữ Hán"; pQ = `[ ${activeQ.pinyin.replace(/[\[\]]/g, '')} ]`; rawAns = activeQ.word; qText.classList.add('vi'); }
+        else if (mode === 'pinyin-vi') { pPrompt = "Tìm nghĩa Việt"; pQ = `[ ${activeQ.pinyin.replace(/[\[\]]/g, '')} ]`; rawAns = activeQ.meaning; qText.classList.add('vi'); }
+        else if (mode === 'audio-zh') { pPrompt = "🔊 Nghe âm ➔ Tìm chữ Hán"; pQ = "🔊 (Bấm loa để nghe lại)"; rawAns = activeQ.word; qText.classList.add('vi'); }
+        else if (mode === 'audio-vi') { pPrompt = "🎧 Nghe âm ➔ Tìm nghĩa Việt"; pQ = "🎧 (Bấm loa để nghe lại)"; rawAns = activeQ.meaning; qText.classList.add('vi'); }
+        else if (mode === 'audio-pinyin') { pPrompt = "👂 Nghe âm ➔ Tìm Pinyin"; pQ = "👂 (Bấm loa để nghe lại)"; rawAns = activeQ.pinyin; qText.classList.add('vi'); }
+
+        const pAns = cleanOptionFormat(rawAns, mode);
+        qType.textContent = pPrompt;
+        qText.textContent = pQ;
+        speak(activeQ.word);
+
+        // Smart distractor selection: prioritize currentPool, then same level, filter out English text
+        function isVietnameseMeaning(str) {
+          if (!str) return false;
+          return !/\b(B\.C\.|Period|stress|pressure|the|and|of|to|in|is|for|with|on|at|from|by|an|or)\b/i.test(str);
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlVersion = urlParams.get('version') || localStorage.getItem('active_hsk_version') || '3.0';
+        const curVer = activeQ.hskVersion || urlVersion || '3.0';
+        const isQYct = isYct(activeQ);
+        let candidates = currentPool.filter(w => w && w.id !== activeQ.id && w.meaning !== activeQ.meaning && isVietnameseMeaning(w.meaning));
+        if (candidates.length < 3) {
+          const sameLevel = vocabData.filter(w => w && matchLevel(w.level, activeQ.level) && isYct(w) === isQYct && (isQYct || w.isCustom || (w.hskVersion || '3.0') === curVer) && w.id !== activeQ.id && w.meaning !== activeQ.meaning && isVietnameseMeaning(w.meaning));
+          candidates.push(...sameLevel);
+        }
+        if (candidates.length < 3) {
+          candidates.push(...vocabData.filter(w => w && w.id !== activeQ.id && w.meaning !== activeQ.meaning && isVietnameseMeaning(w.meaning)));
+        }
+        if (candidates.length < 3) {
+          candidates.push(...fallbackVocab.filter(w => w && w.meaning !== activeQ.meaning));
+        }
+
+        const seenAns = new Set([pAns]);
+        const distOpts = [];
+        for (const c of shuffle(candidates)) {
+          let rawVal = '';
+          if (mode === 'zh-vi' || mode === 'pinyin-vi' || mode === 'audio-vi') rawVal = c.meaning;
+          else if (mode === 'vi-zh' || mode === 'pinyin-zh' || mode === 'audio-zh') rawVal = c.word;
+          else if (mode === 'zh-pinyin' || mode === 'audio-pinyin') rawVal = c.pinyin;
+
+          const val = cleanOptionFormat(rawVal, mode);
+          if (val && !seenAns.has(val)) {
+            seenAns.add(val);
+            distOpts.push(val);
+            if (distOpts.length === 3) break;
+          }
+        }
+
+        if (distOpts.length < 3) {
+          for (const fb of shuffle(fallbackVocab)) {
+            let rawVal = (mode === 'vi-zh' || mode === 'pinyin-zh' || mode === 'audio-zh') ? fb.word : (mode === 'zh-pinyin' || mode === 'audio-pinyin' ? fb.pinyin : fb.meaning);
+            const val = cleanOptionFormat(rawVal, mode);
+            if (val && !seenAns.has(val)) {
+              seenAns.add(val);
+              distOpts.push(val);
+              if (distOpts.length === 3) break;
+            }
+          }
+        }
+
+        let opts = shuffle([pAns, ...distOpts]);
+        ansGrid.innerHTML = '';
+        const colors = ['c-red', 'c-blue', 'c-yellow', 'c-green'];
+        const letters = ['A', 'B', 'C', 'D'];
+
+        opts.forEach((txt, i) => {
+          const b = document.createElement('button');
+          b.className = `ans-btn ${colors[i] || 'c-blue'}`;
+          b.dataset.correct = (txt === pAns);
+          b.innerHTML = `<div class="ans-icon">${letters[i] || ''}</div> <span>${txt}</span>`;
+          b.onclick = () => handleAns(b, txt === pAns);
+          ansGrid.appendChild(b);
+        });
+
+        startTimer();
+      } catch (err) {
+        console.error("Error in nextQuestion:", err);
       }
-
-      let opts = shuffle([pAns, ...distOpts]);
-      ansGrid.innerHTML = '';
-      const colors = ['c-red', 'c-blue', 'c-yellow', 'c-green'];
-      const letters = ['A', 'B', 'C', 'D'];
-
-      opts.forEach((txt, i) => {
-        const b = document.createElement('button');
-        b.className = `ans-btn ${colors[i]}`;
-        b.dataset.correct = (txt === pAns);
-        b.innerHTML = `<div class="ans-icon">${letters[i]}</div> <span>${txt}</span>`;
-        b.onclick = () => handleAns(b, txt === pAns);
-        ansGrid.appendChild(b);
-      });
-
-      startTimer();
     }
 
     function startTimer() {

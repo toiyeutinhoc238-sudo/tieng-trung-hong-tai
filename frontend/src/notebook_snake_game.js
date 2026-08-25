@@ -163,6 +163,9 @@ export class SnakeGameEngine {
               <div class="target-word-row">
                 <span class="target-zh" id="target-zh-text">勤奋</span>
                 <span class="target-pinyin" id="target-pinyin-text">(qínfèn)</span>
+                <button type="button" id="snake-speak-target-btn" class="target-speak-btn" title="Bấm để nghe phát âm">
+                  <i class="fa-solid fa-volume-high"></i>
+                </button>
               </div>
               <div class="target-action-hint">
                 <i class="fa-solid fa-apple-whole" style="color: #ef4444;"></i> Hãy lái rắn ăn quả có <strong>NGHĨA TIẾNG VIỆT ĐÚNG</strong> bên dưới!
@@ -431,6 +434,17 @@ export class SnakeGameEngine {
       });
     }
 
+    const speakBtn = this.container.querySelector('#snake-speak-target-btn');
+    if (speakBtn) {
+      speakBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (this.currentQuestion && typeof window.speakText === 'function') {
+          window.speakText(this.currentQuestion.word);
+        }
+      });
+    }
+
     // Arrow keys & WASD
     this.keyHandler = (e) => {
       if (!this.isRunning || this.isPaused) return;
@@ -587,6 +601,13 @@ export class SnakeGameEngine {
     this.currentQuestion = randomTarget;
     this.updateTargetPrompt();
 
+    // Phát âm từ vựng ngay khi xuất hiện câu hỏi mục tiêu
+    if (typeof window.speakText === 'function') {
+      try {
+        window.speakText(randomTarget.word);
+      } catch (e) {}
+    }
+
     const otherWords = this.rawWords.filter(w => w.word !== randomTarget.word);
     const shuffled = [...otherWords].sort(() => 0.5 - Math.random());
     const distractors = shuffled.slice(0, 3);
@@ -726,8 +747,6 @@ export class SnakeGameEngine {
     this.score += 20 * this.level;
     this.streak++;
     this.wordsEatenCorrect = (this.wordsEatenCorrect || 0) + 1;
-
-    if (window.speakText) window.speakText(this.currentQuestion.word);
 
     if (this.streak >= this.maxStreakNeeded) {
       this.levelUp();

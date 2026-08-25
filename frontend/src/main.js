@@ -12394,6 +12394,67 @@ function startGameArenaFromNotebook() {
   }
 }
 
+window.openNotebookGamesHub = function (customWords, customTitle, customDesc) {
+  let words = customWords;
+  if (!words || words.length < 2) {
+    if (activeNotebook) {
+      words = getNotebookWords(activeNotebook);
+    }
+    if (!words || words.length < 2) {
+      const pool = vocabularyData.filter(w => !w.isCustom && (w.hskVersion || '3.0') === (activeHskVersion || '3.0'));
+      words = pool.length >= 4 ? pool : vocabularyData.slice(0, 100);
+    }
+  }
+
+  if (!words || words.length < 2) {
+    showToast('Đang tải dữ liệu từ vựng cho trò chơi...', false);
+    return;
+  }
+
+  if (typeof switchTab === 'function') {
+    switchTab('flashcards');
+  }
+
+  const deckSelectionView = document.getElementById('deck-selection-view');
+  if (deckSelectionView) deckSelectionView.style.display = 'none';
+
+  const notebookDashboardView = document.getElementById('notebook-dashboard-view');
+  if (notebookDashboardView) notebookDashboardView.style.display = 'none';
+
+  const flashcardStudyView = document.getElementById('flashcard-study-view');
+  if (flashcardStudyView) flashcardStudyView.style.display = 'none';
+
+  const gamePlayView = document.getElementById('game-play-view');
+  if (gamePlayView) gamePlayView.style.display = 'block';
+
+  const hubMount = document.getElementById('notebook-games-hub-mount');
+  if (hubMount) {
+    if (activeNotebookGamesHubInstance) {
+      const hub = activeNotebookGamesHubInstance;
+      activeNotebookGamesHubInstance = null;
+      if (hub.currentGameEngine && hub.currentGameEngine.stopAndExit) {
+        try { hub.currentGameEngine.stopAndExit(); } catch {}
+      }
+    }
+    hubMount.innerHTML = '';
+    activeNotebookGamesHubInstance = new NotebookGamesHub(hubMount, {
+      words: words,
+      title: customTitle || 'Đấu Trường Mini Game Từ Vựng',
+      desc: customDesc || 'Ôn tập, phản xạ từ vựng tiếng Trung qua các trò chơi tương tác hấp dẫn',
+      notebookKey: activeNotebook || 'all',
+      hskVersion: activeHskVersion || '3.0',
+      currentUser: currentUser,
+      onExit: () => {
+        window.exitNotebookGamesHub();
+      }
+    });
+
+    setTimeout(() => {
+      gamePlayView.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  }
+};
+
 window.openAboutModal = function () {
   const modal = document.getElementById('about-hongtai-modal');
   if (modal) {
