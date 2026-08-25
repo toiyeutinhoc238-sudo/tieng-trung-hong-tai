@@ -455,38 +455,64 @@ export class SnakeGameEngine {
     };
     window.addEventListener('keydown', this.keyHandler);
 
-    // Touch Swipe Gestures on Canvas
+    // Touch Swipe Gestures on Canvas (Real-time responsive without page dragging)
     if (this.canvas) {
       let touchStartX = 0;
       let touchStartY = 0;
+      let isTouchActive = false;
+
       this.touchStartHandler = (e) => {
+        e.preventDefault();
         if (e.touches && e.touches[0]) {
           touchStartX = e.touches[0].clientX;
           touchStartY = e.touches[0].clientY;
+          isTouchActive = true;
         }
       };
-      this.touchEndHandler = (e) => {
-        if (!this.isRunning || this.isPaused) return;
-        if (e.changedTouches && e.changedTouches[0]) {
-          const dx = e.changedTouches[0].clientX - touchStartX;
-          const dy = e.changedTouches[0].clientY - touchStartY;
-          const minSwipeDist = 18;
 
-          if (Math.abs(dx) > Math.abs(dy)) {
-            if (Math.abs(dx) > minSwipeDist) {
-              if (dx > 0 && this.dir.x === 0) this.nextDir = { x: 1, y: 0 };
-              else if (dx < 0 && this.dir.x === 0) this.nextDir = { x: -1, y: 0 };
-            }
-          } else {
-            if (Math.abs(dy) > minSwipeDist) {
-              if (dy > 0 && this.dir.y === 0) this.nextDir = { x: 0, y: 1 };
-              else if (dy < 0 && this.dir.y === 0) this.nextDir = { x: 0, y: -1 };
+      this.touchMoveHandler = (e) => {
+        e.preventDefault(); // Prevent whole webpage scrolling / rubber-banding on touchscreen
+        if (!isTouchActive || !this.isRunning || this.isPaused) return;
+        if (e.touches && e.touches[0]) {
+          const dx = e.touches[0].clientX - touchStartX;
+          const dy = e.touches[0].clientY - touchStartY;
+          const minSwipeDist = 14; // Quick, responsive direction change
+
+          if (Math.abs(dx) >= minSwipeDist || Math.abs(dy) >= minSwipeDist) {
+            if (Math.abs(dx) > Math.abs(dy)) {
+              if (dx > 0 && this.dir.x === 0) {
+                this.nextDir = { x: 1, y: 0 };
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+              } else if (dx < 0 && this.dir.x === 0) {
+                this.nextDir = { x: -1, y: 0 };
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+              }
+            } else {
+              if (dy > 0 && this.dir.y === 0) {
+                this.nextDir = { x: 0, y: 1 };
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+              } else if (dy < 0 && this.dir.y === 0) {
+                this.nextDir = { x: 0, y: -1 };
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+              }
             }
           }
         }
       };
-      this.canvas.addEventListener('touchstart', this.touchStartHandler, { passive: true });
-      this.canvas.addEventListener('touchend', this.touchEndHandler, { passive: true });
+
+      this.touchEndHandler = (e) => {
+        e.preventDefault();
+        isTouchActive = false;
+      };
+
+      this.canvas.addEventListener('touchstart', this.touchStartHandler, { passive: false });
+      this.canvas.addEventListener('touchmove', this.touchMoveHandler, { passive: false });
+      this.canvas.addEventListener('touchend', this.touchEndHandler, { passive: false });
+      this.canvas.addEventListener('touchcancel', this.touchEndHandler, { passive: false });
     }
 
     // Directional D-Pad buttons (touch + click support)
@@ -1163,8 +1189,11 @@ export class SnakeGameEngine {
     }
     if (this.canvas && this.touchStartHandler) {
       this.canvas.removeEventListener('touchstart', this.touchStartHandler);
+      this.canvas.removeEventListener('touchmove', this.touchMoveHandler);
       this.canvas.removeEventListener('touchend', this.touchEndHandler);
+      this.canvas.removeEventListener('touchcancel', this.touchEndHandler);
       this.touchStartHandler = null;
+      this.touchMoveHandler = null;
       this.touchEndHandler = null;
     }
     const cb = this.onExit;

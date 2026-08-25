@@ -9,7 +9,6 @@ import { AlchemistGameEngine } from './notebook_alchemist_game.js';
 import { MahjongGameEngine } from './notebook_mahjong_game.js';
 import { ToneRhythmGameEngine } from './notebook_tone_rhythm_game.js';
 import { GoldMinerGameEngine } from './notebook_goldminer_game.js';
-import { PvZGameEngine } from './notebook_pvz_game.js';
 
 function isSuperAdminUser(user) {
   if (!user) return false;
@@ -62,7 +61,7 @@ export class NotebookGamesHub {
           </div>
 
           <div class="hub-header-badge">
-            <span class="beta-pill" style="background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.4); color: #34d399;"><i class="fa-solid fa-circle-check"></i> Đầy đủ 8 Trò Chơi (Miễn Phí)</span>
+            <span class="beta-pill" style="background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.4); color: #34d399;"><i class="fa-solid fa-circle-check"></i> Đầy đủ 7 Trò Chơi Ôn Tập (Miễn Phí)</span>
           </div>
         </div>
 
@@ -245,7 +244,6 @@ export class NotebookGamesHub {
 
     // Native Mini-Games (Unlocked for everyone)
     const nativeGames = [
-      { id: '#btn-choose-pvz', type: 'pvz' },
       { id: '#btn-choose-cannon', type: 'cannon' },
       { id: '#btn-choose-snake', type: 'snake' },
       { id: '#btn-choose-alchemist', type: 'alchemist' },
@@ -334,9 +332,7 @@ export class NotebookGamesHub {
 
     const onExit = () => this.returnToSelector();
 
-    if (gameType === 'pvz') {
-      this.currentGameEngine = new PvZGameEngine(viewport, this.words, onExit);
-    } else if (gameType === 'cannon') {
+    if (gameType === 'cannon') {
       this.currentGameEngine = new CannonGameEngine(viewport, this.words, onExit);
     } else if (gameType === 'snake') {
       this.currentGameEngine = new SnakeGameEngine(viewport, this.words, onExit);
