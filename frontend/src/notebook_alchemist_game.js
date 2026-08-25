@@ -325,6 +325,7 @@ export class AlchemistGameEngine {
     this.isPaused = false;
     this.isRunning = false;
     this.craftedCount = 0;
+    this.correctWordsSet = new Set();
 
     // Current Target & Cauldron State
     this.currentTarget = null;
@@ -343,14 +344,14 @@ export class AlchemistGameEngine {
     this.container.innerHTML = `
       <div class="alchemist-game-wrapper">
         <!-- TOP HUD -->
-        <div class="cannon-hud-bar">
-          <button type="button" id="alchemist-top-back-btn" class="btn btn-outline btn-sm" style="display: flex; align-items: center; gap: 6px; font-weight: 700; border-radius: 50px;">
+        <div class="alchemist-hud-bar">
+          <button type="button" id="alchemist-top-back-btn" class="btn btn-outline btn-sm" style="display: flex; align-items: center; gap: 6px; font-weight: 700; border-radius: 50px; background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); color: #ffffff;">
             <i class="fa-solid fa-arrow-left"></i> Quay lại chọn game
           </button>
 
           <div class="hud-item-title">
             <span style="font-size: 1.4rem;">⚗️</span>
-            <strong style="color: #a855f7;">LÒ LUYỆN CHIẾT TỰ</strong>
+            <strong style="color: #c084fc;">LÒ LUYỆN CHIẾT TỰ</strong>
           </div>
 
           <div class="hud-item hud-score">
@@ -374,8 +375,9 @@ export class AlchemistGameEngine {
             </div>
           </div>
 
-          <div class="hud-item hud-timer">
+          <div class="hud-item hud-timer" title="Thời gian đếm ngược của màn chơi này">
             <i class="fa-solid fa-clock" style="color: #38bdf8;"></i>
+            <span class="hud-label">THỜI GIAN:</span>
             <span class="hud-value" id="alchemist-timer-val">01:20</span>
           </div>
 
@@ -491,11 +493,14 @@ export class AlchemistGameEngine {
               </div>
             </div>
 
+            <!-- BẢNG TỔNG KẾT TỪ VỰNG ĐÚNG / SAI -->
+            <div id="alchemist-words-summary-wrap"></div>
+
             <div class="result-beta-note">
               <i class="fa-solid fa-flask"></i> <strong>Chế độ thử nghiệm:</strong> Điểm số và thành tích không lưu vào hồ sơ trong giai đoạn Beta Super Admin.
             </div>
 
-            <div style="display: flex; gap: 12px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
+            <div style="display: flex; gap: 12px; justify-content: center; margin-top: 14px; flex-wrap: wrap;">
               <button type="button" id="alchemist-retry-btn" class="btn btn-primary" style="padding: 10px 20px; font-weight: 800;"><i class="fa-solid fa-rotate-right"></i> Chơi Lại</button>
               <button type="button" id="alchemist-back-hub-btn" class="btn btn-secondary" style="padding: 10px 18px; font-weight: 700;"><i class="fa-solid fa-gamepad"></i> Đổi Trò Chơi</button>
               <button type="button" id="alchemist-finish-btn" class="btn btn-outline" style="padding: 10px 18px; font-weight: 700;"><i class="fa-solid fa-book-bookmark"></i> Quay Lại Sổ Tay</button>
@@ -881,6 +886,10 @@ export class AlchemistGameEngine {
       this.craftedCount++;
       if (this.streak > this.maxStreak) this.maxStreak = this.streak;
 
+      if (this.currentTarget && this.currentTarget.fullWord) {
+        this.correctWordsSet.add(this.currentTarget.fullWord);
+      }
+
       // Pronounce the word
       if (window.speakText) {
         try { window.speakText(this.currentTarget.fullWord); } catch(e) {}
@@ -976,6 +985,12 @@ export class AlchemistGameEngine {
       if (resStreak) resStreak.textContent = this.maxStreak;
       if (resWords) resWords.textContent = `${this.craftedCount || 0}/${this.totalWordsCount || 0}`;
 
+      // Render danh sách từ vựng Đúng / Sai
+      const summaryWrap = overlay.querySelector('#alchemist-words-summary-wrap');
+      if (summaryWrap) {
+        this.renderWordSummaryList(summaryWrap, this.rawWords, this.correctWordsSet);
+      }
+
       const retryBtn = overlay.querySelector('#alchemist-retry-btn');
       const backHubBtn = overlay.querySelector('#alchemist-back-hub-btn');
       const finishBtn = overlay.querySelector('#alchemist-finish-btn');
@@ -1005,6 +1020,86 @@ export class AlchemistGameEngine {
         };
       }
     }
+  }
+
+  renderWordSummaryList(containerEl, allWords, correctWordsSet) {
+    if (!containerEl) return;
+    const total = allWords.length;
+    const correctCount = allWords.filter(w => correctWordsSet.has(w.word)).length;
+    const wrongCount = total - correctCount;
+
+    containerEl.innerHTML = `
+      <div class="game-results-word-summary">
+        <div class="summary-tabs-header">
+          <button type="button" class="summary-tab-btn active" data-tab="all">
+            <i class="fa-solid fa-list-check"></i> Tất cả (${total})
+          </button>
+          <button type="button" class="summary-tab-btn correct-tab" data-tab="correct">
+            <i class="fa-solid fa-circle-check"></i> Đúng (${correctCount})
+          </button>
+          <button type="button" class="summary-tab-btn wrong-tab" data-tab="wrong">
+            <i class="fa-solid fa-circle-xmark"></i> Sai / Cần ôn (${wrongCount})
+          </button>
+        </div>
+        <div class="summary-words-list"></div>
+      </div>
+    `;
+
+    const listEl = containerEl.querySelector('.summary-words-list');
+    const renderItems = (filter) => {
+      listEl.innerHTML = '';
+      const filtered = allWords.filter(w => {
+        const isCor = correctWordsSet.has(w.word);
+        if (filter === 'correct') return isCor;
+        if (filter === 'wrong') return !isCor;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = `<div style="text-align: center; color: #94a3b8; padding: 20px; font-size: 0.85rem;">Không có từ vựng nào trong mục này.</div>`;
+        return;
+      }
+
+      filtered.forEach(w => {
+        const isCor = correctWordsSet.has(w.word);
+        const card = document.createElement('div');
+        card.className = `summary-word-card ${isCor ? 'is-correct' : 'is-wrong'}`;
+        card.innerHTML = `
+          <div class="sw-badge ${isCor ? 'badge-correct' : 'badge-wrong'}">
+            <i class="fa-solid fa-${isCor ? 'check' : 'xmark'}"></i> ${isCor ? 'Đúng' : 'Sai'}
+          </div>
+          <div class="sw-main">
+            <div class="sw-hanzi">${w.word}</div>
+            <div class="sw-pinyin">${w.pinyin ? `[ ${w.pinyin} ]` : ''}</div>
+            <div class="sw-meaning">${w.meaning || ''}</div>
+          </div>
+          <button type="button" class="sw-speak-btn" title="Nghe phát âm">
+            <i class="fa-solid fa-volume-high"></i>
+          </button>
+        `;
+        const speakBtn = card.querySelector('.sw-speak-btn');
+        if (speakBtn) {
+          speakBtn.onclick = (e) => {
+            e.stopPropagation();
+            if (typeof window.speakText === 'function') {
+              window.speakText(w.word);
+            }
+          };
+        }
+        listEl.appendChild(card);
+      });
+    };
+
+    renderItems('all');
+
+    containerEl.querySelectorAll('.summary-tab-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        containerEl.querySelectorAll('.summary-tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderItems(btn.dataset.tab);
+      });
+    });
   }
 
   restart() {

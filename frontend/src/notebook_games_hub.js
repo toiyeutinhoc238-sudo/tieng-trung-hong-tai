@@ -241,9 +241,17 @@ export class NotebookGamesHub {
     this.activeGameType = gameType;
 
     if (gameType === 'quiz') {
+      try {
+        if (Array.isArray(this.words) && this.words.length > 0) {
+          sessionStorage.setItem('notebook_quiz_custom_words', JSON.stringify(this.words));
+          sessionStorage.setItem('notebook_quiz_custom_title', this.title || 'Ôn Tập Sổ Tay');
+        }
+      } catch (e) {}
+
       const params = new URLSearchParams();
       params.set('source', 'notebook');
       params.set('no_score', 'true');
+      params.set('autostart', 'true');
       if (this.notebookKey) {
         params.set('notebook', this.notebookKey);
         if (this.notebookKey.startsWith('hsk:')) {
@@ -263,7 +271,7 @@ export class NotebookGamesHub {
               <i class="fa-solid fa-arrow-left"></i> Đổi Trò Chơi
             </button>
             <div style="font-size: 0.9rem; font-weight: 800; color: #fbbf24; display: flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-gamepad" style="color: #6366f1;"></i> Đấu Trường Quiz Game (Ôn Tập Sổ Tay)
+              <i class="fa-solid fa-gamepad" style="color: #6366f1;"></i> ${this.title ? `Quiz Game: ${this.title}` : 'Đấu Trường Quiz Game (Ôn Tập Sổ Tay)'}
             </div>
             <button type="button" id="btn-quiz-exit-all" class="btn btn-outline btn-sm" style="border-radius: 50px; font-weight: 700; cursor: pointer;">
               <i class="fa-solid fa-book-bookmark"></i> Sổ Tay

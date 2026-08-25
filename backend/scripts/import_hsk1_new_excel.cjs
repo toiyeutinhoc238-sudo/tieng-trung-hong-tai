@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const xlsx = require('xlsx');
 
-const excelPath = path.join(__dirname, '../../filetuvung/Từ vựng HSK 1 3.0 new.xlsx');
+const excelPath = path.join(__dirname, '../../filetuvung/Từ vựng HSK 1 3.0 VER3.xlsx');
 const dbPath = path.join(__dirname, '../database.json');
 
 if (!fs.existsSync(excelPath)) {
@@ -16,10 +16,10 @@ const rows = xlsx.utils.sheet_to_json(sheet, { header: 1 });
 
 console.log(`Read ${rows.length} rows from Excel file: ${path.basename(excelPath)}`);
 
-const cnMap = {
-  '十一': 11, '十二': 12, '十三': 13, '十四': 14, '十五': 15,
-  '一': 1, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6, '七': 7, '八': 8, '九': 9, '十': 10
-};
+const cnList = [
+  ['十五', 15], ['十四', 14], ['十三', 13], ['十二', 12], ['十一', 11],
+  ['十', 10], ['九', 9], ['八', 8], ['七', 7], ['六', 6], ['五', 5], ['四', 4], ['三', 3], ['二', 2], ['一', 1]
+];
 
 function parseLessonId(baiRaw, lastLessonId) {
   if (!baiRaw) return lastLessonId || 1;
@@ -28,7 +28,7 @@ function parseLessonId(baiRaw, lastLessonId) {
   if (digitMatch) {
     return parseInt(digitMatch[0], 10);
   }
-  for (const [key, val] of Object.entries(cnMap)) {
+  for (const [key, val] of cnList) {
     if (str.includes(key)) {
       return val;
     }

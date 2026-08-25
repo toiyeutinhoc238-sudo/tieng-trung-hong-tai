@@ -107,6 +107,7 @@ export class MahjongGameEngine {
     // Selection
     this.selectedTile = null; // { r, c }
     this.isResolvingMatch = false;
+    this.clearedWordsSet = new Set();
 
     // Powerups
     this.hintCount = 3;
@@ -123,22 +124,22 @@ export class MahjongGameEngine {
     this.container.innerHTML = `
       <div class="mahjong-game-wrapper">
         <!-- TOP HUD -->
-        <div class="cannon-hud-bar">
-          <button type="button" id="mahjong-top-back-btn" class="btn btn-outline btn-sm" style="display: flex; align-items: center; gap: 6px; font-weight: 700; border-radius: 50px;">
+        <div class="mahjong-hud-bar">
+          <button type="button" id="mahjong-top-back-btn" class="btn btn-outline btn-sm" style="display: flex; align-items: center; gap: 6px; font-weight: 700; border-radius: 50px; background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); color: #ffffff;">
             <i class="fa-solid fa-arrow-left"></i> Quay lại chọn game
           </button>
 
           <div class="hud-item-title">
             <span style="font-size: 1.4rem;">🀄</span>
-            <strong style="color: #10b981;">MẠT CHƯỢC NỐI TỪ</strong>
+            <strong style="color: #34d399;">MẠT CHƯỢC NỐI TỪ</strong>
           </div>
 
-          <div class="hud-item" id="mahjong-level-badge" style="background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: #10b981; font-weight: 800; padding: 3px 10px; border-radius: 20px; font-size: 0.82rem;">
+          <div class="hud-item" id="mahjong-level-badge" style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #34d399; font-weight: 800; padding: 4px 12px; border-radius: 20px; font-size: 0.82rem;">
             MÀN 1/1
           </div>
 
-          <div class="hud-item hud-progress" style="display: flex; align-items: center; gap: 5px;">
-            <i class="fa-solid fa-book-open" style="color: #818cf8;"></i>
+          <div class="hud-item hud-progress" style="display: flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-book-open" style="color: #a5b4fc;"></i>
             <span class="hud-label">TIẾN TRÌNH:</span>
             <span class="hud-value" id="mahjong-progress-val">0/0 từ</span>
           </div>
@@ -155,8 +156,9 @@ export class MahjongGameEngine {
             <span class="hud-value" id="mahjong-pairs-val">0</span>
           </div>
 
-          <div class="hud-item hud-timer">
+          <div class="hud-item hud-timer" title="Thời gian đếm ngược của màn chơi này">
             <i class="fa-solid fa-clock" style="color: #38bdf8;"></i>
+            <span class="hud-label">THỜI GIAN:</span>
             <span class="hud-value" id="mahjong-timer-val">01:40</span>
           </div>
 
@@ -246,11 +248,14 @@ export class MahjongGameEngine {
               </div>
             </div>
 
+            <!-- BẢNG TỔNG KẾT TỪ VỰNG ĐÚNG / SAI -->
+            <div id="mahjong-words-summary-wrap"></div>
+
             <div class="result-beta-note">
               <i class="fa-solid fa-flask"></i> <strong>Chế độ thử nghiệm:</strong> Điểm số và thành tích không lưu vào hồ sơ trong giai đoạn Beta Super Admin.
             </div>
 
-            <div style="display: flex; gap: 12px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
+            <div style="display: flex; gap: 12px; justify-content: center; margin-top: 14px; flex-wrap: wrap;">
               <button type="button" id="mahjong-retry-btn" class="btn btn-primary" style="padding: 10px 20px; font-weight: 800;"><i class="fa-solid fa-rotate-right"></i> Chơi Lại</button>
               <button type="button" id="mahjong-back-hub-btn" class="btn btn-secondary" style="padding: 10px 18px; font-weight: 700;"><i class="fa-solid fa-gamepad"></i> Đổi Trò Chơi</button>
               <button type="button" id="mahjong-finish-btn" class="btn btn-outline" style="padding: 10px 18px; font-weight: 700;"><i class="fa-solid fa-book-bookmark"></i> Quay Lại Sổ Tay</button>
@@ -649,8 +654,11 @@ export class MahjongGameEngine {
     this.drawLaserPath(path);
 
     // Pronounce Hanzi
-    if (window.speakText && item1) {
-      window.speakText(item1.word);
+    if (item1 && item1.word) {
+      this.clearedWordsSet.add(item1.word);
+      if (window.speakText) {
+        window.speakText(item1.word);
+      }
     }
 
     // Vanish animation after brief laser show
@@ -1012,6 +1020,12 @@ export class MahjongGameEngine {
       if (resCombo) resCombo.textContent = this.maxCombo;
       if (resPairs) resPairs.textContent = `${this.totalWordsCount}/${this.totalWordsCount} từ (${this.currentLevel} Màn)`;
 
+      // Render danh sách từ vựng Đúng / Sai
+      const summaryWrap = overlay.querySelector('#mahjong-words-summary-wrap');
+      if (summaryWrap) {
+        this.renderWordSummaryList(summaryWrap, this.rawWords, this.clearedWordsSet);
+      }
+
       const retryBtn = overlay.querySelector('#mahjong-retry-btn');
       const backHubBtn = overlay.querySelector('#mahjong-back-hub-btn');
       const finishBtn = overlay.querySelector('#mahjong-finish-btn');
@@ -1041,6 +1055,86 @@ export class MahjongGameEngine {
         };
       }
     }
+  }
+
+  renderWordSummaryList(containerEl, allWords, correctWordsSet) {
+    if (!containerEl) return;
+    const total = allWords.length;
+    const correctCount = allWords.filter(w => correctWordsSet.has(w.word)).length;
+    const wrongCount = total - correctCount;
+
+    containerEl.innerHTML = `
+      <div class="game-results-word-summary">
+        <div class="summary-tabs-header">
+          <button type="button" class="summary-tab-btn active" data-tab="all">
+            <i class="fa-solid fa-list-check"></i> Tất cả (${total})
+          </button>
+          <button type="button" class="summary-tab-btn correct-tab" data-tab="correct">
+            <i class="fa-solid fa-circle-check"></i> Đúng (${correctCount})
+          </button>
+          <button type="button" class="summary-tab-btn wrong-tab" data-tab="wrong">
+            <i class="fa-solid fa-circle-xmark"></i> Sai / Cần ôn (${wrongCount})
+          </button>
+        </div>
+        <div class="summary-words-list"></div>
+      </div>
+    `;
+
+    const listEl = containerEl.querySelector('.summary-words-list');
+    const renderItems = (filter) => {
+      listEl.innerHTML = '';
+      const filtered = allWords.filter(w => {
+        const isCor = correctWordsSet.has(w.word);
+        if (filter === 'correct') return isCor;
+        if (filter === 'wrong') return !isCor;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = `<div style="text-align: center; color: #94a3b8; padding: 20px; font-size: 0.85rem;">Không có từ vựng nào trong mục này.</div>`;
+        return;
+      }
+
+      filtered.forEach(w => {
+        const isCor = correctWordsSet.has(w.word);
+        const card = document.createElement('div');
+        card.className = `summary-word-card ${isCor ? 'is-correct' : 'is-wrong'}`;
+        card.innerHTML = `
+          <div class="sw-badge ${isCor ? 'badge-correct' : 'badge-wrong'}">
+            <i class="fa-solid fa-${isCor ? 'check' : 'xmark'}"></i> ${isCor ? 'Đúng' : 'Sai'}
+          </div>
+          <div class="sw-main">
+            <div class="sw-hanzi">${w.word}</div>
+            <div class="sw-pinyin">${w.pinyin ? `[ ${w.pinyin} ]` : ''}</div>
+            <div class="sw-meaning">${w.meaning || ''}</div>
+          </div>
+          <button type="button" class="sw-speak-btn" title="Nghe phát âm">
+            <i class="fa-solid fa-volume-high"></i>
+          </button>
+        `;
+        const speakBtn = card.querySelector('.sw-speak-btn');
+        if (speakBtn) {
+          speakBtn.onclick = (e) => {
+            e.stopPropagation();
+            if (typeof window.speakText === 'function') {
+              window.speakText(w.word);
+            }
+          };
+        }
+        listEl.appendChild(card);
+      });
+    };
+
+    renderItems('all');
+
+    containerEl.querySelectorAll('.summary-tab-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        containerEl.querySelectorAll('.summary-tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderItems(btn.dataset.tab);
+      });
+    });
   }
 
   restart() {

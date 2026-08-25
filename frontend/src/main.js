@@ -6927,7 +6927,7 @@ window.openLessonDetailModal = function (lessonKey) {
         e.stopPropagation();
         const modalEl = document.getElementById('lesson-detail-popup-modal');
         if (modalEl) modalEl.style.display = 'none';
-        window.location.href = `/quiz-game.html?lesson=${lessonKey}&level=${currentLvl}&version=${activeHskVersion}`;
+        window.location.href = `/quiz-game.html?lesson=${lessonKey}&level=${currentLvl}&version=${activeHskVersion}&source=roadmap&autostart=true`;
       };
     }
   } else {
@@ -7772,7 +7772,7 @@ window.goToLessonStep = function(step, lessonId) {
   } else if (step === 'text') {
     window.location.href = `/lesson-texts.html?lesson=${numId}&level=${currentLvl}&version=${currentVer}`;
   } else if (step === 'quiz') {
-    window.location.href = `/quiz-game.html?lesson=${numId}&level=${currentLvl}&version=${currentVer}`;
+    window.location.href = `/quiz-game.html?lesson=${numId}&level=${currentLvl}&version=${currentVer}&source=roadmap&autostart=true`;
   } else if (step === 'video') {
     window.openLessonExtraVideoModal(numId, currentLvl, currentVer);
   }
@@ -12475,34 +12475,34 @@ window.showGameHubGuideModal = function () {
     modal = document.createElement('div');
     modal.id = 'game-hub-guide-modal';
     modal.className = 'modal-overlay';
-    modal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.72); backdrop-filter: blur(8px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;';
+    modal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;';
     document.body.appendChild(modal);
   }
 
   modal.innerHTML = `
-    <div style="background: var(--bg-primary, #1e293b); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 24px; width: 90%; max-width: 480px; padding: 30px; text-align: center; color: #fff; position: relative; box-shadow: 0 25px 60px rgba(0,0,0,0.6); animation: modalPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
-      <button onclick="document.getElementById('game-hub-guide-modal').style.display='none'" style="position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #94a3b8; font-size: 1.3rem; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">&times;</button>
+    <div class="game-hub-guide-card" style="background: linear-gradient(145deg, #0f172a, #1e293b) !important; border: 2px solid rgba(245, 158, 11, 0.45) !important; border-radius: 24px; width: 90%; max-width: 480px; padding: 30px; text-align: center; color: #ffffff !important; position: relative; box-shadow: 0 25px 60px rgba(0,0,0,0.85); animation: modalPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+      <button onclick="document.getElementById('game-hub-guide-modal').style.display='none'" style="position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #f8fafc; font-size: 1.3rem; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease;">&times;</button>
       
-      <div style="width: 68px; height: 68px; margin: 0 auto 16px auto; background: rgba(245, 158, 11, 0.15); border: 2px solid rgba(245, 158, 11, 0.4); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 2.2rem;">
+      <div style="width: 70px; height: 70px; margin: 0 auto 16px auto; background: rgba(245, 158, 11, 0.15); border: 2px solid rgba(245, 158, 11, 0.5); border-radius: 22px; display: flex; align-items: center; justify-content: center; font-size: 2.3rem; box-shadow: 0 0 20px rgba(245, 158, 11, 0.25);">
         🎮
       </div>
 
-      <h3 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 8px; color: #fbbf24;">
+      <h3 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 8px; color: #fbbf24; text-shadow: 0 2px 10px rgba(245, 158, 11, 0.35);">
         Đấu Trường 6 Trò Chơi Ôn Tập
       </h3>
 
-      <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 14px; padding: 14px 16px; margin: 16px 0 22px 0; text-align: left;">
-        <div style="font-size: 0.92rem; color: #f8fafc; font-weight: 700; line-height: 1.55; display: flex; align-items: flex-start; gap: 10px;">
-          <i class="fa-solid fa-circle-info" style="color: #fbbf24; font-size: 1.15rem; margin-top: 2px; flex-shrink: 0;"></i>
+      <div style="background: rgba(15, 23, 42, 0.85); border: 1.5px solid rgba(245, 158, 11, 0.3); border-radius: 16px; padding: 14px 18px; margin: 16px 0 22px 0; text-align: left;">
+        <div style="font-size: 0.95rem; color: #ffffff; font-weight: 700; line-height: 1.55; display: flex; align-items: flex-start; gap: 10px;">
+          <i class="fa-solid fa-circle-info" style="color: #fbbf24; font-size: 1.25rem; margin-top: 2px; flex-shrink: 0;"></i>
           <span>Vào <strong>Sổ tay từ vựng</strong> để biết thêm chi tiết và chọn bài học bạn muốn chơi game ôn tập nhé!</span>
         </div>
-        <div style="font-size: 0.82rem; color: #94a3b8; margin-top: 10px; line-height: 1.45; padding-left: 26px;">
+        <div style="font-size: 0.82rem; color: #cbd5e1; margin-top: 10px; line-height: 1.45; padding-left: 28px; font-weight: 600;">
           🐍 Nuôi Rắn • 🀄 Mạt Chược • 💥 Bắn Pháo • ⚗️ Giả Kim • 🎵 Phím Đàn • ⚡ Quizizz
         </div>
       </div>
 
       <div>
-        <button class="btn btn-primary" onclick="window.goToNotebookVocabulary()" style="background: linear-gradient(135deg, #f59e0b, #d97706); border: none; color: #fff; padding: 14px 24px; border-radius: 14px; font-weight: 800; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4); width: 100%; transition: transform 0.15s ease;">
+        <button class="btn btn-primary" onclick="window.goToNotebookVocabulary()" style="background: linear-gradient(135deg, #10b981, #059669); border: none; color: #ffffff; padding: 14px 24px; border-radius: 14px; font-weight: 800; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4); width: 100%; transition: transform 0.15s ease;">
           <i class="fa-solid fa-book-bookmark"></i> Vào Sổ Tay Từ Vựng Ngay
         </button>
       </div>
@@ -12538,16 +12538,16 @@ window.showComingSoonNotice = function (featureName = 'Tính năng') {
     modal = document.createElement('div');
     modal.id = 'coming-soon-modal';
     modal.className = 'modal-overlay';
-    modal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;';
+    modal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;';
     document.body.appendChild(modal);
   }
   modal.innerHTML = `
-    <div style="background: var(--bg-primary, #1e293b); border: 1px solid var(--border-glass, rgba(255,255,255,0.15)); border-radius: 20px; width: 90%; max-width: 420px; padding: 28px; text-align: center; color: #fff; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
-      <button onclick="document.getElementById('coming-soon-modal').style.display='none'" style="position: absolute; top: 14px; right: 14px; background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer;">&times;</button>
+    <div class="system-dark-modal-card" style="background: linear-gradient(145deg, #0f172a, #1e293b) !important; border: 1.5px solid rgba(255,255,255,0.18) !important; border-radius: 22px; width: 90%; max-width: 440px; padding: 28px; text-align: center; color: #ffffff !important; position: relative; box-shadow: 0 25px 60px rgba(0,0,0,0.8);">
+      <button onclick="document.getElementById('coming-soon-modal').style.display='none'" style="position: absolute; top: 14px; right: 14px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #f8fafc; font-size: 1.3rem; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">&times;</button>
       <div style="font-size: 3rem; margin-bottom: 10px;">🚀</div>
-      <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 8px; color: #f59e0b;">${featureName}</h3>
-      <p style="font-size: 0.9rem; color: #cbd5e1; margin-bottom: 20px; line-height: 1.5;">Chức năng này đang được tối ưu phát triển và sẽ sớm ra mắt trong thời gian tới!</p>
-      <button class="btn btn-primary" onclick="document.getElementById('coming-soon-modal').style.display='none'" style="background: #3b82f6; border: none; color: #fff; padding: 10px 24px; border-radius: 10px; font-weight: 700; cursor: pointer; width: 100%;">Đã hiểu</button>
+      <h3 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; color: #fbbf24;">${featureName}</h3>
+      <p style="font-size: 0.92rem; color: #cbd5e1; margin-bottom: 20px; line-height: 1.55;">Chức năng này đang được tối ưu phát triển và sẽ sớm ra mắt trong thời gian tới!</p>
+      <button class="btn btn-primary" onclick="document.getElementById('coming-soon-modal').style.display='none'" style="background: #2563eb; border: none; color: #ffffff; padding: 12px 24px; border-radius: 12px; font-weight: 700; cursor: pointer; width: 100%; font-size: 0.95rem;">Đã hiểu</button>
     </div>
   `;
   modal.style.display = 'flex';
@@ -12559,43 +12559,43 @@ window.showHanVietRulesModal = function () {
     modal = document.createElement('div');
     modal.id = 'han-viet-rules-modal';
     modal.className = 'modal-overlay';
-    modal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;';
+    modal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;';
     modal.innerHTML = `
-      <div style="background: var(--bg-primary, #1e293b); border: 1px solid var(--border-glass, rgba(255,255,255,0.12)); border-radius: 20px; width: 100%; max-width: 800px; max-height: 85vh; overflow-y: auto; padding: 28px; color: var(--text-primary, #fff); position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
-        <button onclick="document.getElementById('han-viet-rules-modal').style.display='none'" style="position: absolute; top: 18px; right: 18px; background: none; border: none; color: var(--text-muted, #94a3b8); font-size: 1.5rem; cursor: pointer;">&times;</button>
+      <div class="system-dark-modal-card" style="background: linear-gradient(145deg, #0f172a, #1e293b) !important; border: 1.5px solid rgba(255,255,255,0.18) !important; border-radius: 22px; width: 100%; max-width: 800px; max-height: 85vh; overflow-y: auto; padding: 28px; color: #ffffff !important; position: relative; box-shadow: 0 25px 60px rgba(0,0,0,0.85); text-align: left;">
+        <button onclick="document.getElementById('han-viet-rules-modal').style.display='none'" style="position: absolute; top: 18px; right: 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #f8fafc; font-size: 1.3rem; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">&times;</button>
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-          <div style="font-size: 2.2rem; background: rgba(59,130,246,0.15); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #3b82f6;">🗣️</div>
+          <div style="font-size: 2.2rem; background: rgba(59,130,246,0.2); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #38bdf8;">🗣️</div>
           <div>
-            <h2 style="font-size: 1.4rem; font-weight: 800; margin: 0;">Quy Tắc Chuyển Âm Hán-Việt ➔ Pinyin</h2>
-            <p style="font-size: 0.85rem; color: var(--text-muted, #94a3b8); margin: 4px 0 0 0;">Suy cách đọc Tiếng Trung từ âm Hán-Việt với quy luật phụ âm & thanh điệu chính xác</p>
+            <h2 style="font-size: 1.4rem; font-weight: 800; margin: 0; color: #ffffff;">Quy Tắc Chuyển Âm Hán-Việt ➔ Pinyin</h2>
+            <p style="font-size: 0.85rem; color: #94a3b8; margin: 4px 0 0 0;">Suy cách đọc Tiếng Trung từ âm Hán-Việt với quy luật phụ âm & thanh điệu chính xác</p>
           </div>
         </div>
 
-        <div style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--border-glass); padding-bottom: 12px;">
-          <button class="btn btn-primary btn-sm">Phụ Âm Đầu</button>
-          <button class="btn btn-secondary btn-sm">Thanh Điệu & Nguyên Âm</button>
-          <button class="btn btn-secondary btn-sm">Ví Dụ Thực Tế</button>
+        <div style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.12); padding-bottom: 12px;">
+          <button class="btn btn-primary btn-sm" style="font-weight: 700;">Phụ Âm Đầu</button>
+          <button class="btn btn-secondary btn-sm" style="font-weight: 700;">Thanh Điệu & Nguyên Âm</button>
+          <button class="btn btn-secondary btn-sm" style="font-weight: 700;">Ví Dụ Thực Tế</button>
         </div>
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;">
-          <div style="background: var(--bg-secondary, #0f172a); border: 1px solid var(--border-glass); padding: 16px; border-radius: 14px;">
-            <div style="font-weight: 700; color: #3b82f6; margin-bottom: 6px;">h- ➔ h</div>
-            <p style="font-size: 0.8rem; color: var(--text-muted);">Âm đầu h- giữ nguyên thành h trong Pinyin.</p>
-            <div style="font-size: 0.85rem; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; margin-top: 8px;">
+          <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255,255,255,0.12); padding: 16px; border-radius: 14px;">
+            <div style="font-weight: 700; color: #38bdf8; margin-bottom: 6px;">h- ➔ h</div>
+            <p style="font-size: 0.8rem; color: #cbd5e1;">Âm đầu h- giữ nguyên thành h trong Pinyin.</p>
+            <div style="font-size: 0.85rem; background: rgba(255,255,255,0.06); padding: 8px; border-radius: 8px; margin-top: 8px; color: #ffffff;">
               <b>學</b> Học ➔ <b>húe</b> | <b>海</b> Hải ➔ <b>hǎi</b>
             </div>
           </div>
-          <div style="background: var(--bg-secondary, #0f172a); border: 1px solid var(--border-glass); padding: 16px; border-radius: 14px;">
-            <div style="font-weight: 700; color: #10b981; margin-bottom: 6px;">c / k / qu ➔ g / k</div>
-            <p style="font-size: 0.8rem; color: var(--text-muted);">Các âm gốc velar chuyển thành g hoặc k.</p>
-            <div style="font-size: 0.85rem; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; margin-top: 8px;">
+          <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255,255,255,0.12); padding: 16px; border-radius: 14px;">
+            <div style="font-weight: 700; color: #34d399; margin-bottom: 6px;">c / k / qu ➔ g / k</div>
+            <p style="font-size: 0.8rem; color: #cbd5e1;">Các âm gốc velar chuyển thành g hoặc k.</p>
+            <div style="font-size: 0.85rem; background: rgba(255,255,255,0.06); padding: 8px; border-radius: 8px; margin-top: 8px; color: #ffffff;">
               <b>國</b> Quốc ➔ <b>guó</b> | <b>高</b> Cao ➔ <b>gāo</b>
             </div>
           </div>
-          <div style="background: var(--bg-secondary, #0f172a); border: 1px solid var(--border-glass); padding: 16px; border-radius: 14px;">
-            <div style="font-weight: 700; color: #f59e0b; margin-bottom: 6px;">t / th ➔ d / t</div>
-            <p style="font-size: 0.8rem; color: var(--text-muted);">Âm t- chuyển thành d-, th- chuyển thành t-.</p>
-            <div style="font-size: 0.85rem; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; margin-top: 8px;">
+          <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255,255,255,0.12); padding: 16px; border-radius: 14px;">
+            <div style="font-weight: 700; color: #fbbf24; margin-bottom: 6px;">t / th ➔ d / t</div>
+            <p style="font-size: 0.8rem; color: #cbd5e1;">Âm t- chuyển thành d-, th- chuyển thành t-.</p>
+            <div style="font-size: 0.85rem; background: rgba(255,255,255,0.06); padding: 8px; border-radius: 8px; margin-top: 8px; color: #ffffff;">
               <b>多</b> Đa ➔ <b>duō</b> | <b>天</b> Thiên ➔ <b>tiān</b>
             </div>
           </div>
@@ -12613,23 +12613,23 @@ window.showWritingWorksheetModal = function () {
     modal = document.createElement('div');
     modal.id = 'writing-worksheet-modal';
     modal.className = 'modal-overlay';
-    modal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;';
+    modal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;';
     modal.innerHTML = `
-      <div style="background: var(--bg-primary, #1e293b); border: 1px solid var(--border-glass, rgba(255,255,255,0.12)); border-radius: 20px; width: 100%; max-width: 650px; padding: 28px; color: var(--text-primary, #fff); position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
-        <button onclick="document.getElementById('writing-worksheet-modal').style.display='none'" style="position: absolute; top: 18px; right: 18px; background: none; border: none; color: var(--text-muted, #94a3b8); font-size: 1.5rem; cursor: pointer;">&times;</button>
+      <div class="system-dark-modal-card" style="background: linear-gradient(145deg, #0f172a, #1e293b) !important; border: 1.5px solid rgba(255,255,255,0.18) !important; border-radius: 22px; width: 100%; max-width: 650px; padding: 28px; color: #ffffff !important; position: relative; box-shadow: 0 25px 60px rgba(0,0,0,0.85); text-align: left;">
+        <button onclick="document.getElementById('writing-worksheet-modal').style.display='none'" style="position: absolute; top: 18px; right: 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #f8fafc; font-size: 1.3rem; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">&times;</button>
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-          <div style="font-size: 2.2rem; background: rgba(16,185,129,0.15); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #10b981;">📝</div>
+          <div style="font-size: 2.2rem; background: rgba(16,185,129,0.2); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #34d399;">📝</div>
           <div>
-            <h2 style="font-size: 1.4rem; font-weight: 800; margin: 0;">Tạo File Luyện Viết Chữ Hán</h2>
-            <p style="font-size: 0.85rem; color: var(--text-muted, #94a3b8); margin: 4px 0 0 0;">Xuất bản ô chữ Tianzige (田字格) kèm Pinyin để in ra luyện viết</p>
+            <h2 style="font-size: 1.4rem; font-weight: 800; margin: 0; color: #ffffff;">Tạo File Luyện Viết Chữ Hán</h2>
+            <p style="font-size: 0.85rem; color: #94a3b8; margin: 4px 0 0 0;">Xuất bản ô chữ Tianzige (田字格) kèm Pinyin để in ra luyện viết</p>
           </div>
         </div>
         <div style="margin-bottom: 16px;">
-          <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">Nhập danh sách từ vựng (Chữ Hán):</label>
-          <textarea placeholder="VD: 你好, 谢谢, 学习, 中国..." style="width: 100%; height: 100px; padding: 12px; background: var(--bg-secondary); border: 1px solid var(--border-glass); border-radius: 10px; color: #fff; resize: none;"></textarea>
+          <label style="display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 6px; color: #cbd5e1;">Nhập danh sách từ vựng (Chữ Hán):</label>
+          <textarea placeholder="VD: 你好, 谢谢, 学习, 中国..." style="width: 100%; height: 100px; padding: 12px; background: #0f172a; border: 1px solid rgba(255,255,255,0.18); border-radius: 12px; color: #ffffff; resize: none; font-size: 0.95rem;"></textarea>
         </div>
         <div style="display: flex; justify-content: flex-end; gap: 10px;">
-          <button onclick="alert('File PDF Luyện viết đã được tạo thành công! Đang tiến hành tải xuống...')" class="btn btn-primary"><i class="fa-solid fa-file-pdf"></i> Tạo & Tải PDF In</button>
+          <button onclick="alert('File PDF Luyện viết đã được tạo thành công! Đang tiến hành tải xuống...')" class="btn btn-primary" style="font-weight: 700;"><i class="fa-solid fa-file-pdf"></i> Tạo & Tải PDF In</button>
         </div>
       </div>
     `;
@@ -12644,43 +12644,43 @@ window.showSentenceParserModal = function () {
     modal = document.createElement('div');
     modal.id = 'sentence-parser-modal';
     modal.className = 'modal-overlay';
-    modal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;';
+    modal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;';
     modal.innerHTML = `
-      <div style="background: var(--bg-primary, #1e293b); border: 1px solid var(--border-glass, rgba(255,255,255,0.12)); border-radius: 20px; width: 100%; max-width: 750px; padding: 28px; color: var(--text-primary, #fff); position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
-        <button onclick="document.getElementById('sentence-parser-modal').style.display='none'" style="position: absolute; top: 18px; right: 18px; background: none; border: none; color: var(--text-muted, #94a3b8); font-size: 1.5rem; cursor: pointer;">&times;</button>
+      <div class="system-dark-modal-card" style="background: linear-gradient(145deg, #0f172a, #1e293b) !important; border: 1.5px solid rgba(255,255,255,0.18) !important; border-radius: 22px; width: 100%; max-width: 750px; padding: 28px; color: #ffffff !important; position: relative; box-shadow: 0 25px 60px rgba(0,0,0,0.85); text-align: left;">
+        <button onclick="document.getElementById('sentence-parser-modal').style.display='none'" style="position: absolute; top: 18px; right: 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #f8fafc; font-size: 1.3rem; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">&times;</button>
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-          <div style="font-size: 2.2rem; background: rgba(245,158,11,0.15); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #f59e0b;">✨</div>
+          <div style="font-size: 2.2rem; background: rgba(245,158,11,0.2); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fbbf24;">✨</div>
           <div>
-            <h2 style="font-size: 1.4rem; font-weight: 800; margin: 0;">Phân Tích Cú Pháp Câu AI</h2>
-            <p style="font-size: 0.85rem; color: var(--text-muted, #94a3b8); margin: 4px 0 0 0;">Tách từ, gắn nhãn từ loại và phân tích thành phần câu tự động</p>
+            <h2 style="font-size: 1.4rem; font-weight: 800; margin: 0; color: #ffffff;">Phân Tích Cú Pháp Câu AI</h2>
+            <p style="font-size: 0.85rem; color: #94a3b8; margin: 4px 0 0 0;">Tách từ, gắn nhãn từ loại và phân tích thành phần câu tự động</p>
           </div>
         </div>
         <div style="display: flex; gap: 10px; margin-bottom: 16px;">
-          <input type="text" value="我每天都在学习汉语。" style="flex: 1; padding: 12px; background: var(--bg-secondary); border: 1px solid var(--border-glass); border-radius: 10px; color: #fff; font-size: 1rem;">
-          <button class="btn btn-primary" onclick="alert('Đã phân tích xong câu!')"><i class="fa-solid fa-wand-magic-sparkles"></i> Phân Tích</button>
+          <input type="text" value="我每天都在学习汉语。" style="flex: 1; padding: 12px; background: #0f172a; border: 1px solid rgba(255,255,255,0.18); border-radius: 12px; color: #ffffff; font-size: 1rem;">
+          <button class="btn btn-primary" onclick="alert('Đã phân tích xong câu!')" style="font-weight: 700;"><i class="fa-solid fa-wand-magic-sparkles"></i> Phân Tích</button>
         </div>
-        <div style="background: var(--bg-secondary); padding: 16px; border-radius: 12px; border: 1px solid var(--border-glass);">
-          <div style="font-weight: 700; color: #f59e0b; margin-bottom: 8px;">Ví dụ phân tích:</div>
+        <div style="background: rgba(15, 23, 42, 0.7); padding: 16px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.12);">
+          <div style="font-weight: 700; color: #fbbf24; margin-bottom: 8px;">Ví dụ phân tích:</div>
           <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-            <div style="background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; text-align: center;">
-              <div style="font-size: 1.1rem; font-weight: 800;">我</div>
-              <div style="font-size: 0.75rem; color: #3b82f6;">wǒ (Đại từ - Chủ ngữ)</div>
+            <div style="background: rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 8px; text-align: center;">
+              <div style="font-size: 1.1rem; font-weight: 800; color: #ffffff;">我</div>
+              <div style="font-size: 0.75rem; color: #38bdf8; font-weight: 700;">wǒ (Đại từ - Chủ ngữ)</div>
             </div>
-            <div style="background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; text-align: center;">
-              <div style="font-size: 1.1rem; font-weight: 800;">每天</div>
-              <div style="font-size: 0.75rem; color: #10b981;">měitiān (Trạng ngữ)</div>
+            <div style="background: rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 8px; text-align: center;">
+              <div style="font-size: 1.1rem; font-weight: 800; color: #ffffff;">每天</div>
+              <div style="font-size: 0.75rem; color: #34d399; font-weight: 700;">měitiān (Trạng ngữ)</div>
             </div>
-            <div style="background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; text-align: center;">
-              <div style="font-size: 1.1rem; font-weight: 800;">都在</div>
-              <div style="font-size: 0.75rem; color: #f59e0b;">dōu zài (Phó từ/Trợ từ)</div>
+            <div style="background: rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 8px; text-align: center;">
+              <div style="font-size: 1.1rem; font-weight: 800; color: #ffffff;">都在</div>
+              <div style="font-size: 0.75rem; color: #fbbf24; font-weight: 700;">dōu zài (Phó từ/Trợ từ)</div>
             </div>
-            <div style="background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; text-align: center;">
-              <div style="font-size: 1.1rem; font-weight: 800;">学习</div>
-              <div style="font-size: 0.75rem; color: #ef4444;">xuéxí (Động từ - Vị ngữ)</div>
+            <div style="background: rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 8px; text-align: center;">
+              <div style="font-size: 1.1rem; font-weight: 800; color: #ffffff;">学习</div>
+              <div style="font-size: 0.75rem; color: #f87171; font-weight: 700;">xuéxí (Động từ - Vị ngữ)</div>
             </div>
-            <div style="background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; text-align: center;">
-              <div style="font-size: 1.1rem; font-weight: 800;">汉语</div>
-              <div style="font-size: 0.75rem; color: #8b5cf6;">hànyǔ (Danh từ - Tân ngữ)</div>
+            <div style="background: rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 8px; text-align: center;">
+              <div style="font-size: 1.1rem; font-weight: 800; color: #ffffff;">汉语</div>
+              <div style="font-size: 0.75rem; color: #c084fc; font-weight: 700;">hànyǔ (Danh từ - Tân ngữ)</div>
             </div>
           </div>
         </div>

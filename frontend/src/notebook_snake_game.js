@@ -75,6 +75,11 @@ export class SnakeGameEngine {
     this.isPaused = false;
     this.isRunning = false;
     this.wordsEatenCorrect = 0;
+    this.correctWordsSet = new Set();
+
+    // Game Mode State: 'zh-vi' | 'vi-zh' | 'pinyin-zh' | 'pinyin-vi' | 'mix'
+    this.gameMode = 'zh-vi';
+    this.activeQuestionMode = 'zh-vi';
 
     // Power-up Buffs
     this.invincibleTimer = 0;
@@ -157,9 +162,28 @@ export class SnakeGameEngine {
         <div class="snake-arena-layout">
           <!-- BATTLEFIELD / CANVAS & CONTROLS -->
           <div class="snake-battle-column">
+            <!-- GAME MODE SELECTOR -->
+            <div class="snake-mode-selector-bar" id="snake-mode-selector">
+              <button type="button" class="snake-mode-btn active" data-mode="zh-vi" title="Chữ Hán ➔ Nghĩa Việt">
+                <i class="fa-solid fa-language"></i> <span>Hán ➔ Việt</span>
+              </button>
+              <button type="button" class="snake-mode-btn" data-mode="vi-zh" title="Nghĩa Việt ➔ Chữ Hán">
+                <i class="fa-solid fa-arrow-right-arrow-left"></i> <span>Việt ➔ Hán</span>
+              </button>
+              <button type="button" class="snake-mode-btn" data-mode="pinyin-zh" title="Pinyin ➔ Chữ Hán">
+                <i class="fa-solid fa-spell-check"></i> <span>Pinyin ➔ Hán</span>
+              </button>
+              <button type="button" class="snake-mode-btn" data-mode="pinyin-vi" title="Pinyin ➔ Nghĩa Việt">
+                <i class="fa-solid fa-volume-high"></i> <span>Pinyin ➔ Việt</span>
+              </button>
+              <button type="button" class="snake-mode-btn" data-mode="mix" title="Hỗn hợp ngẫu nhiên">
+                <i class="fa-solid fa-shuffle"></i> <span>Hỗn hợp</span>
+              </button>
+            </div>
+
             <!-- TARGET WORD PROMPT BANNER (NO LEAKED ANSWER) -->
             <div class="snake-target-banner" id="snake-target-card">
-              <div class="target-badge-label"><i class="fa-solid fa-bullseye"></i> TỪ VỰNG CẦN TÌM NGHĨA</div>
+              <div class="target-badge-label"><i class="fa-solid fa-bullseye"></i> CHỮ HÁN CẦN TÌM NGHĨA VIỆT</div>
               <div class="target-word-row">
                 <span class="target-zh" id="target-zh-text">勤奋</span>
                 <span class="target-pinyin" id="target-pinyin-text">(qínfèn)</span>
@@ -347,11 +371,14 @@ export class SnakeGameEngine {
               </div>
             </div>
 
+            <!-- BẢNG TỔNG KẾT TỪ VỰNG ĐÚNG / SAI -->
+            <div id="snake-words-summary-wrap"></div>
+
             <div class="result-beta-note">
               <i class="fa-solid fa-flask"></i> <strong>Chế độ thử nghiệm:</strong> Điểm số và thành tích không lưu vào hồ sơ trong giai đoạn Beta Super Admin.
             </div>
 
-            <div style="display: flex; gap: 12px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
+            <div style="display: flex; gap: 12px; justify-content: center; margin-top: 14px; flex-wrap: wrap;">
               <button type="button" id="snake-retry-btn" class="btn btn-primary" style="padding: 10px 20px; font-weight: 800;"><i class="fa-solid fa-rotate-right"></i> Chơi Lại</button>
               <button type="button" id="snake-back-hub-btn" class="btn btn-secondary" style="padding: 10px 18px; font-weight: 700;"><i class="fa-solid fa-gamepad"></i> Đổi Trò Chơi</button>
               <button type="button" id="snake-finish-btn" class="btn btn-outline" style="padding: 10px 18px; font-weight: 700;"><i class="fa-solid fa-book-bookmark"></i> Quay Lại Sổ Tay</button>
@@ -560,8 +587,50 @@ export class SnakeGameEngine {
       btn.addEventListener('mouseleave', () => btn.classList.remove('active'));
     });
 
+    // Game Mode Selector buttons
+    this.container.querySelectorAll('.snake-mode-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const newMode = btn.dataset.mode;
+        if (newMode === this.gameMode) return;
+        this.container.querySelectorAll('.snake-mode-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.gameMode = newMode;
+        this.showFloatingMessage(`Đã chọn: ${btn.textContent.trim()}`);
+        if (this.currentQuestion) {
+          this.refreshCurrentQuestion();
+        }
+      });
+    });
+
     this.resizeHandler = () => this.initCanvas();
     window.addEventListener('resize', this.resizeHandler);
+  }
+
+  cleanFormat(str) {
+    if (!str) return '';
+    return String(str).replace(/\([^)]*\)/g, '').replace(/（[^）]*）/g, '').trim();
+  }
+
+  refreshCurrentQuestion() {
+    if (!this.currentQuestion) return;
+    let mode = this.gameMode || 'zh-vi';
+    if (mode === 'mix') {
+      const pool = ['zh-vi', 'vi-zh', 'pinyin-zh', 'pinyin-vi'];
+      mode = pool[Math.floor(Math.random() * pool.length)];
+    }
+    this.activeQuestionMode = mode;
+    this.updateTargetPrompt();
+
+    const target = this.currentQuestion;
+    const isTargetHanzi = (mode === 'vi-zh' || mode === 'pinyin-zh');
+    this.apples.forEach(a => {
+      if (a.isCorrect) {
+        a.displayText = isTargetHanzi ? target.word : this.cleanFormat(target.meaning);
+      } else {
+        a.displayText = isTargetHanzi ? a.word : this.cleanFormat(a.meaning);
+      }
+    });
   }
 
   resetSnake() {
@@ -603,6 +672,13 @@ export class SnakeGameEngine {
 
     const nextTarget = this.wordQueue.pop();
     this.currentQuestion = nextTarget;
+
+    let mode = this.gameMode || 'zh-vi';
+    if (mode === 'mix') {
+      const pool = ['zh-vi', 'vi-zh', 'pinyin-zh', 'pinyin-vi'];
+      mode = pool[Math.floor(Math.random() * pool.length)];
+    }
+    this.activeQuestionMode = mode;
     this.updateTargetPrompt();
 
     // Phát âm từ vựng ngay khi xuất hiện câu hỏi mục tiêu
@@ -618,11 +694,16 @@ export class SnakeGameEngine {
 
     this.apples = [];
 
+    const isTargetHanzi = (mode === 'vi-zh' || mode === 'pinyin-zh');
+    const correctDisplayText = isTargetHanzi ? nextTarget.word : this.cleanFormat(nextTarget.meaning);
+
     let pos = this.getRandomEmptyCell(2.5);
     if (pos) {
       this.apples.push({
         word: nextTarget.word,
         meaning: nextTarget.meaning,
+        pinyin: nextTarget.pinyin,
+        displayText: correctDisplayText,
         isCorrect: true,
         x: pos.x,
         y: pos.y
@@ -632,9 +713,12 @@ export class SnakeGameEngine {
     distractors.forEach(d => {
       let dPos = this.getRandomEmptyCell(2.5);
       if (dPos) {
+        const dDisplayText = isTargetHanzi ? d.word : this.cleanFormat(d.meaning);
         this.apples.push({
           word: d.word,
           meaning: d.meaning,
+          pinyin: d.pinyin,
+          displayText: dDisplayText,
           isCorrect: false,
           x: dPos.x,
           y: dPos.y
@@ -683,11 +767,35 @@ export class SnakeGameEngine {
 
   updateTargetPrompt() {
     if (!this.currentQuestion) return;
+    const labelEl = this.container.querySelector('#snake-target-card .target-badge-label');
     const zhEl = this.container.querySelector('#target-zh-text');
     const pyEl = this.container.querySelector('#target-pinyin-text');
+    const hintEl = this.container.querySelector('#snake-target-card .target-action-hint');
 
-    if (zhEl) zhEl.textContent = this.currentQuestion.word;
-    if (pyEl) pyEl.textContent = `(${this.currentQuestion.pinyin})`;
+    const mode = this.activeQuestionMode || 'zh-vi';
+    const q = this.currentQuestion;
+
+    if (mode === 'zh-vi') {
+      if (labelEl) labelEl.innerHTML = `<i class="fa-solid fa-bullseye"></i> CHỮ HÁN CẦN TÌM NGHĨA VIỆT`;
+      if (zhEl) zhEl.textContent = q.word;
+      if (pyEl) pyEl.textContent = `(${q.pinyin})`;
+      if (hintEl) hintEl.innerHTML = `<i class="fa-solid fa-apple-whole" style="color: #ef4444;"></i> Hãy lái rắn ăn quả có <strong>NGHĨA TIẾNG VIỆT ĐÚNG</strong> bên dưới!`;
+    } else if (mode === 'vi-zh') {
+      if (labelEl) labelEl.innerHTML = `<i class="fa-solid fa-bullseye"></i> NGHĨA VIỆT CẦN TÌM CHỮ HÁN`;
+      if (zhEl) zhEl.textContent = this.cleanFormat(q.meaning);
+      if (pyEl) pyEl.textContent = `[ ${q.pinyin} ]`;
+      if (hintEl) hintEl.innerHTML = `<i class="fa-solid fa-apple-whole" style="color: #ef4444;"></i> Hãy lái rắn ăn quả có <strong>CHỮ HÁN ĐÚNG</strong> bên dưới!`;
+    } else if (mode === 'pinyin-zh') {
+      if (labelEl) labelEl.innerHTML = `<i class="fa-solid fa-bullseye"></i> PINYIN CẦN TÌM CHỮ HÁN`;
+      if (zhEl) zhEl.textContent = `[ ${q.pinyin} ]`;
+      if (pyEl) pyEl.textContent = `(${this.cleanFormat(q.meaning)})`;
+      if (hintEl) hintEl.innerHTML = `<i class="fa-solid fa-apple-whole" style="color: #ef4444;"></i> Hãy lái rắn ăn quả có <strong>CHỮ HÁN ĐÚNG</strong> bên dưới!`;
+    } else if (mode === 'pinyin-vi') {
+      if (labelEl) labelEl.innerHTML = `<i class="fa-solid fa-bullseye"></i> PINYIN CẦN TÌM NGHĨA VIỆT`;
+      if (zhEl) zhEl.textContent = `[ ${q.pinyin} ]`;
+      if (pyEl) pyEl.textContent = `(Chữ Hán: ${q.word})`;
+      if (hintEl) hintEl.innerHTML = `<i class="fa-solid fa-apple-whole" style="color: #ef4444;"></i> Hãy lái rắn ăn quả có <strong>NGHĨA TIẾNG VIỆT ĐÚNG</strong> bên dưới!`;
+    }
   }
 
   loop(currentTime) {
@@ -758,6 +866,10 @@ export class SnakeGameEngine {
     this.streak++;
     this.wordsEatenCorrect = (this.wordsEatenCorrect || 0) + 1;
 
+    if (this.currentQuestion && this.currentQuestion.word) {
+      this.correctWordsSet.add(this.currentQuestion.word);
+    }
+
     if (this.streak >= this.maxStreakNeeded) {
       this.levelUp();
     } else {
@@ -793,12 +905,8 @@ export class SnakeGameEngine {
         this.showFloatingMessage('💚 Tim đã đầy!');
       }
     } else if (pow.type === 'x2') {
-      this.streak = Math.min(this.maxStreakNeeded, this.streak * 2 || 2);
-      this.showFloatingMessage(`🪙 x2 Chuỗi! (Chuỗi: ${this.streak}/10)`);
-      if (this.streak >= this.maxStreakNeeded) {
-        this.levelUp();
-        return;
-      }
+      this.score += 50;
+      this.showFloatingMessage('🪙 Nhặt được đồng xu! +50 Điểm thưởng!');
     } else if (pow.type === 'shield') {
       this.invincibleTimer = 5;
       this.showFloatingMessage('🛡️ Bất Tử Trong 5 Giây!');
@@ -937,6 +1045,7 @@ export class SnakeGameEngine {
     });
 
     // Apples (Word Targets & Distractors)
+    const isHanziMode = (this.activeQuestionMode === 'vi-zh' || this.activeQuestionMode === 'pinyin-zh');
     this.apples.forEach(a => {
       const ax = a.x * cs + cs / 2;
       const ay = a.y * cs + cs / 2;
@@ -947,13 +1056,13 @@ export class SnakeGameEngine {
       ctx.textBaseline = 'middle';
       ctx.fillText('🍎', ax, ay - 6);
 
-      // Draw Meaning Badge Underneath
+      // Draw Meaning/Hanzi Badge Underneath
       ctx.save();
-      const text = a.meaning || '';
-      ctx.font = 'bold 12px Inter, sans-serif';
+      const text = a.displayText || (isHanziMode ? a.word : (a.meaning || ''));
+      ctx.font = isHanziMode ? 'bold 15px "Noto Sans SC", sans-serif' : 'bold 12px Inter, sans-serif';
       const textMetrics = ctx.measureText(text);
       const textWidth = Math.max(textMetrics.width + 14, 46);
-      const badgeH = 20;
+      const badgeH = isHanziMode ? 22 : 20;
 
       ctx.fillStyle = '#ffffff';
       ctx.strokeStyle = 'rgba(0, 0, 0, 0.25)';
@@ -963,10 +1072,10 @@ export class SnakeGameEngine {
       ctx.fill();
       ctx.stroke();
 
-      ctx.fillStyle = '#1e293b';
+      ctx.fillStyle = '#0f172a';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(text, ax, ay + 18);
+      ctx.fillText(text, ax, ay + (isHanziMode ? 19 : 18));
       ctx.restore();
     });
 
@@ -1104,6 +1213,12 @@ export class SnakeGameEngine {
       if (resScore) resScore.textContent = this.score;
       if (resWords) resWords.textContent = `${this.wordsEatenCorrect || 0}/${this.totalWordsCount || 0}`;
 
+      // Render danh sách từ vựng Đúng / Sai
+      const summaryWrap = overlay.querySelector('#snake-words-summary-wrap');
+      if (summaryWrap) {
+        this.renderWordSummaryList(summaryWrap, this.rawWords, this.correctWordsSet);
+      }
+
       const retryBtn = overlay.querySelector('#snake-retry-btn');
       const backHubBtn = overlay.querySelector('#snake-back-hub-btn');
       const finishBtn = overlay.querySelector('#snake-finish-btn');
@@ -1133,6 +1248,86 @@ export class SnakeGameEngine {
         };
       }
     }
+  }
+
+  renderWordSummaryList(containerEl, allWords, correctWordsSet) {
+    if (!containerEl) return;
+    const total = allWords.length;
+    const correctCount = allWords.filter(w => correctWordsSet.has(w.word)).length;
+    const wrongCount = total - correctCount;
+
+    containerEl.innerHTML = `
+      <div class="game-results-word-summary">
+        <div class="summary-tabs-header">
+          <button type="button" class="summary-tab-btn active" data-tab="all">
+            <i class="fa-solid fa-list-check"></i> Tất cả (${total})
+          </button>
+          <button type="button" class="summary-tab-btn correct-tab" data-tab="correct">
+            <i class="fa-solid fa-circle-check"></i> Đúng (${correctCount})
+          </button>
+          <button type="button" class="summary-tab-btn wrong-tab" data-tab="wrong">
+            <i class="fa-solid fa-circle-xmark"></i> Sai / Cần ôn (${wrongCount})
+          </button>
+        </div>
+        <div class="summary-words-list"></div>
+      </div>
+    `;
+
+    const listEl = containerEl.querySelector('.summary-words-list');
+    const renderItems = (filter) => {
+      listEl.innerHTML = '';
+      const filtered = allWords.filter(w => {
+        const isCor = correctWordsSet.has(w.word);
+        if (filter === 'correct') return isCor;
+        if (filter === 'wrong') return !isCor;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = `<div style="text-align: center; color: #94a3b8; padding: 20px; font-size: 0.85rem;">Không có từ vựng nào trong mục này.</div>`;
+        return;
+      }
+
+      filtered.forEach(w => {
+        const isCor = correctWordsSet.has(w.word);
+        const card = document.createElement('div');
+        card.className = `summary-word-card ${isCor ? 'is-correct' : 'is-wrong'}`;
+        card.innerHTML = `
+          <div class="sw-badge ${isCor ? 'badge-correct' : 'badge-wrong'}">
+            <i class="fa-solid fa-${isCor ? 'check' : 'xmark'}"></i> ${isCor ? 'Đúng' : 'Sai'}
+          </div>
+          <div class="sw-main">
+            <div class="sw-hanzi">${w.word}</div>
+            <div class="sw-pinyin">${w.pinyin ? `[ ${w.pinyin} ]` : ''}</div>
+            <div class="sw-meaning">${w.meaning || ''}</div>
+          </div>
+          <button type="button" class="sw-speak-btn" title="Nghe phát âm">
+            <i class="fa-solid fa-volume-high"></i>
+          </button>
+        `;
+        const speakBtn = card.querySelector('.sw-speak-btn');
+        if (speakBtn) {
+          speakBtn.onclick = (e) => {
+            e.stopPropagation();
+            if (typeof window.speakText === 'function') {
+              window.speakText(w.word);
+            }
+          };
+        }
+        listEl.appendChild(card);
+      });
+    };
+
+    renderItems('all');
+
+    containerEl.querySelectorAll('.summary-tab-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        containerEl.querySelectorAll('.summary-tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderItems(btn.dataset.tab);
+      });
+    });
   }
 
   restart() {

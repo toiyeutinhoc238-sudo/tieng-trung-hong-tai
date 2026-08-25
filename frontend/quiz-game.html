@@ -937,12 +937,26 @@
             style="color: #8854c0; font-size: 1.6rem; font-weight: 900;">0</span></div>
 
         <!-- VOCAB REVIEW SECTION -->
-        <div
-          style="text-align: left; margin-bottom: 8px; font-weight: 800; font-size: 0.85rem; color: #666; text-transform: uppercase;">
-          <i class="fa-solid fa-graduation-cap"></i> Củng cố từ vựng & kiến thức:
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+          <div style="font-weight: 800; font-size: 0.85rem; color: #475569; text-transform: uppercase;">
+            <i class="fa-solid fa-graduation-cap"></i> Củng cố từ vựng & kiến thức:
+          </div>
         </div>
+
+        <div class="summary-tabs-header" style="margin-bottom: 8px; background: #f1f5f9; border: 1px solid #cbd5e1;">
+          <button type="button" class="summary-tab-btn active" id="quiz-tab-all" style="color: #334155;">
+            <i class="fa-solid fa-list-check"></i> Tất cả (<span id="quiz-cnt-all">0</span>)
+          </button>
+          <button type="button" class="summary-tab-btn correct-tab" id="quiz-tab-correct">
+            <i class="fa-solid fa-circle-check"></i> Đúng (<span id="quiz-cnt-correct">0</span>)
+          </button>
+          <button type="button" class="summary-tab-btn wrong-tab" id="quiz-tab-wrong">
+            <i class="fa-solid fa-circle-xmark"></i> Sai / Cần ôn (<span id="quiz-cnt-wrong">0</span>)
+          </button>
+        </div>
+
         <div id="review-list"
-          style="flex: 1; min-height: 180px; max-height: 300px; overflow-y: auto; background: #f8f9fa; border: 2px solid #eaeaea; border-radius: 14px; padding: 10px; margin-bottom: 16px; text-align: left;">
+          style="flex: 1; min-height: 180px; max-height: 280px; overflow-y: auto; background: #f8f9fa; border: 2px solid #eaeaea; border-radius: 14px; padding: 10px; margin-bottom: 16px; text-align: left;">
           <!-- Dynamically rendered review items -->
         </div>
 
@@ -1034,6 +1048,7 @@
     let vocabData = [];
     let currentPool = [];
     let remainingQs = [];
+    let totalQuestionsCount = 0;
     let distractorPool = [];
     let activeQ = null;
 
@@ -1242,21 +1257,19 @@
       updateLessons();
 
       if (urlLesson && urlLesson !== 'all' && urlLesson !== 'null') {
-        const firstLesson = urlLesson.split(',')[0].replace(/\D/g, '') || urlLesson.split(',')[0];
-        if (firstLesson) {
-          const opt = Array.from(selLesson.options).find(o => {
-            if (o.value == firstLesson) return true;
-            const parts = o.value.split('_');
-            if (parts.length >= 3 && parts[2] == firstLesson) {
-              if (urlVersion && parts.length >= 4) {
-                return parts[3] === urlVersion;
-              }
-              return true;
+        const numLesson = parseInt(String(urlLesson).replace(/\D/g, ''), 10) || urlLesson;
+        const opt = Array.from(selLesson.options).find(o => {
+          if (o.value == urlLesson || o.value == numLesson) return true;
+          const parts = o.value.split('_');
+          if (parts.length >= 3 && String(parts[2]) === String(numLesson)) {
+            if (urlVersion && parts.length >= 4) {
+              return parts[3] === urlVersion;
             }
-            return false;
-          });
-          if (opt) selLesson.value = opt.value;
-        }
+            return true;
+          }
+          return false;
+        });
+        if (opt) selLesson.value = opt.value;
       }
       
       if (autoStart === '1' || autoStart === 'true' || autoStart === true) {
@@ -1380,101 +1393,119 @@
       const urlFilter = urlParams.get('filter');
       const urlVersion = urlParams.get('version') || localStorage.getItem('active_hsk_version') || '3.0';
       const currentVersion = selVersion ? selVersion.value : (urlVersion || '3.0');
+      const urlSource = urlParams.get('source');
 
-      if (lvl !== 'all') {
-        if (lvl.startsWith('yct')) {
-          const y = lvl.replace('yct', '');
-          pool = pool.filter(w => isYct(w) && matchLevel(w.level, y));
-        } else {
-          pool = pool.filter(w => !isYct(w) && w.level && matchLevel(w.level, lvl) && (w.isCustom || (w.hskVersion || '3.0') === currentVersion));
+      let customSessionWords = null;
+      try {
+        if (urlSource === 'notebook') {
+          const raw = sessionStorage.getItem('notebook_quiz_custom_words');
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              customSessionWords = parsed;
+            }
+          }
         }
-      } else if (urlNotebook && urlNotebook.startsWith('hsk:')) {
-        const targetLvl = urlNotebook.replace('hsk:', '');
-        pool = pool.filter(w => !isYct(w) && matchLevel(w.level, targetLvl) && (w.isCustom || (w.hskVersion || '3.0') === currentVersion));
-      } else if (urlNotebook && urlNotebook.startsWith('yct:')) {
-        const targetLvl = urlNotebook.replace('yct:', '');
-        pool = pool.filter(w => isYct(w) && matchLevel(w.level, targetLvl));
+      } catch (e) {}
+
+      if (urlSource === 'notebook' && customSessionWords && customSessionWords.length > 0) {
+        pool = [...customSessionWords];
       } else {
-        pool = pool.filter(w => w.isCustom || isYct(w) || (w.hskVersion || '3.0') === currentVersion);
-      }
-
-      if (urlNotebook) {
-        if (urlNotebook === 'wrong') {
-          pool = pool.filter(w => w.isWrong);
-        } else if (urlNotebook === 'starred') {
-          pool = pool.filter(w => w.isStarred);
-        } else if (urlNotebook.startsWith('custom:')) {
-          const cat = urlNotebook.substring(7);
-          pool = pool.filter(w => w.isCustom && w.category === cat);
-        } else if (urlNotebook.startsWith('premium:')) {
-          const cat = urlNotebook.substring(8);
-          const slugify = (s) => (s || '').toLowerCase().replace(/đ/g, 'd').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-          pool = pool.filter(w => w.level === 'premium' && (w.category === cat || slugify(w.category) === cat || slugify(w.category) === slugify(cat)));
+        if (lvl !== 'all') {
+          if (lvl.startsWith('yct')) {
+            const y = lvl.replace('yct', '');
+            pool = pool.filter(w => isYct(w) && matchLevel(w.level, y));
+          } else {
+            pool = pool.filter(w => !isYct(w) && w.level && matchLevel(w.level, lvl) && (w.isCustom || (w.hskVersion || '3.0') === currentVersion));
+          }
+        } else if (urlNotebook && urlNotebook.startsWith('hsk:')) {
+          const targetLvl = urlNotebook.replace('hsk:', '');
+          pool = pool.filter(w => !isYct(w) && matchLevel(w.level, targetLvl) && (w.isCustom || (w.hskVersion || '3.0') === currentVersion));
+        } else if (urlNotebook && urlNotebook.startsWith('yct:')) {
+          const targetLvl = urlNotebook.replace('yct:', '');
+          pool = pool.filter(w => isYct(w) && matchLevel(w.level, targetLvl));
+        } else {
+          pool = pool.filter(w => w.isCustom || isYct(w) || (w.hskVersion || '3.0') === currentVersion);
         }
-      }
 
-      if (lsn && lsn !== 'all' && lsn !== 'random') {
-        if (lsn.includes('_')) {
-          const parts = lsn.split('_');
-          if (parts.length >= 3) {
-            const type = parts[0];
-            const lLevel = parts[1];
-            const lId = parseInt(parts[2].replace(/\D/g, '')) || parts[2];
-            const lVer = parts[3] || urlVersion;
-            const targetYct = (type === 'yct');
+        if (urlNotebook) {
+          if (urlNotebook === 'wrong') {
+            pool = pool.filter(w => w.isWrong);
+          } else if (urlNotebook === 'starred') {
+            pool = pool.filter(w => w.isStarred);
+          } else if (urlNotebook.startsWith('custom:')) {
+            const cat = urlNotebook.substring(7);
+            pool = pool.filter(w => w.isCustom && w.category === cat);
+          } else if (urlNotebook.startsWith('premium:')) {
+            const cat = urlNotebook.substring(8);
+            const slugify = (s) => (s || '').toLowerCase().replace(/đ/g, 'd').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+            pool = pool.filter(w => w.level === 'premium' && (w.category === cat || slugify(w.category) === cat || slugify(w.category) === slugify(cat)));
+          }
+        }
+
+        if (lsn && lsn !== 'all' && lsn !== 'random') {
+          if (lsn.includes('_')) {
+            const parts = lsn.split('_');
+            if (parts.length >= 3) {
+              const type = parts[0];
+              const lLevel = parts[1];
+              const lId = parseInt(parts[2].replace(/\D/g, ''), 10) || parts[2];
+              const lVer = parts[3] || currentVersion;
+              const targetYct = (type === 'yct');
+              const filteredByLsn = pool.filter(w => {
+                const numId = parseInt(String(w.lessonId).replace(/\D/g, ''), 10) || w.lessonId;
+                const matchLsn = (String(numId) === String(lId));
+                const matchLvl = (!lLevel || matchLevel(w.level, lLevel));
+                const matchYct = isYct(w) === targetYct;
+                const matchVer = targetYct || (w.hskVersion || '3.0') === lVer || w.isCustom;
+                return matchLsn && matchLvl && matchYct && matchVer;
+              });
+              if (filteredByLsn.length > 0) pool = filteredByLsn;
+            }
+          } else {
+            const numLsn = parseInt(String(lsn).replace(/\D/g, ''), 10) || lsn;
             const filteredByLsn = pool.filter(w => {
-              const numId = parseInt(String(w.lessonId).replace(/\D/g, '')) || w.lessonId;
-              const matchLsn = (String(numId) === String(lId));
-              const matchLvl = (!lLevel || matchLevel(w.level, lLevel));
-              const matchYct = isYct(w) === targetYct;
-              const matchVer = targetYct || (w.hskVersion || '3.0') === lVer || w.isCustom;
-              return matchLsn && matchLvl && matchYct && matchVer;
+              const numId = parseInt(String(w.lessonId).replace(/\D/g, ''), 10) || w.lessonId;
+              return String(numId) === String(numLsn);
             });
             if (filteredByLsn.length > 0) pool = filteredByLsn;
           }
-        } else {
-          const numLsn = parseInt(String(lsn).replace(/\D/g, '')) || lsn;
-          const filteredByLsn = pool.filter(w => {
-            const numId = parseInt(String(w.lessonId).replace(/\D/g, '')) || w.lessonId;
-            return String(numId) === String(numLsn);
-          });
-          if (filteredByLsn.length > 0) pool = filteredByLsn;
-        }
-      } else if (urlLessons && urlLessons !== 'all') {
-        const lessonArr = urlLessons.split(',').map(s => parseInt(s.trim().replace(/\D/g, ''))).filter(Boolean);
-        if (lessonArr.length > 0) {
-          const filteredByLessons = pool.filter(w => {
-            const numId = parseInt(String(w.lessonId).replace(/\D/g, '')) || w.lessonId;
-            return lessonArr.includes(numId);
-          });
-          if (filteredByLessons.length > 0) {
-            pool = filteredByLessons;
+        } else if (urlLessons && urlLessons !== 'all') {
+          const lessonArr = urlLessons.split(',').map(s => parseInt(s.trim().replace(/\D/g, ''), 10)).filter(Boolean);
+          if (lessonArr.length > 0) {
+            const filteredByLessons = pool.filter(w => {
+              const numId = parseInt(String(w.lessonId).replace(/\D/g, ''), 10) || w.lessonId;
+              return lessonArr.includes(numId);
+            });
+            if (filteredByLessons.length > 0) {
+              pool = filteredByLessons;
+            }
+          }
+        } else if (lsn === 'random') {
+          const ids = [...new Set(pool.map(w => w.lessonId).filter(Boolean))];
+          if (ids.length > 0) {
+            const rid = ids[Math.floor(Math.random() * ids.length)];
+            pool = pool.filter(w => String(w.lessonId) === String(rid));
           }
         }
-      } else if (lsn === 'random') {
-        const ids = [...new Set(pool.map(w => w.lessonId).filter(Boolean))];
-        if (ids.length > 0) {
-          const rid = ids[Math.floor(Math.random() * ids.length)];
-          pool = pool.filter(w => String(w.lessonId) === String(rid));
-        }
-      }
 
-      if (urlFilter) {
-        if (urlFilter === 'studied') {
-          const stPool = pool.filter(w => w.isStudied);
-          if (stPool.length > 0) pool = stPool;
-        } else if (urlFilter === 'unstudied') {
-          const unPool = pool.filter(w => !w.isStudied);
-          if (unPool.length > 0) pool = unPool;
-        } else if (urlFilter === 'memorized') {
-          const memPool = pool.filter(w => w.isMemorized);
-          if (memPool.length > 0) pool = memPool;
-        } else if (urlFilter === 'unmemorized') {
-          const unmemPool = pool.filter(w => w.isStudied && !w.isMemorized);
-          if (unmemPool.length > 0) pool = unmemPool;
-        } else if (urlFilter === 'starred') {
-          const starPool = pool.filter(w => w.isStarred);
-          if (starPool.length > 0) pool = starPool;
+        if (urlFilter) {
+          if (urlFilter === 'studied') {
+            const stPool = pool.filter(w => w.isStudied);
+            if (stPool.length > 0) pool = stPool;
+          } else if (urlFilter === 'unstudied') {
+            const unPool = pool.filter(w => !w.isStudied);
+            if (unPool.length > 0) pool = unPool;
+          } else if (urlFilter === 'memorized') {
+            const memPool = pool.filter(w => w.isMemorized);
+            if (memPool.length > 0) pool = memPool;
+          } else if (urlFilter === 'unmemorized') {
+            const unmemPool = pool.filter(w => w.isStudied && !w.isMemorized);
+            if (unmemPool.length > 0) pool = unmemPool;
+          } else if (urlFilter === 'starred') {
+            const starPool = pool.filter(w => w.isStarred);
+            if (starPool.length > 0) pool = starPool;
+          }
         }
       }
 
@@ -1485,9 +1516,11 @@
 
       currentPool = pool;
       distractorPool = vocabData.length >= 4 ? vocabData : fallbackVocab;
-      remainingQs = shuffle(currentPool);
+      totalQuestionsCount = currentPool.length;
+      remainingQs = shuffle([...currentPool]);
       if (remainingQs.length === 0) {
         remainingQs = shuffle(fallbackVocab);
+        totalQuestionsCount = remainingQs.length;
       }
 
       score = 0; hearts = 3; hudScore.textContent = score; updateHearts();
@@ -1544,7 +1577,7 @@
 
     function nextQuestion() {
       try {
-        if (remainingQs.length === 0) return endGame("Chiến Thắng!", "Bạn đã hoàn thành xuất sắc!");
+        if (remainingQs.length === 0) return endGame("Chiến Thắng!", `Bạn đã hoàn thành xuất sắc toàn bộ ${totalQuestionsCount} câu hỏi!`);
 
         answered = false;
         activeQ = remainingQs.pop();
@@ -1582,36 +1615,50 @@
         else if (mode === 'audio-pinyin') { pPrompt = "👂 Nghe âm ➔ Tìm Pinyin"; pQ = "👂 (Bấm loa để nghe lại)"; rawAns = activeQ.pinyin; qText.classList.add('vi'); }
 
         const pAns = cleanOptionFormat(rawAns, mode);
-        qType.textContent = pPrompt;
+        const currentQNum = totalQuestionsCount - remainingQs.length;
+        qType.textContent = `Câu ${currentQNum}/${totalQuestionsCount} • ${pPrompt}`;
         qText.textContent = pQ;
         speak(activeQ.word);
 
-        // Smart distractor selection: prioritize currentPool, then same level, filter out English text
-        function isVietnameseMeaning(str) {
-          if (!str) return false;
-          const s = String(str).trim();
-          const hasVi = /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ]/i.test(s);
-          if (hasVi) return true;
-          if (/^(xe taxi|email|bi-a|say xe|tivi|vali|cola|bia|bida|new york)$/i.test(s)) return true;
-          if (/\b(the|and|of|to|in|is|for|with|on|at|from|by|an|or|a|not|all|always|state|status|law|love|feeling|touch|move|enough|overtime|accept|person|name|family|city|country|place|time)\b/i.test(s)) return false;
-          return true;
-        }
-
+        // Smart distractor selection based on question mode
         const urlParams = new URLSearchParams(window.location.search);
         const urlVersion = urlParams.get('version') || localStorage.getItem('active_hsk_version') || '3.0';
         const curVer = activeQ.hskVersion || urlVersion || '3.0';
         const isQYct = isYct(activeQ);
-        let candidates = currentPool.filter(w => w && w.id !== activeQ.id && w.meaning !== activeQ.meaning && isVietnameseMeaning(w.meaning));
-        if (candidates.length < 3) {
-          const sameLevel = vocabData.filter(w => w && matchLevel(w.level, activeQ.level) && isYct(w) === isQYct && (isQYct || w.isCustom || (w.hskVersion || '3.0') === curVer) && w.id !== activeQ.id && w.meaning !== activeQ.meaning && isVietnameseMeaning(w.meaning));
-          candidates.push(...sameLevel);
+
+        let candidates = [];
+        if (mode === 'zh-vi' || mode === 'pinyin-vi' || mode === 'audio-vi') {
+          // Meaning distractors
+          candidates = currentPool.filter(w => w && w.id !== activeQ.id && w.meaning !== activeQ.meaning);
+          if (candidates.length < 3) {
+            const sameLvl = vocabData.filter(w => w && matchLevel(w.level, activeQ.level) && isYct(w) === isQYct && (isQYct || w.isCustom || (w.hskVersion || '3.0') === curVer) && w.id !== activeQ.id && w.meaning !== activeQ.meaning);
+            candidates.push(...sameLvl);
+          }
+          if (candidates.length < 3) {
+            candidates.push(...vocabData.filter(w => w && w.id !== activeQ.id && w.meaning !== activeQ.meaning));
+          }
+        } else if (mode === 'vi-zh' || mode === 'pinyin-zh' || mode === 'audio-zh') {
+          // Hanzi word distractors
+          candidates = currentPool.filter(w => w && w.id !== activeQ.id && w.word !== activeQ.word);
+          if (candidates.length < 3) {
+            const sameLvl = vocabData.filter(w => w && matchLevel(w.level, activeQ.level) && isYct(w) === isQYct && (isQYct || w.isCustom || (w.hskVersion || '3.0') === curVer) && w.id !== activeQ.id && w.word !== activeQ.word);
+            candidates.push(...sameLvl);
+          }
+          if (candidates.length < 3) {
+            candidates.push(...vocabData.filter(w => w && w.id !== activeQ.id && w.word !== activeQ.word));
+          }
+        } else {
+          // Pinyin distractors
+          candidates = currentPool.filter(w => w && w.id !== activeQ.id && w.pinyin !== activeQ.pinyin);
+          if (candidates.length < 3) {
+            const sameLvl = vocabData.filter(w => w && matchLevel(w.level, activeQ.level) && isYct(w) === isQYct && (isQYct || w.isCustom || (w.hskVersion || '3.0') === curVer) && w.id !== activeQ.id && w.pinyin !== activeQ.pinyin);
+            candidates.push(...sameLvl);
+          }
+          if (candidates.length < 3) {
+            candidates.push(...vocabData.filter(w => w && w.id !== activeQ.id && w.pinyin !== activeQ.pinyin));
+          }
         }
-        if (candidates.length < 3) {
-          candidates.push(...vocabData.filter(w => w && (isQYct ? isYct(w) : (w.hskVersion || '3.0') === curVer) && w.id !== activeQ.id && w.meaning !== activeQ.meaning && isVietnameseMeaning(w.meaning)));
-        }
-        if (candidates.length < 3) {
-          candidates.push(...vocabData.filter(w => w && w.id !== activeQ.id && w.meaning !== activeQ.meaning && isVietnameseMeaning(w.meaning)));
-        }
+
         if (candidates.length < 3) {
           candidates.push(...fallbackVocab.filter(w => w && w.meaning !== activeQ.meaning));
         }
@@ -1784,7 +1831,10 @@
       });
     }
 
-    function renderReviewList() {
+    let activeReviewFilter = 'all';
+
+    function renderReviewList(filter = activeReviewFilter) {
+      activeReviewFilter = filter;
       const list = document.getElementById('review-list');
       if (!list) return;
       list.innerHTML = '';
@@ -1804,7 +1854,30 @@
         return;
       }
 
-      targetWords.forEach(item => {
+      const totalCount = targetWords.length;
+      const correctCount = targetWords.filter(w => playedMap.get(w.word) === true).length;
+      const wrongCount = targetWords.filter(w => playedMap.get(w.word) === false || !playedMap.has(w.word)).length;
+
+      const cntAllEl = document.getElementById('quiz-cnt-all');
+      const cntCorEl = document.getElementById('quiz-cnt-correct');
+      const cntWroEl = document.getElementById('quiz-cnt-wrong');
+      if (cntAllEl) cntAllEl.textContent = totalCount;
+      if (cntCorEl) cntCorEl.textContent = correctCount;
+      if (cntWroEl) cntWroEl.textContent = wrongCount;
+
+      const filteredWords = targetWords.filter(w => {
+        const isCor = playedMap.get(w.word) === true;
+        if (filter === 'correct') return isCor;
+        if (filter === 'wrong') return !isCor;
+        return true;
+      });
+
+      if (filteredWords.length === 0) {
+        list.innerHTML = `<div style="text-align:center; color:#94a3b8; padding:24px; font-weight:600; font-size: 0.9rem;">Không có từ vựng nào trong mục này.</div>`;
+        return;
+      }
+
+      filteredWords.forEach(item => {
         const isPlayed = playedMap.has(item.word);
         const isCorrect = playedMap.get(item.word);
 
@@ -1825,6 +1898,11 @@
             badgeBg = 'rgba(226,27,60,0.1)';
             badgeClr = '#e21b3c';
           }
+        } else {
+          statusIcon = '✗';
+          borderClr = '#e21b3c';
+          badgeBg = 'rgba(226,27,60,0.1)';
+          badgeClr = '#e21b3c';
         }
 
         const card = document.createElement('div');
@@ -1842,18 +1920,18 @@
 
         card.innerHTML = `
         <div style="display: flex; align-items: center; gap: 12px; flex: 1; overflow: hidden;">
-          <div style="width: 26px; height: 26px; border-radius: 50%; background: ${badgeBg}; color: ${badgeClr}; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 900; flex-shrink: 0;" title="${isPlayed ? (isCorrect ? 'Trả lời đúng' : 'Trả lời sai') : 'Từ vựng trong bài'}">
+          <div style="width: 26px; height: 26px; border-radius: 50%; background: ${badgeBg}; color: ${badgeClr}; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 900; flex-shrink: 0;" title="${isPlayed ? (isCorrect ? 'Trả lời đúng' : 'Trả lời sai') : 'Chưa trả lời / Cần ôn'}">
             ${statusIcon}
           </div>
           <div style="flex: 1; min-width: 0;">
             <div style="display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;">
-              <span style="font-family: 'Noto Sans SC', sans-serif; font-size: 1.3rem; font-weight: 900; color: #111;">${item.word}</span>
-              <span style="font-size: 0.9rem; color: #8854c0; font-weight: 800;">[ ${item.pinyin} ]</span>
+              <span style="font-family: 'Noto Sans SC', sans-serif; font-size: 1.25rem; font-weight: 900; color: #111;">${item.word}</span>
+              <span style="font-size: 0.88rem; color: #8854c0; font-weight: 800;">[ ${item.pinyin} ]</span>
             </div>
-            <div style="font-size: 0.9rem; color: #555; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.meaning}</div>
+            <div style="font-size: 0.85rem; color: #555; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.meaning}</div>
           </div>
         </div>
-        <button class="review-audio-btn" style="background: #f0f0f0; border: none; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; color: #333; font-size: 1rem; flex-shrink: 0; margin-left: 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 0 #ddd;" title="Nghe phát âm">
+        <button class="review-audio-btn" style="background: #f0f0f0; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; color: #333; font-size: 0.95rem; flex-shrink: 0; margin-left: 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 0 #ddd;" title="Nghe phát âm">
           <i class="fa-solid fa-volume-high"></i>
         </button>
       `;
@@ -1866,6 +1944,23 @@
         list.appendChild(card);
       });
     }
+
+    // Bind tab clicks once
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabAll = document.getElementById('quiz-tab-all');
+      const tabCor = document.getElementById('quiz-tab-correct');
+      const tabWro = document.getElementById('quiz-tab-wrong');
+
+      const setTab = (activeEl, filterName) => {
+        [tabAll, tabCor, tabWro].forEach(t => t && t.classList.remove('active'));
+        if (activeEl) activeEl.classList.add('active');
+        renderReviewList(filterName);
+      };
+
+      if (tabAll) tabAll.onclick = () => setTab(tabAll, 'all');
+      if (tabCor) tabCor.onclick = () => setTab(tabCor, 'correct');
+      if (tabWro) tabWro.onclick = () => setTab(tabWro, 'wrong');
+    });
 
     function saveGameHistory() {
       // If played from notebook review mode or no_score=true, DO NOT save score or send to server
