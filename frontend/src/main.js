@@ -3957,7 +3957,7 @@ function renderUserProfile() {
     const displayRole = document.getElementById('user-display-role') || document.querySelector('.app-sidebar .user-role-badge');
     if (displayRole) {
       const email = (currentUser.email || '').toLowerCase().trim();
-      const isSuper = email.includes('toiyeutinhoc238') || email.includes('phanphiphu') || email.includes('thaihong162004') || currentUser.isSuperAdmin || currentUser.role === 'super_admin';
+      const isSuper = email.includes('phanphiphu') || email.includes('thaihong162004') || currentUser.isSuperAdmin || currentUser.role === 'super_admin';
       const isTeacher = currentUser.role === 'teacher' || email.includes('hongtai');
       const isAdmin = isSuper || isTeacher || currentUser.isAdmin || currentUser.role === 'admin' || isUserAdmin(email);
 
@@ -13094,7 +13094,7 @@ function getCategoryMeta(category) {
 function isUserAdmin(email) {
   if (!email) return false;
   const em = email.toLowerCase();
-  return em.includes('toiyeutinhoc238') || em.includes('phanphiphu') || em.includes('hongtai') || em.includes('admin');
+  return em.includes('phanphiphu') || em.includes('thaihong162004') || em.includes('hongtai') || em.includes('admin');
 }
 
 window.openDiscussionModal = function () {
@@ -13601,7 +13601,7 @@ let adminSyncInterval = null;
 function isSuperAdmin(email) {
   if (!email) return false;
   const em = email.toLowerCase().trim();
-  return em.includes('toiyeutinhoc238') || em.includes('phanphiphu') || em.includes('thaihong162004');
+  return em.includes('phanphiphu') || em.includes('thaihong162004');
 }
 
 window.openAdminManagementModal = function () {

@@ -491,12 +491,12 @@ app.get('/api/dictation/lessons', async (req, res) => {
 });
 
 // Helper functions for Admin & Super Admin resolution
-const SUPER_ADMINS = ['phanphiphu04@gmail.com', 'toiyeutinhoc238@gmail.com', 'thaihong162004@gmail.com'];
+const SUPER_ADMINS = ['phanphiphu04@gmail.com', 'thaihong162004@gmail.com'];
 
 function isSuperAdmin(email) {
   if (!email) return false;
   const em = email.toLowerCase().trim();
-  return SUPER_ADMINS.some(admin => em === admin || em.includes('toiyeutinhoc238') || em.includes('phanphiphu') || em.includes('thaihong162004'));
+  return SUPER_ADMINS.some(admin => em === admin || em.includes('phanphiphu') || em.includes('thaihong162004'));
 }
 
 function isUserAdmin(email, userData = null) {
@@ -2353,7 +2353,7 @@ app.delete('/api/discussions/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
-    const isAdmin = ['toiyeutinhoc238@gmail.com', 'phanphiphu04@gmail.com', 'hongtai'].some(admin => currentEmail.toLowerCase().includes(admin));
+    const isAdmin = ['phanphiphu04@gmail.com', 'thaihong162004@gmail.com', 'hongtai'].some(admin => currentEmail.toLowerCase().includes(admin));
 
     if (mongoose.connection.readyState === 1) {
       const disc = await Discussion.findById(id);

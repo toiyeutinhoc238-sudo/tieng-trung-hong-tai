@@ -1203,12 +1203,6 @@
         "audio": "/audio/hsk1_texts/7-5.mp3",
         "lines": [
           {
-            "speaker": "5",
-            "zh": "006：006：30",
-            "pinyin": "0 0 6 ： 0 0 6 ： 3 0",
-            "vi": "Bản dịch câu thoại: \"006：006：30\""
-          },
-          {
             "speaker": "王一雪",
             "zh": "喂，你在哪儿呢？",
             "pinyin": "wèi ， nǐ zài nǎ ér ne ？",
@@ -1340,12 +1334,6 @@
         "title": "Bài Khóa 2",
         "audio": "/audio/hsk1_texts/8-3.mp3",
         "lines": [
-          {
-            "speaker": "2",
-            "zh": "002：303：00后",
-            "pinyin": "0 0 2 ： 3 0 3 ： 0 0 hòu",
-            "vi": "Bản dịch câu thoại: \"002：303：00后\""
-          },
           {
             "speaker": "白家月",
             "zh": "我们在哪儿见呢？",
@@ -2377,19 +2365,19 @@
           {
             "speaker": "服务员",
             "zh": "好的。一斤饺子40个。",
-            "pinyin": "hǎo de 。 yì jīn jiǎo zǐ 4 0 gè 。",
+            "pinyin": "hǎo de 。 yì jīn jiǎo zi sì shí gè 。",
             "vi": "Vâng ạ. Một cân sủi cảo gồm 40 cái."
           },
           {
             "speaker": "刘明",
             "zh": "40个太多了，我要一半吧。",
-            "pinyin": "4 0 gè tài duō le ， wǒ yào yí bàn ba 。",
+            "pinyin": "sì shí gè tài duō le ， wǒ yào yí bàn ba 。",
             "vi": "40 cái nhiều quá, cho tôi lấy một nửa thôi."
           },
           {
             "speaker": "服务员",
             "zh": "半斤20个。您想喝什么？",
-            "pinyin": "bàn jīn 2 0 gè 。 nín xiǎng hē shén me ？",
+            "pinyin": "bàn jīn èr shí gè 。 nín xiǎng hē shén me ？",
             "vi": "Nửa cân là 20 cái ạ. Quý khách muốn uống gì?"
           },
           {
