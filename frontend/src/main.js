@@ -12455,6 +12455,71 @@ window.openNotebookGamesHub = function (customWords, customTitle, customDesc) {
   }
 };
 
+window.goToNotebookVocabulary = function () {
+  const modal = document.getElementById('game-hub-guide-modal');
+  if (modal) modal.style.display = 'none';
+
+  if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname === '') {
+    if (typeof switchTab === 'function') {
+      switchTab('flashcards');
+    }
+    const deckSelectionView = document.getElementById('deck-selection-view');
+    if (deckSelectionView) deckSelectionView.style.display = 'block';
+
+    const gamePlayView = document.getElementById('game-play-view');
+    if (gamePlayView) gamePlayView.style.display = 'none';
+
+    const flashcardSection = document.getElementById('flashcard-section');
+    if (flashcardSection) {
+      flashcardSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  } else {
+    window.location.href = '/index.html?tab=flashcards';
+  }
+};
+
+window.showGameHubGuideModal = function () {
+  let modal = document.getElementById('game-hub-guide-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'game-hub-guide-modal';
+    modal.className = 'modal-overlay';
+    modal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.72); backdrop-filter: blur(8px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;';
+    document.body.appendChild(modal);
+  }
+
+  modal.innerHTML = `
+    <div style="background: var(--bg-primary, #1e293b); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 24px; width: 90%; max-width: 480px; padding: 30px; text-align: center; color: #fff; position: relative; box-shadow: 0 25px 60px rgba(0,0,0,0.6); animation: modalPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+      <button onclick="document.getElementById('game-hub-guide-modal').style.display='none'" style="position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #94a3b8; font-size: 1.3rem; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">&times;</button>
+      
+      <div style="width: 68px; height: 68px; margin: 0 auto 16px auto; background: rgba(245, 158, 11, 0.15); border: 2px solid rgba(245, 158, 11, 0.4); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 2.2rem;">
+        🎮
+      </div>
+
+      <h3 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 8px; color: #fbbf24;">
+        Đấu Trường 7 Trò Chơi Ôn Tập
+      </h3>
+
+      <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 14px; padding: 14px 16px; margin: 16px 0 22px 0; text-align: left;">
+        <div style="font-size: 0.92rem; color: #f8fafc; font-weight: 700; line-height: 1.55; display: flex; align-items: flex-start; gap: 10px;">
+          <i class="fa-solid fa-circle-info" style="color: #fbbf24; font-size: 1.15rem; margin-top: 2px; flex-shrink: 0;"></i>
+          <span>Vào <strong>Sổ tay từ vựng</strong> để biết thêm chi tiết và chọn bài học bạn muốn chơi game ôn tập nhé!</span>
+        </div>
+        <div style="font-size: 0.82rem; color: #94a3b8; margin-top: 10px; line-height: 1.45; padding-left: 26px;">
+          🐍 Nuôi Rắn • ⛏️ Đào Vàng • 🀄 Mạt Chược • 💥 Bắn Pháo • ⚗️ Giả Kim • 🎵 Phím Đàn • ⚡ Quizizz
+        </div>
+      </div>
+
+      <div>
+        <button class="btn btn-primary" onclick="window.goToNotebookVocabulary()" style="background: linear-gradient(135deg, #f59e0b, #d97706); border: none; color: #fff; padding: 14px 24px; border-radius: 14px; font-weight: 800; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4); width: 100%; transition: transform 0.15s ease;">
+          <i class="fa-solid fa-book-bookmark"></i> Vào Sổ Tay Từ Vựng Ngay
+        </button>
+      </div>
+    </div>
+  `;
+  modal.style.display = 'flex';
+};
+
 window.openAboutModal = function () {
   const modal = document.getElementById('about-hongtai-modal');
   if (modal) {
