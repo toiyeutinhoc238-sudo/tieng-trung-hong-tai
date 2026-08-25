@@ -770,13 +770,24 @@ function renderShadowPassageList() {
 function updateShadowPassageHighlight(curTime) {
   if (!currentLesson || !currentLesson.sentences) return;
   const rows = document.querySelectorAll('.passage-dialogue-row');
+  const container = document.getElementById('shadow-full-passage-list');
+  let activeIdx = -1;
   currentLesson.sentences.forEach((s, idx) => {
     if (curTime >= s.startTime && curTime <= s.endTime) {
       rows[idx]?.classList.add('active');
+      activeIdx = idx;
     } else {
       rows[idx]?.classList.remove('active');
     }
   });
+
+  if (activeIdx !== -1 && container) {
+    const activeRow = document.getElementById(`passage-row-${activeIdx}`);
+    if (activeRow) {
+      const relativeTop = activeRow.offsetTop - (container.clientHeight / 2) + (activeRow.offsetHeight / 2);
+      container.scrollTo({ top: Math.max(0, relativeTop), behavior: 'smooth' });
+    }
+  }
 }
 
 function playFullPassage() {
@@ -1493,10 +1504,11 @@ function renderTranscriptList() {
     container.appendChild(row);
   });
 
-  // Smooth scroll active row into view
+  // Smooth scroll active row ONLY inside the container without jumping the browser window
   const activeRow = document.getElementById(`transcript-row-${currentSentenceIdx}`);
-  if (activeRow) {
-    activeRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (activeRow && container) {
+    const relativeTop = activeRow.offsetTop - (container.clientHeight / 2) + (activeRow.offsetHeight / 2);
+    container.scrollTo({ top: Math.max(0, relativeTop), behavior: 'smooth' });
   }
 }
 

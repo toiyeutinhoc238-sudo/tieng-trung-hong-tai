@@ -860,13 +860,36 @@ export class PvZGameEngine {
   }
 
   spawnSun(x, y, fromSky = true) {
-    this.fallingSuns.push({
-      x: x,
-      y: y,
-      targetY: fromSky ? Math.random() * 260 + 80 : y + 20,
-      speedY: fromSky ? 1.2 : -1.5,
-      life: 12000 // 12s to collect
-    });
+    const canvas = this.container.querySelector('#pvz-canvas');
+    const canvasHeight = canvas ? canvas.height : 440;
+    if (fromSky) {
+      this.fallingSuns.push({
+        x: x,
+        y: y,
+        originY: y,
+        targetY: Math.random() * (canvasHeight - 160) + 60,
+        speedY: 1.2,
+        isFromSky: true,
+        isGrounded: false,
+        bobPhase: Math.random() * Math.PI * 2,
+        life: 14000 // 14s to collect
+      });
+    } else {
+      // Produced by Sunflower: pop up slightly in an arc and land right on/beside the planting tile
+      this.fallingSuns.push({
+        x: x,
+        y: y,
+        originY: y,
+        targetY: y + 20 + (Math.random() * 8 - 4),
+        vx: (Math.random() - 0.5) * 0.7,
+        vy: -3.2, // Pop upward
+        gravity: 0.14,
+        isFromSky: false,
+        isGrounded: false,
+        bobPhase: Math.random() * Math.PI * 2,
+        life: 14000 // 14s to collect
+      });
+    }
   }
 
   spawnProjectile(plant) {
@@ -935,10 +958,30 @@ export class PvZGameEngine {
     }
 
     // Update Falling Suns
+    const cellHeight = (canvas ? canvas.height : 440) / 5;
     for (let i = this.fallingSuns.length - 1; i >= 0; i--) {
       const sun = this.fallingSuns[i];
-      if (sun.y < sun.targetY) {
-        sun.y += sun.speedY;
+      if (sun.isFromSky) {
+        if (!sun.isGrounded) {
+          sun.y += sun.speedY;
+          if (sun.y >= sun.targetY) {
+            sun.y = sun.targetY;
+            sun.isGrounded = true;
+          }
+        }
+      } else {
+        // Produced by plant: parabolic jump and land
+        if (!sun.isGrounded) {
+          sun.vy += sun.gravity;
+          sun.y += sun.vy;
+          sun.x += sun.vx || 0;
+          if (sun.vy > 0 && sun.y >= sun.targetY) {
+            sun.y = sun.targetY;
+            sun.vy = 0;
+            sun.vx = 0;
+            sun.isGrounded = true;
+          }
+        }
       }
       sun.life -= dt;
       if (sun.life <= 0) {
@@ -954,7 +997,7 @@ export class PvZGameEngine {
         if (p.sunCooldown <= 0) {
           p.sunCooldown = 9000;
           const sx = mowerWidth + (p.col + 0.5) * cellWidth;
-          const sy = p.row * (canvas.height / 5) + 30;
+          const sy = p.row * cellHeight + (cellHeight / 2) - 10;
           this.spawnSun(sx, sy, false);
           this.sfx.playSun();
         }
@@ -1262,12 +1305,13 @@ export class PvZGameEngine {
     // Draw Falling Suns
     this.fallingSuns.forEach(sun => {
       ctx.save();
+      const bob = sun.isGrounded ? Math.sin((Date.now() / 240) + (sun.bobPhase || 0)) * 2.8 : 0;
       ctx.font = '34px sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.shadowColor = '#fbbf24';
-      ctx.shadowBlur = 15;
-      ctx.fillText('☀️', sun.x, sun.y);
+      ctx.shadowBlur = 16;
+      ctx.fillText('☀️', sun.x, sun.y + bob);
       ctx.restore();
     });
 

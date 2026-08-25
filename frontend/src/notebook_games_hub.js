@@ -15,7 +15,7 @@ function isSuperAdminUser(user) {
   if (!user) return false;
   if (user.isSuperAdmin || user.role === 'super_admin') return true;
   const email = (user.email || '').toLowerCase().trim();
-  return email.includes('toiyeutinhoc238') || email.includes('phanphiphu') || email.includes('thaihong162004');
+  return email.includes('phanphiphu') || email.includes('thaihong162004');
 }
 
 export class NotebookGamesHub {
