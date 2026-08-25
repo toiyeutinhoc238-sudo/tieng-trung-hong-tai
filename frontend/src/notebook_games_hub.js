@@ -101,23 +101,6 @@ export class NotebookGamesHub {
             </button>
           </div>
 
-          <!-- CARD GAME PVZ: PLANTS VS ZOMBIES 1 -->
-          <div class="game-choice-card card-pvz" id="btn-choose-pvz" style="cursor: pointer;">
-            <div class="card-tag">🌻 PLANTS VS ZOMBIES 1 • CHIẾN THUẬT</div>
-            <div class="card-icon-hero">🌻 🧟</div>
-            <h3 class="card-title">Đại Chiến Zombie Từ Vựng</h3>
-            <p class="card-desc">
-              Thủ thành sân cỏ 5 làn kinh điển PvZ 1! Trồng <strong>9 loại cây</strong> bảo vệ ngôi nhà trước đàn Zombie. Giải từ vựng nhận <strong>+75☀️ Mặt Trời</strong> và bão đạn liên thanh!
-            </p>
-            <div class="card-features">
-              <span><i class="fa-solid fa-seedling"></i> 9 Cây trồng PvZ 1</span>
-              <span><i class="fa-solid fa-bolt"></i> Giải từ nạp +75☀️</span>
-            </div>
-            <button type="button" class="btn btn-primary game-launch-btn" style="background: linear-gradient(135deg, #16a34a, #15803d); color: #ffffff;">
-              Chơi Plants vs Zombies <i class="fa-solid fa-play"></i>
-            </button>
-          </div>
-
           <!-- CARD GAME 1: CANNON -->
           <div class="game-choice-card card-cannon" id="btn-choose-cannon" style="cursor: pointer;">
             <div class="card-tag">PHẢN XẠ PINYIN & BẢN ĐỒ BOM</div>
