@@ -657,7 +657,27 @@
 
     @media (max-width: 1080px) {
       .dict-main-workspace-grid {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .workspace-left-col {
+        display: contents;
+      }
+      .workspace-right-col {
+        display: contents;
+      }
+      .video-player-card {
+        order: 1;
+      }
+      .mode-practice-card {
+        order: 2;
+      }
+      #card-vocab-notes {
+        order: 3;
+      }
+      #card-user-notes {
+        order: 4;
       }
     }
 
@@ -1478,20 +1498,85 @@
     }
 
     /* =========================================
-       MODE 2: NGHE - CHÉP / LUYỆN GÕ STYLING (Hình 2 & 3)
+       MODE 2: NGHE - CHÉP / LUYỆN GÕ STYLING (Hình 3 chuẩn)
        ========================================= */
-    .dictation-instruction-banner {
-      font-size: 0.92rem;
-      font-weight: 700;
-      color: #38bdf8;
-      margin-bottom: 16px;
-      padding: 10px 14px;
+    .dictation-prompt-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 16px;
       background: rgba(56, 189, 248, 0.08);
-      border-radius: 12px;
-      border-left: 4px solid #38bdf8;
+      border-radius: 14px;
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      margin-bottom: 14px;
+    }
+
+    .dictation-prompt-text {
+      font-size: 0.98rem;
+      color: var(--text-primary);
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .prompt-tag {
+      font-weight: 800;
+      color: #38bdf8;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .prompt-meaning {
+      font-weight: 800;
+      color: #f59e0b;
+    }
+
+    html.light-mode .prompt-meaning,
+    html:not(.dark) .prompt-meaning {
+      color: #d97706;
+    }
+
+    .btn-dict-listen {
+      padding: 6px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .btn-dict-listen:hover {
+      background: #38bdf8;
+      color: #0f172a;
+      transform: scale(1.04);
+    }
+
+    .dict-feedback-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .dict-feedback-badge.error {
+      color: #ef4444 !important;
+    }
+
+    .dict-feedback-badge.success {
+      color: #10b981 !important;
     }
 
     .dictation-input-wrap {
@@ -1502,12 +1587,12 @@
 
     .dictation-main-input {
       flex: 1;
-      padding: 12px 18px;
+      padding: 13px 18px;
       border-radius: 14px;
-      border: 2px solid var(--border-glass);
+      border: 2px solid var(--border-glass, rgba(255,255,255,0.2));
       background: rgba(0, 0, 0, 0.3);
-      color: var(--text-primary);
-      font-size: 1.15rem;
+      color: var(--text-primary, #ffffff);
+      font-size: 1.2rem;
       font-weight: 700;
       outline: none;
       transition: all 0.2s;
@@ -1516,6 +1601,23 @@
     .dictation-main-input:focus {
       border-color: #38bdf8;
       box-shadow: 0 0 16px rgba(56, 189, 248, 0.3);
+    }
+
+    .dictation-main-input.input-error {
+      border-color: #ef4444 !important;
+      box-shadow: 0 0 14px rgba(239, 68, 68, 0.35) !important;
+    }
+
+    .dictation-main-input.input-success {
+      border-color: #10b981 !important;
+      box-shadow: 0 0 14px rgba(16, 185, 129, 0.35) !important;
+    }
+
+    html.light-mode .dictation-main-input,
+    html:not(.dark) .dictation-main-input {
+      background: #ffffff !important;
+      border: 2px solid #cbd5e1 !important;
+      color: #0f172a !important;
     }
 
     .btn-check-input {
@@ -1544,28 +1646,28 @@
     .dictation-char-tiles {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 10px;
       justify-content: center;
       margin-bottom: 18px;
       padding: 16px 14px;
-      background: rgba(0, 0, 0, 0.25);
+      background: rgba(0, 0, 0, 0.22);
       border-radius: 16px;
       border: 1px solid var(--border-glass);
-      min-height: 60px;
+      min-height: 64px;
       align-items: center;
     }
 
     .dict-tile-box {
-      min-width: 44px;
-      height: 50px;
-      padding: 0 10px;
-      border-radius: 12px;
+      min-width: 48px;
+      height: 52px;
+      padding: 0 8px;
+      border-radius: 14px;
       background: rgba(255, 255, 255, 0.08);
       border: 1.5px solid var(--border-glass, rgba(255, 255, 255, 0.2));
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.35rem;
+      font-size: 1.4rem;
       font-weight: 800;
       color: var(--text-primary, #ffffff);
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1574,6 +1676,12 @@
 
     .dict-tile-box.pending {
       color: #94a3b8;
+    }
+
+    .dict-tile-box.pending .tile-eye-icon {
+      font-size: 1.15rem;
+      opacity: 0.45;
+      color: inherit;
     }
 
     .dict-tile-box.correct {
@@ -1592,6 +1700,11 @@
       animation: tileShake 0.3s ease;
     }
 
+    .dict-tile-box.wrong .tile-eye-icon {
+      font-size: 1.15rem;
+      color: #ef4444;
+    }
+
     html.light-mode .dict-tile-box,
     html:not(.dark) .dict-tile-box {
       background: #ffffff !important;
@@ -1601,7 +1714,7 @@
 
     html.light-mode .dict-tile-box.pending,
     html:not(.dark) .dict-tile-box.pending {
-      color: #64748b !important;
+      color: #94a3b8 !important;
     }
 
     html.light-mode .dict-tile-box.correct,
@@ -1626,20 +1739,14 @@
       75% { transform: translateX(4px); }
     }
 
-    .dict-tile-box.revealed {
-      background: rgba(56, 189, 248, 0.18);
-      border-color: #38bdf8;
-      color: #0284c7;
-    }
-
     .dict-tile-box.punct {
       border: 1.5px solid #cbd5e1;
       color: #64748b !important;
       background: rgba(0, 0, 0, 0.04);
       min-width: 32px;
-      height: 50px;
+      height: 52px;
       padding: 0 6px;
-      font-size: 1.25rem;
+      font-size: 1.3rem;
       font-weight: 700;
       opacity: 0.9;
     }
@@ -1651,9 +1758,9 @@
       color: #475569 !important;
     }
 
-    /* Virtual Character Keyboard (Hình 2) */
+    /* Virtual Character Keyboard */
     .dict-virtual-keyboard {
-      background: rgba(0, 0, 0, 0.25);
+      background: rgba(0, 0, 0, 0.22);
       border: 1px solid var(--border-glass);
       border-radius: 16px;
       padding: 14px 16px;
@@ -1681,13 +1788,13 @@
     }
 
     .dict-vk-btn {
-      width: 44px;
-      height: 46px;
-      border-radius: 10px;
+      width: 46px;
+      height: 48px;
+      border-radius: 12px;
       background: rgba(56, 189, 248, 0.12);
       border: 1.5px solid rgba(56, 189, 248, 0.35);
       color: var(--text-primary);
-      font-size: 1.25rem;
+      font-size: 1.3rem;
       font-weight: 800;
       cursor: pointer;
       display: flex;
@@ -1717,53 +1824,30 @@
       transform: scale(0.5);
     }
 
-    .dict-feedback-badge {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 18px;
-      border-radius: 12px;
-      font-weight: 800;
-      font-size: 1rem;
-      margin-bottom: 16px;
-      animation: fadeIn 0.25s ease;
-    }
-
-    .dict-feedback-badge.error {
-      background: rgba(239, 68, 68, 0.15) !important;
-      border: 1.5px solid #ef4444 !important;
-      color: #ef4444 !important;
-    }
-
-    .dict-feedback-badge.success {
-      background: rgba(16, 185, 129, 0.15) !important;
-      border: 1.5px solid #10b981 !important;
-      color: #10b981 !important;
-    }
-
     .btn-orange-hint {
       width: 100%;
-      padding: 14px 20px;
-      border-radius: 14px;
-      background: #ea580c !important;
+      padding: 14px 24px;
+      border-radius: 50px;
+      background: linear-gradient(135deg, #f97316, #ea580c) !important;
       color: #ffffff !important;
       font-size: 1rem;
       font-weight: 900;
-      border: 2px solid #f97316 !important;
+      border: none !important;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      box-shadow: 0 4px 14px rgba(234, 88, 12, 0.4);
-      transition: all 0.2s ease;
-      letter-spacing: 0.04em;
+      box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     .btn-orange-hint:hover {
-      background: #c2410c !important;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(234, 88, 12, 0.55);
+      background: linear-gradient(135deg, #fb923c, #f97316) !important;
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 6px 20px rgba(249, 115, 22, 0.55);
     }
 
     /* Solution Box & Completed Actions */
@@ -2719,7 +2803,7 @@
       border: 1px solid #e2e8f0 !important;
     }
   </style>
-  <script type="module" crossorigin src="/assets/dictation-3-EkCFTx.js"></script>
+  <script type="module" crossorigin src="/assets/dictation-Deb6ZMxt.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
   <link rel="modulepreload" crossorigin href="/assets/particles-Db85yIFy.js">
   <link rel="modulepreload" crossorigin href="/assets/screen_drawing-oOIhKrv1.js">
@@ -2934,12 +3018,12 @@
             </div>
           </div>
 
-          <!-- CARD: NỘI DUNG / TRANSCRIPT (Placed on Left Column below Video) -->
-          <div class="workspace-side-card" id="card-subtitles-content">
-            <div class="side-card-header" onclick="window.toggleSideCard('card-subtitles-content')">
+          <!-- CARD: 🌟 TỪ VỰNG & THÀNH NGỮ TRỌNG TÂM (Cung cấp sẵn từ giáo trình) -->
+          <div class="workspace-side-card" id="card-vocab-notes">
+            <div class="side-card-header" onclick="window.toggleSideCard('card-vocab-notes')">
               <div class="side-card-title">
-                <i class="fa-solid fa-file-lines" style="color: #38bdf8;"></i>
-                <span>Nội dung lời thoại theo video</span>
+                <i class="fa-solid fa-sparkles" style="color: #f59e0b;"></i>
+                <span>Từ vựng & Thành ngữ trọng tâm video</span>
               </div>
               <button class="btn-card-collapse" title="Thu gọn / Mở rộng">
                 <i class="fa-solid fa-chevron-down toggle-chevron"></i>
@@ -2947,27 +3031,37 @@
             </div>
 
             <div class="side-card-body">
-              <!-- Checkbox Toggles -->
-              <div class="transcript-toggles-bar">
-                <label class="custom-chk-pill sm">
-                  <input type="checkbox" id="chk-transcript-hide-pinyin" onchange="window.toggleTranscriptPinyin(this.checked)">
-                  <span><i class="fa-solid fa-eye-slash"></i> Ẩn pinyin</span>
-                </label>
-                <label class="custom-chk-pill sm">
-                  <input type="checkbox" id="chk-transcript-hide-meaning" onchange="window.toggleTranscriptMeaning(this.checked)">
-                  <span><i class="fa-solid fa-eye-slash"></i> Ẩn nghĩa</span>
-                </label>
+              <div id="lesson-vocab-notes-list" class="vocab-list-wrap">
+                <!-- Rendered dynamically from lesson.note / keywords -->
               </div>
+            </div>
+          </div>
 
-              <!-- Sentence List Scroll Container -->
-              <div class="transcript-sentences-list" id="transcript-sentences-list">
-                <!-- Rendered dynamically by JS -->
+          <!-- CARD: ✍️ GHI CHÚ CÁ NHÂN CỦA BẠN (Tự Động Lưu) -->
+          <div class="workspace-side-card" id="card-user-notes">
+            <div class="side-card-header" onclick="window.toggleSideCard('card-user-notes')">
+              <div class="side-card-title">
+                <i class="fa-solid fa-book-bookmark" style="color: #10b981;"></i>
+                <span>Ghi chú cá nhân (Tự động lưu)</span>
+              </div>
+              <button class="btn-card-collapse" title="Thu gọn / Mở rộng">
+                <i class="fa-solid fa-chevron-down toggle-chevron"></i>
+              </button>
+            </div>
+
+            <div class="side-card-body">
+              <div class="notebook-wrap">
+                <textarea id="lesson-notes-textarea" class="notebook-textarea" placeholder="Ghi chép lưu ý hoặc từ mới cá nhân cho video này... (Tự động lưu vào máy của bạn)" oninput="window.handleNotesInput(this.value)"></textarea>
+                <div class="notebook-footer">
+                  <span id="notes-save-status" class="notes-save-status"><i class="fa-solid fa-cloud-check"></i> Đã tự động lưu</span>
+                  <button class="btn-clear-notes" onclick="window.clearCurrentNotes()" title="Xóa ghi chú"><i class="fa-solid fa-trash-can"></i></button>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Right Column: Challenges (Top) + Vocabulary/Idioms Notes + Personal Notes -->
+        <!-- Right Column: Interactive Practice Cards (Shadowing & Nghe Chép) -->
         <div class="workspace-right-col">
           <!-- ================= MODE 1: SHADOWING ================= -->
           <div id="mode-panel-shadowing" class="mode-practice-card">
@@ -3153,31 +3247,40 @@
             </div>
           </div>
 
-          <!-- ================= MODE 2: NGHE - CHÉP / LUYỆN GÕ (Hình 2 & 3) ================= -->
+          <!-- ================= MODE 2: NGHE - CHÉP / LUYỆN GÕ (Hình 3 chuẩn) ================= -->
           <div id="mode-panel-dictation" class="mode-practice-card" style="display: none;">
             <div id="dictation-speaker-wrap" style="display: none; margin-bottom: 10px;">
               <span id="dictation-speaker-badge" class="dialogue-speaker-badge"><i class="fa-solid fa-user-tag"></i> 妈妈</span>
             </div>
 
-            <div class="dictation-instruction-banner">
-              <i class="fa-solid fa-headphones-simple"></i>
-              <span>Nghe câu thoại và gõ chữ Hán/Pinyin (hoặc bấm chọn phím chữ bên dưới):</span>
+            <!-- Header Prompt Banner (Hình 3) -->
+            <div class="dictation-prompt-box">
+              <div class="dictation-prompt-text">
+                <span class="prompt-tag"><i class="fa-solid fa-language"></i> Dịch sang tiếng Trung:</span>
+                <span class="prompt-meaning" id="dictation-target-meaning">"..."</span>
+              </div>
+              <button type="button" class="btn-dict-listen" onclick="window.speakCurrentSentence()" title="Nghe phát âm chuẩn">
+                <i class="fa-solid fa-volume-high"></i> Nghe
+              </button>
             </div>
+
+            <!-- Dictation Real-time Feedback Status (Hình 3) -->
+            <div id="dictation-feedback-box" class="dict-feedback-badge" style="display: none;"></div>
 
             <!-- Large Input Box with Realtime Verification -->
             <div class="dictation-input-wrap">
-              <input type="text" id="dictation-user-input" class="dictation-main-input" placeholder="Gõ chữ Hán hoặc Pinyin (Đúng sáng xanh, sai báo đỏ)..." autocomplete="off" spellcheck="false" oninput="window.handleDictationRealtimeInput(this.value)" onkeydown="if(event.key==='Enter') window.checkDictationAnswer()">
+              <input type="text" id="dictation-user-input" class="dictation-main-input" placeholder="Gõ chữ Hán hoặc Pinyin..." autocomplete="off" spellcheck="false" oninput="window.handleDictationRealtimeInput(this.value)" onkeydown="if(event.key==='Enter') window.checkDictationAnswer()">
               <button class="btn-check-input" onclick="window.checkDictationAnswer()">
                 <i class="fa-solid fa-circle-check"></i> Kiểm tra
               </button>
             </div>
 
-            <!-- Dynamic Character Matching Slot Tiles (Hình 2 & 3) -->
+            <!-- Dynamic Character Matching Slot Tiles with Eye Icon (Hình 3) -->
             <div class="dictation-char-tiles" id="dictation-char-tiles">
-              <!-- Rendered dynamically: Correct = Green, Wrong = Red, Pending = _ -->
+              <!-- Rendered dynamically: Correct = Green Char, Wrong = Red Eye, Pending = Eye Icon -->
             </div>
 
-            <!-- Virtual Character Keyboard (Bàn phím chữ Hán ảo tiện lợi - Hình 2) -->
+            <!-- Virtual Character Keyboard (Phím chọn nhanh - Tự ẩn chữ khi bấm) -->
             <div class="dict-virtual-keyboard" id="dict-virtual-keyboard">
               <div class="dict-vk-label">
                 <span><i class="fa-solid fa-keyboard"></i> Phím Chữ Hán Chọn Nhanh</span>
@@ -3196,17 +3299,14 @@
               </div>
             </div>
 
-            <!-- Dictation Action Feedback -->
-            <div id="dictation-feedback-box" class="dict-feedback-badge" style="display: none;"></div>
-
-            <!-- Bottom Action: Hiện Gợi Ý Mẫu -->
+            <!-- Bottom Action: Hiện Gợi Ý Mẫu (Nút cam hình con mắt chuẩn Hình 3) -->
             <div class="dictation-bottom-actions">
               <button class="btn-orange-hint" onclick="window.showDictationHint()">
-                <i class="fa-solid fa-lightbulb"></i> HIỆN GỢI Ý MẪU
+                <i class="fa-regular fa-eye"></i> HIỆN GỢI Ý MẪU
               </button>
             </div>
 
-            <!-- Solution Box: CHỈ HIỆN KHI ĐÃ NHẬP XONG ĐÁP ÁN (Hình 2 & 3) -->
+            <!-- Solution Box: CHỈ HIỆN KHI ĐÃ NHẬP XONG HOẶC BẤM GỢI Ý -->
             <div id="dictation-solution-box" class="dict-solution-card" style="display: none;">
               <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
                 <span style="color: #10b981; font-weight: 800; font-size: 0.92rem;"><i class="fa-solid fa-check-double"></i> Đáp Án Chuẩn & Nghĩa Tiếng Việt:</span>
@@ -3225,46 +3325,38 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          <!-- CARD: 🌟 TỪ VỰNG & THÀNH NGỮ TRỌNG TÂM (Cung cấp sẵn từ giáo trình) -->
-          <div class="workspace-side-card" id="card-vocab-notes">
-            <div class="side-card-header" onclick="window.toggleSideCard('card-vocab-notes')">
-              <div class="side-card-title">
-                <i class="fa-solid fa-sparkles" style="color: #f59e0b;"></i>
-                <span>Từ vựng & Thành ngữ trọng tâm video</span>
-              </div>
-              <button class="btn-card-collapse" title="Thu gọn / Mở rộng">
-                <i class="fa-solid fa-chevron-down toggle-chevron"></i>
-              </button>
+      <!-- BOTTOM SECTION: NỘI DUNG LỜI THOẠI THEO VIDEO (Đưa xuống cuối cùng theo yêu cầu) -->
+      <div class="workspace-bottom-transcript-wrap" style="margin-top: 24px;">
+        <div class="workspace-side-card" id="card-subtitles-content">
+          <div class="side-card-header" onclick="window.toggleSideCard('card-subtitles-content')">
+            <div class="side-card-title">
+              <i class="fa-solid fa-file-lines" style="color: #38bdf8;"></i>
+              <span>Nội dung lời thoại theo video (Toàn bài)</span>
             </div>
-
-            <div class="side-card-body">
-              <div id="lesson-vocab-notes-list" class="vocab-list-wrap">
-                <!-- Rendered dynamically from lesson.note / keywords -->
-              </div>
-            </div>
+            <button class="btn-card-collapse" title="Thu gọn / Mở rộng">
+              <i class="fa-solid fa-chevron-down toggle-chevron"></i>
+            </button>
           </div>
 
-          <!-- CARD: ✍️ GHI CHÚ CÁ NHÂN CỦA BẠN (Tự Động Lưu) -->
-          <div class="workspace-side-card" id="card-user-notes">
-            <div class="side-card-header" onclick="window.toggleSideCard('card-user-notes')">
-              <div class="side-card-title">
-                <i class="fa-solid fa-book-bookmark" style="color: #10b981;"></i>
-                <span>Ghi chú cá nhân (Tự động lưu)</span>
-              </div>
-              <button class="btn-card-collapse" title="Thu gọn / Mở rộng">
-                <i class="fa-solid fa-chevron-down toggle-chevron"></i>
-              </button>
+          <div class="side-card-body">
+            <!-- Checkbox Toggles -->
+            <div class="transcript-toggles-bar">
+              <label class="custom-chk-pill sm">
+                <input type="checkbox" id="chk-transcript-hide-pinyin" onchange="window.toggleTranscriptPinyin(this.checked)">
+                <span><i class="fa-solid fa-eye-slash"></i> Ẩn pinyin</span>
+              </label>
+              <label class="custom-chk-pill sm">
+                <input type="checkbox" id="chk-transcript-hide-meaning" onchange="window.toggleTranscriptMeaning(this.checked)">
+                <span><i class="fa-solid fa-eye-slash"></i> Ẩn nghĩa</span>
+              </label>
             </div>
 
-            <div class="side-card-body">
-              <div class="notebook-wrap">
-                <textarea id="lesson-notes-textarea" class="notebook-textarea" placeholder="Ghi chép lưu ý hoặc từ mới cá nhân cho video này... (Tự động lưu vào máy của bạn)" oninput="window.handleNotesInput(this.value)"></textarea>
-                <div class="notebook-footer">
-                  <span id="notes-save-status" class="notes-save-status"><i class="fa-solid fa-cloud-check"></i> Đã tự động lưu</span>
-                  <button class="btn-clear-notes" onclick="window.clearCurrentNotes()" title="Xóa ghi chú"><i class="fa-solid fa-trash-can"></i></button>
-                </div>
-              </div>
+            <!-- Sentence List Scroll Container -->
+            <div class="transcript-sentences-list" id="transcript-sentences-list">
+              <!-- Rendered dynamically by JS -->
             </div>
           </div>
         </div>

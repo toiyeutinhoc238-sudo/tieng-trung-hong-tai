@@ -1,6 +1,8 @@
 // HSK Vocabulary Flashcard - Main Frontend Controller
 import { HSK1_STRUCTURED_GRAMMAR } from '../grammar_hsk1.js';
 import { HSK2_STRUCTURED_GRAMMAR } from '../grammar_hsk2.js';
+import { HSK3_STRUCTURED_GRAMMAR } from '../grammar_hsk3.js';
+import { HSK1_V2_STRUCTURED_GRAMMAR } from '../grammar_hsk1_v2.js';
 import { HSK_LESSON_EXTRA_VIDEOS, getLessonExtraVideo } from './lesson_videos.js';
 import { PREMIUM_WORDS } from './premium_topics_data.js';
 import { NotebookGamesHub } from './notebook_games_hub.js';
@@ -8,6 +10,8 @@ import './screen_drawing.js';
 if (typeof window !== 'undefined') {
   window.HSK1_STRUCTURED_GRAMMAR = HSK1_STRUCTURED_GRAMMAR;
   window.HSK2_STRUCTURED_GRAMMAR = HSK2_STRUCTURED_GRAMMAR;
+  window.HSK3_STRUCTURED_GRAMMAR = HSK3_STRUCTURED_GRAMMAR;
+  window.HSK1_V2_STRUCTURED_GRAMMAR = HSK1_V2_STRUCTURED_GRAMMAR;
   window.HSK_LESSON_EXTRA_VIDEOS = HSK_LESSON_EXTRA_VIDEOS;
   window.getLessonExtraVideo = getLessonExtraVideo;
   window.PREMIUM_WORDS = PREMIUM_WORDS;
@@ -4770,7 +4774,7 @@ function renderLearningTianzige(word) {
             if (currentRenderSeq !== roadmapAnimationSequence) return;
             loadedCount++;
             if (loadedCount === cleanChars.length) {
-              startCleanSequentialAnimation();
+              startSimultaneousStrokeAnimation();
             }
           },
           onLoadCharDataError: function() {
@@ -4779,7 +4783,7 @@ function renderLearningTianzige(word) {
             if (currentRenderSeq !== roadmapAnimationSequence) return;
             loadedCount++;
             if (loadedCount === cleanChars.length) {
-              startCleanSequentialAnimation();
+              startSimultaneousStrokeAnimation();
             }
           }
         });
@@ -4790,7 +4794,7 @@ function renderLearningTianzige(word) {
         if (currentRenderSeq === roadmapAnimationSequence) {
           loadedCount++;
           if (loadedCount === cleanChars.length) {
-            startCleanSequentialAnimation();
+            startSimultaneousStrokeAnimation();
           }
         }
       }
@@ -4798,7 +4802,7 @@ function renderLearningTianzige(word) {
   }
 }
 
-function startCleanSequentialAnimation() {
+function startSimultaneousStrokeAnimation() {
   roadmapAnimationSequence++;
   const currentSeq = roadmapAnimationSequence;
 
@@ -4818,44 +4822,35 @@ function startCleanSequentialAnimation() {
 
   roadmapStrokeTimeout = setTimeout(() => {
     if (currentSeq === roadmapAnimationSequence) {
-      runSequentialStrokeChain(currentSeq);
+      runSimultaneousStrokeChain(currentSeq);
     }
-  }, 100);
+  }, 80);
 }
 
-async function runSequentialStrokeChain(seq) {
+function runSimultaneousStrokeChain(seq) {
   if (seq !== roadmapAnimationSequence) return;
 
-  for (let i = 0; i < roadmapHanziWriters.length; i++) {
-    if (seq !== roadmapAnimationSequence) return;
-
-    const writer = roadmapHanziWriters[i];
-    if (!writer) continue;
-
-    try {
-      await writer.animateCharacter();
-
-      if (seq !== roadmapAnimationSequence) return;
-
-      await new Promise(resolve => {
-        roadmapStrokeTimeout = setTimeout(resolve, 300);
-      });
-    } catch (e) {
-      // Ignore animation cancels
+  // Animate ALL characters simultaneously at the exact same time
+  roadmapHanziWriters.forEach(writer => {
+    if (writer && typeof writer.animateCharacter === 'function') {
+      try {
+        writer.animateCharacter().catch(() => {});
+      } catch (e) {}
     }
-  }
+  });
 
+  // Automatically loop animation after a delay
   if (seq === roadmapAnimationSequence) {
     roadmapStrokeTimeout = setTimeout(() => {
       if (seq === roadmapAnimationSequence) {
-        startCleanSequentialAnimation();
+        startSimultaneousStrokeAnimation();
       }
-    }, 2500);
+    }, 3500);
   }
 }
 
 window.animateRoadmapStroke = function() {
-  startCleanSequentialAnimation();
+  startSimultaneousStrokeAnimation();
 };
 
 let currentRoadmapTargetAns = '';
@@ -6790,8 +6785,15 @@ window.openLessonDetailModal = function (lessonKey) {
   // Render grammar preview in lesson detail modal
   const numKey = parseInt(String(lessonKey).replace(/\D/g, ''), 10) || 1;
   const currentLvlStr = String(currentLvl);
-  const grammarList = currentLvlStr === '2' ? (HSK2_STRUCTURED_GRAMMAR || []) : (HSK1_STRUCTURED_GRAMMAR || []);
-  const grammarLesson = ((currentLvlStr === '1' || currentLvlStr === '2') && (activeHskVersion === '3.0' || !activeHskVersion)) ? grammarList.find(l => l.lessonId === numKey) : null;
+  let grammarList = [];
+  if (currentLvlStr === '1') {
+    grammarList = (activeHskVersion === '2.0') ? (HSK1_V2_STRUCTURED_GRAMMAR || HSK1_STRUCTURED_GRAMMAR || []) : (HSK1_STRUCTURED_GRAMMAR || []);
+  } else if (currentLvlStr === '2') {
+    grammarList = HSK2_STRUCTURED_GRAMMAR || [];
+  } else if (currentLvlStr === '3') {
+    grammarList = HSK3_STRUCTURED_GRAMMAR || [];
+  }
+  const grammarLesson = grammarList.find(l => l.lessonId === numKey);
   const grammarPreviewBox = document.getElementById('modal-lesson-grammar-preview-box');
   const grammarPreviewList = document.getElementById('modal-lesson-grammar-preview-list');
   const grammarPreviewTitle = document.getElementById('modal-lesson-grammar-preview-title');
@@ -6807,12 +6809,12 @@ window.openLessonDetailModal = function (lessonKey) {
           const cleanF = p.formula.replace(/^(Công thức chung|Cấu trúc|Công thức)\s*[:\-]?\s*/i, '').trim();
           const firstLine = cleanF.split('\n').filter(l => l.trim().length > 0)[0] || '';
           if (firstLine) {
-            fText = `<span style="color: #38bdf8; font-size: 0.82rem; margin-left: 6px; font-weight: 600;">[ ${firstLine} ]</span>`;
+            fText = `<span class="grammar-formula-tag" style="color: #38bdf8; font-size: 0.82rem; margin-left: 6px; font-weight: 600;">[ ${firstLine} ]</span>`;
           }
         }
         return `
           <li style="margin-bottom: 6px; line-height: 1.4;">
-            <strong style="color: #ffffff;">${idx + 1}. ${p.title}</strong>
+            <strong>${idx + 1}. ${p.title}</strong>
             ${fText}
           </li>
         `;
@@ -8254,27 +8256,26 @@ function initLessonHanziWriter(wordStr) {
       }
     });
 
-    // Animate characters sequentially from left to right
-    animateSequentially(0);
+    // Animate all characters simultaneously at the exact same time
+    animateLessonHanziSimultaneously();
   } else {
     box.innerHTML = `<div style="font-size: 3.5rem; font-weight: 800; font-family: var(--font-display); color: var(--text-primary);">${wordStr}</div>`;
   }
 }
 
-function animateSequentially(idx) {
-  if (idx < lessonWriterArray.length && lessonWriterArray[idx]) {
-    lessonWriterArray[idx].animateCharacter({
-      onComplete: () => {
-        animateSequentially(idx + 1);
+function animateLessonHanziSimultaneously() {
+  if (!lessonWriterArray || lessonWriterArray.length === 0) return;
+  lessonWriterArray.forEach(writer => {
+    try {
+      if (writer && typeof writer.animateCharacter === 'function') {
+        writer.animateCharacter().catch(() => {});
       }
-    });
-  }
+    } catch (e) {}
+  });
 }
 
 window.replayLessonHanziStrokes = function() {
-  if (lessonWriterArray && lessonWriterArray.length > 0) {
-    animateSequentially(0);
-  }
+  animateLessonHanziSimultaneously();
 };
 
 function startLessonStudy(lesson, sliceWords) {
@@ -8452,8 +8453,8 @@ function renderBkModalContent() {
       if (diag.notes && diag.notes.length > 0) {
         diag.notes.forEach(note => {
           notesHtml += `
-            <div class="grammar-note-box" style="background:rgba(245,158,11,0.12); border-left:3px solid #f59e0b; padding:10px 14px; border-radius:0 10px 10px 0; margin-top:12px; font-size:0.92rem; color:var(--text-primary, #fef08a); line-height:1.5;">
-              <strong class="grammar-note-title" style="color:#d97706;"><i class="fa-solid fa-lightbulb" style="margin-right:6px;"></i> Chú ý:</strong> <span class="grammar-note-text">${note}</span>
+            <div class="grammar-note-box">
+              <strong class="grammar-note-title"><i class="fa-solid fa-lightbulb" style="margin-right:6px;"></i> Chú ý:</strong> <span class="grammar-note-text">${note}</span>
             </div>
           `;
         });

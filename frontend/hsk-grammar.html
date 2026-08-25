@@ -305,10 +305,43 @@
       color: #b45309 !important;
       font-weight: 800 !important;
     }
-    html.light-mode .note-card {
-      background: #fef3c7 !important;
-      border-left: 4px solid #f59e0b !important;
+    .note-card {
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      border-left: 5px solid #f59e0b;
+      border-radius: 14px;
+      padding: 14px 18px;
+      margin: 12px 0;
+    }
+    .note-card-title {
+      font-weight: 800;
+      color: #fbbf24;
+      font-size: 0.85rem;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .note-card-text {
+      font-size: 0.95rem;
+      color: #fef08a;
+      line-height: 1.65;
+    }
+    html.light-mode .note-card,
+    html:not(.dark) .note-card {
+      background: #fffbeb !important;
+      border: 1.5px solid #fde68a !important;
+      border-left: 5px solid #d97706 !important;
+    }
+    html.light-mode .note-card-title,
+    html:not(.dark) .note-card-title {
       color: #92400e !important;
+      font-weight: 800 !important;
+    }
+    html.light-mode .note-card-text,
+    html:not(.dark) .note-card-text {
+      color: #451a03 !important;
+      font-weight: 600 !important;
     }
     html.light-mode .custom-grammar-table {
       background: #ffffff !important;
@@ -490,6 +523,62 @@
       flex-wrap: wrap;
       gap: 14px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+
+    .version-filter-group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(15, 23, 42, 0.6);
+      padding: 4px 6px;
+      border-radius: 14px;
+      border: 1px solid var(--border-glass);
+    }
+
+    .ver-filter-btn {
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border: none;
+      background: transparent;
+      color: var(--text-sub);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .ver-filter-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .ver-filter-btn.active {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+    }
+
+    html.light-mode .version-filter-group {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+
+    html.light-mode .ver-filter-btn {
+      color: #475569;
+    }
+
+    html.light-mode .ver-filter-btn:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    html.light-mode .ver-filter-btn.active {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #ffffff;
     }
 
     .search-box-wrapper {
@@ -860,14 +949,14 @@
 
     <!-- Level Navigation Tabs -->
     <div class="level-tabs-container" id="level-tabs-bar">
-      <button class="level-tab-btn active" onclick="switchLevel('hsk1')">
-        <i class="fa-solid fa-seedling"></i> HSK 1 (3.0 Mới)
+      <button class="level-tab-btn active" id="tab-hsk1-label" onclick="switchLevel('hsk1')">
+        <i class="fa-solid fa-seedling"></i> HSK 1
       </button>
-      <button class="level-tab-btn" onclick="switchLevel('hsk2')">
-        <i class="fa-solid fa-graduation-cap"></i> HSK 2 (3.0 Mới)
+      <button class="level-tab-btn" id="tab-hsk2-label" onclick="switchLevel('hsk2')">
+        <i class="fa-solid fa-graduation-cap"></i> HSK 2
       </button>
-      <button class="level-tab-btn" onclick="switchLevel('hsk3')">
-        <i class="fa-solid fa-book-bookmark"></i> HSK 3 <small style="background: rgba(245,158,11,0.25); color: #fbbf24; border: 1px solid rgba(245,158,11,0.4); padding: 1px 6px; border-radius: 99px; font-size: 0.68rem; margin-left: 4px;">🔒 Sắp ra mắt</small>
+      <button class="level-tab-btn" id="tab-hsk3-label" onclick="switchLevel('hsk3')">
+        <i class="fa-solid fa-book-bookmark"></i> HSK 3 (Mới)
       </button>
       <button class="level-tab-btn" onclick="switchLevel('hsk4')">
         <i class="fa-solid fa-star"></i> HSK 4 <small style="background: rgba(245,158,11,0.25); color: #fbbf24; border: 1px solid rgba(245,158,11,0.4); padding: 1px 6px; border-radius: 99px; font-size: 0.68rem; margin-left: 4px;">🔒 Sắp ra mắt</small>
@@ -880,11 +969,25 @@
       </button>
     </div>
 
-    <!-- Toolbar: Search & Expand/Collapse Controls -->
+    <!-- Toolbar: Search & Version Filter & Quick Controls -->
     <div class="toolbar-bar">
+      <!-- Search Input -->
       <div class="search-box-wrapper">
         <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="search-input" class="search-input-field" placeholder="Tìm kiếm điểm ngữ pháp, cấu trúc, từ khóa (vd: 是, 有, 吗, 呢, 会, 吧, 比, 离, 着, 就要, 方向补语)..." oninput="handleSearch()">
+        <input type="text" id="search-input" class="search-input-field" placeholder="Tìm kiếm điểm ngữ pháp, cấu trúc, từ khóa (vd: 是, 有, 吗, 呢, 会, 吧, 比, 离, 着, 就要, 把)..." oninput="handleSearch()">
+      </div>
+
+      <!-- Version Filter Pills -->
+      <div class="version-filter-group" title="Lọc hiển thị theo phiên bản HSK">
+        <span style="font-size: 0.78rem; font-weight: 800; color: var(--text-sub); padding: 0 4px; display: flex; align-items: center; gap: 4px;">
+          <i class="fa-solid fa-filter" style="color: #38bdf8;"></i> Phiên bản:
+        </span>
+        <button id="filter-ver-30" class="ver-filter-btn active" onclick="window.switchGrammarVersion('3.0')" title="Lọc theo giáo trình HSK 3.0 Mới Nhất">
+          <i class="fa-solid fa-sparkles" style="color: #fbbf24;"></i> HSK 3.0
+        </button>
+        <button id="filter-ver-20" class="ver-filter-btn" onclick="window.switchGrammarVersion('2.0')" title="Lọc theo giáo trình HSK 2.0 Chuẩn">
+          <i class="fa-solid fa-book" style="color: #38bdf8;"></i> HSK 2.0
+        </button>
       </div>
 
       <div class="quick-tools-group">
@@ -937,14 +1040,63 @@
     import { FULL_STRUCTURED_GRAMMAR } from './grammar_structured.js';
     import { HSK1_STRUCTURED_GRAMMAR } from './grammar_hsk1.js';
     import { HSK2_STRUCTURED_GRAMMAR } from './grammar_hsk2.js';
+    import { HSK3_STRUCTURED_GRAMMAR } from './grammar_hsk3.js';
+    import { HSK1_V2_STRUCTURED_GRAMMAR } from './grammar_hsk1_v2.js';
 
     window.FULL_STRUCTURED_GRAMMAR = FULL_STRUCTURED_GRAMMAR;
     window.HSK1_STRUCTURED_GRAMMAR = HSK1_STRUCTURED_GRAMMAR;
     window.HSK2_STRUCTURED_GRAMMAR = HSK2_STRUCTURED_GRAMMAR;
+    window.HSK3_STRUCTURED_GRAMMAR = HSK3_STRUCTURED_GRAMMAR;
+    window.HSK1_V2_STRUCTURED_GRAMMAR = HSK1_V2_STRUCTURED_GRAMMAR;
 
     let currentActiveLevel = 'hsk1';
+    let currentActiveVersion = '3.0';
     let searchQuery = '';
     let audioCurrent = null;
+
+    window.activeGrammarVersion = currentActiveVersion;
+
+    window.switchGrammarVersion = function (ver) {
+      currentActiveVersion = ver;
+      window.activeGrammarVersion = ver;
+
+      const btn30 = document.getElementById('filter-ver-30');
+      const btn20 = document.getElementById('filter-ver-20');
+      if (btn30 && btn20) {
+        btn30.classList.toggle('active', ver === '3.0');
+        btn20.classList.toggle('active', ver === '2.0');
+      }
+
+      updateLevelTabsLabels();
+
+      const url = new URL(window.location);
+      url.searchParams.set('version', ver);
+      window.history.replaceState({}, '', url);
+
+      const roadmapBtn = document.getElementById('btn-back-to-roadmap');
+      if (roadmapBtn) {
+        const lvlNum = currentActiveLevel.replace(/\D/g, '') || '1';
+        roadmapBtn.href = `/index.html?tab=lessons&level=${lvlNum}&version=${ver}`;
+      }
+
+      renderGrammarView();
+    };
+
+    function updateLevelTabsLabels() {
+      const hsk1Tab = document.getElementById('tab-hsk1-label');
+      const hsk2Tab = document.getElementById('tab-hsk2-label');
+      const hsk3Tab = document.getElementById('tab-hsk3-label');
+
+      if (currentActiveVersion === '2.0') {
+        if (hsk1Tab) hsk1Tab.innerHTML = '<i class="fa-solid fa-seedling"></i> HSK 1 (14 bài)';
+        if (hsk2Tab) hsk2Tab.innerHTML = '<i class="fa-solid fa-graduation-cap"></i> HSK 2 (15 bài)';
+        if (hsk3Tab) hsk3Tab.innerHTML = '<i class="fa-solid fa-book-bookmark"></i> HSK 3 (18 bài)';
+      } else {
+        if (hsk1Tab) hsk1Tab.innerHTML = '<i class="fa-solid fa-seedling"></i> HSK 1 (15 bài)';
+        if (hsk2Tab) hsk2Tab.innerHTML = '<i class="fa-solid fa-graduation-cap"></i> HSK 2 (15 bài)';
+        if (hsk3Tab) hsk3Tab.innerHTML = '<i class="fa-solid fa-book-bookmark"></i> HSK 3 (18 bài)';
+      }
+    }
 
     function getApiBaseUrl() {
       if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '') {
@@ -997,6 +1149,12 @@
           btn.classList.remove('active');
         }
       });
+
+      const roadmapBtn = document.getElementById('btn-back-to-roadmap');
+      if (roadmapBtn) {
+        const lvlNum = currentActiveLevel.replace(/\D/g, '') || '1';
+        roadmapBtn.href = `/index.html?tab=lessons&level=${lvlNum}&version=${currentActiveVersion}`;
+      }
 
       renderGrammarView();
     };
@@ -1051,11 +1209,23 @@
       });
     };
 
+    function getLevelLessons(lvlKey, version) {
+      const ver = version || currentActiveVersion || '3.0';
+      if (lvlKey === 'hsk1') {
+        return (ver === '2.0') ? (window.HSK1_V2_STRUCTURED_GRAMMAR || window.HSK1_STRUCTURED_GRAMMAR || []) : (window.HSK1_STRUCTURED_GRAMMAR || []);
+      } else if (lvlKey === 'hsk2') {
+        return window.HSK2_STRUCTURED_GRAMMAR || [];
+      } else if (lvlKey === 'hsk3') {
+        return window.HSK3_STRUCTURED_GRAMMAR || [];
+      }
+      return [];
+    }
+
     function renderGrammarView() {
       const mainBox = document.getElementById('grammar-main-content');
       if (!mainBox) return;
 
-      if (currentActiveLevel === 'hsk1' || currentActiveLevel === 'hsk2') {
+      if (currentActiveLevel === 'hsk1' || currentActiveLevel === 'hsk2' || currentActiveLevel === 'hsk3') {
         renderStructuredLevel(mainBox, currentActiveLevel);
       } else {
         const lvlNum = currentActiveLevel.replace('hsk', '').toUpperCase();
@@ -1075,6 +1245,9 @@
               <button class="btn-action" onclick="switchLevel('hsk2')" style="background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; border: none; padding: 14px 28px; border-radius: 14px; font-weight: 800; font-size: 1rem; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(16,185,129,0.4);">
                 <i class="fa-solid fa-graduation-cap"></i> Học Ngữ Pháp HSK 2 (15 Bài)
               </button>
+              <button class="btn-action" onclick="switchLevel('hsk3')" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #ffffff; border: none; padding: 14px 28px; border-radius: 14px; font-weight: 800; font-size: 1rem; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(124,58,237,0.4);">
+                <i class="fa-solid fa-book-open"></i> Học Ngữ Pháp HSK 3 (18 Bài)
+              </button>
             </div>
           </div>
         `;
@@ -1089,9 +1262,9 @@
       const subEl = document.getElementById('toc-modal-sub');
       if (!modal || !listEl) return;
 
-      const lessons = currentActiveLevel === 'hsk2' ? (window.HSK2_STRUCTURED_GRAMMAR || []) : (window.HSK1_STRUCTURED_GRAMMAR || []);
+      const lessons = getLevelLessons(currentActiveLevel, currentActiveVersion);
       const lvlNum = currentActiveLevel.replace('hsk', '').toUpperCase();
-      if (subEl) subEl.textContent = `Danh sách 15 bài học và ${lessons.reduce((acc, l) => acc + (l.grammarPoints?.length || 0), 0)} điểm ngữ pháp HSK ${lvlNum} (3.0)`;
+      if (subEl) subEl.textContent = `Danh sách ${lessons.length} bài học và ${lessons.reduce((acc, l) => acc + (l.grammarPoints?.length || 0), 0)} điểm ngữ pháp HSK ${lvlNum} (${currentActiveVersion})`;
 
       let html = '';
       lessons.forEach(les => {
@@ -1286,11 +1459,11 @@
       let noteHtml = '';
       if (point.note) {
         noteHtml = `
-          <div class="note-card" style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-left: 5px solid #f59e0b; border-radius: 14px; padding: 12px 18px; margin: 12px 0;">
-            <div style="font-weight: 800; color: #fbbf24; font-size: 0.82rem; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+          <div class="note-card">
+            <div class="note-card-title">
               <i class="fa-solid fa-triangle-exclamation"></i> Lưu ý & Mẹo nhớ:
             </div>
-            <div style="font-size: 0.93rem; color: #fef08a; line-height: 1.6;">${escapeHtml(point.note)}</div>
+            <div class="note-card-text">${escapeHtml(point.note)}</div>
           </div>
         `;
       }
@@ -1426,7 +1599,7 @@
 
       const lvlNum = String(currentStudyLevel || '1');
       const lvlKey = `hsk${lvlNum}`;
-      const lessons = lvlKey === 'hsk2' ? (window.HSK2_STRUCTURED_GRAMMAR || []) : (window.HSK1_STRUCTURED_GRAMMAR || []);
+      const lessons = getLevelLessons(lvlKey, currentStudyVersion);
       const numId = currentStudyLessonId;
       const lessonData = lessons.find(l => l.lessonId === numId);
 
@@ -1611,7 +1784,7 @@
     };
 
     function renderStructuredLevel(container, lvlKey) {
-      const lessons = lvlKey === 'hsk2' ? (window.HSK2_STRUCTURED_GRAMMAR || []) : (window.HSK1_STRUCTURED_GRAMMAR || []);
+      const lessons = getLevelLessons(lvlKey, currentActiveVersion);
       const lvlNum = lvlKey.replace('hsk', '').toUpperCase();
       if (lessons.length === 0) {
         container.innerHTML = `<div style="text-align:center; padding:40px; color:#94a3b8;">Dữ liệu Ngữ Pháp HSK ${lvlNum} đang được cập nhật...</div>`;
@@ -1765,6 +1938,17 @@
       const reqLvl = urlParams.get('level') || '1';
       const reqLesson = urlParams.get('lesson');
       const reqVer = urlParams.get('version') || '3.0';
+
+      currentActiveVersion = reqVer;
+      window.activeGrammarVersion = reqVer;
+
+      const btn30 = document.getElementById('filter-ver-30');
+      const btn20 = document.getElementById('filter-ver-20');
+      if (btn30 && btn20) {
+        btn30.classList.toggle('active', reqVer === '3.0');
+        btn20.classList.toggle('active', reqVer === '2.0');
+      }
+      updateLevelTabsLabels();
 
       const roadmapBtn = document.getElementById('btn-back-to-roadmap');
       if (roadmapBtn && reqLvl) {

@@ -448,6 +448,29 @@
       border-bottom-right-radius: 4px;
     }
 
+    .grammar-note-box {
+      background: rgba(245, 158, 11, 0.12);
+      border-left: 4px solid #f59e0b;
+      padding: 12px 18px;
+      border-radius: 0 14px 14px 0;
+      margin-top: 18px;
+      font-size: 0.92rem;
+      color: #fef08a;
+      line-height: 1.5;
+    }
+    html.light-mode .grammar-note-box,
+    html:not(.dark) .grammar-note-box {
+      background: #fffbeb !important;
+      border-left: 4px solid #d97706 !important;
+      color: #451a03 !important;
+      font-weight: 600 !important;
+    }
+    html.light-mode .grammar-note-title,
+    html:not(.dark) .grammar-note-title {
+      color: #92400e !important;
+      font-weight: 800 !important;
+    }
+
     .chat-speaker {
       font-size: 0.78rem;
       font-weight: 800;
@@ -1329,8 +1352,8 @@
         if (diagObj.notes && diagObj.notes.length > 0) {
           diagObj.notes.forEach(note => {
             notesHtml += `
-              <div class="grammar-note-box" style="background:rgba(245,158,11,0.12); border-left:4px solid #f59e0b; padding:12px 18px; border-radius:0 14px 14px 0; margin-top:18px; font-size:0.92rem; color:var(--text-primary, #fef08a); line-height:1.5;">
-                <strong class="grammar-note-title" style="color:#d97706;"><i class="fa-solid fa-lightbulb"></i> Chú ý:</strong> <span class="grammar-note-text">${note}</span>
+              <div class="grammar-note-box">
+                <strong class="grammar-note-title"><i class="fa-solid fa-lightbulb"></i> Chú ý:</strong> <span class="grammar-note-text">${note}</span>
               </div>
             `;
           });

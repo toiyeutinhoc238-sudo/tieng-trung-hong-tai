@@ -1001,18 +1001,27 @@ function renderDictationPanel(sent) {
   const speakerWrap = document.getElementById('dictation-speaker-wrap');
   if (speakerWrap) speakerWrap.style.display = 'none';
 
+  const meaningEl = document.getElementById('dictation-target-meaning');
+  if (meaningEl) {
+    meaningEl.textContent = `"${info.cleanMeaning || 'Hãy nghe và gõ lại câu'}"`;
+  }
+
   const inputEl = document.getElementById('dictation-user-input');
   if (inputEl) {
     inputEl.value = '';
+    inputEl.classList.remove('input-error', 'input-success');
   }
 
   const feedbackBox = document.getElementById('dictation-feedback-box');
-  if (feedbackBox) feedbackBox.style.display = 'none';
+  if (feedbackBox) {
+    feedbackBox.style.display = 'none';
+    feedbackBox.innerHTML = '';
+  }
 
   const solutionBox = document.getElementById('dictation-solution-box');
   if (solutionBox) solutionBox.style.display = 'none';
 
-  // Render character slot tiles with punctuation as fixed separators
+  // Render character slot tiles with eye icon (Hình 3 chuẩn)
   const tilesContainer = document.getElementById('dictation-char-tiles');
   if (tilesContainer) {
     tilesContainer.innerHTML = '';
@@ -1033,7 +1042,7 @@ function renderDictationPanel(sent) {
         tile.textContent = c;
       } else {
         tile.className = 'dict-tile-box pending';
-        tile.textContent = '?';
+        tile.innerHTML = '<i class="fa-regular fa-eye tile-eye-icon"></i>';
         tile.dataset.hanziIdx = String(hanziIndex);
         hanziIndex++;
       }
@@ -1141,6 +1150,7 @@ function handleDictationRealtimeInput(val) {
   const tiles = Array.from(document.querySelectorAll('.dict-tile-box'));
   let correctCount = 0;
   let totalHanziCount = 0;
+  let hasWrong = false;
 
   tiles.forEach(tile => {
     const isPunct = tile.dataset.isPunct === 'true';
@@ -1159,18 +1169,51 @@ function handleDictationRealtimeInput(val) {
       const userChar = userHanziChars[hIdx];
       if (userChar === targetChar) {
         tile.className = 'dict-tile-box correct';
-        tile.textContent = targetChar;
+        tile.innerHTML = `<span>${targetChar}</span>`;
         correctCount++;
       } else {
         tile.className = 'dict-tile-box wrong';
-        tile.textContent = userChar;
+        tile.innerHTML = `<i class="fa-solid fa-eye tile-eye-icon" style="color: #ef4444;"></i>`;
+        hasWrong = true;
       }
     } else {
-      // Not typed yet
+      // Not typed yet: white tile with eye icon (Hình 3 chuẩn)
       tile.className = 'dict-tile-box pending';
-      tile.textContent = '?';
+      tile.innerHTML = '<i class="fa-regular fa-eye tile-eye-icon"></i>';
     }
   });
+
+  const inputEl = document.getElementById('dictation-user-input');
+  const feedbackEl = document.getElementById('dictation-feedback-box');
+
+  if (userHanziChars.length > 0) {
+    if (hasWrong) {
+      if (inputEl) {
+        inputEl.classList.add('input-error');
+        inputEl.classList.remove('input-success');
+      }
+      if (feedbackEl) {
+        feedbackEl.style.display = 'flex';
+        feedbackEl.className = 'dict-feedback-badge error';
+        feedbackEl.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> <span>Chưa đúng!</span>';
+      }
+    } else {
+      if (inputEl) inputEl.classList.remove('input-error');
+      if (correctCount >= totalHanziCount && totalHanziCount > 0) {
+        if (inputEl) inputEl.classList.add('input-success');
+        if (feedbackEl) {
+          feedbackEl.style.display = 'flex';
+          feedbackEl.className = 'dict-feedback-badge success';
+          feedbackEl.innerHTML = '<i class="fa-solid fa-circle-check"></i> <span>Chính xác! (+10 điểm) 🎉</span>';
+        }
+      } else {
+        if (feedbackEl) feedbackEl.style.display = 'none';
+      }
+    }
+  } else {
+    if (inputEl) inputEl.classList.remove('input-error', 'input-success');
+    if (feedbackEl) feedbackEl.style.display = 'none';
+  }
 
   // Check if fully completed correctly
   const cleanInput = cleanStr(val);
@@ -1211,7 +1254,7 @@ function checkDictationAnswer() {
     if (feedbackEl) {
       feedbackEl.style.display = 'flex';
       feedbackEl.className = 'dict-feedback-badge error';
-      feedbackEl.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> <span>Chưa chính xác (${Math.round(sim * 100)}%). Hãy xem các ô chữ màu đỏ để sửa lại nhé!</span>`;
+      feedbackEl.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> <span>Chưa đúng! Hãy kiểm tra các ô màu đỏ để sửa lại nhé!</span>`;
       currentStreak = 0;
       userAnswers[sent.id] = { isCorrect: false, score: 0 };
       showToast("Chưa chính xác! Thử nghe lại nhé ⚠️", true);
@@ -1225,12 +1268,10 @@ function showDictationHint() {
   const info = getSentenceDisplayInfo(sent);
 
   const hanziOnly = (info.cleanHanzi || '').split('').filter(c => !isPunctuationChar(c) && /[\u4e00-\u9fa5a-zA-Z0-9]/.test(c)).join('');
-  const halfLen = Math.max(1, Math.ceil(hanziOnly.length / 2));
-  const hintChars = hanziOnly.slice(0, halfLen);
 
   const inputEl = document.getElementById('dictation-user-input');
   if (inputEl) {
-    inputEl.value = hintChars;
+    inputEl.value = hanziOnly;
     handleDictationRealtimeInput(inputEl.value);
   }
 
