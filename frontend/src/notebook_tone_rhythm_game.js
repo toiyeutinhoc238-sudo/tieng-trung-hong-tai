@@ -325,13 +325,12 @@ export class ToneRhythmGameEngine {
     this.wordDeck = [];
     this.buildWordDeck();
 
-    // Speed setting: 'easy' (50 px/s, 2400ms), 'normal' (80 px/s, 1600ms), 'hard' (125 px/s, 1100ms)
+    // Speed setting: 'easy' (28 px/s), 'normal' (45 px/s), 'hard' (70 px/s)
+    // All modes keep 5 hearts (lives) constant as requested!
     this.speedMode = 'easy';
-    this.baseSpeed = 50;
-    this.spawnIntervalMs = 2400;
-    this.syllableGapY = 80;
+    this.baseSpeed = 28;
     this.maxLives = 5;
-    this.speedGrowth = 0.08;
+    this.speedGrowth = 0.02;
 
     // Game display modes: 'normal' | 'hide-pinyin' | 'hide-hanzi' | 'listen-only'
     this.gameMode = 'normal';
@@ -347,13 +346,12 @@ export class ToneRhythmGameEngine {
     this.isStopping = false;
     this.isFeverMode = false;
     this.correctWordsSet = new Set();
-    this.wordProgressMap = new Map(); // wordId -> { total, hits }
 
     this.notesHitCount = 0;
-    this.activeNotes = [];
-    this.spawnTimer = 0;
+    this.currentWord = null; // Single unified active falling word block
     this.wordIndex = 0;
     this.lastFrameTime = 0;
+    this.spawnCooldownTimer = 0;
 
     this.timerInterval = null;
     this.animFrameId = null;
@@ -393,24 +391,18 @@ export class ToneRhythmGameEngine {
 
   setSpeed(mode) {
     this.speedMode = mode;
+    // Keep 5 hearts (lives) constant in all modes!
+    this.maxLives = 5;
+
     if (mode === 'easy') {
-      this.baseSpeed = 50;
-      this.spawnIntervalMs = 2600;
-      this.syllableGapY = 75;
-      this.maxLives = 5;
-      this.speedGrowth = 0.08;
+      this.baseSpeed = 28; // ~17 seconds to fall, calm & relaxed review!
+      this.speedGrowth = 0.02;
     } else if (mode === 'normal') {
-      this.baseSpeed = 80;
-      this.spawnIntervalMs = 1800;
-      this.syllableGapY = 85;
-      this.maxLives = 4;
-      this.speedGrowth = 0.16;
+      this.baseSpeed = 45; // ~10.5 seconds to fall, standard pace!
+      this.speedGrowth = 0.05;
     } else if (mode === 'hard') {
-      this.baseSpeed = 120;
-      this.spawnIntervalMs = 1300;
-      this.syllableGapY = 95;
-      this.maxLives = 3;
-      this.speedGrowth = 0.28;
+      this.baseSpeed = 70; // ~6.8 seconds to fall, reflex challenge!
+      this.speedGrowth = 0.08;
     }
 
     if (!this.isRunning) {
@@ -418,10 +410,9 @@ export class ToneRhythmGameEngine {
       this.updateHUD();
     }
 
-    // Update active speeds of any existing notes
-    this.activeNotes.forEach(note => {
-      note.speed = this.calculateCurrentSpeed();
-    });
+    if (this.currentWord) {
+      this.currentWord.speed = this.calculateCurrentSpeed();
+    }
 
     // Sync in-game speed buttons
     this.container.querySelectorAll('.speed-opt-btn').forEach(btn => {
@@ -447,13 +438,9 @@ export class ToneRhythmGameEngine {
       btn.classList.toggle('active', btn.dataset.mode === mode);
     });
 
-    // Re-render active notes with new display mode
-    this.activeNotes.forEach(note => {
-      if (note.el) {
-        note.el.className = `rhythm-falling-note mode-${this.gameMode}`;
-        note.el.innerHTML = this.renderNoteHtml(note.syllable);
-      }
-    });
+    if (this.currentWord && this.currentWord.el) {
+      this.updateWordBlockElement(this.currentWord);
+    }
 
     const modeLabels = {
       'normal': 'Bình thường (Hiện đủ Hán + Pinyin)',
@@ -463,53 +450,83 @@ export class ToneRhythmGameEngine {
     };
     this.showToast(`🎯 Chế độ: ${modeLabels[mode] || mode}`);
 
-    if (mode === 'listen-only' && this.activeNotes.length > 0 && typeof window.speakText === 'function') {
-      const topNote = this.activeNotes.filter(n => !n.hit).sort((a, b) => b.y - a.y)[0];
-      if (topNote) {
-        try { window.speakText(topNote.syllable.char); } catch(e) {}
-      }
+    if (mode === 'listen-only' && this.currentWord && typeof window.speakText === 'function') {
+      try { window.speakText(this.currentWord.wordItem.word); } catch(e) {}
     }
   }
 
-  renderNoteHtml(syllable) {
-    const isMulti = syllable.totalSyllables > 1;
-    const wordProgressBadge = isMulti
-      ? `<div class="note-syllable-badge"><span class="badge-idx">${syllable.syllableIndex + 1}/${syllable.totalSyllables}</span> <span class="badge-fullword">${syllable.fullWord}</span></div>`
-      : '';
-    const wordCtx = syllable.fullWord
-      ? `<div class="note-word-ctx" title="${syllable.fullWord}: ${syllable.meaning}">[${syllable.fullWord}: ${syllable.meaning}]</div>`
-      : '';
+  renderWordCardHtml(wordItem, currentSyllableIndex = 0) {
+    let hanziDisplay = wordItem.word;
+    let pinyinDisplay = `[ ${wordItem.pinyin} ]`;
+    let meaningDisplay = wordItem.meaning ? `: ${wordItem.meaning}` : '';
 
     if (this.gameMode === 'hide-pinyin') {
-      return `
-        ${wordProgressBadge}
-        <div class="note-char">${syllable.char}</div>
-        <div class="note-pinyin note-hidden-pinyin"><i class="fa-solid fa-eye-slash"></i> Ẩn Pinyin</div>
-        ${wordCtx}
-      `;
+      pinyinDisplay = `<span class="hidden-label"><i class="fa-solid fa-eye-slash"></i> Ẩn Pinyin</span>`;
     } else if (this.gameMode === 'hide-hanzi') {
-      return `
-        ${wordProgressBadge}
-        <div class="note-char note-hidden-hanzi">❓</div>
-        <div class="note-pinyin">[ ${syllable.pinyin} ]</div>
-        <div class="note-word-ctx" title="${syllable.meaning}">[${syllable.meaning}]</div>
-      `;
+      hanziDisplay = '❓'.repeat(Math.max(1, wordItem.syllables.length));
     } else if (this.gameMode === 'listen-only') {
-      return `
-        ${wordProgressBadge}
-        <div class="note-char note-listen-icon"><i class="fa-solid fa-headphones"></i></div>
-        <div class="note-pinyin note-listen-txt">🎧 Nghe chọn thanh</div>
-        <div class="note-word-ctx" title="Đang phát âm...">🔊 [Đang đọc]</div>
-      `;
-    } else {
-      // Normal mode: Both Hanzi & Pinyin
-      return `
-        ${wordProgressBadge}
-        <div class="note-char">${syllable.char}</div>
-        <div class="note-pinyin">[ ${syllable.pinyin} ]</div>
-        ${wordCtx}
-      `;
+      hanziDisplay = `<i class="fa-solid fa-headphones"></i>`;
+      pinyinDisplay = `<span class="listen-label">🎧 Nghe & bấm chuỗi thanh</span>`;
+      meaningDisplay = ` [ Đang đọc... ]`;
     }
+
+    const stepsHtml = wordItem.syllables.map((s, idx) => {
+      const isDone = idx < currentSyllableIndex;
+      const isCurrent = idx === currentSyllableIndex;
+      const toneNum = s.tone === 0 ? 5 : s.tone;
+      const toneSymbol = s.tone === 1 ? '—' : (s.tone === 2 ? 'ˊ' : (s.tone === 3 ? 'ˇ' : (s.tone === 4 ? 'ˋ' : '•')));
+      const toneName = s.tone === 0 ? 'Thanh Nhẹ' : `Thanh ${s.tone}`;
+
+      let stateClass = 'step-upcoming';
+      if (isDone) stateClass = 'step-done';
+      else if (isCurrent) stateClass = 'step-current';
+
+      return `
+        <div class="rhythm-tone-step-badge ${stateClass} tone-${s.tone}" data-step="${idx}" id="rstep_${idx}">
+          <div class="step-header">
+            <span class="step-idx">${idx + 1}</span>
+            <span class="step-char">${s.char}</span>
+            ${isDone ? '<span class="step-check-icon"><i class="fa-solid fa-check"></i></span>' : ''}
+          </div>
+          <div class="step-pinyin">${this.gameMode === 'hide-pinyin' && !isDone ? '???' : s.pinyin}</div>
+          <div class="step-tone-target">
+            <span class="step-tone-pill">${toneName} ${toneSymbol}</span>
+            <span class="step-key-hint">Phím ${toneNum}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    const targetSyllable = wordItem.syllables[currentSyllableIndex];
+    const promptText = targetSyllable
+      ? `Âm ${currentSyllableIndex + 1}/${wordItem.syllables.length}: Bấm <strong class="prompt-target-char">${targetSyllable.char}</strong> (${targetSyllable.pinyin}) ➡️ <strong>${targetSyllable.tone === 0 ? 'Thanh Nhẹ (Phím 5)' : 'Thanh ' + targetSyllable.tone + ' (Phím ' + targetSyllable.tone + ')'}</strong>`
+      : '🎉 Hoàn thành từ!';
+
+    return `
+      <div class="rhythm-word-card-inner">
+        <div class="word-card-top-header">
+          <div class="word-card-hanzi">${hanziDisplay}</div>
+          <div class="word-card-pinyin-row">
+            <span class="word-card-pinyin">${pinyinDisplay}</span>
+            <span class="word-card-meaning">${meaningDisplay}</span>
+          </div>
+        </div>
+
+        <div class="word-card-prompt-bar">
+          <span class="prompt-icon"><i class="fa-solid fa-keyboard"></i></span>
+          <span class="prompt-text">${promptText}</span>
+        </div>
+
+        <div class="word-card-steps-flow">
+          ${stepsHtml}
+        </div>
+      </div>
+    `;
+  }
+
+  updateWordBlockElement(fallingWord) {
+    if (!fallingWord || !fallingWord.el) return;
+    fallingWord.el.innerHTML = this.renderWordCardHtml(fallingWord.wordItem, fallingWord.currentSyllableIndex);
   }
 
   getLaneIndexForTone(tone) {
@@ -700,23 +717,23 @@ export class ToneRhythmGameEngine {
             <div class="start-section-box">
               <div class="section-title">
                 <i class="fa-solid fa-gauge-high" style="color: #059669;"></i>
-                <span>1. CHỌN ĐỘ KHÓ (TỐC ĐỘ RƠI NỐT):</span>
+                <span>1. CHỌN ĐỘ KHÓ (TỐC ĐỘ RƠI TỪ VỰNG):</span>
               </div>
               <div class="start-difficulty-grid">
                 <button type="button" class="start-diff-card active" data-speed="easy">
-                  <div class="diff-badge badge-easy">🐢 DỄ (Khuyên dùng)</div>
+                  <div class="diff-badge badge-easy">🐢 DỄ (Ôn tập thư giãn)</div>
                   <div class="diff-speed-desc">Tốc độ chậm rãi, 5 Tim ❤️</div>
-                  <div class="diff-detail">Nốt rơi thong thả (~8.5s), tha hồ nhìn chữ Hán & nhận diện thanh điệu!</div>
+                  <div class="diff-detail">Từ trôi rất chậm (~17s), thong thả quan sát chữ Hán, Pinyin & gõ từng thanh điệu!</div>
                 </button>
                 <button type="button" class="start-diff-card" data-speed="normal">
                   <div class="diff-badge badge-normal">🚶 VỪA (Tiêu chuẩn)</div>
-                  <div class="diff-speed-desc">Nhịp điệu vừa phải, 4 Tim ❤️</div>
-                  <div class="diff-detail">Cân bằng giữa quan sát chữ và phản xạ ngón tay (~5.5s)!</div>
+                  <div class="diff-speed-desc">Nhịp điệu vừa phải, 5 Tim ❤️</div>
+                  <div class="diff-detail">Cân bằng giữa ghi nhớ từ vựng và phản xạ ngón tay (~10.5s)!</div>
                 </button>
                 <button type="button" class="start-diff-card" data-speed="hard">
-                  <div class="diff-badge badge-hard">⚡ KHÓ (Siêu tốc)</div>
-                  <div class="diff-speed-desc">Tốc độ nhanh, 3 Tim ❤️</div>
-                  <div class="diff-detail">Dành cho cao thủ luyện phản xạ và nhận diện thần tốc (~3.5s)!</div>
+                  <div class="diff-badge badge-hard">⚡ NHANH (Thử thách)</div>
+                  <div class="diff-speed-desc">Tốc độ tăng tốc, 5 Tim ❤️</div>
+                  <div class="diff-detail">Dành cho bạn muốn thử thách gõ chuỗi thanh điệu thần tốc (~6.8s)!</div>
                 </button>
               </div>
             </div>
@@ -779,7 +796,7 @@ export class ToneRhythmGameEngine {
             </div>
 
             <div class="rhythm-guide-body">
-              <p>🎯 <strong>Mục tiêu:</strong> Nhìn nốt chữ Hán & Pinyin đang trôi xuống theo từng cột thanh điệu. Khi nốt chạm vào <strong>Vạch Bắt Nhịp</strong> ở đáy, hãy bấm phím hoặc nút tương ứng.</p>
+              <p>🎯 <strong>Cách chơi:</strong> Một cụm từ vựng hoàn chỉnh (ví dụ <code>没关系 [méi guān xi]</code>) sẽ rơi từ từ xuống. Bạn hãy <strong>bấm lần lượt chuỗi thanh điệu</strong> của các âm tiết cấu thành từ (ví dụ bấm <strong>2 ➡️ 1 ➡️ 5</strong>) trước khi từ chạm đáy để hoàn thành từ vựng!</p>
 
               <table class="guide-tone-table">
                 <thead>
@@ -1064,13 +1081,12 @@ export class ToneRhythmGameEngine {
     this.score = 0;
     this.combo = 0;
     this.maxCombo = 0;
-    this.lives = this.maxLives;
+    this.lives = 5; // Always 5 hearts in all levels!
     this.timeLeft = 60;
     this.notesHitCount = 0;
-    this.activeNotes = [];
-    this.spawnTimer = this.spawnIntervalMs; // trigger first word immediately after countdown!
+    this.currentWord = null;
+    this.isSpawningNext = false;
     this.correctWordsSet = new Set();
-    this.wordProgressMap = new Map();
     this.buildWordDeck();
 
     const startOverlay = this.container.querySelector('#rhythm-start-overlay');
@@ -1089,6 +1105,7 @@ export class ToneRhythmGameEngine {
       if (!this.isRunning || this.isStopping) return;
       this.lastFrameTime = performance.now();
       this.startTimers();
+      this.spawnNextWord();
       this.loop(performance.now());
     });
   }
@@ -1175,67 +1192,52 @@ export class ToneRhythmGameEngine {
     tickEl.classList.add('tick-anim');
   }
 
-  // Spawns all syllables of a Chinese vocabulary word in rapid rhythmic succession
-  spawnWord() {
+  // Spawns the entire unified vocabulary word card at the top of the highway
+  spawnNextWord() {
     if (this.wordIndex >= this.wordDeck.length) {
-      if (this.activeNotes.length === 0) {
-        this.gameOver(true);
-      }
+      this.gameOver(true);
       return;
     }
 
-    const wordItem = this.wordDeck[this.wordIndex];
-    this.wordIndex++;
-
+    const wordItem = this.wordDeck[this.wordIndex++];
     const speed = this.calculateCurrentSpeed();
     const layer = this.container.querySelector('#rhythm-notes-layer');
     if (!layer) return;
 
-    // Track word hits progress for completion bonus
-    this.wordProgressMap.set(wordItem.id, {
-      total: wordItem.syllables.length,
-      hits: 0,
-      wordItem: wordItem
+    // Clear any leftover element in notes layer
+    layer.innerHTML = '';
+
+    const wordBlockId = 'rword_' + Date.now() + '_' + this.wordIndex;
+    const startY = -120;
+
+    const el = document.createElement('div');
+    el.className = `rhythm-falling-word-block mode-${this.gameMode}`;
+    el.id = wordBlockId;
+    el.style.transform = `translate3d(0, ${startY}px, 0)`;
+
+    const fallingWord = {
+      id: wordBlockId,
+      wordItem: wordItem,
+      y: startY,
+      speed: speed,
+      currentSyllableIndex: 0,
+      totalSyllables: wordItem.syllables.length,
+      isDone: false,
+      el: el
+    };
+
+    el.innerHTML = this.renderWordCardHtml(wordItem, 0);
+
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (typeof window.speakText === 'function') {
+        window.speakText(wordItem.word);
+      }
     });
 
-    // Syllables spacing gap: spaced closely so player types them consecutively in rhythm
-    const gap = this.syllableGapY || 80;
-
-    wordItem.syllables.forEach((syllable, sIdx) => {
-      const noteId = 'rnote_' + Date.now() + '_' + this.wordIndex + '_' + sIdx;
-      const laneIndex = this.getLaneIndexForTone(syllable.tone);
-      const startY = -75 - (sIdx * gap);
-
-      const note = {
-        id: noteId,
-        syllable: syllable,
-        wordItem: wordItem,
-        laneIndex: laneIndex,
-        y: startY,
-        speed: speed,
-        hit: false,
-        hasSpoken: false,
-        el: null
-      };
-
-      const el = document.createElement('div');
-      el.className = `rhythm-falling-note mode-${this.gameMode} lane-${laneIndex}`;
-      el.id = noteId;
-      el.style.left = `${laneIndex * 20 + 0.75}%`;
-      el.style.transform = `translate3d(0, ${startY}px, 0)`;
-      el.innerHTML = this.renderNoteHtml(syllable);
-
-      el.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (typeof window.speakText === 'function') {
-          window.speakText(syllable.char);
-        }
-      });
-
-      layer.appendChild(el);
-      note.el = el;
-      this.activeNotes.push(note);
-    });
+    layer.appendChild(el);
+    this.currentWord = fallingWord;
+    this.isSpawningNext = false;
 
     // VIP Listen-Only Mode: Auto-pronounce the word
     if (this.gameMode === 'listen-only' && typeof window.speakText === 'function') {
@@ -1252,42 +1254,58 @@ export class ToneRhythmGameEngine {
       const dt = Math.min((currentTime - this.lastFrameTime) / 1000, 0.1);
       this.lastFrameTime = currentTime;
 
-      // Spawn timer for next word
-      this.spawnTimer += dt * 1000;
-      if (this.spawnTimer >= this.spawnIntervalMs) {
-        // Only spawn next word if current notes have traveled down enough or are cleared
-        const isReadyForNextWord = this.activeNotes.length === 0 || this.activeNotes.every(n => n.y > 40);
-        if (isReadyForNextWord) {
-          this.spawnTimer = 0;
-          this.spawnWord();
-        }
-      }
-
-      // Update falling notes
       const highway = this.container.querySelector('#rhythm-highway');
       const trackHeight = highway ? highway.clientHeight : 500;
 
-      for (let i = this.activeNotes.length - 1; i >= 0; i--) {
-        const note = this.activeNotes[i];
-        note.y += note.speed * dt;
+      if (this.currentWord && !this.currentWord.isDone) {
+        this.currentWord.y += this.currentWord.speed * dt;
 
-        if (note.el) {
-          note.el.style.transform = `translate3d(0, ${note.y}px, 0)`;
+        if (this.currentWord.el) {
+          this.currentWord.el.style.transform = `translate3d(0, ${this.currentWord.y}px, 0)`;
         }
 
         // Passed hit zone completely -> MISS
-        if (note.y > trackHeight - 15 && !note.hit) {
-          if (note.el && note.el.parentNode) {
-            note.el.parentNode.removeChild(note.el);
-          }
-          this.activeNotes.splice(i, 1);
-          this.triggerMiss(note.laneIndex, `BỎ LỠ: ${note.syllable.char} ❌`);
-        }
-      }
+        if (this.currentWord.y > trackHeight - 75) {
+          this.currentWord.isDone = true;
+          this.lives--;
+          this.combo = 0;
+          this.isFeverMode = false;
+          const feverBanner = this.container.querySelector('#rhythm-fever-banner');
+          if (feverBanner) feverBanner.style.display = 'none';
 
-      if (this.wordIndex >= this.wordDeck.length && this.activeNotes.length === 0) {
-        this.gameOver(true);
-        return;
+          this.sfx.playMiss();
+          this.triggerMiss(2, `BỎ LỠ: ${this.currentWord.wordItem.word} ❌ (-1 Tim 💔)`);
+
+          if (this.currentWord.el && this.currentWord.el.parentNode) {
+            this.currentWord.el.parentNode.removeChild(this.currentWord.el);
+          }
+          this.currentWord = null;
+          this.updateHUD();
+
+          if (this.lives <= 0) {
+            this.gameOver(false);
+            return;
+          }
+
+          // Spawn next word after brief 400ms delay
+          this.isSpawningNext = true;
+          setTimeout(() => {
+            if (this.isRunning && !this.isPaused) {
+              this.spawnNextWord();
+            }
+          }, 400);
+        }
+      } else if (!this.currentWord && !this.isSpawningNext) {
+        if (this.wordIndex >= this.wordDeck.length) {
+          this.gameOver(true);
+          return;
+        }
+        this.isSpawningNext = true;
+        setTimeout(() => {
+          if (this.isRunning && !this.isPaused) {
+            this.spawnNextWord();
+          }
+        }, 350);
       }
     } else {
       this.lastFrameTime = currentTime;
@@ -1312,137 +1330,102 @@ export class ToneRhythmGameEngine {
       setTimeout(() => beam.classList.remove('active-beam'), 150);
     }
 
-    const highway = this.container.querySelector('#rhythm-highway');
-    const trackHeight = highway ? highway.clientHeight : 500;
-    const targetHitY = trackHeight - 94;
+    if (!this.currentWord || this.currentWord.isDone) return;
 
-    // 1. Find all active notes matching pressedTone that are on screen
-    const matchingNotes = this.activeNotes
-      .filter(n => !n.hit && n.syllable.tone === pressedTone && n.y > -40)
-      .sort((a, b) => b.y - a.y);
+    const wordItem = this.currentWord.wordItem;
+    const currentIdx = this.currentWord.currentSyllableIndex;
+    const targetSyllable = wordItem.syllables[currentIdx];
 
-    // 2. Find the lowest active note on screen
-    const lowestNote = this.activeNotes
-      .filter(n => !n.hit && n.y > -40)
-      .sort((a, b) => b.y - a.y)[0];
+    if (!targetSyllable) return;
 
-    if (matchingNotes.length > 0) {
-      const targetNote = matchingNotes[0];
-      const diff = Math.abs(targetNote.y - targetHitY);
-
-      // Generous hit tolerance window (allows fast consecutive typing!)
-      if (diff <= 190 || (lowestNote && lowestNote.id === targetNote.id)) {
-        this.handleCorrectHit(targetNote, diff);
-        return;
+    if (pressedTone === targetSyllable.tone) {
+      // 1. CORRECT TONE FOR CURRENT SYLLABLE!
+      this.sfx.playToneTrack(pressedTone);
+      if (typeof window.speakText === 'function') {
+        try { window.speakText(targetSyllable.char); } catch(e) {}
       }
-    }
 
-    // If no matching note, but player pressed wrong tone when a note is near the target line
-    if (lowestNote) {
-      const lowestDiff = Math.abs(lowestNote.y - targetHitY);
-      if (lowestDiff <= 180) {
-        this.handleWrongHit(lowestNote, pressedTone);
-        return;
-      }
-    }
-  }
+      this.currentWord.currentSyllableIndex++;
+      const nextIdx = this.currentWord.currentSyllableIndex;
+      this.updateWordBlockElement(this.currentWord);
 
-  handleCorrectHit(targetNote, diff) {
-    targetNote.hit = true;
-    if (targetNote.el) {
-      targetNote.el.classList.add('correct-hit');
-    }
+      if (nextIdx >= this.currentWord.totalSyllables) {
+        // ALL SYLLABLES OF WORD COMPLETED!
+        this.currentWord.isDone = true;
+        if (this.currentWord.el) {
+          this.currentWord.el.classList.add('word-card-completed');
+        }
 
-    // Tone synthesizer sound & TTS Chinese character
-    this.sfx.playToneTrack(targetNote.syllable.tone);
-    if (typeof window.speakText === 'function') {
-      try { window.speakText(targetNote.syllable.char); } catch(e) {}
-    }
+        const bonusPts = 60 * (this.isFeverMode ? 4 : 1);
+        this.score += bonusPts;
+        this.combo++;
+        if (this.combo > this.maxCombo) this.maxCombo = this.combo;
+        this.notesHitCount += this.currentWord.totalSyllables;
+        this.correctWordsSet.add(wordItem.word);
 
-    const isPerfect = diff < 70;
-    const pts = (isPerfect ? 30 : 20) * (this.isFeverMode ? 4 : 1);
-    this.score += pts;
-    this.combo++;
-    if (this.combo > this.maxCombo) this.maxCombo = this.combo;
-    this.notesHitCount++;
+        this.sfx.playPerfectChord();
+        if (typeof window.speakText === 'function') {
+          try { window.speakText(wordItem.word); } catch(e) {}
+        }
 
-    // Track word completion
-    let wordDone = false;
-    if (targetNote.wordItem) {
-      const prog = this.wordProgressMap.get(targetNote.wordItem.id);
-      if (prog) {
-        prog.hits++;
-        if (prog.hits >= prog.total) {
-          wordDone = true;
-          this.correctWordsSet.add(targetNote.wordItem.word);
-          const bonusPts = 50 * (this.isFeverMode ? 4 : 1);
-          this.score += bonusPts;
-          this.sfx.playPerfectChord();
-          if (typeof window.speakText === 'function') {
-            try { window.speakText(targetNote.wordItem.word); } catch(e) {}
+        this.showHitFeedback(pressedTone === 0 ? 4 : pressedTone - 1, `🎉 HOÀN THÀNH: ${wordItem.word} +${bonusPts}đ!`, '#38bdf8');
+
+        if (this.combo >= 5 && !this.isFeverMode) {
+          this.triggerFever();
+        }
+
+        this.updateHUD();
+
+        // Dissolve card and spawn next word
+        const finishedEl = this.currentWord.el;
+        this.isSpawningNext = true;
+        setTimeout(() => {
+          if (finishedEl && finishedEl.parentNode) {
+            finishedEl.parentNode.removeChild(finishedEl);
           }
-          this.showHitFeedback(targetNote.laneIndex, `🎉 TỪ HOÀN HẢO: ${targetNote.wordItem.word} +${bonusPts}đ!`, '#38bdf8');
+          this.currentWord = null;
+          if (this.isRunning && !this.isPaused) {
+            this.spawnNextWord();
+          }
+        }, 380);
+      } else {
+        // Correct syllable, continue to next syllable
+        const pts = 15 * (this.isFeverMode ? 4 : 1);
+        this.score += pts;
+        this.notesHitCount++;
+        this.showHitFeedback(pressedTone === 0 ? 4 : pressedTone - 1, `✨ Đúng âm ${nextIdx}/${this.currentWord.totalSyllables}! Bấm tiếp!`, '#34d399');
+        this.updateHUD();
+      }
+    } else {
+      // 2. WRONG TONE!
+      this.sfx.playMiss();
+      if (this.currentWord.el) {
+        const activeStep = this.currentWord.el.querySelector(`.step-current`);
+        if (activeStep) {
+          activeStep.classList.add('step-wrong-shake');
+          setTimeout(() => activeStep && activeStep.classList.remove('step-wrong-shake'), 380);
         }
       }
-    }
 
-    if (!wordDone) {
-      this.showHitFeedback(targetNote.laneIndex, isPerfect ? `PERFECT! 🌟 +${pts}` : `ĐÚNG! ✨ +${pts}`, isPerfect ? '#fbbf24' : '#34d399');
-    }
-
-    if (this.combo >= 8 && !this.isFeverMode) {
-      this.triggerFever();
-    }
-
-    setTimeout(() => {
-      if (targetNote.el && targetNote.el.parentNode) {
-        targetNote.el.parentNode.removeChild(targetNote.el);
+      const arena = this.container.querySelector('#rhythm-highway');
+      if (arena) {
+        arena.classList.add('rhythm-screen-shake');
+        setTimeout(() => arena.classList.remove('rhythm-screen-shake'), 380);
       }
-      const idx = this.activeNotes.indexOf(targetNote);
-      if (idx !== -1) this.activeNotes.splice(idx, 1);
 
-      if (this.wordIndex >= this.wordDeck.length && this.activeNotes.length === 0) {
-        this.gameOver(true);
-      }
-    }, 160);
+      this.combo = 0;
+      this.isFeverMode = false;
+      const feverBanner = this.container.querySelector('#rhythm-fever-banner');
+      if (feverBanner) feverBanner.style.display = 'none';
 
-    this.updateHUD();
-  }
-
-  handleWrongHit(targetNote, pressedTone) {
-    if (targetNote.el) {
-      targetNote.el.classList.add('wrong-hit');
-      setTimeout(() => {
-        if (targetNote.el) targetNote.el.classList.remove('wrong-hit');
-      }, 380);
+      const correctName = targetSyllable.tone === 0 ? 'Thanh Nhẹ (Phím 5)' : `Thanh ${targetSyllable.tone} (Phím ${targetSyllable.tone})`;
+      this.showHitFeedback(pressedTone === 0 ? 4 : pressedTone - 1, `Sai thanh: ${targetSyllable.char} là ${correctName} ❌`, '#ef4444');
+      this.updateHUD();
     }
-
-    const arena = this.container.querySelector('#rhythm-highway');
-    if (arena) {
-      arena.classList.add('rhythm-screen-shake');
-      setTimeout(() => arena.classList.remove('rhythm-screen-shake'), 380);
-    }
-
-    this.sfx.playMiss();
-    this.lives--;
-    this.combo = 0;
-    this.isFeverMode = false;
-    const feverBanner = this.container.querySelector('#rhythm-fever-banner');
-    if (feverBanner) feverBanner.style.display = 'none';
-
-    const correctName = targetNote.syllable.tone === 0 ? 'Thanh Nhẹ' : `Thanh ${targetNote.syllable.tone}`;
-    this.showHitFeedback(targetNote.laneIndex, `SAI! ❌ (Là ${correctName}) -1 Tim 💔`, '#ef4444');
-
-    if (this.lives <= 0) {
-      this.gameOver(false);
-      return;
-    }
-    this.updateHUD();
   }
 
   triggerMiss(laneIndex = 2, label = 'MISS ❌') {
     this.combo = 0;
-    this.lives--;
     this.isFeverMode = false;
     const feverBanner = this.container.querySelector('#rhythm-fever-banner');
     if (feverBanner) feverBanner.style.display = 'none';
