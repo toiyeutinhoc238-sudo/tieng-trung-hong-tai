@@ -11411,6 +11411,10 @@ html.dark .cannon-input-hint {
   color: #fbbf24 !important;
 }
 
+.hud-progress .hud-value {
+  color: #c084fc !important;
+}
+
 .hud-timer .hud-value {
   color: #38bdf8 !important;
   font-family: monospace !important;

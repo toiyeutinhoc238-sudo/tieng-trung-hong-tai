@@ -1086,7 +1086,7 @@ export class MahjongGameEngine {
       }
 
       if (icon) icon.textContent = isVictory ? '👑' : '⏰';
-      if (title) title.textContent = isVictory ? 'Đại Sư Mạt Chược - Hoàn Thành Xuất Sắc!' : 'Hết Giờ - Game Over!';
+      if (title) title.textContent = isVictory ? 'Đại Sư Mạt Chược - Hoàn Thành Xuất Sắc!' : 'Hết Giờ - Kết Thúc Lượt Chơi!';
       if (desc) desc.textContent = isVictory ? `Bạn đã xuất sắc vượt qua toàn bộ ${this.totalLevels} Màn chơi và hoàn thành ${this.totalWordsCount}/${this.totalWordsCount} từ vựng!` : 'Hãy tận dụng Kính Lúp và Gió Lốc để nối nhanh hơn nhé!';
       if (resScore) resScore.textContent = this.score;
       if (resCombo) resCombo.textContent = this.maxCombo;

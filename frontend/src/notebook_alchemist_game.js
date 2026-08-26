@@ -297,6 +297,12 @@ class AlchemistSoundFX {
   playChime() {
     this.playTone(880, 'sine', 0.35, 1320);
   }
+  playWarning() {
+    this.playTone(587, 'sine', 0.18, 880);
+  }
+  playUrgentTick() {
+    this.playTone(950, 'triangle', 0.06, 1200);
+  }
 }
 
 export class AlchemistGameEngine {
@@ -315,16 +321,19 @@ export class AlchemistGameEngine {
     this.onExit = onExitCallback;
     this.sfx = new AlchemistSoundFX();
 
-    // Game Core State
+    // Game Core State - Per-round 25s countdown timer!
+    this.roundTime = 25; // 25s per question / round / màn
     this.score = 0;
     this.streak = 0;
     this.maxStreak = 0;
     this.lives = 3;
     this.maxLives = 3;
-    this.timeLeft = 80;
+    this.timeLeft = this.roundTime;
     this.isPaused = false;
     this.isRunning = false;
     this.craftedCount = 0;
+    this.currentQuestionIndex = 0;
+    this.totalWordsCount = (this.rawWords || []).length;
     this.correctWordsSet = new Set();
 
     // Current Target & Cauldron State
@@ -354,6 +363,12 @@ export class AlchemistGameEngine {
             <strong style="color: #c084fc;">LÒ LUYỆN CHIẾT TỰ</strong>
           </div>
 
+          <div class="hud-item hud-progress" title="Tiến độ màn / câu hiện tại">
+            <i class="fa-solid fa-layer-group" style="color: #c084fc;"></i>
+            <span class="hud-label">MÀN:</span>
+            <span class="hud-value" id="alchemist-progress-val">1/${this.totalWordsCount || 1}</span>
+          </div>
+
           <div class="hud-item hud-score">
             <i class="fa-solid fa-star" style="color: #fbbf24;"></i>
             <span class="hud-label">ĐIỂM:</span>
@@ -375,10 +390,10 @@ export class AlchemistGameEngine {
             </div>
           </div>
 
-          <div class="hud-item hud-timer" title="Thời gian đếm ngược của màn chơi này">
+          <div class="hud-item hud-timer" title="Thời gian đếm ngược cho mỗi màn (25s/màn)">
             <i class="fa-solid fa-clock" style="color: #38bdf8;"></i>
             <span class="hud-label">THỜI GIAN:</span>
-            <span class="hud-value" id="alchemist-timer-val">01:20</span>
+            <span class="hud-value" id="alchemist-timer-val">00:25</span>
           </div>
 
           <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
@@ -606,13 +621,14 @@ export class AlchemistGameEngine {
     this.streak = 0;
     this.maxStreak = 0;
     this.lives = 3;
+    this.craftedCount = 0;
+    this.currentQuestionIndex = 0;
 
     const overlay = this.container.querySelector('#alchemist-modal-overlay');
     if (overlay) {
       overlay.style.setProperty('display', 'none', 'important');
     }
-    this.timeLeft = 80;
-    this.craftedCount = 0;
+    
     this.cauldronSlots = [];
     this.totalWordsCount = (this.rawWords || []).length;
     this.wordQueue = [...(this.rawWords || [])].sort(() => Math.random() - 0.5);
@@ -625,14 +641,73 @@ export class AlchemistGameEngine {
   startTimers() {
     if (this.timerInterval) clearInterval(this.timerInterval);
     this.timerInterval = setInterval(() => {
-      if (!this.isRunning || this.isPaused) return;
+      if (!this.isRunning || this.isPaused || this.isProcessing) return;
       this.timeLeft--;
 
+      this.handleTimeCountdownAlert(this.timeLeft);
+
       if (this.timeLeft <= 0) {
-        this.gameOver(true);
+        this.handleRoundTimeout();
       }
       this.updateHUD();
     }, 1000);
+  }
+
+  handleRoundTimeout() {
+    if (this.isProcessing) return;
+    this.isProcessing = true;
+
+    this.sfx.playFail();
+    const liquid = this.container.querySelector('#cauldron-liquid');
+    if (liquid) liquid.classList.add('fusion-fail');
+
+    this.lives--;
+    this.streak = 0;
+    this.showToast('⏰ Hết thời gian màn này! -1 Tim 💔', true);
+
+    setTimeout(() => {
+      if (liquid) liquid.classList.remove('fusion-fail');
+      this.clearCauldron();
+      this.isProcessing = false;
+      if (this.lives <= 0) {
+        this.gameOver(false);
+      } else {
+        this.nextQuestion();
+        this.updateHUD();
+      }
+    }, 900);
+  }
+
+  handleTimeCountdownAlert(t) {
+    const hudTimer = this.container.querySelector('.hud-timer');
+
+    if (t === 10) {
+      if (this.sfx && this.sfx.playWarning) this.sfx.playWarning();
+      this.showToast('⚠️ Còn 10 giây cho màn này!');
+      if (hudTimer) {
+        hudTimer.classList.add('timer-warning-30');
+      }
+    } else if (t <= 5 && t >= 1) {
+      if (this.sfx && this.sfx.playUrgentTick) this.sfx.playUrgentTick();
+      if (hudTimer) {
+        hudTimer.classList.add('timer-urgent-10');
+      }
+      this.showCenterCountdownTick(t);
+    }
+  }
+
+  showCenterCountdownTick(num) {
+    let tickEl = this.container.querySelector('.game-center-countdown-tick');
+    if (!tickEl) {
+      tickEl = document.createElement('div');
+      tickEl.className = 'game-center-countdown-tick';
+      const arena = this.container.querySelector('.alchemist-arena-grid') || this.container;
+      arena.appendChild(tickEl);
+    }
+    tickEl.textContent = num;
+    tickEl.classList.remove('tick-anim');
+    void tickEl.offsetWidth;
+    tickEl.classList.add('tick-anim');
   }
 
   /**
@@ -695,6 +770,14 @@ export class AlchemistGameEngine {
       // Đã hoàn thành toàn bộ danh sách từ vựng mà không lặp lại
       this.gameOver(true);
       return;
+    }
+
+    this.currentQuestionIndex++;
+    this.timeLeft = this.roundTime; // Reset 25s for the new màn!
+
+    const hudTimer = this.container.querySelector('.hud-timer');
+    if (hudTimer) {
+      hudTimer.classList.remove('timer-warning-60', 'timer-warning-30', 'timer-urgent-10');
     }
 
     // Pick next target from wordQueue
@@ -897,6 +980,15 @@ export class AlchemistGameEngine {
       this.craftedCount++;
       if (this.streak > this.maxStreak) this.maxStreak = this.streak;
 
+      if (this.streak > 0 && this.streak % 10 === 0) {
+        if (this.lives < this.maxLives) {
+          this.lives++;
+          this.showToast(`💖 Chuỗi ${this.streak} xuất sắc! Hồi phục +1 Tim! ❤️`);
+        } else {
+          this.showToast(`💖 Chuỗi ${this.streak} xuất sắc! Thần sầu!`);
+        }
+      }
+
       if (this.currentTarget && this.currentTarget.fullWord) {
         this.correctWordsSet.add(this.currentTarget.fullWord);
       }
@@ -939,9 +1031,13 @@ export class AlchemistGameEngine {
     const streakVal = this.container.querySelector('#alchemist-streak-val');
     const livesContainer = this.container.querySelector('#alchemist-lives-container');
     const timerVal = this.container.querySelector('#alchemist-timer-val');
+    const progressVal = this.container.querySelector('#alchemist-progress-val');
 
     if (scoreVal) scoreVal.textContent = this.score;
     if (streakVal) streakVal.textContent = this.streak;
+    if (progressVal) {
+      progressVal.textContent = `${Math.min(this.currentQuestionIndex || 1, this.totalWordsCount || 1)}/${this.totalWordsCount || 1}`;
+    }
 
     if (livesContainer) {
       livesContainer.innerHTML = '';
@@ -954,8 +1050,8 @@ export class AlchemistGameEngine {
     }
 
     if (timerVal) {
-      const min = Math.floor(this.timeLeft / 60);
-      const sec = this.timeLeft % 60;
+      const min = Math.floor(Math.max(0, this.timeLeft) / 60);
+      const sec = Math.max(0, this.timeLeft) % 60;
       timerVal.textContent = `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
     }
   }

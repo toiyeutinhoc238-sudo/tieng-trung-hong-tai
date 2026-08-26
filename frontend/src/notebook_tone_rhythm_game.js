@@ -1377,6 +1377,13 @@ export class ToneRhythmGameEngine {
 
         this.showHitFeedback(pressedTone === 0 ? 4 : pressedTone - 1, `🎉 HOÀN THÀNH: ${wordItem.word} +${bonusPts}đ!`, '#38bdf8');
 
+        if (this.combo > 0 && this.combo % 10 === 0) {
+          if (this.lives < this.maxLives) {
+            this.lives++;
+            this.showToast(`💖 Chuỗi ${this.combo} hoàn hảo! Hồi phục +1 Tim! ❤️`);
+          }
+        }
+
         if (this.combo >= 5 && !this.isFeverMode) {
           this.triggerFever();
         }

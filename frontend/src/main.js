@@ -6966,7 +6966,18 @@ window.openLessonDetailModal = function (lessonKey) {
         e.stopPropagation();
         const modalEl = document.getElementById('lesson-detail-popup-modal');
         if (modalEl) modalEl.style.display = 'none';
-        window.location.href = `/quiz-game.html?lesson=${lessonKey}&level=${currentLvl}&version=${activeHskVersion}&source=roadmap&autostart=true`;
+
+        const numId = parseInt(String(lessonKey).replace(/\D/g, ''), 10) || 1;
+        const curLvl = currentLvl || 1;
+        const curVer = activeHskVersion || '3.0';
+        const curCurriculum = activeLessonsCurriculum || 'hsk';
+        const lessonWords = vocabularyData.filter(w => !w.isCustom && (w.curriculum || 'hsk') === curCurriculum && matchesLevel(w.level, curLvl) && (w.hskVersion || '3.0') === curVer && String(w.lessonId || 1) === String(numId));
+
+        window.openNotebookGamesHub(
+          lessonWords.length >= 2 ? lessonWords : vocabularyData.slice(0, 50),
+          `Bài ${numId}: Ôn Tập Từ Vựng`,
+          `Lựa chọn 1 trong 6 trò chơi ôn tập từ vựng Bài ${numId} HSK ${curLvl}`
+        );
       };
     }
   } else {
@@ -7811,7 +7822,13 @@ window.goToLessonStep = function(step, lessonId) {
   } else if (step === 'text') {
     window.location.href = `/lesson-texts.html?lesson=${numId}&level=${currentLvl}&version=${currentVer}`;
   } else if (step === 'quiz') {
-    window.location.href = `/quiz-game.html?lesson=${numId}&level=${currentLvl}&version=${currentVer}&source=roadmap&autostart=true`;
+    const curCurriculum = activeLessonsCurriculum || 'hsk';
+    const lessonWords = vocabularyData.filter(w => !w.isCustom && (w.curriculum || 'hsk') === curCurriculum && matchesLevel(w.level, currentLvl) && (w.hskVersion || '3.0') === currentVer && String(w.lessonId || 1) === String(numId));
+    window.openNotebookGamesHub(
+      lessonWords.length >= 2 ? lessonWords : vocabularyData.slice(0, 50),
+      `Bài ${numId}: Ôn Tập Từ Vựng`,
+      `Lựa chọn 1 trong 6 trò chơi ôn tập từ vựng Bài ${numId} HSK ${currentLvl}`
+    );
   } else if (step === 'video') {
     window.openLessonExtraVideoModal(numId, currentLvl, currentVer);
   }

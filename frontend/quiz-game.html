@@ -894,7 +894,7 @@
           <label class="form-label">Bài học</label>
           <select id="sel-lesson" class="form-select">
             <option value="all">Tất cả các bài (Mặc định)</option>
-            <option value="random">Random bài bất kì</option>
+            <option value="random">Ngẫu nhiên bài bất kì</option>
           </select>
         </div>
 
@@ -1300,7 +1300,7 @@
     function updateLessons() {
       const lvl = selLevel.value;
       const currentVersion = selVersion ? selVersion.value : (new URLSearchParams(window.location.search).get('version') || localStorage.getItem('active_hsk_version') || '3.0');
-      selLesson.innerHTML = `<option value="all">Tất cả các bài (Mặc định)</option><option value="random">Random bài bất kì</option>`;
+      selLesson.innerHTML = `<option value="all">Tất cả các bài (Mặc định)</option><option value="random">Ngẫu nhiên bài bất kì</option>`;
 
       function cleanLessonTitle(rawTitle, lessonId) {
         if (!rawTitle && !lessonId) return '';
@@ -1523,7 +1523,7 @@
         totalQuestionsCount = remainingQs.length;
       }
 
-      score = 0; hearts = 3; hudScore.textContent = score; updateHearts();
+      score = 0; hearts = 3; quizStreak = 0; hudScore.textContent = score; updateHearts();
       setupModal.style.display = 'none';
 
       // Render Stepper ONLY if played directly by roadmap lesson
@@ -1781,13 +1781,26 @@
         score += Math.max(10, Math.floor((timer / timerMax) * 50));
         hudScore.textContent = score;
         playBeep(1200, 'sine', 0.15);
-        showToast("Tuyệt vời!", true);
+
+        quizStreak = (typeof quizStreak === 'number' ? quizStreak : 0) + 1;
+        if (quizStreak > 0 && quizStreak % 10 === 0) {
+          if (hearts < 3) {
+            hearts++;
+            updateHearts();
+            showToast(`💖 Chuỗi ${quizStreak} câu đúng! Hồi phục +1 Tim! ❤️`, true);
+          } else {
+            showToast(`💖 Chuỗi ${quizStreak} câu đúng xuất sắc!`, true);
+          }
+        } else {
+          showToast("Tuyệt vời!", true);
+        }
 
         btns.forEach(b => {
           if (b !== btn) b.classList.add('dimmed');
         });
         setTimeout(nextQuestion, 1500);
       } else {
+        quizStreak = 0;
         if (btn) {
           btn.classList.add('selected-wrong');
         }
@@ -1805,7 +1818,7 @@
         showToast(isTimeout ? "Hết giờ!" : "Sai rồi!", false);
 
         if (hearts <= 0) {
-          setTimeout(() => endGame("Game Over", "Bạn đã hết mạng sống!"), 1800);
+          setTimeout(() => endGame("Hết Tim!", "Bạn đã dùng hết số mạng sống!"), 1800);
         } else {
           setTimeout(nextQuestion, 1800);
         }

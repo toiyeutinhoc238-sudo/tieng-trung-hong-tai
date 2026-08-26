@@ -832,6 +832,13 @@ export class CannonGameEngine {
       if (targetItem.word) this.correctWordsSet.add(targetItem.word);
       this.showFloatingText(targetItem.x, targetItem.y, `+${pts}`, '#10b981');
       if (window.speakText) window.speakText(targetItem.word);
+
+      if (this.combo > 0 && this.combo % 10 === 0) {
+        if (this.lives < this.maxLives) {
+          this.lives++;
+          this.showFloatingText(targetItem.x, targetItem.y - 30, `💖 Chuỗi ${this.combo}! Hồi phục +1 Tim!`, '#ef4444');
+        }
+      }
     } else if (targetItem.type === 'bonus') {
       this.sfx.playHit();
       const mult = this.score2xTimer > 0 ? 2 : 1;
@@ -844,6 +851,13 @@ export class CannonGameEngine {
       if (targetItem.word) this.correctWordsSet.add(targetItem.word);
       this.showFloatingText(targetItem.x, targetItem.y, `⭐ +${pts} (+5 Combo)`, '#fbbf24');
       if (window.speakText) window.speakText(targetItem.word);
+
+      if (this.combo >= 10 && Math.floor(this.combo / 10) > Math.floor((this.combo - 5) / 10)) {
+        if (this.lives < this.maxLives) {
+          this.lives++;
+          this.showFloatingText(targetItem.x, targetItem.y - 30, `💖 Chuỗi ${this.combo}! Hồi phục +1 Tim!`, '#ef4444');
+        }
+      }
     } else if (targetItem.type === 'bomb') {
       this.sfx.playBomb();
       if (!this.hasShield) {
@@ -1203,7 +1217,7 @@ export class CannonGameEngine {
       }
 
       if (icon) icon.textContent = isVictory ? '🏆' : '💥';
-      if (title) title.textContent = isVictory ? 'Chiến Thắng Xuất Sắc!' : 'Hết Mạng - Game Over!';
+      if (title) title.textContent = isVictory ? 'Chiến Thắng Xuất Sắc!' : 'Hết Tim - Kết Thúc Lượt Chơi!';
       if (desc) desc.textContent = isVictory ? `Bạn đã hoàn thành xuất sắc toàn bộ ${this.wordsDestroyedCount || this.totalWordsCount}/${this.totalWordsCount} từ vựng!` : 'Đừng nản lòng! Hãy gõ pinyin thật nhanh và né bom nhé.';
       if (resScore) resScore.textContent = this.score;
       if (resCombo) resCombo.textContent = this.maxCombo;

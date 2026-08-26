@@ -313,7 +313,7 @@ export class SnakeGameEngine {
                   <i class="fa-solid fa-arrow-right step-arrow"></i>
                   <div class="step-card">
                     <strong style="color: #ef4444;">Hết tim</strong>
-                    <small>Game over</small>
+                    <small>Hết lượt chơi</small>
                   </div>
                 </div>
               </div>
@@ -882,6 +882,13 @@ export class SnakeGameEngine {
       this.correctWordsSet.add(this.currentQuestion.word);
     }
 
+    if (this.wordsEatenCorrect > 0 && this.wordsEatenCorrect % 10 === 0) {
+      if (this.lives < this.maxLives) {
+        this.lives++;
+        this.showFloatingMessage(`💖 Xuất sắc ăn đúng ${this.wordsEatenCorrect} từ! Hồi phục +1 Tim! ❤️`);
+      }
+    }
+
     if (this.streak >= this.maxStreakNeeded) {
       this.levelUp();
     } else {
@@ -1219,7 +1226,7 @@ export class SnakeGameEngine {
     if (overlay) {
       overlay.style.setProperty('display', 'flex', 'important');
       if (icon) icon.textContent = isVictory ? '👑' : '🐍';
-      if (title) title.textContent = isVictory ? 'Vua Nuôi Rắn Từ Vựng!' : 'Hết Tim - Game Over!';
+      if (title) title.textContent = isVictory ? 'Vua Nuôi Rắn Từ Vựng!' : 'Hết Tim - Kết Thúc Lượt Chơi!';
       if (desc) desc.textContent = isVictory ? `Bạn đã xuất sắc hoàn thành toàn bộ ${this.wordsEatenCorrect}/${this.totalWordsCount} từ vựng!` : 'Hãy chú ý quan sát từ vựng và chọn đúng quả táo nhé!';
       if (resLevel) resLevel.textContent = `CẤP ${this.level}`;
       if (resScore) resScore.textContent = this.score;
