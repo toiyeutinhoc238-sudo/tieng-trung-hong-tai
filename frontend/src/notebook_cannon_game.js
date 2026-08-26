@@ -168,16 +168,16 @@ export class CannonGameEngine {
 .phidao-input-tip-sub{font-size:.7rem;font-weight:700;color:#cbd5e1;background:rgba(15,23,42,.75);padding:2px 10px;border-radius:20px;backdrop-filter:blur(4px);text-shadow:0 1px 2px #000;border:1px solid rgba(255,255,255,.08);}
 .phidao-target-hint{font-size:.82rem;color:#fef08a;font-weight:700;min-width:100px;text-align:center;}
 
-/* WORD CARDS: HIGH CONTRAST & BRIGHT */
-.phidao-word-card{position:absolute;display:flex;flex-direction:column;align-items:center;gap:2px;background:linear-gradient(145deg,#1e293b 0%,#0f172a 100%);border:2px solid #38bdf8;border-radius:16px;padding:8px 16px;min-width:80px;box-shadow:0 10px 25px rgba(0,0,0,.5),0 0 18px rgba(56,189,248,.35);will-change:transform;transition:border-color .15s,box-shadow .15s,transform .1s;}
-.phidao-word-card.is-targeted{border-color:#fbbf24 !important;background:linear-gradient(145deg,#451a03 0%,#1e1b4b 100%) !important;box-shadow:0 0 28px rgba(251,191,36,.8),0 0 50px rgba(251,191,36,.4) !important;transform:scale(1.06);}
-.phidao-word-card.type-star{border-color:#c084fc;background:linear-gradient(145deg,#3b0764 0%,#1e1b4b 100%);box-shadow:0 0 28px rgba(192,132,252,.7),0 0 50px rgba(192,132,252,.3);}
-.phidao-word-card .word-py-tone{font-size:.82rem;font-weight:700;color:#7dd3fc;text-shadow:0 1px 3px rgba(0,0,0,.8);}
-.phidao-word-card .word-zh{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;font-size:1.8rem;font-weight:800;color:#ffffff;line-height:1.1;text-shadow:0 0 12px rgba(255,255,255,.8),0 2px 6px rgba(0,0,0,.9);letter-spacing:.05em;}
-.phidao-word-card .pinyin-prog{font-size:.82rem;font-family:'Courier New',Courier,monospace;font-weight:800;letter-spacing:.06em;background:rgba(0,0,0,.45);padding:2px 8px;border-radius:6px;margin-top:2px;}
-.phidao-word-card .py-typed{color:#fde047;text-shadow:0 0 8px #eab308;}
-.phidao-word-card .py-rem{color:#93c5fd;}
-.phidao-word-card.type-star .word-zh{background:linear-gradient(135deg,#f0abfc 0%,#c084fc 50%,#818cf8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 10px rgba(192,132,252,.9));}
+/* WORD CARDS: ULTRA CRISP & SOLID HIGH CONTRAST */
+.phidao-word-card{position:absolute;display:flex;flex-direction:column;align-items:center;gap:3px;background:#ffffff;border:2.5px solid #0284c7;border-radius:18px;padding:8px 18px 10px;min-width:90px;box-shadow:0 12px 28px rgba(0,0,0,.45),0 0 16px rgba(56,189,248,.4);will-change:transform;transition:border-color .15s,box-shadow .15s,transform .1s;}
+.phidao-word-card.is-targeted{border-color:#f59e0b !important;background:#fffbeb !important;box-shadow:0 0 30px rgba(245,158,11,.8),0 12px 30px rgba(0,0,0,.4) !important;transform:scale(1.08);}
+.phidao-word-card.type-star{border-color:#a855f7;background:#faf5ff;box-shadow:0 0 24px rgba(168,85,247,.6),0 10px 25px rgba(0,0,0,.4);}
+.phidao-word-card .word-py-tone{font-size:.9rem;font-weight:800;color:#0369a1;letter-spacing:.02em;}
+.phidao-word-card .word-zh{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;font-size:2rem;font-weight:900;color:#0f172a;line-height:1.1;letter-spacing:.05em;}
+.phidao-word-card .pinyin-prog{font-size:.86rem;font-family:'Courier New',Courier,monospace;font-weight:800;letter-spacing:.06em;background:#f1f5f9;border:1px solid #cbd5e1;padding:2px 10px;border-radius:8px;margin-top:2px;}
+.phidao-word-card .py-typed{color:#ea580c;font-weight:900;}
+.phidao-word-card .py-rem{color:#475569;}
+.phidao-word-card.type-star .word-zh{color:#6b21a8;font-weight:900;}
 
 /* VIETNAMESE MEANING POPUP ON HIT */
 .phidao-hit-meaning-card{position:absolute;background:linear-gradient(135deg,rgba(16,185,129,.95),rgba(5,150,105,.95));border:1.5px solid #6ee7b7;border-radius:12px;padding:6px 14px;color:#ffffff;pointer-events:none;z-index:25;box-shadow:0 8px 24px rgba(0,0,0,.4),0 0 20px rgba(16,185,129,.6);animation:hitPopupFloat 2.2s ease-out forwards;min-width:140px;text-align:center;}
@@ -471,15 +471,34 @@ export class CannonGameEngine {
   }
 
   spawnWord(){
-    if(this.activeWords.length>=4)return;
+    // CHỈ CHO PHÉP TỐI ĐA 1 ĐẾN 2 TỪ VỰNG TRÊN MÀN HÌNH
+    if(this.activeWords.length>=2)return;
     if(!this.wordQueue||this.wordQueue.length===0){if(this.activeWords.length===0)this.gameOver(true);return;}
+    
+    // NẾU TỪ HIỆN TẠI VẪN ĐANG Ở NỬA TRÊN ĐỈNH (y < 160), CHỜ RƠI THÊM ĐỂ KHÔNG BỊ DỒN ĐỐNG
+    if(this.activeWords.some(w=>w.y<160))return;
+
     const playfield=this.container.querySelector('#cannon-playfield');if(!playfield)return;
-    const pfW=playfield.clientWidth||600;const margin=40;
+    const pfW=playfield.clientWidth||600;
     const wordObj=this.wordQueue.pop();if(!wordObj)return;
     const isStar=Math.random()<0.15;
-    const spawnX=margin+Math.random()*Math.max(0,pfW-margin*2-140);const spawnY=-20;
-    // TỐC ĐỘ RƠI CHẬM VÀ ÊM ÁI
-    const baseSpeed=10;const speed=baseSpeed*(0.85+Math.random()*0.25);
+    
+    // PHÂN KHU VỰC TRÁI / PHẢI ĐẢM BẢO 2 TỪ TUYỆT ĐỐI KHÔNG ĐÈ LÊN NHAU
+    let spawnX=60;
+    const halfW=pfW/2;
+    if(this.activeWords.length===0){
+      spawnX=Math.random()<0.5?(40+Math.random()*(halfW-180)):(halfW+20+Math.random()*(halfW-180));
+    }else{
+      const existingX=this.activeWords[0].x;
+      if(existingX<halfW){
+        spawnX=halfW+20+Math.random()*(halfW-180);
+      }else{
+        spawnX=40+Math.random()*(halfW-180);
+      }
+    }
+    
+    const spawnY=-25;
+    const speed=11; // TỐC ĐỘ RƠI ĐỒNG ĐỀU, ÊM ÁI VÀ KHÔNG BAO GIỜ ĐÈ NHAU
     const el=document.createElement('div');el.className=`phidao-word-card type-${isStar?'star':'normal'}`;
     const norm=normalizePinyin(wordObj.pinyin);
     el.innerHTML=`<div class="word-py-tone">${wordObj.pinyin||''}</div><div class="word-zh">${isStar?'✨ ':''}${wordObj.word}</div><div class="pinyin-prog"><span class="py-rem">${norm}</span></div>`;

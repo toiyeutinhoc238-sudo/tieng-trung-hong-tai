@@ -1354,6 +1354,7 @@ export class ToneRhythmGameEngine {
     } else {
       // 2. WRONG TONE!
       this.sfx.playMiss();
+      this.lives--;
       if (this.currentWord.el) {
         const activeStep = this.currentWord.el.querySelector(`.step-current`);
         if (activeStep) {
@@ -1374,8 +1375,13 @@ export class ToneRhythmGameEngine {
       if (feverBanner) feverBanner.style.display = 'none';
 
       const correctName = targetSyllable.tone === 0 ? 'Thanh Nhẹ (Phím 5)' : `Thanh ${targetSyllable.tone} (Phím ${targetSyllable.tone})`;
-      this.showHitFeedback(pressedTone === 0 ? 4 : pressedTone - 1, `Sai thanh: ${targetSyllable.char} là ${correctName} ❌`, '#ef4444');
+      this.showHitFeedback(pressedTone === 0 ? 4 : pressedTone - 1, `Sai thanh: ${targetSyllable.char} là ${correctName} ❌ (-1 Tim 💔)`, '#ef4444');
       this.updateHUD();
+
+      if (this.lives <= 0) {
+        this.gameOver(false);
+        return;
+      }
     }
   }
 
