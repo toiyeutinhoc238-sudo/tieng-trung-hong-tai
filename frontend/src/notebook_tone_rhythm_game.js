@@ -480,13 +480,9 @@ export class ToneRhythmGameEngine {
   renderWordCardHtml(wordItem, currentSyllableIndex = 0) {
     const isWordDone = currentSyllableIndex >= wordItem.syllables.length;
 
-    let hanziDisplay = wordItem.word;
-    let meaningDisplay = wordItem.meaning ? `: ${wordItem.meaning}` : '';
-
-    if (this.gameMode === 'hide-hanzi' && !isWordDone) {
-      hanziDisplay = '❓'.repeat(Math.max(1, wordItem.syllables.length));
-    } else if (this.gameMode === 'listen-only' && !isWordDone) {
-      hanziDisplay = `<i class="fa-solid fa-headphones"></i> [Nghe chọn thanh]`;
+    let meaningDisplay = wordItem.meaning ? `💡 ${wordItem.meaning}` : '';
+    if (this.gameMode === 'listen-only' && !isWordDone) {
+      meaningDisplay = `<i class="fa-solid fa-headphones"></i> Nghe chọn thanh`;
     }
 
     const stepsHtml = wordItem.syllables.map((s, idx) => {
@@ -508,7 +504,7 @@ export class ToneRhythmGameEngine {
       return `
         <div class="rhythm-tone-step-badge ${stateClass}" data-step="${idx}" id="rstep_${idx}">
           <div class="step-header">
-            <span class="step-idx">${idx + 1}</span>
+            ${wordItem.syllables.length > 1 ? `<span class="step-idx">${idx + 1}</span>` : ''}
             ${isDone ? '<span class="step-check-icon"><i class="fa-solid fa-check"></i></span>' : ''}
           </div>
           <div class="step-char">${this.gameMode === 'hide-hanzi' && !isDone ? '❓' : s.char}</div>
@@ -519,11 +515,7 @@ export class ToneRhythmGameEngine {
 
     return `
       <div class="rhythm-word-card-inner">
-        <div class="word-card-top-header">
-          <div class="word-card-hanzi">${hanziDisplay}</div>
-          ${meaningDisplay ? `<div class="word-card-meaning">${meaningDisplay}</div>` : ''}
-        </div>
-
+        ${meaningDisplay ? `<div class="word-card-top-header"><span class="word-card-meaning">${meaningDisplay}</span></div>` : ''}
         <div class="word-card-steps-flow">
           ${stepsHtml}
         </div>
@@ -579,12 +571,6 @@ export class ToneRhythmGameEngine {
               <i class="fa-solid fa-heart" style="color: #ef4444;"></i>
               <i class="fa-solid fa-heart" style="color: #ef4444;"></i>
             </div>
-          </div>
-
-          <div class="hud-item hud-timer" title="Thời gian đếm ngược của màn chơi này">
-            <i class="fa-solid fa-clock" style="color: #0284c7;"></i>
-            <span class="hud-label">THỜI GIAN:</span>
-            <span class="hud-value" id="rhythm-timer-val">01:00</span>
           </div>
 
           <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
@@ -1147,57 +1133,12 @@ export class ToneRhythmGameEngine {
 
   startTimers() {
     if (this.timerInterval) clearInterval(this.timerInterval);
-    this.timerInterval = setInterval(() => {
-      if (!this.isRunning || this.isPaused) return;
-      this.timeLeft--;
-
-      this.handleTimeCountdownAlert(this.timeLeft);
-
-      if (this.timeLeft <= 0) {
-        this.gameOver(true);
-      }
-      this.updateHUD();
-    }, 1000);
+    // Không dùng đồng hồ đếm ngược để học viên ôn tập không bị áp lực
   }
 
-  handleTimeCountdownAlert(t) {
-    const hudTimer = this.container.querySelector('.hud-timer');
+  handleTimeCountdownAlert(t) {}
 
-    if (t === 60) {
-      if (this.sfx && this.sfx.playWarning) this.sfx.playWarning();
-      this.showToast('⏳ Còn 60 giây!');
-      if (hudTimer) {
-        hudTimer.classList.add('timer-warning-60');
-        setTimeout(() => hudTimer && hudTimer.classList.remove('timer-warning-60'), 2000);
-      }
-    } else if (t === 30) {
-      if (this.sfx && this.sfx.playWarning) this.sfx.playWarning();
-      this.showToast('⚠️ Còn 30 giây! Hãy tăng tốc!');
-      if (hudTimer) {
-        hudTimer.classList.add('timer-warning-30');
-      }
-    } else if (t <= 10 && t >= 1) {
-      if (this.sfx && this.sfx.playUrgentTick) this.sfx.playUrgentTick();
-      if (hudTimer) {
-        hudTimer.classList.add('timer-urgent-10');
-      }
-      this.showCenterCountdownTick(t);
-    }
-  }
-
-  showCenterCountdownTick(num) {
-    let tickEl = this.container.querySelector('.game-center-countdown-tick');
-    if (!tickEl) {
-      tickEl = document.createElement('div');
-      tickEl.className = 'game-center-countdown-tick';
-      const highway = this.container.querySelector('#rhythm-highway') || this.container;
-      highway.appendChild(tickEl);
-    }
-    tickEl.textContent = num;
-    tickEl.classList.remove('tick-anim');
-    void tickEl.offsetWidth;
-    tickEl.classList.add('tick-anim');
-  }
+  showCenterCountdownTick(num) {}
 
   // Spawns the entire unified vocabulary word card at the top of the highway
   spawnNextWord() {
@@ -1220,7 +1161,7 @@ export class ToneRhythmGameEngine {
     const el = document.createElement('div');
     el.className = `rhythm-falling-word-block mode-${this.gameMode}`;
     el.id = wordBlockId;
-    el.style.transform = `translate3d(0, ${startY}px, 0)`;
+    el.style.transform = `translate3d(-50%, ${startY}px, 0)`;
 
     const fallingWord = {
       id: wordBlockId,
@@ -1268,7 +1209,7 @@ export class ToneRhythmGameEngine {
         this.currentWord.y += this.currentWord.speed * dt;
 
         if (this.currentWord.el) {
-          this.currentWord.el.style.transform = `translate3d(0, ${this.currentWord.y}px, 0)`;
+          this.currentWord.el.style.transform = `translate3d(-50%, ${this.currentWord.y}px, 0)`;
         }
 
         // Passed hit zone completely -> MISS

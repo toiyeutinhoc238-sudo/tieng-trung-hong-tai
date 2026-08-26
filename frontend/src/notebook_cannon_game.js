@@ -115,63 +115,89 @@ export class CannonGameEngine {
     this.container.innerHTML=`
 <div class="phidao-wrapper">
 <style>
-.phidao-wrapper{position:relative;width:100%;height:100%;min-height:500px;background:#07101e;display:flex;flex-direction:column;overflow:hidden;font-family:'Inter','Segoe UI',sans-serif;}
-.phidao-bg{position:absolute;inset:0;pointer-events:none;z-index:0;background:linear-gradient(180deg,#070d1a 0%,#0d1a30 60%,#0a1525 100%);}
-.phidao-moon{position:absolute;top:24px;right:56px;width:68px;height:68px;background:radial-gradient(circle at 38% 35%,#fffde7,#e0d7b8 60%,#c8b98a);border-radius:50%;box-shadow:0 0 32px 12px rgba(255,240,180,.18),0 0 80px 40px rgba(255,228,130,.06);opacity:.92;}
-.phidao-star{position:absolute;border-radius:50%;background:rgba(255,255,255,.85);animation:starTwinkle var(--dur,3s) ease-in-out infinite;animation-delay:var(--delay,0s);}
-@keyframes starTwinkle{0%,100%{opacity:.8;transform:scale(1)}50%{opacity:.2;transform:scale(.5)}}
-.phidao-sakura-p{position:absolute;font-size:10px;opacity:.5;animation:sakuraFall linear infinite;animation-duration:var(--dur,8s);animation-delay:var(--delay,0s);}
-@keyframes sakuraFall{0%{transform:translateY(-20px) rotate(0deg);opacity:.6}100%{transform:translateY(120vh) rotate(720deg);opacity:0}}
-.phidao-hud{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(7,16,30,.75);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.07);flex-shrink:0;}
+.phidao-wrapper{position:relative;width:100%;height:100%;min-height:560px;background:linear-gradient(180deg,#0b1528 0%,#111e38 50%,#0d172a 100%);display:flex;flex-direction:column;overflow:hidden;font-family:'Inter','Segoe UI',system-ui,sans-serif;color:#f8fafc;}
+.phidao-bg{position:absolute;inset:0;pointer-events:none;z-index:0;background:radial-gradient(circle at 82% 18%,rgba(56,189,248,.18) 0%,transparent 40%),radial-gradient(circle at 20% 40%,rgba(168,85,247,.15) 0%,transparent 45%),linear-gradient(180deg,#071120 0%,#0e1e38 45%,#132746 80%,#0f1c32 100%);}
+.phidao-moon{position:absolute;top:20px;right:90px;width:76px;height:76px;background:radial-gradient(circle at 35% 35%,#fffdf0 0%,#fef08a 40%,#eab308 85%,#ca8a04 100%);border-radius:50%;box-shadow:0 0 40px 15px rgba(254,240,138,.4),0 0 90px 45px rgba(234,179,8,.15);opacity:.95;}
+.phidao-star{position:absolute;border-radius:50%;background:#ffffff;box-shadow:0 0 6px rgba(255,255,255,.9);animation:starTwinkle var(--dur,3s) ease-in-out infinite;animation-delay:var(--delay,0s);}
+@keyframes starTwinkle{0%,100%{opacity:.9;transform:scale(1)}50%{opacity:.3;transform:scale(.6)}}
+.phidao-sakura-p{position:absolute;font-size:14px;opacity:.75;filter:drop-shadow(0 0 6px rgba(244,114,182,.6));animation:sakuraFall linear infinite;animation-duration:var(--dur,8s);animation-delay:var(--delay,0s);}
+@keyframes sakuraFall{0%{transform:translateY(-20px) rotate(0deg);opacity:.8}100%{transform:translateY(120vh) rotate(720deg);opacity:0}}
+
+/* TOP HUD */
+.phidao-hud{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:10px 18px;background:rgba(15,23,42,.88);backdrop-filter:blur(12px);border-bottom:1.5px solid rgba(255,255,255,.15);box-shadow:0 4px 20px rgba(0,0,0,.35);flex-shrink:0;}
 .phidao-hud-center{display:flex;align-items:center;gap:20px;}
 .phidao-hud-left,.phidao-hud-right{display:flex;gap:8px;}
-.phidao-btn-icon{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#e2e8f0;border-radius:10px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.9rem;transition:all .2s;}
-.phidao-btn-icon:hover{background:rgba(255,255,255,.15);transform:scale(1.05);}
-.phidao-stat{display:flex;align-items:center;gap:6px;color:#f1f5f9;font-weight:700;font-size:1.05rem;}
-.phidao-lives-row{display:flex;gap:5px;font-size:1.1rem;}
-.phidao-buff-banner{position:relative;z-index:10;text-align:center;background:rgba(249,115,22,.15);border-bottom:1px solid rgba(249,115,22,.25);color:#fbbf24;font-size:.8rem;font-weight:700;padding:4px 8px;flex-shrink:0;}
-.phidao-playfield{position:relative;z-index:5;flex:1;overflow:hidden;min-height:200px;}
+.phidao-btn-icon{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#f1f5f9;border-radius:10px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.95rem;transition:all .2s;}
+.phidao-btn-icon:hover{background:rgba(255,255,255,.25);transform:scale(1.08);}
+.phidao-stat{display:flex;align-items:center;gap:8px;color:#ffffff;font-weight:800;font-size:1.1rem;text-shadow:0 2px 4px rgba(0,0,0,.5);}
+.phidao-lives-row{display:flex;gap:5px;font-size:1.2rem;filter:drop-shadow(0 0 6px rgba(239,68,68,.5));}
+
+/* BUFF BANNER */
+.phidao-buff-banner{position:relative;z-index:10;text-align:center;background:linear-gradient(90deg,rgba(245,158,11,.2),rgba(239,68,68,.25),rgba(245,158,11,.2));border-bottom:1.5px solid rgba(245,158,11,.4);color:#fef08a;font-size:.85rem;font-weight:800;padding:5px 12px;flex-shrink:0;text-shadow:0 1px 3px #000;}
+
+/* PLAYFIELD - MAX EXPANDED SKY */
+.phidao-playfield{position:relative;z-index:5;flex:1;overflow:hidden;min-height:480px;}
 .phidao-words-layer,.phidao-fx-layer{position:absolute;inset:0;pointer-events:none;}
-.phidao-char-zone{position:absolute;bottom:0;left:0;right:0;height:80px;display:flex;align-items:flex-end;justify-content:center;}
-.phidao-ground-line{position:absolute;bottom:50px;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(148,163,184,.2) 20%,rgba(148,163,184,.4) 50%,rgba(148,163,184,.2) 80%,transparent);}
-.phidao-ground-snow{position:absolute;bottom:0;left:0;right:0;height:50px;background:linear-gradient(180deg,transparent 0%,rgba(180,200,230,.06) 100%);}
-.phidao-character{position:relative;z-index:6;font-size:2.6rem;bottom:46px;animation:charBreathe 3s ease-in-out infinite;filter:drop-shadow(0 4px 14px rgba(56,189,248,.35));user-select:none;}
-@keyframes charBreathe{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-4px) scale(1.03)}}
+
+/* FLOATING SKILL DOCK (Góc Phải) */
+.phidao-floating-skills{position:absolute;right:14px;top:20px;z-index:20;display:flex;flex-direction:column;gap:7px;background:rgba(15,23,42,.78);backdrop-filter:blur(10px);border:1.5px solid rgba(255,255,255,.14);border-radius:16px;padding:8px 6px;box-shadow:0 8px 30px rgba(0,0,0,.45);}
+.phidao-skills-label{font-size:.62rem;font-weight:800;color:#94a3b8;text-align:center;letter-spacing:.05em;padding-bottom:3px;border-bottom:1px solid rgba(255,255,255,.08);}
+.phidao-skill-btn{display:flex;flex-direction:column;align-items:center;gap:1px;background:rgba(30,41,59,.8);border:1.5px solid rgba(255,255,255,.12);border-radius:10px;padding:5px 10px;color:#cbd5e1;cursor:pointer;transition:all .2s;min-width:68px;}
+.phidao-skill-btn .s-emoji{font-size:1.1rem;}
+.phidao-skill-btn .s-label{font-size:.64rem;font-weight:800;color:#ffffff;}
+.phidao-skill-btn .s-cost{font-size:.58rem;color:#94a3b8;font-weight:700;}
+.phidao-skill-btn.affordable{border-color:#fbbf24;background:linear-gradient(135deg,rgba(251,191,36,.25),rgba(245,158,11,.15));box-shadow:0 0 14px rgba(251,191,36,.4);}
+.phidao-skill-btn.affordable .s-cost{color:#fde047;}
+.phidao-skill-btn:hover.affordable{transform:scale(1.08);}
+
+/* CHARACTER & LUMINOUS GROUND */
+.phidao-char-zone{position:absolute;bottom:0;left:0;right:0;height:70px;display:flex;align-items:flex-end;justify-content:center;}
+.phidao-ground-snow{position:absolute;bottom:0;left:0;right:0;height:42px;background:linear-gradient(180deg,#f1f5f9 0%,#e2e8f0 40%,#cbd5e1 100%);border-top:3px solid #38bdf8;box-shadow:0 -4px 20px rgba(56,189,248,.4),inset 0 2px 6px #ffffff;}
+.phidao-ground-line{position:absolute;bottom:40px;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(56,189,248,.6) 20%,#38bdf8 50%,rgba(56,189,248,.6) 80%,transparent);box-shadow:0 0 10px #38bdf8;}
+.phidao-character{position:relative;z-index:6;font-size:2.8rem;bottom:26px;animation:charBreathe 3s ease-in-out infinite;filter:drop-shadow(0 6px 16px rgba(0,0,0,.5)) drop-shadow(0 0 12px rgba(56,189,248,.6));user-select:none;}
+@keyframes charBreathe{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-4px) scale(1.04)}}
 .phidao-character.throw-anim{animation:charThrow .25s ease-out;}
-@keyframes charThrow{0%{transform:translateX(0) rotate(0deg)}30%{transform:translateX(-8px) rotate(-10deg)}70%{transform:translateX(10px) rotate(6deg)}100%{transform:translateX(0) rotate(0deg)}}
-.phidao-word-card{position:absolute;display:flex;flex-direction:column;align-items:center;gap:3px;background:rgba(10,20,40,.85);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:8px 14px;min-width:64px;backdrop-filter:blur(6px);box-shadow:0 4px 18px rgba(0,0,0,.45);will-change:transform;transition:border-color .15s,box-shadow .15s;}
-.phidao-word-card.is-targeted{border-color:rgba(251,191,36,.65);box-shadow:0 0 22px rgba(251,191,36,.3),0 4px 18px rgba(0,0,0,.45);background:rgba(30,20,5,.9);}
-.phidao-word-card.type-star{border-color:rgba(168,85,247,.5);background:rgba(28,10,50,.9);box-shadow:0 0 26px rgba(168,85,247,.2),0 4px 18px rgba(0,0,0,.45);}
-.phidao-word-card .word-zh{font-family:'Noto Sans SC',serif;font-size:1.55rem;font-weight:700;color:#f1f5f9;line-height:1;text-shadow:0 2px 8px rgba(0,0,0,.5);}
-.phidao-word-card .pinyin-prog{font-size:.68rem;font-family:monospace;letter-spacing:.03em;height:14px;}
-.phidao-word-card .py-typed{color:#fbbf24;font-weight:700;}
-.phidao-word-card .py-rem{color:rgba(148,163,184,.55);}
-.phidao-word-card.type-star .word-zh{background:linear-gradient(135deg,#c084fc,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.phidao-input-area{position:relative;z-index:10;background:rgba(7,16,30,.88);backdrop-filter:blur(12px);border-top:1px solid rgba(255,255,255,.07);padding:10px 20px 8px;flex-shrink:0;}
-.phidao-input-hint{font-size:.7rem;color:rgba(148,163,184,.55);text-align:center;margin-bottom:5px;}
-.phidao-typed-row{display:flex;align-items:center;justify-content:center;gap:14px;}
-.phidao-typed-buf{min-width:140px;min-height:36px;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.1);border-radius:10px;padding:5px 14px;font-size:1.1rem;font-weight:700;color:#fbbf24;font-family:monospace;letter-spacing:.06em;text-align:center;display:flex;align-items:center;justify-content:center;gap:2px;transition:border-color .15s;}
-.phidao-typed-buf.has-match{border-color:rgba(251,191,36,.5);background:rgba(251,191,36,.06);}
-.phidao-cursor-blink{animation:blink 1s step-end infinite;color:rgba(251,191,36,.6);}
+@keyframes charThrow{0%{transform:translateX(0) rotate(0deg)}30%{transform:translateX(-10px) rotate(-12deg)}70%{transform:translateX(12px) rotate(8deg)}100%{transform:translateX(0) rotate(0deg)}}
+
+/* FLOATING INPUT INDICATOR (Dưới cùng chính giữa) */
+.phidao-floating-input-bar{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);z-index:20;display:flex;flex-direction:column;align-items:center;gap:3px;pointer-events:none;}
+.phidao-typed-buf{min-width:160px;min-height:36px;background:rgba(15,23,42,.92);border:2px solid rgba(56,189,248,.5);border-radius:10px;padding:4px 16px;font-size:1.15rem;font-weight:900;color:#fde047;font-family:monospace;letter-spacing:.08em;text-align:center;display:flex;align-items:center;justify-content:center;gap:3px;box-shadow:0 0 16px rgba(56,189,248,.25);transition:all .2s;}
+.phidao-typed-buf.has-match{border-color:#fbbf24;background:rgba(251,191,36,.15);box-shadow:0 0 25px rgba(251,191,36,.5);}
+.phidao-cursor-blink{animation:blink 1s step-end infinite;color:#fbbf24;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-.phidao-target-hint{font-size:.76rem;color:rgba(148,163,184,.65);font-style:italic;min-width:80px;}
-.phidao-skill-bar{position:relative;z-index:10;display:flex;gap:8px;padding:7px 16px;background:rgba(7,16,30,.75);border-top:1px solid rgba(255,255,255,.05);flex-shrink:0;justify-content:center;}
-.phidao-skill-btn{display:flex;flex-direction:column;align-items:center;gap:2px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:10px;padding:5px 12px;color:#94a3b8;cursor:pointer;transition:all .2s;min-width:65px;}
-.phidao-skill-btn .s-emoji{font-size:1.05rem;}
-.phidao-skill-btn .s-label{font-size:.62rem;font-weight:700;color:#cbd5e1;}
-.phidao-skill-btn .s-cost{font-size:.56rem;color:#64748b;}
-.phidao-skill-btn.affordable{border-color:rgba(251,191,36,.4);background:rgba(251,191,36,.06);}
-.phidao-skill-btn.affordable .s-cost{color:#fbbf24;}
-.phidao-skill-btn:hover.affordable{transform:scale(1.06);box-shadow:0 4px 16px rgba(251,191,36,.15);}
-.phidao-dagger{position:absolute;font-size:1.25rem;pointer-events:none;z-index:20;filter:drop-shadow(0 0 8px rgba(251,191,36,.7));}
-.phidao-explosion{position:absolute;width:50px;height:50px;border-radius:50%;pointer-events:none;z-index:20;animation:explode .4s ease-out forwards;}
+.phidao-input-tip-sub{font-size:.7rem;font-weight:700;color:#cbd5e1;background:rgba(15,23,42,.75);padding:2px 10px;border-radius:20px;backdrop-filter:blur(4px);text-shadow:0 1px 2px #000;border:1px solid rgba(255,255,255,.08);}
+.phidao-target-hint{font-size:.82rem;color:#fef08a;font-weight:700;min-width:100px;text-align:center;}
+
+/* WORD CARDS: HIGH CONTRAST & BRIGHT */
+.phidao-word-card{position:absolute;display:flex;flex-direction:column;align-items:center;gap:2px;background:linear-gradient(145deg,#1e293b 0%,#0f172a 100%);border:2px solid #38bdf8;border-radius:16px;padding:8px 16px;min-width:80px;box-shadow:0 10px 25px rgba(0,0,0,.5),0 0 18px rgba(56,189,248,.35);will-change:transform;transition:border-color .15s,box-shadow .15s,transform .1s;}
+.phidao-word-card.is-targeted{border-color:#fbbf24 !important;background:linear-gradient(145deg,#451a03 0%,#1e1b4b 100%) !important;box-shadow:0 0 28px rgba(251,191,36,.8),0 0 50px rgba(251,191,36,.4) !important;transform:scale(1.06);}
+.phidao-word-card.type-star{border-color:#c084fc;background:linear-gradient(145deg,#3b0764 0%,#1e1b4b 100%);box-shadow:0 0 28px rgba(192,132,252,.7),0 0 50px rgba(192,132,252,.3);}
+.phidao-word-card .word-py-tone{font-size:.82rem;font-weight:700;color:#7dd3fc;text-shadow:0 1px 3px rgba(0,0,0,.8);}
+.phidao-word-card .word-zh{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;font-size:1.8rem;font-weight:800;color:#ffffff;line-height:1.1;text-shadow:0 0 12px rgba(255,255,255,.8),0 2px 6px rgba(0,0,0,.9);letter-spacing:.05em;}
+.phidao-word-card .pinyin-prog{font-size:.82rem;font-family:'Courier New',Courier,monospace;font-weight:800;letter-spacing:.06em;background:rgba(0,0,0,.45);padding:2px 8px;border-radius:6px;margin-top:2px;}
+.phidao-word-card .py-typed{color:#fde047;text-shadow:0 0 8px #eab308;}
+.phidao-word-card .py-rem{color:#93c5fd;}
+.phidao-word-card.type-star .word-zh{background:linear-gradient(135deg,#f0abfc 0%,#c084fc 50%,#818cf8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 10px rgba(192,132,252,.9));}
+
+/* VIETNAMESE MEANING POPUP ON HIT */
+.phidao-hit-meaning-card{position:absolute;background:linear-gradient(135deg,rgba(16,185,129,.95),rgba(5,150,105,.95));border:1.5px solid #6ee7b7;border-radius:12px;padding:6px 14px;color:#ffffff;pointer-events:none;z-index:25;box-shadow:0 8px 24px rgba(0,0,0,.4),0 0 20px rgba(16,185,129,.6);animation:hitPopupFloat 2.2s ease-out forwards;min-width:140px;text-align:center;}
+@keyframes hitPopupFloat{0%{transform:translateY(0) scale(.7);opacity:0}15%{transform:translateY(-10px) scale(1.08);opacity:1}30%{transform:translateY(-18px) scale(1);opacity:1}80%{transform:translateY(-35px) scale(.98);opacity:1}100%{transform:translateY(-55px) scale(.85);opacity:0}}
+.phidao-hit-top{display:flex;align-items:center;justify-content:center;gap:6px;font-size:.85rem;font-weight:800;}
+.phidao-hit-pts{color:#fef08a;font-weight:900;font-size:.95rem;}
+.phidao-hit-zh{font-family:'Noto Sans SC',sans-serif;font-size:1.15rem;font-weight:800;}
+.phidao-hit-py{color:#a7f3d0;font-size:.8rem;}
+.phidao-hit-mean{font-size:.88rem;font-weight:700;color:#ffffff;margin-top:2px;text-shadow:0 1px 3px rgba(0,0,0,.6);}
+
+.phidao-dagger{position:absolute;font-size:1.4rem;pointer-events:none;z-index:20;filter:drop-shadow(0 0 10px rgba(251,191,36,.8));}
+.phidao-explosion{position:absolute;width:55px;height:55px;border-radius:50%;pointer-events:none;z-index:20;animation:explode .4s ease-out forwards;}
 @keyframes explode{0%{transform:scale(.3);opacity:1}100%{transform:scale(2.2);opacity:0}}
-.phidao-explosion.type-normal{background:radial-gradient(circle,rgba(251,191,36,.8),rgba(249,115,22,.3) 60%,transparent);}
-.phidao-explosion.type-star{background:radial-gradient(circle,rgba(192,132,252,.9),rgba(129,140,248,.4) 60%,transparent);}
-.phidao-float-text{position:absolute;font-size:.9rem;font-weight:800;pointer-events:none;z-index:25;animation:floatUp .9s ease-out forwards;white-space:nowrap;text-shadow:0 2px 6px rgba(0,0,0,.5);}
+.phidao-explosion.type-normal{background:radial-gradient(circle,rgba(251,191,36,.9),rgba(249,115,22,.4) 60%,transparent);}
+.phidao-explosion.type-star{background:radial-gradient(circle,rgba(192,132,252,.95),rgba(129,140,248,.5) 60%,transparent);}
+.phidao-float-text{position:absolute;font-size:1.05rem;font-weight:900;pointer-events:none;z-index:25;animation:floatUp .9s ease-out forwards;white-space:nowrap;text-shadow:0 2px 8px rgba(0,0,0,.8);}
 @keyframes floatUp{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-48px) scale(.85);opacity:0}}
-.phidao-miss-flash{position:absolute;inset:0;background:rgba(239,68,68,.2);pointer-events:none;z-index:30;animation:missFlash .35s ease-out forwards;}
+.phidao-miss-flash{position:absolute;inset:0;background:rgba(239,68,68,.3);pointer-events:none;z-index:30;animation:missFlash .35s ease-out forwards;}
 @keyframes missFlash{0%{opacity:1}100%{opacity:0}}
+
 .phidao-modal-overlay{position:absolute;inset:0;z-index:100;background:rgba(7,16,30,.88);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:16px;}
 .phidao-result-card{position:relative;background:linear-gradient(160deg,rgba(10,20,40,.98),rgba(15,30,55,.96));border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:32px 28px 28px;max-width:540px;width:95%;max-height:90vh;overflow-y:auto;box-shadow:0 32px 80px rgba(0,0,0,.7);text-align:center;}
 .phidao-modal-close-x{position:absolute;top:14px;right:18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#94a3b8;font-size:1.4rem;line-height:1;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:10;}
@@ -209,7 +235,6 @@ export class CannonGameEngine {
       <i class="fa-solid fa-heart" style="color:#ef4444;"></i><i class="fa-solid fa-heart" style="color:#ef4444;"></i><i class="fa-solid fa-heart" style="color:#ef4444;"></i>
     </div>
     <div class="phidao-stat"><i class="fa-solid fa-fire" style="color:#f97316;"></i><span id="cannon-combo-val">x0</span></div>
-    <div class="phidao-stat"><i class="fa-solid fa-clock" style="color:#38bdf8;"></i><span id="cannon-timer-val">01:30</span></div>
   </div>
   <div class="phidao-hud-right">
     <button id="cannon-exit-btn" class="phidao-btn-icon"><i class="fa-solid fa-xmark"></i></button>
@@ -219,24 +244,37 @@ export class CannonGameEngine {
 <div class="phidao-playfield" id="cannon-playfield">
   <div id="cannon-words-layer" class="phidao-words-layer"></div>
   <div id="cannon-fx-layer" class="phidao-fx-layer"></div>
+  
+  <!-- FLOATING SKILL DOCK (Góc Phải) -->
+  <div class="phidao-floating-skills">
+    <div class="phidao-skills-label"><i class="fa-solid fa-wand-magic-sparkles"></i> KỸ NĂNG</div>
+    <button class="phidao-skill-btn" id="skill-ice" data-cost="10" title="Alt+1: Làm chậm">
+      <span class="s-emoji">❄️</span><span class="s-label">Mưa Băng</span><span class="s-cost">10 combo</span>
+    </button>
+    <button class="phidao-skill-btn" id="skill-heal" data-cost="20" title="Alt+2: Hồi máu">
+      <span class="s-emoji">💚</span><span class="s-label">Hồi Máu</span><span class="s-cost">20 combo</span>
+    </button>
+    <button class="phidao-skill-btn" id="skill-x2" data-cost="30" title="Alt+3: Nhân đôi">
+      <span class="s-emoji">⭐</span><span class="s-label">Nhân Điểm</span><span class="s-cost">30 combo</span>
+    </button>
+    <button class="phidao-skill-btn" id="skill-shield" data-cost="20" title="Alt+4: Khiên">
+      <span class="s-emoji">🛡️</span><span class="s-label">Lá Chắn</span><span class="s-cost">20 combo</span>
+    </button>
+  </div>
+
+  <!-- CHARACTER & LUMINOUS GROUND (Ở Đáy) -->
   <div class="phidao-char-zone">
     <div class="phidao-ground-line"></div>
     <div class="phidao-character" id="phidao-character">🥷</div>
     <div class="phidao-ground-snow"></div>
   </div>
-</div>
-<div class="phidao-input-area">
-  <div class="phidao-input-hint"><i class="fa-solid fa-keyboard"></i> Gõ pinyin (không dấu) → phi đao tự bay ra tiêu diệt từ khớp</div>
-  <div class="phidao-typed-row">
+
+  <!-- FLOATING INPUT INDICATOR (Dưới cùng chính giữa) -->
+  <div class="phidao-floating-input-bar">
     <div class="phidao-typed-buf" id="phidao-typed-buf"><span class="phidao-cursor-blink">|</span></div>
+    <div class="phidao-input-tip-sub"><i class="fa-solid fa-keyboard" style="color:#38bdf8;"></i> Gõ Pinyin không dấu để phi đao phóng ra</div>
     <div class="phidao-target-hint" id="phidao-target-hint"></div>
   </div>
-</div>
-<div class="phidao-skill-bar">
-  <button class="phidao-skill-btn" id="skill-ice" data-cost="10"><span class="s-emoji">❄️</span><span class="s-label">Mưa Băng</span><span class="s-cost">10 combo</span></button>
-  <button class="phidao-skill-btn" id="skill-heal" data-cost="20"><span class="s-emoji">💚</span><span class="s-label">Hồi Máu</span><span class="s-cost">20 combo</span></button>
-  <button class="phidao-skill-btn" id="skill-x2" data-cost="30"><span class="s-emoji">⭐</span><span class="s-label">Nhân Điểm</span><span class="s-cost">30 combo</span></button>
-  <button class="phidao-skill-btn" id="skill-shield" data-cost="20"><span class="s-emoji">🛡️</span><span class="s-label">Lá Chắn</span><span class="s-cost">20 combo</span></button>
 </div>
 <div id="cannon-modal-overlay" class="phidao-modal-overlay" style="display:none;">
   <div class="phidao-result-card">
@@ -369,7 +407,7 @@ export class CannonGameEngine {
     const playfield=this.container.querySelector('#cannon-playfield');
     if(!fxLayer||!playfield){this.handleHitWord(target);return;}
     const pfW=playfield.clientWidth;const pfH=playfield.clientHeight;
-    const sX=pfW/2;const sY=pfH-68;const eX=target.x+40;const eY=target.y+30;
+    const sX=pfW/2;const sY=pfH-48;const eX=target.x+40;const eY=target.y+30;
     const dagger=document.createElement('div');dagger.className='phidao-dagger';dagger.textContent='🗡️';
     dagger.style.left=`${sX}px`;dagger.style.top=`${sY}px`;
     const dx=eX-sX;const dy=eY-sY;const angle=Math.atan2(dy,dx)*180/Math.PI-45;
@@ -392,11 +430,14 @@ export class CannonGameEngine {
     this.score+=pts;this.combo++;this.wordsDestroyedCount++;
     if(this.combo>this.maxCombo)this.maxCombo=this.combo;
     if(targetItem.wordObj.word)this.correctWordsSet.add(targetItem.wordObj.word);
-    this.showFloatingText(targetItem.x,targetItem.y,`+${pts}${isStar?' ✨':''}`,isStar?'#c084fc':'#fbbf24');
+
+    // HIỂN THỊ NGHĨA TIẾNG VIỆT NGAY KHI BẮN TRÚNG
+    this.showHitMeaningPopup(targetItem.x, targetItem.y, targetItem.wordObj, pts, isStar);
+
     if(window.speakText){try{window.speakText(targetItem.wordObj.word);}catch(e){}}
     if(this.combo>0&&this.combo%10===0){
-      if(this.lives<this.maxLives){this.lives++;this.music.playHeartRestore();this.showFloatingText(targetItem.x,targetItem.y-32,`💖 Chuỗi ${this.combo}! +1 Tim!`,'#ef4444');}
-      else{this.music.playStreak();this.showFloatingText(targetItem.x,targetItem.y-32,`🔥 Chuỗi ${this.combo}! Thần Kỳ!`,'#f97316');}
+      if(this.lives<this.maxLives){this.lives++;this.music.playHeartRestore();this.showFloatingText(targetItem.x,targetItem.y-36,`💖 Chuỗi ${this.combo}! +1 Tim!`,'#ef4444');}
+      else{this.music.playStreak();this.showFloatingText(targetItem.x,targetItem.y-36,`🔥 Chuỗi ${this.combo}! Thần Kỳ!`,'#f97316');}
     }
     const fxLayer=this.container.querySelector('#cannon-fx-layer');
     if(fxLayer){const boom=document.createElement('div');boom.className=`phidao-explosion type-${targetItem.type}`;boom.style.left=`${targetItem.x+15}px`;boom.style.top=`${targetItem.y+10}px`;fxLayer.appendChild(boom);setTimeout(()=>boom.remove(),450);}
@@ -407,19 +448,41 @@ export class CannonGameEngine {
     if(this.wordQueue.length===0&&this.activeWords.length===0)setTimeout(()=>this.gameOver(true),500);
   }
 
+  showHitMeaningPopup(x, y, wordObj, pts, isStar) {
+    const fxLayer = this.container.querySelector('#cannon-fx-layer');
+    if (!fxLayer) return;
+    const el = document.createElement('div');
+    el.className = 'phidao-hit-meaning-card';
+    el.innerHTML = `
+      <div class="phidao-hit-top">
+        <span class="phidao-hit-pts">+${pts}${isStar ? ' ✨' : ''}</span>
+        <span class="phidao-hit-zh">${wordObj.word}</span>
+        <span class="phidao-hit-py">[${wordObj.pinyin || ''}]</span>
+      </div>
+      <div class="phidao-hit-mean">💡 ${wordObj.meaning || ''}</div>
+    `;
+    const playfield = this.container.querySelector('#cannon-playfield');
+    const pfW = playfield ? playfield.clientWidth : 600;
+    const clampedX = Math.max(12, Math.min(x - 30, pfW - 200));
+    el.style.left = `${clampedX}px`;
+    el.style.top = `${Math.max(10, y - 10)}px`;
+    fxLayer.appendChild(el);
+    setTimeout(() => el.remove(), 2200);
+  }
 
   spawnWord(){
-    if(this.activeWords.length>=6)return;
+    if(this.activeWords.length>=4)return;
     if(!this.wordQueue||this.wordQueue.length===0){if(this.activeWords.length===0)this.gameOver(true);return;}
     const playfield=this.container.querySelector('#cannon-playfield');if(!playfield)return;
-    const pfW=playfield.clientWidth||600;const margin=80;
+    const pfW=playfield.clientWidth||600;const margin=40;
     const wordObj=this.wordQueue.pop();if(!wordObj)return;
     const isStar=Math.random()<0.15;
-    const spawnX=margin+Math.random()*Math.max(0,pfW-margin*2-100);const spawnY=-20;
-    const baseSpeed=28+(90-this.timeLeft)*0.4;const speed=baseSpeed*(0.85+Math.random()*0.35);
+    const spawnX=margin+Math.random()*Math.max(0,pfW-margin*2-140);const spawnY=-20;
+    // TỐC ĐỘ RƠI CHẬM VÀ ÊM ÁI
+    const baseSpeed=10;const speed=baseSpeed*(0.85+Math.random()*0.25);
     const el=document.createElement('div');el.className=`phidao-word-card type-${isStar?'star':'normal'}`;
     const norm=normalizePinyin(wordObj.pinyin);
-    el.innerHTML=`<div class="word-zh">${isStar?'✨ ':''}${wordObj.word}</div><div class="pinyin-prog"><span class="py-rem">${norm}</span></div>`;
+    el.innerHTML=`<div class="word-py-tone">${wordObj.pinyin||''}</div><div class="word-zh">${isStar?'✨ ':''}${wordObj.word}</div><div class="pinyin-prog"><span class="py-rem">${norm}</span></div>`;
     const item={id:`${Date.now()}_${Math.random()}`,wordObj,type:isStar?'star':'normal',x:spawnX,y:spawnY,speed,el,isDestroyed:false,isTargeted:false};
     const wordsLayer=this.container.querySelector('#cannon-words-layer');
     if(wordsLayer){wordsLayer.appendChild(el);this.activeWords.push(item);el.style.transform=`translate3d(${spawnX}px,${spawnY}px,0)`;}
@@ -431,11 +494,12 @@ export class CannonGameEngine {
       const dt=Math.min(0.05,(currentTime-this.lastFrameTime)/1000);
       this.lastFrameTime=currentTime;
       this.spawnTimer+=dt*1000;
-      const baseInterval=Math.max(1400,2800-(90-this.timeLeft)*22);
+      // KHOẢNG CÁCH SINH TỪ THOÁNG ĐÃNG
+      const baseInterval=3200;
       const spawnInterval=this.slowMoTimer>0?baseInterval*1.8:baseInterval;
       if(this.spawnTimer>=spawnInterval){this.spawnTimer=0;this.spawnWord();}
       const playfield=this.container.querySelector('#cannon-playfield');
-      const groundY=playfield?playfield.clientHeight-85:400;
+      const groundY=playfield?playfield.clientHeight-60:450;
       const speedMod=this.slowMoTimer>0?0.35:1.0;
       for(let i=this.activeWords.length-1;i>=0;i--){
         const item=this.activeWords[i];if(item.isDestroyed)continue;
@@ -446,7 +510,7 @@ export class CannonGameEngine {
           this.activeWords.splice(i,1);
           if(this.lockedTarget&&this.lockedTarget.id===item.id){this.lockedTarget=null;this.typedBuffer='';this.updateTypedDisplay();}
           if(this.shieldActive){this.shieldActive=false;this.shieldTimer=0;this.showFloatingText(item.x,groundY-20,'🛡️ Lá Chắn Chặn!','#38bdf8');}
-          else{this.lives--;this.combo=0;this.music.playMiss();this.showMissFlash();this.showFloatingText(item.x,groundY-22,`💔 ${item.wordObj.word}`,'#ef4444');}
+          else{this.lives--;this.combo=0;this.music.playMiss();this.showMissFlash();this.showFloatingText(item.x,groundY-22,`💔 ${item.wordObj.word} (${item.wordObj.meaning || ''})`,'#ef4444');}
           if(this.lives<=0){this.gameOver(false);return;}
           this.updateHUD();
         }
@@ -464,22 +528,15 @@ export class CannonGameEngine {
     if(this.timerInterval)clearInterval(this.timerInterval);
     this.timerInterval=setInterval(()=>{
       if(!this.isRunning||this.isPaused)return;
-      this.timeLeft--;
       if(this.slowMoTimer>0)this.slowMoTimer--;
       if(this.score2xTimer>0)this.score2xTimer--;
       if(this.shieldTimer>0){this.shieldTimer--;if(this.shieldTimer===0)this.shieldActive=false;}
       this.updateBuffBanner();
-      if(this.timeLeft<=10&&this.timeLeft>=1)this.showCenterTick(this.timeLeft);
-      if(this.timeLeft<=0)this.gameOver(this.wordsDestroyedCount>0);
       this.updateHUD();
     },1000);
   }
 
-  showCenterTick(num){
-    let el=this.container.querySelector('.game-center-countdown-tick');
-    if(!el){el=document.createElement('div');el.className='game-center-countdown-tick';(this.container.querySelector('#cannon-playfield')||this.container).appendChild(el);}
-    el.textContent=num;el.classList.remove('tick-anim');void el.offsetWidth;el.classList.add('tick-anim');
-  }
+  showCenterTick(num){}
 
   updateBuffBanner(){
     const banner=this.container.querySelector('#cannon-buff-banner');if(!banner)return;
@@ -504,11 +561,9 @@ export class CannonGameEngine {
   updateHUD(){
     const scoreEl=this.container.querySelector('#cannon-score-val');
     const comboEl=this.container.querySelector('#cannon-combo-val');
-    const timerEl=this.container.querySelector('#cannon-timer-val');
     const livesEl=this.container.querySelector('#cannon-lives-container');
     if(scoreEl)scoreEl.textContent=this.score;
     if(comboEl)comboEl.textContent=`x${this.combo}`;
-    if(timerEl){const m=Math.floor(this.timeLeft/60);const s=this.timeLeft%60;timerEl.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;timerEl.style.color=this.timeLeft<=10?'#ef4444':'#38bdf8';}
     if(livesEl){livesEl.innerHTML='';for(let i=0;i<this.maxLives;i++){const ic=document.createElement('i');const alive=i<this.lives;ic.className=alive?'fa-solid fa-heart':'fa-regular fa-heart';ic.style.color=alive?'#ef4444':'rgba(255,255,255,.2)';livesEl.appendChild(ic);}}
     this.container.querySelectorAll('.phidao-skill-btn').forEach(btn=>btn.classList.toggle('affordable',this.combo>=parseInt(btn.dataset.cost,10)));
   }
@@ -533,7 +588,7 @@ export class CannonGameEngine {
     if(this.animFrameId){cancelAnimationFrame(this.animFrameId);this.animFrameId=null;}
     if(this.timerInterval){clearInterval(this.timerInterval);this.timerInterval=null;}
     this.isStopping=false;this.isRunning=true;this.isPaused=false;
-    this.score=0;this.combo=0;this.maxCombo=0;this.lives=3;this.timeLeft=90;
+    this.score=0;this.combo=0;this.maxCombo=0;this.lives=3;
     this.activeWords=[];this.wordsDestroyedCount=0;this.correctWordsSet=new Set();
     this.typedBuffer='';this.lockedTarget=null;
     this.wordQueue=[...this.rawWords].sort(()=>Math.random()-0.5);

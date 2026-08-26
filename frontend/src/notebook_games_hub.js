@@ -100,20 +100,20 @@ export class NotebookGamesHub {
             </button>
           </div>
 
-          <!-- CARD GAME 1: CANNON -->
+          <!-- CARD GAME 1: PHI DAO (CANNON) -->
           <div class="game-choice-card card-cannon" id="btn-choose-cannon" style="cursor: pointer;">
-            <div class="card-tag">PHẢN XẠ PINYIN & BẢN ĐỒ BOM</div>
-            <div class="card-icon-hero">💥 🚀</div>
-            <h3 class="card-title">Bắn Pháo Pinyin</h3>
+            <div class="card-tag">🗡️ PHI ĐAO LUYỆN CHỮ • PHẢN XẠ PINYIN</div>
+            <div class="card-icon-hero">🗡️ 🥷</div>
+            <h3 class="card-title">Phi Đao Luyện Chữ</h3>
             <p class="card-desc">
-              Từ vựng rơi từ trên cao! Nhanh tay gõ <strong>Pinyin</strong> để khẩu pháo xoay nòng bắn nổ chữ Hán. Tránh xa các thẻ có <strong>BOM 💣</strong> và dùng Combo mở khóa <strong>Mưa Băng, Lá Chắn</strong>!
+              Từ vựng rơi từ trời đêm! Nhanh tay gõ <strong>Pinyin (không dấu)</strong> để ninja phóng phi đao bắn nổ chữ Hán. Thưởng thức âm nhạc Lo-fi thư giãn và củng cố kiến thức sau trận đấu!
             </p>
             <div class="card-features">
-              <span><i class="fa-solid fa-bolt"></i> Luyện gõ Pinyin</span>
-              <span><i class="fa-solid fa-snowflake"></i> Kỹ năng làm chậm</span>
+              <span><i class="fa-solid fa-keyboard"></i> Gõ Pinyin tự do</span>
+              <span><i class="fa-solid fa-music"></i> Nhạc nền Lo-fi thư giãn</span>
             </div>
             <button type="button" class="btn btn-primary game-launch-btn" style="background: linear-gradient(135deg, #dc2626, #b91c1c); color: #ffffff;">
-              Chơi Bắn Pháo <i class="fa-solid fa-play"></i>
+              Chơi Phi Đao <i class="fa-solid fa-play"></i>
             </button>
           </div>
 

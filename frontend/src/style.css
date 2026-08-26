@@ -13172,29 +13172,33 @@ html.dark .mahjong-rules-tip {
 
 /* Falling note cards (Ultra High Contrast, Glowing & Vibrant) */
 /* Unified Falling Word Block (Phím Đàn Thanh Điệu) */
+/* Falling note cards (Ultra High Contrast, Glowing & Compact like Phi Đao) */
+/* Unified Falling Word Block (Phím Đàn Thanh Điệu) */
 .rhythm-falling-word-block {
   position: absolute;
   top: 0;
-  left: 4%;
-  width: 92%;
-  border-radius: 20px;
-  background: #ffffff !important;
-  border: 2.5px solid #38bdf8 !important;
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2), 0 0 25px rgba(56, 189, 248, 0.35) !important;
+  left: 50%;
+  width: auto;
+  min-width: 130px;
+  max-width: 280px;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%) !important;
+  border: 2px solid #38bdf8 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.4) !important;
   z-index: 5;
   box-sizing: border-box;
   text-align: center;
   will-change: transform;
   pointer-events: auto;
   cursor: pointer;
-  padding: 10px 14px 12px 14px;
+  padding: 8px 14px 10px 14px;
   transition: box-shadow 0.15s ease, border-color 0.15s ease;
 }
 
 html.dark .rhythm-falling-word-block {
-  background: #0f172a !important;
+  background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%) !important;
   border-color: #38bdf8 !important;
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(56, 189, 248, 0.35) !important;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(56, 189, 248, 0.45) !important;
 }
 
 .rhythm-falling-word-block.word-card-completed {
@@ -13212,86 +13216,27 @@ html.dark .rhythm-falling-word-block {
 .rhythm-word-card-inner {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
+  align-items: center;
 }
 
 .word-card-top-header {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.word-card-hanzi {
-  font-size: 1.85rem;
-  font-weight: 900;
-  color: #0f172a;
-  font-family: var(--font-hanzi, "Noto Sans SC", sans-serif);
-  letter-spacing: 2px;
-  line-height: 1.1;
-}
-
-html.dark .word-card-hanzi {
-  color: #ffffff;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
-}
-
-.word-card-pinyin-row {
-  display: flex;
-  align-items: center;
   gap: 6px;
-  font-size: 0.95rem;
-  font-weight: 800;
-}
-
-.word-card-pinyin {
-  color: #0284c7;
-  letter-spacing: 0.5px;
-}
-
-html.dark .word-card-pinyin {
-  color: #38bdf8;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+  width: 100%;
 }
 
 .word-card-meaning {
-  color: #475569;
-  font-size: 0.88rem;
-  font-weight: 600;
-}
-
-html.dark .word-card-meaning {
-  color: #94a3b8;
-}
-
-.word-card-prompt-bar {
-  background: #f1f5f9;
-  border: 1px solid #cbd5e1;
-  border-radius: 999px;
-  padding: 4px 12px;
+  color: #7dd3fc;
   font-size: 0.78rem;
-  font-weight: 800;
-  color: #334155;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  margin: 0 auto;
-}
-
-html.dark .word-card-prompt-bar {
-  background: #1e293b;
-  border-color: rgba(255, 255, 255, 0.15);
-  color: #e2e8f0;
-}
-
-.prompt-target-char {
-  color: #d97706;
-  font-size: 0.95rem;
-}
-
-html.dark .prompt-target-char {
-  color: #fbbf24;
+  font-weight: 700;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
 }
 
 .word-card-steps-flow {
@@ -13299,27 +13244,33 @@ html.dark .prompt-target-char {
   align-items: stretch;
   justify-content: center;
   gap: 8px;
-  margin-top: 2px;
 }
 
 .rhythm-tone-step-badge {
-  flex: 1;
-  max-width: 150px;
-  background: #f8fafc;
-  border: 2.5px solid #e2e8f0;
-  border-radius: 16px;
-  padding: 10px 8px 12px 8px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 6px 10px 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
+  min-width: 60px;
   transition: all 0.15s ease;
   position: relative;
 }
 
-html.dark .rhythm-tone-step-badge {
-  background: #1e293b;
-  border-color: rgba(255, 255, 255, 0.12);
+.rhythm-tone-step-badge.step-current {
+  border-color: #fbbf24 !important;
+  background: rgba(251, 191, 36, 0.15) !important;
+  box-shadow: 0 0 18px rgba(251, 191, 36, 0.6) !important;
+  transform: scale(1.06);
+}
+
+.rhythm-tone-step-badge.step-done {
+  border-color: #10b981 !important;
+  background: rgba(16, 185, 129, 0.15) !important;
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.4) !important;
 }
 
 .rhythm-tone-step-badge .step-header {
@@ -13327,26 +13278,34 @@ html.dark .rhythm-tone-step-badge {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 0 4px;
-  margin-bottom: 2px;
+  margin-bottom: 1px;
 }
 
 .rhythm-tone-step-badge .step-idx {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.08);
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-weight: 900;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #64748b;
+  color: #94a3b8;
 }
 
-html.dark .rhythm-tone-step-badge .step-idx {
-  background: rgba(255, 255, 255, 0.15);
-  color: #94a3b8;
+.rhythm-tone-step-badge .step-char {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #ffffff;
+  font-family: var(--font-hanzi, "Noto Sans SC", sans-serif);
+  line-height: 1.1;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+}
+
+.rhythm-tone-step-badge .step-pinyin {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #93c5fd;
+  letter-spacing: 0.5px;
+}
+
+.rhythm-tone-step-badge.step-current .step-pinyin {
+  color: #fde047;
+  text-shadow: 0 0 6px rgba(234, 179, 8, 0.8);
 }
 
 .rhythm-tone-step-badge .step-char {
