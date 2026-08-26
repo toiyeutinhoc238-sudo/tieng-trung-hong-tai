@@ -345,6 +345,7 @@ async function writeUserData(data) {
 
 // Background MongoDB Persistence
 async function persistToMongoDB(data) {
+  if (mongoose.connection.readyState !== 1) return;
   const promises = [];
   const emails = new Set([
     ...Object.keys(data.users || {}),
@@ -355,32 +356,34 @@ async function persistToMongoDB(data) {
 
   for (const email of emails) {
     const u = data.users[email] || { name: "", picture: "", role: "user", stats: { streak: 0, studyTime: 0, lastActiveDate: "" } };
-    promises.push(User.replaceOne(
+    const updateDoc = {
+      name: u.name || "",
+      picture: u.picture || "",
+      role: u.role || 'user',
+      lastSeenTime: u.lastSeenTime || new Date(),
+      stats: u.stats || { streak: 0, studyTime: 0, lastActiveDate: "" },
+      gameHistory: u.gameHistory || [],
+      quizHistory: (data.quizHistory && data.quizHistory[email]) || [],
+      progress: data.progress[email] || {},
+      customWords: data.customWords[email] || [],
+      chats: data.chats[email] || []
+    };
+
+    promises.push(User.updateOne(
       { _id: email },
-      {
-        _id: email,
-        name: u.name,
-        picture: u.picture,
-        role: u.role || 'user',
-        lastSeenTime: u.lastSeenTime || new Date(),
-        stats: u.stats,
-        gameHistory: u.gameHistory || [],
-        quizHistory: (data.quizHistory && data.quizHistory[email]) || [],
-        progress: data.progress[email] || {},
-        customWords: data.customWords[email] || [],
-        chats: data.chats[email] || []
-      },
+      { $set: updateDoc },
       { upsert: true }
     ));
   }
 
-  await Session.deleteMany({});
   for (const token of Object.keys(data.sessions || {})) {
-    promises.push(Session.replaceOne(
-      { _id: token },
-      { _id: token, email: data.sessions[token] },
-      { upsert: true }
-    ));
+    if (token && data.sessions[token]) {
+      promises.push(Session.updateOne(
+        { _id: token },
+        { $set: { email: data.sessions[token] } },
+        { upsert: true }
+      ));
+    }
   }
 
   await Promise.all(promises);
@@ -1887,9 +1890,9 @@ app.post('/api/chat', async (req, res) => {
       }
     }
 
-    let returnedThreadId = null;
+    let returnedThreadId = threadId || null;
 
-    // If logged in, persist the messages into user_data.json
+    // If logged in, persist the messages into user_data.json and MongoDB Atlas
     if (email) {
       const userData = await readUserData();
       if (!userData.chats) userData.chats = {};
@@ -1902,16 +1905,16 @@ app.post('/api/chat', async (req, res) => {
 
       if (!thread) {
         // Create new thread
-        returnedThreadId = 'thread_' + Date.now() + Math.random().toString(36).substring(2, 6);
-        const firstUserMsg = messages[messages.length - 1]?.content || 'Cuộc trò chuyện mới';
-        const title = firstUserMsg.substring(0, 30) + (firstUserMsg.length > 30 ? '...' : '');
+        returnedThreadId = threadId || ('thread_' + Date.now() + Math.random().toString(36).substring(2, 6));
+        const firstUserMsg = messages.find(m => m.role === 'user')?.content || messages[messages.length - 1]?.content || 'Cuộc trò chuyện mới';
+        const title = firstUserMsg.substring(0, 35) + (firstUserMsg.length > 35 ? '...' : '');
         thread = {
           id: returnedThreadId,
           title,
           createdAt: new Date().toISOString(),
           messages: []
         };
-        userData.chats[email].push(thread);
+        userData.chats[email].unshift(thread);
       } else {
         returnedThreadId = thread.id;
       }
@@ -1932,6 +1935,18 @@ app.post('/api/chat', async (req, res) => {
       });
 
       await writeUserData(userData);
+
+      // Immediate atomic update in MongoDB Atlas for maximum durability
+      if (mongoose.connection.readyState === 1) {
+        User.updateOne(
+          { _id: email },
+          { $set: { chats: userData.chats[email], lastSeenTime: new Date() } },
+          { upsert: true }
+        ).catch(err => console.error('[Chat] Atomic MongoDB chat update error:', err));
+      }
+    } else {
+      // For guest users, generate a stable thread ID for local persistence
+      returnedThreadId = threadId || ('thread_guest_' + Date.now() + Math.random().toString(36).substring(2, 6));
     }
 
     res.json({ reply, threadId: returnedThreadId });
@@ -1945,11 +1960,25 @@ app.post('/api/chat', async (req, res) => {
 app.get('/api/chat/threads', async (req, res) => {
   const email = getLoggedInUserEmail(req);
   if (!email) {
-    return res.status(401).json({ error: 'Chưa đăng nhập. Vui lòng đăng nhập trước.' });
+    return res.json([]);
   }
 
   const userData = await readUserData();
-  const userChats = (userData.chats && userData.chats[email]) || [];
+  let userChats = (userData.chats && userData.chats[email]) || [];
+
+  // If cache is empty, check MongoDB directly
+  if (userChats.length === 0 && mongoose.connection.readyState === 1) {
+    try {
+      const uDoc = await User.findById(email);
+      if (uDoc && Array.isArray(uDoc.chats) && uDoc.chats.length > 0) {
+        userChats = uDoc.chats;
+        if (!userData.chats) userData.chats = {};
+        userData.chats[email] = userChats;
+      }
+    } catch (e) {
+      console.warn('Direct MongoDB chat lookup error:', e);
+    }
+  }
 
   // Sort by date descending
   const sorted = [...userChats].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -1957,7 +1986,7 @@ app.get('/api/chat/threads', async (req, res) => {
   // Return list of threads (metadata only)
   const metadata = sorted.map(t => ({
     id: t.id,
-    title: t.title,
+    title: t.title || 'Cuộc trò chuyện',
     createdAt: t.createdAt
   }));
 
@@ -1973,9 +2002,29 @@ app.get('/api/chat/threads/:id', async (req, res) => {
 
   const { id } = req.params;
   const userData = await readUserData();
-  const userChats = (userData.chats && userData.chats[email]) || [];
+  let userChats = (userData.chats && userData.chats[email]) || [];
 
-  const thread = userChats.find(t => t.id === id);
+  let thread = userChats.find(t => t.id === id);
+
+  // If not found in cache, check MongoDB directly
+  if (!thread && mongoose.connection.readyState === 1) {
+    try {
+      const uDoc = await User.findById(email);
+      if (uDoc && Array.isArray(uDoc.chats)) {
+        thread = uDoc.chats.find(t => t.id === id);
+        if (thread) {
+          if (!userData.chats) userData.chats = {};
+          if (!userData.chats[email]) userData.chats[email] = [];
+          if (!userData.chats[email].some(t => t.id === id)) {
+            userData.chats[email].push(thread);
+          }
+        }
+      }
+    } catch (e) {
+      console.warn('Direct MongoDB thread lookup error:', e);
+    }
+  }
+
   if (!thread) {
     return res.status(404).json({ error: 'Không tìm thấy cuộc trò chuyện.' });
   }
@@ -1998,50 +2047,112 @@ app.delete('/api/chat/threads/:id', async (req, res) => {
     userData.chats[email] = userData.chats[email].filter(t => t.id !== id);
     if (userData.chats[email].length < originalLength) {
       await writeUserData(userData);
+
+      if (mongoose.connection.readyState === 1) {
+        User.updateOne(
+          { _id: email },
+          { $set: { chats: userData.chats[email] } }
+        ).catch(err => console.error('Atomic MongoDB chat deletion error:', err));
+      }
+
       return res.json({ success: true, message: 'Đã xóa cuộc trò chuyện.' });
+    }
+  }
+
+  // Also try MongoDB deletion directly if not found in cache
+  if (mongoose.connection.readyState === 1) {
+    try {
+      const uDoc = await User.findById(email);
+      if (uDoc && Array.isArray(uDoc.chats)) {
+        const filtered = uDoc.chats.filter(t => t.id !== id);
+        if (filtered.length < uDoc.chats.length) {
+          await User.updateOne({ _id: email }, { $set: { chats: filtered } });
+          if (!userData.chats) userData.chats = {};
+          userData.chats[email] = filtered;
+          return res.json({ success: true, message: 'Đã xóa cuộc trò chuyện.' });
+        }
+      }
+    } catch (e) {
+      console.warn('MongoDB direct thread deletion error:', e);
     }
   }
 
   res.status(404).json({ error: 'Không tìm thấy cuộc trò chuyện để xóa.' });
 });
 
-// POST endpoint to migrate guest chat history to a new thread
+// POST endpoint to migrate guest chat history to a new or existing user account
 app.post('/api/chat/migrate', async (req, res) => {
   const email = getLoggedInUserEmail(req);
   if (!email) {
     return res.status(401).json({ error: 'Chưa đăng nhập.' });
   }
 
-  const { messages } = req.body;
-  if (!messages || !Array.isArray(messages) || messages.length === 0) {
-    return res.status(400).json({ error: 'Không có tin nhắn để đồng bộ.' });
-  }
+  const { messages, threads: incomingThreads } = req.body;
 
   try {
     const userData = await readUserData();
     if (!userData.chats) userData.chats = {};
     if (!userData.chats[email]) userData.chats[email] = [];
 
-    // Create a new thread for this guest history
-    const threadId = 'thread_' + Date.now() + Math.random().toString(36).substring(2, 6);
-    const firstUserMsg = messages.find(m => m.role === 'user')?.content || 'Cuộc trò chuyện được đồng bộ';
-    const title = firstUserMsg.substring(0, 30) + (firstUserMsg.length > 30 ? '...' : '');
+    let migratedCount = 0;
+    let mainThreadId = null;
 
-    const thread = {
-      id: threadId,
-      title,
-      createdAt: new Date().toISOString(),
-      messages: messages.map(m => ({
-        role: m.role,
-        content: m.content,
-        timestamp: new Date().toISOString()
-      }))
-    };
+    // Handle full threads array migration
+    if (Array.isArray(incomingThreads) && incomingThreads.length > 0) {
+      for (const t of incomingThreads) {
+        if (!t || !t.id || !Array.isArray(t.messages) || t.messages.length === 0) continue;
+        const existingIdx = userData.chats[email].findIndex(item => item.id === t.id);
+        if (existingIdx !== -1) {
+          // Merge / update messages if longer
+          if (t.messages.length > (userData.chats[email][existingIdx].messages || []).length) {
+            userData.chats[email][existingIdx].messages = t.messages;
+          }
+        } else {
+          userData.chats[email].unshift({
+            id: t.id,
+            title: t.title || 'Cuộc trò chuyện',
+            createdAt: t.createdAt || new Date().toISOString(),
+            messages: t.messages
+          });
+          migratedCount++;
+        }
+        if (!mainThreadId) mainThreadId = t.id;
+      }
+    } else if (Array.isArray(messages) && messages.length > 0) {
+      // Handle single messages list migration
+      const threadId = 'thread_' + Date.now() + Math.random().toString(36).substring(2, 6);
+      const firstUserMsg = messages.find(m => m.role === 'user')?.content || 'Cuộc trò chuyện được đồng bộ';
+      const title = firstUserMsg.substring(0, 35) + (firstUserMsg.length > 35 ? '...' : '');
 
-    userData.chats[email].push(thread);
-    await writeUserData(userData);
+      const thread = {
+        id: threadId,
+        title,
+        createdAt: new Date().toISOString(),
+        messages: messages.map(m => ({
+          role: m.role,
+          content: m.content,
+          timestamp: m.timestamp || new Date().toISOString()
+        }))
+      };
 
-    res.json({ success: true, threadId });
+      userData.chats[email].unshift(thread);
+      migratedCount++;
+      mainThreadId = threadId;
+    }
+
+    if (migratedCount > 0) {
+      await writeUserData(userData);
+
+      if (mongoose.connection.readyState === 1) {
+        await User.updateOne(
+          { _id: email },
+          { $set: { chats: userData.chats[email] } },
+          { upsert: true }
+        );
+      }
+    }
+
+    res.json({ success: true, threadId: mainThreadId, count: migratedCount });
   } catch (error) {
     console.error('Migration error:', error);
     res.status(500).json({ error: 'Có lỗi xảy ra khi đồng bộ lịch sử hội thoại.' });

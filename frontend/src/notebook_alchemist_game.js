@@ -449,10 +449,10 @@ export class AlchemistGameEngine {
 
             <!-- ACTION BUTTONS -->
             <div class="cauldron-actions">
-              <button type="button" id="btn-clear-cauldron" class="btn btn-outline" style="border-radius: 50px; font-weight: 700;">
+              <button type="button" id="alchemist-clear-btn" class="btn btn-outline" style="border-radius: 50px; font-weight: 700;">
                 <i class="fa-solid fa-arrow-rotate-left"></i> Đổ Lại
               </button>
-              <button type="button" id="btn-fuse-cauldron" class="btn btn-primary btn-fuse-glow">
+              <button type="button" id="alchemist-fuse-btn" class="btn btn-primary btn-fuse-glow">
                 <i class="fa-solid fa-wand-magic-sparkles"></i> LUYỆN HÓA ✨
               </button>
             </div>
@@ -474,6 +474,7 @@ export class AlchemistGameEngine {
         <!-- MODAL OVERLAY (VICTORY / GAME OVER) -->
         <div id="alchemist-modal-overlay" class="cannon-modal-overlay" style="display: none;">
           <div class="cannon-result-card">
+            <button type="button" id="alchemist-modal-close-x" class="result-modal-close-btn" title="Đóng">&times;</button>
             <div id="alchemist-result-icon" class="result-icon">⚗️</div>
             <h2 id="alchemist-result-title" class="result-title">Hoàn Thành Màn Chơi!</h2>
             <p id="alchemist-result-desc" class="result-desc">Bạn đã xuất sắc luyện thành công các chữ Hán!</p>
@@ -497,13 +498,13 @@ export class AlchemistGameEngine {
             <div id="alchemist-words-summary-wrap"></div>
 
             <div class="result-beta-note">
-              <i class="fa-solid fa-flask"></i> <strong>Chế độ thử nghiệm:</strong> Điểm số và thành tích không lưu vào hồ sơ trong giai đoạn Beta Super Admin.
+              <i class="fa-solid fa-flask"></i> <strong>Chế độ luyện tập:</strong> Hãy tiếp tục trau dồi vốn từ vựng HSK của bạn!
             </div>
 
-            <div style="display: flex; gap: 12px; justify-content: center; margin-top: 14px; flex-wrap: wrap;">
-              <button type="button" id="alchemist-retry-btn" class="btn btn-primary" style="padding: 10px 20px; font-weight: 800;"><i class="fa-solid fa-rotate-right"></i> Chơi Lại</button>
-              <button type="button" id="alchemist-back-hub-btn" class="btn btn-secondary" style="padding: 10px 18px; font-weight: 700;"><i class="fa-solid fa-gamepad"></i> Đổi Trò Chơi</button>
-              <button type="button" id="alchemist-finish-btn" class="btn btn-outline" style="padding: 10px 18px; font-weight: 700;"><i class="fa-solid fa-book-bookmark"></i> Quay Lại Sổ Tay</button>
+            <div class="cannon-result-card-actions">
+              <button type="button" id="alchemist-retry-btn" class="btn btn-primary"><i class="fa-solid fa-rotate-right"></i> Chơi Lại</button>
+              <button type="button" id="alchemist-back-hub-btn" class="btn btn-secondary"><i class="fa-solid fa-gamepad"></i> Đổi Trò Chơi</button>
+              <button type="button" id="alchemist-finish-btn" class="btn btn-outline"><i class="fa-solid fa-book-bookmark"></i> Quay Lại Sổ Tay</button>
             </div>
           </div>
         </div>
@@ -516,12 +517,22 @@ export class AlchemistGameEngine {
     const backHubTopBtn = this.container.querySelector('#alchemist-back-hub-top-btn');
     const topBackBtn = this.container.querySelector('#alchemist-top-back-btn');
     const exitBtn = this.container.querySelector('#alchemist-exit-btn');
+    const closeXBtn = this.container.querySelector('#alchemist-modal-close-x');
     const retryBtn = this.container.querySelector('#alchemist-retry-btn');
     const backHubBtn = this.container.querySelector('#alchemist-back-hub-btn');
     const finishBtn = this.container.querySelector('#alchemist-finish-btn');
     const clearBtn = this.container.querySelector('#btn-clear-cauldron');
     const fuseBtn = this.container.querySelector('#btn-fuse-cauldron');
     const audioBtn = this.container.querySelector('#alchemist-audio-hint-btn');
+
+    if (closeXBtn) {
+      closeXBtn.addEventListener('click', () => {
+        this.stopAndExit();
+        if (typeof window.exitNotebookGamesHub === 'function') {
+          window.exitNotebookGamesHub();
+        }
+      });
+    }
 
     if (pauseBtn) {
       pauseBtn.addEventListener('click', () => this.togglePause());
@@ -991,9 +1002,21 @@ export class AlchemistGameEngine {
         this.renderWordSummaryList(summaryWrap, this.rawWords, this.correctWordsSet);
       }
 
+      const closeXBtn = overlay.querySelector('#alchemist-modal-close-x');
       const retryBtn = overlay.querySelector('#alchemist-retry-btn');
       const backHubBtn = overlay.querySelector('#alchemist-back-hub-btn');
       const finishBtn = overlay.querySelector('#alchemist-finish-btn');
+
+      if (closeXBtn) {
+        closeXBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.stopAndExit();
+          if (typeof window.exitNotebookGamesHub === 'function') {
+            window.exitNotebookGamesHub();
+          }
+        };
+      }
 
       if (retryBtn) {
         retryBtn.onclick = (e) => {

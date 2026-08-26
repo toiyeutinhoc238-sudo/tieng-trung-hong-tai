@@ -59,6 +59,15 @@ class GameSoundFX {
   playHeal() {
     this.playTone(300, 'sine', 0.3, 600);
   }
+  playWarning() {
+    this.playTone(587, 'sine', 0.15, 880);
+  }
+  playUrgentTick() {
+    this.playTone(950, 'triangle', 0.06, 1200);
+  }
+  playGameOver() {
+    this.playTone(320, 'sawtooth', 0.35, 90);
+  }
 }
 
 export class CannonGameEngine {
@@ -313,6 +322,7 @@ export class CannonGameEngine {
         <!-- GAME OVER / VICTORY OVERLAY -->
         <div id="cannon-modal-overlay" class="cannon-modal-overlay" style="display: none;">
           <div class="cannon-result-card">
+            <button type="button" id="cannon-modal-close-x" class="result-modal-close-btn" title="Đóng">&times;</button>
             <div id="cannon-result-icon" class="result-icon">🏆</div>
             <h2 id="cannon-result-title" class="result-title">Hoàn Thành Màn Chơi!</h2>
             <p id="cannon-result-desc" class="result-desc">Bạn đã xuất sắc hoàn thành thời gian sinh tồn!</p>
@@ -336,13 +346,13 @@ export class CannonGameEngine {
             <div id="cannon-words-summary-wrap"></div>
 
             <div class="result-beta-note">
-              <i class="fa-solid fa-flask"></i> <strong>Chế độ thử nghiệm:</strong> Điểm số và thành tích không lưu vào hồ sơ trong giai đoạn Beta Super Admin.
+              <i class="fa-solid fa-flask"></i> <strong>Chế độ luyện tập:</strong> Hãy tiếp tục trau dồi vốn từ vựng HSK của bạn!
             </div>
 
-            <div style="display: flex; gap: 12px; justify-content: center; margin-top: 14px; flex-wrap: wrap;">
-              <button type="button" id="cannon-retry-btn" class="btn btn-primary" style="padding: 10px 20px; font-weight: 800;"><i class="fa-solid fa-rotate-right"></i> Chơi Lại</button>
-              <button type="button" id="cannon-back-hub-btn" class="btn btn-secondary" style="padding: 10px 18px; font-weight: 700;"><i class="fa-solid fa-gamepad"></i> Đổi Trò Chơi</button>
-              <button type="button" id="cannon-finish-btn" class="btn btn-outline" style="padding: 10px 18px; font-weight: 700;"><i class="fa-solid fa-book-bookmark"></i> Quay Lại Sổ Tay</button>
+            <div class="cannon-result-card-actions">
+              <button type="button" id="cannon-retry-btn" class="btn btn-primary"><i class="fa-solid fa-rotate-right"></i> Chơi Lại</button>
+              <button type="button" id="cannon-back-hub-btn" class="btn btn-secondary"><i class="fa-solid fa-gamepad"></i> Đổi Trò Chơi</button>
+              <button type="button" id="cannon-finish-btn" class="btn btn-outline"><i class="fa-solid fa-book-bookmark"></i> Quay Lại Sổ Tay</button>
             </div>
           </div>
         </div>
@@ -357,6 +367,7 @@ export class CannonGameEngine {
     const fireBtn = this.container.querySelector('#cannon-fire-btn');
     const pauseBtn = this.container.querySelector('#cannon-pause-btn');
     const exitBtn = this.container.querySelector('#cannon-exit-btn');
+    const closeXBtn = this.container.querySelector('#cannon-modal-close-x');
     const retryBtn = this.container.querySelector('#cannon-retry-btn');
     const backHubBtn = this.container.querySelector('#cannon-back-hub-btn');
     const finishBtn = this.container.querySelector('#cannon-finish-btn');
@@ -372,6 +383,16 @@ export class CannonGameEngine {
       backHubTopBtn.addEventListener('click', (e) => {
         e.preventDefault();
         this.stopAndExit();
+      });
+    }
+
+    if (closeXBtn) {
+      closeXBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.stopAndExit();
+        if (typeof window.exitNotebookGamesHub === 'function') {
+          window.exitNotebookGamesHub();
+        }
       });
     }
 
@@ -518,12 +539,52 @@ export class CannonGameEngine {
         if (this.shieldTimer === 0) this.hasShield = false;
       }
       this.updateBuffBanner();
+      this.handleTimeCountdownAlert(this.timeLeft);
 
       if (this.timeLeft <= 0) {
         this.gameOver(true);
       }
       this.updateHUD();
     }, 1000);
+  }
+
+  handleTimeCountdownAlert(t) {
+    const hudTimer = this.container.querySelector('.hud-timer');
+
+    if (t === 60) {
+      if (this.sfx && this.sfx.playWarning) this.sfx.playWarning();
+      this.showToast('⏳ Còn 60 giây!');
+      if (hudTimer) {
+        hudTimer.classList.add('timer-warning-60');
+        setTimeout(() => hudTimer && hudTimer.classList.remove('timer-warning-60'), 2000);
+      }
+    } else if (t === 30) {
+      if (this.sfx && this.sfx.playWarning) this.sfx.playWarning();
+      this.showToast('⚠️ Còn 30 giây! Hãy tăng tốc!');
+      if (hudTimer) {
+        hudTimer.classList.add('timer-warning-30');
+      }
+    } else if (t <= 10 && t >= 1) {
+      if (this.sfx && this.sfx.playUrgentTick) this.sfx.playUrgentTick();
+      if (hudTimer) {
+        hudTimer.classList.add('timer-urgent-10');
+      }
+      this.showCenterCountdownTick(t);
+    }
+  }
+
+  showCenterCountdownTick(num) {
+    let tickEl = this.container.querySelector('.game-center-countdown-tick');
+    if (!tickEl) {
+      tickEl = document.createElement('div');
+      tickEl.className = 'game-center-countdown-tick';
+      const playfield = this.container.querySelector('#cannon-playfield') || this.container;
+      playfield.appendChild(tickEl);
+    }
+    tickEl.textContent = num;
+    tickEl.classList.remove('tick-anim');
+    void tickEl.offsetWidth;
+    tickEl.classList.add('tick-anim');
   }
 
   updateBuffBanner() {
@@ -1135,6 +1196,12 @@ export class CannonGameEngine {
 
     if (overlay) {
       overlay.style.setProperty('display', 'flex', 'important');
+      if (isVictory) {
+        if (this.sfx && this.sfx.playSkill) this.sfx.playSkill();
+      } else {
+        if (this.sfx && this.sfx.playGameOver) this.sfx.playGameOver();
+      }
+
       if (icon) icon.textContent = isVictory ? '🏆' : '💥';
       if (title) title.textContent = isVictory ? 'Chiến Thắng Xuất Sắc!' : 'Hết Mạng - Game Over!';
       if (desc) desc.textContent = isVictory ? `Bạn đã hoàn thành xuất sắc toàn bộ ${this.wordsDestroyedCount || this.totalWordsCount}/${this.totalWordsCount} từ vựng!` : 'Đừng nản lòng! Hãy gõ pinyin thật nhanh và né bom nhé.';
@@ -1148,9 +1215,21 @@ export class CannonGameEngine {
         this.renderWordSummaryList(summaryWrap, this.rawWords, this.correctWordsSet);
       }
 
+      const closeXBtn = overlay.querySelector('#cannon-modal-close-x');
       const retryBtn = overlay.querySelector('#cannon-retry-btn');
       const backHubBtn = overlay.querySelector('#cannon-back-hub-btn');
       const finishBtn = overlay.querySelector('#cannon-finish-btn');
+
+      if (closeXBtn) {
+        closeXBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.stopAndExit();
+          if (typeof window.exitNotebookGamesHub === 'function') {
+            window.exitNotebookGamesHub();
+          }
+        };
+      }
 
       if (retryBtn) {
         retryBtn.onclick = (e) => {

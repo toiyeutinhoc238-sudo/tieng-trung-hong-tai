@@ -352,6 +352,7 @@ export class SnakeGameEngine {
         <!-- GAME OVER / LEVEL UP MODAL -->
         <div id="snake-modal-overlay" class="cannon-modal-overlay" style="display: none;">
           <div class="cannon-result-card">
+            <button type="button" id="snake-modal-close-x" class="result-modal-close-btn" title="Đóng">&times;</button>
             <div id="snake-result-icon" class="result-icon">🏆</div>
             <h2 id="snake-result-title" class="result-title">Hoàn Thành Thử Thách!</h2>
             <p id="snake-result-desc" class="result-desc">Chúc mừng bạn đã chinh phục các cấp độ Nuôi Rắn!</p>
@@ -375,13 +376,13 @@ export class SnakeGameEngine {
             <div id="snake-words-summary-wrap"></div>
 
             <div class="result-beta-note">
-              <i class="fa-solid fa-flask"></i> <strong>Chế độ thử nghiệm:</strong> Điểm số và thành tích không lưu vào hồ sơ trong giai đoạn Beta Super Admin.
+              <i class="fa-solid fa-flask"></i> <strong>Chế độ luyện tập:</strong> Hãy tiếp tục trau dồi vốn từ vựng HSK của bạn!
             </div>
 
-            <div style="display: flex; gap: 12px; justify-content: center; margin-top: 14px; flex-wrap: wrap;">
-              <button type="button" id="snake-retry-btn" class="btn btn-primary" style="padding: 10px 20px; font-weight: 800;"><i class="fa-solid fa-rotate-right"></i> Chơi Lại</button>
-              <button type="button" id="snake-back-hub-btn" class="btn btn-secondary" style="padding: 10px 18px; font-weight: 700;"><i class="fa-solid fa-gamepad"></i> Đổi Trò Chơi</button>
-              <button type="button" id="snake-finish-btn" class="btn btn-outline" style="padding: 10px 18px; font-weight: 700;"><i class="fa-solid fa-book-bookmark"></i> Quay Lại Sổ Tay</button>
+            <div class="cannon-result-card-actions">
+              <button type="button" id="snake-retry-btn" class="btn btn-primary"><i class="fa-solid fa-rotate-right"></i> Chơi Lại</button>
+              <button type="button" id="snake-back-hub-btn" class="btn btn-secondary"><i class="fa-solid fa-gamepad"></i> Đổi Trò Chơi</button>
+              <button type="button" id="snake-finish-btn" class="btn btn-outline"><i class="fa-solid fa-book-bookmark"></i> Quay Lại Sổ Tay</button>
             </div>
           </div>
         </div>
@@ -433,6 +434,17 @@ export class SnakeGameEngine {
           window.exitNotebookGamesHub();
         } else {
           this.stopAndExit();
+        }
+      });
+    }
+
+    const closeXBtn = this.container.querySelector('#snake-modal-close-x');
+    if (closeXBtn) {
+      closeXBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.stopAndExit();
+        if (typeof window.exitNotebookGamesHub === 'function') {
+          window.exitNotebookGamesHub();
         }
       });
     }
@@ -1219,9 +1231,21 @@ export class SnakeGameEngine {
         this.renderWordSummaryList(summaryWrap, this.rawWords, this.correctWordsSet);
       }
 
+      const closeXBtn = overlay.querySelector('#snake-modal-close-x');
       const retryBtn = overlay.querySelector('#snake-retry-btn');
       const backHubBtn = overlay.querySelector('#snake-back-hub-btn');
       const finishBtn = overlay.querySelector('#snake-finish-btn');
+
+      if (closeXBtn) {
+        closeXBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.stopAndExit();
+          if (typeof window.exitNotebookGamesHub === 'function') {
+            window.exitNotebookGamesHub();
+          }
+        };
+      }
 
       if (retryBtn) {
         retryBtn.onclick = (e) => {

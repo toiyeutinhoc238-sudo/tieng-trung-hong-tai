@@ -496,7 +496,7 @@
   </style>
   <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
   <script type="module" crossorigin src="/assets/particles-Db85yIFy.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/style-DUnnENlD.css">
+  <link rel="stylesheet" crossorigin href="/assets/style-BQdc6PEW.css">
 </head>
 <body>
   <!-- Navbar -->
@@ -714,12 +714,18 @@
       }
     }
 
+    function getUserKey() {
+      return (currentUser && currentUser.email) ? currentUser.email : 'guest';
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
-      if (!currentUser) {
-        showUnauthorizedView();
-        return;
+      // 1. Instantly load cached threads from localStorage (0ms delay!)
+      loadCachedThreads();
+
+      // 2. Fetch latest threads from MongoDB in background if logged in
+      if (currentUser) {
+        syncCloudThreads();
       }
-      loadThreads();
 
       // Bind New Thread Button
       const newThreadBtn = document.getElementById('new-thread-btn');
@@ -742,66 +748,61 @@
       }
     });
 
-    function showUnauthorizedView() {
-      const container = document.getElementById('history-container');
-      container.innerHTML = `
-        <div class="unauth-overlay">
-          <i class="fa-solid fa-circle-exclamation"></i>
-          <h2 style="font-family: var(--font-display); font-weight: 700;">Bạn chưa đăng nhập!</h2>
-          <p style="color: var(--text-secondary); max-width: 450px; margin: 0 auto 16px auto;">Vui lòng đăng nhập bằng tài khoản Google trên trang chủ để xem lịch sử và lưu trữ cuộc trò chuyện AI của bạn.</p>
-          <button onclick="window.location.href='/'" class="btn btn-primary" style="background: var(--accent-blue); color: white;">Quay về Trang chủ</button>
-        </div>
-      `;
+    // 1. Instant local storage reader
+    function loadCachedThreads() {
+      const userKey = getUserKey();
+      const rawCached = localStorage.getItem('hongtai_threads_cache_' + userKey);
+      if (rawCached) {
+        try {
+          threads = JSON.parse(rawCached);
+          if (Array.isArray(threads) && threads.length > 0) {
+            renderThreadsList();
+            const storedActiveId = sessionStorage.getItem('hongtai_active_thread_id');
+            if (storedActiveId && threads.some(t => t.id === storedActiveId)) {
+              selectThread(storedActiveId);
+            } else if (!activeThreadId) {
+              selectThread(threads[0].id);
+            }
+            return;
+          }
+        } catch (e) {
+          console.warn('Parse cached threads error:', e);
+        }
+      }
+
+      // If no cached threads found
+      threads = [];
+      renderThreadsList();
     }
 
-    async function loadThreads() {
+    // 2. Background Cloud MongoDB sync
+    async function syncCloudThreads() {
+      if (!currentUser) return;
       try {
         const res = await fetch(API_BASE_URL + '/api/chat/threads', {
           headers: getAuthHeaders(),
           credentials: 'include'
         });
-        if (!res.ok) throw new Error();
-        threads = await res.json();
-        renderThreadsList();
+        if (!res.ok) throw new Error('Fetch threads failed');
+        const cloudThreads = await res.json();
         
-        // Cache threads list locally
-        if (currentUser) {
+        if (Array.isArray(cloudThreads)) {
+          threads = cloudThreads;
           localStorage.setItem('hongtai_threads_cache_' + currentUser.email, JSON.stringify(threads));
-        }
+          renderThreadsList();
 
-        // Auto select current active thread or first thread
-        if (Array.isArray(threads) && threads.length > 0) {
-          const storedActiveId = sessionStorage.getItem('hongtai_active_thread_id');
-          if (storedActiveId && threads.some(t => t.id === storedActiveId)) {
-            selectThread(storedActiveId);
-          } else if (!activeThreadId) {
-            selectThread(threads[0].id);
+          // Auto select active thread or first thread
+          if (threads.length > 0) {
+            const storedActiveId = sessionStorage.getItem('hongtai_active_thread_id');
+            if (storedActiveId && threads.some(t => t.id === storedActiveId)) {
+              selectThread(storedActiveId);
+            } else if (!activeThreadId) {
+              selectThread(threads[0].id);
+            }
           }
         }
       } catch (err) {
-        console.error('Error loading threads:', err);
-        if (currentUser) {
-          const cached = localStorage.getItem('hongtai_threads_cache_' + currentUser.email);
-          if (cached) {
-            threads = JSON.parse(cached);
-            renderThreadsList();
-            if (Array.isArray(threads) && threads.length > 0) {
-              const storedActiveId = sessionStorage.getItem('hongtai_active_thread_id');
-              if (storedActiveId && threads.some(t => t.id === storedActiveId)) {
-                selectThread(storedActiveId);
-              } else if (!activeThreadId) {
-                selectThread(threads[0].id);
-              }
-            }
-            return;
-          }
-        }
-        const listContainer = document.getElementById('threads-list');
-        listContainer.innerHTML = `
-          <div style="text-align: center; color: var(--danger); padding: 20px 10px; font-size: 0.85rem;">
-            Không thể tải danh sách cuộc trò chuyện. Vui lòng thử lại sau!
-          </div>
-        `;
+        console.warn('Background thread sync warning:', err);
       }
     }
 
@@ -822,12 +823,27 @@
       if (!container) return;
       
       container.innerHTML = '';
-      if (threads.length === 0) {
-        container.innerHTML = `
-          <div style="text-align: center; color: var(--text-muted); padding: 40px 10px; font-size: 0.85rem; font-style: italic;">
-            Chưa có cuộc trò chuyện nào được lưu.
-          </div>
+
+      // If guest, show a polite cloud backup hint banner
+      if (!currentUser) {
+        const guestBanner = document.createElement('div');
+        guestBanner.style.cssText = 'background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; font-size: 0.78rem; line-height: 1.4; color: #38bdf8;';
+        guestBanner.innerHTML = `
+          <i class="fa-solid fa-cloud-arrow-up" style="margin-right: 4px;"></i>
+          <strong>Khách:</strong> Hội thoại lưu trên máy này. <a href="/" style="color: #60a5fa; font-weight: 700; text-decoration: underline;">Đăng nhập Google</a> để sao lưu vĩnh viễn trên đám mây.
         `;
+        container.appendChild(guestBanner);
+      }
+
+      if (threads.length === 0) {
+        const emptyDiv = document.createElement('div');
+        emptyDiv.style.cssText = 'text-align: center; color: var(--text-muted); padding: 32px 10px; font-size: 0.85rem; font-style: italic;';
+        emptyDiv.innerHTML = `
+          <i class="fa-regular fa-comment-dots" style="font-size: 1.8rem; margin-bottom: 8px; opacity: 0.6;"></i>
+          <div>Chưa có cuộc trò chuyện nào được lưu.</div>
+          <button onclick="startNewThread()" style="margin-top: 12px; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #ffffff; border: none; padding: 6px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer;">+ Trò chuyện mới</button>
+        `;
+        container.appendChild(emptyDiv);
         return;
       }
 
@@ -862,54 +878,51 @@
 
     async function selectThread(id) {
       activeThreadId = id;
+      sessionStorage.setItem('hongtai_active_thread_id', id);
       renderThreadsList(); // Update active class
       
       document.getElementById('empty-chat-state').style.display = 'none';
       const panel = document.getElementById('active-chat-panel');
       panel.style.display = 'flex';
 
-      const messagesContainer = document.getElementById('chat-messages-container');
-      messagesContainer.innerHTML = `
-        <div style="text-align: center; padding: 48px; color: var(--text-muted);">
-          <i class="fa-solid fa-spinner fa-spin" style="font-size: 1.5rem; margin-bottom: 8px;"></i>
-          <div>Đang tải nội dung hội thoại...</div>
-        </div>
-      `;
+      const userKey = getUserKey();
 
-      try {
-        const res = await fetch(API_BASE_URL + `/api/chat/threads/${id}`, {
-          headers: getAuthHeaders(),
-          credentials: 'include'
-        });
-        if (!res.ok) throw new Error();
-        const thread = await res.json();
-        
-        document.getElementById('active-thread-title').textContent = thread.title || 'Chi tiết cuộc trò chuyện';
-        activeThreadMessages = thread.messages || [];
-        
-        renderMessages();
-        
-        // Cache messages for this thread
-        if (currentUser) {
-          localStorage.setItem('hongtai_thread_messages_cache_' + currentUser.email + '_' + id, JSON.stringify(thread));
-        }
-      } catch (err) {
-        console.error(err);
-        if (currentUser) {
-          const cached = localStorage.getItem('hongtai_thread_messages_cache_' + currentUser.email + '_' + id);
-          if (cached) {
-            const thread = JSON.parse(cached);
+      // 1. Instantly render from local cache if available
+      const cached = localStorage.getItem('hongtai_thread_messages_cache_' + userKey + '_' + id);
+      if (cached) {
+        try {
+          const thread = JSON.parse(cached);
+          document.getElementById('active-thread-title').textContent = thread.title || 'Chi tiết cuộc trò chuyện';
+          activeThreadMessages = thread.messages || [];
+          renderMessages();
+        } catch (e) {}
+      } else {
+        const messagesContainer = document.getElementById('chat-messages-container');
+        messagesContainer.innerHTML = `
+          <div style="text-align: center; padding: 48px; color: var(--text-muted);">
+            <i class="fa-solid fa-spinner fa-spin" style="font-size: 1.5rem; margin-bottom: 8px;"></i>
+            <div>Đang tải nội dung hội thoại...</div>
+          </div>
+        `;
+      }
+
+      // 2. If logged in, fetch from MongoDB server to get freshest state
+      if (currentUser) {
+        try {
+          const res = await fetch(API_BASE_URL + `/api/chat/threads/${id}`, {
+            headers: getAuthHeaders(),
+            credentials: 'include'
+          });
+          if (res.ok) {
+            const thread = await res.json();
             document.getElementById('active-thread-title').textContent = thread.title || 'Chi tiết cuộc trò chuyện';
             activeThreadMessages = thread.messages || [];
             renderMessages();
-            return;
+            localStorage.setItem('hongtai_thread_messages_cache_' + currentUser.email + '_' + id, JSON.stringify(thread));
           }
+        } catch (err) {
+          console.warn('Sync thread messages error:', err);
         }
-        messagesContainer.innerHTML = `
-          <div style="text-align: center; color: var(--danger); padding: 48px;">
-            Không thể tải nội dung cuộc trò chuyện này.
-          </div>
-        `;
       }
     }
 
@@ -936,7 +949,7 @@
       messagesContainer.innerHTML = '';
 
       if (activeThreadMessages.length === 0) {
-        messagesContainer.innerHTML = '<div style="color: var(--text-muted); font-style: italic; text-align: center; padding: 20px;">Trống</div>';
+        messagesContainer.innerHTML = '<div style="color: var(--text-muted); font-style: italic; text-align: center; padding: 20px;">Chưa có tin nhắn trong cuộc trò chuyện này.</div>';
         return;
       }
 
@@ -969,32 +982,40 @@
     async function deleteThread(id) {
       if (!confirm('Bạn có chắc chắn muốn xóa vĩnh viễn cuộc trò chuyện này?')) return;
       
-      try {
-        const res = await fetch(API_BASE_URL + `/api/chat/threads/${id}`, {
-          method: 'DELETE',
-          headers: getAuthHeaders(),
-          credentials: 'include'
-        });
-        if (!res.ok) throw new Error();
-        
-        threads = threads.filter(t => t.id !== id);
-        
-        if (activeThreadId === id) {
-          activeThreadId = null;
-          activeThreadMessages = [];
-          document.getElementById('active-chat-panel').style.display = 'none';
-          document.getElementById('empty-chat-state').style.display = 'flex';
-        }
+      const userKey = getUserKey();
 
-        renderThreadsList();
-      } catch (err) {
-        console.error(err);
-        alert('Không thể xóa cuộc trò chuyện. Vui lòng thử lại sau.');
+      // Delete locally
+      threads = threads.filter(t => t.id !== id);
+      localStorage.setItem('hongtai_threads_cache_' + userKey, JSON.stringify(threads));
+      localStorage.removeItem('hongtai_thread_messages_cache_' + userKey + '_' + id);
+
+      if (activeThreadId === id) {
+        activeThreadId = null;
+        sessionStorage.removeItem('hongtai_active_thread_id');
+        activeThreadMessages = [];
+        document.getElementById('active-chat-panel').style.display = 'none';
+        document.getElementById('empty-chat-state').style.display = 'flex';
+      }
+
+      renderThreadsList();
+
+      // Delete on server if logged in
+      if (currentUser) {
+        try {
+          await fetch(API_BASE_URL + `/api/chat/threads/${id}`, {
+            method: 'DELETE',
+            headers: getAuthHeaders(),
+            credentials: 'include'
+          });
+        } catch (err) {
+          console.warn('Server delete thread error:', err);
+        }
       }
     }
 
     function startNewThread() {
       activeThreadId = null;
+      sessionStorage.removeItem('hongtai_active_thread_id');
       activeThreadMessages = [];
 
       // Update UI active states
@@ -1054,7 +1075,7 @@
         });
 
         typingIndicator.style.display = 'none';
-        if (!res.ok) throw new Error();
+        if (!res.ok) throw new Error('Chat API call failed');
         const data = await res.json();
 
         activeThreadMessages.push({
@@ -1064,51 +1085,49 @@
         });
 
         // If a new thread was created, save the ID, reload threads list, and select it
-        if (data.threadId && !activeThreadId) {
+        if (data.threadId) {
           activeThreadId = data.threadId;
           sessionStorage.setItem('hongtai_active_thread_id', activeThreadId);
-          await loadThreads();
 
-          const newT = threads.find(t => t.id === activeThreadId);
-          if (newT) {
-            document.getElementById('active-thread-title').textContent = newT.title || 'Chi tiết cuộc trò chuyện';
-          }
-        }
+          const userKey = getUserKey();
+          const threadTitle = activeThreadMessages.find(m => m.role === 'user')?.content?.substring(0, 35) || 'Cuộc trò chuyện';
+          document.getElementById('active-thread-title').textContent = threadTitle;
 
-        renderMessages();
-
-        // Update cache
-        if (activeThreadId && currentUser) {
+          // Update local cache
           const threadData = {
             id: activeThreadId,
-            title: document.getElementById('active-thread-title').textContent,
+            title: threadTitle,
             messages: activeThreadMessages
           };
-          localStorage.setItem('hongtai_thread_messages_cache_' + currentUser.email + '_' + activeThreadId, JSON.stringify(threadData));
+          localStorage.setItem('hongtai_thread_messages_cache_' + userKey + '_' + activeThreadId, JSON.stringify(threadData));
           
           let cachedThreads = [];
-          const rawCached = localStorage.getItem('hongtai_threads_cache_' + currentUser.email);
+          const rawCached = localStorage.getItem('hongtai_threads_cache_' + userKey);
           if (rawCached) {
-            cachedThreads = JSON.parse(rawCached);
+            try { cachedThreads = JSON.parse(rawCached); } catch (e) { cachedThreads = []; }
           }
           const existingIdx = cachedThreads.findIndex(t => t.id === activeThreadId);
           if (existingIdx !== -1) {
-            cachedThreads[existingIdx].title = threadData.title;
+            cachedThreads[existingIdx].title = threadTitle;
           } else {
             cachedThreads.unshift({
               id: activeThreadId,
-              title: threadData.title,
+              title: threadTitle,
               createdAt: new Date().toISOString()
             });
           }
-          localStorage.setItem('hongtai_threads_cache_' + currentUser.email, JSON.stringify(cachedThreads));
+          threads = cachedThreads;
+          localStorage.setItem('hongtai_threads_cache_' + userKey, JSON.stringify(cachedThreads));
+          renderThreadsList();
         }
+
+        renderMessages();
       } catch (err) {
         typingIndicator.style.display = 'none';
         console.error(err);
         activeThreadMessages.push({
           role: 'assistant',
-          content: 'Lỗi: Không thể gửi câu hỏi hoặc nhận câu trả lời.',
+          content: 'Lỗi: Không thể gửi câu hỏi hoặc nhận câu trả lời. Vui lòng kiểm tra kết nối mạng!',
           timestamp: new Date().toISOString()
         });
         renderMessages();

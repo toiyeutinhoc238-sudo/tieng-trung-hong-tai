@@ -6336,12 +6336,53 @@ function initChatbot() {
 
   // Global callback to migrate guest chats when logged in
   window.migrateGuestChatHistory = async function () {
-    if (chatHistory.length === 0) return;
+    if (!currentUser || !currentUser.email) return;
+
+    // Collect all guest threads from localStorage
+    let guestThreads = [];
+    const rawGuestList = localStorage.getItem('hongtai_threads_cache_guest');
+    if (rawGuestList) {
+      try {
+        guestThreads = JSON.parse(rawGuestList);
+      } catch (e) {
+        guestThreads = [];
+      }
+    }
+
+    const fullGuestThreads = [];
+    for (const gt of guestThreads) {
+      if (!gt || !gt.id) continue;
+      const rawMsgs = localStorage.getItem('hongtai_thread_messages_cache_guest_' + gt.id);
+      if (rawMsgs) {
+        try {
+          const parsed = JSON.parse(rawMsgs);
+          fullGuestThreads.push({
+            id: gt.id,
+            title: gt.title || 'Cuộc trò chuyện',
+            createdAt: gt.createdAt || new Date().toISOString(),
+            messages: parsed.messages || []
+          });
+        } catch (e) {}
+      }
+    }
+
+    // If there's an active in-memory chatHistory not yet saved
+    if (chatHistory.length > 0 && (!activeThreadId || !fullGuestThreads.some(t => t.id === activeThreadId))) {
+      fullGuestThreads.push({
+        id: activeThreadId || ('thread_guest_' + Date.now()),
+        title: chatHistory[0]?.content?.substring(0, 35) || 'Cuộc trò chuyện',
+        createdAt: new Date().toISOString(),
+        messages: chatHistory.map(m => ({ role: m.role, content: m.content, timestamp: new Date().toISOString() }))
+      });
+    }
+
+    if (fullGuestThreads.length === 0) return;
+
     try {
       const response = await fetch(API_BASE_URL + '/api/chat/migrate', {
         method: 'POST',
         headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
-        body: JSON.stringify({ messages: chatHistory }),
+        body: JSON.stringify({ threads: fullGuestThreads }),
         credentials: 'include'
       });
       if (response.ok) {
@@ -6349,10 +6390,16 @@ function initChatbot() {
         if (data.threadId) {
           activeThreadId = data.threadId;
           sessionStorage.setItem('hongtai_active_thread_id', activeThreadId);
-          if (newBtn) newBtn.style.display = 'flex';
-          if (historyBtn) historyBtn.style.display = 'flex';
-          showToast('Đã đồng bộ cuộc hội thoại vào tài khoản của bạn! 💾');
         }
+        // Clean up guest cache after successful migration
+        localStorage.removeItem('hongtai_threads_cache_guest');
+        guestThreads.forEach(gt => {
+          if (gt && gt.id) localStorage.removeItem('hongtai_thread_messages_cache_guest_' + gt.id);
+        });
+
+        if (newBtn) newBtn.style.display = 'flex';
+        if (historyBtn) historyBtn.style.display = 'flex';
+        showToast('Đã sao lưu vĩnh viễn cuộc trò chuyện vào tài khoản của bạn! 💾');
       }
     } catch (e) {
       console.warn('Failed to migrate guest chat history:', e);
@@ -6369,78 +6416,71 @@ function initChatbot() {
         Chào bạn! Tôi là **Trợ lý AI Hongtai** 🐼. Bạn cần tôi hỗ trợ giải nghĩa từ vựng HSK, sửa phát âm Pinyin hay luyện ngữ pháp tiếng Trung hôm nay không?
       </div>
     `;
-    if (newBtn) newBtn.style.display = 'none';
-    if (historyBtn) historyBtn.style.display = 'none';
-  };
-
-  // Toggle header action buttons based on user authentication
-  if (currentUser) {
     if (newBtn) newBtn.style.display = 'flex';
     if (historyBtn) historyBtn.style.display = 'flex';
+  };
 
-    // Load last active thread if stored in sessionStorage (tab-persistent)
-    activeThreadId = sessionStorage.getItem('hongtai_active_thread_id');
-    if (activeThreadId) {
-      loadActiveThread();
-    }
-  } else {
-    if (newBtn) newBtn.style.display = 'none';
-    if (historyBtn) historyBtn.style.display = 'none';
+  // Toggle header action buttons (Always allow New Chat and Chat History for all users & guests)
+  if (newBtn) newBtn.style.display = 'flex';
+  if (historyBtn) historyBtn.style.display = 'flex';
+
+  // Load last active thread if stored in sessionStorage (tab-persistent)
+  activeThreadId = sessionStorage.getItem('hongtai_active_thread_id');
+  if (activeThreadId) {
+    loadActiveThread();
   }
 
-  // Load active thread messages from backend
+  // Load active thread messages from backend or local storage
   async function loadActiveThread() {
-    try {
-      const response = await fetch(API_BASE_URL + `/api/chat/threads/${activeThreadId}`, {
-        headers: getAuthHeaders(),
-        credentials: 'include'
-      });
-      if (response.ok) {
-        const thread = await response.json();
-        messagesContainer.innerHTML = '';
+    const userKey = currentUser ? currentUser.email : 'guest';
 
-        // Load messages history
+    // 1. Try local cache first for instant UI response
+    const cached = localStorage.getItem('hongtai_thread_messages_cache_' + userKey + '_' + activeThreadId);
+    if (cached) {
+      try {
+        const thread = JSON.parse(cached);
+        messagesContainer.innerHTML = '';
         chatHistory = (thread.messages || []).map(m => ({
           role: m.role,
           content: m.content
         }));
-
         chatHistory.forEach(msg => {
           appendChatMessage(msg.role, msg.content);
         });
-
         if (badge) badge.style.display = 'none';
         scrollChatToBottom();
+      } catch (e) {}
+    }
 
-        // Cache messages for this thread
-        if (currentUser) {
-          localStorage.setItem('hongtai_thread_messages_cache_' + currentUser.email + '_' + activeThreadId, JSON.stringify(thread));
-        }
-      } else {
-        throw new Error('Failed to load active thread');
-      }
-    } catch (e) {
-      console.warn('Failed to load active chat thread:', e);
-      if (currentUser) {
-        const cached = localStorage.getItem('hongtai_thread_messages_cache_' + currentUser.email + '_' + activeThreadId);
-        if (cached) {
-          const thread = JSON.parse(cached);
+    // 2. Fetch latest from backend if logged in
+    if (currentUser) {
+      try {
+        const response = await fetch(API_BASE_URL + `/api/chat/threads/${activeThreadId}`, {
+          headers: getAuthHeaders(),
+          credentials: 'include'
+        });
+        if (response.ok) {
+          const thread = await response.json();
           messagesContainer.innerHTML = '';
+
           chatHistory = (thread.messages || []).map(m => ({
             role: m.role,
             content: m.content
           }));
+
           chatHistory.forEach(msg => {
             appendChatMessage(msg.role, msg.content);
           });
+
           if (badge) badge.style.display = 'none';
           scrollChatToBottom();
-          return;
+
+          // Cache messages for this thread
+          localStorage.setItem('hongtai_thread_messages_cache_' + currentUser.email + '_' + activeThreadId, JSON.stringify(thread));
         }
+      } catch (e) {
+        console.warn('Failed to load active chat thread from server:', e);
       }
-      // If thread has been deleted or is invalid, reset local state
-      sessionStorage.removeItem('hongtai_active_thread_id');
-      activeThreadId = null;
     }
   }
 
@@ -6575,36 +6615,35 @@ function initChatbot() {
       appendChatMessage('assistant', reply);
       chatHistory.push({ role: 'assistant', content: reply });
 
-      // Save thread state if returned (persistent backend thread)
+      // Save thread state if returned (persistent backend thread or guest thread)
       if (data.threadId) {
         activeThreadId = data.threadId;
         sessionStorage.setItem('hongtai_active_thread_id', activeThreadId);
 
-        // Cache messages!
-        if (currentUser) {
-          const threadData = {
-            id: activeThreadId,
-            messages: chatHistory.map(m => ({ role: m.role, content: m.content, timestamp: new Date().toISOString() }))
-          };
-          localStorage.setItem('hongtai_thread_messages_cache_' + currentUser.email + '_' + activeThreadId, JSON.stringify(threadData));
+        const userKey = currentUser ? currentUser.email : 'guest';
+        const threadData = {
+          id: activeThreadId,
+          title: chatHistory[0]?.content?.substring(0, 35) || 'Cuộc trò chuyện',
+          messages: chatHistory.map(m => ({ role: m.role, content: m.content, timestamp: new Date().toISOString() }))
+        };
+        localStorage.setItem('hongtai_thread_messages_cache_' + userKey + '_' + activeThreadId, JSON.stringify(threadData));
 
-          let cachedThreads = [];
-          const rawCached = localStorage.getItem('hongtai_threads_cache_' + currentUser.email);
-          if (rawCached) {
-            cachedThreads = JSON.parse(rawCached);
-          }
-          const existingIdx = cachedThreads.findIndex(t => t.id === activeThreadId);
-          if (existingIdx !== -1) {
-            cachedThreads[existingIdx].title = chatHistory[0]?.content?.substring(0, 30) || 'Cuộc trò chuyện';
-          } else {
-            cachedThreads.unshift({
-              id: activeThreadId,
-              title: chatHistory[0]?.content?.substring(0, 30) || 'Cuộc trò chuyện',
-              createdAt: new Date().toISOString()
-            });
-          }
-          localStorage.setItem('hongtai_threads_cache_' + currentUser.email, JSON.stringify(cachedThreads));
+        let cachedThreads = [];
+        const rawCached = localStorage.getItem('hongtai_threads_cache_' + userKey);
+        if (rawCached) {
+          try { cachedThreads = JSON.parse(rawCached); } catch (e) { cachedThreads = []; }
         }
+        const existingIdx = cachedThreads.findIndex(t => t.id === activeThreadId);
+        if (existingIdx !== -1) {
+          cachedThreads[existingIdx].title = threadData.title;
+        } else {
+          cachedThreads.unshift({
+            id: activeThreadId,
+            title: threadData.title,
+            createdAt: new Date().toISOString()
+          });
+        }
+        localStorage.setItem('hongtai_threads_cache_' + userKey, JSON.stringify(cachedThreads));
       }
 
     } catch (err) {

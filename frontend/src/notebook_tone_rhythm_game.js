@@ -231,6 +231,66 @@ class RhythmSoundFX {
       });
     } catch (e) {}
   }
+
+  playWarning() {
+    try {
+      this.init();
+      if (!this.ctx) return;
+      if (this.ctx.state === 'suspended') this.ctx.resume();
+      const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(587, now);
+      osc.frequency.exponentialRampToValueAtTime(880, now + 0.18);
+      gain.gain.setValueAtTime(0.2, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.18);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.18);
+    } catch (e) {}
+  }
+
+  playUrgentTick() {
+    try {
+      this.init();
+      if (!this.ctx) return;
+      if (this.ctx.state === 'suspended') this.ctx.resume();
+      const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(950, now);
+      osc.frequency.exponentialRampToValueAtTime(1200, now + 0.06);
+      gain.gain.setValueAtTime(0.18, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.06);
+    } catch (e) {}
+  }
+
+  playGameOver() {
+    try {
+      this.init();
+      if (!this.ctx) return;
+      if (this.ctx.state === 'suspended') this.ctx.resume();
+      const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(320, now);
+      osc.frequency.exponentialRampToValueAtTime(90, now + 0.35);
+      gain.gain.setValueAtTime(0.22, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.35);
+    } catch (e) {}
+  }
 }
 
 // Fallback vocabulary covering all 5 tones (Thanh 1, 2, 3, 4, and Thanh Nhẹ 0)
@@ -261,16 +321,16 @@ export class ToneRhythmGameEngine {
     this.onExit = onExitCallback;
     this.sfx = new RhythmSoundFX();
 
-    // Decompose all words into flat syllable beats
-    this.syllableDeck = [];
-    this.buildSyllableDeck();
+    // Word Deck with decomposed multi-syllable items
+    this.wordDeck = [];
+    this.buildWordDeck();
 
     // Speed setting: 'easy' (50 px/s, 2400ms), 'normal' (80 px/s, 1600ms), 'hard' (125 px/s, 1100ms)
     this.speedMode = 'easy';
     this.baseSpeed = 50;
     this.spawnIntervalMs = 2400;
+    this.syllableGapY = 80;
     this.maxLives = 5;
-    this.maxActiveNotes = 3;
     this.speedGrowth = 0.08;
 
     // Game display modes: 'normal' | 'hide-pinyin' | 'hide-hanzi' | 'listen-only'
@@ -287,11 +347,12 @@ export class ToneRhythmGameEngine {
     this.isStopping = false;
     this.isFeverMode = false;
     this.correctWordsSet = new Set();
+    this.wordProgressMap = new Map(); // wordId -> { total, hits }
 
     this.notesHitCount = 0;
     this.activeNotes = [];
     this.spawnTimer = 0;
-    this.deckIndex = 0;
+    this.wordIndex = 0;
     this.lastFrameTime = 0;
 
     this.timerInterval = null;
@@ -302,47 +363,54 @@ export class ToneRhythmGameEngine {
     this.bindEvents();
   }
 
-  buildSyllableDeck() {
-    this.syllableDeck = [];
-    // Shuffle raw words once to ensure no duplicate repetitions
+  buildWordDeck() {
+    this.wordDeck = [];
+    // Shuffle raw words once
     const shuffled = [...this.rawWords].sort(() => Math.random() - 0.5);
-    shuffled.forEach(w => {
+    shuffled.forEach((w, wIdx) => {
       const syllables = decomposeWordToSyllables(w);
-      this.syllableDeck.push(...syllables);
+      if (syllables.length > 0) {
+        const wordId = 'w_' + wIdx + '_' + (w.word || w.char || '');
+        this.wordDeck.push({
+          id: wordId,
+          word: w.word || w.char || '',
+          pinyin: w.pinyin || '',
+          meaning: w.meaning || w.vn || '',
+          syllables: syllables.map((s, sIdx) => ({
+            ...s,
+            wordId: wordId,
+            syllableIndex: sIdx,
+            totalSyllables: syllables.length
+          }))
+        });
+      }
     });
-    this.totalSyllablesCount = this.syllableDeck.length;
-    this.deckIndex = 0;
-  }
 
-  getNextSyllable() {
-    if (this.deckIndex >= this.syllableDeck.length) {
-      return null;
-    }
-    const item = this.syllableDeck[this.deckIndex];
-    this.deckIndex++;
-    return item;
+    this.totalWordsCount = this.wordDeck.length;
+    this.totalSyllablesCount = this.wordDeck.reduce((acc, w) => acc + w.syllables.length, 0);
+    this.wordIndex = 0;
   }
 
   setSpeed(mode) {
     this.speedMode = mode;
     if (mode === 'easy') {
       this.baseSpeed = 50;
-      this.spawnIntervalMs = 2400;
+      this.spawnIntervalMs = 2600;
+      this.syllableGapY = 75;
       this.maxLives = 5;
-      this.maxActiveNotes = 3;
       this.speedGrowth = 0.08;
     } else if (mode === 'normal') {
       this.baseSpeed = 80;
-      this.spawnIntervalMs = 1600;
+      this.spawnIntervalMs = 1800;
+      this.syllableGapY = 85;
       this.maxLives = 4;
-      this.maxActiveNotes = 4;
-      this.speedGrowth = 0.18;
+      this.speedGrowth = 0.16;
     } else if (mode === 'hard') {
-      this.baseSpeed = 125;
-      this.spawnIntervalMs = 1100;
+      this.baseSpeed = 120;
+      this.spawnIntervalMs = 1300;
+      this.syllableGapY = 95;
       this.maxLives = 3;
-      this.maxActiveNotes = 5;
-      this.speedGrowth = 0.32;
+      this.speedGrowth = 0.28;
     }
 
     if (!this.isRunning) {
@@ -404,20 +472,31 @@ export class ToneRhythmGameEngine {
   }
 
   renderNoteHtml(syllable) {
+    const isMulti = syllable.totalSyllables > 1;
+    const wordProgressBadge = isMulti
+      ? `<div class="note-syllable-badge"><span class="badge-idx">${syllable.syllableIndex + 1}/${syllable.totalSyllables}</span> <span class="badge-fullword">${syllable.fullWord}</span></div>`
+      : '';
+    const wordCtx = syllable.fullWord
+      ? `<div class="note-word-ctx" title="${syllable.fullWord}: ${syllable.meaning}">[${syllable.fullWord}: ${syllable.meaning}]</div>`
+      : '';
+
     if (this.gameMode === 'hide-pinyin') {
       return `
+        ${wordProgressBadge}
         <div class="note-char">${syllable.char}</div>
         <div class="note-pinyin note-hidden-pinyin"><i class="fa-solid fa-eye-slash"></i> Ẩn Pinyin</div>
-        <div class="note-word-ctx" title="${syllable.fullWord}: ${syllable.meaning}">[${syllable.fullWord}]</div>
+        ${wordCtx}
       `;
     } else if (this.gameMode === 'hide-hanzi') {
       return `
+        ${wordProgressBadge}
         <div class="note-char note-hidden-hanzi">❓</div>
         <div class="note-pinyin">[ ${syllable.pinyin} ]</div>
         <div class="note-word-ctx" title="${syllable.meaning}">[${syllable.meaning}]</div>
       `;
     } else if (this.gameMode === 'listen-only') {
       return `
+        ${wordProgressBadge}
         <div class="note-char note-listen-icon"><i class="fa-solid fa-headphones"></i></div>
         <div class="note-pinyin note-listen-txt">🎧 Nghe chọn thanh</div>
         <div class="note-word-ctx" title="Đang phát âm...">🔊 [Đang đọc]</div>
@@ -425,9 +504,10 @@ export class ToneRhythmGameEngine {
     } else {
       // Normal mode: Both Hanzi & Pinyin
       return `
+        ${wordProgressBadge}
         <div class="note-char">${syllable.char}</div>
         <div class="note-pinyin">[ ${syllable.pinyin} ]</div>
-        <div class="note-word-ctx" title="${syllable.fullWord}: ${syllable.meaning}">[${syllable.fullWord}]</div>
+        ${wordCtx}
       `;
     }
   }
@@ -557,41 +637,51 @@ export class ToneRhythmGameEngine {
               <div class="hit-indicator hit-lane-0" id="hit-beam-0"></div>
             </div>
 
-            <!-- 5 HIT BUTTON PADS AT BOTTOM -->
+            <!-- 5 HIT BUTTON PADS AT BOTTOM (Redesigned & High-Contrast) -->
             <div class="rhythm-pads-row">
               <!-- Lane 1: Tone 1 -->
-              <button type="button" class="rhythm-pad pad-1" data-lane="1" id="pad-1" title="Thanh 1 (Âm ngang —)">
-                <span class="pad-symbol">—</span>
-                <span class="pad-title">THANH 1</span>
-                <span class="pad-key">Phím 1 / A</span>
+              <button type="button" class="rhythm-pad pad-1" data-lane="1" id="pad-1" title="Thanh 1 (Âm ngang —) [Phím 1 hoặc A]">
+                <div class="pad-accent-line"></div>
+                <div class="pad-num-badge">1</div>
+                <div class="pad-symbol">—</div>
+                <div class="pad-title">THANH 1</div>
+                <div class="pad-key">1 / A</div>
               </button>
 
               <!-- Lane 2: Tone 2 -->
-              <button type="button" class="rhythm-pad pad-2" data-lane="2" id="pad-2" title="Thanh 2 (Âm sắc ／)">
-                <span class="pad-symbol">／</span>
-                <span class="pad-title">THANH 2</span>
-                <span class="pad-key">Phím 2 / S</span>
+              <button type="button" class="rhythm-pad pad-2" data-lane="2" id="pad-2" title="Thanh 2 (Âm sắc ˊ) [Phím 2 hoặc S]">
+                <div class="pad-accent-line"></div>
+                <div class="pad-num-badge">2</div>
+                <div class="pad-symbol">ˊ</div>
+                <div class="pad-title">THANH 2</div>
+                <div class="pad-key">2 / S</div>
               </button>
 
               <!-- Lane 3: Tone 3 -->
-              <button type="button" class="rhythm-pad pad-3" data-lane="3" id="pad-3" title="Thanh 3 (Âm hỏi ∨)">
-                <span class="pad-symbol">∨</span>
-                <span class="pad-title">THANH 3</span>
-                <span class="pad-key">Phím 3 / D</span>
+              <button type="button" class="rhythm-pad pad-3" data-lane="3" id="pad-3" title="Thanh 3 (Âm hỏi ˇ) [Phím 3 hoặc D]">
+                <div class="pad-accent-line"></div>
+                <div class="pad-num-badge">3</div>
+                <div class="pad-symbol">ˇ</div>
+                <div class="pad-title">THANH 3</div>
+                <div class="pad-key">3 / D</div>
               </button>
 
               <!-- Lane 4: Tone 4 -->
-              <button type="button" class="rhythm-pad pad-4" data-lane="4" id="pad-4" title="Thanh 4 (Âm huyền ＼)">
-                <span class="pad-symbol">＼</span>
-                <span class="pad-title">THANH 4</span>
-                <span class="pad-key">Phím 4 / F</span>
+              <button type="button" class="rhythm-pad pad-4" data-lane="4" id="pad-4" title="Thanh 4 (Âm huyền ˋ) [Phím 4 hoặc F]">
+                <div class="pad-accent-line"></div>
+                <div class="pad-num-badge">4</div>
+                <div class="pad-symbol">ˋ</div>
+                <div class="pad-title">THANH 4</div>
+                <div class="pad-key">4 / F</div>
               </button>
 
               <!-- Lane 0: Tone 0 (Thanh Nhẹ) -->
-              <button type="button" class="rhythm-pad pad-0" data-lane="0" id="pad-0" title="Thanh Nhẹ (Khinh thanh •)">
-                <span class="pad-symbol">•</span>
-                <span class="pad-title">THANH NHẸ</span>
-                <span class="pad-key">Phím 5 / Space</span>
+              <button type="button" class="rhythm-pad pad-0" data-lane="0" id="pad-0" title="Thanh Nhẹ (Khinh thanh •) [Phím 5 hoặc Phím Cách]">
+                <div class="pad-accent-line"></div>
+                <div class="pad-num-badge">5</div>
+                <div class="pad-symbol">•</div>
+                <div class="pad-title">THANH NHẸ</div>
+                <div class="pad-key">5 / Space</div>
               </button>
             </div>
           </div>
@@ -756,6 +846,7 @@ export class ToneRhythmGameEngine {
         <!-- RESULT MODAL OVERLAY -->
         <div id="rhythm-modal-overlay" class="cannon-modal-overlay" style="display: none;">
           <div class="cannon-result-card">
+            <button type="button" id="rhythm-modal-close-x" class="result-modal-close-btn" title="Đóng">&times;</button>
             <div id="rhythm-result-icon" class="result-icon">🎵</div>
             <h2 id="rhythm-result-title" class="result-title">Hoàn Thành Bản Nhạc!</h2>
             <p id="rhythm-result-desc" class="result-desc">Bạn đã xuất sắc bắt trọn các thanh điệu theo nhịp điệu!</p>
@@ -782,10 +873,10 @@ export class ToneRhythmGameEngine {
               <i class="fa-solid fa-flask"></i> <strong>Chế độ luyện phản xạ:</strong> Bắt trọn vẹn cả 4 thanh điệu chính và thanh nhẹ trong tiếng Trung chuẩn HSK.
             </div>
 
-            <div style="display: flex; gap: 12px; justify-content: center; margin-top: 14px; flex-wrap: wrap;">
-              <button type="button" id="rhythm-retry-btn" class="btn btn-primary" style="padding: 10px 20px; font-weight: 800;"><i class="fa-solid fa-rotate-right"></i> Chơi Lại</button>
-              <button type="button" id="rhythm-back-hub-btn" class="btn btn-secondary" style="padding: 10px 18px; font-weight: 700;"><i class="fa-solid fa-gamepad"></i> Đổi Trò Chơi</button>
-              <button type="button" id="rhythm-finish-btn" class="btn btn-outline" style="padding: 10px 18px; font-weight: 700;"><i class="fa-solid fa-book-bookmark"></i> Thoát</button>
+            <div class="cannon-result-card-actions">
+              <button type="button" id="rhythm-retry-btn" class="btn btn-primary"><i class="fa-solid fa-rotate-right"></i> Chơi Lại</button>
+              <button type="button" id="rhythm-back-hub-btn" class="btn btn-secondary"><i class="fa-solid fa-gamepad"></i> Đổi Trò Chơi</button>
+              <button type="button" id="rhythm-finish-btn" class="btn btn-outline"><i class="fa-solid fa-book-bookmark"></i> Thoát</button>
             </div>
           </div>
         </div>
@@ -797,6 +888,7 @@ export class ToneRhythmGameEngine {
     const topBackBtn = this.container.querySelector('#rhythm-top-back-btn');
     const pauseBtn = this.container.querySelector('#rhythm-pause-btn');
     const exitBtn = this.container.querySelector('#rhythm-exit-btn');
+    const closeXBtn = this.container.querySelector('#rhythm-modal-close-x');
     const guideBtn = this.container.querySelector('#rhythm-guide-btn');
     const guideOverlay = this.container.querySelector('#rhythm-guide-overlay');
     const guideCloseBtn = this.container.querySelector('#rhythm-guide-close-btn');
@@ -808,6 +900,14 @@ export class ToneRhythmGameEngine {
     const startBackBtn = this.container.querySelector('#rhythm-start-back-btn');
 
     if (topBackBtn) topBackBtn.addEventListener('click', () => this.stopAndExit());
+    if (closeXBtn) {
+      closeXBtn.addEventListener('click', () => {
+        this.stopAndExit();
+        if (typeof window.exitNotebookGamesHub === 'function') {
+          window.exitNotebookGamesHub();
+        }
+      });
+    }
     if (pauseBtn) pauseBtn.addEventListener('click', () => this.togglePause());
     if (exitBtn) exitBtn.addEventListener('click', () => {
       this.stopAndExit();
@@ -968,9 +1068,10 @@ export class ToneRhythmGameEngine {
     this.timeLeft = 60;
     this.notesHitCount = 0;
     this.activeNotes = [];
-    this.spawnTimer = 0;
+    this.spawnTimer = this.spawnIntervalMs; // trigger first word immediately after countdown!
     this.correctWordsSet = new Set();
-    this.buildSyllableDeck();
+    this.wordProgressMap = new Map();
+    this.buildWordDeck();
 
     const startOverlay = this.container.querySelector('#rhythm-start-overlay');
     if (startOverlay) startOverlay.style.display = 'none';
@@ -1026,6 +1127,8 @@ export class ToneRhythmGameEngine {
       if (!this.isRunning || this.isPaused) return;
       this.timeLeft--;
 
+      this.handleTimeCountdownAlert(this.timeLeft);
+
       if (this.timeLeft <= 0) {
         this.gameOver(true);
       }
@@ -1033,59 +1136,111 @@ export class ToneRhythmGameEngine {
     }, 1000);
   }
 
-  spawnNote() {
-    if (this.activeNotes.length >= this.maxActiveNotes) return;
-    const syllable = this.getNextSyllable();
-    if (!syllable) {
+  handleTimeCountdownAlert(t) {
+    const hudTimer = this.container.querySelector('.hud-timer');
+
+    if (t === 60) {
+      if (this.sfx && this.sfx.playWarning) this.sfx.playWarning();
+      this.showToast('⏳ Còn 60 giây!');
+      if (hudTimer) {
+        hudTimer.classList.add('timer-warning-60');
+        setTimeout(() => hudTimer && hudTimer.classList.remove('timer-warning-60'), 2000);
+      }
+    } else if (t === 30) {
+      if (this.sfx && this.sfx.playWarning) this.sfx.playWarning();
+      this.showToast('⚠️ Còn 30 giây! Hãy tăng tốc!');
+      if (hudTimer) {
+        hudTimer.classList.add('timer-warning-30');
+      }
+    } else if (t <= 10 && t >= 1) {
+      if (this.sfx && this.sfx.playUrgentTick) this.sfx.playUrgentTick();
+      if (hudTimer) {
+        hudTimer.classList.add('timer-urgent-10');
+      }
+      this.showCenterCountdownTick(t);
+    }
+  }
+
+  showCenterCountdownTick(num) {
+    let tickEl = this.container.querySelector('.game-center-countdown-tick');
+    if (!tickEl) {
+      tickEl = document.createElement('div');
+      tickEl.className = 'game-center-countdown-tick';
+      const highway = this.container.querySelector('#rhythm-highway') || this.container;
+      highway.appendChild(tickEl);
+    }
+    tickEl.textContent = num;
+    tickEl.classList.remove('tick-anim');
+    void tickEl.offsetWidth;
+    tickEl.classList.add('tick-anim');
+  }
+
+  // Spawns all syllables of a Chinese vocabulary word in rapid rhythmic succession
+  spawnWord() {
+    if (this.wordIndex >= this.wordDeck.length) {
       if (this.activeNotes.length === 0) {
         this.gameOver(true);
       }
       return;
     }
 
-    const noteId = 'rnote_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+    const wordItem = this.wordDeck[this.wordIndex];
+    this.wordIndex++;
+
     const speed = this.calculateCurrentSpeed();
-    const laneIndex = this.getLaneIndexForTone(syllable.tone);
-
-    const note = {
-      id: noteId,
-      syllable: syllable,
-      laneIndex: laneIndex,
-      y: -75,
-      speed: speed,
-      hit: false,
-      hasSpoken: false,
-      el: null
-    };
-
     const layer = this.container.querySelector('#rhythm-notes-layer');
     if (!layer) return;
 
-    const el = document.createElement('div');
-    el.className = `rhythm-falling-note mode-${this.gameMode}`;
-    el.id = noteId;
-
-    el.style.left = `${laneIndex * 20 + 0.75}%`;
-    el.style.top = `-75px`;
-    el.innerHTML = this.renderNoteHtml(syllable);
-
-    // Click on note card to speak pronunciation if desired
-    el.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (typeof window.speakText === 'function') {
-        window.speakText(syllable.char);
-      }
+    // Track word hits progress for completion bonus
+    this.wordProgressMap.set(wordItem.id, {
+      total: wordItem.syllables.length,
+      hits: 0,
+      wordItem: wordItem
     });
 
-    layer.appendChild(el);
-    note.el = el;
-    this.activeNotes.push(note);
+    // Syllables spacing gap: spaced closely so player types them consecutively in rhythm
+    const gap = this.syllableGapY || 80;
 
-    // If VIP Listen-Only Mode: Auto-pronounce syllable as soon as it spawns!
+    wordItem.syllables.forEach((syllable, sIdx) => {
+      const noteId = 'rnote_' + Date.now() + '_' + this.wordIndex + '_' + sIdx;
+      const laneIndex = this.getLaneIndexForTone(syllable.tone);
+      const startY = -75 - (sIdx * gap);
+
+      const note = {
+        id: noteId,
+        syllable: syllable,
+        wordItem: wordItem,
+        laneIndex: laneIndex,
+        y: startY,
+        speed: speed,
+        hit: false,
+        hasSpoken: false,
+        el: null
+      };
+
+      const el = document.createElement('div');
+      el.className = `rhythm-falling-note mode-${this.gameMode} lane-${laneIndex}`;
+      el.id = noteId;
+      el.style.left = `${laneIndex * 20 + 0.75}%`;
+      el.style.transform = `translate3d(0, ${startY}px, 0)`;
+      el.innerHTML = this.renderNoteHtml(syllable);
+
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (typeof window.speakText === 'function') {
+          window.speakText(syllable.char);
+        }
+      });
+
+      layer.appendChild(el);
+      note.el = el;
+      this.activeNotes.push(note);
+    });
+
+    // VIP Listen-Only Mode: Auto-pronounce the word
     if (this.gameMode === 'listen-only' && typeof window.speakText === 'function') {
       try {
-        window.speakText(syllable.char);
-        note.hasSpoken = true;
+        window.speakText(wordItem.word);
       } catch (e) {}
     }
   }
@@ -1097,14 +1252,18 @@ export class ToneRhythmGameEngine {
       const dt = Math.min((currentTime - this.lastFrameTime) / 1000, 0.1);
       this.lastFrameTime = currentTime;
 
-      // Spawn timer
+      // Spawn timer for next word
       this.spawnTimer += dt * 1000;
       if (this.spawnTimer >= this.spawnIntervalMs) {
-        this.spawnTimer = 0;
-        this.spawnNote();
+        // Only spawn next word if current notes have traveled down enough or are cleared
+        const isReadyForNextWord = this.activeNotes.length === 0 || this.activeNotes.every(n => n.y > 40);
+        if (isReadyForNextWord) {
+          this.spawnTimer = 0;
+          this.spawnWord();
+        }
       }
 
-      // Update notes
+      // Update falling notes
       const highway = this.container.querySelector('#rhythm-highway');
       const trackHeight = highway ? highway.clientHeight : 500;
 
@@ -1122,11 +1281,11 @@ export class ToneRhythmGameEngine {
             note.el.parentNode.removeChild(note.el);
           }
           this.activeNotes.splice(i, 1);
-          this.triggerMiss(note.laneIndex, 'BỎ LỠ! ❌');
+          this.triggerMiss(note.laneIndex, `BỎ LỠ: ${note.syllable.char} ❌`);
         }
       }
 
-      if (this.deckIndex >= this.syllableDeck.length && this.activeNotes.length === 0) {
+      if (this.wordIndex >= this.wordDeck.length && this.activeNotes.length === 0) {
         this.gameOver(true);
         return;
       }
@@ -1155,24 +1314,24 @@ export class ToneRhythmGameEngine {
 
     const highway = this.container.querySelector('#rhythm-highway');
     const trackHeight = highway ? highway.clientHeight : 500;
-    const targetHitY = trackHeight - 88;
+    const targetHitY = trackHeight - 94;
 
-    // 1. Check notes matching pressedTone that are near the hit line
+    // 1. Find all active notes matching pressedTone that are on screen
     const matchingNotes = this.activeNotes
-      .filter(n => !n.hit && n.syllable.tone === pressedTone && n.y > -20)
+      .filter(n => !n.hit && n.syllable.tone === pressedTone && n.y > -40)
       .sort((a, b) => b.y - a.y);
 
-    // 2. Check the lowest active note
+    // 2. Find the lowest active note on screen
     const lowestNote = this.activeNotes
-      .filter(n => !n.hit && n.y > -20)
+      .filter(n => !n.hit && n.y > -40)
       .sort((a, b) => b.y - a.y)[0];
 
     if (matchingNotes.length > 0) {
       const targetNote = matchingNotes[0];
       const diff = Math.abs(targetNote.y - targetHitY);
 
-      // Generous hit tolerance window
-      if (diff <= 170 || (lowestNote && lowestNote.id === targetNote.id)) {
+      // Generous hit tolerance window (allows fast consecutive typing!)
+      if (diff <= 190 || (lowestNote && lowestNote.id === targetNote.id)) {
         this.handleCorrectHit(targetNote, diff);
         return;
       }
@@ -1181,7 +1340,7 @@ export class ToneRhythmGameEngine {
     // If no matching note, but player pressed wrong tone when a note is near the target line
     if (lowestNote) {
       const lowestDiff = Math.abs(lowestNote.y - targetHitY);
-      if (lowestDiff <= 170) {
+      if (lowestDiff <= 180) {
         this.handleWrongHit(lowestNote, pressedTone);
         return;
       }
@@ -1196,23 +1355,40 @@ export class ToneRhythmGameEngine {
 
     // Tone synthesizer sound & TTS Chinese character
     this.sfx.playToneTrack(targetNote.syllable.tone);
-    this.sfx.playPerfectChord();
     if (typeof window.speakText === 'function') {
       try { window.speakText(targetNote.syllable.char); } catch(e) {}
     }
 
-    const isPerfect = diff < 65;
+    const isPerfect = diff < 70;
     const pts = (isPerfect ? 30 : 20) * (this.isFeverMode ? 4 : 1);
     this.score += pts;
     this.combo++;
     if (this.combo > this.maxCombo) this.maxCombo = this.combo;
     this.notesHitCount++;
 
-    if (targetNote.syllable && targetNote.syllable.fullWord) {
-      this.correctWordsSet.add(targetNote.syllable.fullWord);
+    // Track word completion
+    let wordDone = false;
+    if (targetNote.wordItem) {
+      const prog = this.wordProgressMap.get(targetNote.wordItem.id);
+      if (prog) {
+        prog.hits++;
+        if (prog.hits >= prog.total) {
+          wordDone = true;
+          this.correctWordsSet.add(targetNote.wordItem.word);
+          const bonusPts = 50 * (this.isFeverMode ? 4 : 1);
+          this.score += bonusPts;
+          this.sfx.playPerfectChord();
+          if (typeof window.speakText === 'function') {
+            try { window.speakText(targetNote.wordItem.word); } catch(e) {}
+          }
+          this.showHitFeedback(targetNote.laneIndex, `🎉 TỪ HOÀN HẢO: ${targetNote.wordItem.word} +${bonusPts}đ!`, '#38bdf8');
+        }
+      }
     }
 
-    this.showHitFeedback(targetNote.laneIndex, isPerfect ? `PERFECT! 🌟 +${pts}` : `CHÍNH XÁC! ✨ +${pts}`, isPerfect ? '#fbbf24' : '#34d399');
+    if (!wordDone) {
+      this.showHitFeedback(targetNote.laneIndex, isPerfect ? `PERFECT! 🌟 +${pts}` : `ĐÚNG! ✨ +${pts}`, isPerfect ? '#fbbf24' : '#34d399');
+    }
 
     if (this.combo >= 8 && !this.isFeverMode) {
       this.triggerFever();
@@ -1225,10 +1401,10 @@ export class ToneRhythmGameEngine {
       const idx = this.activeNotes.indexOf(targetNote);
       if (idx !== -1) this.activeNotes.splice(idx, 1);
 
-      if (this.deckIndex >= this.syllableDeck.length && this.activeNotes.length === 0) {
+      if (this.wordIndex >= this.wordDeck.length && this.activeNotes.length === 0) {
         this.gameOver(true);
       }
-    }, 180);
+    }, 160);
 
     this.updateHUD();
   }
@@ -1368,6 +1544,12 @@ export class ToneRhythmGameEngine {
 
     if (overlay) {
       overlay.style.setProperty('display', 'flex', 'important');
+      if (isVictory) {
+        if (this.sfx && this.sfx.playPerfectChord) this.sfx.playPerfectChord();
+      } else {
+        if (this.sfx && this.sfx.playGameOver) this.sfx.playGameOver();
+      }
+
       if (icon) icon.textContent = isVictory ? '🏆' : '💔';
       if (title) title.textContent = isVictory ? 'Bậc Thầy Thanh Điệu!' : 'Hết Tim - Cố Gắng Nhé!';
       if (desc) desc.textContent = isVictory ? `Bạn đã xuất sắc bắt trọn ${this.notesHitCount || this.totalSyllablesCount}/${this.totalSyllablesCount} âm tiết từ vựng!` : 'Hãy chú ý dấu thanh điệu trên Pinyin và luyện tập lại nhé!';
@@ -1381,9 +1563,21 @@ export class ToneRhythmGameEngine {
         this.renderWordSummaryList(summaryWrap, this.rawWords, this.correctWordsSet);
       }
 
+      const closeXBtn = overlay.querySelector('#rhythm-modal-close-x');
       const retryBtn = overlay.querySelector('#rhythm-retry-btn');
       const backHubBtn = overlay.querySelector('#rhythm-back-hub-btn');
       const finishBtn = overlay.querySelector('#rhythm-finish-btn');
+
+      if (closeXBtn) {
+        closeXBtn.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.stopAndExit();
+          if (typeof window.exitNotebookGamesHub === 'function') {
+            window.exitNotebookGamesHub();
+          }
+        };
+      }
 
       if (retryBtn) {
         retryBtn.onclick = (e) => {
