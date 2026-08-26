@@ -13300,37 +13300,39 @@ html.dark .prompt-target-char {
 
 .rhythm-tone-step-badge {
   flex: 1;
-  max-width: 140px;
+  max-width: 150px;
   background: #f8fafc;
-  border: 2px solid #e2e8f0;
-  border-radius: 14px;
-  padding: 6px 4px;
+  border: 2.5px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 10px 8px 12px 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
   transition: all 0.15s ease;
   position: relative;
 }
 
 html.dark .rhythm-tone-step-badge {
   background: #1e293b;
-  border-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .rhythm-tone-step-badge .step-header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 4px;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 4px;
+  margin-bottom: 2px;
 }
 
 .rhythm-tone-step-badge .step-idx {
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   background: rgba(0, 0, 0, 0.08);
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   font-weight: 900;
   display: flex;
   align-items: center;
@@ -13339,15 +13341,16 @@ html.dark .rhythm-tone-step-badge {
 }
 
 html.dark .rhythm-tone-step-badge .step-idx {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.15);
   color: #94a3b8;
 }
 
 .rhythm-tone-step-badge .step-char {
-  font-size: 1.25rem;
+  font-size: 1.65rem;
   font-weight: 900;
   color: #0f172a;
   font-family: var(--font-hanzi, "Noto Sans SC", sans-serif);
+  line-height: 1.1;
 }
 
 html.dark .rhythm-tone-step-badge .step-char {
@@ -13355,27 +13358,60 @@ html.dark .rhythm-tone-step-badge .step-char {
 }
 
 .rhythm-tone-step-badge .step-pinyin {
-  font-size: 0.78rem;
+  font-size: 0.92rem;
   font-weight: 800;
-  color: #64748b;
+  color: #475569;
+  letter-spacing: 0.5px;
 }
 
 html.dark .rhythm-tone-step-badge .step-pinyin {
-  color: #94a3b8;
+  color: #cbd5e1;
 }
 
 .rhythm-tone-step-badge .step-tone-pill {
   font-size: 0.72rem;
   font-weight: 900;
-  padding: 2px 6px;
-  border-radius: 6px;
-  background: rgba(2, 132, 199, 0.1);
-  color: #0284c7;
+  padding: 3px 8px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.06);
+  color: #64748b;
+  display: inline-block;
 }
 
-html.dark .rhythm-tone-step-badge .step-tone-pill {
-  background: rgba(56, 189, 248, 0.18);
-  color: #38bdf8;
+.rhythm-tone-step-badge .step-tone-pill.target-pill {
+  background: #fef3c7;
+  color: #b45309;
+  border: 1px solid #fde68a;
+  font-weight: 900;
+}
+
+html.dark .rhythm-tone-step-badge .step-tone-pill.target-pill {
+  background: rgba(245, 158, 11, 0.25);
+  color: #fbbf24;
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.rhythm-tone-step-badge .step-tone-pill.done-pill {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
+  font-weight: 900;
+}
+
+html.dark .rhythm-tone-step-badge .step-tone-pill.done-pill {
+  background: rgba(34, 197, 94, 0.25);
+  color: #4ade80;
+  border-color: rgba(34, 197, 94, 0.4);
+}
+
+.rhythm-tone-step-badge .step-tone-pill.upcoming-pill {
+  background: #f1f5f9;
+  color: #94a3b8;
+}
+
+html.dark .rhythm-tone-step-badge .step-tone-pill.upcoming-pill {
+  background: rgba(255, 255, 255, 0.06);
+  color: #64748b;
 }
 
 .rhythm-tone-step-badge .step-key-hint {

@@ -28,6 +28,28 @@ function extractToneFromSyllable(syllable) {
   return 0;
 }
 
+// Helper: Strip tone marks from Pinyin so it doesn't reveal answers before the player guesses
+function stripToneMarks(str) {
+  if (!str) return '';
+  return str
+    .replace(/[āáǎà]/g, 'a')
+    .replace(/[ĀÁǍÀ]/g, 'A')
+    .replace(/[ēéěè]/g, 'e')
+    .replace(/[ĒÉĚÈ]/g, 'E')
+    .replace(/[īíǐì]/g, 'i')
+    .replace(/[ĪÍǏÌ]/g, 'I')
+    .replace(/[ōóǒò]/g, 'o')
+    .replace(/[ŌÓǑÒ]/g, 'O')
+    .replace(/[ūúǔù]/g, 'u')
+    .replace(/[ŪÚǓÙ]/g, 'U')
+    .replace(/[ǖǘǚǜ]/g, 'ü')
+    .replace(/[ǕǗǙǛ]/g, 'Ü')
+    .replace(/[ńňǹ]/g, 'n')
+    .replace(/[ŃŇǸ]/g, 'N')
+    .replace(/[ḿ]/g, 'm')
+    .replace(/[0-5]/g, '');
+}
+
 // Helper: Decompose any Chinese vocabulary word (single or compound word) into individual syllable beats
 function decomposeWordToSyllables(wordItem) {
   if (!wordItem) return [];
@@ -456,65 +478,50 @@ export class ToneRhythmGameEngine {
   }
 
   renderWordCardHtml(wordItem, currentSyllableIndex = 0) {
+    const isWordDone = currentSyllableIndex >= wordItem.syllables.length;
+
     let hanziDisplay = wordItem.word;
-    let pinyinDisplay = `[ ${wordItem.pinyin} ]`;
     let meaningDisplay = wordItem.meaning ? `: ${wordItem.meaning}` : '';
 
-    if (this.gameMode === 'hide-pinyin') {
-      pinyinDisplay = `<span class="hidden-label"><i class="fa-solid fa-eye-slash"></i> Ẩn Pinyin</span>`;
-    } else if (this.gameMode === 'hide-hanzi') {
+    if (this.gameMode === 'hide-hanzi' && !isWordDone) {
       hanziDisplay = '❓'.repeat(Math.max(1, wordItem.syllables.length));
-    } else if (this.gameMode === 'listen-only') {
-      hanziDisplay = `<i class="fa-solid fa-headphones"></i>`;
-      pinyinDisplay = `<span class="listen-label">🎧 Nghe & bấm chuỗi thanh</span>`;
-      meaningDisplay = ` [ Đang đọc... ]`;
+    } else if (this.gameMode === 'listen-only' && !isWordDone) {
+      hanziDisplay = `<i class="fa-solid fa-headphones"></i> [Nghe chọn thanh]`;
     }
 
     const stepsHtml = wordItem.syllables.map((s, idx) => {
       const isDone = idx < currentSyllableIndex;
       const isCurrent = idx === currentSyllableIndex;
-      const toneNum = s.tone === 0 ? 5 : s.tone;
-      const toneSymbol = s.tone === 1 ? '—' : (s.tone === 2 ? 'ˊ' : (s.tone === 3 ? 'ˇ' : (s.tone === 4 ? 'ˋ' : '•')));
-      const toneName = s.tone === 0 ? 'Thanh Nhẹ' : `Thanh ${s.tone}`;
+      const cleanSylPy = stripToneMarks(s.pinyin);
 
       let stateClass = 'step-upcoming';
-      if (isDone) stateClass = 'step-done';
-      else if (isCurrent) stateClass = 'step-current';
+      let pinyinText = this.gameMode === 'hide-pinyin' ? '???' : cleanSylPy;
+
+      if (isDone) {
+        stateClass = 'step-done';
+        pinyinText = s.pinyin; // Show accented Pinyin only after solved!
+      } else if (isCurrent) {
+        stateClass = 'step-current';
+        pinyinText = this.gameMode === 'hide-pinyin' ? '???' : cleanSylPy;
+      }
 
       return `
-        <div class="rhythm-tone-step-badge ${stateClass} tone-${s.tone}" data-step="${idx}" id="rstep_${idx}">
+        <div class="rhythm-tone-step-badge ${stateClass}" data-step="${idx}" id="rstep_${idx}">
           <div class="step-header">
             <span class="step-idx">${idx + 1}</span>
-            <span class="step-char">${s.char}</span>
             ${isDone ? '<span class="step-check-icon"><i class="fa-solid fa-check"></i></span>' : ''}
           </div>
-          <div class="step-pinyin">${this.gameMode === 'hide-pinyin' && !isDone ? '???' : s.pinyin}</div>
-          <div class="step-tone-target">
-            <span class="step-tone-pill">${toneName} ${toneSymbol}</span>
-            <span class="step-key-hint">Phím ${toneNum}</span>
-          </div>
+          <div class="step-char">${this.gameMode === 'hide-hanzi' && !isDone ? '❓' : s.char}</div>
+          <div class="step-pinyin">${pinyinText}</div>
         </div>
       `;
     }).join('');
-
-    const targetSyllable = wordItem.syllables[currentSyllableIndex];
-    const promptText = targetSyllable
-      ? `Âm ${currentSyllableIndex + 1}/${wordItem.syllables.length}: Bấm <strong class="prompt-target-char">${targetSyllable.char}</strong> (${targetSyllable.pinyin}) ➡️ <strong>${targetSyllable.tone === 0 ? 'Thanh Nhẹ (Phím 5)' : 'Thanh ' + targetSyllable.tone + ' (Phím ' + targetSyllable.tone + ')'}</strong>`
-      : '🎉 Hoàn thành từ!';
 
     return `
       <div class="rhythm-word-card-inner">
         <div class="word-card-top-header">
           <div class="word-card-hanzi">${hanziDisplay}</div>
-          <div class="word-card-pinyin-row">
-            <span class="word-card-pinyin">${pinyinDisplay}</span>
-            <span class="word-card-meaning">${meaningDisplay}</span>
-          </div>
-        </div>
-
-        <div class="word-card-prompt-bar">
-          <span class="prompt-icon"><i class="fa-solid fa-keyboard"></i></span>
-          <span class="prompt-text">${promptText}</span>
+          ${meaningDisplay ? `<div class="word-card-meaning">${meaningDisplay}</div>` : ''}
         </div>
 
         <div class="word-card-steps-flow">
