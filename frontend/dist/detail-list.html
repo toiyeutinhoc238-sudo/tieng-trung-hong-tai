@@ -195,25 +195,42 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
     }
 
-    /* High-contrast Light Mode overrides for detail-list.html */
+    /* High-contrast Light Mode overrides for detail-list.html (Zero Liquid Glass) */
     html.light-mode body,
+    html:not(.dark) body,
     body.light-mode {
-      color: #0f172a;
+      background: #f1f5f9 !important;
+      color: #0f172a !important;
+    }
+
+    html.light-mode .theme-toggle-btn-top,
+    html:not(.dark) .theme-toggle-btn-top,
+    body.light-mode .theme-toggle-btn-top {
+      background: #ffffff !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      border: 1.5px solid #cbd5e1 !important;
+      color: #0f172a !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
     }
 
     html.light-mode .glass-panel,
+    html:not(.dark) .glass-panel,
     body.light-mode .glass-panel {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.58) 0%, rgba(225, 238, 255, 0.42) 100%) !important;
-      backdrop-filter: blur(20px) saturate(180%) !important;
-      -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-      border: 1px solid rgba(255, 255, 255, 0.85) !important;
+      background: #ffffff !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      border: 1.5px solid #cbd5e1 !important;
       color: #0f172a !important;
-      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.08) !important;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05) !important;
     }
 
     html.light-mode h1,
     html.light-mode h2,
     html.light-mode h3,
+    html:not(.dark) h1,
+    html:not(.dark) h2,
+    html:not(.dark) h3,
     body.light-mode h1,
     body.light-mode h2,
     body.light-mode h3 {
@@ -221,36 +238,43 @@
     }
 
     html.light-mode p,
+    html:not(.dark) p,
     body.light-mode p {
       color: #334155 !important;
     }
 
     html.light-mode .filter-select,
+    html:not(.dark) .filter-select,
     body.light-mode .filter-select,
     html.light-mode #detail-search-input,
+    html:not(.dark) #detail-search-input,
     body.light-mode #detail-search-input {
-      background: rgba(255, 255, 255, 0.65) !important;
-      backdrop-filter: blur(12px) !important;
-      -webkit-backdrop-filter: blur(12px) !important;
+      background: #f8fafc !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
       color: #0f172a !important;
-      border-color: rgba(255, 255, 255, 0.8) !important;
+      border: 1.5px solid #cbd5e1 !important;
     }
 
     html.light-mode table,
+    html:not(.dark) table,
     body.light-mode table {
       color: #0f172a !important;
     }
 
     html.light-mode table thead tr,
+    html:not(.dark) table thead tr,
     body.light-mode table thead tr {
-      background: rgba(226, 232, 240, 0.65) !important;
-      backdrop-filter: blur(10px) !important;
+      background: #f1f5f9 !important;
+      backdrop-filter: none !important;
       color: #0f172a !important;
+      border-bottom: 2px solid #cbd5e1 !important;
     }
 
     html.light-mode table td,
+    html:not(.dark) table td,
     body.light-mode table td {
-      border-bottom: 1px solid rgba(226, 232, 240, 0.5) !important;
+      border-bottom: 1px solid #e2e8f0 !important;
       color: #0f172a !important;
     }
 
@@ -453,8 +477,8 @@
   <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
   <script type="module" crossorigin src="/assets/grammar_hsk1_v2-a5qmjeDV.js"></script>
   <script type="module" crossorigin src="/assets/screen_drawing-oOIhKrv1.js"></script>
-  <script type="module" crossorigin src="/assets/main-By0Beh67.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/style-B1CHE4d4.css">
+  <script type="module" crossorigin src="/assets/main-ZZVyEIbl.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/style-DUnnENlD.css">
 </head>
 
 <body>

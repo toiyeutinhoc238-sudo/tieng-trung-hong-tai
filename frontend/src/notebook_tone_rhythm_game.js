@@ -265,10 +265,13 @@ export class ToneRhythmGameEngine {
     this.syllableDeck = [];
     this.buildSyllableDeck();
 
-    // Speed setting: 'easy' (105 px/s, 1450ms), 'normal' (145 px/s, 1150ms), 'hard' (195 px/s, 850ms)
+    // Speed setting: 'easy' (50 px/s, 2400ms), 'normal' (80 px/s, 1600ms), 'hard' (125 px/s, 1100ms)
     this.speedMode = 'easy';
-    this.baseSpeed = 105;
-    this.spawnIntervalMs = 1450;
+    this.baseSpeed = 50;
+    this.spawnIntervalMs = 2400;
+    this.maxLives = 5;
+    this.maxActiveNotes = 3;
+    this.speedGrowth = 0.08;
 
     // Game display modes: 'normal' | 'hide-pinyin' | 'hide-hanzi' | 'listen-only'
     this.gameMode = 'normal';
@@ -277,8 +280,7 @@ export class ToneRhythmGameEngine {
     this.score = 0;
     this.combo = 0;
     this.maxCombo = 0;
-    this.lives = 4;
-    this.maxLives = 4;
+    this.lives = 5;
     this.timeLeft = 60;
     this.isPaused = false;
     this.isRunning = false;
@@ -324,24 +326,56 @@ export class ToneRhythmGameEngine {
   setSpeed(mode) {
     this.speedMode = mode;
     if (mode === 'easy') {
-      this.baseSpeed = 105;
-      this.spawnIntervalMs = 1450;
+      this.baseSpeed = 50;
+      this.spawnIntervalMs = 2400;
+      this.maxLives = 5;
+      this.maxActiveNotes = 3;
+      this.speedGrowth = 0.08;
     } else if (mode === 'normal') {
-      this.baseSpeed = 145;
-      this.spawnIntervalMs = 1150;
+      this.baseSpeed = 80;
+      this.spawnIntervalMs = 1600;
+      this.maxLives = 4;
+      this.maxActiveNotes = 4;
+      this.speedGrowth = 0.18;
     } else if (mode === 'hard') {
-      this.baseSpeed = 195;
-      this.spawnIntervalMs = 850;
+      this.baseSpeed = 125;
+      this.spawnIntervalMs = 1100;
+      this.maxLives = 3;
+      this.maxActiveNotes = 5;
+      this.speedGrowth = 0.32;
     }
 
+    if (!this.isRunning) {
+      this.lives = this.maxLives;
+      this.updateHUD();
+    }
+
+    // Update active speeds of any existing notes
+    this.activeNotes.forEach(note => {
+      note.speed = this.calculateCurrentSpeed();
+    });
+
+    // Sync in-game speed buttons
     this.container.querySelectorAll('.speed-opt-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.speed === mode);
     });
+
+    // Sync start screen difficulty cards
+    this.container.querySelectorAll('.start-diff-card').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.speed === mode);
+    });
+  }
+
+  calculateCurrentSpeed() {
+    return this.baseSpeed + (60 - this.timeLeft) * this.speedGrowth;
   }
 
   setGameMode(mode) {
     this.gameMode = mode;
     this.container.querySelectorAll('.rhythm-mode-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.mode === mode);
+    });
+    this.container.querySelectorAll('.start-mode-pill').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.mode === mode);
     });
 
@@ -398,18 +432,26 @@ export class ToneRhythmGameEngine {
     }
   }
 
+  getLaneIndexForTone(tone) {
+    if (tone === 1) return 0; // Column 1 - Pad 1 (Thanh 1)
+    if (tone === 2) return 1; // Column 2 - Pad 2 (Thanh 2)
+    if (tone === 3) return 2; // Column 3 - Pad 3 (Thanh 3)
+    if (tone === 4) return 3; // Column 4 - Pad 4 (Thanh 4)
+    return 4; // Column 5 - Pad 0 (Thanh Nhẹ)
+  }
+
   renderLayout() {
     this.container.innerHTML = `
       <div class="rhythm-game-wrapper">
         <!-- TOP HUD -->
         <div class="rhythm-hud-bar">
-          <button type="button" id="rhythm-top-back-btn" class="btn btn-outline btn-sm" style="display: flex; align-items: center; gap: 6px; font-weight: 700; border-radius: 50px; background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); color: #ffffff;">
+          <button type="button" id="rhythm-top-back-btn" class="btn btn-outline btn-sm">
             <i class="fa-solid fa-arrow-left"></i> Quay lại chọn game
           </button>
 
           <div class="hud-item-title">
-            <span style="font-size: 1.3rem;">🎵</span>
-            <strong style="color: #f472b6;">PHÍM ĐÀN THANH ĐIỆU</strong>
+            <span class="hud-icon">🎵</span>
+            <strong>PHÍM ĐÀN THANH ĐIỆU</strong>
           </div>
 
           <div class="hud-item hud-score">
@@ -431,17 +473,18 @@ export class ToneRhythmGameEngine {
               <i class="fa-solid fa-heart" style="color: #ef4444;"></i>
               <i class="fa-solid fa-heart" style="color: #ef4444;"></i>
               <i class="fa-solid fa-heart" style="color: #ef4444;"></i>
+              <i class="fa-solid fa-heart" style="color: #ef4444;"></i>
             </div>
           </div>
 
           <div class="hud-item hud-timer" title="Thời gian đếm ngược của màn chơi này">
-            <i class="fa-solid fa-clock" style="color: #38bdf8;"></i>
+            <i class="fa-solid fa-clock" style="color: #0284c7;"></i>
             <span class="hud-label">THỜI GIAN:</span>
             <span class="hud-value" id="rhythm-timer-val">01:00</span>
           </div>
 
-          <div style="margin-left: auto; display: flex; align-items: center; gap: 6px;">
-            <button type="button" id="rhythm-guide-btn" class="btn btn-outline btn-sm" title="Hướng dẫn cách chơi" style="font-weight: 700; border-radius: 50px; padding: 5px 12px; color: #38bdf8; border-color: #38bdf8; background: rgba(56, 189, 248, 0.1);">
+          <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+            <button type="button" id="rhythm-guide-btn" class="btn btn-outline btn-sm" title="Hướng dẫn cách chơi">
               <i class="fa-solid fa-circle-question"></i> Luật chơi
             </button>
             <button type="button" id="rhythm-pause-btn" class="btn btn-outline btn-sm" title="Tạm dừng"><i class="fa-solid fa-pause"></i></button>
@@ -452,7 +495,7 @@ export class ToneRhythmGameEngine {
         <!-- RHYTHM MODE & SPEED CONTROLS BAR -->
         <div class="rhythm-controls-bar">
           <div class="rhythm-mode-selector-wrap">
-            <span class="control-label"><i class="fa-solid fa-layer-group" style="color: #38bdf8;"></i> Chế độ:</span>
+            <span class="control-label"><i class="fa-solid fa-layer-group" style="color: #0284c7;"></i> Chế độ:</span>
             <div class="rhythm-mode-tabs">
               <button type="button" class="rhythm-mode-btn active" data-mode="normal" title="Hiện đầy đủ cả Chữ Hán và Pinyin">
                 <i class="fa-solid fa-eye"></i> Bình thường
@@ -470,7 +513,7 @@ export class ToneRhythmGameEngine {
           </div>
 
           <div class="rhythm-speed-wrap">
-            <span class="control-label"><i class="fa-solid fa-gauge-high" style="color: #10b981;"></i> Tốc độ:</span>
+            <span class="control-label"><i class="fa-solid fa-gauge-high" style="color: #059669;"></i> Tốc độ:</span>
             <div class="rhythm-speed-tabs">
               <button type="button" class="speed-opt-btn active" data-speed="easy">🐢 Dễ</button>
               <button type="button" class="speed-opt-btn" data-speed="normal">🚶 Vừa</button>
@@ -554,24 +597,103 @@ export class ToneRhythmGameEngine {
           </div>
         </div>
 
+        <!-- START / DIFFICULTY SELECTION MODAL OVERLAY -->
+        <div id="rhythm-start-overlay" class="rhythm-start-overlay" style="display: flex;">
+          <div class="rhythm-start-card">
+            <div class="start-card-hero">
+              <span class="hero-icon">🎵</span>
+              <h2>PHÍM ĐÀN THANH ĐIỆU</h2>
+              <p class="hero-sub">Luyện phản xạ 5 thanh điệu tiếng Trung chuẩn HSK (Thanh 1, 2, 3, 4 & Thanh Nhẹ)</p>
+            </div>
+
+            <!-- CHỌN ĐỘ KHÓ (TỐC ĐỘ RƠI) -->
+            <div class="start-section-box">
+              <div class="section-title">
+                <i class="fa-solid fa-gauge-high" style="color: #059669;"></i>
+                <span>1. CHỌN ĐỘ KHÓ (TỐC ĐỘ RƠI NỐT):</span>
+              </div>
+              <div class="start-difficulty-grid">
+                <button type="button" class="start-diff-card active" data-speed="easy">
+                  <div class="diff-badge badge-easy">🐢 DỄ (Khuyên dùng)</div>
+                  <div class="diff-speed-desc">Tốc độ chậm rãi, 5 Tim ❤️</div>
+                  <div class="diff-detail">Nốt rơi thong thả (~8.5s), tha hồ nhìn chữ Hán & nhận diện thanh điệu!</div>
+                </button>
+                <button type="button" class="start-diff-card" data-speed="normal">
+                  <div class="diff-badge badge-normal">🚶 VỪA (Tiêu chuẩn)</div>
+                  <div class="diff-speed-desc">Nhịp điệu vừa phải, 4 Tim ❤️</div>
+                  <div class="diff-detail">Cân bằng giữa quan sát chữ và phản xạ ngón tay (~5.5s)!</div>
+                </button>
+                <button type="button" class="start-diff-card" data-speed="hard">
+                  <div class="diff-badge badge-hard">⚡ KHÓ (Siêu tốc)</div>
+                  <div class="diff-speed-desc">Tốc độ nhanh, 3 Tim ❤️</div>
+                  <div class="diff-detail">Dành cho cao thủ luyện phản xạ và nhận diện thần tốc (~3.5s)!</div>
+                </button>
+              </div>
+            </div>
+
+            <!-- CHỌN CHẾ ĐỘ HIỂN THỊ -->
+            <div class="start-section-box">
+              <div class="section-title">
+                <i class="fa-solid fa-layer-group" style="color: #0284c7;"></i>
+                <span>2. CHỌN CHẾ ĐỘ HIỂN THỊ:</span>
+              </div>
+              <div class="start-modes-grid">
+                <button type="button" class="start-mode-pill active" data-mode="normal">
+                  <i class="fa-solid fa-eye"></i> Bình thường (Hiện cả Chữ & Pinyin)
+                </button>
+                <button type="button" class="start-mode-pill" data-mode="hide-pinyin">
+                  <i class="fa-solid fa-eye-slash"></i> Ẩn Pinyin (Chỉ nhìn Chữ Hán)
+                </button>
+                <button type="button" class="start-mode-pill" data-mode="hide-hanzi">
+                  <i class="fa-solid fa-font"></i> Ẩn Chữ Hán (Chỉ nhìn Pinyin)
+                </button>
+                <button type="button" class="start-mode-pill vip-pill" data-mode="listen-only">
+                  <i class="fa-solid fa-headphones"></i> 👑 VIP Luyện Nghe (Nghe âm thanh)
+                </button>
+              </div>
+            </div>
+
+            <!-- HƯỚNG DẪN PHÍM BẤM -->
+            <div class="start-keys-bar">
+              <div class="key-pill pill-1"><span class="k-code">1 / A</span> <span class="k-name">Thanh 1 (—)</span></div>
+              <div class="key-pill pill-2"><span class="k-code">2 / S</span> <span class="k-name">Thanh 2 (／)</span></div>
+              <div class="key-pill pill-3"><span class="k-code">3 / D</span> <span class="k-name">Thanh 3 (∨)</span></div>
+              <div class="key-pill pill-4"><span class="k-code">4 / F</span> <span class="k-name">Thanh 4 (＼)</span></div>
+              <div class="key-pill pill-0"><span class="k-code">5 / Space</span> <span class="k-name">Thanh Nhẹ (•)</span></div>
+            </div>
+
+            <div class="start-actions-row">
+              <button type="button" id="rhythm-start-launch-btn" class="btn btn-primary start-play-btn">
+                <i class="fa-solid fa-play"></i> BẮT ĐẦU CHƠI NGAY 🚀
+              </button>
+              <button type="button" id="rhythm-start-guide-btn" class="btn btn-secondary start-sub-btn">
+                <i class="fa-solid fa-circle-question"></i> Luật Chơi
+              </button>
+              <button type="button" id="rhythm-start-back-btn" class="btn btn-outline start-sub-btn">
+                <i class="fa-solid fa-arrow-left"></i> Quay Lại
+              </button>
+            </div>
+          </div>
+        </div>
+
         <!-- HOW-TO-PLAY GUIDE MODAL -->
         <div id="rhythm-guide-overlay" class="rhythm-guide-overlay" style="display: none;">
           <div class="rhythm-guide-card">
-            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 14px;">
-              <h3 style="margin: 0; display: flex; align-items: center; gap: 8px; color: #ec4899;">
+            <div class="rhythm-guide-header">
+              <h3 class="rhythm-guide-title">
                 <i class="fa-solid fa-music"></i> Hướng Dẫn: Phím Đàn Thanh Điệu
               </h3>
-              <button type="button" id="rhythm-guide-close-btn" class="btn btn-outline btn-sm" style="border-radius: 50%; width: 32px; height: 32px; padding: 0;">
+              <button type="button" id="rhythm-guide-close-btn" class="btn btn-outline btn-sm">
                 <i class="fa-solid fa-xmark"></i>
               </button>
             </div>
 
-            <div style="font-size: 0.9rem; line-height: 1.6;">
-              <p>🎯 <strong>Mục tiêu:</strong> Nhìn nốt chữ Hán & Pinyin đang trôi xuống. Khi nốt chạm vào <strong>Vạch Bắt Nhịp</strong> ở đáy, hãy bấm phím Thanh Điệu tương ứng.</p>
+            <div class="rhythm-guide-body">
+              <p>🎯 <strong>Mục tiêu:</strong> Nhìn nốt chữ Hán & Pinyin đang trôi xuống theo từng cột thanh điệu. Khi nốt chạm vào <strong>Vạch Bắt Nhịp</strong> ở đáy, hãy bấm phím hoặc nút tương ứng.</p>
 
               <table class="guide-tone-table">
                 <thead>
-                  <tr style="background: rgba(0,0,0,0.03);">
+                  <tr>
                     <th>Phím</th>
                     <th>Thanh Điệu</th>
                     <th>Dấu Pinyin</th>
@@ -581,49 +703,49 @@ export class ToneRhythmGameEngine {
                 <tbody>
                   <tr>
                     <td><strong style="color: #0284c7;">Phím 1 / A</strong></td>
-                    <td>Thanh 1 (Ngang)</td>
+                    <td>Thanh 1 (Ngang —)</td>
                     <td><code>ā, ē, ī, ō, ū, ǖ</code></td>
                     <td><code>mā</code> (mẹ), <code>bā</code> (tám)</td>
                   </tr>
                   <tr>
                     <td><strong style="color: #059669;">Phím 2 / S</strong></td>
-                    <td>Thanh 2 (Sắc)</td>
+                    <td>Thanh 2 (Sắc ／)</td>
                     <td><code>á, é, í, ó, ú, ǘ</code></td>
                     <td><code>má</code> (tê), <code>xué</code> (học)</td>
                   </tr>
                   <tr>
                     <td><strong style="color: #d97706;">Phím 3 / D</strong></td>
-                    <td>Thanh 3 (Hỏi)</td>
+                    <td>Thanh 3 (Hỏi ∨)</td>
                     <td><code>ǎ, ě, ǐ, ǒ, ǔ, ǚ</code></td>
                     <td><code>nǐ</code> (bạn), <code>hǎo</code> (tốt)</td>
                   </tr>
                   <tr>
                     <td><strong style="color: #e11d48;">Phím 4 / F</strong></td>
-                    <td>Thanh 4 (Huyền)</td>
+                    <td>Thanh 4 (Huyền ＼)</td>
                     <td><code>à, è, ì, ò, ù, ǜ</code></td>
                     <td><code>bà</code> (bố), <code>zài</code> (ở)</td>
                   </tr>
                   <tr>
                     <td><strong style="color: #7c3aed;">Phím 5 / Space</strong></td>
-                    <td><strong>Thanh Nhẹ (Khinh thanh)</strong></td>
+                    <td><strong>Thanh Nhẹ (Khinh thanh •)</strong></td>
                     <td><strong>Không có dấu</strong></td>
-                    <td><code>men</code> (trong <code>nǐmen</code>), <code>ma</code> (trong <code>māma</code>), <code>xi</code> (trong <code>méiguānxi</code>)</td>
+                    <td><code>men</code> (trong <code>nǐmen</code>), <code>ma</code> (trong <code>māma</code>)</td>
                   </tr>
                 </tbody>
               </table>
 
-              <div style="background: rgba(56, 189, 248, 0.1); border-left: 4px solid #38bdf8; padding: 10px 14px; border-radius: 6px; margin: 12px 0;">
+              <div class="guide-modes-box">
                 💡 <strong>4 Chế độ chơi đa dạng:</strong><br/>
-                <ul style="margin: 4px 0 0 16px; padding: 0;">
+                <ul>
                   <li><strong>Bình thường:</strong> Hiện đủ cả Chữ Hán và Pinyin.</li>
                   <li><strong>Ẩn Pinyin:</strong> Chỉ hiện chữ Hán, thử thách bạn nhớ thanh điệu!</li>
-                  <li><strong>Ẩn Chữ Hán:</strong> Chỉ hiện Pinyin không dấu hoặc dấu hỏi để bạn đoán thanh.</li>
+                  <li><strong>Ẩn Chữ Hán:</strong> Chỉ hiện Pinyin để bạn đoán thanh và mặt chữ.</li>
                   <li><strong>👑 VIP Luyện Nghe:</strong> Ẩn cả Hán & Pinyin, nốt rơi sẽ tự động phát âm thanh để bạn nghe và bấm đúng thanh điệu!</li>
                 </ul>
               </div>
 
               <div style="text-align: center; margin-top: 16px;">
-                <button type="button" id="rhythm-guide-start-btn" class="btn btn-primary" style="padding: 10px 28px; font-weight: 800; border-radius: 50px;">
+                <button type="button" id="rhythm-guide-start-btn" class="btn btn-primary start-play-btn">
                   Đã Hiểu - Bắt Đầu Chơi! 🚀
                 </button>
               </div>
@@ -680,6 +802,11 @@ export class ToneRhythmGameEngine {
     const guideCloseBtn = this.container.querySelector('#rhythm-guide-close-btn');
     const guideStartBtn = this.container.querySelector('#rhythm-guide-start-btn');
 
+    const startOverlay = this.container.querySelector('#rhythm-start-overlay');
+    const startLaunchBtn = this.container.querySelector('#rhythm-start-launch-btn');
+    const startGuideBtn = this.container.querySelector('#rhythm-start-guide-btn');
+    const startBackBtn = this.container.querySelector('#rhythm-start-back-btn');
+
     if (topBackBtn) topBackBtn.addEventListener('click', () => this.stopAndExit());
     if (pauseBtn) pauseBtn.addEventListener('click', () => this.togglePause());
     if (exitBtn) exitBtn.addEventListener('click', () => {
@@ -696,24 +823,66 @@ export class ToneRhythmGameEngine {
     if (guideCloseBtn && guideOverlay) {
       guideCloseBtn.addEventListener('click', () => {
         guideOverlay.style.display = 'none';
-        this.isPaused = false;
+        if (this.isRunning) this.isPaused = false;
       });
     }
     if (guideStartBtn && guideOverlay) {
       guideStartBtn.addEventListener('click', () => {
         guideOverlay.style.display = 'none';
-        this.isPaused = false;
+        if (!this.isRunning) {
+          if (startOverlay) startOverlay.style.display = 'none';
+          this.beginActualGame();
+        } else {
+          this.isPaused = false;
+        }
       });
     }
 
-    // Mode selector buttons (Bình thường / Ẩn Pinyin / Ẩn Chữ Hán / VIP Luyện Nghe)
+    // Start Screen difficulty selection cards
+    this.container.querySelectorAll('.start-diff-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const speed = card.dataset.speed;
+        this.setSpeed(speed);
+        this.showToast(`Đã chọn độ khó: ${card.querySelector('.diff-badge')?.textContent.trim() || speed}`);
+      });
+    });
+
+    // Start Screen game mode pills
+    this.container.querySelectorAll('.start-mode-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        const mode = pill.dataset.mode;
+        this.setGameMode(mode);
+      });
+    });
+
+    // Start Screen Launch Button
+    if (startLaunchBtn) {
+      startLaunchBtn.addEventListener('click', () => {
+        if (startOverlay) startOverlay.style.display = 'none';
+        this.beginActualGame();
+      });
+    }
+
+    // Start Screen Guide & Back Buttons
+    if (startGuideBtn && guideOverlay) {
+      startGuideBtn.addEventListener('click', () => {
+        guideOverlay.style.display = 'flex';
+      });
+    }
+    if (startBackBtn) {
+      startBackBtn.addEventListener('click', () => {
+        this.stopAndExit();
+      });
+    }
+
+    // Toolbar Mode selector buttons (Bình thường / Ẩn Pinyin / Ẩn Chữ Hán / VIP Luyện Nghe)
     this.container.querySelectorAll('.rhythm-mode-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         this.setGameMode(btn.dataset.mode);
       });
     });
 
-    // Speed selector buttons
+    // Toolbar Speed selector buttons
     this.container.querySelectorAll('.speed-opt-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         this.setSpeed(btn.dataset.speed);
@@ -726,10 +895,11 @@ export class ToneRhythmGameEngine {
       const lane = parseInt(pad.dataset.lane, 10);
       const handleTrigger = (e) => {
         e.preventDefault();
+        e.stopPropagation();
         this.triggerLaneHit(lane);
       };
       pad.addEventListener('touchstart', handleTrigger, { passive: false });
-      pad.addEventListener('mousedown', handleTrigger);
+      pad.addEventListener('pointerdown', handleTrigger);
     });
 
     // Keyboard handlers (1,2,3,4,5 or A,S,D,F,Space or D,F,J,K,L)
@@ -762,6 +932,19 @@ export class ToneRhythmGameEngine {
   }
 
   start() {
+    // When start() is called, show the Start / Difficulty selection screen
+    const startOverlay = this.container.querySelector('#rhythm-start-overlay');
+    if (startOverlay) {
+      startOverlay.style.display = 'flex';
+    }
+    const resultOverlay = this.container.querySelector('#rhythm-modal-overlay');
+    if (resultOverlay) {
+      resultOverlay.style.setProperty('display', 'none', 'important');
+    }
+    this.updateHUD();
+  }
+
+  beginActualGame() {
     if (this.animFrameId) {
       cancelAnimationFrame(this.animFrameId);
       this.animFrameId = null;
@@ -786,7 +969,11 @@ export class ToneRhythmGameEngine {
     this.notesHitCount = 0;
     this.activeNotes = [];
     this.spawnTimer = 0;
+    this.correctWordsSet = new Set();
     this.buildSyllableDeck();
+
+    const startOverlay = this.container.querySelector('#rhythm-start-overlay');
+    if (startOverlay) startOverlay.style.display = 'none';
 
     const overlay = this.container.querySelector('#rhythm-modal-overlay');
     if (overlay) overlay.style.setProperty('display', 'none', 'important');
@@ -847,7 +1034,7 @@ export class ToneRhythmGameEngine {
   }
 
   spawnNote() {
-    if (this.activeNotes.length >= 6) return;
+    if (this.activeNotes.length >= this.maxActiveNotes) return;
     const syllable = this.getNextSyllable();
     if (!syllable) {
       if (this.activeNotes.length === 0) {
@@ -857,17 +1044,13 @@ export class ToneRhythmGameEngine {
     }
 
     const noteId = 'rnote_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
-
-    // Speed increases slightly over time
-    const speed = this.baseSpeed + (60 - this.timeLeft) * 0.4;
-
-    // VỊ TRÍ RẢI NGẪU NHIÊN: Chọn ngẫu nhiên 1 trong 5 làn (0, 1, 2, 3, 4) hoàn toàn độc lập với thanh điệu
-    const randomLaneIndex = Math.floor(Math.random() * 5);
+    const speed = this.calculateCurrentSpeed();
+    const laneIndex = this.getLaneIndexForTone(syllable.tone);
 
     const note = {
       id: noteId,
       syllable: syllable,
-      laneIndex: randomLaneIndex,
+      laneIndex: laneIndex,
       y: -75,
       speed: speed,
       hit: false,
@@ -882,7 +1065,7 @@ export class ToneRhythmGameEngine {
     el.className = `rhythm-falling-note mode-${this.gameMode}`;
     el.id = noteId;
 
-    el.style.left = `${randomLaneIndex * 20 + 0.75}%`;
+    el.style.left = `${laneIndex * 20 + 0.75}%`;
     el.style.top = `-75px`;
     el.innerHTML = this.renderNoteHtml(syllable);
 
@@ -923,7 +1106,7 @@ export class ToneRhythmGameEngine {
 
       // Update notes
       const highway = this.container.querySelector('#rhythm-highway');
-      const trackHeight = highway ? highway.clientHeight : 480;
+      const trackHeight = highway ? highway.clientHeight : 500;
 
       for (let i = this.activeNotes.length - 1; i >= 0; i--) {
         const note = this.activeNotes[i];
@@ -970,91 +1153,115 @@ export class ToneRhythmGameEngine {
       setTimeout(() => beam.classList.remove('active-beam'), 150);
     }
 
-    // Tìm nốt đang rơi thấp nhất gần vạch đích nhất
-    const eligibleNotes = this.activeNotes.filter(n => !n.hit && n.y > -50).sort((a, b) => b.y - a.y);
-    if (eligibleNotes.length === 0) return;
-
-    const targetNote = eligibleNotes[0];
     const highway = this.container.querySelector('#rhythm-highway');
-    const trackHeight = highway ? highway.clientHeight : 480;
+    const trackHeight = highway ? highway.clientHeight : 500;
     const targetHitY = trackHeight - 88;
-    const diff = Math.abs(targetNote.y - targetHitY);
 
-    if (pressedTone === targetNote.syllable.tone) {
-      // ✅ ĐÚNG THANH ĐIỆU: Đổi màu xanh/vàng phát sáng rồi biến mất!
-      targetNote.hit = true;
-      if (targetNote.el) {
-        targetNote.el.classList.add('correct-hit');
-      }
+    // 1. Check notes matching pressedTone that are near the hit line
+    const matchingNotes = this.activeNotes
+      .filter(n => !n.hit && n.syllable.tone === pressedTone && n.y > -20)
+      .sort((a, b) => b.y - a.y);
 
-      // Phát âm thanh synth thanh điệu & TTS chữ Hán
-      this.sfx.playToneTrack(pressedTone);
-      this.sfx.playPerfectChord();
-      if (typeof window.speakText === 'function') {
-        window.speakText(targetNote.syllable.char);
-      }
+    // 2. Check the lowest active note
+    const lowestNote = this.activeNotes
+      .filter(n => !n.hit && n.y > -20)
+      .sort((a, b) => b.y - a.y)[0];
 
-      const isPerfect = diff < 65;
-      const pts = (isPerfect ? 30 : 20) * (this.isFeverMode ? 4 : 1);
-      this.score += pts;
-      this.combo++;
-      if (this.combo > this.maxCombo) this.maxCombo = this.combo;
-      this.notesHitCount++;
+    if (matchingNotes.length > 0) {
+      const targetNote = matchingNotes[0];
+      const diff = Math.abs(targetNote.y - targetHitY);
 
-      if (targetNote.syllable && targetNote.syllable.fullWord) {
-        this.correctWordsSet.add(targetNote.syllable.fullWord);
-      }
-
-      this.showHitFeedback(targetNote.laneIndex, isPerfect ? `PERFECT! 🌟 +${pts}` : `CHÍNH XÁC! ✨ +${pts}`, isPerfect ? '#fbbf24' : '#34d399');
-
-      if (this.combo >= 8 && !this.isFeverMode) {
-        this.triggerFever();
-      }
-
-      setTimeout(() => {
-        if (targetNote.el && targetNote.el.parentNode) {
-          targetNote.el.parentNode.removeChild(targetNote.el);
-        }
-        const idx = this.activeNotes.indexOf(targetNote);
-        if (idx !== -1) this.activeNotes.splice(idx, 1);
-
-        if (this.deckIndex >= this.syllableDeck.length && this.activeNotes.length === 0) {
-          this.gameOver(true);
-        }
-      }, 180);
-
-      this.updateHUD();
-    } else {
-      // ❌ SAI THANH ĐIỆU: Nốt đổi màu đỏ, rung lắc, trừ 1 Tim & mất Combo!
-      if (targetNote.el) {
-        targetNote.el.classList.add('wrong-hit');
-        setTimeout(() => {
-          if (targetNote.el) targetNote.el.classList.remove('wrong-hit');
-        }, 380);
-      }
-
-      const arena = this.container.querySelector('#rhythm-highway');
-      if (arena) {
-        arena.classList.add('rhythm-screen-shake');
-        setTimeout(() => arena.classList.remove('rhythm-screen-shake'), 380);
-      }
-
-      this.sfx.playMiss();
-      this.lives--;
-      this.combo = 0;
-      this.isFeverMode = false;
-      const feverBanner = this.container.querySelector('#rhythm-fever-banner');
-      if (feverBanner) feverBanner.style.display = 'none';
-
-      const correctName = targetNote.syllable.tone === 0 ? 'Thanh Nhẹ' : `Thanh ${targetNote.syllable.tone}`;
-      this.showHitFeedback(targetNote.laneIndex, `SAI! ❌ (Là ${correctName}) -1 Tim 💔`, '#ef4444');
-
-      if (this.lives <= 0) {
-        this.gameOver(false);
+      // Generous hit tolerance window
+      if (diff <= 170 || (lowestNote && lowestNote.id === targetNote.id)) {
+        this.handleCorrectHit(targetNote, diff);
         return;
       }
-      this.updateHUD();
     }
+
+    // If no matching note, but player pressed wrong tone when a note is near the target line
+    if (lowestNote) {
+      const lowestDiff = Math.abs(lowestNote.y - targetHitY);
+      if (lowestDiff <= 170) {
+        this.handleWrongHit(lowestNote, pressedTone);
+        return;
+      }
+    }
+  }
+
+  handleCorrectHit(targetNote, diff) {
+    targetNote.hit = true;
+    if (targetNote.el) {
+      targetNote.el.classList.add('correct-hit');
+    }
+
+    // Tone synthesizer sound & TTS Chinese character
+    this.sfx.playToneTrack(targetNote.syllable.tone);
+    this.sfx.playPerfectChord();
+    if (typeof window.speakText === 'function') {
+      try { window.speakText(targetNote.syllable.char); } catch(e) {}
+    }
+
+    const isPerfect = diff < 65;
+    const pts = (isPerfect ? 30 : 20) * (this.isFeverMode ? 4 : 1);
+    this.score += pts;
+    this.combo++;
+    if (this.combo > this.maxCombo) this.maxCombo = this.combo;
+    this.notesHitCount++;
+
+    if (targetNote.syllable && targetNote.syllable.fullWord) {
+      this.correctWordsSet.add(targetNote.syllable.fullWord);
+    }
+
+    this.showHitFeedback(targetNote.laneIndex, isPerfect ? `PERFECT! 🌟 +${pts}` : `CHÍNH XÁC! ✨ +${pts}`, isPerfect ? '#fbbf24' : '#34d399');
+
+    if (this.combo >= 8 && !this.isFeverMode) {
+      this.triggerFever();
+    }
+
+    setTimeout(() => {
+      if (targetNote.el && targetNote.el.parentNode) {
+        targetNote.el.parentNode.removeChild(targetNote.el);
+      }
+      const idx = this.activeNotes.indexOf(targetNote);
+      if (idx !== -1) this.activeNotes.splice(idx, 1);
+
+      if (this.deckIndex >= this.syllableDeck.length && this.activeNotes.length === 0) {
+        this.gameOver(true);
+      }
+    }, 180);
+
+    this.updateHUD();
+  }
+
+  handleWrongHit(targetNote, pressedTone) {
+    if (targetNote.el) {
+      targetNote.el.classList.add('wrong-hit');
+      setTimeout(() => {
+        if (targetNote.el) targetNote.el.classList.remove('wrong-hit');
+      }, 380);
+    }
+
+    const arena = this.container.querySelector('#rhythm-highway');
+    if (arena) {
+      arena.classList.add('rhythm-screen-shake');
+      setTimeout(() => arena.classList.remove('rhythm-screen-shake'), 380);
+    }
+
+    this.sfx.playMiss();
+    this.lives--;
+    this.combo = 0;
+    this.isFeverMode = false;
+    const feverBanner = this.container.querySelector('#rhythm-fever-banner');
+    if (feverBanner) feverBanner.style.display = 'none';
+
+    const correctName = targetNote.syllable.tone === 0 ? 'Thanh Nhẹ' : `Thanh ${targetNote.syllable.tone}`;
+    this.showHitFeedback(targetNote.laneIndex, `SAI! ❌ (Là ${correctName}) -1 Tim 💔`, '#ef4444');
+
+    if (this.lives <= 0) {
+      this.gameOver(false);
+      return;
+    }
+    this.updateHUD();
   }
 
   triggerMiss(laneIndex = 2, label = 'MISS ❌') {
@@ -1163,7 +1370,7 @@ export class ToneRhythmGameEngine {
       overlay.style.setProperty('display', 'flex', 'important');
       if (icon) icon.textContent = isVictory ? '🏆' : '💔';
       if (title) title.textContent = isVictory ? 'Bậc Thầy Thanh Điệu!' : 'Hết Tim - Cố Gắng Nhé!';
-      if (desc) desc.textContent = isVictory ? `Bạn đã xuất sắc bắt trọn toàn bộ ${this.notesHitCount || this.totalSyllablesCount}/${this.totalSyllablesCount} âm tiết từ vựng!` : 'Hãy chú ý dấu thanh điệu trên Pinyin và luyện tập lại nhé!';
+      if (desc) desc.textContent = isVictory ? `Bạn đã xuất sắc bắt trọn ${this.notesHitCount || this.totalSyllablesCount}/${this.totalSyllablesCount} âm tiết từ vựng!` : 'Hãy chú ý dấu thanh điệu trên Pinyin và luyện tập lại nhé!';
       if (resScore) resScore.textContent = this.score;
       if (resCombo) resCombo.textContent = this.maxCombo;
       if (resNotes) resNotes.textContent = `${this.notesHitCount || 0}/${this.totalSyllablesCount || 0}`;
@@ -1205,12 +1412,92 @@ export class ToneRhythmGameEngine {
     }
   }
 
+  renderWordSummaryList(containerEl, allWords, correctWordsSet) {
+    if (!containerEl) return;
+    const total = allWords.length;
+    const correctCount = allWords.filter(w => correctWordsSet.has(w.word)).length;
+    const wrongCount = total - correctCount;
+
+    containerEl.innerHTML = `
+      <div class="game-results-word-summary">
+        <div class="summary-tabs-header">
+          <button type="button" class="summary-tab-btn active" data-tab="all">
+            <i class="fa-solid fa-list-check"></i> Tất cả (${total})
+          </button>
+          <button type="button" class="summary-tab-btn correct-tab" data-tab="correct">
+            <i class="fa-solid fa-circle-check"></i> Đúng (${correctCount})
+          </button>
+          <button type="button" class="summary-tab-btn wrong-tab" data-tab="wrong">
+            <i class="fa-solid fa-circle-xmark"></i> Sai / Cần ôn (${wrongCount})
+          </button>
+        </div>
+        <div class="summary-words-list"></div>
+      </div>
+    `;
+
+    const listEl = containerEl.querySelector('.summary-words-list');
+    const renderItems = (filter) => {
+      listEl.innerHTML = '';
+      const filtered = allWords.filter(w => {
+        const isCor = correctWordsSet.has(w.word);
+        if (filter === 'correct') return isCor;
+        if (filter === 'wrong') return !isCor;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = `<div style="text-align: center; color: #94a3b8; padding: 20px; font-size: 0.85rem;">Không có từ vựng nào trong mục này.</div>`;
+        return;
+      }
+
+      filtered.forEach(w => {
+        const isCor = correctWordsSet.has(w.word);
+        const card = document.createElement('div');
+        card.className = `summary-word-card ${isCor ? 'is-correct' : 'is-wrong'}`;
+        card.innerHTML = `
+          <div class="sw-badge ${isCor ? 'badge-correct' : 'badge-wrong'}">
+            <i class="fa-solid fa-${isCor ? 'check' : 'xmark'}"></i> ${isCor ? 'Đúng' : 'Sai'}
+          </div>
+          <div class="sw-main">
+            <div class="sw-hanzi">${w.word}</div>
+            <div class="sw-pinyin">${w.pinyin ? `[ ${w.pinyin} ]` : ''}</div>
+            <div class="sw-meaning">${w.meaning || ''}</div>
+          </div>
+          <button type="button" class="sw-speak-btn" title="Nghe phát âm">
+            <i class="fa-solid fa-volume-high"></i>
+          </button>
+        `;
+        const speakBtn = card.querySelector('.sw-speak-btn');
+        if (speakBtn) {
+          speakBtn.onclick = (e) => {
+            e.stopPropagation();
+            if (typeof window.speakText === 'function') {
+              window.speakText(w.word);
+            }
+          };
+        }
+        listEl.appendChild(card);
+      });
+    };
+
+    renderItems('all');
+
+    containerEl.querySelectorAll('.summary-tab-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        containerEl.querySelectorAll('.summary-tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderItems(btn.dataset.tab);
+      });
+    });
+  }
+
   restart() {
     const overlay = this.container.querySelector('#rhythm-modal-overlay');
     if (overlay) overlay.style.setProperty('display', 'none', 'important');
     const layer = this.container.querySelector('#rhythm-notes-layer');
     if (layer) layer.innerHTML = '';
-    this.start();
+    this.beginActualGame();
   }
 
   stopAndExit() {

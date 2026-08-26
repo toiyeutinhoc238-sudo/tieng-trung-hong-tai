@@ -149,6 +149,17 @@
   </script>
 
   <style>
+    :root {
+      --bg-dark: #0b0f19;
+      --bg-card: #1e293b;
+      --border-glass: rgba(255, 255, 255, 0.15);
+      --primary: #3b82f6;
+      --accent: #f59e0b;
+      --success: #10b981;
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+    }
+
     .theme-toggle-btn-top {
       background: rgba(245, 158, 11, 0.15);
       border: 1px solid rgba(245, 158, 11, 0.4);
@@ -167,75 +178,87 @@
       background: #f59e0b;
       color: #000;
     }
-    html.light-mode .theme-toggle-btn-top, body.light-mode .theme-toggle-btn-top {
-      background: rgba(255, 255, 255, 0.65) !important;
-      backdrop-filter: blur(16px) !important;
-      -webkit-backdrop-filter: blur(16px) !important;
-      border: 1px solid rgba(255, 255, 255, 0.8) !important;
+    html.light-mode .theme-toggle-btn-top,
+    html:not(.dark) .theme-toggle-btn-top,
+    body.light-mode .theme-toggle-btn-top {
+      background: #ffffff !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      border: 1.5px solid #cbd5e1 !important;
       color: #0f172a !important;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
-    }
-    :root {
-      --bg-dark: #0b0f19;
-      --bg-card: rgba(15, 23, 42, 0.75);
-      --border-glass: rgba(255, 255, 255, 0.1);
-      --primary: #3b82f6;
-      --accent: #f59e0b;
-      --success: #10b981;
-      --text-main: #f8fafc;
-      --text-sub: #94a3b8;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
     }
 
-    html.light-mode body, body.light-mode {
-      --bg-card: rgba(255, 255, 255, 0.62);
-      --border-glass: rgba(255, 255, 255, 0.82);
+    html.light-mode body,
+    html:not(.dark) body,
+    body.light-mode {
+      --bg-dark: #f1f5f9;
+      --bg-card: #ffffff;
+      --border-glass: #cbd5e1;
       --text-main: #0f172a;
       --text-sub: #334155;
-      color: #0f172a;
+      background: #f1f5f9 !important;
+      color: #0f172a !important;
     }
     html.light-mode .hanzi-header,
+    html:not(.dark) .hanzi-header,
     html.light-mode .voice-control-bar,
+    html:not(.dark) .voice-control-bar,
     html.light-mode .filter-section,
+    html:not(.dark) .filter-section,
     html.light-mode .vocab-panel,
-    html.light-mode .writing-workshop {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(225, 238, 255, 0.42) 100%) !important;
-      backdrop-filter: blur(20px) saturate(180%) !important;
-      -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-      border: 1px solid rgba(255, 255, 255, 0.85) !important;
+    html:not(.dark) .vocab-panel,
+    html.light-mode .writing-workshop,
+    html:not(.dark) .writing-workshop {
+      background: #ffffff !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      border: 1.5px solid #cbd5e1 !important;
       color: #0f172a !important;
-      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.08) !important;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06) !important;
     }
     html.light-mode .title-group h1,
+    html:not(.dark) .title-group h1,
     html.light-mode .title-group p,
+    html:not(.dark) .title-group p,
     html.light-mode .word-active-title,
+    html:not(.dark) .word-active-title,
     html.light-mode .panel-header,
+    html:not(.dark) .panel-header,
     html.light-mode .vocab-word,
-    html.light-mode .filter-label {
+    html:not(.dark) .vocab-word,
+    html.light-mode .filter-label,
+    html:not(.dark) .filter-label {
       color: #0f172a !important;
     }
     html.light-mode .filter-select,
-    html.light-mode .search-input {
-      background: rgba(255, 255, 255, 0.65) !important;
-      backdrop-filter: blur(12px) !important;
-      -webkit-backdrop-filter: blur(12px) !important;
+    html:not(.dark) .filter-select,
+    html.light-mode .search-input,
+    html:not(.dark) .search-input {
+      background: #f8fafc !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
       color: #0f172a !important;
-      border-color: rgba(255, 255, 255, 0.8) !important;
+      border: 1.5px solid #cbd5e1 !important;
     }
-    html.light-mode .status-alert-banner {
-      background: rgba(255, 255, 255, 0.58) !important;
-      backdrop-filter: blur(12px) !important;
-      border-color: rgba(255, 255, 255, 0.8) !important;
+    html.light-mode .status-alert-banner,
+    html:not(.dark) .status-alert-banner {
+      background: #f8fafc !important;
+      backdrop-filter: none !important;
+      border: 1.5px solid #cbd5e1 !important;
       color: #334155 !important;
     }
-    html.light-mode .btn-close {
-      background: rgba(255, 255, 255, 0.65) !important;
+    html.light-mode .btn-close,
+    html:not(.dark) .btn-close {
+      background: #ffffff !important;
       color: #0f172a !important;
-      border-color: rgba(255, 255, 255, 0.8) !important;
+      border: 1.5px solid #cbd5e1 !important;
     }
-    html.light-mode .vocab-item {
-      background: rgba(255, 255, 255, 0.55) !important;
-      backdrop-filter: blur(12px) !important;
-      border-color: rgba(255, 255, 255, 0.8) !important;
+    html.light-mode .vocab-item,
+    html:not(.dark) .vocab-item {
+      background: #ffffff !important;
+      backdrop-filter: none !important;
+      border: 1.5px solid #e2e8f0 !important;
     }
 
     * {
@@ -247,10 +270,6 @@
     body {
       font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background-color: var(--bg-dark);
-      background-image:
-        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.12) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(245, 158, 11, 0.08) 0px, transparent 50%);
-      background-attachment: fixed;
       color: var(--text-main);
       min-height: 100vh;
       padding: 24px;
@@ -270,11 +289,12 @@
       gap: 16px;
       padding: 24px;
       background: var(--bg-card);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--border-glass);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      border: 1.5px solid var(--border-glass);
       border-radius: 20px;
       margin-bottom: 24px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 
     .brand-box {
@@ -827,10 +847,10 @@
       font-weight: 700;
       color: #cbd5e1;
     }
-  </style>
+  </style>
   <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
   <script type="module" crossorigin src="/assets/particles-Db85yIFy.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/style-B1CHE4d4.css">
+  <link rel="stylesheet" crossorigin href="/assets/style-DUnnENlD.css">
 </head>
 
 <body>
@@ -1992,7 +2012,7 @@
 
     // Initialize Page
     initPage();
-  </script>
+  </script>
 </body>
 
 </html>

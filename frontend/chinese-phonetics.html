@@ -167,27 +167,36 @@
       color: #0f172a !important;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
     }
-    html.light-mode body, body.light-mode {
+    html.light-mode body,
+    html:not(.dark) body,
+    body.light-mode {
       --bg-dark: #f1f5f9;
-      --bg-card: rgba(255, 255, 255, 0.68);
-      --border-glass: rgba(255, 255, 255, 0.8);
+      --bg-card: #ffffff;
+      --border-glass: #cbd5e1;
       --text-main: #0f172a;
       --text-sub: #334155;
       color: #0f172a;
     }
     html.light-mode .voice-control-bar,
+    html:not(.dark) .voice-control-bar,
     html.light-mode .phonetics-header,
+    html:not(.dark) .phonetics-header,
     html.light-mode .hub-card,
+    html:not(.dark) .hub-card,
     html.light-mode .reader-card,
+    html:not(.dark) .reader-card,
     html.light-mode .info-sub-card,
+    html:not(.dark) .info-sub-card,
     html.light-mode .char-detail-inspector,
-    html.light-mode .vd-box {
-      background: rgba(255, 255, 255, 0.68) !important;
-      backdrop-filter: blur(24px) saturate(180%) !important;
-      -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
-      border: 1px solid rgba(255, 255, 255, 0.85) !important;
+    html:not(.dark) .char-detail-inspector,
+    html.light-mode .vd-box,
+    html:not(.dark) .vd-box {
+      background: #ffffff !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      border: 1.5px solid #cbd5e1 !important;
       color: #0f172a !important;
-      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.08) !important;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05) !important;
     }
     html.dark .voice-control-bar,
     html.dark .phonetics-header,
@@ -196,12 +205,12 @@
     html.dark .info-sub-card,
     html.dark .char-detail-inspector,
     html.dark .vd-box {
-      background: rgba(15, 23, 42, 0.6) !important;
-      backdrop-filter: blur(24px) saturate(180%) !important;
-      -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
-      border: 1px solid rgba(255, 255, 255, 0.22) !important;
+      background: #1e293b !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
       color: #ffffff !important;
-      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.37) !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
     }
     html.light-mode .info-sub-content,
     html.light-mode .vd-pinyin,

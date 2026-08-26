@@ -22,7 +22,7 @@
     href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    crossorigin="anonymous" referrerpolicy="no-referrer">
+    crossorigin="anonymous" referrerpolicy="no-referrer">
 
   <script>
     (function () {
@@ -160,19 +160,23 @@
       flex-wrap: wrap;
       gap: 16px;
       padding: 20px 24px;
-      background: var(--bg-card);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--border-glass);
+      background: #1e293b;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
       border-radius: 20px;
       margin-bottom: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 
-    html.light-mode .phonetics-header {
-      background: rgba(255, 255, 255, 0.9);
-      border-color: rgba(0, 0, 0, 0.1);
-      color: #0f172a;
+    html.light-mode .phonetics-header,
+    html:not(.dark) .phonetics-header {
+      background: #ffffff !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      border: 1.5px solid #cbd5e1 !important;
+      color: #0f172a !important;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05) !important;
     }
 
     .brand-box {
@@ -259,8 +263,9 @@
 
     /* Controls Panel */
     .controls-panel {
-      background: rgba(30, 41, 59, 0.8);
-      backdrop-filter: blur(16px);
+      background: #1e293b;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
       border: 1.5px solid rgba(255, 255, 255, 0.15);
       border-radius: 18px;
       padding: 16px 22px;
@@ -272,9 +277,14 @@
       gap: 16px;
     }
 
-    html.light-mode .controls-panel {
-      background: rgba(255, 255, 255, 0.95);
-      border-color: #cbd5e1;
+    html.light-mode .controls-panel,
+    html:not(.dark) .controls-panel {
+      background: #ffffff !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      border: 1.5px solid #cbd5e1 !important;
+      color: #0f172a !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
     }
 
     .fixed-badge-box {
@@ -657,7 +667,7 @@
   <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
   <script type="module" crossorigin src="/assets/particles-Db85yIFy.js"></script>
   <script type="module" crossorigin src="/assets/screen_drawing-oOIhKrv1.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/style-B1CHE4d4.css">
+  <link rel="stylesheet" crossorigin href="/assets/style-DUnnENlD.css">
 </head>
 
 <body>
@@ -1723,7 +1733,7 @@
       </div>
     </div>
   </div>
-
+
 </body>
 
 </html>

@@ -13465,6 +13465,265 @@ html.dark .rhythm-pad.hit-active {
   100% { transform: scale(1); opacity: 1; }
 }
 
+/* Start / Difficulty Selection Screen */
+.rhythm-start-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(11, 15, 25, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.rhythm-start-card {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  border: 2px solid rgba(56, 189, 248, 0.35);
+  border-radius: 24px;
+  max-width: 620px;
+  width: 100%;
+  padding: 24px 28px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(56, 189, 248, 0.2);
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 92vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.start-card-hero {
+  text-align: center;
+}
+
+.start-card-hero .hero-icon {
+  font-size: 2.5rem;
+  display: inline-block;
+  margin-bottom: 4px;
+}
+
+.start-card-hero h2 {
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: #f472b6;
+  margin: 0 0 4px 0;
+  letter-spacing: 0.5px;
+}
+
+.start-card-hero .hero-sub {
+  font-size: 0.82rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.start-section-box {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.section-title {
+  font-size: 0.78rem;
+  font-weight: 900;
+  color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: 0.3px;
+}
+
+.start-difficulty-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 540px) {
+  .start-difficulty-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.start-diff-card {
+  background: rgba(15, 23, 42, 0.6);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 12px 10px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: #ffffff;
+}
+
+.start-diff-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(56, 189, 248, 0.5);
+  background: rgba(30, 41, 59, 0.8);
+}
+
+.start-diff-card.active {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.15);
+  box-shadow: 0 4px 18px rgba(16, 185, 129, 0.35);
+}
+
+.start-diff-card[data-speed="normal"].active {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
+  box-shadow: 0 4px 18px rgba(56, 189, 248, 0.35);
+}
+
+.start-diff-card[data-speed="hard"].active {
+  border-color: #f43f5e;
+  background: rgba(244, 63, 94, 0.15);
+  box-shadow: 0 4px 18px rgba(244, 63, 94, 0.35);
+}
+
+.diff-badge {
+  font-size: 0.82rem;
+  font-weight: 900;
+  padding: 3px 8px;
+  border-radius: 8px;
+  display: inline-block;
+  width: fit-content;
+}
+
+.diff-badge.badge-easy { background: #059669; color: #ffffff; }
+.diff-badge.badge-normal { background: #0284c7; color: #ffffff; }
+.diff-badge.badge-hard { background: #e11d48; color: #ffffff; }
+
+.diff-speed-desc {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #fbbf24;
+  margin-top: 2px;
+}
+
+.diff-detail {
+  font-size: 0.68rem;
+  color: #94a3b8;
+  line-height: 1.3;
+}
+
+.start-modes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+@media (max-width: 500px) {
+  .start-modes-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.start-mode-pill {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 8px 12px;
+  color: #94a3b8;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.18s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.start-mode-pill:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(30, 41, 59, 0.8);
+}
+
+.start-mode-pill.active {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.18);
+  color: #38bdf8;
+  font-weight: 900;
+  box-shadow: 0 2px 10px rgba(56, 189, 248, 0.25);
+}
+
+.start-mode-pill.vip-pill.active {
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.18);
+  color: #fbbf24;
+  box-shadow: 0 2px 10px rgba(245, 158, 11, 0.25);
+}
+
+.start-keys-bar {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  flex-wrap: wrap;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.key-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+}
+
+.k-code {
+  background: rgba(255, 255, 255, 0.12);
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.pill-1 .k-name { color: #38bdf8; font-weight: 800; }
+.pill-2 .k-name { color: #34d399; font-weight: 800; }
+.pill-3 .k-name { color: #fbbf24; font-weight: 800; }
+.pill-4 .k-name { color: #f43f5e; font-weight: 800; }
+.pill-0 .k-name { color: #c084fc; font-weight: 800; }
+
+.start-actions-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.start-play-btn {
+  padding: 12px 28px !important;
+  font-size: 1rem !important;
+  font-weight: 900 !important;
+  border-radius: 50px !important;
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4) !important;
+  transition: all 0.2s ease !important;
+}
+
+.start-play-btn:hover {
+  transform: translateY(-2px) scale(1.03) !important;
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5) !important;
+}
+
 /* How-to-play Guide Modal */
 .rhythm-guide-overlay {
   position: fixed;
@@ -14708,6 +14967,1445 @@ html:not(.dark) #dict-user-profile-badge {
   border: 1.5px solid #cbd5e1 !important;
   color: #0f172a !important;
 }
+
+/* ==========================================================================
+   MASTER DUAL-THEME CONTRAST & ZERO LIQUID GLASS SYSTEM
+   (GAMES HUB & ALL 6 MINI-GAMES: TONE RHYTHM, CANNON, SNAKE, ALCHEMIST, MAHJONG, QUIZ)
+   Guarantees 100% solid, crisp, high-contrast readability in both Light & Dark modes
+   ========================================================================== */
+
+/* 1. GAMES HUB SELECTOR & CARDS */
+.notebook-games-hub-wrapper {
+  color: #0f172a;
+}
+
+html.dark .notebook-games-hub-wrapper {
+  color: #f8fafc;
+}
+
+.games-hub-header {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  border-radius: 20px !important;
+  padding: 16px 20px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+html.dark .games-hub-header {
+  background: #0f172a !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+.games-hub-title {
+  color: #0f172a !important;
+  font-weight: 900 !important;
+}
+
+html.dark .games-hub-title {
+  color: #ffffff !important;
+}
+
+.games-hub-sub {
+  color: #475569 !important;
+}
+
+html.dark .games-hub-sub {
+  color: #94a3b8 !important;
+}
+
+.games-selector-intro h3 {
+  color: #0f172a !important;
+  font-weight: 900 !important;
+}
+
+html.dark .games-selector-intro h3 {
+  color: #ffffff !important;
+}
+
+.games-selector-intro p {
+  color: #475569 !important;
+}
+
+html.dark .games-selector-intro p {
+  color: #cbd5e1 !important;
+}
+
+.game-choice-card {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  border-radius: 22px !important;
+  padding: 22px !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
+}
+
+html.dark .game-choice-card {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35) !important;
+}
+
+.game-choice-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12) !important;
+}
+
+html.dark .game-choice-card:hover {
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5) !important;
+}
+
+.card-title {
+  color: #0f172a !important;
+  font-weight: 900 !important;
+  font-size: 1.25rem !important;
+}
+
+html.dark .card-title {
+  color: #ffffff !important;
+}
+
+.card-desc {
+  color: #334155 !important;
+  font-size: 0.88rem !important;
+  line-height: 1.5 !important;
+}
+
+html.dark .card-desc {
+  color: #cbd5e1 !important;
+}
+
+.card-features span {
+  background: #f1f5f9 !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #334155 !important;
+  font-weight: 700 !important;
+  padding: 4px 10px !important;
+  border-radius: 8px !important;
+}
+
+html.dark .card-features span {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: #e2e8f0 !important;
+}
+
+/* 2. TONE RHYTHM GAME (PHÍM ĐÀN THANH ĐIỆU) */
+.rhythm-hud-bar {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  border-radius: 18px !important;
+  padding: 10px 16px !important;
+  flex-wrap: wrap !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+html.dark .rhythm-hud-bar {
+  background: #0f172a !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+}
+
+.rhythm-hud-bar .hud-item-title strong {
+  color: #db2777 !important;
+  font-weight: 900 !important;
+}
+
+html.dark .rhythm-hud-bar .hud-item-title strong {
+  color: #f472b6 !important;
+}
+
+.rhythm-hud-bar .hud-label {
+  color: #475569 !important;
+  font-weight: 800 !important;
+  font-size: 0.82rem !important;
+}
+
+html.dark .rhythm-hud-bar .hud-label {
+  color: #94a3b8 !important;
+}
+
+.rhythm-hud-bar .hud-value {
+  color: #0284c7 !important;
+  font-weight: 900 !important;
+}
+
+html.dark .rhythm-hud-bar .hud-value {
+  color: #38bdf8 !important;
+}
+
+.rhythm-hud-bar #rhythm-top-back-btn,
+.rhythm-hud-bar #rhythm-pause-btn,
+.rhythm-hud-bar #rhythm-exit-btn {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+.rhythm-hud-bar #rhythm-top-back-btn:hover,
+.rhythm-hud-bar #rhythm-pause-btn:hover,
+.rhythm-hud-bar #rhythm-exit-btn:hover {
+  background: #f1f5f9 !important;
+  border-color: #94a3b8 !important;
+}
+
+html.dark .rhythm-hud-bar #rhythm-top-back-btn,
+html.dark .rhythm-hud-bar #rhythm-pause-btn,
+html.dark .rhythm-hud-bar #rhythm-exit-btn {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+}
+
+html.dark .rhythm-hud-bar #rhythm-top-back-btn:hover,
+html.dark .rhythm-hud-bar #rhythm-pause-btn:hover,
+html.dark .rhythm-hud-bar #rhythm-exit-btn:hover {
+  background: #334155 !important;
+}
+
+.rhythm-hud-bar #rhythm-guide-btn {
+  background: #eff6ff !important;
+  border: 1.5px solid #3b82f6 !important;
+  color: #1d4ed8 !important;
+  font-weight: 800 !important;
+}
+
+html.dark .rhythm-hud-bar #rhythm-guide-btn {
+  background: rgba(56, 189, 248, 0.15) !important;
+  border-color: #38bdf8 !important;
+  color: #38bdf8 !important;
+}
+
+/* Controls Bar (Speed + Modes) */
+.rhythm-controls-bar {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  border-radius: 16px !important;
+  padding: 8px 16px !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+html.dark .rhythm-controls-bar {
+  background: #0f172a !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  color: #f8fafc !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35) !important;
+}
+
+.rhythm-controls-bar .control-label {
+  color: #0f172a !important;
+  font-weight: 900 !important;
+}
+
+html.dark .rhythm-controls-bar .control-label {
+  color: #cbd5e1 !important;
+}
+
+.rhythm-mode-tabs,
+.rhythm-speed-tabs {
+  background: #f1f5f9 !important;
+  border: 1.5px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  padding: 3px !important;
+}
+
+html.dark .rhythm-mode-tabs,
+html.dark .rhythm-speed-tabs {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.rhythm-mode-btn,
+.speed-opt-btn {
+  color: #475569 !important;
+  background: transparent !important;
+  font-weight: 800 !important;
+}
+
+html.dark .rhythm-mode-btn,
+html.dark .speed-opt-btn {
+  color: #94a3b8 !important;
+}
+
+.rhythm-mode-btn:hover,
+.speed-opt-btn:hover {
+  color: #0f172a !important;
+  background: #e2e8f0 !important;
+}
+
+html.dark .rhythm-mode-btn:hover,
+html.dark .speed-opt-btn:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.rhythm-mode-btn.active {
+  background: #0284c7 !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 10px rgba(2, 132, 199, 0.4) !important;
+}
+
+.rhythm-mode-btn.vip-btn.active {
+  background: linear-gradient(135deg, #d97706, #b45309) !important;
+  color: #ffffff !important;
+}
+
+.speed-opt-btn.active {
+  background: #059669 !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.4) !important;
+}
+
+.speed-opt-btn[data-speed="normal"].active {
+  background: #0284c7 !important;
+}
+
+.speed-opt-btn[data-speed="hard"].active {
+  background: #dc2626 !important;
+}
+
+/* Pads Row */
+.rhythm-pads-row {
+  background: #ffffff !important;
+  border-top: 2px solid #cbd5e1 !important;
+}
+
+html.dark .rhythm-pads-row {
+  background: #0f172a !important;
+  border-top-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.rhythm-pad {
+  background: #f8fafc !important;
+  border-right: 1px solid #cbd5e1 !important;
+}
+
+html.dark .rhythm-pad {
+  background: #1e293b !important;
+  border-right-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.rhythm-pad:hover {
+  background: #f1f5f9 !important;
+}
+
+html.dark .rhythm-pad:hover {
+  background: #334155 !important;
+}
+
+.pad-title {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+html.dark .pad-title {
+  color: #f8fafc !important;
+}
+
+.pad-key {
+  color: #475569 !important;
+  background: #e2e8f0 !important;
+  font-weight: 800 !important;
+}
+
+html.dark .pad-key {
+  color: #cbd5e1 !important;
+  background: #334155 !important;
+}
+
+/* Start / Difficulty Modal Card */
+.rhythm-start-overlay {
+  background: rgba(15, 23, 42, 0.75) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.rhythm-start-card {
+  background: #ffffff !important;
+  border: 2px solid #cbd5e1 !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2) !important;
+  color: #0f172a !important;
+}
+
+html.dark .rhythm-start-card {
+  background: #0f172a !important;
+  border-color: rgba(56, 189, 248, 0.35) !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(56, 189, 248, 0.2) !important;
+  color: #f8fafc !important;
+}
+
+.start-card-hero h2 {
+  color: #db2777 !important;
+  font-weight: 900 !important;
+}
+
+html.dark .start-card-hero h2 {
+  color: #f472b6 !important;
+}
+
+.start-card-hero .hero-sub {
+  color: #475569 !important;
+}
+
+html.dark .start-card-hero .hero-sub {
+  color: #94a3b8 !important;
+}
+
+.start-section-box {
+  background: #f8fafc !important;
+  border: 1.5px solid #e2e8f0 !important;
+}
+
+html.dark .start-section-box {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.start-section-box .section-title {
+  color: #0f172a !important;
+  font-weight: 900 !important;
+}
+
+html.dark .start-section-box .section-title {
+  color: #ffffff !important;
+}
+
+.start-diff-card {
+  background: #ffffff !important;
+  border: 2px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+html.dark .start-diff-card {
+  background: #0f172a !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+.start-diff-card:hover {
+  border-color: #0284c7 !important;
+  background: #f0f9ff !important;
+}
+
+html.dark .start-diff-card:hover {
+  border-color: #38bdf8 !important;
+  background: #1e293b !important;
+}
+
+.start-diff-card.active {
+  border-color: #059669 !important;
+  background: #ecfdf5 !important;
+  box-shadow: 0 4px 16px rgba(5, 150, 105, 0.25) !important;
+}
+
+html.dark .start-diff-card.active {
+  border-color: #10b981 !important;
+  background: rgba(16, 185, 129, 0.15) !important;
+}
+
+.start-diff-card[data-speed="normal"].active {
+  border-color: #0284c7 !important;
+  background: #eff6ff !important;
+  box-shadow: 0 4px 16px rgba(2, 132, 199, 0.25) !important;
+}
+
+html.dark .start-diff-card[data-speed="normal"].active {
+  border-color: #38bdf8 !important;
+  background: rgba(56, 189, 248, 0.15) !important;
+}
+
+.start-diff-card[data-speed="hard"].active {
+  border-color: #dc2626 !important;
+  background: #fef2f2 !important;
+  box-shadow: 0 4px 16px rgba(220, 38, 38, 0.25) !important;
+}
+
+html.dark .start-diff-card[data-speed="hard"].active {
+  border-color: #f43f5e !important;
+  background: rgba(244, 63, 94, 0.15) !important;
+}
+
+.diff-speed-desc {
+  color: #b45309 !important;
+}
+
+html.dark .diff-speed-desc {
+  color: #fbbf24 !important;
+}
+
+.diff-detail {
+  color: #475569 !important;
+}
+
+html.dark .diff-detail {
+  color: #cbd5e1 !important;
+}
+
+.start-mode-pill {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+html.dark .start-mode-pill {
+  background: #0f172a !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  color: #cbd5e1 !important;
+}
+
+.start-mode-pill:hover {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+  border-color: #94a3b8 !important;
+}
+
+html.dark .start-mode-pill:hover {
+  background: #1e293b !important;
+  color: #ffffff !important;
+}
+
+.start-mode-pill.active {
+  border-color: #0284c7 !important;
+  background: #eff6ff !important;
+  color: #0284c7 !important;
+}
+
+html.dark .start-mode-pill.active {
+  border-color: #38bdf8 !important;
+  background: rgba(56, 189, 248, 0.2) !important;
+  color: #38bdf8 !important;
+}
+
+.start-mode-pill.vip-pill.active {
+  border-color: #d97706 !important;
+  background: #fffbeb !important;
+  color: #b45309 !important;
+}
+
+html.dark .start-mode-pill.vip-pill.active {
+  border-color: #f59e0b !important;
+  background: rgba(245, 158, 11, 0.2) !important;
+  color: #fbbf24 !important;
+}
+
+.start-keys-bar {
+  background: #f1f5f9 !important;
+  border: 1.5px solid #e2e8f0 !important;
+}
+
+html.dark .start-keys-bar {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.k-code {
+  background: #e2e8f0 !important;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+html.dark .k-code {
+  background: #334155 !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Guide Modal Card */
+.rhythm-guide-card {
+  background: #ffffff !important;
+  border: 2px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+html.dark .rhythm-guide-card {
+  background: #0f172a !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  color: #f8fafc !important;
+}
+
+.rhythm-guide-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  border-bottom: 1.5px solid #e2e8f0 !important;
+  padding-bottom: 12px !important;
+  margin-bottom: 14px !important;
+}
+
+html.dark .rhythm-guide-header {
+  border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.rhythm-guide-title {
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  color: #db2777 !important;
+  font-weight: 900 !important;
+}
+
+html.dark .rhythm-guide-title {
+  color: #ec4899 !important;
+}
+
+.rhythm-guide-body {
+  font-size: 0.9rem !important;
+  line-height: 1.6 !important;
+  color: #334155 !important;
+}
+
+html.dark .rhythm-guide-body {
+  color: #cbd5e1 !important;
+}
+
+.guide-tone-table th {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+  font-weight: 800 !important;
+  border-bottom: 2px solid #cbd5e1 !important;
+}
+
+html.dark .guide-tone-table th {
+  background: #1e293b !important;
+  color: #ffffff !important;
+  border-bottom-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.guide-tone-table td {
+  color: #334155 !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+html.dark .guide-tone-table td {
+  color: #cbd5e1 !important;
+  border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.guide-tone-table code {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1 !important;
+  padding: 2px 6px !important;
+  border-radius: 6px !important;
+}
+
+html.dark .guide-tone-table code {
+  background: #334155 !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.guide-modes-box {
+  background: #f0f9ff !important;
+  border-left: 4px solid #0284c7 !important;
+  padding: 10px 14px !important;
+  border-radius: 8px !important;
+  margin: 12px 0 !important;
+  color: #0c4a6e !important;
+}
+
+html.dark .guide-modes-box {
+  background: rgba(56, 189, 248, 0.12) !important;
+  border-left-color: #38bdf8 !important;
+  color: #e0f2fe !important;
+}
+
+/* 3. UNIVERSAL RESULT MODAL & WORD SUMMARY (ALL 6 MINI-GAMES) */
+.cannon-modal-overlay {
+  background: rgba(15, 23, 42, 0.8) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.cannon-result-card {
+  background: #ffffff !important;
+  border: 2px solid #cbd5e1 !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25) !important;
+  color: #0f172a !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+html.dark .cannon-result-card {
+  background: #0f172a !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8) !important;
+  color: #ffffff !important;
+}
+
+.cannon-result-card .result-title {
+  color: #0f172a !important;
+  font-weight: 900 !important;
+}
+
+html.dark .cannon-result-card .result-title {
+  color: #ffffff !important;
+}
+
+.cannon-result-card .result-desc {
+  color: #475569 !important;
+}
+
+html.dark .cannon-result-card .result-desc {
+  color: #94a3b8 !important;
+}
+
+.cannon-result-card .stat-pill {
+  background: #f8fafc !important;
+  border: 1.5px solid #e2e8f0 !important;
+}
+
+html.dark .cannon-result-card .stat-pill {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.cannon-result-card .stat-pill .label {
+  color: #64748b !important;
+}
+
+html.dark .cannon-result-card .stat-pill .label {
+  color: #94a3b8 !important;
+}
+
+.cannon-result-card .stat-pill .val {
+  color: #0284c7 !important;
+  font-weight: 900 !important;
+}
+
+html.dark .cannon-result-card .stat-pill .val {
+  color: #38bdf8 !important;
+}
+
+.result-beta-note {
+  background: #fffbeb !important;
+  border: 1.5px solid #fde68a !important;
+  color: #b45309 !important;
+}
+
+html.dark .result-beta-note {
+  background: rgba(245, 158, 11, 0.15) !important;
+  border-color: rgba(245, 158, 11, 0.3) !important;
+  color: #fbbf24 !important;
+}
+
+/* Word Summary Table */
+.game-results-word-summary {
+  background: #f8fafc !important;
+  border: 1.5px solid #e2e8f0 !important;
+  border-radius: 16px !important;
+  padding: 12px !important;
+  margin-bottom: 16px !important;
+}
+
+html.dark .game-results-word-summary {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.summary-tabs-header {
+  display: flex !important;
+  gap: 6px !important;
+  background: #e2e8f0 !important;
+  padding: 4px !important;
+  border-radius: 12px !important;
+  margin-bottom: 10px !important;
+}
+
+html.dark .summary-tabs-header {
+  background: #0f172a !important;
+}
+
+.summary-tab-btn {
+  flex: 1 !important;
+  background: transparent !important;
+  border: none !important;
+  color: #475569 !important;
+  font-weight: 800 !important;
+  padding: 6px 8px !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  font-size: 0.78rem !important;
+}
+
+html.dark .summary-tab-btn {
+  color: #94a3b8 !important;
+}
+
+.summary-tab-btn.active {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+}
+
+html.dark .summary-tab-btn.active {
+  background: #334155 !important;
+  color: #ffffff !important;
+}
+
+.summary-tab-btn.correct-tab.active {
+  background: #dcfce7 !important;
+  color: #15803d !important;
+}
+
+html.dark .summary-tab-btn.correct-tab.active {
+  background: rgba(34, 197, 94, 0.25) !important;
+  color: #4ade80 !important;
+}
+
+.summary-tab-btn.wrong-tab.active {
+  background: #fee2e2 !important;
+  color: #b91c1c !important;
+}
+
+html.dark .summary-tab-btn.wrong-tab.active {
+  background: rgba(239, 68, 68, 0.25) !important;
+  color: #f87171 !important;
+}
+
+.summary-words-list {
+  max-height: 220px !important;
+  overflow-y: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+.summary-word-card {
+  background: #ffffff !important;
+  border: 1.5px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  padding: 8px 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+}
+
+html.dark .summary-word-card {
+  background: #0f172a !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.summary-word-card.is-correct {
+  border-color: #86efac !important;
+  background: #f0fdf4 !important;
+}
+
+html.dark .summary-word-card.is-correct {
+  background: rgba(34, 197, 94, 0.12) !important;
+  border-color: rgba(34, 197, 94, 0.35) !important;
+}
+
+.summary-word-card.is-wrong {
+  border-color: #fca5a5 !important;
+  background: #fef2f2 !important;
+}
+
+html.dark .summary-word-card.is-wrong {
+  background: rgba(239, 68, 68, 0.12) !important;
+  border-color: rgba(239, 68, 68, 0.35) !important;
+}
+
+.sw-hanzi {
+  color: #0f172a !important;
+  font-weight: 900 !important;
+  font-size: 1.1rem !important;
+}
+
+html.dark .sw-hanzi {
+  color: #ffffff !important;
+}
+
+.sw-pinyin {
+  color: #0284c7 !important;
+  font-weight: 800 !important;
+  font-size: 0.85rem !important;
+}
+
+html.dark .sw-pinyin {
+  color: #38bdf8 !important;
+}
+
+.sw-meaning {
+  color: #334155 !important;
+  font-size: 0.8rem !important;
+}
+
+html.dark .sw-meaning {
+  color: #cbd5e1 !important;
+}
+
+.sw-speak-btn {
+  background: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  border-radius: 50% !important;
+  width: 32px !important;
+  height: 32px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+}
+
+html.dark .sw-speak-btn {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+}
+
+.sw-badge {
+  font-size: 0.72rem !important;
+  font-weight: 800 !important;
+  padding: 3px 8px !important;
+  border-radius: 6px !important;
+}
+
+.sw-badge.badge-correct {
+  background: #dcfce7 !important;
+  color: #15803d !important;
+}
+
+html.dark .sw-badge.badge-correct {
+  background: rgba(34, 197, 94, 0.2) !important;
+  color: #4ade80 !important;
+}
+
+.sw-badge.badge-wrong {
+  background: #fee2e2 !important;
+  color: #b91c1c !important;
+}
+
+html.dark .sw-badge.badge-wrong {
+  background: rgba(239, 68, 68, 0.2) !important;
+  color: #f87171 !important;
+}
+
+/* Modal action buttons */
+#rhythm-retry-btn,
+#snake-retry-btn,
+#cannon-retry-btn,
+#mahjong-retry-btn,
+#alchemist-retry-btn {
+  background: #059669 !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-weight: 800 !important;
+  border-radius: 50px !important;
+}
+
+#rhythm-retry-btn:hover,
+#snake-retry-btn:hover,
+#cannon-retry-btn:hover,
+#mahjong-retry-btn:hover,
+#alchemist-retry-btn:hover {
+  background: #047857 !important;
+  transform: translateY(-2px) !important;
+}
+
+#rhythm-back-hub-btn,
+#snake-back-hub-btn,
+#cannon-back-hub-btn,
+#mahjong-back-hub-btn,
+#alchemist-back-hub-btn {
+  background: #0284c7 !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-weight: 800 !important;
+  border-radius: 50px !important;
+}
+
+#rhythm-back-hub-btn:hover,
+#snake-back-hub-btn:hover,
+#cannon-back-hub-btn:hover,
+#mahjong-back-hub-btn:hover,
+#alchemist-back-hub-btn:hover {
+  background: #0369a1 !important;
+  transform: translateY(-2px) !important;
+}
+
+#rhythm-finish-btn,
+#snake-finish-btn,
+#cannon-finish-btn,
+#mahjong-finish-btn,
+#alchemist-finish-btn {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  font-weight: 800 !important;
+  border-radius: 50px !important;
+}
+
+html.dark #rhythm-finish-btn,
+html.dark #snake-finish-btn,
+html.dark #cannon-finish-btn,
+html.dark #mahjong-finish-btn,
+html.dark #alchemist-finish-btn {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+}
+
+/* 4. OTHER ARCADE GAMES SOLID THEME REFINEMENT */
+.cannon-top-hud,
+.snake-top-hud,
+.alchemist-hud-bar,
+.mahjong-hud-bar {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+html.dark .cannon-top-hud,
+html.dark .snake-top-hud,
+html.dark .alchemist-hud-bar,
+html.dark .mahjong-hud-bar {
+  background: #0f172a !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+.cannon-sidebar,
+.snake-sidebar,
+.alchemist-inventory-card,
+.mahjong-tools-panel {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+html.dark .cannon-sidebar,
+html.dark .snake-sidebar,
+html.dark .alchemist-inventory-card,
+html.dark .mahjong-tools-panel {
+  background: #0f172a !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* ==========================================================================
+   5. ALL WEBSITE PAGES UNIVERSAL DUAL-THEME & ZERO LIQUID GLASS SYSTEM
+   Applies across all 13 HTML pages:
+   - index.html (Dashboard, Notebooks, Flashcards, Forums)
+   - video-dictation.html (Video Dictation, Shadowing, Dubbing, Karaoke)
+   - quiz-game.html (Arena Quiz, Battle, 4-Choice Options)
+   - chinese-phonetics.html (Pinyin Master, Tables, Mouth Diagrams)
+   - chinese-radicals.html (214 Radicals, Flashcard Stage, Filters)
+   - han-viet-rules.html (Sino-Vietnamese Rules, Formula Cards)
+   - hsk-grammar.html (Grammar Points HSK 1-6, Structure Cards)
+   - lesson-texts.html (Reading & Dialogues HSK, Sentence Cards)
+   - lesson-online.html (Video Classroom, Notes, Curriculum)
+   - hanzi-writer.html (Stroke Order Writer, Workshop Panel)
+   - chat-history.html (AI Chat Studio, Threads, Message Bubbles)
+   - detail-list.html (Vocabulary Detailed Table View)
+   - rank.html (Ceremony Leaderboard, Podium, Badges)
+   ========================================================================== */
+
+/* Universal Body Background & Text Contrast */
+html.light-mode body,
+html:not(.dark) body,
+body.light-mode {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+html.dark body {
+  background: #0b0f19 url('/assets/app_bg_night_v3.png') no-repeat center center fixed / cover !important;
+  color: #f8fafc !important;
+}
+
+/* Universal Zero Glassmorphism Override for all panels and cards */
+.glass-panel,
+.card-glass,
+.glass-card,
+.modal-glass,
+.header-card,
+.phonetics-header,
+.dict-top-nav,
+.dict-hero-banner,
+.dict-workspace-card,
+.dict-karaoke-box,
+.dict-input-box,
+.writing-workshop,
+.vocab-panel,
+.filter-section,
+.threads-sidebar,
+.chat-view-header,
+.rules-header,
+.rule-card,
+.toolbar-bar,
+.controls-panel,
+.hero-flashcard-card {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Light Mode Universal Container & Card Styles */
+html.light-mode .glass-panel,
+html.light-mode .card-glass,
+html.light-mode .glass-card,
+html.light-mode .modal-glass,
+html:not(.dark) .glass-panel,
+html:not(.dark) .card-glass,
+html:not(.dark) .glass-card,
+html:not(.dark) .modal-glass {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.dark .glass-panel,
+html.dark .card-glass,
+html.dark .glass-card,
+html.dark .modal-glass {
+  background: #1e293b !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
+}
+
+/* Video Dictation Page Dual-Theme Contrast */
+html.light-mode .dict-top-nav,
+html:not(.dark) .dict-top-nav {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.dark .dict-top-nav {
+  background: #0f172a !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+html.light-mode .dict-brand-title,
+html:not(.dark) .dict-brand-title {
+  color: #0f172a !important;
+}
+
+html.dark .dict-brand-title {
+  color: #ffffff !important;
+}
+
+html.light-mode .dict-lesson-card,
+html:not(.dark) .dict-lesson-card {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.dark .dict-lesson-card {
+  background: #1e293b !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+html.light-mode .dict-card-title,
+html:not(.dark) .dict-card-title {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+html.dark .dict-card-title {
+  color: #ffffff !important;
+}
+
+html.light-mode .dict-card-desc,
+html:not(.dark) .dict-card-desc {
+  color: #334155 !important;
+}
+
+html.dark .dict-card-desc {
+  color: #cbd5e1 !important;
+}
+
+html.light-mode .dict-workspace-card,
+html:not(.dark) .dict-workspace-card {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+}
+
+html.dark .dict-workspace-card {
+  background: #1e293b !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+html.light-mode .dict-karaoke-box,
+html:not(.dark) .dict-karaoke-box {
+  background: #f8fafc !important;
+  border: 1.5px solid #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+html.dark .dict-karaoke-box {
+  background: #0f172a !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+
+html.light-mode .dict-hanzi-line,
+html:not(.dark) .dict-hanzi-line {
+  color: #0f172a !important;
+}
+
+html.dark .dict-hanzi-line {
+  color: #ffffff !important;
+}
+
+html.light-mode .dict-meaning-line,
+html:not(.dark) .dict-meaning-line {
+  color: #334155 !important;
+}
+
+html.dark .dict-meaning-line {
+  color: #cbd5e1 !important;
+}
+
+html.light-mode .dict-input-field,
+html:not(.dark) .dict-input-field {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+html.dark .dict-input-field {
+  background: #0f172a !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+}
+
+/* Quiz Game Page Dual-Theme Contrast */
+html.light-mode .question-card,
+html:not(.dark) .question-card {
+  background: #ffffff !important;
+  border: 2px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+}
+
+html.dark .question-card {
+  background: #1e293b !important;
+  border: 2px solid rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+html.light-mode .ans-btn,
+html:not(.dark) .ans-btn {
+  background: #f8fafc !important;
+  border: 2px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+html.light-mode .ans-btn:hover,
+html:not(.dark) .ans-btn:hover {
+  background: #f0f9ff !important;
+  border-color: #0284c7 !important;
+  color: #0284c7 !important;
+}
+
+html.dark .ans-btn {
+  background: #0f172a !important;
+  border: 2px solid rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+}
+
+html.dark .ans-btn:hover {
+  background: #1e293b !important;
+  border-color: #38bdf8 !important;
+  color: #38bdf8 !important;
+}
+
+/* Sino-Vietnamese Rules (han-viet-rules.html) */
+html.light-mode .rules-header,
+html:not(.dark) .rules-header {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.dark .rules-header {
+  background: #1e293b !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+html.light-mode .rule-card,
+html:not(.dark) .rule-card {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04) !important;
+}
+
+html.dark .rule-card {
+  background: #1e293b !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+html.light-mode .rule-card h3,
+html:not(.dark) .rule-card h3 {
+  color: #0f172a !important;
+}
+
+html.dark .rule-card h3 {
+  color: #ffffff !important;
+}
+
+html.light-mode .rule-card p,
+html:not(.dark) .rule-card p {
+  color: #334155 !important;
+}
+
+html.dark .rule-card p {
+  color: #cbd5e1 !important;
+}
+
+/* HSK Grammar Page (hsk-grammar.html) */
+html.light-mode .grammar-card,
+html:not(.dark) .grammar-card {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.dark .grammar-card {
+  background: #1e293b !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+html.light-mode .gm-title,
+html:not(.dark) .gm-title {
+  color: #0f172a !important;
+}
+
+html.dark .gm-title {
+  color: #ffffff !important;
+}
+
+html.light-mode .gm-structure-box,
+html:not(.dark) .gm-structure-box {
+  background: #f8fafc !important;
+  border: 1.5px solid #e2e8f0 !important;
+  color: #0284c7 !important;
+  font-weight: 800 !important;
+}
+
+html.dark .gm-structure-box {
+  background: #0f172a !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.12) !important;
+  color: #38bdf8 !important;
+}
+
+/* AI Chat History Page (chat-history.html) */
+html.light-mode .threads-sidebar,
+html:not(.dark) .threads-sidebar {
+  background: #ffffff !important;
+  border-right: 1.5px solid #cbd5e1 !important;
+}
+
+html.dark .threads-sidebar {
+  background: #0f172a !important;
+  border-right: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+html.light-mode .chat-view,
+html:not(.dark) .chat-view {
+  background: #f8fafc !important;
+}
+
+html.dark .chat-view {
+  background: #090d16 !important;
+}
+
+html.light-mode .chat-view-header,
+html:not(.dark) .chat-view-header {
+  background: #ffffff !important;
+  border-bottom: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+html.dark .chat-view-header {
+  background: #0f172a !important;
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+/* Rank / Leaderboard Page (rank.html) */
+html.light-mode .rank-header-nav,
+html:not(.dark) .rank-header-nav {
+  background: #ffffff !important;
+  border-bottom: 1.5px solid #cbd5e1 !important;
+}
+
+html.dark .rank-header-nav {
+  background: #0f172a !important;
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+html.light-mode .leaderboard-modal-content,
+html:not(.dark) .leaderboard-modal-content {
+  background: #ffffff !important;
+  border: 2px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08) !important;
+}
+
+html.dark .leaderboard-modal-content {
+  background: #1e293b !important;
+  border: 2px solid rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+html.light-mode .lb-title,
+html:not(.dark) .lb-title {
+  color: #0f172a !important;
+}
+
+html.dark .lb-title {
+  color: #ffffff !important;
+}
+
+html.light-mode .lb-subtitle,
+html:not(.dark) .lb-subtitle {
+  color: #475569 !important;
+}
+
+html.dark .lb-subtitle {
+  color: #94a3b8 !important;
+}
+
+
 
 
 
