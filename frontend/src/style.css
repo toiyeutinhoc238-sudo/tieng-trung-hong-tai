@@ -16994,6 +16994,55 @@ html.dark .lb-subtitle {
   color: #94a3b8 !important;
 }
 
+/* ==========================================================================
+   GLOBAL PERFORMANCE & MOBILE ACCELERATION (ANTI-LAG SYSTEM)
+   ========================================================================== */
+
+/* Hardware accelerated layer containment for cards & interactive widgets */
+.game-choice-card,
+.lesson-card-item,
+.flashcard-main,
+.hsk-word-card,
+.mini-rad-card,
+.hanzi-card {
+  contain: content;
+  content-visibility: auto;
+  contain-intrinsic-size: 280px 180px;
+}
+
+/* Eliminate GPU strain on mobile Safari & Android by replacing heavy backdrop blurs */
+@media (max-width: 900px), (prefers-reduced-motion: reduce) {
+  * {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  
+  .modal-overlay,
+  #game-hub-guide-modal,
+  #lesson-detail-popup-modal,
+  .system-dark-modal-card {
+    background: rgba(15, 23, 42, 0.96) !important;
+  }
+
+  .sidebar {
+    background: rgba(15, 23, 42, 0.98) !important;
+  }
+
+  .lesson-stepper-hub-bar {
+    background: rgba(15, 23, 42, 0.98) !important;
+  }
+}
+
+/* Touch responsiveness optimization */
+button,
+.btn,
+.sidebar-item,
+.game-choice-card,
+.nav-pill-btn {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
 
 
 

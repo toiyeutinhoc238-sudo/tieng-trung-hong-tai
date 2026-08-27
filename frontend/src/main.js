@@ -504,7 +504,8 @@ function initSeasonalParticles() {
 
   function render(currentTime) {
     if (document.hidden || localStorage.getItem('particles_enabled') === 'false') {
-      animationFrameId = setTimeout(() => requestAnimationFrame(render), 300);
+      if (ctx) ctx.clearRect(0, 0, width, height);
+      animationFrameId = null;
       return;
     }
 
@@ -561,11 +562,46 @@ function initSeasonalParticles() {
       });
     }
 
-    requestAnimationFrame(render);
+    animationFrameId = requestAnimationFrame(render);
   }
 
-  requestAnimationFrame(render);
+  function startOrResumeLoop() {
+    if (!animationFrameId && !document.hidden && localStorage.getItem('particles_enabled') !== 'false') {
+      lastFrameTime = performance.now();
+      animationFrameId = requestAnimationFrame(render);
+    }
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+      startOrResumeLoop();
+    }
+  });
+
+  window.toggleSeasonalParticles = function() {
+    const current = localStorage.getItem('particles_enabled') !== 'false';
+    const next = !current;
+    localStorage.setItem('particles_enabled', next ? 'true' : 'false');
+    if (canvas) canvas.style.display = next ? 'block' : 'none';
+    updateParticleToggleBtns(next);
+    if (next) {
+      startOrResumeLoop();
+    } else {
+      if (ctx) ctx.clearRect(0, 0, width, height);
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+      }
+    }
+    if (typeof showToast === 'function') {
+      showToast(next ? 'Đã bật hiệu ứng rơi động 🌸' : 'Đã tắt hiệu ứng rơi để tăng tốc độ ⚡');
+    }
+  };
+
   const enabled = localStorage.getItem('particles_enabled') !== 'false';
+  if (enabled) {
+    startOrResumeLoop();
+  }
   updateParticleToggleBtns(enabled);
 }
 
@@ -6989,7 +7025,7 @@ window.openLessonDetailModal = function (lessonKey) {
         window.openNotebookGamesHub(
           lessonWords.length >= 2 ? lessonWords : vocabularyData.slice(0, 50),
           `Bài ${numId}: Ôn Tập Từ Vựng`,
-          `Lựa chọn 1 trong 6 trò chơi ôn tập từ vựng Bài ${numId} HSK ${curLvl}`
+          `Lựa chọn 1 trong 5 trò chơi ôn tập từ vựng Bài ${numId} HSK ${curLvl}`
         );
       };
     }
@@ -7840,7 +7876,7 @@ window.goToLessonStep = function(step, lessonId) {
     window.openNotebookGamesHub(
       lessonWords.length >= 2 ? lessonWords : vocabularyData.slice(0, 50),
       `Bài ${numId}: Ôn Tập Từ Vựng`,
-      `Lựa chọn 1 trong 6 trò chơi ôn tập từ vựng Bài ${numId} HSK ${currentLvl}`
+      `Lựa chọn 1 trong 5 trò chơi ôn tập từ vựng Bài ${numId} HSK ${currentLvl}`
     );
   } else if (step === 'video') {
     window.openLessonExtraVideoModal(numId, currentLvl, currentVer);
@@ -12557,7 +12593,7 @@ window.showGameHubGuideModal = function () {
       </div>
 
       <h3 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 8px; color: #fbbf24; text-shadow: 0 2px 10px rgba(245, 158, 11, 0.35);">
-        Đấu Trường 6 Trò Chơi Ôn Tập
+        Đấu Trường 5 Trò Chơi Ôn Tập
       </h3>
 
       <div style="background: rgba(15, 23, 42, 0.85); border: 1.5px solid rgba(245, 158, 11, 0.3); border-radius: 16px; padding: 14px 18px; margin: 16px 0 22px 0; text-align: left;">
@@ -12566,7 +12602,7 @@ window.showGameHubGuideModal = function () {
           <span>Vào <strong>Sổ tay từ vựng</strong> để biết thêm chi tiết và chọn bài học bạn muốn chơi game ôn tập nhé!</span>
         </div>
         <div style="font-size: 0.82rem; color: #cbd5e1; margin-top: 10px; line-height: 1.45; padding-left: 28px; font-weight: 600;">
-          🐍 Nuôi Rắn • 🀄 Mạt Chược • 💥 Bắn Pháo • ⚗️ Giả Kim • 🎵 Phím Đàn • ⚡ Quizizz
+          ⚡ Quiz Game • 🀄 Mạt Chược • ⚗️ Lò Luyện • 🐍 Nuôi Rắn • 🗡️ Phi Đao
         </div>
       </div>
 
@@ -12852,7 +12888,7 @@ window.loadRankPageData = function () {
               ${item.picture ? `<img src="${item.picture}" class="lb-row-avatar">` : `<div class="lb-row-avatar-placeholder">${item.name.charAt(0)}</div>`}
               <div style="flex: 1; min-width: 0;">
                 <div class="lb-user-name">${item.name}</div>
-                <div class="lb-subtext">Đã học thuộc: <strong style="color: #059669;">${item.completedCount} từ vựng</strong></div>
+                <div class="lb-subtext">Chuỗi ngày học: <strong style="color: #f97316;">🔥 ${item.streak || 1} ngày</strong></div>
               </div>
               <div style="text-align: right;">
                 <div class="lb-score-val">${item.completedCount * 100} Điểm</div>
@@ -14005,8 +14041,6 @@ window.renderAdminUsersTable = function () {
       ? `<span style="font-weight: 800; color: #22c55e;">${u.highestQuizScore}đ</span> <span style="font-size: 0.72rem; color: #94a3b8;">(${u.quizCount} đề)</span>`
       : `<span style="font-size: 0.78rem; color: #64748b;">Chưa thi</span>`;
 
-    const wordsProgress = `<span style="font-size: 0.75rem; color: #38bdf8; display: block;">${u.memorizedWordsCount || 0} từ đã thuộc</span>`;
-
     // Format study time
     const studyHours = ((u.studyTime || 0) / 3600).toFixed(1);
     const studyMins = Math.round(((u.studyTime || 0) % 3600) / 60);
@@ -14053,7 +14087,6 @@ window.renderAdminUsersTable = function () {
         <td>${roleBadge}</td>
         <td>
           <div>${highestScoreHtml}</div>
-          ${wordsProgress}
         </td>
         <td>
           <span style="font-weight: 800; color: #f97316; font-size: 0.88rem;">
@@ -14143,8 +14176,8 @@ window.openStudentHistoryDetail = function(userEmail) {
           <div style="font-size: 1.2rem; font-weight: 800; color: #38bdf8; margin-top: 2px;"><i class="fa-solid fa-clock"></i> ${totalMins} phút</div>
         </div>
         <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 10px; text-align: center;">
-          <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Đã Thuộc</div>
-          <div style="font-size: 1.2rem; font-weight: 800; color: #22c55e; margin-top: 2px;"><i class="fa-solid fa-circle-check"></i> ${user.memorizedWordsCount || user.totalWordsMemorized || 0} từ</div>
+          <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Điểm Cao Nhất</div>
+          <div style="font-size: 1.2rem; font-weight: 800; color: #22c55e; margin-top: 2px;"><i class="fa-solid fa-trophy"></i> ${user.highestQuizScore || 0}đ</div>
         </div>
       </div>
 

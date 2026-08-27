@@ -523,7 +523,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css              */import"
                   ${s.picture?`<img src="${s.picture}" class="lb-row-avatar">`:`<div class="lb-row-avatar-placeholder">${s.name.charAt(0)}</div>`}
                   <div style="flex: 1; min-width: 0;">
                     <div class="lb-user-name">${s.name}</div>
-                    <div class="lb-subtext">Đã học thuộc: <strong style="color: #059669;">${s.completedCount} từ vựng</strong></div>
+                    <div class="lb-subtext">Chuỗi ngày học: <strong style="color: #f97316;">🔥 ${s.streak||1} ngày</strong></div>
                   </div>
                   <div style="text-align: right;">
                     <div class="lb-score-val">${s.completedCount*100} Điểm</div>
