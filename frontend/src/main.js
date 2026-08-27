@@ -3806,11 +3806,20 @@ async function initAuth() {
         currentUser = data.user;
         localStorage.setItem('user', JSON.stringify(currentUser));
         renderUserProfile();
+        if (typeof window.initUserSessionTracking === 'function') {
+          window.initUserSessionTracking();
+        }
         return;
       }
     }
   } catch (err) {
     console.warn('Backend session retrieval failed, keeping local persistent user:', err);
+  }
+
+  if (currentUser) {
+    if (typeof window.initUserSessionTracking === 'function') {
+      window.initUserSessionTracking();
+    }
   }
 
   // 3. Nếu chưa đăng nhập thì khởi tạo Google Sign-In
@@ -3901,6 +3910,9 @@ async function handleCredentialResponse(response) {
       }
       localStorage.setItem('user', JSON.stringify(currentUser));
       renderUserProfile();
+      if (typeof window.initUserSessionTracking === 'function') {
+        window.initUserSessionTracking();
+      }
       showToast(`Chào mừng ${currentUser.name} đã quay lại! 👋`);
       const authModal = document.getElementById('auth-required-modal');
       if (authModal) authModal.style.display = 'none';
@@ -13878,6 +13890,44 @@ document.addEventListener('click', (e) => {
   }
 });
 
+window.exportAdminUsersExcel = async function () {
+  if (!currentUser || (!currentUser.isAdmin && !currentUser.isSuperAdmin && !isUserAdmin(currentUser.email))) {
+    showToast('Bạn không có quyền xuất báo cáo quản trị!', true);
+    return;
+  }
+
+  showToast('Đang khởi tạo và tải xuống file Excel báo cáo... 📊');
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/admin/users/export-excel`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+      credentials: 'include'
+    });
+
+    if (!res.ok) {
+      throw new Error('Lỗi khi tải file báo cáo từ máy chủ');
+    }
+
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    const today = new Date();
+    const dateTag = `${today.getFullYear()}_${(today.getMonth() + 1).toString().padStart(2, '0')}_${today.getDate().toString().padStart(2, '0')}`;
+    a.download = `Bao_Cao_Nguoi_Dung_TiengTrungHongTai_${dateTag}.xlsx`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+
+    showToast('✅ Xuất file báo cáo Excel thành công!');
+  } catch (err) {
+    console.error('Export Excel error:', err);
+    showToast('Lỗi khi xuất file báo cáo Excel!', true);
+  }
+};
+
 window.fetchAdminUsersList = async function (showLoading) {
   const container = document.getElementById('admin-users-table-container');
   if (!container) return;
@@ -14111,7 +14161,140 @@ window.renderAdminUsersTable = function () {
   container.innerHTML = html;
 };
 
-window.openStudentHistoryDetail = function(userEmail) {
+// --- USER CLIENT SESSION & PRESENCE TRACKING (ENTER / HEARTBEAT / EXIT) ---
+function initUserSessionTracking() {
+  if (window._hasInitSessionTracking) return;
+  window._hasInitSessionTracking = true;
+
+  let sessionId = sessionStorage.getItem('ht_session_id');
+  if (!sessionId) {
+    sessionId = 'sess_' + Math.random().toString(36).substring(2, 10) + '_' + Date.now();
+    sessionStorage.setItem('ht_session_id', sessionId);
+  }
+
+  function getDeviceDescription() {
+    const ua = navigator.userAgent || '';
+    let dev = '💻 Máy tính';
+    if (/iPad/i.test(ua) || (navigator.maxTouchPoints > 1 && window.innerWidth >= 768 && /Macintosh/i.test(ua))) {
+      dev = '📱 iPad / Tablet';
+    } else if (/iPhone|iPod/i.test(ua)) {
+      dev = '📱 iPhone';
+    } else if (/Android/i.test(ua)) {
+      dev = '📱 Android';
+    } else if (/Mac/i.test(ua)) {
+      dev = '💻 Máy Mac';
+    } else if (/Windows/i.test(ua)) {
+      dev = '💻 Windows PC';
+    }
+    return dev;
+  }
+
+  const device = getDeviceDescription();
+  const API_BASE = getResolvedApiBaseUrl();
+
+  function sendSessionBeat(action) {
+    if (!currentUser || !currentUser.email) return;
+    const payload = JSON.stringify({
+      sessionId,
+      action,
+      device,
+      email: currentUser.email,
+      timestamp: new Date().toISOString()
+    });
+
+    if (action === 'exit' && typeof navigator.sendBeacon === 'function') {
+      try {
+        const blob = new Blob([payload], { type: 'application/json' });
+        navigator.sendBeacon(`${API_BASE}/api/user/session/heartbeat`, blob);
+        return;
+      } catch (e) {}
+    }
+
+    fetch(`${API_BASE}/api/user/session/heartbeat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: payload,
+      credentials: 'include',
+      keepalive: action === 'exit'
+    }).catch(() => {});
+  }
+
+  if (currentUser && currentUser.email) {
+    sendSessionBeat('enter');
+  }
+
+  setInterval(() => {
+    if (document.hasFocus() && currentUser && currentUser.email) {
+      sendSessionBeat('ping');
+    }
+  }, 20000);
+
+  window.addEventListener('beforeunload', () => sendSessionBeat('exit'));
+  window.addEventListener('pagehide', () => sendSessionBeat('exit'));
+}
+window.initUserSessionTracking = initUserSessionTracking;
+
+function formatVnDateTime(isoStr) {
+  if (!isoStr) return 'Chưa rõ';
+  const d = new Date(isoStr);
+  if (isNaN(d.getTime())) return 'Chưa rõ';
+  const pad = n => n.toString().padStart(2, '0');
+  const day = pad(d.getDate());
+  const month = pad(d.getMonth() + 1);
+  const year = d.getFullYear();
+  const hours = pad(d.getHours());
+  const mins = pad(d.getMinutes());
+  const secs = pad(d.getSeconds());
+  return `${hours}:${mins}:${secs} - ${day}/${month}/${year}`;
+}
+
+function formatDurationDetailed(sec) {
+  const s = Math.max(0, Math.round(sec || 0));
+  if (s < 60) return `${s} giây`;
+  const m = Math.floor(s / 60);
+  const remS = s % 60;
+  if (m < 60) return `${m} phút ${remS > 0 ? remS + 's' : ''}`;
+  const h = Math.floor(m / 60);
+  const remM = m % 60;
+  return `${h} giờ ${remM} phút`;
+}
+
+window.switchStudentDetailTab = function (tabName) {
+  const tabLogs = document.getElementById('student-tab-access-logs');
+  const tabDaily = document.getElementById('student-tab-daily-history');
+  const btnLogs = document.getElementById('btn-tab-access-logs');
+  const btnDaily = document.getElementById('btn-tab-daily-history');
+
+  if (tabName === 'logs') {
+    if (tabLogs) tabLogs.style.display = 'block';
+    if (tabDaily) tabDaily.style.display = 'none';
+    if (btnLogs) {
+      btnLogs.style.background = 'linear-gradient(135deg, #0284c7, #2563eb)';
+      btnLogs.style.color = '#ffffff';
+      btnLogs.style.borderColor = '#38bdf8';
+    }
+    if (btnDaily) {
+      btnDaily.style.background = 'rgba(255,255,255,0.06)';
+      btnDaily.style.color = '#94a3b8';
+      btnDaily.style.borderColor = 'rgba(255,255,255,0.12)';
+    }
+  } else {
+    if (tabLogs) tabLogs.style.display = 'none';
+    if (tabDaily) tabDaily.style.display = 'block';
+    if (btnDaily) {
+      btnDaily.style.background = 'linear-gradient(135deg, #0284c7, #2563eb)';
+      btnDaily.style.color = '#ffffff';
+      btnDaily.style.borderColor = '#38bdf8';
+    }
+    if (btnLogs) {
+      btnLogs.style.background = 'rgba(255,255,255,0.06)';
+      btnLogs.style.color = '#94a3b8';
+      btnLogs.style.borderColor = 'rgba(255,255,255,0.12)';
+    }
+  }
+};
+
+window.openStudentHistoryDetail = function (userEmail) {
   const user = adminCachedUsersList.find(u => u.email === userEmail);
   if (!user) {
     showToast('Không tìm thấy dữ liệu học viên!', true);
@@ -14130,6 +14313,43 @@ window.openStudentHistoryDetail = function(userEmail) {
   const safeEmail = escapeHtml(user.email || '');
   const dailyHistory = user.dailyHistory || {};
   const dates = Object.keys(dailyHistory).sort().reverse();
+  const accessLogs = Array.isArray(user.accessLogs) ? user.accessLogs : [];
+
+  let accessLogsRowsHtml = '';
+  if (accessLogs.length === 0) {
+    accessLogsRowsHtml = `<tr><td colspan="5" style="text-align: center; padding: 28px; color: #94a3b8;"><i class="fa-solid fa-clock-rotate-left" style="font-size: 1.5rem; margin-bottom: 6px; display: block; color: #64748b;"></i>Chưa có lịch sử vào/thoát web chi tiết (Sẽ tự động ghi nhận khi học viên truy cập).</td></tr>`;
+  } else {
+    accessLogsRowsHtml = accessLogs.map((log, index) => {
+      const enterFormatted = formatVnDateTime(log.enterTime);
+      const isCurrentlyOnline = user.isOnline && index === 0 && !log.isClosed;
+      const exitFormatted = isCurrentlyOnline
+        ? `<span style="display: inline-flex; align-items: center; gap: 6px; color: #22c55e; font-weight: 800;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 8px #22c55e;"></span> Đang Trên Web</span>`
+        : formatVnDateTime(log.exitTime);
+
+      const durFormatted = formatDurationDetailed(log.durationSeconds || 0);
+      const deviceStr = escapeHtml(log.device || 'Web');
+
+      return `
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.06); transition: background 0.15s;">
+          <td style="padding: 10px 12px; font-weight: 700; color: #34d399; white-space: nowrap;">
+            <i class="fa-solid fa-arrow-right-to-bracket" style="margin-right: 6px; color: #10b981;"></i>${enterFormatted}
+          </td>
+          <td style="padding: 10px 12px; font-weight: 700; color: ${isCurrentlyOnline ? '#22c55e' : '#f87171'}; white-space: nowrap;">
+            <i class="fa-solid fa-arrow-right-from-bracket" style="margin-right: 6px; color: ${isCurrentlyOnline ? '#22c55e' : '#ef4444'};"></i>${exitFormatted}
+          </td>
+          <td style="padding: 10px 12px; font-weight: 800; color: #fbbf24; white-space: nowrap; text-align: center;">
+            ${durFormatted}
+          </td>
+          <td style="padding: 10px 12px; color: #cbd5e1; font-size: 0.8rem; white-space: nowrap;">
+            ${deviceStr}
+          </td>
+          <td style="padding: 10px 12px; text-align: right; white-space: nowrap;">
+            ${isCurrentlyOnline ? '<span style="background: rgba(34,197,94,0.15); color: #22c55e; padding: 2px 8px; border-radius: 6px; font-weight: 800; font-size: 0.72rem; border: 1px solid rgba(34,197,94,0.3);">Online</span>' : '<span style="background: rgba(148,163,184,0.12); color: #94a3b8; padding: 2px 8px; border-radius: 6px; font-weight: 600; font-size: 0.72rem;">Đã Thoát</span>'}
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
 
   let dailyRowsHtml = '';
   if (dates.length === 0) {
@@ -14150,46 +14370,74 @@ window.openStudentHistoryDetail = function(userEmail) {
   const totalMins = Math.round((user.studyTime || 0) / 60);
 
   modal.innerHTML = `
-    <div style="background: linear-gradient(180deg, #131d35 0%, #0d1527 100%); border: 1.5px solid rgba(56, 189, 248, 0.35); border-radius: 24px; width: 100%; max-width: 580px; max-height: 88vh; padding: 24px; box-shadow: 0 25px 60px rgba(0,0,0,0.85); color: #ffffff; position: relative; display: flex; flex-direction: column; gap: 16px; overflow: hidden;">
-      <button type="button" onclick="document.getElementById('admin-user-history-detail-modal').style.display='none'" style="position: absolute; top: 18px; right: 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; font-size: 1.2rem; cursor: pointer; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+    <div style="background: linear-gradient(180deg, #131d35 0%, #0d1527 100%); border: 1.5px solid rgba(56, 189, 248, 0.35); border-radius: 24px; width: 100%; max-width: 780px; max-height: 90vh; padding: 24px; box-shadow: 0 25px 60px rgba(0,0,0,0.85); color: #ffffff; position: relative; display: flex; flex-direction: column; gap: 14px; overflow: hidden;">
+      <button type="button" onclick="document.getElementById('admin-user-history-detail-modal').style.display='none'" style="position: absolute; top: 18px; right: 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; font-size: 1.2rem; cursor: pointer; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10;">
         <i class="fa-solid fa-xmark"></i>
       </button>
 
-      <div style="display: flex; align-items: center; gap: 14px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 14px;">
+      <!-- Header -->
+      <div style="display: flex; align-items: center; gap: 14px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px;">
         <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #0284c7, #2563eb); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: white; flex-shrink: 0;">
           <i class="fa-solid fa-user-graduate"></i>
         </div>
         <div>
-          <h3 style="font-size: 1.2rem; font-weight: 800; color: #ffffff; margin: 0;">Lịch Sử Học Tập Chi Tiết</h3>
-          <p style="font-size: 0.85rem; color: #94a3b8; margin: 2px 0 0 0;">${safeName} (${safeEmail})</p>
+          <h3 style="font-size: 1.2rem; font-weight: 800; color: #ffffff; margin: 0; display: flex; align-items: center; gap: 8px;">
+            ${safeName}
+            ${user.isOnline ? '<span style="background: #22c55e; color: #000; font-size: 0.65rem; font-weight: 900; padding: 2px 7px; border-radius: 50px;">ONLINE</span>' : ''}
+          </h3>
+          <p style="font-size: 0.82rem; color: #94a3b8; margin: 2px 0 0 0;">${safeEmail} • Vai trò: <strong style="color: #38bdf8;">${user.role || 'Học viên'}</strong></p>
         </div>
       </div>
 
       <!-- Quick KPI Badges -->
       <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
         <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 10px; text-align: center;">
-          <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Chuỗi Học</div>
-          <div style="font-size: 1.2rem; font-weight: 800; color: #f97316; margin-top: 2px;"><i class="fa-solid fa-fire"></i> ${user.streak || 0} ngày</div>
+          <div style="font-size: 0.7rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Chuỗi Ngày Học</div>
+          <div style="font-size: 1.15rem; font-weight: 800; color: #f97316; margin-top: 2px;"><i class="fa-solid fa-fire"></i> ${user.streak || 0} ngày</div>
         </div>
         <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 10px; text-align: center;">
-          <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Tổng Thời Gian</div>
-          <div style="font-size: 1.2rem; font-weight: 800; color: #38bdf8; margin-top: 2px;"><i class="fa-solid fa-clock"></i> ${totalMins} phút</div>
+          <div style="font-size: 0.7rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Tổng Thời Gian Học</div>
+          <div style="font-size: 1.15rem; font-weight: 800; color: #38bdf8; margin-top: 2px;"><i class="fa-solid fa-clock"></i> ${totalMins} phút</div>
         </div>
         <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 10px; text-align: center;">
-          <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Điểm Cao Nhất</div>
-          <div style="font-size: 1.2rem; font-weight: 800; color: #22c55e; margin-top: 2px;"><i class="fa-solid fa-trophy"></i> ${user.highestQuizScore || 0}đ</div>
+          <div style="font-size: 0.7rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Tổng Phiên Vào Web</div>
+          <div style="font-size: 1.15rem; font-weight: 800; color: #10b981; margin-top: 2px;"><i class="fa-solid fa-door-open"></i> ${accessLogs.length} phiên</div>
         </div>
       </div>
 
-      <!-- Daily History Breakdown Table -->
-      <div style="font-weight: 800; font-size: 0.92rem; color: #ffffff; display: flex; align-items: center; gap: 8px;">
-        <i class="fa-solid fa-calendar-days" style="color: #38bdf8;"></i> Nhật ký thời gian học theo ngày (${dates.length} ngày hoạt động):
+      <!-- Tab Switcher -->
+      <div style="display: flex; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+        <button type="button" id="btn-tab-access-logs" onclick="window.switchStudentDetailTab('logs')" style="padding: 8px 16px; font-size: 0.85rem; font-weight: 800; border-radius: 10px; background: linear-gradient(135deg, #0284c7, #2563eb); color: #ffffff; border: 1px solid #38bdf8; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;">
+          <i class="fa-solid fa-door-open"></i> Nhật Ký Vào / Thoát Web (${accessLogs.length})
+        </button>
+        <button type="button" id="btn-tab-daily-history" onclick="window.switchStudentDetailTab('daily')" style="padding: 8px 16px; font-size: 0.85rem; font-weight: 700; border-radius: 10px; background: rgba(255,255,255,0.06); color: #94a3b8; border: 1px solid rgba(255,255,255,0.12); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;">
+          <i class="fa-solid fa-calendar-days"></i> Lịch Sử Theo Ngày (${dates.length})
+        </button>
       </div>
 
-      <div style="flex: 1; overflow-y: auto; max-height: 280px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2);">
-        <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem;">
+      <!-- TAB 1: ACCESS LOGS TABLE (ENTER & EXIT TIMES) -->
+      <div id="student-tab-access-logs" style="flex: 1; overflow-y: auto; max-height: 320px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.25);">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem;">
           <thead>
-            <tr style="background: rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.1); color: #cbd5e1;">
+            <tr style="background: rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.12); color: #cbd5e1; position: sticky; top: 0; z-index: 2;">
+              <th style="padding: 10px 12px; text-align: left; font-weight: 800;">🟢 Thời Gian Vào Web</th>
+              <th style="padding: 10px 12px; text-align: left; font-weight: 800;">🔴 Thời Gian Thoát Web</th>
+              <th style="padding: 10px 12px; text-align: center; font-weight: 800;">⏱️ Thời Lượng</th>
+              <th style="padding: 10px 12px; text-align: left; font-weight: 800;">📱 Thiết Bị</th>
+              <th style="padding: 10px 12px; text-align: right; font-weight: 800;">Trạng Thái</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${accessLogsRowsHtml}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- TAB 2: DAILY STUDY BREAKDOWN TABLE -->
+      <div id="student-tab-daily-history" style="display: none; flex: 1; overflow-y: auto; max-height: 320px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.25);">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+          <thead>
+            <tr style="background: rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.12); color: #cbd5e1; position: sticky; top: 0; z-index: 2;">
               <th style="padding: 10px 14px; text-align: left; font-weight: 800;">Ngày Học</th>
               <th style="padding: 10px 14px; text-align: right; font-weight: 800;">Thời Gian Luyện Tập</th>
             </tr>
@@ -14199,6 +14447,7 @@ window.openStudentHistoryDetail = function(userEmail) {
           </tbody>
         </table>
       </div>
+
     </div>
   `;
 

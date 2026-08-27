@@ -16,6 +16,7 @@ import Groq from 'groq-sdk';
 import YTDlpWrap from 'yt-dlp-wrap';
 import { YoutubeTranscript } from 'youtube-transcript';
 import os from 'os';
+import * as XLSX from 'xlsx';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -72,7 +73,8 @@ const userSchema = new mongoose.Schema({
   quizHistory: { type: Array, default: [] },
   progress: { type: Object, default: {} },
   customWords: { type: Array, default: [] },
-  chats: { type: Array, default: [] }
+  chats: { type: Array, default: [] },
+  accessLogs: { type: Array, default: [] }
 }, { minimize: false });
 const User = mongoose.model('User', userSchema);
 
@@ -265,7 +267,8 @@ async function readUserData() {
         role: u.role || 'user',
         lastSeenTime: u.lastSeenTime || null,
         stats: u.stats,
-        gameHistory: u.gameHistory || []
+        gameHistory: u.gameHistory || [],
+        accessLogs: u.accessLogs || []
       };
       if (u.quizHistory && u.quizHistory.length > 0) {
         quizHistory[u._id] = u.quizHistory;
@@ -366,7 +369,8 @@ async function persistToMongoDB(data) {
       quizHistory: (data.quizHistory && data.quizHistory[email]) || [],
       progress: data.progress[email] || {},
       customWords: data.customWords[email] || [],
-      chats: data.chats[email] || []
+      chats: data.chats[email] || [],
+      accessLogs: (data.users[email] && data.users[email].accessLogs) || (u.accessLogs || [])
     };
 
     promises.push(User.updateOne(
@@ -878,7 +882,9 @@ app.get('/api/admin/users', async (req, res) => {
       memorizedWordsCount,
       studiedWordsCount,
       customWordsCount: (userData.customWords && userData.customWords[email] ? userData.customWords[email].length : 0),
-      chatsCount: (userData.chats && userData.chats[email] ? userData.chats[email].length : 0)
+      chatsCount: (userData.chats && userData.chats[email] ? userData.chats[email].length : 0),
+      dailyHistory: stats.dailyHistory || {},
+      accessLogs: (u.accessLogs || []).slice(-50).reverse()
     });
   }
 
@@ -902,6 +908,219 @@ app.get('/api/admin/users', async (req, res) => {
     totalStudyTimeHours: (totalStudyTimeSecs / 3600).toFixed(1),
     users: usersList
   });
+});
+
+// GET /api/admin/users/export-excel - Export full User Management Excel Report (.xlsx)
+app.get('/api/admin/users/export-excel', async (req, res) => {
+  const adminEmail = getLoggedInUserEmail(req);
+  if (!adminEmail || !isUserAdmin(adminEmail)) {
+    return res.status(403).json({ error: 'Forbidden. Admin access required.' });
+  }
+
+  try {
+    const userData = await readUserData();
+    const users = userData.users || {};
+    const now = Date.now();
+
+    function toVnTimeStr(isoOrDate) {
+      if (!isoOrDate) return 'Chưa có';
+      const d = new Date(isoOrDate);
+      if (isNaN(d.getTime())) return 'Chưa có';
+      const vnDate = new Date(d.getTime() + 7 * 60 * 60 * 1000);
+      return vnDate.toISOString().replace('T', ' ').substring(0, 19);
+    }
+
+    function toDurationStr(seconds) {
+      const s = Math.max(0, Math.round(seconds || 0));
+      if (s < 60) return `${s}s`;
+      const m = Math.floor(s / 60);
+      const remS = s % 60;
+      if (m < 60) return `${m}p ${remS > 0 ? remS + 's' : ''}`;
+      const h = Math.floor(m / 60);
+      const remM = m % 60;
+      return `${h}h ${remM}p`;
+    }
+
+    const sheet1Data = [
+      [
+        'STT',
+        'Họ và Tên',
+        'Email',
+        'Vai Trò',
+        'Trạng Thái Trực Tuyến',
+        'Chuỗi Học (Ngày)',
+        'Tổng Thời Gian Học (Phút)',
+        'Tổng Thời Gian Học (Giờ)',
+        'Số Bài Quiz Đã Thi',
+        'Điểm Quiz Cao Nhất',
+        'Điểm Quiz Trung Bình',
+        'Lần Hoạt Động Gần Nhất (Giờ VN)',
+        'Tổng Số Phiên Vào Web'
+      ]
+    ];
+
+    const sheet2Data = [
+      [
+        'STT',
+        'Họ và Tên',
+        'Email',
+        'Mốc Thời Gian Vào Web (Giờ VN)',
+        'Mốc Thời Gian Thoát Web (Giờ VN)',
+        'Thời Lượng Phiên',
+        'Thời Lượng (Giây)',
+        'Thiết Bị / Trình Duyệt',
+        'Địa Chỉ IP / Mạng',
+        'Trạng Thái Phiên'
+      ]
+    ];
+
+    const sheet3Data = [
+      [
+        'STT',
+        'Họ và Tên',
+        'Email',
+        'Ngày Học (YYYY-MM-DD)',
+        'Thời Gian Luyện Tập (Phút)',
+        'Thời Gian Luyện Tập (Giây)'
+      ]
+    ];
+
+    let userIndex = 1;
+    let sessionIndex = 1;
+    let dailyIndex = 1;
+
+    for (const [email, u] of Object.entries(users)) {
+      const isSuper = isSuperAdmin(email);
+      const isAdmin = isUserAdmin(email, userData);
+      const roleStr = isSuper ? 'Super Admin' : (isAdmin ? 'Admin / Giáo Viên' : 'Học Viên');
+
+      const lastSeenTimestamp = userPresenceMap.get(email.toLowerCase().trim()) || (u.lastSeenTime ? new Date(u.lastSeenTime).getTime() : 0);
+      const isOnline = lastSeenTimestamp ? (now - lastSeenTimestamp <= 120000) : false;
+      const statusStr = isOnline ? '🟢 Đang Online' : '⚪ Đã Thoát';
+
+      const stats = u.stats || {};
+      const studyMins = Math.round((stats.studyTime || 0) / 60);
+      const studyHours = ((stats.studyTime || 0) / 3600).toFixed(1);
+
+      const quizHistory = (userData.quizHistory && userData.quizHistory[email]) || u.quizHistory || [];
+      let highestScore = 0;
+      let totalScore = 0;
+      quizHistory.forEach(q => {
+        const sc = Number(q.score) || 0;
+        if (sc > highestScore) highestScore = sc;
+        totalScore += sc;
+      });
+      const avgScore = quizHistory.length > 0 ? Math.round(totalScore / quizHistory.length) : 0;
+
+      const accessLogs = Array.isArray(u.accessLogs) ? u.accessLogs : [];
+
+      sheet1Data.push([
+        userIndex++,
+        u.name || email.split('@')[0],
+        email,
+        roleStr,
+        statusStr,
+        stats.streak || 0,
+        studyMins,
+        studyHours,
+        quizHistory.length,
+        highestScore,
+        avgScore,
+        toVnTimeStr(u.lastSeenTime || stats.lastActiveDate),
+        accessLogs.length
+      ]);
+
+      accessLogs.forEach(sess => {
+        const isCurrentActive = isOnline && !sess.isClosed;
+        sheet2Data.push([
+          sessionIndex++,
+          u.name || email.split('@')[0],
+          email,
+          toVnTimeStr(sess.enterTime),
+          isCurrentActive ? '🟢 Đang Trên Web' : toVnTimeStr(sess.exitTime),
+          toDurationStr(sess.durationSeconds || 0),
+          sess.durationSeconds || 0,
+          sess.device || 'Thiết bị web',
+          sess.ip || '',
+          isCurrentActive ? '🟢 Online' : '⚪ Đã Thoát'
+        ]);
+      });
+
+      const dailyHistory = stats.dailyHistory || {};
+      Object.keys(dailyHistory).sort().reverse().forEach(dateStr => {
+        const sec = dailyHistory[dateStr] || 0;
+        const mins = (sec / 60).toFixed(1);
+        sheet3Data.push([
+          dailyIndex++,
+          u.name || email.split('@')[0],
+          email,
+          dateStr,
+          mins,
+          sec
+        ]);
+      });
+    }
+
+    const wb = XLSX.utils.book_new();
+
+    const ws1 = XLSX.utils.aoa_to_sheet(sheet1Data);
+    ws1['!cols'] = [
+      { wch: 6 },  // STT
+      { wch: 25 }, // Tên
+      { wch: 30 }, // Email
+      { wch: 18 }, // Vai trò
+      { wch: 22 }, // Trạng thái
+      { wch: 18 }, // Streak
+      { wch: 24 }, // Thời gian học (phút)
+      { wch: 22 }, // Thời gian học (giờ)
+      { wch: 18 }, // Số bài quiz
+      { wch: 18 }, // Điểm cao nhất
+      { wch: 20 }, // Điểm trung bình
+      { wch: 28 }, // Lần hoạt động gần nhất
+      { wch: 22 }  // Tổng số phiên
+    ];
+    XLSX.utils.book_append_sheet(wb, ws1, 'Danh Sách Học Viên');
+
+    const ws2 = XLSX.utils.aoa_to_sheet(sheet2Data);
+    ws2['!cols'] = [
+      { wch: 6 },  // STT
+      { wch: 25 }, // Tên
+      { wch: 30 }, // Email
+      { wch: 28 }, // Vào web
+      { wch: 28 }, // Thoát web
+      { wch: 18 }, // Thời lượng
+      { wch: 16 }, // Giây
+      { wch: 24 }, // Thiết bị
+      { wch: 18 }, // IP
+      { wch: 16 }  // Trạng thái
+    ];
+    XLSX.utils.book_append_sheet(wb, ws2, 'Nhật Ký Vào Thoát Web');
+
+    const ws3 = XLSX.utils.aoa_to_sheet(sheet3Data);
+    ws3['!cols'] = [
+      { wch: 6 },  // STT
+      { wch: 25 }, // Tên
+      { wch: 30 }, // Email
+      { wch: 18 }, // Ngày học
+      { wch: 24 }, // Phút
+      { wch: 24 }  // Giây
+    ];
+    XLSX.utils.book_append_sheet(wb, ws3, 'Lịch Sử Học Theo Ngày');
+
+    const excelBuffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
+
+    const todayDate = new Date();
+    const dateTag = `${todayDate.getFullYear()}_${(todayDate.getMonth()+1).toString().padStart(2,'0')}_${todayDate.getDate().toString().padStart(2,'0')}`;
+    const filename = `Bao_Cao_Nguoi_Dung_TiengTrungHongTai_${dateTag}.xlsx`;
+
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.send(excelBuffer);
+
+  } catch (error) {
+    console.error('Error exporting user Excel report:', error);
+    res.status(500).json({ error: 'Failed to export Excel report' });
+  }
 });
 
 // POST /api/admin/users/role - Grant or Revoke Admin/Teacher role (Super Admin only)
@@ -1117,6 +1336,103 @@ app.post('/api/user/stats/sync', async (req, res) => {
   ensureDailyHistoryIntegrity(userRecord.stats);
   await writeUserData(userData);
   res.json(userRecord.stats);
+});
+
+// POST endpoint for user Session Heartbeat & Access Logs (Enter / Ping / Exit)
+app.post('/api/user/session/heartbeat', async (req, res) => {
+  let email = getLoggedInUserEmail(req);
+  if (!email && req.body && req.body.email && typeof req.body.email === 'string' && req.body.email.includes('@')) {
+    email = req.body.email.toLowerCase().trim();
+  }
+  if (!email) {
+    return res.json({ ok: false, error: 'Unauthenticated session' });
+  }
+
+  const { sessionId, action, device, timestamp } = req.body || {};
+  if (!sessionId) {
+    return res.json({ ok: false, error: 'Missing sessionId' });
+  }
+
+  const now = new Date();
+  const userData = await readUserData();
+  let userRecord = userData.users[email];
+  if (!userRecord) {
+    userRecord = {
+      name: email.split('@')[0],
+      picture: '',
+      role: 'user',
+      lastSeenTime: now,
+      accessLogs: []
+    };
+    userData.users[email] = userRecord;
+  }
+
+  if (!Array.isArray(userRecord.accessLogs)) {
+    userRecord.accessLogs = [];
+  }
+
+  userRecord.lastSeenTime = now;
+
+  let session = userRecord.accessLogs.find(s => s.sessionId === sessionId);
+
+  if (action === 'enter' || !session) {
+    if (!session) {
+      session = {
+        sessionId,
+        enterTime: timestamp ? new Date(timestamp) : now,
+        exitTime: now,
+        durationSeconds: 0,
+        device: device || 'Thiết bị web',
+        ip: req.headers['x-forwarded-for']?.split(',')[0].trim() || req.socket?.remoteAddress || '',
+        isClosed: false
+      };
+      userRecord.accessLogs.push(session);
+    } else {
+      session.exitTime = now;
+      session.durationSeconds = Math.max(0, Math.round((new Date(session.exitTime) - new Date(session.enterTime)) / 1000));
+      session.isClosed = false;
+    }
+  } else if (action === 'exit') {
+    session.exitTime = timestamp ? new Date(timestamp) : now;
+    session.durationSeconds = Math.max(0, Math.round((new Date(session.exitTime) - new Date(session.enterTime)) / 1000));
+    session.isClosed = true;
+  } else {
+    // 'ping' or periodic keep-alive
+    session.exitTime = now;
+    session.durationSeconds = Math.max(0, Math.round((new Date(session.exitTime) - new Date(session.enterTime)) / 1000));
+    session.isClosed = false;
+  }
+
+  // Keep last 150 sessions
+  if (userRecord.accessLogs.length > 150) {
+    userRecord.accessLogs = userRecord.accessLogs.slice(-150);
+  }
+
+  await writeUserData(userData);
+  res.json({ ok: true, session });
+});
+
+// GET endpoint for Super Admin to query access logs of a specific user
+app.get('/api/admin/user/:email/access-logs', async (req, res) => {
+  const adminEmail = getLoggedInUserEmail(req);
+  if (!adminEmail || !isUserAdmin(adminEmail)) {
+    return res.status(403).json({ error: 'Forbidden. Admin access required.' });
+  }
+
+  const targetEmail = (req.params.email || '').toLowerCase().trim();
+  const userData = await readUserData();
+  const userRecord = userData.users[targetEmail];
+  if (!userRecord) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+
+  const accessLogs = Array.isArray(userRecord.accessLogs) ? [...userRecord.accessLogs].reverse() : [];
+  res.json({
+    email: targetEmail,
+    name: userRecord.name || targetEmail.split('@')[0],
+    totalSessions: accessLogs.length,
+    accessLogs
+  });
 });
 
 // POST endpoint to save game history
