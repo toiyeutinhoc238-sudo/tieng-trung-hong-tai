@@ -1503,24 +1503,24 @@ function checkLessonTranslationAnswer() {
   if (!inputEl) return;
 
   const rawInput = inputEl.value.trim();
+  if (!rawInput) return;
+
   const normUser = normalizeTextForMatch(rawInput);
-  const normTargetZh = normalizeTextForMatch(current.example_zh || current.word);
+  const targetZh = current.example_zh || current.word || '';
+  const normTargetZh = normalizeTextForMatch(targetZh);
   const normWordZh = normalizeTextForMatch(current.word);
   const normPinyin = normalizeTextForMatch(current.pinyin);
-  const normMeaning = normalizeTextForMatch(current.meaning);
-  const normExampleVi = normalizeTextForMatch(current.example_vi);
 
   const feedbackCorrect = document.getElementById('lesson-feedback-correct');
   const feedbackWrong = document.getElementById('lesson-feedback-wrong');
 
+  // Kiểm tra chính xác câu Hán, từ vựng hoặc Pinyin
   const isMatch = normUser.length > 0 && (
     normUser === normTargetZh ||
-    normTargetZh.includes(normUser) ||
-    normUser.includes(normTargetZh) ||
     normUser === normWordZh ||
     normUser === normPinyin ||
-    (normMeaning.length > 2 && normUser === normMeaning) ||
-    (normExampleVi.length > 2 && normUser === normExampleVi)
+    (normTargetZh.length > 0 && normUser.includes(normTargetZh)) ||
+    (normUser.length >= 2 && normTargetZh.includes(normUser) && normUser.length >= normTargetZh.length * 0.7)
   );
 
   if (isMatch) {
@@ -1528,6 +1528,19 @@ function checkLessonTranslationAnswer() {
     if (feedbackWrong) feedbackWrong.style.display = 'none';
     inputEl.style.borderColor = '#22c55e';
     if (typeof playAudioSuccess === 'function') playAudioSuccess();
+    if (typeof speakText === 'function') speakText(targetZh, 'zh-CN');
+    
+    // Tự động lật mở các thẻ chữ gợi ý khi trả lời đúng
+    const container = document.getElementById('lesson-word-chips-container');
+    if (container) {
+      container.querySelectorAll('.image2-hint-card').forEach(card => {
+        card.setAttribute('data-revealed', 'true');
+        const dotsEl = card.querySelector('.card-dots');
+        const zhEl = card.querySelector('.card-zh');
+        if (dotsEl) dotsEl.style.display = 'none';
+        if (zhEl) zhEl.style.display = 'block';
+      });
+    }
   } else {
     if (feedbackWrong) feedbackWrong.style.display = 'inline-flex';
     if (feedbackCorrect) feedbackCorrect.style.display = 'none';

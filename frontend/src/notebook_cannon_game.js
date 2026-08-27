@@ -94,15 +94,26 @@ class AmbientMusicEngine {
 export class CannonGameEngine {
   constructor(containerEl,wordsList,onExitCallback){
     this.container=containerEl;
-    this.rawWords=wordsList&&wordsList.length>0?wordsList:[
+    const srcList = (wordsList && wordsList.length > 0) ? wordsList : [
       {word:'老师',pinyin:'laoshi',meaning:'giáo viên'},{word:'学生',pinyin:'xuesheng',meaning:'học sinh'},
       {word:'学校',pinyin:'xuexiao',meaning:'trường học'},{word:'电脑',pinyin:'diannao',meaning:'máy tính'},
       {word:'苹果',pinyin:'pingguo',meaning:'quả táo'},{word:'香蕉',pinyin:'xiangjiao',meaning:'quả chuối'},
     ];
+    this.rawWords = srcList.map(item => ({
+      word: item.word || item.char || item.hanzi || '',
+      pinyin: item.pinyin || '',
+      meaning: item.meaning || item.vn || item.trans || ''
+    })).filter(w => w.word && w.pinyin);
+    if(this.rawWords.length === 0){
+      this.rawWords = [
+        {word:'老师',pinyin:'laoshi',meaning:'giáo viên'},{word:'学生',pinyin:'xuesheng',meaning:'học sinh'}
+      ];
+    }
+    this.displayMode = 'both'; // 'both' (Hán + Pinyin), 'hanzi' (Chỉ Hán), 'pinyin' (Chỉ Pinyin), 'listen' (Luyện Nghe)
     this.onExit=onExitCallback;
     this.music=new AmbientMusicEngine();
     this.score=0;this.combo=0;this.maxCombo=0;this.lives=3;this.maxLives=3;
-    this.timeLeft=90;this.isRunning=false;this.isPaused=false;
+    this.isRunning=false;this.isPaused=false;
     this.lastFrameTime=0;this.spawnTimer=0;
     this.wordQueue=[];this.activeWords=[];this.correctWordsSet=new Set();
     this.wordsDestroyedCount=0;this.typedBuffer='';this.lockedTarget=null;
@@ -169,15 +180,23 @@ export class CannonGameEngine {
 .phidao-target-hint{font-size:.82rem;color:#fef08a;font-weight:700;min-width:100px;text-align:center;}
 
 /* WORD CARDS: ULTRA CRISP & SOLID HIGH CONTRAST */
-.phidao-word-card{position:absolute;display:flex;flex-direction:column;align-items:center;gap:3px;background:#ffffff;border:2.5px solid #0284c7;border-radius:18px;padding:8px 18px 10px;min-width:90px;box-shadow:0 12px 28px rgba(0,0,0,.45),0 0 16px rgba(56,189,248,.4);will-change:transform;transition:border-color .15s,box-shadow .15s,transform .1s;}
+.phidao-word-card{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:#ffffff;border:2.5px solid #0284c7;border-radius:18px;padding:8px 20px 10px;min-width:100px;box-shadow:0 12px 28px rgba(0,0,0,.45),0 0 16px rgba(56,189,248,.4);will-change:transform;transition:border-color .15s,box-shadow .15s,transform .1s;}
 .phidao-word-card.is-targeted{border-color:#f59e0b !important;background:#fffbeb !important;box-shadow:0 0 30px rgba(245,158,11,.8),0 12px 30px rgba(0,0,0,.4) !important;transform:scale(1.08);}
 .phidao-word-card.type-star{border-color:#a855f7;background:#faf5ff;box-shadow:0 0 24px rgba(168,85,247,.6),0 10px 25px rgba(0,0,0,.4);}
-.phidao-word-card .word-py-tone{font-size:.9rem;font-weight:800;color:#0369a1;letter-spacing:.02em;}
-.phidao-word-card .word-zh{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;font-size:2rem;font-weight:900;color:#0f172a;line-height:1.1;letter-spacing:.05em;}
-.phidao-word-card .pinyin-prog{font-size:.86rem;font-family:'Courier New',Courier,monospace;font-weight:800;letter-spacing:.06em;background:#f1f5f9;border:1px solid #cbd5e1;padding:2px 10px;border-radius:8px;margin-top:2px;}
+.phidao-word-card .word-zh{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;font-size:2.1rem;font-weight:900;color:#0f172a !important;line-height:1.1;letter-spacing:.05em;-webkit-text-fill-color:initial !important;text-shadow:none !important;}
+.phidao-word-card .pinyin-prog{font-size:.9rem;font-family:'Courier New',Courier,monospace;font-weight:800;letter-spacing:.06em;background:#f1f5f9;border:1px solid #cbd5e1;padding:3px 12px;border-radius:8px;margin-top:2px;display:flex;align-items:center;gap:4px;}
 .phidao-word-card .py-typed{color:#ea580c;font-weight:900;}
 .phidao-word-card .py-rem{color:#475569;}
-.phidao-word-card.type-star .word-zh{color:#6b21a8;font-weight:900;}
+.phidao-word-card .word-py-tone-tag{color:#0284c7;font-weight:800;font-size:.82rem;margin-left:2px;}
+.phidao-word-card.type-star .word-zh{color:#6b21a8 !important;}
+
+/* MODE SWITCHER BAR */
+.phidao-mode-bar{position:relative;z-index:15;display:flex;justify-content:center;gap:6px;padding:6px 12px;background:rgba(15,23,42,.85);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.1);flex-wrap:wrap;}
+.phidao-mode-pill{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:3px 12px;color:#94a3b8;font-size:.78rem;font-weight:800;cursor:pointer;transition:all .2s;}
+.phidao-mode-pill:hover{background:rgba(255,255,255,.18);color:#f1f5f9;}
+.phidao-mode-pill.active{background:linear-gradient(135deg,#0284c7,#0369a1);border-color:#38bdf8;color:#ffffff;box-shadow:0 0 12px rgba(56,189,248,.4);}
+.buf-wrong-shake{animation:bufShake .3s ease-in-out;}
+@keyframes bufShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px);border-color:#ef4444}75%{transform:translateX(6px);border-color:#ef4444}}
 
 /* VIETNAMESE MEANING POPUP ON HIT */
 .phidao-hit-meaning-card{position:absolute;background:linear-gradient(135deg,rgba(16,185,129,.95),rgba(5,150,105,.95));border:1.5px solid #6ee7b7;border-radius:12px;padding:6px 14px;color:#ffffff;pointer-events:none;z-index:25;box-shadow:0 8px 24px rgba(0,0,0,.4),0 0 20px rgba(16,185,129,.6);animation:hitPopupFloat 2.2s ease-out forwards;min-width:140px;text-align:center;}
@@ -239,6 +258,13 @@ export class CannonGameEngine {
   <div class="phidao-hud-right">
     <button id="cannon-exit-btn" class="phidao-btn-icon"><i class="fa-solid fa-xmark"></i></button>
   </div>
+</div>
+<!-- MODE BAR -->
+<div class="phidao-mode-bar">
+  <button type="button" class="phidao-mode-pill active" data-mode="both" title="Hiện cả Chữ Hán & Phiên âm">👁️ Hán + Pinyin</button>
+  <button type="button" class="phidao-mode-pill" data-mode="hanzi" title="Chỉ hiện Chữ Hán (tự nhớ Pinyin để gõ)">🔤 Chỉ Hán</button>
+  <button type="button" class="phidao-mode-pill" data-mode="pinyin" title="Chỉ hiện Phiên âm Pinyin">🔠 Chỉ Pinyin</button>
+  <button type="button" class="phidao-mode-pill" data-mode="listen" title="VIP: Luyện nghe phát âm & gõ Pinyin">🎧 Luyện Nghe</button>
 </div>
 <div id="cannon-buff-banner" class="phidao-buff-banner" style="display:none;"></div>
 <div class="phidao-playfield" id="cannon-playfield">
@@ -331,6 +357,17 @@ export class CannonGameEngine {
     if(qs('#cannon-back-hub-btn'))qs('#cannon-back-hub-btn').addEventListener('click',e=>{e.preventDefault();this.stopAndExit();});
     if(qs('#cannon-finish-btn'))qs('#cannon-finish-btn').addEventListener('click',e=>{e.preventDefault();this.stopAndExit();if(typeof window.exitNotebookGamesHub==='function')window.exitNotebookGamesHub();});
 
+    // MODE SWITCHER PILLS
+    this.container.querySelectorAll('.phidao-mode-pill').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        const mode = btn.getAttribute('data-mode') || 'both';
+        this.displayMode = mode;
+        this.container.querySelectorAll('.phidao-mode-pill').forEach(b => b.classList.toggle('active', b === btn));
+        this.showToast(`Chế độ: ${btn.textContent.trim()}`);
+      });
+    });
+
     this.container.querySelectorAll('.phidao-skill-btn').forEach(btn=>{
       btn.addEventListener('click',e=>{e.preventDefault();const map={'skill-ice':'ice','skill-heal':'heal','skill-x2':'x2','skill-shield':'shield'};if(map[btn.id])this.activateSkill(map[btn.id]);});
     });
@@ -341,32 +378,74 @@ export class CannonGameEngine {
       if(overlay&&overlay.style.display!=='none')return;
       if(e.altKey){const map={'1':'ice','2':'heal','3':'x2','4':'shield'};if(map[e.key]){e.preventDefault();this.activateSkill(map[e.key]);return;}}
       if(e.key==='Backspace'){e.preventDefault();this.typedBuffer=this.typedBuffer.slice(0,-1);this.lockedTarget=null;this.updateTypedDisplay();this.highlightTargets();return;}
-      if(e.key==='Escape'){this.typedBuffer='';this.lockedTarget=null;this.updateTypedDisplay();this.highlightTargets();return;}
-      if(e.key.length===1&&/^[a-zA-Z]$/.test(e.key)&&!e.ctrlKey&&!e.altKey&&!e.metaKey){e.preventDefault();this.typedBuffer+=e.key.toLowerCase();this.handleTypingInput();}
+      if(e.key==='Escape'){e.preventDefault();this.typedBuffer='';this.lockedTarget=null;this.updateTypedDisplay();this.highlightTargets();return;}
+      
+      // Chuyển đổi an toàn hỗ trợ cả gõ Telex/VNI mà không bị kẹt hay lỗi
+      if(e.key.length===1&&!e.ctrlKey&&!e.altKey&&!e.metaKey){
+        const cleanChar = e.key.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[đĐ]/g, "d").toLowerCase();
+        if(/^[a-z]$/.test(cleanChar)){
+          e.preventDefault();
+          this.processTypedChar(cleanChar);
+        }
+      }
     };
     window.addEventListener('keydown',this.keyHandler);
   }
 
-  handleTypingInput(){
-    const buf=this.typedBuffer;
-    if(!this.lockedTarget){
-      const matches=this.activeWords.filter(w=>!w.isDestroyed&&normalizePinyin(w.wordObj.pinyin).startsWith(buf)).sort((a,b)=>b.y-a.y);
-      if(matches.length>0){this.lockedTarget=matches[0];}
-      else{this.typedBuffer='';this.music.playMiss();}
-    }else{
-      const tNorm=normalizePinyin(this.lockedTarget.wordObj.pinyin);
-      if(!tNorm.startsWith(buf)){
-        this.lockedTarget=null;
-        const nm=this.activeWords.filter(w=>!w.isDestroyed&&normalizePinyin(w.wordObj.pinyin).startsWith(buf)).sort((a,b)=>b.y-a.y);
-        if(nm.length>0){this.lockedTarget=nm[0];}
-        else{this.typedBuffer='';this.music.playMiss();}
+  processTypedChar(char){
+    const testBuf = this.typedBuffer + char;
+    
+    // Kiểm tra xem testBuf có khớp với từ đang khóa mục tiêu không
+    if(this.lockedTarget && !this.lockedTarget.isDestroyed){
+      const tNorm = normalizePinyin(this.lockedTarget.wordObj.pinyin);
+      if(tNorm.startsWith(testBuf)){
+        this.typedBuffer = testBuf;
+      } else {
+        // Không khớp mục tiêu hiện tại, thử tìm xem có khớp từ nào khác trên màn hình không
+        const otherMatches = this.activeWords.filter(w => !w.isDestroyed && normalizePinyin(w.wordObj.pinyin).startsWith(testBuf)).sort((a,b)=>b.y-a.y);
+        if(otherMatches.length > 0){
+          this.lockedTarget = otherMatches[0];
+          this.typedBuffer = testBuf;
+        } else {
+          // Bấm nhầm phím: Không xóa sạch toàn bộ buffer mà chỉ rung nhẹ và phát âm thanh
+          this.music.playMiss();
+          this.shakeTypedBuf();
+          return;
+        }
+      }
+    } else {
+      const matches = this.activeWords.filter(w => !w.isDestroyed && normalizePinyin(w.wordObj.pinyin).startsWith(testBuf)).sort((a,b)=>b.y-a.y);
+      if(matches.length > 0){
+        this.lockedTarget = matches[0];
+        this.typedBuffer = testBuf;
+      } else {
+        this.music.playMiss();
+        this.shakeTypedBuf();
+        return;
       }
     }
-    if(this.lockedTarget&&!this.lockedTarget.isDestroyed){
-      const tNorm=normalizePinyin(this.lockedTarget.wordObj.pinyin);
-      if(buf===tNorm){const t=this.lockedTarget;this.typedBuffer='';this.lockedTarget=null;this.fireDagger(t);}
+
+    // Đã gõ xong trọn vẹn pinyin của mục tiêu -> Phóng phi đao tiêu diệt!
+    if(this.lockedTarget && !this.lockedTarget.isDestroyed){
+      const tNorm = normalizePinyin(this.lockedTarget.wordObj.pinyin);
+      if(this.typedBuffer === tNorm){
+        const target = this.lockedTarget;
+        this.typedBuffer = '';
+        this.lockedTarget = null;
+        this.fireDagger(target);
+      }
     }
-    this.updateTypedDisplay();this.highlightTargets();
+
+    this.updateTypedDisplay();
+    this.highlightTargets();
+  }
+
+  shakeTypedBuf(){
+    const bufEl = this.container.querySelector('#phidao-typed-buf');
+    if(bufEl){
+      bufEl.classList.add('buf-wrong-shake');
+      setTimeout(()=>bufEl.classList.remove('buf-wrong-shake'),300);
+    }
   }
 
   updateTypedDisplay(){
@@ -378,8 +457,12 @@ export class CannonGameEngine {
       else{bufEl.className='phidao-typed-buf';bufEl.innerHTML=`<span class="phidao-cursor-blink">|</span>`;}
     }
     if(hintEl){
-      if(this.lockedTarget&&buf){const norm=normalizePinyin(this.lockedTarget.wordObj.pinyin);const rem=norm.slice(buf.length);hintEl.innerHTML=`<span style="color:#fbbf24;">${buf}</span><span style="color:rgba(148,163,184,.45);">${rem}</span> → ${this.lockedTarget.wordObj.word}`;}
-      else hintEl.textContent='';
+      if(this.lockedTarget&&buf){
+        const zh = this.lockedTarget.wordObj.word || this.lockedTarget.wordObj.char || '';
+        const norm=normalizePinyin(this.lockedTarget.wordObj.pinyin);
+        const rem=norm.slice(buf.length);
+        hintEl.innerHTML=`<span style="color:#fbbf24;">${buf}</span><span style="color:rgba(148,163,184,.45);">${rem}</span> → ${zh}`;
+      } else hintEl.textContent='';
     }
   }
 
@@ -391,8 +474,14 @@ export class CannonGameEngine {
       const prog=w.el.querySelector('.pinyin-prog');
       if(prog){
         const norm=normalizePinyin(w.wordObj.pinyin);
-        if(isTgt&&this.typedBuffer){const rem=norm.slice(this.typedBuffer.length);prog.innerHTML=`<span class="py-typed">${this.typedBuffer}</span><span class="py-rem">${rem}</span>`;}
-        else prog.innerHTML=`<span class="py-rem">${norm}</span>`;
+        const pyTone=w.wordObj.pinyin||'';
+        const tagHtml = (this.displayMode === 'both') ? `<small class="word-py-tone-tag">(${pyTone})</small>` : '';
+        if(isTgt&&this.typedBuffer){
+          const rem=norm.slice(this.typedBuffer.length);
+          prog.innerHTML=`<span class="py-typed">${this.typedBuffer}</span><span class="py-rem">${rem}</span> ${tagHtml}`;
+        } else {
+          prog.innerHTML=`<span class="py-rem">${norm}</span> ${tagHtml}`;
+        }
       }
     });
   }
@@ -429,12 +518,13 @@ export class CannonGameEngine {
     const pts=Math.round((isStar?(75+pinLen*30):(pinLen*15))*mult);
     this.score+=pts;this.combo++;this.wordsDestroyedCount++;
     if(this.combo>this.maxCombo)this.maxCombo=this.combo;
-    if(targetItem.wordObj.word)this.correctWordsSet.add(targetItem.wordObj.word);
+    const zh = targetItem.wordObj.word || targetItem.wordObj.char || '';
+    if(zh)this.correctWordsSet.add(zh);
 
     // HIỂN THỊ NGHĨA TIẾNG VIỆT NGAY KHI BẮN TRÚNG
     this.showHitMeaningPopup(targetItem.x, targetItem.y, targetItem.wordObj, pts, isStar);
 
-    if(window.speakText){try{window.speakText(targetItem.wordObj.word);}catch(e){}}
+    if(window.speakText&&zh){try{window.speakText(zh);}catch(e){}}
     if(this.combo>0&&this.combo%10===0){
       if(this.lives<this.maxLives){this.lives++;this.music.playHeartRestore();this.showFloatingText(targetItem.x,targetItem.y-36,`💖 Chuỗi ${this.combo}! +1 Tim!`,'#ef4444');}
       else{this.music.playStreak();this.showFloatingText(targetItem.x,targetItem.y-36,`🔥 Chuỗi ${this.combo}! Thần Kỳ!`,'#f97316');}
@@ -453,10 +543,11 @@ export class CannonGameEngine {
     if (!fxLayer) return;
     const el = document.createElement('div');
     el.className = 'phidao-hit-meaning-card';
+    const zh = wordObj.word || wordObj.char || '';
     el.innerHTML = `
       <div class="phidao-hit-top">
         <span class="phidao-hit-pts">+${pts}${isStar ? ' ✨' : ''}</span>
-        <span class="phidao-hit-zh">${wordObj.word}</span>
+        <span class="phidao-hit-zh">${zh}</span>
         <span class="phidao-hit-py">[${wordObj.pinyin || ''}]</span>
       </div>
       <div class="phidao-hit-mean">💡 ${wordObj.meaning || ''}</div>
@@ -500,8 +591,38 @@ export class CannonGameEngine {
     const spawnY=-25;
     const speed=11; // TỐC ĐỘ RƠI ĐỒNG ĐỀU, ÊM ÁI VÀ KHÔNG BAO GIỜ ĐÈ NHAU
     const el=document.createElement('div');el.className=`phidao-word-card type-${isStar?'star':'normal'}`;
-    const norm=normalizePinyin(wordObj.pinyin);
-    el.innerHTML=`<div class="word-py-tone">${wordObj.pinyin||''}</div><div class="word-zh">${isStar?'✨ ':''}${wordObj.word}</div><div class="pinyin-prog"><span class="py-rem">${norm}</span></div>`;
+    const zh = wordObj.word || wordObj.char || wordObj.hanzi || '';
+    const py = wordObj.pinyin || '';
+    const norm = normalizePinyin(py);
+
+    let cardContent = '';
+    if(this.displayMode === 'hanzi'){
+      cardContent = `
+        <div class="word-zh">${isStar?'✨ ':''}${zh}</div>
+        <div class="pinyin-prog"><span class="py-rem">${norm}</span></div>
+      `;
+    }else if(this.displayMode === 'pinyin'){
+      cardContent = `
+        <div class="word-zh" style="font-size:1.4rem;color:#0284c7 !important;">${isStar?'✨ ':''}${py}</div>
+        <div class="pinyin-prog"><span class="py-rem">${norm}</span></div>
+      `;
+    }else if(this.displayMode === 'listen'){
+      cardContent = `
+        <div class="word-zh" style="font-size:1.8rem;color:#0284c7 !important;">🎧 ❓</div>
+        <div class="pinyin-prog"><span class="py-rem">${norm}</span></div>
+      `;
+      if(typeof window.speakText === 'function' && zh){
+        try { window.speakText(zh); } catch(e){}
+      }
+    }else{
+      // 'both': Cả Chữ Hán to rõ và 1 dòng Pinyin duy nhất
+      cardContent = `
+        <div class="word-zh">${isStar?'✨ ':''}${zh}</div>
+        <div class="pinyin-prog"><span class="py-rem">${norm}</span> <small class="word-py-tone-tag">(${py})</small></div>
+      `;
+    }
+
+    el.innerHTML = cardContent;
     const item={id:`${Date.now()}_${Math.random()}`,wordObj,type:isStar?'star':'normal',x:spawnX,y:spawnY,speed,el,isDestroyed:false,isTargeted:false};
     const wordsLayer=this.container.querySelector('#cannon-words-layer');
     if(wordsLayer){wordsLayer.appendChild(el);this.activeWords.push(item);el.style.transform=`translate3d(${spawnX}px,${spawnY}px,0)`;}

@@ -619,80 +619,151 @@ export class ToneRhythmGameEngine {
             🔥 FEVER MODE x4 SCORE! 🔥
           </div>
 
-          <!-- 5 LANES TRACK HIGHWAY -->
-          <div class="rhythm-highway" id="rhythm-highway">
-            <!-- 5 LANES BACKGROUND TRACKS -->
-            <div class="rhythm-highway-lanes">
-              <div class="highway-lane-track lane-1-bg"></div>
-              <div class="highway-lane-track lane-2-bg"></div>
-              <div class="highway-lane-track lane-3-bg"></div>
-              <div class="highway-lane-track lane-4-bg"></div>
-              <div class="highway-lane-track lane-0-bg"></div>
+          <div class="rhythm-stage-layout">
+            <!-- CÁNH TRÁI: SINH LỰC & TIẾN ĐỘ & ĐIỂM SỐ -->
+            <div class="rhythm-wing-dock rhythm-wing-left">
+              <!-- Sinh Lực / Tim Box -->
+              <div class="rhythm-dock-card dock-card-lives">
+                <div class="dock-card-header">
+                  <i class="fa-solid fa-heart" style="color: #ef4444;"></i>
+                  <span>SINH LỰC</span>
+                </div>
+                <div class="dock-hearts-row" id="rhythm-side-lives-container">
+                  <i class="fa-solid fa-heart"></i>
+                  <i class="fa-solid fa-heart"></i>
+                  <i class="fa-solid fa-heart"></i>
+                  <i class="fa-solid fa-heart"></i>
+                  <i class="fa-solid fa-heart"></i>
+                </div>
+                <div class="dock-sub-status" id="rhythm-side-lives-text">Còn 5 / 5 Tim</div>
+              </div>
+
+              <!-- Điểm Số Box -->
+              <div class="rhythm-dock-card dock-card-score">
+                <div class="dock-card-header">
+                  <i class="fa-solid fa-star" style="color: #fbbf24;"></i>
+                  <span>ĐIỂM SỐ</span>
+                </div>
+                <div class="dock-big-val text-gold" id="rhythm-side-score-val">0</div>
+                <div class="dock-sub-status">Cao nhất: <strong id="rhythm-side-maxcombo-val" style="color: #f97316;">0</strong> combo</div>
+              </div>
+
+              <!-- Tiến Độ Từ Vựng Box -->
+              <div class="rhythm-dock-card dock-card-progress">
+                <div class="dock-card-header">
+                  <i class="fa-solid fa-book-bookmark" style="color: #38bdf8;"></i>
+                  <span>TIẾN ĐỘ TỪ</span>
+                </div>
+                <div class="dock-big-val text-sky" id="rhythm-side-progress-val">1 / 25</div>
+                <div class="dock-progress-bar-wrap">
+                  <div class="dock-progress-fill" id="rhythm-side-progress-bar" style="width: 4%;"></div>
+                </div>
+              </div>
             </div>
 
-            <!-- FALLING NOTES LAYER -->
-            <div class="rhythm-notes-layer" id="rhythm-notes-layer"></div>
+            <!-- 5 LANES TRACK HIGHWAY (CHÍNH GIỮA) -->
+            <div class="rhythm-highway" id="rhythm-highway">
+              <!-- 5 LANES BACKGROUND TRACKS -->
+              <div class="rhythm-highway-lanes">
+                <div class="highway-lane-track lane-1-bg"></div>
+                <div class="highway-lane-track lane-2-bg"></div>
+                <div class="highway-lane-track lane-3-bg"></div>
+                <div class="highway-lane-track lane-4-bg"></div>
+                <div class="highway-lane-track lane-0-bg"></div>
+              </div>
 
-            <!-- READY COUNTDOWN OVERLAY -->
-            <div class="rhythm-countdown-overlay" id="rhythm-countdown-overlay" style="display: none;">
-              <div class="countdown-num" id="rhythm-countdown-text">3</div>
+              <!-- FALLING NOTES LAYER -->
+              <div class="rhythm-notes-layer" id="rhythm-notes-layer"></div>
+
+              <!-- READY COUNTDOWN OVERLAY -->
+              <div class="rhythm-countdown-overlay" id="rhythm-countdown-overlay" style="display: none;">
+                <div class="countdown-num" id="rhythm-countdown-text">3</div>
+              </div>
+
+              <!-- JUDGMENT / HIT ZONE LINE -->
+              <div class="rhythm-hit-zone" id="rhythm-hit-zone">
+                <div class="hit-indicator hit-lane-1" id="hit-beam-1"></div>
+                <div class="hit-indicator hit-lane-2" id="hit-beam-2"></div>
+                <div class="hit-indicator hit-lane-3" id="hit-beam-3"></div>
+                <div class="hit-indicator hit-lane-4" id="hit-beam-4"></div>
+                <div class="hit-indicator hit-lane-0" id="hit-beam-0"></div>
+              </div>
+
+              <!-- 5 HIT BUTTON PADS AT BOTTOM (Redesigned & High-Contrast) -->
+              <div class="rhythm-pads-row">
+                <!-- Lane 1: Tone 1 -->
+                <button type="button" class="rhythm-pad pad-1" data-lane="1" id="pad-1" title="Thanh 1 (Âm ngang —) [Phím 1 hoặc A]">
+                  <div class="pad-accent-line"></div>
+                  <div class="pad-num-badge">1</div>
+                  <div class="pad-symbol">—</div>
+                  <div class="pad-title">THANH 1</div>
+                  <div class="pad-key">1 / A</div>
+                </button>
+
+                <!-- Lane 2: Tone 2 -->
+                <button type="button" class="rhythm-pad pad-2" data-lane="2" id="pad-2" title="Thanh 2 (Âm sắc ˊ) [Phím 2 hoặc S]">
+                  <div class="pad-accent-line"></div>
+                  <div class="pad-num-badge">2</div>
+                  <div class="pad-symbol">ˊ</div>
+                  <div class="pad-title">THANH 2</div>
+                  <div class="pad-key">2 / S</div>
+                </button>
+
+                <!-- Lane 3: Tone 3 -->
+                <button type="button" class="rhythm-pad pad-3" data-lane="3" id="pad-3" title="Thanh 3 (Âm hỏi ˇ) [Phím 3 hoặc D]">
+                  <div class="pad-accent-line"></div>
+                  <div class="pad-num-badge">3</div>
+                  <div class="pad-symbol">ˇ</div>
+                  <div class="pad-title">THANH 3</div>
+                  <div class="pad-key">3 / D</div>
+                </button>
+
+                <!-- Lane 4: Tone 4 -->
+                <button type="button" class="rhythm-pad pad-4" data-lane="4" id="pad-4" title="Thanh 4 (Âm huyền ˋ) [Phím 4 hoặc F]">
+                  <div class="pad-accent-line"></div>
+                  <div class="pad-num-badge">4</div>
+                  <div class="pad-symbol">ˋ</div>
+                  <div class="pad-title">THANH 4</div>
+                  <div class="pad-key">4 / F</div>
+                </button>
+
+                <!-- Lane 0: Tone 0 (Thanh Nhẹ) -->
+                <button type="button" class="rhythm-pad pad-0" data-lane="0" id="pad-0" title="Thanh Nhẹ (Khinh thanh •) [Phím 5 hoặc Phím Cách]">
+                  <div class="pad-accent-line"></div>
+                  <div class="pad-num-badge">5</div>
+                  <div class="pad-symbol">•</div>
+                  <div class="pad-title">THANH NHẸ</div>
+                  <div class="pad-key">5 / Space</div>
+                </button>
+              </div>
             </div>
 
-            <!-- JUDGMENT / HIT ZONE LINE -->
-            <div class="rhythm-hit-zone" id="rhythm-hit-zone">
-              <div class="hit-indicator hit-lane-1" id="hit-beam-1"></div>
-              <div class="hit-indicator hit-lane-2" id="hit-beam-2"></div>
-              <div class="hit-indicator hit-lane-3" id="hit-beam-3"></div>
-              <div class="hit-indicator hit-lane-4" id="hit-beam-4"></div>
-              <div class="hit-indicator hit-lane-0" id="hit-beam-0"></div>
-            </div>
+            <!-- CÁNH PHẢI: COMBO LỬA & HƯỚNG DẪN 5 THANH ĐIỆU -->
+            <div class="rhythm-wing-dock rhythm-wing-right">
+              <!-- Combo Box -->
+              <div class="rhythm-dock-card dock-card-combo">
+                <div class="dock-card-header">
+                  <i class="fa-solid fa-fire" style="color: #f97316;"></i>
+                  <span>CHUỖI COMBO</span>
+                </div>
+                <div class="dock-big-val text-fire" id="rhythm-side-combo-val">x0</div>
+                <div class="dock-sub-status" id="rhythm-side-combo-desc">Gõ liên tiếp đúng để kích hoạt Fever x4!</div>
+              </div>
 
-            <!-- 5 HIT BUTTON PADS AT BOTTOM (Redesigned & High-Contrast) -->
-            <div class="rhythm-pads-row">
-              <!-- Lane 1: Tone 1 -->
-              <button type="button" class="rhythm-pad pad-1" data-lane="1" id="pad-1" title="Thanh 1 (Âm ngang —) [Phím 1 hoặc A]">
-                <div class="pad-accent-line"></div>
-                <div class="pad-num-badge">1</div>
-                <div class="pad-symbol">—</div>
-                <div class="pad-title">THANH 1</div>
-                <div class="pad-key">1 / A</div>
-              </button>
-
-              <!-- Lane 2: Tone 2 -->
-              <button type="button" class="rhythm-pad pad-2" data-lane="2" id="pad-2" title="Thanh 2 (Âm sắc ˊ) [Phím 2 hoặc S]">
-                <div class="pad-accent-line"></div>
-                <div class="pad-num-badge">2</div>
-                <div class="pad-symbol">ˊ</div>
-                <div class="pad-title">THANH 2</div>
-                <div class="pad-key">2 / S</div>
-              </button>
-
-              <!-- Lane 3: Tone 3 -->
-              <button type="button" class="rhythm-pad pad-3" data-lane="3" id="pad-3" title="Thanh 3 (Âm hỏi ˇ) [Phím 3 hoặc D]">
-                <div class="pad-accent-line"></div>
-                <div class="pad-num-badge">3</div>
-                <div class="pad-symbol">ˇ</div>
-                <div class="pad-title">THANH 3</div>
-                <div class="pad-key">3 / D</div>
-              </button>
-
-              <!-- Lane 4: Tone 4 -->
-              <button type="button" class="rhythm-pad pad-4" data-lane="4" id="pad-4" title="Thanh 4 (Âm huyền ˋ) [Phím 4 hoặc F]">
-                <div class="pad-accent-line"></div>
-                <div class="pad-num-badge">4</div>
-                <div class="pad-symbol">ˋ</div>
-                <div class="pad-title">THANH 4</div>
-                <div class="pad-key">4 / F</div>
-              </button>
-
-              <!-- Lane 0: Tone 0 (Thanh Nhẹ) -->
-              <button type="button" class="rhythm-pad pad-0" data-lane="0" id="pad-0" title="Thanh Nhẹ (Khinh thanh •) [Phím 5 hoặc Phím Cách]">
-                <div class="pad-accent-line"></div>
-                <div class="pad-num-badge">5</div>
-                <div class="pad-symbol">•</div>
-                <div class="pad-title">THANH NHẸ</div>
-                <div class="pad-key">5 / Space</div>
-              </button>
+              <!-- Bảng Phím Tắt 5 Thanh Điệu Siêu Trực Quan -->
+              <div class="rhythm-dock-card dock-card-cheatsheet">
+                <div class="dock-card-header">
+                  <i class="fa-solid fa-keyboard" style="color: #a855f7;"></i>
+                  <span>PHÍM TẮT 5 THANH</span>
+                </div>
+                <div class="dock-tone-cheatsheet">
+                  <div class="tone-cheat-item tone-1"><span class="t-badge">1 / A</span> <span class="t-name">Thanh 1 (—)</span></div>
+                  <div class="tone-cheat-item tone-2"><span class="t-badge">2 / S</span> <span class="t-name">Thanh 2 (ˊ)</span></div>
+                  <div class="tone-cheat-item tone-3"><span class="t-badge">3 / D</span> <span class="t-name">Thanh 3 (ˇ)</span></div>
+                  <div class="tone-cheat-item tone-4"><span class="t-badge">4 / F</span> <span class="t-name">Thanh 4 (ˋ)</span></div>
+                  <div class="tone-cheat-item tone-0"><span class="t-badge">5 / Space</span> <span class="t-name">Thanh Nhẹ (•)</span></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1436,7 +1507,6 @@ export class ToneRhythmGameEngine {
     const scoreVal = this.container.querySelector('#rhythm-score-val');
     const comboVal = this.container.querySelector('#rhythm-combo-val');
     const livesContainer = this.container.querySelector('#rhythm-lives-container');
-    const timerVal = this.container.querySelector('#rhythm-timer-val');
 
     if (scoreVal) scoreVal.textContent = this.score;
     if (comboVal) comboVal.textContent = this.combo;
@@ -1451,10 +1521,47 @@ export class ToneRhythmGameEngine {
       }
     }
 
-    if (timerVal) {
-      const min = Math.floor(this.timeLeft / 60);
-      const sec = this.timeLeft % 60;
-      timerVal.textContent = `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+    // SYNC SIDE DOCKS (CÁNH TRÁI & CÁNH PHẢI)
+    const sideScoreVal = this.container.querySelector('#rhythm-side-score-val');
+    const sideComboVal = this.container.querySelector('#rhythm-side-combo-val');
+    const sideMaxComboVal = this.container.querySelector('#rhythm-side-maxcombo-val');
+    const sideLivesContainer = this.container.querySelector('#rhythm-side-lives-container');
+    const sideLivesText = this.container.querySelector('#rhythm-side-lives-text');
+    const sideProgressVal = this.container.querySelector('#rhythm-side-progress-val');
+    const sideProgressBar = this.container.querySelector('#rhythm-side-progress-bar');
+    const sideComboDesc = this.container.querySelector('#rhythm-side-combo-desc');
+
+    if (sideScoreVal) sideScoreVal.textContent = this.score;
+    if (sideComboVal) sideComboVal.textContent = `x${this.combo}`;
+    if (sideMaxComboVal) sideMaxComboVal.textContent = this.maxCombo;
+
+    if (sideLivesText) sideLivesText.textContent = `Còn ${this.lives} / ${this.maxLives} Tim`;
+    if (sideLivesContainer) {
+      sideLivesContainer.innerHTML = '';
+      for (let i = 0; i < this.maxLives; i++) {
+        const heart = document.createElement('i');
+        heart.className = i < this.lives ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
+        heart.style.color = i < this.lives ? '#ef4444' : 'rgba(255,255,255,0.2)';
+        sideLivesContainer.appendChild(heart);
+      }
+    }
+
+    const curWordNum = Math.min(this.wordIndex + 1, this.totalWordsCount || this.wordDeck.length || 1);
+    const totalWords = this.totalWordsCount || this.wordDeck.length || 1;
+    if (sideProgressVal) sideProgressVal.textContent = `${curWordNum} / ${totalWords}`;
+    if (sideProgressBar) {
+      const pct = Math.min(100, Math.max(4, Math.round((curWordNum / totalWords) * 100)));
+      sideProgressBar.style.width = `${pct}%`;
+    }
+
+    if (sideComboDesc) {
+      if (this.isFeverMode) {
+        sideComboDesc.innerHTML = '🔥 <strong style="color:#fde047;">FEVER ĐANG BẬT! x4 ĐIỂM!</strong>';
+      } else if (this.combo >= 4) {
+        sideComboDesc.innerHTML = '⚡ Sắp đạt Fever Mode!';
+      } else {
+        sideComboDesc.innerHTML = 'Gõ liên tiếp đúng để kích hoạt Fever x4!';
+      }
     }
   }
 
