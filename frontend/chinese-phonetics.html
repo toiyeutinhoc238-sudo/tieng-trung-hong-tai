@@ -1966,7 +1966,7 @@
                   <div class="lb-podium-crown">🥈</div>
                   <div class="lb-podium-avatar-wrap">${renderAvatar(top2, 52, '#94a3b8')}</div>
                   <div class="lb-podium-user">${top2.name}</div>
-                  <div class="lb-podium-score">${top2.completedCount * 100} Điểm</div>
+                  <div class="lb-podium-score">${top2.score} Điểm</div>
                 ` : '<div class="lb-podium-empty-txt">Đang chờ...</div>'}
                 <div class="lb-podium-stand p-2">
                   <span class="lb-podium-num">2</span>
@@ -1979,7 +1979,7 @@
                   <div class="lb-podium-crown gold-crown">👑</div>
                   <div class="lb-podium-avatar-wrap">${renderAvatar(top1, 64, '#fbbf24')}</div>
                   <div class="lb-podium-user gold-user">${top1.name}</div>
-                  <div class="lb-podium-score gold-score">${top1.completedCount * 100} Điểm</div>
+                  <div class="lb-podium-score gold-score">${top1.score} Điểm</div>
                 ` : '<div class="lb-podium-empty-txt">Đang chờ...</div>'}
                 <div class="lb-podium-stand p-1">
                   <span class="lb-podium-num">1</span>
@@ -1992,7 +1992,7 @@
                   <div class="lb-podium-crown">🥉</div>
                   <div class="lb-podium-avatar-wrap">${renderAvatar(top3, 48, '#e11d48')}</div>
                   <div class="lb-podium-user">${top3.name}</div>
-                  <div class="lb-podium-score">${top3.completedCount * 100} Điểm</div>
+                  <div class="lb-podium-score">${top3.score} Điểm</div>
                 ` : '<div class="lb-podium-empty-txt">Đang chờ...</div>'}
                 <div class="lb-podium-stand p-3">
                   <span class="lb-podium-num">3</span>
@@ -2017,8 +2017,8 @@
                     <div class="lb-subtext">Chuỗi ngày học: <strong style="color: #f97316;">🔥 ${item.streak || 1} ngày</strong></div>
                   </div>
                   <div style="text-align: right;">
-                    <div class="lb-score-val">${item.completedCount * 100} Điểm</div>
-                    <div class="lb-subtext">${item.studyTimeMinutes} phút</div>
+                    <div class="lb-score-val">${item.score} Điểm</div>
+                    <div class="lb-subtext">${item.quizCount ? `<span style="color: #38bdf8; font-weight: 700;">${item.quizCount} đề</span> • ` : ''}${item.studyTimeMinutes} phút</div>
                   </div>
                 </div>
               `;

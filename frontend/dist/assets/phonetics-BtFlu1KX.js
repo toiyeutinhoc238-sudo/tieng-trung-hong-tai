@@ -483,7 +483,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css              */import"
                   <div class="lb-podium-crown">🥈</div>
                   <div class="lb-podium-avatar-wrap">${u(g,52,"#94a3b8")}</div>
                   <div class="lb-podium-user">${g.name}</div>
-                  <div class="lb-podium-score">${g.completedCount*100} Điểm</div>
+                  <div class="lb-podium-score">${g.score} Điểm</div>
                 `:'<div class="lb-podium-empty-txt">Đang chờ...</div>'}
                 <div class="lb-podium-stand p-2">
                   <span class="lb-podium-num">2</span>
@@ -496,7 +496,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css              */import"
                   <div class="lb-podium-crown gold-crown">👑</div>
                   <div class="lb-podium-avatar-wrap">${u(o,64,"#fbbf24")}</div>
                   <div class="lb-podium-user gold-user">${o.name}</div>
-                  <div class="lb-podium-score gold-score">${o.completedCount*100} Điểm</div>
+                  <div class="lb-podium-score gold-score">${o.score} Điểm</div>
                 `:'<div class="lb-podium-empty-txt">Đang chờ...</div>'}
                 <div class="lb-podium-stand p-1">
                   <span class="lb-podium-num">1</span>
@@ -509,7 +509,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css              */import"
                   <div class="lb-podium-crown">🥉</div>
                   <div class="lb-podium-avatar-wrap">${u(n,48,"#e11d48")}</div>
                   <div class="lb-podium-user">${n.name}</div>
-                  <div class="lb-podium-score">${n.completedCount*100} Điểm</div>
+                  <div class="lb-podium-score">${n.score} Điểm</div>
                 `:'<div class="lb-podium-empty-txt">Đang chờ...</div>'}
                 <div class="lb-podium-stand p-3">
                   <span class="lb-podium-num">3</span>
@@ -526,8 +526,8 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css              */import"
                     <div class="lb-subtext">Chuỗi ngày học: <strong style="color: #f97316;">🔥 ${s.streak||1} ngày</strong></div>
                   </div>
                   <div style="text-align: right;">
-                    <div class="lb-score-val">${s.completedCount*100} Điểm</div>
-                    <div class="lb-subtext">${s.studyTimeMinutes} phút</div>
+                    <div class="lb-score-val">${s.score} Điểm</div>
+                    <div class="lb-subtext">${s.quizCount?`<span style="color: #38bdf8; font-weight: 700;">${s.quizCount} đề</span> • `:""}${s.studyTimeMinutes} phút</div>
                   </div>
                 </div>
               `}),c+="</div>"),e.innerHTML=c}).catch(()=>{const t=document.getElementById("leaderboard-list-container");t&&(t.innerHTML='<div style="text-align: center; color: #f87171; padding: 20px;">Khởi tạo bảng xếp hạng thất bại. Vui lòng thử lại sau!</div>')})};function A(){const i=document.getElementById("section-body-content");if(!i)return;const a=["b","p","m","f","d","t","n","l","g","k","h","j","q","x","zh","ch","sh","r","z","c","s"],t=["a","o","e","i","u","ü","ai","ei","ao","ou","an","en","ang","eng","ong","ia","ie","iao","iu","ian","in","iang","ing","iong","ua","uo","uai","ui","uan","un","uang","ueng","üe","üan","ün"],e={b:["a","o","e","i","u","ai","ei","ao","an","en","ang","eng","ie","iao","ian","in","ing"],p:["a","o","e","i","u","ai","ei","ao","ou","an","en","ang","eng","ie","iao","ian","in","ing"],m:["a","o","e","i","u","ai","ei","ao","ou","an","en","ang","eng","ie","iao","iu","ian","in","ing"],f:["a","o","e","u","ei","ou","an","en","ang","eng"],d:["a","e","i","u","ai","ei","ao","ou","an","en","ang","eng","ong","ia","iao","iu","ian","ing","ua","uo","uan","un"],t:["a","e","i","u","ai","ei","ao","ou","an","eng","ong","ia","iao","ian","ing","uo","uan","un"],n:["a","e","i","u","ü","ai","ei","ao","ou","an","en","ang","eng","ong","ia","ie","iao","iu","ian","in","iang","ing","uo","uan","üe"],l:["a","e","i","u","ü","ai","ei","ao","ou","an","en","ang","eng","ong","ia","ie","iao","iu","ian","in","iang","ing","uo","uan","un","üe"],g:["a","e","u","ai","ei","ao","ou","an","en","ang","eng","ong","ua","uo","uai","ui","uan","un","uang"],k:["a","e","u","ai","ei","ao","ou","an","en","ang","eng","ong","ua","uo","uai","ui","uan","un","uang"],h:["a","e","u","ai","ei","ao","ou","an","en","ang","eng","ong","ua","uo","uai","ui","uan","un","uang"],j:["i","ü","ia","ie","iao","iu","ian","in","iang","ing","iong","üe","üan","ün"],q:["i","ü","ia","ie","iao","iu","ian","in","iang","ing","iong","üe","üan","ün"],x:["i","ü","ia","ie","iao","iu","ian","in","iang","ing","iong","üe","üan","ün"],zh:["a","e","i","u","ai","ei","ao","ou","an","en","ang","eng","ong","ua","uo","uai","ui","uan","un","uang"],ch:["a","e","i","u","ai","ei","ao","ou","an","en","ang","eng","ong","ua","uo","uai","ui","uan","un","uang"],sh:["a","e","i","u","ai","ei","ao","ou","an","en","ang","eng","ua","uo","uai","ui","uan","un","uang"],r:["e","i","u","ao","ou","an","en","ang","eng","ong","uo","ui","uan","un"],z:["a","e","i","u","ai","ei","ao","ou","an","en","ang","eng","ong","uo","ui","uan","un"],c:["a","e","i","u","ai","ei","ao","ou","an","en","ang","eng","ong","uo","ui","uan","un"],s:["a","e","i","u","ai","ei","ao","ou","an","en","ang","eng","ong","uo","ui","uan","un"]};let o=`

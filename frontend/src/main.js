@@ -8872,13 +8872,13 @@ window.openLessonGrammarModal = function(lessonKey, initialPointIdx = 0) {
   const currentVer = activeLessonsCurriculum === 'yct' ? 'yct' : (activeHskVersion || activeRoadmapVersion || '3.0');
   const lvlStr = String(currentLvl);
 
-  // If not HSK 1 or HSK 2 or no data ready yet
-  if ((lvlStr !== '1' && lvlStr !== '2') || currentVer === 'yct' || currentVer === '2.0') {
+  // Supported grammar levels: HSK 1, HSK 2, HSK 3 (for both v2.0 and v3.0)
+  if (!['1', '2', '3'].includes(lvlStr) || currentVer === 'yct') {
     showComingSoonNotice(`Ngữ Pháp HSK ${currentLvl}`);
     return;
   }
 
-  // Navigate to comfortable full-page workspace (Hình 2 style)
+  // Navigate to full-page grammar study workspace
   window.location.href = `/hsk-grammar.html?level=${lvlStr}&lesson=${numKey}&version=${currentVer}`;
 };
 
@@ -8887,9 +8887,7 @@ window.openLessonGrammarStudy = function(lessonId) {
   if (modalEl) modalEl.style.display = 'none';
 
   const numId = parseInt(String(lessonId).replace(/\D/g, ''), 10) || 1;
-  const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : (activeLessonsLevel || 1);
-  const currentVer = activeLessonsCurriculum === 'yct' ? 'yct' : (activeHskVersion || activeRoadmapVersion || '3.0');
-  window.location.href = `/hsk-grammar.html?level=${currentLvl}&lesson=${numId}&version=${currentVer}`;
+  window.openLessonGrammarModal(numId);
 };
 
 window.openLessonVocabStudy = function(lessonKey) {
@@ -8910,14 +8908,6 @@ window.openLessonVocabStudy = function(lessonKey) {
   const firstWord = sliceWords[0];
   const title = cleanLessonTitle(firstWord.lessonTitle || firstWord.category, lessonKey);
   startLessonStudy({ id: lessonKey, title }, sliceWords);
-};
-
-window.openLessonGrammarStudy = function(lessonId) {
-  const modalEl = document.getElementById('lesson-detail-popup-modal');
-  if (modalEl) modalEl.style.display = 'none';
-
-  const numId = parseInt(String(lessonId).replace(/\D/g, ''), 10) || 1;
-  window.openLessonGrammarModal(numId);
 };
 
 window.openLessonTextStudy = function(lessonId) {
@@ -10120,8 +10110,8 @@ function renderHomeLeaderboard() {
       let html = top20Data.map((item, idx) => {
         const medal = rankBadges[idx] || `<span style="font-size: 0.88rem; font-weight: 800; color: #94a3b8; width: 22px; text-align: center; display: inline-block;">${idx + 1}</span>`;
         const name = item.name || 'Học viên';
-        const points = (item.completedCount || 0) * 100;
-        const streak = item.streak || Math.max(1, item.completedCount || 1);
+        const points = item.score || 0;
+        const streak = item.streak || 1;
         const col = rankColors[idx] || '#38bdf8';
         const borderCol = borderColors[idx] || 'rgba(255,255,255,0.08)';
         const avatar = item.picture ? `<img src="${item.picture}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid ${col}; flex-shrink: 0;">` : `<div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, ${col}, #2563eb); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.82rem; flex-shrink: 0;">${name.charAt(0).toUpperCase()}</div>`;
@@ -10133,10 +10123,10 @@ function renderHomeLeaderboard() {
               ${avatar}
               <div style="min-width: 0;">
                 <div style="font-size: 0.92rem; font-weight: 800; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${name}</div>
-                <div style="font-size: 0.78rem; color: ${col};">${streak} ngày liên tiếp</div>
+                <div style="font-size: 0.78rem; color: ${col};">${streak} ngày liên tiếp ${item.quizCount ? `• ${item.quizCount} đề thi` : ''}</div>
               </div>
             </div>
-            <span style="font-weight: 800; color: #10b981; font-size: 0.9rem; flex-shrink: 0;">+${points.toLocaleString()} điểm</span>
+            <span style="font-weight: 800; color: #10b981; font-size: 0.9rem; flex-shrink: 0;">${points.toLocaleString()} điểm</span>
           </div>
         `;
       }).join('');
@@ -12852,7 +12842,7 @@ window.loadRankPageData = function () {
               <div class="lb-podium-crown">🥈</div>
               <div class="lb-podium-avatar-wrap">${renderAvatar(top2, 52, '#94a3b8')}</div>
               <div class="lb-podium-user">${top2.name}</div>
-              <div class="lb-podium-score">${top2.completedCount * 100} Điểm</div>
+              <div class="lb-podium-score">${top2.score} Điểm</div>
             ` : '<div class="lb-podium-empty-txt">Đang chờ...</div>'}
             <div class="lb-podium-stand p-2">
               <span class="lb-podium-num">2</span>
@@ -12865,7 +12855,7 @@ window.loadRankPageData = function () {
               <div class="lb-podium-crown gold-crown">👑</div>
               <div class="lb-podium-avatar-wrap">${renderAvatar(top1, 64, '#fbbf24')}</div>
               <div class="lb-podium-user gold-user">${top1.name}</div>
-              <div class="lb-podium-score gold-score">${top1.completedCount * 100} Điểm</div>
+              <div class="lb-podium-score gold-score">${top1.score} Điểm</div>
             ` : '<div class="lb-podium-empty-txt">Đang chờ...</div>'}
             <div class="lb-podium-stand p-1">
               <span class="lb-podium-num">1</span>
@@ -12878,7 +12868,7 @@ window.loadRankPageData = function () {
               <div class="lb-podium-crown">🥉</div>
               <div class="lb-podium-avatar-wrap">${renderAvatar(top3, 48, '#e11d48')}</div>
               <div class="lb-podium-user">${top3.name}</div>
-              <div class="lb-podium-score">${top3.completedCount * 100} Điểm</div>
+              <div class="lb-podium-score">${top3.score} Điểm</div>
             ` : '<div class="lb-podium-empty-txt">Đang chờ...</div>'}
             <div class="lb-podium-stand p-3">
               <span class="lb-podium-num">3</span>
@@ -12903,8 +12893,8 @@ window.loadRankPageData = function () {
                 <div class="lb-subtext">Chuỗi ngày học: <strong style="color: #f97316;">🔥 ${item.streak || 1} ngày</strong></div>
               </div>
               <div style="text-align: right;">
-                <div class="lb-score-val">${item.completedCount * 100} Điểm</div>
-                <div class="lb-subtext">${item.studyTimeMinutes} phút</div>
+                <div class="lb-score-val">${item.score} Điểm</div>
+                <div class="lb-subtext">${item.quizCount ? `<span style="color: #38bdf8; font-weight: 700;">${item.quizCount} đề</span> • ` : ''}${item.studyTimeMinutes} phút</div>
               </div>
             </div>
           `;

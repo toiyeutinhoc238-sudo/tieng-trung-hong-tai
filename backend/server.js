@@ -1505,57 +1505,60 @@ app.get('/api/user/game-history', async (req, res) => {
   }
 });
 
-// GET endpoint for Real MongoDB Leaderboard — reads directly from MongoDB (bypasses RAM cache)
+// GET endpoint for Real MongoDB Leaderboard — reads directly from MongoDB
 app.get('/api/leaderboard', async (req, res) => {
   try {
-    // Always query MongoDB directly so we reflect the real current state
     const usersList = await User.find({});
 
     if (!usersList || usersList.length === 0) {
       return res.json([]);
     }
 
+    const userData = cachedUserData || await readUserData();
     const leaderboard = [];
 
     for (const u of usersList) {
-      const userProg = u.progress || {};
+      const email = u._id;
+      const quizHistory = (userData.quizHistory && userData.quizHistory[email]) || u.quizHistory || [];
+      const gameHistory = u.gameHistory || [];
+      const allAttempts = [...quizHistory, ...gameHistory];
 
-      // Tính số từ vựng đã học thuộc/hoàn thành
-      let completedLessonsCount = 0;
-      let earliestCompletionTime = null;
+      let highestScore = 0;
+      let latestAttemptTime = 0;
 
-      for (const wordId of Object.keys(userProg)) {
-        const item = userProg[wordId];
-        if (item && item.isMemorized) {
-          completedLessonsCount++;
-          if (item.updatedAt || item.completedAt) {
-            const timeVal = new Date(item.updatedAt || item.completedAt).getTime();
-            if (!earliestCompletionTime || timeVal < earliestCompletionTime) {
-              earliestCompletionTime = timeVal;
-            }
-          }
+      allAttempts.forEach(a => {
+        const sc = Number(a.score) || 0;
+        if (sc > highestScore) highestScore = sc;
+        const t = a.playedAt || a.submittedAt || a.date;
+        if (t) {
+          const timeVal = new Date(t).getTime();
+          if (timeVal > latestAttemptTime) latestAttemptTime = timeVal;
         }
-      }
+      });
 
       const lastActive = u.stats && u.stats.lastActiveDate
         ? new Date(u.stats.lastActiveDate).getTime()
-        : (earliestCompletionTime || Date.now());
+        : (latestAttemptTime || (u.lastSeenTime ? new Date(u.lastSeenTime).getTime() : Date.now()));
 
       leaderboard.push({
-        email: u._id,
-        name: u.name || u._id.split('@')[0],
+        email,
+        name: u.name || email.split('@')[0],
         picture: u.picture || '',
-        completedCount: completedLessonsCount,
+        score: highestScore,
+        quizCount: allAttempts.length,
         studyTime: u.stats ? (u.stats.studyTime || 0) : 0,
         streak: u.stats ? (u.stats.streak || 0) : 0,
-        earliestCompletionTime: earliestCompletionTime || lastActive
+        latestAttemptTime: latestAttemptTime || lastActive
       });
     }
 
-    // Sort real users by completed count, study time, streak, and completion time
+    // Sort real users by highest Quiz score, then quiz count, then study time, then streak
     leaderboard.sort((a, b) => {
-      if (b.completedCount !== a.completedCount) {
-        return b.completedCount - a.completedCount;
+      if (b.score !== a.score) {
+        return b.score - a.score;
+      }
+      if (b.quizCount !== a.quizCount) {
+        return b.quizCount - a.quizCount;
       }
       if (b.studyTime !== a.studyTime) {
         return b.studyTime - a.studyTime;
@@ -1563,14 +1566,15 @@ app.get('/api/leaderboard', async (req, res) => {
       if (b.streak !== a.streak) {
         return b.streak - a.streak;
       }
-      return a.earliestCompletionTime - b.earliestCompletionTime;
+      return b.latestAttemptTime - a.latestAttemptTime;
     });
 
     const realRankedUsers = leaderboard.map((item, index) => ({
       rank: index + 1,
       name: item.name,
       picture: item.picture,
-      completedCount: item.completedCount,
+      score: item.score,
+      quizCount: item.quizCount,
       studyTimeMinutes: Math.round(item.studyTime / 60),
       streak: item.streak
     }));
