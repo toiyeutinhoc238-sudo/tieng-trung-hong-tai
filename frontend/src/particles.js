@@ -50,55 +50,73 @@ export function initSeasonalParticles() {
     });
   }
 
+  let animFrameId = null;
+
   function render() {
+    if (localStorage.getItem('particles_enabled') === 'false') {
+      ctx.clearRect(0, 0, width, height);
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+      return;
+    }
+
     ctx.clearRect(0, 0, width, height);
 
-    if (localStorage.getItem('particles_enabled') !== 'false') {
-      particles.forEach(p => {
-        p.y += p.speedY;
-        p.x += Math.sin(p.y * 0.01) * 0.5;
-        p.rotation += p.rotSpeed;
+    particles.forEach(p => {
+      p.y += p.speedY;
+      p.x += Math.sin(p.y * 0.01) * 0.5;
+      p.rotation += p.rotSpeed;
 
-        if (p.y > height + 20) {
-          p.y = -20;
-          p.x = Math.random() * width;
-        }
-        if (p.x > width + 20) p.x = -20;
-        if (p.x < -20) p.x = width + 20;
+      if (p.y > height + 20) {
+        p.y = -20;
+        p.x = Math.random() * width;
+      }
+      if (p.x > width + 20) p.x = -20;
+      if (p.x < -20) p.x = width + 20;
 
-        ctx.save();
-        ctx.translate(p.x, p.y);
-        ctx.rotate((p.rotation * Math.PI) / 180);
-        ctx.globalAlpha = p.opacity;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate((p.rotation * Math.PI) / 180);
+      ctx.globalAlpha = p.opacity;
 
-        if (season === 'winter') {
-          ctx.fillStyle = '#ffffff';
-          ctx.beginPath();
-          ctx.arc(0, 0, p.size, 0, Math.PI * 2);
-          ctx.fill();
-        } else if (season === 'spring') {
-          ctx.fillStyle = 'rgba(255, 183, 197, 0.85)';
-          ctx.beginPath();
-          ctx.ellipse(0, 0, p.size, p.size * 0.5, 0, 0, Math.PI * 2);
-          ctx.fill();
-        } else if (season === 'summer') {
-          ctx.fillStyle = 'rgba(74, 222, 128, 0.8)';
-          ctx.beginPath();
-          ctx.ellipse(0, 0, p.size, p.size * 0.4, 0.4, 0, Math.PI * 2);
-          ctx.fill();
-        } else if (season === 'autumn') {
-          ctx.fillStyle = 'rgba(245, 158, 11, 0.85)';
-          ctx.beginPath();
-          ctx.ellipse(0, 0, p.size, p.size * 0.5, 0.5, 0, Math.PI * 2);
-          ctx.fill();
-        }
-        ctx.restore();
-      });
-    }
-    requestAnimationFrame(render);
+      if (season === 'winter') {
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(0, 0, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (season === 'spring') {
+        ctx.fillStyle = 'rgba(255, 183, 197, 0.85)';
+        ctx.beginPath();
+        ctx.ellipse(0, 0, p.size, p.size * 0.5, 0, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (season === 'summer') {
+        ctx.fillStyle = 'rgba(74, 222, 128, 0.8)';
+        ctx.beginPath();
+        ctx.ellipse(0, 0, p.size, p.size * 0.4, 0.4, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (season === 'autumn') {
+        ctx.fillStyle = 'rgba(245, 158, 11, 0.85)';
+        ctx.beginPath();
+        ctx.ellipse(0, 0, p.size, p.size * 0.5, 0.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+    });
+
+    animFrameId = requestAnimationFrame(render);
   }
 
-  render();
+  if (localStorage.getItem('particles_enabled') !== 'false') {
+    render();
+  }
+
+  window.startParticleLoop = () => {
+    if (!animFrameId && localStorage.getItem('particles_enabled') !== 'false') {
+      render();
+    }
+  };
 }
 
 window.updateParticleToggleBtns = function(enabled) {

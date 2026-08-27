@@ -1,13 +1,12 @@
 /**
- * Tiếng Trung HongTai - In-Notebook Games Hub Coordinator (Arcade 8 Mini-Games)
- * Tích hợp Đấu Trường Quiz Game (Unlocked All) + 7 Mini-Game Arcade Native (Beta Super Admin)
+ * Tiếng Trung HongTai - In-Notebook Games Hub Coordinator (Arcade 5 Mini-Games)
+ * Tích hợp Đấu Trường Quiz Game (Unlocked All) + 4 Mini-Game Arcade Native
  */
 
 import { CannonGameEngine } from './notebook_cannon_game.js';
 import { SnakeGameEngine } from './notebook_snake_game.js';
 import { AlchemistGameEngine } from './notebook_alchemist_game.js';
 import { MahjongGameEngine } from './notebook_mahjong_game.js';
-import { ToneRhythmGameEngine } from './notebook_tone_rhythm_game.js';
 
 function isSuperAdminUser(user) {
   if (!user) return false;
@@ -60,7 +59,7 @@ export class NotebookGamesHub {
           </div>
 
           <div class="hub-header-badge">
-            <span class="beta-pill" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.4); color: #fbbf24;"><i class="fa-solid fa-wand-magic-sparkles"></i> Đầy đủ 6 Trò Chơi Ôn Luyện (Miễn Phí)</span>
+            <span class="beta-pill" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.4); color: #fbbf24;"><i class="fa-solid fa-wand-magic-sparkles"></i> Đầy đủ 5 Trò Chơi Ôn Luyện (Miễn Phí)</span>
           </div>
         </div>
 
@@ -78,14 +77,14 @@ export class NotebookGamesHub {
     return `
       <div class="games-selector-container">
         <div class="games-selector-intro">
-          <h3>Chọn 1 trong 6 trò chơi để bắt đầu ôn luyện từ vựng</h3>
+          <h3>Chọn 1 trong 5 trò chơi để bắt đầu ôn luyện từ vựng</h3>
           <p>Học tập và rèn luyện phản xạ nhẹ nhàng từ <strong>${this.notebookTitle}</strong>, không tính điểm xếp hạng hay khóa cấp!</p>
         </div>
 
         <div class="games-selector-grid-6">
           <!-- CARD GAME 0: QUIZ GAME (UNLOCKED ALL) -->
           <div class="game-choice-card card-quiz-highlight" id="btn-choose-quiz" style="cursor: pointer;">
-            <div class="card-tag">⭐ GAME ĐỀ XUẤT • TRẮC NGHIỆM 4 ĐÁP ÁN</div>
+            <div class="card-tag">⭐ GAME ĐỀ XUẤT • 📱 CHƠI MƯỢT MỌI THIẾT BỊ (ĐT / IPAD / PC)</div>
             <div class="card-icon-hero">🎮 ⚡</div>
             <h3 class="card-title">Đấu Trường Quiz Game</h3>
             <p class="card-desc">
@@ -93,52 +92,35 @@ export class NotebookGamesHub {
             </p>
             <div class="card-features">
               <span><i class="fa-solid fa-brain"></i> 4 Lựa chọn nhanh</span>
-              <span><i class="fa-solid fa-shield-halved"></i> Ôn tập tự do</span>
+              <span><i class="fa-solid fa-mobile-screen"></i> Cảm ứng chạm 1 chạm</span>
             </div>
             <button type="button" class="btn btn-primary game-launch-btn" style="background: linear-gradient(135deg, #6366f1, #4f46e5); color: #ffffff;">
               Chơi Quiz Game <i class="fa-solid fa-play"></i>
             </button>
           </div>
 
-          <!-- CARD GAME 1: PHI DAO (CANNON) -->
-          <div class="game-choice-card card-cannon" id="btn-choose-cannon" style="cursor: pointer;">
-            <div class="card-tag">🗡️ PHI ĐAO LUYỆN CHỮ • PHẢN XẠ PINYIN</div>
-            <div class="card-icon-hero">🗡️ 🥷</div>
-            <h3 class="card-title">Phi Đao Luyện Chữ</h3>
+          <!-- CARD GAME 1: MAHJONG -->
+          <div class="game-choice-card card-mahjong" id="btn-choose-mahjong" style="cursor: pointer;">
+            <div class="card-tag">🀄 PHẢN XẠ NỐI CẶP • 📱 CHẠM CẢM ỨNG SIÊU MƯỢT</div>
+            <div class="card-icon-hero">🀄 🔍</div>
+            <h3 class="card-title">Mạt Chược Nối Từ</h3>
             <p class="card-desc">
-              Từ vựng rơi từ trời đêm! Nhanh tay gõ <strong>Pinyin (không dấu)</strong> để ninja phóng phi đao bắn nổ chữ Hán. Thưởng thức âm nhạc Lo-fi thư giãn và củng cố kiến thức sau trận đấu!
+              Tìm và chạm nối các cặp quân bài mạt chược tương ứng (<strong>Chữ Hán ↔ Pinyin ↔ Nghĩa</strong>) theo quy tắc đường gấp khúc tối đa 3 đoạn thẳng!
             </p>
             <div class="card-features">
-              <span><i class="fa-solid fa-keyboard"></i> Gõ Pinyin tự do</span>
-              <span><i class="fa-solid fa-music"></i> Nhạc nền Lo-fi thư giãn</span>
+              <span><i class="fa-solid fa-link"></i> Nối đường gấp khúc</span>
+              <span><i class="fa-solid fa-shuffle"></i> Gió lốc & Bom hỗ trợ</span>
             </div>
-            <button type="button" class="btn btn-primary game-launch-btn" style="background: linear-gradient(135deg, #dc2626, #b91c1c); color: #ffffff;">
-              Chơi Phi Đao <i class="fa-solid fa-play"></i>
+            <button type="button" class="btn btn-primary game-launch-btn" style="background: linear-gradient(135deg, #d97706, #b45309); color: #ffffff;">
+              Chơi Mạt Chược <i class="fa-solid fa-play"></i>
             </button>
           </div>
 
-          <!-- CARD GAME 2: SNAKE -->
-          <div class="game-choice-card card-snake" id="btn-choose-snake" style="cursor: pointer;">
-            <div class="card-tag">NHẬN DIỆN MẶT CHỮ & NGHĨA</div>
-            <div class="card-icon-hero">🐍 🍏</div>
-            <h3 class="card-title">Nuôi Rắn Từ Vựng</h3>
-            <p class="card-desc">
-              Quan sát chữ Hán đề bài ở trên, điều khiển chú rắn ăn quả táo mang <strong>nghĩa Tiếng Việt chính xác</strong>. Tích đủ <strong>10 chuỗi ngọc</strong> để lên cấp và nhặt vật phẩm may mắn!
-            </p>
-            <div class="card-features">
-              <span><i class="fa-solid fa-book-open"></i> Nhớ nghĩa tiếng Việt</span>
-              <span><i class="fa-solid fa-layer-group"></i> 5 Cấp độ thử thách</span>
-            </div>
-            <button type="button" class="btn btn-primary game-launch-btn" style="background: linear-gradient(135deg, #059669, #047857); color: #ffffff;">
-              Chơi Nuôi Rắn <i class="fa-solid fa-play"></i>
-            </button>
-          </div>
-
-          <!-- CARD GAME 3: ALCHEMIST -->
+          <!-- CARD GAME 2: ALCHEMIST -->
           <div class="game-choice-card card-alchemist" id="btn-choose-alchemist" style="cursor: pointer;">
-            <div class="card-tag">CHIẾT TỰ & BỘ THỦ</div>
+            <div class="card-tag">⚗️ CHIẾT TỰ & BỘ THỦ • 📱 CHẠM CẢM ỨNG SIÊU MƯỢT</div>
             <div class="card-icon-hero">⚗️ ✨</div>
-            <h3 class="card-title">Lò Luyện Chiết TỰ</h3>
+            <h3 class="card-title">Lò Luyện Chiết Tự</h3>
             <p class="card-desc">
               Trở thành nhà giả kim! Chọn các <strong>Bộ thủ nguyên liệu</strong> nạp vào vạc luyện kim thần kỳ để hợp nhất chế tạo ra chữ Hán mục tiêu.
             </p>
@@ -151,37 +133,37 @@ export class NotebookGamesHub {
             </button>
           </div>
 
-          <!-- CARD GAME 4: MAHJONG -->
-          <div class="game-choice-card card-mahjong" id="btn-choose-mahjong" style="cursor: pointer;">
-            <div class="card-tag">PHẢN XẠ NỐI CẶP ONET</div>
-            <div class="card-icon-hero">🀄 🔍</div>
-            <h3 class="card-title">Mạt Chược Nối Từ</h3>
+          <!-- CARD GAME 3: SNAKE -->
+          <div class="game-choice-card card-snake" id="btn-choose-snake" style="cursor: pointer;">
+            <div class="card-tag">🐍 NHẬN DIỆN MẶT CHỮ • 📱 VUỐT CẢM ỨNG & ⌨️ PHÍM MŨI TÊN</div>
+            <div class="card-icon-hero">🐍 🍏</div>
+            <h3 class="card-title">Nuôi Rắn Từ Vựng</h3>
             <p class="card-desc">
-              Tìm và nối các cặp quân bài mạt chược tương ứng (<strong>Chữ Hán ↔ Pinyin ↔ Nghĩa</strong>) theo quy tắc đường gấp khúc tối đa 3 đoạn thẳng!
+              Quan sát chữ Hán đề bài ở trên, điều khiển chú rắn ăn quả táo mang <strong>nghĩa Tiếng Việt chính xác</strong>. Tích đủ <strong>10 chuỗi ngọc</strong> để lên cấp!
             </p>
             <div class="card-features">
-              <span><i class="fa-solid fa-link"></i> Nối đường gấp khúc</span>
-              <span><i class="fa-solid fa-shuffle"></i> Gió lốc & Bom hỗ trợ</span>
+              <span><i class="fa-solid fa-book-open"></i> Nhớ nghĩa tiếng Việt</span>
+              <span><i class="fa-solid fa-layer-group"></i> 5 Cấp độ thử thách</span>
             </div>
-            <button type="button" class="btn btn-primary game-launch-btn" style="background: linear-gradient(135deg, #d97706, #b45309); color: #ffffff;">
-              Chơi Mạt Chược <i class="fa-solid fa-play"></i>
+            <button type="button" class="btn btn-primary game-launch-btn" style="background: linear-gradient(135deg, #059669, #047857); color: #ffffff;">
+              Chơi Nuôi Rắn <i class="fa-solid fa-play"></i>
             </button>
           </div>
 
-          <!-- CARD GAME 5: RHYTHM -->
-          <div class="game-choice-card card-rhythm" id="btn-choose-rhythm" style="cursor: pointer;">
-            <div class="card-tag">ÂM NHẠC & BẮT THANH ĐIỆU</div>
-            <div class="card-icon-hero">🎵 🎹</div>
-            <h3 class="card-title">Phím Đàn Thanh Điệu</h3>
+          <!-- CARD GAME 4: PHI DAO (CANNON) -->
+          <div class="game-choice-card card-cannon" id="btn-choose-cannon" style="cursor: pointer;">
+            <div class="card-tag">🗡️ PHI ĐAO LUYỆN CHỮ • ⌨️ DÀNH CHO MÁY TÍNH (CẦN BÀN PHÍM)</div>
+            <div class="card-icon-hero">🗡️ 🥷</div>
+            <h3 class="card-title">Phi Đao Luyện Chữ</h3>
             <p class="card-desc">
-              Lắng nghe phát âm và bấm đúng <strong>4 phím thanh điệu (—, ／, ∨, ＼)</strong> khi nốt nhạc trượt vào vạch nhịp để kích hoạt <strong>Fever Mode x4 Điểm</strong>!
+              Từ vựng rơi từ trời đêm! Nhanh tay gõ <strong>Pinyin (không dấu)</strong> trên bàn phím máy tính để ninja phóng phi đao bắn nổ chữ Hán.
             </p>
             <div class="card-features">
-              <span><i class="fa-solid fa-headphones"></i> Luyện đôi tai bắt thanh điệu</span>
-              <span><i class="fa-solid fa-fire"></i> Chuỗi Fever Mode</span>
+              <span><i class="fa-solid fa-keyboard"></i> Cần bàn phím máy tính gõ Pinyin</span>
+              <span><i class="fa-solid fa-music"></i> Nhạc nền Lo-fi thư giãn</span>
             </div>
-            <button type="button" class="btn btn-primary game-launch-btn" style="background: linear-gradient(135deg, #db2777, #be185d); color: #ffffff;">
-              Chơi Phím Đàn <i class="fa-solid fa-play"></i>
+            <button type="button" class="btn btn-primary game-launch-btn" style="background: linear-gradient(135deg, #dc2626, #b91c1c); color: #ffffff;">
+              Chơi Phi Đao <i class="fa-solid fa-play"></i>
             </button>
           </div>
         </div>
@@ -212,8 +194,7 @@ export class NotebookGamesHub {
       { id: '#btn-choose-cannon', type: 'cannon' },
       { id: '#btn-choose-snake', type: 'snake' },
       { id: '#btn-choose-alchemist', type: 'alchemist' },
-      { id: '#btn-choose-mahjong', type: 'mahjong' },
-      { id: '#btn-choose-rhythm', type: 'rhythm' }
+      { id: '#btn-choose-mahjong', type: 'mahjong' }
     ];
 
     nativeGames.forEach(g => {
@@ -321,8 +302,6 @@ export class NotebookGamesHub {
       this.currentGameEngine = new AlchemistGameEngine(viewport, this.words, onExit);
     } else if (gameType === 'mahjong') {
       this.currentGameEngine = new MahjongGameEngine(viewport, this.words, onExit);
-    } else if (gameType === 'rhythm') {
-      this.currentGameEngine = new ToneRhythmGameEngine(viewport, this.words, onExit);
     }
 
     if (this.currentGameEngine && this.currentGameEngine.start) {

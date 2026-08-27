@@ -13119,9 +13119,13 @@ html.dark .mahjong-rules-tip {
 .tone-cheat-item.tone-4 .t-name { color: #f87171; }
 .tone-cheat-item.tone-0 .t-name { color: #c084fc; }
 
-@media (max-width: 980px) {
+@media (max-width: 1200px) {
   .rhythm-wing-dock {
     display: none !important;
+  }
+  .rhythm-stage-layout {
+    max-width: 640px !important;
+    width: 100% !important;
   }
 }
 

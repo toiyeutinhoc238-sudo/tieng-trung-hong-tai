@@ -1071,7 +1071,7 @@ export class ToneRhythmGameEngine {
       });
     });
 
-    // Touch and click on 5 lane pads
+    // Touch and click on 5 lane pads (Using pointerdown to avoid double firing on touch devices)
     this.container.querySelectorAll('.rhythm-pad').forEach(pad => {
       const lane = parseInt(pad.dataset.lane, 10);
       const handleTrigger = (e) => {
@@ -1079,7 +1079,6 @@ export class ToneRhythmGameEngine {
         e.stopPropagation();
         this.triggerLaneHit(lane);
       };
-      pad.addEventListener('touchstart', handleTrigger, { passive: false });
       pad.addEventListener('pointerdown', handleTrigger);
     });
 
