@@ -227,30 +227,20 @@ class ScreenDrawingTool {
   }
 
   bindEvents() {
-    let _wasDragged = false;
-
-    // Bubble Click — fires on mouse click (desktop), skips if was dragged
+    // Bubble Click — Cố định 1 chỗ, bấm để bật/tắt (không bị di chuyển khi giảng dạy)
     this.bubble.addEventListener('click', (e) => {
-      if (_wasDragged) { _wasDragged = false; return; }
       e.stopPropagation();
       this.toggle();
     });
 
-    // Bubble touchend — immediate response on mobile/tablet (no 300ms delay)
+    // Bubble touchend — phản hồi chạm tức thì trên iPad/Tablet
     this.bubble.addEventListener('touchend', (e) => {
-      if (_wasDragged) { _wasDragged = false; return; }
-      e.preventDefault(); // prevent ghost click after touchend
+      e.preventDefault();
       e.stopPropagation();
       this.toggle();
     }, { passive: false });
 
-    // Make Bubble Draggable (with 8px threshold — sets _wasDragged when drag occurs)
-    this.makeDraggable(this.bubble, this.bubble,
-      () => { _wasDragged = false; },
-      () => { _wasDragged = true; }
-    );
-
-    // Make Toolbar Draggable
+    // Make Toolbar Draggable (Chỉ thanh công cụ là có thể kéo di chuyển)
     const handle = this.toolbar.querySelector('.dt-drag-handle');
     this.makeDraggable(this.toolbar, handle);
 

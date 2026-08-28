@@ -1659,7 +1659,7 @@
 
     .dict-tile-box {
       min-width: 48px;
-      height: 52px;
+      height: 54px;
       padding: 0 8px;
       border-radius: 14px;
       background: rgba(255, 255, 255, 0.08);
@@ -1669,9 +1669,18 @@
       justify-content: center;
       font-size: 1.4rem;
       font-weight: 800;
+      font-family: var(--font-hanzi, "Noto Serif SC", serif);
       color: var(--text-primary, #ffffff);
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .dict-tile-box:not(.punct):hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+      border-color: rgba(56, 189, 248, 0.55);
     }
 
     .dict-tile-box.pending {
@@ -1680,15 +1689,30 @@
 
     .dict-tile-box.pending .tile-eye-icon {
       font-size: 1.15rem;
-      opacity: 0.45;
+      opacity: 0.55;
       color: inherit;
+      transition: all 0.2s ease;
+    }
+
+    .dict-tile-box.pending:hover .tile-eye-icon {
+      opacity: 0.95;
+      color: #38bdf8;
+      transform: scale(1.15);
+    }
+
+    .dict-tile-box.manual-flipped {
+      background: #ffffff !important;
+      color: #0f172a !important;
+      border: 2px solid rgba(56, 189, 248, 0.7) !important;
+      box-shadow: 0 4px 14px rgba(56, 189, 248, 0.35) !important;
+      transform: scale(1.02);
     }
 
     .dict-tile-box.correct {
       background: rgba(16, 185, 129, 0.25) !important;
       border-color: #10b981 !important;
       color: #10b981 !important;
-      box-shadow: 0 0 14px rgba(16, 185, 129, 0.35);
+      box-shadow: 0 0 16px rgba(16, 185, 129, 0.4) !important;
       transform: scale(1.04);
     }
 
@@ -1696,7 +1720,7 @@
       background: rgba(239, 68, 68, 0.25) !important;
       border-color: #ef4444 !important;
       color: #ef4444 !important;
-      box-shadow: 0 0 14px rgba(239, 68, 68, 0.35);
+      box-shadow: 0 0 16px rgba(239, 68, 68, 0.4) !important;
       animation: tileShake 0.3s ease;
     }
 
@@ -1707,7 +1731,7 @@
 
     html.light-mode .dict-tile-box,
     html:not(.dark) .dict-tile-box {
-      background: #ffffff !important;
+      background: #f8fafc !important;
       border: 1.5px solid #cbd5e1 !important;
       color: #0f172a !important;
     }
@@ -1715,6 +1739,15 @@
     html.light-mode .dict-tile-box.pending,
     html:not(.dark) .dict-tile-box.pending {
       color: #94a3b8 !important;
+      background: #ffffff !important;
+    }
+
+    html.light-mode .dict-tile-box.manual-flipped,
+    html:not(.dark) .dict-tile-box.manual-flipped {
+      background: #f0f9ff !important;
+      border-color: #0284c7 !important;
+      color: #0284c7 !important;
+      box-shadow: 0 2px 12px rgba(2, 132, 199, 0.25) !important;
     }
 
     html.light-mode .dict-tile-box.correct,
@@ -1744,11 +1777,12 @@
       color: #64748b !important;
       background: rgba(0, 0, 0, 0.04);
       min-width: 32px;
-      height: 52px;
+      height: 54px;
       padding: 0 6px;
       font-size: 1.3rem;
       font-weight: 700;
       opacity: 0.9;
+      cursor: default;
     }
 
     html.light-mode .dict-tile-box.punct,
@@ -1822,6 +1856,43 @@
       opacity: 0;
       pointer-events: none;
       transform: scale(0.5);
+    }
+
+    .dict-vk-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .dict-vk-action-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1.5px solid var(--border-glass, rgba(255, 255, 255, 0.2));
+      color: var(--text-primary, #ffffff);
+      font-size: 1.2rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      user-select: none;
+    }
+
+    .dict-vk-action-btn:hover {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: #38bdf8;
+      color: #38bdf8;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.35);
+    }
+
+    .dict-vk-action-btn:active {
+      transform: scale(0.92);
     }
 
     .btn-orange-hint {
@@ -2803,10 +2874,10 @@
       border: 1px solid #e2e8f0 !important;
     }
   </style>
-  <script type="module" crossorigin src="/assets/dictation-DEkBgclT.js"></script>
+  <script type="module" crossorigin src="/assets/dictation-DbY_cdLJ.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
   <link rel="modulepreload" crossorigin href="/assets/particles-DZeRXKmM.js">
-  <link rel="modulepreload" crossorigin href="/assets/screen_drawing-oOIhKrv1.js">
+  <link rel="modulepreload" crossorigin href="/assets/screen_drawing-DClnYXAw.js">
   <link rel="stylesheet" crossorigin href="/assets/style-sbvbeSgo.css">
 </head>
 
@@ -3097,206 +3168,127 @@
         <div class="workspace-right-col">
           <!-- ================= MODE 1: SHADOWING ================= -->
           <div id="mode-panel-shadowing" class="mode-practice-card">
-            <!-- Sub-mode Switcher (Thoại Từng Câu vs Thoại Toàn Bài) -->
-            <div class="shadow-submode-switcher">
-              <button type="button" class="shadow-submode-btn active" id="btn-shadow-submode-sentence" onclick="window.setShadowSubMode('sentence')">
-                <i class="fa-solid fa-bullseye"></i> <span>Thoại Từng Câu</span>
+            <!-- Visibility Toggles Bar -->
+            <div class="shadow-toggles-bar">
+              <label class="custom-chk-pill">
+                <input type="checkbox" id="chk-shadow-hide-pinyin" onchange="window.toggleShadowPinyin(this.checked)">
+                <span><i class="fa-solid fa-eye-slash"></i> Ẩn pinyin</span>
+              </label>
+              <label class="custom-chk-pill">
+                <input type="checkbox" id="chk-shadow-hide-hanzi" onchange="window.toggleShadowHanzi(this.checked)">
+                <span><i class="fa-solid fa-eye-slash"></i> Ẩn chữ</span>
+              </label>
+              <label class="custom-chk-pill">
+                <input type="checkbox" id="chk-shadow-hide-meaning" onchange="window.toggleShadowMeaning(this.checked)">
+                <span><i class="fa-solid fa-eye-slash"></i> Ẩn nghĩa</span>
+              </label>
+            </div>
+
+            <!-- Target Sentence Display Box -->
+            <div class="shadow-sentence-box">
+              <div id="shadow-speaker-badge-wrap" style="display: none; margin-bottom: 8px;">
+                <span id="shadow-speaker-badge" class="dialogue-speaker-badge"><i class="fa-solid fa-user-tag"></i> 妈妈</span>
+              </div>
+              <div id="shadow-pinyin-display" class="shadow-pinyin-text">...</div>
+              <div id="shadow-hanzi-display" class="shadow-hanzi-text">...</div>
+              <div id="shadow-meaning-display" class="shadow-meaning-text">...</div>
+            </div>
+
+            <!-- Action Control Bar (Câu trước | Chấm điểm | Mic | Nghe lại | Câu tiếp) -->
+            <div class="shadow-action-controls">
+              <button class="btn-shadow-action btn-prev-sent" onclick="window.prevSentence()" title="Quay lại câu trước (Phím Mũi tên trái)">
+                <i class="fa-solid fa-chevron-left"></i> <span>Câu trước</span>
               </button>
-              <button type="button" class="shadow-submode-btn" id="btn-shadow-submode-passage" onclick="window.setShadowSubMode('passage')">
-                <i class="fa-solid fa-book-open-reader"></i> <span>Thoại Toàn Bài Văn</span>
+
+              <button class="btn-shadow-action btn-evaluate" onclick="window.evaluatePronunciation()" title="Chấm điểm và phân tích phát âm câu này">
+                <i class="fa-solid fa-square-check"></i> <span>Chấm Điểm</span>
+              </button>
+
+              <!-- Big Center Mic Button -->
+              <button id="btn-shadow-mic" class="btn-shadow-mic" onclick="window.toggleSpeechRecording()" title="Nhấn để Bắt đầu nói / Nhấn lại để Dừng & Chấm điểm">
+                <i class="fa-solid fa-microphone mic-icon"></i>
+                <span class="mic-label">Mic</span>
+              </button>
+
+              <button id="btn-shadow-playback" class="btn-shadow-action btn-playback" onclick="window.playUserOrModelAudio()" title="Nghe lại giọng ghi âm của bạn / giọng mẫu">
+                <i class="fa-solid fa-rotate-left"></i> <span>Nghe Lại</span>
+              </button>
+
+              <button class="btn-shadow-action btn-next-sent" onclick="window.nextSentence()" title="Chuyển sang câu tiếp theo (Phím Mũi tên phải)">
+                <span>Câu tiếp</span> <i class="fa-solid fa-chevron-right"></i>
               </button>
             </div>
 
-            <!-- SUB-MODE 1: THOẠI TỪNG CÂU -->
-            <div id="shadow-sentence-submode-wrap">
-              <!-- Visibility Toggles Bar -->
-              <div class="shadow-toggles-bar">
-                <label class="custom-chk-pill">
-                  <input type="checkbox" id="chk-shadow-hide-pinyin" onchange="window.toggleShadowPinyin(this.checked)">
-                  <span><i class="fa-solid fa-eye-slash"></i> Ẩn pinyin</span>
-                </label>
-                <label class="custom-chk-pill">
-                  <input type="checkbox" id="chk-shadow-hide-hanzi" onchange="window.toggleShadowHanzi(this.checked)">
-                  <span><i class="fa-solid fa-eye-slash"></i> Ẩn chữ</span>
-                </label>
-                <label class="custom-chk-pill">
-                  <input type="checkbox" id="chk-shadow-hide-meaning" onchange="window.toggleShadowMeaning(this.checked)">
-                  <span><i class="fa-solid fa-eye-slash"></i> Ẩn nghĩa</span>
-                </label>
-              </div>
+            <!-- Recording Live Status Bar (Visible during recording) -->
+            <div id="shadow-recording-live-bar" class="recording-live-bar" style="display: none;">
+              <div class="recording-pulse-dot"></div>
+              <span class="recording-text">Đang thu âm... Bấm nút Mic một lần nữa khi nói xong</span>
+              <span id="shadow-recording-timer" class="recording-timer">00:03</span>
+              <button class="btn-stop-rec-inline" onclick="window.toggleSpeechRecording()">Dừng lại & Chấm điểm</button>
+            </div>
 
-              <!-- Target Sentence Display Box -->
-              <div class="shadow-sentence-box">
-                <div id="shadow-speaker-badge-wrap" style="display: none; margin-bottom: 8px;">
-                  <span id="shadow-speaker-badge" class="dialogue-speaker-badge"><i class="fa-solid fa-user-tag"></i> 妈妈</span>
+            <!-- Speech Assessment Result Card (Clear & Detailed) -->
+            <div id="shadow-assessment-card" class="assessment-result-card" style="display: none;">
+              <div class="assessment-header">
+                <div class="assessment-score-badge" id="assessment-score-badge">
+                  <i class="fa-solid fa-award"></i> <span id="assessment-score-val">0%</span>
                 </div>
-                <div id="shadow-pinyin-display" class="shadow-pinyin-text">...</div>
-                <div id="shadow-hanzi-display" class="shadow-hanzi-text">...</div>
-                <div id="shadow-meaning-display" class="shadow-meaning-text">...</div>
+                <div class="assessment-title" id="assessment-verdict-text">Đang phân tích...</div>
               </div>
 
-              <!-- Action Control Bar (Câu trước | Chấm điểm | Mic | Nghe lại | Câu tiếp) -->
-              <div class="shadow-action-controls">
-                <button class="btn-shadow-action btn-prev-sent" onclick="window.prevSentence()" title="Quay lại câu trước (Phím Mũi tên trái)">
-                  <i class="fa-solid fa-chevron-left"></i> <span>Câu trước</span>
-                </button>
-
-                <button class="btn-shadow-action btn-evaluate" onclick="window.evaluatePronunciation()" title="Chấm điểm và phân tích phát âm câu này">
-                  <i class="fa-solid fa-square-check"></i> <span>Chấm Điểm</span>
-                </button>
-
-                <!-- Big Center Mic Button -->
-                <button id="btn-shadow-mic" class="btn-shadow-mic" onclick="window.toggleSpeechRecording()" title="Nhấn để Bắt đầu nói / Nhấn lại để Dừng & Chấm điểm">
-                  <i class="fa-solid fa-microphone mic-icon"></i>
-                  <span class="mic-label">Mic</span>
-                </button>
-
-                <button id="btn-shadow-playback" class="btn-shadow-action btn-playback" onclick="window.playUserOrModelAudio()" title="Nghe lại giọng ghi âm của bạn / giọng mẫu">
-                  <i class="fa-solid fa-rotate-left"></i> <span>Nghe Lại</span>
-                </button>
-
-                <button class="btn-shadow-action btn-next-sent" onclick="window.nextSentence()" title="Chuyển sang câu tiếp theo (Phím Mũi tên phải)">
-                  <span>Câu tiếp</span> <i class="fa-solid fa-chevron-right"></i>
-                </button>
-              </div>
-
-              <!-- Recording Live Status Bar (Visible during recording) -->
-              <div id="shadow-recording-live-bar" class="recording-live-bar" style="display: none;">
-                <div class="recording-pulse-dot"></div>
-                <span class="recording-text">Đang thu âm... Bấm nút Mic một lần nữa khi nói xong</span>
-                <span id="shadow-recording-timer" class="recording-timer">00:03</span>
-                <button class="btn-stop-rec-inline" onclick="window.toggleSpeechRecording()">Dừng lại & Chấm điểm</button>
-              </div>
-
-              <!-- Speech Assessment Result Card (Clear & Detailed) -->
-              <div id="shadow-assessment-card" class="assessment-result-card" style="display: none;">
-                <div class="assessment-header">
-                  <div class="assessment-score-badge" id="assessment-score-badge">
-                    <i class="fa-solid fa-award"></i> <span id="assessment-score-val">0%</span>
-                  </div>
-                  <div class="assessment-title" id="assessment-verdict-text">Đang phân tích...</div>
-                </div>
-
-                <div class="assessment-audio-row">
-                  <div class="audio-col">
-                    <span class="audio-label"><i class="fa-solid fa-microphone"></i> Giọng ghi âm của bạn:</span>
-                    <div id="user-audio-player-wrap">
-                      <button class="btn-play-rec" onclick="window.playUserRecordingAudio()">
-                        <i class="fa-solid fa-play"></i> Nghe lại giọng bạn
-                      </button>
-                    </div>
-                  </div>
-                  <div class="audio-col">
-                    <span class="audio-label"><i class="fa-solid fa-volume-high"></i> Giọng đọc chuẩn mẫu:</span>
-                    <button class="btn-play-model" onclick="window.speakCurrentSentence()">
-                      <i class="fa-solid fa-volume-high"></i> Nghe mẫu chuẩn
+              <div class="assessment-audio-row">
+                <div class="audio-col">
+                  <span class="audio-label"><i class="fa-solid fa-microphone"></i> Giọng ghi âm của bạn:</span>
+                  <div id="user-audio-player-wrap">
+                    <button class="btn-play-rec" onclick="window.playUserRecordingAudio()">
+                      <i class="fa-solid fa-play"></i> Nghe lại giọng bạn
                     </button>
                   </div>
                 </div>
-
-                <div class="assessment-comparison-box">
-                  <div class="comp-row">
-                    <span class="comp-tag">Bạn đã nói:</span>
-                    <span id="assessment-spoken-text" class="comp-spoken">...</span>
-                  </div>
-                  <div class="comp-row">
-                    <span class="comp-tag">Mục tiêu:</span>
-                    <div id="assessment-target-breakdown" class="comp-target">...</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- SUB-MODE 2: THOẠI TOÀN BÀI VĂN -->
-            <div id="shadow-passage-submode-wrap" style="display: none;">
-              <!-- Visibility Toggles Bar for Passage -->
-              <div class="shadow-toggles-bar">
-                <label class="custom-chk-pill">
-                  <input type="checkbox" id="chk-passage-hide-pinyin" onchange="window.toggleShadowPassagePinyin(this.checked)">
-                  <span><i class="fa-solid fa-eye-slash"></i> Ẩn pinyin</span>
-                </label>
-                <label class="custom-chk-pill">
-                  <input type="checkbox" id="chk-passage-hide-meaning" onchange="window.toggleShadowPassageMeaning(this.checked)">
-                  <span><i class="fa-solid fa-eye-slash"></i> Ẩn nghĩa</span>
-                </label>
-              </div>
-
-              <!-- Full Passage List -->
-              <div class="shadow-passage-box">
-                <div class="shadow-full-passage-list" id="shadow-full-passage-list">
-                  <!-- Rendered dynamically -->
+                <div class="audio-col">
+                  <span class="audio-label"><i class="fa-solid fa-volume-high"></i> Giọng đọc chuẩn mẫu:</span>
+                  <button class="btn-play-model" onclick="window.speakCurrentSentence()">
+                    <i class="fa-solid fa-volume-high"></i> Nghe mẫu chuẩn
+                  </button>
                 </div>
               </div>
 
-              <!-- Passage Action Controls Bar -->
-              <div class="passage-action-controls">
-                <button class="btn-shadow-action btn-passage-play-all" onclick="window.playFullPassage()" title="Phát video toàn bộ bài học từ đầu đến cuối">
-                  <i class="fa-solid fa-play"></i> <span>Phát Toàn Bài</span>
-                </button>
-
-                <!-- Big Center Mic for Passage -->
-                <button id="btn-passage-mic" class="btn-shadow-mic" onclick="window.togglePassageRecording()" title="Thu âm liên tục toàn bài">
-                  <i class="fa-solid fa-microphone mic-icon"></i>
-                  <span class="mic-label">Mic</span>
-                </button>
-
-                <button id="btn-passage-playback" class="btn-shadow-action btn-playback" onclick="window.playPassageRecordingAudio()" title="Nghe lại toàn bộ bài thu âm của bạn">
-                  <i class="fa-solid fa-rotate-left"></i> <span>Nghe Lại</span>
-                </button>
-
-                <button class="btn-shadow-action btn-evaluate" onclick="window.evaluatePassagePronunciation()" title="Chấm điểm tổng thể phát âm cả bài">
-                  <i class="fa-solid fa-chart-simple"></i> <span>Chấm Điểm</span>
-                </button>
-              </div>
-
-              <!-- Passage Recording Live Status Bar -->
-              <div id="shadow-passage-recording-live-bar" class="recording-live-bar" style="display: none; margin-top: 16px;">
-                <div class="recording-pulse-dot"></div>
-                <span class="recording-text">Đang thu âm toàn bài văn... Video đang chạy theo nhịp thoại</span>
-                <span id="shadow-passage-recording-timer" class="recording-timer">00:03</span>
-                <button class="btn-stop-rec-inline" onclick="window.togglePassageRecording()">Dừng lại & Chấm điểm</button>
-              </div>
-
-              <!-- Passage Speech Assessment Result Card -->
-              <div id="shadow-passage-assessment-card" class="assessment-result-card" style="display: none; margin-top: 16px;">
-                <div class="assessment-header">
-                  <div class="assessment-score-badge" id="passage-assessment-score-badge">
-                    <i class="fa-solid fa-award"></i> <span id="passage-assessment-score-val">0%</span>
-                  </div>
-                  <div class="assessment-title" id="passage-assessment-verdict-text">Kết quả phân tích cả bài</div>
+              <div class="assessment-comparison-box">
+                <div class="comp-row">
+                  <span class="comp-tag">Bạn đã nói:</span>
+                  <span id="assessment-spoken-text" class="comp-spoken">...</span>
                 </div>
-                <div class="assessment-comparison-box">
-                  <div class="comp-row">
-                    <span class="comp-tag">Bạn đã đọc:</span>
-                    <span id="passage-assessment-spoken-text" class="comp-spoken">...</span>
-                  </div>
-                  <div class="comp-row">
-                    <span class="comp-tag">Toàn bài chuẩn:</span>
-                    <div id="passage-assessment-target-text" class="comp-target" style="font-size: 0.95rem; line-height: 1.6;">...</div>
-                  </div>
+                <div class="comp-row">
+                  <span class="comp-tag">Mục tiêu:</span>
+                  <div id="assessment-target-breakdown" class="comp-target">...</div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- ================= MODE 2: NGHE - CHÉP / LUYỆN GÕ (Hình 3 chuẩn) ================= -->
+          <!-- ================= MODE 2: NGHE - CHÉP / LUYỆN GÕ ================= -->
           <div id="mode-panel-dictation" class="mode-practice-card" style="display: none;">
             <div id="dictation-speaker-wrap" style="display: none; margin-bottom: 10px;">
               <span id="dictation-speaker-badge" class="dialogue-speaker-badge"><i class="fa-solid fa-user-tag"></i> 妈妈</span>
             </div>
 
-            <!-- Header Prompt Banner (Hình 3) -->
+            <!-- Header Listening Prompt Toolbar (Đã bỏ bản dịch tiếng Việt ban đầu) -->
             <div class="dictation-prompt-box">
               <div class="dictation-prompt-text">
-                <span class="prompt-tag"><i class="fa-solid fa-language"></i> Dịch sang tiếng Trung:</span>
-                <span class="prompt-meaning" id="dictation-target-meaning">"..."</span>
+                <span class="prompt-tag"><i class="fa-solid fa-headphones"></i> Luyện nghe - chép chính tả</span>
+                <span class="dictation-sentence-counter-badge" id="dictation-counter-badge" style="font-size: 0.82rem; color: #38bdf8; font-weight: 800; background: rgba(56, 189, 248, 0.12); padding: 3px 10px; border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.25);">Câu 1/1</span>
               </div>
-              <button type="button" class="btn-dict-listen" onclick="window.speakCurrentSentence()" title="Nghe phát âm chuẩn">
-                <i class="fa-solid fa-volume-high"></i> Nghe
-              </button>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <button type="button" class="btn-dict-listen" onclick="window.speakCurrentSentence()" title="Nghe phát âm chuẩn câu này">
+                  <i class="fa-solid fa-volume-high"></i> Nghe câu
+                </button>
+                <button type="button" class="btn-dict-listen" onclick="window.replaySnippet()" title="Xem lại đoạn video câu này" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); color: #cbd5e1;">
+                  <i class="fa-solid fa-rotate-left"></i> Đoạn video
+                </button>
+              </div>
             </div>
 
-            <!-- Dictation Real-time Feedback Status (Hình 3) -->
+            <!-- Dictation Real-time Feedback Status -->
             <div id="dictation-feedback-box" class="dict-feedback-badge" style="display: none;"></div>
 
             <!-- Large Input Box with Realtime Verification -->
@@ -3307,9 +3299,9 @@
               </button>
             </div>
 
-            <!-- Dynamic Character Matching Slot Tiles with Eye Icon (Hình 3) -->
+            <!-- Dynamic Character Matching Slot Tiles with Eye Icon (Bấm từng ô để lật mở gợi ý) -->
             <div class="dictation-char-tiles" id="dictation-char-tiles">
-              <!-- Rendered dynamically: Correct = Green Char, Wrong = Red Eye, Pending = Eye Icon -->
+              <!-- Rendered dynamically: Clickable, Correct = Green Char, Wrong = Red Eye, Pending = Eye Icon -->
             </div>
 
             <!-- Virtual Character Keyboard (Phím chọn nhanh - Tự ẩn chữ khi bấm) -->
@@ -3322,18 +3314,18 @@
                 <!-- Virtual buttons rendered dynamically -->
               </div>
               <div class="dict-vk-actions">
-                <button class="dict-vk-action-btn" onclick="window.deleteLastDictationChar()" title="Xóa 1 chữ vừa nhập">
-                  <i class="fa-solid fa-delete-left"></i> Xóa chữ
+                <button type="button" class="dict-vk-action-btn" onclick="window.deleteLastDictationChar()" title="Xóa 1 chữ vừa nhập" aria-label="Xóa 1 chữ">
+                  <i class="fa-solid fa-delete-left"></i>
                 </button>
-                <button class="dict-vk-action-btn" onclick="window.clearDictationInput()" title="Xóa hết để gõ lại">
-                  <i class="fa-solid fa-rotate-left"></i> Gõ lại
+                <button type="button" class="dict-vk-action-btn" onclick="window.clearDictationInput()" title="Xóa hết để gõ lại" aria-label="Gõ lại">
+                  <i class="fa-solid fa-rotate-left"></i>
                 </button>
               </div>
             </div>
 
-            <!-- Bottom Action: Hiện Gợi Ý Mẫu (Nút cam hình con mắt chuẩn Hình 3) -->
+            <!-- Bottom Action: Hiện Gợi Ý Mẫu (Nút cam hình con mắt) -->
             <div class="dictation-bottom-actions">
-              <button class="btn-orange-hint" onclick="window.showDictationHint()">
+              <button id="btn-dictation-toggle-hint" class="btn-orange-hint" onclick="window.showDictationHint()">
                 <i class="fa-regular fa-eye"></i> HIỆN GỢI Ý MẪU
               </button>
             </div>
