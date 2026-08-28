@@ -110,6 +110,7 @@ export class CannonGameEngine {
       ];
     }
     this.displayMode = 'both'; // 'both' (Hán + Pinyin), 'hanzi' (Chỉ Hán), 'pinyin' (Chỉ Pinyin), 'listen' (Luyện Nghe)
+    this.playMode = localStorage.getItem('cannon_play_mode') || 'practice'; // 'practice' (infinite lives) or 'challenge' (3 hearts)
     this.onExit=onExitCallback;
     this.music=new AmbientMusicEngine();
     this.score=0;this.combo=0;this.maxCombo=0;this.lives=3;this.maxLives=3;
@@ -136,12 +137,12 @@ export class CannonGameEngine {
 
 /* TOP HUD */
 .phidao-hud{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:10px 18px;background:rgba(15,23,42,.88);backdrop-filter:blur(12px);border-bottom:1.5px solid rgba(255,255,255,.15);box-shadow:0 4px 20px rgba(0,0,0,.35);flex-shrink:0;}
-.phidao-hud-center{display:flex;align-items:center;gap:20px;}
-.phidao-hud-left,.phidao-hud-right{display:flex;gap:8px;}
+.phidao-hud-center{display:flex;align-items:center;gap:14px;}
+.phidao-hud-left,.phidao-hud-right{display:flex;gap:8px;align-items:center;}
 .phidao-btn-icon{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#f1f5f9;border-radius:10px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.95rem;transition:all .2s;}
 .phidao-btn-icon:hover{background:rgba(255,255,255,.25);transform:scale(1.08);}
-.phidao-stat{display:flex;align-items:center;gap:8px;color:#ffffff;font-weight:800;font-size:1.1rem;text-shadow:0 2px 4px rgba(0,0,0,.5);}
-.phidao-lives-row{display:flex;gap:5px;font-size:1.2rem;filter:drop-shadow(0 0 6px rgba(239,68,68,.5));}
+.phidao-stat{display:flex;align-items:center;gap:6px;color:#ffffff;font-weight:800;font-size:1.05rem;text-shadow:0 2px 4px rgba(0,0,0,.5);}
+.phidao-lives-row{display:flex;gap:5px;font-size:1.1rem;filter:drop-shadow(0 0 6px rgba(239,68,68,.5));}
 
 /* BUFF BANNER */
 .phidao-buff-banner{position:relative;z-index:10;text-align:center;background:linear-gradient(90deg,rgba(245,158,11,.2),rgba(239,68,68,.25),rgba(245,158,11,.2));border-bottom:1.5px solid rgba(245,158,11,.4);color:#fef08a;font-size:.85rem;font-weight:800;padding:5px 12px;flex-shrink:0;text-shadow:0 1px 3px #000;}
@@ -179,7 +180,7 @@ export class CannonGameEngine {
 .phidao-input-tip-sub{font-size:.7rem;font-weight:700;color:#cbd5e1;background:rgba(15,23,42,.75);padding:2px 10px;border-radius:20px;backdrop-filter:blur(4px);text-shadow:0 1px 2px #000;border:1px solid rgba(255,255,255,.08);}
 .phidao-target-hint{font-size:.82rem;color:#fef08a;font-weight:700;min-width:100px;text-align:center;}
 
-/* WORD CARDS: ULTRA CRISP & SOLID HIGH CONTRAST */
+/* WORD CARDS */
 .phidao-word-card{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:#ffffff;border:2.5px solid #0284c7;border-radius:18px;padding:8px 20px 10px;min-width:100px;box-shadow:0 12px 28px rgba(0,0,0,.45),0 0 16px rgba(56,189,248,.4);will-change:transform;transition:border-color .15s,box-shadow .15s,transform .1s;}
 .phidao-word-card.is-targeted{border-color:#f59e0b !important;background:#fffbeb !important;box-shadow:0 0 30px rgba(245,158,11,.8),0 12px 30px rgba(0,0,0,.4) !important;transform:scale(1.08);}
 .phidao-word-card.type-star{border-color:#a855f7;background:#faf5ff;box-shadow:0 0 24px rgba(168,85,247,.6),0 10px 25px rgba(0,0,0,.4);}
@@ -245,18 +246,25 @@ export class CannonGameEngine {
 <div class="phidao-bg"><div class="phidao-moon"></div><div id="phidao-stars"></div><div id="phidao-sakura"></div></div>
 <div class="phidao-hud">
   <div class="phidao-hud-left">
-    <button id="cannon-top-back-btn" class="phidao-btn-icon"><i class="fa-solid fa-arrow-left"></i></button>
-    <button id="cannon-pause-btn" class="phidao-btn-icon"><i class="fa-solid fa-pause"></i></button>
+    <button id="cannon-top-back-btn" class="phidao-btn-icon" title="Quay lại"><i class="fa-solid fa-arrow-left"></i></button>
+    <button id="cannon-pause-btn" class="phidao-btn-icon" title="Tạm dừng"><i class="fa-solid fa-pause"></i></button>
+    <!-- Play Mode Toggle Button -->
+    <button type="button" id="cannon-playmode-toggle-btn" class="phidao-btn-icon" title="Chuyển chế độ Kiểm tra (Không tính tim) / Thi đấu (3 Tim)" style="width: auto; padding: 4px 12px; font-weight: 800; border-radius: 50px;">
+      <span id="cannon-mode-icon-text">${this.playMode === 'practice' ? '<i class="fa-solid fa-infinity" style="color: #10b981;"></i> <span style="font-size: 0.8rem; color:#10b981; margin-left: 4px;">Kiểm tra</span>' : '<i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> <span style="font-size: 0.8rem; color:#fbbf24; margin-left: 4px;">Thi đấu</span>'}</span>
+    </button>
   </div>
   <div class="phidao-hud-center">
     <div class="phidao-stat"><i class="fa-solid fa-star" style="color:#fbbf24;"></i><span id="cannon-score-val">0</span></div>
     <div class="phidao-lives-row" id="cannon-lives-container">
-      <i class="fa-solid fa-heart" style="color:#ef4444;"></i><i class="fa-solid fa-heart" style="color:#ef4444;"></i><i class="fa-solid fa-heart" style="color:#ef4444;"></i>
+      ${this.playMode === 'practice' 
+        ? '<span style="color: #10b981; font-weight: 900; font-size: 0.95rem;"><i class="fa-solid fa-infinity"></i> Vô Hạn</span>'
+        : '<i class="fa-solid fa-heart" style="color:#ef4444;"></i><i class="fa-solid fa-heart" style="color:#ef4444;"></i><i class="fa-solid fa-heart" style="color:#ef4444;"></i>'
+      }
     </div>
     <div class="phidao-stat"><i class="fa-solid fa-fire" style="color:#f97316;"></i><span id="cannon-combo-val">x0</span></div>
   </div>
   <div class="phidao-hud-right">
-    <button id="cannon-exit-btn" class="phidao-btn-icon"><i class="fa-solid fa-xmark"></i></button>
+    <button id="cannon-exit-btn" class="phidao-btn-icon" title="Thoát"><i class="fa-solid fa-xmark"></i></button>
   </div>
 </div>
 <!-- MODE BAR -->
@@ -356,6 +364,22 @@ export class CannonGameEngine {
     if(qs('#cannon-retry-btn'))qs('#cannon-retry-btn').addEventListener('click',e=>{e.preventDefault();this.restart();});
     if(qs('#cannon-back-hub-btn'))qs('#cannon-back-hub-btn').addEventListener('click',e=>{e.preventDefault();this.stopAndExit();});
     if(qs('#cannon-finish-btn'))qs('#cannon-finish-btn').addEventListener('click',e=>{e.preventDefault();this.stopAndExit();if(typeof window.exitNotebookGamesHub==='function')window.exitNotebookGamesHub();});
+
+    if(qs('#cannon-playmode-toggle-btn')){
+      qs('#cannon-playmode-toggle-btn').addEventListener('click', e=>{
+        e.preventDefault();
+        this.playMode = (this.playMode === 'practice') ? 'challenge' : 'practice';
+        localStorage.setItem('cannon_play_mode', this.playMode);
+        const textEl = this.container.querySelector('#cannon-mode-icon-text');
+        if(textEl){
+          textEl.innerHTML = (this.playMode === 'practice')
+            ? '<i class="fa-solid fa-infinity" style="color: #10b981;"></i> <span style="font-size: 0.8rem; color:#10b981; margin-left: 4px;">Kiểm tra</span>'
+            : '<i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> <span style="font-size: 0.8rem; color:#fbbf24; margin-left: 4px;">Thi đấu</span>';
+        }
+        this.updateHUD();
+        this.showToast(this.playMode === 'practice' ? '🎯 Chế độ Kiểm tra (♾️ Không tính tim)' : '🏆 Chế độ Thi đấu (❤️❤️❤️ 3 Tim)');
+      });
+    }
 
     // MODE SWITCHER PILLS
     this.container.querySelectorAll('.phidao-mode-pill').forEach(btn => {
@@ -649,9 +673,13 @@ export class CannonGameEngine {
           if(item.el&&item.el.parentNode)item.el.parentNode.removeChild(item.el);
           this.activeWords.splice(i,1);
           if(this.lockedTarget&&this.lockedTarget.id===item.id){this.lockedTarget=null;this.typedBuffer='';this.updateTypedDisplay();}
-          if(this.shieldActive){this.shieldActive=false;this.shieldTimer=0;this.showFloatingText(item.x,groundY-20,'🛡️ Lá Chắn Chặn!','#38bdf8');}
-          else{this.lives--;this.combo=0;this.music.playMiss();this.showMissFlash();this.showFloatingText(item.x,groundY-22,`💔 ${item.wordObj.word} (${item.wordObj.meaning || ''})`,'#ef4444');}
-          if(this.lives<=0){this.gameOver(false);return;}
+          if(this.playMode === 'practice'){
+            this.showFloatingText(item.x,groundY-22,`💡 ${item.wordObj.word} (${item.wordObj.meaning || ''})`,'#38bdf8');
+          } else {
+            if(this.shieldActive){this.shieldActive=false;this.shieldTimer=0;this.showFloatingText(item.x,groundY-20,'🛡️ Lá Chắn Chặn!','#38bdf8');}
+            else{this.lives--;this.combo=0;this.music.playMiss();this.showMissFlash();this.showFloatingText(item.x,groundY-22,`💔 ${item.wordObj.word} (${item.wordObj.meaning || ''})`,'#ef4444');}
+            if(this.lives<=0){this.gameOver(false);return;}
+          }
           this.updateHUD();
         }
       }
@@ -704,7 +732,20 @@ export class CannonGameEngine {
     const livesEl=this.container.querySelector('#cannon-lives-container');
     if(scoreEl)scoreEl.textContent=this.score;
     if(comboEl)comboEl.textContent=`x${this.combo}`;
-    if(livesEl){livesEl.innerHTML='';for(let i=0;i<this.maxLives;i++){const ic=document.createElement('i');const alive=i<this.lives;ic.className=alive?'fa-solid fa-heart':'fa-regular fa-heart';ic.style.color=alive?'#ef4444':'rgba(255,255,255,.2)';livesEl.appendChild(ic);}}
+    if(livesEl){
+      if(this.playMode === 'practice'){
+        livesEl.innerHTML = '<span style="color: #10b981; font-weight: 900; font-size: 0.95rem;"><i class="fa-solid fa-infinity"></i> Vô Hạn</span>';
+      } else {
+        livesEl.innerHTML='';
+        for(let i=0;i<this.maxLives;i++){
+          const ic=document.createElement('i');
+          const alive=i<this.lives;
+          ic.className=alive?'fa-solid fa-heart':'fa-regular fa-heart';
+          ic.style.color=alive?'#ef4444':'rgba(255,255,255,.2)';
+          livesEl.appendChild(ic);
+        }
+      }
+    }
     this.container.querySelectorAll('.phidao-skill-btn').forEach(btn=>btn.classList.toggle('affordable',this.combo>=parseInt(btn.dataset.cost,10)));
   }
 

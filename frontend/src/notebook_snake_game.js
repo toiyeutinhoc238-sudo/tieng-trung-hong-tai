@@ -99,6 +99,10 @@ export class SnakeGameEngine {
     this.dir = { x: 1, y: 0 };
     this.nextDir = { x: 1, y: 0 };
 
+    // Play & Speech Modes
+    this.playMode = localStorage.getItem('snake_play_mode') || 'practice'; // 'practice' (infinite lives) or 'challenge' (3 hearts)
+    this.autoSpeech = localStorage.getItem('snake_auto_speech') !== 'false'; // default true
+
     // Targets & Obstacles
     this.currentQuestion = null;
     this.apples = [];
@@ -120,13 +124,24 @@ export class SnakeGameEngine {
         <!-- TOP HUD -->
         <div class="snake-hud-bar">
           <button type="button" id="snake-top-back-btn" class="btn btn-outline btn-sm" style="display: flex; align-items: center; gap: 6px; font-weight: 700; border-radius: 50px;">
-            <i class="fa-solid fa-arrow-left"></i> Chọn game khác
+            <i class="fa-solid fa-arrow-left"></i> Đổi Game
           </button>
 
           <div class="hud-item-title">
             <span class="snake-badge-icon">🐍</span>
-            <strong>NUÔI RẮN TỪ VỰNG</strong>
+            <strong>NUÔI RẮN</strong>
           </div>
+
+          <!-- Play Mode Toggle Button -->
+          <button type="button" id="snake-playmode-toggle-btn" class="btn btn-outline btn-sm" title="Chuyển chế độ Kiểm tra (Không tính tim) / Thi đấu (3 Tim)" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 800; border-radius: 50px; cursor: pointer; padding: 5px 12px;">
+            <span id="snake-mode-icon-text">${this.playMode === 'practice' ? '<i class="fa-solid fa-infinity" style="color: #10b981;"></i> <span style="color:#10b981;">Kiểm tra</span>' : '<i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> <span style="color:#fbbf24;">Thi đấu</span>'}</span>
+          </button>
+
+          <!-- Auto Speech Toggle Button -->
+          <button type="button" id="snake-speech-toggle-btn" class="btn btn-outline btn-sm" title="Bật/Tắt tự động đọc từ khi hiện câu hỏi" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 800; border-radius: 50px; cursor: pointer; padding: 5px 12px;">
+            <i class="fa-solid ${this.autoSpeech ? 'fa-volume-high' : 'fa-volume-xmark'}" id="snake-speech-icon" style="color: ${this.autoSpeech ? '#22c55e' : '#94a3b8'};"></i>
+            <span id="snake-speech-text" style="font-size: 0.78rem;">${this.autoSpeech ? 'Đọc tự động' : 'Tắt đọc'}</span>
+          </button>
 
           <div class="hud-item hud-level-badge" id="snake-level-badge">CẤP 1</div>
 
@@ -146,9 +161,10 @@ export class SnakeGameEngine {
           <div class="hud-item hud-lives">
             <span class="hud-label">TIM:</span>
             <div class="hud-hearts" id="snake-lives-container">
-              <i class="fa-solid fa-heart" style="color: #ef4444;"></i>
-              <i class="fa-solid fa-heart" style="color: #ef4444;"></i>
-              <i class="fa-solid fa-heart" style="color: #ef4444;"></i>
+              ${this.playMode === 'practice' 
+                ? '<span style="color: #10b981; font-weight: 900; font-size: 0.95rem;"><i class="fa-solid fa-infinity"></i> Vô Hạn</span>'
+                : '<i class="fa-solid fa-heart" style="color: #ef4444;"></i><i class="fa-solid fa-heart" style="color: #ef4444;"></i><i class="fa-solid fa-heart" style="color: #ef4444;"></i>'
+              }
             </div>
           </div>
 
@@ -411,6 +427,40 @@ export class SnakeGameEngine {
     const retryBtn = this.container.querySelector('#snake-retry-btn');
     const backHubBtn = this.container.querySelector('#snake-back-hub-btn');
     const finishBtn = this.container.querySelector('#snake-finish-btn');
+
+    const playmodeToggleBtn = this.container.querySelector('#snake-playmode-toggle-btn');
+    if (playmodeToggleBtn) {
+      playmodeToggleBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.playMode = (this.playMode === 'practice') ? 'challenge' : 'practice';
+        localStorage.setItem('snake_play_mode', this.playMode);
+        const modeTextEl = this.container.querySelector('#snake-mode-icon-text');
+        if (modeTextEl) {
+          modeTextEl.innerHTML = (this.playMode === 'practice')
+            ? '<i class="fa-solid fa-infinity" style="color: #10b981;"></i> <span style="color:#10b981;">Kiểm tra</span>'
+            : '<i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> <span style="color:#fbbf24;">Thi đấu</span>';
+        }
+        this.updateHUD();
+        this.showFloatingMessage(this.playMode === 'practice' ? '🎯 Chế độ Kiểm tra (♾️ Không tính tim)' : '🏆 Chế độ Thi đấu (❤️❤️❤️ 3 Tim)');
+      });
+    }
+
+    const speechToggleBtn = this.container.querySelector('#snake-speech-toggle-btn');
+    if (speechToggleBtn) {
+      speechToggleBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.autoSpeech = !this.autoSpeech;
+        localStorage.setItem('snake_auto_speech', this.autoSpeech ? 'true' : 'false');
+        const icon = this.container.querySelector('#snake-speech-icon');
+        const text = this.container.querySelector('#snake-speech-text');
+        if (icon) {
+          icon.className = `fa-solid ${this.autoSpeech ? 'fa-volume-high' : 'fa-volume-xmark'}`;
+          icon.style.color = this.autoSpeech ? '#22c55e' : '#94a3b8';
+        }
+        if (text) text.textContent = this.autoSpeech ? 'Đọc tự động' : 'Tắt đọc';
+        this.showFloatingMessage(this.autoSpeech ? '🔊 Đã bật tự động đọc từ' : '🔇 Đã tắt tự động đọc');
+      });
+    }
 
     if (topBackBtn) {
       topBackBtn.addEventListener('click', (e) => {
@@ -808,6 +858,10 @@ export class SnakeGameEngine {
       if (pyEl) pyEl.textContent = `(Chữ Hán: ${q.word})`;
       if (hintEl) hintEl.innerHTML = `<i class="fa-solid fa-apple-whole" style="color: #ef4444;"></i> Hãy lái rắn ăn quả có <strong>NGHĨA TIẾNG VIỆT ĐÚNG</strong> bên dưới!`;
     }
+
+    if (this.autoSpeech && q && q.word && typeof window.speakText === 'function') {
+      window.speakText(q.word);
+    }
   }
 
   loop(currentTime) {
@@ -883,9 +937,11 @@ export class SnakeGameEngine {
     }
 
     if (this.wordsEatenCorrect > 0 && this.wordsEatenCorrect % 10 === 0) {
-      if (this.lives < this.maxLives) {
+      if (this.playMode === 'challenge' && this.lives < this.maxLives) {
         this.lives++;
         this.showFloatingMessage(`💖 Xuất sắc ăn đúng ${this.wordsEatenCorrect} từ! Hồi phục +1 Tim! ❤️`);
+      } else {
+        this.showFloatingMessage(`💖 Xuất sắc ăn đúng ${this.wordsEatenCorrect} từ!`);
       }
     }
 
@@ -899,17 +955,22 @@ export class SnakeGameEngine {
 
   handleEatWrong(apple) {
     this.sfx.playEatWrong();
-    if (this.invincibleTimer <= 0) {
-      this.lives--;
-      this.showFloatingMessage('Ăn sai nghĩa! -1 Tim 💔');
-    } else {
-      this.showFloatingMessage('🛡️ Bất tử bảo vệ!');
-    }
-
-    if (this.lives <= 0) {
-      this.gameOver(false);
-    } else {
+    if (this.playMode === 'practice') {
+      this.showFloatingMessage('Ăn chưa đúng quả! Tiếp tục cố gắng nhé! 🎯');
       this.nextWordQuestion();
+    } else {
+      if (this.invincibleTimer <= 0) {
+        this.lives--;
+        this.showFloatingMessage('Ăn sai nghĩa! -1 Tim 💔');
+      } else {
+        this.showFloatingMessage('🛡️ Bất tử bảo vệ!');
+      }
+
+      if (this.lives <= 0) {
+        this.gameOver(false);
+      } else {
+        this.nextWordQuestion();
+      }
     }
     this.updateHUD();
   }
@@ -917,11 +978,11 @@ export class SnakeGameEngine {
   handleEatPowerup(pow) {
     this.sfx.playPowerup();
     if (pow.type === 'heal') {
-      if (this.lives < this.maxLives) {
+      if (this.playMode === 'challenge' && this.lives < this.maxLives) {
         this.lives++;
         this.showFloatingMessage('💚 Hồi 1 Tim!');
       } else {
-        this.showFloatingMessage('💚 Tim đã đầy!');
+        this.showFloatingMessage('💚 Đã nhặt hồi máu!');
       }
     } else if (pow.type === 'x2') {
       this.score += 50;
@@ -935,17 +996,22 @@ export class SnakeGameEngine {
 
   handleMistake(reason) {
     this.sfx.playEatWrong();
-    if (this.invincibleTimer <= 0) {
-      this.lives--;
-      this.showFloatingMessage(`${reason} -1 Tim 💔`);
-    } else {
-      this.showFloatingMessage('🛡️ Bất tử bảo vệ!');
-    }
-
-    if (this.lives <= 0) {
-      this.gameOver(false);
-    } else {
+    if (this.playMode === 'practice') {
+      this.showFloatingMessage(`${reason} (Luyện tập không trừ tim) ♾️`);
       this.resetSnake();
+    } else {
+      if (this.invincibleTimer <= 0) {
+        this.lives--;
+        this.showFloatingMessage(`${reason} -1 Tim 💔`);
+      } else {
+        this.showFloatingMessage('🛡️ Bất tử bảo vệ!');
+      }
+
+      if (this.lives <= 0) {
+        this.gameOver(false);
+      } else {
+        this.resetSnake();
+      }
     }
     this.updateHUD();
   }
@@ -992,12 +1058,16 @@ export class SnakeGameEngine {
     }
 
     if (livesContainer) {
-      livesContainer.innerHTML = '';
-      for (let i = 0; i < this.maxLives; i++) {
-        const heart = document.createElement('i');
-        heart.className = i < this.lives ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
-        heart.style.color = i < this.lives ? '#ef4444' : 'rgba(255,255,255,0.3)';
-        livesContainer.appendChild(heart);
+      if (this.playMode === 'practice') {
+        livesContainer.innerHTML = '<span style="color: #10b981; font-weight: 800; font-size: 0.92rem; display: inline-flex; align-items: center; gap: 4px;"><i class="fa-solid fa-infinity"></i> Vô hạn</span>';
+      } else {
+        livesContainer.innerHTML = '';
+        for (let i = 0; i < this.maxLives; i++) {
+          const heart = document.createElement('i');
+          heart.className = i < this.lives ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
+          heart.style.color = i < this.lives ? '#ef4444' : 'rgba(255,255,255,0.3)';
+          livesContainer.appendChild(heart);
+        }
       }
     }
 

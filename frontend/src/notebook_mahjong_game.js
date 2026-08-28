@@ -116,6 +116,10 @@ export class MahjongGameEngine {
     this.isRunning = false;
     this.isStopping = false;
 
+    // Play & Speech Modes
+    this.playMode = localStorage.getItem('mahjong_play_mode') || 'practice'; // 'practice' (infinite time) or 'challenge' (countdown timer)
+    this.autoSpeech = localStorage.getItem('mahjong_auto_speech') !== 'false'; // default true
+
     // Selection
     this.selectedTile = null; // { r, c }
     this.isResolvingMatch = false;
@@ -137,21 +141,32 @@ export class MahjongGameEngine {
       <div class="mahjong-game-wrapper">
         <!-- TOP HUD -->
         <div class="mahjong-hud-bar">
-          <button type="button" id="mahjong-top-back-btn" class="btn btn-outline btn-sm" style="display: flex; align-items: center; gap: 6px; font-weight: 700; border-radius: 50px; background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); color: #ffffff;">
-            <i class="fa-solid fa-arrow-left"></i> Quay lại chọn game
+          <button type="button" id="mahjong-top-back-btn" class="btn btn-outline btn-sm" style="display: flex; align-items: center; gap: 6px; font-weight: 700; border-radius: 50px;">
+            <i class="fa-solid fa-arrow-left"></i> Đổi Game
           </button>
 
           <div class="hud-item-title">
             <span style="font-size: 1.4rem;">🀄</span>
-            <strong style="color: #34d399;">MẠT CHƯỢC NỐI TỪ</strong>
+            <strong style="color: #10b981;">MẠT CHƯỢC</strong>
           </div>
 
-          <div class="hud-item" id="mahjong-level-badge" style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #34d399; font-weight: 800; padding: 4px 12px; border-radius: 20px; font-size: 0.82rem;">
+          <!-- Play Mode Toggle Button -->
+          <button type="button" id="mahjong-mode-toggle-btn" class="btn btn-outline btn-sm" title="Chuyển chế độ Kiểm tra (Không giới hạn giờ) / Thi đấu (Đếm ngược)" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 800; border-radius: 50px; cursor: pointer; padding: 5px 12px;">
+            <span id="mahjong-mode-icon-text">${this.playMode === 'practice' ? '<i class="fa-solid fa-infinity" style="color: #10b981;"></i> <span style="color:#10b981;">Kiểm tra</span>' : '<i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> <span style="color:#fbbf24;">Thi đấu</span>'}</span>
+          </button>
+
+          <!-- Auto Speech Toggle Button -->
+          <button type="button" id="mahjong-speech-toggle-btn" class="btn btn-outline btn-sm" title="Bật/Tắt tự động đọc từ khi chọn quân cờ" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 800; border-radius: 50px; cursor: pointer; padding: 5px 12px;">
+            <i class="fa-solid ${this.autoSpeech ? 'fa-volume-high' : 'fa-volume-xmark'}" id="mahjong-speech-icon" style="color: ${this.autoSpeech ? '#22c55e' : '#94a3b8'};"></i>
+            <span id="mahjong-speech-text" style="font-size: 0.78rem;">${this.autoSpeech ? 'Đọc' : 'Tắt đọc'}</span>
+          </button>
+
+          <div class="hud-item" id="mahjong-level-badge" style="background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: #10b981; font-weight: 800; padding: 4px 12px; border-radius: 20px; font-size: 0.82rem;">
             MÀN 1/1
           </div>
 
           <div class="hud-item hud-progress" style="display: flex; align-items: center; gap: 6px;">
-            <i class="fa-solid fa-book-open" style="color: #a5b4fc;"></i>
+            <i class="fa-solid fa-book-open" style="color: #7c3aed;"></i>
             <span class="hud-label">TIẾN TRÌNH:</span>
             <span class="hud-value" id="mahjong-progress-val">0/0 từ</span>
           </div>
@@ -164,14 +179,14 @@ export class MahjongGameEngine {
 
           <div class="hud-item hud-combo">
             <i class="fa-solid fa-fire" style="color: #f97316;"></i>
-            <span class="hud-label">CẶP CÒN:</span>
-            <span class="hud-value" id="mahjong-pairs-val">0</span>
+            <span class="hud-label">ĐÃ NỐI:</span>
+            <span class="hud-value" id="mahjong-pairs-val">0/0 cặp</span>
           </div>
 
-          <div class="hud-item hud-timer" title="Thời gian đếm ngược của màn chơi này">
-            <i class="fa-solid fa-clock" style="color: #38bdf8;"></i>
+          <div class="hud-item hud-timer" title="Thời gian của màn chơi này">
+            <i class="fa-solid fa-clock" style="color: #0284c7;"></i>
             <span class="hud-label">THỜI GIAN:</span>
-            <span class="hud-value" id="mahjong-timer-val">01:40</span>
+            <span class="hud-value" id="mahjong-timer-val">${this.playMode === 'practice' ? '♾️ Vô hạn' : '01:40'}</span>
           </div>
 
           <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
@@ -293,6 +308,41 @@ export class MahjongGameEngine {
     const shuffleBtn = this.container.querySelector('#tool-shuffle');
     const bombBtn = this.container.querySelector('#tool-bomb');
 
+    const modeToggleBtn = this.container.querySelector('#mahjong-mode-toggle-btn');
+    if (modeToggleBtn) {
+      modeToggleBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.playMode = (this.playMode === 'practice') ? 'challenge' : 'practice';
+        localStorage.setItem('mahjong_play_mode', this.playMode);
+        const textEl = this.container.querySelector('#mahjong-mode-icon-text');
+        if (textEl) {
+          textEl.innerHTML = (this.playMode === 'practice')
+            ? '<i class="fa-solid fa-infinity" style="color: #10b981;"></i> <span style="color:#10b981;">Kiểm tra</span>'
+            : '<i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> <span style="color:#fbbf24;">Thi đấu</span>';
+        }
+        this.updateHUD();
+        this.startTimers();
+        this.showToast(this.playMode === 'practice' ? '🎯 Chế độ Kiểm tra (♾️ Không giới hạn thời gian)' : '🏆 Chế độ Thi đấu (⏱️ Đếm ngược thời gian)');
+      });
+    }
+
+    const speechToggleBtn = this.container.querySelector('#mahjong-speech-toggle-btn');
+    if (speechToggleBtn) {
+      speechToggleBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.autoSpeech = !this.autoSpeech;
+        localStorage.setItem('mahjong_auto_speech', this.autoSpeech ? 'true' : 'false');
+        const icon = this.container.querySelector('#mahjong-speech-icon');
+        const text = this.container.querySelector('#mahjong-speech-text');
+        if (icon) {
+          icon.className = `fa-solid ${this.autoSpeech ? 'fa-volume-high' : 'fa-volume-xmark'}`;
+          icon.style.color = this.autoSpeech ? '#22c55e' : '#94a3b8';
+        }
+        if (text) text.textContent = this.autoSpeech ? 'Đọc' : 'Tắt đọc';
+        this.showToast(this.autoSpeech ? '🔊 Đã bật phát âm từ vựng' : '🔇 Đã tắt phát âm');
+      });
+    }
+
     if (topBackBtn) topBackBtn.addEventListener('click', () => this.stopAndExit());
     if (backHubTopBtn) backHubTopBtn.addEventListener('click', () => this.stopAndExit());
     if (pauseBtn) pauseBtn.addEventListener('click', () => this.togglePause());
@@ -361,6 +411,7 @@ export class MahjongGameEngine {
 
   startTimers() {
     if (this.timerInterval) clearInterval(this.timerInterval);
+    if (this.playMode === 'practice') return; // Practice mode has infinite time, no countdown
     this.timerInterval = setInterval(() => {
       if (!this.isRunning || this.isPaused) return;
       this.timeLeft--;
@@ -572,6 +623,10 @@ export class MahjongGameEngine {
     if (this.isResolvingMatch || !this.isRunning || this.isPaused) return;
     const clickedItem = this.grid[r][c];
     if (!clickedItem) return;
+
+    if (this.autoSpeech && clickedItem.word && typeof window.speakText === 'function') {
+      window.speakText(clickedItem.word);
+    }
 
     if (!this.selectedTile) {
       // First tile selected
@@ -1030,7 +1085,7 @@ export class MahjongGameEngine {
     const bBomb = this.container.querySelector('#badge-bomb');
 
     if (scoreVal) scoreVal.textContent = this.score;
-    if (pairsVal) pairsVal.textContent = `${this.pairsLeft}/${this.totalPairs}`;
+    if (pairsVal) pairsVal.textContent = `${this.totalPairs - this.pairsLeft}/${this.totalPairs} cặp (Còn ${this.pairsLeft} cặp)`;
     if (levelBadge) levelBadge.textContent = `MÀN ${this.currentLevel}/${this.totalLevels}`;
 
     if (progressVal) {
@@ -1040,9 +1095,13 @@ export class MahjongGameEngine {
     }
 
     if (timerVal) {
-      const min = Math.floor(this.timeLeft / 60);
-      const sec = this.timeLeft % 60;
-      timerVal.textContent = `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+      if (this.playMode === 'practice') {
+        timerVal.textContent = '♾️ Vô hạn';
+      } else {
+        const min = Math.floor(this.timeLeft / 60);
+        const sec = this.timeLeft % 60;
+        timerVal.textContent = `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+      }
     }
 
     if (bHint) bHint.textContent = `x${this.hintCount}`;

@@ -906,7 +906,35 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label">Chế độ thách đấu</label>
+          <label class="form-label"><i class="fa-solid fa-gamepad" style="color: #6366f1;"></i> Hình thức chơi & Kiểm tra</label>
+          <div class="mode-grid" id="playmode-selector" style="margin-bottom: 8px;">
+            <div class="mode-btn active" data-playmode="practice" id="btn-mode-practice" style="border-color: #10b981; background: rgba(16, 185, 129, 0.15); color: #10b981; cursor: pointer;">
+              <div style="font-size: 1.15rem; margin-bottom: 2px;">🎯 ♾️</div>
+              <div style="font-weight: 800;">Kiểm Tra / Luyện Tập</div>
+              <div style="font-size: 0.72rem; font-weight: 600; opacity: 0.9; margin-top: 2px;">Không tính tim • Làm hết tất cả từ</div>
+            </div>
+            <div class="mode-btn" data-playmode="challenge" id="btn-mode-challenge" style="cursor: pointer;">
+              <div style="font-size: 1.15rem; margin-bottom: 2px;">🏆 ❤️</div>
+              <div style="font-weight: 800;">Thi Đấu / Thử Thách</div>
+              <div style="font-size: 0.72rem; font-weight: 600; opacity: 0.9; margin-top: 2px;">3 Mạng sống • Tính điểm xếp hạng</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label"><i class="fa-solid fa-volume-high" style="color: #38bdf8;"></i> Tự Động Phát Âm (Giọng Đọc)</label>
+          <div style="display: flex; gap: 10px;">
+            <button type="button" class="mode-btn active" id="btn-speech-on" style="flex: 1; padding: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 10px; cursor: pointer;">
+              <i class="fa-solid fa-volume-high" style="color: #22c55e;"></i> <span>Bật Tự Động Đọc</span>
+            </button>
+            <button type="button" class="mode-btn" id="btn-speech-off" style="flex: 1; padding: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 10px; cursor: pointer;">
+              <i class="fa-solid fa-volume-xmark" style="color: #94a3b8;"></i> <span>Tắt (Tự Đọc Chữ)</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Dạng Câu Hỏi Thách Đấu</label>
           <div class="mode-grid" id="mode-selector">
             <div class="mode-btn active" data-mode="zh-vi">Chữ Hán ➔ Việt</div>
             <div class="mode-btn" data-mode="vi-zh">Tiếng Việt ➔ Hán</div>
@@ -932,7 +960,7 @@
         <div class="modal-title" id="go-title">Kết Thúc!</div>
         <div class="modal-desc" id="go-desc">Bạn đã hoàn thành phần chơi.</div>
 
-        <div style="font-size: 2.8rem; margin: 2px 0;">🎯</div>
+        <div id="go-icon-badge" style="font-size: 2.8rem; margin: 2px 0;">🎯</div>
         <div style="font-size: 1.1rem; font-weight: 700; margin-bottom: 12px;">Điểm của bạn: <span id="go-score"
             style="color: #8854c0; font-size: 1.6rem; font-weight: 900;">0</span></div>
 
@@ -963,7 +991,8 @@
         <!-- Next Lesson & Stepper Action Buttons -->
         <div id="go-next-lesson-actions" style="margin-bottom: 12px; display: none; flex-direction: column; gap: 8px;"></div>
 
-        <div style="display: flex; gap: 10px;">
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button class="btn-primary" id="btn-retry-wrong" style="flex: 1; background: #ea580c; box-shadow: 0 6px 0 #9a3412; display: none;"><i class="fa-solid fa-rotate-right"></i> Luyện Lại Câu Sai</button>
           <button class="btn-primary" id="btn-restart" style="flex: 1;">Chơi Lại</button>
           <button class="btn-primary" id="btn-quit"
             style="flex: 1; background: #e21b3c; box-shadow: 0 6px 0 #a9122c;"><i class="fa-solid fa-house"></i> Trang Chủ</button>
@@ -984,7 +1013,18 @@
           </div>
         </div>
       </div>
-      <div style="display: flex; align-items: center; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+        <!-- AUTO SPEECH TOGGLE BUTTON -->
+        <button type="button" id="hud-toggle-speech" class="theme-toggle-btn-top" title="Bật/Tắt tự động đọc từ khi hiện câu hỏi" style="padding: 6px 12px; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-volume-high" id="hud-speech-icon" style="color: #22c55e;"></i>
+          <span id="hud-speech-text" style="font-size: 0.78rem; font-weight: 800;">Đọc Tự Động</span>
+        </button>
+
+        <!-- PLAY MODE TOGGLE BUTTON -->
+        <button type="button" id="hud-toggle-mode" class="theme-toggle-btn-top" title="Chuyển chế độ Kiểm tra ♾️ / Thi đấu ❤️" style="padding: 6px 12px; font-size: 0.82rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+          <span id="hud-mode-text"><i class="fa-solid fa-infinity" style="color: #10b981;"></i> Kiểm tra</span>
+        </button>
+
         <div class="score-box">
           <div class="score-label">Điểm số</div>
           <div class="score-value" id="hud-score">0</div>
@@ -1058,8 +1098,11 @@
     let timerMax = 15;
     let timerInterval = null;
     let answered = false;
+    let quizStreak = 0;
 
     let currentMode = 'zh-vi';
+    let gamePlayMode = localStorage.getItem('quiz_play_mode') || 'practice'; // 'practice' (no hearts ♾️) or 'challenge' (3 hearts ❤️)
+    let autoSpeechEnabled = localStorage.getItem('quiz_auto_speech') !== 'false'; // default true
     let audioCtx = null;
 
     // --- DOM ELEMENTS ---
@@ -1070,6 +1113,7 @@
     const selLesson = document.getElementById('sel-lesson');
     const btnStart = document.getElementById('btn-start');
     const btnRestart = document.getElementById('btn-restart');
+    const btnRetryWrong = document.getElementById('btn-retry-wrong');
     const btnQuit = document.getElementById('btn-quit');
     const btnSpeak = document.getElementById('btn-speak');
 
@@ -1080,6 +1124,16 @@
     const heartsContainer = document.getElementById('hearts-container');
     const timerBar = document.getElementById('timer-bar');
     const toastMsg = document.getElementById('toast-msg');
+
+    const btnModePractice = document.getElementById('btn-mode-practice');
+    const btnModeChallenge = document.getElementById('btn-mode-challenge');
+    const btnSpeechOn = document.getElementById('btn-speech-on');
+    const btnSpeechOff = document.getElementById('btn-speech-off');
+    const hudToggleSpeech = document.getElementById('hud-toggle-speech');
+    const hudSpeechIcon = document.getElementById('hud-speech-icon');
+    const hudSpeechText = document.getElementById('hud-speech-text');
+    const hudToggleMode = document.getElementById('hud-toggle-mode');
+    const hudModeText = document.getElementById('hud-mode-text');
 
     // --- UTILS ---
     function showToast(msg, ok = true) {
@@ -1152,9 +1206,134 @@
       return a;
     }
 
+    // --- PLAY MODE & AUTO SPEECH UI SYNC ---
+    function updatePlayModeUI() {
+      if (btnModePractice && btnModeChallenge) {
+        if (gamePlayMode === 'practice') {
+          btnModePractice.classList.add('active');
+          btnModePractice.style.borderColor = '#10b981';
+          btnModePractice.style.background = 'rgba(16, 185, 129, 0.15)';
+          btnModePractice.style.color = '#10b981';
+          btnModeChallenge.classList.remove('active');
+          btnModeChallenge.style.borderColor = '';
+          btnModeChallenge.style.background = '';
+          btnModeChallenge.style.color = '';
+        } else {
+          btnModeChallenge.classList.add('active');
+          btnModeChallenge.style.borderColor = '#f59e0b';
+          btnModeChallenge.style.background = 'rgba(245, 158, 11, 0.15)';
+          btnModeChallenge.style.color = '#f59e0b';
+          btnModePractice.classList.remove('active');
+          btnModePractice.style.borderColor = '';
+          btnModePractice.style.background = '';
+          btnModePractice.style.color = '';
+        }
+      }
+
+      if (hudModeText) {
+        if (gamePlayMode === 'practice') {
+          hudModeText.innerHTML = `<i class="fa-solid fa-infinity" style="color: #10b981;"></i> <span style="font-weight: 800; color: #10b981;">Kiểm tra (♾️)</span>`;
+        } else {
+          hudModeText.innerHTML = `<i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> <span style="font-weight: 800; color: #fbbf24;">Thi đấu (❤️)</span>`;
+        }
+      }
+
+      updateHearts();
+    }
+
+    function updateAutoSpeechUI() {
+      if (btnSpeechOn && btnSpeechOff) {
+        if (autoSpeechEnabled) {
+          btnSpeechOn.classList.add('active');
+          btnSpeechOn.style.borderColor = '#22c55e';
+          btnSpeechOn.style.background = 'rgba(34, 197, 94, 0.15)';
+          btnSpeechOff.classList.remove('active');
+          btnSpeechOff.style.borderColor = '';
+          btnSpeechOff.style.background = '';
+        } else {
+          btnSpeechOff.classList.add('active');
+          btnSpeechOff.style.borderColor = '#94a3b8';
+          btnSpeechOff.style.background = 'rgba(148, 163, 184, 0.15)';
+          btnSpeechOn.classList.remove('active');
+          btnSpeechOn.style.borderColor = '';
+          btnSpeechOn.style.background = '';
+        }
+      }
+
+      if (hudSpeechIcon && hudSpeechText) {
+        if (autoSpeechEnabled) {
+          hudSpeechIcon.className = 'fa-solid fa-volume-high';
+          hudSpeechIcon.style.color = '#22c55e';
+          hudSpeechText.textContent = 'Đọc Tự Động';
+          hudSpeechText.style.color = '#22c55e';
+        } else {
+          hudSpeechIcon.className = 'fa-solid fa-volume-xmark';
+          hudSpeechIcon.style.color = '#94a3b8';
+          hudSpeechText.textContent = 'Tự Đọc Chữ';
+          hudSpeechText.style.color = '#94a3b8';
+        }
+      }
+    }
+
+    // Bind Setup Mode Selector
+    if (btnModePractice) {
+      btnModePractice.addEventListener('click', () => {
+        gamePlayMode = 'practice';
+        localStorage.setItem('quiz_play_mode', 'practice');
+        updatePlayModeUI();
+        playBeep(600, 'sine', 0.1);
+      });
+    }
+
+    if (btnModeChallenge) {
+      btnModeChallenge.addEventListener('click', () => {
+        gamePlayMode = 'challenge';
+        localStorage.setItem('quiz_play_mode', 'challenge');
+        updatePlayModeUI();
+        playBeep(750, 'sine', 0.1);
+      });
+    }
+
+    if (btnSpeechOn) {
+      btnSpeechOn.addEventListener('click', () => {
+        autoSpeechEnabled = true;
+        localStorage.setItem('quiz_auto_speech', 'true');
+        updateAutoSpeechUI();
+        playBeep(880, 'sine', 0.1);
+      });
+    }
+
+    if (btnSpeechOff) {
+      btnSpeechOff.addEventListener('click', () => {
+        autoSpeechEnabled = false;
+        localStorage.setItem('quiz_auto_speech', 'false');
+        updateAutoSpeechUI();
+        playBeep(440, 'sine', 0.1);
+      });
+    }
+
+    if (hudToggleSpeech) {
+      hudToggleSpeech.addEventListener('click', () => {
+        autoSpeechEnabled = !autoSpeechEnabled;
+        localStorage.setItem('quiz_auto_speech', autoSpeechEnabled ? 'true' : 'false');
+        updateAutoSpeechUI();
+        showToast(autoSpeechEnabled ? "🔊 Đã bật Tự động phát âm" : "🔇 Đã tắt Tự động đọc (Học sinh tự nhận diện mặt chữ)", true);
+        playBeep(autoSpeechEnabled ? 880 : 440, 'sine', 0.1);
+      });
+    }
+
+    if (hudToggleMode) {
+      hudToggleMode.addEventListener('click', () => {
+        gamePlayMode = (gamePlayMode === 'practice') ? 'challenge' : 'practice';
+        localStorage.setItem('quiz_play_mode', gamePlayMode);
+        updatePlayModeUI();
+        showToast(gamePlayMode === 'practice' ? "🎯 Chuyển sang Chế độ Kiểm tra (♾️ Không tính tim)" : "🏆 Chuyển sang Chế độ Thi đấu (❤️❤️❤️ Tính tim & Điểm)", true);
+        playBeep(700, 'sine', 0.1);
+      });
+    }
+
     // --- USER AUTHENTICATION & PROFILE HUD ---
     async function loadUserInfo() {
-      // 1. Load from localStorage if present
       try {
         const stored = localStorage.getItem('user');
         if (stored) {
@@ -1198,6 +1377,9 @@
     // --- INITIALIZATION ---
     async function loadVocab() {
       loadUserInfo();
+      updatePlayModeUI();
+      updateAutoSpeechUI();
+
       try {
         const t = localStorage.getItem('session_token');
         const headers = t ? { 'Authorization': `Bearer ${t}`, 'x-session-token': t } : {};
@@ -1219,7 +1401,14 @@
       const urlVersion = params.get('version') || localStorage.getItem('active_hsk_version') || '3.0';
       const urlNotebook = params.get('notebook');
       const urlMode = params.get('mode');
+      const urlPlayMode = params.get('playmode') || params.get('game_mode');
       const autoStart = params.get('autostart') || params.get('auto');
+
+      if (urlPlayMode === 'challenge' || urlPlayMode === 'practice') {
+        gamePlayMode = urlPlayMode;
+        localStorage.setItem('quiz_play_mode', gamePlayMode);
+        updatePlayModeUI();
+      }
 
       if (selVersion) {
         selVersion.value = urlVersion === '2.0' ? '2.0' : '3.0';
@@ -1232,7 +1421,7 @@
       if (urlMode) {
         const targetBtn = document.querySelector(`.mode-btn[data-mode="${urlMode}"]`);
         if (targetBtn) {
-          document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+          document.querySelectorAll('#mode-selector .mode-btn').forEach(b => b.classList.remove('active'));
           targetBtn.classList.add('active');
           currentMode = urlMode;
         }
@@ -1355,18 +1544,24 @@
     document.getElementById('mode-selector').addEventListener('click', e => {
       const btn = e.target.closest('.mode-btn');
       if (btn) {
-        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('#mode-selector .mode-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         currentMode = btn.dataset.mode;
         playBeep(600, 'sine', 0.1);
       }
     });
 
-    btnStart.addEventListener('click', startGame);
+    btnStart.addEventListener('click', () => startGame());
     btnRestart.addEventListener('click', () => {
       goModal.style.display = 'none';
       startGame();
     });
+    if (btnRetryWrong) {
+      btnRetryWrong.addEventListener('click', () => {
+        goModal.style.display = 'none';
+        retryWrongQuestions();
+      });
+    }
     btnQuit.addEventListener('click', () => {
       saveGameHistory();
       setTimeout(() => {
@@ -1379,8 +1574,37 @@
     });
     btnSpeak.addEventListener('click', () => { if (activeQ) speak(activeQ.word); });
 
+    // Keyboard shortcuts (1, 2, 3, 4 / A, B, C, D / Space for Audio replay)
+    window.addEventListener('keydown', (e) => {
+      if (setupModal && setupModal.style.display !== 'none') {
+        if (e.key === 'Enter') startGame();
+        return;
+      }
+      if (goModal && goModal.style.display !== 'none') {
+        if (e.key === 'Enter') {
+          goModal.style.display = 'none';
+          startGame();
+        }
+        return;
+      }
+      if (e.key === ' ' || e.key === 'Spacebar') {
+        e.preventDefault();
+        if (activeQ) speak(activeQ.word);
+        return;
+      }
+      const keyMap = { '1': 0, '2': 1, '3': 2, '4': 3, 'a': 0, 'b': 1, 'c': 2, 'd': 3, 'A': 0, 'B': 1, 'C': 2, 'D': 3 };
+      if (e.key in keyMap) {
+        const idx = keyMap[e.key];
+        const btns = ansGrid ? ansGrid.querySelectorAll('.ans-btn') : [];
+        if (btns[idx] && !answered) {
+          e.preventDefault();
+          btns[idx].click();
+        }
+      }
+    });
+
     // --- GAME LOGIC ---
-    function startGame() {
+    function startGame(overrideWords = null) {
       playBeep(800, 'square', 0.15);
       playedHistory = [];
       let pool = vocabData;
@@ -1395,116 +1619,120 @@
       const currentVersion = selVersion ? selVersion.value : (urlVersion || '3.0');
       const urlSource = urlParams.get('source');
 
-      let customSessionWords = null;
-      try {
-        if (urlSource === 'notebook') {
-          const raw = sessionStorage.getItem('notebook_quiz_custom_words');
-          if (raw) {
-            const parsed = JSON.parse(raw);
-            if (Array.isArray(parsed) && parsed.length > 0) {
-              customSessionWords = parsed;
+      if (overrideWords && Array.isArray(overrideWords) && overrideWords.length > 0) {
+        pool = [...overrideWords];
+      } else {
+        let customSessionWords = null;
+        try {
+          if (urlSource === 'notebook') {
+            const raw = sessionStorage.getItem('notebook_quiz_custom_words');
+            if (raw) {
+              const parsed = JSON.parse(raw);
+              if (Array.isArray(parsed) && parsed.length > 0) {
+                customSessionWords = parsed;
+              }
             }
           }
-        }
-      } catch (e) {}
+        } catch (e) {}
 
-      if (urlSource === 'notebook' && customSessionWords && customSessionWords.length > 0) {
-        pool = [...customSessionWords];
-      } else {
-        if (lvl !== 'all') {
-          if (lvl.startsWith('yct')) {
-            const y = lvl.replace('yct', '');
-            pool = pool.filter(w => isYct(w) && matchLevel(w.level, y));
-          } else {
-            pool = pool.filter(w => !isYct(w) && w.level && matchLevel(w.level, lvl) && (w.isCustom || (w.hskVersion || '3.0') === currentVersion));
-          }
-        } else if (urlNotebook && urlNotebook.startsWith('hsk:')) {
-          const targetLvl = urlNotebook.replace('hsk:', '');
-          pool = pool.filter(w => !isYct(w) && matchLevel(w.level, targetLvl) && (w.isCustom || (w.hskVersion || '3.0') === currentVersion));
-        } else if (urlNotebook && urlNotebook.startsWith('yct:')) {
-          const targetLvl = urlNotebook.replace('yct:', '');
-          pool = pool.filter(w => isYct(w) && matchLevel(w.level, targetLvl));
+        if (urlSource === 'notebook' && customSessionWords && customSessionWords.length > 0) {
+          pool = [...customSessionWords];
         } else {
-          pool = pool.filter(w => w.isCustom || isYct(w) || (w.hskVersion || '3.0') === currentVersion);
-        }
-
-        if (urlNotebook) {
-          if (urlNotebook === 'wrong') {
-            pool = pool.filter(w => w.isWrong);
-          } else if (urlNotebook === 'starred') {
-            pool = pool.filter(w => w.isStarred);
-          } else if (urlNotebook.startsWith('custom:')) {
-            const cat = urlNotebook.substring(7);
-            pool = pool.filter(w => w.isCustom && w.category === cat);
-          } else if (urlNotebook.startsWith('premium:')) {
-            const cat = urlNotebook.substring(8);
-            const slugify = (s) => (s || '').toLowerCase().replace(/đ/g, 'd').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-            pool = pool.filter(w => w.level === 'premium' && (w.category === cat || slugify(w.category) === cat || slugify(w.category) === slugify(cat)));
+          if (lvl !== 'all') {
+            if (lvl.startsWith('yct')) {
+              const y = lvl.replace('yct', '');
+              pool = pool.filter(w => isYct(w) && matchLevel(w.level, y));
+            } else {
+              pool = pool.filter(w => !isYct(w) && w.level && matchLevel(w.level, lvl) && (w.isCustom || (w.hskVersion || '3.0') === currentVersion));
+            }
+          } else if (urlNotebook && urlNotebook.startsWith('hsk:')) {
+            const targetLvl = urlNotebook.replace('hsk:', '');
+            pool = pool.filter(w => !isYct(w) && matchLevel(w.level, targetLvl) && (w.isCustom || (w.hskVersion || '3.0') === currentVersion));
+          } else if (urlNotebook && urlNotebook.startsWith('yct:')) {
+            const targetLvl = urlNotebook.replace('yct:', '');
+            pool = pool.filter(w => isYct(w) && matchLevel(w.level, targetLvl));
+          } else {
+            pool = pool.filter(w => w.isCustom || isYct(w) || (w.hskVersion || '3.0') === currentVersion);
           }
-        }
 
-        if (lsn && lsn !== 'all' && lsn !== 'random') {
-          if (lsn.includes('_')) {
-            const parts = lsn.split('_');
-            if (parts.length >= 3) {
-              const type = parts[0];
-              const lLevel = parts[1];
-              const lId = parseInt(parts[2].replace(/\D/g, ''), 10) || parts[2];
-              const lVer = parts[3] || currentVersion;
-              const targetYct = (type === 'yct');
+          if (urlNotebook) {
+            if (urlNotebook === 'wrong') {
+              pool = pool.filter(w => w.isWrong);
+            } else if (urlNotebook === 'starred') {
+              pool = pool.filter(w => w.isStarred);
+            } else if (urlNotebook.startsWith('custom:')) {
+              const cat = urlNotebook.substring(7);
+              pool = pool.filter(w => w.isCustom && w.category === cat);
+            } else if (urlNotebook.startsWith('premium:')) {
+              const cat = urlNotebook.substring(8);
+              const slugify = (s) => (s || '').toLowerCase().replace(/đ/g, 'd').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+              pool = pool.filter(w => w.level === 'premium' && (w.category === cat || slugify(w.category) === cat || slugify(w.category) === slugify(cat)));
+            }
+          }
+
+          if (lsn && lsn !== 'all' && lsn !== 'random') {
+            if (lsn.includes('_')) {
+              const parts = lsn.split('_');
+              if (parts.length >= 3) {
+                const type = parts[0];
+                const lLevel = parts[1];
+                const lId = parseInt(parts[2].replace(/\D/g, ''), 10) || parts[2];
+                const lVer = parts[3] || currentVersion;
+                const targetYct = (type === 'yct');
+                const filteredByLsn = pool.filter(w => {
+                  const numId = parseInt(String(w.lessonId).replace(/\D/g, ''), 10) || w.lessonId;
+                  const matchLsn = (String(numId) === String(lId));
+                  const matchLvl = (!lLevel || matchLevel(w.level, lLevel));
+                  const matchYct = isYct(w) === targetYct;
+                  const matchVer = targetYct || (w.hskVersion || '3.0') === lVer || w.isCustom;
+                  return matchLsn && matchLvl && matchYct && matchVer;
+                });
+                if (filteredByLsn.length > 0) pool = filteredByLsn;
+              }
+            } else {
+              const numLsn = parseInt(String(lsn).replace(/\D/g, ''), 10) || lsn;
               const filteredByLsn = pool.filter(w => {
                 const numId = parseInt(String(w.lessonId).replace(/\D/g, ''), 10) || w.lessonId;
-                const matchLsn = (String(numId) === String(lId));
-                const matchLvl = (!lLevel || matchLevel(w.level, lLevel));
-                const matchYct = isYct(w) === targetYct;
-                const matchVer = targetYct || (w.hskVersion || '3.0') === lVer || w.isCustom;
-                return matchLsn && matchLvl && matchYct && matchVer;
+                return String(numId) === String(numLsn);
               });
               if (filteredByLsn.length > 0) pool = filteredByLsn;
             }
-          } else {
-            const numLsn = parseInt(String(lsn).replace(/\D/g, ''), 10) || lsn;
-            const filteredByLsn = pool.filter(w => {
-              const numId = parseInt(String(w.lessonId).replace(/\D/g, ''), 10) || w.lessonId;
-              return String(numId) === String(numLsn);
-            });
-            if (filteredByLsn.length > 0) pool = filteredByLsn;
-          }
-        } else if (urlLessons && urlLessons !== 'all') {
-          const lessonArr = urlLessons.split(',').map(s => parseInt(s.trim().replace(/\D/g, ''), 10)).filter(Boolean);
-          if (lessonArr.length > 0) {
-            const filteredByLessons = pool.filter(w => {
-              const numId = parseInt(String(w.lessonId).replace(/\D/g, ''), 10) || w.lessonId;
-              return lessonArr.includes(numId);
-            });
-            if (filteredByLessons.length > 0) {
-              pool = filteredByLessons;
+          } else if (urlLessons && urlLessons !== 'all') {
+            const lessonArr = urlLessons.split(',').map(s => parseInt(s.trim().replace(/\D/g, ''), 10)).filter(Boolean);
+            if (lessonArr.length > 0) {
+              const filteredByLessons = pool.filter(w => {
+                const numId = parseInt(String(w.lessonId).replace(/\D/g, ''), 10) || w.lessonId;
+                return lessonArr.includes(numId);
+              });
+              if (filteredByLessons.length > 0) {
+                pool = filteredByLessons;
+              }
+            }
+          } else if (lsn === 'random') {
+            const ids = [...new Set(pool.map(w => w.lessonId).filter(Boolean))];
+            if (ids.length > 0) {
+              const rid = ids[Math.floor(Math.random() * ids.length)];
+              pool = pool.filter(w => String(w.lessonId) === String(rid));
             }
           }
-        } else if (lsn === 'random') {
-          const ids = [...new Set(pool.map(w => w.lessonId).filter(Boolean))];
-          if (ids.length > 0) {
-            const rid = ids[Math.floor(Math.random() * ids.length)];
-            pool = pool.filter(w => String(w.lessonId) === String(rid));
-          }
-        }
 
-        if (urlFilter) {
-          if (urlFilter === 'studied') {
-            const stPool = pool.filter(w => w.isStudied);
-            if (stPool.length > 0) pool = stPool;
-          } else if (urlFilter === 'unstudied') {
-            const unPool = pool.filter(w => !w.isStudied);
-            if (unPool.length > 0) pool = unPool;
-          } else if (urlFilter === 'memorized') {
-            const memPool = pool.filter(w => w.isMemorized);
-            if (memPool.length > 0) pool = memPool;
-          } else if (urlFilter === 'unmemorized') {
-            const unmemPool = pool.filter(w => w.isStudied && !w.isMemorized);
-            if (unmemPool.length > 0) pool = unmemPool;
-          } else if (urlFilter === 'starred') {
-            const starPool = pool.filter(w => w.isStarred);
-            if (starPool.length > 0) pool = starPool;
+          if (urlFilter) {
+            if (urlFilter === 'studied') {
+              const stPool = pool.filter(w => w.isStudied);
+              if (stPool.length > 0) pool = stPool;
+            } else if (urlFilter === 'unstudied') {
+              const unPool = pool.filter(w => !w.isStudied);
+              if (unPool.length > 0) pool = unPool;
+            } else if (urlFilter === 'memorized') {
+              const memPool = pool.filter(w => w.isMemorized);
+              if (memPool.length > 0) pool = memPool;
+            } else if (urlFilter === 'unmemorized') {
+              const unmemPool = pool.filter(w => w.isStudied && !w.isMemorized);
+              if (unmemPool.length > 0) pool = unmemPool;
+            } else if (urlFilter === 'starred') {
+              const starPool = pool.filter(w => w.isStarred);
+              if (starPool.length > 0) pool = starPool;
+            }
           }
         }
       }
@@ -1523,7 +1751,12 @@
         totalQuestionsCount = remainingQs.length;
       }
 
-      score = 0; hearts = 3; quizStreak = 0; hudScore.textContent = score; updateHearts();
+      score = 0;
+      hearts = (gamePlayMode === 'practice') ? 999 : 3;
+      quizStreak = 0;
+      hudScore.textContent = score;
+      updatePlayModeUI();
+      updateAutoSpeechUI();
       setupModal.style.display = 'none';
 
       // Render Stepper ONLY if played directly by roadmap lesson
@@ -1575,9 +1808,35 @@
       nextQuestion();
     }
 
+    function retryWrongQuestions() {
+      const wrongList = [];
+      if (playedHistory && playedHistory.length > 0) {
+        playedHistory.forEach(item => {
+          if (!item.isCorrect) {
+            const found = vocabData.find(w => w.word === item.word) || item;
+            wrongList.push(found);
+          }
+        });
+      }
+
+      if (wrongList.length > 0) {
+        showToast(`Bắt đầu luyện lại ${wrongList.length} câu đã làm sai!`, true);
+        startGame(wrongList);
+      } else {
+        showToast("Không có câu nào bị sai!", true);
+        startGame();
+      }
+    }
+
     function nextQuestion() {
       try {
-        if (remainingQs.length === 0) return endGame("Chiến Thắng!", `Bạn đã hoàn thành xuất sắc toàn bộ ${totalQuestionsCount} câu hỏi!`);
+        if (remainingQs.length === 0) {
+          if (gamePlayMode === 'practice') {
+            return endGame("Hoàn Thành Kiểm Tra!", `Bạn đã hoàn thành kiểm tra toàn bộ ${totalQuestionsCount} từ vựng!`);
+          } else {
+            return endGame("Chiến Thắng!", `Bạn đã hoàn thành xuất sắc toàn bộ ${totalQuestionsCount} câu hỏi!`);
+          }
+        }
 
         answered = false;
         activeQ = remainingQs.pop();
@@ -1616,9 +1875,14 @@
 
         const pAns = cleanOptionFormat(rawAns, mode);
         const currentQNum = totalQuestionsCount - remainingQs.length;
-        qType.textContent = `Câu ${currentQNum}/${totalQuestionsCount} • ${pPrompt}`;
+        const modeBadgeLabel = (gamePlayMode === 'practice') ? 'Kiểm tra ♾️' : 'Thi đấu ❤️';
+        qType.textContent = `[${modeBadgeLabel}] Câu ${currentQNum}/${totalQuestionsCount} • ${pPrompt}`;
         qText.textContent = pQ;
-        speak(activeQ.word);
+
+        // Auto TTS based on setting
+        if (autoSpeechEnabled) {
+          speak(activeQ.word);
+        }
 
         // Smart distractor selection based on question mode
         const urlParams = new URLSearchParams(window.location.search);
@@ -1784,7 +2048,7 @@
 
         quizStreak = (typeof quizStreak === 'number' ? quizStreak : 0) + 1;
         if (quizStreak > 0 && quizStreak % 10 === 0) {
-          if (hearts < 3) {
+          if (gamePlayMode === 'challenge' && hearts < 3) {
             hearts++;
             updateHearts();
             showToast(`💖 Chuỗi ${quizStreak} câu đúng! Hồi phục +1 Tim! ❤️`, true);
@@ -1792,13 +2056,13 @@
             showToast(`💖 Chuỗi ${quizStreak} câu đúng xuất sắc!`, true);
           }
         } else {
-          showToast("Tuyệt vời!", true);
+          showToast("Chính xác! Xuất sắc!", true);
         }
 
         btns.forEach(b => {
           if (b !== btn) b.classList.add('dimmed');
         });
-        setTimeout(nextQuestion, 1500);
+        setTimeout(nextQuestion, 1400);
       } else {
         quizStreak = 0;
         if (btn) {
@@ -1812,20 +2076,37 @@
           }
         });
 
-        hearts--;
-        updateHearts();
-        playBeep(200, 'sawtooth', 0.3);
-        showToast(isTimeout ? "Hết giờ!" : "Sai rồi!", false);
+        playBeep(220, 'sawtooth', 0.25);
+        showToast(isTimeout ? "Hết giờ!" : "Chưa chính xác!", false);
 
-        if (hearts <= 0) {
-          setTimeout(() => endGame("Hết Tim!", "Bạn đã dùng hết số mạng sống!"), 1800);
-        } else {
+        if (gamePlayMode === 'practice') {
+          // In practice / check mode: NO game over on wrong, continue to let student practice all words
           setTimeout(nextQuestion, 1800);
+        } else {
+          // Challenge mode: Lose hearts
+          hearts--;
+          updateHearts();
+
+          if (hearts <= 0) {
+            setTimeout(() => endGame("Hết Tim!", "Bạn đã dùng hết số mạng sống!"), 1800);
+          } else {
+            setTimeout(nextQuestion, 1800);
+          }
         }
       }
     }
 
     function updateHearts() {
+      if (gamePlayMode === 'practice') {
+        heartsContainer.innerHTML = `<span style="color: #10b981; font-weight: 900; font-size: 1.05rem; display: inline-flex; align-items: center; gap: 6px; filter: drop-shadow(0 2px 6px rgba(16, 185, 129, 0.4));"><i class="fa-solid fa-infinity"></i> Vô Hạn Tim</span>`;
+        return;
+      }
+
+      heartsContainer.innerHTML = `
+        <i class="fa-solid fa-heart" style="color: #ef4444 !important; font-size: 1.25rem;"></i>
+        <i class="fa-solid fa-heart" style="color: #ef4444 !important; font-size: 1.25rem;"></i>
+        <i class="fa-solid fa-heart" style="color: #ef4444 !important; font-size: 1.25rem;"></i>
+      `;
       const hs = heartsContainer.querySelectorAll('i');
       hs.forEach((h, i) => {
         if (i < hearts) {
@@ -1877,6 +2158,15 @@
       if (cntAllEl) cntAllEl.textContent = totalCount;
       if (cntCorEl) cntCorEl.textContent = correctCount;
       if (cntWroEl) cntWroEl.textContent = wrongCount;
+
+      if (btnRetryWrong) {
+        if (wrongCount > 0) {
+          btnRetryWrong.style.display = 'inline-block';
+          btnRetryWrong.innerHTML = `<i class="fa-solid fa-rotate-right"></i> Luyện Lại ${wrongCount} Câu Sai`;
+        } else {
+          btnRetryWrong.style.display = 'none';
+        }
+      }
 
       const filteredWords = targetWords.filter(w => {
         const isCor = playedMap.get(w.word) === true;
@@ -2053,47 +2343,79 @@
     function endGame(title, desc) {
       clearInterval(timerInterval);
 
-      // Calculate Stars based on remaining hearts/lives
-      let earnedStars = 0;
-      if (hearts >= 3) {
-        earnedStars = 3;
-      } else if (hearts === 2) {
-        earnedStars = 2;
-      } else if (hearts === 1) {
-        earnedStars = 1;
-      } else {
-        earnedStars = 0;
-      }
-
-      // Parse URL Params for lesson, level, version
       const urlParams = new URLSearchParams(window.location.search);
       const isRoadmapMode = (urlParams.get('source') === 'roadmap' || (urlParams.get('lesson') && !urlParams.get('notebook') && !urlParams.get('lessons'))) && !urlParams.get('filter');
 
+      const correctCount = playedHistory ? playedHistory.filter(x => x.isCorrect).length : 0;
+      const totalCount = playedHistory ? playedHistory.length : 0;
+      const wrongCount = totalCount - correctCount;
+
+      let resultBadge = '🎯';
       let starsText = '';
-      if (isRoadmapMode) {
-        const qLesson = urlParams.get('lesson') || (selLesson ? selLesson.value : '');
-        const qLevel = urlParams.get('level') || (selLevel ? selLevel.value : '1');
-        const qVer = urlParams.get('version') || localStorage.getItem('active_hsk_version') || '3.0';
-        if (hearts > 0 && qLesson && qLevel) {
-          const starKey = `quiz_stars_${qVer}_${qLevel}_${qLesson}`;
-          const prevStars = parseInt(localStorage.getItem(starKey) || '0', 10);
-          if (earnedStars > prevStars) {
-            localStorage.setItem(starKey, earnedStars.toString());
-          }
-        }
-        starsText = earnedStars > 0
-          ? `<div style="margin-top: 10px; font-size: 1.8rem; color: #fbbf24; filter: drop-shadow(0 2px 8px rgba(251, 191, 36, 0.5));">${'★'.repeat(earnedStars)}${'☆'.repeat(3 - earnedStars)} <span style="font-size: 1rem; font-weight: 800; color: #fff;">(${earnedStars}/3 Sao)</span></div>`
-          : `<div style="margin-top: 10px; font-size: 1rem; color: #ef4444; font-weight: 800;">❌ Thua cuộc (0 Sao) - Cần đạt ít nhất 1 Sao để mở khóa bài tiếp theo!</div>`;
+
+      if (gamePlayMode === 'practice') {
+        const pct = totalCount > 0 ? Math.round((correctCount / totalCount) * 100) : 100;
+        resultBadge = pct >= 80 ? '🎉' : (pct >= 50 ? '👏' : '💪');
+        starsText = `
+          <div style="margin-top: 10px; font-size: 1.1rem; font-weight: 800; color: #10b981;">
+            <i class="fa-solid fa-circle-check"></i> Kết quả: ${correctCount}/${totalCount} từ chính xác (${pct}%)
+          </div>
+          <div style="font-size: 0.88rem; color: #64748b; font-weight: 600; margin-top: 4px;">
+            ${wrongCount > 0 ? `Có ${wrongCount} từ trả lời sai. Hãy xem lại danh sách bên dưới để ôn tập nhé!` : 'Tuyệt vời! Bạn đã trả lời đúng 100% tất cả các từ!'}
+          </div>
+        `;
       } else {
-        starsText = earnedStars > 0
-          ? `<div style="margin-top: 10px; font-size: 1.8rem; color: #fbbf24; filter: drop-shadow(0 2px 8px rgba(251, 191, 36, 0.5));">${'★'.repeat(earnedStars)}${'☆'.repeat(3 - earnedStars)} <span style="font-size: 1rem; font-weight: 800; color: #fff;">(Hoàn thành xuất sắc)</span></div>`
-          : `<div style="margin-top: 10px; font-size: 1rem; color: #ef4444; font-weight: 800;">❌ Kết thúc lượt ôn tập - Hãy luyện tập lại để ghi nhớ từ vựng tốt hơn nhé!</div>`;
+        // Calculate Stars based on remaining hearts/lives
+        let earnedStars = 0;
+        if (hearts >= 3) {
+          earnedStars = 3;
+        } else if (hearts === 2) {
+          earnedStars = 2;
+        } else if (hearts === 1) {
+          earnedStars = 1;
+        } else {
+          earnedStars = 0;
+        }
+
+        if (isRoadmapMode) {
+          const qLesson = urlParams.get('lesson') || (selLesson ? selLesson.value : '');
+          const qLevel = urlParams.get('level') || (selLevel ? selLevel.value : '1');
+          const qVer = urlParams.get('version') || localStorage.getItem('active_hsk_version') || '3.0';
+          if (hearts > 0 && qLesson && qLevel) {
+            const starKey = `quiz_stars_${qVer}_${qLevel}_${qLesson}`;
+            const prevStars = parseInt(localStorage.getItem(starKey) || '0', 10);
+            if (earnedStars > prevStars) {
+              localStorage.setItem(starKey, earnedStars.toString());
+            }
+          }
+          starsText = earnedStars > 0
+            ? `<div style="margin-top: 10px; font-size: 1.8rem; color: #fbbf24; filter: drop-shadow(0 2px 8px rgba(251, 191, 36, 0.5));">${'★'.repeat(earnedStars)}${'☆'.repeat(3 - earnedStars)} <span style="font-size: 1rem; font-weight: 800; color: #fff;">(${earnedStars}/3 Sao)</span></div>`
+            : `<div style="margin-top: 10px; font-size: 1rem; color: #ef4444; font-weight: 800;">❌ Thua cuộc (0 Sao) - Cần đạt ít nhất 1 Sao để mở khóa bài tiếp theo!</div>`;
+        } else {
+          starsText = earnedStars > 0
+            ? `<div style="margin-top: 10px; font-size: 1.8rem; color: #fbbf24; filter: drop-shadow(0 2px 8px rgba(251, 191, 36, 0.5));">${'★'.repeat(earnedStars)}${'☆'.repeat(3 - earnedStars)} <span style="font-size: 1rem; font-weight: 800; color: #fff;">(Hoàn thành xuất sắc)</span></div>`
+            : `<div style="margin-top: 10px; font-size: 1rem; color: #ef4444; font-weight: 800;">❌ Kết thúc lượt ôn tập - Hãy luyện tập lại để ghi nhớ từ vựng tốt hơn nhé!</div>`;
+        }
       }
+
+      const iconBadgeEl = document.getElementById('go-icon-badge');
+      if (iconBadgeEl) iconBadgeEl.textContent = resultBadge;
 
       document.getElementById('go-title').textContent = title;
       document.getElementById('go-desc').innerHTML = desc + starsText;
       document.getElementById('go-score').textContent = score;
-      renderReviewList();
+
+      // Auto select wrong tab if there are mistakes
+      if (wrongCount > 0) {
+        const tabWro = document.getElementById('quiz-tab-wrong');
+        const tabAll = document.getElementById('quiz-tab-all');
+        const tabCor = document.getElementById('quiz-tab-correct');
+        [tabAll, tabCor, tabWro].forEach(t => t && t.classList.remove('active'));
+        if (tabWro) tabWro.classList.add('active');
+        renderReviewList('wrong');
+      } else {
+        renderReviewList('all');
+      }
 
       // Next lesson actions (only in Roadmap mode)
       const actionsEl = document.getElementById('go-next-lesson-actions');

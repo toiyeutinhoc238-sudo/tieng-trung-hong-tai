@@ -414,15 +414,35 @@ document.addEventListener('DOMContentLoaded', async () => {
       goToRoadmapLevel(targetVersion, lvl);
       if (openVocabLesson) {
         setTimeout(() => window.openLessonVocabStudy(openVocabLesson), 250);
+        try {
+          const newUrl = new URL(window.location);
+          newUrl.searchParams.delete('openVocab');
+          window.history.replaceState({}, document.title, newUrl.toString());
+        } catch (e) {}
       } else if (openGrammarLesson) {
         setTimeout(() => window.openLessonGrammarModal(openGrammarLesson), 250);
+        try {
+          const newUrl = new URL(window.location);
+          newUrl.searchParams.delete('openGrammar');
+          window.history.replaceState({}, document.title, newUrl.toString());
+        } catch (e) {}
       }
     } else if (openVocabLesson) {
       goToRoadmapLevel(targetVersion, targetLevel || 1);
       setTimeout(() => window.openLessonVocabStudy(openVocabLesson), 250);
+      try {
+        const newUrl = new URL(window.location);
+        newUrl.searchParams.delete('openVocab');
+        window.history.replaceState({}, document.title, newUrl.toString());
+      } catch (e) {}
     } else if (openGrammarLesson) {
       goToRoadmapLevel(targetVersion, targetLevel || 1);
       setTimeout(() => window.openLessonGrammarModal(openGrammarLesson), 250);
+      try {
+        const newUrl = new URL(window.location);
+        newUrl.searchParams.delete('openGrammar');
+        window.history.replaceState({}, document.title, newUrl.toString());
+      } catch (e) {}
     } else if (targetTab === 'roadmap') {
       showRoadmapView();
     } else if (targetTab === 'exams') {
@@ -7481,14 +7501,6 @@ function renderLessonsList() {
         ` : ''}
       </div>
     `;
-
-    card.addEventListener('click', () => {
-      if (!isUnlocked) {
-        showToast(`🔒 Bạn cần hoàn thành Bài ${prevKey} để mở khóa Bài ${lessonKey}!`, true);
-        return;
-      }
-      startLessonStudy({ id: lessonKey, title }, sliceWords);
-    });
 
     grid.appendChild(card);
   });

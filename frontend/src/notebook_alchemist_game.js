@@ -336,6 +336,10 @@ export class AlchemistGameEngine {
     this.totalWordsCount = (this.rawWords || []).length;
     this.correctWordsSet = new Set();
 
+    // Play & Speech Modes
+    this.playMode = localStorage.getItem('alchemist_play_mode') || 'practice'; // 'practice' (infinite time & lives) or 'challenge'
+    this.autoSpeech = localStorage.getItem('alchemist_auto_speech') !== 'false'; // default true
+
     // Current Target & Cauldron State
     this.currentTarget = null;
     this.cauldronSlots = []; // items currently in cauldron
@@ -354,14 +358,25 @@ export class AlchemistGameEngine {
       <div class="alchemist-game-wrapper">
         <!-- TOP HUD -->
         <div class="alchemist-hud-bar">
-          <button type="button" id="alchemist-top-back-btn" class="btn btn-outline btn-sm" style="display: flex; align-items: center; gap: 6px; font-weight: 700; border-radius: 50px; background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); color: #ffffff;">
-            <i class="fa-solid fa-arrow-left"></i> Quay lại chọn game
+          <button type="button" id="alchemist-top-back-btn" class="btn btn-outline btn-sm" style="display: flex; align-items: center; gap: 6px; font-weight: 700; border-radius: 50px;">
+            <i class="fa-solid fa-arrow-left"></i> Đổi Game
           </button>
 
           <div class="hud-item-title">
             <span style="font-size: 1.4rem;">⚗️</span>
             <strong style="color: #c084fc;">LÒ LUYỆN CHIẾT TỰ</strong>
           </div>
+
+          <!-- Play Mode Toggle Button -->
+          <button type="button" id="alchemist-playmode-toggle-btn" class="btn btn-outline btn-sm" title="Chuyển chế độ Kiểm tra (Không tính tim) / Thi đấu (3 Tim)" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 800; border-radius: 50px; cursor: pointer; padding: 5px 12px;">
+            <span id="alchemist-mode-icon-text">${this.playMode === 'practice' ? '<i class="fa-solid fa-infinity" style="color: #10b981;"></i> <span style="color:#10b981;">Kiểm tra</span>' : '<i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> <span style="color:#fbbf24;">Thi đấu</span>'}</span>
+          </button>
+
+          <!-- Auto Speech Toggle Button -->
+          <button type="button" id="alchemist-speech-toggle-btn" class="btn btn-outline btn-sm" title="Bật/Tắt tự động đọc từ khi hiện câu hỏi" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 800; border-radius: 50px; cursor: pointer; padding: 5px 12px;">
+            <i class="fa-solid ${this.autoSpeech ? 'fa-volume-high' : 'fa-volume-xmark'}" id="alchemist-speech-icon" style="color: ${this.autoSpeech ? '#22c55e' : '#94a3b8'};"></i>
+            <span id="alchemist-speech-text" style="font-size: 0.78rem;">${this.autoSpeech ? 'Đọc' : 'Tắt đọc'}</span>
+          </button>
 
           <div class="hud-item hud-progress" title="Tiến độ màn / câu hiện tại">
             <i class="fa-solid fa-layer-group" style="color: #c084fc;"></i>
@@ -384,16 +399,17 @@ export class AlchemistGameEngine {
           <div class="hud-item hud-lives">
             <span class="hud-label">TIM:</span>
             <div class="hud-hearts" id="alchemist-lives-container">
-              <i class="fa-solid fa-heart" style="color: #ef4444;"></i>
-              <i class="fa-solid fa-heart" style="color: #ef4444;"></i>
-              <i class="fa-solid fa-heart" style="color: #ef4444;"></i>
+              ${this.playMode === 'practice'
+                ? '<span style="color: #10b981; font-weight: 900; font-size: 0.95rem;"><i class="fa-solid fa-infinity"></i> Vô Hạn</span>'
+                : '<i class="fa-solid fa-heart" style="color: #ef4444;"></i><i class="fa-solid fa-heart" style="color: #ef4444;"></i><i class="fa-solid fa-heart" style="color: #ef4444;"></i>'
+              }
             </div>
           </div>
 
-          <div class="hud-item hud-timer" title="Thời gian đếm ngược cho mỗi màn (25s/màn)">
+          <div class="hud-item hud-timer" title="Thời gian của màn chơi này">
             <i class="fa-solid fa-clock" style="color: #38bdf8;"></i>
             <span class="hud-label">THỜI GIAN:</span>
-            <span class="hud-value" id="alchemist-timer-val">00:25</span>
+            <span class="hud-value" id="alchemist-timer-val">${this.playMode === 'practice' ? '♾️ Vô hạn' : '00:25'}</span>
           </div>
 
           <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
@@ -540,6 +556,41 @@ export class AlchemistGameEngine {
     const fuseBtn = this.container.querySelector('#btn-fuse-cauldron');
     const audioBtn = this.container.querySelector('#alchemist-audio-hint-btn');
 
+    const modeToggleBtn = this.container.querySelector('#alchemist-playmode-toggle-btn');
+    if (modeToggleBtn) {
+      modeToggleBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.playMode = (this.playMode === 'practice') ? 'challenge' : 'practice';
+        localStorage.setItem('alchemist_play_mode', this.playMode);
+        const textEl = this.container.querySelector('#alchemist-mode-icon-text');
+        if (textEl) {
+          textEl.innerHTML = (this.playMode === 'practice')
+            ? '<i class="fa-solid fa-infinity" style="color: #10b981;"></i> <span style="color:#10b981;">Kiểm tra</span>'
+            : '<i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> <span style="color:#fbbf24;">Thi đấu</span>';
+        }
+        this.updateHUD();
+        this.startTimers();
+        this.showToast(this.playMode === 'practice' ? '🎯 Chế độ Kiểm tra (♾️ Không tính tim)' : '🏆 Chế độ Thi đấu (❤️❤️❤️ 3 Tim)');
+      });
+    }
+
+    const speechToggleBtn = this.container.querySelector('#alchemist-speech-toggle-btn');
+    if (speechToggleBtn) {
+      speechToggleBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.autoSpeech = !this.autoSpeech;
+        localStorage.setItem('alchemist_auto_speech', this.autoSpeech ? 'true' : 'false');
+        const icon = this.container.querySelector('#alchemist-speech-icon');
+        const text = this.container.querySelector('#alchemist-speech-text');
+        if (icon) {
+          icon.className = `fa-solid ${this.autoSpeech ? 'fa-volume-high' : 'fa-volume-xmark'}`;
+          icon.style.color = this.autoSpeech ? '#22c55e' : '#94a3b8';
+        }
+        if (text) text.textContent = this.autoSpeech ? 'Đọc' : 'Tắt đọc';
+        this.showToast(this.autoSpeech ? '🔊 Đã bật tự động đọc từ' : '🔇 Đã tắt tự động đọc');
+      });
+    }
+
     if (closeXBtn) {
       closeXBtn.addEventListener('click', () => {
         this.stopAndExit();
@@ -640,6 +691,7 @@ export class AlchemistGameEngine {
 
   startTimers() {
     if (this.timerInterval) clearInterval(this.timerInterval);
+    if (this.playMode === 'practice') return; // Practice mode has no timeout countdown
     this.timerInterval = setInterval(() => {
       if (!this.isRunning || this.isPaused || this.isProcessing) return;
       this.timeLeft--;
@@ -810,6 +862,11 @@ export class AlchemistGameEngine {
     }
     if (mnEl) {
       mnEl.textContent = this.currentTarget.meaning;
+    }
+
+    // Auto speech if enabled
+    if (this.autoSpeech && this.currentTarget && this.currentTarget.fullWord && window.speakText) {
+      try { window.speakText(this.currentTarget.fullWord); } catch(e) {}
     }
 
     // Configure Dynamic Cauldron Pot & Slots
@@ -1010,15 +1067,19 @@ export class AlchemistGameEngine {
       // FAIL!
       this.sfx.playFail();
       if (liquid) liquid.classList.add('fusion-fail');
-      this.lives--;
-      this.streak = 0;
-      this.showToast('💨 Hợp thể thất bại! Sai thành phần, hãy thử lại.', true);
+      if (this.playMode === 'practice') {
+        this.showToast('💨 Chưa đúng thành phần, hãy thử lại nhé! 🎯', false);
+      } else {
+        this.lives--;
+        this.streak = 0;
+        this.showToast('💨 Hợp thể thất bại! Sai thành phần (-1 Tim 💔)', true);
+      }
 
       setTimeout(() => {
         if (liquid) liquid.classList.remove('fusion-fail');
         this.clearCauldron();
         this.isProcessing = false;
-        if (this.lives <= 0) {
+        if (this.playMode === 'challenge' && this.lives <= 0) {
           this.gameOver(false);
         }
         this.updateHUD();
@@ -1040,19 +1101,23 @@ export class AlchemistGameEngine {
     }
 
     if (livesContainer) {
-      livesContainer.innerHTML = '';
-      for (let i = 0; i < this.maxLives; i++) {
-        const heart = document.createElement('i');
-        heart.className = i < this.lives ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
-        heart.style.color = i < this.lives ? '#ef4444' : 'rgba(255,255,255,0.3)';
-        livesContainer.appendChild(heart);
+      if (this.playMode === 'practice') {
+        livesContainer.innerHTML = '<span style="color: #10b981; font-weight: 900; font-size: 0.95rem;"><i class="fa-solid fa-infinity"></i> Vô Hạn</span>';
+      } else {
+        livesContainer.innerHTML = '';
+        for (let i = 0; i < this.maxLives; i++) {
+          const heart = document.createElement('i');
+          heart.className = i < this.lives ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
+          heart.style.color = i < this.lives ? '#ef4444' : 'rgba(255,255,255,0.3)';
+          livesContainer.appendChild(heart);
+        }
       }
     }
 
     if (timerVal) {
       const min = Math.floor(Math.max(0, this.timeLeft) / 60);
       const sec = Math.max(0, this.timeLeft) % 60;
-      timerVal.textContent = `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+      timerVal.textContent = this.playMode === 'practice' ? '♾️ Vô hạn' : `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
     }
   }
 

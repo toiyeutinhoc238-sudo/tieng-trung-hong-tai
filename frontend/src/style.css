@@ -11367,22 +11367,33 @@ html.dark .cannon-input-hint {
   transform: scale(1.1);
 }
 
-/* Common High Contrast HUD Styles */
+/* Common High Contrast Dual-Theme HUD Styles */
 .cannon-hud-bar,
 .snake-hud-bar,
 .mahjong-hud-bar,
 .alchemist-hud-bar,
 .rhythm-hud-bar {
-  background: #0f172a !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.12) !important;
-  border-radius: 16px !important;
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  border-radius: 18px !important;
   padding: 10px 18px !important;
   display: flex !important;
   align-items: center !important;
-  gap: 16px !important;
+  gap: 14px !important;
   flex-wrap: wrap !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+}
+
+html.dark .cannon-hud-bar,
+html.dark .snake-hud-bar,
+html.dark .mahjong-hud-bar,
+html.dark .alchemist-hud-bar,
+html.dark .rhythm-hud-bar {
+  background: #0f172a !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
   color: #f8fafc !important;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35) !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.45) !important;
 }
 
 .hud-item {
@@ -11391,35 +11402,60 @@ html.dark .cannon-input-hint {
   gap: 6px !important;
   font-size: 0.88rem !important;
   font-weight: 700 !important;
+  color: #1e293b !important;
+}
+
+html.dark .hud-item {
+  color: #f8fafc !important;
 }
 
 .hud-label {
-  color: #cbd5e1 !important;
+  color: #475569 !important;
   font-weight: 800 !important;
-  font-size: 0.78rem !important;
+  font-size: 0.76rem !important;
   letter-spacing: 0.05em !important;
   text-transform: uppercase !important;
 }
 
+html.dark .hud-label {
+  color: #94a3b8 !important;
+}
+
 .hud-value {
-  color: #38bdf8 !important;
+  color: #0284c7 !important;
   font-weight: 900 !important;
   font-size: 0.95rem !important;
 }
 
+html.dark .hud-value {
+  color: #38bdf8 !important;
+}
+
 .hud-score .hud-value {
+  color: #d97706 !important;
+}
+
+html.dark .hud-score .hud-value {
   color: #fbbf24 !important;
 }
 
 .hud-progress .hud-value {
+  color: #7c3aed !important;
+}
+
+html.dark .hud-progress .hud-value {
   color: #c084fc !important;
 }
 
 .hud-timer .hud-value {
-  color: #38bdf8 !important;
+  color: #0284c7 !important;
   font-family: monospace !important;
   font-size: 1.05rem !important;
   font-weight: 900 !important;
+}
+
+html.dark .hud-timer .hud-value {
+  color: #38bdf8 !important;
 }
 
 /* ==========================================================================
