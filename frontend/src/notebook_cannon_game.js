@@ -547,7 +547,19 @@ export class CannonGameEngine {
     // HIỂN THỊ NGHĨA TIẾNG VIỆT NGAY KHI BẮN TRÚNG
     this.showHitMeaningPopup(targetItem.x, targetItem.y, targetItem.wordObj, pts, isStar);
 
-    if(this.autoSpeech && window.speakText && zh){try{window.speakText(zh);}catch(e){}}
+    // PHÁT ÂM TIẾNG TRUNG CHUẨN KHI HIỆN ĐÁP ÁN NGHĨA TIẾNG VIỆT
+    if(zh){
+      if(typeof window.speakText === 'function'){
+        try { window.speakText(zh); } catch(e){}
+      } else if('speechSynthesis' in window){
+        try {
+          window.speechSynthesis.cancel();
+          const u = new SpeechSynthesisUtterance(zh);
+          u.lang = 'zh-CN';
+          window.speechSynthesis.speak(u);
+        } catch(e){}
+      }
+    }
     if(this.combo>0&&this.combo%10===0){
       if(this.lives<this.maxLives){this.lives++;this.music.playHeartRestore();this.showFloatingText(targetItem.x,targetItem.y-36,`💖 Chuỗi ${this.combo}! +1 Tim!`,'#ef4444');}
       else{this.music.playStreak();this.showFloatingText(targetItem.x,targetItem.y-36,`🔥 Chuỗi ${this.combo}! Thần Kỳ!`,'#f97316');}
@@ -597,19 +609,35 @@ export class CannonGameEngine {
     const wordObj=this.wordQueue.pop();if(!wordObj)return;
     const isStar=Math.random()<0.15;
     
-    // PHÂN KHU VỰC TRÁI / PHẢI ĐẢM BẢO 2 TỪ TUYỆT ĐỐI KHÔNG ĐÈ LÊN NHAU
-    let spawnX=60;
-    const halfW=pfW/2;
-    if(this.activeWords.length===0){
-      spawnX=Math.random()<0.5?(40+Math.random()*(halfW-180)):(halfW+20+Math.random()*(halfW-180));
-    }else{
-      const existingX=this.activeWords[0].x;
-      if(existingX<halfW){
-        spawnX=halfW+20+Math.random()*(halfW-180);
-      }else{
-        spawnX=40+Math.random()*(halfW-180);
+    // ĐẢM BẢO TUYỆT ĐỐI 100%: ĐO CHÍNH XÁC KÍCH THƯỚC DOCK KỸ NĂNG VÀ CHỪA VÙNG ĐỆM AN TOÀN
+    const skillsDock = this.container.querySelector('.phidao-floating-skills');
+    const dockWidth = skillsDock ? (skillsDock.offsetWidth + 25) : 110;
+    const estimatedCardWidth = 170; // Độ rộng tối đa của thẻ từ rơi
+    const minSafeX = 25;
+    const maxSafeX = Math.max(minSafeX + 50, pfW - dockWidth - estimatedCardWidth);
+    const availableWidth = maxSafeX - minSafeX;
+    
+    let spawnX = minSafeX;
+    if (availableWidth > 140) {
+      const half = availableWidth / 2;
+      if (this.activeWords.length === 0) {
+        spawnX = Math.random() < 0.5
+          ? (minSafeX + Math.random() * (half - 15))
+          : (minSafeX + half + Math.random() * (half - 15));
+      } else {
+        const prevX = this.activeWords[0].x;
+        if (prevX < minSafeX + half) {
+          spawnX = minSafeX + half + Math.random() * (half - 15);
+        } else {
+          spawnX = minSafeX + Math.random() * (half - 15);
+        }
       }
+    } else {
+      spawnX = minSafeX + Math.random() * Math.max(10, availableWidth);
     }
+
+    // Khóa chặn biên an toàn tuyệt đối
+    spawnX = Math.max(minSafeX, Math.min(maxSafeX, Math.round(spawnX)));
     
     const spawnY=-25;
     const speed=11; // TỐC ĐỘ RƠI ĐỒNG ĐỀU, ÊM ÁI VÀ KHÔNG BAO GIỜ ĐÈ NHAU

@@ -197,17 +197,17 @@ export class SnakeGameEngine {
               </button>
             </div>
 
-            <!-- TARGET WORD PROMPT BANNER (COMPACT NO PINYIN AS REQUESTED) -->
+            <!-- TARGET WORD PROMPT BANNER (STICKY HEADER DIRECTLY ABOVE CANVAS) -->
             <div class="snake-target-banner" id="snake-target-card">
-              <div class="target-badge-label"><i class="fa-solid fa-bullseye"></i> CHỮ HÁN CẦN TÌM NGHĨA VIỆT</div>
-              <div class="target-word-row">
+              <div class="target-left-group">
+                <span class="target-badge-label"><i class="fa-solid fa-bullseye"></i> ĐỀ BÀI:</span>
                 <span class="target-zh" id="target-zh-text">勤奋</span>
                 <button type="button" id="snake-speak-target-btn" class="target-speak-btn" title="Bấm để nghe phát âm">
                   <i class="fa-solid fa-volume-high"></i>
                 </button>
               </div>
               <div class="target-action-hint">
-                <i class="fa-solid fa-apple-whole" style="color: #ef4444;"></i> Hãy lái rắn ăn quả có <strong>NGHĨA TIẾNG VIỆT ĐÚNG</strong> bên dưới!
+                <i class="fa-solid fa-apple-whole" style="color: #fde047;"></i> Lái rắn ăn quả có <strong>NGHĨA TIẾNG VIỆT ĐÚNG</strong>!
               </div>
             </div>
 
@@ -411,13 +411,17 @@ export class SnakeGameEngine {
     this.ctx = this.canvas.getContext('2d');
 
     const container = this.container.querySelector('#snake-canvas-container');
-    const containerW = container ? container.clientWidth : 680;
-    const width = Math.min(680, Math.max(300, containerW || 600));
-    const height = Math.round(width * (this.rows / this.cols));
+    const containerW = container ? container.clientWidth : 540;
+    
+    // TỐI ƯU CHIỀU CAO CANVAS: TỐI ĐA 320PX ĐỂ 100% CẢ BẢNG ĐỀ BÀI VÀ CANVAS NẰM TRỌN TRÊN 1 MÀN HÌNH
+    const maxAvailableH = Math.max(260, Math.min(320, window.innerHeight - 240));
+    const width = Math.min(540, Math.max(280, containerW || 500));
+    const height = Math.min(maxAvailableH, Math.round(width * (this.rows / this.cols)));
+    const finalW = Math.round(height * (this.cols / this.rows));
 
-    this.canvas.width = width;
+    this.canvas.width = finalW;
     this.canvas.height = height;
-    this.cellSize = width / this.cols;
+    this.cellSize = finalW / this.cols;
   }
 
   bindEvents() {
@@ -830,21 +834,21 @@ export class SnakeGameEngine {
     const q = this.currentQuestion;
 
     if (mode === 'zh-vi') {
-      if (labelEl) labelEl.innerHTML = `<i class="fa-solid fa-bullseye"></i> CHỮ HÁN CẦN TÌM NGHĨA VIỆT`;
+      if (labelEl) labelEl.innerHTML = `<i class="fa-solid fa-bullseye"></i> ĐỀ BÀI:`;
       if (zhEl) zhEl.textContent = q.word;
-      if (hintEl) hintEl.innerHTML = `<i class="fa-solid fa-apple-whole" style="color: #ef4444;"></i> Hãy lái rắn ăn quả có <strong>NGHĨA TIẾNG VIỆT ĐÚNG</strong> bên dưới!`;
+      if (hintEl) hintEl.innerHTML = `<i class="fa-solid fa-apple-whole" style="color: #fde047;"></i> Lái rắn ăn quả có <strong>NGHĨA VIỆT ĐÚNG</strong>!`;
     } else if (mode === 'vi-zh') {
-      if (labelEl) labelEl.innerHTML = `<i class="fa-solid fa-bullseye"></i> NGHĨA VIỆT CẦN TÌM CHỮ HÁN`;
+      if (labelEl) labelEl.innerHTML = `<i class="fa-solid fa-bullseye"></i> ĐỀ BÀI:`;
       if (zhEl) zhEl.textContent = this.cleanFormat(q.meaning);
-      if (hintEl) hintEl.innerHTML = `<i class="fa-solid fa-apple-whole" style="color: #ef4444;"></i> Hãy lái rắn ăn quả có <strong>CHỮ HÁN ĐÚNG</strong> bên dưới!`;
+      if (hintEl) hintEl.innerHTML = `<i class="fa-solid fa-apple-whole" style="color: #fde047;"></i> Lái rắn ăn quả có <strong>CHỮ HÁN ĐÚNG</strong>!`;
     } else if (mode === 'pinyin-zh') {
-      if (labelEl) labelEl.innerHTML = `<i class="fa-solid fa-bullseye"></i> NGHĨA VIỆT CẦN TÌM CHỮ HÁN`;
+      if (labelEl) labelEl.innerHTML = `<i class="fa-solid fa-bullseye"></i> ĐỀ BÀI:`;
       if (zhEl) zhEl.textContent = this.cleanFormat(q.meaning);
-      if (hintEl) hintEl.innerHTML = `<i class="fa-solid fa-apple-whole" style="color: #ef4444;"></i> Hãy lái rắn ăn quả có <strong>CHỮ HÁN ĐÚNG</strong> bên dưới!`;
+      if (hintEl) hintEl.innerHTML = `<i class="fa-solid fa-apple-whole" style="color: #fde047;"></i> Lái rắn ăn quả có <strong>CHỮ HÁN ĐÚNG</strong>!`;
     } else if (mode === 'pinyin-vi') {
-      if (labelEl) labelEl.innerHTML = `<i class="fa-solid fa-bullseye"></i> CHỮ HÁN CẦN TÌM NGHĨA VIỆT`;
+      if (labelEl) labelEl.innerHTML = `<i class="fa-solid fa-bullseye"></i> ĐỀ BÀI:`;
       if (zhEl) zhEl.textContent = q.word;
-      if (hintEl) hintEl.innerHTML = `<i class="fa-solid fa-apple-whole" style="color: #ef4444;"></i> Hãy lái rắn ăn quả có <strong>NGHĨA TIẾNG VIỆT ĐÚNG</strong> bên dưới!`;
+      if (hintEl) hintEl.innerHTML = `<i class="fa-solid fa-apple-whole" style="color: #fde047;"></i> Lái rắn ăn quả có <strong>NGHĨA VIỆT ĐÚNG</strong>!`;
     }
 
     if (this.autoSpeech && q && q.word && typeof window.speakText === 'function') {

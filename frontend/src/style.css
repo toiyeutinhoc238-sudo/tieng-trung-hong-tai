@@ -11537,8 +11537,8 @@ html.dark .hud-level-badge {
 
 .snake-arena-layout {
   display: grid;
-  grid-template-columns: 1fr 300px;
-  gap: 18px;
+  grid-template-columns: 1fr 250px;
+  gap: 12px;
   align-items: start;
 }
 
@@ -11551,7 +11551,7 @@ html.dark .hud-level-badge {
 .snake-battle-column {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .snake-mode-selector-bar {
@@ -11603,40 +11603,52 @@ html.dark .snake-mode-btn:hover {
 }
 
 .snake-target-banner {
-  background: linear-gradient(135deg, rgba(2, 132, 199, 0.08), rgba(14, 165, 233, 0.15));
-  border: 1.5px solid #0284c7;
+  position: sticky;
+  top: 0;
+  z-index: 25;
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  border: 2px solid #38bdf8;
   border-radius: 14px;
   padding: 6px 14px;
-  text-align: center;
-  box-shadow: 0 3px 10px rgba(2, 132, 199, 0.08);
+  box-shadow: 0 4px 16px rgba(2, 132, 199, 0.35);
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 2px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: #ffffff;
+  margin-bottom: 2px;
 }
 
 html.dark .snake-target-banner {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95));
+  background: linear-gradient(135deg, #0f172a, #1e293b);
   border-color: #38bdf8;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+}
+
+.target-left-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .target-badge-label {
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.05em;
-  color: #0284c7;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: #0369a1;
   text-transform: uppercase;
-  background: rgba(2, 132, 199, 0.12);
-  padding: 2px 10px;
+  background: #ffffff;
+  padding: 3px 10px;
   border-radius: 50px;
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 html.dark .target-badge-label {
-  color: #38bdf8;
-  background: rgba(56, 189, 248, 0.15);
+  color: #0f172a;
+  background: #38bdf8;
 }
 
 .target-word-row {
@@ -11644,18 +11656,19 @@ html.dark .target-badge-label {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin: 1px 0;
+  margin: 0;
 }
 
 .target-zh {
-  font-size: 1.75rem;
+  font-size: 1.85rem;
   font-weight: 900;
-  color: #0f172a;
+  color: #fef08a !important; /* Vàng sáng rực rỡ nổi bật tuyệt đối */
   font-family: var(--font-hanzi, "Noto Sans SC", sans-serif);
-  line-height: 1.15;
+  line-height: 1;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
 }
 html.dark .target-zh {
-  color: #ffffff;
+  color: #fef08a !important;
 }
 
 .target-pinyin {
@@ -11663,31 +11676,31 @@ html.dark .target-zh {
 }
 
 .target-speak-btn {
-  background: rgba(2, 132, 199, 0.12);
-  border: 1.5px solid rgba(2, 132, 199, 0.35);
-  color: #0284c7;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #ffffff;
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
-  margin-left: 4px;
+  margin-left: 2px;
 }
 .target-speak-btn:hover {
-  background: #0284c7;
-  color: #ffffff;
+  background: #ffffff;
+  color: #0284c7;
   transform: scale(1.1);
 }
 .target-speak-btn:active {
   transform: scale(0.92);
 }
 html.dark .target-speak-btn {
-  background: rgba(56, 189, 248, 0.18);
-  border-color: rgba(56, 189, 248, 0.4);
+  background: rgba(56, 189, 248, 0.2);
+  border-color: rgba(56, 189, 248, 0.5);
   color: #38bdf8;
 }
 html.dark .target-speak-btn:hover {
@@ -11696,31 +11709,36 @@ html.dark .target-speak-btn:hover {
 }
 
 .target-action-hint {
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-weight: 700;
-  color: #475569;
+  color: #ffffff;
   display: flex;
   align-items: center;
   gap: 4px;
+  background: rgba(0, 0, 0, 0.22);
+  padding: 3px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 html.dark .target-action-hint {
-  color: #cbd5e1;
+  color: #f1f5f9;
+  background: rgba(0, 0, 0, 0.4);
 }
 
 .target-action-hint strong {
-  color: #ef4444;
+  color: #fde047;
 }
 
 .snake-canvas-container {
   position: relative;
-  background: #f8fafc;
-  border-radius: 20px;
+  background: #ffffff;
+  border-radius: 16px;
   overflow: hidden;
-  border: 2px solid #e2e8f0;
+  border: 2px solid #0284c7;
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
   touch-action: none !important;
   user-select: none !important;
   -webkit-user-select: none !important;

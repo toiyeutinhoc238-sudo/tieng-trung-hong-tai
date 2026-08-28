@@ -95,9 +95,9 @@
     };
 
     function updateToggleBtns(isLight) {
-      var btns = document.querySelectorAll('#theme-toggle, #theme-toggle-btn, .theme-toggle-btn, .theme-toggle-btn-top');
+      var btns = document.querySelectorAll('#theme-toggle, #theme-toggle-btn');
       btns.forEach(function (btn) {
-        if (btn.id === 'particle-toggle-btn' || btn.classList.contains('particle-toggle-btn')) return;
+        if (btn.id === 'particle-toggle-btn' || btn.classList.contains('particle-toggle-btn') || btn.id === 'hud-toggle-speech' || btn.id === 'hud-toggle-mode') return;
         btn.innerHTML = isLight
           ? '<i class="fa-solid fa-moon" style="color:#d97706;"></i>'
           : '<i class="fa-solid fa-sun" style="color:#f59e0b;"></i>';
@@ -537,6 +537,27 @@
       overflow-y: auto;
     }
 
+    .hud-action-btn-top {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #fbbf24;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    html.light-mode .hud-action-btn-top {
+      background: rgba(255, 255, 255, 0.85) !important;
+      border: 1px solid rgba(203, 213, 225, 0.8) !important;
+      color: #0f172a !important;
+    }
+
     .question-card {
       flex: 0 0 auto;
       background: rgba(255, 255, 255, 0.35);
@@ -545,9 +566,9 @@
       border: 1px solid rgba(255, 255, 255, 0.75);
       color: #0f172a;
       border-radius: 18px;
-      padding: 30px 16px 20px 16px;
+      padding: 44px 18px 18px 18px;
       text-align: center;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       position: relative;
       box-shadow: 0 8px 25px rgba(31, 38, 135, 0.08);
     }
@@ -563,17 +584,19 @@
 
     .q-type-badge {
       position: absolute;
-      top: 12px;
+      top: 10px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(255, 255, 255, 0.65);
+      background: rgba(255, 255, 255, 0.85);
       color: #0f172a;
-      padding: 6px 16px;
+      padding: 4px 14px;
       border-radius: 20px;
-      font-size: 0.85rem;
+      font-size: 0.78rem;
       font-weight: 800;
       text-transform: uppercase;
-      border: 1px solid rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      white-space: nowrap;
+      letter-spacing: 0.03em;
     }
 
     html.dark .q-type-badge {
@@ -790,7 +813,7 @@
         max-width: 980px !important;
       }
       .question-card {
-        padding: 22px 24px !important;
+        padding: 46px 24px 20px !important;
         margin-bottom: 16px !important;
       }
       .q-text {
@@ -994,13 +1017,13 @@
       </div>
       <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
         <!-- AUTO SPEECH TOGGLE BUTTON -->
-        <button type="button" id="hud-toggle-speech" class="theme-toggle-btn-top" title="Bật/Tắt tự động đọc từ khi hiện câu hỏi" style="padding: 6px 12px; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+        <button type="button" id="hud-toggle-speech" class="hud-action-btn-top" title="Bật/Tắt tự động đọc từ khi hiện câu hỏi" style="padding: 6px 12px; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
           <i class="fa-solid fa-volume-high" id="hud-speech-icon" style="color: #22c55e;"></i>
           <span id="hud-speech-text" style="font-size: 0.78rem; font-weight: 800;">Đọc Tự Động</span>
         </button>
 
         <!-- PLAY MODE TOGGLE BUTTON -->
-        <button type="button" id="hud-toggle-mode" class="theme-toggle-btn-top" title="Chuyển chế độ Kiểm tra ♾️ / Thi đấu ❤️" style="padding: 6px 12px; font-size: 0.82rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+        <button type="button" id="hud-toggle-mode" class="hud-action-btn-top" title="Chuyển chế độ Kiểm tra ♾️ / Thi đấu ❤️" style="padding: 6px 12px; font-size: 0.82rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
           <span id="hud-mode-text"><i class="fa-solid fa-infinity" style="color: #10b981;"></i> Kiểm tra</span>
         </button>
 
@@ -1956,13 +1979,6 @@
 
     function startTimer() {
       clearInterval(timerInterval);
-      if (gamePlayMode === 'practice') {
-        // Practice / Kiểm Tra mode: Unlimited time, student answers at own pace without auto-jump
-        timerBar.style.width = '100%';
-        timerBar.style.backgroundColor = '#10b981';
-        return;
-      }
-
       timer = timerMax;
       timerBar.style.width = '100%';
       timerBar.style.backgroundColor = '#26890c';
