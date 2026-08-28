@@ -1050,8 +1050,8 @@ export class AlchemistGameEngine {
         this.correctWordsSet.add(this.currentTarget.fullWord);
       }
 
-      // Pronounce the word
-      if (window.speakText) {
+      // Pronounce the word only if auto speech is enabled
+      if (this.autoSpeech && window.speakText) {
         try { window.speakText(this.currentTarget.fullWord); } catch(e) {}
       }
 

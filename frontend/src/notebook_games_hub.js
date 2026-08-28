@@ -232,7 +232,6 @@ export class NotebookGamesHub {
       const params = new URLSearchParams();
       params.set('source', 'notebook');
       params.set('no_score', 'true');
-      params.set('autostart', 'true');
       if (this.notebookKey) {
         params.set('notebook', this.notebookKey);
         if (this.notebookKey.startsWith('hsk:')) {
@@ -246,7 +245,7 @@ export class NotebookGamesHub {
       if (this.hskVersion) params.set('version', this.hskVersion);
 
       contentArea.innerHTML = `
-        <div class="embedded-quiz-wrapper" style="width: 100%; display: flex; flex-direction: column; gap: 12px;">
+        <div class="embedded-quiz-wrapper" style="width: 100%; display: flex; flex-direction: column; gap: 10px;">
           <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 14px; padding: 8px 16px;">
             <button type="button" id="btn-quiz-return-hub" class="btn btn-secondary btn-sm" style="display: flex; align-items: center; gap: 6px; border-radius: 50px; font-weight: 700; cursor: pointer;">
               <i class="fa-solid fa-arrow-left"></i> Đổi Trò Chơi
@@ -258,7 +257,7 @@ export class NotebookGamesHub {
               <i class="fa-solid fa-book-bookmark"></i> Sổ Tay
             </button>
           </div>
-          <iframe id="notebook-quiz-iframe" src="/quiz-game.html?${params.toString()}" style="width: 100%; height: 750px; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 18px; background: #0f172a;" frameborder="0" allow="autoplay"></iframe>
+          <iframe id="notebook-quiz-iframe" src="/quiz-game.html?${params.toString()}" style="width: 100%; height: 640px; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 18px; background: #0f172a;" frameborder="0" allow="autoplay"></iframe>
         </div>
       `;
 

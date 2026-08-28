@@ -624,10 +624,6 @@ export class MahjongGameEngine {
     const clickedItem = this.grid[r][c];
     if (!clickedItem) return;
 
-    if (this.autoSpeech && clickedItem.word && typeof window.speakText === 'function') {
-      window.speakText(clickedItem.word);
-    }
-
     if (!this.selectedTile) {
       // First tile selected
       this.sfx.playSelect();
@@ -774,12 +770,11 @@ export class MahjongGameEngine {
     // Draw Smooth Neon Laser beam
     this.drawLaserPath(path);
 
-    // Pronounce Hanzi
-    if (item1 && item1.word) {
-      this.clearedWordsSet.add(item1.word);
-      if (window.speakText) {
+    // Pronounce Hanzi ONLY when auto-speech is enabled
+    if (this.autoSpeech && item1 && item1.word && typeof window.speakText === 'function') {
+      try {
         window.speakText(item1.word);
-      }
+      } catch (e) {}
     }
 
     // Vanish animation after brief laser show

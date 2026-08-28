@@ -497,14 +497,13 @@ export class CannonGameEngine {
       w.el.classList.toggle('is-targeted',isTgt);
       const prog=w.el.querySelector('.pinyin-prog');
       if(prog){
-        const norm=normalizePinyin(w.wordObj.pinyin);
         const pyTone=w.wordObj.pinyin||'';
-        const tagHtml = (this.displayMode === 'both') ? `<small class="word-py-tone-tag">(${pyTone})</small>` : '';
-        if(isTgt&&this.typedBuffer){
-          const rem=norm.slice(this.typedBuffer.length);
-          prog.innerHTML=`<span class="py-typed">${this.typedBuffer}</span><span class="py-rem">${rem}</span> ${tagHtml}`;
+        if(this.displayMode === 'listen' || this.displayMode === 'hanzi' || this.displayMode === 'pinyin'){
+          prog.style.display = 'none';
         } else {
-          prog.innerHTML=`<span class="py-rem">${norm}</span> ${tagHtml}`;
+          // 'both': Chỉ hiển thị chữ màu xanh Pinyin có dấu (BỎ chữ màu đen)
+          prog.style.display = 'flex';
+          prog.innerHTML = `<span class="word-py-tone-tag" style="color:#0284c7;font-weight:800;font-size:0.95rem;">${pyTone}</span>`;
         }
       }
     });
@@ -548,7 +547,7 @@ export class CannonGameEngine {
     // HIỂN THỊ NGHĨA TIẾNG VIỆT NGAY KHI BẮN TRÚNG
     this.showHitMeaningPopup(targetItem.x, targetItem.y, targetItem.wordObj, pts, isStar);
 
-    if(window.speakText&&zh){try{window.speakText(zh);}catch(e){}}
+    if(this.autoSpeech && window.speakText && zh){try{window.speakText(zh);}catch(e){}}
     if(this.combo>0&&this.combo%10===0){
       if(this.lives<this.maxLives){this.lives++;this.music.playHeartRestore();this.showFloatingText(targetItem.x,targetItem.y-36,`💖 Chuỗi ${this.combo}! +1 Tim!`,'#ef4444');}
       else{this.music.playStreak();this.showFloatingText(targetItem.x,targetItem.y-36,`🔥 Chuỗi ${this.combo}! Thần Kỳ!`,'#f97316');}
@@ -623,26 +622,26 @@ export class CannonGameEngine {
     if(this.displayMode === 'hanzi'){
       cardContent = `
         <div class="word-zh">${isStar?'✨ ':''}${zh}</div>
-        <div class="pinyin-prog"><span class="py-rem">${norm}</span></div>
+        <div class="pinyin-prog" style="display:none;"></div>
       `;
     }else if(this.displayMode === 'pinyin'){
       cardContent = `
-        <div class="word-zh" style="font-size:1.4rem;color:#0284c7 !important;">${isStar?'✨ ':''}${py}</div>
-        <div class="pinyin-prog"><span class="py-rem">${norm}</span></div>
+        <div class="word-zh" style="font-size:1.5rem;color:#0284c7 !important;">${isStar?'✨ ':''}${py}</div>
+        <div class="pinyin-prog" style="display:none;"></div>
       `;
     }else if(this.displayMode === 'listen'){
       cardContent = `
         <div class="word-zh" style="font-size:1.8rem;color:#0284c7 !important;">🎧 ❓</div>
-        <div class="pinyin-prog"><span class="py-rem">${norm}</span></div>
+        <div class="pinyin-prog" style="display:none;"></div>
       `;
-      if(typeof window.speakText === 'function' && zh){
+      if(this.autoSpeech && typeof window.speakText === 'function' && zh){
         try { window.speakText(zh); } catch(e){}
       }
     }else{
-      // 'both': Cả Chữ Hán to rõ và 1 dòng Pinyin duy nhất
+      // 'both': Cả Chữ Hán và Pinyin màu xanh có dấu (BỎ chữ màu đen norm)
       cardContent = `
         <div class="word-zh">${isStar?'✨ ':''}${zh}</div>
-        <div class="pinyin-prog"><span class="py-rem">${norm}</span> <small class="word-py-tone-tag">(${py})</small></div>
+        <div class="pinyin-prog"><span class="word-py-tone-tag" style="color:#0284c7;font-weight:800;font-size:0.95rem;">${py}</span></div>
       `;
     }
 
