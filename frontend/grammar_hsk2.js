@@ -33,7 +33,7 @@ export const HSK2_STRUCTURED_GRAMMAR = [
           },
           {
             "rawZh": "我们去买票吧。 (Chúng ta đi mua vé đi.)",
-            "zh": "Chúng ta đi mua vé đi.",
+            "zh": "我们去买票吧。",
             "pinyin": "Wǒmen qù mǎi piào ba.",
             "vi": "Chúng ta đi mua vé đi."
           },

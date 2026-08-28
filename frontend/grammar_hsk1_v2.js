@@ -2,8 +2,8 @@ export const HSK1_V2_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 1,
     "lessonKey": "Bài 1",
-    "lessonTitleZh": "Bài 1",
-    "lessonTitleFull": "Bài 1 (HSK 1 v2.0)",
+    "lessonTitleZh": "你好",
+    "lessonTitleFull": "Bài 1: 你好",
     "grammarPoints": [
       {
         "id": "hsk1_20_b1_g1",
@@ -61,10 +61,54 @@ export const HSK1_V2_STRUCTURED_GRAMMAR = [
     ]
   },
   {
+    "lessonId": 2,
+    "lessonKey": "Bài 2",
+    "lessonTitleZh": "谢谢你",
+    "lessonTitleFull": "Bài 2: 谢谢你",
+    "grammarPoints": [
+      {
+        "id": "hsk1_20_b2_g1",
+        "num": 1,
+        "title": "Cách nói lời cảm ơn và đáp lại lời cảm ơn (谢谢 / 不用谢 / 不客气)",
+        "explanation": "Trong tiếng Trung, khi muốn cảm ơn ai đó, ta dùng \"谢谢\" (xièxie) hoặc \"谢谢你\" (xièxie nǐ). Để đáp lại lời cảm ơn một cách lịch sự, ta dùng \"不客气\" (bú kèqi - Đừng khách sáo) hoặc \"不用谢\" (bú yòng xiè - Không cần cảm ơn).",
+        "formula": "Lời cảm ơn: 谢谢 (你 / 您) !\nĐáp lại: 不客气！ / 不用谢！",
+        "note": "Khi từ \"不\" (bù - thanh 4) đứng trước một từ mang thanh 4 (như 客 kè, 用 yòng), \"不\" sẽ biến điệu đọc thành thanh 2: /bú/.",
+        "examples": [
+          {
+            "rawZh": "谢谢！ (Cảm ơn!)",
+            "zh": "谢谢！",
+            "pinyin": "Xièxie!",
+            "vi": "Cảm ơn!"
+          },
+          {
+            "rawZh": "不客气！ (Đừng khách sáo / Không có gì!)",
+            "zh": "不客气！",
+            "pinyin": "Bú kèqi!",
+            "vi": "Đừng khách sáo! / Không có gì!"
+          },
+          {
+            "rawZh": "不用谢！ (Không cần cảm ơn!)",
+            "zh": "不用谢！",
+            "pinyin": "Bú yòng xiè!",
+            "vi": "Không cần cảm ơn!"
+          },
+          {
+            "rawZh": "再见！ (Tạm biệt!)",
+            "zh": "再见！",
+            "pinyin": "Zàijiàn!",
+            "vi": "Tạm biệt!"
+          }
+        ],
+        "tables": null,
+        "exercises": null
+      }
+    ]
+  },
+  {
     "lessonId": 3,
     "lessonKey": "Bài 3",
-    "lessonTitleZh": "Bài 3",
-    "lessonTitleFull": "Bài 3 (HSK 1 v2.0)",
+    "lessonTitleZh": "你叫什么名字",
+    "lessonTitleFull": "Bài 3: 你叫什么名字",
     "grammarPoints": [
       {
         "id": "hsk1_20_b3_g1",
@@ -151,8 +195,8 @@ export const HSK1_V2_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 4,
     "lessonKey": "Bài 4",
-    "lessonTitleZh": "Bài 4",
-    "lessonTitleFull": "Bài 4 (HSK 1 v2.0)",
+    "lessonTitleZh": "她是我的汉语老师",
+    "lessonTitleFull": "Bài 4: 她是我的汉语老师",
     "grammarPoints": [
       {
         "id": "hsk1_20_b4_g1",
@@ -287,8 +331,8 @@ export const HSK1_V2_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 5,
     "lessonKey": "Bài 5",
-    "lessonTitleZh": "Bài 5",
-    "lessonTitleFull": "Bài 5 (HSK 1 v2.0)",
+    "lessonTitleZh": "她女儿今年二十岁",
+    "lessonTitleFull": "Bài 5: 她女儿今年二十岁",
     "grammarPoints": [
       {
         "id": "hsk1_20_b5_g1",
@@ -665,8 +709,8 @@ export const HSK1_V2_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 6,
     "lessonKey": "Bài 6",
-    "lessonTitleZh": "Bài 6",
-    "lessonTitleFull": "Bài 6 (HSK 1 v2.0)",
+    "lessonTitleZh": "我会说汉语",
+    "lessonTitleFull": "Bài 6: 我会说汉语",
     "grammarPoints": [
       {
         "id": "hsk1_20_b6_g1",
@@ -802,8 +846,8 @@ export const HSK1_V2_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 7,
     "lessonKey": "Bài 7",
-    "lessonTitleZh": "Bài 7",
-    "lessonTitleFull": "Bài 7 (HSK 1 v2.0)",
+    "lessonTitleZh": "今天几号？",
+    "lessonTitleFull": "Bài 7: 今天几号？",
     "grammarPoints": [
       {
         "id": "hsk1_20_b7_g1",
@@ -1041,8 +1085,8 @@ export const HSK1_V2_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 8,
     "lessonKey": "Bài 8",
-    "lessonTitleZh": "Bài 8",
-    "lessonTitleFull": "Bài 8 (HSK 1 v2.0)",
+    "lessonTitleZh": "我想喝茶",
+    "lessonTitleFull": "Bài 8: 我想喝茶",
     "grammarPoints": [
       {
         "id": "hsk1_20_b8_g1",
@@ -1345,8 +1389,8 @@ export const HSK1_V2_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 9,
     "lessonKey": "Bài 9",
-    "lessonTitleZh": "Bài 9",
-    "lessonTitleFull": "Bài 9 (HSK 1 v2.0)",
+    "lessonTitleZh": "你儿子在哪儿工作？",
+    "lessonTitleFull": "Bài 9: 你儿子在哪儿工作？",
     "grammarPoints": [
       {
         "id": "hsk1_20_b9_g1",
@@ -1517,8 +1561,8 @@ export const HSK1_V2_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 10,
     "lessonKey": "Bài 10",
-    "lessonTitleZh": "Bài 10",
-    "lessonTitleFull": "Bài 10 (HSK 1 v2.0)",
+    "lessonTitleZh": "我能坐这儿吗？",
+    "lessonTitleFull": "Bài 10: 我能坐这儿吗？",
     "grammarPoints": [
       {
         "id": "hsk1_20_b10_g1",
@@ -1713,8 +1757,8 @@ export const HSK1_V2_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 11,
     "lessonKey": "Bài 11",
-    "lessonTitleZh": "Bài 11",
-    "lessonTitleFull": "Bài 11 (HSK 1 v2.0)",
+    "lessonTitleZh": "现在几点？",
+    "lessonTitleFull": "Bài 11: 现在几点？",
     "grammarPoints": [
       {
         "id": "hsk1_20_b11_g1",
@@ -1856,8 +1900,8 @@ export const HSK1_V2_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 12,
     "lessonKey": "Bài 12",
-    "lessonTitleZh": "Bài 12",
-    "lessonTitleFull": "Bài 12 (HSK 1 v2.0)",
+    "lessonTitleZh": "明天天气怎么样？",
+    "lessonTitleFull": "Bài 12: 明天天气怎么样？",
     "grammarPoints": [
       {
         "id": "hsk1_20_b12_g1",
@@ -1979,8 +2023,8 @@ export const HSK1_V2_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 13,
     "lessonKey": "Bài 13",
-    "lessonTitleZh": "Bài 13",
-    "lessonTitleFull": "Bài 13 (HSK 1 v2.0)",
+    "lessonTitleZh": "他在学做中国菜呢",
+    "lessonTitleFull": "Bài 13: 他在学做中国菜呢",
     "grammarPoints": [
       {
         "id": "hsk1_20_b13_g1",
@@ -2053,8 +2097,8 @@ export const HSK1_V2_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 14,
     "lessonKey": "Bài 14",
-    "lessonTitleZh": "Bài 14",
-    "lessonTitleFull": "Bài 14 (HSK 1 v2.0)",
+    "lessonTitleZh": "她买了不少衣服",
+    "lessonTitleFull": "Bài 14: 她买了不少衣服",
     "grammarPoints": [
       {
         "id": "hsk1_20_b14_g1",
@@ -2166,8 +2210,8 @@ export const HSK1_V2_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 15,
     "lessonKey": "Bài 15",
-    "lessonTitleZh": "Bài 15",
-    "lessonTitleFull": "Bài 15 (HSK 1 v2.0)",
+    "lessonTitleZh": "我是坐飞机来的",
+    "lessonTitleFull": "Bài 15: 我是坐飞机来的",
     "grammarPoints": [
       {
         "id": "hsk1_20_b15_g1",

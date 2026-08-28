@@ -2,8 +2,8 @@ export const HSK3_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 1,
     "lessonKey": "Bài 1",
-    "lessonTitleZh": "Bài 1",
-    "lessonTitleFull": "Bài 1 (HSK 3 v3.0)",
+    "lessonTitleZh": "我们去机场接你们",
+    "lessonTitleFull": "Bài 1: 我们去机场接你们",
     "grammarPoints": [
       {
         "id": "hsk3_b1_g1",
@@ -175,16 +175,16 @@ export const HSK3_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 2,
     "lessonKey": "Bài 2",
-    "lessonTitleZh": "Bài 2",
-    "lessonTitleFull": "Bài 2 (HSK 3 v3.0)",
+    "lessonTitleZh": "你们想吃什么就点什么",
+    "lessonTitleFull": "Bài 2: 你们想吃什么就点什么",
     "grammarPoints": [
       {
         "id": "hsk3_b2_g1",
         "num": 1,
-        "title": "Cách dùng",
-        "explanation": "Cấu trúc này được dùng để nối hai tính từ hoặc hai động từ (thường là động từ chỉ trạng thái hoặc tâm lý), diễn tả sự đồng thời của hai đặc điểm hoặc hai hành động trên cùng một chủ thể.\n• Ý nghĩa: \"Vừa... vừa...\" hoặc \"Vừa... lại vừa...\".\nCông thức\n• Khẳng định: Chủ ngữ + 又 + Tính từ+ 又 + Tính từ\n• Tính chất đồng nhất (Quy tắc quan trọng nhất):Hai vế của \"又...又...\" phải cùng một sắc thái.Nếu vế trước là tích cực (đẹp, ngon, tốt), vế sau cũng phải tích cực.Nếu vế trước là tiêu cực (đắt, xấu, mệt), vế sau cũng phải tiêu cực.Không được kết hợp trái ngược: Không nói \"Vừa đẹp vừa xấu\" (又漂亮又难看 - không dùng).\n• Hai vế của \"又...又...\" phải cùng một sắc thái.\n• Nếu vế trước là tích cực (đẹp, ngon, tốt), vế sau cũng phải tích cực.\n• Nếu vế trước là tiêu cực (đắt, xấu, mệt), vế sau cũng phải tiêu cực.\n• Không được kết hợp trái ngược: Không nói \"Vừa đẹp vừa xấu\" (又漂亮又难看 - không dùng).\n• Không dùng cho hành động quá khứ đã kết thúc: Cấu trúc này chủ yếu miêu tả trạng thái hoặc đặc điểm của sự vật/sự việc, không dùng để tường thuật các hành động đã hoàn thành trong quá khứ.\n• Từ loại: Sau \"又\" chủ yếu là Tính từ (Adj) hoặc Động từ chỉ trạng thái/tâm lý (ví dụ: 想, 累, 喜欢), không dùng cho các động từ hành động cụ thể (ví dụ: Không dùng \"又吃饭又睡觉\" để tả hành động quá khứ).",
-        "formula": "",
-        "note": "quan trọng khi dùng",
+        "title": "CÂU GHÉP ĐẲNG LẬP 又……又 (Vừa... vừa...)",
+        "explanation": "Cấu trúc này được dùng để nối hai tính từ hoặc hai động từ (thường là động từ chỉ trạng thái hoặc tâm lý), diễn tả sự đồng thời của hai đặc điểm hoặc hai hành động trên cùng một chủ thể.\n• Ý nghĩa: \"Vừa... vừa...\" hoặc \"Vừa... lại vừa...\".",
+        "formula": "Chủ ngữ + 又 + Tính từ / Động từ + 又 + Tính từ / Động từ",
+        "note": "Hai vế của \"又...又...\" phải cùng một sắc thái (cùng tích cực hoặc cùng tiêu cực). Không kết hợp trái ngược.",
         "examples": [
           {
             "rawZh": "这家店的北京烤鸭又好吃又便宜。 (Vịt quay Bắc Kinh của quán này vừa ngon vừa rẻ.)",
@@ -294,8 +294,8 @@ export const HSK3_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 3,
     "lessonKey": "Bài 3",
-    "lessonTitleZh": "Bài 3",
-    "lessonTitleFull": "Bài 3 (HSK 3 v3.0)",
+    "lessonTitleZh": "这个小区挺好的",
+    "lessonTitleFull": "Bài 3: 这个小区挺好的",
     "grammarPoints": [
       {
         "id": "hsk3_b3_g1",
@@ -407,8 +407,8 @@ export const HSK3_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 4,
     "lessonKey": "Bài 4",
-    "lessonTitleZh": "Bài 4",
-    "lessonTitleFull": "Bài 4 (HSK 3 v3.0)",
+    "lessonTitleZh": "这家宾馆跟别的都不一样",
+    "lessonTitleFull": "Bài 4: 这家宾馆跟别的都不一样",
     "grammarPoints": [
       {
         "id": "hsk3_b4_g1",
@@ -520,8 +520,8 @@ export const HSK3_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 5,
     "lessonKey": "Bài 5",
-    "lessonTitleZh": "Bài 5",
-    "lessonTitleFull": "Bài 5 (HSK 3 v3.0)",
+    "lessonTitleZh": "这样的照片才好看",
+    "lessonTitleFull": "Bài 5: 这样的照片才好看",
     "grammarPoints": [
       {
         "id": "hsk3_b5_g1",
@@ -703,8 +703,8 @@ export const HSK3_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 6,
     "lessonKey": "Bài 6",
-    "lessonTitleZh": "Bài 6",
-    "lessonTitleFull": "Bài 6 (HSK 3 v3.0)",
+    "lessonTitleZh": "高铁上还可以点外卖",
+    "lessonTitleFull": "Bài 6: 高铁上还可以点外卖",
     "grammarPoints": [
       {
         "id": "hsk3_b6_g1",
@@ -816,8 +816,8 @@ export const HSK3_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 7,
     "lessonKey": "Bài 7",
-    "lessonTitleZh": "Bài 7",
-    "lessonTitleFull": "Bài 7 (HSK 3 v3.0)",
+    "lessonTitleZh": "这条裙子比短裤子更好看",
+    "lessonTitleFull": "Bài 7: 这条裙子比短裤子更好看",
     "grammarPoints": [
       {
         "id": "hsk3_b7_g1",
@@ -964,8 +964,8 @@ export const HSK3_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 8,
     "lessonKey": "Bài 8",
-    "lessonTitleZh": "Bài 8",
-    "lessonTitleFull": "Bài 8 (HSK 3 v3.0)",
+    "lessonTitleZh": "今天我出院了",
+    "lessonTitleFull": "Bài 8: 今天我出院了",
     "grammarPoints": [
       {
         "id": "hsk3_b8_g1",
@@ -1148,8 +1148,8 @@ export const HSK3_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 9,
     "lessonKey": "Bài 9",
-    "lessonTitleZh": "Bài 9",
-    "lessonTitleFull": "Bài 9 (HSK 3 v3.0)",
+    "lessonTitleZh": "打不好没关系",
+    "lessonTitleFull": "Bài 9: 打不好没关系",
     "grammarPoints": [
       {
         "id": "hsk3_b9_g1",
@@ -1255,8 +1255,8 @@ export const HSK3_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 10,
     "lessonKey": "Bài 10",
-    "lessonTitleZh": "Bài 10",
-    "lessonTitleFull": "Bài 10 (HSK 3 v3.0)",
+    "lessonTitleZh": "你明天再把书还给我",
+    "lessonTitleFull": "Bài 10: 你明天再把书还给我",
     "grammarPoints": [
       {
         "id": "hsk3_b10_g1",
@@ -1382,8 +1382,8 @@ export const HSK3_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 11,
     "lessonKey": "Bài 11",
-    "lessonTitleZh": "Bài 11",
-    "lessonTitleFull": "Bài 11 (HSK 3 v3.0)",
+    "lessonTitleZh": "看来你没办法解决这个问题",
+    "lessonTitleFull": "Bài 11: 看来你没办法解决这个问题",
     "grammarPoints": [
       {
         "id": "hsk3_b11_g1",
@@ -1530,8 +1530,8 @@ export const HSK3_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 12,
     "lessonKey": "Bài 12",
-    "lessonTitleZh": "Bài 12",
-    "lessonTitleFull": "Bài 12 (HSK 3 v3.0)",
+    "lessonTitleZh": "这个季节天气变化很快",
+    "lessonTitleFull": "Bài 12: 这个季节天气变化很快",
     "grammarPoints": [
       {
         "id": "hsk3_b12_g1",
@@ -1713,8 +1713,8 @@ export const HSK3_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 13,
     "lessonKey": "Bài 13",
-    "lessonTitleZh": "Bài 13",
-    "lessonTitleFull": "Bài 13 (HSK 3 v3.0)",
+    "lessonTitleZh": "我的新邻居来自英国",
+    "lessonTitleFull": "Bài 13: 我的新邻居来自英国",
     "grammarPoints": [
       {
         "id": "hsk3_b13_g1",
@@ -1808,8 +1808,8 @@ export const HSK3_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 14,
     "lessonKey": "Bài 14",
-    "lessonTitleZh": "Bài 14",
-    "lessonTitleFull": "Bài 14 (HSK 3 v3.0)",
+    "lessonTitleZh": "这本书被别人借走了",
+    "lessonTitleFull": "Bài 14: 这本书被别人借走了",
     "grammarPoints": [
       {
         "id": "hsk3_b14_g1",
@@ -1891,8 +1891,8 @@ export const HSK3_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 15,
     "lessonKey": "Bài 15",
-    "lessonTitleZh": "Bài 15",
-    "lessonTitleFull": "Bài 15 (HSK 3 v3.0)",
+    "lessonTitleZh": "我是半个南京人",
+    "lessonTitleFull": "Bài 15: 我是半个南京人",
     "grammarPoints": [
       {
         "id": "hsk3_b15_g1",
@@ -2015,8 +2015,8 @@ export const HSK3_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 16,
     "lessonKey": "Bài 16",
-    "lessonTitleZh": "Bài 16",
-    "lessonTitleFull": "Bài 16 (HSK 3 v3.0)",
+    "lessonTitleZh": "我听说有的熊猫出国了",
+    "lessonTitleFull": "Bài 16: 我听说有的熊猫出国了",
     "grammarPoints": [
       {
         "id": "hsk3_b16_g1",
@@ -2163,8 +2163,8 @@ export const HSK3_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 17,
     "lessonKey": "Bài 17",
-    "lessonTitleZh": "Bài 17",
-    "lessonTitleFull": "Bài 17 (HSK 3 v3.0)",
+    "lessonTitleZh": "我要多向认真的人学习",
+    "lessonTitleFull": "Bài 17: 我要多向认真的人学习",
     "grammarPoints": [
       {
         "id": "hsk3_b17_g1",
@@ -2311,8 +2311,8 @@ export const HSK3_STRUCTURED_GRAMMAR = [
   {
     "lessonId": 18,
     "lessonKey": "Bài 18",
-    "lessonTitleZh": "Bài 18",
-    "lessonTitleFull": "Bài 18 (HSK 3 v3.0)",
+    "lessonTitleZh": "我学会了包饺子",
+    "lessonTitleFull": "Bài 18: 我学会了包饺子",
     "grammarPoints": [
       {
         "id": "hsk3_b18_g1",

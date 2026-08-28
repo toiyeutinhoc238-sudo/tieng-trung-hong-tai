@@ -7879,7 +7879,7 @@ window.goToLessonStep = function(step, lessonId) {
   if (step === 'vocab') {
     window.openLessonVocabStudy(numId);
   } else if (step === 'grammar') {
-    window.location.href = `/hsk-grammar.html?level=${currentLvl}&lesson=${numId}&version=${currentVer}`;
+    window.openLessonGrammarModal(numId);
   } else if (step === 'text') {
     window.location.href = `/lesson-texts.html?lesson=${numId}&level=${currentLvl}&version=${currentVer}`;
   } else if (step === 'quiz') {
@@ -8872,8 +8872,17 @@ window.openLessonGrammarModal = function(lessonKey, initialPointIdx = 0) {
   const currentVer = activeLessonsCurriculum === 'yct' ? 'yct' : (activeHskVersion || activeRoadmapVersion || '3.0');
   const lvlStr = String(currentLvl);
 
-  // Supported grammar levels: HSK 1, HSK 2, HSK 3 (for both v2.0 and v3.0)
-  if (!['1', '2', '3'].includes(lvlStr) || currentVer === 'yct') {
+  if (currentVer === 'yct') {
+    showComingSoonNotice(`Ngữ Pháp YCT`);
+    return;
+  }
+
+  if (currentVer === '2.0' && lvlStr !== '1') {
+    showComingSoonNotice(`Ngữ Pháp HSK ${currentLvl} (Phiên bản 2.0)`);
+    return;
+  }
+
+  if (!['1', '2', '3'].includes(lvlStr)) {
     showComingSoonNotice(`Ngữ Pháp HSK ${currentLvl}`);
     return;
   }

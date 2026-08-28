@@ -1088,9 +1088,9 @@
       const hsk3Tab = document.getElementById('tab-hsk3-label');
 
       if (currentActiveVersion === '2.0') {
-        if (hsk1Tab) hsk1Tab.innerHTML = '<i class="fa-solid fa-seedling"></i> HSK 1 (14 bài)';
-        if (hsk2Tab) hsk2Tab.innerHTML = '<i class="fa-solid fa-graduation-cap"></i> HSK 2 (15 bài)';
-        if (hsk3Tab) hsk3Tab.innerHTML = '<i class="fa-solid fa-book-bookmark"></i> HSK 3 (18 bài)';
+        if (hsk1Tab) hsk1Tab.innerHTML = '<i class="fa-solid fa-seedling"></i> HSK 1 (15 bài - v2.0)';
+        if (hsk2Tab) hsk2Tab.innerHTML = '<i class="fa-solid fa-graduation-cap"></i> HSK 2 (v2.0)';
+        if (hsk3Tab) hsk3Tab.innerHTML = '<i class="fa-solid fa-book-bookmark"></i> HSK 3 (v2.0)';
       } else {
         if (hsk1Tab) hsk1Tab.innerHTML = '<i class="fa-solid fa-seedling"></i> HSK 1 (15 bài)';
         if (hsk2Tab) hsk2Tab.innerHTML = '<i class="fa-solid fa-graduation-cap"></i> HSK 2 (15 bài)';
@@ -1214,8 +1214,10 @@
       if (lvlKey === 'hsk1') {
         return (ver === '2.0') ? (window.HSK1_V2_STRUCTURED_GRAMMAR || window.HSK1_STRUCTURED_GRAMMAR || []) : (window.HSK1_STRUCTURED_GRAMMAR || []);
       } else if (lvlKey === 'hsk2') {
+        if (ver === '2.0') return [];
         return window.HSK2_STRUCTURED_GRAMMAR || [];
       } else if (lvlKey === 'hsk3') {
+        if (ver === '2.0') return [];
         return window.HSK3_STRUCTURED_GRAMMAR || [];
       }
       return [];
@@ -1787,7 +1789,22 @@
       const lessons = getLevelLessons(lvlKey, currentActiveVersion);
       const lvlNum = lvlKey.replace('hsk', '').toUpperCase();
       if (lessons.length === 0) {
-        container.innerHTML = `<div style="text-align:center; padding:40px; color:#94a3b8;">Dữ liệu Ngữ Pháp HSK ${lvlNum} đang được cập nhật...</div>`;
+        container.innerHTML = `
+          <div style="background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(16px); border: 1.5px solid rgba(255, 255, 255, 0.15); border-radius: 28px; padding: 50px 32px; text-align: center; box-shadow: 0 16px 40px rgba(0,0,0,0.4); max-width: 680px; margin: 40px auto;">
+            <div style="width: 76px; height: 76px; border-radius: 50%; background: rgba(56, 189, 248, 0.15); color: #38bdf8; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 20px auto; box-shadow: 0 8px 24px rgba(56, 189, 248, 0.25);">
+              <i class="fa-solid fa-book-bookmark"></i>
+            </div>
+            <h2 style="font-size: 1.5rem; font-weight: 800; color: #ffffff; margin-bottom: 12px; font-family: var(--font-display);">Ngữ Pháp HSK ${lvlNum} (${currentActiveVersion})</h2>
+            <p style="color: #94a3b8; font-size: 0.98rem; line-height: 1.6; margin-bottom: 24px;">
+              Dữ liệu ngữ pháp chi tiết theo từng bài học cho cấp độ HSK ${lvlNum} phiên bản ${currentActiveVersion} đang được cập nhật. Bạn có thể chuyển sang học <strong>Ngữ Pháp HSK ${lvlNum} Chuẩn 3.0 Mới</strong> hoặc <strong>HSK 1 (v2.0)</strong>!
+            </p>
+            <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+              <button class="btn-action" onclick="switchGrammarVersion('3.0')" style="background: linear-gradient(135deg, #0284c7, #2563eb); color: #ffffff; border: none; padding: 12px 24px; border-radius: 14px; font-weight: 800; font-size: 0.95rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 8px 20px rgba(37,99,235,0.4);">
+                <i class="fa-solid fa-sparkles"></i> Xem Ngữ Pháp HSK ${lvlNum} Chuẩn 3.0 Mới
+              </button>
+            </div>
+          </div>
+        `;
         return;
       }
 
