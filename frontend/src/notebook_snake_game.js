@@ -85,16 +85,16 @@ export class SnakeGameEngine {
     this.invincibleTimer = 0;
     this.powerups = [];
 
-    // Grid config (optimized for larger cells & clear text badges)
+    // Grid config
     this.cols = 20;
-    this.rows = 14;
-    this.cellSize = 40;
+    this.rows = 13;
+    this.cellSize = 38;
 
     // Snake State
     this.snake = [
-      { x: 6, y: 7 },
-      { x: 5, y: 7 },
-      { x: 4, y: 7 }
+      { x: 6, y: 6 },
+      { x: 5, y: 6 },
+      { x: 4, y: 6 }
     ];
     this.dir = { x: 1, y: 0 };
     this.nextDir = { x: 1, y: 0 };
@@ -176,7 +176,7 @@ export class SnakeGameEngine {
 
         <!-- MAIN ARENA & SIDEBAR -->
         <div class="snake-arena-layout">
-          <!-- BATTLEFIELD / CANVAS & CONTROLS -->
+          <!-- LEFT COLUMN: BATTLEFIELD / CANVAS & CONTROLS -->
           <div class="snake-battle-column">
             <!-- GAME MODE SELECTOR -->
             <div class="snake-mode-selector-bar" id="snake-mode-selector">
@@ -195,20 +195,6 @@ export class SnakeGameEngine {
               <button type="button" class="snake-mode-btn" data-mode="mix" title="Hỗn hợp ngẫu nhiên">
                 <i class="fa-solid fa-shuffle"></i> <span>Hỗn hợp</span>
               </button>
-            </div>
-
-            <!-- TARGET WORD PROMPT BANNER (STICKY HEADER DIRECTLY ABOVE CANVAS) -->
-            <div class="snake-target-banner" id="snake-target-card">
-              <div class="target-left-group">
-                <span class="target-badge-label"><i class="fa-solid fa-bullseye"></i> ĐỀ BÀI:</span>
-                <span class="target-zh" id="target-zh-text">勤奋</span>
-                <button type="button" id="snake-speak-target-btn" class="target-speak-btn" title="Bấm để nghe phát âm">
-                  <i class="fa-solid fa-volume-high"></i>
-                </button>
-              </div>
-              <div class="target-action-hint">
-                <i class="fa-solid fa-apple-whole" style="color: #fde047;"></i> Lái rắn ăn quả có <strong>NGHĨA TIẾNG VIỆT ĐÚNG</strong>!
-              </div>
             </div>
 
             <!-- CANVAS CONTAINER -->
@@ -242,30 +228,35 @@ export class SnakeGameEngine {
               </div>
 
               <div class="snake-keys-guide">
-                <div class="guide-title"><i class="fa-solid fa-gamepad"></i> Hướng Dẫn Điều Khiển</div>
+                <div class="guide-title"><i class="fa-solid fa-gamepad"></i> Điều khiển:</div>
                 <div class="guide-tags">
-                  <span class="guide-tag"><kbd>⬆️</kbd><kbd>⬅️</kbd><kbd>⬇️</kbd><kbd>➡️</kbd> Phím mũi tên</span>
-                  <span class="guide-tag"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> Bàn phím chữ</span>
-                  <span class="guide-tag"><i class="fa-solid fa-hand-pointer"></i> Vuốt màn hình cảm ứng</span>
+                  <span class="guide-tag"><kbd>⬆️</kbd><kbd>⬅️</kbd><kbd>⬇️</kbd><kbd>➡️</kbd> Mũi Tên</span>
+                  <span class="guide-tag"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> Bàn Phím</span>
+                  <span class="guide-tag"><i class="fa-solid fa-hand-pointer"></i> Vuốt cảm ứng</span>
                   <span class="guide-tag"><kbd>Space</kbd> Tạm dừng</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- RIGHT SIDEBAR: INSTRUCTIONS & ITEMS -->
+          <!-- RIGHT SIDEBAR: PROMINENT TARGET CARD & LUCKY ITEMS -->
           <div class="snake-sidebar">
-            <div class="snake-sidebar-card">
-              <div class="sidebar-sec-title"><i class="fa-solid fa-compass"></i> CÁCH LÁI RẮN & CHƠI</div>
-              <ul class="sidebar-bullets">
-                <li><strong>Bước 1:</strong> Nhìn từ vựng Chữ Hán & Pinyin hiển thị trên ô mục tiêu màu xanh phía trên.</li>
-                <li><strong>Bước 2:</strong> Dùng <strong>phím mũi tên / WASD</strong>, <strong>vuốt ngón tay</strong> hoặc <strong>bấm nút D-Pad</strong> để chuyển hướng con rắn.</li>
-                <li><strong>Bước 3:</strong> Lái rắn ăn quả táo có <strong>nghĩa tiếng Việt đúng</strong> của từ đó để tích lũy chuỗi 10 điểm lên cấp!</li>
-                <li><strong>Cảnh báo:</strong> Tránh đâm vào thân rắn, tránh đâm vào đá/bụi rậm và không ăn nhầm nghĩa sai kẻo mất Tim 💔!</li>
-              </ul>
+            <!-- TARGET WORD PROMPT CARD (TOP-RIGHT CORNER) -->
+            <div class="snake-target-banner" id="snake-target-card">
+              <span class="target-badge-label" id="target-badge-type"><i class="fa-solid fa-bullseye"></i> ĐỀ BÀI CẦN TÌM:</span>
+              <div class="target-word-row">
+                <span class="target-zh" id="target-zh-text">勤奋</span>
+                <button type="button" id="snake-speak-target-btn" class="target-speak-btn" title="Bấm để nghe phát âm">
+                  <i class="fa-solid fa-volume-high"></i>
+                </button>
+              </div>
+              <div class="target-action-hint" id="target-action-hint">
+                <i class="fa-solid fa-apple-whole" style="color: #fde047;"></i> Lái rắn ăn quả có <strong>NGHĨA TIẾNG VIỆT ĐÚNG</strong>!
+              </div>
             </div>
 
-            <div class="snake-sidebar-card" style="margin-top: 14px;">
+            <!-- LUCKY ITEMS CARD -->
+            <div class="snake-sidebar-card">
               <div class="sidebar-sec-title"><i class="fa-solid fa-wand-magic-sparkles"></i> VẬT PHẨM MAY MẮN</div>
               
               <div class="powerup-item-row">
@@ -280,7 +271,7 @@ export class SnakeGameEngine {
                 <div class="p-icon" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24;"><i class="fa-solid fa-coins"></i></div>
                 <div>
                   <div class="p-title">X2 CHUỖI</div>
-                  <div class="p-desc">Nhân đôi chuỗi hiện tại (ví dụ: 5 → 10).</div>
+                  <div class="p-desc">Nhân đôi chuỗi hiện tại.</div>
                 </div>
               </div>
 
@@ -411,17 +402,15 @@ export class SnakeGameEngine {
     this.ctx = this.canvas.getContext('2d');
 
     const container = this.container.querySelector('#snake-canvas-container');
-    const containerW = container ? container.clientWidth : 540;
+    const containerW = container ? container.clientWidth : 650;
     
-    // TỐI ƯU CHIỀU CAO CANVAS: TỐI ĐA 320PX ĐỂ 100% CẢ BẢNG ĐỀ BÀI VÀ CANVAS NẰM TRỌN TRÊN 1 MÀN HÌNH
-    const maxAvailableH = Math.max(260, Math.min(320, window.innerHeight - 240));
-    const width = Math.min(540, Math.max(280, containerW || 500));
-    const height = Math.min(maxAvailableH, Math.round(width * (this.rows / this.cols)));
-    const finalW = Math.round(height * (this.cols / this.rows));
+    // TỐI ƯU BÀN CỜ RỘNG RÃI & CHIỀU CAO VỪA VẶN TẦM MẮT (20 cols x 13 rows)
+    const targetW = Math.min(720, Math.max(300, containerW || 620));
+    const targetH = Math.round(targetW * (this.rows / this.cols));
 
-    this.canvas.width = finalW;
-    this.canvas.height = height;
-    this.cellSize = finalW / this.cols;
+    this.canvas.width = targetW;
+    this.canvas.height = targetH;
+    this.cellSize = targetW / this.cols;
   }
 
   bindEvents() {

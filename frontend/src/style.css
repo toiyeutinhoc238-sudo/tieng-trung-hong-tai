@@ -11537,9 +11537,10 @@ html.dark .hud-level-badge {
 
 .snake-arena-layout {
   display: grid;
-  grid-template-columns: 1fr 250px;
-  gap: 12px;
+  grid-template-columns: 1fr 270px;
+  gap: 14px;
   align-items: start;
+  width: 100%;
 }
 
 @media (max-width: 900px) {
@@ -11549,9 +11550,17 @@ html.dark .hud-level-badge {
 }
 
 .snake-battle-column {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
+}
+
+.snake-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
 }
 
 .snake-mode-selector-bar {
@@ -11603,43 +11612,35 @@ html.dark .snake-mode-btn:hover {
 }
 
 .snake-target-banner {
-  position: sticky;
-  top: 0;
-  z-index: 25;
   background: linear-gradient(135deg, #0284c7, #0369a1);
   border: 2px solid #38bdf8;
-  border-radius: 14px;
-  padding: 6px 14px;
-  box-shadow: 0 4px 16px rgba(2, 132, 199, 0.35);
+  border-radius: 18px;
+  padding: 16px 14px;
+  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.35);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  text-align: center;
   gap: 8px;
   color: #ffffff;
-  margin-bottom: 2px;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 html.dark .snake-target-banner {
   background: linear-gradient(135deg, #0f172a, #1e293b);
   border-color: #38bdf8;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
-}
-
-.target-left-group {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
 }
 
 .target-badge-label {
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 900;
   letter-spacing: 0.06em;
   color: #0369a1;
   text-transform: uppercase;
   background: #ffffff;
-  padding: 3px 10px;
+  padding: 4px 14px;
   border-radius: 50px;
   display: inline-flex;
   align-items: center;
@@ -11655,17 +11656,20 @@ html.dark .target-badge-label {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  margin: 0;
+  gap: 10px;
+  margin: 4px 0;
+  width: 100%;
 }
 
 .target-zh {
-  font-size: 1.85rem;
+  font-size: clamp(1.4rem, 2.2vw, 2.4rem);
   font-weight: 900;
   color: #fef08a !important; /* Vàng sáng rực rỡ nổi bật tuyệt đối */
   font-family: var(--font-hanzi, "Noto Sans SC", sans-serif);
-  line-height: 1;
+  line-height: 1.15;
   text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  word-break: break-word;
+  max-width: 100%;
 }
 html.dark .target-zh {
   color: #fef08a !important;
@@ -11679,16 +11683,16 @@ html.dark .target-zh {
   background: rgba(255, 255, 255, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.4);
   color: #ffffff;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  font-size: 0.88rem;
+  font-size: 1rem;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
-  margin-left: 2px;
+  flex-shrink: 0;
 }
 .target-speak-btn:hover {
   background: #ffffff;
@@ -11709,16 +11713,20 @@ html.dark .target-speak-btn:hover {
 }
 
 .target-action-hint {
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   font-weight: 700;
   color: #ffffff;
   display: flex;
   align-items: center;
-  gap: 4px;
-  background: rgba(0, 0, 0, 0.22);
-  padding: 3px 12px;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  justify-content: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 6px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  line-height: 1.35;
+  width: 100%;
+  box-sizing: border-box;
 }
 html.dark .target-action-hint {
   color: #f1f5f9;
@@ -11742,6 +11750,7 @@ html.dark .target-action-hint {
   touch-action: none !important;
   user-select: none !important;
   -webkit-user-select: none !important;
+  width: 100%;
 }
 
 html.dark .snake-canvas-container {
