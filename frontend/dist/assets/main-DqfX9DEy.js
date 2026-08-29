@@ -2665,7 +2665,7 @@ Cập nhật: ${c.updatedAt?new Date(c.updatedAt).toLocaleString("vi-VN"):"Gần
             ${c.cpuCores||4}C / ${c.memoryGB||4}GB • ${xe(V)}
           </div>
         </div>
-      `}else h='<span style="font-size: 0.76rem; color: #64748b; font-style: italic;">Chưa ghi nhận</span>';const g=t.quizCount>0?`<span style="font-weight: 800; color: #22c55e;">${t.highestQuizScore}đ</span> <span style="font-size: 0.72rem; color: #94a3b8;">(${t.quizCount} đề)</span>`:'<span style="font-size: 0.78rem; color: #64748b;">Chưa thi</span>',d=((t.studyTime||0)/3600).toFixed(1);Math.round((t.studyTime||0)%3600/60);const f=(t.studyTime||0)>=3600?`${d}h`:`${Math.round((t.studyTime||0)/60)} phút`,k=t.dailyHistory&&typeof t.dailyHistory=="object"?Object.keys(t.dailyHistory).filter(S=>(t.dailyHistory[S]||0)>0).length:0,p=Math.max(k,t.totalDays||0,t.streak||0,1);let y="";const v=`
+      `}else h='<span style="font-size: 0.76rem; color: #64748b; font-style: italic;">Chưa ghi nhận</span>';const g=t.quizCount>0?`<span style="font-weight: 800; color: #22c55e;">${t.highestQuizScore}đ</span> <span style="font-size: 0.72rem; color: #94a3b8;">(${t.quizCount} đề)</span>`:'<span style="font-size: 0.78rem; color: #64748b;">Chưa thi</span>',d=((t.studyTime||0)/3600).toFixed(1);Math.round((t.studyTime||0)%3600/60);const f=(t.studyTime||0)>=3600?`${d}h`:`${Math.round((t.studyTime||0)/60)} phút`,k=t.streak||1,p=t.dailyHistory&&typeof t.dailyHistory=="object"?Object.keys(t.dailyHistory).filter(S=>(t.dailyHistory[S]||0)>0).length:t.totalDays||1;let y="";const v=`
       <button type="button" onclick="window.openStudentHistoryDetail('${r}')" style="padding: 5px 10px; font-size: 0.76rem; font-weight: 700; border-radius: 8px; background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.35); cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s;" title="Xem lịch sử học theo từng ngày">
         <i class="fa-solid fa-chart-line"></i> Nhật ký
       </button>
@@ -2694,9 +2694,14 @@ Cập nhật: ${c.updatedAt?new Date(c.updatedAt).toLocaleString("vi-VN"):"Gần
           <div>${g}</div>
         </td>
         <td>
-          <span style="font-weight: 800; color: #f97316; font-size: 0.88rem;">
-            <i class="fa-solid fa-fire"></i> ${p} ngày
-          </span>
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-weight: 800; color: #f97316; font-size: 0.88rem;">
+              <i class="fa-solid fa-fire"></i> ${k} ngày
+            </span>
+            <span style="font-size: 0.72rem; color: #94a3b8;">
+              Tổng: ${p} ngày
+            </span>
+          </div>
         </td>
         <td>
           <span style="font-weight: 700; color: #38bdf8; font-size: 0.88rem;">${f}</span>

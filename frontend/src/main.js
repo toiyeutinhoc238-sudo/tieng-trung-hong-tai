@@ -14292,10 +14292,10 @@ window.renderAdminUsersTable = function () {
     const studyMins = Math.round(((u.studyTime || 0) % 3600) / 60);
     const timeFormatted = (u.studyTime || 0) >= 3600 ? `${studyHours}h` : `${Math.round((u.studyTime || 0) / 60)} phút`;
 
+    const streak = u.streak || 1;
     const activeDays = (u.dailyHistory && typeof u.dailyHistory === 'object')
       ? Object.keys(u.dailyHistory).filter(d => (u.dailyHistory[d] || 0) > 0).length
-      : 0;
-    const displayDays = Math.max(activeDays, u.totalDays || 0, u.streak || 0, 1);
+      : (u.totalDays || 1);
 
     // Actions
     let actionBtnHtml = '';
@@ -14341,9 +14341,14 @@ window.renderAdminUsersTable = function () {
           <div>${highestScoreHtml}</div>
         </td>
         <td>
-          <span style="font-weight: 800; color: #f97316; font-size: 0.88rem;">
-            <i class="fa-solid fa-fire"></i> ${displayDays} ngày
-          </span>
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-weight: 800; color: #f97316; font-size: 0.88rem;">
+              <i class="fa-solid fa-fire"></i> ${streak} ngày
+            </span>
+            <span style="font-size: 0.72rem; color: #94a3b8;">
+              Tổng: ${activeDays} ngày
+            </span>
+          </div>
         </td>
         <td>
           <span style="font-weight: 700; color: #38bdf8; font-size: 0.88rem;">${timeFormatted}</span>
