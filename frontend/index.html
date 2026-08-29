@@ -92,6 +92,17 @@
           });
         }
       }
+      window.openAdminManagementModal = window.openAdminManagementModal || function () {
+        var m = document.getElementById('admin-management-modal');
+        if (m) {
+          m.style.setProperty('display', 'flex', 'important');
+          m.style.setProperty('z-index', '9999999', 'important');
+          document.body.style.overflow = 'hidden';
+        }
+        if (typeof window.fetchAdminUsersList === 'function') {
+          window.fetchAdminUsersList(true);
+        }
+      };
     })();
   </script>
 

@@ -92,6 +92,17 @@
           });
         }
       }
+      window.openAdminManagementModal = window.openAdminManagementModal || function () {
+        var m = document.getElementById('admin-management-modal');
+        if (m) {
+          m.style.setProperty('display', 'flex', 'important');
+          m.style.setProperty('z-index', '9999999', 'important');
+          document.body.style.overflow = 'hidden';
+        }
+        if (typeof window.fetchAdminUsersList === 'function') {
+          window.fetchAdminUsersList(true);
+        }
+      };
     })();
   </script>
 
@@ -120,7 +131,7 @@
   <script type="module" crossorigin src="/assets/style-6bg3lfCQ.js"></script>
   <script type="module" crossorigin src="/assets/screen_drawing-sTfMy1C2.js"></script>
   <script type="module" crossorigin src="/assets/grammar_hsk1_v2-C9vbI0cE.js"></script>
-  <script type="module" crossorigin src="/assets/main-BsilNl4s.js"></script>
+  <script type="module" crossorigin src="/assets/main-7bTBbfZG.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/style-BLybZU9s.css">
 </head>
 

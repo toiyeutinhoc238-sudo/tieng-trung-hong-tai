@@ -3786,6 +3786,12 @@ function getAuthHeaders(customHeaders = {}) {
     headers['Authorization'] = `Bearer ${token}`;
     headers['x-session-token'] = token;
   }
+  if (!currentUser) {
+    try {
+      const uRaw = localStorage.getItem('user');
+      if (uRaw) currentUser = JSON.parse(uRaw);
+    } catch (e) {}
+  }
   if (currentUser && currentUser.email) {
     headers['x-user-email'] = currentUser.email;
   }
@@ -14002,7 +14008,10 @@ window.syncDeviceTelemetry = async function (data) {
 
 window.openAdminManagementModal = function () {
   const modal = document.getElementById('admin-management-modal');
-  if (!modal) return;
+  if (!modal) {
+    console.error('admin-management-modal element not found');
+    return;
+  }
 
   if (!currentUser) {
     try {
@@ -14022,7 +14031,8 @@ window.openAdminManagementModal = function () {
     superGrantBox.style.display = isSuper ? 'block' : 'none';
   }
 
-  modal.style.display = 'flex';
+  modal.style.setProperty('display', 'flex', 'important');
+  modal.style.setProperty('z-index', '9999999', 'important');
   document.body.style.overflow = 'hidden';
   window.fetchAdminUsersList(true);
 
