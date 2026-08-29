@@ -9904,11 +9904,64 @@ function renderWeeklyStudyChart() {
 }
 window.renderWeeklyStudyChart = renderWeeklyStudyChart;
 
+// ═══════════════════════════════════════════════════════════════
+// AFK / IDLE DETECTION SYSTEM (Phát hiện treo máy tối đa 5 phút)
+// ═══════════════════════════════════════════════════════════════
+const IDLE_TIMEOUT_SECONDS = 300; // 5 phút không thao tác = 300s
+let lastInteractionTime = Date.now();
+let isUserIdle = false;
+let idleModalShown = false;
+
+function resetUserActivity() {
+  lastInteractionTime = Date.now();
+  if (isUserIdle) {
+    window.resumeFromIdleState();
+  }
+}
+
+// Bắt tất cả sự kiện tương tác của người dùng trên trang
+['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll', 'click', 'wheel'].forEach(evt => {
+  window.addEventListener(evt, resetUserActivity, { passive: true });
+});
+
+window.resumeFromIdleState = function () {
+  isUserIdle = false;
+  idleModalShown = false;
+  lastInteractionTime = Date.now();
+  const idleModal = document.getElementById('app-idle-modal');
+  if (idleModal) {
+    idleModal.style.display = 'none';
+  }
+};
+
+function showIdleWarningModal() {
+  const idleModal = document.getElementById('app-idle-modal');
+  if (idleModal) {
+    idleModal.style.display = 'flex';
+  }
+}
+
 function startStudyTimer() {
   window.__hasMainStudyTimer = true;
   if (activeTimer) clearInterval(activeTimer);
   activeTimer = setInterval(() => {
-    if (document.hasFocus()) {
+    // 1. Kiểm tra thời gian không thao tác (treo máy)
+    const idleSeconds = Math.floor((Date.now() - lastInteractionTime) / 1000);
+
+    if (idleSeconds >= IDLE_TIMEOUT_SECONDS) {
+      if (!isUserIdle) {
+        isUserIdle = true;
+      }
+      if (!idleModalShown) {
+        idleModalShown = true;
+        showIdleWarningModal();
+      }
+      // Treo máy quá 5 phút -> Tạm dừng đếm giờ, không tính giây nào
+      return;
+    }
+
+    // 2. Chỉ tính thời gian khi người dùng thực sự tương tác & tab đang mở
+    if (document.hasFocus() && !document.hidden && !isUserIdle) {
       sessionStudyTime++;
 
       const totalSecs = userStudyTime + sessionStudyTime;

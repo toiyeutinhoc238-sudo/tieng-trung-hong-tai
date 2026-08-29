@@ -5458,6 +5458,8 @@ html.light-mode .modal-card,
 html:not(.dark) .modal-card,
 html.light-mode .modal-overlay > div,
 html:not(.dark) .modal-overlay > div,
+html.light-mode #app-idle-modal .modal-card,
+html:not(.dark) #app-idle-modal .modal-card,
 html.light-mode #lesson-detail-popup-modal .modal-card,
 html:not(.dark) #lesson-detail-popup-modal .modal-card,
 html.light-mode #lesson-grammar-popup-modal .modal-card,
@@ -5474,6 +5476,20 @@ html:not(.dark) #discussion-forum-modal .modal-card {
   border: 1.5px solid #cbd5e1 !important;
   color: #0f172a !important;
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15) !important;
+}
+
+html.light-mode #app-idle-modal h3,
+html:not(.dark) #app-idle-modal h3,
+html.light-mode #idle-modal-title,
+html:not(.dark) #idle-modal-title {
+  color: #d97706 !important;
+}
+
+html.light-mode #app-idle-modal p,
+html:not(.dark) #app-idle-modal p,
+html.light-mode #idle-modal-desc,
+html:not(.dark) #idle-modal-desc {
+  color: #334155 !important;
 }
 
 html.light-mode .modal-card h1, html:not(.dark) .modal-card h1,

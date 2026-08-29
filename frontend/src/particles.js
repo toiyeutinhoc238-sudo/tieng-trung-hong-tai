@@ -209,9 +209,21 @@ window.toggleSeasonalParticles = function() {
     } catch (e) {}
   }
 
+  // AFK / Idle detection for subpages
+  let lastSubpageInteraction = Date.now();
+  ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll', 'click', 'wheel'].forEach(evt => {
+    window.addEventListener(evt, () => { lastSubpageInteraction = Date.now(); }, { passive: true });
+  });
+
   setInterval(() => {
     if (window.__hasMainStudyTimer) return;
-    if (document.hasFocus()) {
+    const idleSecs = Math.floor((Date.now() - lastSubpageInteraction) / 1000);
+    if (idleSecs >= 300) {
+      // Treo máy quá 5 phút -> Tạm dừng tính giờ
+      return;
+    }
+
+    if (document.hasFocus() && !document.hidden) {
       sessionSecs++;
       if (sessionSecs >= 15) {
         const increment = sessionSecs;
