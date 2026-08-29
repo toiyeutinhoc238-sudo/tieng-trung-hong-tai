@@ -10505,7 +10505,7 @@ window.openZubiRecentLessonDetail = function (curr, level) {
   modal.style.display = 'flex';
 };
 
-window.openZubiStatDetail = function (type) {
+window.openZubiStatDetail = async function (type) {
   const modal = document.getElementById('zubi-stat-modal');
   const titleEl = document.getElementById('zubi-modal-title');
   const subtitleEl = document.getElementById('zubi-modal-subtitle');
@@ -10513,6 +10513,29 @@ window.openZubiStatDetail = function (type) {
   const bodyEl = document.getElementById('zubi-modal-body');
 
   if (!modal || !bodyEl) return;
+
+  if ((type === 'streak' || type === 'time') && currentUser) {
+    try {
+      const res = await fetch(API_BASE_URL + '/api/user/stats', {
+        headers: getAuthHeaders(),
+        credentials: 'include'
+      });
+      if (res.ok) {
+        const stats = await res.json();
+        if (stats.dailyHistory && typeof stats.dailyHistory === 'object') {
+          const localHist = getDailyStudyHistory();
+          const merged = { ...localHist, ...stats.dailyHistory };
+          saveDailyStudyHistory(merged);
+        }
+        if (stats.studyTime) {
+          userStudyTime = Math.max(userStudyTime, stats.studyTime);
+        }
+        if (stats.streak) {
+          userStreak = Math.max(userStreak || 0, stats.streak);
+        }
+      }
+    } catch (e) { }
+  }
 
   const builtIn = vocabList.filter(w => !w.isCustom);
 
@@ -10868,7 +10891,9 @@ async function loadInitialStats() {
 
         // Save user's exact backend CSDL dailyHistory
         const userHistory = stats.dailyHistory || {};
-        saveDailyStudyHistory(userHistory);
+        const localHist = getDailyStudyHistory();
+        const merged = { ...localHist, ...userHistory };
+        saveDailyStudyHistory(merged);
       }
     } catch (err) {
       console.error('Failed to load user stats:', err);
