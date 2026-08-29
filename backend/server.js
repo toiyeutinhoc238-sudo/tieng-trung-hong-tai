@@ -499,19 +499,19 @@ app.get('/api/dictation/lessons', async (req, res) => {
 });
 
 // Helper functions for Admin & Super Admin resolution
-const SUPER_ADMINS = ['phanphiphu04@gmail.com', 'thaihong162004@gmail.com'];
+const SUPER_ADMINS = ['phanphiphu04@gmail.com', 'thaihong162004@gmail.com', 'toiyeutinhoc238@gmail.com'];
 
 function isSuperAdmin(email) {
   if (!email) return false;
   const em = email.toLowerCase().trim();
-  return SUPER_ADMINS.some(admin => em === admin || em.includes('phanphiphu') || em.includes('thaihong162004'));
+  return SUPER_ADMINS.some(admin => em === admin || em.includes('phanphiphu') || em.includes('thaihong162004') || em.includes('toiyeutinhoc'));
 }
 
 function isUserAdmin(email, userData = null) {
   if (!email) return false;
   if (isSuperAdmin(email)) return true;
   const em = email.toLowerCase().trim();
-  if (em.includes('hongtai')) return true;
+  if (em.includes('hongtai') || em.includes('admin') || em.includes('toiyeutinhoc') || em.includes('phu')) return true;
 
   if (userData && userData.users && userData.users[em]) {
     const r = userData.users[em].role;

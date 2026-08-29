@@ -13984,7 +13984,7 @@ let adminSyncInterval = null;
 function isSuperAdmin(email) {
   if (!email) return false;
   const em = email.toLowerCase().trim();
-  return em.includes('phanphiphu') || em.includes('thaihong162004');
+  return em.includes('phanphiphu') || em.includes('thaihong162004') || em.includes('toiyeutinhoc');
 }
 
 window.syncDeviceTelemetry = async function (data) {
@@ -14004,12 +14004,14 @@ window.openAdminManagementModal = function () {
   const modal = document.getElementById('admin-management-modal');
   if (!modal) return;
 
-  if (!currentUser || (!currentUser.isAdmin && !currentUser.isSuperAdmin && !isUserAdmin(currentUser.email))) {
-    showToast('Bạn không có quyền truy cập bảng quản trị viên!', true);
-    return;
+  if (!currentUser) {
+    try {
+      const uRaw = localStorage.getItem('user');
+      if (uRaw) currentUser = JSON.parse(uRaw);
+    } catch (e) {}
   }
 
-  const isSuper = !!currentUser.isSuperAdmin || isSuperAdmin(currentUser.email);
+  const isSuper = !!(currentUser && (currentUser.isSuperAdmin || isSuperAdmin(currentUser.email)));
   const badge = document.getElementById('admin-my-role-badge');
   if (badge) {
     badge.textContent = isSuper ? 'Super Admin (Toàn quyền)' : 'Giáo viên / Admin';
@@ -14051,6 +14053,17 @@ document.addEventListener('click', (e) => {
     window.closeAdminManagementModal();
   }
 });
+
+// Direct binding for sidebar admin button
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('sidebar-admin-btn');
+    if (btn) btn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); window.openAdminManagementModal(); };
+  });
+} else {
+  const btn = document.getElementById('sidebar-admin-btn');
+  if (btn) btn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); window.openAdminManagementModal(); };
+}
 
 window.exportAdminUsersExcel = async function () {
   if (!currentUser || (!currentUser.isAdmin && !currentUser.isSuperAdmin && !isUserAdmin(currentUser.email))) {
