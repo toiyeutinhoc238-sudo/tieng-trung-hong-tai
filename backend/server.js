@@ -1545,9 +1545,8 @@ app.get('/api/leaderboard', async (req, res) => {
         email,
         name: u.name || email.split('@')[0],
         picture: u.picture || '',
-        score: totalScore,
-        totalScore,
-        highestScore,
+        score: highestScore,
+        highestScore: highestScore,
         quizCount: allAttempts.length,
         studyTime: u.stats ? (u.stats.studyTime || 0) : 0,
         streak: u.stats ? (u.stats.streak || 0) : 0,
@@ -1555,16 +1554,13 @@ app.get('/api/leaderboard', async (req, res) => {
       });
     }
 
-    // Sort real users by total accumulated score, then quiz count, then highest single score, then study time
+    // Sort real users by highest Quiz score, then quiz count, then study time, then streak
     leaderboard.sort((a, b) => {
       if (b.score !== a.score) {
         return b.score - a.score;
       }
       if (b.quizCount !== a.quizCount) {
         return b.quizCount - a.quizCount;
-      }
-      if (b.highestScore !== a.highestScore) {
-        return b.highestScore - a.highestScore;
       }
       if (b.studyTime !== a.studyTime) {
         return b.studyTime - a.studyTime;
