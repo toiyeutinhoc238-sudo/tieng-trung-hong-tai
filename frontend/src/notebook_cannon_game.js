@@ -117,7 +117,7 @@ export class CannonGameEngine {
     this.isRunning=false;this.isPaused=false;
     this.lastFrameTime=0;this.spawnTimer=0;
     this.wordQueue=[];this.activeWords=[];this.correctWordsSet=new Set();
-    this.wordsDestroyedCount=0;this.typedBuffer='';this.lockedTarget=null;
+    this.wordsDestroyedCount=0;this.typedBuffer='';this.lockedTarget=null;this.wrongStreak=0;
     this.slowMoTimer=0;this.score2xTimer=0;this.shieldActive=false;this.shieldTimer=0;
     this.timerInterval=null;this.animFrameId=null;this.keyHandler=null;
     this.renderLayout();this.bindEvents();
@@ -400,41 +400,69 @@ export class CannonGameEngine {
       if(!this.isRunning||this.isPaused)return;
       const overlay=this.container.querySelector('#cannon-modal-overlay');
       if(overlay&&overlay.style.display!=='none')return;
-      if(e.altKey){const map={'1':'ice','2':'heal','3':'x2','4':'shield'};if(map[e.key]){e.preventDefault();this.activateSkill(map[e.key]);return;}}
-      if(e.key==='Backspace'){e.preventDefault();this.typedBuffer=this.typedBuffer.slice(0,-1);this.lockedTarget=null;this.updateTypedDisplay();this.highlightTargets();return;}
-      if(e.key==='Escape'){e.preventDefault();this.typedBuffer='';this.lockedTarget=null;this.updateTypedDisplay();this.highlightTargets();return;}
+      if(e.altKey){
+        const map={'1':'ice','2':'heal','3':'x2','4':'shield'};
+        if(map[e.key]){
+          e.preventDefault();
+          e.stopPropagation();
+          if(e.stopImmediatePropagation)e.stopImmediatePropagation();
+          this.activateSkill(map[e.key]);
+          return;
+        }
+      }
+      if(e.key==='Backspace'){
+        e.preventDefault();
+        e.stopPropagation();
+        if(e.stopImmediatePropagation)e.stopImmediatePropagation();
+        this.typedBuffer=this.typedBuffer.slice(0,-1);
+        this.lockedTarget=null;
+        this.updateTypedDisplay();
+        this.highlightTargets();
+        return;
+      }
+      if(e.key==='Escape'){
+        e.preventDefault();
+        e.stopPropagation();
+        if(e.stopImmediatePropagation)e.stopImmediatePropagation();
+        this.typedBuffer='';
+        this.lockedTarget=null;
+        this.wrongStreak=0;
+        this.updateTypedDisplay();
+        this.highlightTargets();
+        return;
+      }
       
       // Chuyển đổi an toàn hỗ trợ cả gõ Telex/VNI mà không bị kẹt hay lỗi
       if(e.key.length===1&&!e.ctrlKey&&!e.altKey&&!e.metaKey){
         const cleanChar = e.key.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[đĐ]/g, "d").toLowerCase();
         if(/^[a-z]$/.test(cleanChar)){
           e.preventDefault();
+          e.stopPropagation();
+          if(e.stopImmediatePropagation)e.stopImmediatePropagation();
           this.processTypedChar(cleanChar);
         }
       }
     };
-    window.addEventListener('keydown',this.keyHandler);
+    window.addEventListener('keydown',this.keyHandler,true);
   }
 
   processTypedChar(char){
     const testBuf = this.typedBuffer + char;
+    let matched = false;
     
     // Kiểm tra xem testBuf có khớp với từ đang khóa mục tiêu không
     if(this.lockedTarget && !this.lockedTarget.isDestroyed){
       const tNorm = normalizePinyin(this.lockedTarget.wordObj.pinyin);
       if(tNorm.startsWith(testBuf)){
         this.typedBuffer = testBuf;
+        matched = true;
       } else {
         // Không khớp mục tiêu hiện tại, thử tìm xem có khớp từ nào khác trên màn hình không
         const otherMatches = this.activeWords.filter(w => !w.isDestroyed && normalizePinyin(w.wordObj.pinyin).startsWith(testBuf)).sort((a,b)=>b.y-a.y);
         if(otherMatches.length > 0){
           this.lockedTarget = otherMatches[0];
           this.typedBuffer = testBuf;
-        } else {
-          // Bấm nhầm phím: Không xóa sạch toàn bộ buffer mà chỉ rung nhẹ và phát âm thanh
-          this.music.playMiss();
-          this.shakeTypedBuf();
-          return;
+          matched = true;
         }
       }
     } else {
@@ -442,11 +470,24 @@ export class CannonGameEngine {
       if(matches.length > 0){
         this.lockedTarget = matches[0];
         this.typedBuffer = testBuf;
-      } else {
-        this.music.playMiss();
-        this.shakeTypedBuf();
-        return;
+        matched = true;
       }
+    }
+
+    if(matched){
+      this.wrongStreak = 0; // Gõ đúng ký tự -> reset đếm sai
+    } else {
+      // Bấm nhầm phím / bấm nháp không trúng bất kỳ từ nào đang rơi
+      this.wrongStreak++;
+      this.music.playMiss();
+      this.shakeTypedBuf();
+      this.updateTypedDisplay();
+      
+      // Nếu bấm nháp sai liên tiếp 5 lần -> Tính từ đang rơi bị rớt xuống luôn!
+      if(this.wrongStreak >= 5){
+        this.handleFiveMissPenalty();
+      }
+      return;
     }
 
     // Đã gõ xong trọn vẹn pinyin của mục tiêu -> Phóng phi đao tiêu diệt!
@@ -456,12 +497,67 @@ export class CannonGameEngine {
         const target = this.lockedTarget;
         this.typedBuffer = '';
         this.lockedTarget = null;
+        this.wrongStreak = 0;
         this.fireDagger(target);
       }
     }
 
     this.updateTypedDisplay();
     this.highlightTargets();
+  }
+
+  handleFiveMissPenalty(){
+    this.wrongStreak = 0;
+    this.typedBuffer = '';
+    this.lockedTarget = null;
+    this.combo = 0; // Reset chuỗi đúng liên tiếp về 0
+
+    if(this.activeWords.length === 0){
+      this.updateHUD();
+      this.updateTypedDisplay();
+      this.highlightTargets();
+      return;
+    }
+
+    // Lấy từ đang rơi thấp nhất trên màn hình (gần chạm đất nhất)
+    const sorted = [...this.activeWords].filter(w => !w.isDestroyed).sort((a,b) => b.y - a.y);
+    if(sorted.length === 0) return;
+    const droppedItem = sorted[0];
+    const idx = this.activeWords.findIndex(w => w.id === droppedItem.id);
+    if(idx !== -1){
+      this.activeWords.splice(idx, 1);
+    }
+    if(droppedItem.el && droppedItem.el.parentNode){
+      droppedItem.el.parentNode.removeChild(droppedItem.el);
+    }
+
+    this.showMissFlash();
+    this.music.playMiss();
+    const zh = droppedItem.wordObj.word || droppedItem.wordObj.char || '';
+    this.showFloatingText(droppedItem.x, Math.max(70, droppedItem.y), `💥 Sai 5 lần! Rớt từ: ${zh}`, '#ef4444');
+
+    if(this.playMode !== 'practice'){
+      if(this.shieldActive){
+        this.shieldActive = false;
+        this.shieldTimer = 0;
+        this.showFloatingText(droppedItem.x, Math.max(70, droppedItem.y - 20), '🛡️ Lá Chắn Chặn!', '#38bdf8');
+      } else {
+        this.lives--;
+        if(this.lives <= 0){
+          this.updateHUD();
+          this.gameOver(false);
+          return;
+        }
+      }
+    }
+
+    this.updateHUD();
+    this.updateTypedDisplay();
+    this.highlightTargets();
+
+    if(this.wordQueue.length === 0 && this.activeWords.length === 0){
+      setTimeout(() => this.gameOver(true), 500);
+    }
   }
 
   shakeTypedBuf(){
@@ -481,12 +577,11 @@ export class CannonGameEngine {
       else{bufEl.className='phidao-typed-buf';bufEl.innerHTML=`<span class="phidao-cursor-blink">|</span>`;}
     }
     if(hintEl){
-      if(this.lockedTarget&&buf){
-        const zh = this.lockedTarget.wordObj.word || this.lockedTarget.wordObj.char || '';
-        const norm=normalizePinyin(this.lockedTarget.wordObj.pinyin);
-        const rem=norm.slice(buf.length);
-        hintEl.innerHTML=`<span style="color:#fbbf24;">${buf}</span><span style="color:rgba(148,163,184,.45);">${rem}</span> → ${zh}`;
-      } else hintEl.textContent='';
+      if(this.wrongStreak > 0){
+        hintEl.innerHTML=`<span style="color:#ef4444;font-weight:800;font-size:0.8rem;background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.5);border-radius:12px;padding:2px 10px;display:inline-block;animation:bufShake .2s ease;">⚠️ Bấm sai: ${this.wrongStreak}/5</span>`;
+      } else {
+        hintEl.textContent='';
+      }
     }
   }
 
@@ -699,15 +794,22 @@ export class CannonGameEngine {
         if(item.y>=groundY){
           if(item.el&&item.el.parentNode)item.el.parentNode.removeChild(item.el);
           this.activeWords.splice(i,1);
-          if(this.lockedTarget&&this.lockedTarget.id===item.id){this.lockedTarget=null;this.typedBuffer='';this.updateTypedDisplay();}
+          if(this.lockedTarget&&this.lockedTarget.id===item.id){this.lockedTarget=null;this.typedBuffer='';}
+          this.combo=0; // Đứt chuỗi combo liên tiếp trong mọi chế độ khi bị rớt từ!
+          this.wrongStreak=0;
+          this.music.playMiss();
+          this.showMissFlash();
           if(this.playMode === 'practice'){
-            this.showFloatingText(item.x,groundY-22,`💡 ${item.wordObj.word} (${item.wordObj.meaning || ''})`,'#38bdf8');
+            this.showFloatingText(item.x,groundY-22,`💔 Rớt từ: ${item.wordObj.word} (${item.wordObj.meaning || ''})`,'#ef4444');
           } else {
             if(this.shieldActive){this.shieldActive=false;this.shieldTimer=0;this.showFloatingText(item.x,groundY-20,'🛡️ Lá Chắn Chặn!','#38bdf8');}
-            else{this.lives--;this.combo=0;this.music.playMiss();this.showMissFlash();this.showFloatingText(item.x,groundY-22,`💔 ${item.wordObj.word} (${item.wordObj.meaning || ''})`,'#ef4444');}
+            else{this.lives--;this.showFloatingText(item.x,groundY-22,`💔 ${item.wordObj.word} (${item.wordObj.meaning || ''})`,'#ef4444');}
             if(this.lives<=0){this.gameOver(false);return;}
           }
           this.updateHUD();
+          this.updateTypedDisplay();
+          this.highlightTargets();
+          if(this.wordQueue.length===0&&this.activeWords.length===0)setTimeout(()=>this.gameOver(true),500);
         }
       }
     }else{this.lastFrameTime=currentTime;}
@@ -798,7 +900,7 @@ export class CannonGameEngine {
     this.isStopping=false;this.isRunning=true;this.isPaused=false;
     this.score=0;this.combo=0;this.maxCombo=0;this.lives=3;
     this.activeWords=[];this.wordsDestroyedCount=0;this.correctWordsSet=new Set();
-    this.typedBuffer='';this.lockedTarget=null;
+    this.typedBuffer='';this.lockedTarget=null;this.wrongStreak=0;
     this.wordQueue=[...this.rawWords].sort(()=>Math.random()-0.5);
     this.slowMoTimer=0;this.score2xTimer=0;this.shieldActive=false;this.shieldTimer=0;
     this.lastFrameTime=performance.now();this.spawnTimer=0;
@@ -810,6 +912,7 @@ export class CannonGameEngine {
   }
 
   gameOver(isVictory){
+    if(this.isStopping)return;
     this.isRunning=false;
     if(this.timerInterval){clearInterval(this.timerInterval);this.timerInterval=null;}
     if(this.animFrameId){cancelAnimationFrame(this.animFrameId);this.animFrameId=null;}
@@ -959,7 +1062,7 @@ export class CannonGameEngine {
     this.isRunning=false;this.isStopping=true;this.music.stop();
     if(this.timerInterval){clearInterval(this.timerInterval);this.timerInterval=null;}
     if(this.animFrameId){cancelAnimationFrame(this.animFrameId);this.animFrameId=null;}
-    if(this.keyHandler){window.removeEventListener('keydown',this.keyHandler);this.keyHandler=null;}
+    if(this.keyHandler){window.removeEventListener('keydown',this.keyHandler,true);this.keyHandler=null;}
     const wl=this.container.querySelector('#cannon-words-layer');if(wl)wl.innerHTML='';
     const fl=this.container.querySelector('#cannon-fx-layer');if(fl)fl.innerHTML='';
     const cb=this.onExit;this.onExit=null;if(typeof cb==='function')cb();

@@ -1091,24 +1091,36 @@ export class ToneRhythmGameEngine {
       if (key === '1' || key === 'a') {
         this.triggerLaneHit(1);
         e.preventDefault();
+        e.stopPropagation();
+        if (e.stopImmediatePropagation) e.stopImmediatePropagation();
       } else if (key === '2' || key === 's') {
         this.triggerLaneHit(2);
         e.preventDefault();
+        e.stopPropagation();
+        if (e.stopImmediatePropagation) e.stopImmediatePropagation();
       } else if (key === '3' || (key === 'd' && !e.ctrlKey)) {
         this.triggerLaneHit(3);
         e.preventDefault();
+        e.stopPropagation();
+        if (e.stopImmediatePropagation) e.stopImmediatePropagation();
       } else if (key === '4' || key === 'f') {
         this.triggerLaneHit(4);
         e.preventDefault();
+        e.stopPropagation();
+        if (e.stopImmediatePropagation) e.stopImmediatePropagation();
       } else if (key === '5' || key === ' ' || code === 'Space' || key === 'l' || key === 'g') {
         this.triggerLaneHit(0);
         e.preventDefault();
+        e.stopPropagation();
+        if (e.stopImmediatePropagation) e.stopImmediatePropagation();
       } else if (key === 'p' || code === 'Escape') {
         this.togglePause();
         e.preventDefault();
+        e.stopPropagation();
+        if (e.stopImmediatePropagation) e.stopImmediatePropagation();
       }
     };
-    window.addEventListener('keydown', this.keyHandler);
+    window.addEventListener('keydown', this.keyHandler, true);
   }
 
   start() {
@@ -1759,7 +1771,7 @@ export class ToneRhythmGameEngine {
       clearTimeout(this.countdownTimer);
       this.countdownTimer = null;
     }
-    window.removeEventListener('keydown', this.keyHandler);
+    window.removeEventListener('keydown', this.keyHandler, true);
     const overlay = this.container.querySelector('#rhythm-modal-overlay');
     if (overlay) overlay.style.setProperty('display', 'none', 'important');
     if (typeof this.onExit === 'function') {

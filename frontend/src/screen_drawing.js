@@ -1240,6 +1240,20 @@ class ScreenDrawingTool {
         return;
       }
 
+      // Không kích hoạt phím tắt vẽ khi đang chơi game / modal game hoạt động
+      if (
+        document.querySelector('.phidao-wrapper') ||
+        document.querySelector('.snake-game-wrapper') ||
+        document.querySelector('.tone-rhythm-wrapper') ||
+        document.querySelector('.notebook-games-hub-wrapper') ||
+        document.querySelector('#game-active-viewport') ||
+        document.querySelector('#notebook-games-hub-modal[style*="display: block"]') ||
+        document.querySelector('#notebook-games-hub-modal[style*="display: flex"]') ||
+        window._activeNotebookGame
+      ) {
+        return;
+      }
+
       const key = e.key.toLowerCase();
 
       // Snipping Tool Shortcut (Win + Shift + S / Shift + S / PrintScreen / Ctrl + Shift + S)
@@ -1454,6 +1468,20 @@ function _sdUpdateButtons() {
   document.addEventListener('touchend', onFsTrigger, { passive: false, capture: true });
 
   document.addEventListener('keydown', (e) => {
+    // Bỏ qua khi đang chơi game / modal game hoạt động
+    if (
+      document.querySelector('.phidao-wrapper') ||
+      document.querySelector('.snake-game-wrapper') ||
+      document.querySelector('.tone-rhythm-wrapper') ||
+      document.querySelector('.notebook-games-hub-wrapper') ||
+      document.querySelector('#game-active-viewport') ||
+      document.querySelector('#notebook-games-hub-modal[style*="display: block"]') ||
+      document.querySelector('#notebook-games-hub-modal[style*="display: flex"]') ||
+      window._activeNotebookGame
+    ) {
+      return;
+    }
+
     const isDocFs = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
     const isFs = isDocFs || _sdIsFullscreen;
 

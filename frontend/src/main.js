@@ -3088,10 +3088,24 @@ function setupEventListeners() {
   // Form submission
   addWordForm.addEventListener('submit', handleAddWordForm);
 
-  // Keyboard navigation hotkeys (Only for HSK Exam Player)
+  // Keyboard navigation hotkeys (Only for HSK Exam Player and Flashcards)
   document.addEventListener('keydown', (e) => {
     // Ignore key bindings if user is typing in inputs or select boxes
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') {
+      return;
+    }
+
+    // Không kích hoạt phím tắt khi đang chơi bất kỳ trò chơi arcade / sổ tay nào
+    if (
+      document.querySelector('.phidao-wrapper') ||
+      document.querySelector('.snake-game-wrapper') ||
+      document.querySelector('.tone-rhythm-wrapper') ||
+      document.querySelector('.notebook-games-hub-wrapper') ||
+      document.querySelector('#game-active-viewport') ||
+      document.querySelector('#notebook-games-hub-modal[style*="display: block"]') ||
+      document.querySelector('#notebook-games-hub-modal[style*="display: flex"]') ||
+      window._activeNotebookGame
+    ) {
       return;
     }
 

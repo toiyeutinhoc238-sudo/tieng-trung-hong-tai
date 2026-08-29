@@ -535,21 +535,31 @@ export class SnakeGameEngine {
       if (key === 'arrowup' || key === 'w') {
         if (this.dir.y === 0) this.nextDir = { x: 0, y: -1 };
         e.preventDefault();
+        e.stopPropagation();
+        if (e.stopImmediatePropagation) e.stopImmediatePropagation();
       } else if (key === 'arrowdown' || key === 's') {
         if (this.dir.y === 0) this.nextDir = { x: 0, y: 1 };
         e.preventDefault();
+        e.stopPropagation();
+        if (e.stopImmediatePropagation) e.stopImmediatePropagation();
       } else if (key === 'arrowleft' || key === 'a') {
         if (this.dir.x === 0) this.nextDir = { x: -1, y: 0 };
         e.preventDefault();
+        e.stopPropagation();
+        if (e.stopImmediatePropagation) e.stopImmediatePropagation();
       } else if (key === 'arrowright' || key === 'd') {
         if (this.dir.x === 0) this.nextDir = { x: 1, y: 0 };
         e.preventDefault();
+        e.stopPropagation();
+        if (e.stopImmediatePropagation) e.stopImmediatePropagation();
       } else if (key === ' ') {
         this.togglePause();
         e.preventDefault();
+        e.stopPropagation();
+        if (e.stopImmediatePropagation) e.stopImmediatePropagation();
       }
     };
-    window.addEventListener('keydown', this.keyHandler);
+    window.addEventListener('keydown', this.keyHandler, true);
 
     // Touch Swipe Gestures on Canvas (Real-time responsive without page dragging)
     if (this.canvas) {
@@ -1432,7 +1442,7 @@ export class SnakeGameEngine {
       this.animFrameId = null;
     }
     if (this.keyHandler) {
-      window.removeEventListener('keydown', this.keyHandler);
+      window.removeEventListener('keydown', this.keyHandler, true);
       this.keyHandler = null;
     }
     if (this.resizeHandler) {
