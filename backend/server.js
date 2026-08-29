@@ -734,20 +734,20 @@ app.post('/api/user/device-telemetry', async (req, res) => {
       }
       cachedUserData.users[normEmail].lastDeviceInfo = telemetryData;
       cachedUserData.users[normEmail].lastSeenTime = now;
-      saveUserData(cachedUserData).catch(() => {});
+      saveUserData(cachedUserData).catch(() => { });
     }
 
     if (mongoose.connection.readyState === 1) {
       await User.updateOne(
         { email: normEmail },
-        { 
-          $set: { 
+        {
+          $set: {
             lastDeviceInfo: telemetryData,
             lastSeenTime: now
-          } 
+          }
         },
         { upsert: false }
-      ).catch(() => {});
+      ).catch(() => { });
     }
 
     res.json({ success: true, message: 'Recorded device info' });
@@ -832,14 +832,17 @@ app.get('/api/admin/users', async (req, res) => {
     ensureDailyHistoryIntegrity(stats);
 
     const quizHistory = (userData.quizHistory && userData.quizHistory[email]) || u.quizHistory || [];
+    const gameHistory = u.gameHistory || (userData.users && userData.users[email] && userData.users[email].gameHistory) || [];
+    const allAttempts = [...quizHistory, ...gameHistory];
+
     let highestQuizScore = 0;
     let totalQuizScore = 0;
-    quizHistory.forEach(q => {
+    allAttempts.forEach(q => {
       const sc = Number(q.score) || 0;
       if (sc > highestQuizScore) highestQuizScore = sc;
       totalQuizScore += sc;
     });
-    const avgQuizScore = quizHistory.length > 0 ? Math.round(totalQuizScore / quizHistory.length) : 0;
+    const avgQuizScore = allAttempts.length > 0 ? Math.round(totalQuizScore / allAttempts.length) : 0;
 
     const progress = (userData.progress && userData.progress[email]) || {};
     let memorizedWordsCount = 0;
@@ -862,7 +865,7 @@ app.get('/api/admin/users', async (req, res) => {
       totalDays: stats.totalDays || (stats.dailyHistory ? Object.keys(stats.dailyHistory).filter(d => (stats.dailyHistory[d] || 0) > 0).length : 1),
       maxStreak: stats.maxStreak || stats.streak || 1,
       studyTime: stats.studyTime || 0,
-      quizCount: quizHistory.length,
+      quizCount: allAttempts.length,
       highestQuizScore,
       avgQuizScore,
       memorizedWordsCount,
@@ -1097,7 +1100,7 @@ app.get('/api/admin/users/export-excel', async (req, res) => {
     const excelBuffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
 
     const todayDate = new Date();
-    const dateTag = `${todayDate.getFullYear()}_${(todayDate.getMonth()+1).toString().padStart(2,'0')}_${todayDate.getDate().toString().padStart(2,'0')}`;
+    const dateTag = `${todayDate.getFullYear()}_${(todayDate.getMonth() + 1).toString().padStart(2, '0')}_${todayDate.getDate().toString().padStart(2, '0')}`;
     const filename = `Bao_Cao_Nguoi_Dung_TiengTrungHongTai_${dateTag}.xlsx`;
 
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -1510,17 +1513,11 @@ app.get('/api/user/game-history', async (req, res) => {
 // GET endpoint for Real MongoDB Leaderboard — reads directly from MongoDB
 app.get('/api/leaderboard', async (req, res) => {
   try {
-    const usersList = await User.find({});
-
-    if (!usersList || usersList.length === 0) {
-      return res.json([]);
-    }
-
-    const userData = cachedUserData || await readUserData();
+    const userData = await readUserData();
+    const usersObj = userData.users || {};
     const leaderboard = [];
 
-    for (const u of usersList) {
-      const email = u._id;
+    for (const [email, u] of Object.entries(usersObj)) {
       const quizHistory = (userData.quizHistory && userData.quizHistory[email]) || u.quizHistory || [];
       const gameHistory = u.gameHistory || [];
       const allAttempts = [...quizHistory, ...gameHistory];
@@ -1538,6 +1535,11 @@ app.get('/api/leaderboard', async (req, res) => {
         }
       });
 
+      const progress = (userData.progress && userData.progress[email]) || u.progress || {};
+      const memorizedCount = Object.values(progress).filter(p => p && p.isMemorized).length;
+      const wordScore = memorizedCount * 10;
+      const finalScore = Math.max(highestScore, wordScore);
+
       const lastActive = u.stats && u.stats.lastActiveDate
         ? new Date(u.stats.lastActiveDate).getTime()
         : (latestAttemptTime || (u.lastSeenTime ? new Date(u.lastSeenTime).getTime() : Date.now()));
@@ -1546,8 +1548,10 @@ app.get('/api/leaderboard', async (req, res) => {
         email,
         name: u.name || email.split('@')[0],
         picture: u.picture || '',
-        score: highestScore,
+        score: finalScore,
+        highestScore: finalScore,
         quizCount: allAttempts.length,
+        memorizedCount,
         studyTime: u.stats ? (u.stats.studyTime || 0) : 0,
         streak: u.stats ? (u.stats.streak || 0) : 0,
         latestAttemptTime: latestAttemptTime || lastActive
