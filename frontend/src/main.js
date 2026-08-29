@@ -4374,7 +4374,7 @@ function switchTab(tabId, skipShowTopics = false) {
   if (roadmapSec) roadmapSec.style.display = 'none';
 
   if (tabId === 'home') {
-    setDisp(homeViewSec, 'block');
+    setDisp(homeViewSec, 'flex');
   }
   else if (tabId === 'roadmap') {
     setDisp(roadmapSec, 'block');
