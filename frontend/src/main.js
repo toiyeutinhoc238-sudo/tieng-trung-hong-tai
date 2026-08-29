@@ -3819,10 +3819,9 @@ async function initAuth() {
   if (totalHistorySecs > userStudyTime) {
     userStudyTime = totalHistorySecs;
   }
-  const calcStreak = calculateStreakFromHistory(history);
-  if (calcStreak > userStreak) {
-    userStreak = calcStreak;
-  }
+  const histStats = getStudyStatsFromHistory(history);
+  userTotalDays = histStats.totalDays;
+  userStreak = Math.max(userStreak || 0, histStats.maxStreak, histStats.currentStreak, 1);
 
   renderUserProfile();
   updateStatsUI();
@@ -9698,6 +9697,7 @@ async function handleEssayCorrection() {
 let sessionStudyTime = 0;
 let activeTimer = null;
 let userStreak = 0;
+let userTotalDays = 1;
 let userStudyTime = 0; // cumulative study time in seconds
 
 // In-memory guest stats (will be lost on page reload)
@@ -9721,40 +9721,56 @@ function formatStudyTimeDisplay(totalMinutes) {
 }
 window.formatStudyTimeDisplay = formatStudyTimeDisplay;
 
-function calculateStreakFromHistory(dailyHistory) {
-  if (!dailyHistory || typeof dailyHistory !== 'object') return 1;
+function getStudyStatsFromHistory(dailyHistory) {
+  if (!dailyHistory || typeof dailyHistory !== 'object') {
+    return { currentStreak: 1, maxStreak: 1, totalDays: 1 };
+  }
   const dates = Object.keys(dailyHistory)
     .filter(d => (dailyHistory[d] || 0) > 0)
     .sort();
-  if (dates.length === 0) return 1;
-
-  const today = new Date();
-  const todayStr = today.toLocaleDateString('sv');
-  const yesterday = new Date(today);
-  yesterday.setDate(yesterday.getDate() - 1);
-  const yesterdayStr = yesterday.toLocaleDateString('sv');
-
-  let startStr = null;
-  if (dates.includes(todayStr)) {
-    startStr = todayStr;
-  } else if (dates.includes(yesterdayStr)) {
-    startStr = yesterdayStr;
-  } else {
-    startStr = dates[dates.length - 1];
+  if (dates.length === 0) {
+    return { currentStreak: 1, maxStreak: 1, totalDays: 1 };
   }
 
-  let streak = 0;
-  let checkDate = new Date(startStr);
+  const totalDays = dates.length;
+
+  let maxStreak = 1;
+  let curRun = 1;
+  for (let i = 1; i < dates.length; i++) {
+    const prev = new Date(dates[i - 1]);
+    const curr = new Date(dates[i]);
+    const diffDays = Math.round((curr - prev) / (1000 * 60 * 60 * 24));
+    if (diffDays === 1) {
+      curRun++;
+      if (curRun > maxStreak) maxStreak = curRun;
+    } else if (diffDays > 1) {
+      curRun = 1;
+    }
+  }
+
+  let lastStr = dates[dates.length - 1];
+  let checkDate = new Date(lastStr);
+  let currentStreak = 0;
   while (true) {
-    const dateKey = checkDate.toLocaleDateString('sv');
+    const dateKey = checkDate.toISOString().split('T')[0];
     if (dailyHistory[dateKey] && dailyHistory[dateKey] > 0) {
-      streak++;
+      currentStreak++;
       checkDate.setDate(checkDate.getDate() - 1);
     } else {
       break;
     }
   }
-  return Math.max(streak, 1);
+
+  return {
+    currentStreak: Math.max(currentStreak, 1),
+    maxStreak: Math.max(maxStreak, currentStreak, 1),
+    totalDays: Math.max(totalDays, 1)
+  };
+}
+window.getStudyStatsFromHistory = getStudyStatsFromHistory;
+
+function calculateStreakFromHistory(dailyHistory) {
+  return getStudyStatsFromHistory(dailyHistory).maxStreak;
 }
 window.calculateStreakFromHistory = calculateStreakFromHistory;
 
@@ -10032,12 +10048,11 @@ function renderCourseCompletionDashboard() {
   if (totalHistorySecs > userStudyTime) {
     userStudyTime = totalHistorySecs;
   }
-  const calcStreak = calculateStreakFromHistory(history);
-  if (calcStreak > userStreak) {
-    userStreak = calcStreak;
-  }
+  const histStats = getStudyStatsFromHistory(history);
+  userTotalDays = histStats.totalDays;
+  userStreak = Math.max(userStreak || 0, histStats.maxStreak, histStats.currentStreak, 1);
 
-  if (zubiStreak) zubiStreak.textContent = `${userStreak || 1} Ngày`;
+  if (zubiStreak) zubiStreak.textContent = `${userTotalDays} Ngày`;
 
   const activeVocabs = vocabList.filter(w => !w.isCustom);
   const totalMemorized = activeVocabs.filter(w => w.isMemorized).length;
@@ -10182,10 +10197,9 @@ function updateStatsUI() {
   if (totalHistorySecs > userStudyTime) {
     userStudyTime = totalHistorySecs;
   }
-  const calcStreak = calculateStreakFromHistory(history);
-  if (calcStreak > userStreak) {
-    userStreak = calcStreak;
-  }
+  const histStats = getStudyStatsFromHistory(history);
+  userTotalDays = histStats.totalDays;
+  userStreak = Math.max(userStreak || 0, histStats.maxStreak, histStats.currentStreak, 1);
 
   const streakEl = document.getElementById('welcome-streak-val');
   const homeStreakEl = document.getElementById('home-streak-val');
@@ -10198,9 +10212,9 @@ function updateStatsUI() {
   const zubiStreakEl = document.getElementById('zubi-streak-count');
   const zubiTotalWordsEl = document.getElementById('zubi-total-words-count');
 
-  if (streakEl) streakEl.textContent = `${userStreak} ngày`;
-  if (homeStreakEl) homeStreakEl.textContent = `${userStreak || 1}`;
-  if (zubiStreakEl) zubiStreakEl.textContent = `${userStreak || 1} Ngày`;
+  if (streakEl) streakEl.textContent = `${userTotalDays} ngày`;
+  if (homeStreakEl) homeStreakEl.textContent = `${userTotalDays}`;
+  if (zubiStreakEl) zubiStreakEl.textContent = `${userTotalDays} Ngày`;
 
   const minutes = Math.floor((userStudyTime + sessionStudyTime) / 60);
   const formattedTime = formatStudyTimeDisplay(minutes);
@@ -10589,7 +10603,7 @@ window.openZubiStatDetail = function (type) {
 
   } else if (type === 'time') {
     titleEl.textContent = 'Thời gian tham gia học';
-    subtitleEl.textContent = 'Thống kê thời gian duy trì thói quen học tập của bạn';
+    subtitleEl.textContent = 'Thống kê tổng thời gian duy trì thói quen học tập của bạn';
     iconEl.className = 'zubi-circle-icon blue';
     iconEl.style.background = 'rgba(59, 130, 246, 0.2)';
     iconEl.style.color = '#3b82f6';
@@ -10606,8 +10620,8 @@ window.openZubiStatDetail = function (type) {
           <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-top: 6px;" id="zubi-modal-time-val">${timeDisplay}</div>
         </div>
         <div style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 16px; padding: 18px; text-align: center;">
-          <div style="font-size: 0.8rem; color: #fbbf24; font-weight: 700; text-transform: uppercase;">Chuỗi ngày liên tục (Streak)</div>
-          <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-top: 6px;">🔥 ${userStreak || 1} ngày</div>
+          <div style="font-size: 0.8rem; color: #fbbf24; font-weight: 700; text-transform: uppercase;">Tổng số ngày tham gia</div>
+          <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-top: 6px;">📅 ${userTotalDays || 1} ngày</div>
         </div>
       </div>
       <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 18px; display: flex; gap: 14px; align-items: flex-start;">
@@ -10620,8 +10634,8 @@ window.openZubiStatDetail = function (type) {
     `;
 
   } else if (type === 'streak') {
-    titleEl.textContent = 'Ngày tham gia học (Streak)';
-    subtitleEl.textContent = 'Thống kê chuỗi ngày duy trì thói quen học tập liên tục';
+    titleEl.textContent = 'Ngày tham gia học & Lịch sử học';
+    subtitleEl.textContent = 'Thống kê tổng số ngày và chuỗi học tập liên tục';
     iconEl.className = 'zubi-circle-icon orange';
     iconEl.style.background = 'rgba(249, 115, 22, 0.2)';
     iconEl.style.color = '#f97316';
@@ -10631,24 +10645,53 @@ window.openZubiStatDetail = function (type) {
     const mins = Math.floor(totalCurrentSecs / 60);
     const timeDisplay = formatStudyTimeDisplay(mins);
 
+    const history = getDailyStudyHistory();
+    const sortedDates = Object.keys(history).filter(d => (history[d] || 0) > 0).sort().reverse();
+    let historyRowsHtml = '';
+    if (sortedDates.length > 0) {
+      historyRowsHtml = `
+        <div style="margin-top: 16px; text-align: left;">
+          <div style="font-size: 0.85rem; font-weight: 800; color: #fbbf24; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-calendar-check"></i> Lịch Sử Các Ngày Đã Học (${sortedDates.length} ngày)
+          </div>
+          <div style="max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding-right: 4px;">
+            ${sortedDates.map(d => {
+              const sec = history[d] || 0;
+              const dMins = Math.round(sec / 60);
+              const dTime = dMins >= 60 ? `${Math.floor(dMins / 60)}h ${dMins % 60}m` : `${dMins} phút`;
+              const parts = d.split('-');
+              const vnDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
+              return `
+                <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 8px 14px; font-size: 0.86rem;">
+                  <span style="color: #f1f5f9; font-weight: 700;">📅 Ngày ${vnDate}</span>
+                  <span style="color: #38bdf8; font-weight: 800;"><i class="fa-solid fa-stopwatch"></i> ${dTime}</span>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
     bodyEl.innerHTML = `
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
         <div style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 16px; padding: 18px; text-align: center;">
-          <div style="font-size: 0.8rem; color: #fbbf24; font-weight: 700; text-transform: uppercase;">Chuỗi ngày liên tục</div>
-          <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-top: 6px;">🔥 ${userStreak || 1} ngày</div>
+          <div style="font-size: 0.8rem; color: #fbbf24; font-weight: 700; text-transform: uppercase;">Tổng số ngày đã học</div>
+          <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-top: 6px;">📅 ${userTotalDays || 1} ngày</div>
         </div>
         <div style="background: rgba(59, 130, 246, 0.12); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 16px; padding: 18px; text-align: center;">
-          <div style="font-size: 0.8rem; color: #60a5fa; font-weight: 700; text-transform: uppercase;">Tổng thời gian học</div>
-          <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-top: 6px;">${timeDisplay}</div>
+          <div style="font-size: 0.8rem; color: #60a5fa; font-weight: 700; text-transform: uppercase;">Chuỗi ngày kỷ lục</div>
+          <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-top: 6px;">🔥 ${userStreak || 1} ngày</div>
         </div>
       </div>
       <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 18px; display: flex; gap: 14px; align-items: flex-start;">
         <div style="width: 36px; height: 36px; border-radius: 50%; background: rgba(249, 115, 22, 0.2); color: #f97316; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.1rem;"><i class="fa-solid fa-fire"></i></div>
         <div>
           <strong style="color: #ffffff; font-size: 0.95rem;">Giữ vững thói quen học tập:</strong>
-          <p style="margin: 4px 0 0 0; color: #94a3b8; font-size: 0.85rem; line-height: 1.5;">Học mỗi ngày ít nhất 1 bài học hoặc 10 từ vựng để giữ lửa streak và tiếp thu kiến thức một cách tự nhiên nhất!</p>
+          <p style="margin: 4px 0 0 0; color: #94a3b8; font-size: 0.85rem; line-height: 1.5;">Học mỗi ngày ít nhất 1 bài học hoặc 10 từ vựng để tích lũy ngày học và tiếp thu kiến thức một cách tự nhiên nhất!</p>
         </div>
       </div>
+      ${historyRowsHtml}
     `;
 
   } else if (type === 'enrolled') {
@@ -10839,15 +10882,15 @@ async function loadInitialStats() {
   if (totalHistorySecs > userStudyTime) {
     userStudyTime = totalHistorySecs;
   }
-  const calcStreak = calculateStreakFromHistory(history);
-  if (calcStreak > userStreak) {
-    userStreak = calcStreak;
-  }
+  const histStats = getStudyStatsFromHistory(history);
+  userTotalDays = histStats.totalDays;
+  userStreak = Math.max(userStreak || 0, histStats.maxStreak, histStats.currentStreak, 1);
 
   if (currentUser) {
     const userKey = currentUser._id || currentUser.id || currentUser.email || 'user';
     localStorage.setItem(`user_stats_${userKey}`, JSON.stringify({
       streak: userStreak,
+      totalDays: userTotalDays,
       studyTime: userStudyTime
     }));
   }
@@ -14171,7 +14214,12 @@ window.renderAdminUsersTable = function () {
     // Format study time
     const studyHours = ((u.studyTime || 0) / 3600).toFixed(1);
     const studyMins = Math.round(((u.studyTime || 0) % 3600) / 60);
-    const timeFormatted = u.studyTime > 3600 ? `${studyHours}h` : `${studyMins} phút`;
+    const timeFormatted = (u.studyTime || 0) >= 3600 ? `${studyHours}h` : `${Math.round((u.studyTime || 0) / 60)} phút`;
+
+    const activeDays = (u.dailyHistory && typeof u.dailyHistory === 'object')
+      ? Object.keys(u.dailyHistory).filter(d => (u.dailyHistory[d] || 0) > 0).length
+      : 0;
+    const displayDays = Math.max(activeDays, u.totalDays || 0, u.streak || 0, 1);
 
     // Actions
     let actionBtnHtml = '';
@@ -14218,7 +14266,7 @@ window.renderAdminUsersTable = function () {
         </td>
         <td>
           <span style="font-weight: 800; color: #f97316; font-size: 0.88rem;">
-            <i class="fa-solid fa-fire"></i> ${u.streak || 0} ngày
+            <i class="fa-solid fa-fire"></i> ${displayDays} ngày
           </span>
         </td>
         <td>
@@ -14468,13 +14516,18 @@ window.openStudentHistoryDetail = function (userEmail) {
       <!-- Quick KPI Badges -->
       <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
         <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 10px; text-align: center;">
-          <div style="font-size: 0.7rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Chuỗi Ngày Học</div>
-          <div style="font-size: 1.15rem; font-weight: 800; color: #f97316; margin-top: 2px;"><i class="fa-solid fa-fire"></i> ${user.streak || 0} ngày</div>
+          <div style="font-size: 0.7rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Tổng Số Ngày Đã Học</div>
+          <div style="font-size: 1.15rem; font-weight: 800; color: #f97316; margin-top: 2px;"><i class="fa-solid fa-calendar-check"></i> ${dates.length || user.totalDays || user.streak || 1} ngày</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 10px; text-align: center;">
+          <div style="font-size: 0.7rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Chuỗi Kỷ Lục</div>
+          <div style="font-size: 1.15rem; font-weight: 800; color: #fbbf24; margin-top: 2px;"><i class="fa-solid fa-fire"></i> ${user.maxStreak || user.streak || 1} ngày</div>
         </div>
         <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 10px; text-align: center;">
           <div style="font-size: 0.7rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Tổng Thời Gian Học</div>
-          <div style="font-size: 1.15rem; font-weight: 800; color: #38bdf8; margin-top: 2px;"><i class="fa-solid fa-clock"></i> ${totalMins} phút</div>
+          <div style="font-size: 1.15rem; font-weight: 800; color: #38bdf8; margin-top: 2px;"><i class="fa-solid fa-clock"></i> ${((user.studyTime || 0) >= 3600) ? ((user.studyTime || 0) / 3600).toFixed(1) + 'h' : Math.round((user.studyTime || 0) / 60) + ' phút'}</div>
         </div>
+      </div>
         <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 10px; text-align: center;">
           <div style="font-size: 0.7rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Tổng Phiên Vào Web</div>
           <div style="font-size: 1.15rem; font-weight: 800; color: #10b981; margin-top: 2px;"><i class="fa-solid fa-door-open"></i> ${accessLogs.length} phiên</div>

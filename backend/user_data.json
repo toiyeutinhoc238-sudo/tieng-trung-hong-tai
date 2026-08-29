@@ -11,17 +11,19 @@
         "lastActiveDate": null,
         "dailyHistory": {}
       },
-      "gameHistory": []
+      "gameHistory": [],
+      "accessLogs": [],
+      "lastDeviceInfo": null
     },
     "phanphiphu04@gmail.com": {
       "name": "Phú Phan",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocIebQJ8CFxQDSOgwYPsfuN9FJvtBWARLqdYN9fCo-3UBytEPmI=s96-c",
-      "role": "user",
-      "lastSeenTime": "2026-08-20T15:06:16.856Z",
+      "role": "super_admin",
+      "lastSeenTime": "2026-08-29T13:59:35.946Z",
       "stats": {
         "streak": 1,
-        "studyTime": 10590,
-        "lastActiveDate": "2026-08-20",
+        "studyTime": 10695,
+        "lastActiveDate": "2026-08-29",
         "dailyHistory": {
           "2026-08-07": 1038,
           "2026-08-08": 1038,
@@ -35,7 +37,8 @@
           "2026-08-16": 1095,
           "2026-08-17": 75,
           "2026-08-18": 390,
-          "2026-08-20": 375
+          "2026-08-20": 375,
+          "2026-08-29": 105
         }
       },
       "gameHistory": [
@@ -63,7 +66,19 @@
           "combo": 4,
           "playedAt": "2026-08-18T15:22:07.348Z"
         }
-      ]
+      ],
+      "accessLogs": [
+        {
+          "sessionId": "sess_rwj0qcf9_1788011484221",
+          "enterTime": "2026-08-29T13:51:24.221Z",
+          "exitTime": "2026-08-29T13:59:35.369Z",
+          "durationSeconds": 491,
+          "device": "💻 Windows PC",
+          "ip": "171.232.28.172",
+          "isClosed": true
+        }
+      ],
+      "lastDeviceInfo": null
     },
     "yyxinwp@gmail.com": {
       "name": "Y Lam",
@@ -76,7 +91,9 @@
         "lastActiveDate": "2026-08-05",
         "dailyHistory": {}
       },
-      "gameHistory": []
+      "gameHistory": [],
+      "accessLogs": [],
+      "lastDeviceInfo": null
     },
     "toiyeutinhoc238@gmail.com": {
       "name": "Tin Học Tôi Yêu",
@@ -89,7 +106,9 @@
         "lastActiveDate": "2026-08-08",
         "dailyHistory": {}
       },
-      "gameHistory": []
+      "gameHistory": [],
+      "accessLogs": [],
+      "lastDeviceInfo": null
     },
     "thaihong162004@gmail.com": {
       "name": "Thái Hồng",
@@ -113,7 +132,9 @@
           "2026-08-20": 1200
         }
       },
-      "gameHistory": []
+      "gameHistory": [],
+      "accessLogs": [],
+      "lastDeviceInfo": null
     },
     "theduy2444@gmail.com": {
       "name": "duy nguyen",
@@ -128,7 +149,9 @@
           "2026-08-14": 30
         }
       },
-      "gameHistory": []
+      "gameHistory": [],
+      "accessLogs": [],
+      "lastDeviceInfo": null
     },
     "hkiet5294@gmail.com": {
       "name": "Hoanganh Kiet",
@@ -143,7 +166,9 @@
           "2026-08-14": 255
         }
       },
-      "gameHistory": []
+      "gameHistory": [],
+      "accessLogs": [],
+      "lastDeviceInfo": null
     },
     "nguyentronghuy12333@gmail.com": {
       "name": "Huy Nguyen",
@@ -159,7 +184,9 @@
           "2026-08-16": 270
         }
       },
-      "gameHistory": []
+      "gameHistory": [],
+      "accessLogs": [],
+      "lastDeviceInfo": null
     },
     "nguyentronghuy271104@gmail.com": {
       "name": "Huy Nguyễn",
@@ -177,21 +204,24 @@
           "2026-08-20": 2145
         }
       },
-      "gameHistory": []
+      "gameHistory": [],
+      "accessLogs": [],
+      "lastDeviceInfo": null
     },
     "kieutrang.nguyen8783@gmail.com": {
       "name": "Trang Nguyen",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocKQ6QezwFjK50LIaGzkLtcMQ35dh4pUmZ2fm7il3F22UtpY8w=s96-c",
       "role": "user",
-      "lastSeenTime": "2026-08-20T13:37:15.592Z",
+      "lastSeenTime": "2026-08-29T14:03:04.004Z",
       "stats": {
         "streak": 1,
-        "studyTime": 2490,
-        "lastActiveDate": "2026-08-20",
+        "studyTime": 3240,
+        "lastActiveDate": "2026-08-29",
         "dailyHistory": {
           "2026-08-15": 1695,
           "2026-08-18": 45,
-          "2026-08-20": 750
+          "2026-08-20": 750,
+          "2026-08-29": 750
         }
       },
       "gameHistory": [
@@ -227,7 +257,19 @@
           "combo": 40,
           "playedAt": "2026-08-20T13:34:55.483Z"
         }
-      ]
+      ],
+      "accessLogs": [
+        {
+          "sessionId": "sess_n856qx3s_1788009359288",
+          "enterTime": "2026-08-29T13:50:38.945Z",
+          "exitTime": "2026-08-29T14:02:59.430Z",
+          "durationSeconds": 740,
+          "device": "💻 Máy Mac",
+          "ip": "14.186.185.218",
+          "isClosed": false
+        }
+      ],
+      "lastDeviceInfo": null
     },
     "pthao9298@gmail.com": {
       "name": "Thảo Phương",
@@ -276,7 +318,9 @@
           "combo": 20,
           "playedAt": "2026-08-15T16:41:27.221Z"
         }
-      ]
+      ],
+      "accessLogs": [],
+      "lastDeviceInfo": null
     },
     "mathmathsigma@gmail.com": {
       "name": "Đăng an Ngyễn",
@@ -291,7 +335,9 @@
           "2026-08-16": 255
         }
       },
-      "gameHistory": []
+      "gameHistory": [],
+      "accessLogs": [],
+      "lastDeviceInfo": null
     },
     "duongnguyennhatkhang@gmail.com": {
       "name": "Khang Nhật",
@@ -315,7 +361,9 @@
           "combo": 2,
           "playedAt": "2026-08-16T03:06:16.239Z"
         }
-      ]
+      ],
+      "accessLogs": [],
+      "lastDeviceInfo": null
     },
     "22521000@gm.uit.edu.vn": {
       "name": "Nhẫn Lương Lê Công",
@@ -330,7 +378,9 @@
           "2026-08-16": 30
         }
       },
-      "gameHistory": []
+      "gameHistory": [],
+      "accessLogs": [],
+      "lastDeviceInfo": null
     },
     "thanhphat160818@gmail.com": {
       "name": "Thắng Lê",
@@ -345,7 +395,9 @@
           "2026-08-16": 330
         }
       },
-      "gameHistory": []
+      "gameHistory": [],
+      "accessLogs": [],
+      "lastDeviceInfo": null
     },
     "vyt830941@gmail.com": {
       "name": "Vy Trương",
@@ -360,10 +412,13 @@
           "2026-08-16": 30
         }
       },
-      "gameHistory": []
+      "gameHistory": [],
+      "accessLogs": [],
+      "lastDeviceInfo": null
     },
     "bsau261953@gmail.com": {
       "name": "Sau ba",
+      "picture": "",
       "role": "user",
       "lastSeenTime": "2026-08-16T10:45:25.747Z",
       "stats": {
@@ -374,7 +429,9 @@
           "2026-08-16": 120
         }
       },
-      "gameHistory": []
+      "gameHistory": [],
+      "accessLogs": [],
+      "lastDeviceInfo": null
     },
     "doanthinhinh17101995@gmail.com": {
       "name": "Nhinh Đoàn",
@@ -389,7 +446,9 @@
           "2026-08-16": 135
         }
       },
-      "gameHistory": []
+      "gameHistory": [],
+      "accessLogs": [],
+      "lastDeviceInfo": null
     },
     "kailani162004.work@gmail.com": {
       "name": "红太",
@@ -402,7 +461,9 @@
         "lastActiveDate": "",
         "dailyHistory": {}
       },
-      "gameHistory": []
+      "gameHistory": [],
+      "accessLogs": [],
+      "lastDeviceInfo": null
     },
     "quechii1106@gmail.com": {
       "name": "Vqchyy",
@@ -417,7 +478,9 @@
           "2026-08-16": 60
         }
       },
-      "gameHistory": []
+      "gameHistory": [],
+      "accessLogs": [],
+      "lastDeviceInfo": null
     },
     "maivy2615@gmail.com": {
       "name": "Vy Mai",
@@ -433,7 +496,9 @@
           "2026-08-19": 30
         }
       },
-      "gameHistory": []
+      "gameHistory": [],
+      "accessLogs": [],
+      "lastDeviceInfo": null
     },
     "lethanhthao21112001@gmail.com": {
       "name": "Thảo Lê",
@@ -448,7 +513,9 @@
           "2026-08-17": 225
         }
       },
-      "gameHistory": []
+      "gameHistory": [],
+      "accessLogs": [],
+      "lastDeviceInfo": null
     },
     "lethihuong15082007@gmail.com": {
       "name": "Hương Lê",
@@ -498,7 +565,9 @@
           "combo": 14,
           "playedAt": "2026-08-17T14:31:26.900Z"
         }
-      ]
+      ],
+      "accessLogs": [],
+      "lastDeviceInfo": null
     },
     "hoangnvutc2023@gmail.com": {
       "name": "Hoàng Nguyễn",
@@ -513,7 +582,9 @@
           "2026-08-17": 180
         }
       },
-      "gameHistory": []
+      "gameHistory": [],
+      "accessLogs": [],
+      "lastDeviceInfo": null
     },
     "nguyenkhavy5002213@gmail.com": {
       "name": "Khả Vỹ",
@@ -528,7 +599,9 @@
           "2026-08-18": 195
         }
       },
-      "gameHistory": []
+      "gameHistory": [],
+      "accessLogs": [],
+      "lastDeviceInfo": null
     },
     "huathithanhdao13092011@gmail.com": {
       "name": "Thành Đào Hứa Thị",
@@ -543,7 +616,581 @@
           "2026-08-19": 435
         }
       },
-      "gameHistory": []
+      "gameHistory": [],
+      "accessLogs": [],
+      "lastDeviceInfo": null
+    },
+    "lehongnhung911@gmail.com": {
+      "name": "Thị Hồng Nhung Lê",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocLXZoy2UPxgSapGPDFSJ9bq-xcMMAxoowRNv4anU5ganC9BiJgF=s96-c",
+      "role": "user",
+      "lastSeenTime": "2026-08-29T10:04:03.882Z",
+      "stats": {
+        "streak": 1,
+        "studyTime": 105,
+        "lastActiveDate": "2026-08-21",
+        "dailyHistory": {
+          "2026-08-21": 105
+        }
+      },
+      "gameHistory": [],
+      "accessLogs": [
+        {
+          "sessionId": "sess_bjt3iw0z_1787997839683",
+          "enterTime": "2026-08-29T10:03:59.683Z",
+          "exitTime": "2026-08-29T10:04:00.249Z",
+          "durationSeconds": 0,
+          "device": "📱 iPhone",
+          "ip": "14.181.174.197",
+          "isClosed": false
+        }
+      ],
+      "lastDeviceInfo": null
+    },
+    "nthoamai2006@gmail.com": {
+      "name": "Thị Hoa Mai Nguyễn",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocLBhqwnmyfm7d3icBWqLsWbfWjqJI1cQVYUDkQ7nCwcgmAV6g=s96-c",
+      "role": "user",
+      "lastSeenTime": "2026-08-27T15:51:14.786Z",
+      "stats": {
+        "streak": 1,
+        "studyTime": 7605,
+        "lastActiveDate": "2026-08-27",
+        "dailyHistory": {
+          "2026-08-21": 3630,
+          "2026-08-23": 270,
+          "2026-08-25": 1290,
+          "2026-08-27": 2415
+        }
+      },
+      "gameHistory": [
+        {
+          "score": 1093,
+          "stage": 27,
+          "level": "3",
+          "mode": "mix",
+          "combo": 27,
+          "playedAt": "2026-08-21T15:31:15.474Z"
+        },
+        {
+          "score": 1093,
+          "stage": 27,
+          "level": "3",
+          "mode": "mix",
+          "combo": 27,
+          "playedAt": "2026-08-21T15:31:23.579Z"
+        },
+        {
+          "score": 1017,
+          "stage": 28,
+          "level": "3",
+          "mode": "mix",
+          "combo": 26,
+          "playedAt": "2026-08-27T15:48:55.080Z"
+        },
+        {
+          "score": 1017,
+          "stage": 28,
+          "level": "3",
+          "mode": "mix",
+          "combo": 26,
+          "playedAt": "2026-08-27T15:49:02.835Z"
+        }
+      ],
+      "accessLogs": [],
+      "lastDeviceInfo": null
+    },
+    "dov21231@gmail.com": {
+      "name": "Van Anh Do",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocLpaBBfoDL-iskGvgugtIkQ1xeT-19EmPTQK7K0eItRd1ctFvs=s96-c",
+      "role": "user",
+      "lastSeenTime": "2026-08-22T00:33:22.948Z",
+      "stats": {
+        "streak": 1,
+        "studyTime": 0,
+        "lastActiveDate": "",
+        "dailyHistory": {}
+      },
+      "gameHistory": [],
+      "accessLogs": [],
+      "lastDeviceInfo": null
+    },
+    "nguyenhoangthienbao0830@gmail.com": {
+      "name": "Thien Bao Nguyen Hoang",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocIfZ5XM5YLPFfz1ZNfWaECb2AUUqVfeRjTDcF2ZoxHf0xIIJw=s96-c",
+      "role": "user",
+      "lastSeenTime": "2026-08-29T08:17:42.626Z",
+      "stats": {
+        "streak": 1,
+        "studyTime": 4110,
+        "lastActiveDate": "2026-08-29",
+        "dailyHistory": {
+          "2026-08-22": 345,
+          "2026-08-26": 840,
+          "2026-08-29": 2925
+        }
+      },
+      "gameHistory": [],
+      "accessLogs": [
+        {
+          "sessionId": "sess_wq1g7syr_1787985164800",
+          "enterTime": "2026-08-29T06:32:44.801Z",
+          "exitTime": "2026-08-29T08:13:43.693Z",
+          "durationSeconds": 6059,
+          "device": "💻 Windows PC",
+          "ip": "171.243.49.33",
+          "isClosed": false
+        }
+      ],
+      "lastDeviceInfo": null
+    },
+    "hoangbaoyen2082004@gmail.com": {
+      "name": "Yến Hoàng",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocLr2agFr6aXpsW51J9vDzi9evGT7wBuHhYTwmi-AHTJiV-oDC0=s96-c",
+      "role": "user",
+      "lastSeenTime": "2026-08-22T11:41:08.813Z",
+      "stats": {
+        "streak": 1,
+        "studyTime": 255,
+        "lastActiveDate": "2026-08-22",
+        "dailyHistory": {
+          "2026-08-22": 255
+        }
+      },
+      "gameHistory": [],
+      "accessLogs": [],
+      "lastDeviceInfo": null
+    },
+    "xinhminions@gmail.com": {
+      "name": "Nguyen Nguyen",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocKjmaNe41ieas8JEaeUcwmZ_cviUC2VkJyWefGcGFx0ojg3vJ1Z=s96-c",
+      "role": "user",
+      "lastSeenTime": "2026-08-23T15:00:03.342Z",
+      "stats": {
+        "streak": 2,
+        "studyTime": 3105,
+        "lastActiveDate": "2026-08-23",
+        "dailyHistory": {
+          "2026-08-22": 1410,
+          "2026-08-23": 1695
+        }
+      },
+      "gameHistory": [
+        {
+          "score": 585,
+          "stage": 14,
+          "level": "1",
+          "mode": "zh-vi",
+          "combo": 14,
+          "playedAt": "2026-08-22T12:23:51.630Z"
+        },
+        {
+          "score": 576,
+          "stage": 14,
+          "level": "1",
+          "mode": "zh-vi",
+          "combo": 14,
+          "playedAt": "2026-08-23T13:50:32.470Z"
+        },
+        {
+          "score": 946,
+          "stage": 23,
+          "level": "1",
+          "mode": "mix",
+          "combo": 23,
+          "playedAt": "2026-08-23T14:14:49.071Z"
+        }
+      ],
+      "accessLogs": [],
+      "lastDeviceInfo": null
+    },
+    "kimloan30012006@gmail.com": {
+      "name": "Loan Kim",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocIM9Prgy2xERgw1M6Ml_hoznSezJ5g-XHrSD2Kf9_o9HA06Ng=s96-c",
+      "role": "user",
+      "lastSeenTime": "2026-08-22T17:04:42.204Z",
+      "stats": {
+        "streak": 1,
+        "studyTime": 15,
+        "lastActiveDate": "2026-08-23",
+        "dailyHistory": {
+          "2026-08-23": 15
+        }
+      },
+      "gameHistory": [],
+      "accessLogs": [],
+      "lastDeviceInfo": null
+    },
+    "nguyenchauhuytruong@gmail.com": {
+      "name": "Huy Trường Nguyễn Châu",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocLwjUdsWfPXpH771d2AlFn0ILdidDKH79WlGeNz0DqholbnyA=s96-c",
+      "role": "user",
+      "lastSeenTime": "2026-08-23T15:05:10.501Z",
+      "stats": {
+        "streak": 1,
+        "studyTime": 195,
+        "lastActiveDate": "2026-08-23",
+        "dailyHistory": {
+          "2026-08-23": 195
+        }
+      },
+      "gameHistory": [],
+      "accessLogs": [],
+      "lastDeviceInfo": null
+    },
+    "ngthuyduong8729@gmail.com": {
+      "name": "Dương NgThuyy",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocIRwu17wvpWWu8LCe81GDmEiSN9IOUb8OaTxPtLhw1diq1dLLo=s96-c",
+      "role": "user",
+      "lastSeenTime": "2026-08-24T13:54:39.367Z",
+      "stats": {
+        "streak": 1,
+        "studyTime": 240,
+        "lastActiveDate": "2026-08-24",
+        "dailyHistory": {
+          "2026-08-24": 240
+        }
+      },
+      "gameHistory": [],
+      "accessLogs": [],
+      "lastDeviceInfo": null
+    },
+    "ngthuyduong872009@gmail.com": {
+      "name": "Dương NgThuyy",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocI-fpXZTDGjaAU6eB4Kt09djc8jrqkH6L8BNOdansVFRyoZ4H4=s96-c",
+      "role": "user",
+      "lastSeenTime": "2026-08-27T11:39:26.162Z",
+      "stats": {
+        "streak": 2,
+        "studyTime": 3735,
+        "lastActiveDate": "2026-08-27",
+        "dailyHistory": {
+          "2026-08-26": 210,
+          "2026-08-27": 3525
+        }
+      },
+      "gameHistory": [
+        {
+          "score": 470,
+          "stage": 12,
+          "level": "2",
+          "mode": "zh-vi",
+          "combo": 12,
+          "playedAt": "2026-08-27T10:34:18.767Z"
+        },
+        {
+          "score": 574,
+          "stage": 15,
+          "level": "2",
+          "mode": "mix",
+          "combo": 15,
+          "playedAt": "2026-08-27T10:37:50.604Z"
+        },
+        {
+          "score": 615,
+          "stage": 15,
+          "level": "2",
+          "mode": "mix",
+          "combo": 15,
+          "playedAt": "2026-08-27T10:39:24.521Z"
+        },
+        {
+          "score": 585,
+          "stage": 15,
+          "level": "2",
+          "mode": "mix",
+          "combo": 15,
+          "playedAt": "2026-08-27T11:02:38.253Z"
+        },
+        {
+          "score": 585,
+          "stage": 15,
+          "level": "2",
+          "mode": "mix",
+          "combo": 15,
+          "playedAt": "2026-08-27T11:02:41.611Z"
+        },
+        {
+          "score": 474,
+          "stage": 12,
+          "level": "2",
+          "mode": "mix",
+          "combo": 12,
+          "playedAt": "2026-08-27T11:25:43.616Z"
+        },
+        {
+          "score": 474,
+          "stage": 12,
+          "level": "2",
+          "mode": "mix",
+          "combo": 12,
+          "playedAt": "2026-08-27T11:25:48.088Z"
+        }
+      ],
+      "accessLogs": [],
+      "lastDeviceInfo": null
+    },
+    "uuyn8983@gmail.com": {
+      "name": "uyn uyn",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocKb6DTH1E0uHc2Xd25uH-AEmig6fWMZtnIrh_3Nt_Bwdn3HfQ=s96-c",
+      "role": "user",
+      "lastSeenTime": "2026-08-25T09:40:23.018Z",
+      "stats": {
+        "streak": 1,
+        "studyTime": 2220,
+        "lastActiveDate": "2026-08-25",
+        "dailyHistory": {
+          "2026-08-25": 2220
+        }
+      },
+      "gameHistory": [
+        {
+          "score": 578,
+          "stage": 14,
+          "level": "1",
+          "mode": "mix",
+          "combo": 14,
+          "playedAt": "2026-08-25T08:52:28.566Z"
+        }
+      ],
+      "accessLogs": [],
+      "lastDeviceInfo": null
+    },
+    "baoduy11742005@gmail.com": {
+      "name": "Duy",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocKnSOLLaZSMKR3EHW987m2Bi7wMtxVmLjaodCSSYcAxSLQymDu5=s96-c",
+      "role": "user",
+      "lastSeenTime": "2026-08-26T23:58:32.958Z",
+      "stats": {
+        "streak": 1,
+        "studyTime": 2190,
+        "lastActiveDate": "2026-08-26",
+        "dailyHistory": {
+          "2026-08-26": 2190
+        }
+      },
+      "gameHistory": [
+        {
+          "score": 568,
+          "stage": 14,
+          "level": "1",
+          "mode": "zh-vi",
+          "combo": 14,
+          "playedAt": "2026-08-26T04:45:24.218Z"
+        }
+      ],
+      "accessLogs": [],
+      "lastDeviceInfo": null
+    },
+    "at.nguyenthuynga2004@gmail.com": {
+      "name": "Nguyễn Thúy Nga",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocIWY2-edulmwXCsWGPtqT7nDPZmy8-r5BImvlGy6HE2mgab8sO8=s96-c",
+      "role": "user",
+      "lastSeenTime": "2026-08-28T07:08:26.097Z",
+      "stats": {
+        "streak": 1,
+        "studyTime": 630,
+        "lastActiveDate": "2026-08-28",
+        "dailyHistory": {
+          "2026-08-26": 510,
+          "2026-08-28": 120
+        }
+      },
+      "gameHistory": [],
+      "accessLogs": [
+        {
+          "sessionId": "sess_wpzgrxzy_1787884805708",
+          "enterTime": "2026-08-28T02:40:05.716Z",
+          "exitTime": "2026-08-28T02:40:05.744Z",
+          "durationSeconds": 0,
+          "device": "💻 Windows PC",
+          "ip": "171.227.46.254",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_lgofb01q_1787900313965",
+          "enterTime": "2026-08-28T06:58:33.966Z",
+          "exitTime": "2026-08-28T06:58:33.833Z",
+          "durationSeconds": 0,
+          "device": "💻 Windows PC",
+          "ip": "171.227.46.254",
+          "isClosed": false
+        }
+      ],
+      "lastDeviceInfo": null
+    },
+    "bongbongbin2013@gmail.com": {
+      "name": "Baoan Le",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocIXFV0oeUe1xmGLDmuw45H358XHvcWMNYdzGmJG92D50gkuOg=s96-c",
+      "role": "user",
+      "lastSeenTime": "2026-08-29T13:10:04.968Z",
+      "stats": {
+        "streak": 3,
+        "studyTime": 7350,
+        "lastActiveDate": "2026-08-29",
+        "dailyHistory": {
+          "2026-08-27": 270,
+          "2026-08-28": 2250,
+          "2026-08-29": 4830
+        }
+      },
+      "gameHistory": [
+        {
+          "score": 543,
+          "stage": 14,
+          "level": "1",
+          "mode": "zh-vi",
+          "combo": 13,
+          "playedAt": "2026-08-29T11:30:06.225Z"
+        }
+      ],
+      "accessLogs": [
+        {
+          "sessionId": "sess_ih8rp4t6_1787901780428",
+          "enterTime": "2026-08-28T07:23:00.435Z",
+          "exitTime": "2026-08-28T07:25:55.261Z",
+          "durationSeconds": 175,
+          "device": "📱 Android",
+          "ip": "14.248.218.255",
+          "isClosed": true
+        },
+        {
+          "sessionId": "sess_k7hbcjda_1787901966373",
+          "enterTime": "2026-08-28T07:26:06.379Z",
+          "exitTime": "2026-08-28T07:27:04.777Z",
+          "durationSeconds": 58,
+          "device": "📱 Android",
+          "ip": "14.248.218.255",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_m55a8a86_1787929083177",
+          "enterTime": "2026-08-28T14:58:03.178Z",
+          "exitTime": "2026-08-28T15:56:29.946Z",
+          "durationSeconds": 3507,
+          "device": "💻 Windows PC",
+          "ip": "14.248.218.255",
+          "isClosed": true
+        },
+        {
+          "sessionId": "sess_t29ahmdw_1787970604909",
+          "enterTime": "2026-08-29T02:30:04.909Z",
+          "exitTime": "2026-08-29T02:30:16.552Z",
+          "durationSeconds": 12,
+          "device": "💻 Windows PC",
+          "ip": "14.248.218.255",
+          "isClosed": true
+        },
+        {
+          "sessionId": "sess_dba6x6p9_1787991469906",
+          "enterTime": "2026-08-29T08:17:49.907Z",
+          "exitTime": "2026-08-29T08:18:57.773Z",
+          "durationSeconds": 68,
+          "device": "💻 Windows PC",
+          "ip": "14.248.218.255",
+          "isClosed": true
+        },
+        {
+          "sessionId": "sess_mpk4og0v_1787997031421",
+          "enterTime": "2026-08-29T09:50:31.422Z",
+          "exitTime": "2026-08-29T13:04:26.714Z",
+          "durationSeconds": 11635,
+          "device": "💻 Windows PC",
+          "ip": "14.248.218.255",
+          "isClosed": true
+        }
+      ],
+      "lastDeviceInfo": null
+    },
+    "phuongthaofut@gmail.com": {
+      "name": "Phương Thảo Đoàn",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocIrcIJj3kwf8w9AEV8aopo_6rtueel6vz3RiFIkEqkTY7F7Uk1j=s96-c",
+      "role": "user",
+      "lastSeenTime": "2026-08-28T15:11:42.079Z",
+      "stats": {
+        "streak": 1,
+        "studyTime": 300,
+        "lastActiveDate": "2026-08-28",
+        "dailyHistory": {
+          "2026-08-28": 300
+        }
+      },
+      "gameHistory": [],
+      "accessLogs": [
+        {
+          "sessionId": "sess_q6kexx0h_1787884414894",
+          "enterTime": "2026-08-28T02:33:34.894Z",
+          "exitTime": "2026-08-28T08:38:25.397Z",
+          "durationSeconds": 21891,
+          "device": "💻 Windows PC",
+          "ip": "42.114.29.251",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_5tfahcfv_1787915547962",
+          "enterTime": "2026-08-28T11:12:27.962Z",
+          "exitTime": "2026-08-28T15:11:40.781Z",
+          "durationSeconds": 14353,
+          "device": "💻 Windows PC",
+          "ip": "123.20.116.20",
+          "isClosed": true
+        }
+      ],
+      "lastDeviceInfo": null
+    },
+    "lienhuynh8273@gmail.com": {
+      "name": "Lien8273@gmail.com Huynh",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocKwiO5POjxpcOoD7vDcnqcCwTVn-5XJF5eJKbCorENDWS2wVCO3Ag=s96-c",
+      "role": "user",
+      "lastSeenTime": "2026-08-28T11:22:40.872Z",
+      "stats": {
+        "streak": 1,
+        "studyTime": 780,
+        "lastActiveDate": "2026-08-28",
+        "dailyHistory": {
+          "2026-08-28": 780
+        }
+      },
+      "gameHistory": [],
+      "accessLogs": [
+        {
+          "sessionId": "sess_6d5l5ada_1787912240823",
+          "enterTime": "2026-08-28T10:17:20.823Z",
+          "exitTime": "2026-08-28T11:22:40.028Z",
+          "durationSeconds": 3919,
+          "device": "💻 Windows PC",
+          "ip": "42.114.202.71",
+          "isClosed": true
+        }
+      ],
+      "lastDeviceInfo": null
+    },
+    "imghuzlz.jpg@gmail.com": {
+      "name": "Dang Huong",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocKo_gwd5dEIn5tlTGzG7Tel-M2nZN2AuOsenphMQFSjj_ge7A=s96-c",
+      "role": "user",
+      "lastSeenTime": "2026-08-29T12:47:12.319Z",
+      "stats": {
+        "streak": 1,
+        "studyTime": 15,
+        "lastActiveDate": "2026-08-29",
+        "dailyHistory": {
+          "2026-08-29": 15
+        }
+      },
+      "gameHistory": [],
+      "accessLogs": [
+        {
+          "sessionId": "sess_ik8fj2b9_1788007550623",
+          "enterTime": "2026-08-29T12:45:50.623Z",
+          "exitTime": "2026-08-29T12:47:10.816Z",
+          "durationSeconds": 80,
+          "device": "📱 iPad / Tablet",
+          "ip": "14.186.185.218",
+          "isClosed": false
+        }
+      ],
+      "lastDeviceInfo": null
     }
   },
   "progress": {
@@ -624,6 +1271,18 @@
       "223": {
         "isMemorized": true,
         "isStarred": false,
+        "isStudied": true
+      },
+      "262": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "495": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
         "isStudied": true
       },
       "507": {
@@ -1371,6 +2030,26 @@
         "isMemorized": true,
         "isStarred": false,
         "isStudied": true
+      },
+      "297": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "298": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "299": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "300": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
       }
     },
     "pthao9298@gmail.com": {
@@ -1977,6 +2656,2031 @@
         "isStarred": false,
         "isStudied": true
       }
+    },
+    "lehongnhung911@gmail.com": {
+      "250": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "252": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "305": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "376": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "398": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "421": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      }
+    },
+    "nthoamai2006@gmail.com": {
+      "329": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "331": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "335": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "431": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "441": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "521": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "733": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "734": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "735": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "736": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "738": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "739": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "740": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "741": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "742": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "743": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "745": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "746": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "747": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "748": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "749": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "750": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "751": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "752": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "753": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "754": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "755": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "756": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "757": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "758": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "759": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "760": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "761": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "762": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "763": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "764": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "765": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "766": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "767": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "768": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "769": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "770": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "771": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "772": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "773": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "775": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "778": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "779": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "780": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "782": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "783": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "784": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "785": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "40004": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "40010": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "40011": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "40014": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "40016": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "40024": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "40036": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "40039": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      }
+    },
+    "dov21231@gmail.com": {
+      "288": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      }
+    },
+    "nguyenhoangthienbao0830@gmail.com": {
+      "15": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "84": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "85": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "88": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "91": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "97": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "101": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "107": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "119": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "190": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "491": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      }
+    },
+    "hoangbaoyen2082004@gmail.com": {
+      "515": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      }
+    },
+    "xinhminions@gmail.com": {
+      "210": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "211": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "212": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "213": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "214": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "215": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "216": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "217": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "218": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "219": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "220": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "221": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "222": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "223": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "224": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "225": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "226": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "227": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "228": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "229": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "230": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "231": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "232": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "233": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "234": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "235": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "236": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "237": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "238": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "239": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "240": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "241": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "242": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "243": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "244": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "245": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "246": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "247": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "248": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "249": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "250": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "251": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "252": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "254": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "255": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "256": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "258": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "259": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "261": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "262": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "263": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "290": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "309": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "359": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "374": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "375": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "441": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "488": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      }
+    },
+    "kimloan30012006@gmail.com": {
+      "422": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      }
+    },
+    "nguyenchauhuytruong@gmail.com": {
+      "194": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "296": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      }
+    },
+    "ngthuyduong8729@gmail.com": {
+      "4": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "7": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "73": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "123": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "190": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "210": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "211": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "298": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "469": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "481": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      }
+    },
+    "ngthuyduong872009@gmail.com": {
+      "4": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "7": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "25": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "40": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "59": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "77": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "108": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "117": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "122": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "138": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "168": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "171": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "204": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "6381": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6391": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6392": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6394": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6395": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6396": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6397": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6398": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6399": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6400": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6401": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6402": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6403": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6404": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6406": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6410": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6411": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6412": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6413": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6414": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6415": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6416": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6417": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6418": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6419": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6420": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6421": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6425": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "6435": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "6447": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "6451": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "6462": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "6472": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "6493": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "6510": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6513": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "6519": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "6520": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6521": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6522": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6523": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6524": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6526": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6527": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6528": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6529": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6531": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      }
+    },
+    "uuyn8983@gmail.com": {
+      "224": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "225": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "226": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "227": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "228": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "229": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "230": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "231": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "232": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "233": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "234": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "235": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "236": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "237": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "284": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "417": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "423": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "430": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "2528": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "2529": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "2530": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "2531": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "2532": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "2533": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      }
+    },
+    "baoduy11742005@gmail.com": {
+      "210": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "211": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "224": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "225": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "226": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "227": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "228": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "229": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "230": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "231": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "232": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "233": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "234": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "235": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "236": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "237": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "238": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "239": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "240": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "241": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "242": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "243": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "244": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "245": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "246": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "247": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "248": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "249": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "250": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "251": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "252": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "254": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "255": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "256": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "258": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "259": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "261": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "262": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "263": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "266": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "269": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "270": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "309": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "311": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "317": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "343": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "374": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "377": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "390": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "441": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "488": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "518": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "532": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      }
+    },
+    "at.nguyenthuynga2004@gmail.com": {
+      "31": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "231": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "263": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "298": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "312": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "325": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "396": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "411": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "428": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "433": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "524": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "13950": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "13951": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      }
+    },
+    "bongbongbin2013@gmail.com": {
+      "210": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "211": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "212": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "213": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "214": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "215": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "216": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "217": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "218": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "219": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "220": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "221": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "222": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "223": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "224": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "225": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "226": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "227": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "228": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "229": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "230": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "231": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "232": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "233": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "234": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "235": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "236": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "237": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "269": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "296": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "318": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "415": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "472": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "479": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "484": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "494": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "515": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      }
+    },
+    "phuongthaofut@gmail.com": {
+      "287": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "375": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "415": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "434": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "445": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "454": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "493": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "9462": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9463": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9464": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9465": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9466": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9467": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9468": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9469": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9470": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9471": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9472": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9473": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9474": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9475": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9476": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9477": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9478": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9479": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9480": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9481": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9482": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9483": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9484": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9485": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9486": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9487": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9488": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9489": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9490": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9491": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "9492": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "62513": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      }
+    },
+    "lienhuynh8273@gmail.com": {
+      "85": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "216": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      }
+    },
+    "imghuzlz.jpg@gmail.com": {
+      "332": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      }
     }
   },
   "customWords": {
@@ -2005,7 +4709,24 @@
     "lethihuong15082007@gmail.com": [],
     "hoangnvutc2023@gmail.com": [],
     "nguyenkhavy5002213@gmail.com": [],
-    "huathithanhdao13092011@gmail.com": []
+    "huathithanhdao13092011@gmail.com": [],
+    "lehongnhung911@gmail.com": [],
+    "nthoamai2006@gmail.com": [],
+    "dov21231@gmail.com": [],
+    "nguyenhoangthienbao0830@gmail.com": [],
+    "hoangbaoyen2082004@gmail.com": [],
+    "xinhminions@gmail.com": [],
+    "kimloan30012006@gmail.com": [],
+    "nguyenchauhuytruong@gmail.com": [],
+    "ngthuyduong8729@gmail.com": [],
+    "ngthuyduong872009@gmail.com": [],
+    "uuyn8983@gmail.com": [],
+    "baoduy11742005@gmail.com": [],
+    "at.nguyenthuynga2004@gmail.com": [],
+    "bongbongbin2013@gmail.com": [],
+    "phuongthaofut@gmail.com": [],
+    "lienhuynh8273@gmail.com": [],
+    "imghuzlz.jpg@gmail.com": []
   },
   "sessions": {
     "8qo4v099h5mmshpqcfl": "phanphiphu04@gmail.com",
@@ -2122,7 +4843,27 @@
     "4r8t4lttcptmsh7ki6j": "phanphiphu04@gmail.com",
     "3ipsrk9quzimsle3j59": "phanphiphu04@gmail.com",
     "j6ymup5maomsvy0jw0": "maivy2615@gmail.com",
-    "3fdlgx1xpopmsudglv2": "kieutrang.nguyen8783@gmail.com"
+    "3fdlgx1xpopmsudglv2": "kieutrang.nguyen8783@gmail.com",
+    "jcxjcmbc0cmt31ipx8": "nthoamai2006@gmail.com",
+    "tu5wzrn506mt4ag2ko": "xinhminions@gmail.com",
+    "5b37zss5g4qmt3na3wz": "dov21231@gmail.com",
+    "cqx0397k7kmt2q38mq": "lehongnhung911@gmail.com",
+    "y1mj0yy7symt2qabmt": "lehongnhung911@gmail.com",
+    "9wcsufhtw3mt7asqb0": "ngthuyduong872009@gmail.com",
+    "9taex38im08mt4mouuj": "kimloan30012006@gmail.com",
+    "z5b2vwyn5fmt40k3ow": "nguyenhoangthienbao0830@gmail.com",
+    "kmdr9v0fpkkmt5rippv": "nguyenchauhuytruong@gmail.com",
+    "qim0s18dwtjmt9lq8m8": "baoduy11742005@gmail.com",
+    "9qrcje1y7vjmt47x05o": "hoangbaoyen2082004@gmail.com",
+    "d9dapowdhwvmt8f0fou": "uuyn8983@gmail.com",
+    "o5lqmcumykmt9t6x97": "at.nguyenthuynga2004@gmail.com",
+    "kbe5q7rpqlmtaal6f9": "kailani162004.work@gmail.com",
+    "ejbam44jtymtbftn27": "bongbongbin2013@gmail.com",
+    "higzpusz9u7mtcc7vg9": "phuongthaofut@gmail.com",
+    "ripgymnd15pmtcssa4p": "lienhuynh8273@gmail.com",
+    "ev3zrkirwlsmtd2v8k6": "bongbongbin2013@gmail.com",
+    "49899o6g99fmtedj1x4": "imghuzlz.jpg@gmail.com",
+    "5ybxceo67c6mtefxqox": "phanphiphu04@gmail.com"
   },
   "chats": {
     "thaygiaoroxie@gmail.com": [],
@@ -2178,18 +4919,41 @@
     "lethihuong15082007@gmail.com": [],
     "hoangnvutc2023@gmail.com": [],
     "nguyenkhavy5002213@gmail.com": [],
-    "huathithanhdao13092011@gmail.com": []
-  },
-  "quizHistory": {
-    "thaihong162004@gmail.com": [
+    "huathithanhdao13092011@gmail.com": [],
+    "lehongnhung911@gmail.com": [],
+    "nthoamai2006@gmail.com": [],
+    "dov21231@gmail.com": [],
+    "nguyenhoangthienbao0830@gmail.com": [],
+    "hoangbaoyen2082004@gmail.com": [
       {
-        "score": 20,
-        "stage": 3,
-        "total": 3,
-        "combo": 2,
-        "mode": "Pinyin Listening Challenge (Bỏ dở)",
-        "playedAt": "2026-08-14T17:57:59.619Z"
+        "id": "thread_1787393460057j6ef",
+        "title": "tôi muốn tạo file luyện viết",
+        "createdAt": "2026-08-22T10:11:00.057Z",
+        "messages": [
+          {
+            "role": "user",
+            "content": "tôi muốn tạo file luyện viết",
+            "timestamp": "2026-08-22T10:11:00.057Z"
+          },
+          {
+            "role": "assistant",
+            "content": "Chào bạn, tôi là **Trợ lý AI Hongtai** 🐼. Yêu cầu của bạn đã được ghi nhận. Bạn có thể hỏi bất kỳ câu hỏi nào về từ vựng HSK, phiên âm Pinyin, hoặc cấu trúc ngữ pháp Tiếng Trung nhé!",
+            "timestamp": "2026-08-22T10:11:00.057Z"
+          }
+        ]
       }
-    ]
+    ],
+    "xinhminions@gmail.com": [],
+    "kimloan30012006@gmail.com": [],
+    "nguyenchauhuytruong@gmail.com": [],
+    "ngthuyduong8729@gmail.com": [],
+    "ngthuyduong872009@gmail.com": [],
+    "uuyn8983@gmail.com": [],
+    "baoduy11742005@gmail.com": [],
+    "at.nguyenthuynga2004@gmail.com": [],
+    "bongbongbin2013@gmail.com": [],
+    "phuongthaofut@gmail.com": [],
+    "lienhuynh8273@gmail.com": [],
+    "imghuzlz.jpg@gmail.com": []
   }
 }

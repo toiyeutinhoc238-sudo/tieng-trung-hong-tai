@@ -636,82 +636,9 @@ app.post('/api/auth/logout', async (req, res) => {
   res.json({ success: true });
 });
 
-// GET /api/admin/users & /api/admin/users-activity — Lấy toàn bộ danh sách & lịch sử hoạt động học viên
-app.get(['/api/admin/users', '/api/admin/users-activity'], async (req, res) => {
-  try {
-    const userData = await readUserData();
-    const usersObj = userData.users || {};
-    const progressObj = userData.progress || {};
-
-    const now = Date.now();
-    let totalStudyTimeSec = 0;
-    let onlineCount = 0;
-    let adminCount = 0;
-
-    const usersList = Object.keys(usersObj).map(email => {
-      const u = usersObj[email] || {};
-      const userProg = progressObj[email] || {};
-
-      const totalWordsStudied = Object.values(userProg).filter(p => p && (p.isStudied || p.isMemorized || p.isWrong || p.isStarred)).length;
-      const totalWordsMemorized = Object.values(userProg).filter(p => p && p.isMemorized).length;
-
-      const studyTime = u.stats?.studyTime || 0;
-      totalStudyTimeSec += studyTime;
-
-      const isSuper = isSuperAdmin(email);
-      const isAdmin = isUserAdmin(email, userData);
-      if (isAdmin || isSuper) adminCount++;
-
-      // Check online status within last 5 minutes
-      const lastSeenTime = u.lastSeenTime ? new Date(u.lastSeenTime).getTime() : 0;
-      const isOnline = (now - lastSeenTime) < 5 * 60 * 1000;
-      if (isOnline) onlineCount++;
-
-      return {
-        email: email,
-        name: u.name || 'Học viên',
-        picture: u.picture || '',
-        role: isSuper ? 'super_admin' : (u.role || (email.includes('hongtai') ? 'admin' : 'user')),
-        isSuperAdmin: isSuper,
-        isAdmin: isAdmin,
-        isOnline: isOnline,
-        lastSeen: u.lastSeenTime || null,
-        lastSeenTime: u.lastSeenTime || null,
-        streak: u.stats?.streak || 0,
-        studyTime: studyTime,
-        studyTimeSeconds: studyTime,
-        studyTimeMinutes: Math.round(studyTime / 60),
-        lastActiveDate: u.stats?.lastActiveDate || '',
-        dailyHistory: u.stats?.dailyHistory || {},
-        memorizedWordsCount: totalWordsMemorized,
-        totalWordsStudied: totalWordsStudied,
-        totalWordsMemorized: totalWordsMemorized,
-        quizCount: (u.gameHistory || []).length,
-        highestQuizScore: (u.gameHistory || []).reduce((max, g) => Math.max(max, g.score || 0), 0),
-        gameHistory: u.gameHistory || [],
-        lastDeviceInfo: u.lastDeviceInfo || null
-      };
-    });
-
-    // Sort by lastSeenTime / lastActiveDate descending
-    usersList.sort((a, b) => {
-      const timeA = a.lastSeenTime ? new Date(a.lastSeenTime).getTime() : 0;
-      const timeB = b.lastSeenTime ? new Date(b.lastSeenTime).getTime() : 0;
-      return timeB - timeA;
-    });
-
-    res.json({
-      success: true,
-      totalUsers: usersList.length,
-      onlineCount: onlineCount,
-      adminCount: adminCount,
-      totalStudyTimeHours: parseFloat((totalStudyTimeSec / 3600).toFixed(1)),
-      users: usersList
-    });
-  } catch (err) {
-    console.error("Error fetching user activities:", err);
-    res.status(500).json({ error: 'Failed to fetch user activities' });
-  }
+// GET /api/admin/users-activity — Lấy lịch sử hoạt động học viên (legacy endpoint)
+app.get('/api/admin/users-activity', async (req, res) => {
+  res.redirect('/api/admin/users');
 });
 
 // ============================================================
@@ -901,8 +828,9 @@ app.get('/api/admin/users', async (req, res) => {
     const lastSeenTimestamp = userPresenceMap.get(email.toLowerCase().trim()) || (u.lastSeenTime ? new Date(u.lastSeenTime).getTime() : 0);
     const isOnline = lastSeenTimestamp ? (now - lastSeenTimestamp <= 120000) : false;
 
-    // Exam scores and progress
     const stats = u.stats || {};
+    ensureDailyHistoryIntegrity(stats);
+
     const quizHistory = (userData.quizHistory && userData.quizHistory[email]) || u.quizHistory || [];
     let highestQuizScore = 0;
     let totalQuizScore = 0;
@@ -931,6 +859,8 @@ app.get('/api/admin/users', async (req, res) => {
       isOnline,
       lastSeen: lastSeenTimestamp ? new Date(lastSeenTimestamp).toISOString() : (u.stats?.lastActiveDate || null),
       streak: stats.streak || 0,
+      totalDays: stats.totalDays || (stats.dailyHistory ? Object.keys(stats.dailyHistory).filter(d => (stats.dailyHistory[d] || 0) > 0).length : 1),
+      maxStreak: stats.maxStreak || stats.streak || 1,
       studyTime: stats.studyTime || 0,
       quizCount: quizHistory.length,
       highestQuizScore,
@@ -1226,41 +1156,54 @@ app.post('/api/admin/users/role', async (req, res) => {
   });
 });
 
-// Helper to calculate streak from daily history
+// Helper to calculate streak & active days from daily history
 function calculateStreakFromHistory(dailyHistory) {
-  if (!dailyHistory || typeof dailyHistory !== 'object') return 1;
+  if (!dailyHistory || typeof dailyHistory !== 'object') {
+    return { currentStreak: 1, maxStreak: 1, totalDays: 1 };
+  }
   const dates = Object.keys(dailyHistory)
     .filter(d => (dailyHistory[d] || 0) > 0)
     .sort();
-  if (dates.length === 0) return 1;
-
-  const today = new Date();
-  const todayStr = today.toISOString().split('T')[0];
-  const yesterday = new Date(today);
-  yesterday.setDate(yesterday.getDate() - 1);
-  const yesterdayStr = yesterday.toISOString().split('T')[0];
-
-  let startStr = null;
-  if (dates.includes(todayStr)) {
-    startStr = todayStr;
-  } else if (dates.includes(yesterdayStr)) {
-    startStr = yesterdayStr;
-  } else {
-    startStr = dates[dates.length - 1];
+  if (dates.length === 0) {
+    return { currentStreak: 1, maxStreak: 1, totalDays: 1 };
   }
 
-  let streak = 0;
-  let checkDate = new Date(startStr);
+  const totalDays = dates.length;
+
+  // 1. Calculate max consecutive streak in history
+  let maxStreak = 1;
+  let curRun = 1;
+  for (let i = 1; i < dates.length; i++) {
+    const prev = new Date(dates[i - 1]);
+    const curr = new Date(dates[i]);
+    const diffDays = Math.round((curr - prev) / (1000 * 60 * 60 * 24));
+    if (diffDays === 1) {
+      curRun++;
+      if (curRun > maxStreak) maxStreak = curRun;
+    } else if (diffDays > 1) {
+      curRun = 1;
+    }
+  }
+
+  // 2. Calculate current streak from last active date
+  let lastStr = dates[dates.length - 1];
+  let checkDate = new Date(lastStr);
+  let currentStreak = 0;
   while (true) {
     const dateKey = checkDate.toISOString().split('T')[0];
     if (dailyHistory[dateKey] && dailyHistory[dateKey] > 0) {
-      streak++;
+      currentStreak++;
       checkDate.setDate(checkDate.getDate() - 1);
     } else {
       break;
     }
   }
-  return Math.max(streak, 1);
+
+  return {
+    currentStreak: Math.max(currentStreak, 1),
+    maxStreak: Math.max(maxStreak, currentStreak, 1),
+    totalDays: Math.max(totalDays, 1)
+  };
 }
 
 // GET endpoint to fetch user stats
@@ -1304,10 +1247,12 @@ function ensureDailyHistoryIntegrity(stats) {
     }
   }
 
-  // 3. Ensure streak matches history
-  const calculatedStreak = calculateStreakFromHistory(stats.dailyHistory);
-  if (!stats.streak || stats.streak < calculatedStreak) {
-    stats.streak = calculatedStreak;
+  // 3. Ensure streak and totalDays match history
+  const historyStats = calculateStreakFromHistory(stats.dailyHistory);
+  stats.totalDays = historyStats.totalDays;
+  stats.maxStreak = historyStats.maxStreak;
+  if (!stats.streak || stats.streak < historyStats.maxStreak) {
+    stats.streak = historyStats.maxStreak;
   }
 }
 
