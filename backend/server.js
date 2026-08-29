@@ -1523,11 +1523,13 @@ app.get('/api/leaderboard', async (req, res) => {
       const allAttempts = [...quizHistory, ...gameHistory];
 
       let highestScore = 0;
+      let totalScore = 0;
       let latestAttemptTime = 0;
 
       allAttempts.forEach(a => {
         const sc = Number(a.score) || 0;
         if (sc > highestScore) highestScore = sc;
+        totalScore += sc;
         const t = a.playedAt || a.submittedAt || a.date;
         if (t) {
           const timeVal = new Date(t).getTime();
@@ -1543,8 +1545,9 @@ app.get('/api/leaderboard', async (req, res) => {
         email,
         name: u.name || email.split('@')[0],
         picture: u.picture || '',
-        score: highestScore,
-        highestScore: highestScore,
+        score: totalScore,
+        totalScore,
+        highestScore,
         quizCount: allAttempts.length,
         studyTime: u.stats ? (u.stats.studyTime || 0) : 0,
         streak: u.stats ? (u.stats.streak || 0) : 0,
@@ -1552,13 +1555,16 @@ app.get('/api/leaderboard', async (req, res) => {
       });
     }
 
-    // Sort real users by highest Quiz score, then quiz count, then study time, then streak
+    // Sort real users by total accumulated score, then quiz count, then highest single score, then study time
     leaderboard.sort((a, b) => {
       if (b.score !== a.score) {
         return b.score - a.score;
       }
       if (b.quizCount !== a.quizCount) {
         return b.quizCount - a.quizCount;
+      }
+      if (b.highestScore !== a.highestScore) {
+        return b.highestScore - a.highestScore;
       }
       if (b.studyTime !== a.studyTime) {
         return b.studyTime - a.studyTime;
