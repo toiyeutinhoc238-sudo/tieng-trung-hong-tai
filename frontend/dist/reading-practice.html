@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <script>
+    if (window.location.hostname.includes('onrender.com') || window.location.hostname.startsWith('www.')) {
+      window.location.replace('https://tiengtrunghongtai.online' + window.location.pathname + window.location.search + window.location.hash);
+    }
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luyện Đọc Tiếng Trung (Reading & Mastery) | Tiếng Trung HongTai</title>
+  <meta name="description"
+    content="Chuyên trang Luyện Đọc Tiếng Trung từ HSK 1 đến HSK 6 với chủ đề Đời thường, Giáo trình, HSKK, Thành ngữ, Cổ tích và Báo chí. Tích hợp âm thanh phát âm chuẩn, Luyện viết tập gõ và Trắc nghiệm đọc hiểu.">
+  <link rel="canonical" href="https://tiengtrunghongtai.online/reading-practice.html" />
+  <link rel="icon" type="image/png" href="/assets/logo-CnsJJgQP.png">
+
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Noto+Sans+SC:wght@400;500;700;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <script>
+    (function () {
+      var t = localStorage.getItem('theme') || 'dark';
+      var bgUrl = t === 'light' ? "url('/assets/app_bg_day_v3.png')" : "url('/assets/app_bg_night_v3.png')";
+      document.documentElement.style.setProperty('background-image', bgUrl, 'important');
+      document.documentElement.style.setProperty('background-size', 'cover', 'important');
+      document.documentElement.style.setProperty('background-position', 'center center', 'important');
+      document.documentElement.style.setProperty('background-attachment', 'fixed', 'important');
+      document.documentElement.style.setProperty('background-repeat', 'no-repeat', 'important');
+
+      if (t === 'light') {
+        document.documentElement.classList.add('light-mode', 'light');
+        document.documentElement.classList.remove('dark');
+        if (document.body) {
+          document.body.classList.add('light-mode');
+          document.body.style.setProperty('background-image', bgUrl, 'important');
+        } else {
+          document.addEventListener('DOMContentLoaded', function () {
+            document.body.classList.add('light-mode');
+            document.body.style.setProperty('background-image', bgUrl, 'important');
+          });
+        }
+      } else {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light', 'light-mode');
+        if (document.body) {
+          document.body.style.setProperty('background-image', bgUrl, 'important');
+        } else {
+          document.addEventListener('DOMContentLoaded', function () {
+            document.body.style.setProperty('background-image', bgUrl, 'important');
+          });
+        }
+      }
+    })();
+
+    window.toggleTheme = function () {
+      var isLight = document.documentElement.classList.contains('light-mode') || document.documentElement.classList.contains('light');
+      var nextDark = isLight;
+      var bgUrl = nextDark ? "url('/assets/app_bg_night_v3.png')" : "url('/assets/app_bg_day_v3.png')";
+
+      document.documentElement.style.setProperty('background-image', bgUrl, 'important');
+      document.documentElement.style.setProperty('background-size', 'cover', 'important');
+      document.documentElement.style.setProperty('background-position', 'center center', 'important');
+      document.documentElement.style.setProperty('background-attachment', 'fixed', 'important');
+      document.documentElement.style.setProperty('background-repeat', 'no-repeat', 'important');
+
+      if (document.body) {
+        document.body.style.setProperty('background-image', bgUrl, 'important');
+        document.body.style.setProperty('background-size', 'cover', 'important');
+        document.body.style.setProperty('background-position', 'center center', 'important');
+        document.body.style.setProperty('background-attachment', 'fixed', 'important');
+        document.body.style.setProperty('background-repeat', 'no-repeat', 'important');
+      }
+
+      if (nextDark) {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light', 'light-mode');
+        if (document.body) {
+          document.body.classList.remove('light-mode', 'light');
+          document.body.classList.add('dark');
+        }
+        localStorage.setItem('theme', 'dark');
+        updateToggleBtns(false);
+      } else {
+        document.documentElement.classList.add('light', 'light-mode');
+        document.documentElement.classList.remove('dark');
+        if (document.body) {
+          document.body.classList.remove('dark');
+          document.body.classList.add('light-mode');
+        }
+        localStorage.setItem('theme', 'light');
+        updateToggleBtns(true);
+      }
+    };
+
+    function updateToggleBtns(isLight) {
+      var btns = document.querySelectorAll('#theme-toggle, #theme-toggle-btn, .theme-toggle-btn');
+      btns.forEach(function (btn) {
+        btn.innerHTML = isLight
+          ? '<i class="fa-solid fa-sun" style="color:#f59e0b;"></i>'
+          : '<i class="fa-solid fa-moon" style="color:#60a5fa;"></i>';
+      });
+    }
+  </script>
+
+  <style>
+    /* ==========================================================================
+       READING PRACTICE MODULE - HIGH END GLASSMORPHISM STYLES
+       ========================================================================== */
+    :root {
+      --rd-bg-glass: rgba(15, 23, 42, 0.78);
+      --rd-border: rgba(255, 255, 255, 0.12);
+      --rd-accent: #38bdf8;
+      --rd-accent-gold: #f59e0b;
+      --rd-accent-green: #10b981;
+      --rd-accent-purple: #a855f7;
+      --font-hanzi: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      --font-main: 'Be Vietnam Pro', system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-main);
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: #090e17;
+      overflow-x: hidden;
+    }
+
+    .rd-page-container {
+      max-width: 1440px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 16px 20px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex: 1;
+    }
+
+    /* TOP HEADER BAR */
+    .rd-header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: var(--rd-bg-glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--rd-border);
+      border-radius: 20px;
+      padding: 14px 22px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      flex-wrap: wrap;
+    }
+
+    .rd-header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .rd-back-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--rd-border);
+      color: #e2e8f0;
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .rd-back-btn:hover {
+      background: rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+      transform: translateX(-2px);
+    }
+
+    .rd-brand-title {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .rd-brand-title h1 {
+      font-size: 1.45rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ffffff 0%, #38bdf8 60%, #818cf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .rd-brand-title p {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    .rd-header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .rd-stats-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--rd-border);
+      border-radius: 50px;
+      padding: 6px 14px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #e2e8f0;
+    }
+    .rd-stats-badge strong {
+      color: #fbbf24;
+      font-weight: 800;
+    }
+
+    .rd-continue-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #1a0a00;
+      border: none;
+      border-radius: 50px;
+      padding: 8px 18px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .rd-continue-btn:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+    }
+
+    .rd-theme-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--rd-border);
+      color: #fbbf24;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .rd-theme-btn:hover {
+      background: rgba(255, 255, 255, 0.18);
+      transform: scale(1.08);
+    }
+
+    /* FILTER & SELECTOR BAR */
+    .rd-filter-panel {
+      background: var(--rd-bg-glass);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--rd-border);
+      border-radius: 20px;
+      padding: 14px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    .rd-filter-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .rd-filter-label {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      min-width: 80px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .rd-chips-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      flex: 1;
+    }
+
+    .rd-chip-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 50px;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #cbd5e1;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .rd-chip-btn:hover {
+      background: rgba(255, 255, 255, 0.14);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+    .rd-chip-btn.active {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      border-color: #38bdf8;
+      color: #ffffff;
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
+    }
+
+    .rd-article-quick-select {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 8px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .rd-article-select-dropdown {
+      flex: 1;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--rd-border);
+      color: #f1f5f9;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      outline: none;
+      cursor: pointer;
+    }
+    .rd-nav-article-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--rd-border);
+      color: #f1f5f9;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+    .rd-nav-article-btn:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+    .rd-nav-article-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* MAIN 2-COLUMN WORKSPACE */
+    .rd-main-grid {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 1024px) {
+      .rd-main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* LEFT COLUMN: MAIN READER & INTERACTIVE MODES */
+    .rd-content-card {
+      background: var(--rd-bg-glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--rd-border);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* 3 MAIN MODE TABS (Đọc - Trả lời câu hỏi - Luyện viết) */
+    .rd-mode-tabs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 6px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      flex-wrap: wrap;
+    }
+
+    .rd-mode-tab-btn {
+      flex: 1;
+      min-width: 120px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      padding: 10px 16px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #94a3b8;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .rd-mode-tab-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .rd-mode-tab-btn.active {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(14, 165, 233, 0.35));
+      border-color: rgba(56, 189, 248, 0.5);
+      color: #ffffff;
+      box-shadow: 0 4px 16px rgba(56, 189, 248, 0.25);
+    }
+    .rd-mode-tab-btn.active.tab-quiz {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.35));
+      border-color: rgba(245, 158, 11, 0.5);
+    }
+    .rd-mode-tab-btn.active.tab-write {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.35));
+      border-color: rgba(16, 185, 129, 0.5);
+    }
+
+    /* AUDIO PLAYER BAR */
+    .rd-audio-player-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(90deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+      border: 1.5px solid rgba(56, 189, 248, 0.3);
+      border-radius: 18px;
+      padding: 10px 18px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      flex-wrap: wrap;
+    }
+
+    .rd-play-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #38bdf8, #0284c7);
+      border: none;
+      color: #0f172a;
+      font-size: 1.15rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.5);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      flex-shrink: 0;
+    }
+    .rd-play-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 24px rgba(56, 189, 248, 0.7);
+    }
+
+    .rd-audio-progress-wrap {
+      flex: 1;
+      min-width: 140px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .rd-audio-timeline {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .rd-audio-timeline-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 0%;
+      background: linear-gradient(90deg, #38bdf8, #818cf8);
+      border-radius: 10px;
+      transition: width 0.1s linear;
+    }
+    .rd-audio-time-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      color: #94a3b8;
+      font-weight: 700;
+      font-family: monospace;
+    }
+
+    .rd-audio-speed-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--rd-border);
+      border-radius: 10px;
+      padding: 6px 12px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #38bdf8;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .rd-audio-speed-btn:hover {
+      background: rgba(56, 189, 248, 0.2);
+    }
+
+    /* ART BANNER */
+    .rd-art-banner {
+      position: relative;
+      height: 180px;
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      padding: 20px 24px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+      background-size: cover;
+      background-position: center;
+    }
+    .rd-art-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(0deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.5) 50%, rgba(15, 23, 42, 0.2) 100%);
+      pointer-events: none;
+    }
+    .rd-art-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .rd-art-tag {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #fbbf24;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .rd-art-title-zh {
+      font-family: var(--font-hanzi);
+      font-size: 1.7rem;
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1.2;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+    }
+    .rd-art-title-vi {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #e2e8f0;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    /* READING TEXT BODY */
+    .rd-text-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .rd-text-ctrl-left, .rd-text-ctrl-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .rd-ctrl-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--rd-border);
+      border-radius: 8px;
+      padding: 5px 12px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #cbd5e1;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .rd-ctrl-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+    }
+    .rd-ctrl-btn.active {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: #38bdf8;
+      color: #38bdf8;
+    }
+
+    .rd-chinese-body {
+      font-family: var(--font-hanzi);
+      font-size: 1.35rem;
+      line-height: 2.3;
+      color: #f1f5f9;
+      letter-spacing: 0.04em;
+      white-space: pre-line;
+      transition: font-size 0.2s ease;
+    }
+    .rd-chinese-sentence {
+      padding: 2px 4px;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+      display: inline;
+    }
+    .rd-chinese-sentence:hover {
+      background: rgba(56, 189, 248, 0.15);
+      cursor: pointer;
+    }
+    .rd-chinese-sentence.active-speaking {
+      background: rgba(251, 191, 36, 0.28);
+      border-bottom: 2px solid #fbbf24;
+      color: #ffffff;
+      box-shadow: 0 0 16px rgba(251, 191, 36, 0.3);
+    }
+
+    /* VIETNAMESE TRANSLATION ACCORDION */
+    .rd-accordion-box {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .rd-accordion-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.03);
+      user-select: none;
+    }
+    .rd-accordion-header:hover {
+      background: rgba(255, 255, 255, 0.07);
+    }
+    .rd-accordion-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .rd-accordion-icon {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      transition: transform 0.3s ease;
+    }
+    .rd-accordion-box.open .rd-accordion-icon {
+      transform: rotate(180deg);
+    }
+    .rd-accordion-body {
+      display: none;
+      padding: 16px 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.98rem;
+      line-height: 1.8;
+      color: #cbd5e1;
+      white-space: pre-line;
+    }
+    .rd-accordion-box.open .rd-accordion-body {
+      display: block;
+      animation: fadeInDown 0.3s ease-out;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* RIGHT COLUMN: SIDEBAR ACCORDIONS */
+    .rd-sidebar-column {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .rd-sidebar-card {
+      background: var(--rd-bg-glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--rd-border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .rd-sidebar-header {
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid transparent;
+      transition: all 0.2s;
+    }
+    .rd-sidebar-header:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .rd-sidebar-card.open .rd-sidebar-header {
+      border-bottom-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .rd-sidebar-title {
+      font-size: 0.92rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .rd-sidebar-title.vocab { color: #38bdf8; }
+    .rd-sidebar-title.idiom { color: #fbbf24; }
+    .rd-sidebar-title.phrase { color: #34d399; }
+
+    .rd-sidebar-badge {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .rd-sidebar-body {
+      display: none;
+      padding: 12px 14px;
+      max-height: 480px;
+      overflow-y: auto;
+    }
+    .rd-sidebar-card.open .rd-sidebar-body {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .rd-item-card {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 12px;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: all 0.2s ease;
+    }
+    .rd-item-card:hover {
+      border-color: rgba(56, 189, 248, 0.4);
+      background: rgba(56, 189, 248, 0.05);
+      transform: translateX(2px);
+    }
+    .rd-item-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .rd-item-zh {
+      font-family: var(--font-hanzi);
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #f8fafc;
+    }
+    .rd-item-py {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #38bdf8;
+      margin-left: 6px;
+    }
+    .rd-item-speak-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #cbd5e1;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.75rem;
+      transition: all 0.2s;
+    }
+    .rd-item-speak-btn:hover {
+      background: rgba(56, 189, 248, 0.3);
+      color: #ffffff;
+      transform: scale(1.1);
+    }
+    .rd-item-meaning {
+      font-size: 0.82rem;
+      color: #cbd5e1;
+      line-height: 1.5;
+      font-weight: 600;
+    }
+
+    /* TYPING PRACTICE MODE (Tab Luyện Viết - Ảnh 2) */
+    .rd-typing-workspace {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .rd-typing-options {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 16px;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .rd-checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #cbd5e1;
+      cursor: pointer;
+      user-select: none;
+    }
+    .rd-checkbox-label input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #10b981;
+      cursor: pointer;
+    }
+
+    .rd-ghost-text-container {
+      background: rgba(0, 0, 0, 0.35);
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      padding: 22px 24px;
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .rd-ghost-sentence-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 8px;
+    }
+    .rd-ghost-pinyin-line {
+      font-family: monospace;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #34d399;
+      letter-spacing: 0.08em;
+      transition: opacity 0.2s;
+    }
+    .rd-ghost-hanzi-line {
+      font-family: var(--font-hanzi);
+      font-size: 1.6rem;
+      font-weight: 900;
+      line-height: 1.6;
+      letter-spacing: 0.08em;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px;
+    }
+    .rd-char-span {
+      color: rgba(148, 163, 184, 0.35);
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .rd-char-span.typed-correct {
+      color: #ffffff !important;
+      font-weight: 900 !important;
+      text-shadow: 0 0 12px rgba(16, 185, 129, 0.8);
+      transform: scale(1.05);
+    }
+    .rd-char-span.current-target {
+      border-bottom: 3px solid #fbbf24;
+      color: #fbbf24 !important;
+      animation: pulseTarget 1s infinite;
+    }
+    @keyframes pulseTarget {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    .rd-typing-input-area {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .rd-typing-input-box {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.95);
+      border: 2px solid rgba(56, 189, 248, 0.4);
+      border-radius: 16px;
+      padding: 14px 20px;
+      font-size: 1.25rem;
+      font-weight: 800;
+      font-family: var(--font-hanzi);
+      color: #fde047;
+      outline: none;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+      transition: all 0.2s ease;
+    }
+    .rd-typing-input-box:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+    }
+    .rd-typing-input-box.wrong-shake {
+      animation: inputShake 0.3s ease-in-out;
+      border-color: #ef4444 !important;
+    }
+    @keyframes inputShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+    .rd-typing-tip-sub {
+      font-size: 0.78rem;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* COMPREHENSION QUIZ MODE (Tab Trả lời câu hỏi) */
+    .rd-quiz-workspace {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .rd-quiz-card {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 18px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .rd-quiz-q-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #f1f5f9;
+      display: flex;
+      gap: 8px;
+      line-height: 1.4;
+    }
+    .rd-quiz-q-sub {
+      font-size: 0.88rem;
+      color: #94a3b8;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+    .rd-quiz-options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .rd-quiz-opt-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #cbd5e1;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .rd-quiz-opt-btn:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      transform: translateX(4px);
+    }
+    .rd-quiz-opt-btn.correct {
+      background: rgba(16, 185, 129, 0.25) !important;
+      border-color: #10b981 !important;
+      color: #34d399 !important;
+    }
+    .rd-quiz-opt-btn.wrong {
+      background: rgba(239, 68, 68, 0.25) !important;
+      border-color: #ef4444 !important;
+      color: #f87171 !important;
+    }
+    .rd-quiz-explain-box {
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px dashed rgba(56, 189, 248, 0.4);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      line-height: 1.5;
+      display: none;
+    }
+
+    /* FLOATING TOAST NOTIFICATION */
+    .rd-toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(15, 23, 42, 0.96);
+      color: #ffffff;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-size: 0.92rem;
+      font-weight: 800;
+      border: 1.5px solid #38bdf8;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+      z-index: 99999;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      backdrop-filter: blur(16px);
+    }
+    .rd-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+  <script type="module" crossorigin src="/assets/reading-B8xcqZZR.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
+  <link rel="stylesheet" crossorigin href="/assets/style-B4XfMK0z.css">
+</head>
+
+<body>
+  <div class="rd-page-container">
+
+    <!-- 1. TOP HEADER BAR -->
+    <header class="rd-header-bar">
+      <div class="rd-header-left">
+        <a href="/index.html" class="rd-back-btn" title="Trở về Trang Chủ">
+          <i class="fa-solid fa-arrow-left"></i> Trang Chủ
+        </a>
+        <div class="rd-brand-title">
+          <h1><i class="fa-solid fa-book-open-reader" style="color: #38bdf8;"></i> Luyện Đọc Tiếng Trung</h1>
+          <p>Chuyên trang Đọc hiểu • Từ vựng • Thành ngữ • Luyện gõ phản xạ HSK 1 - 6</p>
+        </div>
+      </div>
+
+      <div class="rd-header-right">
+        <div class="rd-stats-badge">
+          <i class="fa-solid fa-circle-check" style="color: #10b981;"></i>
+          <span>Đã đọc: <strong id="rd-read-count-val">0</strong> / <span id="rd-total-count-val">0</span> bài</span>
+        </div>
+        <button type="button" class="rd-continue-btn" id="rd-continue-study-btn" title="Đọc tiếp bài đang học dở">
+          <i class="fa-solid fa-bolt"></i> Đọc Tiếp
+        </button>
+        <button type="button" class="rd-theme-btn" id="theme-toggle-btn" onclick="window.toggleTheme()" title="Chuyển chế độ Sáng / Tối">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- 2. FILTER & SELECTOR BAR -->
+    <section class="rd-filter-panel">
+      <!-- LEVEL ROW -->
+      <div class="rd-filter-row">
+        <span class="rd-filter-label"><i class="fa-solid fa-layer-group"></i> Cấp độ:</span>
+        <div class="rd-chips-wrap" id="rd-level-chips">
+          <button type="button" class="rd-chip-btn active" data-level="all">Tất cả</button>
+          <button type="button" class="rd-chip-btn" data-level="HSK 1">HSK 1</button>
+          <button type="button" class="rd-chip-btn" data-level="HSK 2">HSK 2</button>
+          <button type="button" class="rd-chip-btn" data-level="HSK 3">HSK 3</button>
+          <button type="button" class="rd-chip-btn" data-level="HSK 4">HSK 4</button>
+          <button type="button" class="rd-chip-btn" data-level="HSK 5">HSK 5</button>
+          <button type="button" class="rd-chip-btn" data-level="HSK 6">HSK 6</button>
+        </div>
+      </div>
+
+      <!-- CATEGORY ROW -->
+      <div class="rd-filter-row">
+        <span class="rd-filter-label"><i class="fa-solid fa-folder-open"></i> Danh mục:</span>
+        <div class="rd-chips-wrap" id="rd-category-chips">
+          <button type="button" class="rd-chip-btn active" data-category="all"><i class="fa-solid fa-border-all"></i> Tất cả</button>
+          <button type="button" class="rd-chip-btn" data-category="daily"><i class="fa-solid fa-sun" style="color:#fbbf24;"></i> Đời thường</button>
+          <button type="button" class="rd-chip-btn" data-category="textbook"><i class="fa-solid fa-book-bookmark" style="color:#38bdf8;"></i> Giáo trình</button>
+          <button type="button" class="rd-chip-btn" data-category="hskk"><i class="fa-solid fa-microphone-lines" style="color:#f472b6;"></i> HSKK</button>
+          <button type="button" class="rd-chip-btn" data-category="idiom"><i class="fa-solid fa-feather" style="color:#a855f7;"></i> Thành ngữ</button>
+          <button type="button" class="rd-chip-btn" data-category="fairy_tale"><i class="fa-solid fa-wand-magic-sparkles" style="color:#34d399;"></i> Cổ tích</button>
+          <button type="button" class="rd-chip-btn" data-category="news"><i class="fa-solid fa-newspaper" style="color:#fb7185;"></i> Báo chí</button>
+        </div>
+      </div>
+
+      <!-- ARTICLE SELECTOR DROPDOWN ROW -->
+      <div class="rd-article-quick-select">
+        <button type="button" class="rd-nav-article-btn" id="rd-prev-article-btn" title="Bài trước">
+          <i class="fa-solid fa-chevron-left"></i> Bài trước
+        </button>
+        <select id="rd-article-select" class="rd-article-select-dropdown" aria-label="Chọn bài đọc"></select>
+        <button type="button" class="rd-nav-article-btn" id="rd-next-article-btn" title="Bài kế tiếp">
+          Bài kế <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- 3. MAIN 2-COLUMN GRID -->
+    <main class="rd-main-grid">
+
+      <!-- LEFT COLUMN: MAIN WORKSPACE (3 TABS) -->
+      <section class="rd-content-card">
+
+        <!-- 3 MODE TABS (Đọc - Trả lời câu hỏi - Luyện viết) -->
+        <nav class="rd-mode-tabs">
+          <button type="button" class="rd-mode-tab-btn active" id="tab-btn-read" data-tab="read">
+            <i class="fa-solid fa-book-open"></i> Đọc bài
+          </button>
+          <button type="button" class="rd-mode-tab-btn tab-quiz" id="tab-btn-quiz" data-tab="quiz">
+            <i class="fa-solid fa-circle-question"></i> Trả lời câu hỏi
+          </button>
+          <button type="button" class="rd-mode-tab-btn tab-write" id="tab-btn-write" data-tab="write">
+            <i class="fa-solid fa-keyboard"></i> Luyện viết
+          </button>
+        </nav>
+
+        <!-- VIEW 1: TAB ĐỌC (READING MODE) -->
+        <div id="view-mode-read" class="rd-view-pane">
+          
+          <!-- AUDIO PLAYER BAR -->
+          <div class="rd-audio-player-bar">
+            <button type="button" class="rd-play-btn" id="rd-audio-play-btn" title="Phát âm thanh bài đọc">
+              <i class="fa-solid fa-play"></i>
+            </button>
+            <div class="rd-audio-progress-wrap">
+              <div class="rd-audio-timeline" id="rd-audio-timeline">
+                <div class="rd-audio-timeline-fill" id="rd-audio-timeline-fill"></div>
+              </div>
+              <div class="rd-audio-time-row">
+                <span id="rd-audio-current-time">0:00</span>
+                <span id="rd-audio-total-time">0:00</span>
+              </div>
+            </div>
+            <button type="button" class="rd-audio-speed-btn" id="rd-audio-speed-btn" title="Chỉnh tốc độ đọc">
+              1.0x
+            </button>
+          </div>
+
+          <!-- ART BANNER -->
+          <div class="rd-art-banner" id="rd-art-banner" style="margin-top: 16px;">
+            <div class="rd-art-overlay"></div>
+            <div class="rd-art-content">
+              <div class="rd-art-tag" id="rd-art-tag">
+                <i class="fa-solid fa-sun"></i> HSK 1 • ĐỜI THƯỜNG
+              </div>
+              <h2 class="rd-art-title-zh" id="rd-art-title-zh">标题</h2>
+              <div class="rd-art-title-vi" id="rd-art-title-vi">Tiêu đề bài đọc</div>
+            </div>
+          </div>
+
+          <!-- TEXT CONTROLS & CHINESE TEXT -->
+          <div style="margin-top: 18px; display: flex; flex-direction: column; gap: 14px;">
+            <div class="rd-text-controls">
+              <div class="rd-text-ctrl-left">
+                <button type="button" class="rd-ctrl-btn" id="rd-toggle-pinyin-btn" title="Bật/Tắt Pinyin">
+                  <i class="fa-solid fa-font"></i> <span id="rd-py-btn-text">Hiện Pinyin</span>
+                </button>
+                <button type="button" class="rd-ctrl-btn" id="rd-mark-done-btn" title="Đánh dấu đã đọc xong bài này">
+                  <i class="fa-regular fa-circle-check"></i> <span id="rd-done-btn-text">Đánh dấu đã đọc</span>
+                </button>
+              </div>
+              <div class="rd-text-ctrl-right">
+                <button type="button" class="rd-ctrl-btn" id="rd-font-dec-btn" title="Thu nhỏ chữ">A-</button>
+                <button type="button" class="rd-ctrl-btn" id="rd-font-inc-btn" title="Phóng to chữ">A+</button>
+              </div>
+            </div>
+
+            <!-- CHINESE TEXT BODY -->
+            <div class="rd-chinese-body" id="rd-chinese-body"></div>
+
+            <!-- VIETNAMESE TRANSLATION ACCORDION -->
+            <div class="rd-accordion-box" id="rd-translation-accordion" style="margin-top: 10px;">
+              <div class="rd-accordion-header" id="rd-translation-header">
+                <div class="rd-accordion-title">
+                  <i class="fa-solid fa-language" style="color: #38bdf8;"></i> Bản dịch Tiếng Việt
+                </div>
+                <i class="fa-solid fa-chevron-down rd-accordion-icon"></i>
+              </div>
+              <div class="rd-accordion-body" id="rd-translation-body"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- VIEW 2: TAB TRẢ LỜI CÂU HỎI (QUIZ MODE) -->
+        <div id="view-mode-quiz" class="rd-view-pane" style="display: none;">
+          <div class="rd-quiz-workspace" id="rd-quiz-workspace"></div>
+        </div>
+
+        <!-- VIEW 3: TAB LUYỆN VIẾT (DICTATION & TYPING MODE - Ảnh 2) -->
+        <div id="view-mode-write" class="rd-view-pane" style="display: none;">
+          <div class="rd-typing-workspace">
+            
+            <div class="rd-typing-options">
+              <label class="rd-checkbox-label">
+                <input type="checkbox" id="rd-hide-pinyin-chk">
+                <span><i class="fa-solid fa-eye-slash"></i> Ẩn Pinyin (Tăng độ khó nhớ mặt chữ)</span>
+              </label>
+              <div style="font-size: 0.82rem; font-weight: 800; color: #10b981;" id="rd-typing-progress-text">
+                Tiến độ: 0%
+              </div>
+            </div>
+
+            <!-- GHOST TEXT CONTAINER (Pinyin xanh + Chữ Hán mờ) -->
+            <div class="rd-ghost-text-container" id="rd-ghost-text-container"></div>
+
+            <!-- INPUT BOX -->
+            <div class="rd-typing-input-area">
+              <input type="text" id="rd-typing-input-box" class="rd-typing-input-box" placeholder="Gõ Pinyin hoặc Chữ Hán vào đây để kiểm tra..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+              <div class="rd-typing-tip-sub">
+                <i class="fa-solid fa-circle-info" style="color: #38bdf8;"></i>
+                <span>Gõ đúng: chữ sáng đậm rõ nét • Gõ sai: cảnh báo rung đỏ • Nhấn Enter hoặc Space để chuyển</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+
+      <!-- RIGHT COLUMN: SIDEBAR EXPANDABLE WIDGETS -->
+      <aside class="rd-sidebar-column">
+
+        <!-- ACCORDION 1: TỪ VỰNG TRỌNG TÂM -->
+        <div class="rd-sidebar-card open" id="rd-side-vocab-card">
+          <div class="rd-sidebar-header" id="rd-side-vocab-header">
+            <div class="rd-sidebar-title vocab">
+              <i class="fa-solid fa-book-bookmark"></i> Từ vựng trọng tâm
+            </div>
+            <span class="rd-sidebar-badge" id="rd-vocab-count-badge">0</span>
+          </div>
+          <div class="rd-sidebar-body" id="rd-vocab-list-body"></div>
+        </div>
+
+        <!-- ACCORDION 2: THÀNH NGỮ BỐN CHỮ -->
+        <div class="rd-sidebar-card open" id="rd-side-idiom-card">
+          <div class="rd-sidebar-header" id="rd-side-idiom-header">
+            <div class="rd-sidebar-title idiom">
+              <i class="fa-solid fa-feather"></i> Thành ngữ
+            </div>
+            <span class="rd-sidebar-badge" id="rd-idiom-count-badge">0</span>
+          </div>
+          <div class="rd-sidebar-body" id="rd-idiom-list-body"></div>
+        </div>
+
+        <!-- ACCORDION 3: QUÁN DỤNG NGỮ & CỤM CỐ ĐỊNH -->
+        <div class="rd-sidebar-card open" id="rd-side-phrase-card">
+          <div class="rd-sidebar-header" id="rd-side-phrase-header">
+            <div class="rd-sidebar-title phrase">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> Quán dụng ngữ & Cụm cố định
+            </div>
+            <span class="rd-sidebar-badge" id="rd-phrase-count-badge">0</span>
+          </div>
+          <div class="rd-sidebar-body" id="rd-phrase-list-body"></div>
+        </div>
+
+      </aside>
+
+    </main>
+
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="rd-toast" class="rd-toast">
+    <i class="fa-solid fa-circle-check" style="color:#10b981;"></i>
+    <span id="rd-toast-msg">Thông báo</span>
+  </div>
+
+  <!-- MAIN SCRIPT -->
+</body>
+
+</html>
