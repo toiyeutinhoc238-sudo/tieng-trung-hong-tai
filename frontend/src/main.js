@@ -3819,9 +3819,10 @@ async function initAuth() {
   if (totalHistorySecs > userStudyTime) {
     userStudyTime = totalHistorySecs;
   }
-  const histStats = getStudyStatsFromHistory(history);
-  userTotalDays = histStats.totalDays;
-  userStreak = Math.max(userStreak || 0, histStats.maxStreak, histStats.currentStreak, 1);
+  const calcStreak = calculateStreakFromHistory(history);
+  if (calcStreak > userStreak) {
+    userStreak = calcStreak;
+  }
 
   renderUserProfile();
   updateStatsUI();
@@ -10893,15 +10894,15 @@ async function loadInitialStats() {
   if (totalHistorySecs > userStudyTime) {
     userStudyTime = totalHistorySecs;
   }
-  const histStats = getStudyStatsFromHistory(history);
-  userTotalDays = histStats.totalDays;
-  userStreak = Math.max(userStreak || 0, histStats.maxStreak, histStats.currentStreak, 1);
+  const calcStreak = calculateStreakFromHistory(history);
+  if (calcStreak > userStreak) {
+    userStreak = calcStreak;
+  }
 
   if (currentUser) {
     const userKey = currentUser._id || currentUser.id || currentUser.email || 'user';
     localStorage.setItem(`user_stats_${userKey}`, JSON.stringify({
       streak: userStreak,
-      totalDays: userTotalDays,
       studyTime: userStudyTime
     }));
   }
