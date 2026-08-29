@@ -1535,11 +1535,6 @@ app.get('/api/leaderboard', async (req, res) => {
         }
       });
 
-      const progress = (userData.progress && userData.progress[email]) || u.progress || {};
-      const memorizedCount = Object.values(progress).filter(p => p && p.isMemorized).length;
-      const wordScore = memorizedCount * 10;
-      const finalScore = Math.max(highestScore, wordScore);
-
       const lastActive = u.stats && u.stats.lastActiveDate
         ? new Date(u.stats.lastActiveDate).getTime()
         : (latestAttemptTime || (u.lastSeenTime ? new Date(u.lastSeenTime).getTime() : Date.now()));
@@ -1548,10 +1543,9 @@ app.get('/api/leaderboard', async (req, res) => {
         email,
         name: u.name || email.split('@')[0],
         picture: u.picture || '',
-        score: finalScore,
-        highestScore: finalScore,
+        score: highestScore,
+        highestScore: highestScore,
         quizCount: allAttempts.length,
-        memorizedCount,
         studyTime: u.stats ? (u.stats.studyTime || 0) : 0,
         streak: u.stats ? (u.stats.streak || 0) : 0,
         latestAttemptTime: latestAttemptTime || lastActive
