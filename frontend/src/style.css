@@ -5339,6 +5339,222 @@ html:not(.dark) #about-hongtai-modal p {
   color: #475569 !important;
 }
 
+/* Zubi Modal KPI Numbers */
+html:not(.dark) .zubi-kpi-val {
+  color: #0f172a !important;
+}
+html.dark .zubi-kpi-val {
+  color: #ffffff !important;
+}
+
+/* Zubi Modal Content Cards */
+html:not(.dark) .zubi-modal-card {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #1e293b !important;
+}
+html.dark .zubi-modal-card {
+  background: rgba(15, 23, 42, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #f8fafc !important;
+}
+
+html:not(.dark) .zubi-item-title {
+  color: #0f172a !important;
+}
+html.dark .zubi-item-title {
+  color: #ffffff !important;
+}
+
+html:not(.dark) .zubi-item-sub {
+  color: #64748b !important;
+}
+html.dark .zubi-item-sub {
+  color: #94a3b8 !important;
+}
+
+/* Zubi Daily Study History List (Fixing invisible dates in Light Mode) */
+html:not(.dark) .zubi-history-section-title {
+  color: #b45309 !important;
+}
+html.dark .zubi-history-section-title {
+  color: #fbbf24 !important;
+}
+
+html:not(.dark) .zubi-history-row {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+html.dark .zubi-history-row {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+html:not(.dark) .zubi-history-date {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+}
+html.dark .zubi-history-date {
+  color: #f1f5f9 !important;
+  font-weight: 700 !important;
+}
+
+html:not(.dark) .zubi-history-time {
+  color: #0284c7 !important;
+  font-weight: 800 !important;
+}
+html.dark .zubi-history-time {
+  color: #38bdf8 !important;
+  font-weight: 800 !important;
+}
+
+/* Zubi Modal Tip Box */
+html:not(.dark) .zubi-tip-box {
+  background: #f0fdf4 !important;
+  border: 1px solid #bbf7d0 !important;
+}
+html.dark .zubi-tip-box {
+  background: rgba(15, 23, 42, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+html:not(.dark) .zubi-tip-title {
+  color: #166534 !important;
+}
+html.dark .zubi-tip-title {
+  color: #ffffff !important;
+}
+
+html:not(.dark) .zubi-tip-desc {
+  color: #15803d !important;
+}
+html.dark .zubi-tip-desc {
+  color: #94a3b8 !important;
+}
+
+/* Home Leaderboard Row Styling */
+html:not(.dark) .home-lb-item {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04) !important;
+}
+html.dark .home-lb-item {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+html:not(.dark) .home-lb-name {
+  color: #0f172a !important;
+}
+html.dark .home-lb-name {
+  color: #ffffff !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   UNIVERSAL THEME STYLING FOR ALL MODALS & POPUPS (Light & Dark Mode)
+   ═══════════════════════════════════════════════════════════════════════════ */
+html.light-mode .modal-card,
+html:not(.dark) .modal-card,
+html.light-mode .modal-overlay > div,
+html:not(.dark) .modal-overlay > div,
+html.light-mode #lesson-detail-popup-modal .modal-card,
+html:not(.dark) #lesson-detail-popup-modal .modal-card,
+html.light-mode #lesson-grammar-popup-modal .modal-card,
+html:not(.dark) #lesson-grammar-popup-modal .modal-card,
+html.light-mode #game-history-modal .modal-card,
+html:not(.dark) #game-history-modal .modal-card,
+html.light-mode #create-notebook-modal .modal-card,
+html:not(.dark) #create-notebook-modal .modal-card,
+html.light-mode #donate-project-modal .modal-card,
+html:not(.dark) #donate-project-modal .modal-card,
+html.light-mode #discussion-forum-modal .modal-card,
+html:not(.dark) #discussion-forum-modal .modal-card {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15) !important;
+}
+
+html.light-mode .modal-card h1, html:not(.dark) .modal-card h1,
+html.light-mode .modal-card h2, html:not(.dark) .modal-card h2,
+html.light-mode .modal-card h3, html:not(.dark) .modal-card h3,
+html.light-mode .modal-card h4, html:not(.dark) .modal-card h4,
+html.light-mode #modal-lesson-title-val, html:not(.dark) #modal-lesson-title-val,
+html.light-mode #grammar-modal-title, html:not(.dark) #grammar-modal-title {
+  color: #0f172a !important;
+}
+
+html.light-mode .modal-card p, html:not(.dark) .modal-card p,
+html.light-mode #modal-lesson-desc-val, html:not(.dark) #modal-lesson-desc-val {
+  color: #334155 !important;
+}
+
+html.light-mode .modal-card .text-muted, html:not(.dark) .modal-card .text-muted,
+html.light-mode .modal-card small, html:not(.dark) .modal-card small {
+  color: #64748b !important;
+}
+
+html.light-mode #lesson-detail-popup-modal div[style*="rgba(255,255,255,0.06)"],
+html:not(.dark) #lesson-detail-popup-modal div[style*="rgba(255,255,255,0.06)"],
+html.light-mode #lesson-detail-popup-modal div[style*="background: rgba(255, 255, 255"],
+html:not(.dark) #lesson-detail-popup-modal div[style*="background: rgba(255, 255, 255"] {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+html.light-mode #modal-lesson-grammar-preview-box,
+html:not(.dark) #modal-lesson-grammar-preview-box {
+  background: #f0f9ff !important;
+  border: 1px dashed #7dd3fc !important;
+}
+
+html.light-mode #modal-lesson-grammar-preview-list,
+html:not(.dark) #modal-lesson-grammar-preview-list {
+  color: #0f172a !important;
+}
+
+html.light-mode .lesson-mod-btn,
+html:not(.dark) .lesson-mod-btn {
+  background: #f8fafc !important;
+  border: 1.5px solid #e2e8f0 !important;
+  color: #0f172a !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04) !important;
+}
+
+html.light-mode .lesson-mod-btn:hover,
+html:not(.dark) .lesson-mod-btn:hover {
+  background: #f1f5f9 !important;
+  border-color: #3b82f6 !important;
+}
+
+html.light-mode .lesson-mod-btn span,
+html:not(.dark) .lesson-mod-btn span {
+  color: #0f172a !important;
+}
+
+html.light-mode .lesson-mod-btn small,
+html:not(.dark) .lesson-mod-btn small {
+  color: #64748b !important;
+}
+
+html.light-mode .modal-card button[style*="position: absolute"],
+html:not(.dark) .modal-card button[style*="position: absolute"],
+html.light-mode .modal-overlay button[style*="position: absolute"],
+html:not(.dark) .modal-overlay button[style*="position: absolute"] {
+  background: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #334155 !important;
+}
+
+html.light-mode .modal-card button[style*="position: absolute"]:hover,
+html:not(.dark) .modal-card button[style*="position: absolute"]:hover,
+html.light-mode .modal-overlay button[style*="position: absolute"]:hover,
+html:not(.dark) .modal-overlay button[style*="position: absolute"]:hover {
+  background: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
 /* About Hongtai Modal Theme Styles */
 html.dark #about-hongtai-modal .about-quote-box {
   background: #1e293b !important;

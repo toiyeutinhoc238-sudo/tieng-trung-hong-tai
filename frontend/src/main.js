@@ -10153,13 +10153,13 @@ function renderHomeLeaderboard() {
         const avatar = item.picture ? `<img src="${item.picture}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid ${col}; flex-shrink: 0;">` : `<div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, ${col}, #2563eb); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.82rem; flex-shrink: 0;">${name.charAt(0).toUpperCase()}</div>`;
 
         return `
-          <div style="background: rgba(255,255,255,0.05); border: 1px solid ${borderCol}; border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+          <div class="home-lb-item" style="border: 1px solid ${borderCol}; border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
             <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
               <span style="font-size: 1.2rem; flex-shrink: 0;">${medal}</span>
               ${avatar}
               <div style="min-width: 0;">
-                <div style="font-size: 0.92rem; font-weight: 800; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${name}</div>
-                <div style="font-size: 0.78rem; color: ${col};">${streak} ngày liên tiếp ${item.quizCount ? `• ${item.quizCount} đề thi` : ''}</div>
+                <div class="home-lb-name" style="font-size: 0.92rem; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${name}</div>
+                <div style="font-size: 0.78rem; color: ${col}; font-weight: 600;">${streak} ngày liên tiếp ${item.quizCount ? `• ${item.quizCount} đề thi` : ''}</div>
               </div>
             </div>
             <span style="font-weight: 800; color: #10b981; font-size: 0.9rem; flex-shrink: 0;">${points.toLocaleString()} điểm</span>
@@ -10464,24 +10464,24 @@ window.openZubiRecentLessonDetail = function (curr, level) {
   let html = `
     <div style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 16px; padding: 18px; display: flex; justify-content: space-between; align-items: center;">
       <div>
-        <span style="font-size: 0.8rem; text-transform: uppercase; color: #34d399; font-weight: 700;">Tiến độ hoàn thành cấp độ</span>
-        <h2 style="font-size: 1.8rem; font-weight: 800; color: #ffffff; margin: 4px 0 0 0;">${memorized} / ${total.toLocaleString()} Từ (${pct}%)</h2>
+        <span style="font-size: 0.8rem; text-transform: uppercase; color: #10b981; font-weight: 700;">Tiến độ hoàn thành cấp độ</span>
+        <h2 class="zubi-kpi-val" style="font-size: 1.8rem; font-weight: 800; margin: 4px 0 0 0;">${memorized} / ${total.toLocaleString()} Từ (${pct}%)</h2>
       </div>
       <button class="btn btn-primary" style="padding: 10px 20px; border-radius: 12px; font-weight: 700;" onclick="document.getElementById('zubi-stat-modal').style.display='none'; window.selectCurriculumAndGo('${curr}', '${level}');">Vào học ngay</button>
     </div>
-    <h4 style="color: #f8fafc; margin: 10px 0 4px 0; font-size: 1rem;">Mẫu từ vựng tiêu biểu trong cấp độ này:</h4>
+    <h4 class="zubi-item-title" style="margin: 10px 0 4px 0; font-size: 1rem;">Mẫu từ vựng tiêu biểu trong cấp độ này:</h4>
     <div style="display: flex; flex-direction: column; gap: 8px; max-height: 240px; overflow-y: auto;">
   `;
 
   const samples = lesWords.slice(0, 10);
   samples.forEach(w => {
     html += `
-      <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;">
+      <div class="zubi-modal-card" style="border-radius: 10px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;">
         <div>
           <strong style="color: #38bdf8; font-size: 1.1rem;">${w.word}</strong>
-          <span style="color: #cbd5e1; margin-left: 10px; font-size: 0.9rem;">[ ${w.pinyin} ]</span>
+          <span class="zubi-item-sub" style="margin-left: 10px; font-size: 0.9rem;">[ ${w.pinyin} ]</span>
         </div>
-        <span style="color: #94a3b8; font-size: 0.85rem;">${w.meaning}</span>
+        <span class="zubi-item-sub" style="font-size: 0.85rem;">${w.meaning}</span>
       </div>
     `;
   });
@@ -10558,22 +10558,22 @@ window.openZubiStatDetail = async function (type) {
       <div style="background: rgba(236, 72, 153, 0.1); border: 1px solid rgba(236, 72, 153, 0.3); border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
         <div>
           <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: #ec4899; font-weight: 700;">Tổng số bài đã xong (Tất cả giáo trình)</span>
-          <h2 style="font-size: 1.8rem; font-weight: 800; color: #ffffff; margin: 4px 0 0 0;">${completedLessons.length} / ${totalLessons} Bài</h2>
+          <h2 class="zubi-kpi-val" style="font-size: 1.8rem; font-weight: 800; margin: 4px 0 0 0;">${completedLessons.length} / ${totalLessons} Bài</h2>
         </div>
         <div style="font-size: 2.2rem; color: #ec4899; opacity: 0.8;"><i class="fa-solid fa-trophy"></i></div>
       </div>
       <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px;">
         <div style="background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.3); border-radius: 12px; padding: 12px; text-align: center;">
-          <div style="font-size: 0.72rem; color: #60a5fa; font-weight: 700; text-transform: uppercase;">HSK 3.0</div>
-          <div style="font-size: 1.3rem; font-weight: 800; color: #fff; margin-top: 4px;">${doneHsk3} / ${totalHsk3}</div>
+          <div style="font-size: 0.72rem; color: #0284c7; font-weight: 700; text-transform: uppercase;">HSK 3.0</div>
+          <div class="zubi-kpi-val" style="font-size: 1.3rem; font-weight: 800; margin-top: 4px;">${doneHsk3} / ${totalHsk3}</div>
         </div>
         <div style="background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); border-radius: 12px; padding: 12px; text-align: center;">
-          <div style="font-size: 0.72rem; color: #c084fc; font-weight: 700; text-transform: uppercase;">HSK 2.0</div>
-          <div style="font-size: 1.3rem; font-weight: 800; color: #fff; margin-top: 4px;">${doneHsk2} / ${totalHsk2}</div>
+          <div style="font-size: 0.72rem; color: #9333ea; font-weight: 700; text-transform: uppercase;">HSK 2.0</div>
+          <div class="zubi-kpi-val" style="font-size: 1.3rem; font-weight: 800; margin-top: 4px;">${doneHsk2} / ${totalHsk2}</div>
         </div>
         <div style="background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); border-radius: 12px; padding: 12px; text-align: center;">
-          <div style="font-size: 0.72rem; color: #fbbf24; font-weight: 700; text-transform: uppercase;">YCT</div>
-          <div style="font-size: 1.3rem; font-weight: 800; color: #fff; margin-top: 4px;">${doneYct} / ${totalYct}</div>
+          <div style="font-size: 0.72rem; color: #d97706; font-weight: 700; text-transform: uppercase;">YCT</div>
+          <div class="zubi-kpi-val" style="font-size: 1.3rem; font-weight: 800; margin-top: 4px;">${doneYct} / ${totalYct}</div>
         </div>
       </div>
     `;
@@ -10582,8 +10582,8 @@ window.openZubiStatDetail = async function (type) {
       html += `
         <div style="text-align: center; padding: 30px 20px;">
           <i class="fa-solid fa-book-bookmark" style="font-size: 3rem; color: #64748b; margin-bottom: 12px; display: block;"></i>
-          <h4 style="color: #f1f5f9; margin: 0 0 6px 0; font-size: 1.1rem;">Chưa có bài học nào hoàn thành 100%</h4>
-          <p style="color: #94a3b8; font-size: 0.85rem; margin: 0 0 16px 0;">Hãy tiếp tục lật flashcard và đánh dấu thuộc từ để hoàn thành bài nhé!</p>
+          <h4 class="zubi-item-title" style="margin: 0 0 6px 0; font-size: 1.1rem;">Chưa có bài học nào hoàn thành 100%</h4>
+          <p class="zubi-item-sub" style="font-size: 0.85rem; margin: 0 0 16px 0;">Hãy tiếp tục lật flashcard và đánh dấu thuộc từ để hoàn thành bài nhé!</p>
           <button class="btn btn-primary" style="padding: 10px 24px; border-radius: 12px;" onclick="document.getElementById('zubi-stat-modal').style.display='none'; window.selectCurriculumAndGo('hsk', 1);">Bắt đầu học ngay</button>
         </div>
       `;
@@ -10595,14 +10595,14 @@ window.openZubiStatDetail = async function (type) {
         const isYct = les.ver.toString().toLowerCase().includes('yct') || (les.curr || '').toLowerCase().includes('yct');
         const isHsk2 = !isYct && (les.ver === '2.0' || les.ver === 2);
         const currLabel = isYct ? 'YCT' : isHsk2 ? 'HSK 2.0' : 'HSK 3.0';
-        const currColor = isYct ? '#fbbf24' : isHsk2 ? '#c084fc' : '#60a5fa';
+        const currColor = isYct ? '#d97706' : isHsk2 ? '#9333ea' : '#0284c7';
         html += `
-          <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
+          <div class="zubi-modal-card" style="border-radius: 12px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
             <div>
-              <strong style="color: #f8fafc; font-size: 0.95rem;">${fullTitle}</strong>
-              <div style="font-size: 0.8rem; color: #94a3b8;">${les.words.length} từ vựng đã ghi nhớ &nbsp;·&nbsp; <span style="color: ${currColor}; font-weight: 700;">${currLabel}</span></div>
+              <strong class="zubi-item-title" style="font-size: 0.95rem;">${fullTitle}</strong>
+              <div class="zubi-item-sub" style="font-size: 0.8rem; margin-top: 2px;">${les.words.length} từ vựng đã ghi nhớ &nbsp;·&nbsp; <span style="color: ${currColor}; font-weight: 700;">${currLabel}</span></div>
             </div>
-            <span class="zubi-pill success" style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: rgba(16, 185, 129, 0.2); color: #34d399;">Hoàn thành</span>
+            <span class="zubi-pill success" style="padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: rgba(16, 185, 129, 0.2); color: #10b981;">Hoàn thành</span>
           </div>
         `;
       });
@@ -10625,19 +10625,19 @@ window.openZubiStatDetail = async function (type) {
     bodyEl.innerHTML = `
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
         <div style="background: rgba(59, 130, 246, 0.12); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 16px; padding: 18px; text-align: center;">
-          <div style="font-size: 0.8rem; color: #60a5fa; font-weight: 700; text-transform: uppercase;">Tổng thời gian đã học</div>
-          <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-top: 6px;" id="zubi-modal-time-val">${timeDisplay}</div>
+          <div style="font-size: 0.8rem; color: #0284c7; font-weight: 700; text-transform: uppercase;">Tổng thời gian đã học</div>
+          <div class="zubi-kpi-val" style="font-size: 1.6rem; font-weight: 800; margin-top: 6px;" id="zubi-modal-time-val">${timeDisplay}</div>
         </div>
         <div style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 16px; padding: 18px; text-align: center;">
-          <div style="font-size: 0.8rem; color: #fbbf24; font-weight: 700; text-transform: uppercase;">Tổng số ngày tham gia</div>
-          <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-top: 6px;">📅 ${userTotalDays || 1} ngày</div>
+          <div style="font-size: 0.8rem; color: #d97706; font-weight: 700; text-transform: uppercase;">Tổng số ngày tham gia</div>
+          <div class="zubi-kpi-val" style="font-size: 1.6rem; font-weight: 800; margin-top: 6px;">📅 ${userTotalDays || 1} ngày</div>
         </div>
       </div>
-      <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 18px; display: flex; gap: 14px; align-items: flex-start;">
-        <div style="width: 36px; height: 36px; border-radius: 50%; background: rgba(16, 185, 129, 0.2); color: #34d399; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.1rem;"><i class="fa-solid fa-lightbulb"></i></div>
+      <div class="zubi-tip-box" style="border-radius: 16px; padding: 18px; display: flex; gap: 14px; align-items: flex-start;">
+        <div style="width: 36px; height: 36px; border-radius: 50%; background: rgba(16, 185, 129, 0.2); color: #10b981; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.1rem;"><i class="fa-solid fa-lightbulb"></i></div>
         <div>
-          <strong style="color: #ffffff; font-size: 0.95rem;">Mẹo học hiệu quả:</strong>
-          <p style="margin: 4px 0 0 0; color: #94a3b8; font-size: 0.85rem; line-height: 1.5;">Duy trì khoảng 15 - 20 phút lật thẻ Flashcard & làm bài tập mỗi ngày sẽ giúp bộ não ghi nhớ từ vựng lâu hơn gấp 3 lần so với dồn học 1 buổi kéo dài!</p>
+          <strong class="zubi-tip-title" style="font-size: 0.95rem;">Mẹo học hiệu quả:</strong>
+          <p class="zubi-tip-desc" style="margin: 4px 0 0 0; font-size: 0.85rem; line-height: 1.5;">Duy trì khoảng 15 - 20 phút lật thẻ Flashcard & làm bài tập mỗi ngày sẽ giúp bộ não ghi nhớ từ vựng lâu hơn gấp 3 lần so với dồn học 1 buổi kéo dài!</p>
         </div>
       </div>
     `;
@@ -10660,7 +10660,7 @@ window.openZubiStatDetail = async function (type) {
     if (sortedDates.length > 0) {
       historyRowsHtml = `
         <div style="margin-top: 16px; text-align: left;">
-          <div style="font-size: 0.85rem; font-weight: 800; color: #fbbf24; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+          <div class="zubi-history-section-title" style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
             <i class="fa-solid fa-calendar-check"></i> Lịch Sử Các Ngày Đã Học (${sortedDates.length} ngày)
           </div>
           <div style="max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding-right: 4px;">
@@ -10671,9 +10671,9 @@ window.openZubiStatDetail = async function (type) {
               const parts = d.split('-');
               const vnDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
               return `
-                <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 8px 14px; font-size: 0.86rem;">
-                  <span style="color: #f1f5f9; font-weight: 700;">📅 Ngày ${vnDate}</span>
-                  <span style="color: #38bdf8; font-weight: 800;"><i class="fa-solid fa-stopwatch"></i> ${dTime}</span>
+                <div class="zubi-history-row" style="display: flex; justify-content: space-between; align-items: center; border-radius: 10px; padding: 8px 14px; font-size: 0.86rem;">
+                  <span class="zubi-history-date">📅 Ngày ${vnDate}</span>
+                  <span class="zubi-history-time"><i class="fa-solid fa-stopwatch"></i> ${dTime}</span>
                 </div>
               `;
             }).join('')}
@@ -10685,19 +10685,19 @@ window.openZubiStatDetail = async function (type) {
     bodyEl.innerHTML = `
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
         <div style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 16px; padding: 18px; text-align: center;">
-          <div style="font-size: 0.8rem; color: #fbbf24; font-weight: 700; text-transform: uppercase;">Tổng số ngày đã học</div>
-          <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-top: 6px;">📅 ${userTotalDays || 1} ngày</div>
+          <div style="font-size: 0.8rem; color: #d97706; font-weight: 700; text-transform: uppercase;">Tổng số ngày đã học</div>
+          <div class="zubi-kpi-val" style="font-size: 1.6rem; font-weight: 800; margin-top: 6px;">📅 ${userTotalDays || 1} ngày</div>
         </div>
         <div style="background: rgba(59, 130, 246, 0.12); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 16px; padding: 18px; text-align: center;">
-          <div style="font-size: 0.8rem; color: #60a5fa; font-weight: 700; text-transform: uppercase;">Chuỗi ngày kỷ lục</div>
-          <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-top: 6px;">🔥 ${userStreak || 1} ngày</div>
+          <div style="font-size: 0.8rem; color: #0284c7; font-weight: 700; text-transform: uppercase;">Chuỗi ngày kỷ lục</div>
+          <div class="zubi-kpi-val" style="font-size: 1.6rem; font-weight: 800; margin-top: 6px;">🔥 ${userStreak || 1} ngày</div>
         </div>
       </div>
-      <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 18px; display: flex; gap: 14px; align-items: flex-start;">
+      <div class="zubi-tip-box" style="border-radius: 16px; padding: 18px; display: flex; gap: 14px; align-items: flex-start;">
         <div style="width: 36px; height: 36px; border-radius: 50%; background: rgba(249, 115, 22, 0.2); color: #f97316; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.1rem;"><i class="fa-solid fa-fire"></i></div>
         <div>
-          <strong style="color: #ffffff; font-size: 0.95rem;">Giữ vững thói quen học tập:</strong>
-          <p style="margin: 4px 0 0 0; color: #94a3b8; font-size: 0.85rem; line-height: 1.5;">Học mỗi ngày ít nhất 1 bài học hoặc 10 từ vựng để tích lũy ngày học và tiếp thu kiến thức một cách tự nhiên nhất!</p>
+          <strong class="zubi-tip-title" style="font-size: 0.95rem;">Giữ vững thói quen học tập:</strong>
+          <p class="zubi-tip-desc" style="margin: 4px 0 0 0; font-size: 0.85rem; line-height: 1.5;">Học mỗi ngày ít nhất 1 bài học hoặc 10 từ vựng để tích lũy ngày học và tiếp thu kiến thức một cách tự nhiên nhất!</p>
         </div>
       </div>
       ${historyRowsHtml}
@@ -10737,16 +10737,16 @@ window.openZubiStatDetail = async function (type) {
 
     bodyEl.innerHTML = `
       <div style="display: flex; flex-direction: column; gap: 12px;">
-        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
-          <div><strong style="color: #ffffff;">HSK 3.0 (Tất cả cấp độ)</strong><div style="font-size: 0.8rem; color: #94a3b8;">Bộ giáo trình mới HSK 3.0</div></div>
+        <div class="zubi-modal-card" style="border-radius: 14px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
+          <div><strong class="zubi-item-title">HSK 3.0 (Tất cả cấp độ)</strong><div class="zubi-item-sub" style="font-size: 0.8rem; margin-top: 2px;">Bộ giáo trình mới HSK 3.0</div></div>
           <span style="font-weight: 800; color: #f97316; font-size: 1.1rem;">${hsk3Lessons.size} Bài</span>
         </div>
-        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
-          <div><strong style="color: #ffffff;">HSK 2.0 (Cấp 1..6)</strong><div style="font-size: 0.8rem; color: #94a3b8;">Bộ giáo trình HSK 2.0 truyền thống</div></div>
+        <div class="zubi-modal-card" style="border-radius: 14px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
+          <div><strong class="zubi-item-title">HSK 2.0 (Cấp 1..6)</strong><div class="zubi-item-sub" style="font-size: 0.8rem; margin-top: 2px;">Bộ giáo trình HSK 2.0 truyền thống</div></div>
           <span style="font-weight: 800; color: #f97316; font-size: 1.1rem;">${hsk2Lessons.size} Bài</span>
         </div>
-        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
-          <div><strong style="color: #ffffff;">YCT 1, 2, 3, 4 (Thiếu nhi)</strong><div style="font-size: 0.8rem; color: #94a3b8;">Giáo trình Tiếng Trung Trẻ Em YCT</div></div>
+        <div class="zubi-modal-card" style="border-radius: 14px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
+          <div><strong class="zubi-item-title">YCT 1, 2, 3, 4 (Thiếu nhi)</strong><div class="zubi-item-sub" style="font-size: 0.8rem; margin-top: 2px;">Giáo trình Tiếng Trung Trẻ Em YCT</div></div>
           <span style="font-weight: 800; color: #f97316; font-size: 1.1rem;">${yctLessons.size} Bài</span>
         </div>
       </div>
@@ -10758,7 +10758,7 @@ window.openZubiStatDetail = async function (type) {
     subtitleEl.textContent = `Phân bổ ${activeVocabs.length.toLocaleString()} từ vựng HSK 3.0 & 2.0 chuẩn hóa`;
     iconEl.className = 'zubi-circle-icon cyan';
     iconEl.style.background = 'rgba(2, 132, 199, 0.2)';
-    iconEl.style.color = '#38bdf8';
+    iconEl.style.color = '#0284c7';
     iconEl.innerHTML = '<i class="fa-solid fa-layer-group"></i>';
 
     const hsk30Levels = {};
@@ -10791,43 +10791,43 @@ window.openZubiStatDetail = async function (type) {
 
     // Generate HSK 3.0 Level rows
     const hsk30Rows = Object.keys(hsk30Levels).sort((a, b) => parseInt(a) - parseInt(b)).map(lvl => `
-      <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #cbd5e1;">
-        <span>HSK 3.0 Cấp ${lvl}</span>
-        <strong style="color: #ffffff;">${hsk30Levels[lvl].toLocaleString()} từ</strong>
+      <div style="display: flex; justify-content: space-between; font-size: 0.88rem;">
+        <span class="zubi-item-sub">HSK 3.0 Cấp ${lvl}</span>
+        <strong class="zubi-kpi-val">${hsk30Levels[lvl].toLocaleString()} từ</strong>
       </div>
     `).join('');
 
     // Generate HSK 2.0 Level rows
     const hsk20Rows = Object.keys(hsk20Levels).sort((a, b) => parseInt(a) - parseInt(b)).map(lvl => `
-      <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #cbd5e1;">
-        <span>HSK 2.0 Cấp ${lvl} ${parseInt(lvl) >= 4 ? '(Thượng & Hạ)' : ''}</span>
-        <strong style="color: #ffffff;">${hsk20Levels[lvl].toLocaleString()} từ</strong>
+      <div style="display: flex; justify-content: space-between; font-size: 0.88rem;">
+        <span class="zubi-item-sub">HSK 2.0 Cấp ${lvl} ${parseInt(lvl) >= 4 ? '(Thượng & Hạ)' : ''}</span>
+        <strong class="zubi-kpi-val">${hsk20Levels[lvl].toLocaleString()} từ</strong>
       </div>
     `).join('');
 
     // Generate YCT Level rows
     const yctRows = Object.keys(yctLevels).sort((a, b) => parseInt(a) - parseInt(b)).map(lvl => `
-      <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #cbd5e1;">
-        <span>YCT Cấp ${lvl}</span>
-        <strong style="color: #ffffff;">${yctLevels[lvl].toLocaleString()} từ</strong>
+      <div style="display: flex; justify-content: space-between; font-size: 0.88rem;">
+        <span class="zubi-item-sub">YCT Cấp ${lvl}</span>
+        <strong class="zubi-kpi-val">${yctLevels[lvl].toLocaleString()} từ</strong>
       </div>
     `).join('');
 
     bodyEl.innerHTML = `
       <div style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
         <div>
-          <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: #38bdf8; font-weight: 700;">TỔNG TỪ VỰNG CHUẨN HÓA</span>
-          <h2 style="font-size: 1.8rem; font-weight: 800; color: #ffffff; margin: 4px 0 0 0;">${activeVocabs.length.toLocaleString()} Từ</h2>
+          <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: #0284c7; font-weight: 700;">TỔNG TỪ VỰNG CHUẨN HÓA</span>
+          <h2 class="zubi-kpi-val" style="font-size: 1.8rem; font-weight: 800; margin: 4px 0 0 0;">${activeVocabs.length.toLocaleString()} Từ</h2>
         </div>
-        <div style="font-size: 2.2rem; color: #38bdf8; opacity: 0.8;"><i class="fa-solid fa-book"></i></div>
+        <div style="font-size: 2.2rem; color: #0284c7; opacity: 0.8;"><i class="fa-solid fa-book"></i></div>
       </div>
 
       <div style="max-height: 50vh; overflow-y: auto; padding-right: 4px; display: flex; flex-direction: column; gap: 14px;">
         <!-- HSK 3.0 Section -->
-        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 14px; padding: 14px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px; margin-bottom: 10px;">
-            <strong style="color: #38bdf8; font-size: 0.95rem;"><i class="fa-solid fa-layer-group"></i> Phân Loại HSK 3.0 (9 Cấp Mới)</strong>
-            <span style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; font-weight: 800; font-size: 0.85rem; padding: 2px 8px; border-radius: 10px;">${hsk30Total.toLocaleString()} từ</span>
+        <div class="zubi-modal-card" style="border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 14px; padding: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(148, 163, 184, 0.2); padding-bottom: 8px; margin-bottom: 10px;">
+            <strong style="color: #0284c7; font-size: 0.95rem;"><i class="fa-solid fa-layer-group"></i> Phân Loại HSK 3.0 (9 Cấp Mới)</strong>
+            <span style="background: rgba(56, 189, 248, 0.2); color: #0284c7; font-weight: 800; font-size: 0.85rem; padding: 2px 8px; border-radius: 10px;">${hsk30Total.toLocaleString()} từ</span>
           </div>
           <div style="display: flex; flex-direction: column; gap: 6px;">
             ${hsk30Rows}
@@ -10835,10 +10835,10 @@ window.openZubiStatDetail = async function (type) {
         </div>
 
         <!-- HSK 2.0 Section -->
-        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 14px; padding: 14px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px; margin-bottom: 10px;">
-            <strong style="color: #c084fc; font-size: 0.95rem;"><i class="fa-solid fa-book-open"></i> Phân Loại HSK 2.0 (6 Cấp Cũ)</strong>
-            <span style="background: rgba(168, 85, 247, 0.2); color: #c084fc; font-weight: 800; font-size: 0.85rem; padding: 2px 8px; border-radius: 10px;">${hsk20Total.toLocaleString()} từ</span>
+        <div class="zubi-modal-card" style="border: 1px solid rgba(168, 85, 247, 0.35); border-radius: 14px; padding: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(148, 163, 184, 0.2); padding-bottom: 8px; margin-bottom: 10px;">
+            <strong style="color: #9333ea; font-size: 0.95rem;"><i class="fa-solid fa-book-open"></i> Phân Loại HSK 2.0 (6 Cấp Cũ)</strong>
+            <span style="background: rgba(168, 85, 247, 0.2); color: #9333ea; font-weight: 800; font-size: 0.85rem; padding: 2px 8px; border-radius: 10px;">${hsk20Total.toLocaleString()} từ</span>
           </div>
           <div style="display: flex; flex-direction: column; gap: 6px;">
             ${hsk20Rows}
@@ -10846,10 +10846,10 @@ window.openZubiStatDetail = async function (type) {
         </div>
 
         <!-- YCT Section -->
-        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 14px; padding: 14px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px; margin-bottom: 10px;">
-            <strong style="color: #fbbf24; font-size: 0.95rem;"><i class="fa-solid fa-child"></i> YCT Cấp 1..4 (Thiếu Nhi)</strong>
-            <span style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; font-weight: 800; font-size: 0.85rem; padding: 2px 8px; border-radius: 10px;">${yctTotal.toLocaleString()} từ</span>
+        <div class="zubi-modal-card" style="border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 14px; padding: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(148, 163, 184, 0.2); padding-bottom: 8px; margin-bottom: 10px;">
+            <strong style="color: #d97706; font-size: 0.95rem;"><i class="fa-solid fa-child"></i> YCT Cấp 1..4 (Thiếu Nhi)</strong>
+            <span style="background: rgba(245, 158, 11, 0.2); color: #d97706; font-weight: 800; font-size: 0.85rem; padding: 2px 8px; border-radius: 10px;">${yctTotal.toLocaleString()} từ</span>
           </div>
           <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px;">
             ${yctRows}
