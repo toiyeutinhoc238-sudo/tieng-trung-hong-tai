@@ -1,7 +1,5 @@
-/**
- * Tiếng Trung HongTai - Chuyên Trang Luyện Đọc Tiếng Trung (Reading & Mastery)
- * Tích hợp: Danh sách chọn bài dạng Lưới (như Shadowing), Audio giọng chuẩn, Ruby Pinyin, Luyện viết & Trắc nghiệm
- */
+import './particles.js';
+import './screen_drawing.js';
 
 class ReadingPracticeApp {
   constructor() {
@@ -400,12 +398,12 @@ class ReadingPracticeApp {
       fairy_tale: 'linear-gradient(135deg, #1e293b 0%, #334155 40%, #047857 100%)',
       news: 'linear-gradient(135deg, #1e293b 0%, #334155 40%, #b91c1c 100%)'
     } : {
-      daily: 'linear-gradient(135deg, #f59e0b 0%, #d97706 40%, #b45309 100%)',
-      textbook: 'linear-gradient(135deg, #0284c7 0%, #0369a1 40%, #1d4ed8 100%)',
-      hskk: 'linear-gradient(135deg, #ec4899 0%, #db2777 40%, #be185d 100%)',
-      idiom: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 40%, #6d28d9 100%)',
-      fairy_tale: 'linear-gradient(135deg, #10b981 0%, #059669 40%, #047857 100%)',
-      news: 'linear-gradient(135deg, #ef4444 0%, #dc2626 40%, #b91c1c 100%)'
+      daily: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+      textbook: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)',
+      hskk: 'linear-gradient(135deg, #db2777 0%, #be185d 100%)',
+      idiom: 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)',
+      fairy_tale: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+      news: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)'
     };
 
     const catIcons = {
@@ -599,12 +597,12 @@ class ReadingPracticeApp {
       fairy_tale: 'linear-gradient(135deg, #1e293b 0%, #334155 40%, #047857 100%)',
       news: 'linear-gradient(135deg, #1e293b 0%, #334155 40%, #b91c1c 100%)'
     } : {
-      daily: 'linear-gradient(135deg, #f59e0b 0%, #d97706 40%, #b45309 100%)',
-      textbook: 'linear-gradient(135deg, #0284c7 0%, #0369a1 40%, #1d4ed8 100%)',
-      hskk: 'linear-gradient(135deg, #ec4899 0%, #db2777 40%, #be185d 100%)',
-      idiom: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 40%, #6d28d9 100%)',
-      fairy_tale: 'linear-gradient(135deg, #10b981 0%, #059669 40%, #047857 100%)',
-      news: 'linear-gradient(135deg, #ef4444 0%, #dc2626 40%, #b91c1c 100%)'
+      daily: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+      textbook: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)',
+      hskk: 'linear-gradient(135deg, #db2777 0%, #be185d 100%)',
+      idiom: 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)',
+      fairy_tale: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+      news: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)'
     };
 
     if (tagEl) {
