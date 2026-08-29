@@ -9721,56 +9721,40 @@ function formatStudyTimeDisplay(totalMinutes) {
 }
 window.formatStudyTimeDisplay = formatStudyTimeDisplay;
 
-function getStudyStatsFromHistory(dailyHistory) {
-  if (!dailyHistory || typeof dailyHistory !== 'object') {
-    return { currentStreak: 1, maxStreak: 1, totalDays: 1 };
-  }
+function calculateStreakFromHistory(dailyHistory) {
+  if (!dailyHistory || typeof dailyHistory !== 'object') return 1;
   const dates = Object.keys(dailyHistory)
     .filter(d => (dailyHistory[d] || 0) > 0)
     .sort();
-  if (dates.length === 0) {
-    return { currentStreak: 1, maxStreak: 1, totalDays: 1 };
+  if (dates.length === 0) return 1;
+
+  const today = new Date();
+  const todayStr = today.toLocaleDateString('sv');
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yesterdayStr = yesterday.toLocaleDateString('sv');
+
+  let startStr = null;
+  if (dates.includes(todayStr)) {
+    startStr = todayStr;
+  } else if (dates.includes(yesterdayStr)) {
+    startStr = yesterdayStr;
+  } else {
+    startStr = dates[dates.length - 1];
   }
 
-  const totalDays = dates.length;
-
-  let maxStreak = 1;
-  let curRun = 1;
-  for (let i = 1; i < dates.length; i++) {
-    const prev = new Date(dates[i - 1]);
-    const curr = new Date(dates[i]);
-    const diffDays = Math.round((curr - prev) / (1000 * 60 * 60 * 24));
-    if (diffDays === 1) {
-      curRun++;
-      if (curRun > maxStreak) maxStreak = curRun;
-    } else if (diffDays > 1) {
-      curRun = 1;
-    }
-  }
-
-  let lastStr = dates[dates.length - 1];
-  let checkDate = new Date(lastStr);
-  let currentStreak = 0;
+  let streak = 0;
+  let checkDate = new Date(startStr);
   while (true) {
-    const dateKey = checkDate.toISOString().split('T')[0];
+    const dateKey = checkDate.toLocaleDateString('sv');
     if (dailyHistory[dateKey] && dailyHistory[dateKey] > 0) {
-      currentStreak++;
+      streak++;
       checkDate.setDate(checkDate.getDate() - 1);
     } else {
       break;
     }
   }
-
-  return {
-    currentStreak: Math.max(currentStreak, 1),
-    maxStreak: Math.max(maxStreak, currentStreak, 1),
-    totalDays: Math.max(totalDays, 1)
-  };
-}
-window.getStudyStatsFromHistory = getStudyStatsFromHistory;
-
-function calculateStreakFromHistory(dailyHistory) {
-  return getStudyStatsFromHistory(dailyHistory).maxStreak;
+  return Math.max(streak, 1);
 }
 window.calculateStreakFromHistory = calculateStreakFromHistory;
 
@@ -10048,11 +10032,12 @@ function renderCourseCompletionDashboard() {
   if (totalHistorySecs > userStudyTime) {
     userStudyTime = totalHistorySecs;
   }
-  const histStats = getStudyStatsFromHistory(history);
-  userTotalDays = histStats.totalDays;
-  userStreak = Math.max(userStreak || 0, histStats.maxStreak, histStats.currentStreak, 1);
+  const calcStreak = calculateStreakFromHistory(history);
+  if (calcStreak > userStreak) {
+    userStreak = calcStreak;
+  }
 
-  if (zubiStreak) zubiStreak.textContent = `${userTotalDays} Ngày`;
+  if (zubiStreak) zubiStreak.textContent = `${userStreak || 1} Ngày`;
 
   const activeVocabs = vocabList.filter(w => !w.isCustom);
   const totalMemorized = activeVocabs.filter(w => w.isMemorized).length;
@@ -10197,9 +10182,10 @@ function updateStatsUI() {
   if (totalHistorySecs > userStudyTime) {
     userStudyTime = totalHistorySecs;
   }
-  const histStats = getStudyStatsFromHistory(history);
-  userTotalDays = histStats.totalDays;
-  userStreak = Math.max(userStreak || 0, histStats.maxStreak, histStats.currentStreak, 1);
+  const calcStreak = calculateStreakFromHistory(history);
+  if (calcStreak > userStreak) {
+    userStreak = calcStreak;
+  }
 
   const streakEl = document.getElementById('welcome-streak-val');
   const homeStreakEl = document.getElementById('home-streak-val');
@@ -10212,9 +10198,9 @@ function updateStatsUI() {
   const zubiStreakEl = document.getElementById('zubi-streak-count');
   const zubiTotalWordsEl = document.getElementById('zubi-total-words-count');
 
-  if (streakEl) streakEl.textContent = `${userTotalDays} ngày`;
-  if (homeStreakEl) homeStreakEl.textContent = `${userTotalDays}`;
-  if (zubiStreakEl) zubiStreakEl.textContent = `${userTotalDays} Ngày`;
+  if (streakEl) streakEl.textContent = `${userStreak} ngày`;
+  if (homeStreakEl) homeStreakEl.textContent = `${userStreak || 1}`;
+  if (zubiStreakEl) zubiStreakEl.textContent = `${userStreak || 1} Ngày`;
 
   const minutes = Math.floor((userStudyTime + sessionStudyTime) / 60);
   const formattedTime = formatStudyTimeDisplay(minutes);
