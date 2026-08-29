@@ -10153,6 +10153,9 @@ function renderHomeLeaderboard() {
         const borderCol = borderColors[idx] || 'rgba(255,255,255,0.08)';
         const avatar = item.picture ? `<img src="${item.picture}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid ${col}; flex-shrink: 0;">` : `<div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, ${col}, #2563eb); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.82rem; flex-shrink: 0;">${name.charAt(0).toUpperCase()}</div>`;
 
+        const mins = item.studyTimeMinutes || Math.round((item.studyTime || 0) / 60);
+        const timeText = mins >= 60 ? `${Math.floor(mins / 60)}h ${mins % 60}m` : `${mins} phút`;
+
         return `
           <div class="home-lb-item" style="border: 1px solid ${borderCol}; border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
             <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
@@ -10160,10 +10163,10 @@ function renderHomeLeaderboard() {
               ${avatar}
               <div style="min-width: 0;">
                 <div class="home-lb-name" style="font-size: 0.92rem; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${name}</div>
-                <div style="font-size: 0.78rem; color: ${col}; font-weight: 600;">${streak} ngày liên tiếp ${item.quizCount ? `• ${item.quizCount} đề thi` : ''}</div>
+                <div style="font-size: 0.78rem; color: #94a3b8; font-weight: 600;">⏱️ ${timeText} ${points > 0 ? `• 🎯 ${points.toLocaleString()}đ` : ''}</div>
               </div>
             </div>
-            <span style="font-weight: 800; color: #10b981; font-size: 0.9rem; flex-shrink: 0;">${points.toLocaleString()} điểm</span>
+            <span style="font-weight: 800; color: #f59e0b; font-size: 0.92rem; flex-shrink: 0; background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3); padding: 4px 10px; border-radius: 99px;">🔥 ${streak} ngày</span>
           </div>
         `;
       }).join('');
@@ -12923,6 +12926,11 @@ window.loadRankPageData = function () {
         return `<div style="width: ${size}px; height: ${size}px; border-radius: 50%; background: linear-gradient(135deg, ${borderCol}, #2563eb); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: ${size * 0.4}px; border: 3px solid ${borderCol}; box-shadow: 0 0 12px ${borderCol}80;">${item.name ? item.name.charAt(0).toUpperCase() : '?'}</div>`;
       }
 
+      function formatTime(mins) {
+        if (!mins) return '0 phút';
+        return mins >= 60 ? `${Math.floor(mins / 60)}h ${mins % 60}m` : `${mins} phút`;
+      }
+
       // Build Podium Stage HTML (Order: Rank 2 - Rank 1 - Rank 3)
       let html = `
         <div class="lb-podium-stage">
@@ -12933,7 +12941,8 @@ window.loadRankPageData = function () {
               <div class="lb-podium-crown">🥈</div>
               <div class="lb-podium-avatar-wrap">${renderAvatar(top2, 52, '#94a3b8')}</div>
               <div class="lb-podium-user">${top2.name}</div>
-              <div class="lb-podium-score">${top2.score} Điểm</div>
+              <div class="lb-podium-score" style="color: #f59e0b; font-weight: 800;">🔥 ${top2.streak || 1} ngày</div>
+              <div style="font-size: 0.76rem; color: #94a3b8; margin-top: 2px;">⏱️ ${formatTime(top2.studyTimeMinutes)} ${top2.score > 0 ? `• ${top2.score}đ` : ''}</div>
             ` : '<div class="lb-podium-empty-txt">Đang chờ...</div>'}
             <div class="lb-podium-stand p-2">
               <span class="lb-podium-num">2</span>
@@ -12946,7 +12955,8 @@ window.loadRankPageData = function () {
               <div class="lb-podium-crown gold-crown">👑</div>
               <div class="lb-podium-avatar-wrap">${renderAvatar(top1, 64, '#fbbf24')}</div>
               <div class="lb-podium-user gold-user">${top1.name}</div>
-              <div class="lb-podium-score gold-score">${top1.score} Điểm</div>
+              <div class="lb-podium-score gold-score" style="color: #f59e0b; font-weight: 800; font-size: 1.1rem;">🔥 ${top1.streak || 1} ngày</div>
+              <div style="font-size: 0.8rem; color: #cbd5e1; margin-top: 2px;">⏱️ ${formatTime(top1.studyTimeMinutes)} ${top1.score > 0 ? `• ${top1.score}đ` : ''}</div>
             ` : '<div class="lb-podium-empty-txt">Đang chờ...</div>'}
             <div class="lb-podium-stand p-1">
               <span class="lb-podium-num">1</span>
@@ -12959,7 +12969,8 @@ window.loadRankPageData = function () {
               <div class="lb-podium-crown">🥉</div>
               <div class="lb-podium-avatar-wrap">${renderAvatar(top3, 48, '#e11d48')}</div>
               <div class="lb-podium-user">${top3.name}</div>
-              <div class="lb-podium-score">${top3.score} Điểm</div>
+              <div class="lb-podium-score" style="color: #f59e0b; font-weight: 800;">🔥 ${top3.streak || 1} ngày</div>
+              <div style="font-size: 0.76rem; color: #94a3b8; margin-top: 2px;">⏱️ ${formatTime(top3.studyTimeMinutes)} ${top3.score > 0 ? `• ${top3.score}đ` : ''}</div>
             ` : '<div class="lb-podium-empty-txt">Đang chờ...</div>'}
             <div class="lb-podium-stand p-3">
               <span class="lb-podium-num">3</span>
@@ -12975,17 +12986,17 @@ window.loadRankPageData = function () {
         html += `<div class="lb-rest-list">`;
         remaining.forEach((item, index) => {
           const rankNum = item.rank || (index + 4);
+          const timeStr = formatTime(item.studyTimeMinutes);
           html += `
             <div class="leaderboard-item rank-rest">
               <span class="lb-rank-num">#${rankNum}</span>
               ${item.picture ? `<img src="${item.picture}" class="lb-row-avatar">` : `<div class="lb-row-avatar-placeholder">${item.name.charAt(0)}</div>`}
               <div style="flex: 1; min-width: 0;">
                 <div class="lb-user-name">${item.name}</div>
-                <div class="lb-subtext">Chuỗi ngày học: <strong style="color: #f97316;">🔥 ${item.streak || 1} ngày</strong></div>
+                <div class="lb-subtext">⏱️ ${timeStr} ${item.score > 0 ? `• 🎯 ${item.score}đ` : ''}</div>
               </div>
               <div style="text-align: right;">
-                <div class="lb-score-val">${item.score} Điểm</div>
-                <div class="lb-subtext">${item.quizCount ? `<span style="color: #38bdf8; font-weight: 700;">${item.quizCount} đề</span> • ` : ''}${item.studyTimeMinutes} phút</div>
+                <span style="font-weight: 800; color: #f59e0b; font-size: 0.92rem; background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3); padding: 4px 10px; border-radius: 99px;">🔥 ${item.streak || 1} ngày</span>
               </div>
             </div>
           `;

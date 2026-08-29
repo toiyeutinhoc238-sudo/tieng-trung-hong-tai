@@ -1602,16 +1602,16 @@ app.get('/api/leaderboard', async (req, res) => {
       });
     }
 
-    // Sort real users by total exam score (sum of max score of each distinct exam), then study time, then streak
+    // XẾP HẠNG: 1. Chuỗi ngày học (streak) -> 2. Thời gian học (studyTime) -> 3. Điểm thi (score)
     leaderboard.sort((a, b) => {
-      if (b.score !== a.score) {
-        return b.score - a.score;
+      if (b.streak !== a.streak) {
+        return b.streak - a.streak;
       }
       if (b.studyTime !== a.studyTime) {
         return b.studyTime - a.studyTime;
       }
-      if (b.streak !== a.streak) {
-        return b.streak - a.streak;
+      if (b.score !== a.score) {
+        return b.score - a.score;
       }
       return b.latestAttemptTime - a.latestAttemptTime;
     });
@@ -1622,6 +1622,7 @@ app.get('/api/leaderboard', async (req, res) => {
       picture: item.picture,
       score: item.score,
       quizCount: item.quizCount,
+      studyTime: item.studyTime,
       studyTimeMinutes: Math.round(item.studyTime / 60),
       streak: item.streak
     }));
