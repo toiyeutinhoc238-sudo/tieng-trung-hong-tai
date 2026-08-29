@@ -800,6 +800,54 @@ app.get('/api/stats/community', async (req, res) => {
   });
 });
 
+// Helper to get unique exam key for distinct exam score calculation
+function getExamKey(attempt) {
+  if (!attempt) return 'default_exam';
+  if (attempt.examId) return `exam_${attempt.examId}`;
+  if (attempt.quizId) return `quiz_${attempt.quizId}`;
+  if (attempt.quizTitle) return `title_${attempt.quizTitle}`;
+  if (attempt.examTitle) return `title_${attempt.examTitle}`;
+  if (attempt.title) return `title_${attempt.title}`;
+  if (attempt.topicId) return `topic_${attempt.topicId}`;
+  if (attempt.topic) return `topic_${attempt.topic}`;
+
+  const level = attempt.level || attempt.stageGroup || 'default';
+  const mode = attempt.mode || 'default';
+  const curr = attempt.curriculum || attempt.ver || 'hsk';
+  return `${curr}_lvl_${level}_mode_${mode}`;
+}
+
+// Calculate user's total exam score as sum of maximum score of each distinct exam
+function calculateUserDistinctExamScore(allAttempts) {
+  if (!Array.isArray(allAttempts) || allAttempts.length === 0) {
+    return { totalScore: 0, highestScore: 0, distinctExamsCount: 0, examMaxMap: {} };
+  }
+
+  const examMaxMap = {};
+  let highestScore = 0;
+
+  allAttempts.forEach(att => {
+    const key = getExamKey(att);
+    const sc = typeof att.score === 'number' ? att.score : (parseInt(att.score) || 0);
+    if (sc > highestScore) highestScore = sc;
+    if (!examMaxMap[key] || sc > examMaxMap[key]) {
+      examMaxMap[key] = sc;
+    }
+  });
+
+  let totalScore = 0;
+  Object.values(examMaxMap).forEach(sc => {
+    totalScore += sc;
+  });
+
+  return {
+    totalScore,
+    highestScore,
+    distinctExamsCount: Object.keys(examMaxMap).length,
+    examMaxMap
+  };
+}
+
 // ============================================================
 // ADMIN MANAGEMENT & LEARNER INTELLIGENCE APIs
 // ============================================================
@@ -835,14 +883,11 @@ app.get('/api/admin/users', async (req, res) => {
     const gameHistory = u.gameHistory || (userData.users && userData.users[email] && userData.users[email].gameHistory) || [];
     const allAttempts = [...quizHistory, ...gameHistory];
 
-    let highestQuizScore = 0;
-    let totalQuizScore = 0;
-    allAttempts.forEach(q => {
-      const sc = Number(q.score) || 0;
-      if (sc > highestQuizScore) highestQuizScore = sc;
-      totalQuizScore += sc;
-    });
-    const avgQuizScore = allAttempts.length > 0 ? Math.round(totalQuizScore / allAttempts.length) : 0;
+    const examStats = calculateUserDistinctExamScore(allAttempts);
+    const totalQuizScore = examStats.totalScore;
+    const highestQuizScore = examStats.highestScore;
+    const distinctExamsCount = examStats.distinctExamsCount;
+    const avgQuizScore = distinctExamsCount > 0 ? Math.round(totalQuizScore / distinctExamsCount) : 0;
 
     const progress = (userData.progress && userData.progress[email]) || {};
     let memorizedWordsCount = 0;
@@ -865,7 +910,9 @@ app.get('/api/admin/users', async (req, res) => {
       totalDays: stats.totalDays || (stats.dailyHistory ? Object.keys(stats.dailyHistory).filter(d => (stats.dailyHistory[d] || 0) > 0).length : 1),
       maxStreak: stats.maxStreak || stats.streak || 1,
       studyTime: stats.studyTime || 0,
-      quizCount: allAttempts.length,
+      quizCount: distinctExamsCount,
+      totalAttempts: allAttempts.length,
+      totalQuizScore,
       highestQuizScore,
       avgQuizScore,
       memorizedWordsCount,
@@ -1522,14 +1569,13 @@ app.get('/api/leaderboard', async (req, res) => {
       const gameHistory = u.gameHistory || [];
       const allAttempts = [...quizHistory, ...gameHistory];
 
-      let highestScore = 0;
-      let totalScore = 0;
-      let latestAttemptTime = 0;
+      const examStats = calculateUserDistinctExamScore(allAttempts);
+      const totalScore = examStats.totalScore;
+      const highestScore = examStats.highestScore;
+      const distinctExamsCount = examStats.distinctExamsCount;
 
+      let latestAttemptTime = 0;
       allAttempts.forEach(a => {
-        const sc = Number(a.score) || 0;
-        if (sc > highestScore) highestScore = sc;
-        totalScore += sc;
         const t = a.playedAt || a.submittedAt || a.date;
         if (t) {
           const timeVal = new Date(t).getTime();
@@ -1545,22 +1591,21 @@ app.get('/api/leaderboard', async (req, res) => {
         email,
         name: u.name || email.split('@')[0],
         picture: u.picture || '',
-        score: highestScore,
-        highestScore: highestScore,
-        quizCount: allAttempts.length,
+        score: totalScore,
+        totalScore,
+        highestScore,
+        quizCount: distinctExamsCount,
+        totalAttempts: allAttempts.length,
         studyTime: u.stats ? (u.stats.studyTime || 0) : 0,
         streak: u.stats ? (u.stats.streak || 0) : 0,
         latestAttemptTime: latestAttemptTime || lastActive
       });
     }
 
-    // Sort real users by highest Quiz score, then quiz count, then study time, then streak
+    // Sort real users by total exam score (sum of max score of each distinct exam), then study time, then streak
     leaderboard.sort((a, b) => {
       if (b.score !== a.score) {
         return b.score - a.score;
-      }
-      if (b.quizCount !== a.quizCount) {
-        return b.quizCount - a.quizCount;
       }
       if (b.studyTime !== a.studyTime) {
         return b.studyTime - a.studyTime;
