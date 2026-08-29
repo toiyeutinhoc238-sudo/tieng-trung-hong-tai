@@ -98,6 +98,11 @@
         localStorage.setItem('theme', 'light');
         updateToggleBtns(true);
       }
+
+      if (window.readingApp && typeof window.readingApp.renderArtBanner === 'function') {
+        window.readingApp.renderArtBanner();
+        window.readingApp.renderCatalogGrid();
+      }
     };
 
     function updateToggleBtns(isLight) {
@@ -112,28 +117,84 @@
 
   <style>
     /* ==========================================================================
-       READING PRACTICE MODULE - HIGH END GLASSMORPHISM STYLES
+       ADAPTIVE LIGHT & DARK THEME DESIGN TOKENS
        ========================================================================== */
-    :root {
-      --rd-bg-glass: rgba(15, 23, 42, 0.78);
+    :root,
+    html,
+    html.light,
+    html.light-mode {
+      --rd-bg-page: #f8fafc;
+      --rd-bg-glass: rgba(255, 255, 255, 0.94);
+      --rd-bg-card-sub: #f1f5f9;
+      --rd-bg-input: #ffffff;
+      --rd-border: #e2e8f0;
+      --rd-border-sub: #cbd5e1;
+      --rd-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --rd-shadow-sub: 0 4px 14px rgba(0, 0, 0, 0.05);
+
+      --rd-text-title: #0f172a;
+      --rd-text-main: #1e293b;
+      --rd-text-sub: #475569;
+      --rd-text-muted: #64748b;
+      
+      --rd-accent: #0284c7;
+      --rd-accent-light: #e0f2fe;
+      --rd-accent-gold: #d97706;
+      --rd-accent-green: #059669;
+      --rd-accent-purple: #9333ea;
+      --rd-accent-rose: #e11d48;
+
+      --rd-tab-bg: #e2e8f0;
+      --rd-tab-btn-hover: rgba(0, 0, 0, 0.05);
+      
+      --rd-ghost-char: #cbd5e1;
+      --rd-ghost-typed: #059669;
+      --rd-ghost-target: #d97706;
+
+      --font-hanzi: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      --font-main: 'Be Vietnam Pro', system-ui, sans-serif;
+    }
+
+    html.dark {
+      --rd-bg-page: #090e17;
+      --rd-bg-glass: rgba(15, 23, 42, 0.85);
+      --rd-bg-card-sub: rgba(0, 0, 0, 0.28);
+      --rd-bg-input: rgba(15, 23, 42, 0.95);
       --rd-border: rgba(255, 255, 255, 0.12);
+      --rd-border-sub: rgba(255, 255, 255, 0.08);
+      --rd-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+      --rd-shadow-sub: 0 6px 20px rgba(0, 0, 0, 0.3);
+
+      --rd-text-title: #ffffff;
+      --rd-text-main: #f8fafc;
+      --rd-text-sub: #cbd5e1;
+      --rd-text-muted: #94a3b8;
+
       --rd-accent: #38bdf8;
+      --rd-accent-light: rgba(56, 189, 248, 0.15);
       --rd-accent-gold: #f59e0b;
       --rd-accent-green: #10b981;
       --rd-accent-purple: #a855f7;
-      --font-hanzi: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-      --font-main: 'Be Vietnam Pro', system-ui, sans-serif;
+      --rd-accent-rose: #fb7185;
+
+      --rd-tab-bg: rgba(0, 0, 0, 0.35);
+      --rd-tab-btn-hover: rgba(255, 255, 255, 0.06);
+
+      --rd-ghost-char: rgba(148, 163, 184, 0.35);
+      --rd-ghost-typed: #ffffff;
+      --rd-ghost-target: #fbbf24;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: var(--font-main);
-      color: #f8fafc;
+      color: var(--rd-text-main);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      background-color: #090e17;
+      background-color: var(--rd-bg-page);
       overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     .rd-page-container {
@@ -159,7 +220,7 @@
       border: 1px solid var(--rd-border);
       border-radius: 20px;
       padding: 14px 22px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      box-shadow: var(--rd-shadow);
       flex-wrap: wrap;
     }
 
@@ -174,9 +235,9 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
-      background: rgba(255, 255, 255, 0.08);
+      background: var(--rd-bg-card-sub);
       border: 1px solid var(--rd-border);
-      color: #e2e8f0;
+      color: var(--rd-text-main);
       padding: 8px 16px;
       border-radius: 50px;
       font-size: 0.88rem;
@@ -186,7 +247,7 @@
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .rd-back-btn:hover {
-      background: rgba(255, 255, 255, 0.18);
+      background: var(--rd-accent);
       color: #ffffff;
       transform: translateX(-2px);
     }
@@ -199,40 +260,81 @@
     .rd-brand-title h1 {
       font-size: 1.45rem;
       font-weight: 900;
-      background: linear-gradient(135deg, #ffffff 0%, #38bdf8 60%, #818cf8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
       display: flex;
       align-items: center;
       gap: 8px;
     }
+    html.dark .rd-brand-title h1 {
+      background: linear-gradient(135deg, #ffffff 0%, #38bdf8 60%, #818cf8 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    html.light .rd-brand-title h1,
+    html.light-mode .rd-brand-title h1,
+    html:not(.dark) .rd-brand-title h1 {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 60%, #4338ca 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
     .rd-brand-title p {
       font-size: 0.8rem;
-      color: #94a3b8;
+      color: var(--rd-text-muted);
       font-weight: 600;
     }
 
     .rd-header-right {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
+    }
+
+    /* VIEW TOGGLE BUTTONS (Dàn danh sách bài / Đang đọc) */
+    .rd-view-toggle-wrap {
+      display: inline-flex;
+      background: var(--rd-bg-card-sub);
+      border: 1px solid var(--rd-border);
+      border-radius: 50px;
+      padding: 3px;
+      gap: 4px;
+    }
+    .rd-view-toggle-btn {
+      background: transparent;
+      border: none;
+      color: var(--rd-text-muted);
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .rd-view-toggle-btn.active {
+      background: var(--rd-accent);
+      color: #ffffff;
+      box-shadow: 0 2px 10px rgba(2, 132, 199, 0.35);
     }
 
     .rd-stats-badge {
       display: flex;
       align-items: center;
       gap: 8px;
-      background: rgba(255, 255, 255, 0.06);
+      background: var(--rd-bg-card-sub);
       border: 1px solid var(--rd-border);
       border-radius: 50px;
       padding: 6px 14px;
       font-size: 0.85rem;
       font-weight: 700;
-      color: #e2e8f0;
+      color: var(--rd-text-main);
     }
     .rd-stats-badge strong {
-      color: #fbbf24;
+      color: var(--rd-accent-gold);
       font-weight: 800;
     }
 
@@ -241,7 +343,7 @@
       align-items: center;
       gap: 8px;
       background: linear-gradient(135deg, #f59e0b, #d97706);
-      color: #1a0a00;
+      color: #ffffff;
       border: none;
       border-radius: 50px;
       padding: 8px 18px;
@@ -257,9 +359,9 @@
     }
 
     .rd-theme-btn {
-      background: rgba(255, 255, 255, 0.08);
+      background: var(--rd-bg-card-sub);
       border: 1px solid var(--rd-border);
-      color: #fbbf24;
+      color: var(--rd-accent-gold);
       width: 38px;
       height: 38px;
       border-radius: 50%;
@@ -270,7 +372,7 @@
       transition: all 0.2s;
     }
     .rd-theme-btn:hover {
-      background: rgba(255, 255, 255, 0.18);
+      background: var(--rd-accent-light);
       transform: scale(1.08);
     }
 
@@ -285,7 +387,7 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+      box-shadow: var(--rd-shadow-sub);
     }
 
     .rd-filter-row {
@@ -297,7 +399,7 @@
     .rd-filter-label {
       font-size: 0.82rem;
       font-weight: 800;
-      color: #94a3b8;
+      color: var(--rd-text-muted);
       text-transform: uppercase;
       letter-spacing: 0.05em;
       min-width: 80px;
@@ -315,13 +417,13 @@
     }
 
     .rd-chip-btn {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: var(--rd-bg-card-sub);
+      border: 1px solid var(--rd-border-sub);
       border-radius: 50px;
       padding: 6px 14px;
       font-size: 0.82rem;
       font-weight: 700;
-      color: #cbd5e1;
+      color: var(--rd-text-main);
       cursor: pointer;
       transition: all 0.2s ease;
       display: inline-flex;
@@ -329,61 +431,260 @@
       gap: 6px;
     }
     .rd-chip-btn:hover {
-      background: rgba(255, 255, 255, 0.14);
-      color: #ffffff;
+      background: var(--rd-accent-light);
+      color: var(--rd-accent);
       transform: translateY(-1px);
     }
     .rd-chip-btn.active {
-      background: linear-gradient(135deg, #0284c7, #0369a1);
-      border-color: #38bdf8;
-      color: #ffffff;
-      box-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
+      background: linear-gradient(135deg, #0284c7, #0369a1) !important;
+      border-color: #0284c7 !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
     }
 
-    .rd-article-quick-select {
+    /* SEARCH INPUT */
+    .rd-search-wrap {
       display: flex;
       align-items: center;
-      gap: 10px;
+      flex: 1 1 240px;
+      position: relative;
+    }
+    .rd-search-input {
       width: 100%;
-      background: rgba(0, 0, 0, 0.2);
-      padding: 8px 14px;
-      border-radius: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    .rd-article-select-dropdown {
-      flex: 1;
-      background: rgba(15, 23, 42, 0.85);
-      border: 1px solid var(--rd-border);
-      color: #f1f5f9;
-      padding: 8px 14px;
-      border-radius: 10px;
-      font-size: 0.9rem;
-      font-weight: 700;
+      background: var(--rd-bg-input);
+      border: 1.5px solid var(--rd-border-sub);
+      color: var(--rd-text-main);
+      padding: 8px 16px 8px 36px;
+      border-radius: 50px;
+      font-size: 0.88rem;
+      font-weight: 600;
       outline: none;
-      cursor: pointer;
-    }
-    .rd-nav-article-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid var(--rd-border);
-      color: #f1f5f9;
-      padding: 8px 14px;
-      border-radius: 10px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      cursor: pointer;
       transition: all 0.2s;
+    }
+    .rd-search-input:focus {
+      border-color: var(--rd-accent);
+      box-shadow: 0 0 14px rgba(2, 132, 199, 0.25);
+    }
+    .rd-search-icon {
+      position: absolute;
+      left: 14px;
+      color: var(--rd-text-muted);
+      font-size: 0.85rem;
+      pointer-events: none;
+    }
+
+    /* ==========================================================================
+       ARTICLE CATALOG GRID VIEW (Dàn ra như Shadowing)
+       ========================================================================== */
+    .rd-catalog-section {
       display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .rd-catalog-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 6px;
+    }
+    .rd-catalog-count-text {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--rd-text-title);
+    }
+
+    .rd-catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .rd-card-article {
+      background: var(--rd-bg-glass);
+      border: 1.5px solid var(--rd-border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--rd-shadow-sub);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .rd-card-article:hover {
+      transform: translateY(-5px);
+      border-color: var(--rd-accent);
+      box-shadow: var(--rd-shadow);
+    }
+
+    .rd-card-banner {
+      height: 125px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+    }
+    .rd-card-banner-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(0deg, rgba(15, 23, 42, 0.85) 0%, rgba(15, 23, 42, 0.25) 100%);
+      pointer-events: none;
+    }
+    .rd-card-banner-top {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .rd-badge-lvl {
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .rd-badge-done {
+      background: #10b981;
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+    }
+
+    .rd-card-category-tag {
+      position: relative;
+      z-index: 2;
+      font-size: 0.76rem;
+      font-weight: 800;
+      color: #fde047;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .rd-card-body {
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+    .rd-card-title-zh {
+      font-family: var(--font-hanzi);
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: var(--rd-text-title);
+      line-height: 1.3;
+    }
+    .rd-card-title-vi {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--rd-text-sub);
+      line-height: 1.4;
+    }
+    .rd-card-preview {
+      font-size: 0.82rem;
+      color: var(--rd-text-muted);
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+    .rd-card-footer {
+      padding: 12px 18px;
+      border-top: 1px solid var(--rd-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--rd-bg-card-sub);
+    }
+    .rd-card-meta {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--rd-text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .rd-card-btn-action {
+      background: var(--rd-accent);
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
       align-items: center;
       gap: 6px;
-      white-space: nowrap;
+      transition: all 0.2s;
     }
-    .rd-nav-article-btn:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.2);
-      transform: translateY(-1px);
+    .rd-card-btn-action:hover {
+      background: #0284c7;
+      transform: translateX(2px);
     }
-    .rd-nav-article-btn:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
+
+    /* ==========================================================================
+       READING WORKSPACE VIEW (Chế độ Học & Đọc chi tiết)
+       ========================================================================== */
+    .rd-workspace-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .rd-workspace-top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: var(--rd-bg-glass);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--rd-border);
+      border-radius: 16px;
+      padding: 10px 18px;
+      box-shadow: var(--rd-shadow-sub);
+      flex-wrap: wrap;
+    }
+    .rd-back-to-catalog-btn {
+      background: var(--rd-bg-card-sub);
+      border: 1px solid var(--rd-border);
+      color: var(--rd-text-main);
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .rd-back-to-catalog-btn:hover {
+      background: var(--rd-accent);
+      color: #ffffff;
     }
 
     /* MAIN 2-COLUMN WORKSPACE */
@@ -408,7 +709,7 @@
       border: 1px solid var(--rd-border);
       border-radius: 24px;
       padding: 24px;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+      box-shadow: var(--rd-shadow);
       display: flex;
       flex-direction: column;
       gap: 20px;
@@ -419,10 +720,10 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      background: rgba(0, 0, 0, 0.3);
+      background: var(--rd-tab-bg);
       padding: 6px;
       border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--rd-border-sub);
       flex-wrap: wrap;
     }
 
@@ -435,7 +736,7 @@
       padding: 10px 16px;
       font-size: 0.95rem;
       font-weight: 800;
-      color: #94a3b8;
+      color: var(--rd-text-muted);
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -444,22 +745,24 @@
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .rd-mode-tab-btn:hover {
-      color: #ffffff;
-      background: rgba(255, 255, 255, 0.06);
+      color: var(--rd-text-main);
+      background: var(--rd-tab-btn-hover);
     }
     .rd-mode-tab-btn.active {
-      background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(14, 165, 233, 0.35));
-      border-color: rgba(56, 189, 248, 0.5);
-      color: #ffffff;
-      box-shadow: 0 4px 16px rgba(56, 189, 248, 0.25);
+      background: var(--rd-accent-light) !important;
+      border-color: var(--rd-accent) !important;
+      color: var(--rd-accent) !important;
+      box-shadow: 0 4px 16px rgba(2, 132, 199, 0.2);
     }
     .rd-mode-tab-btn.active.tab-quiz {
-      background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.35));
-      border-color: rgba(245, 158, 11, 0.5);
+      background: #fef3c7 !important;
+      border-color: #d97706 !important;
+      color: #b45309 !important;
     }
     .rd-mode-tab-btn.active.tab-write {
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.35));
-      border-color: rgba(16, 185, 129, 0.5);
+      background: #dcfce7 !important;
+      border-color: #059669 !important;
+      color: #047857 !important;
     }
 
     /* AUDIO PLAYER BAR */
@@ -467,11 +770,11 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      background: linear-gradient(90deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
-      border: 1.5px solid rgba(56, 189, 248, 0.3);
+      background: var(--rd-bg-card-sub);
+      border: 1.5px solid var(--rd-border);
       border-radius: 18px;
       padding: 10px 18px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      box-shadow: var(--rd-shadow-sub);
       flex-wrap: wrap;
     }
 
@@ -479,21 +782,21 @@
       width: 44px;
       height: 44px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #38bdf8, #0284c7);
+      background: linear-gradient(135deg, #0284c7, #0369a1);
       border: none;
-      color: #0f172a;
+      color: #ffffff;
       font-size: 1.15rem;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 0 16px rgba(56, 189, 248, 0.5);
+      box-shadow: 0 0 16px rgba(2, 132, 199, 0.4);
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       flex-shrink: 0;
     }
     .rd-play-btn:hover {
       transform: scale(1.1);
-      box-shadow: 0 0 24px rgba(56, 189, 248, 0.7);
+      box-shadow: 0 0 24px rgba(2, 132, 199, 0.6);
     }
 
     .rd-audio-progress-wrap {
@@ -505,8 +808,8 @@
     }
     .rd-audio-timeline {
       width: 100%;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.15);
+      height: 7px;
+      background: rgba(148, 163, 184, 0.3);
       border-radius: 10px;
       cursor: pointer;
       position: relative;
@@ -518,7 +821,7 @@
       top: 0;
       bottom: 0;
       width: 0%;
-      background: linear-gradient(90deg, #38bdf8, #818cf8);
+      background: linear-gradient(90deg, #0284c7, #818cf8);
       border-radius: 10px;
       transition: width 0.1s linear;
     }
@@ -526,24 +829,24 @@
       display: flex;
       justify-content: space-between;
       font-size: 0.72rem;
-      color: #94a3b8;
+      color: var(--rd-text-muted);
       font-weight: 700;
       font-family: monospace;
     }
 
     .rd-audio-speed-btn {
-      background: rgba(255, 255, 255, 0.08);
+      background: var(--rd-bg-input);
       border: 1px solid var(--rd-border);
       border-radius: 10px;
       padding: 6px 12px;
       font-size: 0.78rem;
       font-weight: 800;
-      color: #38bdf8;
+      color: var(--rd-accent);
       cursor: pointer;
       transition: all 0.2s;
     }
     .rd-audio-speed-btn:hover {
-      background: rgba(56, 189, 248, 0.2);
+      background: var(--rd-accent-light);
     }
 
     /* ART BANNER */
@@ -555,15 +858,15 @@
       display: flex;
       align-items: flex-end;
       padding: 20px 24px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
       background-size: cover;
       background-position: center;
     }
     .rd-art-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(0deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.5) 50%, rgba(15, 23, 42, 0.2) 100%);
+      background: linear-gradient(0deg, rgba(15, 23, 42, 0.88) 0%, rgba(15, 23, 42, 0.4) 60%, rgba(15, 23, 42, 0.1) 100%);
       pointer-events: none;
     }
     .rd-art-content {
@@ -574,28 +877,29 @@
       gap: 4px;
     }
     .rd-art-tag {
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       font-weight: 800;
-      color: #fbbf24;
+      color: #fde047;
       text-transform: uppercase;
       letter-spacing: 0.06em;
       display: flex;
       align-items: center;
       gap: 6px;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
     }
     .rd-art-title-zh {
       font-family: var(--font-hanzi);
-      font-size: 1.7rem;
+      font-size: 1.75rem;
       font-weight: 900;
-      color: #ffffff;
+      color: #ffffff !important;
       line-height: 1.2;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85);
     }
     .rd-art-title-vi {
       font-size: 0.95rem;
       font-weight: 700;
-      color: #e2e8f0;
-      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+      color: #f1f5f9 !important;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.85);
     }
 
     /* READING TEXT BODY */
@@ -604,7 +908,7 @@
       align-items: center;
       justify-content: space-between;
       padding-bottom: 12px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid var(--rd-border);
       flex-wrap: wrap;
       gap: 10px;
     }
@@ -614,34 +918,35 @@
       gap: 8px;
     }
     .rd-ctrl-btn {
-      background: rgba(255, 255, 255, 0.06);
+      background: var(--rd-bg-card-sub);
       border: 1px solid var(--rd-border);
       border-radius: 8px;
       padding: 5px 12px;
       font-size: 0.78rem;
       font-weight: 700;
-      color: #cbd5e1;
+      color: var(--rd-text-main);
       cursor: pointer;
       transition: all 0.2s;
     }
     .rd-ctrl-btn:hover {
-      background: rgba(255, 255, 255, 0.15);
-      color: #ffffff;
+      background: var(--rd-accent-light);
+      color: var(--rd-accent);
     }
     .rd-ctrl-btn.active {
-      background: rgba(56, 189, 248, 0.2);
-      border-color: #38bdf8;
-      color: #38bdf8;
+      background: var(--rd-accent);
+      border-color: var(--rd-accent);
+      color: #ffffff;
     }
 
     .rd-chinese-body {
       font-family: var(--font-hanzi);
       font-size: 1.35rem;
       line-height: 2.3;
-      color: #f1f5f9;
+      color: var(--rd-text-title);
       letter-spacing: 0.04em;
       white-space: pre-line;
       transition: font-size 0.2s ease;
+      font-weight: 500;
     }
     .rd-chinese-sentence {
       padding: 2px 4px;
@@ -650,20 +955,21 @@
       display: inline;
     }
     .rd-chinese-sentence:hover {
-      background: rgba(56, 189, 248, 0.15);
+      background: var(--rd-accent-light);
       cursor: pointer;
     }
     .rd-chinese-sentence.active-speaking {
-      background: rgba(251, 191, 36, 0.28);
-      border-bottom: 2px solid #fbbf24;
-      color: #ffffff;
-      box-shadow: 0 0 16px rgba(251, 191, 36, 0.3);
+      background: #fef08a !important;
+      border-bottom: 2px solid #eab308 !important;
+      color: #713f12 !important;
+      box-shadow: 0 0 14px rgba(234, 179, 8, 0.35);
+      border-radius: 4px;
     }
 
     /* VIETNAMESE TRANSLATION ACCORDION */
     .rd-accordion-box {
-      background: rgba(0, 0, 0, 0.25);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: var(--rd-bg-card-sub);
+      border: 1px solid var(--rd-border);
       border-radius: 16px;
       overflow: hidden;
       transition: all 0.3s ease;
@@ -674,23 +980,23 @@
       justify-content: space-between;
       padding: 14px 18px;
       cursor: pointer;
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(0, 0, 0, 0.02);
       user-select: none;
     }
     .rd-accordion-header:hover {
-      background: rgba(255, 255, 255, 0.07);
+      background: rgba(0, 0, 0, 0.06);
     }
     .rd-accordion-title {
       font-size: 0.95rem;
       font-weight: 800;
-      color: #38bdf8;
+      color: var(--rd-accent);
       display: flex;
       align-items: center;
       gap: 8px;
     }
     .rd-accordion-icon {
       font-size: 0.85rem;
-      color: #94a3b8;
+      color: var(--rd-text-muted);
       transition: transform 0.3s ease;
     }
     .rd-accordion-box.open .rd-accordion-icon {
@@ -699,10 +1005,10 @@
     .rd-accordion-body {
       display: none;
       padding: 16px 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-top: 1px solid var(--rd-border);
       font-size: 0.98rem;
       line-height: 1.8;
-      color: #cbd5e1;
+      color: var(--rd-text-main);
       white-space: pre-line;
     }
     .rd-accordion-box.open .rd-accordion-body {
@@ -729,7 +1035,7 @@
       border: 1px solid var(--rd-border);
       border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      box-shadow: var(--rd-shadow-sub);
     }
 
     .rd-sidebar-header {
@@ -739,15 +1045,15 @@
       justify-content: space-between;
       cursor: pointer;
       user-select: none;
-      background: rgba(255, 255, 255, 0.03);
+      background: var(--rd-bg-card-sub);
       border-bottom: 1px solid transparent;
       transition: all 0.2s;
     }
     .rd-sidebar-header:hover {
-      background: rgba(255, 255, 255, 0.08);
+      background: var(--rd-tab-btn-hover);
     }
     .rd-sidebar-card.open .rd-sidebar-header {
-      border-bottom-color: rgba(255, 255, 255, 0.08);
+      border-bottom-color: var(--rd-border);
     }
 
     .rd-sidebar-title {
@@ -757,12 +1063,12 @@
       align-items: center;
       gap: 8px;
     }
-    .rd-sidebar-title.vocab { color: #38bdf8; }
-    .rd-sidebar-title.idiom { color: #fbbf24; }
-    .rd-sidebar-title.phrase { color: #34d399; }
+    .rd-sidebar-title.vocab { color: var(--rd-accent); }
+    .rd-sidebar-title.idiom { color: var(--rd-accent-gold); }
+    .rd-sidebar-title.phrase { color: var(--rd-accent-green); }
 
     .rd-sidebar-badge {
-      background: rgba(255, 255, 255, 0.1);
+      background: var(--rd-accent);
       padding: 2px 8px;
       border-radius: 12px;
       font-size: 0.72rem;
@@ -783,8 +1089,8 @@
     }
 
     .rd-item-card {
-      background: rgba(0, 0, 0, 0.25);
-      border: 1px solid rgba(255, 255, 255, 0.07);
+      background: var(--rd-bg-card-sub);
+      border: 1px solid var(--rd-border);
       border-radius: 12px;
       padding: 10px 14px;
       display: flex;
@@ -793,8 +1099,8 @@
       transition: all 0.2s ease;
     }
     .rd-item-card:hover {
-      border-color: rgba(56, 189, 248, 0.4);
-      background: rgba(56, 189, 248, 0.05);
+      border-color: var(--rd-accent);
+      background: var(--rd-accent-light);
       transform: translateX(2px);
     }
     .rd-item-top {
@@ -807,18 +1113,18 @@
       font-family: var(--font-hanzi);
       font-size: 1.15rem;
       font-weight: 800;
-      color: #f8fafc;
+      color: var(--rd-text-title);
     }
     .rd-item-py {
       font-size: 0.8rem;
       font-weight: 800;
-      color: #38bdf8;
+      color: var(--rd-accent);
       margin-left: 6px;
     }
     .rd-item-speak-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #cbd5e1;
+      background: var(--rd-bg-input);
+      border: 1px solid var(--rd-border-sub);
+      color: var(--rd-text-main);
       width: 28px;
       height: 28px;
       border-radius: 50%;
@@ -830,13 +1136,13 @@
       transition: all 0.2s;
     }
     .rd-item-speak-btn:hover {
-      background: rgba(56, 189, 248, 0.3);
+      background: var(--rd-accent);
       color: #ffffff;
       transform: scale(1.1);
     }
     .rd-item-meaning {
       font-size: 0.82rem;
-      color: #cbd5e1;
+      color: var(--rd-text-sub);
       line-height: 1.5;
       font-weight: 600;
     }
@@ -853,9 +1159,9 @@
       justify-content: space-between;
       gap: 12px;
       padding: 10px 16px;
-      background: rgba(0, 0, 0, 0.25);
+      background: var(--rd-bg-card-sub);
       border-radius: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--rd-border);
     }
     .rd-checkbox-label {
       display: flex;
@@ -863,20 +1169,20 @@
       gap: 8px;
       font-size: 0.88rem;
       font-weight: 700;
-      color: #cbd5e1;
+      color: var(--rd-text-main);
       cursor: pointer;
       user-select: none;
     }
     .rd-checkbox-label input[type="checkbox"] {
       width: 18px;
       height: 18px;
-      accent-color: #10b981;
+      accent-color: var(--rd-accent-green);
       cursor: pointer;
     }
 
     .rd-ghost-text-container {
-      background: rgba(0, 0, 0, 0.35);
-      border: 2px solid rgba(255, 255, 255, 0.12);
+      background: var(--rd-bg-card-sub);
+      border: 2px solid var(--rd-border);
       border-radius: 18px;
       padding: 22px 24px;
       min-height: 180px;
@@ -894,7 +1200,7 @@
       font-family: monospace;
       font-size: 1.05rem;
       font-weight: 800;
-      color: #34d399;
+      color: var(--rd-accent-green);
       letter-spacing: 0.08em;
       transition: opacity 0.2s;
     }
@@ -909,19 +1215,19 @@
       gap: 2px;
     }
     .rd-char-span {
-      color: rgba(148, 163, 184, 0.35);
+      color: var(--rd-ghost-char);
       transition: all 0.2s ease;
       position: relative;
     }
     .rd-char-span.typed-correct {
-      color: #ffffff !important;
+      color: var(--rd-ghost-typed) !important;
       font-weight: 900 !important;
-      text-shadow: 0 0 12px rgba(16, 185, 129, 0.8);
+      text-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
       transform: scale(1.05);
     }
     .rd-char-span.current-target {
-      border-bottom: 3px solid #fbbf24;
-      color: #fbbf24 !important;
+      border-bottom: 3px solid var(--rd-ghost-target);
+      color: var(--rd-ghost-target) !important;
       animation: pulseTarget 1s infinite;
     }
     @keyframes pulseTarget {
@@ -936,21 +1242,21 @@
     }
     .rd-typing-input-box {
       width: 100%;
-      background: rgba(15, 23, 42, 0.95);
-      border: 2px solid rgba(56, 189, 248, 0.4);
+      background: var(--rd-bg-input);
+      border: 2px solid var(--rd-accent);
       border-radius: 16px;
       padding: 14px 20px;
       font-size: 1.25rem;
       font-weight: 800;
       font-family: var(--font-hanzi);
-      color: #fde047;
+      color: var(--rd-text-title);
       outline: none;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+      box-shadow: var(--rd-shadow-sub);
       transition: all 0.2s ease;
     }
     .rd-typing-input-box:focus {
-      border-color: #38bdf8;
-      box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+      border-color: var(--rd-accent);
+      box-shadow: 0 0 18px rgba(2, 132, 199, 0.3);
     }
     .rd-typing-input-box.wrong-shake {
       animation: inputShake 0.3s ease-in-out;
@@ -963,7 +1269,7 @@
     }
     .rd-typing-tip-sub {
       font-size: 0.78rem;
-      color: #94a3b8;
+      color: var(--rd-text-muted);
       display: flex;
       align-items: center;
       gap: 6px;
@@ -976,8 +1282,8 @@
       gap: 20px;
     }
     .rd-quiz-card {
-      background: rgba(0, 0, 0, 0.25);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: var(--rd-bg-card-sub);
+      border: 1px solid var(--rd-border);
       border-radius: 18px;
       padding: 20px;
       display: flex;
@@ -987,14 +1293,14 @@
     .rd-quiz-q-title {
       font-size: 1.1rem;
       font-weight: 800;
-      color: #f1f5f9;
+      color: var(--rd-text-title);
       display: flex;
       gap: 8px;
       line-height: 1.4;
     }
     .rd-quiz-q-sub {
       font-size: 0.88rem;
-      color: #94a3b8;
+      color: var(--rd-text-muted);
       font-weight: 600;
       margin-top: 2px;
     }
@@ -1004,13 +1310,13 @@
       gap: 8px;
     }
     .rd-quiz-opt-btn {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1.5px solid rgba(255, 255, 255, 0.12);
+      background: var(--rd-bg-input);
+      border: 1.5px solid var(--rd-border-sub);
       border-radius: 12px;
       padding: 12px 18px;
       font-size: 0.95rem;
       font-weight: 700;
-      color: #cbd5e1;
+      color: var(--rd-text-main);
       cursor: pointer;
       text-align: left;
       transition: all 0.2s ease;
@@ -1019,27 +1325,30 @@
       justify-content: space-between;
     }
     .rd-quiz-opt-btn:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.12);
-      color: #ffffff;
+      background: var(--rd-accent-light);
+      border-color: var(--rd-accent);
+      color: var(--rd-accent);
       transform: translateX(4px);
     }
     .rd-quiz-opt-btn.correct {
       background: rgba(16, 185, 129, 0.25) !important;
       border-color: #10b981 !important;
-      color: #34d399 !important;
+      color: #059669 !important;
+      font-weight: 800 !important;
     }
     .rd-quiz-opt-btn.wrong {
-      background: rgba(239, 68, 68, 0.25) !important;
+      background: rgba(239, 68, 68, 0.2) !important;
       border-color: #ef4444 !important;
-      color: #f87171 !important;
+      color: #dc2626 !important;
+      font-weight: 800 !important;
     }
     .rd-quiz-explain-box {
-      background: rgba(56, 189, 248, 0.1);
-      border: 1px dashed rgba(56, 189, 248, 0.4);
+      background: var(--rd-accent-light);
+      border: 1px dashed var(--rd-accent);
       border-radius: 12px;
       padding: 10px 14px;
       font-size: 0.85rem;
-      color: #cbd5e1;
+      color: var(--rd-text-main);
       line-height: 1.5;
       display: none;
     }
@@ -1050,14 +1359,14 @@
       bottom: 28px;
       left: 50%;
       transform: translateX(-50%) translateY(100px);
-      background: rgba(15, 23, 42, 0.96);
-      color: #ffffff;
+      background: var(--rd-bg-glass);
+      color: var(--rd-text-title);
       padding: 12px 24px;
       border-radius: 50px;
       font-size: 0.92rem;
       font-weight: 800;
-      border: 1.5px solid #38bdf8;
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+      border: 1.5px solid var(--rd-accent);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
       z-index: 99999;
       opacity: 0;
       pointer-events: none;
@@ -1084,19 +1393,31 @@
           <i class="fa-solid fa-arrow-left"></i> Trang Chủ
         </a>
         <div class="rd-brand-title">
-          <h1><i class="fa-solid fa-book-open-reader" style="color: #38bdf8;"></i> Luyện Đọc Tiếng Trung</h1>
+          <h1><i class="fa-solid fa-book-open-reader" style="color: #0284c7;"></i> Luyện Đọc Tiếng Trung</h1>
           <p>Chuyên trang Đọc hiểu • Từ vựng • Thành ngữ • Luyện gõ phản xạ HSK 1 - 6</p>
         </div>
       </div>
 
       <div class="rd-header-right">
+        <!-- VIEW SWITCHER (Danh sách bài / Đang đọc) -->
+        <div class="rd-view-toggle-wrap">
+          <button type="button" class="rd-view-toggle-btn active" id="btn-view-catalog" title="Xem danh sách tất cả bài đọc dạng lưới">
+            <i class="fa-solid fa-grid-2"></i> Danh sách bài (<span id="rd-catalog-badge-count">33</span>)
+          </button>
+          <button type="button" class="rd-view-toggle-btn" id="btn-view-reader" title="Chuyển sang màn hình đọc bài chi tiết">
+            <i class="fa-solid fa-book-open"></i> Đang đọc bài
+          </button>
+        </div>
+
         <div class="rd-stats-badge">
           <i class="fa-solid fa-circle-check" style="color: #10b981;"></i>
           <span>Đã đọc: <strong id="rd-read-count-val">0</strong> / <span id="rd-total-count-val">0</span> bài</span>
         </div>
+
         <button type="button" class="rd-continue-btn" id="rd-continue-study-btn" title="Đọc tiếp bài đang học dở">
           <i class="fa-solid fa-bolt"></i> Đọc Tiếp
         </button>
+
         <button type="button" class="rd-theme-btn" id="theme-toggle-btn" onclick="window.toggleTheme()" title="Chuyển chế độ Sáng / Tối">
           <i class="fa-solid fa-moon"></i>
         </button>
@@ -1119,194 +1440,220 @@
         </div>
       </div>
 
-      <!-- CATEGORY ROW -->
+      <!-- CATEGORY & SEARCH ROW -->
       <div class="rd-filter-row">
         <span class="rd-filter-label"><i class="fa-solid fa-folder-open"></i> Danh mục:</span>
         <div class="rd-chips-wrap" id="rd-category-chips">
           <button type="button" class="rd-chip-btn active" data-category="all"><i class="fa-solid fa-border-all"></i> Tất cả</button>
           <button type="button" class="rd-chip-btn" data-category="daily"><i class="fa-solid fa-sun" style="color:#fbbf24;"></i> Đời thường</button>
-          <button type="button" class="rd-chip-btn" data-category="textbook"><i class="fa-solid fa-book-bookmark" style="color:#38bdf8;"></i> Giáo trình</button>
+          <button type="button" class="rd-chip-btn" data-category="textbook"><i class="fa-solid fa-book-bookmark" style="color:#0284c7;"></i> Giáo trình</button>
           <button type="button" class="rd-chip-btn" data-category="hskk"><i class="fa-solid fa-microphone-lines" style="color:#f472b6;"></i> HSKK</button>
           <button type="button" class="rd-chip-btn" data-category="idiom"><i class="fa-solid fa-feather" style="color:#a855f7;"></i> Thành ngữ</button>
-          <button type="button" class="rd-chip-btn" data-category="fairy_tale"><i class="fa-solid fa-wand-magic-sparkles" style="color:#34d399;"></i> Cổ tích</button>
+          <button type="button" class="rd-chip-btn" data-category="fairy_tale"><i class="fa-solid fa-wand-magic-sparkles" style="color:#10b981;"></i> Cổ tích</button>
           <button type="button" class="rd-chip-btn" data-category="news"><i class="fa-solid fa-newspaper" style="color:#fb7185;"></i> Báo chí</button>
         </div>
-      </div>
 
-      <!-- ARTICLE SELECTOR DROPDOWN ROW -->
-      <div class="rd-article-quick-select">
-        <button type="button" class="rd-nav-article-btn" id="rd-prev-article-btn" title="Bài trước">
-          <i class="fa-solid fa-chevron-left"></i> Bài trước
-        </button>
-        <select id="rd-article-select" class="rd-article-select-dropdown" aria-label="Chọn bài đọc"></select>
-        <button type="button" class="rd-nav-article-btn" id="rd-next-article-btn" title="Bài kế tiếp">
-          Bài kế <i class="fa-solid fa-chevron-right"></i>
-        </button>
+        <div class="rd-search-wrap">
+          <i class="fa-solid fa-magnifying-glass rd-search-icon"></i>
+          <input type="text" id="rd-search-input" class="rd-search-input" placeholder="Tìm theo tiêu đề, từ vựng...">
+        </div>
       </div>
     </section>
 
-    <!-- 3. MAIN 2-COLUMN GRID -->
-    <main class="rd-main-grid">
-
-      <!-- LEFT COLUMN: MAIN WORKSPACE (3 TABS) -->
-      <section class="rd-content-card">
-
-        <!-- 3 MODE TABS (Đọc - Trả lời câu hỏi - Luyện viết) -->
-        <nav class="rd-mode-tabs">
-          <button type="button" class="rd-mode-tab-btn active" id="tab-btn-read" data-tab="read">
-            <i class="fa-solid fa-book-open"></i> Đọc bài
-          </button>
-          <button type="button" class="rd-mode-tab-btn tab-quiz" id="tab-btn-quiz" data-tab="quiz">
-            <i class="fa-solid fa-circle-question"></i> Trả lời câu hỏi
-          </button>
-          <button type="button" class="rd-mode-tab-btn tab-write" id="tab-btn-write" data-tab="write">
-            <i class="fa-solid fa-keyboard"></i> Luyện viết
-          </button>
-        </nav>
-
-        <!-- VIEW 1: TAB ĐỌC (READING MODE) -->
-        <div id="view-mode-read" class="rd-view-pane">
-          
-          <!-- AUDIO PLAYER BAR -->
-          <div class="rd-audio-player-bar">
-            <button type="button" class="rd-play-btn" id="rd-audio-play-btn" title="Phát âm thanh bài đọc">
-              <i class="fa-solid fa-play"></i>
-            </button>
-            <div class="rd-audio-progress-wrap">
-              <div class="rd-audio-timeline" id="rd-audio-timeline">
-                <div class="rd-audio-timeline-fill" id="rd-audio-timeline-fill"></div>
-              </div>
-              <div class="rd-audio-time-row">
-                <span id="rd-audio-current-time">0:00</span>
-                <span id="rd-audio-total-time">0:00</span>
-              </div>
-            </div>
-            <button type="button" class="rd-audio-speed-btn" id="rd-audio-speed-btn" title="Chỉnh tốc độ đọc">
-              1.0x
-            </button>
-          </div>
-
-          <!-- ART BANNER -->
-          <div class="rd-art-banner" id="rd-art-banner" style="margin-top: 16px;">
-            <div class="rd-art-overlay"></div>
-            <div class="rd-art-content">
-              <div class="rd-art-tag" id="rd-art-tag">
-                <i class="fa-solid fa-sun"></i> HSK 1 • ĐỜI THƯỜNG
-              </div>
-              <h2 class="rd-art-title-zh" id="rd-art-title-zh">标题</h2>
-              <div class="rd-art-title-vi" id="rd-art-title-vi">Tiêu đề bài đọc</div>
-            </div>
-          </div>
-
-          <!-- TEXT CONTROLS & CHINESE TEXT -->
-          <div style="margin-top: 18px; display: flex; flex-direction: column; gap: 14px;">
-            <div class="rd-text-controls">
-              <div class="rd-text-ctrl-left">
-                <button type="button" class="rd-ctrl-btn" id="rd-toggle-pinyin-btn" title="Bật/Tắt Pinyin">
-                  <i class="fa-solid fa-font"></i> <span id="rd-py-btn-text">Hiện Pinyin</span>
-                </button>
-                <button type="button" class="rd-ctrl-btn" id="rd-mark-done-btn" title="Đánh dấu đã đọc xong bài này">
-                  <i class="fa-regular fa-circle-check"></i> <span id="rd-done-btn-text">Đánh dấu đã đọc</span>
-                </button>
-              </div>
-              <div class="rd-text-ctrl-right">
-                <button type="button" class="rd-ctrl-btn" id="rd-font-dec-btn" title="Thu nhỏ chữ">A-</button>
-                <button type="button" class="rd-ctrl-btn" id="rd-font-inc-btn" title="Phóng to chữ">A+</button>
-              </div>
-            </div>
-
-            <!-- CHINESE TEXT BODY -->
-            <div class="rd-chinese-body" id="rd-chinese-body"></div>
-
-            <!-- VIETNAMESE TRANSLATION ACCORDION -->
-            <div class="rd-accordion-box" id="rd-translation-accordion" style="margin-top: 10px;">
-              <div class="rd-accordion-header" id="rd-translation-header">
-                <div class="rd-accordion-title">
-                  <i class="fa-solid fa-language" style="color: #38bdf8;"></i> Bản dịch Tiếng Việt
-                </div>
-                <i class="fa-solid fa-chevron-down rd-accordion-icon"></i>
-              </div>
-              <div class="rd-accordion-body" id="rd-translation-body"></div>
-            </div>
-          </div>
-
+    <!-- 3. VIEW MODE A: ARTICLE CATALOG GRID (DÀN RA NHƯ SHADOWING) -->
+    <section class="rd-catalog-section" id="rd-catalog-view-section">
+      <div class="rd-catalog-header-row">
+        <div class="rd-catalog-count-text">
+          <i class="fa-solid fa-layer-group" style="color: var(--rd-accent);"></i> Danh sách bài đọc (<span id="rd-matching-count-val">0</span> bài)
         </div>
+      </div>
+      <div class="rd-catalog-grid" id="rd-catalog-cards-grid"></div>
+    </section>
 
-        <!-- VIEW 2: TAB TRẢ LỜI CÂU HỎI (QUIZ MODE) -->
-        <div id="view-mode-quiz" class="rd-view-pane" style="display: none;">
-          <div class="rd-quiz-workspace" id="rd-quiz-workspace"></div>
+    <!-- 4. VIEW MODE B: READING WORKSPACE VIEW (CHẾ ĐỘ ĐỌC VÀ HỌC CHI TIẾT) -->
+    <section class="rd-workspace-section" id="rd-workspace-view-section" style="display: none;">
+
+      <!-- WORKSPACE TOP NAV BAR -->
+      <div class="rd-workspace-top-bar">
+        <button type="button" class="rd-back-to-catalog-btn" id="rd-back-to-catalog-btn">
+          <i class="fa-solid fa-chevron-left"></i> Danh sách bài đọc
+        </button>
+
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button type="button" class="rd-nav-article-btn" id="rd-prev-article-btn" title="Bài trước">
+            <i class="fa-solid fa-chevron-left"></i> Bài trước
+          </button>
+          <select id="rd-article-select" class="rd-article-select-dropdown" aria-label="Chọn bài đọc" style="max-width: 280px;"></select>
+          <button type="button" class="rd-nav-article-btn" id="rd-next-article-btn" title="Bài kế tiếp">
+            Bài kế <i class="fa-solid fa-chevron-right"></i>
+          </button>
         </div>
+      </div>
 
-        <!-- VIEW 3: TAB LUYỆN VIẾT (DICTATION & TYPING MODE - Ảnh 2) -->
-        <div id="view-mode-write" class="rd-view-pane" style="display: none;">
-          <div class="rd-typing-workspace">
+      <!-- MAIN 2-COLUMN GRID -->
+      <main class="rd-main-grid">
+
+        <!-- LEFT COLUMN: MAIN WORKSPACE (3 TABS) -->
+        <section class="rd-content-card">
+
+          <!-- 3 MODE TABS (Đọc - Trả lời câu hỏi - Luyện viết) -->
+          <nav class="rd-mode-tabs">
+            <button type="button" class="rd-mode-tab-btn active" id="tab-btn-read" data-tab="read">
+              <i class="fa-solid fa-book-open"></i> Đọc bài
+            </button>
+            <button type="button" class="rd-mode-tab-btn tab-quiz" id="tab-btn-quiz" data-tab="quiz">
+              <i class="fa-solid fa-circle-question"></i> Trả lời câu hỏi
+            </button>
+            <button type="button" class="rd-mode-tab-btn tab-write" id="tab-btn-write" data-tab="write">
+              <i class="fa-solid fa-keyboard"></i> Luyện viết
+            </button>
+          </nav>
+
+          <!-- VIEW 1: TAB ĐỌC (READING MODE) -->
+          <div id="view-mode-read" class="rd-view-pane">
             
-            <div class="rd-typing-options">
-              <label class="rd-checkbox-label">
-                <input type="checkbox" id="rd-hide-pinyin-chk">
-                <span><i class="fa-solid fa-eye-slash"></i> Ẩn Pinyin (Tăng độ khó nhớ mặt chữ)</span>
-              </label>
-              <div style="font-size: 0.82rem; font-weight: 800; color: #10b981;" id="rd-typing-progress-text">
-                Tiến độ: 0%
+            <!-- AUDIO PLAYER BAR -->
+            <div class="rd-audio-player-bar">
+              <button type="button" class="rd-play-btn" id="rd-audio-play-btn" title="Phát âm thanh bài đọc">
+                <i class="fa-solid fa-play"></i>
+              </button>
+              <div class="rd-audio-progress-wrap">
+                <div class="rd-audio-timeline" id="rd-audio-timeline">
+                  <div class="rd-audio-timeline-fill" id="rd-audio-timeline-fill"></div>
+                </div>
+                <div class="rd-audio-time-row">
+                  <span id="rd-audio-current-time">0:00</span>
+                  <span id="rd-audio-total-time">0:00</span>
+                </div>
+              </div>
+              <button type="button" class="rd-audio-speed-btn" id="rd-audio-speed-btn" title="Chỉnh tốc độ đọc">
+                1.0x
+              </button>
+            </div>
+
+            <!-- ART BANNER -->
+            <div class="rd-art-banner" id="rd-art-banner" style="margin-top: 16px;">
+              <div class="rd-art-overlay"></div>
+              <div class="rd-art-content">
+                <div class="rd-art-tag" id="rd-art-tag">
+                  <i class="fa-solid fa-sun"></i> HSK 1 • ĐỜI THƯỜNG
+                </div>
+                <h2 class="rd-art-title-zh" id="rd-art-title-zh">标题</h2>
+                <div class="rd-art-title-vi" id="rd-art-title-vi">Tiêu đề bài đọc</div>
               </div>
             </div>
 
-            <!-- GHOST TEXT CONTAINER (Pinyin xanh + Chữ Hán mờ) -->
-            <div class="rd-ghost-text-container" id="rd-ghost-text-container"></div>
+            <!-- TEXT CONTROLS & CHINESE TEXT -->
+            <div style="margin-top: 18px; display: flex; flex-direction: column; gap: 14px;">
+              <div class="rd-text-controls">
+                <div class="rd-text-ctrl-left">
+                  <button type="button" class="rd-ctrl-btn" id="rd-toggle-pinyin-btn" title="Bật/Tắt Pinyin">
+                    <i class="fa-solid fa-font"></i> <span id="rd-py-btn-text">Hiện Pinyin</span>
+                  </button>
+                  <button type="button" class="rd-ctrl-btn" id="rd-mark-done-btn" title="Đánh dấu đã đọc xong bài này">
+                    <i class="fa-regular fa-circle-check"></i> <span id="rd-done-btn-text">Đánh dấu đã đọc</span>
+                  </button>
+                </div>
+                <div class="rd-text-ctrl-right">
+                  <button type="button" class="rd-ctrl-btn" id="rd-font-dec-btn" title="Thu nhỏ chữ">A-</button>
+                  <button type="button" class="rd-ctrl-btn" id="rd-font-inc-btn" title="Phóng to chữ">A+</button>
+                </div>
+              </div>
 
-            <!-- INPUT BOX -->
-            <div class="rd-typing-input-area">
-              <input type="text" id="rd-typing-input-box" class="rd-typing-input-box" placeholder="Gõ Pinyin hoặc Chữ Hán vào đây để kiểm tra..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-              <div class="rd-typing-tip-sub">
-                <i class="fa-solid fa-circle-info" style="color: #38bdf8;"></i>
-                <span>Gõ đúng: chữ sáng đậm rõ nét • Gõ sai: cảnh báo rung đỏ • Nhấn Enter hoặc Space để chuyển</span>
+              <!-- CHINESE TEXT BODY -->
+              <div class="rd-chinese-body" id="rd-chinese-body"></div>
+
+              <!-- VIETNAMESE TRANSLATION ACCORDION -->
+              <div class="rd-accordion-box" id="rd-translation-accordion" style="margin-top: 10px;">
+                <div class="rd-accordion-header" id="rd-translation-header">
+                  <div class="rd-accordion-title">
+                    <i class="fa-solid fa-language" style="color: #0284c7;"></i> Bản dịch Tiếng Việt
+                  </div>
+                  <i class="fa-solid fa-chevron-down rd-accordion-icon"></i>
+                </div>
+                <div class="rd-accordion-body" id="rd-translation-body"></div>
               </div>
             </div>
 
           </div>
-        </div>
 
-      </section>
-
-      <!-- RIGHT COLUMN: SIDEBAR EXPANDABLE WIDGETS -->
-      <aside class="rd-sidebar-column">
-
-        <!-- ACCORDION 1: TỪ VỰNG TRỌNG TÂM -->
-        <div class="rd-sidebar-card open" id="rd-side-vocab-card">
-          <div class="rd-sidebar-header" id="rd-side-vocab-header">
-            <div class="rd-sidebar-title vocab">
-              <i class="fa-solid fa-book-bookmark"></i> Từ vựng trọng tâm
-            </div>
-            <span class="rd-sidebar-badge" id="rd-vocab-count-badge">0</span>
+          <!-- VIEW 2: TAB TRẢ LỜI CÂU HỎI (QUIZ MODE) -->
+          <div id="view-mode-quiz" class="rd-view-pane" style="display: none;">
+            <div class="rd-quiz-workspace" id="rd-quiz-workspace"></div>
           </div>
-          <div class="rd-sidebar-body" id="rd-vocab-list-body"></div>
-        </div>
 
-        <!-- ACCORDION 2: THÀNH NGỮ BỐN CHỮ -->
-        <div class="rd-sidebar-card open" id="rd-side-idiom-card">
-          <div class="rd-sidebar-header" id="rd-side-idiom-header">
-            <div class="rd-sidebar-title idiom">
-              <i class="fa-solid fa-feather"></i> Thành ngữ
+          <!-- VIEW 3: TAB LUYỆN VIẾT (DICTATION & TYPING MODE - Ảnh 2) -->
+          <div id="view-mode-write" class="rd-view-pane" style="display: none;">
+            <div class="rd-typing-workspace">
+              
+              <div class="rd-typing-options">
+                <label class="rd-checkbox-label">
+                  <input type="checkbox" id="rd-hide-pinyin-chk">
+                  <span><i class="fa-solid fa-eye-slash"></i> Ẩn Pinyin (Tăng độ khó nhớ mặt chữ)</span>
+                </label>
+                <div style="font-size: 0.85rem; font-weight: 800; color: #059669;" id="rd-typing-progress-text">
+                  Tiến độ: 0%
+                </div>
+              </div>
+
+              <!-- GHOST TEXT CONTAINER (Pinyin xanh + Chữ Hán mờ) -->
+              <div class="rd-ghost-text-container" id="rd-ghost-text-container"></div>
+
+              <!-- INPUT BOX -->
+              <div class="rd-typing-input-area">
+                <input type="text" id="rd-typing-input-box" class="rd-typing-input-box" placeholder="Gõ Chữ Hán vào đây để kiểm tra..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                <div class="rd-typing-tip-sub">
+                  <i class="fa-solid fa-circle-info" style="color: #0284c7;"></i>
+                  <span>Gõ đúng: chữ sáng rõ nét • Gõ sai: cảnh báo rung đỏ • Nhấn Enter để chuyển câu</span>
+                </div>
+              </div>
+
             </div>
-            <span class="rd-sidebar-badge" id="rd-idiom-count-badge">0</span>
           </div>
-          <div class="rd-sidebar-body" id="rd-idiom-list-body"></div>
-        </div>
 
-        <!-- ACCORDION 3: QUÁN DỤNG NGỮ & CỤM CỐ ĐỊNH -->
-        <div class="rd-sidebar-card open" id="rd-side-phrase-card">
-          <div class="rd-sidebar-header" id="rd-side-phrase-header">
-            <div class="rd-sidebar-title phrase">
-              <i class="fa-solid fa-wand-magic-sparkles"></i> Quán dụng ngữ & Cụm cố định
+        </section>
+
+        <!-- RIGHT COLUMN: SIDEBAR EXPANDABLE WIDGETS -->
+        <aside class="rd-sidebar-column">
+
+          <!-- ACCORDION 1: TỪ VỰNG TRỌNG TÂM -->
+          <div class="rd-sidebar-card open" id="rd-side-vocab-card">
+            <div class="rd-sidebar-header" id="rd-side-vocab-header">
+              <div class="rd-sidebar-title vocab">
+                <i class="fa-solid fa-book-bookmark"></i> Từ vựng trọng tâm
+              </div>
+              <span class="rd-sidebar-badge" id="rd-vocab-count-badge">0</span>
             </div>
-            <span class="rd-sidebar-badge" id="rd-phrase-count-badge">0</span>
+            <div class="rd-sidebar-body" id="rd-vocab-list-body"></div>
           </div>
-          <div class="rd-sidebar-body" id="rd-phrase-list-body"></div>
-        </div>
 
-      </aside>
+          <!-- ACCORDION 2: THÀNH NGỮ BỐN CHỮ -->
+          <div class="rd-sidebar-card open" id="rd-side-idiom-card">
+            <div class="rd-sidebar-header" id="rd-side-idiom-header">
+              <div class="rd-sidebar-title idiom">
+                <i class="fa-solid fa-feather"></i> Thành ngữ
+              </div>
+              <span class="rd-sidebar-badge" id="rd-idiom-count-badge">0</span>
+            </div>
+            <div class="rd-sidebar-body" id="rd-idiom-list-body"></div>
+          </div>
 
-    </main>
+          <!-- ACCORDION 3: QUÁN DỤNG NGỮ & CỤM CỐ ĐỊNH -->
+          <div class="rd-sidebar-card open" id="rd-side-phrase-card">
+            <div class="rd-sidebar-header" id="rd-side-phrase-header">
+              <div class="rd-sidebar-title phrase">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Quán dụng ngữ & Cụm cố định
+              </div>
+              <span class="rd-sidebar-badge" id="rd-phrase-count-badge">0</span>
+            </div>
+            <div class="rd-sidebar-body" id="rd-phrase-list-body"></div>
+          </div>
+
+        </aside>
+
+      </main>
+
+    </section>
 
   </div>
 

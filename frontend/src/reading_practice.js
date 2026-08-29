@@ -1,6 +1,6 @@
 /**
  * Tiếng Trung HongTai - Chuyên Trang Luyện Đọc Tiếng Trung (Reading & Mastery)
- * Tích hợp: Đọc hiểu, Audio giọng chuẩn, Ruby Pinyin, Luyện viết gõ phím (Ghost text) & Trắc nghiệm đọc hiểu
+ * Tích hợp: Danh sách chọn bài dạng Lưới (như Shadowing), Audio giọng chuẩn, Ruby Pinyin, Luyện viết & Trắc nghiệm
  */
 
 class ReadingPracticeApp {
@@ -10,6 +10,8 @@ class ReadingPracticeApp {
     this.currentArticle = null;
     this.currentLevel = 'all';
     this.currentCategory = 'all';
+    this.searchQuery = '';
+    this.currentView = 'catalog'; // 'catalog' (Dàn ra như Shadowing) | 'workspace' (Đọc & Học chi tiết)
     this.activeTab = 'read'; // 'read' | 'quiz' | 'write'
     this.showPinyin = false;
     this.fontSizeRem = 1.35;
@@ -25,7 +27,7 @@ class ReadingPracticeApp {
     this.hideTypingPinyin = false;
 
     // Quiz state
-    this.quizAnswers = {}; // { qIdx: selectedOptIdx }
+    this.quizAnswers = {};
 
     // Persistent state
     this.readArticles = new Set(JSON.parse(localStorage.getItem('reading_completed_articles') || '[]'));
@@ -47,8 +49,8 @@ class ReadingPracticeApp {
       const res = await fetch('/reading_practice_data.json');
       if (res.ok) {
         this.articles = await res.json();
-      } else {
-        console.warn('Fallback loading reading data...');
+        const b = document.getElementById('rd-catalog-badge-count');
+        if (b) b.textContent = this.articles.length;
       }
     } catch (e) {
       console.error('Failed to load reading data:', e);
@@ -61,14 +63,40 @@ class ReadingPracticeApp {
     const cat = params.get('category');
     const id = params.get('id');
     const tab = params.get('tab');
+    const view = params.get('view');
 
     if (lvl) this.currentLevel = lvl;
     if (cat) this.currentCategory = cat;
     if (tab && ['read', 'quiz', 'write'].includes(tab)) this.activeTab = tab;
-    if (id) this.lastArticleId = id;
+    if (id) {
+      this.lastArticleId = id;
+      this.currentView = 'workspace';
+    }
+    if (view === 'workspace' || view === 'catalog') this.currentView = view;
   }
 
   bindDOMEvents() {
+    // View Switcher buttons (Danh sách bài / Đang đọc)
+    const btnCatalog = document.getElementById('btn-view-catalog');
+    const btnReader = document.getElementById('btn-view-reader');
+    if (btnCatalog) {
+      btnCatalog.addEventListener('click', () => this.switchView('catalog'));
+    }
+    if (btnReader) {
+      btnReader.addEventListener('click', () => {
+        if (!this.currentArticle && this.filteredArticles.length > 0) {
+          this.selectArticle(this.filteredArticles[0]);
+        }
+        this.switchView('workspace');
+      });
+    }
+
+    // Back to catalog button
+    const backCatBtn = document.getElementById('rd-back-to-catalog-btn');
+    if (backCatBtn) {
+      backCatBtn.addEventListener('click', () => this.switchView('catalog'));
+    }
+
     // Level chips
     document.querySelectorAll('#rd-level-chips .rd-chip-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
@@ -90,6 +118,15 @@ class ReadingPracticeApp {
         this.applyFilters();
       });
     });
+
+    // Search Input
+    const searchInput = document.getElementById('rd-search-input');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        this.searchQuery = (e.target.value || '').trim().toLowerCase();
+        this.applyFilters();
+      });
+    }
 
     // Article select dropdown
     const selectEl = document.getElementById('rd-article-select');
@@ -115,6 +152,7 @@ class ReadingPracticeApp {
           const found = this.articles.find(a => a.id === this.lastArticleId);
           if (found) {
             this.selectArticle(found);
+            this.switchView('workspace');
             this.showToast(`Đã mở bài: ${found.title_vi || found.title_zh}`);
             return;
           }
@@ -122,9 +160,11 @@ class ReadingPracticeApp {
         const unread = this.articles.find(a => !this.readArticles.has(a.id));
         if (unread) {
           this.selectArticle(unread);
+          this.switchView('workspace');
           this.showToast(`Đọc bài tiếp theo: ${unread.title_vi || unread.title_zh}`);
         } else if (this.articles[0]) {
           this.selectArticle(this.articles[0]);
+          this.switchView('workspace');
         }
       });
     }
@@ -203,6 +243,7 @@ class ReadingPracticeApp {
         this.updateHeaderStats();
         this.updateMarkDoneButton();
         this.renderArticleDropdown();
+        this.renderCatalogGrid();
       });
     }
 
@@ -267,6 +308,24 @@ class ReadingPracticeApp {
     }
   }
 
+  switchView(viewName) {
+    this.currentView = viewName;
+    const catSec = document.getElementById('rd-catalog-view-section');
+    const workSec = document.getElementById('rd-workspace-view-section');
+    const btnCat = document.getElementById('btn-view-catalog');
+    const btnRead = document.getElementById('btn-view-reader');
+
+    if (btnCat) btnCat.classList.toggle('active', viewName === 'catalog');
+    if (btnRead) btnRead.classList.toggle('active', viewName === 'workspace');
+
+    if (catSec) catSec.style.display = (viewName === 'catalog') ? 'flex' : 'none';
+    if (workSec) workSec.style.display = (viewName === 'workspace') ? 'flex' : 'none';
+
+    if (viewName === 'workspace') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
   renderFilterPills() {
     document.querySelectorAll('#rd-level-chips .rd-chip-btn').forEach(btn => {
       btn.classList.toggle('active', btn.getAttribute('data-level') === this.currentLevel);
@@ -280,18 +339,29 @@ class ReadingPracticeApp {
     this.filteredArticles = this.articles.filter(a => {
       if (this.currentLevel !== 'all' && a.level !== this.currentLevel) return false;
       if (this.currentCategory !== 'all' && a.category !== this.currentCategory) return false;
+      if (this.searchQuery) {
+        const query = this.searchQuery;
+        const matchTitle = (a.title_zh && a.title_zh.toLowerCase().includes(query)) || (a.title_vi && a.title_vi.toLowerCase().includes(query));
+        const matchContent = a.content_zh && a.content_zh.toLowerCase().includes(query);
+        const matchVocab = Array.isArray(a.vocabulary) && a.vocabulary.some(v => v.word.includes(query) || (v.meaning && v.meaning.toLowerCase().includes(query)));
+        if (!matchTitle && !matchContent && !matchVocab) return false;
+      }
       return true;
     });
 
+    const matchCountEl = document.getElementById('rd-matching-count-val');
+    if (matchCountEl) matchCountEl.textContent = this.filteredArticles.length;
+
+    this.renderCatalogGrid();
     this.renderArticleDropdown();
 
     if (this.filteredArticles.length > 0) {
       const stillThere = this.filteredArticles.find(a => this.currentArticle && a.id === this.currentArticle.id);
       if (stillThere) {
-        this.selectArticle(stillThere);
+        this.selectArticle(stillThere, false);
       } else {
         const matchingLast = this.filteredArticles.find(a => a.id === this.lastArticleId);
-        this.selectArticle(matchingLast || this.filteredArticles[0]);
+        this.selectArticle(matchingLast || this.filteredArticles[0], false);
       }
     } else {
       this.currentArticle = null;
@@ -301,13 +371,109 @@ class ReadingPracticeApp {
     this.updateHeaderStats();
   }
 
+  // -------------------------------------------------------------
+  // VIEW MODE A: RENDER ARTICLE CATALOG GRID (DÀN RA NHƯ SHADOWING)
+  // -------------------------------------------------------------
+
+  renderCatalogGrid() {
+    const grid = document.getElementById('rd-catalog-cards-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    if (this.filteredArticles.length === 0) {
+      grid.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--rd-text-muted);">
+          <i class="fa-solid fa-book-open" style="font-size: 2.5rem; margin-bottom: 12px; color: var(--rd-accent);"></i>
+          <div style="font-size: 1.1rem; font-weight: 800;">Không tìm thấy bài đọc nào phù hợp với bộ lọc</div>
+          <p style="font-size: 0.85rem; margin-top: 6px;">Hãy thử chọn cấp độ khác hoặc từ khóa tìm kiếm khác</p>
+        </div>
+      `;
+      return;
+    }
+
+    const isDark = document.documentElement.classList.contains('dark');
+    const catColors = isDark ? {
+      daily: 'linear-gradient(135deg, #1e293b 0%, #334155 40%, #b45309 100%)',
+      textbook: 'linear-gradient(135deg, #1e293b 0%, #334155 40%, #0369a1 100%)',
+      hskk: 'linear-gradient(135deg, #1e293b 0%, #334155 40%, #be185d 100%)',
+      idiom: 'linear-gradient(135deg, #1e293b 0%, #334155 40%, #6b21a8 100%)',
+      fairy_tale: 'linear-gradient(135deg, #1e293b 0%, #334155 40%, #047857 100%)',
+      news: 'linear-gradient(135deg, #1e293b 0%, #334155 40%, #b91c1c 100%)'
+    } : {
+      daily: 'linear-gradient(135deg, #f59e0b 0%, #d97706 40%, #b45309 100%)',
+      textbook: 'linear-gradient(135deg, #0284c7 0%, #0369a1 40%, #1d4ed8 100%)',
+      hskk: 'linear-gradient(135deg, #ec4899 0%, #db2777 40%, #be185d 100%)',
+      idiom: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 40%, #6d28d9 100%)',
+      fairy_tale: 'linear-gradient(135deg, #10b981 0%, #059669 40%, #047857 100%)',
+      news: 'linear-gradient(135deg, #ef4444 0%, #dc2626 40%, #b91c1c 100%)'
+    };
+
+    const catIcons = {
+      daily: 'fa-sun',
+      textbook: 'fa-book-bookmark',
+      hskk: 'fa-microphone-lines',
+      idiom: 'fa-feather',
+      fairy_tale: 'fa-wand-magic-sparkles',
+      news: 'fa-newspaper'
+    };
+
+    this.filteredArticles.forEach((article) => {
+      const isDone = this.readArticles.has(article.id);
+      const card = document.createElement('div');
+      card.className = 'rd-card-article';
+      card.dataset.id = article.id;
+
+      const bannerBg = catColors[article.category] || (isDark ? 'linear-gradient(135deg, #1e293b, #334155)' : 'linear-gradient(135deg, #0284c7, #0369a1)');
+      const catIcon = catIcons[article.category] || 'fa-book-open';
+      const vocabCount = Array.isArray(article.vocabulary) ? article.vocabulary.length : 0;
+      const idiomCount = Array.isArray(article.idioms) ? article.idioms.length : 0;
+      const previewText = article.content_zh.slice(0, 80) + (article.content_zh.length > 80 ? '...' : '');
+
+      card.innerHTML = `
+        <div class="rd-card-banner" style="background: ${bannerBg};">
+          <div class="rd-card-banner-overlay"></div>
+          <div class="rd-card-banner-top">
+            <span class="rd-badge-lvl">${article.level}</span>
+            ${isDone ? '<span class="rd-badge-done"><i class="fa-solid fa-circle-check"></i> Đã đọc</span>' : ''}
+          </div>
+          <div class="rd-card-category-tag">
+            <i class="fa-solid ${catIcon}"></i> ${article.category_name || 'Bài đọc'}
+          </div>
+        </div>
+
+        <div class="rd-card-body">
+          <div class="rd-card-title-zh">${article.title_zh}</div>
+          <div class="rd-card-title-vi">${article.title_vi || ''}</div>
+          <div class="rd-card-preview">${previewText}</div>
+        </div>
+
+        <div class="rd-card-footer">
+          <div class="rd-card-meta">
+            <span><i class="fa-solid fa-book-bookmark" style="color: var(--rd-accent);"></i> ${vocabCount} từ</span>
+            ${idiomCount > 0 ? `<span><i class="fa-solid fa-feather" style="color: var(--rd-accent-gold);"></i> ${idiomCount} thành ngữ</span>` : ''}
+          </div>
+          <button type="button" class="rd-card-btn-action" title="Đọc bài này">
+            Đọc ngay <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      `;
+
+      card.addEventListener('click', () => {
+        this.selectArticle(article);
+        this.switchView('workspace');
+      });
+
+      grid.appendChild(card);
+    });
+  }
+
   renderArticleDropdown() {
     const selectEl = document.getElementById('rd-article-select');
     if (!selectEl) return;
     selectEl.innerHTML = '';
 
     if (this.filteredArticles.length === 0) {
-      selectEl.innerHTML = '<option value="">Không có bài đọc phù hợp</option>';
+      selectEl.innerHTML = '<option value="">Không có bài đọc</option>';
       return;
     }
 
@@ -315,7 +481,7 @@ class ReadingPracticeApp {
       const opt = document.createElement('option');
       opt.value = a.id;
       const isDone = this.readArticles.has(a.id) ? '✅ ' : '';
-      opt.textContent = `${isDone}[${a.level}] ${a.title_zh} (${a.title_vi || ''})`;
+      opt.textContent = `${isDone}[${a.level}] ${a.title_zh}`;
       selectEl.appendChild(opt);
     });
 
@@ -324,7 +490,7 @@ class ReadingPracticeApp {
     }
   }
 
-  selectArticle(article) {
+  selectArticle(article, shouldUpdateUI = true) {
     if (!article) return;
     this.currentArticle = article;
     this.lastArticleId = article.id;
@@ -423,13 +589,22 @@ class ReadingPracticeApp {
       news: 'fa-newspaper'
     };
 
-    const catColors = {
-      daily: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #b45309 100%)',
-      textbook: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0369a1 100%)',
-      hskk: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #be185d 100%)',
-      idiom: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #6b21a8 100%)',
-      fairy_tale: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #047857 100%)',
-      news: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #b91c1c 100%)'
+    const isDark = document.documentElement.classList.contains('dark');
+
+    const catColors = isDark ? {
+      daily: 'linear-gradient(135deg, #1e293b 0%, #334155 40%, #b45309 100%)',
+      textbook: 'linear-gradient(135deg, #1e293b 0%, #334155 40%, #0369a1 100%)',
+      hskk: 'linear-gradient(135deg, #1e293b 0%, #334155 40%, #be185d 100%)',
+      idiom: 'linear-gradient(135deg, #1e293b 0%, #334155 40%, #6b21a8 100%)',
+      fairy_tale: 'linear-gradient(135deg, #1e293b 0%, #334155 40%, #047857 100%)',
+      news: 'linear-gradient(135deg, #1e293b 0%, #334155 40%, #b91c1c 100%)'
+    } : {
+      daily: 'linear-gradient(135deg, #f59e0b 0%, #d97706 40%, #b45309 100%)',
+      textbook: 'linear-gradient(135deg, #0284c7 0%, #0369a1 40%, #1d4ed8 100%)',
+      hskk: 'linear-gradient(135deg, #ec4899 0%, #db2777 40%, #be185d 100%)',
+      idiom: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 40%, #6d28d9 100%)',
+      fairy_tale: 'linear-gradient(135deg, #10b981 0%, #059669 40%, #047857 100%)',
+      news: 'linear-gradient(135deg, #ef4444 0%, #dc2626 40%, #b91c1c 100%)'
     };
 
     if (tagEl) {
@@ -438,7 +613,7 @@ class ReadingPracticeApp {
     if (titleZhEl) titleZhEl.textContent = a.title_zh;
     if (titleViEl) titleViEl.textContent = a.title_vi || a.title_zh;
     if (bannerEl) {
-      bannerEl.style.background = catColors[a.category] || 'linear-gradient(135deg, #0f172a, #1e293b)';
+      bannerEl.style.background = catColors[a.category] || (isDark ? 'linear-gradient(135deg, #1e293b, #334155)' : 'linear-gradient(135deg, #0284c7, #0369a1)');
     }
   }
 
@@ -459,10 +634,9 @@ class ReadingPracticeApp {
       sSpan.title = 'Nhấn để nghe câu này';
 
       if (this.showPinyin && Array.isArray(sObj.tokens) && sObj.tokens.length > 0) {
-        // Render ruby tokens
         const rubyHTML = sObj.tokens.map(t => {
           if (t.pinyin && t.pinyin.trim()) {
-            return `<ruby style="margin-right:2px;">${t.word}<rt style="font-size:0.75rem;color:#38bdf8;user-select:none;">${t.pinyin}</rt></ruby>`;
+            return `<ruby style="margin-right:2px;">${t.word}<rt style="font-size:0.75rem;color:var(--rd-accent);user-select:none;">${t.pinyin}</rt></ruby>`;
           }
           return t.word;
         }).join('');
@@ -499,7 +673,7 @@ class ReadingPracticeApp {
     if (vBody) {
       vBody.innerHTML = '';
       if (vocabList.length === 0) {
-        vBody.innerHTML = '<div style="padding:10px;color:#94a3b8;font-size:0.82rem;text-align:center;">Không có từ vựng riêng trong bài này.</div>';
+        vBody.innerHTML = '<div style="padding:10px;color:var(--rd-text-muted);font-size:0.82rem;text-align:center;">Không có từ vựng riêng trong bài này.</div>';
       } else {
         vocabList.forEach(v => {
           const item = document.createElement('div');
@@ -532,7 +706,7 @@ class ReadingPracticeApp {
     if (iBody) {
       iBody.innerHTML = '';
       if (idiomList.length === 0) {
-        iBody.innerHTML = '<div style="padding:10px;color:#94a3b8;font-size:0.82rem;text-align:center;">Bài đọc này không có thành ngữ 4 chữ.</div>';
+        iBody.innerHTML = '<div style="padding:10px;color:var(--rd-text-muted);font-size:0.82rem;text-align:center;">Bài đọc này không có thành ngữ 4 chữ.</div>';
       } else {
         idiomList.forEach(i => {
           const item = document.createElement('div');
@@ -540,8 +714,8 @@ class ReadingPracticeApp {
           item.innerHTML = `
             <div class="rd-item-top">
               <div>
-                <span class="rd-item-zh" style="color:#fbbf24;">${i.word}</span>
-                <span class="rd-item-py" style="color:#fde047;">[${i.pinyin}]</span>
+                <span class="rd-item-zh" style="color:var(--rd-accent-gold);">${i.word}</span>
+                <span class="rd-item-py" style="color:var(--rd-accent-gold);">[${i.pinyin}]</span>
               </div>
               <button type="button" class="rd-item-speak-btn" title="Nghe phát âm">
                 <i class="fa-solid fa-volume-high"></i>
@@ -565,7 +739,7 @@ class ReadingPracticeApp {
     if (pBody) {
       pBody.innerHTML = '';
       if (phraseList.length === 0) {
-        pBody.innerHTML = '<div style="padding:10px;color:#94a3b8;font-size:0.82rem;text-align:center;">Không có quán dụng ngữ trong bài này.</div>';
+        pBody.innerHTML = '<div style="padding:10px;color:var(--rd-text-muted);font-size:0.82rem;text-align:center;">Không có quán dụng ngữ trong bài này.</div>';
       } else {
         phraseList.forEach(p => {
           const item = document.createElement('div');
@@ -573,8 +747,8 @@ class ReadingPracticeApp {
           item.innerHTML = `
             <div class="rd-item-top">
               <div>
-                <span class="rd-item-zh" style="color:#34d399;">${p.word}</span>
-                <span class="rd-item-py" style="color:#6ee7b7;">[${p.pinyin || ''}]</span>
+                <span class="rd-item-zh" style="color:var(--rd-accent-green);">${p.word}</span>
+                <span class="rd-item-py" style="color:var(--rd-accent-green);">[${p.pinyin || ''}]</span>
               </div>
               <button type="button" class="rd-item-speak-btn" title="Nghe phát âm">
                 <i class="fa-solid fa-volume-high"></i>
@@ -604,7 +778,7 @@ class ReadingPracticeApp {
     const questions = Array.isArray(a.questions) ? a.questions : [];
 
     if (questions.length === 0) {
-      wrap.innerHTML = '<div style="text-align:center;padding:30px;color:#94a3b8;">Đang chuẩn bị câu hỏi trắc nghiệm cho bài học này...</div>';
+      wrap.innerHTML = '<div style="text-align:center;padding:30px;color:var(--rd-text-muted);">Đang chuẩn bị câu hỏi trắc nghiệm cho bài học này...</div>';
       return;
     }
 
@@ -614,7 +788,7 @@ class ReadingPracticeApp {
 
       const optHTML = q.options.map((opt, oIdx) => `
         <button type="button" class="rd-quiz-opt-btn" data-qidx="${qIdx}" data-oidx="${oIdx}">
-          <span><strong>${String.fromCharCode(65 + oIdx)}.</strong> ${opt.text_zh} ${opt.text_vi ? `<span style="font-size:0.82rem;color:#94a3b8;margin-left:6px;">(${opt.text_vi})</span>` : ''}</span>
+          <span><strong>${String.fromCharCode(65 + oIdx)}.</strong> ${opt.text_zh} ${opt.text_vi ? `<span style="font-size:0.82rem;color:var(--rd-text-muted);margin-left:6px;">(${opt.text_vi})</span>` : ''}</span>
           <i class="fa-regular fa-circle"></i>
         </button>
       `).join('');
@@ -687,10 +861,10 @@ class ReadingPracticeApp {
       scoreBanner.style.textAlign = 'center';
       scoreBanner.style.padding = '24px';
       scoreBanner.innerHTML = `
-        <h3 style="font-size:1.3rem;font-weight:900;color:#34d399;margin-bottom:8px;">
+        <h3 style="font-size:1.3rem;font-weight:900;color:#059669;margin-bottom:8px;">
           🏆 Kết quả: Đúng ${correctCount} / ${questions.length} câu (${Math.round((correctCount / questions.length) * 100)}%)
         </h3>
-        <p style="font-size:0.92rem;color:#e2e8f0;margin-bottom:14px;">
+        <p style="font-size:0.92rem;color:var(--rd-text-main);margin-bottom:14px;">
           ${correctCount === questions.length ? 'Xuất sắc! Bạn đã hiểu toàn bộ nội dung bài đọc.' : 'Rất tốt! Bạn có thể xem lại các phần giải thích ở trên.'}
         </p>
         <button type="button" class="rd-continue-btn" id="rd-reset-quiz-btn" style="margin: 0 auto;">
@@ -713,6 +887,7 @@ class ReadingPracticeApp {
         localStorage.setItem('reading_completed_articles', JSON.stringify([...this.readArticles]));
         this.updateHeaderStats();
         this.updateMarkDoneButton();
+        this.renderCatalogGrid();
       }
     }
   }
@@ -758,7 +933,7 @@ class ReadingPracticeApp {
 
     block.innerHTML = `
       <div class="rd-ghost-pinyin-line" id="rd-cur-ghost-pinyin">
-        <span style="color:#94a3b8;font-size:0.85rem;margin-right:8px;">[Câu ${this.typingSentenceIndex + 1}/${this.typingSentences.length}]:</span>
+        <span style="color:var(--rd-text-muted);font-size:0.85rem;margin-right:8px;">[Câu ${this.typingSentenceIndex + 1}/${this.typingSentences.length}]:</span>
         <span id="rd-cur-ghost-pinyin-text" style="opacity:${this.hideTypingPinyin ? '0' : '1'};transition:opacity 0.2s;">
           ${currentPinyin || 'Pinyin'}
         </span>
@@ -781,13 +956,10 @@ class ReadingPracticeApp {
     const cleanVal = val.replace(/[.,!?:;="\'"()[\]{}，。！？；：\s\-_~`]/g, '');
 
     const charSpans = document.querySelectorAll('#rd-cur-ghost-hanzi .rd-char-span');
-    let matchedCount = 0;
 
-    // Check Hanzi match
     charSpans.forEach((span, idx) => {
       if (idx < cleanVal.length && cleanVal[idx] === cleanCur[idx]) {
         span.className = 'rd-char-span typed-correct';
-        matchedCount++;
       } else if (idx === cleanVal.length) {
         span.className = 'rd-char-span current-target';
       } else {
@@ -823,6 +995,7 @@ class ReadingPracticeApp {
       localStorage.setItem('reading_completed_articles', JSON.stringify([...this.readArticles]));
       this.updateHeaderStats();
       this.updateMarkDoneButton();
+      this.renderCatalogGrid();
     }
   }
 
@@ -967,7 +1140,7 @@ class ReadingPracticeApp {
     if (!toast || !msgEl) return;
 
     msgEl.textContent = msg;
-    toast.style.borderColor = isError ? '#ef4444' : '#38bdf8';
+    toast.style.borderColor = isError ? '#ef4444' : 'var(--rd-accent)';
     const icon = toast.querySelector('i');
     if (icon) icon.className = isError ? 'fa-solid fa-circle-exclamation' : 'fa-solid fa-circle-check';
     if (icon) icon.style.color = isError ? '#ef4444' : '#10b981';
@@ -979,7 +1152,7 @@ class ReadingPracticeApp {
 
   renderEmptyState() {
     const bodyEl = document.getElementById('rd-chinese-body');
-    if (bodyEl) bodyEl.innerHTML = '<div style="padding:40px;text-align:center;color:#94a3b8;">Không tìm thấy bài đọc nào phù hợp với bộ lọc hiện tại.</div>';
+    if (bodyEl) bodyEl.innerHTML = '<div style="padding:40px;text-align:center;color:var(--rd-text-muted);">Không tìm thấy bài đọc nào phù hợp với bộ lọc hiện tại.</div>';
   }
 }
 
