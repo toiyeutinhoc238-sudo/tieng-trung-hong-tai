@@ -7406,8 +7406,8 @@ html.light-mode h4:not(.btn *),
 html.light-mode h5:not(.btn *),
 html.light-mode h6:not(.btn *),
 html.light-mode p:not(.btn *),
-html.light-mode span:not(.btn *):not(.badge):not(.badge *):not(.c-red):not(.c-blue):not(.c-green):not(.c-yellow),
-html.light-mode div:not(.btn *):not(.badge *):not(.btn-node-start),
+html.light-mode span:not(.btn *):not(.badge):not(.badge *):not(.c-red):not(.c-blue):not(.c-green):not(.c-yellow):not(.rd-card-banner *):not(.rd-badge-lvl):not(.phidao-wrapper *):not(.phidao-stat *):not(#cannon-score-val):not(#cannon-combo-val),
+html.light-mode div:not(.btn *):not(.badge *):not(.btn-node-start):not(.rd-card-banner *):not(.rd-card-category-tag):not(.phidao-wrapper *):not(.phidao-stat),
 html.light-mode td,
 html.light-mode th,
 html.light-mode li,
@@ -7416,13 +7416,52 @@ html.light-mode label {
 }
 
 /* Đảm bảo chữ trắng inline style chuyển thành tối dứt khoát */
-html.light-mode [style*="color: #fff"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start),
-html.light-mode [style*="color:#fff"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start),
-html.light-mode [style*="color: #ffffff"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start),
-html.light-mode [style*="color:#ffffff"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start),
-html.light-mode [style*="color: white"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start),
-html.light-mode [style*="color:white"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start) {
+html.light-mode [style*="color: #fff"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start):not(.rd-card-banner *):not(.rd-card-category-tag):not(.phidao-wrapper *):not(.phidao-stat *):not(#cannon-score-val):not(#cannon-combo-val),
+html.light-mode [style*="color:#fff"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start):not(.rd-card-banner *):not(.rd-card-category-tag):not(.phidao-wrapper *):not(.phidao-stat *):not(#cannon-score-val):not(#cannon-combo-val),
+html.light-mode [style*="color: #ffffff"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start):not(.rd-card-banner *):not(.rd-card-category-tag):not(.phidao-wrapper *):not(.phidao-stat *):not(#cannon-score-val):not(#cannon-combo-val),
+html.light-mode [style*="color:#ffffff"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start):not(.rd-card-banner *):not(.rd-card-category-tag):not(.phidao-wrapper *):not(.phidao-stat *):not(#cannon-score-val):not(#cannon-combo-val),
+html.light-mode [style*="color: white"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start):not(.rd-card-banner *):not(.rd-card-category-tag):not(.phidao-wrapper *):not(.phidao-stat *):not(#cannon-score-val):not(#cannon-combo-val),
+html.light-mode [style*="color:white"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start):not(.rd-card-banner *):not(.rd-card-category-tag):not(.phidao-wrapper *):not(.phidao-stat *):not(#cannon-score-val):not(#cannon-combo-val) {
   color: #0f172a !important;
+}
+
+/* Bảo vệ độ tương phản thẻ bài đọc Reading Practice trong Light Mode */
+html.light-mode .rd-card-banner,
+html:not(.dark) .rd-card-banner {
+  overflow: hidden !important;
+}
+html.light-mode .rd-card-banner-watermark,
+html:not(.dark) .rd-card-banner-watermark {
+  color: rgba(255, 255, 255, 0.22) !important;
+}
+html.light-mode .rd-card-category-tag,
+html:not(.dark) .rd-card-category-tag {
+  color: #ffffff !important;
+  background: rgba(0, 0, 0, 0.32) !important;
+}
+html.light-mode .rd-badge-lvl,
+html:not(.dark) .rd-badge-lvl {
+  color: #0f172a !important;
+  background: #ffffff !important;
+}
+
+/* Bảo vệ hiển thị Điểm và Chuỗi Game Phi Đao trong Light Mode */
+html.light-mode .phidao-wrapper *,
+html.light-mode .phidao-stat,
+html.light-mode .phidao-stat span,
+html:not(.dark) .phidao-stat,
+html:not(.dark) .phidao-stat span {
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9) !important;
+}
+html.light-mode #cannon-score-val,
+html:not(.dark) #cannon-score-val {
+  color: #fde047 !important;
+  text-shadow: 0 0 12px rgba(253, 224, 71, 0.7), 0 2px 6px rgba(0, 0, 0, 0.9) !important;
+}
+html.light-mode #cannon-combo-val,
+html:not(.dark) #cannon-combo-val {
+  color: #fb923c !important;
+  text-shadow: 0 0 12px rgba(251, 146, 60, 0.7), 0 2px 6px rgba(0, 0, 0, 0.9) !important;
 }
 
 html.light-mode [style*="color: #f8fafc"],

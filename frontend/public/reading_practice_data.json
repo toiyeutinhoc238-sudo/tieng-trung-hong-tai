@@ -694,19 +694,19 @@
         "question_vi": "Trong bài, từ \"小猫\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "Con mèo nhỏ.",
+            "text_zh": "小猫；幼小的猫",
             "text_vi": "Con mèo nhỏ."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -722,15 +722,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -747,8 +747,8 @@
     "category_icon": "fa-sun",
     "level": "HSK 1",
     "level_num": 1,
-    "title_zh": "小猫和朋友",
-    "title_vi": "Mèo con và người bạn",
+    "title_zh": "在学校的一天",
+    "title_vi": "Một ngày ở trường học",
     "content_zh": "今天上午，我们在教室里上课。老师问我们问题，我举手回答。下课以后，我和同学一起吃午饭。饭菜很好吃，我们都很高兴。下午我们在操场上跑步，大家跑得很快。我觉得今天真有意思！",
     "content_vi": "Sáng hôm nay, chúng tôi học bài trong lớp học.Cô giáo đặt câu hỏi cho chúng tôi, tôi giơ tay trả lời.\nSau khi tan học, tôi cùng bạn học ăn cơm trưa.Thức ăn rất ngon, chúng tôi đều vô cùng vui vẻ. Buổi chiều chúng tôi chạy bộ trên sân tập, mọi người chạy rất nhanh. Tôi cảm thấy hôm nay thật là thú vị!",
     "sentences": [
@@ -1130,8 +1130,8 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "小猫和朋友",
-            "text_vi": "Mèo con và người bạn"
+            "text_zh": "在学校的一天",
+            "text_vi": "Một ngày ở trường học"
           },
           {
             "text_zh": "现代科技的利与弊",
@@ -1147,26 +1147,26 @@
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài viết xoay quanh chủ đề chính \"Mèo con và người bạn\"."
+        "explanation_vi": "Bài viết xoay quanh chủ đề chính \"Một ngày ở trường học\" (在学校的一天)."
       },
       {
         "question_zh": "在文中，“教室” 的含义是？",
         "question_vi": "Trong bài, từ \"教室\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "Phòng học, lớp học.",
+            "text_zh": "学生上课的房间，教室",
             "text_vi": "Phòng học, lớp học."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -1182,15 +1182,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -1712,19 +1712,19 @@
         "question_vi": "Trong bài, từ \"在同一个……\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "Ở cùng trong một... (trường học, lớp học...).",
+            "text_zh": "在同一个场所或单位（如学校、班级）",
             "text_vi": "Ở cùng trong một... (trường học, lớp học...)."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -1740,15 +1740,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -2229,19 +2229,19 @@
         "question_vi": "Trong bài, từ \"起床\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "Thức dậy, rời giường.",
+            "text_zh": "睡醒后离开床铺，起床",
             "text_vi": "Thức dậy, rời giường."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -2257,15 +2257,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -3123,19 +3123,19 @@
         "question_vi": "Trong bài, từ \"兔子\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "Con thỏ.",
+            "text_zh": "兔子；哺乳动物",
             "text_vi": "Con thỏ."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -3151,15 +3151,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -4197,19 +4197,19 @@
         "question_vi": "Trong bài, từ \"很久以前\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "Rất lâu trước đây, ngày xửa ngày xưa (mở đầu truyện kể).",
+            "text_zh": "很久以前（故事常用的开头）",
             "text_vi": "Rất lâu trước đây, ngày xửa ngày xưa (mở đầu truyện kể)."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -4225,15 +4225,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -4698,19 +4698,19 @@
         "question_vi": "Trong bài, từ \"很晚才……\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "Mãi muộn mới... (biểu thị hành động diễn ra trễ hơn dự kiến).",
+            "text_zh": "很晚才……（表示发生得迟）",
             "text_vi": "Mãi muộn mới... (biểu thị hành động diễn ra trễ hơn dự kiến)."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -4726,15 +4726,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -5630,19 +5630,19 @@
         "question_vi": "Trong bài, từ \"医生\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "Bác sĩ.",
+            "text_zh": "医生；大夫",
             "text_vi": "Bác sĩ."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -5658,15 +5658,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -6106,19 +6106,19 @@
         "question_vi": "Trong bài, từ \"运动\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "Thể thao, vận động.",
+            "text_zh": "体育运动；身体活动",
             "text_vi": "Thể thao, vận động."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -6134,15 +6134,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -6637,19 +6637,19 @@
         "question_vi": "Trong bài, từ \"做运动\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "Tập thể dục, chơi thể thao.",
+            "text_zh": "进行体育锻炼或活动",
             "text_vi": "Tập thể dục, chơi thể thao."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -6665,15 +6665,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -7726,19 +7726,19 @@
         "question_vi": "Trong bài, từ \"陪……说话\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "Ngồi trò chuyện tâm sự cùng ai đó.",
+            "text_zh": "与人交谈、倾诉心事",
             "text_vi": "Ngồi trò chuyện tâm sự cùng ai đó."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -7754,15 +7754,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -9104,19 +9104,19 @@
         "question_vi": "Trong bài, từ \"突然\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "đột nhiên, bất ngờ",
+            "text_zh": "突然；出乎意料",
             "text_vi": "đột nhiên, bất ngờ"
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -9132,15 +9132,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -10541,19 +10541,19 @@
         "question_vi": "Trong bài, từ \"环境\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "môi trường, không gian",
+            "text_zh": "周围的环境与空间",
             "text_vi": "môi trường, không gian"
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -10569,15 +10569,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -10674,19 +10674,19 @@
         "question_vi": "Trong bài, từ \"季节\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "Mùa",
+            "text_zh": "季节；一年中的某个时期",
             "text_vi": "Mùa"
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -10702,15 +10702,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -11399,15 +11399,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -12503,15 +12503,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -14887,19 +14887,19 @@
         "question_vi": "Trong bài, từ \"习惯\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "Thói quen, tập quán.",
+            "text_zh": "长期养成的生活习惯",
             "text_vi": "Thói quen, tập quán."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -14915,15 +14915,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -15410,19 +15410,19 @@
         "question_vi": "Trong bài, từ \"炎热\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "Nóng bức, oi ả gắt gao.",
+            "text_zh": "天气极为炎热、酷暑",
             "text_vi": "Nóng bức, oi ả gắt gao."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -15438,15 +15438,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -16928,19 +16928,19 @@
         "question_vi": "Trong bài, từ \"困扰\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "rắc rối, làm phiền lòng, gây áp lực",
+            "text_zh": "带来麻烦与心理压力",
             "text_vi": "rắc rối, làm phiền lòng, gây áp lực"
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -16956,15 +16956,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -18249,19 +18249,19 @@
         "question_vi": "Trong bài, từ \"交往\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "giao tiếp, qua lại, tiếp xúc",
+            "text_zh": "人与人之间的交往与接触",
             "text_vi": "giao tiếp, qua lại, tiếp xúc"
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -18277,15 +18277,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -18391,15 +18391,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -19108,15 +19108,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -20665,19 +20665,19 @@
         "question_vi": "Trong bài, từ \"心事\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "Tâm sự, nỗi niềm trăn trở chất chứa trong lòng.",
+            "text_zh": "深藏在心底的心事与烦忧",
             "text_vi": "Tâm sự, nỗi niềm trăn trở chất chứa trong lòng."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -20693,15 +20693,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -22319,19 +22319,19 @@
         "question_vi": "Trong bài, từ \"频率\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "Tần số (ẩn dụ cho mức độ đồng điệu trong tư tưởng, quan điểm).",
+            "text_zh": "频率（比喻思想维度的默契）",
             "text_vi": "Tần số (ẩn dụ cho mức độ đồng điệu trong tư tưởng, quan điểm)."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -22347,15 +22347,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -24685,19 +24685,19 @@
         "question_vi": "Trong bài, từ \"抵达\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "Đặt chân tới, đến nơi, cập bến.",
+            "text_zh": "到达目的地；踏上彼岸",
             "text_vi": "Đặt chân tới, đến nơi, cập bến."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -24713,15 +24713,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -24812,15 +24812,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -27155,19 +27155,19 @@
         "question_vi": "Trong bài, từ \"羁绊\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "Sự ràng buộc, trói buộc; sợi dây liên kết cảm xúc sâu sắc giữa người với người.",
+            "text_zh": "人与人之间深层的情感羁绊",
             "text_vi": "Sự ràng buộc, trói buộc; sợi dây liên kết cảm xúc sâu sắc giữa người với người."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -27183,15 +27183,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -29706,19 +29706,19 @@
         "question_vi": "Trong bài, từ \"清辉\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "Ánh sáng trong trẻo, dịu mát (thường dùng tả ánh trăng đêm).",
+            "text_zh": "清冷明净的光辉（如月光）",
             "text_vi": "Ánh sáng trong trẻo, dịu mát (thường dùng tả ánh trăng đêm)."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -29734,15 +29734,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -31728,19 +31728,19 @@
         "question_vi": "Trong bài, từ \"差异\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "Sự sai khác, điểm dị biệt.",
+            "text_zh": "彼此之间的差异与不同",
             "text_vi": "Sự sai khác, điểm dị biệt."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -31756,15 +31756,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -35664,19 +35664,19 @@
         "question_vi": "Trong bài, từ \"坦途\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "Con đường bằng phẳng thênh thang.",
+            "text_zh": "平坦而开阔的坦途",
             "text_vi": "Con đường bằng phẳng thênh thang."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -35692,15 +35692,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -39631,19 +39631,19 @@
         "question_vi": "Trong bài, từ \"从容\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "Ung dung, điềm tĩnh, thong dong.",
+            "text_zh": "从容不迫、平静淡定",
             "text_vi": "Ung dung, điềm tĩnh, thong dong."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -39659,15 +39659,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -41780,19 +41780,19 @@
         "question_vi": "Trong bài, từ \"苛求\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "Đòi hỏi khắt khe, cưỡng cầu gượng ép.",
+            "text_zh": "苛求；过于勉强与强求",
             "text_vi": "Đòi hỏi khắt khe, cưỡng cầu gượng ép."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -41808,15 +41808,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -43362,19 +43362,19 @@
         "question_vi": "Trong bài, từ \"敬畏\" có nghĩa là gì?",
         "options": [
           {
-            "text_zh": "Kính sợ, tôn kính và nể sợ trước quy luật tự nhiên/đất trời.",
+            "text_zh": "对自然与规律的崇敬与敬畏",
             "text_vi": "Kính sợ, tôn kính và nể sợ trước quy luật tự nhiên/đất trời."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "表示生气、愤怒的情绪",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "指森林里的各种动物",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "表示金钱数量与花费",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -43390,15 +43390,15 @@
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "必须急躁才能达成目标",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "不需要关心与理解他人",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
+            "text_zh": "只应该选择容易的事情做",
             "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
           }
         ],
@@ -43407,5 +43407,1905 @@
       }
     ],
     "read_count": 0
+  },
+  {
+    "id": "textbook_hsk1_1",
+    "category": "textbook",
+    "category_name": "Giáo trình",
+    "category_icon": "fa-book-bookmark",
+    "level": "HSK 1",
+    "level_num": 1,
+    "title_zh": "我的汉语老师",
+    "title_vi": "Giáo viên tiếng Trung của tôi",
+    "content_zh": "我叫王明，我是一名学生。我的汉语老师叫李老师。李老师今年三十岁，她很漂亮，也很和气。李老师教我们汉语拼音和汉字。大家都很喜欢李老师，我们觉得学汉语很有意思。",
+    "content_vi": "Tôi tên là Vương Minh, tôi là một học sinh. Giáo viên tiếng Trung của tôi tên là cô Lý. Cô Lý năm nay ba mươi tuổi, cô rất xinh đẹp và cũng rất hiền hòa. Cô Lý dạy chúng tôi phiên âm tiếng Trung và chữ Hán. Mọi người đều rất thích cô Lý, chúng tôi cảm thấy học tiếng Trung rất thú vị.",
+    "sentences": [
+      {
+        "index": 0,
+        "text_zh": "我叫王明，我是一名学生。",
+        "pinyin": "wǒ jiào wáng míng ， wǒ shì yī míng xué sheng 。",
+        "tokens": [
+          {
+            "word": "我",
+            "pinyin": "wǒ",
+            "meaning": "Tôi"
+          },
+          {
+            "word": "叫",
+            "pinyin": "jiào",
+            "meaning": "Tên là"
+          },
+          {
+            "word": "王明",
+            "pinyin": "wáng míng",
+            "meaning": "Vương Minh"
+          },
+          {
+            "word": "，",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "我",
+            "pinyin": "wǒ",
+            "meaning": "Tôi"
+          },
+          {
+            "word": "是",
+            "pinyin": "shì",
+            "meaning": "Là"
+          },
+          {
+            "word": "一名",
+            "pinyin": "yī míng",
+            "meaning": "Một (lượng từ chỉ người)"
+          },
+          {
+            "word": "学生",
+            "pinyin": "xué sheng",
+            "meaning": "Học sinh"
+          },
+          {
+            "word": "。",
+            "pinyin": "",
+            "meaning": ""
+          }
+        ]
+      },
+      {
+        "index": 1,
+        "text_zh": "我的汉语老师叫李老师。",
+        "pinyin": "wǒ de hàn yǔ lǎo shī jiào lǐ lǎo shī 。",
+        "tokens": [
+          {
+            "word": "我的",
+            "pinyin": "wǒ de",
+            "meaning": "Của tôi"
+          },
+          {
+            "word": "汉语",
+            "pinyin": "hàn yǔ",
+            "meaning": "Tiếng Trung"
+          },
+          {
+            "word": "老师",
+            "pinyin": "lǎo shī",
+            "meaning": "Giáo viên"
+          },
+          {
+            "word": "叫",
+            "pinyin": "jiào",
+            "meaning": "Tên là"
+          },
+          {
+            "word": "李老师",
+            "pinyin": "lǐ lǎo shī",
+            "meaning": "Thầy/Cô Lý"
+          },
+          {
+            "word": "。",
+            "pinyin": "",
+            "meaning": ""
+          }
+        ]
+      },
+      {
+        "index": 2,
+        "text_zh": "李老师今年三十岁，她很漂亮，也很和气。",
+        "pinyin": "lǐ lǎo shī jīn nián sān shí suì ， tā hěn piào liang ， yě hěn hé qi 。",
+        "tokens": [
+          {
+            "word": "李老师",
+            "pinyin": "lǐ lǎo shī",
+            "meaning": "Cô Lý"
+          },
+          {
+            "word": "今年",
+            "pinyin": "jīn nián",
+            "meaning": "Năm nay"
+          },
+          {
+            "word": "三十岁",
+            "pinyin": "sān shí suì",
+            "meaning": "30 tuổi"
+          },
+          {
+            "word": "，",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "她",
+            "pinyin": "tā",
+            "meaning": "Cô ấy"
+          },
+          {
+            "word": "很",
+            "pinyin": "hěn",
+            "meaning": "Rất"
+          },
+          {
+            "word": "漂亮",
+            "pinyin": "piào liang",
+            "meaning": "Xinh đẹp"
+          },
+          {
+            "word": "，",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "也",
+            "pinyin": "yě",
+            "meaning": "Cũng"
+          },
+          {
+            "word": "很",
+            "pinyin": "hěn",
+            "meaning": "Rất"
+          },
+          {
+            "word": "和气",
+            "pinyin": "hé qi",
+            "meaning": "Hiền hòa, nhã nhặn"
+          },
+          {
+            "word": "。",
+            "pinyin": "",
+            "meaning": ""
+          }
+        ]
+      },
+      {
+        "index": 3,
+        "text_zh": "李老师教我们汉语拼音和汉字。",
+        "pinyin": "lǐ lǎo shī jiāo wǒ men hàn yǔ pīn yīn hé hàn zì 。",
+        "tokens": [
+          {
+            "word": "李老师",
+            "pinyin": "lǐ lǎo shī",
+            "meaning": "Cô Lý"
+          },
+          {
+            "word": "教",
+            "pinyin": "jiāo",
+            "meaning": "Dạy"
+          },
+          {
+            "word": "我们",
+            "pinyin": "wǒ men",
+            "meaning": "Chúng tôi"
+          },
+          {
+            "word": "汉语拼音",
+            "pinyin": "hàn yǔ pīn yīn",
+            "meaning": "Phiên âm tiếng Trung"
+          },
+          {
+            "word": "和",
+            "pinyin": "hé",
+            "meaning": "Và"
+          },
+          {
+            "word": "汉字",
+            "pinyin": "hàn zì",
+            "meaning": "Chữ Hán"
+          },
+          {
+            "word": "。",
+            "pinyin": "",
+            "meaning": ""
+          }
+        ]
+      },
+      {
+        "index": 4,
+        "text_zh": "大家都很喜欢李老师，我们觉得学汉语很有意思。",
+        "pinyin": "dà jiā dōu hěn xǐ huan lǐ lǎo shī ， wǒ men jué de xué hàn yǔ hěn yǒu yì si 。",
+        "tokens": [
+          {
+            "word": "大家",
+            "pinyin": "dà jiā",
+            "meaning": "Mọi người"
+          },
+          {
+            "word": "都",
+            "pinyin": "dōu",
+            "meaning": "Đều"
+          },
+          {
+            "word": "很",
+            "pinyin": "hěn",
+            "meaning": "Rất"
+          },
+          {
+            "word": "喜欢",
+            "pinyin": "xǐ huan",
+            "meaning": "Thích"
+          },
+          {
+            "word": "李老师",
+            "pinyin": "lǐ lǎo shī",
+            "meaning": "Cô Lý"
+          },
+          {
+            "word": "，",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "我们",
+            "pinyin": "wǒ men",
+            "meaning": "Chúng tôi"
+          },
+          {
+            "word": "觉得",
+            "pinyin": "jué de",
+            "meaning": "Cảm thấy"
+          },
+          {
+            "word": "学汉语",
+            "pinyin": "xué hàn yǔ",
+            "meaning": "Học tiếng Trung"
+          },
+          {
+            "word": "很",
+            "pinyin": "hěn",
+            "meaning": "Rất"
+          },
+          {
+            "word": "有意思",
+            "pinyin": "yǒu yì si",
+            "meaning": "Thú vị"
+          },
+          {
+            "word": "。",
+            "pinyin": "",
+            "meaning": ""
+          }
+        ]
+      }
+    ],
+    "vocabulary": [
+      {
+        "word": "老师",
+        "pinyin": "lǎo shī",
+        "meaning": "Giáo viên, thầy cô giáo"
+      },
+      {
+        "word": "学生",
+        "pinyin": "xué sheng",
+        "meaning": "Học sinh, sinh viên"
+      },
+      {
+        "word": "漂亮",
+        "pinyin": "piào liang",
+        "meaning": "Xinh đẹp, đẹp đẽ"
+      },
+      {
+        "word": "汉字",
+        "pinyin": "hàn zì",
+        "meaning": "Chữ Hán"
+      },
+      {
+        "word": "喜欢",
+        "pinyin": "xǐ huan",
+        "meaning": "Thích, yêu thích"
+      },
+      {
+        "word": "有意思",
+        "pinyin": "yǒu yì si",
+        "meaning": "Thú vị, hay ho"
+      }
+    ],
+    "idioms": [],
+    "fixed_phrases": [],
+    "questions": [
+      {
+        "question_zh": "李老师今年多大？",
+        "question_vi": "Cô Lý năm nay bao nhiêu tuổi?",
+        "options": [
+          {
+            "text_zh": "三十岁",
+            "text_vi": "30 tuổi"
+          },
+          {
+            "text_zh": "二十岁",
+            "text_vi": "20 tuổi"
+          },
+          {
+            "text_zh": "四十岁",
+            "text_vi": "40 tuổi"
+          },
+          {
+            "text_zh": "五十岁",
+            "text_vi": "50 tuổi"
+          }
+        ],
+        "answer_index": 0,
+        "explanation_vi": "Trong bài viết rõ: \"李老师今年三十岁\" (Cô Lý năm nay ba mươi tuổi)."
+      },
+      {
+        "question_zh": "李老师教学生什么？",
+        "question_vi": "Cô Lý dạy học sinh điều gì?",
+        "options": [
+          {
+            "text_zh": "拼音和汉字",
+            "text_vi": "Phiên âm và chữ Hán"
+          },
+          {
+            "text_zh": "英语和法语",
+            "text_vi": "Tiếng Anh và tiếng Pháp"
+          },
+          {
+            "text_zh": "数学和画画",
+            "text_vi": "Toán học và vẽ tranh"
+          },
+          {
+            "text_zh": "唱歌和跳舞",
+            "text_vi": "Ca hát và nhảy múa"
+          }
+        ],
+        "answer_index": 0,
+        "explanation_vi": "Bài đọc nêu: \"李老师教我们汉语拼音和汉字\" (Cô Lý dạy chúng tôi phiên âm tiếng Trung và chữ Hán)."
+      },
+      {
+        "question_zh": "学生们觉得学汉语怎么样？",
+        "question_vi": "Học sinh cảm thấy học tiếng Trung thế nào?",
+        "options": [
+          {
+            "text_zh": "很有意思",
+            "text_vi": "Rất thú vị"
+          },
+          {
+            "text_zh": "太难了",
+            "text_vi": "Quá khó"
+          },
+          {
+            "text_zh": "很无聊",
+            "text_vi": "Rất nhàm chán"
+          },
+          {
+            "text_zh": "不高兴",
+            "text_vi": "Không vui vẻ"
+          }
+        ],
+        "answer_index": 0,
+        "explanation_vi": "Câu cuối bài: \"我们觉得学汉语很有意思\" (Chúng tôi cảm thấy học tiếng Trung rất thú vị)."
+      }
+    ],
+    "read_count": 128
+  },
+  {
+    "id": "textbook_hsk1_2",
+    "category": "textbook",
+    "category_name": "Giáo trình",
+    "category_icon": "fa-book-bookmark",
+    "level": "HSK 1",
+    "level_num": 1,
+    "title_zh": "在商店买水果",
+    "title_vi": "Mua hoa quả ở cửa hàng",
+    "content_zh": "今天下午，我和妈妈去商店买水果。商店里有很多苹果、香蕉和西瓜。妈妈问服务员：“苹果多少钱一斤？” 服务员说：“三块钱一斤。” 妈妈买了五斤苹果和一个大西瓜。水果很新鲜，也很甜。",
+    "content_vi": "Chiều hôm nay, tôi cùng mẹ đến cửa hàng mua hoa quả. Trong cửa hàng có rất nhiều táo, chuối và dưa hấu. Mẹ hỏi nhân viên phục vụ: \"Táo bao nhiêu tiền một cân?\" Nhân viên nói: \"Ba đồng một cân.\" Mẹ đã mua năm cân táo và một quả dưa hấu lớn. Hoa quả rất tươi ngon và cũng rất ngọt.",
+    "sentences": [
+      {
+        "index": 0,
+        "text_zh": "今天下午，我和妈妈去商店买水果。",
+        "pinyin": "jīn tiān xià wǔ ， wǒ hé mā ma qù shāng diàn mǎi shuǐ guǒ 。",
+        "tokens": [
+          {
+            "word": "今天",
+            "pinyin": "jīn tiān",
+            "meaning": "Hôm nay"
+          },
+          {
+            "word": "下午",
+            "pinyin": "xià wǔ",
+            "meaning": "Buổi chiều"
+          },
+          {
+            "word": "，",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "我",
+            "pinyin": "wǒ",
+            "meaning": "Tôi"
+          },
+          {
+            "word": "和",
+            "pinyin": "hé",
+            "meaning": "Cùng, và"
+          },
+          {
+            "word": "妈妈",
+            "pinyin": "mā ma",
+            "meaning": "Mẹ"
+          },
+          {
+            "word": "去",
+            "pinyin": "qù",
+            "meaning": "Đi"
+          },
+          {
+            "word": "商店",
+            "pinyin": "shāng diàn",
+            "meaning": "Cửa hàng"
+          },
+          {
+            "word": "买",
+            "pinyin": "mǎi",
+            "meaning": "Mua"
+          },
+          {
+            "word": "水果",
+            "pinyin": "shuǐ guǒ",
+            "meaning": "Hoa quả"
+          },
+          {
+            "word": "。",
+            "pinyin": "",
+            "meaning": ""
+          }
+        ]
+      },
+      {
+        "index": 1,
+        "text_zh": "商店里有很多苹果、香蕉和西瓜。",
+        "pinyin": "shāng diàn lǐ yǒu hěn duō píng guǒ 、 xiāng jiāo hé xī guā 。",
+        "tokens": [
+          {
+            "word": "商店里",
+            "pinyin": "shāng diàn lǐ",
+            "meaning": "Trong cửa hàng"
+          },
+          {
+            "word": "有",
+            "pinyin": "yǒu",
+            "meaning": "Có"
+          },
+          {
+            "word": "很多",
+            "pinyin": "hěn duō",
+            "meaning": "Rất nhiều"
+          },
+          {
+            "word": "苹果",
+            "pinyin": "píng guǒ",
+            "meaning": "Táo"
+          },
+          {
+            "word": "、",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "香蕉",
+            "pinyin": "xiāng jiāo",
+            "meaning": "Chuối"
+          },
+          {
+            "word": "和",
+            "pinyin": "hé",
+            "meaning": "Và"
+          },
+          {
+            "word": "西瓜",
+            "pinyin": "xī guā",
+            "meaning": "Dưa hấu"
+          },
+          {
+            "word": "。",
+            "pinyin": "",
+            "meaning": ""
+          }
+        ]
+      },
+      {
+        "index": 2,
+        "text_zh": "妈妈问服务员：“苹果多少钱一斤？”",
+        "pinyin": "mā ma wèn fú wù yuán ：“ píng guǒ duō shao qián yī jīn ？”",
+        "tokens": [
+          {
+            "word": "妈妈",
+            "pinyin": "mā ma",
+            "meaning": "Mẹ"
+          },
+          {
+            "word": "问",
+            "pinyin": "wèn",
+            "meaning": "Hỏi"
+          },
+          {
+            "word": "服务员",
+            "pinyin": "fú wù yuán",
+            "meaning": "Nhân viên phục vụ"
+          },
+          {
+            "word": "：",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "“",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "苹果",
+            "pinyin": "píng guǒ",
+            "meaning": "Táo"
+          },
+          {
+            "word": "多少钱",
+            "pinyin": "duō shao qián",
+            "meaning": "Bao nhiêu tiền"
+          },
+          {
+            "word": "一斤",
+            "pinyin": "yī jīn",
+            "meaning": "Một cân (500g)"
+          },
+          {
+            "word": "？",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "”",
+            "pinyin": "",
+            "meaning": ""
+          }
+        ]
+      },
+      {
+        "index": 3,
+        "text_zh": "服务员说：“三块钱一斤。”",
+        "pinyin": "fú wù yuán shuō ：“ sān kuài qián yī jīn 。”",
+        "tokens": [
+          {
+            "word": "服务员",
+            "pinyin": "fú wù yuán",
+            "meaning": "Nhân viên phục vụ"
+          },
+          {
+            "word": "说",
+            "pinyin": "shuō",
+            "meaning": "Nói"
+          },
+          {
+            "word": "：",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "“",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "三块钱",
+            "pinyin": "sān kuài qián",
+            "meaning": "3 đồng"
+          },
+          {
+            "word": "一斤",
+            "pinyin": "yī jīn",
+            "meaning": "Một cân"
+          },
+          {
+            "word": "。",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "”",
+            "pinyin": "",
+            "meaning": ""
+          }
+        ]
+      },
+      {
+        "index": 4,
+        "text_zh": "妈妈买了五斤苹果和一个大西瓜。水果很新鲜，也很甜。",
+        "pinyin": "mā ma mǎi le wǔ jīn píng guǒ hé yí gè dà xī guā 。 shuǐ guǒ hěn xīn xiān ， yě hěn tián 。",
+        "tokens": [
+          {
+            "word": "妈妈",
+            "pinyin": "mā ma",
+            "meaning": "Mẹ"
+          },
+          {
+            "word": "买了",
+            "pinyin": "mǎi le",
+            "meaning": "Đã mua"
+          },
+          {
+            "word": "五斤",
+            "pinyin": "wǔ jīn",
+            "meaning": "Năm cân"
+          },
+          {
+            "word": "苹果",
+            "pinyin": "píng guǒ",
+            "meaning": "Táo"
+          },
+          {
+            "word": "和",
+            "pinyin": "hé",
+            "meaning": "Và"
+          },
+          {
+            "word": "一个",
+            "pinyin": "yí gè",
+            "meaning": "Một quả"
+          },
+          {
+            "word": "大西瓜",
+            "pinyin": "dà xī guā",
+            "meaning": "Dưa hấu to"
+          },
+          {
+            "word": "。",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "水果",
+            "pinyin": "shuǐ guǒ",
+            "meaning": "Hoa quả"
+          },
+          {
+            "word": "很",
+            "pinyin": "hěn",
+            "meaning": "Rất"
+          },
+          {
+            "word": "新鲜",
+            "pinyin": "xīn xiān",
+            "meaning": "Tươi"
+          },
+          {
+            "word": "，",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "也",
+            "pinyin": "yě",
+            "meaning": "Cũng"
+          },
+          {
+            "word": "很",
+            "pinyin": "hěn",
+            "meaning": "Rất"
+          },
+          {
+            "word": "甜",
+            "pinyin": "tián",
+            "meaning": "Ngọt"
+          },
+          {
+            "word": "。",
+            "pinyin": "",
+            "meaning": ""
+          }
+        ]
+      }
+    ],
+    "vocabulary": [
+      {
+        "word": "商店",
+        "pinyin": "shāng diàn",
+        "meaning": "Cửa hàng, tiệm buôn"
+      },
+      {
+        "word": "买",
+        "pinyin": "mǎi",
+        "meaning": "Mua"
+      },
+      {
+        "word": "水果",
+        "pinyin": "shuǐ guǒ",
+        "meaning": "Hoa quả, trái cây"
+      },
+      {
+        "word": "苹果",
+        "pinyin": "píng guǒ",
+        "meaning": "Quả táo"
+      },
+      {
+        "word": "多少钱",
+        "pinyin": "duō shao qián",
+        "meaning": "Bao nhiêu tiền"
+      },
+      {
+        "word": "西瓜",
+        "pinyin": "xī guā",
+        "meaning": "Dưa hấu"
+      }
+    ],
+    "idioms": [],
+    "fixed_phrases": [],
+    "questions": [
+      {
+        "question_zh": "苹果多少钱一斤？",
+        "question_vi": "Táo bao nhiêu tiền một cân?",
+        "options": [
+          {
+            "text_zh": "三块钱",
+            "text_vi": "3 đồng"
+          },
+          {
+            "text_zh": "五块钱",
+            "text_vi": "5 đồng"
+          },
+          {
+            "text_zh": "十块钱",
+            "text_vi": "10 đồng"
+          },
+          {
+            "text_zh": "两块钱",
+            "text_vi": "2 đồng"
+          }
+        ],
+        "answer_index": 0,
+        "explanation_vi": "Nhân viên trả lời: \"三块钱一斤\" (Ba đồng một cân)."
+      },
+      {
+        "question_zh": "妈妈一共买了多少苹果？",
+        "question_vi": "Mẹ đã mua tổng cộng bao nhiêu táo?",
+        "options": [
+          {
+            "text_zh": "五斤",
+            "text_vi": "Năm cân"
+          },
+          {
+            "text_zh": "三斤",
+            "text_vi": "Ba cân"
+          },
+          {
+            "text_zh": "一斤",
+            "text_vi": "Một cân"
+          },
+          {
+            "text_zh": "十斤",
+            "text_vi": "Mười cân"
+          }
+        ],
+        "answer_index": 0,
+        "explanation_vi": "Trong bài có viết: \"妈妈买了五斤苹果\" (Mẹ đã mua năm cân táo)."
+      },
+      {
+        "question_zh": "水果的味道怎么样？",
+        "question_vi": "Vị của hoa quả như thế nào?",
+        "options": [
+          {
+            "text_zh": "很新鲜也很甜",
+            "text_vi": "Rất tươi và cũng rất ngọt"
+          },
+          {
+            "text_zh": "有点儿酸",
+            "text_vi": "Hơi chua"
+          },
+          {
+            "text_zh": "不好吃",
+            "text_vi": "Không ngon"
+          },
+          {
+            "text_zh": "不甜",
+            "text_vi": "Không ngọt"
+          }
+        ],
+        "answer_index": 0,
+        "explanation_vi": "Câu cuối bài: \"水果很新鲜，也很甜\" (Hoa quả rất tươi và cũng rất ngọt)."
+      }
+    ],
+    "read_count": 94
+  },
+  {
+    "id": "daily_hsk1_1",
+    "category": "daily",
+    "category_name": "Đời thường",
+    "category_icon": "fa-sun",
+    "level": "HSK 1",
+    "level_num": 1,
+    "title_zh": "喝茶与喝咖啡",
+    "title_vi": "Uống trà và uống cà phê",
+    "content_zh": "中国人很喜欢喝茶，我的爷爷每天早上都要喝一杯热茶。爷爷说喝茶对身体很好。我不喜欢喝茶，我更喜欢喝牛奶和咖啡。今天天气很冷，妈妈给我做了一杯热牛奶，喝完以后我觉得很暖和。",
+    "content_vi": "Người Trung Quốc rất thích uống trà, ông nội của tôi mỗi buổi sáng đều phải uống một ly trà nóng. Ông nói uống trà rất tốt cho sức khỏe. Tôi không thích uống trà, tôi thích uống sữa bò và cà phê hơn. Hôm nay thời tiết rất lạnh, mẹ đã pha cho tôi một cốc sữa nóng, uống xong tôi cảm thấy rất ấm áp.",
+    "sentences": [
+      {
+        "index": 0,
+        "text_zh": "中国人很喜欢喝茶，我的爷爷每天早上都要喝一杯热茶。",
+        "pinyin": "zhōng guó rén hěn xǐ huan hē chá ， wǒ de yé ye měi tiān zǎo shang dōu yào hē yī bēi rè chá 。",
+        "tokens": [
+          {
+            "word": "中国人",
+            "pinyin": "zhōng guó rén",
+            "meaning": "Người Trung Quốc"
+          },
+          {
+            "word": "很",
+            "pinyin": "hěn",
+            "meaning": "Rất"
+          },
+          {
+            "word": "喜欢",
+            "pinyin": "xǐ huan",
+            "meaning": "Thích"
+          },
+          {
+            "word": "喝茶",
+            "pinyin": "hē chá",
+            "meaning": "Uống trà"
+          },
+          {
+            "word": "，",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "我的",
+            "pinyin": "wǒ de",
+            "meaning": "Của tôi"
+          },
+          {
+            "word": "爷爷",
+            "pinyin": "yé ye",
+            "meaning": "Ông nội"
+          },
+          {
+            "word": "每天",
+            "pinyin": "měi tiān",
+            "meaning": "Mỗi ngày"
+          },
+          {
+            "word": "早上",
+            "pinyin": "zǎo shang",
+            "meaning": "Buổi sáng"
+          },
+          {
+            "word": "都",
+            "pinyin": "dōu",
+            "meaning": "Đều"
+          },
+          {
+            "word": "要",
+            "pinyin": "yào",
+            "meaning": "Cần, phải"
+          },
+          {
+            "word": "喝",
+            "pinyin": "hē",
+            "meaning": "Uống"
+          },
+          {
+            "word": "一杯",
+            "pinyin": "yī bēi",
+            "meaning": "Một ly/cốc"
+          },
+          {
+            "word": "热茶",
+            "pinyin": "rè chá",
+            "meaning": "Trà nóng"
+          },
+          {
+            "word": "。",
+            "pinyin": "",
+            "meaning": ""
+          }
+        ]
+      },
+      {
+        "index": 1,
+        "text_zh": "爷爷说喝茶对身体很好。我不喜欢喝茶，我更喜欢喝牛奶和咖啡。",
+        "pinyin": "yé ye shuō hē chá duì shēn tǐ hěn hǎo 。 wǒ bù xǐ huan hē chá ， wǒ gèng xǐ huan hē niú nǎi hé kā fēi 。",
+        "tokens": [
+          {
+            "word": "爷爷",
+            "pinyin": "yé ye",
+            "meaning": "Ông nội"
+          },
+          {
+            "word": "说",
+            "pinyin": "shuō",
+            "meaning": "Nói"
+          },
+          {
+            "word": "喝茶",
+            "pinyin": "hē chá",
+            "meaning": "Uống trà"
+          },
+          {
+            "word": "对",
+            "pinyin": "duì",
+            "meaning": "Đối với"
+          },
+          {
+            "word": "身体",
+            "pinyin": "shēn tǐ",
+            "meaning": "Cơ thể, sức khỏe"
+          },
+          {
+            "word": "很好",
+            "pinyin": "hěn hǎo",
+            "meaning": "Rất tốt"
+          },
+          {
+            "word": "。",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "我",
+            "pinyin": "wǒ",
+            "meaning": "Tôi"
+          },
+          {
+            "word": "不",
+            "pinyin": "bù",
+            "meaning": "Không"
+          },
+          {
+            "word": "喜欢",
+            "pinyin": "xǐ huan",
+            "meaning": "Thích"
+          },
+          {
+            "word": "喝茶",
+            "pinyin": "hē chá",
+            "meaning": "Uống trà"
+          },
+          {
+            "word": "，",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "我",
+            "pinyin": "wǒ",
+            "meaning": "Tôi"
+          },
+          {
+            "word": "更",
+            "pinyin": "gèng",
+            "meaning": "Càng, hơn"
+          },
+          {
+            "word": "喜欢",
+            "pinyin": "xǐ huan",
+            "meaning": "Thích"
+          },
+          {
+            "word": "喝",
+            "pinyin": "hē",
+            "meaning": "Uống"
+          },
+          {
+            "word": "牛奶",
+            "pinyin": "niú nǎi",
+            "meaning": "Sữa bò"
+          },
+          {
+            "word": "和",
+            "pinyin": "hé",
+            "meaning": "Và"
+          },
+          {
+            "word": "咖啡",
+            "pinyin": "kā fēi",
+            "meaning": "Cà phê"
+          },
+          {
+            "word": "。",
+            "pinyin": "",
+            "meaning": ""
+          }
+        ]
+      },
+      {
+        "index": 2,
+        "text_zh": "今天天气很冷，妈妈给我做了一杯热牛奶，喝完以后我觉得很暖和。",
+        "pinyin": "jīn tiān tiān qì hěn lěng ， mā ma gěi wǒ zuò le yī bēi rè niú nǎi ， hē wán yǐ hòu wǒ jué de hěn nuǎn huo 。",
+        "tokens": [
+          {
+            "word": "今天",
+            "pinyin": "jīn tiān",
+            "meaning": "Hôm nay"
+          },
+          {
+            "word": "天气",
+            "pinyin": "tiān qì",
+            "meaning": "Thời tiết"
+          },
+          {
+            "word": "很冷",
+            "pinyin": "hěn lěng",
+            "meaning": "Rất lạnh"
+          },
+          {
+            "word": "，",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "妈妈",
+            "pinyin": "mā ma",
+            "meaning": "Mẹ"
+          },
+          {
+            "word": "给我",
+            "pinyin": "gěi wǒ",
+            "meaning": "Cho tôi"
+          },
+          {
+            "word": "做了一杯",
+            "pinyin": "zuò le yī bēi",
+            "meaning": "Làm một cốc"
+          },
+          {
+            "word": "热牛奶",
+            "pinyin": "rè niú nǎi",
+            "meaning": "Sữa nóng"
+          },
+          {
+            "word": "，",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "喝完以后",
+            "pinyin": "hē wán yǐ hòu",
+            "meaning": "Sau khi uống xong"
+          },
+          {
+            "word": "我觉得",
+            "pinyin": "wǒ jué de",
+            "meaning": "Tôi cảm thấy"
+          },
+          {
+            "word": "很暖和",
+            "pinyin": "hěn nuǎn huo",
+            "meaning": "Rất ấm áp"
+          },
+          {
+            "word": "。",
+            "pinyin": "",
+            "meaning": ""
+          }
+        ]
+      }
+    ],
+    "vocabulary": [
+      {
+        "word": "喝",
+        "pinyin": "hē",
+        "meaning": "Uống"
+      },
+      {
+        "word": "茶",
+        "pinyin": "chá",
+        "meaning": "Trà"
+      },
+      {
+        "word": "咖啡",
+        "pinyin": "kā fēi",
+        "meaning": "Cà phê"
+      },
+      {
+        "word": "牛奶",
+        "pinyin": "niú nǎi",
+        "meaning": "Sữa bò"
+      },
+      {
+        "word": "天气",
+        "pinyin": "tiān qì",
+        "meaning": "Thời tiết"
+      },
+      {
+        "word": "暖和",
+        "pinyin": "nuǎn huo",
+        "meaning": "Ấm áp"
+      }
+    ],
+    "idioms": [],
+    "fixed_phrases": [],
+    "questions": [
+      {
+        "question_zh": "爷爷每天早上喝什么？",
+        "question_vi": "Ông nội mỗi buổi sáng uống gì?",
+        "options": [
+          {
+            "text_zh": "一杯热茶",
+            "text_vi": "Một ly trà nóng"
+          },
+          {
+            "text_zh": "一杯冷咖啡",
+            "text_vi": "Một ly cà phê lạnh"
+          },
+          {
+            "text_zh": "一杯果汁",
+            "text_vi": "Một ly nước ép"
+          },
+          {
+            "text_zh": "一瓶可乐",
+            "text_vi": "Một chai cocacola"
+          }
+        ],
+        "answer_index": 0,
+        "explanation_vi": "Trong bài có viết: \"我的爷爷每天早上都要喝一杯热茶\" (Ông nội tôi mỗi sáng đều uống một ly trà nóng)."
+      },
+      {
+        "question_zh": "作者更喜欢喝什么？",
+        "question_vi": "Tác giả thích uống thức uống gì hơn?",
+        "options": [
+          {
+            "text_zh": "牛奶和咖啡",
+            "text_vi": "Sữa bò và cà phê"
+          },
+          {
+            "text_zh": "热茶和绿茶",
+            "text_vi": "Trà nóng và trà xanh"
+          },
+          {
+            "text_zh": "白开水",
+            "text_vi": "Nước lọc"
+          },
+          {
+            "text_zh": "啤酒",
+            "text_vi": "Bia"
+          }
+        ],
+        "answer_index": 0,
+        "explanation_vi": "Tác giả viết: \"我不喜欢喝茶，我更喜欢喝牛奶和咖啡\" (Tôi không thích uống trà, tôi thích uống sữa bò và cà phê hơn)."
+      },
+      {
+        "question_zh": "今天的天气怎么样？",
+        "question_vi": "Thời tiết hôm nay như thế nào?",
+        "options": [
+          {
+            "text_zh": "很冷",
+            "text_vi": "Rất lạnh"
+          },
+          {
+            "text_zh": "很热",
+            "text_vi": "Rất nóng"
+          },
+          {
+            "text_zh": "下大雨",
+            "text_vi": "Mưa to"
+          },
+          {
+            "text_zh": "刮大风",
+            "text_vi": "Gió to"
+          }
+        ],
+        "answer_index": 0,
+        "explanation_vi": "Bài viết nêu rõ: \"今天天气很冷\" (Hôm nay thời tiết rất lạnh)."
+      }
+    ],
+    "read_count": 85
+  },
+  {
+    "id": "fairy_tale_hsk1_1",
+    "category": "fairy_tale",
+    "category_name": "Cổ tích",
+    "category_icon": "fa-wand-magic-sparkles",
+    "level": "HSK 1",
+    "level_num": 1,
+    "title_zh": "小兔找朋友",
+    "title_vi": "Thỏ con đi tìm bạn",
+    "content_zh": "森林里有一只小白兔，她的耳朵很长，眼睛很红。小白兔想找一个好朋友。她看见一只小松鼠，小松鼠在树上跳来跳去。小白兔问：“我们做朋友好吗？” 小松鼠笑着说：“好啊！” 它们一起在草地上快乐地玩耍。",
+    "content_vi": "Trong khu rừng có một chú thỏ trắng nhỏ, tai nó rất dài, mắt rất đỏ. Thỏ trắng muốn tìm một người bạn tốt. Nó nhìn thấy một chú sóc nhỏ, sóc nhỏ đang nhảy qua nhảy lại trên cây. Thỏ trắng hỏi: \"Chúng mình làm bạn có được không?\" Sóc nhỏ cười nói: \"Được chứ!\" Chúng cùng nhau vui vẻ đùa nghịch trên bãi cỏ.",
+    "sentences": [
+      {
+        "index": 0,
+        "text_zh": "森林里有一只小白兔，她的耳朵很长，眼睛很红。",
+        "pinyin": "sēn lín lǐ yǒu yī zhī xiǎo bái tù ， tā de ěr duo hěn cháng ， yǎn jing hěn hóng 。",
+        "tokens": [
+          {
+            "word": "森林里",
+            "pinyin": "sēn lín lǐ",
+            "meaning": "Trong rừng"
+          },
+          {
+            "word": "有",
+            "pinyin": "yǒu",
+            "meaning": "Có"
+          },
+          {
+            "word": "一只",
+            "pinyin": "yī zhī",
+            "meaning": "Một con"
+          },
+          {
+            "word": "小白兔",
+            "pinyin": "xiǎo bái tù",
+            "meaning": "Thỏ trắng nhỏ"
+          },
+          {
+            "word": "，",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "她的",
+            "pinyin": "tā de",
+            "meaning": "Của nó"
+          },
+          {
+            "word": "耳朵",
+            "pinyin": "ěr duo",
+            "meaning": "Tai"
+          },
+          {
+            "word": "很长",
+            "pinyin": "hěn cháng",
+            "meaning": "Rất dài"
+          },
+          {
+            "word": "，",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "眼睛",
+            "pinyin": "yǎn jing",
+            "meaning": "Mắt"
+          },
+          {
+            "word": "很红",
+            "pinyin": "hěn hóng",
+            "meaning": "Rất đỏ"
+          },
+          {
+            "word": "。",
+            "pinyin": "",
+            "meaning": ""
+          }
+        ]
+      },
+      {
+        "index": 1,
+        "text_zh": "小白兔想找一个好朋友。她看见一只小松鼠，小松鼠在树上跳来跳去。",
+        "pinyin": "xiǎo bái tù xiǎng zhǎo yí gè hǎo péng you 。 tā kàn jiàn yì zhī xiǎo sōng shǔ ， xiǎo sōng shǔ zài shù shàng tiào lái tiào qù 。",
+        "tokens": [
+          {
+            "word": "小白兔",
+            "pinyin": "xiǎo bái tù",
+            "meaning": "Thỏ trắng nhỏ"
+          },
+          {
+            "word": "想找",
+            "pinyin": "xiǎng zhǎo",
+            "meaning": "Muốn tìm"
+          },
+          {
+            "word": "一个",
+            "pinyin": "yí gè",
+            "meaning": "Một người"
+          },
+          {
+            "word": "好朋友",
+            "pinyin": "hǎo péng you",
+            "meaning": "Bạn tốt"
+          },
+          {
+            "word": "。",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "她看见",
+            "pinyin": "tā kàn jiàn",
+            "meaning": "Nó nhìn thấy"
+          },
+          {
+            "word": "一只",
+            "pinyin": "yì zhī",
+            "meaning": "Một con"
+          },
+          {
+            "word": "小松鼠",
+            "pinyin": "xiǎo sōng shǔ",
+            "meaning": "Sóc nhỏ"
+          },
+          {
+            "word": "，",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "小松鼠",
+            "pinyin": "xiǎo sōng shǔ",
+            "meaning": "Sóc nhỏ"
+          },
+          {
+            "word": "在树上",
+            "pinyin": "zài shù shàng",
+            "meaning": "Trên cây"
+          },
+          {
+            "word": "跳来跳去",
+            "pinyin": "tiào lái tiào qù",
+            "meaning": "Nhảy qua nhảy lại"
+          },
+          {
+            "word": "。",
+            "pinyin": "",
+            "meaning": ""
+          }
+        ]
+      },
+      {
+        "index": 2,
+        "text_zh": "小白兔问：“我们做朋友好吗？” 小松鼠笑着说：“好啊！” 它们一起在草地上快乐地玩耍。",
+        "pinyin": "xiǎo bái tù wèn ：“ wǒ men zuò péng you hǎo ma ？” xiǎo sōng shǔ xiào zhe shuō ：“ hǎo a ！” tā men yì qǐ zài cǎo dì shàng kuài lè de wán shuǎ 。",
+        "tokens": [
+          {
+            "word": "小白兔",
+            "pinyin": "xiǎo bái tù",
+            "meaning": "Thỏ trắng nhỏ"
+          },
+          {
+            "word": "问",
+            "pinyin": "wèn",
+            "meaning": "Hỏi"
+          },
+          {
+            "word": "我们",
+            "pinyin": "wǒ men",
+            "meaning": "Chúng ta"
+          },
+          {
+            "word": "做朋友",
+            "pinyin": "zuò péng you",
+            "meaning": "Làm bạn bè"
+          },
+          {
+            "word": "好吗",
+            "pinyin": "hǎo ma",
+            "meaning": "Được không"
+          },
+          {
+            "word": "小松鼠",
+            "pinyin": "xiǎo sōng shǔ",
+            "meaning": "Sóc nhỏ"
+          },
+          {
+            "word": "笑着说",
+            "pinyin": "xiào zhe shuō",
+            "meaning": "Cười nói"
+          },
+          {
+            "word": "好啊",
+            "pinyin": "hǎo a",
+            "meaning": "Được chứ"
+          },
+          {
+            "word": "它们",
+            "pinyin": "tā men",
+            "meaning": "Chúng nó"
+          },
+          {
+            "word": "一起",
+            "pinyin": "yì qǐ",
+            "meaning": "Cùng nhau"
+          },
+          {
+            "word": "在草地上",
+            "pinyin": "zài cǎo dì shàng",
+            "meaning": "Trên bãi cỏ"
+          },
+          {
+            "word": "快乐地",
+            "pinyin": "kuài lè de",
+            "meaning": "Vui vẻ"
+          },
+          {
+            "word": "玩耍",
+            "pinyin": "wán shuǎ",
+            "meaning": "Chơi đùa"
+          }
+        ]
+      }
+    ],
+    "vocabulary": [
+      {
+        "word": "朋友",
+        "pinyin": "péng you",
+        "meaning": "Bạn bè"
+      },
+      {
+        "word": "兔子",
+        "pinyin": "tù zi",
+        "meaning": "Con thỏ"
+      },
+      {
+        "word": "耳朵",
+        "pinyin": "ěr duo",
+        "meaning": "Tai"
+      },
+      {
+        "word": "树",
+        "pinyin": "shù",
+        "meaning": "Cây cối"
+      },
+      {
+        "word": "高兴",
+        "pinyin": "gāo xìng",
+        "meaning": "Vui mừng"
+      },
+      {
+        "word": "一起",
+        "pinyin": "yī qǐ",
+        "meaning": "Cùng nhau"
+      }
+    ],
+    "idioms": [],
+    "fixed_phrases": [],
+    "questions": [
+      {
+        "question_zh": "小白兔的眼睛是什么颜色的？",
+        "question_vi": "Mắt của thỏ con có màu gì?",
+        "options": [
+          {
+            "text_zh": "红色的",
+            "text_vi": "Màu đỏ"
+          },
+          {
+            "text_zh": "黑色的",
+            "text_vi": "Màu đen"
+          },
+          {
+            "text_zh": "蓝色的",
+            "text_vi": "Màu xanh da trời"
+          },
+          {
+            "text_zh": "绿色的",
+            "text_vi": "Màu xanh lá"
+          }
+        ],
+        "answer_index": 0,
+        "explanation_vi": "Trong bài có câu: \"眼睛很红\" (Mắt rất đỏ)."
+      },
+      {
+        "question_zh": "小松鼠在什么地方跳来跳去？",
+        "question_vi": "Sóc nhỏ nhảy qua nhảy lại ở đâu?",
+        "options": [
+          {
+            "text_zh": "在树上",
+            "text_vi": "Trên cây"
+          },
+          {
+            "text_zh": "在水里",
+            "text_vi": "Dưới nước"
+          },
+          {
+            "text_zh": "在房间里",
+            "text_vi": "Trong phòng"
+          },
+          {
+            "text_zh": "在天上",
+            "text_vi": "Trên trời"
+          }
+        ],
+        "answer_index": 0,
+        "explanation_vi": "Bài viết nêu rõ: \"小松鼠在树上跳来跳去\" (Sóc nhỏ nhảy qua nhảy lại ở trên cây)."
+      },
+      {
+        "question_zh": "小松鼠同意和小白兔做朋友吗？",
+        "question_vi": "Sóc nhỏ có đồng ý làm bạn với thỏ trắng không?",
+        "options": [
+          {
+            "text_zh": "同意了",
+            "text_vi": "Đã đồng ý (\"Được chứ!\")"
+          },
+          {
+            "text_zh": "不同意",
+            "text_vi": "Không đồng ý"
+          },
+          {
+            "text_zh": "跑走了",
+            "text_vi": "Bỏ chạy mất"
+          },
+          {
+            "text_zh": "哭了",
+            "text_vi": "Khóc nhè"
+          }
+        ],
+        "answer_index": 0,
+        "explanation_vi": "Sóc nhỏ cười nói: \"好啊！\" (Được chứ!) và cùng thỏ chơi vui vẻ."
+      }
+    ],
+    "read_count": 112
+  },
+  {
+    "id": "hskk_hsk1_1",
+    "category": "hskk",
+    "category_name": "Khẩu ngữ",
+    "category_icon": "fa-microphone-lines",
+    "level": "HSK 1",
+    "level_num": 1,
+    "title_zh": "自我介绍",
+    "title_vi": "Giới thiệu bản thân",
+    "content_zh": "大家好！我来介绍一下自己。我叫张亮，今年二十岁。我是北京人，现在在大学读二年级。我家有四口人：爸爸、妈妈、哥哥和我。我的爱好是听音乐和看电影。很高兴认识大家！",
+    "content_vi": "Xin chào mọi người! Tôi xin phép giới thiệu một chút về bản thân. Tôi tên là Trương Lượng, năm nay hai mươi tuổi. Tôi là người Bắc Kinh, hiện đang học năm thứ hai đại học. Nhà tôi có bốn người: bố, mẹ, anh trai và tôi. Sở thích của tôi là nghe nhạc và xem phim. Rất vui được làm quen với mọi người!",
+    "sentences": [
+      {
+        "index": 0,
+        "text_zh": "大家好！我来介绍一下自己。",
+        "pinyin": "dà jiā hǎo ！ wǒ lái jiè shào yí xià zì jǐ 。",
+        "tokens": [
+          {
+            "word": "大家好",
+            "pinyin": "dà jiā hǎo",
+            "meaning": "Chào mọi người"
+          },
+          {
+            "word": "！",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "我来",
+            "pinyin": "wǒ lái",
+            "meaning": "Để tôi"
+          },
+          {
+            "word": "介绍一下",
+            "pinyin": "jiè shào yí xià",
+            "meaning": "Giới thiệu một chút"
+          },
+          {
+            "word": "自己",
+            "pinyin": "zì jǐ",
+            "meaning": "Bản thân"
+          },
+          {
+            "word": "。",
+            "pinyin": "",
+            "meaning": ""
+          }
+        ]
+      },
+      {
+        "index": 1,
+        "text_zh": "我叫张亮，今年二十岁。我是北京人，现在在大学读二年级。",
+        "pinyin": "wǒ jiào zhāng liàng ， jīn nián èr shí suì 。 wǒ shì běi jīng rén ， xiàn zài zài dà xué dú èr nián jí 。",
+        "tokens": [
+          {
+            "word": "我叫",
+            "pinyin": "wǒ jiào",
+            "meaning": "Tôi tên"
+          },
+          {
+            "word": "张亮",
+            "pinyin": "zhāng liàng",
+            "meaning": "Trương Lượng"
+          },
+          {
+            "word": "，",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "今年",
+            "pinyin": "jīn nián",
+            "meaning": "Năm nay"
+          },
+          {
+            "word": "二十岁",
+            "pinyin": "èr shí suì",
+            "meaning": "20 tuổi"
+          },
+          {
+            "word": "。",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "我是",
+            "pinyin": "wǒ shì",
+            "meaning": "Tôi là"
+          },
+          {
+            "word": "北京人",
+            "pinyin": "běi jīng rén",
+            "meaning": "Người Bắc Kinh"
+          },
+          {
+            "word": "，",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "现在",
+            "pinyin": "xiàn zài",
+            "meaning": "Bây giờ, hiện tại"
+          },
+          {
+            "word": "在大学",
+            "pinyin": "zài dà xué",
+            "meaning": "Ở trường đại học"
+          },
+          {
+            "word": "读",
+            "pinyin": "dú",
+            "meaning": "Học"
+          },
+          {
+            "word": "二年级",
+            "pinyin": "èr nián jí",
+            "meaning": "Năm thứ hai"
+          },
+          {
+            "word": "。",
+            "pinyin": "",
+            "meaning": ""
+          }
+        ]
+      },
+      {
+        "index": 2,
+        "text_zh": "我家有四口人：爸爸、妈妈、哥哥和我。",
+        "pinyin": "wǒ jiā yǒu sì kǒu rén ： bà ba 、 mā ma 、 gē ge hé wǒ 。",
+        "tokens": [
+          {
+            "word": "我家",
+            "pinyin": "wǒ jiā",
+            "meaning": "Nhà tôi"
+          },
+          {
+            "word": "有",
+            "pinyin": "yǒu",
+            "meaning": "Có"
+          },
+          {
+            "word": "四口人",
+            "pinyin": "sì kǒu rén",
+            "meaning": "4 người"
+          },
+          {
+            "word": "：",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "爸爸",
+            "pinyin": "bà ba",
+            "meaning": "Bố"
+          },
+          {
+            "word": "、",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "妈妈",
+            "pinyin": "mā ma",
+            "meaning": "Mẹ"
+          },
+          {
+            "word": "、",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "哥哥",
+            "pinyin": "gē ge",
+            "meaning": "Anh trai"
+          },
+          {
+            "word": "和",
+            "pinyin": "hé",
+            "meaning": "Và"
+          },
+          {
+            "word": "我",
+            "pinyin": "wǒ",
+            "meaning": "Tôi"
+          },
+          {
+            "word": "。",
+            "pinyin": "",
+            "meaning": ""
+          }
+        ]
+      },
+      {
+        "index": 3,
+        "text_zh": "我的爱好是听音乐和看电影。很高兴认识大家！",
+        "pinyin": "wǒ de ài hào shì tīng yīn yuè hé kàn diàn yǐng 。 hěn gāo xìng rèn shi dà jiā ！",
+        "tokens": [
+          {
+            "word": "我的",
+            "pinyin": "wǒ de",
+            "meaning": "Của tôi"
+          },
+          {
+            "word": "爱好",
+            "pinyin": "ài hào",
+            "meaning": "Sở thích"
+          },
+          {
+            "word": "是",
+            "pinyin": "shì",
+            "meaning": "Là"
+          },
+          {
+            "word": "听音乐",
+            "pinyin": "tīng yīn yuè",
+            "meaning": "Nghe nhạc"
+          },
+          {
+            "word": "和",
+            "pinyin": "hé",
+            "meaning": "Và"
+          },
+          {
+            "word": "看电影",
+            "pinyin": "kàn diàn yǐng",
+            "meaning": "Xem phim"
+          },
+          {
+            "word": "。",
+            "pinyin": "",
+            "meaning": ""
+          },
+          {
+            "word": "很高兴",
+            "pinyin": "hěn gāo xìng",
+            "meaning": "Rất vui mừng"
+          },
+          {
+            "word": "认识",
+            "pinyin": "rèn shi",
+            "meaning": "Quen biết"
+          },
+          {
+            "word": "大家",
+            "pinyin": "dà jiā",
+            "meaning": "Mọi người"
+          },
+          {
+            "word": "！",
+            "pinyin": "",
+            "meaning": ""
+          }
+        ]
+      }
+    ],
+    "vocabulary": [
+      {
+        "word": "介绍",
+        "pinyin": "jiè shào",
+        "meaning": "Giới thiệu"
+      },
+      {
+        "word": "认识",
+        "pinyin": "rèn shi",
+        "meaning": "Quen biết, nhận biết"
+      },
+      {
+        "word": "大学",
+        "pinyin": "dà xué",
+        "meaning": "Trường đại học"
+      },
+      {
+        "word": "哥哥",
+        "pinyin": "gē ge",
+        "meaning": "Anh trai"
+      },
+      {
+        "word": "听音乐",
+        "pinyin": "tīng yīn yuè",
+        "meaning": "Nghe nhạc"
+      },
+      {
+        "word": "看电影",
+        "pinyin": "kàn diàn yǐng",
+        "meaning": "Xem phim"
+      }
+    ],
+    "idioms": [],
+    "fixed_phrases": [],
+    "questions": [
+      {
+        "question_zh": "张亮今年多大？",
+        "question_vi": "Trương Lượng năm nay bao nhiêu tuổi?",
+        "options": [
+          {
+            "text_zh": "二十岁",
+            "text_vi": "20 tuổi"
+          },
+          {
+            "text_zh": "十八岁",
+            "text_vi": "18 tuổi"
+          },
+          {
+            "text_zh": "二十五岁",
+            "text_vi": "25 tuổi"
+          },
+          {
+            "text_zh": "三十岁",
+            "text_vi": "30 tuổi"
+          }
+        ],
+        "answer_index": 0,
+        "explanation_vi": "Trương Lượng giới thiệu: \"今年二十岁\" (Năm nay hai mươi tuổi)."
+      },
+      {
+        "question_zh": "张亮家里有几口人？",
+        "question_vi": "Nhà của Trương Lượng có mấy người?",
+        "options": [
+          {
+            "text_zh": "四口人",
+            "text_vi": "4 người"
+          },
+          {
+            "text_zh": "三口人",
+            "text_vi": "3 người"
+          },
+          {
+            "text_zh": "五口人",
+            "text_vi": "5 người"
+          },
+          {
+            "text_zh": "六口人",
+            "text_vi": "6 người"
+          }
+        ],
+        "answer_index": 0,
+        "explanation_vi": "Trong bài có nêu: \"我家有四口人：爸爸、妈妈、哥哥和我\" (Nhà tôi có bốn người: bố, mẹ, anh trai và tôi)."
+      },
+      {
+        "question_zh": "张亮的爱好是什么？",
+        "question_vi": "Sở thích của Trương Lượng là gì?",
+        "options": [
+          {
+            "text_zh": "听音乐和看电影",
+            "text_vi": "Nghe nhạc và xem phim"
+          },
+          {
+            "text_zh": "踢足球和游泳",
+            "text_vi": "Đá bóng và bơi lội"
+          },
+          {
+            "text_zh": "做饭和打扫",
+            "text_vi": "Nấu ăn và dọn dẹp"
+          },
+          {
+            "text_zh": "买衣服",
+            "text_vi": "Mua quần áo"
+          }
+        ],
+        "answer_index": 0,
+        "explanation_vi": "Câu văn: \"我的爱好是听音乐和看电影\" (Sở thích của tôi là nghe nhạc và xem phim)."
+      }
+    ],
+    "read_count": 145
   }
 ]

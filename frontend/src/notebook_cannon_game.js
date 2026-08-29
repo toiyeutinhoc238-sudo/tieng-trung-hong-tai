@@ -33,16 +33,8 @@ class AmbientMusicEngine {
     }catch(e){}
   }
   startDrone(){
-    if(!this.ctx)return;
-    [130.81,196.00].forEach(f=>{
-      try{
-        const osc=this.ctx.createOscillator();const gain=this.ctx.createGain();
-        osc.type='sine';osc.frequency.setValueAtTime(f,this.ctx.currentTime);
-        gain.gain.setValueAtTime(0.03,this.ctx.currentTime);
-        osc.connect(gain);gain.connect(this.masterGain);osc.start();
-        this.droneNodes.push({osc,gain});
-      }catch(e){}
-    });
+    // Đã tắt hoàn toàn âm rung drone ù ù nền theo yêu cầu
+    return;
   }
   stopDrone(){
     this.droneNodes.forEach(({osc,gain})=>{
@@ -56,7 +48,7 @@ class AmbientMusicEngine {
     this.isPlaying=true;
     if(this.ctx.state==='suspended')this.ctx.resume();
     this.masterGain.gain.linearRampToValueAtTime(1.0,this.ctx.currentTime+2.0);
-    this.startDrone();
+    // Bỏ startDrone() để không phát ra tiếng ù ù
     const patterns=[[392,440,523,392,329,261,293,261],[261,329,392,440,392,329,261,220],[523,440,392,329,261,293,329,392],[440,392,329,261,293,329,392,440]];
     const scheduleNote=()=>{
       if(!this.isPlaying||!this.ctx)return;
@@ -65,7 +57,6 @@ class AmbientMusicEngine {
       const dur=1.6+Math.random()*0.8;const vol=0.045+Math.random()*0.025;
       this.playNote(freq,dur,vol,'sine');
       if(Math.random()<0.3)setTimeout(()=>{if(this.isPlaying)this.playNote(freq*2,dur*0.7,vol*0.4,'sine');},300);
-      if(Math.random()<0.15)setTimeout(()=>{if(this.isPlaying)this.playNote(130.81,2.5,0.03,'triangle');},600);
       this.noteIdx++;
       if(this.noteIdx%pattern.length===0)this.patternIdx++;
       this.noteTimeout=setTimeout(scheduleNote,900+Math.random()*600);
@@ -141,7 +132,27 @@ export class CannonGameEngine {
 .phidao-hud-left,.phidao-hud-right{display:flex;gap:8px;align-items:center;}
 .phidao-btn-icon{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#f1f5f9;border-radius:10px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.95rem;transition:all .2s;}
 .phidao-btn-icon:hover{background:rgba(255,255,255,.25);transform:scale(1.08);}
-.phidao-stat{display:flex;align-items:center;gap:6px;color:#ffffff;font-weight:800;font-size:1.05rem;text-shadow:0 2px 4px rgba(0,0,0,.5);}
+.phidao-stat{display:flex !important;align-items:center !important;gap:6px !important;color:#ffffff !important;font-weight:900 !important;font-size:1.15rem !important;text-shadow:0 2px 6px rgba(0,0,0,.8) !important;}
+.phidao-stat span{font-family:'Outfit','Inter',system-ui,sans-serif !important;font-weight:900 !important;display:inline-block !important;font-size:1.15rem !important;}
+#cannon-score-val{color:#fde047 !important;text-shadow:0 0 12px rgba(253,224,71,.6),0 2px 6px rgba(0,0,0,.9) !important;}
+#cannon-combo-val{color:#fb923c !important;text-shadow:0 0 12px rgba(251,146,60,.6),0 2px 6px rgba(0,0,0,.9) !important;}
+
+html.light-mode .phidao-stat,
+html.light-mode .phidao-stat span,
+html:not(.dark) .phidao-stat,
+html:not(.dark) .phidao-stat span {
+  color: #ffffff !important;
+}
+html.light-mode #cannon-score-val,
+html:not(.dark) #cannon-score-val {
+  color: #fde047 !important;
+  text-shadow: 0 0 12px rgba(253,224,71,.7), 0 2px 6px rgba(0,0,0,.9) !important;
+}
+html.light-mode #cannon-combo-val,
+html:not(.dark) #cannon-combo-val {
+  color: #fb923c !important;
+  text-shadow: 0 0 12px rgba(251,146,60,.7), 0 2px 6px rgba(0,0,0,.9) !important;
+}
 .phidao-lives-row{display:flex;gap:5px;font-size:1.1rem;filter:drop-shadow(0 0 6px rgba(239,68,68,.5));}
 
 /* BUFF BANNER */
@@ -642,18 +653,9 @@ export class CannonGameEngine {
     // HIỂN THỊ NGHĨA TIẾNG VIỆT NGAY KHI BẮN TRÚNG
     this.showHitMeaningPopup(targetItem.x, targetItem.y, targetItem.wordObj, pts, isStar);
 
-    // PHÁT ÂM TIẾNG TRUNG CHUẨN KHI HIỆN ĐÁP ÁN NGHĨA TIẾNG VIỆT
+    // PHÁT ÂM TIẾNG TRUNG CHUẨN TỨC THÌ (0ms latency, không nghẽn mạng)
     if(zh){
-      if(typeof window.speakText === 'function'){
-        try { window.speakText(zh); } catch(e){}
-      } else if('speechSynthesis' in window){
-        try {
-          window.speechSynthesis.cancel();
-          const u = new SpeechSynthesisUtterance(zh);
-          u.lang = 'zh-CN';
-          window.speechSynthesis.speak(u);
-        } catch(e){}
-      }
+      this.speakWordInstant(zh);
     }
     if(this.combo>0&&this.combo%10===0){
       if(this.lives<this.maxLives){this.lives++;this.music.playHeartRestore();this.showFloatingText(targetItem.x,targetItem.y-36,`💖 Chuỗi ${this.combo}! +1 Tim!`,'#ef4444');}
@@ -668,74 +670,117 @@ export class CannonGameEngine {
     if(this.wordQueue.length===0&&this.activeWords.length===0)setTimeout(()=>this.gameOver(true),500);
   }
 
+  speakWordInstant(zh){
+    if(!zh)return;
+    if('speechSynthesis' in window){
+      try {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(zh);
+        u.lang = 'zh-CN';
+        u.rate = 1.05; // Đọc nhanh, dứt khoát, không chờ mạng
+        u.pitch = 1.0;
+        const voices = window.speechSynthesis.getVoices();
+        const zhVoice = voices.find(v => v.lang === 'zh-CN' || v.lang === 'zh' || v.lang.startsWith('zh'));
+        if(zhVoice) u.voice = zhVoice;
+        window.speechSynthesis.speak(u);
+        return;
+      } catch(e){}
+    }
+    if(typeof window.speakText === 'function'){
+      try { window.speakText(zh); } catch(e){}
+    }
+  }
+
   showHitMeaningPopup(x, y, wordObj, pts, isStar) {
     const fxLayer = this.container.querySelector('#cannon-fx-layer');
     if (!fxLayer) return;
-    const el = document.createElement('div');
-    el.className = 'phidao-hit-meaning-card';
+
+    const popup = document.createElement('div');
+    popup.className = 'phidao-hit-meaning-card';
     const zh = wordObj.word || wordObj.char || '';
-    el.innerHTML = `
-      <div class="phidao-hit-top">
-        <span class="phidao-hit-pts">+${pts}${isStar ? ' ✨' : ''}</span>
-        <span class="phidao-hit-zh">${zh}</span>
-        <span class="phidao-hit-py">[${wordObj.pinyin || ''}]</span>
+    const py = wordObj.pinyin || '';
+    const meaning = wordObj.meaning || '';
+
+    popup.innerHTML = `
+      <div style="font-size: 0.95rem; font-weight: 900; color: #fbbf24; display: flex; align-items: center; justify-content: center; gap: 4px;">
+        <span>+${pts}</span>
+        <span style="font-family: var(--font-hanzi); font-size: 1.15rem; color: #ffffff;">${zh}</span>
+        <span style="font-size: 0.85rem; color: #38bdf8; font-weight: 700;">[${py}]</span>
       </div>
-      <div class="phidao-hit-mean">💡 ${wordObj.meaning || ''}</div>
+      <div style="font-size: 0.88rem; font-weight: 800; color: #f1f5f9; text-shadow: 0 1px 3px #000; margin-top: 1px;">
+        ${meaning ? `💡 ${meaning}` : ''}
+      </div>
     `;
-    const playfield = this.container.querySelector('#cannon-playfield');
-    const pfW = playfield ? playfield.clientWidth : 600;
-    const clampedX = Math.max(12, Math.min(x - 30, pfW - 200));
-    el.style.left = `${clampedX}px`;
-    el.style.top = `${Math.max(10, y - 10)}px`;
-    fxLayer.appendChild(el);
-    setTimeout(() => el.remove(), 2200);
+
+    popup.style.left = `${Math.max(10, Math.min(window.innerWidth - 220, x - 20))}px`;
+    popup.style.top = `${Math.max(10, y - 10)}px`;
+    fxLayer.appendChild(popup);
+    setTimeout(() => popup.remove(), 2200);
   }
 
   spawnWord(){
-    // CHỈ CHO PHÉP TỐI ĐA 1 ĐẾN 2 TỪ VỰNG TRÊN MÀN HÌNH
-    if(this.activeWords.length>=2)return;
-    if(!this.wordQueue||this.wordQueue.length===0){if(this.activeWords.length===0)this.gameOver(true);return;}
+    // Quyết định số từ rơi cùng lúc trên màn hình dựa vào tiến độ:
+    // - Mới bắt đầu (< 4 từ bị tiêu diệt): tối đa 1 - 2 từ để làm quen
+    // - Về sau (>= 4 từ bị tiêu diệt): tăng lên 3 từ cùng lúc trên màn hình
+    const maxActive = this.wordsDestroyedCount >= 4 ? 3 : 2;
+    if(this.activeWords.length >= maxActive) return;
+    if(!this.wordQueue || this.wordQueue.length === 0){
+      if(this.activeWords.length === 0) this.gameOver(true);
+      return;
+    }
     
-    // NẾU TỪ HIỆN TẠI VẪN ĐANG Ở NỬA TRÊN ĐỈNH (y < 160), CHỜ RƠI THÊM ĐỂ KHÔNG BỊ DỒN ĐỐNG
-    if(this.activeWords.some(w=>w.y<160))return;
+    // Khoảng cách theo chiều dọc: chỉ chặn nếu có từ ngay sát đỉnh (y < 80)
+    if(this.activeWords.some(w => w.y < 80)) return;
 
-    const playfield=this.container.querySelector('#cannon-playfield');if(!playfield)return;
-    const pfW=playfield.clientWidth||600;
-    const wordObj=this.wordQueue.pop();if(!wordObj)return;
-    const isStar=Math.random()<0.15;
+    const playfield = this.container.querySelector('#cannon-playfield');
+    if(!playfield) return;
+    const pfW = playfield.clientWidth || 600;
+    const wordObj = this.wordQueue.pop();
+    if(!wordObj) return;
+    const isStar = Math.random() < 0.15;
     
-    // ĐẢM BẢO TUYỆT ĐỐI 100%: ĐO CHÍNH XÁC KÍCH THƯỚC DOCK KỸ NĂNG VÀ CHỪA VÙNG ĐỆM AN TOÀN
+    // Vùng an toàn không bị dock kỹ năng (bên phải) che khuất
     const skillsDock = this.container.querySelector('.phidao-floating-skills');
     const dockWidth = skillsDock ? (skillsDock.offsetWidth + 25) : 110;
-    const estimatedCardWidth = 170; // Độ rộng tối đa của thẻ từ rơi
+    const estimatedCardWidth = 160;
     const minSafeX = 25;
     const maxSafeX = Math.max(minSafeX + 50, pfW - dockWidth - estimatedCardWidth);
     const availableWidth = maxSafeX - minSafeX;
     
-    let spawnX = minSafeX;
-    if (availableWidth > 140) {
-      const half = availableWidth / 2;
-      if (this.activeWords.length === 0) {
-        spawnX = Math.random() < 0.5
-          ? (minSafeX + Math.random() * (half - 15))
-          : (minSafeX + half + Math.random() * (half - 15));
-      } else {
-        const prevX = this.activeWords[0].x;
-        if (prevX < minSafeX + half) {
-          spawnX = minSafeX + half + Math.random() * (half - 15);
-        } else {
-          spawnX = minSafeX + Math.random() * (half - 15);
-        }
-      }
-    } else {
-      spawnX = minSafeX + Math.random() * Math.max(10, availableWidth);
-    }
+    // Chia không gian thành 3 làn rơi (Làn 0: Trái, Làn 1: Giữa, Làn 2: Phải)
+    const laneWidth = availableWidth / 3;
+    const lanes = [
+      { minX: minSafeX, maxX: minSafeX + laneWidth - 10 },
+      { minX: minSafeX + laneWidth + 5, maxX: minSafeX + laneWidth * 2 - 5 },
+      { minX: minSafeX + laneWidth * 2 + 10, maxX: maxSafeX }
+    ];
 
-    // Khóa chặn biên an toàn tuyệt đối
+    // Tìm làn nào hiện đang có ít từ nhất để rơi vào làn đó (tránh đè nhau)
+    const laneOccupancy = [0, 0, 0];
+    this.activeWords.forEach(w => {
+      lanes.forEach((l, lIdx) => {
+        if(w.x >= l.minX - 35 && w.x <= l.maxX + 35) {
+          laneOccupancy[lIdx]++;
+        }
+      });
+    });
+
+    let bestLaneIdx = 0;
+    let minOcc = 999;
+    lanes.forEach((_, lIdx) => {
+      if(laneOccupancy[lIdx] < minOcc) {
+        minOcc = laneOccupancy[lIdx];
+        bestLaneIdx = lIdx;
+      }
+    });
+
+    const targetLane = lanes[bestLaneIdx];
+    let spawnX = targetLane.minX + Math.random() * Math.max(10, (targetLane.maxX - targetLane.minX));
     spawnX = Math.max(minSafeX, Math.min(maxSafeX, Math.round(spawnX)));
     
-    const spawnY=-25;
-    const speed=11; // TỐC ĐỘ RƠI ĐỒNG ĐỀU, ÊM ÁI VÀ KHÔNG BAO GIỜ ĐÈ NHAU
+    const spawnY = -25;
+    // Tốc độ rơi: 11 cơ bản, về sau tăng nhẹ lên 12-14 để kịch tính vừa phải
+    const speed = 11 + Math.min(4, Math.floor(this.wordsDestroyedCount / 10));
     const el=document.createElement('div');el.className=`phidao-word-card type-${isStar?'star':'normal'}`;
     const zh = wordObj.word || wordObj.char || wordObj.hanzi || '';
     const py = wordObj.pinyin || '';
@@ -757,8 +802,8 @@ export class CannonGameEngine {
         <div class="word-zh" style="font-size:1.8rem;color:#0284c7 !important;">🎧 ❓</div>
         <div class="pinyin-prog" style="display:none;"></div>
       `;
-      if(this.autoSpeech && typeof window.speakText === 'function' && zh){
-        try { window.speakText(zh); } catch(e){}
+      if(this.autoSpeech && zh){
+        this.speakWordInstant(zh);
       }
     }else{
       // 'both': Cả Chữ Hán và Pinyin màu xanh có dấu (BỎ chữ màu đen norm)
@@ -780,8 +825,10 @@ export class CannonGameEngine {
       const dt=Math.min(0.05,(currentTime-this.lastFrameTime)/1000);
       this.lastFrameTime=currentTime;
       this.spawnTimer+=dt*1000;
-      // KHOẢNG CÁCH SINH TỪ THOÁNG ĐÃNG
-      const baseInterval=3200;
+      // Nhịp độ sinh từ:
+      // Ban đầu: ~2800ms
+      // Về sau (đã bắn được >= 4 từ): giảm xuống ~2100ms để 2-3 từ cùng xuất hiện rơi đều đặn
+      const baseInterval=this.wordsDestroyedCount>=4?2100:2800;
       const spawnInterval=this.slowMoTimer>0?baseInterval*1.8:baseInterval;
       if(this.spawnTimer>=spawnInterval){this.spawnTimer=0;this.spawnWord();}
       const playfield=this.container.querySelector('#cannon-playfield');

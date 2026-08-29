@@ -22,7 +22,7 @@
     href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Noto+Sans+SC:wght@400;500;700;900&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    crossorigin="anonymous" referrerpolicy="no-referrer">
+    crossorigin="anonymous" referrerpolicy="no-referrer">
 
   <script>
     (function () {
@@ -98,9 +98,13 @@
         updateToggleBtns(true);
       }
 
-      if (window.readingApp && typeof window.readingApp.renderArtBanner === 'function') {
-        window.readingApp.renderArtBanner();
-        window.readingApp.renderCatalogGrid();
+      if (window.readingApp) {
+        if (typeof window.readingApp.renderCatalogGrid === 'function') {
+          window.readingApp.renderCatalogGrid();
+        }
+        if (typeof window.readingApp.renderArtBanner === 'function') {
+          window.readingApp.renderArtBanner();
+        }
       }
     };
 
@@ -523,23 +527,42 @@
     }
 
     .rd-card-banner {
-      height: 130px;
-      padding: 14px 16px;
+      height: 138px;
+      padding: 16px 18px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       position: relative;
       background-size: cover;
       background-position: center;
+      overflow: hidden;
+      border-radius: 18px 18px 0 0;
     }
     .rd-card-banner-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(0deg, rgba(0, 0, 0, 0.45) 0%, transparent 60%);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(0, 0, 0, 0.22) 100%);
       pointer-events: none;
+      z-index: 1;
     }
     html.dark .rd-card-banner-overlay {
-      background: linear-gradient(0deg, rgba(15, 23, 42, 0.8) 0%, rgba(15, 23, 42, 0.2) 100%);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(0, 0, 0, 0.38) 100%);
+    }
+
+    .rd-card-banner-watermark {
+      position: absolute;
+      right: 14px;
+      bottom: 2px;
+      font-size: 5rem;
+      color: rgba(255, 255, 255, 0.22) !important;
+      pointer-events: none;
+      z-index: 1;
+      transform: rotate(-10deg);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .rd-card-article:hover .rd-card-banner-watermark {
+      transform: rotate(0deg) scale(1.1);
+      color: rgba(255, 255, 255, 0.35) !important;
     }
 
     .rd-card-banner-top {
@@ -549,49 +572,66 @@
       align-items: center;
       justify-content: space-between;
     }
-    .rd-badge-lvl {
+
+    .rd-badge-lvl,
+    html.light-mode .rd-badge-lvl,
+    html:not(.dark) .rd-badge-lvl {
       background: #ffffff !important;
       color: #0f172a !important;
-      font-size: 0.75rem;
-      font-weight: 900;
-      padding: 3px 10px;
-      border-radius: 20px;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      font-size: 0.76rem !important;
+      font-weight: 900 !important;
+      padding: 4px 12px !important;
+      border-radius: 20px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 4px !important;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18) !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.95) !important;
+      letter-spacing: 0.02em !important;
     }
     html.dark .rd-badge-lvl {
-      background: rgba(15, 23, 42, 0.85) !important;
+      background: rgba(15, 23, 42, 0.92) !important;
       color: #ffffff !important;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1.5px solid rgba(255, 255, 255, 0.28) !important;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4) !important;
     }
 
     .rd-badge-done {
-      background: #10b981;
+      background: #10b981 !important;
       color: #ffffff !important;
-      font-size: 0.72rem;
-      font-weight: 800;
-      padding: 3px 10px;
-      border-radius: 20px;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+      font-size: 0.72rem !important;
+      font-weight: 800 !important;
+      padding: 4px 10px !important;
+      border-radius: 20px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 4px !important;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4) !important;
+      border: 1px solid rgba(255, 255, 255, 0.4) !important;
     }
 
-    .rd-card-category-tag {
-      position: relative;
-      z-index: 2;
-      font-size: 0.8rem;
-      font-weight: 900;
+    .rd-card-category-tag,
+    html.light-mode .rd-card-category-tag,
+    html:not(.dark) .rd-card-category-tag {
+      position: relative !important;
+      z-index: 2 !important;
+      font-size: 0.78rem !important;
+      font-weight: 800 !important;
       color: #ffffff !important;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      text-transform: uppercase !important;
+      letter-spacing: 0.05em !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      background: rgba(0, 0, 0, 0.32) !important;
+      backdrop-filter: blur(8px) !important;
+      -webkit-backdrop-filter: blur(8px) !important;
+      padding: 5px 12px !important;
+      border-radius: 10px !important;
+      border: 1px solid rgba(255, 255, 255, 0.32) !important;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+      width: fit-content !important;
     }
 
     .rd-card-body {
@@ -1022,6 +1062,52 @@
       border-radius: 4px;
     }
 
+    /* INTERACTIVE CLICKABLE WORDS */
+    .rd-word-token {
+      display: inline-block;
+      padding: 0 2px;
+      margin: 0 1px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+    .rd-word-token:hover {
+      background: var(--rd-accent-light);
+      color: var(--rd-accent) !important;
+      transform: translateY(-2px);
+      box-shadow: 0 3px 8px rgba(2, 132, 199, 0.25);
+    }
+    .rd-word-token.active-inspected {
+      background: #fef08a !important;
+      color: #713f12 !important;
+      border-bottom: 2.5px solid #d97706 !important;
+      box-shadow: 0 0 12px rgba(234, 179, 8, 0.5);
+    }
+
+    /* FLOATING WORD INSPECTOR POPUP */
+    .rd-word-inspector-popup {
+      position: fixed;
+      z-index: 999999;
+      background: var(--rd-bg-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 2px solid var(--rd-accent);
+      border-radius: 20px;
+      padding: 16px 20px;
+      min-width: 280px;
+      max-width: 380px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      animation: popIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.9) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
     /* VIETNAMESE TRANSLATION ACCORDION */
     .rd-accordion-box {
       background: var(--rd-bg-card-sub);
@@ -1276,11 +1362,31 @@
       transition: all 0.2s ease;
       position: relative;
     }
+    .rd-char-span.is-punct {
+      color: var(--rd-text-sub) !important;
+      font-weight: 700;
+      opacity: 0.7;
+    }
     .rd-char-span.typed-correct {
-      color: var(--rd-ghost-typed) !important;
+      color: #10b981 !important;
       font-weight: 900 !important;
       text-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
       transform: scale(1.05);
+    }
+    .rd-char-span.typed-wrong {
+      color: #ef4444 !important;
+      font-weight: 900 !important;
+      border-bottom: 3.5px solid #ef4444 !important;
+      text-shadow: 0 0 14px rgba(239, 68, 68, 0.75) !important;
+      background: rgba(239, 68, 68, 0.14) !important;
+      border-radius: 4px;
+      padding: 0 2px;
+      animation: wrongShake 0.3s ease-in-out;
+    }
+    @keyframes wrongShake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-4px); }
+      40%, 80% { transform: translateX(4px); }
     }
     .rd-char-span.current-target {
       border-bottom: 3px solid var(--rd-ghost-target);
@@ -1314,6 +1420,11 @@
     .rd-typing-input-box:focus {
       border-color: var(--rd-accent);
       box-shadow: 0 0 18px rgba(2, 132, 199, 0.3);
+    }
+    .rd-typing-input-box.has-wrong-char {
+      border-color: #ef4444 !important;
+      box-shadow: 0 0 16px rgba(239, 68, 68, 0.4) !important;
+      background: rgba(239, 68, 68, 0.04) !important;
     }
     .rd-typing-input-box.wrong-shake {
       animation: inputShake 0.3s ease-in-out;
@@ -1440,11 +1551,11 @@
       transform: translateX(-50%) translateY(0);
     }
   </style>
-  <script type="module" crossorigin src="/assets/reading-Co2rp2cZ.js"></script>
+  <script type="module" crossorigin src="/assets/reading-DwTzrm53.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
   <link rel="modulepreload" crossorigin href="/assets/screen_drawing-BS_xmQo7.js">
   <link rel="modulepreload" crossorigin href="/assets/particles-DZeRXKmM.js">
-  <link rel="stylesheet" crossorigin href="/assets/style-B4XfMK0z.css">
+  <link rel="stylesheet" crossorigin href="/assets/style-C-1kDReX.css">
 </head>
 
 <body>
@@ -1684,6 +1795,55 @@
         <!-- RIGHT COLUMN: SIDEBAR EXPANDABLE WIDGETS -->
         <aside class="rd-sidebar-column">
 
+          <!-- LIVE WORD INSPECTOR CARD IN SIDEBAR -->
+          <div class="rd-sidebar-card open" id="rd-side-inspector-card" style="border-color: var(--rd-accent); box-shadow: 0 4px 18px rgba(2, 132, 199, 0.18);">
+            <div class="rd-sidebar-header" style="background: var(--rd-accent-light);">
+              <div class="rd-sidebar-title" style="color: var(--rd-accent) !important;">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Tra cứu từ vựng
+              </div>
+              <span class="rd-sidebar-badge" style="background: var(--rd-accent);">Tra tức thì</span>
+            </div>
+            <div class="rd-sidebar-body" id="rd-live-inspector-body" style="display: flex; flex-direction: column; gap: 10px; padding: 14px 16px;">
+              <!-- Quick Search Input -->
+              <div style="display: flex; gap: 6px;">
+                <input type="text" id="rd-search-dict-input" placeholder="Gõ từ hoặc Pinyin (VD: 你好, nihao...)" style="flex: 1; padding: 8px 12px; border-radius: 10px; border: 1.5px solid var(--rd-border-sub); background: var(--rd-bg-input); color: var(--rd-text-title); font-size: 0.84rem; outline: none; font-weight: 600;">
+                <button type="button" id="rd-search-dict-btn" style="background: var(--rd-accent); color: #ffffff; border: none; border-radius: 10px; padding: 0 14px; cursor: pointer; font-weight: 800; font-size: 0.85rem;" title="Tra từ"><i class="fa-solid fa-magnifying-glass"></i></button>
+              </div>
+
+              <div id="rd-inspector-empty-tip" style="text-align: center; color: var(--rd-text-muted); font-size: 0.86rem; padding: 12px 6px; line-height: 1.6;">
+                <i class="fa-solid fa-hand-pointer" style="color: var(--rd-accent); font-size: 1.3rem; margin-bottom: 6px; display: block;"></i>
+                Bấm vào <strong>bất kỳ từ nào</strong> trong bài đọc hoặc gõ vào ô trên để tra cứu đầy đủ nghĩa & phiên âm!
+              </div>
+
+              <div id="rd-inspector-result" style="display: none; flex-direction: column; gap: 10px;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <div>
+                    <span id="rd-insp-zh" style="font-family: var(--font-hanzi); font-size: 1.5rem; font-weight: 900; color: var(--rd-text-title);">小猫</span>
+                    <span id="rd-insp-py" style="font-size: 0.95rem; font-weight: 800; color: var(--rd-accent); margin-left: 8px;">[xiǎo māo]</span>
+                  </div>
+                  <button type="button" class="rd-item-speak-btn" id="rd-insp-side-speak-btn" title="Nghe phát âm">
+                    <i class="fa-solid fa-volume-high"></i>
+                  </button>
+                </div>
+                <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                  <span id="rd-insp-level" style="font-size: 0.72rem; font-weight: 800; background: var(--rd-accent-light); color: var(--rd-accent); padding: 2px 8px; border-radius: 6px; border: 1px solid var(--rd-accent);">HSK 1</span>
+                  <span id="rd-insp-pos" style="font-size: 0.72rem; font-weight: 700; color: var(--rd-text-muted);">Danh từ</span>
+                </div>
+                <div id="rd-insp-meaning" style="font-size: 0.92rem; font-weight: 700; color: var(--rd-text-main); line-height: 1.5; background: var(--rd-bg-card-sub); padding: 10px 14px; border-radius: 12px; border: 1px solid var(--rd-border);">
+                  Mèo con; chú mèo nhỏ
+                </div>
+                <div id="rd-insp-ex-box" style="display: none; flex-direction: column; gap: 4px; font-size: 0.82rem; background: var(--rd-bg-input); padding: 10px 14px; border-radius: 12px; border: 1px dashed var(--rd-border-sub);">
+                  <div id="rd-insp-ex-zh" style="font-weight: 800; color: var(--rd-text-title);">我家有一只小猫。</div>
+                  <div id="rd-insp-ex-py" style="color: var(--rd-accent); font-weight: 600;">Wǒ jiā yǒu yì zhī xiǎo māo.</div>
+                  <div id="rd-insp-ex-vi" style="color: var(--rd-text-sub);">Nhà tôi có một con mèo nhỏ.</div>
+                </div>
+                <div id="rd-insp-note-box" style="display: none; font-size: 0.8rem; color: var(--rd-text-sub); background: rgba(2, 132, 199, 0.08); padding: 8px 12px; border-radius: 10px; border-left: 3px solid var(--rd-accent);">
+                  <span id="rd-insp-note-text"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- ACCORDION 1: TỪ VỰNG TRỌNG TÂM -->
           <div class="rd-sidebar-card open" id="rd-side-vocab-card">
             <div class="rd-sidebar-header" id="rd-side-vocab-header">
@@ -1731,7 +1891,7 @@
     <span id="rd-toast-msg">Thông báo</span>
   </div>
 
-  <!-- MAIN SCRIPT -->
+  <!-- MAIN SCRIPT -->
 </body>
 
 </html>
