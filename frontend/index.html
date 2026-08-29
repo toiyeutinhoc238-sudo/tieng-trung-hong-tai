@@ -128,7 +128,18 @@
     window.switchTab = window.switchTab || function (tab) { console.log('Initializing tab:', tab); };
     window.toggleSidebarCollapse = window.toggleSidebarCollapse || function () { };
     window.toggleTheme = window.toggleTheme || function () { };
+    window.showLeaderboardModal = window.showLeaderboardModal || function () { console.log('Leaderboard initializing...'); };
+    window.showComingSoonNotice = window.showComingSoonNotice || function (f) { alert((f || 'Tính năng') + ' đang được phát triển và sắp ra mắt!'); };
+    window.openLessonReviewStudy = window.openLessonReviewStudy || function (id) { console.log('Initializing review study:', id); };
+    window.openNotebookGamesHub = window.openNotebookGamesHub || function () { console.log('Initializing games hub...'); };
+    // Quick-login stub: hiển thị thông báo loading nếu main.js chưa tải xong
+    window.loginWithGoogleAccount = window.loginWithGoogleAccount || function (email, name) {
+      var toast = document.getElementById('toast') || document.getElementById('toast-msg');
+      if (toast) { toast.textContent = 'Đang tải... Vui lòng thử lại sau 1-2 giây!'; toast.classList.add('show'); setTimeout(function(){ toast.classList.remove('show'); }, 2500); }
+      else { console.log('Quick login initializing for:', email); }
+    };
   </script>
+
 </head>
 
 <body>
@@ -385,11 +396,11 @@
       <!-- DANH MỤC 3: LUYỆN ĐỀ -->
       <div class="sidebar-section-label">Luyện Đề</div>
       <ul class="sidebar-menu" style="margin-bottom: 12px;">
-        <li class="sidebar-item" onclick="window.showComingSoonNotice('Luyện Đề Thi HSK')">
-          <i class="fa-solid fa-file-signature" style="color: #64748b;"></i> <span>HSK (117 Đề)</span>
+        <li class="sidebar-item" onclick="window.switchTab('exams'); if(window.innerWidth <= 768) window.toggleSidebarCollapse();" style="cursor:pointer;">
+          <i class="fa-solid fa-file-signature" style="color: #6366f1;"></i> <span>HSK (117 Đề)</span>
           <span
-            style="font-size:0.68rem; background:rgba(245,158,11,0.2); color:#f59e0b; border:1px solid rgba(245,158,11,0.3); padding:2px 6px; border-radius:6px; font-weight:700; margin-left:auto; white-space:nowrap;">🔒
-            Sắp ra mắt</span>
+            style="font-size:0.68rem; background:rgba(99,102,241,0.2); color:#6366f1; border:1px solid rgba(99,102,241,0.35); padding:2px 6px; border-radius:6px; font-weight:700; margin-left:auto; white-space:nowrap;">📝
+            Làm ngay</span>
         </li>
         <li class="sidebar-item" onclick="window.showComingSoonNotice('Luyện đề HSKK')">
           <i class="fa-solid fa-microphone" style="color: #64748b;"></i> <span>HSKK</span>
@@ -3460,11 +3471,10 @@
           <small style="background: #0284c7; color: #fff; padding: 1px 6px; border-radius: 99px;">Hội thoại 📖</small>
         </button>
         <button id="modal-btn-mod-review" class="lesson-mod-btn mod-review" style="padding: 16px;"
-          onclick="window.showComingSoonNotice('Ôn Tập')">
-          <i class="fa-solid fa-circle-play" style="font-size: 1.3rem;"></i>
+          onclick="window.openLessonReviewStudy(window.activeLessonId || '1')">
+          <i class="fa-solid fa-gamepad" style="font-size: 1.3rem;"></i>
           <span style="font-size: 1.05rem; font-weight: 800;">Ôn Tập</span>
-          <small style="background: rgba(0,0,0,0.25); color: #fff; padding: 1px 6px; border-radius: 99px;">Sắp ra
-            mắt</small>
+          <small id="modal-review-badge" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #fff; padding: 1px 6px; border-radius: 99px;">5 Mini-Game 🎮</small>
         </button>
         <button id="modal-btn-mod-video" class="lesson-mod-btn mod-video"
           style="display: none; grid-column: 1 / -1; flex-direction: row; gap: 8px; padding: 12px 16px;">

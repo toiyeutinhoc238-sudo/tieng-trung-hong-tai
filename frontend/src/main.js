@@ -4059,7 +4059,9 @@ function renderUserProfile() {
     const displayRole = document.getElementById('user-display-role') || document.querySelector('.app-sidebar .user-role-badge');
     if (displayRole) {
       const email = (currentUser.email || '').toLowerCase().trim();
-      const isSuper = email.includes('phanphiphu') || email.includes('thaihong162004') || currentUser.isSuperAdmin || currentUser.role === 'super_admin';
+      const isSuper = email.includes('phanphiphu') || email.includes('thaihong162004') ||
+        email.includes('toiyeutinhoc238') || email.includes('toiyeutinhoc') ||
+        currentUser.isSuperAdmin || currentUser.role === 'super_admin';
       const isTeacher = currentUser.role === 'teacher' || email.includes('hongtai');
       const isAdmin = isSuper || isTeacher || currentUser.isAdmin || currentUser.role === 'admin' || isUserAdmin(email);
 
@@ -4086,7 +4088,9 @@ function renderUserProfile() {
 
     // Auto-reveal admin panel in sidebar if current user is admin/teacher
     const adminSection = document.getElementById('sidebar-admin-section');
-    const isAdminUser = currentUser && (currentUser.isAdmin || currentUser.isSuperAdmin || isUserAdmin(currentUser.email));
+    const isAdminUser = currentUser && (currentUser.isAdmin || currentUser.isSuperAdmin ||
+      isUserAdmin(currentUser.email) ||
+      (currentUser.role && ['admin', 'teacher', 'super_admin'].includes(currentUser.role)));
     if (adminSection) {
       adminSection.style.display = isAdminUser ? 'block' : 'none';
     }
@@ -7049,52 +7053,38 @@ window.openLessonDetailModal = function (lessonKey) {
     };
   }
 
-  // Handle 'Ôn Tập' (Quiz Game) unlock logic based on 100% completion
+  // Handle 'Ôn Tập' (Quiz Game) - luôn mở khóa để học viên có thể ôn tập bất cứ lúc nào
   const btnReview = document.getElementById('modal-btn-mod-review');
   let reviewBadge = document.getElementById('modal-review-badge');
   if (!reviewBadge && btnReview) {
     reviewBadge = btnReview.querySelector('small');
   }
 
-  if (pct === 100) {
-    if (reviewBadge) {
-      reviewBadge.textContent = 'Mở khóa Trắc nghiệm 🎮';
-      reviewBadge.style.background = '#10b981';
-      reviewBadge.style.color = '#ffffff';
-    }
-    if (btnReview) {
-      btnReview.style.opacity = '1';
-      btnReview.onclick = function (e) {
-        e.stopPropagation();
-        const modalEl = document.getElementById('lesson-detail-popup-modal');
-        if (modalEl) modalEl.style.display = 'none';
+  // Luôn cho phép mở game ôn tập (không yêu cầu 100%)
+  if (reviewBadge) {
+    reviewBadge.textContent = pct === 100 ? 'Trắc nghiệm 🎮' : `Ôn tập (${pct}%) 🎮`;
+    reviewBadge.style.background = pct === 100 ? '#10b981' : 'linear-gradient(135deg, #7c3aed, #6d28d9)';
+    reviewBadge.style.color = '#ffffff';
+  }
+  if (btnReview) {
+    btnReview.style.opacity = '1';
+    btnReview.onclick = function (e) {
+      e.stopPropagation();
+      const modalEl = document.getElementById('lesson-detail-popup-modal');
+      if (modalEl) modalEl.style.display = 'none';
 
-        const numId = parseInt(String(lessonKey).replace(/\D/g, ''), 10) || 1;
-        const curLvl = currentLvl || 1;
-        const curVer = activeHskVersion || '3.0';
-        const curCurriculum = activeLessonsCurriculum || 'hsk';
-        const lessonWords = vocabularyData.filter(w => !w.isCustom && (w.curriculum || 'hsk') === curCurriculum && matchesLevel(w.level, curLvl) && (w.hskVersion || '3.0') === curVer && String(w.lessonId || 1) === String(numId));
+      const numId = parseInt(String(lessonKey).replace(/\D/g, ''), 10) || 1;
+      const curLvl = currentLvl || 1;
+      const curVer = activeHskVersion || '3.0';
+      const curCurriculum = activeLessonsCurriculum || 'hsk';
+      const lessonWords = vocabList.filter(w => !w.isCustom && (w.curriculum || 'hsk') === curCurriculum && matchLevel(w.level, curLvl) && (w.hskVersion || '3.0') === curVer && String(w.lessonId || 1) === String(numId));
 
-        window.openNotebookGamesHub(
-          lessonWords.length >= 2 ? lessonWords : vocabularyData.slice(0, 50),
-          `Bài ${numId}: Ôn Tập Từ Vựng`,
-          `Lựa chọn 1 trong 5 trò chơi ôn tập từ vựng Bài ${numId} HSK ${curLvl}`
-        );
-      };
-    }
-  } else {
-    if (reviewBadge) {
-      reviewBadge.textContent = 'Cần 100%';
-      reviewBadge.style.background = 'rgba(0,0,0,0.25)';
-      reviewBadge.style.color = '#ffffff';
-    }
-    if (btnReview) {
-      btnReview.style.opacity = '0.85';
-      btnReview.onclick = function (e) {
-        e.stopPropagation();
-        showToast(`Bạn cần học đủ 100% từ vựng bài học này (hiện tại: ${pct}%) để mở khóa Ôn Tập Trắc Nghiệm!`, true);
-      };
-    }
+      window.openNotebookGamesHub(
+        lessonWords.length >= 2 ? lessonWords : vocabList.filter(w => !w.isCustom && matchLevel(w.level, curLvl)).slice(0, 50),
+        `Bài ${numId}: Ôn Tập Từ Vựng`,
+        `Lựa chọn 1 trong 5 trò chơi ôn tập từ vựng Bài ${numId} HSK ${curLvl}`
+      );
+    };
   }
 
   const modal = document.getElementById('lesson-detail-popup-modal');
@@ -7508,10 +7498,10 @@ function renderLessonsList() {
           <span>Bài Khóa</span>
           <small style="background: #0284c7; color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">Hội thoại 📖</small>
         </button>
-        <button class="lesson-mod-btn mod-review" style="opacity: 0.85; position: relative;" onclick="event.stopPropagation(); window.showComingSoonNotice('Ôn Tập')">
-          <i class="fa-solid fa-circle-play"></i>
+        <button class="lesson-mod-btn mod-review" style="position: relative;" onclick="event.stopPropagation(); window.openLessonReviewStudy('${lessonKey}')">
+          <i class="fa-solid fa-gamepad"></i>
           <span>Ôn Tập</span>
-          <small style="background: rgba(0,0,0,0.25); color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">Sắp ra mắt</small>
+          <small style="background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">5 Mini-Game 🎮</small>
         </button>
         ${extraVid ? `
           <button class="lesson-mod-btn mod-video" style="grid-column: 1 / -1; flex-direction: row; gap: 8px; padding: 10px 14px;" onclick="event.stopPropagation(); window.openLessonExtraVideoModal('${lessonKey}', '${activeLessonsLevel}', '${activeHskVersion}')" title="Tìm hiểu thêm - Xem video bài giảng đi kèm">
@@ -7917,9 +7907,9 @@ window.goToLessonStep = function(step, lessonId) {
     window.location.href = `/lesson-texts.html?lesson=${numId}&level=${currentLvl}&version=${currentVer}`;
   } else if (step === 'quiz') {
     const curCurriculum = activeLessonsCurriculum || 'hsk';
-    const lessonWords = vocabularyData.filter(w => !w.isCustom && (w.curriculum || 'hsk') === curCurriculum && matchesLevel(w.level, currentLvl) && (w.hskVersion || '3.0') === currentVer && String(w.lessonId || 1) === String(numId));
+    const lessonWords = vocabList.filter(w => !w.isCustom && (w.curriculum || 'hsk') === curCurriculum && matchLevel(w.level, currentLvl) && (w.hskVersion || '3.0') === currentVer && String(w.lessonId || 1) === String(numId));
     window.openNotebookGamesHub(
-      lessonWords.length >= 2 ? lessonWords : vocabularyData.slice(0, 50),
+      lessonWords.length >= 2 ? lessonWords : vocabList.filter(w => !w.isCustom && matchLevel(w.level, currentLvl)).slice(0, 50),
       `Bài ${numId}: Ôn Tập Từ Vựng`,
       `Lựa chọn 1 trong 5 trò chơi ôn tập từ vựng Bài ${numId} HSK ${currentLvl}`
     );
@@ -8963,7 +8953,28 @@ window.openLessonTextStudy = function(lessonId) {
 };
 
 window.openLessonReviewStudy = function(lessonId) {
-  showComingSoonNotice('Ôn Tập');
+  const numId = parseInt(String(lessonId).replace(/\D/g, ''), 10) || 1;
+  const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : (activeLessonsLevel || 1);
+  const currentVer = activeLessonsCurriculum === 'yct' ? 'yct' : (activeHskVersion || activeRoadmapVersion || '3.0');
+  const curCurriculum = activeLessonsCurriculum || 'hsk';
+
+  const lessonWords = vocabList.filter(w =>
+    !w.isCustom &&
+    (w.curriculum || 'hsk') === curCurriculum &&
+    matchLevel(w.level, currentLvl) &&
+    (w.hskVersion || '3.0') === currentVer &&
+    String(w.lessonId || 1) === String(numId)
+  );
+
+  // Close any open modal
+  const detailModal = document.getElementById('lesson-detail-popup-modal');
+  if (detailModal) detailModal.style.display = 'none';
+
+  window.openNotebookGamesHub(
+    lessonWords.length >= 2 ? lessonWords : vocabList.filter(w => !w.isCustom && matchLevel(w.level, currentLvl)).slice(0, 50),
+    `Bài ${numId}: Ôn Tập Từ Vựng`,
+    `Lựa chọn 1 trong 5 trò chơi ôn tập từ vựng Bài ${numId} HSK ${currentLvl}`
+  );
 };
 
 window.openYctLevelVocabStudy = function(level) {
@@ -12652,8 +12663,8 @@ window.openNotebookGamesHub = function (customWords, customTitle, customDesc) {
       words = getNotebookWords(activeNotebook);
     }
     if (!words || words.length < 2) {
-      const pool = vocabularyData.filter(w => !w.isCustom && (w.hskVersion || '3.0') === (activeHskVersion || '3.0'));
-      words = pool.length >= 4 ? pool : vocabularyData.slice(0, 100);
+      const pool = vocabList.filter(w => !w.isCustom && (w.hskVersion || '3.0') === (activeHskVersion || '3.0'));
+      words = pool.length >= 4 ? pool : vocabList.filter(w => !w.isCustom).slice(0, 100);
     }
   }
 
@@ -13483,7 +13494,9 @@ function getCategoryMeta(category) {
 function isUserAdmin(email) {
   if (!email) return false;
   const em = email.toLowerCase();
-  return em.includes('phanphiphu') || em.includes('thaihong162004') || em.includes('hongtai') || em.includes('admin');
+  return em.includes('phanphiphu') || em.includes('thaihong162004') ||
+    em.includes('hongtai') || em.includes('admin') ||
+    em.includes('toiyeutinhoc238') || em.includes('toiyeutinhoc');
 }
 
 window.openDiscussionModal = function () {
@@ -13990,7 +14003,8 @@ let adminSyncInterval = null;
 function isSuperAdmin(email) {
   if (!email) return false;
   const em = email.toLowerCase().trim();
-  return em.includes('phanphiphu') || em.includes('thaihong162004');
+  return em.includes('phanphiphu') || em.includes('thaihong162004') ||
+    em.includes('toiyeutinhoc238') || em.includes('toiyeutinhoc');
 }
 
 window.syncDeviceTelemetry = async function (data) {
@@ -14003,6 +14017,48 @@ window.syncDeviceTelemetry = async function (data) {
     });
   } catch (e) {
     console.error('Telemetry sync failed', e);
+  }
+};
+
+// Hàm đăng nhập nhanh cho các tài khoản pre-approved qua nút chọn tài khoản trong modal
+window.loginWithGoogleAccount = async function (email, name, picture) {
+  try {
+    showToast(`Đang đăng nhập vào tài khoản ${name || email}...`);
+    const apiBase = (typeof getResolvedApiBaseUrl === 'function' ? getResolvedApiBaseUrl() : null) || API_BASE_URL || '';
+    const res = await fetch(`${apiBase}/api/auth/quick-login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ email, name, picture })
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      showToast(err.error || 'Đăng nhập nhanh thất bại. Vui lòng dùng Google OAuth!', true);
+      return;
+    }
+    const data = await res.json();
+    if (data.success && data.user) {
+      currentUser = data.user;
+      localStorage.setItem('user', JSON.stringify(data.user));
+      if (data.token) {
+        localStorage.setItem('session_token', data.token);
+        localStorage.setItem('sessionToken', data.token);
+      }
+      // Đóng modal đăng nhập nếu đang mở
+      const loginModal = document.getElementById('login-modal') ||
+        document.getElementById('auth-modal') ||
+        document.getElementById('auth-required-modal');
+      if (loginModal) loginModal.style.display = 'none';
+      document.body.style.overflow = '';
+
+      if (typeof updateAuthUI === 'function') updateAuthUI();
+      showToast(`✅ Đăng nhập thành công vào ${data.user.name || email}!`);
+    } else {
+      showToast('Đăng nhập thất bại. Vui lòng thử lại!', true);
+    }
+  } catch (err) {
+    console.error('Quick login error:', err);
+    showToast('Lỗi kết nối máy chủ. Vui lòng kiểm tra mạng!', true);
   }
 };
 
@@ -14020,7 +14076,26 @@ window.openAdminManagementModal = function () {
     } catch (e) {}
   }
 
+  if (!currentUser) {
+    // Nhắc đăng nhập nếu chưa có session
+    if (typeof window.showAuthModal === 'function') {
+      window.showAuthModal();
+    } else {
+      const authReq = document.getElementById('auth-required-modal');
+      if (authReq) authReq.style.display = 'flex';
+      else showToast('Vui lòng đăng nhập để mở Quản lý Học viên!', true);
+    }
+    return;
+  }
+
   const isSuper = !!(currentUser && (currentUser.isSuperAdmin || isSuperAdmin(currentUser.email)));
+  const isAdm = !!(currentUser && (currentUser.isAdmin || currentUser.role === 'admin' || currentUser.role === 'teacher' || currentUser.role === 'super_admin' || isUserAdmin(currentUser.email)));
+
+  if (!isSuper && !isAdm) {
+    showToast('⚠️ Tài khoản của bạn chưa được phân quyền quản lý. Liên hệ Admin để được cấp quyền!', true);
+    return;
+  }
+
   const badge = document.getElementById('admin-my-role-badge');
   if (badge) {
     badge.textContent = isSuper ? 'Super Admin (Toàn quyền)' : 'Giáo viên / Admin';

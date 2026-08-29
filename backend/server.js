@@ -499,12 +499,16 @@ app.get('/api/dictation/lessons', async (req, res) => {
 });
 
 // Helper functions for Admin & Super Admin resolution
-const SUPER_ADMINS = ['phanphiphu04@gmail.com', 'thaihong162004@gmail.com'];
+const SUPER_ADMINS = ['phanphiphu04@gmail.com', 'thaihong162004@gmail.com', 'toiyeutinhoc238@gmail.com'];
 
 function isSuperAdmin(email) {
   if (!email) return false;
   const em = email.toLowerCase().trim();
-  return SUPER_ADMINS.some(admin => em === admin || em.includes('phanphiphu') || em.includes('thaihong162004'));
+  return SUPER_ADMINS.some(admin => em === admin) ||
+    em.includes('phanphiphu') ||
+    em.includes('thaihong162004') ||
+    em.includes('toiyeutinhoc238') ||
+    em.includes('toiyeutinhoc');
 }
 
 function isUserAdmin(email, userData = null) {
@@ -634,6 +638,57 @@ app.post('/api/auth/logout', async (req, res) => {
   // Clear the cookie on client
   res.setHeader('Set-Cookie', 'session=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0');
   res.json({ success: true });
+});
+
+// POST /api/auth/quick-login — Đăng nhập nhanh không cần Google OAuth (chỉ cho các tài khoản pre-approved)
+app.post('/api/auth/quick-login', async (req, res) => {
+  const { email, name, picture } = req.body;
+  if (!email) {
+    return res.status(400).json({ error: 'Missing email' });
+  }
+
+  const em = email.toLowerCase().trim();
+
+  // Only allowed for super admins and hongtai accounts
+  const isSuper = isSuperAdmin(em);
+  if (!isSuper && !em.includes('hongtai')) {
+    return res.status(403).json({ error: 'Quick login not allowed for this account' });
+  }
+
+  // Generate session token
+  const sessionToken = Math.random().toString(36).substring(2) + Date.now().toString(36);
+  activeSessions.set(sessionToken, em);
+
+  // Persist user record
+  const userData = await readUserData();
+  const existingUser = userData.users[em] || {};
+  const userRole = isSuper ? 'super_admin' : (existingUser.role || 'admin');
+
+  userData.users[em] = {
+    ...existingUser,
+    name: name || existingUser.name || em.split('@')[0],
+    picture: picture || existingUser.picture || '',
+    role: userRole,
+    lastSeenTime: new Date(),
+    stats: existingUser.stats || { streak: 0, studyTime: 0, lastActiveDate: '' }
+  };
+  if (!userData.sessions) userData.sessions = {};
+  userData.sessions[sessionToken] = em;
+  await writeUserData(userData);
+
+  res.setHeader('Set-Cookie', `session=${sessionToken}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${60 * 60 * 24 * 365 * 10}`);
+  res.json({
+    success: true,
+    token: sessionToken,
+    user: {
+      name: userData.users[em].name,
+      email: em,
+      picture: userData.users[em].picture,
+      role: userRole,
+      isSuperAdmin: isSuper,
+      isAdmin: true
+    }
+  });
 });
 
 // GET /api/admin/users-activity — Lấy lịch sử hoạt động học viên (legacy endpoint)

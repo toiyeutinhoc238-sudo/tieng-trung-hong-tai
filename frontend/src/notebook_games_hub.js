@@ -12,7 +12,8 @@ function isSuperAdminUser(user) {
   if (!user) return false;
   if (user.isSuperAdmin || user.role === 'super_admin') return true;
   const email = (user.email || '').toLowerCase().trim();
-  return email.includes('phanphiphu') || email.includes('thaihong162004');
+  return email.includes('phanphiphu') || email.includes('thaihong162004') ||
+    email.includes('toiyeutinhoc238') || email.includes('toiyeutinhoc');
 }
 
 export class NotebookGamesHub {
@@ -251,7 +252,7 @@ export class NotebookGamesHub {
               <i class="fa-solid fa-arrow-left"></i> Đổi Trò Chơi
             </button>
             <div style="font-size: 0.9rem; font-weight: 800; color: #fbbf24; display: flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-gamepad" style="color: #6366f1;"></i> ${this.title ? `Quiz Game: ${this.title}` : 'Đấu Trường Quiz Game (Ôn Tập Sổ Tay)'}
+              <i class="fa-solid fa-gamepad" style="color: #6366f1;"></i> ${this.notebookTitle ? `Quiz Game: ${this.notebookTitle}` : 'Đấu Trường Quiz Game (Ôn Tập Sổ Tay)'}
             </div>
             <button type="button" id="btn-quiz-exit-all" class="btn btn-outline btn-sm" style="border-radius: 50px; font-weight: 700; cursor: pointer;">
               <i class="fa-solid fa-book-bookmark"></i> Sổ Tay
