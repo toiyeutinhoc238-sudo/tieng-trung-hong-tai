@@ -335,23 +335,28 @@
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
     }
 
-    html.light-mode .dialogue-tab-btn {
+    html.light-mode .dialogue-tab-btn,
+    html:not(.dark) .dialogue-tab-btn {
       background: #ffffff;
-      border-color: #cbd5e1;
-      color: #475569;
+      border: 2px solid #cbd5e1;
+      color: #334155;
     }
 
     .dialogue-tab-btn:hover {
-      border-color: #38bdf8;
-      color: #ffffff;
+      border-color: #0284c7;
+      color: #0284c7;
       transform: translateY(-2px);
     }
 
-    .dialogue-tab-btn.active {
-      background: linear-gradient(135deg, #0284c7, #2563eb);
-      border-color: #38bdf8;
-      color: #ffffff;
-      box-shadow: 0 8px 25px rgba(56, 189, 248, 0.4);
+    .dialogue-tab-btn.active,
+    html.light-mode .dialogue-tab-btn.active,
+    html:not(.dark) .dialogue-tab-btn.active {
+      background: linear-gradient(135deg, #0284c7 0%, #1d4ed8 100%) !important;
+      border: 2px solid #0284c7 !important;
+      color: #ffffff !important;
+      font-weight: 900 !important;
+      box-shadow: 0 8px 24px rgba(2, 132, 199, 0.45) !important;
+      transform: translateY(-2px);
     }
 
     /* Mode Step Navigation Tabs (1, 2, 3, 4) */
@@ -380,23 +385,47 @@
       transition: all 0.2s ease;
     }
 
-    html.light-mode .mode-step-btn {
+    html.light-mode .mode-step-btn,
+    html:not(.dark) .mode-step-btn {
       background: #ffffff;
-      border-color: #cbd5e1;
-      color: #475569;
+      border: 1.5px solid #cbd5e1;
+      color: #334155;
     }
 
     .mode-step-btn:hover {
-      background: rgba(59, 130, 246, 0.2);
-      color: #ffffff;
-      border-color: #3b82f6;
+      background: rgba(217, 119, 6, 0.15);
+      color: #d97706;
+      border-color: #d97706;
     }
 
-    .mode-step-btn.active {
-      background: linear-gradient(135deg, #f59e0b, #d97706);
-      color: #ffffff;
-      border-color: #fbbf24;
-      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+    .mode-step-btn.active,
+    html.light-mode .mode-step-btn.active,
+    html:not(.dark) .mode-step-btn.active {
+      background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+      color: #ffffff !important;
+      border: 1.5px solid #d97706 !important;
+      font-weight: 900 !important;
+      box-shadow: 0 6px 20px rgba(217, 119, 6, 0.45) !important;
+    }
+
+    /* Stepper Top Tabs */
+    .stepper-tab-btn {
+      transition: all 0.2s ease;
+    }
+    html.light-mode .stepper-tab-btn:not(.active),
+    html:not(.dark) .stepper-tab-btn:not(.active) {
+      background: #ffffff !important;
+      border-color: #cbd5e1 !important;
+      color: #334155 !important;
+    }
+    .stepper-tab-btn.active,
+    html.light-mode .stepper-tab-btn.active,
+    html:not(.dark) .stepper-tab-btn.active {
+      background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%) !important;
+      border: 1.5px solid #7c3aed !important;
+      color: #ffffff !important;
+      font-weight: 800 !important;
+      box-shadow: 0 6px 18px rgba(124, 58, 237, 0.45) !important;
     }
 
     /* Workspace Box */
@@ -564,10 +593,10 @@
       border-color: #7dd3fc !important;
     }
 
-    html.light-mode [style*="color:#ffffff"],
-    html.light-mode [style*="color: #ffffff"],
-    html.light-mode [style*="color:#f8fafc"],
-    html.light-mode [style*="color: #f8fafc"] {
+    html.light-mode [style*="color:#ffffff"]:not(.active):not([class*="btn-"]):not(.dialogue-tab-btn):not(.mode-step-btn):not(.stepper-tab-btn),
+    html.light-mode [style*="color: #ffffff"]:not(.active):not([class*="btn-"]):not(.dialogue-tab-btn):not(.mode-step-btn):not(.stepper-tab-btn),
+    html.light-mode [style*="color:#f8fafc"]:not(.active):not([class*="btn-"]):not(.dialogue-tab-btn):not(.mode-step-btn):not(.stepper-tab-btn),
+    html.light-mode [style*="color: #f8fafc"]:not(.active):not([class*="btn-"]):not(.dialogue-tab-btn):not(.mode-step-btn):not(.stepper-tab-btn) {
       color: #0f172a !important;
     }
 
@@ -664,9 +693,9 @@
       display: none !important;
     }
   </style>
-  <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
-  <script type="module" crossorigin src="/assets/particles-DZeRXKmM.js"></script>
-  <script type="module" crossorigin src="/assets/screen_drawing-BS_xmQo7.js"></script>
+  <script type="module" crossorigin src="/assets/style-Bu5eknd6.js"></script>
+  <script type="module" crossorigin src="/assets/screen_drawing-sTfMy1C2.js"></script>
+  <script type="module" crossorigin src="/assets/particles-ywC_Bx9v.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/style-B4XfMK0z.css">
 </head>
 

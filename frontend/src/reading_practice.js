@@ -1,3 +1,4 @@
+import './device_profiler.js';
 import './particles.js';
 import './screen_drawing.js';
 
@@ -5,6 +6,7 @@ class ReadingPracticeApp {
   constructor() {
     this.articles = [];
     this.filteredArticles = [];
+    this.vocabDict = {};
     this.currentArticle = null;
     this.currentLevel = 'all';
     this.currentCategory = 'all';
@@ -18,6 +20,7 @@ class ReadingPracticeApp {
     this.speechUtterance = null;
     this.activeSentenceIndex = -1;
     this.currentPlayingIndex = 0;
+    this.activeInspectedWord = null;
     
     // Typing state
     this.typingSentenceIndex = 0;
@@ -44,14 +47,35 @@ class ReadingPracticeApp {
 
   async loadArticlesData() {
     try {
-      const res = await fetch('/reading_practice_data.json');
-      if (res.ok) {
-        this.articles = await res.json();
+      // 1. Instant Cache from Session
+      const cached = sessionStorage.getItem('reading_practice_articles_cache');
+      if (cached) {
+        try {
+          this.articles = JSON.parse(cached);
+          const b = document.getElementById('rd-catalog-badge-count');
+          if (b) b.textContent = this.articles.length;
+          this.renderCatalogGrid();
+        } catch (e) {}
+      }
+
+      // 2. Fetch fresh data in parallel
+      const artPromise = fetch('/reading_practice_data.json').then(r => r.ok ? r.json() : []);
+      const dictPromise = fetch('/reading_vocab_dict.json').then(r => r.ok ? r.json() : {}).catch(() => ({}));
+
+      const articles = await artPromise;
+      if (Array.isArray(articles) && articles.length > 0) {
+        this.articles = articles;
+        sessionStorage.setItem('reading_practice_articles_cache', JSON.stringify(articles));
         const b = document.getElementById('rd-catalog-badge-count');
         if (b) b.textContent = this.articles.length;
       }
+
+      // Dictionary loads in background without blocking UI
+      dictPromise.then(dict => {
+        this.vocabDict = dict || {};
+      });
     } catch (e) {
-      console.error('Failed to load reading data:', e);
+      console.error('Failed to load reading data / dictionary:', e);
     }
   }
 
@@ -629,26 +653,228 @@ class ReadingPracticeApp {
       const sSpan = document.createElement('span');
       sSpan.className = 'rd-chinese-sentence';
       sSpan.dataset.sidx = sIdx;
-      sSpan.title = 'Nhấn để nghe câu này';
+      sSpan.title = 'Nhấp đúp để nghe cả câu này';
 
-      if (this.showPinyin && Array.isArray(sObj.tokens) && sObj.tokens.length > 0) {
-        const rubyHTML = sObj.tokens.map(t => {
-          if (t.pinyin && t.pinyin.trim()) {
-            return `<ruby style="margin-right:2px;">${t.word}<rt style="font-size:0.75rem;color:var(--rd-accent);user-select:none;">${t.pinyin}</rt></ruby>`;
+      if (Array.isArray(sObj.tokens) && sObj.tokens.length > 0) {
+        sObj.tokens.forEach(t => {
+          const isPunct = /^[，。！？；：、“”‘’（）《》\s\-_~`.,!?:;]+$/.test(t.word);
+          if (isPunct) {
+            sSpan.appendChild(document.createTextNode(t.word));
+          } else {
+            const tokenSpan = document.createElement('span');
+            tokenSpan.className = 'rd-word-token';
+            tokenSpan.dataset.word = t.word;
+            tokenSpan.title = `Bấm để tra từ "${t.word}"`;
+
+            if (this.showPinyin && t.pinyin && t.pinyin.trim()) {
+              tokenSpan.innerHTML = `<ruby>${t.word}<rt style="font-size:0.75rem;color:var(--rd-accent);user-select:none;">${t.pinyin}</rt></ruby>`;
+            } else {
+              tokenSpan.textContent = t.word;
+            }
+
+            tokenSpan.addEventListener('click', (e) => {
+              e.stopPropagation();
+              this.inspectWord(t.word, e, t);
+            });
+
+            sSpan.appendChild(tokenSpan);
           }
-          return t.word;
-        }).join('');
-        sSpan.innerHTML = rubyHTML + ' ';
+        });
       } else {
-        sSpan.textContent = sObj.text_zh + ' ';
+        sSpan.textContent = sObj.text_zh;
       }
 
-      sSpan.addEventListener('click', () => {
+      sSpan.addEventListener('dblclick', () => {
         this.speakSentence(sObj.text_zh, sIdx);
       });
 
       bodyEl.appendChild(sSpan);
+      bodyEl.appendChild(document.createTextNode(' '));
     });
+
+    bodyEl.onmouseup = (e) => {
+      const sel = window.getSelection();
+      const text = sel ? sel.toString().trim() : '';
+      if (text && /[\u4e00-\u9fa5]/.test(text) && text.length <= 15) {
+        this.inspectWord(text, e);
+      }
+    };
+  }
+
+  inspectWord(word, e = null, tokenMeta = null) {
+    if (!word) return;
+    const cleanWord = word.trim();
+    if (!cleanWord) return;
+
+    this.activeInspectedWord = cleanWord;
+
+    document.querySelectorAll('.rd-word-token').forEach(el => {
+      if (el.dataset.word === cleanWord) {
+        el.classList.add('active-inspected');
+      } else {
+        el.classList.remove('active-inspected');
+      }
+    });
+
+    let entry = this.vocabDict ? this.vocabDict[cleanWord] : null;
+
+    if (!entry && this.currentArticle) {
+      const allNotes = [
+        ...(this.currentArticle.vocabulary || []),
+        ...(this.currentArticle.idioms || []),
+        ...(this.currentArticle.fixed_phrases || [])
+      ];
+      const match = allNotes.find(n => n.word === cleanWord);
+      if (match) {
+        entry = {
+          word: match.word,
+          pinyin: match.pinyin,
+          meaning: match.meaning,
+          pos: 'Từ trong bài',
+          level: this.currentArticle.level || 'Bài học'
+        };
+      }
+    }
+
+    if (!entry && tokenMeta && (tokenMeta.pinyin || tokenMeta.meaning)) {
+      entry = {
+        word: cleanWord,
+        pinyin: tokenMeta.pinyin,
+        meaning: tokenMeta.meaning || 'Đang cập nhật nghĩa...',
+        pos: 'Từ vựng',
+        level: this.currentArticle?.level || 'HSK'
+      };
+    }
+
+    if (!entry) {
+      entry = {
+        word: cleanWord,
+        pinyin: tokenMeta?.pinyin || '',
+        meaning: 'Từ vựng đang được bổ sung nghĩa...',
+        pos: 'Hán tự',
+        level: 'Mở rộng'
+      };
+    }
+
+    // 1. Update Sidebar Live Inspector Card
+    const emptyTip = document.getElementById('rd-inspector-empty-tip');
+    const resultBox = document.getElementById('rd-inspector-result');
+    const zhEl = document.getElementById('rd-insp-zh');
+    const pyEl = document.getElementById('rd-insp-py');
+    const levelEl = document.getElementById('rd-insp-level');
+    const posEl = document.getElementById('rd-insp-pos');
+    const meanEl = document.getElementById('rd-insp-meaning');
+    const exBox = document.getElementById('rd-insp-ex-box');
+    const exZh = document.getElementById('rd-insp-ex-zh');
+    const exPy = document.getElementById('rd-insp-ex-py');
+    const exVi = document.getElementById('rd-insp-ex-vi');
+    const sideSpeakBtn = document.getElementById('rd-insp-side-speak-btn');
+
+    if (emptyTip) emptyTip.style.display = 'none';
+    if (resultBox) resultBox.style.display = 'flex';
+    if (zhEl) zhEl.textContent = entry.word;
+    if (pyEl) pyEl.textContent = entry.pinyin ? `[${entry.pinyin}]` : '';
+    if (levelEl) levelEl.textContent = entry.level || 'HSK';
+    if (posEl) posEl.textContent = entry.pos || '';
+    if (meanEl) meanEl.textContent = entry.meaning || 'Nghĩa từ vựng';
+
+    if (entry.example_zh && exBox && exZh && exVi) {
+      exBox.style.display = 'flex';
+      exZh.textContent = entry.example_zh;
+      if (exPy) exPy.textContent = entry.example_py || '';
+      exVi.textContent = entry.example_vi || '';
+    } else if (exBox) {
+      exBox.style.display = 'none';
+    }
+
+    if (sideSpeakBtn) {
+      sideSpeakBtn.onclick = (ev) => {
+        ev.stopPropagation();
+        this.speakText(entry.word);
+      };
+    }
+
+    this.speakText(entry.word);
+
+    // 2. Show Floating Popup near click position
+    if (e) {
+      this.showFloatingInspector(entry, e);
+    }
+  }
+
+  showFloatingInspector(entry, e) {
+    this.removeFloatingInspector();
+
+    const popup = document.createElement('div');
+    popup.id = 'rd-word-inspector-popup';
+    popup.className = 'rd-word-inspector-popup';
+
+    popup.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+        <div style="display:flex;align-items:baseline;gap:8px;">
+          <span style="font-family:var(--font-hanzi);font-size:1.4rem;font-weight:900;color:var(--rd-text-title);">${entry.word}</span>
+          <span style="font-size:0.92rem;font-weight:800;color:var(--rd-accent);">${entry.pinyin ? `[${entry.pinyin}]` : ''}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <button type="button" class="rd-item-speak-btn" id="rd-float-speak-btn" title="Nghe phát âm">
+            <i class="fa-solid fa-volume-high"></i>
+          </button>
+          <button type="button" class="rd-item-speak-btn" id="rd-float-close-btn" title="Đóng" style="color:var(--rd-text-muted);">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="font-size:0.72rem;font-weight:800;background:var(--rd-accent-light);color:var(--rd-accent);padding:2px 8px;border-radius:6px;border:1px solid var(--rd-accent);">${entry.level || 'HSK'}</span>
+        ${entry.pos ? `<span style="font-size:0.72rem;font-weight:700;color:var(--rd-text-muted);">${entry.pos}</span>` : ''}
+      </div>
+      <div style="font-size:0.92rem;font-weight:700;color:var(--rd-text-main);line-height:1.5;background:var(--rd-bg-card-sub);padding:8px 12px;border-radius:10px;border:1px solid var(--rd-border);">
+        ${entry.meaning}
+      </div>
+      ${entry.example_zh ? `
+        <div style="font-size:0.8rem;background:var(--rd-bg-input);padding:8px 10px;border-radius:8px;border:1px dashed var(--rd-border-sub);">
+          <div style="font-weight:800;color:var(--rd-text-title);">${entry.example_zh}</div>
+          <div style="color:var(--rd-text-sub);">${entry.example_vi || ''}</div>
+        </div>
+      ` : ''}
+    `;
+
+    document.body.appendChild(popup);
+
+    const rect = popup.getBoundingClientRect();
+    let x = (e.clientX || (window.innerWidth / 2)) - 20;
+    let y = (e.clientY || (window.innerHeight / 2)) + 15;
+
+    if (x + rect.width > window.innerWidth - 20) {
+      x = window.innerWidth - rect.width - 20;
+    }
+    if (y + rect.height > window.innerHeight - 20) {
+      y = (e.clientY || 0) - rect.height - 15;
+    }
+    if (x < 15) x = 15;
+    if (y < 15) y = 15;
+
+    popup.style.left = `${x}px`;
+    popup.style.top = `${y}px`;
+
+    const spkBtn = popup.querySelector('#rd-float-speak-btn');
+    if (spkBtn) spkBtn.onclick = (ev) => { ev.stopPropagation(); this.speakText(entry.word); };
+
+    const clsBtn = popup.querySelector('#rd-float-close-btn');
+    if (clsBtn) clsBtn.onclick = (ev) => { ev.stopPropagation(); this.removeFloatingInspector(); };
+
+    const outsideListener = (ev) => {
+      if (!popup.contains(ev.target)) {
+        this.removeFloatingInspector();
+        document.removeEventListener('click', outsideListener);
+      }
+    };
+    setTimeout(() => document.addEventListener('click', outsideListener), 100);
+  }
+
+  removeFloatingInspector() {
+    const existing = document.getElementById('rd-word-inspector-popup');
+    if (existing) existing.remove();
   }
 
   renderTranslation() {
@@ -663,15 +889,44 @@ class ReadingPracticeApp {
     const a = this.currentArticle;
     if (!a) return;
 
+    // Reset Live Inspector Card in sidebar
+    const emptyTip = document.getElementById('rd-inspector-empty-tip');
+    const resultBox = document.getElementById('rd-inspector-result');
+    if (emptyTip) emptyTip.style.display = 'block';
+    if (resultBox) resultBox.style.display = 'none';
+
     // 1. Vocab
     const vBadge = document.getElementById('rd-vocab-count-badge');
     const vBody = document.getElementById('rd-vocab-list-body');
-    const vocabList = Array.isArray(a.vocabulary) ? a.vocabulary : [];
+    let vocabList = Array.isArray(a.vocabulary) ? [...a.vocabulary] : [];
+
+    // Supplement from 6,620 words dictionary for any words not yet noted
+    if (Array.isArray(a.sentences)) {
+      const existingWords = new Set(vocabList.map(v => v.word));
+      a.sentences.forEach(s => {
+        if (Array.isArray(s.tokens)) {
+          s.tokens.forEach(t => {
+            if (t.word && t.word.length >= 2 && !existingWords.has(t.word) && !/^[，。！？；：、“”‘’（）《》\s\-_~`.,!?:;]+$/.test(t.word)) {
+              const dictEntry = this.vocabDict ? this.vocabDict[t.word] : null;
+              if (dictEntry && dictEntry.meaning) {
+                existingWords.add(t.word);
+                vocabList.push({
+                  word: t.word,
+                  pinyin: dictEntry.pinyin || t.pinyin || '',
+                  meaning: dictEntry.meaning
+                });
+              }
+            }
+          });
+        }
+      });
+    }
+
     if (vBadge) vBadge.textContent = vocabList.length;
     if (vBody) {
       vBody.innerHTML = '';
       if (vocabList.length === 0) {
-        vBody.innerHTML = '<div style="padding:10px;color:var(--rd-text-muted);font-size:0.82rem;text-align:center;">Không có từ vựng riêng trong bài này.</div>';
+        vBody.innerHTML = '<div style="padding:10px;color:var(--rd-text-muted);font-size:0.82rem;text-align:center;">Bấm vào từ bất kỳ trên bài đọc để tra cứu tức thì!</div>';
       } else {
         vocabList.forEach(v => {
           const item = document.createElement('div');
@@ -690,7 +945,7 @@ class ReadingPracticeApp {
           `;
           const sBtn = item.querySelector('.rd-item-speak-btn');
           if (sBtn) sBtn.onclick = (e) => { e.stopPropagation(); this.speakText(v.word); };
-          item.onclick = () => this.speakText(v.word);
+          item.onclick = () => this.inspectWord(v.word);
           vBody.appendChild(item);
         });
       }
@@ -784,24 +1039,26 @@ class ReadingPracticeApp {
       const card = document.createElement('div');
       card.className = 'rd-quiz-card';
 
-      const optHTML = q.options.map((opt, oIdx) => `
-        <button type="button" class="rd-quiz-opt-btn" data-qidx="${qIdx}" data-oidx="${oIdx}">
-          <span><strong>${String.fromCharCode(65 + oIdx)}.</strong> ${opt.text_zh} ${opt.text_vi ? `<span style="font-size:0.82rem;color:var(--rd-text-muted);margin-left:6px;">(${opt.text_vi})</span>` : ''}</span>
-          <i class="fa-regular fa-circle"></i>
-        </button>
-      `).join('');
+      const optHTML = q.options.map((opt, oIdx) => {
+        const text = typeof opt === 'string' ? opt : (opt.text_vi || opt.text_zh || opt.text || '');
+        return `
+          <button type="button" class="rd-quiz-opt-btn" data-qidx="${qIdx}" data-oidx="${oIdx}">
+            <span><strong>${String.fromCharCode(65 + oIdx)}.</strong> ${text}</span>
+            <i class="fa-regular fa-circle"></i>
+          </button>
+        `;
+      }).join('');
+
+      const questionText = q.question_vi || q.question_zh || `Câu hỏi ${qIdx + 1}`;
 
       card.innerHTML = `
         <div class="rd-quiz-q-title">
           <span>Câu ${qIdx + 1}:</span>
-          <div>
-            <div>${q.question_zh}</div>
-            <div class="rd-quiz-q-sub">${q.question_vi}</div>
-          </div>
+          <div>${questionText}</div>
         </div>
         <div class="rd-quiz-options-list">${optHTML}</div>
         <div class="rd-quiz-explain-box" id="rd-explain-${qIdx}">
-          💡 <strong>Giải thích:</strong> ${q.explanation_vi}
+          💡 <strong>Giải thích:</strong> ${q.explanation_vi || ''}
         </div>
       `;
 
@@ -954,16 +1211,30 @@ class ReadingPracticeApp {
     const cleanVal = val.replace(/[.,!?:;="\'"()[\]{}，。！？；：\s\-_~`]/g, '');
 
     const charSpans = document.querySelectorAll('#rd-cur-ghost-hanzi .rd-char-span');
+    let hasWrong = false;
 
     charSpans.forEach((span, idx) => {
-      if (idx < cleanVal.length && cleanVal[idx] === cleanCur[idx]) {
-        span.className = 'rd-char-span typed-correct';
-      } else if (idx === cleanVal.length) {
+      if (idx < cleanVal.length) {
+        if (cleanVal[idx] === cleanCur[idx]) {
+          span.className = 'rd-char-span typed-correct';
+        } else {
+          span.className = 'rd-char-span typed-wrong';
+          hasWrong = true;
+        }
+      } else if (idx === cleanVal.length && !hasWrong) {
         span.className = 'rd-char-span current-target';
       } else {
         span.className = 'rd-char-span';
       }
     });
+
+    if (hasWrong) {
+      e.target.classList.add('wrong-shake');
+      e.target.style.borderColor = '#ef4444';
+    } else {
+      e.target.classList.remove('wrong-shake');
+      e.target.style.borderColor = '';
+    }
 
     if (cleanVal.length > 0 && cleanCur.startsWith(cleanVal)) {
       if (cleanVal.length === cleanCur.length) {
@@ -971,9 +1242,6 @@ class ReadingPracticeApp {
         this.speakText(curSentence);
         setTimeout(() => this.advanceTypingSentence(), 400);
       }
-    } else if (cleanVal.length > 0 && !cleanCur.startsWith(cleanVal)) {
-      e.target.classList.add('wrong-shake');
-      setTimeout(() => e.target.classList.remove('wrong-shake'), 300);
     }
 
     this.updateTypingProgress();

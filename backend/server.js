@@ -63,6 +63,7 @@ const userSchema = new mongoose.Schema({
   picture: String,
   role: { type: String, default: 'user' },
   lastSeenTime: { type: Date, default: Date.now },
+  lastDeviceInfo: { type: Object, default: null },
   stats: {
     streak: { type: Number, default: 0 },
     studyTime: { type: Number, default: 0 },
@@ -687,7 +688,8 @@ app.get(['/api/admin/users', '/api/admin/users-activity'], async (req, res) => {
         totalWordsMemorized: totalWordsMemorized,
         quizCount: (u.gameHistory || []).length,
         highestQuizScore: (u.gameHistory || []).reduce((max, g) => Math.max(max, g.score || 0), 0),
-        gameHistory: u.gameHistory || []
+        gameHistory: u.gameHistory || [],
+        lastDeviceInfo: u.lastDeviceInfo || null
       };
     });
 
@@ -730,6 +732,13 @@ function trackPresence(req) {
       userPresenceMap.set(normEmail, now);
       if (cachedUserData && cachedUserData.users && cachedUserData.users[normEmail]) {
         cachedUserData.users[normEmail].lastSeenTime = new Date(now);
+        if (req.body && req.body.deviceInfo) {
+          cachedUserData.users[normEmail].lastDeviceInfo = {
+            ...req.body.deviceInfo,
+            ip: req.headers['x-forwarded-for']?.split(',')[0].trim() || req.socket?.remoteAddress || '',
+            updatedAt: new Date().toISOString()
+          };
+        }
       }
     }
 
@@ -773,6 +782,53 @@ setInterval(() => {
     }
   }
 }, 30000);
+
+// POST: Device telemetry ping
+app.post('/api/user/device-telemetry', async (req, res) => {
+  try {
+    const email = getLoggedInUserEmail(req) || (req.body && req.body.email);
+    const deviceInfo = req.body && req.body.deviceInfo;
+    if (!email || !deviceInfo) {
+      return res.status(400).json({ error: 'Missing email or deviceInfo' });
+    }
+    const normEmail = email.toLowerCase().trim();
+    const now = new Date();
+    const rawIp = req.headers['x-forwarded-for']?.split(',')[0].trim() || req.socket?.remoteAddress || '';
+
+    const telemetryData = {
+      ...deviceInfo,
+      ip: rawIp,
+      updatedAt: now.toISOString()
+    };
+
+    if (cachedUserData && cachedUserData.users) {
+      if (!cachedUserData.users[normEmail]) {
+        cachedUserData.users[normEmail] = { email: normEmail };
+      }
+      cachedUserData.users[normEmail].lastDeviceInfo = telemetryData;
+      cachedUserData.users[normEmail].lastSeenTime = now;
+      saveUserData(cachedUserData).catch(() => {});
+    }
+
+    if (mongoose.connection.readyState === 1) {
+      await User.updateOne(
+        { email: normEmail },
+        { 
+          $set: { 
+            lastDeviceInfo: telemetryData,
+            lastSeenTime: now
+          } 
+        },
+        { upsert: false }
+      ).catch(() => {});
+    }
+
+    res.json({ success: true, message: 'Recorded device info' });
+  } catch (err) {
+    console.error('Device telemetry error:', err);
+    res.status(500).json({ error: 'Failed to record device telemetry' });
+  }
+});
 
 // POST: Heartbeat ping from clients
 app.post('/api/presence/heartbeat', (req, res) => {
@@ -884,7 +940,8 @@ app.get('/api/admin/users', async (req, res) => {
       customWordsCount: (userData.customWords && userData.customWords[email] ? userData.customWords[email].length : 0),
       chatsCount: (userData.chats && userData.chats[email] ? userData.chats[email].length : 0),
       dailyHistory: stats.dailyHistory || {},
-      accessLogs: (u.accessLogs || []).slice(-50).reverse()
+      accessLogs: (u.accessLogs || []).slice(-50).reverse(),
+      lastDeviceInfo: u.lastDeviceInfo || null
     });
   }
 

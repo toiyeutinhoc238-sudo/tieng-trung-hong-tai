@@ -670,19 +670,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "小猫和朋友",
+            "text_zh": "Mèo con và người bạn",
             "text_vi": "Mèo con và người bạn"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -698,15 +698,15 @@
             "text_vi": "Con mèo nhỏ."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -718,24 +718,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "read_count": 0
@@ -1130,19 +1130,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "小猫和朋友",
+            "text_zh": "Mèo con và người bạn",
             "text_vi": "Mèo con và người bạn"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -1158,15 +1158,15 @@
             "text_vi": "Phòng học, lớp học."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -1178,24 +1178,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "read_count": 0
@@ -1688,19 +1688,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "我的朋友",
+            "text_zh": "Bạn của tôi",
             "text_vi": "Bạn của tôi"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -1716,15 +1716,15 @@
             "text_vi": "Ở cùng trong một... (trường học, lớp học...)."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -1736,24 +1736,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "read_count": 0
@@ -2205,19 +2205,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "我的一天",
+            "text_zh": "Một ngày của tôi",
             "text_vi": "Một ngày của tôi"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -2233,15 +2233,15 @@
             "text_vi": "Thức dậy, rời giường."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -2253,24 +2253,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "read_count": 0
@@ -3099,19 +3099,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "小白兔和胡萝卜",
+            "text_zh": "Thỏ trắng nhỏ và củ cà rốt",
             "text_vi": "Thỏ trắng nhỏ và củ cà rốt"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -3127,15 +3127,15 @@
             "text_vi": "Con thỏ."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -3147,24 +3147,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "read_count": 0
@@ -4173,19 +4173,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "小红帽",
+            "text_zh": "Cô bé quàng khăn đỏ",
             "text_vi": "Cô bé quàng khăn đỏ"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -4201,15 +4201,15 @@
             "text_vi": "Rất lâu trước đây, ngày xửa ngày xưa (mở đầu truyện kể)."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -4221,24 +4221,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "read_count": 0
@@ -4674,19 +4674,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "周末逛超市",
+            "text_zh": "Cuối tuần dạo chơi siêu thị",
             "text_vi": "Cuối tuần dạo chơi siêu thị"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -4702,15 +4702,15 @@
             "text_vi": "Mãi muộn mới... (biểu thị hành động diễn ra trễ hơn dự kiến)."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -4722,24 +4722,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "read_count": 0
@@ -5606,19 +5606,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "我爸爸爱喝茶",
+            "text_zh": "Bố tôi thích uống trà",
             "text_vi": "Bố tôi thích uống trà"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -5634,15 +5634,15 @@
             "text_vi": "Bác sĩ."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -5654,24 +5654,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "read_count": 0
@@ -6082,19 +6082,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "好朋友",
+            "text_zh": "Bạn tốt",
             "text_vi": "Bạn tốt"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -6110,15 +6110,15 @@
             "text_vi": "Thể thao, vận động."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -6130,24 +6130,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "read_count": 0
@@ -6613,19 +6613,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "我的爱好",
+            "text_zh": "Sở thích của tôi",
             "text_vi": "Sở thích của tôi"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -6641,15 +6641,15 @@
             "text_vi": "Tập thể dục, chơi thể thao."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -6661,24 +6661,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "read_count": 0
@@ -7702,19 +7702,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "帮助奶奶",
+            "text_zh": "Giúp đỡ bà nội",
             "text_vi": "Giúp đỡ bà nội"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -7730,15 +7730,15 @@
             "text_vi": "Ngồi trò chuyện tâm sự cùng ai đó."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -7750,24 +7750,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "read_count": 0
@@ -9080,19 +9080,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "第一次学做中国菜",
+            "text_zh": "Lần đầu học nấu món ăn Trung Quốc",
             "text_vi": "Lần đầu học nấu món ăn Trung Quốc"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -9108,15 +9108,15 @@
             "text_vi": "đột nhiên, bất ngờ"
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -9128,24 +9128,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "read_count": 0
@@ -10517,19 +10517,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "我和图书馆的周末",
+            "text_zh": "Tôi và ngày cuối tuần ở thư viện",
             "text_vi": "Tôi và ngày cuối tuần ở thư viện"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -10545,15 +10545,15 @@
             "text_vi": "môi trường, không gian"
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -10565,24 +10565,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "read_count": 0
@@ -10650,19 +10650,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "请介绍一下你最喜欢的一个季节",
+            "text_zh": "Hãy giới thiệu một mùa mà bạn yêu thích nhất",
             "text_vi": "Hãy giới thiệu một mùa mà bạn yêu thích nhất"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -10678,15 +10678,15 @@
             "text_vi": "Mùa"
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -10698,24 +10698,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "sentences": [
@@ -11371,19 +11371,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "画蛇添足",
+            "text_zh": "Vẽ rắn thêm chân",
             "text_vi": "Vẽ rắn thêm chân"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -11395,24 +11395,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "sentences": [
@@ -12475,19 +12475,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "嫦娥奔月",
+            "text_zh": "Hằng Nga bay lên cung trăng",
             "text_vi": "Hằng Nga bay lên cung trăng"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -12499,24 +12499,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "sentences": [
@@ -14863,19 +14863,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "中国人为什么喜欢喝热水",
+            "text_zh": "Vì sao người Trung Quốc thích uống nước nóng",
             "text_vi": "Vì sao người Trung Quốc thích uống nước nóng"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -14891,15 +14891,15 @@
             "text_vi": "Thói quen, tập quán."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -14911,24 +14911,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "read_count": 0
@@ -15386,19 +15386,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "夏天",
+            "text_zh": "Mùa hè",
             "text_vi": "Mùa hè"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -15414,15 +15414,15 @@
             "text_vi": "Nóng bức, oi ả gắt gao."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -15434,24 +15434,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "read_count": 0
@@ -16904,19 +16904,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "告别拖延症",
+            "text_zh": "Tạm biệt chứng trì hoãn",
             "text_vi": "Tạm biệt chứng trì hoãn"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -16932,15 +16932,15 @@
             "text_vi": "rắc rối, làm phiền lòng, gây áp lực"
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -16952,24 +16952,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "read_count": 0
@@ -18225,19 +18225,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "学会拒绝",
+            "text_zh": "Học cách từ chối",
             "text_vi": "Học cách từ chối"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -18253,15 +18253,15 @@
             "text_vi": "giao tiếp, qua lại, tiếp xúc"
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -18273,24 +18273,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "read_count": 0
@@ -18363,19 +18363,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "谈谈你对“失败是成功之母”的理解",
+            "text_zh": "Bàn về câu tục ngữ Thất bại là mẹ thành công",
             "text_vi": "Bàn về câu tục ngữ Thất bại là mẹ thành công"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -18387,24 +18387,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "sentences": [
@@ -19080,19 +19080,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "守株待兔",
+            "text_zh": "Ôm cây đợi thỏ",
             "text_vi": "Ôm cây đợi thỏ"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -19104,24 +19104,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "sentences": [
@@ -20641,19 +20641,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "活在当下，不负余生",
+            "text_zh": "Sống cho hiện tại, không phụ quãng đời còn lại",
             "text_vi": "Sống cho hiện tại, không phụ quãng đời còn lại"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -20669,15 +20669,15 @@
             "text_vi": "Tâm sự, nỗi niềm trăn trở chất chứa trong lòng."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -20689,24 +20689,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "read_count": 0
@@ -22295,19 +22295,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "内心的温柔与定力",
+            "text_zh": "Sự dịu dàng và định lực từ sâu thẳm nội tâm",
             "text_vi": "Sự dịu dàng và định lực từ sâu thẳm nội tâm"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -22323,15 +22323,15 @@
             "text_vi": "Tần số (ẩn dụ cho mức độ đồng điệu trong tư tưởng, quan điểm)."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -22343,24 +22343,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "read_count": 0
@@ -24661,19 +24661,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "人间值得慢慢走",
+            "text_zh": "Nhân gian đáng để bước đi thong thả",
             "text_vi": "Nhân gian đáng để bước đi thong thả"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -24689,15 +24689,15 @@
             "text_vi": "Đặt chân tới, đến nơi, cập bến."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -24709,24 +24709,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "read_count": 0
@@ -24784,19 +24784,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "中国高铁：风驰电掣的“国家名片”",
+            "text_zh": "Đường sắt cao tốc Trung Quốc",
             "text_vi": "Đường sắt cao tốc Trung Quốc"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -24808,24 +24808,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "sentences": [
@@ -27131,19 +27131,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "宿命的剧本与青春的重逢",
+            "text_zh": "Kịch bản của số mệnh và sự trùng phùng của thanh xuân",
             "text_vi": "Kịch bản của số mệnh và sự trùng phùng của thanh xuân"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -27159,15 +27159,15 @@
             "text_vi": "Sự ràng buộc, trói buộc; sợi dây liên kết cảm xúc sâu sắc giữa người với người."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -27179,24 +27179,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "read_count": 0
@@ -29682,19 +29682,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "天地过客，坦然接纳",
+            "text_zh": "Khách qua đường giữa đất trời, thản nhiên đón nhận",
             "text_vi": "Khách qua đường giữa đất trời, thản nhiên đón nhận"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -29710,15 +29710,15 @@
             "text_vi": "Ánh sáng trong trẻo, dịu mát (thường dùng tả ánh trăng đêm)."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -29730,24 +29730,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "read_count": 0
@@ -31704,19 +31704,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "允许别人做别人，允许自己做自己",
+            "text_zh": "Cho phép người khác là chính họ, cho phép mình là chính mình",
             "text_vi": "Cho phép người khác là chính họ, cho phép mình là chính mình"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -31732,15 +31732,15 @@
             "text_vi": "Sự sai khác, điểm dị biệt."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -31752,24 +31752,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "read_count": 0
@@ -35640,19 +35640,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "答案都在路上，走着走着花就开了",
+            "text_zh": "Đáp án đều ở trên đường, cứ đi rồi hoa sẽ nở",
             "text_vi": "Đáp án đều ở trên đường, cứ đi rồi hoa sẽ nở"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -35668,15 +35668,15 @@
             "text_vi": "Con đường bằng phẳng thênh thang."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -35688,24 +35688,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "read_count": 0
@@ -39607,19 +39607,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "做一个内心强大的人",
+            "text_zh": "Trở thành một người có nội tâm mạnh mẽ",
             "text_vi": "Trở thành một người có nội tâm mạnh mẽ"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -39635,15 +39635,15 @@
             "text_vi": "Ung dung, điềm tĩnh, thong dong."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -39655,24 +39655,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "read_count": 0
@@ -41756,19 +41756,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "生命里，总有一朵祥云为你缭绕",
+            "text_zh": "Trong đời, luôn có một áng mây lành vương vấn vì bạn",
             "text_vi": "Trong đời, luôn có một áng mây lành vương vấn vì bạn"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -41784,15 +41784,15 @@
             "text_vi": "Đòi hỏi khắt khe, cưỡng cầu gượng ép."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -41804,24 +41804,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "read_count": 0
@@ -43338,19 +43338,19 @@
         "question_vi": "Chủ đề xuyên suốt của bài viết là gì?",
         "options": [
           {
-            "text_zh": "平视世界，方见自己",
+            "text_zh": "Nhìn ngang bằng thế giới, mới thấy rõ chính mình",
             "text_vi": "Nhìn ngang bằng thế giới, mới thấy rõ chính mình"
           },
           {
-            "text_zh": "现代科技的利与弊",
+            "text_zh": "Lợi và hại của công nghệ hiện đại",
             "text_vi": "Lợi và hại của công nghệ hiện đại"
           },
           {
-            "text_zh": "去国外留学的注意事项",
+            "text_zh": "Các lưu ý khi đi du học nước ngoài",
             "text_vi": "Các lưu ý khi đi du học nước ngoài"
           },
           {
-            "text_zh": "健康饮食与运动指南",
+            "text_zh": "Cẩm nang ăn uống lành mạnh và vận động",
             "text_vi": "Cẩm nang ăn uống lành mạnh và vận động"
           }
         ],
@@ -43366,15 +43366,15 @@
             "text_vi": "Kính sợ, tôn kính và nể sợ trước quy luật tự nhiên/đất trời."
           },
           {
-            "text_zh": "Biểu thị sự tức giận",
+            "text_zh": "Biểu thị sự tức giận, cáu gắt",
             "text_vi": "Biểu thị sự tức giận, cáu gắt"
           },
           {
-            "text_zh": "Chỉ các loài động vật",
+            "text_zh": "Chỉ các loài động vật trong rừng",
             "text_vi": "Chỉ các loài động vật trong rừng"
           },
           {
-            "text_zh": "Nói về số lượng tiền bạc",
+            "text_zh": "Nói về số lượng tiền tệ, chi tiêu",
             "text_vi": "Nói về số lượng tiền tệ, chi tiêu"
           }
         ],
@@ -43386,24 +43386,24 @@
         "question_vi": "Đọc xong bài viết này, chúng ta có thể rút ra bài học gì?",
         "options": [
           {
-            "text_zh": "保持积极心态，珍惜当下的每一步",
+            "text_zh": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc",
             "text_vi": "Giữ tâm thế tích cực, sống trọn vẹn và trân trọng từng khoảnh khắc"
           },
           {
-            "text_zh": "Phải vội vàng để đạt mục đích",
+            "text_zh": "Phải luôn vội vàng, nóng vội để đạt mục đích",
             "text_vi": "Phải luôn vội vàng, nóng vội để đạt mục đích"
           },
           {
-            "text_zh": "Không cần quan tâm đến người khác",
+            "text_zh": "Không cần quan tâm, thấu hiểu người khác",
             "text_vi": "Không cần quan tâm, thấu hiểu người khác"
           },
           {
-            "text_zh": "Chỉ nên làm việc dễ dàng",
-            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng"
+            "text_zh": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn",
+            "text_vi": "Chỉ nên lựa chọn những việc dễ dàng, né tránh khó khăn"
           }
         ],
         "answer_index": 0,
-        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự tĩnh tại và kiên định trên hành trình cuộc sống."
+        "explanation_vi": "Bài đọc mang thông điệp nhân văn, khích lệ sự kiên định và tinh thần tích cực trong cuộc sống."
       }
     ],
     "read_count": 0

@@ -1010,16 +1010,58 @@
       transition: all 0.2s ease;
       display: inline;
     }
-    .rd-chinese-sentence:hover {
-      background: var(--rd-accent-light);
-      cursor: pointer;
-    }
     .rd-chinese-sentence.active-speaking {
       background: #fef08a !important;
       border-bottom: 2px solid #ca8a04 !important;
       color: #713f12 !important;
       box-shadow: 0 0 14px rgba(234, 179, 8, 0.35);
       border-radius: 4px;
+    }
+
+    /* INTERACTIVE CLICKABLE WORDS */
+    .rd-word-token {
+      display: inline-block;
+      padding: 0 2px;
+      margin: 0 1px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+    .rd-word-token:hover {
+      background: var(--rd-accent-light);
+      color: var(--rd-accent) !important;
+      transform: translateY(-2px);
+      box-shadow: 0 3px 8px rgba(2, 132, 199, 0.25);
+    }
+    .rd-word-token.active-inspected {
+      background: #fef08a !important;
+      color: #713f12 !important;
+      border-bottom: 2.5px solid #d97706 !important;
+      box-shadow: 0 0 12px rgba(234, 179, 8, 0.5);
+    }
+
+    /* FLOATING WORD INSPECTOR POPUP */
+    .rd-word-inspector-popup {
+      position: fixed;
+      z-index: 999999;
+      background: var(--rd-bg-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 2px solid var(--rd-accent);
+      border-radius: 20px;
+      padding: 16px 20px;
+      min-width: 280px;
+      max-width: 380px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      animation: popIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.9) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
     }
 
     /* VIETNAMESE TRANSLATION ACCORDION */
@@ -1282,6 +1324,18 @@
       text-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
       transform: scale(1.05);
     }
+    .rd-char-span.typed-wrong {
+      color: #ef4444 !important;
+      font-weight: 900 !important;
+      border-bottom: 3px solid #ef4444 !important;
+      text-shadow: 0 0 12px rgba(239, 68, 68, 0.6) !important;
+      animation: wrongShake 0.3s ease-in-out;
+    }
+    @keyframes wrongShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      75% { transform: translateX(4px); }
+    }
     .rd-char-span.current-target {
       border-bottom: 3px solid var(--rd-ghost-target);
       color: var(--rd-ghost-target) !important;
@@ -1440,10 +1494,10 @@
       transform: translateX(-50%) translateY(0);
     }
   </style>
-  <script type="module" crossorigin src="/assets/reading-Co2rp2cZ.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
-  <link rel="modulepreload" crossorigin href="/assets/screen_drawing-BS_xmQo7.js">
-  <link rel="modulepreload" crossorigin href="/assets/particles-DZeRXKmM.js">
+  <script type="module" crossorigin src="/assets/reading-TEI7wPxq.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/style-Bu5eknd6.js">
+  <link rel="modulepreload" crossorigin href="/assets/screen_drawing-sTfMy1C2.js">
+  <link rel="modulepreload" crossorigin href="/assets/particles-ywC_Bx9v.js">
   <link rel="stylesheet" crossorigin href="/assets/style-B4XfMK0z.css">
 </head>
 
@@ -1683,6 +1737,45 @@
 
         <!-- RIGHT COLUMN: SIDEBAR EXPANDABLE WIDGETS -->
         <aside class="rd-sidebar-column">
+
+          <!-- LIVE WORD INSPECTOR CARD IN SIDEBAR -->
+          <div class="rd-sidebar-card open" id="rd-side-inspector-card" style="border-color: var(--rd-accent); box-shadow: 0 4px 18px rgba(2, 132, 199, 0.18);">
+            <div class="rd-sidebar-header" style="background: var(--rd-accent-light);">
+              <div class="rd-sidebar-title" style="color: var(--rd-accent) !important;">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Tra cứu từ vựng
+              </div>
+              <span class="rd-sidebar-badge" style="background: var(--rd-accent);">Tra tức thì</span>
+            </div>
+            <div class="rd-sidebar-body" id="rd-live-inspector-body" style="display: flex; flex-direction: column; gap: 10px; padding: 14px 16px;">
+              <div id="rd-inspector-empty-tip" style="text-align: center; color: var(--rd-text-muted); font-size: 0.86rem; padding: 12px 6px; line-height: 1.6;">
+                <i class="fa-solid fa-hand-pointer" style="color: var(--rd-accent); font-size: 1.3rem; margin-bottom: 6px; display: block;"></i>
+                Bấm vào <strong>bất kỳ từ nào</strong> trong bài đọc để xem nghĩa & phiên âm chi tiết ngay tại đây!
+              </div>
+              <div id="rd-inspector-result" style="display: none; flex-direction: column; gap: 10px;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <div>
+                    <span id="rd-insp-zh" style="font-family: var(--font-hanzi); font-size: 1.5rem; font-weight: 900; color: var(--rd-text-title);">小猫</span>
+                    <span id="rd-insp-py" style="font-size: 0.95rem; font-weight: 800; color: var(--rd-accent); margin-left: 8px;">[xiǎo māo]</span>
+                  </div>
+                  <button type="button" class="rd-item-speak-btn" id="rd-insp-side-speak-btn" title="Nghe phát âm">
+                    <i class="fa-solid fa-volume-high"></i>
+                  </button>
+                </div>
+                <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                  <span id="rd-insp-level" style="font-size: 0.72rem; font-weight: 800; background: var(--rd-accent-light); color: var(--rd-accent); padding: 2px 8px; border-radius: 6px; border: 1px solid var(--rd-accent);">HSK 1</span>
+                  <span id="rd-insp-pos" style="font-size: 0.72rem; font-weight: 700; color: var(--rd-text-muted);">Danh từ</span>
+                </div>
+                <div id="rd-insp-meaning" style="font-size: 0.92rem; font-weight: 700; color: var(--rd-text-main); line-height: 1.5; background: var(--rd-bg-card-sub); padding: 10px 14px; border-radius: 12px; border: 1px solid var(--rd-border);">
+                  Mèo con; chú mèo nhỏ
+                </div>
+                <div id="rd-insp-ex-box" style="display: none; flex-direction: column; gap: 4px; font-size: 0.82rem; background: var(--rd-bg-input); padding: 10px 14px; border-radius: 12px; border: 1px dashed var(--rd-border-sub);">
+                  <div id="rd-insp-ex-zh" style="font-weight: 800; color: var(--rd-text-title);">我家有一只小猫。</div>
+                  <div id="rd-insp-ex-py" style="color: var(--rd-accent); font-weight: 600;">Wǒ jiā yǒu yì zhī xiǎo māo.</div>
+                  <div id="rd-insp-ex-vi" style="color: var(--rd-text-sub);">Nhà tôi có một con mèo nhỏ.</div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <!-- ACCORDION 1: TỪ VỰNG TRỌNG TÂM -->
           <div class="rd-sidebar-card open" id="rd-side-vocab-card">

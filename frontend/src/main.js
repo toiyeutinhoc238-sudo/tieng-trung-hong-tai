@@ -1,4 +1,5 @@
 // HSK Vocabulary Flashcard - Main Frontend Controller
+import './device_profiler.js';
 import { HSK1_STRUCTURED_GRAMMAR } from '../grammar_hsk1.js';
 import { HSK2_STRUCTURED_GRAMMAR } from '../grammar_hsk2.js';
 import { HSK3_STRUCTURED_GRAMMAR } from '../grammar_hsk3.js';
@@ -13277,6 +13278,9 @@ window.sendPresenceHeartbeat = async function () {
       headers['x-client-id'] = clientId;
     }
 
+    const devInfo = window.getDeviceInfo ? window.getDeviceInfo() : null;
+    const devTier = window.getDeviceTier ? window.getDeviceTier() : null;
+
     await fetch(`${base}/api/presence/heartbeat`, {
       method: 'POST',
       headers: headers,
@@ -13285,6 +13289,7 @@ window.sendPresenceHeartbeat = async function () {
         clientId: clientId,
         email: userEmail,
         path: window.location.pathname,
+        deviceInfo: devInfo ? { ...devInfo, tier: devTier } : null,
         ts: Date.now()
       })
     });
@@ -13863,6 +13868,19 @@ function isSuperAdmin(email) {
   return em.includes('phanphiphu') || em.includes('thaihong162004');
 }
 
+window.syncDeviceTelemetry = async function (data) {
+  try {
+    await fetch(`${API_BASE_URL}/api/admin/telemetry`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data),
+      credentials: 'include'
+    });
+  } catch (e) {
+    console.error('Telemetry sync failed', e);
+  }
+};
+
 window.openAdminManagementModal = function () {
   const modal = document.getElementById('admin-management-modal');
   if (!modal) return;
@@ -14073,9 +14091,10 @@ window.renderAdminUsersTable = function () {
     <table class="admin-users-table">
       <thead>
         <tr>
-          <th style="min-width: 220px;">Học Viên</th>
+          <th style="min-width: 200px;">Học Viên</th>
           <th>Trạng Thái</th>
           <th>Vai Trò &amp; Quyền Hạn</th>
+          <th>Thiết Bị Gần Nhất 💻</th>
           <th>Điểm Thi &amp; Lộ Trình</th>
           <th>Chuỗi Học 🔥</th>
           <th>Thời Gian ⏱️</th>
@@ -14109,6 +14128,39 @@ window.renderAdminUsersTable = function () {
       roleBadge = `<span class="admin-role-badge admin-role-admin"><i class="fa-solid fa-shield-halved"></i> Quản trị viên</span>`;
     } else {
       roleBadge = `<span class="admin-role-badge admin-role-user"><i class="fa-solid fa-graduation-cap"></i> Học viên</span>`;
+    }
+
+    // Device info HTML
+    const dev = u.lastDeviceInfo;
+    let deviceHtml = '';
+    if (dev) {
+      const isMobile = dev.isTouch || /iOS|Android|iPhone|iPad/i.test(dev.os);
+      const devIcon = isMobile ? '<i class="fa-solid fa-mobile-screen-button" style="color: #38bdf8; font-size: 0.95rem;"></i>' : '<i class="fa-solid fa-laptop" style="color: #a855f7; font-size: 0.95rem;"></i>';
+      const tierId = dev.tier?.id || 'tier-2';
+      const tierBadge = tierId === 'tier-3' 
+        ? '<span style="font-size:0.68rem;background:rgba(16,185,129,0.18);color:#10b981;padding:1px 6px;border-radius:4px;font-weight:800;border:1px solid rgba(16,185,129,0.35);">Tier 3</span>'
+        : (tierId === 'tier-2'
+          ? '<span style="font-size:0.68rem;background:rgba(245,158,11,0.18);color:#f59e0b;padding:1px 6px;border-radius:4px;font-weight:800;border:1px solid rgba(245,158,11,0.35);">Tier 2</span>'
+          : '<span style="font-size:0.68rem;background:rgba(148,163,184,0.18);color:#94a3b8;padding:1px 6px;border-radius:4px;font-weight:800;border:1px solid rgba(148,163,184,0.35);">Tier 1</span>');
+
+      const devTitle = `Hệ điều hành: ${dev.os} (${dev.browser || ''})\nCPU: ${dev.cpuCores || 4} Nhân | RAM: ${dev.memoryGB || 4}GB\nGPU: ${dev.gpuRenderer || 'Standard'}\nMàn hình: ${dev.screenWidth || 0}x${dev.screenHeight || 0} (@${dev.dpr || 1}x)\nMạng: ${dev.networkType || 'wifi'}\nPhân tầng: ${dev.tier?.name || 'Tiêu chuẩn'}\nCập nhật: ${dev.updatedAt ? new Date(dev.updatedAt).toLocaleString('vi-VN') : 'Gần đây'}`;
+
+      const shortGpu = (dev.gpuRenderer || 'Standard GPU').replace(/ANGLE \(([^,]+).*/, '$1').replace(/(Direct3D11|vs_\d+_\d+|ps_\d+_\d+)/g, '').trim();
+
+      deviceHtml = `
+        <div style="display: flex; flex-direction: column; gap: 3px; cursor: help; min-width: 140px;" title="${escapeHtml(devTitle)}">
+          <div style="display: flex; align-items: center; gap: 5px;">
+            ${devIcon}
+            <span style="font-size: 0.82rem; font-weight: 700; color: #ffffff;">${escapeHtml(dev.os)}</span>
+            ${tierBadge}
+          </div>
+          <div style="font-size: 0.72rem; color: #94a3b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 170px;" title="${escapeHtml(dev.gpuRenderer || '')}">
+            ${dev.cpuCores || 4}C / ${dev.memoryGB || 4}GB • ${escapeHtml(shortGpu)}
+          </div>
+        </div>
+      `;
+    } else {
+      deviceHtml = `<span style="font-size: 0.76rem; color: #64748b; font-style: italic;">Chưa ghi nhận</span>`;
     }
 
     // Scores & progress
@@ -14160,6 +14212,7 @@ window.renderAdminUsersTable = function () {
         </td>
         <td>${statusHtml}</td>
         <td>${roleBadge}</td>
+        <td>${deviceHtml}</td>
         <td>
           <div>${highestScoreHtml}</div>
         </td>
@@ -14169,11 +14222,9 @@ window.renderAdminUsersTable = function () {
           </span>
         </td>
         <td>
-          <span style="font-weight: 700; color: #e2e8f0; font-size: 0.85rem;">
-            ${timeFormatted}
-          </span>
+          <span style="font-weight: 700; color: #38bdf8; font-size: 0.88rem;">${timeFormatted}</span>
         </td>
-        <td style="text-align: right;">${actionBtnHtml}</td>
+        ${isCurrentSuper ? `<td>${actionBtnHtml}</td>` : ''}
       </tr>
     `;
   });

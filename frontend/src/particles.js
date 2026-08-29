@@ -3,7 +3,7 @@ export function initSeasonalParticles() {
   if (!canvas) {
     canvas = document.createElement('canvas');
     canvas.id = 'seasonal-particle-canvas';
-    canvas.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;';
+    canvas.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; will-change: transform; transform: translateZ(0);';
     if (document.body) {
       document.body.insertBefore(canvas, document.body.firstChild);
     } else {
@@ -18,55 +18,85 @@ export function initSeasonalParticles() {
     canvas.style.display = enabled ? 'block' : 'none';
   }
 
-  const ctx = canvas.getContext('2d');
-  let width = (canvas.width = window.innerWidth);
-  let height = (canvas.height = window.innerHeight);
+  const ctx = canvas.getContext('2d', { alpha: true });
+  // Limit canvas internal resolution to max 1280x720 to save 80% GPU memory on 4K/Retina
+  let width = (canvas.width = Math.min(window.innerWidth, 1280));
+  let height = (canvas.height = Math.min(window.innerHeight, 720));
 
   window.addEventListener('resize', () => {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-  });
+    width = canvas.width = Math.min(window.innerWidth, 1280);
+    height = canvas.height = Math.min(window.innerHeight, 720);
+  }, { passive: true });
 
-  const month = new Date().getMonth() + 1; // 1 to 12
+  const month = new Date().getMonth() + 1;
   let season = 'spring';
   if (month >= 1 && month <= 3) season = 'spring';
   else if (month >= 4 && month <= 6) season = 'summer';
   else if (month >= 7 && month <= 9) season = 'autumn';
   else season = 'winter';
 
-  const particleCount = season === 'winter' ? 40 : 28;
+  const isMobile = window.innerWidth < 768;
+  const particleCount = isMobile ? 10 : (season === 'winter' ? 22 : 16);
   const particles = [];
 
   for (let i = 0; i < particleCount; i++) {
     particles.push({
       x: Math.random() * width,
       y: Math.random() * height,
-      size: season === 'winter' ? Math.random() * 3.5 + 2 : Math.random() * 7 + 5,
-      speedY: Math.random() * 1.2 + 0.5,
-      speedX: Math.sin(Math.random() * Math.PI) * 0.7,
+      size: season === 'winter' ? Math.random() * 2.5 + 2 : Math.random() * 5 + 3,
+      speedY: Math.random() * 0.8 + 0.3,
+      speedX: Math.sin(Math.random() * Math.PI) * 0.4,
       rotation: Math.random() * 360,
-      rotSpeed: (Math.random() - 0.5) * 1.5,
-      opacity: Math.random() * 0.65 + 0.35
+      rotSpeed: (Math.random() - 0.5) * 1.0,
+      opacity: Math.random() * 0.55 + 0.25
     });
   }
 
   let animFrameId = null;
+  let isTabVisible = !document.hidden;
+  let isScrolling = false;
+  let scrollTimeout = null;
+  let lastFrameTime = 0;
+  const targetInterval = 1000 / 30; // 30 FPS cap
 
-  function render() {
-    if (localStorage.getItem('particles_enabled') === 'false') {
-      ctx.clearRect(0, 0, width, height);
-      if (animFrameId) {
-        cancelAnimationFrame(animFrameId);
-        animFrameId = null;
+  // Pause on background tab
+  document.addEventListener('visibilitychange', () => {
+    isTabVisible = !document.hidden;
+    if (isTabVisible && !animFrameId && localStorage.getItem('particles_enabled') !== 'false') {
+      animFrameId = requestAnimationFrame(render);
+    }
+  }, { passive: true });
+
+  // Pause during active scrolling to give 100% 60-120fps smooth scrolling
+  window.addEventListener('scroll', () => {
+    isScrolling = true;
+    if (scrollTimeout) clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      isScrolling = false;
+      if (isTabVisible && !animFrameId && localStorage.getItem('particles_enabled') !== 'false') {
+        animFrameId = requestAnimationFrame(render);
       }
+    }, 150);
+  }, { passive: true });
+
+  function render(timestamp) {
+    if (!isTabVisible || isScrolling || localStorage.getItem('particles_enabled') === 'false') {
+      animFrameId = null;
       return;
     }
+
+    // 30 FPS throttling
+    if (timestamp - lastFrameTime < targetInterval) {
+      animFrameId = requestAnimationFrame(render);
+      return;
+    }
+    lastFrameTime = timestamp;
 
     ctx.clearRect(0, 0, width, height);
 
     particles.forEach(p => {
       p.y += p.speedY;
-      p.x += Math.sin(p.y * 0.01) * 0.5;
+      p.x += Math.sin(p.y * 0.01) * 0.3;
       p.rotation += p.rotSpeed;
 
       if (p.y > height + 20) {
@@ -109,12 +139,12 @@ export function initSeasonalParticles() {
   }
 
   if (localStorage.getItem('particles_enabled') !== 'false') {
-    render();
+    animFrameId = requestAnimationFrame(render);
   }
 
   window.startParticleLoop = () => {
     if (!animFrameId && localStorage.getItem('particles_enabled') !== 'false') {
-      render();
+      animFrameId = requestAnimationFrame(render);
     }
   };
 }
