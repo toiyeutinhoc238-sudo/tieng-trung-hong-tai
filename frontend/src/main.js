@@ -13984,7 +13984,7 @@ let adminSyncInterval = null;
 function isSuperAdmin(email) {
   if (!email) return false;
   const em = email.toLowerCase().trim();
-  return em.includes('phanphiphu') || em.includes('thaihong162004') || em.includes('toiyeutinhoc');
+  return em.includes('phanphiphu') || em.includes('thaihong162004');
 }
 
 window.syncDeviceTelemetry = async function (data) {
