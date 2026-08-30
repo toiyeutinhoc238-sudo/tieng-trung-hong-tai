@@ -3819,9 +3819,7 @@ async function initAuth() {
     userStudyTime = totalHistorySecs;
   }
   const calcStreak = calculateStreakFromHistory(history);
-  if (calcStreak > userStreak) {
-    userStreak = calcStreak;
-  }
+  userStreak = calcStreak;
 
   renderUserProfile();
   updateStatsUI();
@@ -9720,40 +9718,41 @@ function formatStudyTimeDisplay(totalMinutes) {
 }
 window.formatStudyTimeDisplay = formatStudyTimeDisplay;
 
+// Safe date stepping (handles leap years, month & year boundaries cleanly in UTC)
+function getPreviousDateStr(dateStr) {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  const dt = new Date(Date.UTC(y, m - 1, d, 12, 0, 0));
+  dt.setUTCDate(dt.getUTCDate() - 1);
+  return dt.toISOString().split('T')[0];
+}
+
+// Helper to calculate streak from daily history
+// Chuỗi ngày được tính theo số ngày học liên tiếp. Nếu đứt đoạn thì xem như mất chuỗi (= 0).
 function calculateStreakFromHistory(dailyHistory) {
-  if (!dailyHistory || typeof dailyHistory !== 'object') return 1;
-  const dates = Object.keys(dailyHistory)
-    .filter(d => (dailyHistory[d] || 0) > 0)
-    .sort();
-  if (dates.length === 0) return 1;
+  if (!dailyHistory || typeof dailyHistory !== 'object') return 0;
+  const activeDates = new Set(
+    Object.keys(dailyHistory).filter(d => (dailyHistory[d] || 0) > 0)
+  );
+  if (activeDates.size === 0) return 0;
 
-  const today = new Date();
-  const todayStr = today.toLocaleDateString('sv');
-  const yesterday = new Date(today);
-  yesterday.setDate(yesterday.getDate() - 1);
-  const yesterdayStr = yesterday.toLocaleDateString('sv');
+  // Giờ chuẩn Việt Nam (Asia/Ho_Chi_Minh)
+  const todayStr = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' }).format(new Date());
+  const yesterdayStr = getPreviousDateStr(todayStr);
 
-  let startStr = null;
-  if (dates.includes(todayStr)) {
-    startStr = todayStr;
-  } else if (dates.includes(yesterdayStr)) {
-    startStr = yesterdayStr;
-  } else {
-    startStr = dates[dates.length - 1];
+  // Nếu cả hôm nay và hôm qua đều không học -> Chuỗi đã đứt -> 0 ngày
+  if (!activeDates.has(todayStr) && !activeDates.has(yesterdayStr)) {
+    return 0;
   }
 
+  let curr = activeDates.has(todayStr) ? todayStr : yesterdayStr;
   let streak = 0;
-  let checkDate = new Date(startStr);
-  while (true) {
-    const dateKey = checkDate.toLocaleDateString('sv');
-    if (dailyHistory[dateKey] && dailyHistory[dateKey] > 0) {
-      streak++;
-      checkDate.setDate(checkDate.getDate() - 1);
-    } else {
-      break;
-    }
+
+  while (activeDates.has(curr)) {
+    streak++;
+    curr = getPreviousDateStr(curr);
   }
-  return Math.max(streak, 1);
+
+  return streak;
 }
 window.calculateStreakFromHistory = calculateStreakFromHistory;
 
@@ -10032,11 +10031,9 @@ function renderCourseCompletionDashboard() {
     userStudyTime = totalHistorySecs;
   }
   const calcStreak = calculateStreakFromHistory(history);
-  if (calcStreak > userStreak) {
-    userStreak = calcStreak;
-  }
+  userStreak = calcStreak;
 
-  if (zubiStreak) zubiStreak.textContent = `${userStreak || 1} Ngày`;
+  if (zubiStreak) zubiStreak.textContent = `${userStreak} Ngày`;
 
   const activeVocabs = vocabList.filter(w => !w.isCustom);
   const totalMemorized = activeVocabs.filter(w => w.isMemorized).length;
@@ -10146,7 +10143,7 @@ function renderHomeLeaderboard() {
         const medal = rankBadges[idx] || `<span style="font-size: 0.88rem; font-weight: 800; color: #94a3b8; width: 22px; text-align: center; display: inline-block;">${idx + 1}</span>`;
         const name = item.name || 'Học viên';
         const points = item.score || 0;
-        const streak = item.streak || 1;
+        const streak = item.streak || 0;
         const col = rankColors[idx] || '#38bdf8';
         const borderCol = borderColors[idx] || 'rgba(255,255,255,0.08)';
         const avatar = item.picture ? `<img src="${item.picture}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid ${col}; flex-shrink: 0;">` : `<div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, ${col}, #2563eb); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.82rem; flex-shrink: 0;">${name.charAt(0).toUpperCase()}</div>`;
@@ -10182,9 +10179,7 @@ function updateStatsUI() {
     userStudyTime = totalHistorySecs;
   }
   const calcStreak = calculateStreakFromHistory(history);
-  if (calcStreak > userStreak) {
-    userStreak = calcStreak;
-  }
+  userStreak = calcStreak;
 
   const streakEl = document.getElementById('welcome-streak-val');
   const homeStreakEl = document.getElementById('home-streak-val');
@@ -10198,8 +10193,8 @@ function updateStatsUI() {
   const zubiTotalWordsEl = document.getElementById('zubi-total-words-count');
 
   if (streakEl) streakEl.textContent = `${userStreak} ngày`;
-  if (homeStreakEl) homeStreakEl.textContent = `${userStreak || 1}`;
-  if (zubiStreakEl) zubiStreakEl.textContent = `${userStreak || 1} Ngày`;
+  if (homeStreakEl) homeStreakEl.textContent = `${userStreak}`;
+  if (zubiStreakEl) zubiStreakEl.textContent = `${userStreak} Ngày`;
 
   const minutes = Math.floor((userStudyTime + sessionStudyTime) / 60);
   const formattedTime = formatStudyTimeDisplay(minutes);
@@ -10606,7 +10601,7 @@ window.openZubiStatDetail = function (type) {
         </div>
         <div style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 16px; padding: 18px; text-align: center;">
           <div style="font-size: 0.8rem; color: #fbbf24; font-weight: 700; text-transform: uppercase;">Chuỗi ngày liên tục (Streak)</div>
-          <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-top: 6px;">🔥 ${userStreak || 1} ngày</div>
+          <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-top: 6px;">🔥 ${userStreak || 0} ngày</div>
         </div>
       </div>
       <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 18px; display: flex; gap: 14px; align-items: flex-start;">
@@ -10634,7 +10629,7 @@ window.openZubiStatDetail = function (type) {
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
         <div style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 16px; padding: 18px; text-align: center;">
           <div style="font-size: 0.8rem; color: #fbbf24; font-weight: 700; text-transform: uppercase;">Chuỗi ngày liên tục</div>
-          <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-top: 6px;">🔥 ${userStreak || 1} ngày</div>
+          <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-top: 6px;">🔥 ${userStreak || 0} ngày</div>
         </div>
         <div style="background: rgba(59, 130, 246, 0.12); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 16px; padding: 18px; text-align: center;">
           <div style="font-size: 0.8rem; color: #60a5fa; font-weight: 700; text-transform: uppercase;">Tổng thời gian học</div>
@@ -10839,9 +10834,7 @@ async function loadInitialStats() {
     userStudyTime = totalHistorySecs;
   }
   const calcStreak = calculateStreakFromHistory(history);
-  if (calcStreak > userStreak) {
-    userStreak = calcStreak;
-  }
+  userStreak = calcStreak;
 
   if (currentUser) {
     const userKey = currentUser._id || currentUser.id || currentUser.email || 'user';
@@ -12925,7 +12918,7 @@ window.loadRankPageData = function () {
               ${item.picture ? `<img src="${item.picture}" class="lb-row-avatar">` : `<div class="lb-row-avatar-placeholder">${item.name.charAt(0)}</div>`}
               <div style="flex: 1; min-width: 0;">
                 <div class="lb-user-name">${item.name}</div>
-                <div class="lb-subtext">Chuỗi ngày học: <strong style="color: #f97316;">🔥 ${item.streak || 1} ngày</strong></div>
+                <div class="lb-subtext">Chuỗi ngày học: <strong style="color: #f97316;">🔥 ${item.streak || 0} ngày</strong></div>
               </div>
               <div style="text-align: right;">
                 <div class="lb-score-val">${item.score} Điểm</div>
@@ -14113,7 +14106,7 @@ window.renderAdminUsersTable = function () {
 
     // Scores & progress
     const highestScoreHtml = u.quizCount > 0
-      ? `<span style="font-weight: 800; color: #22c55e;">${u.highestQuizScore}đ</span> <span style="font-size: 0.72rem; color: #94a3b8;">(${u.quizCount} đề)</span>`
+      ? `<span onclick="window.openStudentHistoryDetail('${safeEmail}', 'games')" style="cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Nhấp để xem chi tiết lịch sử chơi trò chơi"><strong style="color: #22c55e; font-weight: 800;">${u.highestQuizScore}đ</strong> <span style="font-size: 0.72rem; color: #a855f7; text-decoration: underline;">(${u.quizCount} lượt)</span></span>`
       : `<span style="font-size: 0.78rem; color: #64748b;">Chưa thi</span>`;
 
     // Format study time
@@ -14286,30 +14279,30 @@ function formatDurationDetailed(sec) {
 
 window.switchStudentDetailTab = function (tabName) {
   const tabLogs = document.getElementById('student-tab-access-logs');
-  const tabDaily = document.getElementById('student-tab-daily-history');
+  const tabGames = document.getElementById('student-tab-game-history');
   const btnLogs = document.getElementById('btn-tab-access-logs');
-  const btnDaily = document.getElementById('btn-tab-daily-history');
+  const btnGames = document.getElementById('btn-tab-game-history');
 
   if (tabName === 'logs') {
-    if (tabLogs) tabLogs.style.display = 'block';
-    if (tabDaily) tabDaily.style.display = 'none';
+    if (tabLogs) tabLogs.style.display = 'flex';
+    if (tabGames) tabGames.style.display = 'none';
     if (btnLogs) {
       btnLogs.style.background = 'linear-gradient(135deg, #0284c7, #2563eb)';
       btnLogs.style.color = '#ffffff';
       btnLogs.style.borderColor = '#38bdf8';
     }
-    if (btnDaily) {
-      btnDaily.style.background = 'rgba(255,255,255,0.06)';
-      btnDaily.style.color = '#94a3b8';
-      btnDaily.style.borderColor = 'rgba(255,255,255,0.12)';
+    if (btnGames) {
+      btnGames.style.background = 'rgba(255,255,255,0.06)';
+      btnGames.style.color = '#94a3b8';
+      btnGames.style.borderColor = 'rgba(255,255,255,0.12)';
     }
-  } else {
+  } else if (tabName === 'games') {
     if (tabLogs) tabLogs.style.display = 'none';
-    if (tabDaily) tabDaily.style.display = 'block';
-    if (btnDaily) {
-      btnDaily.style.background = 'linear-gradient(135deg, #0284c7, #2563eb)';
-      btnDaily.style.color = '#ffffff';
-      btnDaily.style.borderColor = '#38bdf8';
+    if (tabGames) tabGames.style.display = 'flex';
+    if (btnGames) {
+      btnGames.style.background = 'linear-gradient(135deg, #7c3aed, #6d28d9)';
+      btnGames.style.color = '#ffffff';
+      btnGames.style.borderColor = '#a855f7';
     }
     if (btnLogs) {
       btnLogs.style.background = 'rgba(255,255,255,0.06)';
@@ -14319,7 +14312,42 @@ window.switchStudentDetailTab = function (tabName) {
   }
 };
 
-window.openStudentHistoryDetail = function (userEmail) {
+window.switchAccessSubTab = function (subType) {
+  const subLogs = document.getElementById('access-subview-logs');
+  const subDaily = document.getElementById('access-subview-daily');
+  const btnSubLogs = document.getElementById('btn-sub-access-logs');
+  const btnSubDaily = document.getElementById('btn-sub-access-daily');
+
+  if (subType === 'logs') {
+    if (subLogs) subLogs.style.display = 'block';
+    if (subDaily) subDaily.style.display = 'none';
+    if (btnSubLogs) {
+      btnSubLogs.style.background = 'rgba(56, 189, 248, 0.2)';
+      btnSubLogs.style.color = '#38bdf8';
+      btnSubLogs.style.borderColor = 'rgba(56, 189, 248, 0.4)';
+    }
+    if (btnSubDaily) {
+      btnSubDaily.style.background = 'transparent';
+      btnSubDaily.style.color = '#94a3b8';
+      btnSubDaily.style.borderColor = 'transparent';
+    }
+  } else {
+    if (subLogs) subLogs.style.display = 'none';
+    if (subDaily) subDaily.style.display = 'block';
+    if (btnSubDaily) {
+      btnSubDaily.style.background = 'rgba(56, 189, 248, 0.2)';
+      btnSubDaily.style.color = '#38bdf8';
+      btnSubDaily.style.borderColor = 'rgba(56, 189, 248, 0.4)';
+    }
+    if (btnSubLogs) {
+      btnSubLogs.style.background = 'transparent';
+      btnSubLogs.style.color = '#94a3b8';
+      btnSubLogs.style.borderColor = 'transparent';
+    }
+  }
+};
+
+window.openStudentHistoryDetail = function (userEmail, defaultTab = 'logs') {
   const user = adminCachedUsersList.find(u => u.email === userEmail);
   if (!user) {
     showToast('Không tìm thấy dữ liệu học viên!', true);
@@ -14339,12 +14367,14 @@ window.openStudentHistoryDetail = function (userEmail) {
   const dailyHistory = user.dailyHistory || {};
   const dates = Object.keys(dailyHistory).sort().reverse();
   const accessLogs = Array.isArray(user.accessLogs) ? user.accessLogs : [];
+  const gameHistory = Array.isArray(user.gameHistory) ? user.gameHistory : [];
 
-  let accessLogsRowsHtml = '';
-  if (accessLogs.length === 0) {
-    accessLogsRowsHtml = `<tr><td colspan="5" style="text-align: center; padding: 28px; color: #94a3b8;"><i class="fa-solid fa-clock-rotate-left" style="font-size: 1.5rem; margin-bottom: 6px; display: block; color: #64748b;"></i>Chưa có lịch sử vào/thoát web chi tiết (Sẽ tự động ghi nhận khi học viên truy cập).</td></tr>`;
-  } else {
-    accessLogsRowsHtml = accessLogs.map((log, index) => {
+  function renderStudentAccessRows(logs) {
+    if (!logs || !Array.isArray(logs) || logs.length === 0) {
+      return `<tr><td colspan="4" style="text-align: center; padding: 28px; color: #94a3b8;"><i class="fa-solid fa-clock-rotate-left" style="font-size: 1.5rem; margin-bottom: 6px; display: block; color: #64748b;"></i>Chưa có lịch sử vào/thoát web chi tiết (Sẽ tự động ghi nhận khi học viên truy cập).</td></tr>`;
+    }
+
+    return logs.map((log, index) => {
       const enterFormatted = formatVnDateTime(log.enterTime);
       const isCurrentlyOnline = user.isOnline && index === 0 && !log.isClosed;
       const exitFormatted = isCurrentlyOnline
@@ -14352,29 +14382,30 @@ window.openStudentHistoryDetail = function (userEmail) {
         : formatVnDateTime(log.exitTime);
 
       const durFormatted = formatDurationDetailed(log.durationSeconds || 0);
-      const deviceStr = escapeHtml(log.device || 'Web');
+      const statusBadge = isCurrentlyOnline
+        ? `<span style="background: rgba(34,197,94,0.15); color: #22c55e; padding: 3px 10px; border-radius: 6px; font-weight: 800; font-size: 0.75rem; border: 1px solid rgba(34,197,94,0.3); display: inline-flex; align-items: center; gap: 5px;"><span style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span> Online</span>`
+        : `<span style="background: rgba(148,163,184,0.12); color: #94a3b8; padding: 3px 10px; border-radius: 6px; font-weight: 600; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 5px;"><span style="width: 6px; height: 6px; border-radius: 50%; background: #64748b;"></span> Offline</span>`;
 
       return `
         <tr style="border-bottom: 1px solid rgba(255,255,255,0.06); transition: background 0.15s;">
-          <td style="padding: 10px 12px; font-weight: 700; color: #34d399; white-space: nowrap;">
+          <td style="padding: 10px 14px; font-weight: 700; color: #34d399; white-space: nowrap;">
             <i class="fa-solid fa-arrow-right-to-bracket" style="margin-right: 6px; color: #10b981;"></i>${enterFormatted}
           </td>
-          <td style="padding: 10px 12px; font-weight: 700; color: ${isCurrentlyOnline ? '#22c55e' : '#f87171'}; white-space: nowrap;">
+          <td style="padding: 10px 14px; font-weight: 700; color: ${isCurrentlyOnline ? '#22c55e' : '#f87171'}; white-space: nowrap;">
             <i class="fa-solid fa-arrow-right-from-bracket" style="margin-right: 6px; color: ${isCurrentlyOnline ? '#22c55e' : '#ef4444'};"></i>${exitFormatted}
           </td>
-          <td style="padding: 10px 12px; font-weight: 800; color: #fbbf24; white-space: nowrap; text-align: center;">
+          <td style="padding: 10px 14px; font-weight: 800; color: #fbbf24; white-space: nowrap; text-align: center;">
             ${durFormatted}
           </td>
-          <td style="padding: 10px 12px; color: #cbd5e1; font-size: 0.8rem; white-space: nowrap;">
-            ${deviceStr}
-          </td>
-          <td style="padding: 10px 12px; text-align: right; white-space: nowrap;">
-            ${isCurrentlyOnline ? '<span style="background: rgba(34,197,94,0.15); color: #22c55e; padding: 2px 8px; border-radius: 6px; font-weight: 800; font-size: 0.72rem; border: 1px solid rgba(34,197,94,0.3);">Online</span>' : '<span style="background: rgba(148,163,184,0.12); color: #94a3b8; padding: 2px 8px; border-radius: 6px; font-weight: 600; font-size: 0.72rem;">Đã Thoát</span>'}
+          <td style="padding: 10px 14px; text-align: right; white-space: nowrap;">
+            ${statusBadge}
           </td>
         </tr>
       `;
     }).join('');
   }
+
+  const accessLogsRowsHtml = renderStudentAccessRows(accessLogs);
 
   let dailyRowsHtml = '';
   if (dates.length === 0) {
@@ -14392,10 +14423,75 @@ window.openStudentHistoryDetail = function (userEmail) {
     }).join('');
   }
 
+  function renderStudentGameRows(historyArr) {
+    if (!historyArr || !Array.isArray(historyArr) || historyArr.length === 0) {
+      return `<tr><td colspan="6" style="text-align: center; padding: 36px 20px; color: #94a3b8;"><i class="fa-solid fa-gamepad" style="font-size: 2rem; margin-bottom: 8px; display: block; color: #64748b; opacity: 0.6;"></i>Học viên chưa tham gia lượt chơi trò chơi nào.</td></tr>`;
+    }
+
+    const modeNames = {
+      'zh-vi': 'Chữ Hán ➔ Việt',
+      'vi-zh': 'Việt ➔ Chữ Hán',
+      'zh-pinyin': 'Chữ Hán ➔ Pinyin',
+      'pinyin-zh': 'Pinyin ➔ Chữ Hán',
+      'mix': 'Hỗn hợp',
+      'cannon': 'Bắn Đại Bác',
+      'snake': 'Rắn Săn Mồi',
+      'mahjong': 'Mạt Chược',
+      'rhythm': 'Nhịp Điệu Thanh Điệu',
+      'alchemist': 'Giả Kim Thuật'
+    };
+
+    // Deduplicate records within 60s
+    const unique = [];
+    historyArr.forEach(item => {
+      if (!item) return;
+      const itemTime = item.playedAt ? new Date(item.playedAt).getTime() : 0;
+      const isDup = unique.some(ex => {
+        const exTime = ex.playedAt ? new Date(ex.playedAt).getTime() : 0;
+        return Math.abs(itemTime - exTime) < 60000 && ex.score == item.score && ex.stage == item.stage;
+      });
+      if (!isDup) unique.push(item);
+    });
+
+    unique.sort((a, b) => new Date(b.playedAt || b.date || 0) - new Date(a.playedAt || a.date || 0));
+
+    return unique.map(item => {
+      const playedDate = item.playedAt || item.date;
+      let dateFormatted = '-';
+      if (playedDate) {
+        const d = new Date(playedDate);
+        if (!isNaN(d.getTime())) {
+          const timePart = d.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', hour12: false });
+          const datePart = `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
+          dateFormatted = `<div style="font-weight: 700; color: #ffffff;">${timePart}</div><div style="font-size: 0.72rem; color: #94a3b8;">${datePart}</div>`;
+        }
+      }
+
+      const modeName = escapeHtml(modeNames[item.mode] || item.mode || 'Trắc nghiệm');
+      const levelLabel = item.level === 'all' ? 'Tất cả' : (item.level ? `HSK ${escapeHtml(String(item.level))}` : 'Phiên Âm');
+      const scoreVal = typeof item.score !== 'undefined' ? item.score : 0;
+      const stageText = item.stage ? `${item.stage} câu` : (item.total ? `${item.total} câu` : '-');
+      const comboText = typeof item.combo !== 'undefined' && item.combo !== null ? item.combo : '-';
+
+      return `
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.06); transition: background 0.15s;">
+          <td style="padding: 10px 14px; white-space: nowrap;">${dateFormatted}</td>
+          <td style="padding: 10px 14px; font-weight: 600; color: #ffffff; white-space: nowrap;">${modeName}</td>
+          <td style="padding: 10px 14px; text-align: center; color: #38bdf8; font-weight: 700; white-space: nowrap;">${levelLabel}</td>
+          <td style="padding: 10px 14px; text-align: center; color: #fbbf24; font-weight: 800; font-size: 1.05rem; white-space: nowrap;">${scoreVal}</td>
+          <td style="padding: 10px 14px; text-align: center; color: #cbd5e1; white-space: nowrap;">${stageText}</td>
+          <td style="padding: 10px 14px; text-align: center; color: #22c55e; font-weight: 800; font-size: 1rem; white-space: nowrap;">${comboText}</td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  const gameHistoryRowsHtml = renderStudentGameRows(gameHistory);
   const totalMins = Math.round((user.studyTime || 0) / 60);
+  const studentStreak = calculateStreakFromHistory(dailyHistory);
 
   modal.innerHTML = `
-    <div style="background: linear-gradient(180deg, #131d35 0%, #0d1527 100%); border: 1.5px solid rgba(56, 189, 248, 0.35); border-radius: 24px; width: 100%; max-width: 780px; max-height: 90vh; padding: 24px; box-shadow: 0 25px 60px rgba(0,0,0,0.85); color: #ffffff; position: relative; display: flex; flex-direction: column; gap: 14px; overflow: hidden;">
+    <div style="background: linear-gradient(180deg, #131d35 0%, #0d1527 100%); border: 1.5px solid rgba(56, 189, 248, 0.35); border-radius: 24px; width: 100%; max-width: 820px; max-height: 90vh; padding: 24px; box-shadow: 0 25px 60px rgba(0,0,0,0.85); color: #ffffff; position: relative; display: flex; flex-direction: column; gap: 14px; overflow: hidden;">
       <button type="button" onclick="document.getElementById('admin-user-history-detail-modal').style.display='none'" style="position: absolute; top: 18px; right: 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; font-size: 1.2rem; cursor: pointer; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10;">
         <i class="fa-solid fa-xmark"></i>
       </button>
@@ -14415,60 +14511,93 @@ window.openStudentHistoryDetail = function (userEmail) {
       </div>
 
       <!-- Quick KPI Badges -->
-      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
         <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 10px; text-align: center;">
-          <div style="font-size: 0.7rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Chuỗi Ngày Học</div>
-          <div style="font-size: 1.15rem; font-weight: 800; color: #f97316; margin-top: 2px;"><i class="fa-solid fa-fire"></i> ${user.streak || 0} ngày</div>
+          <div style="font-size: 0.68rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Chuỗi Ngày Học</div>
+          <div style="font-size: 1.1rem; font-weight: 800; color: #f97316; margin-top: 2px;"><i class="fa-solid fa-fire"></i> ${studentStreak} ngày</div>
         </div>
         <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 10px; text-align: center;">
-          <div style="font-size: 0.7rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Tổng Thời Gian Học</div>
-          <div style="font-size: 1.15rem; font-weight: 800; color: #38bdf8; margin-top: 2px;"><i class="fa-solid fa-clock"></i> ${totalMins} phút</div>
+          <div style="font-size: 0.68rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Tổng Thời Gian</div>
+          <div style="font-size: 1.1rem; font-weight: 800; color: #38bdf8; margin-top: 2px;"><i class="fa-solid fa-clock"></i> ${totalMins} phút</div>
         </div>
         <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 10px; text-align: center;">
-          <div style="font-size: 0.7rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Tổng Phiên Vào Web</div>
-          <div style="font-size: 1.15rem; font-weight: 800; color: #10b981; margin-top: 2px;"><i class="fa-solid fa-door-open"></i> ${accessLogs.length} phiên</div>
+          <div style="font-size: 0.68rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Phiên Vào Web</div>
+          <div id="student-kpi-sessions-count" style="font-size: 1.1rem; font-weight: 800; color: #10b981; margin-top: 2px;"><i class="fa-solid fa-door-open"></i> ${accessLogs.length} phiên</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 10px; text-align: center;">
+          <div style="font-size: 0.68rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Lượt Chơi Game</div>
+          <div id="student-kpi-games-count" style="font-size: 1.1rem; font-weight: 800; color: #a855f7; margin-top: 2px;"><i class="fa-solid fa-gamepad"></i> ${gameHistory.length} lượt</div>
         </div>
       </div>
 
-      <!-- Tab Switcher -->
-      <div style="display: flex; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
-        <button type="button" id="btn-tab-access-logs" onclick="window.switchStudentDetailTab('logs')" style="padding: 8px 16px; font-size: 0.85rem; font-weight: 800; border-radius: 10px; background: linear-gradient(135deg, #0284c7, #2563eb); color: #ffffff; border: 1px solid #38bdf8; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;">
-          <i class="fa-solid fa-door-open"></i> Nhật Ký Vào / Thoát Web (${accessLogs.length})
+      <!-- 2 Main Tabs: Lịch Sử Truy Cập & Lịch Sử Chơi Trò Chơi -->
+      <div style="display: flex; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+        <button type="button" id="btn-tab-access-logs" onclick="window.switchStudentDetailTab('logs')" style="padding: 9px 18px; font-size: 0.88rem; font-weight: 800; border-radius: 10px; background: linear-gradient(135deg, #0284c7, #2563eb); color: #ffffff; border: 1px solid #38bdf8; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; transition: all 0.2s;">
+          <i class="fa-solid fa-door-open"></i> Lịch Sử Truy Cập (${accessLogs.length})
         </button>
-        <button type="button" id="btn-tab-daily-history" onclick="window.switchStudentDetailTab('daily')" style="padding: 8px 16px; font-size: 0.85rem; font-weight: 700; border-radius: 10px; background: rgba(255,255,255,0.06); color: #94a3b8; border: 1px solid rgba(255,255,255,0.12); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;">
-          <i class="fa-solid fa-calendar-days"></i> Lịch Sử Theo Ngày (${dates.length})
+        <button type="button" id="btn-tab-game-history" onclick="window.switchStudentDetailTab('games')" style="padding: 9px 18px; font-size: 0.88rem; font-weight: 700; border-radius: 10px; background: rgba(255,255,255,0.06); color: #94a3b8; border: 1px solid rgba(255,255,255,0.12); cursor: pointer; display: inline-flex; align-items: center; gap: 7px; transition: all 0.2s;">
+          <i class="fa-solid fa-gamepad"></i> Lịch Sử Chơi Trò Chơi (${gameHistory.length})
         </button>
       </div>
 
-      <!-- TAB 1: ACCESS LOGS TABLE (ENTER & EXIT TIMES) -->
-      <div id="student-tab-access-logs" style="flex: 1; overflow-y: auto; max-height: 320px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.25);">
-        <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem;">
-          <thead>
-            <tr style="background: rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.12); color: #cbd5e1; position: sticky; top: 0; z-index: 2;">
-              <th style="padding: 10px 12px; text-align: left; font-weight: 800;">🟢 Thời Gian Vào Web</th>
-              <th style="padding: 10px 12px; text-align: left; font-weight: 800;">🔴 Thời Gian Thoát Web</th>
-              <th style="padding: 10px 12px; text-align: center; font-weight: 800;">⏱️ Thời Lượng</th>
-              <th style="padding: 10px 12px; text-align: left; font-weight: 800;">📱 Thiết Bị</th>
-              <th style="padding: 10px 12px; text-align: right; font-weight: 800;">Trạng Thái</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${accessLogsRowsHtml}
-          </tbody>
-        </table>
+      <!-- TAB 1: LỊCH SỬ TRUY CẬP (ACCESS LOGS + DAILY STUDY BREAKDOWN) -->
+      <div id="student-tab-access-logs" style="display: flex; flex-direction: column; flex: 1; min-height: 0; gap: 8px;">
+        <!-- Sub-filter pills for Access tab -->
+        <div style="display: flex; gap: 8px; align-items: center; justify-content: flex-start;">
+          <button type="button" id="btn-sub-access-logs" onclick="window.switchAccessSubTab('logs')" style="padding: 5px 12px; font-size: 0.78rem; font-weight: 700; border-radius: 8px; background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); cursor: pointer; transition: all 0.2s;">
+            <i class="fa-solid fa-door-open"></i> Phiên Vào / Thoát Web (${accessLogs.length})
+          </button>
+          <button type="button" id="btn-sub-access-daily" onclick="window.switchAccessSubTab('daily')" style="padding: 5px 12px; font-size: 0.78rem; font-weight: 700; border-radius: 8px; background: transparent; color: #94a3b8; border: 1px solid transparent; cursor: pointer; transition: all 0.2s;">
+            <i class="fa-regular fa-calendar-check"></i> Lịch Sử Học Theo Ngày (${dates.length})
+          </button>
+        </div>
+
+        <div id="access-subview-logs" style="flex: 1; overflow-y: auto; max-height: 290px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.25);">
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem;">
+            <thead>
+              <tr style="background: rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.12); color: #cbd5e1; position: sticky; top: 0; z-index: 2;">
+                <th style="padding: 10px 14px; text-align: left; font-weight: 800;">🟢 Thời Gian Vào</th>
+                <th style="padding: 10px 14px; text-align: left; font-weight: 800;">🔴 Thời Gian Thoát</th>
+                <th style="padding: 10px 14px; text-align: center; font-weight: 800;">⏱️ Thời Lượng Truy Cập</th>
+                <th style="padding: 10px 14px; text-align: right; font-weight: 800;">Trạng Thái</th>
+              </tr>
+            </thead>
+            <tbody id="student-access-logs-tbody">
+              ${accessLogsRowsHtml}
+            </tbody>
+          </table>
+        </div>
+
+        <div id="access-subview-daily" style="display: none; flex: 1; overflow-y: auto; max-height: 290px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.25);">
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+            <thead>
+              <tr style="background: rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.12); color: #cbd5e1; position: sticky; top: 0; z-index: 2;">
+                <th style="padding: 10px 14px; text-align: left; font-weight: 800;">Ngày Học</th>
+                <th style="padding: 10px 14px; text-align: right; font-weight: 800;">Thời Gian Luyện Tập</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${dailyRowsHtml}
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <!-- TAB 2: DAILY STUDY BREAKDOWN TABLE -->
-      <div id="student-tab-daily-history" style="display: none; flex: 1; overflow-y: auto; max-height: 320px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.25);">
+      <!-- TAB 2: LỊCH SỬ CHƠI TRÒ CHƠI (GAME PLAY HISTORY) -->
+      <div id="student-tab-game-history" style="display: none; flex: 1; overflow-y: auto; max-height: 330px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.25);">
         <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
           <thead>
             <tr style="background: rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.12); color: #cbd5e1; position: sticky; top: 0; z-index: 2;">
-              <th style="padding: 10px 14px; text-align: left; font-weight: 800;">Ngày Học</th>
-              <th style="padding: 10px 14px; text-align: right; font-weight: 800;">Thời Gian Luyện Tập</th>
+              <th style="padding: 10px 14px; text-align: left; font-weight: 800;">Thời gian</th>
+              <th style="padding: 10px 14px; text-align: left; font-weight: 800;">Chế độ</th>
+              <th style="padding: 10px 14px; text-align: center; font-weight: 800;">Cấp độ</th>
+              <th style="padding: 10px 14px; text-align: center; font-weight: 800;">Điểm số</th>
+              <th style="padding: 10px 14px; text-align: center; font-weight: 800;">Số câu</th>
+              <th style="padding: 10px 14px; text-align: center; font-weight: 800;">Combo</th>
             </tr>
           </thead>
-          <tbody>
-            ${dailyRowsHtml}
+          <tbody id="student-game-history-tbody">
+            ${gameHistoryRowsHtml}
           </tbody>
         </table>
       </div>
@@ -14477,6 +14606,50 @@ window.openStudentHistoryDetail = function (userEmail) {
   `;
 
   modal.style.display = 'flex';
+
+  // Live background refresh directly from MongoDB endpoints for 100% data fidelity
+  fetch(`${API_BASE_URL}/api/admin/user/${encodeURIComponent(userEmail)}/access-logs`, {
+    headers: getAuthHeaders(),
+    credentials: 'include'
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data && Array.isArray(data.accessLogs)) {
+        user.accessLogs = data.accessLogs;
+        const countKpi = document.getElementById('student-kpi-sessions-count');
+        const badgeEl = document.getElementById('btn-tab-access-logs');
+        const subBadgeEl = document.getElementById('btn-sub-access-logs');
+        const tbody = document.getElementById('student-access-logs-tbody');
+        if (countKpi) countKpi.innerHTML = `<i class="fa-solid fa-door-open"></i> ${data.accessLogs.length} phiên`;
+        if (badgeEl) badgeEl.innerHTML = `<i class="fa-solid fa-door-open"></i> Lịch Sử Truy Cập (${data.accessLogs.length})`;
+        if (subBadgeEl) subBadgeEl.innerHTML = `<i class="fa-solid fa-door-open"></i> Phiên Vào / Thoát Web (${data.accessLogs.length})`;
+        if (tbody) tbody.innerHTML = renderStudentAccessRows(data.accessLogs);
+      }
+    })
+    .catch(() => {});
+
+  fetch(`${API_BASE_URL}/api/user/game-history?email=${encodeURIComponent(userEmail)}`, {
+    headers: getAuthHeaders(),
+    credentials: 'include'
+  })
+    .then(res => res.json())
+    .then(gh => {
+      if (Array.isArray(gh)) {
+        user.gameHistory = gh;
+        const kpiEl = document.getElementById('student-kpi-games-count');
+        const tabBtn = document.getElementById('btn-tab-game-history');
+        const tbody = document.getElementById('student-game-history-tbody');
+        if (kpiEl) kpiEl.innerHTML = `<i class="fa-solid fa-gamepad"></i> ${gh.length} lượt`;
+        if (tabBtn) tabBtn.innerHTML = `<i class="fa-solid fa-gamepad"></i> Lịch Sử Chơi Trò Chơi (${gh.length})`;
+        if (tbody) tbody.innerHTML = renderStudentGameRows(gh);
+      }
+    })
+    .catch(() => {});
+
+  // Switch to default tab if specified
+  if (defaultTab === 'games') {
+    window.switchStudentDetailTab('games');
+  }
 };
 
 window.openRolePickerModal = function (targetEmail, currentRole, targetName) {

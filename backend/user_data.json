@@ -19,7 +19,7 @@
       "role": "user",
       "lastSeenTime": "2026-08-20T15:06:16.856Z",
       "stats": {
-        "streak": 1,
+        "streak": 0,
         "studyTime": 10590,
         "lastActiveDate": "2026-08-20",
         "dailyHistory": {
@@ -71,7 +71,7 @@
       "role": "user",
       "lastSeenTime": "2026-08-16T10:45:25.745Z",
       "stats": {
-        "streak": 1,
+        "streak": 0,
         "studyTime": 600,
         "lastActiveDate": "2026-08-05",
         "dailyHistory": {}
@@ -84,7 +84,7 @@
       "role": "user",
       "lastSeenTime": "2026-08-16T10:45:25.745Z",
       "stats": {
-        "streak": 1,
+        "streak": 0,
         "studyTime": 30,
         "lastActiveDate": "2026-08-08",
         "dailyHistory": {}
@@ -97,7 +97,7 @@
       "role": "admin",
       "lastSeenTime": "2026-08-20T14:38:15.102Z",
       "stats": {
-        "streak": 9,
+        "streak": 0,
         "studyTime": 24520,
         "lastActiveDate": "2026-08-20",
         "dailyHistory": {
@@ -121,7 +121,7 @@
       "role": "user",
       "lastSeenTime": "2026-08-16T10:45:25.745Z",
       "stats": {
-        "streak": 1,
+        "streak": 0,
         "studyTime": 30,
         "lastActiveDate": "2026-08-14",
         "dailyHistory": {
@@ -136,7 +136,7 @@
       "role": "user",
       "lastSeenTime": "2026-08-16T10:45:25.746Z",
       "stats": {
-        "streak": 1,
+        "streak": 0,
         "studyTime": 255,
         "lastActiveDate": "2026-08-14",
         "dailyHistory": {
@@ -151,7 +151,7 @@
       "role": "user",
       "lastSeenTime": "2026-08-19T12:11:23.976Z",
       "stats": {
-        "streak": 2,
+        "streak": 0,
         "studyTime": 750,
         "lastActiveDate": "2026-08-16",
         "dailyHistory": {
@@ -167,7 +167,7 @@
       "role": "user",
       "lastSeenTime": "2026-08-20T14:01:52.682Z",
       "stats": {
-        "streak": 2,
+        "streak": 0,
         "studyTime": 2955,
         "lastActiveDate": "2026-08-20",
         "dailyHistory": {
@@ -185,7 +185,7 @@
       "role": "user",
       "lastSeenTime": "2026-08-20T13:37:15.592Z",
       "stats": {
-        "streak": 1,
+        "streak": 0,
         "studyTime": 2490,
         "lastActiveDate": "2026-08-20",
         "dailyHistory": {
@@ -235,7 +235,7 @@
       "role": "user",
       "lastSeenTime": "2026-08-16T10:45:25.746Z",
       "stats": {
-        "streak": 2,
+        "streak": 0,
         "studyTime": 4860,
         "lastActiveDate": "2026-08-16",
         "dailyHistory": {
@@ -284,7 +284,7 @@
       "role": "user",
       "lastSeenTime": "2026-08-16T10:45:25.746Z",
       "stats": {
-        "streak": 1,
+        "streak": 0,
         "studyTime": 255,
         "lastActiveDate": "2026-08-16",
         "dailyHistory": {
@@ -299,7 +299,7 @@
       "role": "user",
       "lastSeenTime": "2026-08-16T10:45:25.746Z",
       "stats": {
-        "streak": 1,
+        "streak": 0,
         "studyTime": 270,
         "lastActiveDate": "2026-08-16",
         "dailyHistory": {
@@ -323,7 +323,7 @@
       "role": "user",
       "lastSeenTime": "2026-08-16T10:45:25.746Z",
       "stats": {
-        "streak": 1,
+        "streak": 0,
         "studyTime": 30,
         "lastActiveDate": "2026-08-16",
         "dailyHistory": {
@@ -338,7 +338,7 @@
       "role": "user",
       "lastSeenTime": "2026-08-16T10:45:25.747Z",
       "stats": {
-        "streak": 1,
+        "streak": 0,
         "studyTime": 330,
         "lastActiveDate": "2026-08-16",
         "dailyHistory": {
@@ -353,7 +353,7 @@
       "role": "user",
       "lastSeenTime": "2026-08-16T10:45:25.747Z",
       "stats": {
-        "streak": 1,
+        "streak": 0,
         "studyTime": 30,
         "lastActiveDate": "2026-08-16",
         "dailyHistory": {
@@ -367,7 +367,7 @@
       "role": "user",
       "lastSeenTime": "2026-08-16T10:45:25.747Z",
       "stats": {
-        "streak": 1,
+        "streak": 0,
         "studyTime": 120,
         "lastActiveDate": "2026-08-16",
         "dailyHistory": {
@@ -382,7 +382,7 @@
       "role": "user",
       "lastSeenTime": "2026-08-16T10:45:25.747Z",
       "stats": {
-        "streak": 1,
+        "streak": 0,
         "studyTime": 135,
         "lastActiveDate": "2026-08-16",
         "dailyHistory": {
@@ -397,7 +397,7 @@
       "role": "user",
       "lastSeenTime": "2026-08-16T10:45:25.747Z",
       "stats": {
-        "streak": 1,
+        "streak": 0,
         "studyTime": 0,
         "lastActiveDate": "",
         "dailyHistory": {}
@@ -410,7 +410,7 @@
       "role": "user",
       "lastSeenTime": "2026-08-16T15:08:56.277Z",
       "stats": {
-        "streak": 1,
+        "streak": 0,
         "studyTime": 60,
         "lastActiveDate": "2026-08-16",
         "dailyHistory": {
@@ -425,7 +425,7 @@
       "role": "user",
       "lastSeenTime": "2026-08-19T12:29:33.585Z",
       "stats": {
-        "streak": 1,
+        "streak": 0,
         "studyTime": 135,
         "lastActiveDate": "2026-08-19",
         "dailyHistory": {
@@ -441,7 +441,7 @@
       "role": "user",
       "lastSeenTime": "2026-08-17T15:37:25.280Z",
       "stats": {
-        "streak": 1,
+        "streak": 0,
         "studyTime": 225,
         "lastActiveDate": "2026-08-17",
         "dailyHistory": {
@@ -456,7 +456,7 @@
       "role": "user",
       "lastSeenTime": "2026-08-20T14:39:39.740Z",
       "stats": {
-        "streak": 1,
+        "streak": 0,
         "studyTime": 7140,
         "lastActiveDate": "2026-08-20",
         "dailyHistory": {
@@ -506,7 +506,7 @@
       "role": "user",
       "lastSeenTime": "2026-08-17T14:08:10.318Z",
       "stats": {
-        "streak": 1,
+        "streak": 0,
         "studyTime": 180,
         "lastActiveDate": "2026-08-17",
         "dailyHistory": {
@@ -521,7 +521,7 @@
       "role": "user",
       "lastSeenTime": "2026-08-18T15:30:15.056Z",
       "stats": {
-        "streak": 1,
+        "streak": 0,
         "studyTime": 195,
         "lastActiveDate": "2026-08-18",
         "dailyHistory": {
@@ -536,7 +536,7 @@
       "role": "user",
       "lastSeenTime": "2026-08-18T19:28:30.839Z",
       "stats": {
-        "streak": 1,
+        "streak": 0,
         "studyTime": 435,
         "lastActiveDate": "2026-08-19",
         "dailyHistory": {

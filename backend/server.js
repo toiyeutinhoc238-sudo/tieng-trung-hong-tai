@@ -687,7 +687,7 @@ app.get(['/api/admin/users', '/api/admin/users-activity'], async (req, res) => {
         isOnline: isOnline,
         lastSeen: u.lastSeenTime || null,
         lastSeenTime: u.lastSeenTime || null,
-        streak: u.stats?.streak || 0,
+        streak: calculateStreakFromHistory(u.stats?.dailyHistory),
         studyTime: studyTime,
         studyTimeSeconds: studyTime,
         studyTimeMinutes: Math.round(studyTime / 60),
@@ -845,9 +845,33 @@ app.get('/api/admin/users', async (req, res) => {
   }
 
   const now = Date.now();
-  const usersList = [];
+  // Ensure we query directly from MongoDB Atlas for 100% fresh, real-time data
+  let dbUsersMap = new Map();
+  if (mongoose.connection.readyState === 1) {
+    try {
+      const dbUsers = await User.find({}).lean();
+      dbUsers.forEach(u => {
+        if (u && u._id) {
+          dbUsersMap.set(u._id.toLowerCase().trim(), u);
+        }
+      });
+    } catch (dbErr) {
+      console.error("Error reading users directly from MongoDB in /api/admin/users:", dbErr);
+    }
+  }
 
-  for (const [email, u] of Object.entries(userData.users || {})) {
+  // Combine emails from both MongoDB and in-memory userData
+  const allEmails = new Set([
+    ...dbUsersMap.keys(),
+    ...Object.keys(userData.users || {}).map(e => e.toLowerCase().trim())
+  ]);
+
+  for (const email of allEmails) {
+    const dbU = dbUsersMap.get(email);
+    const memU = (userData.users && (userData.users[email] || Object.values(userData.users).find(x => x && x.email && x.email.toLowerCase() === email))) || {};
+
+    // Source of truth: MongoDB record first, fallback to in-memory
+    const u = dbU || memU;
     const isSuper = isSuperAdmin(email);
     const isAdmin = isUserAdmin(email, userData);
     const role = isSuper ? 'super_admin' : (u.role || (email.includes('hongtai') ? 'admin' : 'user'));
@@ -858,23 +882,28 @@ app.get('/api/admin/users', async (req, res) => {
 
     // Exam scores and progress
     const stats = u.stats || {};
-    const quizHistory = (userData.quizHistory && userData.quizHistory[email]) || u.quizHistory || [];
+    const gameHistory = Array.isArray(u.gameHistory) ? u.gameHistory : (Array.isArray(memU.gameHistory) ? memU.gameHistory : []);
+    const quizHistory = (userData.quizHistory && userData.quizHistory[email]) || (Array.isArray(u.quizHistory) ? u.quizHistory : []);
+    const combinedGames = [...gameHistory, ...quizHistory].sort((a, b) => new Date(b.playedAt || b.date) - new Date(a.playedAt || a.date));
+
     let highestQuizScore = 0;
     let totalQuizScore = 0;
-    quizHistory.forEach(q => {
+    combinedGames.forEach(q => {
       const sc = Number(q.score) || 0;
       if (sc > highestQuizScore) highestQuizScore = sc;
       totalQuizScore += sc;
     });
-    const avgQuizScore = quizHistory.length > 0 ? Math.round(totalQuizScore / quizHistory.length) : 0;
+    const avgQuizScore = combinedGames.length > 0 ? Math.round(totalQuizScore / combinedGames.length) : 0;
 
-    const progress = (userData.progress && userData.progress[email]) || {};
+    const progress = (userData.progress && userData.progress[email]) || u.progress || {};
     let memorizedWordsCount = 0;
     let studiedWordsCount = 0;
     Object.values(progress).forEach(p => {
       if (p.isMemorized) memorizedWordsCount++;
       if (p.isStudied || p.isMemorized || p.isWrong || p.isStarred) studiedWordsCount++;
     });
+
+    const accessLogs = Array.isArray(u.accessLogs) ? u.accessLogs : (Array.isArray(memU.accessLogs) ? memU.accessLogs : []);
 
     usersList.push({
       email,
@@ -884,10 +913,10 @@ app.get('/api/admin/users', async (req, res) => {
       isSuperAdmin: isSuper,
       isAdmin,
       isOnline,
-      lastSeen: lastSeenTimestamp ? new Date(lastSeenTimestamp).toISOString() : (u.stats?.lastActiveDate || null),
-      streak: stats.streak || 0,
+      lastSeen: lastSeenTimestamp ? new Date(lastSeenTimestamp).toISOString() : (stats.lastActiveDate || null),
+      streak: calculateStreakFromHistory(stats.dailyHistory),
       studyTime: stats.studyTime || 0,
-      quizCount: quizHistory.length,
+      quizCount: combinedGames.length,
       highestQuizScore,
       avgQuizScore,
       memorizedWordsCount,
@@ -895,7 +924,8 @@ app.get('/api/admin/users', async (req, res) => {
       customWordsCount: (userData.customWords && userData.customWords[email] ? userData.customWords[email].length : 0),
       chatsCount: (userData.chats && userData.chats[email] ? userData.chats[email].length : 0),
       dailyHistory: stats.dailyHistory || {},
-      accessLogs: (u.accessLogs || []).slice(-50).reverse()
+      accessLogs: [...accessLogs].slice(-100).reverse(),
+      gameHistory: combinedGames
     });
   }
 
@@ -1031,7 +1061,7 @@ app.get('/api/admin/users/export-excel', async (req, res) => {
         email,
         roleStr,
         statusStr,
-        stats.streak || 0,
+        calculateStreakFromHistory(stats.dailyHistory),
         studyMins,
         studyHours,
         quizHistory.length,
@@ -1180,41 +1210,43 @@ app.post('/api/admin/users/role', async (req, res) => {
   });
 });
 
+// Safe date stepping (handles leap years, month & year boundaries cleanly in UTC)
+function getPreviousDateStr(dateStr) {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  const dt = new Date(Date.UTC(y, m - 1, d, 12, 0, 0));
+  dt.setUTCDate(dt.getUTCDate() - 1);
+  return dt.toISOString().split('T')[0];
+}
+
 // Helper to calculate streak from daily history
+// Chuỗi ngày được tính theo số ngày học liên tiếp. Nếu đứt đoạn (nghỉ học) thì xem như mất chuỗi (= 0).
 function calculateStreakFromHistory(dailyHistory) {
-  if (!dailyHistory || typeof dailyHistory !== 'object') return 1;
-  const dates = Object.keys(dailyHistory)
-    .filter(d => (dailyHistory[d] || 0) > 0)
-    .sort();
-  if (dates.length === 0) return 1;
+  if (!dailyHistory || typeof dailyHistory !== 'object') return 0;
+  const activeDates = new Set(
+    Object.keys(dailyHistory).filter(d => (dailyHistory[d] || 0) > 0)
+  );
+  if (activeDates.size === 0) return 0;
 
-  // Use Vietnam Time (UTC+7) to avoid streak reset issues for users studying in the early morning
-  const today = new Date(new Date().getTime() + 7 * 60 * 60 * 1000);
-  const todayStr = today.toISOString().split('T')[0];
-  const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
-  const yesterdayStr = yesterday.toISOString().split('T')[0];
+  // Sử dụng giờ chuẩn Việt Nam (UTC+7 / Asia/Ho_Chi_Minh)
+  const todayStr = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' }).format(new Date());
+  const yesterdayStr = getPreviousDateStr(todayStr);
 
-  let startStr = null;
-  if (dates.includes(todayStr)) {
-    startStr = todayStr;
-  } else if (dates.includes(yesterdayStr)) {
-    startStr = yesterdayStr;
-  } else {
-    startStr = dates[dates.length - 1];
+  // Nếu cả hôm nay và hôm qua người dùng đều không học -> Chuỗi đã bị đứt đoạn -> 0 ngày
+  if (!activeDates.has(todayStr) && !activeDates.has(yesterdayStr)) {
+    return 0;
   }
 
+  // Điểm bắt đầu tính lùi: nếu hôm nay có học thì bắt đầu từ hôm nay.
+  // Nếu hôm nay chưa học nhưng hôm qua có học, chuỗi hôm qua vẫn duy trì.
+  let curr = activeDates.has(todayStr) ? todayStr : yesterdayStr;
   let streak = 0;
-  let checkDate = new Date(startStr);
-  while (true) {
-    const dateKey = checkDate.toISOString().split('T')[0];
-    if (dailyHistory[dateKey] && dailyHistory[dateKey] > 0) {
-      streak++;
-      checkDate.setDate(checkDate.getDate() - 1);
-    } else {
-      break;
-    }
+
+  while (activeDates.has(curr)) {
+    streak++;
+    curr = getPreviousDateStr(curr);
   }
-  return Math.max(streak, 1);
+
+  return streak;
 }
 
 // GET endpoint to fetch user stats
@@ -1259,11 +1291,8 @@ function ensureDailyHistoryIntegrity(stats) {
     }
   }
 
-  // 3. Ensure streak matches history
-  const calculatedStreak = calculateStreakFromHistory(stats.dailyHistory);
-  if (!stats.streak || stats.streak < calculatedStreak) {
-    stats.streak = calculatedStreak;
-  }
+  // 3. Ensure streak matches history accurately
+  stats.streak = calculateStreakFromHistory(stats.dailyHistory);
 }
 
 app.get('/api/user/stats', async (req, res) => {
@@ -1325,24 +1354,8 @@ app.post('/api/user/stats/sync', async (req, res) => {
   if (typeof incrementStudyTime === 'number' && incrementStudyTime > 0) {
     userRecord.stats.studyTime += incrementStudyTime;
     userRecord.stats.dailyHistory[todayStr] = (userRecord.stats.dailyHistory[todayStr] || 0) + incrementStudyTime;
-  }
-
-  const lastActiveStr = userRecord.stats.lastActiveDate;
-
-  if (!lastActiveStr) {
-    userRecord.stats.streak = 1;
     userRecord.stats.lastActiveDate = todayStr;
-  } else if (lastActiveStr !== todayStr) {
-    const today = new Date(todayStr);
-    const lastActive = new Date(lastActiveStr);
-    const diffTime = Math.abs(today - lastActive);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    if (diffDays === 1) {
-      userRecord.stats.streak += 1;
-    } else if (diffDays > 1) {
-      userRecord.stats.streak = 1;
-    }
+  } else if (!userRecord.stats.lastActiveDate) {
     userRecord.stats.lastActiveDate = todayStr;
   }
 
@@ -1433,8 +1446,20 @@ app.get('/api/admin/user/:email/access-logs', async (req, res) => {
   }
 
   const targetEmail = (req.params.email || '').toLowerCase().trim();
-  const userData = await readUserData();
-  const userRecord = userData.users[targetEmail];
+  let userRecord = null;
+
+  // Query directly from MongoDB Atlas
+  if (mongoose.connection.readyState === 1) {
+    try {
+      userRecord = await User.findById(targetEmail).lean();
+    } catch (e) {}
+  }
+
+  if (!userRecord) {
+    const userData = await readUserData();
+    userRecord = userData.users && (userData.users[targetEmail] || userData.users[req.params.email]);
+  }
+
   if (!userRecord) {
     return res.status(404).json({ error: 'User not found' });
   }
@@ -1499,19 +1524,36 @@ app.post('/api/user/game-history', async (req, res) => {
 
 // GET endpoint to fetch game history
 app.get('/api/user/game-history', async (req, res) => {
-  const email = req.query.email || getLoggedInUserEmail(req);
+  const email = (req.query.email || getLoggedInUserEmail(req) || '').toLowerCase().trim();
   if (!email) {
     return res.json([]);
   }
 
   try {
-    const userData = await readUserData();
-    const userRecord = userData.users[email];
-    const userHistory = (userRecord && userRecord.gameHistory) ? userRecord.gameHistory : [];
-    const quizHistory = (userData.quizHistory && userData.quizHistory[email]) ? userData.quizHistory[email] : [];
+    let userHistory = [];
+    let quizHistory = [];
+
+    // Query directly from MongoDB Atlas for 100% accurate, non-stale data
+    if (mongoose.connection.readyState === 1) {
+      try {
+        const dbUser = await User.findById(email).lean();
+        if (dbUser) {
+          userHistory = Array.isArray(dbUser.gameHistory) ? dbUser.gameHistory : [];
+          quizHistory = Array.isArray(dbUser.quizHistory) ? dbUser.quizHistory : [];
+        }
+      } catch (e) {}
+    }
+
+    // Fallback to in-memory cache if MongoDB returned empty
+    if (userHistory.length === 0 && quizHistory.length === 0) {
+      const userData = await readUserData();
+      const userRecord = userData.users && (userData.users[email] || userData.users[req.query.email]);
+      userHistory = (userRecord && userRecord.gameHistory) ? userRecord.gameHistory : [];
+      quizHistory = (userData.quizHistory && (userData.quizHistory[email] || userData.quizHistory[req.query.email])) ? (userData.quizHistory[email] || userData.quizHistory[req.query.email]) : [];
+    }
 
     // Gop va sap xep theo thoi gian playedAt moi nhat
-    const combined = [...userHistory, ...quizHistory].sort((a, b) => new Date(b.playedAt) - new Date(a.playedAt));
+    const combined = [...userHistory, ...quizHistory].sort((a, b) => new Date(b.playedAt || b.date || 0) - new Date(a.playedAt || a.date || 0));
     res.json(combined);
   } catch (err) {
     res.json([]);
@@ -1560,7 +1602,7 @@ app.get('/api/leaderboard', async (req, res) => {
         score: highestScore,
         quizCount: allAttempts.length,
         studyTime: u.stats ? (u.stats.studyTime || 0) : 0,
-        streak: u.stats ? (u.stats.streak || 0) : 0,
+        streak: calculateStreakFromHistory(u.stats?.dailyHistory),
         latestAttemptTime: latestAttemptTime || lastActive
       });
     }

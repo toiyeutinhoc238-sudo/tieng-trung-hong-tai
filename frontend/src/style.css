@@ -7416,12 +7416,12 @@ html.light-mode label {
 }
 
 /* Đảm bảo chữ trắng inline style chuyển thành tối dứt khoát */
-html.light-mode [style*="color: #fff"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start):not(.rd-card-banner *):not(.rd-card-category-tag):not(.phidao-wrapper *):not(.phidao-stat *):not(#cannon-score-val):not(#cannon-combo-val),
-html.light-mode [style*="color:#fff"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start):not(.rd-card-banner *):not(.rd-card-category-tag):not(.phidao-wrapper *):not(.phidao-stat *):not(#cannon-score-val):not(#cannon-combo-val),
-html.light-mode [style*="color: #ffffff"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start):not(.rd-card-banner *):not(.rd-card-category-tag):not(.phidao-wrapper *):not(.phidao-stat *):not(#cannon-score-val):not(#cannon-combo-val),
-html.light-mode [style*="color:#ffffff"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start):not(.rd-card-banner *):not(.rd-card-category-tag):not(.phidao-wrapper *):not(.phidao-stat *):not(#cannon-score-val):not(#cannon-combo-val),
-html.light-mode [style*="color: white"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start):not(.rd-card-banner *):not(.rd-card-category-tag):not(.phidao-wrapper *):not(.phidao-stat *):not(#cannon-score-val):not(#cannon-combo-val),
-html.light-mode [style*="color:white"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start):not(.rd-card-banner *):not(.rd-card-category-tag):not(.phidao-wrapper *):not(.phidao-stat *):not(#cannon-score-val):not(#cannon-combo-val) {
+html.light-mode [style*="color: #fff"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start):not(.rd-card-banner *):not(.rd-card-category-tag):not(.phidao-wrapper *):not(.phidao-stat *):not(#cannon-score-val):not(#cannon-combo-val):not(.announcement-glass-card *):not(.announcement-badge):not(.announcement-badge *):not(.announcement-btn):not(.announcement-btn *),
+html.light-mode [style*="color:#fff"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start):not(.rd-card-banner *):not(.rd-card-category-tag):not(.phidao-wrapper *):not(.phidao-stat *):not(#cannon-score-val):not(#cannon-combo-val):not(.announcement-glass-card *):not(.announcement-badge):not(.announcement-badge *):not(.announcement-btn):not(.announcement-btn *),
+html.light-mode [style*="color: #ffffff"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start):not(.rd-card-banner *):not(.rd-card-category-tag):not(.phidao-wrapper *):not(.phidao-stat *):not(#cannon-score-val):not(#cannon-combo-val):not(.announcement-glass-card *):not(.announcement-badge):not(.announcement-badge *):not(.announcement-btn):not(.announcement-btn *),
+html.light-mode [style*="color:#ffffff"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start):not(.rd-card-banner *):not(.rd-card-category-tag):not(.phidao-wrapper *):not(.phidao-stat *):not(#cannon-score-val):not(#cannon-combo-val):not(.announcement-glass-card *):not(.announcement-badge):not(.announcement-badge *):not(.announcement-btn):not(.announcement-btn *),
+html.light-mode [style*="color: white"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start):not(.rd-card-banner *):not(.rd-card-category-tag):not(.phidao-wrapper *):not(.phidao-stat *):not(#cannon-score-val):not(#cannon-combo-val):not(.announcement-glass-card *):not(.announcement-badge):not(.announcement-badge *):not(.announcement-btn):not(.announcement-btn *),
+html.light-mode [style*="color:white"]:not(.btn *):not(.btn):not(.badge *):not(.roadmap-header-banner *):not(.btn-node-start):not(.rd-card-banner *):not(.rd-card-category-tag):not(.phidao-wrapper *):not(.phidao-stat *):not(#cannon-score-val):not(#cannon-combo-val):not(.announcement-glass-card *):not(.announcement-badge):not(.announcement-badge *):not(.announcement-btn):not(.announcement-btn *) {
   color: #0f172a !important;
 }
 
@@ -15629,6 +15629,55 @@ html:not(.dark) .announcement-desc {
 html.light-mode .announcement-time,
 html:not(.dark) .announcement-time {
   color: #64748b !important;
+}
+
+/* Announcement Cards Badges & Buttons - Guarantees Crisp White Text on solid colored pills/buttons in both Light & Dark modes */
+.announcement-badge,
+.announcement-btn,
+.announcement-glass-card .announcement-badge,
+.announcement-glass-card .announcement-btn,
+.announcement-glass-card button,
+.announcement-glass-card a[style*="background"],
+.announcement-glass-card span[style*="background"],
+html.light-mode .announcement-badge,
+html.light-mode .announcement-btn,
+html.light-mode .announcement-glass-card .announcement-badge,
+html.light-mode .announcement-glass-card .announcement-btn,
+html.light-mode .announcement-glass-card button,
+html.light-mode .announcement-glass-card a[style*="background"],
+html.light-mode .announcement-glass-card span[style*="background"],
+html:not(.dark) .announcement-badge,
+html:not(.dark) .announcement-btn,
+html:not(.dark) .announcement-glass-card .announcement-badge,
+html:not(.dark) .announcement-glass-card .announcement-btn,
+html:not(.dark) .announcement-glass-card button,
+html:not(.dark) .announcement-glass-card a[style*="background"],
+html:not(.dark) .announcement-glass-card span[style*="background"] {
+  color: #ffffff !important;
+}
+
+.announcement-badge *,
+.announcement-btn *,
+.announcement-glass-card .announcement-badge *,
+.announcement-glass-card .announcement-btn *,
+.announcement-glass-card button *,
+.announcement-glass-card a[style*="background"] *,
+.announcement-glass-card span[style*="background"] *,
+html.light-mode .announcement-badge *,
+html.light-mode .announcement-btn *,
+html.light-mode .announcement-glass-card .announcement-badge *,
+html.light-mode .announcement-glass-card .announcement-btn *,
+html.light-mode .announcement-glass-card button *,
+html.light-mode .announcement-glass-card a[style*="background"] *,
+html.light-mode .announcement-glass-card span[style*="background"] *,
+html:not(.dark) .announcement-badge *,
+html:not(.dark) .announcement-btn *,
+html:not(.dark) .announcement-glass-card .announcement-badge *,
+html:not(.dark) .announcement-glass-card .announcement-btn *,
+html:not(.dark) .announcement-glass-card button *,
+html:not(.dark) .announcement-glass-card a[style*="background"] *,
+html:not(.dark) .announcement-glass-card span[style*="background"] * {
+  color: #ffffff !important;
 }
 
 /* Light Mode Header & Outline Button Contrast (Hình 3) */

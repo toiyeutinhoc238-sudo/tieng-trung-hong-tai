@@ -173,7 +173,7 @@ window.toggleSeasonalParticles = function() {
       // Also update user_stats cache in localStorage
       const statsKey = userEmail !== 'guest' ? `user_stats_${userEmail}` : 'user_stats_guest';
       const statsRaw = localStorage.getItem(statsKey);
-      const cachedStats = statsRaw ? JSON.parse(statsRaw) : { streak: 1, studyTime: 0 };
+      const cachedStats = statsRaw ? JSON.parse(statsRaw) : { streak: 0, studyTime: 0 };
       cachedStats.studyTime = (cachedStats.studyTime || 0) + secs;
       localStorage.setItem(statsKey, JSON.stringify(cachedStats));
     } catch (e) {}
