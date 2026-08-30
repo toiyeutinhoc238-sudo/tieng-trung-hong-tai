@@ -3378,26 +3378,39 @@ async function initVideoDictationPage() {
   // Check URL mode parameter (shadowing vs dictation)
   const params = new URLSearchParams(window.location.search);
   const urlMode = params.get('mode');
-  if (urlMode === 'shadowing' || urlMode === 'dictation') {
-    currentMode = urlMode;
-    // Update active tab buttons if present
+  const typeTabsEl = document.getElementById('dict-main-type-tabs');
+
+  if (urlMode === 'shadowing') {
+    currentMode = 'shadowing';
+    // Ẩn hoàn toàn 2 tab nghe chép khi người dùng đang ở chuyên mục Shadowing
+    if (typeTabsEl) typeTabsEl.style.display = 'none';
+
     document.querySelectorAll('.mode-tab-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.mode === currentMode);
+      btn.classList.toggle('active', btn.dataset.mode === 'shadowing');
     });
 
-    // Update Banner Texts dynamically
     const bannerTag = document.getElementById('dict-banner-tag');
     const bannerTitle = document.getElementById('dict-banner-title');
     const heading = document.getElementById('dict-catalog-heading');
-    if (urlMode === 'shadowing') {
-      if (bannerTag) bannerTag.innerHTML = '<i class="fa-solid fa-microphone-lines"></i> LUYỆN SHADOWING BẢN XỨ';
-      if (bannerTitle) bannerTitle.textContent = 'Luyện Phản Xạ Nói & Shadowing Video';
-      if (heading) heading.innerHTML = '<i class="fa-solid fa-microphone-lines" style="color: #10b981;"></i> Video Luyện Shadowing';
-    } else if (urlMode === 'dictation') {
-      if (bannerTag) bannerTag.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> LUYỆN NGHE CHÉP CHÍNH TẢ';
-      if (bannerTitle) bannerTitle.textContent = 'Luyện Nghe Chép Chính Tả Video';
-      if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square" style="color: #38bdf8;"></i> Video Luyện Nghe Chép';
-    }
+    if (bannerTag) bannerTag.innerHTML = '<i class="fa-solid fa-microphone-lines"></i> LUYỆN SHADOWING BẢN XỨ';
+    if (bannerTitle) bannerTitle.textContent = 'Luyện Phản Xạ Nói & Shadowing Video';
+    if (heading) heading.innerHTML = '<i class="fa-solid fa-microphone-lines" style="color: #10b981;"></i> Video Luyện Shadowing';
+  } else {
+    // Chế độ Nghe Chép (dictation hoặc mặc định)
+    currentMode = 'dictation';
+    // Hiện 2 tab lựa chọn: Nghe chép theo Video vs Nghe chép Đoạn ngắn HSK
+    if (typeTabsEl) typeTabsEl.style.display = 'flex';
+
+    document.querySelectorAll('.mode-tab-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.mode === 'dictation');
+    });
+
+    const bannerTag = document.getElementById('dict-banner-tag');
+    const bannerTitle = document.getElementById('dict-banner-title');
+    const heading = document.getElementById('dict-catalog-heading');
+    if (bannerTag) bannerTag.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> LUYỆN NGHE CHÉP CHÍNH TẢ';
+    if (bannerTitle) bannerTitle.textContent = 'Luyện Nghe Chép Chính Tả Video';
+    if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square" style="color: #38bdf8;"></i> Video Luyện Nghe Chép';
   }
 
   filteredLessons = [...allLessons];
@@ -3696,8 +3709,8 @@ function switchMainTab(tab) {
     // Passage Mode
     if (videoCatalog) videoCatalog.style.display = 'none';
     if (videoWorkspace) videoWorkspace.style.display = 'none';
-    if (player && typeof player.pauseVideo === 'function') {
-      player.pauseVideo();
+    if (typeof ytPlayer !== 'undefined' && ytPlayer && typeof ytPlayer.pauseVideo === 'function') {
+      try { ytPlayer.pauseVideo(); } catch (e) {}
     }
 
     if (currentPassage && passageWorkspace && passageWorkspace.style.display === 'block') {
@@ -3753,6 +3766,17 @@ function resumeLastStudiedPassage() {
 function renderPassageGrid() {
   const grid = document.getElementById('passage-cards-grid');
   if (!grid) return;
+
+  if (!allPassages || allPassages.length === 0) {
+    grid.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 50px 20px; color: var(--text-muted); background: rgba(255,255,255,0.03); border-radius: 16px; border: 1.5px dashed var(--border-glass);">
+        <i class="fa-solid fa-spinner fa-spin" style="font-size: 2.2rem; color: #8b5cf6; margin-bottom: 12px;"></i>
+        <h4 style="margin: 0 0 6px 0; font-weight: 800; color: var(--text-primary);">Đang tải dữ liệu 715 đoạn nghe HSK...</h4>
+        <p style="font-size: 0.85rem; margin: 0;">Vui lòng đợi trong giây lát!</p>
+      </div>
+    `;
+    return;
+  }
 
   const completed = getCompletedPassages();
   const search = (passageSearchQuery || '').toLowerCase().trim();
