@@ -2848,6 +2848,11 @@ function renderCatalogGrid() {
   const grid = document.getElementById('dict-lessons-catalog-grid');
   if (!grid) return;
 
+  const topBadge = document.getElementById('dict-top-nav-video-count-badge');
+  if (topBadge && allLessons.length > 0) {
+    topBadge.innerHTML = `<i class="fa-solid fa-fire"></i> ${allLessons.length} Video Mới`;
+  }
+
   grid.innerHTML = '';
   const email = getCurrentUserEmail();
   const { cat } = getSelectedCategoryAndLevel();
