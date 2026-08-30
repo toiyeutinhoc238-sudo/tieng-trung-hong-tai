@@ -476,6 +476,60 @@
       color: var(--text-muted);
     }
 
+    .dict-card-meta-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .dict-card-sentences-count {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .dict-card-learners-count {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      color: #10b981;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 2px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      width: fit-content;
+    }
+
+    .dict-card-learners-count i {
+      color: #34d399;
+      font-size: 0.74rem;
+    }
+
+    .workspace-learners-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      color: #10b981;
+      background: rgba(16, 185, 129, 0.14);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      padding: 3px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .workspace-learners-badge i {
+      color: #34d399;
+    }
+
     /* Custom / My Video Badges & Controls */
     .dict-my-badge {
       display: inline-flex;
@@ -2874,6 +2928,448 @@
       background: #f8fafc !important;
       border: 1px solid #e2e8f0 !important;
     }
+
+    html:not(.dark) .dict-card-learners-count,
+    html.light-mode .dict-card-learners-count {
+      background: #ecfdf5 !important;
+      border-color: #a7f3d0 !important;
+      color: #059669 !important;
+    }
+
+    html:not(.dark) .workspace-learners-badge,
+    html.light-mode .workspace-learners-badge {
+      background: #ecfdf5 !important;
+      border-color: #a7f3d0 !important;
+      color: #059669 !important;
+    }
+
+    /* ============================================================
+       HSK PASSAGES DICTATION STYLES (715 Đoạn HSK 1, 2, 3)
+       ============================================================ */
+    .dict-main-type-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 6px;
+      border-radius: 16px;
+      border: 1px solid var(--border-glass);
+      width: fit-content;
+      max-width: 100%;
+      flex-wrap: wrap;
+    }
+
+    .dict-main-type-btn {
+      padding: 10px 20px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .dict-main-type-btn:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .dict-main-type-btn.active#tab-btn-video-mode {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: #ffffff;
+      border-color: rgba(56, 189, 248, 0.4);
+      box-shadow: 0 4px 16px rgba(2, 132, 199, 0.35);
+    }
+
+    .dict-main-type-btn.active#tab-btn-passage-mode {
+      background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+      color: #ffffff;
+      border-color: rgba(167, 139, 250, 0.4);
+      box-shadow: 0 4px 16px rgba(139, 92, 246, 0.35);
+    }
+
+    .type-badge-pill {
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.15);
+      color: inherit;
+      font-weight: 800;
+    }
+
+    .type-badge-pill.highlight {
+      background: linear-gradient(135deg, #ec4899, #f43f5e);
+      color: #fff;
+    }
+
+    /* Passage Level Selector Pills */
+    .passage-level-btn {
+      padding: 8px 18px;
+      border-radius: 12px;
+      border: 1px solid var(--border-glass);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-secondary);
+      font-weight: 800;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .passage-level-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--text-primary);
+    }
+
+    .passage-level-btn.active {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      border-color: #8b5cf6;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4);
+    }
+
+    /* Resume Card */
+    .passage-resume-card {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(15, 23, 42, 0.6));
+      border: 1.5px dashed rgba(167, 139, 250, 0.45);
+      border-radius: 16px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    /* Passage Cards Grid */
+    .passage-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .passage-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      border-radius: 16px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    .passage-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+      border-color: rgba(167, 139, 250, 0.5);
+    }
+
+    .passage-card.completed {
+      border-color: rgba(16, 185, 129, 0.45);
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), var(--bg-card));
+    }
+
+    .passage-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .passage-card-badge {
+      font-size: 0.76rem;
+      font-weight: 800;
+      padding: 2px 10px;
+      border-radius: 20px;
+      background: rgba(139, 92, 246, 0.18);
+      color: #c084fc;
+      border: 1px solid rgba(139, 92, 246, 0.35);
+    }
+
+    .passage-card-completed-tag {
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: #10b981;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .passage-card-hanzi {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1.5;
+      font-family: var(--font-hanzi);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .passage-card-pinyin {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #38bdf8;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .passage-card-meaning {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .passage-card-btn-start {
+      padding: 8px 14px;
+      border-radius: 10px;
+      background: rgba(139, 92, 246, 0.15);
+      color: #c084fc;
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      font-size: 0.82rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .passage-card:hover .passage-card-btn-start {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      color: #ffffff;
+      border-color: #8b5cf6;
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+    }
+
+    /* Passage Study Workspace */
+    .passage-study-card {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 28px 24px;
+      border-radius: 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .passage-audio-header {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border-glass);
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+    }
+
+    .passage-audio-main-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .btn-passage-play-big {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+      color: #ffffff;
+      border: none;
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.45);
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .btn-passage-play-big:hover {
+      transform: scale(1.08);
+      box-shadow: 0 8px 24px rgba(139, 92, 246, 0.6);
+    }
+
+    .btn-passage-play-big.playing {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.45);
+    }
+
+    .passage-audio-progress-bar {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .passage-audio-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #8b5cf6, #38bdf8);
+      border-radius: 4px;
+      transition: width 0.1s linear;
+    }
+
+    .passage-audio-tools-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-glass);
+    }
+
+    .passage-speed-btn {
+      padding: 4px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border-glass);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .passage-speed-btn.active {
+      background: #8b5cf6;
+      color: #fff;
+      border-color: #8b5cf6;
+    }
+
+    .passage-tool-btn {
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-glass);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .passage-tool-btn:hover {
+      background: rgba(255, 255, 255, 0.14);
+      color: var(--text-primary);
+    }
+
+    .passage-info-box {
+      padding: 14px 18px;
+      border-radius: 14px;
+      margin-bottom: 16px;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .passage-info-box.pinyin-box {
+      background: rgba(56, 189, 248, 0.08);
+      border: 1.5px solid rgba(56, 189, 248, 0.25);
+    }
+
+    .passage-info-box.meaning-box {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1.5px solid rgba(16, 185, 129, 0.25);
+    }
+
+    .passage-footer-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border-glass);
+      flex-wrap: wrap;
+    }
+
+    /* Light Mode adaptations */
+    html.light-mode .dict-main-type-tabs,
+    html:not(.dark) .dict-main-type-tabs {
+      background: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+    }
+
+    html.light-mode .dict-main-type-btn,
+    html:not(.dark) .dict-main-type-btn {
+      color: #475569 !important;
+    }
+
+    html.light-mode .dict-main-type-btn.active,
+    html:not(.dark) .dict-main-type-btn.active {
+      color: #ffffff !important;
+    }
+
+    html.light-mode .passage-level-btn,
+    html:not(.dark) .passage-level-btn {
+      background: #ffffff !important;
+      border-color: #cbd5e1 !important;
+      color: #475569 !important;
+    }
+
+    html.light-mode .passage-level-btn.active,
+    html:not(.dark) .passage-level-btn.active {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed) !important;
+      color: #ffffff !important;
+    }
+
+    html.light-mode .passage-card,
+    html:not(.dark) .passage-card {
+      background: #ffffff !important;
+      border-color: #e2e8f0 !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
+    }
+
+    html.light-mode .passage-card-hanzi,
+    html:not(.dark) .passage-card-hanzi {
+      color: #0f172a !important;
+    }
+
+    html.light-mode .passage-card-meaning,
+    html:not(.dark) .passage-card-meaning {
+      color: #475569 !important;
+    }
+
+    html.light-mode .passage-study-card,
+    html:not(.dark) .passage-study-card {
+      background: #ffffff !important;
+      border-color: #e2e8f0 !important;
+    }
+
+    html.light-mode .passage-audio-header,
+    html:not(.dark) .passage-audio-header {
+      background: #f8fafc !important;
+      border-color: #e2e8f0 !important;
+    }
   </style>
 </head>
 
@@ -2915,6 +3411,20 @@
       </div>
     </header>
 
+    <!-- 2 MAIN STUDY TABS: Video Dictation vs HSK Passages -->
+    <div class="dict-main-type-tabs" id="dict-main-type-tabs">
+      <button class="dict-main-type-btn active" id="tab-btn-video-mode" onclick="window.switchMainTab('video')">
+        <i class="fa-brands fa-youtube" style="color: #ef4444;"></i> 
+        <span>Nghe Chép Theo Video</span>
+        <span class="type-badge-pill" id="badge-video-count">23 Video</span>
+      </button>
+      <button class="dict-main-type-btn" id="tab-btn-passage-mode" onclick="window.switchMainTab('passage')">
+        <i class="fa-solid fa-headphones-simple" style="color: #a855f7;"></i>
+        <span>Nghe Chép Đoạn Ngắn HSK</span>
+        <span class="type-badge-pill highlight" id="badge-passage-count">715 Đoạn</span>
+      </button>
+    </div>
+
     <!-- CATALOG VIEW: List of Lessons -->
     <section id="dict-catalog-view">
       <!-- HERO INTRO BANNER -->
@@ -2932,11 +3442,11 @@
         </div>
         <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
           <div class="dict-banner-stat-box">
-            <div style="font-size: 1.35rem; font-weight: 900; color: #0284c7;">8</div>
+            <div id="dict-banner-video-count" style="font-size: 1.35rem; font-weight: 900; color: #0284c7;">23</div>
             <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">Video Tuyển Chọn</div>
           </div>
           <div class="dict-banner-stat-box">
-            <div style="font-size: 1.35rem; font-weight: 900; color: #10b981;">64+</div>
+            <div id="dict-banner-sentence-count" style="font-size: 1.35rem; font-weight: 900; color: #10b981;">445+</div>
             <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">Câu Thoại Chuẩn</div>
           </div>
         </div>
@@ -3010,8 +3520,11 @@
             <i class="fa-solid fa-arrow-left"></i> Danh sách video
           </button>
           <div>
-            <h2 id="workspace-lesson-title" style="font-size: 1.25rem; font-weight: 800; margin: 0; color: var(--text-primary);">Tên bài học</h2>
-            <span id="workspace-lesson-level-badge" class="level-badge level-1" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 6px;">HSK 1</span>
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <h2 id="workspace-lesson-title" style="font-size: 1.25rem; font-weight: 800; margin: 0; color: var(--text-primary);">Tên bài học</h2>
+              <span id="workspace-lesson-level-badge" class="level-badge level-1" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 6px;">HSK 1</span>
+              <span id="workspace-lesson-learners-badge" class="workspace-learners-badge" title="Tổng số lượt học video này"><i class="fa-solid fa-user-graduate"></i> <span id="workspace-lesson-learners-count">0</span> lượt học</span>
+            </div>
           </div>
         </div>
 
@@ -3344,6 +3857,207 @@
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         PASSAGE CATALOG VIEW: List of HSK Passages (715 Đoạn HSK 1, 2, 3)
+         ============================================================ -->
+    <section id="dict-passage-catalog-view" style="display: none;">
+      <!-- Hero Banner for Passages -->
+      <div class="dict-hero-banner" style="border-color: rgba(139, 92, 246, 0.4); background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(15, 23, 42, 0.75));">
+        <div style="flex: 1; min-width: 280px;">
+          <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(139, 92, 246, 0.2); color: #c084fc; padding: 4px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 800; margin-bottom: 8px;">
+            <i class="fa-solid fa-graduation-cap"></i> KHO LUYỆN NGHE ĐOẠN NGẮN CHUẨN HSK 3.0
+          </div>
+          <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--text-primary); margin: 0 0 6px 0;">
+            Luyện Nghe Chép Đoạn Ngắn Theo Cấp Độ HSK
+          </h2>
+          <p style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.5; margin: 0;">
+            Luyện thính giác phản xạ từng câu, từng đoạn văn ngắn chuẩn kỳ thi HSK 1, 2, 3. Nghe audio giọng chuẩn Bắc Kinh, gõ chép chữ Hán và chuyển đoạn mượt mà!
+          </p>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <div class="dict-banner-stat-box">
+            <div style="font-size: 1.35rem; font-weight: 900; color: #a855f7;">715</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">Đoạn Văn Luyện Nghe</div>
+          </div>
+          <div class="dict-banner-stat-box">
+            <div style="font-size: 1.35rem; font-weight: 900; color: #10b981;">3</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">Cấp Độ (HSK 1 - 3)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resume Quick Banner -->
+      <div id="passage-resume-box" class="passage-resume-card" style="display: none;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <i class="fa-solid fa-bookmark" style="font-size: 1.4rem; color: #a855f7;"></i>
+          <div>
+            <div style="font-size: 0.82rem; color: var(--text-secondary);">Tiếp tục tiến trình học:</div>
+            <div id="passage-resume-title" style="font-size: 1rem; font-weight: 800; color: var(--text-primary);">Đang tải...</div>
+          </div>
+        </div>
+        <button id="passage-btn-resume" class="btn btn-primary btn-sm" onclick="window.resumeLastStudiedPassage()" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9); border: none; border-radius: 10px; font-weight: 800; padding: 8px 18px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+          <i class="fa-solid fa-play"></i> Tiếp tục học ngay
+        </button>
+      </div>
+
+      <!-- Level Pills & Search -->
+      <div class="dict-filter-bar" style="margin-top: 16px;">
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button class="passage-level-btn active" data-level="1" onclick="window.selectPassageLevel(1)">
+            🌱 HSK 1 (250 đoạn)
+          </button>
+          <button class="passage-level-btn" data-level="2" onclick="window.selectPassageLevel(2)">
+            🌲 HSK 2 (265 đoạn)
+          </button>
+          <button class="passage-level-btn" data-level="3" onclick="window.selectPassageLevel(3)">
+            🏔️ HSK 3 (200 đoạn)
+          </button>
+        </div>
+        <div class="dict-search-wrap" style="flex: 1; max-width: 380px;">
+          <input type="text" id="passage-search-input" class="dict-search-input" placeholder="Tìm kiếm nội dung đoạn văn, từ vựng...">
+        </div>
+      </div>
+
+      <!-- Passage Grid List -->
+      <div class="passage-cards-grid" id="passage-cards-grid">
+        <!-- Rendered dynamically by video_dictation.js -->
+      </div>
+    </section>
+
+    <!-- ============================================================
+         PASSAGE WORKSPACE VIEW: Dedicated Distraction-free Study Workspace
+         ============================================================ -->
+    <section id="dict-passage-workspace-view" style="display: none;">
+      <!-- Top Bar: Back to catalog, level, index, Next/Prev -->
+      <div class="workspace-top-bar" style="margin-bottom: 20px;">
+        <div class="workspace-breadcrumb">
+          <button class="btn-return-catalog" onclick="window.returnToPassageCatalog()">
+            <i class="fa-solid fa-arrow-left"></i> Danh sách đoạn
+          </button>
+          <div>
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <h2 id="passage-ws-title" style="font-size: 1.25rem; font-weight: 800; margin: 0; color: var(--text-primary);">Đoạn 1</h2>
+              <span id="passage-ws-level-badge" class="level-badge level-1">HSK 1</span>
+              <span id="passage-ws-progress-text" style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); background: rgba(255,255,255,0.06); padding: 3px 10px; border-radius: 20px; border: 1px solid var(--border-glass);">Đoạn 1 / 250</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <button id="btn-passage-prev" class="btn btn-outline btn-sm" onclick="window.navPassage(-1)" style="border-radius: 12px; font-weight: 700;">
+            <i class="fa-solid fa-chevron-left"></i> Đoạn trước
+          </button>
+          <button id="btn-passage-next" class="btn btn-primary btn-sm" onclick="window.navPassage(1)" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9); border: none; border-radius: 12px; font-weight: 800; box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4);">
+            Đoạn tiếp theo <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Study Box -->
+      <div class="passage-study-card glass-panel">
+        <!-- Audio Player Section -->
+        <div class="passage-audio-header">
+          <div class="passage-audio-main-row">
+            <button id="btn-passage-play-audio" class="btn-passage-play-big" onclick="window.playCurrentPassageAudio()" title="Phát âm thanh đoạn văn">
+              <i class="fa-solid fa-play"></i>
+            </button>
+            <div style="flex: 1;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                <span style="font-size: 0.85rem; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
+                  <i class="fa-solid fa-volume-high" style="color: #a855f7;"></i> Giọng Đọc Bản Xứ Chuẩn Bắc Kinh
+                </span>
+                <span id="passage-audio-status" style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">Sẵn sàng</span>
+              </div>
+              <div class="passage-audio-progress-bar">
+                <div id="passage-audio-progress-fill" class="passage-audio-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="passage-audio-tools-row">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted);">Tốc độ:</span>
+              <button class="passage-speed-btn active" data-speed="1.0" onclick="window.setPassageSpeed(1.0)">1.0x</button>
+              <button class="passage-speed-btn" data-speed="0.75" onclick="window.setPassageSpeed(0.75)">0.75x</button>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="passage-tool-btn" onclick="window.replayCurrentPassageAudio()" title="Nghe lại từ đầu">
+                <i class="fa-solid fa-rotate-left"></i> Nghe lại
+              </button>
+              <button id="btn-toggle-passage-pinyin" class="passage-tool-btn" onclick="window.togglePassagePinyin()" title="Bật/Tắt hiển thị Pinyin">
+                <i class="fa-solid fa-language"></i> <span id="text-toggle-pinyin">Xem Pinyin</span>
+              </button>
+              <button id="btn-toggle-passage-meaning" class="passage-tool-btn" onclick="window.togglePassageMeaning()" title="Bật/Tắt bản dịch nghĩa">
+                <i class="fa-solid fa-eye"></i> <span id="text-toggle-meaning">Xem Nghĩa</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pinyin Box (Collapsible) -->
+        <div id="passage-pinyin-box" class="passage-info-box pinyin-box" style="display: none;">
+          <div style="font-size: 0.76rem; font-weight: 800; color: #a855f7; text-transform: uppercase; margin-bottom: 4px;">Phiên Âm Pinyin:</div>
+          <div id="passage-pinyin-text" style="font-size: 1.05rem; font-weight: 700; color: #38bdf8; line-height: 1.6;"></div>
+        </div>
+
+        <!-- Meaning Box (Collapsible) -->
+        <div id="passage-meaning-box" class="passage-info-box meaning-box" style="display: none;">
+          <div style="font-size: 0.76rem; font-weight: 800; color: #10b981; text-transform: uppercase; margin-bottom: 4px;">Bản Dịch Tiếng Việt:</div>
+          <div id="passage-meaning-text" style="font-size: 0.95rem; font-weight: 600; color: #e2e8f0; line-height: 1.6;"></div>
+        </div>
+
+        <!-- Dictation Typing / Interactive Slot Tiles -->
+        <div class="passage-dictation-workspace">
+          <div class="dictation-instruction-banner" style="border-left-color: #8b5cf6; margin-bottom: 16px;">
+            <i class="fa-solid fa-keyboard" style="color: #a855f7;"></i>
+            <span>Lắng nghe âm thanh và gõ lại câu chữ Hán vào ô bên dưới, sau đó bấm <strong>Kiểm tra đáp án</strong> (hoặc nhấn Enter):</span>
+          </div>
+
+          <!-- Character Slots Display -->
+          <div id="passage-char-tiles" class="dictation-char-tiles"></div>
+
+          <!-- Typing Input Row -->
+          <div class="dictation-input-wrap">
+            <input type="text" id="passage-dictation-input" class="dictation-main-input" placeholder="Gõ câu chữ Hán bạn nghe được..." autocomplete="off">
+            <button class="btn-check-input" onclick="window.checkPassageAnswer()" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9); box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4);">
+              <i class="fa-solid fa-circle-check"></i> Kiểm tra
+            </button>
+          </div>
+
+          <!-- Feedback Alert -->
+          <div id="passage-feedback-badge" class="dict-feedback-badge" style="display: none;"></div>
+
+          <!-- Solution Box (Shown when user wants answer or checked) -->
+          <div id="passage-solution-box" class="dict-solution-card" style="display: none;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+              <span style="font-size: 0.8rem; font-weight: 800; color: #10b981;">ĐÁP ÁN CHUẨN:</span>
+              <button class="btn-copy-solution" onclick="window.copyPassageSolution()" style="font-size: 0.75rem; background: none; border: none; color: #38bdf8; cursor: pointer;">
+                <i class="fa-regular fa-copy"></i> Điền đáp án
+              </button>
+            </div>
+            <div id="passage-solution-hanzi" style="font-size: 1.25rem; font-weight: 800; color: #ffffff; font-family: var(--font-hanzi); margin-bottom: 4px;"></div>
+            <div id="passage-solution-pinyin" style="font-size: 0.95rem; font-weight: 700; color: #38bdf8; margin-bottom: 4px;"></div>
+            <div id="passage-solution-meaning" style="font-size: 0.9rem; color: #94a3b8;"></div>
+          </div>
+        </div>
+
+        <!-- Action Footer -->
+        <div class="passage-footer-actions">
+          <button class="btn btn-secondary btn-sm" onclick="window.revealPassageAnswer()">
+            <i class="fa-solid fa-lightbulb"></i> Xem đáp án
+          </button>
+          <div style="display: flex; gap: 10px;">
+            <button id="btn-passage-prev-bottom" class="btn btn-outline btn-sm" onclick="window.navPassage(-1)">
+              <i class="fa-solid fa-arrow-left"></i> Đoạn trước
+            </button>
+            <button id="btn-passage-next-bottom" class="btn btn-primary btn-sm" onclick="window.navPassage(1)" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9); border: none; font-weight: 800; box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4);">
+              Đoạn tiếp theo <i class="fa-solid fa-arrow-right"></i>
+            </button>
           </div>
         </div>
       </div>

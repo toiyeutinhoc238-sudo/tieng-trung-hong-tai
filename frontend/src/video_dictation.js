@@ -62,6 +62,7 @@ let playbackWatcher = null;
 let isSentencePlaying = false;
 let lastPausedSentenceIdx = -1;
 let activeHanziWriter = null;
+let hasRecordedCompletionForCurrentSession = false;
 
 // Built-in Fallback Lessons Data
 // Built-in 8 Lessons from Excel + YouTube
@@ -255,7 +256,10 @@ function setupPlayerForVideo(youtubeId) {
       vidEl.playbackRate = currentSpeed;
       vidEl.onplay = () => startPlaybackWatcher();
       vidEl.onpause = () => stopPlaybackWatcher();
-      vidEl.onended = () => stopPlaybackWatcher();
+      vidEl.onended = () => {
+        stopPlaybackWatcher();
+        handleLessonVideoEnded();
+      };
 
       const onReadyHandler = () => {
         isPlayerReady = true;
@@ -299,6 +303,10 @@ function setupPlayerForVideo(youtubeId) {
           startPlaybackWatcher();
         } else {
           stopPlaybackWatcher();
+        }
+        // YT.PlayerState.ENDED = 0
+        if (event.data === 0 || (window.YT && window.YT.PlayerState && event.data === window.YT.PlayerState.ENDED)) {
+          handleLessonVideoEnded();
         }
       }
     }
@@ -368,6 +376,14 @@ function startPlaybackWatcher() {
           if (curTime >= curSent.endTime) {
             stopDubbingPreview();
             return;
+          }
+        }
+
+        // 8. Auto record completion when video reaches near the end (>= duration - 0.6s)
+        if (ytPlayer && ytPlayer.getDuration && typeof ytPlayer.getDuration === 'function') {
+          const dur = ytPlayer.getDuration();
+          if (dur > 0 && curTime >= dur - 0.6) {
+            handleLessonVideoEnded();
           }
         }
 
@@ -2803,6 +2819,59 @@ function isLessonCompleted(lessonId) {
   return getCompletedVideos().includes(lessonId);
 }
 
+async function handleLessonVideoEnded() {
+  if (!currentLesson || hasRecordedCompletionForCurrentSession) return;
+  hasRecordedCompletionForCurrentSession = true;
+
+  console.log(`[Video Dictation] Video completed for lesson: ${currentLesson.id}`);
+
+  // 1. Tự động đánh dấu hoàn thành cho cá nhân học viên nếu chưa xong
+  const email = getCurrentUserEmail();
+  const storageKey = `completed_dictation_videos_${email}`;
+  let list = getCompletedVideos();
+  if (!list.includes(currentLesson.id)) {
+    list.push(currentLesson.id);
+    localStorage.setItem(storageKey, JSON.stringify(list));
+    updateWorkspaceCompletedButton();
+  }
+
+  // 2. Tăng studyCount tại chỗ ngay lập tức trên UI (Optimistic Update)
+  currentLesson.studyCount = (currentLesson.studyCount || 0) + 1;
+  const learnersEl = document.getElementById('workspace-lesson-learners-count');
+  if (learnersEl) {
+    learnersEl.textContent = currentLesson.studyCount.toLocaleString('vi-VN');
+  }
+
+  // Cập nhật trong allLessons và filteredLessons
+  const matchInAll = allLessons.find(l => l.id === currentLesson.id);
+  if (matchInAll) matchInAll.studyCount = currentLesson.studyCount;
+
+  // 3. Hiển thị thông báo chúc mừng
+  showToast(`🎉 Tuyệt vời! Bạn đã xem hết clip! Hệ thống đã ghi nhận thêm 1 lượt học.`);
+
+  // 4. Gửi request lên Server ghi nhận
+  try {
+    const res = await fetch('/api/dictation/record-completion', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        lessonId: currentLesson.id,
+        userEmail: email
+      })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data && typeof data.studyCount === 'number') {
+        currentLesson.studyCount = data.studyCount;
+        if (matchInAll) matchInAll.studyCount = data.studyCount;
+        if (learnersEl) learnersEl.textContent = data.studyCount.toLocaleString('vi-VN');
+      }
+    }
+  } catch (err) {
+    console.warn("Could not sync video completion to server:", err);
+  }
+}
+
 function toggleLessonCompleted(lessonId, event) {
   if (event) event.stopPropagation();
   const email = getCurrentUserEmail();
@@ -2815,6 +2884,17 @@ function toggleLessonCompleted(lessonId, event) {
   } else {
     list.push(lessonId);
     showToast("🎉 Đã lưu video vào danh sách ĐÃ HOÀN THÀNH!");
+    fetch('/api/dictation/record-completion', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ lessonId, userEmail: email })
+    }).then(r => r.json()).then(data => {
+      if (data && typeof data.studyCount === 'number') {
+        const les = allLessons.find(l => l.id === lessonId);
+        if (les) les.studyCount = data.studyCount;
+        renderCatalogGrid();
+      }
+    }).catch(() => {});
   }
   localStorage.setItem(storageKey, JSON.stringify(list));
   renderCatalogGrid();
@@ -2851,6 +2931,17 @@ function renderCatalogGrid() {
   const topBadge = document.getElementById('dict-top-nav-video-count-badge');
   if (topBadge && allLessons.length > 0) {
     topBadge.innerHTML = `<i class="fa-solid fa-fire"></i> ${allLessons.length} Video Mới`;
+  }
+
+  const bannerVideoCountEl = document.getElementById('dict-banner-video-count');
+  if (bannerVideoCountEl && allLessons.length > 0) {
+    bannerVideoCountEl.textContent = allLessons.length;
+  }
+
+  const bannerSentenceCountEl = document.getElementById('dict-banner-sentence-count');
+  if (bannerSentenceCountEl && allLessons.length > 0) {
+    const totalSentences = allLessons.reduce((sum, l) => sum + (l.sentences?.length || 0), 0);
+    bannerSentenceCountEl.textContent = `${totalSentences}+`;
   }
 
   grid.innerHTML = '';
@@ -2919,7 +3010,10 @@ function renderCatalogGrid() {
         </div>
         <h3 class="dict-card-title" style="margin-bottom: 12px;">${lesson.title}</h3>
         <div class="dict-card-footer">
-          <span class="dict-card-sentences-count"><i class="fa-solid fa-list-ol"></i> ${lesson.sentences?.length || 0} câu thoại</span>
+          <div class="dict-card-meta-wrap">
+            <span class="dict-card-sentences-count"><i class="fa-solid fa-list-ol"></i> ${lesson.sentences?.length || 0} câu thoại</span>
+            <span class="dict-card-learners-count" title="Số lượt người đã học xong clip"><i class="fa-solid fa-user-graduate"></i> ${(lesson.studyCount || 0).toLocaleString('vi-VN')} người học</span>
+          </div>
           <button class="btn btn-primary btn-sm btn-start-study" style="${currentMode === 'shadowing' ? 'background: linear-gradient(135deg, #10b981, #059669);' : ''}">
             <i class="fa-solid ${currentMode === 'shadowing' ? 'fa-microphone' : 'fa-pencil'}"></i> ${currentMode === 'shadowing' ? 'Luyện Shadowing' : 'Luyện Nghe Chép'}
           </button>
@@ -2985,6 +3079,15 @@ function openLessonWorkspace(lesson) {
     levelBadge.textContent = lesson.levelText || `HSK ${lesson.level || 1}`;
     levelBadge.className = `level-badge level-${lesson.level || '1'}`;
   }
+
+  // Update Learners Count in Workspace
+  const learnersEl = document.getElementById('workspace-lesson-learners-count');
+  if (learnersEl) {
+    learnersEl.textContent = (lesson.studyCount || 0).toLocaleString('vi-VN');
+  }
+
+  // Reset completion trigger for this video session
+  hasRecordedCompletionForCurrentSession = false;
 
   // Update Completed Button in Workspace
   updateWorkspaceCompletedButton();
@@ -3303,11 +3406,27 @@ async function initVideoDictationPage() {
   // Setup Event Listeners
   setupEventListeners();
 
-  // Check URL params (e.g. ?lesson=dict_lesson_1)
-  const lessonId = params.get('lesson');
-  if (lessonId) {
-    const target = allLessons.find(l => l.id === lessonId);
-    if (target) openLessonWorkspace(target);
+  // Load HSK Passages (715 đoạn HSK 1, 2, 3)
+  loadHskPassages();
+
+  // Check URL params (e.g. ?lesson=dict_lesson_1 or ?tab=passage)
+  const urlTab = params.get('tab');
+  if (urlTab === 'passage') {
+    switchMainTab('passage');
+    const urlLvl = params.get('level');
+    if (urlLvl) selectPassageLevel(parseInt(urlLvl, 10));
+    const passageId = params.get('passage');
+    if (passageId) {
+      setTimeout(() => {
+        openPassageWorkspaceById(passageId);
+      }, 400);
+    }
+  } else {
+    const lessonId = params.get('lesson');
+    if (lessonId) {
+      const target = allLessons.find(l => l.id === lessonId);
+      if (target) openLessonWorkspace(target);
+    }
   }
 }
 
@@ -3390,6 +3509,29 @@ function setupEventListeners() {
   if (customForm) {
     customForm.addEventListener('submit', handleSaveCustomVideo);
   }
+
+  // Passage Search Input
+  const pSearch = document.getElementById('passage-search-input');
+  if (pSearch) {
+    pSearch.addEventListener('input', (e) => {
+      passageSearchQuery = e.target.value;
+      renderPassageGrid();
+    });
+  }
+
+  // Passage Dictation Real-time Typing
+  const pDictInput = document.getElementById('passage-dictation-input');
+  if (pDictInput) {
+    pDictInput.addEventListener('input', () => {
+      renderPassageCharTiles();
+    });
+    pDictInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        checkPassageAnswer();
+      }
+    });
+  }
 }
 
 
@@ -3464,8 +3606,556 @@ window.jumpToSentence = function (idx) {
 
 window.toggleLessonCompleted = toggleLessonCompleted;
 window.toggleCurrentLessonCompleted = toggleCurrentLessonCompleted;
+window.handleLessonVideoEnded = handleLessonVideoEnded;
 window.getCompletedVideos = getCompletedVideos;
 window.isLessonCompleted = isLessonCompleted;
+
+// ============================================================
+// HSK PASSAGE DICTATION MODULE (715 Đoạn HSK 1, 2, 3)
+// ============================================================
+let mainActiveTab = 'video'; // 'video' | 'passage'
+let allPassages = [];
+let selectedPassageLevel = 1;
+let passageSearchQuery = '';
+let currentPassage = null;
+let passageAudio = null;
+let passageAudioSpeed = 1.0;
+let showPassagePinyin = false;
+let showPassageMeaning = false;
+
+function getCompletedPassages() {
+  try {
+    return new Set(JSON.parse(localStorage.getItem('hsk_completed_passages') || '[]'));
+  } catch (e) {
+    return new Set();
+  }
+}
+
+function saveCompletedPassage(passageId) {
+  try {
+    const set = getCompletedPassages();
+    set.add(passageId);
+    localStorage.setItem('hsk_completed_passages', JSON.stringify(Array.from(set)));
+  } catch (e) {}
+}
+
+async function loadHskPassages() {
+  try {
+    const res = await fetch('/api/dictation/hsk-passages');
+    if (res.ok) {
+      allPassages = await res.json();
+    } else {
+      const resStatic = await fetch('/hsk_listening_passages.json');
+      if (resStatic.ok) allPassages = await resStatic.json();
+    }
+  } catch (e) {
+    console.warn("Could not load HSK passages via API, trying static JSON:", e);
+    try {
+      const resStatic = await fetch('/hsk_listening_passages.json');
+      if (resStatic.ok) allPassages = await resStatic.json();
+    } catch (err) {}
+  }
+
+  const badgeCount = document.getElementById('badge-passage-count');
+  if (badgeCount && allPassages.length > 0) {
+    badgeCount.textContent = `${allPassages.length} Đoạn`;
+  }
+
+  updatePassageResumeBanner();
+  renderPassageGrid();
+}
+
+function switchMainTab(tab) {
+  mainActiveTab = tab;
+  const videoTabBtn = document.getElementById('tab-btn-video-mode');
+  const passageTabBtn = document.getElementById('tab-btn-passage-mode');
+
+  if (videoTabBtn) videoTabBtn.classList.toggle('active', tab === 'video');
+  if (passageTabBtn) passageTabBtn.classList.toggle('active', tab === 'passage');
+
+  const videoCatalog = document.getElementById('dict-catalog-view');
+  const videoWorkspace = document.getElementById('dict-workspace-view');
+  const passageCatalog = document.getElementById('dict-passage-catalog-view');
+  const passageWorkspace = document.getElementById('dict-passage-workspace-view');
+
+  if (tab === 'video') {
+    if (passageCatalog) passageCatalog.style.display = 'none';
+    if (passageWorkspace) passageWorkspace.style.display = 'none';
+    if (passageAudio) {
+      passageAudio.pause();
+      updatePassagePlayBtn(false);
+    }
+    if (currentLesson && videoWorkspace && videoWorkspace.style.display === 'block') {
+      videoWorkspace.style.display = 'block';
+      if (videoCatalog) videoCatalog.style.display = 'none';
+    } else {
+      if (videoCatalog) videoCatalog.style.display = 'block';
+      if (videoWorkspace) videoWorkspace.style.display = 'none';
+    }
+  } else {
+    // Passage Mode
+    if (videoCatalog) videoCatalog.style.display = 'none';
+    if (videoWorkspace) videoWorkspace.style.display = 'none';
+    if (player && typeof player.pauseVideo === 'function') {
+      player.pauseVideo();
+    }
+
+    if (currentPassage && passageWorkspace && passageWorkspace.style.display === 'block') {
+      passageWorkspace.style.display = 'block';
+      if (passageCatalog) passageCatalog.style.display = 'none';
+    } else {
+      if (passageCatalog) passageCatalog.style.display = 'block';
+      if (passageWorkspace) passageWorkspace.style.display = 'none';
+    }
+
+    updatePassageResumeBanner();
+    renderPassageGrid();
+  }
+}
+
+function selectPassageLevel(level) {
+  selectedPassageLevel = level;
+  document.querySelectorAll('.passage-level-btn').forEach(btn => {
+    btn.classList.toggle('active', parseInt(btn.dataset.level, 10) === level);
+  });
+  renderPassageGrid();
+}
+
+function updatePassageResumeBanner() {
+  const resumeBox = document.getElementById('passage-resume-box');
+  const resumeTitle = document.getElementById('passage-resume-title');
+  if (!resumeBox || !resumeTitle) return;
+
+  const lastPassageId = localStorage.getItem('hsk_passage_last_id_global') || localStorage.getItem(`hsk_passage_last_id_lvl${selectedPassageLevel}`);
+  if (!lastPassageId || allPassages.length === 0) {
+    resumeBox.style.display = 'none';
+    return;
+  }
+
+  const p = allPassages.find(item => item.id === lastPassageId);
+  if (p) {
+    resumeTitle.textContent = `Đoạn ${p.index} (${p.levelText}): "${p.hanzi.substring(0, 35)}..."`;
+    resumeBox.style.display = 'flex';
+  } else {
+    resumeBox.style.display = 'none';
+  }
+}
+
+function resumeLastStudiedPassage() {
+  const lastPassageId = localStorage.getItem('hsk_passage_last_id_global') || localStorage.getItem(`hsk_passage_last_id_lvl${selectedPassageLevel}`);
+  if (!lastPassageId) return;
+  const p = allPassages.find(item => item.id === lastPassageId);
+  if (p) {
+    openPassageWorkspace(p);
+  }
+}
+
+function renderPassageGrid() {
+  const grid = document.getElementById('passage-cards-grid');
+  if (!grid) return;
+
+  const completed = getCompletedPassages();
+  const search = (passageSearchQuery || '').toLowerCase().trim();
+
+  const passagesInLevel = allPassages.filter(p => p.level === selectedPassageLevel);
+  const filtered = passagesInLevel.filter(p => {
+    if (!search) return true;
+    return (p.hanzi && p.hanzi.toLowerCase().includes(search)) ||
+           (p.meaning && p.meaning.toLowerCase().includes(search)) ||
+           (p.pinyin && p.pinyin.toLowerCase().includes(search));
+  });
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 50px 20px; color: var(--text-muted); background: rgba(255,255,255,0.03); border-radius: 16px; border: 1.5px dashed var(--border-glass);">
+        <i class="fa-solid fa-file-circle-question" style="font-size: 2.5rem; color: #8b5cf6; margin-bottom: 12px; opacity: 0.8;"></i>
+        <h4 style="margin: 0 0 6px 0; font-weight: 800; color: var(--text-primary);">Không tìm thấy đoạn văn phù hợp</h4>
+        <p style="font-size: 0.85rem; margin: 0;">Thử tìm kiếm với từ khóa khác hoặc đổi cấp độ HSK nhé!</p>
+      </div>
+    `;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(p => {
+    const isDone = completed.has(p.id);
+    return `
+      <div class="passage-card ${isDone ? 'completed' : ''}" onclick="window.openPassageWorkspaceById('${p.id}')">
+        <div>
+          <div class="passage-card-top">
+            <span class="passage-card-badge">Đoạn ${p.index} • ${p.levelText}</span>
+            ${isDone ? '<span class="passage-card-completed-tag"><i class="fa-solid fa-circle-check"></i> Đã học</span>' : ''}
+          </div>
+          <div class="passage-card-hanzi" title="${p.hanzi}">${p.hanzi}</div>
+          <div class="passage-card-pinyin">${p.pinyin}</div>
+          <div class="passage-card-meaning">${p.meaning}</div>
+        </div>
+        <div>
+          <button class="passage-card-btn-start">
+            <i class="fa-solid fa-headphones"></i> Luyện nghe chép
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function openPassageWorkspaceById(id) {
+  const p = allPassages.find(item => item.id === id);
+  if (p) openPassageWorkspace(p);
+}
+
+function openPassageWorkspace(passage) {
+  currentPassage = passage;
+  selectedPassageLevel = passage.level;
+
+  // Persist progress
+  try {
+    localStorage.setItem(`hsk_passage_last_id_lvl${passage.level}`, passage.id);
+    localStorage.setItem(`hsk_passage_last_idx_lvl${passage.level}`, passage.index);
+    localStorage.setItem('hsk_passage_last_id_global', passage.id);
+  } catch (e) {}
+
+  const catalogView = document.getElementById('dict-passage-catalog-view');
+  const workspaceView = document.getElementById('dict-passage-workspace-view');
+  if (catalogView) catalogView.style.display = 'none';
+  if (workspaceView) workspaceView.style.display = 'block';
+
+  // Stop any playing audio
+  if (passageAudio) {
+    passageAudio.pause();
+    updatePassagePlayBtn(false);
+  }
+
+  // Update Breadcrumb & Header info
+  const titleEl = document.getElementById('passage-ws-title');
+  const levelBadge = document.getElementById('passage-ws-level-badge');
+  const progressText = document.getElementById('passage-ws-progress-text');
+
+  const passagesInLevel = allPassages.filter(p => p.level === passage.level);
+  if (titleEl) titleEl.textContent = `Đoạn ${passage.index}`;
+  if (levelBadge) {
+    levelBadge.textContent = passage.levelText;
+    levelBadge.className = `level-badge level-${passage.level}`;
+  }
+  if (progressText) {
+    progressText.textContent = `Đoạn ${passage.index} / ${passagesInLevel.length}`;
+  }
+
+  // Prev / Next button states
+  const prevBtnTop = document.getElementById('btn-passage-prev');
+  const prevBtnBottom = document.getElementById('btn-passage-prev-bottom');
+  const isFirst = passage.index <= 1;
+  if (prevBtnTop) prevBtnTop.disabled = isFirst;
+  if (prevBtnBottom) prevBtnBottom.disabled = isFirst;
+
+  // Populate Solution & Collapsible contents
+  const pinyinText = document.getElementById('passage-pinyin-text');
+  const meaningText = document.getElementById('passage-meaning-text');
+  const solHanzi = document.getElementById('passage-solution-hanzi');
+  const solPinyin = document.getElementById('passage-solution-pinyin');
+  const solMeaning = document.getElementById('passage-solution-meaning');
+
+  if (pinyinText) pinyinText.textContent = passage.pinyin;
+  if (meaningText) meaningText.textContent = passage.meaning;
+  if (solHanzi) solHanzi.textContent = passage.hanzi;
+  if (solPinyin) solPinyin.textContent = passage.pinyin;
+  if (solMeaning) solMeaning.textContent = passage.meaning;
+
+  // Reset toggles & solution box
+  showPassagePinyin = false;
+  showPassageMeaning = false;
+  const pinyinBox = document.getElementById('passage-pinyin-box');
+  const meaningBox = document.getElementById('passage-meaning-box');
+  const solBox = document.getElementById('passage-solution-box');
+  const feedbackBadge = document.getElementById('passage-feedback-badge');
+
+  if (pinyinBox) pinyinBox.style.display = 'none';
+  if (meaningBox) meaningBox.style.display = 'none';
+  if (solBox) solBox.style.display = 'none';
+  if (feedbackBadge) feedbackBadge.style.display = 'none';
+
+  const pinyinToggleBtn = document.getElementById('text-toggle-pinyin');
+  const meaningToggleBtn = document.getElementById('text-toggle-meaning');
+  if (pinyinToggleBtn) pinyinToggleBtn.textContent = 'Xem Pinyin';
+  if (meaningToggleBtn) meaningToggleBtn.textContent = 'Xem Nghĩa';
+
+  // Clear typing input
+  const inputEl = document.getElementById('passage-dictation-input');
+  if (inputEl) {
+    inputEl.value = '';
+    inputEl.focus();
+  }
+
+  // Render character slot tiles
+  renderPassageCharTiles();
+
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Auto play audio
+  setTimeout(() => {
+    playCurrentPassageAudio();
+  }, 350);
+}
+
+function renderPassageCharTiles() {
+  const container = document.getElementById('passage-char-tiles');
+  if (!container || !currentPassage) return;
+
+  const targetChars = Array.from(currentPassage.hanzi);
+  const inputVal = document.getElementById('passage-dictation-input')?.value || '';
+  const typedChars = Array.from(inputVal);
+
+  container.innerHTML = targetChars.map((char, i) => {
+    const isPunctuation = /[，。？！、：；“”‘’！？.!,;?]/i.test(char) || /\s/.test(char);
+    if (isPunctuation) {
+      return `<span style="font-size: 1.3rem; font-weight: 800; color: var(--text-muted); align-self: flex-end; padding: 0 4px 6px;">${char}</span>`;
+    }
+
+    const typed = typedChars[i] || '';
+    let statusClass = 'empty';
+    if (typed) {
+      statusClass = (typed === char) ? 'correct' : 'incorrect';
+    }
+
+    return `
+      <div class="dict-tile ${statusClass}">
+        <span class="dict-tile-text">${typed || ''}</span>
+      </div>
+    `;
+  }).join('');
+}
+
+function updatePassagePlayBtn(isPlaying) {
+  const btn = document.getElementById('btn-passage-play-audio');
+  if (!btn) return;
+  btn.classList.toggle('playing', isPlaying);
+  btn.innerHTML = isPlaying ? '<i class="fa-solid fa-pause"></i>' : '<i class="fa-solid fa-play"></i>';
+}
+
+function playCurrentPassageAudio() {
+  if (!currentPassage) return;
+
+  if (passageAudio && !passageAudio.paused) {
+    passageAudio.pause();
+    updatePassagePlayBtn(false);
+    const statusEl = document.getElementById('passage-audio-status');
+    if (statusEl) statusEl.textContent = 'Đã tạm dừng';
+    return;
+  }
+
+  const cleanText = currentPassage.hanzi.replace(/[^\u4e00-\u9fa5，。？！、]/g, '');
+  const url = `/api/tts?text=${encodeURIComponent(cleanText)}&voice=baidu-female`;
+
+  if (!passageAudio || passageAudio.src !== window.location.origin + url) {
+    if (passageAudio) {
+      passageAudio.pause();
+      passageAudio.src = '';
+    }
+    passageAudio = new Audio(url);
+    passageAudio.playbackRate = passageAudioSpeed;
+
+    passageAudio.ontimeupdate = () => {
+      if (passageAudio.duration) {
+        const pct = (passageAudio.currentTime / passageAudio.duration) * 100;
+        const fill = document.getElementById('passage-audio-progress-fill');
+        if (fill) fill.style.width = `${pct}%`;
+      }
+    };
+
+    passageAudio.onended = () => {
+      updatePassagePlayBtn(false);
+      const statusEl = document.getElementById('passage-audio-status');
+      if (statusEl) statusEl.textContent = 'Hoàn thành lượt nghe';
+      const fill = document.getElementById('passage-audio-progress-fill');
+      if (fill) fill.style.width = '100%';
+    };
+
+    passageAudio.onerror = () => {
+      console.warn("Audio TTS failed, fallback to Web Speech");
+      useWebSpeechForPassage(cleanText);
+    };
+  }
+
+  passageAudio.playbackRate = passageAudioSpeed;
+  passageAudio.play().then(() => {
+    updatePassagePlayBtn(true);
+    const statusEl = document.getElementById('passage-audio-status');
+    if (statusEl) statusEl.textContent = 'Đang phát âm thanh...';
+  }).catch(e => {
+    console.warn("Play error:", e);
+    useWebSpeechForPassage(cleanText);
+  });
+}
+
+function replayCurrentPassageAudio() {
+  if (passageAudio) {
+    passageAudio.currentTime = 0;
+  }
+  playCurrentPassageAudio();
+}
+
+function setPassageSpeed(speed) {
+  passageAudioSpeed = speed;
+  document.querySelectorAll('.passage-speed-btn').forEach(b => {
+    b.classList.toggle('active', parseFloat(b.dataset.speed) === speed);
+  });
+  if (passageAudio) {
+    passageAudio.playbackRate = speed;
+  }
+}
+
+function useWebSpeechForPassage(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'zh-CN';
+  utter.rate = passageAudioSpeed;
+  utter.onstart = () => {
+    updatePassagePlayBtn(true);
+    const statusEl = document.getElementById('passage-audio-status');
+    if (statusEl) statusEl.textContent = 'Đang phát âm thanh...';
+  };
+  utter.onend = () => {
+    updatePassagePlayBtn(false);
+    const statusEl = document.getElementById('passage-audio-status');
+    if (statusEl) statusEl.textContent = 'Hoàn thành lượt nghe';
+  };
+  window.speechSynthesis.speak(utter);
+}
+
+function togglePassagePinyin() {
+  showPassagePinyin = !showPassagePinyin;
+  const box = document.getElementById('passage-pinyin-box');
+  const txt = document.getElementById('text-toggle-pinyin');
+  if (box) box.style.display = showPassagePinyin ? 'block' : 'none';
+  if (txt) txt.textContent = showPassagePinyin ? 'Ẩn Pinyin' : 'Xem Pinyin';
+}
+
+function togglePassageMeaning() {
+  showPassageMeaning = !showPassageMeaning;
+  const box = document.getElementById('passage-meaning-box');
+  const txt = document.getElementById('text-toggle-meaning');
+  if (box) box.style.display = showPassageMeaning ? 'block' : 'none';
+  if (txt) txt.textContent = showPassageMeaning ? 'Ẩn Nghĩa' : 'Xem Nghĩa';
+}
+
+function checkPassageAnswer() {
+  if (!currentPassage) return;
+  const inputEl = document.getElementById('passage-dictation-input');
+  if (!inputEl) return;
+
+  const rawUser = inputEl.value.trim();
+  const cleanUser = rawUser.replace(/[\s，。？！、：；“”‘’！？.!,;?]/g, '');
+  const cleanTarget = currentPassage.hanzi.replace(/[\s，。？！、：；“”‘’！？.!,;?]/g, '');
+
+  const feedbackBadge = document.getElementById('passage-feedback-badge');
+  const solBox = document.getElementById('passage-solution-box');
+
+  renderPassageCharTiles();
+
+  if (cleanUser === cleanTarget) {
+    // 100% correct
+    saveCompletedPassage(currentPassage.id);
+    if (feedbackBadge) {
+      feedbackBadge.style.display = 'flex';
+      feedbackBadge.className = 'dict-feedback-badge success';
+      feedbackBadge.style.alignItems = 'center';
+      feedbackBadge.style.gap = '10px';
+      feedbackBadge.innerHTML = `
+        <i class="fa-solid fa-circle-check" style="font-size: 1.4rem; color: #10b981;"></i>
+        <div>
+          <div style="font-weight: 800; font-size: 1.05rem; color: #10b981;">🎉 Tuyệt vời! Bạn đã nghe chép hoàn toàn chính xác!</div>
+          <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 2px;">Đã ghi nhận hoàn thành đoạn này. Bạn có thể bấm <strong>Đoạn tiếp theo ➡️</strong> để tiếp tục.</div>
+        </div>
+      `;
+    }
+    if (solBox) solBox.style.display = 'block';
+    showToast("🎉 Hoàn toàn chính xác! Xuất sắc!");
+  } else {
+    // Calculate match percentage
+    let matchCount = 0;
+    for (let i = 0; i < cleanUser.length && i < cleanTarget.length; i++) {
+      if (cleanUser[i] === cleanTarget[i]) matchCount++;
+    }
+    const pct = cleanTarget.length > 0 ? Math.round((matchCount / cleanTarget.length) * 100) : 0;
+
+    if (feedbackBadge) {
+      feedbackBadge.style.display = 'flex';
+      feedbackBadge.className = 'dict-feedback-badge warning';
+      feedbackBadge.style.alignItems = 'center';
+      feedbackBadge.style.gap = '10px';
+      feedbackBadge.innerHTML = `
+        <i class="fa-solid fa-triangle-exclamation" style="font-size: 1.4rem; color: #f59e0b;"></i>
+        <div>
+          <div style="font-weight: 800; font-size: 1rem; color: #f59e0b;">Bạn đã nghe đúng khoảng ${pct}% câu thoại!</div>
+          <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 2px;">Hãy nghe lại hoặc bấm <strong>Xem đáp án</strong> để kiểm tra các từ chưa chính xác nhé!</div>
+        </div>
+      `;
+    }
+  }
+}
+
+function revealPassageAnswer() {
+  const solBox = document.getElementById('passage-solution-box');
+  if (solBox) {
+    solBox.style.display = (solBox.style.display === 'block') ? 'none' : 'block';
+  }
+}
+
+function copyPassageSolution() {
+  if (!currentPassage) return;
+  const inputEl = document.getElementById('passage-dictation-input');
+  if (inputEl) {
+    inputEl.value = currentPassage.hanzi;
+    renderPassageCharTiles();
+    checkPassageAnswer();
+  }
+}
+
+function navPassage(direction) {
+  if (!currentPassage) return;
+  const passagesInLevel = allPassages.filter(p => p.level === currentPassage.level);
+  const curIdx = passagesInLevel.findIndex(p => p.id === currentPassage.id);
+  const newIdx = curIdx + direction;
+
+  if (newIdx >= 0 && newIdx < passagesInLevel.length) {
+    openPassageWorkspace(passagesInLevel[newIdx]);
+  } else if (newIdx >= passagesInLevel.length) {
+    showToast("🎉 Xuất sắc! Bạn đã hoàn thành đoạn cuối cùng của cấp độ này!");
+  }
+}
+
+function returnToPassageCatalog() {
+  if (passageAudio) {
+    passageAudio.pause();
+    updatePassagePlayBtn(false);
+  }
+  const catalogView = document.getElementById('dict-passage-catalog-view');
+  const workspaceView = document.getElementById('dict-passage-workspace-view');
+  if (workspaceView) workspaceView.style.display = 'none';
+  if (catalogView) catalogView.style.display = 'block';
+
+  updatePassageResumeBanner();
+  renderPassageGrid();
+}
+
+// Window bindings for HSK Passage Dictation
+window.switchMainTab = switchMainTab;
+window.selectPassageLevel = selectPassageLevel;
+window.resumeLastStudiedPassage = resumeLastStudiedPassage;
+window.openPassageWorkspaceById = openPassageWorkspaceById;
+window.openPassageWorkspace = openPassageWorkspace;
+window.returnToPassageCatalog = returnToPassageCatalog;
+window.playCurrentPassageAudio = playCurrentPassageAudio;
+window.replayCurrentPassageAudio = replayCurrentPassageAudio;
+window.setPassageSpeed = setPassageSpeed;
+window.togglePassagePinyin = togglePassagePinyin;
+window.togglePassageMeaning = togglePassageMeaning;
+window.checkPassageAnswer = checkPassageAnswer;
+window.revealPassageAnswer = revealPassageAnswer;
+window.copyPassageSolution = copyPassageSolution;
+window.navPassage = navPassage;
 
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {

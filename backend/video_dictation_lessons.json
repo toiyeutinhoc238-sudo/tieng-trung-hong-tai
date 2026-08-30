@@ -62,7 +62,9 @@
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 142,
+    "completedUsers": []
   },
   {
     "id": "dict_v2_qingjia",
@@ -125,7 +127,9 @@
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 118,
+    "completedUsers": []
   },
   {
     "id": "dict_v3_xiangxin",
@@ -258,7 +262,9 @@
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 165,
+    "completedUsers": []
   },
   {
     "id": "dict_v4_meigui_taolu",
@@ -386,7 +392,9 @@
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 194,
+    "completedUsers": []
   },
   {
     "id": "dict_v5_meigui_zili",
@@ -588,7 +596,9 @@
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 153,
+    "completedUsers": []
   },
   {
     "id": "dict_v6_meigui_pugongying",
@@ -732,7 +742,9 @@
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 176,
+    "completedUsers": []
   },
   {
     "id": "dict_v7_meigui_libie",
@@ -900,7 +912,9 @@
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 188,
+    "completedUsers": []
   },
   {
     "id": "dict_v8_meigui_buwanmei",
@@ -1201,7 +1215,9 @@
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 162,
+    "completedUsers": []
   },
   {
     "id": "dict_v9_xinwen",
@@ -1399,7 +1415,9 @@
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 95,
+    "completedUsers": []
   },
   {
     "id": "dict_v10_xuexi",
@@ -1550,7 +1568,9 @@
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 127,
+    "completedUsers": []
   },
   {
     "id": "dict_v12_xiaoxuesheng",
@@ -2314,7 +2334,9 @@
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 84,
+    "completedUsers": []
   },
   {
     "id": "dict_v13_luying",
@@ -2801,7 +2823,9 @@
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 79,
+    "completedUsers": []
   },
   {
     "id": "dict_v14_nvwu",
@@ -3806,7 +3830,9 @@
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 91,
+    "completedUsers": []
   },
   {
     "id": "dict_v15_bingmayong",
@@ -4376,7 +4402,9 @@
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 106,
+    "completedUsers": []
   },
   {
     "id": "dict_v16_jianchi",
@@ -4459,7 +4487,9 @@
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 115,
+    "completedUsers": []
   },
   {
     "id": "dict_v17_raokouling",
@@ -4620,7 +4650,9 @@
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 149,
+    "completedUsers": []
   },
   {
     "id": "dict_v18_zhuzi",
@@ -4737,7 +4769,9 @@
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 73,
+    "completedUsers": []
   },
   {
     "id": "dict_v19_dushu",
@@ -4871,7 +4905,9 @@
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 132,
+    "completedUsers": []
   },
   {
     "id": "dict_v20_qiangda",
@@ -4988,7 +5024,9 @@
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 97,
+    "completedUsers": []
   },
   {
     "id": "dict_v21_jiemeihua",
@@ -5371,7 +5409,9 @@
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 82,
+    "completedUsers": []
   },
   {
     "id": "dict_v22_shamo",
@@ -5966,7 +6006,9 @@
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 67,
+    "completedUsers": []
   },
   {
     "id": "dict_v23_zongcai",
@@ -7101,7 +7143,9 @@
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 111,
+    "completedUsers": []
   },
   {
     "id": "dict_v24_xinlingqilv",
@@ -7621,6 +7665,8 @@
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 89,
+    "completedUsers": []
   }
 ]

@@ -3143,6 +3143,61 @@ app.get('/api/dictation/lessons/:id', async (req, res) => {
   }
 });
 
+// POST /api/dictation/record-completion — Ghi nhận 1 lượt hoàn thành video bài học (Khi xem hết clip)
+app.post('/api/dictation/record-completion', async (req, res) => {
+  try {
+    const { lessonId, userEmail } = req.body || {};
+    if (!lessonId) {
+      return res.status(400).json({ error: 'Missing lessonId' });
+    }
+
+    const lessons = await readDictationLessons();
+    const lesson = lessons.find(l => l.id === lessonId);
+    if (!lesson) {
+      return res.status(404).json({ error: 'Lesson not found' });
+    }
+
+    lesson.studyCount = (lesson.studyCount || 0) + 1;
+    lesson.completedUsers = lesson.completedUsers || [];
+
+    const email = (userEmail || '').trim().toLowerCase();
+    if (email && email !== 'guest' && !lesson.completedUsers.includes(email)) {
+      lesson.completedUsers.push(email);
+    }
+
+    await fs.writeFile(DICTATION_DB_PATH, JSON.stringify(lessons, null, 2), 'utf-8');
+
+    res.json({
+      success: true,
+      lessonId,
+      studyCount: lesson.studyCount,
+      uniqueLearners: lesson.completedUsers.length
+    });
+  } catch (err) {
+    console.error("Error recording dictation completion:", err);
+    res.status(500).json({ error: 'Failed to record completion' });
+  }
+});
+
+const HSK_PASSAGES_PATH = path.join(__dirname, 'hsk_listening_passages.json');
+
+// GET /api/dictation/hsk-passages — Lấy danh sách đoạn văn nghe chép HSK 1, 2, 3
+app.get('/api/dictation/hsk-passages', async (req, res) => {
+  try {
+    const data = await fs.readFile(HSK_PASSAGES_PATH, 'utf-8');
+    const passages = JSON.parse(data);
+    const { level } = req.query;
+    if (level) {
+      const lvlNum = parseInt(level, 10);
+      return res.json(passages.filter(p => p.level === lvlNum));
+    }
+    res.json(passages);
+  } catch (err) {
+    console.error("Error reading hsk_listening_passages.json:", err);
+    res.status(500).json({ error: 'Failed to load HSK passages' });
+  }
+});
+
 // ============================================================
 // VOICE ACTIVITY DETECTION (VAD) & ANTI-HALLUCINATION ENGINE
 // ============================================================

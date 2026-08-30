@@ -68,7 +68,8 @@ export const DICTATION_LESSONS = [
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 142
   },
   {
     "id": "dict_v2_qingjia",
@@ -131,7 +132,8 @@ export const DICTATION_LESSONS = [
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 118
   },
   {
     "id": "dict_v3_xiangxin",
@@ -264,7 +266,8 @@ export const DICTATION_LESSONS = [
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 165
   },
   {
     "id": "dict_v4_meigui_taolu",
@@ -392,7 +395,8 @@ export const DICTATION_LESSONS = [
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 194
   },
   {
     "id": "dict_v5_meigui_zili",
@@ -594,7 +598,8 @@ export const DICTATION_LESSONS = [
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 153
   },
   {
     "id": "dict_v6_meigui_pugongying",
@@ -738,7 +743,8 @@ export const DICTATION_LESSONS = [
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 176
   },
   {
     "id": "dict_v7_meigui_libie",
@@ -906,7 +912,8 @@ export const DICTATION_LESSONS = [
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 188
   },
   {
     "id": "dict_v8_meigui_buwanmei",
@@ -1207,7 +1214,8 @@ export const DICTATION_LESSONS = [
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 162
   },
   {
     "id": "dict_v9_xinwen",
@@ -1405,7 +1413,8 @@ export const DICTATION_LESSONS = [
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 95
   },
   {
     "id": "dict_v10_xuexi",
@@ -1556,7 +1565,8 @@ export const DICTATION_LESSONS = [
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 127
   },
   {
     "id": "dict_v12_xiaoxuesheng",
@@ -2320,7 +2330,8 @@ export const DICTATION_LESSONS = [
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 84
   },
   {
     "id": "dict_v13_luying",
@@ -2807,7 +2818,8 @@ export const DICTATION_LESSONS = [
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 79
   },
   {
     "id": "dict_v14_nvwu",
@@ -3812,7 +3824,8 @@ export const DICTATION_LESSONS = [
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 91
   },
   {
     "id": "dict_v15_bingmayong",
@@ -4382,7 +4395,8 @@ export const DICTATION_LESSONS = [
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 106
   },
   {
     "id": "dict_v16_jianchi",
@@ -4465,7 +4479,8 @@ export const DICTATION_LESSONS = [
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 115
   },
   {
     "id": "dict_v17_raokouling",
@@ -4626,7 +4641,8 @@ export const DICTATION_LESSONS = [
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 149
   },
   {
     "id": "dict_v18_zhuzi",
@@ -4743,7 +4759,8 @@ export const DICTATION_LESSONS = [
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 73
   },
   {
     "id": "dict_v19_dushu",
@@ -4877,7 +4894,8 @@ export const DICTATION_LESSONS = [
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 132
   },
   {
     "id": "dict_v20_qiangda",
@@ -4994,7 +5012,8 @@ export const DICTATION_LESSONS = [
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 97
   },
   {
     "id": "dict_v21_jiemeihua",
@@ -5377,7 +5396,8 @@ export const DICTATION_LESSONS = [
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 82
   },
   {
     "id": "dict_v22_shamo",
@@ -5972,7 +5992,8 @@ export const DICTATION_LESSONS = [
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 67
   },
   {
     "id": "dict_v23_zongcai",
@@ -7107,7 +7128,8 @@ export const DICTATION_LESSONS = [
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 111
   },
   {
     "id": "dict_v24_xinlingqilv",
@@ -7627,6 +7649,7 @@ export const DICTATION_LESSONS = [
           0
         ]
       }
-    ]
+    ],
+    "studyCount": 89
   }
 ];
