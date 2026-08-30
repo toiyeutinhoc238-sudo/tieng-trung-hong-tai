@@ -2457,6 +2457,7 @@ function resetCardOrientation() {
   setTimeout(renderActiveCard, 100);
 }
 
+let globalToastTimer = null;
 function showToast(message, isError = false) {
   let toastEl = document.getElementById('toast') || document.getElementById('toast-msg');
   if (!toastEl) {
@@ -2465,11 +2466,17 @@ function showToast(message, isError = false) {
     toastEl.className = 'toast';
     document.body.appendChild(toastEl);
   }
-  toastEl.textContent = message;
+  toastEl.style.zIndex = '9999999';
+  if (typeof message === 'string' && message.includes('<') && message.includes('>')) {
+    toastEl.innerHTML = message;
+  } else {
+    toastEl.textContent = message;
+  }
   toastEl.style.borderLeftColor = isError ? 'var(--danger, #ef4444)' : 'var(--accent-blue, #3b82f6)';
   toastEl.classList.add('show');
 
-  setTimeout(() => {
+  if (globalToastTimer) clearTimeout(globalToastTimer);
+  globalToastTimer = setTimeout(() => {
     toastEl.classList.remove('show');
   }, 2500);
 }
@@ -13946,21 +13953,34 @@ window.exportAdminUsersExcel = async function () {
   }
 };
 
-window.fetchAdminUsersList = async function (showLoading) {
+window.fetchAdminUsersList = async function (showLoading, isManualRefresh = false) {
   const container = document.getElementById('admin-users-table-container');
-  if (!container) return;
+  const refreshBtn = document.getElementById('admin-refresh-users-btn');
+  const refreshIcon = refreshBtn ? refreshBtn.querySelector('i') : null;
+
+  if (isManualRefresh) {
+    if (refreshIcon) refreshIcon.classList.add('fa-spin');
+    if (refreshBtn) {
+      refreshBtn.style.pointerEvents = 'none';
+      refreshBtn.style.opacity = '0.7';
+      refreshBtn.style.transform = 'scale(0.95)';
+    }
+    showToast('Đang làm mới dữ liệu học viên từ máy chủ...', false);
+  }
 
   if (showLoading && adminCachedUsersList.length === 0) {
-    container.innerHTML = `
-      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px; color: #94a3b8; gap: 12px;">
-        <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; color: #f43f5e;"></i>
-        <span>Đang nạp dữ liệu toàn bộ học viên & phân quyền...</span>
-      </div>
-    `;
+    if (container) {
+      container.innerHTML = `
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px; color: #94a3b8; gap: 12px;">
+          <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; color: #f43f5e;"></i>
+          <span>Đang nạp dữ liệu toàn bộ học viên & phân quyền...</span>
+        </div>
+      `;
+    }
   }
 
   try {
-    const res = await fetch(`${API_BASE_URL}/api/admin/users`, {
+    const res = await fetch(`${API_BASE_URL}/api/admin/users?t=${Date.now()}`, {
       method: 'GET',
       headers: getAuthHeaders(),
       credentials: 'include'
@@ -13994,16 +14014,29 @@ window.fetchAdminUsersList = async function (showLoading) {
       if (countUsers) countUsers.textContent = adminCachedUsersList.filter(u => !u.isAdmin && !u.isSuperAdmin).length;
 
       window.renderAdminUsersTable();
+
+      if (isManualRefresh) {
+        showToast('Đã làm mới dữ liệu học viên thành công!', false);
+      }
     }
   } catch (err) {
     console.error('Fetch admin users error:', err);
-    if (showLoading) {
+    if (isManualRefresh) {
+      showToast('Lỗi khi làm mới dữ liệu. Vui lòng thử lại!', true);
+    } else if (showLoading && container) {
       container.innerHTML = `
         <div style="text-align: center; padding: 36px; color: #94a3b8;">
           <i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b; font-size: 1.5rem; margin-bottom: 8px;"></i>
           <p>Không thể kết nối đến máy chủ quản trị. Vui lòng kiểm tra quyền hạn tài khoản.</p>
         </div>
       `;
+    }
+  } finally {
+    if (refreshIcon) refreshIcon.classList.remove('fa-spin');
+    if (refreshBtn) {
+      refreshBtn.style.pointerEvents = 'auto';
+      refreshBtn.style.opacity = '1';
+      refreshBtn.style.transform = 'scale(1)';
     }
   }
 };
