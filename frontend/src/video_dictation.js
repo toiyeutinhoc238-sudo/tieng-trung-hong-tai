@@ -214,6 +214,65 @@ function setupPlayerForVideo(youtubeId) {
   }
 
   isPlayerReady = false;
+
+  // Local Video Fallback (for videos with local MP4, e.g. jC1pJrrL5Tc or mKR73TvQuTo)
+  const localVideoUrl = currentLesson?.localVideo || (youtubeId === 'jC1pJrrL5Tc' || youtubeId === 'mKR73TvQuTo' ? `/videos/${youtubeId}.mp4` : null);
+  if (localVideoUrl) {
+    const embedContainer = document.getElementById('yt-video-embed');
+    if (embedContainer) {
+      embedContainer.innerHTML = `
+        <video id="html5-video-player" src="${localVideoUrl}" playsinline controls style="width: 100%; height: 100%; object-fit: contain; background: #000; border-radius: 16px;"></video>
+      `;
+      const vidEl = document.getElementById('html5-video-player');
+
+      ytPlayer = {
+        isHtml5: true,
+        seekTo: (sec) => {
+          if (vidEl) vidEl.currentTime = sec;
+        },
+        playVideo: () => {
+          if (vidEl) vidEl.play().catch(e => console.warn(e));
+        },
+        pauseVideo: () => {
+          if (vidEl) vidEl.pause();
+        },
+        getCurrentTime: () => {
+          return vidEl ? vidEl.currentTime : 0;
+        },
+        setPlaybackRate: (rate) => {
+          if (vidEl) vidEl.playbackRate = rate;
+        },
+        getPlayerState: () => {
+          if (!vidEl) return 2;
+          return vidEl.paused ? 2 : 1;
+        },
+        destroy: () => {
+          if (vidEl) vidEl.pause();
+          if (embedContainer) embedContainer.innerHTML = '';
+        }
+      };
+
+      vidEl.playbackRate = currentSpeed;
+      vidEl.onplay = () => startPlaybackWatcher();
+      vidEl.onpause = () => stopPlaybackWatcher();
+      vidEl.onended = () => stopPlaybackWatcher();
+
+      const onReadyHandler = () => {
+        isPlayerReady = true;
+        console.log("HTML5 Video Player is Ready.");
+        playCurrentSentence();
+      };
+
+      if (vidEl.readyState >= 1) {
+        onReadyHandler();
+      } else {
+        vidEl.onloadedmetadata = onReadyHandler;
+      }
+      isPlayerReady = true;
+      return;
+    }
+  }
+
   ytPlayer = new YT.Player('yt-video-embed', {
     videoId: youtubeId,
     playerVars: {
@@ -319,7 +378,7 @@ function startPlaybackWatcher() {
 
     if (ytPlayer && ytPlayer.getPlayerState) {
       const state = ytPlayer.getPlayerState();
-      if (state === YT.PlayerState.PLAYING || state === YT.PlayerState.BUFFERING) {
+      if (state === 1 || (window.YT && window.YT.PlayerState && state === YT.PlayerState.BUFFERING)) {
         playbackWatcher = requestAnimationFrame(updateFrame);
         return;
       }
