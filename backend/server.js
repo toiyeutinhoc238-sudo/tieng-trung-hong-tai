@@ -44,7 +44,7 @@ fs.mkdir(AUDIO_CACHE_DIR, { recursive: true }).catch(err => {
 
 // Connect to MongoDB Atlas
 const MONGODB_URI = process.env.MONGODB_URI;
-mongoose.set('bufferCommands', false); // Disable 10-second buffering when disconnected
+// Removed bufferCommands=false so Mongoose will queue queries until connected
 
 if (!MONGODB_URI) {
   console.error("Warning: MONGODB_URI is not set in environment variables!");
@@ -243,10 +243,21 @@ async function readUserData() {
     return cachedUserData;
   }
 
-  // If MongoDB is not connected, use user_data.json file fallback immediately
-  if (mongoose.connection.readyState !== 1) {
-    const fileData = await readUserDataFromFile();
-    return fileData;
+  // Ensure we wait for MongoDB to connect if URI is provided.
+  // This prevents the bug where server reads from old ephemeral local file and overwrites DB!
+  if (process.env.MONGODB_URI) {
+    if (mongoose.connection.readyState !== 1) {
+      console.log("Waiting for MongoDB connection before reading data...");
+      try {
+        for (let i = 0; i < 50; i++) {
+          if (mongoose.connection.readyState === 1) break;
+          await new Promise(r => setTimeout(r, 100));
+        }
+      } catch (e) {}
+    }
+  } else if (mongoose.connection.readyState !== 1) {
+    // If no MongoDB URI, use user_data.json file fallback immediately
+    return await readUserDataFromFile();
   }
 
   try {
@@ -1177,10 +1188,10 @@ function calculateStreakFromHistory(dailyHistory) {
     .sort();
   if (dates.length === 0) return 1;
 
-  const today = new Date();
+  // Use Vietnam Time (UTC+7) to avoid streak reset issues for users studying in the early morning
+  const today = new Date(new Date().getTime() + 7 * 60 * 60 * 1000);
   const todayStr = today.toISOString().split('T')[0];
-  const yesterday = new Date(today);
-  yesterday.setDate(yesterday.getDate() - 1);
+  const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
   const yesterdayStr = yesterday.toISOString().split('T')[0];
 
   let startStr = null;
@@ -1227,7 +1238,8 @@ function ensureDailyHistoryIntegrity(stats) {
     // 2. If stats.studyTime has extra unallocated time, allocate it to history
     const unallocated = totalSecs - recordedSecs;
     const streak = Math.max(1, stats.streak || 1);
-    const refDateStr = stats.lastActiveDate || new Date().toISOString().split('T')[0];
+    const vnTimeNow = new Date(new Date().getTime() + 7 * 60 * 60 * 1000);
+    const refDateStr = stats.lastActiveDate || vnTimeNow.toISOString().split('T')[0];
     const refDate = new Date(refDateStr);
 
     if (recordedSecs === 0) {
@@ -1307,7 +1319,8 @@ app.post('/api/user/stats/sync', async (req, res) => {
     userRecord.stats.dailyHistory = {};
   }
 
-  const todayStr = localDateStr || new Date().toISOString().split('T')[0];
+  const vnTimeNow = new Date(new Date().getTime() + 7 * 60 * 60 * 1000);
+  const todayStr = localDateStr || vnTimeNow.toISOString().split('T')[0];
 
   if (typeof incrementStudyTime === 'number' && incrementStudyTime > 0) {
     userRecord.stats.studyTime += incrementStudyTime;
