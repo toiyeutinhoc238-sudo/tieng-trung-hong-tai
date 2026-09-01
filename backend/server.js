@@ -109,6 +109,13 @@ const discussionSchema = new mongoose.Schema({
 }, { timestamps: true });
 const Discussion = mongoose.model('Discussion', discussionSchema);
 
+const dictationLessonSchema = new mongoose.Schema({
+  _id: String, // lessonId, e.g. 'dict_v13_luying'
+  studyCount: { type: Number, default: 0 },
+  completedUsers: { type: [String], default: [] }
+}, { timestamps: true });
+const DictationLesson = mongoose.model('DictationLesson', dictationLessonSchema);
+
 // In-memory Cache for User Data
 let cachedUserData = null;
 
@@ -497,16 +504,6 @@ app.get('/api/exams/catalog', async (req, res) => {
   }
 });
 
-// GET /api/dictation/lessons - Return Video Dictation lessons from video_dictation_lessons.json
-app.get('/api/dictation/lessons', async (req, res) => {
-  try {
-    const dictationData = await fs.readFile(DICTATION_DB_PATH, 'utf-8');
-    res.json(JSON.parse(dictationData));
-  } catch (error) {
-    console.error('Error reading video_dictation_lessons.json:', error);
-    res.status(500).json({ error: 'Failed to load dictation lessons' });
-  }
-});
 
 // Helper functions for Admin & Super Admin resolution
 const SUPER_ADMINS = ['phanphiphu04@gmail.com', 'thaihong162004@gmail.com'];
@@ -3104,20 +3101,44 @@ app.get('/api/grammar/detail/:key', async (req, res) => {
 });
 
 // ==========================================
-// VIDEO DICTATION API (eJOY Video Dictation)
+// VIDEO DICTATION API (eJOY Video Dictation - Real MongoDB Sync)
 // ==========================================
 
 async function readDictationLessons() {
   try {
     const data = await fs.readFile(DICTATION_DB_PATH, 'utf-8');
-    return JSON.parse(data);
+    const lessons = JSON.parse(data);
+
+    // Sync real studyCount and completedUsers from MongoDB (Không dùng số liệu ảo)
+    try {
+      if (mongoose.connection && mongoose.connection.readyState === 1) {
+        const stats = await DictationLesson.find({}).lean();
+        const statsMap = new Map();
+        stats.forEach(s => statsMap.set(s._id, s));
+
+        lessons.forEach(l => {
+          const s = statsMap.get(l.id);
+          l.studyCount = s ? (s.studyCount || 0) : 0;
+          l.completedUsers = s ? (s.completedUsers || []) : [];
+        });
+      } else {
+        lessons.forEach(l => {
+          l.studyCount = l.studyCount || 0;
+          l.completedUsers = l.completedUsers || [];
+        });
+      }
+    } catch (dbErr) {
+      console.warn("MongoDB DictationLesson read warning:", dbErr.message);
+    }
+
+    return lessons;
   } catch (error) {
     console.error('Error reading video dictation database:', error);
     return [];
   }
 }
 
-// GET /api/dictation/lessons — Lấy danh sách video luyện chép chính tả
+// GET /api/dictation/lessons — Lấy danh sách video luyện chép chính tả (Số liệu thực tế từ MongoDB)
 app.get('/api/dictation/lessons', async (req, res) => {
   try {
     const lessons = await readDictationLessons();
@@ -3143,7 +3164,7 @@ app.get('/api/dictation/lessons/:id', async (req, res) => {
   }
 });
 
-// POST /api/dictation/record-completion — Ghi nhận 1 lượt hoàn thành video bài học (Khi xem hết clip)
+// POST /api/dictation/record-completion — Ghi nhận 1 lượt hoàn thành video bài học vào MongoDB thực tế
 app.post('/api/dictation/record-completion', async (req, res) => {
   try {
     const { lessonId, userEmail } = req.body || {};
@@ -3151,27 +3172,59 @@ app.post('/api/dictation/record-completion', async (req, res) => {
       return res.status(400).json({ error: 'Missing lessonId' });
     }
 
-    const lessons = await readDictationLessons();
-    const lesson = lessons.find(l => l.id === lessonId);
-    if (!lesson) {
-      return res.status(404).json({ error: 'Lesson not found' });
-    }
-
-    lesson.studyCount = (lesson.studyCount || 0) + 1;
-    lesson.completedUsers = lesson.completedUsers || [];
-
     const email = (userEmail || '').trim().toLowerCase();
-    if (email && email !== 'guest' && !lesson.completedUsers.includes(email)) {
-      lesson.completedUsers.push(email);
+    let currentCount = 0;
+    let completedUsersList = [];
+
+    // 1. Lưu và tăng lượt học thực tế trong MongoDB Atlas
+    if (mongoose.connection && mongoose.connection.readyState === 1) {
+      let doc = await DictationLesson.findById(lessonId);
+      if (!doc) {
+        doc = new DictationLesson({ _id: lessonId, studyCount: 0, completedUsers: [] });
+      }
+      doc.studyCount = (doc.studyCount || 0) + 1;
+      if (email && email !== 'guest' && !doc.completedUsers.includes(email)) {
+        doc.completedUsers.push(email);
+      }
+      await doc.save();
+      currentCount = doc.studyCount;
+      completedUsersList = doc.completedUsers;
+
+      // Cập nhật tiến độ của User trong MongoDB
+      if (email && email !== 'guest') {
+        try {
+          await User.findByIdAndUpdate(email, {
+            $addToSet: { 'progress.completedVideos': lessonId },
+            $inc: { 'stats.videoCompletions': 1 }
+          });
+        } catch (userErr) {
+          console.warn("Could not update User in MongoDB:", userErr.message);
+        }
+      }
     }
 
-    await fs.writeFile(DICTATION_DB_PATH, JSON.stringify(lessons, null, 2), 'utf-8');
+    // 2. Ghi nhận backup vào file local
+    try {
+      const data = await fs.readFile(DICTATION_DB_PATH, 'utf-8');
+      const lessons = JSON.parse(data);
+      const lesson = lessons.find(l => l.id === lessonId);
+      if (lesson) {
+        lesson.studyCount = currentCount || ((lesson.studyCount || 0) + 1);
+        lesson.completedUsers = lesson.completedUsers || [];
+        if (email && email !== 'guest' && !lesson.completedUsers.includes(email)) {
+          lesson.completedUsers.push(email);
+        }
+        await fs.writeFile(DICTATION_DB_PATH, JSON.stringify(lessons, null, 2), 'utf-8');
+      }
+    } catch (fsErr) {
+      console.warn("Local sync warning:", fsErr.message);
+    }
 
     res.json({
       success: true,
       lessonId,
-      studyCount: lesson.studyCount,
-      uniqueLearners: lesson.completedUsers.length
+      studyCount: currentCount,
+      uniqueLearners: completedUsersList.length
     });
   } catch (err) {
     console.error("Error recording dictation completion:", err);

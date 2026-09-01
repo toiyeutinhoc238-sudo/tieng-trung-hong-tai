@@ -77,17 +77,17 @@ function cleanStr(s) {
     .trim();
 }
 
-// Helper: Extract speaker prefix (e.g. "妈妈：" or "小初:" or "A:" or "Mẹ:")
+// Helper: Extract speaker prefix (e.g. "妈妈：" or "gǒu （ nǚ ） ：" or "Chó (nữ):" or "A:")
 function parseSpeakerAndText(text) {
   if (!text) return { speaker: '', text: '' };
   const str = text.trim();
   // Match các dạng dấu 2 chấm: ASCII :, full-width ：, middle dot ·, và khoảng trắng đặc biệt
-  const match = str.match(/^([^\uff1a:\n]{1,15})[\uff1a:]\s*(.+)$/s);
+  const match = str.match(/^([^\uff1a:\n]{1,35})[\uff1a:]\s*(.+)$/s);
   if (match) {
     const spk = match[1].trim();
     const txt = match[2].trim();
     // Chỉ nhận dạng speaker nếu phần trước dấu : ngắn hợp lý (không phải cả câu)
-    if (spk.length >= 1 && spk.length <= 10 && txt.length > 0) {
+    if (spk.length >= 1 && spk.length <= 30 && txt.length > 0) {
       return { speaker: spk, text: txt };
     }
   }
@@ -1059,7 +1059,7 @@ function evaluatePassagePronunciation() {
   showToast(`📊 Điểm tổng thể cả bài: ${percent}%!`);
 }
 
-const isPunctuationChar = (c) => /[，。？！、：；“”‘’!?,.:;'" …—\-（）()\/]/.test(c);
+const isPunctuationChar = (c) => !/[\u4e00-\u9fa5\u3400-\u4dbfa-zA-Z0-9]/.test(c);
 
 function renderDictationPanel(sent) {
   if (!sent) return;
@@ -1260,6 +1260,7 @@ function handleDictationRealtimeInput(val) {
     totalHanziCount++;
     const hIdx = parseInt(tile.dataset.hanziIdx || '0', 10);
     const targetChar = tile.dataset.char;
+    const isManual = tile.dataset.manualFlipped === 'true';
 
     if (hIdx < userHanziChars.length) {
       const userChar = userHanziChars[hIdx];
@@ -1269,14 +1270,19 @@ function handleDictationRealtimeInput(val) {
         tile.innerHTML = `<span>${targetChar}</span>`;
         correctCount++;
       } else {
-        tile.className = 'dict-tile-box wrong';
-        tile.dataset.flipped = 'false';
-        tile.innerHTML = `<i class="fa-solid fa-eye tile-eye-icon" style="color: #ef4444;"></i>`;
         hasWrong = true;
+        if (isManual) {
+          tile.className = 'dict-tile-box wrong manual-flipped';
+          tile.dataset.flipped = 'true';
+          tile.innerHTML = `<span>${targetChar}</span>`;
+        } else {
+          tile.className = 'dict-tile-box wrong';
+          tile.dataset.flipped = 'false';
+          tile.innerHTML = `<i class="fa-solid fa-eye tile-eye-icon" style="color: #ef4444;"></i>`;
+        }
       }
     } else {
       // Position not typed yet
-      const isManual = tile.dataset.manualFlipped === 'true';
       if (isManual) {
         tile.className = 'dict-tile-box manual-flipped';
         tile.dataset.flipped = 'true';
@@ -3896,21 +3902,32 @@ function openPassageWorkspace(passage) {
   if (pinyinBox) pinyinBox.style.display = 'none';
   if (meaningBox) meaningBox.style.display = 'none';
   if (solBox) solBox.style.display = 'none';
-  if (feedbackBadge) feedbackBadge.style.display = 'none';
+  if (feedbackBadge) {
+    feedbackBadge.style.display = 'none';
+    feedbackBadge.innerHTML = '';
+  }
 
   const pinyinToggleBtn = document.getElementById('text-toggle-pinyin');
   const meaningToggleBtn = document.getElementById('text-toggle-meaning');
   if (pinyinToggleBtn) pinyinToggleBtn.textContent = 'Xem Pinyin';
   if (meaningToggleBtn) meaningToggleBtn.textContent = 'Xem Nghĩa';
 
+  // Reset "HIỆN GỢI Ý MẪU" button to default state
+  const hintBtn = document.getElementById('btn-passage-toggle-hint');
+  if (hintBtn) {
+    hintBtn.innerHTML = '<i class="fa-regular fa-eye"></i> HIỆN GỢI Ý MẪU';
+    hintBtn.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+  }
+
   // Clear typing input
   const inputEl = document.getElementById('passage-dictation-input');
   if (inputEl) {
     inputEl.value = '';
+    inputEl.classList.remove('input-error', 'input-success');
     inputEl.focus();
   }
 
-  // Render character slot tiles
+  // Render character slot tiles with eye icon (Bấm từng ô để lật mở gợi ý)
   renderPassageCharTiles();
 
   // Scroll to top
@@ -3923,31 +3940,322 @@ function openPassageWorkspace(passage) {
 }
 
 function renderPassageCharTiles() {
-  const container = document.getElementById('passage-char-tiles');
-  if (!container || !currentPassage) return;
+  const tilesContainer = document.getElementById('passage-char-tiles');
+  if (!tilesContainer || !currentPassage) return;
 
-  const targetChars = Array.from(currentPassage.hanzi);
-  const inputVal = document.getElementById('passage-dictation-input')?.value || '';
-  const typedChars = Array.from(inputVal);
+  tilesContainer.innerHTML = '';
+  const rawChars = (currentPassage.hanzi || '').split('');
+  let hanziIndex = 0;
 
-  container.innerHTML = targetChars.map((char, i) => {
-    const isPunctuation = /[，。？！、：；“”‘’！？.!,;?]/i.test(char) || /\s/.test(char);
-    if (isPunctuation) {
-      return `<span style="font-size: 1.3rem; font-weight: 800; color: var(--text-muted); align-self: flex-end; padding: 0 4px 6px;">${char}</span>`;
+  rawChars.forEach((c, idx) => {
+    const tile = document.createElement('div');
+    const isPunct = isPunctuationChar(c);
+
+    tile.id = `passage-tile-${idx}`;
+    tile.dataset.char = c;
+    tile.dataset.idx = idx;
+    tile.dataset.isPunct = isPunct ? 'true' : 'false';
+
+    if (isPunct) {
+      tile.className = 'dict-tile-box punct';
+      tile.textContent = c;
+    } else {
+      tile.className = 'dict-tile-box pending';
+      tile.innerHTML = '<i class="fa-regular fa-eye tile-eye-icon"></i>';
+      tile.dataset.hanziIdx = String(hanziIndex);
+      tile.dataset.manualFlipped = 'false';
+      tile.dataset.flipped = 'false';
+      tile.title = 'Bấm để xem gợi ý chữ này';
+      tile.onclick = function () {
+        window.togglePassageTileHint(this, c);
+      };
+      hanziIndex++;
     }
 
-    const typed = typedChars[i] || '';
-    let statusClass = 'empty';
-    if (typed) {
-      statusClass = (typed === char) ? 'correct' : 'incorrect';
+    tilesContainer.appendChild(tile);
+  });
+
+  // Render Virtual Character Keyboard for current passage
+  renderPassageVirtualKeyboard(currentPassage.hanzi);
+}
+
+function togglePassageTileHint(btnEl, char) {
+  if (!btnEl) return;
+  const isFlipped = btnEl.dataset.manualFlipped === 'true';
+  const inputEl = document.getElementById('passage-dictation-input');
+  const currentVal = inputEl ? inputEl.value : '';
+
+  if (isFlipped) {
+    btnEl.dataset.manualFlipped = 'false';
+  } else {
+    btnEl.dataset.manualFlipped = 'true';
+  }
+
+  handlePassageRealtimeInput(currentVal);
+}
+
+function renderPassageVirtualKeyboard(hanziText) {
+  const vkGrid = document.getElementById('passage-vk-grid');
+  if (!vkGrid) return;
+
+  vkGrid.innerHTML = '';
+  const hanziChars = (hanziText || '').split('').filter(c => !isPunctuationChar(c) && /[\u4e00-\u9fa5a-zA-Z0-9]/.test(c));
+
+  const displayChars = [...hanziChars];
+  displayChars.sort(() => Math.random() - 0.5);
+
+  displayChars.forEach((char, btnIdx) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'dict-vk-btn';
+    btn.textContent = char;
+    btn.dataset.char = char;
+    btn.dataset.btnIdx = String(btnIdx);
+    btn.onclick = (e) => {
+      e.preventDefault();
+      inputPassageChar(char);
+    };
+    vkGrid.appendChild(btn);
+  });
+}
+
+function updatePassageVirtualKeyboardUsage(currentInputVal) {
+  const vkGrid = document.getElementById('passage-vk-grid');
+  if (!vkGrid) return;
+
+  const buttons = Array.from(vkGrid.querySelectorAll('.dict-vk-btn'));
+  const inputChars = (currentInputVal || '').split('').filter(c => !isPunctuationChar(c) && /[\u4e00-\u9fa5a-zA-Z0-9]/.test(c));
+
+  const usedCounts = {};
+  inputChars.forEach(c => {
+    usedCounts[c] = (usedCounts[c] || 0) + 1;
+  });
+
+  const consumedCounts = {};
+  buttons.forEach(btn => {
+    const char = btn.dataset.char;
+    const needed = usedCounts[char] || 0;
+    const currentConsumed = consumedCounts[char] || 0;
+
+    if (currentConsumed < needed) {
+      btn.classList.add('used');
+      consumedCounts[char] = currentConsumed + 1;
+    } else {
+      btn.classList.remove('used');
+    }
+  });
+}
+
+function inputPassageChar(char) {
+  const inputEl = document.getElementById('passage-dictation-input');
+  if (!inputEl) return;
+
+  inputEl.value += char;
+  handlePassageRealtimeInput(inputEl.value);
+}
+
+function deleteLastPassageChar() {
+  const inputEl = document.getElementById('passage-dictation-input');
+  if (!inputEl || !inputEl.value) return;
+
+  inputEl.value = inputEl.value.slice(0, -1);
+  handlePassageRealtimeInput(inputEl.value);
+}
+
+function clearPassageInput() {
+  const inputEl = document.getElementById('passage-dictation-input');
+  if (inputEl) {
+    inputEl.value = '';
+    handlePassageRealtimeInput('');
+  }
+}
+
+function handlePassageRealtimeInput(val) {
+  if (!currentPassage) return;
+
+  // Extract only Hanzi characters from user input (ignoring punctuation)
+  const userHanziChars = (val || '').split('').filter(c => !isPunctuationChar(c) && /[\u4e00-\u9fa5a-zA-Z0-9]/.test(c));
+
+  // Update virtual keyboard visibility so used letters disappear (Duolingo style)
+  updatePassageVirtualKeyboardUsage(val);
+
+  const tiles = Array.from(document.querySelectorAll('#passage-char-tiles .dict-tile-box'));
+  let correctCount = 0;
+  let totalHanziCount = 0;
+  let hasWrong = false;
+
+  tiles.forEach(tile => {
+    const isPunct = tile.dataset.isPunct === 'true';
+    if (isPunct) {
+      tile.className = 'dict-tile-box punct';
+      tile.textContent = tile.dataset.char;
+      return;
     }
 
-    return `
-      <div class="dict-tile ${statusClass}">
-        <span class="dict-tile-text">${typed || ''}</span>
-      </div>
-    `;
-  }).join('');
+    totalHanziCount++;
+    const hIdx = parseInt(tile.dataset.hanziIdx || '0', 10);
+    const targetChar = tile.dataset.char;
+    const isManual = tile.dataset.manualFlipped === 'true';
+
+    if (hIdx < userHanziChars.length) {
+      const userChar = userHanziChars[hIdx];
+      if (userChar === targetChar) {
+        tile.className = 'dict-tile-box correct';
+        tile.dataset.flipped = 'true';
+        tile.innerHTML = `<span>${targetChar}</span>`;
+        correctCount++;
+      } else {
+        hasWrong = true;
+        if (isManual) {
+          tile.className = 'dict-tile-box wrong manual-flipped';
+          tile.dataset.flipped = 'true';
+          tile.innerHTML = `<span>${targetChar}</span>`;
+        } else {
+          tile.className = 'dict-tile-box wrong';
+          tile.dataset.flipped = 'false';
+          tile.innerHTML = `<i class="fa-solid fa-eye tile-eye-icon" style="color: #ef4444;"></i>`;
+        }
+      }
+    } else {
+      // Position not typed yet
+      if (isManual) {
+        tile.className = 'dict-tile-box manual-flipped';
+        tile.dataset.flipped = 'true';
+        tile.innerHTML = `<span>${targetChar}</span>`;
+      } else {
+        tile.className = 'dict-tile-box pending';
+        tile.dataset.flipped = 'false';
+        tile.innerHTML = '<i class="fa-regular fa-eye tile-eye-icon"></i>';
+      }
+    }
+  });
+
+  const inputEl = document.getElementById('passage-dictation-input');
+  const feedbackEl = document.getElementById('passage-feedback-badge');
+
+  if (userHanziChars.length > 0) {
+    if (hasWrong) {
+      if (inputEl) {
+        inputEl.classList.add('input-error');
+        inputEl.classList.remove('input-success');
+      }
+      if (feedbackEl) {
+        feedbackEl.style.display = 'flex';
+        feedbackEl.className = 'dict-feedback-badge error';
+        feedbackEl.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> <span>Chưa đúng!</span>';
+      }
+    } else {
+      if (inputEl) inputEl.classList.remove('input-error');
+      if (correctCount >= totalHanziCount && totalHanziCount > 0) {
+        if (inputEl) inputEl.classList.add('input-success');
+        if (feedbackEl) {
+          feedbackEl.style.display = 'flex';
+          feedbackEl.className = 'dict-feedback-badge success';
+          feedbackEl.innerHTML = '<i class="fa-solid fa-circle-check"></i> <span>Chính xác! (+10 điểm) 🎉</span>';
+        }
+      } else {
+        if (feedbackEl) feedbackEl.style.display = 'none';
+      }
+    }
+  } else {
+    if (inputEl) inputEl.classList.remove('input-error', 'input-success');
+    if (feedbackEl) feedbackEl.style.display = 'none';
+  }
+
+  // Check if fully completed correctly
+  const cleanInput = cleanStr(val);
+  const cleanTarget = cleanStr(currentPassage.hanzi);
+  const cleanPinyinTarget = cleanStr(currentPassage.pinyin);
+
+  const isFullMatch = (cleanInput === cleanTarget) || (cleanInput === cleanPinyinTarget) || (totalHanziCount > 0 && correctCount >= totalHanziCount);
+
+  if (isFullMatch) {
+    onPassageCompletedSuccess(currentPassage);
+  }
+}
+
+function showPassageHint() {
+  if (!currentPassage) return;
+  const tiles = Array.from(document.querySelectorAll('#passage-char-tiles .dict-tile-box')).filter(t => t.dataset.isPunct !== 'true');
+  const allFlipped = tiles.length > 0 && tiles.every(t => t.dataset.flipped === 'true' || t.dataset.manualFlipped === 'true');
+  const hintBtn = document.getElementById('btn-passage-toggle-hint');
+  const solutionEl = document.getElementById('passage-solution-box');
+  const solutionHanzi = document.getElementById('passage-solution-hanzi');
+  const solutionPinyin = document.getElementById('passage-solution-pinyin');
+  const solutionMeaning = document.getElementById('passage-solution-meaning');
+  const inputEl = document.getElementById('passage-dictation-input');
+
+  if (allFlipped) {
+    // ẨN GỢI Ý MẪU: Đóng lại các ô gợi ý
+    tiles.forEach(tile => {
+      tile.dataset.manualFlipped = 'false';
+    });
+    if (hintBtn) {
+      hintBtn.innerHTML = '<i class="fa-regular fa-eye"></i> HIỆN GỢI Ý MẪU';
+      hintBtn.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+    }
+    if (solutionEl) solutionEl.style.display = 'none';
+    handlePassageRealtimeInput(inputEl ? inputEl.value : '');
+    showToast("Đã ẩn gợi ý mẫu");
+  } else {
+    // HIỆN GỢI Ý MẪU: Mở tất cả các ô chữ gợi ý
+    tiles.forEach(tile => {
+      tile.dataset.manualFlipped = 'true';
+      tile.dataset.flipped = 'true';
+      tile.className = 'dict-tile-box manual-flipped';
+      tile.innerHTML = `<span>${tile.dataset.char}</span>`;
+    });
+    if (hintBtn) {
+      hintBtn.innerHTML = '<i class="fa-solid fa-eye-slash"></i> ẨN GỢI Ý MẪU';
+      hintBtn.style.background = 'linear-gradient(135deg, #64748b, #475569)';
+    }
+
+    if (solutionEl && solutionHanzi) {
+      solutionHanzi.innerHTML = renderClickableHanziSpans(currentPassage.hanzi);
+      if (solutionPinyin) solutionPinyin.textContent = currentPassage.pinyin;
+      if (solutionMeaning) solutionMeaning.textContent = currentPassage.meaning;
+      solutionEl.style.display = 'block';
+    }
+
+    showToast("💡 Đã mở gợi ý mẫu!");
+  }
+}
+
+function onPassageCompletedSuccess(passage) {
+  const feedbackEl = document.getElementById('passage-feedback-badge');
+  const solutionEl = document.getElementById('passage-solution-box');
+  const solutionHanzi = document.getElementById('passage-solution-hanzi');
+  const solutionPinyin = document.getElementById('passage-solution-pinyin');
+  const solutionMeaning = document.getElementById('passage-solution-meaning');
+
+  // Turn all tiles green
+  const tiles = document.querySelectorAll('#passage-char-tiles .dict-tile-box');
+  tiles.forEach(t => {
+    t.textContent = t.dataset.char;
+    t.className = 'dict-tile-box correct';
+    t.dataset.flipped = 'true';
+    t.dataset.manualFlipped = 'true';
+  });
+
+  if (feedbackEl) {
+    feedbackEl.style.display = 'flex';
+    feedbackEl.className = 'dict-feedback-badge success';
+    feedbackEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> <span>Chính xác tuyệt vời! (+10 điểm) 🎉</span>`;
+  }
+
+  // REVEAL SOLUTION & VIETNAMESE MEANING
+  if (solutionEl && solutionHanzi) {
+    solutionHanzi.innerHTML = renderClickableHanziSpans(passage.hanzi);
+    if (solutionPinyin) solutionPinyin.textContent = passage.pinyin;
+    if (solutionMeaning) solutionMeaning.textContent = passage.meaning;
+    solutionEl.style.display = 'block';
+  }
+
+  saveCompletedPassage(passage.id);
+  totalScore += 10;
+  currentStreak++;
+  showToast("🎉 Hoàn toàn chính xác! (+10 điểm)");
+  renderCurrentSentenceHeaderStats();
 }
 
 function updatePassagePlayBtn(isPlaying) {
@@ -4067,55 +4375,31 @@ function togglePassageMeaning() {
 function checkPassageAnswer() {
   if (!currentPassage) return;
   const inputEl = document.getElementById('passage-dictation-input');
-  if (!inputEl) return;
+  const feedbackEl = document.getElementById('passage-feedback-badge');
+  const val = inputEl ? inputEl.value.trim() : '';
 
-  const rawUser = inputEl.value.trim();
-  const cleanUser = rawUser.replace(/[\s，。？！、：；“”‘’！？.!,;?]/g, '');
-  const cleanTarget = currentPassage.hanzi.replace(/[\s，。？！、：；“”‘’！？.!,;?]/g, '');
+  if (!val) {
+    showToast("Vui lòng gõ chữ hoặc chọn phím bên dưới!", true);
+    return;
+  }
 
-  const feedbackBadge = document.getElementById('passage-feedback-badge');
-  const solBox = document.getElementById('passage-solution-box');
+  const cleanInput = cleanStr(val);
+  const cleanTarget = cleanStr(currentPassage.hanzi);
+  const cleanPinyinTarget = cleanStr(currentPassage.pinyin);
 
-  renderPassageCharTiles();
+  const isFullMatch = (cleanInput === cleanTarget) || (cleanInput === cleanPinyinTarget);
+  const sim = calculateSimilarity(cleanInput, cleanTarget) || calculateSimilarity(cleanInput, cleanPinyinTarget);
 
-  if (cleanUser === cleanTarget) {
-    // 100% correct
-    saveCompletedPassage(currentPassage.id);
-    if (feedbackBadge) {
-      feedbackBadge.style.display = 'flex';
-      feedbackBadge.className = 'dict-feedback-badge success';
-      feedbackBadge.style.alignItems = 'center';
-      feedbackBadge.style.gap = '10px';
-      feedbackBadge.innerHTML = `
-        <i class="fa-solid fa-circle-check" style="font-size: 1.4rem; color: #10b981;"></i>
-        <div>
-          <div style="font-weight: 800; font-size: 1.05rem; color: #10b981;">🎉 Tuyệt vời! Bạn đã nghe chép hoàn toàn chính xác!</div>
-          <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 2px;">Đã ghi nhận hoàn thành đoạn này. Bạn có thể bấm <strong>Đoạn tiếp theo ➡️</strong> để tiếp tục.</div>
-        </div>
-      `;
-    }
-    if (solBox) solBox.style.display = 'block';
-    showToast("🎉 Hoàn toàn chính xác! Xuất sắc!");
+  if (isFullMatch || sim >= 0.85) {
+    onPassageCompletedSuccess(currentPassage);
   } else {
-    // Calculate match percentage
-    let matchCount = 0;
-    for (let i = 0; i < cleanUser.length && i < cleanTarget.length; i++) {
-      if (cleanUser[i] === cleanTarget[i]) matchCount++;
-    }
-    const pct = cleanTarget.length > 0 ? Math.round((matchCount / cleanTarget.length) * 100) : 0;
-
-    if (feedbackBadge) {
-      feedbackBadge.style.display = 'flex';
-      feedbackBadge.className = 'dict-feedback-badge warning';
-      feedbackBadge.style.alignItems = 'center';
-      feedbackBadge.style.gap = '10px';
-      feedbackBadge.innerHTML = `
-        <i class="fa-solid fa-triangle-exclamation" style="font-size: 1.4rem; color: #f59e0b;"></i>
-        <div>
-          <div style="font-weight: 800; font-size: 1rem; color: #f59e0b;">Bạn đã nghe đúng khoảng ${pct}% câu thoại!</div>
-          <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 2px;">Hãy nghe lại hoặc bấm <strong>Xem đáp án</strong> để kiểm tra các từ chưa chính xác nhé!</div>
-        </div>
-      `;
+    handlePassageRealtimeInput(val);
+    if (feedbackEl) {
+      feedbackEl.style.display = 'flex';
+      feedbackEl.className = 'dict-feedback-badge error';
+      feedbackEl.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> <span>Chưa đúng! Hãy kiểm tra các ô màu đỏ để sửa lại nhé!</span>`;
+      currentStreak = 0;
+      showToast("Chưa chính xác! Thử nghe lại nhé ⚠️", true);
     }
   }
 }
@@ -4132,7 +4416,7 @@ function copyPassageSolution() {
   const inputEl = document.getElementById('passage-dictation-input');
   if (inputEl) {
     inputEl.value = currentPassage.hanzi;
-    renderPassageCharTiles();
+    handlePassageRealtimeInput(currentPassage.hanzi);
     checkPassageAnswer();
   }
 }
@@ -4180,6 +4464,12 @@ window.checkPassageAnswer = checkPassageAnswer;
 window.revealPassageAnswer = revealPassageAnswer;
 window.copyPassageSolution = copyPassageSolution;
 window.navPassage = navPassage;
+window.handlePassageRealtimeInput = handlePassageRealtimeInput;
+window.togglePassageTileHint = togglePassageTileHint;
+window.showPassageHint = showPassageHint;
+window.inputPassageChar = inputPassageChar;
+window.deleteLastPassageChar = deleteLastPassageChar;
+window.clearPassageInput = clearPassageInput;
 
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {

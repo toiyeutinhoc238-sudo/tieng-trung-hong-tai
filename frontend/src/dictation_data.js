@@ -1,9 +1,3 @@
-/**
- * Tiếng Trung HongTai - 23 Official Video Dictation Lessons
- * Matched with 'Nội dung Video.xlsx' & 'Nội dung Video phần 2.xlsx'
- * Full Vietnamese translations, Pinyin with tones, Keywords and Proportional Timestamps
- */
-
 export const DICTATION_LESSONS = [
   {
     "id": "dict_v1_lifa",
@@ -69,7 +63,8 @@ export const DICTATION_LESSONS = [
         ]
       }
     ],
-    "studyCount": 142
+    "studyCount": 0,
+    "completedUsers": []
   },
   {
     "id": "dict_v2_qingjia",
@@ -133,7 +128,8 @@ export const DICTATION_LESSONS = [
         ]
       }
     ],
-    "studyCount": 118
+    "studyCount": 0,
+    "completedUsers": []
   },
   {
     "id": "dict_v3_xiangxin",
@@ -267,7 +263,8 @@ export const DICTATION_LESSONS = [
         ]
       }
     ],
-    "studyCount": 165
+    "studyCount": 0,
+    "completedUsers": []
   },
   {
     "id": "dict_v4_meigui_taolu",
@@ -396,7 +393,8 @@ export const DICTATION_LESSONS = [
         ]
       }
     ],
-    "studyCount": 194
+    "studyCount": 0,
+    "completedUsers": []
   },
   {
     "id": "dict_v5_meigui_zili",
@@ -599,7 +597,8 @@ export const DICTATION_LESSONS = [
         ]
       }
     ],
-    "studyCount": 153
+    "studyCount": 0,
+    "completedUsers": []
   },
   {
     "id": "dict_v6_meigui_pugongying",
@@ -744,7 +743,8 @@ export const DICTATION_LESSONS = [
         ]
       }
     ],
-    "studyCount": 176
+    "studyCount": 0,
+    "completedUsers": []
   },
   {
     "id": "dict_v7_meigui_libie",
@@ -792,7 +792,7 @@ export const DICTATION_LESSONS = [
         ]
       },
       {
-        "id": 4,
+        "id": 3,
         "startTime": 27.74,
         "endTime": 30.1,
         "duration": 2.36,
@@ -808,7 +808,7 @@ export const DICTATION_LESSONS = [
         ]
       },
       {
-        "id": 5,
+        "id": 4,
         "startTime": 30.1,
         "endTime": 40.38,
         "duration": 10.28,
@@ -825,7 +825,7 @@ export const DICTATION_LESSONS = [
         ]
       },
       {
-        "id": 6,
+        "id": 5,
         "startTime": 50.06,
         "endTime": 57.64,
         "duration": 7.58,
@@ -842,7 +842,7 @@ export const DICTATION_LESSONS = [
         ]
       },
       {
-        "id": 7,
+        "id": 6,
         "startTime": 57.64,
         "endTime": 68.14,
         "duration": 10.5,
@@ -860,7 +860,7 @@ export const DICTATION_LESSONS = [
         ]
       },
       {
-        "id": 8,
+        "id": 7,
         "startTime": 68.14,
         "endTime": 76.72,
         "duration": 8.58,
@@ -877,7 +877,7 @@ export const DICTATION_LESSONS = [
         ]
       },
       {
-        "id": 9,
+        "id": 8,
         "startTime": 76.72,
         "endTime": 84.58,
         "duration": 7.86,
@@ -895,7 +895,7 @@ export const DICTATION_LESSONS = [
         ]
       },
       {
-        "id": 10,
+        "id": 9,
         "startTime": 84.58,
         "endTime": 92.6,
         "duration": 8.02,
@@ -913,7 +913,8 @@ export const DICTATION_LESSONS = [
         ]
       }
     ],
-    "studyCount": 188
+    "studyCount": 0,
+    "completedUsers": []
   },
   {
     "id": "dict_v8_meigui_buwanmei",
@@ -1215,7 +1216,8 @@ export const DICTATION_LESSONS = [
         ]
       }
     ],
-    "studyCount": 162
+    "studyCount": 0,
+    "completedUsers": []
   },
   {
     "id": "dict_v9_xinwen",
@@ -1414,7 +1416,8 @@ export const DICTATION_LESSONS = [
         ]
       }
     ],
-    "studyCount": 95
+    "studyCount": 0,
+    "completedUsers": []
   },
   {
     "id": "dict_v10_xuexi",
@@ -1566,7 +1569,8 @@ export const DICTATION_LESSONS = [
         ]
       }
     ],
-    "studyCount": 127
+    "studyCount": 0,
+    "completedUsers": []
   },
   {
     "id": "dict_v12_xiaoxuesheng",
@@ -2331,7 +2335,8 @@ export const DICTATION_LESSONS = [
         ]
       }
     ],
-    "studyCount": 84
+    "studyCount": 0,
+    "completedUsers": []
   },
   {
     "id": "dict_v13_luying",
@@ -2601,23 +2606,6 @@ export const DICTATION_LESSONS = [
       },
       {
         "id": 17,
-        "startTime": 97.59,
-        "endTime": 102.93,
-        "duration": 5.34,
-        "hanzi": "（车急刹车躲避小鹿，蛋糕扣在脸上）：",
-        "pinyin": "（ chē jí shā chē duǒ bì xiǎo lù ， dàn gāo kòu zài liǎn shàng ） ：",
-        "meaning": "(Xe phanh gấp né hươu, bánh kem ụp trọn vào mặt):",
-        "keywords": [
-          "车急刹车",
-          "躲避小鹿",
-          "蛋糕扣在"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 18,
         "startTime": 102.93,
         "endTime": 104.93,
         "duration": 2,
@@ -2632,7 +2620,7 @@ export const DICTATION_LESSONS = [
         ]
       },
       {
-        "id": 19,
+        "id": 18,
         "startTime": 104.93,
         "endTime": 111.03,
         "duration": 6.1,
@@ -2649,7 +2637,7 @@ export const DICTATION_LESSONS = [
         ]
       },
       {
-        "id": 20,
+        "id": 19,
         "startTime": 111.03,
         "endTime": 128.17,
         "duration": 17.14,
@@ -2666,20 +2654,7 @@ export const DICTATION_LESSONS = [
         ]
       },
       {
-        "id": 21,
-        "startTime": 128.17,
-        "endTime": 129.62,
-        "duration": 1.45,
-        "hanzi": "（车冲进大雾迷路撞车抛锚）：",
-        "pinyin": "（ chē chōng jìn dà wù mí lù zhuàng chē pāo máo ） ：",
-        "meaning": "(Xe lao vào sương mù, đâm dải phân cách bốc khói):",
-        "keywords": [],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 22,
+        "id": 20,
         "startTime": 129.62,
         "endTime": 137.99,
         "duration": 8.37,
@@ -2694,7 +2669,7 @@ export const DICTATION_LESSONS = [
         ]
       },
       {
-        "id": 23,
+        "id": 21,
         "startTime": 137.99,
         "endTime": 140.89,
         "duration": 2.9,
@@ -2710,20 +2685,7 @@ export const DICTATION_LESSONS = [
         ]
       },
       {
-        "id": 24,
-        "startTime": 140.89,
-        "endTime": 142.13,
-        "duration": 1.24,
-        "hanzi": "（打电话求助）：",
-        "pinyin": "（ dǎ diàn huà qiú zhù ） ：",
-        "meaning": "(Gọi điện thoại cầu cứu):",
-        "keywords": [],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 25,
+        "id": 22,
         "startTime": 141.79,
         "endTime": 150.29,
         "duration": 8.5,
@@ -2736,7 +2698,7 @@ export const DICTATION_LESSONS = [
         ]
       },
       {
-        "id": 26,
+        "id": 23,
         "startTime": 153.69,
         "endTime": 161.73,
         "duration": 8.04,
@@ -2753,7 +2715,7 @@ export const DICTATION_LESSONS = [
         ]
       },
       {
-        "id": 27,
+        "id": 24,
         "startTime": 161.73,
         "endTime": 162.93,
         "duration": 1.2,
@@ -2768,7 +2730,7 @@ export const DICTATION_LESSONS = [
         ]
       },
       {
-        "id": 28,
+        "id": 25,
         "startTime": 164.37,
         "endTime": 167.23,
         "duration": 2.86,
@@ -2785,7 +2747,7 @@ export const DICTATION_LESSONS = [
         ]
       },
       {
-        "id": 29,
+        "id": 26,
         "startTime": 171.61,
         "endTime": 173.45,
         "duration": 1.84,
@@ -2802,7 +2764,7 @@ export const DICTATION_LESSONS = [
         ]
       },
       {
-        "id": 30,
+        "id": 27,
         "startTime": 173.45,
         "endTime": 174,
         "duration": 0.55,
@@ -2819,7 +2781,8 @@ export const DICTATION_LESSONS = [
         ]
       }
     ],
-    "studyCount": 79
+    "studyCount": 0,
+    "completedUsers": []
   },
   {
     "id": "dict_v14_nvwu",
@@ -3825,7 +3788,8 @@ export const DICTATION_LESSONS = [
         ]
       }
     ],
-    "studyCount": 91
+    "studyCount": 0,
+    "completedUsers": []
   },
   {
     "id": "dict_v15_bingmayong",
@@ -4396,7 +4360,8 @@ export const DICTATION_LESSONS = [
         ]
       }
     ],
-    "studyCount": 106
+    "studyCount": 0,
+    "completedUsers": []
   },
   {
     "id": "dict_v16_jianchi",
@@ -4480,7 +4445,8 @@ export const DICTATION_LESSONS = [
         ]
       }
     ],
-    "studyCount": 115
+    "studyCount": 0,
+    "completedUsers": []
   },
   {
     "id": "dict_v17_raokouling",
@@ -4642,7 +4608,8 @@ export const DICTATION_LESSONS = [
         ]
       }
     ],
-    "studyCount": 149
+    "studyCount": 0,
+    "completedUsers": []
   },
   {
     "id": "dict_v18_zhuzi",
@@ -4760,7 +4727,8 @@ export const DICTATION_LESSONS = [
         ]
       }
     ],
-    "studyCount": 73
+    "studyCount": 0,
+    "completedUsers": []
   },
   {
     "id": "dict_v19_dushu",
@@ -4895,7 +4863,8 @@ export const DICTATION_LESSONS = [
         ]
       }
     ],
-    "studyCount": 132
+    "studyCount": 0,
+    "completedUsers": []
   },
   {
     "id": "dict_v20_qiangda",
@@ -5013,7 +4982,8 @@ export const DICTATION_LESSONS = [
         ]
       }
     ],
-    "studyCount": 97
+    "studyCount": 0,
+    "completedUsers": []
   },
   {
     "id": "dict_v21_jiemeihua",
@@ -5223,23 +5193,6 @@ export const DICTATION_LESSONS = [
       },
       {
         "id": 13,
-        "startTime": 82.48,
-        "endTime": 88.27,
-        "duration": 5.79,
-        "hanzi": "（两人同台争夺麦克风合唱歌曲《卡门》片段）：",
-        "pinyin": "（ liǎng rén tóng tái zhēng duó mài kè fēng hé chàng gē qǔ 《 kǎ mén 》 piàn duàn ） ：",
-        "meaning": "(Hai người tranh mic hát bài kinh điển \"Carmen\")",
-        "keywords": [
-          "两人同台",
-          "争夺麦克",
-          "风合唱歌"
-        ],
-        "blankIndices": [
-          0
-        ]
-      },
-      {
-        "id": 14,
         "startTime": 88.27,
         "endTime": 91.77,
         "duration": 3.5,
@@ -5256,7 +5209,7 @@ export const DICTATION_LESSONS = [
         ]
       },
       {
-        "id": 15,
+        "id": 14,
         "startTime": 91.77,
         "endTime": 95.13,
         "duration": 3.36,
@@ -5271,7 +5224,7 @@ export const DICTATION_LESSONS = [
         ]
       },
       {
-        "id": 16,
+        "id": 15,
         "startTime": 95.13,
         "endTime": 98.92,
         "duration": 3.79,
@@ -5288,7 +5241,7 @@ export const DICTATION_LESSONS = [
         ]
       },
       {
-        "id": 17,
+        "id": 16,
         "startTime": 98.92,
         "endTime": 103.03,
         "duration": 4.11,
@@ -5305,7 +5258,7 @@ export const DICTATION_LESSONS = [
         ]
       },
       {
-        "id": 18,
+        "id": 17,
         "startTime": 103.03,
         "endTime": 104.43,
         "duration": 1.4,
@@ -5320,7 +5273,7 @@ export const DICTATION_LESSONS = [
         ]
       },
       {
-        "id": 19,
+        "id": 18,
         "startTime": 104.43,
         "endTime": 105.83,
         "duration": 1.4,
@@ -5335,7 +5288,7 @@ export const DICTATION_LESSONS = [
         ]
       },
       {
-        "id": 20,
+        "id": 19,
         "startTime": 105.83,
         "endTime": 107.83,
         "duration": 2,
@@ -5352,7 +5305,7 @@ export const DICTATION_LESSONS = [
         ]
       },
       {
-        "id": 21,
+        "id": 20,
         "startTime": 110.73,
         "endTime": 119.99,
         "duration": 9.26,
@@ -5369,7 +5322,7 @@ export const DICTATION_LESSONS = [
         ]
       },
       {
-        "id": 22,
+        "id": 21,
         "startTime": 119.99,
         "endTime": 129.33,
         "duration": 9.34,
@@ -5382,7 +5335,7 @@ export const DICTATION_LESSONS = [
         ]
       },
       {
-        "id": 23,
+        "id": 22,
         "startTime": 129.33,
         "endTime": 130.53,
         "duration": 1.2,
@@ -5397,7 +5350,8 @@ export const DICTATION_LESSONS = [
         ]
       }
     ],
-    "studyCount": 82
+    "studyCount": 0,
+    "completedUsers": []
   },
   {
     "id": "dict_v22_shamo",
@@ -5993,7 +5947,8 @@ export const DICTATION_LESSONS = [
         ]
       }
     ],
-    "studyCount": 67
+    "studyCount": 0,
+    "completedUsers": []
   },
   {
     "id": "dict_v23_zongcai",
@@ -7129,7 +7084,8 @@ export const DICTATION_LESSONS = [
         ]
       }
     ],
-    "studyCount": 111
+    "studyCount": 0,
+    "completedUsers": []
   },
   {
     "id": "dict_v24_xinlingqilv",
@@ -7650,6 +7606,7 @@ export const DICTATION_LESSONS = [
         ]
       }
     ],
-    "studyCount": 89
+    "studyCount": 0,
+    "completedUsers": []
   }
 ];
