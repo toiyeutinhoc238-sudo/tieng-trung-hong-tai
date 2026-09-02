@@ -2600,6 +2600,42 @@
       color: #cbd5e1;
     }
 
+    /* Passage Workspace Level Pills */
+    .passage-ws-lvl-btn {
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary, #94a3b8);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .passage-ws-lvl-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .passage-ws-lvl-btn.active {
+      background: linear-gradient(135deg, #8b5cf6, #6d28d9) !important;
+      color: #ffffff !important;
+      box-shadow: 0 2px 8px rgba(139, 92, 246, 0.45);
+    }
+
+    html:not(.dark) .passage-ws-lvl-btn,
+    html.light-mode .passage-ws-lvl-btn {
+      color: #64748b;
+    }
+
+    html:not(.dark) .passage-ws-lvl-btn.active,
+    html.light-mode .passage-ws-lvl-btn.active {
+      background: linear-gradient(135deg, #8b5cf6, #6d28d9) !important;
+      color: #ffffff !important;
+    }
+
     /* =========================================
        LIGHT MODE ADAPTATION FOR VIDEO DICTATION
        ========================================= */
@@ -3967,18 +4003,28 @@
          PASSAGE WORKSPACE VIEW: Dedicated Distraction-free Study Workspace
          ============================================================ -->
     <section id="dict-passage-workspace-view" style="display: none;">
-      <!-- Top Bar: Back to catalog, level, index, Next/Prev -->
+      <!-- Top Bar: Level Selector Tabs, Index, Next/Prev -->
       <div class="workspace-top-bar" style="margin-bottom: 20px;">
-        <div class="workspace-breadcrumb">
-          <button class="btn-return-catalog" onclick="window.returnToPassageCatalog()">
+        <div class="workspace-breadcrumb" style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <button class="btn-return-catalog" onclick="window.returnToPassageCatalog()" title="Xem danh sách toàn bộ đoạn văn">
             <i class="fa-solid fa-arrow-left"></i> Danh sách đoạn
           </button>
-          <div>
-            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-              <h2 id="passage-ws-title" style="font-size: 1.25rem; font-weight: 800; margin: 0; color: var(--text-primary);">Đoạn 1</h2>
-              <span id="passage-ws-level-badge" class="level-badge level-1">HSK 1</span>
-              <span id="passage-ws-progress-text" style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); background: rgba(255,255,255,0.06); padding: 3px 10px; border-radius: 20px; border: 1px solid var(--border-glass);">Đoạn 1 / 250</span>
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <h2 id="passage-ws-title" style="font-size: 1.3rem; font-weight: 900; margin: 0; color: var(--text-primary);">Đoạn 1</h2>
+            
+            <!-- HSK Level Selector Tabs directly on workspace -->
+            <div class="passage-ws-level-pills" style="display: inline-flex; background: rgba(0,0,0,0.3); padding: 3px; border-radius: 12px; border: 1px solid var(--border-glass); gap: 4px;">
+              <button type="button" class="passage-ws-lvl-btn active" data-level="1" onclick="window.selectPassageLevelAndOpen(1)">HSK 1</button>
+              <button type="button" class="passage-ws-lvl-btn" data-level="2" onclick="window.selectPassageLevelAndOpen(2)">HSK 2</button>
+              <button type="button" class="passage-ws-lvl-btn" data-level="3" onclick="window.selectPassageLevelAndOpen(3)">HSK 3</button>
             </div>
+
+            <!-- Quick Passage Selector Jump Dropdown -->
+            <select id="passage-ws-jump-select" onchange="window.openPassageWorkspaceById(this.value)" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); color: #38bdf8; font-weight: 800; font-size: 0.82rem; border-radius: 10px; padding: 4px 8px; outline: none; cursor: pointer;" title="Chuyển nhanh đến đoạn bất kỳ">
+              <!-- Options populated dynamically -->
+            </select>
+
+            <span id="passage-ws-progress-text" style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); background: rgba(255,255,255,0.06); padding: 3px 10px; border-radius: 20px; border: 1px solid var(--border-glass);">Đoạn 1 / 250</span>
           </div>
         </div>
 
@@ -3986,7 +4032,7 @@
           <button id="btn-passage-prev" class="btn btn-outline btn-sm" onclick="window.navPassage(-1)" style="border-radius: 12px; font-weight: 700;">
             <i class="fa-solid fa-chevron-left"></i> Đoạn trước
           </button>
-          <button id="btn-passage-next" class="btn btn-primary btn-sm" onclick="window.navPassage(1)" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9); border: none; border-radius: 12px; font-weight: 800; box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4);">
+          <button id="btn-passage-next" class="btn btn-primary btn-sm" onclick="window.navPassage(1)" style="background: linear-gradient(135deg, #10b981, #059669); border: none; border-radius: 12px; font-weight: 800; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);">
             Đoạn tiếp theo <i class="fa-solid fa-chevron-right"></i>
           </button>
         </div>

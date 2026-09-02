@@ -6004,7 +6004,7 @@ html:not(.dark) .cartoon-roadmap-hero .hero-title {
   font-size: 2.2rem;
   font-weight: 900;
   color: #0f172a !important;
-  text-shadow: 0 2px 10px rgba(255, 255, 255, 0.9), 0 0 20px rgba(255, 255, 255, 0.8) !important;
+  text-shadow: none !important;
   margin: 0;
   line-height: 1.2;
 }
@@ -6014,7 +6014,7 @@ html:not(.dark) .cartoon-roadmap-hero .hero-subtitle {
   font-size: 1.2rem;
   font-weight: 800;
   color: #d97706 !important;
-  text-shadow: 0 1px 4px rgba(255, 255, 255, 0.9) !important;
+  text-shadow: none !important;
   margin-top: 4px;
 }
 
@@ -6022,7 +6022,7 @@ html:not(.dark) .cartoon-roadmap-hero .hero-desc {
   color: #1e293b !important;
   font-size: 0.95rem;
   font-weight: 700;
-  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8) !important;
+  text-shadow: none !important;
   margin: 8px 0 0 0;
   max-width: 520px;
   line-height: 1.5;
@@ -6087,7 +6087,7 @@ html.dark .cartoon-roadmap-hero .hero-title {
   font-size: 2.2rem;
   font-weight: 900;
   color: #ffffff !important;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6), 0 0 20px rgba(59, 130, 246, 0.4) !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) !important;
   margin: 0;
   line-height: 1.2;
 }
@@ -6097,7 +6097,7 @@ html.dark .cartoon-roadmap-hero .hero-subtitle {
   font-size: 1.2rem;
   font-weight: 800;
   color: #fbbf24 !important;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) !important;
   margin-top: 4px;
 }
 
@@ -6105,7 +6105,7 @@ html.dark .cartoon-roadmap-hero .hero-desc {
   color: #f8fafc !important;
   font-size: 0.95rem;
   font-weight: 700;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5) !important;
+  text-shadow: none !important;
   margin: 8px 0 0 0;
   max-width: 520px;
   line-height: 1.5;
@@ -7446,22 +7446,21 @@ html:not(.dark) .rd-badge-lvl {
 }
 
 /* Bảo vệ hiển thị Điểm và Chuỗi Game Phi Đao trong Light Mode */
-html.light-mode .phidao-wrapper *,
 html.light-mode .phidao-stat,
 html.light-mode .phidao-stat span,
 html:not(.dark) .phidao-stat,
 html:not(.dark) .phidao-stat span {
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
 }
 html.light-mode #cannon-score-val,
 html:not(.dark) #cannon-score-val {
   color: #fde047 !important;
-  text-shadow: 0 0 12px rgba(253, 224, 71, 0.7), 0 2px 6px rgba(0, 0, 0, 0.9) !important;
+  text-shadow: none !important;
 }
 html.light-mode #cannon-combo-val,
 html:not(.dark) #cannon-combo-val {
   color: #fb923c !important;
-  text-shadow: 0 0 12px rgba(251, 146, 60, 0.7), 0 2px 6px rgba(0, 0, 0, 0.9) !important;
+  text-shadow: none !important;
 }
 
 html.light-mode [style*="color: #f8fafc"],
@@ -9407,8 +9406,8 @@ body.light-mode .next-lesson-hub-btn:hover {
 .yt-sub-hanzi-word.karaoke-word-active {
   color: #f59e0b !important;
   font-weight: 900 !important;
-  text-shadow: 0 0 12px rgba(245, 158, 11, 0.9), 0 0 24px rgba(217, 119, 6, 0.7) !important;
-  transform: scale(1.15);
+  text-shadow: none !important;
+  transform: scale(1.1);
   display: inline-block;
   transition: all 0.08s ease-out;
   border-bottom: 2px solid #f59e0b;
@@ -12325,7 +12324,7 @@ html.dark .alchemist-quest-tag {
   font-size: 3.2rem;
   font-weight: 900;
   color: #ffffff;
-  text-shadow: 0 0 18px rgba(255, 255, 255, 0.8), 0 0 30px #c084fc;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   animation: mysteryFloat 2.4s infinite ease-in-out;
 }
 
@@ -12337,7 +12336,7 @@ html.dark .alchemist-quest-tag {
 .target-mystery-orb.revealed {
   background: radial-gradient(circle at 35% 35%, #10b981, #047857 70%, #064e3b 100%);
   border-color: #34d399;
-  box-shadow: 0 0 30px rgba(52, 211, 153, 0.7), inset 0 0 15px rgba(255, 255, 255, 0.6);
+  box-shadow: 0 4px 16px rgba(52, 211, 153, 0.4), inset 0 0 15px rgba(255, 255, 255, 0.4);
   transform: rotateY(360deg);
 }
 
@@ -12350,7 +12349,7 @@ html.dark .alchemist-quest-tag {
   font-size: 3.2rem;
   font-weight: 900;
   color: #ffffff;
-  text-shadow: 0 0 20px rgba(255, 255, 255, 0.9), 0 0 35px #a7f3d0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 .target-mystery-orb.revealed .revealed-hanzi {
@@ -13156,9 +13155,9 @@ html.dark .mahjong-rules-tip {
   line-height: 1.1;
   letter-spacing: -0.02em;
 }
-.dock-big-val.text-gold { color: #facc15; text-shadow: 0 0 15px rgba(250,204,21,0.4); }
-.dock-big-val.text-fire { color: #fb923c; text-shadow: 0 0 15px rgba(251,146,60,0.4); }
-.dock-big-val.text-sky  { color: #38bdf8; text-shadow: 0 0 15px rgba(56,189,248,0.4); }
+.dock-big-val.text-gold { color: #facc15; }
+.dock-big-val.text-fire { color: #fb923c; }
+.dock-big-val.text-sky  { color: #38bdf8; }
 
 .dock-sub-status {
   font-size: 0.76rem;
@@ -13958,7 +13957,7 @@ html.dark .rhythm-pad.hit-active {
   font-size: 4.5rem;
   font-weight: 900;
   color: #fbbf24;
-  text-shadow: 0 0 25px rgba(251, 191, 36, 0.6);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
   animation: countPulse 0.8s infinite ease-in-out;
 }
 
@@ -14565,7 +14564,7 @@ html.dark .cannon-result-card-actions {
   font-size: 5.5rem;
   font-weight: 900;
   color: #ef4444;
-  text-shadow: 0 0 35px rgba(239, 68, 68, 0.8), 0 4px 15px rgba(0, 0, 0, 0.9);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
   pointer-events: none;
   z-index: 9999;
   opacity: 0;

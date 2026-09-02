@@ -3541,8 +3541,8 @@ function setupEventListeners() {
   // Passage Dictation Real-time Typing
   const pDictInput = document.getElementById('passage-dictation-input');
   if (pDictInput) {
-    pDictInput.addEventListener('input', () => {
-      renderPassageCharTiles();
+    pDictInput.addEventListener('input', (e) => {
+      handlePassageRealtimeInput(e.target.value);
     });
     pDictInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
@@ -3682,6 +3682,17 @@ async function loadHskPassages() {
 
   updatePassageResumeBanner();
   renderPassageGrid();
+
+  // If user is currently on the passage tab or entered with tab=passage param, open workspace directly
+  if (mainActiveTab === 'passage' || new URLSearchParams(window.location.search).get('tab') === 'passage') {
+    if (!currentPassage && allPassages.length > 0) {
+      const lastId = localStorage.getItem('hsk_passage_last_id_global') || localStorage.getItem(`hsk_passage_last_id_lvl${selectedPassageLevel}`);
+      const target = (lastId ? allPassages.find(p => p.id === lastId) : null) || allPassages.find(p => p.level === selectedPassageLevel) || allPassages[0];
+      if (target) {
+        openPassageWorkspace(target);
+      }
+    }
+  }
 }
 
 function switchMainTab(tab) {
@@ -3712,23 +3723,25 @@ function switchMainTab(tab) {
       if (videoWorkspace) videoWorkspace.style.display = 'none';
     }
   } else {
-    // Passage Mode
+    // Passage Mode - Go directly to Workspace!
     if (videoCatalog) videoCatalog.style.display = 'none';
     if (videoWorkspace) videoWorkspace.style.display = 'none';
     if (typeof ytPlayer !== 'undefined' && ytPlayer && typeof ytPlayer.pauseVideo === 'function') {
       try { ytPlayer.pauseVideo(); } catch (e) {}
     }
 
-    if (currentPassage && passageWorkspace && passageWorkspace.style.display === 'block') {
-      passageWorkspace.style.display = 'block';
-      if (passageCatalog) passageCatalog.style.display = 'none';
-    } else {
-      if (passageCatalog) passageCatalog.style.display = 'block';
-      if (passageWorkspace) passageWorkspace.style.display = 'none';
-    }
+    if (passageCatalog) passageCatalog.style.display = 'none';
+    if (passageWorkspace) passageWorkspace.style.display = 'block';
 
-    updatePassageResumeBanner();
-    renderPassageGrid();
+    if (!currentPassage && allPassages.length > 0) {
+      const lastId = localStorage.getItem('hsk_passage_last_id_global') || localStorage.getItem(`hsk_passage_last_id_lvl${selectedPassageLevel}`);
+      const target = (lastId ? allPassages.find(p => p.id === lastId) : null) || allPassages.find(p => p.level === selectedPassageLevel) || allPassages[0];
+      if (target) {
+        openPassageWorkspace(target);
+      }
+    } else if (currentPassage) {
+      openPassageWorkspace(currentPassage);
+    }
   }
 }
 
@@ -3737,7 +3750,22 @@ function selectPassageLevel(level) {
   document.querySelectorAll('.passage-level-btn').forEach(btn => {
     btn.classList.toggle('active', parseInt(btn.dataset.level, 10) === level);
   });
+  document.querySelectorAll('.passage-ws-lvl-btn').forEach(btn => {
+    btn.classList.toggle('active', parseInt(btn.dataset.level, 10) === level);
+  });
   renderPassageGrid();
+}
+
+function selectPassageLevelAndOpen(level) {
+  selectedPassageLevel = level;
+  selectPassageLevel(level);
+
+  const lastId = localStorage.getItem(`hsk_passage_last_id_lvl${level}`);
+  const passagesInLevel = allPassages.filter(p => p.level === level);
+  const target = (lastId ? passagesInLevel.find(p => p.id === lastId) : null) || passagesInLevel[0];
+  if (target) {
+    openPassageWorkspace(target);
+  }
 }
 
 function updatePassageResumeBanner() {
@@ -3871,6 +3899,22 @@ function openPassageWorkspace(passage) {
     progressText.textContent = `Đoạn ${passage.index} / ${passagesInLevel.length}`;
   }
 
+  // Sync Level Selector Tabs
+  document.querySelectorAll('.passage-ws-lvl-btn').forEach(btn => {
+    btn.classList.toggle('active', parseInt(btn.dataset.level, 10) === passage.level);
+  });
+  document.querySelectorAll('.passage-level-btn').forEach(btn => {
+    btn.classList.toggle('active', parseInt(btn.dataset.level, 10) === passage.level);
+  });
+
+  // Populate Quick Jump Dropdown
+  const jumpSelect = document.getElementById('passage-ws-jump-select');
+  if (jumpSelect) {
+    jumpSelect.innerHTML = passagesInLevel.map(p => `
+      <option value="${p.id}" ${p.id === passage.id ? 'selected' : ''}>Đoạn ${p.index} (${p.levelText})</option>
+    `).join('');
+  }
+
   // Prev / Next button states
   const prevBtnTop = document.getElementById('btn-passage-prev');
   const prevBtnBottom = document.getElementById('btn-passage-prev-bottom');
@@ -3930,13 +3974,18 @@ function openPassageWorkspace(passage) {
   // Render character slot tiles with eye icon (Bấm từng ô để lật mở gợi ý)
   renderPassageCharTiles();
 
+  // Reset audio player state (Không tự động phát - chỉ phát khi người dùng tự bấm nút)
+  if (passageAudio) {
+    passageAudio.pause();
+    updatePassagePlayBtn(false);
+  }
+  const statusEl = document.getElementById('passage-audio-status');
+  if (statusEl) statusEl.textContent = 'Sẵn sàng';
+  const fill = document.getElementById('passage-audio-progress-fill');
+  if (fill) fill.style.width = '0%';
+
   // Scroll to top
   window.scrollTo({ top: 0, behavior: 'smooth' });
-
-  // Auto play audio
-  setTimeout(() => {
-    playCurrentPassageAudio();
-  }, 350);
 }
 
 function renderPassageCharTiles() {
@@ -4451,6 +4500,7 @@ function returnToPassageCatalog() {
 // Window bindings for HSK Passage Dictation
 window.switchMainTab = switchMainTab;
 window.selectPassageLevel = selectPassageLevel;
+window.selectPassageLevelAndOpen = selectPassageLevelAndOpen;
 window.resumeLastStudiedPassage = resumeLastStudiedPassage;
 window.openPassageWorkspaceById = openPassageWorkspaceById;
 window.openPassageWorkspace = openPassageWorkspace;
