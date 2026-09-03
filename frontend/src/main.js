@@ -790,10 +790,28 @@ function cleanFrontendSpeechText(text) {
   return str.trim();
 }
 
+let pendingTtsRetryTimeout = null;
+let activeTtsSessionId = 0;
+
 function speakText(text) {
   if (!text) return;
   const cleanText = cleanFrontendSpeechText(text);
   if (!cleanText) return;
+
+  const currentSessionId = ++activeTtsSessionId;
+
+  // Clear any pending retry timer from prior speech
+  if (pendingTtsRetryTimeout) {
+    clearTimeout(pendingTtsRetryTimeout);
+    pendingTtsRetryTimeout = null;
+  }
+
+  // Cancel Web Speech API immediately to prevent queued utterances
+  if ('speechSynthesis' in window) {
+    try {
+      window.speechSynthesis.cancel();
+    } catch (e) { }
+  }
 
   // 1. Instantly stop previous playing audio element
   if (activeAudioElement) {
@@ -820,10 +838,11 @@ function speakText(text) {
   activeAudioElement = audio;
 
   audio.play().catch(err => {
-    console.warn("Retrying Baidu female voice audio playback...", err);
-    setTimeout(() => {
+    if (currentSessionId !== activeTtsSessionId) return;
+    pendingTtsRetryTimeout = setTimeout(() => {
+      if (currentSessionId !== activeTtsSessionId) return;
       audio.play().catch(e => {
-        console.error("Audio playback error:", e);
+        if (currentSessionId !== activeTtsSessionId) return;
         if ('speechSynthesis' in window) {
           window.speechSynthesis.cancel();
           const utterance = new SpeechSynthesisUtterance(cleanText);
@@ -832,7 +851,7 @@ function speakText(text) {
           window.speechSynthesis.speak(utterance);
         }
       });
-    }, 200);
+    }, 150);
   });
 }
 window.speakText = speakText;

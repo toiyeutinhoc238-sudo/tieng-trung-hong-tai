@@ -497,9 +497,9 @@ export class MahjongGameEngine {
       const wordObj = activeWordsForBoard[i];
       const pairId = 'pair_' + i + '_' + Date.now();
 
-      const cleanWord = wordObj.word || wordObj.text || '汉字';
+      const cleanWord = wordObj.word || wordObj.hanzi || wordObj.char || wordObj.text || '汉字';
       const cleanPinyin = wordObj.pinyin || 'hànzì';
-      const cleanMeaning = wordObj.meaning || wordObj.vietnamese || 'từ vựng';
+      const cleanMeaning = wordObj.meaning || wordObj.vietnamese || wordObj.vi || 'từ vựng';
 
       // Tile 1: Always Chinese Hanzi
       tilesList.push({
@@ -754,12 +754,19 @@ export class MahjongGameEngine {
   handleMatch(tile1, tile2, path) {
     this.isResolvingMatch = true;
     const item1 = this.grid[tile1.r][tile1.c];
+    const item2 = this.grid[tile2.r][tile2.c];
     this.sfx.playMatch();
 
     this.score += 25 + this.combo * 10;
     this.combo++;
     this.pairsLeft--;
     if (this.combo > this.maxCombo) this.maxCombo = this.combo;
+
+    // Track cleared word
+    const matchedWord = (item1 && (item1.word || item1.hanzi || item1.text)) || (item2 && (item2.word || item2.hanzi || item2.text));
+    if (matchedWord) {
+      this.clearedWordsSet.add(matchedWord);
+    }
 
     // Highlight matched glow
     const el1 = this.container.querySelector(`#tile_${tile1.r}_${tile1.c}`);
@@ -770,10 +777,10 @@ export class MahjongGameEngine {
     // Draw Smooth Neon Laser beam
     this.drawLaserPath(path);
 
-    // Pronounce Hanzi ONLY when auto-speech is enabled
-    if (this.autoSpeech && item1 && item1.word && typeof window.speakText === 'function') {
+    // Pronounce Hanzi ONLY when auto-speech is enabled - instantly speaking THIS EXACT MATCHED WORD
+    if (this.autoSpeech && matchedWord && typeof window.speakText === 'function') {
       try {
-        window.speakText(item1.word);
+        window.speakText(matchedWord);
       } catch (e) {}
     }
 
@@ -800,10 +807,13 @@ export class MahjongGameEngine {
           this.currentLevel++;
           this.sfx.playPowerup();
           this.timeLeft = Math.min(150, this.timeLeft + 50); // Thêm 50s thưởng
-          this.hintCount = Math.min(5, this.hintCount + 1);
-          this.shuffleCount = Math.min(5, this.shuffleCount + 1);
-          this.bombCount = Math.min(4, this.bombCount + 1);
-          this.showToast(`🎉 XUẤT SẮC QUA MÀN ${this.currentLevel - 1}! Sang Màn ${this.currentLevel}/${this.totalLevels} (${this.unplayedWordsPool.length} từ tiếp theo)...`);
+          
+          // HỒI PHỤC ĐẦY ĐỦ VẬT PHẨM TRỢ GIÚP CHO MỖI VÁN / MÀN MỚI
+          this.hintCount = 3;
+          this.shuffleCount = 3;
+          this.bombCount = 2;
+
+          this.showToast(`🎉 XUẤT SẮC QUA MÀN ${this.currentLevel - 1}! Sang Màn ${this.currentLevel}/${this.totalLevels} (${this.unplayedWordsPool.length} từ tiếp theo)... Đã hồi đầy đủ Trợ giúp!`);
           this.initBoard();
           this.updateHUD();
         } else {
