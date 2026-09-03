@@ -1812,7 +1812,7 @@ function renderDeckSelectionView() {
   if (isStudying) {
     // Refresh the notebook data/statistics in the background without changing active view
     if (activeNotebook) {
-      openNotebookDashboard(activeNotebook);
+      openNotebookDashboard(activeNotebook, true);
     } else if (activeSmartTopic) {
       renderSubdecksList();
     }
@@ -11548,7 +11548,7 @@ function createSubdeckCard(name, id, count, icon, color, isLocked = false) {
   return card;
 }
 
-function openNotebookDashboard(notebookId) {
+function openNotebookDashboard(notebookId, preservePage = false) {
   const titleEl = document.getElementById('dashboard-notebook-title');
   const descEl = document.getElementById('dashboard-notebook-desc');
 
@@ -11763,9 +11763,9 @@ function openNotebookDashboard(notebookId) {
 
   updateNotebookDashboardStatsOnly(notebookId);
 
-  updateNotebookDashboardStatsOnly(notebookId);
-
-  currentNotebookPage = 1;
+  if (!preservePage) {
+    currentNotebookPage = 1;
+  }
   renderNotebookWordsTable();
 }
 
@@ -11963,19 +11963,22 @@ window.handleNotebookWordPlay = function (wordText) {
 window.handleNotebookWordToggleMemorized = async function (id) {
   const numericId = /^\d+$/.test(id) ? parseInt(id) : id;
   await toggleWordMemorized(numericId);
-  openNotebookDashboard(activeNotebook);
+  updateNotebookDashboardStatsOnly(activeNotebook);
+  renderNotebookWordsTable();
 };
 
 window.handleNotebookWordToggleStarred = async function (id) {
   const numericId = /^\d+$/.test(id) ? parseInt(id) : id;
   await toggleWordStarred(numericId);
-  openNotebookDashboard(activeNotebook);
+  updateNotebookDashboardStatsOnly(activeNotebook);
+  renderNotebookWordsTable();
 };
 
 window.handleNotebookWordDelete = async function (id) {
   const numericId = /^\d+$/.test(id) ? parseInt(id) : id;
   await handleDeleteCustomWord(numericId);
-  openNotebookDashboard(activeNotebook);
+  updateNotebookDashboardStatsOnly(activeNotebook);
+  renderNotebookWordsTable();
 };
 
 // 5. Add custom word form submission handler
@@ -12035,7 +12038,7 @@ async function handleNotebookAddWordForm(e) {
 
     showToast(`Đã lưu "${word}" vào sổ tay "${listName}"! 📁`);
     form.reset();
-    openNotebookDashboard(activeNotebook);
+    openNotebookDashboard(activeNotebook, true);
     return;
   }
 
@@ -12052,7 +12055,7 @@ async function handleNotebookAddWordForm(e) {
       vocabList.push({ ...newWord, isCustom: true });
       showToast(`Đã lưu "${word}" vào sổ tay "${listName}"! 📁`);
       form.reset();
-      openNotebookDashboard(activeNotebook);
+      openNotebookDashboard(activeNotebook, true);
     } else {
       throw new Error('Lỗi từ API');
     }
