@@ -3,7 +3,8 @@ const path = require('path');
 const fs = require('fs');
 const { pinyin } = require('pinyin-pro');
 
-const wb = xlsx.readFile(path.resolve(__dirname, '../../filetuvung/Bài khóa HSK 2 3.0.xlsx'));
+const excelPath = path.resolve('filetuvung/Bài khóa hsk 2 3.0 NEW VER2.xlsx');
+const wb = xlsx.readFile(excelPath);
 const sheet = wb.Sheets[wb.SheetNames[0]];
 const data = xlsx.utils.sheet_to_json(sheet, { header: 1 });
 
@@ -14,10 +15,10 @@ function getFullPinyin(zhText) {
 
 function parseTF(tfText, tfAns) {
   if (!tfText || !tfAns) return [];
-  const qLines = tfText.split('\n').map(s => s.trim()).filter(Boolean);
+  const qLines = tfText.toString().split('\n').map(s => s.trim()).filter(Boolean);
   
   const ansMap = {};
-  const ansMatches = tfAns.match(/(?:(?:[(（]?(\d+)[)）]?)|(\d+))\s*[.:,]?\s*(Đúng|Sai|True|False|对|错)/gi) || [];
+  const ansMatches = tfAns.toString().match(/(?:(?:[(（]?(\d+)[)）]?)|(\d+))\s*[.:,]?\s*(Đúng|Sai|True|False|对|错)/gi) || [];
   ansMatches.forEach(m => {
     const numMatch = m.match(/\d+/);
     const valMatch = m.match(/Đúng|Sai|True|False|对|错/i);
@@ -45,7 +46,7 @@ function parseMC(mcText, mcAns) {
   if (!mcText || !mcAns) return [];
   
   const ansMap = {};
-  const ansMatches = mcAns.match(/(?:[(（]?(\d+)[)）]?|\b(\d+))\s*[.:,]?\s*([A-Da-d])/g) || [];
+  const ansMatches = mcAns.toString().match(/(?:[(（]?(\d+)[)）]?|\b(\d+))\s*[.:,]?\s*([A-Da-d])/g) || [];
   ansMatches.forEach(m => {
     const numMatch = m.match(/\d+/);
     const letterMatch = m.match(/[A-Da-d]$/);
@@ -54,7 +55,7 @@ function parseMC(mcText, mcAns) {
     }
   });
 
-  const lines = mcText.split('\n').map(s => s.trim()).filter(Boolean);
+  const lines = mcText.toString().split('\n').map(s => s.trim()).filter(Boolean);
   const questions = [];
   let currentQ = null;
 
@@ -102,18 +103,16 @@ function parseMC(mcText, mcAns) {
 
 function parseLines(zhRaw, viRaw) {
   if (!zhRaw) return [];
-  const zhLines = zhRaw.split('\n').map(s => s.trim()).filter(Boolean);
-  const viLines = (viRaw || '').split('\n').map(s => s.trim()).filter(Boolean);
+  const zhLines = zhRaw.toString().split('\n').map(s => s.trim()).filter(Boolean);
+  const viLines = (viRaw || '').toString().split('\n').map(s => s.trim()).filter(Boolean);
 
-  // If text is dialogue with speaker prefixes (e.g. 白家月：... or Bạch Gia Nguyệt: ...)
   const result = [];
 
   zhLines.forEach((zhL, idx) => {
     const viL = viLines[idx] || '';
     
-    // Check for colon
-    const zhColon = zhL.match(/^([^：:]{1,12})[：:](.*)/);
-    const viColon = viL.match(/^([^：:]{1,25})[：:](.*)/);
+    const zhColon = zhL.match(/^([^：:]{1,15})[：:](.*)/);
+    const viColon = viL.match(/^([^：:]{1,30})[：:](.*)/);
 
     let speaker = '';
     let zh = zhL;
@@ -139,7 +138,6 @@ function parseLines(zhRaw, viRaw) {
   return result;
 }
 
-// Map of standard Lesson Titles for HSK 2
 const lessonTitles = {
   1: 'Bài 1: 她请我们去了北京烤鸭',
   2: 'Bài 2: 还是打车去北大吧',
@@ -160,7 +158,6 @@ const lessonTitles = {
 
 const outputLessons = [];
 
-// Group rows into 15 lessons, 4 dialogues each
 for (let l = 1; l <= 15; l++) {
   const startRow = (l - 1) * 4 + 1;
   const dialogues = [];
@@ -177,7 +174,6 @@ for (let l = 1; l <= 15; l++) {
     let tfQuestions = parseTF(row[4], row[5]);
     let mcQuestions = parseMC(row[6], row[7]);
 
-    // Fallback for Lesson 1 Dialogue 1 if missing in Excel
     if (l === 1 && d === 1 && mcQuestions.length === 0 && tfQuestions.length === 0) {
       mcQuestions = [
         {
@@ -201,7 +197,6 @@ for (let l = 1; l <= 15; l++) {
       ];
     }
 
-    // Unified questions list: True/False first, then Multiple Choice
     const allQuestions = [...tfQuestions, ...mcQuestions];
 
     dialogues.push({
@@ -230,16 +225,24 @@ for (let l = 1; l <= 15; l++) {
   });
 }
 
-console.log('Successfully generated', outputLessons.length, 'lessons!');
-console.log('Sample lesson 1:', JSON.stringify(outputLessons[0], null, 2).slice(0, 500));
-console.log('Sample lesson 1 diag 4 quiz:', JSON.stringify(outputLessons[0].dialogues[3].quiz, null, 2));
+console.log('Total parsed lessons:', outputLessons.length);
+let totalLines = 0;
+let totalQuizzes = 0;
+outputLessons.forEach(ls => {
+  ls.dialogues.forEach(dg => {
+    totalLines += dg.lines.length;
+    totalQuizzes += dg.quiz.questions.length;
+  });
+});
+console.log('Total dialogue lines across all 15 lessons:', totalLines);
+console.log('Total quiz questions across all 15 lessons:', totalQuizzes);
 
-// Write to files
-const outPath1 = path.resolve(__dirname, '../../frontend/public/hsk2_reading_texts.json');
-const outPath2 = path.resolve(__dirname, '../../frontend/dist/hsk2_reading_texts.json');
+// Save output
+const outPublic = path.resolve('frontend/public/hsk2_reading_texts.json');
+const outDist = path.resolve('frontend/dist/hsk2_reading_texts.json');
 
-fs.writeFileSync(outPath1, JSON.stringify(outputLessons, null, 2), 'utf8');
-if (fs.existsSync(path.dirname(outPath2))) {
-  fs.writeFileSync(outPath2, JSON.stringify(outputLessons, null, 2), 'utf8');
+fs.writeFileSync(outPublic, JSON.stringify(outputLessons, null, 2), 'utf8');
+if (fs.existsSync(path.dirname(outDist))) {
+  fs.writeFileSync(outDist, JSON.stringify(outputLessons, null, 2), 'utf8');
 }
-console.log('Saved to:', outPath1, 'and', outPath2);
+console.log('Saved to', outPublic, 'and', outDist);
