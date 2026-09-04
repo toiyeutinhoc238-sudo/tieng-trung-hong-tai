@@ -1893,40 +1893,42 @@
         const isQYct = isYct(activeQ);
 
         let candidates = [];
-        if (mode === 'zh-vi' || mode === 'pinyin-vi' || mode === 'audio-vi') {
-          // Meaning distractors
-          candidates = currentPool.filter(w => w && w.id !== activeQ.id && w.meaning !== activeQ.meaning);
-          if (candidates.length < 3) {
-            const sameLvl = vocabData.filter(w => w && matchLevel(w.level, activeQ.level) && isYct(w) === isQYct && (isQYct || w.isCustom || (w.hskVersion || '3.0') === curVer) && w.id !== activeQ.id && w.meaning !== activeQ.meaning);
-            candidates.push(...sameLvl);
-          }
-          if (candidates.length < 3) {
-            candidates.push(...vocabData.filter(w => w && w.id !== activeQ.id && w.meaning !== activeQ.meaning));
-          }
-        } else if (mode === 'vi-zh' || mode === 'pinyin-zh' || mode === 'audio-zh') {
-          // Hanzi word distractors
-          candidates = currentPool.filter(w => w && w.id !== activeQ.id && w.word !== activeQ.word);
-          if (candidates.length < 3) {
-            const sameLvl = vocabData.filter(w => w && matchLevel(w.level, activeQ.level) && isYct(w) === isQYct && (isQYct || w.isCustom || (w.hskVersion || '3.0') === curVer) && w.id !== activeQ.id && w.word !== activeQ.word);
-            candidates.push(...sameLvl);
-          }
-          if (candidates.length < 3) {
-            candidates.push(...vocabData.filter(w => w && w.id !== activeQ.id && w.word !== activeQ.word));
-          }
-        } else {
-          // Pinyin distractors
-          candidates = currentPool.filter(w => w && w.id !== activeQ.id && w.pinyin !== activeQ.pinyin);
-          if (candidates.length < 3) {
-            const sameLvl = vocabData.filter(w => w && matchLevel(w.level, activeQ.level) && isYct(w) === isQYct && (isQYct || w.isCustom || (w.hskVersion || '3.0') === curVer) && w.id !== activeQ.id && w.pinyin !== activeQ.pinyin);
-            candidates.push(...sameLvl);
-          }
-          if (candidates.length < 3) {
-            candidates.push(...vocabData.filter(w => w && w.id !== activeQ.id && w.pinyin !== activeQ.pinyin));
-          }
+        const isMeaningMode = (mode === 'zh-vi' || mode === 'pinyin-vi' || mode === 'audio-vi');
+        const isWordMode = (mode === 'vi-zh' || mode === 'pinyin-zh' || mode === 'audio-zh');
+        const isPinyinMode = (mode === 'zh-pinyin' || mode === 'audio-pinyin');
+        const keyField = isMeaningMode ? 'meaning' : (isWordMode ? 'word' : 'pinyin');
+
+        // Priority 1: Distractors from current practicing pool (same lesson / notebook / study scope)
+        const poolCandidates = currentPool.filter(w => w && w.id !== activeQ.id && w[keyField] !== activeQ[keyField]);
+        candidates = shuffle([...poolCandidates]);
+
+        // Priority 2: Distractors from words already STUDIED (isStudied / isMemorized) in the SAME HSK Level & Curriculum
+        if (candidates.length < 3) {
+          const studiedSameLvl = vocabData.filter(w =>
+            w && w.id !== activeQ.id && w[keyField] !== activeQ[keyField] &&
+            (w.isStudied || w.isMemorized) &&
+            matchLevel(w.level, activeQ.level) &&
+            isYct(w) === isQYct &&
+            (isQYct || w.isCustom || (w.hskVersion || '3.0') === curVer)
+          );
+          candidates.push(...shuffle(studiedSameLvl));
         }
 
+        // Priority 3: Other words in the SAME HSK Level & Curriculum
         if (candidates.length < 3) {
-          candidates.push(...fallbackVocab.filter(w => w && w.meaning !== activeQ.meaning));
+          const sameLvl = vocabData.filter(w =>
+            w && w.id !== activeQ.id && w[keyField] !== activeQ[keyField] &&
+            matchLevel(w.level, activeQ.level) &&
+            isYct(w) === isQYct &&
+            (isQYct || w.isCustom || (w.hskVersion || '3.0') === curVer)
+          );
+          candidates.push(...shuffle(sameLvl));
+        }
+
+        // Priority 4: Fallback from vocabData
+        if (candidates.length < 3) {
+          const fallbackCandidates = vocabData.filter(w => w && w.id !== activeQ.id && w[keyField] !== activeQ[keyField]);
+          candidates.push(...shuffle(fallbackCandidates));
         }
 
         const seenAns = new Set([pAns]);

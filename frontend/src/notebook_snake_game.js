@@ -746,9 +746,30 @@ export class SnakeGameEngine {
     this.activeQuestionMode = mode;
     this.updateTargetPrompt();
 
-    const otherWords = this.rawWords.filter(w => w.word !== nextTarget.word);
-    const shuffled = [...otherWords].sort(() => Math.random() - 0.5);
-    const distractors = shuffled.slice(0, 3);
+    const otherWords = (this.rawWords || []).filter(w => w && w.word !== nextTarget.word && w.meaning !== nextTarget.meaning);
+    let candidatePool = [...otherWords];
+
+    if (candidatePool.length < 3 && typeof window !== 'undefined' && Array.isArray(window.vocabList)) {
+      const extraSameLevel = window.vocabList.filter(w =>
+        w && w.word !== nextTarget.word && w.meaning !== nextTarget.meaning &&
+        (w.isStudied || w.isMemorized || String(w.level) === String(nextTarget.level))
+      );
+      candidatePool.push(...extraSameLevel);
+    }
+
+    const shuffled = [...candidatePool].sort(() => Math.random() - 0.5);
+    const seenWords = new Set([nextTarget.word]);
+    const seenMeanings = new Set([nextTarget.meaning]);
+    const distractors = [];
+
+    for (const d of shuffled) {
+      if (d && d.word && d.meaning && !seenWords.has(d.word) && !seenMeanings.has(d.meaning)) {
+        seenWords.add(d.word);
+        seenMeanings.add(d.meaning);
+        distractors.push(d);
+        if (distractors.length === 3) break;
+      }
+    }
 
     this.apples = [];
 

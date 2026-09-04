@@ -12161,9 +12161,52 @@ function startQuizSession() {
   const quizWords = shuffledWords.slice(0, limitCount);
 
   quizQuestions = quizWords.map(word => {
-    const candidates = vocabList.filter(w => w.id !== word.id);
-    const shuffledCandidates = shuffleArray([...candidates]);
-    const distractors = shuffledCandidates.slice(0, 3);
+    // Priority 1: Distractors from the CURRENT study/practice pool (same lesson / notebook / filtered set)
+    const samePoolCandidates = words.filter(w => w && w.id !== word.id && w.word !== word.word && w.meaning !== word.meaning);
+    let candidates = shuffleArray([...samePoolCandidates]);
+
+    // Priority 2: If pool has fewer than 3 distractors, fill from words that the student has ALREADY STUDIED (isStudied / isMemorized) of the same level
+    if (candidates.length < 3) {
+      const studiedSameLevel = vocabList.filter(w =>
+        w && w.id !== word.id && w.word !== word.word && w.meaning !== word.meaning &&
+        (w.isStudied || w.isMemorized) &&
+        matchLevel(w.level, word.level) &&
+        (w.hskVersion || '3.0') === (word.hskVersion || activeHskVersion)
+      );
+      candidates.push(...shuffleArray([...studiedSameLevel]));
+    }
+
+    // Priority 3: Other words from the SAME HSK Level & Curriculum
+    if (candidates.length < 3) {
+      const sameLevel = vocabList.filter(w =>
+        w && w.id !== word.id && w.word !== word.word && w.meaning !== word.meaning &&
+        matchLevel(w.level, word.level) &&
+        (w.hskVersion || '3.0') === (word.hskVersion || activeHskVersion)
+      );
+      candidates.push(...shuffleArray([...sameLevel]));
+    }
+
+    // Priority 4: Fallback from vocabList if still insufficient
+    if (candidates.length < 3) {
+      const fallback = vocabList.filter(w => w && w.id !== word.id && w.word !== word.word && w.meaning !== word.meaning);
+      candidates.push(...shuffleArray([...fallback]));
+    }
+
+    // Select 3 unique distractors guaranteeing no duplicates in word, meaning, or pinyin
+    const distractors = [];
+    const seenWords = new Set([word.word]);
+    const seenMeanings = new Set([word.meaning]);
+    const seenPinyins = new Set([word.pinyin]);
+
+    for (const c of candidates) {
+      if (c && c.word && c.meaning && !seenWords.has(c.word) && !seenMeanings.has(c.meaning)) {
+        seenWords.add(c.word);
+        seenMeanings.add(c.meaning);
+        if (c.pinyin) seenPinyins.add(c.pinyin);
+        distractors.push(c);
+        if (distractors.length === 3) break;
+      }
+    }
 
     const type = Math.floor(Math.random() * 3);
 
