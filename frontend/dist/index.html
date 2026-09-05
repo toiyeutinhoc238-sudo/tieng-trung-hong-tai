@@ -117,11 +117,11 @@
     window.toggleSidebarCollapse = window.toggleSidebarCollapse || function () { };
     window.toggleTheme = window.toggleTheme || function () { };
   </script>
-  <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
+  <script type="module" crossorigin src="/assets/global_sidebar-zY9kB4Kl.js"></script>
   <script type="module" crossorigin src="/assets/grammar_hsk1_v2-C9vbI0cE.js"></script>
   <script type="module" crossorigin src="/assets/screen_drawing-BS_xmQo7.js"></script>
-  <script type="module" crossorigin src="/assets/main-Dt-NzHsu.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/style-BAzTPdLB.css">
+  <script type="module" crossorigin src="/assets/main-BTg9Pzep.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-C6voaIKT.css">
 </head>
 
 <body>
@@ -129,6 +129,9 @@
   <!-- Navigation Bar -->
   <nav class="navbar">
     <div class="nav-container">
+      <button id="mobile-nav-toggle-btn" class="menu-toggle-btn global-hamburger-btn mobile-nav-hamburger" onclick="window.toggleSidebarCollapse()" title="Mở menu điều hướng" aria-label="Mở menu điều hướng">
+        <i class="fa-solid fa-bars"></i> <span class="btn-text">Menu</span>
+      </button>
       <div class="nav-brand" style="cursor: pointer;" onclick="window.openAboutModal()"
         title="Bấm để xem giới thiệu tổng quan về Tiếng Trung Hongtai">
         <img class="brand-logo-img" src="/assets/logo.png" alt="Tiếng Trung Hongtai Logo">
@@ -3719,7 +3722,7 @@
   </div>
 
   <!-- App Main Scripts -->
-  <script src="/assets/hanzi-writer.min.js"></script>
+  <script src="/assets/hanzi-writer.min.js"></script>
 
   <!-- Modal Yêu Cầu Đăng Nhập (Auth Required Modal) -->
   <div class="modal-overlay" id="auth-required-modal" onclick="if(event.target === this) this.style.display='none';"

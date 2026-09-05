@@ -12727,6 +12727,18 @@ window.openAboutModal = function () {
 
 // --- NEW SIDEBAR COLLAPSE, DROPDOWN & FEATURE MODALS ---
 window.toggleSidebarCollapse = function () {
+  if (window.innerWidth <= 900) {
+    if (window.toggleGlobalSidebar) {
+      window.toggleGlobalSidebar();
+    } else {
+      const sidebar = document.querySelector('.app-sidebar');
+      const backdrop = document.querySelector('.sidebar-backdrop');
+      if (sidebar) sidebar.classList.toggle('open');
+      if (backdrop) backdrop.classList.toggle('active');
+      document.body.classList.toggle('sidebar-open');
+    }
+    return;
+  }
   document.body.classList.toggle('sidebar-collapsed');
   const isCollapsed = document.body.classList.contains('sidebar-collapsed');
   localStorage.setItem('sidebar_collapsed', isCollapsed ? 'true' : 'false');

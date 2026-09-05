@@ -125,6 +125,9 @@
   <!-- Navigation Bar -->
   <nav class="navbar">
     <div class="nav-container">
+      <button id="mobile-nav-toggle-btn" class="menu-toggle-btn global-hamburger-btn mobile-nav-hamburger" onclick="window.toggleSidebarCollapse()" title="Mở menu điều hướng" aria-label="Mở menu điều hướng">
+        <i class="fa-solid fa-bars"></i> <span class="btn-text">Menu</span>
+      </button>
       <div class="nav-brand" style="cursor: pointer;" onclick="window.openAboutModal()"
         title="Bấm để xem giới thiệu tổng quan về Tiếng Trung Hongtai">
         <img class="brand-logo-img" src="/assets/logo.png" alt="Tiếng Trung Hongtai Logo">
@@ -3717,6 +3720,7 @@
   <!-- App Main Scripts -->
   <script src="/assets/hanzi-writer.min.js"></script>
   <script type="module" src="/src/main.js"></script>
+  <script type="module" src="/src/global_sidebar.js"></script>
 
   <!-- Modal Yêu Cầu Đăng Nhập (Auth Required Modal) -->
   <div class="modal-overlay" id="auth-required-modal" onclick="if(event.target === this) this.style.display='none';"

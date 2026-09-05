@@ -215,37 +215,96 @@
       document.body.insertBefore(container.firstElementChild, document.body.firstChild);
     }
 
-    // 3. Connect existing and new hamburger buttons
-    document.querySelectorAll('.menu-toggle-btn, .sidebar-open-btn, .top-menu-btn, #top-sidebar-toggle-btn').forEach(btn => {
-      btn.removeEventListener('click', window.toggleGlobalSidebar);
-      btn.addEventListener('click', window.toggleGlobalSidebar);
-    });
+    // 3. Inject top-left hamburger menu button if missing (runs across all pages, mobile & desktop)
+    injectTopMenuButtonIfMissing();
 
-    // 4. Inject a top-left hamburger menu button if none exists on non-index page
-    if (!isIndex) {
-      injectTopMenuButtonIfMissing();
-    }
+    // 4. Connect all existing and new hamburger / menu toggle buttons
+    const bindMenuButtons = () => {
+      document.querySelectorAll('.menu-toggle-btn, .global-hamburger-btn, .sidebar-open-btn, .top-menu-btn, #top-sidebar-toggle-btn, #sidebar-expand-float-btn, .sidebar-expand-float-btn, #mobile-nav-toggle-btn').forEach(btn => {
+        btn.onclick = window.toggleGlobalSidebar;
+      });
+    };
+    bindMenuButtons();
+    setTimeout(bindMenuButtons, 500);
   }
 
   function injectTopMenuButtonIfMissing() {
-    // Always use a fixed floating button — injecting into header risks being hidden
-    // by overflow, z-index stacking, or flex/grid layout on different subpages.
-    const existingFloating = document.getElementById('floating-menu-trigger-btn');
-    if (existingFloating) return;
+    // 1. Check if there's already an active hamburger button in any primary header
+    const alreadyHasBtn = document.querySelector('.global-hamburger-btn, #mobile-nav-toggle-btn, #top-sidebar-toggle-btn');
+    if (alreadyHasBtn) {
+      alreadyHasBtn.onclick = window.toggleGlobalSidebar;
+      return;
+    }
 
-    // Also skip if there's already a dedicated menu trigger
-    const existingMenuBtn = document.querySelector('.menu-toggle-btn, .sidebar-open-btn, .top-menu-btn, #top-sidebar-toggle-btn');
-    if (existingMenuBtn) return;
+    // 2. Comprehensive header insertion points across all pages in the app
+    const headerConfigs = [
+      { container: '.navbar .nav-container', insertBefore: '.nav-brand' },
+      { container: '.top-bar', insertBefore: ':first-child' },
+      { container: '.rd-header-left', insertBefore: ':first-child' },
+      { container: '.rd-header-bar', insertBefore: ':first-child' },
+      { container: '.dict-top-nav', insertBefore: '.dict-brand' },
+      { container: '.grammar-header .brand-box', insertBefore: ':first-child' },
+      { container: '.grammar-header', insertBefore: ':first-child' },
+      { container: '.hanzi-header .brand-box', insertBefore: ':first-child' },
+      { container: '.hanzi-header', insertBefore: ':first-child' },
+      { container: '.phonetics-header .brand-box', insertBefore: ':first-child' },
+      { container: '.phonetics-header', insertBefore: ':first-child' },
+      { container: '.header-card > div:first-child', insertBefore: ':first-child' },
+      { container: '.header-card', insertBefore: ':first-child' },
+      { container: '.header-panel .logo', insertBefore: ':first-child' },
+      { container: '.header-panel', insertBefore: ':first-child' },
+      { container: '.rank-header-nav', insertBefore: '.rank-brand-logo' },
+      { container: '.rules-header', insertBefore: '.rules-title-group' },
+      { container: '.header-bar .header-title-wrap', insertBefore: ':first-child' },
+      { container: '.chat-view-header', insertBefore: ':first-child' },
+      { container: 'header', insertBefore: ':first-child' }
+    ];
 
-    // Create a fixed floating button — always visible, always on top
-    const floatingBtn = document.createElement('button');
-    floatingBtn.className = 'floating-menu-trigger-btn';
-    floatingBtn.id = 'floating-menu-trigger-btn';
-    floatingBtn.setAttribute('aria-label', 'Mở Menu Danh Mục');
-    floatingBtn.title = 'Menu điều hướng';
-    floatingBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
-    floatingBtn.onclick = window.toggleGlobalSidebar;
-    document.body.appendChild(floatingBtn);
+    let inserted = false;
+    for (const cfg of headerConfigs) {
+      const parent = document.querySelector(cfg.container);
+      if (parent) {
+        if (parent.querySelector('.global-hamburger-btn, .menu-toggle-btn, #sidebar-expand-float-btn')) {
+          inserted = true;
+          break;
+        }
+
+        const menuBtn = document.createElement('button');
+        menuBtn.className = 'menu-toggle-btn global-hamburger-btn';
+        menuBtn.id = 'global-hamburger-btn';
+        menuBtn.title = 'Mở Menu Danh Mục';
+        menuBtn.setAttribute('aria-label', 'Mở Menu Danh Mục');
+        menuBtn.innerHTML = '<i class="fa-solid fa-bars"></i> <span class="btn-text">Menu</span>';
+        menuBtn.onclick = window.toggleGlobalSidebar;
+
+        if (cfg.insertBefore === ':first-child') {
+          parent.insertBefore(menuBtn, parent.firstChild);
+        } else {
+          const target = parent.querySelector(cfg.insertBefore);
+          if (target) {
+            parent.insertBefore(menuBtn, target);
+          } else {
+            parent.insertBefore(menuBtn, parent.firstChild);
+          }
+        }
+        inserted = true;
+        break;
+      }
+    }
+
+
+
+    // 3. Fallback floating button if no standard header is present
+    if (!inserted && !document.querySelector('.floating-menu-trigger-btn')) {
+      const floatingBtn = document.createElement('button');
+      floatingBtn.className = 'menu-toggle-btn global-hamburger-btn floating-menu-trigger-btn';
+      floatingBtn.id = 'global-floating-menu-btn';
+      floatingBtn.title = 'Mở Menu Danh Mục';
+      floatingBtn.setAttribute('aria-label', 'Mở Menu Danh Mục');
+      floatingBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
+      floatingBtn.onclick = window.toggleGlobalSidebar;
+      document.body.appendChild(floatingBtn);
+    }
   }
 
   if (document.readyState === 'loading') {

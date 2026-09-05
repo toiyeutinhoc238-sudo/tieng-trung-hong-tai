@@ -326,7 +326,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 100;
+      z-index: 2000;
       padding: 20px;
     }
 
@@ -846,7 +846,12 @@
       <div class="modal-content">
         <div
           style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
-          <div class="modal-title" style="margin-bottom:0;">Quizizz HSK</div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <button class="menu-toggle-btn global-hamburger-btn setup-menu-toggle-btn" onclick="window.toggleGlobalSidebar()" title="Mở Menu Danh Mục" aria-label="Mở Menu Danh Mục">
+              <i class="fa-solid fa-bars"></i> <span class="btn-text">Menu</span>
+            </button>
+            <div class="modal-title" style="margin-bottom:0;">Quizizz HSK</div>
+          </div>
           <div style="display: flex; align-items: center; gap: 8px;">
             <button id="particle-toggle-btn" class="particle-toggle-btn" onclick="window.toggleSeasonalParticles()" title="Bật/Tắt hiệu ứng mùa">
               <i class="fa-solid fa-snowflake"></i>
@@ -1004,6 +1009,9 @@
 
     <!-- GAME TOP HUD -->
     <div class="top-bar">
+      <button class="menu-toggle-btn global-hamburger-btn" onclick="window.toggleGlobalSidebar()" title="Mở Menu Danh Mục" aria-label="Mở Menu Danh Mục">
+        <i class="fa-solid fa-bars"></i> <span class="btn-text">Menu</span>
+      </button>
       <div class="player-info">
         <div class="avatar" id="player-avatar"><i class="fa-solid fa-user-ninja"></i></div>
         <div class="player-details">
