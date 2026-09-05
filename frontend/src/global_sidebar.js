@@ -162,20 +162,33 @@
 
   // Toggle & Control Functions
   window.openGlobalSidebar = function () {
-    document.body.classList.remove('sidebar-collapsed');
+    const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html');
+    if (isIndex && window.innerWidth > 900) {
+      document.body.classList.remove('sidebar-collapsed');
+      localStorage.setItem('sidebar_collapsed', 'false');
+      return;
+    }
+
     const sidebar = document.querySelector('.app-sidebar') || document.getElementById('global-app-sidebar');
     const backdrop = document.querySelector('.sidebar-backdrop') || document.getElementById('global-sidebar-backdrop');
     if (sidebar) {
       sidebar.classList.add('open', 'active');
       sidebar.style.pointerEvents = 'auto';
     }
-    if (backdrop) {
+    if (backdrop && window.innerWidth <= 900) {
       backdrop.classList.add('active');
     }
     document.body.classList.add('sidebar-open');
   };
 
   window.closeGlobalSidebar = function () {
+    const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html');
+    if (isIndex && window.innerWidth > 900) {
+      document.body.classList.add('sidebar-collapsed');
+      localStorage.setItem('sidebar_collapsed', 'true');
+      return;
+    }
+
     const sidebar = document.querySelector('.app-sidebar') || document.getElementById('global-app-sidebar');
     const backdrop = document.querySelector('.sidebar-backdrop') || document.getElementById('global-sidebar-backdrop');
     if (sidebar) {
@@ -188,6 +201,16 @@
   };
 
   window.toggleGlobalSidebar = function () {
+    const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html');
+    if (isIndex && window.innerWidth > 900) {
+      if (window.toggleSidebarCollapse) {
+        window.toggleSidebarCollapse();
+      } else {
+        document.body.classList.toggle('sidebar-collapsed');
+      }
+      return;
+    }
+
     const sidebar = document.querySelector('.app-sidebar') || document.getElementById('global-app-sidebar');
     if (sidebar && (sidebar.classList.contains('open') || sidebar.classList.contains('active') || document.body.classList.contains('sidebar-open'))) {
       window.closeGlobalSidebar();

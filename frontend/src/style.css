@@ -17381,32 +17381,48 @@ button,
   }
 }
 
-/* Master Backdrop Z-Index Guarantee (Directly behind drawer at 100000, in front of page) */
+/* Master Backdrop: Only active on mobile when drawer is opened (Never blur desktop) */
 .sidebar-backdrop {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  background: rgba(0, 0, 0, 0.65) !important;
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
-  z-index: 99990 !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-  transition: opacity 0.28s ease !important;
+  display: none !important;
 }
 
-body.sidebar-open .sidebar-backdrop,
-.sidebar-backdrop.active {
-  opacity: 1 !important;
-  pointer-events: auto !important;
+.app-sidebar.open,
+.app-sidebar.active,
+.global-app-sidebar.open,
+.global-app-sidebar.active,
+body.sidebar-open .app-sidebar,
+body.sidebar-open .global-app-sidebar {
+  z-index: 100000 !important;
 }
 
-/* Lock background page scrolling when sidebar is open */
-body.sidebar-open {
-  overflow: hidden !important;
-  touch-action: none !important;
+@media (max-width: 900px) {
+  .sidebar-backdrop {
+    display: block !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(0, 0, 0, 0.65) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    z-index: 99990 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity 0.28s ease !important;
+  }
+
+  body.sidebar-open .sidebar-backdrop,
+  .sidebar-backdrop.active {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  /* Lock background page scrolling when mobile drawer is open */
+  body.sidebar-open {
+    overflow: hidden !important;
+    touch-action: none !important;
+  }
 }
 
 /* Hide floating elements that can overlap the open sidebar */
