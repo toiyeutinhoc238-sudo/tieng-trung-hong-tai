@@ -17692,7 +17692,7 @@ body.light-mode .floating-menu-trigger-btn {
   border-color: #38bdf8 !important;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .menu-toggle-btn .btn-text,
   .global-hamburger-btn .btn-text,
   .menu-toggle-btn span,
@@ -17706,10 +17706,11 @@ body.light-mode .floating-menu-trigger-btn {
     height: 40px !important;
     min-width: 40px !important;
     border-radius: 10px !important;
+    flex-shrink: 0 !important;
   }
   .menu-toggle-btn i,
   .global-hamburger-btn i {
-    font-size: 1.25rem !important;
+    font-size: 1.2rem !important;
   }
 }
 
