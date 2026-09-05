@@ -7773,23 +7773,25 @@ html.light-mode .google-acc-card {
   position: fixed;
   top: 16px;
   left: 16px;
-  z-index: 999;
-  background: var(--bg-glass, #ffffff);
-  border: 1px solid var(--border-glass, #e2e8f0);
-  color: var(--text-primary, #0f172a);
+  z-index: 99998 !important;
+  background: rgba(15, 23, 42, 0.94) !important;
+  border: 1.5px solid #38bdf8 !important;
+  color: #38bdf8 !important;
   padding: 8px 18px;
   border-radius: 30px;
   font-weight: 700;
   font-size: 0.88rem;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
   align-items: center;
   gap: 8px;
   transition: all 0.25s ease;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
 }
 .sidebar-expand-float-btn:hover {
-  background: #2563eb;
-  color: #ffffff;
+  background: #2563eb !important;
+  color: #ffffff !important;
   transform: translateY(-2px);
   box-shadow: 0 12px 28px rgba(37, 99, 235, 0.4);
 }
@@ -7815,7 +7817,7 @@ html.light-mode .google-acc-card {
 }
 
 body.sidebar-collapsed .app-sidebar {
-  transform: translateX(-100%);
+  transform: translateX(-105%) !important;
   opacity: 0;
   pointer-events: none;
 }

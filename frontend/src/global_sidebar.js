@@ -220,13 +220,6 @@
   };
 
   window.closeGlobalSidebar = function () {
-    const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html');
-    if (isIndex && window.innerWidth > 900) {
-      document.body.classList.add('sidebar-collapsed');
-      localStorage.setItem('sidebar_collapsed', 'true');
-      return;
-    }
-
     const sidebar = document.querySelector('.app-sidebar') || document.getElementById('global-app-sidebar');
     const backdrop = document.querySelector('.sidebar-backdrop') || document.getElementById('global-sidebar-backdrop');
     if (sidebar) {
@@ -267,6 +260,12 @@
   // Inject or setup on DOM Ready
   function initGlobalSidebar() {
     const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html');
+
+    // On desktop index page, default to expanded sidebar
+    if (isIndex && window.innerWidth > 900) {
+      document.body.classList.remove('sidebar-collapsed');
+      localStorage.setItem('sidebar_collapsed', 'false');
+    }
 
     // 1. Ensure Backdrop exists
     let backdrop = document.querySelector('.sidebar-backdrop');

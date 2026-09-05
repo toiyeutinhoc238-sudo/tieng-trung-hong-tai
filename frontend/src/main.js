@@ -383,8 +383,9 @@ const toastElement = document.getElementById('toast');
 
 // --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', async () => {
-  if (localStorage.getItem('sidebar_collapsed') === 'true') {
-    document.body.classList.add('sidebar-collapsed');
+  if (window.innerWidth > 900) {
+    document.body.classList.remove('sidebar-collapsed');
+    localStorage.setItem('sidebar_collapsed', 'false');
   }
   initTheme();
   initSeasonalParticles();
