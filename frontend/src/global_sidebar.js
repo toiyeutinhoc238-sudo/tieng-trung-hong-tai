@@ -175,7 +175,7 @@
       sidebar.classList.add('open', 'active');
       sidebar.style.pointerEvents = 'auto';
     }
-    if (backdrop && window.innerWidth <= 900) {
+    if (backdrop && (!isIndex || window.innerWidth <= 900)) {
       backdrop.classList.add('active');
     }
     document.body.classList.add('sidebar-open');
@@ -228,20 +228,23 @@
 
   // Inject or setup on DOM Ready
   function initGlobalSidebar() {
+    const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html');
+
     // 1. Ensure Backdrop exists
     let backdrop = document.querySelector('.sidebar-backdrop');
     if (!backdrop) {
       backdrop = document.createElement('div');
-      backdrop.className = 'sidebar-backdrop';
+      backdrop.className = 'sidebar-backdrop' + (isIndex ? ' on-index' : '');
       backdrop.id = 'global-sidebar-backdrop';
       document.body.appendChild(backdrop);
+    } else if (isIndex) {
+      backdrop.classList.add('on-index');
     }
     backdrop.addEventListener('click', function (e) {
       window.closeGlobalSidebar();
     });
 
     // 2. If no sidebar on this page (i.e. not index.html), inject global sidebar
-    const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html');
     let existingSidebar = document.querySelector('.app-sidebar');
     
     if (!existingSidebar && !isIndex) {
