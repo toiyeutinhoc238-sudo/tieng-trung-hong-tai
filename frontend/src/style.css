@@ -7830,7 +7830,7 @@ body.sidebar-collapsed .sidebar-expand-float-btn {
   display: flex !important;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 767px) {
   #sidebar-expand-float-btn,
   .sidebar-expand-float-btn {
     display: inline-flex !important;
@@ -17318,7 +17318,7 @@ html.dark .lb-subtitle {
 }
 
 /* Eliminate GPU strain on mobile Safari & Android by replacing heavy backdrop blurs */
-@media (max-width: 900px), (prefers-reduced-motion: reduce) {
+@media (max-width: 767px), (prefers-reduced-motion: reduce) {
   * {
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
@@ -17354,8 +17354,8 @@ button,
    MASTER GLOBAL MOBILE RESPONSIVE FRAMEWORK (iOS & Android)
    ============================================================ */
 
-/* 1. Master Mobile Sidebar Drawer & Backdrop Overlay (Unified for all pages) */
-@media (max-width: 900px) {
+/* 1. Master Mobile Sidebar Drawer & Backdrop Overlay (Unified for mobile phones < 768px) */
+@media (max-width: 767px) {
   .sidebar,
   .app-sidebar,
   .global-app-sidebar {
@@ -17423,7 +17423,7 @@ button,
   }
 }
 
-/* Master Backdrop: Only active on mobile when drawer is opened (Never blur desktop) */
+/* Master Backdrop: Only active on mobile when drawer is opened (Never blur desktop/tablets) */
 .sidebar-backdrop {
   display: none !important;
 }
@@ -17437,7 +17437,7 @@ body.sidebar-open .global-app-sidebar {
   z-index: 100000 !important;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 767px) {
   .sidebar-backdrop {
     display: block !important;
     position: fixed !important;
@@ -17445,9 +17445,9 @@ body.sidebar-open .global-app-sidebar {
     left: 0 !important;
     right: 0 !important;
     bottom: 0 !important;
-    background: rgba(0, 0, 0, 0.65) !important;
-    backdrop-filter: blur(8px) !important;
-    -webkit-backdrop-filter: blur(8px) !important;
+    background: rgba(0, 0, 0, 0.55) !important;
+    backdrop-filter: blur(2px) !important;
+    -webkit-backdrop-filter: blur(2px) !important;
     z-index: 99990 !important;
     opacity: 0 !important;
     pointer-events: none !important;

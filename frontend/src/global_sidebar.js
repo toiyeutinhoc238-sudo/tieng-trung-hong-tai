@@ -201,7 +201,7 @@
   window.openGlobalSidebar = function () {
     updateSidebarUserProfile();
     const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html');
-    if (isIndex && window.innerWidth > 900) {
+    if (isIndex && window.innerWidth >= 768) {
       document.body.classList.remove('sidebar-collapsed');
       localStorage.setItem('sidebar_collapsed', 'false');
       return;
@@ -213,7 +213,7 @@
       sidebar.classList.add('open', 'active');
       sidebar.style.pointerEvents = 'auto';
     }
-    if (backdrop && (!isIndex || window.innerWidth <= 900)) {
+    if (backdrop && (!isIndex || window.innerWidth < 768)) {
       backdrop.classList.add('active');
     }
     document.body.classList.add('sidebar-open');
@@ -233,7 +233,7 @@
 
   window.toggleGlobalSidebar = function () {
     const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html');
-    if (isIndex && window.innerWidth > 900) {
+    if (isIndex && window.innerWidth >= 768) {
       if (window.toggleSidebarCollapse) {
         window.toggleSidebarCollapse();
       } else {
@@ -261,8 +261,8 @@
   function initGlobalSidebar() {
     const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html');
 
-    // On desktop index page, default to expanded sidebar
-    if (isIndex && window.innerWidth > 900) {
+    // On desktop and tablet index page (>= 768px), default to expanded sidebar
+    if (isIndex && window.innerWidth >= 768) {
       document.body.classList.remove('sidebar-collapsed');
       localStorage.setItem('sidebar_collapsed', 'false');
     }

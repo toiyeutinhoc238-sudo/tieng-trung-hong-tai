@@ -383,7 +383,7 @@ const toastElement = document.getElementById('toast');
 
 // --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', async () => {
-  if (window.innerWidth > 900) {
+  if (window.innerWidth >= 768) {
     document.body.classList.remove('sidebar-collapsed');
     localStorage.setItem('sidebar_collapsed', 'false');
   }
@@ -12735,7 +12735,7 @@ window.openAboutModal = function () {
 
 // --- NEW SIDEBAR COLLAPSE, DROPDOWN & FEATURE MODALS ---
 window.toggleSidebarCollapse = function () {
-  if (window.innerWidth <= 900) {
+  if (window.innerWidth < 768) {
     document.body.classList.remove('sidebar-collapsed');
     if (window.toggleGlobalSidebar) {
       window.toggleGlobalSidebar();
