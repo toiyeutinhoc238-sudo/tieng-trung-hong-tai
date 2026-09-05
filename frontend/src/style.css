@@ -7850,7 +7850,6 @@ html.light-mode, html.light-mode body, body.light-mode, html.light, html.light b
 }
 
 /* 2. Strip all dark/white solid backgrounds, rounded container margins, and drop shadows from main layout wrappers */
-.main-layout,
 .zubi-dashboard-container,
 #home-view-section,
 .workspace-section,
@@ -7864,6 +7863,21 @@ html.light-mode, html.light-mode body, body.light-mode, html.light, html.light b
   max-width: 100% !important;
   padding: 20px 28px !important;
   box-sizing: border-box !important;
+}
+
+@media (min-width: 901px) {
+  body:not(.sidebar-collapsed) .main-layout {
+    margin-left: 260px !important;
+    width: calc(100% - 260px) !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .main-layout {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
 }
 
 body.sidebar-collapsed .main-layout,
