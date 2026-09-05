@@ -541,21 +541,33 @@
         }
 
         /* Colorful Letter Blocks Title (Matching Mockup Image 3) */
+        .hongtai-color-blocks {
+          display: flex;
+          gap: clamp(4px, 1.4vw, 8px);
+          justify-content: center;
+          align-items: center;
+          margin-bottom: 6px;
+          flex-wrap: nowrap !important;
+          width: 100%;
+          max-width: 100%;
+        }
+
         .color-block {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          width: 46px;
-          height: 50px;
-          border-radius: 12px;
+          width: clamp(28px, 8vw, 46px);
+          height: clamp(32px, 8.8vw, 50px);
+          border-radius: clamp(6px, 1.8vw, 12px);
           font-family: var(--font-display, sans-serif);
-          font-size: 1.8rem;
+          font-size: clamp(1.05rem, 4vw, 1.8rem);
           font-weight: 900;
           color: #ffffff;
           box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
           border: 2px solid rgba(255, 255, 255, 0.4);
           transform: rotate(-2deg);
           transition: transform 0.2s ease, box-shadow 0.2s ease;
+          flex-shrink: 0;
         }
 
         .color-block:nth-child(even) {
@@ -593,6 +605,49 @@
 
         .color-block.yellow {
           background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        }
+
+        @media (max-width: 768px) {
+          .home-hero-banner {
+            padding: 18px 10px !important;
+            border-radius: 20px !important;
+          }
+          .hero-brand-subtitle {
+            font-size: 0.88rem !important;
+            letter-spacing: 0.15em !important;
+            white-space: nowrap !important;
+          }
+          .hero-brand-slogan {
+            font-size: 0.9rem !important;
+          }
+          .home-live-stats-row {
+            gap: 8px !important;
+            flex-wrap: wrap !important;
+          }
+          .home-live-stats-row > div {
+            padding: 5px 12px !important;
+            font-size: 0.82rem !important;
+          }
+          .zubi-stat-cards-grid {
+            grid-template-columns: 1fr 1fr !important;
+            gap: 10px !important;
+          }
+          .zubi-stat-card {
+            padding: 14px 12px !important;
+            border-radius: 16px !important;
+          }
+          .zubi-stat-val {
+            font-size: 1.35rem !important;
+          }
+          .zubi-stat-label {
+            font-size: 0.78rem !important;
+          }
+        }
+
+        @media (max-width: 360px) {
+          .zubi-stat-cards-grid {
+            grid-template-columns: 1fr !important;
+          }
         }
 
         /* Lesson Detail Modal Light Mode Overrides */
@@ -644,14 +699,13 @@
         style="background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(20px); border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 28px; padding: 22px 32px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center; position: relative; overflow: hidden; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);">
 
         <!-- Header Small Subtitle -->
-        <div
+        <div class="hero-brand-subtitle"
           style="font-family: var(--font-display, sans-serif); font-size: 1.15rem; font-weight: 800; color: #ef4444; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 2px; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
           T I Ế N G &nbsp; T R U N G
         </div>
 
         <!-- Colorful Letter Blocks Title: H O N G T A I -->
-        <div class="hongtai-color-blocks"
-          style="display: flex; gap: 8px; justify-content: center; align-items: center; margin-bottom: 6px; flex-wrap: wrap;">
+        <div class="hongtai-color-blocks">
           <span class="color-block red">H</span>
           <span class="color-block green">O</span>
           <span class="color-block purple">N</span>
@@ -662,7 +716,7 @@
         </div>
 
         <!-- Slogan -->
-        <div style="font-size: 1.05rem; font-weight: 700; color: #fbbf24; text-shadow: 0 1px 2px rgba(0,0,0,0.4);">
+        <div class="hero-brand-slogan" style="font-size: 1.05rem; font-weight: 700; color: #fbbf24; text-shadow: 0 1px 2px rgba(0,0,0,0.4);">
           Ngôn ngữ mới - Cơ hội mới 🚀
         </div>
 
