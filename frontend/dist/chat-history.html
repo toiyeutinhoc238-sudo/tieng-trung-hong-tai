@@ -493,10 +493,108 @@
       color: white;
       transform: scale(1.05);
     }
+
+    /* Mobile Responsive Optimizations (< 768px) */
+    @media (max-width: 768px) {
+      body {
+        height: 100dvh !important;
+        overflow: hidden !important;
+        margin: 0;
+        padding: 0;
+      }
+      .navbar {
+        display: none !important; /* Hide redundant desktop navbar on mobile */
+      }
+      .history-container {
+        position: relative !important;
+        height: 100dvh !important;
+        width: 100vw !important;
+        overflow: hidden !important;
+      }
+      .threads-sidebar {
+        width: 100% !important;
+        min-width: 100% !important;
+        position: absolute !important;
+        inset: 0 !important;
+        z-index: 20 !important;
+        background: var(--bg-primary, #0b0f19) !important;
+        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      }
+      .history-container.chat-active .threads-sidebar {
+        transform: translateX(-100%) !important;
+        pointer-events: none !important;
+      }
+      .chat-view {
+        width: 100% !important;
+        min-width: 100% !important;
+        position: absolute !important;
+        inset: 0 !important;
+        z-index: 10 !important;
+        background: var(--bg-primary, #0b0f19) !important;
+        display: flex !important;
+        flex-direction: column !important;
+      }
+      .history-container.chat-active .chat-view {
+        z-index: 30 !important;
+      }
+      .mobile-back-btn {
+        display: inline-flex !important;
+        align-items: center;
+        gap: 6px;
+        background: rgba(56, 189, 248, 0.15);
+        border: 1px solid rgba(56, 189, 248, 0.3);
+        color: #38bdf8;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        cursor: pointer;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      .chat-view-header {
+        padding: 10px 12px !important;
+        gap: 8px !important;
+      }
+      .chat-view-title {
+        font-size: 0.9rem !important;
+        max-width: 140px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+      }
+      .chat-messages {
+        padding: 12px 10px !important;
+      }
+      .history-input-container {
+        padding: 8px 10px !important;
+      }
+      .history-container.chat-active .history-input-container {
+        padding-left: 64px !important;
+      }
+      .history-input-container input {
+        font-size: 16px !important; /* Prevents auto-zoom on iOS */
+        padding: 10px 12px !important;
+      }
+      .btn-theme-toggle span,
+      .btn-home-top span {
+        display: none !important;
+      }
+      .btn-theme-toggle,
+      .btn-home-top {
+        padding: 6px 10px !important;
+      }
+    }
+    @media (min-width: 769px) {
+      .mobile-back-btn {
+        display: none !important;
+      }
+    }
   </style>
-  <script type="module" crossorigin src="/assets/global_sidebar-DKn7xiF-.js"></script>
+  <script type="module" crossorigin src="/assets/style-CWJALHP1.js"></script>
   <script type="module" crossorigin src="/assets/particles-D7lb_4rt.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-dMPVJNJX.css">
+  <script type="module" crossorigin src="/assets/global_sidebar-M6JkQlYu.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/style-z9wvdqoc.css">
 </head>
 <body>
   <!-- Navbar -->
@@ -562,13 +660,18 @@
       <!-- Active Conversation Panel (Hidden initially) -->
       <div id="active-chat-panel" style="display: none; flex-direction: column; flex-grow: 1; height: 100%;">
         <div class="chat-view-header" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-bottom: 1px solid var(--border-glass); background: rgba(15, 23, 42, 0.4);">
-          <h4 class="chat-view-title" id="active-thread-title" style="margin: 0; font-family: 'Outfit', 'Be Vietnam Pro', sans-serif; font-size: 1.05rem; font-weight: 700; color: #ffffff;">Cuộc trò chuyện chi tiết</h4>
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <button class="btn-theme-toggle" onclick="toggleTheme()" title="Chuyển đổi giao diện Sáng / Tối" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #ffffff; padding: 6px 14px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: 0.82rem; font-weight: 600; transition: all 0.2s;">
-              <i class="fa-solid fa-moon"></i> Giao diện
+          <div style="display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1;">
+            <button id="mobile-back-to-threads-btn" class="mobile-back-btn" onclick="window.showThreadsListMobile()" title="Quay lại danh sách hội thoại">
+              <i class="fa-solid fa-chevron-left"></i> <span>Danh sách</span>
             </button>
-            <a href="/index.html" class="btn-home-top" title="Quay về Trang Chủ" style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); color: #38bdf8; padding: 6px 14px; border-radius: 8px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; transition: all 0.2s;">
-              <i class="fa-solid fa-house"></i> Trang Chủ
+            <h4 class="chat-view-title" id="active-thread-title" style="margin: 0; font-family: 'Outfit', 'Be Vietnam Pro', sans-serif; font-size: 1.05rem; font-weight: 700; color: #ffffff;">Cuộc trò chuyện chi tiết</h4>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+            <button class="btn-theme-toggle" onclick="toggleTheme()" title="Chuyển đổi giao diện Sáng / Tối" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #ffffff; padding: 6px 12px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: 0.82rem; font-weight: 600; transition: all 0.2s;">
+              <i class="fa-solid fa-moon"></i> <span>Giao diện</span>
+            </button>
+            <a href="/index.html" class="btn-home-top" title="Quay về Trang Chủ" style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); color: #38bdf8; padding: 6px 12px; border-radius: 8px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; transition: all 0.2s;">
+              <i class="fa-solid fa-house"></i> <span>Trang Chủ</span>
             </a>
           </div>
         </div>
@@ -876,6 +979,13 @@
       });
     }
 
+    window.showThreadsListMobile = function() {
+      const historyContainer = document.getElementById('history-container');
+      if (historyContainer) {
+        historyContainer.classList.remove('chat-active');
+      }
+    };
+
     async function selectThread(id) {
       activeThreadId = id;
       sessionStorage.setItem('hongtai_active_thread_id', id);
@@ -884,6 +994,11 @@
       document.getElementById('empty-chat-state').style.display = 'none';
       const panel = document.getElementById('active-chat-panel');
       panel.style.display = 'flex';
+
+      const historyContainer = document.getElementById('history-container');
+      if (historyContainer && window.innerWidth <= 768) {
+        historyContainer.classList.add('chat-active');
+      }
 
       const userKey = getUserKey();
 
@@ -1025,6 +1140,11 @@
       document.getElementById('empty-chat-state').style.display = 'none';
       const panel = document.getElementById('active-chat-panel');
       panel.style.display = 'flex';
+
+      const historyContainer = document.getElementById('history-container');
+      if (historyContainer && window.innerWidth <= 768) {
+        historyContainer.classList.add('chat-active');
+      }
 
       document.getElementById('active-thread-title').textContent = 'Cuộc trò chuyện mới';
 

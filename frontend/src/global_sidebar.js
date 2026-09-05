@@ -50,6 +50,7 @@
       const emailEl = sidebar.querySelector('.user-sub, #user-display-email');
       const roleEl = sidebar.querySelector('.user-role-badge, #user-display-role');
       const avatarWrap = sidebar.querySelector('.sidebar-avatar-wrap');
+      const logoutLi = sidebar.querySelector('.sidebar-auth-action-item');
 
       if (user && (user.name || user.email)) {
         const displayName = user.name || user.displayName || (user.email ? user.email.split('@')[0] : 'Học viên');
@@ -67,12 +68,26 @@
             avatarWrap.innerHTML = `<div class="user-avatar sidebar-avatar-placeholder"><i class="fa-solid fa-user"></i></div>`;
           }
         }
+        if (logoutLi) {
+          logoutLi.innerHTML = `
+            <a href="javascript:void(0)" class="logout-link" onclick="window.handleGlobalLogout && window.handleGlobalLogout(event)" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 8px; color: #f87171; font-size: 0.88rem; font-weight: 600; text-decoration: none; transition: all 0.2s;">
+              <i class="fa-solid fa-right-from-bracket" style="color: #f87171;"></i> <span>Đăng xuất</span>
+            </a>
+          `;
+        }
       } else {
         if (nameEl) nameEl.textContent = 'Khách (Chưa đăng nhập)';
         if (emailEl) emailEl.textContent = 'Đăng nhập để lưu tiến độ học';
         if (roleEl) roleEl.textContent = 'Khách';
         if (avatarWrap) {
           avatarWrap.innerHTML = `<div class="user-avatar sidebar-avatar-placeholder"><i class="fa-solid fa-user"></i></div>`;
+        }
+        if (logoutLi) {
+          logoutLi.innerHTML = `
+            <a href="javascript:void(0)" onclick="window.openLoginPrompt && window.openLoginPrompt()" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 8px; color: #4ade80; font-size: 0.88rem; font-weight: 700; text-decoration: none; transition: all 0.2s;">
+              <i class="fa-brands fa-google" style="color: #4ade80;"></i> <span>Đăng nhập Google</span>
+            </a>
+          `;
         }
       }
     });
@@ -102,17 +117,48 @@
         </button>
       </div>
 
-      <!-- User Account Card -->
-      <div class="auth-container" style="width: 100%; border-bottom: 1px solid var(--border-glass, rgba(255,255,255,0.12)); padding-bottom: 12px; margin-bottom: 12px;">
-        <div class="sidebar-profile-card" onclick="if(window.location.pathname !== '/' && !window.location.pathname.endsWith('/index.html')) { window.location.href='/'; }">
-          <div class="sidebar-avatar-wrap">
-            ${userAvatar ? `<img class="user-avatar-img" src="${userAvatar}" alt="Avatar" style="display: block; width: 44px; height: 44px; border-radius: 50%; object-fit: cover;">` : `<div class="user-avatar sidebar-avatar-placeholder"><i class="fa-solid fa-user"></i></div>`}
+      <!-- User Account Card with Interactive Dropdown -->
+      <div class="auth-container ${user ? 'logged-in' : 'logged-out'}" style="width: 100%; border-bottom: 1px solid var(--border-glass, rgba(255,255,255,0.12)); padding-bottom: 12px; margin-bottom: 12px; position: relative;">
+        <div class="user-dropdown" style="width: 100%; position: relative;">
+          <div class="user-profile sidebar-profile-card" onclick="window.toggleGlobalUserDropdown && window.toggleGlobalUserDropdown(event)"
+            style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: rgba(255, 255, 255, 0.04); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.08); transition: all 0.2s ease;">
+            <div style="display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1;">
+              <div class="sidebar-avatar-wrap" style="flex-shrink: 0;">
+                ${userAvatar ? `<img class="user-avatar-img" src="${userAvatar}" alt="Avatar" style="display: block; width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-blue, #38bdf8);">` : `<div class="user-avatar sidebar-avatar-placeholder" style="width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center; color: white;"><i class="fa-solid fa-user"></i></div>`}
+              </div>
+              <div class="user-info" style="min-width: 0; flex: 1; display: flex; flex-direction: column; overflow: hidden;">
+                <span class="user-name" style="font-weight: 700; font-size: 0.92rem; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${userName}</span>
+                <span class="user-sub" style="font-size: 0.72rem; color: #94a3b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${userEmail}</span>
+                <span class="user-role-badge" style="font-size: 0.68rem; margin-top: 2px; align-self: flex-start;">${userRole}</span>
+              </div>
+            </div>
+            <i class="fa-solid fa-chevron-down profile-chevron" style="color: #94a3b8; font-size: 0.8rem; margin-left: 8px; transition: transform 0.2s ease;"></i>
           </div>
-          <div class="user-info">
-            <span class="user-name">${userName}</span>
-            <span class="user-sub">${userEmail}</span>
-            <span class="user-role-badge">${userRole}</span>
-          </div>
+
+          <!-- Dropdown menu with 3 options -->
+          <ul class="profile-dropdown-menu" style="position: absolute; top: calc(100% + 6px); left: 0; right: 0; width: 100%; background: #1e293b; background-color: rgba(30, 41, 59, 0.98); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 12px; box-shadow: 0 14px 35px rgba(0,0,0,0.6); padding: 8px 6px; list-style: none; z-index: 9999; margin: 0; box-sizing: border-box;">
+            <li>
+              <a href="/chat-history.html" class="history-link" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 8px; color: #cbd5e1; font-size: 0.88rem; font-weight: 500; text-decoration: none; transition: all 0.2s;">
+                <i class="fa-solid fa-clock-rotate-left" style="color: #38bdf8;"></i> <span>Lịch sử cuộc trò chuyện</span>
+              </a>
+            </li>
+            <li>
+              <a href="/rank.html" id="game-history-btn" class="history-link" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 8px; color: #cbd5e1; font-size: 0.88rem; font-weight: 500; text-decoration: none; transition: all 0.2s;">
+                <i class="fa-solid fa-gamepad" style="color: #fbbf24;"></i> <span>Lịch sử chơi & Xếp hạng</span>
+              </a>
+            </li>
+            <li class="sidebar-auth-action-item">
+              ${user ? `
+              <a href="javascript:void(0)" class="logout-link" onclick="window.handleGlobalLogout && window.handleGlobalLogout(event)" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 8px; color: #f87171; font-size: 0.88rem; font-weight: 600; text-decoration: none; transition: all 0.2s;">
+                <i class="fa-solid fa-right-from-bracket" style="color: #f87171;"></i> <span>Đăng xuất</span>
+              </a>
+              ` : `
+              <a href="javascript:void(0)" onclick="window.openLoginPrompt && window.openLoginPrompt()" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 8px; color: #4ade80; font-size: 0.88rem; font-weight: 700; text-decoration: none; transition: all 0.2s;">
+                <i class="fa-brands fa-google" style="color: #4ade80;"></i> <span>Đăng nhập Google</span>
+              </a>
+              `}
+            </li>
+          </ul>
         </div>
       </div>
 
@@ -264,10 +310,73 @@
     }
   };
 
+  // User Dropdown Handlers
+  window.toggleGlobalUserDropdown = function (e) {
+    if (e) {
+      e.stopPropagation();
+      if (typeof e.preventDefault === 'function') e.preventDefault();
+    }
+    const currentDropdown = (e && e.target) ? e.target.closest('.user-dropdown') : null;
+    if (currentDropdown) {
+      currentDropdown.classList.toggle('show-menu');
+    } else {
+      const dropdowns = document.querySelectorAll('.user-dropdown');
+      dropdowns.forEach(d => d.classList.toggle('show-menu'));
+    }
+  };
+  window.toggleUserDropdown = window.toggleGlobalUserDropdown;
+
+  window.handleGlobalLogout = async function (e) {
+    if (e) {
+      e.stopPropagation();
+      if (typeof e.preventDefault === 'function') e.preventDefault();
+    }
+    try {
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include'
+      });
+    } catch (err) {}
+
+    localStorage.removeItem('user');
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('hongtai_user');
+    localStorage.removeItem('hongtai_current_user');
+    localStorage.removeItem('session_token');
+    sessionStorage.removeItem('user');
+
+    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+      try { google.accounts.id.disableAutoSelect(); } catch (e) {}
+    }
+
+    if (typeof window.handleLogout === 'function') {
+      window.handleLogout(e);
+    } else {
+      window.location.reload();
+    }
+  };
+
+  window.openLoginPrompt = function () {
+    const modal = document.getElementById('app-login-modal') || document.getElementById('auth-required-modal');
+    if (modal) {
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    } else {
+      window.location.href = '/?login=true';
+    }
+  };
+
   // Attach global keyboard ESC listener
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
       window.closeGlobalSidebar();
+      document.querySelectorAll('.user-dropdown.show-menu').forEach(d => d.classList.remove('show-menu'));
+    }
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.user-dropdown')) {
+      document.querySelectorAll('.user-dropdown.show-menu').forEach(d => d.classList.remove('show-menu'));
     }
   });
 
@@ -312,9 +421,12 @@
     setTimeout(updateSidebarUserProfile, 500);
     setTimeout(updateSidebarUserProfile, 1500);
 
-    // 3. Stop click propagation on sidebars to prevent accidental closing
+    // 3. Stop click propagation on sidebars to prevent accidental closing but close dropdown if clicking elsewhere in sidebar
     document.querySelectorAll('.app-sidebar, .global-app-sidebar').forEach(sb => {
       sb.addEventListener('click', (e) => {
+        if (!e.target.closest('.user-dropdown')) {
+          document.querySelectorAll('.user-dropdown.show-menu').forEach(d => d.classList.remove('show-menu'));
+        }
         e.stopPropagation();
       });
     });

@@ -17918,5 +17918,313 @@ body.sidebar-collapsed .floating-theme-widget {
   }
 }
 
+/* ==========================================================================
+   MOBILE RESPONSIVENESS: GAME HISTORY, RANK PAGE, & ADMIN MANAGEMENT MODAL
+   ========================================================================== */
+
+/* 1. LỊCH SỬ CHƠI TRÒ CHƠI MODAL (#game-history-modal) */
+.game-history-table-wrap {
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border-glass);
+}
+
+.game-history-table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.88rem;
+}
+
+@media (max-width: 640px) {
+  #game-history-modal {
+    padding: 10px !important;
+  }
+
+  #game-history-modal .glass-panel,
+  #game-history-modal .game-history-panel {
+    padding: 16px 12px !important;
+    max-height: 92vh !important;
+    border-radius: 16px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  #game-history-modal h3 {
+    font-size: 1.05rem !important;
+  }
+
+  .game-history-table {
+    min-width: 480px !important;
+    font-size: 0.78rem !important;
+  }
+
+  .game-history-table th,
+  .game-history-table td {
+    padding: 8px 10px !important;
+  }
+}
+
+/* 2. BẢNG XẾP HẠNG HỌC VIÊN (rank.html) */
+@media (max-width: 640px) {
+  .rank-header-nav {
+    height: 56px !important;
+    padding: 0 12px !important;
+  }
+
+  .rank-brand-logo {
+    gap: 8px !important;
+  }
+
+  .rank-brand-logo img {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .rank-brand-logo span {
+    font-size: 0.95rem !important;
+  }
+
+  .rank-nav-right {
+    gap: 6px !important;
+  }
+
+  .rank-nav-btn,
+  .rank-theme-btn,
+  .particle-toggle-btn {
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 0.85rem !important;
+  }
+
+  .rank-main-wrapper {
+    padding: 12px 8px !important;
+  }
+
+  .rank-modal-standalone {
+    padding: 16px 12px !important;
+    border-radius: 20px !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+  }
+
+  .lb-title {
+    font-size: 1.05rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .lb-subtitle {
+    font-size: 0.74rem !important;
+  }
+
+  .lb-podium-stage {
+    gap: 6px !important;
+    padding: 10px 2px !important;
+  }
+
+  .lb-podium-user {
+    max-width: 78px !important;
+    font-size: 0.74rem !important;
+  }
+
+  .lb-podium-score {
+    font-size: 0.7rem !important;
+  }
+
+  .lb-podium-crown {
+    font-size: 1.3rem !important;
+  }
+
+  .gold-crown {
+    font-size: 1.7rem !important;
+  }
+
+  .lb-podium-stand {
+    padding: 6px 4px !important;
+  }
+
+  .lb-podium-stand.p-1 {
+    height: 70px !important;
+  }
+
+  .lb-podium-stand.p-2 {
+    height: 52px !important;
+  }
+
+  .lb-podium-stand.p-3 {
+    height: 38px !important;
+  }
+
+  .lb-rest-list .leaderboard-item {
+    padding: 10px 8px !important;
+    gap: 8px !important;
+  }
+
+  .lb-row-avatar,
+  .lb-row-avatar-placeholder {
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 0.85rem !important;
+  }
+
+  .lb-user-name {
+    font-size: 0.86rem !important;
+  }
+
+  .lb-score-val {
+    font-size: 0.88rem !important;
+  }
+
+  .lb-subtext {
+    font-size: 0.7rem !important;
+  }
+}
+
+/* 3. TRUNG TÂM QUẢN TRỊ & HỌC VIÊN (#admin-management-modal) */
+@media (max-width: 768px) {
+  #admin-management-modal,
+  .admin-modal-overlay {
+    padding: 8px !important;
+    box-sizing: border-box !important;
+  }
+
+  #admin-management-modal > div,
+  .admin-modal-dialog {
+    max-height: 96vh !important;
+    border-radius: 16px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .admin-modal-header {
+    padding: 12px 14px !important;
+    gap: 8px !important;
+  }
+
+  .admin-modal-header h2 {
+    font-size: 1.02rem !important;
+  }
+
+  .admin-header-subtitle {
+    font-size: 0.72rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .admin-btn-text {
+    display: none !important;
+  }
+
+  .admin-excel-btn {
+    padding: 0 10px !important;
+    width: 36px !important;
+    justify-content: center !important;
+  }
+
+  .admin-kpi-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    padding: 10px 12px !important;
+  }
+
+  .admin-kpi-row > div {
+    padding: 8px 10px !important;
+    gap: 8px !important;
+    border-radius: 10px !important;
+  }
+
+  .admin-kpi-row > div > div:first-child {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 0.9rem !important;
+    border-radius: 8px !important;
+  }
+
+  .admin-kpi-row > div > div:last-child > div:first-child {
+    font-size: 0.68rem !important;
+  }
+
+  .admin-kpi-row > div > div:last-child > div:last-child {
+    font-size: 1.05rem !important;
+  }
+
+  .admin-super-grant-wrap {
+    padding: 10px 12px !important;
+  }
+
+  .admin-super-grant-wrap form {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+  }
+
+  .admin-super-grant-wrap input,
+  .admin-super-grant-wrap select,
+  .admin-super-grant-wrap button {
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .admin-toolbar-row {
+    padding: 8px 12px !important;
+    gap: 8px !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  #admin-filter-tabs-container {
+    display: flex !important;
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    gap: 6px !important;
+    padding-bottom: 4px !important;
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+    scrollbar-width: none;
+  }
+
+  #admin-filter-tabs-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  #admin-filter-tabs-container .disc-filter-pill {
+    white-space: nowrap !important;
+    font-size: 0.76rem !important;
+    padding: 5px 10px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .admin-search-wrap {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .admin-users-table-container,
+  #admin-users-table-container {
+    padding: 10px 12px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .admin-users-table {
+    min-width: 650px !important;
+    width: 100% !important;
+  }
+
+  .admin-users-table th,
+  .admin-users-table td {
+    padding: 8px 10px !important;
+    font-size: 0.78rem !important;
+  }
+}
+
 
 

@@ -2949,7 +2949,11 @@ function setupEventListeners() {
 
   // User Profile Dropdown Toggle on Click
   window.toggleUserDropdown = function(e) {
-    if (e) e.stopPropagation();
+    if (e) {
+      if (e._toggleUserDropdownHandled) return;
+      e._toggleUserDropdownHandled = true;
+      e.stopPropagation();
+    }
     const dropdown = document.querySelector('.user-dropdown');
     if (dropdown) {
       dropdown.classList.toggle('show-menu');
