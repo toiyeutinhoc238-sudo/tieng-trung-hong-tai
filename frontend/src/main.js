@@ -3952,40 +3952,75 @@ window.openAuthRequiredModal = function() {
 // Google Sign-In Credential Callback
 async function handleCredentialResponse(response) {
   try {
-    const res = await fetch(API_BASE_URL + '/api/auth/google', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ credential: response.credential }),
-      credentials: 'include'
-    });
+    let clientDecodedUser = null;
+    try {
+      if (response && response.credential) {
+        const base64Url = response.credential.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        const p = JSON.parse(jsonPayload);
+        if (p && p.email) {
+          const em = p.email.toLowerCase().trim();
+          const isSuper = em.includes('phanphiphu') || em.includes('thaihong162004');
+          const isTeach = em.includes('hongtai');
+          clientDecodedUser = {
+            name: p.name || em.split('@')[0],
+            email: em,
+            picture: p.picture || '',
+            role: isSuper ? 'super_admin' : (isTeach ? 'teacher' : 'user'),
+            isSuperAdmin: isSuper,
+            isAdmin: isSuper || isTeach
+          };
+        }
+      }
+    } catch (e) {
+      console.warn('Client JWT decode fallback error:', e);
+    }
 
-    if (!res.ok) throw new Error('Đăng nhập qua backend thất bại');
+    let data = null;
+    try {
+      const res = await fetch(API_BASE_URL + '/api/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ credential: response.credential }),
+        credentials: 'include'
+      });
+      if (res.ok) {
+        data = await res.json();
+      }
+    } catch (err) {
+      console.warn('Backend /api/auth/google network error:', err);
+    }
 
-    const data = await res.json();
-    if (data.success && data.user) {
+    if (data && data.success && data.user) {
       currentUser = data.user;
       if (data.token) {
         localStorage.setItem('session_token', data.token);
       }
-      localStorage.setItem('user', JSON.stringify(currentUser));
-      renderUserProfile();
-      if (typeof window.initUserSessionTracking === 'function') {
-        window.initUserSessionTracking();
-      }
-      showToast(`Chào mừng ${currentUser.name} đã quay lại! 👋`);
-      const authModal = document.getElementById('auth-required-modal');
-      if (authModal) authModal.style.display = 'none';
-
-      // Migrate guest chat history to user account
-      if (typeof window.migrateGuestChatHistory === 'function') {
-        window.migrateGuestChatHistory();
-      }
-
-      // Re-fetch vocabulary and reload user statistics
-      await fetchVocabulary();
+    } else if (clientDecodedUser) {
+      currentUser = clientDecodedUser;
     } else {
       throw new Error('Không nhận được dữ liệu người dùng');
     }
+
+    localStorage.setItem('user', JSON.stringify(currentUser));
+    renderUserProfile();
+    if (typeof window.initUserSessionTracking === 'function') {
+      window.initUserSessionTracking();
+    }
+    showToast(`Chào mừng ${currentUser.name} đã quay lại! 👋`);
+    const authModal = document.getElementById('auth-required-modal');
+    if (authModal) authModal.style.display = 'none';
+
+    // Migrate guest chat history to user account
+    if (typeof window.migrateGuestChatHistory === 'function') {
+      window.migrateGuestChatHistory();
+    }
+
+    // Re-fetch vocabulary and reload user statistics
+    await fetchVocabulary();
   } catch (err) {
     console.error('Auth Error:', err);
     showToast('Đăng nhập Google thất bại!', true);

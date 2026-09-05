@@ -5689,11 +5689,34 @@ body {
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
   box-sizing: border-box !important;
-  transition: all var(--transition-normal);
+  transition: transform 0.25s ease, opacity 0.25s ease;
 }
 
-/* Global App Sidebar (Off-canvas Drawer on all subpages across ALL screen sizes) */
-.global-app-sidebar {
+/* On Desktop, Laptop, PC and Tablets (>= 768px), keep index sidebar docked and visible */
+@media (min-width: 768px) {
+  body:not(.sidebar-collapsed) .app-sidebar:not(.global-sidebar-drawer) {
+    transform: translateX(0) !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    opacity: 1 !important;
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    width: 260px !important;
+    display: flex !important;
+  }
+
+  body:not(.sidebar-collapsed) .main-layout {
+    margin-left: 260px !important;
+    width: calc(100% - 260px) !important;
+    max-width: calc(100% - 260px) !important;
+  }
+}
+
+/* Global App Sidebar (Off-canvas Drawer on subpages across ALL screen sizes) */
+.global-sidebar-drawer,
+#global-sidebar-mount .app-sidebar {
   width: 290px !important;
   max-width: 86vw !important;
   height: 100vh !important;
@@ -5724,9 +5747,12 @@ body {
   visibility: hidden !important;
 }
 
-.global-app-sidebar.open,
-.global-app-sidebar.active,
-body.sidebar-open .global-app-sidebar {
+.global-sidebar-drawer.open,
+.global-sidebar-drawer.active,
+#global-sidebar-mount .app-sidebar.open,
+#global-sidebar-mount .app-sidebar.active,
+body.sidebar-open .global-sidebar-drawer,
+body.sidebar-open #global-sidebar-mount .app-sidebar {
   transform: translateX(0) !important;
   opacity: 1 !important;
   pointer-events: auto !important;
@@ -5734,12 +5760,12 @@ body.sidebar-open .global-app-sidebar {
 }
 
 .app-sidebar::-webkit-scrollbar,
-.global-app-sidebar::-webkit-scrollbar {
+.global-sidebar-drawer::-webkit-scrollbar {
   width: 5px;
 }
 
 .app-sidebar::-webkit-scrollbar-thumb,
-.global-app-sidebar::-webkit-scrollbar-thumb {
+.global-sidebar-drawer::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.25);
   border-radius: 4px;
 }
@@ -17358,7 +17384,8 @@ button,
 @media (max-width: 767px) {
   .sidebar,
   .app-sidebar,
-  .global-app-sidebar {
+  .global-app-sidebar,
+  .global-sidebar-drawer {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
@@ -17393,9 +17420,12 @@ button,
   .app-sidebar.active,
   .global-app-sidebar.open,
   .global-app-sidebar.active,
+  .global-sidebar-drawer.open,
+  .global-sidebar-drawer.active,
   body.sidebar-open .sidebar,
   body.sidebar-open .app-sidebar,
-  body.sidebar-open .global-app-sidebar {
+  body.sidebar-open .global-app-sidebar,
+  body.sidebar-open .global-sidebar-drawer {
     transform: translateX(0) !important;
     opacity: 1 !important;
     pointer-events: auto !important;
@@ -17404,7 +17434,8 @@ button,
 
   /* Single continuous scrolling container: child wrapper does not create nested scroll trap */
   .app-sidebar .sidebar-menu-wrapper,
-  .global-app-sidebar .sidebar-menu-wrapper {
+  .global-app-sidebar .sidebar-menu-wrapper,
+  .global-sidebar-drawer .sidebar-menu-wrapper {
     overflow: visible !important;
     flex: none !important;
     height: auto !important;
@@ -17414,7 +17445,8 @@ button,
   }
 
   .app-sidebar .sidebar-footer,
-  .global-app-sidebar .sidebar-footer {
+  .global-app-sidebar .sidebar-footer,
+  .global-sidebar-drawer .sidebar-footer {
     margin-top: 16px !important;
     padding-bottom: 24px !important;
     flex-shrink: 0 !important;
@@ -17432,8 +17464,11 @@ button,
 .app-sidebar.active,
 .global-app-sidebar.open,
 .global-app-sidebar.active,
+.global-sidebar-drawer.open,
+.global-sidebar-drawer.active,
 body.sidebar-open .app-sidebar,
-body.sidebar-open .global-app-sidebar {
+body.sidebar-open .global-app-sidebar,
+body.sidebar-open .global-sidebar-drawer {
   z-index: 100000 !important;
 }
 

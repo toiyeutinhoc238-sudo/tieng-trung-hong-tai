@@ -481,9 +481,14 @@ function getLoggedInUserEmail(req) {
 // Helper to decode Google JWT payload without external libraries
 function decodeJwt(token) {
   try {
+    if (!token || typeof token !== 'string') return null;
     const parts = token.split('.');
     if (parts.length !== 3) return null;
-    const payload = parts[1];
+    let payload = parts[1];
+    payload = payload.replace(/-/g, '+').replace(/_/g, '/');
+    while (payload.length % 4) {
+      payload += '=';
+    }
     const decoded = Buffer.from(payload, 'base64').toString('utf8');
     return JSON.parse(decoded);
   } catch (e) {

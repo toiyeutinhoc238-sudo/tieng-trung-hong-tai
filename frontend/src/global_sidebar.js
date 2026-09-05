@@ -37,7 +37,7 @@
     try {
       const stored = localStorage.getItem('user') || localStorage.getItem('hongtai_current_user') || localStorage.getItem('currentUser') || sessionStorage.getItem('user');
       if (stored) return JSON.parse(stored);
-    } catch (e) {}
+    } catch (e) { }
     return null;
   }
 
@@ -89,7 +89,7 @@
     const userAvatar = user && (user.picture || user.avatar) ? (user.picture || user.avatar) : '';
 
     return `
-    <aside class="app-sidebar global-app-sidebar" id="global-app-sidebar">
+    <aside class="app-sidebar global-sidebar-drawer" id="global-app-sidebar">
       <div class="sidebar-header">
         <a href="/" style="display: flex; align-items: center; gap: 12px; cursor: pointer; flex: 1; text-decoration: none;">
           <img class="sidebar-logo" src="/assets/logo.png" alt="Hongtai Logo">
@@ -283,7 +283,7 @@
 
     // 2. If no sidebar on this page (i.e. not index.html), inject global sidebar
     let existingSidebar = document.querySelector('.app-sidebar');
-    
+
     if (!existingSidebar && !isIndex) {
       const container = document.createElement('div');
       container.id = 'global-sidebar-mount';
