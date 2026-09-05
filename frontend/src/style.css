@@ -17188,6 +17188,165 @@ button,
   -webkit-tap-highlight-color: transparent;
 }
 
+/* ============================================================
+   MASTER GLOBAL MOBILE RESPONSIVE FRAMEWORK (iOS & Android)
+   ============================================================ */
+
+/* 1. Mobile Sidebar & Backdrop Overlay */
+@media (max-width: 900px) {
+  .sidebar,
+  .app-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    width: 290px !important;
+    max-width: 82vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    transform: translateX(-105%) !important;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    z-index: 10000 !important;
+    box-shadow: 4px 0 30px rgba(0, 0, 0, 0.6) !important;
+    background: rgba(15, 23, 42, 0.98) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .sidebar.open,
+  .sidebar.active,
+  .app-sidebar.open,
+  .app-sidebar.active,
+  body.sidebar-open .sidebar,
+  body.sidebar-open .app-sidebar {
+    transform: translateX(0) !important;
+  }
+
+  .sidebar-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.28s ease;
+  }
+
+  body.sidebar-open .sidebar-backdrop,
+  .sidebar-backdrop.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+/* 2. Global Mobile App Bar & Header Layout */
+@media (max-width: 768px) {
+  .dict-page-container,
+  .reading-container,
+  .grammar-container,
+  .hanzi-container,
+  .main-layout,
+  .container {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+    padding-top: 12px !important;
+    padding-bottom: calc(90px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .top-nav,
+  .navbar,
+  .dict-top-nav,
+  .reading-top-nav {
+    padding: 8px 12px !important;
+    border-radius: 14px !important;
+    margin-bottom: 14px !important;
+    min-height: 52px !important;
+    gap: 8px !important;
+  }
+
+  .brand-title,
+  .logo-text,
+  .dict-brand-title {
+    font-size: clamp(1rem, 4vw, 1.25rem) !important;
+    white-space: nowrap !important;
+    letter-spacing: 0.02em !important;
+  }
+
+  .brand-logo-img,
+  .dict-brand img {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  /* Floating Action Buttons Safe Docking */
+  .floating-vocab-fab,
+  .floating-fab,
+  .floating-btn {
+    bottom: calc(78px + env(safe-area-inset-bottom, 0px)) !important;
+    right: 14px !important;
+    width: 46px !important;
+    height: 46px !important;
+    font-size: 1.15rem !important;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45) !important;
+    z-index: 990 !important;
+  }
+
+  /* 3. Horizontal Swipeable Filter Chips Bar */
+  .swipeable-chips-bar,
+  .dict-category-filter,
+  .level-filter-chips,
+  .cat-pills-row,
+  .passage-levels-scroll,
+  .rad-filter-scroll {
+    display: flex !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    padding: 4px 2px 8px 2px !important;
+    gap: 8px !important;
+    white-space: nowrap !important;
+  }
+
+  .swipeable-chips-bar::-webkit-scrollbar,
+  .dict-category-filter::-webkit-scrollbar,
+  .level-filter-chips::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .cat-pill-btn,
+  .passage-level-btn,
+  .filter-chip-btn {
+    flex-shrink: 0 !important;
+    padding: 7px 14px !important;
+    font-size: 0.82rem !important;
+    min-height: 36px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    border-radius: 99px !important;
+  }
+
+  /* 4. Touch Target Minimum Size & Input Zoom Prevention */
+  input[type="text"],
+  input[type="search"],
+  textarea,
+  select {
+    font-size: 16px !important; /* Prevents auto-zoom on iOS */
+  }
+
+  button,
+  .btn {
+    min-height: 42px !important;
+  }
+}
+
+
 
 
 

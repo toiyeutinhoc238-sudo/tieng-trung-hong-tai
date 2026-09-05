@@ -906,13 +906,134 @@
       from { opacity: 0; transform: translateY(-4px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    /* ============================================================
+       MOBILE RESPONSIVE OVERHAUL FOR HSK GRAMMAR
+       ============================================================ */
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px 12px calc(80px + env(safe-area-inset-bottom, 0px)) !important;
+      }
+
+      .grammar-header {
+        padding: 10px 14px !important;
+        border-radius: 16px !important;
+        margin-bottom: 12px !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        align-items: stretch !important;
+      }
+
+      .brand-box {
+        gap: 10px !important;
+      }
+
+      .brand-logo-img {
+        width: 32px !important;
+        height: 32px !important;
+      }
+
+      .title-group h1 {
+        font-size: 1.15rem !important;
+      }
+
+      .title-group p {
+        display: none !important;
+      }
+
+      /* Level Navigation Tabs: Horizontal Swipeable Bar */
+      .level-nav-tabs {
+        display: flex !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none !important;
+        padding: 4px 2px 8px 2px !important;
+        gap: 8px !important;
+        margin-bottom: 12px !important;
+        white-space: nowrap !important;
+        flex-wrap: nowrap !important;
+      }
+
+      .level-nav-tabs::-webkit-scrollbar {
+        display: none !important;
+      }
+
+      .level-tab-btn {
+        flex-shrink: 0 !important;
+        padding: 8px 16px !important;
+        font-size: 0.82rem !important;
+        min-height: 38px !important;
+        border-radius: 99px !important;
+      }
+
+      /* Toolbar: Stack Search Bar and Version Selector */
+      .toolbar-bar {
+        padding: 12px 14px !important;
+        border-radius: 16px !important;
+        margin-bottom: 14px !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        align-items: stretch !important;
+      }
+
+      .version-filter-group {
+        width: 100% !important;
+        display: flex !important;
+        justify-content: space-between !important;
+      }
+
+      .ver-filter-btn {
+        flex: 1 !important;
+        justify-content: center !important;
+        font-size: 0.8rem !important;
+        padding: 7px 10px !important;
+      }
+
+      .search-box-wrapper {
+        width: 100% !important;
+        min-width: 0 !important;
+      }
+
+      .search-input-field {
+        font-size: 16px !important; /* Prevents auto zoom */
+        min-height: 42px !important;
+      }
+
+      /* Grammar Point Cards */
+      .grammar-point-card {
+        padding: 16px 14px !important;
+        border-radius: 18px !important;
+        word-break: break-word !important;
+      }
+
+      .point-title-text {
+        font-size: 1.1rem !important;
+        line-height: 1.4 !important;
+      }
+
+      /* Tables Scrollable Wrapper */
+      .custom-grammar-table {
+        display: block !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        width: 100% !important;
+        font-size: 0.82rem !important;
+      }
+
+      .example-item-card {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 8px !important;
+        padding: 12px 14px !important;
+      }
+    }
   </style>
-  <script type="module" crossorigin src="/assets/grammar-BY6VBXio.js"></script>
+  <script type="module" crossorigin src="/assets/grammar-bzMY84vR.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
   <link rel="modulepreload" crossorigin href="/assets/grammar_hsk1_v2-C9vbI0cE.js">
   <link rel="modulepreload" crossorigin href="/assets/particles-D7lb_4rt.js">
   <link rel="modulepreload" crossorigin href="/assets/screen_drawing-BS_xmQo7.js">
-  <link rel="stylesheet" crossorigin href="/assets/style-iaYlAEYK.css">
+  <link rel="stylesheet" crossorigin href="/assets/style-DqJJazJN.css">
 </head>
 
 <body>

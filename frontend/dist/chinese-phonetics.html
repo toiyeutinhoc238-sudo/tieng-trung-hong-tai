@@ -984,11 +984,103 @@
       font-weight: 800;
       color: #38bdf8;
     }
+
+    /* ============================================================
+       MOBILE RESPONSIVE OVERHAUL FOR CHINESE PHONETICS
+       ============================================================ */
+    @media (max-width: 768px) {
+      body {
+        padding: 10px 10px calc(80px + env(safe-area-inset-bottom, 0px)) !important;
+      }
+
+      .phonetics-header {
+        padding: 10px 14px !important;
+        border-radius: 16px !important;
+        margin-bottom: 12px !important;
+        gap: 10px !important;
+      }
+
+      .brand-box {
+        gap: 10px !important;
+      }
+
+      .brand-logo-img {
+        width: 32px !important;
+        height: 32px !important;
+      }
+
+      .title-group h1 {
+        font-size: 1.15rem !important;
+      }
+
+      .title-group p {
+        display: none !important;
+      }
+
+      .voice-control-bar {
+        padding: 8px 12px !important;
+        border-radius: 12px !important;
+        margin-bottom: 14px !important;
+      }
+
+      .hub-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px !important;
+      }
+
+      .hub-card {
+        padding: 16px 12px !important;
+        border-radius: 16px !important;
+      }
+
+      .hub-number {
+        font-size: 1.5rem !important;
+        margin-bottom: 6px !important;
+      }
+
+      .hub-text {
+        font-size: 1.05rem !important;
+        margin-bottom: 2px !important;
+      }
+
+      .hub-sub {
+        font-size: 0.72rem !important;
+      }
+
+      /* Pinyin Matrix Table Scrollable Container */
+      .matrix-scroll-wrap,
+      .pinyin-table-wrap,
+      #pinyin-matrix-container {
+        width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: thin !important;
+        padding-bottom: 10px !important;
+        border-radius: 14px !important;
+      }
+
+      .pinyin-cell,
+      .sound-char-btn {
+        min-width: 44px !important;
+        min-height: 44px !important;
+        font-size: 0.95rem !important;
+      }
+
+      .reader-header {
+        flex-direction: column !important;
+        gap: 10px !important;
+        align-items: stretch !important;
+      }
+
+      .reader-title {
+        font-size: 1.15rem !important;
+      }
+    }
   </style>
-  <script type="module" crossorigin src="/assets/phonetics-Bfc60E-e.js"></script>
+  <script type="module" crossorigin src="/assets/phonetics-DZD-T23n.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
   <link rel="modulepreload" crossorigin href="/assets/particles-D7lb_4rt.js">
-  <link rel="stylesheet" crossorigin href="/assets/style-iaYlAEYK.css">
+  <link rel="stylesheet" crossorigin href="/assets/style-DqJJazJN.css">
 </head>
 
 <body>

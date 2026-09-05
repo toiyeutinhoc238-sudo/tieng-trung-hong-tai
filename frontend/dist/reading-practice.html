@@ -1550,12 +1550,176 @@
       opacity: 1;
       transform: translateX(-50%) translateY(0);
     }
+
+    /* ============================================================
+       MOBILE RESPONSIVE OVERHAUL FOR READING PRACTICE
+       ============================================================ */
+    @media (max-width: 768px) {
+      .rd-page-container {
+        padding: 10px 12px calc(80px + env(safe-area-inset-bottom, 0px)) !important;
+      }
+
+      /* Compact Top Header */
+      .rd-header-bar {
+        padding: 10px 14px !important;
+        border-radius: 16px !important;
+        margin-bottom: 14px !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+        align-items: stretch !important;
+      }
+
+      .rd-header-left {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        width: 100% !important;
+      }
+
+      .rd-brand-title h1 {
+        font-size: 1.15rem !important;
+      }
+
+      .rd-brand-title p {
+        display: none !important;
+      }
+
+      .rd-back-btn {
+        padding: 6px 12px !important;
+        font-size: 0.8rem !important;
+        border-radius: 10px !important;
+      }
+
+      .rd-header-right {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        width: 100% !important;
+      }
+
+      .rd-view-toggle-wrap {
+        flex: 1 !important;
+        display: flex !important;
+      }
+
+      .rd-view-toggle-btn {
+        flex: 1 !important;
+        padding: 8px 6px !important;
+        font-size: 0.78rem !important;
+        justify-content: center !important;
+      }
+
+      .rd-stats-badge {
+        display: none !important;
+      }
+
+      /* Filter Rows: Smooth horizontal swipeable chips bar */
+      .rd-catalog-filter-card {
+        padding: 12px 14px !important;
+        border-radius: 16px !important;
+        margin-bottom: 14px !important;
+        gap: 10px !important;
+      }
+
+      .rd-filter-level-row,
+      .rd-filter-cat-row,
+      .rd-filter-chips-wrap {
+        display: flex !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none !important;
+        padding: 2px 2px 6px 2px !important;
+        gap: 6px !important;
+        white-space: nowrap !important;
+        flex-wrap: nowrap !important;
+      }
+
+      .rd-filter-level-row::-webkit-scrollbar,
+      .rd-filter-cat-row::-webkit-scrollbar,
+      .rd-filter-chips-wrap::-webkit-scrollbar {
+        display: none !important;
+      }
+
+      .rd-chip-btn {
+        flex-shrink: 0 !important;
+        padding: 6px 12px !important;
+        font-size: 0.8rem !important;
+        min-height: 34px !important;
+        border-radius: 99px !important;
+      }
+
+      /* Catalog Cards Grid: 1 column */
+      .rd-catalog-grid {
+        grid-template-columns: 1fr !important;
+        gap: 14px !important;
+      }
+
+      .rd-card-article {
+        border-radius: 18px !important;
+      }
+
+      .rd-card-banner {
+        height: 120px !important;
+      }
+
+      /* Reader Workspace on Mobile */
+      .rd-reader-container {
+        padding: 14px 12px !important;
+        border-radius: 18px !important;
+      }
+
+      .rd-mode-tabs {
+        width: 100% !important;
+        display: flex !important;
+        padding: 4px !important;
+        gap: 4px !important;
+      }
+
+      .rd-mode-tab-btn {
+        flex: 1 !important;
+        min-width: 0 !important;
+        padding: 8px 4px !important;
+        font-size: 0.78rem !important;
+        border-radius: 10px !important;
+        justify-content: center !important;
+      }
+
+      .rd-article-body {
+        font-size: 1.18rem !important;
+        line-height: 1.8 !important;
+      }
+
+      .rd-passage-nav-bar {
+        flex-direction: column !important;
+        gap: 10px !important;
+        align-items: stretch !important;
+      }
+
+      .rd-passage-select {
+        width: 100% !important;
+        font-size: 16px !important;
+      }
+
+      .rd-passage-nav-btns-row {
+        display: flex !important;
+        justify-content: space-between !important;
+        gap: 8px !important;
+      }
+
+      .rd-passage-nav-btn {
+        flex: 1 !important;
+        justify-content: center !important;
+        min-height: 44px !important;
+      }
+    }
   </style>
-  <script type="module" crossorigin src="/assets/reading-hEiMrlhP.js"></script>
+  <script type="module" crossorigin src="/assets/reading-CbVGILM2.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
   <link rel="modulepreload" crossorigin href="/assets/screen_drawing-BS_xmQo7.js">
   <link rel="modulepreload" crossorigin href="/assets/particles-D7lb_4rt.js">
-  <link rel="stylesheet" crossorigin href="/assets/style-iaYlAEYK.css">
+  <link rel="stylesheet" crossorigin href="/assets/style-DqJJazJN.css">
 </head>
 
 <body>

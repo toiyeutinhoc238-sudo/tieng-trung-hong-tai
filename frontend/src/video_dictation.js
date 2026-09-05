@@ -3122,6 +3122,7 @@ function openLessonWorkspace(lesson) {
 
   if (catalogView) catalogView.style.display = 'none';
   if (workspaceView) workspaceView.style.display = 'block';
+  document.body.classList.add('in-workspace');
 
   // Set titles & breadcrumb
   const titleEl = document.getElementById('workspace-lesson-title');
@@ -3189,6 +3190,7 @@ function openLessonWorkspace(lesson) {
 }
 
 function returnToCatalog() {
+  document.body.classList.remove('in-workspace');
   if (ytPlayer && ytPlayer.pauseVideo) {
     try { ytPlayer.pauseVideo(); } catch (e) { }
   }

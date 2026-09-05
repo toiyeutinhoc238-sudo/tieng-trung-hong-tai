@@ -847,6 +847,97 @@
       font-weight: 700;
       color: #cbd5e1;
     }
+
+    /* ============================================================
+       MOBILE RESPONSIVE OVERHAUL FOR HANZI WRITER
+       ============================================================ */
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px 12px calc(80px + env(safe-area-inset-bottom, 0px)) !important;
+      }
+
+      .hanzi-header {
+        padding: 10px 14px !important;
+        border-radius: 16px !important;
+        margin-bottom: 12px !important;
+        gap: 10px !important;
+      }
+
+      .brand-box {
+        gap: 10px !important;
+      }
+
+      .brand-box .brand-logo-img {
+        width: 32px !important;
+        height: 32px !important;
+      }
+
+      .title-group h1 {
+        font-size: 1.15rem !important;
+      }
+
+      .title-group p {
+        display: none !important;
+      }
+
+      /* Single column dropdown filter on mobile */
+      .filter-grid {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+      }
+
+      .filter-section {
+        padding: 14px 16px !important;
+        border-radius: 16px !important;
+        margin-bottom: 14px !important;
+      }
+
+      .filter-select {
+        font-size: 16px !important; /* Prevents auto zoom */
+        min-height: 42px !important;
+      }
+
+      .main-workspace {
+        grid-template-columns: 1fr !important;
+        gap: 14px !important;
+      }
+
+      .canvas-panel {
+        padding: 16px 14px !important;
+        border-radius: 18px !important;
+        align-items: center !important;
+      }
+
+      .canvas-rice-grid-wrap {
+        width: min(280px, 80vw) !important;
+        height: min(280px, 80vw) !important;
+      }
+
+      .hanzi-target-box {
+        width: min(260px, 74vw) !important;
+        height: min(260px, 74vw) !important;
+      }
+
+      .action-buttons-grid {
+        width: 100% !important;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px !important;
+      }
+
+      .btn-action {
+        width: 100% !important;
+        min-height: 44px !important;
+        font-size: 0.88rem !important;
+        justify-content: center !important;
+      }
+
+      .vocab-panel {
+        padding: 16px 14px !important;
+        border-radius: 18px !important;
+        max-height: 520px !important;
+      }
+    }
   </style>
   <link rel="stylesheet" href="/src/style.css">
 </head>

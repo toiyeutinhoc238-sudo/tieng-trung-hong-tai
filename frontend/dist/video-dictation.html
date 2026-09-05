@@ -3439,12 +3439,353 @@
       background: #f8fafc !important;
       border-color: #e2e8f0 !important;
     }
+
+    /* ============================================================
+       MOBILE RESPONSIVE OVERHAUL FOR VIDEO DICTATION & SHADOWING
+       ============================================================ */
+    @media (max-width: 768px) {
+      .dict-page-container {
+        padding: 10px 12px calc(80px + env(safe-area-inset-bottom, 0px)) !important;
+      }
+
+      /* Auto-hide top headers when learning in workspace */
+      body.in-workspace .dict-top-nav,
+      body.in-workspace .dict-hero-banner,
+      body.in-workspace .dict-main-type-tabs {
+        display: none !important;
+      }
+
+      /* Compact Top Navigation Header on mobile */
+      .dict-top-nav {
+        padding: 8px 12px !important;
+        margin-bottom: 12px !important;
+        border-radius: 14px !important;
+        flex-wrap: nowrap !important;
+      }
+
+      .dict-brand-title {
+        font-size: 1.05rem !important;
+      }
+
+      .dict-brand-title span:first-child {
+        font-size: 0.98rem !important;
+      }
+
+      .dict-hot-badge {
+        font-size: 0.65rem !important;
+        padding: 2px 6px !important;
+      }
+
+      /* Hero Banner on mobile */
+      .dict-hero-banner {
+        padding: 14px 16px !important;
+        border-radius: 16px !important;
+        margin-bottom: 14px !important;
+        gap: 12px !important;
+      }
+
+      .dict-banner-tag {
+        font-size: 0.72rem !important;
+        padding: 3px 8px !important;
+      }
+
+      .dict-banner-title {
+        font-size: 1.15rem !important;
+        margin-bottom: 4px !important;
+      }
+
+      .dict-banner-desc {
+        font-size: 0.82rem !important;
+        line-height: 1.4 !important;
+      }
+
+      .dict-banner-stat-box {
+        padding: 6px 12px !important;
+        min-width: 75px !important;
+      }
+
+      .dict-banner-stat-num {
+        font-size: 1.15rem !important;
+      }
+
+      .dict-banner-stat-label {
+        font-size: 0.68rem !important;
+      }
+
+      /* Segmented Main Type Tabs (Video vs Đoạn Văn) */
+      .dict-main-type-tabs {
+        width: 100% !important;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 6px !important;
+        padding: 4px !important;
+        margin-bottom: 14px !important;
+        border-radius: 14px !important;
+      }
+
+      .dict-main-type-btn {
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 9px 8px !important;
+        font-size: 0.82rem !important;
+        border-radius: 10px !important;
+      }
+
+      /* Category Pills Bar: Smooth horizontal swipe */
+      .dict-category-filter {
+        display: flex !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none !important;
+        padding: 4px 2px 10px 2px !important;
+        gap: 8px !important;
+        margin-bottom: 12px !important;
+        white-space: nowrap !important;
+      }
+
+      .dict-category-filter::-webkit-scrollbar {
+        display: none !important;
+      }
+
+      .cat-pill-btn {
+        flex-shrink: 0 !important;
+        padding: 7px 14px !important;
+        font-size: 0.8rem !important;
+        min-height: 36px !important;
+      }
+
+      /* Video Catalog Grid: 1 column full width */
+      .dict-catalog-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+      }
+
+      .dict-lesson-card {
+        border-radius: 18px !important;
+        overflow: hidden !important;
+      }
+
+      .dict-card-thumb-wrap {
+        height: auto !important;
+        aspect-ratio: 16 / 9 !important;
+      }
+
+      .dict-card-body {
+        padding: 14px 16px !important;
+      }
+
+      .dict-card-title {
+        font-size: 1.05rem !important;
+        margin-bottom: 10px !important;
+        line-height: 1.4 !important;
+      }
+
+      .btn-start-study {
+        width: 100% !important;
+        min-height: 44px !important;
+        font-size: 0.9rem !important;
+        justify-content: center !important;
+      }
+
+      /* Workspace View on Mobile */
+      .dict-workspace-view {
+        padding-top: 0 !important;
+      }
+
+      .dict-workspace-header {
+        padding: 8px 12px !important;
+        margin-bottom: 10px !important;
+        border-radius: 12px !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+      }
+
+      .workspace-back-btn {
+        padding: 6px 12px !important;
+        font-size: 0.8rem !important;
+        min-height: 34px !important;
+      }
+
+      .workspace-title-text {
+        font-size: 0.95rem !important;
+        max-width: 220px !important;
+      }
+
+      /* Sticky Video Player at Top during Practice */
+      .dict-player-card {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 100 !important;
+        border-radius: 0 0 16px 16px !important;
+        margin-left: -12px !important;
+        margin-right: -12px !important;
+        margin-top: -10px !important;
+        margin-bottom: 12px !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6) !important;
+      }
+
+      .dict-player-card iframe {
+        aspect-ratio: 16 / 9 !important;
+      }
+
+      /* Subtitles in Player */
+      .yt-in-player-dual-subs {
+        padding: 10px 14px !important;
+        min-height: 65px !important;
+      }
+
+      .yt-sub-hanzi-line {
+        font-size: 1.2rem !important;
+      }
+
+      .yt-sub-pinyin-line {
+        font-size: 0.85rem !important;
+      }
+
+      .yt-sub-meaning-line {
+        font-size: 0.8rem !important;
+      }
+
+      /* Mode Switcher Segmented Control in Workspace */
+      .dict-mode-switch-tabs {
+        width: 100% !important;
+        display: flex !important;
+        margin-bottom: 12px !important;
+        padding: 4px !important;
+        border-radius: 12px !important;
+      }
+
+      .mode-tab-btn {
+        flex: 1 !important;
+        padding: 8px 6px !important;
+        font-size: 0.8rem !important;
+        min-height: 38px !important;
+        justify-content: center !important;
+      }
+
+      /* Player Controls Bar */
+      .dict-controls-bar {
+        padding: 8px 12px !important;
+        gap: 8px !important;
+        border-radius: 12px !important;
+        margin-bottom: 12px !important;
+        flex-wrap: wrap !important;
+      }
+
+      .btn-replay-snippet {
+        min-height: 44px !important;
+        padding: 8px 16px !important;
+        font-size: 0.88rem !important;
+        font-weight: 800 !important;
+      }
+
+      .speed-pills-wrap {
+        gap: 4px !important;
+      }
+
+      .speed-pill {
+        padding: 5px 8px !important;
+        font-size: 0.76rem !important;
+        min-height: 32px !important;
+      }
+
+      /* Dictation Tiles & Keyboard Interaction */
+      .dict-tile-row {
+        gap: 6px !important;
+        margin-bottom: 12px !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+      }
+
+      .dict-tile {
+        min-width: 44px !important;
+        height: 48px !important;
+        font-size: 1.35rem !important;
+        border-radius: 10px !important;
+      }
+
+      .dict-input-container {
+        margin-bottom: 12px !important;
+      }
+
+      .full-dictation-textarea,
+      .dict-input-box {
+        font-size: 16px !important; /* Prevents auto zoom */
+        min-height: 46px !important;
+        padding: 10px 14px !important;
+        border-radius: 12px !important;
+      }
+
+      .dict-action-btn-row {
+        display: flex !important;
+        gap: 8px !important;
+        margin-top: 8px !important;
+      }
+
+      .btn-check-answer,
+      .btn-hint-toggle {
+        flex: 1 !important;
+        min-height: 44px !important;
+        font-size: 0.88rem !important;
+      }
+
+      /* Sticky Bottom Navigation Bar for Next/Prev Sentence */
+      .dict-sentence-nav-row {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        background: rgba(15, 23, 42, 0.96) !important;
+        backdrop-filter: blur(16px) !important;
+        -webkit-backdrop-filter: blur(16px) !important;
+        border-top: 1px solid var(--border-glass) !important;
+        padding: 8px 14px calc(8px + env(safe-area-inset-bottom, 0px)) 14px !important;
+        z-index: 995 !important;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5) !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+      }
+
+      .btn-nav-sentence {
+        min-height: 42px !important;
+        padding: 8px 16px !important;
+        font-size: 0.85rem !important;
+        border-radius: 10px !important;
+      }
+
+      .sentence-counter-badge {
+        font-size: 0.82rem !important;
+        padding: 4px 10px !important;
+      }
+
+      /* Modals: Mobile Bottom Sheets */
+      .dict-modal-backdrop {
+        align-items: flex-end !important;
+        padding: 0 !important;
+      }
+
+      .dict-modal-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        border-radius: 24px 24px 0 0 !important;
+        max-height: 88vh !important;
+        max-height: 88dvh !important;
+        padding: 20px 18px calc(24px + env(safe-area-inset-bottom, 0px)) !important;
+        animation: slideUpBottomSheet 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      }
+
+      @keyframes slideUpBottomSheet {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+      }
+    }
   </style>
-  <script type="module" crossorigin src="/assets/dictation-DUdCNfLq.js"></script>
+  <script type="module" crossorigin src="/assets/dictation-Bk0IRb11.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
   <link rel="modulepreload" crossorigin href="/assets/particles-D7lb_4rt.js">
   <link rel="modulepreload" crossorigin href="/assets/screen_drawing-BS_xmQo7.js">
-  <link rel="stylesheet" crossorigin href="/assets/style-iaYlAEYK.css">
+  <link rel="stylesheet" crossorigin href="/assets/style-DqJJazJN.css">
 </head>
 
 <body>
