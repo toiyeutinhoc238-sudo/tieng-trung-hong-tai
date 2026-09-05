@@ -12819,7 +12819,7 @@ window.openAboutModal = function () {
 
 // --- NEW SIDEBAR COLLAPSE, DROPDOWN & FEATURE MODALS ---
 window.toggleSidebarCollapse = function () {
-  if (window.innerWidth < 768) {
+  if (window.innerWidth <= 900) {
     document.body.classList.remove('sidebar-collapsed');
     if (window.toggleGlobalSidebar) {
       window.toggleGlobalSidebar();

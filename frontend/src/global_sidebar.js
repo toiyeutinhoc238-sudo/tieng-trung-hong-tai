@@ -261,7 +261,7 @@
   window.openGlobalSidebar = function () {
     updateSidebarUserProfile();
     const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html');
-    if (isIndex && window.innerWidth >= 768) {
+    if (isIndex && window.innerWidth > 900) {
       document.body.classList.remove('sidebar-collapsed');
       localStorage.setItem('sidebar_collapsed', 'false');
       return;
@@ -273,7 +273,7 @@
       sidebar.classList.add('open', 'active');
       sidebar.style.pointerEvents = 'auto';
     }
-    if (backdrop && (!isIndex || window.innerWidth < 768)) {
+    if (backdrop && (!isIndex || window.innerWidth <= 900)) {
       backdrop.classList.add('active');
     }
     document.body.classList.add('sidebar-open');
@@ -293,7 +293,7 @@
 
   window.toggleGlobalSidebar = function () {
     const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html');
-    if (isIndex && window.innerWidth >= 768) {
+    if (isIndex && window.innerWidth > 900) {
       if (window.toggleSidebarCollapse) {
         window.toggleSidebarCollapse();
       } else {

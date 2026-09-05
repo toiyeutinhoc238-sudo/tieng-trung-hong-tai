@@ -7876,10 +7876,42 @@ body.sidebar-collapsed .sidebar-expand-float-btn {
   display: flex !important;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 900px) {
   #sidebar-expand-float-btn,
   .sidebar-expand-float-btn {
-    display: none !important;
+    display: inline-flex !important;
+    position: fixed !important;
+    top: 14px !important;
+    left: 14px !important;
+    z-index: 99995 !important;
+    background: rgba(15, 23, 42, 0.92) !important;
+    border: 1.5px solid rgba(56, 189, 248, 0.55) !important;
+    color: #38bdf8 !important;
+    padding: 8px 16px !important;
+    border-radius: 999px !important;
+    font-weight: 700 !important;
+    font-size: 0.88rem !important;
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    align-items: center !important;
+    gap: 7px !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+    transition: all 0.2s ease !important;
+  }
+  #sidebar-expand-float-btn:hover,
+  .sidebar-expand-float-btn:hover {
+    background: #2563eb !important;
+    color: #ffffff !important;
+    transform: translateY(-2px) scale(1.02) !important;
+  }
+  #sidebar-expand-float-btn:active,
+  .sidebar-expand-float-btn:active {
+    transform: scale(0.95) !important;
+    background: #1d4ed8 !important;
+    color: #ffffff !important;
   }
 }
 
@@ -17377,8 +17409,8 @@ button,
    MASTER GLOBAL MOBILE RESPONSIVE FRAMEWORK (iOS & Android)
    ============================================================ */
 
-/* 1. Master Mobile Sidebar Drawer & Backdrop Overlay (Unified for mobile phones < 768px) */
-@media (max-width: 767px) {
+/* 1. Master Mobile Sidebar Drawer & Backdrop Overlay (Unified for mobile & tablets <= 900px) */
+@media (max-width: 900px) {
   .sidebar,
   .app-sidebar,
   .global-app-sidebar,
@@ -17469,7 +17501,7 @@ body.sidebar-open .global-sidebar-drawer {
   z-index: 100000 !important;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 900px) {
   .sidebar-backdrop {
     display: block !important;
     position: fixed !important;
