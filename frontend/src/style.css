@@ -191,21 +191,6 @@ a {
 .hsk-badge-6 { background: var(--hsk-6, linear-gradient(135deg, #ef4444, #dc2626)); }
 
 /* Navigation Bar */
-.app-sidebar {
-  width: 260px;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 200;
-  background: var(--bg-secondary) !important;
-  border-right: 1px solid var(--border-glass) !important;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 20px 16px;
-  transition: all var(--transition-normal);
-}
 
 .navbar {
   position: sticky;
@@ -5681,49 +5666,85 @@ body {
   padding-bottom: 0 !important;
 }
 
-/* Left Fixed Sidebar Container */
-.app-sidebar {
+/* Master Desktop & Universal Sidebar Container */
+.app-sidebar,
+.global-app-sidebar {
   width: 260px;
   height: 100vh;
+  height: 100dvh;
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 200;
-  background: var(--bg-glass);
+  z-index: 500;
+  background: var(--bg-glass, rgba(15, 23, 42, 0.95));
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-right: 1px solid var(--border-glass);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 20px 16px;
+  border-right: 1px solid var(--border-glass, rgba(255, 255, 255, 0.1));
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  padding: 16px 12px 60px 12px !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+  box-sizing: border-box !important;
   transition: all var(--transition-normal);
 }
 
-  .sidebar-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 8px 12px 20px 12px;
-    border-bottom: 1px solid var(--border-glass);
-    margin-bottom: 16px;
-  }
+.app-sidebar::-webkit-scrollbar,
+.global-app-sidebar::-webkit-scrollbar {
+  width: 5px;
+}
 
-  .sidebar-logo {
-    height: 44px;
-    width: auto;
-    object-fit: contain;
-    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.6));
-  }
+.app-sidebar::-webkit-scrollbar-thumb,
+.global-app-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+}
 
-  .sidebar-menu {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    flex: 1;
-    overflow-y: auto;
-  }
+.app-sidebar .sidebar-menu-wrapper,
+.global-app-sidebar .sidebar-menu-wrapper {
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  flex: none !important;
+  height: auto !important;
+  overflow: visible !important;
+  padding-bottom: 50px !important;
+  box-sizing: border-box !important;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px 20px 12px;
+  border-bottom: 1px solid var(--border-glass);
+  margin-bottom: 16px;
+  flex-shrink: 0 !important;
+}
+
+.sidebar-logo {
+  height: 44px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.6));
+}
+
+.app-sidebar .sidebar-menu,
+.global-app-sidebar .sidebar-menu {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: visible !important;
+  flex: none !important;
+}
 
   .sidebar-item {
     display: flex;
@@ -17635,19 +17656,30 @@ body.light-mode .global-app-sidebar {
   box-shadow: 4px 0 32px rgba(0, 0, 0, 0.15) !important;
 }
 
+/* Floating Theme & Particle Widget Placement (Avoid overlapping Desktop Sidebar) */
+#floating-theme-widget,
+.floating-theme-widget {
+  position: fixed !important;
+  bottom: 24px !important;
+  left: 284px !important;
+  z-index: 400 !important;
+  display: flex !important;
+  gap: 12px !important;
+  align-items: center !important;
+  touch-action: manipulation !important;
+  transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s ease !important;
+}
 
+body.sidebar-collapsed #floating-theme-widget,
+body.sidebar-collapsed .floating-theme-widget {
+  left: 24px !important;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+@media (max-width: 900px) {
+  #floating-theme-widget,
+  .floating-theme-widget {
+    left: 20px !important;
+    bottom: 20px !important;
+  }
+}
 
