@@ -871,8 +871,12 @@ export class SnakeGameEngine {
       if (hintEl) hintEl.innerHTML = `<i class="fa-solid fa-apple-whole" style="color: #fde047;"></i> Lái rắn ăn quả có <strong>NGHĨA VIỆT ĐÚNG</strong>!`;
     }
 
-    if (this.autoSpeech && q && q.word && typeof window.speakText === 'function') {
-      window.speakText(q.word);
+    if (this.autoSpeech && q && q.word) {
+      if (typeof window.speakWordInstant === 'function') {
+        window.speakWordInstant(q.word);
+      } else if (typeof window.speakText === 'function') {
+        window.speakText(q.word);
+      }
     }
   }
 

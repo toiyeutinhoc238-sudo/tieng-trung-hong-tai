@@ -865,8 +865,11 @@ export class AlchemistGameEngine {
     }
 
     // Auto speech if enabled
-    if (this.autoSpeech && this.currentTarget && this.currentTarget.fullWord && window.speakText) {
-      try { window.speakText(this.currentTarget.fullWord); } catch(e) {}
+    if (this.autoSpeech && this.currentTarget && this.currentTarget.fullWord) {
+      const spkFn = window.speakWordInstant || window.speakText;
+      if (typeof spkFn === 'function') {
+        try { spkFn(this.currentTarget.fullWord); } catch(e) {}
+      }
     }
 
     // Configure Dynamic Cauldron Pot & Slots
@@ -1051,8 +1054,11 @@ export class AlchemistGameEngine {
       }
 
       // Pronounce the word only if auto speech is enabled
-      if (this.autoSpeech && window.speakText) {
-        try { window.speakText(this.currentTarget.fullWord); } catch(e) {}
+      if (this.autoSpeech && this.currentTarget && this.currentTarget.fullWord) {
+        const spkFn = window.speakWordInstant || window.speakText;
+        if (typeof spkFn === 'function') {
+          try { spkFn(this.currentTarget.fullWord); } catch(e) {}
+        }
       }
 
       this.showToast(`✨ Luyện Thành Công:「${this.currentTarget.fullWord}」! +${pts} Điểm`);

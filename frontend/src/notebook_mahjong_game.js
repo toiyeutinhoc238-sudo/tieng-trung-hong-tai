@@ -132,6 +132,18 @@ export class MahjongGameEngine {
 
     this.timerInterval = null;
 
+    // Pre-warm SpeechSynthesis engine
+    if ('speechSynthesis' in window) {
+      try {
+        window.speechSynthesis.getVoices();
+        if (typeof window.speechSynthesis.onvoiceschanged !== 'undefined') {
+          window.speechSynthesis.onvoiceschanged = () => {
+            try { window.speechSynthesis.getVoices(); } catch (e) {}
+          };
+        }
+      } catch (e) {}
+    }
+
     this.renderLayout();
     this.bindEvents();
   }
@@ -156,7 +168,7 @@ export class MahjongGameEngine {
           </button>
 
           <!-- Auto Speech Toggle Button -->
-          <button type="button" id="mahjong-speech-toggle-btn" class="btn btn-outline btn-sm" title="Bật/Tắt tự động đọc từ khi chọn quân cờ" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 800; border-radius: 50px; cursor: pointer; padding: 5px 12px;">
+          <button type="button" id="mahjong-speech-toggle-btn" class="btn btn-outline btn-sm" title="Bật/Tắt tự động phát âm ngay khi nối cặp từ vựng" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 800; border-radius: 50px; cursor: pointer; padding: 5px 12px;">
             <i class="fa-solid ${this.autoSpeech ? 'fa-volume-high' : 'fa-volume-xmark'}" id="mahjong-speech-icon" style="color: ${this.autoSpeech ? '#22c55e' : '#94a3b8'};"></i>
             <span id="mahjong-speech-text" style="font-size: 0.78rem;">${this.autoSpeech ? 'Đọc' : 'Tắt đọc'}</span>
           </button>
@@ -396,6 +408,15 @@ export class MahjongGameEngine {
     const overlay = this.container.querySelector('#mahjong-modal-overlay');
     if (overlay) {
       overlay.style.setProperty('display', 'none', 'important');
+    }
+
+    // Warm up speech synthesis on game start for instant 0ms latency
+    if ('speechSynthesis' in window) {
+      try {
+        window.speechSynthesis.getVoices();
+        const u = new SpeechSynthesisUtterance('');
+        window.speechSynthesis.speak(u);
+      } catch (e) {}
     }
 
     // Reset HUD timer visual styles
@@ -762,10 +783,14 @@ export class MahjongGameEngine {
     this.pairsLeft--;
     if (this.combo > this.maxCombo) this.maxCombo = this.combo;
 
-    // Track cleared word
-    const matchedWord = (item1 && (item1.word || item1.hanzi || item1.text)) || (item2 && (item2.word || item2.hanzi || item2.text));
-    if (matchedWord) {
-      this.clearedWordsSet.add(matchedWord);
+    // Track cleared word (Always extract Chinese Hanzi character)
+    const matchedHanzi = (item1 && item1.word) || (item2 && item2.word) ||
+      (item1 && item1.type === 'hanzi' ? item1.text : '') ||
+      (item2 && item2.type === 'hanzi' ? item2.text : '') ||
+      (item1 && (item1.hanzi || item1.text)) || (item2 && (item2.hanzi || item2.text)) || '';
+
+    if (matchedHanzi) {
+      this.clearedWordsSet.add(matchedHanzi);
     }
 
     // Highlight matched glow
@@ -777,11 +802,9 @@ export class MahjongGameEngine {
     // Draw Smooth Neon Laser beam
     this.drawLaserPath(path);
 
-    // Pronounce Hanzi ONLY when auto-speech is enabled - instantly speaking THIS EXACT MATCHED WORD
-    if (this.autoSpeech && matchedWord && typeof window.speakText === 'function') {
-      try {
-        window.speakText(matchedWord);
-      } catch (e) {}
+    // Pronounce Hanzi INSTANTLY upon matching (0-delay native speech synthesis, no waiting for network)
+    if (this.autoSpeech && matchedHanzi) {
+      this.speakWordInstant(matchedHanzi);
     }
 
     // Vanish animation after brief laser show
@@ -829,6 +852,47 @@ export class MahjongGameEngine {
         }
       }
     }, 380);
+  }
+
+  speakWordInstant(text) {
+    if (!text) return;
+    const cleanWord = String(text).replace(/<[^>]*>/g, '').replace(/[\(\uff08][^\)\uff09]*[\)\uff09]/g, '').trim();
+    if (!cleanWord) return;
+
+    // 1. Instant zero-latency native Web Speech API (runs 100% on device with 0 network lag)
+    if ('speechSynthesis' in window) {
+      try {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(cleanWord);
+        u.lang = 'zh-CN';
+        u.rate = 0.95;
+        u.pitch = 1.0;
+        const voices = window.speechSynthesis.getVoices();
+        if (voices && voices.length > 0) {
+          const zhVoice = voices.find(v => v.lang === 'zh-CN' || v.lang === 'zh' || (v.lang && v.lang.startsWith('zh')));
+          if (zhVoice) u.voice = zhVoice;
+        }
+        window.speechSynthesis.speak(u);
+        return;
+      } catch (e) {
+        console.warn('Mahjong speakWordInstant error:', e);
+      }
+    }
+
+    // 2. Global speakWordInstant helper
+    if (typeof window.speakWordInstant === 'function') {
+      try {
+        window.speakWordInstant(cleanWord);
+        return;
+      } catch (e) {}
+    }
+
+    // 3. Fallback to global speakText if Web Speech API is not supported
+    if (typeof window.speakText === 'function') {
+      try {
+        window.speakText(cleanWord);
+      } catch (e) {}
+    }
   }
 
   // ==========================================
@@ -1263,9 +1327,7 @@ export class MahjongGameEngine {
         if (speakBtn) {
           speakBtn.onclick = (e) => {
             e.stopPropagation();
-            if (typeof window.speakText === 'function') {
-              window.speakText(w.word);
-            }
+            this.speakWordInstant(w.word);
           };
         }
         listEl.appendChild(card);

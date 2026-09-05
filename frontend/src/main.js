@@ -869,6 +869,47 @@ function speakText(text) {
 }
 window.speakText = speakText;
 
+// --- INSTANT 0-DELAY LOCAL SPEECH ENGINE (Web Speech API for instant interactive games) ---
+function speakWordInstant(text) {
+  if (!text) return;
+  const cleanText = cleanFrontendSpeechText(text);
+  if (!cleanText) return;
+
+  // Clear any active remote audio element to prevent overlapping
+  if (activeAudioElement) {
+    try {
+      activeAudioElement.pause();
+      activeAudioElement.currentTime = 0;
+      activeAudioElement.src = '';
+    } catch (e) { }
+    activeAudioElement = null;
+  }
+
+  // 1. Instant zero-latency native Web Speech API (runs 100% on device with 0 network lag)
+  if ('speechSynthesis' in window) {
+    try {
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(cleanText);
+      u.lang = 'zh-CN';
+      u.rate = 0.95;
+      u.pitch = 1.0;
+      const voices = window.speechSynthesis.getVoices();
+      if (voices && voices.length > 0) {
+        const zhVoice = voices.find(v => v.lang === 'zh-CN' || v.lang === 'zh' || (v.lang && v.lang.startsWith('zh')));
+        if (zhVoice) u.voice = zhVoice;
+      }
+      window.speechSynthesis.speak(u);
+      return;
+    } catch (e) {
+      console.warn('speakWordInstant Web Speech error:', e);
+    }
+  }
+
+  // 2. Fallback to standard speakText if Web Speech API is unavailable
+  speakText(cleanText);
+}
+window.speakWordInstant = speakWordInstant;
+
 // iOS Safari & Mobile Audio Autoplay Unlocker
 function setupAudioUnlocker() {
   const unlock = () => {
@@ -879,6 +920,13 @@ function setupAudioUnlocker() {
         document.removeEventListener('click', unlock);
       }).catch(() => { });
     } catch (e) { }
+    if ('speechSynthesis' in window) {
+      try {
+        window.speechSynthesis.getVoices();
+        const u = new SpeechSynthesisUtterance('');
+        window.speechSynthesis.speak(u);
+      } catch (e) { }
+    }
   };
   document.addEventListener('touchstart', unlock, { once: true });
   document.addEventListener('click', unlock, { once: true });
