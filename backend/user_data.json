@@ -18,10 +18,10 @@
       "name": "Phú Phan",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocIebQJ8CFxQDSOgwYPsfuN9FJvtBWARLqdYN9fCo-3UBytEPmI=s96-c",
       "role": "super_admin",
-      "lastSeenTime": "2026-09-05T12:36:10.878Z",
+      "lastSeenTime": "2026-09-05T12:45:27.859Z",
       "stats": {
         "streak": 3,
-        "studyTime": 16110,
+        "studyTime": 16245,
         "lastActiveDate": "2026-09-05",
         "dailyHistory": {
           "2026-08-07": 1038,
@@ -43,7 +43,7 @@
           "2026-09-01": 105,
           "2026-09-03": 30,
           "2026-09-04": 45,
-          "2026-09-05": 1920
+          "2026-09-05": 2055
         }
       },
       "gameHistory": [
@@ -512,6 +512,15 @@
           "durationSeconds": 5,
           "device": "💻 Windows PC",
           "ip": "171.232.28.172",
+          "isClosed": true
+        },
+        {
+          "sessionId": "sess_k9eiltol_1788612134430",
+          "enterTime": "2026-09-05T12:42:14.431Z",
+          "exitTime": "2026-09-05T12:43:36.746Z",
+          "durationSeconds": 82,
+          "device": "💻 Windows PC",
+          "ip": "::1",
           "isClosed": true
         }
       ]

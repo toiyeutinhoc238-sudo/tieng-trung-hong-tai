@@ -182,6 +182,20 @@
           </li>
         </ul>
 
+        ${(user && (user.role === 'super_admin' || user.role === 'admin' || user.role === 'teacher' || (user.email && (user.email.includes('phanphiphu') || user.email.includes('thaihong162004') || user.email.includes('hongtai'))))) ? `
+        <!-- DANH MỤC: QUẢN TRỊ VIÊN -->
+        <div class="sidebar-section-label" style="color: #f43f5e; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-crown" style="font-size: 0.75rem;"></i> Quản Trị Hệ Thống
+        </div>
+        <ul class="sidebar-menu" style="margin-bottom: 12px;">
+          <li class="sidebar-item" onclick="if(window.openAdminManagementModal){ window.openAdminManagementModal(); } else { window.location.href = '/?openAdmin=true'; }"
+            style="cursor: pointer; background: rgba(244, 63, 94, 0.08); border: 1px solid rgba(244, 63, 94, 0.25); border-radius: 10px;">
+            <i class="fa-solid fa-users-gear" style="color: #f43f5e;"></i> <span>Quản lý Học viên</span>
+            <span style="font-size:0.68rem; background:linear-gradient(135deg, #f43f5e, #e11d48); color:white; padding:2px 6px; border-radius:6px; font-weight:800; margin-left:auto; white-space:nowrap;">Admin</span>
+          </li>
+        </ul>
+        ` : ''}
+
         <!-- DANH MỤC: GIAO DIỆN -->
         <div class="sidebar-section-label">Giao Diện</div>
         <ul class="sidebar-menu" style="margin-bottom: 24px;">

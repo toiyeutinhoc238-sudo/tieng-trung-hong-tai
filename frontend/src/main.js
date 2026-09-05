@@ -254,6 +254,18 @@ function getResolvedApiBaseUrl() {
 const API_BASE_URL = getResolvedApiBaseUrl();
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '316017385374-7nnvn1q2mcej8n9r2ii7ofrmbu6mdhra.apps.googleusercontent.com';
 
+export function isSuperAdmin(email) {
+  if (!email) return false;
+  const em = email.toLowerCase().trim();
+  return em.includes('phanphiphu') || em.includes('thaihong162004') || em === 'super_admin';
+}
+
+export function isUserAdmin(email) {
+  if (!email) return false;
+  const em = email.toLowerCase().trim();
+  return isSuperAdmin(em) || em.includes('hongtai') || em.includes('admin') || em.includes('teacher');
+}
+
 export const PREMIUM_TOPICS_CONFIG = [
   // 1. Ngữ pháp & Cấu trúc đặc biệt
   { name: 'Động từ Ly Hợp', id: 'premium:dong-tu-ly-hop', icon: 'fa-bolt', color: '#ec4899', catName: 'Động từ ly hợp', desc: '231 động từ có kết cấu ly hợp có thể tách rời và chèn tân ngữ, bổ ngữ' },
@@ -3965,8 +3977,8 @@ async function handleCredentialResponse(response) {
         const p = JSON.parse(jsonPayload);
         if (p && p.email) {
           const em = p.email.toLowerCase().trim();
-          const isSuper = em.includes('phanphiphu') || em.includes('thaihong162004');
-          const isTeach = em.includes('hongtai');
+          const isSuper = isSuperAdmin(em);
+          const isTeach = em.includes('hongtai') || em.includes('teacher');
           clientDecodedUser = {
             name: p.name || em.split('@')[0],
             email: em,
@@ -4007,12 +4019,24 @@ async function handleCredentialResponse(response) {
       throw new Error('Không nhận được dữ liệu người dùng');
     }
 
+    // Ensure role and permissions are populated
+    const emailStr = (currentUser.email || '').toLowerCase().trim();
+    if (isSuperAdmin(emailStr)) {
+      currentUser.role = 'super_admin';
+      currentUser.isSuperAdmin = true;
+      currentUser.isAdmin = true;
+    } else if (isUserAdmin(emailStr)) {
+      currentUser.isAdmin = true;
+    }
+
     localStorage.setItem('user', JSON.stringify(currentUser));
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
     renderUserProfile();
     if (typeof window.initUserSessionTracking === 'function') {
       window.initUserSessionTracking();
     }
-    showToast(`Chào mừng ${currentUser.name} đã quay lại! 👋`);
+    showToast(`Chào mừng ${currentUser.name || 'Học viên'} đã quay lại! 👋`);
     const authModal = document.getElementById('auth-required-modal');
     if (authModal) authModal.style.display = 'none';
 
@@ -4022,16 +4046,21 @@ async function handleCredentialResponse(response) {
     }
 
     // Re-fetch vocabulary and reload user statistics
-    await fetchVocabulary();
+    try {
+      await fetchVocabulary();
+    } catch (ve) {
+      console.warn('Fetch vocab after login:', ve);
+    }
   } catch (err) {
     console.error('Auth Error:', err);
-    showToast('Đăng nhập Google thất bại!', true);
+    showToast('Đăng nhập Google thất bại! Vui lòng thử lại.', true);
   }
 }
+window.handleCredentialResponse = handleCredentialResponse;
 
 // Logout Click Handler
-async function handleLogout(e) {
-  if (e) e.preventDefault();
+export async function handleLogout(e) {
+  if (e && typeof e.preventDefault === 'function') e.preventDefault();
 
   try {
     await fetch(API_BASE_URL + '/api/auth/logout', {
@@ -4045,14 +4074,18 @@ async function handleLogout(e) {
 
   currentUser = null;
   localStorage.removeItem('user');
+  localStorage.removeItem('currentUser');
+  localStorage.removeItem('hongtai_user');
+  localStorage.removeItem('hongtai_current_user');
   localStorage.removeItem('session_token');
+  sessionStorage.removeItem('user');
 
   const userDropdownToggle = document.querySelector('.user-dropdown');
   if (userDropdownToggle) {
     userDropdownToggle.classList.remove('show-menu');
   }
 
-  if (typeof google !== 'undefined') {
+  if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
     try {
       google.accounts.id.disableAutoSelect();
     } catch (e) {
@@ -4069,7 +4102,9 @@ async function handleLogout(e) {
   guestLastActive = '';
 
   // Re-fetch vocabulary to load guest state
-  await fetchVocabulary();
+  try {
+    await fetchVocabulary();
+  } catch (ve) {}
 
   // Reset Chatbot interface and threads on logout
   if (typeof window.resetChatbotOnLogout === 'function') {
@@ -4077,8 +4112,16 @@ async function handleLogout(e) {
   }
 
   // Re-initialize Google Sign-In button since logged-out elements render again
-  setTimeout(initGoogleSignIn, 100);
+  setTimeout(initGoogleSignIn, 120);
 }
+window.handleLogout = handleLogout;
+
+document.addEventListener('click', (e) => {
+  if (e.target.closest('#logout-btn, .logout-link')) {
+    e.preventDefault();
+    handleLogout(e);
+  }
+});
 
 // Render profile view based on currentUser state
 function renderUserProfile() {
@@ -4087,8 +4130,8 @@ function renderUserProfile() {
   const avatarPlaceholder = document.getElementById('user-avatar-placeholder');
   const displayName = document.getElementById('user-display-name');
   const displayEmail = document.getElementById('user-display-email');
-
   const navChatHistoryLi = document.getElementById('nav-chat-history-li');
+  const adminSection = document.getElementById('sidebar-admin-section');
 
   if (!authContainer) return;
 
@@ -4096,27 +4139,31 @@ function renderUserProfile() {
     authContainer.classList.remove('logged-out');
     authContainer.classList.add('logged-in');
 
+    const email = (currentUser.email || '').toLowerCase().trim();
+    const isSuper = isSuperAdmin(email) || currentUser.isSuperAdmin || currentUser.role === 'super_admin';
+    const isTeacher = currentUser.role === 'teacher' || email.includes('hongtai');
+    const isAdmin = isSuper || isTeacher || currentUser.isAdmin || currentUser.role === 'admin' || isUserAdmin(email);
+
     if (currentUser.picture) {
-      avatarImg.src = currentUser.picture;
-      avatarImg.style.display = 'block';
-      avatarPlaceholder.style.display = 'none';
+      if (avatarImg) {
+        avatarImg.src = currentUser.picture;
+        avatarImg.style.display = 'block';
+      }
+      if (avatarPlaceholder) avatarPlaceholder.style.display = 'none';
     } else {
-      avatarImg.style.display = 'none';
-      avatarPlaceholder.style.display = 'flex';
-      avatarPlaceholder.textContent = currentUser.name ? currentUser.name.substring(0, 2).toUpperCase() : 'HT';
+      if (avatarImg) avatarImg.style.display = 'none';
+      if (avatarPlaceholder) {
+        avatarPlaceholder.style.display = 'flex';
+        avatarPlaceholder.textContent = currentUser.name ? currentUser.name.substring(0, 2).toUpperCase() : 'HT';
+      }
     }
 
-    displayName.textContent = currentUser.name || 'Học viên';
-    displayEmail.textContent = currentUser.email || 'demo@tiengtrunghongtai.com';
+    if (displayName) displayName.textContent = currentUser.name || 'Học viên';
+    if (displayEmail) displayEmail.textContent = currentUser.email || 'demo@tiengtrunghongtai.com';
 
     // Dynamically update profile role badge
     const displayRole = document.getElementById('user-display-role') || document.querySelector('.app-sidebar .user-role-badge');
     if (displayRole) {
-      const email = (currentUser.email || '').toLowerCase().trim();
-      const isSuper = email.includes('phanphiphu') || email.includes('thaihong162004') || currentUser.isSuperAdmin || currentUser.role === 'super_admin';
-      const isTeacher = currentUser.role === 'teacher' || email.includes('hongtai');
-      const isAdmin = isSuper || isTeacher || currentUser.isAdmin || currentUser.role === 'admin' || isUserAdmin(email);
-
       if (isSuper) {
         displayRole.innerHTML = '<i class="fa-solid fa-crown"></i> Super Admin';
         displayRole.style.color = '#f43f5e';
@@ -4139,10 +4186,8 @@ function renderUserProfile() {
     if (navChatHistoryLi) navChatHistoryLi.style.display = 'block';
 
     // Auto-reveal admin panel in sidebar if current user is admin/teacher
-    const adminSection = document.getElementById('sidebar-admin-section');
-    const isAdminUser = currentUser && (currentUser.isAdmin || currentUser.isSuperAdmin || isUserAdmin(currentUser.email));
     if (adminSection) {
-      adminSection.style.display = isAdminUser ? 'block' : 'none';
+      adminSection.style.display = isAdmin ? 'block' : 'none';
     }
 
     if (typeof window.updateChatbotOnLogin === 'function') {
@@ -4153,8 +4198,6 @@ function renderUserProfile() {
     authContainer.classList.add('logged-out');
 
     if (navChatHistoryLi) navChatHistoryLi.style.display = 'none';
-
-    const adminSection = document.getElementById('sidebar-admin-section');
     if (adminSection) adminSection.style.display = 'none';
   }
 
@@ -4164,6 +4207,7 @@ function renderUserProfile() {
     loadExamPapersList(currentExamLevel);
   }
 }
+window.renderUserProfile = renderUserProfile;
 
 // --- HSK MOCK EXAM ENGINE ---
 
@@ -13472,12 +13516,6 @@ function getCategoryMeta(category) {
   }
 }
 
-function isUserAdmin(email) {
-  if (!email) return false;
-  const em = email.toLowerCase();
-  return em.includes('phanphiphu') || em.includes('thaihong162004') || em.includes('hongtai') || em.includes('admin');
-}
-
 window.openDiscussionModal = function () {
   const modal = document.getElementById('discussion-forum-modal');
   if (modal) {
@@ -13978,12 +14016,6 @@ let adminCachedUsersList = [];
 let currentAdminFilter = 'all';
 let currentAdminSearchQuery = '';
 let adminSyncInterval = null;
-
-function isSuperAdmin(email) {
-  if (!email) return false;
-  const em = email.toLowerCase().trim();
-  return em.includes('phanphiphu') || em.includes('thaihong162004');
-}
 
 window.openAdminManagementModal = function () {
   const modal = document.getElementById('admin-management-modal');
@@ -14961,8 +14993,26 @@ function updateVideoDictationSidebarBadges() {
 }
 
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', updateVideoDictationSidebarBadges);
+  document.addEventListener('DOMContentLoaded', () => {
+    updateVideoDictationSidebarBadges();
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('openAdmin') === 'true') {
+      setTimeout(() => {
+        if (typeof window.openAdminManagementModal === 'function') {
+          window.openAdminManagementModal();
+        }
+      }, 400);
+    }
+  });
 } else {
   updateVideoDictationSidebarBadges();
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('openAdmin') === 'true') {
+    setTimeout(() => {
+      if (typeof window.openAdminManagementModal === 'function') {
+        window.openAdminManagementModal();
+      }
+    }, 400);
+  }
 }
 
