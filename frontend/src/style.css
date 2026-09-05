@@ -6380,6 +6380,61 @@ html.light-mode #custom-section {
   cursor: pointer;
   transition: all 0.2s;
 }
+
+@media (max-width: 768px) {
+  .roadmap-container {
+    padding: 0 4px 60px 4px !important;
+    overflow-x: hidden !important;
+  }
+  .roadmap-node-item,
+  .roadmap-node-item:nth-child(4n+1),
+  .roadmap-node-item:nth-child(4n+2),
+  .roadmap-node-item:nth-child(4n+3),
+  .roadmap-node-item:nth-child(4n+4) {
+    transform: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 10px !important;
+    box-sizing: border-box !important;
+    padding: 0 !important;
+    margin-bottom: 20px !important;
+    flex-direction: row !important;
+  }
+  .node-icon-circle {
+    width: 58px !important;
+    height: 58px !important;
+    font-size: 1.3rem !important;
+    flex-shrink: 0 !important;
+    box-shadow: 0 6px 0 #b45309, 0 8px 14px rgba(0,0,0,0.3) !important;
+  }
+  .node-icon-circle::before {
+    width: 38px !important;
+    height: 16px !important;
+  }
+  .node-info-card {
+    max-width: none !important;
+    width: 100% !important;
+    padding: 12px 14px !important;
+    box-sizing: border-box !important;
+    min-width: 0 !important;
+  }
+  .node-card-top {
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+  .node-card-title {
+    font-size: 0.95rem !important;
+  }
+  .node-card-sub {
+    font-size: 0.8rem !important;
+    line-height: 1.35 !important;
+    margin-bottom: 8px !important;
+  }
+  .btn-node-start {
+    padding: 10px 14px !important;
+    font-size: 0.85rem !important;
+  }
+}
 html.light-mode .level-tab.active,
 html.light-mode .status-filter-btn.active {
   background: #2563eb !important;
@@ -17692,8 +17747,7 @@ body.sidebar-collapsed .floating-theme-widget {
 @media (max-width: 900px) {
   #floating-theme-widget,
   .floating-theme-widget {
-    left: 20px !important;
-    bottom: 20px !important;
+    display: none !important;
   }
 }
 

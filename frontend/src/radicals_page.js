@@ -185,18 +185,18 @@ function renderGridContent() {
             </span>
           </div>
 
-          <div style="font-size: 1.1rem; font-weight: 800; border-top: 1px solid rgba(148, 163, 184, 0.2); padding-top: 8px;">
+          <div style="font-size: clamp(0.95rem, 3vw, 1.1rem); font-weight: 800; border-top: 1px solid rgba(148, 163, 184, 0.2); padding-top: 6px; line-height: 1.35;">
             Hán-Việt: ${r.name} - <span style="color: #10b981;">${r.meaning}</span>
           </div>
 
           ${r.note ? `
-            <div style="font-size: 0.88rem; font-style: italic; line-height: 1.4; background: rgba(37, 99, 235, 0.08); padding: 8px 12px; border-radius: 8px;" class="rad-text-sub">
+            <div style="font-size: 0.82rem; font-style: italic; line-height: 1.35; background: rgba(37, 99, 235, 0.08); padding: 6px 10px; border-radius: 8px;" class="rad-text-sub">
               <i class="fa-solid fa-circle-info" style="color: #2563eb; margin-right: 4px;"></i> ${r.note}
             </div>
           ` : ''}
 
           ${r.example ? `
-            <div style="font-size: 0.9rem; font-weight: 600; margin-top: 2px;" class="rad-text-primary">
+            <div style="font-size: 0.82rem; font-weight: 600; margin-top: 2px; line-height: 1.35; word-break: break-word;" class="rad-text-primary">
               <i class="fa-solid fa-lightbulb" style="color: #fbbf24; margin-right: 4px;"></i> Ví dụ: ${r.example}
             </div>
           ` : ''}

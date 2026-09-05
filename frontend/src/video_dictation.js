@@ -3464,10 +3464,14 @@ async function initVideoDictationPage() {
 
     const bannerTag = document.getElementById('dict-banner-tag');
     const bannerTitle = document.getElementById('dict-banner-title');
+    const bannerDesc = document.getElementById('dict-banner-desc');
     const heading = document.getElementById('dict-catalog-heading');
-    if (bannerTag) bannerTag.innerHTML = '<i class="fa-solid fa-microphone-lines"></i> LUYỆN SHADOWING BẢN XỨ';
-    if (bannerTitle) bannerTitle.textContent = 'Luyện Phản Xạ Nói & Shadowing Video';
-    if (heading) heading.innerHTML = '<i class="fa-solid fa-microphone-lines" style="color: #10b981;"></i> Video Luyện Shadowing';
+    const subheading = document.getElementById('dict-catalog-subheading');
+    if (bannerTag) bannerTag.innerHTML = '<i class="fa-solid fa-microphone-lines"></i> SHADOWING';
+    if (bannerTitle) bannerTitle.textContent = 'Luyện Shadowing Video';
+    if (bannerDesc) bannerDesc.textContent = 'Luyện phản xạ nghe nói và chuẩn hóa ngữ điệu qua video thực tế.';
+    if (heading) heading.innerHTML = '<i class="fa-solid fa-microphone-lines" style="color: #10b981;"></i> Video Shadowing';
+    if (subheading) subheading.textContent = 'Ngắt nhịp câu thoại, luyện phản xạ và ngữ điệu tự nhiên.';
   } else {
     // Chế độ Nghe Chép (dictation hoặc mặc định)
     currentMode = 'dictation';
@@ -3480,10 +3484,14 @@ async function initVideoDictationPage() {
 
     const bannerTag = document.getElementById('dict-banner-tag');
     const bannerTitle = document.getElementById('dict-banner-title');
+    const bannerDesc = document.getElementById('dict-banner-desc');
     const heading = document.getElementById('dict-catalog-heading');
-    if (bannerTag) bannerTag.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> LUYỆN NGHE CHÉP CHÍNH TẢ';
-    if (bannerTitle) bannerTitle.textContent = 'Luyện Nghe Chép Chính Tả Video';
-    if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square" style="color: #38bdf8;"></i> Video Luyện Nghe Chép';
+    const subheading = document.getElementById('dict-catalog-subheading');
+    if (bannerTag) bannerTag.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> CHÉP CHÍNH TẢ';
+    if (bannerTitle) bannerTitle.textContent = 'Luyện Chép Video';
+    if (bannerDesc) bannerDesc.textContent = 'Luyện thính giác phản xạ và ghi nhớ mặt chữ qua video thực tế.';
+    if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square" style="color: #38bdf8;"></i> Video Luyện Chép';
+    if (subheading) subheading.textContent = 'Ngắt nhịp câu thoại, luyện phản xạ và ghi nhớ chữ Hán.';
   }
 
   filteredLessons = [...allLessons];

@@ -4548,30 +4548,30 @@ function renderGamifiedRoadmapPath() {
   let levelsData = [];
   if (hskVer === 'yct') {
     levelsData = [
-      { level: 1, name: 'YCT Cấp 1', desc: 'Thiếu nhi sơ cấp 1 - 80 từ vựng cơ bản', count: '80 từ', color: '#10b981' },
-      { level: 2, name: 'YCT Cấp 2', desc: 'Thiếu nhi sơ cấp 2 - 150 từ vựng thông dụng', count: '150 từ', color: '#3b82f6' },
-      { level: 3, name: 'YCT Cấp 3', desc: 'Thiếu nhi trung cấp 3 - 300 từ vựng giao tiếp', count: '300 từ', color: '#f59e0b' },
-      { level: 4, name: 'YCT Cấp 4', desc: 'Thiếu nhi cao cấp 4 - 600 từ vựng nâng cao', count: '600 từ', color: '#8b5cf6' }
+      { level: 1, name: 'YCT Cấp 1', desc: 'Thiếu nhi Cấp 1', count: '80 từ', color: '#10b981' },
+      { level: 2, name: 'YCT Cấp 2', desc: 'Thiếu nhi Cấp 2', count: '150 từ', color: '#3b82f6' },
+      { level: 3, name: 'YCT Cấp 3', desc: 'Thiếu nhi Cấp 3', count: '300 từ', color: '#f59e0b' },
+      { level: 4, name: 'YCT Cấp 4', desc: 'Thiếu nhi Cấp 4', count: '600 từ', color: '#8b5cf6' }
     ];
   } else if (hskVer === '2.0') {
     levelsData = [
-      { level: 1, name: 'HSK 1 (2.0)', desc: 'Nhập môn sơ cấp - 150 từ vựng cơ bản nhất', count: '150 từ', color: '#58cc02', shadow: '#46a302' },
-      { level: 2, name: 'HSK 2 (2.0)', desc: 'Giao tiếp cơ bản - 300 từ vựng sinh hoạt', count: '300 từ', color: '#1cb0f6', shadow: '#1899d6' },
-      { level: 3, name: 'HSK 3 (2.0)', desc: 'Trung cấp 1 - 600 từ vựng giao tiếp tự tin', count: '600 từ', color: '#ffc800', shadow: '#e5b200', textCol: '#4b3200' },
-      { level: 4, name: 'HSK 4 (2.0)', desc: 'Trung cấp 2 - 1,200 từ vựng học tập & làm việc', count: '1,200 từ', color: '#ce82ff', shadow: '#b45be6' },
-      { level: 5, name: 'HSK 5 (2.0)', desc: 'Cao cấp 1 - 2,500 từ vựng báo chí & công sở', count: '2,500 từ', color: '#58cc02', shadow: '#46a302' },
-      { level: 6, name: 'HSK 6 (2.0)', desc: 'Thành thạo - 5,000 từ vựng chuyên sâu & dịch thuật', count: '5,000 từ', color: '#1cb0f6', shadow: '#1899d6' }
+      { level: 1, name: 'HSK 1 (2.0)', desc: 'Sơ cấp 1', count: '150 từ', color: '#58cc02', shadow: '#46a302' },
+      { level: 2, name: 'HSK 2 (2.0)', desc: 'Sơ cấp 2', count: '300 từ', color: '#1cb0f6', shadow: '#1899d6' },
+      { level: 3, name: 'HSK 3 (2.0)', desc: 'Trung cấp 3', count: '600 từ', color: '#ffc800', shadow: '#e5b200', textCol: '#4b3200' },
+      { level: 4, name: 'HSK 4 (2.0)', desc: 'Trung cấp 4', count: '1,200 từ', color: '#ce82ff', shadow: '#b45be6' },
+      { level: 5, name: 'HSK 5 (2.0)', desc: 'Cao cấp 5', count: '2,500 từ', color: '#58cc02', shadow: '#46a302' },
+      { level: 6, name: 'HSK 6 (2.0)', desc: 'Cao cấp 6', count: '5,000 từ', color: '#1cb0f6', shadow: '#1899d6' }
     ];
   } else {
     // HSK 3.0
     levelsData = [
-      { level: 1, name: 'HSK 1 (3.0)', desc: 'Sơ cấp 1 - 500 âm tiết & từ vựng cơ bản', color: '#58cc02', shadow: '#46a302' },
-      { level: 2, name: 'HSK 2 (3.0)', desc: 'Sơ cấp 2 - Từ vựng giao tiếp đời sống', color: '#1cb0f6', shadow: '#1899d6' },
-      { level: 3, name: 'HSK 3 (3.0)', desc: 'Sơ cấp 3 - Từ vựng hoàn thiện nền tảng', color: '#ffc800', shadow: '#e5b200', textCol: '#4b3200' },
-      { level: 4, name: 'HSK 4 (3.0)', desc: 'Trung cấp 4 - Từ vựng học thuật & đời sống', color: '#ce82ff', shadow: '#b45be6' },
-      { level: 5, name: 'HSK 5 (3.0)', desc: 'Trung cấp 5 - Từ vựng làm việc & công sở', color: '#58cc02', shadow: '#46a302' },
-      { level: 6, name: 'HSK 6 (3.0)', desc: 'Trung cấp 6 - Từ vựng cao cấp & học thuật', color: '#1cb0f6', shadow: '#1899d6' },
-      { level: '7-9', name: 'New HSK 7-9 (3.0)', desc: 'Cao cấp HSK 7-9 - 10 Chủ đề chuyên sâu cho bậc Đại học & Chuyên gia', color: '#ffc800', shadow: '#e5b200', textCol: '#4b3200' }
+      { level: 1, name: 'HSK 1 (3.0)', desc: 'Sơ cấp 1', color: '#58cc02', shadow: '#46a302' },
+      { level: 2, name: 'HSK 2 (3.0)', desc: 'Sơ cấp 2', color: '#1cb0f6', shadow: '#1899d6' },
+      { level: 3, name: 'HSK 3 (3.0)', desc: 'Sơ cấp 3', color: '#ffc800', shadow: '#e5b200', textCol: '#4b3200' },
+      { level: 4, name: 'HSK 4 (3.0)', desc: 'Trung cấp 4', color: '#ce82ff', shadow: '#b45be6' },
+      { level: 5, name: 'HSK 5 (3.0)', desc: 'Trung cấp 5', color: '#58cc02', shadow: '#46a302' },
+      { level: 6, name: 'HSK 6 (3.0)', desc: 'Cao cấp 6', color: '#1cb0f6', shadow: '#1899d6' },
+      { level: '7-9', name: 'HSK 7-9 (3.0)', desc: 'Cao cấp 7-9', color: '#ffc800', shadow: '#e5b200', textCol: '#4b3200' }
     ];
   }
 

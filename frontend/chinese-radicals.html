@@ -569,12 +569,20 @@
         font-size: 0.82rem !important;
       }
       .grid-container {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         gap: 10px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
       }
       .rad-card {
-        padding: 12px 8px !important;
+        padding: 12px 10px !important;
         border-radius: 14px !important;
+        min-width: 0 !important;
+        overflow: hidden !important;
+        word-break: break-word !important;
+      }
+      .rad-card .rad-text-sub {
+        display: none !important;
       }
       .hero-stage-wrapper {
         flex-direction: column !important;
@@ -594,13 +602,7 @@
         max-height: 240px !important;
       }
       #floating-theme-widget {
-        bottom: 16px !important;
-        left: 16px !important;
-      }
-      #floating-theme-widget button {
-        width: 44px !important;
-        height: 44px !important;
-        font-size: 1.1rem !important;
+        display: none !important;
       }
     }
   </style>

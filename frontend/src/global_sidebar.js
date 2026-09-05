@@ -144,6 +144,17 @@
             <i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> <span>Bảng Xếp Hạng</span>
           </li>
         </ul>
+
+        <!-- DANH MỤC: GIAO DIỆN -->
+        <div class="sidebar-section-label">Giao Diện</div>
+        <ul class="sidebar-menu" style="margin-bottom: 24px;">
+          <li class="sidebar-item" onclick="window.toggleTheme && window.toggleTheme()">
+            <i class="fa-solid fa-moon" style="color: #60a5fa;"></i> <span>Chế độ Sáng / Tối</span>
+          </li>
+          <li class="sidebar-item" onclick="window.toggleSeasonalParticles && window.toggleSeasonalParticles()">
+            <i class="fa-solid fa-snowflake" style="color: #38bdf8;"></i> <span>Hiệu ứng Mùa rơi</span>
+          </li>
+        </ul>
       </div>
     </aside>
     `;
