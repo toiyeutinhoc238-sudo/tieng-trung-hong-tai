@@ -7567,9 +7567,9 @@ html.light-mode h3:not(.btn *),
 html.light-mode h4:not(.btn *),
 html.light-mode h5:not(.btn *),
 html.light-mode h6:not(.btn *),
-html.light-mode p:not(.btn *),
-html.light-mode span:not(.btn *):not(.badge):not(.badge *):not(.c-red):not(.c-blue):not(.c-green):not(.c-yellow):not(.rd-card-banner *):not(.rd-badge-lvl):not(.phidao-wrapper *):not(.phidao-stat *):not(#cannon-score-val):not(#cannon-combo-val),
-html.light-mode div:not(.btn *):not(.badge *):not(.btn-node-start):not(.rd-card-banner *):not(.rd-card-category-tag):not(.phidao-wrapper *):not(.phidao-stat),
+html.light-mode p:not(.btn *):not(.dict-word-popover *),
+html.light-mode span:not(.btn *):not(.badge):not(.badge *):not(.c-red):not(.c-blue):not(.c-green):not(.c-yellow):not(.rd-card-banner *):not(.rd-badge-lvl):not(.phidao-wrapper *):not(.phidao-stat *):not(#cannon-score-val):not(#cannon-combo-val):not(.dict-word-popover *),
+html.light-mode div:not(.btn *):not(.badge *):not(.btn-node-start):not(.rd-card-banner *):not(.rd-card-category-tag):not(.phidao-wrapper *):not(.phidao-stat):not(.dict-word-popover):not(.dict-word-popover *),
 html.light-mode td,
 html.light-mode th,
 html.light-mode li,
@@ -17938,6 +17938,159 @@ html.light #particle-toggle-btn,
 html.light-mode #particle-toggle-btn,
 body.light-mode #particle-toggle-btn {
   color: #2563eb !important;
+}
+
+/* Ẩn floating-theme-widget trên tất cả các trang con (chỉ hiển thị ở index.html) */
+body.is-subpage #floating-theme-widget,
+body.is-subpage .floating-theme-widget,
+.dictation-body #floating-theme-widget,
+.reading-body #floating-theme-widget {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* ============================================================
+   CLICK-TO-LOOKUP DICTIONARY POPOVER (SIÊU TƯƠNG PHẢN CẢ NỀN SÁNG & TỐI)
+   ============================================================ */
+.dict-word-popover {
+  position: fixed;
+  z-index: 100000;
+  background: rgba(15, 23, 42, 0.98) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1.5px solid rgba(56, 189, 248, 0.5) !important;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.75), 0 0 30px rgba(56, 189, 248, 0.15) !important;
+  border-radius: 18px;
+  padding: 16px 20px;
+  min-width: 240px;
+  max-width: 320px;
+  display: none;
+  animation: popoverFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dict-word-popover .popover-word-title {
+  font-size: 1.9rem !important;
+  font-weight: 900 !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.dict-word-popover #popover-word-text {
+  color: #38bdf8 !important;
+  font-size: 1.9rem !important;
+  font-weight: 900 !important;
+  text-shadow: 0 2px 10px rgba(56, 189, 248, 0.3) !important;
+  line-height: 1.2 !important;
+}
+
+.dict-word-popover .popover-hsk-badge {
+  font-size: 0.72rem !important;
+  font-weight: 800 !important;
+  background: linear-gradient(135deg, #ec4899, #8b5cf6) !important;
+  color: #ffffff !important;
+  padding: 3px 8px !important;
+  border-radius: 6px !important;
+  letter-spacing: 0.05em !important;
+}
+
+.dict-word-popover .popover-pinyin,
+.dict-word-popover #popover-pinyin-text {
+  font-size: 1.1rem !important;
+  font-weight: 800 !important;
+  color: #fbbf24 !important;
+  margin-bottom: 6px !important;
+  letter-spacing: 0.02em !important;
+}
+
+.dict-word-popover .popover-meaning,
+.dict-word-popover #popover-meaning-text {
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  color: #f1f5f9 !important;
+  line-height: 1.5 !important;
+  margin-bottom: 14px !important;
+}
+
+.dict-word-popover .popover-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.dict-word-popover .popover-btn {
+  flex: 1;
+  padding: 7px 12px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(255, 255, 255, 0.18) !important;
+  background: rgba(255, 255, 255, 0.09) !important;
+  color: #ffffff !important;
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.dict-word-popover .popover-btn:hover {
+  background: rgba(56, 189, 248, 0.3) !important;
+  border-color: #38bdf8 !important;
+  color: #ffffff !important;
+}
+
+/* POPOVER TRONG NỀN SÁNG (LIGHT MODE) */
+html.light-mode .dict-word-popover,
+body.light-mode .dict-word-popover,
+html.light .dict-word-popover {
+  background: rgba(255, 255, 255, 0.98) !important;
+  border: 1.5px solid rgba(14, 165, 233, 0.4) !important;
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.06) !important;
+}
+
+html.light-mode .dict-word-popover #popover-word-text,
+body.light-mode .dict-word-popover #popover-word-text,
+html.light .dict-word-popover #popover-word-text {
+  color: #0284c7 !important;
+  text-shadow: none !important;
+}
+
+html.light-mode .dict-word-popover .popover-pinyin,
+html.light-mode .dict-word-popover #popover-pinyin-text,
+body.light-mode .dict-word-popover .popover-pinyin,
+body.light-mode .dict-word-popover #popover-pinyin-text,
+html.light .dict-word-popover .popover-pinyin,
+html.light .dict-word-popover #popover-pinyin-text {
+  color: #b45309 !important; /* Đậm nét, không bị nhạt */
+}
+
+html.light-mode .dict-word-popover .popover-meaning,
+html.light-mode .dict-word-popover #popover-meaning-text,
+body.light-mode .dict-word-popover .popover-meaning,
+body.light-mode .dict-word-popover #popover-meaning-text,
+html.light .dict-word-popover .popover-meaning,
+html.light .dict-word-popover #popover-meaning-text {
+  color: #0f172a !important; /* Đen đậm rõ nét 100% trên nền sáng */
+}
+
+html.light-mode .dict-word-popover .popover-btn,
+body.light-mode .dict-word-popover .popover-btn,
+html.light .dict-word-popover .popover-btn {
+  background: #f1f5f9 !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+html.light-mode .dict-word-popover .popover-btn:hover,
+body.light-mode .dict-word-popover .popover-btn:hover,
+html.light .dict-word-popover .popover-btn:hover {
+  background: #e2e8f0 !important;
+  border-color: #0284c7 !important;
+  color: #0284c7 !important;
 }
 
 /* ============================================================

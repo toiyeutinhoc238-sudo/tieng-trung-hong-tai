@@ -50,9 +50,17 @@
       if (t === 'light') {
         document.documentElement.classList.add('light-mode', 'light');
         document.documentElement.classList.remove('dark');
+        if (document.body) {
+          document.body.classList.add('light-mode', 'light');
+          document.body.classList.remove('dark');
+        }
       } else {
         document.documentElement.classList.add('dark');
         document.documentElement.classList.remove('light', 'light-mode');
+        if (document.body) {
+          document.body.classList.add('dark');
+          document.body.classList.remove('light', 'light-mode');
+        }
       }
     })();
 
@@ -67,10 +75,18 @@
       if (nextDark) {
         document.documentElement.classList.add('dark');
         document.documentElement.classList.remove('light', 'light-mode');
+        if (document.body) {
+          document.body.classList.add('dark');
+          document.body.classList.remove('light', 'light-mode');
+        }
         localStorage.setItem('theme', 'dark');
       } else {
         document.documentElement.classList.add('light', 'light-mode');
         document.documentElement.classList.remove('dark');
+        if (document.body) {
+          document.body.classList.add('light', 'light-mode');
+          document.body.classList.remove('dark');
+        }
         localStorage.setItem('theme', 'light');
       }
       updateThemeIcon(!nextDark);
@@ -2468,19 +2484,19 @@
       cursor: pointer;
     }
 
-    /* Interactive Click-to-Lookup Word Card Popover */
+    /* Interactive Click-to-Lookup Word Card Popover (Ultra High Contrast in both Dark and Light mode) */
     .dict-word-popover {
       position: fixed;
       z-index: 100000;
-      background: rgba(15, 23, 42, 0.96);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(56, 189, 248, 0.4);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.98) !important;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1.5px solid rgba(56, 189, 248, 0.5) !important;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.75), 0 0 30px rgba(56, 189, 248, 0.15) !important;
+      border-radius: 18px;
       padding: 16px 20px;
-      min-width: 220px;
+      min-width: 240px;
       max-width: 320px;
-      color: var(--text-primary);
       display: none;
       animation: popoverFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -2491,37 +2507,49 @@
     }
 
     .popover-word-title {
-      font-size: 1.8rem;
-      font-weight: 900;
-      color: #38bdf8;
+      font-size: 1.9rem !important;
+      font-weight: 900 !important;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 2px;
+      margin-bottom: 4px;
+    }
+
+    #popover-word-text {
+      color: #38bdf8 !important;
+      font-size: 1.9rem !important;
+      font-weight: 900 !important;
+      text-shadow: 0 2px 10px rgba(56, 189, 248, 0.3) !important;
+      line-height: 1.2 !important;
     }
 
     .popover-hsk-badge {
-      font-size: 0.72rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, #ec4899, #8b5cf6);
-      color: #fff;
-      padding: 2px 8px;
-      border-radius: 6px;
+      font-size: 0.72rem !important;
+      font-weight: 800 !important;
+      background: linear-gradient(135deg, #ec4899, #8b5cf6) !important;
+      color: #ffffff !important;
+      padding: 3px 8px !important;
+      border-radius: 6px !important;
+      letter-spacing: 0.05em !important;
     }
 
-    .popover-pinyin {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: #fbbf24;
-      margin-bottom: 6px;
+    .popover-pinyin,
+    #popover-pinyin-text {
+      font-size: 1.1rem !important;
+      font-weight: 800 !important;
+      color: #fbbf24 !important;
+      margin-bottom: 6px !important;
+      letter-spacing: 0.02em !important;
     }
 
-    .popover-meaning {
-      font-size: 0.9rem;
-      color: #e2e8f0;
-      line-height: 1.4;
-      margin-bottom: 12px;
+    .popover-meaning,
+    #popover-meaning-text {
+      font-size: 0.95rem !important;
+      font-weight: 600 !important;
+      color: #f1f5f9 !important;
+      line-height: 1.5 !important;
+      margin-bottom: 14px !important;
     }
 
     .popover-actions {
@@ -2531,24 +2559,75 @@
 
     .popover-btn {
       flex: 1;
-      padding: 6px 12px;
-      border-radius: 8px;
-      border: 1px solid var(--border-glass);
-      background: rgba(255, 255, 255, 0.08);
-      color: #fff;
-      font-size: 0.78rem;
-      font-weight: 700;
+      padding: 7px 12px;
+      border-radius: 10px;
+      border: 1.5px solid rgba(255, 255, 255, 0.18) !important;
+      background: rgba(255, 255, 255, 0.09) !important;
+      color: #ffffff !important;
+      font-size: 0.82rem !important;
+      font-weight: 700 !important;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
     }
 
     .popover-btn:hover {
-      background: rgba(56, 189, 248, 0.25);
-      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.3) !important;
+      border-color: #38bdf8 !important;
+      color: #ffffff !important;
+    }
+
+    /* KHI Ở NỀN SÁNG (LIGHT MODE) */
+    html.light-mode .dict-word-popover,
+    body.light-mode .dict-word-popover,
+    html.light .dict-word-popover {
+      background: rgba(255, 255, 255, 0.98) !important;
+      border: 1.5px solid rgba(14, 165, 233, 0.4) !important;
+      box-shadow: 0 16px 36px rgba(15, 23, 42, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.06) !important;
+    }
+
+    html.light-mode #popover-word-text,
+    body.light-mode #popover-word-text,
+    html.light #popover-word-text {
+      color: #0284c7 !important;
+      text-shadow: none !important;
+    }
+
+    html.light-mode .popover-pinyin,
+    html.light-mode #popover-pinyin-text,
+    body.light-mode .popover-pinyin,
+    body.light-mode #popover-pinyin-text,
+    html.light .popover-pinyin,
+    html.light #popover-pinyin-text {
+      color: #b45309 !important; /* Đậm nét trên nền sáng */
+    }
+
+    html.light-mode .popover-meaning,
+    html.light-mode #popover-meaning-text,
+    body.light-mode .popover-meaning,
+    body.light-mode #popover-meaning-text,
+    html.light .popover-meaning,
+    html.light #popover-meaning-text {
+      color: #0f172a !important; /* Chữ nghĩa đen đậm rõ nét 100% */
+    }
+
+    html.light-mode .popover-btn,
+    body.light-mode .popover-btn,
+    html.light .popover-btn {
+      background: #f1f5f9 !important;
+      border: 1.5px solid #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+
+    html.light-mode .popover-btn:hover,
+    body.light-mode .popover-btn:hover,
+    html.light .popover-btn:hover {
+      background: #e2e8f0 !important;
+      border-color: #0284c7 !important;
+      color: #0284c7 !important;
     }
 
     /* In-Player Dual Subtitles Overlay Below Video */

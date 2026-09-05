@@ -452,8 +452,13 @@
     const existingBubble = document.getElementById('menu-bubble-widget');
     if (existingBubble) existingBubble.remove();
 
-    // 6. Ensure Floating Theme & Particle Widget (Chuyển nền 🌙 & Bông tuyết ❄️) is present
-    ensureFloatingThemeWidget();
+    // 6. Floating Theme & Particle Widget (Chuyển nền 🌙 & Bông tuyết ❄️) chỉ hiển thị ở Trang Chủ (index.html).
+    // Ở các trang con khác đã có sẵn các nút này trong thanh điều hướng, nên tự động dọn dẹp để không bị trùng lặp!
+    const isIndexPage = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html') || window.location.pathname === '';
+    if (!isIndexPage) {
+      const floatTheme = document.getElementById('floating-theme-widget');
+      if (floatTheme) floatTheme.remove();
+    }
 
     // 7. Connect all existing and new hamburger / menu toggle buttons
     const bindMenuButtons = () => {
@@ -463,33 +468,6 @@
     };
     bindMenuButtons();
     setTimeout(bindMenuButtons, 500);
-  }
-
-  // Ensure Floating Theme & Particle Toggle Buttons (Chuyển nền & Bông tuyết)
-  function ensureFloatingThemeWidget() {
-    if (document.getElementById('floating-theme-widget')) return;
-
-    const widget = document.createElement('div');
-    widget.id = 'floating-theme-widget';
-    widget.className = 'floating-theme-widget';
-
-    const isDark = !document.documentElement.classList.contains('light') && !document.documentElement.classList.contains('light-mode');
-
-    widget.innerHTML = `
-      <button id="floating-theme-toggle-btn" class="floating-theme-btn" onclick="window.toggleTheme && window.toggleTheme()" title="Chuyển đổi Sáng/Tối">
-        <i class="fa-solid ${isDark ? 'fa-moon' : 'fa-sun'}" style="${isDark ? '' : 'color: #f59e0b;'}"></i>
-      </button>
-      <button id="particle-toggle-btn" class="particle-toggle-btn" onclick="window.toggleSeasonalParticles && window.toggleSeasonalParticles()" title="Bật/Tắt hiệu ứng mùa">
-        <i class="fa-solid fa-snowflake"></i>
-      </button>
-    `;
-
-    document.body.appendChild(widget);
-
-    if (typeof window.updateParticleToggleBtns === 'function') {
-      const particlesOn = localStorage.getItem('particles_enabled') !== 'false';
-      window.updateParticleToggleBtns(particlesOn);
-    }
   }
 
   function injectTopMenuButtonIfMissing() {
