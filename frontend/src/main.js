@@ -252,7 +252,7 @@ function getResolvedApiBaseUrl() {
   return window.location.origin || 'https://tiengtrunghongtai.online';
 }
 const API_BASE_URL = getResolvedApiBaseUrl();
-const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || 'your-google-client-id-here.apps.googleusercontent.com';
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '316017385374-7nnvn1q2mcej8n9r2ii7ofrmbu6mdhra.apps.googleusercontent.com';
 
 export const PREMIUM_TOPICS_CONFIG = [
   // 1. Ngữ pháp & Cấu trúc đặc biệt
