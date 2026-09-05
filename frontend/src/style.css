@@ -7859,30 +7859,7 @@ body.sidebar-collapsed .sidebar-expand-float-btn {
 @media (max-width: 767px) {
   #sidebar-expand-float-btn,
   .sidebar-expand-float-btn {
-    display: inline-flex !important;
-    position: fixed !important;
-    top: 12px !important;
-    left: 12px !important;
-    z-index: 99998 !important;
-    background: rgba(15, 23, 42, 0.92) !important;
-    border: 1.5px solid #38bdf8 !important;
-    color: #38bdf8 !important;
-    padding: 8px 14px !important;
-    border-radius: 12px !important;
-    font-weight: 800 !important;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important;
-  }
-  html.light-mode #sidebar-expand-float-btn,
-  html.light #sidebar-expand-float-btn,
-  body.light-mode #sidebar-expand-float-btn,
-  html.light-mode .sidebar-expand-float-btn,
-  body.light-mode .sidebar-expand-float-btn {
-    background: rgba(255, 255, 255, 0.96) !important;
-    border-color: #0284c7 !important;
-    color: #0284c7 !important;
-    box-shadow: 0 4px 16px rgba(2, 132, 199, 0.22) !important;
+    display: none !important;
   }
 }
 
