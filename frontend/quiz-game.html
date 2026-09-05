@@ -831,6 +831,92 @@
         font-size: clamp(1.6rem, 1.9vw, 2rem) !important;
       }
     }
+
+    /* Mobile Responsive Polish for HUD and Options */
+    @media (max-width: 768px) {
+      .top-bar {
+        padding: 8px 10px !important;
+        gap: 8px !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+      }
+      .player-info {
+        gap: 8px !important;
+        min-width: 0 !important;
+        flex-shrink: 1 !important;
+      }
+      .avatar {
+        width: 38px !important;
+        height: 38px !important;
+        font-size: 1.2rem !important;
+        border-radius: 10px !important;
+        flex-shrink: 0 !important;
+      }
+      .player-details {
+        min-width: 0 !important;
+        white-space: nowrap !important;
+      }
+      .player-details h4 {
+        font-size: 0.85rem !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-width: 90px !important;
+        margin: 0 !important;
+      }
+      .hearts {
+        font-size: 0.82rem !important;
+        white-space: nowrap !important;
+        gap: 4px !important;
+      }
+      .hearts span {
+        font-size: 0.82rem !important;
+        white-space: nowrap !important;
+      }
+      .hud-action-btn-top {
+        padding: 5px 8px !important;
+        font-size: 0.75rem !important;
+      }
+      .hud-action-btn-top span {
+        font-size: 0.75rem !important;
+      }
+      .score-box {
+        padding: 4px 8px !important;
+      }
+      .score-value {
+        font-size: 1rem !important;
+        padding: 2px 6px !important;
+      }
+      .score-label {
+        font-size: 0.65rem !important;
+      }
+      /* Nút Trang Chủ trong HUD và Setup modal bị thừa trên mobile vì đã có nút Menu ở góc trái */
+      .top-bar a[href="/index.html"],
+      #setup-modal a[title="Trang Chủ"] {
+        display: none !important;
+      }
+      /* Cân đối lại chữ đáp án để không bị rớt chữ lẻ */
+      .ans-btn {
+        padding: 16px 18px !important;
+      }
+      .ans-btn span {
+        font-size: clamp(1.4rem, 3.8vw, 2rem) !important;
+        line-height: 1.25 !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #hud-toggle-speech #hud-speech-text,
+      #hud-toggle-mode #hud-mode-text span {
+        display: none !important;
+      }
+      #hud-toggle-speech,
+      #hud-toggle-mode {
+        padding: 6px 8px !important;
+        min-width: 34px !important;
+        justify-content: center !important;
+      }
+    }
   </style>
   <link rel="stylesheet" href="/src/style.css">
 </head>

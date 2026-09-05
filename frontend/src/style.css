@@ -7730,6 +7730,16 @@ body.sidebar-collapsed .sidebar-expand-float-btn {
     backdrop-filter: blur(12px) !important;
     -webkit-backdrop-filter: blur(12px) !important;
   }
+  html.light-mode #sidebar-expand-float-btn,
+  html.light #sidebar-expand-float-btn,
+  body.light-mode #sidebar-expand-float-btn,
+  html.light-mode .sidebar-expand-float-btn,
+  body.light-mode .sidebar-expand-float-btn {
+    background: rgba(255, 255, 255, 0.96) !important;
+    border-color: #0284c7 !important;
+    color: #0284c7 !important;
+    box-shadow: 0 4px 16px rgba(2, 132, 199, 0.22) !important;
+  }
 }
 
 /* ==========================================================================
@@ -17384,7 +17394,8 @@ button,
   }
 
   .home-hero-banner {
-    padding: 18px 10px !important;
+    margin-top: 52px !important;
+    padding: 18px 12px !important;
     border-radius: 20px !important;
   }
 
@@ -17392,6 +17403,18 @@ button,
     font-size: 0.88rem !important;
     letter-spacing: 0.15em !important;
     white-space: nowrap !important;
+  }
+
+  /* 6. Clean up redundant top navigation buttons on mobile devices */
+  .top-home-btn,
+  .btn-home-top,
+  .rules-header a[href="/index.html"],
+  .phonetics-header .btn-close[title="Trang Chủ"],
+  .header-card a[href="/index.html"].top-home-btn,
+  .dict-top-nav button[onclick*="location.href='/'"],
+  #dict-user-profile-badge,
+  .dict-brand small {
+    display: none !important;
   }
 }
 

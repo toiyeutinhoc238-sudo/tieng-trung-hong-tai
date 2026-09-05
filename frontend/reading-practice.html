@@ -1562,54 +1562,74 @@
 
       /* Compact Top Header */
       .rd-header-bar {
-        padding: 10px 14px !important;
+        padding: 10px 12px !important;
         border-radius: 16px !important;
-        margin-bottom: 14px !important;
+        margin-bottom: 12px !important;
         flex-direction: column !important;
-        gap: 12px !important;
+        gap: 10px !important;
         align-items: stretch !important;
       }
 
       .rd-header-left {
         display: flex !important;
         align-items: center !important;
-        justify-content: space-between !important;
+        gap: 10px !important;
         width: 100% !important;
       }
 
+      /* Nút Trang Chủ trong header bị thừa trên mobile vì đã có nút Menu điều hướng ngay đầu */
+      .rd-header-left .rd-back-btn {
+        display: none !important;
+      }
+
+      .rd-brand-title {
+        flex: 1 !important;
+      }
+
       .rd-brand-title h1 {
-        font-size: 1.15rem !important;
+        font-size: 1.12rem !important;
+        margin: 0 !important;
+        white-space: nowrap !important;
       }
 
       .rd-brand-title p {
         display: none !important;
       }
 
-      .rd-back-btn {
-        padding: 6px 12px !important;
-        font-size: 0.8rem !important;
-        border-radius: 10px !important;
-      }
-
       .rd-header-right {
         display: flex !important;
-        flex-wrap: wrap !important;
+        flex-wrap: nowrap !important;
         gap: 8px !important;
         align-items: center !important;
         justify-content: space-between !important;
         width: 100% !important;
       }
 
+      /* Ẩn nút tuyết & giao diện trong thanh này vì đã có ở thanh Menu Drawer */
+      .rd-header-right .rd-theme-btn {
+        display: none !important;
+      }
+
       .rd-view-toggle-wrap {
         flex: 1 !important;
         display: flex !important;
+        min-width: 0 !important;
       }
 
       .rd-view-toggle-btn {
         flex: 1 !important;
-        padding: 8px 6px !important;
+        padding: 7px 8px !important;
         font-size: 0.78rem !important;
         justify-content: center !important;
+        white-space: nowrap !important;
+        min-width: 0 !important;
+      }
+
+      .rd-continue-btn {
+        white-space: nowrap !important;
+        padding: 7px 12px !important;
+        font-size: 0.8rem !important;
+        flex-shrink: 0 !important;
       }
 
       .rd-stats-badge {
