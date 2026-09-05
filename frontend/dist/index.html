@@ -117,11 +117,11 @@
     window.toggleSidebarCollapse = window.toggleSidebarCollapse || function () { };
     window.toggleTheme = window.toggleTheme || function () { };
   </script>
-  <script type="module" crossorigin src="/assets/global_sidebar-D8qSweFh.js"></script>
+  <script type="module" crossorigin src="/assets/global_sidebar-Bk6teYUj.js"></script>
   <script type="module" crossorigin src="/assets/grammar_hsk1_v2-C9vbI0cE.js"></script>
   <script type="module" crossorigin src="/assets/screen_drawing-BS_xmQo7.js"></script>
-  <script type="module" crossorigin src="/assets/main-BTg9Pzep.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-bE2pEMk5.css">
+  <script type="module" crossorigin src="/assets/main-BgzGWhE9.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-47wKjEuq.css">
 </head>
 
 <body>
@@ -150,7 +150,7 @@
     <i class="fa-solid fa-bars"></i> <span>Menu</span>
   </button>
 
-  <aside class="app-sidebar">
+  <aside class="app-sidebar global-app-sidebar" id="global-app-sidebar">
     <div class="sidebar-header">
       <div style="display: flex; align-items: center; gap: 12px; cursor: pointer; flex: 1;"
         onclick="window.openAboutModal()">
@@ -273,7 +273,7 @@
       </div>
     </div>
 
-    <div class="sidebar-menu-wrapper" style="overflow-y: auto; flex: 1; padding-right: 4px;">
+    <div class="sidebar-menu-wrapper" style="width: 100%; box-sizing: border-box;">
 
       <!-- TRANG CHỦ -->
       <ul class="sidebar-menu" style="margin-bottom: 12px;">
@@ -432,8 +432,7 @@
 
     </div>
 
-    <div class="sidebar-footer">
-      <style>
+    <style>
         .app-sidebar .auth-container {
           border-left: none;
           padding: 0 0 14px 0;
@@ -691,7 +690,6 @@
           color: #0284c7 !important;
         }
       </style>
-    </div>
   </aside>
 
   <!-- Main Content Layout -->

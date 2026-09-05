@@ -17222,58 +17222,134 @@ button,
    MASTER GLOBAL MOBILE RESPONSIVE FRAMEWORK (iOS & Android)
    ============================================================ */
 
-/* 1. Mobile Sidebar & Backdrop Overlay */
+/* 1. Master Mobile Sidebar Drawer & Backdrop Overlay (Unified for all pages) */
 @media (max-width: 900px) {
   .sidebar,
-  .app-sidebar {
+  .app-sidebar,
+  .global-app-sidebar {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
     bottom: 0 !important;
     width: 290px !important;
-    max-width: 82vw !important;
+    max-width: 86vw !important;
     height: 100vh !important;
     height: 100dvh !important;
     transform: translateX(-105%) !important;
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    z-index: 10000 !important;
-    box-shadow: 4px 0 30px rgba(0, 0, 0, 0.6) !important;
+    z-index: 100000 !important;
+    box-shadow: 4px 0 32px rgba(0, 0, 0, 0.65) !important;
     background: rgba(15, 23, 42, 0.98) !important;
-    backdrop-filter: blur(20px) !important;
-    -webkit-backdrop-filter: blur(20px) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    overflow-x: hidden !important;
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    touch-action: pan-y !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    padding: 16px 14px calc(140px + env(safe-area-inset-bottom, 30px)) !important;
+    box-sizing: border-box !important;
+    pointer-events: auto !important;
   }
 
   .sidebar.open,
   .sidebar.active,
   .app-sidebar.open,
   .app-sidebar.active,
+  .global-app-sidebar.open,
+  .global-app-sidebar.active,
   body.sidebar-open .sidebar,
-  body.sidebar-open .app-sidebar {
+  body.sidebar-open .app-sidebar,
+  body.sidebar-open .global-app-sidebar {
     transform: translateX(0) !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    visibility: visible !important;
   }
 
-  .sidebar-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    z-index: 9999;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.28s ease;
+  /* Single continuous scrolling container: child wrapper does not create nested scroll trap */
+  .app-sidebar .sidebar-menu-wrapper,
+  .global-app-sidebar .sidebar-menu-wrapper {
+    overflow: visible !important;
+    flex: none !important;
+    height: auto !important;
+    width: 100% !important;
+    padding-bottom: 24px !important;
+    box-sizing: border-box !important;
   }
 
-  body.sidebar-open .sidebar-backdrop,
-  .sidebar-backdrop.active {
-    opacity: 1;
-    pointer-events: auto;
+  .app-sidebar .sidebar-footer,
+  .global-app-sidebar .sidebar-footer {
+    margin-top: 16px !important;
+    padding-bottom: 24px !important;
+    flex-shrink: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
+}
+
+/* Master Backdrop Z-Index Guarantee (Directly behind drawer at 100000, in front of page) */
+.sidebar-backdrop {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background: rgba(0, 0, 0, 0.65) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  z-index: 99990 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 0.28s ease !important;
+}
+
+body.sidebar-open .sidebar-backdrop,
+.sidebar-backdrop.active {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Lock background page scrolling when sidebar is open */
+body.sidebar-open {
+  overflow: hidden !important;
+  touch-action: none !important;
+}
+
+/* Hide floating elements that can overlap the open sidebar */
+body.sidebar-open #sidebar-expand-float-btn,
+body.sidebar-open .sidebar-expand-float-btn,
+body.sidebar-open #mobile-nav-toggle-btn,
+body.sidebar-open .floating-vocab-fab,
+body.sidebar-open .floating-fab,
+body.sidebar-open .floating-btn,
+body.sidebar-open #floating-chat-bubble,
+body.sidebar-open .chatbot-toggle-btn,
+body.sidebar-open #radical-top-fullscreen-btn {
+  display: none !important;
+}
+
+/* Ensure all sidebar items and buttons are interactable and responsive to touch */
+.app-sidebar *,
+.global-app-sidebar * {
+  pointer-events: auto;
+}
+
+.app-sidebar .sidebar-item,
+.global-app-sidebar .sidebar-item,
+.app-sidebar .sidebar-subitem,
+.global-app-sidebar .sidebar-subitem,
+.app-sidebar .sidebar-profile-card,
+.global-app-sidebar .sidebar-profile-card {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: rgba(56, 189, 248, 0.2) !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
 }
 
 /* 2. Global Mobile App Bar & Header Layout */
@@ -17547,63 +17623,16 @@ body.light-mode .floating-menu-trigger-btn {
   }
 }
 
-/* Global App Sidebar Z-Index & Layout Guarantee */
-.global-app-sidebar {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  bottom: 0 !important;
-  width: 290px !important;
-  max-width: 84vw !important;
-  height: 100vh !important;
-  height: 100dvh !important;
-  transform: translateX(-105%) !important;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  z-index: 99999 !important;
-  box-shadow: 4px 0 32px rgba(0, 0, 0, 0.65) !important;
-  background: rgba(15, 23, 42, 0.98) !important;
-  backdrop-filter: blur(24px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
-  overflow-y: auto !important;
-  -webkit-overflow-scrolling: touch !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: space-between !important;
-  padding: 18px 14px !important;
-}
-
+/* Light mode sidebar drawer styling */
+html.light-mode .app-sidebar,
+html:not(.dark) .app-sidebar,
+body.light-mode .app-sidebar,
 html.light-mode .global-app-sidebar,
-html:not(.dark) .global-app-sidebar {
+html:not(.dark) .global-app-sidebar,
+body.light-mode .global-app-sidebar {
   background: rgba(255, 255, 255, 0.98) !important;
   border-right: 1.5px solid #e2e8f0 !important;
   box-shadow: 4px 0 32px rgba(0, 0, 0, 0.15) !important;
-}
-
-.global-app-sidebar.open,
-.global-app-sidebar.active,
-body.sidebar-open .global-app-sidebar {
-  transform: translateX(0) !important;
-}
-
-.sidebar-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  z-index: 99990;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.28s ease;
-}
-
-body.sidebar-open .sidebar-backdrop,
-.sidebar-backdrop.active {
-  opacity: 1;
-  pointer-events: auto;
 }
 
 

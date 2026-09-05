@@ -4461,6 +4461,10 @@ function switchTab(tabId, skipShowTopics = false) {
 
   // Always scroll to top smoothly when switching tab (e.g. clicking Trang chủ)
   window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  if (window.innerWidth <= 900 && typeof window.closeGlobalSidebar === 'function') {
+    window.closeGlobalSidebar();
+  }
 }
 window.switchTab = switchTab;
 
@@ -4470,6 +4474,9 @@ function showHomeView() {
 
 function showRoadmapView() {
   switchTab('roadmap');
+  if (window.innerWidth <= 900 && typeof window.closeGlobalSidebar === 'function') {
+    window.closeGlobalSidebar();
+  }
 }
 window.showRoadmapView = showRoadmapView;
 
@@ -12728,11 +12735,12 @@ window.openAboutModal = function () {
 // --- NEW SIDEBAR COLLAPSE, DROPDOWN & FEATURE MODALS ---
 window.toggleSidebarCollapse = function () {
   if (window.innerWidth <= 900) {
+    document.body.classList.remove('sidebar-collapsed');
     if (window.toggleGlobalSidebar) {
       window.toggleGlobalSidebar();
     } else {
-      const sidebar = document.querySelector('.app-sidebar');
-      const backdrop = document.querySelector('.sidebar-backdrop');
+      const sidebar = document.querySelector('.app-sidebar') || document.getElementById('global-app-sidebar');
+      const backdrop = document.querySelector('.sidebar-backdrop') || document.getElementById('global-sidebar-backdrop');
       if (sidebar) sidebar.classList.toggle('open');
       if (backdrop) backdrop.classList.toggle('active');
       document.body.classList.toggle('sidebar-open');

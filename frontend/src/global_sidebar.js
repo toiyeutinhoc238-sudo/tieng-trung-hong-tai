@@ -79,7 +79,7 @@
         </div>
       </div>
 
-      <div class="sidebar-menu-wrapper" style="overflow-y: auto; flex: 1; padding-right: 4px;">
+      <div class="sidebar-menu-wrapper" style="width: 100%; box-sizing: border-box;">
         <!-- TRANG CHỦ -->
         <ul class="sidebar-menu" style="margin-bottom: 12px;">
           <li class="sidebar-item ${activeKey === 'home' ? 'active' : ''}" onclick="window.location.href = '/'">
@@ -145,34 +145,34 @@
           </li>
         </ul>
       </div>
-
-      <!-- FOOTER CONTROLS -->
-      <div class="sidebar-footer" style="display: flex; gap: 8px; justify-content: space-between; align-items: center; padding-top: 14px; border-top: 1px solid var(--border-glass, rgba(255,255,255,0.12));">
-        <button onclick="window.toggleTheme && window.toggleTheme()" class="btn btn-outline btn-sm" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.82rem; padding: 8px 10px; border-radius: 10px;">
-          <i class="fa-solid fa-moon"></i> <span>Giao diện</span>
-        </button>
-        <button onclick="window.toggleSeasonalParticles && window.toggleSeasonalParticles()" class="btn btn-outline btn-sm" style="display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem; padding: 8px 12px; border-radius: 10px;">
-          <i class="fa-solid fa-snowflake" style="color: #60a5fa;"></i>
-        </button>
-      </div>
     </aside>
     `;
   }
 
   // Toggle & Control Functions
   window.openGlobalSidebar = function () {
+    document.body.classList.remove('sidebar-collapsed');
     const sidebar = document.querySelector('.app-sidebar') || document.getElementById('global-app-sidebar');
     const backdrop = document.querySelector('.sidebar-backdrop') || document.getElementById('global-sidebar-backdrop');
-    if (sidebar) sidebar.classList.add('open', 'active');
-    if (backdrop) backdrop.classList.add('active');
+    if (sidebar) {
+      sidebar.classList.add('open', 'active');
+      sidebar.style.pointerEvents = 'auto';
+    }
+    if (backdrop) {
+      backdrop.classList.add('active');
+    }
     document.body.classList.add('sidebar-open');
   };
 
   window.closeGlobalSidebar = function () {
     const sidebar = document.querySelector('.app-sidebar') || document.getElementById('global-app-sidebar');
     const backdrop = document.querySelector('.sidebar-backdrop') || document.getElementById('global-sidebar-backdrop');
-    if (sidebar) sidebar.classList.remove('open', 'active');
-    if (backdrop) backdrop.classList.remove('active');
+    if (sidebar) {
+      sidebar.classList.remove('open', 'active');
+    }
+    if (backdrop) {
+      backdrop.classList.remove('active');
+    }
     document.body.classList.remove('sidebar-open');
   };
 
@@ -202,7 +202,9 @@
       backdrop.id = 'global-sidebar-backdrop';
       document.body.appendChild(backdrop);
     }
-    backdrop.addEventListener('click', window.closeGlobalSidebar);
+    backdrop.addEventListener('click', function (e) {
+      window.closeGlobalSidebar();
+    });
 
     // 2. If no sidebar on this page (i.e. not index.html), inject global sidebar
     const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html');
@@ -215,10 +217,34 @@
       document.body.insertBefore(container.firstElementChild, document.body.firstChild);
     }
 
-    // 3. Inject top-left hamburger menu button if missing (runs across all pages, mobile & desktop)
+    // 3. Stop click propagation on sidebars to prevent accidental closing
+    document.querySelectorAll('.app-sidebar, .global-app-sidebar').forEach(sb => {
+      sb.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+    });
+
+    // 4. Auto-close sidebar on mobile when any navigation item is clicked
+    const bindItemClicks = () => {
+      document.querySelectorAll('.app-sidebar .sidebar-item, .global-app-sidebar .sidebar-item, .app-sidebar .sidebar-subitem, .global-app-sidebar .sidebar-subitem').forEach(item => {
+        if (item.classList.contains('sidebar-dropdown-toggle')) return;
+        item.style.pointerEvents = 'auto';
+        item.addEventListener('click', () => {
+          if (window.innerWidth <= 900) {
+            setTimeout(() => {
+              window.closeGlobalSidebar();
+            }, 120);
+          }
+        });
+      });
+    };
+    bindItemClicks();
+    setTimeout(bindItemClicks, 600);
+
+    // 5. Inject top-left hamburger menu button if missing (runs across all pages, mobile & desktop)
     injectTopMenuButtonIfMissing();
 
-    // 4. Connect all existing and new hamburger / menu toggle buttons
+    // 6. Connect all existing and new hamburger / menu toggle buttons
     const bindMenuButtons = () => {
       document.querySelectorAll('.menu-toggle-btn, .global-hamburger-btn, .sidebar-open-btn, .top-menu-btn, #top-sidebar-toggle-btn, #sidebar-expand-float-btn, .sidebar-expand-float-btn, #mobile-nav-toggle-btn').forEach(btn => {
         btn.onclick = window.toggleGlobalSidebar;
