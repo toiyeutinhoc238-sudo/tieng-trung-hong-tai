@@ -35,10 +35,47 @@
   // Get current user info from localStorage or session
   function getCurrentUser() {
     try {
-      const stored = localStorage.getItem('hongtai_current_user') || localStorage.getItem('currentUser');
+      const stored = localStorage.getItem('user') || localStorage.getItem('hongtai_current_user') || localStorage.getItem('currentUser') || sessionStorage.getItem('user');
       if (stored) return JSON.parse(stored);
     } catch (e) {}
     return null;
+  }
+
+  // Update user profile card in DOM if user state changes
+  function updateSidebarUserProfile() {
+    const user = getCurrentUser();
+    const sidebars = document.querySelectorAll('.app-sidebar, .global-app-sidebar');
+    sidebars.forEach(sidebar => {
+      const nameEl = sidebar.querySelector('.user-name, #user-display-name');
+      const emailEl = sidebar.querySelector('.user-sub, #user-display-email');
+      const roleEl = sidebar.querySelector('.user-role-badge, #user-display-role');
+      const avatarWrap = sidebar.querySelector('.sidebar-avatar-wrap');
+
+      if (user && (user.name || user.email)) {
+        const displayName = user.name || user.displayName || (user.email ? user.email.split('@')[0] : 'Học viên');
+        const displayEmail = user.email || '';
+        const displayRole = user.role === 'super_admin' ? 'Super Admin' : (user.role === 'admin' ? 'Admin' : (user.role === 'teacher' ? 'Giáo viên' : 'Học viên'));
+        const displayAvatar = user.picture || user.avatar || '';
+
+        if (nameEl) nameEl.textContent = displayName;
+        if (emailEl) emailEl.textContent = displayEmail;
+        if (roleEl) roleEl.textContent = displayRole;
+        if (avatarWrap) {
+          if (displayAvatar) {
+            avatarWrap.innerHTML = `<img class="user-avatar-img" src="${displayAvatar}" alt="Avatar" style="display: block; width: 44px; height: 44px; border-radius: 50%; object-fit: cover;">`;
+          } else {
+            avatarWrap.innerHTML = `<div class="user-avatar sidebar-avatar-placeholder"><i class="fa-solid fa-user"></i></div>`;
+          }
+        }
+      } else {
+        if (nameEl) nameEl.textContent = 'Khách (Chưa đăng nhập)';
+        if (emailEl) emailEl.textContent = 'Đăng nhập để lưu tiến độ học';
+        if (roleEl) roleEl.textContent = 'Khách';
+        if (avatarWrap) {
+          avatarWrap.innerHTML = `<div class="user-avatar sidebar-avatar-placeholder"><i class="fa-solid fa-user"></i></div>`;
+        }
+      }
+    });
   }
 
   // Generate Sidebar Drawer HTML
@@ -46,10 +83,10 @@
     const activeKey = getActiveRouteKey();
     const user = getCurrentUser();
 
-    const userName = user ? (user.name || user.displayName || 'Học viên') : 'Khách (Chưa đăng nhập)';
+    const userName = user ? (user.name || user.displayName || (user.email ? user.email.split('@')[0] : 'Học viên')) : 'Khách (Chưa đăng nhập)';
     const userEmail = user ? (user.email || '') : 'Đăng nhập để lưu tiến độ học';
     const userRole = user ? (user.role === 'super_admin' ? 'Super Admin' : (user.role === 'admin' ? 'Admin' : (user.role === 'teacher' ? 'Giáo viên' : 'Học viên'))) : 'Khách';
-    const userAvatar = user && user.picture ? user.picture : '';
+    const userAvatar = user && (user.picture || user.avatar) ? (user.picture || user.avatar) : '';
 
     return `
     <aside class="app-sidebar global-app-sidebar" id="global-app-sidebar">
@@ -69,7 +106,7 @@
       <div class="auth-container" style="width: 100%; border-bottom: 1px solid var(--border-glass, rgba(255,255,255,0.12)); padding-bottom: 12px; margin-bottom: 12px;">
         <div class="sidebar-profile-card" onclick="if(window.location.pathname !== '/' && !window.location.pathname.endsWith('/index.html')) { window.location.href='/'; }">
           <div class="sidebar-avatar-wrap">
-            ${userAvatar ? `<img class="user-avatar-img" src="${userAvatar}" alt="Avatar" style="display: block;">` : `<div class="user-avatar sidebar-avatar-placeholder"><i class="fa-solid fa-user"></i></div>`}
+            ${userAvatar ? `<img class="user-avatar-img" src="${userAvatar}" alt="Avatar" style="display: block; width: 44px; height: 44px; border-radius: 50%; object-fit: cover;">` : `<div class="user-avatar sidebar-avatar-placeholder"><i class="fa-solid fa-user"></i></div>`}
           </div>
           <div class="user-info">
             <span class="user-name">${userName}</span>
@@ -162,6 +199,7 @@
 
   // Toggle & Control Functions
   window.openGlobalSidebar = function () {
+    updateSidebarUserProfile();
     const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html');
     if (isIndex && window.innerWidth > 900) {
       document.body.classList.remove('sidebar-collapsed');
@@ -253,6 +291,13 @@
       container.innerHTML = buildSidebarHTML();
       document.body.insertBefore(container.firstElementChild, document.body.firstChild);
     }
+
+    // Synchronize user profile into sidebar
+    updateSidebarUserProfile();
+    window.addEventListener('storage', updateSidebarUserProfile);
+    window.addEventListener('user-auth-changed', updateSidebarUserProfile);
+    setTimeout(updateSidebarUserProfile, 500);
+    setTimeout(updateSidebarUserProfile, 1500);
 
     // 3. Stop click propagation on sidebars to prevent accidental closing
     document.querySelectorAll('.app-sidebar, .global-app-sidebar').forEach(sb => {
