@@ -228,29 +228,24 @@
   }
 
   function injectTopMenuButtonIfMissing() {
-    // Check if there is already a menu button in the header
+    // Always use a fixed floating button — injecting into header risks being hidden
+    // by overflow, z-index stacking, or flex/grid layout on different subpages.
+    const existingFloating = document.getElementById('floating-menu-trigger-btn');
+    if (existingFloating) return;
+
+    // Also skip if there's already a dedicated menu trigger
     const existingMenuBtn = document.querySelector('.menu-toggle-btn, .sidebar-open-btn, .top-menu-btn, #top-sidebar-toggle-btn');
     if (existingMenuBtn) return;
 
-    // Check for standard headers on subpages
-    const header = document.querySelector('.dict-top-nav, .rp-header, .page-header, .header-card, header');
-    if (header) {
-      const menuBtn = document.createElement('button');
-      menuBtn.className = 'menu-toggle-btn';
-      menuBtn.title = 'Mở Menu Danh Mục';
-      menuBtn.innerHTML = '<i class="fa-solid fa-bars"></i> <span>Menu</span>';
-      menuBtn.onclick = window.toggleGlobalSidebar;
-      header.insertBefore(menuBtn, header.firstChild);
-    } else {
-      // Create a floating top-left menu trigger button
-      const floatingBtn = document.createElement('button');
-      floatingBtn.className = 'floating-menu-trigger-btn';
-      floatingBtn.id = 'floating-menu-trigger-btn';
-      floatingBtn.title = 'Mở Menu Danh Mục';
-      floatingBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
-      floatingBtn.onclick = window.toggleGlobalSidebar;
-      document.body.appendChild(floatingBtn);
-    }
+    // Create a fixed floating button — always visible, always on top
+    const floatingBtn = document.createElement('button');
+    floatingBtn.className = 'floating-menu-trigger-btn';
+    floatingBtn.id = 'floating-menu-trigger-btn';
+    floatingBtn.setAttribute('aria-label', 'Mở Menu Danh Mục');
+    floatingBtn.title = 'Menu điều hướng';
+    floatingBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
+    floatingBtn.onclick = window.toggleGlobalSidebar;
+    document.body.appendChild(floatingBtn);
   }
 
   if (document.readyState === 'loading') {
