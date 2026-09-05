@@ -1,8 +1,8 @@
 import { DICTATION_LESSONS } from './dictation_data.js';
 import './particles.js';
 /**
- * Tiếng Trung HongTai - Video Dictation Engine (Luyện Nghe Chép Chính Tả Video)
- * Architecture inspired by eJOY / DailyDictation / LingoClip
+ * Tiếng Trung HongTai - Video Dictation & Shadowing Engine (Luyện Nghe Chép Chính Tả & Shadowing Video)
+ * Bản quyền thuộc về Tiếng Trung HongTai
  */
 
 // Global State
@@ -18,6 +18,48 @@ let isVideoHidden = false;
 let userAnswers = {}; // { sentenceId: { isCorrect, score, userAnswer, blanks: [] } }
 let totalScore = 0;
 let currentStreak = 0;
+
+export function formatSecondsToDuration(totalSeconds) {
+  if (!totalSeconds || isNaN(totalSeconds) || totalSeconds <= 0) return '00:00';
+  const sec = Math.round(Number(totalSeconds));
+  const hrs = Math.floor(sec / 3600);
+  const mins = Math.floor((sec % 3600) / 60);
+  const secs = sec % 60;
+  if (hrs > 0) {
+    return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  }
+  return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+}
+
+export function getLessonFormattedDuration(lesson) {
+  if (!lesson) return '00:00';
+
+  if (typeof lesson.duration === 'number' && lesson.duration > 0) {
+    return formatSecondsToDuration(lesson.duration);
+  }
+
+  if (typeof lesson.duration === 'string' && /^\d+$/.test(lesson.duration.trim())) {
+    return formatSecondsToDuration(parseInt(lesson.duration.trim(), 10));
+  }
+
+  if (Array.isArray(lesson.sentences) && lesson.sentences.length > 0) {
+    const maxEnd = lesson.sentences.reduce((max, s) => {
+      const end = typeof s.endTime === 'number' ? s.endTime : (typeof s.startTime === 'number' ? s.startTime + 3 : 0);
+      return Math.max(max, end);
+    }, 0);
+    if (maxEnd > 0) {
+      return formatSecondsToDuration(maxEnd);
+    }
+  }
+
+  if (typeof lesson.duration === 'string' && lesson.duration.trim() && lesson.duration.trim() !== '03:30' && lesson.duration.trim() !== '03:00') {
+    return lesson.duration.trim();
+  }
+
+  return '02:00';
+}
+window.formatSecondsToDuration = formatSecondsToDuration;
+window.getLessonFormattedDuration = getLessonFormattedDuration;
 
 // Subtitles & Shadowing Visibility State
 let shadowHidePinyin = false;
@@ -2127,8 +2169,8 @@ window.autoGenerateAllWithAI = async function () {
 
   const steps = [
     { delay: 0, msg: '🔍 Đang phân tích video & kết nối AI...' },
-    { delay: 3000, msg: '⚡ AI đang phân loại HSK, xác định chủ đề & bóc tách câu thoại...' },
-    { delay: 7000, msg: '✍️ Đang chuẩn hóa chính tả 100% & sinh phiên âm Pinyin...' }
+    { delay: 2500, msg: '🎙️ Whisper đang trích xuất giọng nói & căn mốc âm thanh...' },
+    { delay: 6000, msg: '🌐 AI đang chuẩn hóa Chữ Hán, sinh Pinyin & dịch Tiếng Việt chuẩn xác 100%...' }
   ];
   const toastTimers = steps.map(s => setTimeout(() => showToast(s.msg), s.delay));
 
@@ -2136,7 +2178,7 @@ window.autoGenerateAllWithAI = async function () {
     const res = await fetch('/api/dictation/fetch-subtitles', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ youtubeId: ytId, extractRawOnly: true })
+      body: JSON.stringify({ youtubeId: ytId, extractRawOnly: false })
     });
 
     toastTimers.forEach(t => clearTimeout(t));
@@ -2150,6 +2192,9 @@ window.autoGenerateAllWithAI = async function () {
     const data = await res.json();
 
     if (data.success && Array.isArray(data.sentences) && data.sentences.length > 0) {
+      if (data.duration && typeof data.duration === 'number' && data.duration > 0) {
+        window._lastExtractedVideoDuration = data.duration;
+      }
       const titleInput = document.getElementById('custom-video-title');
       if (titleInput && (!titleInput.value || titleInput.value.startsWith('Bài Luyện Nghe'))) {
         titleInput.value = data.videoTitle || titleInput.value;
@@ -2174,13 +2219,15 @@ window.autoGenerateAllWithAI = async function () {
         const eSec = (s.endTime % 60).toFixed(3);
         const sFormatted = `${String(sMin).padStart(2, '0')}:${String(sSec).padStart(6, '0')}`;
         const eFormatted = `${String(eMin).padStart(2, '0')}:${String(eSec).padStart(6, '0')}`;
-        return `[${sFormatted} - ${eFormatted}] ${s.hanzi}`; // Note: hanzi holds raw text for extractRawOnly
+        const py = s.pinyin ? ` | ${s.pinyin}` : '';
+        const meaning = s.meaning ? ` | ${s.meaning}` : '';
+        return `[${sFormatted} - ${eFormatted}] ${s.hanzi}${py}${meaning}`;
       });
 
       const textarea = document.getElementById('custom-video-subtitles');
       if (textarea) textarea.value = lines.join('\n');
 
-      showToast("⚡ Đã trích xuất phụ đề theo ngôn ngữ gốc của video! Hãy bấm nút 'Dịch Tiếng Trung' để chuyển sang Chữ Hán, Pinyin & Tiếng Việt. 🎉");
+      showToast(`🎉 Xuất sắc! AI đã trích xuất & dịch thành công ${data.sentences.length} câu thoại chuẩn xác 100%!`);
 
     } else {
       showToast(data.message || 'Không thể tạo tự động bài học. Vui lòng thử lại!', true);
@@ -2193,7 +2240,7 @@ window.autoGenerateAllWithAI = async function () {
   } finally {
     if (btn) {
       btn.disabled = false;
-      btn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> AI Tạo Tự Động Toàn Diện';
+      btn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> ✨ AI Tự Động Trích Xuất & Dịch (1-Chạm)';
     }
   }
 };
@@ -2990,7 +3037,7 @@ function renderCatalogGrid() {
     card.innerHTML = `
       <div class="dict-card-thumb-wrap">
         <img src="${lesson.thumbnail || `https://img.youtube.com/vi/${lesson.youtubeId}/hqdefault.jpg`}" alt="${lesson.title}" loading="lazy">
-        <span class="dict-card-dur-badge"><i class="fa-regular fa-clock"></i> ${lesson.duration || '03:00'}</span>
+        <span class="dict-card-dur-badge"><i class="fa-regular fa-clock"></i> ${getLessonFormattedDuration(lesson)}</span>
         <span class="dict-card-level-badge level-${lesson.level || '1'}">${lesson.levelText || `HSK ${lesson.level || 1}`}</span>
         ${isCompleted ? `<span class="dict-completed-badge" style="position: absolute; top: 10px; left: 10px; z-index: 4;"><i class="fa-solid fa-circle-check"></i> Đã Xong</span>` : ''}
         <button class="dict-card-play-overlay-btn" title="Bắt đầu luyện tập">
@@ -3159,13 +3206,22 @@ function returnToCatalog() {
 // ==========================================
 
 function openAddVideoModal() {
-  showToast("🔒 Tính năng Thêm Video YouTube cá nhân đang được nâng cấp và sẽ sớm ra mắt! Hãy cùng đón chờ nhé. ✨", false);
+  const modal = document.getElementById('dict-add-video-modal');
+  if (modal) {
+    modal.style.display = 'flex';
+    setTimeout(() => {
+      document.getElementById('custom-video-url')?.focus();
+    }, 100);
+  }
 }
 
 function closeAddVideoModal() {
   const modal = document.getElementById('dict-add-video-modal');
   if (modal) modal.style.display = 'none';
 }
+
+window.openAddVideoModal = openAddVideoModal;
+window.closeAddVideoModal = closeAddVideoModal;
 
 function parseTimeToSeconds(timeStr) {
   if (!timeStr) return null;
@@ -3279,12 +3335,21 @@ async function handleSaveCustomVideo(e) {
     });
   }
 
+  let durationSeconds = 0;
+  if (window._lastExtractedVideoDuration && typeof window._lastExtractedVideoDuration === 'number' && window._lastExtractedVideoDuration > 0) {
+    durationSeconds = window._lastExtractedVideoDuration;
+  } else if (sentences.length > 0) {
+    const maxEnd = sentences.reduce((max, s) => Math.max(max, s.endTime || 0), 0);
+    durationSeconds = Math.ceil(maxEnd);
+  }
+  const calculatedDuration = durationSeconds > 0 ? formatSecondsToDuration(durationSeconds) : '02:00';
+
   const email = getCurrentUserEmail();
   const newLesson = {
     id: `dict_custom_${Date.now()}`,
     title: titleInput || `Video Luyện Chép (${ytId})`,
     youtubeId: ytId,
-    duration: '03:30',
+    duration: calculatedDuration,
     level: levelInput,
     levelText: `HSK ${levelInput}`,
     category: catInput,

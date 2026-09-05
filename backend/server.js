@@ -2192,28 +2192,28 @@ app.post('/api/chat', async (req, res) => {
           ...messages.map(m => ({ role: m.role === 'model' ? 'assistant' : m.role, content: m.content }))
         ];
         const completion = await groqClient.chat.completions.create({
-          model: 'llama-3.3-70b-versatile',
+          model: 'openai/gpt-oss-120b',
           messages: groqMsgs,
           temperature: 0.7,
           max_tokens: 1500
         });
         reply = completion.choices[0]?.message?.content || '';
-      } catch (eGroq70b) {
-        console.warn('[Chat AI] Groq LLaMA 3.3 70B error, trying LLaMA 3.1 8B:', eGroq70b.message);
+      } catch (eGroq120) {
+        console.warn('[Chat AI] Groq GPT-OSS-120B error, trying GPT-OSS-20B:', eGroq120.message);
         try {
           const groqMsgs = [
             { role: 'system', content: systemPrompt },
             ...messages.map(m => ({ role: m.role === 'model' ? 'assistant' : m.role, content: m.content }))
           ];
           const completion = await groqClient.chat.completions.create({
-            model: 'llama-3.1-8b-instant',
+            model: 'openai/gpt-oss-20b',
             messages: groqMsgs,
             temperature: 0.7,
             max_tokens: 1500
           });
           reply = completion.choices[0]?.message?.content || '';
-        } catch (eGroq8b) {
-          console.warn('[Chat AI] Groq LLaMA 3.1 8B error:', eGroq8b.message);
+        } catch (eGroq20) {
+          console.warn('[Chat AI] Groq GPT-OSS-20B error:', eGroq20.message);
         }
       }
     }
@@ -3101,13 +3101,31 @@ app.get('/api/grammar/detail/:key', async (req, res) => {
 });
 
 // ==========================================
-// VIDEO DICTATION API (eJOY Video Dictation - Real MongoDB Sync)
+// VIDEO DICTATION API (Tiếng Trung HongTai Dictation & Shadowing Engine - Real MongoDB Sync)
 // ==========================================
 
 async function readDictationLessons() {
   try {
     const data = await fs.readFile(DICTATION_DB_PATH, 'utf-8');
     const lessons = JSON.parse(data);
+
+    // Dynamic duration validation (eliminate any legacy hardcoded 03:30)
+    lessons.forEach(l => {
+      if (!l.duration || l.duration === '03:30' || l.duration === '03:00') {
+        if (Array.isArray(l.sentences) && l.sentences.length > 0) {
+          const maxEnd = l.sentences.reduce((max, s) => Math.max(max, s.endTime || 0), 0);
+          if (maxEnd > 0) {
+            const sec = Math.round(maxEnd);
+            const hrs = Math.floor(sec / 3600);
+            const mins = Math.floor((sec % 3600) / 60);
+            const secs = sec % 60;
+            l.duration = hrs > 0
+              ? `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`
+              : `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+          }
+        }
+      }
+    });
 
     // Sync real studyCount and completedUsers from MongoDB (Không dùng số liệu ảo)
     try {
@@ -3310,7 +3328,7 @@ export function extractPrecisionVoiceSegments(whisperData) {
       }).filter(s => s.hanzi.length > 0);
   }
 
-  // Step 1: Filter ghost words on background music
+  // Step 1: Filter ghost words on background music & Sort words chronologically
   const validWords = [];
 
   for (let i = 0; i < allWords.length; i++) {
@@ -3320,7 +3338,9 @@ export function extractPrecisionVoiceSegments(whisperData) {
 
     if (isHallucinationText(wordText)) continue;
 
-    const dur = w.end - w.start;
+    const start = typeof w.start === 'number' ? w.start : 0;
+    const end = typeof w.end === 'number' ? w.end : start + 0.3;
+    const dur = end - start;
     const charCount = wordText.replace(/\s+/g, '').length || 1;
     const durPerChar = dur / charCount;
 
@@ -3331,10 +3351,13 @@ export function extractPrecisionVoiceSegments(whisperData) {
 
     validWords.push({
       word: wordText,
-      start: w.start,
-      end: w.end
+      start: Math.max(0, start),
+      end: Math.max(start + 0.05, end)
     });
   }
+
+  // Ensure absolute chronological order
+  validWords.sort((a, b) => a.start - b.start);
 
   // Step 2: Clean isolated phantom chars & repetitive loop spam
   const cleanedWords = [];
@@ -3361,10 +3384,10 @@ export function extractPrecisionVoiceSegments(whisperData) {
   }
 
   // Step 3: Cluster words into precision sentences based on:
-  // - Voice Activity Detection: Vocal pause / music gap > 0.48s
-  // - Punctuation ending marks (。！？!?)
-  // - Clause pauses (，, with length > 2.2s)
-  // - Max duration (max 7.5s or max 25 chars)
+  // - Voice Activity Detection: Vocal pause / music gap > 0.65s (prevents splitting notes/words within singing lines)
+  // - Punctuation ending marks (。！？!?；;.\n)
+  // - Clause pauses (，, with length > 2.8s)
+  // - Max duration (max 8.0s or max 14 words)
   const rawSentences = [];
   let currentGroup = [];
 
@@ -3378,13 +3401,13 @@ export function extractPrecisionVoiceSegments(whisperData) {
 
     const prevWord = currentGroup[currentGroup.length - 1];
     const voiceGap = wordObj.start - prevWord.end;
-    const currentText = currentGroup.map(w => w.word).join('').trim();
-    const isPrevPunctuation = /[。！？!?；;\n]$/.test(prevWord.word);
-    const isClauseBreak = /[，,、]$/.test(prevWord.word) && (prevWord.end - currentGroup[0].start > 2.2);
-    const isTooLong = currentText.length > 25 || (wordObj.end - currentGroup[0].start > 7.5);
+    const currentText = currentGroup.map(w => w.word).join(' ').trim();
+    const isPrevPunctuation = /[。！？!?；;.\n]$/.test(prevWord.word);
+    const isClauseBreak = /[，,、]$/.test(prevWord.word) && (prevWord.end - currentGroup[0].start > 2.8);
+    const isTooLong = currentText.split(' ').length > 14 || (wordObj.end - currentGroup[0].start > 8.0);
 
-    // CRITICAL: Voice ends when speaker/singer pauses for > 0.48s (switches to BGM/silence)
-    const isVoiceStopped = voiceGap > 0.48;
+    // CRITICAL: Voice ends when speaker/singer pauses for > 0.65s (switches to BGM/silence)
+    const isVoiceStopped = voiceGap > 0.65;
 
     if (isVoiceStopped || isPrevPunctuation || isClauseBreak || isTooLong) {
       rawSentences.push(buildSentenceFromWords(currentGroup, rawSentences.length + 1));
@@ -3398,28 +3421,57 @@ export function extractPrecisionVoiceSegments(whisperData) {
     rawSentences.push(buildSentenceFromWords(currentGroup, rawSentences.length + 1));
   }
 
-  // Step 4: Post-filter intro phantom fragments (e.g. if a 1st sentence is isolated before a 4s+ gap and is an incomplete fragment)
-  if (rawSentences.length >= 2) {
-    const first = rawSentences[0];
-    const second = rawSentences[1];
+  // Step 4: Consolidate broken sub-phrases / trailing fragments
+  // If a fragment is tiny (< 3 words) and gap < 0.85s, merge with previous sentence so words aren't cut off
+  const consolidated = [];
+  for (let i = 0; i < rawSentences.length; i++) {
+    const curr = rawSentences[i];
+    if (consolidated.length > 0) {
+      const prev = consolidated[consolidated.length - 1];
+      const gap = curr.startTime - prev.endTime;
+      const wordCount = curr.hanzi.split(' ').length;
+      if (gap < 0.85 && (wordCount <= 2 || curr.duration < 1.2 || /^(đầu|tôi|nữa|nhé|ơi|đi|nào|đâu|lại|bay|về|thơ|mười|tám|18)[\.,!\?]?$/i.test(curr.hanzi.trim()))) {
+        prev.endTime = curr.endTime;
+        prev.duration = parseFloat((prev.endTime - prev.startTime).toFixed(3));
+        prev.hanzi = `${prev.hanzi} ${curr.hanzi}`.replace(/\s+/g, ' ').trim();
+        prev.words.push(...curr.words);
+        continue;
+      }
+    }
+    consolidated.push(curr);
+  }
+
+  // Step 5: Post-filter intro phantom fragments (e.g. if a 1st sentence is isolated before a 4s+ gap and is an incomplete fragment)
+  if (consolidated.length >= 2) {
+    const first = consolidated[0];
+    const second = consolidated[1];
     const gap = second.startTime - first.endTime;
     if (first.startTime < 8.0 && gap > 4.0 && first.hanzi.length <= 4) {
       console.log(`[VAD Engine] Dropped intro phantom fragment: "${first.hanzi}" [${first.startTime}s - ${first.endTime}s] before ${gap.toFixed(2)}s intro music`);
-      rawSentences.shift();
-      rawSentences.forEach((s, idx) => s.id = idx + 1);
+      consolidated.shift();
     }
   }
 
-  return rawSentences;
+  consolidated.forEach((s, idx) => s.id = idx + 1);
+  return consolidated;
 }
 
 function buildSentenceFromWords(wordList, id) {
-  const rawText = wordList.map(w => w.word).join('').trim();
-  const startTime = parseFloat(wordList[0].start.toFixed(3));
-  const endTime = parseFloat(wordList[wordList.length - 1].end.toFixed(3));
+  const starts = wordList.map(w => w.start).filter(n => typeof n === 'number' && !isNaN(n));
+  const ends = wordList.map(w => w.end).filter(n => typeof n === 'number' && !isNaN(n));
+  const startTime = starts.length > 0 ? parseFloat(Math.min(...starts).toFixed(3)) : 0;
+  let endTime = ends.length > 0 ? parseFloat(Math.max(...ends).toFixed(3)) : startTime + 2;
+  if (endTime <= startTime) endTime = parseFloat((startTime + 1.5).toFixed(3));
+
+  const hasHanzi = wordList.some(w => /[\u4e00-\u9fa5]/.test(w.word));
+  const rawText = hasHanzi
+    ? wordList.map(w => w.word).join('').trim()
+    : wordList.map(w => w.word).join(' ').replace(/\s+/g, ' ').trim();
 
   let py = '';
-  try { py = pinyin(rawText, { toneType: 'symbol' }); } catch (e) { }
+  if (hasHanzi) {
+    try { py = pinyin(rawText, { toneType: 'symbol' }); } catch (e) { }
+  }
 
   return {
     id,
@@ -3746,56 +3798,57 @@ async function batchTranslateAndPinyin(speechItems) {
   return results;
 }
 
-// Universal Multi-Model LLM JSON Caller (LLaMA 3.3 70B -> LLaMA 3.1 8B -> Gemini 2.5 Flash)
+// Universal Multi-Model LLM JSON Caller (GPT-OSS-120B -> GPT-OSS-20B -> Qwen -> Gemini)
 async function callLLMJson(prompt) {
-  // 1. Try Groq LLaMA 3.3 70B (Deterministic temperature 0)
+  // 1. Try Groq GPT-OSS-120B (Deterministic temperature 0, high quality)
   if (groqClient) {
     try {
       const res = await groqClient.chat.completions.create({
-        model: 'llama-3.3-70b-versatile',
+        model: 'openai/gpt-oss-120b',
         messages: [{ role: 'user', content: prompt }],
         temperature: 0,
         response_format: { type: 'json_object' }
       });
       return JSON.parse(res.choices[0].message.content);
-    } catch (e70b) {
-      console.warn('[LLM] LLaMA 3.3 70B limit/error, falling back to LLaMA 3.1 8B:', e70b.message);
+    } catch (e120b) {
+      console.warn('[LLM] GPT-OSS-120B limit/error, falling back to GPT-OSS-20B:', e120b.message);
     }
 
-    // 2. Try Groq LLaMA 3.1 8B Instant (Deterministic temperature 0)
+    // 2. Try Groq GPT-OSS-20B (Deterministic temperature 0, fast)
     try {
       const res = await groqClient.chat.completions.create({
-        model: 'llama-3.1-8b-instant',
+        model: 'openai/gpt-oss-20b',
         messages: [{ role: 'user', content: prompt }],
         temperature: 0,
         response_format: { type: 'json_object' }
       });
       return JSON.parse(res.choices[0].message.content);
-    } catch (e8b) {
-      console.warn('[LLM] LLaMA 3.1 8B error, falling back to Gemini:', e8b.message);
+    } catch (e20b) {
+      console.warn('[LLM] GPT-OSS-20B error, falling back to Gemini/Qwen:', e20b.message);
     }
   }
 
-  // 3. Try Google Gemini Flash (Deterministic temperature 0)
-  if (genAI) {
-    try {
-      const model = genAI.getGenerativeModel({
-        model: 'gemini-1.5-flash',
-        generationConfig: { responseMimeType: 'application/json', temperature: 0 }
-      });
-      const res = await model.generateContent(prompt);
-      return JSON.parse(res.response.text());
-    } catch (eGem) {
-      console.warn('[LLM] Gemini 1.5 Flash error, trying gemini-1.5-pro:', eGem.message);
+  // 3. Try Google Gemini REST API (Deterministic temperature 0)
+  const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+  if (GEMINI_API_KEY) {
+    const candidateGemini = ['gemini-2.5-flash', 'gemini-flash-latest', 'gemini-2.5-pro'];
+    for (const gModel of candidateGemini) {
       try {
-        const model15 = genAI.getGenerativeModel({
-          model: 'gemini-1.5-pro',
-          generationConfig: { responseMimeType: 'application/json', temperature: 0 }
+        const gemRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${gModel}:generateContent?key=${GEMINI_API_KEY}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ role: 'user', parts: [{ text: prompt }] }],
+            generationConfig: { responseMimeType: 'application/json', temperature: 0 }
+          })
         });
-        const res15 = await model15.generateContent(prompt);
-        return JSON.parse(res15.response.text());
-      } catch (eGem15) {
-        console.warn('[LLM] All Gemini models failed:', eGem15.message);
+        if (gemRes.ok) {
+          const gData = await gemRes.json();
+          const text = gData.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (text) return JSON.parse(text);
+        }
+      } catch (eGem) {
+        console.warn(`[LLM] Gemini ${gModel} call error:`, eGem.message);
       }
     }
   }
@@ -3858,34 +3911,40 @@ async function enhanceAndClassifyLesson(rawSpeechSegments, videoTitle, durationS
       }));
 
       const isFirstChunk = (i === 0);
-      const prompt = `Bạn là Chuyên Gia Ngôn Ngữ Học Tiếng Trung & Biên Tập Viên Việt-Trung Cao Cấp.
-Dưới đây là tiêu đề video "${videoTitle}" (${durationSeconds}s) và danh sách các câu trích xuất chính xác từ âm thanh giọng nói (đã có mốc thời gian chuẩn xác từ âm phổ).
+      const prompt = `Bạn là Chuyên Gia Ngôn Ngữ Học Tiếng Trung & Biên Tập Lời Bài Hát/Hội Thoại Việt-Trung Cao Cấp.
+Dưới đây là tiêu đề video "${videoTitle}" (${durationSeconds}s) và danh sách các câu trích xuất chính xác từ âm thanh giọng nói (đã có mốc thời gian chuẩn xác từ âm phổ):
+
+${JSON.stringify(chunkItems, null, 2)}
 
 NHIỆM VỤ BIÊN TẬP VÀ DỊCH NGHĨA CHUẨN XÁC 100%:
 
-1. "vietnamese" (DỊCH TIẾNG VIỆT CHUẨN CHÍNH TẢ & NGỮ CẢNH):
-   - Dịch Tiếng Việt chuẩn xác 100% ngữ nghĩa tự nhiên, giàu cảm xúc, đúng ngữ cảnh bài hát/đoạn hội thoại.
-   - Sửa triệt để mọi lỗi chính tả tiếng Việt.
+1. QUY TẮC DỊCH VÀ BẢO TOÀN TRỌN VẸN TỪ NGỮ 100%:
+   - BẮT BUỘC BẢO TOÀN ĐẦY ĐỦ MỌI TỪ NGỮ, SỐ ĐẾM, SỐ TUỔI:
+     + Tuyệt đối không được bỏ rơi bất kỳ từ ngữ đuôi câu nào (ví dụ: "tuổi tôi mười tám" / "tuổi tôi 18" PHẢI CÓ ĐỦ chữ "mười tám" / "18", không được dừng ở "tuổi tôi").
+     + Mọi đại từ nhân xưng, số từ, danh từ trong âm thanh phải được giữ nguyên trọn vẹn trong "vietnamese" và dịch tương ứng đầy đủ trong "hanzi" (ví dụ: "十八岁" cho 18 tuổi).
+   - Nếu âm thanh gốc là TIẾNG VIỆT:
+     + "vietnamese": Chuẩn hóa lời bài hát/câu nói Tiếng Việt chuẩn xác 100%, sửa các từ AI nhận diện nhầm âm (ví dụ: "gió xé" -> "giỏ xe", "hóa phượng" -> "hoa phượng", "chùm vượng vĩ" -> "chùm phượng vĩ", "gã khó" -> "gã khờ ngọng nghịu").
+     + "hanzi": Dịch sang Chữ Hán Giản Thể (Simplified Chinese) thật mượt mà, đầy đủ ý, chuẩn ngữ pháp, khớp nghĩa 100% với từng câu hát.
+   - Nếu âm thanh gốc là TIẾNG TRUNG:
+     + "hanzi": BẮT BUỘC dùng Chữ Hán Giản Thể chuẩn (Simplified Chinese), sửa chữ nhầm đồng âm nếu có.
+     + "vietnamese": Dịch Tiếng Việt chuẩn xác, giàu cảm xúc và tự nhiên theo ngữ cảnh.
 
-2. "hanzi" (CHỮ HÁN GIẢN THỂ CHUẨN XÁC KHỚP VỚI GIỌNG NÓI/HÁT):
-   - BẮT BUỘC dùng Chữ Hán Giản Thể chuẩn (Simplified Chinese).
-   - Chuẩn hóa chữ Hán đúng ngữ pháp, sửa các chữ bị nhận diện nhầm đồng âm nếu có.
+2. LOẠI BỎ RÁC & TẠP ÂM:
+   - Nếu câu nào là tạp âm rác, lời kêu gọi đăng ký kênh (như "subscribe", "ghiền mì gõ", "like video", v.v.), hãy đặt "ignore": true.
 
 3. GIỮ NGUYÊN "id" tương ứng của từng câu trong danh sách.
 ${isFirstChunk ? `4. "hskLevel": Cấp độ HSK phù hợp ("1", "2", "3", "4", "5", "6").
 5. "category": Chọn đúng 1 trong: "Âm Nhạc", "Giao Tiếp", "Ẩm Thực", "Du Lịch", "Hoạt Hình", "Phim Ảnh", "Công Việc", "Tin Tức", "Văn Hóa", "Đời Sống", "Khác".
 6. "description": 1 câu tóm tắt nội dung bài học tiếng Việt hấp dẫn.` : ''}
 
-Danh sách câu giọng nói từ âm thanh:
-${JSON.stringify(chunkItems, null, 2)}
-
 BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
 {
-  ${isFirstChunk ? `"hskLevel": "2",\n  "category": "Âm Nhạc",\n  "description": "...",\n  ` : ''}"sentences": [
+  ${isFirstChunk ? `"hskLevel": "3",\n  "category": "Âm Nhạc",\n  "description": "...",\n  ` : ''}"sentences": [
     {
       "id": 1,
       "hanzi": "<Chữ Hán Giản Thể chuẩn>",
-      "vietnamese": "<Bản dịch Tiếng Việt chuẩn>"
+      "vietnamese": "<Lời bài hát/câu dịch Tiếng Việt chuẩn>",
+      "ignore": false
     }
   ]
 }`;
@@ -3901,7 +3960,7 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
       if (Array.isArray(parsed.sentences)) {
         for (let idx = 0; idx < parsed.sentences.length; idx++) {
           const s = parsed.sentences[idx];
-          if (!s) continue;
+          if (!s || s.ignore === true) continue;
 
           const origItem = chunk.find(x => x.id == s.id) || chunk[idx] || {};
 
@@ -3920,12 +3979,16 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON:
           try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) { }
 
           // STRICT TIMINGS: Always prioritize the physically measured audio VAD start/end timestamps
-          const exactStart = (origItem.startTime !== undefined && origItem.startTime !== null)
+          let exactStart = (origItem.startTime !== undefined && origItem.startTime !== null)
             ? origItem.startTime
             : parseTimeSeconds(s.startTime, 0);
-          const exactEnd = (origItem.endTime !== undefined && origItem.endTime !== null)
+          let exactEnd = (origItem.endTime !== undefined && origItem.endTime !== null)
             ? origItem.endTime
             : parseTimeSeconds(s.endTime, exactStart + 3);
+
+          if (exactEnd <= exactStart) {
+            exactEnd = exactStart + (origItem.duration > 0 ? origItem.duration : 2.5);
+          }
 
           refinedSentences.push({
             id: refinedSentences.length + 1,
@@ -3981,18 +4044,29 @@ function postProcessAndSplitSentences(sentences) {
   if (!Array.isArray(sentences) || sentences.length === 0) return [];
   const result = [];
 
+  let lastEndTime = 0;
+
   for (const s of sentences) {
     const rawHanzi = cleanRepeatedPhrases(s.hanzi || s.text || '');
     const rawMeaning = cleanRepeatedPhrases(s.meaning || s.vietnamese || '');
-    const startTime = typeof s.startTime === 'number' ? s.startTime : 0;
-    const endTime = typeof s.endTime === 'number' ? s.endTime : (startTime + 3);
+    let startTime = typeof s.startTime === 'number' ? s.startTime : 0;
+    let endTime = typeof s.endTime === 'number' ? s.endTime : (startTime + 3);
 
-    if (!rawHanzi) continue;
+    if (!rawHanzi || isHallucinationText(rawHanzi) || isHallucinationText(rawMeaning)) continue;
+
+    if (startTime < lastEndTime) {
+      startTime = Math.max(startTime, lastEndTime);
+    }
+    if (endTime <= startTime) {
+      endTime = startTime + (s.duration > 0 ? s.duration : 2.5);
+    }
 
     let py = s.pinyin || '';
     if (!py && rawHanzi) {
       try { py = pinyin(rawHanzi, { toneType: 'symbol' }); } catch (e) { }
     }
+
+    lastEndTime = endTime;
 
     result.push({
       id: result.length + 1,
@@ -4287,14 +4361,20 @@ export async function extractYouTubeDictation(youtubeId, extractRawOnly = false)
           try {
             console.log(`[Dictation] Running Groq Whisper Large v3 with Word VAD & Music Filtering...`);
             const { createReadStream } = await import('fs');
-
-            const transcription = await groqClient.audio.transcriptions.create({
+            const isVietnameseTitle = /[àáảãạâầấẩẫậăằắẳẵặèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/i.test(videoTitle);
+            const whisperOpts = {
               file: createReadStream(tempAudio),
               model: 'whisper-large-v3',
               temperature: 0.0,
               response_format: 'verbose_json',
-              timestamp_granularities: ['segment', 'word']
-            });
+              timestamp_granularities: ['segment', 'word'],
+              prompt: `Tiếng Trung HSK, Giản thể, Lời bài hát, Hội thoại: ${videoTitle || ''}`
+            };
+            if (isVietnameseTitle) {
+              whisperOpts.language = 'vi';
+            }
+
+            const transcription = await groqClient.audio.transcriptions.create(whisperOpts);
 
             rawSentences = extractPrecisionVoiceSegments(transcription);
             console.log(`[Dictation] Whisper Large v3 with Word VAD extracted ${rawSentences.length} accurate speech sentences`);
@@ -4724,6 +4804,22 @@ app.post('/api/dictation/save-lesson', async (req, res) => {
     newLesson.userEmail = email;
     newLesson.isCustom = true;
     newLesson.createdAt = newLesson.createdAt || new Date().toISOString();
+
+    // Ensure accurate duration format
+    if (!newLesson.duration || newLesson.duration === '03:30' || newLesson.duration === '03:00') {
+      if (Array.isArray(newLesson.sentences) && newLesson.sentences.length > 0) {
+        const maxEnd = newLesson.sentences.reduce((max, s) => Math.max(max, s.endTime || 0), 0);
+        if (maxEnd > 0) {
+          const sec = Math.round(maxEnd);
+          const hrs = Math.floor(sec / 3600);
+          const mins = Math.floor((sec % 3600) / 60);
+          const secs = sec % 60;
+          newLesson.duration = hrs > 0
+            ? `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`
+            : `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+      }
+    }
 
     const lessons = await readDictationLessons();
     const existingIndex = lessons.findIndex(l => l.youtubeId === newLesson.youtubeId && l.userEmail === email);

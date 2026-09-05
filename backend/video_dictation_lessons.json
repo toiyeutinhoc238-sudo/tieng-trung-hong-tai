@@ -1,5 +1,305 @@
 [
   {
+    "id": "dict_custom_1788579634667",
+    "title": "Phượng Hồng - Bằng Kiều",
+    "youtubeId": "sNH6CcEDlZI",
+    "duration": "06:11",
+    "level": "3",
+    "levelText": "HSK 3",
+    "category": "Âm Nhạc",
+    "thumbnail": "https://img.youtube.com/vi/sNH6CcEDlZI/hqdefault.jpg",
+    "description": "Video cá nhân được thêm bởi guest.",
+    "isCustom": true,
+    "userEmail": "guest",
+    "createdAt": "2026-09-05T03:40:34.667Z",
+    "sentences": [
+      {
+        "id": 1,
+        "startTime": 47.02,
+        "endTime": 51,
+        "hanzi": "满载着红莲的车子在等待",
+        "pinyin": "mǎn zài zhe hóng lián de chē zi zài děng dài",
+        "meaning": "Những chiếc giò xe chờ đầy hoa phượng",
+        "keywords": [
+          "满载",
+          "着红"
+        ],
+        "blankIndices": [
+          0
+        ]
+      },
+      {
+        "id": 2,
+        "startTime": 51,
+        "endTime": 56.14,
+        "hanzi": "你在等我的夏天，去往何处",
+        "pinyin": "nǐ zài děng wǒ de xià tiān ， qù wǎng hé chù",
+        "meaning": "Em chờ mùa hè của tôi đi đâu",
+        "keywords": [
+          "你在",
+          "等我"
+        ],
+        "blankIndices": [
+          0
+        ]
+      },
+      {
+        "id": 3,
+        "startTime": 58.62,
+        "endTime": 63.76,
+        "hanzi": "你手中的盛开红莲，是我的年华",
+        "pinyin": "nǐ shǒu zhōng de shèng kāi hóng lián ， shì wǒ de nián huá",
+        "meaning": "Chùm phượng vĩ em cầm là tuổi tôi",
+        "keywords": [
+          "你手",
+          "中的"
+        ],
+        "blankIndices": [
+          0
+        ]
+      },
+      {
+        "id": 4,
+        "startTime": 66.14,
+        "endTime": 70.86,
+        "hanzi": "没有人轻声低语",
+        "pinyin": "méi yǒu rén qīng shēng dī yǔ",
+        "meaning": "Thưa chẳng ai hay thầm lặng mối",
+        "keywords": [
+          "没有",
+          "人轻"
+        ],
+        "blankIndices": [
+          0
+        ]
+      },
+      {
+        "id": 5,
+        "startTime": 70.86,
+        "endTime": 74.66,
+        "hanzi": "初恋",
+        "pinyin": "chū liàn",
+        "meaning": "tình đầu",
+        "keywords": [
+          "初恋"
+        ],
+        "blankIndices": [
+          0
+        ]
+      },
+      {
+        "id": 6,
+        "startTime": 74.66,
+        "endTime": 81.04,
+        "hanzi": "我的初恋",
+        "pinyin": "wǒ de chū liàn",
+        "meaning": "Mối tình đầu của tôi",
+        "keywords": [
+          "我的",
+          "初恋"
+        ],
+        "blankIndices": [
+          0
+        ]
+      },
+      {
+        "id": 7,
+        "startTime": 82.06,
+        "endTime": 86.82,
+        "hanzi": "是教室外的细雨",
+        "pinyin": "shì jiào shì wài de xì yǔ",
+        "meaning": "Là cơn mưa rào rào ngoài lớp học",
+        "keywords": [
+          "是教",
+          "室外"
+        ],
+        "blankIndices": [
+          0
+        ]
+      },
+      {
+        "id": 8,
+        "startTime": 86.82,
+        "endTime": 91.66,
+        "hanzi": "是某人的白衣，漂浮在梦中",
+        "pinyin": "shì mǒu rén de bái yī ， piāo fú zài mèng zhōng",
+        "meaning": "Là áo ai bay trắng cả giấc mơ",
+        "keywords": [
+          "是某",
+          "人的"
+        ],
+        "blankIndices": [
+          0
+        ]
+      },
+      {
+        "id": 9,
+        "startTime": 91.66,
+        "endTime": 98.02,
+        "hanzi": "是仍在匆忙中回荡的诗篇",
+        "pinyin": "shì réng zài cōng máng zhōng huí dàng de shī piān",
+        "meaning": "Là bài thơ còn hoài trong vội",
+        "keywords": [
+          "是仍",
+          "在匆"
+        ],
+        "blankIndices": [
+          0
+        ]
+      },
+      {
+        "id": 10,
+        "startTime": 210.246,
+        "endTime": 215.046,
+        "hanzi": "满载着红莲的车子在等待",
+        "pinyin": "mǎn zài zhe hóng lián de chē zi zài děng dài",
+        "meaning": "Những chiếc giò xe chờ đầy hoa phượng",
+        "keywords": [
+          "满载",
+          "着红"
+        ],
+        "blankIndices": [
+          0
+        ]
+      },
+      {
+        "id": 11,
+        "startTime": 215.046,
+        "endTime": 220.366,
+        "hanzi": "你在等我的夏天，去往何处",
+        "pinyin": "nǐ zài děng wǒ de xià tiān ， qù wǎng hé chù",
+        "meaning": "Em chờ mùa hè của tôi đi đâu",
+        "keywords": [
+          "你在",
+          "等我"
+        ],
+        "blankIndices": [
+          0
+        ]
+      },
+      {
+        "id": 12,
+        "startTime": 223.006,
+        "endTime": 227.746,
+        "hanzi": "你手中的盛开红莲，是我的年华",
+        "pinyin": "nǐ shǒu zhōng de shèng kāi hóng lián ， shì wǒ de nián huá",
+        "meaning": "Chùm phượng vĩ em cầm là tuổi tôi",
+        "keywords": [
+          "你手",
+          "中的"
+        ],
+        "blankIndices": [
+          0
+        ]
+      },
+      {
+        "id": 13,
+        "startTime": 272.838,
+        "endTime": 279.838,
+        "hanzi": "懵懂的夏日正午到来",
+        "pinyin": "měng dǒng de xià rì zhèng wǔ dào lái",
+        "meaning": "Ngần ngơ mùa hè đến trưa",
+        "keywords": [
+          "懵懂",
+          "的夏"
+        ],
+        "blankIndices": [
+          0
+        ]
+      },
+      {
+        "id": 14,
+        "startTime": 279.838,
+        "endTime": 284.258,
+        "hanzi": "在树上哭泣思念",
+        "pinyin": "zài shù shàng kū qì sī niàn",
+        "meaning": "Khóc nỗi nhớ trên cây",
+        "keywords": [
+          "在树",
+          "上哭"
+        ],
+        "blankIndices": [
+          0
+        ]
+      },
+      {
+        "id": 15,
+        "startTime": 285.278,
+        "endTime": 290.298,
+        "hanzi": "而来年是否还能相见",
+        "pinyin": "ér lái nián shì fǒu hái néng xiāng jiàn",
+        "meaning": "Và mùa sau biết có còn gặp lại ngày",
+        "keywords": [
+          "而来",
+          "年是"
+        ],
+        "blankIndices": [
+          0
+        ]
+      },
+      {
+        "id": 16,
+        "startTime": 327.898,
+        "endTime": 333.218,
+        "hanzi": "我等夏天过去",
+        "pinyin": "wǒ děng xià tiān guò qù",
+        "meaning": "Em chờ mùa hè đi qua",
+        "keywords": [
+          "我等",
+          "夏天"
+        ],
+        "blankIndices": [
+          0
+        ]
+      },
+      {
+        "id": 17,
+        "startTime": 333.218,
+        "endTime": 336.258,
+        "hanzi": "而我仍站在原地",
+        "pinyin": "ér wǒ réng zhàn zài yuán dì",
+        "meaning": "còn tôi đứng lại",
+        "keywords": [
+          "而我",
+          "仍站"
+        ],
+        "blankIndices": [
+          0
+        ]
+      },
+      {
+        "id": 18,
+        "startTime": 336.258,
+        "endTime": 340.738,
+        "hanzi": "阳光犹豫地洒满",
+        "pinyin": "yáng guāng yóu yù dì sǎ mǎn",
+        "meaning": "nắng ngập ngừng",
+        "keywords": [
+          "阳光",
+          "犹豫"
+        ],
+        "blankIndices": [
+          0
+        ]
+      },
+      {
+        "id": 19,
+        "startTime": 340.738,
+        "endTime": 347.178,
+        "hanzi": "一缕棕发",
+        "pinyin": "yì lǚ zōng fā",
+        "meaning": "một vạt tóc nâu",
+        "keywords": [
+          "一缕",
+          "棕发"
+        ],
+        "blankIndices": [
+          0
+        ]
+      }
+    ]
+  },
+  {
     "id": "dict_v1_lifa",
     "youtubeId": "x8hxgoX41bQ",
     "title": "理发",

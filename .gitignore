@@ -3,5 +3,10 @@ node_modules/
 backend/scratch/
 scratch/
 backend/audio_cache/
+backend/temp/
+backend/temp_audio/
+*.m4a
+*.webm
+*.mp3
 TRON BO DE THI HSK TU 1 DEN 9/
 filetuvung/
