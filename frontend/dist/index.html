@@ -120,7 +120,7 @@
   <script type="module" crossorigin src="/assets/global_sidebar-4hgNWOdN.js"></script>
   <script type="module" crossorigin src="/assets/grammar_hsk1_v2-C9vbI0cE.js"></script>
   <script type="module" crossorigin src="/assets/screen_drawing-BS_xmQo7.js"></script>
-  <script type="module" crossorigin src="/assets/main-dsAIfs_c.js"></script>
+  <script type="module" crossorigin src="/assets/main-DG8pcYIU.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/global_sidebar-CpLKR0Ni.css">
 </head>
 
@@ -177,7 +177,7 @@
       <!-- Logged in state elements -->
       <div class="logged-in-view user-dropdown" style="width: 100%; position: relative;">
         <!-- Profile card (click to open dropdown) -->
-        <div class="user-profile sidebar-profile-card">
+        <div class="user-profile sidebar-profile-card" onclick="window.toggleUserDropdown && window.toggleUserDropdown(event)">
           <div class="sidebar-avatar-wrap">
             <img id="user-avatar-img" class="user-avatar-img" src="" alt="Avatar" style="display: none;">
             <div id="user-avatar-placeholder" class="user-avatar sidebar-avatar-placeholder"><i
@@ -2179,7 +2179,7 @@
     </section>
 
     <!-- Custom Cards Management Section -->
-    <section id="custom-section" class="workspace-section">
+    <section id="custom-section" class="workspace-section" style="display: none;">
       <!-- Segmented Switcher for Dictionary tabs -->
       <div class="dict-tab-container" style="display: flex; justify-content: center; margin-bottom: 32px;">
         <div class="dict-segmented-control glass-panel"

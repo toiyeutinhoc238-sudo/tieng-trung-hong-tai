@@ -173,7 +173,7 @@
       <!-- Logged in state elements -->
       <div class="logged-in-view user-dropdown" style="width: 100%; position: relative;">
         <!-- Profile card (click to open dropdown) -->
-        <div class="user-profile sidebar-profile-card">
+        <div class="user-profile sidebar-profile-card" onclick="window.toggleUserDropdown && window.toggleUserDropdown(event)">
           <div class="sidebar-avatar-wrap">
             <img id="user-avatar-img" class="user-avatar-img" src="" alt="Avatar" style="display: none;">
             <div id="user-avatar-placeholder" class="user-avatar sidebar-avatar-placeholder"><i
@@ -2175,7 +2175,7 @@
     </section>
 
     <!-- Custom Cards Management Section -->
-    <section id="custom-section" class="workspace-section">
+    <section id="custom-section" class="workspace-section" style="display: none;">
       <!-- Segmented Switcher for Dictionary tabs -->
       <div class="dict-tab-container" style="display: flex; justify-content: center; margin-bottom: 32px;">
         <div class="dict-segmented-control glass-panel"
