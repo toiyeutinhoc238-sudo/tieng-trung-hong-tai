@@ -252,8 +252,8 @@
     bindItemClicks();
     setTimeout(bindItemClicks, 600);
 
-    // 5. Inject top-left hamburger menu button if missing (runs across all pages, mobile & desktop)
-    injectTopMenuButtonIfMissing();
+    // 5. Initialize Floating Menu Bubble Widget (Style Bong Bóng giống nút Chatbot)
+    initMenuBubbleWidget();
 
     // 6. Connect all existing and new hamburger / menu toggle buttons
     const bindMenuButtons = () => {
@@ -265,44 +265,127 @@
     setTimeout(bindMenuButtons, 500);
   }
 
+  // Floating Menu Bubble Widget (Style Bong Bóng giống nút Chatbot AI)
+  function initMenuBubbleWidget() {
+    if (document.getElementById('menu-bubble-widget')) return;
+
+    const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html');
+    const bubbleWidget = document.createElement('div');
+    bubbleWidget.className = 'menu-bubble-widget' + (isIndex ? ' on-index-page' : '');
+    bubbleWidget.id = 'menu-bubble-widget';
+
+    const bubbleBtn = document.createElement('button');
+    bubbleBtn.className = 'menu-bubble-btn';
+    bubbleBtn.id = 'menu-bubble-btn';
+    bubbleBtn.title = 'Mở Menu Danh Mục (☰)';
+    bubbleBtn.setAttribute('aria-label', 'Mở Menu Danh Mục');
+    bubbleBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
+
+    bubbleWidget.appendChild(bubbleBtn);
+    document.body.appendChild(bubbleWidget);
+
+    enableBubbleDrag(bubbleWidget, bubbleBtn);
+  }
+
+  function enableBubbleDrag(widgetEl, btnEl) {
+    let isDragging = false;
+    let startX = 0, startY = 0;
+    let initialLeft = 0, initialTop = 0;
+    let hasMoved = false;
+
+    function getCoords(e) {
+      if (e.touches && e.touches.length > 0) {
+        return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      }
+      return { x: e.clientX, y: e.clientY };
+    }
+
+    function onPointerDown(e) {
+      if (e.button && e.button !== 0) return;
+      const coords = getCoords(e);
+      startX = coords.x;
+      startY = coords.y;
+      const rect = widgetEl.getBoundingClientRect();
+      initialLeft = rect.left;
+      initialTop = rect.top;
+      hasMoved = false;
+      isDragging = true;
+      widgetEl.style.transition = 'none';
+    }
+
+    function onPointerMove(e) {
+      if (!isDragging) return;
+      const coords = getCoords(e);
+      const dx = coords.x - startX;
+      const dy = coords.y - startY;
+
+      if (!hasMoved && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) {
+        hasMoved = true;
+      }
+
+      if (hasMoved) {
+        if (e.cancelable) e.preventDefault();
+        const maxX = window.innerWidth - widgetEl.offsetWidth - 10;
+        const maxY = window.innerHeight - widgetEl.offsetHeight - 10;
+        const newX = Math.max(10, Math.min(maxX, initialLeft + dx));
+        const newY = Math.max(10, Math.min(maxY, initialTop + dy));
+
+        widgetEl.style.left = `${newX}px`;
+        widgetEl.style.top = `${newY}px`;
+        widgetEl.style.bottom = 'auto';
+        widgetEl.style.right = 'auto';
+      }
+    }
+
+    function onPointerUp(e) {
+      if (!isDragging) return;
+      isDragging = false;
+      widgetEl.style.transition = 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+
+      if (!hasMoved) {
+        window.toggleGlobalSidebar();
+      } else {
+        const rect = widgetEl.getBoundingClientRect();
+        const midX = window.innerWidth / 2;
+        const isLeft = (rect.left + rect.width / 2) < midX;
+        if (isLeft) {
+          widgetEl.style.left = '16px';
+          widgetEl.style.right = 'auto';
+        } else {
+          widgetEl.style.left = `${window.innerWidth - rect.width - 16}px`;
+          widgetEl.style.right = 'auto';
+        }
+      }
+    }
+
+    btnEl.addEventListener('touchstart', onPointerDown, { passive: false });
+    window.addEventListener('touchmove', onPointerMove, { passive: false });
+    window.addEventListener('touchend', onPointerUp);
+
+    btnEl.addEventListener('mousedown', onPointerDown);
+    window.addEventListener('mousemove', onPointerMove);
+    window.addEventListener('mouseup', onPointerUp);
+  }
+
   function injectTopMenuButtonIfMissing() {
-    // 1. Check if there's already an active hamburger button in any primary header
+    // Keep navbar insertion only for pages that have standard nav-container or top-bar
     const alreadyHasBtn = document.querySelector('.global-hamburger-btn, #mobile-nav-toggle-btn, #top-sidebar-toggle-btn');
     if (alreadyHasBtn) {
       alreadyHasBtn.onclick = window.toggleGlobalSidebar;
       return;
     }
 
-    // 2. Comprehensive header insertion points across all pages in the app
     const headerConfigs = [
       { container: '.navbar .nav-container', insertBefore: '.nav-brand' },
       { container: '.top-bar', insertBefore: ':first-child' },
       { container: '.rd-header-left', insertBefore: ':first-child' },
-      { container: '.rd-header-bar', insertBefore: ':first-child' },
-      { container: '.dict-top-nav', insertBefore: '.dict-brand' },
-      { container: '.grammar-header .brand-box', insertBefore: ':first-child' },
-      { container: '.grammar-header', insertBefore: ':first-child' },
-      { container: '.hanzi-header .brand-box', insertBefore: ':first-child' },
-      { container: '.hanzi-header', insertBefore: ':first-child' },
-      { container: '.phonetics-header .brand-box', insertBefore: ':first-child' },
-      { container: '.phonetics-header', insertBefore: ':first-child' },
-      { container: '.header-card > div:first-child', insertBefore: ':first-child' },
-      { container: '.header-card', insertBefore: ':first-child' },
-      { container: '.header-panel .logo', insertBefore: ':first-child' },
-      { container: '.header-panel', insertBefore: ':first-child' },
-      { container: '.rank-header-nav', insertBefore: '.rank-brand-logo' },
-      { container: '.rules-header', insertBefore: '.rules-title-group' },
-      { container: '.header-bar .header-title-wrap', insertBefore: ':first-child' },
-      { container: '.chat-view-header', insertBefore: ':first-child' },
-      { container: 'header', insertBefore: ':first-child' }
+      { container: '.dict-top-nav', insertBefore: '.dict-brand' }
     ];
 
-    let inserted = false;
     for (const cfg of headerConfigs) {
       const parent = document.querySelector(cfg.container);
       if (parent) {
         if (parent.querySelector('.global-hamburger-btn, .menu-toggle-btn, #sidebar-expand-float-btn')) {
-          inserted = true;
           break;
         }
 
@@ -311,7 +394,7 @@
         menuBtn.id = 'global-hamburger-btn';
         menuBtn.title = 'Mở Menu Danh Mục';
         menuBtn.setAttribute('aria-label', 'Mở Menu Danh Mục');
-        menuBtn.innerHTML = '<i class="fa-solid fa-bars"></i> <span class="btn-text">Menu</span>';
+        menuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
         menuBtn.onclick = window.toggleGlobalSidebar;
 
         if (cfg.insertBefore === ':first-child') {
@@ -324,23 +407,8 @@
             parent.insertBefore(menuBtn, parent.firstChild);
           }
         }
-        inserted = true;
         break;
       }
-    }
-
-
-
-    // 3. Fallback floating button if no standard header is present
-    if (!inserted && !document.querySelector('.floating-menu-trigger-btn')) {
-      const floatingBtn = document.createElement('button');
-      floatingBtn.className = 'menu-toggle-btn global-hamburger-btn floating-menu-trigger-btn';
-      floatingBtn.id = 'global-floating-menu-btn';
-      floatingBtn.title = 'Mở Menu Danh Mục';
-      floatingBtn.setAttribute('aria-label', 'Mở Menu Danh Mục');
-      floatingBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
-      floatingBtn.onclick = window.toggleGlobalSidebar;
-      document.body.appendChild(floatingBtn);
     }
   }
 

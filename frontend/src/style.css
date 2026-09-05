@@ -17752,3 +17752,95 @@ body.sidebar-collapsed .floating-theme-widget {
   }
 }
 
+/* ============================================================
+   FLOATING MENU BUBBLE (Style Bong Bóng giống nút Chatbot AI)
+   ============================================================ */
+.menu-bubble-widget {
+  position: fixed !important;
+  bottom: 24px !important;
+  left: 24px !important;
+  z-index: 99998 !important;
+  pointer-events: auto !important;
+  touch-action: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.menu-bubble-btn {
+  width: 58px !important;
+  height: 58px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%) !important;
+  border: 2px solid rgba(255, 255, 255, 0.35) !important;
+  color: #ffffff !important;
+  font-size: 1.45rem !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.45), 0 0 24px rgba(37, 99, 235, 0.35) !important;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s ease !important;
+  outline: none !important;
+  padding: 0 !important;
+  position: relative !important;
+}
+
+.menu-bubble-btn:hover {
+  transform: scale(1.1) rotate(6deg) !important;
+  box-shadow: 0 8px 26px rgba(14, 165, 233, 0.6), 0 0 30px rgba(37, 99, 235, 0.5) !important;
+}
+
+.menu-bubble-btn:active {
+  transform: scale(0.92) !important;
+}
+
+.menu-bubble-btn i {
+  color: #ffffff !important;
+  font-size: 1.45rem !important;
+  line-height: 1 !important;
+  pointer-events: none !important;
+}
+
+/* Light mode bubble */
+html.light-mode .menu-bubble-btn,
+body.light-mode .menu-bubble-btn,
+html:not(.dark) .menu-bubble-btn {
+  background: linear-gradient(135deg, #0284c7 0%, #1d4ed8 100%) !important;
+  border-color: rgba(255, 255, 255, 0.6) !important;
+  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.4), 0 0 20px rgba(29, 78, 216, 0.3) !important;
+}
+
+/* Hide bubble when sidebar is open */
+body.sidebar-open .menu-bubble-widget {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: scale(0.7) !important;
+  transition: all 0.25s ease !important;
+}
+
+/* On desktop with expanded sidebar on index, hide the bubble */
+@media (min-width: 901px) {
+  body:not(.sidebar-collapsed) #menu-bubble-widget.on-index-page {
+    display: none !important;
+  }
+}
+
+/* Mobile responsive sizing */
+@media (max-width: 768px) {
+  .menu-bubble-widget {
+    bottom: 20px !important;
+    left: 16px !important;
+  }
+  .menu-bubble-btn {
+    width: 52px !important;
+    height: 52px !important;
+  }
+  .menu-bubble-btn i {
+    font-size: 1.3rem !important;
+  }
+}
+
+
