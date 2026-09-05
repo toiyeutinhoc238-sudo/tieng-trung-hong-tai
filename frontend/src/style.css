@@ -17848,7 +17848,7 @@ body.light-mode .global-app-sidebar {
   box-shadow: 4px 0 32px rgba(0, 0, 0, 0.15) !important;
 }
 
-/* Floating Theme & Particle Widget Placement (Avoid overlapping Desktop Sidebar) */
+/* Floating Theme & Particle Widget Placement (Chuyển nền 🌙 & Bông tuyết ❄️) */
 #floating-theme-widget,
 .floating-theme-widget {
   position: fixed !important;
@@ -17859,7 +17859,7 @@ body.light-mode .global-app-sidebar {
   gap: 12px !important;
   align-items: center !important;
   touch-action: manipulation !important;
-  transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s ease !important;
+  transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s ease, opacity 0.25s ease !important;
 }
 
 body.sidebar-collapsed #floating-theme-widget,
@@ -17867,87 +17867,87 @@ body.sidebar-collapsed .floating-theme-widget {
   left: 24px !important;
 }
 
+/* Hiển thị rõ ràng, đẹp mắt trên điện thoại di động & máy tính bảng (< 900px) ở góc dưới bên trái */
 @media (max-width: 900px) {
   #floating-theme-widget,
   .floating-theme-widget {
-    display: none !important;
-  }
-}
-
-/* ============================================================
-   FLOATING MENU BUBBLE (Chỉ hiển thị trên điện thoại di động)
-   ============================================================ */
-.menu-bubble-widget {
-  display: none !important; /* Ẩn hoàn toàn trên máy tính và máy tính bảng (màn hình >= 768px) */
-}
-
-/* Chỉ hiển thị trên điện thoại di động (màn hình dưới 768px) */
-@media (max-width: 767px) {
-  .menu-bubble-widget {
+    display: flex !important;
     position: fixed !important;
     bottom: 20px !important;
     left: 16px !important;
-    z-index: 99998 !important;
+    z-index: 99990 !important;
+    gap: 10px !important;
+    align-items: center !important;
     pointer-events: auto !important;
-    touch-action: none !important;
-    user-select: none !important;
-    -webkit-user-select: none !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+    touch-action: manipulation !important;
   }
 
-  .menu-bubble-btn {
-    width: 52px !important;
-    height: 52px !important;
+  #floating-theme-widget button,
+  .floating-theme-widget button,
+  #floating-theme-toggle-btn,
+  #particle-toggle-btn {
+    width: 48px !important;
+    height: 48px !important;
     border-radius: 50% !important;
-    background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%) !important;
-    border: 2px solid rgba(255, 255, 255, 0.35) !important;
-    color: #ffffff !important;
-    font-size: 1.3rem !important;
+    background: var(--bg-card, rgba(15, 23, 42, 0.9)) !important;
+    border: 2px solid var(--border-glass, rgba(255, 255, 255, 0.18)) !important;
+    color: var(--text-primary, #ffffff) !important;
+    font-size: 1.25rem !important;
     cursor: pointer !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    box-shadow: 0 6px 20px rgba(14, 165, 233, 0.45), 0 0 24px rgba(37, 99, 235, 0.35) !important;
-    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s ease !important;
-    outline: none !important;
-    padding: 0 !important;
-    position: relative !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    touch-action: manipulation !important;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s ease, box-shadow 0.2s ease !important;
   }
 
-  .menu-bubble-btn:hover {
-    transform: scale(1.1) rotate(6deg) !important;
-    box-shadow: 0 8px 26px rgba(14, 165, 233, 0.6), 0 0 30px rgba(37, 99, 235, 0.5) !important;
+  #particle-toggle-btn {
+    color: #60a5fa !important;
   }
 
-  .menu-bubble-btn:active {
-    transform: scale(0.92) !important;
+  #floating-theme-widget button:active,
+  .floating-theme-widget button:active,
+  #floating-theme-toggle-btn:active,
+  #particle-toggle-btn:active {
+    transform: scale(0.9) !important;
   }
 
-  .menu-bubble-btn i {
-    color: #ffffff !important;
-    font-size: 1.3rem !important;
-    line-height: 1 !important;
-    pointer-events: none !important;
-  }
-
-  /* Light mode bubble */
-  html.light-mode .menu-bubble-btn,
-  body.light-mode .menu-bubble-btn,
-  html:not(.dark) .menu-bubble-btn {
-    background: linear-gradient(135deg, #0284c7 0%, #1d4ed8 100%) !important;
-    border-color: rgba(255, 255, 255, 0.6) !important;
-    box-shadow: 0 6px 20px rgba(2, 132, 199, 0.4), 0 0 20px rgba(29, 78, 216, 0.3) !important;
-  }
-
-  /* Hide bubble when sidebar drawer is open */
-  body.sidebar-open .menu-bubble-widget {
+  /* Ẩn widget chuyển nền khi drawer menu mở trên mobile để không che menu */
+  body.sidebar-open #floating-theme-widget,
+  body.sidebar-open .floating-theme-widget {
     opacity: 0 !important;
     pointer-events: none !important;
-    transform: scale(0.7) !important;
-    transition: all 0.25s ease !important;
+    visibility: hidden !important;
   }
+}
+
+/* Chế độ sáng (Light mode) */
+html.light #floating-theme-widget button,
+html.light-mode #floating-theme-widget button,
+body.light-mode #floating-theme-widget button {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+html.light #particle-toggle-btn,
+html.light-mode #particle-toggle-btn,
+body.light-mode #particle-toggle-btn {
+  color: #2563eb !important;
+}
+
+/* ============================================================
+   ẨN HOÀN TOÀN BONG BÓNG MENU THỪA (Đã có nút [☰ Menu] ở góc trên)
+   ============================================================ */
+.menu-bubble-widget,
+#menu-bubble-widget {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 /* ==========================================================================

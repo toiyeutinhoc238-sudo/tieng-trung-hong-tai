@@ -448,10 +448,14 @@
     bindItemClicks();
     setTimeout(bindItemClicks, 600);
 
-    // 5. Initialize Floating Menu Bubble Widget (Style Bong Bóng giống nút Chatbot)
-    initMenuBubbleWidget();
+    // 5. Remove any redundant menu bubble widget if previously created
+    const existingBubble = document.getElementById('menu-bubble-widget');
+    if (existingBubble) existingBubble.remove();
 
-    // 6. Connect all existing and new hamburger / menu toggle buttons
+    // 6. Ensure Floating Theme & Particle Widget (Chuyển nền 🌙 & Bông tuyết ❄️) is present
+    ensureFloatingThemeWidget();
+
+    // 7. Connect all existing and new hamburger / menu toggle buttons
     const bindMenuButtons = () => {
       document.querySelectorAll('.menu-toggle-btn, .global-hamburger-btn, .sidebar-open-btn, .top-menu-btn, #top-sidebar-toggle-btn, #sidebar-expand-float-btn, .sidebar-expand-float-btn, #mobile-nav-toggle-btn').forEach(btn => {
         btn.onclick = window.toggleGlobalSidebar;
@@ -461,106 +465,31 @@
     setTimeout(bindMenuButtons, 500);
   }
 
-  // Floating Menu Bubble Widget (Style Bong Bóng giống nút Chatbot AI)
-  function initMenuBubbleWidget() {
-    if (document.getElementById('menu-bubble-widget')) return;
+  // Ensure Floating Theme & Particle Toggle Buttons (Chuyển nền & Bông tuyết)
+  function ensureFloatingThemeWidget() {
+    if (document.getElementById('floating-theme-widget')) return;
 
-    const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html');
-    const bubbleWidget = document.createElement('div');
-    bubbleWidget.className = 'menu-bubble-widget' + (isIndex ? ' on-index-page' : '');
-    bubbleWidget.id = 'menu-bubble-widget';
+    const widget = document.createElement('div');
+    widget.id = 'floating-theme-widget';
+    widget.className = 'floating-theme-widget';
 
-    const bubbleBtn = document.createElement('button');
-    bubbleBtn.className = 'menu-bubble-btn';
-    bubbleBtn.id = 'menu-bubble-btn';
-    bubbleBtn.title = 'Mở Menu Danh Mục (☰)';
-    bubbleBtn.setAttribute('aria-label', 'Mở Menu Danh Mục');
-    bubbleBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
+    const isDark = !document.documentElement.classList.contains('light') && !document.documentElement.classList.contains('light-mode');
 
-    bubbleWidget.appendChild(bubbleBtn);
-    document.body.appendChild(bubbleWidget);
+    widget.innerHTML = `
+      <button id="floating-theme-toggle-btn" class="floating-theme-btn" onclick="window.toggleTheme && window.toggleTheme()" title="Chuyển đổi Sáng/Tối">
+        <i class="fa-solid ${isDark ? 'fa-moon' : 'fa-sun'}" style="${isDark ? '' : 'color: #f59e0b;'}"></i>
+      </button>
+      <button id="particle-toggle-btn" class="particle-toggle-btn" onclick="window.toggleSeasonalParticles && window.toggleSeasonalParticles()" title="Bật/Tắt hiệu ứng mùa">
+        <i class="fa-solid fa-snowflake"></i>
+      </button>
+    `;
 
-    enableBubbleDrag(bubbleWidget, bubbleBtn);
-  }
+    document.body.appendChild(widget);
 
-  function enableBubbleDrag(widgetEl, btnEl) {
-    let isDragging = false;
-    let startX = 0, startY = 0;
-    let initialLeft = 0, initialTop = 0;
-    let hasMoved = false;
-
-    function getCoords(e) {
-      if (e.touches && e.touches.length > 0) {
-        return { x: e.touches[0].clientX, y: e.touches[0].clientY };
-      }
-      return { x: e.clientX, y: e.clientY };
+    if (typeof window.updateParticleToggleBtns === 'function') {
+      const particlesOn = localStorage.getItem('particles_enabled') !== 'false';
+      window.updateParticleToggleBtns(particlesOn);
     }
-
-    function onPointerDown(e) {
-      if (e.button && e.button !== 0) return;
-      const coords = getCoords(e);
-      startX = coords.x;
-      startY = coords.y;
-      const rect = widgetEl.getBoundingClientRect();
-      initialLeft = rect.left;
-      initialTop = rect.top;
-      hasMoved = false;
-      isDragging = true;
-      widgetEl.style.transition = 'none';
-    }
-
-    function onPointerMove(e) {
-      if (!isDragging) return;
-      const coords = getCoords(e);
-      const dx = coords.x - startX;
-      const dy = coords.y - startY;
-
-      if (!hasMoved && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) {
-        hasMoved = true;
-      }
-
-      if (hasMoved) {
-        if (e.cancelable) e.preventDefault();
-        const maxX = window.innerWidth - widgetEl.offsetWidth - 10;
-        const maxY = window.innerHeight - widgetEl.offsetHeight - 10;
-        const newX = Math.max(10, Math.min(maxX, initialLeft + dx));
-        const newY = Math.max(10, Math.min(maxY, initialTop + dy));
-
-        widgetEl.style.left = `${newX}px`;
-        widgetEl.style.top = `${newY}px`;
-        widgetEl.style.bottom = 'auto';
-        widgetEl.style.right = 'auto';
-      }
-    }
-
-    function onPointerUp(e) {
-      if (!isDragging) return;
-      isDragging = false;
-      widgetEl.style.transition = 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
-
-      if (!hasMoved) {
-        window.toggleGlobalSidebar();
-      } else {
-        const rect = widgetEl.getBoundingClientRect();
-        const midX = window.innerWidth / 2;
-        const isLeft = (rect.left + rect.width / 2) < midX;
-        if (isLeft) {
-          widgetEl.style.left = '16px';
-          widgetEl.style.right = 'auto';
-        } else {
-          widgetEl.style.left = `${window.innerWidth - rect.width - 16}px`;
-          widgetEl.style.right = 'auto';
-        }
-      }
-    }
-
-    btnEl.addEventListener('touchstart', onPointerDown, { passive: false });
-    window.addEventListener('touchmove', onPointerMove, { passive: false });
-    window.addEventListener('touchend', onPointerUp);
-
-    btnEl.addEventListener('mousedown', onPointerDown);
-    window.addEventListener('mousemove', onPointerMove);
-    window.addEventListener('mouseup', onPointerUp);
   }
 
   function injectTopMenuButtonIfMissing() {

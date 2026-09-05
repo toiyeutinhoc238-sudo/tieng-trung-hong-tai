@@ -431,14 +431,14 @@ document.addEventListener('DOMContentLoaded', async () => {
           const newUrl = new URL(window.location);
           newUrl.searchParams.delete('openVocab');
           window.history.replaceState({}, document.title, newUrl.toString());
-        } catch (e) {}
+        } catch (e) { }
       } else if (openGrammarLesson) {
         setTimeout(() => window.openLessonGrammarModal(openGrammarLesson), 250);
         try {
           const newUrl = new URL(window.location);
           newUrl.searchParams.delete('openGrammar');
           window.history.replaceState({}, document.title, newUrl.toString());
-        } catch (e) {}
+        } catch (e) { }
       }
     } else if (openVocabLesson) {
       goToRoadmapLevel(targetVersion, targetLevel || 1);
@@ -447,7 +447,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const newUrl = new URL(window.location);
         newUrl.searchParams.delete('openVocab');
         window.history.replaceState({}, document.title, newUrl.toString());
-      } catch (e) {}
+      } catch (e) { }
     } else if (openGrammarLesson) {
       goToRoadmapLevel(targetVersion, targetLevel || 1);
       setTimeout(() => window.openLessonGrammarModal(openGrammarLesson), 250);
@@ -455,7 +455,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const newUrl = new URL(window.location);
         newUrl.searchParams.delete('openGrammar');
         window.history.replaceState({}, document.title, newUrl.toString());
-      } catch (e) {}
+      } catch (e) { }
     } else if (targetTab === 'roadmap') {
       showRoadmapView();
     } else if (targetTab === 'exams') {
@@ -611,7 +611,7 @@ function initSeasonalParticles() {
     }
   });
 
-  window.toggleSeasonalParticles = function() {
+  window.toggleSeasonalParticles = function () {
     const current = localStorage.getItem('particles_enabled') !== 'false';
     const next = !current;
     localStorage.setItem('particles_enabled', next ? 'true' : 'false');
@@ -653,7 +653,7 @@ function updateParticleToggleBtns(enabled) {
   });
 }
 
-window.toggleSeasonalParticles = function() {
+window.toggleSeasonalParticles = function () {
   const current = localStorage.getItem('particles_enabled') !== 'false';
   const next = !current;
   localStorage.setItem('particles_enabled', next ? 'true' : 'false');
@@ -845,7 +845,7 @@ function speakText(text) {
   // 3. Request Baidu Female Voice MP3 stream from backend server with speed=3 (chậm rãi, tròn vành rõ chữ)
   const currentVoice = 'baidu-female';
   const url = `${API_BASE_URL}/api/tts?text=${encodeURIComponent(cleanText)}&voice=${encodeURIComponent(currentVoice)}&speed=3`;
-  
+
   const audio = new Audio(url);
   audio.playbackRate = currentSpeed;
   activeAudioElement = audio;
@@ -1161,7 +1161,7 @@ async function markLessonWordMemorized(id) {
     const guestProg = JSON.parse(localStorage.getItem('guest_progress') || '{}');
     guestProg[id] = { isMemorized: true, isStudied: true, level: vocabList[index] ? vocabList[index].level : '1' };
     localStorage.setItem('guest_progress', JSON.stringify(guestProg));
-  } catch(e) {}
+  } catch (e) { }
 
   updateStats();
 
@@ -1173,7 +1173,7 @@ async function markLessonWordMemorized(id) {
         body: JSON.stringify({ id, isMemorized: true }),
         credentials: 'include'
       });
-    } catch(e) {
+    } catch (e) {
       console.warn('Sync lesson word progress error:', e);
     }
   }
@@ -1413,11 +1413,11 @@ function renderActiveCardLesson(current) {
           radicalColor: '#ef4444',
           outlineColor: isDark ? '#475569' : '#94a3b8',
           strokeAnimationSpeed: 1.2,
-          onLoadCharDataError: function(err) {
+          onLoadCharDataError: function (err) {
             targetContainer.innerHTML = `<span style="font-size: 4.5rem; font-weight: 900; color: #ef4444;">${current.word}</span>`;
           }
         });
-        activeLessonHanziWriter.animateCharacter().catch(() => {});
+        activeLessonHanziWriter.animateCharacter().catch(() => { });
       } catch (err) {
         console.warn('HanziWriter error:', err);
         targetContainer.innerHTML = `<span style="font-size: 5rem; font-weight: 900; color: #ef4444;">${current.word}</span>`;
@@ -1595,7 +1595,7 @@ function renderLessonWordHintCards(sentence) {
   }
 }
 
-window.toggleImage2CardHint = function(index) {
+window.toggleImage2CardHint = function (index) {
   const card = document.getElementById(`image2-card-${index}`);
   if (!card) return;
 
@@ -1665,7 +1665,7 @@ function checkLessonTranslationAnswer() {
     inputEl.style.borderColor = '#22c55e';
     if (typeof playAudioSuccess === 'function') playAudioSuccess();
     if (typeof speakText === 'function') speakText(targetZh, 'zh-CN');
-    
+
     // Tự động lật mở các thẻ chữ gợi ý khi trả lời đúng
     const container = document.getElementById('lesson-word-chips-container');
     if (container) {
@@ -2996,7 +2996,7 @@ function setupEventListeners() {
   }
 
   // User Profile Dropdown Toggle on Click
-  window.toggleUserDropdown = function(e) {
+  window.toggleUserDropdown = function (e) {
     if (e) {
       if (e._toggleUserDropdownHandled) return;
       e._toggleUserDropdownHandled = true;
@@ -3088,14 +3088,14 @@ function setupEventListeners() {
         historyArr.forEach(item => {
           if (!item || !item.playedAt) return;
           const itemTime = new Date(item.playedAt).getTime();
-          
+
           const isDuplicate = uniqueHistory.some(existing => {
             const existingTime = new Date(existing.playedAt).getTime();
             const timeDiff = Math.abs(itemTime - existingTime);
-            return timeDiff < 60000 && 
-                   existing.score == item.score && 
-                   existing.stage == item.stage && 
-                   existing.level == item.level;
+            return timeDiff < 60000 &&
+              existing.score == item.score &&
+              existing.stage == item.stage &&
+              existing.level == item.level;
           });
 
           if (!isDuplicate) {
@@ -3404,52 +3404,52 @@ function setupEventListeners() {
     });
   }
 
-window.toggleRoadmapEyeCard = function(index, targetSentence) {
-  const card = document.getElementById(`roadmap-eye-card-${index}`);
-  if (!card) return;
+  window.toggleRoadmapEyeCard = function (index, targetSentence) {
+    const card = document.getElementById(`roadmap-eye-card-${index}`);
+    if (!card) return;
 
-  const isRevealed = card.getAttribute('data-revealed') === 'true';
-  const word = card.getAttribute('data-word');
-  const dotsEl = card.querySelector('.card-dots');
-  const zhEl = card.querySelector('.card-zh');
-  const inputEl = document.getElementById('roadmap-sentence-input');
+    const isRevealed = card.getAttribute('data-revealed') === 'true';
+    const word = card.getAttribute('data-word');
+    const dotsEl = card.querySelector('.card-dots');
+    const zhEl = card.querySelector('.card-zh');
+    const inputEl = document.getElementById('roadmap-sentence-input');
 
-  if (isRevealed) {
-    card.setAttribute('data-revealed', 'false');
-    if (dotsEl) dotsEl.style.display = 'block';
-    if (zhEl) zhEl.style.display = 'none';
-  } else {
-    card.setAttribute('data-revealed', 'true');
-    if (dotsEl) dotsEl.style.display = 'none';
-    if (zhEl) zhEl.style.display = 'block';
+    if (isRevealed) {
+      card.setAttribute('data-revealed', 'false');
+      if (dotsEl) dotsEl.style.display = 'block';
+      if (zhEl) zhEl.style.display = 'none';
+    } else {
+      card.setAttribute('data-revealed', 'true');
+      if (dotsEl) dotsEl.style.display = 'none';
+      if (zhEl) zhEl.style.display = 'block';
 
+      if (inputEl) {
+        inputEl.value += word;
+        if (typeof handleRoadmapTranslationInput === 'function') {
+          handleRoadmapTranslationInput(targetSentence);
+        }
+      }
+    }
+  };
+
+  window.revealAllRoadmapEyeCards = function (targetSentence) {
+    const cards = document.querySelectorAll('.image2-hint-card[id^="roadmap-eye-card-"]');
+    cards.forEach(card => {
+      card.setAttribute('data-revealed', 'true');
+      const dotsEl = card.querySelector('.card-dots');
+      const zhEl = card.querySelector('.card-zh');
+      if (dotsEl) dotsEl.style.display = 'none';
+      if (zhEl) zhEl.style.display = 'block';
+    });
+
+    const inputEl = document.getElementById('roadmap-sentence-input');
     if (inputEl) {
-      inputEl.value += word;
+      inputEl.value = targetSentence;
       if (typeof handleRoadmapTranslationInput === 'function') {
         handleRoadmapTranslationInput(targetSentence);
       }
     }
-  }
-};
-
-window.revealAllRoadmapEyeCards = function(targetSentence) {
-  const cards = document.querySelectorAll('.image2-hint-card[id^="roadmap-eye-card-"]');
-  cards.forEach(card => {
-    card.setAttribute('data-revealed', 'true');
-    const dotsEl = card.querySelector('.card-dots');
-    const zhEl = card.querySelector('.card-zh');
-    if (dotsEl) dotsEl.style.display = 'none';
-    if (zhEl) zhEl.style.display = 'block';
-  });
-
-  const inputEl = document.getElementById('roadmap-sentence-input');
-  if (inputEl) {
-    inputEl.value = targetSentence;
-    if (typeof handleRoadmapTranslationInput === 'function') {
-      handleRoadmapTranslationInput(targetSentence);
-    }
-  }
-};
+  };
 
   const typeSpeakExBtn = document.getElementById('type-speak-example-btn');
   if (typeSpeakExBtn) {
@@ -4007,7 +4007,7 @@ function initGoogleSignIn() {
   }
 }
 
-window.openAuthRequiredModal = function() {
+window.openAuthRequiredModal = function () {
   const modal = document.getElementById('auth-required-modal');
   if (modal) {
     modal.style.display = 'flex';
@@ -4156,7 +4156,7 @@ export async function handleLogout(e) {
   // Re-fetch vocabulary to load guest state
   try {
     await fetchVocabulary();
-  } catch (ve) {}
+  } catch (ve) { }
 
   // Reset Chatbot interface and threads on logout
   if (typeof window.resetChatbotOnLogout === 'function') {
@@ -4613,7 +4613,7 @@ function showRoadmapView() {
 }
 window.showRoadmapView = showRoadmapView;
 
-window.returnToHskLevelSelection = function() {
+window.returnToHskLevelSelection = function () {
   const roadmapSec = document.getElementById('roadmap-view-section');
   const lessonsSec = document.getElementById('lessons-section');
   if (lessonsSec) lessonsSec.style.display = 'none';
@@ -4645,7 +4645,7 @@ function isRoadmapLessonUnlocked(hskVersion, level, lessonKey, sortedLessonKeys)
 
 window.isRoadmapLessonUnlocked = isRoadmapLessonUnlocked;
 
-window.unlockRoadmapLevel = function(ver, level) {
+window.unlockRoadmapLevel = function (ver, level) {
   try {
     const map = getUnlockedLevelsMap();
     if (!map[ver]) map[ver] = [];
@@ -4658,7 +4658,7 @@ window.unlockRoadmapLevel = function(ver, level) {
   }
 };
 
-window.lockRoadmapLevel = function(ver, level) {
+window.lockRoadmapLevel = function (ver, level) {
   try {
     const map = getUnlockedLevelsMap();
     if (map[ver]) {
@@ -4897,11 +4897,11 @@ window.openRoadmapLearningView = function (ver, level) {
   window.goToRoadmapLevel(ver, level);
 };
 
-window.renderRoadmapLearningList = function() {
+window.renderRoadmapLearningList = function () {
   const grid = document.getElementById('roadmap-learning-vocab-list');
   if (!grid) return;
   grid.innerHTML = '';
-  
+
   currentRoadmapLearningVocabs.forEach((w, index) => {
     const item = document.createElement('div');
     item.className = 'learning-vocab-item glass-panel';
@@ -4917,7 +4917,7 @@ window.renderRoadmapLearningList = function() {
       background: rgba(255,255,255,0.02);
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     `;
-    
+
     // Hover effect dynamically added
     item.onmouseenter = () => { if (currentRoadmapLearningIndex !== index) { item.style.transform = 'translateY(-2px)'; item.style.background = 'rgba(255,255,255,0.05)'; item.style.borderColor = 'rgba(255,255,255,0.1)'; } };
     item.onmouseleave = () => { if (currentRoadmapLearningIndex !== index) { item.style.transform = 'translateY(0)'; item.style.background = 'rgba(255,255,255,0.02)'; item.style.borderColor = 'rgba(255,255,255,0.05)'; } };
@@ -4952,7 +4952,7 @@ function renderLearningTianzige(word) {
   roadmapHanziWriters.forEach(w => {
     try {
       if (w && typeof w.cancelAnimation === 'function') w.cancelAnimation();
-    } catch(e){}
+    } catch (e) { }
   });
   roadmapHanziWriters = [];
 
@@ -5028,15 +5028,15 @@ function renderLearningTianzige(word) {
           strokeColor: isDark ? '#38bdf8' : '#2563eb',
           radicalColor: '#ef4444',
           outlineColor: isDark ? '#475569' : '#94a3b8',
-          onLoadCharDataSuccess: function() {
-            try { writer.hideCharacter(); } catch(e){}
+          onLoadCharDataSuccess: function () {
+            try { writer.hideCharacter(); } catch (e) { }
             if (currentRenderSeq !== roadmapAnimationSequence) return;
             loadedCount++;
             if (loadedCount === cleanChars.length) {
               startSimultaneousStrokeAnimation();
             }
           },
-          onLoadCharDataError: function() {
+          onLoadCharDataError: function () {
             const targetEl = document.getElementById(`roadmap-tianzige-target-${idx}`);
             if (targetEl) targetEl.innerHTML = `<span style="font-size: 2.2rem; font-weight: 800; color: #dc2626;">${char}</span>`;
             if (currentRenderSeq !== roadmapAnimationSequence) return;
@@ -5076,7 +5076,7 @@ function startSimultaneousStrokeAnimation() {
         w.cancelAnimation();
         w.hideCharacter();
       }
-    } catch(e){}
+    } catch (e) { }
   });
 
   roadmapStrokeTimeout = setTimeout(() => {
@@ -5093,8 +5093,8 @@ function runSimultaneousStrokeChain(seq) {
   roadmapHanziWriters.forEach(writer => {
     if (writer && typeof writer.animateCharacter === 'function') {
       try {
-        writer.animateCharacter().catch(() => {});
-      } catch (e) {}
+        writer.animateCharacter().catch(() => { });
+      } catch (e) { }
     }
   });
 
@@ -5108,13 +5108,13 @@ function runSimultaneousStrokeChain(seq) {
   }
 }
 
-window.animateRoadmapStroke = function() {
+window.animateRoadmapStroke = function () {
   startSimultaneousStrokeAnimation();
 };
 
 let currentRoadmapTargetAns = '';
 
-window.handleRoadmapTranslationInput = function(targetAns) {
+window.handleRoadmapTranslationInput = function (targetAns) {
   const inputEl = document.getElementById('roadmap-sentence-input');
   const feedbackEl = document.getElementById('roadmap-sentence-feedback');
   if (!inputEl || !feedbackEl) return;
@@ -5151,7 +5151,7 @@ window.handleRoadmapTranslationInput = function(targetAns) {
 
   // Find best matching candidate target
   let bestCleanTarget = candidateTargets[0] || '';
-  
+
   // 1. Exact match check
   const exactMatch = candidateTargets.find(cand => cand === cleanTyped);
   if (exactMatch) {
@@ -5179,7 +5179,7 @@ window.handleRoadmapTranslationInput = function(targetAns) {
   }
 
   let html = '<div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">';
-  
+
   let isFullMatch = true;
   for (let i = 0; i < cleanTyped.length; i++) {
     const userChar = cleanTyped[i];
@@ -5201,7 +5201,7 @@ window.handleRoadmapTranslationInput = function(targetAns) {
   feedbackEl.innerHTML = html;
 };
 
-window.revealNextRoadmapHint = function(targetAns) {
+window.revealNextRoadmapHint = function (targetAns) {
   const inputEl = document.getElementById('roadmap-sentence-input');
   if (!inputEl) return;
 
@@ -5218,11 +5218,11 @@ window.revealNextRoadmapHint = function(targetAns) {
   }
 };
 
-window.showLearningFlashcard = function(index) {
+window.showLearningFlashcard = function (index) {
   if (index < 0 || index >= currentRoadmapLearningVocabs.length) return;
   currentRoadmapLearningIndex = index;
   const w = currentRoadmapLearningVocabs[index];
-  
+
   const flashcard = document.getElementById('roadmap-learning-flashcard');
   if (!flashcard) return;
 
@@ -5232,13 +5232,13 @@ window.showLearningFlashcard = function(index) {
   const rawMeaning = w.meaning || '---';
   const mn = cleanMeaningText(rawMeaning);
   const extractedNote = extractNoteFromMeaning(rawMeaning);
-  
+
   const egZh = w.example_zh || '';
   const egVi = w.example_vi || '';
-  
+
   // Smart split Chinese examples by sentence-ending punctuation (！, 。, ？) or newline
   const egZhLines = egZh ? egZh.split(/(?<=[！。？\n])\s*/).map(s => s.trim()).filter(Boolean) : [];
-  
+
   // Smart split Vietnamese examples by sentence-ending punctuation (. ! ?) or newline
   const egViLines = egVi ? egVi.split(/(?<=[.!?\n])\s*/).map(s => s.trim()).filter(Boolean) : [];
 
@@ -5247,7 +5247,7 @@ window.showLearningFlashcard = function(index) {
 
   // Always show translation exercise
   const hasExercise = true;
-  
+
   // Align exercise prompt and target answer
   let sentenceQ = mn;
   let sentenceAns = hz;
@@ -5350,17 +5350,17 @@ window.showLearningFlashcard = function(index) {
             <!-- Eye Cards Row -->
             <div id="roadmap-eye-cards-row" style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: center; width: 100%;">
               ${(() => {
-                const cleanSentenceAns = sentenceAns.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '');
-                const wordTokens = [];
-                let tokenIdx = 0;
-                while (tokenIdx < cleanSentenceAns.length) {
-                  const chunkSize = (cleanSentenceAns.length - tokenIdx >= 2) ? 2 : 1;
-                  wordTokens.push(cleanSentenceAns.substring(tokenIdx, tokenIdx + chunkSize));
-                  tokenIdx += chunkSize;
-                }
-                return wordTokens.map((token, index) => {
-                  const dotsFormatted = Array(token.length).fill('.').join(' ');
-                  return `
+          const cleanSentenceAns = sentenceAns.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '');
+          const wordTokens = [];
+          let tokenIdx = 0;
+          while (tokenIdx < cleanSentenceAns.length) {
+            const chunkSize = (cleanSentenceAns.length - tokenIdx >= 2) ? 2 : 1;
+            wordTokens.push(cleanSentenceAns.substring(tokenIdx, tokenIdx + chunkSize));
+            tokenIdx += chunkSize;
+          }
+          return wordTokens.map((token, index) => {
+            const dotsFormatted = Array(token.length).fill('.').join(' ');
+            return `
                     <div class="image2-hint-card" id="roadmap-eye-card-${index}" data-word="${token}" data-revealed="false"
                       style="width: 76px; height: 96px; background: #ffffff; border: 2.5px solid #1e293b; border-radius: 16px; padding: 10px 8px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; box-shadow: 0 4px 10px rgba(0,0,0,0.08); cursor: pointer; user-select: none; transition: transform 0.15s ease;"
                       onclick="window.toggleRoadmapEyeCard(${index}, '${cleanSentenceAns.replace(/'/g, "\\'")}')"
@@ -5382,8 +5382,8 @@ window.showLearningFlashcard = function(index) {
                       </div>
                     </div>
                   `;
-                }).join('');
-              })()}
+          }).join('');
+        })()}
             </div>
 
             <!-- Instruction Text matching Image 2 -->
@@ -5440,13 +5440,13 @@ window.showLearningFlashcard = function(index) {
   }
 };
 
-window.prevLearningFlashcard = function() {
+window.prevLearningFlashcard = function () {
   if (currentRoadmapLearningIndex > 0) {
     showLearningFlashcard(currentRoadmapLearningIndex - 1);
   }
 };
 
-window.nextLearningFlashcard = function() {
+window.nextLearningFlashcard = function () {
   if (currentRoadmapLearningIndex < currentRoadmapLearningVocabs.length - 1) {
     showLearningFlashcard(currentRoadmapLearningIndex + 1);
   }
@@ -6410,7 +6410,7 @@ async function handleTypingCheck() {
   // Alternative Answers Validation: Split database word by |, /, ;, or commas
   const correctAnswerStr = current.word.trim();
   const acceptableAnswers = correctAnswerStr.split(/[\/|;；,，、]+/).map(ans => ans.trim().toLowerCase());
-  
+
   const normInput = typeof normalizeTextForMatch === 'function' ? normalizeTextForMatch(answer) : answer.replace(/[\s\-_]/g, '');
   const normWord = typeof normalizeTextForMatch === 'function' ? normalizeTextForMatch(current.word) : current.word.trim().toLowerCase();
   const normPinyin = typeof normalizeTextForMatch === 'function' ? normalizeTextForMatch(current.pinyin) : (current.pinyin || '').trim().toLowerCase();
@@ -6621,7 +6621,7 @@ function initChatbot() {
             createdAt: gt.createdAt || new Date().toISOString(),
             messages: parsed.messages || []
           });
-        } catch (e) {}
+        } catch (e) { }
       }
     }
 
@@ -6708,7 +6708,7 @@ function initChatbot() {
         });
         if (badge) badge.style.display = 'none';
         scrollChatToBottom();
-      } catch (e) {}
+      } catch (e) { }
     }
 
     // 2. Fetch latest from backend if logged in
@@ -6999,7 +6999,7 @@ window.closeLessonExtraVideoModal = function () {
     try {
       iframe.contentWindow?.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
       iframe.contentWindow?.postMessage('{"event":"command","func":"stopVideo","args":""}', '*');
-    } catch (e) {}
+    } catch (e) { }
     iframe.src = 'about:blank';
     iframe.removeAttribute('src');
     // Replace element with clean clone to forcefully kill background audio thread
@@ -7136,7 +7136,7 @@ window.openLessonDetailModal = function (lessonKey) {
       const cleanTitle = videoObj.title || (title ? (title.startsWith('Bài') ? title : `Bài ${lessonKey}: ${title}`) : `Bài ${lessonKey}`);
       if (extraVideoTitle) extraVideoTitle.textContent = cleanTitle;
       if (extraVideoDesc) extraVideoDesc.style.display = 'none';
-      
+
       const handleOpenVideo = function (e) {
         if (e) e.stopPropagation();
         const modalEl = document.getElementById('lesson-detail-popup-modal');
@@ -7923,7 +7923,7 @@ function renderLessonStepperNav(currentStep, lessonId, lessonTitle) {
 
 window.renderLessonStepperNav = renderLessonStepperNav;
 
-window.toggleLessonToolbar = function() {
+window.toggleLessonToolbar = function () {
   window._isStepperBarCollapsed = !window._isStepperBarCollapsed;
   const bar = document.querySelector('.lesson-stepper-hub-bar');
   const btn = document.getElementById('toggle-toolbar-btn');
@@ -7942,7 +7942,7 @@ window.toggleLessonToolbar = function() {
   }
 };
 
-window.goToNextLesson = function(currentLessonNum) {
+window.goToNextLesson = function (currentLessonNum) {
   const num = parseInt(String(currentLessonNum).replace(/\D/g, ''), 10) || 1;
   const nextLessonId = num + 1;
   const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : (activeLessonsLevel || 1);
@@ -7977,7 +7977,7 @@ window.goToNextLesson = function(currentLessonNum) {
   showToast(`🚀 Đã chuyển sang Bài ${nextLessonId}`);
 };
 
-window.goToPrevLesson = function(currentLessonNum) {
+window.goToPrevLesson = function (currentLessonNum) {
   const num = parseInt(String(currentLessonNum).replace(/\D/g, ''), 10) || 1;
   if (num <= 1) {
     showToast('Đây là bài học đầu tiên của cấp độ này!');
@@ -7993,7 +7993,7 @@ window.goToPrevLesson = function(currentLessonNum) {
   showToast(`⬅️ Đã chuyển về Bài ${prevLessonId}`);
 };
 
-window.toggleLessonWordStar = async function(wordId) {
+window.toggleLessonWordStar = async function (wordId) {
   const targetId = wordId || (currentLessonVocabWords[currentLessonVocabIndex] ? currentLessonVocabWords[currentLessonVocabIndex].id : null);
   if (!targetId) return;
 
@@ -8046,7 +8046,7 @@ window.toggleLessonWordStar = async function(wordId) {
   });
 };
 
-window.goToLessonStep = function(step, lessonId) {
+window.goToLessonStep = function (step, lessonId) {
   if (!currentUser) {
     window.openAuthRequiredModal();
     return;
@@ -8085,7 +8085,7 @@ window.goToLessonStep = function(step, lessonId) {
   }
 };
 
-window.returnToLessonsMap = function() {
+window.returnToLessonsMap = function () {
   const modal = document.getElementById('lesson-detail-modal');
   if (modal) {
     modal.classList.remove('active');
@@ -8106,7 +8106,7 @@ window.returnToLessonsMap = function() {
 
 let isFlashcardFullscreen = false;
 
-window.toggleFlashcardFullscreen = function(forceState) {
+window.toggleFlashcardFullscreen = function (forceState) {
   const isDocFs = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
   const targetState = typeof forceState === 'boolean' ? forceState : (!isFlashcardFullscreen && !isDocFs);
   if (targetState) {
@@ -8116,7 +8116,7 @@ window.toggleFlashcardFullscreen = function(forceState) {
   }
 };
 
-window.enterFlashcardFullscreen = function() {
+window.enterFlashcardFullscreen = function () {
   isFlashcardFullscreen = true;
   document.body.classList.add('flashcard-fullscreen-mode', 'app-fullscreen-mode');
 
@@ -8134,7 +8134,7 @@ window.enterFlashcardFullscreen = function() {
   try {
     if (!document.fullscreenElement && !document.webkitFullscreenElement) {
       if (docEl.requestFullscreen) {
-        docEl.requestFullscreen().catch(() => {});
+        docEl.requestFullscreen().catch(() => { });
       } else if (docEl.webkitRequestFullscreen) {
         docEl.webkitRequestFullscreen();
       } else if (docEl.msRequestFullscreen) {
@@ -8151,7 +8151,7 @@ window.enterFlashcardFullscreen = function() {
   }
 };
 
-window.exitFlashcardFullscreen = function(callDocExit = true) {
+window.exitFlashcardFullscreen = function (callDocExit = true) {
   isFlashcardFullscreen = false;
   document.body.classList.remove('flashcard-fullscreen-mode', 'app-fullscreen-mode');
 
@@ -8170,7 +8170,7 @@ window.exitFlashcardFullscreen = function(callDocExit = true) {
     if (isDocFs) {
       try {
         if (document.exitFullscreen) {
-          document.exitFullscreen().catch(() => {});
+          document.exitFullscreen().catch(() => { });
         } else if (document.webkitExitFullscreen) {
           document.webkitExitFullscreen();
         } else if (document.msExitFullscreen) {
@@ -8316,7 +8316,7 @@ window.enterAppFullscreen = window.enterFlashcardFullscreen;
 window.exitAppFullscreen = window.exitFlashcardFullscreen;
 
 
-window.returnToLessonsMap = function() {
+window.returnToLessonsMap = function () {
   if (isFlashcardFullscreen) {
     window.exitFlashcardFullscreen(true);
   }
@@ -8324,7 +8324,7 @@ window.returnToLessonsMap = function() {
   switchTab('lessons');
 };
 
-window.toggleLessonCharHint = function(btnEl, char) {
+window.toggleLessonCharHint = function (btnEl, char) {
   if (!btnEl) return;
   const isFlipped = btnEl.getAttribute('data-manual-flipped') === 'true';
   if (isFlipped) {
@@ -8342,7 +8342,7 @@ window.toggleLessonCharHint = function(btnEl, char) {
   }
 };
 
-window.updateLessonCharHintCards = function(containerId, typedText, targetAnswer) {
+window.updateLessonCharHintCards = function (containerId, typedText, targetAnswer) {
   const container = typeof containerId === 'string' ? document.getElementById(containerId) : containerId;
   if (!container) return;
 
@@ -8398,7 +8398,7 @@ window.updateLessonCharHintCards = function(containerId, typedText, targetAnswer
   });
 };
 
-window.revealAllLessonCharHints = function(fullWord) {
+window.revealAllLessonCharHints = function (fullWord) {
   const container = document.getElementById('lesson-char-hints-container');
   const toggleBtn = document.getElementById('lesson-toggle-all-hints-btn');
   if (!container) return;
@@ -8441,7 +8441,7 @@ window.revealAllLessonCharHints = function(fullWord) {
   }
 };
 
-window.checkLessonTypingInput = function(validAnswers) {
+window.checkLessonTypingInput = function (validAnswers) {
   const inputEl = document.getElementById('lesson-typing-input');
   const feedbackEl = document.getElementById('lesson-typing-feedback');
   if (!inputEl || !feedbackEl) return;
@@ -8488,7 +8488,7 @@ window.checkLessonTypingInput = function(validAnswers) {
   }
 };
 
-window.navigateLessonFlashcard = function(dir) {
+window.navigateLessonFlashcard = function (dir) {
   if (!currentLessonVocabWords || currentLessonVocabWords.length === 0) return;
   let nextIdx = currentLessonVocabIndex + dir;
   if (nextIdx < 0) nextIdx = currentLessonVocabWords.length - 1;
@@ -8496,12 +8496,12 @@ window.navigateLessonFlashcard = function(dir) {
   renderLessonFlashcardWorkspace(currentLessonTitleStr, currentLessonVocabWords, nextIdx);
 };
 
-window.selectLessonFlashcardIndex = function(idx) {
+window.selectLessonFlashcardIndex = function (idx) {
   if (!currentLessonVocabWords || !currentLessonVocabWords[idx]) return;
   renderLessonFlashcardWorkspace(currentLessonTitleStr, currentLessonVocabWords, idx);
 };
 
-window.speakLessonWord = function(text) {
+window.speakLessonWord = function (text) {
   if (!text) return;
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel();
@@ -8566,13 +8566,13 @@ function animateLessonHanziSimultaneously() {
   lessonWriterArray.forEach(writer => {
     try {
       if (writer && typeof writer.animateCharacter === 'function') {
-        writer.animateCharacter().catch(() => {});
+        writer.animateCharacter().catch(() => { });
       }
-    } catch (e) {}
+    } catch (e) { }
   });
 }
 
-window.replayLessonHanziStrokes = function() {
+window.replayLessonHanziStrokes = function () {
   animateLessonHanziSimultaneously();
 };
 
@@ -8639,7 +8639,7 @@ let currentBkMode = 'read'; // 'read' | 'quiz' | 'dictation' | 'translate'
 let currentBkLineIndex = 0;
 let currentBkScore = 0;
 
-window.switchBkTab = function(mode) {
+window.switchBkTab = function (mode) {
   currentBkMode = mode;
   currentBkLineIndex = 0;
   currentBkScore = 0;
@@ -8951,7 +8951,7 @@ function renderBkModalContent() {
   }
 }
 
-window.checkBkQuizAnswer = function(oIdx, btnEl) {
+window.checkBkQuizAnswer = function (oIdx, btnEl) {
   const options = window.currentBkQuizOptions || [];
   const selected = options[oIdx] || '';
   const target = window.currentBkQuizTarget || '';
@@ -8988,12 +8988,12 @@ window.checkBkQuizAnswer = function(oIdx, btnEl) {
   if (nextBtn) nextBtn.style.display = 'block';
 };
 
-window.nextBkQuizQuestion = function(totalLines) {
+window.nextBkQuizQuestion = function (totalLines) {
   currentBkLineIndex = (currentBkLineIndex + 1) % totalLines;
   renderBkModalContent();
 };
 
-window.checkBkDictationInput = function(target) {
+window.checkBkDictationInput = function (target) {
   const inputEl = document.getElementById('bk-dictation-input');
   const feedbackEl = document.getElementById('bk-dictation-feedback');
   if (!inputEl || !feedbackEl) return;
@@ -9017,7 +9017,7 @@ window.checkBkDictationInput = function(target) {
   }
 };
 
-window.checkBkTranslateInput = function(target) {
+window.checkBkTranslateInput = function (target) {
   const inputEl = document.getElementById('bk-translate-input');
   const feedbackEl = document.getElementById('bk-translate-feedback');
   if (!inputEl || !feedbackEl) return;
@@ -9041,7 +9041,7 @@ window.checkBkTranslateInput = function(target) {
   }
 };
 
-window.navBkLine = function(dir, totalLines) {
+window.navBkLine = function (dir, totalLines) {
   currentBkLineIndex = (currentBkLineIndex + dir + totalLines) % totalLines;
   renderBkModalContent();
 };
@@ -9056,7 +9056,7 @@ function escapeHtml(str) {
     .replace(/'/g, '&#039;');
 }
 
-window.openLessonGrammarModal = function(lessonKey, initialPointIdx = 0) {
+window.openLessonGrammarModal = function (lessonKey, initialPointIdx = 0) {
   const numKey = parseInt(String(lessonKey).replace(/\D/g, ''), 10) || 1;
   const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : (activeLessonsLevel || 1);
   const currentVer = activeLessonsCurriculum === 'yct' ? 'yct' : (activeHskVersion || activeRoadmapVersion || '3.0');
@@ -9081,7 +9081,7 @@ window.openLessonGrammarModal = function(lessonKey, initialPointIdx = 0) {
   window.location.href = `/hsk-grammar.html?level=${lvlStr}&lesson=${numKey}&version=${currentVer}`;
 };
 
-window.openLessonGrammarStudy = function(lessonId) {
+window.openLessonGrammarStudy = function (lessonId) {
   const modalEl = document.getElementById('lesson-detail-popup-modal');
   if (modalEl) modalEl.style.display = 'none';
 
@@ -9089,7 +9089,7 @@ window.openLessonGrammarStudy = function(lessonId) {
   window.openLessonGrammarModal(numId);
 };
 
-window.openLessonVocabStudy = function(lessonKey) {
+window.openLessonVocabStudy = function (lessonKey) {
   const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : activeLessonsLevel;
   const levelVocabs = vocabList.filter(w => {
     if (w.isCustom) return false;
@@ -9109,7 +9109,7 @@ window.openLessonVocabStudy = function(lessonKey) {
   startLessonStudy({ id: lessonKey, title }, sliceWords);
 };
 
-window.openLessonTextStudy = function(lessonId) {
+window.openLessonTextStudy = function (lessonId) {
   const modalEl = document.getElementById('lesson-detail-popup-modal');
   if (modalEl) modalEl.style.display = 'none';
 
@@ -9119,11 +9119,11 @@ window.openLessonTextStudy = function(lessonId) {
   window.location.href = `/lesson-texts.html?lesson=${numId}&level=${currentLvl}&version=${currentVer}`;
 };
 
-window.openLessonReviewStudy = function(lessonId) {
+window.openLessonReviewStudy = function (lessonId) {
   showComingSoonNotice('Ôn Tập');
 };
 
-window.openYctLevelVocabStudy = function(level) {
+window.openYctLevelVocabStudy = function (level) {
   const yctWords = vocabList.filter(w =>
     !w.isCustom &&
     (w.curriculum === 'yct' || w.hskVersion === 'yct') &&
@@ -9132,7 +9132,7 @@ window.openYctLevelVocabStudy = function(level) {
   startLessonStudy({ id: `yct_${level}`, title: `YCT Cấp ${level}` }, yctWords);
 };
 
-window.startYctLevelFlashcard = function(level) {
+window.startYctLevelFlashcard = function (level) {
   const yctWords = vocabList.filter(w =>
     !w.isCustom &&
     (w.curriculum === 'yct' || w.hskVersion === 'yct') &&
@@ -9951,7 +9951,7 @@ function getDailyStudyHistory() {
           if (merged) {
             localStorage.setItem(key, JSON.stringify(history));
           }
-        } catch (e) {}
+        } catch (e) { }
       }
     }
     return history;
@@ -9964,7 +9964,7 @@ function saveDailyStudyHistory(history) {
   try {
     const key = getDailyStudyHistoryKey();
     localStorage.setItem(key, JSON.stringify(history));
-  } catch (e) {}
+  } catch (e) { }
 }
 
 function recordDailyStudyTime(secs) {
@@ -10047,8 +10047,8 @@ function renderWeeklyStudyChart() {
     const heightPct = mins > 0 ? Math.min(100, Math.max(22, Math.round((mins / maxMins) * 100))) : 12;
     const timeLabel = mins > 0 ? (mins >= 60 ? `${Math.floor(mins / 60)}h${mins % 60 ? mins % 60 + 'm' : ''}` : `${mins}m`) : '--';
 
-    const barGradient = isToday 
-      ? 'linear-gradient(180deg, #f59e0b, #d97706); box-shadow: 0 4px 12px rgba(245,158,11,0.4);' 
+    const barGradient = isToday
+      ? 'linear-gradient(180deg, #f59e0b, #d97706); box-shadow: 0 4px 12px rgba(245,158,11,0.4);'
       : (mins > 0 ? 'linear-gradient(180deg, #38bdf8, #2563eb); box-shadow: 0 4px 12px rgba(56,189,248,0.3);' : 'rgba(255,255,255,0.1);');
 
     const labelColor = isToday ? '#fbbf24; font-weight: 800;' : '#94a3b8; font-weight: 700;';
@@ -10685,11 +10685,11 @@ window.openZubiStatDetail = function (type) {
     // Phân loại số bài đã xong theo từng giáo trình
     const doneHsk3 = completedLessons.filter(g => !g.ver.toString().toLowerCase().includes('yct') && (g.ver === '3.0' || g.ver === 3 || !g.ver)).length;
     const doneHsk2 = completedLessons.filter(g => !g.ver.toString().toLowerCase().includes('yct') && (g.ver === '2.0' || g.ver === 2)).length;
-    const doneYct  = completedLessons.filter(g => g.ver.toString().toLowerCase().includes('yct') || (g.curr || '').toLowerCase().includes('yct')).length;
+    const doneYct = completedLessons.filter(g => g.ver.toString().toLowerCase().includes('yct') || (g.curr || '').toLowerCase().includes('yct')).length;
 
     const totalHsk3 = Object.values(textbookGroups).filter(g => !g.ver.toString().toLowerCase().includes('yct') && (g.ver === '3.0' || g.ver === 3 || !g.ver)).length;
     const totalHsk2 = Object.values(textbookGroups).filter(g => !g.ver.toString().toLowerCase().includes('yct') && (g.ver === '2.0' || g.ver === 2)).length;
-    const totalYct  = Object.values(textbookGroups).filter(g => g.ver.toString().toLowerCase().includes('yct') || (g.curr || '').toLowerCase().includes('yct')).length;
+    const totalYct = Object.values(textbookGroups).filter(g => g.ver.toString().toLowerCase().includes('yct') || (g.curr || '').toLowerCase().includes('yct')).length;
 
     let html = `
       <div style="background: rgba(236, 72, 153, 0.1); border: 1px solid rgba(236, 72, 153, 0.3); border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
@@ -11020,7 +11020,7 @@ let createNbLevel = '1';
 let createNbLesson = 'all';
 let createNbSelectedWordsMap = new Map(); // wordId -> wordObj
 
-window.openCreateNotebookModal = function() {
+window.openCreateNotebookModal = function () {
   const modal = document.getElementById('create-notebook-modal');
   if (!modal) return;
 
@@ -11044,7 +11044,7 @@ window.openCreateNotebookModal = function() {
   modal.style.display = 'flex';
 };
 
-window.setCreateNbVersion = function(ver) {
+window.setCreateNbVersion = function (ver) {
   createNbVersion = ver;
   if (ver === 'premium') {
     createNbLevel = 'Du lịch';
@@ -11116,7 +11116,7 @@ function renderCreateNbLevelPills() {
   }).join('');
 }
 
-window.setCreateNbLevel = function(lvl) {
+window.setCreateNbLevel = function (lvl) {
   createNbLevel = lvl;
   createNbLesson = 'all';
   renderCreateNbLevelPills();
@@ -11172,7 +11172,7 @@ function renderCreateNbLessonPills() {
   pillsWrap.innerHTML = html;
 }
 
-window.setCreateNbLesson = function(lessonId) {
+window.setCreateNbLesson = function (lessonId) {
   createNbLesson = lessonId;
   renderCreateNbLessonPills();
   window.renderCreateNbWordsList();
@@ -11210,7 +11210,7 @@ function getFilteredWordsForCreatePicker() {
   return list;
 }
 
-window.renderCreateNbWordsList = function() {
+window.renderCreateNbWordsList = function () {
   const container = document.getElementById('create-nb-words-list-container');
   const countEl = document.getElementById('create-nb-filter-matched-count');
   if (!container) return;
@@ -11258,7 +11258,7 @@ window.renderCreateNbWordsList = function() {
   }).join('');
 };
 
-window.toggleCreateNbWordSelection = function(wordId) {
+window.toggleCreateNbWordSelection = function (wordId) {
   if (createNbSelectedWordsMap.has(wordId)) {
     createNbSelectedWordsMap.delete(wordId);
   } else {
@@ -11270,7 +11270,7 @@ window.toggleCreateNbWordSelection = function(wordId) {
   window.renderCreateNbWordsList();
 };
 
-window.createNbSelectAllVisible = function(selectAll) {
+window.createNbSelectAllVisible = function (selectAll) {
   const visible = getFilteredWordsForCreatePicker();
   visible.forEach(w => {
     if (selectAll) {
@@ -11290,7 +11290,7 @@ function updateCreateNbSelectedBadge() {
   if (badge) badge.textContent = `${count} từ`;
 }
 
-window.submitCreateCustomNotebook = async function() {
+window.submitCreateCustomNotebook = async function () {
   const nameInput = document.getElementById('create-nb-name-input');
   const name = nameInput ? nameInput.value.trim() : '';
 
@@ -11363,7 +11363,7 @@ window.submitCreateCustomNotebook = async function() {
   showNotebookDashboardView(`custom:${name}`);
 };
 
-window.deleteCustomNotebook = function(name) {
+window.deleteCustomNotebook = function (name) {
   if (name === 'Mặc định') return;
   if (!confirm(`Bạn có chắc chắn muốn xóa sổ tay "${name}"? Các từ vựng trong sổ tay này sẽ bị xóa khỏi danh sách cá nhân.`)) return;
 
@@ -12637,7 +12637,7 @@ function updateExamsVersionUI() {
 
 let activeNotebookGamesHubInstance = null;
 
-window.exitNotebookGamesHub = function() {
+window.exitNotebookGamesHub = function () {
   const gamePlayView = document.getElementById('game-play-view');
   if (gamePlayView) gamePlayView.style.display = 'none';
 
@@ -12656,7 +12656,7 @@ window.exitNotebookGamesHub = function() {
     const hub = activeNotebookGamesHubInstance;
     activeNotebookGamesHubInstance = null;
     if (hub.currentGameEngine && hub.currentGameEngine.stopAndExit) {
-      try { hub.currentGameEngine.stopAndExit(); } catch {}
+      try { hub.currentGameEngine.stopAndExit(); } catch { }
     }
   }
 
@@ -12714,7 +12714,7 @@ function startGameArenaFromNotebook() {
       const hub = activeNotebookGamesHubInstance;
       activeNotebookGamesHubInstance = null;
       if (hub.currentGameEngine && hub.currentGameEngine.stopAndExit) {
-        try { hub.currentGameEngine.stopAndExit(); } catch {}
+        try { hub.currentGameEngine.stopAndExit(); } catch { }
       }
     }
     hubMount.innerHTML = '';
@@ -12771,7 +12771,7 @@ window.openNotebookGamesHub = function (customWords, customTitle, customDesc) {
       const hub = activeNotebookGamesHubInstance;
       activeNotebookGamesHubInstance = null;
       if (hub.currentGameEngine && hub.currentGameEngine.stopAndExit) {
-        try { hub.currentGameEngine.stopAndExit(); } catch {}
+        try { hub.currentGameEngine.stopAndExit(); } catch { }
       }
     }
     hubMount.innerHTML = '';
@@ -13229,9 +13229,9 @@ window.showGrammarModal = function () {
 };
 
 // Open grammar detail modal for a specific level
-window.openGrammarDetail = function(grammarKey, apiBase) {
+window.openGrammarDetail = function (grammarKey, apiBase) {
   const API_BASE_URL = apiBase || getResolvedApiBaseUrl();
-  
+
   let detailModal = document.getElementById('grammar-detail-modal');
   if (!detailModal) {
     detailModal = document.createElement('div');
@@ -13239,7 +13239,7 @@ window.openGrammarDetail = function(grammarKey, apiBase) {
     detailModal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 100000; align-items: center; justify-content: center; padding: 20px;';
     document.body.appendChild(detailModal);
   }
-  
+
   detailModal.innerHTML = `
     <div style="background: var(--bg-primary); border: 2px solid var(--border-glass); border-radius: 28px; width: 100%; max-width: 820px; max-height: 90vh; display: flex; flex-direction: column; padding: 28px; color: var(--text-primary); position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
       <button onclick="document.getElementById('grammar-detail-modal').style.display='none'" style="position: absolute; top: 16px; right: 16px; background: var(--bg-secondary); border: 2px solid var(--border-glass); color: var(--text-secondary); font-size: 1.2rem; cursor: pointer; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">&times;</button>
@@ -13250,14 +13250,14 @@ window.openGrammarDetail = function(grammarKey, apiBase) {
     </div>
   `;
   detailModal.style.display = 'flex';
-  
+
   fetch(`${API_BASE_URL}/api/grammar/detail/${grammarKey}`)
     .then(res => res.json())
     .then(data => {
       const header = document.getElementById('grammar-detail-header');
       const content = document.getElementById('grammar-detail-content');
       if (!header || !content) return;
-      
+
       header.innerHTML = `
         <div style="display: flex; align-items: center; gap: 14px;">
           <span style="font-size: 2.2rem;">${data.icon || '📖'}</span>
@@ -13270,13 +13270,13 @@ window.openGrammarDetail = function(grammarKey, apiBase) {
           </div>
         </div>
       `;
-      
+
       let itemsHtml = '';
       (data.items || []).forEach((point, i) => {
         const examplesHtml = (point.examples || []).map(ex => `
           <div style="background: var(--bg-primary); border-left: 3px solid ${data.color}; border-radius: 0 10px 10px 0; padding: 10px 14px; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; font-family: var(--font-chinese);">${ex.replace(/[一-龯]+/g, (m) => `<strong style="color: ${data.color}; font-size: 1.1em;">${m}</strong>`)}</div>
         `).join('');
-        
+
         itemsHtml += `
           <div style="background: var(--bg-secondary); border: 1.5px solid var(--border-glass); border-radius: 18px; padding: 18px 20px; margin-bottom: 12px;">
             <div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: ${point.explanation ? '12px' : '0'};">
@@ -13288,7 +13288,7 @@ window.openGrammarDetail = function(grammarKey, apiBase) {
           </div>
         `;
       });
-      
+
       content.innerHTML = itemsHtml || `<div style="text-align: center; padding: 40px; color: var(--text-muted);">Không có dữ liệu chi tiết cho cấp độ này.</div>`;
     })
     .catch(err => {
@@ -13317,16 +13317,16 @@ if (document.readyState === 'loading') {
 // --- 214 BỘ THỦ TIẾNG TRUNG CONTROLLER ---
 let activeRadicalCategory = '50 bộ 1';
 
-window.openRadicalsModal = function() {
+window.openRadicalsModal = function () {
   const modal = document.getElementById('radicals-study-modal');
   if (!modal) return;
   modal.style.display = 'flex';
   window.switchRadicalTab('50 bộ 1');
 };
 
-window.switchRadicalTab = function(category) {
+window.switchRadicalTab = function (category) {
   activeRadicalCategory = category;
-  
+
   // Active tab button styling
   const tabIds = {
     '50 bộ 1': 'rad-tab-50-1',
@@ -13388,7 +13388,7 @@ window.switchRadicalTab = function(category) {
   } else {
     // Render radical cards
     const radList = (radicalsData.radicals || []).filter(r => r.category === category);
-    
+
     let html = `
       <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px;">
     `;
@@ -14464,7 +14464,7 @@ function initUserSessionTracking() {
         const blob = new Blob([payload], { type: 'application/json' });
         navigator.sendBeacon(`${API_BASE}/api/user/session/heartbeat`, blob);
         return;
-      } catch (e) {}
+      } catch (e) { }
     }
 
     fetch(`${API_BASE}/api/user/session/heartbeat`, {
@@ -14473,7 +14473,7 @@ function initUserSessionTracking() {
       body: payload,
       credentials: 'include',
       keepalive: action === 'exit'
-    }).catch(() => {});
+    }).catch(() => { });
   }
 
   if (currentUser && currentUser.email) {
@@ -14865,7 +14865,7 @@ window.openStudentHistoryDetail = function (userEmail, defaultTab = 'logs') {
         if (tbody) tbody.innerHTML = renderStudentAccessRows(data.accessLogs);
       }
     })
-    .catch(() => {});
+    .catch(() => { });
 
   fetch(`${API_BASE_URL}/api/user/game-history?email=${encodeURIComponent(userEmail)}`, {
     headers: getAuthHeaders(),
@@ -14883,7 +14883,7 @@ window.openStudentHistoryDetail = function (userEmail, defaultTab = 'logs') {
         if (tbody) tbody.innerHTML = renderStudentGameRows(gh);
       }
     })
-    .catch(() => {});
+    .catch(() => { });
 
   // Switch to default tab if specified
   if (defaultTab === 'games') {
@@ -15041,7 +15041,7 @@ function updateVideoDictationSidebarBadges() {
         update(data.length);
       }
     })
-    .catch(() => {});
+    .catch(() => { });
 }
 
 if (document.readyState === 'loading') {
