@@ -241,6 +241,25 @@
       border-color: #2563eb;
     }
 
+    #level-switcher-select option,
+    #lesson-switcher-select option {
+      background: #0f172a;
+      color: #f8fafc;
+    }
+
+    html.light-mode #level-switcher-select,
+    html.light-mode #lesson-switcher-select {
+      background: #ffffff !important;
+      color: #0f172a !important;
+      border-color: rgba(0, 0, 0, 0.2) !important;
+    }
+
+    html.light-mode #level-switcher-select option,
+    html.light-mode #lesson-switcher-select option {
+      background: #ffffff;
+      color: #0f172a;
+    }
+
     /* Voice Control Bar */
     .voice-control-bar {
       background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(167, 139, 250, 0.12));
@@ -774,7 +793,23 @@
           style="padding: 8px 14px; border-radius: 12px; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; text-decoration: none;">
           <i class="fa-solid fa-map-location-dot"></i> Lộ trình
         </a>
-        <div style="font-weight: 800; font-size: 1.05rem; color: #fbbf24; display: flex; align-items: center; gap: 8px;"
+        
+        <!-- Level & Lesson Switcher -->
+        <div style="display: inline-flex; align-items: center; gap: 8px;">
+          <select id="level-switcher-select" onchange="window.switchHskLevel(this.value)"
+            title="Chọn cấp độ HSK"
+            style="background: rgba(15, 23, 42, 0.75); border: 1.5px solid rgba(56, 189, 248, 0.45); color: #38bdf8; font-weight: 800; font-size: 0.88rem; padding: 7px 12px; border-radius: 10px; cursor: pointer; outline: none; transition: all 0.2s;">
+            <option value="1">HSK 1 (3.0)</option>
+            <option value="2">HSK 2 (3.0)</option>
+            <option value="3">HSK 3 (3.0)</option>
+          </select>
+          <select id="lesson-switcher-select" onchange="window.switchHskLesson(this.value)"
+            title="Chọn bài học"
+            style="background: rgba(15, 23, 42, 0.75); border: 1.5px solid rgba(245, 158, 11, 0.45); color: #fbbf24; font-weight: 800; font-size: 0.88rem; padding: 7px 12px; border-radius: 10px; cursor: pointer; outline: none; max-width: 250px; transition: all 0.2s;">
+          </select>
+        </div>
+
+        <div style="font-weight: 800; font-size: 1.05rem; color: #fbbf24; display: none; align-items: center; gap: 8px;"
           id="lesson-title-badge">
           <i class="fa-solid fa-bookmark" style="color: #38bdf8;"></i> Bài Khóa HSK 1 - Bài 1
         </div>
@@ -881,8 +916,50 @@
 
       updateFixedBadges();
       await loadData();
+      populateLessonSwitcher();
       renderWorkspace();
     });
+
+    function populateLessonSwitcher() {
+      const lvlSel = document.getElementById('level-switcher-select');
+      if (lvlSel) lvlSel.value = String(currentLevel);
+
+      const lesSel = document.getElementById('lesson-switcher-select');
+      if (lesSel && allReadingTexts && allReadingTexts.length > 0) {
+        lesSel.innerHTML = allReadingTexts.map(l => {
+          const isSel = Number(l.lessonId) === Number(currentLessonId) ? 'selected' : '';
+          return `<option value="${l.lessonId}" ${isSel}>${l.lessonTitle || `Bài ${l.lessonId}`}</option>`;
+        }).join('');
+      }
+    }
+
+    window.switchHskLevel = async function(lvl) {
+      currentLevel = parseInt(lvl, 10) || 1;
+      currentLessonId = 1;
+      currentDialogueId = 1;
+      updateUrlParams();
+      updateFixedBadges();
+      await loadData();
+      populateLessonSwitcher();
+      renderWorkspace();
+    };
+
+    window.switchHskLesson = function(lesId) {
+      currentLessonId = parseInt(lesId, 10) || 1;
+      currentDialogueId = 1;
+      updateUrlParams();
+      updateFixedBadges();
+      populateLessonSwitcher();
+      renderWorkspace();
+    };
+
+    function updateUrlParams() {
+      const url = new URL(window.location);
+      url.searchParams.set('level', currentLevel);
+      url.searchParams.set('lesson', currentLessonId);
+      url.searchParams.set('version', currentVersion);
+      window.history.replaceState({}, '', url);
+    }
 
     const HSK_LESSON_EXTRA_VIDEOS = {
       "3.0": {
