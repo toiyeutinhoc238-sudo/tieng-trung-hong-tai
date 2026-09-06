@@ -4801,8 +4801,13 @@ app.post('/api/dictation/transcribe-audio', async (req, res) => {
 // POST /api/dictation/save-lesson — Lưu bài học video mới
 app.post('/api/dictation/save-lesson', async (req, res) => {
   try {
-    const email = getLoggedInUserEmail(req) || req.body.userEmail || 'guest';
     const newLesson = req.body;
+    // Tạm thời khóa chức năng tạo video tùy thích mới
+    if (newLesson && newLesson.isCustom && !newLesson.isTimingUpdate) {
+      return res.status(403).json({ error: 'Tính năng thêm video tùy thích đang tạm thời được khóa!' });
+    }
+
+    const email = getLoggedInUserEmail(req) || req.body.userEmail || 'guest';
     if (!newLesson || !newLesson.youtubeId || !newLesson.title) {
       return res.status(400).json({ error: 'Missing required lesson fields (youtubeId, title)' });
     }

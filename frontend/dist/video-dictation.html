@@ -3864,11 +3864,11 @@
       }
     }
   </style>
-  <script type="module" crossorigin src="/assets/dictation-Sbu3y9lo.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/global_sidebar-uXADLsHL.js">
+  <script type="module" crossorigin src="/assets/dictation-jlYpQS_-.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/global_sidebar-BN2Ll7Lw.js">
   <link rel="modulepreload" crossorigin href="/assets/particles-D7lb_4rt.js">
   <link rel="modulepreload" crossorigin href="/assets/screen_drawing-BS_xmQo7.js">
-  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-BcZZHFZf.css">
+  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-Ch4qFvkA.css">
 </head>
 
 <body>
@@ -3996,7 +3996,8 @@
           <div class="dict-search-wrap">
             <input type="text" id="dict-search-input" class="dict-search-input" placeholder="Tìm kiếm video bài học...">
           </div>
-          <button class="btn btn-primary btn-sm" onclick="window.openAddVideoModal()" style="white-space: nowrap; border-radius: 50px; padding: 8px 20px; background: linear-gradient(135deg, #ef4444, #dc2626); color: #ffffff; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4); font-weight: 800; border: none;" title="Dán link YouTube bất kỳ để tự động phân tích và tạo bài luyện chép">
+          <!-- Chức năng thêm video tùy thích tạm thời khóa -->
+          <button id="btn-add-custom-video" class="btn btn-primary btn-sm" onclick="window.openAddVideoModal()" style="display: none !important; white-space: nowrap; border-radius: 50px; padding: 8px 20px; background: linear-gradient(135deg, #ef4444, #dc2626); color: #ffffff; cursor: pointer; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4); font-weight: 800; border: none;" title="Chức năng thêm video đang tạm thời được khóa">
             <i class="fa-brands fa-youtube" style="font-size: 1rem;"></i>
             <span>+ Thêm Video YouTube</span>
           </button>
@@ -4666,8 +4667,8 @@
       </div>
     </div>
 
-    <!-- MODAL: Add Custom YouTube Video -->
-    <div id="dict-add-video-modal" class="modal-overlay">
+    <!-- MODAL: Add Custom YouTube Video (Tạm thời khóa) -->
+    <div id="dict-add-video-modal" class="modal-overlay" style="display: none !important;">
       <div class="modal-card modal-box" style="max-width: 530px; max-height: 90vh; overflow-y: auto; padding: 18px 22px; border: 1.5px solid rgba(239, 68, 68, 0.4); border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.6);">
         <button class="modal-close-btn" onclick="window.closeAddVideoModal()">&times;</button>
         <h3 style="margin-top: 0; margin-bottom: 4px; font-size: 1.25rem; font-weight: 800; display: flex; align-items: center; gap: 8px;">

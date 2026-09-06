@@ -18411,5 +18411,10 @@ html.light .dict-word-popover .popover-btn:hover {
   }
 }
 
-
-
+/* ============================================================
+   TẠM THỜI KHÓA CHỨC NĂNG THÊM VIDEO TÙY THÍCH
+   ============================================================ */
+#btn-add-custom-video,
+#dict-add-video-modal {
+  display: none !important;
+}

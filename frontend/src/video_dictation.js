@@ -2426,7 +2426,7 @@ window.saveAdjustedTiming = function () {
   fetch('/api/dictation/save-lesson', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(currentLesson)
+    body: JSON.stringify({ ...currentLesson, isTimingUpdate: true })
   }).catch(err => console.warn("Save timing error:", err));
 
   renderSentenceNavigator();
@@ -3006,14 +3006,11 @@ function renderCatalogGrid() {
     if (isMyVideosTab) {
       grid.innerHTML = `
         <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-muted); background: rgba(255,255,255,0.03); border: 1.5px dashed rgba(245, 158, 11, 0.4); border-radius: 20px;">
-          <i class="fa-brands fa-youtube" style="font-size: 3.5rem; color: #ef4444; margin-bottom: 16px; opacity: 0.85;"></i>
-          <h3 style="color: var(--text-primary); font-size: 1.3rem; margin-bottom: 8px;">Bạn chưa có video cá nhân nào</h3>
-          <p style="max-width: 500px; margin: 0 auto 20px; font-size: 0.92rem; color: var(--text-secondary);">
-            Dán bất kỳ link video YouTube yêu thích nào (MV, phim hoạt hình, hội thoại...) để tạo bài luyện nghe chép chính tả cá nhân hóa!
+          <i class="fa-solid fa-lock" style="font-size: 3.2rem; color: #f59e0b; margin-bottom: 16px; opacity: 0.9;"></i>
+          <h3 style="color: var(--text-primary); font-size: 1.3rem; margin-bottom: 8px;">Chức năng thêm video đang tạm khóa</h3>
+          <p style="max-width: 500px; margin: 0 auto; font-size: 0.92rem; color: var(--text-secondary);">
+            Tính năng thêm video YouTube tùy thích đang được tạm thời khóa để nâng cấp và bảo trì hệ thống.
           </p>
-          <button class="btn btn-primary btn-sm" onclick="window.openAddVideoModal()" style="background: linear-gradient(135deg, #ef4444, #dc2626); border: none; color: #ffffff; font-weight: 800; padding: 10px 24px; border-radius: 50px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);">
-            <i class="fa-brands fa-youtube" style="color: #ffffff;"></i> + Thêm Video YouTube Mới
-          </button>
         </div>
       `;
     } else {
@@ -3021,7 +3018,7 @@ function renderCatalogGrid() {
         <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-muted);">
           <i class="fa-solid fa-video-slash" style="font-size: 3rem; margin-bottom: 16px; opacity: 0.5;"></i>
           <h3>Không tìm thấy video nào phù hợp</h3>
-          <p>Vui lòng thử chọn danh mục khác hoặc bấm nút [Thêm Video YouTube] ở trên để tạo bài mới!</p>
+          <p>Vui lòng thử chọn danh mục hoặc cấp độ khác để xem danh sách bài học!</p>
         </div>
       `;
     }
@@ -3208,13 +3205,9 @@ function returnToCatalog() {
 // ==========================================
 
 function openAddVideoModal() {
+  showToast("Tính năng thêm video tùy thích đang tạm thời được khóa để bảo trì và nâng cấp!", true);
   const modal = document.getElementById('dict-add-video-modal');
-  if (modal) {
-    modal.style.display = 'flex';
-    setTimeout(() => {
-      document.getElementById('custom-video-url')?.focus();
-    }, 100);
-  }
+  if (modal) modal.style.display = 'none';
 }
 
 function closeAddVideoModal() {
@@ -3241,6 +3234,8 @@ function parseTimeToSeconds(timeStr) {
 
 async function handleSaveCustomVideo(e) {
   e.preventDefault();
+  showToast("Tính năng thêm video tùy thích đang tạm thời được khóa!", true);
+  return;
   const urlInput = document.getElementById('custom-video-url').value.trim();
   const titleInput = document.getElementById('custom-video-title').value.trim();
   const levelInput = document.getElementById('custom-video-level').value;
