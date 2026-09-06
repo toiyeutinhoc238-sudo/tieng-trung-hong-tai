@@ -9976,10 +9976,7 @@ function recordDailyStudyTime(secs) {
   renderWeeklyStudyChart();
 }
 
-function renderWeeklyStudyChart() {
-  const container = document.getElementById('home-weekly-chart-bars');
-  if (!container) return;
-
+function generateWeeklyChartBarsHtml() {
   const history = getDailyStudyHistory();
   const now = new Date();
 
@@ -10012,17 +10009,12 @@ function renderWeeklyStudyChart() {
     if (dateStr === todayStr) {
       dayMinsMap[dateStr] = 0;
     } else {
-      // Past / future days in week:
-      // Unstudied days (0s) remain 0 ('--').
-      // Past studied days stay strictly fixed at Math.floor(recordedSecs / 60).
       const mins = Math.floor(recordedSecs / 60);
       dayMinsMap[dateStr] = mins;
       weekPastMinsSum += mins;
     }
   }
 
-  // Today absorbs all current week minutes minus fixed past days,
-  // ensuring extra rounding minutes are credited ONLY to today.
   const todaySecs = (history[todayStr] || 0) + sessionStudyTime;
   if (todaySecs > 0) {
     const weekTotalMins = Math.floor(weekSecsSum / 60);
@@ -10063,9 +10055,21 @@ function renderWeeklyStudyChart() {
     `;
   }
 
-  container.innerHTML = html;
+  return html;
+}
+
+function renderWeeklyStudyChart() {
+  const container = document.getElementById('home-weekly-chart-bars');
+  if (container) {
+    container.innerHTML = generateWeeklyChartBarsHtml();
+  }
+  const modalBars = document.getElementById('zubi-streak-weekly-chart-bars');
+  if (modalBars) {
+    modalBars.innerHTML = generateWeeklyChartBarsHtml();
+  }
 }
 window.renderWeeklyStudyChart = renderWeeklyStudyChart;
+window.generateWeeklyChartBarsHtml = generateWeeklyChartBarsHtml;
 
 function startStudyTimer() {
   window.__hasMainStudyTimer = true;
@@ -10748,8 +10752,8 @@ window.openZubiStatDetail = function (type) {
     bodyEl.innerHTML = html;
 
   } else if (type === 'time') {
-    titleEl.textContent = 'Thời gian tham gia học';
-    subtitleEl.textContent = 'Thống kê thời gian duy trì thói quen học tập của bạn';
+    titleEl.textContent = 'Thời Gian Học & Tiến Độ Tuần';
+    subtitleEl.textContent = 'Thống kê thời gian duy trì thói quen học tập và biểu đồ trong tuần';
     iconEl.className = 'zubi-circle-icon blue';
     iconEl.style.background = 'rgba(59, 130, 246, 0.2)';
     iconEl.style.color = '#3b82f6';
@@ -10758,18 +10762,35 @@ window.openZubiStatDetail = function (type) {
     const totalCurrentSecs = userStudyTime + sessionStudyTime;
     const mins = Math.floor(totalCurrentSecs / 60);
     const timeDisplay = formatStudyTimeDisplay(mins);
+    const chartBarsHtml = typeof generateWeeklyChartBarsHtml === 'function' ? generateWeeklyChartBarsHtml() : '';
 
     bodyEl.innerHTML = `
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
         <div style="background: rgba(59, 130, 246, 0.12); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 16px; padding: 18px; text-align: center;">
           <div style="font-size: 0.8rem; color: #60a5fa; font-weight: 700; text-transform: uppercase;">Tổng thời gian đã học</div>
-          <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-top: 6px;" id="zubi-modal-time-val">${timeDisplay}</div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: #ffffff; margin-top: 6px;" id="zubi-modal-time-val">${timeDisplay}</div>
         </div>
         <div style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 16px; padding: 18px; text-align: center;">
           <div style="font-size: 0.8rem; color: #fbbf24; font-weight: 700; text-transform: uppercase;">Chuỗi ngày liên tục (Streak)</div>
-          <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-top: 6px;">🔥 ${userStreak || 0} ngày</div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: #ffffff; margin-top: 6px;">🔥 ${userStreak || 0} ngày</div>
         </div>
       </div>
+
+      <!-- Biểu Đồ Tiến Độ Học Trong Tuần -->
+      <div style="background: rgba(15, 23, 42, 0.75); border: 1.5px solid rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 20px; margin-bottom: 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+          <h4 style="font-size: 1rem; font-weight: 800; color: #ffffff; margin: 0; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-chart-column" style="color: #38bdf8;"></i> Biểu Đồ Tiến Độ Học Trong Tuần
+          </h4>
+          <span style="font-size: 0.75rem; font-weight: 700; color: #34d399; background: rgba(16,185,129,0.18); padding: 3px 10px; border-radius: 99px; border: 1px solid rgba(16,185,129,0.3);">
+            <i class="fa-solid fa-circle-check"></i> Cập nhật tự động
+          </span>
+        </div>
+        <div id="zubi-streak-weekly-chart-bars" style="display: flex; align-items: flex-end; justify-content: space-around; height: 160px; padding: 16px 10px 10px 10px; border-bottom: 2px solid rgba(255,255,255,0.12); position: relative;">
+          ${chartBarsHtml}
+        </div>
+      </div>
+
       <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 18px; display: flex; gap: 14px; align-items: flex-start;">
         <div style="width: 36px; height: 36px; border-radius: 50%; background: rgba(16, 185, 129, 0.2); color: #34d399; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.1rem;"><i class="fa-solid fa-lightbulb"></i></div>
         <div>
@@ -10780,8 +10801,8 @@ window.openZubiStatDetail = function (type) {
     `;
 
   } else if (type === 'streak') {
-    titleEl.textContent = 'Ngày tham gia học (Streak)';
-    subtitleEl.textContent = 'Thống kê chuỗi ngày duy trì thói quen học tập liên tục';
+    titleEl.textContent = 'Chuỗi Ngày Học & Tiến Độ Tuần';
+    subtitleEl.textContent = 'Thống kê chuỗi ngày duy trì thói quen học tập và biểu đồ tiến độ học trong tuần';
     iconEl.className = 'zubi-circle-icon orange';
     iconEl.style.background = 'rgba(249, 115, 22, 0.2)';
     iconEl.style.color = '#f97316';
@@ -10790,18 +10811,35 @@ window.openZubiStatDetail = function (type) {
     const totalCurrentSecs = userStudyTime + sessionStudyTime;
     const mins = Math.floor(totalCurrentSecs / 60);
     const timeDisplay = formatStudyTimeDisplay(mins);
+    const chartBarsHtml = typeof generateWeeklyChartBarsHtml === 'function' ? generateWeeklyChartBarsHtml() : '';
 
     bodyEl.innerHTML = `
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
         <div style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 16px; padding: 18px; text-align: center;">
           <div style="font-size: 0.8rem; color: #fbbf24; font-weight: 700; text-transform: uppercase;">Chuỗi ngày liên tục</div>
-          <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-top: 6px;">🔥 ${userStreak || 0} ngày</div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: #ffffff; margin-top: 6px;">🔥 ${userStreak || 0} ngày</div>
         </div>
         <div style="background: rgba(59, 130, 246, 0.12); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 16px; padding: 18px; text-align: center;">
           <div style="font-size: 0.8rem; color: #60a5fa; font-weight: 700; text-transform: uppercase;">Tổng thời gian học</div>
-          <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-top: 6px;">${timeDisplay}</div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: #ffffff; margin-top: 6px;">${timeDisplay}</div>
         </div>
       </div>
+
+      <!-- Biểu Đồ Tiến Độ Học Trong Tuần (Hiển thị chi tiết bên trong cửa sổ modal khi bấm vào con mắt trên chuỗi) -->
+      <div style="background: rgba(15, 23, 42, 0.75); border: 1.5px solid rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 20px; margin-bottom: 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+          <h4 style="font-size: 1rem; font-weight: 800; color: #ffffff; margin: 0; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-chart-column" style="color: #38bdf8;"></i> Biểu Đồ Tiến Độ Học Trong Tuần
+          </h4>
+          <span style="font-size: 0.75rem; font-weight: 700; color: #34d399; background: rgba(16,185,129,0.18); padding: 3px 10px; border-radius: 99px; border: 1px solid rgba(16,185,129,0.3);">
+            <i class="fa-solid fa-circle-check"></i> Cập nhật tự động
+          </span>
+        </div>
+        <div id="zubi-streak-weekly-chart-bars" style="display: flex; align-items: flex-end; justify-content: space-around; height: 160px; padding: 16px 10px 10px 10px; border-bottom: 2px solid rgba(255,255,255,0.12); position: relative;">
+          ${chartBarsHtml}
+        </div>
+      </div>
+
       <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 18px; display: flex; gap: 14px; align-items: flex-start;">
         <div style="width: 36px; height: 36px; border-radius: 50%; background: rgba(249, 115, 22, 0.2); color: #f97316; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.1rem;"><i class="fa-solid fa-fire"></i></div>
         <div>

@@ -748,14 +748,15 @@
         style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px;">
         <!-- Card 1: Study Days / Streak -->
         <div class="zubi-stat-card glass-panel"
-          style="background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(16px); border: 1.5px solid rgba(255, 255, 255, 0.18); border-radius: 20px; padding: 22px 26px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 10px 28px rgba(0,0,0,0.3);">
+          style="background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(16px); border: 1.5px solid rgba(255, 255, 255, 0.18); border-radius: 20px; padding: 22px 26px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 10px 28px rgba(0,0,0,0.3); cursor: pointer;"
+          onclick="window.openZubiStatDetail('streak')">
           <div class="zubi-stat-top" style="display: flex; justify-content: space-between; align-items: center;">
             <div class="zubi-circle-icon orange"
               style="width: 48px; height: 48px; border-radius: 50%; background: rgba(249, 115, 22, 0.2); color: #f97316; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
               <i class="fa-solid fa-fire"></i>
             </div>
             <i class="fa-regular fa-eye zubi-eye-icon" style="color: #94a3b8; font-size: 1.05rem; cursor: pointer;"
-              title="Chi tiết ngày tham gia học" onclick="window.openZubiStatDetail('streak')"></i>
+              title="Chi tiết ngày tham gia học và tiến độ tuần" onclick="event.stopPropagation(); window.openZubiStatDetail('streak')"></i>
           </div>
           <div class="zubi-stat-val" id="zubi-streak-count"
             style="font-family: var(--font-display, sans-serif); font-size: 2rem; font-weight: 800; color: #ffffff; line-height: 1.1;">
@@ -766,14 +767,15 @@
 
         <!-- Card 2: Study Time -->
         <div class="zubi-stat-card glass-panel"
-          style="background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(16px); border: 1.5px solid rgba(255, 255, 255, 0.18); border-radius: 20px; padding: 22px 26px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 10px 28px rgba(0,0,0,0.3);">
+          style="background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(16px); border: 1.5px solid rgba(255, 255, 255, 0.18); border-radius: 20px; padding: 22px 26px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 10px 28px rgba(0,0,0,0.3); cursor: pointer;"
+          onclick="window.openZubiStatDetail('time')">
           <div class="zubi-stat-top" style="display: flex; justify-content: space-between; align-items: center;">
             <div class="zubi-circle-icon blue"
               style="width: 48px; height: 48px; border-radius: 50%; background: rgba(59, 130, 246, 0.2); color: #3b82f6; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
               <i class="fa-solid fa-clock"></i>
             </div>
             <i class="fa-regular fa-eye zubi-eye-icon" style="color: #94a3b8; font-size: 1.05rem; cursor: pointer;"
-              title="Chi tiết thời gian học" onclick="window.openZubiStatDetail('time')"></i>
+              title="Chi tiết thời gian học" onclick="event.stopPropagation(); window.openZubiStatDetail('time')"></i>
           </div>
           <div class="zubi-stat-val" id="zubi-study-time-count"
             style="font-family: var(--font-display, sans-serif); font-size: 2rem; font-weight: 800; color: #ffffff; line-height: 1.1;">
@@ -783,26 +785,9 @@
         </div>
       </div>
 
-      <!-- ROW 3: LEARNING PROGRESS BAR CHART PANEL -->
-      <div
-        style="background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(20px); border: 1.5px solid rgba(255, 255, 255, 0.18); border-radius: 24px; padding: 28px; box-shadow: 0 12px 36px rgba(0,0,0,0.35);">
-        <div
-          style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
-          <h3
-            style="font-size: 1.15rem; font-weight: 800; color: #ffffff; margin: 0; display: flex; align-items: center; gap: 10px;">
-            <i class="fa-solid fa-chart-column" style="color: #38bdf8;"></i> Biểu Đồ Tiến Độ Học Trong Tuần
-          </h3>
-          <span
-            style="font-size: 0.85rem; font-weight: 700; color: #34d399; background: rgba(16,185,129,0.18); padding: 4px 12px; border-radius: 99px; border: 1px solid rgba(16,185,129,0.3);">
-            <i class="fa-solid fa-circle-check"></i> Tự động cập nhật từ cơ sở dữ liệu
-          </span>
-        </div>
-
-        <!-- Bar Chart Visual Container (Rendered 100% dynamically from real study history) -->
-        <div
-          style="display: flex; align-items: flex-end; justify-content: space-around; height: 160px; padding: 20px 10px 10px 10px; border-bottom: 2px solid rgba(255,255,255,0.12); position: relative;"
-          id="home-weekly-chart-bars">
-        </div>
+      <!-- ROW 3: LEARNING PROGRESS BAR CHART PANEL (Ẩn trên Dashboard trang chủ theo yêu cầu người dùng, hiển thị khi bấm vào biểu tượng mắt trên chuỗi Streak) -->
+      <div id="home-weekly-chart-panel" style="display: none !important;">
+        <div id="home-weekly-chart-bars"></div>
       </div>
 
       <!-- ROW 4: BẢNG THÔNG BÁO TỚI HỌC VIÊN -->

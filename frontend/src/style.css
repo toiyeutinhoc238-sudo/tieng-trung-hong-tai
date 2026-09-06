@@ -17482,6 +17482,10 @@ button,
     width: 100% !important;
     box-sizing: border-box !important;
   }
+
+  .home-hero-banner {
+    margin-top: 48px !important;
+  }
 }
 
 /* Master Backdrop: Only active on mobile when drawer is opened (Never blur desktop/tablets) */
