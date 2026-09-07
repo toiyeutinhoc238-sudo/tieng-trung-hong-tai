@@ -192,18 +192,29 @@ export async function extractYouTubeSubtitles(youtubeId) {
 
   try {
     console.log(`[YouTube Subtitles] Inspecting subtitles via yt-dlp for ${youtubeId}...`);
+    
     await ensureYtDlpExists();
-    await execFileAsync(YTDLP_PATH, [
+    
+    const subArgs = [
       videoUrl,
       '--skip-download',
       '--write-auto-subs',
       '--write-subs',
       '--sub-langs', 'zh-Hans,zh,zh-Hant,zh-CN,zh-TW,vi,en',
       '--sub-format', 'json3',
-      '--extractor-args', 'youtube:player_client=ios,tv',
-      '--js-runtimes', `node:${process.execPath}`,
       '-o', `${subTempBase}.%(ext)s`
-    ], { timeout: 35000 });
+    ];
+
+    if (process.env.YOUTUBE_COOKIES) {
+      const cookiesPath = path.join(AUDIO_TEMP_DIR, 'cookies.txt');
+      fs.writeFileSync(cookiesPath, process.env.YOUTUBE_COOKIES.replace(/\\n/g, '\n'));
+      subArgs.push('--cookies', cookiesPath);
+    } else {
+      subArgs.push('--extractor-args', 'youtube:player_client=ios,tv');
+      subArgs.push('--js-runtimes', `node:${process.execPath}`);
+    }
+
+    await execFileAsync(YTDLP_PATH, subArgs, { timeout: 35000 });
 
     const filesInTemp = fs.readdirSync(AUDIO_TEMP_DIR);
     const matchedFile = filesInTemp.find(f => f.startsWith(subTempPrefix) && f.endsWith('.json3'));
@@ -280,15 +291,27 @@ export async function transcribeAudioWithVAD(youtubeId, videoTitle = '') {
     console.log(`[VAD Audio Engine] Downloading clean audio track for ${youtubeId}...`);
     try {
       await ensureYtDlpExists();
-      await execFileAsync(YTDLP_PATH, [
+      
+      const ytDlpArgs = [
         videoUrl,
-        '--extractor-args', 'youtube:player_client=ios,tv',
-        '--js-runtimes', `node:${process.execPath}`,
         '-f', '140/ba[ext=m4a]/ba[abr<=64]/ba/b*',
         '-o', audioPath,
         '--force-overwrites',
         '--no-playlist'
-      ], { timeout: 60000 });
+      ];
+      
+      // Bypass 429/403 on Render by using Cookies if provided
+      if (process.env.YOUTUBE_COOKIES) {
+        const cookiesPath = path.join(AUDIO_TEMP_DIR, 'cookies.txt');
+        fs.writeFileSync(cookiesPath, process.env.YOUTUBE_COOKIES.replace(/\\n/g, '\n'));
+        ytDlpArgs.push('--cookies', cookiesPath);
+        console.log(`[VAD Audio Engine] Using YOUTUBE_COOKIES to bypass IP ban.`);
+      } else {
+        ytDlpArgs.push('--extractor-args', 'youtube:player_client=ios,android,web');
+        ytDlpArgs.push('--js-runtimes', `node:${process.execPath}`);
+      }
+
+      await execFileAsync(YTDLP_PATH, ytDlpArgs, { timeout: 60000 });
     } catch (ytErr) {
       console.log(`[VAD Audio Engine] yt-dlp failed (likely 429/403: ${ytErr.message}). Falling back to @distube/ytdl-core...`);
       await new Promise((resolve, reject) => {
