@@ -199,6 +199,8 @@ export async function extractYouTubeSubtitles(youtubeId) {
       '--write-subs',
       '--sub-langs', 'zh-Hans,zh,zh-Hant,zh-CN,zh-TW,vi,en',
       '--sub-format', 'json3',
+      '--extractor-args', 'youtube:player_client=ios,tv',
+      '--js-runtimes', `node:${process.execPath}`,
       '-o', `${subTempBase}.%(ext)s`
     ], { timeout: 35000 });
 
@@ -278,6 +280,8 @@ export async function transcribeAudioWithVAD(youtubeId, videoTitle = '') {
     await ensureYtDlpExists();
     await execFileAsync(YTDLP_PATH, [
       videoUrl,
+      '--extractor-args', 'youtube:player_client=ios,tv',
+      '--js-runtimes', `node:${process.execPath}`,
       '-f', '140/ba[ext=m4a]/ba[abr<=64]/ba/b*',
       '-o', audioPath,
       '--force-overwrites',
