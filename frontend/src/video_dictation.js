@@ -3205,9 +3205,14 @@ function returnToCatalog() {
 // ==========================================
 
 function openAddVideoModal() {
-  showToast("Tính năng thêm video tùy thích đang tạm thời được khóa để bảo trì và nâng cấp!", true);
   const modal = document.getElementById('dict-add-video-modal');
-  if (modal) modal.style.display = 'none';
+  if (modal) {
+    modal.style.display = 'flex';
+    const urlInput = document.getElementById('custom-video-url');
+    if (urlInput) {
+      setTimeout(() => urlInput.focus(), 150);
+    }
+  }
 }
 
 function closeAddVideoModal() {
@@ -3234,8 +3239,6 @@ function parseTimeToSeconds(timeStr) {
 
 async function handleSaveCustomVideo(e) {
   e.preventDefault();
-  showToast("Tính năng thêm video tùy thích đang tạm thời được khóa!", true);
-  return;
   const urlInput = document.getElementById('custom-video-url').value.trim();
   const titleInput = document.getElementById('custom-video-title').value.trim();
   const levelInput = document.getElementById('custom-video-level').value;
@@ -3317,19 +3320,21 @@ async function handleSaveCustomVideo(e) {
         blankIndices: [0]
       });
     }
+  } else {
+    // If user clicked Save without clicking AI Extract first, auto-run AI extraction
+    showToast("🔍 Đang tự động trích xuất lời thoại chuẩn xác từ video bằng AI...");
+    await window.autoGenerateAllWithAI();
+    const updatedSubtitles = document.getElementById('custom-video-subtitles')?.value.trim();
+    if (!updatedSubtitles) {
+      showToast("Không tìm thấy giọng nói con người trong video để tạo bài học!", true);
+      return;
+    }
+    return handleSaveCustomVideo(e);
   }
 
   if (sentences.length === 0) {
-    sentences.push({
-      id: 1,
-      startTime: 0,
-      endTime: 15.0,
-      hanzi: "你好，欢迎学习中文！",
-      pinyin: "Nǐ hǎo, huānyíng xuéxí zhōngwén!",
-      meaning: "Xin chào, chào mừng bạn học tiếng Trung!",
-      keywords: ["你好", "中文"],
-      blankIndices: [0]
-    });
+    showToast("Không phát hiện câu thoại hợp lệ nào từ video. Vui lòng chọn video có giọng nói hoặc lời bài hát!", true);
+    return;
   }
 
   let durationSeconds = 0;
@@ -3393,6 +3398,9 @@ async function handleSaveCustomVideo(e) {
 
   filterLessons('my_videos', 'all');
   showToast("🎉 Đã thêm video vào danh sách của bạn thành công!");
+  setTimeout(() => {
+    openLessonWorkspace(newLesson);
+  }, 350);
 }
 
 // ==========================================
