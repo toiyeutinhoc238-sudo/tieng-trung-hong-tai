@@ -5,14 +5,18 @@ import { execFile } from 'child_process';
 import { promisify } from 'util';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
-import Groq from 'groq-sdk';
+import Groq, { toFile } from 'groq-sdk';
 import { pinyin } from 'pinyin-pro';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Explicitly load .env from backend directory and root directory
+dotenv.config({ path: path.join(__dirname, '..', '.env') });
+dotenv.config({ path: path.join(__dirname, '..', '..', '.env') });
 dotenv.config();
 
 const execFileAsync = promisify(execFile);
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 // Path to yt-dlp binary
 const BIN_DIR = path.join(__dirname, '..', 'bin');
@@ -22,10 +26,16 @@ if (!fs.existsSync(AUDIO_TEMP_DIR)) {
   fs.mkdirSync(AUDIO_TEMP_DIR, { recursive: true });
 }
 
-// Groq client initialization
-const groqApiKey = process.env.GROQ_API_KEY;
-const groqClient = groqApiKey ? new Groq({ apiKey: groqApiKey }) : null;
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+// Dynamic AI Clients initialization (guarantees key presence regardless of load order)
+function getGroqClient() {
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) return null;
+  return new Groq({ apiKey, timeout: 120000 });
+}
+
+function getGeminiApiKey() {
+  return process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+}
 
 /**
  * 1. Extract YouTube ID from any arbitrary URL format
@@ -145,74 +155,32 @@ export function cleanSpeechText(text) {
  * Matches how eJOY, 4English, and Language Reactor work.
  */
 export async function extractYouTubeSubtitles(youtubeId) {
+  const subTempPrefix = `sub_${youtubeId}_${Date.now()}`;
+  const subTempBase = path.join(AUDIO_TEMP_DIR, subTempPrefix);
+  const videoUrl = `https://www.youtube.com/watch?v=${youtubeId}`;
+
   try {
-    const videoUrl = `https://www.youtube.com/watch?v=${youtubeId}`;
     console.log(`[YouTube Subtitles] Inspecting subtitles via yt-dlp for ${youtubeId}...`);
 
-    const { stdout } = await execFileAsync(YTDLP_PATH, [
+    await execFileAsync(YTDLP_PATH, [
       videoUrl,
-      '--dump-json',
-      '--no-warnings',
-      '--skip-download'
+      '--skip-download',
+      '--write-auto-subs',
+      '--write-subs',
+      '--sub-langs', 'zh-Hans,zh,zh-Hant,zh-CN,zh-TW,vi,en',
+      '--sub-format', 'json3',
+      '-o', `${subTempBase}.%(ext)s`
     ], { timeout: 35000 });
 
-    const info = JSON.parse(stdout);
-    const allSubs = { ...(info.subtitles || {}), ...(info.automatic_captions || {}) };
-    const availableLangs = Object.keys(allSubs);
-    console.log(`[YouTube Subtitles] Available subtitle tracks:`, availableLangs.join(', '));
+    const filesInTemp = fs.readdirSync(AUDIO_TEMP_DIR);
+    const matchedFile = filesInTemp.find(f => f.startsWith(subTempPrefix) && f.endsWith('.json3'));
 
-    // Priority: Chinese (zh-Hans, zh-CN, zh, zh-TW, zh-HK) -> Vietnamese (vi) -> English (en)
-    const priorityLangs = [
-      'zh-Hans', 'zh-CN', 'zh', 'zh-Hant', 'zh-TW', 'zh-HK', 'zh-SG',
-      'vi', 'en'
-    ];
+    if (matchedFile) {
+      const fullSubPath = path.join(AUDIO_TEMP_DIR, matchedFile);
+      const fileContent = fs.readFileSync(fullSubPath, 'utf-8');
+      try { fs.unlinkSync(fullSubPath); } catch (_) {}
 
-    let chosenLang = null;
-    for (const pl of priorityLangs) {
-      if (allSubs[pl]) {
-        chosenLang = pl;
-        break;
-      }
-      // Check partial match
-      const matched = availableLangs.find(l => l.toLowerCase() === pl.toLowerCase() || l.toLowerCase().startsWith(pl.toLowerCase()));
-      if (matched) {
-        chosenLang = matched;
-        break;
-      }
-    }
-
-    if (!chosenLang) {
-      console.log(`[YouTube Subtitles] No suitable subtitle track found for ${youtubeId}`);
-      return null;
-    }
-
-    console.log(`[YouTube Subtitles] Selected track: ${chosenLang}`);
-    const trackFormats = allSubs[chosenLang];
-    // Find json3 format (has precise word/segment ms timestamps) or vtt
-    const json3Format = trackFormats.find(f => f.ext === 'json3' || (f.url && f.url.includes('fmt=json3')));
-    const vttFormat = trackFormats.find(f => f.ext === 'vtt');
-    const targetFormat = json3Format || vttFormat || trackFormats[0];
-
-    if (!targetFormat || !targetFormat.url) {
-      console.warn(`[YouTube Subtitles] Track format URL missing`);
-      return null;
-    }
-
-    const subRes = await fetch(targetFormat.url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-      },
-      signal: AbortSignal.timeout(15000)
-    });
-
-    if (!subRes.ok) {
-      console.warn(`[YouTube Subtitles] HTTP fetch failed: status ${subRes.status}`);
-      return null;
-    }
-
-    // Parse JSON3 format
-    if (targetFormat.ext === 'json3' || targetFormat.url.includes('fmt=json3')) {
-      const json3Data = await subRes.json();
+      const json3Data = JSON.parse(fileContent);
       const events = json3Data.events || [];
       const rawSentences = [];
 
@@ -240,7 +208,7 @@ export async function extractYouTubeSubtitles(youtubeId) {
       if (rawSentences.length > 0) {
         console.log(`[YouTube Subtitles] Successfully extracted ${rawSentences.length} raw sentences from official YouTube captions!`);
         return {
-          lang: chosenLang,
+          lang: matchedFile.includes('zh') ? 'zh' : 'auto',
           source: 'YouTube Official / ASR Subtitles',
           sentences: rawSentences
         };
@@ -249,8 +217,15 @@ export async function extractYouTubeSubtitles(youtubeId) {
 
     return null;
   } catch (err) {
-    console.warn(`[YouTube Subtitles] Subtitle extraction error:`, err.message);
+    console.log(`[YouTube Subtitles] No native subtitles downloaded (${err.message}). Falling back to Tier 2.`);
     return null;
+  } finally {
+    try {
+      const remaining = fs.readdirSync(AUDIO_TEMP_DIR).filter(f => f.startsWith(subTempPrefix));
+      for (const f of remaining) {
+        fs.unlinkSync(path.join(AUDIO_TEMP_DIR, f));
+      }
+    } catch (_) {}
   }
 }
 
@@ -260,7 +235,8 @@ export async function extractYouTubeSubtitles(youtubeId) {
  * Guarantees zero phantom sentences / hallucinations on music or silence.
  */
 export async function transcribeAudioWithVAD(youtubeId, videoTitle = '') {
-  if (!groqClient) {
+  const groq = getGroqClient();
+  if (!groq) {
     throw new Error('Groq Whisper AI client is not configured (missing GROQ_API_KEY).');
   }
 
@@ -272,7 +248,7 @@ export async function transcribeAudioWithVAD(youtubeId, videoTitle = '') {
     await execFileAsync(YTDLP_PATH, [
       videoUrl,
       '--extractor-args', 'youtube:player_client=android,web;player_skip=webpage,configs',
-      '-f', 'ba/b*',
+      '-f', '140/ba[ext=m4a]/ba[abr<=64]/ba/b*',
       '-o', audioPath,
       '--force-overwrites',
       '--no-playlist'
@@ -286,8 +262,10 @@ export async function transcribeAudioWithVAD(youtubeId, videoTitle = '') {
     console.log(`[VAD Audio Engine] Audio downloaded successfully (${fileSizeKB} KB). Running Whisper Large v3 with strict VAD...`);
 
     // Call Groq Whisper Large v3 at temperature 0.0 with word & segment timestamps
-    const transcription = await groqClient.audio.transcriptions.create({
-      file: fs.createReadStream(audioPath),
+    const audioBuffer = fs.readFileSync(audioPath);
+    const audioFile = await toFile(audioBuffer, `audio_${youtubeId}.m4a`);
+    const transcription = await groq.audio.transcriptions.create({
+      file: audioFile,
       model: 'whisper-large-v3',
       temperature: 0.0,
       response_format: 'verbose_json',
@@ -350,9 +328,10 @@ export async function transcribeAudioWithVAD(youtubeId, videoTitle = '') {
  * Universal Multi-Model LLM JSON Caller (Groq GPT-OSS-120B -> Gemini 2.5 Flash)
  */
 async function callLLMJson(prompt) {
-  if (groqClient) {
+  const groq = getGroqClient();
+  if (groq) {
     try {
-      const res = await groqClient.chat.completions.create({
+      const res = await groq.chat.completions.create({
         model: 'openai/gpt-oss-120b',
         messages: [{ role: 'user', content: prompt }],
         temperature: 0,
@@ -364,11 +343,12 @@ async function callLLMJson(prompt) {
     }
   }
 
-  if (GEMINI_API_KEY) {
+  const geminiKey = getGeminiApiKey();
+  if (geminiKey) {
     const candidateModels = ['gemini-2.5-flash', 'gemini-flash-latest', 'gemini-2.0-flash'];
     for (const modelName of candidateModels) {
       try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`;
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${geminiKey}`;
         const res = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
