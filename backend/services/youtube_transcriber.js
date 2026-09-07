@@ -278,7 +278,6 @@ export async function transcribeAudioWithVAD(youtubeId, videoTitle = '') {
     await ensureYtDlpExists();
     await execFileAsync(YTDLP_PATH, [
       videoUrl,
-      '--extractor-args', 'youtube:player_client=android,web;player_skip=webpage,configs',
       '-f', '140/ba[ext=m4a]/ba[abr<=64]/ba/b*',
       '-o', audioPath,
       '--force-overwrites',
