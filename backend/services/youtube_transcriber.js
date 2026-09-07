@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import Groq, { toFile } from 'groq-sdk';
 import { pinyin } from 'pinyin-pro';
-
+import YTDlpWrap from 'yt-dlp-wrap';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -21,9 +21,36 @@ const execFileAsync = promisify(execFile);
 // Path to yt-dlp binary
 const BIN_DIR = path.join(__dirname, '..', 'bin');
 let YTDLP_PATH = path.join(BIN_DIR, process.platform === 'win32' ? 'yt-dlp.exe' : 'yt-dlp');
-if (!fs.existsSync(YTDLP_PATH)) {
-  YTDLP_PATH = 'yt-dlp'; // Fallback to global PATH (useful for Render/Linux)
+
+// Ensure yt-dlp binary exists (Auto-download if missing on Render/Linux)
+let isYtDlpReady = fs.existsSync(YTDLP_PATH);
+async function ensureYtDlpExists() {
+  if (isYtDlpReady) return;
+  
+  if (!fs.existsSync(BIN_DIR)) {
+    fs.mkdirSync(BIN_DIR, { recursive: true });
+  }
+
+  try {
+    // Attempt fallback to global yt-dlp first
+    await execFileAsync('yt-dlp', ['--version']);
+    YTDLP_PATH = 'yt-dlp';
+    isYtDlpReady = true;
+    console.log('[System] Using global yt-dlp');
+    return;
+  } catch (err) {
+    // Global not found, download automatically
+    console.log('[System] yt-dlp not found. Downloading automatically via yt-dlp-wrap...');
+    const downloader = YTDlpWrap.default ? YTDlpWrap.default : YTDlpWrap;
+    await downloader.downloadFromGithub(YTDLP_PATH);
+    if (process.platform !== 'win32') {
+      fs.chmodSync(YTDLP_PATH, '755');
+    }
+    isYtDlpReady = true;
+    console.log('[System] yt-dlp downloaded successfully!');
+  }
 }
+
 const AUDIO_TEMP_DIR = path.join(os.tmpdir(), 'hongtai_transcribe_audio');
 if (!fs.existsSync(AUDIO_TEMP_DIR)) {
   fs.mkdirSync(AUDIO_TEMP_DIR, { recursive: true });
@@ -164,7 +191,7 @@ export async function extractYouTubeSubtitles(youtubeId) {
 
   try {
     console.log(`[YouTube Subtitles] Inspecting subtitles via yt-dlp for ${youtubeId}...`);
-
+    await ensureYtDlpExists();
     await execFileAsync(YTDLP_PATH, [
       videoUrl,
       '--skip-download',
@@ -248,6 +275,7 @@ export async function transcribeAudioWithVAD(youtubeId, videoTitle = '') {
 
   try {
     console.log(`[VAD Audio Engine] Downloading clean audio track for ${youtubeId}...`);
+    await ensureYtDlpExists();
     await execFileAsync(YTDLP_PATH, [
       videoUrl,
       '--extractor-args', 'youtube:player_client=android,web;player_skip=webpage,configs',
