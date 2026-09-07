@@ -8,6 +8,7 @@ import dotenv from 'dotenv';
 import Groq, { toFile } from 'groq-sdk';
 import { pinyin } from 'pinyin-pro';
 import YTDlpWrap from 'yt-dlp-wrap';
+import ytdl from '@distube/ytdl-core';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -277,16 +278,33 @@ export async function transcribeAudioWithVAD(youtubeId, videoTitle = '') {
 
   try {
     console.log(`[VAD Audio Engine] Downloading clean audio track for ${youtubeId}...`);
-    await ensureYtDlpExists();
-    await execFileAsync(YTDLP_PATH, [
-      videoUrl,
-      '--extractor-args', 'youtube:player_client=ios,tv',
-      '--js-runtimes', `node:${process.execPath}`,
-      '-f', '140/ba[ext=m4a]/ba[abr<=64]/ba/b*',
-      '-o', audioPath,
-      '--force-overwrites',
-      '--no-playlist'
-    ], { timeout: 60000 });
+    try {
+      await ensureYtDlpExists();
+      await execFileAsync(YTDLP_PATH, [
+        videoUrl,
+        '--extractor-args', 'youtube:player_client=ios,tv',
+        '--js-runtimes', `node:${process.execPath}`,
+        '-f', '140/ba[ext=m4a]/ba[abr<=64]/ba/b*',
+        '-o', audioPath,
+        '--force-overwrites',
+        '--no-playlist'
+      ], { timeout: 60000 });
+    } catch (ytErr) {
+      console.log(`[VAD Audio Engine] yt-dlp failed (likely 429/403: ${ytErr.message}). Falling back to @distube/ytdl-core...`);
+      await new Promise((resolve, reject) => {
+        try {
+          const stream = ytdl(videoUrl, { filter: 'audioonly', quality: 'lowestaudio' });
+          const writeStream = fs.createWriteStream(audioPath);
+          stream.pipe(writeStream);
+          stream.on('end', () => resolve());
+          writeStream.on('finish', () => resolve());
+          stream.on('error', (err) => reject(err));
+          writeStream.on('error', (err) => reject(err));
+        } catch (err) {
+          reject(err);
+        }
+      });
+    }
 
     if (!fs.existsSync(audioPath) || fs.statSync(audioPath).size < 1000) {
       throw new Error('Không thể tải luồng âm thanh từ video YouTube này.');
