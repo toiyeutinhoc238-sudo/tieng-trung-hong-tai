@@ -20,7 +20,10 @@ const execFileAsync = promisify(execFile);
 
 // Path to yt-dlp binary
 const BIN_DIR = path.join(__dirname, '..', 'bin');
-const YTDLP_PATH = path.join(BIN_DIR, process.platform === 'win32' ? 'yt-dlp.exe' : 'yt-dlp');
+let YTDLP_PATH = path.join(BIN_DIR, process.platform === 'win32' ? 'yt-dlp.exe' : 'yt-dlp');
+if (!fs.existsSync(YTDLP_PATH)) {
+  YTDLP_PATH = 'yt-dlp'; // Fallback to global PATH (useful for Render/Linux)
+}
 const AUDIO_TEMP_DIR = path.join(os.tmpdir(), 'hongtai_transcribe_audio');
 if (!fs.existsSync(AUDIO_TEMP_DIR)) {
   fs.mkdirSync(AUDIO_TEMP_DIR, { recursive: true });
