@@ -239,6 +239,64 @@ function pickBestCaptionTrack(tracks) {
 }
 
 /**
+ * Intelligent Sentence Boundary Merging (Standard 4You / eJOY / Language Reactor)
+ * Combines fragmented ASR snippets (1-1.5s, 2-3 words) into complete, natural,
+ * grammatically coherent sentences suitable for Dictation, Shadowing, and Dubbing.
+ */
+export function mergeSubtitleFragments(sentences) {
+  if (!Array.isArray(sentences) || sentences.length <= 1) return sentences || [];
+
+  const merged = [];
+  let cur = { ...sentences[0] };
+
+  const isSentenceEnd = (text) => /[。！？\.\!\?]["'”’]?\s*$/.test(text);
+  const isChineseChar = (char) => /[\u4e00-\u9fa5]/.test(char);
+
+  for (let i = 1; i < sentences.length; i++) {
+    const next = sentences[i];
+    const gap = next.startTime - cur.endTime;
+    const combinedDuration = next.endTime - cur.startTime;
+    const combinedLength = (cur.text + next.text).length;
+
+    // Merge conditions:
+    // 1. Current sentence does not end with sentence-ending punctuation (。！？.!?) OR is too brief (< 1.2s or < 4 chars)
+    // 2. The gap between speech fragments is small (<= 1.2s, allows natural pauses or slight overlap >= -0.5s)
+    // 3. Combined duration is suitable for dictation / shadowing (<= 9.0s)
+    // 4. Combined length is reasonable (<= 36 characters)
+    const shouldMerge = (
+      (!isSentenceEnd(cur.text) || cur.duration < 1.2 || cur.text.length < 4) &&
+      gap <= 1.2 &&
+      gap >= -0.5 &&
+      combinedDuration <= 9.0 &&
+      combinedLength <= 36
+    );
+
+    if (shouldMerge) {
+      cur.endTime = Math.max(cur.endTime, next.endTime);
+      cur.duration = parseFloat((cur.endTime - cur.startTime).toFixed(3));
+
+      const curEndsChinese = isChineseChar(cur.text.slice(-1));
+      const nextStartsChinese = isChineseChar(next.text.charAt(0));
+
+      if (curEndsChinese && nextStartsChinese) {
+        cur.text = cur.text + next.text;
+      } else {
+        cur.text = (cur.text + ' ' + next.text).replace(/\s{2,}/g, ' ').trim();
+      }
+    } else {
+      cur.id = merged.length + 1;
+      merged.push(cur);
+      cur = { ...next };
+    }
+  }
+
+  cur.id = merged.length + 1;
+  merged.push(cur);
+
+  return merged;
+}
+
+/**
  * Fetch official Closed Captions (CC) or auto-subtitles directly from YouTube InnerTube API.
  * Uses official mobile app signature (zero yt-dlp dependency, <0.5s response, 0% rate limit).
  * This is the exact mechanism used by eJOY, 4English, and Language Reactor.
@@ -345,11 +403,13 @@ async function fetchInnerTubeCaptions(youtubeId) {
       }
     }
 
-    console.log(`[InnerTube Captions] Successfully extracted ${deduped.length} sentences via InnerTube!`);
+    const mergedSentences = mergeSubtitleFragments(deduped);
+
+    console.log(`[InnerTube Captions] Extracted ${deduped.length} raw snippets -> Merged into ${mergedSentences.length} complete sentences via InnerTube!`);
     return {
       lang: chosenTrack.languageCode || 'zh',
       source: `YouTube Official Subtitles (${chosenTrack.languageCode})`,
-      sentences: deduped
+      sentences: mergedSentences
     };
   } catch (err) {
     console.warn(`[InnerTube Captions] Error:`, err.message);
@@ -435,11 +495,12 @@ export async function extractYouTubeSubtitles(youtubeId) {
       }
 
       if (rawSentences.length > 0) {
-        console.log(`[YouTube Subtitles] Extracted ${rawSentences.length} sentences via secondary yt-dlp.`);
+        const mergedYtDlp = mergeSubtitleFragments(rawSentences);
+        console.log(`[YouTube Subtitles] Extracted ${rawSentences.length} raw snippets -> Merged into ${mergedYtDlp.length} complete sentences via secondary yt-dlp.`);
         return {
           lang: matchedFile.includes('zh') ? 'zh' : 'auto',
           source: 'YouTube Official / ASR Subtitles (yt-dlp)',
-          sentences: rawSentences
+          sentences: mergedYtDlp
         };
       }
     }
