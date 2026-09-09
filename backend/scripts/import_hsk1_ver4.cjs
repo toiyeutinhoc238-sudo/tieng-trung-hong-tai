@@ -5,7 +5,7 @@ const xlsx = require('xlsx');
 const rootDir = path.resolve(__dirname, '../..');
 const filetuvungDir = path.join(rootDir, 'filetuvung');
 const dbPath = path.join(rootDir, 'backend/database.json');
-const backupPath = path.join(rootDir, 'backend/database.json.bak_pre_ver4');
+const backupPath = path.join(rootDir, `backend/database.json.bak_${Date.now()}`);
 
 console.log('=== IMPORT HSK 1 VER4 TO DATABASE.JSON ===');
 
@@ -169,11 +169,16 @@ console.log(`HSK 1 (2.0): ${updatedCount20} updated, ${newCount20} new.`);
 // =========================================================================
 // PART B: IMPORT HSK 1 (3.0) NEW VER4
 // =========================================================================
-const file30 = path.join(filetuvungDir, 'Từ vựng HSK 1 3.0 NEW VER4.xlsx');
-if (!fs.existsSync(file30)) {
-  console.error('File not found:', file30);
+const file30Candidates = [
+  path.join(filetuvungDir, 'Từ vựng HSK 1 3.0 VER4.xlsx'),
+  path.join(filetuvungDir, 'Từ vựng HSK 1 3.0 NEW VER4.xlsx')
+];
+const file30 = file30Candidates.find(f => fs.existsSync(f));
+if (!file30) {
+  console.error('File not found in candidates:', file30Candidates);
   process.exit(1);
 }
+console.log('Reading HSK 1 (3.0) from:', file30);
 
 const wb30 = xlsx.readFile(file30);
 const rows30 = xlsx.utils.sheet_to_json(wb30.Sheets[wb30.SheetNames[0]], { header: 1 });

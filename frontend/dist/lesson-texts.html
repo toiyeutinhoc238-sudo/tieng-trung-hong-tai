@@ -260,6 +260,88 @@
       color: #0f172a;
     }
 
+    /* Pinyin Toggle Hub Button (High Contrast & Dual Theme) */
+    #pinyin-toggle-hub-btn {
+      padding: 7px 14px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+      outline: none;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    /* Pinyin: BẬT (Active) - Rich amber gradient with bold white text & icon */
+    #pinyin-toggle-hub-btn.pinyin-active,
+    #pinyin-toggle-hub-btn:not(.pinyin-off) {
+      background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+      color: #ffffff !important;
+      border: 1.5px solid #b45309 !important;
+      box-shadow: 0 3px 12px rgba(217, 119, 6, 0.35) !important;
+    }
+
+    #pinyin-toggle-hub-btn.pinyin-active:hover,
+    #pinyin-toggle-hub-btn:not(.pinyin-off):hover {
+      background: linear-gradient(135deg, #fbbf24, #d97706) !important;
+      transform: translateY(-1px);
+      box-shadow: 0 5px 16px rgba(217, 119, 6, 0.45) !important;
+    }
+
+    #pinyin-toggle-hub-btn.pinyin-active i,
+    #pinyin-toggle-hub-btn:not(.pinyin-off) i,
+    #pinyin-toggle-hub-btn.pinyin-active span,
+    #pinyin-toggle-hub-btn:not(.pinyin-off) span {
+      color: #ffffff !important;
+    }
+
+    /* Pinyin: TẮT (Inactive) - Crisp slate with readable text */
+    #pinyin-toggle-hub-btn.pinyin-off {
+      background: #e2e8f0 !important;
+      color: #334155 !important;
+      border: 1.5px solid #cbd5e1 !important;
+      box-shadow: none !important;
+    }
+
+    #pinyin-toggle-hub-btn.pinyin-off i,
+    #pinyin-toggle-hub-btn.pinyin-off span {
+      color: #334155 !important;
+    }
+
+    #pinyin-toggle-hub-btn.pinyin-off:hover {
+      background: #cbd5e1 !important;
+      color: #0f172a !important;
+      border-color: #94a3b8 !important;
+      transform: translateY(-1px);
+    }
+
+    /* Dark Mode styling for Pinyin: TẮT */
+    html.dark #pinyin-toggle-hub-btn.pinyin-off {
+      background: rgba(255, 255, 255, 0.08) !important;
+      color: #cbd5e1 !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+    }
+
+    html.dark #pinyin-toggle-hub-btn.pinyin-off i,
+    html.dark #pinyin-toggle-hub-btn.pinyin-off span {
+      color: #cbd5e1 !important;
+    }
+
+    html.dark #pinyin-toggle-hub-btn.pinyin-off:hover {
+      background: rgba(255, 255, 255, 0.16) !important;
+      color: #ffffff !important;
+      border-color: rgba(255, 255, 255, 0.35) !important;
+    }
+
+    #pinyin-toggle-hub-btn:active {
+      transform: scale(0.96) !important;
+    }
+
     /* Voice Control Bar */
     .voice-control-bar {
       background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(167, 139, 250, 0.12));
@@ -713,8 +795,9 @@
     }
 
     @media (max-width: 480px) {
-      #pinyin-toggle-label {
-        display: none !important;
+      #pinyin-toggle-hub-btn {
+        padding: 6px 10px !important;
+        font-size: 0.8rem !important;
       }
       #header-roadmap-btn {
         padding: 8px 10px !important;
@@ -744,11 +827,6 @@
         </div>
       </div>
       <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-        <button id="pinyin-toggle-btn" class="btn-close" onclick="window.togglePinyinVisibility()"
-          title="Bật/Tắt hiển thị Pinyin toàn bộ Bài Khóa" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.35); color: #fbbf24;">
-          <i class="fa-solid fa-eye" id="pinyin-toggle-icon"></i>
-          <span id="pinyin-toggle-label">Pinyin: BẬT</span>
-        </button>
         <button id="particle-toggle-btn" class="btn-close particle-toggle-btn"
           onclick="window.toggleSeasonalParticles()" title="Bật/Tắt hiệu ứng lá rơi động">
           <i class="fa-solid fa-snowflake" style="color:#38bdf8;"></i>
@@ -813,8 +891,8 @@
           id="lesson-title-badge">
           <i class="fa-solid fa-bookmark" style="color: #38bdf8;"></i> Bài Khóa HSK 1 - Bài 1
         </div>
-        <button id="pinyin-toggle-hub-btn" class="btn-close" onclick="window.togglePinyinVisibility()"
-          title="Bật/Tắt hiển thị Pinyin trong Bài Khóa" style="padding: 6px 12px; border-radius: 10px; font-weight: 700; font-size: 0.82rem; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.35); color: #fbbf24; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+        <button id="pinyin-toggle-hub-btn" class="pinyin-active" onclick="window.togglePinyinVisibility()"
+          title="Bật/Tắt hiển thị Pinyin trong Bài Khóa">
           <i class="fa-solid fa-eye" id="pinyin-hub-icon"></i>
           <span id="pinyin-hub-label">Pinyin: BẬT</span>
         </button>
@@ -1783,16 +1861,27 @@
         document.documentElement.classList.add('hide-pinyin');
       }
 
-      const iconEls = [document.getElementById('pinyin-toggle-icon'), document.getElementById('pinyin-hub-icon')];
-      const labelEls = [document.getElementById('pinyin-toggle-label'), document.getElementById('pinyin-hub-label')];
+      const hubBtn = document.getElementById('pinyin-toggle-hub-btn');
+      const hubIcon = document.getElementById('pinyin-hub-icon');
+      const hubLabel = document.getElementById('pinyin-hub-label');
 
-      iconEls.forEach(el => {
-        if (el) el.className = showPinyin ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash';
-      });
+      if (hubBtn) {
+        if (showPinyin) {
+          hubBtn.classList.remove('pinyin-off');
+          hubBtn.classList.add('pinyin-active');
+        } else {
+          hubBtn.classList.remove('pinyin-active');
+          hubBtn.classList.add('pinyin-off');
+        }
+      }
 
-      labelEls.forEach(el => {
-        if (el) el.textContent = showPinyin ? 'Pinyin: BẬT' : 'Pinyin: TẮT';
-      });
+      if (hubIcon) {
+        hubIcon.className = showPinyin ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash';
+      }
+
+      if (hubLabel) {
+        hubLabel.textContent = showPinyin ? 'Pinyin: BẬT' : 'Pinyin: TẮT';
+      }
 
       if (showToastNotice) {
         showLessonToast(showPinyin ? '👁️ Đã BẬT hiển thị Pinyin bài khóa' : '🙈 Đã ẨN Pinyin bài khóa (tự thử thách khả năng đọc chữ Hán)');
