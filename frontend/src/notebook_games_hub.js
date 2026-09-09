@@ -257,7 +257,7 @@ export class NotebookGamesHub {
               <i class="fa-solid fa-book-bookmark"></i> Sổ Tay
             </button>
           </div>
-          <iframe id="notebook-quiz-iframe" src="/quiz-game.html?${params.toString()}" style="width: 100%; height: 640px; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 18px; background: #0f172a;" frameborder="0" allow="autoplay"></iframe>
+          <iframe id="notebook-quiz-iframe" src="/quiz-game.html?${params.toString()}" style="width: 100%; height: clamp(700px, 86vh, 860px); min-height: 700px; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 18px; background: #0f172a;" frameborder="0" allow="autoplay"></iframe>
         </div>
       `;
 

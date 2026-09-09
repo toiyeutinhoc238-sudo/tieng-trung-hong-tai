@@ -11463,8 +11463,8 @@ html.dark .cannon-input-hint {
   gap: 8px;
   text-align: left;
   flex: 1;
-  min-height: 160px;
-  max-height: 260px;
+  min-height: 220px;
+  max-height: clamp(320px, 52vh, 480px);
   overflow: hidden;
 }
 
@@ -16729,12 +16729,20 @@ html.dark .summary-tab-btn.wrong-tab.active {
 }
 
 .summary-words-list {
-  max-height: 170px !important;
+  max-height: clamp(280px, 48vh, 460px) !important;
   overflow-y: auto !important;
-  display: flex !important;
-  flex-direction: column !important;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
   gap: 8px !important;
-  padding-right: 2px !important;
+  padding-right: 4px !important;
+  align-content: start !important;
+}
+
+@media (max-width: 600px) {
+  .summary-words-list {
+    grid-template-columns: 1fr !important;
+    max-height: 42vh !important;
+  }
 }
 
 .summary-word-card {
