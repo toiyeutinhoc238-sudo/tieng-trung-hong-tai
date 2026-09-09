@@ -2227,7 +2227,9 @@ window.autoGenerateAllWithAI = async function () {
       const textarea = document.getElementById('custom-video-subtitles');
       if (textarea) textarea.value = lines.join('\n');
 
-      showToast(`🎉 Xuất sắc! AI đã trích xuất & dịch thành công ${data.sentences.length} câu thoại chuẩn xác 100%!`);
+      const levelLabel = data.levelText || `HSK ${data.level || '2'}`;
+      const catLabel = data.category ? ` • ${data.category}` : '';
+      showToast(`🎉 Xuất sắc! AI đã phân loại [${levelLabel}${catLabel}] và trích xuất thành công ${data.sentences.length} câu thoại chuẩn xác!`);
 
     } else {
       showToast(data.message || 'Không thể tạo tự động bài học. Vui lòng thử lại!', true);

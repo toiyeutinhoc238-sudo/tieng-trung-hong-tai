@@ -200,8 +200,10 @@ export async function extractYouTubeSubtitles(youtubeId) {
       '--skip-download',
       '--write-auto-subs',
       '--write-subs',
-      '--sub-langs', 'zh-Hans,zh,zh-Hant,zh-CN,zh-TW,vi,en',
+      '--sub-langs', 'zh.*,zh-Hans,zh-CN,zh-TW,en.*,vi.*',
       '--sub-format', 'json3',
+      '--ignore-errors',
+      '--no-abort-on-error',
       '-o', `${subTempBase}.%(ext)s`
     ];
 
@@ -210,8 +212,8 @@ export async function extractYouTubeSubtitles(youtubeId) {
       fs.writeFileSync(cookiesPath, process.env.YOUTUBE_COOKIES.replace(/\\n/g, '\n'));
       subArgs.push('--cookies', cookiesPath);
     } else {
-      subArgs.push('--extractor-args', 'youtube:player_client=ios,tv');
-      subArgs.push('--js-runtimes', `node:${process.execPath}`);
+      subArgs.push('--extractor-args', 'youtube:player_client=android,ios');
+      subArgs.push('--user-agent', 'com.google.android.youtube/19.29.37 (Linux; U; Android 14) gzip');
     }
 
     await execFileAsync(YTDLP_PATH, subArgs, { timeout: 35000 });
@@ -289,48 +291,74 @@ export async function transcribeAudioWithVAD(youtubeId, videoTitle = '') {
 
   try {
     console.log(`[VAD Audio Engine] Downloading clean audio track for ${youtubeId}...`);
-    try {
-      await ensureYtDlpExists();
-      
-      const ytDlpArgs = [
-        videoUrl,
-        '-f', '140/ba[ext=m4a]/ba[abr<=64]/ba/b*',
-        '-o', audioPath,
-        '--force-overwrites',
-        '--no-playlist'
-      ];
-      
-      // Bypass 429/403 on Render by using Cookies if provided
-      if (process.env.YOUTUBE_COOKIES) {
-        const cookiesPath = path.join(AUDIO_TEMP_DIR, 'cookies.txt');
-        fs.writeFileSync(cookiesPath, process.env.YOUTUBE_COOKIES.replace(/\\n/g, '\n'));
-        ytDlpArgs.push('--cookies', cookiesPath);
-        console.log(`[VAD Audio Engine] Using YOUTUBE_COOKIES to bypass IP ban.`);
-      } else {
-        ytDlpArgs.push('--extractor-args', 'youtube:player_client=ios,android,web');
-        ytDlpArgs.push('--js-runtimes', `node:${process.execPath}`);
-      }
+    let downloaded = false;
+    await ensureYtDlpExists();
 
-      await execFileAsync(YTDLP_PATH, ytDlpArgs, { timeout: 60000 });
-    } catch (ytErr) {
-      console.log(`[VAD Audio Engine] yt-dlp failed (likely 429/403: ${ytErr.message}). Falling back to @distube/ytdl-core...`);
-      await new Promise((resolve, reject) => {
-        try {
-          const stream = ytdl(videoUrl, { filter: 'audioonly', quality: 'lowestaudio' });
+    // Strategy 1: yt-dlp with mobile clients (android -> ios)
+    const mobileClients = ['android', 'ios'];
+    for (const client of mobileClients) {
+      try {
+        const ytDlpArgs = [
+          videoUrl,
+          '-f', '140/ba[ext=m4a]/ba[abr<=64]/ba/b*',
+          '-o', audioPath,
+          '--force-overwrites',
+          '--no-playlist',
+          '--no-check-certificates',
+          '--geo-bypass'
+        ];
+
+        if (process.env.YOUTUBE_COOKIES) {
+          const cookiesPath = path.join(AUDIO_TEMP_DIR, 'cookies.txt');
+          fs.writeFileSync(cookiesPath, process.env.YOUTUBE_COOKIES.replace(/\\n/g, '\n'));
+          ytDlpArgs.push('--cookies', cookiesPath);
+        } else {
+          ytDlpArgs.push('--extractor-args', `youtube:player_client=${client}`);
+          ytDlpArgs.push('--user-agent', 'com.google.android.youtube/19.29.37 (Linux; U; Android 14) gzip');
+        }
+
+        await execFileAsync(YTDLP_PATH, ytDlpArgs, { timeout: 45000 });
+        if (fs.existsSync(audioPath) && fs.statSync(audioPath).size > 2000) {
+          downloaded = true;
+          console.log(`[VAD Audio Engine] Successfully downloaded audio track via client: ${client}`);
+          break;
+        }
+      } catch (err) {
+        console.warn(`[VAD Audio Engine] yt-dlp client ${client} failed (${err.message}). Trying next...`);
+      }
+    }
+
+    // Strategy 2: Fallback to @distube/ytdl-core if yt-dlp failed
+    if (!downloaded) {
+      console.log(`[VAD Audio Engine] yt-dlp mobile clients exhausted, falling back to @distube/ytdl-core...`);
+      try {
+        await new Promise((resolve, reject) => {
+          const stream = ytdl(videoUrl, {
+            filter: 'audioonly',
+            quality: 'lowestaudio',
+            requestOptions: {
+              headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+              }
+            }
+          });
           const writeStream = fs.createWriteStream(audioPath);
           stream.pipe(writeStream);
           stream.on('end', () => resolve());
           writeStream.on('finish', () => resolve());
           stream.on('error', (err) => reject(err));
           writeStream.on('error', (err) => reject(err));
-        } catch (err) {
-          reject(err);
+        });
+        if (fs.existsSync(audioPath) && fs.statSync(audioPath).size > 2000) {
+          downloaded = true;
         }
-      });
+      } catch (ytdlErr) {
+        console.warn(`[VAD Audio Engine] @distube/ytdl-core fallback warning:`, ytdlErr.message);
+      }
     }
 
-    if (!fs.existsSync(audioPath) || fs.statSync(audioPath).size < 1000) {
-      throw new Error('Không thể tải luồng âm thanh từ video YouTube này.');
+    if (!downloaded || !fs.existsSync(audioPath) || fs.statSync(audioPath).size < 1000) {
+      throw new Error('Không thể tải luồng âm thanh video (YouTube 429 Rate Limit). Vui lòng thử lại sau giây lát hoặc dán trực tiếp câu thoại vào ô nhập!');
     }
 
     const fileSizeKB = (fs.statSync(audioPath).size / 1024).toFixed(1);
@@ -450,11 +478,15 @@ async function callLLMJson(prompt) {
  * Enrich raw transcribed sentences with Standard Pinyin and Context-Aware Vietnamese Translation
  */
 export async function enrichWithPinyinAndContextTranslation(rawItems, videoTitle = '', duration = 60) {
-  if (!rawItems || rawItems.length === 0) return [];
+  if (!rawItems || rawItems.length === 0) {
+    return { sentences: [], aiHskLevel: null, aiCategory: null };
+  }
 
   console.log(`[AI Enrichment] Translating and enriching ${rawItems.length} sentences for "${videoTitle}"...`);
   const chunkSize = 25;
   const enrichedList = [];
+  let aiHskLevel = null;
+  let aiCategory = null;
 
   for (let i = 0; i < rawItems.length; i += chunkSize) {
     const chunk = rawItems.slice(i, i + chunkSize);
@@ -492,6 +524,15 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON THEO ĐỊNH DẠNG:
 }`;
 
       const parsed = await callLLMJson(prompt);
+      if (parsed.hskLevel && !aiHskLevel) {
+        const cleanLvl = String(parsed.hskLevel).replace(/\D/g, '');
+        if (['1', '2', '3', '4', '5', '6'].includes(cleanLvl)) {
+          aiHskLevel = cleanLvl;
+        }
+      }
+      if (parsed.category && !aiCategory) {
+        aiCategory = parsed.category;
+      }
       const parsedSentences = parsed.sentences || [];
 
       for (let cIdx = 0; cIdx < chunk.length; cIdx++) {
@@ -552,7 +593,130 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON THEO ĐỊNH DẠNG:
     }
   }
 
-  return enrichedList;
+  return {
+    sentences: enrichedList,
+    aiHskLevel: aiHskLevel,
+    aiCategory: aiCategory
+  };
+}
+
+// In-memory cache of HSK Vocabulary database for accurate lexical difficulty scoring
+let hskWordMap = null;
+function getHskWordMap() {
+  if (hskWordMap) return hskWordMap;
+  hskWordMap = new Map();
+  try {
+    const dbPath = path.join(__dirname, '..', 'database.json');
+    if (fs.existsSync(dbPath)) {
+      const raw = fs.readFileSync(dbPath, 'utf8');
+      const db = JSON.parse(raw);
+      db.forEach(item => {
+        const w = (item.word || item.hanzi || '').trim();
+        const lvl = parseInt(item.level, 10);
+        if (w && lvl >= 1 && lvl <= 6) {
+          if (!hskWordMap.has(w) || hskWordMap.get(w) < lvl) {
+            hskWordMap.set(w, lvl);
+          }
+        }
+      });
+      console.log(`[HSK Classifier] Loaded ${hskWordMap.size} unique HSK words for lexical analysis.`);
+    }
+  } catch (err) {
+    console.warn('[HSK Classifier] Warning loading database.json:', err.message);
+  }
+  return hskWordMap;
+}
+
+export function classifyHskAndCategory(videoTitle, enrichedSentences, aiHskLevel, aiCategory) {
+  const title = (videoTitle || '').trim();
+  const lowerTitle = title.toLowerCase();
+
+  // 1. Explicit HSK in Video Title (Highest confidence)
+  // Matches "HSK 1", "HSK1", "HSK 3.0 Cấp 2", "Level 4", "Hsk 5"
+  const titleMatch = title.match(/hsk\s*([1-6])/i)
+    || title.match(/cấp\s*([1-6])/i)
+    || title.match(/level\s*([1-6])/i)
+    || title.match(/hsk([1-6])/i);
+
+  if (titleMatch && titleMatch[1]) {
+    const titleLvl = titleMatch[1];
+    return {
+      level: titleLvl,
+      levelText: `HSK ${titleLvl}`,
+      category: resolveCategory(lowerTitle, aiCategory),
+      detectionSource: 'Title Explicit'
+    };
+  }
+
+  // 2. Lexical word matching from HSK 16,000+ vocabulary database
+  const map = getHskWordMap();
+  const foundLevels = [];
+  const allText = enrichedSentences.map(s => s.hanzi || s.text || '').join('');
+
+  if (map && map.size > 0 && allText.length > 0) {
+    const cleanChinese = allText.replace(/[^\u4e00-\u9fa5]/g, '');
+    for (let len = 4; len >= 1; len--) {
+      for (let i = 0; i <= cleanChinese.length - len; i++) {
+        const sub = cleanChinese.substring(i, i + len);
+        if (map.has(sub)) {
+          foundLevels.push(map.get(sub));
+        }
+      }
+    }
+  }
+
+  let lexicalLevel = '2';
+  if (foundLevels.length > 0) {
+    foundLevels.sort((a, b) => a - b);
+    // 70th percentile represents target learner comprehension level
+    const p70 = foundLevels[Math.floor(foundLevels.length * 0.7)];
+    if (p70 >= 1 && p70 <= 6) {
+      lexicalLevel = String(p70);
+    }
+  }
+
+  // 3. AI / LLM Contextual Decision
+  let finalLevel = lexicalLevel;
+  let source = 'Lexical Vocabulary Analysis';
+
+  if (aiHskLevel && ['1', '2', '3', '4', '5', '6'].includes(String(aiHskLevel))) {
+    finalLevel = String(aiHskLevel);
+    source = 'AI Semantic Analysis';
+  } else {
+    finalLevel = lexicalLevel;
+  }
+
+  return {
+    level: finalLevel,
+    levelText: `HSK ${finalLevel}`,
+    category: resolveCategory(lowerTitle, aiCategory),
+    detectionSource: source
+  };
+}
+
+function resolveCategory(lowerTitle, aiCategory) {
+  if (aiCategory && ['Giao Tiếp', 'Âm Nhạc', 'Phim Ảnh', 'Ẩm Thực', 'Du Lịch', 'Đời Sống', 'Tin Tức', 'Hoạt Hình'].includes(aiCategory)) {
+    return aiCategory;
+  }
+  if (lowerTitle.includes('nhạc') || lowerTitle.includes('hát') || lowerTitle.includes('music') || lowerTitle.includes('song') || lowerTitle.includes('mv')) {
+    return 'Âm Nhạc';
+  }
+  if (lowerTitle.includes('phim') || lowerTitle.includes('drama') || lowerTitle.includes('movie') || lowerTitle.includes('tập')) {
+    return 'Phim Ảnh';
+  }
+  if (lowerTitle.includes('ẩm thực') || lowerTitle.includes('món ăn') || lowerTitle.includes('nấu') || lowerTitle.includes('ăn')) {
+    return 'Ẩm Thực';
+  }
+  if (lowerTitle.includes('tin tức') || lowerTitle.includes('thời sự') || lowerTitle.includes('news')) {
+    return 'Tin Tức';
+  }
+  if (lowerTitle.includes('hoạt hình') || lowerTitle.includes('anime') || lowerTitle.includes('cartoon')) {
+    return 'Hoạt Hình';
+  }
+  if (lowerTitle.includes('du lịch') || lowerTitle.includes('travel') || lowerTitle.includes('bắc kinh') || lowerTitle.includes('thượng hải')) {
+    return 'Du Lịch';
+  }
+  return 'Giao Tiếp';
 }
 
 /**
@@ -610,31 +774,11 @@ export async function processYouTubeVideo(urlOrId) {
   }
 
   // Step 5: AI Context Enrichment & Pinyin
-  const enrichedSentences = await enrichWithPinyinAndContextTranslation(rawSentences, meta.title, meta.duration);
+  const { sentences: enrichedSentences, aiHskLevel, aiCategory } = await enrichWithPinyinAndContextTranslation(rawSentences, meta.title, meta.duration);
 
-  // Auto-detect HSK Level based on length and vocabulary
-  let hskLevel = '2';
-  const totalChars = enrichedSentences.reduce((sum, s) => sum + s.hanzi.length, 0);
-  const avgLen = totalChars / Math.max(1, enrichedSentences.length);
-  if (avgLen <= 5) hskLevel = '1';
-  else if (avgLen <= 9) hskLevel = '2';
-  else if (avgLen <= 14) hskLevel = '3';
-  else if (avgLen <= 20) hskLevel = '4';
-  else hskLevel = '5';
-
-  let category = 'Giao Tiếp';
-  const lowerTitle = meta.title.toLowerCase();
-  if (lowerTitle.includes('nhạc') || lowerTitle.includes('hát') || lowerTitle.includes('music') || lowerTitle.includes('song') || lowerTitle.includes('mv')) {
-    category = 'Âm Nhạc';
-  } else if (lowerTitle.includes('phim') || lowerTitle.includes('drama') || lowerTitle.includes('movie')) {
-    category = 'Phim Ảnh';
-  } else if (lowerTitle.includes('ẩm thực') || lowerTitle.includes('món ăn') || lowerTitle.includes('nấu')) {
-    category = 'Ẩm Thực';
-  } else if (lowerTitle.includes('tin tức') || lowerTitle.includes('thời sự') || lowerTitle.includes('news')) {
-    category = 'Tin Tức';
-  } else if (lowerTitle.includes('hoạt hình') || lowerTitle.includes('anime') || lowerTitle.includes('cartoon')) {
-    category = 'Hoạt Hình';
-  }
+  // Auto-detect HSK Level & Category with multi-tier intelligence (Title -> AI -> Lexical HSK Database)
+  const classification = classifyHskAndCategory(meta.title, enrichedSentences, aiHskLevel, aiCategory);
+  console.log(`[Video Transcriber] HSK Classification: ${classification.levelText} (Source: ${classification.detectionSource}), Category: ${classification.category}`);
 
   return {
     success: true,
@@ -643,10 +787,11 @@ export async function processYouTubeVideo(urlOrId) {
     duration: meta.duration,
     author: meta.author,
     thumbnail: meta.thumbnail,
-    level: hskLevel,
-    levelText: `HSK ${hskLevel}`,
-    category: category,
-    description: `Bài luyện nghe chép chính tả & shadowing từ video "${meta.title}".`,
+    level: classification.level,
+    levelText: classification.levelText,
+    category: classification.category,
+    hskDetectionSource: classification.detectionSource,
+    description: `Bài luyện nghe chép chính tả & shadowing (${classification.levelText} • ${classification.category}) từ video "${meta.title}".`,
     tierUsed: transcriptionResult.source,
     sentencesCount: enrichedSentences.length,
     sentences: enrichedSentences
