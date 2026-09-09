@@ -7196,16 +7196,30 @@ window.openLessonDetailModal = function (lessonKey) {
   const btnText = document.getElementById('modal-btn-mod-text');
   if (btnText) {
     const textBadge = btnText.querySelector('small');
-    if (textBadge) {
-      textBadge.textContent = 'Hội thoại 📖';
-      textBadge.style.background = '#0284c7';
-      textBadge.style.color = '#ffffff';
+    const hasReadingText = (activeHskVersion === '3.0') && ['1', '2', '3'].includes(String(currentLvl)) && activeLessonsCurriculum !== 'yct';
+    if (!hasReadingText) {
+      if (textBadge) {
+        textBadge.textContent = 'Đang khóa 🔒';
+        textBadge.style.background = '#64748b';
+        textBadge.style.color = '#ffffff';
+      }
+      btnText.style.opacity = '0.7';
+      btnText.onclick = function () {
+        showComingSoonNotice(`Bài Khóa HSK ${currentLvl} (${activeHskVersion === '2.0' ? 'Phiên bản 2.0' : activeHskVersion}) đang được đội ngũ chuẩn bị và sẽ sớm ra mắt!`);
+      };
+    } else {
+      if (textBadge) {
+        textBadge.textContent = 'Hội thoại 📖';
+        textBadge.style.background = '#0284c7';
+        textBadge.style.color = '#ffffff';
+      }
+      btnText.style.opacity = '1';
+      btnText.onclick = function () {
+        const modalEl = document.getElementById('lesson-detail-popup-modal');
+        if (modalEl) modalEl.style.display = 'none';
+        window.openLessonTextStudy(lessonKey);
+      };
     }
-    btnText.onclick = function () {
-      const modalEl = document.getElementById('lesson-detail-popup-modal');
-      if (modalEl) modalEl.style.display = 'none';
-      window.openLessonTextStudy(lessonKey);
-    };
   }
 
   // Handle 'Ôn Tập' (Quiz Game) unlock logic based on 100% completion
@@ -8073,6 +8087,11 @@ window.goToLessonStep = function (step, lessonId) {
   } else if (step === 'grammar') {
     window.openLessonGrammarModal(numId);
   } else if (step === 'text') {
+    const hasReadingText = (currentVer === '3.0') && ['1', '2', '3'].includes(String(currentLvl)) && activeLessonsCurriculum !== 'yct';
+    if (!hasReadingText) {
+      showComingSoonNotice(`Bài Khóa HSK ${currentLvl} (${currentVer === '2.0' ? 'Phiên bản 2.0' : currentVer}) đang được đội ngũ chuẩn bị và sẽ sớm ra mắt!`);
+      return;
+    }
     window.location.href = `/lesson-texts.html?lesson=${numId}&level=${currentLvl}&version=${currentVer}`;
   } else if (step === 'quiz') {
     const curCurriculum = activeLessonsCurriculum || 'hsk';
@@ -9069,7 +9088,7 @@ window.openLessonGrammarModal = function (lessonKey, initialPointIdx = 0) {
     return;
   }
 
-  if (currentVer === '2.0' && lvlStr !== '1') {
+  if (currentVer === '2.0' && !['1', '2'].includes(lvlStr)) {
     showComingSoonNotice(`Ngữ Pháp HSK ${currentLvl} (Phiên bản 2.0)`);
     return;
   }
@@ -9118,6 +9137,14 @@ window.openLessonTextStudy = function (lessonId) {
   const numId = parseInt(String(lessonId).replace(/\D/g, ''), 10) || 1;
   const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : (activeLessonsLevel || 1);
   const currentVer = activeLessonsCurriculum === 'yct' ? 'yct' : (activeHskVersion || activeRoadmapVersion || '3.0');
+  const lvlStr = String(currentLvl);
+
+  const hasReadingText = (currentVer === '3.0') && ['1', '2', '3'].includes(lvlStr) && activeLessonsCurriculum !== 'yct';
+  if (!hasReadingText) {
+    showComingSoonNotice(`Bài Khóa HSK ${currentLvl} (${currentVer === '2.0' ? 'Phiên bản 2.0' : currentVer}) đang được đội ngũ chuẩn bị và sẽ sớm ra mắt!`);
+    return;
+  }
+
   window.location.href = `/lesson-texts.html?lesson=${numId}&level=${currentLvl}&version=${currentVer}`;
 };
 

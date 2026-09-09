@@ -1060,16 +1060,20 @@
 
     async function loadData() {
       try {
+        if (currentVersion === '2.0' || currentVersion === 'yct' || Number(currentLevel) > 3) {
+          allReadingTexts = [];
+          return;
+        }
         const file = `/hsk${currentLevel}_reading_texts.json`;
         const res = await fetch(file);
         if (res.ok) {
           allReadingTexts = await res.json();
         } else {
-          const fallbackRes = await fetch('/hsk1_reading_texts.json');
-          if (fallbackRes.ok) allReadingTexts = await fallbackRes.json();
+          allReadingTexts = [];
         }
       } catch (e) {
         console.warn("Error loading reading texts:", e);
+        allReadingTexts = [];
       }
     }
 
@@ -1179,12 +1183,38 @@
       const diagObj = getActiveDialogueData();
 
       if (!diagObj) {
-        box.innerHTML = `<div style="text-align:center; padding:60px; font-size:1.05rem; color:#94a3b8;">
-          <i class="fa-solid fa-file-circle-exclamation" style="font-size:2.5rem; color:#fbbf24; margin-bottom:12px;"></i>
-          <div>Nội dung Bài Khóa ${currentDialogueId} - Bài ${currentLessonId} đang được cập nhật!</div>
-        </div>`;
+        const isVer2 = currentVersion === '2.0';
+        if (tabBox) tabBox.style.display = 'none';
+        const modeBox = document.querySelector('.mode-steps-container');
+        if (modeBox) modeBox.style.display = 'none';
+
+        box.innerHTML = `
+          <div style="background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); border: 1.5px solid rgba(255, 255, 255, 0.15); border-radius: 28px; padding: 60px 32px; text-align: center; box-shadow: 0 16px 40px rgba(0,0,0,0.4); max-width: 680px; margin: 40px auto;">
+            <div style="width: 80px; height: 80px; border-radius: 50%; background: rgba(245, 158, 11, 0.15); color: #fbbf24; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; margin: 0 auto 24px auto; box-shadow: 0 8px 24px rgba(245, 158, 11, 0.25);">
+              <i class="fa-solid fa-lock"></i>
+            </div>
+            <h2 style="font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-bottom: 12px; font-family: var(--font-display);">Bài Khóa HSK ${currentLevel} (${currentVersion}) Đang Khóa</h2>
+            <p style="color: #94a3b8; font-size: 1rem; line-height: 1.6; margin-bottom: 28px;">
+              ${isVer2
+                ? `Hiện tại hệ thống chỉ mới có Bài Khóa cho các cấp độ HSK 1, 2, 3 chuẩn 3.0. Bài Khóa cho phiên bản 2.0 đang được đội ngũ giáo viên Tiếng Trung HongTai biên soạn và sẽ sớm ra mắt!`
+                : `Nội dung Bài Khóa cho cấp độ HSK ${currentLevel} (${currentVersion}) đang được đội ngũ giáo viên Tiếng Trung HongTai biên soạn và sẽ sớm ra mắt!`}
+            </p>
+            <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+              <a href="/index.html?tab=lessons&level=${currentLevel}&version=${currentVersion}" style="background: linear-gradient(135deg, #0284c7, #2563eb); color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 14px; font-weight: 800; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 6px 20px rgba(37,99,235,0.4);">
+                <i class="fa-solid fa-arrow-left"></i> Về Lộ Trình Học
+              </a>
+              <a href="/hsk-grammar.html?level=${currentLevel}&lesson=${currentLessonId}&version=${currentVersion}" style="background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.2); color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 14px; font-weight: 800; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-spell-check"></i> Học Ngữ Pháp Bài ${currentLessonId}
+              </a>
+            </div>
+          </div>
+        `;
         return;
       }
+
+      if (tabBox) tabBox.style.display = 'flex';
+      const modeBox = document.querySelector('.mode-steps-container');
+      if (modeBox) modeBox.style.display = 'flex';
 
       const audioIdx = (currentDialogueId * 2) - 1;
       const audioUrl = diagObj.audio || `/audio/hsk${currentLevel}_texts/${currentLessonId}-${audioIdx}.mp3`;

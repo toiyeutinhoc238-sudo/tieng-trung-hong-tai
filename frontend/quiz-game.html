@@ -2143,9 +2143,15 @@
                   <a href="/hsk-grammar.html?level=${qLevel}&lesson=${numLessonId}&version=${qVer}" target="_top" class="stepper-tab-btn" style="padding: 6px 12px; font-size: 0.82rem; border-radius: 10px; text-decoration: none;">
                     <i class="fa-solid fa-spell-check"></i> 2. Ngữ Pháp
                   </a>
-                  <a href="/lesson-texts.html?lesson=${numLessonId}&level=${qLevel}&version=${qVer}" target="_top" class="stepper-tab-btn" style="padding: 6px 12px; font-size: 0.82rem; border-radius: 10px; text-decoration: none;">
-                    <i class="fa-solid fa-comments"></i> 3. Bài Khóa
-                  </a>
+                  ${((qVer === '3.0') && ['1', '2', '3'].includes(String(qLevel))) ? `
+                    <a href="/lesson-texts.html?lesson=${numLessonId}&level=${qLevel}&version=${qVer}" target="_top" class="stepper-tab-btn" style="padding: 6px 12px; font-size: 0.82rem; border-radius: 10px; text-decoration: none;">
+                      <i class="fa-solid fa-comments"></i> 3. Bài Khóa
+                    </a>
+                  ` : `
+                    <span class="stepper-tab-btn" style="padding: 6px 12px; font-size: 0.82rem; border-radius: 10px; opacity: 0.5; cursor: not-allowed;" title="Bài Khóa phiên bản này đang được chuẩn bị">
+                      <i class="fa-solid fa-lock"></i> 3. Bài Khóa
+                    </span>
+                  `}
                   <span class="stepper-tab-btn active active-quiz" style="padding: 6px 12px; font-size: 0.82rem; border-radius: 10px; background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; border-color: #fbbf24;">
                     <i class="fa-solid fa-circle-play"></i> 4. Ôn Tập
                   </span>
@@ -2785,9 +2791,15 @@
                   Tiếp Tục Chinh Phục Bài ${nextLessonId}?
                 </div>
                 <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
-                  <a href="/lesson-texts.html?lesson=${numLessonId}&level=${qLevel}&version=${qVer}" target="_top" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #cbd5e1; padding: 8px 14px; border-radius: 10px; font-weight: 700; font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
-                    <i class="fa-solid fa-comments"></i> Xem Lại Bài Khóa
-                  </a>
+                  ${((qVer === '3.0') && ['1', '2', '3'].includes(String(qLevel))) ? `
+                    <a href="/lesson-texts.html?lesson=${numLessonId}&level=${qLevel}&version=${qVer}" target="_top" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #cbd5e1; padding: 8px 14px; border-radius: 10px; font-weight: 700; font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                      <i class="fa-solid fa-comments"></i> Xem Lại Bài Khóa
+                    </a>
+                  ` : `
+                    <a href="/hsk-grammar.html?level=${qLevel}&lesson=${numLessonId}&version=${qVer}" target="_top" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #cbd5e1; padding: 8px 14px; border-radius: 10px; font-weight: 700; font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                      <i class="fa-solid fa-spell-check"></i> Học Ngữ Pháp
+                    </a>
+                  `}
                   <a href="/index.html?tab=lessons&level=${qLevel}&version=${qVer}&openVocab=${nextLessonId}" target="_top" style="background: linear-gradient(135deg, #10b981, #059669); border: none; color: #ffffff; padding: 8px 18px; border-radius: 10px; font-weight: 800; font-size: 0.88rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(16,185,129,0.4);">
                     <span>Học Bài ${nextLessonId}</span> <i class="fa-solid fa-arrow-right"></i>
                   </a>

@@ -1899,6 +1899,11 @@
       } else if (step === 'grammar') {
         // already here
       } else if (step === 'text') {
+        const hasReadingText = (ver === '3.0') && ['1', '2', '3'].includes(String(lvl));
+        if (!hasReadingText) {
+          alert(`Bài Khóa HSK ${lvl} (${ver === '2.0' ? 'Phiên bản 2.0' : ver}) đang được chuẩn bị và sẽ sớm ra mắt!`);
+          return;
+        }
         window.location.href = `/lesson-texts.html?lesson=${numId}&level=${lvl}&version=${ver}`;
       } else if (step === 'quiz') {
         window.location.href = `/quiz-game.html?lesson=${numId}&level=${lvl}&version=${ver}`;
