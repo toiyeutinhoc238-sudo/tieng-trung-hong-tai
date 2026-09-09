@@ -15089,15 +15089,11 @@ window.handleChangeUserRole = async function (targetEmail, newRole) {
   }
 };
 
-// Dynamically sync Video Dictation & Shadowing badges with backend
+// Dynamically sync announcement dictation badge with backend
 function updateVideoDictationSidebarBadges() {
-  const shadowingBadge = document.getElementById('sidebar-shadowing-count-badge');
-  const dictationBadge = document.getElementById('sidebar-dictation-count-badge');
   const annBadge = document.getElementById('announcement-dictation-count-badge');
 
   const update = (count) => {
-    if (shadowingBadge) shadowingBadge.textContent = `🔥 ${count} Video`;
-    if (dictationBadge) dictationBadge.textContent = `🔥 ${count} Video`;
     if (annBadge) annBadge.innerHTML = `<i class="fa-brands fa-youtube"></i> ${count} Video Khẩu Ngữ Thực Tế`;
   };
 
