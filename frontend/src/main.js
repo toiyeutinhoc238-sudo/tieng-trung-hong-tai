@@ -3,6 +3,7 @@ import { HSK1_STRUCTURED_GRAMMAR } from '../grammar_hsk1.js';
 import { HSK2_STRUCTURED_GRAMMAR } from '../grammar_hsk2.js';
 import { HSK3_STRUCTURED_GRAMMAR } from '../grammar_hsk3.js';
 import { HSK1_V2_STRUCTURED_GRAMMAR } from '../grammar_hsk1_v2.js';
+import { HSK2_V2_STRUCTURED_GRAMMAR } from '../grammar_hsk2_v2.js';
 import { HSK_LESSON_EXTRA_VIDEOS, getLessonExtraVideo } from './lesson_videos.js';
 import { PREMIUM_WORDS } from './premium_topics_data.js';
 import { NotebookGamesHub } from './notebook_games_hub.js';
@@ -12,6 +13,7 @@ if (typeof window !== 'undefined') {
   window.HSK2_STRUCTURED_GRAMMAR = HSK2_STRUCTURED_GRAMMAR;
   window.HSK3_STRUCTURED_GRAMMAR = HSK3_STRUCTURED_GRAMMAR;
   window.HSK1_V2_STRUCTURED_GRAMMAR = HSK1_V2_STRUCTURED_GRAMMAR;
+  window.HSK2_V2_STRUCTURED_GRAMMAR = HSK2_V2_STRUCTURED_GRAMMAR;
   window.HSK_LESSON_EXTRA_VIDEOS = HSK_LESSON_EXTRA_VIDEOS;
   window.getLessonExtraVideo = getLessonExtraVideo;
   window.PREMIUM_WORDS = PREMIUM_WORDS;
@@ -7087,7 +7089,7 @@ window.openLessonDetailModal = function (lessonKey) {
   if (currentLvlStr === '1') {
     grammarList = (activeHskVersion === '2.0') ? (HSK1_V2_STRUCTURED_GRAMMAR || HSK1_STRUCTURED_GRAMMAR || []) : (HSK1_STRUCTURED_GRAMMAR || []);
   } else if (currentLvlStr === '2') {
-    grammarList = HSK2_STRUCTURED_GRAMMAR || [];
+    grammarList = (activeHskVersion === '2.0') ? (HSK2_V2_STRUCTURED_GRAMMAR || HSK2_STRUCTURED_GRAMMAR || []) : (HSK2_STRUCTURED_GRAMMAR || []);
   } else if (currentLvlStr === '3') {
     grammarList = HSK3_STRUCTURED_GRAMMAR || [];
   }

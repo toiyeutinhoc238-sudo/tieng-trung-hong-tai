@@ -1163,12 +1163,14 @@
     import { HSK2_STRUCTURED_GRAMMAR } from './grammar_hsk2.js';
     import { HSK3_STRUCTURED_GRAMMAR } from './grammar_hsk3.js';
     import { HSK1_V2_STRUCTURED_GRAMMAR } from './grammar_hsk1_v2.js';
+    import { HSK2_V2_STRUCTURED_GRAMMAR } from './grammar_hsk2_v2.js';
 
     window.FULL_STRUCTURED_GRAMMAR = FULL_STRUCTURED_GRAMMAR;
     window.HSK1_STRUCTURED_GRAMMAR = HSK1_STRUCTURED_GRAMMAR;
     window.HSK2_STRUCTURED_GRAMMAR = HSK2_STRUCTURED_GRAMMAR;
     window.HSK3_STRUCTURED_GRAMMAR = HSK3_STRUCTURED_GRAMMAR;
     window.HSK1_V2_STRUCTURED_GRAMMAR = HSK1_V2_STRUCTURED_GRAMMAR;
+    window.HSK2_V2_STRUCTURED_GRAMMAR = HSK2_V2_STRUCTURED_GRAMMAR;
 
     let currentActiveLevel = 'hsk1';
     let currentActiveVersion = '3.0';
@@ -1210,7 +1212,7 @@
 
       if (currentActiveVersion === '2.0') {
         if (hsk1Tab) hsk1Tab.innerHTML = '<i class="fa-solid fa-seedling"></i> HSK 1 (15 bài - v2.0)';
-        if (hsk2Tab) hsk2Tab.innerHTML = '<i class="fa-solid fa-graduation-cap"></i> HSK 2 (v2.0)';
+        if (hsk2Tab) hsk2Tab.innerHTML = '<i class="fa-solid fa-graduation-cap"></i> HSK 2 (15 bài - v2.0)';
         if (hsk3Tab) hsk3Tab.innerHTML = '<i class="fa-solid fa-book-bookmark"></i> HSK 3 (v2.0)';
       } else {
         if (hsk1Tab) hsk1Tab.innerHTML = '<i class="fa-solid fa-seedling"></i> HSK 1 (15 bài)';
@@ -1335,8 +1337,7 @@
       if (lvlKey === 'hsk1') {
         return (ver === '2.0') ? (window.HSK1_V2_STRUCTURED_GRAMMAR || window.HSK1_STRUCTURED_GRAMMAR || []) : (window.HSK1_STRUCTURED_GRAMMAR || []);
       } else if (lvlKey === 'hsk2') {
-        if (ver === '2.0') return [];
-        return window.HSK2_STRUCTURED_GRAMMAR || [];
+        return (ver === '2.0') ? (window.HSK2_V2_STRUCTURED_GRAMMAR || window.HSK2_STRUCTURED_GRAMMAR || []) : (window.HSK2_STRUCTURED_GRAMMAR || []);
       } else if (lvlKey === 'hsk3') {
         if (ver === '2.0') return [];
         return window.HSK3_STRUCTURED_GRAMMAR || [];
