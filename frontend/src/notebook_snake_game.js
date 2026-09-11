@@ -951,6 +951,9 @@ export class SnakeGameEngine {
     if (this.currentQuestion && this.currentQuestion.word) {
       this.correctWordsSet.add(this.currentQuestion.word);
     }
+    if (typeof window.recordWordMemorized === 'function' && this.currentQuestion) {
+      window.recordWordMemorized(this.currentQuestion);
+    }
 
     if (this.wordsEatenCorrect > 0 && this.wordsEatenCorrect % 10 === 0) {
       if (this.playMode === 'challenge' && this.lives < this.maxLives) {
@@ -971,6 +974,9 @@ export class SnakeGameEngine {
 
   handleEatWrong(apple) {
     this.sfx.playEatWrong();
+    if (typeof window.recordWordWrong === 'function' && this.currentQuestion) {
+      window.recordWordWrong(this.currentQuestion);
+    }
     if (this.playMode === 'practice') {
       this.showFloatingMessage('Ăn chưa đúng quả! Tiếp tục cố gắng nhé! 🎯');
       this.nextWordQuestion();
@@ -1456,6 +1462,13 @@ export class SnakeGameEngine {
   }
 
   stopAndExit() {
+    // Khi thoát đột ngột: nếu từ vựng câu hỏi hiện tại chưa được ăn đúng, tính là Chưa thuộc!
+    if (this.currentQuestion && this.currentQuestion.word && (!this.correctWordsSet || !this.correctWordsSet.has(this.currentQuestion.word))) {
+      if (typeof window.recordWordWrong === 'function') {
+        window.recordWordWrong(this.currentQuestion);
+      }
+    }
+
     this.isRunning = false;
     this.isStopping = true;
     if (this.timerInterval) {

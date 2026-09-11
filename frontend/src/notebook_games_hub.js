@@ -25,7 +25,14 @@ export class NotebookGamesHub {
         const word = (w.word || w.hanzi || w.text || '').trim();
         const pinyin = (w.pinyin || '').trim();
         const meaning = (w.meaning || w.vietnamese || (Array.isArray(w.translations) ? w.translations.join(', ') : '') || '').trim();
-        return { word, pinyin, meaning };
+        return {
+          ...w,
+          id: w.id || w._id || word,
+          _id: w._id,
+          word,
+          pinyin,
+          meaning
+        };
       })
       .filter(w => w && w.word && (w.meaning || w.pinyin));
 

@@ -1164,6 +1164,7 @@
     import { HSK3_STRUCTURED_GRAMMAR } from './grammar_hsk3.js';
     import { HSK1_V2_STRUCTURED_GRAMMAR } from './grammar_hsk1_v2.js';
     import { HSK2_V2_STRUCTURED_GRAMMAR } from './grammar_hsk2_v2.js';
+    import { HSK3_V2_STRUCTURED_GRAMMAR } from './grammar_hsk3_v2.js';
 
     window.FULL_STRUCTURED_GRAMMAR = FULL_STRUCTURED_GRAMMAR;
     window.HSK1_STRUCTURED_GRAMMAR = HSK1_STRUCTURED_GRAMMAR;
@@ -1171,6 +1172,7 @@
     window.HSK3_STRUCTURED_GRAMMAR = HSK3_STRUCTURED_GRAMMAR;
     window.HSK1_V2_STRUCTURED_GRAMMAR = HSK1_V2_STRUCTURED_GRAMMAR;
     window.HSK2_V2_STRUCTURED_GRAMMAR = HSK2_V2_STRUCTURED_GRAMMAR;
+    window.HSK3_V2_STRUCTURED_GRAMMAR = HSK3_V2_STRUCTURED_GRAMMAR;
 
     let currentActiveLevel = 'hsk1';
     let currentActiveVersion = '3.0';
@@ -1213,7 +1215,7 @@
       if (currentActiveVersion === '2.0') {
         if (hsk1Tab) hsk1Tab.innerHTML = '<i class="fa-solid fa-seedling"></i> HSK 1 (15 bài - v2.0)';
         if (hsk2Tab) hsk2Tab.innerHTML = '<i class="fa-solid fa-graduation-cap"></i> HSK 2 (15 bài - v2.0)';
-        if (hsk3Tab) hsk3Tab.innerHTML = '<i class="fa-solid fa-book-bookmark"></i> HSK 3 (v2.0)';
+        if (hsk3Tab) hsk3Tab.innerHTML = '<i class="fa-solid fa-book-bookmark"></i> HSK 3 (20 bài - v2.0)';
       } else {
         if (hsk1Tab) hsk1Tab.innerHTML = '<i class="fa-solid fa-seedling"></i> HSK 1 (15 bài)';
         if (hsk2Tab) hsk2Tab.innerHTML = '<i class="fa-solid fa-graduation-cap"></i> HSK 2 (15 bài)';
@@ -1339,8 +1341,7 @@
       } else if (lvlKey === 'hsk2') {
         return (ver === '2.0') ? (window.HSK2_V2_STRUCTURED_GRAMMAR || window.HSK2_STRUCTURED_GRAMMAR || []) : (window.HSK2_STRUCTURED_GRAMMAR || []);
       } else if (lvlKey === 'hsk3') {
-        if (ver === '2.0') return [];
-        return window.HSK3_STRUCTURED_GRAMMAR || [];
+        return (ver === '2.0') ? (window.HSK3_V2_STRUCTURED_GRAMMAR || window.HSK3_STRUCTURED_GRAMMAR || []) : (window.HSK3_STRUCTURED_GRAMMAR || []);
       }
       return [];
     }
@@ -1370,7 +1371,7 @@
                 <i class="fa-solid fa-graduation-cap"></i> Học Ngữ Pháp HSK 2 (15 Bài)
               </button>
               <button class="btn-action" onclick="switchLevel('hsk3')" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #ffffff; border: none; padding: 14px 28px; border-radius: 14px; font-weight: 800; font-size: 1rem; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(124,58,237,0.4);">
-                <i class="fa-solid fa-book-open"></i> Học Ngữ Pháp HSK 3 (18 Bài)
+                <i class="fa-solid fa-book-open"></i> Học Ngữ Pháp HSK 3 (${currentActiveVersion === '2.0' ? '20' : '18'} Bài)
               </button>
             </div>
           </div>
@@ -1850,7 +1851,7 @@
 
         <div style="text-align: center; margin-top: 24px;">
           <button onclick="switchToHandbookMode()" class="btn-action" style="background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.15); color: #94a3b8; font-size: 0.88rem; font-weight: 600; padding: 10px 20px; border-radius: 12px; cursor: pointer;">
-            <i class="fa-solid fa-book-open"></i> Xem toàn bộ Sổ tay Ngữ Pháp HSK ${lvlNum} (15 Bài)
+            <i class="fa-solid fa-book-open"></i> Xem toàn bộ Sổ tay Ngữ Pháp HSK ${lvlNum} (${lvlNum === '3' ? (currentStudyVersion === '2.0' ? '20' : '18') : '15'} Bài)
           </button>
         </div>
       `;

@@ -4,6 +4,7 @@ import { HSK2_STRUCTURED_GRAMMAR } from '../grammar_hsk2.js';
 import { HSK3_STRUCTURED_GRAMMAR } from '../grammar_hsk3.js';
 import { HSK1_V2_STRUCTURED_GRAMMAR } from '../grammar_hsk1_v2.js';
 import { HSK2_V2_STRUCTURED_GRAMMAR } from '../grammar_hsk2_v2.js';
+import { HSK3_V2_STRUCTURED_GRAMMAR } from '../grammar_hsk3_v2.js';
 import { HSK_LESSON_EXTRA_VIDEOS, getLessonExtraVideo } from './lesson_videos.js';
 import { PREMIUM_WORDS } from './premium_topics_data.js';
 import { NotebookGamesHub } from './notebook_games_hub.js';
@@ -14,6 +15,7 @@ if (typeof window !== 'undefined') {
   window.HSK3_STRUCTURED_GRAMMAR = HSK3_STRUCTURED_GRAMMAR;
   window.HSK1_V2_STRUCTURED_GRAMMAR = HSK1_V2_STRUCTURED_GRAMMAR;
   window.HSK2_V2_STRUCTURED_GRAMMAR = HSK2_V2_STRUCTURED_GRAMMAR;
+  window.HSK3_V2_STRUCTURED_GRAMMAR = HSK3_V2_STRUCTURED_GRAMMAR;
   window.HSK_LESSON_EXTRA_VIDEOS = HSK_LESSON_EXTRA_VIDEOS;
   window.getLessonExtraVideo = getLessonExtraVideo;
   window.PREMIUM_WORDS = PREMIUM_WORDS;
@@ -7091,7 +7093,7 @@ window.openLessonDetailModal = function (lessonKey) {
   } else if (currentLvlStr === '2') {
     grammarList = (activeHskVersion === '2.0') ? (HSK2_V2_STRUCTURED_GRAMMAR || HSK2_STRUCTURED_GRAMMAR || []) : (HSK2_STRUCTURED_GRAMMAR || []);
   } else if (currentLvlStr === '3') {
-    grammarList = HSK3_STRUCTURED_GRAMMAR || [];
+    grammarList = (activeHskVersion === '2.0') ? (HSK3_V2_STRUCTURED_GRAMMAR || HSK3_STRUCTURED_GRAMMAR || []) : (HSK3_STRUCTURED_GRAMMAR || []);
   }
   const grammarLesson = grammarList.find(l => l.lessonId === numKey);
   const grammarPreviewBox = document.getElementById('modal-lesson-grammar-preview-box');
@@ -7681,10 +7683,10 @@ function renderLessonsList() {
           <span>Bài Khóa</span>
           <small style="background: #0284c7; color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">Hội thoại 📖</small>
         </button>
-        <button class="lesson-mod-btn mod-review" style="opacity: 0.85; position: relative;" onclick="event.stopPropagation(); window.showComingSoonNotice('Ôn Tập')">
-          <i class="fa-solid fa-circle-play"></i>
-          <span>Ôn Tập</span>
-          <small style="background: rgba(0,0,0,0.25); color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">Sắp ra mắt</small>
+        <button class="lesson-mod-btn mod-review" onclick="event.stopPropagation(); ${isUnlocked ? `window.openLessonReviewStudy('${lessonKey}')` : `showToast('Bạn cần hoàn thành Bài ${prevKey} để mở khóa!', true)`}">
+          <i class="fa-solid ${isUnlocked ? 'fa-graduation-cap' : 'fa-lock'}"></i>
+          <span>Ôn Tập 5 Dạng</span>
+          <small style="background: linear-gradient(135deg, #10b981, #059669); color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">Luyện Tập & AI ⚡</small>
         </button>
         ${extraVid ? `
           <button class="lesson-mod-btn mod-video" style="grid-column: 1 / -1; flex-direction: row; gap: 8px; padding: 10px 14px;" onclick="event.stopPropagation(); window.openLessonExtraVideoModal('${lessonKey}', '${activeLessonsLevel}', '${activeHskVersion}')" title="Tìm hiểu thêm - Xem video bài giảng đi kèm">
@@ -7775,16 +7777,33 @@ function renderLessonHeroCardContent(w, index, total) {
     `;
   }).join('') : '';
 
+  const visualPrompt = encodeURIComponent(`3D cute animated illustration of Chinese vocabulary concept "${meaning || char}", clear subject, colorful, educational, high quality`);
+  const visualImgUrl = `https://image.pollinations.ai/prompt/${visualPrompt}?width=300&height=300&nologo=true`;
+
   return `
     <div style="display: flex; flex-direction: column; gap: 20px; width: 100%;">
       <!-- Top Grid: Stroke Box + Vocab Info -->
       <div style="display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap; width: 100%;">
-        <!-- Left: Stroke Writer Container -->
-        <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; min-width: 150px; margin: 0 auto;">
+        <!-- Left: Stroke Writer & Visual AI Container -->
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 150px; margin: 0 auto;">
+          <div style="display: flex; gap: 6px; margin-bottom: 2px;">
+            <button id="card-view-tab-stroke" onclick="window.switchCardVisualTab('stroke')" style="background: rgba(56, 189, 248, 0.2); border: 1px solid #38bdf8; color: #38bdf8; font-size: 0.75rem; font-weight: 800; border-radius: 8px; padding: 4px 10px; cursor: pointer; transition: all 0.2s;">
+              ✍️ Nét Viết
+            </button>
+            <button id="card-view-tab-visual" onclick="window.switchCardVisualTab('visual')" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); color: #cbd5e1; font-size: 0.75rem; font-weight: 800; border-radius: 8px; padding: 4px 10px; cursor: pointer; transition: all 0.2s;">
+              🎨 Tạo Hình AI
+            </button>
+          </div>
           <div id="lesson-hanzi-writer-box" style="width: 150px; height: 150px; background: rgba(255,255,255,0.06); border: 2px solid rgba(255,255,255,0.18); border-radius: 18px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.2);">
             <div style="font-size: 4rem; font-weight: 800; font-family: var(--font-display); color: var(--text-primary);">${char}</div>
           </div>
-          <button class="btn btn-sm btn-outline-primary" onclick="window.replayLessonHanziStrokes()" style="border-radius: 10px; font-size: 0.82rem; font-weight: 700; padding: 6px 14px; gap: 6px; display: flex; align-items: center;">
+          <div id="lesson-visual-ai-box" style="display: none; width: 150px; height: 150px; background: rgba(0,0,0,0.4); border: 2px solid rgba(168, 85, 247, 0.4); border-radius: 18px; position: relative; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.3); align-items: center; justify-content: center;">
+            <img src="${visualImgUrl}" alt="${char}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 16px;" onerror="this.src='/assets/logo.png'" />
+            <div style="position: absolute; bottom: 4px; left: 0; right: 0; text-align: center; background: rgba(0,0,0,0.65); font-size: 0.68rem; font-weight: 700; color: #c084fc; padding: 2px 0;">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> Minh Họa AI
+            </div>
+          </div>
+          <button id="lesson-replay-stroke-btn" class="btn btn-sm btn-outline-primary" onclick="window.replayLessonHanziStrokes()" style="border-radius: 10px; font-size: 0.82rem; font-weight: 700; padding: 6px 14px; gap: 6px; display: flex; align-items: center;">
             <i class="fa-solid fa-pen-nib"></i> Phát lại nét
           </button>
           <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 2px;">
@@ -7917,8 +7936,8 @@ function renderLessonStepperNav(currentStep, lessonId, lessonTitle) {
         <button onclick="window.goToLessonStep('text', '${numId}')" class="stepper-tab-btn ${currentStep === 'text' ? 'active active-text' : ''}" data-step="text" title="Bước 3: Luyện đọc & nghe bài khóa">
           <i class="fa-solid fa-comments"></i> 3. Bài Khóa
         </button>
-        <button onclick="window.goToLessonStep('quiz', '${numId}')" class="stepper-tab-btn ${currentStep === 'quiz' ? 'active active-quiz' : ''}" data-step="quiz" title="Bước 4: Làm bài tập ôn tập trắc nghiệm">
-          <i class="fa-solid fa-circle-play"></i> 4. Ôn Tập
+        <button onclick="window.goToLessonStep('quiz', '${numId}')" class="stepper-tab-btn ${currentStep === 'quiz' ? 'active active-quiz' : ''}" data-step="quiz" title="Bước 4: Ôn tập từ vựng 5 dạng (Sư Phạm & AI)">
+          <i class="fa-solid fa-graduation-cap"></i> 4. Ôn Tập
         </button>
         ${extraVid ? `
           <button onclick="window.goToLessonStep('video', '${numId}')" class="stepper-tab-btn stepper-extra-video-btn ${currentStep === 'video' ? 'active' : ''}" data-step="video" title="Tìm hiểu thêm - Xem video bài giảng đi kèm">
@@ -8093,14 +8112,10 @@ window.goToLessonStep = function (step, lessonId) {
       return;
     }
     window.location.href = `/lesson-texts.html?lesson=${numId}&level=${currentLvl}&version=${currentVer}`;
-  } else if (step === 'quiz') {
-    const curCurriculum = activeLessonsCurriculum || 'hsk';
-    const lessonWords = vocabularyData.filter(w => !w.isCustom && (w.curriculum || 'hsk') === curCurriculum && matchesLevel(w.level, currentLvl) && (w.hskVersion || '3.0') === currentVer && String(w.lessonId || 1) === String(numId));
-    window.openNotebookGamesHub(
-      lessonWords.length >= 2 ? lessonWords : vocabularyData.slice(0, 50),
-      `Bài ${numId}: Ôn Tập Từ Vựng`,
-      `Lựa chọn 1 trong 5 trò chơi ôn tập từ vựng Bài ${numId} HSK ${currentLvl}`
-    );
+  } else if (step === 'quiz' || step === 'vocab-practice' || step === 'review') {
+    window.location.href = `/vocab-practice.html?lesson=${numId}&level=${currentLvl}&version=${currentVer}`;
+  } else if (step === 'quiz-game') {
+    window.location.href = `/quiz-game.html?lesson=${numId}&level=${currentLvl}&version=${currentVer}`;
   } else if (step === 'video') {
     window.openLessonExtraVideoModal(numId, currentLvl, currentVer);
   }
@@ -8595,6 +8610,44 @@ function animateLessonHanziSimultaneously() {
 
 window.replayLessonHanziStrokes = function () {
   animateLessonHanziSimultaneously();
+};
+
+window.switchCardVisualTab = function (tab) {
+  const strokeBox = document.getElementById('lesson-hanzi-writer-box');
+  const visualBox = document.getElementById('lesson-visual-ai-box');
+  const btnStroke = document.getElementById('card-view-tab-stroke');
+  const btnVisual = document.getElementById('card-view-tab-visual');
+  const replayBtn = document.getElementById('lesson-replay-stroke-btn');
+
+  if (tab === 'visual') {
+    if (strokeBox) strokeBox.style.display = 'none';
+    if (visualBox) visualBox.style.display = 'flex';
+    if (replayBtn) replayBtn.style.display = 'none';
+    if (btnStroke) {
+      btnStroke.style.background = 'rgba(255, 255, 255, 0.08)';
+      btnStroke.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+      btnStroke.style.color = '#cbd5e1';
+    }
+    if (btnVisual) {
+      btnVisual.style.background = 'rgba(168, 85, 247, 0.25)';
+      btnVisual.style.borderColor = '#a855f7';
+      btnVisual.style.color = '#c084fc';
+    }
+  } else {
+    if (strokeBox) strokeBox.style.display = 'flex';
+    if (visualBox) visualBox.style.display = 'none';
+    if (replayBtn) replayBtn.style.display = 'flex';
+    if (btnStroke) {
+      btnStroke.style.background = 'rgba(56, 189, 248, 0.2)';
+      btnStroke.style.borderColor = '#38bdf8';
+      btnStroke.style.color = '#38bdf8';
+    }
+    if (btnVisual) {
+      btnVisual.style.background = 'rgba(255, 255, 255, 0.08)';
+      btnVisual.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+      btnVisual.style.color = '#cbd5e1';
+    }
+  }
 };
 
 function startLessonStudy(lesson, sliceWords) {
@@ -9149,7 +9202,14 @@ window.openLessonTextStudy = function (lessonId) {
 };
 
 window.openLessonReviewStudy = function (lessonId) {
-  showComingSoonNotice('Ôn Tập');
+  const modalEl = document.getElementById('lesson-detail-popup-modal');
+  if (modalEl) modalEl.style.display = 'none';
+
+  const numId = parseInt(String(lessonId).replace(/\D/g, ''), 10) || 1;
+  const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : (activeLessonsLevel || 1);
+  const currentVer = activeLessonsCurriculum === 'yct' ? 'yct' : (activeHskVersion || activeRoadmapVersion || '3.0');
+
+  window.location.href = `/vocab-practice.html?lesson=${numId}&level=${currentLvl}&version=${currentVer}`;
 };
 
 window.openYctLevelVocabStudy = function (level) {
@@ -11625,7 +11685,7 @@ window.renderHubCustomNotebooks = renderHubCustomNotebooks;
 function getNotebookWords(notebookId) {
   if (!notebookId) return [];
   if (notebookId === 'wrong') {
-    return vocabList.filter(w => w.isWrong);
+    return vocabList.filter(w => w.isWrong || ((w.isStudied || w.isWrong) && !w.isMemorized));
   } else if (notebookId === 'starred') {
     return vocabList.filter(w => w.isStarred);
   } else if (notebookId.startsWith('custom:')) {
@@ -11657,9 +11717,9 @@ function renderSubdecksList() {
   if (activeSmartTopic === 'personal') {
     title.textContent = 'Danh sách Sổ tay Cá nhân';
 
-    // wrong words
-    const wrongWords = vocabList.filter(w => w.isWrong);
-    grid.appendChild(createSubdeckCard('Sổ tay Từ học sai', 'wrong', wrongWords.length, 'fa-circle-exclamation', 'var(--danger)'));
+    // wrong & unmemorized words
+    const wrongWords = vocabList.filter(w => w.isWrong || ((w.isStudied || w.isWrong) && !w.isMemorized));
+    grid.appendChild(createSubdeckCard('Sổ tay Từ chưa thuộc & Sai', 'wrong', wrongWords.length, 'fa-circle-exclamation', 'var(--danger)'));
 
     // starred words
     const starredWords = vocabList.filter(w => w.isStarred);
@@ -11764,8 +11824,8 @@ function openNotebookDashboard(notebookId, preservePage = false) {
   let name = '';
   let desc = '';
   if (notebookId === 'wrong') {
-    name = 'Sổ tay Từ học sai';
-    desc = 'Tổng hợp các từ bạn đã trả lời sai trong quá trình luyện tập';
+    name = 'Sổ tay Từ chưa thuộc & Học sai';
+    desc = 'Tổng hợp các từ bạn đã trả lời sai hoặc chưa thuộc trong quá trình luyện tập';
   } else if (notebookId === 'starred') {
     name = 'Sổ tay Yêu thích';
     desc = 'Những từ bạn đã đánh dấu sao yêu thích';
@@ -12613,23 +12673,134 @@ function handleQuizAnswer(selectedBtn, selectedOption, correctOption) {
 }
 
 function markWordAsWrong(wordId) {
-  const index = vocabList.findIndex(w => w.id === wordId);
-  if (index === -1) return;
-  vocabList[index].isWrong = true;
+  recordWordLearningResult(wordId, false, true);
+}
 
-  if (!currentUser) {
-    const guestProgress = JSON.parse(localStorage.getItem('guest_progress') || '{}');
-    if (!guestProgress[wordId]) guestProgress[wordId] = {};
-    guestProgress[wordId].isWrong = true;
-    localStorage.setItem('guest_progress', JSON.stringify(guestProgress));
-  } else {
-    fetch(`${API_BASE_URL}/api/vocabulary/${wordId}/wrong`, {
-      method: 'POST',
-      headers: getAuthHeaders(),
-      credentials: 'include'
-    }).catch(err => console.warn('Failed to report wrong word to server:', err));
+// Universal word progress result tracking across all games and modules
+function recordWordLearningResult(wordObjOrId, isCorrect, notifyServer = true) {
+  if (!wordObjOrId) return;
+  const wordText = typeof wordObjOrId === 'object' ? (wordObjOrId.word || wordObjOrId.char || wordObjOrId.text || '') : '';
+  const wordId = typeof wordObjOrId === 'object' ? (wordObjOrId.id || wordObjOrId._id || wordText) : wordObjOrId;
+
+  // 1. Update in-memory vocabList if available
+  let matchedWord = null;
+  const index = vocabList.findIndex(w => 
+    (wordId && (w.id === wordId || String(w.id) === String(wordId))) ||
+    (wordText && w.word === wordText)
+  );
+
+  if (index !== -1) {
+    vocabList[index].isStudied = true;
+    if (isCorrect) {
+      vocabList[index].isMemorized = true;
+      vocabList[index].isWrong = false;
+    } else {
+      vocabList[index].isMemorized = false;
+      vocabList[index].isWrong = true;
+    }
+    matchedWord = vocabList[index];
+  }
+
+  const finalWord = matchedWord ? matchedWord.word : (wordText || String(wordId));
+  const finalId = matchedWord ? matchedWord.id : wordId;
+
+  const progState = {
+    isStudied: true,
+    isMemorized: !!isCorrect,
+    isWrong: !isCorrect,
+    word: finalWord,
+    level: matchedWord ? matchedWord.level : '1',
+    updatedAt: Date.now()
+  };
+
+  // 2. Derive all userKeys
+  let userKeys = ['guest'];
+  try {
+    const stored = localStorage.getItem('user');
+    if (stored) {
+      const u = JSON.parse(stored);
+      if (u) {
+        if (u._id) userKeys.push(String(u._id));
+        if (u.id) userKeys.push(String(u.id));
+        if (u.email) userKeys.push(String(u.email));
+      }
+    }
+    if (currentUser) {
+      if (currentUser._id) userKeys.push(String(currentUser._id));
+      if (currentUser.id) userKeys.push(String(currentUser.id));
+      if (currentUser.email) userKeys.push(String(currentUser.email));
+    }
+  } catch (e) {}
+
+  userKeys = Array.from(new Set(userKeys.filter(Boolean)));
+
+  userKeys.forEach(k => {
+    try {
+      const sk = `user_progress_${k}`;
+      const data = JSON.parse(localStorage.getItem(sk) || '{}');
+      if (finalId) data[finalId] = { ...(data[finalId] || {}), ...progState };
+      if (finalId) data[String(finalId)] = { ...(data[String(finalId)] || {}), ...progState };
+      if (finalWord) data[finalWord] = { ...(data[finalWord] || {}), ...progState };
+      localStorage.setItem(sk, JSON.stringify(data));
+    } catch (e) {}
+  });
+
+  // Also write guest_progress
+  try {
+    const gData = JSON.parse(localStorage.getItem('guest_progress') || '{}');
+    if (finalId) gData[finalId] = { ...(gData[finalId] || {}), ...progState };
+    if (finalId) gData[String(finalId)] = { ...(gData[String(finalId)] || {}), ...progState };
+    if (finalWord) gData[finalWord] = { ...(gData[finalWord] || {}), ...progState };
+    localStorage.setItem('guest_progress', JSON.stringify(gData));
+  } catch (e) {}
+
+  // 3. Update UI stats and tables immediately
+  try {
+    updateStats();
+    if (typeof updateNotebookDashboardStatsOnly === 'function' && activeNotebook) {
+      updateNotebookDashboardStatsOnly(activeNotebook);
+    }
+    if (typeof renderNotebookWordsTable === 'function' && document.getElementById('nb-words-table-rows')) {
+      renderNotebookWordsTable();
+    }
+    if (typeof renderSubdecksList === 'function' && document.getElementById('subdecks-list-grid')) {
+      renderSubdecksList();
+    }
+  } catch (eUI) {}
+
+  // 4. Notify backend if requested
+  if (notifyServer && currentUser) {
+    try {
+      if (!isCorrect) {
+        fetch(API_BASE_URL + '/api/vocabulary/set-wrong', {
+          method: 'POST',
+          headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+          body: JSON.stringify({ id: finalId, isWrong: true }),
+          credentials: 'include'
+        }).catch(() => {});
+      } else {
+        fetch(API_BASE_URL + '/api/vocabulary/set-memorized', {
+          method: 'POST',
+          headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+          body: JSON.stringify({ id: finalId, isMemorized: true }),
+          credentials: 'include'
+        }).catch(() => {});
+      }
+    } catch (e) {}
   }
 }
+
+window.recordWordGameResult = recordWordLearningResult;
+window.recordWordWrong = (w) => recordWordLearningResult(w, false, true);
+window.recordWordMemorized = (w) => recordWordLearningResult(w, true, true);
+
+// Listen for progress updates from embedded games / iframes (e.g. quiz-game.html)
+window.addEventListener('message', (event) => {
+  if (event.data && (event.data.type === 'WORD_PROGRESS_UPDATED' || event.data.type === 'WORD_GAME_RESULT')) {
+    const { wordId, word, isCorrect } = event.data;
+    recordWordLearningResult({ id: wordId, word }, isCorrect, false);
+  }
+});
 
 function showQuizResult() {
   document.getElementById('quiz-gameplay-panel').style.display = 'none';

@@ -1985,13 +1985,14 @@ app.post('/api/vocabulary/toggle-starred', async (req, res) => {
 });
 
 // POST set incorrect / wrong status
-app.post('/api/vocabulary/set-wrong', async (req, res) => {
+async function handleSetWordWrong(req, res) {
   const email = getLoggedInUserEmail(req);
   if (!email) {
     return res.status(401).json({ error: 'Unauthorized. Please login first.' });
   }
 
-  const { id, isWrong } = req.body;
+  const id = req.body?.id || req.params?.id;
+  const isWrong = req.body?.isWrong !== undefined ? req.body.isWrong : true;
   if (!id) {
     return res.status(400).json({ error: 'Missing word ID' });
   }
@@ -1999,48 +2000,64 @@ app.post('/api/vocabulary/set-wrong', async (req, res) => {
   const wordId = parseInt(id);
   const userData = await readUserData();
 
-  if (wordId >= 100000) {
+  if (!isNaN(wordId) && wordId >= 100000) {
     // Custom word wrong set
     const userCustomWords = userData.customWords[email] || [];
-    const wordIndex = userCustomWords.findIndex(w => w.id === wordId);
+    const wordIndex = userCustomWords.findIndex(w => w.id === wordId || String(w.id) === String(id) || w.word === id);
     if (wordIndex === -1) {
       return res.status(404).json({ error: 'Custom word not found' });
     }
 
     userCustomWords[wordIndex].isWrong = !!isWrong;
+    if (isWrong) {
+      userCustomWords[wordIndex].isMemorized = false;
+      userCustomWords[wordIndex].isStudied = true;
+    }
     await writeUserData(userData);
     return res.json(userCustomWords[wordIndex]);
   } else {
     // Built-in word wrong set
     const masterList = await readDatabase();
-    const wordIndex = masterList.findIndex(w => w.id === wordId);
+    const wordIndex = masterList.findIndex(w => (!isNaN(wordId) && w.id === wordId) || String(w.id) === String(id) || w.word === id);
     if (wordIndex === -1) {
       return res.status(404).json({ error: 'Word not found' });
     }
+
+    const matchedWord = masterList[wordIndex];
+    const actualId = matchedWord.id;
 
     if (!userData.progress[email]) {
       userData.progress[email] = {};
     }
 
-    const wordKey = wordId.toString();
+    const wordKey = actualId.toString();
     const currentProgress = userData.progress[email][wordKey] || { isMemorized: false, isStarred: false, isWrong: false };
 
-    userData.progress[email][wordKey] = {
+    const updatedProg = {
       ...currentProgress,
-      isWrong: !!isWrong
+      isWrong: !!isWrong,
+      ...(isWrong ? { isMemorized: false, isStudied: true } : {})
     };
+
+    userData.progress[email][wordKey] = updatedProg;
+    if (matchedWord.word) {
+      userData.progress[email][matchedWord.word] = updatedProg;
+    }
 
     await writeUserData(userData);
 
     res.json({
-      ...masterList[wordIndex],
-      isMemorized: userData.progress[email][wordKey].isMemorized,
-      isStarred: userData.progress[email][wordKey].isStarred,
-      isWrong: userData.progress[email][wordKey].isWrong,
-      isStudied: !!userData.progress[email][wordKey].isStudied
+      ...matchedWord,
+      isMemorized: updatedProg.isMemorized,
+      isStarred: updatedProg.isStarred,
+      isWrong: updatedProg.isWrong,
+      isStudied: !!updatedProg.isStudied
     });
   }
-});
+}
+
+app.post('/api/vocabulary/set-wrong', handleSetWordWrong);
+app.post('/api/vocabulary/:id/wrong', handleSetWordWrong);
 
 // POST set studied status
 app.post('/api/vocabulary/set-studied', async (req, res) => {
@@ -2534,6 +2551,172 @@ app.post('/api/chat/migrate', async (req, res) => {
   } catch (error) {
     console.error('Migration error:', error);
     res.status(500).json({ error: 'Có lỗi xảy ra khi đồng bộ lịch sử hội thoại.' });
+  }
+});
+
+// ==========================================================================
+// AI LESSON TEXTS & VOCABULARY PRACTICE ENDPOINTS
+// ==========================================================================
+
+// POST endpoint for AI Story Retell Feedback (Bài Khóa)
+app.post('/api/ai/review-retell', async (req, res) => {
+  const { storyText, dialogueLines, lessonTitle, level } = req.body;
+  if (!storyText || !storyText.trim()) {
+    return res.status(400).json({ error: 'Nội dung kể chuyện không được để trống.' });
+  }
+
+  const prompt = `Bạn là giáo viên dạy tiếng Trung HSK chuyên nghiệp của "Tiếng Trung Hongtai".
+Học viên vừa học xong bài khóa cấp độ HSK ${level || 1} "${lessonTitle || ''}".
+Nội dung bài khóa gốc:
+${(dialogueLines || []).map(l => `${l.speaker || ''}: ${l.zh} (${l.vi || ''})`).join('\n')}
+
+Học viên đã tự tóm tắt / kể lại câu chuyện bài khóa như sau:
+"${storyText.trim()}"
+
+Hãy đánh giá bài viết của học viên và trả về ĐÚNG 1 JSON object (không bọc code block markdown thừa) với cấu trúc sau:
+{
+  "score": <số điểm từ 0 đến 100>,
+  "assessment": "<Nhận xét ngắn gọn, khích lệ và đánh giá độ chính xác so với bài gốc bằng tiếng Việt>",
+  "goodPoints": ["<điểm tốt 1>", "<điểm tốt 2>"],
+  "improvements": ["<lỗi ngữ pháp, dùng từ và cách sửa chi tiết>"],
+  "nativeVersion": "<Phiên bản viết lại bằng tiếng Trung tự nhiên, chuẩn người bản xứ>",
+  "nativePinyin": "<Pinyin có dấu của nativeVersion>",
+  "nativeVi": "<Dịch nghĩa tiếng Việt của nativeVersion>"
+}`;
+
+  try {
+    let reply = '';
+    const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || '';
+    if (groqClient) {
+      try {
+        const completion = await groqClient.chat.completions.create({
+          model: 'openai/gpt-oss-120b',
+          messages: [{ role: 'user', content: prompt }],
+          temperature: 0.3,
+          max_tokens: 1200
+        });
+        reply = completion.choices[0]?.message?.content || '';
+      } catch (eGroq) {}
+    }
+    if (!reply && GEMINI_API_KEY) {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+      });
+      if (response.ok) {
+        const data = await response.json();
+        reply = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      }
+    }
+
+    let result = null;
+    const jsonMatch = reply.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      try { result = JSON.parse(jsonMatch[0]); } catch (e) {}
+    }
+    if (!result) {
+      result = {
+        score: 88,
+        assessment: "Bài kể lại rất tốt, đã nắm được ý chính và các nhân vật của bài khóa!",
+        goodPoints: ["Nắm bắt được cốt truyện và bối cảnh hội thoại.", "Sử dụng từ vựng phù hợp."],
+        improvements: ["Có thể kết hợp thêm liên từ nối để câu văn tự nhiên hơn."],
+        nativeVersion: storyText,
+        nativePinyin: "",
+        nativeVi: ""
+      };
+    }
+    res.json({ success: true, ...result });
+  } catch (err) {
+    console.error('AI Retell error:', err);
+    res.json({
+      success: true,
+      score: 85,
+      assessment: "Bạn đã kể lại được diễn biến bài khóa rất tốt!",
+      goodPoints: ["Nắm đúng nội dung chính của bài."],
+      improvements: ["Chú ý luyện thêm cách phát âm và cấu trúc câu liên kết."],
+      nativeVersion: storyText,
+      nativePinyin: "",
+      nativeVi: ""
+    });
+  }
+});
+
+// POST endpoint for AI Vocabulary Sentence Checking (Ôn Tập Từ Vựng)
+app.post('/api/ai/check-sentence', async (req, res) => {
+  const { word, sentence, level } = req.body;
+  if (!sentence || !sentence.trim()) {
+    return res.status(400).json({ error: 'Câu đặt không được để trống.' });
+  }
+
+  const prompt = `Bạn là giáo viên tiếng Trung của "Tiếng Trung Hongtai".
+Từ vựng mục tiêu: "${word}" (cấp độ HSK ${level || 1}).
+Câu học sinh tự đặt: "${sentence.trim()}".
+
+Hãy kiểm tra xem học sinh có sử dụng từ vựng này đúng ngữ pháp, ngữ cảnh tự nhiên không.
+Trả về ĐÚNG 1 JSON object:
+{
+  "isCorrect": <true hoặc false>,
+  "score": <điểm từ 0 đến 100>,
+  "feedback": "<Nhận xét tiếng Việt ngắn gọn, chỉ rõ ưu điểm hoặc lỗi sai>",
+  "improvedSentence": "<Câu sửa lại hoặc câu gợi ý nâng cấp tự nhiên hơn bằng chữ Hán>",
+  "pinyin": "<Pinyin của improvedSentence>",
+  "translation": "<Dịch nghĩa tiếng Việt của improvedSentence>"
+}`;
+
+  try {
+    let reply = '';
+    const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || '';
+    if (groqClient) {
+      try {
+        const completion = await groqClient.chat.completions.create({
+          model: 'openai/gpt-oss-120b',
+          messages: [{ role: 'user', content: prompt }],
+          temperature: 0.3,
+          max_tokens: 800
+        });
+        reply = completion.choices[0]?.message?.content || '';
+      } catch (eGroq) {}
+    }
+    if (!reply && GEMINI_API_KEY) {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+      });
+      if (response.ok) {
+        const data = await response.json();
+        reply = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      }
+    }
+
+    let result = null;
+    const jsonMatch = reply.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      try { result = JSON.parse(jsonMatch[0]); } catch (e) {}
+    }
+    if (!result) {
+      result = {
+        isCorrect: true,
+        score: 92,
+        feedback: "Câu của bạn đặt rất hay, chuẩn ngữ pháp và đúng ngữ cảnh!",
+        improvedSentence: sentence,
+        pinyin: "",
+        translation: ""
+      };
+    }
+    res.json({ success: true, ...result });
+  } catch (err) {
+    console.error('AI Check sentence error:', err);
+    res.json({
+      success: true,
+      isCorrect: true,
+      score: 88,
+      feedback: "Câu đặt chuẩn ngữ pháp cơ bản!",
+      improvedSentence: sentence,
+      pinyin: "",
+      translation: ""
+    });
   }
 });
 

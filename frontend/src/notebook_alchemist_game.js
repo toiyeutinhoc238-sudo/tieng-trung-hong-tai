@@ -1052,6 +1052,9 @@ export class AlchemistGameEngine {
       if (this.currentTarget && this.currentTarget.fullWord) {
         this.correctWordsSet.add(this.currentTarget.fullWord);
       }
+      if (typeof window.recordWordMemorized === 'function' && this.currentTarget) {
+        window.recordWordMemorized({ word: this.currentTarget.fullWord, pinyin: this.currentTarget.pinyin, meaning: this.currentTarget.meaning });
+      }
 
       // Pronounce the word only if auto speech is enabled
       if (this.autoSpeech && this.currentTarget && this.currentTarget.fullWord) {
@@ -1072,6 +1075,9 @@ export class AlchemistGameEngine {
     } else {
       // FAIL!
       this.sfx.playFail();
+      if (typeof window.recordWordWrong === 'function' && this.currentTarget) {
+        window.recordWordWrong({ word: this.currentTarget.fullWord, pinyin: this.currentTarget.pinyin, meaning: this.currentTarget.meaning });
+      }
       if (liquid) liquid.classList.add('fusion-fail');
       if (this.playMode === 'practice') {
         this.showToast('💨 Chưa đúng thành phần, hãy thử lại nhé! 🎯', false);
@@ -1301,6 +1307,13 @@ export class AlchemistGameEngine {
   }
 
   stopAndExit() {
+    // Khi thoát đột ngột: nếu chữ Hán đang luyện chưa hoàn thành, tính là Chưa thuộc!
+    if (this.currentTarget && this.currentTarget.fullWord && (!this.correctWordsSet || !this.correctWordsSet.has(this.currentTarget.fullWord))) {
+      if (typeof window.recordWordWrong === 'function') {
+        window.recordWordWrong({ word: this.currentTarget.fullWord, pinyin: this.currentTarget.pinyin, meaning: this.currentTarget.meaning });
+      }
+    }
+
     this.isRunning = false;
     this.isStopping = true;
     if (this.timerInterval) {

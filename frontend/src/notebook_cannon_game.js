@@ -91,6 +91,8 @@ export class CannonGameEngine {
       {word:'苹果',pinyin:'pingguo',meaning:'quả táo'},{word:'香蕉',pinyin:'xiangjiao',meaning:'quả chuối'},
     ];
     this.rawWords = srcList.map(item => ({
+      ...item,
+      id: item.id || item._id || item.word || item.char || item.hanzi,
       word: item.word || item.char || item.hanzi || '',
       pinyin: item.pinyin || '',
       meaning: item.meaning || item.vn || item.trans || ''
@@ -250,6 +252,7 @@ html:not(.dark) #cannon-combo-val {
 .phidao-action-btn.secondary{background:rgba(255,255,255,.08);color:#e2e8f0;border:1px solid rgba(255,255,255,.15);}
 .phidao-action-btn.outline{background:transparent;color:#94a3b8;border:1px solid rgba(255,255,255,.1);}
 .phidao-action-btn:hover{transform:scale(1.04);}
+.phidao-pause-card{max-width:440px;border:1px solid rgba(56,189,248,.3);box-shadow:0 24px 64px rgba(0,0,0,.85),0 0 32px rgba(56,189,248,.15);}
 .game-center-countdown-tick{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(2);font-size:3rem;font-weight:900;color:#ef4444;pointer-events:none;z-index:50;opacity:0;}
 .game-center-countdown-tick.tick-anim{animation:tickPop .7s ease-out forwards;}
 @keyframes tickPop{0%{transform:translate(-50%,-50%) scale(2.5);opacity:1}100%{transform:translate(-50%,-50%) scale(.8);opacity:0}}
@@ -258,7 +261,7 @@ html:not(.dark) #cannon-combo-val {
 <div class="phidao-hud">
   <div class="phidao-hud-left">
     <button id="cannon-top-back-btn" class="phidao-btn-icon" title="Quay lại"><i class="fa-solid fa-arrow-left"></i></button>
-    <button id="cannon-pause-btn" class="phidao-btn-icon" title="Tạm dừng"><i class="fa-solid fa-pause"></i></button>
+    <button id="cannon-pause-btn" class="phidao-btn-icon" title="Tạm dừng (Esc)"><i class="fa-solid fa-pause"></i></button>
     <!-- Play Mode Toggle Button -->
     <button type="button" id="cannon-playmode-toggle-btn" class="phidao-btn-icon" title="Chuyển chế độ Kiểm tra (Không tính tim) / Thi đấu (3 Tim)" style="width: auto; padding: 4px 12px; font-weight: 800; border-radius: 50px;">
       <span id="cannon-mode-icon-text">${this.playMode === 'practice' ? '<i class="fa-solid fa-infinity" style="color: #10b981;"></i> <span style="font-size: 0.8rem; color:#10b981; margin-left: 4px;">Kiểm tra</span>' : '<i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> <span style="font-size: 0.8rem; color:#fbbf24; margin-left: 4px;">Thi đấu</span>'}</span>
@@ -317,8 +320,33 @@ html:not(.dark) #cannon-combo-val {
   <!-- FLOATING INPUT INDICATOR (Dưới cùng chính giữa) -->
   <div class="phidao-floating-input-bar">
     <div class="phidao-typed-buf" id="phidao-typed-buf"><span class="phidao-cursor-blink">|</span></div>
-    <div class="phidao-input-tip-sub"><i class="fa-solid fa-keyboard" style="color:#38bdf8;"></i> Gõ Pinyin không dấu để phi đao phóng ra</div>
+    <div class="phidao-input-tip-sub"><i class="fa-solid fa-keyboard" style="color:#38bdf8;"></i> Gõ Pinyin không dấu để phi đao phóng ra (Bấm <strong>Esc</strong> để tạm dừng)</div>
     <div class="phidao-target-hint" id="phidao-target-hint"></div>
+  </div>
+</div>
+<!-- PAUSE MODAL OVERLAY -->
+<div id="cannon-pause-overlay" class="phidao-modal-overlay" style="display:none; z-index:105;">
+  <div class="phidao-result-card phidao-pause-card">
+    <button type="button" id="cannon-pause-close-x" class="phidao-modal-close-x" title="Tiếp tục">&times;</button>
+    <div class="phidao-result-icon" style="font-size:2.8rem; filter:drop-shadow(0 0 16px rgba(251,191,36,.5));">⏸️</div>
+    <h2 class="phidao-result-title" style="color:#38bdf8;">Đang Tạm Dừng</h2>
+    <p class="phidao-result-desc">Trận chiến đang đóng băng. Bạn có thể nghỉ tay một chút rồi tiếp tục!</p>
+    <div class="phidao-result-stats">
+      <div class="phidao-stat-pill"><span>Điểm Hiện Tại</span><strong id="pause-score">0</strong></div>
+      <div class="phidao-stat-pill"><span>Combo</span><strong id="pause-combo">0</strong></div>
+      <div class="phidao-stat-pill"><span>Từ Đã Hạ</span><strong id="pause-words">0</strong></div>
+    </div>
+    <div class="phidao-result-actions" style="margin-top:20px;">
+      <button type="button" id="cannon-pause-resume-btn" class="phidao-action-btn primary" style="padding:10px 22px; font-size:.95rem;">
+        <i class="fa-solid fa-play"></i> Tiếp Tục (Esc)
+      </button>
+      <button type="button" id="cannon-pause-restart-btn" class="phidao-action-btn secondary">
+        <i class="fa-solid fa-rotate-right"></i> Chơi Lại
+      </button>
+      <button type="button" id="cannon-pause-exit-btn" class="phidao-action-btn outline">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i> Thoát
+      </button>
+    </div>
   </div>
 </div>
 <div id="cannon-modal-overlay" class="phidao-modal-overlay" style="display:none;">
@@ -371,6 +399,10 @@ html:not(.dark) #cannon-combo-val {
     const qs=(id)=>this.container.querySelector(id);
     if(qs('#cannon-top-back-btn'))qs('#cannon-top-back-btn').addEventListener('click',e=>{e.preventDefault();this.stopAndExit();});
     if(qs('#cannon-pause-btn'))qs('#cannon-pause-btn').addEventListener('click',e=>{e.preventDefault();this.togglePause();});
+    if(qs('#cannon-pause-close-x'))qs('#cannon-pause-close-x').addEventListener('click',e=>{e.preventDefault();this.togglePause(false);});
+    if(qs('#cannon-pause-resume-btn'))qs('#cannon-pause-resume-btn').addEventListener('click',e=>{e.preventDefault();this.togglePause(false);});
+    if(qs('#cannon-pause-restart-btn'))qs('#cannon-pause-restart-btn').addEventListener('click',e=>{e.preventDefault();this.togglePause(false);this.restart();});
+    if(qs('#cannon-pause-exit-btn'))qs('#cannon-pause-exit-btn').addEventListener('click',e=>{e.preventDefault();this.stopAndExit();if(typeof window.exitNotebookGamesHub==='function')window.exitNotebookGamesHub();});
     if(qs('#cannon-exit-btn'))qs('#cannon-exit-btn').addEventListener('click',e=>{e.preventDefault();this.stopAndExit();if(typeof window.exitNotebookGamesHub==='function')window.exitNotebookGamesHub();});
     if(qs('#cannon-retry-btn'))qs('#cannon-retry-btn').addEventListener('click',e=>{e.preventDefault();this.restart();});
     if(qs('#cannon-back-hub-btn'))qs('#cannon-back-hub-btn').addEventListener('click',e=>{e.preventDefault();this.stopAndExit();});
@@ -408,9 +440,28 @@ html:not(.dark) #cannon-combo-val {
     });
 
     this.keyHandler=(e)=>{
-      if(!this.isRunning||this.isPaused)return;
+      if(!this.isRunning)return;
       const overlay=this.container.querySelector('#cannon-modal-overlay');
       if(overlay&&overlay.style.display!=='none')return;
+
+      if(e.key==='Escape'){
+        e.preventDefault();
+        e.stopPropagation();
+        if(e.stopImmediatePropagation)e.stopImmediatePropagation();
+        this.togglePause();
+        return;
+      }
+
+      if(this.isPaused){
+        if(e.key==='Enter'||e.key===' '){
+          e.preventDefault();
+          e.stopPropagation();
+          if(e.stopImmediatePropagation)e.stopImmediatePropagation();
+          this.togglePause(false);
+        }
+        return;
+      }
+
       if(e.altKey){
         const map={'1':'ice','2':'heal','3':'x2','4':'shield'};
         if(map[e.key]){
@@ -649,6 +700,9 @@ html:not(.dark) #cannon-combo-val {
     if(this.combo>this.maxCombo)this.maxCombo=this.combo;
     const zh = targetItem.wordObj.word || targetItem.wordObj.char || '';
     if(zh)this.correctWordsSet.add(zh);
+    if (typeof window.recordWordMemorized === 'function') {
+      window.recordWordMemorized(targetItem.wordObj);
+    }
 
     // HIỂN THỊ NGHĨA TIẾNG VIỆT NGAY KHI BẮN TRÚNG
     this.showHitMeaningPopup(targetItem.x, targetItem.y, targetItem.wordObj, pts, isStar);
@@ -846,6 +900,9 @@ html:not(.dark) #cannon-combo-val {
           this.wrongStreak=0;
           this.music.playMiss();
           this.showMissFlash();
+          if (typeof window.recordWordWrong === 'function' && item.wordObj) {
+            window.recordWordWrong(item.wordObj);
+          }
           if(this.playMode === 'practice'){
             this.showFloatingText(item.x,groundY-22,`💔 Rớt từ: ${item.wordObj.word} (${item.wordObj.meaning || ''})`,'#ef4444');
           } else {
@@ -933,12 +990,32 @@ html:not(.dark) #cannon-combo-val {
 
   showToast(msg){if(typeof window.showToast==='function')window.showToast(msg);}
 
-  togglePause(){
-    this.isPaused=!this.isPaused;
+  togglePause(forceState){
+    if(!this.isRunning)return;
+    const overlay=this.container.querySelector('#cannon-pause-overlay');
+    this.isPaused=(typeof forceState==='boolean')?forceState:!this.isPaused;
+
     const btn=this.container.querySelector('#cannon-pause-btn');
     if(btn)btn.innerHTML=`<i class="fa-solid fa-${this.isPaused?'play':'pause'}"></i>`;
-    if(this.isPaused)this.music.stop();else this.music.start();
-    this.showToast(this.isPaused?'⏸ Đã tạm dừng':'▶️ Tiếp tục');
+
+    if(this.isPaused){
+      this.music.stop();
+      if(overlay){
+        const sc=overlay.querySelector('#pause-score');
+        const cb=overlay.querySelector('#pause-combo');
+        const wd=overlay.querySelector('#pause-words');
+        if(sc)sc.textContent=this.score;
+        if(cb)cb.textContent=`x${this.combo}`;
+        if(wd)wd.textContent=`${this.wordsDestroyedCount}/${this.rawWords.length}`;
+        overlay.style.setProperty('display','flex','important');
+      }
+      this.showToast('⏸ Đã tạm dừng (Bấm Esc hoặc Tiếp tục)');
+    } else {
+      if(overlay)overlay.style.setProperty('display','none','important');
+      this.lastFrameTime=performance.now();
+      this.music.start();
+      this.showToast('▶️ Tiếp tục');
+    }
   }
 
   start(){
@@ -951,7 +1028,9 @@ html:not(.dark) #cannon-combo-val {
     this.wordQueue=[...this.rawWords].sort(()=>Math.random()-0.5);
     this.slowMoTimer=0;this.score2xTimer=0;this.shieldActive=false;this.shieldTimer=0;
     this.lastFrameTime=performance.now();this.spawnTimer=0;
+    const pauseOverlay=this.container.querySelector('#cannon-pause-overlay');if(pauseOverlay)pauseOverlay.style.setProperty('display','none','important');
     const overlay=this.container.querySelector('#cannon-modal-overlay');if(overlay)overlay.style.setProperty('display','none','important');
+    const btn=this.container.querySelector('#cannon-pause-btn');if(btn)btn.innerHTML='<i class="fa-solid fa-pause"></i>';
     const wordsLayer=this.container.querySelector('#cannon-words-layer');if(wordsLayer)wordsLayer.innerHTML='';
     const fxLayer=this.container.querySelector('#cannon-fx-layer');if(fxLayer)fxLayer.innerHTML='';
     this.updateHUD();this.updateTypedDisplay();this.startTimers();this.music.start();
@@ -961,10 +1040,12 @@ html:not(.dark) #cannon-combo-val {
   gameOver(isVictory){
     if(this.isStopping)return;
     this.isRunning=false;
+    this.isPaused=false;
     if(this.timerInterval){clearInterval(this.timerInterval);this.timerInterval=null;}
     if(this.animFrameId){cancelAnimationFrame(this.animFrameId);this.animFrameId=null;}
     this.music.stop();
 
+    const pauseOverlay=this.container.querySelector('#cannon-pause-overlay');if(pauseOverlay)pauseOverlay.style.setProperty('display','none','important');
     const overlay=this.container.querySelector('#cannon-modal-overlay');
     if(!overlay)return;
     overlay.style.setProperty('display','flex','important');
@@ -1106,7 +1187,17 @@ html:not(.dark) #cannon-combo-val {
   }
 
   stopAndExit(){
-    this.isRunning=false;this.isStopping=true;this.music.stop();
+    // Khi thoát đột ngột: ghi nhận tất cả từ đang rơi dở dang là Chưa thuộc!
+    if (this.activeWords && this.activeWords.length > 0 && typeof window.recordWordWrong === 'function') {
+      this.activeWords.forEach(item => {
+        if (!item.isDestroyed && item.wordObj) {
+          window.recordWordWrong(item.wordObj);
+        }
+      });
+    }
+
+    this.isRunning=false;this.isStopping=true;this.isPaused=false;this.music.stop();
+    const pauseOverlay=this.container.querySelector('#cannon-pause-overlay');if(pauseOverlay)pauseOverlay.style.setProperty('display','none','important');
     if(this.timerInterval){clearInterval(this.timerInterval);this.timerInterval=null;}
     if(this.animFrameId){cancelAnimationFrame(this.animFrameId);this.animFrameId=null;}
     if(this.keyHandler){window.removeEventListener('keydown',this.keyHandler,true);this.keyHandler=null;}

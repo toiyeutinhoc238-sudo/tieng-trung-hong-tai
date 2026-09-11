@@ -1160,11 +1160,13 @@
 
     @media (max-width: 480px) {
       #hud-toggle-speech #hud-speech-text,
-      #hud-toggle-mode #hud-mode-text span {
+      #hud-toggle-mode #hud-mode-text span,
+      #hud-toggle-pause #hud-pause-text {
         display: none !important;
       }
       #hud-toggle-speech,
-      #hud-toggle-mode {
+      #hud-toggle-mode,
+      #hud-toggle-pause {
         padding: 6px 8px !important;
         min-width: 34px !important;
         justify-content: center !important;
@@ -1296,6 +1298,12 @@
         </div>
 
         <button class="btn-primary" id="btn-start">BẮT ĐẦU</button>
+        <div style="margin-top: 12px; text-align: center;">
+          <a href="/vocab-practice.html" id="btn-goto-pedagogical" style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 16px; background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(168, 85, 247, 0.15)); border: 1.5px solid rgba(139, 92, 246, 0.4); border-radius: 12px; color: #a855f7; font-weight: 800; font-size: 0.95rem; text-decoration: none; transition: all 0.2s ease;">
+            <i class="fa-solid fa-graduation-cap" style="font-size: 1.15rem; color: #a855f7;"></i>
+            <span>Chuyển Sang Ôn Tập 5 Dạng Bài Tập (Sư Phạm & AI)</span>
+          </a>
+        </div>
       </div>
     </div>
 
@@ -1343,11 +1351,50 @@
         <!-- Next Lesson & Stepper Action Buttons -->
         <div id="go-next-lesson-actions" style="margin-bottom: 12px; display: none; flex-direction: column; gap: 8px;"></div>
 
+        <!-- Pedagogical Practice Hub Link -->
+        <div style="margin-bottom: 12px;">
+          <a href="/vocab-practice.html" id="btn-go-pedagogical" style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 13px; background: linear-gradient(135deg, #6366f1, #8b5cf6); border-radius: 12px; color: #ffffff; font-weight: 800; font-size: 0.95rem; text-decoration: none; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35); transition: all 0.2s ease;">
+            <i class="fa-solid fa-graduation-cap"></i> <span>Luyện Sâu 5 Dạng Bài Tập (Nối từ, Sắp xếp, Cloze, Đặt câu AI)</span>
+          </a>
+        </div>
+
         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
           <button class="btn-primary" id="btn-retry-wrong" style="flex: 1; background: #ea580c; box-shadow: 0 6px 0 #9a3412; display: none;"><i class="fa-solid fa-rotate-right"></i> Luyện Lại Câu Sai</button>
           <button class="btn-primary" id="btn-restart" style="flex: 1;">Chơi Lại</button>
           <button class="btn-primary" id="btn-quit"
             style="flex: 1; background: #e21b3c; box-shadow: 0 6px 0 #a9122c;"><i class="fa-solid fa-house"></i> Trang Chủ</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAUSE MODAL -->
+    <div class="modal" id="quiz-pause-modal" style="display: none; z-index: 10000; backdrop-filter: blur(12px); background: rgba(15, 23, 42, 0.85);">
+      <div class="modal-card" style="max-width: 440px; text-align: center; border: 2px solid rgba(245, 158, 11, 0.5); box-shadow: 0 20px 50px rgba(0,0,0,0.7); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+        <div style="font-size: 3.2rem; margin-bottom: 8px;">⏸️</div>
+        <h2 style="font-size: 1.6rem; font-weight: 900; color: #fbbf24; margin: 0 0 6px 0;">ĐÃ TẠM DỪNG</h2>
+        <p style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 20px;">Thời gian đếm ngược đang được đóng băng. Bạn có thể nghỉ ngơi và tiếp tục bất cứ lúc nào!</p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; background: rgba(255,255,255,0.06); padding: 12px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1);">
+          <div>
+            <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 700;">ĐIỂM SỐ</div>
+            <div id="pause-score-val" style="font-size: 1.5rem; font-weight: 900; color: #38bdf8;">0</div>
+          </div>
+          <div>
+            <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 700;">TIẾN ĐỘ CÂU</div>
+            <div id="pause-q-progress" style="font-size: 1.5rem; font-weight: 900; color: #10b981;">1 / 10</div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <button type="button" id="btn-pause-resume" class="btn-primary" style="background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 6px 0 #047857; padding: 12px; font-size: 1rem; font-weight: 800; border-radius: 12px; cursor: pointer;">
+            <i class="fa-solid fa-play"></i> Tiếp Tục Làm Bài
+          </button>
+          <button type="button" id="btn-pause-restart" class="btn-primary" style="background: linear-gradient(135deg, #f59e0b, #d97706); box-shadow: 0 6px 0 #b45309; padding: 10px; font-size: 0.92rem; font-weight: 700; border-radius: 12px; cursor: pointer;">
+            <i class="fa-solid fa-rotate-right"></i> Chơi Lại Vòng Này
+          </button>
+          <button type="button" id="btn-pause-quit" class="btn-primary" style="background: #e21b3c; box-shadow: 0 6px 0 #a9122c; padding: 10px; font-size: 0.9rem; font-weight: 700; border-radius: 12px; cursor: pointer;">
+            <i class="fa-solid fa-house"></i> Thoát Trò Chơi
+          </button>
         </div>
       </div>
     </div>
@@ -1378,6 +1425,12 @@
         <!-- PLAY MODE TOGGLE BUTTON -->
         <button type="button" id="hud-toggle-mode" class="hud-action-btn-top" title="Chuyển chế độ Kiểm tra ♾️ / Thi đấu ❤️" style="padding: 6px 12px; font-size: 0.82rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
           <span id="hud-mode-text"><i class="fa-solid fa-infinity" style="color: #10b981;"></i> Kiểm tra</span>
+        </button>
+
+        <!-- PAUSE TOGGLE BUTTON -->
+        <button type="button" id="hud-toggle-pause" class="hud-action-btn-top" title="Tạm dừng / Tiếp tục chơi (Phím P hoặc Esc)" style="padding: 6px 12px; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-pause" id="hud-pause-icon" style="color: #fbbf24;"></i>
+          <span id="hud-pause-text" style="font-size: 0.78rem; font-weight: 800;">Tạm Dừng</span>
         </button>
 
         <div class="score-box">
@@ -1489,6 +1542,15 @@
     const hudSpeechText = document.getElementById('hud-speech-text');
     const hudToggleMode = document.getElementById('hud-toggle-mode');
     const hudModeText = document.getElementById('hud-mode-text');
+    const hudTogglePause = document.getElementById('hud-toggle-pause');
+    const hudPauseIcon = document.getElementById('hud-pause-icon');
+    const hudPauseText = document.getElementById('hud-pause-text');
+    const pauseModal = document.getElementById('quiz-pause-modal');
+    const btnPauseResume = document.getElementById('btn-pause-resume');
+    const btnPauseRestart = document.getElementById('btn-pause-restart');
+    const btnPauseQuit = document.getElementById('btn-pause-quit');
+
+    let isPaused = false;
 
     // --- UTILS ---
     function showToast(msg, ok = true) {
@@ -1685,6 +1747,92 @@
         showToast(gamePlayMode === 'practice' ? "🎯 Chuyển sang Chế độ Kiểm tra (♾️ Không tính tim)" : "🏆 Chuyển sang Chế độ Thi đấu (❤️❤️❤️ Tính tim & Điểm)", true);
         playBeep(700, 'sine', 0.1);
       });
+    }
+
+    if (hudTogglePause) {
+      hudTogglePause.addEventListener('click', () => togglePause());
+    }
+    if (btnPauseResume) {
+      btnPauseResume.addEventListener('click', () => togglePause(false));
+    }
+    if (btnPauseRestart) {
+      btnPauseRestart.addEventListener('click', () => {
+        if (typeof handleSuddenExit === 'function') handleSuddenExit();
+        if (pauseModal) pauseModal.style.display = 'none';
+        isPaused = false;
+        startGame();
+      });
+    }
+    if (btnPauseQuit) {
+      btnPauseQuit.addEventListener('click', () => {
+        if (typeof handleSuddenExit === 'function') handleSuddenExit();
+        if (pauseModal) pauseModal.style.display = 'none';
+        isPaused = false;
+        saveGameHistory();
+        setTimeout(() => {
+          if (window.self !== window.top) {
+            window.parent.postMessage({ type: 'CLOSE_GAME_IFRAME' }, '*');
+          } else {
+            window.location.href = 'index.html';
+          }
+        }, 150);
+      });
+    }
+
+    function togglePause(forceState) {
+      if (setupModal && setupModal.style.display !== 'none') return;
+      if (goModal && goModal.style.display !== 'none') return;
+      if (!activeQ) return;
+
+      if (typeof forceState === 'boolean') {
+        isPaused = forceState;
+      } else {
+        isPaused = !isPaused;
+      }
+
+      if (isPaused) {
+        clearInterval(timerInterval);
+        if (activeAudio) {
+          try { activeAudio.pause(); } catch(e) {}
+        }
+        try { window.speechSynthesis.cancel(); } catch(e) {}
+
+        if (hudPauseIcon) hudPauseIcon.className = 'fa-solid fa-play';
+        if (hudPauseText) hudPauseText.textContent = 'Tiếp Tục';
+        if (hudTogglePause) {
+          hudTogglePause.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+          hudTogglePause.style.borderColor = '#059669';
+          hudTogglePause.style.color = '#ffffff';
+          if (hudPauseIcon) hudPauseIcon.style.color = '#ffffff';
+        }
+
+        const pauseScore = document.getElementById('pause-score-val');
+        const pauseProg = document.getElementById('pause-q-progress');
+        if (pauseScore) pauseScore.textContent = score;
+        if (pauseProg) {
+          const currentIdx = totalQuestionsCount - remainingQs.length;
+          pauseProg.textContent = `${Math.max(1, currentIdx)} / ${totalQuestionsCount}`;
+        }
+
+        if (pauseModal) pauseModal.style.display = 'flex';
+        showToast('⏸ Đã tạm dừng làm bài');
+      } else {
+        if (pauseModal) pauseModal.style.display = 'none';
+
+        if (hudPauseIcon) hudPauseIcon.className = 'fa-solid fa-pause';
+        if (hudPauseText) hudPauseText.textContent = 'Tạm Dừng';
+        if (hudTogglePause) {
+          hudTogglePause.style.background = '';
+          hudTogglePause.style.borderColor = '';
+          hudTogglePause.style.color = '';
+          if (hudPauseIcon) hudPauseIcon.style.color = '#fbbf24';
+        }
+
+        if (!answered) {
+          startTimer(true);
+        }
+        showToast('▶️ Tiếp tục làm bài!');
+      }
     }
 
     // --- USER AUTHENTICATION & PROFILE HUD ---
@@ -1929,7 +2077,7 @@
     });
     btnSpeak.addEventListener('click', () => { if (activeQ) speak(activeQ.word); });
 
-    // Keyboard shortcuts (1, 2, 3, 4 / A, B, C, D / Space for Audio replay)
+    // Keyboard shortcuts (1, 2, 3, 4 / A, B, C, D / Space for Audio replay / P, Esc for Pause)
     window.addEventListener('keydown', (e) => {
       if (setupModal && setupModal.style.display !== 'none') {
         if (e.key === 'Enter') startGame();
@@ -1942,6 +2090,22 @@
         }
         return;
       }
+
+      // Pause toggle via 'p' / 'P' / 'Escape'
+      if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') {
+        e.preventDefault();
+        togglePause();
+        return;
+      }
+
+      if (isPaused) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          togglePause(false);
+        }
+        return;
+      }
+
       if (e.key === ' ' || e.key === 'Spacebar') {
         e.preventDefault();
         if (activeQ) speak(activeQ.word);
@@ -2110,6 +2274,16 @@
       hearts = (gamePlayMode === 'practice') ? 999 : 3;
       quizStreak = 0;
       hudScore.textContent = score;
+      isPaused = false;
+      if (pauseModal) pauseModal.style.display = 'none';
+      if (hudPauseIcon) hudPauseIcon.className = 'fa-solid fa-pause';
+      if (hudPauseText) hudPauseText.textContent = 'Tạm Dừng';
+      if (hudTogglePause) {
+        hudTogglePause.style.background = '';
+        hudTogglePause.style.borderColor = '';
+        hudTogglePause.style.color = '';
+        if (hudPauseIcon) hudPauseIcon.style.color = '#fbbf24';
+      }
       updatePlayModeUI();
       updateAutoSpeechUI();
       setupModal.style.display = 'none';
@@ -2338,13 +2512,19 @@
       }
     }
 
-    function startTimer() {
+    function startTimer(isResuming = false) {
       clearInterval(timerInterval);
-      timer = timerMax;
-      timerBar.style.width = '100%';
-      timerBar.style.backgroundColor = '#26890c';
+      if (!isResuming) {
+        timer = timerMax;
+      }
+      const initialPct = (timer / timerMax) * 100;
+      timerBar.style.width = `${initialPct}%`;
+      if (initialPct < 30) timerBar.style.backgroundColor = '#e21b3c';
+      else if (initialPct < 60) timerBar.style.backgroundColor = '#d89e00';
+      else timerBar.style.backgroundColor = '#26890c';
 
       timerInterval = setInterval(() => {
+        if (isPaused) return;
         timer -= 0.1;
         const pct = (timer / timerMax) * 100;
         timerBar.style.width = `${pct}%`;
@@ -2358,8 +2538,123 @@
       }, 100);
     }
 
+    // --- ROBUST VOCABULARY PROGRESS TRACKING ---
+    function recordWordLearningResult(wordObjOrQ, isCorrect) {
+      if (!wordObjOrQ) return;
+      const word = (wordObjOrQ.word || wordObjOrQ.char || '').trim();
+      const id = wordObjOrQ.id || word;
+      const pinyin = (wordObjOrQ.pinyin || '').trim();
+      const meaning = (wordObjOrQ.meaning || '').trim();
+
+      // 1. Determine all possible user keys
+      let userKeys = ['guest'];
+      try {
+        const stored = localStorage.getItem('user');
+        if (stored) {
+          const u = JSON.parse(stored);
+          if (u) {
+            if (u._id) userKeys.push(String(u._id));
+            if (u.id) userKeys.push(String(u.id));
+            if (u.email) userKeys.push(String(u.email));
+          }
+        }
+      } catch (e) {}
+
+      // Unique user keys
+      userKeys = Array.from(new Set(userKeys.filter(Boolean)));
+
+      const progState = {
+        isStudied: true,
+        isMemorized: !!isCorrect,
+        isWrong: !isCorrect,
+        word: word,
+        pinyin: pinyin,
+        meaning: meaning,
+        updatedAt: Date.now()
+      };
+
+      // 2. Update user_progress for all user keys
+      userKeys.forEach(k => {
+        try {
+          const storageKey = `user_progress_${k}`;
+          const currentData = JSON.parse(localStorage.getItem(storageKey) || '{}');
+          if (id) currentData[id] = { ...(currentData[id] || {}), ...progState };
+          if (id) currentData[String(id)] = { ...(currentData[String(id)] || {}), ...progState };
+          if (word) currentData[word] = { ...(currentData[word] || {}), ...progState };
+          localStorage.setItem(storageKey, JSON.stringify(currentData));
+        } catch (e) {}
+      });
+
+      // Always also save to guest_progress
+      try {
+        const guestData = JSON.parse(localStorage.getItem('guest_progress') || '{}');
+        if (id) guestData[id] = { ...(guestData[id] || {}), ...progState };
+        if (id) guestData[String(id)] = { ...(guestData[String(id)] || {}), ...progState };
+        if (word) guestData[word] = { ...(guestData[word] || {}), ...progState };
+        localStorage.setItem('guest_progress', JSON.stringify(guestData));
+      } catch (e) {}
+
+      // 3. PostMessage to opener / parent (e.g. notebook hub iframe or separate tab)
+      const payload = {
+        type: 'WORD_PROGRESS_UPDATED',
+        wordId: id,
+        word: word,
+        pinyin: pinyin,
+        meaning: meaning,
+        isCorrect: !!isCorrect,
+        isWrong: !isCorrect,
+        isMemorized: !!isCorrect,
+        isStudied: true
+      };
+
+      try {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage(payload, '*');
+        }
+        if (window.opener && !window.opener.closed) {
+          window.opener.postMessage(payload, '*');
+        }
+      } catch (e) {}
+
+      // 4. Synchronize to backend if user token exists
+      try {
+        const token = localStorage.getItem('session_token');
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+          headers['x-session-token'] = token;
+        }
+
+        if (!isCorrect) {
+          fetch(API_BASE_URL + '/api/vocabulary/set-wrong', {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({ id, isWrong: true }),
+            credentials: 'include'
+          }).catch(() => {});
+        } else {
+          fetch(API_BASE_URL + '/api/vocabulary/set-memorized', {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({ id, isMemorized: true }),
+            credentials: 'include'
+          }).catch(() => {});
+        }
+      } catch (e) {}
+    }
+
+    // Xử lý khi người chơi đột ngột thoát khỏi trò chơi: tính từ hiện tại là Chưa thuộc!
+    function handleSuddenExit() {
+      if (activeQ && !answered) {
+        recordWordLearningResult(activeQ, false);
+      }
+    }
+
+    window.addEventListener('beforeunload', handleSuddenExit);
+    window.addEventListener('pagehide', handleSuddenExit);
+
     function handleAns(btn, isCorrect, isTimeout = false) {
-      if (answered) return;
+      if (answered || isPaused) return;
       answered = true;
       clearInterval(timerInterval);
 
@@ -2372,32 +2667,7 @@
         });
 
         // Record word progress for notebook & dashboard
-        try {
-          const userKey = localStorage.getItem('current_user_email') || 'guest';
-          const userProg = JSON.parse(localStorage.getItem(`user_progress_${userKey}`) || '{}');
-          const guestProg = JSON.parse(localStorage.getItem('guest_progress') || '{}');
-          const qId = activeQ.id || activeQ.word;
-
-          if (!userProg[qId]) userProg[qId] = {};
-          userProg[qId].isStudied = true;
-          if (isCorrect) {
-            userProg[qId].isMemorized = true;
-            userProg[qId].isWrong = false;
-          } else {
-            userProg[qId].isWrong = true;
-          }
-          localStorage.setItem(`user_progress_${userKey}`, JSON.stringify(userProg));
-
-          if (!guestProg[qId]) guestProg[qId] = {};
-          guestProg[qId].isStudied = true;
-          if (isCorrect) {
-            guestProg[qId].isMemorized = true;
-            guestProg[qId].isWrong = false;
-          } else {
-            guestProg[qId].isWrong = true;
-          }
-          localStorage.setItem('guest_progress', JSON.stringify(guestProg));
-        } catch (eProg) {}
+        recordWordLearningResult(activeQ, isCorrect);
       }
 
       const btns = ansGrid.querySelectorAll('.ans-btn');
@@ -2814,10 +3084,32 @@
         }
       }
 
+      const btnGoPed = document.getElementById('btn-go-pedagogical');
+      if (btnGoPed) {
+        const curVer = urlParams.get('version') || (selVersion ? selVersion.value : '3.0');
+        const curLvl = urlParams.get('level') || (selLevel ? selLevel.value : '1');
+        const curLes = urlParams.get('lesson') || (selLesson ? selLesson.value : '');
+        btnGoPed.href = `/vocab-practice.html?version=${encodeURIComponent(curVer)}&level=${encodeURIComponent(curLvl)}${curLes && curLes !== 'all' ? `&lesson=${encodeURIComponent(curLes)}` : ''}`;
+      }
+
       goModal.style.display = 'flex';
       playBeep(300, 'triangle', 0.5);
       saveGameHistory();
     }
+
+    function syncPedagogicalSetupLink() {
+      const btnGotoPed = document.getElementById('btn-goto-pedagogical');
+      if (btnGotoPed && selVersion && selLevel && selLesson) {
+        const v = selVersion.value || '3.0';
+        const l = selLevel.value || '1';
+        const les = selLesson.value || '1';
+        btnGotoPed.href = `/vocab-practice.html?version=${encodeURIComponent(v)}&level=${encodeURIComponent(l)}${les && les !== 'all' ? `&lesson=${encodeURIComponent(les)}` : ''}`;
+      }
+    }
+    if (selVersion) selVersion.addEventListener('change', syncPedagogicalSetupLink);
+    if (selLevel) selLevel.addEventListener('change', syncPedagogicalSetupLink);
+    if (selLesson) selLesson.addEventListener('change', syncPedagogicalSetupLink);
+    syncPedagogicalSetupLink();
 
     loadVocab();
   </script>

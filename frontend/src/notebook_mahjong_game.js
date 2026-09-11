@@ -791,6 +791,9 @@ export class MahjongGameEngine {
 
     if (matchedHanzi) {
       this.clearedWordsSet.add(matchedHanzi);
+      if (typeof window.recordWordMemorized === 'function') {
+        window.recordWordMemorized({ word: matchedHanzi, pinyin: item1?.pinyin || item2?.pinyin, meaning: item1?.meaning || item2?.meaning });
+      }
     }
 
     // Highlight matched glow
@@ -1355,6 +1358,22 @@ export class MahjongGameEngine {
   }
 
   stopAndExit() {
+    // Khi thoát đột ngột: nếu còn các quân bài dở dang trên bàn chưa nối được, ghi nhận là Chưa thuộc!
+    if (this.grid && typeof window.recordWordWrong === 'function') {
+      const remainingMap = new Map();
+      for (let r = 0; r < this.rows; r++) {
+        for (let c = 0; c < this.cols; c++) {
+          const item = this.grid[r] ? this.grid[r][c] : null;
+          if (item && item.word && (!this.clearedWordsSet || !this.clearedWordsSet.has(item.word))) {
+            remainingMap.set(item.word, item);
+          }
+        }
+      }
+      remainingMap.forEach(item => {
+        window.recordWordWrong({ word: item.word, pinyin: item.pinyin, meaning: item.meaning });
+      });
+    }
+
     this.isRunning = false;
     this.isStopping = true;
     if (this.timerInterval) {

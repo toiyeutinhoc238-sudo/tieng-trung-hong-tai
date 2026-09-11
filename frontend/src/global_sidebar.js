@@ -25,6 +25,7 @@
     if (path.includes('hanzi-writer')) return 'hanzi';
     if (path.includes('hsk-grammar')) return 'grammar';
     if (path.includes('lesson-texts')) return 'texts';
+    if (path.includes('vocab-practice')) return 'vocab-practice';
     if (path.includes('detail-list')) return 'vocabulary';
     if (path.includes('quiz-game')) return 'games';
     if (path.includes('han-viet-rules')) return 'rules';
@@ -193,6 +194,9 @@
           </li>
           <li class="sidebar-item ${activeKey === 'texts' ? 'active' : ''}" onclick="window.location.href = '/lesson-texts.html'">
             <i class="fa-solid fa-comments" style="color: #fb923c;"></i> <span>Bài Khóa & Hội Thoại</span>
+          </li>
+          <li class="sidebar-item ${activeKey === 'vocab-practice' ? 'active' : ''}" onclick="window.location.href = '/vocab-practice.html'">
+            <i class="fa-solid fa-graduation-cap" style="color: #a855f7;"></i> <span>Ôn Tập Từ Vựng (5 Dạng)</span>
           </li>
         </ul>
 

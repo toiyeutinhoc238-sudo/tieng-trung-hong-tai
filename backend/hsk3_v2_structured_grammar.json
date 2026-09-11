@@ -1,0 +1,1971 @@
+[
+  {
+    "lessonId": 1,
+    "lessonKey": "Bài 1",
+    "lessonTitleZh": "周末你有什么打算？",
+    "lessonTitleVi": "Cuối tuần bạn có dự định gì?",
+    "lessonTitleFull": "Bài 1: 周末你有什么打算？ (HSK 3 v2.0)",
+    "grammarPoints": [
+      {
+        "id": "hsk3_20_b1_g1",
+        "num": 1,
+        "title": "Bổ ngữ chỉ kết quả 好",
+        "explanation": "Cách dùng: Đứng sau động từ làm bổ ngữ kết quả, biểu thị hành động đã hoàn thành, đạt đến trạng thái tốt đẹp, hoàn chỉnh và làm người nói hài lòng.",
+        "formula": "Công thức: Động từ + 好 + (了)",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "饭做好了。 (Cơm đã nấu xong/rồi.)",
+            "zh": "饭做好了。",
+            "pinyin": "fàn zuò hǎo le 。",
+            "vi": "Cơm đã nấu xong/rồi."
+          },
+          {
+            "rawZh": "我想好了，跟你一起去北京。 (Tôi đã suy nghĩ kỹ rồi, đi Bắc Kinh cùng bạn.)",
+            "zh": "我想好了，跟你一起去北京。",
+            "pinyin": "wǒ xiǎng hǎo le ， gēn nǐ yì qǐ qù běi jīng 。",
+            "vi": "Tôi đã suy nghĩ kỹ rồi, đi Bắc Kinh cùng bạn."
+          },
+          {
+            "rawZh": "衣服我已经洗好了。 (Quần áo tôi đã giặt xong rồi.)",
+            "zh": "衣服我已经洗好了。",
+            "pinyin": "yī fu wǒ yǐ jīng xǐ hǎo le 。",
+            "vi": "Quần áo tôi đã giặt xong rồi."
+          },
+          {
+            "rawZh": "明天考试的作业你准备好了吗？ (Bài tập cho kỳ thi ngày mai bạn đã chuẩn bị xong chưa?)",
+            "zh": "明天考试的作业你准备好了吗？",
+            "pinyin": "míng tiān kǎo shì de zuò yè nǐ zhǔn bèi hǎo le ma ？",
+            "vi": "Bài tập cho kỳ thi ngày mai bạn đã chuẩn bị xong chưa?"
+          }
+        ],
+        "tables": []
+      },
+      {
+        "id": "hsk3_20_b1_g2",
+        "num": 2,
+        "title": "Cấu trúc diễn tả sự phủ định 一……也/ 都 + 不/ 没……",
+        "explanation": "Cách dùng: Dùng để nhấn mạnh sự phủ định hoàn toàn (\"một chút cũng không/chưa...\").",
+        "formula": "Công thức: Chủ ngữ + 一 + Lượng từ + Danh từ + 也/都 + 不/没 + Động từ/Tính từ",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "我一杯茶也都没喝。 (Tôi một cốc trà cũng không uống.)",
+            "zh": "我一杯茶也都没喝。",
+            "pinyin": "wǒ yì bēi chá yě dōu méi hē 。",
+            "vi": "Tôi một cốc trà cũng không uống."
+          },
+          {
+            "rawZh": "今天他一点儿东西也没吃。 (Hôm nay anh ấy một chút đồ ăn cũng chưa ăn.)",
+            "zh": "今天他一点儿东西也没吃。",
+            "pinyin": "jīn tiān tā yì diǎn ér dōng xī yě méi chī 。",
+            "vi": "Hôm nay anh ấy một chút đồ ăn cũng chưa ăn."
+          },
+          {
+            "rawZh": "这个汉字我一个也不认识。 (Chữ Hán này tôi một chữ cũng không biết/quen.)",
+            "zh": "这个汉字我一个也不认识。",
+            "pinyin": "zhè ge hàn zì wǒ yí gè yě bú rèn shi 。",
+            "vi": "Chữ Hán này tôi một chữ cũng không biết/quen."
+          },
+          {
+            "rawZh": "外面一点儿也不冷。 (Bên ngoài một chút cũng không lạnh.)",
+            "zh": "外面一点儿也不冷。",
+            "pinyin": "wài miàn yì diǎn ér yě bù lěng 。",
+            "vi": "Bên ngoài một chút cũng không lạnh."
+          }
+        ],
+        "tables": []
+      },
+      {
+        "id": "hsk3_20_b1_g3",
+        "num": 3,
+        "title": "Liên từ 那",
+        "explanation": "Cách dùng: Liên từ \"那\" biểu thị sự suy luận, chuyển ý (\"vậy thì\", \"thế thì\"), dùng để đưa ra kết luận hoặc gợi ý dựa trên tình huống đã đề cập trước đó.",
+        "formula": "Công thức: [Tiền đề/Tình huống], 那 + [Kết luận/Gợi ý]",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "你不想去，那我一个人去吧。 (Bạn không muốn đi, vậy thì một mình tôi đi nhé.)",
+            "zh": "你不想去，那我一个人去吧。",
+            "pinyin": "nǐ bù xiǎng qù ， nà wǒ yí gè rén qù ba 。",
+            "vi": "Bạn không muốn đi, vậy thì một mình tôi đi nhé."
+          },
+          {
+            "rawZh": "今天不下雨，那我们去爬山吧。 (Hôm nay trời không mưa, vậy thì chúng ta đi leo núi nhé.)",
+            "zh": "今天不下雨，那我们去爬山吧。",
+            "pinyin": "jīn tiān bú xià yǔ ， nà wǒ men qù pá shān ba 。",
+            "vi": "Hôm nay trời không mưa, vậy thì chúng ta đi leo núi nhé."
+          },
+          {
+            "rawZh": "你没时间，那我们明天再复习。 (Bạn không có thời gian, vậy thì ngày mai chúng ta hãy ôn tập.)",
+            "zh": "你没时间，那我们明天再复习。",
+            "pinyin": "nǐ méi shí jiān ， nà wǒ men míng tiān zài fù xí 。",
+            "vi": "Bạn không có thời gian, vậy thì ngày mai chúng ta hãy ôn tập."
+          },
+          {
+            "rawZh": "咖啡喝完了，那喝茶吧。 (Cà phê uống hết rồi, vậy thì uống trà nhé.)",
+            "zh": "咖啡喝完了，那喝茶吧。",
+            "pinyin": "kā fēi hē wán le ， nà hē chá ba 。",
+            "vi": "Cà phê uống hết rồi, vậy thì uống trà nhé."
+          }
+        ],
+        "tables": []
+      }
+    ]
+  },
+  {
+    "lessonId": 2,
+    "lessonKey": "Bài 2",
+    "lessonTitleZh": "他什么时候回来？",
+    "lessonTitleVi": "Khi nào anh ấy quay về?",
+    "lessonTitleFull": "Bài 2: 他什么时候回来？ (HSK 3 v2.0)",
+    "grammarPoints": [
+      {
+        "id": "hsk3_20_b2_g1",
+        "num": 1,
+        "title": "Bổ ngữ chỉ phương hướng đơn giản (简单趋向补语)",
+        "explanation": "Cách dùng: Đứng sau động từ để chỉ hướng di chuyển của hành động so với người nói.\n• 来 (lái): Hành động hướng về phía người nói (đến).\n• 去 (qù): Hành động hướng ra xa người nói (đi).\nCác động từ thường gặp: 回 (về), 进 (vào), 出 (ra), 上 (lên), 下 (xuống), 到 (đến), 带 (mang).\nVị trí của tân ngữ (Tân ngữ là nơi chốn hoặc sự vật):\n• Nếu tân ngữ là từ chỉ nơi chốn (Địa điểm): Tân ngữ bắt buộc phải đặt giữa động từ và bổ ngữ\n• Nếu tân ngữ là danh từ chỉ sự vật: Tân ngữ có thể đặt trước hoặc sau bổ ngữ",
+        "formula": "Công thức: Động từ + (Địa điểm) + 来 / 去 + (Sự vật)",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "他回到学校来了。 (Anh ấy đã về đến trường (người nói đang ở trường).)",
+            "zh": "他回到学校来了。",
+            "pinyin": "tā huí dào xué xiào lái le 。",
+            "vi": "Anh ấy đã về đến trường (người nói đang ở trường)."
+          },
+          {
+            "rawZh": "请你进教室去。 (Mời bạn vào lớp (người nói đang ở ngoài).)",
+            "zh": "请你进教室去。",
+            "pinyin": "qǐng nǐ jìn jiào shì qù 。",
+            "vi": "Mời bạn vào lớp (người nói đang ở ngoài)."
+          },
+          {
+            "rawZh": "他带回来了一些水果。 (Anh ấy mang về một ít trái cây.)",
+            "zh": "他带回来了一些水果。",
+            "pinyin": "tā dài huí lái le yì xiē shuǐ guǒ 。",
+            "vi": "Anh ấy mang về một ít trái cây."
+          },
+          {
+            "rawZh": "我去商店买回来一个杯子。 (Tôi đi cửa hàng mua về một cái cốc.)",
+            "zh": "我去商店买回来一个杯子。",
+            "pinyin": "wǒ qù shāng diàn mǎi huí lái yí gè bēi zi 。",
+            "vi": "Tôi đi cửa hàng mua về một cái cốc."
+          }
+        ],
+        "tables": []
+      },
+      {
+        "id": "hsk3_20_b2_g2",
+        "num": 2,
+        "title": "Cấu trúc diễn tả hai hành động xảy ra liên tiếp  ……了+ 就",
+        "explanation": "Cách dùng: Biểu thị ngay sau khi hành động thứ nhất kết thúc thì hành động thứ hai xảy ra.",
+        "formula": "Công thức: Động từ 1 + 了 + 就 + Động từ 2",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "我到了学校就给你打电话。 (Tôi đến trường sẽ gọi điện cho bạn ngay.)",
+            "zh": "我到了学校就给你打电话。",
+            "pinyin": "wǒ dào le xué xiào jiù gěi nǐ dǎ diàn huà 。",
+            "vi": "Tôi đến trường sẽ gọi điện cho bạn ngay."
+          },
+          {
+            "rawZh": "下课了我们就去吃饭。 (Tan học chúng ta đi ăn cơm ngay.)",
+            "zh": "下课了我们就去吃饭。",
+            "pinyin": "xià kè le wǒ men jiù qù chī fàn 。",
+            "vi": "Tan học chúng ta đi ăn cơm ngay."
+          },
+          {
+            "rawZh": "他买了书就回家了。 (Anh ấy mua sách xong là về nhà ngay.)",
+            "zh": "他买了书就回家了。",
+            "pinyin": "tā mǎi le shū jiù huí jiā le 。",
+            "vi": "Anh ấy mua sách xong là về nhà ngay."
+          },
+          {
+            "rawZh": "看到老师他就跑了。 (Vừa nhìn thấy giáo viên, anh ấy liền chạy.)",
+            "zh": "看到老师他就跑了。",
+            "pinyin": "kàn dào lǎo shī tā jiù pǎo le 。",
+            "vi": "Vừa nhìn thấy giáo viên, anh ấy liền chạy."
+          }
+        ],
+        "tables": []
+      },
+      {
+        "id": "hsk3_20_b2_g3",
+        "num": 3,
+        "title": "Câu hỏi có cấu trúc 能……吗？",
+        "explanation": "Cách dùng: Dùng để hỏi về năng lực hoặc sự cho phép.",
+        "formula": "Công thức: 能 + Động từ + 吗?",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "我能坐这儿吗？ (Tôi có thể ngồi ở đây không?)",
+            "zh": "我能坐这儿吗？",
+            "pinyin": "wǒ néng zuò zhè ér ma ？",
+            "vi": "Tôi có thể ngồi ở đây không?"
+          },
+          {
+            "rawZh": "明天你能去北京吗？ (Ngày mai bạn có thể đi Bắc Kinh không?)",
+            "zh": "明天你能去北京吗？",
+            "pinyin": "míng tiān nǐ néng qù běi jīng ma ？",
+            "vi": "Ngày mai bạn có thể đi Bắc Kinh không?"
+          },
+          {
+            "rawZh": "我们能在这儿看书吗？ (Chúng ta có thể đọc sách ở đây không?)",
+            "zh": "我们能在这儿看书吗？",
+            "pinyin": "wǒ men néng zài zhè ér kàn shū ma ？",
+            "vi": "Chúng ta có thể đọc sách ở đây không?"
+          },
+          {
+            "rawZh": "你能帮我写汉字吗？ (Bạn có thể giúp tôi viết chữ Hán không?)",
+            "zh": "你能帮我写汉字吗？",
+            "pinyin": "nǐ néng bāng wǒ xiě hàn zì ma ？",
+            "vi": "Bạn có thể giúp tôi viết chữ Hán không?"
+          }
+        ],
+        "tables": []
+      }
+    ]
+  },
+  {
+    "lessonId": 3,
+    "lessonKey": "Bài 3",
+    "lessonTitleZh": "桌子上放着很多饮料",
+    "lessonTitleVi": "Trên bàn để rất nhiều đồ uống",
+    "lessonTitleFull": "Bài 3: 桌子上放着很多饮料 (HSK 3 v2.0)",
+    "grammarPoints": [
+      {
+        "id": "hsk3_20_b3_g1",
+        "num": 1,
+        "title": "还是 và 或者",
+        "explanation": "Cách dùng:\n• 还是 (háishì): Dùng trong câu hỏi để đưa ra lựa chọn (A hay B?).\n• 或者 (huòzhě): Dùng trong câu trần thuật để biểu thị sự lựa chọn (A hoặc B).\n• Câu hỏi: A + 还是 + B?\n• Câu trần thuật: A + 或者 + B",
+        "formula": "Công thức:",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "你想喝茶还是喝咖啡？ (Bạn muốn uống trà hay uống cà phê?)",
+            "zh": "你想喝茶还是喝咖啡？",
+            "pinyin": "nǐ xiǎng hē chá hái shì hē kā fēi ？",
+            "vi": "Bạn muốn uống trà hay uống cà phê?"
+          },
+          {
+            "rawZh": "今天下午你是去超市还是去学校？ (Chiều nay bạn đi siêu thị hay đi trường học?)",
+            "zh": "今天下午你是去超市还是去学校？",
+            "pinyin": "jīn tiān xià wǔ nǐ shì qù chāo shì hái shì qù xué xiào ？",
+            "vi": "Chiều nay bạn đi siêu thị hay đi trường học?"
+          },
+          {
+            "rawZh": "周末我打算在家复习或者去看电影。 (Cuối tuần tôi dự định ở nhà ôn tập hoặc đi xem phim.)",
+            "zh": "周末我打算在家复习或者去看电影。",
+            "pinyin": "zhōu mò wǒ dǎ suàn zài jiā fù xí huò zhě qù kàn diàn yǐng 。",
+            "vi": "Cuối tuần tôi dự định ở nhà ôn tập hoặc đi xem phim."
+          },
+          {
+            "rawZh": "你可以坐出租车或者坐公共汽车去机场。 (Bạn có thể ngồi taxi hoặc xe buýt đến sân bay.)",
+            "zh": "你可以坐出租车或者坐公共汽车去机场。",
+            "pinyin": "nǐ kě yǐ zuò chū zū chē huò zhě zuò gōng gòng qì chē qù jī chǎng 。",
+            "vi": "Bạn có thể ngồi taxi hoặc xe buýt đến sân bay."
+          }
+        ],
+        "tables": []
+      },
+      {
+        "id": "hsk3_20_b3_g2",
+        "num": 2,
+        "title": "Cách diễn tả sự tồn tại",
+        "explanation": "Cách dùng: Dùng để mô tả sự tồn tại của người hoặc vật tại một nơi nào đó.",
+        "formula": "Công thức: Nơi chốn + Động từ + 着 + Số từ + Lượng từ + Danh từ",
+        "note": "Lưu ý: Động từ trong cấu trúc này thường là động từ đơn âm tiết biểu thị tư thế hoặc trạng thái (như 放, 站, 挂, 住, 坐).",
+        "examples": [
+          {
+            "rawZh": "桌子上放着一台电脑。 (Trên bàn đang đặt một cái máy tính.)",
+            "zh": "桌子上放着一台电脑。",
+            "pinyin": "zhuō zi shàng fàng zhe yì tái diàn nǎo 。",
+            "vi": "Trên bàn đang đặt một cái máy tính."
+          },
+          {
+            "rawZh": "门口站着一个人。 (Ở cửa đang đứng một người.)",
+            "zh": "门口站着一个人。",
+            "pinyin": "mén kǒu zhàn zhe yí gè rén 。",
+            "vi": "Ở cửa đang đứng một người."
+          },
+          {
+            "rawZh": "墙上挂着一张照片。 (Trên tường đang treo một bức ảnh.)",
+            "zh": "墙上挂着一张照片。",
+            "pinyin": "qiáng shàng guà zhe yì zhāng zhào piàn 。",
+            "vi": "Trên tường đang treo một bức ảnh."
+          },
+          {
+            "rawZh": "超市里放着很多东西。 (Trong siêu thị đang bày rất nhiều đồ đạc.)",
+            "zh": "超市里放着很多东西。",
+            "pinyin": "chāo shì lǐ fàng zhe hěn duō dōng xī 。",
+            "vi": "Trong siêu thị đang bày rất nhiều đồ đạc."
+          }
+        ],
+        "tables": []
+      },
+      {
+        "id": "hsk3_20_b3_g3",
+        "num": 3,
+        "title": "Trợ động từ 会 (biểu thị khả năng)",
+        "explanation": "Cách dùng: Biểu thị dự đoán về một khả năng, sự việc có thể xảy ra trong tương lai (\"sẽ\" hoặc \"có thể\").",
+        "formula": "Công thức: S + 会 + V",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "今天下午可能会下雨。 (Chiều nay có thể sẽ mưa.)",
+            "zh": "今天下午可能会下雨。",
+            "pinyin": "jīn tiān xià wǔ kě néng huì xià yǔ 。",
+            "vi": "Chiều nay có thể sẽ mưa."
+          },
+          {
+            "rawZh": "他明天会来学校吗？ (Ngày mai anh ấy sẽ đến trường chứ?)",
+            "zh": "他明天会来学校吗？",
+            "pinyin": "tā míng tiān huì lái xué xiào ma ？",
+            "vi": "Ngày mai anh ấy sẽ đến trường chứ?"
+          },
+          {
+            "rawZh": "你去看电影，他也会去。 (Bạn đi xem phim, anh ấy cũng sẽ đi.)",
+            "zh": "你去看电影，他也会去。",
+            "pinyin": "nǐ qù kàn diàn yǐng ， tā yě huì qù 。",
+            "vi": "Bạn đi xem phim, anh ấy cũng sẽ đi."
+          },
+          {
+            "rawZh": "我想今天晚上他会回家。 (Tôi nghĩ tối nay anh ấy sẽ về nhà.)",
+            "zh": "我想今天晚上他会回家。",
+            "pinyin": "wǒ xiǎng jīn tiān wǎn shàng tā huì huí jiā 。",
+            "vi": "Tôi nghĩ tối nay anh ấy sẽ về nhà."
+          }
+        ],
+        "tables": []
+      }
+    ]
+  },
+  {
+    "lessonId": 4,
+    "lessonKey": "Bài 4",
+    "lessonTitleZh": "她总是笑着跟客人说话",
+    "lessonTitleVi": "Cô ấy luôn cười khi nói chuyện với khách hàng",
+    "lessonTitleFull": "Bài 4: 她总是笑着跟客人说话 (HSK 3 v2.0)",
+    "grammarPoints": [
+      {
+        "id": "hsk3_20_b4_g1",
+        "num": 1,
+        "title": "Cấu trúc 又……又……",
+        "explanation": "Cách dùng: Dùng để biểu thị hai tính chất hoặc trạng thái cùng tồn tại trên một đối tượng (vừa... vừa...).",
+        "formula": "Công thức: 又 + Tính từ/Động từ + 又 + Tính từ/Động từ",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "那个商店的水果又多又新鲜。 (Trái cây ở cửa hàng đó vừa nhiều vừa tươi.)",
+            "zh": "那个商店的水果又多又新鲜。",
+            "pinyin": "nà ge shāng diàn de shuǐ guǒ yòu duō yòu xīn xiān 。",
+            "vi": "Trái cây ở cửa hàng đó vừa nhiều vừa tươi."
+          },
+          {
+            "rawZh": "这件衣服又漂亮又便宜。 (Chiếc áo này vừa đẹp vừa rẻ.)",
+            "zh": "这件衣服又漂亮又便宜。",
+            "pinyin": "zhè jiàn yī fu yòu piào liang yòu pián yi 。",
+            "vi": "Chiếc áo này vừa đẹp vừa rẻ."
+          },
+          {
+            "rawZh": "他又聪明又热情。 (Anh ấy vừa thông minh vừa nhiệt tình.)",
+            "zh": "他又聪明又热情。",
+            "pinyin": "tā yòu cōng ming yòu rè qíng 。",
+            "vi": "Anh ấy vừa thông minh vừa nhiệt tình."
+          },
+          {
+            "rawZh": "今天天气又热又下雨。 (Thời tiết hôm nay vừa nóng vừa mưa.)",
+            "zh": "今天天气又热又下雨。",
+            "pinyin": "jīn tiān tiān qì yòu rè yòu xià yǔ 。",
+            "vi": "Thời tiết hôm nay vừa nóng vừa mưa."
+          }
+        ],
+        "tables": []
+      },
+      {
+        "id": "hsk3_20_b4_g2",
+        "num": 2,
+        "title": "Cấu trúc: Động từ 1 + 着 + Động từ 2",
+        "explanation": "Cách dùng: Diễn tả hai hành động xảy ra đồng thời, hoặc hành động 1 là cách thức/trạng thái của hành động 2.",
+        "formula": "Công thức: Động từ 1 + 着 (+ tân ngữ 1) + Động từ 2 (+ tân ngữ 2)",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "他看着书睡着了。 (Anh ấy vừa đọc sách vừa ngủ thiếp đi.)",
+            "zh": "他看着书睡着了。",
+            "pinyin": "tā kàn zhe shū shuì zháo le 。",
+            "vi": "Anh ấy vừa đọc sách vừa ngủ thiếp đi."
+          },
+          {
+            "rawZh": "她开着车去学校。 (Cô ấy lái xe đi trường học.)",
+            "zh": "她开着车去学校。",
+            "pinyin": "tā kāi zhe chē qù xué xiào 。",
+            "vi": "Cô ấy lái xe đi trường học."
+          },
+          {
+            "rawZh": "他们拿着花站在门口。 (Họ cầm hoa đứng ở cửa.)",
+            "zh": "他们拿着花站在门口。",
+            "pinyin": "tā men ná zhe huā zhàn zài mén kǒu 。",
+            "vi": "Họ cầm hoa đứng ở cửa."
+          },
+          {
+            "rawZh": "他听着音乐写作业。 (Anh ấy vừa nghe nhạc vừa làm bài tập.)",
+            "zh": "他听着音乐写作业。",
+            "pinyin": "tā tīng zhe yīn yuè xiě zuò yè 。",
+            "vi": "Anh ấy vừa nghe nhạc vừa làm bài tập."
+          }
+        ],
+        "tables": []
+      }
+    ]
+  },
+  {
+    "lessonId": 5,
+    "lessonKey": "Bài 5",
+    "lessonTitleZh": "我最近越来越胖了",
+    "lessonTitleVi": "Dạo này tôi càng ngày càng béo ra",
+    "lessonTitleFull": "Bài 5: 我最近越来越胖了 (HSK 3 v2.0)",
+    "grammarPoints": [
+      {
+        "id": "hsk3_20_b5_g1",
+        "num": 1,
+        "title": "Trợ từ 了 chỉ sự thay đổi",
+        "explanation": "Cách dùng: Đặt ở cuối câu để biểu thị một tình huống đã thay đổi so với trước kia (đã xảy ra/đã xuất hiện tình trạng mới).",
+        "formula": "Công thức: Chủ ngữ + Tính từ/Động từ + 了",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "下雨了。 (Trời mưa rồi.)",
+            "zh": "下雨了。",
+            "pinyin": "xià yǔ le 。",
+            "vi": "Trời mưa rồi."
+          },
+          {
+            "rawZh": "我没钱了。 (Tôi hết tiền rồi.)",
+            "zh": "我没钱了。",
+            "pinyin": "wǒ méi qián le 。",
+            "vi": "Tôi hết tiền rồi."
+          },
+          {
+            "rawZh": "他不想去了。 (Anh ấy không muốn đi nữa rồi.)",
+            "zh": "他不想去了。",
+            "pinyin": "tā bù xiǎng qù le 。",
+            "vi": "Anh ấy không muốn đi nữa rồi."
+          },
+          {
+            "rawZh": "天气热了。 (Thời tiết nóng lên rồi.)",
+            "zh": "天气热了。",
+            "pinyin": "tiān qì rè le 。",
+            "vi": "Thời tiết nóng lên rồi."
+          }
+        ],
+        "tables": []
+      },
+      {
+        "id": "hsk3_20_b5_g2",
+        "num": 2,
+        "title": "Cấu trúc: 越来越 + Tính từ/ Động từ",
+        "explanation": "Cách dùng: Biểu thị mức độ thay đổi dần dần theo thời gian (\"ngày càng...\").",
+        "formula": "Công thức: S + 越来越 + Tính từ/Động từ",
+        "note": "Lưu ý: Không được dùng phó từ chỉ mức độ (như 很, 非常, 太...) trước tính từ hoặc động từ trong cấu trúc này.",
+        "examples": [
+          {
+            "rawZh": "天气越来越热了。 (Thời tiết ngày càng nóng.)",
+            "zh": "天气越来越热了。",
+            "pinyin": "tiān qì yuè lái yuè rè le 。",
+            "vi": "Thời tiết ngày càng nóng."
+          },
+          {
+            "rawZh": "汉语越来越难了。 (Tiếng Hán ngày càng khó.)",
+            "zh": "汉语越来越难了。",
+            "pinyin": "hàn yǔ yuè lái yuè nán le 。",
+            "vi": "Tiếng Hán ngày càng khó."
+          },
+          {
+            "rawZh": "我越来越喜欢你了。 (Tôi ngày càng thích bạn.)",
+            "zh": "我越来越喜欢你了。",
+            "pinyin": "wǒ yuè lái yuè xǐ huan nǐ le 。",
+            "vi": "Tôi ngày càng thích bạn."
+          },
+          {
+            "rawZh": "他中文说得越来越好了。 (Tiếng Trung của anh ấy nói ngày càng tốt.)",
+            "zh": "他中文说得越来越好了。",
+            "pinyin": "tā zhōng wén shuō dé yuè lái yuè hǎo le 。",
+            "vi": "Tiếng Trung của anh ấy nói ngày càng tốt."
+          }
+        ],
+        "tables": []
+      }
+    ]
+  },
+  {
+    "lessonId": 6,
+    "lessonKey": "Bài 6",
+    "lessonTitleZh": "怎么突然找不到了？",
+    "lessonTitleVi": "Sao bỗng dưng lại không tìm thấy rồi?",
+    "lessonTitleFull": "Bài 6: 怎么突然找不到了？ (HSK 3 v2.0)",
+    "grammarPoints": [
+      {
+        "id": "hsk3_20_b6_g1",
+        "num": 1,
+        "title": "Bổ ngữ chỉ khả năng (Động từ + 得/ 不 + Bổ ngữ)",
+        "explanation": "Cách dùng: Dùng để diễn tả một hành động có khả năng thực hiện được hay không (kết quả hoặc phương hướng).\n• Khẳng định: V + 得 + Bổ ngữ (Ví dụ: 我听得懂)\n• Phủ định: V + 不 + Bổ ngữ (Ví dụ: 我听不懂)\n• Câu hỏi: V + 得 + Bổ ngữ + 不 + V + Bổ ngữ? (Ví dụ: 你听得懂听不懂?) hoặc V + 得 + Bổ ngữ + 吗? (Ví dụ: 你听得懂吗?)",
+        "formula": "",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "这个汉字我看得懂。 (Chữ Hán này tôi đọc hiểu được.)",
+            "zh": "这个汉字我看得懂。",
+            "pinyin": "zhè ge hàn zì wǒ kàn dé dǒng 。",
+            "vi": "Chữ Hán này tôi đọc hiểu được."
+          },
+          {
+            "rawZh": "在外面听得见吗？ (Ở bên ngoài có nghe thấy không?)",
+            "zh": "在外面听得见吗？",
+            "pinyin": "zài wài miàn tīng dé jiàn ma ？",
+            "vi": "Ở bên ngoài có nghe thấy không?"
+          },
+          {
+            "rawZh": "那本书买不到了。 (Quyển sách đó không mua được nữa rồi.)",
+            "zh": "那本书买不到了。",
+            "pinyin": "nà běn shū mǎi bú dào le 。",
+            "vi": "Quyển sách đó không mua được nữa rồi."
+          },
+          {
+            "rawZh": "他走得很快。 (Anh ấy đi (được) rất nhanh.)",
+            "zh": "他走得很快。",
+            "pinyin": "tā zǒu dé hěn kuài 。",
+            "vi": "Anh ấy đi (được) rất nhanh."
+          }
+        ],
+        "tables": []
+      },
+      {
+        "id": "hsk3_20_b6_g2",
+        "num": 2,
+        "title": "Cấu trúc hỏi vị trí với 呢",
+        "explanation": "Cách dùng: Dùng để hỏi vị trí của người hoặc vật khi đã biết đối tượng đó nhưng chưa biết nó ở đâu (rút gọn của \"ở đâu\").",
+        "formula": "Công thức: [Người/Vật] + 呢?",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "我的书呢？ (Sách của tôi đâu?)",
+            "zh": "我的书呢？",
+            "pinyin": "wǒ de shū ne ？",
+            "vi": "Sách của tôi đâu?"
+          },
+          {
+            "rawZh": "老师呢？ (Thầy giáo đâu rồi?)",
+            "zh": "老师呢？",
+            "pinyin": "lǎo shī ne ？",
+            "vi": "Thầy giáo đâu rồi?"
+          },
+          {
+            "rawZh": "小猫呢？ (Con mèo đâu rồi?)",
+            "zh": "小猫呢？",
+            "pinyin": "xiǎo māo ne ？",
+            "vi": "Con mèo đâu rồi?"
+          },
+          {
+            "rawZh": "你的手机呢？ (Điện thoại của bạn đâu?)",
+            "zh": "你的手机呢？",
+            "pinyin": "nǐ de shǒu jī ne ？",
+            "vi": "Điện thoại của bạn đâu?"
+          }
+        ],
+        "tables": []
+      },
+      {
+        "id": "hsk3_20_b6_g3",
+        "num": 3,
+        "title": "刚 và 刚才",
+        "explanation": "Cách dùng:\n• 刚 (Phó từ): Nhấn mạnh thời gian ngắn, đứng ngay trước động từ. S + 刚 + V. (Ví dụ: 我刚到).\n• 刚才 (Danh từ thời gian): Có thể đứng trước hoặc sau chủ ngữ. 刚才 + S + V hoặc S + 刚才 + V. (Ví dụ: 刚才他打电话).",
+        "formula": "",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "我刚到家。 (Tôi vừa mới về đến nhà.)",
+            "zh": "我刚到家。",
+            "pinyin": "wǒ gāng dào jiā 。",
+            "vi": "Tôi vừa mới về đến nhà."
+          },
+          {
+            "rawZh": "他刚吃完饭。 (Anh ấy vừa ăn cơm xong.)",
+            "zh": "他刚吃完饭。",
+            "pinyin": "tā gāng chī wán fàn 。",
+            "vi": "Anh ấy vừa ăn cơm xong."
+          },
+          {
+            "rawZh": "刚才谁打电话？ (Vừa nãy ai gọi điện thoại thế?)",
+            "zh": "刚才谁打电话？",
+            "pinyin": "gāng cái shuí dǎ diàn huà ？",
+            "vi": "Vừa nãy ai gọi điện thoại thế?"
+          },
+          {
+            "rawZh": "刚才他出去了。 (Vừa nãy anh ấy ra ngoài rồi.)",
+            "zh": "刚才他出去了。",
+            "pinyin": "gāng cái tā chū qù le 。",
+            "vi": "Vừa nãy anh ấy ra ngoài rồi."
+          }
+        ],
+        "tables": []
+      }
+    ]
+  },
+  {
+    "lessonId": 7,
+    "lessonKey": "Bài 7",
+    "lessonTitleZh": "我跟她都认识五年了",
+    "lessonTitleVi": "Tôi và cô ấy quen nhau 5 năm rồi",
+    "lessonTitleFull": "Bài 7: 我跟她都认识五年了 (HSK 3 v2.0)",
+    "grammarPoints": [
+      {
+        "id": "hsk3_20_b7_g1",
+        "num": 1,
+        "title": "Cách diễn tả khoảng thời gian (Thời lượng)",
+        "explanation": "Cách dùng: Dùng để diễn tả một hành động đã kéo dài trong bao lâu.",
+        "formula": "Công thức: Động từ + Tân ngữ + Động từ + 了 + Khoảng thời gian",
+        "note": "Lưu ý: Nếu hành động kéo dài đến hiện tại và vẫn chưa kết thúc, dùng cấu trúc: Động từ + Tân ngữ + Động từ + 了 + Khoảng thời gian + 了 (Ví dụ: 我学汉语学了三年了 - Tôi đã học tiếng Hán được 3 năm rồi và vẫn đang học).",
+        "examples": [
+          {
+            "rawZh": "我看了两个小时书。 (Tôi đã đọc sách 2 tiếng đồng hồ.)",
+            "zh": "我看了两个小时书。",
+            "pinyin": "wǒ kàn le liǎng gè xiǎo shí shū 。",
+            "vi": "Tôi đã đọc sách 2 tiếng đồng hồ."
+          },
+          {
+            "rawZh": "他睡了八个小时。 (Anh ấy đã ngủ 8 tiếng.)",
+            "zh": "他睡了八个小时。",
+            "pinyin": "tā shuì le bā gè xiǎo shí 。",
+            "vi": "Anh ấy đã ngủ 8 tiếng."
+          },
+          {
+            "rawZh": "我在这儿住了三年。 (Tôi đã sống ở đây 3 năm.)",
+            "zh": "我在这儿住了三年。",
+            "pinyin": "wǒ zài zhè ér zhù le sān nián 。",
+            "vi": "Tôi đã sống ở đây 3 năm."
+          },
+          {
+            "rawZh": "我们踢了一个小时球。 (Chúng tôi đã đá bóng 1 tiếng.)",
+            "zh": "我们踢了一个小时球。",
+            "pinyin": "wǒ men tī le yí gè xiǎo shí qiú 。",
+            "vi": "Chúng tôi đã đá bóng 1 tiếng."
+          },
+          {
+            "rawZh": "我学了三年汉语。 (Tôi học tiếng Hán được 3 năm.)",
+            "zh": "我学了三年汉语。",
+            "pinyin": "wǒ xué le sān nián hàn yǔ 。",
+            "vi": "Tôi học tiếng Hán được 3 năm."
+          },
+          {
+            "rawZh": "他看了两个小时电视。 (Anh ấy đã xem tivi 2 tiếng.)",
+            "zh": "他看了两个小时电视。",
+            "pinyin": "tā kàn le liǎng gè xiǎo shí diàn shì 。",
+            "vi": "Anh ấy đã xem tivi 2 tiếng."
+          },
+          {
+            "rawZh": "我们跑了半个小时步。 (Chúng tôi chạy bộ được nửa tiếng.)",
+            "zh": "我们跑了半个小时步。",
+            "pinyin": "wǒ men pǎo le bàn gè xiǎo shí bù 。",
+            "vi": "Chúng tôi chạy bộ được nửa tiếng."
+          }
+        ],
+        "tables": []
+      },
+      {
+        "id": "hsk3_20_b7_g2",
+        "num": 2,
+        "title": "Cách diễn tả sự hứng thú (对……感兴趣 / 有兴趣)",
+        "explanation": "Cách dùng: Dùng để bày tỏ sự thích thú hoặc quan tâm đối với một lĩnh vực, sự vật nào đó.",
+        "formula": "Công thức: S + 对 + [Đối tượng] + 感兴趣 / 有兴趣\nPhủ định: S + 对 + [Đối tượng] + 不感兴趣 / 没有兴趣\nMức độ: S + 对 + [Đối tượng] + [很/非常/特别] + 感兴趣",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "我对看电影感兴趣。 (Tôi có hứng thú với việc xem phim.)",
+            "zh": "我对看电影感兴趣。",
+            "pinyin": "wǒ duì kàn diàn yǐng gǎn xìng qù 。",
+            "vi": "Tôi có hứng thú với việc xem phim."
+          },
+          {
+            "rawZh": "他对中国菜有兴趣。 (Anh ấy có hứng thú với món ăn Trung Quốc.)",
+            "zh": "他对中国菜有兴趣。",
+            "pinyin": "tā duì zhōng guó cài yǒu xìng qù 。",
+            "vi": "Anh ấy có hứng thú với món ăn Trung Quốc."
+          },
+          {
+            "rawZh": "你对什么有兴趣？ (Bạn có hứng thú với cái gì?)",
+            "zh": "你对什么有兴趣？",
+            "pinyin": "nǐ duì shén me yǒu xìng qù ？",
+            "vi": "Bạn có hứng thú với cái gì?"
+          },
+          {
+            "rawZh": "学生对汉语课很感兴趣。 (Học sinh rất hứng thú với tiết học tiếng Hán.)",
+            "zh": "学生对汉语课很感兴趣。",
+            "pinyin": "xué shēng duì hàn yǔ kè hěn gǎn xìng qù 。",
+            "vi": "Học sinh rất hứng thú với tiết học tiếng Hán."
+          }
+        ],
+        "tables": []
+      },
+      {
+        "id": "hsk3_20_b7_g3",
+        "num": 3,
+        "title": "Cách diễn tả thời gian với 半, 刻 hoặc 差",
+        "explanation": "Cách dùng: Các cách đọc giờ đặc biệt trong tiếng Trung.\n• 半: Giờ + 点半 (Ví dụ: 8点半)\n• 刻: 一刻 (yī kè) = 15 phút, 三刻 (sān kè) = 45 phút. Giờ + 点一刻/三刻\n• 差: 差 + Phút + 分 + Giờ + 点",
+        "formula": "",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "现在八点半。 (Bây giờ là 8 giờ 30 (rưỡi).)",
+            "zh": "现在八点半。",
+            "pinyin": "xiàn zài bā diǎn bàn 。",
+            "vi": "Bây giờ là 8 giờ 30 (rưỡi)."
+          },
+          {
+            "rawZh": "现在八点一刻。 (Bây giờ là 8 giờ 15.)",
+            "zh": "现在八点一刻。",
+            "pinyin": "xiàn zài bā diǎn yí kè 。",
+            "vi": "Bây giờ là 8 giờ 15."
+          },
+          {
+            "rawZh": "现在差五分八点。 (Bây giờ là 7 giờ 55 (kém 5 phút 8 giờ).)",
+            "zh": "现在差五分八点。",
+            "pinyin": "xiàn zài chà wǔ fēn bā diǎn 。",
+            "vi": "Bây giờ là 7 giờ 55 (kém 5 phút 8 giờ)."
+          },
+          {
+            "rawZh": "差十分八点。 (giờ 50 (8 giờ kém 10).)",
+            "zh": "差十分八点。",
+            "pinyin": "chà shí fēn bā diǎn 。",
+            "vi": "giờ 50 (8 giờ kém 10)."
+          }
+        ],
+        "tables": []
+      }
+    ]
+  },
+  {
+    "lessonId": 8,
+    "lessonKey": "Bài 8",
+    "lessonTitleZh": "你去哪儿我就去哪儿",
+    "lessonTitleVi": "Bạn đi đâu tôi đi đó",
+    "lessonTitleFull": "Bài 8: 你去哪儿我就去哪儿 (HSK 3 v2.0)",
+    "grammarPoints": [
+      {
+        "id": "hsk3_20_b8_g1",
+        "num": 1,
+        "title": "又 và 再",
+        "explanation": "Cách dùng:\n• 又 (yòu): Biểu thị hành động đã xảy ra lặp lại (trong quá khứ).\n• 再 (zài): Biểu thị hành động sẽ xảy ra lặp lại (trong tương lai).",
+        "formula": "Công thức: S + 又/再 + V",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "昨天下了雨，今天又下了。 (Hôm qua trời mưa, hôm nay lại mưa rồi.)",
+            "zh": "昨天下了雨，今天又下了。",
+            "pinyin": "zuó tiān xià le yǔ ， jīn tiān yòu xià le 。",
+            "vi": "Hôm qua trời mưa, hôm nay lại mưa rồi."
+          },
+          {
+            "rawZh": "我刚吃了一个，又想吃一个。 (Tôi vừa ăn một cái, lại muốn ăn thêm cái nữa.)",
+            "zh": "我刚吃了一个，又想吃一个。",
+            "pinyin": "wǒ gāng chī le yí gè ， yòu xiǎng chī yí gè 。",
+            "vi": "Tôi vừa ăn một cái, lại muốn ăn thêm cái nữa."
+          },
+          {
+            "rawZh": "你明天再来吧。 (Ngày mai bạn lại đến nhé.)",
+            "zh": "你明天再来吧。",
+            "pinyin": "nǐ míng tiān zài lái ba 。",
+            "vi": "Ngày mai bạn lại đến nhé."
+          },
+          {
+            "rawZh": "我们再学习一遍汉语吧。 (Chúng ta ôn tập lại tiếng Hán một lần nữa nhé.)",
+            "zh": "我们再学习一遍汉语吧。",
+            "pinyin": "wǒ men zài xué xí yí biàn hàn yǔ ba 。",
+            "vi": "Chúng ta ôn tập lại tiếng Hán một lần nữa nhé."
+          }
+        ],
+        "tables": []
+      },
+      {
+        "id": "hsk3_20_b8_g2",
+        "num": 2,
+        "title": "Đại từ nghi vấn sử dụng linh hoạt và cấu trúc \"就\" nối động từ",
+        "explanation": "Cách dùng: Dùng đại từ nghi vấn (什么, 谁, 哪儿, 什么时候...) lặp lại để biểu thị sự tùy ý, không giới hạn (\"bất cứ cái gì/ai/nơi nào...\").",
+        "formula": "Công thức: S + Nghi vấn từ + V + 就 + Nghi vấn từ + V",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "你想吃什么就吃什么。 (Bạn muốn ăn cái gì thì ăn cái đó.)",
+            "zh": "你想吃什么就吃什么。",
+            "pinyin": "nǐ xiǎng chī shén me jiù chī shén me 。",
+            "vi": "Bạn muốn ăn cái gì thì ăn cái đó."
+          },
+          {
+            "rawZh": "你想去哪儿就去哪儿。 (Bạn muốn đi đâu thì đi đó.)",
+            "zh": "你想去哪儿就去哪儿。",
+            "pinyin": "nǐ xiǎng qù nǎ ér jiù qù nǎ ér 。",
+            "vi": "Bạn muốn đi đâu thì đi đó."
+          },
+          {
+            "rawZh": "你想什么时候来就什么时候来。 (Bạn muốn đến lúc nào thì đến lúc đó.)",
+            "zh": "你想什么时候来就什么时候来。",
+            "pinyin": "nǐ xiǎng shén me shí hòu lái jiù shén me shí hòu lái 。",
+            "vi": "Bạn muốn đến lúc nào thì đến lúc đó."
+          },
+          {
+            "rawZh": "谁想去就去。 (Ai muốn đi thì cứ đi.)",
+            "zh": "谁想去就去。",
+            "pinyin": "shuí xiǎng qù jiù qù 。",
+            "vi": "Ai muốn đi thì cứ đi."
+          }
+        ],
+        "tables": []
+      }
+    ]
+  },
+  {
+    "lessonId": 9,
+    "lessonKey": "Bài 9",
+    "lessonTitleZh": "她的汉语说得跟中国人一样好",
+    "lessonTitleVi": "Cô ấy nói tiếng Trung hay như người Trung Quốc vậy",
+    "lessonTitleFull": "Bài 9: 她的汉语说得跟中国人一样好 (HSK 3 v2.0)",
+    "grammarPoints": [
+      {
+        "id": "hsk3_20_b9_g1",
+        "num": 1,
+        "title": "Cấu trúc 越 A 越 B",
+        "explanation": "Cách dùng: Biểu thị mức độ của sự vật/hành động thay đổi theo sự thay đổi của mức độ khác (\"càng... càng...\").",
+        "formula": "Công thức: 越 + V/Adj + 越 + V/Adj",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "雨越下越大。 (Trời mưa càng lúc càng to.)",
+            "zh": "雨越下越大。",
+            "pinyin": "yǔ yuè xià yuè dà 。",
+            "vi": "Trời mưa càng lúc càng to."
+          },
+          {
+            "rawZh": "他跑得越快越好。 (Anh ấy chạy càng nhanh càng tốt.)",
+            "zh": "他跑得越快越好。",
+            "pinyin": "tā pǎo dé yuè kuài yuè hǎo 。",
+            "vi": "Anh ấy chạy càng nhanh càng tốt."
+          },
+          {
+            "rawZh": "天气越热，我越想喝水。 (Thời tiết càng nóng, tôi càng muốn uống nước.)",
+            "zh": "天气越热，我越想喝水。",
+            "pinyin": "tiān qì yuè rè ， wǒ yuè xiǎng hē shuǐ 。",
+            "vi": "Thời tiết càng nóng, tôi càng muốn uống nước."
+          },
+          {
+            "rawZh": "汉语越学越有意思。 (Tiếng Hán càng học càng thú vị.)",
+            "zh": "汉语越学越有意思。",
+            "pinyin": "hàn yǔ yuè xué yuè yǒu yì sī 。",
+            "vi": "Tiếng Hán càng học càng thú vị."
+          }
+        ],
+        "tables": []
+      },
+      {
+        "id": "hsk3_20_b9_g2",
+        "num": 2,
+        "title": "Cấu trúc so sánh: A 跟 B 一样 (+ tính từ)",
+        "explanation": "Cách dùng: Dùng để so sánh hai đối tượng có tính chất tương đồng.",
+        "formula": "Công thức: A + 跟 + B + 一样 + (Tính từ)",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "我跟你一样高。 (Tôi cao bằng bạn.)",
+            "zh": "我跟你一样高。",
+            "pinyin": "wǒ gēn nǐ yí yàng gāo 。",
+            "vi": "Tôi cao bằng bạn."
+          },
+          {
+            "rawZh": "他的汉语跟老师一样好。 (Tiếng Hán của anh ấy tốt như của thầy giáo.)",
+            "zh": "他的汉语跟老师一样好。",
+            "pinyin": "tā de hàn yǔ gēn lǎo shī yí yàng hǎo 。",
+            "vi": "Tiếng Hán của anh ấy tốt như của thầy giáo."
+          },
+          {
+            "rawZh": "这个衣服的颜色跟我的一样。 (Màu sắc của chiếc áo này giống với của tôi.)",
+            "zh": "这个衣服的颜色跟我的一样。",
+            "pinyin": "zhè ge yī fu de yán sè gēn wǒ de yí yàng 。",
+            "vi": "Màu sắc của chiếc áo này giống với của tôi."
+          },
+          {
+            "rawZh": "他做得跟我一样快。 (Anh ấy làm nhanh bằng tôi.)",
+            "zh": "他做得跟我一样快。",
+            "pinyin": "tā zuò dé gēn wǒ yí yàng kuài 。",
+            "vi": "Anh ấy làm nhanh bằng tôi."
+          }
+        ],
+        "tables": []
+      }
+    ]
+  },
+  {
+    "lessonId": 10,
+    "lessonKey": "Bài 10",
+    "lessonTitleZh": "数学比历史难多了",
+    "lessonTitleVi": "Toán khó hơn Lịch sử nhiều",
+    "lessonTitleFull": "Bài 10: 数学比历史难多了 (HSK 3 v2.0)",
+    "grammarPoints": [
+      {
+        "id": "hsk3_20_b10_g1",
+        "num": 1,
+        "title": "Cấu trúc so sánh (2)",
+        "explanation": "Cách dùng:\n• So sánh hơn (A > B): Dùng cấu trúc A + 比 + B + Tính từ + (一点儿/一些/得多/多了) để chỉ mức độ chênh lệch.一点儿/一些: Chênh lệch ít.得多/多了: Chênh lệch nhiều.\n• 一点儿/一些: Chênh lệch ít.\n• 得多/多了: Chênh lệch nhiều.\n• So sánh kém (A < B): Dùng cấu trúc A + 没有 + B + (这么/那么) + Tính từ để diễn tả A không đạt mức độ bằng B.",
+        "formula": "",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "他比我高一点儿。 (Anh ấy cao hơn tôi một chút.)",
+            "zh": "他比我高一点儿。",
+            "pinyin": "tā bǐ wǒ gāo yì diǎn ér 。",
+            "vi": "Anh ấy cao hơn tôi một chút."
+          },
+          {
+            "rawZh": "今天比昨天冷得多。 (Hôm nay lạnh hơn hôm qua rất nhiều.)",
+            "zh": "今天比昨天冷得多。",
+            "pinyin": "jīn tiān bǐ zuó tiān lěng dé duō 。",
+            "vi": "Hôm nay lạnh hơn hôm qua rất nhiều."
+          },
+          {
+            "rawZh": "我没有他高。 (Tôi không cao bằng anh ấy.)",
+            "zh": "我没有他高。",
+            "pinyin": "wǒ méi yǒu tā gāo 。",
+            "vi": "Tôi không cao bằng anh ấy."
+          },
+          {
+            "rawZh": "今天没有昨天那么冷。 (Hôm nay không lạnh bằng hôm qua.)",
+            "zh": "今天没有昨天那么冷。",
+            "pinyin": "jīn tiān méi yǒu zuó tiān nà me lěng 。",
+            "vi": "Hôm nay không lạnh bằng hôm qua."
+          }
+        ],
+        "tables": []
+      },
+      {
+        "id": "hsk3_20_b10_g2",
+        "num": 2,
+        "title": "Số ước lượng (一二, 一两, 两三, 三四)",
+        "explanation": "Cách dùng: Dùng hai số liền kề để chỉ số lượng xấp xỉ.",
+        "formula": "Công thức: Số 1 + Số 2 + Lượng từ + Danh từ",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "一两天。 (Một hai ngày.)",
+            "zh": "一两天。",
+            "pinyin": "yì liǎng tiān 。",
+            "vi": "Một hai ngày."
+          },
+          {
+            "rawZh": "两三个人。 (Hai ba người.)",
+            "zh": "两三个人。",
+            "pinyin": "liǎng sān gè rén 。",
+            "vi": "Hai ba người."
+          },
+          {
+            "rawZh": "三四本书。 (Ba bốn quyển sách.)",
+            "zh": "三四本书。",
+            "pinyin": "sān sì běn shū 。",
+            "vi": "Ba bốn quyển sách."
+          },
+          {
+            "rawZh": "一两块钱。 (Một hai đồng.)",
+            "zh": "一两块钱。",
+            "pinyin": "yì liǎng kuài qián 。",
+            "vi": "Một hai đồng."
+          }
+        ],
+        "tables": []
+      }
+    ]
+  },
+  {
+    "lessonId": 11,
+    "lessonKey": "Bài 11",
+    "lessonTitleZh": "别忘了把空调关了",
+    "lessonTitleVi": "Đừng quên tắt điều hòa nhé",
+    "lessonTitleFull": "Bài 11: 别忘了把空调关了 (HSK 3 v2.0)",
+    "grammarPoints": [
+      {
+        "id": "hsk3_20_b11_g1",
+        "num": 1,
+        "title": "Câu chữ 把 (1)",
+        "explanation": "Cách dùng: Dùng để nhấn mạnh sự tác động của chủ ngữ lên đối tượng (tân ngữ), làm cho đối tượng đó thay đổi trạng thái, vị trí hoặc bị tiêu hủy.",
+        "formula": "Công thức: S + 把 + O + V + Thành phần bổ sung (Bổ ngữ kết quả/hướng/trạng thái, \"了\", lặp lại động từ...)",
+        "note": "Lưu ý quan trọng:\n• Tân ngữ (O): Phải là đối tượng cụ thể, xác định (có \"这\", \"那\", \"我的\"...) hoặc người/vật mà người nghe đã biết.\n• Động từ (V): Không bao giờ đứng một mình. Bắt buộc phải có thành phần khác đi kèm sau động từ (bổ ngữ kết quả, bổ ngữ hướng, bổ ngữ trạng thái, \"了\",...) để chỉ rõ kết quả tác động.\n• Phó từ/Động từ năng nguyện: Các phó từ phủ định (不, 没) và động từ năng nguyện (能, 想, 要...) bắt buộc phải đặt trước chữ \"把\", không được đặt sau.",
+        "examples": [
+          {
+            "rawZh": "请把桌子上的那本书放在包里。 (Xin hãy đặt quyển sách trên bàn vào trong túi.)",
+            "zh": "请把桌子上的那本书放在包里。",
+            "pinyin": "qǐng bǎ zhuō zi shàng de nà běn shū fàng zài bāo lǐ 。",
+            "vi": "Xin hãy đặt quyển sách trên bàn vào trong túi."
+          },
+          {
+            "rawZh": "我已经把老师给的汉语作业做完了。 (Tôi đã làm xong bài tập tiếng Hán mà giáo viên đã cho.)",
+            "zh": "我已经把老师给的汉语作业做完了。",
+            "pinyin": "wǒ yǐ jīng bǎ lǎo shī gěi de hàn yǔ zuò yè zuò wán le 。",
+            "vi": "Tôi đã làm xong bài tập tiếng Hán mà giáo viên đã cho."
+          },
+          {
+            "rawZh": "你能把那扇门关上吗？外面太冷了。 (Bạn có thể đóng cánh cửa đó lại không? Bên ngoài lạnh quá.)",
+            "zh": "你能把那扇门关上吗？外面太冷了。",
+            "pinyin": "nǐ néng bǎ nà shàn mén guān shàng ma ？ wài miàn tài lěng le 。",
+            "vi": "Bạn có thể đóng cánh cửa đó lại không? Bên ngoài lạnh quá."
+          },
+          {
+            "rawZh": "他把这辆旧自行车卖给了我的同学。 (Anh ấy đã bán chiếc xe đạp cũ này cho bạn học của tôi.)",
+            "zh": "他把这辆旧自行车卖给了我的同学。",
+            "pinyin": "tā bǎ zhè liàng jiù zì xíng chē mài gěi le wǒ de tóng xué 。",
+            "vi": "Anh ấy đã bán chiếc xe đạp cũ này cho bạn học của tôi."
+          },
+          {
+            "rawZh": "别把那个坏掉的杯子放在桌子上。 (Đừng để cái cốc bị hỏng kia lên bàn.)",
+            "zh": "别把那个坏掉的杯子放在桌子上。",
+            "pinyin": "bié bǎ nà ge huài diào de bēi zi fàng zài zhuō zi shàng 。",
+            "vi": "Đừng để cái cốc bị hỏng kia lên bàn."
+          }
+        ],
+        "tables": []
+      },
+      {
+        "id": "hsk3_20_b11_g2",
+        "num": 2,
+        "title": "Số ước lượng với 左右",
+        "explanation": "Cách dùng: Biểu thị khoảng, xấp xỉ, đứng sau số lượng.",
+        "formula": "Công thức: Số + Lượng từ + (Danh từ) + 左右",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "三点左右。 (Khoảng 3 giờ.)",
+            "zh": "三点左右。",
+            "pinyin": "sān diǎn zuǒ yòu 。",
+            "vi": "Khoảng 3 giờ."
+          },
+          {
+            "rawZh": "十个人左右。 (Khoảng 10 người.)",
+            "zh": "十个人左右。",
+            "pinyin": "shí gè rén zuǒ yòu 。",
+            "vi": "Khoảng 10 người."
+          },
+          {
+            "rawZh": "五百块左右。 (Khoảng 500 đồng.)",
+            "zh": "五百块左右。",
+            "pinyin": "wǔ bǎi kuài zuǒ yòu 。",
+            "vi": "Khoảng 500 đồng."
+          },
+          {
+            "rawZh": "一个小时左右。 (Khoảng 1 tiếng đồng hồ.)",
+            "zh": "一个小时左右。",
+            "pinyin": "yí gè xiǎo shí zuǒ yòu 。",
+            "vi": "Khoảng 1 tiếng đồng hồ."
+          }
+        ],
+        "tables": []
+      }
+    ]
+  },
+  {
+    "lessonId": 12,
+    "lessonKey": "Bài 12",
+    "lessonTitleZh": "把重要的东西放在我这儿吧",
+    "lessonTitleVi": "Để những thứ quan trọng ở chỗ tôi đi",
+    "lessonTitleFull": "Bài 12: 把重要的东西放在我这儿吧 (HSK 3 v2.0)",
+    "grammarPoints": [
+      {
+        "id": "hsk3_20_b12_g1",
+        "num": 1,
+        "title": "Phân biệt 才 (cái) và 就 (jiù)",
+        "explanation": "Cách dùng:\n• 才 (cái): Diễn tả hành động xảy ra muộn hơn dự kiến, mất nhiều thời gian, hoặc điều kiện chưa đủ. (Nghĩa: mới, chỉ mới).\n• 就 (jiù): Diễn tả hành động xảy ra sớm hơn dự kiến, thời gian ngắn, hoặc diễn ra thuận lợi, nhanh chóng. (Nghĩa: liền, đã, thì).\n• Khẳng định: S + (Thời gian/Điều kiện) + 才/就 + Động từ\n• Câu hỏi: S + 几点/什么时候 + 才/就 + Động từ?",
+        "formula": "Công thức:",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "他八点就来了。 (Anh ấy 8 giờ đã đến rồi (đến sớm).)",
+            "zh": "他八点就来了。",
+            "pinyin": "tā bā diǎn jiù lái le 。",
+            "vi": "Anh ấy 8 giờ đã đến rồi (đến sớm)."
+          },
+          {
+            "rawZh": "他八点才来。 (Anh ấy 8 giờ mới đến (đến muộn).)",
+            "zh": "他八点才来。",
+            "pinyin": "tā bā diǎn cái lái 。",
+            "vi": "Anh ấy 8 giờ mới đến (đến muộn)."
+          },
+          {
+            "rawZh": "你几点才去学校？ (Mấy giờ bạn mới đi học?)",
+            "zh": "你几点才去学校？",
+            "pinyin": "nǐ jǐ diǎn cái qù xué xiào ？",
+            "vi": "Mấy giờ bạn mới đi học?"
+          },
+          {
+            "rawZh": "我做完了作业就睡觉。 (Tôi làm xong bài tập là đi ngủ liền (nhanh).)",
+            "zh": "我做完了作业就睡觉。",
+            "pinyin": "wǒ zuò wán le zuò yè jiù shuì jiào 。",
+            "vi": "Tôi làm xong bài tập là đi ngủ liền (nhanh)."
+          }
+        ],
+        "tables": []
+      },
+      {
+        "id": "hsk3_20_b12_g2",
+        "num": 2,
+        "title": "Câu chữ 把 (2) - Tác động vào vị trí/đối tượng",
+        "explanation": "Cách dùng: Dùng khi muốn nói đến việc di chuyển một vật đến một nơi nào đó hoặc đưa/gửi cho ai đó.\n• Phủ định: S + 不/没 + 把 + O + V + ...\n• Câu hỏi: S + 把 + O + V + 在/到/给 + [Nơi chốn/Người nhận] + 吗?",
+        "formula": "Công thức: S + 把 + O + V + 在/到/给 + [Nơi chốn/Người nhận]",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "我把书放在桌子上。 (Tôi để sách ở trên bàn.)",
+            "zh": "我把书放在桌子上。",
+            "pinyin": "wǒ bǎ shū fàng zài zhuō zi shàng 。",
+            "vi": "Tôi để sách ở trên bàn."
+          },
+          {
+            "rawZh": "请把信寄到那个地址。 (Xin hãy gửi thư đến địa chỉ kia.)",
+            "zh": "请把信寄到那个地址。",
+            "pinyin": "qǐng bǎ xìn jì dào nà ge dì zhǐ 。",
+            "vi": "Xin hãy gửi thư đến địa chỉ kia."
+          },
+          {
+            "rawZh": "他没把苹果给我。 (Anh ấy chưa đưa quả táo cho tôi.)",
+            "zh": "他没把苹果给我。",
+            "pinyin": "tā méi bǎ píng guǒ gěi wǒ 。",
+            "vi": "Anh ấy chưa đưa quả táo cho tôi."
+          },
+          {
+            "rawZh": "你能把这个药送到医院吗？ (Bạn có thể mang thuốc này đến bệnh viện không?)",
+            "zh": "你能把这个药送到医院吗？",
+            "pinyin": "nǐ néng bǎ zhè ge yào sòng dào yī yuàn ma ？",
+            "vi": "Bạn có thể mang thuốc này đến bệnh viện không?"
+          }
+        ],
+        "tables": []
+      }
+    ]
+  },
+  {
+    "lessonId": 13,
+    "lessonKey": "Bài 13",
+    "lessonTitleZh": "我是走回来的",
+    "lessonTitleVi": "Tôi đi bộ về",
+    "lessonTitleFull": "Bài 13: 我是走回来的 (HSK 3 v2.0)",
+    "grammarPoints": [
+      {
+        "id": "hsk3_20_b13_g1",
+        "num": 1,
+        "title": "Bổ ngữ phương hướng dạng kết hợp (Compound)",
+        "explanation": "Cách dùng: Kết hợp động từ chỉ hướng (Lên, xuống, vào, ra, về, qua) với 来 (hướng về người nói) hoặc 去 (hướng ra xa người nói).",
+        "formula": "Công thức: Động từ + (Hướng: 上/下/进/出/回/过) + 来/去",
+        "note": "Lưu ý tân ngữ nơi chốn: Phải đặt giữa bổ ngữ hướng và 来/去 (V + Hướng + Nơi chốn + 来/去).",
+        "examples": [
+          {
+            "rawZh": "快上来吧！ (Mau lên đây đi!)",
+            "zh": "快上来吧！",
+            "pinyin": "kuài shàng lái ba ！",
+            "vi": "Mau lên đây đi!"
+          },
+          {
+            "rawZh": "他走进教室去了。 (Anh ấy đi vào trong lớp rồi (người nói ở ngoài).)",
+            "zh": "他走进教室去了。",
+            "pinyin": "tā zǒu jìn jiào shì qù le 。",
+            "vi": "Anh ấy đi vào trong lớp rồi (người nói ở ngoài)."
+          },
+          {
+            "rawZh": "请你把书带回来。 (Xin hãy mang sách về đây.)",
+            "zh": "请你把书带回来。",
+            "pinyin": "qǐng nǐ bǎ shū dài huí lái 。",
+            "vi": "Xin hãy mang sách về đây."
+          },
+          {
+            "rawZh": "他走不出来。 (Anh ấy không thể đi ra ngoài được.)",
+            "zh": "他走不出来。",
+            "pinyin": "tā zǒu bù chū lái 。",
+            "vi": "Anh ấy không thể đi ra ngoài được."
+          }
+        ],
+        "tables": []
+      },
+      {
+        "id": "hsk3_20_b13_g2",
+        "num": 2,
+        "title": "Cấu trúc 一边……一边……",
+        "explanation": "Cách dùng: Diễn tả hai hành động diễn ra đồng thời.",
+        "formula": "Công thức: 一边 + V1 + 一边 + V2",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "我们一边喝茶一边看电影。 (Chúng tôi vừa uống trà vừa xem phim.)",
+            "zh": "我们一边喝茶一边看电影。",
+            "pinyin": "wǒ men yì biān hē chá yì biān kàn diàn yǐng 。",
+            "vi": "Chúng tôi vừa uống trà vừa xem phim."
+          },
+          {
+            "rawZh": "他喜欢一边听音乐一边写作业。 (Anh ấy thích vừa nghe nhạc vừa làm bài tập.)",
+            "zh": "他喜欢一边听音乐一边写作业。",
+            "pinyin": "tā xǐ huan yì biān tīng yīn yuè yì biān xiě zuò yè 。",
+            "vi": "Anh ấy thích vừa nghe nhạc vừa làm bài tập."
+          },
+          {
+            "rawZh": "他们一边吃饭一边聊天。 (Họ vừa ăn cơm vừa trò chuyện.)",
+            "zh": "他们一边吃饭一边聊天。",
+            "pinyin": "tā men yì biān chī fàn yì biān liáo tiān 。",
+            "vi": "Họ vừa ăn cơm vừa trò chuyện."
+          },
+          {
+            "rawZh": "你可以一边工作一边学习吗？ (Bạn có thể vừa làm việc vừa học tập không?)",
+            "zh": "你可以一边工作一边学习吗？",
+            "pinyin": "nǐ kě yǐ yì biān gōng zuò yì biān xué xí ma ？",
+            "vi": "Bạn có thể vừa làm việc vừa học tập không?"
+          }
+        ],
+        "tables": []
+      }
+    ]
+  },
+  {
+    "lessonId": 14,
+    "lessonKey": "Bài 14",
+    "lessonTitleZh": "你把水果拿过来",
+    "lessonTitleVi": "Bạn mang hoa quả lại đây",
+    "lessonTitleFull": "Bài 14: 你把水果拿过来 (HSK 3 v2.0)",
+    "grammarPoints": [
+      {
+        "id": "hsk3_20_b14_g1",
+        "num": 1,
+        "title": "Câu chữ 把 (3): A 把 B + động từ + BNKQ/BNPH",
+        "explanation": "Cách dùng: Dùng để nhấn mạnh kết quả hoặc sự thay đổi vị trí của đối tượng sau khi bị tác động.\n• Phủ định: S + 不/没 + 把 + O + V + ...\n• Câu hỏi: S + 把 + O + V + Bổ ngữ + 吗?",
+        "formula": "Công thức: S + 把 + O + V + Bổ ngữ kết quả/Bổ ngữ phương hướng",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "我把作业做完了。 (Tôi đã làm xong bài tập rồi.)",
+            "zh": "我把作业做完了。",
+            "pinyin": "wǒ bǎ zuò yè zuò wán le 。",
+            "vi": "Tôi đã làm xong bài tập rồi."
+          },
+          {
+            "rawZh": "他把门关上了。 (Anh ấy đóng cửa lại rồi.)",
+            "zh": "他把门关上了。",
+            "pinyin": "tā bǎ mén guān shàng le 。",
+            "vi": "Anh ấy đóng cửa lại rồi."
+          },
+          {
+            "rawZh": "你没把我的书带回来吗？ (Bạn không mang sách của tôi về à?)",
+            "zh": "你没把我的书带回来吗？",
+            "pinyin": "nǐ méi bǎ wǒ de shū dài huí lái ma ？",
+            "vi": "Bạn không mang sách của tôi về à?"
+          },
+          {
+            "rawZh": "他能不能把那把椅子搬走？ (Anh ấy có thể chuyển cái ghế đó đi không?)",
+            "zh": "他能不能把那把椅子搬走？",
+            "pinyin": "tā néng bu néng bǎ nà bǎ yǐ zi bān zǒu ？",
+            "vi": "Anh ấy có thể chuyển cái ghế đó đi không?"
+          }
+        ],
+        "tables": []
+      },
+      {
+        "id": "hsk3_20_b14_g2",
+        "num": 2,
+        "title": "Cấu trúc biểu thị trình tự: 先……再……然后……",
+        "explanation": "Cách dùng: Dùng để liệt kê các hành động xảy ra theo trình tự thời gian.",
+        "formula": "Công thức: S + 先 + V1, 再 + V2, 然后 + V3",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "我们先去吃饭，再去看电影。 (Chúng ta đi ăn cơm trước, rồi đi xem phim sau.)",
+            "zh": "我们先去吃饭，再去看电影。",
+            "pinyin": "wǒ men xiān qù chī fàn ， zài qù kàn diàn yǐng 。",
+            "vi": "Chúng ta đi ăn cơm trước, rồi đi xem phim sau."
+          },
+          {
+            "rawZh": "你先写名字，然后写汉字。 (Bạn viết tên trước, sau đó viết chữ Hán.)",
+            "zh": "你先写名字，然后写汉字。",
+            "pinyin": "nǐ xiān xiě míng zì ， rán hòu xiě hàn zì 。",
+            "vi": "Bạn viết tên trước, sau đó viết chữ Hán."
+          },
+          {
+            "rawZh": "我先洗澡，再睡觉。 (Tôi tắm trước, rồi đi ngủ.)",
+            "zh": "我先洗澡，再睡觉。",
+            "pinyin": "wǒ xiān xǐ zǎo ， zài shuì jiào 。",
+            "vi": "Tôi tắm trước, rồi đi ngủ."
+          },
+          {
+            "rawZh": "先买票，然后进站。 (Mua vé trước, sau đó vào ga.)",
+            "zh": "先买票，然后进站。",
+            "pinyin": "xiān mǎi piào ， rán hòu jìn zhàn 。",
+            "vi": "Mua vé trước, sau đó vào ga."
+          }
+        ],
+        "tables": []
+      }
+    ]
+  },
+  {
+    "lessonId": 15,
+    "lessonKey": "Bài 15",
+    "lessonTitleZh": "其他都没什么问题",
+    "lessonTitleVi": "Những cái khác đều không có vấn đề gì",
+    "lessonTitleFull": "Bài 15: 其他都没什么问题 (HSK 3 v2.0)",
+    "grammarPoints": [
+      {
+        "id": "hsk3_20_b15_g1",
+        "num": 1,
+        "title": "Cấu trúc Ngoài... ra: 除了……以外，都/还/也……",
+        "explanation": "Cách dùng:\n• Ngoài... ra, những cái khác đều... (除了...以外, ...都...)\n• Ngoài... ra, còn... (除了...以外, ...还/也...)",
+        "formula": "Công thức: 除了 + A + 以外, S + 都/还/也 + V",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "除了小王以外，我们都去了。 (Ngoài Tiểu Vương ra, chúng tôi đều đi rồi.)",
+            "zh": "除了小王以外，我们都去了。",
+            "pinyin": "chú le xiǎo wáng yǐ wài ， wǒ men dōu qù le 。",
+            "vi": "Ngoài Tiểu Vương ra, chúng tôi đều đi rồi."
+          },
+          {
+            "rawZh": "除了汉语，我还学英语。 (Ngoài tiếng Hán, tôi còn học tiếng Anh.)",
+            "zh": "除了汉语，我还学英语。",
+            "pinyin": "chú le hàn yǔ ， wǒ hái xué yīng yǔ 。",
+            "vi": "Ngoài tiếng Hán, tôi còn học tiếng Anh."
+          },
+          {
+            "rawZh": "除了他以外，谁也不认识我。 (Ngoài anh ấy ra, không ai quen tôi cả.)",
+            "zh": "除了他以外，谁也不认识我。",
+            "pinyin": "chú le tā yǐ wài ， shuí yě bú rèn shi wǒ 。",
+            "vi": "Ngoài anh ấy ra, không ai quen tôi cả."
+          },
+          {
+            "rawZh": "除了苹果，我还想买一些香蕉。 (Ngoài táo, tôi còn muốn mua ít chuối.)",
+            "zh": "除了苹果，我还想买一些香蕉。",
+            "pinyin": "chú le píng guǒ ， wǒ hái xiǎng mǎi yì xiē xiāng jiāo 。",
+            "vi": "Ngoài táo, tôi còn muốn mua ít chuối."
+          }
+        ],
+        "tables": []
+      },
+      {
+        "id": "hsk3_20_b15_g2",
+        "num": 2,
+        "title": "Đại từ nghi vấn dùng linh hoạt & phiếm chỉ: 什么",
+        "explanation": "Cách dùng: Dùng để biểu thị sự tùy ý, không giới hạn.\n• Biểu thị tính tùy ý, không giới hạn hoặc thay thế cho sự vật/hành động không xác định (\"bất kỳ cái gì / cái gì cũng...\").\nCách dùng: Dùng để thay thế cho sự vật hoặc hành động không xác định, biểu thị tính tùy ý (\"bất kỳ cái gì/bất cứ cái gì\").",
+        "formula": "Công thức: S + V + 什么 + O + 就 + V + 什么",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "周末你有没有什么打算？ (Cuối tuần bạn có dự định gì không?)",
+            "zh": "周末你有没有什么打算？",
+            "pinyin": "zhōu mò nǐ yǒu méi yǒu shén me dǎ suàn ？",
+            "vi": "Cuối tuần bạn có dự định gì không?"
+          },
+          {
+            "rawZh": "我没有什么特别的计划。 (Tôi không có kế hoạch gì đặc biệt.)",
+            "zh": "我没有什么特别的计划。",
+            "pinyin": "wǒ méi yǒu shén me tè bié de jì huà 。",
+            "vi": "Tôi không có kế hoạch gì đặc biệt."
+          },
+          {
+            "rawZh": "你想吃什么就吃什么。 (Bạn muốn ăn gì thì ăn đó.)",
+            "zh": "你想吃什么就吃什么。",
+            "pinyin": "nǐ xiǎng chī shén me jiù chī shén me 。",
+            "vi": "Bạn muốn ăn gì thì ăn đó."
+          },
+          {
+            "rawZh": "你想买什么就买什么。 (Bạn muốn mua gì thì mua đó.)",
+            "zh": "你想买什么就买什么。",
+            "pinyin": "nǐ xiǎng mǎi shén me jiù mǎi shén me 。",
+            "vi": "Bạn muốn mua gì thì mua đó."
+          }
+        ],
+        "tables": []
+      },
+      {
+        "id": "hsk3_20_b15_g3",
+        "num": 3,
+        "title": "Cách diễn tả mức độ: 极了",
+        "explanation": "Cách dùng: Đứng sau tính từ để biểu thị mức độ cao (cực kỳ, rất).\n• Phủ định: Không dùng trực tiếp với \"极了\" (thường dùng 不 + Adj + 得很).",
+        "formula": "Công thức: Tính từ + 极了",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "这个汉字漂亮极了。 (Chữ Hán này đẹp cực kỳ.)",
+            "zh": "这个汉字漂亮极了。",
+            "pinyin": "zhè ge hàn zì piào liang jí le 。",
+            "vi": "Chữ Hán này đẹp cực kỳ."
+          },
+          {
+            "rawZh": "我高兴极了。 (Tôi vui cực kỳ.)",
+            "zh": "我高兴极了。",
+            "pinyin": "wǒ gāo xìng jí le 。",
+            "vi": "Tôi vui cực kỳ."
+          },
+          {
+            "rawZh": "天气好极了。 (Thời tiết tốt cực kỳ.)",
+            "zh": "天气好极了。",
+            "pinyin": "tiān qì hǎo jí le 。",
+            "vi": "Thời tiết tốt cực kỳ."
+          },
+          {
+            "rawZh": "那个电影精彩极了。 (Bộ phim đó hay cực kỳ.)",
+            "zh": "那个电影精彩极了。",
+            "pinyin": "nà ge diàn yǐng jīng cǎi jí le 。",
+            "vi": "Bộ phim đó hay cực kỳ."
+          }
+        ],
+        "tables": []
+      }
+    ]
+  },
+  {
+    "lessonId": 16,
+    "lessonKey": "Bài 16",
+    "lessonTitleZh": "我现在累得下了班就想睡觉",
+    "lessonTitleVi": "Bây giờ tôi mệt đến mức tan làm chỉ muốn đi ngủ",
+    "lessonTitleFull": "Bài 16: 我现在累得下了班就想睡觉 (HSK 3 v2.0)",
+    "grammarPoints": [
+      {
+        "id": "hsk3_20_b16_g1",
+        "num": 1,
+        "title": "Cấu trúc Nếu... thì (如果……（的话），（主语）就……)",
+        "explanation": "Cách dùng: Diễn tả giả thiết hoặc điều kiện xảy ra sự việc.",
+        "formula": "Công thức: Nếu + [Giả thiết] + (的话), + (Chủ ngữ) + 就 + [Kết quả].",
+        "note": "Lưu ý: \"习惯\" có thể lược bỏ. \"就\" thường đứng trước động từ trong vế kết quả.",
+        "examples": [
+          {
+            "rawZh": "如果你有时间，我们就去吃饭。 (Nếu bạn có thời gian, chúng ta đi ăn cơm.)",
+            "zh": "如果你有时间，我们就去吃饭。",
+            "pinyin": "rú guǒ nǐ yǒu shí jiān ， wǒ men jiù qù chī fàn 。",
+            "vi": "Nếu bạn có thời gian, chúng ta đi ăn cơm."
+          },
+          {
+            "rawZh": "如果你不高兴，就不看这个电影。 (Nếu bạn không vui, thì đừng xem bộ phim này.)",
+            "zh": "如果你不高兴，就不看这个电影。",
+            "pinyin": "rú guǒ nǐ bù gāo xìng ， jiù bú kàn zhè ge diàn yǐng 。",
+            "vi": "Nếu bạn không vui, thì đừng xem bộ phim này."
+          },
+          {
+            "rawZh": "如果老师在，我们就学习汉语。 (Nếu thầy giáo ở đây, chúng ta sẽ học tiếng Hán.)",
+            "zh": "如果老师在，我们就学习汉语。",
+            "pinyin": "rú guǒ lǎo shī zài ， wǒ men jiù xué xí hàn yǔ 。",
+            "vi": "Nếu thầy giáo ở đây, chúng ta sẽ học tiếng Hán."
+          },
+          {
+            "rawZh": "如果你想喝咖啡，我就去买。 (Nếu bạn muốn uống cà phê, tôi sẽ đi mua.)",
+            "zh": "如果你想喝咖啡，我就去买。",
+            "pinyin": "rú guǒ nǐ xiǎng hē kā fēi ， wǒ jiù qù mǎi 。",
+            "vi": "Nếu bạn muốn uống cà phê, tôi sẽ đi mua."
+          },
+          {
+            "rawZh": "如果明天天气好，我们就出去运动。 (Nếu ngày mai thời tiết tốt, chúng ta đi ra ngoài tập thể dục.)",
+            "zh": "如果明天天气好，我们就出去运动。",
+            "pinyin": "rú guǒ míng tiān tiān qì hǎo ， wǒ men jiù chū qù yùn dòng 。",
+            "vi": "Nếu ngày mai thời tiết tốt, chúng ta đi ra ngoài tập thể dục."
+          }
+        ],
+        "tables": []
+      },
+      {
+        "id": "hsk3_20_b16_g2",
+        "num": 2,
+        "title": "Bổ ngữ trạng thái (Cấu trúc với 得)",
+        "explanation": "Cách dùng: Dùng để miêu tả, đánh giá kết quả hoặc mức độ của một hành động/tính chất.",
+        "formula": "Công thức: [Động từ/Tính từ] + 得 + [Cụm động từ/Tính từ]",
+        "note": "Lưu ý:\n• Phần đứng trước \"得\" thường là tính từ hoặc động từ.\n• Phần đứng sau \"得\" là cụm động từ hoặc tính từ để miêu tả trạng thái/kết quả của sự việc đó.\n• Nếu có tân ngữ, cần lặp lại động từ.",
+        "examples": [
+          {
+            "rawZh": "孩子玩儿得不想回家。 (Đứa trẻ chơi đến mức không muốn về nhà.)",
+            "zh": "孩子玩儿得不想回家。",
+            "pinyin": "hái zi wán ér dé bù xiǎng huí jiā 。",
+            "vi": "Đứa trẻ chơi đến mức không muốn về nhà."
+          },
+          {
+            "rawZh": "儿子累得下了班就睡觉了。 (Con trai mệt đến mức tan làm là đi ngủ ngay.)",
+            "zh": "儿子累得下了班就睡觉了。",
+            "pinyin": "ér zi lèi dé xià le bān jiù shuì jiào le 。",
+            "vi": "Con trai mệt đến mức tan làm là đi ngủ ngay."
+          },
+          {
+            "rawZh": "他高兴得跳了起来。 (Anh ấy vui đến mức nhảy cẫng lên.)",
+            "zh": "他高兴得跳了起来。",
+            "pinyin": "tā gāo xìng dé tiào le qǐ lái 。",
+            "vi": "Anh ấy vui đến mức nhảy cẫng lên."
+          },
+          {
+            "rawZh": "老师写汉字写得漂亮极了。 (Thầy giáo viết chữ Hán đẹp cực kỳ.)",
+            "zh": "老师写汉字写得漂亮极了。",
+            "pinyin": "lǎo shī xiě hàn zì xiě dé piào liang jí le 。",
+            "vi": "Thầy giáo viết chữ Hán đẹp cực kỳ."
+          },
+          {
+            "rawZh": "学生们学习得太累了。 (Các học sinh học đến mức mệt quá.)",
+            "zh": "学生们学习得太累了。",
+            "pinyin": "xué shēng men xué xí dé tài lèi le 。",
+            "vi": "Các học sinh học đến mức mệt quá."
+          }
+        ],
+        "tables": []
+      },
+      {
+        "id": "hsk3_20_b16_g3",
+        "num": 3,
+        "title": "Tính từ đơn âm tiết lặp lại (AA)",
+        "explanation": "Cách dùng: Nhấn mạnh tính chất, làm câu văn sinh động hơn.",
+        "formula": "Công thức: Tính từ + Tính từ.",
+        "note": "Lưu ý: Không dùng phó từ chỉ mức độ (rất, thật...) phía trước.",
+        "examples": [
+          {
+            "rawZh": "那件衣服红红的，真漂亮。 (Cái áo đó đỏ đỏ, thật đẹp.)",
+            "zh": "那件衣服红红的，真漂亮。",
+            "pinyin": "nà jiàn yī fu hóng hóng de ， zhēn piào liang 。",
+            "vi": "Cái áo đó đỏ đỏ, thật đẹp."
+          },
+          {
+            "rawZh": "那个白白的东西是牛奶。 (Cái thứ trắng trắng kia là sữa bò.)",
+            "zh": "那个白白的东西是牛奶。",
+            "pinyin": "nà ge bái bái de dōng xī shì niú nǎi 。",
+            "vi": "Cái thứ trắng trắng kia là sữa bò."
+          },
+          {
+            "rawZh": "他的眼睛大大的。 (Mắt của anh ấy to tròn.)",
+            "zh": "他的眼睛大大的。",
+            "pinyin": "tā de yǎn jīng dà dà de 。",
+            "vi": "Mắt của anh ấy to tròn."
+          },
+          {
+            "rawZh": "今天天气暖暖的，去运动吧。 (Thời tiết hôm nay ấm áp, đi tập thể dục đi.)",
+            "zh": "今天天气暖暖的，去运动吧。",
+            "pinyin": "jīn tiān tiān qì nuǎn nuǎn de ， qù yùn dòng ba 。",
+            "vi": "Thời tiết hôm nay ấm áp, đi tập thể dục đi."
+          },
+          {
+            "rawZh": "这个苹果甜甜的，好吃极了。 (Quả táo này ngọt ngọt, ngon cực kỳ.)",
+            "zh": "这个苹果甜甜的，好吃极了。",
+            "pinyin": "zhè ge píng guǒ tián tián de ， hǎo chī jí le 。",
+            "vi": "Quả táo này ngọt ngọt, ngon cực kỳ."
+          }
+        ],
+        "tables": []
+      }
+    ]
+  },
+  {
+    "lessonId": 17,
+    "lessonKey": "Bài 17",
+    "lessonTitleZh": "谁都有办法看好你的“病”",
+    "lessonTitleVi": "Ai cũng có cách chữa khỏi \"bệnh\" cho bạn",
+    "lessonTitleFull": "Bài 17: 谁都有办法看好你的“病” (HSK 3 v2.0)",
+    "grammarPoints": [
+      {
+        "id": "hsk3_20_b17_g1",
+        "num": 1,
+        "title": "Động từ 2 âm tiết lặp lại (ABAB)",
+        "explanation": "Cách dùng: Biểu thị hành động diễn ra trong thời gian ngắn, thử làm, hoặc làm nhẹ nhàng.",
+        "formula": "Công thức: ABAB (Ví dụ: 休息休息).",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "我们休息休息吧。 (Chúng ta nghỉ ngơi một chút đi.)",
+            "zh": "我们休息休息吧。",
+            "pinyin": "wǒ men xiū xi xiū xi ba 。",
+            "vi": "Chúng ta nghỉ ngơi một chút đi."
+          },
+          {
+            "rawZh": "你学习学习汉语。 (Bạn học tập tiếng Hán một chút đi.)",
+            "zh": "你学习学习汉语。",
+            "pinyin": "nǐ xué xí xué xí hàn yǔ 。",
+            "vi": "Bạn học tập tiếng Hán một chút đi."
+          },
+          {
+            "rawZh": "你介绍介绍这个电影吧。 (Bạn giới thiệu qua một chút về bộ phim này đi.)",
+            "zh": "你介绍介绍这个电影吧。",
+            "pinyin": "nǐ jiè shào jiè shào zhè ge diàn yǐng ba 。",
+            "vi": "Bạn giới thiệu qua một chút về bộ phim này đi."
+          },
+          {
+            "rawZh": "我们打扫打扫房间。 (Chúng ta dọn dẹp phòng một chút.)",
+            "zh": "我们打扫打扫房间。",
+            "pinyin": "wǒ men dǎ sǎo dǎ sǎo fáng jiān 。",
+            "vi": "Chúng ta dọn dẹp phòng một chút."
+          },
+          {
+            "rawZh": "你准备准备，明天有考试。 (Bạn chuẩn bị một chút đi, ngày mai có bài thi.)",
+            "zh": "你准备准备，明天有考试。",
+            "pinyin": "nǐ zhǔn bèi zhǔn bèi ， míng tiān yǒu kǎo shì 。",
+            "vi": "Bạn chuẩn bị một chút đi, ngày mai có bài thi."
+          }
+        ],
+        "tables": []
+      },
+      {
+        "id": "hsk3_20_b17_g2",
+        "num": 2,
+        "title": "Đại từ nghi vấn dùng phiếm chỉ (谁，什么，怎么，哪儿 + 都)",
+        "explanation": "Cách dùng: Nhấn mạnh mọi đối tượng/sự vật đều như nhau trong phạm vi được nói đến (ai cũng, cái gì cũng, đâu cũng...).",
+        "formula": "Công thức: Nghi vấn từ + 都 + Động từ/Tính từ.",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "这个商店的东西，我什么都想买。 (Đồ ở cửa hàng này, cái gì tôi cũng muốn mua.)",
+            "zh": "这个商店的东西，我什么都想买。",
+            "pinyin": "zhè ge shāng diàn de dōng xī ， wǒ shén me dōu xiǎng mǎi 。",
+            "vi": "Đồ ở cửa hàng này, cái gì tôi cũng muốn mua."
+          },
+          {
+            "rawZh": "这里的人，谁都认识我。 (Mọi người ở đây, ai cũng quen tôi.)",
+            "zh": "这里的人，谁都认识我。",
+            "pinyin": "zhè lǐ de rén ， shuí dōu rèn shi wǒ 。",
+            "vi": "Mọi người ở đây, ai cũng quen tôi."
+          },
+          {
+            "rawZh": "无论怎么走，我都找不到饭店。 (Dù đi thế nào, tôi cũng không tìm thấy nhà hàng.)",
+            "zh": "无论怎么走，我都找不到饭店。",
+            "pinyin": "wú lùn zěn me zǒu ， wǒ dōu zhǎo bú dào fàn diàn 。",
+            "vi": "Dù đi thế nào, tôi cũng không tìm thấy nhà hàng."
+          },
+          {
+            "rawZh": "这里的汉语老师，哪儿都很漂亮。 (Các thầy cô tiếng Hán ở đây, đâu cũng rất đẹp.)",
+            "zh": "这里的汉语老师，哪儿都很漂亮。",
+            "pinyin": "zhè lǐ de hàn yǔ lǎo shī ， nǎ ér dōu hěn piào liang 。",
+            "vi": "Các thầy cô tiếng Hán ở đây, đâu cũng rất đẹp."
+          },
+          {
+            "rawZh": "什么我都不吃，因为我不饿。 (Cái gì tôi cũng không ăn, vì tôi không đói.)",
+            "zh": "什么我都不吃，因为我不饿。",
+            "pinyin": "shén me wǒ dōu bù chī ， yīn wèi wǒ bú è 。",
+            "vi": "Cái gì tôi cũng không ăn, vì tôi không đói."
+          }
+        ],
+        "tables": []
+      }
+    ]
+  },
+  {
+    "lessonId": 18,
+    "lessonKey": "Bài 18",
+    "lessonTitleZh": "我相信他们会同意的",
+    "lessonTitleVi": "Tôi tin họ sẽ đồng ý",
+    "lessonTitleFull": "Bài 18: 我相信他们会同意的 (HSK 3 v2.0)",
+    "grammarPoints": [
+      {
+        "id": "hsk3_20_b18_g1",
+        "num": 1,
+        "title": "Cấu trúc 只要……，就……",
+        "explanation": "Cách dùng: Biểu thị điều kiện duy nhất, chỉ cần đạt được điều kiện đó thì kết quả sẽ xảy ra.",
+        "formula": "Công thức: 只要 + [Điều kiện] + 就 + [Kết quả]",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "只要努力，就一定能成功。 (Chỉ cần nỗ lực thì nhất định sẽ thành công.)",
+            "zh": "只要努力，就一定能成功。",
+            "pinyin": "zhǐ yào nǔ lì ， jiù yí dìng néng chéng gōng 。",
+            "vi": "Chỉ cần nỗ lực thì nhất định sẽ thành công."
+          },
+          {
+            "rawZh": "只要有时间，我就去看你。 (Chỉ cần có thời gian, tôi sẽ đi thăm bạn.)",
+            "zh": "只要有时间，我就去看你。",
+            "pinyin": "zhǐ yào yǒu shí jiān ， wǒ jiù qù kàn nǐ 。",
+            "vi": "Chỉ cần có thời gian, tôi sẽ đi thăm bạn."
+          },
+          {
+            "rawZh": "只要你想学，我就教你。 (Chỉ cần bạn muốn học, tôi sẽ dạy bạn.)",
+            "zh": "只要你想学，我就教你。",
+            "pinyin": "zhǐ yào nǐ xiǎng xué ， wǒ jiù jiào nǐ 。",
+            "vi": "Chỉ cần bạn muốn học, tôi sẽ dạy bạn."
+          },
+          {
+            "rawZh": "只要明天不下雨，我们就去踢球。 (Chỉ cần ngày mai không mưa, chúng ta sẽ đi đá bóng.)",
+            "zh": "只要明天不下雨，我们就去踢球。",
+            "pinyin": "zhǐ yào míng tiān bú xià yǔ ， wǒ men jiù qù tī qiú 。",
+            "vi": "Chỉ cần ngày mai không mưa, chúng ta sẽ đi đá bóng."
+          }
+        ],
+        "tables": []
+      },
+      {
+        "id": "hsk3_20_b18_g2",
+        "num": 2,
+        "title": "Giới từ 关于",
+        "explanation": "Cách dùng: Dùng để đưa ra chủ đề, vấn đề mà hành động hay sự việc muốn đề cập đến (về, liên quan đến). Thường đứng đầu câu hoặc đầu cụm danh từ.",
+        "formula": "Công thức: 关于 + [Chủ đề/Vấn đề], + [Nội dung nói về chủ đề đó]",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "关于这个问题，我们可以再讨论。 (Về vấn đề này, chúng ta có thể thảo luận thêm.)",
+            "zh": "关于这个问题，我们可以再讨论。",
+            "pinyin": "guān yú zhè ge wèn tí ， wǒ men kě yǐ zài tǎo lùn 。",
+            "vi": "Về vấn đề này, chúng ta có thể thảo luận thêm."
+          },
+          {
+            "rawZh": "我看了一本关于历史的书。 (Tôi đã đọc một quyển sách về lịch sử.)",
+            "zh": "我看了一本关于历史的书。",
+            "pinyin": "wǒ kàn le yì běn guān yú lì shǐ de shū 。",
+            "vi": "Tôi đã đọc một quyển sách về lịch sử."
+          },
+          {
+            "rawZh": "关于他的工作，你了解多少？ (Về công việc của anh ấy, bạn biết được bao nhiêu?)",
+            "zh": "关于他的工作，你了解多少？",
+            "pinyin": "guān yú tā de gōng zuò ， nǐ liǎo jiě duō shǎo ？",
+            "vi": "Về công việc của anh ấy, bạn biết được bao nhiêu?"
+          },
+          {
+            "rawZh": "关于汉语学习，老师有很多建议。 (Về việc học tiếng Hán, giáo viên có rất nhiều gợi ý.)",
+            "zh": "关于汉语学习，老师有很多建议。",
+            "pinyin": "guān yú hàn yǔ xué xí ， lǎo shī yǒu hěn duō jiàn yì 。",
+            "vi": "Về việc học tiếng Hán, giáo viên có rất nhiều gợi ý."
+          }
+        ],
+        "tables": []
+      }
+    ]
+  },
+  {
+    "lessonId": 19,
+    "lessonKey": "Bài 19",
+    "lessonTitleZh": "你没看出来吗？",
+    "lessonTitleVi": "Bạn không nhận ra à?",
+    "lessonTitleFull": "Bài 19: 你没看出来吗？ (HSK 3 v2.0)",
+    "grammarPoints": [
+      {
+        "id": "hsk3_20_b19_g1",
+        "num": 1,
+        "title": "Nghĩa mở rộng của bổ ngữ chỉ phương hướng",
+        "explanation": "Cách dùng:\n• 出来 (chūlái): Dùng sau động từ để chỉ sự xuất hiện của vật mới, hoặc biểu thị sự nhận ra, phân biệt, bộc lộ ra (từ ẩn thành hiện).\n• 下来 (xiàlái): Dùng sau tính từ hoặc động từ để chỉ sự thay đổi của trạng thái từ mạnh sang yếu, từ chuyển động sang ngừng, từ nhanh sang chậm.\n• 起来 (qǐlái): Dùng sau động từ để diễn tả khả năng hồi tưởng, nhớ lại được hay không.\n• 看起来 (kàn qǐlái): Không mang nghĩa hồi tưởng, dùng để diễn tả sự đánh giá hay ước lượng khía cạnh nào đó thông qua quan sát, tương tự '看上去'.",
+        "formula": "",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "我写出来了一个汉字。 (Tôi viết ra được một chữ Hán.)",
+            "zh": "我写出来了一个汉字。",
+            "pinyin": "wǒ xiě chū lái le yí gè hàn zì 。",
+            "vi": "Tôi viết ra được một chữ Hán."
+          },
+          {
+            "rawZh": "我听出来他是在开玩笑。 (Tôi nghe ra được anh ấy đang đùa.)",
+            "zh": "我听出来他是在开玩笑。",
+            "pinyin": "wǒ tīng chū lái tā shì zài kāi wán xiào 。",
+            "vi": "Tôi nghe ra được anh ấy đang đùa."
+          },
+          {
+            "rawZh": "他把心里的想法说出来了。 (Anh ấy đã nói ra được suy nghĩ trong lòng.)",
+            "zh": "他把心里的想法说出来了。",
+            "pinyin": "tā bǎ xīn lǐ de xiǎng fǎ shuō chū lái le 。",
+            "vi": "Anh ấy đã nói ra được suy nghĩ trong lòng."
+          },
+          {
+            "rawZh": "雨停下来了。 (Mưa tạnh rồi (từ có mưa sang ngừng).)",
+            "zh": "雨停下来了。",
+            "pinyin": "yǔ tíng xià lái le 。",
+            "vi": "Mưa tạnh rồi (từ có mưa sang ngừng)."
+          },
+          {
+            "rawZh": "速度慢下来了。 (Tốc độ chậm lại rồi.)",
+            "zh": "速度慢下来了。",
+            "pinyin": "sù dù màn xià lái le 。",
+            "vi": "Tốc độ chậm lại rồi."
+          },
+          {
+            "rawZh": "他冷静下来了。 (Anh ấy bình tĩnh lại rồi (từ trạng thái cảm xúc mạnh sang yếu).)",
+            "zh": "他冷静下来了。",
+            "pinyin": "tā lěng jìng xià lái le 。",
+            "vi": "Anh ấy bình tĩnh lại rồi (từ trạng thái cảm xúc mạnh sang yếu)."
+          },
+          {
+            "rawZh": "我想不起来他的名字了。 (Tôi không nhớ ra nổi tên của anh ấy rồi.)",
+            "zh": "我想不起来他的名字了。",
+            "pinyin": "wǒ xiǎng bù qǐ lái tā de míng zì le 。",
+            "vi": "Tôi không nhớ ra nổi tên của anh ấy rồi."
+          },
+          {
+            "rawZh": "这件事我终于想起来了。 (Chuyện này cuối cùng tôi đã nhớ ra rồi.)",
+            "zh": "这件事我终于想起来了。",
+            "pinyin": "zhè jiàn shì wǒ zhōng yú xiǎng qǐ lái le 。",
+            "vi": "Chuyện này cuối cùng tôi đã nhớ ra rồi."
+          },
+          {
+            "rawZh": "他看起来很累。 (Anh ấy trông có vẻ rất mệt.)",
+            "zh": "他看起来很累。",
+            "pinyin": "tā kàn qǐ lái hěn lèi 。",
+            "vi": "Anh ấy trông có vẻ rất mệt."
+          },
+          {
+            "rawZh": "这件衣服看起来不错。 (Chiếc áo này nhìn có vẻ được đấy/đẹp đấy.)",
+            "zh": "这件衣服看起来不错。",
+            "pinyin": "zhè jiàn yī fu kàn qǐ lái bú cuò 。",
+            "vi": "Chiếc áo này nhìn có vẻ được đấy/đẹp đấy."
+          }
+        ],
+        "tables": []
+      },
+      {
+        "id": "hsk3_20_b19_g2",
+        "num": 2,
+        "title": "使，叫 và 让 (Cấu trúc khiến/để)",
+        "explanation": "Cách dùng: Đều mang nghĩa \"khiến cho\", \"bảo\", \"để cho\" ai đó làm gì hoặc dẫn đến kết quả gì.\n• 让 (ràng): Phổ biến nhất, dùng được cả trong văn nói và văn viết. Nghĩa: \"để cho\", \"cho phép\" hoặc \"bảo ai đó làm gì\".\n• 叫 (jiào): Chủ yếu dùng trong khẩu ngữ (văn nói), mang tính thân mật. Nghĩa: \"bảo\", \"sai\". Không dùng trong văn viết trang trọng.\n• 使 (shǐ): Dùng trong văn viết hoặc ngữ cảnh trang trọng. Nghĩa: \"khiến cho\", thường dùng để diễn tả nguyên nhân dẫn đến một kết quả (đặc biệt là về cảm xúc hoặc sự thay đổi trạng thái).",
+        "formula": "Công thức: S + (让/叫/使) + O + V",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "老师让我回答问题。 (Thầy giáo bảo tôi trả lời câu hỏi.)",
+            "zh": "老师让我回答问题。",
+            "pinyin": "lǎo shī ràng wǒ huí dá wèn tí 。",
+            "vi": "Thầy giáo bảo tôi trả lời câu hỏi."
+          },
+          {
+            "rawZh": "他没叫我去。 (Anh ấy không bảo tôi đi.)",
+            "zh": "他没叫我去。",
+            "pinyin": "tā méi jiào wǒ qù 。",
+            "vi": "Anh ấy không bảo tôi đi."
+          },
+          {
+            "rawZh": "这件事使我很感动。 (Chuyện này khiến tôi rất cảm động.)",
+            "zh": "这件事使我很感动。",
+            "pinyin": "zhè jiàn shì shǐ wǒ hěn gǎn dòng 。",
+            "vi": "Chuyện này khiến tôi rất cảm động."
+          },
+          {
+            "rawZh": "别让他等太久。 (Đừng để anh ấy đợi quá lâu.)",
+            "zh": "别让他等太久。",
+            "pinyin": "bié ràng tā děng tài jiǔ 。",
+            "vi": "Đừng để anh ấy đợi quá lâu."
+          }
+        ],
+        "tables": []
+      }
+    ]
+  },
+  {
+    "lessonId": 20,
+    "lessonKey": "Bài 20",
+    "lessonTitleZh": "我被他影响了",
+    "lessonTitleVi": "Tôi bị anh ấy ảnh hưởng rồi",
+    "lessonTitleFull": "Bài 20: 我被他影响了 (HSK 3 v2.0)",
+    "grammarPoints": [
+      {
+        "id": "hsk3_20_b20_g1",
+        "num": 1,
+        "title": "Câu có từ 被 (Câu bị động)",
+        "explanation": "Cách dùng: Dùng để biểu thị đối tượng bị tác động bởi hành động (chịu sự tác động).",
+        "formula": "Công thức: O + 被/让/叫 + S + V + [Thành phần khác]",
+        "note": "Lưu ý quan trọng:\n• Lược bỏ tác nhân (S): Trong câu chữ 被, tác nhân (S) đứng sau 被 có thể được lược bỏ (Ví dụ: 书被拿走了). Tuy nhiên, trong câu chữ 叫 và 让, bắt buộc phải có tác nhân đứng sau, không được lược bỏ.\n• Vị trí phó từ phủ định & Động từ năng nguyện: Các phó từ phủ định (不, 没) và động từ năng nguyện (能, 想, 要...) bắt buộc phải đặt trước 被, 叫, 让.",
+        "examples": [
+          {
+            "rawZh": "我的书被他拿走了。 (Sách của tôi bị anh ấy lấy đi rồi.)",
+            "zh": "我的书被他拿走了。",
+            "pinyin": "wǒ de shū bèi tā ná zǒu le 。",
+            "vi": "Sách của tôi bị anh ấy lấy đi rồi."
+          },
+          {
+            "rawZh": "苹果被小狗吃了。 (Quả táo bị con chó nhỏ ăn rồi.)",
+            "zh": "苹果被小狗吃了。",
+            "pinyin": "píng guǒ bèi xiǎo gǒu chī le 。",
+            "vi": "Quả táo bị con chó nhỏ ăn rồi."
+          },
+          {
+            "rawZh": "门被风吹开了。 (Cửa bị gió thổi mở ra.)",
+            "zh": "门被风吹开了。",
+            "pinyin": "mén bèi fēng chuī kāi le 。",
+            "vi": "Cửa bị gió thổi mở ra."
+          },
+          {
+            "rawZh": "作业被老师改完了。 (Bài tập bị thầy giáo sửa xong rồi.)",
+            "zh": "作业被老师改完了。",
+            "pinyin": "zuò yè bèi lǎo shī gǎi wán le 。",
+            "vi": "Bài tập bị thầy giáo sửa xong rồi."
+          },
+          {
+            "rawZh": "书被拿走了。 (Sách bị lấy đi rồi (lược bỏ tác nhân).)",
+            "zh": "书被拿走了。",
+            "pinyin": "shū bèi ná zǒu le 。",
+            "vi": "Sách bị lấy đi rồi (lược bỏ tác nhân)."
+          },
+          {
+            "rawZh": "他的书没被我拿走。 (Sách của anh ấy chưa bị tôi lấy đi (phủ định đặt trước 被).)",
+            "zh": "他的书没被我拿走。",
+            "pinyin": "tā de shū méi bèi wǒ ná zǒu 。",
+            "vi": "Sách của anh ấy chưa bị tôi lấy đi (phủ định đặt trước 被)."
+          },
+          {
+            "rawZh": "他的书不能被我拿走。 (Sách của anh ấy không thể bị tôi lấy đi (động từ năng nguyện đặt trước 被).)",
+            "zh": "他的书不能被我拿走。",
+            "pinyin": "tā de shū bù néng bèi wǒ ná zǒu 。",
+            "vi": "Sách của anh ấy không thể bị tôi lấy đi (động từ năng nguyện đặt trước 被)."
+          },
+          {
+            "rawZh": "我的蛋糕叫小猫吃完了。 (Bánh kem của tôi bị con mèo ăn hết rồi.)",
+            "zh": "我的蛋糕叫小猫吃完了。",
+            "pinyin": "wǒ de dàn gāo jiào xiǎo māo chī wán le 。",
+            "vi": "Bánh kem của tôi bị con mèo ăn hết rồi."
+          },
+          {
+            "rawZh": "这件衣服叫我的朋友弄脏了。 (Chiếc áo này bị bạn tôi làm bẩn rồi.)",
+            "zh": "这件衣服叫我的朋友弄脏了。",
+            "pinyin": "zhè jiàn yī fu jiào wǒ de péng yǒu nòng zāng le 。",
+            "vi": "Chiếc áo này bị bạn tôi làm bẩn rồi."
+          },
+          {
+            "rawZh": "他的手机叫别人拿走了。 (Điện thoại của anh ấy bị người khác lấy mất rồi.)",
+            "zh": "他的手机叫别人拿走了。",
+            "pinyin": "tā de shǒu jī jiào bié rén ná zǒu le 。",
+            "vi": "Điện thoại của anh ấy bị người khác lấy mất rồi."
+          },
+          {
+            "rawZh": "窗户让风吹开了。 (Cửa sổ bị gió thổi mở.)",
+            "zh": "窗户让风吹开了。",
+            "pinyin": "chuāng hù ràng fēng chuī kāi le 。",
+            "vi": "Cửa sổ bị gió thổi mở."
+          },
+          {
+            "rawZh": "作业让老师改完了。 (Bài tập bị thầy giáo sửa xong rồi.)",
+            "zh": "作业让老师改完了。",
+            "pinyin": "zuò yè ràng lǎo shī gǎi wán le 。",
+            "vi": "Bài tập bị thầy giáo sửa xong rồi."
+          },
+          {
+            "rawZh": "这把椅子让他搬走了。 (Cái ghế này bị anh ấy chuyển đi rồi.)",
+            "zh": "这把椅子让他搬走了。",
+            "pinyin": "zhè bǎ yǐ zi ràng tā bān zǒu le 。",
+            "vi": "Cái ghế này bị anh ấy chuyển đi rồi."
+          }
+        ],
+        "tables": []
+      },
+      {
+        "id": "hsk3_20_b20_g2",
+        "num": 2,
+        "title": "Cấu trúc 只有……，才……",
+        "explanation": "Cách dùng: Biểu thị điều kiện cần thiết duy nhất (\"chỉ có... mới...\").",
+        "formula": "Công thức: 只有 + [Điều kiện cần] + 才 + [Kết quả]",
+        "note": "",
+        "examples": [
+          {
+            "rawZh": "只有努力学习，才会有好成绩。 (Chỉ có nỗ lực học tập thì mới có thành tích tốt.)",
+            "zh": "只有努力学习，才会有好成绩。",
+            "pinyin": "zhǐ yǒu nǔ lì xué xí ， cái huì yǒu hǎo chéng jì 。",
+            "vi": "Chỉ có nỗ lực học tập thì mới có thành tích tốt."
+          },
+          {
+            "rawZh": "只有你去，他才高兴。 (Chỉ có bạn đi, anh ấy mới vui.)",
+            "zh": "只有你去，他才高兴。",
+            "pinyin": "zhǐ yǒu nǐ qù ， tā cái gāo xìng 。",
+            "vi": "Chỉ có bạn đi, anh ấy mới vui."
+          },
+          {
+            "rawZh": "只有多练习，才能学好汉语。 (Chỉ có luyện tập nhiều, mới có thể học tốt tiếng Hán.)",
+            "zh": "只有多练习，才能学好汉语。",
+            "pinyin": "zhǐ yǒu duō liàn xí ， cái néng xué hǎo hàn yǔ 。",
+            "vi": "Chỉ có luyện tập nhiều, mới có thể học tốt tiếng Hán."
+          },
+          {
+            "rawZh": "只有你自己，才能决定未来。 (Chỉ có chính bạn, mới có thể quyết định tương lai.)",
+            "zh": "只有你自己，才能决定未来。",
+            "pinyin": "zhǐ yǒu nǐ zì jǐ ， cái néng jué dìng wèi lái 。",
+            "vi": "Chỉ có chính bạn, mới có thể quyết định tương lai."
+          }
+        ],
+        "tables": []
+      }
+    ]
+  }
+]
