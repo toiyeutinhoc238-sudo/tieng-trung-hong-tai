@@ -13681,6 +13681,24 @@ window.openDonateModal = function () {
   }
 };
 
+window.openSurveyModal = function () {
+  const modal = document.getElementById('student-survey-modal');
+  if (modal) {
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  } else {
+    window.open('https://forms.gle/WaqZsrYrCZfAN5xn6', '_blank');
+  }
+};
+
+window.closeSurveyModal = function () {
+  const modal = document.getElementById('student-survey-modal');
+  if (modal) {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+};
+
 // ==========================================================================
 // REAL-TIME PRESENCE & LIVE COMMUNITY STATS SYSTEM
 // ==========================================================================

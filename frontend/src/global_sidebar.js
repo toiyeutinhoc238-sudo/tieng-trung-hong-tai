@@ -228,6 +228,15 @@
           </li>
         </ul>
 
+        <!-- DANH MỤC: CỘNG ĐỒNG & KHẢO SÁT -->
+        <div class="sidebar-section-label">Cộng Đồng &amp; Góp Ý</div>
+        <ul class="sidebar-menu" style="margin-bottom: 12px;">
+          <li class="sidebar-item" onclick="if(window.openSurveyModal){ window.openSurveyModal(); } else { window.open('https://forms.gle/WaqZsrYrCZfAN5xn6', '_blank'); }" style="cursor: pointer;">
+            <i class="fa-solid fa-clipboard-question" style="color: #ec4899;"></i> <span>Khảo sát ý kiến</span>
+            <span style="font-size:0.68rem; background:linear-gradient(135deg, rgba(236,72,153,0.25), rgba(244,63,94,0.25)); color:#f472b6; border:1px solid rgba(236,72,153,0.4); padding:2px 8px; border-radius:6px; font-weight:700; margin-left:auto; white-space:nowrap;">Góp ý 🎁</span>
+          </li>
+        </ul>
+
         ${(user && (user.role === 'super_admin' || user.role === 'admin' || user.role === 'teacher' || (user.email && (user.email.includes('phanphiphu') || user.email.includes('thaihong162004') || user.email.includes('hongtai'))))) ? `
         <!-- DANH MỤC: QUẢN TRỊ VIÊN -->
         <div class="sidebar-section-label" style="color: #f43f5e; display: flex; align-items: center; gap: 6px;">

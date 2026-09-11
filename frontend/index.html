@@ -117,6 +117,8 @@
     window.switchTab = window.switchTab || function (tab) { console.log('Initializing tab:', tab); };
     window.toggleSidebarCollapse = window.toggleSidebarCollapse || function () { };
     window.toggleTheme = window.toggleTheme || function () { };
+    window.openSurveyModal = window.openSurveyModal || function () { const m = document.getElementById('student-survey-modal'); if (m) { m.style.display = 'flex'; document.body.style.overflow = 'hidden'; } else { window.open('https://forms.gle/WaqZsrYrCZfAN5xn6', '_blank'); } };
+    window.closeSurveyModal = window.closeSurveyModal || function () { const m = document.getElementById('student-survey-modal'); if (m) { m.style.display = 'none'; document.body.style.overflow = ''; } };
   </script>
 </head>
 
@@ -135,7 +137,14 @@
 
 
 
-      <div class="nav-right">
+      <div class="nav-right" style="display: flex; align-items: center; gap: 10px;">
+        <a href="https://forms.gle/WaqZsrYrCZfAN5xn6" target="_blank" rel="noopener noreferrer" class="nav-survey-pill"
+          onclick="if(window.openSurveyModal){ event.preventDefault(); window.openSurveyModal(); }"
+          title="Bấm để tham gia khảo sát ý kiến học viên">
+          <i class="fa-solid fa-clipboard-question"></i>
+          <span>Khảo sát ý kiến</span>
+          <span class="nav-survey-badge">Mới</span>
+        </a>
       </div>
     </div>
   </nav>
@@ -383,6 +392,12 @@
       <!-- DANH MỤC 4: CỘNG ĐỒNG -->
       <div class="sidebar-section-label">Cộng Đồng</div>
       <ul class="sidebar-menu">
+        <li class="sidebar-item" onclick="if(window.openSurveyModal){ window.openSurveyModal(); } else { window.open('https://forms.gle/WaqZsrYrCZfAN5xn6', '_blank'); }"
+          style="cursor: pointer;">
+          <i class="fa-solid fa-clipboard-question" style="color: #ec4899;"></i> <span>Khảo sát ý kiến</span>
+          <span
+            style="font-size:0.68rem; background:linear-gradient(135deg, rgba(236,72,153,0.25), rgba(244,63,94,0.25)); color:#f472b6; border:1px solid rgba(236,72,153,0.4); padding:2px 8px; border-radius:6px; font-weight:700; margin-left:auto; white-space:nowrap;">Góp ý 🎁</span>
+        </li>
         <li class="sidebar-item" onclick="window.showComingSoonNotice('Kho tài liệu')">
           <i class="fa-solid fa-folder-open" style="color: #64748b;"></i> <span>Kho tài liệu</span>
           <span
@@ -730,6 +745,18 @@
             <span id="live-online-users-count" style="font-size: 0.98rem; font-weight: 800; color: #34d399;">--</span>
           </div>
         </div>
+
+        <!-- NÚT KHẢO SÁT HỌC VIÊN TRÊN HERO BANNER -->
+        <div class="home-survey-hero-wrap" style="margin-top: 14px;">
+          <a href="https://forms.gle/WaqZsrYrCZfAN5xn6" target="_blank" rel="noopener noreferrer" class="survey-hero-pill-btn"
+            onclick="if(window.openSurveyModal){ event.preventDefault(); window.openSurveyModal(); }"
+            title="Đóng góp ý kiến trải nghiệm để nhận quà tặng và giúp Hongtai ngày một tốt hơn">
+            <span class="survey-pill-icon"><i class="fa-solid fa-clipboard-question"></i></span>
+            <span class="survey-pill-text">Khảo Sát Ý Kiến &amp; Trải Nghiệm Học Viên</span>
+            <span class="survey-pill-tag">Đóng góp 🎁</span>
+            <i class="fa-solid fa-arrow-up-right-from-square survey-pill-arrow"></i>
+          </a>
+        </div>
       </div>
 
       <!-- ROW 2: 2 STAT CARDS (Ngày tham gia học & Thời gian học) -->
@@ -779,6 +806,47 @@
         <div id="home-weekly-chart-bars"></div>
       </div>
 
+      <!-- ROW 3.5: FEATURED SURVEY CARD (Khảo sát ý kiến học viên) -->
+      <div class="home-survey-feature-card glass-panel"
+        style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.9) 100%); backdrop-filter: blur(20px); border: 1.5px solid rgba(245, 158, 11, 0.35); border-radius: 24px; padding: 22px 28px; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35), 0 0 24px rgba(245, 158, 11, 0.12); display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; position: relative; overflow: hidden;">
+        
+        <div class="survey-card-glow" style="position: absolute; top: -50px; right: -50px; width: 180px; height: 180px; background: radial-gradient(circle, rgba(245, 158, 11, 0.25) 0%, transparent 70%); pointer-events: none;"></div>
+
+        <div style="display: flex; align-items: center; gap: 20px; flex: 1; min-width: 280px; z-index: 1;">
+          <div class="survey-card-icon-wrap"
+            style="width: 58px; height: 58px; border-radius: 18px; background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(236, 72, 153, 0.25)); border: 1.5px solid rgba(245, 158, 11, 0.4); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; color: #fbbf24; flex-shrink: 0; box-shadow: 0 8px 20px rgba(245, 158, 11, 0.2);">
+            <i class="fa-solid fa-clipboard-list"></i>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <span style="background: linear-gradient(135deg, #f59e0b, #ef4444); color: #ffffff; font-size: 0.72rem; font-weight: 800; padding: 3px 10px; border-radius: 99px; text-transform: uppercase; letter-spacing: 0.05em; display: inline-flex; align-items: center; gap: 4px;">
+                <i class="fa-solid fa-sparkles"></i> Khảo sát học viên
+              </span>
+              <span style="color: #94a3b8; font-size: 0.8rem; font-weight: 600;">Chỉ mất 1-2 phút</span>
+            </div>
+            <h3 style="font-family: var(--font-display, sans-serif); font-size: 1.22rem; font-weight: 800; color: #ffffff; margin: 0; line-height: 1.3;">
+              Đóng Góp Ý Kiến &amp; Cải Thiện Nền Tảng Học Tiếng Trung
+            </h3>
+            <p style="color: #cbd5e1; font-size: 0.88rem; margin: 0; line-height: 1.45;">
+              Mọi chia sẻ của bạn là nguồn động lực quý báu để Tiếng Trung Hongtai hoàn thiện các tính năng học tập &amp; bài giảng ngày một tốt hơn!
+            </p>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; z-index: 1;">
+          <button onclick="window.openSurveyModal()" class="btn-survey-main"
+            style="background: linear-gradient(135deg, #f59e0b, #ec4899); color: #ffffff; border: none; padding: 12px 22px; border-radius: 14px; font-size: 0.95rem; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 8px 24px rgba(245, 158, 11, 0.35); transition: all 0.25s ease;">
+            <i class="fa-solid fa-pen-to-square"></i>
+            <span>Làm khảo sát ngay</span>
+          </button>
+          <a href="https://forms.gle/WaqZsrYrCZfAN5xn6" target="_blank" rel="noopener noreferrer" class="btn-survey-external"
+            style="background: rgba(255, 255, 255, 0.08); color: #f1f5f9; border: 1.5px solid rgba(255, 255, 255, 0.2); padding: 12px 18px; border-radius: 14px; font-size: 0.92rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; backdrop-filter: blur(10px); transition: all 0.25s ease;">
+            <span>Mở tab mới</span>
+            <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.82rem; color: #94a3b8;"></i>
+          </a>
+        </div>
+      </div>
+
       <!-- ROW 4: BẢNG THÔNG BÁO TỚI HỌC VIÊN -->
       <div class="announcement-panel-wrap"
         style="background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 18px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); display: flex; flex-direction: column; gap: 12px;">
@@ -792,6 +860,18 @@
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 8px;">
+          <!-- Survey Notice -->
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 11px 16px; background: linear-gradient(90deg, rgba(245, 158, 11, 0.12), rgba(236, 72, 153, 0.08)); border-radius: 14px; border: 1.5px solid rgba(245, 158, 11, 0.3); flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="background: linear-gradient(135deg, #f59e0b, #ef4444); color: #ffffff; font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 6px;">KHẢO SÁT</span>
+              <span style="font-size: 0.9rem; font-weight: 700; color: #f8fafc;">Phiếu khảo sát đóng góp ý kiến &amp; trải nghiệm học viên</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <button onclick="window.openSurveyModal()" style="background: rgba(245, 158, 11, 0.25); border: 1px solid rgba(245, 158, 11, 0.45); color: #fbbf24; font-size: 0.82rem; font-weight: 700; padding: 4px 12px; border-radius: 8px; cursor: pointer;">Làm ngay</button>
+              <a href="https://forms.gle/WaqZsrYrCZfAN5xn6" target="_blank" rel="noopener noreferrer" style="color: #cbd5e1; font-size: 0.85rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;" title="Mở trong tab mới">↗</a>
+            </div>
+          </div>
+
           <!-- Update 1 -->
           <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 14px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 1px solid rgba(255,255,255,0.06); flex-wrap: wrap;">
             <div style="display: flex; align-items: center; gap: 10px;">
@@ -3593,6 +3673,51 @@
         style="padding: 12px; border-radius: 14px; font-weight: 800; font-size: 0.95rem;">
         Cảm Ơn Bạn! Trở Lại Trang Chủ
       </button>
+    </div>
+  </div>
+
+  <!-- Modal Khảo Sát Ý Kiến Học Viên (Google Form Modal) -->
+  <div class="modal-overlay" id="student-survey-modal" onclick="if(event.target === this) window.closeSurveyModal();"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(14px); z-index: 99999; align-items: center; justify-content: center; padding: 14px;">
+    <div class="modal-card glass-panel"
+      style="background: #0f172a; border: 1.5px solid rgba(245, 158, 11, 0.4); border-radius: 24px; width: 100%; max-width: 780px; height: 92vh; max-height: 860px; box-shadow: 0 25px 65px rgba(0,0,0,0.7), 0 0 35px rgba(245, 158, 11, 0.2); color: #ffffff; position: relative; display: flex; flex-direction: column; overflow: hidden;">
+      
+      <!-- Modal Header -->
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); background: rgba(15, 23, 42, 0.95);">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(135deg, #f59e0b, #ec4899); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #fff; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);">
+            <i class="fa-solid fa-clipboard-list"></i>
+          </div>
+          <div>
+            <h3 style="font-size: 1.05rem; font-weight: 800; color: #ffffff; margin: 0; font-family: var(--font-display, sans-serif);">
+              Khảo Sát Ý Kiến Học Viên
+            </h3>
+            <p style="font-size: 0.78rem; color: #94a3b8; margin: 0;">Tiếng Trung Hongtai • Đóng góp trải nghiệm</p>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <a href="https://forms.gle/WaqZsrYrCZfAN5xn6" target="_blank" rel="noopener noreferrer"
+            style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.18); color: #cbd5e1; font-size: 0.8rem; font-weight: 700; padding: 6px 12px; border-radius: 10px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;"
+            title="Mở trong tab mới trên trình duyệt">
+            <span>Mở tab mới</span> <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.72rem;"></i>
+          </a>
+          <button onclick="window.closeSurveyModal()"
+            style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #cbd5e1; font-size: 1.2rem; cursor: pointer; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">
+            &times;
+          </button>
+        </div>
+      </div>
+
+      <!-- Iframe Google Form -->
+      <div style="flex: 1; width: 100%; position: relative; background: #ffffff;">
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfbFzuZ7Z88x4WWtUQJqg5Ww0VM8sW_ngsIo7V1eEjTc9Yd7Q/viewform?embedded=true"
+          style="width: 100%; height: 100%; border: none; display: block;"
+          title="Phiếu khảo sát học viên Tiếng Trung Hongtai"
+          loading="lazy">
+          Đang tải biểu mẫu khảo sát...
+        </iframe>
+      </div>
     </div>
   </div>
 
