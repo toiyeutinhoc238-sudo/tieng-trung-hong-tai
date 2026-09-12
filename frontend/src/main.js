@@ -7791,34 +7791,20 @@ function renderLessonHeroCardContent(w, index, total) {
     `;
   }).join('') : '';
 
-  const visualPrompt = encodeURIComponent(`3D cute animated illustration of Chinese vocabulary concept "${meaning || char}", clear subject, colorful, educational, high quality`);
-  const visualImgUrl = `https://image.pollinations.ai/prompt/${visualPrompt}?width=300&height=300&nologo=true`;
-
   return `
     <div style="display: flex; flex-direction: column; gap: 20px; width: 100%;">
       <!-- Top Grid: Stroke Box + Vocab Info -->
       <div style="display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap; width: 100%;">
-        <!-- Left: Stroke Writer & Visual AI Container -->
+        <!-- Left: Stroke Writer Container -->
         <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 150px; margin: 0 auto;">
-          <div style="display: flex; gap: 6px; margin-bottom: 2px;">
-            <button id="card-view-tab-stroke" onclick="window.switchCardVisualTab('stroke')" style="background: rgba(56, 189, 248, 0.2); border: 1px solid #38bdf8; color: #38bdf8; font-size: 0.75rem; font-weight: 800; border-radius: 8px; padding: 4px 10px; cursor: pointer; transition: all 0.2s;">
-              ✍️ Nét Viết
-            </button>
-            <button id="card-view-tab-visual" onclick="window.switchCardVisualTab('visual')" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); color: #cbd5e1; font-size: 0.75rem; font-weight: 800; border-radius: 8px; padding: 4px 10px; cursor: pointer; transition: all 0.2s;">
-              🎨 Tạo Hình AI
-            </button>
+          <div style="font-size: 0.82rem; font-weight: 800; color: #38bdf8; margin-bottom: 2px; display: flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-pen-nib"></i> <span>Nét Viết Chữ Hán</span>
           </div>
           <div id="lesson-hanzi-writer-box" style="width: 150px; height: 150px; background: rgba(255,255,255,0.06); border: 2px solid rgba(255,255,255,0.18); border-radius: 18px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.2);">
             <div style="font-size: 4rem; font-weight: 800; font-family: var(--font-display); color: var(--text-primary);">${char}</div>
           </div>
-          <div id="lesson-visual-ai-box" style="display: none; width: 150px; height: 150px; background: rgba(0,0,0,0.4); border: 2px solid rgba(168, 85, 247, 0.4); border-radius: 18px; position: relative; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.3); align-items: center; justify-content: center;">
-            <img src="${visualImgUrl}" alt="${char}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 16px;" onerror="this.src='/assets/logo.png'" />
-            <div style="position: absolute; bottom: 4px; left: 0; right: 0; text-align: center; background: rgba(0,0,0,0.65); font-size: 0.68rem; font-weight: 700; color: #c084fc; padding: 2px 0;">
-              <i class="fa-solid fa-wand-magic-sparkles"></i> Minh Họa AI
-            </div>
-          </div>
           <button id="lesson-replay-stroke-btn" class="btn btn-sm btn-outline-primary" onclick="window.replayLessonHanziStrokes()" style="border-radius: 10px; font-size: 0.82rem; font-weight: 700; padding: 6px 14px; gap: 6px; display: flex; align-items: center;">
-            <i class="fa-solid fa-pen-nib"></i> Phát lại nét
+            <i class="fa-solid fa-rotate-right"></i> Phát lại nét
           </button>
           <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 2px;">
             <button class="stage-mini-nav-btn" onclick="window.navigateLessonFlashcard(-1)" title="Thẻ trước (←)" style="width: 32px; height: 32px; border-radius: 50%; background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.4); color: #60a5fa; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; transition: all 0.2s;" onmouseenter="this.style.background='rgba(59,130,246,0.4)'; this.style.transform='scale(1.08)';" onmouseleave="this.style.background='rgba(59,130,246,0.2)'; this.style.transform='scale(1)';">
@@ -8758,43 +8744,7 @@ window.replayLessonHanziStrokes = function () {
   animateLessonHanziSimultaneously();
 };
 
-window.switchCardVisualTab = function (tab) {
-  const strokeBox = document.getElementById('lesson-hanzi-writer-box');
-  const visualBox = document.getElementById('lesson-visual-ai-box');
-  const btnStroke = document.getElementById('card-view-tab-stroke');
-  const btnVisual = document.getElementById('card-view-tab-visual');
-  const replayBtn = document.getElementById('lesson-replay-stroke-btn');
-
-  if (tab === 'visual') {
-    if (strokeBox) strokeBox.style.display = 'none';
-    if (visualBox) visualBox.style.display = 'flex';
-    if (replayBtn) replayBtn.style.display = 'none';
-    if (btnStroke) {
-      btnStroke.style.background = 'rgba(255, 255, 255, 0.08)';
-      btnStroke.style.borderColor = 'rgba(255, 255, 255, 0.2)';
-      btnStroke.style.color = '#cbd5e1';
-    }
-    if (btnVisual) {
-      btnVisual.style.background = 'rgba(168, 85, 247, 0.25)';
-      btnVisual.style.borderColor = '#a855f7';
-      btnVisual.style.color = '#c084fc';
-    }
-  } else {
-    if (strokeBox) strokeBox.style.display = 'flex';
-    if (visualBox) visualBox.style.display = 'none';
-    if (replayBtn) replayBtn.style.display = 'flex';
-    if (btnStroke) {
-      btnStroke.style.background = 'rgba(56, 189, 248, 0.2)';
-      btnStroke.style.borderColor = '#38bdf8';
-      btnStroke.style.color = '#38bdf8';
-    }
-    if (btnVisual) {
-      btnVisual.style.background = 'rgba(255, 255, 255, 0.08)';
-      btnVisual.style.borderColor = 'rgba(255, 255, 255, 0.2)';
-      btnVisual.style.color = '#cbd5e1';
-    }
-  }
-};
+window.switchCardVisualTab = function (tab) {};
 
 function startLessonStudy(lesson, sliceWords) {
   if (!currentUser) {

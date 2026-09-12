@@ -1256,13 +1256,6 @@
     window.addEventListener('beforeunload', handleVocabSuddenExit);
     window.addEventListener('pagehide', handleVocabSuddenExit);
 
-    function getWordVisualImageUrl(wordObj) {
-      if (!wordObj || !wordObj.word) return '/src/assets/logo.png';
-      // Generate clean visual prompt
-      const prompt = `cute 3D vector illustration of ${wordObj.meaning || wordObj.word}, clean white background, vibrant colors, modern icons style`;
-      return `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=400&height=400&nologo=true`;
-    }
-
     function renderWorkspace() {
       const box = document.getElementById('vocab-workspace');
       if (!box) return;
