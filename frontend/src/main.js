@@ -1383,7 +1383,7 @@ function renderActiveCardLesson(current) {
   const deckAiResult = document.getElementById('deck-sentence-ai-result');
   if (deckAiInput) {
     deckAiInput.value = '';
-    deckAiInput.placeholder = `Gõ câu tiếng Trung chứa từ "${current.word}"... (Ví dụ: 我很喜欢${current.word}...)`;
+    deckAiInput.placeholder = `Gõ câu tiếng Trung chứa từ "${current.word}"...`;
   }
   if (deckAiResult) {
     deckAiResult.style.display = 'none';
@@ -7918,7 +7918,7 @@ function renderLessonHeroCardContent(w, index, total) {
         </div>
 
         <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-          <input type="text" id="lesson-ai-sentence-input" class="hanzi-text" placeholder="Gõ câu tiếng Trung chứa từ &quot;${char}&quot; (Ví dụ: 我很喜欢${char}...)" 
+          <input type="text" id="lesson-ai-sentence-input" class="hanzi-text" placeholder="Gõ câu tiếng Trung chứa từ &quot;${char}&quot;..." 
             onkeydown="if(event.key === 'Enter') window.submitLessonSentenceForAiCheck('${char.replace(/'/g, "\\'")}', ${activeLessonsLevel || 1})"
             style="flex: 1; min-width: 260px; padding: 12px 16px; background: rgba(0,0,0,0.4); border: 1.5px solid rgba(167, 139, 250, 0.35); border-radius: 14px; color: #ffffff; font-size: 1.1rem; font-weight: 700; outline: none; transition: all 0.2s; box-sizing: border-box;" />
 
