@@ -3008,11 +3008,14 @@ function renderCatalogGrid() {
     if (isMyVideosTab) {
       grid.innerHTML = `
         <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-muted); background: rgba(255,255,255,0.03); border: 1.5px dashed rgba(245, 158, 11, 0.4); border-radius: 20px;">
-          <i class="fa-solid fa-lock" style="font-size: 3.2rem; color: #f59e0b; margin-bottom: 16px; opacity: 0.9;"></i>
-          <h3 style="color: var(--text-primary); font-size: 1.3rem; margin-bottom: 8px;">Chức năng thêm video đang tạm khóa</h3>
-          <p style="max-width: 500px; margin: 0 auto; font-size: 0.92rem; color: var(--text-secondary);">
-            Tính năng thêm video YouTube tùy thích đang được tạm thời khóa để nâng cấp và bảo trì hệ thống.
+          <div style="font-size: 3.2rem; margin-bottom: 14px;">🚀</div>
+          <h3 style="color: #fbbf24; font-size: 1.3rem; margin-bottom: 8px; font-weight: 800;">Tính Năng Thêm Video YouTube (Sắp Ra Mắt)</h3>
+          <p style="max-width: 520px; margin: 0 auto 16px auto; font-size: 0.92rem; color: var(--text-secondary); line-height: 1.55;">
+            Chức năng dán link YouTube tùy thích để tự động tạo bài luyện chép chính tả & Shadowing đang được hoàn thiện và sẽ sớm ra mắt!
           </p>
+          <button class="btn btn-primary" onclick="window.showComingSoonNotice('Thêm Video YouTube (Sắp Ra Mắt)')" style="background: linear-gradient(135deg, #f59e0b, #d97706); border: none; color: #ffffff; padding: 10px 22px; border-radius: 12px; font-weight: 700; font-size: 0.9rem; cursor: pointer;">
+            <i class="fa-solid fa-clock"></i> Sắp Ra Mắt
+          </button>
         </div>
       `;
     } else {
@@ -3203,25 +3206,42 @@ function returnToCatalog() {
 }
 
 // ==========================================
-// ADD CUSTOM YOUTUBE VIDEO MODAL
+// ADD CUSTOM YOUTUBE VIDEO MODAL (SẮP RA MẮT)
 // ==========================================
 
-function openAddVideoModal() {
-  const modal = document.getElementById('dict-add-video-modal');
-  if (modal) {
-    modal.style.display = 'flex';
-    const urlInput = document.getElementById('custom-video-url');
-    if (urlInput) {
-      setTimeout(() => urlInput.focus(), 150);
-    }
+function showComingSoonNotice(featureName = 'Thêm Video YouTube') {
+  let modal = document.getElementById('coming-soon-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'coming-soon-modal';
+    modal.className = 'modal-overlay';
+    modal.style.cssText = 'display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;';
+    document.body.appendChild(modal);
   }
+  modal.innerHTML = `
+    <div class="system-dark-modal-card" style="background: linear-gradient(145deg, #0f172a, #1e293b) !important; border: 1.5px solid rgba(255,255,255,0.18) !important; border-radius: 22px; width: 90%; max-width: 440px; padding: 28px; text-align: center; color: #ffffff !important; position: relative; box-shadow: 0 25px 60px rgba(0,0,0,0.8);">
+      <button onclick="document.getElementById('coming-soon-modal').style.display='none'" style="position: absolute; top: 14px; right: 14px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #f8fafc; font-size: 1.3rem; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">&times;</button>
+      <div style="font-size: 3.2rem; margin-bottom: 12px;">🚀</div>
+      <h3 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; color: #fbbf24;">${featureName}</h3>
+      <p style="font-size: 0.92rem; color: #cbd5e1; margin-bottom: 22px; line-height: 1.55;">Chức năng tự thêm video YouTube tùy thích đang được đội ngũ hoàn thiện và sẽ sớm ra mắt trong các bản cập nhật tiếp theo!</p>
+      <button class="btn btn-primary" onclick="document.getElementById('coming-soon-modal').style.display='none'" style="background: linear-gradient(135deg, #0284c7, #2563eb); border: none; color: #ffffff; padding: 12px 24px; border-radius: 12px; font-weight: 700; cursor: pointer; width: 100%; font-size: 0.95rem;">Đã hiểu</button>
+    </div>
+  `;
+  modal.style.display = 'flex';
+}
+
+function openAddVideoModal() {
+  showComingSoonNotice('Thêm Video YouTube (Sắp Ra Mắt)');
 }
 
 function closeAddVideoModal() {
   const modal = document.getElementById('dict-add-video-modal');
   if (modal) modal.style.display = 'none';
+  const comingSoon = document.getElementById('coming-soon-modal');
+  if (comingSoon) comingSoon.style.display = 'none';
 }
 
+window.showComingSoonNotice = showComingSoonNotice;
 window.openAddVideoModal = openAddVideoModal;
 window.closeAddVideoModal = closeAddVideoModal;
 
