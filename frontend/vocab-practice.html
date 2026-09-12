@@ -350,7 +350,7 @@
       transform: scale(1.05);
     }
 
-    /* Matching Game Cards */
+    /* Matching Game Cards - Tương phản cao, siêu rõ chữ trên mọi thiết bị */
     .matching-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -358,55 +358,158 @@
       margin-bottom: 24px;
     }
 
+    .matching-col-header {
+      font-weight: 800;
+      font-size: 1rem;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 10px;
+    }
+
+    .matching-col-header.zh-header {
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+    }
+    html.light-mode .matching-col-header.zh-header,
+    body.light-mode .matching-col-header.zh-header {
+      color: #0369a1;
+      background: #e0f2fe;
+    }
+
+    .matching-col-header.vi-header {
+      color: #34d399;
+      background: rgba(16, 185, 129, 0.12);
+    }
+    html.light-mode .matching-col-header.vi-header,
+    body.light-mode .matching-col-header.vi-header {
+      color: #15803d;
+      background: #dcfce7;
+    }
+
     .matching-card {
-      background: rgba(255, 255, 255, 0.06);
-      border: 2px solid rgba(255, 255, 255, 0.16);
+      background: rgba(30, 41, 59, 0.85);
+      border: 2px solid rgba(255, 255, 255, 0.22);
       border-radius: 16px;
-      padding: 16px 20px;
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #f8fafc;
+      padding: 14px 20px;
+      color: #ffffff;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      min-height: 70px;
-      transition: all 0.2s;
+      min-height: 72px;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       user-select: none;
+      position: relative;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
     }
 
-    html.light-mode .matching-card {
+    .matching-card .hanzi-text-main {
+      font-family: var(--font-chinese, "Noto Sans SC", sans-serif);
+      font-size: 1.75rem;
+      font-weight: 800;
+      line-height: 1.2;
+      color: inherit;
+      letter-spacing: 0.05em;
+    }
+
+    .matching-card .match-meaning-main {
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.35;
+      color: inherit;
+    }
+
+    html.light-mode .matching-card,
+    body.light-mode .matching-card {
       background: #ffffff;
-      border-color: #cbd5e1;
+      border: 2px solid #94a3b8;
       color: #0f172a;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
     }
 
     .matching-card:hover {
-      border-color: #38bdf8;
+      border-color: #0284c7;
       transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(2, 132, 199, 0.2);
     }
 
+    /* Đang được chọn */
     .matching-card.selected {
-      background: rgba(56, 189, 248, 0.25) !important;
+      background: rgba(14, 165, 233, 0.25) !important;
       border-color: #38bdf8 !important;
-      color: #38bdf8 !important;
-      box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+      color: #ffffff !important;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.45), 0 8px 20px rgba(56, 189, 248, 0.3) !important;
+      transform: translateY(-2px) scale(1.02);
     }
 
+    html.light-mode .matching-card.selected,
+    body.light-mode .matching-card.selected {
+      background: #e0f2fe !important;
+      border-color: #0284c7 !important;
+      color: #0369a1 !important;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.35), 0 6px 18px rgba(2, 132, 199, 0.2) !important;
+    }
+
+    /* Đã nối đúng - Cực kỳ rõ ràng, ĐẬM NÉT, xếp ngang hàng nhau */
     .matching-card.matched {
-      background: rgba(16, 185, 129, 0.25) !important;
+      background: rgba(16, 185, 129, 0.22) !important;
       border-color: #10b981 !important;
-      color: #34d399 !important;
+      color: #ffffff !important;
       pointer-events: none;
-      opacity: 0.6;
+      opacity: 1 !important;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25) !important;
+      display: flex;
+      justify-content: space-between;
+      padding: 14px 18px;
     }
 
+    html.light-mode .matching-card.matched,
+    body.light-mode .matching-card.matched {
+      background: #dcfce7 !important;
+      border-color: #16a34a !important;
+      color: #14532d !important;
+      box-shadow: 0 4px 14px rgba(22, 163, 74, 0.15) !important;
+    }
+
+    .matched-check-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #10b981;
+      color: #ffffff;
+      font-size: 0.82rem;
+      font-weight: 800;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(16, 185, 129, 0.4);
+    }
+
+    html.light-mode .matched-check-badge,
+    body.light-mode .matched-check-badge {
+      background: #16a34a;
+      color: #ffffff;
+    }
+
+    /* Nối sai */
     .matching-card.wrong {
       background: rgba(239, 68, 68, 0.25) !important;
       border-color: #ef4444 !important;
-      color: #f87171 !important;
-      animation: shake 0.3s;
+      color: #fca5a5 !important;
+      animation: shake 0.35s ease-in-out;
+    }
+
+    html.light-mode .matching-card.wrong,
+    body.light-mode .matching-card.wrong {
+      background: #fee2e2 !important;
+      border-color: #dc2626 !important;
+      color: #991b1b !important;
     }
 
     @keyframes shake {
@@ -925,107 +1028,226 @@
       }
     }
 
-    // 2. NỐI TỪ VỚI NGHĨA
-    function renderMatchingMode(box) {
-      const batchWords = currentLessonWords.slice(0, 6);
+    // 2. BÀI TẬP NỐI TỪ VỚI NGHĨA
+    function escapeMatchStr(str) {
+      return String(str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    }
+
+    function renderMatchingMode(box, batchIndex = 0) {
+      if (!currentLessonWords || currentLessonWords.length === 0) {
+        box.innerHTML = `<div style="text-align:center; padding:40px; color:#94a3b8;">Không có từ vựng nào trong bài học này!</div>`;
+        return;
+      }
+
+      const batchSize = 6;
+      const totalWords = currentLessonWords.length;
+      const safeBatchIndex = Math.max(0, batchIndex);
+      const startIdx = (safeBatchIndex * batchSize) % totalWords;
+      let batchWords = currentLessonWords.slice(startIdx, startIdx + batchSize);
+      if (batchWords.length < batchSize && totalWords >= batchSize) {
+        batchWords = currentLessonWords.slice(Math.max(0, totalWords - batchSize));
+      }
+
+      // Xáo trộn nghĩa tiếng Việt ban đầu
       const shuffledMeanings = [...batchWords].sort(() => Math.random() - 0.5);
 
+      matchingState = {
+        batchIndex: safeBatchIndex,
+        batchWords: batchWords,
+        selectedZh: null,
+        selectedVi: null,
+        matchedList: [], // Danh sách các cặp đã ghép đúng, sẽ hiển thị cùng hàng trên cùng
+        unmatchedZh: [...batchWords],
+        unmatchedVi: [...shuffledMeanings]
+      };
+
       box.innerHTML = `
-        <div style="max-width:800px; margin:0 auto;">
+        <div style="max-width:850px; margin:0 auto;">
           <div style="text-align:center; margin-bottom:20px;">
-            <h3 style="font-size:1.3rem; font-weight:800; color:#fbbf24; margin-bottom:6px;">
+            <h3 style="font-size:1.35rem; font-weight:800; color:#fbbf24; margin-bottom:6px;">
               <i class="fa-solid fa-link"></i> BÀI TẬP NỐI TỪ VỚI NGHĨA
             </h3>
-            <p style="color:#cbd5e1; font-size:0.92rem;">
-              Bấm chọn 1 từ ở Cột Chữ Hán và 1 nghĩa ở Cột Nghĩa Tiếng Việt tương ứng để nối cặp:
+            <p style="color:var(--text-secondary, #cbd5e1); font-size:0.92rem;">
+              Bấm chọn 1 từ ở <strong>Cột Chữ Hán</strong> và 1 nghĩa ở <strong>Cột Nghĩa Tiếng Việt</strong> tương ứng. Khi nối đúng, 2 từ sẽ tự động xếp lên cùng hàng!
             </p>
           </div>
 
-          <div class="matching-grid">
+          <div class="matching-grid" id="matching-grid-container">
             <!-- Cột Chữ Hán -->
             <div style="display:flex; flex-direction:column; gap:12px;">
-              <div style="font-weight:800; font-size:0.95rem; color:#38bdf8; text-transform:uppercase; margin-bottom:4px;">
-                Cột A: Chữ Hán & Pinyin
+              <div class="matching-col-header zh-header">
+                <i class="fa-solid fa-font"></i> Cột A: Chữ Hán
               </div>
-              ${batchWords.map(w => `
-                <div class="matching-card hanzi-text" id="match-zh-${w.id}" onclick="handleMatchSelect('zh', '${w.word}', ${w.id})">
-                  <div>
-                    <div style="font-size:1.4rem; font-weight:800;">${w.word}</div>
-                    <div style="font-size:0.85rem; color:#fbbf24; font-weight:600;">${w.pinyin || ''}</div>
-                  </div>
-                </div>
-              `).join('')}
+              <div id="matching-col-zh-cards" style="display:flex; flex-direction:column; gap:12px;"></div>
             </div>
 
             <!-- Cột Nghĩa Tiếng Việt -->
             <div style="display:flex; flex-direction:column; gap:12px;">
-              <div style="font-weight:800; font-size:0.95rem; color:#34d399; text-transform:uppercase; margin-bottom:4px;">
-                Cột B: Nghĩa Tiếng Việt
+              <div class="matching-col-header vi-header">
+                <i class="fa-solid fa-language"></i> Cột B: Nghĩa Tiếng Việt
               </div>
-              ${shuffledMeanings.map(w => `
-                <div class="matching-card" id="match-vi-${w.id}" onclick="handleMatchSelect('vi', '${w.word}', ${w.id})">
-                  <span>${w.meaning}</span>
-                </div>
-              `).join('')}
+              <div id="matching-col-vi-cards" style="display:flex; flex-direction:column; gap:12px;"></div>
             </div>
           </div>
 
-          <div id="matching-feedback" style="text-align:center; min-height:36px; margin-bottom:16px; font-weight:800;"></div>
+          <div id="matching-feedback" style="text-align:center; min-height:42px; margin-bottom:16px;"></div>
 
-          <div style="text-align:center;">
-            <button onclick="renderMatchingMode(document.getElementById('vocab-workspace'))" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2); color:#cbd5e1; padding:12px 24px; border-radius:12px; font-weight:700; cursor:pointer;">
-              <i class="fa-solid fa-rotate-left"></i> Trộn Lại & Làm Hiệp Mới
+          <div id="matching-actions" style="text-align:center; display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+            <button onclick="renderMatchingMode(document.getElementById('vocab-workspace'), ${safeBatchIndex})" class="btn-matching-action" style="background:rgba(255,255,255,0.08); border:1.5px solid rgba(255,255,255,0.2); color:inherit; padding:10px 20px; border-radius:12px; font-weight:700; cursor:pointer;">
+              <i class="fa-solid fa-rotate-left"></i> Trộn Lại Hiệp Này
             </button>
+            ${totalWords > batchSize ? `
+            <button onclick="renderMatchingMode(document.getElementById('vocab-workspace'), ${(safeBatchIndex + 1)})" class="btn-matching-action" style="background:linear-gradient(135deg, #0284c7, #0369a1); border:none; color:#ffffff; padding:10px 20px; border-radius:12px; font-weight:800; cursor:pointer;">
+              <i class="fa-solid fa-forward-step"></i> Hiệp Tiếp Theo
+            </button>
+            ` : ''}
           </div>
         </div>
       `;
+
+      updateMatchingGridCards();
+    }
+
+    function updateMatchingGridCards() {
+      const zhCol = document.getElementById('matching-col-zh-cards');
+      const viCol = document.getElementById('matching-col-vi-cards');
+      if (!zhCol || !viCol || !matchingState) return;
+
+      // 1. Render Cột A (Chữ Hán)
+      let zhHtml = '';
+      // A1. Các thẻ đã nối đúng (xếp lên các hàng đầu tiên)
+      matchingState.matchedList.forEach(w => {
+        zhHtml += `
+          <div class="matching-card matched" id="match-zh-${w.id}">
+            <span class="hanzi-text-main">${w.word}</span>
+            <span class="matched-check-badge" title="Đã ghép đúng"><i class="fa-solid fa-check"></i></span>
+          </div>
+        `;
+      });
+      // A2. Các thẻ chưa nối
+      matchingState.unmatchedZh.forEach(w => {
+        const isSelected = matchingState.selectedZh && (matchingState.selectedZh.id === w.id);
+        zhHtml += `
+          <div class="matching-card ${isSelected ? 'selected' : ''}" 
+               id="match-zh-${w.id}" 
+               onclick="handleMatchSelect('zh', '${escapeMatchStr(w.word)}', ${w.id})">
+            <span class="hanzi-text-main">${w.word}</span>
+          </div>
+        `;
+      });
+      zhCol.innerHTML = zhHtml;
+
+      // 2. Render Cột B (Nghĩa Tiếng Việt)
+      let viHtml = '';
+      // B1. Các thẻ đã nối đúng (THEO ĐÚNG THỨ TỰ TƯƠNG ỨNG VỚI CỘT A ĐỂ XẾP CÙNG HÀNG)
+      matchingState.matchedList.forEach(w => {
+        viHtml += `
+          <div class="matching-card matched" id="match-vi-${w.id}">
+            <span class="matched-check-badge" title="Đã ghép đúng"><i class="fa-solid fa-check"></i></span>
+            <span class="match-meaning-main">${w.meaning}</span>
+          </div>
+        `;
+      });
+      // B2. Các thẻ chưa nối
+      matchingState.unmatchedVi.forEach(w => {
+        const isSelected = matchingState.selectedVi && (matchingState.selectedVi.id === w.id);
+        viHtml += `
+          <div class="matching-card ${isSelected ? 'selected' : ''}" 
+               id="match-vi-${w.id}" 
+               onclick="handleMatchSelect('vi', '${escapeMatchStr(w.word)}', ${w.id})">
+            <span class="match-meaning-main">${w.meaning}</span>
+          </div>
+        `;
+      });
+      viCol.innerHTML = viHtml;
     }
 
     function handleMatchSelect(type, word, id) {
+      if (!matchingState) return;
+
       if (type === 'zh') {
-        if (matchingState.selectedZh) {
-          const prevEl = document.getElementById(`match-zh-${matchingState.selectedZh.id}`);
-          if (prevEl) prevEl.classList.remove('selected');
+        if (matchingState.selectedZh && matchingState.selectedZh.id === id) {
+          matchingState.selectedZh = null;
+          updateMatchingGridCards();
+          return;
         }
         matchingState.selectedZh = { word, id };
-        const el = document.getElementById(`match-zh-${id}`);
-        if (el) el.classList.add('selected');
         speakWord(word);
       } else if (type === 'vi') {
-        if (matchingState.selectedVi) {
-          const prevEl = document.getElementById(`match-vi-${matchingState.selectedVi.id}`);
-          if (prevEl) prevEl.classList.remove('selected');
+        if (matchingState.selectedVi && matchingState.selectedVi.id === id) {
+          matchingState.selectedVi = null;
+          updateMatchingGridCards();
+          return;
         }
         matchingState.selectedVi = { word, id };
-        const el = document.getElementById(`match-vi-${id}`);
-        if (el) el.classList.add('selected');
       }
 
-      // If both selected, check match
+      updateMatchingGridCards();
+
+      // Khi đã chọn cả 2 bên (Chữ Hán & Nghĩa Tiếng Việt)
       if (matchingState.selectedZh && matchingState.selectedVi) {
         const zh = matchingState.selectedZh;
         const vi = matchingState.selectedVi;
-        const zhEl = document.getElementById(`match-zh-${zh.id}`);
-        const viEl = document.getElementById(`match-vi-${vi.id}`);
         const feed = document.getElementById('matching-feedback');
 
         if (zh.word === vi.word) {
-          // Matched!
+          // Ghép đúng!
           recordVocabResult(zh.word, true);
-          if (zhEl) { zhEl.classList.remove('selected'); zhEl.classList.add('matched'); }
-          if (viEl) { viEl.classList.remove('selected'); viEl.classList.add('matched'); }
-          matchingState.matchedPairs.push(zh.word);
-          if (feed) feed.innerHTML = `<span style="color:#34d399;"><i class="fa-solid fa-circle-check"></i> Ghép đúng: ${zh.word}!</span>`;
-        } else {
-          // Wrong
-          recordVocabResult(zh.word, false);
-          if (zhEl) { zhEl.classList.add('wrong'); setTimeout(() => { zhEl.classList.remove('selected', 'wrong'); }, 500); }
-          if (viEl) { viEl.classList.add('wrong'); setTimeout(() => { viEl.classList.remove('selected', 'wrong'); }, 500); }
-          if (feed) feed.innerHTML = `<span style="color:#f87171;"><i class="fa-solid fa-circle-xmark"></i> Chưa đúng, hãy ghép lại nhé!</span>`;
-        }
 
-        matchingState.selectedZh = null;
-        matchingState.selectedVi = null;
+          const matchedWordObj = matchingState.batchWords.find(w => w.id === zh.id || w.word === zh.word);
+          const pairData = matchedWordObj || { id: zh.id, word: zh.word, meaning: vi.word };
+
+          // Thêm vào danh sách matchedList -> tự động xếp lên cùng một hàng ở trên
+          matchingState.matchedList.push(pairData);
+
+          // Loại bỏ khỏi danh sách chưa ghép
+          matchingState.unmatchedZh = matchingState.unmatchedZh.filter(w => w.id !== zh.id && w.word !== zh.word);
+          matchingState.unmatchedVi = matchingState.unmatchedVi.filter(w => w.id !== vi.id && w.word !== vi.word);
+
+          matchingState.selectedZh = null;
+          matchingState.selectedVi = null;
+
+          if (feed) {
+            feed.innerHTML = `<span style="color:#16a34a; font-weight:800; font-size:1.05rem;"><i class="fa-solid fa-circle-check"></i> Ghép đúng: <strong>${zh.word}</strong> = <em>${pairData.meaning}</em></span>`;
+          }
+
+          // Cập nhật lại giao diện: 2 từ vừa nối đúng lập tức xếp lên cùng một hàng!
+          updateMatchingGridCards();
+
+          // Kiểm tra nếu đã hoàn thành toàn bộ hiệp
+          if (matchingState.matchedList.length >= matchingState.batchWords.length) {
+            if (feed) {
+              feed.innerHTML = `
+                <div style="background:linear-gradient(135deg, rgba(16, 185, 129, 0.18), rgba(2, 132, 199, 0.18)); border:2px solid #10b981; border-radius:14px; padding:14px 18px; margin-top:10px;">
+                  <div style="font-size:1.15rem; font-weight:800; color:#16a34a; margin-bottom:4px;">
+                    🎉 Xuất sắc! Bạn đã nối đúng toàn bộ ${matchingState.batchWords.length} từ!
+                  </div>
+                  <div style="font-size:0.88rem; color:var(--text-secondary, #cbd5e1);">
+                    Tất cả các cặp từ đã được xếp thành từng hàng hoàn chỉnh.
+                  </div>
+                </div>
+              `;
+            }
+          }
+        } else {
+          // Ghép sai
+          recordVocabResult(zh.word, false);
+
+          const zhEl = document.getElementById(`match-zh-${zh.id}`);
+          const viEl = document.getElementById(`match-vi-${vi.id}`);
+          if (zhEl) zhEl.classList.add('wrong');
+          if (viEl) viEl.classList.add('wrong');
+
+          if (feed) {
+            feed.innerHTML = `<span style="color:#dc2626; font-weight:800; font-size:1rem;"><i class="fa-solid fa-circle-xmark"></i> Chưa chính xác, hãy ghép lại nhé!</span>`;
+          }
+
+          setTimeout(() => {
+            matchingState.selectedZh = null;
+            matchingState.selectedVi = null;
+            updateMatchingGridCards();
+          }, 450);
+        }
       }
     }
 
