@@ -1487,6 +1487,14 @@ function renderActiveCardLesson(current) {
       markStarredBtn.classList.remove('active');
     }
   }
+
+  // Synchronize Dual Practice Mode (Translate vs Sentence)
+  try {
+    const savedMode = (typeof localStorage !== 'undefined' && localStorage.getItem('hongtai_vocab_practice_mode')) || 'translate';
+    if (typeof window.switchVocabPracticeMode === 'function') {
+      window.switchVocabPracticeMode(savedMode);
+    }
+  } catch (e) { }
 }
 
 // Render Eye Hint Cards matching Image 2 EXACTLY
@@ -7874,19 +7882,19 @@ function renderLessonHeroCardContent(w, index, total) {
               class="vocab-mode-btn ${currentVocabMode === 'translate' ? 'active' : ''}" 
               onclick="window.switchVocabPracticeMode('translate')">
               <i class="fa-solid fa-pen-to-square"></i>
-              <span>Luyện Dịch Câu</span>
+              <span>Luyện Dịch Theo Gợi Ý</span>
               <span class="vocab-mode-tag">Cơ bản</span>
             </button>
             <button type="button" id="vocab-mode-btn-sentence" 
               class="vocab-mode-btn ${currentVocabMode === 'sentence' ? 'active' : ''}" 
               onclick="window.switchVocabPracticeMode('sentence')">
               <i class="fa-solid fa-wand-magic-sparkles"></i>
-              <span>Tập Đặt Câu Với Từ</span>
+              <span>Tự Đặt Câu Sáng Tạo</span>
               <span class="vocab-mode-tag vocab-mode-tag-ai">AI Nâng Cao</span>
             </button>
           </div>
           <div class="vocab-mode-desc-pill" id="vocab-mode-desc-pill">
-            ${currentVocabMode === 'translate' ? '<i class="fa-solid fa-seedling" style="color: #10b981;"></i> Dành cho học viên rèn phản xạ & từ vựng' : '<i class="fa-solid fa-robot" style="color: #a855f7;"></i> AI chấm điểm ngữ pháp & gợi ý câu chuẩn'}
+            ${currentVocabMode === 'translate' ? '<i class="fa-solid fa-seedling" style="color: #10b981;"></i> Đặt câu theo gợi ý mẫu (Dành cho học viên mới/yếu)' : '<i class="fa-solid fa-robot" style="color: #a855f7;"></i> Tự đặt câu sáng tạo & AI chấm điểm ngữ pháp'}
           </div>
         </div>
 
@@ -8435,30 +8443,67 @@ window.switchVocabPracticeMode = function (mode) {
     console.warn('Cannot save vocab practice mode', e);
   }
 
-  const translatePanel = document.getElementById('lesson-mode-translate-panel');
-  const sentencePanel = document.getElementById('lesson-mode-sentence-panel');
-  const translateBtn = document.getElementById('vocab-mode-btn-translate');
-  const sentenceBtn = document.getElementById('vocab-mode-btn-sentence');
-  const descPill = document.getElementById('vocab-mode-desc-pill');
+  const isSentence = mode === 'sentence';
 
-  if (mode === 'sentence') {
-    if (translatePanel) translatePanel.style.display = 'none';
-    if (sentencePanel) sentencePanel.style.display = 'block';
-    if (translateBtn) translateBtn.classList.remove('active');
-    if (sentenceBtn) sentenceBtn.classList.add('active');
-    if (descPill) {
-      descPill.innerHTML = '<i class="fa-solid fa-robot" style="color: #a855f7;"></i> AI chấm điểm ngữ pháp & gợi ý câu chuẩn';
+  // Translate Panels
+  const translatePanels = [
+    document.getElementById('lesson-mode-translate-panel'),
+    document.getElementById('deck-mode-translate-panel')
+  ];
+  translatePanels.forEach(p => {
+    if (p) p.style.display = isSentence ? 'none' : 'block';
+  });
+
+  // Sentence Panels
+  const sentencePanels = [
+    document.getElementById('lesson-mode-sentence-panel'),
+    document.getElementById('deck-mode-sentence-panel')
+  ];
+  sentencePanels.forEach(p => {
+    if (p) p.style.display = isSentence ? 'block' : 'none';
+  });
+
+  // Translate Buttons
+  const translateBtns = [
+    document.getElementById('vocab-mode-btn-translate'),
+    document.getElementById('deck-vocab-mode-btn-translate')
+  ];
+  translateBtns.forEach(btn => {
+    if (btn) {
+      if (isSentence) btn.classList.remove('active');
+      else btn.classList.add('active');
     }
-    const sentenceInput = document.getElementById('lesson-ai-sentence-input');
+  });
+
+  // Sentence Buttons
+  const sentenceBtns = [
+    document.getElementById('vocab-mode-btn-sentence'),
+    document.getElementById('deck-vocab-mode-btn-sentence')
+  ];
+  sentenceBtns.forEach(btn => {
+    if (btn) {
+      if (isSentence) btn.classList.add('active');
+      else btn.classList.remove('active');
+    }
+  });
+
+  // Description Pills
+  const descPills = [
+    document.getElementById('vocab-mode-desc-pill'),
+    document.getElementById('deck-vocab-mode-desc-pill')
+  ];
+  descPills.forEach(descPill => {
+    if (descPill) {
+      descPill.innerHTML = isSentence
+        ? '<i class="fa-solid fa-robot" style="color: #a855f7;"></i> Tự đặt câu sáng tạo & AI chấm điểm ngữ pháp'
+        : '<i class="fa-solid fa-seedling" style="color: #10b981;"></i> Đặt câu theo gợi ý mẫu (Dành cho học viên mới/yếu)';
+    }
+  });
+
+  if (isSentence) {
+    const sentenceInput = document.getElementById('lesson-ai-sentence-input') || document.getElementById('deck-ai-sentence-input');
     if (sentenceInput) sentenceInput.focus();
   } else {
-    if (translatePanel) translatePanel.style.display = 'block';
-    if (sentencePanel) sentencePanel.style.display = 'none';
-    if (translateBtn) translateBtn.classList.add('active');
-    if (sentenceBtn) sentenceBtn.classList.remove('active');
-    if (descPill) {
-      descPill.innerHTML = '<i class="fa-solid fa-seedling" style="color: #10b981;"></i> Dành cho học viên rèn phản xạ & từ vựng';
-    }
     const typingInput = document.getElementById('lesson-typing-input');
     if (typingInput) typingInput.focus();
   }
