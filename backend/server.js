@@ -2764,11 +2764,13 @@ Trả về DUY NHẤT 1 JSON object thuần túy (không bọc trong markdown bl
       }
     } else {
       // Đảm bảo kiểu dữ liệu và ràng buộc logic
-      if (isGibberish || (!containsWord && targetWord)) {
+      const fb = (result.feedback || '').toLowerCase();
+      const mentionsFailure = fb.includes('vô nghĩa') || fb.includes('không chứa từ') || fb.includes('không có nghĩa') || fb.includes('chưa đáp ứng') || fb.includes('không phải là câu');
+      if (isGibberish || (!containsWord && targetWord) || mentionsFailure || result.isCorrect === false) {
         result.isCorrect = false;
-        result.score = Math.min(typeof result.score === 'number' ? result.score : 20, 30);
+        result.score = Math.min(typeof result.score === 'number' ? result.score : 20, 25);
       } else {
-        result.isCorrect = result.isCorrect !== false;
+        result.isCorrect = result.isCorrect !== false && (typeof result.score === 'number' ? result.score >= 60 : true);
         result.score = typeof result.score === 'number' ? Math.min(100, Math.max(0, result.score)) : (result.isCorrect ? 85 : 25);
       }
     }

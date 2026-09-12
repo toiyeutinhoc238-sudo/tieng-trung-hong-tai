@@ -1910,11 +1910,15 @@
         }
         throw new Error('Check sentence failed');
       } catch (err) {
+        const containsWord = targetWord ? sentence.includes(targetWord) : true;
+        const isGibberish = /^([a-zA-Z0-9\u4e00-\u9fa5])\1{3,}$/.test(sentence) || sentence.length < 2;
+        const ok = containsWord && !isGibberish;
         const fallback = {
-          score: 85,
-          badge: 'Tốt',
-          feedback: `Câu có sử dụng từ "${targetWord}" đúng ngữ cảnh. Hãy tiếp tục phát huy!`,
-          grammarAnalysis: 'Cấu trúc câu cơ bản hoàn chỉnh.',
+          score: ok ? 85 : 15,
+          isCorrect: ok,
+          badge: ok ? 'Tốt 👏' : 'Chưa Đạt ❌',
+          feedback: ok ? `Câu có sử dụng từ "${targetWord}" đúng ngữ cảnh. Hãy tiếp tục phát huy!` : `Câu chưa chứa từ vựng mục tiêu "${targetWord}". Hãy thử đặt lại câu nhé!`,
+          grammarAnalysis: ok ? 'Cấu trúc câu cơ bản hoàn chỉnh.' : 'Chưa đạt yêu cầu.',
           improvedSentence: sentence,
           vietnameseTranslation: 'Bản dịch câu của bạn.'
         };
@@ -1923,12 +1927,18 @@
     }
 
     function renderSentenceCheckResult(data, container) {
-      const score = data.score || 85;
-      const badge = data.badge || (score >= 90 ? 'Xuất Sắc' : 'Tốt');
-      const scoreColor = score >= 85 ? '#10b981' : '#0284c7';
+      const isCorrect = data.isCorrect !== false && (typeof data.score === 'number' ? data.score >= 55 : true);
+      const score = typeof data.score === 'number' ? data.score : (isCorrect ? 85 : 20);
+      const badge = data.badge || (
+        score >= 90 ? 'Xuất Sắc 🌟' :
+        score >= 80 ? 'Rất Tốt 👏' :
+        score >= 65 ? 'Khá 👍' :
+        score >= 50 ? 'Cần Cải Thiện ✍️' : 'Chưa Đạt ❌'
+      );
+      const scoreColor = isCorrect && score >= 80 ? '#10b981' : (isCorrect && score >= 60 ? '#0284c7' : '#ef4444');
 
       container.innerHTML = `
-        <div class="ai-result-card">
+        <div class="ai-result-card" style="border: 1.5px solid ${scoreColor}40;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
             <div style="display:flex; align-items:center; gap:12px;">
               <span style="background:${scoreColor}; color:#fff; font-weight:900; font-size:1.1rem; padding:4px 14px; border-radius:99px;">
