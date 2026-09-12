@@ -7863,34 +7863,6 @@ function renderLessonHeroCardContent(w, index, total) {
         </div>
       </div>
 
-      <!-- Bottom Full Width Container: DỊCH SANG TIẾNG TRUNG (Typing & Hint Cards) -->
-      <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.12); border-radius: 18px; padding: 18px 20px; width: 100%; box-sizing: border-box; box-shadow: 0 6px 20px rgba(0,0,0,0.25);">
-        <div style="font-size: 0.95rem; font-weight: 800; color: #38bdf8; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
-          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-            <span><i class="fa-solid fa-language"></i> Dịch sang tiếng Trung: <span style="color: #ffffff; font-weight: 800;">"${exercisePrompt}"</span></span>
-            <button onclick="window.speakText('${targetAnswer.replace(/'/g, "\\'")}')" class="btn btn-sm" style="background: rgba(56, 189, 248, 0.18); border: 1.5px solid rgba(56, 189, 248, 0.4); color: #38bdf8; border-radius: 10px; padding: 3px 10px; font-size: 0.82rem; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s;" title="Nghe phát âm câu dịch mẫu" onmouseover="this.style.background='rgba(56, 189, 248, 0.3)'" onmouseout="this.style.background='rgba(56, 189, 248, 0.18)'">
-              <i class="fa-solid fa-volume-high"></i> Nghe
-            </button>
-          </div>
-          <div id="lesson-typing-feedback"></div>
-        </div>
-
-        <input type="text" id="lesson-typing-input" placeholder="Gõ chữ Hán hoặc câu ví dụ vào đây..." oninput="window.checkLessonTypingInput(${validAnswersJson})" style="width: 100%; padding: 12px 16px; background: rgba(0,0,0,0.4); border: 2px solid rgba(255,255,255,0.2); border-radius: 14px; color: #ffffff; font-size: 1.1rem; font-weight: 700; outline: none; transition: all 0.2s; margin-bottom: 14px; box-sizing: border-box;" />
-
-        <!-- Eye-icon Character Hint Cards (Real-time typed validation) -->
-        <div id="lesson-char-hints-container" data-target="${targetAnswer.replace(/'/g, "\\'").replace(/"/g, '&quot;')}" style="display: flex; gap: 10px; justify-content: center; margin-bottom: 14px; flex-wrap: wrap;">
-          ${hintChars.map((c, i) => `
-            <div class="lesson-hint-card" data-char="${c.replace(/'/g, "\\'")}" onclick="window.toggleLessonCharHint(this, '${c.replace(/'/g, "\\'")}')" title="Bấm để hiện chữ" style="width: 52px; height: 68px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #94a3b8; font-size: 1.2rem; transition: all 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.3);" onmouseenter="this.style.transform='translateY(-2px)'" onmouseleave="this.style.transform='translateY(0)'">
-              <i class="fa-solid fa-eye"></i>
-            </div>
-          `).join('')}
-        </div>
-
-        <button id="lesson-toggle-all-hints-btn" onclick="window.revealAllLessonCharHints('${targetAnswer.replace(/'/g, "\\'")}')" style="width: 100%; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; color: #ffffff; font-weight: 800; font-size: 0.95rem; padding: 12px; border-radius: 14px; cursor: pointer; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4); transition: all 0.2s; letter-spacing: 0.5px;" onmousedown="this.style.transform='scale(0.98)'" onmouseup="this.style.transform='scale(1)'">
-          <i class="fa-solid fa-eye" style="margin-right: 6px;"></i> HIỆN GỢI Ý MẪU
-        </button>
-      </div>
-
       <!-- AI Sentence Practice Box: ĐẶT CÂU CÙNG AI & CHẤM ĐIỂM NGỮ PHÁP -->
       <div class="lesson-ai-sentence-card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
@@ -8597,22 +8569,31 @@ window.submitLessonSentenceForAiCheck = async function (targetWord, level = 1) {
     }
     throw new Error('Check sentence failed');
   } catch (err) {
+    const containsWord = targetWord ? sentence.includes(targetWord) : true;
+    const isGibberish = /^([a-zA-Z0-9\u4e00-\u9fa5])\1{3,}$/.test(sentence) || sentence.length < 2;
+    const ok = containsWord && !isGibberish;
     const fallback = {
-      score: 88,
-      isCorrect: true,
-      badge: 'Rất Tốt',
-      feedback: `Câu có sử dụng từ "${targetWord}" đúng ngữ cảnh. Hãy tiếp tục phát huy!`,
+      score: ok ? 88 : 15,
+      isCorrect: ok,
+      badge: ok ? 'Rất Tốt 👏' : 'Chưa Đạt ❌',
+      feedback: ok ? `Câu có sử dụng từ "${targetWord}" đúng ngữ cảnh. Hãy tiếp tục phát huy!` : `Câu của bạn chưa chứa từ vựng mục tiêu "${targetWord}". Hãy thử đặt lại câu nhé!`,
       improvedSentence: sentence,
-      translation: 'Bản dịch câu của bạn.'
+      translation: ''
     };
     renderLessonAiCheckResult(fallback, resBox, targetWord);
   }
 };
 
 function renderLessonAiCheckResult(data, container, targetWord) {
-  const score = data.score || 85;
-  const badge = data.badge || (score >= 90 ? 'Xuất Sắc 🌟' : score >= 80 ? 'Rất Tốt 👏' : score >= 65 ? 'Khá 👍' : 'Cần Cải Thiện ✍️');
-  const scoreColor = score >= 85 ? '#10b981' : score >= 70 ? '#0284c7' : '#f59e0b';
+  const isCorrect = data.isCorrect !== false && (typeof data.score === 'number' ? data.score >= 55 : true);
+  const score = typeof data.score === 'number' ? data.score : (isCorrect ? 85 : 20);
+  const badge = data.badge || (
+    score >= 90 ? 'Xuất Sắc 🌟' :
+    score >= 80 ? 'Rất Tốt 👏' :
+    score >= 65 ? 'Khá 👍' :
+    score >= 50 ? 'Cần Cải Thiện ✍️' : 'Chưa Đạt ❌'
+  );
+  const scoreColor = isCorrect && score >= 80 ? '#10b981' : (isCorrect && score >= 60 ? '#0284c7' : '#ef4444');
 
   const improved = data.improvedSentence || '';
   const translation = data.translation || data.vietnameseTranslation || '';
@@ -8620,10 +8601,10 @@ function renderLessonAiCheckResult(data, container, targetWord) {
   const feedback = data.feedback || '';
 
   container.innerHTML = `
-    <div class="lesson-ai-result-box" style="border-radius: 16px; padding: 18px; text-align: left; box-shadow: 0 8px 24px rgba(0,0,0,0.15);">
+    <div class="lesson-ai-result-box" style="border-radius: 16px; padding: 18px; text-align: left; box-shadow: 0 8px 24px rgba(0,0,0,0.15); border: 1.5px solid ${scoreColor}40;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
         <div style="display: flex; align-items: center; gap: 10px;">
-          <span style="background: ${scoreColor}; color: #ffffff; font-weight: 900; font-size: 1.05rem; padding: 4px 14px; border-radius: 99px;">
+          <span style="background: ${scoreColor}; color: #ffffff; font-weight: 900; font-size: 1.05rem; padding: 4px 14px; border-radius: 99px; box-shadow: 0 2px 8px ${scoreColor}60;">
             ${score} / 100
           </span>
           <strong style="font-size: 1rem;">Đánh Giá: <span style="color: ${scoreColor}; font-weight: 800;">${badge}</span></strong>
@@ -8633,14 +8614,14 @@ function renderLessonAiCheckResult(data, container, targetWord) {
         </button>
       </div>
 
-      <div class="ai-fb-text" style="border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; font-size: 0.92rem; line-height: 1.55;">
-        <strong style="color: #8b5cf6;"><i class="fa-solid fa-comment-dots"></i> Nhận xét AI:</strong> ${feedback}
+      <div class="ai-fb-text" style="border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; font-size: 0.92rem; line-height: 1.55; border-left: 3px solid ${scoreColor};">
+        <strong style="color: ${isCorrect ? '#8b5cf6' : '#ef4444'};"><i class="fa-solid ${isCorrect ? 'fa-comment-dots' : 'fa-triangle-exclamation'}"></i> Nhận xét AI:</strong> ${feedback}
       </div>
 
       ${improved ? `
         <div class="ai-improved-box" style="border-radius: 12px; padding: 14px; border: 1px solid rgba(56, 189, 248, 0.3);">
           <div style="font-size: 0.8rem; font-weight: 800; color: #0284c7; text-transform: uppercase; margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between;">
-            <span><i class="fa-solid fa-sparkles"></i> Câu gợi ý nâng cấp (Chuẩn Bản Xứ):</span>
+            <span><i class="fa-solid fa-sparkles"></i> ${isCorrect ? 'Câu gợi ý nâng cấp (Chuẩn Bản Xứ):' : 'Câu gợi ý mẫu chuẩn:'}</span>
             <button onclick="window.speakLessonWord('${improved.replace(/'/g, "\\'")}')" class="btn" style="background: rgba(2, 132, 199, 0.15); border: 1px solid rgba(2, 132, 199, 0.35); color: #0284c7; padding: 2px 10px; border-radius: 6px; cursor: pointer; font-size: 0.78rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
               <i class="fa-solid fa-volume-high"></i> Nghe
             </button>

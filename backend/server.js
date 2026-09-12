@@ -2593,11 +2593,22 @@ Hãy đánh giá bài viết của học viên và trả về ĐÚNG 1 JSON obje
           model: 'openai/gpt-oss-120b',
           messages: [{ role: 'user', content: prompt }],
           temperature: 0.3,
-          max_tokens: 1200
+          max_tokens: 1500
         });
         reply = completion.choices[0]?.message?.content || '';
-      } catch (eGroq) {}
+      } catch (eGroq) {
+        try {
+          const completion2 = await groqClient.chat.completions.create({
+            model: 'openai/gpt-oss-20b',
+            messages: [{ role: 'user', content: prompt }],
+            temperature: 0.3,
+            max_tokens: 1500
+          });
+          reply = completion2.choices[0]?.message?.content || '';
+        } catch (eGroq2) {}
+      }
     }
+
     if (!reply && GEMINI_API_KEY) {
       const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
         method: 'POST',
@@ -2649,19 +2660,45 @@ app.post('/api/ai/check-sentence', async (req, res) => {
     return res.status(400).json({ error: 'Câu đặt không được để trống.' });
   }
 
-  const prompt = `Bạn là giáo viên tiếng Trung của "Tiếng Trung Hongtai".
-Từ vựng mục tiêu: "${word}" (cấp độ HSK ${level || 1}).
-Câu học sinh tự đặt: "${sentence.trim()}".
+  const cleanSentence = sentence.trim();
+  const targetWord = (word || '').trim();
+  const containsWord = targetWord ? cleanSentence.includes(targetWord) : true;
+  const isGibberish = /^([a-zA-Z0-9\u4e00-\u9fa5])\1{3,}$/.test(cleanSentence) || cleanSentence.length < 2;
 
-Hãy kiểm tra xem học sinh có sử dụng từ vựng này đúng ngữ pháp, ngữ cảnh tự nhiên không.
-Trả về ĐÚNG 1 JSON object:
+  const prompt = `Bạn là giáo viên dạy tiếng Trung có tâm và giàu kinh nghiệm sư phạm của "Tiếng Trung Hongtai".
+Nhiệm vụ: Chấm điểm và nhận xét câu do học sinh tự đặt để luyện tập từ vựng.
+
+Từ vựng mục tiêu cần đặt câu: "${targetWord}" (Trình độ: HSK ${level || 1}).
+Câu học sinh đã đặt: "${cleanSentence}"
+
+NGUYÊN TẮC CHẤM ĐIỂM (CỰC KỲ QUAN TRỌNG):
+1. ĐÁNH GIÁ ĐÚNG (isCorrect = true):
+   - Nếu câu có chứa từ vựng mục tiêu "${targetWord}" (hoặc dạng đúng của từ) VÀ ngữ pháp cơ bản ĐÚNG, câu có nghĩa logic hiểu được trong tiếng Trung -> BẮT BUỘC CHẤM ĐÚNG (isCorrect = true), điểm số từ 80 đến 100.
+   - TUYỆT ĐỐI KHÔNG BẮT BẺ KHẮT KHE những câu ngắn gọn, câu giao tiếp khẩu ngữ thông thường (ví dụ: "今天下雨。", "外面下雨了。", "我不喜欢下雨。", "下雨了，快回家吧。", "今天下雨，我不去学校。" đều là câu hoàn toàn ĐÚNG và RẤT TỰ NHIÊN).
+   - Nếu câu đúng nhưng có thể dùng từ ngữ trau chuốt hơn, vẫn chấm là ĐÚNG (isCorrect = true, 80-90 điểm), khen ngợi câu của học sinh trước rồi mới nhẹ nhàng gợi ý câu nâng cấp ở mục improvedSentence.
+
+2. ĐÁNH GIÁ SAI (isCorrect = false):
+   - CHỈ đánh giá là SAI (isCorrect = false, điểm từ 0 đến 35) trong các trường hợp sau:
+     + Câu hoàn toàn KHÔNG chứa từ vựng mục tiêu "${targetWord}".
+     + Gõ vô nghĩa, ký tự rác, lặp từ vô nghĩa (ví dụ: "啊啊啊啊啊啊", "asdfghjkl", "123456").
+     + Sai ngữ pháp nghiêm trọng làm câu vô nghĩa hoặc người Trung Quốc không thể hiểu được.
+
+3. THANG ĐIỂM (score: số nguyên từ 0 đến 100):
+   - 90 - 100: Câu xuất sắc, diễn đạt tự nhiên, đúng từ đúng ngữ pháp.
+   - 80 - 89: Câu đúng ngữ pháp, dùng đúng từ mục tiêu, câu có nghĩa hoàn chỉnh.
+   - 60 - 79: Có dùng đúng từ nhưng ngữ pháp hơi lủng củng hoặc thiếu thành phần phụ.
+   - 30 - 50: Sai ngữ pháp nặng.
+   - 0 - 25: Gõ bậy bạ, vô nghĩa hoặc hoàn toàn không chứa từ mục tiêu "${targetWord}".
+
+4. ĐỊNH DẠNG TRẢ VỀ:
+Trả về DUY NHẤT 1 JSON object thuần túy (không bọc trong markdown block):
 {
   "isCorrect": <true hoặc false>,
-  "score": <điểm từ 0 đến 100>,
-  "feedback": "<Nhận xét tiếng Việt ngắn gọn, chỉ rõ ưu điểm hoặc lỗi sai>",
-  "improvedSentence": "<Câu sửa lại hoặc câu gợi ý nâng cấp tự nhiên hơn bằng chữ Hán>",
-  "pinyin": "<Pinyin của improvedSentence>",
-  "translation": "<Dịch nghĩa tiếng Việt của improvedSentence>"
+  "score": <số nguyên từ 0 đến 100>,
+  "feedback": "<Lời nhận xét tiếng Việt thân thiện, khích lệ; giải thích rõ vì sao đúng hoặc chỉ ra cụ thể lỗi nếu sai>",
+  "improvedSentence": "<Câu tiếng Trung gợi ý nâng cấp mượt mà hoặc câu sửa lỗi chuẩn xác>",
+  "pinyin": "<Pinyin có dấu của improvedSentence>",
+  "translation": "<Bản dịch tiếng Việt chuẩn của improvedSentence>"
 }`;
 
   try {
@@ -2672,11 +2709,21 @@ Trả về ĐÚNG 1 JSON object:
         const completion = await groqClient.chat.completions.create({
           model: 'openai/gpt-oss-120b',
           messages: [{ role: 'user', content: prompt }],
-          temperature: 0.3,
+          temperature: 0.2,
           max_tokens: 800
         });
         reply = completion.choices[0]?.message?.content || '';
-      } catch (eGroq) {}
+      } catch (eGroq) {
+        try {
+          const completion2 = await groqClient.chat.completions.create({
+            model: 'openai/gpt-oss-20b',
+            messages: [{ role: 'user', content: prompt }],
+            temperature: 0.2,
+            max_tokens: 800
+          });
+          reply = completion2.choices[0]?.message?.content || '';
+        } catch (eGroq2) {}
+      }
     }
     if (!reply && GEMINI_API_KEY) {
       const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
@@ -2696,24 +2743,45 @@ Trả về ĐÚNG 1 JSON object:
       try { result = JSON.parse(jsonMatch[0]); } catch (e) {}
     }
     if (!result) {
-      result = {
-        isCorrect: true,
-        score: 92,
-        feedback: "Câu của bạn đặt rất hay, chuẩn ngữ pháp và đúng ngữ cảnh!",
-        improvedSentence: sentence,
-        pinyin: "",
-        translation: ""
-      };
+      if (!containsWord || isGibberish) {
+        result = {
+          isCorrect: false,
+          score: 15,
+          feedback: `Câu của bạn ${!containsWord ? `chưa chứa từ vựng mục tiêu "${targetWord}"` : 'chưa có nghĩa hoàn chỉnh'}. Hãy thử đặt lại câu nhé!`,
+          improvedSentence: `今天${targetWord || ''}。`,
+          pinyin: "",
+          translation: ""
+        };
+      } else {
+        result = {
+          isCorrect: true,
+          score: 88,
+          feedback: `Câu có sử dụng từ "${targetWord}" đúng ngữ cảnh và ngữ pháp. Hãy tiếp tục phát huy!`,
+          improvedSentence: cleanSentence,
+          pinyin: "",
+          translation: ""
+        };
+      }
+    } else {
+      // Đảm bảo kiểu dữ liệu và ràng buộc logic
+      if (isGibberish || (!containsWord && targetWord)) {
+        result.isCorrect = false;
+        result.score = Math.min(typeof result.score === 'number' ? result.score : 20, 30);
+      } else {
+        result.isCorrect = result.isCorrect !== false;
+        result.score = typeof result.score === 'number' ? Math.min(100, Math.max(0, result.score)) : (result.isCorrect ? 85 : 25);
+      }
     }
     res.json({ success: true, ...result });
   } catch (err) {
     console.error('AI Check sentence error:', err);
+    const ok = containsWord && !isGibberish;
     res.json({
       success: true,
-      isCorrect: true,
-      score: 88,
-      feedback: "Câu đặt chuẩn ngữ pháp cơ bản!",
-      improvedSentence: sentence,
+      isCorrect: ok,
+      score: ok ? 85 : 15,
+      feedback: ok ? `Câu đặt cơ bản đã đúng ngữ pháp!` : `Câu chưa chứa từ vựng mục tiêu "${targetWord}".`,
+      improvedSentence: cleanSentence,
       pinyin: "",
       translation: ""
     });
