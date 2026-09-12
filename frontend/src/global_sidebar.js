@@ -19,6 +19,7 @@
     if (path.includes('video-dictation')) {
       return search.includes('mode=shadowing') ? 'shadowing' : 'dictation';
     }
+    if (path.includes('writing-practice')) return 'writing';
     if (path.includes('reading-practice')) return 'reading';
     if (path.includes('chinese-phonetics')) return 'phonetics';
     if (path.includes('chinese-radicals')) return 'radicals';
@@ -219,6 +220,10 @@
           </li>
           <li class="sidebar-item ${activeKey === 'reading' ? 'active' : ''}" onclick="window.location.href = '/reading-practice.html'">
             <i class="fa-solid fa-book-open-reader" style="color: #ec4899;"></i> <span>Luyện Đọc HSK</span>
+          </li>
+          <li class="sidebar-item ${activeKey === 'writing' ? 'active' : ''}" onclick="window.location.href = '/writing-practice.html'">
+            <i class="fa-solid fa-feather-pointed" style="color: #a855f7;"></i> <span>Luyện Viết & AI Chấm</span>
+            <span style="font-size:0.65rem; background:linear-gradient(135deg, rgba(168,85,247,0.25), rgba(139,92,246,0.3)); color:#d8b4fe; border:1px solid rgba(168,85,247,0.4); padding:2px 7px; border-radius:6px; font-weight:800; margin-left:auto;">AI Mới ✨</span>
           </li>
           <li class="sidebar-item ${activeKey === 'rules' ? 'active' : ''}" onclick="window.location.href = '/han-viet-rules.html'">
             <i class="fa-solid fa-book-bookmark" style="color: #8b5cf6;"></i> <span>Quy Tắc Hán Việt</span>
