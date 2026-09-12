@@ -1449,22 +1449,35 @@ class ReadingPracticeApp {
     const targetSpan = document.querySelector(`.rd-chinese-sentence[data-sidx="${sIdx}"]`);
     if (targetSpan) targetSpan.classList.add('active-speaking');
 
-    const u = new SpeechSynthesisUtterance(sentence);
-    u.lang = 'zh-CN';
-    u.rate = this.audioSpeed;
-    u.onend = () => {
-      if (targetSpan) targetSpan.classList.remove('active-speaking');
-    };
-    window.speechSynthesis.speak(u);
+    setTimeout(() => {
+      try {
+        const u = new SpeechSynthesisUtterance(sentence);
+        u.lang = 'zh-CN';
+        u.rate = this.audioSpeed;
+        u.onend = () => {
+          if (targetSpan) targetSpan.classList.remove('active-speaking');
+        };
+        u.onerror = () => {
+          if (targetSpan) targetSpan.classList.remove('active-speaking');
+        };
+        window.speechSynthesis.speak(u);
+      } catch (e) {
+        if (targetSpan) targetSpan.classList.remove('active-speaking');
+      }
+    }, 60);
   }
 
   speakText(text) {
     if (!text || !('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'zh-CN';
-    u.rate = 0.9;
-    window.speechSynthesis.speak(u);
+    setTimeout(() => {
+      try {
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'zh-CN';
+        u.rate = 0.9;
+        window.speechSynthesis.speak(u);
+      } catch (e) { }
+    }, 60);
   }
 
   showToast(msg, isError = false) {

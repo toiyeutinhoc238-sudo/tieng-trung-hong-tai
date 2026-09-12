@@ -1951,7 +1951,35 @@
       }
     }
 
+    let currentActiveAudio = null;
+    let activeSpeakSessionId = 0;
+
+    function stopAllAudio() {
+      activeSpeakSessionId++;
+
+      if ('speechSynthesis' in window) {
+        try {
+          window.speechSynthesis.cancel();
+        } catch (e) { }
+      }
+
+      if (currentActiveAudio) {
+        try {
+          currentActiveAudio.pause();
+          currentActiveAudio.currentTime = 0;
+          currentActiveAudio.src = '';
+        } catch (e) { }
+        currentActiveAudio = null;
+      }
+
+      document.querySelectorAll('.read-audio-btn, .cloze-audio-btn').forEach(btn => {
+        btn.classList.remove('speaking-active');
+      });
+    }
+    window.stopAllAudio = stopAllAudio;
+
     function selectDialogue(diagId) {
+      stopAllAudio();
       currentDialogueId = diagId;
       currentLineIndex = 0;
       completedChatLines = [];
@@ -1971,6 +1999,7 @@
     }
 
     function switchBkMode(mode) {
+      stopAllAudio();
       currentMode = mode;
       currentLineIndex = 0;
       currentScore = 0;
@@ -1988,29 +2017,91 @@
     window.switchBkMode = switchBkMode;
 
     function switchPracticeTab(tab) {
+      stopAllAudio();
       currentPracticeTab = tab;
       renderWorkspace();
     }
     window.switchPracticeTab = switchPracticeTab;
 
-    function speakText(text) {
+    function speakText(text, btnElement) {
       if (!text) return;
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = 'zh-CN';
-        u.rate = 0.88;
-        window.speechSynthesis.speak(u);
+      stopAllAudio();
+
+      const sessionId = ++activeSpeakSessionId;
+      const cleanText = text.replace(/<[^>]*>/g, '').trim();
+      if (!cleanText) return;
+
+      if (btnElement) {
+        btnElement.classList.add('speaking-active');
       }
+
+      // Try server natural Baidu female voice first
+      const audioUrl = `/api/tts?text=${encodeURIComponent(cleanText)}&voice=baidu-female&speed=3&_t=${Date.now()}`;
+      const audio = new Audio(audioUrl);
+      currentActiveAudio = audio;
+
+      audio.onended = () => {
+        if (currentActiveAudio === audio) currentActiveAudio = null;
+        if (btnElement) btnElement.classList.remove('speaking-active');
+      };
+
+      audio.onerror = () => {
+        if (sessionId !== activeSpeakSessionId) return;
+        currentActiveAudio = null;
+        fallbackWebSpeech(cleanText, sessionId, btnElement);
+      };
+
+      audio.play().catch(err => {
+        if (sessionId !== activeSpeakSessionId) return;
+        currentActiveAudio = null;
+        fallbackWebSpeech(cleanText, sessionId, btnElement);
+      });
+    }
+    window.speakText = speakText;
+
+    function fallbackWebSpeech(text, sessionId, btnElement) {
+      if (!('speechSynthesis' in window)) {
+        if (btnElement) btnElement.classList.remove('speaking-active');
+        return;
+      }
+      try {
+        window.speechSynthesis.cancel();
+      } catch (e) { }
+
+      // 60ms delay prevents Chromium SpeechSynthesis queue overlap / stacking bug
+      setTimeout(() => {
+        if (sessionId !== activeSpeakSessionId) return;
+        try {
+          const u = new SpeechSynthesisUtterance(text);
+          u.lang = 'zh-CN';
+          u.rate = 0.88;
+          u.onend = () => {
+            if (btnElement) btnElement.classList.remove('speaking-active');
+          };
+          u.onerror = () => {
+            if (btnElement) btnElement.classList.remove('speaking-active');
+          };
+          window.speechSynthesis.speak(u);
+        } catch (err) {
+          if (btnElement) btnElement.classList.remove('speaking-active');
+        }
+      }, 60);
     }
 
     function playDialogueAudio(audioPath) {
       if (!audioPath) return;
+      stopAllAudio();
+
       const audio = new Audio(audioPath);
+      currentActiveAudio = audio;
+      audio.onended = () => {
+        if (currentActiveAudio === audio) currentActiveAudio = null;
+      };
       audio.play().catch(err => {
-        console.warn("Audio file play error, falling back to TTS:", err);
+        console.warn("Audio file play error:", err);
       });
     }
+    window.playDialogueAudio = playDialogueAudio;
 
     function getActiveDialogueData() {
       const lessonObj = (allReadingTexts || []).find(l => Number(l.lessonId) === currentLessonId);
@@ -2107,7 +2198,7 @@
                     <i class="fa-regular fa-eye"></i>
                   </button>
                 ` : ''}
-                <button type="button" onclick="speakText(decodeURIComponent('${encodeURIComponent(line.zh)}'))" class="read-action-btn read-audio-btn" title="Nghe phát âm">
+                <button type="button" onclick="speakText(decodeURIComponent('${encodeURIComponent(line.zh)}'), this)" class="read-action-btn read-audio-btn" title="Nghe phát âm">
                   <i class="fa-solid fa-volume-high"></i>
                 </button>
               </div>
@@ -2221,7 +2312,7 @@
                 </div>
 
                 <div style="text-align:center; margin-bottom:20px;">
-                  <button onclick="speakText(decodeURIComponent('${encodeURIComponent(curLine.zh)}'))" style="background:linear-gradient(135deg, #3b82f6, #1d4ed8); border:none; color:#ffffff; padding:12px 24px; border-radius:99px; font-weight:700; font-size:0.95rem; cursor:pointer; box-shadow:0 6px 20px rgba(59,130,246,0.4); display:inline-flex; align-items:center; gap:8px;">
+                  <button onclick="speakText(decodeURIComponent('${encodeURIComponent(curLine.zh)}'), this)" style="background:linear-gradient(135deg, #3b82f6, #1d4ed8); border:none; color:#ffffff; padding:12px 24px; border-radius:99px; font-weight:700; font-size:0.95rem; cursor:pointer; box-shadow:0 6px 20px rgba(59,130,246,0.4); display:inline-flex; align-items:center; gap:8px;">
                     <i class="fa-solid fa-volume-high"></i> BẤM ĐỂ NGHE CÂU THOẠI
                   </button>
                 </div>
@@ -2505,7 +2596,7 @@
             <div class="hanzi-text cloze-line-text">
               ${text}
             </div>
-            <button onclick="speakText(decodeURIComponent('${encodeURIComponent(line.zh)}'))" class="btn btn-sm cloze-audio-btn" style="background:rgba(56,189,248,0.15); border:1px solid rgba(56,189,248,0.3); color:#38bdf8; padding:6px 12px; border-radius:8px; cursor:pointer; font-size:0.82rem; flex-shrink:0;" title="Nghe câu này">
+            <button onclick="speakText(decodeURIComponent('${encodeURIComponent(line.zh)}'), this)" class="btn btn-sm cloze-audio-btn" style="background:rgba(56,189,248,0.15); border:1px solid rgba(56,189,248,0.3); color:#38bdf8; padding:6px 12px; border-radius:8px; cursor:pointer; font-size:0.82rem; flex-shrink:0;" title="Nghe câu này">
               <i class="fa-solid fa-volume-high"></i>
             </button>
           </div>

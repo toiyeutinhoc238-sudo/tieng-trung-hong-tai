@@ -1892,8 +1892,10 @@ function updateStats() {
 function renderDeckSelectionView() {
   // Check if there is an active study or quiz session currently displayed
   const studyView = document.getElementById('flashcard-study-view');
+  const lessonVocabView = document.getElementById('lesson-vocab-study-view');
   const quizView = document.getElementById('quiz-study-view');
   const isStudying = (studyView && studyView.style.display === 'block') ||
+    (lessonVocabView && lessonVocabView.style.display === 'block') ||
     (quizView && quizView.style.display === 'block');
 
   if (isStudying) {
@@ -1953,15 +1955,23 @@ function startStudySession(status, level, title, desc) {
   if (titleEl) titleEl.textContent = title;
   if (descEl) descEl.textContent = desc;
 
-  // Hide deck selector & notebook dashboard, show study workspace
+  // Hide deck selector & notebook dashboard & dedicated lesson vocab view, show study workspace
   const deckSel = document.getElementById('deck-selection-view');
   if (deckSel) deckSel.style.display = 'none';
 
   const nbDash = document.getElementById('notebook-dashboard-view');
   if (nbDash) nbDash.style.display = 'none';
 
+  const lessonVocabView = document.getElementById('lesson-vocab-study-view');
+  if (lessonVocabView) lessonVocabView.style.display = 'none';
+
   const fcStudy = document.getElementById('flashcard-study-view');
   if (fcStudy) fcStudy.style.display = 'block';
+
+  // In notebook mode, default to flip/type, never stay in lesson-study-card mode
+  if (studyNotebookId && studyMode === 'lesson') {
+    studyMode = 'flip';
+  }
 
   // Apply filters to load cards (this already calls renderActiveCard inside)
   applyFilters();
@@ -1983,6 +1993,11 @@ function _applyStudyModeUI(mode) {
   const modeLessonBtn = document.getElementById('mode-lesson-btn');
   const modeFlipBtn = document.getElementById('mode-flip-btn');
   const modeTypeBtn = document.getElementById('mode-type-btn');
+
+  // If studying inside a notebook, hide 'Học Bài Tương Tác' button so user focuses on Lật Thẻ and Luyện Gõ
+  if (modeLessonBtn) {
+    modeLessonBtn.style.display = studyNotebookId ? 'none' : 'flex';
+  }
 
   const lessonStudyCard = document.getElementById('lesson-study-card');
   const flashcardContainer = document.getElementById('flashcard-card-container');
@@ -2028,21 +2043,22 @@ function _applyStudyModeUI(mode) {
   resetBtnStyles(modeFlipBtn);
   resetBtnStyles(modeTypeBtn);
 
-  if (mode === 'lesson') {
+  if (mode === 'lesson' && !studyNotebookId) {
     setBtnActive(modeLessonBtn);
     if (lessonStudyCard) lessonStudyCard.style.display = 'block';
     if (flashcardContainer) flashcardContainer.style.display = 'none';
-    if (typingContainer) typingContainer.style.display = 'none';
-  } else if (mode === 'flip') {
-    setBtnActive(modeFlipBtn);
-    if (lessonStudyCard) lessonStudyCard.style.display = 'none';
-    if (flashcardContainer) flashcardContainer.style.display = 'block';
     if (typingContainer) typingContainer.style.display = 'none';
   } else if (mode === 'type') {
     setBtnActive(modeTypeBtn);
     if (lessonStudyCard) lessonStudyCard.style.display = 'none';
     if (flashcardContainer) flashcardContainer.style.display = 'none';
     if (typingContainer) typingContainer.style.display = 'flex';
+  } else {
+    // Default to 'flip' mode
+    setBtnActive(modeFlipBtn);
+    if (lessonStudyCard) lessonStudyCard.style.display = 'none';
+    if (flashcardContainer) flashcardContainer.style.display = 'block';
+    if (typingContainer) typingContainer.style.display = 'none';
   }
 }
 
@@ -2876,6 +2892,8 @@ function setupEventListeners() {
 
       studySelectedLessons = null;
       studyNotebookId = null;
+      const lessonVocabView = document.getElementById('lesson-vocab-study-view');
+      if (lessonVocabView) lessonVocabView.style.display = 'none';
       document.getElementById('flashcard-study-view').style.display = 'none';
       document.getElementById('deck-selection-view').style.display = 'block';
       if (activeNotebook) {
@@ -6277,7 +6295,9 @@ function studyCustomList(name) {
   // Toggle DOM views
   const selectionView = document.getElementById('deck-selection-view');
   const studyView = document.getElementById('flashcard-study-view');
+  const lessonVocabView = document.getElementById('lesson-vocab-study-view');
   if (selectionView) selectionView.style.display = 'none';
+  if (lessonVocabView) lessonVocabView.style.display = 'none';
   if (studyView) studyView.style.display = 'block';
 
   const titleEl = document.getElementById('study-deck-title');
@@ -8202,6 +8222,10 @@ window.returnToLessonsMap = function () {
   if (modal) {
     modal.classList.remove('active');
   }
+  const lessonVocabView = document.getElementById('lesson-vocab-study-view');
+  if (lessonVocabView) {
+    lessonVocabView.style.display = 'none';
+  }
   const studyView = document.getElementById('flashcard-study-view');
   if (studyView) {
     studyView.style.display = 'none';
@@ -8237,6 +8261,11 @@ window.enterFlashcardFullscreen = function () {
     studyView.classList.add('fullscreen-flashcard-active');
   }
 
+  const lessonVocabView = document.getElementById('lesson-vocab-study-view');
+  if (lessonVocabView) {
+    lessonVocabView.classList.add('fullscreen-flashcard-active');
+  }
+
   const radicalView = document.getElementById('radical-study-workspace') || document.getElementById('radicals-flashcard-view');
   if (radicalView) {
     radicalView.classList.add('fullscreen-flashcard-active');
@@ -8270,6 +8299,11 @@ window.exitFlashcardFullscreen = function (callDocExit = true) {
   const studyView = document.getElementById('flashcard-study-view');
   if (studyView) {
     studyView.classList.remove('fullscreen-flashcard-active');
+  }
+
+  const lessonVocabView = document.getElementById('lesson-vocab-study-view');
+  if (lessonVocabView) {
+    lessonVocabView.classList.remove('fullscreen-flashcard-active');
   }
 
   const radicalView = document.getElementById('radical-study-workspace') || document.getElementById('radicals-flashcard-view');
@@ -8321,7 +8355,7 @@ function renderLessonFlashcardWorkspace(lessonTitle, words, selectedIndex = 0) {
   currentLessonVocabWords = words || [];
   currentLessonVocabIndex = Math.max(0, Math.min(selectedIndex, currentLessonVocabWords.length - 1));
 
-  const studyView = document.getElementById('flashcard-study-view');
+  const studyView = document.getElementById('lesson-vocab-study-view') || document.getElementById('flashcard-study-view');
   if (!studyView) return;
 
   const currentWord = currentLessonVocabWords[currentLessonVocabIndex];
@@ -8917,9 +8951,12 @@ function startLessonStudy(lesson, sliceWords) {
   const controlsDash = document.querySelector('.controls-dashboard');
   if (controlsDash) controlsDash.style.display = 'none';
 
-  // SHOW ONLY IMAGE 4 FLASHCARD WORKSPACE
+  // SHOW ONLY IMAGE 4 FLASHCARD WORKSPACE (DEDICATED VIEW)
   const studyView = document.getElementById('flashcard-study-view');
-  if (studyView) studyView.style.display = 'block';
+  if (studyView) studyView.style.display = 'none';
+
+  const lessonVocabView = document.getElementById('lesson-vocab-study-view');
+  if (lessonVocabView) lessonVocabView.style.display = 'block';
 
   renderLessonFlashcardWorkspace(title, sliceWords, 0);
 
@@ -11821,6 +11858,8 @@ function showTopicsView() {
   if (dashboardView) dashboardView.style.display = 'none';
   if (studyView) studyView.style.display = 'none';
   if (quizView) quizView.style.display = 'none';
+  const lessonVocabView = document.getElementById('lesson-vocab-study-view');
+  if (lessonVocabView) lessonVocabView.style.display = 'none';
 
   activeNotebook = null;
   studyNotebookId = null;
@@ -11836,6 +11875,8 @@ function showSubdecksView() {
   const dashboardView = document.getElementById('notebook-dashboard-view');
   const studyView = document.getElementById('flashcard-study-view');
   const quizView = document.getElementById('quiz-study-view');
+  const lessonVocabView = document.getElementById('lesson-vocab-study-view');
+  if (lessonVocabView) lessonVocabView.style.display = 'none';
 
   if (selectionView) selectionView.style.display = 'block';
   if (topicsView) topicsView.style.display = 'none';
@@ -11863,6 +11904,8 @@ function showNotebookDashboardView(notebookId, preserveLessons = false) {
   const dashboardView = document.getElementById('notebook-dashboard-view');
   const studyView = document.getElementById('flashcard-study-view');
   const quizView = document.getElementById('quiz-study-view');
+  const lessonVocabView = document.getElementById('lesson-vocab-study-view');
+  if (lessonVocabView) lessonVocabView.style.display = 'none';
 
   if (selectionView) selectionView.style.display = 'block';
   if (topicsView) topicsView.style.display = 'none';
@@ -12558,7 +12601,7 @@ function startStudySessionFromNotebook(mode) {
   if (!activeNotebook) return;
 
   studyNotebookId = activeNotebook;
-  studyMode = mode; // set the variable directly — startStudySession will call setStudyMode() once
+  studyMode = mode || 'flip';
 
   const notebookName = document.getElementById('dashboard-notebook-title')?.textContent || '';
   const notebookDesc = document.getElementById('dashboard-notebook-desc')?.textContent || '';
@@ -12570,8 +12613,9 @@ function startStudySessionFromNotebook(mode) {
     studySelectedLessons = null;
   }
 
-  // Pass active filter to study session (this calls setStudyMode once internally)
+  // Pass active filter to study session
   startStudySession(dashboardActiveFilter, 'all', notebookName, notebookDesc);
+  setStudyMode(studyMode);
 }
 
 // Fast-path typing session: bypass applyFilters/updateStats entirely, just set filteredList directly
@@ -12592,9 +12636,11 @@ function startDirectTypingSession(words) {
   // Switch views
   const deckView = document.getElementById('deck-selection-view');
   const studyView = document.getElementById('flashcard-study-view');
+  const lessonVocabView = document.getElementById('lesson-vocab-study-view');
   const notebookDashboard = document.getElementById('notebook-dashboard-view');
   if (deckView) deckView.style.display = 'none';
   if (notebookDashboard) notebookDashboard.style.display = 'none';
+  if (lessonVocabView) lessonVocabView.style.display = 'none';
   if (studyView) studyView.style.display = 'block';
 
   // Set header title
@@ -13164,6 +13210,9 @@ function startGameArenaFromNotebook() {
   const flashcardStudyView = document.getElementById('flashcard-study-view');
   if (flashcardStudyView) flashcardStudyView.style.display = 'none';
 
+  const lessonVocabView = document.getElementById('lesson-vocab-study-view');
+  if (lessonVocabView) lessonVocabView.style.display = 'none';
+
   const gamePlayView = document.getElementById('game-play-view');
   if (gamePlayView) gamePlayView.style.display = 'block';
 
@@ -13220,6 +13269,9 @@ window.openNotebookGamesHub = function (customWords, customTitle, customDesc) {
 
   const flashcardStudyView = document.getElementById('flashcard-study-view');
   if (flashcardStudyView) flashcardStudyView.style.display = 'none';
+
+  const lessonVocabView2 = document.getElementById('lesson-vocab-study-view');
+  if (lessonVocabView2) lessonVocabView2.style.display = 'none';
 
   const gamePlayView = document.getElementById('game-play-view');
   if (gamePlayView) gamePlayView.style.display = 'block';
