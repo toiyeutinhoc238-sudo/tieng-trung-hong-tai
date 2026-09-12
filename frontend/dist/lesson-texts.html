@@ -994,7 +994,7 @@
       font-weight: 500 !important;
     }
 
-    /* Pinyin Visibility Rules */
+    /* Pinyin & Meaning Visibility Rules (Hidden by default) */
     body.hide-pinyin .chat-py,
     body.hide-pinyin .bk-pinyin-line,
     body.hide-pinyin [data-role="pinyin"],
@@ -1005,6 +1005,261 @@
     .hide-pinyin .bk-pinyin-line,
     .hide-pinyin [data-role="pinyin"] {
       display: none !important;
+    }
+
+    body.hide-meaning .bk-meaning-line:not(.force-revealed),
+    body.hide-meaning [data-role="meaning"]:not(.force-revealed),
+    html.hide-meaning .bk-meaning-line:not(.force-revealed),
+    html.hide-meaning [data-role="meaning"]:not(.force-revealed),
+    .hide-meaning .bk-meaning-line:not(.force-revealed),
+    .hide-meaning [data-role="meaning"]:not(.force-revealed) {
+      display: none !important;
+    }
+
+    /* Hub & Header Toggle Buttons */
+    #meaning-toggle-hub-btn {
+      padding: 7px 14px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+      outline: none;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    #meaning-toggle-hub-btn.meaning-active {
+      background: linear-gradient(135deg, #10b981, #059669) !important;
+      color: #ffffff !important;
+      border: 1.5px solid #047857 !important;
+      box-shadow: 0 3px 12px rgba(16, 185, 129, 0.35) !important;
+    }
+
+    #meaning-toggle-hub-btn.meaning-active:hover {
+      background: linear-gradient(135deg, #34d399, #059669) !important;
+      transform: translateY(-1px);
+      box-shadow: 0 5px 16px rgba(16, 185, 129, 0.45) !important;
+    }
+
+    #meaning-toggle-hub-btn.meaning-active i,
+    #meaning-toggle-hub-btn.meaning-active span {
+      color: #ffffff !important;
+    }
+
+    #meaning-toggle-hub-btn.meaning-off {
+      background: rgba(255, 255, 255, 0.08) !important;
+      color: #cbd5e1 !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+      box-shadow: none !important;
+    }
+
+    #meaning-toggle-hub-btn.meaning-off i,
+    #meaning-toggle-hub-btn.meaning-off span {
+      color: #cbd5e1 !important;
+    }
+
+    #meaning-toggle-hub-btn.meaning-off:hover {
+      background: rgba(255, 255, 255, 0.16) !important;
+      color: #ffffff !important;
+      border-color: rgba(255, 255, 255, 0.35) !important;
+      transform: translateY(-1px);
+    }
+
+    #meaning-toggle-hub-btn:active {
+      transform: scale(0.96) !important;
+    }
+
+    .btn-step-toggle {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #94a3b8;
+      padding: 7px 14px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.84rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      outline: none;
+      user-select: none;
+    }
+
+    .btn-step-toggle:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .btn-step-toggle.active-pinyin {
+      background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+      color: #ffffff !important;
+      border-color: #b45309 !important;
+      box-shadow: 0 3px 12px rgba(217, 119, 6, 0.35) !important;
+    }
+
+    .btn-step-toggle.active-meaning {
+      background: linear-gradient(135deg, #10b981, #059669) !important;
+      color: #ffffff !important;
+      border-color: #047857 !important;
+      box-shadow: 0 3px 12px rgba(16, 185, 129, 0.35) !important;
+    }
+
+    /* Step 1: Read Dialogue Box & Lines */
+    .read-step-box {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      padding: 26px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      transition: all 0.25s ease;
+    }
+
+    .read-line-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 14px;
+      transition: background-color 0.2s;
+    }
+
+    .read-line-row:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .read-speaker-badge {
+      background: rgba(37, 99, 235, 0.25);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      padding: 6px 14px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 0.88rem;
+      flex-shrink: 0;
+    }
+
+    .read-line-content {
+      flex: 1;
+      word-break: break-word;
+    }
+
+    .read-line-zh {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 4px;
+      line-height: 1.5;
+    }
+
+    .read-line-py {
+      font-size: 0.95rem;
+      color: #fbbf24;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .read-line-vi {
+      font-size: 0.92rem;
+      color: #cbd5e1;
+      line-height: 1.45;
+      transition: all 0.2s ease;
+    }
+
+    .read-line-vi.force-revealed {
+      display: block !important;
+      color: #38bdf8 !important;
+      font-weight: 700 !important;
+      padding: 6px 10px;
+      background: rgba(56, 189, 248, 0.12);
+      border-left: 3px solid #38bdf8;
+      border-radius: 6px;
+      margin-top: 6px;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .read-line-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .read-action-btn {
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      outline: none;
+    }
+
+    .read-audio-btn {
+      background: rgba(56, 189, 248, 0.2);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #38bdf8;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      gap: 6px;
+    }
+
+    .read-audio-btn:hover {
+      background: rgba(56, 189, 248, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .single-meaning-toggle {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #94a3b8;
+      width: 36px;
+      height: 36px;
+      font-size: 0.88rem;
+    }
+
+    .single-meaning-toggle:hover {
+      background: rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+    }
+
+    .single-meaning-toggle.active {
+      background: rgba(16, 185, 129, 0.25) !important;
+      border-color: rgba(16, 185, 129, 0.5) !important;
+      color: #34d399 !important;
+    }
+
+    .step-bottom-next-bar {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(37, 99, 235, 0.15));
+      border: 1.5px solid rgba(56, 189, 248, 0.35);
+      border-radius: 20px;
+      padding: 18px 24px;
+      margin-top: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .step-bottom-title {
+      font-size: 1.12rem;
+      font-weight: 800;
+      color: #ffffff;
+      font-family: var(--font-main);
+    }
+
     /* Light Mode Stepper Bar & Header */
     html.light-mode .lesson-stepper-hub-bar,
     body.light-mode .lesson-stepper-hub-bar {
@@ -1045,6 +1300,106 @@
       background: linear-gradient(135deg, #0284c7, #2563eb) !important;
       color: #ffffff !important;
       border-color: #38bdf8 !important;
+    }
+
+    html.light-mode #meaning-toggle-hub-btn,
+    body.light-mode #meaning-toggle-hub-btn {
+      background: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+
+    html.light-mode #meaning-toggle-hub-btn.meaning-active,
+    body.light-mode #meaning-toggle-hub-btn.meaning-active {
+      background: linear-gradient(135deg, #10b981, #059669) !important;
+      color: #ffffff !important;
+      border-color: #047857 !important;
+    }
+
+    html.light-mode .btn-step-toggle,
+    body.light-mode .btn-step-toggle {
+      background: #f1f5f9 !important;
+      border: 1.5px solid #cbd5e1 !important;
+      color: #475569 !important;
+    }
+
+    html.light-mode .btn-step-toggle:hover,
+    body.light-mode .btn-step-toggle:hover {
+      background: #e2e8f0 !important;
+      color: #0f172a !important;
+    }
+
+    html.light-mode .read-step-box,
+    body.light-mode .read-step-box {
+      background: #ffffff !important;
+      border: 1.5px solid #e2e8f0 !important;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06) !important;
+    }
+
+    html.light-mode .read-line-row,
+    body.light-mode .read-line-row {
+      border-bottom: 1px solid #f1f5f9 !important;
+    }
+
+    html.light-mode .read-line-zh,
+    body.light-mode .read-line-zh {
+      color: #0f172a !important;
+    }
+
+    html.light-mode .read-line-py,
+    body.light-mode .read-line-py {
+      color: #d97706 !important;
+    }
+
+    html.light-mode .read-line-vi,
+    body.light-mode .read-line-vi {
+      color: #475569 !important;
+    }
+
+    html.light-mode .read-line-vi.force-revealed,
+    body.light-mode .read-line-vi.force-revealed {
+      color: #0369a1 !important;
+      background: #e0f2fe !important;
+      border-left-color: #0284c7 !important;
+    }
+
+    html.light-mode .read-speaker-badge,
+    body.light-mode .read-speaker-badge {
+      background: #eff6ff !important;
+      color: #1d4ed8 !important;
+      border-color: #bfdbfe !important;
+    }
+
+    html.light-mode .read-audio-btn,
+    body.light-mode .read-audio-btn {
+      background: #f0f9ff !important;
+      border-color: #bae6fd !important;
+      color: #0284c7 !important;
+    }
+
+    html.light-mode .single-meaning-toggle,
+    body.light-mode .single-meaning-toggle {
+      background: #f8fafc !important;
+      border-color: #cbd5e1 !important;
+      color: #64748b !important;
+    }
+
+    html.light-mode .single-meaning-toggle:hover,
+    body.light-mode .single-meaning-toggle:hover {
+      background: #e2e8f0 !important;
+      color: #0f172a !important;
+    }
+
+    html.light-mode .step-bottom-next-bar,
+    body.light-mode .step-bottom-next-bar {
+      background: #ffffff !important;
+      border: 1.5px solid #bae6fd !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+    }
+
+    html.light-mode .step-bottom-title,
+    body.light-mode .step-bottom-title {
+      color: #0f172a !important;
     }
 
     html.light-mode .practice-tabs-bar,
@@ -1285,11 +1640,18 @@
           id="lesson-title-badge">
           <i class="fa-solid fa-bookmark" style="color: #38bdf8;"></i> Bài Khóa HSK 1 - Bài 1
         </div>
-        <button id="pinyin-toggle-hub-btn" class="pinyin-active" onclick="window.togglePinyinVisibility()"
-          title="Bật/Tắt hiển thị Pinyin trong Bài Khóa">
-          <i class="fa-solid fa-eye" id="pinyin-hub-icon"></i>
-          <span id="pinyin-hub-label">Pinyin: BẬT</span>
-        </button>
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <button id="pinyin-toggle-hub-btn" class="pinyin-off" onclick="window.togglePinyinVisibility()"
+            title="Bật/Tắt hiển thị Pinyin trong Bài Khóa">
+            <i class="fa-solid fa-eye-slash" id="pinyin-hub-icon"></i>
+            <span id="pinyin-hub-label">Pinyin: TẮT</span>
+          </button>
+          <button id="meaning-toggle-hub-btn" class="meaning-off" onclick="window.toggleMeaningVisibility()"
+            title="Bật/Tắt hiển thị Dịch Nghĩa tiếng Việt trong Bài Khóa">
+            <i class="fa-solid fa-eye-slash" id="meaning-hub-icon"></i>
+            <span id="meaning-hub-label">Dịch Nghĩa: TẮT</span>
+          </button>
+        </div>
       </div>
 
       <!-- 4 Step Tabs -->
@@ -1725,22 +2087,33 @@
 
       // 1. BƯỚC 1: ĐỌC BÀI KHÓA (READ)
       if (currentMode === 'read') {
-        let linesHtml = lines.map(line => {
+        let linesHtml = lines.map((line, idx) => {
           return `
-            <div style="display:flex; align-items:flex-start; gap:16px; margin-bottom:18px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:14px;">
+            <div class="read-line-row">
               ${line.speaker ? `
-                <span style="background:rgba(37,99,235,0.25); color:#60a5fa; border:1px solid rgba(59,130,246,0.4); padding:6px 14px; border-radius:12px; font-weight:800; font-size:0.88rem; flex-shrink:0;">
+                <span class="read-speaker-badge">
                   ${line.speaker}
                 </span>
               ` : ''}
-              <div style="flex:1; word-break:break-word;">
-                <div class="hanzi-text" style="font-size:1.35rem; font-weight:800; color:#ffffff; margin-bottom:4px;">${line.zh}</div>
-                ${line.pinyin ? `<div class="bk-pinyin-line" data-role="pinyin" style="font-size:0.95rem; color:#fbbf24; font-weight:700; margin-bottom:4px;">${line.pinyin}</div>` : ''}
-                ${line.vi ? `<div style="font-size:0.92rem; color:#cbd5e1;">${line.vi}</div>` : ''}
+              <div class="read-line-content">
+                <div class="hanzi-text read-line-zh">${line.zh}</div>
+                ${line.pinyin ? `<div class="bk-pinyin-line read-line-py" data-role="pinyin">${line.pinyin}</div>` : ''}
+                ${line.vi ? `
+                  <div class="bk-meaning-line read-line-vi" data-role="meaning" id="read-meaning-${idx}">
+                    ${line.vi}
+                  </div>
+                ` : ''}
               </div>
-              <button onclick="speakText(decodeURIComponent('${encodeURIComponent(line.zh)}'))" style="background:rgba(56,189,248,0.2); border:1px solid rgba(56,189,248,0.4); color:#38bdf8; cursor:pointer; padding:8px 16px; border-radius:12px; font-weight:700; font-size:0.9rem; flex-shrink:0;" title="Nghe phát âm">
-                <i class="fa-solid fa-volume-high"></i> Nghe
-              </button>
+              <div class="read-line-actions">
+                ${line.vi ? `
+                  <button type="button" onclick="window.toggleSingleLineMeaning(${idx})" id="read-meaning-btn-${idx}" class="read-action-btn single-meaning-toggle" title="Xem nhanh dịch nghĩa câu này">
+                    <i class="fa-regular fa-eye"></i>
+                  </button>
+                ` : ''}
+                <button type="button" onclick="speakText(decodeURIComponent('${encodeURIComponent(line.zh)}'))" class="read-action-btn read-audio-btn" title="Nghe phát âm">
+                  <i class="fa-solid fa-volume-high"></i>
+                </button>
+              </div>
             </div>
           `;
         }).join('');
@@ -1759,26 +2132,34 @@
         box.innerHTML = `
           <div style="max-width:850px; margin:0 auto;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
-              <h3 style="color:#38bdf8; font-size:1.3rem; margin:0; font-weight:800; display:flex; align-items:center; gap:10px;">
+              <h3 style="color:#38bdf8; font-size:1.25rem; margin:0; font-weight:800; display:flex; align-items:center; gap:10px;">
                 <i class="fa-solid fa-book-open"></i> BƯỚC 1: ĐỌC & NGHE CHI TIẾT BÀI KHÓA (${diagObj.title || `Bài Khóa ${currentDialogueId}`})
               </h3>
-              <button onclick="playDialogueAudio('${audioUrl}')" style="background:rgba(59,130,246,0.2); border:1px solid rgba(59,130,246,0.4); color:#60a5fa; padding:8px 16px; border-radius:12px; font-weight:700; font-size:0.88rem; cursor:pointer;">
-                <i class="fa-solid fa-play"></i> Nghe Toàn Bộ Bài Khóa
-              </button>
+              <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <button type="button" id="step1-pinyin-toggle-btn" class="btn-step-toggle ${showPinyin ? 'active-pinyin' : ''}" onclick="window.togglePinyinVisibility()" title="Bật/Tắt Pinyin">
+                  <i class="${showPinyin ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'}"></i> <span>Pinyin: ${showPinyin ? 'BẬT' : 'TẮT'}</span>
+                </button>
+                <button type="button" id="step1-meaning-toggle-btn" class="btn-step-toggle ${showMeaning ? 'active-meaning' : ''}" onclick="window.toggleMeaningVisibility()" title="Bật/Tắt Dịch Nghĩa">
+                  <i class="${showMeaning ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'}"></i> <span>Dịch Nghĩa: ${showMeaning ? 'BẬT' : 'TẮT'}</span>
+                </button>
+                <button onclick="playDialogueAudio('${audioUrl}')" style="background:rgba(59,130,246,0.2); border:1px solid rgba(59,130,246,0.4); color:#60a5fa; padding:8px 16px; border-radius:12px; font-weight:700; font-size:0.88rem; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+                  <i class="fa-solid fa-play"></i> Nghe Toàn Bộ Bài Khóa
+                </button>
+              </div>
             </div>
 
-            <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.12); border-radius:20px; padding:26px; box-shadow:0 8px 24px rgba(0,0,0,0.3);">
+            <div class="read-step-box">
               ${linesHtml}
               ${notesHtml}
             </div>
 
             <!-- Bottom Seamless Step Action Bar -->
-            <div style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(37, 99, 235, 0.15)); border: 1.5px solid rgba(56, 189, 248, 0.35); border-radius: 20px; padding: 18px 24px; margin-top: 28px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+            <div class="step-bottom-next-bar">
               <div>
                 <div style="font-size: 0.85rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">
                   <i class="fa-solid fa-circle-check" style="color: #34d399;"></i> Đã đọc xong bài khóa?
                 </div>
-                <div style="font-size: 1.12rem; font-weight: 800; color: #ffffff; font-family: var(--font-main);">
+                <div class="step-bottom-title">
                   Chuyển sang Bước 2: Luyện Nghe Nhập Bài Khóa (Khung Chat Đối Thoại)!
                 </div>
               </div>
@@ -1893,6 +2274,9 @@
       } else if (currentMode === 'practice') {
         renderPracticeMode(box, diagObj, audioUrl);
       }
+
+      if (typeof applyPinyinState === 'function') applyPinyinState(false);
+      if (typeof applyMeaningState === 'function') applyMeaningState(false);
     }
 
     function renderPracticeMode(box, diagObj, audioUrl) {
@@ -2851,13 +3235,20 @@
       renderWorkspace();
     }
 
-    // Pinyin Visibility Management & Toast Notification
-    let showPinyin = localStorage.getItem('lesson_text_show_pinyin') !== 'false';
+    // Pinyin & Meaning Visibility Management & Toast Notification (Default: HIDDEN)
+    let showPinyin = localStorage.getItem('lesson_text_show_pinyin') === 'true';
+    let showMeaning = localStorage.getItem('lesson_text_show_meaning') === 'true';
 
     function initPinyinState() {
       const saved = localStorage.getItem('lesson_text_show_pinyin');
-      showPinyin = saved !== 'false';
+      showPinyin = saved === 'true';
       applyPinyinState(false);
+    }
+
+    function initMeaningState() {
+      const saved = localStorage.getItem('lesson_text_show_meaning');
+      showMeaning = saved === 'true';
+      applyMeaningState(false);
     }
 
     function applyPinyinState(showToastNotice = false) {
@@ -2869,6 +3260,7 @@
         document.documentElement.classList.add('hide-pinyin');
       }
 
+      // Update Hub Button
       const hubBtn = document.getElementById('pinyin-toggle-hub-btn');
       const hubIcon = document.getElementById('pinyin-hub-icon');
       const hubLabel = document.getElementById('pinyin-hub-label');
@@ -2891,8 +3283,59 @@
         hubLabel.textContent = showPinyin ? 'Pinyin: BẬT' : 'Pinyin: TẮT';
       }
 
+      // Update Step 1 Header Button
+      const step1Btn = document.getElementById('step1-pinyin-toggle-btn');
+      if (step1Btn) {
+        step1Btn.className = `btn-step-toggle ${showPinyin ? 'active-pinyin' : ''}`;
+        step1Btn.innerHTML = `<i class="${showPinyin ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'}"></i> <span>Pinyin: ${showPinyin ? 'BẬT' : 'TẮT'}</span>`;
+      }
+
       if (showToastNotice) {
         showLessonToast(showPinyin ? '👁️ Đã BẬT hiển thị Pinyin bài khóa' : '🙈 Đã ẨN Pinyin bài khóa (tự thử thách khả năng đọc chữ Hán)');
+      }
+    }
+
+    function applyMeaningState(showToastNotice = false) {
+      if (showMeaning) {
+        document.body.classList.remove('hide-meaning');
+        document.documentElement.classList.remove('hide-meaning');
+      } else {
+        document.body.classList.add('hide-meaning');
+        document.documentElement.classList.add('hide-meaning');
+      }
+
+      // Update Hub Button
+      const hubBtn = document.getElementById('meaning-toggle-hub-btn');
+      const hubIcon = document.getElementById('meaning-hub-icon');
+      const hubLabel = document.getElementById('meaning-hub-label');
+
+      if (hubBtn) {
+        if (showMeaning) {
+          hubBtn.classList.remove('meaning-off');
+          hubBtn.classList.add('meaning-active');
+        } else {
+          hubBtn.classList.remove('meaning-active');
+          hubBtn.classList.add('meaning-off');
+        }
+      }
+
+      if (hubIcon) {
+        hubIcon.className = showMeaning ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash';
+      }
+
+      if (hubLabel) {
+        hubLabel.textContent = showMeaning ? 'Dịch Nghĩa: BẬT' : 'Dịch Nghĩa: TẮT';
+      }
+
+      // Update Step 1 Header Button
+      const step1Btn = document.getElementById('step1-meaning-toggle-btn');
+      if (step1Btn) {
+        step1Btn.className = `btn-step-toggle ${showMeaning ? 'active-meaning' : ''}`;
+        step1Btn.innerHTML = `<i class="${showMeaning ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'}"></i> <span>Dịch Nghĩa: ${showMeaning ? 'BẬT' : 'TẮT'}</span>`;
+      }
+
+      if (showToastNotice) {
+        showLessonToast(showMeaning ? '👁️ Đã BẬT hiển thị Dịch Nghĩa tiếng Việt' : '🙈 Đã ẨN Dịch Nghĩa tiếng Việt (tập trung luyện chữ Hán)');
       }
     }
 
@@ -2900,6 +3343,34 @@
       showPinyin = !showPinyin;
       localStorage.setItem('lesson_text_show_pinyin', showPinyin ? 'true' : 'false');
       applyPinyinState(true);
+    };
+
+    window.toggleMeaningVisibility = function () {
+      showMeaning = !showMeaning;
+      localStorage.setItem('lesson_text_show_meaning', showMeaning ? 'true' : 'false');
+      applyMeaningState(true);
+    };
+
+    window.toggleSingleLineMeaning = function (idx) {
+      const el = document.getElementById(`read-meaning-${idx}`);
+      const btn = document.getElementById(`read-meaning-btn-${idx}`);
+      if (!el) return;
+      const isRevealed = el.classList.contains('force-revealed');
+      if (isRevealed) {
+        el.classList.remove('force-revealed');
+        if (btn) {
+          btn.classList.remove('active');
+          btn.innerHTML = '<i class="fa-regular fa-eye"></i>';
+          btn.title = 'Xem nhanh dịch nghĩa câu này';
+        }
+      } else {
+        el.classList.add('force-revealed');
+        if (btn) {
+          btn.classList.add('active');
+          btn.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
+          btn.title = 'Ẩn dịch nghĩa câu này';
+        }
+      }
     };
 
     function showLessonToast(msg, isError = false) {
@@ -2922,9 +3393,10 @@
     }
     window.showToast = showLessonToast;
 
-    // Apply saved pinyin state on load
+    // Apply saved pinyin and meaning state on load
     document.addEventListener('DOMContentLoaded', () => {
       initPinyinState();
+      initMeaningState();
     });
   </script>
 
