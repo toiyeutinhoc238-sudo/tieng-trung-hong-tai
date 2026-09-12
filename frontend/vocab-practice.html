@@ -518,41 +518,379 @@
       40%, 80% { transform: translateX(6px); }
     }
 
-    /* Word Unscramble Chips */
+    /* Practice Prompt Card (Khung câu hỏi / gợi ý dịu mắt) */
+    .practice-prompt-card {
+      background: rgba(30, 41, 59, 0.75);
+      border: 1.5px solid rgba(56, 189, 248, 0.35);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 20px;
+      transition: all 0.25s ease;
+    }
+
+    html.light-mode .practice-prompt-card,
+    body.light-mode .practice-prompt-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    html.light-mode .practice-prompt-card .prompt-title {
+      color: #0284c7 !important;
+    }
+
+    html.light-mode .practice-prompt-card .prompt-main-text {
+      color: #1e293b !important;
+    }
+
+    html.light-mode .practice-prompt-card .prompt-sub-text {
+      color: #64748b !important;
+    }
+
+    /* Word Unscramble Chips & Container (Hàng ghép câu & Ngân hàng từ) */
     .unscramble-container {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
       justify-content: center;
-      min-height: 60px;
+      align-items: center;
+      min-height: 72px;
       padding: 16px;
-      background: rgba(15, 23, 42, 0.6);
+      background: rgba(15, 23, 42, 0.5);
       border: 2px dashed rgba(56, 189, 248, 0.4);
       border-radius: 16px;
       margin-bottom: 20px;
+      transition: all 0.25s ease;
     }
 
+    html.light-mode .unscramble-container,
+    body.light-mode .unscramble-container {
+      background: #f8fafc;
+      border: 2px dashed #94a3b8;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.03);
+    }
+
+    /* Word Chips trong Ngân hàng mảnh từ */
     .word-chip {
-      background: linear-gradient(135deg, #0284c7, #2563eb);
+      background: rgba(30, 41, 59, 0.85);
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
       color: #ffffff;
       padding: 10px 20px;
       border-radius: 12px;
       font-size: 1.25rem;
-      font-weight: 800;
+      font-weight: 700;
       cursor: pointer;
       user-select: none;
-      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
-      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .word-chip:hover {
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.2);
       transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.5);
+    }
+
+    html.light-mode .word-chip,
+    body.light-mode .word-chip {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      color: #1e293b;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    html.light-mode .word-chip:hover,
+    body.light-mode .word-chip:hover {
+      background: #f0f9ff;
+      border-color: #0284c7;
+      color: #0284c7;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.15);
     }
 
     .word-chip.used {
-      opacity: 0.35;
+      opacity: 0.25;
       pointer-events: none;
+      filter: grayscale(0.5);
+    }
+
+    html.light-mode .word-chip.used,
+    body.light-mode .word-chip.used {
+      background: #f1f5f9;
+      border-color: #e2e8f0;
+      color: #94a3b8;
+    }
+
+    /* Assembled Chips (Mảnh từ đã đưa lên hàng ghép) - Dịu mắt, trang nhã */
+    .assembled-word-chip {
+      background: rgba(16, 185, 129, 0.25);
+      border: 1.5px solid #10b981;
+      color: #a7f3d0;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 1.25rem;
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+      transition: all 0.2s;
+    }
+
+    .assembled-word-chip:hover {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: #ef4444;
+      color: #fca5a5;
+      transform: translateY(-2px);
+    }
+
+    html.light-mode .assembled-word-chip,
+    body.light-mode .assembled-word-chip {
+      background: #f0fdf4;
+      border: 1.5px solid #86efac;
+      color: #166534;
+      box-shadow: 0 2px 8px rgba(22, 163, 74, 0.1);
+    }
+
+    html.light-mode .assembled-word-chip:hover,
+    body.light-mode .assembled-word-chip:hover {
+      background: #fee2e2;
+      border-color: #fca5a5;
+      color: #991b1b;
+    }
+
+    /* Nhãn tiêu đề phần bài tập */
+    .practice-label-green {
+      color: #34d399;
+      font-weight: 700;
+      font-size: 0.92rem;
+      margin-bottom: 8px;
+      text-align: left;
+    }
+    html.light-mode .practice-label-green,
+    body.light-mode .practice-label-green {
+      color: #0284c7;
+    }
+
+    .practice-label-amber {
+      color: #fbbf24;
+      font-weight: 700;
+      font-size: 0.92rem;
+      margin-bottom: 8px;
+      text-align: left;
+    }
+    html.light-mode .practice-label-amber,
+    body.light-mode .practice-label-amber {
+      color: #d97706;
+    }
+
+    /* Ô input gõ câu trong bài tập AI */
+    .practice-ai-input {
+      width: 100%;
+      padding: 14px 18px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 2px solid rgba(167, 139, 250, 0.35);
+      border-radius: 14px;
+      color: #ffffff;
+      font-size: 1.2rem;
+      font-weight: 600;
+      outline: none;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
+    .practice-ai-input:focus {
+      border-color: #8b5cf6;
+    }
+    html.light-mode .practice-ai-input,
+    body.light-mode .practice-ai-input {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      color: #0f172a;
+    }
+    html.light-mode .practice-ai-input:focus,
+    body.light-mode .practice-ai-input:focus {
+      border-color: #8b5cf6;
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+    }
+
+    /* Practice Buttons System (Dịu mắt, thanh lịch trên cả Sáng & Tối) */
+    .practice-btn {
+      font-family: var(--font-main);
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid transparent;
+      user-select: none;
+      text-decoration: none;
+    }
+
+    .practice-btn-primary {
+      background: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+    }
+    .practice-btn-primary:hover {
+      background: #0369a1;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(2, 132, 199, 0.35);
+    }
+
+    .practice-btn-success {
+      background: #10b981;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+    }
+    .practice-btn-success:hover {
+      background: #059669;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+    }
+
+    .practice-btn-neutral {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #cbd5e1;
+    }
+    .practice-btn-neutral:hover {
+      background: rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    html.light-mode .practice-btn-neutral,
+    body.light-mode .practice-btn-neutral {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      color: #334155;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    }
+    html.light-mode .practice-btn-neutral:hover,
+    body.light-mode .practice-btn-neutral:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+      border-color: #94a3b8;
+      transform: translateY(-1px);
+    }
+
+    /* Option Answer Buttons for Listening and Cloze */
+    .ans-opt-btn {
+      font-family: var(--font-main);
+      background: rgba(30, 41, 59, 0.7);
+      border: 1.5px solid rgba(255, 255, 255, 0.16);
+      color: #f8fafc;
+      padding: 16px 20px;
+      border-radius: 14px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      user-select: none;
+    }
+    .ans-opt-btn:hover {
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(56, 189, 248, 0.2);
+    }
+    html.light-mode .ans-opt-btn,
+    body.light-mode .ans-opt-btn {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      color: #1e293b;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    html.light-mode .ans-opt-btn:hover,
+    body.light-mode .ans-opt-btn:hover {
+      background: #f0f9ff;
+      border-color: #38bdf8;
+      color: #0284c7;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.12);
+    }
+
+    /* Feedback Badges */
+    .feedback-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      border-radius: 99px;
+      font-size: 0.98rem;
+      font-weight: 700;
+    }
+    .feedback-badge-success {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid #10b981;
+      color: #10b981;
+    }
+    html.light-mode .feedback-badge-success,
+    body.light-mode .feedback-badge-success {
+      background: #dcfce7;
+      border-color: #86efac;
+      color: #15803d;
+    }
+    .feedback-badge-error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid #ef4444;
+      color: #f87171;
+    }
+    html.light-mode .feedback-badge-error,
+    body.light-mode .feedback-badge-error {
+      background: #fee2e2;
+      border-color: #fca5a5;
+      color: #b91c1c;
+    }
+
+    /* AI Card styles */
+    .ai-result-card {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1.5px solid rgba(139, 92, 246, 0.4);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+    html.light-mode .ai-result-card,
+    body.light-mode .ai-result-card {
+      background: #ffffff;
+      border: 1.5px solid #ddd6fe;
+      box-shadow: 0 8px 24px rgba(139, 92, 246, 0.08);
+    }
+    .ai-result-feedback {
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+      color: #cbd5e1;
+      font-size: 0.92rem;
+      text-align: left;
+    }
+    html.light-mode .ai-result-feedback,
+    body.light-mode .ai-result-feedback {
+      background: #f8fafc;
+      color: #334155;
+    }
+    .ai-result-upgrade {
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 12px;
+      padding: 14px;
+      text-align: left;
+    }
+    html.light-mode .ai-result-upgrade,
+    body.light-mode .ai-result-upgrade {
+      background: #f0f9ff;
+      border-color: #bae6fd;
+    }
+    html.light-mode .ai-result-upgrade .upgrade-text {
+      color: #0369a1 !important;
     }
 
     @media (max-width: 768px) {
@@ -971,21 +1309,21 @@
             </span>
           </div>
 
-          <!-- Audio Listening Hero -->
-          <div style="background:rgba(15,23,42,0.7); border:1.5px solid rgba(56,189,248,0.35); border-radius:20px; padding:32px; margin-bottom:24px;">
-            <div style="font-size:1.1rem; font-weight:700; color:#cbd5e1; margin-bottom:18px;">
+          <!-- Audio Listening Hero Dịu Mắt -->
+          <div class="practice-prompt-card" style="padding:32px;">
+            <div class="prompt-title" style="font-size:1.05rem; font-weight:700; margin-bottom:18px;">
               Bấm nút loa bên dưới để nghe phát âm, sau đó chọn nghĩa tiếng Việt đúng:
             </div>
 
-            <button onclick="speakWord('${curWord.word}')" style="background:linear-gradient(135deg, #2563eb, #1d4ed8); border:none; color:#ffffff; padding:16px 36px; border-radius:99px; font-weight:800; font-size:1.15rem; cursor:pointer; box-shadow:0 8px 25px rgba(37,99,235,0.4); display:inline-flex; align-items:center; gap:12px; transition:transform 0.15s;">
-              <i class="fa-solid fa-volume-high" style="font-size:1.4rem;"></i> BẤM ĐỂ NGHE PHÁT ÂM
+            <button onclick="speakWord('${curWord.word}')" class="practice-btn practice-btn-primary" style="padding:16px 36px; border-radius:99px; font-size:1.15rem; box-shadow:0 8px 25px rgba(2,132,199,0.35);">
+              <i class="fa-solid fa-volume-high" style="font-size:1.35rem;"></i> BẤM ĐỂ NGHE PHÁT ÂM
             </button>
           </div>
 
           <!-- Options Grid -->
           <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:24px;">
             ${rawOptions.map((opt, idx) => `
-              <button class="ans-opt-btn" onclick="checkListenAnswer('${opt.word}', '${curWord.word}', this)" style="background:rgba(255,255,255,0.06); border:1.5px solid rgba(255,255,255,0.18); color:#f8fafc; padding:16px 20px; border-radius:14px; font-size:1.1rem; font-weight:700; cursor:pointer; text-align:left; display:flex; justify-content:space-between; align-items:center; transition:all 0.2s;">
+              <button class="ans-opt-btn" onclick="checkListenAnswer('${opt.word}', '${curWord.word}', this)" style="text-align:left; display:flex; justify-content:space-between; align-items:center;">
                 <span>${String.fromCharCode(65 + idx)}. ${opt.meaning}</span>
                 <i class="fa-solid fa-circle-check opt-icon" style="opacity:0;"></i>
               </button>
@@ -995,10 +1333,10 @@
           <div id="listen-feedback" style="min-height:32px; margin-bottom:18px; font-weight:800; font-size:1.05rem;"></div>
 
           <div style="display:flex; justify-content:space-between; gap:12px;">
-            <button onclick="navWord(-1)" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2); color:#fff; padding:12px 20px; border-radius:12px; font-weight:700; cursor:pointer;">
+            <button onclick="navWord(-1)" class="practice-btn practice-btn-neutral">
               &larr; Từ trước
             </button>
-            <button onclick="navWord(1)" style="background:#2563eb; border:none; color:#fff; padding:12px 28px; border-radius:12px; font-weight:800; cursor:pointer;">
+            <button onclick="navWord(1)" class="practice-btn practice-btn-primary">
               Từ tiếp theo &rarr;
             </button>
           </div>
@@ -1012,19 +1350,19 @@
       const feed = document.getElementById('listen-feedback');
       if (selectedWord === correctWord) {
         recordVocabResult(correctWord, true);
-        btnEl.style.background = 'rgba(16, 185, 129, 0.25)';
+        btnEl.style.background = 'rgba(16, 185, 129, 0.2)';
         btnEl.style.borderColor = '#10b981';
-        btnEl.style.color = '#34d399';
+        btnEl.style.color = '#10b981';
         const icon = btnEl.querySelector('.opt-icon');
-        if (icon) { icon.style.opacity = '1'; icon.style.color = '#34d399'; }
-        if (feed) feed.innerHTML = `<span style="color:#34d399;"><i class="fa-solid fa-circle-check"></i> Chính xác! (${correctWord})</span>`;
+        if (icon) { icon.style.opacity = '1'; icon.style.color = '#10b981'; }
+        if (feed) feed.innerHTML = `<div class="feedback-badge feedback-badge-success"><i class="fa-solid fa-circle-check"></i> Chính xác! (${correctWord})</div>`;
         speakWord(correctWord);
       } else {
         recordVocabResult(correctWord, false);
-        btnEl.style.background = 'rgba(239, 68, 68, 0.25)';
+        btnEl.style.background = 'rgba(239, 68, 68, 0.2)';
         btnEl.style.borderColor = '#ef4444';
-        btnEl.style.color = '#f87171';
-        if (feed) feed.innerHTML = `<span style="color:#f87171;"><i class="fa-solid fa-circle-xmark"></i> Chưa đúng, thử nghe lại nhé!</span>`;
+        btnEl.style.color = '#ef4444';
+        if (feed) feed.innerHTML = `<div class="feedback-badge feedback-badge-error"><i class="fa-solid fa-circle-xmark"></i> Chưa đúng, thử nghe lại nhé!</div>`;
       }
     }
 
@@ -1093,11 +1431,11 @@
           <div id="matching-feedback" style="text-align:center; min-height:42px; margin-bottom:16px;"></div>
 
           <div id="matching-actions" style="text-align:center; display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
-            <button onclick="renderMatchingMode(document.getElementById('vocab-workspace'), ${safeBatchIndex})" class="btn-matching-action" style="background:rgba(255,255,255,0.08); border:1.5px solid rgba(255,255,255,0.2); color:inherit; padding:10px 20px; border-radius:12px; font-weight:700; cursor:pointer;">
+            <button onclick="renderMatchingMode(document.getElementById('vocab-workspace'), ${safeBatchIndex})" class="practice-btn practice-btn-neutral">
               <i class="fa-solid fa-rotate-left"></i> Trộn Lại Hiệp Này
             </button>
             ${totalWords > batchSize ? `
-            <button onclick="renderMatchingMode(document.getElementById('vocab-workspace'), ${(safeBatchIndex + 1)})" class="btn-matching-action" style="background:linear-gradient(135deg, #0284c7, #0369a1); border:none; color:#ffffff; padding:10px 20px; border-radius:12px; font-weight:800; cursor:pointer;">
+            <button onclick="renderMatchingMode(document.getElementById('vocab-workspace'), ${(safeBatchIndex + 1)})" class="practice-btn practice-btn-primary">
               <i class="fa-solid fa-forward-step"></i> Hiệp Tiếp Theo
             </button>
             ` : ''}
@@ -1280,27 +1618,27 @@
             </span>
           </div>
 
-          <!-- Prompt Box -->
-          <div style="background:rgba(15,23,42,0.7); border:1.5px solid rgba(56,189,248,0.35); border-radius:20px; padding:24px; margin-bottom:20px;">
-            <div style="font-size:0.9rem; font-weight:800; color:#38bdf8; text-transform:uppercase; margin-bottom:6px;">
+          <!-- Prompt Box Dịu Mắt -->
+          <div class="practice-prompt-card">
+            <div class="prompt-title" style="font-size:0.9rem; font-weight:800; color:#38bdf8; text-transform:uppercase; margin-bottom:6px;">
               <i class="fa-solid fa-flag"></i> Nghĩa tiếng Việt gợi ý:
             </div>
-            <div style="font-size:1.35rem; font-weight:800; color:#ffffff;">
+            <div class="prompt-main-text" style="font-size:1.35rem; font-weight:800; color:#ffffff;">
               "${meaningVi}"
             </div>
-            <div style="margin-top:10px; font-size:0.85rem; color:#94a3b8;">
-              Từ vựng trọng tâm: <strong style="color:#fbbf24;">${curWord.word}</strong> (${curWord.pinyin})
+            <div class="prompt-sub-text" style="margin-top:10px; font-size:0.85rem; color:#94a3b8;">
+              Từ vựng trọng tâm: <strong style="color:#d97706;">${curWord.word}</strong> (${curWord.pinyin})
             </div>
           </div>
 
           <!-- Assembled Sentence Drop Zone -->
-          <div style="font-size:0.9rem; font-weight:800; color:#34d399; margin-bottom:8px; text-align:left;">
+          <div class="practice-label-green">
             Hàng ghép câu của bạn (Bấm vào từ để gỡ ra):
           </div>
           <div class="unscramble-container" id="unscramble-dropzone"></div>
 
           <!-- Available Chips -->
-          <div style="font-size:0.9rem; font-weight:800; color:#fbbf24; margin-bottom:8px; text-align:left;">
+          <div class="practice-label-amber">
             Ngân hàng mảnh từ (Bấm để đưa lên hàng ghép):
           </div>
           <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-bottom:24px;" id="unscramble-bank">
@@ -1314,13 +1652,13 @@
           <div id="unscramble-feedback" style="min-height:32px; margin-bottom:18px; font-weight:800; font-size:1.05rem;"></div>
 
           <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
-            <button onclick="checkUnscrambleAnswer()" style="background:linear-gradient(135deg, #10b981, #059669); border:none; color:#ffffff; padding:12px 28px; border-radius:12px; font-weight:800; font-size:0.98rem; cursor:pointer;">
+            <button onclick="checkUnscrambleAnswer()" class="practice-btn practice-btn-success">
               <i class="fa-solid fa-check"></i> Kiểm Tra
             </button>
-            <button onclick="renderUnscrambleMode(document.getElementById('vocab-workspace'))" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2); color:#cbd5e1; padding:12px 20px; border-radius:12px; font-weight:700; font-size:0.92rem; cursor:pointer;">
+            <button onclick="renderUnscrambleMode(document.getElementById('vocab-workspace'))" class="practice-btn practice-btn-neutral">
               <i class="fa-solid fa-rotate-left"></i> Làm Lại
             </button>
-            <button onclick="navWord(1)" style="background:#2563eb; border:none; color:#fff; padding:12px 24px; border-radius:12px; font-weight:800; cursor:pointer;">
+            <button onclick="navWord(1)" class="practice-btn practice-btn-primary">
               Câu Tiếp Theo &rarr;
             </button>
           </div>
@@ -1355,7 +1693,7 @@
       const dropzone = document.getElementById('unscramble-dropzone');
       if (dropzone) {
         dropzone.innerHTML = state.assembled.map(c => `
-          <div class="word-chip hanzi-text" style="background:linear-gradient(135deg, #059669, #047857);" onclick="removeAssembledChip(${c.id})">
+          <div class="assembled-word-chip hanzi-text" onclick="removeAssembledChip(${c.id})" title="Bấm để gỡ ra">
             ${c.char}
           </div>
         `).join('');
@@ -1379,11 +1717,11 @@
       const userSentence = state.assembled.map(c => c.char).join('');
       if (userSentence === state.target) {
         if (curWord) recordVocabResult(curWord, true);
-        feed.innerHTML = `<span style="color:#34d399;"><i class="fa-solid fa-circle-check"></i> Xuất sắc! Câu ghép hoàn toàn chính xác!</span>`;
+        feed.innerHTML = `<div class="feedback-badge feedback-badge-success"><i class="fa-solid fa-circle-check"></i> Xuất sắc! Câu ghép hoàn toàn chính xác!</div>`;
         speakWord(state.target);
       } else {
         if (curWord) recordVocabResult(curWord, false);
-        feed.innerHTML = `<span style="color:#f87171;"><i class="fa-solid fa-circle-xmark"></i> Thứ tự chưa đúng, thử sắp xếp lại nhé!</span>`;
+        feed.innerHTML = `<div class="feedback-badge feedback-badge-error"><i class="fa-solid fa-circle-xmark"></i> Thứ tự chưa đúng, thử sắp xếp lại nhé!</div>`;
       }
     }
 
@@ -1409,23 +1747,23 @@
             </span>
           </div>
 
-          <!-- Sentence Card -->
-          <div style="background:rgba(15,23,42,0.7); border:1.5px solid rgba(56,189,248,0.35); border-radius:20px; padding:28px; margin-bottom:24px;">
-            <div style="font-size:0.9rem; font-weight:800; color:#38bdf8; text-transform:uppercase; margin-bottom:12px;">
+          <!-- Sentence Card Dịu Mắt -->
+          <div class="practice-prompt-card">
+            <div class="prompt-title" style="font-size:0.9rem; font-weight:800; color:#38bdf8; text-transform:uppercase; margin-bottom:12px;">
               Chọn từ thích hợp nhất để hoàn thành câu:
             </div>
-            <div class="hanzi-text" style="font-size:1.55rem; font-weight:800; color:#ffffff; line-height:1.8; margin-bottom:12px;">
+            <div class="hanzi-text prompt-main-text" style="font-size:1.55rem; font-weight:800; color:#ffffff; line-height:1.8; margin-bottom:12px;">
               ${clozeSentence}
             </div>
-            ${curWord.example_vi ? `<div style="font-size:0.95rem; color:#cbd5e1; font-style:italic;">Dịch: "${curWord.example_vi}"</div>` : ''}
+            ${curWord.example_vi ? `<div class="prompt-sub-text" style="font-size:0.95rem; color:#cbd5e1; font-style:italic;">Dịch: "${curWord.example_vi}"</div>` : ''}
           </div>
 
           <!-- Options Grid -->
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:24px;">
             ${options.map((opt, idx) => `
-              <button class="ans-opt-btn hanzi-text" onclick="checkSentenceClozeAnswer('${opt.word}', '${curWord.word}', this)" style="background:rgba(255,255,255,0.06); border:1.5px solid rgba(255,255,255,0.18); color:#f8fafc; padding:16px 20px; border-radius:14px; font-size:1.25rem; font-weight:800; cursor:pointer; text-align:center; transition:all 0.2s;">
+              <button class="ans-opt-btn hanzi-text" onclick="checkSentenceClozeAnswer('${opt.word}', '${curWord.word}', this)" style="padding:16px 20px; border-radius:14px; font-size:1.25rem; font-weight:800; cursor:pointer; text-align:center;">
                 <div>${opt.word}</div>
-                <div style="font-size:0.85rem; color:#94a3b8; font-weight:600; font-family:var(--font-main);">${opt.pinyin} - ${opt.meaning}</div>
+                <div style="font-size:0.85rem; color:#64748b; font-weight:600; font-family:var(--font-main);">${opt.pinyin} - ${opt.meaning}</div>
               </button>
             `).join('')}
           </div>
@@ -1433,10 +1771,10 @@
           <div id="cloze-feedback" style="min-height:32px; margin-bottom:18px; font-weight:800; font-size:1.05rem;"></div>
 
           <div style="display:flex; justify-content:space-between; gap:12px;">
-            <button onclick="navWord(-1)" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2); color:#fff; padding:12px 20px; border-radius:12px; font-weight:700; cursor:pointer;">
+            <button onclick="navWord(-1)" class="practice-btn practice-btn-neutral">
               &larr; Câu trước
             </button>
-            <button onclick="navWord(1)" style="background:#2563eb; border:none; color:#fff; padding:12px 28px; border-radius:12px; font-weight:800; cursor:pointer;">
+            <button onclick="navWord(1)" class="practice-btn practice-btn-primary">
               Câu tiếp theo &rarr;
             </button>
           </div>
@@ -1450,18 +1788,18 @@
 
       if (selectedWord === correctWord) {
         recordVocabResult(correctWord, true);
-        btnEl.style.background = 'rgba(16, 185, 129, 0.25)';
+        btnEl.style.background = 'rgba(16, 185, 129, 0.2)';
         btnEl.style.borderColor = '#10b981';
-        btnEl.style.color = '#34d399';
-        if (slotEl) { slotEl.textContent = correctWord; slotEl.style.color = '#34d399'; }
-        if (feed) feed.innerHTML = `<span style="color:#34d399;"><i class="fa-solid fa-circle-check"></i> Chính xác! (${correctWord})</span>`;
+        btnEl.style.color = '#10b981';
+        if (slotEl) { slotEl.textContent = correctWord; slotEl.style.color = '#10b981'; }
+        if (feed) feed.innerHTML = `<div class="feedback-badge feedback-badge-success"><i class="fa-solid fa-circle-check"></i> Chính xác! (${correctWord})</div>`;
         speakWord(correctWord);
       } else {
         recordVocabResult(correctWord, false);
-        btnEl.style.background = 'rgba(239, 68, 68, 0.25)';
+        btnEl.style.background = 'rgba(239, 68, 68, 0.2)';
         btnEl.style.borderColor = '#ef4444';
-        btnEl.style.color = '#f87171';
-        if (feed) feed.innerHTML = `<span style="color:#f87171;"><i class="fa-solid fa-circle-xmark"></i> Chưa phù hợp ngữ cảnh, hãy thử lại!</span>`;
+        btnEl.style.color = '#ef4444';
+        if (feed) feed.innerHTML = `<div class="feedback-badge feedback-badge-error"><i class="fa-solid fa-circle-xmark"></i> Chưa phù hợp ngữ cảnh, hãy thử lại!</div>`;
       }
     }
 
@@ -1501,18 +1839,18 @@
             </div>
           </div>
 
-          <!-- Input Sentence Box -->
-          <div style="background:rgba(15,23,42,0.7); border:1.5px solid rgba(167,139,250,0.35); border-radius:20px; padding:24px; margin-bottom:20px;">
-            <label style="font-size:0.95rem; font-weight:800; color:#cbd5e1; display:block; margin-bottom:8px;">
-              Hãy đặt một câu tiếng Trung có chứa từ "<span style="color:#fbbf24;">${curWord.word}</span>":
+          <!-- Input Sentence Box Dịu Mắt -->
+          <div class="practice-prompt-card">
+            <label class="prompt-title" style="font-size:0.95rem; font-weight:800; color:#cbd5e1; display:block; margin-bottom:10px;">
+              Hãy đặt một câu tiếng Trung có chứa từ "<span style="color:#d97706;">${curWord.word}</span>":
             </label>
-            <input type="text" id="ai-user-sentence-input" placeholder="Ví dụ: 我很喜欢..." class="hanzi-text" style="width:100%; padding:14px 18px; background:rgba(0,0,0,0.4); border:2px solid rgba(167,139,250,0.3); border-radius:14px; color:#ffffff; font-size:1.2rem; font-weight:600; outline:none; margin-bottom:16px; box-sizing:border-box;" />
+            <input type="text" id="ai-user-sentence-input" placeholder="Ví dụ: 我很喜欢..." class="hanzi-text practice-ai-input" />
 
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
-              <div style="font-size:0.85rem; color:#94a3b8;">
+              <div class="prompt-sub-text" style="font-size:0.85rem; color:#94a3b8;">
                 Gõ bằng chữ Hán hoặc Pinyin
               </div>
-              <button onclick="submitSentenceForAiCheck('${curWord.word}')" style="background:linear-gradient(135deg, #8b5cf6, #6d28d9); border:none; color:#ffffff; padding:12px 28px; border-radius:12px; font-weight:800; font-size:0.98rem; cursor:pointer; box-shadow:0 6px 20px rgba(139,92,246,0.4); display:inline-flex; align-items:center; gap:8px;">
+              <button onclick="submitSentenceForAiCheck('${curWord.word}')" style="background:linear-gradient(135deg, #8b5cf6, #7c3aed); border:none; color:#ffffff; padding:12px 28px; border-radius:12px; font-weight:700; font-size:0.98rem; cursor:pointer; box-shadow:0 6px 20px rgba(139,92,246,0.3); display:inline-flex; align-items:center; gap:8px;">
                 <i class="fa-solid fa-wand-magic-sparkles"></i> 🤖 AI Chấm Điểm & Phân Tích
               </button>
             </div>
@@ -1522,10 +1860,10 @@
           <div id="sentence-ai-result" style="display:none; margin-bottom:24px;"></div>
 
           <div style="display:flex; justify-content:space-between; gap:12px;">
-            <button onclick="navWord(-1)" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2); color:#fff; padding:12px 20px; border-radius:12px; font-weight:700; cursor:pointer;">
+            <button onclick="navWord(-1)" class="practice-btn practice-btn-neutral">
               &larr; Từ trước
             </button>
-            <button onclick="navWord(1)" style="background:#2563eb; border:none; color:#fff; padding:12px 28px; border-radius:12px; font-weight:800; cursor:pointer;">
+            <button onclick="navWord(1)" class="practice-btn practice-btn-primary">
               Từ tiếp theo &rarr;
             </button>
           </div>
@@ -1546,9 +1884,9 @@
 
       resBox.style.display = 'block';
       resBox.innerHTML = `
-        <div style="text-align:center; padding:24px; background:rgba(15,23,42,0.8); border-radius:16px;">
-          <i class="fa-solid fa-spinner fa-spin" style="font-size:2rem; color:#a78bfa; margin-bottom:10px;"></i>
-          <div style="font-weight:700; color:#cbd5e1;">AI HongTai đang kiểm tra ngữ pháp câu của bạn...</div>
+        <div class="ai-result-card" style="text-align:center; padding:24px;">
+          <i class="fa-solid fa-spinner fa-spin" style="font-size:2rem; color:#8b5cf6; margin-bottom:10px;"></i>
+          <div style="font-weight:700;">AI HongTai đang kiểm tra ngữ pháp câu của bạn...</div>
         </div>
       `;
 
@@ -1585,35 +1923,35 @@
     function renderSentenceCheckResult(data, container) {
       const score = data.score || 85;
       const badge = data.badge || (score >= 90 ? 'Xuất Sắc' : 'Tốt');
-      const scoreColor = score >= 85 ? '#10b981' : '#38bdf8';
+      const scoreColor = score >= 85 ? '#10b981' : '#0284c7';
 
       container.innerHTML = `
-        <div style="background:rgba(15,23,42,0.85); border:1.5px solid rgba(139,92,246,0.4); border-radius:20px; padding:22px; box-shadow:0 10px 30px rgba(0,0,0,0.35);">
+        <div class="ai-result-card">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
             <div style="display:flex; align-items:center; gap:12px;">
               <span style="background:${scoreColor}; color:#fff; font-weight:900; font-size:1.1rem; padding:4px 14px; border-radius:99px;">
                 ${score} / 100
               </span>
-              <strong style="font-size:1.1rem; color:#fff;">Đánh Giá: <span style="color:${scoreColor};">${badge}</span></strong>
+              <strong style="font-size:1.1rem;">Đánh Giá: <span style="color:${scoreColor};">${badge}</span></strong>
             </div>
-            <button onclick="document.getElementById('sentence-ai-result').style.display='none'" style="background:rgba(255,255,255,0.08); border:none; color:#94a3b8; padding:4px 10px; border-radius:8px; cursor:pointer;">
+            <button onclick="document.getElementById('sentence-ai-result').style.display='none'" class="practice-btn practice-btn-neutral" style="padding:4px 10px; font-size:0.85rem; border-radius:8px;">
               <i class="fa-solid fa-xmark"></i>
             </button>
           </div>
 
-          <div style="background:rgba(255,255,255,0.04); border-radius:12px; padding:14px; margin-bottom:12px; color:#cbd5e1; font-size:0.92rem; text-align:left;">
-            <strong style="color:#38bdf8;"><i class="fa-solid fa-comment"></i> Nhận xét AI:</strong> ${data.feedback || ''}
+          <div class="ai-result-feedback">
+            <strong style="color:#0284c7;"><i class="fa-solid fa-comment"></i> Nhận xét AI:</strong> ${data.feedback || ''}
           </div>
 
           ${data.improvedSentence ? `
-            <div style="background:rgba(56,189,248,0.12); border:1px solid rgba(56,189,248,0.3); border-radius:12px; padding:14px; text-align:left;">
-              <div style="font-size:0.85rem; font-weight:800; color:#38bdf8; text-transform:uppercase; margin-bottom:4px;">
+            <div class="ai-result-upgrade">
+              <div style="font-size:0.85rem; font-weight:800; color:#0284c7; text-transform:uppercase; margin-bottom:4px;">
                 <i class="fa-solid fa-sparkles"></i> Câu gợi ý nâng cấp (Chuẩn Bản Xứ):
               </div>
-              <div class="hanzi-text" style="font-size:1.2rem; font-weight:800; color:#ffffff;">
+              <div class="hanzi-text upgrade-text" style="font-size:1.2rem; font-weight:800;">
                 ${data.improvedSentence}
               </div>
-              ${data.vietnameseTranslation ? `<div style="font-size:0.88rem; color:#94a3b8; margin-top:4px;">Dịch: "${data.vietnameseTranslation}"</div>` : ''}
+              ${data.vietnameseTranslation ? `<div style="font-size:0.88rem; color:#64748b; margin-top:4px;">Dịch: "${data.vietnameseTranslation}"</div>` : ''}
             </div>
           ` : ''}
         </div>
