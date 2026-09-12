@@ -7791,6 +7791,8 @@ function renderLessonHeroCardContent(w, index, total) {
     `;
   }).join('') : '';
 
+  const currentVocabMode = (typeof localStorage !== 'undefined' && localStorage.getItem('hongtai_vocab_practice_mode')) || 'translate';
+
   return `
     <div style="display: flex; flex-direction: column; gap: 20px; width: 100%;">
       <!-- Top Grid: Stroke Box + Vocab Info -->
@@ -7863,37 +7865,98 @@ function renderLessonHeroCardContent(w, index, total) {
         </div>
       </div>
 
-      <!-- AI Sentence Practice Box: ĐẶT CÂU CÙNG AI & CHẤM ĐIỂM NGỮ PHÁP -->
-      <div class="lesson-ai-sentence-card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
-          <div style="font-size: 1rem; font-weight: 800; color: #c084fc; display: flex; align-items: center; gap: 8px;">
-            <i class="fa-solid fa-wand-magic-sparkles" style="color: #a855f7;"></i> 
-            <span>Tập Đặt Câu Với Từ <strong style="color: #fbbf24; font-size: 1.2rem; font-family: var(--font-hanzi);">${char}</strong>:</span>
+      <!-- Practice Card: HỖ TRỢ 2 CHẾ ĐỘ (1. Luyện Dịch Câu Cơ Bản | 2. Tập Đặt Câu AI Nâng Cao) -->
+      <div class="lesson-vocab-practice-card lesson-ai-sentence-card">
+        <!-- Mode Switcher Tabs -->
+        <div class="vocab-practice-header">
+          <div class="vocab-mode-toggle-group">
+            <button type="button" id="vocab-mode-btn-translate" 
+              class="vocab-mode-btn ${currentVocabMode === 'translate' ? 'active' : ''}" 
+              onclick="window.switchVocabPracticeMode('translate')">
+              <i class="fa-solid fa-pen-to-square"></i>
+              <span>Luyện Dịch Câu</span>
+              <span class="vocab-mode-tag">Cơ bản</span>
+            </button>
+            <button type="button" id="vocab-mode-btn-sentence" 
+              class="vocab-mode-btn ${currentVocabMode === 'sentence' ? 'active' : ''}" 
+              onclick="window.switchVocabPracticeMode('sentence')">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              <span>Tập Đặt Câu Với Từ</span>
+              <span class="vocab-mode-tag vocab-mode-tag-ai">AI Nâng Cao</span>
+            </button>
           </div>
-          <span style="font-size: 0.78rem; background: rgba(168, 85, 247, 0.2); color: #d8b4fe; border: 1px solid rgba(168, 85, 247, 0.4); padding: 3px 10px; border-radius: 99px; font-weight: 800;">
-            🤖 AI HongTai Chấm Điểm
-          </span>
+          <div class="vocab-mode-desc-pill" id="vocab-mode-desc-pill">
+            ${currentVocabMode === 'translate' ? '<i class="fa-solid fa-seedling" style="color: #10b981;"></i> Dành cho học viên rèn phản xạ & từ vựng' : '<i class="fa-solid fa-robot" style="color: #a855f7;"></i> AI chấm điểm ngữ pháp & gợi ý câu chuẩn'}
+          </div>
         </div>
 
-        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-          <input type="text" id="lesson-ai-sentence-input" class="hanzi-text" placeholder="Gõ câu tiếng Trung chứa từ &quot;${char}&quot;..." 
-            onkeydown="if(event.key === 'Enter') window.submitLessonSentenceForAiCheck('${char.replace(/'/g, "\\'")}', ${activeLessonsLevel || 1})"
-            style="flex: 1; min-width: 260px; padding: 12px 16px; background: rgba(0,0,0,0.4); border: 1.5px solid rgba(167, 139, 250, 0.35); border-radius: 14px; color: #ffffff; font-size: 1.1rem; font-weight: 700; outline: none; transition: all 0.2s; box-sizing: border-box;" />
+        <!-- Mode 1: LUYỆN DỊCH CÂU (Dành cho học viên mới/yếu) -->
+        <div id="lesson-mode-translate-panel" style="display: ${currentVocabMode === 'translate' ? 'block' : 'none'};">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <div style="font-size: 0.95rem; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <span><i class="fa-solid fa-language"></i> Dịch sang tiếng Trung: <strong style="color: var(--text-primary, #ffffff); font-weight: 800;">"${exercisePrompt}"</strong></span>
+              <button onclick="window.speakLessonWord('${targetAnswer.replace(/'/g, "\\'")}')" class="btn btn-sm" style="background: rgba(56, 189, 248, 0.18); border: 1.5px solid rgba(56, 189, 248, 0.4); color: #38bdf8; border-radius: 10px; padding: 3px 10px; font-size: 0.82rem; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s;" title="Nghe phát âm câu mẫu">
+                <i class="fa-solid fa-volume-high"></i> Nghe
+              </button>
+            </div>
+            <div id="lesson-typing-feedback"></div>
+          </div>
 
-          <button onclick="window.submitLessonSentenceForAiCheck('${char.replace(/'/g, "\\'")}', ${activeLessonsLevel || 1})" 
-            class="btn btn-primary" 
-            style="background: linear-gradient(135deg, #8b5cf6, #7c3aed); border: none; color: #ffffff; padding: 12px 22px; border-radius: 12px; font-weight: 800; font-size: 0.95rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 16px rgba(139,92,246,0.35); white-space: nowrap; transition: transform 0.15s;">
-            <i class="fa-solid fa-paper-plane"></i> Chấm Điểm
-          </button>
+          <input type="text" id="lesson-typing-input" class="hanzi-text" placeholder="Gõ chữ Hán dịch câu trên vào đây..." 
+            oninput="window.checkLessonTypingInput(${validAnswersJson})" 
+            style="width: 100%; padding: 12px 16px; background: rgba(0,0,0,0.4); border: 1.5px solid rgba(56, 189, 248, 0.35); border-radius: 14px; color: #ffffff; font-size: 1.1rem; font-weight: 700; outline: none; transition: all 0.2s; margin-bottom: 14px; box-sizing: border-box;" />
+
+          <!-- Character Hint Cards -->
+          <div id="lesson-char-hints-container" data-target="${targetAnswer.replace(/'/g, "\\'").replace(/"/g, '&quot;')}" style="display: flex; gap: 10px; justify-content: center; margin-bottom: 14px; flex-wrap: wrap;">
+            ${hintChars.map((c, i) => `
+              <div class="lesson-hint-card" data-char="${c.replace(/'/g, "\\'")}" onclick="window.toggleLessonCharHint(this, '${c.replace(/'/g, "\\'")}')" title="Bấm để lật mở chữ" style="width: 52px; height: 68px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #94a3b8; font-size: 1.2rem; transition: all 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.3);" onmouseenter="this.style.transform='translateY(-2px)'" onmouseleave="this.style.transform='translateY(0)'">
+                <i class="fa-solid fa-eye"></i>
+              </div>
+            `).join('')}
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <button id="lesson-toggle-all-hints-btn" onclick="window.revealAllLessonCharHints('${targetAnswer.replace(/'/g, "\\'")}')" style="flex: 1; min-width: 220px; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; color: #ffffff; font-weight: 800; font-size: 0.95rem; padding: 12px; border-radius: 14px; cursor: pointer; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4); transition: all 0.2s; letter-spacing: 0.5px;">
+              <i class="fa-solid fa-eye" style="margin-right: 6px;"></i> HIỆN GỢI Ý MẪU
+            </button>
+            <span style="font-size: 0.8rem; color: #94a3b8; font-style: italic;">
+              <i class="fa-solid fa-circle-info"></i> Bấm vào từng ô mắt hoặc nút Hiện gợi ý để xem chữ mẫu
+            </span>
+          </div>
         </div>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 0.8rem; color: #94a3b8; flex-wrap: wrap; gap: 6px;">
-          <span><i class="fa-solid fa-keyboard"></i> Gõ chữ Hán hoặc Pinyin • Nhấn Enter để AI chấm ngay</span>
-          <span style="font-style: italic;">Chấm ngữ pháp &bull; Đánh giá độ tự nhiên &bull; Gợi ý chuẩn bản xứ</span>
-        </div>
+        <!-- Mode 2: TẬP ĐẶT CÂU VỚI TỪ (AI Chấm Điểm) -->
+        <div id="lesson-mode-sentence-panel" style="display: ${currentVocabMode === 'sentence' ? 'block' : 'none'};">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <div style="font-size: 1rem; font-weight: 800; color: #c084fc; display: flex; align-items: center; gap: 8px;">
+              <i class="fa-solid fa-wand-magic-sparkles" style="color: #a855f7;"></i> 
+              <span>Tập Đặt Câu Chứa Từ <strong style="color: #fbbf24; font-size: 1.25rem; font-family: var(--font-hanzi);">${char}</strong>:</span>
+            </div>
+            <span style="font-size: 0.78rem; background: rgba(168, 85, 247, 0.2); color: #d8b4fe; border: 1px solid rgba(168, 85, 247, 0.4); padding: 3px 10px; border-radius: 99px; font-weight: 800;">
+              🤖 AI HongTai Chấm Điểm
+            </span>
+          </div>
 
-        <!-- AI Check Result Box -->
-        <div id="lesson-sentence-ai-result" style="display: none; margin-top: 14px;"></div>
+          <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <input type="text" id="lesson-ai-sentence-input" class="hanzi-text" placeholder="Gõ câu tiếng Trung chứa từ &quot;${char}&quot;..." 
+              onkeydown="if(event.key === 'Enter') window.submitLessonSentenceForAiCheck('${char.replace(/'/g, "\\'")}', ${activeLessonsLevel || 1})"
+              style="flex: 1; min-width: 260px; padding: 12px 16px; background: rgba(0,0,0,0.4); border: 1.5px solid rgba(167, 139, 250, 0.35); border-radius: 14px; color: #ffffff; font-size: 1.1rem; font-weight: 700; outline: none; transition: all 0.2s; box-sizing: border-box;" />
+
+            <button onclick="window.submitLessonSentenceForAiCheck('${char.replace(/'/g, "\\'")}', ${activeLessonsLevel || 1})" 
+              class="btn btn-primary" 
+              style="background: linear-gradient(135deg, #8b5cf6, #7c3aed); border: none; color: #ffffff; padding: 12px 22px; border-radius: 12px; font-weight: 800; font-size: 0.95rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 16px rgba(139,92,246,0.35); white-space: nowrap; transition: transform 0.15s;">
+              <i class="fa-solid fa-paper-plane"></i> Chấm Điểm
+            </button>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 0.8rem; color: #94a3b8; flex-wrap: wrap; gap: 6px;">
+            <span><i class="fa-solid fa-keyboard"></i> Gõ chữ Hán hoặc Pinyin • Nhấn Enter để AI chấm ngay</span>
+            <span style="font-style: italic;">Chấm ngữ pháp &bull; Đánh giá độ tự nhiên &bull; Gợi ý chuẩn bản xứ</span>
+          </div>
+
+          <!-- AI Check Result Box -->
+          <div id="lesson-sentence-ai-result" style="display: none; margin-top: 14px;"></div>
+        </div>
       </div>
     </div>
   `;
@@ -8363,6 +8426,42 @@ window.returnToLessonsMap = function () {
   }
   isLessonVocabStudyMode = false;
   switchTab('lessons');
+};
+
+window.switchVocabPracticeMode = function (mode) {
+  try {
+    localStorage.setItem('hongtai_vocab_practice_mode', mode);
+  } catch (e) {
+    console.warn('Cannot save vocab practice mode', e);
+  }
+
+  const translatePanel = document.getElementById('lesson-mode-translate-panel');
+  const sentencePanel = document.getElementById('lesson-mode-sentence-panel');
+  const translateBtn = document.getElementById('vocab-mode-btn-translate');
+  const sentenceBtn = document.getElementById('vocab-mode-btn-sentence');
+  const descPill = document.getElementById('vocab-mode-desc-pill');
+
+  if (mode === 'sentence') {
+    if (translatePanel) translatePanel.style.display = 'none';
+    if (sentencePanel) sentencePanel.style.display = 'block';
+    if (translateBtn) translateBtn.classList.remove('active');
+    if (sentenceBtn) sentenceBtn.classList.add('active');
+    if (descPill) {
+      descPill.innerHTML = '<i class="fa-solid fa-robot" style="color: #a855f7;"></i> AI chấm điểm ngữ pháp & gợi ý câu chuẩn';
+    }
+    const sentenceInput = document.getElementById('lesson-ai-sentence-input');
+    if (sentenceInput) sentenceInput.focus();
+  } else {
+    if (translatePanel) translatePanel.style.display = 'block';
+    if (sentencePanel) sentencePanel.style.display = 'none';
+    if (translateBtn) translateBtn.classList.add('active');
+    if (sentenceBtn) sentenceBtn.classList.remove('active');
+    if (descPill) {
+      descPill.innerHTML = '<i class="fa-solid fa-seedling" style="color: #10b981;"></i> Dành cho học viên rèn phản xạ & từ vựng';
+    }
+    const typingInput = document.getElementById('lesson-typing-input');
+    if (typingInput) typingInput.focus();
+  }
 };
 
 window.toggleLessonCharHint = function (btnEl, char) {

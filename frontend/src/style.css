@@ -18950,4 +18950,176 @@ body.light-mode .ai-improved-trans {
   color: #475569 !important;
 }
 
+/* ============================================================
+   BỘ CHUYỂN ĐỔI 2 CHẾ ĐỘ BÀI TẬP TỪ VỰNG: DỊCH CÂU & ĐẶT CÂU AI
+   ============================================================ */
+.lesson-vocab-practice-card {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1.5px solid rgba(139, 92, 246, 0.35);
+  border-radius: 18px;
+  padding: 18px 20px;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  transition: all 0.25s ease;
+}
+
+.vocab-practice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.vocab-mode-toggle-group {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 4px;
+  border-radius: 14px;
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  gap: 6px;
+}
+
+.vocab-mode-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+
+.vocab-mode-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.vocab-mode-btn.active#vocab-mode-btn-translate {
+  background: linear-gradient(135deg, #0284c7, #2563eb);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+}
+
+.vocab-mode-btn.active#vocab-mode-btn-sentence {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(139, 92, 246, 0.35);
+}
+
+.vocab-mode-tag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 99px;
+  background: rgba(56, 189, 248, 0.2);
+  color: #38bdf8;
+  letter-spacing: 0.3px;
+}
+
+.vocab-mode-btn.active .vocab-mode-tag {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+.vocab-mode-tag-ai {
+  background: rgba(168, 85, 247, 0.2);
+  color: #c084fc;
+}
+
+.vocab-mode-desc-pill {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 5px 12px;
+  border-radius: 99px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Light Mode Styles for Vocab Dual Practice */
+html.light-mode .lesson-vocab-practice-card,
+body.light-mode .lesson-vocab-practice-card {
+  background: linear-gradient(135deg, #ffffff, #f8fafc) !important;
+  border: 1.5px solid #cbd5e1 !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06) !important;
+}
+
+html.light-mode .vocab-practice-header,
+body.light-mode .vocab-practice-header {
+  border-bottom-color: #e2e8f0 !important;
+}
+
+html.light-mode .vocab-mode-toggle-group,
+body.light-mode .vocab-mode-toggle-group {
+  background: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.light-mode .vocab-mode-btn,
+body.light-mode .vocab-mode-btn {
+  color: #64748b !important;
+}
+
+html.light-mode .vocab-mode-btn:hover,
+body.light-mode .vocab-mode-btn:hover {
+  color: #0f172a !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+}
+
+html.light-mode .vocab-mode-btn.active#vocab-mode-btn-translate,
+body.light-mode .vocab-mode-btn.active#vocab-mode-btn-translate {
+  background: linear-gradient(135deg, #0284c7, #2563eb) !important;
+  color: #ffffff !important;
+}
+
+html.light-mode .vocab-mode-btn.active#vocab-mode-btn-sentence,
+body.light-mode .vocab-mode-btn.active#vocab-mode-btn-sentence {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed) !important;
+  color: #ffffff !important;
+}
+
+html.light-mode .vocab-mode-desc-pill,
+body.light-mode .vocab-mode-desc-pill {
+  background: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+  color: #475569 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03) !important;
+}
+
+html.light-mode input#lesson-typing-input,
+body.light-mode input#lesson-typing-input {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+html.light-mode input#lesson-typing-input:focus,
+body.light-mode input#lesson-typing-input:focus {
+  border-color: #0284c7 !important;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15) !important;
+}
+
+html.light-mode .lesson-hint-card,
+body.light-mode .lesson-hint-card {
+  background: #f8fafc !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #64748b !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+}
+
 
