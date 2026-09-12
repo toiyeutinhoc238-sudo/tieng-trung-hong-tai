@@ -122,8 +122,8 @@
   <script type="module" crossorigin src="/assets/global_sidebar-YD_5zBmV.js"></script>
   <script type="module" crossorigin src="/assets/grammar_hsk3_v2-DLPb-ska.js"></script>
   <script type="module" crossorigin src="/assets/screen_drawing-BS_xmQo7.js"></script>
-  <script type="module" crossorigin src="/assets/main-CUepgXOe.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/style-Bj2OVyAm.css">
+  <script type="module" crossorigin src="/assets/main-BfA9VjFx.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/style-BFHOl0la.css">
 </head>
 
 <body>
@@ -1970,6 +1970,37 @@
                     style="display: none; width: 100%; margin-top: 8px; background: rgba(238, 242, 255, 0.95); padding: 14px 20px; border-radius: 16px; border: 2px solid #818cf8; color: #1e1b4b; font-weight: 900; font-size: 1.15rem;">
                     💡 Đáp án chuẩn: <span id="lesson-standard-zh-text" style="color: #2563eb;">你好吗？</span>
                   </div>
+                </div>
+
+                <!-- AI Sentence Making & Evaluation -->
+                <div class="lesson-ai-sentence-card" style="margin-top: 18px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+                    <div style="font-size: 1rem; font-weight: 800; color: #7c3aed; display: flex; align-items: center; gap: 8px;">
+                      <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Tập Đặt Câu Với Từ Đang Học & AI Chấm Điểm:</span>
+                    </div>
+                    <span style="font-size: 0.78rem; background: rgba(139, 92, 246, 0.15); color: #7c3aed; border: 1px solid rgba(139, 92, 246, 0.35); padding: 3px 10px; border-radius: 99px; font-weight: 800;">
+                      🤖 AI HongTai
+                    </span>
+                  </div>
+
+                  <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <input type="text" id="deck-ai-sentence-input" class="hanzi-text" placeholder="Gõ câu tiếng Trung chứa từ vựng đang học..."
+                      onkeydown="if(event.key==='Enter') document.getElementById('deck-ai-check-btn').click()"
+                      style="flex: 1; min-width: 240px; padding: 12px 16px; background: #ffffff; border: 2px solid #cbd5e1; border-radius: 14px; font-size: 1.1rem; font-weight: 700; outline: none; transition: border-color 0.2s;" />
+
+                    <button id="deck-ai-check-btn" type="button" class="btn btn-primary"
+                      onclick="window.submitLessonSentenceForAiCheck(window.currentDeckWord || (window.currentLessonTargetZh || '你'), 1)"
+                      style="background: linear-gradient(135deg, #8b5cf6, #7c3aed); border: none; color: #ffffff; padding: 12px 22px; border-radius: 12px; font-weight: 800; font-size: 0.95rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(139,92,246,0.35); white-space: nowrap;">
+                      <i class="fa-solid fa-paper-plane"></i> Chấm Điểm
+                    </button>
+                  </div>
+
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 0.8rem; color: #64748b; flex-wrap: wrap; gap: 6px;">
+                    <span><i class="fa-solid fa-keyboard"></i> Gõ chữ Hán hoặc Pinyin • Nhấn Enter hoặc nút để chấm điểm</span>
+                    <span style="font-style: italic;">Chấm ngữ pháp &bull; Đánh giá độ tự nhiên &bull; Gợi ý nâng cấp</span>
+                  </div>
+
+                  <div id="deck-sentence-ai-result" style="display: none; margin-top: 14px;"></div>
                 </div>
 
               </div>

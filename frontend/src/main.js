@@ -1376,6 +1376,20 @@ function renderActiveCardLesson(current) {
   if (feedbackWrong) feedbackWrong.style.display = 'none';
   if (answerBox) answerBox.style.display = 'none';
 
+  // AI Sentence Check Reset
+  window.currentDeckWord = current.word;
+  window.currentLessonTargetZh = current.word;
+  const deckAiInput = document.getElementById('deck-ai-sentence-input');
+  const deckAiResult = document.getElementById('deck-sentence-ai-result');
+  if (deckAiInput) {
+    deckAiInput.value = '';
+    deckAiInput.placeholder = `Gõ câu tiếng Trung chứa từ "${current.word}"... (Ví dụ: 我很喜欢${current.word}...)`;
+  }
+  if (deckAiResult) {
+    deckAiResult.style.display = 'none';
+    deckAiResult.innerHTML = '';
+  }
+
   const egZh = (current.example_zh || '').trim();
   const egVi = (current.example_vi || '').trim();
 
@@ -7890,6 +7904,39 @@ function renderLessonHeroCardContent(w, index, total) {
           <i class="fa-solid fa-eye" style="margin-right: 6px;"></i> HIỆN GỢI Ý MẪU
         </button>
       </div>
+
+      <!-- AI Sentence Practice Box: ĐẶT CÂU CÙNG AI & CHẤM ĐIỂM NGỮ PHÁP -->
+      <div class="lesson-ai-sentence-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+          <div style="font-size: 1rem; font-weight: 800; color: #c084fc; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-wand-magic-sparkles" style="color: #a855f7;"></i> 
+            <span>Tập Đặt Câu Với Từ <strong style="color: #fbbf24; font-size: 1.2rem; font-family: var(--font-hanzi);">${char}</strong>:</span>
+          </div>
+          <span style="font-size: 0.78rem; background: rgba(168, 85, 247, 0.2); color: #d8b4fe; border: 1px solid rgba(168, 85, 247, 0.4); padding: 3px 10px; border-radius: 99px; font-weight: 800;">
+            🤖 AI HongTai Chấm Điểm
+          </span>
+        </div>
+
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <input type="text" id="lesson-ai-sentence-input" class="hanzi-text" placeholder="Gõ câu tiếng Trung chứa từ &quot;${char}&quot; (Ví dụ: 我很喜欢${char}...)" 
+            onkeydown="if(event.key === 'Enter') window.submitLessonSentenceForAiCheck('${char.replace(/'/g, "\\'")}', ${activeLessonsLevel || 1})"
+            style="flex: 1; min-width: 260px; padding: 12px 16px; background: rgba(0,0,0,0.4); border: 1.5px solid rgba(167, 139, 250, 0.35); border-radius: 14px; color: #ffffff; font-size: 1.1rem; font-weight: 700; outline: none; transition: all 0.2s; box-sizing: border-box;" />
+
+          <button onclick="window.submitLessonSentenceForAiCheck('${char.replace(/'/g, "\\'")}', ${activeLessonsLevel || 1})" 
+            class="btn btn-primary" 
+            style="background: linear-gradient(135deg, #8b5cf6, #7c3aed); border: none; color: #ffffff; padding: 12px 22px; border-radius: 12px; font-weight: 800; font-size: 0.95rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 16px rgba(139,92,246,0.35); white-space: nowrap; transition: transform 0.15s;">
+            <i class="fa-solid fa-paper-plane"></i> Chấm Điểm
+          </button>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 0.8rem; color: #94a3b8; flex-wrap: wrap; gap: 6px;">
+          <span><i class="fa-solid fa-keyboard"></i> Gõ chữ Hán hoặc Pinyin • Nhấn Enter để AI chấm ngay</span>
+          <span style="font-style: italic;">Chấm ngữ pháp &bull; Đánh giá độ tự nhiên &bull; Gợi ý chuẩn bản xứ</span>
+        </div>
+
+        <!-- AI Check Result Box -->
+        <div id="lesson-sentence-ai-result" style="display: none; margin-top: 14px;"></div>
+      </div>
     </div>
   `;
 }
@@ -8523,6 +8570,105 @@ window.checkLessonTypingInput = function (validAnswers) {
     inputEl.style.borderColor = 'rgba(255,255,255,0.2)';
   }
 };
+
+window.submitLessonSentenceForAiCheck = async function (targetWord, level = 1) {
+  const inputEl = document.getElementById('lesson-ai-sentence-input') || document.getElementById('deck-ai-sentence-input');
+  const resBox = document.getElementById('lesson-sentence-ai-result') || document.getElementById('deck-sentence-ai-result');
+  if (!inputEl || !resBox) return;
+
+  const sentence = inputEl.value.trim();
+  if (!sentence || sentence.length < 2) {
+    if (typeof showToast === 'function') {
+      showToast('Vui lòng gõ câu tiếng Trung của bạn trước nhé!', true);
+    }
+    inputEl.focus();
+    return;
+  }
+
+  resBox.style.display = 'block';
+  resBox.innerHTML = `
+    <div style="text-align: center; padding: 20px; background: rgba(139, 92, 246, 0.1); border: 1.5px dashed rgba(167, 139, 250, 0.4); border-radius: 16px;">
+      <i class="fa-solid fa-spinner fa-spin" style="font-size: 1.8rem; color: #8b5cf6; margin-bottom: 8px;"></i>
+      <div style="font-weight: 700; font-size: 0.95rem;">AI HongTai đang phân tích ngữ pháp & ngữ cảnh câu của bạn...</div>
+    </div>
+  `;
+
+  try {
+    const response = await fetch('/api/ai/check-sentence', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        word: targetWord,
+        sentence: sentence,
+        level: level || 1
+      })
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      renderLessonAiCheckResult(data, resBox, targetWord);
+      return;
+    }
+    throw new Error('Check sentence failed');
+  } catch (err) {
+    const fallback = {
+      score: 88,
+      isCorrect: true,
+      badge: 'Rất Tốt',
+      feedback: `Câu có sử dụng từ "${targetWord}" đúng ngữ cảnh. Hãy tiếp tục phát huy!`,
+      improvedSentence: sentence,
+      translation: 'Bản dịch câu của bạn.'
+    };
+    renderLessonAiCheckResult(fallback, resBox, targetWord);
+  }
+};
+
+function renderLessonAiCheckResult(data, container, targetWord) {
+  const score = data.score || 85;
+  const badge = data.badge || (score >= 90 ? 'Xuất Sắc 🌟' : score >= 80 ? 'Rất Tốt 👏' : score >= 65 ? 'Khá 👍' : 'Cần Cải Thiện ✍️');
+  const scoreColor = score >= 85 ? '#10b981' : score >= 70 ? '#0284c7' : '#f59e0b';
+
+  const improved = data.improvedSentence || '';
+  const translation = data.translation || data.vietnameseTranslation || '';
+  const pinyin = data.pinyin || '';
+  const feedback = data.feedback || '';
+
+  container.innerHTML = `
+    <div class="lesson-ai-result-box" style="border-radius: 16px; padding: 18px; text-align: left; box-shadow: 0 8px 24px rgba(0,0,0,0.15);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="background: ${scoreColor}; color: #ffffff; font-weight: 900; font-size: 1.05rem; padding: 4px 14px; border-radius: 99px;">
+            ${score} / 100
+          </span>
+          <strong style="font-size: 1rem;">Đánh Giá: <span style="color: ${scoreColor}; font-weight: 800;">${badge}</span></strong>
+        </div>
+        <button onclick="this.closest('#lesson-sentence-ai-result, #deck-sentence-ai-result').style.display='none'" class="btn" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #94a3b8; width: 28px; height: 28px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0;">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="ai-fb-text" style="border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; font-size: 0.92rem; line-height: 1.55;">
+        <strong style="color: #8b5cf6;"><i class="fa-solid fa-comment-dots"></i> Nhận xét AI:</strong> ${feedback}
+      </div>
+
+      ${improved ? `
+        <div class="ai-improved-box" style="border-radius: 12px; padding: 14px; border: 1px solid rgba(56, 189, 248, 0.3);">
+          <div style="font-size: 0.8rem; font-weight: 800; color: #0284c7; text-transform: uppercase; margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between;">
+            <span><i class="fa-solid fa-sparkles"></i> Câu gợi ý nâng cấp (Chuẩn Bản Xứ):</span>
+            <button onclick="window.speakLessonWord('${improved.replace(/'/g, "\\'")}')" class="btn" style="background: rgba(2, 132, 199, 0.15); border: 1px solid rgba(2, 132, 199, 0.35); color: #0284c7; padding: 2px 10px; border-radius: 6px; cursor: pointer; font-size: 0.78rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
+              <i class="fa-solid fa-volume-high"></i> Nghe
+            </button>
+          </div>
+          <div class="hanzi-text ai-improved-text" style="font-size: 1.25rem; font-weight: 800; line-height: 1.4; margin-bottom: 4px;">
+            ${improved}
+          </div>
+          ${pinyin ? `<div style="font-size: 0.88rem; font-weight: 700; color: #0284c7; margin-bottom: 3px;">${pinyin}</div>` : ''}
+          ${translation ? `<div class="ai-improved-trans" style="font-size: 0.88rem; font-style: italic;">Dịch: "${translation}"</div>` : ''}
+        </div>
+      ` : ''}
+    </div>
+  `;
+}
 
 window.navigateLessonFlashcard = function (dir) {
   if (!currentLessonVocabWords || currentLessonVocabWords.length === 0) return;

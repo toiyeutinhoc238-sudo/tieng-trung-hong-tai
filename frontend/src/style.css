@@ -18610,4 +18610,96 @@ html.light .dict-word-popover .popover-btn:hover {
   }
 }
 
+/* ============================================================
+   TẬP ĐẶT CÂU CÙNG AI TRONG FLASHCARD HỌC TỪ VỰNG
+   ============================================================ */
+.lesson-ai-sentence-card {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1.5px solid rgba(139, 92, 246, 0.35);
+  border-radius: 18px;
+  padding: 18px 20px;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  transition: all 0.25s ease;
+}
+
+html.light-mode .lesson-ai-sentence-card,
+body.light-mode .lesson-ai-sentence-card {
+  background: linear-gradient(135deg, #faf5ff, #f3e8ff) !important;
+  border: 1.5px solid #d8b4fe !important;
+  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.08) !important;
+}
+
+html.light-mode .lesson-ai-sentence-card input#lesson-ai-sentence-input,
+body.light-mode .lesson-ai-sentence-card input#lesson-ai-sentence-input,
+html.light-mode .lesson-ai-sentence-card input#deck-ai-sentence-input,
+body.light-mode .lesson-ai-sentence-card input#deck-ai-sentence-input {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+html.light-mode .lesson-ai-sentence-card input#lesson-ai-sentence-input:focus,
+body.light-mode .lesson-ai-sentence-card input#lesson-ai-sentence-input:focus,
+html.light-mode .lesson-ai-sentence-card input#deck-ai-sentence-input:focus,
+body.light-mode .lesson-ai-sentence-card input#deck-ai-sentence-input:focus {
+  border-color: #8b5cf6 !important;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15) !important;
+}
+
+.lesson-ai-result-box {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1.5px solid rgba(139, 92, 246, 0.4);
+  color: #ffffff;
+}
+
+html.light-mode .lesson-ai-result-box,
+body.light-mode .lesson-ai-result-box {
+  background: #ffffff !important;
+  border: 1.5px solid #d8b4fe !important;
+  color: #0f172a !important;
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.1) !important;
+}
+
+.ai-fb-text {
+  background: rgba(255, 255, 255, 0.05);
+  color: #cbd5e1;
+}
+
+html.light-mode .ai-fb-text,
+body.light-mode .ai-fb-text {
+  background: #f8fafc !important;
+  color: #334155 !important;
+}
+
+.ai-improved-box {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+html.light-mode .ai-improved-box,
+body.light-mode .ai-improved-box {
+  background: #f0fdf4 !important;
+  border-color: #86efac !important;
+}
+
+.ai-improved-text {
+  color: #ffffff;
+}
+
+html.light-mode .ai-improved-text,
+body.light-mode .ai-improved-text {
+  color: #166534 !important;
+}
+
+.ai-improved-trans {
+  color: #94a3b8;
+}
+
+html.light-mode .ai-improved-trans,
+body.light-mode .ai-improved-trans {
+  color: #475569 !important;
+}
+
 
