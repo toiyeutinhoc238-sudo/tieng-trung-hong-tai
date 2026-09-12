@@ -2665,30 +2665,27 @@ app.post('/api/ai/check-sentence', async (req, res) => {
   const containsWord = targetWord ? cleanSentence.includes(targetWord) : true;
   const isGibberish = /^([a-zA-Z0-9\u4e00-\u9fa5])\1{3,}$/.test(cleanSentence) || cleanSentence.length < 2;
 
-  const prompt = `Bạn là giáo viên dạy tiếng Trung có tâm và giàu kinh nghiệm sư phạm của "Tiếng Trung Hongtai".
-Nhiệm vụ: Chấm điểm và nhận xét câu do học sinh tự đặt để luyện tập từ vựng.
+  const prompt = `Bạn là giáo viên dạy tiếng Trung có tâm, giàu kinh nghiệm và sư phạm chuẩn mực của "Tiếng Trung Hongtai".
+Nhiệm vụ: Chấm điểm và nhận xét câu học sinh tự đặt để luyện từ vựng.
 
 Từ vựng mục tiêu cần đặt câu: "${targetWord}" (Trình độ: HSK ${level || 1}).
 Câu học sinh đã đặt: "${cleanSentence}"
 
-NGUYÊN TẮC CHẤM ĐIỂM (CỰC KỲ QUAN TRỌNG):
-1. ĐÁNH GIÁ ĐÚNG (isCorrect = true):
-   - Nếu câu có chứa từ vựng mục tiêu "${targetWord}" (hoặc dạng đúng của từ) VÀ ngữ pháp cơ bản ĐÚNG, câu có nghĩa logic hiểu được trong tiếng Trung -> BẮT BUỘC CHẤM ĐÚNG (isCorrect = true), điểm số từ 80 đến 100.
-   - TUYỆT ĐỐI KHÔNG BẮT BẺ KHẮT KHE những câu ngắn gọn, câu giao tiếp khẩu ngữ thông thường (ví dụ: "今天下雨。", "外面下雨了。", "我不喜欢下雨。", "下雨了，快回家吧。", "今天下雨，我不去学校。" đều là câu hoàn toàn ĐÚNG và RẤT TỰ NHIÊN).
-   - Nếu câu đúng nhưng có thể dùng từ ngữ trau chuốt hơn, vẫn chấm là ĐÚNG (isCorrect = true, 80-90 điểm), khen ngợi câu của học sinh trước rồi mới nhẹ nhàng gợi ý câu nâng cấp ở mục improvedSentence.
+NGUYÊN TẮC SƯ PHẠM CỐT LÕI (CỰC KỲ QUAN TRỌNG - TUÂN THỦ 100%):
+1. TÔN TRỌNG CÂU ĐÚNG CỦA HỌC SINH - TUYỆT ĐỐI KHÔNG BẮT BẺ GƯỢNG GẠO:
+   - Nếu câu học sinh đặt đã đúng ngữ pháp và diễn đạt tự nhiên (ví dụ: "这个菜有点儿不好吃。", "今天下雨。", "我有点儿累。", "这件衣服有点儿小。") -> BẮT BUỘC CHẤM 95 - 100 ĐIỂM (Xuất Sắc 🌟).
+   - Lời nhận xét: Khen ngợi học sinh ("Câu bạn đặt rất chính xác, tự nhiên và đúng ngữ cảnh! Tiếp tục phát huy nhé!").
+   - TUYỆT ĐỐI KHÔNG bắt bẻ rườm rà, KHÔNG xúi học sinh chèn thêm các từ khác (như xúi thêm "不太" vào câu có "有点儿", hoặc xúi thêm từ làm câu rối rắm).
+   - Nếu câu học sinh đã đúng và hay: "improvedSentence" hãy GIỮ NGUYÊN câu của học sinh, hoặc chỉ mở rộng ngữ cảnh giao tiếp đời sống (ví dụ: "这个菜有点儿不好吃，你想吃别的吗？").
 
-2. ĐÁNH GIÁ SAI (isCorrect = false):
-   - CHỈ đánh giá là SAI (isCorrect = false, điểm từ 0 đến 35) trong các trường hợp sau:
-     + Câu hoàn toàn KHÔNG chứa từ vựng mục tiêu "${targetWord}".
-     + Gõ vô nghĩa, ký tự rác, lặp từ vô nghĩa (ví dụ: "啊啊啊啊啊啊", "asdfghjkl", "123456").
-     + Sai ngữ pháp nghiêm trọng làm câu vô nghĩa hoặc người Trung Quốc không thể hiểu được.
+2. TÍNH NHẤT QUÁN & ĐỘ BAO DUNG TRONG KHẨU NGỮ:
+   - Cả hai cách nói như "有点儿不好吃", "不太好吃", hay khẩu ngữ "有点儿不太好吃" (hơi không ngon lắm) đều hoàn toàn có thể chấp nhận trong giao tiếp thường ngày -> TUYỆT ĐỐI KHÔNG chấm điểm thấp (không được chấm 40-50 điểm). Cứ dùng đúng từ mục tiêu và hiểu được rõ ràng là PHẢI TỪ 85 ĐIỂM TRỞ LÊN.
+   - TUYỆT ĐỐI KHÔNG mâu thuẫn: Câu trước gợi ý thêm từ gì thì câu sau không bao giờ được bảo từ đó sai!
 
-3. THANG ĐIỂM (score: số nguyên từ 0 đến 100):
-   - 90 - 100: Câu xuất sắc, diễn đạt tự nhiên, đúng từ đúng ngữ pháp.
-   - 80 - 89: Câu đúng ngữ pháp, dùng đúng từ mục tiêu, câu có nghĩa hoàn chỉnh.
-   - 60 - 79: Có dùng đúng từ nhưng ngữ pháp hơi lủng củng hoặc thiếu thành phần phụ.
-   - 30 - 50: Sai ngữ pháp nặng.
-   - 0 - 25: Gõ bậy bạ, vô nghĩa hoặc hoàn toàn không chứa từ mục tiêu "${targetWord}".
+3. CHỈ ĐÁNH GIÁ SAI (score < 40, isCorrect = false) KHI:
+   - Hoàn toàn KHÔNG chứa từ vựng mục tiêu "${targetWord}".
+   - Gõ vô nghĩa, ký tự rác, gõ bậy bạ (ví dụ: "啊啊啊...", "yi fu yi fu...").
+   - Sai cấu trúc ngữ pháp nghiêm trọng làm người bản xứ không hiểu được.
 
 4. ĐỊNH DẠNG TRẢ VỀ:
 Trả về DUY NHẤT 1 JSON object thuần túy (không bọc trong markdown block):
