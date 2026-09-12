@@ -550,7 +550,32 @@
       box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4);
     }
 
-    /* Cloze Test Styles */
+    /* Cloze Test Styles & Typing Inputs */
+    .cloze-instruction-box {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1.5px solid rgba(56, 189, 248, 0.35);
+      border-radius: 18px;
+      padding: 18px 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .cloze-instruction-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #38bdf8;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cloze-instruction-desc {
+      font-size: 0.92rem;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+
     .cloze-word-bank {
       display: flex;
       gap: 10px;
@@ -568,12 +593,16 @@
       border: 1.5px solid rgba(56, 189, 248, 0.4);
       color: #38bdf8;
       font-weight: 800;
-      font-size: 1.1rem;
-      padding: 6px 16px;
-      border-radius: 10px;
+      font-size: 1.15rem;
+      padding: 8px 18px;
+      border-radius: 12px;
       cursor: pointer;
       user-select: none;
-      transition: all 0.2s;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      font-family: var(--font-hanzi);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .cloze-bank-item:hover {
@@ -584,46 +613,111 @@
     }
 
     .cloze-bank-item.used {
-      opacity: 0.35;
-      pointer-events: none;
-      filter: grayscale(0.8);
+      opacity: 0.45;
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.15);
+      color: #94a3b8;
+      text-decoration: line-through;
     }
 
-    .cloze-slot {
+    .cloze-content-box {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      margin-bottom: 20px;
+    }
+
+    .cloze-line-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding-bottom: 12px;
+    }
+
+    .cloze-line-text {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #ffffff;
+      flex: 1;
+      line-height: 1.9;
+    }
+
+    .cloze-slot-wrapper {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      min-width: 80px;
-      height: 38px;
-      padding: 0 10px;
-      margin: 0 4px;
-      border-bottom: 2.5px solid #fbbf24;
-      background: rgba(251, 191, 36, 0.1);
-      border-radius: 6px;
-      color: #fbbf24;
-      font-weight: 800;
-      font-size: 1.15rem;
-      cursor: pointer;
+      position: relative;
       vertical-align: middle;
-      transition: all 0.2s;
+      margin: 0 4px;
     }
 
-    .cloze-slot.filled {
+    .cloze-input {
+      display: inline-block;
+      text-align: center;
+      height: 40px;
+      padding: 0 10px;
+      border: none;
+      border-bottom: 2.5px solid #fbbf24;
+      background: rgba(251, 191, 36, 0.15);
+      border-radius: 8px;
+      color: #fbbf24;
+      font-size: 1.25rem;
+      font-weight: 800;
+      font-family: var(--font-hanzi);
+      outline: none;
+      transition: all 0.2s;
+      box-sizing: border-box;
+    }
+
+    .cloze-input:focus {
+      background: rgba(56, 189, 248, 0.25);
+      border-bottom-color: #38bdf8;
+      color: #38bdf8;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.35);
+    }
+
+    .cloze-input.filled {
       background: rgba(56, 189, 248, 0.2);
       border-bottom-color: #38bdf8;
       color: #38bdf8;
     }
 
-    .cloze-slot.correct {
+    .cloze-input.correct {
       background: rgba(16, 185, 129, 0.25) !important;
       border-bottom-color: #10b981 !important;
       color: #34d399 !important;
     }
 
-    .cloze-slot.wrong {
+    .cloze-input.wrong {
       background: rgba(239, 68, 68, 0.25) !important;
       border-bottom-color: #ef4444 !important;
       color: #f87171 !important;
+    }
+
+    .cloze-icon-correct {
+      color: #10b981;
+      font-size: 1rem;
+      margin-left: 5px;
+      animation: popIn 0.2s ease-out forwards;
+    }
+
+    .cloze-wrong-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.88rem;
+      color: #ef4444;
+      margin-left: 6px;
+      font-weight: 800;
+      background: rgba(239, 68, 68, 0.15);
+      padding: 2px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      font-family: var(--font-hanzi);
+      animation: popIn 0.2s ease-out forwards;
     }
 
     /* AI Retell Box */
@@ -911,6 +1005,159 @@
     .hide-pinyin .bk-pinyin-line,
     .hide-pinyin [data-role="pinyin"] {
       display: none !important;
+    /* Light Mode Stepper Bar & Header */
+    html.light-mode .lesson-stepper-hub-bar,
+    body.light-mode .lesson-stepper-hub-bar {
+      background: #ffffff !important;
+      border: 1.5px solid #e2e8f0 !important;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05) !important;
+    }
+
+    html.light-mode .stepper-tab-btn:not(.active),
+    body.light-mode .stepper-tab-btn:not(.active) {
+      background: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+      color: #475569 !important;
+    }
+
+    html.light-mode .stepper-tab-btn:not(.active):hover,
+    body.light-mode .stepper-tab-btn:not(.active):hover {
+      background: #e2e8f0 !important;
+      color: #0f172a !important;
+    }
+
+    html.light-mode #stepper-roadmap-btn,
+    body.light-mode #stepper-roadmap-btn {
+      background: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+
+    html.light-mode #pinyin-toggle-hub-btn,
+    body.light-mode #pinyin-toggle-hub-btn {
+      background: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+
+    html.light-mode #pinyin-toggle-hub-btn.pinyin-active,
+    body.light-mode #pinyin-toggle-hub-btn.pinyin-active {
+      background: linear-gradient(135deg, #0284c7, #2563eb) !important;
+      color: #ffffff !important;
+      border-color: #38bdf8 !important;
+    }
+
+    html.light-mode .practice-tabs-bar,
+    body.light-mode .practice-tabs-bar {
+      background: #f1f5f9 !important;
+      border-color: #e2e8f0 !important;
+    }
+
+    /* Light Mode Cloze Test Elements */
+    html.light-mode .cloze-instruction-box,
+    body.light-mode .cloze-instruction-box {
+      background: linear-gradient(135deg, #f0f9ff, #e0f2fe) !important;
+      border: 1.5px solid #bae6fd !important;
+      box-shadow: 0 4px 16px rgba(56, 189, 248, 0.08) !important;
+    }
+
+    html.light-mode .cloze-instruction-title,
+    body.light-mode .cloze-instruction-title {
+      color: #0284c7 !important;
+    }
+
+    html.light-mode .cloze-instruction-desc,
+    body.light-mode .cloze-instruction-desc {
+      color: #334155 !important;
+    }
+
+    html.light-mode .cloze-word-bank,
+    body.light-mode .cloze-word-bank {
+      background: #f8fafc !important;
+      border: 1.5px dashed #7dd3fc !important;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03) !important;
+    }
+
+    html.light-mode .cloze-bank-item,
+    body.light-mode .cloze-bank-item {
+      background: #ffffff !important;
+      border: 1.5px solid #38bdf8 !important;
+      color: #0284c7 !important;
+      box-shadow: 0 2px 8px rgba(56, 189, 248, 0.15) !important;
+    }
+
+    html.light-mode .cloze-bank-item:hover,
+    body.light-mode .cloze-bank-item:hover {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+    }
+
+    html.light-mode .cloze-bank-item.used,
+    body.light-mode .cloze-bank-item.used {
+      background: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+      color: #94a3b8 !important;
+      opacity: 0.55 !important;
+    }
+
+    html.light-mode .cloze-content-box,
+    body.light-mode .cloze-content-box {
+      background: #ffffff !important;
+      border: 1.5px solid #e2e8f0 !important;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.04) !important;
+    }
+
+    html.light-mode .cloze-line-row,
+    body.light-mode .cloze-line-row {
+      border-bottom-color: #f1f5f9 !important;
+    }
+
+    html.light-mode .cloze-line-text,
+    body.light-mode .cloze-line-text {
+      color: #0f172a !important;
+    }
+
+    html.light-mode .cloze-input,
+    body.light-mode .cloze-input {
+      background: #fef9c3 !important;
+      border-bottom-color: #d97706 !important;
+      color: #b45309 !important;
+    }
+
+    html.light-mode .cloze-input:focus,
+    body.light-mode .cloze-input:focus {
+      background: #e0f2fe !important;
+      border-bottom-color: #0284c7 !important;
+      color: #0369a1 !important;
+      box-shadow: 0 0 12px rgba(2, 132, 199, 0.25) !important;
+    }
+
+    html.light-mode .cloze-input.filled,
+    body.light-mode .cloze-input.filled {
+      background: #e0f2fe !important;
+      border-bottom-color: #0284c7 !important;
+      color: #0369a1 !important;
+    }
+
+    html.light-mode .cloze-input.correct,
+    body.light-mode .cloze-input.correct {
+      background: #d1fae5 !important;
+      border-bottom-color: #10b981 !important;
+      color: #047857 !important;
+    }
+
+    html.light-mode .cloze-input.wrong,
+    body.light-mode .cloze-input.wrong {
+      background: #fee2e2 !important;
+      border-bottom-color: #ef4444 !important;
+      color: #b91c1c !important;
+    }
+
+    html.light-mode .cloze-wrong-hint,
+    body.light-mode .cloze-wrong-hint {
+      background: #fee2e2 !important;
+      color: #b91c1c !important;
+      border-color: #fca5a5 !important;
     }
 
     @media (max-width: 768px) {
@@ -1012,8 +1259,7 @@
     </div>
 
     <!-- Controls Bar & Unified 4-Step Stepper -->
-    <div class="lesson-stepper-hub-bar"
-      style="background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 18px; padding: 10px 16px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; box-shadow: 0 10px 30px rgba(0,0,0,0.35);">
+    <div class="lesson-stepper-hub-bar">
       <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
         <a id="stepper-roadmap-btn" href="/index.html?tab=lessons&level=1" class="btn-close"
           style="padding: 8px 14px; border-radius: 12px; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; text-decoration: none;">
@@ -1024,14 +1270,14 @@
         <div style="display: inline-flex; align-items: center; gap: 8px;">
           <select id="level-switcher-select" onchange="window.switchHskLevel(this.value)"
             title="Chọn cấp độ HSK"
-            style="background: rgba(15, 23, 42, 0.75); border: 1.5px solid rgba(56, 189, 248, 0.45); color: #38bdf8; font-weight: 800; font-size: 0.88rem; padding: 7px 12px; border-radius: 10px; cursor: pointer; outline: none; transition: all 0.2s;">
+            style="font-weight: 800; font-size: 0.88rem; padding: 7px 12px; border-radius: 10px; cursor: pointer; outline: none; transition: all 0.2s;">
             <option value="1">HSK 1 (3.0)</option>
             <option value="2">HSK 2 (3.0)</option>
             <option value="3">HSK 3 (3.0)</option>
           </select>
           <select id="lesson-switcher-select" onchange="window.switchHskLesson(this.value)"
             title="Chọn bài học"
-            style="background: rgba(15, 23, 42, 0.75); border: 1.5px solid rgba(245, 158, 11, 0.45); color: #fbbf24; font-weight: 800; font-size: 0.88rem; padding: 7px 12px; border-radius: 10px; cursor: pointer; outline: none; max-width: 250px; transition: all 0.2s;">
+            style="font-weight: 800; font-size: 0.88rem; padding: 7px 12px; border-radius: 10px; cursor: pointer; outline: none; max-width: 250px; transition: all 0.2s;">
           </select>
         </div>
 
@@ -1049,12 +1295,12 @@
       <!-- 4 Step Tabs -->
       <div class="lesson-stepper-tabs" style="display: flex; gap: 8px; flex-wrap: wrap;">
         <button onclick="goToLessonStep('vocab')" class="stepper-tab-btn"
-          style="padding: 8px 14px; border-radius: 12px; font-weight: 700; font-size: 0.88rem; cursor: pointer; border: 1.5px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.08); color: #cbd5e1; display: flex; align-items: center; gap: 6px; transition: all 0.2s;"
+          style="padding: 8px 14px; border-radius: 12px; font-weight: 700; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s;"
           title="Bước 1: Học từ vựng Flashcard">
           <i class="fa-solid fa-book-bookmark"></i> 1. Từ Vựng
         </button>
         <button onclick="goToLessonStep('grammar')" class="stepper-tab-btn"
-          style="padding: 8px 14px; border-radius: 12px; font-weight: 700; font-size: 0.88rem; cursor: pointer; border: 1.5px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.08); color: #cbd5e1; display: flex; align-items: center; gap: 6px; transition: all 0.2s;"
+          style="padding: 8px 14px; border-radius: 12px; font-weight: 700; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s;"
           title="Bước 2: Học cấu trúc ngữ pháp">
           <i class="fa-solid fa-spell-check"></i> 2. Ngữ Pháp
         </button>
@@ -1064,7 +1310,7 @@
           <i class="fa-solid fa-comments"></i> 3. Bài Khóa
         </button>
         <button onclick="goToLessonStep('vocab-practice')" class="stepper-tab-btn"
-          style="padding: 8px 14px; border-radius: 12px; font-weight: 700; font-size: 0.88rem; cursor: pointer; border: 1.5px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.08); color: #cbd5e1; display: flex; align-items: center; gap: 6px; transition: all 0.2s;"
+          style="padding: 8px 14px; border-radius: 12px; font-weight: 700; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s;"
           title="Bước 4: Ôn tập từ vựng 5 dạng (Sư Phạm & AI)">
           <i class="fa-solid fa-graduation-cap"></i> 4. Ôn Tập
         </button>
@@ -1124,6 +1370,22 @@
     let currentScore = 0;
     let completedChatLines = []; // Chat history for Dictation Mode
     let clozeState = { slots: [], bank: [], userAnswers: {} };
+    let currentLessonVocabs = []; // Danh sách từ vựng bài học hiện tại (để ưu tiên đục từ vựng)
+
+    async function loadLessonVocabs() {
+      try {
+        const res = await fetch(`/api/vocabulary?level=${currentLevel}&lessonId=${currentLessonId}&version=${currentVersion}`);
+        if (res.ok) {
+          const list = await res.json();
+          if (Array.isArray(list)) {
+            currentLessonVocabs = list.map(w => (w.word || w.char || '').trim()).filter(Boolean);
+          }
+        }
+      } catch (e) {
+        console.warn("Error fetching lesson vocabularies:", e);
+        currentLessonVocabs = [];
+      }
+    }
 
     document.addEventListener('DOMContentLoaded', async function () {
       const urlParams = new URLSearchParams(window.location.search);
@@ -1162,6 +1424,7 @@
       currentLevel = parseInt(lvl, 10) || 1;
       currentLessonId = 1;
       currentDialogueId = 1;
+      clozeState = { slots: [], bank: [], userAnswers: {} };
       updateUrlParams();
       updateFixedBadges();
       await loadData();
@@ -1169,12 +1432,14 @@
       renderWorkspace();
     };
 
-    window.switchHskLesson = function(lesId) {
+    window.switchHskLesson = async function(lesId) {
       currentLessonId = parseInt(lesId, 10) || 1;
       currentDialogueId = 1;
+      clozeState = { slots: [], bank: [], userAnswers: {} };
       updateUrlParams();
       updateFixedBadges();
       populateLessonSwitcher();
+      await loadLessonVocabs();
       renderWorkspace();
     };
 
@@ -1290,6 +1555,7 @@
       try {
         if (currentVersion === '2.0' || currentVersion === 'yct' || Number(currentLevel) > 3) {
           allReadingTexts = [];
+          currentLessonVocabs = [];
           return;
         }
         const file = `/hsk${currentLevel}_reading_texts.json`;
@@ -1303,6 +1569,7 @@
         console.warn("Error loading reading texts:", e);
         allReadingTexts = [];
       }
+      await loadLessonVocabs();
     }
 
     function updateFixedBadges() {
@@ -1786,15 +2053,20 @@
       `;
     }
 
+    let activeClozeSlotId = null;
+
     function renderPracticeClozeHtml(diagObj) {
       const state = prepareClozeStateForDialogue(diagObj);
       const lines = diagObj.lines || [];
 
-      // Bank items HTML
+      // Bank items HTML (Thẻ từ vựng có thể click để điền hoặc click lại để gỡ)
       const bankHtml = state.bank.map(b => `
-        <span class="cloze-bank-item ${b.used ? 'used' : ''}" onclick="handleClozeBankClick(${b.id})" title="${b.used ? 'Đã dùng' : 'Bấm để điền vào ô trống'}">
+        <button type="button" class="cloze-bank-item ${b.used ? 'used' : ''}" 
+          id="cloze-bank-item-${b.id}"
+          onclick="window.handleClozeBankClick(${b.id})" 
+          title="${b.used ? 'Đã dùng (Bấm để gỡ từ này ra)' : 'Bấm để điền vào ô trống'}">
           ${b.word}
-        </span>
+        </button>
       `).join('');
 
       // Lines with slots
@@ -1805,30 +2077,54 @@
         if (matchingSlots.length > 0) {
           matchingSlots.forEach(s => {
             const userAns = state.userAnswers[s.id];
-            const wordDisplay = userAns ? userAns.word : '?';
-            const isFilled = !!userAns;
+            const userWord = userAns ? userAns.word : '';
+            const isFilled = !!userWord;
 
             let statusClass = '';
             if (state.checked) {
-              if (userAns && userAns.word === s.word) {
+              const cleanUser = userWord.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '');
+              const cleanTarget = s.word.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '');
+              if (cleanUser === cleanTarget) {
                 statusClass = 'correct';
               } else {
                 statusClass = 'wrong';
               }
             }
 
-            const slotHtml = `<span class="cloze-slot ${isFilled ? 'filled' : ''} ${statusClass}" onclick="handleClozeSlotClick(${s.id})" title="${isFilled ? 'Bấm để gỡ từ ra' : 'Ô trống cần điền'}">${wordDisplay}</span>`;
+            const slotWidth = Math.max(68, s.word.length * 28 + 14);
+            const slotHtml = `
+              <span class="cloze-slot-wrapper">
+                <input type="text" 
+                  class="cloze-input ${isFilled ? 'filled' : ''} ${statusClass}" 
+                  id="cloze-input-${s.id}" 
+                  data-slot-id="${s.id}" 
+                  data-target="${s.word}" 
+                  value="${userWord.replace(/"/g, '&quot;')}" 
+                  placeholder="?" 
+                  autocomplete="off" 
+                  autocorrect="off" 
+                  autocapitalize="off" 
+                  spellcheck="false" 
+                  style="width: ${slotWidth}px;" 
+                  onfocus="window.handleClozeInputFocus(${s.id})" 
+                  oninput="window.handleClozeInputType(${s.id}, this.value)" 
+                  onkeydown="window.handleClozeInputKeydown(event, ${s.id})" 
+                  title="Gõ chữ Hán hoặc bấm chọn từ ở Ngân hàng từ" />
+                ${statusClass === 'correct' ? '<i class="fa-solid fa-circle-check cloze-icon-correct"></i>' : ''}
+                ${statusClass === 'wrong' ? `<span class="cloze-wrong-hint" title="Đáp án đúng"><i class="fa-solid fa-circle-xmark"></i> ${s.word}</span>` : ''}
+              </span>
+            `;
             text = text.replace(s.word, slotHtml);
           });
         }
 
         return `
-          <div style="display:flex; align-items:center; gap:14px; margin-bottom:16px; border-bottom:1px solid rgba(255,255,255,0.06); padding-bottom:12px;">
-            ${line.speaker ? `<span style="background:rgba(37,99,235,0.2); color:#60a5fa; border:1px solid rgba(59,130,246,0.3); padding:4px 12px; border-radius:8px; font-weight:800; font-size:0.82rem; flex-shrink:0;">${line.speaker}</span>` : ''}
-            <div class="hanzi-text" style="font-size:1.3rem; font-weight:800; color:#ffffff; flex:1; line-height:1.8;">
+          <div class="cloze-line-row">
+            ${line.speaker ? `<span class="cloze-speaker-badge" style="background:rgba(37,99,235,0.2); color:#60a5fa; border:1px solid rgba(59,130,246,0.3); padding:4px 12px; border-radius:8px; font-weight:800; font-size:0.82rem; flex-shrink:0;">${line.speaker}</span>` : ''}
+            <div class="hanzi-text cloze-line-text">
               ${text}
             </div>
-            <button onclick="speakText(decodeURIComponent('${encodeURIComponent(line.zh)}'))" style="background:rgba(56,189,248,0.15); border:1px solid rgba(56,189,248,0.3); color:#38bdf8; padding:6px 12px; border-radius:8px; cursor:pointer; font-size:0.82rem; flex-shrink:0;">
+            <button onclick="speakText(decodeURIComponent('${encodeURIComponent(line.zh)}'))" class="btn btn-sm cloze-audio-btn" style="background:rgba(56,189,248,0.15); border:1px solid rgba(56,189,248,0.3); color:#38bdf8; padding:6px 12px; border-radius:8px; cursor:pointer; font-size:0.82rem; flex-shrink:0;" title="Nghe câu này">
               <i class="fa-solid fa-volume-high"></i>
             </button>
           </div>
@@ -1838,25 +2134,26 @@
       return `
         <div>
           <!-- Instruction Box -->
-          <div style="background:rgba(15,23,42,0.7); border:1.5px solid rgba(56,189,248,0.35); border-radius:18px; padding:18px 22px; margin-bottom:20px;">
-            <div style="font-size:1.05rem; font-weight:800; color:#38bdf8; margin-bottom:6px; display:flex; align-items:center; gap:8px;">
-              <i class="fa-solid fa-puzzle-piece"></i> BÀI TẬP ĐIỀN TỪ HOÀN THÀNH BÀI KHÓA (CLOZE TEST)
+          <div class="cloze-instruction-box">
+            <div class="cloze-instruction-title">
+              <i class="fa-solid fa-puzzle-piece"></i> BÀI TẬP ĐIỀN TỪ VỰNG HOÀN THÀNH BÀI KHÓA (CLOZE TEST)
             </div>
-            <div style="font-size:0.9rem; color:#cbd5e1;">
-              Bấm chọn từ trong <strong>Ngân Hàng Từ</strong> bên dưới để tự động điền vào các vị trí <code>[ ? ]</code> còn khuyết. Bấm vào ô đã điền nếu muốn gỡ từ ra!
+            <div class="cloze-instruction-desc">
+              Các từ vựng vừa học trong bài được đục rải rác trong bài khóa. Bạn có thể <strong>nhập tay trực tiếp bằng bàn phím</strong> vào ô <code>[ ? ]</code> hoặc <strong>bấm chọn từ trong Ngân Hàng Từ</strong> bên dưới. Bấm lại vào từ đã chọn để gỡ ra!
             </div>
           </div>
 
           <!-- Word Bank -->
-          <div style="margin-bottom:12px; font-size:0.92rem; font-weight:800; color:#fbbf24; text-transform:uppercase; letter-spacing:0.5px;">
-            <i class="fa-solid fa-layer-group"></i> Ngân Hàng Từ Vựng:
+          <div style="margin-bottom:12px; font-size:0.92rem; font-weight:800; color:#fbbf24; text-transform:uppercase; letter-spacing:0.5px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+            <span><i class="fa-solid fa-layer-group"></i> Ngân Hàng Từ Vựng (${state.bank.length} từ):</span>
+            <span style="font-size:0.8rem; color:#94a3b8; font-weight:600; text-transform:none;">Bấm từ để điền • Bấm từ gạch ngang để gỡ</span>
           </div>
           <div class="cloze-word-bank">
             ${bankHtml}
           </div>
 
           <!-- Cloze Text Content Box -->
-          <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(255,255,255,0.12); border-radius:20px; padding:24px; box-shadow:0 8px 24px rgba(0,0,0,0.3); margin-bottom:20px;">
+          <div class="cloze-content-box">
             ${linesWithSlotsHtml}
           </div>
 
@@ -1934,53 +2231,98 @@
 
       const lines = diagObj.lines || [];
       const slots = [];
-      const bankWords = [];
+      const usedWords = new Set();
 
-      lines.forEach((line, lIdx) => {
-        const text = line.zh || '';
-        const words = text.match(/[\u4e00-\u9fa5]{2,4}/g) || [];
-        let chosen = null;
-        for (const w of words) {
-          if (!bankWords.includes(w) && slots.length < 5) {
-            chosen = w;
-            break;
-          }
-        }
-        if (chosen) {
-          const slotId = slots.length;
-          slots.push({
-            id: slotId,
-            lineIdx: lIdx,
-            word: chosen,
-            speaker: line.speaker || '',
-            fullZh: text
-          });
-          bankWords.push(chosen);
-        }
-      });
+      // Danh sách từ vựng của bài học này (sắp xếp theo độ dài giảm dần để ưu tiên từ ghép)
+      const lessonVocabs = (currentLessonVocabs && currentLessonVocabs.length > 0)
+        ? [...currentLessonVocabs].filter(v => v && v.length >= 1 && !/^[0-9.,!?:;="'"()\s\-_]+$/.test(v)).sort((a, b) => b.length - a.length)
+        : [];
 
-      if (slots.length < 2 && lines.length > 0) {
-        lines.slice(0, 3).forEach((line, lIdx) => {
-          const chars = (line.zh || '').match(/[\u4e00-\u9fa5]/g) || [];
-          if (chars.length > 0 && slots.length < 4) {
-            const w = chars.slice(0, 2).join('');
-            if (w && !bankWords.includes(w)) {
+      // 1. Quét ưu tiên các từ vựng bài học xuất hiện trong bài khóa
+      if (lessonVocabs.length > 0) {
+        lines.forEach((line, lIdx) => {
+          const text = line.zh || '';
+          let lineSlotsCount = 0;
+
+          for (const v of lessonVocabs) {
+            if (slots.length >= 6) break;
+            if (lineSlotsCount >= 2) break;
+            if (usedWords.has(v)) continue;
+
+            if (text.includes(v)) {
               slots.push({
                 id: slots.length,
                 lineIdx: lIdx,
-                word: w,
+                word: v,
                 speaker: line.speaker || '',
-                fullZh: line.zh
+                fullZh: text,
+                isLessonVocab: true
               });
-              bankWords.push(w);
+              usedWords.add(v);
+              lineSlotsCount++;
             }
           }
         });
       }
 
-      const bank = bankWords.map((w, bIdx) => ({
+      // 2. Nếu bài khóa có ít hơn 3 từ vựng xuất hiện: tìm thêm các từ ghép ở GIỮA hoặc CUỐI câu (tránh đầu câu)
+      if (slots.length < 3 && lines.length > 0) {
+        lines.forEach((line, lIdx) => {
+          if (slots.length >= 5) return;
+          const text = line.zh || '';
+          // Bỏ qua 2-3 ký tự đầu câu để tránh đục đại từ chủ ngữ (他, 我, 你, 他是, 有一...)
+          const midPart = text.length > 4 ? text.slice(3) : text;
+          const candidateWords = midPart.match(/[\u4e00-\u9fa5]{2,3}/g) || [];
+
+          for (const cand of candidateWords) {
+            if (slots.length >= 5) break;
+            if (usedWords.has(cand)) continue;
+            // Không chọn các từ quá phổ biến hoặc ngữ pháp đại từ
+            if (['什么', '怎么', '我们', '你们', '他们', '但是', '因为', '所以'].includes(cand)) continue;
+
+            slots.push({
+              id: slots.length,
+              lineIdx: lIdx,
+              word: cand,
+              speaker: line.speaker || '',
+              fullZh: text,
+              isLessonVocab: false
+            });
+            usedWords.add(cand);
+            break;
+          }
+        });
+      }
+
+      // Fallback cuối cùng nếu vẫn quá ít
+      if (slots.length === 0 && lines.length > 0) {
+        lines.slice(0, 3).forEach((line, lIdx) => {
+          const text = line.zh || '';
+          const words = text.match(/[\u4e00-\u9fa5]{2}/g) || [];
+          if (words.length > 0 && slots.length < 3) {
+            const w = words[words.length - 1]; // Chọn từ ở cuối câu
+            if (w && !usedWords.has(w)) {
+              slots.push({
+                id: slots.length,
+                lineIdx: lIdx,
+                word: w,
+                speaker: line.speaker || '',
+                fullZh: text,
+                isLessonVocab: false
+              });
+              usedWords.add(w);
+            }
+          }
+        });
+      }
+
+      // Sắp xếp các slots theo thứ tự xuất hiện trong bài khóa (lineIdx)
+      slots.sort((a, b) => a.lineIdx - b.lineIdx);
+      slots.forEach((s, idx) => s.id = idx);
+
+      const bank = slots.map((s, bIdx) => ({
         id: bIdx,
-        word: w,
+        word: s.word,
         used: false
       })).sort(() => Math.random() - 0.5);
 
@@ -1995,87 +2337,162 @@
       return clozeState;
     }
 
-    function handleClozeBankClick(bankId) {
-      if (!clozeState || clozeState.checked) return;
-      const bankItem = clozeState.bank.find(b => b.id === bankId);
-      if (!bankItem || bankItem.used) return;
+    window.handleClozeInputFocus = function (slotId) {
+      activeClozeSlotId = slotId;
+    };
 
-      const emptySlot = clozeState.slots.find(s => !clozeState.userAnswers[s.id]);
-      if (!emptySlot) {
+    window.handleClozeInputKeydown = function (event, slotId) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        const nextSlot = clozeState.slots.find(s => s.id > slotId);
+        if (nextSlot) {
+          const nextInput = document.getElementById(`cloze-input-${nextSlot.id}`);
+          if (nextInput) nextInput.focus();
+        } else {
+          window.checkClozeAnswers();
+        }
+      }
+    };
+
+    window.handleClozeInputType = function (slotId, rawVal) {
+      if (!clozeState) return;
+      const val = (rawVal || '').trim();
+      const inputEl = document.getElementById(`cloze-input-${slotId}`);
+
+      if (val) {
+        clozeState.userAnswers[slotId] = { word: val };
+        if (inputEl) {
+          inputEl.classList.add('filled');
+          inputEl.classList.remove('correct', 'wrong');
+        }
+      } else {
+        delete clozeState.userAnswers[slotId];
+        if (inputEl) {
+          inputEl.classList.remove('filled', 'correct', 'wrong');
+        }
+      }
+
+      // Sync bank item used status without losing input focus
+      if (clozeState.bank) {
+        clozeState.bank.forEach(b => {
+          const isUsed = Object.values(clozeState.userAnswers).some(ans => ans && ans.word === b.word);
+          b.used = isUsed;
+          const bankBtn = document.getElementById(`cloze-bank-item-${b.id}`);
+          if (bankBtn) {
+            if (isUsed) bankBtn.classList.add('used');
+            else bankBtn.classList.remove('used');
+          }
+        });
+      }
+    };
+
+    window.handleClozeBankClick = function (bankId) {
+      if (!clozeState) return;
+      const bankItem = clozeState.bank.find(b => b.id === bankId);
+      if (!bankItem) return;
+
+      // If already used, unfill the slot that has this word
+      if (bankItem.used) {
+        const usedSlotId = Object.keys(clozeState.userAnswers).find(id => clozeState.userAnswers[id]?.word === bankItem.word);
+        if (usedSlotId !== undefined) {
+          delete clozeState.userAnswers[usedSlotId];
+          bankItem.used = false;
+          const inputEl = document.getElementById(`cloze-input-${usedSlotId}`);
+          if (inputEl) {
+            inputEl.value = '';
+            inputEl.classList.remove('filled', 'correct', 'wrong');
+          }
+          const bankBtn = document.getElementById(`cloze-bank-item-${bankItem.id}`);
+          if (bankBtn) bankBtn.classList.remove('used');
+        }
+        return;
+      }
+
+      // Target slot: active focused slot or first empty slot
+      let targetSlotId = activeClozeSlotId;
+      if (targetSlotId === null || targetSlotId === undefined || (clozeState.userAnswers[targetSlotId] && clozeState.userAnswers[targetSlotId].word)) {
+        const firstEmpty = clozeState.slots.find(s => !clozeState.userAnswers[s.id] || !clozeState.userAnswers[s.id].word);
+        if (firstEmpty) {
+          targetSlotId = firstEmpty.id;
+        }
+      }
+
+      if (targetSlotId === null || targetSlotId === undefined) {
         showLessonToast('Tất cả các ô trống đã được điền! Bấm "Kiểm Tra Đáp Án" nhé.');
         return;
       }
 
-      clozeState.userAnswers[emptySlot.id] = {
-        word: bankItem.word,
-        bankId: bankId
-      };
+      clozeState.userAnswers[targetSlotId] = { word: bankItem.word, bankId: bankId };
       bankItem.used = true;
-      renderWorkspace();
-    }
-    window.handleClozeBankClick = handleClozeBankClick;
 
-    function handleClozeSlotClick(slotId) {
-      if (!clozeState) return;
-      const ans = clozeState.userAnswers[slotId];
-      if (!ans) return;
+      const inputEl = document.getElementById(`cloze-input-${targetSlotId}`);
+      if (inputEl) {
+        inputEl.value = bankItem.word;
+        inputEl.classList.add('filled');
+        inputEl.classList.remove('correct', 'wrong');
+      }
 
-      const bankItem = clozeState.bank.find(b => b.id === ans.bankId);
-      if (bankItem) bankItem.used = false;
-      delete clozeState.userAnswers[slotId];
-      clozeState.checked = false;
-      renderWorkspace();
-    }
-    window.handleClozeSlotClick = handleClozeSlotClick;
+      const bankBtn = document.getElementById(`cloze-bank-item-${bankItem.id}`);
+      if (bankBtn) bankBtn.classList.add('used');
 
-    function checkClozeAnswers() {
+      // Move focus to next empty slot if available
+      const nextEmpty = clozeState.slots.find(s => s.id > targetSlotId && (!clozeState.userAnswers[s.id] || !clozeState.userAnswers[s.id].word));
+      if (nextEmpty) {
+        activeClozeSlotId = nextEmpty.id;
+        const nextInput = document.getElementById(`cloze-input-${nextEmpty.id}`);
+        if (nextInput) nextInput.focus();
+      }
+    };
+
+    window.checkClozeAnswers = function () {
       if (!clozeState) return;
       const filledCount = Object.keys(clozeState.userAnswers).length;
       if (filledCount === 0) {
-        showLessonToast('Vui lòng chọn từ điền vào các ô trống trước!', true);
+        showLessonToast('Vui lòng nhập hoặc chọn từ điền vào các ô trống trước!', true);
         return;
       }
 
       clozeState.checked = true;
       let correctCount = 0;
       clozeState.slots.forEach(s => {
-        const userWord = clozeState.userAnswers[s.id]?.word;
-        if (userWord === s.word) {
+        const userWord = (clozeState.userAnswers[s.id]?.word || '').trim();
+        const cleanUser = userWord.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '');
+        const cleanTarget = s.word.replace(/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`]/g, '');
+
+        if (cleanUser === cleanTarget) {
           correctCount++;
         }
       });
 
       const total = clozeState.slots.length;
       const pct = Math.round((correctCount / total) * 100);
-      clozeState.lastScoreText = `Đúng ${correctCount}/${total} câu (${pct}%) ${pct === 100 ? '🎉 Hoàn Hảo!' : pct >= 50 ? '👍 Rất Tốt!' : '💪 Hãy Cố Gắng Thêm!'}`;
+      clozeState.lastScoreText = `Đúng ${correctCount}/${total} từ (${pct}%) ${pct === 100 ? '🎉 Hoàn Hảo! Điểm số tối đa.' : pct >= 50 ? '👍 Rất Tốt! Hãy tiếp tục phát huy.' : '💪 Hãy Cố Gắng Thêm Nhé!'}`;
       renderWorkspace();
-    }
-    window.checkClozeAnswers = checkClozeAnswers;
+    };
 
-    function resetClozeState() {
+    window.resetClozeState = function () {
       if (!clozeState) return;
       clozeState.userAnswers = {};
-      clozeState.bank.forEach(b => b.used = false);
+      if (clozeState.bank) clozeState.bank.forEach(b => b.used = false);
       clozeState.checked = false;
       clozeState.lastScoreText = '';
+      activeClozeSlotId = null;
       renderWorkspace();
-    }
-    window.resetClozeState = resetClozeState;
+    };
 
-    function revealClozeAnswers() {
+    window.revealClozeAnswers = function () {
       if (!clozeState) return;
       clozeState.slots.forEach(s => {
-        const matchingBank = clozeState.bank.find(b => b.word === s.word && !b.used) || clozeState.bank.find(b => b.word === s.word);
+        const matchingBank = clozeState.bank.find(b => b.word === s.word);
         if (matchingBank) {
           matchingBank.used = true;
-          clozeState.userAnswers[s.id] = { word: s.word, bankId: matchingBank.id };
         }
+        clozeState.userAnswers[s.id] = { word: s.word, bankId: matchingBank ? matchingBank.id : null };
       });
       clozeState.checked = true;
-      clozeState.lastScoreText = 'Đã hiển thị đáp án mẫu chính xác!';
+      clozeState.lastScoreText = 'Đã hiển thị toàn bộ đáp án mẫu chính xác!';
       renderWorkspace();
-    }
-    window.revealClozeAnswers = revealClozeAnswers;
+    };
 
     async function submitRetellStory() {
       const inputEl = document.getElementById('retell-story-input');

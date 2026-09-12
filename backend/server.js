@@ -1746,9 +1746,24 @@ app.get('/api/vocabulary', async (req, res) => {
   const masterList = await readDatabase();
   const email = getLoggedInUserEmail(req);
 
+  const targetLevel = req.query.level;
+  const targetLessonId = req.query.lessonId || req.query.lesson;
+  const targetVersion = req.query.version || req.query.hskVersion;
+
+  let baseList = masterList;
+  if (targetLevel) {
+    baseList = baseList.filter(w => String(w.level) === String(targetLevel) || String(w.level) === `HSK ${targetLevel}`);
+  }
+  if (targetLessonId) {
+    baseList = baseList.filter(w => String(w.lessonId) === String(targetLessonId) || String(w.lesson_id) === String(targetLessonId));
+  }
+  if (targetVersion) {
+    baseList = baseList.filter(w => (w.hskVersion || '3.0') === targetVersion);
+  }
+
   if (!email) {
-    // If not logged in, return master list with default unmemorized, unstarred, and not wrong states
-    const defaultList = masterList.map(w => ({
+    // If not logged in, return filtered master list with default unmemorized, unstarred, and not wrong states
+    const defaultList = baseList.map(w => ({
       ...w,
       isMemorized: false,
       isStarred: false,
@@ -1763,7 +1778,7 @@ app.get('/api/vocabulary', async (req, res) => {
   const userCustomWords = userData.customWords[email] || [];
 
   // Merge study states for built-in words
-  const mergedList = masterList.map(item => {
+  const mergedList = baseList.map(item => {
     const state = userProgress[item.id.toString()];
     return {
       ...item,
@@ -1773,6 +1788,11 @@ app.get('/api/vocabulary', async (req, res) => {
       isStudied: state ? !!state.isStudied : false
     };
   });
+
+  // If specific level or lesson was requested, return filtered list directly without appending global custom words
+  if (targetLevel || targetLessonId) {
+    return res.json(mergedList);
+  }
 
   // Append user-specific custom words
   const mappedCustomWords = userCustomWords.map(cw => ({
