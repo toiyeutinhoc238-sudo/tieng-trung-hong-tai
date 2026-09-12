@@ -18570,10 +18570,258 @@ html.light .dict-word-popover .popover-btn:hover {
   filter: brightness(1.08);
 }
 
+.home-survey-card-title {
+  color: #ffffff;
+}
+
+.home-survey-card-desc {
+  color: #cbd5e1;
+}
+
+.btn-survey-external {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f1f5f9;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  padding: 12px 18px;
+  border-radius: 14px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  backdrop-filter: blur(10px);
+  transition: all 0.25s ease;
+}
+
+.btn-survey-external span {
+  color: inherit;
+}
+
+.btn-survey-external i {
+  font-size: 0.82rem;
+  color: #94a3b8;
+  transition: color 0.25s ease;
+}
+
 .btn-survey-external:hover {
   background: rgba(255, 255, 255, 0.15) !important;
   border-color: rgba(255, 255, 255, 0.4) !important;
   transform: translateY(-2px);
+  color: #ffffff !important;
+}
+
+.btn-survey-external:hover i {
+  color: #ffffff;
+}
+
+.btn-survey-modal-external {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #cbd5e1;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 10px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.btn-survey-modal-external i {
+  font-size: 0.72rem;
+}
+
+.announcement-panel-title {
+  color: #ffffff;
+}
+
+.announcement-survey-text {
+  color: #f8fafc;
+}
+
+.announcement-survey-ext {
+  color: #cbd5e1;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ============================================================
+   LIGHT MODE OVERRIDES FOR SURVEY & ANNOUNCEMENTS
+   ============================================================ */
+html.light-mode .home-survey-feature-card,
+body.light-mode .home-survey-feature-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(254, 243, 199, 0.5) 100%) !important;
+  border: 1.5px solid rgba(245, 158, 11, 0.5) !important;
+  box-shadow: 0 14px 32px rgba(245, 158, 11, 0.12), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light-mode .home-survey-card-title,
+body.light-mode .home-survey-card-title {
+  color: #0f172a !important;
+}
+
+html.light-mode .home-survey-card-desc,
+body.light-mode .home-survey-card-desc {
+  color: #475569 !important;
+}
+
+html.light-mode .btn-survey-external,
+body.light-mode .btn-survey-external {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #1e293b !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-mode .btn-survey-external span,
+body.light-mode .btn-survey-external span {
+  color: #1e293b !important;
+  font-weight: 800 !important;
+}
+
+html.light-mode .btn-survey-external i,
+body.light-mode .btn-survey-external i {
+  color: #334155 !important;
+}
+
+html.light-mode .btn-survey-external:hover,
+body.light-mode .btn-survey-external:hover {
+  background: #fffbeb !important;
+  border-color: #f59e0b !important;
+  box-shadow: 0 6px 18px rgba(245, 158, 11, 0.25) !important;
+  transform: translateY(-2px);
+}
+
+html.light-mode .btn-survey-external:hover span,
+body.light-mode .btn-survey-external:hover span,
+html.light-mode .btn-survey-external:hover i,
+body.light-mode .btn-survey-external:hover i {
+  color: #b45309 !important;
+}
+
+/* Modal Header Light Mode */
+html.light-mode #student-survey-modal .modal-card,
+body.light-mode #student-survey-modal .modal-card {
+  background: #ffffff !important;
+  border-color: rgba(245, 158, 11, 0.5) !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25) !important;
+}
+
+html.light-mode #student-survey-modal .modal-card > div:first-child,
+body.light-mode #student-survey-modal .modal-card > div:first-child {
+  background: #f8fafc !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+html.light-mode #student-survey-modal h3,
+body.light-mode #student-survey-modal h3 {
+  color: #0f172a !important;
+}
+
+html.light-mode #student-survey-modal p,
+body.light-mode #student-survey-modal p {
+  color: #64748b !important;
+}
+
+html.light-mode .btn-survey-modal-external,
+body.light-mode .btn-survey-modal-external {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #1e293b !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06) !important;
+}
+
+html.light-mode .btn-survey-modal-external span,
+body.light-mode .btn-survey-modal-external span {
+  color: #1e293b !important;
+  font-weight: 700 !important;
+}
+
+html.light-mode .btn-survey-modal-external i,
+body.light-mode .btn-survey-modal-external i {
+  color: #334155 !important;
+}
+
+html.light-mode .btn-survey-modal-external:hover,
+body.light-mode .btn-survey-modal-external:hover {
+  background: #fffbeb !important;
+  border-color: #f59e0b !important;
+}
+
+html.light-mode .btn-survey-modal-external:hover span,
+html.light-mode .btn-survey-modal-external:hover i {
+  color: #b45309 !important;
+}
+
+html.light-mode #student-survey-modal button[onclick*="closeSurveyModal"],
+body.light-mode #student-survey-modal button[onclick*="closeSurveyModal"] {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #475569 !important;
+}
+
+/* Announcement Panel Light Mode */
+html.light-mode .announcement-panel-wrap,
+body.light-mode .announcement-panel-wrap {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07) !important;
+}
+
+html.light-mode .announcement-panel-title,
+body.light-mode .announcement-panel-title {
+  color: #0f172a !important;
+}
+
+html.light-mode .announcement-survey-text,
+body.light-mode .announcement-survey-text {
+  color: #1e293b !important;
+}
+
+html.light-mode .announcement-survey-ext,
+body.light-mode .announcement-survey-ext {
+  color: #475569 !important;
+}
+
+html.light-mode .announcement-panel-wrap div[style*="background: rgba(255,255,255,0.04)"],
+body.light-mode .announcement-panel-wrap div[style*="background: rgba(255,255,255,0.04)"] {
+  background: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* Pills in Light Mode */
+html.light-mode .nav-survey-pill,
+body.light-mode .nav-survey-pill {
+  background: rgba(254, 243, 199, 0.92) !important;
+  border-color: rgba(245, 158, 11, 0.6) !important;
+  color: #b45309 !important;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15) !important;
+}
+
+html.light-mode .survey-hero-pill-btn,
+body.light-mode .survey-hero-pill-btn {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(245, 158, 11, 0.55) !important;
+  box-shadow: 0 6px 18px rgba(245, 158, 11, 0.15) !important;
+}
+
+html.light-mode .survey-hero-pill-btn .survey-pill-text,
+body.light-mode .survey-hero-pill-btn .survey-pill-text {
+  color: #0f172a !important;
+}
+
+html.light-mode .survey-hero-pill-btn .survey-pill-tag,
+body.light-mode .survey-hero-pill-btn .survey-pill-tag {
+  background: rgba(245, 158, 11, 0.15) !important;
+  border-color: rgba(245, 158, 11, 0.35) !important;
+  color: #b45309 !important;
 }
 
 /* 4. Responsive adjustments */
