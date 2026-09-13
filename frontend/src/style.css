@@ -19119,12 +19119,129 @@ body.light-mode input#lesson-typing-input:focus {
   box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15) !important;
 }
 
-html.light-mode .lesson-hint-card,
-body.light-mode .lesson-hint-card {
+/* Base default hint card for light mode (only when un-typed & un-revealed) */
+html.light-mode .lesson-hint-card:not(.char-correct):not(.char-wrong):not(.char-revealed):not([data-status="correct"]):not([data-status="wrong"]):not([data-status="revealed"]),
+body.light-mode .lesson-hint-card:not(.char-correct):not(.char-wrong):not(.char-revealed):not([data-status="correct"]):not([data-status="wrong"]):not([data-status="revealed"]) {
   background: #f8fafc !important;
   border: 1.5px solid #cbd5e1 !important;
   color: #64748b !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
 }
+
+/* CORRECT (GREEN) Hint Card: Light Mode */
+.lesson-hint-card.char-correct,
+.lesson-hint-card[data-status="correct"],
+html.light-mode .lesson-hint-card.char-correct,
+body.light-mode .lesson-hint-card.char-correct,
+html.light-mode .lesson-hint-card[data-status="correct"],
+body.light-mode .lesson-hint-card[data-status="correct"] {
+  background: #dcfce7 !important;
+  border: 2.5px solid #16a34a !important;
+  color: #15803d !important;
+  box-shadow: 0 0 16px rgba(22, 163, 74, 0.4) !important;
+  transform: translateY(-2px);
+}
+.lesson-hint-card.char-correct span,
+.lesson-hint-card[data-status="correct"] span,
+html.light-mode .lesson-hint-card.char-correct span,
+body.light-mode .lesson-hint-card.char-correct span,
+html.light-mode .lesson-hint-card[data-status="correct"] span,
+body.light-mode .lesson-hint-card[data-status="correct"] span {
+  color: #15803d !important;
+  font-weight: 900 !important;
+}
+
+/* WRONG (RED) Hint Card: Light Mode */
+.lesson-hint-card.char-wrong,
+.lesson-hint-card[data-status="wrong"],
+html.light-mode .lesson-hint-card.char-wrong,
+body.light-mode .lesson-hint-card.char-wrong,
+html.light-mode .lesson-hint-card[data-status="wrong"],
+body.light-mode .lesson-hint-card[data-status="wrong"] {
+  background: #fee2e2 !important;
+  border: 2px solid #ef4444 !important;
+  color: #dc2626 !important;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.35) !important;
+}
+.lesson-hint-card.char-wrong i,
+.lesson-hint-card[data-status="wrong"] i,
+html.light-mode .lesson-hint-card.char-wrong i,
+body.light-mode .lesson-hint-card.char-wrong i,
+html.light-mode .lesson-hint-card[data-status="wrong"] i,
+body.light-mode .lesson-hint-card[data-status="wrong"] i {
+  color: #ef4444 !important;
+}
+
+/* MANUALLY REVEALED: Light Mode */
+.lesson-hint-card.char-revealed,
+.lesson-hint-card[data-status="revealed"],
+html.light-mode .lesson-hint-card.char-revealed,
+body.light-mode .lesson-hint-card.char-revealed,
+html.light-mode .lesson-hint-card[data-status="revealed"],
+body.light-mode .lesson-hint-card[data-status="revealed"] {
+  background: #ffffff !important;
+  border: 1.5px solid #94a3b8 !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+.lesson-hint-card.char-revealed span,
+.lesson-hint-card[data-status="revealed"] span,
+html.light-mode .lesson-hint-card.char-revealed span,
+body.light-mode .lesson-hint-card.char-revealed span,
+html.light-mode .lesson-hint-card[data-status="revealed"] span,
+body.light-mode .lesson-hint-card[data-status="revealed"] span {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+/* DARK MODE OVERRIDES */
+html.dark .lesson-hint-card.char-correct,
+body.dark .lesson-hint-card.char-correct,
+html.dark .lesson-hint-card[data-status="correct"],
+body.dark .lesson-hint-card[data-status="correct"] {
+  background: rgba(16, 185, 129, 0.25) !important;
+  border: 2px solid #10b981 !important;
+  color: #34d399 !important;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.45) !important;
+}
+html.dark .lesson-hint-card.char-correct span,
+body.dark .lesson-hint-card.char-correct span,
+html.dark .lesson-hint-card[data-status="correct"] span,
+body.dark .lesson-hint-card[data-status="correct"] span {
+  color: #34d399 !important;
+}
+
+html.dark .lesson-hint-card.char-wrong,
+body.dark .lesson-hint-card.char-wrong,
+html.dark .lesson-hint-card[data-status="wrong"],
+body.dark .lesson-hint-card[data-status="wrong"] {
+  background: rgba(239, 68, 68, 0.25) !important;
+  border: 2px solid #ef4444 !important;
+  color: #f87171 !important;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.4) !important;
+}
+html.dark .lesson-hint-card.char-wrong i,
+body.dark .lesson-hint-card.char-wrong i,
+html.dark .lesson-hint-card[data-status="wrong"] i,
+body.dark .lesson-hint-card[data-status="wrong"] i {
+  color: #f87171 !important;
+}
+
+html.dark .lesson-hint-card.char-revealed,
+body.dark .lesson-hint-card.char-revealed,
+html.dark .lesson-hint-card[data-status="revealed"],
+body.dark .lesson-hint-card[data-status="revealed"] {
+  background: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+html.dark .lesson-hint-card.char-revealed span,
+body.dark .lesson-hint-card.char-revealed span,
+html.dark .lesson-hint-card[data-status="revealed"] span,
+body.dark .lesson-hint-card[data-status="revealed"] span {
+  color: #0f172a !important;
+}
+
 
 

@@ -8590,16 +8590,23 @@ window.toggleLessonCharHint = function (btnEl, char) {
   const isFlipped = btnEl.getAttribute('data-manual-flipped') === 'true';
   if (isFlipped) {
     btnEl.setAttribute('data-manual-flipped', 'false');
-    btnEl.style.background = 'rgba(255,255,255,0.08)';
-    btnEl.style.color = '#94a3b8';
-    btnEl.style.border = '1px solid rgba(255,255,255,0.2)';
+    btnEl.removeAttribute('data-status');
+    btnEl.classList.remove('char-correct', 'char-wrong', 'char-revealed');
+    btnEl.style.removeProperty('background');
+    btnEl.style.removeProperty('color');
+    btnEl.style.removeProperty('border');
+    btnEl.style.removeProperty('box-shadow');
     btnEl.innerHTML = `<i class="fa-solid fa-eye"></i>`;
   } else {
     btnEl.setAttribute('data-manual-flipped', 'true');
-    btnEl.style.background = '#ffffff';
-    btnEl.style.color = '#0f172a';
-    btnEl.style.border = '1px solid rgba(255,255,255,0.2)';
-    btnEl.innerHTML = `<span style="font-size: 1.5rem; font-weight: 800; font-family: var(--font-hanzi);">${char}</span>`;
+    btnEl.setAttribute('data-status', 'revealed');
+    btnEl.classList.remove('char-correct', 'char-wrong');
+    btnEl.classList.add('char-revealed');
+    btnEl.style.setProperty('background', '#ffffff', 'important');
+    btnEl.style.setProperty('color', '#0f172a', 'important');
+    btnEl.style.setProperty('border', '1.5px solid #94a3b8', 'important');
+    btnEl.style.setProperty('box-shadow', '0 4px 12px rgba(0,0,0,0.1)', 'important');
+    btnEl.innerHTML = `<span style="font-size: 1.5rem; font-weight: 800; font-family: var(--font-hanzi); color: #0f172a !important;">${char}</span>`;
   }
 };
 
@@ -8624,35 +8631,46 @@ window.updateLessonCharHintCards = function (containerId, typedText, targetAnswe
       if (typedChar === targetChar) {
         // Correct character for position idx: Auto-flip GREEN
         card.setAttribute('data-flipped', 'true');
-        card.style.background = 'rgba(16, 185, 129, 0.25)';
-        card.style.border = '2px solid #10b981';
-        card.style.color = '#34d399';
-        card.style.boxShadow = '0 0 16px rgba(16, 185, 129, 0.4)';
-        card.innerHTML = `<span style="font-size: 1.5rem; font-weight: 800; font-family: var(--font-hanzi);">${targetChar}</span>`;
+        card.setAttribute('data-status', 'correct');
+        card.classList.remove('char-wrong', 'char-revealed');
+        card.classList.add('char-correct');
+        card.style.setProperty('background', '#dcfce7', 'important');
+        card.style.setProperty('border', '2.5px solid #16a34a', 'important');
+        card.style.setProperty('color', '#15803d', 'important');
+        card.style.setProperty('box-shadow', '0 0 16px rgba(22, 163, 74, 0.4)', 'important');
+        card.innerHTML = `<span style="font-size: 1.5rem; font-weight: 800; font-family: var(--font-hanzi); color: #15803d !important;">${targetChar}</span>`;
       } else {
         // Wrong character typed for position idx: Do NOT flip character, show RED
         card.setAttribute('data-flipped', 'false');
-        card.style.background = 'rgba(239, 68, 68, 0.25)';
-        card.style.border = '2px solid #ef4444';
-        card.style.color = '#f87171';
-        card.style.boxShadow = '0 0 16px rgba(239, 68, 68, 0.4)';
-        card.innerHTML = `<i class="fa-solid fa-eye" style="color: #f87171;"></i>`;
+        card.setAttribute('data-status', 'wrong');
+        card.classList.remove('char-correct', 'char-revealed');
+        card.classList.add('char-wrong');
+        card.style.setProperty('background', '#fee2e2', 'important');
+        card.style.setProperty('border', '2px solid #ef4444', 'important');
+        card.style.setProperty('color', '#dc2626', 'important');
+        card.style.setProperty('box-shadow', '0 0 16px rgba(239, 68, 68, 0.35)', 'important');
+        card.innerHTML = `<i class="fa-solid fa-eye" style="color: #ef4444 !important;"></i>`;
       }
     } else {
       // Position not typed yet
+      card.classList.remove('char-correct', 'char-wrong');
       const isManualFlipped = card.getAttribute('data-manual-flipped') === 'true';
       if (isManualFlipped) {
-        card.style.background = '#ffffff';
-        card.style.border = '1px solid rgba(255,255,255,0.2)';
-        card.style.color = '#0f172a';
-        card.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
-        card.innerHTML = `<span style="font-size: 1.5rem; font-weight: 800; font-family: var(--font-hanzi);">${targetChar}</span>`;
+        card.setAttribute('data-status', 'revealed');
+        card.classList.add('char-revealed');
+        card.style.setProperty('background', '#ffffff', 'important');
+        card.style.setProperty('border', '1.5px solid #94a3b8', 'important');
+        card.style.setProperty('color', '#0f172a', 'important');
+        card.style.setProperty('box-shadow', '0 4px 12px rgba(0,0,0,0.1)', 'important');
+        card.innerHTML = `<span style="font-size: 1.5rem; font-weight: 800; font-family: var(--font-hanzi); color: #0f172a !important;">${targetChar}</span>`;
       } else {
         card.setAttribute('data-flipped', 'false');
-        card.style.background = 'rgba(255,255,255,0.08)';
-        card.style.border = '1px solid rgba(255,255,255,0.2)';
-        card.style.color = '#94a3b8';
-        card.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
+        card.removeAttribute('data-status');
+        card.classList.remove('char-revealed');
+        card.style.removeProperty('background');
+        card.style.removeProperty('border');
+        card.style.removeProperty('color');
+        card.style.removeProperty('box-shadow');
         card.innerHTML = `<i class="fa-solid fa-eye"></i>`;
       }
     }
@@ -8667,26 +8685,32 @@ window.revealAllLessonCharHints = function (fullWord) {
   const cards = container.querySelectorAll('.lesson-hint-card');
   if (cards.length === 0) return;
 
-  const allFlipped = Array.from(cards).every(c => c.getAttribute('data-flipped') === 'true');
+  const allFlipped = Array.from(cards).every(c => c.getAttribute('data-flipped') === 'true' || c.getAttribute('data-manual-flipped') === 'true');
   const chars = fullWord.match(/[\u4e00-\u9fa5\u3400-\u4dbfa-zA-Z0-9]/g) || Array.from(fullWord).filter(c => !/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`、“”‘’（）《》〈〉【】]/u.test(c));
-
 
   cards.forEach((card, idx) => {
     if (allFlipped) {
       card.setAttribute('data-flipped', 'false');
       card.setAttribute('data-manual-flipped', 'false');
-      card.style.background = 'rgba(255,255,255,0.08)';
-      card.style.color = '#94a3b8';
-      card.style.border = '1px solid rgba(255,255,255,0.2)';
+      card.removeAttribute('data-status');
+      card.classList.remove('char-correct', 'char-wrong', 'char-revealed');
+      card.style.removeProperty('background');
+      card.style.removeProperty('color');
+      card.style.removeProperty('border');
+      card.style.removeProperty('box-shadow');
       card.innerHTML = `<i class="fa-solid fa-eye"></i>`;
     } else {
       if (chars[idx]) {
         card.setAttribute('data-flipped', 'true');
         card.setAttribute('data-manual-flipped', 'true');
-        card.style.background = '#ffffff';
-        card.style.color = '#0f172a';
-        card.style.border = '1px solid rgba(255,255,255,0.2)';
-        card.innerHTML = `<span style="font-size: 1.5rem; font-weight: 800; font-family: var(--font-hanzi);">${chars[idx]}</span>`;
+        card.setAttribute('data-status', 'revealed');
+        card.classList.remove('char-correct', 'char-wrong');
+        card.classList.add('char-revealed');
+        card.style.setProperty('background', '#ffffff', 'important');
+        card.style.setProperty('color', '#0f172a', 'important');
+        card.style.setProperty('border', '1.5px solid #94a3b8', 'important');
+        card.style.setProperty('box-shadow', '0 4px 12px rgba(0,0,0,0.1)', 'important');
+        card.innerHTML = `<span style="font-size: 1.5rem; font-weight: 800; font-family: var(--font-hanzi); color: #0f172a !important;">${chars[idx]}</span>`;
       }
     }
   });

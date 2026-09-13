@@ -873,6 +873,47 @@
       transition: all 0.2s ease;
     }
 
+    .lesson-hint-card.char-correct {
+      background: #dcfce7 !important;
+      border: 2.5px solid #16a34a !important;
+      color: #15803d !important;
+      box-shadow: 0 0 16px rgba(22, 163, 74, 0.4) !important;
+    }
+    .lesson-hint-card.char-correct span {
+      color: #15803d !important;
+      font-weight: 900 !important;
+    }
+
+    .lesson-hint-card.char-wrong {
+      background: #fee2e2 !important;
+      border: 2px solid #ef4444 !important;
+      color: #dc2626 !important;
+      box-shadow: 0 0 16px rgba(239, 68, 68, 0.35) !important;
+    }
+    .lesson-hint-card.char-wrong i {
+      color: #ef4444 !important;
+    }
+
+    .lesson-hint-card.char-revealed {
+      background: #ffffff !important;
+      border: 1.5px solid #94a3b8 !important;
+      color: #0f172a !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    }
+    .lesson-hint-card.char-revealed span {
+      color: #0f172a !important;
+      font-weight: 800 !important;
+    }
+
+    html.dark .lesson-hint-card.char-correct {
+      background: rgba(16, 185, 129, 0.25) !important;
+      border: 2px solid #10b981 !important;
+      color: #34d399 !important;
+    }
+    html.dark .lesson-hint-card.char-correct span {
+      color: #34d399 !important;
+    }
+
     /* COMPLETE LIGHT MODE THEME OVERRIDES */
     html.light-mode body {
       background-color: #f1f5f9 !important;
@@ -3239,33 +3280,44 @@
           const typedChar = typedChars[idx];
           if (typedChar === targetChar) {
             card.setAttribute('data-flipped', 'true');
-            card.style.background = 'rgba(16, 185, 129, 0.25)';
-            card.style.border = '2px solid #10b981';
-            card.style.color = '#34d399';
-            card.style.boxShadow = '0 0 16px rgba(16, 185, 129, 0.4)';
-            card.innerHTML = `<span style="font-size: 1.3rem; font-weight: 800; font-family: var(--font-hanzi);">${targetChar}</span>`;
+            card.setAttribute('data-status', 'correct');
+            card.classList.remove('char-wrong', 'char-revealed');
+            card.classList.add('char-correct');
+            card.style.setProperty('background', '#dcfce7', 'important');
+            card.style.setProperty('border', '2.5px solid #16a34a', 'important');
+            card.style.setProperty('color', '#15803d', 'important');
+            card.style.setProperty('box-shadow', '0 0 16px rgba(22, 163, 74, 0.4)', 'important');
+            card.innerHTML = `<span style="font-size: 1.3rem; font-weight: 800; font-family: var(--font-hanzi); color: #15803d !important;">${targetChar}</span>`;
           } else {
             card.setAttribute('data-flipped', 'false');
-            card.style.background = 'rgba(239, 68, 68, 0.25)';
-            card.style.border = '2px solid #ef4444';
-            card.style.color = '#f87171';
-            card.style.boxShadow = '0 0 16px rgba(239, 68, 68, 0.4)';
-            card.innerHTML = `<i class="fa-solid fa-eye" style="color: #f87171;"></i>`;
+            card.setAttribute('data-status', 'wrong');
+            card.classList.remove('char-correct', 'char-revealed');
+            card.classList.add('char-wrong');
+            card.style.setProperty('background', '#fee2e2', 'important');
+            card.style.setProperty('border', '2px solid #ef4444', 'important');
+            card.style.setProperty('color', '#dc2626', 'important');
+            card.style.setProperty('box-shadow', '0 0 16px rgba(239, 68, 68, 0.35)', 'important');
+            card.innerHTML = `<i class="fa-solid fa-eye" style="color: #ef4444 !important;"></i>`;
           }
         } else {
+          card.classList.remove('char-correct', 'char-wrong');
           const isManualFlipped = card.getAttribute('data-manual-flipped') === 'true';
           if (isManualFlipped) {
-            card.style.background = '#ffffff';
-            card.style.border = '1px solid rgba(255,255,255,0.2)';
-            card.style.color = '#0f172a';
-            card.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
-            card.innerHTML = `<span style="font-size: 1.3rem; font-weight: 800; font-family: var(--font-hanzi);">${targetChar}</span>`;
+            card.setAttribute('data-status', 'revealed');
+            card.classList.add('char-revealed');
+            card.style.setProperty('background', '#ffffff', 'important');
+            card.style.setProperty('border', '1.5px solid #94a3b8', 'important');
+            card.style.setProperty('color', '#0f172a', 'important');
+            card.style.setProperty('box-shadow', '0 4px 12px rgba(0,0,0,0.1)', 'important');
+            card.innerHTML = `<span style="font-size: 1.3rem; font-weight: 800; font-family: var(--font-hanzi); color: #0f172a !important;">${targetChar}</span>`;
           } else {
             card.setAttribute('data-flipped', 'false');
-            card.style.background = 'rgba(255,255,255,0.08)';
-            card.style.border = '1px solid rgba(255,255,255,0.2)';
-            card.style.color = '#94a3b8';
-            card.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
+            card.removeAttribute('data-status');
+            card.classList.remove('char-revealed');
+            card.style.removeProperty('background');
+            card.style.removeProperty('border');
+            card.style.removeProperty('color');
+            card.style.removeProperty('box-shadow');
             card.innerHTML = `<i class="fa-solid fa-eye"></i>`;
           }
         }
@@ -3277,42 +3329,51 @@
       const isFlipped = btnEl.getAttribute('data-manual-flipped') === 'true';
       if (isFlipped) {
         btnEl.setAttribute('data-manual-flipped', 'false');
-        btnEl.style.background = 'rgba(255,255,255,0.08)';
-        btnEl.style.color = '#94a3b8';
-        btnEl.style.border = '1px solid rgba(255,255,255,0.2)';
+        btnEl.removeAttribute('data-status');
+        btnEl.classList.remove('char-correct', 'char-wrong', 'char-revealed');
+        btnEl.style.removeProperty('background');
+        btnEl.style.removeProperty('color');
+        btnEl.style.removeProperty('border');
         btnEl.innerHTML = `<i class="fa-solid fa-eye"></i>`;
       } else {
         btnEl.setAttribute('data-manual-flipped', 'true');
-        btnEl.style.background = '#ffffff';
-        btnEl.style.color = '#0f172a';
-        btnEl.style.border = '1px solid rgba(255,255,255,0.2)';
-        btnEl.innerHTML = `<span style="font-size: 1.3rem; font-weight: 800; font-family: var(--font-hanzi);">${char}</span>`;
+        btnEl.setAttribute('data-status', 'revealed');
+        btnEl.classList.remove('char-correct', 'char-wrong');
+        btnEl.classList.add('char-revealed');
+        btnEl.style.setProperty('background', '#ffffff', 'important');
+        btnEl.style.setProperty('color', '#0f172a', 'important');
+        btnEl.style.setProperty('border', '1.5px solid #94a3b8', 'important');
+        btnEl.innerHTML = `<span style="font-size: 1.3rem; font-weight: 800; font-family: var(--font-hanzi); color: #0f172a !important;">${char}</span>`;
       }
     }
 
     function revealAllHints(word) {
       const cards = document.querySelectorAll('.lesson-hint-card');
       if (cards.length === 0) return;
-      const allFlipped = Array.from(cards).every(c => c.getAttribute('data-flipped') === 'true');
+      const allFlipped = Array.from(cards).every(c => c.getAttribute('data-flipped') === 'true' || c.getAttribute('data-manual-flipped') === 'true');
       const chars = word.match(/[\u4e00-\u9fa5\u3400-\u4dbfa-zA-Z0-9]/g) || Array.from(word).filter(c => !/[.,!?:;="'"()\[\]{}，。！？；：\s\-_~`、“”‘’（）《》〈〉【】]/u.test(c));
-
 
       cards.forEach((card, idx) => {
         if (allFlipped) {
           card.setAttribute('data-flipped', 'false');
           card.setAttribute('data-manual-flipped', 'false');
-          card.style.background = 'rgba(255,255,255,0.08)';
-          card.style.color = '#94a3b8';
-          card.style.border = '1px solid rgba(255,255,255,0.2)';
+          card.removeAttribute('data-status');
+          card.classList.remove('char-correct', 'char-wrong', 'char-revealed');
+          card.style.removeProperty('background');
+          card.style.removeProperty('color');
+          card.style.removeProperty('border');
           card.innerHTML = `<i class="fa-solid fa-eye"></i>`;
         } else {
           if (chars[idx]) {
             card.setAttribute('data-flipped', 'true');
             card.setAttribute('data-manual-flipped', 'true');
-            card.style.background = '#ffffff';
-            card.style.color = '#0f172a';
-            card.style.border = '1px solid rgba(255,255,255,0.2)';
-            card.innerHTML = `<span style="font-size: 1.3rem; font-weight: 800; font-family: var(--font-hanzi);">${chars[idx]}</span>`;
+            card.setAttribute('data-status', 'revealed');
+            card.classList.remove('char-correct', 'char-wrong');
+            card.classList.add('char-revealed');
+            card.style.setProperty('background', '#ffffff', 'important');
+            card.style.setProperty('color', '#0f172a', 'important');
+            card.style.setProperty('border', '1.5px solid #94a3b8', 'important');
+            card.innerHTML = `<span style="font-size: 1.3rem; font-weight: 800; font-family: var(--font-hanzi); color: #0f172a !important;">${chars[idx]}</span>`;
           }
         }
       });
