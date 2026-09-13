@@ -122,8 +122,8 @@
   <script type="module" crossorigin src="/assets/global_sidebar-BI93f3Av.js"></script>
   <script type="module" crossorigin src="/assets/grammar_hsk3_v2-DLPb-ska.js"></script>
   <script type="module" crossorigin src="/assets/screen_drawing-BS_xmQo7.js"></script>
-  <script type="module" crossorigin src="/assets/main-C3l00929.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/style-B6Jrl_3i.css">
+  <script type="module" crossorigin src="/assets/main-DRYdcflH.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/style-Q2SlpDtk.css">
 </head>
 
 <body>
@@ -2214,6 +2214,106 @@
                   </button>
                 </div>
               </div>
+            </div>
+
+            <!-- Sentence AI Mode Container (Matches Typing Mode Form & Scale) -->
+            <div class="sentence-card-container typing-card-container" id="sentence-card-container"
+              style="display: none; width: 100%; min-height: 400px; height: auto; border-radius: var(--radius-xl); padding: 28px 32px; flex-direction: column; justify-content: space-between; border: 1px solid var(--border-glass); box-sizing: border-box; gap: 18px;">
+              
+              <!-- Top Row: Badges (Level & Category) -->
+              <div class="card-header-tags"
+                style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+                <span class="badge badge-level" id="sentence-card-level"
+                  style="background: rgba(168, 85, 247, 0.15); border: 1.5px solid rgba(168, 85, 247, 0.35); color: #a855f7; font-weight: 800; font-size: 0.85rem; padding: 4px 12px; border-radius: 99px;">
+                  HSK 1
+                </span>
+                <span class="badge badge-category" id="sentence-card-category">
+                  Từ vựng
+                </span>
+              </div>
+
+              <!-- Upper Section: Vocabulary (Chữ Hán to đẹp, Pinyin, Nút nghe 🔊, Nghĩa tiếng Việt) -->
+              <div class="sentence-vocab-display"
+                style="width: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; margin: 4px 0;">
+                
+                <h2 id="sentence-card-word" class="chinese-word"
+                  style="font-family: var(--font-chinese, var(--font-display)); font-size: 3.2rem; font-weight: 800; color: var(--text-primary); margin: 0; line-height: 1.15; letter-spacing: 0.02em;">
+                  学习
+                </h2>
+
+                <div style="display: inline-flex; align-items: center; justify-content: center; gap: 10px; margin: 6px 0 2px;">
+                  <span id="sentence-card-pinyin"
+                    style="font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; color: #8b5cf6;">
+                    xuéxí
+                  </span>
+                  <button id="sentence-card-speak-btn" type="button" class="speak-btn circle-btn"
+                    style="width: 34px; height: 34px; font-size: 0.85rem; background: rgba(139, 92, 246, 0.15); color: #8b5cf6; border: 1.5px solid rgba(139, 92, 246, 0.35); cursor: pointer; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s;"
+                    title="Nghe phát âm từ vựng">
+                    <i class="fa-solid fa-volume-high"></i>
+                  </button>
+                </div>
+
+                <div class="example-title" style="text-align: center; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin-top: 4px;">Nghĩa tiếng Việt:</div>
+                <div id="sentence-card-meaning"
+                  style="font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--text-primary); line-height: 1.35;">
+                  học tập, học hành
+                </div>
+
+                <div id="sentence-card-collocation"
+                  style="display: none; font-size: 0.9rem; color: #64748b; font-weight: 600; margin-top: 6px; background: rgba(139, 92, 246, 0.08); padding: 5px 16px; border-radius: 20px; border: 1px dashed rgba(139, 92, 246, 0.25);">
+                </div>
+              </div>
+
+              <!-- Lower Section: Đặt câu & AI Chấm điểm -->
+              <div class="sentence-practice-section"
+                style="width: 100%; max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px;">
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.92rem; font-weight: 700; color: #8b5cf6; flex-wrap: wrap; gap: 6px;">
+                  <span>
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Đặt câu tiếng Trung chứa từ "<strong id="sentence-card-target-word" style="color: var(--text-primary); font-family: var(--font-chinese);">学习</strong>":
+                  </span>
+                  <span style="font-size: 0.78rem; background: rgba(139, 92, 246, 0.15); color: #8b5cf6; padding: 3px 12px; border-radius: 99px; border: 1px solid rgba(139, 92, 246, 0.3); font-weight: 800;">
+                    🤖 AI HongTai Chấm Điểm
+                  </span>
+                </div>
+
+                <!-- Input box + Nút Chấm Điểm -->
+                <div style="display: flex; gap: 10px; width: 100%; align-items: center; flex-wrap: wrap;">
+                  <input type="text" id="sentence-card-input" class="hanzi-text"
+                    placeholder="Gõ câu tiếng Trung của bạn vào đây..." autocomplete="off"
+                    style="flex: 1; min-width: 260px; padding: 13px 18px; font-size: 1.15rem; font-weight: 700; font-family: var(--font-chinese); border-radius: var(--radius-md); border: 2px solid rgba(139, 92, 246, 0.35); background: rgba(0,0,0,0.06); color: var(--text-primary); outline: none; transition: border-color 0.2s; box-sizing: border-box;" />
+                  
+                  <button id="sentence-card-check-btn" type="button" class="btn btn-primary"
+                    style="background: linear-gradient(135deg, #8b5cf6, #7c3aed); border: none; color: #ffffff; padding: 13px 24px; border-radius: var(--radius-md); font-weight: 800; font-size: 0.95rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(139,92,246,0.35); white-space: nowrap; transition: transform 0.15s;">
+                    <i class="fa-solid fa-paper-plane"></i> Chấm Điểm
+                  </button>
+                </div>
+
+                <!-- Hint text -->
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-secondary); margin-top: -2px; flex-wrap: wrap; gap: 6px;">
+                  <span><i class="fa-solid fa-keyboard"></i> Gõ chữ Hán • Nhấn <strong>Enter</strong> để AI chấm ngay</span>
+                  <span style="font-style: italic;">Chấm ngữ pháp &bull; Đánh giá độ tự nhiên &bull; Gợi ý câu chuẩn bản xứ</span>
+                </div>
+
+                <!-- AI Check Result Box -->
+                <div id="sentence-card-result" style="display: none; width: 100%; margin-top: 8px;"></div>
+              </div>
+
+              <!-- Card Action Bar matching Image 2 -->
+              <div class="card-action-bar"
+                style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-top: 6px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.12);">
+                <button id="sentence-hint-example-btn" type="button" class="btn btn-secondary btn-sm"
+                  style="font-size: 0.78rem; padding: 6px 14px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; background: rgba(245, 158, 11, 0.12); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); font-weight: 700;">
+                  <i class="fa-solid fa-lightbulb"></i> Xem câu mẫu
+                </button>
+                <div style="display: flex; gap: 8px;">
+                  <button id="sentence-next-word-btn" type="button" class="btn btn-primary btn-sm"
+                    style="font-size: 0.78rem; padding: 7px 16px; background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);">
+                    Từ tiếp theo <i class="fa-solid fa-chevron-right"></i>
+                  </button>
+                </div>
+              </div>
+
             </div>
           </div>
 

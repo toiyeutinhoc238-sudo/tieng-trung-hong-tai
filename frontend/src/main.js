@@ -1763,10 +1763,7 @@ function renderActiveCard() {
   }
   if (studyMode === 'sentence') {
     _applyStudyModeUI('sentence');
-    renderActiveCardLesson(current);
-    if (typeof window.switchVocabPracticeMode === 'function') {
-      window.switchVocabPracticeMode('sentence');
-    }
+    renderActiveCardSentence(current);
     return;
   }
   if (studyMode === 'type') {
@@ -2014,20 +2011,26 @@ function _applyStudyModeUI(mode) {
   const lessonStudyCard = document.getElementById('lesson-study-card');
   const flashcardContainer = document.getElementById('flashcard-card-container');
   const typingContainer = document.getElementById('typing-card-container');
+  const sentenceContainer = document.getElementById('sentence-card-container');
   const cardViewportEl = document.querySelector('.card-viewport');
 
   if (cardViewportEl) {
     if (mode === 'type') {
       cardViewportEl.classList.add('typing-mode-active');
+      cardViewportEl.classList.remove('sentence-mode-active');
+    } else if (mode === 'sentence') {
+      cardViewportEl.classList.add('sentence-mode-active');
+      cardViewportEl.classList.remove('typing-mode-active');
     } else {
       cardViewportEl.classList.remove('typing-mode-active');
+      cardViewportEl.classList.remove('sentence-mode-active');
     }
   }
 
   const markMemorizedBtn = document.getElementById('mark-memorized-btn');
   const markUnmemorizedBtn = document.getElementById('mark-unmemorized-btn');
   const markStarredBtn = document.getElementById('mark-starred-btn');
-  if (mode === 'type') {
+  if (mode === 'type' || mode === 'sentence') {
     if (markMemorizedBtn) markMemorizedBtn.style.display = 'none';
     if (markUnmemorizedBtn) markUnmemorizedBtn.style.display = 'none';
     if (markStarredBtn) markStarredBtn.style.display = 'none';
@@ -2058,25 +2061,26 @@ function _applyStudyModeUI(mode) {
 
   if (mode === 'sentence') {
     setBtnActive(modeSentenceBtn, 'linear-gradient(135deg, #a855f7, #7c3aed)');
-    if (lessonStudyCard) lessonStudyCard.style.display = 'block';
+    if (sentenceContainer) sentenceContainer.style.display = 'flex';
+    if (lessonStudyCard) lessonStudyCard.style.display = 'none';
     if (flashcardContainer) flashcardContainer.style.display = 'none';
     if (typingContainer) typingContainer.style.display = 'none';
-    if (typeof window.switchVocabPracticeMode === 'function') {
-      window.switchVocabPracticeMode('sentence');
-    }
   } else if (mode === 'lesson' && !studyNotebookId) {
     setBtnActive(modeLessonBtn);
+    if (sentenceContainer) sentenceContainer.style.display = 'none';
     if (lessonStudyCard) lessonStudyCard.style.display = 'block';
     if (flashcardContainer) flashcardContainer.style.display = 'none';
     if (typingContainer) typingContainer.style.display = 'none';
   } else if (mode === 'type') {
     setBtnActive(modeTypeBtn);
+    if (sentenceContainer) sentenceContainer.style.display = 'none';
     if (lessonStudyCard) lessonStudyCard.style.display = 'none';
     if (flashcardContainer) flashcardContainer.style.display = 'none';
     if (typingContainer) typingContainer.style.display = 'flex';
   } else {
     // Default to 'flip' mode
     setBtnActive(modeFlipBtn);
+    if (sentenceContainer) sentenceContainer.style.display = 'none';
     if (lessonStudyCard) lessonStudyCard.style.display = 'none';
     if (flashcardContainer) flashcardContainer.style.display = 'block';
     if (typingContainer) typingContainer.style.display = 'none';
@@ -6414,6 +6418,167 @@ function updateCategorySelectOptions() {
   });
 }
 
+function renderActiveCardSentence(current) {
+  if (!current) return;
+
+  const levelEl = document.getElementById('sentence-card-level');
+  const catEl = document.getElementById('sentence-card-category');
+  const wordEl = document.getElementById('sentence-card-word');
+  const pinyinEl = document.getElementById('sentence-card-pinyin');
+  const meaningEl = document.getElementById('sentence-card-meaning');
+  const collocEl = document.getElementById('sentence-card-collocation');
+  const targetWordLabel = document.getElementById('sentence-card-target-word');
+  const inputEl = document.getElementById('sentence-card-input');
+  const resultBox = document.getElementById('sentence-card-result');
+  const speakBtn = document.getElementById('sentence-card-speak-btn');
+  const hintExampleBtn = document.getElementById('sentence-hint-example-btn');
+  const nextWordBtn = document.getElementById('sentence-next-word-btn');
+  const checkBtn = document.getElementById('sentence-card-check-btn');
+
+  if (levelEl) {
+    levelEl.textContent = current.isCustom ? 'Cá nhân' : (current.level === 'premium' ? 'Premium' : `HSK ${current.level || 1} (v${current.hskVersion || '2.0'})`);
+  }
+  if (catEl) {
+    catEl.textContent = current.category || current.word_type || 'Từ vựng';
+  }
+  if (wordEl) {
+    wordEl.textContent = current.word;
+  }
+  if (pinyinEl) {
+    pinyinEl.textContent = current.pinyin || '';
+  }
+  if (meaningEl) {
+    meaningEl.textContent = typeof cleanMeaningText === 'function' ? cleanMeaningText(current.meaning || '') : (current.meaning || '');
+  }
+  if (targetWordLabel) {
+    targetWordLabel.textContent = current.word;
+  }
+
+  // Extract collocations or extra notes
+  if (collocEl) {
+    const note = current.note || current.description || (typeof extractNoteFromMeaning === 'function' ? extractNoteFromMeaning(current.meaning) : '');
+    if (note && note.length > 2 && !note.startsWith('Bài học từ vựng')) {
+      collocEl.innerHTML = `<i class="fa-solid fa-circle-info" style="color: #8b5cf6; margin-right: 4px;"></i> ${note}`;
+      collocEl.style.display = 'inline-block';
+    } else {
+      collocEl.style.display = 'none';
+    }
+  }
+
+  if (speakBtn) {
+    speakBtn.onclick = () => {
+      if (typeof speakText === 'function') speakText(current.word, 'zh-CN');
+      else if (typeof window.speakLessonWord === 'function') window.speakLessonWord(current.word);
+    };
+  }
+
+  if (inputEl) {
+    inputEl.value = '';
+    inputEl.placeholder = `Gõ câu tiếng Trung chứa từ "${current.word}"...`;
+    inputEl.onkeydown = (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        window.submitSentenceCardAiCheck();
+      }
+    };
+    setTimeout(() => {
+      inputEl.focus();
+    }, 60);
+  }
+
+  if (checkBtn) {
+    checkBtn.onclick = () => window.submitSentenceCardAiCheck();
+  }
+
+  if (hintExampleBtn) {
+    const egZh = (current.example_zh || '').trim();
+    const egVi = (current.example_vi || '').trim();
+    if (egZh) {
+      hintExampleBtn.style.display = 'inline-flex';
+      hintExampleBtn.onclick = () => {
+        if (typeof showToast === 'function') {
+          showToast(`💡 Câu mẫu: <strong>${egZh}</strong>${egVi ? `<br/><span style="font-size:0.85rem; opacity:0.9;">(${egVi})</span>` : ''}`, false);
+        }
+      };
+    } else {
+      hintExampleBtn.style.display = 'none';
+    }
+  }
+
+  if (nextWordBtn) {
+    nextWordBtn.onclick = () => {
+      nextCard();
+    };
+  }
+
+  if (resultBox) {
+    resultBox.style.display = 'none';
+    resultBox.innerHTML = '';
+  }
+
+  window.currentSentenceTargetWord = current.word;
+  window.currentSentenceTargetLevel = current.level || 1;
+}
+
+window.submitSentenceCardAiCheck = async function () {
+  const inputEl = document.getElementById('sentence-card-input');
+  const resBox = document.getElementById('sentence-card-result');
+  if (!inputEl || !resBox) return;
+
+  const sentence = inputEl.value.trim();
+  const current = (filteredList && filteredList[currentIndex]) || {};
+  const word = window.currentSentenceTargetWord || current.word || '';
+  const level = window.currentSentenceTargetLevel || current.level || 1;
+
+  if (!sentence || sentence.length < 2) {
+    if (typeof showToast === 'function') {
+      showToast('Vui lòng gõ câu tiếng Trung của bạn trước nhé!', true);
+    }
+    inputEl.focus();
+    return;
+  }
+
+  resBox.style.display = 'block';
+  resBox.innerHTML = `
+    <div style="text-align: center; padding: 20px; background: rgba(139, 92, 246, 0.1); border: 1.5px dashed rgba(167, 139, 250, 0.4); border-radius: 16px;">
+      <i class="fa-solid fa-spinner fa-spin" style="font-size: 1.8rem; color: #8b5cf6; margin-bottom: 8px;"></i>
+      <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary);">AI HongTai đang phân tích ngữ pháp & ngữ cảnh câu của bạn...</div>
+    </div>
+  `;
+
+  try {
+    const response = await fetch('/api/ai/check-sentence', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        word: word,
+        sentence: sentence,
+        level: level
+      })
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      renderLessonAiCheckResult(data, resBox, word);
+      return;
+    }
+    throw new Error('Check sentence failed');
+  } catch (err) {
+    const containsWord = word ? sentence.includes(word) : true;
+    const isGibberish = /^([a-zA-Z0-9\u4e00-\u9fa5])\1{3,}$/.test(sentence) || sentence.length < 2;
+    const ok = containsWord && !isGibberish;
+    const fallback = {
+      score: ok ? 88 : 15,
+      isCorrect: ok,
+      badge: ok ? 'Rất Tốt 👏' : 'Chưa Đạt ❌',
+      feedback: ok ? `Câu có sử dụng từ "${word}" đúng ngữ cảnh. Hãy tiếp tục phát huy!` : `Câu của bạn chưa chứa từ vựng mục tiêu "${word}". Hãy thử đặt lại câu nhé!`,
+      improvedSentence: sentence,
+      translation: ''
+    };
+    renderLessonAiCheckResult(fallback, resBox, word);
+  }
+};
+
 function renderActiveCardTyping(current) {
   const typeLevel = document.getElementById('type-card-level');
   const typeCategory = document.getElementById('type-card-category');
@@ -8856,7 +9021,7 @@ function renderLessonAiCheckResult(data, container, targetWord) {
           </span>
           <strong style="font-size: 1rem;">Đánh Giá: <span style="color: ${scoreColor}; font-weight: 800;">${badge}</span></strong>
         </div>
-        <button onclick="this.closest('#lesson-sentence-ai-result, #deck-sentence-ai-result').style.display='none'" class="btn" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #94a3b8; width: 28px; height: 28px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0;">
+        <button onclick="this.closest('#lesson-sentence-ai-result, #deck-sentence-ai-result, #sentence-card-result').style.display='none'" class="btn" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #94a3b8; width: 28px; height: 28px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0;">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>

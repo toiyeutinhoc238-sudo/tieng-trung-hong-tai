@@ -2467,7 +2467,11 @@ html:not(.dark) .list-pill:hover {
   display: none !important;
 }
 
-.card-viewport.typing-mode-active .typing-card-container {
+.card-viewport.typing-mode-active .sentence-card-container {
+  display: none !important;
+}
+
+.card-viewport.typing-mode-active #typing-card-container {
   display: flex !important;
 }
 
@@ -2475,6 +2479,64 @@ html:not(.dark) .list-pill:hover {
 .card-viewport.typing-mode-active #mark-unmemorized-btn,
 .card-viewport.typing-mode-active #mark-starred-btn {
   display: none !important;
+}
+
+/* Sentence Mode Active Layout Tweaks (Matches Typing Mode Look & Feel) */
+.card-viewport.sentence-mode-active .flashcard-card-container {
+  display: none !important;
+}
+
+.card-viewport.sentence-mode-active .lesson-study-card {
+  display: none !important;
+}
+
+.card-viewport.sentence-mode-active #typing-card-container {
+  display: none !important;
+}
+
+.card-viewport.sentence-mode-active .sentence-card-container {
+  display: flex !important;
+}
+
+.card-viewport.sentence-mode-active #mark-memorized-btn,
+.card-viewport.sentence-mode-active #mark-unmemorized-btn,
+.card-viewport.sentence-mode-active #mark-starred-btn {
+  display: none !important;
+}
+
+/* Light mode overrides for sentence card */
+html.light-mode #sentence-card-input,
+html.light #sentence-card-input,
+html:not(.dark) #sentence-card-input {
+  background: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+html.light-mode #sentence-card-input:focus,
+html.light #sentence-card-input:focus,
+html:not(.dark) #sentence-card-input:focus {
+  border-color: #8b5cf6 !important;
+  background: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15) !important;
+}
+
+html.light-mode #sentence-card-word,
+html.light #sentence-card-word,
+html:not(.dark) #sentence-card-word {
+  color: #0f172a !important;
+}
+
+html.light-mode #sentence-card-meaning,
+html.light #sentence-card-meaning,
+html:not(.dark) #sentence-card-meaning {
+  color: #0f172a !important;
+}
+
+html.light-mode .sentence-card-container .card-action-bar,
+html.light .sentence-card-container .card-action-bar,
+html:not(.dark) .sentence-card-container .card-action-bar {
+  border-top: 1px dashed rgba(0, 0, 0, 0.1) !important;
 }
 
 /* ==========================================================================
