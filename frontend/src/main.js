@@ -7266,50 +7266,45 @@ window.openLessonDetailModal = function (lessonKey) {
     }
   }
 
-  // Handle 'Ôn Tập' (Quiz Game) unlock logic based on 100% completion
+  // Handle 'Ôn Tập 5 Dạng' module button in Lesson Detail Modal (No 100% completion requirement)
   const btnReview = document.getElementById('modal-btn-mod-review');
   let reviewBadge = document.getElementById('modal-review-badge');
   if (!reviewBadge && btnReview) {
     reviewBadge = btnReview.querySelector('small');
   }
 
-  if (pct === 100) {
-    if (reviewBadge) {
-      reviewBadge.textContent = 'Mở khóa Trắc nghiệm 🎮';
-      reviewBadge.style.background = '#10b981';
-      reviewBadge.style.color = '#ffffff';
-    }
-    if (btnReview) {
+  const hasReviewStudy = (activeHskVersion === '3.0') && ['1', '2', '3'].includes(String(currentLvl)) && activeLessonsCurriculum !== 'yct';
+
+  if (btnReview) {
+    const titleSpan = btnReview.querySelector('span');
+    if (titleSpan) titleSpan.textContent = 'Ôn Tập 5 Dạng';
+
+    const iconEl = btnReview.querySelector('i');
+    if (iconEl) iconEl.className = 'fa-solid fa-graduation-cap';
+
+    if (!hasReviewStudy) {
+      if (reviewBadge) {
+        reviewBadge.textContent = activeHskVersion === '2.0' ? 'Chỉ có HSK 3.0 🔒' : 'Sắp ra mắt ⏳';
+        reviewBadge.style.background = '#64748b';
+        reviewBadge.style.color = '#ffffff';
+      }
+      btnReview.style.opacity = '0.75';
+      btnReview.onclick = function (e) {
+        e.stopPropagation();
+        showComingSoonNotice(`Phần Ôn Tập 5 Dạng hiện đang áp dụng cho chuẩn HSK 3.0 (Cấp 1 - 3). Phiên bản HSK ${currentLvl} (${activeHskVersion === '2.0' ? 'Phiên bản 2.0' : activeHskVersion}) đang được chuẩn bị và sẽ sớm ra mắt! Bạn có thể chuyển sang chuẩn HSK 3.0 để trải nghiệm ngay.`);
+      };
+    } else {
+      if (reviewBadge) {
+        reviewBadge.textContent = '5 Chế Độ Sư Phạm ⚡';
+        reviewBadge.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+        reviewBadge.style.color = '#ffffff';
+      }
       btnReview.style.opacity = '1';
       btnReview.onclick = function (e) {
         e.stopPropagation();
         const modalEl = document.getElementById('lesson-detail-popup-modal');
         if (modalEl) modalEl.style.display = 'none';
-
-        const numId = parseInt(String(lessonKey).replace(/\D/g, ''), 10) || 1;
-        const curLvl = currentLvl || 1;
-        const curVer = activeHskVersion || '3.0';
-        const curCurriculum = activeLessonsCurriculum || 'hsk';
-        const lessonWords = vocabularyData.filter(w => !w.isCustom && (w.curriculum || 'hsk') === curCurriculum && matchesLevel(w.level, curLvl) && (w.hskVersion || '3.0') === curVer && String(w.lessonId || 1) === String(numId));
-
-        window.openNotebookGamesHub(
-          lessonWords.length >= 2 ? lessonWords : vocabularyData.slice(0, 50),
-          `Bài ${numId}: Ôn Tập Từ Vựng`,
-          `Lựa chọn 1 trong 5 trò chơi ôn tập từ vựng Bài ${numId} HSK ${curLvl}`
-        );
-      };
-    }
-  } else {
-    if (reviewBadge) {
-      reviewBadge.textContent = 'Cần 100%';
-      reviewBadge.style.background = 'rgba(0,0,0,0.25)';
-      reviewBadge.style.color = '#ffffff';
-    }
-    if (btnReview) {
-      btnReview.style.opacity = '0.85';
-      btnReview.onclick = function (e) {
-        e.stopPropagation();
-        showToast(`Bạn cần học đủ 100% từ vựng bài học này (hiện tại: ${pct}%) để mở khóa Ôn Tập Trắc Nghiệm!`, true);
+        window.openLessonReviewStudy(lessonKey);
       };
     }
   }
@@ -7696,6 +7691,8 @@ function renderLessonsList() {
 
     const extraVid = getLessonExtraVideo(activeLessonsLevel, lessonKey, activeHskVersion);
 
+    const hasReviewStudy = (activeHskVersion === '3.0') && ['1', '2', '3'].includes(String(activeLessonsLevel)) && activeLessonsCurriculum !== 'yct';
+
     card.innerHTML = `
       <div class="lesson-card-header">
         <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
@@ -7725,11 +7722,19 @@ function renderLessonsList() {
           <span>Bài Khóa</span>
           <small style="background: #0284c7; color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">Hội thoại 📖</small>
         </button>
-        <button class="lesson-mod-btn mod-review" onclick="event.stopPropagation(); ${isUnlocked ? `window.openLessonReviewStudy('${lessonKey}')` : `showToast('Bạn cần hoàn thành Bài ${prevKey} để mở khóa!', true)`}">
-          <i class="fa-solid ${isUnlocked ? 'fa-graduation-cap' : 'fa-lock'}"></i>
-          <span>Ôn Tập 5 Dạng</span>
-          <small style="background: linear-gradient(135deg, #10b981, #059669); color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">Luyện Tập & AI ⚡</small>
-        </button>
+        ${hasReviewStudy ? `
+          <button class="lesson-mod-btn mod-review" onclick="event.stopPropagation(); ${isUnlocked ? `window.openLessonReviewStudy('${lessonKey}')` : `showToast('Bạn cần hoàn thành Bài ${prevKey} để mở khóa!', true)`}">
+            <i class="fa-solid ${isUnlocked ? 'fa-graduation-cap' : 'fa-lock'}"></i>
+            <span>Ôn Tập 5 Dạng</span>
+            <small style="background: linear-gradient(135deg, #10b981, #059669); color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">5 Chế Độ Sư Phạm ⚡</small>
+          </button>
+        ` : `
+          <button class="lesson-mod-btn mod-review" style="opacity: 0.75;" onclick="event.stopPropagation(); window.showComingSoonNotice('Phần Ôn Tập 5 Dạng hiện đang áp dụng cho chuẩn HSK 3.0 (Cấp 1 - 3). Phiên bản HSK ${activeLessonsLevel} (${activeHskVersion === '2.0' ? 'Phiên bản 2.0' : activeHskVersion}) đang được chuẩn bị và sẽ sớm ra mắt! Bạn có thể chuyển sang chuẩn HSK 3.0 để trải nghiệm ngay.');">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>Ôn Tập 5 Dạng</span>
+            <small style="background: #64748b; color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">${activeHskVersion === '2.0' ? 'Chỉ có 3.0 🔒' : 'Sắp ra mắt ⏳'}</small>
+          </button>
+        `}
         ${extraVid ? `
           <button class="lesson-mod-btn mod-video" style="grid-column: 1 / -1; flex-direction: row; gap: 8px; padding: 10px 14px;" onclick="event.stopPropagation(); window.openLessonExtraVideoModal('${lessonKey}', '${activeLessonsLevel}', '${activeHskVersion}')" title="Tìm hiểu thêm - Xem video bài giảng đi kèm">
             <i class="fa-brands fa-youtube" style="color: #ffffff; font-size: 1.15rem;"></i>
@@ -9466,6 +9471,12 @@ window.openLessonReviewStudy = function (lessonId) {
   const numId = parseInt(String(lessonId).replace(/\D/g, ''), 10) || 1;
   const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : (activeLessonsLevel || 1);
   const currentVer = activeLessonsCurriculum === 'yct' ? 'yct' : (activeHskVersion || activeRoadmapVersion || '3.0');
+
+  const hasReview = (currentVer === '3.0') && ['1', '2', '3'].includes(String(currentLvl)) && activeLessonsCurriculum !== 'yct';
+  if (!hasReview) {
+    showComingSoonNotice(`Phần Ôn Tập 5 Dạng hiện đang áp dụng cho chuẩn HSK 3.0 (Cấp 1 - 3). Phiên bản HSK ${currentLvl} (${currentVer === '2.0' ? 'Phiên bản 2.0' : currentVer}) đang được chuẩn bị và sẽ sớm ra mắt! Bạn có thể chuyển sang chuẩn HSK 3.0 để trải nghiệm ngay.`);
+    return;
+  }
 
   window.location.href = `/vocab-practice.html?lesson=${numId}&level=${currentLvl}&version=${currentVer}`;
 };
