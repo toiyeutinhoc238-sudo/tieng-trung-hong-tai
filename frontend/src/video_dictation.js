@@ -188,38 +188,76 @@ function showToast(msg, isError = false) {
   }, 2500);
 }
 
+let activeSpeakChineseSessionId = 0;
+let currentSpeakChineseAudio = null;
+
 // Audio Player: Baidu TTS with Google TTS & Web Speech fallback
 function speakChinese(text) {
   if (!text) return;
   const clean = text.replace(/[^\u4e00-\u9fa5a-zA-Z0-9\s，。！？、…]/g, '').trim();
   if (!clean) return;
 
+  activeSpeakChineseSessionId++;
+  const sessionId = activeSpeakChineseSessionId;
+
+  if (currentSpeakChineseAudio) {
+    try {
+      currentSpeakChineseAudio.pause();
+      currentSpeakChineseAudio.currentTime = 0;
+      currentSpeakChineseAudio.src = '';
+    } catch (e) {}
+    currentSpeakChineseAudio = null;
+  }
+  if ('speechSynthesis' in window) {
+    try {
+      window.speechSynthesis.cancel();
+    } catch (e) {}
+  }
+
   function useWebSpeech() {
     if (!('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(clean);
-    u.lang = 'zh-CN';
-    u.rate = 0.82;
-    u.pitch = 1.05;
-    // Prefer a Mandarin voice if available
-    const voices = window.speechSynthesis.getVoices();
-    const mandarinVoice = voices.find(v =>
-      v.lang.toLowerCase().startsWith('zh') ||
-      v.name.toLowerCase().includes('chinese') ||
-      v.name.toLowerCase().includes('mandarin')
-    );
-    if (mandarinVoice) u.voice = mandarinVoice;
-    window.speechSynthesis.speak(u);
+    try {
+      window.speechSynthesis.cancel();
+    } catch (e) {}
+
+    setTimeout(() => {
+      if (sessionId !== activeSpeakChineseSessionId) return;
+      try {
+        const u = new SpeechSynthesisUtterance(clean);
+        u.lang = 'zh-CN';
+        u.rate = 0.82;
+        u.pitch = 1.05;
+        const voices = window.speechSynthesis.getVoices();
+        const mandarinVoice = voices.find(v =>
+          v.lang.toLowerCase().startsWith('zh') ||
+          v.name.toLowerCase().includes('chinese') ||
+          v.name.toLowerCase().includes('mandarin')
+        );
+        if (mandarinVoice) u.voice = mandarinVoice;
+        window.speechSynthesis.speak(u);
+      } catch (err) {}
+    }, 60);
   }
 
   // Try backend TTS first, fallback to Web Speech
-  const audioUrl = `/api/tts?text=${encodeURIComponent(clean)}&voice=baidu-female`;
+  const audioUrl = `/api/tts?text=${encodeURIComponent(clean)}&voice=baidu-female&speed=3&_t=${Date.now()}`;
   const audio = new Audio(audioUrl);
+  currentSpeakChineseAudio = audio;
   audio.playbackRate = 0.9;
-  const playPromise = audio.play();
-  if (playPromise) {
-    playPromise.catch(() => useWebSpeech());
-  }
+
+  audio.onended = () => {
+    if (currentSpeakChineseAudio === audio) currentSpeakChineseAudio = null;
+  };
+  audio.onerror = () => {
+    if (sessionId !== activeSpeakChineseSessionId) return;
+    currentSpeakChineseAudio = null;
+    useWebSpeech();
+  };
+  audio.play().catch(e => {
+    if (sessionId !== activeSpeakChineseSessionId) return;
+    currentSpeakChineseAudio = null;
+    useWebSpeech();
+  });
 }
 
 // Convenience: speak the current lesson's sentence (used by inline onclick in HTML)
@@ -3593,7 +3631,26 @@ function setupEventListeners() {
 
   // Global Hotkeys for Shadowing & Dictation (Space = Replay, ArrowLeft/Right = Prev/Next, P = AutoPause, S = Speed)
   document.addEventListener('keydown', (e) => {
-    // If not in workspace, return
+    // Check if in Passage Workspace (Luyện nghe - chép chính tả HSK)
+    const pWs = document.getElementById('dict-passage-workspace-view');
+    if (pWs && pWs.style.display !== 'none') {
+      const isTyping = ['INPUT', 'TEXTAREA'].includes(e.target.tagName);
+      if (e.key === 'ArrowRight' && (e.altKey || e.ctrlKey || !isTyping)) {
+        e.preventDefault();
+        navPassage(1);
+        return;
+      } else if (e.key === 'ArrowLeft' && (e.altKey || e.ctrlKey || !isTyping)) {
+        e.preventDefault();
+        navPassage(-1);
+        return;
+      } else if (e.code === 'Space' && (e.ctrlKey || (!isTyping && !e.target.closest('.dict-vk-btn')))) {
+        e.preventDefault();
+        playCurrentPassageAudio();
+        return;
+      }
+    }
+
+    // If not in video dictation workspace, return
     const ws = document.getElementById('dict-workspace-view');
     if (!ws || ws.style.display === 'none') return;
 
@@ -3978,11 +4035,8 @@ function openPassageWorkspace(passage) {
   if (catalogView) catalogView.style.display = 'none';
   if (workspaceView) workspaceView.style.display = 'block';
 
-  // Stop any playing audio
-  if (passageAudio) {
-    passageAudio.pause();
-    updatePassagePlayBtn(false);
-  }
+  // Stop any playing audio immediately (both HTML5 Audio and Web Speech)
+  stopAllPassageAudio();
 
   // Update Breadcrumb & Header info
   const titleEl = document.getElementById('passage-ws-title');
@@ -4015,12 +4069,24 @@ function openPassageWorkspace(passage) {
     `).join('');
   }
 
-  // Prev / Next button states
+  // Prev / Next button states across all views (top, side floating, inline, bottom)
   const prevBtnTop = document.getElementById('btn-passage-prev');
   const prevBtnBottom = document.getElementById('btn-passage-prev-bottom');
+  const sidePrevBtn = document.getElementById('btn-passage-side-prev');
+  const inlinePrevBtn = document.getElementById('btn-passage-inline-prev');
   const isFirst = passage.index <= 1;
   if (prevBtnTop) prevBtnTop.disabled = isFirst;
   if (prevBtnBottom) prevBtnBottom.disabled = isFirst;
+  if (sidePrevBtn) sidePrevBtn.disabled = isFirst;
+  if (inlinePrevBtn) inlinePrevBtn.disabled = isFirst;
+
+  const isLast = passage.index >= passagesInLevel.length;
+  const nextBtnTop = document.getElementById('btn-passage-next');
+  const nextBtnBottom = document.getElementById('btn-passage-next-bottom');
+  const sideNextBtn = document.getElementById('btn-passage-side-next');
+  const inlineNextBtn = document.getElementById('btn-passage-inline-next');
+  if (sideNextBtn) sideNextBtn.disabled = false;
+  if (inlineNextBtn) inlineNextBtn.disabled = false;
 
   // Populate Solution & Collapsible contents
   const pinyinText = document.getElementById('passage-pinyin-text');
@@ -4075,12 +4141,7 @@ function openPassageWorkspace(passage) {
   renderPassageCharTiles();
 
   // Reset audio player state (Không tự động phát - chỉ phát khi người dùng tự bấm nút)
-  if (passageAudio) {
-    passageAudio.pause();
-    updatePassagePlayBtn(false);
-  }
-  const statusEl = document.getElementById('passage-audio-status');
-  if (statusEl) statusEl.textContent = 'Sẵn sàng';
+  stopAllPassageAudio();
   const fill = document.getElementById('passage-audio-progress-fill');
   if (fill) fill.style.width = '0%';
 
@@ -4407,6 +4468,34 @@ function onPassageCompletedSuccess(passage) {
   renderCurrentSentenceHeaderStats();
 }
 
+let activePassageAudioSessionId = 0;
+
+function stopAllPassageAudio() {
+  activePassageAudioSessionId++;
+  if (passageAudio) {
+    try {
+      passageAudio.pause();
+      passageAudio.currentTime = 0;
+      passageAudio.onended = null;
+      passageAudio.onerror = null;
+      passageAudio.ontimeupdate = null;
+      passageAudio.src = '';
+    } catch (e) {}
+    passageAudio = null;
+  }
+  if ('speechSynthesis' in window) {
+    try {
+      window.speechSynthesis.cancel();
+    } catch (e) {}
+  }
+  updatePassagePlayBtn(false);
+  const statusEl = document.getElementById('passage-audio-status');
+  if (statusEl && statusEl.textContent === 'Đang phát âm thanh...') {
+    statusEl.textContent = 'Sẵn sàng';
+  }
+}
+window.stopAllPassageAudio = stopAllPassageAudio;
+
 function updatePassagePlayBtn(isPlaying) {
   const btn = document.getElementById('btn-passage-play-audio');
   if (!btn) return;
@@ -4417,62 +4506,75 @@ function updatePassagePlayBtn(isPlaying) {
 function playCurrentPassageAudio() {
   if (!currentPassage) return;
 
-  if (passageAudio && !passageAudio.paused) {
-    passageAudio.pause();
-    updatePassagePlayBtn(false);
+  const isSpeaking = ('speechSynthesis' in window && window.speechSynthesis.speaking);
+  const isAudioPlaying = (passageAudio && !passageAudio.paused);
+
+  // If already playing or speaking, click acts as pause/stop
+  if (isAudioPlaying || isSpeaking) {
+    stopAllPassageAudio();
     const statusEl = document.getElementById('passage-audio-status');
     if (statusEl) statusEl.textContent = 'Đã tạm dừng';
     return;
   }
 
+  // Stop any previous speech / audio completely
+  stopAllPassageAudio();
+  const sessionId = ++activePassageAudioSessionId;
+
   const cleanText = currentPassage.hanzi.replace(/[^\u4e00-\u9fa5，。？！、]/g, '');
-  const url = `/api/tts?text=${encodeURIComponent(cleanText)}&voice=baidu-female`;
+  if (!cleanText) return;
 
-  if (!passageAudio || passageAudio.src !== window.location.origin + url) {
-    if (passageAudio) {
-      passageAudio.pause();
-      passageAudio.src = '';
-    }
-    passageAudio = new Audio(url);
-    passageAudio.playbackRate = passageAudioSpeed;
+  const statusEl = document.getElementById('passage-audio-status');
+  if (statusEl) statusEl.textContent = 'Đang tải âm thanh...';
 
-    passageAudio.ontimeupdate = () => {
-      if (passageAudio.duration) {
-        const pct = (passageAudio.currentTime / passageAudio.duration) * 100;
-        const fill = document.getElementById('passage-audio-progress-fill');
-        if (fill) fill.style.width = `${pct}%`;
-      }
-    };
+  const url = `/api/tts?text=${encodeURIComponent(cleanText)}&voice=baidu-female&speed=3&_t=${Date.now()}`;
+  const audio = new Audio(url);
+  passageAudio = audio;
+  audio.playbackRate = passageAudioSpeed;
 
-    passageAudio.onended = () => {
-      updatePassagePlayBtn(false);
-      const statusEl = document.getElementById('passage-audio-status');
-      if (statusEl) statusEl.textContent = 'Hoàn thành lượt nghe';
+  audio.ontimeupdate = () => {
+    if (sessionId !== activePassageAudioSessionId) return;
+    if (audio.duration) {
+      const pct = (audio.currentTime / audio.duration) * 100;
       const fill = document.getElementById('passage-audio-progress-fill');
-      if (fill) fill.style.width = '100%';
-    };
+      if (fill) fill.style.width = `${pct}%`;
+    }
+  };
 
-    passageAudio.onerror = () => {
-      console.warn("Audio TTS failed, fallback to Web Speech");
-      useWebSpeechForPassage(cleanText);
-    };
-  }
+  audio.onended = () => {
+    if (sessionId !== activePassageAudioSessionId) return;
+    updatePassagePlayBtn(false);
+    if (statusEl) statusEl.textContent = 'Hoàn thành lượt nghe';
+    const fill = document.getElementById('passage-audio-progress-fill');
+    if (fill) fill.style.width = '100%';
+    passageAudio = null;
+  };
 
-  passageAudio.playbackRate = passageAudioSpeed;
-  passageAudio.play().then(() => {
+  audio.onerror = () => {
+    if (sessionId !== activePassageAudioSessionId) return;
+    passageAudio = null;
+    console.warn("Audio TTS failed, fallback to Web Speech");
+    useWebSpeechForPassage(cleanText, sessionId);
+  };
+
+  audio.play().then(() => {
+    if (sessionId !== activePassageAudioSessionId) {
+      audio.pause();
+      audio.src = '';
+      return;
+    }
     updatePassagePlayBtn(true);
-    const statusEl = document.getElementById('passage-audio-status');
     if (statusEl) statusEl.textContent = 'Đang phát âm thanh...';
   }).catch(e => {
-    console.warn("Play error:", e);
-    useWebSpeechForPassage(cleanText);
+    if (sessionId !== activePassageAudioSessionId) return;
+    passageAudio = null;
+    console.warn("Play error, fallback to Web Speech:", e);
+    useWebSpeechForPassage(cleanText, sessionId);
   });
 }
 
 function replayCurrentPassageAudio() {
-  if (passageAudio) {
-    passageAudio.currentTime = 0;
-  }
+  stopAllPassageAudio();
   playCurrentPassageAudio();
 }
 
@@ -4486,23 +4588,60 @@ function setPassageSpeed(speed) {
   }
 }
 
-function useWebSpeechForPassage(text) {
-  if (!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = 'zh-CN';
-  utter.rate = passageAudioSpeed;
-  utter.onstart = () => {
-    updatePassagePlayBtn(true);
-    const statusEl = document.getElementById('passage-audio-status');
-    if (statusEl) statusEl.textContent = 'Đang phát âm thanh...';
-  };
-  utter.onend = () => {
+function useWebSpeechForPassage(text, sessionId) {
+  if (!('speechSynthesis' in window)) {
     updatePassagePlayBtn(false);
     const statusEl = document.getElementById('passage-audio-status');
-    if (statusEl) statusEl.textContent = 'Hoàn thành lượt nghe';
-  };
-  window.speechSynthesis.speak(utter);
+    if (statusEl) statusEl.textContent = 'Không hỗ trợ âm thanh';
+    return;
+  }
+  try {
+    window.speechSynthesis.cancel();
+  } catch (e) {}
+
+  // 60ms delay ensures Chromium SpeechSynthesis queue is completely flushed
+  setTimeout(() => {
+    if (sessionId !== activePassageAudioSessionId) return;
+    try {
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'zh-CN';
+      utter.rate = passageAudioSpeed * 0.88;
+
+      const voices = window.speechSynthesis.getVoices();
+      const mandarinVoice = voices.find(v =>
+        v.lang.toLowerCase().startsWith('zh') ||
+        v.name.toLowerCase().includes('chinese') ||
+        v.name.toLowerCase().includes('mandarin')
+      );
+      if (mandarinVoice) utter.voice = mandarinVoice;
+
+      utter.onstart = () => {
+        if (sessionId !== activePassageAudioSessionId) {
+          window.speechSynthesis.cancel();
+          return;
+        }
+        updatePassagePlayBtn(true);
+        const statusEl = document.getElementById('passage-audio-status');
+        if (statusEl) statusEl.textContent = 'Đang phát âm thanh...';
+      };
+
+      utter.onend = () => {
+        if (sessionId !== activePassageAudioSessionId) return;
+        updatePassagePlayBtn(false);
+        const statusEl = document.getElementById('passage-audio-status');
+        if (statusEl) statusEl.textContent = 'Hoàn thành lượt nghe';
+      };
+
+      utter.onerror = () => {
+        if (sessionId !== activePassageAudioSessionId) return;
+        updatePassagePlayBtn(false);
+      };
+
+      window.speechSynthesis.speak(utter);
+    } catch (err) {
+      updatePassagePlayBtn(false);
+    }
+  }, 60);
 }
 
 function togglePassagePinyin() {
@@ -4525,6 +4664,14 @@ function checkPassageAnswer() {
   if (!currentPassage) return;
   const inputEl = document.getElementById('passage-dictation-input');
   const feedbackEl = document.getElementById('passage-feedback-badge');
+  const solBox = document.getElementById('passage-solution-box');
+
+  // If already marked correct, pressing Enter / checking again automatically advances to next passage
+  if (solBox && solBox.style.display === 'block' && feedbackEl && feedbackEl.classList.contains('success')) {
+    navPassage(1);
+    return;
+  }
+
   const val = inputEl ? inputEl.value.trim() : '';
 
   if (!val) {
@@ -4572,6 +4719,7 @@ function copyPassageSolution() {
 
 function navPassage(direction) {
   if (!currentPassage) return;
+  stopAllPassageAudio();
   const passagesInLevel = allPassages.filter(p => p.level === currentPassage.level);
   const curIdx = passagesInLevel.findIndex(p => p.id === currentPassage.id);
   const newIdx = curIdx + direction;
@@ -4584,10 +4732,7 @@ function navPassage(direction) {
 }
 
 function returnToPassageCatalog() {
-  if (passageAudio) {
-    passageAudio.pause();
-    updatePassagePlayBtn(false);
-  }
+  stopAllPassageAudio();
   const catalogView = document.getElementById('dict-passage-catalog-view');
   const workspaceView = document.getElementById('dict-passage-workspace-view');
   if (workspaceView) workspaceView.style.display = 'none';
