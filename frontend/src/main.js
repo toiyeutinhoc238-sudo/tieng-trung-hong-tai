@@ -6520,6 +6520,55 @@ function renderActiveCardSentence(current) {
   window.currentSentenceTargetLevel = current.level || 1;
 }
 
+function getSentenceScoreFallback(sentence, targetWord) {
+  const containsWord = targetWord ? sentence.includes(targetWord) : true;
+  const isGibberish = /^([a-zA-Z0-9\u4e00-\u9fa5])\1{3,}$/.test(sentence) || sentence.length < 2;
+  const ok = containsWord && !isGibberish;
+  const charCount = (sentence.match(/[\u4e00-\u9fa5\u3400-\u4dbfa-zA-Z0-9]/g) || []).length;
+
+  if (!ok) {
+    return {
+      score: 15,
+      isCorrect: false,
+      badge: 'Chưa Đạt ❌',
+      feedback: `Câu của bạn ${!containsWord ? `chưa chứa từ vựng mục tiêu "${targetWord}"` : 'chưa có nghĩa hoàn chỉnh'}. Hãy thử đặt lại câu nhé!`,
+      improvedSentence: sentence,
+      translation: ''
+    };
+  }
+
+  let score = 85;
+  let badge = 'Rất Tốt 👏';
+  let feedback = `Câu có sử dụng từ "${targetWord}" chuẩn xác, tự nhiên. Tiếp tục phát huy!`;
+
+  if (charCount < 6) {
+    score = 68;
+    badge = 'Khá 👍';
+    feedback = `Câu có sử dụng từ "${targetWord}" đúng ngữ pháp nhưng còn hơi ngắn. Bạn hãy thử thêm thời gian hoặc địa điểm để câu dài và đạt điểm cao hơn nhé!`;
+  } else if (charCount <= 10) {
+    score = 85;
+    badge = 'Rất Tốt 👏';
+    feedback = `Câu có độ dài vừa vặn, dùng từ "${targetWord}" chuẩn xác và tự nhiên!`;
+  } else if (charCount <= 14) {
+    score = 93;
+    badge = 'Xuất Sắc 🌟';
+    feedback = `Rất tốt! Câu của bạn dài, diễn đạt lưu loát và giàu ngữ cảnh!`;
+  } else {
+    score = 98;
+    badge = 'Xuất Sắc 🌟';
+    feedback = `Xuất sắc! Câu của bạn rất dài, phong phú, chuẩn phong cách bản ngữ!`;
+  }
+
+  return {
+    score,
+    isCorrect: true,
+    badge,
+    feedback,
+    improvedSentence: sentence,
+    translation: ''
+  };
+}
+
 window.submitSentenceCardAiCheck = async function () {
   const inputEl = document.getElementById('sentence-card-input');
   const resBox = document.getElementById('sentence-card-result');
@@ -6564,17 +6613,7 @@ window.submitSentenceCardAiCheck = async function () {
     }
     throw new Error('Check sentence failed');
   } catch (err) {
-    const containsWord = word ? sentence.includes(word) : true;
-    const isGibberish = /^([a-zA-Z0-9\u4e00-\u9fa5])\1{3,}$/.test(sentence) || sentence.length < 2;
-    const ok = containsWord && !isGibberish;
-    const fallback = {
-      score: ok ? 88 : 15,
-      isCorrect: ok,
-      badge: ok ? 'Rất Tốt 👏' : 'Chưa Đạt ❌',
-      feedback: ok ? `Câu có sử dụng từ "${word}" đúng ngữ cảnh. Hãy tiếp tục phát huy!` : `Câu của bạn chưa chứa từ vựng mục tiêu "${word}". Hãy thử đặt lại câu nhé!`,
-      improvedSentence: sentence,
-      translation: ''
-    };
+    const fallback = getSentenceScoreFallback(sentence, word);
     renderLessonAiCheckResult(fallback, resBox, word);
   }
 };
@@ -8981,17 +9020,7 @@ window.submitLessonSentenceForAiCheck = async function (targetWord, level) {
     }
     throw new Error('Check sentence failed');
   } catch (err) {
-    const containsWord = word ? sentence.includes(word) : true;
-    const isGibberish = /^([a-zA-Z0-9\u4e00-\u9fa5])\1{3,}$/.test(sentence) || sentence.length < 2;
-    const ok = containsWord && !isGibberish;
-    const fallback = {
-      score: ok ? 88 : 15,
-      isCorrect: ok,
-      badge: ok ? 'Rất Tốt 👏' : 'Chưa Đạt ❌',
-      feedback: ok ? `Câu có sử dụng từ "${word}" đúng ngữ cảnh. Hãy tiếp tục phát huy!` : `Câu của bạn chưa chứa từ vựng mục tiêu "${word}". Hãy thử đặt lại câu nhé!`,
-      improvedSentence: sentence,
-      translation: ''
-    };
+    const fallback = getSentenceScoreFallback(sentence, word);
     renderLessonAiCheckResult(fallback, resBox, word);
   }
 };
@@ -12972,17 +13001,7 @@ window.submitQuickSentenceForAiCheck = async function () {
     }
     throw new Error('Check sentence failed');
   } catch (err) {
-    const containsWord = word ? sentence.includes(word) : true;
-    const isGibberish = /^([a-zA-Z0-9\u4e00-\u9fa5])\1{3,}$/.test(sentence) || sentence.length < 2;
-    const ok = containsWord && !isGibberish;
-    const fallback = {
-      score: ok ? 88 : 15,
-      isCorrect: ok,
-      badge: ok ? 'Rất Tốt 👏' : 'Chưa Đạt ❌',
-      feedback: ok ? `Câu có sử dụng từ "${word}" đúng ngữ cảnh. Hãy tiếp tục phát huy!` : `Câu của bạn chưa chứa từ vựng mục tiêu "${word}". Hãy thử đặt lại câu nhé!`,
-      improvedSentence: sentence,
-      translation: ''
-    };
+    const fallback = getSentenceScoreFallback(sentence, word);
     renderLessonAiCheckResult(fallback, resBox, word);
   }
 };

@@ -2684,35 +2684,44 @@ app.post('/api/ai/check-sentence', async (req, res) => {
   const targetWord = (word || '').trim();
   const containsWord = targetWord ? cleanSentence.includes(targetWord) : true;
   const isGibberish = /^([a-zA-Z0-9\u4e00-\u9fa5])\1{3,}$/.test(cleanSentence) || cleanSentence.length < 2;
+  const charCount = (cleanSentence.match(/[\u4e00-\u9fa5\u3400-\u4dbfa-zA-Z0-9]/g) || []).length;
 
   const prompt = `Bạn là giáo viên dạy tiếng Trung có tâm, giàu kinh nghiệm và sư phạm chuẩn mực của "Tiếng Trung Hongtai".
 Nhiệm vụ: Chấm điểm và nhận xét câu học sinh tự đặt để luyện từ vựng.
 
 Từ vựng mục tiêu cần đặt câu: "${targetWord}" (Trình độ: HSK ${level || 1}).
-Câu học sinh đã đặt: "${cleanSentence}"
+Câu học sinh đã đặt: "${cleanSentence}" (Độ dài: ${charCount} ký tự chữ Hán).
 
-NGUYÊN TẮC SƯ PHẠM CỐT LÕI (CỰC KỲ QUAN TRỌNG - TUÂN THỦ 100%):
-1. TÔN TRỌNG CÂU ĐÚNG CỦA HỌC SINH - TUYỆT ĐỐI KHÔNG BẮT BẺ GƯỢNG GẠO:
-   - Nếu câu học sinh đặt đã đúng ngữ pháp và diễn đạt tự nhiên (ví dụ: "这个菜有点儿不好吃。", "今天下雨。", "我有点儿累。", "这件衣服有点儿小。") -> BẮT BUỘC CHẤM 95 - 100 ĐIỂM (Xuất Sắc 🌟).
-   - Lời nhận xét: Khen ngợi học sinh ("Câu bạn đặt rất chính xác, tự nhiên và đúng ngữ cảnh! Tiếp tục phát huy nhé!").
-   - TUYỆT ĐỐI KHÔNG bắt bẻ rườm rà, KHÔNG xúi học sinh chèn thêm các từ khác (như xúi thêm "不太" vào câu có "有点儿", hoặc xúi thêm từ làm câu rối rắm).
-   - Nếu câu học sinh đã đúng và hay: "improvedSentence" hãy GIỮ NGUYÊN câu của học sinh, hoặc chỉ mở rộng ngữ cảnh giao tiếp đời sống (ví dụ: "这个菜有点儿不好吃，你想吃别的吗？").
+QUY ĐỊNH CHẤM ĐIỂM THEO ĐỘ DÀI & ĐỘ PHONG PHÚ (BẮT BUỘC TUÂN THỦ):
+- Nguyên tắc: Câu càng ngắn thì điểm càng thấp (chỉ ở mức đạt/khá); câu càng dài, đủ ý và giàu ngữ cảnh thì điểm càng cao (rất tốt/xuất sắc).
 
-2. TÍNH NHẤT QUÁN & ĐỘ BAO DUNG TRONG KHẨU NGỮ:
-   - Cả hai cách nói như "有点儿不好吃", "不太好吃", hay khẩu ngữ "有点儿不太好吃" (hơi không ngon lắm) đều hoàn toàn có thể chấp nhận trong giao tiếp thường ngày -> TUYỆT ĐỐI KHÔNG chấm điểm thấp (không được chấm 40-50 điểm). Cứ dùng đúng từ mục tiêu và hiểu được rõ ràng là PHẢI TỪ 85 ĐIỂM TRỞ LÊN.
-   - TUYỆT ĐỐI KHÔNG mâu thuẫn: Câu trước gợi ý thêm từ gì thì câu sau không bao giờ được bảo từ đó sai!
+1. Câu quá ngắn (dưới 6 chữ Hán, ví dụ: "他去。", "今天下雨。", "我有点儿累。", "他仿佛懂了。"):
+   - Dù đúng ngữ pháp nhưng vì quá ngắn, câu đơn điệu nên CHỈ CHẤM TỪ 60 ĐẾN 72 ĐIỂM (Khá 👍).
+   - Lời nhận xét: Khen câu đúng nhưng chỉ ra câu hơi ngắn, khích lệ học sinh thêm trạng ngữ thời gian, địa điểm, liên từ hoặc tân ngữ để câu dài và sinh động hơn.
 
-3. CHỈ ĐÁNH GIÁ SAI (score < 40, isCorrect = false) KHI:
+2. Câu có độ dài trung bình (từ 6 đến 10 chữ Hán, có đầy đủ thành phần câu Chủ - Vị - Tân):
+   - Chấm trong khoảng 80 ĐẾN 88 ĐIỂM (Rất Tốt 👏).
+   - Lời nhận xét: Khen câu rõ nghĩa, dùng từ tự nhiên và chuẩn ngữ cảnh.
+
+3. Câu dài, đầy đủ ý và giàu ngữ cảnh (từ 11 đến 14 chữ Hán, có liên từ hoặc mệnh đề phụ):
+   - Chấm trong khoảng 90 ĐẾN 95 ĐIỂM (Xuất Sắc 🌟).
+   - Lời nhận xét: Khen ngợi học sinh đã đặt câu dài, lưu loát và biểu đạt tốt.
+
+4. Câu rất dài, có chiều sâu và cấu trúc phức hợp (từ 15 chữ Hán trở lên):
+   - Chấm trong khoảng 96 ĐẾN 100 ĐIỂM (Xuất Sắc 🌟).
+   - Lời nhận xét: Khen ngợi nhiệt tình vì câu rất dài, chuẩn xác, văn phong bản ngữ mượt mà.
+
+5. CHỈ ĐÁNH GIÁ SAI (score < 40, isCorrect = false) KHI:
    - Hoàn toàn KHÔNG chứa từ vựng mục tiêu "${targetWord}".
    - Gõ vô nghĩa, ký tự rác, gõ bậy bạ (ví dụ: "啊啊啊...", "yi fu yi fu...").
    - Sai cấu trúc ngữ pháp nghiêm trọng làm người bản xứ không hiểu được.
 
-4. ĐỊNH DẠNG TRẢ VỀ:
+ĐỊNH DẠNG TRẢ VỀ:
 Trả về DUY NHẤT 1 JSON object thuần túy (không bọc trong markdown block):
 {
   "isCorrect": <true hoặc false>,
-  "score": <số nguyên từ 0 đến 100>,
-  "feedback": "<Lời nhận xét tiếng Việt thân thiện, khích lệ; giải thích rõ vì sao đúng hoặc chỉ ra cụ thể lỗi nếu sai>",
+  "score": <số nguyên từ 0 đến 100 theo đúng quy định độ dài ở trên>,
+  "feedback": "<Lời nhận xét tiếng Việt thân thiện, khích lệ; giải thích rõ vì sao đúng/chỉ ra độ ngắn/dài của câu hoặc cụ thể lỗi nếu sai>",
   "improvedSentence": "<Câu tiếng Trung gợi ý nâng cấp mượt mà hoặc câu sửa lỗi chuẩn xác>",
   "pinyin": "<Pinyin có dấu của improvedSentence>",
   "translation": "<Bản dịch tiếng Việt chuẩn của improvedSentence>"
@@ -2770,10 +2779,25 @@ Trả về DUY NHẤT 1 JSON object thuần túy (không bọc trong markdown bl
           translation: ""
         };
       } else {
+        let fallbackScore = 85;
+        let fallbackFb = `Câu có sử dụng từ "${targetWord}" chuẩn xác. Hãy tiếp tục phát huy!`;
+        if (charCount < 6) {
+          fallbackScore = 68;
+          fallbackFb = `Câu có sử dụng từ "${targetWord}" đúng ngữ pháp nhưng còn hơi ngắn. Bạn hãy thử thêm thời gian hoặc địa điểm để câu dài và đạt điểm cao hơn nhé!`;
+        } else if (charCount <= 10) {
+          fallbackScore = 85;
+          fallbackFb = `Câu có độ dài vừa vặn, dùng từ "${targetWord}" chuẩn xác và tự nhiên!`;
+        } else if (charCount <= 14) {
+          fallbackScore = 93;
+          fallbackFb = `Rất tốt! Câu của bạn dài, diễn đạt lưu loát và giàu ngữ cảnh!`;
+        } else {
+          fallbackScore = 98;
+          fallbackFb = `Xuất sắc! Câu của bạn rất dài, phức hợp và mang phong cách bản ngữ tự nhiên!`;
+        }
         result = {
           isCorrect: true,
-          score: 88,
-          feedback: `Câu có sử dụng từ "${targetWord}" đúng ngữ cảnh và ngữ pháp. Hãy tiếp tục phát huy!`,
+          score: fallbackScore,
+          feedback: fallbackFb,
           improvedSentence: cleanSentence,
           pinyin: "",
           translation: ""
@@ -2787,19 +2811,50 @@ Trả về DUY NHẤT 1 JSON object thuần túy (không bọc trong markdown bl
         result.isCorrect = false;
         result.score = Math.min(typeof result.score === 'number' ? result.score : 20, 25);
       } else {
-        result.isCorrect = result.isCorrect !== false && (typeof result.score === 'number' ? result.score >= 60 : true);
-        result.score = typeof result.score === 'number' ? Math.min(100, Math.max(0, result.score)) : (result.isCorrect ? 85 : 25);
+        result.isCorrect = true;
+        let baseScore = typeof result.score === 'number' ? result.score : 80;
+
+        // Ràng buộc quy định điểm theo độ dài câu
+        if (charCount < 6) {
+          result.score = Math.min(Math.max(baseScore, 60), 72);
+          if (result.feedback && !result.feedback.includes('ngắn') && !result.feedback.includes('thêm')) {
+            result.feedback += ' (Gợi ý: Câu đúng ngữ pháp nhưng còn hơi ngắn, hãy thử thêm thời gian, địa điểm hoặc liên từ để đạt điểm cao hơn nhé!)';
+          }
+        } else if (charCount <= 10) {
+          result.score = Math.min(Math.max(baseScore, 80), 88);
+        } else if (charCount <= 14) {
+          result.score = Math.min(Math.max(baseScore, 90), 95);
+        } else {
+          result.score = Math.min(Math.max(baseScore, 96), 100);
+        }
       }
     }
     res.json({ success: true, ...result });
   } catch (err) {
     console.error('AI Check sentence error:', err);
     const ok = containsWord && !isGibberish;
+    let fallbackScore = 15;
+    let fallbackFb = `Câu chưa chứa từ vựng mục tiêu "${targetWord}".`;
+    if (ok) {
+      if (charCount < 6) {
+        fallbackScore = 68;
+        fallbackFb = `Câu có sử dụng từ "${targetWord}" đúng ngữ pháp nhưng còn hơi ngắn. Hãy thử thêm trạng ngữ thời gian hoặc địa điểm để câu dài và đạt điểm cao hơn nhé!`;
+      } else if (charCount <= 10) {
+        fallbackScore = 85;
+        fallbackFb = `Câu có sử dụng từ "${targetWord}" chuẩn xác, diễn đạt tự nhiên. Tiếp tục phát huy!`;
+      } else if (charCount <= 14) {
+        fallbackScore = 93;
+        fallbackFb = `Rất tốt! Câu của bạn dài, đầy đủ ý và giàu ngữ cảnh.`;
+      } else {
+        fallbackScore = 98;
+        fallbackFb = `Xuất sắc! Câu của bạn rất dài, phức hợp và chuẩn bản ngữ.`;
+      }
+    }
     res.json({
       success: true,
       isCorrect: ok,
-      score: ok ? 85 : 15,
-      feedback: ok ? `Câu đặt cơ bản đã đúng ngữ pháp!` : `Câu chưa chứa từ vựng mục tiêu "${targetWord}".`,
+      score: fallbackScore,
+      feedback: fallbackFb,
       improvedSentence: cleanSentence,
       pinyin: "",
       translation: ""

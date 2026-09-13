@@ -1925,11 +1925,37 @@
         const containsWord = targetWord ? sentence.includes(targetWord) : true;
         const isGibberish = /^([a-zA-Z0-9\u4e00-\u9fa5])\1{3,}$/.test(sentence) || sentence.length < 2;
         const ok = containsWord && !isGibberish;
+        const charCount = (sentence.match(/[\u4e00-\u9fa5\u3400-\u4dbfa-zA-Z0-9]/g) || []).length;
+
+        let score = 15;
+        let badge = 'Chưa Đạt ❌';
+        let feedback = `Câu chưa chứa từ vựng mục tiêu "${targetWord}". Hãy thử đặt lại câu nhé!`;
+
+        if (ok) {
+          if (charCount < 6) {
+            score = 68;
+            badge = 'Khá 👍';
+            feedback = `Câu có sử dụng từ "${targetWord}" đúng ngữ pháp nhưng còn hơi ngắn. Hãy thêm thời gian hoặc địa điểm để câu dài và đạt điểm cao hơn nhé!`;
+          } else if (charCount <= 10) {
+            score = 85;
+            badge = 'Rất Tốt 👏';
+            feedback = `Câu có độ dài vừa vặn, dùng từ "${targetWord}" chuẩn xác và tự nhiên!`;
+          } else if (charCount <= 14) {
+            score = 93;
+            badge = 'Xuất Sắc 🌟';
+            feedback = `Rất tốt! Câu của bạn dài, diễn đạt lưu loát và giàu ngữ cảnh!`;
+          } else {
+            score = 98;
+            badge = 'Xuất Sắc 🌟';
+            feedback = `Xuất sắc! Câu của bạn rất dài, phong phú, chuẩn phong cách bản ngữ!`;
+          }
+        }
+
         const fallback = {
-          score: ok ? 85 : 15,
+          score,
           isCorrect: ok,
-          badge: ok ? 'Tốt 👏' : 'Chưa Đạt ❌',
-          feedback: ok ? `Câu có sử dụng từ "${targetWord}" đúng ngữ cảnh. Hãy tiếp tục phát huy!` : `Câu chưa chứa từ vựng mục tiêu "${targetWord}". Hãy thử đặt lại câu nhé!`,
+          badge,
+          feedback,
           grammarAnalysis: ok ? 'Cấu trúc câu cơ bản hoàn chỉnh.' : 'Chưa đạt yêu cầu.',
           improvedSentence: sentence,
           vietnameseTranslation: 'Bản dịch câu của bạn.'
