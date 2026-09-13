@@ -1037,7 +1037,14 @@
       currentVersion = params.get('version') || localStorage.getItem('active_hsk_version') || '3.0';
 
       const lvlSel = document.getElementById('level-switcher-select');
-      if (lvlSel) lvlSel.value = String(currentLevel);
+      if (lvlSel) {
+        lvlSel.innerHTML = `
+          <option value="1">HSK 1 (${currentVersion === '2.0' ? '2.0' : '3.0'})</option>
+          <option value="2">HSK 2 (${currentVersion === '2.0' ? '2.0' : '3.0'})</option>
+          <option value="3">HSK 3 (${currentVersion === '2.0' ? '2.0' : '3.0'})</option>
+        `;
+        lvlSel.value = String(currentLevel);
+      }
 
       await loadVocabularyData();
       renderWorkspace();

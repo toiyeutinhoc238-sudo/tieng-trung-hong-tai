@@ -7273,7 +7273,7 @@ window.openLessonDetailModal = function (lessonKey) {
     reviewBadge = btnReview.querySelector('small');
   }
 
-  const hasReviewStudy = (activeHskVersion === '3.0') && ['1', '2', '3'].includes(String(currentLvl)) && activeLessonsCurriculum !== 'yct';
+  const hasReviewStudy = ['1', '2', '3'].includes(String(currentLvl)) && activeLessonsCurriculum !== 'yct';
 
   if (btnReview) {
     const titleSpan = btnReview.querySelector('span');
@@ -7284,14 +7284,14 @@ window.openLessonDetailModal = function (lessonKey) {
 
     if (!hasReviewStudy) {
       if (reviewBadge) {
-        reviewBadge.textContent = activeHskVersion === '2.0' ? 'Chỉ có HSK 3.0 🔒' : 'Sắp ra mắt ⏳';
+        reviewBadge.textContent = 'Sắp ra mắt ⏳';
         reviewBadge.style.background = '#64748b';
         reviewBadge.style.color = '#ffffff';
       }
       btnReview.style.opacity = '0.75';
       btnReview.onclick = function (e) {
         e.stopPropagation();
-        showComingSoonNotice(`Phần Ôn Tập 5 Dạng hiện đang áp dụng cho chuẩn HSK 3.0 (Cấp 1 - 3). Phiên bản HSK ${currentLvl} (${activeHskVersion === '2.0' ? 'Phiên bản 2.0' : activeHskVersion}) đang được chuẩn bị và sẽ sớm ra mắt! Bạn có thể chuyển sang chuẩn HSK 3.0 để trải nghiệm ngay.`);
+        showComingSoonNotice(`Phần Ôn Tập 5 Dạng hiện đang áp dụng cho HSK Cấp 1, 2, 3. Cấp độ ${currentLvl} (${activeHskVersion === '2.0' ? 'Phiên bản 2.0' : activeHskVersion}) đang được chuẩn bị và sẽ sớm ra mắt!`);
       };
     } else {
       if (reviewBadge) {
@@ -7691,7 +7691,7 @@ function renderLessonsList() {
 
     const extraVid = getLessonExtraVideo(activeLessonsLevel, lessonKey, activeHskVersion);
 
-    const hasReviewStudy = (activeHskVersion === '3.0') && ['1', '2', '3'].includes(String(activeLessonsLevel)) && activeLessonsCurriculum !== 'yct';
+    const hasReviewStudy = ['1', '2', '3'].includes(String(activeLessonsLevel)) && activeLessonsCurriculum !== 'yct';
 
     card.innerHTML = `
       <div class="lesson-card-header">
@@ -7729,10 +7729,10 @@ function renderLessonsList() {
             <small style="background: linear-gradient(135deg, #10b981, #059669); color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">5 Chế Độ Sư Phạm ⚡</small>
           </button>
         ` : `
-          <button class="lesson-mod-btn mod-review" style="opacity: 0.75;" onclick="event.stopPropagation(); window.showComingSoonNotice('Phần Ôn Tập 5 Dạng hiện đang áp dụng cho chuẩn HSK 3.0 (Cấp 1 - 3). Phiên bản HSK ${activeLessonsLevel} (${activeHskVersion === '2.0' ? 'Phiên bản 2.0' : activeHskVersion}) đang được chuẩn bị và sẽ sớm ra mắt! Bạn có thể chuyển sang chuẩn HSK 3.0 để trải nghiệm ngay.');">
+          <button class="lesson-mod-btn mod-review" style="opacity: 0.75;" onclick="event.stopPropagation(); window.showComingSoonNotice('Phần Ôn Tập 5 Dạng hiện đang áp dụng cho HSK Cấp 1, 2, 3. Cấp độ ${activeLessonsLevel} (${activeHskVersion === '2.0' ? 'Phiên bản 2.0' : activeHskVersion}) đang được chuẩn bị và sẽ sớm ra mắt!');">
             <i class="fa-solid fa-graduation-cap"></i>
             <span>Ôn Tập 5 Dạng</span>
-            <small style="background: #64748b; color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">${activeHskVersion === '2.0' ? 'Chỉ có 3.0 🔒' : 'Sắp ra mắt ⏳'}</small>
+            <small style="background: #64748b; color: #fff; padding: 1px 6px; border-radius: 99px; font-weight: 700;">Sắp ra mắt ⏳</small>
           </button>
         `}
         ${extraVid ? `
@@ -9472,9 +9472,9 @@ window.openLessonReviewStudy = function (lessonId) {
   const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : (activeLessonsLevel || 1);
   const currentVer = activeLessonsCurriculum === 'yct' ? 'yct' : (activeHskVersion || activeRoadmapVersion || '3.0');
 
-  const hasReview = (currentVer === '3.0') && ['1', '2', '3'].includes(String(currentLvl)) && activeLessonsCurriculum !== 'yct';
+  const hasReview = ['1', '2', '3'].includes(String(currentLvl)) && activeLessonsCurriculum !== 'yct';
   if (!hasReview) {
-    showComingSoonNotice(`Phần Ôn Tập 5 Dạng hiện đang áp dụng cho chuẩn HSK 3.0 (Cấp 1 - 3). Phiên bản HSK ${currentLvl} (${currentVer === '2.0' ? 'Phiên bản 2.0' : currentVer}) đang được chuẩn bị và sẽ sớm ra mắt! Bạn có thể chuyển sang chuẩn HSK 3.0 để trải nghiệm ngay.`);
+    showComingSoonNotice(`Phần Ôn Tập 5 Dạng hiện đang áp dụng cho HSK Cấp 1, 2, 3. Cấp độ ${currentLvl} (${currentVer === '2.0' ? 'Phiên bản 2.0' : currentVer}) đang được chuẩn bị và sẽ sớm ra mắt!`);
     return;
   }
 
