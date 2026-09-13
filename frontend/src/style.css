@@ -4698,6 +4698,11 @@ html.dark .topic-card:hover {
   background: rgba(16, 185, 129, 0.06) !important;
   transform: scale(1.01);
 }
+#nb-start-sentence-btn:hover {
+  border-color: #a855f7 !important;
+  background: rgba(168, 85, 247, 0.08) !important;
+  transform: scale(1.01);
+}
 #nb-start-quiz-btn:hover {
   border-color: var(--warning) !important;
   background: rgba(245, 158, 11, 0.06) !important;

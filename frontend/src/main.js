@@ -1761,6 +1761,14 @@ function renderActiveCard() {
     renderActiveCardLesson(current);
     return;
   }
+  if (studyMode === 'sentence') {
+    _applyStudyModeUI('sentence');
+    renderActiveCardLesson(current);
+    if (typeof window.switchVocabPracticeMode === 'function') {
+      window.switchVocabPracticeMode('sentence');
+    }
+    return;
+  }
   if (studyMode === 'type') {
     _applyStudyModeUI('type');
     renderActiveCardTyping(current);
@@ -1993,10 +2001,14 @@ function _applyStudyModeUI(mode) {
   const modeLessonBtn = document.getElementById('mode-lesson-btn');
   const modeFlipBtn = document.getElementById('mode-flip-btn');
   const modeTypeBtn = document.getElementById('mode-type-btn');
+  const modeSentenceBtn = document.getElementById('mode-sentence-btn');
 
-  // If studying inside a notebook, hide 'Học Bài Tương Tác' button so user focuses on Lật Thẻ and Luyện Gõ
+  // If studying inside a notebook, hide 'Học Bài Tương Tác' button so user focuses on Lật Thẻ, Luyện Gõ, Đặt Câu AI
   if (modeLessonBtn) {
     modeLessonBtn.style.display = studyNotebookId ? 'none' : 'flex';
+  }
+  if (modeSentenceBtn) {
+    modeSentenceBtn.style.display = 'flex';
   }
 
   const lessonStudyCard = document.getElementById('lesson-study-card');
@@ -2032,18 +2044,27 @@ function _applyStudyModeUI(mode) {
     btn.style.color = 'var(--text-secondary)';
   };
 
-  const setBtnActive = (btn) => {
+  const setBtnActive = (btn, bg = 'var(--accent-blue)') => {
     if (!btn) return;
     btn.classList.add('active-mode');
-    btn.style.background = 'var(--accent-blue)';
+    btn.style.background = bg;
     btn.style.color = 'white';
   };
 
   resetBtnStyles(modeLessonBtn);
   resetBtnStyles(modeFlipBtn);
   resetBtnStyles(modeTypeBtn);
+  resetBtnStyles(modeSentenceBtn);
 
-  if (mode === 'lesson' && !studyNotebookId) {
+  if (mode === 'sentence') {
+    setBtnActive(modeSentenceBtn, 'linear-gradient(135deg, #a855f7, #7c3aed)');
+    if (lessonStudyCard) lessonStudyCard.style.display = 'block';
+    if (flashcardContainer) flashcardContainer.style.display = 'none';
+    if (typingContainer) typingContainer.style.display = 'none';
+    if (typeof window.switchVocabPracticeMode === 'function') {
+      window.switchVocabPracticeMode('sentence');
+    }
+  } else if (mode === 'lesson' && !studyNotebookId) {
     setBtnActive(modeLessonBtn);
     if (lessonStudyCard) lessonStudyCard.style.display = 'block';
     if (flashcardContainer) flashcardContainer.style.display = 'none';
@@ -3230,6 +3251,14 @@ function setupEventListeners() {
 
   // Keyboard navigation hotkeys (Only for HSK Exam Player and Flashcards)
   document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const qModal = document.getElementById('nb-quick-sentence-modal');
+      if (qModal && qModal.style.display !== 'none') {
+        window.closeQuickSentenceModal();
+        return;
+      }
+    }
+
     // Ignore key bindings if user is typing in inputs or select boxes
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') {
       return;
@@ -3332,10 +3361,12 @@ function setupEventListeners() {
   const modeLessonBtn = document.getElementById('mode-lesson-btn');
   const modeFlipBtn = document.getElementById('mode-flip-btn');
   const modeTypeBtn = document.getElementById('mode-type-btn');
+  const modeSentenceBtn = document.getElementById('mode-sentence-btn');
 
   if (modeLessonBtn) modeLessonBtn.addEventListener('click', () => setStudyMode('lesson'));
   if (modeFlipBtn) modeFlipBtn.addEventListener('click', () => setStudyMode('flip'));
   if (modeTypeBtn) modeTypeBtn.addEventListener('click', () => setStudyMode('type'));
+  if (modeSentenceBtn) modeSentenceBtn.addEventListener('click', () => setStudyMode('sentence'));
 
   // Lesson Interactive Study Card Event Listeners
   const lessonAnimateBtn = document.getElementById('lesson-animate-stroke-btn');
@@ -3696,6 +3727,7 @@ function setupEventListeners() {
   // Notebook Dashboard Buttons
   const nbStartFlashcardBtn = document.getElementById('nb-start-flashcard-btn');
   const nbStartTypingBtn = document.getElementById('nb-start-typing-btn');
+  const nbStartSentenceBtn = document.getElementById('nb-start-sentence-btn');
   const nbStartQuizBtn = document.getElementById('nb-start-quiz-btn');
   const nbAddWordForm = document.getElementById('nb-add-word-form');
   const nbSearchInput = document.getElementById('nb-search-input');
@@ -3708,6 +3740,11 @@ function setupEventListeners() {
   if (nbStartTypingBtn) {
     nbStartTypingBtn.addEventListener('click', () => {
       startStudySessionFromNotebook('type');
+    });
+  }
+  if (nbStartSentenceBtn) {
+    nbStartSentenceBtn.addEventListener('click', () => {
+      startStudySessionFromNotebook('sentence');
     });
   }
   if (nbStartQuizBtn) {
@@ -8712,7 +8749,7 @@ window.checkLessonTypingInput = function (validAnswers) {
   }
 };
 
-window.submitLessonSentenceForAiCheck = async function (targetWord, level = 1) {
+window.submitLessonSentenceForAiCheck = async function (targetWord, level) {
   const inputEl = document.getElementById('lesson-ai-sentence-input') || document.getElementById('deck-ai-sentence-input');
   const resBox = document.getElementById('lesson-sentence-ai-result') || document.getElementById('deck-sentence-ai-result');
   if (!inputEl || !resBox) return;
@@ -8725,6 +8762,9 @@ window.submitLessonSentenceForAiCheck = async function (targetWord, level = 1) {
     inputEl.focus();
     return;
   }
+
+  const word = targetWord || window.currentDeckWord || window.currentLessonTargetZh || '';
+  const wordLevel = level || window.currentDeckWordLevel || activeLessonsLevel || 1;
 
   resBox.style.display = 'block';
   resBox.innerHTML = `
@@ -8739,31 +8779,31 @@ window.submitLessonSentenceForAiCheck = async function (targetWord, level = 1) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        word: targetWord,
+        word: word,
         sentence: sentence,
-        level: level || 1
+        level: wordLevel
       })
     });
 
     if (response.ok) {
       const data = await response.json();
-      renderLessonAiCheckResult(data, resBox, targetWord);
+      renderLessonAiCheckResult(data, resBox, word);
       return;
     }
     throw new Error('Check sentence failed');
   } catch (err) {
-    const containsWord = targetWord ? sentence.includes(targetWord) : true;
+    const containsWord = word ? sentence.includes(word) : true;
     const isGibberish = /^([a-zA-Z0-9\u4e00-\u9fa5])\1{3,}$/.test(sentence) || sentence.length < 2;
     const ok = containsWord && !isGibberish;
     const fallback = {
       score: ok ? 88 : 15,
       isCorrect: ok,
       badge: ok ? 'Rất Tốt 👏' : 'Chưa Đạt ❌',
-      feedback: ok ? `Câu có sử dụng từ "${targetWord}" đúng ngữ cảnh. Hãy tiếp tục phát huy!` : `Câu của bạn chưa chứa từ vựng mục tiêu "${targetWord}". Hãy thử đặt lại câu nhé!`,
+      feedback: ok ? `Câu có sử dụng từ "${word}" đúng ngữ cảnh. Hãy tiếp tục phát huy!` : `Câu của bạn chưa chứa từ vựng mục tiêu "${word}". Hãy thử đặt lại câu nhé!`,
       improvedSentence: sentence,
       translation: ''
     };
-    renderLessonAiCheckResult(fallback, resBox, targetWord);
+    renderLessonAiCheckResult(fallback, resBox, word);
   }
 };
 
@@ -12421,6 +12461,9 @@ function renderNotebookWordsTable() {
       <td style="padding: 12px; color: var(--text-secondary);">${w.meaning || ''}</td>
       <td style="padding: 12px; text-align: center;">
         <div style="display: flex; gap: 8px; justify-content: center; align-items: center;">
+          <button class="btn btn-icon-only" title="Đặt câu cùng AI ✨" style="color: #a855f7; background: rgba(168, 85, 247, 0.12); border-radius: 8px;" onclick="window.openSentenceModalForWord('${(w.word || '').replace(/'/g, "\\'")}', '${(w.pinyin || '').replace(/'/g, "\\'")}', '${(w.meaning || '').replace(/'/g, "\\'")}', ${w.level || 1})">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+          </button>
           <button class="btn btn-icon-only" title="Nghe phát âm" onclick="handleNotebookWordPlay('${(w.word || '').replace(/'/g, "\\'")}')">
             <i class="fa-solid fa-volume-high text-primary"></i>
           </button>
@@ -12628,6 +12671,132 @@ function startStudySessionFromNotebook(mode) {
   startStudySession(dashboardActiveFilter, 'all', notebookName, notebookDesc);
   setStudyMode(studyMode);
 }
+
+// --- QUICK SENTENCE MAKING MODAL FOR NOTEBOOK WORDS ---
+window._quickSentenceCurrentWord = '';
+window._quickSentenceCurrentPinyin = '';
+window._quickSentenceCurrentMeaning = '';
+window._quickSentenceCurrentLevel = 1;
+
+window.openSentenceModalForWord = function (word, pinyin = '', meaning = '', level = 1) {
+  window._quickSentenceCurrentWord = word;
+  window._quickSentenceCurrentPinyin = pinyin;
+  window._quickSentenceCurrentMeaning = meaning;
+  window._quickSentenceCurrentLevel = level || 1;
+
+  const modal = document.getElementById('nb-quick-sentence-modal');
+  if (!modal) return;
+
+  const wordEl = document.getElementById('quick-sentence-word');
+  const pinyinEl = document.getElementById('quick-sentence-pinyin');
+  const meaningEl = document.getElementById('quick-sentence-meaning');
+  const levelBadge = document.getElementById('quick-sentence-level-badge');
+  const targetLabel = document.getElementById('quick-sentence-target-label');
+  const inputEl = document.getElementById('quick-sentence-input');
+  const resultBox = document.getElementById('quick-sentence-result');
+
+  if (wordEl) wordEl.textContent = word;
+  if (pinyinEl) pinyinEl.textContent = pinyin;
+  if (meaningEl) meaningEl.textContent = typeof cleanMeaningText === 'function' ? cleanMeaningText(meaning) : meaning;
+  if (levelBadge) levelBadge.textContent = typeof level === 'number' ? `HSK ${level}` : (level || 'HSK 1');
+  if (targetLabel) targetLabel.textContent = word;
+
+  if (inputEl) {
+    inputEl.value = '';
+    inputEl.placeholder = `Gõ câu tiếng Trung của bạn chứa từ "${word}"...`;
+  }
+  if (resultBox) {
+    resultBox.style.display = 'none';
+    resultBox.innerHTML = '';
+  }
+
+  modal.style.display = 'flex';
+  setTimeout(() => {
+    if (inputEl) inputEl.focus();
+  }, 100);
+};
+
+window.closeQuickSentenceModal = function () {
+  const modal = document.getElementById('nb-quick-sentence-modal');
+  if (modal) modal.style.display = 'none';
+};
+
+window.speakQuickSentenceWord = function () {
+  if (window._quickSentenceCurrentWord && typeof speakText === 'function') {
+    speakText(window._quickSentenceCurrentWord, 'zh-CN');
+  }
+};
+
+window.startFullSentenceStudyFromQuickModal = function () {
+  const word = window._quickSentenceCurrentWord;
+  window.closeQuickSentenceModal();
+  startStudySessionFromNotebook('sentence');
+  if (word && filteredList && filteredList.length > 0) {
+    const idx = filteredList.findIndex(w => w.word === word);
+    if (idx >= 0) {
+      currentIndex = idx;
+      renderActiveCard();
+    }
+  }
+};
+
+window.submitQuickSentenceForAiCheck = async function () {
+  const inputEl = document.getElementById('quick-sentence-input');
+  const resBox = document.getElementById('quick-sentence-result');
+  const word = window._quickSentenceCurrentWord || '';
+  const level = window._quickSentenceCurrentLevel || 1;
+
+  if (!inputEl || !resBox) return;
+  const sentence = inputEl.value.trim();
+
+  if (!sentence || sentence.length < 2) {
+    if (typeof showToast === 'function') {
+      showToast('Vui lòng gõ câu tiếng Trung của bạn trước nhé!', true);
+    }
+    inputEl.focus();
+    return;
+  }
+
+  resBox.style.display = 'block';
+  resBox.innerHTML = `
+    <div style="text-align: center; padding: 20px; background: rgba(168, 85, 247, 0.1); border: 1.5px dashed rgba(168, 85, 247, 0.4); border-radius: 16px;">
+      <i class="fa-solid fa-spinner fa-spin" style="font-size: 1.8rem; color: #a855f7; margin-bottom: 8px;"></i>
+      <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary);">AI HongTai đang phân tích ngữ pháp câu của bạn...</div>
+    </div>
+  `;
+
+  try {
+    const response = await fetch('/api/ai/check-sentence', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        word: word,
+        sentence: sentence,
+        level: level
+      })
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      renderLessonAiCheckResult(data, resBox, word);
+      return;
+    }
+    throw new Error('Check sentence failed');
+  } catch (err) {
+    const containsWord = word ? sentence.includes(word) : true;
+    const isGibberish = /^([a-zA-Z0-9\u4e00-\u9fa5])\1{3,}$/.test(sentence) || sentence.length < 2;
+    const ok = containsWord && !isGibberish;
+    const fallback = {
+      score: ok ? 88 : 15,
+      isCorrect: ok,
+      badge: ok ? 'Rất Tốt 👏' : 'Chưa Đạt ❌',
+      feedback: ok ? `Câu có sử dụng từ "${word}" đúng ngữ cảnh. Hãy tiếp tục phát huy!` : `Câu của bạn chưa chứa từ vựng mục tiêu "${word}". Hãy thử đặt lại câu nhé!`,
+      improvedSentence: sentence,
+      translation: ''
+    };
+    renderLessonAiCheckResult(fallback, resBox, word);
+  }
+};
 
 // Fast-path typing session: bypass applyFilters/updateStats entirely, just set filteredList directly
 function startDirectTypingSession(words) {

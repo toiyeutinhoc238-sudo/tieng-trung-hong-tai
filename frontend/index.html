@@ -690,6 +690,28 @@
         html:not(.dark) .grammar-formula-tag {
           color: #0284c7 !important;
         }
+        /* Quick Sentence Modal Light Mode Overrides */
+        html.light-mode #nb-quick-sentence-modal .modal-card,
+        html:not(.dark) #nb-quick-sentence-modal .modal-card {
+          background: #ffffff !important;
+          border: 1.5px solid #cbd5e1 !important;
+          color: #0f172a !important;
+          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15) !important;
+        }
+        html.light-mode #quick-sentence-word,
+        html:not(.dark) #quick-sentence-word {
+          color: #2563eb !important;
+        }
+        html.light-mode #quick-sentence-meaning,
+        html:not(.dark) #quick-sentence-meaning {
+          color: #475569 !important;
+        }
+        html.light-mode #quick-sentence-input,
+        html:not(.dark) #quick-sentence-input {
+          background: #ffffff !important;
+          border-color: #cbd5e1 !important;
+          color: #0f172a !important;
+        }
       </style>
   </aside>
 
@@ -1418,6 +1440,24 @@
                 </div>
               </button>
 
+              <!-- Sentence Making Button -->
+              <button type="button" id="nb-start-sentence-btn" class="study-method-card sentence-card"
+                style="display: flex; align-items: center; text-align: left; padding: 18px 20px; border-radius: 14px; border: 1.5px solid rgba(168, 85, 247, 0.3); background: rgba(168, 85, 247, 0.04); cursor: pointer; transition: all 0.25s ease; width: 100%;">
+                <div class="method-icon-wrap"
+                  style="width: 52px; height: 52px; min-width: 52px; border-radius: 14px; background: linear-gradient(135deg, #a855f7, #7c3aed); color: white; display: flex; align-items: center; justify-content: center; margin-right: 16px; font-size: 1.5rem; box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35);">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </div>
+                <div>
+                  <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                    <strong
+                      style="font-size: 1.08rem; font-family: var(--font-display); color: var(--text-primary);">Đặt Câu Cùng AI ✨</strong>
+                    <span class="badge-beta-tag" style="background: rgba(168, 85, 247, 0.18); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); font-size: 0.68rem; font-weight: 800; padding: 1px 6px; border-radius: 4px;">Thông Minh</span>
+                  </div>
+                  <span
+                    style="font-size: 0.82rem; color: var(--text-secondary); font-weight: 500; line-height: 1.35; display: block; margin-top: 4px;">Thực hành viết câu chứa từ & AI giáo viên sửa lỗi tức thì</span>
+                </div>
+              </button>
+
               <!-- Mini-Games Hub button -->
               <button type="button" id="nb-start-game-arena-btn" class="study-method-card game-arena-card"
                 style="display: flex; align-items: center; text-align: left; padding: 18px 20px; border-radius: 14px; border: 1.5px solid #ec4899; background: rgba(236, 72, 153, 0.06); cursor: pointer; transition: all 0.25s ease; width: 100%;">
@@ -1759,18 +1799,22 @@
           <!-- Study Mode Switcher -->
           <div class="study-mode-container" style="margin-bottom: 20px; display: flex; justify-content: center;">
             <div class="segmented-control glass-panel"
-              style="display: flex; padding: 4px; border-radius: 50px; gap: 4px; width: 100%; max-width: 580px; justify-content: space-between;">
+              style="display: flex; padding: 4px; border-radius: 50px; gap: 4px; width: 100%; max-width: 680px; justify-content: space-between; flex-wrap: wrap;">
               <button id="mode-lesson-btn" class="btn active-mode"
-                style="flex: 1; border-radius: 50px; font-size: 0.9rem; padding: 8px 16px; border: none; cursor: pointer; transition: all var(--transition-fast); background: var(--accent-blue); color: white; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                style="flex: 1; min-width: 140px; border-radius: 50px; font-size: 0.9rem; padding: 8px 16px; border: none; cursor: pointer; transition: all var(--transition-fast); background: var(--accent-blue); color: white; display: flex; align-items: center; justify-content: center; gap: 8px;">
                 <i class="fa-solid fa-book-open"></i> Học Bài Tương Tác
               </button>
               <button id="mode-flip-btn" class="btn"
-                style="flex: 1; border-radius: 50px; font-size: 0.9rem; padding: 8px 16px; border: none; cursor: pointer; transition: all var(--transition-fast); background: transparent; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; gap: 8px;">
+                style="flex: 1; min-width: 110px; border-radius: 50px; font-size: 0.9rem; padding: 8px 16px; border: none; cursor: pointer; transition: all var(--transition-fast); background: transparent; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; gap: 8px;">
                 <i class="fa-solid fa-clone"></i> Ôn Lật Thẻ
               </button>
               <button id="mode-type-btn" class="btn"
-                style="flex: 1; border-radius: 50px; font-size: 0.9rem; padding: 8px 16px; border: none; cursor: pointer; transition: all var(--transition-fast); background: transparent; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; gap: 8px;">
+                style="flex: 1; min-width: 110px; border-radius: 50px; font-size: 0.9rem; padding: 8px 16px; border: none; cursor: pointer; transition: all var(--transition-fast); background: transparent; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; gap: 8px;">
                 <i class="fa-solid fa-keyboard"></i> Luyện Gõ
+              </button>
+              <button id="mode-sentence-btn" class="btn"
+                style="flex: 1; min-width: 120px; border-radius: 50px; font-size: 0.9rem; padding: 8px 16px; border: none; cursor: pointer; transition: all var(--transition-fast); background: transparent; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Đặt Câu AI ✨
               </button>
             </div>
           </div>
@@ -3635,6 +3679,76 @@
         </div>
       </div>
 
+    </div>
+  </div>
+
+  <!-- Modal Đặt Câu Nhanh Cùng AI cho Sổ Tay Từ Vựng -->
+  <div class="modal-overlay" id="nb-quick-sentence-modal" onclick="if(event.target === this) window.closeQuickSentenceModal();"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); z-index: 99999; align-items: center; justify-content: center; padding: 16px; overflow-y: auto;">
+    <div class="modal-card glass-panel"
+      style="background: var(--bg-primary, #0f172a); border: 1.5px solid rgba(168, 85, 247, 0.4); border-radius: 28px; width: 100%; max-width: 620px; padding: 26px 28px; box-shadow: 0 25px 60px rgba(0,0,0,0.6); color: #ffffff; position: relative; display: flex; flex-direction: column; gap: 18px; max-height: calc(100vh - 40px); overflow-y: auto; margin: auto;">
+      
+      <!-- Close button -->
+      <button type="button" onclick="window.closeQuickSentenceModal()"
+        style="position: absolute; top: 18px; right: 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #cbd5e1; font-size: 1.2rem; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s; z-index: 10;">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Header with Word Details -->
+      <div style="display: flex; align-items: center; gap: 16px; padding-right: 40px;">
+        <div style="width: 54px; height: 54px; min-width: 54px; border-radius: 16px; background: linear-gradient(135deg, #a855f7, #7c3aed); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; box-shadow: 0 6px 18px rgba(124, 58, 237, 0.4); flex-shrink: 0;">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+        </div>
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <span class="lesson-badge" id="quick-sentence-level-badge" style="background: rgba(168, 85, 247, 0.18); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); font-size: 0.78rem; padding: 2px 10px; border-radius: 99px; font-weight: 700;">HSK 1</span>
+            <span style="font-size: 0.8rem; color: #38bdf8; font-weight: 700;"><i class="fa-solid fa-robot"></i> Sổ Tay Từ &bull; AI Chấm Điểm</span>
+          </div>
+          <div style="display: flex; align-items: baseline; gap: 10px; margin-top: 4px; flex-wrap: wrap;">
+            <span id="quick-sentence-word" style="font-size: 1.8rem; font-weight: 900; font-family: var(--font-hanzi); color: #38bdf8; letter-spacing: 0.05em;">你好</span>
+            <span id="quick-sentence-pinyin" style="font-size: 1.1rem; font-weight: 700; color: #10b981;">nǐ hǎo</span>
+            <button type="button" id="quick-sentence-speak-btn" onclick="window.speakQuickSentenceWord()" class="circle-btn" style="background: rgba(56, 189, 248, 0.2); border: 1px solid rgba(56, 189, 248, 0.4); color: #38bdf8; width: 32px; height: 32px; border-radius: 50%; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;" title="Phát âm">
+              <i class="fa-solid fa-volume-high"></i>
+            </button>
+          </div>
+          <div id="quick-sentence-meaning" style="font-size: 0.95rem; color: #cbd5e1; font-weight: 500; margin-top: 2px;">chào bạn, xin chào</div>
+        </div>
+      </div>
+
+      <!-- Prompt Info Box -->
+      <div style="background: rgba(168, 85, 247, 0.08); border: 1px dashed rgba(168, 85, 247, 0.35); border-radius: 14px; padding: 12px 16px; font-size: 0.9rem; color: #e9d5ff; line-height: 1.5; display: flex; align-items: center; gap: 10px;">
+        <i class="fa-solid fa-lightbulb" style="color: #fbbf24; font-size: 1.1rem; flex-shrink: 0;"></i>
+        <span>Hãy đặt một câu tiếng Trung có chứa từ <strong id="quick-sentence-target-label" style="color: #38bdf8; font-family: var(--font-hanzi); font-size: 1.05rem;">你好</strong>. AI giáo viên sẽ chấm điểm và gợi ý bản ngữ!</span>
+      </div>
+
+      <!-- Input and Action -->
+      <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+        <input type="text" id="quick-sentence-input" class="hanzi-text" placeholder="Gõ câu tiếng Trung của bạn vào đây..."
+          onkeydown="if(event.key === 'Enter') window.submitQuickSentenceForAiCheck()"
+          style="flex: 1; min-width: 240px; padding: 13px 18px; background: rgba(255, 255, 255, 0.08); border: 2px solid rgba(255, 255, 255, 0.18); border-radius: 14px; font-size: 1.1rem; font-weight: 700; color: #ffffff; outline: none; transition: border-color 0.2s;" />
+
+        <button type="button" onclick="document.getElementById('quick-sentence-input').value = ''; document.getElementById('quick-sentence-input').focus();" class="btn" title="Xóa"
+          style="padding: 13px 16px; border-radius: 12px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.18); color: #94a3b8; font-weight: 700; cursor: pointer;">
+          <i class="fa-solid fa-rotate-left"></i>
+        </button>
+
+        <button type="button" id="quick-sentence-submit-btn" onclick="window.submitQuickSentenceForAiCheck()" class="btn btn-primary"
+          style="background: linear-gradient(135deg, #a855f7, #7c3aed); border: none; color: #ffffff; padding: 13px 22px; border-radius: 12px; font-weight: 800; font-size: 0.95rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4); white-space: nowrap;">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> AI Chấm Điểm
+        </button>
+      </div>
+
+      <!-- Quick AI Result Container -->
+      <div id="quick-sentence-result" style="display: none;"></div>
+
+      <!-- Footer Buttons: Full Study Session Option -->
+      <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 14px; margin-top: 4px; flex-wrap: wrap; gap: 10px;">
+        <span style="font-size: 0.8rem; color: #94a3b8; font-style: italic;">Hệ thống AI phân tích lỗi sai &bull; Gợi ý câu chuẩn bản xứ</span>
+        <button type="button" onclick="window.startFullSentenceStudyFromQuickModal()" class="btn btn-secondary"
+          style="background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); color: #38bdf8; padding: 8px 16px; border-radius: 10px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-graduation-cap"></i> Luyện toàn bộ sổ tay &rarr;
+        </button>
+      </div>
     </div>
   </div>
 
