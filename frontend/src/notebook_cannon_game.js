@@ -185,20 +185,22 @@ html:not(.dark) #cannon-combo-val {
 @keyframes charThrow{0%{transform:translateX(0) rotate(0deg)}30%{transform:translateX(-10px) rotate(-12deg)}70%{transform:translateX(12px) rotate(8deg)}100%{transform:translateX(0) rotate(0deg)}}
 
 /* FLOATING INPUT INDICATOR (Dưới cùng chính giữa) */
-.phidao-floating-input-bar{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);z-index:20;display:flex;flex-direction:column;align-items:center;gap:3px;pointer-events:none;}
-.phidao-typed-buf{min-width:160px;min-height:36px;background:rgba(15,23,42,.92);border:2px solid rgba(56,189,248,.5);border-radius:10px;padding:4px 16px;font-size:1.15rem;font-weight:900;color:#fde047;font-family:monospace;letter-spacing:.08em;text-align:center;display:flex;align-items:center;justify-content:center;gap:3px;box-shadow:0 0 16px rgba(56,189,248,.25);transition:all .2s;}
-.phidao-typed-buf.has-match{border-color:#fbbf24;background:rgba(251,191,36,.15);box-shadow:0 0 25px rgba(251,191,36,.5);}
-.phidao-cursor-blink{animation:blink 1s step-end infinite;color:#fbbf24;}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-.phidao-input-tip-sub{font-size:.7rem;font-weight:700;color:#cbd5e1;background:rgba(15,23,42,.75);padding:2px 10px;border-radius:20px;backdrop-filter:blur(4px);text-shadow:0 1px 2px #000;border:1px solid rgba(255,255,255,.08);}
-.phidao-target-hint{font-size:.82rem;color:#fef08a;font-weight:700;min-width:100px;text-align:center;}
+.phidao-floating-input-bar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);z-index:20;display:flex;flex-direction:column;align-items:center;gap:4px;pointer-events:none;}
+.phidao-typed-buf{min-width:220px;min-height:42px;background:rgba(15,23,42,.95);border:2px solid rgba(56,189,248,.6);border-radius:12px;padding:3px 14px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(56,189,248,.3);transition:all .2s;pointer-events:auto;cursor:text;}
+.phidao-typed-buf.has-match{border-color:#fbbf24;background:rgba(251,191,36,.2);box-shadow:0 0 28px rgba(251,191,36,.6);}
+.phidao-real-input{background:transparent !important;border:none !important;outline:none !important;color:#fde047 !important;font-family:'Noto Sans SC','PingFang SC',monospace,sans-serif !important;font-size:1.35rem !important;font-weight:900 !important;text-align:center !important;width:280px !important;letter-spacing:.05em !important;caret-color:#fbbf24 !important;}
+.phidao-real-input::placeholder{color:rgba(253,224,71,.5) !important;font-size:.92rem !important;font-weight:600 !important;font-family:'Inter',system-ui,sans-serif !important;}
+.phidao-input-tip-sub{font-size:.74rem;font-weight:700;color:#cbd5e1;background:rgba(15,23,42,.85);padding:3px 12px;border-radius:20px;backdrop-filter:blur(6px);text-shadow:0 1px 2px #000;border:1px solid rgba(255,255,255,.12);pointer-events:auto;}
+.phidao-target-hint{font-size:.82rem;color:#fef08a;font-weight:700;min-width:100px;text-align:center;pointer-events:auto;}
 
 /* WORD CARDS - Clean, crisp, subtle shadows without heavy blur/glow */
-.phidao-word-card{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:#ffffff;border:2px solid #0284c7;border-radius:16px;padding:8px 18px 9px;min-width:90px;box-shadow:0 4px 12px rgba(0,0,0,.15);will-change:transform;transition:border-color .15s,box-shadow .15s,transform .1s;}
-.phidao-word-card.is-targeted{border-color:#f59e0b !important;background:#fffbeb !important;box-shadow:0 4px 14px rgba(245,158,11,.35) !important;transform:scale(1.05);}
+.phidao-word-card{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:#ffffff;border:2px solid #0284c7;border-radius:16px;padding:8px 16px 8px;min-width:95px;box-shadow:0 4px 12px rgba(0,0,0,.15);will-change:transform;transition:border-color .15s,box-shadow .15s,transform .1s;}
+.phidao-word-card.is-targeted{border-color:#f59e0b !important;background:#fffbeb !important;box-shadow:0 4px 16px rgba(245,158,11,.45) !important;transform:scale(1.06);}
 .phidao-word-card.type-star{border-color:#a855f7;background:#ffffff;box-shadow:0 4px 12px rgba(168,85,247,.25);}
-.phidao-word-card .word-zh{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;font-size:2.1rem;font-weight:900;color:#0f172a !important;line-height:1.1;letter-spacing:.05em;-webkit-text-fill-color:initial !important;text-shadow:none !important;filter:none !important;-webkit-font-smoothing:antialiased;}
-.phidao-word-card .pinyin-prog{font-size:.9rem;font-family:'Courier New',Courier,monospace;font-weight:800;letter-spacing:.06em;background:#f1f5f9;border:1px solid #cbd5e1;padding:3px 12px;border-radius:8px;margin-top:2px;display:flex;align-items:center;gap:4px;}
+.phidao-word-card .word-zh{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;font-size:2.05rem;font-weight:900;color:#0f172a !important;line-height:1.1;letter-spacing:.05em;-webkit-text-fill-color:initial !important;text-shadow:none !important;filter:none !important;-webkit-font-smoothing:antialiased;}
+.phidao-word-card .word-meaning-sub{font-size:.8rem;font-weight:700;color:#047857;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:6px;padding:1px 8px;margin-top:3px;max-width:150px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.phidao-word-card .word-meaning-main{font-size:1.15rem;font-weight:900;color:#047857 !important;text-align:center;padding:2px 6px;max-width:160px;line-height:1.25;}
+.phidao-word-card .pinyin-prog{font-size:.9rem;font-family:'Courier New',Courier,monospace;font-weight:800;letter-spacing:.06em;background:#f1f5f9;border:1px solid #cbd5e1;padding:2px 10px;border-radius:8px;margin-top:2px;display:flex;align-items:center;gap:4px;}
 .phidao-word-card .py-typed{color:#ea580c;font-weight:900;}
 .phidao-word-card .py-rem{color:#475569;}
 .phidao-word-card .word-py-tone-tag{color:#0284c7;font-weight:800;font-size:.82rem;margin-left:2px;}
@@ -283,8 +285,9 @@ html:not(.dark) #cannon-combo-val {
 </div>
 <!-- MODE BAR -->
 <div class="phidao-mode-bar">
-  <button type="button" class="phidao-mode-pill active" data-mode="both" title="Hiện cả Chữ Hán & Phiên âm">👁️ Hán + Pinyin</button>
-  <button type="button" class="phidao-mode-pill" data-mode="hanzi" title="Chỉ hiện Chữ Hán (tự nhớ Pinyin để gõ)">🔤 Chỉ Hán</button>
+  <button type="button" class="phidao-mode-pill active" data-mode="both" title="Hiện cả Chữ Hán, Pinyin & Tiếng Việt">👁️ Hán + Pinyin + Việt</button>
+  <button type="button" class="phidao-mode-pill" data-mode="meaning" title="Hiện Tiếng Việt nổi bật (luyện phản xạ gõ Chữ Hán hoặc Pinyin)">🇻🇳 Chỉ Tiếng Việt</button>
+  <button type="button" class="phidao-mode-pill" data-mode="hanzi" title="Chỉ hiện Chữ Hán (tự nhớ Pinyin/Nghĩa để gõ)">🔤 Chỉ Hán</button>
   <button type="button" class="phidao-mode-pill" data-mode="pinyin" title="Chỉ hiện Phiên âm Pinyin">🔠 Chỉ Pinyin</button>
   <button type="button" class="phidao-mode-pill" data-mode="listen" title="VIP: Luyện nghe phát âm & gõ Pinyin">🎧 Luyện Nghe</button>
 </div>
@@ -319,8 +322,13 @@ html:not(.dark) #cannon-combo-val {
 
   <!-- FLOATING INPUT INDICATOR (Dưới cùng chính giữa) -->
   <div class="phidao-floating-input-bar">
-    <div class="phidao-typed-buf" id="phidao-typed-buf"><span class="phidao-cursor-blink">|</span></div>
-    <div class="phidao-input-tip-sub"><i class="fa-solid fa-keyboard" style="color:#38bdf8;"></i> Gõ Pinyin không dấu để phi đao phóng ra (Bấm <strong>Esc</strong> để tạm dừng)</div>
+    <div class="phidao-typed-buf" id="phidao-typed-buf">
+      <input type="text" id="phidao-real-input"
+        placeholder="Gõ Pinyin hoặc Chữ Hán..."
+        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+        class="phidao-real-input" />
+    </div>
+    <div class="phidao-input-tip-sub"><i class="fa-solid fa-keyboard" style="color:#38bdf8;"></i> Gõ <strong>Pinyin</strong> hoặc <strong>Chữ Hán</strong> trực tiếp để phóng phi đao (Bấm <strong>Esc</strong> để tạm dừng)</div>
     <div class="phidao-target-hint" id="phidao-target-hint"></div>
   </div>
 </div>
@@ -431,6 +439,8 @@ html:not(.dark) #cannon-combo-val {
         const mode = btn.getAttribute('data-mode') || 'both';
         this.displayMode = mode;
         this.container.querySelectorAll('.phidao-mode-pill').forEach(b => b.classList.toggle('active', b === btn));
+        this.highlightTargets();
+        this.focusInput();
         this.showToast(`Chế độ: ${btn.textContent.trim()}`);
       });
     });
@@ -438,6 +448,36 @@ html:not(.dark) #cannon-combo-val {
     this.container.querySelectorAll('.phidao-skill-btn').forEach(btn=>{
       btn.addEventListener('click',e=>{e.preventDefault();const map={'skill-ice':'ice','skill-heal':'heal','skill-x2':'x2','skill-shield':'shield'};if(map[btn.id])this.activateSkill(map[btn.id]);});
     });
+
+    // Input cho phép nhập cả Chữ Hán (IME) lẫn Pinyin (bàn phím thường)
+    const realInput = this.container.querySelector('#phidao-real-input');
+    if(realInput){
+      realInput.addEventListener('input', (e) => {
+        this.processInputBuffer(e.target.value);
+      });
+      realInput.addEventListener('compositionend', (e) => {
+        this.processInputBuffer(e.target.value);
+      });
+      realInput.addEventListener('keydown', (e) => {
+        if(e.key === 'Escape'){
+          e.preventDefault();
+          this.togglePause();
+        } else if(e.key === 'Enter'){
+          e.preventDefault();
+          if(realInput.value.trim()){
+            this.processInputBuffer(realInput.value.trim());
+          }
+        }
+      });
+    }
+
+    // Tự động focus lại ô nhập khi bấm vào khu vực chơi
+    const playfield = this.container.querySelector('#cannon-playfield');
+    if(playfield){
+      playfield.addEventListener('click', () => {
+        this.focusInput();
+      });
+    }
 
     this.keyHandler=(e)=>{
       if(!this.isRunning)return;
@@ -447,7 +487,6 @@ html:not(.dark) #cannon-combo-val {
       if(e.key==='Escape'){
         e.preventDefault();
         e.stopPropagation();
-        if(e.stopImmediatePropagation)e.stopImmediatePropagation();
         this.togglePause();
         return;
       }
@@ -456,7 +495,6 @@ html:not(.dark) #cannon-combo-val {
         if(e.key==='Enter'||e.key===' '){
           e.preventDefault();
           e.stopPropagation();
-          if(e.stopImmediatePropagation)e.stopImmediatePropagation();
           this.togglePause(false);
         }
         return;
@@ -467,100 +505,106 @@ html:not(.dark) #cannon-combo-val {
         if(map[e.key]){
           e.preventDefault();
           e.stopPropagation();
-          if(e.stopImmediatePropagation)e.stopImmediatePropagation();
           this.activateSkill(map[e.key]);
           return;
         }
       }
-      if(e.key==='Backspace'){
-        e.preventDefault();
-        e.stopPropagation();
-        if(e.stopImmediatePropagation)e.stopImmediatePropagation();
-        this.typedBuffer=this.typedBuffer.slice(0,-1);
-        this.lockedTarget=null;
-        this.updateTypedDisplay();
-        this.highlightTargets();
-        return;
-      }
-      if(e.key==='Escape'){
-        e.preventDefault();
-        e.stopPropagation();
-        if(e.stopImmediatePropagation)e.stopImmediatePropagation();
-        this.typedBuffer='';
-        this.lockedTarget=null;
-        this.wrongStreak=0;
-        this.updateTypedDisplay();
-        this.highlightTargets();
-        return;
-      }
-      
-      // Chuyển đổi an toàn hỗ trợ cả gõ Telex/VNI mà không bị kẹt hay lỗi
-      if(e.key.length===1&&!e.ctrlKey&&!e.altKey&&!e.metaKey){
-        const cleanChar = e.key.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[đĐ]/g, "d").toLowerCase();
-        if(/^[a-z]$/.test(cleanChar)){
-          e.preventDefault();
-          e.stopPropagation();
-          if(e.stopImmediatePropagation)e.stopImmediatePropagation();
-          this.processTypedChar(cleanChar);
-        }
+
+      const inp = this.container.querySelector('#phidao-real-input');
+      if(inp && document.activeElement !== inp && !e.ctrlKey && !e.altKey && !e.metaKey){
+        inp.focus();
       }
     };
     window.addEventListener('keydown',this.keyHandler,true);
   }
 
-  processTypedChar(char){
-    const testBuf = this.typedBuffer + char;
-    let matched = false;
-    
-    // Kiểm tra xem testBuf có khớp với từ đang khóa mục tiêu không
-    if(this.lockedTarget && !this.lockedTarget.isDestroyed){
-      const tNorm = normalizePinyin(this.lockedTarget.wordObj.pinyin);
-      if(tNorm.startsWith(testBuf)){
-        this.typedBuffer = testBuf;
-        matched = true;
-      } else {
-        // Không khớp mục tiêu hiện tại, thử tìm xem có khớp từ nào khác trên màn hình không
-        const otherMatches = this.activeWords.filter(w => !w.isDestroyed && normalizePinyin(w.wordObj.pinyin).startsWith(testBuf)).sort((a,b)=>b.y-a.y);
-        if(otherMatches.length > 0){
-          this.lockedTarget = otherMatches[0];
-          this.typedBuffer = testBuf;
-          matched = true;
-        }
+  focusInput(){
+    setTimeout(() => {
+      const inp = this.container.querySelector('#phidao-real-input');
+      if(inp && this.isRunning && !this.isPaused){
+        inp.focus();
       }
-    } else {
-      const matches = this.activeWords.filter(w => !w.isDestroyed && normalizePinyin(w.wordObj.pinyin).startsWith(testBuf)).sort((a,b)=>b.y-a.y);
-      if(matches.length > 0){
-        this.lockedTarget = matches[0];
-        this.typedBuffer = testBuf;
-        matched = true;
-      }
-    }
+    }, 40);
+  }
 
-    if(matched){
-      this.wrongStreak = 0; // Gõ đúng ký tự -> reset đếm sai
-    } else {
-      // Bấm nhầm phím / bấm nháp không trúng bất kỳ từ nào đang rơi
-      this.wrongStreak++;
-      this.music.playMiss();
-      this.shakeTypedBuf();
+  processInputBuffer(rawVal){
+    if(!this.isRunning || this.isPaused) return;
+    const val = (rawVal || '').trim();
+    this.typedBuffer = val;
+
+    if(!val){
+      this.lockedTarget = null;
+      this.wrongStreak = 0;
       this.updateTypedDisplay();
-      
-      // Nếu bấm nháp sai liên tiếp 5 lần -> Tính từ đang rơi bị rớt xuống luôn!
-      if(this.wrongStreak >= 5){
-        this.handleFiveMissPenalty();
-      }
+      this.highlightTargets();
       return;
     }
 
-    // Đã gõ xong trọn vẹn pinyin của mục tiêu -> Phóng phi đao tiêu diệt!
+    const pinyinNorm = normalizePinyin(val);
+    const cleanZh = val.replace(/\s+/g, '');
+
+    const sortedWords = [...this.activeWords]
+      .filter(w => !w.isDestroyed)
+      .sort((a, b) => b.y - a.y);
+
+    // 1. Kiểm tra trúng khớp hoàn toàn Chữ Hán hoặc Pinyin (Ưu tiên từ rơi thấp nhất)
+    let exactTarget = sortedWords.find(w => {
+      const zh = (w.wordObj.word || w.wordObj.char || w.wordObj.hanzi || '').trim();
+      return cleanZh === zh || cleanZh.endsWith(zh);
+    });
+
+    if(!exactTarget && pinyinNorm){
+      exactTarget = sortedWords.find(w => {
+        const py = normalizePinyin(w.wordObj.pinyin);
+        return pinyinNorm === py || pinyinNorm.endsWith(py);
+      });
+    }
+
+    if(exactTarget){
+      const target = exactTarget;
+      this.typedBuffer = '';
+      const inp = this.container.querySelector('#phidao-real-input');
+      if(inp) inp.value = '';
+      this.lockedTarget = null;
+      this.wrongStreak = 0;
+      this.updateTypedDisplay();
+      this.highlightTargets();
+      this.fireDagger(target);
+      return;
+    }
+
+    // 2. Khớp tiền tố (Prefix / Partial match để khóa mục tiêu)
+    let matchedTarget = null;
     if(this.lockedTarget && !this.lockedTarget.isDestroyed){
-      const tNorm = normalizePinyin(this.lockedTarget.wordObj.pinyin);
-      if(this.typedBuffer === tNorm){
-        const target = this.lockedTarget;
-        this.typedBuffer = '';
-        this.lockedTarget = null;
-        this.wrongStreak = 0;
-        this.fireDagger(target);
+      const zh = (this.lockedTarget.wordObj.word || this.lockedTarget.wordObj.char || '').trim();
+      const py = normalizePinyin(this.lockedTarget.wordObj.pinyin);
+      if(zh.startsWith(cleanZh) || (pinyinNorm && py.startsWith(pinyinNorm))){
+        matchedTarget = this.lockedTarget;
+      }
+    }
+
+    if(!matchedTarget){
+      matchedTarget = sortedWords.find(w => {
+        const zh = (w.wordObj.word || w.wordObj.char || '').trim();
+        const py = normalizePinyin(w.wordObj.pinyin);
+        return zh.startsWith(cleanZh) || (pinyinNorm && py.startsWith(pinyinNorm));
+      });
+    }
+
+    if(matchedTarget){
+      this.lockedTarget = matchedTarget;
+      this.wrongStreak = 0;
+    } else {
+      this.lockedTarget = null;
+      this.wrongStreak++;
+      this.music.playMiss();
+      this.shakeTypedBuf();
+
+      if(this.wrongStreak >= 5){
+        const inp = this.container.querySelector('#phidao-real-input');
+        if(inp) inp.value = '';
+        this.handleFiveMissPenalty();
+        return;
       }
     }
 
@@ -568,9 +612,19 @@ html:not(.dark) #cannon-combo-val {
     this.highlightTargets();
   }
 
+  processTypedChar(char){
+    const inp = this.container.querySelector('#phidao-real-input');
+    const cur = inp ? inp.value : this.typedBuffer;
+    const nextVal = cur + char;
+    if(inp) inp.value = nextVal;
+    this.processInputBuffer(nextVal);
+  }
+
   handleFiveMissPenalty(){
     this.wrongStreak = 0;
     this.typedBuffer = '';
+    const inp = this.container.querySelector('#phidao-real-input');
+    if(inp) inp.value = '';
     this.lockedTarget = null;
     this.combo = 0; // Reset chuỗi đúng liên tiếp về 0
 
@@ -633,14 +687,23 @@ html:not(.dark) #cannon-combo-val {
   updateTypedDisplay(){
     const bufEl=this.container.querySelector('#phidao-typed-buf');
     const hintEl=this.container.querySelector('#phidao-target-hint');
+    const inp = this.container.querySelector('#phidao-real-input');
     const buf=this.typedBuffer;
+
     if(bufEl){
-      if(buf){bufEl.className=`phidao-typed-buf${this.lockedTarget?' has-match':''}`;bufEl.innerHTML=`<span>${buf}</span><span class="phidao-cursor-blink">|</span>`;}
-      else{bufEl.className='phidao-typed-buf';bufEl.innerHTML=`<span class="phidao-cursor-blink">|</span>`;}
+      bufEl.className=`phidao-typed-buf${this.lockedTarget?' has-match':''}`;
+    }
+    if(inp && inp.value !== buf){
+      inp.value = buf;
     }
     if(hintEl){
       if(this.wrongStreak > 0){
         hintEl.innerHTML=`<span style="color:#ef4444;font-weight:800;font-size:0.8rem;background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.5);border-radius:12px;padding:2px 10px;display:inline-block;animation:bufShake .2s ease;">⚠️ Bấm sai: ${this.wrongStreak}/5</span>`;
+      } else if(this.lockedTarget && !this.lockedTarget.isDestroyed){
+        const zh = this.lockedTarget.wordObj.word || '';
+        const py = this.lockedTarget.wordObj.pinyin || '';
+        const vn = this.lockedTarget.wordObj.meaning || '';
+        hintEl.innerHTML=`<span style="color:#fde047;font-weight:800;font-size:0.85rem;background:rgba(15,23,42,0.9);border:1px solid rgba(251,191,36,0.5);border-radius:12px;padding:3px 14px;display:inline-flex;align-items:center;gap:6px;box-shadow:0 2px 10px rgba(0,0,0,0.4);">🎯 Mục tiêu: <strong style="font-size:1.05rem;color:#ffffff;">${zh}</strong> <span style="color:#38bdf8;font-weight:700;">[${py}]</span> ${vn ? `<span style="color:#34d399;font-weight:700;">• ${vn}</span>` : ''}</span>`;
       } else {
         hintEl.textContent='';
       }
@@ -655,7 +718,7 @@ html:not(.dark) #cannon-combo-val {
       const prog=w.el.querySelector('.pinyin-prog');
       if(prog){
         const pyTone=w.wordObj.pinyin||'';
-        if(this.displayMode === 'listen' || this.displayMode === 'hanzi' || this.displayMode === 'pinyin'){
+        if(this.displayMode === 'listen' || this.displayMode === 'hanzi' || this.displayMode === 'pinyin' || this.displayMode === 'meaning'){
           prog.style.display = 'none';
         } else {
           // 'both': Chỉ hiển thị chữ màu xanh Pinyin có dấu (BỎ chữ màu đen)
@@ -839,31 +902,42 @@ html:not(.dark) #cannon-combo-val {
     const zh = wordObj.word || wordObj.char || wordObj.hanzi || '';
     const py = wordObj.pinyin || '';
     const norm = normalizePinyin(py);
+    const meaning = wordObj.meaning || wordObj.vn || wordObj.trans || '';
 
     let cardContent = '';
-    if(this.displayMode === 'hanzi'){
+    if(this.displayMode === 'meaning'){
+      cardContent = `
+        <div class="word-meaning-main">${isStar?'✨ ':''}${meaning || zh}</div>
+        <div class="word-sub-hint" style="font-size:0.75rem; color:#64748b; font-weight:700; margin-top:2px;">(Gõ Hán hoặc Pinyin)</div>
+        <div class="pinyin-prog" style="display:none;"></div>
+      `;
+    }else if(this.displayMode === 'hanzi'){
       cardContent = `
         <div class="word-zh">${isStar?'✨ ':''}${zh}</div>
+        ${meaning ? `<div class="word-meaning-sub" title="${meaning}">${meaning}</div>` : ''}
         <div class="pinyin-prog" style="display:none;"></div>
       `;
     }else if(this.displayMode === 'pinyin'){
       cardContent = `
         <div class="word-zh" style="font-size:1.5rem;color:#0284c7 !important;">${isStar?'✨ ':''}${py}</div>
+        ${meaning ? `<div class="word-meaning-sub" title="${meaning}">${meaning}</div>` : ''}
         <div class="pinyin-prog" style="display:none;"></div>
       `;
     }else if(this.displayMode === 'listen'){
       cardContent = `
         <div class="word-zh" style="font-size:1.8rem;color:#0284c7 !important;">🎧 ❓</div>
+        ${meaning ? `<div class="word-meaning-sub" title="${meaning}">${meaning}</div>` : ''}
         <div class="pinyin-prog" style="display:none;"></div>
       `;
       if(this.autoSpeech && zh){
         this.speakWordInstant(zh);
       }
     }else{
-      // 'both': Cả Chữ Hán và Pinyin màu xanh có dấu (BỎ chữ màu đen norm)
+      // 'both': Cả Chữ Hán, Pinyin màu xanh có dấu VÀ Nghĩa Tiếng Việt
       cardContent = `
         <div class="word-zh">${isStar?'✨ ':''}${zh}</div>
         <div class="pinyin-prog"><span class="word-py-tone-tag" style="color:#0284c7;font-weight:800;font-size:0.95rem;">${py}</span></div>
+        ${meaning ? `<div class="word-meaning-sub" title="${meaning}">${meaning}</div>` : ''}
       `;
     }
 
@@ -1014,6 +1088,7 @@ html:not(.dark) #cannon-combo-val {
       if(overlay)overlay.style.setProperty('display','none','important');
       this.lastFrameTime=performance.now();
       this.music.start();
+      this.focusInput();
       this.showToast('▶️ Tiếp tục');
     }
   }
@@ -1034,6 +1109,7 @@ html:not(.dark) #cannon-combo-val {
     const wordsLayer=this.container.querySelector('#cannon-words-layer');if(wordsLayer)wordsLayer.innerHTML='';
     const fxLayer=this.container.querySelector('#cannon-fx-layer');if(fxLayer)fxLayer.innerHTML='';
     this.updateHUD();this.updateTypedDisplay();this.startTimers();this.music.start();
+    this.focusInput();
     this.animFrameId=requestAnimationFrame(t=>this.loop(t));
   }
 

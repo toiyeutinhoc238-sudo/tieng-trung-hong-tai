@@ -4828,34 +4828,90 @@ html.dark .topic-card:hover {
   box-shadow: 0 6px 16px rgba(245, 158, 11, 0.15);
 }
 
-/* Limit Button Toggle */
-.limit-btn {
-  background: transparent;
-  color: var(--text-secondary);
-  border-color: var(--border-glass);
-}
-.limit-btn:hover {
-  background: rgba(255, 255, 255, 0.05);
-}
-.limit-btn.active-limit {
-  background: var(--accent-blue);
-  color: white;
-  border-color: var(--accent-blue);
+/* --- NOTEBOOK DASHBOARD FILTER & LIMIT BUTTONS --- */
+.filter-btn, .limit-btn {
+  padding: 7px 16px !important;
+  border-radius: 10px !important;
+  font-size: 0.86rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border: 1.5px solid #cbd5e1 !important;
+  background: #ffffff !important;
+  color: #475569 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
-/* Filter Button Toggle */
-.filter-btn {
-  background: transparent;
-  color: var(--text-secondary);
-  border-color: var(--border-glass);
+.filter-btn:hover, .limit-btn:hover {
+  background: #f1f5f9 !important;
+  border-color: #94a3b8 !important;
+  color: #0f172a !important;
+  transform: translateY(-1px);
 }
-.filter-btn:hover {
-  background: rgba(255, 255, 255, 0.05);
+
+/* ACTIVE FILTER BUTTON - TÔ ĐẬM RỰC RỠ TÍM */
+.filter-btn.active-filter,
+html.light-mode .filter-btn.active-filter,
+html:not(.dark) .filter-btn.active-filter {
+  background: linear-gradient(135deg, #9333ea, #7e22ce) !important;
+  color: #ffffff !important;
+  border: 1.5px solid #6b21a8 !important;
+  font-weight: 900 !important;
+  box-shadow: 0 4px 14px rgba(147, 51, 234, 0.45) !important;
+  transform: translateY(-1px);
 }
-.filter-btn.active-filter {
-  background: var(--accent-purple);
-  color: white;
-  border-color: var(--accent-purple);
+
+/* ACTIVE LIMIT BUTTON - TÔ ĐẬM RỰC RỠ XANH DƯƠNG */
+.limit-btn.active-limit,
+html.light-mode .limit-btn.active-limit,
+html:not(.dark) .limit-btn.active-limit {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+  color: #ffffff !important;
+  border: 1.5px solid #1e40af !important;
+  font-weight: 900 !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.45) !important;
+  transform: translateY(-1px);
+}
+
+/* DARK MODE VARIANTS */
+html.dark .filter-btn,
+body.dark-mode .filter-btn,
+html.dark .limit-btn,
+body.dark-mode .limit-btn {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.16) !important;
+  color: #cbd5e1 !important;
+  box-shadow: none !important;
+}
+
+html.dark .filter-btn:hover,
+body.dark-mode .filter-btn:hover,
+html.dark .limit-btn:hover,
+body.dark-mode .limit-btn:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: #ffffff !important;
+}
+
+html.dark .filter-btn.active-filter,
+body.dark-mode .filter-btn.active-filter {
+  background: linear-gradient(135deg, #a855f7, #7c3aed) !important;
+  color: #ffffff !important;
+  border: 1.5px solid #c084fc !important;
+  box-shadow: 0 4px 16px rgba(168, 85, 247, 0.5) !important;
+  font-weight: 900 !important;
+}
+
+html.dark .limit-btn.active-limit,
+body.dark-mode .limit-btn.active-limit {
+  background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+  color: #ffffff !important;
+  border: 1.5px solid #60a5fa !important;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.5) !important;
+  font-weight: 900 !important;
 }
 
 /* --- UNIVERSAL CROSS-PLATFORM & MOBILE RESPONSIVE POLISH --- */
