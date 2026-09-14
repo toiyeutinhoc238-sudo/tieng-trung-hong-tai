@@ -2556,27 +2556,52 @@ html:not(.dark) .sentence-card-container .card-action-bar {
 .chatbot-toggle-btn {
   width: 60px;
   height: 60px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-teal) 100%);
-  border: none;
-  color: white;
-  font-size: 1.6rem;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #0284c7 0%, #2563eb 50%, #7c3aed 100%) !important;
+  border: 2.5px solid rgba(255, 255, 255, 0.85) !important;
+  color: #ffffff !important;
+  font-size: 1.65rem !important;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25), var(--shadow-glow);
+  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.55), 0 0 16px rgba(2, 132, 199, 0.45) !important;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, background 0.3s !important;
   position: relative;
+  animation: chatBtnBreathe 3s infinite ease-in-out;
+}
+
+@keyframes chatBtnBreathe {
+  0%, 100% {
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.55), 0 0 16px rgba(2, 132, 199, 0.45);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 10px 30px rgba(124, 58, 237, 0.65), 0 0 24px rgba(37, 99, 235, 0.6);
+    transform: scale(1.05);
+  }
 }
 
 .chatbot-toggle-btn:hover {
-  transform: scale(1.1) rotate(-5deg);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3), 0 0 25px rgba(59, 130, 246, 0.4);
+  transform: scale(1.12) rotate(-4deg);
+  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.65), 0 0 28px rgba(124, 58, 237, 0.6) !important;
 }
 
 .chatbot-toggle-btn:active {
-  transform: scale(0.95);
+  transform: scale(0.94);
+}
+
+html.light-mode .chatbot-toggle-btn,
+body.light-mode .chatbot-toggle-btn {
+  background: linear-gradient(135deg, #0284c7 0%, #2563eb 50%, #7c3aed 100%) !important;
+  border: 2.5px solid #ffffff !important;
+  color: #ffffff !important;
+  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.5), 0 0 18px rgba(2, 132, 199, 0.4) !important;
+}
+
+.chatbot-widget.dock-left {
+  right: auto !important;
+  left: 24px !important;
 }
 
 .chatbot-badge {
@@ -2607,7 +2632,7 @@ html:not(.dark) .sentence-card-container .card-action-bar {
 /* Chat Panel */
 .chatbot-panel {
   position: absolute;
-  bottom: 76px;
+  bottom: 74px;
   right: 0;
   width: 380px;
   height: 520px;
@@ -2620,6 +2645,27 @@ html:not(.dark) .sentence-card-container .card-action-bar {
   transform-origin: bottom right;
 }
 
+/* Khi mở panel bên phải: dời sang bên trái 76px để né hoàn toàn nút cây bút */
+.chatbot-widget:not(.dock-left) .chatbot-panel {
+  right: 76px;
+  bottom: 0;
+}
+
+/* Khi dock sang bên trái */
+.chatbot-widget.dock-left .chatbot-panel {
+  left: 0;
+  right: auto;
+  transform-origin: bottom left;
+}
+
+/* Khi chat đang mở: Bút vẽ tự động nâng lên cao để không bao giờ bị đè */
+body.chatbot-panel-open .screen-pen-floating-bubble {
+  transform: translateY(-460px) scale(0.9) !important;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s !important;
+  opacity: 0.9 !important;
+  z-index: 9999 !important;
+}
+
 @keyframes slideInUp {
   from {
     opacity: 0;
@@ -2629,6 +2675,26 @@ html:not(.dark) .sentence-card-container .card-action-bar {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
+}
+
+.chat-bullet-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 4px 0;
+  line-height: 1.45;
+}
+
+.chat-bullet-dot {
+  color: #38bdf8;
+  font-weight: 900;
+  font-size: 1.1rem;
+  line-height: 1.2;
+}
+
+html.light-mode .chat-bullet-dot,
+body.light-mode .chat-bullet-dot {
+  color: #2563eb;
 }
 
 /* 214 Radicals Modal Tab Buttons */

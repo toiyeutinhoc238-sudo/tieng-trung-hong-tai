@@ -2225,7 +2225,12 @@ app.post('/api/chat', async (req, res) => {
 
   try {
     let reply = '';
-    const systemPrompt = 'Bạn là trợ lý AI học tiếng Trung đắc lực của thương hiệu "Tiếng Trung Hongtai". Bạn có phong cách nói chuyện thân thiện, chuyên nghiệp, tận tâm và thông thái. Bạn giúp học viên giải thích từ vựng HSK, các quy tắc phát âm Pinyin, cấu trúc ngữ pháp tiếng Trung, dịch thuật Anh-Trung-Việt và luyện giao tiếp. Hãy sử dụng định dạng Markdown rõ ràng, thụt lề hợp lý, xuống dòng sạch sẽ. Khi nói về thương hiệu, luôn tự xưng là "Trợ lý AI Hongtai".';
+    const systemPrompt = `Bạn là Trợ lý AI học tiếng Trung của thương hiệu "Tiếng Trung Hongtai".
+QUY TẮC BẮT BUỘC KHI PHẢN HỒI:
+1. NÓI NGẮN GỌN, SÚC TÍCH, ĐÚNG TRỌNG TÂM: Người học đang xem trên ô chat nhỏ điện thoại/tablet, tuyệt đối KHÔNG nói dông dài, KHÔNG viết bài luận dài lê thê, KHÔNG mở bài/kết bài rườm rà. Trả lời thẳng vào câu hỏi trong khoảng 2 - 4 câu hoặc vài gạch đầu dòng ngắn.
+2. TUYỆT ĐỐI KHÔNG KẺ BẢNG (NO MARKDOWN TABLES): KHÔNG BAO GIỜ dùng cú pháp kẻ bảng (cú pháp |---| hoặc bảng Markdown) vì khung chat nhỏ sẽ bị méo mó, vỡ chữ và tràn viền. Nếu cần liệt kê, BẮT BUỘC dùng danh sách gạch đầu dòng (- hoặc •).
+3. RÕ RÀNG VÀ CHUẨN XÁC: Khi giải thích từ vựng hoặc ngữ pháp, luôn kèm Chữ Hán, Pinyin và nghĩa Tiếng Việt ngắn gọn + đúng 1 câu ví dụ ngắn.
+4. XƯNG HÔ: Luôn tự xưng là "Trợ lý AI Hongtai", giọng văn thân thiện, ấm áp và gần gũi.`;
 
     // 1. Primary: Try Groq LLaMA 3.3 70B
     if (groqClient) {
@@ -2238,7 +2243,7 @@ app.post('/api/chat', async (req, res) => {
           model: 'openai/gpt-oss-120b',
           messages: groqMsgs,
           temperature: 0.7,
-          max_tokens: 1500
+          max_tokens: 500
         });
         reply = completion.choices[0]?.message?.content || '';
       } catch (eGroq120) {
@@ -2252,7 +2257,7 @@ app.post('/api/chat', async (req, res) => {
             model: 'openai/gpt-oss-20b',
             messages: groqMsgs,
             temperature: 0.7,
-            max_tokens: 1500
+            max_tokens: 500
           });
           reply = completion.choices[0]?.message?.content || '';
         } catch (eGroq20) {
@@ -2280,6 +2285,7 @@ app.post('/api/chat', async (req, res) => {
             },
             body: JSON.stringify({
               contents,
+              generationConfig: { maxOutputTokens: 500, temperature: 0.7 },
               systemInstruction: { parts: [{ text: systemPrompt }] }
             })
           });

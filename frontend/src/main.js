@@ -7034,6 +7034,7 @@ function initChatbot() {
   window.toggleChatbotPanel = function () {
     const isHidden = panel.style.display === 'none';
     panel.style.display = isHidden ? 'flex' : 'none';
+    document.body.classList.toggle('chatbot-panel-open', isHidden);
     if (isHidden) {
       if (badge) badge.style.display = 'none';
       if (input) input.focus();
@@ -7043,10 +7044,35 @@ function initChatbot() {
 
   window.closeChatbotPanel = function () {
     panel.style.display = 'none';
+    document.body.classList.remove('chatbot-panel-open');
+  };
+
+  // Chuyển đổi vị trí Trái / Phải để né nút cây bút
+  const widget = document.getElementById('chatbot-widget');
+  const savedDockSide = localStorage.getItem('hongtai_chatbot_dock_side');
+  if (savedDockSide === 'left' && widget) {
+    widget.classList.add('dock-left');
+  }
+
+  window.toggleChatbotSide = function () {
+    if (!widget) return;
+    const isLeft = widget.classList.toggle('dock-left');
+    localStorage.setItem('hongtai_chatbot_dock_side', isLeft ? 'left' : 'right');
+    if (typeof showToast === 'function') {
+      showToast(isLeft ? 'Đã chuyển khung chat sang bên trái 👈' : 'Đã chuyển khung chat sang bên phải 👉');
+    }
   };
 
   toggleBtn.onclick = window.toggleChatbotPanel;
   closeBtn.onclick = window.closeChatbotPanel;
+
+  const dockSideBtn = document.getElementById('chatbot-side-dock-btn');
+  if (dockSideBtn) {
+    dockSideBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      window.toggleChatbotSide();
+    });
+  }
 
   // Header Actions listeners
   if (newBtn) {
@@ -7081,11 +7107,19 @@ function initChatbot() {
     }
   });
 
-  // Helper to format Markdown-like syntax to HTML
+  // Helper to format Markdown-like syntax to HTML (Loại bỏ bảng Markdown và thay bằng danh sách sạch)
   function formatMarkdown(text) {
     if (!text) return '';
+    // Loại bỏ hoàn toàn cú pháp bảng Markdown |---| và chuyển các hàng | a | b | c | thành bullet list sạch đẹp
+    let cleaned = text
+      .replace(/^\s*\|?\s*[-:]+[-|\s:]*$/gm, '')
+      .replace(/^\s*\|\s*(.*?)\s*\|\s*$/gm, (match, inner) => {
+        const parts = inner.split(/\s*\|\s*/).map(p => p.trim()).filter(Boolean);
+        return parts.length ? '• ' + parts.join(' — ') : '';
+      });
+
     // Escape HTML to prevent XSS
-    let escaped = text
+    let escaped = cleaned
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;');
@@ -7093,8 +7127,11 @@ function initChatbot() {
     // Bold: **text** -> <strong>text</strong>
     escaped = escaped.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
+    // Bullet points: lines starting with "- " or "• " -> formatted nicely
+    escaped = escaped.replace(/^[-•]\s+(.*)$/gm, '<div class="chat-bullet-line"><span class="chat-bullet-dot">•</span> <span>$1</span></div>');
+
     // Line breaks: \n -> <br>
-    escaped = escaped.replace(/\n/g, '<br>');
+    escaped = escaped.replace(/\n{3,}/g, '\n\n').replace(/\n/g, '<br>');
 
     return escaped;
   }
