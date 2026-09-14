@@ -18,6 +18,9 @@ let isVideoHidden = false;
 let userAnswers = {}; // { sentenceId: { isCorrect, score, userAnswer, blanks: [] } }
 let totalScore = 0;
 let currentStreak = 0;
+let isSeekingSentence = false;
+let seekTargetSentenceIdx = -1;
+let seekUnlockTime = 0;
 
 export function formatSecondsToDuration(totalSeconds) {
   if (!totalSeconds || isNaN(totalSeconds) || totalSeconds <= 0) return '00:00';
@@ -400,39 +403,67 @@ function startPlaybackWatcher() {
     if (ytPlayer && ytPlayer.getCurrentTime && currentLesson && currentLesson.sentences && currentLesson.sentences.length > 0) {
       try {
         const curTime = ytPlayer.getCurrentTime();
+        const now = Date.now();
 
-        // 1. Detect active sentence from curTime if video is playing continuously
-        let activeIdx = currentLesson.sentences.findIndex(s => curTime >= s.startTime - 0.05 && curTime < s.endTime);
-        if (activeIdx === -1) {
-          const nextIdx = currentLesson.sentences.findIndex(s => s.startTime > curTime);
-          if (nextIdx > 0 && curTime >= currentLesson.sentences[nextIdx - 1].endTime) {
-            activeIdx = nextIdx - 1;
-          } else if (nextIdx === -1 && curTime >= currentLesson.sentences[currentLesson.sentences.length - 1].startTime) {
-            activeIdx = currentLesson.sentences.length - 1;
+        // 0. Khi đang seek: Chờ YouTube hoàn tất tua về mốc startTime, không để curTime cũ gây nhảy câu
+        if (isSeekingSentence) {
+          const targetSent = currentLesson.sentences[seekTargetSentenceIdx];
+          if (targetSent) {
+            const hasLanded = (curTime >= targetSent.startTime - 0.25 && curTime < targetSent.endTime);
+            if (hasLanded || now >= seekUnlockTime) {
+              isSeekingSentence = false;
+            } else {
+              // Vẫn đang trong quá trình tua: Tiếp tục chờ, tuyệt đối không auto-sync hay auto-pause
+              if (ytPlayer && ytPlayer.getPlayerState) {
+                const state = ytPlayer.getPlayerState();
+                if (state === 1 || (window.YT && window.YT.PlayerState && (state === YT.PlayerState.BUFFERING || state === YT.PlayerState.UNSTARTED))) {
+                  playbackWatcher = requestAnimationFrame(updateFrame);
+                  return;
+                }
+              }
+              playbackWatcher = null;
+              return;
+            }
+          } else {
+            isSeekingSentence = false;
           }
         }
 
-        // 2. Auto sync currentSentenceIdx when playing continuously
-        if (activeIdx !== -1 && activeIdx !== currentSentenceIdx) {
-          currentSentenceIdx = activeIdx;
-          lastPausedSentenceIdx = -1; // Reset pause guard for new sentence
-          renderCurrentSentence();
+        const isPassageMode = (currentMode === 'shadowing' && shadowSubMode === 'passage');
+
+        // 1. Chỉ auto-sync câu khi chạy liên tục (autoPauseEnabled = false hoặc chế độ cả đoạn passage)
+        // Khi đang ở chế độ luyện từng câu (Chép chính tả / Shadowing từng câu), giữ cố định câu đang luyện, không nhảy loạn!
+        if (!autoPauseEnabled || isPassageMode) {
+          let activeIdx = currentLesson.sentences.findIndex(s => curTime >= s.startTime - 0.05 && curTime < s.endTime);
+          if (activeIdx === -1) {
+            const nextIdx = currentLesson.sentences.findIndex(s => s.startTime > curTime);
+            if (nextIdx > 0 && curTime >= currentLesson.sentences[nextIdx - 1].endTime) {
+              activeIdx = nextIdx - 1;
+            } else if (nextIdx === -1 && curTime >= currentLesson.sentences[currentLesson.sentences.length - 1].startTime) {
+              activeIdx = currentLesson.sentences.length - 1;
+            }
+          }
+
+          if (activeIdx !== -1 && activeIdx !== currentSentenceIdx) {
+            currentSentenceIdx = activeIdx;
+            lastPausedSentenceIdx = -1;
+            renderCurrentSentence();
+          }
         }
 
-        // 3. Highlight transcript and passage
+        // 2. Highlight transcript and passage
         updateSubtitleHighlight(curTime);
         updateShadowPassageHighlight(curTime);
 
-        // 4. Real-time Dubbing Karaoke & Pacing
+        // 3. Real-time Dubbing Karaoke & Pacing
         if (currentMode === 'dubbing' && (dubbingVideoSyncPlaying || dubbingPreviewPlaying)) {
           updateDubbingKaraoke(curTime);
         }
 
-        // 5. Auto pause at the end of each sentence
-        const isPassageMode = (currentMode === 'shadowing' && shadowSubMode === 'passage');
+        // 4. Tự động dừng ở cuối mỗi câu (kể cả khi bấm Nghe Lại nhiều lần)
         if (autoPauseEnabled && !isPassageMode && currentLesson.sentences[currentSentenceIdx]) {
           const curSent = currentLesson.sentences[currentSentenceIdx];
-          if (curTime >= curSent.endTime - 0.08 && lastPausedSentenceIdx !== currentSentenceIdx) {
+          if (curTime >= curSent.endTime + 0.02 && lastPausedSentenceIdx !== currentSentenceIdx) {
             ytPlayer.pauseVideo();
             lastPausedSentenceIdx = currentSentenceIdx;
             isSentencePlaying = false;
@@ -441,7 +472,7 @@ function startPlaybackWatcher() {
           }
         }
 
-        // 6. Dubbing recording auto-stop when reaching sentence end
+        // 5. Dubbing recording auto-stop when reaching sentence end
         if (dubbingVideoSyncPlaying && currentLesson.sentences[currentSentenceIdx]) {
           const curSent = currentLesson.sentences[currentSentenceIdx];
           if (curTime >= curSent.endTime) {
@@ -450,7 +481,7 @@ function startPlaybackWatcher() {
           }
         }
 
-        // 7. Dubbing preview auto-stop when reaching sentence end
+        // 6. Dubbing preview auto-stop when reaching sentence end
         if (dubbingPreviewPlaying && currentLesson.sentences[currentSentenceIdx]) {
           const curSent = currentLesson.sentences[currentSentenceIdx];
           if (curTime >= curSent.endTime) {
@@ -459,7 +490,7 @@ function startPlaybackWatcher() {
           }
         }
 
-        // 8. Auto record completion when video reaches near the end (>= duration - 0.6s)
+        // 7. Auto record completion when video reaches near the end (>= duration - 0.6s)
         if (ytPlayer && ytPlayer.getDuration && typeof ytPlayer.getDuration === 'function') {
           const dur = ytPlayer.getDuration();
           if (dur > 0 && curTime >= dur - 0.6) {
@@ -497,10 +528,20 @@ function stopPlaybackWatcher() {
 }
 
 function playCurrentSentence() {
-  if (!currentLesson || !currentLesson.sentences[currentSentenceIdx]) return;
+  if (!currentLesson || !currentLesson.sentences || !currentLesson.sentences[currentSentenceIdx]) return;
   const sentence = currentLesson.sentences[currentSentenceIdx];
   if (ytPlayer && ytPlayer.seekTo) {
-    ytPlayer.seekTo(sentence.startTime, true);
+    // 1. Reset pause guard để câu nghe lại luôn tự dừng chính xác ở cuối câu
+    lastPausedSentenceIdx = -1;
+
+    // 2. Kích hoạt cờ khóa tua để tránh xung đột dữ liệu thời gian cũ khi YouTube tua lại
+    isSeekingSentence = true;
+    seekTargetSentenceIdx = currentSentenceIdx;
+    seekUnlockTime = Date.now() + 500;
+
+    // Lùi nhẹ 0.05s để không bao giờ bị nuốt phụ âm đầu
+    const targetSeek = Math.max(0, sentence.startTime - 0.05);
+    ytPlayer.seekTo(targetSeek, true);
     ytPlayer.setPlaybackRate(currentSpeed);
     ytPlayer.playVideo();
     isSentencePlaying = true;

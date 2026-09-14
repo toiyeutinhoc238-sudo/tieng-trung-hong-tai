@@ -658,10 +658,11 @@ export async function transcribeAudioWithVAD(youtubeId, videoTitle = '') {
       });
     }
 
-    console.log(`[VAD Audio Engine] After strict VAD gating: ${validSentences.length} accurate speech sentences retained.`);
+    const mergedSentences = mergeSubtitleFragments(validSentences);
+    console.log(`[VAD Audio Engine] After strict VAD gating & fragment merging: ${validSentences.length} raw -> ${mergedSentences.length} complete sentences retained.`);
     return {
-      source: 'Groq Whisper Large v3 (Voice Activity Gated)',
-      sentences: validSentences
+      source: 'Groq Whisper Large v3 (Voice Activity Gated & Intelligently Merged)',
+      sentences: mergedSentences
     };
   } finally {
     // Clean up temporary audio file
