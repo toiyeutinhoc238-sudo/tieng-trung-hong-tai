@@ -4849,49 +4849,49 @@
     </div>
 
     <!-- MODAL: Add Custom YouTube Video -->
-    <div id="dict-add-video-modal" class="modal-overlay" style="display: none;">
-      <div class="modal-card modal-box" style="max-width: 530px; max-height: 90vh; overflow-y: auto; padding: 18px 22px; border: 1.5px solid rgba(239, 68, 68, 0.4); border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.6);">
+    <div id="dict-add-video-modal" class="modal-overlay" style="display: none; align-items: center; justify-content: center; z-index: 99999;">
+      <div class="modal-card modal-box" style="max-width: 620px; width: 94vw; max-height: 92vh; overflow-y: auto; padding: 22px 26px; border: 1.5px solid rgba(239, 68, 68, 0.4); border-radius: 22px; box-shadow: 0 25px 65px rgba(0,0,0,0.7); box-sizing: border-box;">
         <button class="modal-close-btn" onclick="window.closeAddVideoModal()">&times;</button>
-        <h3 style="margin-top: 0; margin-bottom: 4px; font-size: 1.25rem; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+        <h3 style="margin-top: 0; margin-bottom: 4px; font-size: 1.28rem; font-weight: 800; display: flex; align-items: center; gap: 8px;">
           <i class="fa-brands fa-youtube" style="color: #ef4444;"></i> Thêm Video YouTube Cá Nhân
         </h3>
-        <p style="color: var(--text-muted); font-size: 0.78rem; margin-bottom: 12px; line-height: 1.4;">
-          Dán link video YouTube để tự động tạo bài luyện chép chính tả và lưu vào tài khoản của bạn.
+        <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 14px; line-height: 1.45;">
+          Dán đường link YouTube để AI tự động trích xuất phụ đề, khớp từng mili-giây và tạo bài luyện chép chính tả cho riêng bạn.
         </p>
 
         <form id="custom-video-form">
           <!-- YouTube URL Input -->
-          <div style="margin-bottom: 10px;">
-            <label style="display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 4px;">
+          <div style="margin-bottom: 12px;">
+            <label style="display: block; font-size: 0.82rem; font-weight: 700; margin-bottom: 5px;">
               <i class="fa-solid fa-link" style="color: #38bdf8;"></i> Đường Dẫn Link YouTube:
             </label>
-            <input type="text" id="custom-video-url" class="dict-search-input" placeholder="https://www.youtube.com/watch?v=... hoặc https://youtu.be/..." required style="border-radius: 10px; width: 100%; box-sizing: border-box; padding: 8px 12px; font-size: 0.84rem; height: 38px;" oninput="window.handleYouTubeUrlInput(this.value)">
+            <input type="text" id="custom-video-url" class="dict-search-input" placeholder="https://www.youtube.com/watch?v=... hoặc https://youtu.be/..." required style="border-radius: 11px; width: 100% !important; box-sizing: border-box !important; padding: 10px 14px; font-size: 0.88rem; height: 42px;" oninput="window.handleYouTubeUrlInput(this.value)">
           </div>
 
           <!-- Real-Time Video Preview Card -->
-          <div id="custom-video-preview-box" class="dict-preview-card" style="display: none; padding: 8px 12px; margin-bottom: 10px; gap: 10px; border-radius: 12px;">
-            <img id="custom-video-preview-img" class="dict-preview-thumb" src="" alt="Thumbnail" style="width: 84px; height: 48px; border-radius: 8px;">
+          <div id="custom-video-preview-box" class="dict-preview-card" style="display: none; padding: 10px 14px; margin-bottom: 12px; gap: 12px; border-radius: 12px; align-items: center; background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25);">
+            <img id="custom-video-preview-img" class="dict-preview-thumb" src="" alt="Thumbnail" style="width: 96px; height: 54px; border-radius: 8px; object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
             <div style="flex: 1; overflow: hidden;">
-              <div id="custom-video-preview-id" style="font-size: 0.8rem; font-weight: 800; color: #38bdf8;">YouTube ID: ...</div>
-              <div style="font-size: 0.74rem; color: #10b981; margin-top: 2px; font-weight: 700;">
+              <div id="custom-video-preview-id" style="font-size: 0.84rem; font-weight: 800; color: #38bdf8;">YouTube ID: ...</div>
+              <div style="font-size: 0.78rem; color: #10b981; margin-top: 3px; font-weight: 700;">
                 <i class="fa-solid fa-circle-check"></i> Link YouTube hợp lệ — Sẵn sàng nạp!
               </div>
             </div>
           </div>
 
           <!-- Video Title -->
-          <div style="margin-bottom: 10px;">
-            <label style="display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 4px;">
+          <div style="margin-bottom: 12px;">
+            <label style="display: block; font-size: 0.82rem; font-weight: 700; margin-bottom: 5px;">
               <i class="fa-solid fa-heading" style="color: #fbbf24;"></i> Tiêu đề bài học / Tên Video:
             </label>
-            <input type="text" id="custom-video-title" class="dict-search-input" placeholder="Ví dụ: Bài hát Ánh Trăng Nói Hộ Lòng Tôi..." required style="border-radius: 10px; width: 100%; box-sizing: border-box; padding: 8px 12px; font-size: 0.84rem; height: 38px;">
+            <input type="text" id="custom-video-title" class="dict-search-input" placeholder="Ví dụ: Bài hát Ánh Trăng Nói Hộ Lòng Tôi..." required style="border-radius: 11px; width: 100% !important; box-sizing: border-box !important; padding: 10px 14px; font-size: 0.88rem; height: 42px;">
           </div>
 
           <!-- Level & Category Grid -->
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
             <div>
-              <label style="display: block; font-size: 0.78rem; font-weight: 700; margin-bottom: 4px;">Cấp độ phù hợp:</label>
-              <select id="custom-video-level" class="dict-search-input" style="border-radius: 10px; width: 100%; padding: 6px 10px; font-size: 0.82rem; height: 36px;">
+              <label style="display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 5px;">Cấp độ phù hợp:</label>
+              <select id="custom-video-level" class="dict-search-input" style="border-radius: 11px; width: 100% !important; box-sizing: border-box !important; padding: 8px 12px; font-size: 0.84rem; height: 40px;">
                 <option value="1">HSK 1 (Cơ bản)</option>
                 <option value="2">HSK 2</option>
                 <option value="3" selected>HSK 3</option>
@@ -4901,8 +4901,8 @@
               </select>
             </div>
             <div>
-              <label style="display: block; font-size: 0.78rem; font-weight: 700; margin-bottom: 4px;">Chủ đề video:</label>
-              <select id="custom-video-cat" class="dict-search-input" style="border-radius: 10px; width: 100%; padding: 6px 10px; font-size: 0.82rem; height: 36px;">
+              <label style="display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 5px;">Chủ đề video:</label>
+              <select id="custom-video-cat" class="dict-search-input" style="border-radius: 11px; width: 100% !important; box-sizing: border-box !important; padding: 8px 12px; font-size: 0.84rem; height: 40px;">
                 <option value="Âm Nhạc">🎵 Âm Nhạc / Bài Hát</option>
                 <option value="Giao Tiếp">💬 Hội Thoại Giao Tiếp</option>
                 <option value="Ẩm Thực">🍜 Ẩm Thực & Nhà Hàng</option>
@@ -4918,35 +4918,45 @@
             </div>
           </div>
 
+          <!-- AI Auto-Extract Highlight Block -->
+          <div style="background: rgba(139, 92, 246, 0.08); border: 1.5px dashed rgba(139, 92, 246, 0.35); border-radius: 14px; padding: 12px 16px; margin-bottom: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 0.82rem; font-weight: 800; color: #c084fc; display: flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> AI Tự Động Trích Xuất & Căn Mốc Giọng Nói
+              </span>
+              <span style="font-size: 0.72rem; color: var(--text-muted); background: rgba(255,255,255,0.06); padding: 2px 8px; border-radius: 6px;">Whisper Large v3</span>
+            </div>
+            <button type="button" id="btn-auto-generate-all" onclick="window.autoGenerateAllWithAI()" style="width: 100%; box-sizing: border-box; background: linear-gradient(135deg, #8b5cf6, #ec4899); border: none; color: #ffffff; font-weight: 800; padding: 11px 18px; font-size: 0.9rem; box-shadow: 0 4px 14px rgba(139, 92, 246, 0.35); border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;" title="Tự động trích xuất phụ đề gốc Whisper và dịch chuẩn mực 100% Chữ Hán, Pinyin & Tiếng Việt">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> ✨ AI Tự Động Trích Xuất & Dịch (1-Chạm)
+            </button>
+          </div>
+
           <!-- Subtitle / Sentence Script Section -->
-          <div style="margin-bottom: 14px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; flex-wrap: wrap; gap: 4px;">
-              <label style="font-size: 0.78rem; font-weight: 700;">
-                <i class="fa-solid fa-closed-captioning" style="color: #a78bfa;"></i> Danh sách câu thoại / Phụ đề:
+          <div style="margin-bottom: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+              <label style="font-size: 0.82rem; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-closed-captioning" style="color: #38bdf8;"></i> Danh sách câu thoại / Lời bài hát:
               </label>
-              <div class="dict-subtitle-toolbar" style="gap: 6px; margin-bottom: 0; flex-wrap: wrap;">
-                <button type="button" class="dict-subtitle-tool-btn" id="btn-auto-generate-all" onclick="window.autoGenerateAllWithAI()" style="background: linear-gradient(135deg, #8b5cf6, #ec4899); border: none; color: #ffffff; font-weight: 800; padding: 6px 12px; font-size: 0.78rem; box-shadow: 0 2px 10px rgba(139, 92, 246, 0.35); border-radius: 8px;" title="Tự động trích xuất phụ đề gốc Whisper và dịch chuẩn mực 100% Chữ Hán, Pinyin & Tiếng Việt">
-                  <i class="fa-solid fa-wand-magic-sparkles"></i> ✨ AI Tự Động Trích Xuất & Dịch (1-Chạm)
+              <div style="display: flex; gap: 6px;">
+                <button type="button" class="dict-subtitle-tool-btn" id="btn-auto-translate-subs" onclick="window.autoTranslateSubtitles()" style="background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8; font-weight: 700; padding: 5px 11px; font-size: 0.76rem; border-radius: 8px; cursor: pointer;" title="Tự động dịch/chuẩn hóa phụ đề do bạn dán vào sang Tiếng Trung + Tiếng Việt + Pinyin">
+                  <i class="fa-solid fa-language"></i> Dịch Tiếng Trung
                 </button>
-                <button type="button" class="dict-subtitle-tool-btn" id="btn-auto-translate-subs" onclick="window.autoTranslateSubtitles()" style="background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.4); color: #38bdf8; font-weight: 700; padding: 6px 10px; font-size: 0.76rem; border-radius: 8px;" title="Tự động dịch/chuẩn hóa phụ đề do bạn dán vào sang Tiếng Trung + Tiếng Việt + Pinyin">
-                  <i class="fa-solid fa-language"></i> 🌐 Dịch Lại Thủ Công
-                </button>
-                <button type="button" class="dict-subtitle-tool-btn" onclick="window.clearSubtitlesInput()" style="padding: 5px 8px; font-size: 0.74rem; border-radius: 8px;" title="Xóa nội dung">
+                <button type="button" class="dict-subtitle-tool-btn" onclick="window.clearSubtitlesInput()" style="padding: 5px 10px; font-size: 0.74rem; border-radius: 8px; cursor: pointer;" title="Xóa nội dung">
                   <i class="fa-solid fa-eraser"></i> Xóa
                 </button>
               </div>
             </div>
 
-            <textarea id="custom-video-subtitles" class="full-dictation-textarea" style="min-height: 105px; max-height: 135px; font-size: 0.82rem; line-height: 1.5; padding: 8px 10px; border-radius: 10px;" placeholder="• Bấm nút '✨ AI Tự Động Trích Xuất & Dịch (1-Chạm)' ở trên để hệ thống tự động làm hết toàn bộ từ A-Z!&#10;• Hoặc dán thủ công: [00:06 - 00:12] 你好 | Nǐ hǎo | Xin chào"></textarea>
-            <small style="color: var(--text-muted); font-size: 0.72rem; display: block; margin-top: 3px;">
-              💡 Trích xuất giọng nói Whisper chuẩn xác từng mili-giây, dịch nghĩa sư phạm tự nhiên kèm Pinyin chuẩn 100%.
+            <textarea id="custom-video-subtitles" class="full-dictation-textarea" style="width: 100% !important; box-sizing: border-box !important; min-height: 150px; max-height: 220px; font-family: 'SF Mono', Consolas, monospace; font-size: 0.84rem; line-height: 1.6; padding: 12px 14px; border-radius: 12px; border: 1.5px solid rgba(255,255,255,0.15); background: rgba(15,23,42,0.65); color: #f8fafc; resize: vertical; display: block;" placeholder="• Bấm nút '✨ AI Tự Động Trích Xuất & Dịch' ở trên để AI tự động làm hết toàn bộ!&#10;• Hoặc dán thủ công: [00:06 - 00:12] 你好 | Nǐ hǎo | Xin chào"></textarea>
+            <small style="color: var(--text-muted); font-size: 0.74rem; display: block; margin-top: 4px; line-height: 1.4;">
+              💡 Trích xuất giọng nói chuẩn từng mili-giây, định dạng: <code>[BắtĐầu - KếtThúc] LờiThoại | Pinyin | Nghĩa</code>
             </small>
           </div>
 
           <!-- Actions -->
-          <div style="display: flex; gap: 8px; justify-content: flex-end;">
-            <button type="button" class="btn btn-outline" style="padding: 8px 16px; font-size: 0.84rem; border-radius: 10px;" onclick="window.closeAddVideoModal()">Hủy Bỏ</button>
-            <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, #ef4444, #f97316); border: none; font-weight: 800; padding: 8px 18px; font-size: 0.84rem; border-radius: 10px;">
+          <div style="display: flex; gap: 10px; justify-content: flex-end;">
+            <button type="button" class="btn btn-outline" style="padding: 9px 18px; font-size: 0.86rem; border-radius: 11px;" onclick="window.closeAddVideoModal()">Hủy Bỏ</button>
+            <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, #ef4444, #f97316); border: none; font-weight: 800; padding: 9px 22px; font-size: 0.86rem; border-radius: 11px; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);">
               <i class="fa-solid fa-cloud-arrow-up"></i> Lưu & Bắt Đầu Luyện Chép
             </button>
           </div>

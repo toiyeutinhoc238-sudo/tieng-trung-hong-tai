@@ -173,8 +173,24 @@ export function cleanSpeechText(text) {
   // If only punctuation or whitespace remains, drop it
   if (/^[\p{P}\s]*$/u.test(cleaned)) return '';
 
-  // Drop common metadata/credit spam
-  if (/^(作词|作曲|编曲|填词|演唱|歌手|字幕|english|music by|subscribe|ghiền mì gõ)+/i.test(cleaned)) {
+  // Drop common metadata/credit spam and YouTube outro/subscribe hallucinations
+  const spamPatterns = [
+    /subscribe/i,
+    /đăng ký/i,
+    /ghiền mì gõ/i,
+    /la la school/i,
+    /like và share/i,
+    /để không bỏ lỡ/i,
+    /video hấp dẫn/i,
+    /cảm ơn các bạn/i,
+    /thanks for watching/i,
+    /please subscribe/i,
+    /^(?:曲|作词|作曲|编曲|填词|演唱|歌手|字幕|english|music by)\b/i,
+    /林宗盛|李宗盛/i,
+    /ürlich/i
+  ];
+
+  if (spamPatterns.some(p => p.test(cleaned))) {
     return '';
   }
 
@@ -649,6 +665,9 @@ export async function transcribeAudioWithVAD(youtubeId, videoTitle = '') {
       const end = parseFloat(Number(seg.end || (start + 2.5)).toFixed(3));
       const dur = parseFloat((end - start).toFixed(3));
 
+      // Guard: Discard invalid, inverted, or tiny audio glitch segments
+      if (dur <= 0.4 || end <= start) continue;
+
       validSentences.push({
         id: validSentences.length + 1,
         startTime: start,
@@ -746,16 +765,18 @@ export async function enrichWithPinyinAndContextTranslation(rawItems, videoTitle
     }));
 
     try {
-      const prompt = `Bạn là Chuyên Gia Ngôn Ngữ Học & Biên Dịch Phim Ảnh, Giáo Dục Tiếng Trung Cao Cấp (như hệ thống của eJOY, 4English, Language Reactor).
-Dưới đây là danh sách các câu trích xuất 100% CHÍNH XÁC từ giọng nói thực tế trong video: "${videoTitle}" (Độ dài: ${duration}s):
+      const prompt = `Bạn là Chuyên Gia Ngôn Ngữ Học & Biên Dịch Phim Ảnh, Giáo Dục Cao Cấp (như hệ thống của eJOY, 4English, Language Reactor).
+Dưới đây là danh sách các câu trích xuất từ âm thanh thực tế trong video: "${videoTitle}" (Độ dài: ${duration}s):
 
 ${JSON.stringify(chunkInput, null, 2)}
 
 NHIỆM VỤ BIÊN TẬP VÀ DỊCH NGHĨA CHUẨN XÁC:
-1. "hanzi": BẮT BUỘC là Chữ Hán Giản Thể chuẩn (Simplified Chinese) khớp 100% với lời nói trong âm thanh. Nếu câu gốc là chữ phồn thể, hãy chuyển sang giản thể.
-2. "vietnamese": Dịch Tiếng Việt chuẩn xác, mượt mà, đúng ngữ cảnh (xưng hô tự nhiên, không dịch máy móc vụng về, giữ trọn vẹn số đếm, danh từ, nghĩa của câu).
+1. "hanzi": 
+   - Nếu lời thoại/âm thanh trong video là Tiếng Trung: BẮT BUỘC giữ đúng Chữ Hán Giản Thể (Simplified Chinese) khớp 100% với lời nói trong âm thanh. Nếu có chữ phồn thể, hãy chuyển sang giản thể.
+   - Nếu lời thoại/âm thanh trong video là Tiếng Việt hoặc ngôn ngữ khác (ví dụ bài hát tiếng Việt): GIỮ NGUYÊN đúng văn bản lời nói/ca từ gốc thực tế, TUYỆT ĐỐI KHÔNG tự bịa hoặc ép dịch sang chữ Hán giả mạo.
+2. "vietnamese": Dịch Tiếng Việt chuẩn xác, mượt mà, đúng ngữ cảnh (nếu gốc là tiếng Việt thì giữ nguyên lời thoại tiếng Việt đúng chính tả).
 3. TUYỆT ĐỐI KHÔNG tự bịa thêm câu mới. GIỮ NGUYÊN đúng số lượng và "id" của từng câu.
-4. "hskLevel": Đánh giá cấp độ HSK chung cho bài ("1", "2", "3", "4", "5", "6").
+4. "hskLevel": Đánh giá cấp độ HSK tương đương ("1", "2", "3", "4", "5", "6").
 5. "category": Phân loại chính xác 1 trong: "Giao Tiếp", "Âm Nhạc", "Phim Ảnh", "Ẩm Thực", "Du Lịch", "Đời Sống", "Tin Tức", "Hoạt Hình".
 
 BẮT BUỘC TRẢ VỀ ĐÚNG JSON THEO ĐỊNH DẠNG:
@@ -795,18 +816,23 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON THEO ĐỊNH DẠNG:
           vietnamese = 'Câu luyện tập tiếng Trung';
         }
 
+        const cleanHanzi = hanzi.replace(/[^\u4e00-\u9fa5]/g, '');
         let py = '';
-        try {
-          py = pinyin(hanzi, { toneType: 'symbol' });
-        } catch (e) { }
+        if (cleanHanzi.length > 0) {
+          try {
+            py = pinyin(hanzi, { toneType: 'symbol' });
+          } catch (e) { }
+        }
 
         // Extract keywords
-        const cleanHanzi = hanzi.replace(/[^\u4e00-\u9fa5]/g, '');
         const keywords = [];
         if (cleanHanzi.length >= 2) {
           keywords.push(cleanHanzi.slice(0, Math.min(2, cleanHanzi.length)));
         } else if (cleanHanzi.length === 1) {
           keywords.push(cleanHanzi);
+        } else if (hanzi) {
+          const words = hanzi.split(/\s+/).filter(Boolean);
+          if (words.length > 0) keywords.push(words[0]);
         }
 
         enrichedList.push({

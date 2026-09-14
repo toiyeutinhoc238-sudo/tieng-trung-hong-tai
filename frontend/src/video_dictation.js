@@ -2176,8 +2176,21 @@ function getLocalCustomVideos() {
   try {
     const saved = localStorage.getItem(`custom_video_dictation_${email}`);
     if (saved) {
-      const list = JSON.parse(saved);
-      if (Array.isArray(list)) return list;
+      let list = JSON.parse(saved);
+      if (Array.isArray(list)) {
+        list = list.map(item => {
+          if (item && Array.isArray(item.sentences)) {
+            item.sentences = item.sentences.map(s => {
+              if (s && s.hanzi) {
+                s.hanzi = s.hanzi.replace(/^\[[\d:.\s-]+\]\s*/, '').trim();
+              }
+              return s;
+            }).filter(s => s && s.hanzi && s.hanzi !== 'Ni hao' && !s.hanzi.startsWith('[00'));
+          }
+          return item;
+        }).filter(item => item && Array.isArray(item.sentences) && item.sentences.length > 0);
+        return list;
+      }
     }
   } catch (e) { }
   return [];
@@ -3370,18 +3383,21 @@ async function handleSaveCustomVideo(e) {
       let endTime = curTime + 4.0;
       let textLine = line;
 
-      // Check for timestamp bracket format: [00:12 - 00:18] or 0:15
-      const bracketMatch = line.match(/^\[\s*([\d:.]+)\s*(?:-|–|to)\s*([\d:.]+)\s*\]\s*(.*)$/i);
-      if (bracketMatch) {
-        const sTime = parseTimeToSeconds(bracketMatch[1]);
-        const eTime = parseTimeToSeconds(bracketMatch[2]);
-        if (sTime !== null) startTime = sTime;
-        if (eTime !== null && eTime > startTime) endTime = eTime;
+      // Robust timestamp bracket format: [00:12 - 00:18], [00 00 - 00:05], etc.
+      const bracketMatch = line.match(/^\[?\s*([\d:.\s]+?)\s*(?:-|–|to)\s*([\d:.\s]+?)\s*\]?\s*(.*)$/i);
+      if (bracketMatch && bracketMatch[1] && bracketMatch[2] && bracketMatch[3]) {
+        const sTime = parseTimeToSeconds(bracketMatch[1].replace(/\s+/g, ':'));
+        const eTime = parseTimeToSeconds(bracketMatch[2].replace(/\s+/g, ':'));
+        if (sTime !== null && !isNaN(sTime)) startTime = sTime;
+        if (eTime !== null && !isNaN(eTime) && eTime > startTime) endTime = eTime;
         textLine = bracketMatch[3].trim();
       }
 
+      // Guarantee that any residual timestamp brackets like [00:00 - 00:05] are removed from textLine
+      textLine = textLine.replace(/^\[[\d:.\s-]+\]\s*/, '').trim();
+
       const parts = textLine.split('|').map(p => p.trim());
-      const hanzi = parts[0] || '';
+      let hanzi = (parts[0] || '').replace(/^\[[\d:.\s-]+\]\s*/, '').trim();
       let pinyin = parts[1] || '';
       let meaning = parts[2] || (parts.length === 2 && !/[a-zA-Zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]/.test(parts[1]) ? parts[1] : 'Câu luyện chép tiếng Trung');
 
