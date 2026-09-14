@@ -8148,19 +8148,14 @@ function renderLessonHeroCardContent(w, index, total) {
               class="vocab-mode-btn ${currentVocabMode === 'translate' ? 'active' : ''}" 
               onclick="window.switchVocabPracticeMode('translate')">
               <i class="fa-solid fa-pen-to-square"></i>
-              <span>Luyện Dịch Theo Gợi Ý</span>
-              <span class="vocab-mode-tag">Cơ bản</span>
+              <span>Luyện Dịch Câu</span>
             </button>
             <button type="button" id="vocab-mode-btn-sentence" 
               class="vocab-mode-btn ${currentVocabMode === 'sentence' ? 'active' : ''}" 
               onclick="window.switchVocabPracticeMode('sentence')">
               <i class="fa-solid fa-wand-magic-sparkles"></i>
-              <span>Tự Đặt Câu Sáng Tạo</span>
-              <span class="vocab-mode-tag vocab-mode-tag-ai">AI Nâng Cao</span>
+              <span>Tự Đặt Câu (AI)</span>
             </button>
-          </div>
-          <div class="vocab-mode-desc-pill" id="vocab-mode-desc-pill">
-            ${currentVocabMode === 'translate' ? '<i class="fa-solid fa-seedling" style="color: #10b981;"></i> Đặt câu theo gợi ý mẫu (Dành cho học viên mới/yếu)' : '<i class="fa-solid fa-robot" style="color: #a855f7;"></i> Tự đặt câu sáng tạo & AI chấm điểm ngữ pháp'}
           </div>
         </div>
 
@@ -8767,16 +8762,14 @@ window.switchVocabPracticeMode = function (mode) {
     }
   });
 
-  // Description Pills
+  // Description Pills (ẩn triệt để cho giao diện gọn gàng)
   const descPills = [
     document.getElementById('vocab-mode-desc-pill'),
     document.getElementById('deck-vocab-mode-desc-pill')
   ];
   descPills.forEach(descPill => {
     if (descPill) {
-      descPill.innerHTML = isSentence
-        ? '<i class="fa-solid fa-robot" style="color: #a855f7;"></i> Tự đặt câu sáng tạo & AI chấm điểm ngữ pháp'
-        : '<i class="fa-solid fa-seedling" style="color: #10b981;"></i> Đặt câu theo gợi ý mẫu (Dành cho học viên mới/yếu)';
+      descPill.style.display = 'none';
     }
   });
 

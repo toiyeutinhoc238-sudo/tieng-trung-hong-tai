@@ -19089,39 +19089,45 @@ body.light-mode .ai-improved-trans {
 
 .vocab-practice-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  flex-wrap: wrap;
-  gap: 10px;
+  justify-content: center;
+  margin-bottom: 14px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .vocab-mode-toggle-group {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  width: 100%;
+  max-width: 100%;
   background: rgba(0, 0, 0, 0.35);
   padding: 4px;
   border-radius: 14px;
   border: 1.5px solid rgba(255, 255, 255, 0.12);
   gap: 6px;
+  box-sizing: border-box;
 }
 
 .vocab-mode-btn {
+  flex: 1;
+  min-width: 0;
   background: transparent;
   border: none;
   color: #94a3b8;
-  padding: 8px 16px;
+  padding: 10px 14px;
   border-radius: 10px;
-  font-size: 0.88rem;
-  font-weight: 700;
+  font-size: 0.92rem;
+  font-weight: 800;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
+  box-sizing: border-box;
+  text-align: center;
 }
 
 .vocab-mode-btn:hover {
@@ -19129,49 +19135,22 @@ body.light-mode .ai-improved-trans {
   background: rgba(255, 255, 255, 0.08);
 }
 
-.vocab-mode-btn.active#vocab-mode-btn-translate {
+.vocab-mode-btn.active#vocab-mode-btn-translate,
+.vocab-mode-btn.active#deck-vocab-mode-btn-translate {
   background: linear-gradient(135deg, #0284c7, #2563eb);
   color: #ffffff;
   box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
 }
 
-.vocab-mode-btn.active#vocab-mode-btn-sentence {
+.vocab-mode-btn.active#vocab-mode-btn-sentence,
+.vocab-mode-btn.active#deck-vocab-mode-btn-sentence {
   background: linear-gradient(135deg, #8b5cf6, #7c3aed);
   color: #ffffff;
   box-shadow: 0 4px 14px rgba(139, 92, 246, 0.35);
 }
 
-.vocab-mode-tag {
-  font-size: 0.72rem;
-  font-weight: 800;
-  padding: 2px 7px;
-  border-radius: 99px;
-  background: rgba(56, 189, 248, 0.2);
-  color: #38bdf8;
-  letter-spacing: 0.3px;
-}
-
-.vocab-mode-btn.active .vocab-mode-tag {
-  background: rgba(255, 255, 255, 0.25);
-  color: #ffffff;
-}
-
-.vocab-mode-tag-ai {
-  background: rgba(168, 85, 247, 0.2);
-  color: #c084fc;
-}
-
 .vocab-mode-desc-pill {
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: #cbd5e1;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  padding: 5px 12px;
-  border-radius: 99px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  display: none !important;
 }
 
 /* Light Mode Styles for Vocab Dual Practice */
@@ -19184,13 +19163,13 @@ body.light-mode .lesson-vocab-practice-card {
 
 html.light-mode .vocab-practice-header,
 body.light-mode .vocab-practice-header {
-  border-bottom-color: #e2e8f0 !important;
+  border-bottom-color: transparent !important;
 }
 
 html.light-mode .vocab-mode-toggle-group,
 body.light-mode .vocab-mode-toggle-group {
   background: #f1f5f9 !important;
-  border-color: #cbd5e1 !important;
+  border: 1.5px solid #cbd5e1 !important;
 }
 
 html.light-mode .vocab-mode-btn,
@@ -19205,23 +19184,19 @@ body.light-mode .vocab-mode-btn:hover {
 }
 
 html.light-mode .vocab-mode-btn.active#vocab-mode-btn-translate,
-body.light-mode .vocab-mode-btn.active#vocab-mode-btn-translate {
+html.light-mode .vocab-mode-btn.active#deck-vocab-mode-btn-translate,
+body.light-mode .vocab-mode-btn.active#vocab-mode-btn-translate,
+body.light-mode .vocab-mode-btn.active#deck-vocab-mode-btn-translate {
   background: linear-gradient(135deg, #0284c7, #2563eb) !important;
   color: #ffffff !important;
 }
 
 html.light-mode .vocab-mode-btn.active#vocab-mode-btn-sentence,
-body.light-mode .vocab-mode-btn.active#vocab-mode-btn-sentence {
+html.light-mode .vocab-mode-btn.active#deck-vocab-mode-btn-sentence,
+body.light-mode .vocab-mode-btn.active#vocab-mode-btn-sentence,
+body.light-mode .vocab-mode-btn.active#deck-vocab-mode-btn-sentence {
   background: linear-gradient(135deg, #8b5cf6, #7c3aed) !important;
   color: #ffffff !important;
-}
-
-html.light-mode .vocab-mode-desc-pill,
-body.light-mode .vocab-mode-desc-pill {
-  background: #f8fafc !important;
-  border-color: #e2e8f0 !important;
-  color: #475569 !important;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03) !important;
 }
 
 html.light-mode input#lesson-typing-input,
