@@ -28,7 +28,7 @@ let YTDLP_PATH = path.join(BIN_DIR, process.platform === 'win32' ? 'yt-dlp.exe' 
 let isYtDlpReady = fs.existsSync(YTDLP_PATH);
 async function ensureYtDlpExists() {
   if (isYtDlpReady) return;
-  
+
   if (!fs.existsSync(BIN_DIR)) {
     fs.mkdirSync(BIN_DIR, { recursive: true });
   }
@@ -454,7 +454,7 @@ export async function extractYouTubeSubtitles(youtubeId) {
   try {
     console.log(`[YouTube Subtitles] Trying secondary yt-dlp inspection for ${youtubeId}...`);
     await ensureYtDlpExists();
-    
+
     const subArgs = [
       videoUrl,
       '--skip-download',
@@ -484,7 +484,7 @@ export async function extractYouTubeSubtitles(youtubeId) {
     if (matchedFile) {
       const fullSubPath = path.join(AUDIO_TEMP_DIR, matchedFile);
       const fileContent = fs.readFileSync(fullSubPath, 'utf-8');
-      try { fs.unlinkSync(fullSubPath); } catch (_) {}
+      try { fs.unlinkSync(fullSubPath); } catch (_) { }
 
       const json3Data = JSON.parse(fileContent);
       const events = json3Data.events || [];
@@ -532,7 +532,7 @@ export async function extractYouTubeSubtitles(youtubeId) {
       for (const f of remaining) {
         fs.unlinkSync(path.join(AUDIO_TEMP_DIR, f));
       }
-    } catch (_) {}
+    } catch (_) { }
   }
 }
 
