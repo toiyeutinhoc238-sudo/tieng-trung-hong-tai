@@ -9,6 +9,7 @@ import Groq, { toFile } from 'groq-sdk';
 import { pinyin } from 'pinyin-pro';
 import YTDlpWrap from 'yt-dlp-wrap';
 import ytdl from '@distube/ytdl-core';
+import { groupWordsIntoSentences } from './sentence_grouper.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -536,6 +537,86 @@ export async function extractYouTubeSubtitles(youtubeId) {
 }
 
 /**
+ * TIER 2A: AssemblyAI High-Precision Audio Engine
+ * Uses acoustic deep learning with vocal isolation, word-level timestamps, and zero YouTube outro hallucinations.
+ */
+export async function transcribeAudioWithAssemblyAI(audioPath) {
+  const apiKey = process.env.ASSEMBLYAI_API_KEY;
+  if (!apiKey) return null;
+
+  try {
+    console.log('[AssemblyAI Engine] Uploading audio track...');
+    const audioBuffer = fs.readFileSync(audioPath);
+    const uploadRes = await fetch('https://api.assemblyai.com/v2/upload', {
+      method: 'POST',
+      headers: {
+        'authorization': apiKey,
+        'content-type': 'application/octet-stream'
+      },
+      body: audioBuffer
+    });
+
+    if (!uploadRes.ok) {
+      console.warn('[AssemblyAI Engine] Upload failed:', uploadRes.status);
+      return null;
+    }
+
+    const { upload_url } = await uploadRes.json();
+    console.log('[AssemblyAI Engine] Audio uploaded. Requesting transcription...');
+
+    const trRes = await fetch('https://api.assemblyai.com/v2/transcript', {
+      method: 'POST',
+      headers: {
+        'authorization': apiKey,
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        audio_url: upload_url,
+        language_detection: true,
+        punctuate: true,
+        format_text: true
+      })
+    });
+
+    if (!trRes.ok) {
+      console.warn('[AssemblyAI Engine] Transcript request failed:', trRes.status);
+      return null;
+    }
+
+    const trData = await trRes.json();
+    const transcriptId = trData.id;
+
+    for (let i = 0; i < 30; i++) {
+      await new Promise(r => setTimeout(r, 3000));
+      const pollRes = await fetch(`https://api.assemblyai.com/v2/transcript/${transcriptId}`, {
+        headers: { 'authorization': apiKey }
+      });
+      if (!pollRes.ok) continue;
+      const pollData = await pollRes.json();
+      if (pollData.status === 'completed') {
+        console.log(`[AssemblyAI Engine] Completed! Detected lang: ${pollData.language_code}, words: ${pollData.words?.length}`);
+        if (pollData.words && pollData.words.length > 0) {
+          const sentences = groupWordsIntoSentences(pollData.words);
+          if (sentences.length > 0) {
+            return {
+              source: `AssemblyAI High-Precision Audio Engine (${pollData.language_code || 'auto'})`,
+              sentences: sentences
+            };
+          }
+        }
+        break;
+      } else if (pollData.status === 'error') {
+        console.warn('[AssemblyAI Engine] Processing error:', pollData.error);
+        break;
+      }
+    }
+  } catch (err) {
+    console.warn('[AssemblyAI Engine] Error:', err.message);
+  }
+  return null;
+}
+
+/**
  * TIER 2: High-Fidelity Audio Download & Voice Activity Detection (VAD) Transcription
  * Used when the video has NO YouTube captions.
  * Guarantees zero phantom sentences / hallucinations on music or silence.
@@ -583,30 +664,20 @@ export async function transcribeAudioWithVAD(youtubeId, videoTitle = '') {
           console.log(`[VAD Audio Engine] Successfully downloaded audio track via client: ${client}`);
           break;
         }
-      } catch (err) {
-        console.warn(`[VAD Audio Engine] yt-dlp client ${client} failed (${err.message}). Trying next...`);
+      } catch (dlErr) {
+        console.warn(`[VAD Audio Engine] Download attempt with client ${client} failed:`, dlErr.message);
       }
     }
 
-    // Strategy 2: Fallback to @distube/ytdl-core if yt-dlp failed
+    // Strategy 2: Fallback to @distube/ytdl-core
     if (!downloaded) {
-      console.log(`[VAD Audio Engine] yt-dlp mobile clients exhausted, falling back to @distube/ytdl-core...`);
       try {
+        console.log(`[VAD Audio Engine] Attempting fallback download via @distube/ytdl-core...`);
+        const stream = ytdl(videoUrl, { quality: 'lowestaudio', filter: 'audioonly' });
+        const writeStream = fs.createWriteStream(audioPath);
+        stream.pipe(writeStream);
         await new Promise((resolve, reject) => {
-          const stream = ytdl(videoUrl, {
-            filter: 'audioonly',
-            quality: 'lowestaudio',
-            requestOptions: {
-              headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-              }
-            }
-          });
-          const writeStream = fs.createWriteStream(audioPath);
-          stream.pipe(writeStream);
-          stream.on('end', () => resolve());
           writeStream.on('finish', () => resolve());
-          stream.on('error', (err) => reject(err));
           writeStream.on('error', (err) => reject(err));
         });
         if (fs.existsSync(audioPath) && fs.statSync(audioPath).size > 2000) {
@@ -622,18 +693,34 @@ export async function transcribeAudioWithVAD(youtubeId, videoTitle = '') {
     }
 
     const fileSizeKB = (fs.statSync(audioPath).size / 1024).toFixed(1);
-    console.log(`[VAD Audio Engine] Audio downloaded successfully (${fileSizeKB} KB). Running Whisper Large v3 with strict VAD...`);
+    console.log(`[VAD Audio Engine] Audio downloaded successfully (${fileSizeKB} KB).`);
 
-    // Call Groq Whisper Large v3 at temperature 0.0 with word & segment timestamps
+    // Tier 2A: AssemblyAI (Accurate lyric/speech detection with zero hallucination outro spam)
+    if (process.env.ASSEMBLYAI_API_KEY) {
+      try {
+        const assemblyRes = await transcribeAudioWithAssemblyAI(audioPath);
+        if (assemblyRes && Array.isArray(assemblyRes.sentences) && assemblyRes.sentences.length > 0) {
+          console.log(`[VAD Audio Engine] AssemblyAI succeeded with ${assemblyRes.sentences.length} sentences!`);
+          return assemblyRes;
+        }
+      } catch (aErr) {
+        console.warn(`[VAD Audio Engine] AssemblyAI failed (${aErr.message}), falling back to Whisper...`);
+      }
+    }
+
+    // Tier 2B: Groq Whisper Large v3 (Fallback)
+    console.log(`[VAD Audio Engine] Running Whisper Large v3 fallback...`);
     const audioBuffer = fs.readFileSync(audioPath);
     const audioFile = await toFile(audioBuffer, `audio_${youtubeId}.m4a`);
+    const isChinese = /[\u4e00-\u9fa5]/.test(videoTitle);
     const transcription = await groq.audio.transcriptions.create({
       file: audioFile,
       model: 'whisper-large-v3',
       temperature: 0.0,
       response_format: 'verbose_json',
       timestamp_granularities: ['segment'],
-      prompt: /[\u4e00-\u9fa5]/.test(videoTitle) ? `Tiếng Trung chuẩn, lời thoại HSK: ${videoTitle}` : (videoTitle ? `Video: ${videoTitle}` : undefined)
+      language: isChinese ? 'zh' : undefined,
+      prompt: isChinese ? 'Tiếng Trung chuẩn HSK, hội thoại chuẩn' : undefined
     });
 
     const segments = transcription.segments || [];
@@ -647,11 +734,11 @@ export async function transcribeAudioWithVAD(youtubeId, videoTitle = '') {
       const compressionRatio = seg.compression_ratio !== undefined ? seg.compression_ratio : 1.0;
       const textClean = cleanSpeechText(seg.text || '');
 
-      // Strict VAD Filter:
-      // 1. If no_speech_prob >= 0.45, it is background music, sound effects, or silence -> DISCARD!
+      // VAD Filter:
+      // 1. If no_speech_prob >= 0.88, it is pure silence or noise -> DISCARD!
       // 2. If compression_ratio >= 2.4, it is Whisper hallucination repetition loop -> DISCARD!
       // 3. If cleaned text is empty or purely symbols -> DISCARD!
-      if (noSpeechProb >= 0.45) {
+      if (noSpeechProb >= 0.88) {
         console.log(`[VAD Gating] Discarded non-speech/music segment: [${seg.start}s - ${seg.end}s] (no_speech_prob: ${noSpeechProb.toFixed(3)}) "${seg.text}"`);
         continue;
       }
