@@ -3086,14 +3086,14 @@ function renderCatalogGrid() {
   if (filteredLessons.length === 0) {
     if (isMyVideosTab) {
       grid.innerHTML = `
-        <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-muted); background: rgba(255,255,255,0.03); border: 1.5px dashed rgba(245, 158, 11, 0.4); border-radius: 20px;">
-          <div style="font-size: 3.2rem; margin-bottom: 14px;">🚀</div>
-          <h3 style="color: #fbbf24; font-size: 1.3rem; margin-bottom: 8px; font-weight: 800;">Tính Năng Thêm Video YouTube (Sắp Ra Mắt)</h3>
+        <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-muted); background: rgba(255,255,255,0.03); border: 1.5px dashed rgba(56, 189, 248, 0.4); border-radius: 20px;">
+          <div style="font-size: 3.2rem; margin-bottom: 14px;">🎬</div>
+          <h3 style="color: #38bdf8; font-size: 1.3rem; margin-bottom: 8px; font-weight: 800;">Bạn Chưa Có Video Cá Nhân Nào</h3>
           <p style="max-width: 520px; margin: 0 auto 16px auto; font-size: 0.92rem; color: var(--text-secondary); line-height: 1.55;">
-            Chức năng dán link YouTube tùy thích để tự động tạo bài luyện chép chính tả & Shadowing đang được hoàn thiện và sẽ sớm ra mắt!
+            Dán bất kỳ link video YouTube nào để AI tự động trích xuất phụ đề, căn mốc giọng nói và tạo bài luyện chép chính tả & Shadowing cho riêng bạn!
           </p>
-          <button class="btn btn-primary" onclick="window.showComingSoonNotice('Thêm Video YouTube (Sắp Ra Mắt)')" style="background: linear-gradient(135deg, #f59e0b, #d97706); border: none; color: #ffffff; padding: 10px 22px; border-radius: 12px; font-weight: 700; font-size: 0.9rem; cursor: pointer;">
-            <i class="fa-solid fa-clock"></i> Sắp Ra Mắt
+          <button class="btn btn-primary" onclick="window.openAddVideoModal()" style="background: linear-gradient(135deg, #0284c7, #2563eb); border: none; color: #ffffff; padding: 10px 22px; border-radius: 12px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
+            <i class="fa-brands fa-youtube"></i> Thêm Video YouTube Ngay
           </button>
         </div>
       `;
@@ -3310,7 +3310,13 @@ function showComingSoonNotice(featureName = 'Thêm Video YouTube') {
 }
 
 function openAddVideoModal() {
-  showComingSoonNotice('Thêm Video YouTube (Sắp Ra Mắt)');
+  const modal = document.getElementById('dict-add-video-modal');
+  if (modal) {
+    modal.style.display = 'flex';
+    setTimeout(() => {
+      document.getElementById('custom-video-url')?.focus();
+    }, 100);
+  }
 }
 
 function closeAddVideoModal() {

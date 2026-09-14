@@ -616,8 +616,8 @@ export async function transcribeAudioWithVAD(youtubeId, videoTitle = '') {
       model: 'whisper-large-v3',
       temperature: 0.0,
       response_format: 'verbose_json',
-      timestamp_granularities: ['segment', 'word'],
-      prompt: `Tiếng Trung HSK, hội thoại chuẩn, lời bài hát tiếng Trung: ${videoTitle}`
+      timestamp_granularities: ['segment'],
+      prompt: /[\u4e00-\u9fa5]/.test(videoTitle) ? `Tiếng Trung chuẩn, lời thoại HSK: ${videoTitle}` : (videoTitle ? `Video: ${videoTitle}` : undefined)
     });
 
     const segments = transcription.segments || [];
