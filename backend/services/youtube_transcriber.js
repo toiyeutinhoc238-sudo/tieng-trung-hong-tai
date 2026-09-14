@@ -9,6 +9,7 @@ import Groq, { toFile } from 'groq-sdk';
 import { pinyin } from 'pinyin-pro';
 import YTDlpWrap from 'yt-dlp-wrap';
 import ytdl from '@distube/ytdl-core';
+import { YoutubeTranscript } from 'youtube-transcript';
 import { groupWordsIntoSentences } from './sentence_grouper.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -43,13 +44,27 @@ async function ensureYtDlpExists() {
   } catch (err) {
     // Global not found, download automatically
     console.log('[System] yt-dlp not found. Downloading automatically via yt-dlp-wrap...');
-    const downloader = YTDlpWrap.default ? YTDlpWrap.default : YTDlpWrap;
-    await downloader.downloadFromGithub(YTDLP_PATH);
+    try {
+      const downloader = YTDlpWrap.default ? YTDlpWrap.default : YTDlpWrap;
+      await downloader.downloadFromGithub(YTDLP_PATH);
+    } catch (ghApiErr) {
+      console.warn('[System] yt-dlp-wrap API failed (possible rate limit). Downloading direct release binary...', ghApiErr.message);
+      const releaseUrl = process.platform === 'win32'
+        ? 'https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe'
+        : 'https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp';
+      const binRes = await fetch(releaseUrl, { redirect: 'follow' });
+      if (!binRes.ok) {
+        throw new Error(`Failed to download yt-dlp release binary: HTTP ${binRes.status}`);
+      }
+      const binBuffer = Buffer.from(await binRes.arrayBuffer());
+      fs.writeFileSync(YTDLP_PATH, binBuffer);
+    }
+
     if (process.platform !== 'win32') {
       fs.chmodSync(YTDLP_PATH, '755');
     }
     isYtDlpReady = true;
-    console.log('[System] yt-dlp downloaded successfully!');
+    console.log('[System] yt-dlp downloaded and verified successfully!');
   }
 }
 
@@ -435,18 +450,87 @@ async function fetchInnerTubeCaptions(youtubeId) {
 }
 
 /**
+ * TIER 1B: Multi-Lingual Transcript Scraper via youtube-transcript
+ * Resilient to datacenter IP blocks, extracts official and auto-generated transcripts with timestamps.
+ */
+export async function fetchFromYoutubeTranscript(youtubeId) {
+  console.log(`[YoutubeTranscript Engine] Querying multi-lingual transcript for ${youtubeId}...`);
+  // Try default (fastest, 1 round-trip) or Chinese explicitly
+  const langPreferences = [null, 'zh-Hans', 'zh'];
+
+  for (const lang of langPreferences) {
+    try {
+      const config = lang ? { lang } : undefined;
+      const raw = await YoutubeTranscript.fetchTranscript(youtubeId, config);
+      if (Array.isArray(raw) && raw.length > 0) {
+        const sentences = [];
+        for (let i = 0; i < raw.length; i++) {
+          const item = raw[i];
+          const textClean = cleanSpeechText(item.text || '');
+          if (!textClean) continue;
+
+          const startSec = parseFloat(((item.offset || 0) / 1000).toFixed(3));
+          const durSec = parseFloat(((item.duration || 3000) / 1000).toFixed(3));
+          const endSec = parseFloat((startSec + durSec).toFixed(3));
+
+          sentences.push({
+            id: sentences.length + 1,
+            startTime: startSec,
+            endTime: endSec,
+            duration: durSec,
+            text: textClean
+          });
+        }
+
+        if (sentences.length > 0) {
+          const merged = mergeSubtitleFragments(sentences);
+          const detectedLang = raw[0].lang || lang || 'auto';
+          console.log(`[YoutubeTranscript Engine] Extracted ${sentences.length} raw snippets -> Merged into ${merged.length} complete sentences (lang: ${detectedLang})!`);
+          return {
+            lang: detectedLang,
+            source: `YouTube Subtitles (youtube-transcript ${detectedLang})`,
+            sentences: merged
+          };
+        }
+      }
+    } catch (err) {
+      if (err.message && err.message.includes('No transcripts are available for this video')) {
+        console.log(`[YoutubeTranscript Engine] No YouTube transcripts available for ${youtubeId}.`);
+        break;
+      }
+    }
+  }
+  return null;
+}
+
+/**
  * TIER 1: Extract YouTube Native & Auto-Generated (ASR) Subtitles
  * Primary: InnerTube Android API (Instant, No 429, matches eJOY & 4English)
+ * Secondary: Multi-lingual HTML scraper (Zero 429 on Datacenter / Render)
  * Fallback: yt-dlp subtitle extraction
  */
 export async function extractYouTubeSubtitles(youtubeId) {
   // 1. Primary: Direct InnerTube Android API
-  const innerTubeRes = await fetchInnerTubeCaptions(youtubeId);
-  if (innerTubeRes && innerTubeRes.sentences && innerTubeRes.sentences.length > 0) {
-    return innerTubeRes;
+  try {
+    const innerTubeRes = await fetchInnerTubeCaptions(youtubeId);
+    if (innerTubeRes && innerTubeRes.sentences && innerTubeRes.sentences.length > 0) {
+      return innerTubeRes;
+    }
+  } catch (err) {
+    console.warn(`[YouTube Subtitles] InnerTube attempt failed:`, err.message);
   }
 
-  // 2. Secondary fallback: yt-dlp if available
+  // 2. Secondary: Resilient Multi-lingual Web Scraper (Zero Datacenter 429 Block)
+  try {
+    const ytTranscriptRes = await fetchFromYoutubeTranscript(youtubeId);
+    if (ytTranscriptRes && ytTranscriptRes.sentences && ytTranscriptRes.sentences.length > 0) {
+      return ytTranscriptRes;
+    }
+  } catch (err) {
+    console.warn(`[YouTube Subtitles] YoutubeTranscript attempt failed:`, err.message);
+  }
+
+  // 3. Tertiary fallback: yt-dlp if available
   const subTempPrefix = `sub_${youtubeId}_${Date.now()}`;
   const subTempBase = path.join(AUDIO_TEMP_DIR, subTempPrefix);
   const videoUrl = `https://www.youtube.com/watch?v=${youtubeId}`;
