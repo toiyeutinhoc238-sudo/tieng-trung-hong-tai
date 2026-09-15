@@ -1107,32 +1107,6 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON THEO ĐỊNH DẠNG:
 }
 
 // In-memory cache of HSK Vocabulary database for accurate lexical difficulty scoring
-let hskWordMap = null;
-function getHskWordMap() {
-  if (hskWordMap) return hskWordMap;
-  hskWordMap = new Map();
-  try {
-    const dbPath = path.join(__dirname, '..', 'database.json');
-    if (fs.existsSync(dbPath)) {
-      const raw = fs.readFileSync(dbPath, 'utf8');
-      const db = JSON.parse(raw);
-      db.forEach(item => {
-        const w = (item.word || item.hanzi || '').trim();
-        const lvl = parseInt(item.level, 10);
-        if (w && lvl >= 1 && lvl <= 6) {
-          if (!hskWordMap.has(w) || hskWordMap.get(w) < lvl) {
-            hskWordMap.set(w, lvl);
-          }
-        }
-      });
-      console.log(`[HSK Classifier] Loaded ${hskWordMap.size} unique HSK words for lexical analysis.`);
-    }
-  } catch (err) {
-    console.warn('[HSK Classifier] Warning loading database.json:', err.message);
-  }
-  return hskWordMap;
-}
-
 export function classifyHskAndCategory(videoTitle, enrichedSentences, aiHskLevel, aiCategory) {
   const title = (videoTitle || '').trim();
   const lowerTitle = title.toLowerCase();
@@ -1154,42 +1128,13 @@ export function classifyHskAndCategory(videoTitle, enrichedSentences, aiHskLevel
     };
   }
 
-  // 2. Lexical word matching from HSK 16,000+ vocabulary database
-  const map = getHskWordMap();
-  const foundLevels = [];
-  const allText = enrichedSentences.map(s => s.hanzi || s.text || '').join('');
-
-  if (map && map.size > 0 && allText.length > 0) {
-    const cleanChinese = allText.replace(/[^\u4e00-\u9fa5]/g, '');
-    for (let len = 4; len >= 1; len--) {
-      for (let i = 0; i <= cleanChinese.length - len; i++) {
-        const sub = cleanChinese.substring(i, i + len);
-        if (map.has(sub)) {
-          foundLevels.push(map.get(sub));
-        }
-      }
-    }
-  }
-
-  let lexicalLevel = '2';
-  if (foundLevels.length > 0) {
-    foundLevels.sort((a, b) => a - b);
-    // 70th percentile represents target learner comprehension level
-    const p70 = foundLevels[Math.floor(foundLevels.length * 0.7)];
-    if (p70 >= 1 && p70 <= 6) {
-      lexicalLevel = String(p70);
-    }
-  }
-
-  // 3. AI / LLM Contextual Decision
-  let finalLevel = lexicalLevel;
-  let source = 'Lexical Vocabulary Analysis';
+  // 2. AI / LLM Contextual Decision (Semantic intelligence, zero memory overhead)
+  let finalLevel = '2';
+  let source = 'Standard Heuristic Default';
 
   if (aiHskLevel && ['1', '2', '3', '4', '5', '6'].includes(String(aiHskLevel))) {
     finalLevel = String(aiHskLevel);
     source = 'AI Semantic Analysis';
-  } else {
-    finalLevel = lexicalLevel;
   }
 
   return {

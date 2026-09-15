@@ -4686,7 +4686,7 @@ export async function extractYouTubeDictation(youtubeId, extractRawOnly = false)
 app.get('/api/dictation/debug-status', (req, res) => {
   res.json({
     status: 'online',
-    commit: 'latest',
+    commit: 'fix-502-render-v2',
     hasGroqKey: !!process.env.GROQ_API_KEY,
     hasGeminiKey: !!process.env.GEMINI_API_KEY,
     hasYoutubeKey: !!process.env.YOUTUBE_API_KEY,
@@ -4697,6 +4697,36 @@ app.get('/api/dictation/debug-status', (req, res) => {
     platform: process.platform,
     timestamp: new Date().toISOString()
   });
+});
+
+// GET /api/dictation/test-subtitles — Diagnostic endpoint to inspect YouTube steps
+app.get('/api/dictation/test-subtitles', async (req, res) => {
+  const id = req.query.id || 'AHSWgUFKF8M';
+  const report = { youtubeId: id, timestamp: new Date().toISOString(), steps: {} };
+  const t0 = Date.now();
+  try {
+    const { fetchVideoMetadata, extractYouTubeSubtitles } = await import('./services/youtube_transcriber.js');
+    const tMeta = Date.now();
+    try {
+      const meta = await fetchVideoMetadata(id);
+      report.steps.metadata = { ok: true, durationMs: Date.now() - tMeta, data: meta };
+    } catch (e) {
+      report.steps.metadata = { ok: false, durationMs: Date.now() - tMeta, error: e.message };
+    }
+    const tSub = Date.now();
+    try {
+      const sub = await extractYouTubeSubtitles(id);
+      report.steps.subtitles = { ok: !!sub, durationMs: Date.now() - tSub, count: sub?.sentences?.length, source: sub?.source };
+    } catch (e) {
+      report.steps.subtitles = { ok: false, durationMs: Date.now() - tSub, error: e.message };
+    }
+    report.totalDurationMs = Date.now() - t0;
+    res.json(report);
+  } catch (err) {
+    report.error = err.message;
+    report.totalDurationMs = Date.now() - t0;
+    res.status(500).json(report);
+  }
 });
 
 // POST /api/dictation/fetch-subtitles — Lấy phụ đề / mốc giọng nói YouTube
