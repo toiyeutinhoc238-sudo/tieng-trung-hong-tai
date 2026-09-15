@@ -28,6 +28,7 @@ let YTDLP_PATH = path.join(BIN_DIR, process.platform === 'win32' ? 'yt-dlp.exe' 
 // Ensure yt-dlp binary exists (Auto-download if missing on Render/Linux)
 let isYtDlpReady = fs.existsSync(YTDLP_PATH);
 async function ensureYtDlpExists() {
+  if (process.platform !== 'win32') return;
   if (isYtDlpReady) return;
 
   if (!fs.existsSync(BIN_DIR)) {
@@ -550,7 +551,9 @@ export async function extractYouTubeSubtitles(youtubeId) {
     console.warn(`[YouTube Subtitles] YoutubeTranscript attempt failed:`, err.message);
   }
 
-  // 3. Tertiary fallback: yt-dlp if available
+  // 3. Tertiary fallback: yt-dlp if available (Windows/localhost only)
+  if (process.platform !== 'win32') return null;
+
   const subTempPrefix = `sub_${youtubeId}_${Date.now()}`;
   const subTempBase = path.join(AUDIO_TEMP_DIR, subTempPrefix);
   const videoUrl = `https://www.youtube.com/watch?v=${youtubeId}`;
@@ -726,6 +729,12 @@ export async function transcribeAudioWithAssemblyAI(audioPath) {
  * Guarantees zero phantom sentences / hallucinations on music or silence.
  */
 export async function transcribeAudioWithVAD(youtubeId, videoTitle = '') {
+  if (process.platform !== 'win32') {
+    // Render/Linux environment: YouTube strictly blocks audio stream downloads on datacenter IPs (429 Rate Limit).
+    // Throw immediately with friendly guidance instead of timing out into 502.
+    throw new Error('Video này không có phụ đề CC (Closed Captions) sẵn trên YouTube. Do YouTube giới hạn tải âm thanh từ máy chủ cloud (429 Rate Limit), bạn vui lòng chọn video có phụ đề CC (hoặc dán trực tiếp câu thoại vào ô bên dưới) nhé!');
+  }
+
   const groq = getGroqClient();
   if (!groq) {
     throw new Error('Groq Whisper AI client is not configured (missing GROQ_API_KEY).');
@@ -739,37 +748,39 @@ export async function transcribeAudioWithVAD(youtubeId, videoTitle = '') {
     let downloaded = false;
     await ensureYtDlpExists();
 
-    // Strategy 1: yt-dlp with mobile client (android)
-    const mobileClients = ['android'];
-    for (const client of mobileClients) {
-      try {
-        const ytDlpArgs = [
-          videoUrl,
-          '-f', '140/ba[ext=m4a]/ba[abr<=64]/ba/b*',
-          '-o', audioPath,
-          '--force-overwrites',
-          '--no-playlist',
-          '--no-check-certificates',
-          '--geo-bypass'
-        ];
+    // Strategy 1: yt-dlp with mobile client (android) - Windows/localhost only
+    if (process.platform === 'win32') {
+      const mobileClients = ['android'];
+      for (const client of mobileClients) {
+        try {
+          const ytDlpArgs = [
+            videoUrl,
+            '-f', '140/ba[ext=m4a]/ba[abr<=64]/ba/b*',
+            '-o', audioPath,
+            '--force-overwrites',
+            '--no-playlist',
+            '--no-check-certificates',
+            '--geo-bypass'
+          ];
 
-        if (process.env.YOUTUBE_COOKIES) {
-          const cookiesPath = path.join(AUDIO_TEMP_DIR, 'cookies.txt');
-          fs.writeFileSync(cookiesPath, process.env.YOUTUBE_COOKIES.replace(/\\n/g, '\n'));
-          ytDlpArgs.push('--cookies', cookiesPath);
-        } else {
-          ytDlpArgs.push('--extractor-args', `youtube:player_client=${client}`);
-          ytDlpArgs.push('--user-agent', 'com.google.android.youtube/19.29.37 (Linux; U; Android 14) gzip');
-        }
+          if (process.env.YOUTUBE_COOKIES) {
+            const cookiesPath = path.join(AUDIO_TEMP_DIR, 'cookies.txt');
+            fs.writeFileSync(cookiesPath, process.env.YOUTUBE_COOKIES.replace(/\\n/g, '\n'));
+            ytDlpArgs.push('--cookies', cookiesPath);
+          } else {
+            ytDlpArgs.push('--extractor-args', `youtube:player_client=${client}`);
+            ytDlpArgs.push('--user-agent', 'com.google.android.youtube/19.29.37 (Linux; U; Android 14) gzip');
+          }
 
-        await execFileAsync(YTDLP_PATH, ytDlpArgs, { timeout: 12000 });
-        if (fs.existsSync(audioPath) && fs.statSync(audioPath).size > 2000) {
-          downloaded = true;
-          console.log(`[VAD Audio Engine] Successfully downloaded audio track via client: ${client}`);
-          break;
+          await execFileAsync(YTDLP_PATH, ytDlpArgs, { timeout: 12000 });
+          if (fs.existsSync(audioPath) && fs.statSync(audioPath).size > 2000) {
+            downloaded = true;
+            console.log(`[VAD Audio Engine] Successfully downloaded audio track via client: ${client}`);
+            break;
+          }
+        } catch (dlErr) {
+          console.warn(`[VAD Audio Engine] Download attempt with client ${client} failed:`, dlErr.message);
         }
-      } catch (dlErr) {
-        console.warn(`[VAD Audio Engine] Download attempt with client ${client} failed:`, dlErr.message);
       }
     }
 
@@ -890,27 +901,35 @@ export async function transcribeAudioWithVAD(youtubeId, videoTitle = '') {
 }
 
 /**
- * Universal Multi-Model LLM JSON Caller (Groq GPT-OSS-120B -> Gemini 2.5 Flash)
+ * Universal Multi-Model LLM JSON Caller (Groq Qwen 27B -> Groq GPT-OSS 20B -> Gemini 3.6 Flash)
  */
 async function callLLMJson(prompt) {
   const groq = getGroqClient();
   if (groq) {
-    try {
-      const res = await groq.chat.completions.create({
-        model: 'openai/gpt-oss-120b',
-        messages: [{ role: 'user', content: prompt }],
-        temperature: 0,
-        response_format: { type: 'json_object' }
-      });
-      return JSON.parse(res.choices[0].message.content);
-    } catch (e120b) {
-      console.warn('[LLM] Groq 120B limit/warn, falling back to Gemini:', e120b.message);
+    const groqModels = ['openai/gpt-oss-20b', 'qwen/qwen3.8-27b', 'openai/gpt-oss-120b'];
+    for (const model of groqModels) {
+      try {
+        const res = await groq.chat.completions.create({
+          model,
+          max_tokens: model.includes('qwen') ? 800 : 1500,
+          messages: [
+            { role: 'system', content: 'You are a professional linguistic editor and translator. Output MUST be valid JSON only.' },
+            { role: 'user', content: prompt }
+          ],
+          temperature: 0,
+          response_format: { type: 'json_object' }
+        });
+        const content = res.choices[0]?.message?.content;
+        if (content) return JSON.parse(content);
+      } catch (eGroq) {
+        console.warn(`[LLM] Groq ${model} warning:`, eGroq.message);
+      }
     }
   }
 
   const geminiKey = getGeminiApiKey();
   if (geminiKey) {
-    const candidateModels = ['gemini-2.5-flash', 'gemini-flash-latest', 'gemini-2.0-flash'];
+    const candidateModels = ['gemini-3.6-flash', 'gemini-flash-latest', 'gemini-2.5-flash-lite', 'gemini-2.0-flash'];
     for (const modelName of candidateModels) {
       try {
         const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${geminiKey}`;
@@ -920,7 +939,8 @@ async function callLLMJson(prompt) {
           body: JSON.stringify({
             contents: [{ role: 'user', parts: [{ text: prompt }] }],
             generationConfig: { responseMimeType: 'application/json', temperature: 0 }
-          })
+          }),
+          signal: AbortSignal.timeout(10000)
         });
         if (res.ok) {
           const gData = await res.json();
@@ -949,21 +969,30 @@ export async function enrichWithPinyinAndContextTranslation(rawItems, videoTitle
   const targetItems = rawItems.slice(0, maxSentences);
   console.log(`[AI Enrichment] Translating and enriching ${targetItems.length} sentences for "${videoTitle}"...`);
   const chunkSize = 25;
-  const enrichedList = [];
   let aiHskLevel = null;
   let aiCategory = null;
 
+  // Split into chunks
+  const chunks = [];
   for (let i = 0; i < targetItems.length; i += chunkSize) {
-    const chunk = targetItems.slice(i, i + chunkSize);
-    const chunkInput = chunk.map((s, idx) => ({
-      id: s.id || (i + idx + 1),
-      startTime: s.startTime,
-      endTime: s.endTime,
-      text: s.text || s.hanzi || ''
-    }));
+    chunks.push({
+      startIdx: i,
+      chunk: targetItems.slice(i, i + chunkSize)
+    });
+  }
 
-    try {
-      const prompt = `Bạn là Chuyên Gia Ngôn Ngữ Học & Biên Dịch Phim Ảnh, Giáo Dục Cao Cấp (như hệ thống của eJOY, 4English, Language Reactor).
+  // Process all chunks in parallel for maximum speed (typically finishes in < 2 seconds total)
+  const processedChunks = await Promise.all(
+    chunks.map(async ({ startIdx, chunk }) => {
+      const chunkInput = chunk.map((s, idx) => ({
+        id: s.id || (startIdx + idx + 1),
+        startTime: s.startTime,
+        endTime: s.endTime,
+        text: s.text || s.hanzi || ''
+      }));
+
+      try {
+        const prompt = `Bạn là Chuyên Gia Ngôn Ngữ Học & Biên Dịch Phim Ảnh, Giáo Dục Cao Cấp (như hệ thống của eJOY, 4English, Language Reactor).
 Dưới đây là danh sách các câu trích xuất từ âm thanh thực tế trong video: "${videoTitle}" (Độ dài: ${duration}s):
 
 ${JSON.stringify(chunkInput, null, 2)}
@@ -990,80 +1019,85 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON THEO ĐỊNH DẠNG:
   ]
 }`;
 
-      const parsed = await callLLMJson(prompt);
-      if (parsed.hskLevel && !aiHskLevel) {
-        const cleanLvl = String(parsed.hskLevel).replace(/\D/g, '');
-        if (['1', '2', '3', '4', '5', '6'].includes(cleanLvl)) {
-          aiHskLevel = cleanLvl;
+        const parsed = await callLLMJson(prompt);
+        if (parsed.hskLevel && !aiHskLevel) {
+          const cleanLvl = String(parsed.hskLevel).replace(/\D/g, '');
+          if (['1', '2', '3', '4', '5', '6'].includes(cleanLvl)) {
+            aiHskLevel = cleanLvl;
+          }
         }
-      }
-      if (parsed.category && !aiCategory) {
-        aiCategory = parsed.category;
-      }
-      const parsedSentences = parsed.sentences || [];
-
-      for (let cIdx = 0; cIdx < chunk.length; cIdx++) {
-        const orig = chunk[cIdx];
-        const match = parsedSentences.find(p => p.id === orig.id) || parsedSentences[cIdx] || {};
-
-        let hanzi = (match.hanzi || orig.text || orig.hanzi || '').trim();
-        let vietnamese = (match.vietnamese || '').trim();
-
-        // Fallback translation if LLM missed it
-        if (!vietnamese && hanzi) {
-          vietnamese = 'Câu luyện tập tiếng Trung';
+        if (parsed.category && !aiCategory) {
+          aiCategory = parsed.category;
         }
 
-        const cleanHanzi = hanzi.replace(/[^\u4e00-\u9fa5]/g, '');
-        let py = '';
-        if (cleanHanzi.length > 0) {
-          try {
-            py = pinyin(hanzi, { toneType: 'symbol' });
-          } catch (e) { }
-        }
+        const parsedSentences = parsed.sentences || [];
+        const resultItems = [];
 
-        // Extract keywords
-        const keywords = [];
-        if (cleanHanzi.length >= 2) {
-          keywords.push(cleanHanzi.slice(0, Math.min(2, cleanHanzi.length)));
-        } else if (cleanHanzi.length === 1) {
-          keywords.push(cleanHanzi);
-        } else if (hanzi) {
-          const words = hanzi.split(/\s+/).filter(Boolean);
-          if (words.length > 0) keywords.push(words[0]);
-        }
+        for (let cIdx = 0; cIdx < chunk.length; cIdx++) {
+          const orig = chunk[cIdx];
+          const match = parsedSentences.find(p => p.id === orig.id) || parsedSentences[cIdx] || {};
 
-        enrichedList.push({
-          id: enrichedList.length + 1,
-          startTime: orig.startTime,
-          endTime: orig.endTime,
-          duration: orig.duration || parseFloat((orig.endTime - orig.startTime).toFixed(3)),
-          hanzi: hanzi,
-          pinyin: py,
-          meaning: vietnamese,
-          keywords: keywords.length > 0 ? keywords : [cleanHanzi.slice(0, 1) || '你']
+          let hanzi = (match.hanzi || orig.text || orig.hanzi || '').trim();
+          let vietnamese = (match.vietnamese || '').trim();
+
+          if (!vietnamese && hanzi) {
+            vietnamese = 'Câu luyện tập';
+          }
+
+          const cleanHanzi = hanzi.replace(/[^\u4e00-\u9fa5]/g, '');
+          let py = '';
+          if (cleanHanzi.length > 0) {
+            try {
+              py = pinyin(hanzi, { toneType: 'symbol' });
+            } catch (e) { }
+          }
+
+          const keywords = [];
+          if (cleanHanzi.length >= 2) {
+            keywords.push(cleanHanzi.slice(0, Math.min(2, cleanHanzi.length)));
+          } else if (cleanHanzi.length === 1) {
+            keywords.push(cleanHanzi);
+          } else if (hanzi) {
+            const words = hanzi.split(/\s+/).filter(Boolean);
+            if (words.length > 0) keywords.push(words[0]);
+          }
+
+          resultItems.push({
+            id: startIdx + cIdx + 1,
+            startTime: orig.startTime,
+            endTime: orig.endTime,
+            duration: orig.duration || parseFloat((orig.endTime - orig.startTime).toFixed(3)),
+            hanzi: hanzi,
+            pinyin: py,
+            meaning: vietnamese,
+            keywords: keywords.length > 0 ? keywords : [cleanHanzi.slice(0, 1) || '你']
+          });
+        }
+        return resultItems;
+      } catch (err) {
+        console.warn(`[AI Enrichment] Chunk error, applying fallback Pinyin & translation:`, err.message);
+        return chunk.map((orig, cIdx) => {
+          const hanzi = (orig.text || orig.hanzi || '').trim();
+          let py = '';
+          try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) { }
+          return {
+            id: startIdx + cIdx + 1,
+            startTime: orig.startTime,
+            endTime: orig.endTime,
+            duration: orig.duration || parseFloat((orig.endTime - orig.startTime).toFixed(3)),
+            hanzi: hanzi,
+            pinyin: py,
+            meaning: hanzi,
+            keywords: [hanzi.slice(0, Math.min(2, hanzi.length))]
+          };
         });
       }
-    } catch (err) {
-      console.warn(`[AI Enrichment] LLM chunk enrichment error, applying fallback Pinyin & translation:`, err.message);
-      // Direct pinyin fallback
-      for (const orig of chunk) {
-        const hanzi = (orig.text || orig.hanzi || '').trim();
-        let py = '';
-        try { py = pinyin(hanzi, { toneType: 'symbol' }); } catch (e) { }
-        enrichedList.push({
-          id: enrichedList.length + 1,
-          startTime: orig.startTime,
-          endTime: orig.endTime,
-          duration: orig.duration || parseFloat((orig.endTime - orig.startTime).toFixed(3)),
-          hanzi: hanzi,
-          pinyin: py,
-          meaning: 'Câu đàm thoại tiếng Trung',
-          keywords: [hanzi.slice(0, Math.min(2, hanzi.length))]
-        });
-      }
-    }
-  }
+    })
+  );
+
+  const enrichedList = processedChunks.flat();
+  // Ensure contiguous IDs
+  enrichedList.forEach((s, idx) => { s.id = idx + 1; });
 
   return {
     sentences: enrichedList,
