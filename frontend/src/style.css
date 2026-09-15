@@ -1151,7 +1151,96 @@ body.light-mode .profile-dropdown-menu li a,
   width: 100%;
   perspective: 1200px;
   -webkit-perspective: 1200px;
-  height: 360px;
+  min-height: 420px;
+  height: 420px;
+  position: relative;
+}
+
+/* Swipe Track for Flashcard (Tinder-style swipe) */
+.flashcard-swipe-track {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  transform-origin: center bottom;
+  will-change: transform, opacity;
+}
+
+/* Dynamic Swipe Feedback Stamps */
+.swipe-stamp {
+  position: absolute;
+  top: 24px;
+  z-index: 50;
+  padding: 8px 18px;
+  border-radius: 12px;
+  font-weight: 900;
+  font-size: 1.15rem;
+  letter-spacing: 1px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.swipe-stamp.stamp-memorized {
+  left: 20px;
+  color: #10b981;
+  border: 3px solid #10b981;
+  background: rgba(16, 185, 129, 0.22);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transform: rotate(-12deg);
+}
+
+.swipe-stamp.stamp-unmemorized {
+  right: 20px;
+  color: #ef4444;
+  border: 3px solid #ef4444;
+  background: rgba(239, 68, 68, 0.22);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transform: rotate(12deg);
+}
+
+/* Gesture Helper Bar */
+.flashcard-swipe-hint-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  padding: 6px 16px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-glass);
+  margin-top: 6px;
+  margin-bottom: 2px;
+  user-select: none;
+}
+
+.flashcard-swipe-hint-bar .hint-swipe-left {
+  color: #ef4444;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.flashcard-swipe-hint-bar .hint-swipe-right {
+  color: #10b981;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.flashcard-swipe-hint-bar .hint-separator {
+  opacity: 0.35;
 }
 
 .flashcard-card {
@@ -1181,7 +1270,7 @@ body.light-mode .profile-dropdown-menu li a,
   transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
   border-radius: var(--radius-xl);
-  padding: 32px;
+  padding: 28px 24px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -1189,6 +1278,8 @@ body.light-mode .profile-dropdown-menu li a,
   border: 1px solid var(--border-glass);
   box-sizing: border-box;
   transition: opacity 0.25s ease;
+  overflow-y: auto;
+  scrollbar-width: thin;
 }
 
 /* Front & Back specific background styling */
@@ -5108,9 +5199,89 @@ button, input, select, textarea, .btn, .nav-item, .quiz-option-btn, .speaker-btn
 }
 
 @media (max-width: 768px) {
+  .flashcard-card-container {
+    min-height: 430px !important;
+    height: 430px !important;
+    margin-bottom: 8px !important;
+  }
   .flashcard-card {
-    min-height: 320px !important;
-    padding: 16px !important;
+    min-height: 100% !important;
+    height: 100% !important;
+    padding: 0 !important;
+  }
+  .card-side {
+    padding: 18px 16px 14px 16px !important;
+    border-radius: 22px !important;
+  }
+  .chinese-word {
+    font-size: 4.4rem !important;
+  }
+  .pinyin-text {
+    font-size: 1.85rem !important;
+    margin-bottom: 4px !important;
+  }
+  .meaning-text {
+    font-size: 1.15rem !important;
+    margin-bottom: 8px !important;
+    line-height: 1.35 !important;
+  }
+  .example-box {
+    padding: 10px 14px !important;
+    margin: 6px 0 !important;
+    border-radius: 12px !important;
+  }
+  .example-zh {
+    font-size: 1rem !important;
+    gap: 8px !important;
+  }
+  .example-vi {
+    font-size: 0.85rem !important;
+  }
+  .card-action-bar {
+    padding-top: 4px !important;
+    margin-top: 4px !important;
+  }
+  .card-hud-controls {
+    gap: 8px !important;
+    margin-top: 14px !important;
+    margin-bottom: 12px !important;
+    width: 100% !important;
+    justify-content: space-between !important;
+  }
+  .btn-hud {
+    padding: 10px 8px !important;
+    font-size: 0.82rem !important;
+    flex: 1 1 auto !important;
+    max-width: none !important;
+    gap: 5px !important;
+    border-radius: 40px !important;
+  }
+  #mark-starred-btn span {
+    display: none !important; /* Icon-only star on mobile to fit all 5 buttons cleanly */
+  }
+  #mark-starred-btn {
+    flex: 0 0 42px !important;
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    max-width: 42px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+  }
+  #prev-card-btn, #next-card-btn {
+    flex: 0 0 42px !important;
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+  }
+  .card-viewport {
+    gap: 10px !important;
+    padding-bottom: 80px !important; /* Prevents floating chat & theme buttons from overlapping HUD */
+  }
+  .flashcard-swipe-hint-bar {
+    font-size: 0.78rem !important;
+    padding: 5px 12px !important;
+    gap: 8px !important;
   }
   .study-controls {
     flex-wrap: wrap;
@@ -6855,6 +7026,13 @@ html.light-mode .card-example-zh-back {
 }
 html.light-mode .card-example-vi-back {
   color: #334155 !important;
+}
+html.light-mode .flashcard-swipe-hint-bar,
+html.light .flashcard-swipe-hint-bar,
+html:not(.dark) .flashcard-swipe-hint-bar {
+  background: rgba(0, 0, 0, 0.04) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  color: #64748b !important;
 }
 
 /* ─── SYSTEM & GAME MODALS (Solid High Contrast in Both Modes) ─── */

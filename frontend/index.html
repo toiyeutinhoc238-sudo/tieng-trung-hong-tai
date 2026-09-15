@@ -2047,72 +2047,90 @@
 
             </div>
 
-            <!-- Rotating Card Container (Flip Flashcard Mode) -->
-            <div class="flashcard-card-container" id="flashcard-card-container"
-              style="position: relative; width: 100%; height: 360px; display: none;">
-              <div class="flashcard-card" id="flashcard-card">
-
-                <!-- Card Front Side -->
-                <div class="card-side card-front">
-                  <div class="card-header-tags">
-                    <span class="badge badge-level" id="card-level-front">HSK 1</span>
-                    <span class="badge badge-category" id="card-category-front">Động từ</span>
-                  </div>
-
-                  <div class="card-content-main">
-                    <h2 class="chinese-word" id="card-word-front">学习</h2>
-                  </div>
-
-                  <div class="card-action-bar">
-                    <button id="speak-btn-front" class="speak-btn circle-btn" title="Nghe phát âm">
-                      <i class="fa-solid fa-volume-high"></i>
-                    </button>
-                    <span class="click-hint"><i class="fa-solid fa-rotate"></i> Click để lật mặt sau</span>
-                    <div class="placeholder-icon"></div>
-                  </div>
+            <!-- Rotating Card Container (Flip Flashcard Mode) with Swipe Gestures -->
+            <div class="flashcard-card-container" id="flashcard-card-container" style="display: none;">
+              <!-- Swipe Track & Gesture Badges -->
+              <div class="flashcard-swipe-track" id="flashcard-swipe-track">
+                
+                <!-- Dynamic Swipe Feedback Stamps (Tinder / Anki style) -->
+                <div class="swipe-stamp stamp-memorized" id="swipe-stamp-memorized">
+                  <i class="fa-solid fa-circle-check"></i> <span>ĐÃ THUỘC</span>
+                </div>
+                <div class="swipe-stamp stamp-unmemorized" id="swipe-stamp-unmemorized">
+                  <i class="fa-solid fa-circle-xmark"></i> <span>CHƯA THUỘC</span>
                 </div>
 
-                <!-- Card Back Side -->
-                <div class="card-side card-back">
-                  <div class="card-header-tags">
-                    <span class="badge badge-level" id="card-level-back">HSK 1</span>
-                    <span class="badge badge-category" id="card-category-back">Động từ</span>
-                  </div>
+                <div class="flashcard-card" id="flashcard-card">
 
-                  <div class="card-content-main">
-                    <div class="pinyin-text" id="card-pinyin-back">xuéxí</div>
-                    <div class="meaning-text" id="card-meaning-back">học tập, học hành</div>
-
-                    <div class="example-box">
-                      <div class="example-title">Ví dụ:</div>
-                      <div class="example-zh">
-                        <span id="card-example-zh-back">我喜欢学习汉语。</span>
-                        <button id="speak-example-btn" class="speak-example-btn" title="Nghe câu ví dụ">
-                          <i class="fa-solid fa-volume-low"></i>
-                        </button>
-                      </div>
-                      <div class="example-vi" id="card-example-vi-back">tôi thích học tiếng trung.</div>
+                  <!-- Card Front Side -->
+                  <div class="card-side card-front">
+                    <div class="card-header-tags">
+                      <span class="badge badge-level" id="card-level-front">HSK 1</span>
+                      <span class="badge badge-category" id="card-category-front">Động từ</span>
                     </div>
-                  </div>
 
-                  <div class="card-action-bar" style="justify-content: space-between; display: flex; width: 100%;">
-                    <!-- Quick add to notebook dropdown selector -->
-                    <div class="fc-quick-save-wrapper" style="position: relative;">
-                      <button id="fc-quick-save-btn" class="btn btn-outline btn-sm"
-                        style="font-size: 0.75rem; padding: 6px 12px; display: flex; align-items: center; gap: 6px; border-radius: 20px; border-color: var(--border-glass-hover);">
-                        <i class="fa-solid fa-folder-plus text-primary"></i> + Sổ tay
+                    <div class="card-content-main">
+                      <h2 class="chinese-word" id="card-word-front">学习</h2>
+                    </div>
+
+                    <div class="card-action-bar">
+                      <button id="speak-btn-front" class="speak-btn circle-btn" title="Nghe phát âm">
+                        <i class="fa-solid fa-volume-high"></i>
                       </button>
-                      <div id="fc-quick-save-dropdown" class="glass-panel"
-                        style="display: none; position: absolute; left: 0; bottom: 110%; z-index: 100; min-width: 180px; padding: 8px; flex-direction: column; gap: 6px; background: var(--bg-card); border: 1px solid var(--border-glass); border-radius: 8px; box-shadow: 0 -4px 16px rgba(0,0,0,0.3);">
-                        <!-- Dynamically rendered custom lists -->
+                      <span class="click-hint"><i class="fa-solid fa-rotate"></i> Chạm để lật mặt sau</span>
+                      <div class="placeholder-icon"></div>
+                    </div>
+                  </div>
+
+                  <!-- Card Back Side -->
+                  <div class="card-side card-back">
+                    <div class="card-header-tags">
+                      <span class="badge badge-level" id="card-level-back">HSK 1</span>
+                      <span class="badge badge-category" id="card-category-back">Động từ</span>
+                    </div>
+
+                    <div class="card-content-main">
+                      <div class="pinyin-text" id="card-pinyin-back">xuéxí</div>
+                      <div class="meaning-text" id="card-meaning-back">học tập, học hành</div>
+
+                      <div class="example-box">
+                        <div class="example-title">Ví dụ:</div>
+                        <div class="example-zh">
+                          <span id="card-example-zh-back">我喜欢学习汉语。</span>
+                          <button id="speak-example-btn" class="speak-example-btn" title="Nghe câu ví dụ">
+                            <i class="fa-solid fa-volume-low"></i>
+                          </button>
+                        </div>
+                        <div class="example-vi" id="card-example-vi-back">tôi thích học tiếng trung.</div>
                       </div>
                     </div>
 
-                    <span class="click-hint"><i class="fa-solid fa-rotate"></i> Click để lật mặt trước</span>
-                  </div>
-                </div>
+                    <div class="card-action-bar" style="justify-content: space-between; display: flex; width: 100%;">
+                      <!-- Quick add to notebook dropdown selector -->
+                      <div class="fc-quick-save-wrapper" style="position: relative;">
+                        <button id="fc-quick-save-btn" class="btn btn-outline btn-sm"
+                          style="font-size: 0.75rem; padding: 6px 12px; display: flex; align-items: center; gap: 6px; border-radius: 20px; border-color: var(--border-glass-hover);">
+                          <i class="fa-solid fa-folder-plus text-primary"></i> + Sổ tay
+                        </button>
+                        <div id="fc-quick-save-dropdown" class="glass-panel"
+                          style="display: none; position: absolute; left: 0; bottom: 110%; z-index: 100; min-width: 180px; padding: 8px; flex-direction: column; gap: 6px; background: var(--bg-card); border: 1px solid var(--border-glass); border-radius: 8px; box-shadow: 0 -4px 16px rgba(0,0,0,0.3);">
+                          <!-- Dynamically rendered custom lists -->
+                        </div>
+                      </div>
 
+                      <span class="click-hint"><i class="fa-solid fa-rotate"></i> Chạm để lật mặt trước</span>
+                    </div>
+                  </div>
+
+                </div>
               </div>
+            </div>
+
+            <!-- Sleek Gesture Helper Bar for Mobile & Desktop -->
+            <div class="flashcard-swipe-hint-bar" id="flashcard-swipe-hint-bar">
+              <span class="hint-swipe-left"><i class="fa-solid fa-angles-left"></i> Vuốt trái: Chưa thuộc</span>
+              <span class="hint-separator">•</span>
+              <span class="hint-swipe-right">Vuốt phải: Đã thuộc <i class="fa-solid fa-angles-right"></i></span>
             </div>
 
             <!-- Typing Mode Container (Hidden by default) -->

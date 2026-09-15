@@ -2630,8 +2630,256 @@ function showToast(message, isError = false) {
 }
 window.showToast = showToast;
 
+// --- FLASHCARD TOUCH & MOUSE SWIPE GESTURES (Tinder / Anki Mode) ---
+let flashcardSwipeInitialized = false;
+function initFlashcardSwipe() {
+  if (flashcardSwipeInitialized) return;
+  const track = document.getElementById('flashcard-swipe-track');
+  const stampMemorized = document.getElementById('swipe-stamp-memorized');
+  const stampUnmemorized = document.getElementById('swipe-stamp-unmemorized');
+  if (!track) return;
+  flashcardSwipeInitialized = true;
+
+  let startX = 0;
+  let startY = 0;
+  let currentX = 0;
+  let currentY = 0;
+  let isDragging = false;
+  let isSwipingHorizontal = false;
+  let startTime = 0;
+  let hasMovedFar = false;
+  let isAnimatingOut = false;
+
+  const resetTrackPosition = (withAnimation = true) => {
+    if (withAnimation) {
+      track.style.transition = 'transform 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s ease';
+    } else {
+      track.style.transition = 'none';
+    }
+    track.style.transform = 'translate3d(0px, 0px, 0px) rotate(0deg)';
+    track.style.opacity = '1';
+    if (stampMemorized) stampMemorized.style.opacity = '0';
+    if (stampUnmemorized) stampUnmemorized.style.opacity = '0';
+  };
+
+  const handleDragStart = (clientX, clientY, target) => {
+    if (isAnimatingOut) return false;
+    // Do not initiate swipe if interacting with buttons, links, or dropdowns
+    if (target.closest('button') || target.closest('a') || target.closest('.fc-quick-save-wrapper') || target.closest('.speak-btn') || target.closest('.speak-example-btn')) {
+      return false;
+    }
+    startX = clientX;
+    startY = clientY;
+    currentX = clientX;
+    currentY = clientY;
+    isDragging = true;
+    isSwipingHorizontal = false;
+    hasMovedFar = false;
+    window.__isCardDraggingOrSwiped = false;
+    startTime = Date.now();
+    track.style.transition = 'none';
+    return true;
+  };
+
+  const handleDragMove = (clientX, clientY, e) => {
+    if (!isDragging || isAnimatingOut) return;
+    currentX = clientX;
+    currentY = clientY;
+    const diffX = currentX - startX;
+    const diffY = currentY - startY;
+
+    if (!isSwipingHorizontal) {
+      if (Math.abs(diffX) > 10 && Math.abs(diffX) > Math.abs(diffY)) {
+        isSwipingHorizontal = true;
+        window.__isCardDraggingOrSwiped = true;
+      } else if (Math.abs(diffY) > 12) {
+        // Vertical scroll dominates, let page scroll naturally
+        isDragging = false;
+        resetTrackPosition(false);
+        return;
+      }
+    }
+
+    if (isSwipingHorizontal) {
+      if (e && e.cancelable) e.preventDefault();
+      hasMovedFar = true;
+      window.__isCardDraggingOrSwiped = true;
+
+      // Realistic Tinder-style tilt rotation
+      const rotateDeg = (diffX / 300) * 14;
+      track.style.transform = `translate3d(${diffX}px, ${diffY * 0.15}px, 0px) rotate(${rotateDeg}deg)`;
+
+      // Dynamic stamp badges
+      if (diffX > 15) {
+        const memOpacity = Math.min(1, Math.max(0, (diffX - 15) / 80));
+        if (stampMemorized) stampMemorized.style.opacity = memOpacity.toString();
+        if (stampUnmemorized) stampUnmemorized.style.opacity = '0';
+      } else if (diffX < -15) {
+        const unmemOpacity = Math.min(1, Math.max(0, (-diffX - 15) / 80));
+        if (stampUnmemorized) stampUnmemorized.style.opacity = unmemOpacity.toString();
+        if (stampMemorized) stampMemorized.style.opacity = '0';
+      } else {
+        if (stampMemorized) stampMemorized.style.opacity = '0';
+        if (stampUnmemorized) stampUnmemorized.style.opacity = '0';
+      }
+    }
+  };
+
+  const handleDragEnd = () => {
+    if (!isDragging || isAnimatingOut) return;
+    isDragging = false;
+
+    if (!isSwipingHorizontal || !hasMovedFar) {
+      resetTrackPosition(true);
+      setTimeout(() => { window.__isCardDraggingOrSwiped = false; }, 80);
+      return;
+    }
+
+    const diffX = currentX - startX;
+    const elapsed = Date.now() - startTime;
+    const velocity = Math.abs(diffX) / Math.max(1, elapsed);
+    const threshold = 65;
+
+    if (diffX > threshold || (diffX > 30 && velocity > 0.4)) {
+      // SWIPE RIGHT -> ĐÃ THUỘC
+      triggerSwipeAction('right');
+    } else if (diffX < -threshold || (diffX < -30 && velocity > 0.4)) {
+      // SWIPE LEFT -> CHƯA THUỘC
+      triggerSwipeAction('left');
+    } else {
+      // Snap back if threshold not met
+      resetTrackPosition(true);
+      setTimeout(() => { window.__isCardDraggingOrSwiped = false; }, 80);
+    }
+  };
+
+  const triggerSwipeAction = (direction) => {
+    isAnimatingOut = true;
+    window.__isCardDraggingOrSwiped = true;
+    stopAutoplay();
+
+    // Fly out animation
+    const outX = direction === 'right' ? (window.innerWidth + 200) : -(window.innerWidth + 200);
+    const outRotate = direction === 'right' ? 24 : -24;
+
+    track.style.transition = 'transform 0.22s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.2s ease';
+    track.style.transform = `translate3d(${outX}px, 0px, 0px) rotate(${outRotate}deg)`;
+    track.style.opacity = '0';
+
+    if (direction === 'right' && stampMemorized) stampMemorized.style.opacity = '1';
+    if (direction === 'left' && stampUnmemorized) stampUnmemorized.style.opacity = '1';
+
+    if (filteredList && filteredList.length > 0 && currentIndex < filteredList.length) {
+      const current = filteredList[currentIndex];
+      const previousId = current.id;
+
+      if (direction === 'right') {
+        // ĐÃ THUỘC
+        if (!current.isMemorized) {
+          toggleWordMemorized(current.id);
+        } else {
+          showToast('Đã thuộc từ này! 🎉 (+100 điểm)');
+        }
+        if (current.isWrong && typeof setWordWrong === 'function') {
+          setWordWrong(current.id, false);
+        }
+      } else {
+        // CHƯA THUỘC
+        if (current.isMemorized) {
+          toggleWordMemorized(current.id);
+        } else if (!current.isStudied) {
+          markWordAsStudied(current.id);
+          updateStats();
+        }
+        if (typeof setWordWrong === 'function') {
+          setWordWrong(current.id, true);
+        }
+        showToast('Chưa thuộc ⚠️ Đã lưu vào danh sách ôn tập');
+      }
+
+      setTimeout(() => {
+        const stillInList = filteredList.some(w => w.id === previousId);
+        if (stillInList) {
+          nextCard();
+        } else {
+          if (currentIndex >= filteredList.length) currentIndex = 0;
+          resetCardOrientation();
+        }
+
+        // Entrance animation for next card
+        track.style.transition = 'none';
+        track.style.transform = 'scale(0.92)';
+        track.style.opacity = '0';
+        if (stampMemorized) stampMemorized.style.opacity = '0';
+        if (stampUnmemorized) stampUnmemorized.style.opacity = '0';
+
+        requestAnimationFrame(() => {
+          track.style.transition = 'transform 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.15), opacity 0.18s ease';
+          track.style.transform = 'scale(1)';
+          track.style.opacity = '1';
+          setTimeout(() => {
+            isAnimatingOut = false;
+            hasMovedFar = false;
+            window.__isCardDraggingOrSwiped = false;
+          }, 230);
+        });
+      }, 220);
+    } else {
+      setTimeout(() => {
+        resetTrackPosition(false);
+        isAnimatingOut = false;
+        hasMovedFar = false;
+        window.__isCardDraggingOrSwiped = false;
+      }, 240);
+    }
+  };
+
+  // Touch handlers
+  track.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      handleDragStart(e.touches[0].clientX, e.touches[0].clientY, e.target);
+    }
+  }, { passive: true });
+
+  window.addEventListener('touchmove', (e) => {
+    if (isDragging && e.touches.length > 0) {
+      handleDragMove(e.touches[0].clientX, e.touches[0].clientY, e);
+    }
+  }, { passive: false });
+
+  window.addEventListener('touchend', () => {
+    handleDragEnd();
+  });
+
+  window.addEventListener('touchcancel', () => {
+    isDragging = false;
+    resetTrackPosition(true);
+  });
+
+  // Mouse handlers for desktop/testing
+  track.addEventListener('mousedown', (e) => {
+    if (e.button === 0) {
+      const ok = handleDragStart(e.clientX, e.clientY, e.target);
+      if (ok) e.preventDefault();
+    }
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+      handleDragMove(e.clientX, e.clientY, e);
+    }
+  });
+
+  window.addEventListener('mouseup', () => {
+    handleDragEnd();
+  });
+}
+
 // --- EVENT LISTENERS ---
 function setupEventListeners() {
+  // Initialize Touch & Mouse Swipe Gesture on Flashcards
+  initFlashcardSwipe();
+
   // Handle browser back button to always return to Home view
   window.history.pushState({ page: 'app' }, '', '');
   window.addEventListener('popstate', (e) => {
@@ -2934,6 +3182,11 @@ function setupEventListeners() {
 
   // Card Flip Click
   cardElement.addEventListener('click', (e) => {
+    // Prevent flip if swipe gesture just occurred
+    if (window.__isCardDraggingOrSwiped) {
+      window.__isCardDraggingOrSwiped = false;
+      return;
+    }
     // Prevent flip if clicking a button, quick-save wrapper, or example box inside card actions
     if (e.target.closest('.circle-btn') || e.target.closest('.speak-example-btn') || e.target.closest('.example-box') || e.target.closest('.fc-quick-save-wrapper')) {
       return;
