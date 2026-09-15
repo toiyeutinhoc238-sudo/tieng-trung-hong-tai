@@ -2277,7 +2277,13 @@ window.autoGenerateAllWithAI = async function () {
 
     if (!res.ok) {
       const errData = await res.json().catch(() => ({}));
-      showToast(`Lỗi máy chủ: ${errData.error || res.status}`, true);
+      const msg = errData.error || res.status;
+      showToast(`Lỗi máy chủ: ${msg}`, true);
+      const textarea = document.getElementById('custom-video-subtitles');
+      if (textarea && !textarea.value.trim()) {
+        textarea.placeholder = "👉 Mẹo tiện lợi: Mở video trên YouTube, bấm '...' -> 'Hiện bản ghi lời' (Show transcript), bôi đen copy toàn bộ và dán vào đây, sau đó bấm nút 'Dịch Tiếng Trung' nhé!";
+        textarea.focus();
+      }
       return;
     }
 
@@ -2337,6 +2343,26 @@ window.autoGenerateAllWithAI = async function () {
       btn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> ✨ AI Tự Động Trích Xuất & Dịch (1-Chạm)';
     }
   }
+};
+
+window.handleSubtitleFileUpload = function (event) {
+  const file = event.target?.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const content = e.target?.result;
+    if (content) {
+      const textarea = document.getElementById('custom-video-subtitles');
+      if (textarea) {
+        textarea.value = content;
+        showToast(`📁 Đã nạp thành công file "${file.name}"! Bấm "Dịch Tiếng Trung" nếu cần dịch sang Chữ Hán.`);
+      }
+    }
+  };
+  reader.onerror = function () {
+    showToast("Không thể đọc file phụ đề!", true);
+  };
+  reader.readAsText(file);
 };
 
 window.fetchYouTubeSubtitles = window.autoGenerateAllWithAI;
@@ -3374,28 +3400,84 @@ async function handleSaveCustomVideo(e) {
 
   let sentences = [];
   if (rawSubtitles) {
-    const lines = rawSubtitles.split('\n').map(l => l.trim()).filter(Boolean);
-    let curTime = 2.0;
+    // 1. Detect SRT / VTT formats
+    let parsedUnits = [];
+    if (rawSubtitles.includes('-->')) {
+      const blocks = rawSubtitles.split(/\n\s*\n/);
+      for (const block of blocks) {
+        const bLines = block.split('\n').map(l => l.trim()).filter(Boolean);
+        const arrowLine = bLines.find(l => l.includes('-->'));
+        if (arrowLine) {
+          const [sStr, eStr] = arrowLine.split('-->').map(s => s.trim().split(' ')[0]);
+          const sTime = parseTimeToSeconds(sStr.replace(',', '.'));
+          const eTime = parseTimeToSeconds(eStr.replace(',', '.'));
+          const textLines = bLines.filter(l => l !== arrowLine && !/^\d+$/.test(l) && !l.startsWith('WEBVTT'));
+          const text = textLines.join(' ').trim();
+          if (text && sTime !== null) {
+            parsedUnits.push({ startTime: sTime, endTime: eTime || (sTime + 3), textLine: text });
+          }
+        }
+      }
+    }
 
-    for (let idx = 0; idx < lines.length; idx++) {
-      const line = lines[idx];
-      let startTime = curTime;
-      let endTime = curTime + 4.0;
-      let textLine = line;
-
-      // Robust timestamp bracket format: [00:12 - 00:18], [00 00 - 00:05], etc.
-      const bracketMatch = line.match(/^\[?\s*([\d:.\s]+?)\s*(?:-|–|to)\s*([\d:.\s]+?)\s*\]?\s*(.*)$/i);
-      if (bracketMatch && bracketMatch[1] && bracketMatch[2] && bracketMatch[3]) {
-        const sTime = parseTimeToSeconds(bracketMatch[1].replace(/\s+/g, ':'));
-        const eTime = parseTimeToSeconds(bracketMatch[2].replace(/\s+/g, ':'));
-        if (sTime !== null && !isNaN(sTime)) startTime = sTime;
-        if (eTime !== null && !isNaN(eTime) && eTime > startTime) endTime = eTime;
-        textLine = bracketMatch[3].trim();
+    // 2. If not SRT, handle YouTube 2-line transcript and normal lines
+    if (parsedUnits.length === 0) {
+      const timeOnlyRegex = /^(\d{1,2}:)?\d{1,2}:\d{2}$/;
+      const rawLines = rawSubtitles.split('\n').map(l => l.trim()).filter(Boolean);
+      const lines = [];
+      let i = 0;
+      while (i < rawLines.length) {
+        if (timeOnlyRegex.test(rawLines[i]) && rawLines[i + 1] && !timeOnlyRegex.test(rawLines[i + 1])) {
+          lines.push(rawLines[i] + ' ' + rawLines[i + 1]);
+          i += 2;
+        } else {
+          lines.push(rawLines[i]);
+          i++;
+        }
       }
 
-      // Guarantee that any residual timestamp brackets like [00:00 - 00:05] are removed from textLine
-      textLine = textLine.replace(/^\[[\d:.\s-]+\]\s*/, '').trim();
+      let curTime = 2.0;
+      for (let idx = 0; idx < lines.length; idx++) {
+        const line = lines[idx];
+        let startTime = null;
+        let endTime = null;
+        let textLine = line;
 
+        // A. Range bracket: [00:12 - 00:18] or 00:12 - 00:18
+        const rangeMatch = line.match(/^\[?\s*([\d:.\s]+?)\s*(?:-|–|to)\s*([\d:.\s]+?)\s*\]?\s*(.*)$/i);
+        if (rangeMatch && rangeMatch[1] && rangeMatch[2]) {
+          startTime = parseTimeToSeconds(rangeMatch[1].replace(/\s+/g, ':'));
+          endTime = parseTimeToSeconds(rangeMatch[2].replace(/\s+/g, ':'));
+          textLine = rangeMatch[3];
+        } else {
+          // B. Single timestamp prefix: [0:17] text or 0:17 text
+          const singleMatch = line.match(/^\[?(\d{1,2}:\d{2}(?::\d{2})?(?:\.\d+)?)\]?\s*(.*)$/);
+          if (singleMatch) {
+            startTime = parseTimeToSeconds(singleMatch[1]);
+            textLine = singleMatch[2];
+            if (idx + 1 < lines.length) {
+              const nextSingle = lines[idx + 1].match(/^\[?(\d{1,2}:\d{2}(?::\d{2})?(?:\.\d+)?)\]?/);
+              if (nextSingle) {
+                const nextStart = parseTimeToSeconds(nextSingle[1]);
+                if (nextStart && nextStart > startTime) endTime = nextStart;
+              }
+            }
+          }
+        }
+
+        if (startTime === null || isNaN(startTime)) startTime = curTime;
+        const duration = Math.max(3, Math.min(10, textLine.length * 0.55));
+        if (endTime === null || isNaN(endTime) || endTime <= startTime) {
+          endTime = parseFloat((startTime + duration).toFixed(1));
+        }
+        curTime = endTime + 0.6;
+        parsedUnits.push({ startTime, endTime, textLine });
+      }
+    }
+
+    for (let idx = 0; idx < parsedUnits.length; idx++) {
+      const u = parsedUnits[idx];
+      let textLine = (u.textLine || '').replace(/^\[[\d:.\s-]+\]\s*/, '').trim();
       const parts = textLine.split('|').map(p => p.trim());
       let hanzi = (parts[0] || '').replace(/^\[[\d:.\s-]+\]\s*/, '').trim();
       let pinyin = parts[1] || '';
@@ -3415,12 +3497,6 @@ async function handleSaveCustomVideo(e) {
         } catch (err) { }
       }
 
-      const duration = Math.max(3, Math.min(10, hanzi.length * 0.55));
-      if (!bracketMatch) {
-        endTime = parseFloat((startTime + duration).toFixed(1));
-        curTime = endTime + 0.6;
-      }
-
       const cleanHanzi = hanzi.replace(/[^\u4e00-\u9fa5]/g, '');
       const keywords = [];
       if (cleanHanzi.length >= 2) {
@@ -3434,9 +3510,9 @@ async function handleSaveCustomVideo(e) {
 
       sentences.push({
         id: idx + 1,
-        startTime: parseFloat(startTime.toFixed(3)),
-        endTime: parseFloat(endTime.toFixed(3)),
-        hanzi: hanzi,
+        startTime: parseFloat(u.startTime.toFixed(3)),
+        endTime: parseFloat(u.endTime.toFixed(3)),
+        hanzi: hanzi || `Câu ${idx + 1}`,
         pinyin: pinyin,
         meaning: meaning,
         keywords: keywords.length > 0 ? keywords : [hanzi.slice(0, 1)],
