@@ -4739,7 +4739,7 @@ app.get('/api/dictation/debug-network', async (req, res) => {
     try {
       const val = await Promise.race([
         fn(),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout after 4000ms')), 4000))
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout after 12000ms')), 12000))
       ]);
       results[name] = { ok: true, durationMs: Date.now() - t0, ...val };
     } catch (e) {
@@ -4757,39 +4757,8 @@ app.get('/api/dictation/debug-network', async (req, res) => {
       return { status: r.status, tracksCount: j.items?.length || 0, tracks: j.items?.map(i => i.snippet?.language) };
     }),
 
-    // 2. Desktop watch HTML (ytInitialPlayerResponse)
-    testMethod('desktop_watch_html', async () => {
-      const r = await fetch(`https://www.youtube.com/watch?v=${id}`, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
-          'Accept-Language': 'vi,en;q=0.9'
-        }
-      });
-      const html = await r.text();
-      const hasInit = html.includes('ytInitialPlayerResponse');
-      const match = html.match(/captionTracks":\s*(\[.*?\])/);
-      let tracksCount = 0;
-      if (match) {
-        try { tracksCount = JSON.parse(match[1]).length; } catch (e) {}
-      }
-      return { status: r.status, htmlLen: html.length, hasInit, tracksCount };
-    }),
-
-    // 3. Mobile watch HTML
-    testMethod('mobile_watch_html', async () => {
-      const r = await fetch(`https://m.youtube.com/watch?v=${id}`, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1',
-          'Accept-Language': 'vi,en;q=0.9'
-        }
-      });
-      const html = await r.text();
-      const hasCaptions = html.includes('captionTracks');
-      return { status: r.status, htmlLen: html.length, hasCaptions };
-    }),
-
-    // 4. InnerTube iOS Player
-    testMethod('innertube_ios', async () => {
+    // 2. InnerTube iOS Player (Node fetch)
+    testMethod('innertube_ios_fetch', async () => {
       const r = await fetch('https://www.youtube.com/youtubei/v1/player?prettyPrint=false', {
         method: 'POST',
         headers: {
@@ -4821,33 +4790,39 @@ app.get('/api/dictation/debug-network', async (req, res) => {
       return { status: r.status, isJson: !!j, playability: j?.playabilityStatus?.status, tracksCount: tracks?.length || 0 };
     }),
 
-    // 5. InnerTube Web Embedded
-    testMethod('innertube_web_embedded', async () => {
-      const r = await fetch('https://www.youtube.com/youtubei/v1/player?prettyPrint=false', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
-          'Referer': 'https://www.youtube.com/'
-        },
-        body: JSON.stringify({
+    // 3. InnerTube iOS (via system curl)
+    testMethod('innertube_ios_curl', async () => {
+      const { exec } = await import('child_process');
+      return new Promise((resolve, reject) => {
+        const payload = JSON.stringify({
           context: {
             client: {
-              clientName: 'WEB_EMBEDDED_PLAYER',
-              clientVersion: '1.20241105.01.00',
+              clientName: 'IOS',
+              clientVersion: '20.10.4',
+              deviceMake: 'Apple',
+              deviceModel: 'iPhone16,2',
+              osName: 'iOS',
+              osVersion: '18.1.1.22B91',
               hl: 'vi',
               gl: 'VN'
-            },
-            thirdParty: { embedUrl: 'https://www.youtube.com/' }
+            }
           },
           videoId: id
-        })
+        }).replace(/"/g, '\\"');
+        const cmd = `curl -s -m 8 -X POST "https://www.youtube.com/youtubei/v1/player?prettyPrint=false" -H "Content-Type: application/json" -H "User-Agent: com.google.ios.youtube/20.10.4 (iPhone16,2; U; CPU iOS 18_1_1 like Mac OS X; en_US)" -H "X-YouTube-Client-Name: 5" -H "X-YouTube-Client-Version: 20.10.4" -d "${payload}"`;
+        exec(cmd, (err, stdout, stderr) => {
+          if (err) return reject(new Error(err.message + (stderr ? ': ' + stderr : '')));
+          let j = null;
+          try { j = JSON.parse(stdout); } catch (e) {}
+          resolve({
+            stdoutLen: stdout.length,
+            isJson: !!j,
+            playability: j?.playabilityStatus?.status,
+            tracksCount: j?.captions?.playerCaptionsTracklistRenderer?.captionTracks?.length || 0,
+            preview: stdout.substring(0, 150)
+          });
+        });
       });
-      const text = await r.text();
-      let j = null;
-      try { j = JSON.parse(text); } catch (e) {}
-      const tracks = j?.captions?.playerCaptionsTracklistRenderer?.captionTracks;
-      return { status: r.status, isJson: !!j, playability: j?.playabilityStatus?.status, tracksCount: tracks?.length || 0 };
     })
   ]);
 
