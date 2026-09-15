@@ -458,9 +458,11 @@ export async function fetchFromYoutubeTranscript(youtubeId) {
   // Try default (fastest, 1 round-trip) or Chinese explicitly
   const langPreferences = [null, 'zh-Hans', 'zh'];
 
+  const fetchTimeout = (url, opts) => fetch(url, { ...opts, signal: AbortSignal.timeout(5000) });
+
   for (const lang of langPreferences) {
     try {
-      const config = lang ? { lang } : undefined;
+      const config = { ...(lang ? { lang } : {}), fetch: fetchTimeout };
       const raw = await YoutubeTranscript.fetchTranscript(youtubeId, config);
       if (Array.isArray(raw) && raw.length > 0) {
         const sentences = [];
@@ -560,7 +562,7 @@ export async function extractYouTubeSubtitles(youtubeId) {
       subArgs.push('--user-agent', 'com.google.android.youtube/19.29.37 (Linux; U; Android 14) gzip');
     }
 
-    await execFileAsync(YTDLP_PATH, subArgs, { timeout: 35000 });
+    await execFileAsync(YTDLP_PATH, subArgs, { timeout: 8000 });
 
     const filesInTemp = fs.readdirSync(AUDIO_TEMP_DIR);
     const matchedFile = filesInTemp.find(f => f.startsWith(subTempPrefix) && f.endsWith('.json3'));
@@ -719,8 +721,8 @@ export async function transcribeAudioWithVAD(youtubeId, videoTitle = '') {
     let downloaded = false;
     await ensureYtDlpExists();
 
-    // Strategy 1: yt-dlp with mobile clients (android -> ios)
-    const mobileClients = ['android', 'ios'];
+    // Strategy 1: yt-dlp with mobile client (android)
+    const mobileClients = ['android'];
     for (const client of mobileClients) {
       try {
         const ytDlpArgs = [
@@ -742,7 +744,7 @@ export async function transcribeAudioWithVAD(youtubeId, videoTitle = '') {
           ytDlpArgs.push('--user-agent', 'com.google.android.youtube/19.29.37 (Linux; U; Android 14) gzip');
         }
 
-        await execFileAsync(YTDLP_PATH, ytDlpArgs, { timeout: 45000 });
+        await execFileAsync(YTDLP_PATH, ytDlpArgs, { timeout: 12000 });
         if (fs.existsSync(audioPath) && fs.statSync(audioPath).size > 2000) {
           downloaded = true;
           console.log(`[VAD Audio Engine] Successfully downloaded audio track via client: ${client}`);
