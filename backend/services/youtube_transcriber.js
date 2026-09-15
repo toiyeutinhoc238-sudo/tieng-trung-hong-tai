@@ -233,14 +233,20 @@ export function cleanSpeechText(text) {
 }
 
 const INNERTUBE_API_URL = 'https://www.youtube.com/youtubei/v1/player?prettyPrint=false';
-const INNERTUBE_CLIENT_VERSION = '20.10.38';
+const INNERTUBE_CLIENT_VERSION = '20.10.4';
 const INNERTUBE_CONTEXT = {
   client: {
-    clientName: 'ANDROID',
-    clientVersion: INNERTUBE_CLIENT_VERSION,
-  },
+    clientName: 'IOS',
+    clientVersion: '20.10.4',
+    deviceMake: 'Apple',
+    deviceModel: 'iPhone16,2',
+    osName: 'iOS',
+    osVersion: '18.1.1.22B91',
+    hl: 'vi',
+    gl: 'VN'
+  }
 };
-const INNERTUBE_USER_AGENT = `com.google.android.youtube/${INNERTUBE_CLIENT_VERSION} (Linux; U; Android 14)`;
+const INNERTUBE_USER_AGENT = 'com.google.ios.youtube/20.10.4 (iPhone16,2; U; CPU iOS 18_1_1 like Mac OS X; en_US)';
 
 function decodeXmlEntities(str) {
   if (!str) return '';
@@ -360,6 +366,8 @@ async function fetchInnerTubeCaptions(youtubeId) {
       headers: {
         'Content-Type': 'application/json',
         'User-Agent': INNERTUBE_USER_AGENT,
+        'X-YouTube-Client-Name': '5',
+        'X-YouTube-Client-Version': '20.10.4',
       },
       body: JSON.stringify({
         context: INNERTUBE_CONTEXT,
@@ -373,7 +381,14 @@ async function fetchInnerTubeCaptions(youtubeId) {
       return null;
     }
 
-    const data = await resp.json();
+    let data;
+    try {
+      data = await resp.json();
+    } catch (e) {
+      console.warn(`[InnerTube Captions] InnerTube response was not valid JSON: ${e.message}`);
+      return null;
+    }
+
     const captionTracks = data?.captions?.playerCaptionsTracklistRenderer?.captionTracks;
     if (!Array.isArray(captionTracks) || captionTracks.length === 0) {
       console.log(`[InnerTube Captions] No caption tracks available for ${youtubeId}.`);
@@ -387,7 +402,10 @@ async function fetchInnerTubeCaptions(youtubeId) {
 
     console.log(`[InnerTube Captions] Selected track: ${chosenTrack.languageCode} (${chosenTrack.kind || 'standard'})`);
     const subRes = await fetch(chosenTrack.baseUrl, {
-      headers: { 'User-Agent': INNERTUBE_USER_AGENT },
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
+        'Accept': '*/*'
+      },
       signal: AbortSignal.timeout(10000)
     });
 

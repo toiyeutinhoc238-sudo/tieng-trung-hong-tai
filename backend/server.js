@@ -4734,24 +4734,47 @@ app.get('/api/dictation/debug-innertube', async (req, res) => {
   const id = req.query.id || 'AHSWgUFKF8M';
   try {
     const INNERTUBE_API_URL = 'https://www.youtube.com/youtubei/v1/player?prettyPrint=false';
-    const INNERTUBE_CLIENT_VERSION = '20.10.38';
-    const INNERTUBE_CONTEXT = { client: { clientName: 'ANDROID', clientVersion: INNERTUBE_CLIENT_VERSION } };
-    const INNERTUBE_USER_AGENT = `com.google.android.youtube/${INNERTUBE_CLIENT_VERSION} (Linux; U; Android 14)`;
+    const INNERTUBE_CLIENT_VERSION = '20.10.4';
+    const INNERTUBE_CONTEXT = {
+      client: {
+        clientName: 'IOS',
+        clientVersion: '20.10.4',
+        deviceMake: 'Apple',
+        deviceModel: 'iPhone16,2',
+        osName: 'iOS',
+        osVersion: '18.1.1.22B91',
+        hl: 'vi',
+        gl: 'VN'
+      }
+    };
+    const INNERTUBE_USER_AGENT = 'com.google.ios.youtube/20.10.4 (iPhone16,2; U; CPU iOS 18_1_1 like Mac OS X; en_US)';
 
     const resp = await fetch(INNERTUBE_API_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'User-Agent': INNERTUBE_USER_AGENT },
+      headers: {
+        'Content-Type': 'application/json',
+        'User-Agent': INNERTUBE_USER_AGENT,
+        'X-YouTube-Client-Name': '5',
+        'X-YouTube-Client-Version': '20.10.4'
+      },
       body: JSON.stringify({ context: INNERTUBE_CONTEXT, videoId: id }),
       signal: AbortSignal.timeout(8000)
     });
-    const data = await resp.json();
+    const text = await resp.text();
+    let data = null;
+    try { data = JSON.parse(text); } catch (e) {
+      return res.json({ httpStatus: resp.status, isJson: false, rawPreview: text.substring(0, 300) });
+    }
     const tracks = data?.captions?.playerCaptionsTracklistRenderer?.captionTracks;
     const playability = data?.playabilityStatus;
 
     let downloadTest = null;
     if (tracks && tracks[0]?.baseUrl) {
       try {
-        const dRes = await fetch(tracks[0].baseUrl, { signal: AbortSignal.timeout(5000) });
+        const dRes = await fetch(tracks[0].baseUrl, {
+          headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+          signal: AbortSignal.timeout(5000)
+        });
         downloadTest = { status: dRes.status, ok: dRes.ok, length: (await dRes.text()).length };
       } catch (e) {
         downloadTest = { error: e.message };
@@ -4763,7 +4786,7 @@ app.get('/api/dictation/debug-innertube', async (req, res) => {
       playabilityStatus: playability?.status,
       reason: playability?.reason,
       tracksCount: tracks?.length || 0,
-      tracks: tracks?.map(t => ({ lang: t.languageCode, kind: t.kind })),
+      tracks: tracks?.map(t => ({ lang: t.languageCode, name: t.name?.runs?.[0]?.text, kind: t.kind })),
       downloadTest
     });
   } catch (err) {
