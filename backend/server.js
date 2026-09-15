@@ -4729,6 +4729,48 @@ app.get('/api/dictation/test-subtitles', async (req, res) => {
   }
 });
 
+// GET /api/dictation/debug-innertube — Diagnostic endpoint to inspect raw InnerTube response
+app.get('/api/dictation/debug-innertube', async (req, res) => {
+  const id = req.query.id || 'AHSWgUFKF8M';
+  try {
+    const INNERTUBE_API_URL = 'https://www.youtube.com/youtubei/v1/player?prettyPrint=false';
+    const INNERTUBE_CLIENT_VERSION = '20.10.38';
+    const INNERTUBE_CONTEXT = { client: { clientName: 'ANDROID', clientVersion: INNERTUBE_CLIENT_VERSION } };
+    const INNERTUBE_USER_AGENT = `com.google.android.youtube/${INNERTUBE_CLIENT_VERSION} (Linux; U; Android 14)`;
+
+    const resp = await fetch(INNERTUBE_API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'User-Agent': INNERTUBE_USER_AGENT },
+      body: JSON.stringify({ context: INNERTUBE_CONTEXT, videoId: id }),
+      signal: AbortSignal.timeout(8000)
+    });
+    const data = await resp.json();
+    const tracks = data?.captions?.playerCaptionsTracklistRenderer?.captionTracks;
+    const playability = data?.playabilityStatus;
+
+    let downloadTest = null;
+    if (tracks && tracks[0]?.baseUrl) {
+      try {
+        const dRes = await fetch(tracks[0].baseUrl, { signal: AbortSignal.timeout(5000) });
+        downloadTest = { status: dRes.status, ok: dRes.ok, length: (await dRes.text()).length };
+      } catch (e) {
+        downloadTest = { error: e.message };
+      }
+    }
+
+    res.json({
+      httpStatus: resp.status,
+      playabilityStatus: playability?.status,
+      reason: playability?.reason,
+      tracksCount: tracks?.length || 0,
+      tracks: tracks?.map(t => ({ lang: t.languageCode, kind: t.kind })),
+      downloadTest
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // POST /api/dictation/fetch-subtitles — Lấy phụ đề / mốc giọng nói YouTube
 app.post('/api/dictation/fetch-subtitles', async (req, res) => {
   const { youtubeId, url } = req.body || {};
