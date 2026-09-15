@@ -6521,48 +6521,97 @@ function renderActiveCardSentence(current) {
   window.currentSentenceTargetLevel = current.level || 1;
 }
 
+// Helper: Nhận diện các cấu trúc ngữ pháp (NP) tiếng Trung trong câu
+function detectChineseGrammarPoints(sentence) {
+  if (!sentence) return [];
+  const points = [];
+  
+  // 1. Cấu trúc câu phức & Liên từ cặp đôi
+  if (/虽然|尽管/.test(sentence) && /但是|但|可是|却/.test(sentence)) points.push('Mệnh đề nhượng bộ (虽然...但是...)');
+  else if (/虽然|尽管/.test(sentence)) points.push('Từ nối nhượng bộ (虽然/尽管)');
+  
+  if (/因为/.test(sentence) && /所以/.test(sentence)) points.push('Mệnh đề nhân quả (因为...所以...)');
+  else if (/因为|由于/.test(sentence)) points.push('Nguyên nhân (因为/由于)');
+  else if (/所以|因此/.test(sentence)) points.push('Kết quả (所以/因此)');
+
+  if (/不但|不仅|不光/.test(sentence) && /而且|并且|也|还/.test(sentence)) points.push('Mệnh đề tăng tiến (不但...而且...)');
+  else if (/不但|不仅/.test(sentence)) points.push('Cấu trúc tăng tiến (不但/不仅)');
+
+  if (/如果|要是|假如/.test(sentence) && /就|便|那么/.test(sentence)) points.push('Mệnh đề giả thiết (如果...就...)');
+  else if (/如果|要是/.test(sentence)) points.push('Cấu trúc điều kiện (如果/要是)');
+
+  if (/只要/.test(sentence) && /就/.test(sentence)) points.push('Điều kiện đầy đủ (只要...就...)');
+  if (/只有/.test(sentence) && /才/.test(sentence)) points.push('Điều kiện cần (只有...才...)');
+  if (/一边/.test(sentence) && sentence.indexOf('一边') !== sentence.lastIndexOf('一边')) points.push('Hành động song song (一边...一边...)');
+  else if (/又[\u4e00-\u9fa5]+又[\u4e00-\u9fa5]+/.test(sentence)) points.push('Tính chất song song (又...又...)');
+  if (/除了/.test(sentence) && /以外|都|也|还/.test(sentence)) points.push('Cấu trúc loại trừ (除了...以外...)');
+  if (/越[\u4e00-\u9fa5]+越[\u4e00-\u9fa5]+/.test(sentence)) points.push('Cấu trúc tiến triển (越...越...)');
+  if (/既然/.test(sentence) && /就|也/.test(sentence)) points.push('Liên từ suy luận (既然...就...)');
+  if (/连[\u4e00-\u9fa5]+(?:都|也)/.test(sentence)) points.push('Cấu trúc nhấn mạnh (连...都/也...)');
+
+  // 2. Các câu đặc thù tiếng Trung
+  if (/把[\u4e00-\u9fa5]+(?:[\u4e00-\u9fa5]{1,4})/.test(sentence)) points.push('Câu chữ 把 (câu xử lý)');
+  if (/被[\u4e00-\u9fa5]+/.test(sentence)) points.push('Câu chữ 被 (câu bị động)');
+  if (/比[\u4e00-\u9fa5]+(?:更|还|大|小|多|少|高|快|好|漂亮|便宜|贵|远|近|长|短)/.test(sentence)) points.push('Câu so sánh 比');
+  if (/没有[\u4e00-\u9fa5]+(?:那么|这么)/.test(sentence)) points.push('Câu so sánh 没有...那么');
+  if (/是[\u4e00-\u9fa5]+的[。！？]?$/.test(sentence) || /是[\u4e00-\u9fa5]{2,}的/.test(sentence)) points.push('Cấu trúc nhấn mạnh 是...的');
+
+  // 3. Bổ ngữ
+  if (/[\u4e00-\u9fa5]得(?:很|非常|十分|特别|真|极l|太|好|快|慢|多|少|高)/.test(sentence)) points.push('Bổ ngữ trạng thái (V + 得...)');
+  if (/[\u4e00-\u9fa5](?:得懂|不懂|得见|不见|得完|不完|得了|不了|得上|不上|得下|不下|得起|不起)/.test(sentence)) points.push('Bổ ngữ khả năng');
+  if (/[\u4e00-\u9fa5](?:出来|进去|过来|过去|起来|下去|回来|回去|上来|上去|下来)/.test(sentence)) points.push('Bổ ngữ xu hướng kép');
+  if (/(?:做完|写完|学完|看完|吃完|听懂|看懂|买到|找到|看到|听到|做好|准备好|学会|记住)/.test(sentence)) points.push('Bổ ngữ kết quả');
+
+  // 4. Trợ từ động thái & thời thái
+  if (/(?:正在|在)[\u4e00-\u9fa5]+(?:呢)?/.test(sentence)) points.push('Thì tiếp diễn (正在/在...呢)');
+  if (/[\u4e00-\u9fa5]着/.test(sentence) && !/虽然|接着|着急/.test(sentence)) points.push('Trợ từ động thái 着 (tiếp diễn trạng thái)');
+  if (/[\u4e00-\u9fa5]过/.test(sentence) && !/经过|不过|过去|难过/.test(sentence)) points.push('Trợ từ động thái 过 (từng trải qua)');
+
+  return Array.from(new Set(points));
+}
+
 function getSentenceScoreFallback(sentence, targetWord) {
   const containsWord = targetWord ? sentence.includes(targetWord) : true;
   const isGibberish = /^([a-zA-Z0-9\u4e00-\u9fa5])\1{3,}$/.test(sentence) || sentence.length < 2;
   const ok = containsWord && !isGibberish;
   const charCount = (sentence.match(/[\u4e00-\u9fa5\u3400-\u4dbfa-zA-Z0-9]/g) || []).length;
+  const detectedGrammar = detectChineseGrammarPoints(sentence);
+  const npCount = detectedGrammar.length;
 
   if (!ok) {
     return {
       score: 15,
       isCorrect: false,
+      grammarPoints: [],
       badge: 'Chưa Đạt ❌',
-      feedback: `Câu của bạn ${!containsWord ? `chưa chứa từ vựng mục tiêu "${targetWord}"` : 'chưa có nghĩa hoàn chỉnh'}. Hãy thử đặt lại câu nhé!`,
+      feedback: `Câu của bạn ${!containsWord ? `hoàn toàn chưa chứa từ vựng mục tiêu "${targetWord}"` : 'chưa có nghĩa hoàn chỉnh'}. Hãy đặt lại câu có sử dụng đúng từ này nhé!`,
       improvedSentence: sentence,
       translation: ''
     };
   }
 
-  let score = 85;
-  let badge = 'Rất Tốt 👏';
-  let feedback = `Câu có sử dụng từ "${targetWord}" chuẩn xác, tự nhiên. Tiếp tục phát huy!`;
+  let score = 58;
+  let badge = 'Đạt (Cơ Bản) 👍';
+  let feedback = `Câu đúng ngữ pháp cơ bản và dùng đúng từ "${targetWord}", nhưng câu còn ngắn (${charCount} chữ) và đơn giản. Cần mở rộng câu và dùng thêm cấu trúc ngữ pháp (np) để đạt điểm cao hơn!`;
 
-  if (charCount < 6) {
-    score = 68;
-    badge = 'Khá 👍';
-    feedback = `Câu có sử dụng từ "${targetWord}" đúng ngữ pháp nhưng còn hơi ngắn. Bạn hãy thử thêm thời gian hoặc địa điểm để câu dài và đạt điểm cao hơn nhé!`;
-  } else if (charCount <= 10) {
-    score = 85;
-    badge = 'Rất Tốt 👏';
-    feedback = `Câu có độ dài vừa vặn, dùng từ "${targetWord}" chuẩn xác và tự nhiên!`;
-  } else if (charCount <= 14) {
-    score = 93;
-    badge = 'Xuất Sắc 🌟';
-    feedback = `Rất tốt! Câu của bạn dài, diễn đạt lưu loát và giàu ngữ cảnh!`;
-  } else {
-    score = 98;
-    badge = 'Xuất Sắc 🌟';
-    feedback = `Xuất sắc! Câu của bạn rất dài, phong phú, chuẩn phong cách bản ngữ!`;
+  if (npCount >= 2 && charCount >= 15) {
+    score = 94;
+    badge = 'Xuất Sắc 🏆';
+    feedback = `Xuất sắc! Câu của bạn dài (${charCount} chữ), diễn đạt lưu loát và vận dụng nhiều cấu trúc ngữ pháp (${detectedGrammar.join(', ')}) rất tự nhiên!`;
+  } else if (npCount >= 1 && charCount >= 12) {
+    score = 83;
+    badge = 'Rất Tốt 🌟';
+    feedback = `Rất tốt! Câu có độ dài tốt (${charCount} chữ) và áp dụng cấu trúc ngữ pháp: ${detectedGrammar.join(', ')}!`;
+  } else if (charCount >= 8 && (npCount >= 1 || charCount >= 10)) {
+    score = 73;
+    badge = 'Khá 👏';
+    feedback = `Khá tốt! Câu của bạn rõ nghĩa, sử dụng từ "${targetWord}" chuẩn xác. Hãy thử dùng thêm liên từ câu phức để nâng cao điểm số!`;
   }
 
   return {
     score,
     isCorrect: true,
+    grammarPoints: detectedGrammar,
     badge,
     feedback,
     improvedSentence: sentence,
@@ -9072,20 +9121,21 @@ window.submitLessonSentenceForAiCheck = async function (targetWord, level) {
 };
 
 function renderLessonAiCheckResult(data, container, targetWord) {
-  const isCorrect = data.isCorrect !== false && (typeof data.score === 'number' ? data.score >= 55 : true);
-  const score = typeof data.score === 'number' ? data.score : (isCorrect ? 85 : 20);
+  const isCorrect = data.isCorrect !== false && (typeof data.score === 'number' ? data.score >= 50 : true);
+  const score = typeof data.score === 'number' ? data.score : (isCorrect ? 58 : 20);
   const badge = data.badge || (
-    score >= 90 ? 'Xuất Sắc 🌟' :
-    score >= 80 ? 'Rất Tốt 👏' :
-    score >= 65 ? 'Khá 👍' :
-    score >= 50 ? 'Cần Cải Thiện ✍️' : 'Chưa Đạt ❌'
+    score >= 90 ? 'Xuất Sắc 🏆' :
+    score >= 80 ? 'Rất Tốt 🌟' :
+    score >= 70 ? 'Khá 👏' :
+    score >= 50 ? 'Đạt (Cơ Bản) 👍' : 'Chưa Đạt / Cần Sửa ❌'
   );
-  const scoreColor = isCorrect && score >= 80 ? '#10b981' : (isCorrect && score >= 60 ? '#0284c7' : '#ef4444');
+  const scoreColor = isCorrect && score >= 80 ? '#10b981' : (isCorrect && score >= 50 ? '#0284c7' : '#ef4444');
 
   const improved = data.improvedSentence || '';
   const translation = data.translation || data.vietnameseTranslation || '';
   const pinyin = data.pinyin || '';
   const feedback = data.feedback || '';
+  const grammarPoints = Array.isArray(data.grammarPoints) ? data.grammarPoints : [];
 
   container.innerHTML = `
     <div class="lesson-ai-result-box" style="border-radius: 16px; padding: 18px; text-align: left; box-shadow: 0 8px 24px rgba(0,0,0,0.15); border: 1.5px solid ${scoreColor}40;">
@@ -9100,6 +9150,13 @@ function renderLessonAiCheckResult(data, container, targetWord) {
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
+
+      ${grammarPoints.length > 0 ? `
+        <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 10px;">
+          <span style="font-size: 0.78rem; font-weight: 800; color: #7c3aed; text-transform: uppercase;">Ngữ pháp nhận diện:</span>
+          ${grammarPoints.map(p => `<span style="background: rgba(139, 92, 246, 0.12); color: #7c3aed; border: 1px solid rgba(139, 92, 246, 0.28); border-radius: 99px; padding: 2px 10px; font-size: 0.78rem; font-weight: 700;"><i class="fa-solid fa-code-branch"></i> ${p}</span>`).join('')}
+        </div>
+      ` : ''}
 
       <div class="ai-fb-text" style="border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; font-size: 0.92rem; line-height: 1.55; border-left: 3px solid ${scoreColor};">
         <strong style="color: ${isCorrect ? '#8b5cf6' : '#ef4444'};"><i class="fa-solid ${isCorrect ? 'fa-comment-dots' : 'fa-triangle-exclamation'}"></i> Nhận xét AI:</strong> ${feedback}

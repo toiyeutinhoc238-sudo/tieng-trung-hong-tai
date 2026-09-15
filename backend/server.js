@@ -2687,6 +2687,55 @@ Hãy đánh giá bài viết của học viên và trả về ĐÚNG 1 JSON obje
   }
 });
 
+// Helper: Nhận diện các cấu trúc ngữ pháp (NP) tiếng Trung trong câu
+function detectChineseGrammarPoints(sentence) {
+  if (!sentence) return [];
+  const points = [];
+  
+  // 1. Cấu trúc câu phức & Liên từ cặp đôi
+  if (/虽然|尽管/.test(sentence) && /但是|但|可是|却/.test(sentence)) points.push('Mệnh đề nhượng bộ (虽然...但是...)');
+  else if (/虽然|尽管/.test(sentence)) points.push('Từ nối nhượng bộ (虽然/尽管)');
+  
+  if (/因为/.test(sentence) && /所以/.test(sentence)) points.push('Mệnh đề nhân quả (因为...所以...)');
+  else if (/因为|由于/.test(sentence)) points.push('Nguyên nhân (因为/由于)');
+  else if (/所以|因此/.test(sentence)) points.push('Kết quả (所以/因此)');
+
+  if (/不但|不仅|不光/.test(sentence) && /而且|并且|也|还/.test(sentence)) points.push('Mệnh đề tăng tiến (不但...而且...)');
+  else if (/不但|不仅/.test(sentence)) points.push('Cấu trúc tăng tiến (不但/不仅)');
+
+  if (/如果|要是|假如/.test(sentence) && /就|便|那么/.test(sentence)) points.push('Mệnh đề giả thiết (如果...就...)');
+  else if (/如果|要是/.test(sentence)) points.push('Cấu trúc điều kiện (如果/要是)');
+
+  if (/只要/.test(sentence) && /就/.test(sentence)) points.push('Điều kiện đầy đủ (只要...就...)');
+  if (/只有/.test(sentence) && /才/.test(sentence)) points.push('Điều kiện cần (只有...才...)');
+  if (/一边/.test(sentence) && sentence.indexOf('一边') !== sentence.lastIndexOf('一边')) points.push('Hành động song song (一边...一边...)');
+  else if (/又[\u4e00-\u9fa5]+又[\u4e00-\u9fa5]+/.test(sentence)) points.push('Tính chất song song (又...又...)');
+  if (/除了/.test(sentence) && /以外|都|也|还/.test(sentence)) points.push('Cấu trúc loại trừ (除了...以外...)');
+  if (/越[\u4e00-\u9fa5]+越[\u4e00-\u9fa5]+/.test(sentence)) points.push('Cấu trúc tiến triển (越...越...)');
+  if (/既然/.test(sentence) && /就|也/.test(sentence)) points.push('Liên từ suy luận (既然...就...)');
+  if (/连[\u4e00-\u9fa5]+(?:都|也)/.test(sentence)) points.push('Cấu trúc nhấn mạnh (连...都/也...)');
+
+  // 2. Các câu đặc thù tiếng Trung
+  if (/把[\u4e00-\u9fa5]+(?:[\u4e00-\u9fa5]{1,4})/.test(sentence)) points.push('Câu chữ 把 (câu xử lý)');
+  if (/被[\u4e00-\u9fa5]+/.test(sentence)) points.push('Câu chữ 被 (câu bị động)');
+  if (/比[\u4e00-\u9fa5]+(?:更|还|大|小|多|少|高|快|好|漂亮|便宜|贵|远|近|长|短)/.test(sentence)) points.push('Câu so sánh 比');
+  if (/没有[\u4e00-\u9fa5]+(?:那么|这么)/.test(sentence)) points.push('Câu so sánh 没有...那么');
+  if (/是[\u4e00-\u9fa5]+的[。！？]?$/.test(sentence) || /是[\u4e00-\u9fa5]{2,}的/.test(sentence)) points.push('Cấu trúc nhấn mạnh 是...的');
+
+  // 3. Bổ ngữ
+  if (/[\u4e00-\u9fa5]得(?:很|非常|十分|特别|真|极了|太|好|快|慢|多|少|高)/.test(sentence)) points.push('Bổ ngữ trạng thái (V + 得...)');
+  if (/[\u4e00-\u9fa5](?:得懂|不懂|得见|不见|得完|不完|得了|不了|得上|不上|得下|不下|得起|不起)/.test(sentence)) points.push('Bổ ngữ khả năng');
+  if (/[\u4e00-\u9fa5](?:出来|进去|过来|过去|起来|下去|回来|回去|上来|上去|下来)/.test(sentence)) points.push('Bổ ngữ xu hướng kép');
+  if (/(?:做完|写完|学完|看完|吃完|听懂|看懂|买到|找到|看到|听到|做好|准备好|学会|记住)/.test(sentence)) points.push('Bổ ngữ kết quả');
+
+  // 4. Trợ từ động thái & thời thái
+  if (/(?:正在|在)[\u4e00-\u9fa5]+(?:呢)?/.test(sentence)) points.push('Thì tiếp diễn (正在/在...呢)');
+  if (/[\u4e00-\u9fa5]着/.test(sentence) && !/虽然|接着|着急/.test(sentence)) points.push('Trợ từ động thái 着 (tiếp diễn trạng thái)');
+  if (/[\u4e00-\u9fa5]过/.test(sentence) && !/经过|不过|过去|难过/.test(sentence)) points.push('Trợ từ động thái 过 (từng trải qua)');
+
+  return Array.from(new Set(points));
+}
+
 // POST endpoint for AI Vocabulary Sentence Checking (Ôn Tập Từ Vựng)
 app.post('/api/ai/check-sentence', async (req, res) => {
   const { word, sentence, level } = req.body;
@@ -2699,43 +2748,56 @@ app.post('/api/ai/check-sentence', async (req, res) => {
   const containsWord = targetWord ? cleanSentence.includes(targetWord) : true;
   const isGibberish = /^([a-zA-Z0-9\u4e00-\u9fa5])\1{3,}$/.test(cleanSentence) || cleanSentence.length < 2;
   const charCount = (cleanSentence.match(/[\u4e00-\u9fa5\u3400-\u4dbfa-zA-Z0-9]/g) || []).length;
+  const detectedGrammar = detectChineseGrammarPoints(cleanSentence);
+  const npCount = detectedGrammar.length;
+  const npListStr = detectedGrammar.length > 0 ? detectedGrammar.join(', ') : 'Chưa phát hiện điểm ngữ pháp nâng cao nào (câu cấu trúc cơ bản)';
 
-  const prompt = `Bạn là giáo viên dạy tiếng Trung có tâm, giàu kinh nghiệm và sư phạm chuẩn mực của "Tiếng Trung Hongtai".
-Nhiệm vụ: Chấm điểm và nhận xét câu học sinh tự đặt để luyện từ vựng.
+  const prompt = `Bạn là giáo viên dạy tiếng Trung CỰC KỲ KHÓ TÍNH, CHUẨN MỰC và SƯ PHẠM NGHIÊM KHẮC của "Tiếng Trung Hongtai".
+Nhiệm vụ: Chấm điểm thật KHẮT KHE, CÔNG TÂM và nhận xét chi tiết câu học sinh tự đặt để luyện từ vựng.
 
 Từ vựng mục tiêu cần đặt câu: "${targetWord}" (Trình độ: HSK ${level || 1}).
 Câu học sinh đã đặt: "${cleanSentence}" (Độ dài: ${charCount} ký tự chữ Hán).
+Cấu trúc ngữ pháp (NP) sơ bộ nhận diện trong câu: ${npListStr}.
 
-QUY ĐỊNH CHẤM ĐIỂM THEO ĐỘ DÀI & ĐỘ PHONG PHÚ (BẮT BUỘC TUÂN THỦ):
-- Nguyên tắc: Câu càng ngắn thì điểm càng thấp (chỉ ở mức đạt/khá); câu càng dài, đủ ý và giàu ngữ cảnh thì điểm càng cao (rất tốt/xuất sắc).
+BẢNG QUY TẮC CHẤM ĐIỂM BẮT BUỘC (RẤT KHẮT KHE - TUÂN THỦ TUYỆT ĐỐI):
 
-1. Câu quá ngắn (dưới 6 chữ Hán, ví dụ: "他去。", "今天下雨。", "我有点儿累。", "他仿佛懂了。"):
-   - Dù đúng ngữ pháp nhưng vì quá ngắn, câu đơn điệu nên CHỈ CHẤM TỪ 60 ĐẾN 72 ĐIỂM (Khá 👍).
-   - Lời nhận xét: Khen câu đúng nhưng chỉ ra câu hơi ngắn, khích lệ học sinh thêm trạng ngữ thời gian, địa điểm, liên từ hoặc tân ngữ để câu dài và sinh động hơn.
+1. THIẾU TỪ MỤC TIÊU HOẶC GÕ VÔ NGHĨA / RÁC (score: 0 - 20 ĐIỂM, isCorrect: false):
+   - Nếu câu KHÔNG chứa từ vựng mục tiêu "${targetWord}" (kể cả thiếu nét, gõ sai chữ Hán của từ vựng): CHO ĐIỂM THẤP TỪ 0 ĐẾN 20 ĐIỂM!
+   - Nếu câu gõ bậy bạ, ký tự rác vô nghĩa: CHO ĐIỂM TỪ 0 ĐẾN 10 ĐIỂM.
+   - Nhận xét: Nghiêm khắc nhắc nhở câu hoàn toàn chưa sử dụng từ vựng yêu cầu "${targetWord}".
 
-2. Câu có độ dài trung bình (từ 6 đến 10 chữ Hán, có đầy đủ thành phần câu Chủ - Vị - Tân):
-   - Chấm trong khoảng 80 ĐẾN 88 ĐIỂM (Rất Tốt 👏).
-   - Lời nhận xét: Khen câu rõ nghĩa, dùng từ tự nhiên và chuẩn ngữ cảnh.
+2. DÙNG SAI TỪ, SAI NGỮ PHÁP HOẶC SAI NGỮ CẢNH (score: 15 - 40 ĐIỂM, isCorrect: false):
+   - Dùng sai từ loại của "${targetWord}" (ví dụ: từ là tính từ nhưng dùng làm động từ mang tân ngữ, hoặc phó từ đặt sai vị trí).
+   - Dùng sai ngữ cảnh / kết hợp từ không tự nhiên (dịch từng từ thô từ tiếng Việt sang chữ Hán, chắp vá từ ngô nghê).
+   - Sai trật tự ngữ pháp tiếng Trung cơ bản.
+   - CHO ĐIỂM THẤP TỪ 15 ĐẾN 40 ĐIỂM!
+   - Nhận xét: Chỉ rõ cụ thể lỗi sai: từ "${targetWord}" bị dùng sai ở đâu, cấu trúc nào bị sai, và sửa lại câu đúng chuẩn.
 
-3. Câu dài, đầy đủ ý và giàu ngữ cảnh (từ 11 đến 14 chữ Hán, có liên từ hoặc mệnh đề phụ):
-   - Chấm trong khoảng 90 ĐẾN 95 ĐIỂM (Xuất Sắc 🌟).
-   - Lời nhận xét: Khen ngợi học sinh đã đặt câu dài, lưu loát và biểu đạt tốt.
+3. ĐÚNG NGỮ PHÁP NHƯNG CÂU ĐƠN GIẢN / CƠ BẢN (CHỈ CHO ĐIỂM TRUNG BÌNH: 50 - 65 ĐIỂM, isCorrect: true):
+   - Câu ĐÚNG ngữ pháp và có chứa đúng từ "${targetWord}", nhưng câu NGẮN hoặc là CÂU ĐƠN GIẢN (chỉ có Chủ - Vị - Tân cơ bản, dưới 8-10 chữ Hán, ít thành phần mở rộng, không dùng ngữ pháp nâng cao).
+   - Ví dụ: "我学习汉语。", "他非常喜欢苹果。", "今天天气很好。", "我想去商店买东西。"
+   - TUYỆT ĐỐI CHỈ ĐƯỢC CHO ĐIỂM TRUNG BÌNH TỪ 50 ĐẾN 65 ĐIỂM! (Cấm cho điểm cao 75-90 ở trường hợp này).
+   - Nhận xét: Ghi nhận câu đúng ngữ pháp và dùng từ chuẩn, nhưng thẳng thắn nhận xét câu còn quá cơ bản, cấu trúc đơn điệu; khuyên học sinh muốn đạt điểm cao thì phải mở rộng câu, dùng thêm trạng ngữ thời gian, nơi chốn, liên từ và cấu trúc ngữ pháp (np) phức hợp.
 
-4. Câu rất dài, có chiều sâu và cấu trúc phức hợp (từ 15 chữ Hán trở lên):
-   - Chấm trong khoảng 96 ĐẾN 100 ĐIỂM (Xuất Sắc 🌟).
-   - Lời nhận xét: Khen ngợi nhiệt tình vì câu rất dài, chuẩn xác, văn phong bản ngữ mượt mà.
+4. CÂU MỨC ĐỘ KHÁ (score: 70 - 79 ĐIỂM, isCorrect: true):
+   - Câu có độ dài từ 8 đến 12 chữ Hán, diễn đạt rõ ràng, có trạng ngữ thời gian/địa điểm cụ thể HOẶC áp dụng được 1 cấu trúc ngữ pháp cơ bản (câu so sánh 比, trợ từ động thái 了/着/过, câu chữ 是...的, bổ ngữ kết quả...).
+   - Nhận xét: Khen câu hoàn chỉnh, diễn đạt tốt; gợi ý phát triển thêm liên từ để câu đạt điểm cao hơn.
 
-5. CHỈ ĐÁNH GIÁ SAI (score < 40, isCorrect = false) KHI:
-   - Hoàn toàn KHÔNG chứa từ vựng mục tiêu "${targetWord}".
-   - Gõ vô nghĩa, ký tự rác, gõ bậy bạ (ví dụ: "啊啊啊...", "yi fu yi fu...").
-   - Sai cấu trúc ngữ pháp nghiêm trọng làm người bản xứ không hiểu được.
+5. CÂU DÀI VÀ SỬ DỤNG NHIỀU CẤU TRÚC NGỮ PHÁP (NHIỀU NP) THÌ ĐIỂM MỚI CAO (score: 80 - 100 ĐIỂM, isCorrect: true):
+   - Mức Rất Tốt (80 - 89 ĐIỂM):
+     + YÊU CẦU: Câu phải DÀI (từ 12-16 chữ Hán trở lên), diễn đạt tự nhiên, VÀ bắt buộc phải áp dụng thành thạo từ 1 đến 2 cấu trúc ngữ pháp (np) quan trọng (như câu chữ 把, câu chữ 被, liên từ cặp đôi 虽然...但是..., 因为...所以..., 不但...而且..., 一边...一边..., 如果...就..., bổ ngữ trạng thái 得, bổ ngữ khả năng, bổ ngữ xu hướng kép).
+     + Nhận xét: Khen câu dài, biểu đạt lưu loát và vận dụng đúng cấu trúc ngữ pháp.
+   - Mức Xuất Sắc (90 - 100 ĐIỂM):
+     + YÊU CẦU CỰC CAO: Câu phải RẤT DÀI (từ 16 chữ Hán trở lên), giàu ngữ cảnh thực tế, văn phong tự nhiên chuẩn bản ngữ, VÀ kết hợp NHIỀU CẤU TRÚC NGỮ PHÁP (từ 2-3 điểm ngữ pháp trở lên) một cách nhuần nhuyễn.
+     + Nhận xét: Khen ngợi nồng nhiệt vì câu dài, tư duy ngữ pháp phong phú và hành văn như người bản xứ.
 
 ĐỊNH DẠNG TRẢ VỀ:
-Trả về DUY NHẤT 1 JSON object thuần túy (không bọc trong markdown block):
+Trả về DUY NHẤT 1 JSON object thuần túy (không bọc trong markdown block hay văn bản nào khác):
 {
   "isCorrect": <true hoặc false>,
-  "score": <số nguyên từ 0 đến 100 theo đúng quy định độ dài ở trên>,
-  "feedback": "<Lời nhận xét tiếng Việt thân thiện, khích lệ; giải thích rõ vì sao đúng/chỉ ra độ ngắn/dài của câu hoặc cụ thể lỗi nếu sai>",
+  "score": <số nguyên từ 0 đến 100 theo đúng bảng điểm khắt khe ở trên>,
+  "grammarPoints": ["<Tên cấu trúc ngữ pháp 1 đã dùng>", "<Tên cấu trúc ngữ pháp 2 đã dùng>"],
+  "feedback": "<Lời nhận xét tiếng Việt chi tiết, thẳng thắn, nêu rõ vì sao đúng/sai, chỉ ra điểm ngữ pháp đã dùng hoặc cần cải thiện>",
   "improvedSentence": "<Câu tiếng Trung gợi ý nâng cấp mượt mà hoặc câu sửa lỗi chuẩn xác>",
   "pinyin": "<Pinyin có dấu của improvedSentence>",
   "translation": "<Bản dịch tiếng Việt chuẩn của improvedSentence>"
@@ -2787,30 +2849,33 @@ Trả về DUY NHẤT 1 JSON object thuần túy (không bọc trong markdown bl
         result = {
           isCorrect: false,
           score: 15,
+          grammarPoints: [],
           feedback: `Câu của bạn ${!containsWord ? `chưa chứa từ vựng mục tiêu "${targetWord}"` : 'chưa có nghĩa hoàn chỉnh'}. Hãy thử đặt lại câu nhé!`,
           improvedSentence: `今天${targetWord || ''}。`,
           pinyin: "",
           translation: ""
         };
       } else {
-        let fallbackScore = 85;
-        let fallbackFb = `Câu có sử dụng từ "${targetWord}" chuẩn xác. Hãy tiếp tục phát huy!`;
-        if (charCount < 6) {
-          fallbackScore = 68;
-          fallbackFb = `Câu có sử dụng từ "${targetWord}" đúng ngữ pháp nhưng còn hơi ngắn. Bạn hãy thử thêm thời gian hoặc địa điểm để câu dài và đạt điểm cao hơn nhé!`;
-        } else if (charCount <= 10) {
-          fallbackScore = 85;
-          fallbackFb = `Câu có độ dài vừa vặn, dùng từ "${targetWord}" chuẩn xác và tự nhiên!`;
-        } else if (charCount <= 14) {
+        // Fallback calculation strictly based on length and grammar points
+        let fallbackScore = 55;
+        let fallbackFb = `Câu có sử dụng từ "${targetWord}" đúng ngữ pháp nhưng cấu trúc còn đơn giản. Hãy thử thêm trạng ngữ thời gian, nơi chốn hoặc liên từ để đạt điểm cao hơn nhé!`;
+        if (npCount >= 2 && charCount >= 15) {
           fallbackScore = 93;
-          fallbackFb = `Rất tốt! Câu của bạn dài, diễn đạt lưu loát và giàu ngữ cảnh!`;
+          fallbackFb = `Xuất sắc! Câu của bạn dài (${charCount} chữ), diễn đạt lưu loát và vận dụng nhiều cấu trúc ngữ pháp (${detectedGrammar.join(', ')}) rất tự nhiên!`;
+        } else if (npCount >= 1 && charCount >= 12) {
+          fallbackScore = 84;
+          fallbackFb = `Rất tốt! Câu có độ dài tốt (${charCount} chữ) và áp dụng tốt cấu trúc ngữ pháp: ${detectedGrammar.join(', ')}!`;
+        } else if (charCount >= 8 && (npCount >= 1 || charCount >= 10)) {
+          fallbackScore = 72;
+          fallbackFb = `Khá tốt! Câu của bạn rõ nghĩa, sử dụng từ "${targetWord}" chuẩn xác. Hãy thử dùng thêm liên từ câu phức để nâng cao điểm số!`;
         } else {
-          fallbackScore = 98;
-          fallbackFb = `Xuất sắc! Câu của bạn rất dài, phức hợp và mang phong cách bản ngữ tự nhiên!`;
+          fallbackScore = 58;
+          fallbackFb = `Câu đúng ngữ pháp cơ bản và dùng đúng từ "${targetWord}", nhưng câu còn ngắn (${charCount} chữ) và đơn giản. Cần mở rộng câu và dùng thêm cấu trúc ngữ pháp để đạt điểm cao hơn!`;
         }
         result = {
           isCorrect: true,
           score: fallbackScore,
+          grammarPoints: detectedGrammar,
           feedback: fallbackFb,
           improvedSentence: cleanSentence,
           pinyin: "",
@@ -2818,28 +2883,49 @@ Trả về DUY NHẤT 1 JSON object thuần túy (không bọc trong markdown bl
         };
       }
     } else {
-      // Đảm bảo kiểu dữ liệu và ràng buộc logic
+      // Đảm bảo kiểu dữ liệu và ràng buộc logic khắt khe
       const fb = (result.feedback || '').toLowerCase();
-      const mentionsFailure = fb.includes('vô nghĩa') || fb.includes('không chứa từ') || fb.includes('không có nghĩa') || fb.includes('chưa đáp ứng') || fb.includes('không phải là câu');
-      if (isGibberish || (!containsWord && targetWord) || mentionsFailure || result.isCorrect === false) {
-        result.isCorrect = false;
-        result.score = Math.min(typeof result.score === 'number' ? result.score : 20, 25);
-      } else {
-        result.isCorrect = true;
-        let baseScore = typeof result.score === 'number' ? result.score : 80;
+      const mentionsFailure = fb.includes('vô nghĩa') || fb.includes('không chứa từ') || fb.includes('chưa chứa từ') || fb.includes('thiếu từ') || fb.includes('không có nghĩa') || fb.includes('chưa đáp ứng') || fb.includes('sai ngữ pháp') || fb.includes('dùng sai');
+      
+      if (!Array.isArray(result.grammarPoints) || result.grammarPoints.length === 0) {
+        result.grammarPoints = detectedGrammar;
+      }
 
-        // Ràng buộc quy định điểm theo độ dài câu
-        if (charCount < 6) {
-          result.score = Math.min(Math.max(baseScore, 60), 72);
-          if (result.feedback && !result.feedback.includes('ngắn') && !result.feedback.includes('thêm')) {
-            result.feedback += ' (Gợi ý: Câu đúng ngữ pháp nhưng còn hơi ngắn, hãy thử thêm thời gian, địa điểm hoặc liên từ để đạt điểm cao hơn nhé!)';
+      if (isGibberish || (!containsWord && targetWord) || (!containsWord && mentionsFailure)) {
+        // 1. Thiếu từ hoặc vô nghĩa: cho điểm thấp luôn! (0 - 20 điểm)
+        result.isCorrect = false;
+        result.score = Math.min(typeof result.score === 'number' ? result.score : 15, 20);
+        if (!result.feedback || (!result.feedback.includes('thiếu') && !result.feedback.includes('chưa chứa'))) {
+          result.feedback = `Câu của bạn hoàn toàn chưa chứa từ vựng mục tiêu "${targetWord}". Vui lòng đặt lại câu có sử dụng từ này nhé!`;
+        }
+      } else if (result.isCorrect === false || mentionsFailure) {
+        // 2. Sai từ / sai ngữ pháp: cho điểm thấp luôn! (15 - 38 điểm)
+        result.isCorrect = false;
+        result.score = Math.min(Math.max(typeof result.score === 'number' ? result.score : 25, 15), 38);
+      } else {
+        // 3, 4, 5. Câu đúng:
+        result.isCorrect = true;
+        let baseScore = typeof result.score === 'number' ? result.score : 60;
+        const totalNp = Math.max(npCount, (result.grammarPoints || []).length);
+
+        // Quy tắc: Đúng thì điểm trung bình (50-65). Câu dài VÀ dùng nhiều np thì điểm mới cao!
+        if (charCount < 8 || totalNp === 0) {
+          // Câu ngắn hoặc không có cấu trúc ngữ pháp: CHỈ ĐIỂM TRUNG BÌNH (50 - 65)
+          result.score = Math.min(Math.max(baseScore, 50), 65);
+          if (result.feedback && !result.feedback.includes('đơn giản') && !result.feedback.includes('ngắn') && !result.feedback.includes('trung bình') && !result.feedback.includes('mở rộng')) {
+            result.feedback += ' (Đánh giá mức Trung Bình: Câu đúng cơ bản nhưng còn ngắn/đơn giản. Hãy mở rộng câu dài hơn và áp dụng thêm cấu trúc ngữ pháp như câu chữ 把, liên từ hoặc bổ ngữ để đạt điểm cao hơn nhé!)';
           }
-        } else if (charCount <= 10) {
+        } else if (totalNp >= 2 && charCount >= 15) {
+          // Câu rất dài VÀ nhiều np: 90 - 100 điểm
+          result.score = Math.min(Math.max(baseScore, 90), 100);
+        } else if (totalNp >= 1 && charCount >= 12) {
+          // Câu dài VÀ có 1-2 np: 80 - 88 điểm
           result.score = Math.min(Math.max(baseScore, 80), 88);
-        } else if (charCount <= 14) {
-          result.score = Math.min(Math.max(baseScore, 90), 95);
+        } else if (charCount >= 8 || totalNp >= 1) {
+          // Câu khá: 70 - 78 điểm
+          result.score = Math.min(Math.max(baseScore, 70), 78);
         } else {
-          result.score = Math.min(Math.max(baseScore, 96), 100);
+          result.score = Math.min(baseScore, 65);
         }
       }
     }
@@ -2850,24 +2936,25 @@ Trả về DUY NHẤT 1 JSON object thuần túy (không bọc trong markdown bl
     let fallbackScore = 15;
     let fallbackFb = `Câu chưa chứa từ vựng mục tiêu "${targetWord}".`;
     if (ok) {
-      if (charCount < 6) {
-        fallbackScore = 68;
-        fallbackFb = `Câu có sử dụng từ "${targetWord}" đúng ngữ pháp nhưng còn hơi ngắn. Hãy thử thêm trạng ngữ thời gian hoặc địa điểm để câu dài và đạt điểm cao hơn nhé!`;
-      } else if (charCount <= 10) {
-        fallbackScore = 85;
-        fallbackFb = `Câu có sử dụng từ "${targetWord}" chuẩn xác, diễn đạt tự nhiên. Tiếp tục phát huy!`;
-      } else if (charCount <= 14) {
+      if (npCount >= 2 && charCount >= 15) {
         fallbackScore = 93;
-        fallbackFb = `Rất tốt! Câu của bạn dài, đầy đủ ý và giàu ngữ cảnh.`;
+        fallbackFb = `Xuất sắc! Câu dài (${charCount} chữ), diễn đạt lưu loát và vận dụng nhiều cấu trúc ngữ pháp: ${detectedGrammar.join(', ')}.`;
+      } else if (npCount >= 1 && charCount >= 12) {
+        fallbackScore = 84;
+        fallbackFb = `Rất tốt! Câu có độ dài tốt (${charCount} chữ) và áp dụng cấu trúc ngữ pháp: ${detectedGrammar.join(', ')}.`;
+      } else if (charCount >= 8 && (npCount >= 1 || charCount >= 10)) {
+        fallbackScore = 72;
+        fallbackFb = `Khá tốt! Câu rõ nghĩa, dùng từ "${targetWord}" chuẩn xác. Hãy thử dùng thêm liên từ câu phức để nâng cao điểm số.`;
       } else {
-        fallbackScore = 98;
-        fallbackFb = `Xuất sắc! Câu của bạn rất dài, phức hợp và chuẩn bản ngữ.`;
+        fallbackScore = 58;
+        fallbackFb = `Câu đúng ngữ pháp cơ bản và dùng đúng từ "${targetWord}", nhưng câu còn ngắn (${charCount} chữ) và đơn giản. Cần mở rộng câu và dùng thêm cấu trúc ngữ pháp để đạt điểm cao hơn!`;
       }
     }
     res.json({
       success: true,
       isCorrect: ok,
       score: fallbackScore,
+      grammarPoints: detectedGrammar,
       feedback: fallbackFb,
       improvedSentence: cleanSentence,
       pinyin: "",
