@@ -26,6 +26,14 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.join(__dirname, '.env') });
 dotenv.config();
 
+// Crash Prevention Safeguards (Guarantees server never dies with 502/crash)
+process.on('uncaughtException', (err) => {
+  console.error('[Server SafeGuard] Uncaught exception prevented:', err.message);
+});
+process.on('unhandledRejection', (reason) => {
+  console.error('[Server SafeGuard] Unhandled rejection prevented:', reason);
+});
+
 const DB_PATH = path.join(__dirname, 'database.json');
 const DICTATION_DB_PATH = path.join(__dirname, 'video_dictation_lessons.json');
 const USER_DB_PATH = path.join(__dirname, 'user_data.json');

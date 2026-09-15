@@ -47,24 +47,42 @@ async function ensureYtDlpExists() {
     try {
       const downloader = YTDlpWrap.default ? YTDlpWrap.default : YTDlpWrap;
       await downloader.downloadFromGithub(YTDLP_PATH);
-    } catch (ghApiErr) {
-      console.warn('[System] yt-dlp-wrap API failed (possible rate limit). Downloading direct release binary...', ghApiErr.message);
-      const releaseUrl = process.platform === 'win32'
-        ? 'https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe'
-        : 'https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp';
-      const binRes = await fetch(releaseUrl, { redirect: 'follow' });
-      if (!binRes.ok) {
-        throw new Error(`Failed to download yt-dlp release binary: HTTP ${binRes.status}`);
+      if (process.platform !== 'win32') {
+        fs.chmodSync(YTDLP_PATH, '755');
       }
-      const binBuffer = Buffer.from(await binRes.arrayBuffer());
-      fs.writeFileSync(YTDLP_PATH, binBuffer);
+      isYtDlpReady = true;
+      console.log('[System] yt-dlp downloaded and verified successfully!');
+    } catch (ghApiErr) {
+      console.warn('[System] yt-dlp-wrap API failed, attempting direct release binary...', ghApiErr.message);
+      try {
+        const releaseUrl = process.platform === 'win32'
+          ? 'https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe'
+          : 'https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp';
+        const binRes = await fetch(releaseUrl, { redirect: 'follow' });
+        if (binRes.ok && binRes.body) {
+          const fileStream = fs.createWriteStream(YTDLP_PATH);
+          const reader = binRes.body.getReader ? binRes.body.getReader() : null;
+          if (reader) {
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
+              fileStream.write(value);
+            }
+            fileStream.end();
+          } else {
+            const buf = Buffer.from(await binRes.arrayBuffer());
+            fs.writeFileSync(YTDLP_PATH, buf);
+          }
+          if (process.platform !== 'win32') {
+            fs.chmodSync(YTDLP_PATH, '755');
+          }
+          isYtDlpReady = true;
+          console.log('[System] yt-dlp release binary downloaded successfully!');
+        }
+      } catch (directErr) {
+        console.warn('[System] Direct yt-dlp download non-fatal warning:', directErr.message);
+      }
     }
-
-    if (process.platform !== 'win32') {
-      fs.chmodSync(YTDLP_PATH, '755');
-    }
-    isYtDlpReady = true;
-    console.log('[System] yt-dlp downloaded and verified successfully!');
   }
 }
 
@@ -761,10 +779,17 @@ export async function transcribeAudioWithVAD(youtubeId, videoTitle = '') {
         console.log(`[VAD Audio Engine] Attempting fallback download via @distube/ytdl-core...`);
         const stream = ytdl(videoUrl, { quality: 'lowestaudio', filter: 'audioonly' });
         const writeStream = fs.createWriteStream(audioPath);
-        stream.pipe(writeStream);
         await new Promise((resolve, reject) => {
+          stream.on('error', (err) => {
+            writeStream.destroy();
+            reject(err);
+          });
+          writeStream.on('error', (err) => {
+            stream.destroy();
+            reject(err);
+          });
           writeStream.on('finish', () => resolve());
-          writeStream.on('error', (err) => reject(err));
+          stream.pipe(writeStream);
         });
         if (fs.existsSync(audioPath) && fs.statSync(audioPath).size > 2000) {
           downloaded = true;
