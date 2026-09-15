@@ -269,7 +269,7 @@ async function readUserData() {
           if (mongoose.connection.readyState === 1) break;
           await new Promise(r => setTimeout(r, 100));
         }
-      } catch (e) {}
+      } catch (e) { }
     }
   } else if (mongoose.connection.readyState !== 1) {
     // If no MongoDB URI, use user_data.json file fallback immediately
@@ -1162,7 +1162,7 @@ app.get('/api/admin/users/export-excel', async (req, res) => {
     const excelBuffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
 
     const todayDate = new Date();
-    const dateTag = `${todayDate.getFullYear()}_${(todayDate.getMonth()+1).toString().padStart(2,'0')}_${todayDate.getDate().toString().padStart(2,'0')}`;
+    const dateTag = `${todayDate.getFullYear()}_${(todayDate.getMonth() + 1).toString().padStart(2, '0')}_${todayDate.getDate().toString().padStart(2, '0')}`;
     const filename = `Bao_Cao_Nguoi_Dung_TiengTrungHongTai_${dateTag}.xlsx`;
 
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -1463,7 +1463,7 @@ app.get('/api/admin/user/:email/access-logs', async (req, res) => {
   if (mongoose.connection.readyState === 1) {
     try {
       userRecord = await User.findById(targetEmail).lean();
-    } catch (e) {}
+    } catch (e) { }
   }
 
   if (!userRecord) {
@@ -1552,7 +1552,7 @@ app.get('/api/user/game-history', async (req, res) => {
           userHistory = Array.isArray(dbUser.gameHistory) ? dbUser.gameHistory : [];
           quizHistory = Array.isArray(dbUser.quizHistory) ? dbUser.quizHistory : [];
         }
-      } catch (e) {}
+      } catch (e) { }
     }
 
     // Fallback to in-memory cache if MongoDB returned empty
@@ -2639,7 +2639,7 @@ Hãy đánh giá bài viết của học viên và trả về ĐÚNG 1 JSON obje
             max_tokens: 1500
           });
           reply = completion2.choices[0]?.message?.content || '';
-        } catch (eGroq2) {}
+        } catch (eGroq2) { }
       }
     }
 
@@ -2658,7 +2658,7 @@ Hãy đánh giá bài viết của học viên và trả về ĐÚNG 1 JSON obje
     let result = null;
     const jsonMatch = reply.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
-      try { result = JSON.parse(jsonMatch[0]); } catch (e) {}
+      try { result = JSON.parse(jsonMatch[0]); } catch (e) { }
     }
     if (!result) {
       result = {
@@ -2762,7 +2762,7 @@ Trả về DUY NHẤT 1 JSON object thuần túy (không bọc trong markdown bl
             max_tokens: 800
           });
           reply = completion2.choices[0]?.message?.content || '';
-        } catch (eGroq2) {}
+        } catch (eGroq2) { }
       }
     }
     if (!reply && GEMINI_API_KEY) {
@@ -2780,7 +2780,7 @@ Trả về DUY NHẤT 1 JSON object thuần túy (không bọc trong markdown bl
     let result = null;
     const jsonMatch = reply.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
-      try { result = JSON.parse(jsonMatch[0]); } catch (e) {}
+      try { result = JSON.parse(jsonMatch[0]); } catch (e) { }
     }
     if (!result) {
       if (!containsWord || isGibberish) {
@@ -2975,7 +2975,7 @@ Trả về ĐÚNG 1 JSON object:
     let result = null;
     const jsonMatch = reply.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
-      try { result = JSON.parse(jsonMatch[0]); } catch (e) {}
+      try { result = JSON.parse(jsonMatch[0]); } catch (e) { }
     }
 
     if (!result) {
@@ -3061,7 +3061,7 @@ Trả về ĐÚNG 1 JSON object:
           max_tokens: 1200
         });
         reply = completion.choices[0]?.message?.content || '';
-      } catch (e) {}
+      } catch (e) { }
     }
 
     if (!reply && GEMINI_API_KEY) {
@@ -3079,7 +3079,7 @@ Trả về ĐÚNG 1 JSON object:
     let result = null;
     const jsonMatch = reply.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
-      try { result = JSON.parse(jsonMatch[0]); } catch (e) {}
+      try { result = JSON.parse(jsonMatch[0]); } catch (e) { }
     }
 
     if (!result) {
@@ -4785,7 +4785,7 @@ app.get('/api/dictation/debug-network', async (req, res) => {
       });
       const text = await r.text();
       let j = null;
-      try { j = JSON.parse(text); } catch (e) {}
+      try { j = JSON.parse(text); } catch (e) { }
       const tracks = j?.captions?.playerCaptionsTracklistRenderer?.captionTracks;
       return { status: r.status, isJson: !!j, playability: j?.playabilityStatus?.status, tracksCount: tracks?.length || 0 };
     }),
@@ -4813,7 +4813,7 @@ app.get('/api/dictation/debug-network', async (req, res) => {
         exec(cmd, (err, stdout, stderr) => {
           if (err) return reject(new Error(err.message + (stderr ? ': ' + stderr : '')));
           let j = null;
-          try { j = JSON.parse(stdout); } catch (e) {}
+          try { j = JSON.parse(stdout); } catch (e) { }
           resolve({
             stdoutLen: stdout.length,
             isJson: !!j,
