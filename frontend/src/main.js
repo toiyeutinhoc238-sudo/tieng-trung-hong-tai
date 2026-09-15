@@ -7064,8 +7064,23 @@ function initChatbot() {
     }
   };
 
-  toggleBtn.onclick = window.toggleChatbotPanel;
-  closeBtn.onclick = window.closeChatbotPanel;
+  toggleBtn.onclick = function (e) {
+    e.stopPropagation();
+    window.toggleChatbotPanel();
+  };
+  closeBtn.onclick = function (e) {
+    e.stopPropagation();
+    window.closeChatbotPanel();
+  };
+
+  // Đóng khung chat khi bấm/chạm ra ngoài
+  document.addEventListener('click', (e) => {
+    if (panel && panel.style.display !== 'none') {
+      if (!panel.contains(e.target) && !toggleBtn.contains(e.target)) {
+        window.closeChatbotPanel();
+      }
+    }
+  });
 
   const dockSideBtn = document.getElementById('chatbot-side-dock-btn');
   if (dockSideBtn) {
