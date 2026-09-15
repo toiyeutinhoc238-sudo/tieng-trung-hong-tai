@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "html2canvas": "^1.4.1",
+    "pinyin-pro": "^3.29.4",
     "vite": "^5.2.11"
   }
 }

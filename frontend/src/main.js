@@ -9,6 +9,7 @@ import { HSK_LESSON_EXTRA_VIDEOS, getLessonExtraVideo } from './lesson_videos.js
 import { PREMIUM_WORDS } from './premium_topics_data.js';
 import { NotebookGamesHub } from './notebook_games_hub.js';
 import './screen_drawing.js';
+import { pinyin } from 'pinyin-pro';
 if (typeof window !== 'undefined') {
   window.HSK1_STRUCTURED_GRAMMAR = HSK1_STRUCTURED_GRAMMAR;
   window.HSK2_STRUCTURED_GRAMMAR = HSK2_STRUCTURED_GRAMMAR;
@@ -11698,11 +11699,25 @@ async function loadInitialStats() {
   renderWeeklyStudyChart();
 }
 
-// --- DYNAMIC NOTEBOOK BUILDER (TẠO SỔ TAY MỚI TỰ CHỌN TỪ VỰNG) ---
+// --- DYNAMIC NOTEBOOK BUILDER (TẠO SỔ TAY MỚI - TRA TỪ ĐIỂN & TỰ NHẬP TỪ AI SINH PINYIN) ---
+let createNbActiveTab = 'dict'; // 'dict' | 'custom' | 'curriculum'
+let createNbCustomSubMode = 'single'; // 'single' | 'batch'
 let createNbVersion = '3.0';
 let createNbLevel = '1';
 let createNbLesson = 'all';
 let createNbSelectedWordsMap = new Map(); // wordId -> wordObj
+
+function computePinyinForText(text) {
+  if (!text || !text.trim()) return '';
+  try {
+    if (typeof pinyin === 'function') {
+      return pinyin(text.trim(), { toneType: 'symbol' });
+    }
+  } catch (e) {
+    console.warn('pinyin generation error:', e);
+  }
+  return '';
+}
 
 window.openCreateNotebookModal = function () {
   const modal = document.getElementById('create-notebook-modal');
@@ -11711,21 +11726,485 @@ window.openCreateNotebookModal = function () {
   const nameInput = document.getElementById('create-nb-name-input');
   if (nameInput) nameInput.value = '';
 
-  const searchInput = document.getElementById('create-nb-word-search-input');
+  const searchInput = document.getElementById('create-nb-dict-search-input');
   if (searchInput) searchInput.value = '';
+
+  const hanziInput = document.getElementById('create-nb-custom-hanzi');
+  if (hanziInput) hanziInput.value = '';
+
+  const pinyinInput = document.getElementById('create-nb-custom-pinyin');
+  if (pinyinInput) pinyinInput.value = '';
+
+  const meaningInput = document.getElementById('create-nb-custom-meaning');
+  if (meaningInput) meaningInput.value = '';
+
+  const exampleInput = document.getElementById('create-nb-custom-example');
+  if (exampleInput) exampleInput.value = '';
+
+  const noteInput = document.getElementById('create-nb-custom-note');
+  if (noteInput) noteInput.value = '';
+
+  const batchInput = document.getElementById('create-nb-batch-text');
+  if (batchInput) batchInput.value = '';
 
   createNbVersion = '3.0';
   createNbLevel = '1';
   createNbLesson = 'all';
   createNbSelectedWordsMap.clear();
 
+  window.switchCreateNbTab('dict');
+  window.switchCreateNbCustomSubMode('single');
+
   updateCreateNbPillsUI();
   renderCreateNbLevelPills();
   renderCreateNbLessonPills();
   window.renderCreateNbWordsList();
-  updateCreateNbSelectedBadge();
+  window.renderCreateNbSelectedWordsList();
 
   modal.style.display = 'flex';
+};
+
+window.switchCreateNbTab = function (tab) {
+  createNbActiveTab = tab;
+  ['dict', 'custom', 'curriculum'].forEach(t => {
+    const btn = document.getElementById(`create-nb-tab-btn-${t}`);
+    const content = document.getElementById(`create-nb-tab-content-${t}`);
+    if (btn) btn.classList.toggle('active', t === tab);
+    if (content) content.style.display = (t === tab) ? 'flex' : 'none';
+  });
+
+  if (tab === 'dict') {
+    const searchInput = document.getElementById('create-nb-dict-search-input');
+    if (searchInput) {
+      setTimeout(() => searchInput.focus(), 60);
+      window.handleCreateNbDictSearch(searchInput.value);
+    }
+  } else if (tab === 'custom') {
+    const hanziInput = document.getElementById('create-nb-custom-hanzi');
+    if (hanziInput) setTimeout(() => hanziInput.focus(), 60);
+  } else if (tab === 'curriculum') {
+    window.renderCreateNbWordsList();
+  }
+};
+
+window.switchCreateNbCustomSubMode = function (mode) {
+  createNbCustomSubMode = mode;
+  const singleBtn = document.getElementById('create-nb-custom-mode-single-btn');
+  const batchBtn = document.getElementById('create-nb-custom-mode-batch-btn');
+  const singleWrap = document.getElementById('create-nb-custom-single-wrap');
+  const batchWrap = document.getElementById('create-nb-custom-batch-wrap');
+
+  if (singleBtn) singleBtn.classList.toggle('active', mode === 'single');
+  if (batchBtn) batchBtn.classList.toggle('active', mode === 'batch');
+  if (singleWrap) singleWrap.style.display = (mode === 'single') ? 'flex' : 'none';
+  if (batchWrap) batchWrap.style.display = (mode === 'batch') ? 'flex' : 'none';
+};
+
+window.handleCreateNbCustomHanziInput = function (val) {
+  const pinyinInput = document.getElementById('create-nb-custom-pinyin');
+  const meaningInput = document.getElementById('create-nb-custom-meaning');
+  if (!val || !val.trim()) {
+    if (pinyinInput) pinyinInput.value = '';
+    return;
+  }
+
+  const clean = val.trim();
+  const py = computePinyinForText(clean);
+  if (pinyinInput) pinyinInput.value = py;
+
+  // Smart auto-fill meaning from dictionary if user hasn't typed a meaning yet
+  if (meaningInput && !meaningInput.value.trim()) {
+    const match = vocabList.find(w => (w.word === clean || w.simplified === clean || w.character === clean));
+    if (match) {
+      meaningInput.value = match.meaning || match.definition || match.vietnamese || '';
+    }
+  }
+};
+
+window.handleCreateNbDictSearch = function (rawQuery) {
+  const container = document.getElementById('create-nb-dict-results-container');
+  if (!container) return;
+
+  const q = (rawQuery || '').trim().toLowerCase();
+  const normQ = typeof normalizeTextForMatch === 'function' ? normalizeTextForMatch(q) : q.replace(/[\s\-_]/g, '');
+
+  let results = [];
+  if (!q) {
+    // Show popular starter words from HSK 1-3
+    results = vocabList.filter(w => !w.isCustom && (w.level === '1' || w.level === '2' || w.level === '3')).slice(0, 15);
+  } else {
+    // Search across word, pinyin, meaning, hanViet
+    const seenWords = new Set();
+    results = vocabList.filter(w => {
+      if (w.isCustom) return false;
+      const char = (w.word || w.simplified || w.character || '').toLowerCase();
+      const py = (w.pinyin || '').toLowerCase();
+      const vi = (w.meaning || w.definition || w.vietnamese || '').toLowerCase();
+      const hv = (w.hanViet || '').toLowerCase();
+
+      const normChar = typeof normalizeTextForMatch === 'function' ? normalizeTextForMatch(char) : char;
+      const normPy = typeof normalizeTextForMatch === 'function' ? normalizeTextForMatch(py) : py;
+      const normVi = typeof normalizeTextForMatch === 'function' ? normalizeTextForMatch(vi) : vi;
+      const normHv = typeof normalizeTextForMatch === 'function' ? normalizeTextForMatch(hv) : hv;
+
+      const isMatch = char.includes(q) || py.includes(q) || vi.includes(q) || hv.includes(q)
+        || (normQ && (normChar.includes(normQ) || normPy.includes(normQ) || normVi.includes(normQ) || normHv.includes(normQ)));
+
+      if (isMatch && !seenWords.has(char)) {
+        seenWords.add(char);
+        return true;
+      }
+      return false;
+    }).slice(0, 30);
+  }
+
+  if (results.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 24px 14px; color: #94a3b8; font-size: 0.88rem; background: rgba(0,0,0,0.2); border-radius: 12px;">
+        <i class="fa-solid fa-magnifying-glass" style="font-size: 1.8rem; margin-bottom: 8px; opacity: 0.5; display: block; color: #38bdf8;"></i>
+        Chưa tìm thấy từ "<strong>${rawQuery}</strong>" trong kho từ sẵn có.
+        <div style="margin-top: 10px;">
+          <button type="button" onclick="window.fetchOnlineDictAndAddToNb('${rawQuery.replace(/'/g, "\\'")}')" class="btn btn-sm btn-primary"
+            style="padding: 6px 16px; border-radius: 8px; font-weight: 700; font-size: 0.82rem; background: linear-gradient(135deg, #0284c7, #2563eb); border: none; cursor: pointer;">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> ✨ AI Tra từ điển online &amp; Thêm từ này
+          </button>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = results.map(w => {
+    const char = w.word || w.simplified || w.character || '';
+    const py = w.pinyin || '';
+    const vi = w.meaning || w.definition || w.vietnamese || '';
+    const lvlText = (w.level === 'premium') ? w.category : `HSK ${w.level || '1'}`;
+    const isAdded = Array.from(createNbSelectedWordsMap.values()).some(item => item.word === char);
+
+    return `
+      <div class="create-nb-dict-card ${isAdded ? 'is-added' : ''}">
+        <div style="display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1;">
+          <div style="font-size: 1.3rem; font-weight: 800; font-family: var(--font-hanzi); color: #ffffff; min-width: 65px;">
+            ${char}
+          </div>
+          <div style="min-width: 80px; font-size: 0.88rem; font-weight: 700; color: #38bdf8;">
+            ${py}
+          </div>
+          <div style="font-size: 0.84rem; color: #cbd5e1; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${vi}">
+            ${vi}
+          </div>
+          <span style="font-size: 0.72rem; padding: 2px 7px; border-radius: 6px; background: rgba(255,255,255,0.06); color: #94a3b8; border: 1px solid rgba(255,255,255,0.1); white-space: nowrap;">
+            ${lvlText}
+          </span>
+          <button type="button" onclick="window.speakLessonWord('${char.replace(/'/g, "\\'")}')"
+            style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); color: #38bdf8; border-radius: 8px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.75rem; flex-shrink: 0;">
+            <i class="fa-solid fa-volume-high"></i>
+          </button>
+        </div>
+
+        <button type="button" onclick="window.toggleDictWordToCreateNb('${char.replace(/'/g, "\\'")}', '${py.replace(/'/g, "\\'")}', '${vi.replace(/'/g, "\\'")}')"
+          class="btn btn-sm ${isAdded ? 'btn-success' : 'btn-outline-primary'}"
+          style="padding: 5px 12px; font-size: 0.8rem; font-weight: 700; border-radius: 8px; cursor: pointer; flex-shrink: 0; min-width: 90px; text-align: center;">
+          ${isAdded ? '<i class="fa-solid fa-check"></i> Đã thêm' : '<i class="fa-solid fa-plus"></i> Thêm'}
+        </button>
+      </div>
+    `;
+  }).join('');
+};
+
+window.toggleDictWordToCreateNb = function (word, pinyinVal, meaningVal) {
+  let existingId = null;
+  for (const [id, item] of createNbSelectedWordsMap.entries()) {
+    if (item.word === word) {
+      existingId = id;
+      break;
+    }
+  }
+
+  if (existingId) {
+    createNbSelectedWordsMap.delete(existingId);
+    showToast(`Đã bỏ từ "${word}" khỏi danh sách`);
+  } else {
+    const newId = `dict_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
+    createNbSelectedWordsMap.set(newId, {
+      id: newId,
+      word,
+      pinyin: pinyinVal || computePinyinForText(word),
+      meaning: meaningVal,
+      level: 'custom',
+      isCustom: true
+    });
+    showToast(`Đã thêm "${word}" vào sổ tay! ✨`);
+  }
+
+  const searchInput = document.getElementById('create-nb-dict-search-input');
+  window.handleCreateNbDictSearch(searchInput ? searchInput.value : '');
+  window.renderCreateNbSelectedWordsList();
+};
+
+window.fetchOnlineDictAndAddToNb = async function (rawText) {
+  if (!rawText || !rawText.trim()) return;
+  const word = rawText.trim();
+  showToast(`🔍 Đang tra cứu online từ "${word}"...`);
+  try {
+    const res = await fetch('/api/dict/lookup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ word })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const py = data.pinyin || computePinyinForText(word);
+      const meaning = data.meaning || 'Từ vựng tra cứu';
+      const newId = `online_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
+      createNbSelectedWordsMap.set(newId, {
+        id: newId,
+        word: data.word || word,
+        pinyin: py,
+        meaning: meaning,
+        level: 'custom',
+        isCustom: true
+      });
+      showToast(`🎉 Đã tìm thấy & thêm "${word}" (${py} - ${meaning})!`);
+      const searchInput = document.getElementById('create-nb-dict-search-input');
+      if (searchInput) searchInput.value = '';
+      window.handleCreateNbDictSearch('');
+      window.renderCreateNbSelectedWordsList();
+    } else {
+      showToast(`Không tìm thấy kết quả cho "${word}". Bạn có thể tự nhập ở Cách 2 nhé!`, true);
+    }
+  } catch (err) {
+    console.warn('Online dict lookup error:', err);
+    const py = computePinyinForText(word);
+    const newId = `online_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
+    createNbSelectedWordsMap.set(newId, {
+      id: newId,
+      word: word,
+      pinyin: py,
+      meaning: 'Từ vựng mới',
+      level: 'custom',
+      isCustom: true
+    });
+    showToast(`Đã thêm "${word}" (${py}) vào sổ tay!`);
+    window.renderCreateNbSelectedWordsList();
+  }
+};
+
+window.addSingleCustomWordToCreateNb = function () {
+  const hanziInput = document.getElementById('create-nb-custom-hanzi');
+  const pinyinInput = document.getElementById('create-nb-custom-pinyin');
+  const meaningInput = document.getElementById('create-nb-custom-meaning');
+  const exampleInput = document.getElementById('create-nb-custom-example');
+  const noteInput = document.getElementById('create-nb-custom-note');
+
+  const hanzi = hanziInput ? hanziInput.value.trim() : '';
+  let pinyinVal = pinyinInput ? pinyinInput.value.trim() : '';
+  const meaning = meaningInput ? meaningInput.value.trim() : '';
+  const example = exampleInput ? exampleInput.value.trim() : '';
+  const note = noteInput ? noteInput.value.trim() : '';
+
+  if (!hanzi) {
+    showToast('Vui lòng nhập Chữ Hán!', true);
+    if (hanziInput) hanziInput.focus();
+    return;
+  }
+
+  if (!meaning) {
+    showToast('Vui lòng nhập Nghĩa tiếng Việt!', true);
+    if (meaningInput) meaningInput.focus();
+    return;
+  }
+
+  if (!pinyinVal) {
+    pinyinVal = computePinyinForText(hanzi);
+  }
+
+  let example_zh = '';
+  let example_vi = '';
+  if (example && example.includes('|')) {
+    const parts = example.split('|');
+    example_zh = parts[0].trim();
+    example_vi = parts[1].trim();
+  } else if (example) {
+    example_zh = example;
+  }
+
+  const wordObj = {
+    id: `manual_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
+    word: hanzi,
+    pinyin: pinyinVal,
+    meaning: meaning,
+    example_zh: example_zh,
+    example_vi: example_vi,
+    explanation: note,
+    level: 'custom',
+    isCustom: true
+  };
+
+  createNbSelectedWordsMap.set(wordObj.id, wordObj);
+
+  if (hanziInput) {
+    hanziInput.value = '';
+    hanziInput.focus();
+  }
+  if (pinyinInput) pinyinInput.value = '';
+  if (meaningInput) meaningInput.value = '';
+  if (exampleInput) exampleInput.value = '';
+  if (noteInput) noteInput.value = '';
+
+  window.renderCreateNbSelectedWordsList();
+  showToast(`✨ Đã thêm "${hanzi}" (${pinyinVal}) vào danh sách!`);
+};
+
+window.addBatchCustomWordsToCreateNb = function () {
+  const batchInput = document.getElementById('create-nb-batch-text');
+  if (!batchInput) return;
+
+  const text = batchInput.value.trim();
+  if (!text) {
+    showToast('Vui lòng dán danh sách từ vựng vào ô nhập!', true);
+    batchInput.focus();
+    return;
+  }
+
+  const lines = text.split('\n');
+  let addedCount = 0;
+
+  lines.forEach(line => {
+    const trimmed = line.trim();
+    if (!trimmed) return;
+
+    let hanzi = '';
+    let pinyinVal = '';
+    let meaning = '';
+
+    if (trimmed.includes('|')) {
+      const parts = trimmed.split('|').map(p => p.trim());
+      hanzi = parts[0];
+      if (parts.length >= 3) {
+        pinyinVal = parts[1];
+        meaning = parts[2];
+      } else {
+        meaning = parts[1];
+      }
+    } else if (trimmed.includes('-')) {
+      const parts = trimmed.split('-').map(p => p.trim());
+      hanzi = parts[0];
+      meaning = parts.slice(1).join(' - ');
+    } else if (trimmed.includes(':') || trimmed.includes('：')) {
+      const parts = trimmed.split(/[:：]/).map(p => p.trim());
+      hanzi = parts[0];
+      meaning = parts.slice(1).join(': ');
+    } else if (trimmed.includes('/')) {
+      const parts = trimmed.split('/').map(p => p.trim());
+      hanzi = parts[0];
+      meaning = parts.slice(1).join('/ ');
+    } else {
+      const match = trimmed.match(/^([\u4e00-\u9fa5]+)\s+(.*)$/);
+      if (match) {
+        hanzi = match[1].trim();
+        meaning = match[2].trim();
+      } else {
+        hanzi = trimmed;
+        meaning = 'Từ vựng tự nhập';
+      }
+    }
+
+    if (hanzi) {
+      if (!pinyinVal) {
+        pinyinVal = computePinyinForText(hanzi);
+      }
+      const wordObj = {
+        id: `batch_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
+        word: hanzi,
+        pinyin: pinyinVal,
+        meaning: meaning || 'Từ vựng tự nhập',
+        level: 'custom',
+        isCustom: true
+      };
+      createNbSelectedWordsMap.set(wordObj.id, wordObj);
+      addedCount++;
+    }
+  });
+
+  if (addedCount > 0) {
+    batchInput.value = '';
+    window.renderCreateNbSelectedWordsList();
+    showToast(`🎉 AI đã tự động sinh Pinyin và thêm thành công ${addedCount} từ vựng!`);
+  } else {
+    showToast('Không nhận diện được từ vựng hợp lệ. Vui lòng kiểm tra định dạng!', true);
+  }
+};
+
+window.renderCreateNbSelectedWordsList = function () {
+  const container = document.getElementById('create-nb-selected-words-list');
+  const countBadge = document.getElementById('create-nb-selected-count-badge');
+  const totalBadge = document.getElementById('create-nb-total-selected-badge');
+
+  const count = createNbSelectedWordsMap.size;
+  if (countBadge) countBadge.textContent = `${count} từ`;
+  if (totalBadge) totalBadge.textContent = `${count} từ`;
+
+  if (!container) return;
+
+  if (count === 0) {
+    container.innerHTML = `
+      <div style="display: flex; align-items: center; gap: 8px; color: #94a3b8; font-size: 0.84rem; font-style: italic; padding: 6px;">
+        <i class="fa-solid fa-circle-info" style="color: #38bdf8;"></i> Chưa có từ vựng nào được chọn. Hãy tra từ điển (Cách 1) hoặc tự nhập từ (Cách 2) ở trên nhé!
+      </div>
+    `;
+    return;
+  }
+
+  const words = Array.from(createNbSelectedWordsMap.values());
+  container.innerHTML = words.map(w => {
+    const char = w.word || w.simplified || w.character || '';
+    const py = w.pinyin || '';
+    const vi = w.meaning || w.definition || w.vietnamese || '';
+
+    return `
+      <div class="create-nb-selected-card">
+        <strong style="color: #38bdf8; font-size: 0.98rem; font-family: var(--font-hanzi);">${char}</strong>
+        <span style="color: #34d399; font-size: 0.8rem; font-weight: 700;">${py}</span>
+        <span style="color: #94a3b8; font-size: 0.76rem;">—</span>
+        <span style="color: #e2e8f0; font-size: 0.78rem; max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${vi}">
+          ${vi}
+        </span>
+        <button type="button" onclick="window.speakLessonWord('${char.replace(/'/g, "\\'")}')"
+          style="background: none; border: none; color: #38bdf8; cursor: pointer; padding: 0 3px; font-size: 0.75rem;" title="Phát âm">
+          <i class="fa-solid fa-volume-high"></i>
+        </button>
+        <button type="button" onclick="window.removeWordFromCreateNb('${w.id}')"
+          style="background: none; border: none; color: #f87171; cursor: pointer; padding: 0 3px; font-size: 0.75rem;" title="Xóa từ này khỏi sổ tay">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    `;
+  }).join('');
+};
+
+window.removeWordFromCreateNb = function (id) {
+  createNbSelectedWordsMap.delete(id);
+  window.renderCreateNbSelectedWordsList();
+
+  const searchInput = document.getElementById('create-nb-dict-search-input');
+  if (searchInput) window.handleCreateNbDictSearch(searchInput.value);
+
+  if (createNbActiveTab === 'curriculum') {
+    window.renderCreateNbWordsList();
+  }
+};
+
+window.clearAllCreateNbSelectedWords = function () {
+  if (createNbSelectedWordsMap.size === 0) return;
+  if (!confirm('Bạn có chắc chắn muốn xóa toàn bộ từ đã chọn trong danh sách này?')) return;
+  createNbSelectedWordsMap.clear();
+  window.renderCreateNbSelectedWordsList();
+
+  const searchInput = document.getElementById('create-nb-dict-search-input');
+  if (searchInput) window.handleCreateNbDictSearch(searchInput.value);
+  if (createNbActiveTab === 'curriculum') window.renderCreateNbWordsList();
+  showToast('Đã xóa tất cả từ đã chọn');
 };
 
 window.setCreateNbVersion = function (ver) {
@@ -11820,7 +12299,6 @@ function renderCreateNbLessonPills() {
 
   lessonContainer.style.display = 'flex';
 
-  // Find all available words for this version & level
   const baseWords = vocabList.filter(w => {
     if (w.isCustom) return false;
     if (createNbVersion === 'yct') {
@@ -11879,18 +12357,6 @@ function getFilteredWordsForCreatePicker() {
     }
   }
 
-  const searchInput = document.getElementById('create-nb-word-search-input');
-  const q = searchInput ? searchInput.value.trim().toLowerCase() : '';
-  if (q) {
-    list = list.filter(w => {
-      const char = (w.word || w.simplified || w.character || '').toLowerCase();
-      const py = (w.pinyin || '').toLowerCase();
-      const vi = (w.meaning || w.definition || w.vietnamese || '').toLowerCase();
-      const hv = (w.hanViet || '').toLowerCase();
-      return char.includes(q) || py.includes(q) || vi.includes(q) || hv.includes(q);
-    });
-  }
-
   return list;
 }
 
@@ -11922,7 +12388,7 @@ window.renderCreateNbWordsList = function () {
     return `
       <div class="create-nb-word-row ${isSelected ? 'selected' : ''}" onclick="window.toggleCreateNbWordSelection('${w.id}')">
         <input type="checkbox" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation(); window.toggleCreateNbWordSelection('${w.id}')" style="width: 18px; height: 18px; cursor: pointer; accent-color: #10b981;">
-        <div style="font-size: 1.25rem; font-weight: 800; font-family: var(--font-display); color: #ffffff; min-width: 70px;">
+        <div style="font-size: 1.25rem; font-weight: 800; font-family: var(--font-hanzi); color: #ffffff; min-width: 70px;">
           ${char}
         </div>
         <div style="font-size: 0.88rem; font-weight: 700; color: #38bdf8; min-width: 100px;">
@@ -11947,10 +12413,20 @@ window.toggleCreateNbWordSelection = function (wordId) {
     createNbSelectedWordsMap.delete(wordId);
   } else {
     const w = vocabList.find(item => item.id === wordId);
-    if (w) createNbSelectedWordsMap.set(wordId, w);
+    if (w) {
+      createNbSelectedWordsMap.set(wordId, {
+        id: w.id,
+        word: w.word || w.simplified || w.character || '',
+        pinyin: w.pinyin || '',
+        meaning: w.meaning || w.definition || w.vietnamese || '',
+        hanViet: w.hanViet || '',
+        level: w.level || 'custom',
+        isCustom: true
+      });
+    }
   }
 
-  updateCreateNbSelectedBadge();
+  window.renderCreateNbSelectedWordsList();
   window.renderCreateNbWordsList();
 };
 
@@ -11958,21 +12434,23 @@ window.createNbSelectAllVisible = function (selectAll) {
   const visible = getFilteredWordsForCreatePicker();
   visible.forEach(w => {
     if (selectAll) {
-      createNbSelectedWordsMap.set(w.id, w);
+      createNbSelectedWordsMap.set(w.id, {
+        id: w.id,
+        word: w.word || w.simplified || w.character || '',
+        pinyin: w.pinyin || '',
+        meaning: w.meaning || w.definition || w.vietnamese || '',
+        hanViet: w.hanViet || '',
+        level: w.level || 'custom',
+        isCustom: true
+      });
     } else {
       createNbSelectedWordsMap.delete(w.id);
     }
   });
 
-  updateCreateNbSelectedBadge();
+  window.renderCreateNbSelectedWordsList();
   window.renderCreateNbWordsList();
 };
-
-function updateCreateNbSelectedBadge() {
-  const count = createNbSelectedWordsMap.size;
-  const badge = document.getElementById('create-nb-total-selected-badge');
-  if (badge) badge.textContent = `${count} từ`;
-}
 
 window.submitCreateCustomNotebook = async function () {
   const nameInput = document.getElementById('create-nb-name-input');
@@ -11991,7 +12469,7 @@ window.submitCreateCustomNotebook = async function () {
   }
 
   if (createNbSelectedWordsMap.size === 0) {
-    showToast('Vui lòng tick chọn ít nhất 1 từ vựng để thêm vào sổ tay!', true);
+    showToast('Vui lòng thêm ít nhất 1 từ vựng vào sổ tay!', true);
     return;
   }
 
@@ -12005,10 +12483,11 @@ window.submitCreateCustomNotebook = async function () {
   // 2. Clone selected words with isCustom: true and category: name
   const createdWords = [];
   selectedWords.forEach(w => {
+    const char = w.word || w.simplified || w.character || '';
     const clone = {
       id: `custom_${Date.now()}_${Math.random().toString(36).substr(2, 7)}`,
-      word: w.word || w.simplified || w.character || '',
-      pinyin: w.pinyin || '',
+      word: char,
+      pinyin: w.pinyin || computePinyinForText(char),
       meaning: w.meaning || w.definition || w.vietnamese || '',
       hanViet: w.hanViet || '',
       level: 'custom',
@@ -12031,6 +12510,31 @@ window.submitCreateCustomNotebook = async function () {
   const guestCustom = JSON.parse(localStorage.getItem('guest_custom_words') || '[]');
   guestCustom.push(...createdWords);
   localStorage.setItem('guest_custom_words', JSON.stringify(guestCustom));
+
+  // Sync to database if user is logged in
+  if (currentUser) {
+    try {
+      for (const w of createdWords) {
+        fetch(API_BASE_URL + '/api/vocabulary', {
+          method: 'POST',
+          headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+          body: JSON.stringify({
+            word: w.word,
+            pinyin: w.pinyin,
+            meaning: w.meaning,
+            level: 99,
+            category: name,
+            example_zh: w.example_zh,
+            example_vi: w.example_vi,
+            explanation: w.explanation
+          }),
+          credentials: 'include'
+        }).catch(() => {});
+      }
+    } catch (e) {
+      console.warn('Sync custom words API error:', e);
+    }
+  }
 
   // Close modal
   const modal = document.getElementById('create-notebook-modal');

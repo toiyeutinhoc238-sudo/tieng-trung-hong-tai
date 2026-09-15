@@ -122,8 +122,8 @@
   <script type="module" crossorigin src="/assets/global_sidebar-BI93f3Av.js"></script>
   <script type="module" crossorigin src="/assets/grammar_hsk3_v2-DLPb-ska.js"></script>
   <script type="module" crossorigin src="/assets/screen_drawing-BS_xmQo7.js"></script>
-  <script type="module" crossorigin src="/assets/main-BZ7Nc0YQ.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/style-aj0Ik5h_.css">
+  <script type="module" crossorigin src="/assets/main-DQZcescO.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/style-CJ8QinbF.css">
 </head>
 
 <body>
@@ -4024,7 +4024,7 @@
   <div class="modal-overlay" id="create-notebook-modal" onclick="if(event.target === this) this.style.display='none';"
     style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(16px); z-index: 999999; align-items: center; justify-content: center; padding: 16px;">
     <div class="modal-card glass-panel"
-      style="background: #0f172a; border: 1.5px solid rgba(56, 189, 248, 0.35); border-radius: 24px; width: 100%; max-width: 820px; max-height: 92vh; padding: 24px 28px; box-shadow: 0 25px 60px rgba(0,0,0,0.6); color: #ffffff; position: relative; display: flex; flex-direction: column; gap: 16px; overflow: hidden;">
+      style="background: #0f172a; border: 1.5px solid rgba(56, 189, 248, 0.35); border-radius: 24px; width: 100%; max-width: 860px; max-height: 92vh; padding: 22px 26px; box-shadow: 0 25px 60px rgba(0,0,0,0.6); color: #ffffff; position: relative; display: flex; flex-direction: column; gap: 14px; overflow: hidden;">
 
       <!-- Close Button -->
       <button onclick="document.getElementById('create-notebook-modal').style.display='none'"
@@ -4036,20 +4036,20 @@
       <div
         style="display: flex; align-items: center; gap: 14px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.12);">
         <div
-          style="width: 46px; height: 46px; border-radius: 14px; background: linear-gradient(135deg, #0284c7, #2563eb); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35); flex-shrink: 0;">
-          <i class="fa-solid fa-folder-plus"></i>
+          style="width: 44px; height: 44px; border-radius: 14px; background: linear-gradient(135deg, #0284c7, #2563eb); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35); flex-shrink: 0;">
+          <i class="fa-solid fa-book-bookmark"></i>
         </div>
         <div>
           <h3
-            style="font-size: 1.35rem; font-weight: 800; color: #ffffff; margin: 0 0 2px 0; font-family: var(--font-display);">
+            style="font-size: 1.3rem; font-weight: 800; color: #ffffff; margin: 0 0 2px 0; font-family: var(--font-display);">
             Tạo Sổ Tay Mới</h3>
-          <p style="font-size: 0.85rem; color: #94a3b8; margin: 0;">Lựa chọn từ vựng theo phiên bản, cấp độ và bài học
-            để gom vào sổ tay cá nhân.</p>
+          <p style="font-size: 0.84rem; color: #94a3b8; margin: 0;">Đặt tên sổ tay, tra từ điển hoặc tự nhập từ vựng
+            (AI tự động sinh phiên âm Pinyin chuẩn).</p>
         </div>
       </div>
 
       <!-- Scrollable Body -->
-      <div style="overflow-y: auto; display: flex; flex-direction: column; gap: 16px; padding-right: 4px; flex: 1;">
+      <div style="overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding-right: 4px; flex: 1;">
 
         <!-- Step 1: Tên sổ tay -->
         <div style="display: flex; flex-direction: column; gap: 6px;">
@@ -4060,97 +4060,236 @@
             Đặt tên cho sổ tay (*)
           </label>
           <input type="text" id="create-nb-name-input"
-            placeholder="Ví dụ: Từ vựng khó nhớ tuần này, Từ vựng HSK 1 tự chọn..."
+            placeholder="Ví dụ: Từ vựng giao tiếp thường ngày, Từ vựng khó nhớ tuần này, Mua sắm du lịch..."
             style="width: 100%; padding: 10px 16px; background: rgba(0,0,0,0.35); border: 1.5px solid rgba(255,255,255,0.18); border-radius: 12px; color: #ffffff; font-size: 0.95rem; font-weight: 600; outline: none; transition: all 0.2s;"
             onfocus="this.style.borderColor='#38bdf8'" onblur="this.style.borderColor='rgba(255,255,255,0.18)'">
         </div>
 
-        <!-- Step 2: Bộ lọc chọn từ vựng -->
-        <div
-          style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; gap: 12px;">
-          <div
+        <!-- Step 2: Tabs chọn phương thức thêm từ vựng -->
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <label
             style="font-size: 0.85rem; font-weight: 700; color: #38bdf8; display: flex; align-items: center; gap: 6px;">
             <span
               style="background: rgba(56, 189, 248, 0.2); width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem;">2</span>
-            Bộ lọc từ vựng để thêm vào sổ tay:
+            Thêm từ vựng vào sổ tay:
+          </label>
+
+          <!-- Tab Selector -->
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button type="button" id="create-nb-tab-btn-dict" class="create-nb-tab-btn active"
+              onclick="window.switchCreateNbTab('dict')">
+              <i class="fa-solid fa-magnifying-glass"></i> Cách 1: Tra từ điển &amp; Thêm
+            </button>
+            <button type="button" id="create-nb-tab-btn-custom" class="create-nb-tab-btn"
+              onclick="window.switchCreateNbTab('custom')">
+              <i class="fa-solid fa-wand-magic-sparkles" style="color: #38bdf8;"></i> Cách 2: Tự nhập từ (AI sinh Pinyin)
+            </button>
+            <button type="button" id="create-nb-tab-btn-curriculum" class="create-nb-tab-btn"
+              onclick="window.switchCreateNbTab('curriculum')">
+              <i class="fa-solid fa-book-open"></i> Cách 3: Chọn từ giáo trình
+            </button>
           </div>
 
-          <!-- 2.1 Chọn Giáo trình / Phiên bản -->
-          <div style="display: flex; flex-direction: column; gap: 6px;">
-            <span style="font-size: 0.76rem; font-weight: 700; color: #94a3b8; text-transform: uppercase;">1. Chọn Giáo
-              Trình / Phiên Bản:</span>
-            <div id="create-nb-version-pills" style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <button type="button" class="nb-picker-pill active" data-ver="3.0"
-                onclick="window.setCreateNbVersion('3.0')">🎓 HSK 3.0 (Mới)</button>
-              <button type="button" class="nb-picker-pill" data-ver="2.0" onclick="window.setCreateNbVersion('2.0')">📜
-                HSK 2.0</button>
-              <button type="button" class="nb-picker-pill" data-ver="yct" onclick="window.setCreateNbVersion('yct')">👶
-                YCT Thiếu Nhi</button>
-              <button type="button" class="nb-picker-pill" data-ver="premium"
-                onclick="window.setCreateNbVersion('premium')">👑 Chủ Đề Cao Cấp</button>
+          <!-- TAB 1: TRA TỪ ĐIỂN & THÊM -->
+          <div id="create-nb-tab-content-dict"
+            style="display: flex; flex-direction: column; gap: 10px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px;">
+            <div style="position: relative; width: 100%;">
+              <i class="fa-solid fa-magnifying-glass"
+                style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #38bdf8; font-size: 0.95rem;"></i>
+              <input type="text" id="create-nb-dict-search-input"
+                placeholder="Tra cứu chữ Hán, Pinyin hoặc Tiếng Việt (Ví dụ: 喜欢, xuexi, học tập, trà sữa)..."
+                style="width: 100%; padding: 10px 42px 10px 40px; font-size: 0.9rem; background: rgba(0,0,0,0.35); border: 1.5px solid rgba(56, 189, 248, 0.35); border-radius: 12px; color: #ffffff; outline: none; transition: all 0.2s;"
+                onfocus="this.style.borderColor='#38bdf8'" onblur="this.style.borderColor='rgba(56, 189, 248, 0.35)'"
+                oninput="window.handleCreateNbDictSearch(this.value)">
+              <button type="button"
+                onclick="document.getElementById('create-nb-dict-search-input').value=''; window.handleCreateNbDictSearch('');"
+                style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 0.9rem;">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+
+            <!-- Dict Search Results Container -->
+            <div id="create-nb-dict-results-container"
+              style="max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding-right: 4px;">
+              <!-- Dynamic items populated by JS -->
             </div>
           </div>
 
-          <!-- 2.2 Chọn Cấp độ -->
-          <div style="display: flex; flex-direction: column; gap: 6px;">
-            <span style="font-size: 0.76rem; font-weight: 700; color: #94a3b8; text-transform: uppercase;">2. Chọn Cấp
-              Độ:</span>
-            <div id="create-nb-level-pills" style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <!-- Dynamic Level Pills populated by JS -->
+          <!-- TAB 2: TỰ NHẬP TỪ & AI SINH PINYIN -->
+          <div id="create-nb-tab-content-custom"
+            style="display: none; flex-direction: column; gap: 12px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px;">
+            <!-- Header with sub-mode toggle -->
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+              <span style="font-size: 0.84rem; color: #cbd5e1; font-weight: 700;">
+                <i class="fa-solid fa-sparkles" style="color: #10b981;"></i> Nhập Chữ Hán và Nghĩa — Hệ thống tự động sinh Phiên âm Pinyin chuẩn thanh điệu:
+              </span>
+              <div style="display: flex; gap: 6px;">
+                <button type="button" id="create-nb-custom-mode-single-btn" class="nb-picker-pill active"
+                  onclick="window.switchCreateNbCustomSubMode('single')">
+                  <i class="fa-solid fa-pen"></i> Từng từ một
+                </button>
+                <button type="button" id="create-nb-custom-mode-batch-btn" class="nb-picker-pill"
+                  onclick="window.switchCreateNbCustomSubMode('batch')">
+                  <i class="fa-solid fa-list-check"></i> Dán nhiều từ
+                </button>
+              </div>
+            </div>
+
+            <!-- Submode A: Single Word Entry -->
+            <div id="create-nb-custom-single-wrap" style="display: flex; flex-direction: column; gap: 10px;">
+              <div style="display: grid; grid-template-columns: 1fr 1.1fr 1.3fr; gap: 10px;">
+                <!-- Hanzi Input -->
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                  <label style="font-size: 0.78rem; font-weight: 700; color: #94a3b8;">Chữ Hán (*):</label>
+                  <input type="text" id="create-nb-custom-hanzi" placeholder="Ví dụ: 梦想, 努力..."
+                    style="padding: 9px 12px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.18); border-radius: 10px; color: #ffffff; font-size: 1.05rem; font-weight: 700; font-family: var(--font-hanzi); outline: none;"
+                    oninput="window.handleCreateNbCustomHanziInput(this.value)">
+                </div>
+
+                <!-- Pinyin Input (AI Auto-populated) -->
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <label style="font-size: 0.78rem; font-weight: 700; color: #94a3b8;">Phiên âm (Pinyin):</label>
+                    <span style="font-size: 0.7rem; color: #10b981; font-weight: 700; display: inline-flex; align-items: center; gap: 3px;">
+                      <i class="fa-solid fa-wand-magic-sparkles"></i> AI tự sinh
+                    </span>
+                  </div>
+                  <input type="text" id="create-nb-custom-pinyin" placeholder="AI tự nhảy (mèng xiǎng)..."
+                    style="padding: 9px 12px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 10px; color: #34d399; font-size: 0.95rem; font-weight: 700; outline: none;">
+                </div>
+
+                <!-- Meaning Input -->
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                  <label style="font-size: 0.78rem; font-weight: 700; color: #94a3b8;">Nghĩa tiếng Việt (*):</label>
+                  <input type="text" id="create-nb-custom-meaning" placeholder="Ví dụ: Ước mơ, hoài bão..."
+                    style="padding: 9px 12px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.18); border-radius: 10px; color: #ffffff; font-size: 0.92rem; outline: none;"
+                    onkeydown="if(event.key==='Enter') window.addSingleCustomWordToCreateNb()">
+                </div>
+              </div>
+
+              <!-- Collapsible Extras (Ví dụ & Ghi chú) -->
+              <details style="font-size: 0.82rem; color: #94a3b8;">
+                <summary style="cursor: pointer; font-weight: 600; color: #38bdf8; outline: none; margin-bottom: 4px;">
+                  <i class="fa-solid fa-plus-circle"></i> Thêm ví dụ &amp; Ghi chú (Không bắt buộc)
+                </summary>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 6px;">
+                  <input type="text" id="create-nb-custom-example"
+                    placeholder="Câu ví dụ: 每个人都有自己的梦想 | Ai cũng có ước mơ riêng"
+                    style="padding: 7px 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; color: #e2e8f0; font-size: 0.82rem; outline: none;">
+                  <input type="text" id="create-nb-custom-note"
+                    placeholder="Ghi chú thêm (ngữ cảnh, từ đồng nghĩa...)"
+                    style="padding: 7px 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; color: #e2e8f0; font-size: 0.82rem; outline: none;">
+                </div>
+              </details>
+
+              <div style="display: flex; justify-content: flex-end;">
+                <button type="button" onclick="window.addSingleCustomWordToCreateNb()" class="btn btn-sm btn-primary"
+                  style="padding: 8px 18px; border-radius: 10px; font-weight: 700; font-size: 0.88rem; background: linear-gradient(135deg, #10b981, #059669); border: none; box-shadow: 0 4px 12px rgba(16,185,129,0.35); cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                  <i class="fa-solid fa-plus"></i> Thêm từ này vào sổ tay
+                </button>
+              </div>
+            </div>
+
+            <!-- Submode B: Batch Paste -->
+            <div id="create-nb-custom-batch-wrap" style="display: none; flex-direction: column; gap: 8px;">
+              <p style="font-size: 0.8rem; color: #94a3b8; margin: 0;">
+                👉 Dán danh sách từ của bạn (Mỗi dòng 1 từ theo cú pháp: <strong>Chữ Hán - Nghĩa</strong>). AI sẽ tự động sinh Pinyin chuẩn xác cho toàn bộ:
+              </p>
+              <textarea id="create-nb-batch-text" rows="5"
+                placeholder="Ví dụ:&#10;苹果 - quả táo&#10;香蕉 - quả chuối&#10;西瓜 - dưa hấu&#10;努力 - nỗ lực, cố gắng"
+                style="width: 100%; padding: 10px 14px; background: rgba(0,0,0,0.35); border: 1.5px solid rgba(255,255,255,0.15); border-radius: 12px; color: #ffffff; font-size: 0.88rem; line-height: 1.5; font-family: inherit; outline: none; resize: vertical;"></textarea>
+              <div style="display: flex; justify-content: flex-end;">
+                <button type="button" onclick="window.addBatchCustomWordsToCreateNb()" class="btn btn-sm btn-primary"
+                  style="padding: 8px 18px; border-radius: 10px; font-weight: 800; font-size: 0.88rem; background: linear-gradient(135deg, #0284c7, #2563eb); border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i> ✨ AI Tự Sinh Pinyin &amp; Thêm Toàn Bộ
+                </button>
+              </div>
             </div>
           </div>
 
-          <!-- 2.3 Chọn Bài học -->
-          <div id="create-nb-lesson-container" style="display: flex; flex-direction: column; gap: 6px;">
-            <span style="font-size: 0.76rem; font-weight: 700; color: #94a3b8; text-transform: uppercase;">3. Chọn Bài
-              Học:</span>
-            <div id="create-nb-lesson-pills"
-              style="display: flex; gap: 6px; flex-wrap: wrap; max-height: 100px; overflow-y: auto; padding: 2px;">
-              <!-- Dynamic Lesson Pills populated by JS -->
+          <!-- TAB 3: CHỌN TỪ GIÁO TRÌNH CÓ SẴN (PRESERVED) -->
+          <div id="create-nb-tab-content-curriculum"
+            style="display: none; flex-direction: column; gap: 12px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px;">
+            <!-- 2.1 Chọn Giáo trình / Phiên bản -->
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <span style="font-size: 0.76rem; font-weight: 700; color: #94a3b8; text-transform: uppercase;">1. Chọn Giáo
+                Trình:</span>
+              <div id="create-nb-version-pills" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button type="button" class="nb-picker-pill active" data-ver="3.0"
+                  onclick="window.setCreateNbVersion('3.0')">🎓 HSK 3.0 (Mới)</button>
+                <button type="button" class="nb-picker-pill" data-ver="2.0" onclick="window.setCreateNbVersion('2.0')">📜
+                  HSK 2.0</button>
+                <button type="button" class="nb-picker-pill" data-ver="yct" onclick="window.setCreateNbVersion('yct')">👶
+                  YCT Thiếu Nhi</button>
+                <button type="button" class="nb-picker-pill" data-ver="premium"
+                  onclick="window.setCreateNbVersion('premium')">👑 Chủ Đề Cao Cấp</button>
+              </div>
+            </div>
+
+            <!-- 2.2 Chọn Cấp độ -->
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <span style="font-size: 0.76rem; font-weight: 700; color: #94a3b8; text-transform: uppercase;">2. Chọn Cấp
+                Độ:</span>
+              <div id="create-nb-level-pills" style="display: flex; gap: 8px; flex-wrap: wrap;"></div>
+            </div>
+
+            <!-- 2.3 Chọn Bài học -->
+            <div id="create-nb-lesson-container" style="display: flex; flex-direction: column; gap: 6px;">
+              <span style="font-size: 0.76rem; font-weight: 700; color: #94a3b8; text-transform: uppercase;">3. Chọn Bài
+                Học:</span>
+              <div id="create-nb-lesson-pills"
+                style="display: flex; gap: 6px; flex-wrap: wrap; max-height: 100px; overflow-y: auto; padding: 2px;"></div>
+            </div>
+
+            <!-- Curriculum word list selector -->
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 4px;">
+              <span style="font-size: 0.8rem; font-weight: 700; color: #60a5fa;">
+                Từ vựng theo bài học (<span id="create-nb-filter-matched-count">0 từ</span>):
+              </span>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.createNbSelectAllVisible(true)"
+                  style="padding: 3px 10px; font-size: 0.76rem; border-radius: 8px; cursor: pointer;">
+                  <i class="fa-solid fa-check-double"></i> Chọn tất cả
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.createNbSelectAllVisible(false)"
+                  style="padding: 3px 10px; font-size: 0.76rem; border-radius: 8px; cursor: pointer;">
+                  <i class="fa-solid fa-xmark"></i> Bỏ chọn
+                </button>
+              </div>
+            </div>
+
+            <div id="create-nb-words-list-container"
+              style="max-height: 180px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; background: rgba(0,0,0,0.25); padding: 4px;">
             </div>
           </div>
+
         </div>
 
-        <!-- Step 3: Danh sách từ vựng theo bộ lọc & tick chọn -->
-        <div style="display: flex; flex-direction: column; gap: 10px;">
+        <!-- Step 3: Danh sách từ vựng đã chọn cho sổ tay mới -->
+        <div
+          style="display: flex; flex-direction: column; gap: 8px; background: rgba(15, 23, 42, 0.7); border: 1.5px solid rgba(56, 189, 248, 0.25); border-radius: 16px; padding: 12px 14px;">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-            <label
-              style="font-size: 0.85rem; font-weight: 700; color: #38bdf8; display: flex; align-items: center; gap: 6px;">
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 0.88rem; font-weight: 700; color: #e2e8f0;">
               <span
-                style="background: rgba(56, 189, 248, 0.2); width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem;">3</span>
-              Tick chọn các từ vựng (<span id="create-nb-filter-matched-count"
-                style="color: #60a5fa; font-weight: 800;">0 từ</span>):
-            </label>
-
-            <!-- Search & Batch Actions -->
-            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-              <button type="button" class="btn btn-sm btn-outline-primary"
-                onclick="window.createNbSelectAllVisible(true)"
-                style="padding: 4px 10px; font-size: 0.78rem; border-radius: 8px; cursor: pointer;">
-                <i class="fa-solid fa-check-double"></i> Chọn tất cả
-              </button>
-              <button type="button" class="btn btn-sm btn-outline-secondary"
-                onclick="window.createNbSelectAllVisible(false)"
-                style="padding: 4px 10px; font-size: 0.78rem; border-radius: 8px; cursor: pointer;">
-                <i class="fa-solid fa-xmark"></i> Bỏ chọn
-              </button>
+                style="background: linear-gradient(135deg, #10b981, #059669); color: white; width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem;">
+                <i class="fa-solid fa-check"></i>
+              </span>
+              <span>Các từ sẽ lưu vào sổ tay mới:</span>
+              <span id="create-nb-selected-count-badge"
+                style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); padding: 2px 10px; border-radius: 99px; font-size: 0.8rem; font-weight: 800;">
+                0 từ
+              </span>
             </div>
+            <button type="button" onclick="window.clearAllCreateNbSelectedWords()" class="btn btn-sm btn-outline-secondary"
+              style="padding: 3px 10px; font-size: 0.76rem; border-radius: 8px; cursor: pointer; color: #f87171; border-color: rgba(248,113,113,0.3);">
+              <i class="fa-solid fa-trash-can"></i> Xóa tất cả
+            </button>
           </div>
 
-          <!-- Quick Search Filter within matched words -->
-          <div style="position: relative; width: 100%;">
-            <i class="fa-solid fa-magnifying-glass"
-              style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.85rem;"></i>
-            <input type="text" id="create-nb-word-search-input"
-              placeholder="Tìm nhanh chữ Hán, pinyin hoặc nghĩa tiếng Việt..."
-              style="width: 100%; padding: 8px 12px 8px 34px; font-size: 0.85rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; color: #ffffff; outline: none;"
-              oninput="window.renderCreateNbWordsList()">
-          </div>
-
-          <!-- Word Picker Items List Container -->
-          <div id="create-nb-words-list-container"
-            style="max-height: 240px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; background: rgba(0,0,0,0.25); padding: 4px;">
-            <!-- Populated by JS -->
+          <!-- Selected Words Chips/Items Container -->
+          <div id="create-nb-selected-words-list"
+            style="display: flex; flex-wrap: wrap; gap: 8px; max-height: 160px; overflow-y: auto; padding: 4px; min-height: 48px; align-items: center;">
+            <!-- Dynamic items rendered by JS -->
           </div>
         </div>
 
@@ -4158,23 +4297,23 @@
 
       <!-- Modal Footer -->
       <div
-        style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.12); flex-wrap: wrap;">
-        <div
-          style="display: flex; align-items: center; gap: 8px; font-size: 0.92rem; font-weight: 700; color: #e2e8f0;">
-          <span>Tổng số từ đã chọn:</span>
+        style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.12); flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 700; color: #cbd5e1;">
+          <span>Tổng số từ trong sổ tay:</span>
           <span id="create-nb-total-selected-badge"
-            style="background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 3px 12px; border-radius: 99px; font-size: 0.88rem; font-weight: 800; box-shadow: 0 2px 8px rgba(16,185,129,0.35);">0
-            từ</span>
+            style="background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 3px 12px; border-radius: 99px; font-size: 0.86rem; font-weight: 800; box-shadow: 0 2px 8px rgba(16,185,129,0.35);">
+            0 từ
+          </span>
         </div>
 
         <div style="display: flex; gap: 10px;">
           <button type="button" onclick="document.getElementById('create-notebook-modal').style.display='none'"
             class="btn btn-secondary"
-            style="padding: 10px 18px; border-radius: 12px; font-weight: 700; font-size: 0.88rem; cursor: pointer;">
+            style="padding: 9px 18px; border-radius: 12px; font-weight: 700; font-size: 0.86rem; cursor: pointer;">
             Hủy
           </button>
           <button type="button" onclick="window.submitCreateCustomNotebook()" class="btn btn-primary"
-            style="padding: 10px 22px; border-radius: 12px; font-weight: 800; font-size: 0.92rem; background: linear-gradient(135deg, #0284c7, #2563eb); border: none; box-shadow: 0 4px 16px rgba(37,99,235,0.45); display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            style="padding: 9px 22px; border-radius: 12px; font-weight: 800; font-size: 0.92rem; background: linear-gradient(135deg, #0284c7, #2563eb); border: none; box-shadow: 0 4px 16px rgba(37,99,235,0.45); display: flex; align-items: center; gap: 8px; cursor: pointer;">
             <i class="fa-solid fa-floppy-disk"></i> Tạo &amp; Lưu Sổ Tay
           </button>
         </div>
@@ -4182,6 +4321,7 @@
 
     </div>
   </div>
+
 
   <!-- MODAL: CỘNG ĐỒNG THẢO LUẬN & GÓP Ý HONGTAI -->
   <div id="discussion-forum-modal"
