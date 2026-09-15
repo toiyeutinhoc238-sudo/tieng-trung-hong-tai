@@ -4729,6 +4729,131 @@ app.get('/api/dictation/test-subtitles', async (req, res) => {
   }
 });
 
+// GET /api/dictation/debug-network — Multi-method diagnostic to determine optimal caption pipeline on Render
+app.get('/api/dictation/debug-network', async (req, res) => {
+  const id = req.query.id || 'AHSWgUFKF8M';
+  const results = {};
+
+  const testMethod = async (name, fn) => {
+    const t0 = Date.now();
+    try {
+      const val = await Promise.race([
+        fn(),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout after 4000ms')), 4000))
+      ]);
+      results[name] = { ok: true, durationMs: Date.now() - t0, ...val };
+    } catch (e) {
+      results[name] = { ok: false, durationMs: Date.now() - t0, error: e.message };
+    }
+  };
+
+  await Promise.allSettled([
+    // 1. YouTube Data API v3 captions list
+    testMethod('google_captions_api', async () => {
+      const key = process.env.YOUTUBE_API_KEY;
+      if (!key) return { note: 'No YOUTUBE_API_KEY configured' };
+      const r = await fetch(`https://www.googleapis.com/youtube/v3/captions?videoId=${id}&key=${key}&part=snippet`);
+      const j = await r.json();
+      return { status: r.status, tracksCount: j.items?.length || 0, tracks: j.items?.map(i => i.snippet?.language) };
+    }),
+
+    // 2. Desktop watch HTML (ytInitialPlayerResponse)
+    testMethod('desktop_watch_html', async () => {
+      const r = await fetch(`https://www.youtube.com/watch?v=${id}`, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
+          'Accept-Language': 'vi,en;q=0.9'
+        }
+      });
+      const html = await r.text();
+      const hasInit = html.includes('ytInitialPlayerResponse');
+      const match = html.match(/captionTracks":\s*(\[.*?\])/);
+      let tracksCount = 0;
+      if (match) {
+        try { tracksCount = JSON.parse(match[1]).length; } catch (e) {}
+      }
+      return { status: r.status, htmlLen: html.length, hasInit, tracksCount };
+    }),
+
+    // 3. Mobile watch HTML
+    testMethod('mobile_watch_html', async () => {
+      const r = await fetch(`https://m.youtube.com/watch?v=${id}`, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1',
+          'Accept-Language': 'vi,en;q=0.9'
+        }
+      });
+      const html = await r.text();
+      const hasCaptions = html.includes('captionTracks');
+      return { status: r.status, htmlLen: html.length, hasCaptions };
+    }),
+
+    // 4. InnerTube iOS Player
+    testMethod('innertube_ios', async () => {
+      const r = await fetch('https://www.youtube.com/youtubei/v1/player?prettyPrint=false', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': 'com.google.ios.youtube/20.10.4 (iPhone16,2; U; CPU iOS 18_1_1 like Mac OS X; en_US)',
+          'X-YouTube-Client-Name': '5',
+          'X-YouTube-Client-Version': '20.10.4'
+        },
+        body: JSON.stringify({
+          context: {
+            client: {
+              clientName: 'IOS',
+              clientVersion: '20.10.4',
+              deviceMake: 'Apple',
+              deviceModel: 'iPhone16,2',
+              osName: 'iOS',
+              osVersion: '18.1.1.22B91',
+              hl: 'vi',
+              gl: 'VN'
+            }
+          },
+          videoId: id
+        })
+      });
+      const text = await r.text();
+      let j = null;
+      try { j = JSON.parse(text); } catch (e) {}
+      const tracks = j?.captions?.playerCaptionsTracklistRenderer?.captionTracks;
+      return { status: r.status, isJson: !!j, playability: j?.playabilityStatus?.status, tracksCount: tracks?.length || 0 };
+    }),
+
+    // 5. InnerTube Web Embedded
+    testMethod('innertube_web_embedded', async () => {
+      const r = await fetch('https://www.youtube.com/youtubei/v1/player?prettyPrint=false', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
+          'Referer': 'https://www.youtube.com/'
+        },
+        body: JSON.stringify({
+          context: {
+            client: {
+              clientName: 'WEB_EMBEDDED_PLAYER',
+              clientVersion: '1.20241105.01.00',
+              hl: 'vi',
+              gl: 'VN'
+            },
+            thirdParty: { embedUrl: 'https://www.youtube.com/' }
+          },
+          videoId: id
+        })
+      });
+      const text = await r.text();
+      let j = null;
+      try { j = JSON.parse(text); } catch (e) {}
+      const tracks = j?.captions?.playerCaptionsTracklistRenderer?.captionTracks;
+      return { status: r.status, isJson: !!j, playability: j?.playabilityStatus?.status, tracksCount: tracks?.length || 0 };
+    })
+  ]);
+
+  res.json({ id, timestamp: new Date().toISOString(), results });
+});
+
 // GET /api/dictation/debug-innertube — Diagnostic endpoint to inspect raw InnerTube response
 app.get('/api/dictation/debug-innertube', async (req, res) => {
   const id = req.query.id || 'AHSWgUFKF8M';
