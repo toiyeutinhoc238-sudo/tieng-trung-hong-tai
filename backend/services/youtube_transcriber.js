@@ -515,8 +515,13 @@ export async function fetchFromYoutubeTranscript(youtubeId) {
         }
       }
     } catch (err) {
-      if (err.message && err.message.includes('No transcripts are available for this video')) {
-        console.log(`[YoutubeTranscript Engine] No YouTube transcripts available for ${youtubeId}.`);
+      if (err.message && (
+        err.message.includes('No transcripts are available') ||
+        err.message.includes('too many requests') ||
+        err.message.includes('captcha') ||
+        err.message.includes('429')
+      )) {
+        console.log(`[YoutubeTranscript Engine] Captcha, 429, or no transcripts available for ${youtubeId}.`);
         break;
       }
     }
