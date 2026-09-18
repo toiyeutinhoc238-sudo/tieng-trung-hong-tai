@@ -1757,8 +1757,12 @@ app.get('/api/vocabulary', async (req, res) => {
   const targetLevel = req.query.level;
   const targetLessonId = req.query.lessonId || req.query.lesson;
   const targetVersion = req.query.version || req.query.hskVersion;
+  const targetCurriculum = req.query.curriculum;
 
   let baseList = masterList;
+  if (targetCurriculum) {
+    baseList = baseList.filter(w => (w.curriculum || 'hsk') === targetCurriculum || (w.hskVersion || '') === targetCurriculum);
+  }
   if (targetLevel) {
     baseList = baseList.filter(w => String(w.level) === String(targetLevel) || String(w.level) === `HSK ${targetLevel}`);
   }

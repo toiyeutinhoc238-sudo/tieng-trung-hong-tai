@@ -2086,6 +2086,11 @@ function _applyStudyModeUI(mode) {
     if (flashcardContainer) flashcardContainer.style.display = 'block';
     if (typingContainer) typingContainer.style.display = 'none';
   }
+
+  const flashcardSwipeHintBar = document.getElementById('flashcard-swipe-hint-bar');
+  if (flashcardSwipeHintBar) {
+    flashcardSwipeHintBar.style.display = (!mode || mode === 'flip') ? 'flex' : 'none';
+  }
 }
 
 function renderDetailedStatsTable() {
@@ -2738,12 +2743,12 @@ function initFlashcardSwipe() {
     const diffX = currentX - startX;
     const elapsed = Date.now() - startTime;
     const velocity = Math.abs(diffX) / Math.max(1, elapsed);
-    const threshold = 65;
+    const threshold = 55;
 
-    if (diffX > threshold || (diffX > 30 && velocity > 0.4)) {
+    if (diffX > threshold || (diffX > 25 && velocity > 0.35)) {
       // SWIPE RIGHT -> ĐÃ THUỘC
       triggerSwipeAction('right');
-    } else if (diffX < -threshold || (diffX < -30 && velocity > 0.4)) {
+    } else if (diffX < -threshold || (diffX < -25 && velocity > 0.35)) {
       // SWIPE LEFT -> CHƯA THUỘC
       triggerSwipeAction('left');
     } else {
@@ -3914,6 +3919,8 @@ function setupEventListeners() {
     activeHskVersion = version;
     if (version === 'yct') {
       activeLessonsCurriculum = 'yct';
+    } else if (version === 'hanngu') {
+      activeLessonsCurriculum = 'hanngu';
     } else {
       activeLessonsCurriculum = 'hsk';
     }
@@ -3929,12 +3936,14 @@ function setupEventListeners() {
   };
 
   const svYctBtn = document.getElementById('smart-yct-version-btn');
+  const svHannguBtn = document.getElementById('smart-hanngu-version-btn');
 
   if (lv3Btn) lv3Btn.addEventListener('click', () => setHskVersion('3.0'));
   if (lv2Btn) lv2Btn.addEventListener('click', () => setHskVersion('2.0'));
   if (sv3Btn) sv3Btn.addEventListener('click', () => setHskVersion('3.0'));
   if (sv2Btn) sv2Btn.addEventListener('click', () => setHskVersion('2.0'));
   if (svYctBtn) svYctBtn.addEventListener('click', () => setHskVersion('yct'));
+  if (svHannguBtn) svHannguBtn.addEventListener('click', () => setHskVersion('hanngu'));
   if (ev3Btn) ev3Btn.addEventListener('click', () => setHskVersion('3.0'));
   if (ev2Btn) ev2Btn.addEventListener('click', () => setHskVersion('2.0'));
 
@@ -4972,6 +4981,9 @@ function getUnlockedLevelsMap() {
 }
 
 function isLevelUnlocked(ver, level, levelIndex, levelsData, builtInVocabs) {
+  if (ver === 'hanngu') {
+    return parseInt(level) === 1;
+  }
   // All levels in HSK 3.0, HSK 2.0, and YCT are open and unlocked for full learning
   return true;
 }
@@ -5025,6 +5037,15 @@ function renderGamifiedRoadmapPath() {
       { level: 3, name: 'YCT Cấp 3', desc: 'Thiếu nhi Cấp 3', count: '300 từ', color: '#f59e0b' },
       { level: 4, name: 'YCT Cấp 4', desc: 'Thiếu nhi Cấp 4', count: '600 từ', color: '#8b5cf6' }
     ];
+  } else if (hskVer === 'hanngu') {
+    levelsData = [
+      { level: 1, name: 'Hán ngữ Quyển 1', desc: 'Sơ cấp 1 (15 Bài học cơ bản)', color: '#0ea5e9', shadow: '#0284c7' },
+      { level: 2, name: 'Hán ngữ Quyển 2', desc: 'Sơ cấp 2 (15 Bài học nâng cao)', color: '#10b981', shadow: '#059669' },
+      { level: 3, name: 'Hán ngữ Quyển 3', desc: 'Trung cấp 1 (10 Bài học)', color: '#f59e0b', shadow: '#d97706' },
+      { level: 4, name: 'Hán ngữ Quyển 4', desc: 'Trung cấp 2 (10 Bài học)', color: '#8b5cf6', shadow: '#7c3aed' },
+      { level: 5, name: 'Hán ngữ Quyển 5', desc: 'Cao cấp 1 (13 Bài học)', color: '#ec4899', shadow: '#db2777' },
+      { level: 6, name: 'Hán ngữ Quyển 6', desc: 'Cao cấp 2 (13 Bài học)', color: '#ef4444', shadow: '#dc2626' }
+    ];
   } else if (hskVer === '2.0') {
     levelsData = [
       { level: 1, name: 'HSK 1 (2.0)', desc: 'Sơ cấp 1', count: '150 từ', color: '#58cc02', shadow: '#46a302' },
@@ -5057,14 +5078,17 @@ function renderGamifiedRoadmapPath() {
       const curr = (w.curriculum || 'hsk').toLowerCase();
       const ver = (w.hskVersion || '3.0').toLowerCase();
 
+      if (hskVer === 'hanngu') {
+        return (curr === 'hanngu' || ver === 'hanngu') && matchLevel(w.level, item.level);
+      }
       if (hskVer === 'yct') {
         return (curr.includes('yct') || ver.includes('yct')) && matchLevel(w.level, item.level);
       }
       if (hskVer === '2.0') {
-        return !curr.includes('yct') && !ver.includes('yct') && (ver.includes('2') || ver === '2.0') && matchLevel(w.level, item.level);
+        return !curr.includes('yct') && !ver.includes('yct') && curr !== 'hanngu' && ver !== 'hanngu' && (ver.includes('2') || ver === '2.0') && matchLevel(w.level, item.level);
       }
       // HSK 3.0
-      return !curr.includes('yct') && !ver.includes('yct') && (ver.includes('3') || ver === '3.0' || w.hskVersion === '3.0') && matchLevel(w.level, item.level);
+      return !curr.includes('yct') && !ver.includes('yct') && curr !== 'hanngu' && ver !== 'hanngu' && (ver.includes('3') || ver === '3.0' || w.hskVersion === '3.0') && matchLevel(w.level, item.level);
     });
 
     const totalWords = levelWords.length;
@@ -5100,15 +5124,20 @@ function renderGamifiedRoadmapPath() {
     if (isUnlocked) {
       actionButtonsHtml = `
         <button class="btn-node-start" style="background: ${item.color}; box-shadow: 0 4px 0 ${item.shadow || '#000000'}; border-bottom: none; color: ${item.textCol || '#ffffff'}; transition: all 0.2s; border-radius: 12px; font-weight: 700; padding: 12px 20px; font-size: 0.9rem;" onclick="goToRoadmapLevel('${hskVer}', '${item.level}')" onmousedown="this.style.transform='translateY(3px)'; this.style.boxShadow='0 1px 0 ${item.shadow || '#000000'}';" onmouseup="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 0 ${item.shadow || '#000000'}';" onmouseleave="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 0 ${item.shadow || '#000000'}';">
-          Khám Phá Cấp ${item.level} <i class="fa-solid fa-arrow-right"></i>
+          ${hskVer === 'hanngu' ? `Khám Phá Quyển ${item.level}` : `Khám Phá Cấp ${item.level}`} <i class="fa-solid fa-arrow-right"></i>
         </button>
         <button class="btn-node-start" style="background: rgba(255,255,255,0.1); width: auto;" onclick="window.location.href='/quiz-game.html?level=${item.level}&version=${hskVer}'" title="Thi trắc nghiệm">
           <i class="fa-solid fa-gamepad"></i>
         </button>
       `;
     } else {
+      const comingSoonLabel = hskVer === 'yct'
+        ? `Lộ trình YCT Cấp ${item.level}`
+        : hskVer === 'hanngu'
+        ? `Lộ trình Hán ngữ Quyển ${item.level}`
+        : `Lộ trình HSK Cấp ${item.level}${hskVer === '2.0' ? ' (2.0)' : ''}`;
       actionButtonsHtml = `
-        <button class="btn-node-start btn-node-locked" style="background: rgba(100, 116, 139, 0.35); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; border-radius: 12px; font-weight: 700; padding: 12px 20px; font-size: 0.88rem; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="window.showComingSoonNotice('Lộ trình ' + (${hskVer === 'yct' ? "'YCT Cấp ' + '" + item.level + "'" : "'HSK ' + '" + item.level + "'" + (hskVer === '2.0' ? "' (2.0)'" : "''")}))">
+        <button class="btn-node-start btn-node-locked" style="background: rgba(100, 116, 139, 0.35); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; border-radius: 12px; font-weight: 700; padding: 12px 20px; font-size: 0.88rem; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="window.showComingSoonNotice('${comingSoonLabel}')">
           <i class="fa-solid fa-lock" style="color: #fbbf24;"></i> Sắp ra mắt (Đang biên soạn)
         </button>
       `;
@@ -5160,9 +5189,10 @@ function renderGamifiedRoadmapPath() {
   const activeVocabsForRoadmap = builtInVocabsAll.filter(w => {
     const curr = (w.curriculum || 'hsk').toLowerCase();
     const ver = (w.hskVersion || '3.0').toLowerCase();
+    if (hskVer === 'hanngu') return curr === 'hanngu' || ver === 'hanngu';
     if (hskVer === 'yct') return curr.includes('yct') || ver.includes('yct');
-    if (hskVer === '2.0') return !curr.includes('yct') && !ver.includes('yct') && (ver.includes('2') || ver === '2.0');
-    return !curr.includes('yct') && !ver.includes('yct') && (ver.includes('3') || ver === '3.0' || w.hskVersion === '3.0');
+    if (hskVer === '2.0') return !curr.includes('yct') && !ver.includes('yct') && curr !== 'hanngu' && ver !== 'hanngu' && (ver.includes('2') || ver === '2.0');
+    return !curr.includes('yct') && !ver.includes('yct') && curr !== 'hanngu' && ver !== 'hanngu' && (ver.includes('3') || ver === '3.0' || w.hskVersion === '3.0');
   });
   const totalRoadmapWords = activeVocabsForRoadmap.length;
   const memorizedRoadmapWords = activeVocabsForRoadmap.filter(w => w.isMemorized).length;
@@ -5177,15 +5207,16 @@ function renderGamifiedRoadmapPath() {
 
   // Determine current level: highest level with any memorized words
   if (levelBadgeEl) {
-    let currentLevelDisplay = levelsData[0] ? levelsData[0].name : 'HSK 1';
+    let currentLevelDisplay = levelsData[0] ? levelsData[0].name : (hskVer === 'hanngu' ? 'Hán ngữ Quyển 1' : 'HSK 1');
     for (let i = levelsData.length - 1; i >= 0; i--) {
       const ld = levelsData[i];
       const lvWords = builtInVocabsAll.filter(w => {
         const curr2 = (w.curriculum || 'hsk').toLowerCase();
         const ver2 = (w.hskVersion || '3.0').toLowerCase();
+        if (hskVer === 'hanngu') return (curr2 === 'hanngu' || ver2 === 'hanngu') && matchLevel(w.level, ld.level);
         if (hskVer === 'yct') return (curr2.includes('yct') || ver2.includes('yct')) && matchLevel(w.level, ld.level);
-        if (hskVer === '2.0') return !curr2.includes('yct') && !ver2.includes('yct') && (ver2.includes('2') || ver2 === '2.0') && matchLevel(w.level, ld.level);
-        return !curr2.includes('yct') && !ver2.includes('yct') && (ver2.includes('3') || ver2 === '3.0' || w.hskVersion === '3.0') && matchLevel(w.level, ld.level);
+        if (hskVer === '2.0') return !curr2.includes('yct') && !ver2.includes('yct') && curr2 !== 'hanngu' && ver2 !== 'hanngu' && (ver2.includes('2') || ver2 === '2.0') && matchLevel(w.level, ld.level);
+        return !curr2.includes('yct') && !ver2.includes('yct') && curr2 !== 'hanngu' && ver2 !== 'hanngu' && (ver2.includes('3') || ver2 === '3.0' || w.hskVersion === '3.0') && matchLevel(w.level, ld.level);
       });
       if (lvWords.some(w => w.isMemorized)) {
         currentLevelDisplay = ld.name;
@@ -5207,6 +5238,12 @@ window.goToRoadmapLevel = function (ver, level) {
     activeLessonsCurriculum = 'yct';
     activeYctLevel = level.toString();
     localStorage.setItem('active_hsk_version', 'yct');
+  } else if (ver === 'hanngu') {
+    activeHskVersion = 'hanngu';
+    activeRoadmapVersion = 'hanngu';
+    activeLessonsCurriculum = 'hanngu';
+    activeLessonsLevel = parseInt(level) || 1;
+    localStorage.setItem('active_hsk_version', 'hanngu');
   } else {
     activeHskVersion = ver || '3.0';
     activeRoadmapVersion = ver || '3.0';
@@ -7955,6 +7992,32 @@ function renderLessonsList() {
       const numB = parseInt(String(b).replace(/\D/g, '')) || 0;
       return numA - numB;
     });
+  } else if (activeLessonsCurriculum === 'hanngu') {
+    if (lessonsLevelContainer) lessonsLevelContainer.style.display = 'none';
+    if (volumePillsContainer) volumePillsContainer.style.display = 'none';
+    if (versionSelectorWrap) versionSelectorWrap.style.display = 'none';
+    if (yctLevelContainer) yctLevelContainer.style.display = 'none';
+
+    const currentBookLvl = activeLessonsLevel || 1;
+    const hannguVocabs = vocabList.filter(w => !w.isCustom && (w.curriculum === 'hanngu' || w.hskVersion === 'hanngu') && matchLevel(w.level, currentBookLvl));
+
+    if (objectivesText) {
+      objectivesText.textContent = `Mục tiêu: Giáo trình Hán ngữ Quyển ${currentBookLvl} - Sơ cấp cơ bản (${hannguVocabs.length} từ vựng, 15 bài học chuẩn)`;
+    }
+
+    var levelVocabs = hannguVocabs;
+    var lessonGroups = {};
+    levelVocabs.forEach(w => {
+      const les = w.lessonId || 1;
+      if (!lessonGroups[les]) lessonGroups[les] = [];
+      lessonGroups[les].push(w);
+    });
+
+    var uniqueLessonKeys = Object.keys(lessonGroups).sort((a, b) => {
+      const numA = parseInt(String(a).replace(/\D/g, '')) || 0;
+      const numB = parseInt(String(b).replace(/\D/g, '')) || 0;
+      return numA - numB;
+    });
   } else {
     // HSK Curriculum Mode
     if (yctLevelContainer) yctLevelContainer.style.display = 'none';
@@ -8008,6 +8071,7 @@ function renderLessonsList() {
       const totalWordsInLevel = vocabList.filter(w =>
         !w.isCustom &&
         w.curriculum !== 'yct' && w.hskVersion !== 'yct' &&
+        w.curriculum !== 'hanngu' && w.hskVersion !== 'hanngu' &&
         matchLevel(w.level, activeLessonsLevel) &&
         (w.hskVersion || '3.0') === activeHskVersion
       ).length;
@@ -8041,7 +8105,7 @@ function renderLessonsList() {
     // Filter HSK level vocabulary
     var levelVocabs = vocabList.filter(w => {
       if (w.isCustom) return false;
-      if (w.curriculum === 'yct' || w.hskVersion === 'yct') return false;
+      if (w.curriculum === 'yct' || w.hskVersion === 'yct' || w.curriculum === 'hanngu' || w.hskVersion === 'hanngu') return false;
       if (!matchLevel(w.level, activeLessonsLevel)) return false;
       if ((w.hskVersion || '3.0') !== activeHskVersion) return false;
       if ((activeLessonsLevel === 4 || activeLessonsLevel === 5) && activeHskVersion === '2.0' && activeVolumeFilter !== 'all') {
@@ -8073,6 +8137,8 @@ function renderLessonsList() {
 
   const mapHeaderTitle = activeLessonsCurriculum === 'yct'
     ? `BẢN ĐỒ BÀI HỌC YCT CẤP ${activeYctLevel}`
+    : activeLessonsCurriculum === 'hanngu'
+    ? `BẢN ĐỒ BÀI HỌC HÁN NGỮ - QUYỂN ${activeLessonsLevel || 1}`
     : `BẢN ĐỒ BÀI HỌC HSK CẤP ${activeLessonsLevel === '7-9' ? '7-8-9' : activeLessonsLevel} (${activeHskVersion})`;
 
   // View Switcher Bar Header
@@ -13089,6 +13155,9 @@ function getNotebookWords(notebookId) {
   } else if (notebookId.startsWith('yct:')) {
     const lvl = notebookId.substring(4);
     return vocabList.filter(w => !w.isCustom && (w.curriculum === 'yct' || w.hskVersion === 'yct') && String(w.level) === String(lvl));
+  } else if (notebookId.startsWith('hanngu:')) {
+    const vol = notebookId.substring(7);
+    return vocabList.filter(w => !w.isCustom && (w.curriculum === 'hanngu' || w.hskVersion === 'hanngu') && String(w.level) === String(vol));
   } else if (notebookId.startsWith('premium:')) {
     const category = notebookId.substring(8);
     const target = (typeof PREMIUM_TOPICS_CONFIG !== 'undefined' ? PREMIUM_TOPICS_CONFIG : []).find(t => t.id === notebookId || t.id === `premium:${category}` || t.catName.toLowerCase() === category.toLowerCase());
@@ -13138,20 +13207,33 @@ function renderSubdecksList() {
     grid.appendChild(createCard);
   }
   else if (activeSmartTopic === 'hsk') {
-    title.textContent = 'Danh sách Từ vựng';
+    title.textContent = 'Danh sách Sổ tay Giáo trình';
     if (activeHskVersion === 'yct') {
       for (let lvl = 1; lvl <= 4; lvl++) {
         const lvlWords = vocabList.filter(w => (w.curriculum === 'yct' || w.hskVersion === 'yct') && matchLevel(w.level, lvl));
         grid.appendChild(createSubdeckCard(`YCT Cấp ${lvl}`, `yct:${lvl}`, lvlWords.length, 'fa-child', 'var(--accent-teal)', false));
       }
+    } else if (activeHskVersion === 'hanngu') {
+      const hannguBooks = [
+        { vol: 1, name: 'Hán ngữ Quyển 1', isLocked: false, desc: 'Sơ cấp 1 (15 Bài học)' },
+        { vol: 2, name: 'Hán ngữ Quyển 2', isLocked: true, desc: 'Sơ cấp 2' },
+        { vol: 3, name: 'Hán ngữ Quyển 3', isLocked: true, desc: 'Trung cấp 1' },
+        { vol: 4, name: 'Hán ngữ Quyển 4', isLocked: true, desc: 'Trung cấp 2' },
+        { vol: 5, name: 'Hán ngữ Quyển 5', isLocked: true, desc: 'Cao cấp 1' },
+        { vol: 6, name: 'Hán ngữ Quyển 6', isLocked: true, desc: 'Cao cấp 2' }
+      ];
+      hannguBooks.forEach(b => {
+        const bWords = vocabList.filter(w => !w.isCustom && (w.curriculum === 'hanngu' || w.hskVersion === 'hanngu') && matchLevel(w.level, b.vol));
+        grid.appendChild(createSubdeckCard(b.name, `hanngu:${b.vol}`, bWords.length, 'fa-book-open', '#0ea5e9', b.isLocked));
+      });
     } else {
       const maxLvl = 6;
       for (let lvl = 1; lvl <= maxLvl; lvl++) {
-        const lvlWords = vocabList.filter(w => !w.isCustom && matchLevel(w.level, lvl) && (w.hskVersion || '3.0') === activeHskVersion);
+        const lvlWords = vocabList.filter(w => !w.isCustom && w.curriculum !== 'hanngu' && w.hskVersion !== 'hanngu' && matchLevel(w.level, lvl) && (w.hskVersion || '3.0') === activeHskVersion);
         grid.appendChild(createSubdeckCard(`HSK Cấp ${lvl}`, `hsk:${lvl}`, lvlWords.length, 'fa-graduation-cap', 'var(--success)', false));
       }
       if (activeHskVersion === '3.0') {
-        const hsk79Words = vocabList.filter(w => !w.isCustom && matchLevel(w.level, '7-9') && (w.hskVersion || '3.0') === activeHskVersion);
+        const hsk79Words = vocabList.filter(w => !w.isCustom && w.curriculum !== 'hanngu' && w.hskVersion !== 'hanngu' && matchLevel(w.level, '7-9') && (w.hskVersion || '3.0') === activeHskVersion);
         grid.appendChild(createSubdeckCard(`HSK Cấp 7-8-9 (Cao cấp)`, `hsk:7-9`, hsk79Words.length, 'fa-award', '#a855f7', false));
       }
     }
@@ -13258,6 +13340,22 @@ function openNotebookDashboard(notebookId, preservePage = false) {
       name = `Từ vựng YCT Cấp ${lvl}`;
       desc = `Toàn bộ từ vựng luyện thi YCT Cấp ${lvl}`;
     }
+  } else if (notebookId.startsWith('hanngu:')) {
+    const vol = notebookId.substring(7);
+    if (selectedDashboardLessons && selectedDashboardLessons.length > 0) {
+      const uniqueLessons = {};
+      baseWords.forEach(w => {
+        if (w.lessonId) {
+          uniqueLessons[w.lessonId] = w.lessonTitle || `Bài ${w.lessonId}`;
+        }
+      });
+      const lessonNames = selectedDashboardLessons.map(id => uniqueLessons[id] || `Bài ${id}`).join(', ');
+      name = `Hán ngữ Quyển ${vol} - ${lessonNames}`;
+      desc = `Các từ vựng thuộc ${lessonNames.toLowerCase()} của Giáo trình Hán ngữ Quyển ${vol}`;
+    } else {
+      name = `Giáo trình Hán ngữ Quyển ${vol}`;
+      desc = `Toàn bộ từ vựng Giáo trình Hán ngữ Quyển ${vol} (Bộ 6 cuốn)`;
+    }
   } else if (notebookId.startsWith('premium:')) {
     const target = (typeof PREMIUM_TOPICS_CONFIG !== 'undefined' ? PREMIUM_TOPICS_CONFIG : []).find(t => t.id === notebookId);
     if (target) {
@@ -13278,7 +13376,7 @@ function openNotebookDashboard(notebookId, preservePage = false) {
   if (backBtn) {
     if (notebookId === 'starred' || notebookId === 'wrong' || notebookId.startsWith('custom:')) {
       backBtn.innerHTML = '<i class="fa-solid fa-arrow-left"></i> Quay lại chủ đề chính';
-    } else if (notebookId.startsWith('hsk:') || notebookId.startsWith('yct:')) {
+    } else if (notebookId.startsWith('hsk:') || notebookId.startsWith('yct:') || notebookId.startsWith('hanngu:')) {
       backBtn.innerHTML = '<i class="fa-solid fa-arrow-left"></i> Quay lại danh sách cấp độ';
     } else if (notebookId.startsWith('premium:')) {
       backBtn.innerHTML = '<i class="fa-solid fa-arrow-left"></i> Quay lại danh sách chủ đề';
@@ -13299,10 +13397,10 @@ function openNotebookDashboard(notebookId, preservePage = false) {
 
   // Update Stats Widget
 
-  // Render HSK Lesson Selector Block if applicable (Luôn hiển thị khi xem sổ tay HSK / YCT)
+  // Render HSK Lesson Selector Block if applicable (Luôn hiển thị khi xem sổ tay HSK / YCT / Hán ngữ)
   const lessonContainer = document.getElementById('nb-hsk-lesson-selector-container');
   if (lessonContainer) {
-    if (notebookId.startsWith('hsk:') || notebookId.startsWith('yct:')) {
+    if (notebookId.startsWith('hsk:') || notebookId.startsWith('yct:') || notebookId.startsWith('hanngu:')) {
       lessonContainer.style.display = 'block';
       const lessonsList = document.getElementById('nb-hsk-lessons-list');
       const countBadge = document.getElementById('nb-selected-lessons-count-badge');
@@ -13312,9 +13410,12 @@ function openNotebookDashboard(notebookId, preservePage = false) {
       if (lessonsList) {
         lessonsList.innerHTML = '';
 
-        const lvl = notebookId.substring(4);
+        const lvl = notebookId.startsWith('hanngu:') ? notebookId.substring(7) : notebookId.substring(4);
         const allLvlWords = vocabList.filter(w => {
           if (w.isCustom) return false;
+          if (notebookId.startsWith('hanngu:')) {
+            return (w.curriculum === 'hanngu' || w.hskVersion === 'hanngu') && String(w.level) === String(lvl);
+          }
           if (notebookId.startsWith('yct:')) {
             return (w.curriculum === 'yct' || w.hskVersion === 'yct') && String(w.level) === String(lvl);
           }
@@ -13432,9 +13533,9 @@ function updateNotebookDashboardStatsOnly(notebookId) {
   if (!notebookId) return;
   const baseWords = getNotebookWords(notebookId);
 
-  // Filter baseWords for statistics if specific HSK / YCT lessons are selected
+  // Filter baseWords for statistics if specific HSK / YCT / Hán ngữ lessons are selected
   let wordsForStats = baseWords;
-  if ((notebookId.startsWith('hsk:') || notebookId.startsWith('yct:')) && selectedDashboardLessons.length > 0) {
+  if ((notebookId.startsWith('hsk:') || notebookId.startsWith('yct:') || notebookId.startsWith('hanngu:')) && selectedDashboardLessons.length > 0) {
     wordsForStats = baseWords.filter(w => w.lessonId && selectedDashboardLessons.some(id => String(id) === String(w.lessonId)));
   }
 
@@ -13471,8 +13572,8 @@ function renderNotebookWordsTable() {
 
   let words = getNotebookWords(activeNotebook);
 
-  // Filter HSK / YCT dashboard lessons if selected
-  if (activeNotebook && (activeNotebook.startsWith('hsk:') || activeNotebook.startsWith('yct:')) && selectedDashboardLessons.length > 0) {
+  // Filter HSK / YCT / Hán ngữ dashboard lessons if selected
+  if (activeNotebook && (activeNotebook.startsWith('hsk:') || activeNotebook.startsWith('yct:') || activeNotebook.startsWith('hanngu:')) && selectedDashboardLessons.length > 0) {
     words = words.filter(w => w.lessonId && selectedDashboardLessons.some(id => String(id) === String(w.lessonId)));
   }
 
@@ -13737,8 +13838,8 @@ function startStudySessionFromNotebook(mode) {
   const notebookName = document.getElementById('dashboard-notebook-title')?.textContent || '';
   const notebookDesc = document.getElementById('dashboard-notebook-desc')?.textContent || '';
 
-  // Pass HSK or YCT lesson selections if studying HSK / YCT
-  if (activeNotebook.startsWith('hsk:') || activeNotebook.startsWith('yct:')) {
+  // Pass HSK or YCT or Hán ngữ lesson selections if studying HSK / YCT / Hán ngữ
+  if (activeNotebook.startsWith('hsk:') || activeNotebook.startsWith('yct:') || activeNotebook.startsWith('hanngu:')) {
     studySelectedLessons = selectedDashboardLessons.length > 0 ? [...selectedDashboardLessons] : null;
   } else {
     studySelectedLessons = null;
@@ -13913,8 +14014,8 @@ function startDirectTypingSession(words) {
 function startQuizSession() {
   let words = getNotebookWords(activeNotebook);
 
-  // Apply HSK / YCT lesson filters if selected
-  if ((activeNotebook.startsWith('hsk:') || activeNotebook.startsWith('yct:')) && selectedDashboardLessons.length > 0) {
+  // Apply HSK / YCT / Hán ngữ lesson filters if selected
+  if ((activeNotebook.startsWith('hsk:') || activeNotebook.startsWith('yct:') || activeNotebook.startsWith('hanngu:')) && selectedDashboardLessons.length > 0) {
     words = words.filter(w => w.lessonId && selectedDashboardLessons.some(id => String(id) === String(w.lessonId)));
   }
 
@@ -14423,7 +14524,7 @@ function startGameArenaFromNotebook() {
   let words = getNotebookWords(activeNotebook);
 
   // Filter lessons if selected
-  if ((activeNotebook.startsWith('hsk:') || activeNotebook.startsWith('yct:')) && selectedDashboardLessons && selectedDashboardLessons.length > 0) {
+  if ((activeNotebook.startsWith('hsk:') || activeNotebook.startsWith('yct:') || activeNotebook.startsWith('hanngu:')) && selectedDashboardLessons && selectedDashboardLessons.length > 0) {
     words = words.filter(w => w.lessonId && selectedDashboardLessons.some(id => String(id) === String(w.lessonId)));
   }
 

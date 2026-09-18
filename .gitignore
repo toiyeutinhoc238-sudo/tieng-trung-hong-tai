@@ -9,4 +9,6 @@ backend/temp_audio/
 *.webm
 *.mp3
 TRON BO DE THI HSK TU 1 DEN 9/
-filetuvung/
+filetuvung/
+*.backup*.json
+

@@ -5200,9 +5200,10 @@ button, input, select, textarea, .btn, .nav-item, .quiz-option-btn, .speaker-btn
 
 @media (max-width: 768px) {
   .flashcard-card-container {
-    min-height: 430px !important;
-    height: 430px !important;
-    margin-bottom: 8px !important;
+    min-height: 460px !important;
+    height: 470px !important;
+    max-height: 65vh !important;
+    margin-bottom: 10px !important;
   }
   .flashcard-card {
     min-height: 100% !important;
@@ -5210,78 +5211,135 @@ button, input, select, textarea, .btn, .nav-item, .quiz-option-btn, .speaker-btn
     padding: 0 !important;
   }
   .card-side {
-    padding: 18px 16px 14px 16px !important;
-    border-radius: 22px !important;
+    padding: 16px 16px 14px 16px !important;
+    border-radius: 20px !important;
+    overflow: hidden !important; /* Đảm bảo nội dung không bao giờ tràn ra ngoài đè nút HUD */
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    box-sizing: border-box !important;
+  }
+  .card-back .card-content-main {
+    flex: 1 1 auto !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    justify-content: flex-start !important;
+    padding: 4px 2px !important;
+    margin: 4px 0 !important;
+    scrollbar-width: thin !important;
   }
   .chinese-word {
-    font-size: 4.4rem !important;
+    font-size: 4rem !important;
+    line-height: 1.1 !important;
   }
   .pinyin-text {
-    font-size: 1.85rem !important;
-    margin-bottom: 4px !important;
+    font-size: 1.65rem !important;
+    margin-bottom: 3px !important;
   }
   .meaning-text {
-    font-size: 1.15rem !important;
-    margin-bottom: 8px !important;
+    font-size: 1.08rem !important;
+    margin-bottom: 6px !important;
     line-height: 1.35 !important;
   }
   .example-box {
-    padding: 10px 14px !important;
+    padding: 9px 12px !important;
     margin: 6px 0 !important;
     border-radius: 12px !important;
+    box-sizing: border-box !important;
   }
   .example-zh {
-    font-size: 1rem !important;
+    font-size: 0.96rem !important;
     gap: 8px !important;
+    line-height: 1.3 !important;
   }
   .example-vi {
-    font-size: 0.85rem !important;
+    font-size: 0.82rem !important;
+    line-height: 1.25 !important;
   }
   .card-action-bar {
-    padding-top: 4px !important;
-    margin-top: 4px !important;
+    flex-shrink: 0 !important;
+    padding-top: 8px !important;
+    margin-top: auto !important;
+    border-top: 1px solid var(--border-glass) !important;
+    position: relative !important;
+    z-index: 5 !important;
+  }
+  .flashcard-swipe-hint-bar {
+    font-size: 0.78rem !important;
+    padding: 6px 14px !important;
+    gap: 8px !important;
+    margin: 8px auto 6px auto !important;
+    width: fit-content !important;
+    max-width: 95% !important;
+    border-radius: 20px !important;
   }
   .card-hud-controls {
-    gap: 8px !important;
-    margin-top: 14px !important;
+    gap: 6px !important;
+    margin-top: 12px !important;
     margin-bottom: 12px !important;
     width: 100% !important;
-    justify-content: space-between !important;
+    justify-content: center !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
   }
   .btn-hud {
     padding: 10px 8px !important;
-    font-size: 0.82rem !important;
+    font-size: 0.8rem !important;
     flex: 1 1 auto !important;
     max-width: none !important;
-    gap: 5px !important;
-    border-radius: 40px !important;
+    gap: 4px !important;
+    border-radius: 30px !important;
+    white-space: nowrap !important;
   }
   #mark-starred-btn span {
     display: none !important; /* Icon-only star on mobile to fit all 5 buttons cleanly */
   }
   #mark-starred-btn {
-    flex: 0 0 42px !important;
-    width: 42px !important;
-    height: 42px !important;
-    min-width: 42px !important;
-    max-width: 42px !important;
+    flex: 0 0 40px !important;
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    max-width: 40px !important;
     padding: 0 !important;
     border-radius: 50% !important;
   }
   #prev-card-btn, #next-card-btn {
-    flex: 0 0 42px !important;
-    width: 42px !important;
-    height: 42px !important;
-    min-width: 42px !important;
+    flex: 0 0 40px !important;
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
   }
   .card-viewport {
-    gap: 10px !important;
-    padding-bottom: 80px !important; /* Prevents floating chat & theme buttons from overlapping HUD */
-  }
-  .flashcard-swipe-hint-bar {
-    font-size: 0.78rem !important;
-    padding: 5px 12px !important;
     gap: 8px !important;
+    padding-bottom: 95px !important; /* Prevents floating chat & theme buttons from overlapping HUD */
+  }
+}
+
+@media (max-width: 380px) {
+  .flashcard-card-container {
+    min-height: 440px !important;
+    height: 450px !important;
+  }
+  .chinese-word {
+    font-size: 3.4rem !important;
+  }
+  .card-hud-controls {
+    gap: 4px !important;
+  }
+  .btn-hud {
+    padding: 8px 6px !important;
+    font-size: 0.74rem !important;
+    gap: 3px !important;
+  }
+  #prev-card-btn, #next-card-btn, #mark-starred-btn {
+    flex: 0 0 36px !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
   }
   .study-controls {
     flex-wrap: wrap;
