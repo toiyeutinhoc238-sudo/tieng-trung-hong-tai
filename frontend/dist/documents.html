@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <script>
+    if (window.location.hostname.includes('onrender.com') || window.location.hostname.startsWith('www.')) {
+      window.location.replace('https://tiengtrunghongtai.online' + window.location.pathname + window.location.search + window.location.hash);
+    }
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kho Sách & Tài Liệu Điện Tử Tiếng Trung (E-Book Reader) | Tiếng Trung HongTai</title>
+  <meta name="description"
+    content="Kho 66 đầu sách và tài liệu điện tử Tiếng Trung chọn lọc: Giáo trình Hán ngữ, Giáo trình HSK 3.0, Kỹ năng biên phiên dịch, Sách nghiệp vụ sư phạm cho giáo viên, Tác phẩm văn học và Truyện đọc song ngữ. Đọc trực tiếp trên web, tự động lưu tiến độ, bình luận và ghi chú cá nhân.">
+  <link rel="canonical" href="https://tiengtrunghongtai.online/documents.html" />
+  <link rel="icon" type="image/png" href="/assets/logo-CnsJJgQP.png">
+
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Noto+Sans+SC:wght@400;500;700;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+  
+
+  <!-- Local PDF.js Engine -->
+  <script src="/vendor/pdfjs/pdf.min.js"></script>
+
+  <script>
+    (function () {
+      var t = localStorage.getItem('theme') || 'dark';
+      var bgUrl = t === 'light' ? "url('/assets/app_bg_day_v3.png')" : "url('/assets/app_bg_night_v3.png')";
+      document.documentElement.style.setProperty('background-image', bgUrl, 'important');
+      document.documentElement.style.setProperty('background-size', 'cover', 'important');
+      document.documentElement.style.setProperty('background-position', 'center center', 'important');
+      document.documentElement.style.setProperty('background-attachment', 'fixed', 'important');
+      document.documentElement.style.setProperty('background-repeat', 'no-repeat', 'important');
+
+      if (t === 'light') {
+        document.documentElement.classList.add('light-mode', 'light');
+        document.documentElement.classList.remove('dark');
+        document.addEventListener('DOMContentLoaded', function () {
+          if (document.body) {
+            document.body.classList.add('light-mode');
+            document.body.style.setProperty('background-image', bgUrl, 'important');
+          }
+        });
+      } else {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light', 'light-mode');
+        document.addEventListener('DOMContentLoaded', function () {
+          if (document.body) {
+            document.body.classList.remove('light-mode');
+            document.body.style.setProperty('background-image', bgUrl, 'important');
+          }
+        });
+      }
+    })();
+
+    window.toggleTheme = function () {
+      var isDark = document.documentElement.classList.contains('dark');
+      var nextDark = !isDark;
+      var bgUrl = nextDark ? "url('/assets/app_bg_night_v3.png')" : "url('/assets/app_bg_day_v3.png')";
+      document.documentElement.style.setProperty('background-image', bgUrl, 'important');
+      if (document.body) {
+        document.body.style.setProperty('background-image', bgUrl, 'important');
+      }
+
+      if (nextDark) {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light', 'light-mode');
+        if (document.body) {
+          document.body.classList.remove('light-mode', 'light');
+          document.body.classList.add('dark');
+        }
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.documentElement.classList.add('light', 'light-mode');
+        document.documentElement.classList.remove('dark');
+        if (document.body) {
+          document.body.classList.remove('dark');
+          document.body.classList.add('light-mode');
+        }
+        localStorage.setItem('theme', 'light');
+      }
+    };
+  </script>
+  <script type="module" crossorigin src="/assets/documents-DVPo3s5E.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/global_sidebar-DU5b37H7.js">
+  <link rel="stylesheet" crossorigin href="/assets/documents-DyMeqFQy.css">
+  <link rel="stylesheet" crossorigin href="/assets/style-7S6wFPrc.css">
+</head>
+
+<body>
+  <div class="app-layout">
+
+    <!-- Global App Topbar Header -->
+    <header class="app-topbar"
+      style="display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.08); position: sticky; top: 0; z-index: 100;">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <button id="mobile-sidebar-toggle-btn" class="global-menu-trigger"
+          style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.12); color: #ffffff; width: 40px; height: 40px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <a href="/" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+          <img src="/assets/logo-CnsJJgQP.png" alt="Logo" style="height: 36px; width: 36px; border-radius: 8px;">
+          <span
+            style="font-size: 1.15rem; font-weight: 900; background: linear-gradient(135deg, #38bdf8, #818cf8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.3px;">Tiếng
+            Trung HongTai</span>
+        </a>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button onclick="window.toggleTheme()" id="theme-toggle-btn"
+          style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.1); color: #f59e0b; width: 38px; height: 38px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+          <i class="fa-solid fa-sun"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="documents-main-container">
+
+      <!-- Hero Header Banner -->
+      <section class="documents-hero">
+        <div class="documents-hero-content">
+          <div class="documents-badge-chip">
+            <i class="fa-solid fa-book-bookmark"></i>
+            <span>Kho Tài Liệu Điện Tử Thông Minh</span>
+          </div>
+          <h1 class="documents-title">Thư Viện Sách & Giáo Trình Tiếng Trung Chuẩn Quốc Tế</h1>
+          <p class="documents-subtitle">
+            Khám phá 66 đầu sách tuyển chọn: Giáo trình Hán ngữ, HSK 2.0 &amp; 3.0, Kỹ năng biên phiên dịch thực chiến,
+            nghiên cứu sư phạm chuyên sâu dành cho giáo viên và các tác phẩm văn học kinh điển. Hỗ trợ đọc trực tiếp, tự
+            động lưu tiến độ, ghi chú cá nhân và thảo luận học thuật theo từng trang sách.
+          </p>
+
+          <div class="documents-stats-row">
+            <div class="documents-stat-item">
+              <i class="fa-solid fa-book"></i>
+              <span><strong>66</strong> Đầu Sách</span>
+            </div>
+            <div class="documents-stat-item">
+              <i class="fa-solid fa-layer-group"></i>
+              <span><strong>7</strong> Chuyên Mục Sư Phạm</span>
+            </div>
+            <div class="documents-stat-item">
+              <i class="fa-solid fa-bolt"></i>
+              <span><strong>Đọc Trực Tuyến</strong> Mượt Mà</span>
+            </div>
+            <div class="documents-stat-item">
+              <i class="fa-solid fa-shield-halved"></i>
+              <span><strong>Bảo Vệ</strong> Bản Quyền Tác Giả</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Search & Category Filters -->
+      <section class="documents-controls-bar">
+        <div class="documents-search-wrapper">
+          <i class="fa-solid fa-magnifying-glass documents-search-icon"></i>
+          <input type="text" id="documents-search-input" class="documents-search-input"
+            placeholder="Tìm kiếm sách theo tên tiếng Việt, chữ Hán, danh mục hoặc nội dung...">
+          <button id="documents-search-clear" class="documents-search-clear" title="Xóa tìm kiếm">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="documents-filter-pills">
+          <button class="documents-filter-btn active" data-category="all">
+            <span>Tất cả</span>
+            <span class="documents-filter-count">66</span>
+          </button>
+          <button class="documents-filter-btn" data-category="Giáo Trình Hán Ngữ">
+            <i class="fa-solid fa-book-open" style="color: #fbbf24;"></i>
+            <span>Giáo Trình Hán Ngữ</span>
+            <span class="documents-filter-count">5</span>
+          </button>
+          <button class="documents-filter-btn" data-category="Giáo Trình HSK">
+            <i class="fa-solid fa-graduation-cap" style="color: #f87171;"></i>
+            <span>Giáo Trình HSK</span>
+            <span class="documents-filter-count">4</span>
+          </button>
+          <button class="documents-filter-btn" data-category="Biên Phiên Dịch">
+            <i class="fa-solid fa-language" style="color: #34d399;"></i>
+            <span>Biên Phiên Dịch</span>
+            <span class="documents-filter-count">2</span>
+          </button>
+          <button class="documents-filter-btn" data-category="Sách Cho Giáo Viên">
+            <i class="fa-solid fa-chalkboard-user" style="color: #a78bfa;"></i>
+            <span>Sách Cho Giáo Viên</span>
+            <span class="documents-filter-count">34</span>
+          </button>
+          <button class="documents-filter-btn" data-category="Truyện Đọc &amp; Văn Học">
+            <i class="fa-solid fa-feather-pointed" style="color: #f472b6;"></i>
+            <span>Truyện Đọc &amp; Văn Học</span>
+            <span class="documents-filter-count">12</span>
+          </button>
+          <button class="documents-filter-btn" data-category="Văn Hóa &amp; Xã Hội">
+            <i class="fa-solid fa-landmark" style="color: #22d3ee;"></i>
+            <span>Văn Hóa &amp; Xã Hội</span>
+            <span class="documents-filter-count">5</span>
+          </button>
+          <button class="documents-filter-btn" data-category="Ngữ Pháp &amp; Tra Cứu">
+            <i class="fa-solid fa-spell-check" style="color: #60a5fa;"></i>
+            <span>Ngữ Pháp &amp; Tra Cứu</span>
+            <span class="documents-filter-count">4</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Books Grid -->
+      <section id="documents-grid" class="documents-grid">
+        <!-- Rendered dynamically by documents.js -->
+        <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: #94a3b8;">
+          <i class="fa-solid fa-spinner fa-spin" style="font-size: 2.5rem; color: #38bdf8; margin-bottom: 12px;"></i>
+          <p style="font-weight: 700;">Đang nạp kho sách và tài liệu điện tử...</p>
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- FULLSCREEN E-BOOK READER MODAL -->
+  <div id="ebook-reader-modal" class="ebook-reader-modal theme-dark" role="dialog" aria-modal="true">
+
+    <!-- Top Header HUD -->
+    <header class="reader-header">
+      <div class="reader-header-left">
+        <button id="reader-btn-back" class="reader-btn-back" title="Đóng sách và trở về kho tài liệu">
+          <i class="fa-solid fa-chevron-left"></i>
+          <span>Kho Sách</span>
+        </button>
+
+        <div class="reader-book-info">
+          <h2 id="reader-book-title" class="reader-book-title">Tên Sách</h2>
+          <div id="reader-book-meta" class="reader-book-meta"><span>Chuyên mục</span></div>
+        </div>
+      </div>
+
+      <!-- Page Navigator -->
+      <div class="reader-nav-controls">
+        <button id="reader-btn-prev" class="reader-nav-btn" title="Trang trước (Phím ← hoặc PageUp)">
+          <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <div class="reader-page-indicator">
+          <span>Trang</span>
+          <input type="number" id="reader-page-input" class="reader-page-input" value="1" min="1" step="1">
+          <span id="reader-total-pages">/ 1</span>
+        </div>
+        <button id="reader-btn-next" class="reader-nav-btn" title="Trang tiếp (Phím →, Phím cách hoặc PageDown)">
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+
+      <!-- Tool Buttons -->
+      <div class="reader-header-right">
+        <button id="reader-zoom-out" class="reader-tool-btn" title="Thu nhỏ (-)">
+          <i class="fa-solid fa-magnifying-glass-minus"></i>
+        </button>
+        <button id="reader-zoom-in" class="reader-tool-btn" title="Phóng to (+)">
+          <i class="fa-solid fa-magnifying-glass-plus"></i>
+        </button>
+        <button id="reader-zoom-fit" class="reader-tool-btn" title="Vừa chiều rộng / Vừa trang">
+          <i class="fa-solid fa-expand"></i>
+          <span>Vừa Trang</span>
+        </button>
+        <button id="reader-theme-toggle" class="reader-tool-btn" title="Chuyển chế độ: Tối / Giấy da Sepia / Sáng">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+
+        <!-- Comments Drawer Trigger -->
+        <button id="reader-toggle-comments" class="reader-tool-btn" title="Bình luận &amp; Thảo luận trang này">
+          <i class="fa-regular fa-comment-dots"></i>
+          <span>Bình luận</span>
+          <span id="reader-comments-count-badge" class="badge-counter" style="display: none;">0</span>
+        </button>
+
+        <!-- Personal Notes Drawer Trigger -->
+        <button id="reader-toggle-notes" class="reader-tool-btn" title="Ghi chú cá nhân của tôi">
+          <i class="fa-solid fa-feather"></i>
+          <span>Ghi chú</span>
+          <span id="reader-notes-count-badge" class="badge-counter" style="display: none;">0</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <div class="reader-workspace">
+      <!-- Floating Page Turn Buttons for comfortable reading -->
+      <button id="reader-float-prev" class="reader-floating-nav reader-floating-prev" title="Trang trước">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+      <button id="reader-float-next" class="reader-floating-nav reader-floating-next" title="Trang sau">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+
+      <!-- Viewport & Canvas -->
+      <div id="reader-viewport" class="reader-viewport">
+        <div class="reader-canvas-wrapper">
+          <canvas id="pdf-render-canvas"></canvas>
+          <div class="reader-watermark-overlay">
+            Tiếng Trung HongTai<br>Bản quyền đọc trực tuyến
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading Spinner -->
+      <div id="reader-loading-overlay" class="reader-loading-overlay" style="display: none;">
+        <div class="reader-spinner"></div>
+        <span class="reader-loading-text" style="font-size: 0.95rem; font-weight: 700;">Đang nạp trang sách...</span>
+      </div>
+
+      <!-- SIDE DRAWER 1: COMMENTS -->
+      <aside id="reader-comments-drawer" class="reader-drawer">
+        <div class="drawer-header">
+          <h3 class="drawer-title">
+            <i class="fa-regular fa-comments" style="color: #38bdf8;"></i>
+            <span>Bình Luận Trang</span>
+          </h3>
+          <button id="drawer-close-comments" class="drawer-close-btn" title="Đóng ngăn bình luận">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="drawer-body">
+          <div class="drawer-filter-tabs">
+            <button class="drawer-filter-tab active" data-mode="page">
+              <span id="comments-current-page-label">Trang 1</span>
+            </button>
+            <button class="drawer-filter-tab" data-mode="all">
+              <span>Tất cả các trang</span>
+            </button>
+          </div>
+
+          <div id="reader-comments-list" style="display: flex; flex-direction: column; gap: 12px; flex: 1 1 auto; overflow-y: auto;">
+            <!-- Comments rendered dynamically -->
+          </div>
+
+          <!-- Add Comment Form -->
+          <div class="comment-input-form">
+            <textarea id="reader-comment-input" class="comment-textarea" placeholder="Nhập câu hỏi, giải nghĩa ngữ pháp hoặc thảo luận tại trang này..."></textarea>
+            <button id="btn-submit-comment" class="btn-submit-comment">
+              <i class="fa-solid fa-paper-plane"></i>
+              <span>Gửi Bình Luận</span>
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- SIDE DRAWER 2: PERSONAL PRIVATE NOTES -->
+      <aside id="reader-notes-drawer" class="reader-drawer">
+        <div class="drawer-header">
+          <h3 class="drawer-title">
+            <i class="fa-solid fa-feather-pointed" style="color: #fbbf24;"></i>
+            <span>Ghi Chú Cá Nhân</span>
+          </h3>
+          <button id="drawer-close-notes" class="drawer-close-btn" title="Đóng ngăn ghi chú">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="drawer-body">
+          <p style="font-size: 0.82rem; color: #94a3b8; margin: 0;">
+            Ghi chú riêng tư chỉ bạn mới có thể xem. Bấm vào bất kỳ ghi chú nào để nhảy nhanh tới trang sách tương ứng.
+          </p>
+
+          <div id="reader-notes-list" style="display: flex; flex-direction: column; gap: 10px; flex: 1 1 auto; overflow-y: auto;">
+            <!-- Notes rendered dynamically -->
+          </div>
+
+          <!-- Add Note Form -->
+          <div class="comment-input-form">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 0.8rem; font-weight: 700; color: #cbd5e1;">Màu nhãn:</span>
+              <div class="note-color-picker">
+                <div class="color-dot active" data-color="#fef08a" style="background: #fef08a;" title="Vàng"></div>
+                <div class="color-dot" data-color="#bbf7d0" style="background: #bbf7d0;" title="Xanh lá"></div>
+                <div class="color-dot" data-color="#fbcfe8" style="background: #fbcfe8;" title="Hồng"></div>
+                <div class="color-dot" data-color="#ddd6fe" style="background: #ddd6fe;" title="Tím"></div>
+              </div>
+            </div>
+            <textarea id="reader-note-input" class="comment-textarea" placeholder="Ghi chú từ vựng, ngữ pháp, mẹo học cho trang hiện tại..."></textarea>
+            <button id="btn-submit-note" class="btn-submit-comment" style="background: #d97706;">
+              <i class="fa-solid fa-floppy-disk"></i>
+              <span>Lưu Ghi Chú</span>
+            </button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- MODULE SCRIPTS -->
+</body>
+
+</html>

@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import fs from 'fs/promises';
-import { existsSync, createWriteStream } from 'fs';
+import { existsSync, createWriteStream, createReadStream } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import https from 'https';
@@ -198,6 +198,8 @@ app.use('/assets', express.static(path.join(PUBLIC_DIR, 'assets')));
 app.use('/assets', express.static(path.join(FRONTEND_DIR, 'public', 'assets')));
 app.use('/src/assets', express.static(path.join(FRONTEND_DIR, 'src', 'assets')));
 app.use('/src', express.static(path.join(FRONTEND_DIR, 'src')));
+app.use('/vendor', express.static(path.join(DIST_DIR, 'vendor')));
+app.use('/vendor', express.static(path.join(PUBLIC_DIR, 'vendor')));
 
 app.use(express.static(DIST_DIR));
 app.use(express.static(PUBLIC_DIR));
@@ -3542,6 +3544,398 @@ app.delete('/api/discussions/:id', async (req, res) => {
   } catch (err) {
     console.error('Error deleting discussion:', err);
     res.status(500).json({ error: 'Lỗi xóa bài viết.' });
+  }
+});
+
+// ==========================================================================
+// E-BOOK & KHO TÀI LIỆU TIẾNG TRUNG API ENDPOINTS
+// ==========================================================================
+const BOOKS_CATALOG_PATH = path.join(__dirname, 'books_catalog.json');
+const BOOK_INTERACTIONS_PATH = path.join(__dirname, 'book_interactions.json');
+
+async function readBooksCatalog() {
+  try {
+    const data = await fs.readFile(BOOKS_CATALOG_PATH, 'utf-8');
+    return JSON.parse(data);
+  } catch (e) {
+    console.error('Error reading books_catalog.json:', e);
+    return [];
+  }
+}
+
+async function readBookInteractions() {
+  try {
+    const data = await fs.readFile(BOOK_INTERACTIONS_PATH, 'utf-8');
+    const parsed = JSON.parse(data);
+    if (!parsed.reading_progress) parsed.reading_progress = {};
+    if (!parsed.comments) parsed.comments = [];
+    if (!parsed.notes) parsed.notes = [];
+    return parsed;
+  } catch (e) {
+    return { reading_progress: {}, comments: [], notes: [] };
+  }
+}
+
+async function writeBookInteractions(data) {
+  try {
+    await fs.writeFile(BOOK_INTERACTIONS_PATH, JSON.stringify(data, null, 2), 'utf-8');
+  } catch (e) {
+    console.error('Error writing book_interactions.json:', e);
+  }
+}
+
+function resolveUserIdentifier(req) {
+  const email = getLoggedInUserEmail(req);
+  if (email) return email.toLowerCase().trim();
+  const guestId = req.headers['x-guest-id'] || req.query.guestId || req.body?.guestId;
+  if (guestId) return 'guest_' + String(guestId).trim();
+  return 'guest_device';
+}
+
+// GET /api/books - Danh sách toàn bộ sách kèm thống kê tương tác & tiến độ đọc
+app.get('/api/books', async (req, res) => {
+  try {
+    const catalog = await readBooksCatalog();
+    const interactions = await readBookInteractions();
+    const userKey = resolveUserIdentifier(req);
+    const userProgressMap = interactions.reading_progress[userKey] || {};
+
+    // Group comments count by bookId
+    const commentsCountByBook = {};
+    (interactions.comments || []).forEach(c => {
+      commentsCountByBook[c.bookId] = (commentsCountByBook[c.bookId] || 0) + 1;
+    });
+
+    // Group notes count by bookId for this user
+    const notesCountByBook = {};
+    (interactions.notes || []).forEach(n => {
+      if (n.userKey === userKey) {
+        notesCountByBook[n.bookId] = (notesCountByBook[n.bookId] || 0) + 1;
+      }
+    });
+
+    const enrichedBooks = catalog.map(b => {
+      const progress = userProgressMap[b.id] || null;
+      return {
+        ...b,
+        totalComments: commentsCountByBook[b.id] || 0,
+        totalUserNotes: notesCountByBook[b.id] || 0,
+        userProgress: progress
+      };
+    });
+
+    res.json({ success: true, books: enrichedBooks, total: enrichedBooks.length });
+  } catch (err) {
+    console.error('Error fetching books catalog:', err);
+    res.status(500).json({ error: 'Lỗi tải danh mục sách.' });
+  }
+});
+
+// GET /api/books/:id - Chi tiết 1 cuốn sách
+app.get('/api/books/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const catalog = await readBooksCatalog();
+    const book = catalog.find(b => b.id === id);
+    if (!book) {
+      return res.status(404).json({ error: 'Không tìm thấy sách.' });
+    }
+
+    const interactions = await readBookInteractions();
+    const userKey = resolveUserIdentifier(req);
+    const userProgress = (interactions.reading_progress[userKey] && interactions.reading_progress[userKey][id]) || null;
+    const bookComments = (interactions.comments || []).filter(c => c.bookId === id);
+    const userNotes = (interactions.notes || []).filter(n => n.bookId === id && n.userKey === userKey);
+
+    res.json({
+      success: true,
+      book: {
+        ...book,
+        userProgress,
+        totalComments: bookComments.length,
+        totalNotes: userNotes.length
+      }
+    });
+  } catch (err) {
+    console.error('Error fetching book detail:', err);
+    res.status(500).json({ error: 'Lỗi tải thông tin sách.' });
+  }
+});
+
+// GET /api/books/:id/stream - Stream PDF binary với hỗ trợ byte range & bảo mật chống tải
+app.get('/api/books/:id/stream', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const catalog = await readBooksCatalog();
+    const book = catalog.find(b => b.id === id);
+    if (!book) {
+      return res.status(404).json({ error: 'Không tìm thấy sách.' });
+    }
+
+    const p1 = path.resolve(__dirname, '..', 'PDF Sách tiếng Trung', book.relPath);
+    const p2 = path.resolve(__dirname, '..', book.relPath);
+    const fullPdfPath = existsSync(p1) ? p1 : (existsSync(p2) ? p2 : null);
+    if (!fullPdfPath || !existsSync(fullPdfPath)) {
+      return res.status(404).json({ error: 'Tệp sách PDF không tồn tại trên máy chủ.' });
+    }
+
+    const stat = await fs.stat(fullPdfPath);
+    const fileSize = stat.size;
+    const range = req.headers.range;
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'inline; filename="reader.pdf"');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('Cache-Control', 'private, max-age=86400');
+    res.setHeader('Accept-Ranges', 'bytes');
+
+    if (range) {
+      const parts = range.replace(/bytes=/, "").split("-");
+      const start = parseInt(parts[0], 10);
+      const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+      const chunksize = (end - start) + 1;
+
+      res.status(206);
+      res.setHeader('Content-Range', `bytes ${start}-${end}/${fileSize}`);
+      res.setHeader('Content-Length', chunksize);
+      const fileStream = createReadStream(fullPdfPath, { start, end });
+      fileStream.pipe(res);
+    } else {
+      res.setHeader('Content-Length', fileSize);
+      const fileStream = createReadStream(fullPdfPath);
+      fileStream.pipe(res);
+    }
+  } catch (err) {
+    console.error('Error streaming PDF:', err);
+    res.status(500).json({ error: 'Lỗi truyền luồng tài liệu PDF.' });
+  }
+});
+
+// GET /api/books/:id/progress - Lấy tiến độ đọc sách của người dùng
+app.get('/api/books/:id/progress', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userKey = resolveUserIdentifier(req);
+    const interactions = await readBookInteractions();
+    const progress = (interactions.reading_progress[userKey] && interactions.reading_progress[userKey][id]) || null;
+    res.json({ success: true, progress });
+  } catch (err) {
+    res.status(500).json({ error: 'Lỗi lấy tiến độ đọc sách.' });
+  }
+});
+
+// POST /api/books/:id/progress - Lưu trang đang đọc
+app.post('/api/books/:id/progress', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { page, totalPages } = req.body;
+    if (!page || Number(page) < 1) {
+      return res.status(400).json({ error: 'Số trang không hợp lệ.' });
+    }
+
+    const userKey = resolveUserIdentifier(req);
+    const interactions = await readBookInteractions();
+    if (!interactions.reading_progress[userKey]) {
+      interactions.reading_progress[userKey] = {};
+    }
+
+    const progressRecord = {
+      bookId: id,
+      lastPage: Number(page),
+      totalPages: Number(totalPages) || interactions.reading_progress[userKey][id]?.totalPages || 1,
+      percentage: totalPages ? Math.min(100, Math.round((Number(page) / Number(totalPages)) * 100)) : 0,
+      updatedAt: new Date()
+    };
+
+    interactions.reading_progress[userKey][id] = progressRecord;
+    await writeBookInteractions(interactions);
+
+    res.json({ success: true, progress: progressRecord });
+  } catch (err) {
+    console.error('Error saving reading progress:', err);
+    res.status(500).json({ error: 'Lỗi lưu tiến độ đọc.' });
+  }
+});
+
+// GET /api/books/:id/comments - Lấy danh sách bình luận (có thể lọc theo ?page=N)
+app.get('/api/books/:id/comments', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { page } = req.query;
+    const interactions = await readBookInteractions();
+    let comments = (interactions.comments || []).filter(c => c.bookId === id);
+
+    if (page) {
+      comments = comments.filter(c => Number(c.page) === Number(page));
+    }
+
+    comments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    res.json({ success: true, comments, total: comments.length });
+  } catch (err) {
+    console.error('Error fetching book comments:', err);
+    res.status(500).json({ error: 'Lỗi tải bình luận.' });
+  }
+});
+
+// POST /api/books/:id/comments - Thêm bình luận cho trang sách
+app.post('/api/books/:id/comments', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { page, content } = req.body;
+    if (!content || !content.trim()) {
+      return res.status(400).json({ error: 'Nội dung bình luận không được trống.' });
+    }
+
+    const currentEmail = getLoggedInUserEmail(req);
+    let authorName = 'Học viên ẩn danh';
+    let authorPicture = '';
+    let authorRole = 'user';
+
+    if (currentEmail) {
+      const userData = await readUserData();
+      const user = (userData.users && userData.users[currentEmail]) || {};
+      authorName = user.name || currentEmail.split('@')[0];
+      authorPicture = user.picture || '';
+      authorRole = user.role || 'user';
+    } else if (req.body.authorName) {
+      authorName = String(req.body.authorName).trim().substring(0, 30);
+    }
+
+    const newComment = {
+      id: 'book_cmt_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
+      bookId: id,
+      page: Number(page) || 1,
+      content: content.trim(),
+      authorEmail: currentEmail || null,
+      authorName,
+      authorPicture,
+      authorRole,
+      createdAt: new Date()
+    };
+
+    const interactions = await readBookInteractions();
+    interactions.comments.push(newComment);
+    await writeBookInteractions(interactions);
+
+    res.json({ success: true, comment: newComment });
+  } catch (err) {
+    console.error('Error adding book comment:', err);
+    res.status(500).json({ error: 'Lỗi đăng bình luận sách.' });
+  }
+});
+
+// DELETE /api/books/:id/comments/:commentId - Xóa bình luận
+app.delete('/api/books/:id/comments/:commentId', async (req, res) => {
+  try {
+    const { id, commentId } = req.params;
+    const currentEmail = getLoggedInUserEmail(req);
+    const userData = await readUserData();
+    const isAdmin = isUserAdmin(currentEmail, userData);
+
+    const interactions = await readBookInteractions();
+    const comment = interactions.comments.find(c => c.id === commentId && c.bookId === id);
+    if (!comment) {
+      return res.status(404).json({ error: 'Không tìm thấy bình luận.' });
+    }
+
+    if (comment.authorEmail && comment.authorEmail !== currentEmail && !isAdmin) {
+      return res.status(403).json({ error: 'Bạn không có quyền xóa bình luận này.' });
+    }
+
+    interactions.comments = interactions.comments.filter(c => c.id !== commentId);
+    await writeBookInteractions(interactions);
+
+    res.json({ success: true, message: 'Đã xóa bình luận thành công.' });
+  } catch (err) {
+    console.error('Error deleting book comment:', err);
+    res.status(500).json({ error: 'Lỗi xóa bình luận.' });
+  }
+});
+
+// GET /api/books/:id/notes - Lấy danh sách ghi chú cá nhân của người dùng cho sách này
+app.get('/api/books/:id/notes', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userKey = resolveUserIdentifier(req);
+    const interactions = await readBookInteractions();
+    const notes = (interactions.notes || [])
+      .filter(n => n.bookId === id && n.userKey === userKey)
+      .sort((a, b) => Number(a.page) - Number(b.page) || new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt));
+
+    res.json({ success: true, notes, total: notes.length });
+  } catch (err) {
+    console.error('Error fetching book notes:', err);
+    res.status(500).json({ error: 'Lỗi tải ghi chú.' });
+  }
+});
+
+// POST /api/books/:id/notes - Thêm hoặc cập nhật ghi chú cá nhân
+app.post('/api/books/:id/notes', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { noteId, page, content, color = '#fef08a' } = req.body;
+    if (!content || !content.trim()) {
+      return res.status(400).json({ error: 'Nội dung ghi chú không được để trống.' });
+    }
+
+    const userKey = resolveUserIdentifier(req);
+    const interactions = await readBookInteractions();
+
+    let noteRecord;
+    if (noteId) {
+      // Update existing note
+      const idx = interactions.notes.findIndex(n => n.id === noteId && n.userKey === userKey && n.bookId === id);
+      if (idx !== -1) {
+        interactions.notes[idx].page = Number(page) || interactions.notes[idx].page;
+        interactions.notes[idx].content = content.trim();
+        interactions.notes[idx].color = color;
+        interactions.notes[idx].updatedAt = new Date();
+        noteRecord = interactions.notes[idx];
+      }
+    }
+
+    if (!noteRecord) {
+      // Create new note
+      noteRecord = {
+        id: 'note_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
+        bookId: id,
+        userKey,
+        page: Number(page) || 1,
+        content: content.trim(),
+        color: color || '#fef08a',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+      interactions.notes.push(noteRecord);
+    }
+
+    await writeBookInteractions(interactions);
+    res.json({ success: true, note: noteRecord });
+  } catch (err) {
+    console.error('Error saving book note:', err);
+    res.status(500).json({ error: 'Lỗi lưu ghi chú cá nhân.' });
+  }
+});
+
+// DELETE /api/books/:id/notes/:noteId - Xóa ghi chú cá nhân
+app.delete('/api/books/:id/notes/:noteId', async (req, res) => {
+  try {
+    const { id, noteId } = req.params;
+    const userKey = resolveUserIdentifier(req);
+    const interactions = await readBookInteractions();
+
+    const note = interactions.notes.find(n => n.id === noteId && n.bookId === id && n.userKey === userKey);
+    if (!note) {
+      return res.status(404).json({ error: 'Không tìm thấy ghi chú cá nhân.' });
+    }
+
+    interactions.notes = interactions.notes.filter(n => n.id !== noteId);
+    await writeBookInteractions(interactions);
+
+    res.json({ success: true, message: 'Đã xóa ghi chú thành công.' });
+  } catch (err) {
+    console.error('Error deleting book note:', err);
+    res.status(500).json({ error: 'Lỗi xóa ghi chú.' });
   }
 });
 

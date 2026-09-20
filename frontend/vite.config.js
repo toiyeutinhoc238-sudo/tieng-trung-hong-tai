@@ -30,7 +30,8 @@ export default defineConfig({
         reading: resolve(__dirname, 'reading-practice.html'),
         rank: resolve(__dirname, 'rank.html'),
         dictation: resolve(__dirname, 'video-dictation.html'),
-        writing: resolve(__dirname, 'writing-practice.html')
+        writing: resolve(__dirname, 'writing-practice.html'),
+        documents: resolve(__dirname, 'documents.html')
       }
     }
   }

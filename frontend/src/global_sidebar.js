@@ -31,6 +31,7 @@
     if (path.includes('quiz-game')) return 'games';
     if (path.includes('han-viet-rules')) return 'rules';
     if (path.includes('rank')) return 'rank';
+    if (path.includes('documents')) return 'documents';
     return '';
   }
 
@@ -230,6 +231,10 @@
           </li>
           <li class="sidebar-item ${activeKey === 'rank' ? 'active' : ''}" onclick="window.location.href = '/rank.html'">
             <i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> <span>Bảng Xếp Hạng</span>
+          </li>
+          <li class="sidebar-item ${activeKey === 'documents' ? 'active' : ''}" onclick="window.location.href = '/documents.html'">
+            <i class="fa-solid fa-book-bookmark" style="color: #06b6d4;"></i> <span>Kho Sách &amp; Tài Liệu</span>
+            <span style="font-size:0.65rem; background:linear-gradient(135deg, rgba(6,182,212,0.25), rgba(59,130,246,0.3)); color:#22d3ee; border:1px solid rgba(6,182,212,0.4); padding:2px 7px; border-radius:6px; font-weight:800; margin-left:auto;">66 Sách 📚</span>
           </li>
         </ul>
 
