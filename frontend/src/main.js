@@ -5193,7 +5193,7 @@ function renderRoadmapBookshelf() {
           level: 1,
           title: '新 HSK 教程 1 (HSK 3.0)',
           tag: 'HSK 3.0 Cấp 1',
-          coverUrl: '/covers/hsk3/hsk1.jpg',
+          coverUrl: '/covers/thumbnails/book_hj57ni.jpg',
           desc: 'Giáo trình HSK 3.0 cấp độ 1 sơ cấp chuẩn quốc tế'
         },
         {
@@ -5201,7 +5201,7 @@ function renderRoadmapBookshelf() {
           level: 2,
           title: '新 HSK 教程 2 (HSK 3.0)',
           tag: 'HSK 3.0 Cấp 2',
-          coverUrl: '/covers/hsk3/hsk2.jpg',
+          coverUrl: '/covers/thumbnails/book_74e5v6.jpg',
           desc: 'Giáo trình HSK 3.0 cấp độ 2 sơ cấp nâng cao'
         },
         {
@@ -5209,7 +5209,7 @@ function renderRoadmapBookshelf() {
           level: 3,
           title: '新 HSK 教程 3 (HSK 3.0)',
           tag: 'HSK 3.0 Cấp 3',
-          coverUrl: '/covers/hsk3/hsk3.jpg',
+          coverUrl: '/covers/thumbnails/book_3b4cws.jpg',
           desc: 'Giáo trình HSK 3.0 cấp độ 3 sơ cấp hoàn chỉnh'
         },
         {
@@ -5217,7 +5217,7 @@ function renderRoadmapBookshelf() {
           level: 4,
           title: '新 HSK 教程 4 (HSK 3.0)',
           tag: 'HSK 3.0 Cấp 4',
-          coverUrl: '/covers/hsk3/hsk4.jpg',
+          coverUrl: '/covers/thumbnails/book_32gwjz.jpg',
           desc: 'Giáo trình HSK 3.0 cấp độ 4 trung cấp cơ bản'
         },
         {
@@ -5225,9 +5225,7 @@ function renderRoadmapBookshelf() {
           level: 5,
           title: '新 HSK 教程 5 (HSK 3.0)',
           tag: 'HSK 3.0 Cấp 5',
-          pastelBg: 'linear-gradient(145deg, #fef9c3 0%, #fef08a 100%)',
-          pastelAccent: '#a16207',
-          hanzi: 'HSK',
+          coverUrl: '/covers/hsk3/hsk5.jpg',
           desc: 'Giáo trình HSK 3.0 cấp độ 5 trung cấp nâng cao'
         },
         {
@@ -5235,9 +5233,7 @@ function renderRoadmapBookshelf() {
           level: 6,
           title: '新 HSK 教程 6 (HSK 3.0)',
           tag: 'HSK 3.0 Cấp 6',
-          pastelBg: 'linear-gradient(145deg, #ede9fe 0%, #ddd6fe 100%)',
-          pastelAccent: '#6d28d9',
-          hanzi: 'HSK',
+          coverUrl: '/covers/hsk3/hsk6.jpg',
           desc: 'Giáo trình HSK 3.0 cấp độ 6 cao cấp'
         },
         {
@@ -5245,9 +5241,7 @@ function renderRoadmapBookshelf() {
           level: '7-9',
           title: '新 HSK 教程 7-9 (HSK 3.0)',
           tag: 'HSK 3.0 Cấp 7-9',
-          pastelBg: 'linear-gradient(145deg, #fce7f3 0%, #fbcfe8 100%)',
-          pastelAccent: '#be185d',
-          hanzi: 'HSK',
+          coverUrl: '/covers/hsk3/hsk7_9.jpg',
           desc: 'Giáo trình HSK 3.0 cấp 7-8-9 trình độ chuyên gia'
         }
       ]
@@ -5264,7 +5258,7 @@ function renderRoadmapBookshelf() {
           level: 1,
           title: 'Giáo Trình Chuẩn HSK 1',
           tag: 'HSK 2.0 Cấp 1',
-          coverUrl: '/covers/hsk2/hsk1.jpg',
+          coverUrl: '/covers/thumbnails/book_pv3abw.jpg',
           desc: 'Giáo trình chuẩn HSK 1 sơ cấp cơ bản 150 từ vựng'
         },
         {
@@ -5272,7 +5266,7 @@ function renderRoadmapBookshelf() {
           level: 2,
           title: 'Giáo Trình Chuẩn HSK 2',
           tag: 'HSK 2.0 Cấp 2',
-          coverUrl: '/covers/hsk2/hsk2.jpg',
+          coverUrl: '/covers/thumbnails/book_fg5v3p.jpg',
           desc: 'Giáo trình chuẩn HSK 2 sơ cấp giao tiếp 300 từ vựng'
         },
         {
@@ -5280,7 +5274,7 @@ function renderRoadmapBookshelf() {
           level: 3,
           title: 'Giáo Trình Chuẩn HSK 3',
           tag: 'HSK 2.0 Cấp 3',
-          coverUrl: '/covers/hsk2/hsk3.jpg',
+          coverUrl: '/covers/thumbnails/book_e9p1fu.jpg',
           desc: 'Giáo trình chuẩn HSK 3 trung cấp gồm 20 bài học 600 từ vựng'
         },
         {
@@ -5288,7 +5282,7 @@ function renderRoadmapBookshelf() {
           level: 4,
           title: 'Giáo Trình Chuẩn HSK 4',
           tag: 'HSK 2.0 Cấp 4',
-          coverUrl: '/covers/hsk2/hsk4.jpg',
+          coverUrl: '/covers/thumbnails/book_68ruwr.jpg',
           desc: 'Giáo trình chuẩn HSK 4 gồm 20 chủ đề chuyên sâu 1,200 từ vựng'
         },
         {
@@ -5296,7 +5290,7 @@ function renderRoadmapBookshelf() {
           level: 5,
           title: 'Giáo Trình Chuẩn HSK 5',
           tag: 'HSK 2.0 Cấp 5',
-          coverUrl: '/covers/hsk2/hsk5.jpg',
+          coverUrl: '/covers/thumbnails/book_8e6cd7.jpg',
           desc: 'Giáo trình chuẩn HSK 5 cao cấp 2,500 từ vựng'
         },
         {
@@ -5304,7 +5298,7 @@ function renderRoadmapBookshelf() {
           level: 6,
           title: 'Giáo Trình Chuẩn HSK 6',
           tag: 'HSK 2.0 Cấp 6',
-          coverUrl: '/covers/hsk2/hsk6.jpg',
+          coverUrl: '/covers/hsk2/hsk6_thuong.jpg',
           desc: 'Giáo trình chuẩn HSK 6 thành thạo 5,000 từ vựng'
         }
       ]
@@ -5321,9 +5315,7 @@ function renderRoadmapBookshelf() {
           level: 1,
           title: 'Giáo Trình Hán Ngữ 1',
           tag: 'Quyển 1 Thượng',
-          pastelBg: 'linear-gradient(145deg, #fef3c7 0%, #fed7aa 100%)',
-          pastelAccent: '#c2410c',
-          hanzi: '汉语',
+          coverUrl: '/covers/thumbnails/book_m03mz1.jpg',
           desc: 'Giáo trình Hán ngữ quyển 1 cơ bản, phát âm Pinyin & nét bút'
         },
         {
@@ -5331,9 +5323,7 @@ function renderRoadmapBookshelf() {
           level: 2,
           title: 'Giáo Trình Hán Ngữ 2',
           tag: 'Quyển 1 Hạ',
-          pastelBg: 'linear-gradient(145deg, #dcfce7 0%, #bbf7d0 100%)',
-          pastelAccent: '#15803d',
-          hanzi: '汉语',
+          coverUrl: '/covers/thumbnails/book_82zwgt.jpg',
           desc: 'Giáo trình Hán ngữ quyển 2, ngữ pháp câu và đàm thoại hàng ngày'
         },
         {
@@ -5341,9 +5331,7 @@ function renderRoadmapBookshelf() {
           level: 3,
           title: 'Giáo Trình Hán Ngữ 3',
           tag: 'Quyển 2 Thượng',
-          pastelBg: 'linear-gradient(145deg, #fee2e2 0%, #fecaca 100%)',
-          pastelAccent: '#b91c1c',
-          hanzi: '汉语',
+          coverUrl: '/covers/thumbnails/book_8emthg.jpg',
           desc: 'Giáo trình Hán ngữ quyển 3, ngữ pháp trung cấp và mở rộng diễn đạt'
         },
         {
@@ -5351,9 +5339,7 @@ function renderRoadmapBookshelf() {
           level: 4,
           title: 'Giáo Trình Hán Ngữ 4',
           tag: 'Quyển 2 Hạ',
-          pastelBg: 'linear-gradient(145deg, #e0f2fe 0%, #bae6fd 100%)',
-          pastelAccent: '#0369a1',
-          hanzi: '汉语',
+          coverUrl: '/covers/thumbnails/book_ow9jfp.jpg',
           desc: 'Giáo trình Hán ngữ quyển 4, từ vựng chuyên đề và đối thoại chuyên sâu'
         },
         {
@@ -5361,9 +5347,7 @@ function renderRoadmapBookshelf() {
           level: 5,
           title: 'Giáo Trình Hán Ngữ 5',
           tag: 'Quyển 3 Thượng',
-          pastelBg: 'linear-gradient(145deg, #f3e8ff 0%, #e9d5ff 100%)',
-          pastelAccent: '#7e22ce',
-          hanzi: '汉语',
+          coverUrl: '/covers/thumbnails/book_tn7sl6.jpg',
           desc: 'Giáo trình Hán ngữ quyển 5, văn phong học thuật và nghị luận'
         },
         {
@@ -5371,9 +5355,7 @@ function renderRoadmapBookshelf() {
           level: 6,
           title: 'Giáo Trình Hán Ngữ 6',
           tag: 'Quyển 3 Hạ',
-          pastelBg: 'linear-gradient(145deg, #ccfbf1 0%, #99f6e4 100%)',
-          pastelAccent: '#0f766e',
-          hanzi: '汉语',
+          coverUrl: '/covers/thumbnails/book_d5l2mx.jpg',
           desc: 'Giáo trình Hán ngữ quyển 6, hoàn thiện đọc hiểu và ngữ cảm bản xứ'
         }
       ]
@@ -5390,9 +5372,7 @@ function renderRoadmapBookshelf() {
           level: 1,
           title: 'Giáo Trình YCT Cấp 1',
           tag: 'YCT Cấp 1',
-          pastelBg: 'linear-gradient(145deg, #ffe4e6 0%, #fecdd3 100%)',
-          pastelAccent: '#be123c',
-          hanzi: 'YCT',
+          coverUrl: '/covers/yct/yct1.jpg',
           desc: 'Giáo trình YCT cấp 1 nhập môn sinh động cho thiếu nhi'
         },
         {
@@ -5400,9 +5380,7 @@ function renderRoadmapBookshelf() {
           level: 2,
           title: 'Giáo Trình YCT Cấp 2',
           tag: 'YCT Cấp 2',
-          pastelBg: 'linear-gradient(145deg, #ffedd5 0%, #fed7aa 100%)',
-          pastelAccent: '#c2410c',
-          hanzi: 'YCT',
+          coverUrl: '/covers/yct/yct2.jpg',
           desc: 'Giáo trình YCT cấp 2 mở rộng vốn từ đời sống gần gũi'
         },
         {
@@ -5410,9 +5388,7 @@ function renderRoadmapBookshelf() {
           level: 3,
           title: 'Giáo Trình YCT Cấp 3',
           tag: 'YCT Cấp 3',
-          pastelBg: 'linear-gradient(145deg, #dcfce7 0%, #bbf7d0 100%)',
-          pastelAccent: '#15803d',
-          hanzi: 'YCT',
+          coverUrl: '/covers/yct/yct3.jpg',
           desc: 'Giáo trình YCT cấp 3 giao tiếp tự tin ở trường học'
         },
         {
@@ -5420,9 +5396,7 @@ function renderRoadmapBookshelf() {
           level: 4,
           title: 'Giáo Trình YCT Cấp 4',
           tag: 'YCT Cấp 4',
-          pastelBg: 'linear-gradient(145deg, #e0e7ff 0%, #c7d2fe 100%)',
-          pastelAccent: '#4338ca',
-          hanzi: 'YCT',
+          coverUrl: '/covers/yct/yct4.jpg',
           desc: 'Giáo trình YCT cấp 4 hoàn thiện kỹ năng tiếng Trung toàn diện'
         }
       ]

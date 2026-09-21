@@ -431,7 +431,7 @@ if (window.pdfjsLib) {
             level: 1,
             title: 'Giáo Trình Chuẩn HSK 1',
             volTag: 'Tập 1',
-            coverUrl: '/covers/hsk2/hsk1.jpg',
+            coverUrl: '/covers/thumbnails/book_pv3abw.jpg',
             matchFile: 'HSK 1 chuẩn.pdf',
             desc: 'Giáo trình chuẩn HSK 1 bao gồm 15 bài học nhập môn kèm file dịch tiếng Việt chuẩn của TS. Nguyễn Thị Minh Hồng.'
           },
@@ -439,7 +439,7 @@ if (window.pdfjsLib) {
             level: 2,
             title: 'Giáo Trình Chuẩn HSK 2',
             volTag: 'Tập 2',
-            coverUrl: '/covers/hsk2/hsk2.jpg',
+            coverUrl: '/covers/thumbnails/book_fg5v3p.jpg',
             matchFile: 'HSK 2 chuẩn.pdf',
             desc: 'Giáo trình chuẩn HSK 2 bao gồm 15 bài học sơ cấp nâng cao mở rộng vốn câu giao tiếp thực tế.'
           },
@@ -447,7 +447,7 @@ if (window.pdfjsLib) {
             level: 3,
             title: 'Giáo Trình Chuẩn HSK 3',
             volTag: 'Tập 3',
-            coverUrl: '/covers/hsk2/hsk3.jpg',
+            coverUrl: '/covers/thumbnails/book_e9p1fu.jpg',
             matchFile: 'HSK 3 chuẩn.pdf',
             desc: 'Giáo trình chuẩn HSK 3 bao gồm 20 bài học củng cố ngữ pháp trung cấp và diễn đạt mở rộng.'
           },
@@ -455,7 +455,7 @@ if (window.pdfjsLib) {
             level: 4,
             title: 'Giáo Trình Chuẩn HSK 4 (Quyển Thượng)',
             volTag: 'Thượng (上)',
-            coverUrl: '/covers/hsk2/hsk4.jpg',
+            coverUrl: '/covers/thumbnails/book_68ruwr.jpg',
             matchFile: 'HSK 4 chuẩn上.pdf',
             desc: 'Giáo trình chuẩn HSK 4 Quyển Thượng (上) gồm 10 bài học trung cấp đầu tiên kèm ngữ pháp và bài tập chi tiết.'
           },
@@ -463,7 +463,7 @@ if (window.pdfjsLib) {
             level: 4,
             title: 'Giáo Trình Chuẩn HSK 4 (Quyển Hạ)',
             volTag: 'Hạ (下)',
-            coverUrl: '/covers/hsk2/hsk4.jpg',
+            coverUrl: '/covers/thumbnails/book_69bni4.jpg',
             matchFile: 'HSK 4 chuẩn下.pdf',
             desc: 'Giáo trình chuẩn HSK 4 Quyển Hạ (下) gồm 10 bài học tiếp theo (bài 11 - 20) giúp hoàn thiện toàn bộ chuẩn HSK cấp 4.'
           },
@@ -471,7 +471,7 @@ if (window.pdfjsLib) {
             level: 5,
             title: 'Giáo Trình Chuẩn HSK 5 (Quyển Thượng)',
             volTag: 'Thượng (上)',
-            coverUrl: '/covers/hsk2/hsk5.jpg',
+            coverUrl: '/covers/hsk2/hsk5_thuong.jpg',
             bookId: null,
             desc: 'Giáo trình chuẩn HSK 5 Quyển Thượng (上) chuyên sâu đọc hiểu văn bản nâng cao và từ vựng học thuật (Đang cập nhật số hóa).'
           },
@@ -479,7 +479,7 @@ if (window.pdfjsLib) {
             level: 5,
             title: 'Giáo Trình Chuẩn HSK 5 (Quyển Hạ)',
             volTag: 'Hạ (下)',
-            coverUrl: '/covers/hsk2/hsk5.jpg',
+            coverUrl: '/covers/thumbnails/book_8e6cd7.jpg',
             matchFile: 'HSK 5 chuẩn下.pdf',
             desc: 'Giáo trình chuẩn HSK 5 Quyển Hạ (下) bản số hóa sắc nét, rèn luyện đọc hiểu văn bản nâng cao và viết luận.'
           },
@@ -487,7 +487,7 @@ if (window.pdfjsLib) {
             level: 6,
             title: 'Giáo Trình Chuẩn HSK 6 (Quyển Thượng)',
             volTag: 'Thượng (上)',
-            coverUrl: '/covers/hsk2/hsk6.jpg',
+            coverUrl: '/covers/hsk2/hsk6_thuong.jpg',
             bookId: null,
             desc: 'Giáo trình chuẩn HSK 6 Quyển Thượng (上) cao cấp dành cho người học thành thạo ngôn ngữ (Đang cập nhật số hóa).'
           },
@@ -495,7 +495,7 @@ if (window.pdfjsLib) {
             level: 6,
             title: 'Giáo Trình Chuẩn HSK 6 (Quyển Hạ)',
             volTag: 'Hạ (下)',
-            coverUrl: '/covers/hsk2/hsk6.jpg',
+            coverUrl: '/covers/hsk2/hsk6_ha.jpg',
             bookId: null,
             desc: 'Giáo trình chuẩn HSK 6 Quyển Hạ (下) hoàn thiện năng lực ngôn ngữ cao cấp nhất trong hệ thống HSK (Đang cập nhật số hóa).'
           }
@@ -512,7 +512,7 @@ if (window.pdfjsLib) {
             level: 1,
             title: '新 HSK 教程 1 (HSK 3.0)',
             volTag: 'Cấp 1',
-            coverUrl: '/covers/hsk3/hsk1.jpg',
+            coverUrl: '/covers/thumbnails/book_hj57ni.jpg',
             matchFile: '新HSK教程1.pdf',
             desc: 'Giáo trình HSK cấp độ 1 tiêu chuẩn 3.0 mới nhất do NXB Đại học Ngôn ngữ Bắc Kinh xuất bản.'
           },
@@ -520,7 +520,7 @@ if (window.pdfjsLib) {
             level: 2,
             title: '新 HSK 教程 2 (HSK 3.0)',
             volTag: 'Cấp 2',
-            coverUrl: '/covers/hsk3/hsk2.jpg',
+            coverUrl: '/covers/thumbnails/book_74e5v6.jpg',
             matchFile: '新HSK2 教材.pdf',
             desc: 'Toàn bộ giáo trình HSK 2 mới chuẩn quốc tế 3.0 với đầy đủ bài khóa và hội thoại.'
           },
@@ -528,7 +528,7 @@ if (window.pdfjsLib) {
             level: 3,
             title: '新 HSK 教程 3 (HSK 3.0)',
             volTag: 'Cấp 3',
-            coverUrl: '/covers/hsk3/hsk3.jpg',
+            coverUrl: '/covers/thumbnails/book_3b4cws.jpg',
             matchFile: '新HSK3教程.pdf',
             desc: 'Giáo trình HSK 3 mới chuẩn 3.0 củng cố hệ thống ngữ pháp và 1000 từ vựng cốt lõi.'
           },
@@ -536,7 +536,7 @@ if (window.pdfjsLib) {
             level: 4,
             title: '新 HSK 教程 4 (Quyển Thượng - HSK 3.0)',
             volTag: 'Thượng (上)',
-            coverUrl: '/covers/hsk3/hsk4.jpg',
+            coverUrl: '/covers/thumbnails/book_32gwjz.jpg',
             matchFile: '新HSK教程4上.pdf',
             desc: 'Giáo trình HSK 4 mới Tập Thượng (上) chuẩn v3.0 kèm 10 bài học trung cấp cơ bản.'
           },
@@ -544,7 +544,7 @@ if (window.pdfjsLib) {
             level: 4,
             title: '新 HSK 教程 4 (Quyển Hạ - HSK 3.0)',
             volTag: 'Hạ (下)',
-            coverUrl: '/covers/hsk3/hsk4.jpg',
+            coverUrl: '/covers/hsk3/hsk4_ha.jpg',
             bookId: null,
             desc: 'Giáo trình HSK 4 mới Tập Hạ (下) chuẩn v3.0 (Đang cập nhật số hóa).'
           },
@@ -552,7 +552,7 @@ if (window.pdfjsLib) {
             level: 5,
             title: '新 HSK 教程 5 (Quyển Thượng - HSK 3.0)',
             volTag: 'Thượng (上)',
-            coverUrl: '/covers/hsk3/hsk4.jpg',
+            coverUrl: '/covers/hsk3/hsk5_thuong.jpg',
             bookId: null,
             desc: 'Giáo trình HSK 5 mới Tập Thượng (上) chuẩn v3.0 (Đang cập nhật số hóa).'
           },
@@ -560,7 +560,7 @@ if (window.pdfjsLib) {
             level: 5,
             title: '新 HSK 教程 5 (Quyển Hạ - HSK 3.0)',
             volTag: 'Hạ (下)',
-            coverUrl: '/covers/hsk3/hsk4.jpg',
+            coverUrl: '/covers/hsk3/hsk5_ha.jpg',
             bookId: null,
             desc: 'Giáo trình HSK 5 mới Tập Hạ (下) chuẩn v3.0 (Đang cập nhật số hóa).'
           },
@@ -568,7 +568,7 @@ if (window.pdfjsLib) {
             level: 6,
             title: '新 HSK 教程 6 (Quyển Thượng - HSK 3.0)',
             volTag: 'Thượng (上)',
-            coverUrl: '/covers/hsk3/hsk4.jpg',
+            coverUrl: '/covers/hsk3/hsk6_thuong.jpg',
             bookId: null,
             desc: 'Giáo trình HSK 6 mới Tập Thượng (上) chuẩn v3.0 (Đang cập nhật số hóa).'
           },
@@ -576,7 +576,7 @@ if (window.pdfjsLib) {
             level: 6,
             title: '新 HSK 教程 6 (Quyển Hạ - HSK 3.0)',
             volTag: 'Hạ (下)',
-            coverUrl: '/covers/hsk3/hsk4.jpg',
+            coverUrl: '/covers/hsk3/hsk6_ha.jpg',
             bookId: null,
             desc: 'Giáo trình HSK 6 mới Tập Hạ (下) chuẩn v3.0 (Đang cập nhật số hóa).'
           }
@@ -594,6 +594,7 @@ if (window.pdfjsLib) {
             title: 'Giáo Trình Hán Ngữ 1',
             subtitle: 'Bản dịch song ngữ',
             matchFile: 'hán ngữ 1 (Trung-Việt).pdf',
+            coverUrl: '/covers/thumbnails/book_m03mz1.jpg',
             pastelBg: 'linear-gradient(145deg, #fef3c7 0%, #fed7aa 100%)',
             pastelAccent: '#c2410c',
             hanzi: '汉语',
@@ -605,6 +606,7 @@ if (window.pdfjsLib) {
             title: 'Giáo Trình Hán Ngữ 2',
             subtitle: 'Bản dịch song ngữ',
             matchFile: 'Bản sao của Giáo trình hán ngữ 2 (Trung-Việt).pdf',
+            coverUrl: '/covers/thumbnails/book_82zwgt.jpg',
             pastelBg: 'linear-gradient(145deg, #dcfce7 0%, #bbf7d0 100%)',
             pastelAccent: '#15803d',
             hanzi: '汉语',
@@ -616,6 +618,7 @@ if (window.pdfjsLib) {
             title: 'Giáo Trình Hán Ngữ 3',
             subtitle: 'Bản dịch song ngữ',
             matchFile: 'Bản sao của Giáo trình hán ngữ 3 (Trung-Việt).pdf',
+            coverUrl: '/covers/thumbnails/book_8emthg.jpg',
             pastelBg: 'linear-gradient(145deg, #fee2e2 0%, #fecaca 100%)',
             pastelAccent: '#b91c1c',
             hanzi: '汉语',
@@ -627,6 +630,7 @@ if (window.pdfjsLib) {
             title: 'Giáo Trình Hán Ngữ 4',
             subtitle: 'Bản dịch song ngữ',
             matchFile: 'Bản sao của Giáo trình hán ngữ 4 (Trung-Việt).pdf',
+            coverUrl: '/covers/thumbnails/book_ow9jfp.jpg',
             pastelBg: 'linear-gradient(145deg, #e0f2fe 0%, #bae6fd 100%)',
             pastelAccent: '#0369a1',
             hanzi: '汉语',
@@ -638,6 +642,7 @@ if (window.pdfjsLib) {
             title: 'Giáo Trình Hán Ngữ 5',
             subtitle: 'Bản dịch song ngữ',
             matchFile: 'Bản sao của Giáo trình hán ngữ 5 (Trung-Việt).pdf',
+            coverUrl: '/covers/thumbnails/book_tn7sl6.jpg',
             pastelBg: 'linear-gradient(145deg, #f3e8ff 0%, #e9d5ff 100%)',
             pastelAccent: '#7e22ce',
             hanzi: '汉语',
@@ -650,6 +655,7 @@ if (window.pdfjsLib) {
             subtitle: 'Bản dịch song ngữ',
             matchFile: 'Bản sao của Giáo trình hán ngữ 6 (Trung-Việt).pdf',
             matchTitle: 'Hán Ngữ 6',
+            coverUrl: '/covers/thumbnails/book_d5l2mx.jpg',
             pastelBg: 'linear-gradient(145deg, #ccfbf1 0%, #99f6e4 100%)',
             pastelAccent: '#0f766e',
             hanzi: '汉语',
@@ -690,10 +696,11 @@ if (window.pdfjsLib) {
           volRibbonHtml = `<div class="comic-book-vol-ribbon ${volClass}">${escapeHTML(b.volTag)}</div>`;
         }
 
-        // Check if book has a custom stylized color cover (like Hán Ngữ) or real image cover
+        // Priority: Real cover thumbnail from PDF (foundBook.coverUrl) -> book coverUrl -> fallback styled card
+        const actualCoverUrl = (foundBook && foundBook.coverUrl) || b.coverUrl;
         let innerCoverHtml = '';
-        if (b.coverUrl) {
-          innerCoverHtml = `<img src="${b.coverUrl}" alt="${escapeHTML(b.title)}" class="comic-book-cover-img" loading="lazy">`;
+        if (actualCoverUrl) {
+          innerCoverHtml = `<img src="${actualCoverUrl}" alt="${escapeHTML(b.title)}" class="comic-book-cover-img" loading="lazy">`;
         } else {
           const volNumStr = String(b.volNum || b.level || '').replace(/\D/g, '') || (b.volNum || b.level || '');
           const bgGradient = b.pastelBg || (b.color ? `linear-gradient(145deg, ${b.color}22, ${b.color}44)` : 'linear-gradient(145deg, #fef3c7, #fed7aa)');
@@ -718,7 +725,7 @@ if (window.pdfjsLib) {
         }
 
         const safeTitle = escapeHTML(b.title).replace(/'/g, "\\'");
-        const safeCover = b.coverUrl ? escapeHTML(b.coverUrl).replace(/'/g, "\\'") : '';
+        const safeCover = (actualCoverUrl || '').replace(/'/g, "\\'");
         const safeDesc = escapeHTML(b.desc || '').replace(/'/g, "\\'");
         const safeId = resolvedBookId ? `'${resolvedBookId}'` : 'null';
         const levelArg = (b.level || b.volNum) ? `${b.level || b.volNum}` : 'null';
