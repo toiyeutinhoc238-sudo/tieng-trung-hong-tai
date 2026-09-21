@@ -59,29 +59,65 @@ const bookMeta = {
     category: "Biên Phiên Dịch",
     description: "Nâng cao kỹ năng phiên dịch hội nghị, cabin, đàm phán kinh tế và các chủ đề chuyên ngành thời sự."
   },
+  "HSK 1 chuẩn.pdf": {
+    titleVi: "Giáo Trình Chuẩn HSK 1",
+    category: "Giáo Trình HSK",
+    coverUrl: "/covers/hsk2/hsk1.jpg",
+    description: "Giáo trình chuẩn HSK 1 bao gồm 15 bài học nhập môn kèm file dịch tiếng Việt chuẩn của TS. Nguyễn Thị Minh Hồng."
+  },
+  "HSK 2 chuẩn.pdf": {
+    titleVi: "Giáo Trình Chuẩn HSK 2",
+    category: "Giáo Trình HSK",
+    coverUrl: "/covers/hsk2/hsk2.jpg",
+    description: "Giáo trình chuẩn HSK 2 bao gồm 15 bài học sơ cấp nâng cao mở rộng vốn câu giao tiếp thực tế."
+  },
+  "HSK 3 chuẩn.pdf": {
+    titleVi: "Giáo Trình Chuẩn HSK 3",
+    category: "Giáo Trình HSK",
+    coverUrl: "/covers/hsk2/hsk3.jpg",
+    description: "Giáo trình chuẩn HSK 3 bao gồm 20 bài học củng cố ngữ pháp trung cấp và diễn đạt mở rộng."
+  },
+  "HSK 4 chuẩn上.pdf": {
+    titleVi: "Giáo Trình Chuẩn HSK 4 (Quyển Thượng - 上)",
+    category: "Giáo Trình HSK",
+    coverUrl: "/covers/hsk2/hsk4.jpg",
+    description: "Giáo trình chuẩn HSK 4 Quyển Thượng (上) gồm 10 bài học trung cấp đầu tiên, mở rộng từ vựng và kết cấu ngữ pháp chủ điểm."
+  },
+  "HSK 4 chuẩn下.pdf": {
+    titleVi: "Giáo Trình Chuẩn HSK 4 (Quyển Hạ - 下)",
+    category: "Giáo Trình HSK",
+    coverUrl: "/covers/hsk2/hsk4.jpg",
+    description: "Giáo trình chuẩn HSK 4 Quyển Hạ (下) gồm 10 bài học tiếp theo (bài 11 - 20) giúp hoàn thiện toàn bộ chuẩn kiến thức HSK cấp 4."
+  },
   "HSK 5 chuẩn下.pdf": {
-    titleVi: "Giáo Trình Chuẩn HSK 5 (Tập Dưới)",
+    titleVi: "Giáo Trình Chuẩn HSK 5 (Quyển Hạ - 下)",
     category: "Giáo Trình HSK",
     coverUrl: "/covers/hsk2/hsk5.jpg",
-    description: "Giáo trình chuẩn HSK cấp độ 5 tập 2, rèn luyện đọc hiểu văn bản nâng cao, từ vựng học thuật và viết luận."
+    description: "Giáo trình chuẩn HSK cấp độ 5 Quyển Hạ (下), rèn luyện đọc hiểu văn bản nâng cao, từ vựng học thuật và viết luận."
+  },
+  "新HSK教程1.pdf": {
+    titleVi: "新 HSK 教程 1 (HSK 3.0)",
+    category: "Giáo Trình HSK",
+    coverUrl: "/covers/hsk3/hsk1.jpg",
+    description: "Giáo trình HSK cấp độ 1 tiêu chuẩn 3.0 mới nhất do NXB Đại học Ngôn ngữ Bắc Kinh xuất bản."
   },
   "新HSK2 教材.pdf": {
-    titleVi: "Giáo Trình HSK 2 Mới (HSK 3.0)",
+    titleVi: "新 HSK 教程 2 (HSK 3.0)",
     category: "Giáo Trình HSK",
     coverUrl: "/covers/hsk3/hsk2.jpg",
     description: "Giáo trình HSK cấp độ 2 theo chuẩn cải cách mới, tích hợp hội thoại thực tế và cấu trúc câu thông dụng."
   },
   "新HSK3教程.pdf": {
-    titleVi: "Giáo Trình HSK 3 Mới (HSK 3.0)",
+    titleVi: "新 HSK 教程 3 (HSK 3.0)",
     category: "Giáo Trình HSK",
     coverUrl: "/covers/hsk3/hsk3.jpg",
     description: "Giáo trình chuẩn HSK cấp độ 3 mới mở rộng ngữ pháp trung cấp, hội thoại tình huống và vốn từ biểu đạt phong phú."
   },
   "新HSK教程4上.pdf": {
-    titleVi: "Giáo Trình HSK 4 Mới (Tập Trên - HSK 3.0)",
+    titleVi: "新 HSK 教程 4 (Quyển Thượng - HSK 3.0)",
     category: "Giáo Trình HSK",
     coverUrl: "/covers/hsk3/hsk4.jpg",
-    description: "Giáo trình chuẩn HSK 4 phần 1, phát triển năng lực giao tiếp mạch lạc, nghị luận xã hội và đọc hiểu đoạn văn dài."
+    description: "Giáo trình chuẩn HSK 4 mới Quyển Thượng (上) theo chuẩn v3.0, phát triển năng lực giao tiếp mạch lạc, nghị luận xã hội và đọc hiểu đoạn văn dài."
   },
   "Bản sao của Giáo trình hán ngữ 2 (Trung-Việt).pdf": {
     titleVi: "Giáo Trình Hán Ngữ 2 (Bản Dịch Song Ngữ Trung - Việt)",

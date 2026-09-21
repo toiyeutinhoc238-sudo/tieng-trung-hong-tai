@@ -7,6 +7,20 @@
         "totalPages": 317,
         "percentage": 0,
         "updatedAt": "2026-09-21T14:14:27.735Z"
+      },
+      "book_68ruwr": {
+        "bookId": "book_68ruwr",
+        "lastPage": 1,
+        "totalPages": 161,
+        "percentage": 1,
+        "updatedAt": "2026-09-21T14:37:42.863Z"
+      },
+      "book_69bni4": {
+        "bookId": "book_69bni4",
+        "lastPage": 1,
+        "totalPages": 174,
+        "percentage": 1,
+        "updatedAt": "2026-09-21T14:40:08.717Z"
       }
     }
   },

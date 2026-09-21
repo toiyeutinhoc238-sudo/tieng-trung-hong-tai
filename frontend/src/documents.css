@@ -1770,6 +1770,43 @@ html.dark .comic-book-card:hover {
   box-shadow: 0 2px 8px rgba(2, 132, 199, 0.45), 0 1px 3px rgba(0, 0, 0, 0.3) !important;
 }
 
+/* Volume Ribbon (Distinguishing Quyển Thượng 上 and Quyển Hạ 下) */
+.comic-book-vol-ribbon {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  color: #ffffff !important;
+  border-radius: 8px;
+  padding: 4px 6px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-align: center;
+  z-index: 4;
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+.comic-book-vol-ribbon.vol-thuong {
+  background: linear-gradient(135deg, #0284c7, #0369a1) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.75) !important;
+}
+
+.comic-book-vol-ribbon.vol-ha {
+  background: linear-gradient(135deg, #7c3aed, #5b21b6) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.75) !important;
+}
+
+.comic-book-vol-ribbon.vol-general {
+  background: linear-gradient(135deg, #334155, #1e293b) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.5) !important;
+}
+
 /* Stylized Volume Card for Hán Ngữ */
 .styled-vol-card {
   width: 100%;
@@ -2228,6 +2265,15 @@ html.dark .pending-book-modal-close {
 
   .comic-book-spine-overlay {
     width: 8px;
+  }
+
+  .comic-book-vol-ribbon {
+    bottom: 4px;
+    left: 4px;
+    right: 4px;
+    font-size: 0.54rem;
+    padding: 2px 3px;
+    border-radius: 5px;
   }
 
   /* Stylized Volume Card for Hán Ngữ on Mobile */

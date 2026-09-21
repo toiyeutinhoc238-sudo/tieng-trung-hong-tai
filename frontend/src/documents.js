@@ -425,49 +425,79 @@ if (window.pdfjsLib) {
         accentColor: '#0284c7',
         mascotImg: '/assets/logo.png',
         title: 'Giáo Trình Chuẩn HSK 2.0',
-        subtitle: 'Bộ giáo trình 6 cấp độ (HSK 1 - HSK 6)',
+        subtitle: 'Bộ giáo trình chuẩn Beijing Language & Culture University (HSK 1 - HSK 6, gồm đủ quyển Thượng & Hạ)',
         books: [
           {
             level: 1,
             title: 'Giáo Trình Chuẩn HSK 1',
+            volTag: 'Tập 1',
             coverUrl: '/covers/hsk2/hsk1.jpg',
-            bookId: null,
+            matchFile: 'HSK 1 chuẩn.pdf',
             desc: 'Giáo trình chuẩn HSK 1 bao gồm 15 bài học nhập môn kèm file dịch tiếng Việt chuẩn của TS. Nguyễn Thị Minh Hồng.'
           },
           {
             level: 2,
             title: 'Giáo Trình Chuẩn HSK 2',
+            volTag: 'Tập 2',
             coverUrl: '/covers/hsk2/hsk2.jpg',
-            bookId: null,
+            matchFile: 'HSK 2 chuẩn.pdf',
             desc: 'Giáo trình chuẩn HSK 2 bao gồm 15 bài học sơ cấp nâng cao mở rộng vốn câu giao tiếp thực tế.'
           },
           {
             level: 3,
             title: 'Giáo Trình Chuẩn HSK 3',
+            volTag: 'Tập 3',
             coverUrl: '/covers/hsk2/hsk3.jpg',
-            bookId: null,
+            matchFile: 'HSK 3 chuẩn.pdf',
             desc: 'Giáo trình chuẩn HSK 3 bao gồm 20 bài học củng cố ngữ pháp trung cấp và diễn đạt mở rộng.'
           },
           {
             level: 4,
-            title: 'Giáo Trình Chuẩn HSK 4',
+            title: 'Giáo Trình Chuẩn HSK 4 (Quyển Thượng)',
+            volTag: 'Thượng (上)',
             coverUrl: '/covers/hsk2/hsk4.jpg',
-            bookId: null,
-            desc: 'Giáo trình chuẩn HSK 4 gồm 2 tập Thượng và Hạ với 20 chủ đề chuyên sâu.'
+            matchFile: 'HSK 4 chuẩn上.pdf',
+            desc: 'Giáo trình chuẩn HSK 4 Quyển Thượng (上) gồm 10 bài học trung cấp đầu tiên kèm ngữ pháp và bài tập chi tiết.'
+          },
+          {
+            level: 4,
+            title: 'Giáo Trình Chuẩn HSK 4 (Quyển Hạ)',
+            volTag: 'Hạ (下)',
+            coverUrl: '/covers/hsk2/hsk4.jpg',
+            matchFile: 'HSK 4 chuẩn下.pdf',
+            desc: 'Giáo trình chuẩn HSK 4 Quyển Hạ (下) gồm 10 bài học tiếp theo (bài 11 - 20) giúp hoàn thiện toàn bộ chuẩn HSK cấp 4.'
           },
           {
             level: 5,
-            title: 'Giáo Trình Chuẩn HSK 5 (Tập Dưới)',
+            title: 'Giáo Trình Chuẩn HSK 5 (Quyển Thượng)',
+            volTag: 'Thượng (上)',
             coverUrl: '/covers/hsk2/hsk5.jpg',
-            bookId: 'book_8e6cd7',
-            desc: 'Giáo trình chuẩn HSK 5 Tập Dưới (HSK 5 chuẩn下.pdf) bản số hóa sắc nét, đọc trực tuyến mượt mà.'
+            bookId: null,
+            desc: 'Giáo trình chuẩn HSK 5 Quyển Thượng (上) chuyên sâu đọc hiểu văn bản nâng cao và từ vựng học thuật (Đang cập nhật số hóa).'
+          },
+          {
+            level: 5,
+            title: 'Giáo Trình Chuẩn HSK 5 (Quyển Hạ)',
+            volTag: 'Hạ (下)',
+            coverUrl: '/covers/hsk2/hsk5.jpg',
+            matchFile: 'HSK 5 chuẩn下.pdf',
+            desc: 'Giáo trình chuẩn HSK 5 Quyển Hạ (下) bản số hóa sắc nét, rèn luyện đọc hiểu văn bản nâng cao và viết luận.'
           },
           {
             level: 6,
-            title: 'Giáo Trình Chuẩn HSK 6',
+            title: 'Giáo Trình Chuẩn HSK 6 (Quyển Thượng)',
+            volTag: 'Thượng (上)',
             coverUrl: '/covers/hsk2/hsk6.jpg',
             bookId: null,
-            desc: 'Giáo trình chuẩn HSK 6 cao cấp dành cho người học thành thạo ngôn ngữ.'
+            desc: 'Giáo trình chuẩn HSK 6 Quyển Thượng (上) cao cấp dành cho người học thành thạo ngôn ngữ (Đang cập nhật số hóa).'
+          },
+          {
+            level: 6,
+            title: 'Giáo Trình Chuẩn HSK 6 (Quyển Hạ)',
+            volTag: 'Hạ (下)',
+            coverUrl: '/covers/hsk2/hsk6.jpg',
+            bookId: null,
+            desc: 'Giáo trình chuẩn HSK 6 Quyển Hạ (下) hoàn thiện năng lực ngôn ngữ cao cấp nhất trong hệ thống HSK (Đang cập nhật số hóa).'
           }
         ]
       },
@@ -476,35 +506,79 @@ if (window.pdfjsLib) {
         accentColor: '#10b981',
         mascotImg: '/assets/logo.png',
         title: 'Giáo Trình HSK 3.0 Mới',
-        subtitle: 'Bộ giáo trình tiêu chuẩn quốc tế mới nhất (Cấp 1 - Cấp 4)',
+        subtitle: 'Bộ giáo trình tiêu chuẩn quốc tế mới nhất (Cấp 1 - Cấp 6, gồm quyển Thượng & Hạ)',
         books: [
           {
             level: 1,
             title: '新 HSK 教程 1 (HSK 3.0)',
+            volTag: 'Cấp 1',
             coverUrl: '/covers/hsk3/hsk1.jpg',
-            bookId: null,
-            desc: 'Giáo trình HSK cấp độ 1 tiêu chuẩn 3.0 mới nhất do NXB Giáo dục & Nghiên cứu Giảng dạy Ngôn ngữ Bắc Kinh xuất bản.'
+            matchFile: '新HSK教程1.pdf',
+            desc: 'Giáo trình HSK cấp độ 1 tiêu chuẩn 3.0 mới nhất do NXB Đại học Ngôn ngữ Bắc Kinh xuất bản.'
           },
           {
             level: 2,
             title: '新 HSK 教程 2 (HSK 3.0)',
+            volTag: 'Cấp 2',
             coverUrl: '/covers/hsk3/hsk2.jpg',
-            bookId: 'book_74e5v6',
+            matchFile: '新HSK2 教材.pdf',
             desc: 'Toàn bộ giáo trình HSK 2 mới chuẩn quốc tế 3.0 với đầy đủ bài khóa và hội thoại.'
           },
           {
             level: 3,
             title: '新 HSK 教程 3 (HSK 3.0)',
+            volTag: 'Cấp 3',
             coverUrl: '/covers/hsk3/hsk3.jpg',
-            bookId: 'book_3b4cws',
+            matchFile: '新HSK3教程.pdf',
             desc: 'Giáo trình HSK 3 mới chuẩn 3.0 củng cố hệ thống ngữ pháp và 1000 từ vựng cốt lõi.'
           },
           {
             level: 4,
-            title: '新 HSK 教程 4 (Tập Trên - HSK 3.0)',
+            title: '新 HSK 教程 4 (Quyển Thượng - HSK 3.0)',
+            volTag: 'Thượng (上)',
             coverUrl: '/covers/hsk3/hsk4.jpg',
-            bookId: 'book_32gwjz',
-            desc: 'Giáo trình HSK 4 mới Tập Trên chuẩn v3.0 kèm 10 bài học trung cấp cơ bản.'
+            matchFile: '新HSK教程4上.pdf',
+            desc: 'Giáo trình HSK 4 mới Tập Thượng (上) chuẩn v3.0 kèm 10 bài học trung cấp cơ bản.'
+          },
+          {
+            level: 4,
+            title: '新 HSK 教程 4 (Quyển Hạ - HSK 3.0)',
+            volTag: 'Hạ (下)',
+            coverUrl: '/covers/hsk3/hsk4.jpg',
+            bookId: null,
+            desc: 'Giáo trình HSK 4 mới Tập Hạ (下) chuẩn v3.0 (Đang cập nhật số hóa).'
+          },
+          {
+            level: 5,
+            title: '新 HSK 教程 5 (Quyển Thượng - HSK 3.0)',
+            volTag: 'Thượng (上)',
+            coverUrl: '/covers/hsk3/hsk4.jpg',
+            bookId: null,
+            desc: 'Giáo trình HSK 5 mới Tập Thượng (上) chuẩn v3.0 (Đang cập nhật số hóa).'
+          },
+          {
+            level: 5,
+            title: '新 HSK 教程 5 (Quyển Hạ - HSK 3.0)',
+            volTag: 'Hạ (下)',
+            coverUrl: '/covers/hsk3/hsk4.jpg',
+            bookId: null,
+            desc: 'Giáo trình HSK 5 mới Tập Hạ (下) chuẩn v3.0 (Đang cập nhật số hóa).'
+          },
+          {
+            level: 6,
+            title: '新 HSK 教程 6 (Quyển Thượng - HSK 3.0)',
+            volTag: 'Thượng (上)',
+            coverUrl: '/covers/hsk3/hsk4.jpg',
+            bookId: null,
+            desc: 'Giáo trình HSK 6 mới Tập Thượng (上) chuẩn v3.0 (Đang cập nhật số hóa).'
+          },
+          {
+            level: 6,
+            title: '新 HSK 教程 6 (Quyển Hạ - HSK 3.0)',
+            volTag: 'Hạ (下)',
+            coverUrl: '/covers/hsk3/hsk4.jpg',
+            bookId: null,
+            desc: 'Giáo trình HSK 6 mới Tập Hạ (下) chuẩn v3.0 (Đang cập nhật số hóa).'
           }
         ]
       },
@@ -513,13 +587,13 @@ if (window.pdfjsLib) {
         accentColor: '#f59e0b',
         mascotImg: '/assets/logo.png',
         title: 'Giáo Trình Hán Ngữ 6 Cuốn',
-        subtitle: 'Bản dịch song ngữ Trung - Việt chuẩn Đại học (Tập 1 - 6)',
+        subtitle: 'Bản dịch song ngữ Trung - Việt chuẩn Đại học (Tập 1 - 6, đầy đủ 6 cuốn)',
         books: [
           {
             volNum: 1,
             title: 'Giáo Trình Hán Ngữ 1',
             subtitle: 'Bản dịch song ngữ',
-            bookId: 'book_m03mz1',
+            matchFile: 'hán ngữ 1 (Trung-Việt).pdf',
             pastelBg: 'linear-gradient(145deg, #fef3c7 0%, #fed7aa 100%)',
             pastelAccent: '#c2410c',
             hanzi: '汉语',
@@ -530,7 +604,7 @@ if (window.pdfjsLib) {
             volNum: 2,
             title: 'Giáo Trình Hán Ngữ 2',
             subtitle: 'Bản dịch song ngữ',
-            bookId: 'book_82zwgt',
+            matchFile: 'Bản sao của Giáo trình hán ngữ 2 (Trung-Việt).pdf',
             pastelBg: 'linear-gradient(145deg, #dcfce7 0%, #bbf7d0 100%)',
             pastelAccent: '#15803d',
             hanzi: '汉语',
@@ -541,7 +615,7 @@ if (window.pdfjsLib) {
             volNum: 3,
             title: 'Giáo Trình Hán Ngữ 3',
             subtitle: 'Bản dịch song ngữ',
-            bookId: 'book_8emthg',
+            matchFile: 'Bản sao của Giáo trình hán ngữ 3 (Trung-Việt).pdf',
             pastelBg: 'linear-gradient(145deg, #fee2e2 0%, #fecaca 100%)',
             pastelAccent: '#b91c1c',
             hanzi: '汉语',
@@ -552,7 +626,7 @@ if (window.pdfjsLib) {
             volNum: 4,
             title: 'Giáo Trình Hán Ngữ 4',
             subtitle: 'Bản dịch song ngữ',
-            bookId: 'book_ow9jfp',
+            matchFile: 'Bản sao của Giáo trình hán ngữ 4 (Trung-Việt).pdf',
             pastelBg: 'linear-gradient(145deg, #e0f2fe 0%, #bae6fd 100%)',
             pastelAccent: '#0369a1',
             hanzi: '汉语',
@@ -563,18 +637,17 @@ if (window.pdfjsLib) {
             volNum: 5,
             title: 'Giáo Trình Hán Ngữ 5',
             subtitle: 'Bản dịch song ngữ',
-            bookId: null,
+            matchFile: 'Bản sao của Giáo trình hán ngữ 5 (Trung-Việt).pdf',
             pastelBg: 'linear-gradient(145deg, #f3e8ff 0%, #e9d5ff 100%)',
             pastelAccent: '#7e22ce',
             hanzi: '汉语',
             tag: 'Quyển 3 Thượng',
-            desc: 'Giáo trình Hán ngữ quyển 5 (Tập 3 Thượng) nâng cao khả năng phân tích ngữ văn và nghị luận.'
+            desc: 'Giáo trình Hán ngữ quyển 5 (Tập 3 Thượng) nâng cao khả năng phân tích ngữ văn, tác phẩm văn chương và bình luận xã hội.'
           },
           {
             volNum: 6,
             title: 'Giáo Trình Hán Ngữ 6',
             subtitle: 'Bản dịch song ngữ',
-            bookId: 'book_d5l2mx',
             matchFile: 'Bản sao của Giáo trình hán ngữ 6 (Trung-Việt).pdf',
             matchTitle: 'Hán Ngữ 6',
             pastelBg: 'linear-gradient(145deg, #ccfbf1 0%, #99f6e4 100%)',
@@ -608,6 +681,15 @@ if (window.pdfjsLib) {
           badgeHtml = `<span class="comic-book-status-badge coming-soon"><i class="fa-solid fa-clock"></i> Sắp ra</span>`;
         }
 
+        // Volume Ribbon (Thượng 上 / Hạ 下 / Tập)
+        let volRibbonHtml = '';
+        if (b.volTag) {
+          const isHa = b.volTag.includes('Hạ') || b.volTag.includes('下');
+          const isThuong = b.volTag.includes('Thượng') || b.volTag.includes('上');
+          const volClass = isHa ? 'vol-ha' : (isThuong ? 'vol-thuong' : 'vol-general');
+          volRibbonHtml = `<div class="comic-book-vol-ribbon ${volClass}">${escapeHTML(b.volTag)}</div>`;
+        }
+
         // Check if book has a custom stylized color cover (like Hán Ngữ) or real image cover
         let innerCoverHtml = '';
         if (b.coverUrl) {
@@ -635,9 +717,9 @@ if (window.pdfjsLib) {
           `;
         }
 
-        const safeTitle = escapeHTML(b.title);
-        const safeCover = b.coverUrl ? escapeHTML(b.coverUrl) : '';
-        const safeDesc = escapeHTML(b.desc || '');
+        const safeTitle = escapeHTML(b.title).replace(/'/g, "\\'");
+        const safeCover = b.coverUrl ? escapeHTML(b.coverUrl).replace(/'/g, "\\'") : '';
+        const safeDesc = escapeHTML(b.desc || '').replace(/'/g, "\\'");
         const safeId = resolvedBookId ? `'${resolvedBookId}'` : 'null';
         const levelArg = (b.level || b.volNum) ? `${b.level || b.volNum}` : 'null';
 
@@ -647,6 +729,7 @@ if (window.pdfjsLib) {
             <div class="comic-book-gloss-overlay"></div>
             ${badgeHtml}
             ${innerCoverHtml}
+            ${volRibbonHtml}
           </div>
         `;
       }).join('');
