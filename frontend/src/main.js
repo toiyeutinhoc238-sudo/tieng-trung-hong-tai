@@ -8091,7 +8091,7 @@ function renderLessonsList() {
           1: `HSK 3.0 Cấp 1 - Sơ cấp dành cho người mới bắt đầu`,
           2: `HSK 3.0 Cấp 2 - Sơ cấp nâng cao`,
           3: `HSK 3.0 Cấp 3 - Sơ cấp hoàn chỉnh`,
-          4: `HSK 3.0 Cấp 4 - Trung cấp cơ bản`,
+          4: `HSK 3.0 Cấp 4 - Trung cấp cơ bản (Quyển 1)`,
           5: `HSK 3.0 Cấp 5 - Trung cấp nâng cao`,
           6: `HSK 3.0 Cấp 6 - Cao cấp`,
           '7-9': `HSK 3.0 Cấp 7-8-9 - Nâng cao chuyên nghiệp`,

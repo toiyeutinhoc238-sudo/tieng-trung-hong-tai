@@ -504,7 +504,7 @@
   <script type="module" crossorigin src="/assets/global_sidebar-DU5b37H7.js"></script>
   <script type="module" crossorigin src="/assets/grammar_hsk3_v2-DLPb-ska.js"></script>
   <script type="module" crossorigin src="/assets/screen_drawing-BS_xmQo7.js"></script>
-  <script type="module" crossorigin src="/assets/main-CImqOF8p.js"></script>
+  <script type="module" crossorigin src="/assets/main-BR_8Fy6w.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/style-7S6wFPrc.css">
 </head>
 
@@ -703,16 +703,16 @@
           levelSelect.value = activeLevel;
         } else {
           levelSelect.innerHTML = `
-            <option value="all">Cấp độ: Tất cả đã công khai (HSK 1 - 3)</option>
+            <option value="all">Cấp độ: Tất cả đã công khai (HSK 1 - 4)</option>
             <option value="1">Cấp độ: HSK 1 (3.0)</option>
             <option value="2">Cấp độ: HSK 2 (3.0)</option>
             <option value="3">Cấp độ: HSK 3 (3.0)</option>
-            <option value="4" disabled style="color: #64748b;">Cấp độ: HSK 4 (🔒 Sắp ra mắt)</option>
+            <option value="4">Cấp độ: HSK 4 (3.0 - Quyển 1)</option>
             <option value="5" disabled style="color: #64748b;">Cấp độ: HSK 5 (🔒 Sắp ra mắt)</option>
             <option value="6" disabled style="color: #64748b;">Cấp độ: HSK 6 (🔒 Sắp ra mắt)</option>
             <option value="7-9" disabled style="color: #64748b;">Cấp độ: HSK 7-8-9 (🔒 Sắp ra mắt)</option>
           `;
-          if (!['1', '2', '3', 'all'].includes(String(activeLevel))) {
+          if (!['1', '2', '3', '4', 'all'].includes(String(activeLevel))) {
             activeLevel = 'all';
           }
           levelSelect.value = activeLevel;
@@ -949,8 +949,8 @@
             // Only HSK 1 is public for 2.0
             if (!matchLevel(w.level, '1')) return false;
           } else {
-            // For 3.0: Only HSK 1, 2, 3 are public
-            const allowedLevels = ['1', '2', '3'];
+            // For 3.0: HSK 1, 2, 3, 4 are public
+            const allowedLevels = ['1', '2', '3', '4'];
             const lvlStr = (w.level || '').toString().replace('hsk', '').trim();
             if (!allowedLevels.includes(lvlStr)) return false;
           }
