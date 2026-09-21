@@ -512,7 +512,9 @@ if (window.pdfjsLib) {
             title: 'Giáo Trình Hán Ngữ 1',
             subtitle: 'Bản dịch song ngữ',
             bookId: 'book_m03mz1',
-            color: '#eab308',
+            pastelBg: 'linear-gradient(145deg, #fef3c7 0%, #fed7aa 100%)',
+            pastelAccent: '#c2410c',
+            hanzi: '汉语',
             tag: 'Quyển 1 Thượng',
             desc: 'Giáo trình Hán ngữ cơ sở quyển 1 chuẩn quốc tế, rèn luyện phát âm Pinyin, nét bút và giao tiếp nhập môn.'
           },
@@ -521,7 +523,9 @@ if (window.pdfjsLib) {
             title: 'Giáo Trình Hán Ngữ 2',
             subtitle: 'Bản dịch song ngữ',
             bookId: 'book_82zwgt',
-            color: '#16a34a',
+            pastelBg: 'linear-gradient(145deg, #dcfce7 0%, #bbf7d0 100%)',
+            pastelAccent: '#15803d',
+            hanzi: '汉语',
             tag: 'Quyển 1 Hạ',
             desc: 'Giáo trình Hán ngữ bộ 6 tập quyển 2, bản dịch chú giải tiếng Việt chuẩn xác cho học viên mới bắt đầu.'
           },
@@ -530,7 +534,9 @@ if (window.pdfjsLib) {
             title: 'Giáo Trình Hán Ngữ 3',
             subtitle: 'Bản dịch song ngữ',
             bookId: 'book_8emthg',
-            color: '#ea580c',
+            pastelBg: 'linear-gradient(145deg, #fee2e2 0%, #fecaca 100%)',
+            pastelAccent: '#b91c1c',
+            hanzi: '汉语',
             tag: 'Quyển 2 Thượng',
             desc: 'Giáo trình Hán ngữ quyển 3 (Tập 2 Thượng), bước ngoặt củng cố ngữ pháp trung cấp và diễn đạt mở rộng.'
           },
@@ -539,7 +545,9 @@ if (window.pdfjsLib) {
             title: 'Giáo Trình Hán Ngữ 4',
             subtitle: 'Bản dịch song ngữ',
             bookId: 'book_ow9jfp',
-            color: '#2563eb',
+            pastelBg: 'linear-gradient(145deg, #e0f2fe 0%, #bae6fd 100%)',
+            pastelAccent: '#0369a1',
+            hanzi: '汉语',
             tag: 'Quyển 2 Hạ',
             desc: 'Giáo trình Hán ngữ quyển 4 (Tập 2 Hạ), nâng cao vốn từ vựng chuyên đề, câu phức và đối thoại chuyên sâu.'
           },
@@ -548,7 +556,9 @@ if (window.pdfjsLib) {
             title: 'Giáo Trình Hán Ngữ 5',
             subtitle: 'Bản dịch song ngữ',
             bookId: 'book_tn7sl6',
-            color: '#9333ea',
+            pastelBg: 'linear-gradient(145deg, #f3e8ff 0%, #e9d5ff 100%)',
+            pastelAccent: '#7e22ce',
+            hanzi: '汉语',
             tag: 'Quyển 3 Thượng',
             desc: 'Giáo trình Hán ngữ quyển 5 (Tập 3 Thượng) nâng cao khả năng phân tích ngữ văn và nghị luận.'
           },
@@ -557,7 +567,9 @@ if (window.pdfjsLib) {
             title: 'Giáo Trình Hán Ngữ 6',
             subtitle: 'Bản dịch song ngữ',
             bookId: null,
-            color: '#0f766e',
+            pastelBg: 'linear-gradient(145deg, #ccfbf1 0%, #99f6e4 100%)',
+            pastelAccent: '#0f766e',
+            hanzi: '汉语',
             tag: 'Quyển 3 Hạ',
             desc: 'Giáo trình Hán ngữ quyển 6 (Tập 3 Hạ) hoàn thiện kỹ năng đọc hiểu và văn phong bản xứ cao cấp.'
           }
@@ -584,27 +596,23 @@ if (window.pdfjsLib) {
         if (b.coverUrl) {
           innerCoverHtml = `<img src="${b.coverUrl}" alt="${escapeHTML(b.title)}" class="comic-book-cover-img" loading="lazy">`;
         } else {
-          // Beautiful stylized cover matching student book aesthetic from screenshot
+          const volNumStr = String(b.volNum || b.level || '').replace(/\D/g, '') || (b.volNum || b.level || '');
+          const bgGradient = b.pastelBg || (b.color ? `linear-gradient(145deg, ${b.color}22, ${b.color}44)` : 'linear-gradient(145deg, #fef3c7, #fed7aa)');
+          const accentColor = b.pastelAccent || b.color || '#0f172a';
+          const hanziLogo = b.hanzi || '汉语';
+
           innerCoverHtml = `
-            <div class="styled-vol-card" style="background: linear-gradient(145deg, ${b.color || '#3b82f6'}, #0f172a 130%);">
+            <div class="styled-vol-card" style="background: ${bgGradient};">
               <div class="vol-sub">${escapeHTML(b.tag || 'Giáo Trình')}</div>
               <div class="vol-name">${escapeHTML(b.title)}</div>
-              <div class="vol-center-pattern">
-                <div class="pattern-grid">
-                  <div class="pattern-cell" style="background: rgba(255,255,255,0.7);"></div>
-                  <div class="pattern-cell" style="background: rgba(255,255,255,0.3);"></div>
-                  <div class="pattern-cell" style="background: rgba(255,255,255,0.8);"></div>
-                  <div class="pattern-cell" style="background: rgba(255,255,255,0.4);"></div>
-                  <div class="pattern-cell" style="background: rgba(255,255,255,0.9);"></div>
-                  <div class="pattern-cell" style="background: rgba(255,255,255,0.5);"></div>
-                  <div class="pattern-cell" style="background: rgba(255,255,255,0.6);"></div>
-                  <div class="pattern-cell" style="background: rgba(255,255,255,0.85);"></div>
-                  <div class="pattern-cell" style="background: rgba(255,255,255,0.35);"></div>
+              <div class="vol-center-emblem">
+                <div class="vol-emblem-badge">
+                  <span class="vol-emblem-char" style="color: ${accentColor};">${hanziLogo}</span>
                 </div>
               </div>
               <div class="vol-footer">
                 <div class="vol-foot-label">HongTai<br>Book</div>
-                <div class="vol-number-badge">${b.volNum || b.level || ''}</div>
+                <div class="vol-number-badge" style="color: ${accentColor};">${volNumStr}</div>
               </div>
             </div>
           `;

@@ -5225,7 +5225,9 @@ function renderRoadmapBookshelf() {
           level: 5,
           title: '新 HSK 教程 5 (HSK 3.0)',
           tag: 'HSK 3.0 Cấp 5',
-          color: '#f59e0b',
+          pastelBg: 'linear-gradient(145deg, #fef9c3 0%, #fef08a 100%)',
+          pastelAccent: '#a16207',
+          hanzi: 'HSK',
           desc: 'Giáo trình HSK 3.0 cấp độ 5 trung cấp nâng cao'
         },
         {
@@ -5233,7 +5235,9 @@ function renderRoadmapBookshelf() {
           level: 6,
           title: '新 HSK 教程 6 (HSK 3.0)',
           tag: 'HSK 3.0 Cấp 6',
-          color: '#8b5cf6',
+          pastelBg: 'linear-gradient(145deg, #ede9fe 0%, #ddd6fe 100%)',
+          pastelAccent: '#6d28d9',
+          hanzi: 'HSK',
           desc: 'Giáo trình HSK 3.0 cấp độ 6 cao cấp'
         },
         {
@@ -5241,7 +5245,9 @@ function renderRoadmapBookshelf() {
           level: '7-9',
           title: '新 HSK 教程 7-9 (HSK 3.0)',
           tag: 'HSK 3.0 Cấp 7-9',
-          color: '#ec4899',
+          pastelBg: 'linear-gradient(145deg, #fce7f3 0%, #fbcfe8 100%)',
+          pastelAccent: '#be185d',
+          hanzi: 'HSK',
           desc: 'Giáo trình HSK 3.0 cấp 7-8-9 trình độ chuyên gia'
         }
       ]
@@ -5315,7 +5321,9 @@ function renderRoadmapBookshelf() {
           level: 1,
           title: 'Giáo Trình Hán Ngữ 1',
           tag: 'Quyển 1 Thượng',
-          color: '#eab308',
+          pastelBg: 'linear-gradient(145deg, #fef3c7 0%, #fed7aa 100%)',
+          pastelAccent: '#c2410c',
+          hanzi: '汉语',
           desc: 'Giáo trình Hán ngữ quyển 1 cơ bản, phát âm Pinyin & nét bút'
         },
         {
@@ -5323,7 +5331,9 @@ function renderRoadmapBookshelf() {
           level: 2,
           title: 'Giáo Trình Hán Ngữ 2',
           tag: 'Quyển 1 Hạ',
-          color: '#16a34a',
+          pastelBg: 'linear-gradient(145deg, #dcfce7 0%, #bbf7d0 100%)',
+          pastelAccent: '#15803d',
+          hanzi: '汉语',
           desc: 'Giáo trình Hán ngữ quyển 2, ngữ pháp câu và đàm thoại hàng ngày'
         },
         {
@@ -5331,7 +5341,9 @@ function renderRoadmapBookshelf() {
           level: 3,
           title: 'Giáo Trình Hán Ngữ 3',
           tag: 'Quyển 2 Thượng',
-          color: '#ea580c',
+          pastelBg: 'linear-gradient(145deg, #fee2e2 0%, #fecaca 100%)',
+          pastelAccent: '#b91c1c',
+          hanzi: '汉语',
           desc: 'Giáo trình Hán ngữ quyển 3, ngữ pháp trung cấp và mở rộng diễn đạt'
         },
         {
@@ -5339,7 +5351,9 @@ function renderRoadmapBookshelf() {
           level: 4,
           title: 'Giáo Trình Hán Ngữ 4',
           tag: 'Quyển 2 Hạ',
-          color: '#2563eb',
+          pastelBg: 'linear-gradient(145deg, #e0f2fe 0%, #bae6fd 100%)',
+          pastelAccent: '#0369a1',
+          hanzi: '汉语',
           desc: 'Giáo trình Hán ngữ quyển 4, từ vựng chuyên đề và đối thoại chuyên sâu'
         },
         {
@@ -5347,7 +5361,9 @@ function renderRoadmapBookshelf() {
           level: 5,
           title: 'Giáo Trình Hán Ngữ 5',
           tag: 'Quyển 3 Thượng',
-          color: '#9333ea',
+          pastelBg: 'linear-gradient(145deg, #f3e8ff 0%, #e9d5ff 100%)',
+          pastelAccent: '#7e22ce',
+          hanzi: '汉语',
           desc: 'Giáo trình Hán ngữ quyển 5, văn phong học thuật và nghị luận'
         },
         {
@@ -5355,7 +5371,9 @@ function renderRoadmapBookshelf() {
           level: 6,
           title: 'Giáo Trình Hán Ngữ 6',
           tag: 'Quyển 3 Hạ',
-          color: '#0f766e',
+          pastelBg: 'linear-gradient(145deg, #ccfbf1 0%, #99f6e4 100%)',
+          pastelAccent: '#0f766e',
+          hanzi: '汉语',
           desc: 'Giáo trình Hán ngữ quyển 6, hoàn thiện đọc hiểu và ngữ cảm bản xứ'
         }
       ]
@@ -5372,7 +5390,9 @@ function renderRoadmapBookshelf() {
           level: 1,
           title: 'Giáo Trình YCT Cấp 1',
           tag: 'YCT Cấp 1',
-          color: '#f43f5e',
+          pastelBg: 'linear-gradient(145deg, #ffe4e6 0%, #fecdd3 100%)',
+          pastelAccent: '#be123c',
+          hanzi: 'YCT',
           desc: 'Giáo trình YCT cấp 1 nhập môn sinh động cho thiếu nhi'
         },
         {
@@ -5380,7 +5400,9 @@ function renderRoadmapBookshelf() {
           level: 2,
           title: 'Giáo Trình YCT Cấp 2',
           tag: 'YCT Cấp 2',
-          color: '#f59e0b',
+          pastelBg: 'linear-gradient(145deg, #ffedd5 0%, #fed7aa 100%)',
+          pastelAccent: '#c2410c',
+          hanzi: 'YCT',
           desc: 'Giáo trình YCT cấp 2 mở rộng vốn từ đời sống gần gũi'
         },
         {
@@ -5388,7 +5410,9 @@ function renderRoadmapBookshelf() {
           level: 3,
           title: 'Giáo Trình YCT Cấp 3',
           tag: 'YCT Cấp 3',
-          color: '#10b981',
+          pastelBg: 'linear-gradient(145deg, #dcfce7 0%, #bbf7d0 100%)',
+          pastelAccent: '#15803d',
+          hanzi: 'YCT',
           desc: 'Giáo trình YCT cấp 3 giao tiếp tự tin ở trường học'
         },
         {
@@ -5396,7 +5420,9 @@ function renderRoadmapBookshelf() {
           level: 4,
           title: 'Giáo Trình YCT Cấp 4',
           tag: 'YCT Cấp 4',
-          color: '#3b82f6',
+          pastelBg: 'linear-gradient(145deg, #e0e7ff 0%, #c7d2fe 100%)',
+          pastelAccent: '#4338ca',
+          hanzi: 'YCT',
           desc: 'Giáo trình YCT cấp 4 hoàn thiện kỹ năng tiếng Trung toàn diện'
         }
       ]
@@ -5441,26 +5467,22 @@ function renderRoadmapBookshelf() {
         innerCoverHtml = `<img src="${b.coverUrl}" alt="${safeEscape(b.title)}" class="comic-book-cover-img" loading="lazy">`;
       } else {
         const volNumStr = String(b.level).replace(/\D/g, '') || b.level;
+        const bgGradient = b.pastelBg || (b.color ? `linear-gradient(145deg, ${b.color}22, ${b.color}44)` : 'linear-gradient(145deg, #fef3c7, #fed7aa)');
+        const accentColor = b.pastelAccent || b.color || '#0f172a';
+        const hanziLogo = b.hanzi || '汉语';
+
         innerCoverHtml = `
-          <div class="styled-vol-card" style="background: linear-gradient(145deg, ${b.color || '#3b82f6'}, #0f172a 130%);">
+          <div class="styled-vol-card" style="background: ${bgGradient};">
             <div class="vol-sub">${safeEscape(b.tag || 'Giáo Trình')}</div>
             <div class="vol-name">${safeEscape(b.title)}</div>
-            <div class="vol-center-pattern">
-              <div class="pattern-grid">
-                <div class="pattern-cell" style="background: rgba(255,255,255,0.7);"></div>
-                <div class="pattern-cell" style="background: rgba(255,255,255,0.3);"></div>
-                <div class="pattern-cell" style="background: rgba(255,255,255,0.8);"></div>
-                <div class="pattern-cell" style="background: rgba(255,255,255,0.4);"></div>
-                <div class="pattern-cell" style="background: rgba(255,255,255,0.9);"></div>
-                <div class="pattern-cell" style="background: rgba(255,255,255,0.5);"></div>
-                <div class="pattern-cell" style="background: rgba(255,255,255,0.6);"></div>
-                <div class="pattern-cell" style="background: rgba(255,255,255,0.85);"></div>
-                <div class="pattern-cell" style="background: rgba(255,255,255,0.35);"></div>
+            <div class="vol-center-emblem">
+              <div class="vol-emblem-badge">
+                <span class="vol-emblem-char" style="color: ${accentColor};">${hanziLogo}</span>
               </div>
             </div>
             <div class="vol-footer">
               <div class="vol-foot-label">HongTai<br>Roadmap</div>
-              <div class="vol-number-badge">${volNumStr}</div>
+              <div class="vol-number-badge" style="color: ${accentColor};">${volNumStr}</div>
             </div>
           </div>
         `;

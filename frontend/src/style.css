@@ -20524,8 +20524,8 @@ html.dark .comic-book-card:hover {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 10px 8px;
-  color: #ffffff;
+  padding: 12px 10px;
+  color: #0f172a;
   position: relative;
   box-sizing: border-box;
 }
@@ -20535,48 +20535,61 @@ html.dark .comic-book-card:hover {
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.4px;
-  color: #ffffff !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
-  opacity: 1;
-  padding-right: 52px;
+  color: #334155 !important;
+  text-shadow: none !important;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 6px;
+  padding: 2px 7px;
+  max-width: calc(100% - 50px);
   box-sizing: border-box;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  display: inline-block;
+  width: fit-content;
 }
 
 .styled-vol-card .vol-name {
   font-size: 0.88rem;
   font-weight: 900;
-  line-height: 1.22;
-  margin-top: 3px;
-  color: #ffffff !important;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
+  line-height: 1.25;
+  margin-top: 5px;
+  color: #0f172a !important;
+  text-shadow: none !important;
+  font-family: var(--font-display, sans-serif);
 }
 
-.styled-vol-card .vol-center-pattern {
+.styled-vol-card .vol-center-emblem {
   margin: auto 0;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.styled-vol-card .vol-center-pattern .pattern-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 14px);
-  grid-template-rows: repeat(3, 14px);
-  gap: 2.5px;
-  border: 1.5px solid rgba(255, 255, 255, 0.6);
-  padding: 3px;
-  border-radius: 6px;
-  background: rgba(0, 0, 0, 0.25);
+.styled-vol-card .vol-emblem-badge {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), inset 0 1px 2px rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
 }
 
-.styled-vol-card .vol-center-pattern .pattern-cell {
-  width: 14px;
-  height: 14px;
-  border-radius: 2px;
-  background: rgba(255, 255, 255, 0.7);
+.styled-vol-card .vol-emblem-char {
+  font-size: 1.25rem;
+  font-weight: 900;
+  font-family: "Noto Serif SC", "Songti SC", "PingFang SC", "SimSun", serif;
+  line-height: 1;
+  letter-spacing: 0.5px;
 }
 
 .styled-vol-card .vol-footer {
@@ -20586,20 +20599,19 @@ html.dark .comic-book-card:hover {
 }
 
 .styled-vol-card .vol-foot-label {
-  font-size: 0.64rem;
+  font-size: 0.62rem;
   font-weight: 800;
   line-height: 1.2;
-  color: #ffffff !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+  color: #475569 !important;
+  text-shadow: none !important;
 }
 
 .styled-vol-card .vol-number-badge {
   font-size: 2.1rem;
   font-weight: 900;
   font-style: italic;
-  line-height: 1;
-  color: #ffffff !important;
-  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.6);
+  line-height: 0.9;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8) !important;
 }
 
 /* Mobile responsive for Bookshelf */
@@ -20687,36 +20699,37 @@ html.dark .comic-book-card:hover {
   }
 
   .styled-vol-card {
-    padding: 6px 4px;
+    padding: 6px 5px;
   }
 
   .styled-vol-card .vol-sub {
-    font-size: 0.5rem;
-    padding-right: 36px;
+    font-size: 0.52rem;
+    padding: 1.5px 5px;
+    max-width: calc(100% - 38px);
   }
 
   .styled-vol-card .vol-name {
-    font-size: 0.68rem;
+    font-size: 0.72rem;
+    line-height: 1.15;
+    margin-top: 3px;
   }
 
-  .styled-vol-card .vol-center-pattern .pattern-grid {
-    grid-template-columns: repeat(3, 8px);
-    grid-template-rows: repeat(3, 8px);
-    gap: 1.5px;
-    padding: 2px;
+  .styled-vol-card .vol-emblem-badge {
+    width: 36px;
+    height: 36px;
   }
 
-  .styled-vol-card .vol-center-pattern .pattern-cell {
-    width: 8px;
-    height: 8px;
+  .styled-vol-card .vol-emblem-char {
+    font-size: 0.92rem;
   }
 
   .styled-vol-card .vol-foot-label {
-    font-size: 0.5rem;
+    font-size: 0.52rem;
+    line-height: 1.1;
   }
 
   .styled-vol-card .vol-number-badge {
-    font-size: 1.35rem;
+    font-size: 1.45rem;
   }
 }
 
