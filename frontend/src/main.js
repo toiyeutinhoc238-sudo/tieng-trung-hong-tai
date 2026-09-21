@@ -1089,7 +1089,8 @@ async function toggleWordMemorized(id) {
   vocabList[index].isMemorized = nextState;
   markWordAsStudied(id);
   updateStats();
-  if (studyMode !== 'type') {
+  const isStudyingFlip = document.getElementById('flashcard-study-view')?.style.display === 'block' && studyMode === 'flip';
+  if (!isStudyingFlip && studyMode !== 'type') {
     applyFilters(true);
   }
   showToast(nextState ? 'Đã thuộc từ này! 🎉 (+100 điểm)' : 'Đã bỏ thuộc! Từ này quay lại danh sách cần ôn tập ⚠️ (-100 điểm)');
@@ -1120,7 +1121,7 @@ async function toggleWordMemorized(id) {
       vocabList[index].isMemorized = !oldMemorized;
       localStorage.setItem('guest_progress', JSON.stringify(guestProgress));
       updateStats();
-      if (studyMode !== 'type') {
+      if (!isStudyingFlip && studyMode !== 'type') {
         applyFilters(true);
       }
       return;
@@ -1131,7 +1132,7 @@ async function toggleWordMemorized(id) {
     // Confirm local state matches server
     Object.assign(vocabList[index], updatedWord);
     updateStats();
-    if (studyMode !== 'type') {
+    if (!isStudyingFlip && studyMode !== 'type') {
       applyFilters(true);
     }
   } catch (error) {
@@ -1141,7 +1142,7 @@ async function toggleWordMemorized(id) {
     // Rollback state on error
     vocabList[index].isMemorized = oldMemorized;
     updateStats();
-    if (studyMode !== 'type') {
+    if (!isStudyingFlip && studyMode !== 'type') {
       applyFilters(true);
     }
   }
@@ -1865,7 +1866,7 @@ function updateStats() {
 
   const total = levelList.length;
   const memorized = levelList.filter(w => w.isMemorized).length;
-  const unmemorized = levelList.filter(w => w.isStudied && !w.isMemorized).length;
+  const unmemorized = total - memorized;
   const starred = levelList.filter(w => w.isStarred).length;
 
   const statsTotal = document.getElementById('stats-total');
@@ -1978,6 +1979,23 @@ function startStudySession(status, level, title, desc) {
   if (studyNotebookId && studyMode === 'lesson') {
     studyMode = 'flip';
   }
+
+  // If user selected specific lessons, study all words of those lessons
+  if (studySelectedLessons && studySelectedLessons.length > 0) {
+    studyWordLimit = 'all';
+  }
+
+  // Reset completion state and show card container
+  const compEl = document.getElementById('flashcard-complete-container');
+  if (compEl) compEl.style.display = 'none';
+  const cardCont = document.getElementById('flashcard-card-container');
+  if (cardCont) cardCont.style.display = 'block';
+  const hud = document.getElementById('card-hud-controls');
+  if (hud) hud.style.display = 'flex';
+  const pi = document.getElementById('card-page-indicator');
+  if (pi) pi.style.display = 'block';
+  const hintBar = document.getElementById('flashcard-swipe-hint-bar');
+  if (hintBar) hintBar.style.display = 'flex';
 
   // Apply filters to load cards (this already calls renderActiveCard inside)
   applyFilters();
@@ -2284,7 +2302,7 @@ function applyFilters(preserveIndex = false) {
 
     // 2. Status Filter
     if (activeStatus === 'memorized' && !w.isMemorized) return false;
-    if (activeStatus === 'unmemorized' && (!w.isStudied || w.isMemorized)) return false;
+    if (activeStatus === 'unmemorized' && w.isMemorized) return false;
     if (activeStatus === 'wrong' && !w.isWrong) return false;
     if (activeStatus === 'starred' && !w.isStarred) return false;
     if (activeStatus === 'custom' && !w.isCustom) return false;
@@ -2316,17 +2334,21 @@ function applyFilters(preserveIndex = false) {
     const validIds = new Set(newList.map(w => w.id));
     filteredList = filteredList.filter(w => validIds.has(w.id));
 
-    // Add any new elements from newList that were not in filteredList
-    const existingIds = new Set(filteredList.map(w => w.id));
-    newList.forEach(w => {
-      if (!existingIds.has(w.id)) {
-        filteredList.push(w);
-      }
-    });
+    // Do not alter or truncate the study queue if in an active flashcard flip session
+    const isStudyingFlip = document.getElementById('flashcard-study-view')?.style.display === 'block' && studyMode === 'flip';
+    if (!isStudyingFlip) {
+      // Add any new elements from newList that were not in filteredList
+      const existingIds = new Set(filteredList.map(w => w.id));
+      newList.forEach(w => {
+        if (!existingIds.has(w.id)) {
+          filteredList.push(w);
+        }
+      });
 
-    // Re-apply study word limit if we just shuffled
-    if (studyWordLimit !== 'all' && filteredList.length > studyWordLimit) {
-      filteredList = filteredList.slice(0, studyWordLimit);
+      // Re-apply study word limit if we just shuffled
+      if (studyWordLimit !== 'all' && filteredList.length > studyWordLimit) {
+        filteredList = filteredList.slice(0, studyWordLimit);
+      }
     }
   }
 
@@ -2563,51 +2585,159 @@ function runAutoplayCycle() {
 }
 
 // --- NAVIGATION & INTERACTION ---
-function nextCard() {
-  if (filteredList.length === 0) return;
+function showFlashcardSessionComplete() {
+  stopAutoplay();
+  const compEl = document.getElementById('flashcard-complete-container');
+  const cardCont = document.getElementById('flashcard-card-container');
+  const hud = document.getElementById('card-hud-controls');
+  const pi = document.getElementById('card-page-indicator');
+  const hintBar = document.getElementById('flashcard-swipe-hint-bar');
+
+  if (cardCont) cardCont.style.display = 'none';
+  if (hud) hud.style.display = 'none';
+  if (pi) pi.style.display = 'none';
+  if (hintBar) hintBar.style.display = 'none';
+
+  if (!compEl) return;
+  compEl.style.display = 'flex';
+
+  const total = filteredList ? filteredList.length : 0;
+  const memCount = filteredList ? filteredList.filter(w => w.isMemorized).length : 0;
+  const unmemWords = filteredList ? filteredList.filter(w => !w.isMemorized) : [];
+  const unmemCount = unmemWords.length;
+
+  const totalEl = document.getElementById('fc-stat-total');
+  const memEl = document.getElementById('fc-stat-mem');
+  const unmemEl = document.getElementById('fc-stat-unmem');
+  const reviewBtn = document.getElementById('fc-review-unmemorized-btn');
+  const reviewCountEl = document.getElementById('fc-review-unmem-count');
+
+  if (totalEl) totalEl.textContent = total;
+  if (memEl) memEl.textContent = memCount;
+  if (unmemEl) unmemEl.textContent = unmemCount;
+
+  if (reviewBtn) {
+    if (unmemCount > 0) {
+      reviewBtn.style.display = 'inline-flex';
+      if (reviewCountEl) reviewCountEl.textContent = unmemCount;
+      reviewBtn.onclick = () => {
+        compEl.style.display = 'none';
+        filteredList = [...unmemWords];
+        currentIndex = 0;
+        if (cardCont) cardCont.style.display = 'block';
+        if (hud) hud.style.display = 'flex';
+        if (pi) pi.style.display = 'block';
+        if (hintBar) hintBar.style.display = 'flex';
+        resetCardOrientation();
+      };
+    } else {
+      reviewBtn.style.display = 'none';
+    }
+  }
+
+  const restartBtn = document.getElementById('fc-restart-session-btn');
+  if (restartBtn) {
+    restartBtn.onclick = () => {
+      compEl.style.display = 'none';
+      currentIndex = 0;
+      if (cardCont) cardCont.style.display = 'block';
+      if (hud) hud.style.display = 'flex';
+      if (pi) pi.style.display = 'block';
+      if (hintBar) hintBar.style.display = 'flex';
+      resetCardOrientation();
+    };
+  }
+
+  const exitBtn = document.getElementById('fc-exit-session-btn');
+  if (exitBtn) {
+    exitBtn.onclick = () => {
+      compEl.style.display = 'none';
+      const backToDecksBtn = document.getElementById('back-to-decks-btn');
+      if (backToDecksBtn) {
+        backToDecksBtn.click();
+      } else {
+        showTopicsView();
+      }
+    };
+  }
+}
+
+function nextCard(forceLoop = false) {
+  if (!filteredList || filteredList.length === 0) return;
 
   if (studyMode === 'type') {
     const currentWord = filteredList[currentIndex];
     applyFilters(true);
 
-    if (filteredList.length === 0) return;
+    if (!filteredList || filteredList.length === 0) return;
 
     const stillExists = filteredList.some(w => w.id === currentWord.id);
     if (stillExists) {
-      currentIndex = (currentIndex + 1) % filteredList.length;
+      if (currentIndex >= filteredList.length - 1) {
+        showFlashcardSessionComplete();
+        return;
+      }
+      currentIndex = currentIndex + 1;
       resetCardOrientation();
     } else {
       if (currentIndex >= filteredList.length) {
-        currentIndex = 0;
+        showFlashcardSessionComplete();
+        return;
       }
       resetCardOrientation();
     }
   } else {
-    currentIndex = (currentIndex + 1) % filteredList.length;
-    resetCardOrientation();
+    if (currentIndex >= filteredList.length - 1) {
+      if (forceLoop) {
+        currentIndex = 0;
+        resetCardOrientation();
+      } else {
+        showFlashcardSessionComplete();
+        return;
+      }
+    } else {
+      currentIndex = currentIndex + 1;
+      resetCardOrientation();
+    }
   }
 }
 
 function prevCard() {
-  if (filteredList.length === 0) return;
-  currentIndex = (currentIndex - 1 + filteredList.length) % filteredList.length;
-  resetCardOrientation();
+  if (!filteredList || filteredList.length === 0) return;
+  const compEl = document.getElementById('flashcard-complete-container');
+  if (compEl && compEl.style.display !== 'none') {
+    compEl.style.display = 'none';
+    const cardCont = document.getElementById('flashcard-card-container');
+    if (cardCont) cardCont.style.display = 'block';
+    const hud = document.getElementById('card-hud-controls');
+    if (hud) hud.style.display = 'flex';
+    const pi = document.getElementById('card-page-indicator');
+    if (pi) pi.style.display = 'block';
+    const hintBar = document.getElementById('flashcard-swipe-hint-bar');
+    if (hintBar) hintBar.style.display = 'flex';
+    currentIndex = filteredList.length - 1;
+    resetCardOrientation();
+    return;
+  }
+  if (currentIndex > 0) {
+    currentIndex--;
+    resetCardOrientation();
+  }
 }
 
 function flipCard() {
-  if (filteredList.length === 0) return;
+  if (!filteredList || filteredList.length === 0) return;
   isFlipped = !isFlipped;
-  cardElement.classList.toggle('flipped', isFlipped);
-  if (isFlipped) {
+  if (cardElement) cardElement.classList.toggle('flipped', isFlipped);
+  if (isFlipped && filteredList[currentIndex]) {
     markWordAsStudied(filteredList[currentIndex].id);
   }
 }
 
 function resetCardOrientation() {
   isFlipped = false;
-  cardElement.classList.remove('flipped');
-  // Add a slight delay to render so the front side transitions properly before content updates
-  setTimeout(renderActiveCard, 100);
+  if (cardElement) cardElement.classList.remove('flipped');
+  renderActiveCard();
 }
 
 let globalToastTimer = null;
@@ -2694,10 +2824,10 @@ function initFlashcardSwipe() {
     const diffY = currentY - startY;
 
     if (!isSwipingHorizontal) {
-      if (Math.abs(diffX) > 10 && Math.abs(diffX) > Math.abs(diffY)) {
+      if (Math.abs(diffX) > 8 && Math.abs(diffX) > Math.abs(diffY) * 0.6) {
         isSwipingHorizontal = true;
         window.__isCardDraggingOrSwiped = true;
-      } else if (Math.abs(diffY) > 12) {
+      } else if (Math.abs(diffY) > 25 && Math.abs(diffY) > Math.abs(diffX) * 1.5) {
         // Vertical scroll dominates, let page scroll naturally
         isDragging = false;
         resetTrackPosition(false);
@@ -2743,12 +2873,12 @@ function initFlashcardSwipe() {
     const diffX = currentX - startX;
     const elapsed = Date.now() - startTime;
     const velocity = Math.abs(diffX) / Math.max(1, elapsed);
-    const threshold = 55;
+    const threshold = 45;
 
-    if (diffX > threshold || (diffX > 25 && velocity > 0.35)) {
+    if (diffX > threshold || (diffX > 20 && velocity > 0.3)) {
       // SWIPE RIGHT -> ĐÃ THUỘC
       triggerSwipeAction('right');
-    } else if (diffX < -threshold || (diffX < -25 && velocity > 0.35)) {
+    } else if (diffX < -threshold || (diffX < -20 && velocity > 0.3)) {
       // SWIPE LEFT -> CHƯA THUỘC
       triggerSwipeAction('left');
     } else {
@@ -2776,7 +2906,6 @@ function initFlashcardSwipe() {
 
     if (filteredList && filteredList.length > 0 && currentIndex < filteredList.length) {
       const current = filteredList[currentIndex];
-      const previousId = current.id;
 
       if (direction === 'right') {
         // ĐÃ THUỘC
@@ -2803,13 +2932,16 @@ function initFlashcardSwipe() {
       }
 
       setTimeout(() => {
-        const stillInList = filteredList.some(w => w.id === previousId);
-        if (stillInList) {
-          nextCard();
-        } else {
-          if (currentIndex >= filteredList.length) currentIndex = 0;
-          resetCardOrientation();
+        if (currentIndex >= filteredList.length - 1) {
+          resetTrackPosition(false);
+          isAnimatingOut = false;
+          hasMovedFar = false;
+          window.__isCardDraggingOrSwiped = false;
+          showFlashcardSessionComplete();
+          return;
         }
+
+        nextCard();
 
         // Entrance animation for next card
         track.style.transition = 'none';
@@ -2838,6 +2970,8 @@ function initFlashcardSwipe() {
       }, 240);
     }
   };
+
+  window.triggerFlashcardSwipeAction = triggerSwipeAction;
 
   // Touch handlers
   track.addEventListener('touchstart', (e) => {
@@ -2878,6 +3012,22 @@ function initFlashcardSwipe() {
   window.addEventListener('mouseup', () => {
     handleDragEnd();
   });
+
+  // Clickable swipe helper bar buttons
+  const hintLeft = document.querySelector('.hint-swipe-left');
+  const hintRight = document.querySelector('.hint-swipe-right');
+  if (hintLeft) {
+    hintLeft.onclick = (e) => {
+      e.stopPropagation();
+      triggerSwipeAction('left');
+    };
+  }
+  if (hintRight) {
+    hintRight.onclick = (e) => {
+      e.stopPropagation();
+      triggerSwipeAction('right');
+    };
+  }
 }
 
 // --- EVENT LISTENERS ---
@@ -3076,7 +3226,7 @@ function setupEventListeners() {
       if (smartSelectedRange === 'all') {
         studySelectedLessons = null;
         studyCustomCategory = null;
-        startStudySession('unmemorized', activeLevel, `Học Từ Vựng HSK ${activeLevel}`, `Luyện ôn tập từ vựng chuẩn HSK Cấp ${activeLevel}`);
+        startStudySession('all', activeLevel, `Học Từ Vựng HSK ${activeLevel}`, `Luyện ôn tập từ vựng chuẩn HSK Cấp ${activeLevel}`);
       } else {
         // If they have selected specific HSK lessons
         if (smartSelectedLessons.length > 0) {
@@ -3088,7 +3238,7 @@ function setupEventListeners() {
           const lessonNames = sortedIds.map(id => `Bài ${id}`).join(', ');
           const desc = `Đang ôn tập từ vựng các bài: ${lessonNames}`;
 
-          startStudySession('unmemorized', activeLevel, title, desc);
+          startStudySession('all', activeLevel, title, desc);
         } else {
           studySelectedLessons = null;
           if (smartSelectedSubDeck === 'wrong') {
@@ -13966,7 +14116,7 @@ function renderNotebookWordsTable() {
   } else if (dashboardActiveFilter === 'memorized') {
     words = words.filter(w => w.isMemorized);
   } else if (dashboardActiveFilter === 'unmemorized') {
-    words = words.filter(w => (w.isStudied || w.isWrong) && !w.isMemorized);
+    words = words.filter(w => !w.isMemorized);
   } else if (dashboardActiveFilter === 'starred') {
     words = words.filter(w => w.isStarred);
   }
@@ -14408,7 +14558,7 @@ function startQuizSession() {
   } else if (dashboardActiveFilter === 'memorized') {
     words = words.filter(w => w.isMemorized);
   } else if (dashboardActiveFilter === 'unmemorized') {
-    words = words.filter(w => w.isStudied && !w.isMemorized);
+    words = words.filter(w => !w.isMemorized);
   } else if (dashboardActiveFilter === 'starred') {
     words = words.filter(w => w.isStarred);
   }
@@ -14917,7 +15067,7 @@ function startGameArenaFromNotebook() {
   } else if (dashboardActiveFilter === 'memorized') {
     words = words.filter(w => w.isMemorized);
   } else if (dashboardActiveFilter === 'unmemorized') {
-    words = words.filter(w => w.isStudied && !w.isMemorized);
+    words = words.filter(w => !w.isMemorized);
   } else if (dashboardActiveFilter === 'starred') {
     words = words.filter(w => w.isStarred);
   }
