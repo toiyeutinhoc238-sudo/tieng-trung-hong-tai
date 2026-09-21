@@ -155,6 +155,7 @@ if (window.pdfjsLib) {
       btnZoomIn.addEventListener('click', () => {
         autoFitMode = 'custom';
         currentScale = Math.min(3.0, currentScale + 0.2);
+        showToast(`🔍 Phóng to: ${Math.round(currentScale * 100)}%`);
         queueRenderPage(currentPageNum);
       });
     }
@@ -162,7 +163,8 @@ if (window.pdfjsLib) {
     if (btnZoomOut) {
       btnZoomOut.addEventListener('click', () => {
         autoFitMode = 'custom';
-        currentScale = Math.max(0.6, currentScale - 0.2);
+        currentScale = Math.max(0.4, currentScale - 0.2);
+        showToast(`🔍 Thu nhỏ: ${Math.round(currentScale * 100)}%`);
         queueRenderPage(currentPageNum);
       });
     }
@@ -170,7 +172,7 @@ if (window.pdfjsLib) {
     if (btnZoomFit) {
       btnZoomFit.addEventListener('click', () => {
         autoFitMode = autoFitMode === 'fitWidth' ? 'fitPage' : 'fitWidth';
-        showToast(autoFitMode === 'fitWidth' ? 'Đã chỉnh: Vừa chiều rộng' : 'Đã chỉnh: Vừa trang');
+        showToast(autoFitMode === 'fitWidth' ? '📐 Đã chỉnh: Vừa chiều rộng' : '📄 Đã chỉnh: Vừa trang');
         queueRenderPage(currentPageNum);
       });
     }
@@ -933,6 +935,12 @@ if (window.pdfjsLib) {
       if (pageNumPending !== null) {
         renderPage(pageNumPending);
         pageNumPending = null;
+      }
+
+      // Reset scroll to top if moving to a new page
+      if (viewportContainer && currentPageNum !== num) {
+        viewportContainer.scrollTop = 0;
+        viewportContainer.scrollLeft = 0;
       }
 
       // Update UI

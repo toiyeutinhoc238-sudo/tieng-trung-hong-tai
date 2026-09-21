@@ -773,24 +773,28 @@ html.dark .feature-desc {
   position: relative;
   overflow: auto;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
+  align-items: safe center;
+  justify-content: safe center;
   padding: 24px;
+  box-sizing: border-box;
   touch-action: pan-y pinch-zoom;
 }
 
 .reader-canvas-wrapper {
+  margin: auto;
+  flex-shrink: 0;
   position: relative;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
   border-radius: 6px;
-  overflow: hidden;
   background: var(--reader-canvas-bg, #ffffff);
   transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 #pdf-render-canvas {
   display: block;
-  max-width: 100%;
+  max-width: none;
   height: auto;
   pointer-events: auto;
   user-select: none;
@@ -2601,12 +2605,17 @@ html.dark .pending-book-modal-close {
   /* Viewport & Canvas: Maximize Full Mobile Screen Width */
   .reader-viewport {
     padding: 6px 4px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    align-items: safe center;
+    justify-content: safe center;
   }
 
   .reader-canvas-wrapper {
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
     border-radius: 4px;
-    max-width: 100%;
+    max-width: none;
+    margin: auto;
   }
 
   /* Mobile Bottom Sheet Drawers for Comments & Notes */
