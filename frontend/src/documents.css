@@ -1147,6 +1147,100 @@ body.light .documents-stat-item strong {
   color: #0f172a;
 }
 
+/* --- App Topbar & Responsive Header --- */
+.app-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(14px);
+  border-bottom: 2.5px solid #0f172a;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+html.dark .app-topbar {
+  background: rgba(15, 23, 42, 0.94);
+  border-bottom-color: #334155;
+}
+
+.topbar-left-cluster {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.topbar-brand-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  min-width: 0;
+}
+
+.topbar-brand-logo {
+  height: 38px;
+  width: 38px;
+  border-radius: 10px;
+  border: 2px solid #0f172a;
+  box-shadow: 1.5px 1.5px 0 #0f172a;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+html.dark .topbar-brand-logo {
+  border-color: #475569;
+  box-shadow: 1.5px 1.5px 0 #000000;
+}
+
+.topbar-brand-titles {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.topbar-brand-name {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #0f172a;
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+}
+
+html.dark .topbar-brand-name {
+  color: #f8fafc;
+}
+
+.topbar-brand-subtitle {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #3b82f6;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+html.dark .topbar-brand-subtitle {
+  color: #60a5fa;
+}
+
+.topbar-right-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.topbar-theme-btn {
+  color: #f59e0b !important;
+}
+
 /* --- Topbar Comic Style Controls --- */
 .topbar-comic-menu-btn {
   background: #ffffff;
@@ -1420,34 +1514,55 @@ html.dark .comic-book-card:hover {
   z-index: 3;
 }
 
-/* Status badge */
+/* Status badge (High contrast, clearly visible on all book covers) */
 .comic-book-status-badge {
   position: absolute;
   top: 8px;
   right: 8px;
-  background: rgba(15, 23, 42, 0.88);
-  backdrop-filter: blur(6px);
-  color: #ffffff;
-  border: 1.5px solid rgba(255, 255, 255, 0.3);
-  font-size: 0.65rem;
-  font-weight: 800;
-  padding: 3px 7px;
+  background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+  color: #ffffff !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.7) !important;
+  font-size: 0.68rem;
+  font-weight: 800 !important;
+  padding: 3px 8px;
   border-radius: 999px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 4px;
   z-index: 4;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+  white-space: nowrap;
+  max-width: calc(100% - 14px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+.comic-book-status-badge,
+.comic-book-status-badge *,
+.comic-book-status-badge i,
+.comic-book-status-badge span {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+}
+
+.comic-book-status-badge.coming-soon {
+  background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+  border-color: rgba(255, 255, 255, 0.75) !important;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.45), 0 1px 3px rgba(0, 0, 0, 0.3) !important;
 }
 
 .comic-book-status-badge.available {
-  background: #10b981;
-  border-color: #34d399;
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  border-color: rgba(255, 255, 255, 0.75) !important;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.45), 0 1px 3px rgba(0, 0, 0, 0.3) !important;
 }
 
 .comic-book-status-badge.reading {
-  background: #0ea5e9;
-  border-color: #38bdf8;
+  background: linear-gradient(135deg, #0284c7, #2563eb) !important;
+  border-color: rgba(255, 255, 255, 0.75) !important;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.45), 0 1px 3px rgba(0, 0, 0, 0.3) !important;
 }
 
 /* Stylized Volume Card for Hán Ngữ */
@@ -1757,6 +1872,7 @@ html.dark .pending-book-modal-close {
     line-height: 1.4;
     margin: 0 0 8px 0;
     display: -webkit-box;
+    line-clamp: 2;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
@@ -1804,7 +1920,8 @@ html.dark .pending-book-modal-close {
   }
 
   .view-switch-btn {
-    flex: 1;
+    flex: 1 1 0;
+    min-width: 0;
     padding: 7px 6px;
     font-size: 0.76rem;
     font-weight: 800;
@@ -1860,16 +1977,21 @@ html.dark .pending-book-modal-close {
     border-radius: 10px;
     border-width: 2px;
     box-shadow: 2px 2.5px 0 #0f172a;
+    width: 100%;
+    min-width: 0;
   }
 
   .comic-book-status-badge {
-    top: 3px;
-    left: 3px;
-    padding: 2px 4px;
-    font-size: 0.56rem;
-    font-weight: 800;
-    border-radius: 4px;
+    top: 4px;
+    right: 4px;
+    left: auto;
+    padding: 2px 6px;
+    font-size: 0.58rem;
+    font-weight: 800 !important;
+    border-radius: 999px;
     gap: 3px;
+    max-width: calc(100% - 8px);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
   }
 
   .comic-book-status-badge i {
@@ -2316,3 +2438,126 @@ html.dark .pending-book-modal-close {
     right: 12px;
   }
 }
+
+/* ==========================================================================
+   EXTRA RESPONSIVE SAFEGUARDS (Under 480px & Under 350px Viewports)
+   ========================================================================== */
+
+@media (max-width: 480px) {
+  .app-topbar {
+    padding: 8px 10px !important;
+  }
+
+  .topbar-left-cluster {
+    gap: 8px;
+  }
+
+  .topbar-brand-link {
+    gap: 8px;
+  }
+
+  .topbar-brand-logo {
+    width: 34px;
+    height: 34px;
+  }
+
+  .topbar-brand-titles {
+    max-width: 125px;
+  }
+
+  .topbar-brand-name {
+    font-size: 0.88rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .topbar-brand-subtitle {
+    display: none !important;
+  }
+
+  .topbar-comic-login-btn span {
+    display: none !important;
+  }
+
+  .topbar-comic-login-btn {
+    width: 36px;
+    height: 36px;
+    padding: 0 !important;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .topbar-comic-menu-btn,
+  .topbar-theme-btn {
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 0.95rem !important;
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 350px) {
+  .app-topbar {
+    padding: 6px 6px !important;
+  }
+
+  .topbar-left-cluster {
+    gap: 5px;
+  }
+
+  .topbar-brand-link {
+    gap: 5px;
+  }
+
+  .topbar-brand-logo {
+    width: 30px;
+    height: 30px;
+  }
+
+  .topbar-brand-titles {
+    max-width: 90px;
+  }
+
+  .topbar-brand-name {
+    font-size: 0.78rem;
+  }
+
+  .topbar-comic-menu-btn,
+  .topbar-comic-login-btn,
+  .topbar-theme-btn {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 0.85rem !important;
+  }
+
+  .documents-main-container {
+    padding: 6px 4px 50px 4px !important;
+  }
+
+  .bookshelf-grid {
+    gap: 5px !important;
+  }
+
+  .comic-book-status-badge {
+    top: 3px !important;
+    right: 3px !important;
+    padding: 1.5px 4px !important;
+    font-size: 0.5rem !important;
+    max-width: calc(100% - 6px) !important;
+    gap: 2px !important;
+  }
+
+  .comic-book-status-badge i {
+    font-size: 0.46rem !important;
+  }
+
+  .view-switch-btn {
+    font-size: 0.7rem !important;
+    padding: 6px 4px !important;
+  }
+}
+

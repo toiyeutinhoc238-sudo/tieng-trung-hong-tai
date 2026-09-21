@@ -70,23 +70,22 @@
   <div class="app-layout">
 
     <!-- Global App Topbar Header -->
-    <header class="app-topbar"
-      style="display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); border-bottom: 2.5px solid #0f172a; position: sticky; top: 0; z-index: 100;">
-      <div style="display: flex; align-items: center; gap: 12px;">
+    <header class="app-topbar">
+      <div class="topbar-left-cluster">
         <button id="mobile-sidebar-toggle-btn" class="topbar-comic-menu-btn" title="Mở menu chuyển trang">
           <i class="fa-solid fa-bars"></i>
         </button>
-        <a href="/" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
-          <img src="./src/assets/logo.png" alt="Logo" style="height: 38px; width: 38px; border-radius: 10px; border: 2px solid #0f172a; box-shadow: 1.5px 1.5px 0 #0f172a;">
-          <div class="topbar-brand-titles" style="display: flex; flex-direction: column;">
-            <span class="topbar-brand-name" style="font-size: 1.15rem; font-weight: 900; color: #0f172a; letter-spacing: -0.3px; line-height: 1.2;">Tiếng Trung HongTai</span>
-            <span class="topbar-brand-subtitle" style="font-size: 0.72rem; font-weight: 800; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.5px;">Kho Sách &amp; Giáo Trình</span>
+        <a href="/" class="topbar-brand-link">
+          <img src="./src/assets/logo.png" alt="Logo" class="topbar-brand-logo">
+          <div class="topbar-brand-titles">
+            <span class="topbar-brand-name">Tiếng Trung HongTai</span>
+            <span class="topbar-brand-subtitle">Kho Sách &amp; Giáo Trình</span>
           </div>
         </a>
       </div>
 
-      <div class="topbar-right-actions" style="display: flex; align-items: center; gap: 8px;">
-        <button onclick="window.toggleTheme()" id="theme-toggle-btn" class="topbar-comic-menu-btn" style="width: 38px; height: 38px; font-size: 1rem; color: #f59e0b;" title="Chuyển chế độ sáng/tối">
+      <div class="topbar-right-actions">
+        <button onclick="window.toggleTheme()" id="theme-toggle-btn" class="topbar-comic-menu-btn topbar-theme-btn" title="Chuyển chế độ sáng/tối">
           <i class="fa-solid fa-sun"></i>
         </button>
         <a href="/#login" class="topbar-comic-login-btn">

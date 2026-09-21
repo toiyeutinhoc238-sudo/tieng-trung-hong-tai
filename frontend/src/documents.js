@@ -574,7 +574,7 @@ if (window.pdfjsLib) {
         } else if (hasPdf) {
           badgeHtml = `<span class="comic-book-status-badge available"><i class="fa-solid fa-book-open"></i> Đọc ngay</span>`;
         } else {
-          badgeHtml = `<span class="comic-book-status-badge"><i class="fa-solid fa-clock"></i> Sắp ra</span>`;
+          badgeHtml = `<span class="comic-book-status-badge coming-soon"><i class="fa-solid fa-clock"></i> Sắp ra</span>`;
         }
 
         // Check if book has a custom stylized color cover (like Hán Ngữ) or real image cover
