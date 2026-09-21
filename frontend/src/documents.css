@@ -1689,3 +1689,630 @@ html.dark .pending-book-modal-close {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+/* ==========================================================================
+   MOBILE OPTIMIZATION (Dedicated for Smartphones: 320px - 640px)
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  /* Main Container & Top Navigation */
+  .documents-main-container {
+    padding: 8px 10px 60px 10px;
+  }
+
+  .topbar-comic-container {
+    padding: 8px 10px;
+    gap: 8px;
+  }
+
+  .topbar-comic-brand img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .topbar-comic-brand-text {
+    font-size: 0.92rem;
+  }
+
+  .topbar-comic-brand-badge {
+    display: none;
+  }
+
+  .topbar-comic-menu-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 0.92rem;
+  }
+
+  .topbar-comic-login-btn {
+    padding: 6px 10px;
+    font-size: 0.76rem;
+    gap: 5px;
+  }
+
+  /* Compact Hero Header (Never block the bookshelf view) */
+  .documents-hero {
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    border-radius: 14px;
+    border-width: 2px;
+    box-shadow: 2px 3px 0 #0f172a;
+  }
+
+  .documents-badge-chip {
+    font-size: 0.68rem;
+    padding: 3px 8px;
+    margin-bottom: 6px;
+    gap: 5px;
+  }
+
+  .documents-title {
+    font-size: 1.15rem;
+    line-height: 1.25;
+    margin: 0 0 6px 0;
+  }
+
+  .documents-subtitle {
+    font-size: 0.76rem;
+    line-height: 1.4;
+    margin: 0 0 8px 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .documents-stats-row {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 6px;
+    padding-bottom: 2px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .documents-stats-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .documents-stat-item {
+    padding: 4px 8px;
+    font-size: 0.7rem;
+    gap: 4px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    border-width: 1.5px;
+    box-shadow: 1.5px 2px 0 #0f172a;
+  }
+
+  .documents-stat-item i {
+    font-size: 0.8rem;
+  }
+
+  /* View Switcher Controls */
+  .view-switch-wrapper {
+    margin-bottom: 12px;
+  }
+
+  .view-switch-box {
+    width: 100%;
+    padding: 3px;
+    border-radius: 12px;
+    border-width: 2px;
+    box-shadow: 2px 3px 0 #0f172a;
+  }
+
+  .view-switch-btn {
+    flex: 1;
+    padding: 7px 6px;
+    font-size: 0.76rem;
+    font-weight: 800;
+    gap: 5px;
+    justify-content: center;
+    border-radius: 9px;
+  }
+
+  .view-switch-btn i {
+    font-size: 0.82rem;
+  }
+
+  /* Comic Bookshelves & Shelves Header */
+  .bookshelf-shelf {
+    margin-bottom: 18px;
+  }
+
+  .bookshelf-shelf-header {
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .bookshelf-mascot-badge {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border-width: 2px;
+    box-shadow: 2px 2px 0 #0f172a;
+  }
+
+  .bookshelf-mascot-img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .bookshelf-shelf-title {
+    font-size: 0.96rem;
+    line-height: 1.2;
+  }
+
+  .bookshelf-shelf-subtitle {
+    font-size: 0.72rem;
+    line-height: 1.25;
+  }
+
+  /* 3-Column Book Grid for Small Phone Screens */
+  .bookshelf-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .comic-book-card {
+    border-radius: 10px;
+    border-width: 2px;
+    box-shadow: 2px 2.5px 0 #0f172a;
+  }
+
+  .comic-book-status-badge {
+    top: 3px;
+    left: 3px;
+    padding: 2px 4px;
+    font-size: 0.56rem;
+    font-weight: 800;
+    border-radius: 4px;
+    gap: 3px;
+  }
+
+  .comic-book-status-badge i {
+    font-size: 0.52rem;
+  }
+
+  .comic-book-spine-overlay {
+    width: 8px;
+  }
+
+  /* Stylized Volume Card for Hán Ngữ on Mobile */
+  .styled-vol-card {
+    padding: 6px 4px;
+  }
+
+  .styled-vol-card .vol-sub {
+    font-size: 0.5rem;
+    letter-spacing: 0.2px;
+  }
+
+  .styled-vol-card .vol-name {
+    font-size: 0.68rem;
+    font-weight: 900;
+    line-height: 1.15;
+    margin-top: 1px;
+  }
+
+  .styled-vol-card .vol-center-pattern .pattern-grid {
+    grid-template-columns: repeat(3, 8px);
+    grid-template-rows: repeat(3, 8px);
+    gap: 1.5px;
+    padding: 2px;
+    border-radius: 4px;
+    border-width: 1px;
+  }
+
+  .styled-vol-card .vol-center-pattern .pattern-cell {
+    width: 8px;
+    height: 8px;
+  }
+
+  .styled-vol-card .vol-foot-label {
+    font-size: 0.5rem;
+    line-height: 1.1;
+  }
+
+  .styled-vol-card .vol-number-badge {
+    font-size: 1.35rem;
+  }
+
+  /* Floating Mascot on Mobile */
+  .floating-mascot-container {
+    bottom: 14px;
+    right: 10px;
+  }
+
+  .floating-mascot-bubble {
+    display: none; /* Hide persistent bubble so it never obstructs book covers */
+  }
+
+  .floating-mascot-btn {
+    width: 44px;
+    height: 44px;
+    border-width: 2px;
+    box-shadow: 2px 2.5px 0 #0f172a;
+  }
+
+  .floating-mascot-btn img {
+    width: 34px;
+    height: 34px;
+  }
+
+  .floating-mascot-chat-pill {
+    width: 18px;
+    height: 18px;
+    font-size: 0.6rem;
+    bottom: -1px;
+    right: -1px;
+  }
+
+  /* Pending Book Modal on Mobile */
+  .pending-book-modal {
+    max-width: 92vw;
+    padding: 16px 12px;
+    border-radius: 16px;
+    border-width: 2.5px;
+    box-shadow: 3.5px 4px 0 #0f172a;
+  }
+
+  #pending-modal-cover {
+    width: 85px !important;
+  }
+
+  #pending-modal-title {
+    font-size: 0.98rem !important;
+  }
+
+  #pending-modal-desc {
+    font-size: 0.78rem !important;
+    line-height: 1.4 !important;
+  }
+
+  /* Catalog View on Mobile */
+  .documents-controls-bar {
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .documents-search-input {
+    padding: 10px 36px 10px 36px;
+    font-size: 0.82rem;
+  }
+
+  .documents-filter-pills {
+    display: flex;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    gap: 6px;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .documents-filter-pills::-webkit-scrollbar {
+    display: none;
+  }
+
+  .documents-filter-btn {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .documents-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .book-card {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .book-card-cover {
+    width: 80px;
+  }
+}
+
+/* Extra Small Screens (<= 360px) */
+@media (max-width: 360px) {
+  .topbar-comic-brand-text {
+    font-size: 0.84rem;
+  }
+
+  .topbar-comic-login-btn span {
+    display: none;
+  }
+
+  .topbar-comic-login-btn {
+    padding: 6px 8px;
+  }
+
+  .bookshelf-grid {
+    gap: 6px;
+  }
+
+  .comic-book-status-badge {
+    font-size: 0.52rem;
+    padding: 1px 3px;
+  }
+}
+
+/* ==========================================================================
+   MOBILE OPTIMIZATION: E-BOOK READER MODAL (<= 768px)
+   ========================================================================== */
+
+/* Universal Reader Text & Input Contrast */
+.ebook-reader-modal .reader-book-title,
+#reader-book-title {
+  color: #f8fafc !important;
+}
+
+.ebook-reader-modal.theme-dark .reader-book-title,
+.ebook-reader-modal.theme-dark #reader-book-title {
+  color: #f8fafc !important;
+}
+
+.ebook-reader-modal.theme-dark .reader-page-indicator,
+.ebook-reader-modal.theme-dark #reader-total-pages {
+  color: #cbd5e1 !important;
+}
+
+.ebook-reader-modal.theme-dark .reader-page-input {
+  color: #f8fafc !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+.view-switch-text-mobile {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .app-topbar {
+    padding: 8px 10px !important;
+  }
+
+  .topbar-brand-subtitle {
+    display: none !important;
+  }
+
+  .topbar-brand-name {
+    font-size: 0.95rem !important;
+  }
+
+  .topbar-comic-brand-text {
+    font-size: 0.92rem;
+  }
+
+  .view-switch-text-full {
+    display: none !important;
+  }
+
+  .view-switch-text-mobile {
+    display: inline !important;
+  }
+
+  .floating-mascot-container {
+    bottom: 12px !important;
+    right: 8px !important;
+    z-index: 90;
+  }
+
+  .floating-mascot-bubble {
+    display: none !important;
+  }
+
+  .floating-mascot-btn {
+    width: 40px !important;
+    height: 40px !important;
+    border-width: 2px !important;
+    box-shadow: 2px 2px 0 #0f172a !important;
+    opacity: 0.85;
+  }
+
+  .floating-mascot-btn img {
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  .floating-mascot-chat-pill {
+    width: 16px !important;
+    height: 16px !important;
+    font-size: 0.55rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .reader-header {
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    grid-template-rows: auto auto !important;
+    align-items: center !important;
+    padding: 8px 10px 6px 10px !important;
+    gap: 6px 8px !important;
+    background: #0f172a !important;
+    border-bottom: 1.5px solid rgba(255, 255, 255, 0.12) !important;
+  }
+
+  .reader-header-left {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .reader-btn-back {
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #f8fafc;
+  }
+
+  .reader-btn-back span {
+    display: none; /* Icon-only chevron on mobile */
+  }
+
+  .reader-book-info {
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .reader-book-title {
+    font-size: 0.88rem !important;
+    font-weight: 800 !important;
+    color: #f8fafc !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+  }
+
+  .reader-book-meta {
+    display: none; /* Hide category subtitle to save vertical room */
+  }
+
+  /* Right Tools: Icon-Only Buttons */
+  .reader-header-right {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+  }
+
+  .reader-tool-btn {
+    padding: 6px 9px;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #f8fafc;
+  }
+
+  .reader-tool-btn span:not(.badge-counter) {
+    display: none; /* Hide label text */
+  }
+
+  #reader-zoom-out,
+  #reader-zoom-in,
+  #reader-zoom-fit {
+    display: none; /* Pinch-zoom on touchscreen */
+  }
+
+  /* Center Page Navigator: Row 2 Centered */
+  .reader-nav-controls {
+    grid-column: 1 / -1;
+    grid-row: 2 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 12px;
+    gap: 8px;
+    margin: 0 auto;
+    width: fit-content;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 999px;
+  }
+
+  .reader-nav-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 0.85rem;
+    color: #f8fafc;
+  }
+
+  .reader-page-indicator {
+    font-size: 0.8rem;
+    gap: 4px;
+    color: #f8fafc !important;
+    font-weight: 800;
+  }
+
+  .reader-page-indicator > span:first-child {
+    display: none; /* Hide label 'Trang' */
+  }
+
+  .reader-page-input {
+    width: 36px;
+    font-size: 0.8rem;
+    padding: 2px 2px;
+    text-align: center;
+    border-radius: 6px;
+  }
+
+  /* Viewport & Canvas: Maximize Full Mobile Screen Width */
+  .reader-viewport {
+    padding: 6px 4px;
+  }
+
+  .reader-canvas-wrapper {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    border-radius: 4px;
+    max-width: 100%;
+  }
+
+  /* Mobile Bottom Sheet Drawers for Comments & Notes */
+  .reader-drawer {
+    width: 100%;
+    max-width: 100vw;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 72vh;
+    border-radius: 20px 20px 0 0;
+    border-left: none;
+    border-top: 3px solid #0f172a;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.6);
+    transform: translateY(100%);
+  }
+
+  .reader-drawer.open {
+    transform: translateY(0);
+  }
+
+  .drawer-header {
+    padding: 12px 16px;
+  }
+
+  .drawer-body {
+    padding: 14px 16px;
+  }
+
+  /* Floating Turn Page Buttons: Lower Thumb Reachable */
+  .reader-floating-nav {
+    top: auto;
+    bottom: 24px;
+    transform: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 1.1rem;
+    background: rgba(15, 23, 42, 0.85);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  }
+
+  .reader-floating-nav:hover:not(:disabled) {
+    transform: scale(1.1);
+  }
+
+  .reader-floating-prev {
+    left: 12px;
+  }
+
+  .reader-floating-next {
+    right: 12px;
+  }
+}

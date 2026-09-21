@@ -1,15 +1,5 @@
 {
-  "reading_progress": {
-    "phanphiphu04@gmail.com": {
-      "book_74e5v6": {
-        "bookId": "book_74e5v6",
-        "lastPage": 1,
-        "totalPages": 164,
-        "percentage": 1,
-        "updatedAt": "2026-09-21T04:19:22.655Z"
-      }
-    }
-  },
+  "reading_progress": {},
   "comments": [],
   "notes": []
 }

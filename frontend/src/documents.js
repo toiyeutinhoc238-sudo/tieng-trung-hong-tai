@@ -185,6 +185,45 @@ if (window.pdfjsLib) {
       btnBack.addEventListener('click', closeReader);
     }
 
+    // Mobile Touch Gestures for Turn Pages (Swipe left/right)
+    const viewportContainer = document.getElementById('reader-viewport');
+    if (viewportContainer) {
+      let touchStartX = 0;
+      let touchStartY = 0;
+      viewportContainer.addEventListener('touchstart', (e) => {
+        if (e.touches && e.touches.length === 1) {
+          touchStartX = e.touches[0].clientX;
+          touchStartY = e.touches[0].clientY;
+        }
+      }, { passive: true });
+
+      viewportContainer.addEventListener('touchend', (e) => {
+        if (e.changedTouches && e.changedTouches.length === 1) {
+          const deltaX = e.changedTouches[0].clientX - touchStartX;
+          const deltaY = e.changedTouches[0].clientY - touchStartY;
+          // Trigger page turn if horizontal swipe > 45px and predominantly horizontal
+          if (Math.abs(deltaX) > 45 && Math.abs(deltaX) > Math.abs(deltaY) * 1.3) {
+            if (deltaX < 0) {
+              onNextPage(); // Swiped left -> next page
+            } else {
+              onPrevPage(); // Swiped right -> prev page
+            }
+          }
+        }
+      }, { passive: true });
+    }
+
+    // Debounced window resize handler for mobile rotation (portrait <-> landscape)
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if (elReaderModal && elReaderModal.style.display === 'flex' && pdfDoc) {
+          queueRenderPage(currentPageNum);
+        }
+      }, 250);
+    });
+
     // Drawer Toggles
     const btnCommentsToggle = document.getElementById('reader-toggle-comments');
     if (btnCommentsToggle) {
@@ -793,6 +832,10 @@ if (window.pdfjsLib) {
       applyReaderTheme(readerTheme);
     }
 
+    if (window.innerWidth <= 768) {
+      autoFitMode = 'fitWidth';
+    }
+
     if (elBookTitle) elBookTitle.textContent = book.titleVi;
     if (elBookMeta) elBookMeta.innerHTML = `<span>${book.category}</span> • <span>${book.titleOriginal}</span>`;
 
@@ -850,13 +893,14 @@ if (window.pdfjsLib) {
       // Calculate scale to fit width or fit page
       const viewportContainer = document.getElementById('reader-viewport');
       const unscaledViewport = page.getViewport({ scale: 1.0 });
+      const isMobile = window.innerWidth <= 768;
 
       if (autoFitMode === 'fitWidth' && viewportContainer) {
-        const availableWidth = viewportContainer.clientWidth - 48;
-        currentScale = Math.max(0.6, Math.min(2.5, availableWidth / unscaledViewport.width));
+        const availableWidth = viewportContainer.clientWidth - (isMobile ? 12 : 48);
+        currentScale = Math.max(0.35, Math.min(2.8, availableWidth / unscaledViewport.width));
       } else if (autoFitMode === 'fitPage' && viewportContainer) {
-        const availableHeight = viewportContainer.clientHeight - 60;
-        currentScale = Math.max(0.6, Math.min(2.0, availableHeight / unscaledViewport.height));
+        const availableHeight = viewportContainer.clientHeight - (isMobile ? 24 : 60);
+        currentScale = Math.max(0.35, Math.min(2.5, availableHeight / unscaledViewport.height));
       }
 
       const pixelRatio = window.devicePixelRatio || 1;

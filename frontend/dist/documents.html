@@ -62,9 +62,9 @@
       }
     };
   </script>
-  <script type="module" crossorigin src="/assets/documents-p_8E5Fzi.js"></script>
+  <script type="module" crossorigin src="/assets/documents-B1LpSlZx.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/global_sidebar-DU5b37H7.js">
-  <link rel="stylesheet" crossorigin href="/assets/documents-eR1H5Nwe.css">
+  <link rel="stylesheet" crossorigin href="/assets/documents-CtpWl_CP.css">
   <link rel="stylesheet" crossorigin href="/assets/style-7S6wFPrc.css">
 </head>
 
@@ -80,14 +80,14 @@
         </button>
         <a href="/" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
           <img src="/assets/logo-CnsJJgQP.png" alt="Logo" style="height: 38px; width: 38px; border-radius: 10px; border: 2px solid #0f172a; box-shadow: 1.5px 1.5px 0 #0f172a;">
-          <div style="display: flex; flex-direction: column;">
-            <span style="font-size: 1.15rem; font-weight: 900; color: #0f172a; letter-spacing: -0.3px; line-height: 1.2;">Tiếng Trung HongTai</span>
-            <span style="font-size: 0.72rem; font-weight: 800; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.5px;">Kho Sách &amp; Giáo Trình</span>
+          <div class="topbar-brand-titles" style="display: flex; flex-direction: column;">
+            <span class="topbar-brand-name" style="font-size: 1.15rem; font-weight: 900; color: #0f172a; letter-spacing: -0.3px; line-height: 1.2;">Tiếng Trung HongTai</span>
+            <span class="topbar-brand-subtitle" style="font-size: 0.72rem; font-weight: 800; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.5px;">Kho Sách &amp; Giáo Trình</span>
           </div>
         </a>
       </div>
 
-      <div style="display: flex; align-items: center; gap: 10px;">
+      <div class="topbar-right-actions" style="display: flex; align-items: center; gap: 8px;">
         <button onclick="window.toggleTheme()" id="theme-toggle-btn" class="topbar-comic-menu-btn" style="width: 38px; height: 38px; font-size: 1rem; color: #f59e0b;" title="Chuyển chế độ sáng/tối">
           <i class="fa-solid fa-sun"></i>
         </button>
@@ -141,11 +141,13 @@
         <div class="view-switch-box">
           <button id="btn-view-bookshelf" class="view-switch-btn active" onclick="window.switchDocsView('bookshelf')">
             <i class="fa-solid fa-book-bookmark"></i>
-            <span>Kệ Giáo Trình Trọng Tâm</span>
+            <span class="view-switch-text-full">Kệ Giáo Trình Trọng Tâm</span>
+            <span class="view-switch-text-mobile">Kệ Sách</span>
           </button>
           <button id="btn-view-catalog" class="view-switch-btn" onclick="window.switchDocsView('catalog')">
             <i class="fa-solid fa-layer-group"></i>
-            <span>Toàn Bộ Kho Sách (66 Cuốn)</span>
+            <span class="view-switch-text-full">Toàn Bộ Kho Sách (66 Cuốn)</span>
+            <span class="view-switch-text-mobile">Tất Cả (66)</span>
           </button>
         </div>
       </div>
