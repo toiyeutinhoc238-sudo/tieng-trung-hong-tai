@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <script>
+    if (window.location.hostname.includes('onrender.com') || window.location.hostname.startsWith('www.')) {
+      window.location.replace('https://tiengtrunghongtai.online' + window.location.pathname + window.location.search + window.location.hash);
+    }
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luyện Nói HSKK & AI Chấm Điểm Khẩu Ngữ (3 Phút - 2 Phút) | Tiếng Trung HongTai</title>
+  <meta name="description"
+    content="Phòng luyện thi Khẩu ngữ HSKK Sơ - Trung - Cao cấp chuẩn phòng thi: 3 phút chuẩn bị, 2 phút ghi âm bài nói, AI tự động gợi ý dàn bài từ vựng và chấm điểm phát âm ngữ pháp chuyên sâu.">
+  <link rel="canonical" href="https://tiengtrunghongtai.online/speaking-practice.html" />
+  <link rel="icon" type="image/png" href="./src/assets/logo.png">
+
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&family=Quicksand:wght@600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="/src/style.css">
+
+  <script>
+    (function () {
+      var t = localStorage.getItem('theme') || 'dark';
+      var bgUrl = t === 'light' ? "url('/assets/app_bg_day_v3.png')" : "url('/assets/app_bg_night_v3.png')";
+      document.documentElement.style.setProperty('background-image', bgUrl, 'important');
+      document.documentElement.style.setProperty('background-size', 'cover', 'important');
+      document.documentElement.style.setProperty('background-position', 'center center', 'important');
+      document.documentElement.style.setProperty('background-attachment', 'fixed', 'important');
+      document.documentElement.style.setProperty('background-repeat', 'no-repeat', 'important');
+
+      if (t === 'light') {
+        document.documentElement.classList.add('light-mode', 'light');
+        document.documentElement.classList.remove('dark');
+        if (document.body) {
+          document.body.classList.add('light-mode');
+          document.body.style.setProperty('background-image', bgUrl, 'important');
+        } else {
+          document.addEventListener('DOMContentLoaded', function () {
+            document.body.classList.add('light-mode');
+            document.body.style.setProperty('background-image', bgUrl, 'important');
+          });
+        }
+      } else {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light', 'light-mode');
+        if (document.body) {
+          document.body.classList.remove('light-mode', 'light');
+          document.body.classList.add('dark');
+        } else {
+          document.addEventListener('DOMContentLoaded', function () {
+            document.body.classList.add('dark');
+            document.body.style.setProperty('background-image', bgUrl, 'important');
+          });
+        }
+      }
+    })();
+
+    window.toggleTheme = function () {
+      var isLight = document.documentElement.classList.contains('light-mode') || document.documentElement.classList.contains('light');
+      var nextDark = isLight;
+      var bgUrl = nextDark ? "url('/assets/app_bg_night_v3.png')" : "url('/assets/app_bg_day_v3.png')";
+
+      document.documentElement.style.setProperty('background-image', bgUrl, 'important');
+      document.documentElement.style.setProperty('background-size', 'cover', 'important');
+      document.documentElement.style.setProperty('background-position', 'center center', 'important');
+      document.documentElement.style.setProperty('background-attachment', 'fixed', 'important');
+      document.documentElement.style.setProperty('background-repeat', 'no-repeat', 'important');
+
+      if (document.body) {
+        document.body.style.setProperty('background-image', bgUrl, 'important');
+        document.body.style.setProperty('background-size', 'cover', 'important');
+        document.body.style.setProperty('background-position', 'center center', 'important');
+        document.body.style.setProperty('background-attachment', 'fixed', 'important');
+        document.body.style.setProperty('background-repeat', 'no-repeat', 'important');
+      }
+
+      if (nextDark) {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light', 'light-mode');
+        if (document.body) {
+          document.body.classList.remove('light-mode', 'light');
+          document.body.classList.add('dark');
+        }
+        localStorage.setItem('theme', 'dark');
+        updateToggleBtns(false);
+      } else {
+        document.documentElement.classList.add('light', 'light-mode');
+        document.documentElement.classList.remove('dark');
+        if (document.body) {
+          document.body.classList.remove('dark');
+          document.body.classList.add('light-mode');
+        }
+        localStorage.setItem('theme', 'light');
+        updateToggleBtns(true);
+      }
+    };
+
+    function updateToggleBtns(isLight) {
+      document.querySelectorAll('.theme-toggle-btn').forEach(function (btn) {
+        btn.innerHTML = isLight ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
+        btn.setAttribute('title', isLight ? 'Chuyển sang Chế độ Tối' : 'Chuyển sang Chế độ Sáng');
+      });
+    }
+  </script>
+
+  <style>
+    :root {
+      --speaking-primary: #f59e0b;
+      --speaking-primary-hover: #d97706;
+      --speaking-accent: #38bdf8;
+      --speaking-red: #ef4444;
+      --speaking-emerald: #10b981;
+    }
+
+    .speaking-main-container {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 20px 16px 80px 16px;
+    }
+
+    /* Hero Banner */
+    .speaking-hero-banner {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.22), rgba(239, 68, 68, 0.16));
+      border: 1.5px solid rgba(245, 158, 11, 0.4);
+      border-radius: 24px;
+      padding: 24px;
+      margin-bottom: 24px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    html.light-mode .speaking-hero-banner {
+      background: linear-gradient(135deg, #fffbeb, #fee2e2);
+      border: 1.5px solid #fcd34d;
+      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.12);
+    }
+
+    /* Main Workspace Panel */
+    .speaking-card-panel {
+      background: rgba(24, 33, 53, 0.85);
+      border: 2px solid rgba(245, 158, 11, 0.35);
+      border-radius: 24px;
+      padding: 28px;
+      margin-bottom: 24px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    html.light-mode .speaking-card-panel {
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    }
+
+    /* Level Selector */
+    .level-select-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    html.light-mode .level-select-row {
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .level-btn {
+      padding: 8px 20px;
+      border-radius: 12px;
+      border: 2px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.05);
+      color: #cbd5e1;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .level-btn:hover {
+      border-color: #f59e0b;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .level-btn.active {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      border-color: #fbbf24;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+    }
+
+    html.light-mode .level-btn {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+      color: #475569;
+    }
+
+    html.light-mode .level-btn.active {
+      background: linear-gradient(135deg, #d97706, #b45309);
+      border-color: #b45309;
+      color: #ffffff;
+    }
+
+    /* Question Display Card */
+    .question-display-card {
+      display: flex;
+      align-items: stretch;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 640px) {
+      .question-display-card {
+        flex-direction: column;
+      }
+    }
+
+    .question-box {
+      flex: 1;
+      background: rgba(15, 23, 42, 0.7);
+      border: 2px solid rgba(245, 158, 11, 0.35);
+      border-radius: 18px;
+      padding: 18px 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 80px;
+    }
+
+    html.light-mode .question-box {
+      background: #f8fafc;
+      border-color: #fcd34d;
+    }
+
+    .question-text {
+      font-family: var(--font-chinese), 'Noto Sans SC', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    html.light-mode .question-text {
+      color: #0f172a;
+    }
+
+    .spin-btn {
+      flex-shrink: 0;
+      padding: 0 26px;
+      min-height: 72px;
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      border: 2px solid #60a5fa;
+      border-radius: 18px;
+      color: #ffffff;
+      font-size: 1.15rem;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+      user-select: none;
+    }
+
+    .spin-btn:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.5);
+    }
+
+    .spin-btn.rolling i {
+      animation: spinRoll 0.5s ease;
+    }
+
+    @keyframes spinRoll {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Hint Button (Green Wireframe Style) */
+    .hint-trigger-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      border-radius: 12px;
+      background: rgba(34, 197, 94, 0.14);
+      border: 2px solid #22c55e;
+      color: #4ade80;
+      font-size: 0.96rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 24px;
+    }
+
+    .hint-trigger-btn:hover {
+      background: rgba(34, 197, 94, 0.25);
+      transform: translateY(-1px);
+    }
+
+    .hint-content-card {
+      background: rgba(15, 23, 42, 0.75);
+      border: 1.5px solid rgba(34, 197, 94, 0.4);
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 24px;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    html.light-mode .hint-content-card {
+      background: #f0fdf4;
+      border-color: #86efac;
+    }
+
+    /* 2 RED TIMER BUTTONS MATCHING WIREFRAME 2 */
+    .exam-actions-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 640px) {
+      .exam-actions-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+    }
+
+    .exam-action-btn {
+      padding: 20px 24px;
+      border-radius: 18px;
+      border: 2.5px solid #ef4444;
+      background: rgba(239, 68, 68, 0.12);
+      color: #f87171;
+      font-size: 1.25rem;
+      font-weight: 900;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.2);
+      user-select: none;
+    }
+
+    .exam-action-btn:hover {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 26px rgba(239, 68, 68, 0.45);
+    }
+
+    .exam-action-btn.active-timer {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: #ffffff;
+      box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.35);
+      animation: pulseRed 1.8s infinite;
+    }
+
+    @keyframes pulseRed {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+
+    html.light-mode .exam-action-btn {
+      background: #fff5f5;
+      border-color: #ef4444;
+      color: #dc2626;
+    }
+
+    html.light-mode .exam-action-btn:hover,
+    html.light-mode .exam-action-btn.active-timer {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: #ffffff;
+    }
+
+    /* Preparation Active Box */
+    .prep-timer-card {
+      background: rgba(15, 23, 42, 0.8);
+      border: 2px solid #38bdf8;
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 24px;
+      display: none;
+      text-align: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    html.light-mode .prep-timer-card {
+      background: #f0f9ff;
+      border-color: #38bdf8;
+    }
+
+    /* Speaking Recording Active Box */
+    .speaking-recorder-card {
+      background: rgba(15, 23, 42, 0.8);
+      border: 2px solid #ef4444;
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 24px;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    html.light-mode .speaking-recorder-card {
+      background: #fff5f5;
+      border-color: #ef4444;
+    }
+
+    /* Audio Visualizer Wave */
+    .sound-wave-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      height: 48px;
+      margin: 16px 0;
+    }
+
+    .sound-wave-bar {
+      width: 6px;
+      height: 12px;
+      border-radius: 99px;
+      background: #ef4444;
+      transition: height 0.1s ease;
+    }
+
+    .sound-wave-container.recording .sound-wave-bar {
+      animation: wavePulse 0.8s infinite ease-in-out alternate;
+    }
+
+    .sound-wave-container.recording .sound-wave-bar:nth-child(2) { animation-delay: 0.15s; }
+    .sound-wave-container.recording .sound-wave-bar:nth-child(3) { animation-delay: 0.3s; }
+    .sound-wave-container.recording .sound-wave-bar:nth-child(4) { animation-delay: 0.45s; }
+    .sound-wave-container.recording .sound-wave-bar:nth-child(5) { animation-delay: 0.2s; }
+    .sound-wave-container.recording .sound-wave-bar:nth-child(6) { animation-delay: 0.35s; }
+    .sound-wave-container.recording .sound-wave-bar:nth-child(7) { animation-delay: 0.5s; }
+    .sound-wave-container.recording .sound-wave-bar:nth-child(8) { animation-delay: 0.1s; }
+
+    @keyframes wavePulse {
+      0% { height: 8px; }
+      100% { height: 42px; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Top App Navigation -->
+  <header class="app-top-nav"
+    style="position: sticky; top: 0; z-index: 100; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); background: rgba(15, 23, 42, 0.88); border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding: 12px 20px;">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <button onclick="window.toggleGlobalSidebar && window.toggleGlobalSidebar()" class="sidebar-toggle-btn"
+          style="background: transparent; border: none; color: #ffffff; font-size: 1.25rem; cursor: pointer; padding: 4px 8px;">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <a href="/" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+          <img src="./src/assets/logo.png" alt="HongTai Logo" style="width: 36px; height: 36px; border-radius: 10px;">
+          <div>
+            <span style="font-weight: 800; font-size: 1.15rem; color: #ffffff; display: block; line-height: 1.1;">Luyện Nói Tiếng Trung HSKK</span>
+            <span style="font-size: 0.72rem; color: #fbbf24; font-weight: 700;">HSKK Speaking (3p - 2p) &amp; AI Grader</span>
+          </div>
+        </a>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <!-- Switch to Writing Skill Button -->
+        <a href="/writing-practice.html" class="btn"
+          style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(124, 58, 237, 0.25)); border: 1.5px solid #a855f7; color: #d8b4fe; padding: 7px 14px; border-radius: 10px; font-weight: 800; font-size: 0.88rem; text-decoration: none; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-feather-pointed"></i> <span>Luyện Viết HSKK</span>
+        </a>
+        <a href="/" class="btn hide-mobile"
+          style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #cbd5e1; padding: 7px 12px; border-radius: 10px; font-weight: 700; font-size: 0.88rem; text-decoration: none; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-house"></i> <span>Trang chủ</span>
+        </a>
+        <button class="btn theme-toggle-btn" onclick="window.toggleTheme()"
+          style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #f59e0b; width: 38px; height: 38px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+          <i class="fa-solid fa-sun"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="speaking-main-container">
+
+    <!-- Hero Banner -->
+    <section class="speaking-hero-banner">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+        <div style="max-width: 780px;">
+          <div
+            style="display: inline-flex; align-items: center; gap: 8px; background: rgba(245, 158, 11, 0.22); border: 1px solid rgba(245, 158, 11, 0.4); padding: 4px 14px; border-radius: 99px; font-size: 0.82rem; font-weight: 800; color: #fbbf24; margin-bottom: 10px;">
+            <span>🎙️ Phòng Thi Khẩu Ngữ HSKK Thực Chiến</span>
+            <span>&bull;</span>
+            <span>Chuẩn Format: 3 Phút Chuẩn Bị &bull; 2 Phút Trả Lời</span>
+          </div>
+          <h1 style="font-size: 1.85rem; font-weight: 900; margin: 0 0 8px 0; color: var(--text-primary, #ffffff); line-height: 1.25;">
+            Luyện Nói HSKK &amp; AI Tự Động Đề Xuất Dàn Ý Chấm Điểm
+          </h1>
+          <p style="font-size: 0.94rem; color: var(--text-secondary, #94a3b8); margin: 0; line-height: 1.6;">
+            Quay ngẫu nhiên 1,045 câu hỏi HSKK Sơ - Trung - Cao cấp, xem gợi ý dàn bài &amp; từ vựng của AI, bấm 3 phút chuẩn bị và 2 phút ghi âm bài nói để AI chấm điểm phát âm toàn diện.
+          </p>
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+          <div style="text-align: center; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; padding: 8px 14px;">
+            <div style="font-size: 1.35rem; font-weight: 900; color: #fbbf24;" id="total-speaking-stat">1,045</div>
+            <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 700;">Đề Khẩu Ngữ</div>
+          </div>
+          <div style="text-align: center; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; padding: 8px 14px;">
+            <div style="font-size: 1.35rem; font-weight: 900; color: #ef4444;">3p &amp; 2p</div>
+            <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 700;">Chuẩn thi HSKK</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAIN SPEAKING WORKSPACE (MATCHING WIREFRAME 2) -->
+    <section class="speaking-card-panel">
+      <!-- Title: Luyện nói -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 style="font-size: 1.6rem; font-weight: 900; color: var(--text-primary, #ffffff); margin: 0; display: flex; align-items: center; gap: 10px;">
+          <i class="fa-solid fa-microphone-lines" style="color: #f59e0b;"></i>
+          <span>Luyện nói</span>
+        </h2>
+        <span style="font-size: 0.82rem; color: #94a3b8; font-weight: 700;">Bộ đề HSKK chính thức</span>
+      </div>
+
+      <!-- 1. Trình độ: [Sơ] [Trung] [Cao] -->
+      <div class="level-select-row">
+        <span style="font-weight: 900; font-size: 1.05rem; color: var(--text-primary, #ffffff); margin-right: 6px;">
+          Trình độ:
+        </span>
+        <button class="level-btn" id="lvl-btn-so" onclick="switchSpeakingLevel('so', this)">
+          <span>Sơ</span> <span style="font-size: 0.75rem; opacity: 0.85;">(195 đề)</span>
+        </button>
+        <button class="level-btn active" id="lvl-btn-trung" onclick="switchSpeakingLevel('trung', this)">
+          <span>Trung</span> <span style="font-size: 0.75rem; opacity: 0.85;">(450 đề)</span>
+        </button>
+        <button class="level-btn" id="lvl-btn-cao" onclick="switchSpeakingLevel('cao', this)">
+          <span>Cao</span> <span style="font-size: 0.75rem; opacity: 0.85;">(400 đề)</span>
+        </button>
+      </div>
+
+      <!-- 2. Đề: [Khung câu hỏi] + Button [Quay] (Random) -->
+      <div style="margin-bottom: 8px;">
+        <span style="font-weight: 900; font-size: 1.1rem; color: var(--text-primary, #ffffff);">
+          Đề:
+        </span>
+      </div>
+      <div class="question-display-card">
+        <div class="question-box">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+            <span id="question-meta-badge" style="font-size: 0.78rem; font-weight: 800; color: #fbbf24; background: rgba(245, 158, 11, 0.15); padding: 3px 10px; border-radius: 99px;">
+              Câu 1 • HSKK Trung cấp
+            </span>
+            <button onclick="playQuestionTts()" title="Nghe giám khảo đọc đề thi"
+              style="background: transparent; border: none; color: #fbbf24; font-size: 1.15rem; cursor: pointer;">
+              <i class="fa-solid fa-volume-high"></i>
+            </button>
+          </div>
+          <p class="question-text" id="active-question-text">
+            请谈谈你最喜欢的一个季节，并说明理由。
+          </p>
+        </div>
+
+        <!-- Button Quay (Random) -->
+        <button class="spin-btn" id="spin-question-btn" onclick="spinRandomQuestion()" title="Quay ngẫu nhiên đề thi khác">
+          <i class="fa-solid fa-dice" style="font-size: 1.5rem;"></i>
+          <span>Quay</span>
+          <span style="font-size: 0.7rem; font-weight: 700; opacity: 0.85;">Random</span>
+        </button>
+      </div>
+
+      <!-- 3. Button Gợi ý (Green Wireframe Button -> AI Dàn bài & Từ vựng) -->
+      <div>
+        <button class="hint-trigger-btn" id="hint-toggle-btn" onclick="toggleAiSuggestions()">
+          <i class="fa-solid fa-lightbulb"></i>
+          <span>Gợi ý</span>
+          <span style="font-size: 0.82rem; font-weight: 600; opacity: 0.9;">&rarr; Dàn bài &bull; Từ vựng / câu có thể sử dụng (AI tự đề xuất)</span>
+        </button>
+      </div>
+
+      <!-- Expandable AI Suggestion Content -->
+      <div class="hint-content-card" id="ai-suggestion-box">
+        <!-- Content dynamically rendered by JS -->
+      </div>
+
+      <!-- 4. 2 ACTION BUTTONS: [Chuẩn bị (3p)] & [Bắt đầu nói (2p)] (RED WIREFRAME BUTTONS) -->
+      <div class="exam-actions-grid">
+        <button class="exam-action-btn" id="btn-prep-3p" onclick="startPrepTimer()">
+          <i class="fa-solid fa-hourglass-start"></i>
+          <span>Chuẩn bị (3p)</span>
+        </button>
+        <button class="exam-action-btn" id="btn-speak-2p" onclick="startSpeakingTimerAndRecord()">
+          <i class="fa-solid fa-microphone"></i>
+          <span>Bắt đầu nói (2p)</span>
+        </button>
+      </div>
+
+      <!-- ACTIVE TIMER 1: CHUẨN BỊ (3 PHÚT) -->
+      <div class="prep-timer-card" id="prep-timer-box">
+        <div style="max-width: 500px; margin: 0 auto;">
+          <div style="font-size: 0.88rem; font-weight: 800; color: #38bdf8; text-transform: uppercase; margin-bottom: 6px;">
+            <i class="fa-solid fa-clock"></i> Thời Gian Chuẩn Bị Dàn Ý
+          </div>
+          <div id="prep-timer-display" style="font-size: 3.5rem; font-weight: 900; color: #ffffff; font-family: monospace; line-height: 1; margin: 10px 0;">
+            03:00
+          </div>
+          <p style="font-size: 0.88rem; color: #94a3b8; margin: 0 0 16px 0;">
+            Hãy sắp xếp các ý trong đầu hoặc mở mục "Gợi ý" để nắm cấu trúc trước khi bắt đầu nói.
+          </p>
+
+          <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+            <button onclick="togglePausePrepTimer()" id="prep-pause-btn" class="btn"
+              style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #ffffff; padding: 8px 16px; border-radius: 10px; font-weight: 700; font-size: 0.88rem; cursor: pointer;">
+              <i class="fa-solid fa-pause"></i> <span>Tạm dừng</span>
+            </button>
+            <button onclick="resetPrepTimer()" class="btn"
+              style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #cbd5e1; padding: 8px 16px; border-radius: 10px; font-weight: 700; font-size: 0.88rem; cursor: pointer;">
+              <i class="fa-solid fa-rotate-left"></i> <span>Đặt lại (3p)</span>
+            </button>
+            <button onclick="stopPrepAndStartSpeaking()" class="btn"
+              style="background: linear-gradient(135deg, #ef4444, #dc2626); border: none; color: #ffffff; padding: 8px 18px; border-radius: 10px; font-weight: 800; font-size: 0.88rem; cursor: pointer;">
+              <i class="fa-solid fa-forward-step"></i> <span>Bắt đầu nói ngay &rarr;</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTIVE TIMER 2: BẮT ĐẦU NÓI & GHI ÂM (2 PHÚT) -->
+      <div class="speaking-recorder-card" id="speaking-recorder-box">
+        <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+          <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; padding: 4px 14px; border-radius: 99px; font-size: 0.82rem; font-weight: 800; margin-bottom: 8px;">
+            <i class="fa-solid fa-circle fa-beat" style="color: #ef4444;"></i>
+            <span>ĐANG GHI ÂM BÀI NÓI CỦA BẠN</span>
+          </div>
+
+          <div id="speaking-timer-display" style="font-size: 3.8rem; font-weight: 900; color: #f87171; font-family: monospace; line-height: 1; margin: 10px 0;">
+            02:00
+          </div>
+
+          <!-- Sound wave visualizer -->
+          <div class="sound-wave-container recording" id="sound-wave-bars">
+            <div class="sound-wave-bar"></div>
+            <div class="sound-wave-bar"></div>
+            <div class="sound-wave-bar"></div>
+            <div class="sound-wave-bar"></div>
+            <div class="sound-wave-bar"></div>
+            <div class="sound-wave-bar"></div>
+            <div class="sound-wave-bar"></div>
+            <div class="sound-wave-bar"></div>
+          </div>
+
+          <p style="font-size: 0.9rem; color: #cbd5e1; margin: 0 0 16px 0;">
+            Hãy nói to, rõ ràng vào microphone. Hệ thống đang ghi âm và tự động nhận diện tiếng Trung...
+          </p>
+
+          <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+            <button onclick="finishSpeakingRecording()" class="btn"
+              style="background: linear-gradient(135deg, #10b981, #059669); border: none; color: #ffffff; padding: 12px 24px; border-radius: 14px; font-weight: 900; font-size: 1.05rem; cursor: pointer; box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);">
+              <i class="fa-solid fa-check"></i> <span>Hoàn thành &amp; Dừng nói</span>
+            </button>
+            <button onclick="cancelSpeakingRecording()" class="btn"
+              style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); color: #fca5a5; padding: 12px 18px; border-radius: 14px; font-weight: 700; font-size: 0.95rem; cursor: pointer;">
+              <i class="fa-solid fa-xmark"></i> <span>Hủy bỏ</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RECORDING COMPLETED CARD & SUBMIT TO AI -->
+      <div id="recorded-result-box" style="display: none; background: rgba(15, 23, 42, 0.75); border: 2px solid rgba(16, 185, 129, 0.4); border-radius: 20px; padding: 22px; margin-bottom: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-circle-check" style="color: #10b981; font-size: 1.4rem;"></i>
+            <div>
+              <div style="font-weight: 900; font-size: 1.15rem; color: #ffffff;">Đã Ghi Âm Xong Bài Nói!</div>
+              <div style="font-size: 0.8rem; color: #94a3b8;" id="recording-duration-text">Thời lượng: 01:25</div>
+            </div>
+          </div>
+
+          <!-- Audio playback element -->
+          <div id="playback-audio-container" style="display: flex; align-items: center; gap: 10px;">
+            <audio id="recorded-audio-player" controls style="height: 38px; border-radius: 8px; outline: none;"></audio>
+          </div>
+        </div>
+
+        <!-- Transcript Preview & Edit -->
+        <div style="margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label for="spoken-transcript-input" style="font-size: 0.88rem; font-weight: 800; color: #38bdf8;">
+              <i class="fa-solid fa-pen-to-square"></i> Văn bản nhận diện từ bài nói (Bạn có thể chỉnh sửa trước khi nộp):
+            </label>
+            <button onclick="clearTranscript()" style="background: transparent; border: none; color: #f87171; font-size: 0.78rem; font-weight: 700; cursor: pointer;">
+              <i class="fa-solid fa-trash-can"></i> Xóa
+            </button>
+          </div>
+          <textarea id="spoken-transcript-input" class="writing-textarea" style="min-height: 120px;"
+            placeholder="Nội dung bài nói của bạn sẽ tự động hiển thị tại đây... Bạn cũng có thể tự gõ bổ sung nếu mic chưa nhận diện hết."></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px;">
+          <button onclick="restartSpeakingFlow()" class="btn"
+            style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; padding: 12px 20px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer;">
+            <i class="fa-solid fa-rotate-left"></i> <span>Nói lại lượt khác</span>
+          </button>
+          <button id="submit-speaking-btn" onclick="submitSpeakingForAiGrading()" class="btn"
+            style="background: linear-gradient(135deg, #f59e0b, #d97706); border: none; color: #ffffff; padding: 12px 28px; border-radius: 12px; font-weight: 900; font-size: 1.05rem; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Đưa AI Chấm Điểm Bài Nói</span>
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- AI SPEAKING EVALUATION RESULTS PANEL -->
+    <section id="ai-speaking-evaluation-results" style="display: none;">
+      <!-- Results populated by JS -->
+    </section>
+
+  </main>
+
+  <script type="module" src="/src/global_sidebar.js"></script>
+  <script type="module" src="/src/speaking_practice.js"></script>
+</body>
+
+</html>

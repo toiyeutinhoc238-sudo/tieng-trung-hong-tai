@@ -9,9 +9,9 @@
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Luyện Viết Tiếng Trung & AI Chấm Bài Văn Dài (HSK Writing) | Tiếng Trung HongTai</title>
+  <title>Luyện Viết Tiếng Trung HSKK & AI Chấm Bài | Tiếng Trung HongTai</title>
   <meta name="description"
-    content="Chuyên trang Luyện Viết Tiếng Trung chuẩn HSK 1 - HSK 6 với AI Chấm Điểm chuyên sâu: Chấm bài viết tự do, Viết theo đề bài HSK, Soi lỗi ngữ pháp, Viết lại chuẩn bản xứ và Gợi ý từ vựng nâng cao.">
+    content="Luyện Viết Tiếng Trung chuẩn thi HSKK Sơ - Trung - Cao cấp với 1,045 đề thi thực chiến. AI tự động đề xuất dàn bài, từ vựng và chấm điểm bài viết chi tiết.">
   <link rel="canonical" href="https://tiengtrunghongtai.online/writing-practice.html" />
   <link rel="icon" type="image/png" href="./src/assets/logo.png">
 
@@ -118,12 +118,13 @@
       --writing-accent: #38bdf8;
       --writing-amber: #f59e0b;
       --writing-emerald: #10b981;
+      --writing-bg-panel: rgba(26, 32, 53, 0.82);
     }
 
     .writing-main-container {
-      max-width: 1180px;
+      max-width: 1140px;
       margin: 0 auto;
-      padding: 24px 16px 80px 16px;
+      padding: 20px 16px 80px 16px;
     }
 
     /* Hero Banner */
@@ -131,141 +132,343 @@
       background: linear-gradient(135deg, rgba(139, 92, 246, 0.22), rgba(56, 189, 248, 0.15));
       border: 1.5px solid rgba(168, 85, 247, 0.35);
       border-radius: 24px;
-      padding: 28px 24px;
+      padding: 24px;
       margin-bottom: 24px;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      position: relative;
-      overflow: hidden;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
     }
 
-    html.light-mode .writing-hero-banner,
-    body.light-mode .writing-hero-banner {
+    html.light-mode .writing-hero-banner {
       background: linear-gradient(135deg, #f5f3ff, #e0f2fe);
       border: 1.5px solid #d8b4fe;
       box-shadow: 0 8px 24px rgba(139, 92, 246, 0.1);
     }
 
-    /* Mode Selector Tabs */
-    .writing-mode-switcher {
-      display: flex;
-      gap: 12px;
-      background: rgba(15, 23, 42, 0.6);
-      padding: 8px;
-      border-radius: 18px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      margin-bottom: 24px;
+    /* 3 TOP CARDS ROW MATCHING WIREFRAME */
+    .wf-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
     }
 
-    html.light-mode .writing-mode-switcher,
-    body.light-mode .writing-mode-switcher {
-      background: #ffffff;
-      border: 1.5px solid #cbd5e1;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    @media (max-width: 768px) {
+      .wf-cards-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
     }
 
-    .writing-mode-btn {
-      flex: 1;
+    .wf-card-box {
+      background: rgba(30, 41, 59, 0.65);
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      padding: 22px 18px;
+      text-align: center;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      padding: 14px 20px;
-      border-radius: 14px;
-      border: none;
-      background: transparent;
-      color: #94a3b8;
-      font-size: 1.05rem;
-      font-weight: 800;
-      cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      min-height: 140px;
     }
 
-    .writing-mode-btn.active {
-      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-      color: #ffffff;
-      box-shadow: 0 4px 18px rgba(139, 92, 246, 0.4);
+    html.light-mode .wf-card-box {
+      background: #ffffff;
+      border: 2px solid #e2e8f0;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
     }
 
-    html.light-mode .writing-mode-btn {
-      color: #64748b;
+    .wf-card-box:hover:not(.locked) {
+      transform: translateY(-3px);
+      border-color: #8b5cf6;
+      box-shadow: 0 8px 24px rgba(139, 92, 246, 0.25);
     }
 
-    html.light-mode .writing-mode-btn.active {
-      background: linear-gradient(135deg, #7c3aed, #6d28d9);
-      color: #ffffff;
+    .wf-card-box.active {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(56, 189, 248, 0.18));
+      border: 2.5px solid #a855f7;
+      box-shadow: 0 8px 30px rgba(168, 85, 247, 0.35);
     }
 
-    /* Level Selector Pills */
-    .level-pills-row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
+    html.light-mode .wf-card-box.active {
+      background: linear-gradient(135deg, #ede9fe, #e0f2fe);
+      border-color: #7c3aed;
+      box-shadow: 0 8px 25px rgba(124, 58, 237, 0.15);
+    }
+
+    .wf-card-box.locked {
+      opacity: 0.65;
+      cursor: not-allowed;
+      border-style: dashed;
+    }
+
+    .wf-lock-badge {
+      display: inline-flex;
       align-items: center;
-      margin-bottom: 16px;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 99px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      background: rgba(34, 197, 94, 0.18);
+      color: #22c55e;
+      border: 1.5px solid #22c55e;
+      margin-top: 8px;
     }
 
-    .level-pill-btn {
-      padding: 6px 14px;
-      border-radius: 99px;
-      border: 1.5px solid rgba(255, 255, 255, 0.15);
+    .wf-card-icon {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: #cbd5e1;
+    }
+
+    .wf-card-box.active .wf-card-icon {
+      color: #a855f7;
+    }
+
+    .wf-card-title {
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: var(--text-primary, #ffffff);
+      margin-bottom: 4px;
+    }
+
+    .wf-card-sub {
+      font-size: 0.8rem;
+      color: var(--text-secondary, #94a3b8);
+      font-weight: 600;
+    }
+
+    /* Downward Arrow Indicator */
+    .wf-arrow-down {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: -6px 0 16px 0;
+      color: #a855f7;
+      font-size: 1.5rem;
+      animation: bounceDown 1.8s infinite;
+    }
+
+    @keyframes bounceDown {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(5px); }
+    }
+
+    /* Main Workspace Panel */
+    .writing-card-panel {
+      background: rgba(24, 33, 53, 0.82);
+      border: 2px solid rgba(168, 85, 247, 0.35);
+      border-radius: 24px;
+      padding: 26px;
+      margin-bottom: 24px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    html.light-mode .writing-card-panel {
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    }
+
+    /* Level Selector Buttons */
+    .level-select-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    html.light-mode .level-select-row {
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .level-btn {
+      padding: 8px 20px;
+      border-radius: 12px;
+      border: 2px solid rgba(255, 255, 255, 0.16);
       background: rgba(255, 255, 255, 0.05);
       color: #cbd5e1;
-      font-size: 0.88rem;
-      font-weight: 700;
+      font-size: 0.95rem;
+      font-weight: 800;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .level-pill-btn.active {
-      background: rgba(139, 92, 246, 0.25);
+    .level-btn:hover {
+      border-color: #8b5cf6;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .level-btn.active {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
       border-color: #a855f7;
-      color: #d8b4fe;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4);
     }
 
-    html.light-mode .level-pill-btn {
+    html.light-mode .level-btn {
       background: #f8fafc;
       border-color: #cbd5e1;
       color: #475569;
     }
 
-    html.light-mode .level-pill-btn.active {
-      background: #ede9fe;
-      border-color: #7c3aed;
-      color: #6d28d9;
+    html.light-mode .level-btn.active {
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      border-color: #6d28d9;
+      color: #ffffff;
     }
 
-    /* Workspace Card */
-    .writing-card-panel {
-      background: rgba(30, 41, 59, 0.75);
-      border: 1.5px solid rgba(255, 255, 255, 0.12);
-      border-radius: 20px;
-      padding: 24px;
-      margin-bottom: 24px;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    /* Question Display Box */
+    .question-display-card {
+      display: flex;
+      align-items: stretch;
+      gap: 14px;
+      margin-bottom: 20px;
     }
 
-    html.light-mode .writing-card-panel,
-    body.light-mode .writing-card-panel {
-      background: #ffffff;
-      border: 1.5px solid #e2e8f0;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+    @media (max-width: 640px) {
+      .question-display-card {
+        flex-direction: column;
+      }
     }
 
-    /* Textarea Container */
-    .writing-textarea-wrapper {
-      position: relative;
-      margin-bottom: 16px;
+    .question-box {
+      flex: 1;
+      background: rgba(15, 23, 42, 0.7);
+      border: 2px solid rgba(56, 189, 248, 0.35);
+      border-radius: 18px;
+      padding: 18px 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 80px;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.2);
     }
 
+    html.light-mode .question-box {
+      background: #f8fafc;
+      border-color: #93c5fd;
+    }
+
+    .question-text {
+      font-family: var(--font-chinese), 'Noto Sans SC', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    html.light-mode .question-text {
+      color: #0f172a;
+    }
+
+    .spin-btn {
+      flex-shrink: 0;
+      padding: 0 26px;
+      min-height: 72px;
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      border: 2px solid #60a5fa;
+      border-radius: 18px;
+      color: #ffffff;
+      font-size: 1.15rem;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+      user-select: none;
+    }
+
+    .spin-btn:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.5);
+      background: linear-gradient(135deg, #2563eb, #1e40af);
+    }
+
+    .spin-btn:active {
+      transform: translateY(1px);
+    }
+
+    .spin-btn.rolling i {
+      animation: spinRoll 0.5s ease;
+    }
+
+    @keyframes spinRoll {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Suggestion Box (Green Wireframe Style) */
+    .hint-trigger-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      border-radius: 12px;
+      background: rgba(34, 197, 94, 0.14);
+      border: 2px solid #22c55e;
+      color: #4ade80;
+      font-size: 0.96rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 18px;
+    }
+
+    .hint-trigger-btn:hover {
+      background: rgba(34, 197, 94, 0.25);
+      transform: translateY(-1px);
+    }
+
+    .hint-content-card {
+      background: rgba(15, 23, 42, 0.75);
+      border: 1.5px solid rgba(34, 197, 94, 0.4);
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 20px;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    html.light-mode .hint-content-card {
+      background: #f0fdf4;
+      border-color: #86efac;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Textarea */
     .writing-textarea {
       width: 100%;
-      min-height: 240px;
+      min-height: 220px;
       padding: 18px;
-      border-radius: 16px;
-      border: 1.5px solid rgba(168, 85, 247, 0.3);
-      background: rgba(15, 23, 42, 0.6);
+      border-radius: 18px;
+      border: 2px solid rgba(168, 85, 247, 0.35);
+      background: rgba(15, 23, 42, 0.65);
       color: #ffffff;
       font-family: var(--font-chinese), 'Noto Sans SC', sans-serif;
       font-size: 1.25rem;
@@ -281,110 +484,37 @@
       box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.25);
     }
 
-    html.light-mode .writing-textarea,
-    body.light-mode .writing-textarea {
-      background: #fdfdfd;
-      border: 1.5px solid #cbd5e1;
+    html.light-mode .writing-textarea {
+      background: #ffffff;
+      border-color: #cbd5e1;
       color: #0f172a;
     }
 
     html.light-mode .writing-textarea:focus {
-      background: #ffffff;
       border-color: #7c3aed;
       box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
     }
 
-    /* Keyword Tags */
-    .keyword-tag {
+    .submit-writing-btn {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      border: none;
+      color: #ffffff;
+      padding: 14px 30px;
+      border-radius: 16px;
+      font-weight: 900;
+      font-size: 1.1rem;
+      cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      background: rgba(56, 189, 248, 0.12);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      color: #38bdf8;
-      padding: 4px 12px;
-      border-radius: 99px;
-      font-size: 0.9rem;
-      font-weight: 700;
-      cursor: pointer;
-      user-select: none;
+      gap: 10px;
+      box-shadow: 0 6px 22px rgba(139, 92, 246, 0.45);
       transition: all 0.2s;
     }
 
-    .keyword-tag.used {
-      background: rgba(16, 185, 129, 0.18);
-      border-color: #10b981;
-      color: #34d399;
-    }
-
-    html.light-mode .keyword-tag {
-      background: #f0f9ff;
-      border-color: #bae6fd;
-      color: #0284c7;
-    }
-
-    html.light-mode .keyword-tag.used {
-      background: #f0fdf4;
-      border-color: #86efac;
-      color: #15803d;
-    }
-
-    /* Result Box Components */
-    .score-circle-badge {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: #ffffff;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-      flex-shrink: 0;
-    }
-
-    .criteria-progress-bar-bg {
-      height: 10px;
-      border-radius: 99px;
-      background: rgba(255, 255, 255, 0.1);
-      overflow: hidden;
-      margin-top: 6px;
-    }
-
-    html.light-mode .criteria-progress-bar-bg {
-      background: #e2e8f0;
-    }
-
-    .criteria-progress-bar-fill {
-      height: 100%;
-      border-radius: 99px;
-      transition: width 0.6s ease;
-    }
-
-    .error-diff-card {
-      background: rgba(239, 68, 68, 0.08);
-      border: 1.5px solid rgba(239, 68, 68, 0.25);
-      border-radius: 14px;
-      padding: 16px;
-      margin-bottom: 12px;
-    }
-
-    html.light-mode .error-diff-card {
-      background: #fff5f5;
-      border-color: #fecaca;
-    }
-
-    .native-rewrite-card {
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(56, 189, 248, 0.08));
-      border: 1.5px solid rgba(16, 185, 129, 0.3);
-      border-radius: 18px;
-      padding: 22px;
-      margin-bottom: 20px;
-    }
-
-    html.light-mode .native-rewrite-card {
-      background: #f0fdf4;
-      border-color: #bbf7d0;
+    .submit-writing-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(139, 92, 246, 0.6);
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
     }
   </style>
 </head>
@@ -392,7 +522,7 @@
 <body>
   <!-- Top App Navigation -->
   <header class="app-top-nav"
-    style="position: sticky; top: 0; z-index: 100; backdrop-filter: blur(16px); background: rgba(15, 23, 42, 0.85); border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding: 12px 20px;">
+    style="position: sticky; top: 0; z-index: 100; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); background: rgba(15, 23, 42, 0.88); border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding: 12px 20px;">
     <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
       <div style="display: flex; align-items: center; gap: 14px;">
         <button onclick="window.toggleGlobalSidebar && window.toggleGlobalSidebar()" class="sidebar-toggle-btn"
@@ -402,21 +532,21 @@
         <a href="/" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
           <img src="./src/assets/logo.png" alt="HongTai Logo" style="width: 36px; height: 36px; border-radius: 10px;">
           <div>
-            <span style="font-weight: 800; font-size: 1.15rem; color: #ffffff; display: block; line-height: 1.1;">Luyện
-              Viết Tiếng Trung</span>
-            <span style="font-size: 0.72rem; color: #a855f7; font-weight: 700;">AI Essay Grader &amp; Writing Hub</span>
+            <span style="font-weight: 800; font-size: 1.15rem; color: #ffffff; display: block; line-height: 1.1;">Luyện Viết Tiếng Trung</span>
+            <span style="font-size: 0.72rem; color: #a855f7; font-weight: 700;">HSKK Writing &amp; AI Grader</span>
           </div>
         </a>
       </div>
 
-      <div style="display: flex; align-items: center; gap: 12px;">
-        <a href="/" class="btn"
-          style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #cbd5e1; padding: 8px 14px; border-radius: 10px; font-weight: 700; font-size: 0.88rem; text-decoration: none; display: flex; align-items: center; gap: 6px;">
-          <i class="fa-solid fa-house"></i> <span class="hide-mobile">Trang chủ</span>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <!-- Switch to Speaking Skill Button -->
+        <a href="/speaking-practice.html" class="btn"
+          style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(217, 119, 6, 0.22)); border: 1.5px solid #f59e0b; color: #fbbf24; padding: 7px 14px; border-radius: 10px; font-weight: 800; font-size: 0.88rem; text-decoration: none; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-microphone-lines"></i> <span>Luyện Nói HSKK (3p-2p)</span>
         </a>
-        <a href="/vocab-practice.html" class="btn"
-          style="background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.35); color: #d8b4fe; padding: 8px 14px; border-radius: 10px; font-weight: 700; font-size: 0.88rem; text-decoration: none; display: flex; align-items: center; gap: 6px;">
-          <i class="fa-solid fa-graduation-cap"></i> <span class="hide-mobile">Ôn từ vựng</span>
+        <a href="/" class="btn hide-mobile"
+          style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #cbd5e1; padding: 7px 12px; border-radius: 10px; font-weight: 700; font-size: 0.88rem; text-decoration: none; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-house"></i> <span>Trang chủ</span>
         </a>
         <button class="btn theme-toggle-btn" onclick="window.toggleTheme()"
           style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #f59e0b; width: 38px; height: 38px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
@@ -434,159 +564,186 @@
       <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
         <div style="max-width: 780px;">
           <div
-            style="display: inline-flex; align-items: center; gap: 8px; background: rgba(139, 92, 246, 0.2); border: 1px solid rgba(168, 85, 247, 0.4); padding: 4px 14px; border-radius: 99px; font-size: 0.82rem; font-weight: 800; color: #d8b4fe; margin-bottom: 12px;">
-            <span>🤖 AI HongTai Trợ Giảng Chấm Bài 24/7</span>
+            style="display: inline-flex; align-items: center; gap: 8px; background: rgba(139, 92, 246, 0.2); border: 1px solid rgba(168, 85, 247, 0.4); padding: 4px 14px; border-radius: 99px; font-size: 0.82rem; font-weight: 800; color: #d8b4fe; margin-bottom: 10px;">
+            <span>✍️ Luyện Viết HSKK Thực Chiến</span>
             <span>&bull;</span>
-            <span>Chuẩn Format HSK 1 - 6</span>
+            <span>Kho 1,045 Đề Sơ - Trung - Cao</span>
           </div>
-          <h1 style="font-size: 1.85rem; font-weight: 900; margin: 0 0 10px 0; color: var(--text-primary, #ffffff); line-height: 1.25;">
-            Phòng Luyện Viết Tiếng Trung & AI Chấm Bài Luận Chuyên Sâu
+          <h1 style="font-size: 1.85rem; font-weight: 900; margin: 0 0 8px 0; color: var(--text-primary, #ffffff); line-height: 1.25;">
+            Luyện Viết &amp; AI Tự Động Đề Xuất Dàn Ý Chấm Điểm
           </h1>
-          <p style="font-size: 0.96rem; color: var(--text-secondary, #94a3b8); margin: 0; line-height: 1.6;">
-            Thực hành viết tiếng Trung tự do hoặc theo đề bài mẫu. AI phân tích toàn diện 4 tiêu chí chuẩn thi HSK, chỉ
-            rõ lỗi sai từng câu, viết lại văn phong người bản xứ và gợi ý từ vựng nâng điểm.
+          <p style="font-size: 0.94rem; color: var(--text-secondary, #94a3b8); margin: 0; line-height: 1.6;">
+            Quay ngẫu nhiên đề thi HSKK, xem AI gợi ý dàn bài &amp; từ vựng then chốt, soạn bài và nhận ngay bản nhận xét sửa lỗi chi tiết 4 tiêu chí.
           </p>
         </div>
 
-        <div style="display: flex; gap: 12px;">
-          <div
-            style="text-align: center; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; padding: 10px 16px;">
-            <div style="font-size: 1.4rem; font-weight: 900; color: #38bdf8;">100%</div>
-            <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 700;">Tự Động &amp; Tức Thì</div>
+        <div style="display: flex; gap: 10px;">
+          <div style="text-align: center; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; padding: 8px 14px;">
+            <div style="font-size: 1.35rem; font-weight: 900; color: #38bdf8;" id="total-questions-stat">1,045</div>
+            <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 700;">Câu hỏi HSKK</div>
           </div>
-          <div
-            style="text-align: center; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; padding: 10px 16px;">
-            <div style="font-size: 1.4rem; font-weight: 900; color: #10b981;">HSK 1-6</div>
-            <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 700;">Kho Đề Phong Phú</div>
+          <div style="text-align: center; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; padding: 8px 14px;">
+            <div style="font-size: 1.35rem; font-weight: 900; color: #10b981;">AI 24/7</div>
+            <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 700;">Chấm tức thì</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 2 MAIN MODE TABS -->
-    <div class="writing-mode-switcher">
-      <button id="tab-btn-free" class="writing-mode-btn active" onclick="switchWritingMode('free')">
-        <i class="fa-solid fa-feather-pointed"></i>
-        <span>1. Chấm Điểm Bài Viết Tự Do</span>
-      </button>
-      <button id="tab-btn-prompt" class="writing-mode-btn" onclick="switchWritingMode('prompt')">
-        <i class="fa-solid fa-list-check"></i>
-        <span>2. Luyện Viết Theo Đề Bài (HSK 1 - 6)</span>
-      </button>
-    </div>
+    <!-- 3 CARDS ROW (EXACT MATCH USER DRAWING 1) -->
+    <div class="wf-cards-grid">
+      <!-- Card 1: Nhìn tranh [KHÓA] -->
+      <div class="wf-card-box locked" onclick="alert('Tính năng Luyện Viết Miêu Tả Tranh đang được hoàn thiện và sẽ sớm ra mắt nhé!')" title="Tính năng đang được phát triển">
+        <i class="fa-solid fa-image wf-card-icon"></i>
+        <div class="wf-card-title">Nhìn tranh</div>
+        <div class="wf-card-sub">Miêu tả tranh HSK</div>
+        <span class="wf-lock-badge"><i class="fa-solid fa-lock"></i> KHÓA</span>
+      </div>
 
-    <!-- VIEW 1: FREE WRITING MODE -->
-    <div id="view-free-mode">
-      <div class="writing-card-panel">
-        <!-- Level pills -->
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px;">
-          <div>
-            <span style="font-size: 0.88rem; font-weight: 800; color: var(--text-primary, #ffffff); margin-right: 8px;">Mục Tiêu Trình Độ:</span>
-            <div class="level-pills-row" style="display: inline-flex; margin-bottom: 0;">
-              <button class="level-pill-btn active" data-lvl="auto" onclick="setFreeLevel('auto', this)">Tự do</button>
-              <button class="level-pill-btn" data-lvl="1" onclick="setFreeLevel('1', this)">HSK 1</button>
-              <button class="level-pill-btn" data-lvl="2" onclick="setFreeLevel('2', this)">HSK 2</button>
-              <button class="level-pill-btn" data-lvl="3" onclick="setFreeLevel('3', this)">HSK 3</button>
-              <button class="level-pill-btn" data-lvl="4" onclick="setFreeLevel('4', this)">HSK 4</button>
-              <button class="level-pill-btn" data-lvl="5" onclick="setFreeLevel('5', this)">HSK 5</button>
-              <button class="level-pill-btn" data-lvl="6" onclick="setFreeLevel('6', this)">HSK 6</button>
-            </div>
-          </div>
+      <!-- Card 2: Trả lời câu hỏi (Active) -->
+      <div class="wf-card-box active" id="wf-card-qa" onclick="selectWritingMode('qa')">
+        <i class="fa-solid fa-comments-dollar wf-card-icon"></i>
+        <div class="wf-card-title">Trả lời câu hỏi</div>
+        <div class="wf-card-sub">1,045 đề thi HSKK</div>
+        <span style="font-size: 0.72rem; color: #d8b4fe; font-weight: 800; margin-top: 6px;">
+          <i class="fa-solid fa-sparkles"></i> Đang mở
+        </span>
+      </div>
 
-          <!-- Quick Action Buttons -->
-          <div style="display: flex; gap: 8px;">
-            <button onclick="pasteFromClipboard()" class="btn"
-              style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; padding: 6px 12px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer;">
-              <i class="fa-solid fa-paste"></i> Dán văn bản
-            </button>
-            <button onclick="loadSampleText()" class="btn"
-              style="background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); color: #38bdf8; padding: 6px 12px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer;">
-              <i class="fa-solid fa-file-lines"></i> Mẫu bài văn
-            </button>
-            <button onclick="clearWritingInput()" class="btn"
-              style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; padding: 6px 12px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer;">
-              <i class="fa-solid fa-trash-can"></i> Xóa
-            </button>
-          </div>
-        </div>
-
-        <!-- Textarea -->
-        <div class="writing-textarea-wrapper">
-          <textarea id="free-writing-input" class="writing-textarea"
-            placeholder="Gõ hoặc dán toàn bộ bài văn, đoạn văn, bài tập về nhà hoặc nhật ký tiếng Trung của bạn tại đây...&#10;&#10;Ví dụ: 我叫小明，今年二十岁。我很喜欢学中文，因为我想去中国旅游和工作..."
-            oninput="handleTextInputChange('free')"></textarea>
-        </div>
-
-        <!-- Word count and submit bar -->
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
-          <div style="display: flex; align-items: center; gap: 16px; font-size: 0.9rem; color: #94a3b8; font-weight: 700;">
-            <span><i class="fa-solid fa-font"></i> Số chữ Hán: <strong id="free-char-count" style="color: #38bdf8; font-size: 1.15rem;">0</strong> chữ</span>
-            <span><i class="fa-solid fa-align-left"></i> Số đoạn: <strong id="free-para-count" style="color: #a855f7;">0</strong></span>
-            <span><i class="fa-solid fa-clock"></i> Thời gian đọc: <strong id="free-read-time" style="color: #fbbf24;">0s</strong></span>
-          </div>
-
-          <button id="free-submit-btn" onclick="submitEssayForGrading('free')" class="btn btn-primary"
-            style="background: linear-gradient(135deg, #8b5cf6, #7c3aed); border: none; color: #ffffff; padding: 14px 28px; border-radius: 14px; font-weight: 800; font-size: 1.05rem; cursor: pointer; display: flex; align-items: center; gap: 10px; box-shadow: 0 6px 20px rgba(139,92,246,0.4); transition: transform 0.15s;">
-            <i class="fa-solid fa-wand-magic-sparkles"></i> <span>AI Chấm Điểm &amp; Sửa Lỗi (Ctrl + Enter)</span>
-          </button>
-        </div>
+      <!-- Card 3: Viết tự do / Mở rộng -->
+      <div class="wf-card-box" id="wf-card-free" onclick="selectWritingMode('free')">
+        <i class="fa-solid fa-feather-pointed wf-card-icon"></i>
+        <div class="wf-card-title">Viết tự do</div>
+        <div class="wf-card-sub">Chấm bài văn tùy ý</div>
+        <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 700; margin-top: 6px;">Tự nhập đề bài</span>
       </div>
     </div>
 
-    <!-- VIEW 2: TOPIC-BASED PROMPT MODE -->
-    <div id="view-prompt-mode" style="display: none;">
-      <div class="writing-card-panel">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
-          <div>
-            <span style="font-size: 0.88rem; font-weight: 800; color: var(--text-primary, #ffffff); margin-right: 8px;">Cấp Độ Đề Bài:</span>
-            <div class="level-pills-row" style="display: inline-flex; margin-bottom: 0;">
-              <button class="level-pill-btn" data-lvl="1" onclick="switchPromptLevel(1, this)">HSK 1</button>
-              <button class="level-pill-btn" data-lvl="2" onclick="switchPromptLevel(2, this)">HSK 2</button>
-              <button class="level-pill-btn active" data-lvl="3" onclick="switchPromptLevel(3, this)">HSK 3</button>
-              <button class="level-pill-btn" data-lvl="4" onclick="switchPromptLevel(4, this)">HSK 4</button>
-              <button class="level-pill-btn" data-lvl="5" onclick="switchPromptLevel(5, this)">HSK 5</button>
-              <button class="level-pill-btn" data-lvl="6" onclick="switchPromptLevel(6, this)">HSK 6</button>
-            </div>
-          </div>
+    <!-- Arrow down indicator for active card -->
+    <div class="wf-arrow-down" id="wf-pointer-arrow">
+      <i class="fa-solid fa-arrow-down"></i>
+    </div>
 
-          <button onclick="generateAiTopicPrompt()" id="generate-topic-btn" class="btn"
-            style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(217, 119, 6, 0.18)); border: 1.5px solid #f59e0b; color: #fbbf24; padding: 8px 16px; border-radius: 12px; font-size: 0.88rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px;">
-            <i class="fa-solid fa-dice"></i> <span>🎲 Tạo Đề Mới Bằng AI</span>
+    <!-- MAIN PRACTICE WORKSPACE (CARD 2: TRẢ LỜI CÂU HỎI HSKK) -->
+    <section id="qa-workspace-view" class="writing-card-panel">
+      <!-- 1. Trình độ selector -->
+      <div class="level-select-row">
+        <span style="font-weight: 900; font-size: 1.05rem; color: var(--text-primary, #ffffff); margin-right: 6px;">
+          Trình độ:
+        </span>
+        <button class="level-btn" id="lvl-btn-so" onclick="switchHskkLevel('so', this)">
+          <span>Sơ</span> <span style="font-size: 0.75rem; opacity: 0.85;">(195 đề)</span>
+        </button>
+        <button class="level-btn active" id="lvl-btn-trung" onclick="switchHskkLevel('trung', this)">
+          <span>Trung</span> <span style="font-size: 0.75rem; opacity: 0.85;">(450 đề)</span>
+        </button>
+        <button class="level-btn" id="lvl-btn-cao" onclick="switchHskkLevel('cao', this)">
+          <span>Cao</span> <span style="font-size: 0.75rem; opacity: 0.85;">(400 đề)</span>
+        </button>
+      </div>
+
+      <!-- 2. Đề display box & Quay button -->
+      <div style="margin-bottom: 8px;">
+        <span style="font-weight: 900; font-size: 1.1rem; color: var(--text-primary, #ffffff);">
+          Đề:
+        </span>
+      </div>
+      <div class="question-display-card">
+        <div class="question-box">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+            <span id="question-meta-badge" style="font-size: 0.78rem; font-weight: 800; color: #38bdf8; background: rgba(56, 189, 248, 0.15); padding: 3px 10px; border-radius: 99px;">
+              Câu 1 • HSKK Trung cấp
+            </span>
+            <button onclick="playQuestionTts()" title="Nghe phát âm đề bài"
+              style="background: transparent; border: none; color: #38bdf8; font-size: 1.1rem; cursor: pointer;">
+              <i class="fa-solid fa-volume-high"></i>
+            </button>
+          </div>
+          <p class="question-text" id="active-question-text">
+            请谈谈你最喜欢的一个季节，并说明理由。
+          </p>
+        </div>
+
+        <!-- Button Quay (Random) -->
+        <button class="spin-btn" id="spin-question-btn" onclick="spinRandomQuestion()" title="Quay ngẫu nhiên một đề thi khác">
+          <i class="fa-solid fa-dice" style="font-size: 1.5rem;"></i>
+          <span>Quay</span>
+          <span style="font-size: 0.7rem; font-weight: 700; opacity: 0.85;">Random</span>
+        </button>
+      </div>
+
+      <!-- 3. Button Gợi ý (Green Wireframe Button -> AI Dàn bài & Từ vựng) -->
+      <div>
+        <button class="hint-trigger-btn" id="hint-toggle-btn" onclick="toggleAiSuggestions()">
+          <i class="fa-solid fa-lightbulb"></i>
+          <span>Gợi ý</span>
+          <span style="font-size: 0.82rem; font-weight: 600; opacity: 0.9;">&rarr; Dàn bài &bull; Từ vựng &bull; Cấu trúc câu (AI đề xuất)</span>
+        </button>
+      </div>
+
+      <!-- Expandable AI Suggestion Content -->
+      <div class="hint-content-card" id="ai-suggestion-box">
+        <!-- Content dynamically rendered by JS -->
+      </div>
+
+      <!-- 4. Textarea: Viết rồi đưa AI chấm -->
+      <div style="position: relative; margin-bottom: 16px;">
+        <textarea id="qa-writing-input" class="writing-textarea"
+          placeholder="... Viết rồi đưa AI chấm (Gõ câu trả lời bằng tiếng Trung của bạn tại đây)..."
+          oninput="handleQaTextInput()"></textarea>
+      </div>
+
+      <!-- Word count and Submit Bar -->
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 16px; font-size: 0.92rem; color: #94a3b8; font-weight: 700;">
+          <span><i class="fa-solid fa-font"></i> Số chữ Hán: <strong id="qa-char-count" style="color: #38bdf8; font-size: 1.2rem;">0</strong> chữ</span>
+          <span class="hide-mobile"><i class="fa-solid fa-align-left"></i> Đoạn: <strong id="qa-para-count" style="color: #a855f7;">0</strong></span>
+          <button onclick="clearQaInput()" style="background: transparent; border: none; color: #f87171; cursor: pointer; font-size: 0.82rem; font-weight: 700;">
+            <i class="fa-solid fa-trash-can"></i> Xóa chữ
           </button>
         </div>
 
-        <!-- Prompt Carousel / Selector -->
-        <div id="prompt-topics-list" style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 18px;">
-          <!-- Populated by JS -->
+        <button id="qa-submit-btn" onclick="submitQaForGrading()" class="submit-writing-btn">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Viết rồi đưa AI chấm (Ctrl + Enter)</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- FREE WRITING WORKSPACE (CARD 3) -->
+    <section id="free-workspace-view" class="writing-card-panel" style="display: none;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 900; color: #ffffff; margin: 0 0 4px 0;">Chấm Điểm Bài Viết Tự Do</h2>
+          <p style="font-size: 0.86rem; color: #94a3b8; margin: 0;">Gõ hoặc dán bài văn, nhật ký hoặc bài tập của bạn để AI chấm toàn diện.</p>
         </div>
-
-        <!-- Active Topic Details Box -->
-        <div id="active-topic-card"
-          style="background: rgba(15, 23, 42, 0.55); border: 1.5px solid rgba(56, 189, 248, 0.35); border-radius: 16px; padding: 20px; margin-bottom: 20px;">
-          <!-- Populated by JS -->
-        </div>
-
-        <!-- Prompt Textarea -->
-        <div class="writing-textarea-wrapper">
-          <textarea id="prompt-writing-input" class="writing-textarea"
-            placeholder="Viết bài văn tiếng Trung của bạn theo đề bài trên..."
-            oninput="handleTextInputChange('prompt')"></textarea>
-        </div>
-
-        <!-- Keywords Tracker & Submit -->
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
-          <div style="display: flex; align-items: center; gap: 16px; font-size: 0.9rem; color: #94a3b8; font-weight: 700;">
-            <span><i class="fa-solid fa-font"></i> Số chữ: <strong id="prompt-char-count" style="color: #38bdf8; font-size: 1.15rem;">0</strong> / <span id="prompt-min-target">80</span></span>
-            <span id="prompt-keywords-status" style="color: #10b981;"><i class="fa-solid fa-check-double"></i> Từ khóa: 0/4</span>
-          </div>
-
-          <button id="prompt-submit-btn" onclick="submitEssayForGrading('prompt')" class="btn btn-primary"
-            style="background: linear-gradient(135deg, #8b5cf6, #7c3aed); border: none; color: #ffffff; padding: 14px 28px; border-radius: 14px; font-weight: 800; font-size: 1.05rem; cursor: pointer; display: flex; align-items: center; gap: 10px; box-shadow: 0 6px 20px rgba(139,92,246,0.4);">
-            <i class="fa-solid fa-paper-plane"></i> <span>Nộp Bài Chấm Điểm Theo Đề</span>
+        <div style="display: flex; gap: 8px;">
+          <button onclick="pasteFromClipboard()" class="btn"
+            style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; padding: 6px 12px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer;">
+            <i class="fa-solid fa-paste"></i> Dán văn bản
+          </button>
+          <button onclick="clearWritingInput()" class="btn"
+            style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; padding: 6px 12px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer;">
+            <i class="fa-solid fa-trash-can"></i> Xóa
           </button>
         </div>
       </div>
-    </div>
+
+      <div style="position: relative; margin-bottom: 16px;">
+        <textarea id="free-writing-input" class="writing-textarea"
+          placeholder="Gõ hoặc dán nội dung bài viết tiếng Trung của bạn tại đây...&#10;&#10;Ví dụ: 我叫小明，今年二十岁。我很喜欢学中文，因为我想去中国旅游和工作..."
+          oninput="handleTextInputChange('free')"></textarea>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 16px; font-size: 0.9rem; color: #94a3b8; font-weight: 700;">
+          <span><i class="fa-solid fa-font"></i> Số chữ Hán: <strong id="free-char-count" style="color: #38bdf8; font-size: 1.15rem;">0</strong> chữ</span>
+        </div>
+
+        <button id="free-submit-btn" onclick="submitEssayForGrading('free')" class="submit-writing-btn">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> <span>AI Chấm Điểm &amp; Sửa Lỗi</span>
+        </button>
+      </div>
+    </section>
 
     <!-- AI EVALUATION RESULTS CONTAINER (Shared) -->
     <section id="ai-evaluation-results" style="display: none;">

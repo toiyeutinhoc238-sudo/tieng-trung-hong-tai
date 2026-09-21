@@ -31,6 +31,7 @@ export default defineConfig({
         rank: resolve(__dirname, 'rank.html'),
         dictation: resolve(__dirname, 'video-dictation.html'),
         writing: resolve(__dirname, 'writing-practice.html'),
+        speaking: resolve(__dirname, 'speaking-practice.html'),
         documents: resolve(__dirname, 'documents.html')
       }
     }
