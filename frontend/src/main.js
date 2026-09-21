@@ -4883,6 +4883,9 @@ function switchTab(tabId, skipShowTopics = false) {
   else if (tabId === 'roadmap') {
     setDisp(roadmapSec, 'block');
     setDisp(lessonsSec, 'none');
+    if (typeof renderRoadmapBookshelf === 'function') {
+      renderRoadmapBookshelf();
+    }
     renderGamifiedRoadmapPath();
   }
   else if (tabId === 'lessons') {
@@ -4955,6 +4958,11 @@ function showHomeView() {
 
 function showRoadmapView() {
   switchTab('roadmap');
+  if (typeof window.setRoadmapViewMode === 'function') {
+    window.setRoadmapViewMode('bookshelf');
+  } else if (typeof renderRoadmapBookshelf === 'function') {
+    renderRoadmapBookshelf();
+  }
   if (window.innerWidth <= 900 && typeof window.closeGlobalSidebar === 'function') {
     window.closeGlobalSidebar();
   }
@@ -4967,7 +4975,380 @@ window.returnToHskLevelSelection = function () {
   if (lessonsSec) lessonsSec.style.display = 'none';
   if (roadmapSec) roadmapSec.style.display = 'block';
   switchTab('roadmap');
+  if (typeof renderRoadmapBookshelf === 'function') {
+    renderRoadmapBookshelf();
+  }
+  if (roadmapSec) {
+    roadmapSec.scrollIntoView({ behavior: 'smooth' });
+  }
 };
+
+// --- ROADMAP BOOKSHELF LOGIC ---
+let roadmapBookshelfFilter = 'all';
+let roadmapViewMode = 'bookshelf'; // 'bookshelf' or 'trail'
+
+window.setRoadmapViewMode = function (mode) {
+  roadmapViewMode = mode;
+  const bookshelfEl = document.getElementById('roadmap-bookshelf-container');
+  const trailEl = document.getElementById('roadmap-path-nodes-container');
+  const btnBookshelf = document.getElementById('btn-roadmap-view-bookshelf');
+  const btnTrail = document.getElementById('btn-roadmap-view-trail');
+
+  if (btnBookshelf) btnBookshelf.classList.toggle('active', mode === 'bookshelf');
+  if (btnTrail) btnTrail.classList.toggle('active', mode === 'trail');
+
+  if (mode === 'bookshelf') {
+    if (bookshelfEl) bookshelfEl.style.display = 'block';
+    if (trailEl) trailEl.style.display = 'none';
+    renderRoadmapBookshelf();
+  } else {
+    if (bookshelfEl) bookshelfEl.style.display = 'none';
+    if (trailEl) trailEl.style.display = 'block';
+    renderGamifiedRoadmapPath();
+  }
+};
+
+window.filterRoadmapBookshelf = function (filter) {
+  roadmapBookshelfFilter = filter;
+  const pillsContainer = document.getElementById('roadmap-shelf-filter-pills');
+  if (pillsContainer) {
+    pillsContainer.querySelectorAll('.roadmap-filter-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-filter') === filter);
+    });
+  }
+  renderRoadmapBookshelf();
+};
+
+function renderRoadmapBookshelf() {
+  const container = document.getElementById('roadmap-bookshelf-container');
+  if (!container) return;
+
+  const safeEscape = typeof escapeHtml === 'function'
+    ? escapeHtml
+    : (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+  // 4 Core Shelves
+  const shelves = [
+    {
+      id: 'hsk3',
+      title: 'Giáo Trình HSK 3.0 Mới Nhất',
+      subtitle: 'Bộ giáo trình tiêu chuẩn quốc tế mới nhất (Cấp 1 - Cấp 7-9)',
+      accentColor: '#10b981',
+      mascotImg: '/assets/dragon_award_mascot.png',
+      books: [
+        {
+          ver: '3.0',
+          level: 1,
+          title: '新 HSK 教程 1 (HSK 3.0)',
+          tag: 'HSK 3.0 Cấp 1',
+          coverUrl: '/covers/hsk3/hsk1.jpg',
+          desc: 'Giáo trình HSK 3.0 cấp độ 1 sơ cấp chuẩn quốc tế'
+        },
+        {
+          ver: '3.0',
+          level: 2,
+          title: '新 HSK 教程 2 (HSK 3.0)',
+          tag: 'HSK 3.0 Cấp 2',
+          coverUrl: '/covers/hsk3/hsk2.jpg',
+          desc: 'Giáo trình HSK 3.0 cấp độ 2 sơ cấp nâng cao'
+        },
+        {
+          ver: '3.0',
+          level: 3,
+          title: '新 HSK 教程 3 (HSK 3.0)',
+          tag: 'HSK 3.0 Cấp 3',
+          coverUrl: '/covers/hsk3/hsk3.jpg',
+          desc: 'Giáo trình HSK 3.0 cấp độ 3 sơ cấp hoàn chỉnh'
+        },
+        {
+          ver: '3.0',
+          level: 4,
+          title: '新 HSK 教程 4 (HSK 3.0)',
+          tag: 'HSK 3.0 Cấp 4',
+          coverUrl: '/covers/hsk3/hsk4.jpg',
+          desc: 'Giáo trình HSK 3.0 cấp độ 4 trung cấp cơ bản'
+        },
+        {
+          ver: '3.0',
+          level: 5,
+          title: '新 HSK 教程 5 (HSK 3.0)',
+          tag: 'HSK 3.0 Cấp 5',
+          color: '#f59e0b',
+          desc: 'Giáo trình HSK 3.0 cấp độ 5 trung cấp nâng cao'
+        },
+        {
+          ver: '3.0',
+          level: 6,
+          title: '新 HSK 教程 6 (HSK 3.0)',
+          tag: 'HSK 3.0 Cấp 6',
+          color: '#8b5cf6',
+          desc: 'Giáo trình HSK 3.0 cấp độ 6 cao cấp'
+        },
+        {
+          ver: '3.0',
+          level: '7-9',
+          title: '新 HSK 教程 7-9 (HSK 3.0)',
+          tag: 'HSK 3.0 Cấp 7-9',
+          color: '#ec4899',
+          desc: 'Giáo trình HSK 3.0 cấp 7-8-9 trình độ chuyên gia'
+        }
+      ]
+    },
+    {
+      id: 'hsk2',
+      title: 'Giáo Trình Chuẩn HSK 2.0',
+      subtitle: 'Bộ giáo trình 6 cấp độ chuẩn hóa kinh điển (HSK 1 - HSK 6)',
+      accentColor: '#3b82f6',
+      mascotImg: '/assets/hongtai_dragon_mascot.png',
+      books: [
+        {
+          ver: '2.0',
+          level: 1,
+          title: 'Giáo Trình Chuẩn HSK 1',
+          tag: 'HSK 2.0 Cấp 1',
+          coverUrl: '/covers/hsk2/hsk1.jpg',
+          desc: 'Giáo trình chuẩn HSK 1 sơ cấp cơ bản 150 từ vựng'
+        },
+        {
+          ver: '2.0',
+          level: 2,
+          title: 'Giáo Trình Chuẩn HSK 2',
+          tag: 'HSK 2.0 Cấp 2',
+          coverUrl: '/covers/hsk2/hsk2.jpg',
+          desc: 'Giáo trình chuẩn HSK 2 sơ cấp giao tiếp 300 từ vựng'
+        },
+        {
+          ver: '2.0',
+          level: 3,
+          title: 'Giáo Trình Chuẩn HSK 3',
+          tag: 'HSK 2.0 Cấp 3',
+          coverUrl: '/covers/hsk2/hsk3.jpg',
+          desc: 'Giáo trình chuẩn HSK 3 trung cấp gồm 20 bài học 600 từ vựng'
+        },
+        {
+          ver: '2.0',
+          level: 4,
+          title: 'Giáo Trình Chuẩn HSK 4',
+          tag: 'HSK 2.0 Cấp 4',
+          coverUrl: '/covers/hsk2/hsk4.jpg',
+          desc: 'Giáo trình chuẩn HSK 4 gồm 20 chủ đề chuyên sâu 1,200 từ vựng'
+        },
+        {
+          ver: '2.0',
+          level: 5,
+          title: 'Giáo Trình Chuẩn HSK 5',
+          tag: 'HSK 2.0 Cấp 5',
+          coverUrl: '/covers/hsk2/hsk5.jpg',
+          desc: 'Giáo trình chuẩn HSK 5 cao cấp 2,500 từ vựng'
+        },
+        {
+          ver: '2.0',
+          level: 6,
+          title: 'Giáo Trình Chuẩn HSK 6',
+          tag: 'HSK 2.0 Cấp 6',
+          coverUrl: '/covers/hsk2/hsk6.jpg',
+          desc: 'Giáo trình chuẩn HSK 6 thành thạo 5,000 từ vựng'
+        }
+      ]
+    },
+    {
+      id: 'hanngu',
+      title: 'Giáo Trình Hán Ngữ 6 Cuốn (Đại Học)',
+      subtitle: 'Bản dịch song ngữ Trung - Việt chuẩn Đại học (Quyển 1 - 6)',
+      accentColor: '#f59e0b',
+      mascotImg: '/assets/logo.png',
+      books: [
+        {
+          ver: 'hanngu',
+          level: 1,
+          title: 'Giáo Trình Hán Ngữ 1',
+          tag: 'Quyển 1 Thượng',
+          color: '#eab308',
+          desc: 'Giáo trình Hán ngữ quyển 1 cơ bản, phát âm Pinyin & nét bút'
+        },
+        {
+          ver: 'hanngu',
+          level: 2,
+          title: 'Giáo Trình Hán Ngữ 2',
+          tag: 'Quyển 1 Hạ',
+          color: '#16a34a',
+          desc: 'Giáo trình Hán ngữ quyển 2, ngữ pháp câu và đàm thoại hàng ngày'
+        },
+        {
+          ver: 'hanngu',
+          level: 3,
+          title: 'Giáo Trình Hán Ngữ 3',
+          tag: 'Quyển 2 Thượng',
+          color: '#ea580c',
+          desc: 'Giáo trình Hán ngữ quyển 3, ngữ pháp trung cấp và mở rộng diễn đạt'
+        },
+        {
+          ver: 'hanngu',
+          level: 4,
+          title: 'Giáo Trình Hán Ngữ 4',
+          tag: 'Quyển 2 Hạ',
+          color: '#2563eb',
+          desc: 'Giáo trình Hán ngữ quyển 4, từ vựng chuyên đề và đối thoại chuyên sâu'
+        },
+        {
+          ver: 'hanngu',
+          level: 5,
+          title: 'Giáo Trình Hán Ngữ 5',
+          tag: 'Quyển 3 Thượng',
+          color: '#9333ea',
+          desc: 'Giáo trình Hán ngữ quyển 5, văn phong học thuật và nghị luận'
+        },
+        {
+          ver: 'hanngu',
+          level: 6,
+          title: 'Giáo Trình Hán Ngữ 6',
+          tag: 'Quyển 3 Hạ',
+          color: '#0f766e',
+          desc: 'Giáo trình Hán ngữ quyển 6, hoàn thiện đọc hiểu và ngữ cảm bản xứ'
+        }
+      ]
+    },
+    {
+      id: 'yct',
+      title: 'Giáo Trình Thiếu Nhi YCT',
+      subtitle: 'Chương trình chuẩn hóa dành cho học sinh tiểu học & thiếu nhi (Cấp 1 - 4)',
+      accentColor: '#f43f5e',
+      mascotImg: '/assets/dragon_award_mascot.png',
+      books: [
+        {
+          ver: 'yct',
+          level: 1,
+          title: 'Giáo Trình YCT Cấp 1',
+          tag: 'YCT Cấp 1',
+          color: '#f43f5e',
+          desc: 'Giáo trình YCT cấp 1 nhập môn sinh động cho thiếu nhi'
+        },
+        {
+          ver: 'yct',
+          level: 2,
+          title: 'Giáo Trình YCT Cấp 2',
+          tag: 'YCT Cấp 2',
+          color: '#f59e0b',
+          desc: 'Giáo trình YCT cấp 2 mở rộng vốn từ đời sống gần gũi'
+        },
+        {
+          ver: 'yct',
+          level: 3,
+          title: 'Giáo Trình YCT Cấp 3',
+          tag: 'YCT Cấp 3',
+          color: '#10b981',
+          desc: 'Giáo trình YCT cấp 3 giao tiếp tự tin ở trường học'
+        },
+        {
+          ver: 'yct',
+          level: 4,
+          title: 'Giáo Trình YCT Cấp 4',
+          tag: 'YCT Cấp 4',
+          color: '#3b82f6',
+          desc: 'Giáo trình YCT cấp 4 hoàn thiện kỹ năng tiếng Trung toàn diện'
+        }
+      ]
+    }
+  ];
+
+  // Filter shelves
+  const filteredShelves = (roadmapBookshelfFilter === 'all')
+    ? shelves
+    : shelves.filter(s => s.id === roadmapBookshelfFilter);
+
+  const builtInVocabs = vocabList.filter(w => !w.isCustom);
+
+  let html = '';
+
+  filteredShelves.forEach(shelf => {
+    const booksHtml = shelf.books.map(b => {
+      const bookWords = builtInVocabs.filter(w => {
+        const curr = (w.curriculum || 'hsk').toLowerCase();
+        const ver = (w.hskVersion || '3.0').toLowerCase();
+        if (b.ver === 'hanngu') return (curr === 'hanngu' || ver === 'hanngu') && matchLevel(w.level, b.level);
+        if (b.ver === 'yct') return (curr.includes('yct') || ver.includes('yct')) && matchLevel(w.level, b.level);
+        if (b.ver === '2.0') return !curr.includes('yct') && !ver.includes('yct') && curr !== 'hanngu' && ver !== 'hanngu' && (ver.includes('2') || ver === '2.0') && matchLevel(w.level, b.level);
+        return !curr.includes('yct') && !ver.includes('yct') && curr !== 'hanngu' && ver !== 'hanngu' && (ver.includes('3') || ver === '3.0' || w.hskVersion === '3.0') && matchLevel(w.level, b.level);
+      });
+
+      const totalWords = bookWords.length;
+      const memorizedWords = bookWords.filter(w => w.isMemorized).length;
+      const pct = totalWords > 0 ? Math.round((memorizedWords / totalWords) * 100) : 0;
+
+      let badgeHtml = '';
+      if (pct === 100 && totalWords > 0) {
+        badgeHtml = `<span class="comic-book-status-badge done"><i class="fa-solid fa-crown"></i> 100% Xong</span>`;
+      } else if (pct > 0) {
+        badgeHtml = `<span class="comic-book-status-badge reading"><i class="fa-solid fa-bolt"></i> ${pct}% (${memorizedWords}/${totalWords})</span>`;
+      } else {
+        badgeHtml = `<span class="comic-book-status-badge available"><i class="fa-solid fa-play"></i> ${totalWords > 0 ? `${totalWords} từ` : 'Bắt đầu'}</span>`;
+      }
+
+      let innerCoverHtml = '';
+      if (b.coverUrl) {
+        innerCoverHtml = `<img src="${b.coverUrl}" alt="${safeEscape(b.title)}" class="comic-book-cover-img" loading="lazy">`;
+      } else {
+        const volNumStr = String(b.level).replace(/\D/g, '') || b.level;
+        innerCoverHtml = `
+          <div class="styled-vol-card" style="background: linear-gradient(145deg, ${b.color || '#3b82f6'}, #0f172a 130%);">
+            <div class="vol-sub">${safeEscape(b.tag || 'Giáo Trình')}</div>
+            <div class="vol-name">${safeEscape(b.title)}</div>
+            <div class="vol-center-pattern">
+              <div class="pattern-grid">
+                <div class="pattern-cell" style="background: rgba(255,255,255,0.7);"></div>
+                <div class="pattern-cell" style="background: rgba(255,255,255,0.3);"></div>
+                <div class="pattern-cell" style="background: rgba(255,255,255,0.8);"></div>
+                <div class="pattern-cell" style="background: rgba(255,255,255,0.4);"></div>
+                <div class="pattern-cell" style="background: rgba(255,255,255,0.9);"></div>
+                <div class="pattern-cell" style="background: rgba(255,255,255,0.5);"></div>
+                <div class="pattern-cell" style="background: rgba(255,255,255,0.6);"></div>
+                <div class="pattern-cell" style="background: rgba(255,255,255,0.85);"></div>
+                <div class="pattern-cell" style="background: rgba(255,255,255,0.35);"></div>
+              </div>
+            </div>
+            <div class="vol-footer">
+              <div class="vol-foot-label">HongTai<br>Roadmap</div>
+              <div class="vol-number-badge">${volNumStr}</div>
+            </div>
+          </div>
+        `;
+      }
+
+      const safeTitle = safeEscape(b.title);
+      const levelArg = typeof b.level === 'string' ? `'${b.level}'` : b.level;
+
+      return `
+        <div class="comic-book-card" onclick="window.goToRoadmapLevel('${b.ver}', ${levelArg})" title="Vào học bài: ${safeTitle}">
+          <div class="comic-book-spine-overlay"></div>
+          <div class="comic-book-gloss-overlay"></div>
+          ${badgeHtml}
+          ${innerCoverHtml}
+        </div>
+      `;
+    }).join('');
+
+    html += `
+      <section class="bookshelf-shelf" style="--shelf-accent: ${shelf.accentColor};">
+        <div class="bookshelf-shelf-header">
+          <div class="bookshelf-mascot-badge">
+            <img src="${shelf.mascotImg}" alt="Mascot" class="bookshelf-mascot-img">
+          </div>
+          <div class="bookshelf-shelf-titles">
+            <h2 class="bookshelf-shelf-title">${safeEscape(shelf.title)}</h2>
+            <p class="bookshelf-shelf-subtitle">${safeEscape(shelf.subtitle)}</p>
+          </div>
+        </div>
+        <div class="bookshelf-grid">
+          ${booksHtml}
+        </div>
+      </section>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+window.renderRoadmapBookshelf = renderRoadmapBookshelf;
 
 let activeRoadmapVersion = '3.0';
 

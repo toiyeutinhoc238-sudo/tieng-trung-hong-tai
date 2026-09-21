@@ -2400,25 +2400,45 @@
             </div>
           </div>
 
-          <!-- Bottom Curriculum Version Selector Bar -->
-          <div
-            style="display: flex; justify-content: center; align-items: center; gap: 12px; padding-top: 16px; border-top: 1px dashed rgba(255,255,255,0.3);">
-            <span class="hero-ver-label">Giáo trình:</span>
-            <div class="roadmap-ver-pills" style="display: flex; gap: 10px; margin: 0; flex-wrap: wrap;">
-              <button class="roadmap-ver-pill active" data-ver="3.0" onclick="window.setRoadmapVersion('3.0')"
-                style="padding: 8px 16px; border-radius: 12px; font-weight: 800;">🎓 HSK 3.0 (Mới Nhất)</button>
-              <button class="roadmap-ver-pill" data-ver="2.0" onclick="window.setRoadmapVersion('2.0')"
-                style="padding: 8px 16px; border-radius: 12px; font-weight: 800;">📜 HSK 2.0</button>
-              <button class="roadmap-ver-pill" data-ver="yct" onclick="window.setRoadmapVersion('yct')"
-                style="padding: 8px 16px; border-radius: 12px; font-weight: 800;">👶 YCT (Thiếu Nhi)</button>
-              <button class="roadmap-ver-pill" data-ver="hanngu" onclick="window.setRoadmapVersion('hanngu')"
-                style="padding: 8px 16px; border-radius: 12px; font-weight: 800;">📖 Giáo trình Hán ngữ (6 Quyển)</button>
+          <!-- Curriculum Filter Bar & View Toggle -->
+          <div class="roadmap-shelf-filter-bar">
+            <div class="roadmap-filter-pills" id="roadmap-shelf-filter-pills">
+              <button class="roadmap-filter-btn active" data-filter="all" onclick="window.filterRoadmapBookshelf('all')">
+                <i class="fa-solid fa-layer-group"></i> <span>Tất cả giáo trình</span>
+              </button>
+              <button class="roadmap-filter-btn" data-filter="hsk3" onclick="window.filterRoadmapBookshelf('hsk3')">
+                <i class="fa-solid fa-graduation-cap"></i> <span>HSK 3.0 Mới</span>
+              </button>
+              <button class="roadmap-filter-btn" data-filter="hsk2" onclick="window.filterRoadmapBookshelf('hsk2')">
+                <i class="fa-solid fa-book-bookmark"></i> <span>HSK 2.0 Chuẩn</span>
+              </button>
+              <button class="roadmap-filter-btn" data-filter="hanngu" onclick="window.filterRoadmapBookshelf('hanngu')">
+                <i class="fa-solid fa-book"></i> <span>Hán Ngữ 6 Quyển</span>
+              </button>
+              <button class="roadmap-filter-btn" data-filter="yct" onclick="window.filterRoadmapBookshelf('yct')">
+                <i class="fa-solid fa-child-reaching"></i> <span>YCT Thiếu Nhi</span>
+              </button>
+            </div>
+
+            <!-- View Mode Switch: Kệ Giáo Trình / Bản Đồ Lộ Trình -->
+            <div class="roadmap-view-mode-toggle" id="roadmap-view-mode-toggle">
+              <button class="roadmap-view-toggle-btn active" id="btn-roadmap-view-bookshelf" onclick="window.setRoadmapViewMode('bookshelf')" title="Xem dạng Kệ Giáo Trình">
+                <i class="fa-solid fa-book-open"></i> <span>Kệ Giáo Trình</span>
+              </button>
+              <button class="roadmap-view-toggle-btn" id="btn-roadmap-view-trail" onclick="window.setRoadmapViewMode('trail')" title="Xem dạng Bản Đồ Chuỗi Cấp Độ">
+                <i class="fa-solid fa-route"></i> <span>Bản Đồ Cấp Độ</span>
+              </button>
             </div>
           </div>
         </div>
 
-        <!-- Gamified Roadmap Map Path Nodes Trail -->
-        <div class="roadmap-path-trail" id="roadmap-path-nodes-container">
+        <!-- Roadmap Bookshelf Container (Default View) -->
+        <div class="roadmap-bookshelf-container" id="roadmap-bookshelf-container">
+          <!-- Dynamically populated by JS renderRoadmapBookshelf() -->
+        </div>
+
+        <!-- Gamified Roadmap Map Path Nodes Trail (Alternative View) -->
+        <div class="roadmap-path-trail" id="roadmap-path-nodes-container" style="display: none;">
           <!-- Dynamically populated by JS renderGamifiedRoadmapPath() -->
         </div>
 

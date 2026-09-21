@@ -19914,3 +19914,560 @@ body.dark .lesson-hint-card[data-status="revealed"] span {
   0% { transform: scale(0.85); opacity: 0; }
   100% { transform: scale(1); opacity: 1; }
 }
+
+/* ==========================================================================
+   ROADMAP BOOKSHELF (KỆ GIÁO TRÌNH LỘ TRÌNH)
+   Comic 3D Bookshelf & Card Styling for Gamified Learning Roadmap
+   ========================================================================== */
+
+.roadmap-bookshelf-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.roadmap-shelf-filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 28px;
+  background: rgba(15, 23, 42, 0.65);
+  border: 2px solid #0f172a;
+  border-radius: 18px;
+  padding: 12px 18px;
+  box-shadow: 3px 4px 0 #0f172a;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+html.light .roadmap-shelf-filter-bar,
+html.light-mode .roadmap-shelf-filter-bar,
+body.light .roadmap-shelf-filter-bar,
+body.light-mode .roadmap-shelf-filter-bar {
+  background: rgba(255, 255, 255, 0.9);
+  border: 2.5px solid #0f172a;
+  box-shadow: 3px 4px 0 #0f172a;
+}
+
+html.dark .roadmap-shelf-filter-bar,
+body.dark .roadmap-shelf-filter-bar {
+  background: rgba(15, 23, 42, 0.85);
+  border-color: #334155;
+  box-shadow: 3px 4px 0 #000000;
+}
+
+.roadmap-filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.roadmap-filter-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid #0f172a;
+  color: #94a3b8;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 0.88rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 2px 2px 0 #0f172a;
+}
+
+html.light .roadmap-filter-btn,
+html.light-mode .roadmap-filter-btn {
+  background: #ffffff;
+  color: #475569;
+}
+
+html.dark .roadmap-filter-btn {
+  background: #1e293b;
+  border-color: #475569;
+  color: #cbd5e1;
+  box-shadow: 2px 2px 0 #000000;
+}
+
+.roadmap-filter-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 3px 3.5px 0 #0f172a;
+  color: #38bdf8;
+}
+
+html.dark .roadmap-filter-btn:hover {
+  box-shadow: 3px 3.5px 0 #000000;
+}
+
+.roadmap-filter-btn.active {
+  background: #3b82f6;
+  color: #ffffff !important;
+  border-color: #0f172a;
+  box-shadow: 2.5px 3px 0 #1d4ed8;
+}
+
+html.dark .roadmap-filter-btn.active {
+  background: #3b82f6;
+  border-color: #60a5fa;
+  box-shadow: 2.5px 3px 0 #000000;
+}
+
+.roadmap-view-mode-toggle {
+  display: inline-flex;
+  background: rgba(0, 0, 0, 0.25);
+  border: 2px solid #0f172a;
+  border-radius: 12px;
+  padding: 3px;
+  gap: 4px;
+}
+
+html.light .roadmap-view-mode-toggle {
+  background: #e2e8f0;
+}
+
+html.dark .roadmap-view-mode-toggle {
+  background: #0f172a;
+  border-color: #334155;
+}
+
+.roadmap-view-toggle-btn {
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  padding: 6px 12px;
+  border-radius: 9px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.roadmap-view-toggle-btn.active {
+  background: #3b82f6;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+}
+
+/* Shelf Container */
+.bookshelf-shelf {
+  margin-bottom: 38px;
+  transition: opacity 0.2s ease;
+}
+
+.bookshelf-shelf-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+  position: relative;
+  padding-left: 14px;
+}
+
+.bookshelf-shelf-header::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 2px;
+  bottom: 2px;
+  width: 5px;
+  border-radius: 4px;
+  background: var(--shelf-accent, #3b82f6);
+}
+
+.bookshelf-mascot-badge {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  border: 2.5px solid #0f172a;
+  background: #ffffff;
+  box-shadow: 2.5px 3px 0 #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+html.dark .bookshelf-mascot-badge {
+  background: #1e293b;
+  border-color: #475569;
+  box-shadow: 2.5px 3px 0 #000000;
+}
+
+.bookshelf-mascot-img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.bookshelf-shelf-titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.bookshelf-shelf-title {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.3px;
+  line-height: 1.25;
+}
+
+html.dark .bookshelf-shelf-title {
+  color: #f8fafc;
+}
+
+.bookshelf-shelf-subtitle {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #64748b;
+  margin: 3px 0 0 0;
+}
+
+html.dark .bookshelf-shelf-subtitle {
+  color: #94a3b8;
+}
+
+/* 6-Column Grid (3 on mobile, 4 on tablet, 6 on desktop) */
+.bookshelf-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .bookshelf-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .bookshelf-grid {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 20px;
+  }
+}
+
+/* Comic 3D Book Cards */
+.comic-book-card {
+  position: relative;
+  aspect-ratio: 1 / 1.48;
+  border-radius: 14px;
+  border: 2.5px solid #0f172a;
+  background: #ffffff;
+  box-shadow: 3px 4px 0 #0f172a;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  display: flex;
+  flex-direction: column;
+}
+
+html.dark .comic-book-card {
+  border-color: #334155;
+  box-shadow: 3px 4px 0 #000000;
+  background: #1e293b;
+}
+
+.comic-book-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 4px 8px 0 #0f172a;
+}
+
+html.dark .comic-book-card:hover {
+  box-shadow: 4px 8px 0 #000000;
+}
+
+.comic-book-card:active {
+  transform: translateY(1px);
+  box-shadow: 1.5px 2px 0 #0f172a;
+}
+
+.comic-book-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 3D Spine and reflection */
+.comic-book-spine-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 14px;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.5) 0%, rgba(0, 0, 0, 0.15) 30%, transparent 100%);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.comic-book-gloss-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.03) 45%, transparent 100%);
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Status badge */
+.comic-book-status-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+  color: #ffffff !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.7) !important;
+  font-size: 0.68rem;
+  font-weight: 800 !important;
+  padding: 3px 8px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 4;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+  white-space: nowrap;
+  max-width: calc(100% - 14px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+.comic-book-status-badge,
+.comic-book-status-badge *,
+.comic-book-status-badge i,
+.comic-book-status-badge span {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+}
+
+.comic-book-status-badge.available {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  border-color: rgba(255, 255, 255, 0.75) !important;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.45), 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+
+.comic-book-status-badge.reading {
+  background: linear-gradient(135deg, #0284c7, #2563eb) !important;
+  border-color: rgba(255, 255, 255, 0.75) !important;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.45), 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+
+.comic-book-status-badge.done {
+  background: linear-gradient(135deg, #eab308, #ca8a04) !important;
+  border-color: rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 2px 8px rgba(234, 179, 8, 0.45), 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Stylized Volume Card for Textbooks with Graphic Covers (Hán ngữ, YCT, HSK 7-9) */
+.styled-vol-card {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 8px;
+  color: #ffffff;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.styled-vol-card .vol-sub {
+  font-size: 0.62rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #ffffff !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+  opacity: 1;
+}
+
+.styled-vol-card .vol-name {
+  font-size: 0.88rem;
+  font-weight: 900;
+  line-height: 1.22;
+  margin-top: 3px;
+  color: #ffffff !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
+}
+
+.styled-vol-card .vol-center-pattern {
+  margin: auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.styled-vol-card .vol-center-pattern .pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 14px);
+  grid-template-rows: repeat(3, 14px);
+  gap: 2.5px;
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  padding: 3px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.styled-vol-card .vol-center-pattern .pattern-cell {
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.styled-vol-card .vol-footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.styled-vol-card .vol-foot-label {
+  font-size: 0.64rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #ffffff !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+}
+
+.styled-vol-card .vol-number-badge {
+  font-size: 2.1rem;
+  font-weight: 900;
+  font-style: italic;
+  line-height: 1;
+  color: #ffffff !important;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.6);
+}
+
+/* Mobile responsive for Bookshelf */
+@media (max-width: 640px) {
+  .roadmap-shelf-filter-bar {
+    padding: 8px 10px;
+    gap: 8px;
+    border-radius: 14px;
+  }
+
+  .roadmap-filter-pills {
+    display: flex;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    gap: 6px;
+    padding-bottom: 2px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    width: 100%;
+  }
+
+  .roadmap-filter-pills::-webkit-scrollbar {
+    display: none;
+  }
+
+  .roadmap-filter-btn {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .bookshelf-shelf {
+    margin-bottom: 24px;
+  }
+
+  .bookshelf-shelf-header {
+    gap: 8px;
+    margin-bottom: 12px;
+    padding-left: 10px;
+  }
+
+  .bookshelf-mascot-badge {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+  }
+
+  .bookshelf-mascot-img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .bookshelf-shelf-title {
+    font-size: 1.05rem;
+  }
+
+  .bookshelf-shelf-subtitle {
+    font-size: 0.74rem;
+  }
+
+  .bookshelf-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .comic-book-card {
+    border-radius: 10px;
+    border-width: 2px;
+    box-shadow: 2px 2.5px 0 #0f172a;
+  }
+
+  .comic-book-status-badge {
+    top: 4px;
+    right: 4px;
+    padding: 2px 5px;
+    font-size: 0.56rem;
+    border-radius: 999px;
+    gap: 3px;
+    max-width: calc(100% - 8px);
+  }
+
+  .comic-book-spine-overlay {
+    width: 8px;
+  }
+
+  .styled-vol-card {
+    padding: 6px 4px;
+  }
+
+  .styled-vol-card .vol-sub {
+    font-size: 0.5rem;
+  }
+
+  .styled-vol-card .vol-name {
+    font-size: 0.68rem;
+  }
+
+  .styled-vol-card .vol-center-pattern .pattern-grid {
+    grid-template-columns: repeat(3, 8px);
+    grid-template-rows: repeat(3, 8px);
+    gap: 1.5px;
+    padding: 2px;
+  }
+
+  .styled-vol-card .vol-center-pattern .pattern-cell {
+    width: 8px;
+    height: 8px;
+  }
+
+  .styled-vol-card .vol-foot-label {
+    font-size: 0.5rem;
+  }
+
+  .styled-vol-card .vol-number-badge {
+    font-size: 1.35rem;
+  }
+}
+
