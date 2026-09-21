@@ -32,89 +32,67 @@
 
   <script>
     (function () {
-      var t = localStorage.getItem('theme') || 'dark';
-      var bgUrl = t === 'light' ? "url('/assets/app_bg_day_v3.png')" : "url('/assets/app_bg_night_v3.png')";
-      document.documentElement.style.setProperty('background-image', bgUrl, 'important');
-      document.documentElement.style.setProperty('background-size', 'cover', 'important');
-      document.documentElement.style.setProperty('background-position', 'center center', 'important');
-      document.documentElement.style.setProperty('background-attachment', 'fixed', 'important');
-      document.documentElement.style.setProperty('background-repeat', 'no-repeat', 'important');
-
+      var t = localStorage.getItem('theme') || 'light';
+      document.documentElement.classList.add('notebook-grid-page');
       if (t === 'light') {
         document.documentElement.classList.add('light-mode', 'light');
         document.documentElement.classList.remove('dark');
-        document.addEventListener('DOMContentLoaded', function () {
-          if (document.body) {
-            document.body.classList.add('light-mode');
-            document.body.style.setProperty('background-image', bgUrl, 'important');
-          }
-        });
       } else {
         document.documentElement.classList.add('dark');
-        document.documentElement.classList.remove('light', 'light-mode');
-        document.addEventListener('DOMContentLoaded', function () {
-          if (document.body) {
-            document.body.classList.remove('light-mode');
-            document.body.style.setProperty('background-image', bgUrl, 'important');
-          }
-        });
+        document.documentElement.classList.remove('light-mode', 'light');
       }
     })();
 
     window.toggleTheme = function () {
       var isDark = document.documentElement.classList.contains('dark');
-      var nextDark = !isDark;
-      var bgUrl = nextDark ? "url('/assets/app_bg_night_v3.png')" : "url('/assets/app_bg_day_v3.png')";
-      document.documentElement.style.setProperty('background-image', bgUrl, 'important');
-      if (document.body) {
-        document.body.style.setProperty('background-image', bgUrl, 'important');
-      }
-
-      if (nextDark) {
+      if (isDark) {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light', 'light-mode');
+        if (document.body) {
+          document.body.classList.remove('dark');
+          document.body.classList.add('light', 'light-mode');
+        }
+        localStorage.setItem('theme', 'light');
+      } else {
         document.documentElement.classList.add('dark');
         document.documentElement.classList.remove('light', 'light-mode');
         if (document.body) {
-          document.body.classList.remove('light-mode', 'light');
+          document.body.classList.remove('light', 'light-mode');
           document.body.classList.add('dark');
         }
         localStorage.setItem('theme', 'dark');
-      } else {
-        document.documentElement.classList.add('light', 'light-mode');
-        document.documentElement.classList.remove('dark');
-        if (document.body) {
-          document.body.classList.remove('dark');
-          document.body.classList.add('light-mode');
-        }
-        localStorage.setItem('theme', 'light');
       }
     };
   </script>
 </head>
 
-<body>
+<body class="notebook-grid-page">
   <div class="app-layout">
 
     <!-- Global App Topbar Header -->
     <header class="app-topbar"
-      style="display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.08); position: sticky; top: 0; z-index: 100;">
-      <div style="display: flex; align-items: center; gap: 14px;">
-        <button id="mobile-sidebar-toggle-btn" class="global-menu-trigger"
-          style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.12); color: #ffffff; width: 40px; height: 40px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
+      style="display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); border-bottom: 2.5px solid #0f172a; position: sticky; top: 0; z-index: 100;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button id="mobile-sidebar-toggle-btn" class="topbar-comic-menu-btn" title="Mở menu chuyển trang">
           <i class="fa-solid fa-bars"></i>
         </button>
         <a href="/" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
-          <img src="./src/assets/logo.png" alt="Logo" style="height: 36px; width: 36px; border-radius: 8px;">
-          <span
-            style="font-size: 1.15rem; font-weight: 900; background: linear-gradient(135deg, #38bdf8, #818cf8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.3px;">Tiếng
-            Trung HongTai</span>
+          <img src="./src/assets/logo.png" alt="Logo" style="height: 38px; width: 38px; border-radius: 10px; border: 2px solid #0f172a; box-shadow: 1.5px 1.5px 0 #0f172a;">
+          <div style="display: flex; flex-direction: column;">
+            <span style="font-size: 1.15rem; font-weight: 900; color: #0f172a; letter-spacing: -0.3px; line-height: 1.2;">Tiếng Trung HongTai</span>
+            <span style="font-size: 0.72rem; font-weight: 800; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.5px;">Kho Sách &amp; Giáo Trình</span>
+          </div>
         </a>
       </div>
 
-      <div style="display: flex; align-items: center; gap: 12px;">
-        <button onclick="window.toggleTheme()" id="theme-toggle-btn"
-          style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.1); color: #f59e0b; width: 38px; height: 38px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <button onclick="window.toggleTheme()" id="theme-toggle-btn" class="topbar-comic-menu-btn" style="width: 38px; height: 38px; font-size: 1rem; color: #f59e0b;" title="Chuyển chế độ sáng/tối">
           <i class="fa-solid fa-sun"></i>
         </button>
+        <a href="/#login" class="topbar-comic-login-btn">
+          <i class="fa-solid fa-right-to-bracket"></i>
+          <span>Đăng nhập</span>
+        </a>
       </div>
     </header>
 
@@ -128,7 +106,7 @@
             <i class="fa-solid fa-book-bookmark"></i>
             <span>Kho Tài Liệu Điện Tử Thông Minh</span>
           </div>
-          <h1 class="documents-title">Thư Viện Sách & Giáo Trình Tiếng Trung Chuẩn Quốc Tế</h1>
+          <h1 class="documents-title">Thư Viện Sách &amp; Giáo Trình Tiếng Trung Chuẩn Quốc Tế</h1>
           <p class="documents-subtitle">
             Khám phá 66 đầu sách tuyển chọn: Giáo trình Hán ngữ, HSK 2.0 &amp; 3.0, Kỹ năng biên phiên dịch thực chiến,
             nghiên cứu sư phạm chuyên sâu dành cho giáo viên và các tác phẩm văn học kinh điển. Hỗ trợ đọc trực tiếp, tự
@@ -156,71 +134,123 @@
         </div>
       </section>
 
-      <!-- Search & Category Filters -->
-      <section class="documents-controls-bar">
-        <div class="documents-search-wrapper">
-          <i class="fa-solid fa-magnifying-glass documents-search-icon"></i>
-          <input type="text" id="documents-search-input" class="documents-search-input"
-            placeholder="Tìm kiếm sách theo tên tiếng Việt, chữ Hán, danh mục hoặc nội dung...">
-          <button id="documents-search-clear" class="documents-search-clear" title="Xóa tìm kiếm">
-            <i class="fa-solid fa-xmark"></i>
+      <!-- View Switcher -->
+      <div class="view-switch-wrapper">
+        <div class="view-switch-box">
+          <button id="btn-view-bookshelf" class="view-switch-btn active" onclick="window.switchDocsView('bookshelf')">
+            <i class="fa-solid fa-book-bookmark"></i>
+            <span>Kệ Giáo Trình Trọng Tâm</span>
+          </button>
+          <button id="btn-view-catalog" class="view-switch-btn" onclick="window.switchDocsView('catalog')">
+            <i class="fa-solid fa-layer-group"></i>
+            <span>Toàn Bộ Kho Sách (66 Cuốn)</span>
           </button>
         </div>
+      </div>
 
-        <div class="documents-filter-pills">
-          <button class="documents-filter-btn active" data-category="all">
-            <span>Tất cả</span>
-            <span class="documents-filter-count">66</span>
-          </button>
-          <button class="documents-filter-btn" data-category="Giáo Trình Hán Ngữ">
-            <i class="fa-solid fa-book-open" style="color: #fbbf24;"></i>
-            <span>Giáo Trình Hán Ngữ</span>
-            <span class="documents-filter-count">5</span>
-          </button>
-          <button class="documents-filter-btn" data-category="Giáo Trình HSK">
-            <i class="fa-solid fa-graduation-cap" style="color: #f87171;"></i>
-            <span>Giáo Trình HSK</span>
-            <span class="documents-filter-count">4</span>
-          </button>
-          <button class="documents-filter-btn" data-category="Biên Phiên Dịch">
-            <i class="fa-solid fa-language" style="color: #34d399;"></i>
-            <span>Biên Phiên Dịch</span>
-            <span class="documents-filter-count">2</span>
-          </button>
-          <button class="documents-filter-btn" data-category="Sách Cho Giáo Viên">
-            <i class="fa-solid fa-chalkboard-user" style="color: #a78bfa;"></i>
-            <span>Sách Cho Giáo Viên</span>
-            <span class="documents-filter-count">34</span>
-          </button>
-          <button class="documents-filter-btn" data-category="Truyện Đọc &amp; Văn Học">
-            <i class="fa-solid fa-feather-pointed" style="color: #f472b6;"></i>
-            <span>Truyện Đọc &amp; Văn Học</span>
-            <span class="documents-filter-count">12</span>
-          </button>
-          <button class="documents-filter-btn" data-category="Văn Hóa &amp; Xã Hội">
-            <i class="fa-solid fa-landmark" style="color: #22d3ee;"></i>
-            <span>Văn Hóa &amp; Xã Hội</span>
-            <span class="documents-filter-count">5</span>
-          </button>
-          <button class="documents-filter-btn" data-category="Ngữ Pháp &amp; Tra Cứu">
-            <i class="fa-solid fa-spell-check" style="color: #60a5fa;"></i>
-            <span>Ngữ Pháp &amp; Tra Cứu</span>
-            <span class="documents-filter-count">4</span>
-          </button>
-        </div>
-      </section>
+      <!-- VIEW 1: COMIC BOOKSHELF VIEW (Matching User Screenshot) -->
+      <div id="documents-bookshelf-view" class="documents-bookshelf-container">
+        <!-- Rendered dynamically by documents.js: Shelf 1 (HSK 2.0), Shelf 2 (HSK 3.0), Shelf 3 (Hán ngữ 6 cuốn) -->
+      </div>
 
-      <!-- Books Grid -->
-      <section id="documents-grid" class="documents-grid">
-        <!-- Rendered dynamically by documents.js -->
-        <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: #94a3b8;">
-          <i class="fa-solid fa-spinner fa-spin" style="font-size: 2.5rem; color: #38bdf8; margin-bottom: 12px;"></i>
-          <p style="font-weight: 700;">Đang nạp kho sách và tài liệu điện tử...</p>
-        </div>
-      </section>
+      <!-- VIEW 2: FULL CATALOG & SEARCH VIEW -->
+      <div id="documents-catalog-view" class="documents-catalog-container" style="display: none;">
+        <!-- Search & Category Filters -->
+        <section class="documents-controls-bar">
+          <div class="documents-search-wrapper">
+            <i class="fa-solid fa-magnifying-glass documents-search-icon"></i>
+            <input type="text" id="documents-search-input" class="documents-search-input"
+              placeholder="Tìm kiếm sách theo tên tiếng Việt, chữ Hán, danh mục hoặc nội dung...">
+            <button id="documents-search-clear" class="documents-search-clear" title="Xóa tìm kiếm">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+
+          <div class="documents-filter-pills">
+            <button class="documents-filter-btn active" data-category="all">
+              <span>Tất cả</span>
+              <span class="documents-filter-count">66</span>
+            </button>
+            <button class="documents-filter-btn" data-category="Giáo Trình Hán Ngữ">
+              <i class="fa-solid fa-book-open" style="color: #fbbf24;"></i>
+              <span>Giáo Trình Hán Ngữ</span>
+              <span class="documents-filter-count">5</span>
+            </button>
+            <button class="documents-filter-btn" data-category="Giáo Trình HSK">
+              <i class="fa-solid fa-graduation-cap" style="color: #f87171;"></i>
+              <span>Giáo Trình HSK</span>
+              <span class="documents-filter-count">4</span>
+            </button>
+            <button class="documents-filter-btn" data-category="Biên Phiên Dịch">
+              <i class="fa-solid fa-language" style="color: #34d399;"></i>
+              <span>Biên Phiên Dịch</span>
+              <span class="documents-filter-count">2</span>
+            </button>
+            <button class="documents-filter-btn" data-category="Sách Cho Giáo Viên">
+              <i class="fa-solid fa-chalkboard-user" style="color: #a78bfa;"></i>
+              <span>Sách Cho Giáo Viên</span>
+              <span class="documents-filter-count">34</span>
+            </button>
+            <button class="documents-filter-btn" data-category="Truyện Đọc &amp; Văn Học">
+              <i class="fa-solid fa-feather-pointed" style="color: #f472b6;"></i>
+              <span>Truyện Đọc &amp; Văn Học</span>
+              <span class="documents-filter-count">12</span>
+            </button>
+            <button class="documents-filter-btn" data-category="Văn Hóa &amp; Xã Hội">
+              <i class="fa-solid fa-landmark" style="color: #22d3ee;"></i>
+              <span>Văn Hóa &amp; Xã Hội</span>
+              <span class="documents-filter-count">5</span>
+            </button>
+            <button class="documents-filter-btn" data-category="Ngữ Pháp &amp; Tra Cứu">
+              <i class="fa-solid fa-spell-check" style="color: #60a5fa;"></i>
+              <span>Ngữ Pháp &amp; Tra Cứu</span>
+              <span class="documents-filter-count">4</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- Books Grid -->
+        <section id="documents-grid" class="documents-grid">
+          <!-- Rendered dynamically by documents.js -->
+          <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: #94a3b8;">
+            <i class="fa-solid fa-spinner fa-spin" style="font-size: 2.5rem; color: #38bdf8; margin-bottom: 12px;"></i>
+            <p style="font-weight: 700;">Đang nạp kho sách và tài liệu điện tử...</p>
+          </div>
+        </section>
+      </div>
 
     </main>
 
+  </div>
+
+  <!-- FLOATING MASCOT WIDGET (Matching Screenshot) -->
+  <aside class="floating-mascot-container" aria-label="Trợ lý đọc sách HongTai">
+    <div class="floating-mascot-wrapper" onclick="window.showMascotTipModal()">
+      <div class="floating-mascot-bubble">
+        <span>Đọc sách cùng HongTai! 📖</span>
+      </div>
+      <div class="floating-mascot-btn" title="Trợ lý đọc sách HongTai">
+        <img src="/assets/hongtai_dragon_mascot.png" alt="HongTai Dragon Mascot">
+        <div class="floating-mascot-chat-pill">
+          <i class="fa-solid fa-comment"></i>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- PENDING BOOK / INFO MODAL -->
+  <div id="pending-book-modal" class="pending-book-modal-backdrop" style="display: none;" onclick="window.closePendingBookModal(event)">
+    <div class="pending-book-modal" onclick="event.stopPropagation()">
+      <button class="pending-book-modal-close" onclick="window.closePendingBookModal()">&times;</button>
+      <div style="margin-bottom: 14px;">
+        <img id="pending-modal-cover" src="" alt="Bìa sách" style="width: 130px; aspect-ratio: 1/1.48; object-fit: cover; border-radius: 12px; border: 2.5px solid #0f172a; box-shadow: 3px 4px 0 #0f172a; display: inline-block;">
+      </div>
+      <h3 id="pending-modal-title" style="margin: 0 0 6px 0; font-size: 1.15rem; font-weight: 900; color: #0f172a;">Tên Sách</h3>
+      <p id="pending-modal-desc" style="font-size: 0.88rem; color: #64748b; line-height: 1.5; margin: 0 0 18px 0;">Nội dung chi tiết...</p>
+      <div id="pending-modal-actions" style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+        <!-- Dynamic buttons -->
+      </div>
+    </div>
   </div>
 
   <!-- FULLSCREEN E-BOOK READER MODAL -->

@@ -40,10 +40,14 @@ if (window.pdfjsLib) {
 
   // DOM Elements cache
   let elGrid, elSearch, elSearchClear, elFilterBtns;
+  let elBookshelfView, elCatalogView, elBtnBookshelf, elBtnCatalog;
   let elReaderModal, elCanvas, elCanvasCtx, elPageInput, elTotalPages, elBookTitle, elBookMeta;
   let elBtnPrev, elBtnNext, elFloatPrev, elFloatNext, elSpinner;
   let elCommentsDrawer, elCommentsList, elCommentInput, elCommentSubmit;
   let elNotesDrawer, elNotesList, elNoteInput, elNoteSubmit;
+
+  // View state
+  let currentDocsView = 'bookshelf'; // 'bookshelf' or 'catalog'
 
   // Init application
   document.addEventListener('DOMContentLoaded', () => {
@@ -51,6 +55,7 @@ if (window.pdfjsLib) {
     setupEventListeners();
     setupAntiDownloadProtection();
     loadBooksCatalog();
+    renderBookshelves();
   });
 
   function initDOMElements() {
@@ -58,6 +63,12 @@ if (window.pdfjsLib) {
     elSearch = document.getElementById('documents-search-input');
     elSearchClear = document.getElementById('documents-search-clear');
     elFilterBtns = document.querySelectorAll('.documents-filter-btn');
+
+    // Bookshelf & Catalog View elements
+    elBookshelfView = document.getElementById('documents-bookshelf-view');
+    elCatalogView = document.getElementById('documents-catalog-view');
+    elBtnBookshelf = document.getElementById('btn-view-bookshelf');
+    elBtnCatalog = document.getElementById('btn-view-catalog');
 
     // Reader modal elements
     elReaderModal = document.getElementById('ebook-reader-modal');
@@ -307,6 +318,7 @@ if (window.pdfjsLib) {
         allBooks = data.books;
         updateCategoryCounts();
         renderBooksGrid();
+        renderBookshelves();
       }
     } catch (err) {
       console.error('Failed to load books catalog:', err);
@@ -320,6 +332,358 @@ if (window.pdfjsLib) {
       }
     }
   }
+
+  // --- VIEW SWITCHER ---
+  window.switchDocsView = function (mode) {
+    currentDocsView = mode;
+    if (!elBookshelfView || !elCatalogView) {
+      elBookshelfView = document.getElementById('documents-bookshelf-view');
+      elCatalogView = document.getElementById('documents-catalog-view');
+      elBtnBookshelf = document.getElementById('btn-view-bookshelf');
+      elBtnCatalog = document.getElementById('btn-view-catalog');
+    }
+
+    if (mode === 'bookshelf') {
+      if (elBookshelfView) elBookshelfView.style.display = 'block';
+      if (elCatalogView) elCatalogView.style.display = 'none';
+      if (elBtnBookshelf) elBtnBookshelf.classList.add('active');
+      if (elBtnCatalog) elBtnCatalog.classList.remove('active');
+    } else {
+      if (elBookshelfView) elBookshelfView.style.display = 'none';
+      if (elCatalogView) elCatalogView.style.display = 'block';
+      if (elBtnBookshelf) elBtnBookshelf.classList.remove('active');
+      if (elBtnCatalog) elBtnCatalog.classList.add('active');
+    }
+  };
+
+  // --- COMIC BOOKSHELF RENDERER (Matching User Reference Image) ---
+  function renderBookshelves() {
+    const container = elBookshelfView || document.getElementById('documents-bookshelf-view');
+    if (!container) return;
+
+    // Helper to get progress for a bookId
+    function getBookProgressInfo(bookId) {
+      if (!bookId) return null;
+      const b = allBooks.find(item => item.id === bookId);
+      const local = getLocalProgress(bookId);
+      const prog = (b && b.userProgress) || local;
+      return (prog && prog.lastPage > 1) ? prog : null;
+    }
+
+    const shelvesData = [
+      {
+        id: 'shelf-hsk2',
+        accentColor: '#0284c7',
+        mascotImg: '/assets/hongtai_dragon_mascot.png',
+        title: 'Giáo Trình Chuẩn HSK 2.0',
+        subtitle: 'Bộ giáo trình 6 cấp độ (HSK 1 - HSK 6)',
+        books: [
+          {
+            level: 1,
+            title: 'Giáo Trình Chuẩn HSK 1',
+            coverUrl: '/covers/hsk2/hsk1.jpg',
+            bookId: null,
+            desc: 'Giáo trình chuẩn HSK 1 bao gồm 15 bài học nhập môn kèm file dịch tiếng Việt chuẩn của TS. Nguyễn Thị Minh Hồng.'
+          },
+          {
+            level: 2,
+            title: 'Giáo Trình Chuẩn HSK 2',
+            coverUrl: '/covers/hsk2/hsk2.jpg',
+            bookId: null,
+            desc: 'Giáo trình chuẩn HSK 2 bao gồm 15 bài học sơ cấp nâng cao mở rộng vốn câu giao tiếp thực tế.'
+          },
+          {
+            level: 3,
+            title: 'Giáo Trình Chuẩn HSK 3',
+            coverUrl: '/covers/hsk2/hsk3.jpg',
+            bookId: null,
+            desc: 'Giáo trình chuẩn HSK 3 bao gồm 20 bài học củng cố ngữ pháp trung cấp và diễn đạt mở rộng.'
+          },
+          {
+            level: 4,
+            title: 'Giáo Trình Chuẩn HSK 4',
+            coverUrl: '/covers/hsk2/hsk4.jpg',
+            bookId: null,
+            desc: 'Giáo trình chuẩn HSK 4 gồm 2 tập Thượng và Hạ với 20 chủ đề chuyên sâu.'
+          },
+          {
+            level: 5,
+            title: 'Giáo Trình Chuẩn HSK 5 (Tập Dưới)',
+            coverUrl: '/covers/hsk2/hsk5.jpg',
+            bookId: 'book_8e6cd7',
+            desc: 'Giáo trình chuẩn HSK 5 Tập Dưới (HSK 5 chuẩn下.pdf) bản số hóa sắc nét, đọc trực tuyến mượt mà.'
+          },
+          {
+            level: 6,
+            title: 'Giáo Trình Chuẩn HSK 6',
+            coverUrl: '/covers/hsk2/hsk6.jpg',
+            bookId: null,
+            desc: 'Giáo trình chuẩn HSK 6 cao cấp dành cho người học thành thạo ngôn ngữ.'
+          }
+        ]
+      },
+      {
+        id: 'shelf-hsk3',
+        accentColor: '#10b981',
+        mascotImg: '/assets/dragon_award_mascot.png',
+        title: 'Giáo Trình HSK 3.0 Mới',
+        subtitle: 'Bộ giáo trình tiêu chuẩn quốc tế mới nhất (Cấp 1 - Cấp 4)',
+        books: [
+          {
+            level: 1,
+            title: '新 HSK 教程 1 (HSK 3.0)',
+            coverUrl: '/covers/hsk3/hsk1.jpg',
+            bookId: null,
+            desc: 'Giáo trình HSK cấp độ 1 tiêu chuẩn 3.0 mới nhất do NXB Giáo dục & Nghiên cứu Giảng dạy Ngôn ngữ Bắc Kinh xuất bản.'
+          },
+          {
+            level: 2,
+            title: '新 HSK 教程 2 (HSK 3.0)',
+            coverUrl: '/covers/hsk3/hsk2.jpg',
+            bookId: 'book_74e5v6',
+            desc: 'Toàn bộ giáo trình HSK 2 mới chuẩn quốc tế 3.0 với đầy đủ bài khóa và hội thoại.'
+          },
+          {
+            level: 3,
+            title: '新 HSK 教程 3 (HSK 3.0)',
+            coverUrl: '/covers/hsk3/hsk3.jpg',
+            bookId: 'book_3b4cws',
+            desc: 'Giáo trình HSK 3 mới chuẩn 3.0 củng cố hệ thống ngữ pháp và 1000 từ vựng cốt lõi.'
+          },
+          {
+            level: 4,
+            title: '新 HSK 教程 4 (Tập Trên - HSK 3.0)',
+            coverUrl: '/covers/hsk3/hsk4.jpg',
+            bookId: 'book_32gwjz',
+            desc: 'Giáo trình HSK 4 mới Tập Trên chuẩn v3.0 kèm 10 bài học trung cấp cơ bản.'
+          }
+        ]
+      },
+      {
+        id: 'shelf-hanngu',
+        accentColor: '#f59e0b',
+        mascotImg: '/assets/logo.png',
+        title: 'Giáo Trình Hán Ngữ 6 Cuốn',
+        subtitle: 'Bản dịch song ngữ Trung - Việt chuẩn Đại học (Tập 1 - 6)',
+        books: [
+          {
+            volNum: 1,
+            title: 'Giáo Trình Hán Ngữ 1',
+            subtitle: 'Bản dịch song ngữ',
+            bookId: 'book_m03mz1',
+            color: '#eab308',
+            tag: 'Quyển 1 Thượng',
+            desc: 'Giáo trình Hán ngữ cơ sở quyển 1 chuẩn quốc tế, rèn luyện phát âm Pinyin, nét bút và giao tiếp nhập môn.'
+          },
+          {
+            volNum: 2,
+            title: 'Giáo Trình Hán Ngữ 2',
+            subtitle: 'Bản dịch song ngữ',
+            bookId: 'book_82zwgt',
+            color: '#16a34a',
+            tag: 'Quyển 1 Hạ',
+            desc: 'Giáo trình Hán ngữ bộ 6 tập quyển 2, bản dịch chú giải tiếng Việt chuẩn xác cho học viên mới bắt đầu.'
+          },
+          {
+            volNum: 3,
+            title: 'Giáo Trình Hán Ngữ 3',
+            subtitle: 'Bản dịch song ngữ',
+            bookId: 'book_8emthg',
+            color: '#ea580c',
+            tag: 'Quyển 2 Thượng',
+            desc: 'Giáo trình Hán ngữ quyển 3 (Tập 2 Thượng), bước ngoặt củng cố ngữ pháp trung cấp và diễn đạt mở rộng.'
+          },
+          {
+            volNum: 4,
+            title: 'Giáo Trình Hán Ngữ 4',
+            subtitle: 'Bản dịch song ngữ',
+            bookId: 'book_ow9jfp',
+            color: '#2563eb',
+            tag: 'Quyển 2 Hạ',
+            desc: 'Giáo trình Hán ngữ quyển 4 (Tập 2 Hạ), nâng cao vốn từ vựng chuyên đề, câu phức và đối thoại chuyên sâu.'
+          },
+          {
+            volNum: 5,
+            title: 'Giáo Trình Hán Ngữ 5',
+            subtitle: 'Bản dịch song ngữ',
+            bookId: 'book_tn7sl6',
+            color: '#9333ea',
+            tag: 'Quyển 3 Thượng',
+            desc: 'Giáo trình Hán ngữ quyển 5 (Tập 3 Thượng) nâng cao khả năng phân tích ngữ văn và nghị luận.'
+          },
+          {
+            volNum: 6,
+            title: 'Giáo Trình Hán Ngữ 6',
+            subtitle: 'Bản dịch song ngữ',
+            bookId: null,
+            color: '#0f766e',
+            tag: 'Quyển 3 Hạ',
+            desc: 'Giáo trình Hán ngữ quyển 6 (Tập 3 Hạ) hoàn thiện kỹ năng đọc hiểu và văn phong bản xứ cao cấp.'
+          }
+        ]
+      }
+    ];
+
+    container.innerHTML = shelvesData.map(shelf => {
+      const booksHtml = shelf.books.map(b => {
+        const prog = getBookProgressInfo(b.bookId);
+        const hasPdf = Boolean(b.bookId);
+
+        let badgeHtml = '';
+        if (prog) {
+          badgeHtml = `<span class="comic-book-status-badge reading"><i class="fa-solid fa-bookmark"></i> P.${prog.lastPage}</span>`;
+        } else if (hasPdf) {
+          badgeHtml = `<span class="comic-book-status-badge available"><i class="fa-solid fa-book-open"></i> Đọc ngay</span>`;
+        } else {
+          badgeHtml = `<span class="comic-book-status-badge"><i class="fa-solid fa-clock"></i> Sắp ra</span>`;
+        }
+
+        // Check if book has a custom stylized color cover (like Hán Ngữ) or real image cover
+        let innerCoverHtml = '';
+        if (b.coverUrl) {
+          innerCoverHtml = `<img src="${b.coverUrl}" alt="${escapeHTML(b.title)}" class="comic-book-cover-img" loading="lazy">`;
+        } else {
+          // Beautiful stylized cover matching student book aesthetic from screenshot
+          innerCoverHtml = `
+            <div class="styled-vol-card" style="background: linear-gradient(145deg, ${b.color || '#3b82f6'}, #0f172a 130%);">
+              <div class="vol-sub">${escapeHTML(b.tag || 'Giáo Trình')}</div>
+              <div class="vol-name">${escapeHTML(b.title)}</div>
+              <div class="vol-center-pattern">
+                <div class="pattern-grid">
+                  <div class="pattern-cell" style="background: rgba(255,255,255,0.7);"></div>
+                  <div class="pattern-cell" style="background: rgba(255,255,255,0.3);"></div>
+                  <div class="pattern-cell" style="background: rgba(255,255,255,0.8);"></div>
+                  <div class="pattern-cell" style="background: rgba(255,255,255,0.4);"></div>
+                  <div class="pattern-cell" style="background: rgba(255,255,255,0.9);"></div>
+                  <div class="pattern-cell" style="background: rgba(255,255,255,0.5);"></div>
+                  <div class="pattern-cell" style="background: rgba(255,255,255,0.6);"></div>
+                  <div class="pattern-cell" style="background: rgba(255,255,255,0.85);"></div>
+                  <div class="pattern-cell" style="background: rgba(255,255,255,0.35);"></div>
+                </div>
+              </div>
+              <div class="vol-footer">
+                <div class="vol-foot-label">HongTai<br>Book</div>
+                <div class="vol-number-badge">${b.volNum || b.level || ''}</div>
+              </div>
+            </div>
+          `;
+        }
+
+        const safeTitle = escapeHTML(b.title);
+        const safeCover = b.coverUrl ? escapeHTML(b.coverUrl) : '';
+        const safeDesc = escapeHTML(b.desc || '');
+        const safeId = b.bookId ? `'${b.bookId}'` : 'null';
+        const levelArg = (b.level || b.volNum) ? `${b.level || b.volNum}` : 'null';
+
+        return `
+          <div class="comic-book-card" onclick="window.openShelfBook(${safeId}, '${safeTitle}', '${safeCover}', '${safeDesc}', ${levelArg})" title="${safeTitle}">
+            <div class="comic-book-spine-overlay"></div>
+            <div class="comic-book-gloss-overlay"></div>
+            ${badgeHtml}
+            ${innerCoverHtml}
+          </div>
+        `;
+      }).join('');
+
+      return `
+        <section class="bookshelf-shelf" style="--shelf-accent: ${shelf.accentColor};">
+          <div class="bookshelf-shelf-header">
+            <div class="bookshelf-mascot-badge">
+              <img src="${shelf.mascotImg}" alt="Mascot" class="bookshelf-mascot-img">
+            </div>
+            <div class="bookshelf-shelf-titles">
+              <h2 class="bookshelf-shelf-title">${escapeHTML(shelf.title)}</h2>
+              <p class="bookshelf-shelf-subtitle">${escapeHTML(shelf.subtitle)}</p>
+            </div>
+          </div>
+          <div class="bookshelf-grid">
+            ${booksHtml}
+          </div>
+        </section>
+      `;
+    }).join('');
+  }
+
+  // --- SHELF BOOK OPEN & MODAL HANDLERS ---
+  window.openShelfBook = function (bookId, title, coverUrl, desc, level) {
+    if (bookId) {
+      window.openBookReader(bookId);
+      return;
+    }
+
+    // Show pending modal
+    const modal = document.getElementById('pending-book-modal');
+    const imgEl = document.getElementById('pending-modal-cover');
+    const titleEl = document.getElementById('pending-modal-title');
+    const descEl = document.getElementById('pending-modal-desc');
+    const actionsEl = document.getElementById('pending-modal-actions');
+
+    if (modal && titleEl && descEl) {
+      if (imgEl) {
+        imgEl.src = coverUrl || '/assets/logo.png';
+        imgEl.alt = title;
+      }
+      titleEl.textContent = title;
+      descEl.textContent = desc || 'Bản số hóa chất lượng cao đang được cập nhật để mang lại trải nghiệm đọc tốt nhất cho bạn.';
+
+      let actionsHtml = `
+        <button onclick="window.closePendingBookModal()" class="topbar-comic-menu-btn" style="width: auto; padding: 8px 18px; font-size: 0.9rem; font-weight: 800;">
+          Đóng
+        </button>
+      `;
+
+      if (level) {
+        actionsHtml += `
+          <a href="/detail-list.html?level=${level}" class="topbar-comic-login-btn">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>Học Từ Vựng Cấp ${level}</span>
+          </a>
+        `;
+      }
+
+      if (actionsEl) actionsEl.innerHTML = actionsHtml;
+      modal.style.display = 'flex';
+    }
+  };
+
+  window.closePendingBookModal = function (e) {
+    if (e && e.target !== e.currentTarget) return;
+    const modal = document.getElementById('pending-book-modal');
+    if (modal) modal.style.display = 'none';
+  };
+
+  window.showMascotTipModal = function () {
+    const modal = document.getElementById('pending-book-modal');
+    const imgEl = document.getElementById('pending-modal-cover');
+    const titleEl = document.getElementById('pending-modal-title');
+    const descEl = document.getElementById('pending-modal-desc');
+    const actionsEl = document.getElementById('pending-modal-actions');
+
+    if (modal && titleEl && descEl) {
+      if (imgEl) {
+        imgEl.src = '/assets/hongtai_dragon_mascot.png';
+        imgEl.alt = 'HongTai Dragon Mascot';
+      }
+      titleEl.textContent = 'Mẹo Đọc Sách Thông Minh Cùng HongTai';
+      descEl.innerHTML = `
+        <div style="text-align: left; font-size: 0.88rem; line-height: 1.6; color: #334155; display: flex; flex-direction: column; gap: 8px;">
+          <div><strong style="color: #0284c7;">📖 Đọc trực tuyến:</strong> Không cần tải PDF, đọc siêu tốc trên mọi thiết bị máy tính và điện thoại.</div>
+          <div><strong style="color: #10b981;">🔖 Tự động lưu trang:</strong> Đóng sách hệ thống tự động ghi nhớ trang đang đọc cho lần sau.</div>
+          <div><strong style="color: #f59e0b;">💬 Thảo luận trang:</strong> Nhấn nút "Bình luận" để hỏi đáp và thảo luận trực tiếp theo từng trang.</div>
+          <div><strong style="color: #ec4899;">✍️ Ghi chú cá nhân:</strong> Viết note riêng tư kèm nhãn màu đánh dấu kiến thức quan trọng.</div>
+        </div>
+      `;
+      if (actionsEl) {
+        actionsEl.innerHTML = `
+          <button onclick="window.closePendingBookModal()" class="topbar-comic-login-btn" style="width: 100%; justify-content: center;">
+            <i class="fa-solid fa-check"></i>
+            <span>Đã hiểu, bắt đầu đọc sách ngay!</span>
+          </button>
+        `;
+      }
+      modal.style.display = 'flex';
+    }
+  };
 
   function updateCategoryCounts() {
     const counts = { all: allBooks.length };

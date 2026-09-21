@@ -87,7 +87,8 @@
     "category": "Giáo Trình HSK",
     "description": "Giáo trình chuẩn HSK cấp độ 5 tập 2, rèn luyện đọc hiểu văn bản nâng cao, từ vựng học thuật và viết luận.",
     "sizeMB": 5.96,
-    "relPath": "PDF Sách tiếng Trung/Pdf Giáo trình/HSK 2.0/HSK 5 chuẩn下.pdf"
+    "relPath": "PDF Sách tiếng Trung/Pdf Giáo trình/HSK 2.0/HSK 5 chuẩn下.pdf",
+    "coverUrl": "/covers/hsk2/hsk5.jpg"
   },
   {
     "id": "book_74e5v6",
@@ -97,7 +98,8 @@
     "category": "Giáo Trình HSK",
     "description": "Giáo trình HSK cấp độ 2 theo chuẩn cải cách mới, tích hợp hội thoại thực tế và cấu trúc câu thông dụng.",
     "sizeMB": 50.24,
-    "relPath": "PDF Sách tiếng Trung/Pdf Giáo trình/HSK 3.0/新HSK2 教材.pdf"
+    "relPath": "PDF Sách tiếng Trung/Pdf Giáo trình/HSK 3.0/新HSK2 教材.pdf",
+    "coverUrl": "/covers/hsk3/hsk2.jpg"
   },
   {
     "id": "book_3b4cws",
@@ -107,7 +109,8 @@
     "category": "Giáo Trình HSK",
     "description": "Giáo trình chuẩn HSK cấp độ 3 mới mở rộng ngữ pháp trung cấp, hội thoại tình huống và vốn từ biểu đạt phong phú.",
     "sizeMB": 71.64,
-    "relPath": "PDF Sách tiếng Trung/Pdf Giáo trình/HSK 3.0/新HSK3教程.pdf"
+    "relPath": "PDF Sách tiếng Trung/Pdf Giáo trình/HSK 3.0/新HSK3教程.pdf",
+    "coverUrl": "/covers/hsk3/hsk3.jpg"
   },
   {
     "id": "book_32gwjz",
@@ -117,7 +120,8 @@
     "category": "Giáo Trình HSK",
     "description": "Giáo trình chuẩn HSK 4 phần 1, phát triển năng lực giao tiếp mạch lạc, nghị luận xã hội và đọc hiểu đoạn văn dài.",
     "sizeMB": 85.35,
-    "relPath": "PDF Sách tiếng Trung/Pdf Giáo trình/HSK 3.0/新HSK教程4上.pdf"
+    "relPath": "PDF Sách tiếng Trung/Pdf Giáo trình/HSK 3.0/新HSK教程4上.pdf",
+    "coverUrl": "/covers/hsk3/hsk4.jpg"
   },
   {
     "id": "book_srnxvs",
