@@ -168,11 +168,19 @@ window.toggleSeasonalParticles = function() {
   const current = localStorage.getItem('particles_enabled') !== 'false';
   const next = !current;
   localStorage.setItem('particles_enabled', next ? 'true' : 'false');
-  if (window.updateParticleToggleBtns) {
+  if (typeof window.updateParticleToggleBtns === 'function') {
     window.updateParticleToggleBtns(next);
   }
   const cv = document.getElementById('seasonal-particle-canvas');
   if (cv) cv.style.display = next ? 'block' : 'none';
+  if (next) {
+    if (typeof window.startParticleLoop === 'function') {
+      window.startParticleLoop();
+    }
+  }
+  if (typeof window.showToast === 'function') {
+    window.showToast(next ? 'Đã bật hiệu ứng bông tuyết mùa rơi ❄️' : 'Đã tắt hiệu ứng bông tuyết mùa rơi ⚡');
+  }
 };
 
 // Universal Study Time Tracker across ALL HTML pages

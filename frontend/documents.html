@@ -136,9 +136,68 @@
       });
     }
 
+    window.updateParticleToggleBtns = function (enabled) {
+      var btns = document.querySelectorAll('#particle-toggle-btn, .particle-toggle-btn, .topbar-particle-btn');
+      btns.forEach(function (btn) {
+        if (enabled) {
+          btn.classList.remove('particles-off');
+          btn.innerHTML = '<i class="fa-solid fa-snowflake" style="color: #38bdf8;"></i>';
+          btn.title = 'Tắt hiệu ứng mùa rơi (Đang BẬT)';
+          btn.style.opacity = '1';
+        } else {
+          btn.classList.add('particles-off');
+          btn.innerHTML = '<i class="fa-solid fa-snowflake" style="opacity: 0.35; color: #94a3b8;"></i>';
+          btn.title = 'Bật hiệu ứng mùa rơi (Đang TẮT)';
+          btn.style.opacity = '0.55';
+        }
+      });
+    };
+
+    window.toggleSeasonalParticles = function () {
+      var current = localStorage.getItem('particles_enabled') !== 'false';
+      var next = !current;
+      localStorage.setItem('particles_enabled', next ? 'true' : 'false');
+      if (typeof window.updateParticleToggleBtns === 'function') {
+        window.updateParticleToggleBtns(next);
+      }
+      var cv = document.getElementById('seasonal-particle-canvas');
+      if (cv) cv.style.display = next ? 'block' : 'none';
+      if (next) {
+        if (typeof window.startParticleLoop === 'function') {
+          window.startParticleLoop();
+        } else if (typeof window.initSeasonalParticles === 'function') {
+          window.initSeasonalParticles();
+        }
+      }
+      if (typeof window.showToast === 'function') {
+        window.showToast(next ? 'Đã bật hiệu ứng bông tuyết mùa rơi ❄️' : 'Đã tắt hiệu ứng bông tuyết mùa rơi ⚡');
+      }
+    };
+
+    window.showToast = function (message, isError) {
+      var existing = document.getElementById('hongtai-global-toast');
+      if (existing) existing.remove();
+      var toast = document.createElement('div');
+      toast.id = 'hongtai-global-toast';
+      toast.style.cssText = 'position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); ' +
+        'background: ' + (isError ? 'rgba(239, 68, 68, 0.95)' : 'rgba(15, 23, 42, 0.95)') + '; ' +
+        'color: #ffffff; border: 1.5px solid ' + (isError ? '#f87171' : 'rgba(56, 189, 248, 0.5)') + '; ' +
+        'padding: 10px 20px; border-radius: 12px; font-size: 0.88rem; font-weight: 700; z-index: 10000000; ' +
+        'box-shadow: 0 10px 30px rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); ' +
+        'transition: opacity 0.25s ease; text-align: center; max-width: 90vw; pointer-events: none;';
+      toast.textContent = message;
+      document.body ? document.body.appendChild(toast) : document.addEventListener('DOMContentLoaded', function () { document.body.appendChild(toast); });
+      setTimeout(function () {
+        toast.style.opacity = '0';
+        setTimeout(function () { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 300);
+      }, 2200);
+    };
+
     document.addEventListener('DOMContentLoaded', function () {
       var isLight = document.documentElement.classList.contains('light-mode') || document.documentElement.classList.contains('light');
       updateToggleBtns(isLight);
+      var particlesEnabled = localStorage.getItem('particles_enabled') !== 'false';
+      window.updateParticleToggleBtns(particlesEnabled);
     });
   </script>
 </head>
@@ -169,9 +228,9 @@
           <button onclick="window.toggleTheme()" id="theme-toggle-btn" class="topbar-comic-menu-btn topbar-theme-btn" title="Chuyển chế độ sáng/tối">
             <i class="fa-solid fa-sun"></i>
           </button>
-          <a href="/#login" class="topbar-comic-login-btn">
-            <i class="fa-solid fa-right-to-bracket"></i>
-            <span>Đăng nhập</span>
+          <a href="/" class="topbar-comic-login-btn topbar-home-btn" title="Về trang chủ Tiếng Trung HongTai">
+            <i class="fa-solid fa-house"></i>
+            <span>Trang chủ</span>
           </a>
         </div>
       </div>
@@ -522,6 +581,7 @@
   </div>
 
   <!-- MODULE SCRIPTS -->
+  <script type="module" src="/src/particles.js"></script>
   <script type="module" src="/src/documents.js"></script>
   <script type="module" src="/src/global_sidebar.js"></script>
 </body>
