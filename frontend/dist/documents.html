@@ -30,74 +30,153 @@
 
   <script>
     (function () {
-      var t = localStorage.getItem('theme') || 'light';
-      document.documentElement.classList.add('notebook-grid-page');
+      var t = localStorage.getItem('theme') || 'dark';
+      var bgUrl = t === 'light' ? "url('/assets/app_bg_day_v3.png')" : "url('/assets/app_bg_night_v3.png')";
+      document.documentElement.style.setProperty('background-image', bgUrl, 'important');
+      document.documentElement.style.setProperty('background-size', 'cover', 'important');
+      document.documentElement.style.setProperty('background-position', 'center center', 'important');
+      document.documentElement.style.setProperty('background-attachment', 'fixed', 'important');
+      document.documentElement.style.setProperty('background-repeat', 'no-repeat', 'important');
+
       if (t === 'light') {
         document.documentElement.classList.add('light-mode', 'light');
         document.documentElement.classList.remove('dark');
-      } else {
-        document.documentElement.classList.add('dark');
-        document.documentElement.classList.remove('light-mode', 'light');
-      }
-    })();
-
-    window.toggleTheme = function () {
-      var isDark = document.documentElement.classList.contains('dark');
-      if (isDark) {
-        document.documentElement.classList.remove('dark');
-        document.documentElement.classList.add('light', 'light-mode');
         if (document.body) {
+          document.body.classList.add('light-mode');
           document.body.classList.remove('dark');
-          document.body.classList.add('light', 'light-mode');
+          document.body.style.setProperty('background-image', bgUrl, 'important');
+          document.body.style.setProperty('background-size', 'cover', 'important');
+          document.body.style.setProperty('background-position', 'center center', 'important');
+          document.body.style.setProperty('background-attachment', 'fixed', 'important');
+          document.body.style.setProperty('background-repeat', 'no-repeat', 'important');
+        } else {
+          document.addEventListener('DOMContentLoaded', function () {
+            document.body.classList.add('light-mode');
+            document.body.classList.remove('dark');
+            document.body.style.setProperty('background-image', bgUrl, 'important');
+            document.body.style.setProperty('background-size', 'cover', 'important');
+            document.body.style.setProperty('background-position', 'center center', 'important');
+            document.body.style.setProperty('background-attachment', 'fixed', 'important');
+            document.body.style.setProperty('background-repeat', 'no-repeat', 'important');
+          });
         }
-        localStorage.setItem('theme', 'light');
       } else {
         document.documentElement.classList.add('dark');
         document.documentElement.classList.remove('light', 'light-mode');
         if (document.body) {
-          document.body.classList.remove('light', 'light-mode');
+          document.body.classList.remove('light-mode', 'light');
+          document.body.classList.add('dark');
+          document.body.style.setProperty('background-image', bgUrl, 'important');
+          document.body.style.setProperty('background-size', 'cover', 'important');
+          document.body.style.setProperty('background-position', 'center center', 'important');
+          document.body.style.setProperty('background-attachment', 'fixed', 'important');
+          document.body.style.setProperty('background-repeat', 'no-repeat', 'important');
+        } else {
+          document.addEventListener('DOMContentLoaded', function () {
+            document.body.classList.remove('light-mode', 'light');
+            document.body.classList.add('dark');
+            document.body.style.setProperty('background-image', bgUrl, 'important');
+            document.body.style.setProperty('background-size', 'cover', 'important');
+            document.body.style.setProperty('background-position', 'center center', 'important');
+            document.body.style.setProperty('background-attachment', 'fixed', 'important');
+            document.body.style.setProperty('background-repeat', 'no-repeat', 'important');
+          });
+        }
+      }
+    })();
+
+    window.toggleTheme = function () {
+      var isLight = document.documentElement.classList.contains('light-mode') || document.documentElement.classList.contains('light');
+      var nextDark = isLight;
+      var bgUrl = nextDark ? "url('/assets/app_bg_night_v3.png')" : "url('/assets/app_bg_day_v3.png')";
+
+      document.documentElement.style.setProperty('background-image', bgUrl, 'important');
+      document.documentElement.style.setProperty('background-size', 'cover', 'important');
+      document.documentElement.style.setProperty('background-position', 'center center', 'important');
+      document.documentElement.style.setProperty('background-attachment', 'fixed', 'important');
+      document.documentElement.style.setProperty('background-repeat', 'no-repeat', 'important');
+
+      if (document.body) {
+        document.body.style.setProperty('background-image', bgUrl, 'important');
+        document.body.style.setProperty('background-size', 'cover', 'important');
+        document.body.style.setProperty('background-position', 'center center', 'important');
+        document.body.style.setProperty('background-attachment', 'fixed', 'important');
+        document.body.style.setProperty('background-repeat', 'no-repeat', 'important');
+      }
+
+      if (nextDark) {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light', 'light-mode');
+        if (document.body) {
+          document.body.classList.remove('light-mode', 'light');
           document.body.classList.add('dark');
         }
         localStorage.setItem('theme', 'dark');
+        updateToggleBtns(false);
+      } else {
+        document.documentElement.classList.add('light', 'light-mode');
+        document.documentElement.classList.remove('dark');
+        if (document.body) {
+          document.body.classList.remove('dark');
+          document.body.classList.add('light-mode');
+        }
+        localStorage.setItem('theme', 'light');
+        updateToggleBtns(true);
       }
     };
+
+    function updateToggleBtns(isLight) {
+      var btns = document.querySelectorAll('#theme-toggle, #theme-toggle-btn, .theme-toggle-btn, .topbar-theme-btn');
+      btns.forEach(function (btn) {
+        btn.innerHTML = isLight
+          ? '<i class="fa-solid fa-sun" style="color:#f59e0b;"></i>'
+          : '<i class="fa-solid fa-moon" style="color:#60a5fa;"></i>';
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var isLight = document.documentElement.classList.contains('light-mode') || document.documentElement.classList.contains('light');
+      updateToggleBtns(isLight);
+    });
   </script>
-  <script type="module" crossorigin src="/assets/documents-BZKsUIiV.js"></script>
+  <script type="module" crossorigin src="/assets/documents-8hnCOEF4.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/global_sidebar-DU5b37H7.js">
   <link rel="modulepreload" crossorigin href="/assets/particles-ChKxUPOC.js">
-  <link rel="stylesheet" crossorigin href="/assets/documents-BkfVyJi2.css">
+  <link rel="stylesheet" crossorigin href="/assets/documents-B9-1SJA0.css">
   <link rel="stylesheet" crossorigin href="/assets/style-7S6wFPrc.css">
 </head>
 
-<body class="notebook-grid-page">
+<body>
   <div class="app-layout">
 
     <!-- Global App Topbar Header -->
     <header class="app-topbar">
-      <div class="topbar-left-cluster">
-        <button id="mobile-sidebar-toggle-btn" class="topbar-comic-menu-btn" title="Mở menu chuyển trang">
-          <i class="fa-solid fa-bars"></i>
-        </button>
-        <a href="/" class="topbar-brand-link">
-          <img src="/assets/logo-CnsJJgQP.png" alt="Logo" class="topbar-brand-logo">
-          <div class="topbar-brand-titles">
-            <span class="topbar-brand-name">Tiếng Trung HongTai</span>
-            <span class="topbar-brand-subtitle">Kho Sách &amp; Giáo Trình</span>
-          </div>
-        </a>
-      </div>
+      <div class="app-topbar-inner">
+        <div class="topbar-left-cluster">
+          <button id="mobile-sidebar-toggle-btn" class="topbar-comic-menu-btn" title="Mở menu chuyển trang">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <a href="/" class="topbar-brand-link">
+            <img src="/assets/logo-CnsJJgQP.png" alt="Logo" class="topbar-brand-logo">
+            <div class="topbar-brand-titles">
+              <span class="topbar-brand-name">Tiếng Trung HongTai</span>
+              <span class="topbar-brand-subtitle">Kho Sách &amp; Giáo Trình</span>
+            </div>
+          </a>
+        </div>
 
-      <div class="topbar-right-actions">
-        <button id="particle-toggle-btn" class="topbar-comic-menu-btn topbar-particle-btn particle-toggle-btn" onclick="window.toggleSeasonalParticles()" title="Bật/Tắt hiệu ứng mùa (Bông tuyết)">
-          <i class="fa-solid fa-snowflake" style="color: #38bdf8;"></i>
-        </button>
-        <button onclick="window.toggleTheme()" id="theme-toggle-btn" class="topbar-comic-menu-btn topbar-theme-btn" title="Chuyển chế độ sáng/tối">
-          <i class="fa-solid fa-sun"></i>
-        </button>
-        <a href="/#login" class="topbar-comic-login-btn">
-          <i class="fa-solid fa-right-to-bracket"></i>
-          <span>Đăng nhập</span>
-        </a>
+        <div class="topbar-right-actions">
+          <button id="particle-toggle-btn" class="topbar-comic-menu-btn topbar-particle-btn particle-toggle-btn" onclick="window.toggleSeasonalParticles()" title="Bật/Tắt hiệu ứng mùa (Bông tuyết)">
+            <i class="fa-solid fa-snowflake" style="color: #38bdf8;"></i>
+          </button>
+          <button onclick="window.toggleTheme()" id="theme-toggle-btn" class="topbar-comic-menu-btn topbar-theme-btn" title="Chuyển chế độ sáng/tối">
+            <i class="fa-solid fa-sun"></i>
+          </button>
+          <a href="/#login" class="topbar-comic-login-btn">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <span>Đăng nhập</span>
+          </a>
+        </div>
       </div>
     </header>
 
@@ -134,6 +213,36 @@
             <div class="documents-stat-item">
               <i class="fa-solid fa-shield-halved"></i>
               <span><strong>Bảo Vệ</strong> Bản Quyền Tác Giả</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="documents-hero-side-card">
+          <div class="hero-feature-pill">
+            <div class="feature-icon-wrap" style="background: rgba(56, 189, 248, 0.15); color: #0284c7;">
+              <i class="fa-solid fa-laptop-code"></i>
+            </div>
+            <div class="feature-text-wrap">
+              <span class="feature-title">Đa Thiết Bị Tiện Lợi</span>
+              <span class="feature-desc">Tương thích hoàn hảo Điện thoại, Máy tính bảng &amp; PC</span>
+            </div>
+          </div>
+          <div class="hero-feature-pill">
+            <div class="feature-icon-wrap" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">
+              <i class="fa-solid fa-bookmark"></i>
+            </div>
+            <div class="feature-text-wrap">
+              <span class="feature-title">Tự Động Ghi Nhớ</span>
+              <span class="feature-desc">Tự động đánh dấu và mở lại trang sách bạn đang đọc dở</span>
+            </div>
+          </div>
+          <div class="hero-feature-pill">
+            <div class="feature-icon-wrap" style="background: rgba(245, 158, 11, 0.15); color: #d97706;">
+              <i class="fa-solid fa-highlighter"></i>
+            </div>
+            <div class="feature-text-wrap">
+              <span class="feature-title">Ghi Chú &amp; Bình Luận</span>
+              <span class="feature-desc">Tạo ghi chú học tập riêng biệt theo từng số trang</span>
             </div>
           </div>
         </div>

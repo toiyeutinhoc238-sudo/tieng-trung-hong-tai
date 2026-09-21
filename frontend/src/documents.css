@@ -21,21 +21,30 @@
 /* --- Container & Layout --- */
 .documents-main-container {
   max-width: 1400px;
+  width: 100%;
   margin: 0 auto;
   padding: 24px 20px 80px 20px;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 /* --- Hero Banner --- */
 .documents-hero {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 36px;
   background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(99, 102, 241, 0.12), rgba(168, 85, 247, 0.08));
   border: 1px solid rgba(56, 189, 248, 0.25);
   border-radius: 20px;
-  padding: 36px 32px;
+  padding: 36px 36px;
   margin-bottom: 32px;
   backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   overflow: hidden;
   box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
 }
 
 .documents-hero::before {
@@ -53,8 +62,97 @@
 .documents-hero-content {
   position: relative;
   z-index: 2;
-  max-width: 800px;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 780px;
 }
+
+.documents-hero-side-card {
+  position: relative;
+  z-index: 2;
+  width: 330px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hero-feature-pill {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 2px solid #0f172a;
+  border-radius: 14px;
+  box-shadow: 2.5px 3px 0 #0f172a;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+
+html.dark .hero-feature-pill {
+  background: rgba(15, 23, 42, 0.75);
+  border-color: #334155;
+  box-shadow: 2.5px 3px 0 #000;
+}
+
+.hero-feature-pill:hover {
+  transform: translateY(-2px);
+  box-shadow: 3.5px 5px 0 #0f172a;
+}
+
+html.dark .hero-feature-pill:hover {
+  box-shadow: 3.5px 5px 0 #000;
+}
+
+.feature-icon-wrap {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.feature-text-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.feature-title {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+html.dark .feature-title {
+  color: #f8fafc;
+}
+
+.feature-desc {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #475569;
+  line-height: 1.35;
+}
+
+html.dark .feature-desc {
+  color: #94a3b8;
+}
+
+@media (max-width: 960px) {
+  .documents-hero {
+    gap: 20px;
+  }
+  .documents-hero-side-card {
+    display: none !important;
+  }
+}
+
 
 .documents-badge-chip {
   display: inline-flex;
@@ -1090,32 +1188,50 @@
    NOTEBOOK GRAPH PAPER & COMIC BOOKSHELF THEME (User Reference Design)
    ========================================================================== */
 
-/* --- Notebook Grid Paper Background --- */
-body.notebook-grid-page,
-html.notebook-grid-page {
-  background-color: #f1f5f9 !important;
-  background-image: 
-    linear-gradient(to right, rgba(148, 163, 184, 0.35) 1.5px, transparent 1.5px),
-    linear-gradient(to bottom, rgba(148, 163, 184, 0.35) 1.5px, transparent 1.5px) !important;
-  background-size: 26px 26px !important;
-  background-position: center top !important;
-  background-attachment: fixed !important;
-  background-repeat: repeat !important;
+/* --- Synchronized App Background Theme (Matches All Other Pages) --- */
+html,
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
   min-height: 100vh;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
 }
 
-html.dark body.notebook-grid-page,
-html.dark.notebook-grid-page {
-  background-color: #0b1120 !important;
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.08) 1.5px, transparent 1.5px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 1.5px, transparent 1.5px) !important;
-  background-size: 26px 26px !important;
+.app-layout {
+  width: 100%;
+  max-width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* Light mode background */
+html.light,
+html.light-mode,
+html.light-mode body,
+html.light body {
+  background: #f1f5f9 url('/assets/app_bg_day_v3.png') no-repeat center center fixed / cover !important;
+  color: #0f172a;
+}
+
+/* Dark mode background */
+html.dark,
+html.dark body,
+body.dark {
+  background: #090d16 url('/assets/app_bg_night_v3.png') no-repeat center center fixed / cover !important;
+  color: #f8fafc;
 }
 
 /* Light Mode Overrides for Hero */
 html.light .documents-title,
-body.light .documents-title {
+html.light-mode .documents-title,
+body.light .documents-title,
+body.light-mode .documents-title {
   background: linear-gradient(135deg, #0f172a 30%, #1e40af 70%, #0369a1 100%);
   -webkit-background-clip: text;
   background-clip: text;
@@ -1123,19 +1239,27 @@ body.light .documents-title {
 }
 
 html.light .documents-subtitle,
-body.light .documents-subtitle {
-  color: #475569;
+html.light-mode .documents-subtitle,
+body.light .documents-subtitle,
+body.light-mode .documents-subtitle {
+  color: #334155;
 }
 
 html.light .documents-hero,
-body.light .documents-hero {
-  background: rgba(255, 255, 255, 0.85);
-  border-color: #0f172a;
+html.light-mode .documents-hero,
+body.light .documents-hero,
+body.light-mode .documents-hero {
+  background: rgba(255, 255, 255, 0.90);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 2.5px solid #0f172a;
   box-shadow: 3px 4px 0 #0f172a;
 }
 
 html.light .documents-stat-item,
-body.light .documents-stat-item {
+html.light-mode .documents-stat-item,
+body.light .documents-stat-item,
+body.light-mode .documents-stat-item {
   background: #ffffff;
   border: 2px solid #0f172a;
   box-shadow: 2px 2.5px 0 #0f172a;
@@ -1143,18 +1267,85 @@ body.light .documents-stat-item {
 }
 
 html.light .documents-stat-item strong,
-body.light .documents-stat-item strong {
+html.light-mode .documents-stat-item strong,
+body.light .documents-stat-item strong,
+body.light-mode .documents-stat-item strong {
   color: #0f172a;
+}
+
+/* Dark Mode Overrides for Hero */
+html.dark .documents-hero,
+body.dark .documents-hero {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+}
+
+/* Light Mode Overrides for Catalog Book Cards & Filters */
+html.light .book-card,
+html.light-mode .book-card,
+body.light .book-card,
+body.light-mode .book-card {
+  background: rgba(255, 255, 255, 0.92);
+  border: 2px solid #0f172a;
+  box-shadow: 3px 4px 0 #0f172a;
+  color: #0f172a;
+}
+
+html.light .book-title-vi,
+html.light-mode .book-title-vi,
+body.light .book-title-vi,
+body.light-mode .book-title-vi {
+  color: #0f172a;
+}
+
+html.light .book-desc,
+html.light-mode .book-desc,
+body.light .book-desc,
+body.light-mode .book-desc {
+  color: #475569;
+}
+
+html.light .documents-search-input,
+html.light-mode .documents-search-input,
+body.light .documents-search-input,
+body.light-mode .documents-search-input {
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid #0f172a;
+  box-shadow: 2px 3px 0 #0f172a;
+  color: #0f172a;
+}
+
+html.light .documents-filter-btn,
+html.light-mode .documents-filter-btn,
+body.light .documents-filter-btn,
+body.light-mode .documents-filter-btn {
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #0f172a;
+  box-shadow: 2px 2px 0 #0f172a;
+  color: #0f172a;
+}
+
+html.light .documents-filter-btn.active,
+html.light-mode .documents-filter-btn.active,
+body.light .documents-filter-btn.active,
+body.light-mode .documents-filter-btn.active {
+  background: #3b82f6;
+  color: #ffffff;
+  border-color: #0f172a;
 }
 
 /* --- App Topbar & Responsive Header --- */
 .app-topbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 12px 24px;
+  justify-content: center;
+  padding: 0;
   background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-bottom: 2.5px solid #0f172a;
   position: sticky;
   top: 0;
@@ -1168,6 +1359,17 @@ body.light .documents-stat-item strong {
 html.dark .app-topbar {
   background: rgba(15, 23, 42, 0.94);
   border-bottom-color: #334155;
+}
+
+.app-topbar-inner {
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
 }
 
 .topbar-left-cluster {
@@ -1879,31 +2081,37 @@ html.dark .pending-book-modal-close {
   }
 
   .documents-stats-row {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    gap: 6px;
-    padding-bottom: 2px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-
-  .documents-stats-row::-webkit-scrollbar {
-    display: none;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
   }
 
   .documents-stat-item {
-    padding: 4px 8px;
-    font-size: 0.7rem;
-    gap: 4px;
-    flex-shrink: 0;
-    border-radius: 8px;
-    border-width: 1.5px;
-    box-shadow: 1.5px 2px 0 #0f172a;
+    padding: 6px 8px !important;
+    font-size: 0.72rem !important;
+    gap: 6px !important;
+    flex-shrink: 1 !important;
+    border-radius: 8px !important;
+    border-width: 1.5px !important;
+    box-shadow: 1.5px 2px 0 #0f172a !important;
+    box-sizing: border-box !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    justify-content: flex-start !important;
   }
 
   .documents-stat-item i {
-    font-size: 0.8rem;
+    font-size: 0.82rem !important;
+    flex-shrink: 0;
+  }
+
+  .documents-stat-item span {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
   }
 
   /* View Switcher Controls */
@@ -2196,6 +2404,10 @@ html.dark .pending-book-modal-close {
 
 @media (max-width: 640px) {
   .app-topbar {
+    padding: 0 !important;
+  }
+
+  .app-topbar-inner {
     padding: 8px 10px !important;
   }
 
@@ -2445,7 +2657,11 @@ html.dark .pending-book-modal-close {
 
 @media (max-width: 480px) {
   .app-topbar {
-    padding: 8px 10px !important;
+    padding: 0 !important;
+  }
+
+  .app-topbar-inner {
+    padding: 8px 8px !important;
   }
 
   .topbar-left-cluster {
@@ -2502,6 +2718,10 @@ html.dark .pending-book-modal-close {
 
 @media (max-width: 350px) {
   .app-topbar {
+    padding: 0 !important;
+  }
+
+  .app-topbar-inner {
     padding: 6px 6px !important;
   }
 
