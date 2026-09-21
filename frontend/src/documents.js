@@ -1,3 +1,5 @@
+import './particles.js';
+
 /**
  * Tiếng Trung HongTai - Kho Sách & Tài Liệu Điện Tử (E-Book Reader)
  * Trình đọc sách PDF thông minh, bảo mật bản quyền, lưu tiến độ & tương tác học thuật.

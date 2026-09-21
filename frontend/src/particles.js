@@ -3,7 +3,7 @@ export function initSeasonalParticles() {
   if (!canvas) {
     canvas = document.createElement('canvas');
     canvas.id = 'seasonal-particle-canvas';
-    canvas.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999;';
+    canvas.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 50;';
     if (document.body) {
       document.body.insertBefore(canvas, document.body.firstChild);
     } else {
@@ -34,19 +34,26 @@ export function initSeasonalParticles() {
   else if (month >= 7 && month <= 9) season = 'autumn';
   else season = 'winter';
 
-  const particleCount = season === 'winter' ? 40 : 28;
+  // Support dedicated snowflake theme for documents & bookshelf or user preference
+  const isDocumentsPage = window.location.pathname.includes('documents');
+  if (isDocumentsPage) {
+    season = 'winter'; // Default to beautiful snowflake effect for documents page
+  }
+
+  const particleCount = season === 'winter' ? 45 : 28;
   const particles = [];
 
   for (let i = 0; i < particleCount; i++) {
     particles.push({
       x: Math.random() * width,
       y: Math.random() * height,
-      size: season === 'winter' ? Math.random() * 3.5 + 2 : Math.random() * 7 + 5,
-      speedY: Math.random() * 1.2 + 0.5,
+      size: season === 'winter' ? (Math.random() * 4.5 + 2.5) : (Math.random() * 7 + 5),
+      speedY: season === 'winter' ? (Math.random() * 0.9 + 0.45) : (Math.random() * 1.2 + 0.5),
       speedX: Math.sin(Math.random() * Math.PI) * 0.7,
       rotation: Math.random() * 360,
       rotSpeed: (Math.random() - 0.5) * 1.5,
-      opacity: Math.random() * 0.65 + 0.35
+      opacity: Math.random() * 0.5 + 0.45,
+      shape: i % 3 === 0 ? 'crystal' : 'glow'
     });
   }
 
@@ -82,10 +89,33 @@ export function initSeasonalParticles() {
       ctx.globalAlpha = p.opacity;
 
       if (season === 'winter') {
-        ctx.fillStyle = '#ffffff';
-        ctx.beginPath();
-        ctx.arc(0, 0, p.size, 0, Math.PI * 2);
-        ctx.fill();
+        if (p.shape === 'crystal') {
+          // Delicate 6-arm crystal snowflake
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.95)';
+          ctx.lineWidth = Math.max(1, p.size * 0.22);
+          ctx.lineCap = 'round';
+          ctx.beginPath();
+          for (let k = 0; k < 6; k++) {
+            ctx.moveTo(0, 0);
+            ctx.lineTo(0, p.size);
+            ctx.moveTo(0, p.size * 0.55);
+            ctx.lineTo(p.size * 0.25, p.size * 0.75);
+            ctx.moveTo(0, p.size * 0.55);
+            ctx.lineTo(-p.size * 0.25, p.size * 0.75);
+            ctx.rotate(Math.PI / 3);
+          }
+          ctx.stroke();
+        } else {
+          // Soft glowing fluffy snowball with icy core
+          const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, p.size);
+          grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
+          grad.addColorStop(0.4, 'rgba(224, 242, 254, 0.85)');
+          grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+          ctx.fillStyle = grad;
+          ctx.beginPath();
+          ctx.arc(0, 0, p.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
       } else if (season === 'spring') {
         ctx.fillStyle = 'rgba(255, 183, 197, 0.85)';
         ctx.beginPath();
@@ -124,12 +154,12 @@ window.updateParticleToggleBtns = function(enabled) {
   btns.forEach(btn => {
     if (enabled) {
       btn.classList.remove('particles-off');
-      btn.innerHTML = '<i class="fa-solid fa-snowflake" style="color: #3b82f6;"></i>';
-      btn.title = 'Tắt hiệu ứng rơi động (Đang BẬT)';
+      btn.innerHTML = '<i class="fa-solid fa-snowflake" style="color: #38bdf8;"></i>';
+      btn.title = 'Tắt hiệu ứng mùa rơi (Đang BẬT)';
     } else {
       btn.classList.add('particles-off');
       btn.innerHTML = '<i class="fa-solid fa-snowflake" style="opacity: 0.35; color: #94a3b8;"></i>';
-      btn.title = 'Bật hiệu ứng rơi động (Đang TẮT)';
+      btn.title = 'Bật hiệu ứng mùa rơi (Đang TẮT)';
     }
   });
 };

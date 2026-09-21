@@ -85,6 +85,9 @@
       </div>
 
       <div class="topbar-right-actions">
+        <button id="particle-toggle-btn" class="topbar-comic-menu-btn topbar-particle-btn particle-toggle-btn" onclick="window.toggleSeasonalParticles()" title="Bật/Tắt hiệu ứng mùa (Bông tuyết)">
+          <i class="fa-solid fa-snowflake" style="color: #38bdf8;"></i>
+        </button>
         <button onclick="window.toggleTheme()" id="theme-toggle-btn" class="topbar-comic-menu-btn topbar-theme-btn" title="Chuyển chế độ sáng/tối">
           <i class="fa-solid fa-sun"></i>
         </button>
@@ -223,21 +226,6 @@
     </main>
 
   </div>
-
-  <!-- FLOATING MASCOT WIDGET (Matching Screenshot) -->
-  <aside class="floating-mascot-container" aria-label="Trợ lý đọc sách HongTai">
-    <div class="floating-mascot-wrapper" onclick="window.showMascotTipModal()">
-      <div class="floating-mascot-bubble">
-        <span>Đọc sách cùng HongTai! 📖</span>
-      </div>
-      <div class="floating-mascot-btn" title="Trợ lý đọc sách HongTai">
-        <img src="/assets/hongtai_dragon_mascot.png" alt="HongTai Dragon Mascot">
-        <div class="floating-mascot-chat-pill">
-          <i class="fa-solid fa-comment"></i>
-        </div>
-      </div>
-    </div>
-  </aside>
 
   <!-- PENDING BOOK / INFO MODAL -->
   <div id="pending-book-modal" class="pending-book-modal-backdrop" style="display: none;" onclick="window.closePendingBookModal(event)">
