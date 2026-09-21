@@ -432,7 +432,10 @@ function scan(dir, relative = '') {
         sizeMB: parseFloat((fs.statSync(fullPath).size / (1024 * 1024)).toFixed(2)),
         relPath: relPath.replace(/\\/g, '/')
       };
-      if (meta.coverUrl) {
+      const thumbDiskPath = path.resolve(__dirname, '..', '..', 'frontend', 'public', 'covers', 'thumbnails', `${id}.jpg`);
+      if (fs.existsSync(thumbDiskPath)) {
+        bookObj.coverUrl = `/covers/thumbnails/${id}.jpg`;
+      } else if (meta.coverUrl) {
         bookObj.coverUrl = meta.coverUrl;
       }
       results.push(bookObj);

@@ -888,19 +888,35 @@ if (window.pdfjsLib) {
       else if (book.category.includes('Văn Học') || book.category.includes('Truyện')) tagClass = 'tag-van-hoc';
       else if (book.category.includes('Ngữ Pháp')) tagClass = 'tag-ngu-phap';
 
+      const coverThumb = book.coverUrl || `/covers/thumbnails/${book.id}.jpg`;
+
       return `
         <div class="book-card" id="card-${book.id}">
           <div class="book-card-spine"></div>
           
-          <div class="book-card-header">
-            <span class="book-category-tag ${tagClass}">${escapeHTML(book.category)}</span>
-            <span class="book-size-chip"><i class="fa-regular fa-file-pdf"></i> ${book.sizeMB} MB</span>
-          </div>
+          <div class="book-card-main-content">
+            <div class="book-card-cover-wrapper" onclick="window.openBookReader('${book.id}')" title="Nhấn để đọc: ${escapeHTML(book.titleVi)}">
+              <img src="${coverThumb}" alt="${escapeHTML(book.titleVi)}" class="book-card-cover-thumb" loading="lazy" onerror="this.style.display='none'">
+              <div class="book-card-cover-spine-edge"></div>
+              <div class="book-card-cover-shine"></div>
+              <div class="book-card-hover-overlay">
+                <i class="fa-solid fa-book-open-reader"></i>
+                <span>Đọc ngay</span>
+              </div>
+            </div>
 
-          <div class="book-card-body">
-            <h3 class="book-title-vi" title="${escapeHTML(book.titleVi)}">${escapeHTML(book.titleVi)}</h3>
-            <p class="book-title-original" title="${escapeHTML(book.titleOriginal)}">${escapeHTML(book.titleOriginal)}</p>
-            <p class="book-desc">${escapeHTML(book.description)}</p>
+            <div class="book-card-info-col">
+              <div class="book-card-header">
+                <span class="book-category-tag ${tagClass}">${escapeHTML(book.category)}</span>
+                <span class="book-size-chip"><i class="fa-regular fa-file-pdf"></i> ${book.sizeMB} MB</span>
+              </div>
+
+              <div class="book-card-body">
+                <h3 class="book-title-vi" onclick="window.openBookReader('${book.id}')" title="${escapeHTML(book.titleVi)}">${escapeHTML(book.titleVi)}</h3>
+                <p class="book-title-original" title="${escapeHTML(book.titleOriginal)}">${escapeHTML(book.titleOriginal)}</p>
+                <p class="book-desc">${escapeHTML(book.description)}</p>
+              </div>
+            </div>
           </div>
 
           ${hasProgress ? `
