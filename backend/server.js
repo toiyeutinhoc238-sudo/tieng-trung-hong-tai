@@ -3997,10 +3997,19 @@ app.get('/api/books/:id/stream', async (req, res) => {
       return res.status(404).json({ error: 'Không tìm thấy sách.' });
     }
 
-    const p1 = path.resolve(__dirname, '..', 'PDF Sách tiếng Trung', book.relPath);
-    const p2 = path.resolve(__dirname, '..', book.relPath);
-    const fullPdfPath = existsSync(p1) ? p1 : (existsSync(p2) ? p2 : null);
-    if (!fullPdfPath || !existsSync(fullPdfPath)) {
+    const trimmedRel = (book.relPath || '').replace(/^PDF Sách tiếng Trung[\\/]/i, '');
+    const candidatePaths = [
+      path.resolve(__dirname, '..', 'PDF SACH TIENG TRUNG NEW', book.relPath),
+      path.resolve(__dirname, '..', 'PDF SACH TIENG TRUNG NEW', 'PDF Sách tiếng Trung', book.relPath),
+      path.resolve(__dirname, '..', 'PDF SACH TIENG TRUNG NEW', 'PDF Sách tiếng Trung', trimmedRel),
+      path.resolve(__dirname, '..', 'PDF SACH TIENG TRUNG NEW', trimmedRel),
+      path.resolve(__dirname, '..', book.relPath),
+      path.resolve(__dirname, '..', 'PDF Sách tiếng Trung', book.relPath),
+      path.resolve(__dirname, '..', 'PDF Sách tiếng Trung', trimmedRel),
+      path.resolve(__dirname, '..', 'PDF Sách tiếng Trung', 'PDF Sách tiếng Trung', trimmedRel)
+    ];
+    const fullPdfPath = candidatePaths.find(p => p && existsSync(p)) || null;
+    if (!fullPdfPath) {
       return res.status(404).json({ error: 'Tệp sách PDF không tồn tại trên máy chủ.' });
     }
 

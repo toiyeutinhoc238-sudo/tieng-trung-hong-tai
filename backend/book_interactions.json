@@ -1,5 +1,15 @@
 {
-  "reading_progress": {},
+  "reading_progress": {
+    "phanphiphu04@gmail.com": {
+      "book_d5l2mx": {
+        "bookId": "book_d5l2mx",
+        "lastPage": 1,
+        "totalPages": 317,
+        "percentage": 0,
+        "updatedAt": "2026-09-21T14:14:27.735Z"
+      }
+    }
+  },
   "comments": [],
   "notes": []
 }

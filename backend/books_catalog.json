@@ -60,14 +60,14 @@
     "relPath": "PDF Sách tiếng Trung/Pdf Giáo trình/Hán ngữ 6 cuốn/Mới/Bản sao của Giáo trình hán ngữ 4 (Trung-Việt).pdf"
   },
   {
-    "id": "book_tn7sl6",
-    "name": "Bản sao của Giáo trình hán ngữ 5 (Trung-Việt).pdf",
-    "titleVi": "Giáo Trình Hán Ngữ 5 (Bản Dịch Song Ngữ Trung - Việt)",
-    "titleOriginal": "Giáo trình hán ngữ 5 (Trung-Việt)",
+    "id": "book_d5l2mx",
+    "name": "Bản sao của Giáo trình hán ngữ 6 (Trung-Việt).pdf",
+    "titleVi": "Giáo Trình Hán Ngữ 6 (Bản Dịch Song Ngữ Trung - Việt)",
+    "titleOriginal": "Giáo trình hán ngữ 6 (Trung-Việt)",
     "category": "Giáo Trình Hán Ngữ",
-    "description": "Giáo trình Hán ngữ quyển 5 (Tập 3 Thượng), tiếp cận các tác phẩm văn chương, văn hóa và bình luận xã hội.",
-    "sizeMB": 83.03,
-    "relPath": "PDF Sách tiếng Trung/Pdf Giáo trình/Hán ngữ 6 cuốn/Mới/Bản sao của Giáo trình hán ngữ 5 (Trung-Việt).pdf"
+    "description": "Giáo trình Hán ngữ bộ 6 tập quyển 6 (Tập 3 Hạ), trình độ nâng cao giúp hoàn thiện vốn ngữ pháp sâu sắc và năng lực biểu đạt phong phú.",
+    "sizeMB": 77.3,
+    "relPath": "PDF Sách tiếng Trung/Pdf Giáo trình/Hán ngữ 6 cuốn/Mới/Bản sao của Giáo trình hán ngữ 6 (Trung-Việt).pdf"
   },
   {
     "id": "book_6yn0dc",
@@ -122,16 +122,6 @@
     "sizeMB": 85.35,
     "relPath": "PDF Sách tiếng Trung/Pdf Giáo trình/HSK 3.0/新HSK教程4上.pdf",
     "coverUrl": "/covers/hsk3/hsk4.jpg"
-  },
-  {
-    "id": "book_srnxvs",
-    "name": "现代汉语八百词.pdf",
-    "titleVi": "800 Từ Tiếng Hán Hiện Đại (Lữ Thúc Tương)",
-    "titleOriginal": "现代汉语八百词",
-    "category": "Ngữ Pháp & Tra Cứu",
-    "description": "Tác phẩm gối đầu giường phân tích ngữ nghĩa, ngữ dụng và cấu trúc hư từ của các từ vựng phổ dụng nhất.",
-    "sizeMB": 18.43,
-    "relPath": "PDF Sách tiếng Trung/Học tập/现代汉语八百词.pdf"
   },
   {
     "id": "book_n8lnrk",
@@ -204,26 +194,6 @@
     "relPath": "PDF Sách tiếng Trung/sách cho giáo viên/新教师必备81问.pdf"
   },
   {
-    "id": "book_e0rbp0",
-    "name": "The Routledge Handbook of Chinese Language Teaching.pdf",
-    "titleVi": "Cẩm Nang Quốc Tế Về Phương Pháp Giảng Dạy Tiếng Trung (Routledge)",
-    "titleOriginal": "The Routledge Handbook of Chinese Language Teaching",
-    "category": "Sách Cho Giáo Viên",
-    "description": "Tài liệu học thuật hàng đầu thế giới phân tích các lý thuyết, đường hướng và phương pháp sư phạm hiện đại.",
-    "sizeMB": 16.75,
-    "relPath": "PDF Sách tiếng Trung/Học tập/The Routledge Handbook of Chinese Language Teaching.pdf"
-  },
-  {
-    "id": "book_bq3dkc",
-    "name": "对外汉语教材通论.pdf",
-    "titleVi": "Đại Cương Nghiên Cứu & Đánh Giá Giáo Trình Tiếng Hán",
-    "titleOriginal": "对外汉语教材通论",
-    "category": "Sách Cho Giáo Viên",
-    "description": "Tiêu chí lựa chọn, so sánh, biên soạn và khai thác tối đa hiệu quả từ các bộ giáo trình tiếng Trung hiện hành.",
-    "sizeMB": 16.25,
-    "relPath": "PDF Sách tiếng Trung/sách cho giáo viên/对外汉语教材通论.pdf"
-  },
-  {
     "id": "book_ajxu4a",
     "name": "K-16 Non-native Chinese Teachers Training.pdf",
     "titleVi": "Đào Tạo & Bồi Dưỡng Nghiệp Vụ Giáo Viên Dạy Tiếng Trung K-16",
@@ -274,16 +244,6 @@
     "relPath": "PDF Sách tiếng Trung/sách cho giáo viên/Lesson Plans for Teaching Chinese Grammar.pdf"
   },
   {
-    "id": "book_5v59eg",
-    "name": "Xiandai Hanyu Yufa Yanjiu Jiaocheng.pdf",
-    "titleVi": "Giáo Trình Nghiên Cứu Ngữ Pháp Hán Ngữ Hiện Đại (GS. Lục Kiệm Minh)",
-    "titleOriginal": "Xiandai Hanyu Yufa Yanjiu Jiaocheng",
-    "category": "Sách Cho Giáo Viên",
-    "description": "Công trình kinh điển của GS. Lục Kiệm Minh đào sâu phương pháp luận nghiên cứu ngữ pháp tiếng Hán hiện đại.",
-    "sizeMB": 47.17,
-    "relPath": "PDF Sách tiếng Trung/sách cho giáo viên/Xiandai Hanyu Yufa Yanjiu Jiaocheng.pdf"
-  },
-  {
     "id": "book_ntmqhr",
     "name": "现代汉语教学说明与自学参考.pdf",
     "titleVi": "Hướng Dẫn Giảng Dạy & Tài Liệu Tự Học Tiếng Hán Hiện Đại",
@@ -292,16 +252,6 @@
     "description": "Đáp án chi tiết bài tập, giải thích bổ trợ và tài liệu mở rộng cho chương trình tiếng Hán hiện đại.",
     "sizeMB": 9.3,
     "relPath": "PDF Sách tiếng Trung/sách cho giáo viên/现代汉语教学说明与自学参考.pdf"
-  },
-  {
-    "id": "book_5ur120",
-    "name": "The Graded Chinese National Standard.pdf",
-    "titleVi": "Khung Tiêu Chuẩn Năng Lực Tiếng Hán Quốc Tế Phân Cấp Toàn Diện",
-    "titleOriginal": "The Graded Chinese National Standard",
-    "category": "Sách Cho Giáo Viên",
-    "description": "Văn bản gốc quy định chuẩn năng lực 3 bậc 9 cấp (HSK 3.0) từ vựng, ngữ pháp và kỹ năng.",
-    "sizeMB": 17.81,
-    "relPath": "PDF Sách tiếng Trung/sách cho giáo viên/The Graded Chinese National Standard.pdf"
   },
   {
     "id": "book_ciuag9",
@@ -322,6 +272,16 @@
     "description": "Quy trình thiết kế bài giảng 5 bước: Khởi động, Giới thiệu từ mới, Ngữ pháp, Luyện tập và Ứng dụng thực tế.",
     "sizeMB": 12.87,
     "relPath": "PDF Sách tiếng Trung/sách cho giáo viên/教学课堂教案设计.pdf"
+  },
+  {
+    "id": "book_gu7enp",
+    "name": "外国人学汉语语法偏误研究.pdf",
+    "titleVi": "Nghiên Cứu Lỗi Lệch Ngữ Pháp Của Người Nước Ngoài Khi Học Tiếng Hán",
+    "titleOriginal": "外国人学汉语语法偏误研究",
+    "category": "Sách Cho Giáo Viên",
+    "description": "Phân tích chuyên sâu các lỗi ngữ pháp thường gặp nhất của người nước ngoài khi học tiếng Hán và phương pháp khắc phục hiệu quả.",
+    "sizeMB": 14.05,
+    "relPath": "PDF Sách tiếng Trung/sách cho giáo viên/外国人学汉语语法偏误研究.pdf"
   },
   {
     "id": "book_d8e86x",
@@ -352,26 +312,6 @@
     "description": "Tác phẩm gối đầu giường của GS. Lưu Tuần - nền tảng lý thuyết bắt buộc cho mọi giáo viên tiếng Trung.",
     "sizeMB": 10.66,
     "relPath": "PDF Sách tiếng Trung/sách cho giáo viên/对外汉语教育学引论.pdf"
-  },
-  {
-    "id": "book_7xo1uv",
-    "name": "国际汉语教学案例分析与点评.pdf",
-    "titleVi": "Phân Tích & Bình Luận Các Án Lệ Giảng Dạy Tiếng Trung Quốc Tế",
-    "titleOriginal": "国际汉语教学案例分析与点评",
-    "category": "Sách Cho Giáo Viên",
-    "description": "Tổng kết kinh nghiệm thực địa, nhận xét chuyên gia và bài học kinh nghiệm giảng dạy đa quốc gia.",
-    "sizeMB": 57.38,
-    "relPath": "PDF Sách tiếng Trung/sách cho giáo viên/国际汉语教学案例分析与点评.pdf"
-  },
-  {
-    "id": "book_wzmdte",
-    "name": "Analysis of Classic Cases for TCSOL.pdf",
-    "titleVi": "Phân Tích Các Tình Huống Kinh Điển Trong Dạy Tiếng Trung (TCSOL)",
-    "titleOriginal": "Analysis of Classic Cases for TCSOL",
-    "category": "Sách Cho Giáo Viên",
-    "description": "Các tình huống sư phạm thực tế, xử lý tâm lý học viên và tình huống sư phạm đa văn hóa trên lớp.",
-    "sizeMB": 16.58,
-    "relPath": "PDF Sách tiếng Trung/sách cho giáo viên/Analysis of Classic Cases for TCSOL.pdf"
   },
   {
     "id": "book_l9z5ni",
@@ -434,6 +374,16 @@
     "relPath": "PDF Sách tiếng Trung/sách cho giáo viên/National Standard 3 Grammar.pdf"
   },
   {
+    "id": "book_dhudgd",
+    "name": "国际汉语词汇与词汇教学.pdf",
+    "titleVi": "Từ Vựng & Phương Pháp Giảng Dạy Từ Vựng Tiếng Hán Quốc Tế",
+    "titleOriginal": "国际汉语词汇与词汇教学",
+    "category": "Sách Cho Giáo Viên",
+    "description": "Chuyên khảo lý thuyết và kỹ thuật sư phạm giảng dạy hệ thống từ vựng tiếng Hán cho người nước ngoài một cách hiệu quả.",
+    "sizeMB": 102.25,
+    "relPath": "PDF Sách tiếng Trung/sách cho giáo viên/国际汉语词汇与词汇教学.pdf"
+  },
+  {
     "id": "book_tzkmdn",
     "name": "汉语词汇与词汇教学.pdf",
     "titleVi": "Từ Vựng Học & Phương Pháp Giảng Dạy Từ Vựng Tiếng Hán",
@@ -454,14 +404,14 @@
     "relPath": "PDF Sách tiếng Trung/sách cho giáo viên/听说课优秀教案集.pdf"
   },
   {
-    "id": "book_7jeadn",
-    "name": "International Chinese Teaching Cases and Discussions.pdf",
-    "titleVi": "Tuyển Tập Tình Huống Giảng Dạy Tiếng Trung Quốc Tế & Thảo Luận Sư Phạm",
-    "titleOriginal": "International Chinese Teaching Cases and Discussions",
+    "id": "book_1gs9lc",
+    "name": "国际汉语教学案例与分析.pdf",
+    "titleVi": "Tuyển Tập Tình Huống Sư Phạm & Phân Tích Giảng Dạy Tiếng Hán Quốc Tế",
+    "titleOriginal": "国际汉语教学案例与分析",
     "category": "Sách Cho Giáo Viên",
-    "description": "Tập hợp các bài học mẫu, phương pháp thiết kế hoạt động và giải pháp tương tác lớp học sinh động.",
-    "sizeMB": 68.54,
-    "relPath": "PDF Sách tiếng Trung/sách cho giáo viên/International Chinese Teaching Cases and Discussions.pdf"
+    "description": "Phân tích các tình huống sư phạm thực tế trong giảng dạy tiếng Hán cho học viên nước ngoài, giải pháp xử lý và phương pháp đứng lớp.",
+    "sizeMB": 76.25,
+    "relPath": "PDF Sách tiếng Trung/sách cho giáo viên/国际汉语教学案例与分析.pdf"
   },
   {
     "id": "book_dyiwui",
@@ -642,6 +592,16 @@
     "description": "Góc nhìn văn hóa đương đại về lối sống, công nghệ, tiêu dùng và các xu hướng mới của giới trẻ Trung Quốc.",
     "sizeMB": 2.04,
     "relPath": "PDF Sách tiếng Trung/sách cho giáo viên/Cosmopolitan Life in Modern China.pdf"
+  },
+  {
+    "id": "book_pzrbib",
+    "name": "中国历史常识.pdf",
+    "titleVi": "Kiến Thức Lịch Sử Trung Quốc Thường Thức",
+    "titleOriginal": "中国历史常识",
+    "category": "Văn Hóa & Xã Hội",
+    "description": "Tập hợp các sự kiện lịch sử, nhân vật, biến cố và tiến trình phát triển văn minh Trung Hoa từ cổ đại đến hiện đại.",
+    "sizeMB": 42.51,
+    "relPath": "PDF Sách tiếng Trung/Học tập/中国历史常识.pdf"
   },
   {
     "id": "book_e705ug",

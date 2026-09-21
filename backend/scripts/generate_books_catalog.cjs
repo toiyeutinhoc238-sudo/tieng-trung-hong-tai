@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const rootDir = path.resolve(__dirname, '..', '..', 'PDF Sách tiếng Trung');
+const rootDir = path.resolve(__dirname, '..', '..', 'PDF SACH TIENG TRUNG NEW');
 
 const bookMeta = {
   "China_s Cultural Heritage.pdf": {
@@ -28,6 +28,11 @@ const bookMeta = {
     titleVi: "Cẩm Nang Quốc Tế Về Phương Pháp Giảng Dạy Tiếng Trung (Routledge)",
     category: "Sách Cho Giáo Viên",
     description: "Tài liệu học thuật hàng đầu thế giới phân tích các lý thuyết, đường hướng và phương pháp sư phạm hiện đại."
+  },
+  "中国历史常识.pdf": {
+    titleVi: "Kiến Thức Lịch Sử Trung Quốc Thường Thức",
+    category: "Văn Hóa & Xã Hội",
+    description: "Tập hợp các sự kiện lịch sử, nhân vật, biến cố và tiến trình phát triển văn minh Trung Hoa từ cổ đại đến hiện đại."
   },
   "中国文化要略.pdf": {
     titleVi: "Đại Cương Văn Hóa Trung Quốc (Trung Quốc Văn Hóa Yếu Lược)",
@@ -57,21 +62,25 @@ const bookMeta = {
   "HSK 5 chuẩn下.pdf": {
     titleVi: "Giáo Trình Chuẩn HSK 5 (Tập Dưới)",
     category: "Giáo Trình HSK",
+    coverUrl: "/covers/hsk2/hsk5.jpg",
     description: "Giáo trình chuẩn HSK cấp độ 5 tập 2, rèn luyện đọc hiểu văn bản nâng cao, từ vựng học thuật và viết luận."
   },
   "新HSK2 教材.pdf": {
     titleVi: "Giáo Trình HSK 2 Mới (HSK 3.0)",
     category: "Giáo Trình HSK",
+    coverUrl: "/covers/hsk3/hsk2.jpg",
     description: "Giáo trình HSK cấp độ 2 theo chuẩn cải cách mới, tích hợp hội thoại thực tế và cấu trúc câu thông dụng."
   },
   "新HSK3教程.pdf": {
     titleVi: "Giáo Trình HSK 3 Mới (HSK 3.0)",
     category: "Giáo Trình HSK",
+    coverUrl: "/covers/hsk3/hsk3.jpg",
     description: "Giáo trình chuẩn HSK cấp độ 3 mới mở rộng ngữ pháp trung cấp, hội thoại tình huống và vốn từ biểu đạt phong phú."
   },
   "新HSK教程4上.pdf": {
     titleVi: "Giáo Trình HSK 4 Mới (Tập Trên - HSK 3.0)",
     category: "Giáo Trình HSK",
+    coverUrl: "/covers/hsk3/hsk4.jpg",
     description: "Giáo trình chuẩn HSK 4 phần 1, phát triển năng lực giao tiếp mạch lạc, nghị luận xã hội và đọc hiểu đoạn văn dài."
   },
   "Bản sao của Giáo trình hán ngữ 2 (Trung-Việt).pdf": {
@@ -93,6 +102,11 @@ const bookMeta = {
     titleVi: "Giáo Trình Hán Ngữ 5 (Bản Dịch Song Ngữ Trung - Việt)",
     category: "Giáo Trình Hán Ngữ",
     description: "Giáo trình Hán ngữ quyển 5 (Tập 3 Thượng), tiếp cận các tác phẩm văn chương, văn hóa và bình luận xã hội."
+  },
+  "Bản sao của Giáo trình hán ngữ 6 (Trung-Việt).pdf": {
+    titleVi: "Giáo Trình Hán Ngữ 6 (Bản Dịch Song Ngữ Trung - Việt)",
+    category: "Giáo Trình Hán Ngữ",
+    description: "Giáo trình Hán ngữ bộ 6 tập quyển 6 (Tập 3 Hạ), trình độ nâng cao giúp hoàn thiện vốn ngữ pháp sâu sắc và năng lực biểu đạt phong phú."
   },
   "hán ngữ 1 (Trung-Việt).pdf": {
     titleVi: "Giáo Trình Hán Ngữ 1 (Bản Dịch Song Ngữ Trung - Việt)",
@@ -333,6 +347,21 @@ const bookMeta = {
     titleVi: "Tập Thơ Những Cánh Chim Bay (Phi Điểu Tập - Tagore dịch Hán)",
     category: "Truyện Đọc & Văn Học",
     description: "Thi phẩm kinh điển của Rabindranath Tagore qua ngòi bút dịch Hán ngữ điêu luyện của danh sĩ Trịnh Chấn Đạc."
+  },
+  "国际汉语教学案例与分析.pdf": {
+    titleVi: "Tuyển Tập Tình Huống Sư Phạm & Phân Tích Giảng Dạy Tiếng Hán Quốc Tế",
+    category: "Sách Cho Giáo Viên",
+    description: "Phân tích các tình huống sư phạm thực tế trong giảng dạy tiếng Hán cho học viên nước ngoài, giải pháp xử lý và phương pháp đứng lớp."
+  },
+  "国际汉语词汇与词汇教学.pdf": {
+    titleVi: "Từ Vựng & Phương Pháp Giảng Dạy Từ Vựng Tiếng Hán Quốc Tế",
+    category: "Sách Cho Giáo Viên",
+    description: "Chuyên khảo lý thuyết và kỹ thuật sư phạm giảng dạy hệ thống từ vựng tiếng Hán cho người nước ngoài một cách hiệu quả."
+  },
+  "外国人学汉语语法偏误研究.pdf": {
+    titleVi: "Nghiên Cứu Lỗi Lệch Ngữ Pháp Của Người Nước Ngoài Khi Học Tiếng Hán",
+    category: "Sách Cho Giáo Viên",
+    description: "Phân tích chuyên sâu các lỗi ngữ pháp thường gặp nhất của người nước ngoài khi học tiếng Hán và phương pháp khắc phục hiệu quả."
   }
 };
 
@@ -357,7 +386,7 @@ function scan(dir, relative = '') {
       const meta = bookMeta[item.name] || {};
       const id = generateId(relPath);
       const cleanOriginal = item.name.replace(/\.pdf$/i, '').replace(/^Bản sao của\s*/i, '').trim();
-      results.push({
+      const bookObj = {
         id: id,
         name: item.name,
         titleVi: meta.titleVi || cleanOriginal,
@@ -366,7 +395,11 @@ function scan(dir, relative = '') {
         description: meta.description || 'Tài liệu học tập tiếng Trung hữu ích.',
         sizeMB: parseFloat((fs.statSync(fullPath).size / (1024 * 1024)).toFixed(2)),
         relPath: relPath.replace(/\\/g, '/')
-      });
+      };
+      if (meta.coverUrl) {
+        bookObj.coverUrl = meta.coverUrl;
+      }
+      results.push(bookObj);
     }
   }
   return results;

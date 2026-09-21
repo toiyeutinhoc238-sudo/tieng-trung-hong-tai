@@ -156,6 +156,8 @@ if (window.pdfjsLib) {
         autoFitMode = 'custom';
         currentScale = Math.min(3.0, currentScale + 0.2);
         showToast(`🔍 Phóng to: ${Math.round(currentScale * 100)}%`);
+        const vp = document.getElementById('reader-viewport');
+        if (vp && vp.scrollTop < 60) vp.scrollTop = 0;
         queueRenderPage(currentPageNum);
       });
     }
@@ -165,6 +167,8 @@ if (window.pdfjsLib) {
         autoFitMode = 'custom';
         currentScale = Math.max(0.4, currentScale - 0.2);
         showToast(`🔍 Thu nhỏ: ${Math.round(currentScale * 100)}%`);
+        const vp = document.getElementById('reader-viewport');
+        if (vp && vp.scrollTop < 60) vp.scrollTop = 0;
         queueRenderPage(currentPageNum);
       });
     }
@@ -173,6 +177,8 @@ if (window.pdfjsLib) {
       btnZoomFit.addEventListener('click', () => {
         autoFitMode = autoFitMode === 'fitWidth' ? 'fitPage' : 'fitWidth';
         showToast(autoFitMode === 'fitWidth' ? '📐 Đã chỉnh: Vừa chiều rộng' : '📄 Đã chỉnh: Vừa trang');
+        const vp = document.getElementById('reader-viewport');
+        if (vp) vp.scrollTop = 0;
         queueRenderPage(currentPageNum);
       });
     }
@@ -557,7 +563,7 @@ if (window.pdfjsLib) {
             volNum: 5,
             title: 'Giáo Trình Hán Ngữ 5',
             subtitle: 'Bản dịch song ngữ',
-            bookId: 'book_tn7sl6',
+            bookId: null,
             pastelBg: 'linear-gradient(145deg, #f3e8ff 0%, #e9d5ff 100%)',
             pastelAccent: '#7e22ce',
             hanzi: '汉语',
@@ -568,7 +574,9 @@ if (window.pdfjsLib) {
             volNum: 6,
             title: 'Giáo Trình Hán Ngữ 6',
             subtitle: 'Bản dịch song ngữ',
-            bookId: null,
+            bookId: 'book_d5l2mx',
+            matchFile: 'Bản sao của Giáo trình hán ngữ 6 (Trung-Việt).pdf',
+            matchTitle: 'Hán Ngữ 6',
             pastelBg: 'linear-gradient(145deg, #ccfbf1 0%, #99f6e4 100%)',
             pastelAccent: '#0f766e',
             hanzi: '汉语',
@@ -581,8 +589,15 @@ if (window.pdfjsLib) {
 
     container.innerHTML = shelvesData.map(shelf => {
       const booksHtml = shelf.books.map(b => {
-        const prog = getBookProgressInfo(b.bookId);
-        const hasPdf = Boolean(b.bookId);
+        // Resolve book dynamically from loaded allBooks catalog
+        const foundBook = allBooks.find(item => 
+          (b.bookId && item.id === b.bookId) ||
+          (b.matchFile && item.name === b.matchFile) ||
+          (b.matchTitle && item.titleVi && item.titleVi.toLowerCase().includes(b.matchTitle.toLowerCase()))
+        );
+        const resolvedBookId = foundBook ? foundBook.id : b.bookId;
+        const prog = getBookProgressInfo(resolvedBookId);
+        const hasPdf = Boolean(resolvedBookId);
 
         let badgeHtml = '';
         if (prog) {
@@ -623,7 +638,7 @@ if (window.pdfjsLib) {
         const safeTitle = escapeHTML(b.title);
         const safeCover = b.coverUrl ? escapeHTML(b.coverUrl) : '';
         const safeDesc = escapeHTML(b.desc || '');
-        const safeId = b.bookId ? `'${b.bookId}'` : 'null';
+        const safeId = resolvedBookId ? `'${resolvedBookId}'` : 'null';
         const levelArg = (b.level || b.volNum) ? `${b.level || b.volNum}` : 'null';
 
         return `
@@ -844,6 +859,12 @@ if (window.pdfjsLib) {
       applyReaderTheme(readerTheme);
     }
 
+    const vpInit = document.getElementById('reader-viewport');
+    if (vpInit) {
+      vpInit.scrollTop = 0;
+      vpInit.scrollLeft = 0;
+    }
+
     if (window.innerWidth <= 768) {
       autoFitMode = 'fitWidth';
     }
@@ -922,6 +943,22 @@ if (window.pdfjsLib) {
       elCanvas.width = viewport.width;
       elCanvas.style.width = `${viewport.width / pixelRatio}px`;
       elCanvas.style.height = `${viewport.height / pixelRatio}px`;
+
+      // Smart dynamic vertical margin:
+      // When rendered page is taller than viewport (zoomed in), set marginTop to 0
+      // so user can scroll from the exact top down to bottom without clipping!
+      const canvasWrapper = elCanvas.parentElement;
+      if (canvasWrapper && viewportContainer) {
+        const renderHeight = viewport.height / pixelRatio;
+        const availHeight = viewportContainer.clientHeight - (isMobile ? 24 : 48);
+        if (renderHeight > availHeight) {
+          canvasWrapper.style.marginTop = '0px';
+          canvasWrapper.style.marginBottom = isMobile ? '24px' : '40px';
+        } else {
+          canvasWrapper.style.marginTop = 'auto';
+          canvasWrapper.style.marginBottom = 'auto';
+        }
+      }
 
       const renderContext = {
         canvasContext: elCanvasCtx,
