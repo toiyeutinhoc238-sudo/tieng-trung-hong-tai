@@ -18,11 +18,11 @@
       "name": "Phú Phan",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocIebQJ8CFxQDSOgwYPsfuN9FJvtBWARLqdYN9fCo-3UBytEPmI=s96-c",
       "role": "super_admin",
-      "lastSeenTime": "2026-09-18T11:22:46.819Z",
+      "lastSeenTime": "2026-09-21T13:08:34.747Z",
       "stats": {
         "streak": 1,
-        "studyTime": 26175,
-        "lastActiveDate": "2026-09-18",
+        "studyTime": 27810,
+        "lastActiveDate": "2026-09-21",
         "dailyHistory": {
           "2026-08-07": 1038,
           "2026-08-08": 1038,
@@ -52,7 +52,8 @@
           "2026-09-13": 15,
           "2026-09-15": 570,
           "2026-09-16": 360,
-          "2026-09-18": 4650
+          "2026-09-18": 4740,
+          "2026-09-21": 1545
         }
       },
       "gameHistory": [
@@ -963,6 +964,51 @@
           "device": "💻 Windows PC",
           "ip": "::1",
           "isClosed": true
+        },
+        {
+          "sessionId": "sess_xzhiit3l_1789731220682",
+          "enterTime": "2026-09-18T11:33:40.682Z",
+          "exitTime": "2026-09-18T11:35:25.791Z",
+          "durationSeconds": 105,
+          "device": "💻 Windows PC",
+          "ip": "171.232.28.172",
+          "isClosed": true
+        },
+        {
+          "sessionId": "sess_u47pyxxa_1789989983226",
+          "enterTime": "2026-09-21T11:26:23.226Z",
+          "exitTime": "2026-09-21T11:29:07.610Z",
+          "durationSeconds": 164,
+          "device": "💻 Windows PC",
+          "ip": "::1",
+          "isClosed": true
+        },
+        {
+          "sessionId": "sess_3ir4djaw_1789990311010",
+          "enterTime": "2026-09-21T11:31:51.011Z",
+          "exitTime": "2026-09-21T11:40:56.906Z",
+          "durationSeconds": 546,
+          "device": "💻 Windows PC",
+          "ip": "::1",
+          "isClosed": true
+        },
+        {
+          "sessionId": "sess_84akr6oc_1789991226847",
+          "enterTime": "2026-09-21T11:47:06.847Z",
+          "exitTime": "2026-09-21T11:56:43.043Z",
+          "durationSeconds": 576,
+          "device": "💻 Windows PC",
+          "ip": "::1",
+          "isClosed": true
+        },
+        {
+          "sessionId": "sess_er2n5fis_1789995813633",
+          "enterTime": "2026-09-21T13:03:33.634Z",
+          "exitTime": "2026-09-21T13:08:33.643Z",
+          "durationSeconds": 300,
+          "device": "💻 Windows PC",
+          "ip": "::1",
+          "isClosed": false
         }
       ]
     },
@@ -1013,11 +1059,11 @@
       "name": "Thái Hồng",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocKBlWlP1i1PUXEJ-J8R-D1O16X0yTLoJHD1QrPcxm_fJZFl0VmG=s96-c",
       "role": "super_admin",
-      "lastSeenTime": "2026-09-18T08:16:55.580Z",
+      "lastSeenTime": "2026-09-21T02:31:42.634Z",
       "stats": {
-        "streak": 21,
-        "studyTime": 188570,
-        "lastActiveDate": "2026-09-18",
+        "streak": 23,
+        "studyTime": 210065,
+        "lastActiveDate": "2026-09-20",
         "dailyHistory": {
           "2026-08-10": 420,
           "2026-08-12": 735,
@@ -1049,119 +1095,13 @@
           "2026-09-15": 13560,
           "2026-09-16": 7185,
           "2026-09-17": 9435,
-          "2026-09-18": 1545
+          "2026-09-18": 9465,
+          "2026-09-19": 4425,
+          "2026-09-20": 9150
         }
       },
       "gameHistory": [],
       "accessLogs": [
-        {
-          "sessionId": "sess_tn3tz65d_1788008622770",
-          "enterTime": "2026-08-29T14:21:25.232Z",
-          "exitTime": "2026-09-02T13:02:35.912Z",
-          "durationSeconds": 340871,
-          "device": "💻 Máy tính",
-          "ip": "14.186.185.218",
-          "isClosed": false
-        },
-        {
-          "sessionId": "sess_97guiqxd_1787854006353",
-          "enterTime": "2026-08-29T15:36:38.710Z",
-          "exitTime": "2026-08-30T14:10:16.420Z",
-          "durationSeconds": 81218,
-          "device": "💻 Windows PC",
-          "ip": "171.227.46.254",
-          "isClosed": true
-        },
-        {
-          "sessionId": "sess_ka6yek3i_1788027767383",
-          "enterTime": "2026-08-29T18:22:47.383Z",
-          "exitTime": "2026-08-29T18:22:52.651Z",
-          "durationSeconds": 5,
-          "device": "📱 iPhone",
-          "ip": "171.227.46.254",
-          "isClosed": false
-        },
-        {
-          "sessionId": "sess_e8bgjn6n_1788029466544",
-          "enterTime": "2026-08-29T18:51:06.544Z",
-          "exitTime": "2026-08-29T18:51:06.808Z",
-          "durationSeconds": 0,
-          "device": "📱 iPhone",
-          "ip": "171.227.46.254",
-          "isClosed": false
-        },
-        {
-          "sessionId": "sess_nhfpqo5z_1788061592482",
-          "enterTime": "2026-08-30T03:46:32.483Z",
-          "exitTime": "2026-08-30T03:50:39.972Z",
-          "durationSeconds": 247,
-          "device": "📱 iPhone",
-          "ip": "171.242.197.3",
-          "isClosed": false
-        },
-        {
-          "sessionId": "sess_i5awk39k_1788074060693",
-          "enterTime": "2026-08-30T07:14:20.693Z",
-          "exitTime": "2026-08-30T07:14:31.172Z",
-          "durationSeconds": 10,
-          "device": "📱 iPhone",
-          "ip": "171.227.46.254",
-          "isClosed": false
-        },
-        {
-          "sessionId": "sess_ei3paxzg_1788076526837",
-          "enterTime": "2026-08-30T07:55:26.837Z",
-          "exitTime": "2026-08-30T07:55:26.969Z",
-          "durationSeconds": 0,
-          "device": "📱 iPhone",
-          "ip": "171.227.46.254",
-          "isClosed": false
-        },
-        {
-          "sessionId": "sess_dg754wdp_1788098970621",
-          "enterTime": "2026-08-30T14:09:30.621Z",
-          "exitTime": "2026-08-30T14:09:51.000Z",
-          "durationSeconds": 20,
-          "device": "📱 iPhone",
-          "ip": "171.227.46.254",
-          "isClosed": true
-        },
-        {
-          "sessionId": "sess_t6kco40v_1788143241800",
-          "enterTime": "2026-08-31T02:27:21.800Z",
-          "exitTime": "2026-08-31T02:27:30.210Z",
-          "durationSeconds": 8,
-          "device": "📱 iPhone",
-          "ip": "171.227.46.254",
-          "isClosed": false
-        },
-        {
-          "sessionId": "sess_fd3rocsi_1788150236816",
-          "enterTime": "2026-08-31T04:23:56.816Z",
-          "exitTime": "2026-08-31T04:24:36.141Z",
-          "durationSeconds": 39,
-          "device": "📱 iPhone",
-          "ip": "171.255.184.56",
-          "isClosed": true
-        },
-        {
-          "sessionId": "sess_hm2a7k0x_1788159918090",
-          "enterTime": "2026-08-31T07:05:18.090Z",
-          "exitTime": "2026-08-31T07:31:07.691Z",
-          "durationSeconds": 1550,
-          "device": "📱 iPhone",
-          "ip": "171.255.184.233",
-          "isClosed": false
-        },
-        {
-          "sessionId": "sess_umm2cdqq_1788162662024",
-          "enterTime": "2026-08-31T07:51:02.024Z",
-          "exitTime": "2026-08-31T07:51:02.154Z",
-          "durationSeconds": 0,
-          "device": "📱 iPhone",
-          "ip": "171.227.46.254",
-          "isClosed": false
-        },
         {
           "sessionId": "sess_dmtb95o3_1788177402585",
           "enterTime": "2026-08-31T11:56:42.585Z",
@@ -1660,8 +1600,8 @@
         {
           "sessionId": "sess_stcxtrxr_1789142389099",
           "enterTime": "2026-09-11T15:59:49.101Z",
-          "exitTime": "2026-09-18T06:59:13.294Z",
-          "durationSeconds": 572364,
+          "exitTime": "2026-09-20T15:28:11.249Z",
+          "durationSeconds": 775702,
           "device": "💻 Windows PC",
           "ip": "171.227.35.6",
           "isClosed": false
@@ -2173,8 +2113,8 @@
         {
           "sessionId": "sess_jel5fhxk_1789663248323",
           "enterTime": "2026-09-17T16:40:48.324Z",
-          "exitTime": "2026-09-17T17:16:13.732Z",
-          "durationSeconds": 2125,
+          "exitTime": "2026-09-18T13:27:31.748Z",
+          "durationSeconds": 74803,
           "device": "💻 Máy tính",
           "ip": "171.227.35.6",
           "isClosed": false
@@ -2241,6 +2181,276 @@
           "device": "📱 iPhone",
           "ip": "171.227.35.6",
           "isClosed": false
+        },
+        {
+          "sessionId": "sess_ywctv9cm_1789733278134",
+          "enterTime": "2026-09-18T12:07:58.134Z",
+          "exitTime": "2026-09-18T12:08:05.656Z",
+          "durationSeconds": 8,
+          "device": "📱 iPhone",
+          "ip": "123.20.206.146",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_usoxtft2_1789742088661",
+          "enterTime": "2026-09-18T14:34:48.663Z",
+          "exitTime": "2026-09-18T15:57:43.991Z",
+          "durationSeconds": 4975,
+          "device": "💻 Máy tính",
+          "ip": "171.227.35.6",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_hkiyy0lo_1789746437593",
+          "enterTime": "2026-09-18T15:47:17.593Z",
+          "exitTime": "2026-09-18T15:49:37.847Z",
+          "durationSeconds": 140,
+          "device": "📱 iPhone",
+          "ip": "171.227.35.6",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_khkxa36n_1789752527396",
+          "enterTime": "2026-09-18T17:28:47.396Z",
+          "exitTime": "2026-09-18T17:29:07.641Z",
+          "durationSeconds": 20,
+          "device": "📱 iPhone",
+          "ip": "171.227.35.6",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_ldvnbvy6_1789752655561",
+          "enterTime": "2026-09-18T17:30:55.562Z",
+          "exitTime": "2026-09-18T17:33:42.667Z",
+          "durationSeconds": 167,
+          "device": "📱 iPhone",
+          "ip": "171.227.35.6",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_k62oapub_1789752841142",
+          "enterTime": "2026-09-18T17:34:01.142Z",
+          "exitTime": "2026-09-18T17:34:01.457Z",
+          "durationSeconds": 0,
+          "device": "📱 iPhone",
+          "ip": "171.227.35.6",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_9n8qv5j0_1789757235384",
+          "enterTime": "2026-09-18T18:47:15.385Z",
+          "exitTime": "2026-09-19T02:20:58.559Z",
+          "durationSeconds": 27223,
+          "device": "📱 iPhone",
+          "ip": "104.28.205.74",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_gfr8ojd3_1789796398455",
+          "enterTime": "2026-09-19T05:39:58.455Z",
+          "exitTime": "2026-09-19T05:48:43.463Z",
+          "durationSeconds": 525,
+          "device": "📱 iPhone",
+          "ip": "27.74.139.112",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_2heqof0h_1789804778948",
+          "enterTime": "2026-09-19T07:59:38.948Z",
+          "exitTime": "2026-09-19T07:59:47.535Z",
+          "durationSeconds": 9,
+          "device": "📱 iPhone",
+          "ip": "171.227.35.6",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_yxtiux9d_1789808449015",
+          "enterTime": "2026-09-19T09:00:49.019Z",
+          "exitTime": "2026-09-19T09:03:02.882Z",
+          "durationSeconds": 134,
+          "device": "💻 Máy tính",
+          "ip": "14.226.241.52",
+          "isClosed": true
+        },
+        {
+          "sessionId": "sess_sr23iy8f_1789809911914",
+          "enterTime": "2026-09-19T09:25:11.915Z",
+          "exitTime": "2026-09-19T13:20:38.534Z",
+          "durationSeconds": 14127,
+          "device": "💻 Máy tính",
+          "ip": "14.226.241.52",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_cj6kf7ho_1789822859821",
+          "enterTime": "2026-09-19T13:00:59.821Z",
+          "exitTime": "2026-09-19T13:01:06.409Z",
+          "durationSeconds": 7,
+          "device": "📱 iPhone",
+          "ip": "171.227.35.6",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_0brumhlg_1789828588967",
+          "enterTime": "2026-09-19T14:36:28.968Z",
+          "exitTime": "2026-09-19T16:13:03.494Z",
+          "durationSeconds": 5795,
+          "device": "💻 Máy tính",
+          "ip": "171.227.35.6",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_7gmee6zu_1789837536744",
+          "enterTime": "2026-09-19T17:05:36.744Z",
+          "exitTime": "2026-09-19T17:05:56.994Z",
+          "durationSeconds": 20,
+          "device": "📱 iPhone",
+          "ip": "171.227.35.6",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_zunr03a6_1789840418376",
+          "enterTime": "2026-09-19T17:53:38.376Z",
+          "exitTime": "2026-09-19T17:54:01.514Z",
+          "durationSeconds": 23,
+          "device": "📱 iPhone",
+          "ip": "171.227.35.6",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_xsm4jmdj_1789841501210",
+          "enterTime": "2026-09-19T18:11:41.210Z",
+          "exitTime": "2026-09-19T21:19:23.354Z",
+          "durationSeconds": 11262,
+          "device": "📱 iPhone",
+          "ip": "171.227.35.6",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_bx0lx989_1789874391432",
+          "enterTime": "2026-09-20T03:19:51.432Z",
+          "exitTime": "2026-09-20T03:21:51.676Z",
+          "durationSeconds": 120,
+          "device": "📱 iPhone",
+          "ip": "171.227.35.6",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_9ntnkl78_1789886414907",
+          "enterTime": "2026-09-20T06:40:14.907Z",
+          "exitTime": "2026-09-20T06:40:35.029Z",
+          "durationSeconds": 20,
+          "device": "📱 iPhone",
+          "ip": "171.227.35.6",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_6voiueao_1789888630309",
+          "enterTime": "2026-09-20T07:17:10.309Z",
+          "exitTime": "2026-09-20T07:17:10.626Z",
+          "durationSeconds": 0,
+          "device": "📱 iPhone",
+          "ip": "171.227.35.6",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_o8bsbft0_1789894567688",
+          "enterTime": "2026-09-20T08:56:07.688Z",
+          "exitTime": "2026-09-20T08:56:07.894Z",
+          "durationSeconds": 0,
+          "device": "📱 iPhone",
+          "ip": "171.227.35.6",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_hx3na7d7_1789898572088",
+          "enterTime": "2026-09-20T10:02:52.090Z",
+          "exitTime": "2026-09-20T12:07:40.940Z",
+          "durationSeconds": 7489,
+          "device": "💻 Máy tính",
+          "ip": "171.227.35.6",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_sfqrgpv0_1789900028141",
+          "enterTime": "2026-09-20T10:27:08.141Z",
+          "exitTime": "2026-09-20T10:43:42.329Z",
+          "durationSeconds": 994,
+          "device": "📱 iPhone",
+          "ip": "171.227.35.6",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_tko1ek3d_1789911142735",
+          "enterTime": "2026-09-20T13:32:22.735Z",
+          "exitTime": "2026-09-20T13:32:22.932Z",
+          "durationSeconds": 0,
+          "device": "📱 iPhone",
+          "ip": "171.227.35.6",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_x8x1pg98_1789912135341",
+          "enterTime": "2026-09-20T13:48:55.343Z",
+          "exitTime": "2026-09-20T13:49:14.844Z",
+          "durationSeconds": 20,
+          "device": "💻 Máy tính",
+          "ip": "171.227.35.6",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_dkwyluqy_1789916499955",
+          "enterTime": "2026-09-20T15:01:39.957Z",
+          "exitTime": "2026-09-20T15:10:07.321Z",
+          "durationSeconds": 507,
+          "device": "💻 Máy tính",
+          "ip": "171.227.35.6",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_qkjogvd1_1789918234597",
+          "enterTime": "2026-09-20T15:30:34.598Z",
+          "exitTime": "2026-09-20T16:41:47.306Z",
+          "durationSeconds": 4273,
+          "device": "💻 Máy tính",
+          "ip": "171.227.35.6",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_eta6rxsf_1789921348126",
+          "enterTime": "2026-09-20T16:22:28.126Z",
+          "exitTime": "2026-09-20T16:55:48.887Z",
+          "durationSeconds": 2001,
+          "device": "📱 iPhone",
+          "ip": "171.227.35.6",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_vbn7ca2k_1789930892655",
+          "enterTime": "2026-09-20T19:01:32.655Z",
+          "exitTime": "2026-09-20T19:01:32.829Z",
+          "durationSeconds": 0,
+          "device": "📱 iPhone",
+          "ip": "171.227.35.6",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_lgnuiu5c_1789932561230",
+          "enterTime": "2026-09-20T19:29:21.231Z",
+          "exitTime": "2026-09-20T19:29:21.661Z",
+          "durationSeconds": 0,
+          "device": "📱 iPhone",
+          "ip": "104.28.205.71",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_iq8tae89_1789957902167",
+          "enterTime": "2026-09-21T02:31:42.167Z",
+          "exitTime": "2026-09-21T02:31:42.634Z",
+          "durationSeconds": 0,
+          "device": "📱 iPhone",
+          "ip": "171.227.35.6",
+          "isClosed": false
         }
       ]
     },
@@ -2298,7 +2508,7 @@
       "name": "Huy Nguyễn",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocLfPJSblETi0uI_sSHBP67IULaTQ0_JfyJkkXR7sE8CUspeDjhY=s96-c",
       "role": "user",
-      "lastSeenTime": "2026-09-17T12:56:29.245Z",
+      "lastSeenTime": "2026-09-19T11:20:46.929Z",
       "stats": {
         "streak": 1,
         "studyTime": 3060,
@@ -2330,6 +2540,15 @@
           "device": "📱 iPad / Tablet",
           "ip": "49.215.60.136",
           "isClosed": false
+        },
+        {
+          "sessionId": "sess_h924ncfr_1789816845011",
+          "enterTime": "2026-09-19T11:20:45.012Z",
+          "exitTime": "2026-09-19T11:20:45.271Z",
+          "durationSeconds": 0,
+          "device": "💻 Windows PC",
+          "ip": "49.217.199.85",
+          "isClosed": true
         }
       ]
     },
@@ -2920,15 +3139,16 @@
       "name": "Thành Đào Hứa Thị",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocI-iRtls_DgPq4Ghe6urWanhCifbvR7Edmbnse21vxebAfRYA=s96-c",
       "role": "user",
-      "lastSeenTime": "2026-09-11T15:23:59.761Z",
+      "lastSeenTime": "2026-09-19T16:31:35.829Z",
       "stats": {
         "streak": 1,
-        "studyTime": 1380,
-        "lastActiveDate": "2026-09-11",
+        "studyTime": 2220,
+        "lastActiveDate": "2026-09-19",
         "dailyHistory": {
           "2026-08-19": 435,
           "2026-09-02": 120,
-          "2026-09-11": 825
+          "2026-09-11": 825,
+          "2026-09-19": 840
         }
       },
       "gameHistory": [],
@@ -2959,6 +3179,15 @@
           "device": "📱 Android",
           "ip": "171.237.6.219",
           "isClosed": true
+        },
+        {
+          "sessionId": "sess_c7yrj41d_1789834192742",
+          "enterTime": "2026-09-19T16:09:52.750Z",
+          "exitTime": "2026-09-19T16:31:35.829Z",
+          "durationSeconds": 1303,
+          "device": "📱 Android",
+          "ip": "113.167.185.126",
+          "isClosed": false
         }
       ]
     },
@@ -3141,11 +3370,11 @@
       "name": "Nguyen Nguyen",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocKjmaNe41ieas8JEaeUcwmZ_cviUC2VkJyWefGcGFx0ojg3vJ1Z=s96-c",
       "role": "user",
-      "lastSeenTime": "2026-09-18T07:33:14.551Z",
+      "lastSeenTime": "2026-09-20T15:42:12.015Z",
       "stats": {
-        "streak": 1,
-        "studyTime": 28740,
-        "lastActiveDate": "2026-09-18",
+        "streak": 3,
+        "studyTime": 37470,
+        "lastActiveDate": "2026-09-20",
         "dailyHistory": {
           "2026-08-22": 1410,
           "2026-08-23": 1695,
@@ -3156,7 +3385,9 @@
           "2026-09-06": 3585,
           "2026-09-07": 4860,
           "2026-09-14": 7380,
-          "2026-09-18": 645
+          "2026-09-18": 645,
+          "2026-09-19": 2595,
+          "2026-09-20": 6135
         }
       },
       "gameHistory": [
@@ -3279,6 +3510,38 @@
           "mode": "zh-vi",
           "combo": 23,
           "playedAt": "2026-09-14T05:38:25.954Z"
+        },
+        {
+          "score": 938,
+          "stage": 23,
+          "level": "1",
+          "mode": "zh-vi",
+          "combo": 22,
+          "playedAt": "2026-09-19T04:58:50.163Z"
+        },
+        {
+          "score": 909,
+          "stage": 23,
+          "level": "1",
+          "mode": "zh-vi",
+          "combo": 22,
+          "playedAt": "2026-09-19T05:11:15.308Z"
+        },
+        {
+          "score": 978,
+          "stage": 23,
+          "level": "1",
+          "mode": "zh-vi",
+          "combo": 23,
+          "playedAt": "2026-09-19T05:12:42.924Z"
+        },
+        {
+          "score": 978,
+          "stage": 23,
+          "level": "1",
+          "mode": "zh-vi",
+          "combo": 23,
+          "playedAt": "2026-09-19T05:12:48.942Z"
         }
       ],
       "accessLogs": [
@@ -3362,6 +3625,24 @@
           "device": "💻 Windows PC",
           "ip": "14.191.124.74",
           "isClosed": false
+        },
+        {
+          "sessionId": "sess_6jswxmai_1789790965848",
+          "enterTime": "2026-09-19T04:09:25.848Z",
+          "exitTime": "2026-09-19T15:47:14.485Z",
+          "durationSeconds": 41869,
+          "device": "💻 Windows PC",
+          "ip": "14.191.124.74",
+          "isClosed": true
+        },
+        {
+          "sessionId": "sess_iflp8xrd_1789895446400",
+          "enterTime": "2026-09-20T09:10:46.404Z",
+          "exitTime": "2026-09-20T15:39:49.684Z",
+          "durationSeconds": 23343,
+          "device": "💻 Windows PC",
+          "ip": "14.191.124.74",
+          "isClosed": true
         }
       ]
     },
@@ -3905,11 +4186,11 @@
       "name": "Nguyễn Thúy Nga",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocIWY2-edulmwXCsWGPtqT7nDPZmy8-r5BImvlGy6HE2mgab8sO8=s96-c",
       "role": "user",
-      "lastSeenTime": "2026-09-17T15:54:16.197Z",
+      "lastSeenTime": "2026-09-19T04:39:45.028Z",
       "stats": {
-        "streak": 2,
-        "studyTime": 8625,
-        "lastActiveDate": "2026-09-17",
+        "streak": 1,
+        "studyTime": 10485,
+        "lastActiveDate": "2026-09-19",
         "dailyHistory": {
           "2026-08-26": 510,
           "2026-08-28": 120,
@@ -3919,7 +4200,8 @@
           "2026-09-10": 105,
           "2026-09-14": 315,
           "2026-09-16": 1320,
-          "2026-09-17": 1020
+          "2026-09-17": 1020,
+          "2026-09-19": 1860
         }
       },
       "gameHistory": [],
@@ -4031,6 +4313,15 @@
           "device": "💻 Windows PC",
           "ip": "42.112.78.130",
           "isClosed": false
+        },
+        {
+          "sessionId": "sess_t5a0o4lr_1789790395251",
+          "enterTime": "2026-09-19T03:59:55.252Z",
+          "exitTime": "2026-09-19T04:39:44.044Z",
+          "durationSeconds": 2389,
+          "device": "💻 Windows PC",
+          "ip": "171.253.156.57",
+          "isClosed": true
         }
       ]
     },
@@ -4038,11 +4329,11 @@
       "name": "Baoan Le",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocIXFV0oeUe1xmGLDmuw45H358XHvcWMNYdzGmJG92D50gkuOg=s96-c",
       "role": "user",
-      "lastSeenTime": "2026-09-18T09:40:49.104Z",
+      "lastSeenTime": "2026-09-20T07:54:37.774Z",
       "stats": {
-        "streak": 4,
-        "studyTime": 13905,
-        "lastActiveDate": "2026-09-18",
+        "streak": 1,
+        "studyTime": 15015,
+        "lastActiveDate": "2026-09-20",
         "dailyHistory": {
           "2026-08-27": 270,
           "2026-08-28": 2250,
@@ -4058,7 +4349,8 @@
           "2026-09-15": 255,
           "2026-09-16": 1155,
           "2026-09-17": 45,
-          "2026-09-18": 2010
+          "2026-09-18": 3105,
+          "2026-09-20": 15
         }
       },
       "gameHistory": [
@@ -4255,8 +4547,17 @@
         {
           "sessionId": "sess_1lm59528_1789720166960",
           "enterTime": "2026-09-18T08:29:26.960Z",
-          "exitTime": "2026-09-18T09:40:49.104Z",
-          "durationSeconds": 4282,
+          "exitTime": "2026-09-18T16:30:28.126Z",
+          "durationSeconds": 28861,
+          "device": "💻 Windows PC",
+          "ip": "113.190.84.101",
+          "isClosed": true
+        },
+        {
+          "sessionId": "sess_xp291tfj_1789868136734",
+          "enterTime": "2026-09-20T01:35:36.734Z",
+          "exitTime": "2026-09-20T01:38:15.833Z",
+          "durationSeconds": 159,
           "device": "💻 Windows PC",
           "ip": "113.190.84.101",
           "isClosed": false
@@ -4302,16 +4603,17 @@
       "name": "Lien8273@gmail.com Huynh",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocKwiO5POjxpcOoD7vDcnqcCwTVn-5XJF5eJKbCorENDWS2wVCO3Ag=s96-c",
       "role": "user",
-      "lastSeenTime": "2026-09-13T10:02:31.597Z",
+      "lastSeenTime": "2026-09-19T11:56:29.028Z",
       "stats": {
-        "streak": 2,
-        "studyTime": 7710,
-        "lastActiveDate": "2026-09-13",
+        "streak": 1,
+        "studyTime": 9030,
+        "lastActiveDate": "2026-09-19",
         "dailyHistory": {
           "2026-08-28": 780,
           "2026-08-30": 840,
           "2026-09-12": 3360,
-          "2026-09-13": 2730
+          "2026-09-13": 2730,
+          "2026-09-19": 1320
         }
       },
       "gameHistory": [],
@@ -4368,6 +4670,24 @@
           "durationSeconds": 1528,
           "device": "💻 Windows PC",
           "ip": "42.116.172.82",
+          "isClosed": true
+        },
+        {
+          "sessionId": "sess_v8trx5l5_1789815140697",
+          "enterTime": "2026-09-19T10:52:20.697Z",
+          "exitTime": "2026-09-19T10:59:07.214Z",
+          "durationSeconds": 407,
+          "device": "💻 Windows PC",
+          "ip": "42.116.135.179",
+          "isClosed": true
+        },
+        {
+          "sessionId": "sess_hyo6skqa_1789815970660",
+          "enterTime": "2026-09-19T11:06:10.661Z",
+          "exitTime": "2026-09-19T11:43:22.601Z",
+          "durationSeconds": 2232,
+          "device": "💻 Windows PC",
+          "ip": "42.116.135.179",
           "isClosed": true
         }
       ]
@@ -4428,7 +4748,7 @@
       "name": "Thư Minh",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocKfi1OeJWmjXy8abs9ea0gid1zNrEgeOuCqYQ0uLSyofBQsHM5njQ=s96-c",
       "role": "user",
-      "lastSeenTime": "2026-09-17T17:19:27.884Z",
+      "lastSeenTime": "2026-09-20T06:17:47.443Z",
       "stats": {
         "streak": 0,
         "studyTime": 3150,
@@ -4488,17 +4808,44 @@
         {
           "sessionId": "sess_ky53d3kv_1789664276505",
           "enterTime": "2026-09-17T16:57:56.505Z",
-          "exitTime": "2026-09-17T16:57:57.175Z",
+          "exitTime": "2026-09-18T14:55:00.217Z",
+          "durationSeconds": 79024,
+          "device": "💻 Windows PC",
+          "ip": "27.65.234.79",
+          "isClosed": true
+        },
+        {
+          "sessionId": "sess_92f3xhtb_1789664365875",
+          "enterTime": "2026-09-17T16:59:25.876Z",
+          "exitTime": "2026-09-18T18:27:07.415Z",
+          "durationSeconds": 91662,
+          "device": "💻 Windows PC",
+          "ip": "27.65.234.79",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_3lk2xwo7_1789829271692",
+          "enterTime": "2026-09-19T14:47:51.692Z",
+          "exitTime": "2026-09-19T14:47:51.863Z",
           "durationSeconds": 0,
           "device": "💻 Windows PC",
           "ip": "27.65.234.79",
           "isClosed": false
         },
         {
-          "sessionId": "sess_92f3xhtb_1789664365875",
-          "enterTime": "2026-09-17T16:59:25.876Z",
-          "exitTime": "2026-09-17T16:59:26.555Z",
+          "sessionId": "sess_32g27hgh_1789863410266",
+          "enterTime": "2026-09-20T00:16:50.267Z",
+          "exitTime": "2026-09-20T00:16:51.725Z",
           "durationSeconds": 0,
+          "device": "💻 Windows PC",
+          "ip": "27.65.234.79",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_j8kpkfr7_1789867009816",
+          "enterTime": "2026-09-20T01:16:49.816Z",
+          "exitTime": "2026-09-20T06:16:47.493Z",
+          "durationSeconds": 17998,
           "device": "💻 Windows PC",
           "ip": "27.65.234.79",
           "isClosed": false
@@ -4732,7 +5079,7 @@
       "name": "Sakazmix",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocJwOL-Hxw6WKsdpPZ4ewYe4MUPRI-WRsZ4j05Pk0LRu4Qw4aZff=s96-c",
       "role": "user",
-      "lastSeenTime": "2026-09-18T09:39:56.040Z",
+      "lastSeenTime": "2026-09-18T11:41:48.774Z",
       "stats": {
         "streak": 1,
         "studyTime": 2040,
@@ -4999,7 +5346,7 @@
       "name": "Thùy Chi Bùi",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocJyFeGzl-c6V5Dr6FEsbd7CIkh0UUS_gtdI76Pugf0VlEZMIw=s96-c",
       "role": "user",
-      "lastSeenTime": "2026-09-16T14:47:12.017Z",
+      "lastSeenTime": "2026-09-19T11:36:55.531Z",
       "stats": {
         "streak": 0,
         "studyTime": 195,
@@ -5062,6 +5409,15 @@
           "durationSeconds": 0,
           "device": "📱 iPhone",
           "ip": "117.5.142.248",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_zcon6dh3_1789817755569",
+          "enterTime": "2026-09-19T11:35:55.569Z",
+          "exitTime": "2026-09-19T11:35:56.528Z",
+          "durationSeconds": 0,
+          "device": "📱 iPhone",
+          "ip": "203.205.33.34",
           "isClosed": false
         }
       ]
@@ -5414,16 +5770,26 @@
       "name": "Homie La",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocKmjyNokYM_7-Q3i-dm9pRe3pvAp7fMhXlZCuRxdssmewXIR68=s96-c",
       "role": "user",
-      "lastSeenTime": "2026-09-14T16:58:15.139Z",
+      "lastSeenTime": "2026-09-18T17:26:49.788Z",
       "stats": {
         "streak": 1,
-        "studyTime": 60,
-        "lastActiveDate": "2026-09-14",
+        "studyTime": 1035,
+        "lastActiveDate": "2026-09-19",
         "dailyHistory": {
-          "2026-09-14": 60
+          "2026-09-14": 60,
+          "2026-09-19": 975
         }
       },
-      "gameHistory": [],
+      "gameHistory": [
+        {
+          "score": 521,
+          "stage": 14,
+          "level": "1",
+          "mode": "mix",
+          "combo": 14,
+          "playedAt": "2026-09-18T17:10:10.205Z"
+        }
+      ],
       "accessLogs": [
         {
           "sessionId": "sess_oh39cf0z_1789405002297",
@@ -5433,6 +5799,15 @@
           "device": "📱 Android",
           "ip": "171.243.49.247",
           "isClosed": false
+        },
+        {
+          "sessionId": "sess_fib5y3bn_1789750982956",
+          "enterTime": "2026-09-18T17:03:02.957Z",
+          "exitTime": "2026-09-18T17:14:16.791Z",
+          "durationSeconds": 674,
+          "device": "📱 Android",
+          "ip": "171.243.49.247",
+          "isClosed": true
         }
       ]
     },
@@ -5484,14 +5859,15 @@
       "name": "linh phamkhanh",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocJ6C4TnY2c98YpLmpsDDzMk5PdqEs_0Rod5tjnTiu7RjqozGg=s96-c",
       "role": "user",
-      "lastSeenTime": "2026-09-16T14:16:18.783Z",
+      "lastSeenTime": "2026-09-19T02:53:15.053Z",
       "stats": {
-        "streak": 2,
-        "studyTime": 5355,
-        "lastActiveDate": "2026-09-16",
+        "streak": 1,
+        "studyTime": 5370,
+        "lastActiveDate": "2026-09-19",
         "dailyHistory": {
           "2026-09-15": 4410,
-          "2026-09-16": 945
+          "2026-09-16": 945,
+          "2026-09-19": 15
         }
       },
       "gameHistory": [],
@@ -5547,13 +5923,14 @@
       "name": "Lê Thạch Ngọc Hương",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocJjfDgPTyoPq9onZY2Bv6re7UmKKYgUYywltjVk2kuLmUcrM2g=s96-c",
       "role": "user",
-      "lastSeenTime": "2026-09-15T16:17:30.722Z",
+      "lastSeenTime": "2026-09-20T09:54:11.802Z",
       "stats": {
         "streak": 1,
-        "studyTime": 2640,
-        "lastActiveDate": "2026-09-15",
+        "studyTime": 2655,
+        "lastActiveDate": "2026-09-20",
         "dailyHistory": {
-          "2026-09-15": 2640
+          "2026-09-15": 2640,
+          "2026-09-20": 15
         }
       },
       "gameHistory": [],
@@ -5561,8 +5938,8 @@
         {
           "sessionId": "sess_8s47bu72_1789469779219",
           "enterTime": "2026-09-15T10:56:19.219Z",
-          "exitTime": "2026-09-15T16:07:36.635Z",
-          "durationSeconds": 18677,
+          "exitTime": "2026-09-20T09:02:37.381Z",
+          "durationSeconds": 425178,
           "device": "💻 Windows PC",
           "ip": "14.169.218.217",
           "isClosed": false
@@ -5764,13 +6141,14 @@
       "name": "duyên nguyễn",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocK5MRmsjatC_ESWIHa3vLRxAbj2K64fU9d5BPrX9a3f8A0cFg=s96-c",
       "role": "user",
-      "lastSeenTime": "2026-09-17T17:32:08.948Z",
+      "lastSeenTime": "2026-09-19T14:05:54.464Z",
       "stats": {
-        "streak": 1,
-        "studyTime": 180,
-        "lastActiveDate": "2026-09-18",
+        "streak": 2,
+        "studyTime": 210,
+        "lastActiveDate": "2026-09-19",
         "dailyHistory": {
-          "2026-09-18": 180
+          "2026-09-18": 180,
+          "2026-09-19": 30
         }
       },
       "gameHistory": [],
@@ -5783,6 +6161,15 @@
           "device": "💻 Windows PC",
           "ip": "27.66.65.150",
           "isClosed": true
+        },
+        {
+          "sessionId": "sess_9fvrfphg_1789826699887",
+          "enterTime": "2026-09-19T14:04:59.888Z",
+          "exitTime": "2026-09-19T14:05:21.604Z",
+          "durationSeconds": 22,
+          "device": "💻 Windows PC",
+          "ip": "27.66.65.150",
+          "isClosed": true
         }
       ]
     },
@@ -5790,13 +6177,13 @@
       "name": "Tuyết Nguyễn",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocKcGj5uQPjmxyHBw6ExSAQQx_Hjy27doCVqQihCEqDynT9Alg=s96-c",
       "role": "user",
-      "lastSeenTime": "2026-09-17T23:05:06.384Z",
+      "lastSeenTime": "2026-09-20T23:14:28.541Z",
       "stats": {
         "streak": 1,
-        "studyTime": 75,
+        "studyTime": 1215,
         "lastActiveDate": "2026-09-18",
         "dailyHistory": {
-          "2026-09-18": 75
+          "2026-09-18": 1215
         }
       },
       "gameHistory": [],
@@ -5809,6 +6196,182 @@
           "device": "💻 Windows PC",
           "ip": "171.251.205.234",
           "isClosed": false
+        },
+        {
+          "sessionId": "sess_48nxa1fh_1789741164687",
+          "enterTime": "2026-09-18T14:19:24.689Z",
+          "exitTime": "2026-09-18T14:23:26.861Z",
+          "durationSeconds": 242,
+          "device": "💻 Windows PC",
+          "ip": "171.251.205.234",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_e3r2x0pd_1789741432411",
+          "enterTime": "2026-09-18T14:23:52.412Z",
+          "exitTime": "2026-09-18T14:46:17.795Z",
+          "durationSeconds": 1345,
+          "device": "💻 Windows PC",
+          "ip": "171.251.205.234",
+          "isClosed": false
+        }
+      ]
+    },
+    "26051510@vnu.edu.vn": {
+      "name": "26051510 TRẦN THỊ HOA HIÊN",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocLAzf-YKVzsdww71AZwTOHFw3gYXPQXe_iXpHnwv2OzFwY5ww=s96-c",
+      "role": "user",
+      "lastSeenTime": "2026-09-18T16:51:04.558Z",
+      "stats": {
+        "streak": 1,
+        "studyTime": 525,
+        "lastActiveDate": "2026-09-18",
+        "dailyHistory": {
+          "2026-09-18": 525
+        }
+      },
+      "gameHistory": [],
+      "accessLogs": [
+        {
+          "sessionId": "sess_q0g4ojvb_1789749239451",
+          "enterTime": "2026-09-18T16:33:59.451Z",
+          "exitTime": "2026-09-18T16:45:16.657Z",
+          "durationSeconds": 677,
+          "device": "💻 Windows PC",
+          "ip": "58.187.40.16",
+          "isClosed": true
+        }
+      ]
+    },
+    "ngannghiem88@gmail.com": {
+      "name": "Ngân Nghiêm",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocISMy_lEsZXt4AdYzpaxkPfPLqqKbcAugMau1WC9OaQ9IlIww=s96-c",
+      "role": "user",
+      "lastSeenTime": "2026-09-21T03:50:10.702Z",
+      "stats": {
+        "streak": 2,
+        "studyTime": 3450,
+        "lastActiveDate": "2026-09-21",
+        "dailyHistory": {
+          "2026-09-20": 2805,
+          "2026-09-21": 645
+        }
+      },
+      "gameHistory": [],
+      "accessLogs": [
+        {
+          "sessionId": "sess_5m45295c_1789872566230",
+          "enterTime": "2026-09-20T02:49:26.231Z",
+          "exitTime": "2026-09-20T03:54:12.598Z",
+          "durationSeconds": 3886,
+          "device": "💻 Windows PC",
+          "ip": "103.140.249.51",
+          "isClosed": true
+        },
+        {
+          "sessionId": "sess_k0jgkjpp_1789960836431",
+          "enterTime": "2026-09-21T03:20:36.431Z",
+          "exitTime": "2026-09-21T03:50:08.326Z",
+          "durationSeconds": 1772,
+          "device": "💻 Windows PC",
+          "ip": "103.140.249.51",
+          "isClosed": true
+        }
+      ]
+    },
+    "xinhlovely.0501@gmail.com": {
+      "name": "Lovely Xinh",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocI2MtDfVpsTayimgd7zrcHlDteVRzEfzvKcOPXBppTNVMwhIA=s96-c",
+      "role": "user",
+      "lastSeenTime": "2026-09-20T15:43:20.348Z",
+      "stats": {
+        "streak": 1,
+        "studyTime": 285,
+        "lastActiveDate": "2026-09-20",
+        "dailyHistory": {
+          "2026-09-20": 285
+        }
+      },
+      "gameHistory": [],
+      "accessLogs": [
+        {
+          "sessionId": "sess_5vp1r8qi_1789911197231",
+          "enterTime": "2026-09-20T13:33:17.232Z",
+          "exitTime": "2026-09-20T13:42:06.912Z",
+          "durationSeconds": 530,
+          "device": "📱 iPhone",
+          "ip": "171.234.8.155",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_zho30moj_1789918990427",
+          "enterTime": "2026-09-20T15:43:10.428Z",
+          "exitTime": "2026-09-20T15:43:19.763Z",
+          "durationSeconds": 9,
+          "device": "📱 iPhone",
+          "ip": "14.191.124.74",
+          "isClosed": true
+        }
+      ]
+    },
+    "cuongthinh031206@gmail.com": {
+      "name": "Cường Thịnh Phạm Trọng",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocIwMVmfoS1wrEi5epOho9bWC_t-qozY2FaYfSIL0bTk2JWQenqN=s96-c",
+      "role": "user",
+      "lastSeenTime": "2026-09-20T18:25:24.107Z",
+      "stats": {
+        "streak": 1,
+        "studyTime": 30,
+        "lastActiveDate": "2026-09-20",
+        "dailyHistory": {
+          "2026-09-20": 30
+        }
+      },
+      "gameHistory": [],
+      "accessLogs": [
+        {
+          "sessionId": "sess_g5v0c3b0_1789911808234",
+          "enterTime": "2026-09-20T13:43:28.234Z",
+          "exitTime": "2026-09-20T13:44:08.360Z",
+          "durationSeconds": 40,
+          "device": "📱 iPhone",
+          "ip": "171.234.8.155",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_5ni1qv21_1789928719392",
+          "enterTime": "2026-09-20T18:25:19.392Z",
+          "exitTime": "2026-09-20T18:25:22.500Z",
+          "durationSeconds": 3,
+          "device": "📱 iPhone",
+          "ip": "116.98.180.61",
+          "isClosed": true
+        }
+      ]
+    },
+    "dolequynhmai.6525@gmail.com": {
+      "name": "Mai Quỳnh",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocJc9o7l6GfhJyOnVx2vJPgR2b7ZdZuaPpSFkWNGVSVJdIvI7no=s96-c",
+      "role": "user",
+      "lastSeenTime": "2026-09-20T18:53:30.212Z",
+      "stats": {
+        "streak": 1,
+        "studyTime": 1755,
+        "lastActiveDate": "2026-09-21",
+        "dailyHistory": {
+          "2026-09-21": 1755
+        }
+      },
+      "gameHistory": [],
+      "accessLogs": [
+        {
+          "sessionId": "sess_1kxb1aon_1789928513588",
+          "enterTime": "2026-09-20T18:21:53.589Z",
+          "exitTime": "2026-09-20T18:53:28.958Z",
+          "durationSeconds": 1895,
+          "device": "💻 Windows PC",
+          "ip": "183.80.95.28",
+          "isClosed": true
         }
       ]
     }
@@ -5929,6 +6492,12 @@
         "isStudied": true
       },
       "228": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "233": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
@@ -6288,7 +6857,19 @@
         "isWrong": false,
         "isStudied": true
       },
+      "438": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "440": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "445": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
@@ -6408,6 +6989,12 @@
         "isWrong": false,
         "isStudied": true
       },
+      "500": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "503": {
         "isMemorized": false,
         "isStarred": false,
@@ -6522,25 +7109,31 @@
     },
     "thaihong162004@gmail.com": {
       "4": {
-        "isMemorized": false,
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "6": {
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "7": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "12": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "14": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -6560,6 +7153,12 @@
         "isStarred": false,
         "isStudied": true
       },
+      "21": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "23": {
         "isMemorized": true,
         "isStarred": false,
@@ -6567,7 +7166,7 @@
         "isStudied": true
       },
       "24": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -6638,16 +7237,16 @@
         "isStudied": true
       },
       "44": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "45": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
       },
       "46": {
         "isMemorized": true,
@@ -6660,10 +7259,10 @@
         "isStudied": true
       },
       "48": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
       },
       "50": {
         "isMemorized": true,
@@ -6712,7 +7311,7 @@
         "isStudied": true
       },
       "59": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -6728,7 +7327,7 @@
         "isStudied": true
       },
       "62": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -6834,6 +7433,11 @@
         "isStarred": false,
         "isStudied": true
       },
+      "89": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
       "90": {
         "isMemorized": true,
         "isStarred": false,
@@ -6845,7 +7449,7 @@
         "isStudied": true
       },
       "92": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -6891,7 +7495,13 @@
         "isStudied": true
       },
       "104": {
-        "isMemorized": false,
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "105": {
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -6916,6 +7526,12 @@
         "isStarred": false,
         "isStudied": true
       },
+      "111": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "117": {
         "isMemorized": true,
         "isStarred": false,
@@ -6927,10 +7543,10 @@
         "isStudied": true
       },
       "119": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
       },
       "120": {
         "isMemorized": true,
@@ -6958,7 +7574,7 @@
         "isStudied": true
       },
       "126": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -7040,20 +7656,26 @@
         "isStarred": false,
         "isStudied": true
       },
+      "151": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "157": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "158": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "159": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -7064,9 +7686,21 @@
         "isWrong": false,
         "isStudied": true
       },
+      "172": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "180": {
         "isMemorized": true,
         "isStarred": false,
+        "isStudied": true
+      },
+      "181": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
         "isStudied": true
       },
       "183": {
@@ -7080,7 +7714,7 @@
         "isStudied": true
       },
       "188": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -7101,6 +7735,12 @@
         "isWrong": false,
         "isStudied": true
       },
+      "194": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "198": {
         "isMemorized": false,
         "isStarred": false,
@@ -7108,7 +7748,7 @@
         "isStudied": true
       },
       "199": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -7126,7 +7766,7 @@
         "isStudied": true
       },
       "205": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -7298,7 +7938,7 @@
         "isMemorized": true,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
       },
       "243": {
         "isMemorized": true,
@@ -7421,13 +8061,13 @@
         "isStudied": true
       },
       "272": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "273": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -7435,7 +8075,7 @@
       "275": {
         "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "276": {
@@ -7747,7 +8387,7 @@
       "338": {
         "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "339": {
@@ -7778,7 +8418,7 @@
         "isStudied": true
       },
       "346": {
-        "isMemorized": true,
+        "isMemorized": false,
         "isStarred": false,
         "isStudied": true
       },
@@ -7818,7 +8458,7 @@
       "355": {
         "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "356": {
@@ -7849,7 +8489,7 @@
       "361": {
         "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "362": {
@@ -7883,11 +8523,11 @@
       "367": {
         "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "368": {
-        "isMemorized": true,
+        "isMemorized": false,
         "isStarred": false,
         "isWrong": true,
         "isStudied": true
@@ -7895,7 +8535,7 @@
       "369": {
         "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "370": {
@@ -7930,10 +8570,10 @@
         "isStudied": true
       },
       "376": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
       },
       "377": {
         "isMemorized": true,
@@ -7941,10 +8581,10 @@
         "isStudied": true
       },
       "378": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
       },
       "379": {
         "isMemorized": true,
@@ -7973,9 +8613,9 @@
         "isStudied": true
       },
       "386": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "387": {
@@ -7999,15 +8639,15 @@
         "isStudied": true
       },
       "391": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
       },
       "392": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "393": {
@@ -8033,9 +8673,9 @@
         "isStudied": true
       },
       "397": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "398": {
@@ -8050,16 +8690,16 @@
         "isStudied": true
       },
       "400": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
       },
       "401": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
       },
       "402": {
         "isMemorized": true,
@@ -8067,10 +8707,10 @@
         "isStudied": true
       },
       "403": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
       },
       "404": {
         "isMemorized": true,
@@ -8110,16 +8750,16 @@
         "isStudied": true
       },
       "411": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
       },
       "412": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
       },
       "413": {
         "isMemorized": false,
@@ -8156,9 +8796,9 @@
         "isStudied": true
       },
       "419": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "420": {
@@ -8238,9 +8878,9 @@
         "isStudied": true
       },
       "434": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "435": {
@@ -8336,7 +8976,7 @@
       "454": {
         "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "455": {
@@ -8345,19 +8985,19 @@
         "isStudied": true
       },
       "456": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "457": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "458": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -8368,25 +9008,31 @@
         "isStudied": true
       },
       "460": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "462": {
-        "isMemorized": false,
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "465": {
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "466": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "467": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -8397,19 +9043,19 @@
         "isStudied": true
       },
       "469": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "472": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "473": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -8427,7 +9073,7 @@
         "isStudied": true
       },
       "476": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -8444,27 +9090,27 @@
         "isStudied": true
       },
       "484": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "486": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "487": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "488": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "489": {
@@ -8473,13 +9119,13 @@
         "isStudied": true
       },
       "491": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "492": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -8495,13 +9141,13 @@
         "isStudied": true
       },
       "495": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "496": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -8513,7 +9159,7 @@
         "isStudied": true
       },
       "498": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -8525,19 +9171,19 @@
         "isStudied": true
       },
       "502": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "503": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "504": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -8548,19 +9194,25 @@
         "isStudied": true
       },
       "507": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "508": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "511": {
-        "isMemorized": false,
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "512": {
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -8578,7 +9230,7 @@
         "isStudied": true
       },
       "515": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -8595,7 +9247,7 @@
         "isStudied": true
       },
       "521": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -8607,7 +9259,7 @@
         "isStudied": true
       },
       "525": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -8623,9 +9275,14 @@
         "isStudied": true
       },
       "528": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
+        "isStudied": true
+      },
+      "529": {
+        "isMemorized": true,
+        "isStarred": false,
         "isStudied": true
       },
       "532": {
@@ -8897,9 +9554,9 @@
         "isStarred": false
       },
       "1034": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "2486": {
@@ -8996,9 +9653,9 @@
         "isStarred": false
       },
       "6607": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "6620": {
@@ -9036,7 +9693,7 @@
         "isStudied": true
       },
       "6645": {
-        "isMemorized": true,
+        "isMemorized": false,
         "isStarred": false,
         "isWrong": true,
         "isStudied": true
@@ -9076,7 +9733,22 @@
         "isStarred": false,
         "isStudied": true
       },
+      "6657": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
       "6658": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6659": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6660": {
         "isMemorized": true,
         "isStarred": false,
         "isStudied": true
@@ -9087,6 +9759,11 @@
         "isStudied": true
       },
       "6662": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6663": {
         "isMemorized": true,
         "isStarred": false,
         "isStudied": true
@@ -9111,6 +9788,16 @@
         "isStarred": false,
         "isStudied": true
       },
+      "6668": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6669": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
       "6670": {
         "isMemorized": true,
         "isStarred": false,
@@ -9121,9 +9808,9 @@
         "isStarred": false
       },
       "6783": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "6798": {
@@ -9255,20 +9942,44 @@
         "isWrong": false,
         "isStudied": true
       },
+      "7663": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "7665": {
         "isMemorized": true,
         "isStarred": false,
         "isStudied": true
       },
+      "7667": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "7668": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
+      },
+      "7674": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
       },
       "7680": {
         "isMemorized": true,
         "isStarred": false,
+        "isStudied": true
+      },
+      "7681": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
         "isStudied": true
       },
       "7685": {
@@ -9280,9 +9991,27 @@
         "isMemorized": true,
         "isStarred": false
       },
+      "7714": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
       "7729": {
         "isMemorized": true,
         "isStarred": false,
+        "isStudied": true
+      },
+      "7732": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "7735": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
         "isStudied": true
       },
       "7736": {
@@ -9301,9 +10030,51 @@
         "isStarred": false,
         "isStudied": true
       },
+      "7741": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "7742": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
       "7743": {
         "isMemorized": true,
         "isStarred": false,
+        "isStudied": true
+      },
+      "7745": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "7746": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "7748": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "7750": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "7751": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
         "isStudied": true
       },
       "7752": {
@@ -9318,11 +10089,31 @@
       },
       "7759": {
         "isMemorized": true,
-        "isStarred": false
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "7762": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "7765": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
       },
       "7766": {
         "isMemorized": true,
         "isStarred": false,
+        "isStudied": true
+      },
+      "7770": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
         "isStudied": true
       },
       "7771": {
@@ -9333,15 +10124,22 @@
       "7773": {
         "isMemorized": true,
         "isStarred": false,
-        "isStudied": true
+        "isStudied": true,
+        "isWrong": true
       },
       "7775": {
         "isMemorized": true,
         "isStarred": false,
         "isStudied": true
       },
+      "7776": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "7777": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -9360,12 +10158,20 @@
         "isMemorized": true,
         "isStarred": false
       },
+      "7781": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
       "7782": {
-        "isMemorized": true,
-        "isStarred": false
+        "isMemorized": false,
+        "isStarred": false,
+        "isStudied": true,
+        "isWrong": true
       },
       "7783": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -9373,13 +10179,13 @@
       "7784": {
         "isMemorized": false,
         "isStarred": false,
-        "isWrong": false,
+        "isWrong": true,
         "isStudied": true
       },
       "7785": {
         "isMemorized": false,
         "isStarred": false,
-        "isWrong": false,
+        "isWrong": true,
         "isStudied": true
       },
       "7786": {
@@ -9393,16 +10199,28 @@
       "7788": {
         "isMemorized": false,
         "isStarred": false,
-        "isWrong": false,
+        "isWrong": true,
         "isStudied": true
       },
       "7789": {
         "isMemorized": false,
         "isStarred": false,
-        "isWrong": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "7791": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
         "isStudied": true
       },
       "7792": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "7793": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": true,
@@ -9414,16 +10232,23 @@
       },
       "7795": {
         "isMemorized": true,
-        "isStarred": false
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "7796": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
       },
       "7797": {
         "isMemorized": false,
         "isStarred": false,
-        "isWrong": false,
+        "isWrong": true,
         "isStudied": true
       },
       "7799": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -9436,9 +10261,17 @@
       },
       "7801": {
         "isMemorized": true,
-        "isStarred": false
+        "isStarred": false,
+        "isStudied": true,
+        "isWrong": false
       },
       "7802": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "7803": {
         "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
@@ -9448,14 +10281,26 @@
         "isMemorized": true,
         "isStarred": false
       },
+      "7805": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
       "7807": {
         "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
+      "7808": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "7809": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -9478,16 +10323,24 @@
       },
       "7822": {
         "isMemorized": true,
-        "isStarred": false
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
       },
       "7823": {
-        "isMemorized": false,
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "7824": {
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "7825": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -9496,28 +10349,46 @@
         "isMemorized": true,
         "isStarred": false
       },
+      "7828": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "7829": {
         "isMemorized": true,
         "isStarred": false
+      },
+      "7830": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
       },
       "7831": {
         "isMemorized": true,
         "isStarred": false
       },
+      "7832": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "7833": {
         "isMemorized": false,
         "isStarred": false,
-        "isWrong": false,
+        "isWrong": true,
         "isStudied": true
       },
       "7834": {
         "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "7835": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -9525,6 +10396,18 @@
       "7836": {
         "isMemorized": true,
         "isStarred": false
+      },
+      "7837": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "7838": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
       },
       "7839": {
         "isMemorized": true,
@@ -9539,7 +10422,7 @@
       "7841": {
         "isMemorized": false,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "7842": {
@@ -9550,22 +10433,24 @@
       },
       "7843": {
         "isMemorized": true,
-        "isStarred": false
-      },
-      "7844": {
-        "isMemorized": false,
         "isStarred": false,
         "isWrong": true,
         "isStudied": true
       },
-      "7846": {
+      "7844": {
         "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "7846": {
+        "isMemorized": false,
         "isStarred": false,
         "isWrong": true,
         "isStudied": true
       },
       "7847": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -9581,6 +10466,13 @@
       "7851": {
         "isMemorized": true,
         "isStarred": false,
+        "isStudied": true,
+        "isWrong": false
+      },
+      "7852": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
         "isStudied": true
       },
       "7853": {
@@ -9589,11 +10481,15 @@
       },
       "7854": {
         "isMemorized": true,
-        "isStarred": false
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
       },
       "7861": {
-        "isMemorized": true,
-        "isStarred": false
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
       },
       "7862": {
         "isMemorized": false,
@@ -9607,11 +10503,19 @@
       },
       "7865": {
         "isMemorized": true,
-        "isStarred": false
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
       },
       "7866": {
         "isMemorized": true,
         "isStarred": false
+      },
+      "7867": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
       },
       "7869": {
         "isMemorized": true,
@@ -9644,7 +10548,7 @@
       "7877": {
         "isMemorized": false,
         "isStarred": false,
-        "isWrong": false,
+        "isWrong": true,
         "isStudied": true
       },
       "7879": {
@@ -9652,7 +10556,7 @@
         "isStarred": false
       },
       "7881": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -9662,7 +10566,7 @@
         "isStarred": false
       },
       "7885": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -9670,7 +10574,7 @@
       "7888": {
         "isMemorized": false,
         "isStarred": false,
-        "isWrong": false,
+        "isWrong": true,
         "isStudied": true
       },
       "7889": {
@@ -9680,7 +10584,7 @@
       "7893": {
         "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "7894": {
@@ -9702,7 +10606,7 @@
       "7901": {
         "isMemorized": false,
         "isStarred": false,
-        "isWrong": false,
+        "isWrong": true,
         "isStudied": true
       },
       "7902": {
@@ -9724,7 +10628,7 @@
         "isStarred": false
       },
       "7956": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -9732,17 +10636,17 @@
       "7975": {
         "isMemorized": false,
         "isStarred": false,
-        "isWrong": false,
+        "isWrong": true,
         "isStudied": true
       },
       "7977": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "7988": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -9835,6 +10739,12 @@
       "8183": {
         "isMemorized": false,
         "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "8238": {
+        "isMemorized": true,
+        "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
@@ -9901,7 +10811,7 @@
       "8396": {
         "isMemorized": false,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "8398": {
@@ -9951,10 +10861,10 @@
         "isStarred": false
       },
       "8560": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
       },
       "8568": {
         "isMemorized": true,
@@ -9977,7 +10887,7 @@
       "8664": {
         "isMemorized": false,
         "isStarred": false,
-        "isWrong": false,
+        "isWrong": true,
         "isStudied": true
       },
       "8737": {
@@ -9987,15 +10897,15 @@
         "isStudied": true
       },
       "8746": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "8774": {
         "isMemorized": false,
         "isStarred": false,
-        "isWrong": false,
+        "isWrong": true,
         "isStudied": true
       },
       "8777": {
@@ -10065,9 +10975,9 @@
         "isStudied": true
       },
       "8926": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "8941": {
@@ -10266,19 +11176,19 @@
         "isStudied": true
       },
       "70002": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "70003": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "70004": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -10335,10 +11245,10 @@
         "isStudied": true
       },
       "70039": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
       },
       "70040": {
         "isMemorized": true,
@@ -10346,9 +11256,9 @@
         "isStudied": true
       },
       "70041": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "70042": {
@@ -10379,27 +11289,27 @@
         "isStudied": true
       },
       "70052": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
       "决心": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "壶": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "天真": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "如今": {
@@ -10417,7 +11327,7 @@
       "抢": {
         "isMemorized": false,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "时期": {
@@ -10445,15 +11355,15 @@
         "isStudied": true
       },
       "或者": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "愿意": {
         "isMemorized": false,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "季节": {
@@ -10463,9 +11373,9 @@
         "isStudied": true
       },
       "关注": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "句子": {
@@ -10475,39 +11385,39 @@
         "isStudied": true
       },
       "女儿": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
       },
       "和": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
-        "isStudied": true
+        "isStudied": true,
+        "isWrong": false
       },
       "孩子": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "多": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
       },
       "弟弟": {
         "isMemorized": false,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "妹妹": {
         "isMemorized": false,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "大方": {
@@ -10547,15 +11457,15 @@
         "isStudied": true
       },
       "大型": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "诗": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "惭愧": {
@@ -10579,7 +11489,7 @@
       "洒": {
         "isMemorized": false,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "便宜": {
@@ -10589,22 +11499,22 @@
         "isStudied": true
       },
       "到": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "朋友": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
       },
       "钱": {
         "isMemorized": false,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
       },
       "在": {
         "isMemorized": false,
@@ -10613,34 +11523,34 @@
         "isStudied": true
       },
       "饭": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "块": {
         "isMemorized": false,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
       },
       "衣服": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
       },
       "学习": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "边": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
       },
       "外": {
         "isMemorized": false,
@@ -10649,21 +11559,21 @@
         "isStudied": true
       },
       "这边": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
       },
       "那个": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
       },
       "玩": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "件": {
@@ -10675,32 +11585,32 @@
       "上": {
         "isMemorized": false,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "前": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "唱": {
         "isMemorized": false,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "下": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "家": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
       },
       "午饭": {
         "isMemorized": false,
@@ -10709,21 +11619,21 @@
         "isStudied": true
       },
       "商店": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
       },
       "男": {
         "isMemorized": false,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "桌子": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "营业": {
@@ -10783,19 +11693,19 @@
       "答应": {
         "isMemorized": false,
         "isStarred": false,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       "婚姻": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
       },
       "广大": {
         "isMemorized": false,
         "isStarred": false,
-        "isWrong": false,
+        "isWrong": true,
         "isStudied": true
       },
       "挑战": {
@@ -10820,7 +11730,7 @@
         "isMemorized": false,
         "isStarred": false,
         "isStudied": true,
-        "isWrong": true
+        "isWrong": false
       },
       "涂鸦": {
         "isMemorized": false,
@@ -10835,16 +11745,268 @@
         "isStudied": true
       },
       "看": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "法国": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true,
+        "isWrong": false
+      },
+      "台阶": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "锁": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": true,
         "isStudied": true
       },
-      "法国": {
+      "漏": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "项": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "石灰岩": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "岩石": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "悠久": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isStudied": true,
+        "isWrong": false
+      },
+      "诚恳": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "击": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "孝顺": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "傍晚": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "赞美": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "为": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "官": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "充满": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "辞职": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "产生": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "地势": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "从前": {
         "isMemorized": false,
         "isStarred": false,
         "isStudied": true,
         "isWrong": true
+      },
+      "老实": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "勤奋": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "反映": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "食物": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true,
+        "isWrong": false
+      },
+      "结实": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "盼望": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "委屈": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "航行": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isStudied": true,
+        "isWrong": true
+      },
+      "善良": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "驾驶": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "着火": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "满足": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "局": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "馒头": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "各自": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "反而": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "仿佛": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "顶": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "风俗": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "后背": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "英雄": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "似的": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "支教": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
       }
     },
     "theduy2444@gmail.com": {
@@ -12887,6 +14049,12 @@
         "isWrong": false,
         "isStudied": true
       },
+      "282": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "290": {
         "isMemorized": false,
         "isStarred": false,
@@ -12894,6 +14062,30 @@
         "isStudied": true
       },
       "408": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "434": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "435": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "440": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "483": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
@@ -14139,7 +15331,8 @@
       "382": {
         "isMemorized": true,
         "isStarred": false,
-        "isStudied": true
+        "isStudied": true,
+        "isWrong": true
       },
       "383": {
         "isMemorized": true,
@@ -14194,7 +15387,7 @@
       "394": {
         "isMemorized": true,
         "isStarred": false,
-        "isWrong": false,
+        "isWrong": true,
         "isStudied": true
       },
       "395": {
@@ -14212,16 +15405,121 @@
         "isStarred": false,
         "isStudied": true
       },
+      "398": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "399": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "400": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "401": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "402": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "403": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
       "404": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
+      "405": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "406": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "407": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "408": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "409": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "410": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "411": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "412": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
       "413": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": false,
+        "isStudied": true
+      },
+      "414": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "415": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "416": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "417": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "418": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "419": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "420": {
+        "isMemorized": true,
+        "isStarred": false,
         "isStudied": true
       },
       "423": {
@@ -14360,6 +15658,18 @@
         "isMemorized": true,
         "isStarred": false,
         "isStudied": true
+      },
+      "好听": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": true,
+        "isStudied": true
+      },
+      "本": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isStudied": true,
+        "isWrong": true
       }
     },
     "kimloan30012006@gmail.com": {
@@ -15823,6 +17133,12 @@
         "isWrong": false,
         "isStudied": true
       },
+      "59": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "74": {
         "isMemorized": false,
         "isStarred": false,
@@ -16085,6 +17401,41 @@
         "isStudied": true
       },
       "6486": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6491": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6492": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6494": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6495": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6496": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6497": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6499": {
         "isMemorized": true,
         "isStarred": false,
         "isStudied": true
@@ -16472,6 +17823,11 @@
         "isWrong": false,
         "isStudied": true
       },
+      "360": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
       "374": {
         "isMemorized": true,
         "isStarred": false,
@@ -16482,7 +17838,24 @@
         "isStarred": false,
         "isStudied": true
       },
+      "385": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "390": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "392": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "398": {
         "isMemorized": true,
         "isStarred": false,
         "isStudied": true
@@ -17090,7 +18463,7 @@
         "isStudied": true
       },
       "71": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": true,
         "isStudied": true
@@ -17108,7 +18481,7 @@
         "isStudied": true
       },
       "74": {
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isWrong": true,
         "isStudied": true
@@ -17136,6 +18509,12 @@
         "isStudied": true
       },
       "85": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "92": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
@@ -17982,6 +19361,18 @@
       },
       "158": {
         "isMemorized": true,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "160": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "162": {
+        "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
@@ -22384,6 +23775,12 @@
         "isWrong": false,
         "isStudied": true
       },
+      "56": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "127": {
         "isMemorized": false,
         "isStarred": false,
@@ -23279,6 +24676,164 @@
       }
     },
     "onelahomie@gmail.com": {
+      "210": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "211": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "212": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "213": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "214": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "215": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "216": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "217": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "218": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "219": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "220": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "221": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "222": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "223": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "224": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "225": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "226": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "227": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "228": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "229": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "230": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "231": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "232": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "233": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "234": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "235": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "236": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "237": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "368": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "412": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "522": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "525": {
         "isMemorized": false,
         "isStarred": false,
@@ -23465,6 +25020,18 @@
         "isWrong": false,
         "isStudied": true
       },
+      "511": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "520": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "526": {
         "isMemorized": false,
         "isStarred": false,
@@ -23589,6 +25156,12 @@
         "isStarred": false,
         "isStudied": true
       },
+      "347": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "474": {
         "isMemorized": false,
         "isStarred": false,
@@ -23602,10 +25175,472 @@
         "isStarred": false,
         "isStudied": true
       },
+      "211": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "212": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "213": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "214": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isStudied": true,
+        "isWrong": true
+      },
+      "215": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "216": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "217": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "218": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isStudied": true,
+        "isWrong": true
+      },
+      "219": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "220": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "221": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "222": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "223": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "237": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "324": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
+        "isStudied": true
+      },
+      "442": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "453": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "484": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "大家": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isStudied": true,
+        "isWrong": true
+      },
+      "老师": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isStudied": true,
+        "isWrong": true
+      }
+    },
+    "26051510@vnu.edu.vn": {
+      "401": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      }
+    },
+    "ngannghiem88@gmail.com": {
+      "7": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "210": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "211": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "212": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "213": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "214": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "215": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "216": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "217": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "218": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "219": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "220": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "221": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "222": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "224": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "225": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "226": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "227": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "228": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "229": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "230": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "231": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "232": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "273": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "403": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "405": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "491": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "502": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "518": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "523": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "537": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "743": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "747": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "748": {
+        "isMemorized": true,
+        "isStarred": true,
+        "isStudied": true
+      },
+      "750": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "752": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "753": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "754": {
+        "isMemorized": true,
+        "isStarred": true,
+        "isStudied": true
+      },
+      "755": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "40004": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "40010": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      }
+    },
+    "xinhlovely.0501@gmail.com": {
+      "250": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "392": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "398": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "399": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "400": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "401": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "402": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "403": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      }
+    },
+    "cuongthinh031206@gmail.com": {
+      "237": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "398": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "418": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      }
+    },
+    "dolequynhmai.6525@gmail.com": {
+      "201": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "288": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "360": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "6738": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6739": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6740": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6742": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6744": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6745": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6746": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6747": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6752": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "6753": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "70010": {
+        "isMemorized": true,
+        "isStarred": false,
         "isStudied": true
       }
     }
@@ -23625,10 +25660,10 @@
         "category": "新生词",
         "example_zh": "",
         "example_vi": "",
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isCustom": true,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       },
       {
@@ -23670,10 +25705,10 @@
         "category": "新生词",
         "example_zh": "",
         "example_vi": "",
-        "isMemorized": false,
+        "isMemorized": true,
         "isStarred": false,
         "isCustom": true,
-        "isWrong": true,
+        "isWrong": false,
         "isStudied": true
       }
     ],
@@ -23746,30 +25781,14 @@
     "nhatnguyetlehan@gmail.com": [],
     "dhoaicv@gmail.com": [],
     "duyen241224@gmail.com": [],
-    "tuyetbg1104@gmail.com": []
+    "tuyetbg1104@gmail.com": [],
+    "26051510@vnu.edu.vn": [],
+    "ngannghiem88@gmail.com": [],
+    "xinhlovely.0501@gmail.com": [],
+    "cuongthinh031206@gmail.com": [],
+    "dolequynhmai.6525@gmail.com": []
   },
   "sessions": {
-    "ripgymnd15pmtcssa4p": "lienhuynh8273@gmail.com",
-    "ev3zrkirwlsmtd2v8k6": "bongbongbin2013@gmail.com",
-    "1gplummho3pmtnvqp9r": "nanh1506204@gmail.com",
-    "lmar5x9jc3cmtnwm3is": "nanh1506204@gmail.com",
-    "5annkm1b9glmto2omcn": "tranvanchien0113@gmail.com",
-    "9dzfd54h50kmto48t7p": "phanphiphu04@gmail.com",
-    "n4627w9m44mmto7dkrc": "phanphiphu04@gmail.com",
-    "xwekk0nwpshmto9zxb6": "phanphiphu04@gmail.com",
-    "y9d1ot2713tmtoccsau": "phanphiphu04@gmail.com",
-    "6tu8el0kxemmtoddx4o": "kieutrang.nguyen8783@gmail.com",
-    "49899o6g99fmtedj1x4": "imghuzlz.jpg@gmail.com",
-    "vb5jqj3v4c8mtoe3z98": "phanphiphu04@gmail.com",
-    "5ybxceo67c6mtefxqox": "phanphiphu04@gmail.com",
-    "720ttam4b3mtogezgl": "phanphiphu04@gmail.com",
-    "3k5po90luvjmtogep9t": "phanphiphu04@gmail.com",
-    "zzyk51rfznomtehe8we": "dtrungkien581@gmail.com",
-    "gd81rd9mn3mtpx6l5e": "h84706749@gmail.com",
-    "vxnv9vululimtzyjwlk": "baxuanchu5@gmail.com",
-    "001j1jeyqn8t5mtzyr3oe": "minht4426@gmail.com",
-    "c3qk7ecm5flmu0iuhz5": "tathuhang1010@gmail.com",
-    "64494sk1d4umtg7yl7m": "minht4426@gmail.com",
     "tq63hqb7w1smtqotzn8": "phanphiphu04@gmail.com",
     "kj4iqg19xdmu0r6u2e": "myvu.ket@gmail.com",
     "ym7flxxu7u9mu0ub3cj": "mainguyen.30jul@gmail.com",
@@ -23796,12 +25815,12 @@
     "6az5fqlzi5cmsx0bm84": "lethihuong15082007@gmail.com",
     "4w9auv45n27msha3alh": "phanphiphu04@gmail.com",
     "mi8uq21snuimsj9a4do": "phanphiphu04@gmail.com",
-    "etc5mhfexo8msigjd8o": "phanphiphu04@gmail.com",
     "889ghvewtcbmsfw7xe9": "phanphiphu04@gmail.com",
-    "ak4t7jszy09msfp5zo2": "phanphiphu04@gmail.com",
+    "etc5mhfexo8msigjd8o": "phanphiphu04@gmail.com",
     "qg9qq6jusimsgc7dzm": "phanphiphu04@gmail.com",
-    "6bcoqmw665msh4ofnz": "phanphiphu04@gmail.com",
+    "ak4t7jszy09msfp5zo2": "phanphiphu04@gmail.com",
     "fd83eblcnjwmsjd9qtx": "phanphiphu04@gmail.com",
+    "6bcoqmw665msh4ofnz": "phanphiphu04@gmail.com",
     "e0tcqj42kggmsh8d6fw": "phanphiphu04@gmail.com",
     "ibniwpw41mmsg43v3h": "phanphiphu04@gmail.com",
     "2uvopvjpiyemshqo3r1": "phanphiphu04@gmail.com",
@@ -23810,9 +25829,9 @@
     "zt8a0n1fhqmshafbdb": "phanphiphu04@gmail.com",
     "lwizbyvaa2mswubo1x": "lethanhthao21112001@gmail.com",
     "guxytfn8hiomsvjgzq7": "doanthinhinh17101995@gmail.com",
-    "ym7oeoj4kzmshq9mbc": "phanphiphu04@gmail.com",
     "woh3q2o34edmshlte34": "phanphiphu04@gmail.com",
     "ego8jltspr7msr4kxmv": "thaihong162004@gmail.com",
+    "ym7oeoj4kzmshq9mbc": "phanphiphu04@gmail.com",
     "919wyjvp81bmsytk5u8": "nguyenkhavy5002213@gmail.com",
     "fbhhn7lqazamsudch2d": "nguyentronghuy271104@gmail.com",
     "3ewv9089748msvasx3h": "thaihong162004@gmail.com",
@@ -23820,46 +25839,46 @@
     "16eedmjwcngimsjcjpuj": "phanphiphu04@gmail.com",
     "if8diflclybmsjvbspz": "phanphiphu04@gmail.com",
     "25kbis657vmsihyuky": "phanphiphu04@gmail.com",
+    "kfz7t664rwkmsjbvyah": "phanphiphu04@gmail.com",
+    "qzs3p0gcnxsmsiic0ka": "phanphiphu04@gmail.com",
+    "um5nx91hxumsvj1skc": "bsau261953@gmail.com",
     "ayv3xj0yu2dmslefwyu": "phanphiphu04@gmail.com",
     "rkif0f5sjfqmsja8ztp": "phanphiphu04@gmail.com",
-    "qzs3p0gcnxsmsiic0ka": "phanphiphu04@gmail.com",
-    "kfz7t664rwkmsjbvyah": "phanphiphu04@gmail.com",
-    "um5nx91hxumsvj1skc": "bsau261953@gmail.com",
     "3fgyr9ajfe3mskrx76f": "phanphiphu04@gmail.com",
     "jcxjcmbc0cmt31ipx8": "nthoamai2006@gmail.com",
+    "1jfll8ik9nwmsigxrft": "phanphiphu04@gmail.com",
     "3ikvvl1p17pmsgaoihx": "phanphiphu04@gmail.com",
     "9zuseddu47amshbdxzp": "phanphiphu04@gmail.com",
-    "1jfll8ik9nwmsigxrft": "phanphiphu04@gmail.com",
     "yhqlfj7s1uomsuij0r5": "pthao9298@gmail.com",
     "euz5hn7ocrvmshuskg8": "phanphiphu04@gmail.com",
     "ilw8itfui9nmskmv8a1": "phanphiphu04@gmail.com",
-    "xvtd5yz7dxmsg3hhhv": "phanphiphu04@gmail.com",
     "iikx78giveqmsg4jylh": "phanphiphu04@gmail.com",
+    "xvtd5yz7dxmsg3hhhv": "phanphiphu04@gmail.com",
     "kmdr9v0fpkkmt5rippv": "nguyenchauhuytruong@gmail.com",
     "eftqanptmbhmsuqjw3k": "mathmathsigma@gmail.com",
     "z5b2vwyn5fmt40k3ow": "nguyenhoangthienbao0830@gmail.com",
     "4r8t4lttcptmsh7ki6j": "phanphiphu04@gmail.com",
     "zhmz1i7asc9msklvay9": "phanphiphu04@gmail.com",
     "qg7jydlvuxmseh0may": "phanphiphu04@gmail.com",
-    "cvausqfhn4umsfw8y8y": "yyxinwp@gmail.com",
     "7xygzg6m183msg98pm0": "phanphiphu04@gmail.com",
-    "03rlp3g7m5vomsq6emr2": "phanphiphu04@gmail.com",
+    "cvausqfhn4umsfw8y8y": "yyxinwp@gmail.com",
     "qim0s18dwtjmt9lq8m8": "baoduy11742005@gmail.com",
+    "03rlp3g7m5vomsq6emr2": "phanphiphu04@gmail.com",
     "r7xg277kvvsmsihl409": "phanphiphu04@gmail.com",
     "9wcsufhtw3mt7asqb0": "ngthuyduong872009@gmail.com",
     "km0i0v0qdotmsv7x86q": "duongnguyennhatkhang@gmail.com",
+    "iqkzk7934dmstm27bm": "nguyentronghuy12333@gmail.com",
+    "agrkn8jlqf5msvxx1sl": "quechii1106@gmail.com",
     "7qj9od1jtm9mskn7b2r": "phanphiphu04@gmail.com",
+    "jmvic1ktfxnmshbxg21": "phanphiphu04@gmail.com",
     "5b37zss5g4qmt3na3wz": "dov21231@gmail.com",
     "6g3ov999za4msxedj4w": "lethanhthao21112001@gmail.com",
-    "iqkzk7934dmstm27bm": "nguyentronghuy12333@gmail.com",
     "wx7t6bpcbrmsldaq0i": "phanphiphu04@gmail.com",
     "h95p7hydgsdmsjcvww3": "phanphiphu04@gmail.com",
-    "agrkn8jlqf5msvxx1sl": "quechii1106@gmail.com",
-    "jmvic1ktfxnmshbxg21": "phanphiphu04@gmail.com",
     "xhzhlof7hpsmssk9t9n": "phanphiphu04@gmail.com",
     "fovgt2bgo6msh732mv": "phanphiphu04@gmail.com",
-    "4p14pc436qbmsg1iffk": "phanphiphu04@gmail.com",
     "asxya9e75csmslwc7y3": "phanphiphu04@gmail.com",
+    "4p14pc436qbmsg1iffk": "phanphiphu04@gmail.com",
     "qbsvpcxbtmmsjdzxv8": "phanphiphu04@gmail.com",
     "gutxwd37eomskk8wu6": "phanphiphu04@gmail.com",
     "9qrcje1y7vjmt47x05o": "hoangbaoyen2082004@gmail.com",
@@ -23867,55 +25886,55 @@
     "ypzhbl1ed8mslnn7ez": "phanphiphu04@gmail.com",
     "y1mj0yy7symt2qabmt": "lehongnhung911@gmail.com",
     "w721zx8t4vmsvn8apy": "phanphiphu04@gmail.com",
-    "qsa6jeh3j2dmt01wqh0": "nguyentronghuy271104@gmail.com",
     "hyipporq4h6msz1tb0m": "huathithanhdao13092011@gmail.com",
-    "yc00msuj54qmsg01sf4": "phanphiphu04@gmail.com",
     "bdjr8kr3zsfmshuf6cs": "phanphiphu04@gmail.com",
     "pihnek0v2pqmsdhft9l": "phanphiphu04@gmail.com",
+    "qsa6jeh3j2dmt01wqh0": "nguyentronghuy271104@gmail.com",
+    "yc00msuj54qmsg01sf4": "phanphiphu04@gmail.com",
+    "dgbfmm61x3msvgw1bv": "vyt830941@gmail.com",
     "ep9stdlf40rmslskigc": "phanphiphu04@gmail.com",
     "a096fszxrsbmshd1fea": "phanphiphu04@gmail.com",
-    "dgbfmm61x3msvgw1bv": "vyt830941@gmail.com",
-    "ro0acpji3hnmsecmnzr": "phanphiphu04@gmail.com",
-    "d9dapowdhwvmt8f0fou": "uuyn8983@gmail.com",
-    "jg49dj9qpolmsmssqzo": "phanphiphu04@gmail.com",
-    "p7eu5p9pkbamsmtal6h": "phanphiphu04@gmail.com",
     "7yug1wv6txgmsegujas": "phanphiphu04@gmail.com",
     "32sglth7mo7msn43k8i": "thaihong162004@gmail.com",
+    "d9dapowdhwvmt8f0fou": "uuyn8983@gmail.com",
+    "ro0acpji3hnmsecmnzr": "phanphiphu04@gmail.com",
+    "jg49dj9qpolmsmssqzo": "phanphiphu04@gmail.com",
+    "p7eu5p9pkbamsmtal6h": "phanphiphu04@gmail.com",
     "64da3prf2znmsfvsj7g": "phanphiphu04@gmail.com",
     "zc1xvytbkyhmskrkwiv": "phanphiphu04@gmail.com",
     "fb61ljaxq7imsfkhxgq": "phanphiphu04@gmail.com",
     "bpk1g7bcggmsvev2hn": "22521000@gm.uit.edu.vn",
     "y5kxrp8bn8rmsn3yqxf": "phanphiphu04@gmail.com",
-    "l8uwi41r1bmskl9q0m": "phanphiphu04@gmail.com",
+    "esa8fn1x04msgck6xy": "phanphiphu04@gmail.com",
+    "dxgwaa9sqlqmsvg6iip": "thanhphat160818@gmail.com",
+    "yr2ch7e263mshvmtz8": "phanphiphu04@gmail.com",
     "yy9y25fgao9msg9o8q5": "phanphiphu04@gmail.com",
     "6a3w4adtdulmsms2xow": "phanphiphu04@gmail.com",
-    "esa8fn1x04msgck6xy": "phanphiphu04@gmail.com",
-    "8qo4v099h5mmshpqcfl": "phanphiphu04@gmail.com",
     "tu5wzrn506mt4ag2ko": "xinhminions@gmail.com",
-    "dxgwaa9sqlqmsvg6iip": "thanhphat160818@gmail.com",
-    "mxioucqvc1msn27nqo": "thaihong162004@gmail.com",
     "3ipsrk9quzimsle3j59": "phanphiphu04@gmail.com",
-    "yr2ch7e263mshvmtz8": "phanphiphu04@gmail.com",
+    "l8uwi41r1bmskl9q0m": "phanphiphu04@gmail.com",
+    "8qo4v099h5mmshpqcfl": "phanphiphu04@gmail.com",
+    "mxioucqvc1msn27nqo": "thaihong162004@gmail.com",
     "7rrde3uvvsrmsh5g1mz": "phanphiphu04@gmail.com",
+    "zllgbd60iukmsk7oqh7": "phanphiphu04@gmail.com",
     "zo1s6u9m8emsxb6r7y": "hoangnvutc2023@gmail.com",
     "rvymb7cp07qmsn5gsdk": "thaihong162004@gmail.com",
-    "zllgbd60iukmsk7oqh7": "phanphiphu04@gmail.com",
     "7lx9pzkhg9smsig2fya": "phanphiphu04@gmail.com",
     "2bwn1kqj9mbmsiiszov": "phanphiphu04@gmail.com",
     "k1zqs2xj829mskmi5a2": "phanphiphu04@gmail.com",
     "0hhg5qbvi30kmsldpxxg": "phanphiphu04@gmail.com",
     "9taex38im08mt4mouuj": "kimloan30012006@gmail.com",
     "95z3a0i8pwbmsgdbtzv": "phanphiphu04@gmail.com",
-    "znhkpvtpjymslsaemj": "phanphiphu04@gmail.com",
     "cqx0397k7kmt2q38mq": "lehongnhung911@gmail.com",
     "c1t5umimx8bmsg7k7u2": "phanphiphu04@gmail.com",
+    "znhkpvtpjymslsaemj": "phanphiphu04@gmail.com",
     "967swycwwpemst69cd9": "hkiet5294@gmail.com",
     "byab4q3h3njmssvg71g": "theduy2444@gmail.com",
     "1lxy9nvc12lmsjdl4ob": "toiyeutinhoc238@gmail.com",
     "tyrbkni4ssmmsga2o89": "phanphiphu04@gmail.com",
     "0sa7xoyrcv6msjb9h34": "phanphiphu04@gmail.com",
-    "euzuunpax7qmsjaqqvz": "phanphiphu04@gmail.com",
     "p1ijelrhtfmmsftdrvv": "phanphiphu04@gmail.com",
+    "euzuunpax7qmsjaqqvz": "phanphiphu04@gmail.com",
     "ne3xcax556nmu3tir8r": "kimthoa8858@gmail.com",
     "7lgm71ld0jnmu3toux5": "thanthitamnhu04@gmail.com",
     "o5lqmcumykmt9t6x97": "at.nguyenthuynga2004@gmail.com",
@@ -23929,8 +25948,35 @@
     "cw3qgmung7mu5pwvlo": "dhoaicv@gmail.com",
     "6jnce1vnrj7mu5t0ekt": "duyen241224@gmail.com",
     "w1cqwy8awimu64z3cd": "tuyetbg1104@gmail.com",
+    "higzpusz9u7mtcc7vg9": "phuongthaofut@gmail.com",
     "37cdujw0mbvmtmbeuf0": "dieuthu1310@gmail.com",
-    "higzpusz9u7mtcc7vg9": "phuongthaofut@gmail.com"
+    "fy8mib02xhmu6vrtmz": "phanphiphu04@gmail.com",
+    "ripgymnd15pmtcssa4p": "lienhuynh8273@gmail.com",
+    "ev3zrkirwlsmtd2v8k6": "bongbongbin2013@gmail.com",
+    "f5juji7ppnmu76hjc4": "26051510@vnu.edu.vn",
+    "1gplummho3pmtnvqp9r": "nanh1506204@gmail.com",
+    "lmar5x9jc3cmtnwm3is": "nanh1506204@gmail.com",
+    "5annkm1b9glmto2omcn": "tranvanchien0113@gmail.com",
+    "9dzfd54h50kmto48t7p": "phanphiphu04@gmail.com",
+    "n4627w9m44mmto7dkrc": "phanphiphu04@gmail.com",
+    "xwekk0nwpshmto9zxb6": "phanphiphu04@gmail.com",
+    "49899o6g99fmtedj1x4": "imghuzlz.jpg@gmail.com",
+    "y9d1ot2713tmtoccsau": "phanphiphu04@gmail.com",
+    "6tu8el0kxemmtoddx4o": "kieutrang.nguyen8783@gmail.com",
+    "vb5jqj3v4c8mtoe3z98": "phanphiphu04@gmail.com",
+    "5ybxceo67c6mtefxqox": "phanphiphu04@gmail.com",
+    "720ttam4b3mtogezgl": "phanphiphu04@gmail.com",
+    "3k5po90luvjmtogep9t": "phanphiphu04@gmail.com",
+    "zzyk51rfznomtehe8we": "dtrungkien581@gmail.com",
+    "c0teo4y5yijmu97wxnl": "ngannghiem88@gmail.com",
+    "8b1k40lrx9lmu9uwuql": "xinhlovely.0501@gmail.com",
+    "npncivaz34mu9v9y84": "cuongthinh031206@gmail.com",
+    "gd81rd9mn3mtpx6l5e": "h84706749@gmail.com",
+    "vxnv9vululimtzyjwlk": "baxuanchu5@gmail.com",
+    "001j1jeyqn8t5mtzyr3oe": "minht4426@gmail.com",
+    "6wucsjo7ihmua5802o": "dolequynhmai.6525@gmail.com",
+    "c3qk7ecm5flmu0iuhz5": "tathuhang1010@gmail.com",
+    "64494sk1d4umtg7yl7m": "minht4426@gmail.com"
   },
   "chats": {
     "thaygiaoroxie@gmail.com": [],
@@ -24230,7 +26276,25 @@
     "mainguyen.30jul@gmail.com": [],
     "thhuongg14042008@gmail.com": [],
     "buidangkimngan9at2@gmail.com": [],
-    "onelahomie@gmail.com": [],
+    "onelahomie@gmail.com": [
+      {
+        "id": "thread_1789751040428pg96",
+        "title": "Muốn nói \"tôi muốn đi ngủ\" thì sao",
+        "createdAt": "2026-09-18T17:04:00.428Z",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Muốn nói \"tôi muốn đi ngủ\" thì sao",
+            "timestamp": "2026-09-18T17:04:00.429Z"
+          },
+          {
+            "role": "assistant",
+            "content": "Trợ lý AI Hongtai trả lời:\n\n- 中文：**我想睡觉**  \n- Pinyin：wǒ xiǎng shuì jiào  \n- Nghĩa: tôi muốn đi ngủ  \n- Ví dụ: 我很累，**我想睡觉**。 (Tôi rất mệt, tôi muốn đi ngủ.)",
+            "timestamp": "2026-09-18T17:04:00.429Z"
+          }
+        ]
+      }
+    ],
     "truongthainhu1016@gmail.com": [],
     "phamkhanhlinh28102004@gmail.com": [],
     "lengochuongmigi@gmail.com": [],
@@ -24241,7 +26305,12 @@
     "nhatnguyetlehan@gmail.com": [],
     "dhoaicv@gmail.com": [],
     "duyen241224@gmail.com": [],
-    "tuyetbg1104@gmail.com": []
+    "tuyetbg1104@gmail.com": [],
+    "26051510@vnu.edu.vn": [],
+    "ngannghiem88@gmail.com": [],
+    "xinhlovely.0501@gmail.com": [],
+    "cuongthinh031206@gmail.com": [],
+    "dolequynhmai.6525@gmail.com": []
   },
   "quizHistory": {
     "thaihong162004@gmail.com": [

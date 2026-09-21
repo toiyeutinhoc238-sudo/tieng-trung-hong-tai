@@ -5108,6 +5108,7 @@ function showHomeView() {
 
 function showRoadmapView() {
   switchTab('roadmap');
+  roadmapBookshelfFilter = 'all';
   if (typeof window.setRoadmapViewMode === 'function') {
     window.setRoadmapViewMode('bookshelf');
   } else if (typeof renderRoadmapBookshelf === 'function') {
@@ -5125,6 +5126,7 @@ window.returnToHskLevelSelection = function () {
   if (lessonsSec) lessonsSec.style.display = 'none';
   if (roadmapSec) roadmapSec.style.display = 'block';
   switchTab('roadmap');
+  roadmapBookshelfFilter = 'all';
   if (typeof renderRoadmapBookshelf === 'function') {
     renderRoadmapBookshelf();
   }
