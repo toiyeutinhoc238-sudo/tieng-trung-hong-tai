@@ -19982,12 +19982,35 @@ body.dark .roadmap-shelf-filter-bar {
   box-shadow: 2px 2px 0 #0f172a;
 }
 
+/* Light Mode: Inactive filter buttons with crisp black text */
 html.light .roadmap-filter-btn,
-html.light-mode .roadmap-filter-btn {
-  background: #ffffff;
-  color: #475569;
+html.light-mode .roadmap-filter-btn,
+body.light .roadmap-filter-btn,
+body.light-mode .roadmap-filter-btn {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: 2px solid #0f172a !important;
+  box-shadow: 2px 2px 0 #0f172a !important;
 }
 
+html.light .roadmap-filter-btn *,
+html.light-mode .roadmap-filter-btn *,
+body.light .roadmap-filter-btn *,
+body.light-mode .roadmap-filter-btn * {
+  color: #0f172a !important;
+}
+
+html.light .roadmap-filter-btn:hover:not(.active),
+html.light-mode .roadmap-filter-btn:hover:not(.active) {
+  background: #f1f5f9 !important;
+  color: #2563eb !important;
+}
+
+html.light .roadmap-filter-btn:hover:not(.active) * {
+  color: #2563eb !important;
+}
+
+/* Dark Mode: Inactive filter buttons */
 html.dark .roadmap-filter-btn {
   background: #1e293b;
   border-color: #475569;
@@ -20005,17 +20028,38 @@ html.dark .roadmap-filter-btn:hover {
   box-shadow: 3px 3.5px 0 #000000;
 }
 
-.roadmap-filter-btn.active {
-  background: #3b82f6;
+/* ACTIVE filter button in Light Mode: BOLD BLUE BACKGROUND + PURE WHITE TEXT */
+html.light .roadmap-filter-btn.active,
+html.light-mode .roadmap-filter-btn.active,
+body.light .roadmap-filter-btn.active,
+body.light-mode .roadmap-filter-btn.active {
+  background: #2563eb !important;
   color: #ffffff !important;
-  border-color: #0f172a;
-  box-shadow: 2.5px 3px 0 #1d4ed8;
+  border: 2px solid #0f172a !important;
+  box-shadow: 2.5px 3px 0 #1e3a8a !important;
 }
 
-html.dark .roadmap-filter-btn.active {
-  background: #3b82f6;
-  border-color: #60a5fa;
-  box-shadow: 2.5px 3px 0 #000000;
+html.light .roadmap-filter-btn.active *,
+html.light-mode .roadmap-filter-btn.active *,
+body.light .roadmap-filter-btn.active *,
+body.light-mode .roadmap-filter-btn.active * {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+}
+
+/* ACTIVE filter button in Dark Mode */
+html.dark .roadmap-filter-btn.active,
+body.dark .roadmap-filter-btn.active {
+  background: #3b82f6 !important;
+  color: #ffffff !important;
+  border-color: #60a5fa !important;
+  box-shadow: 2.5px 3px 0 #000000 !important;
+}
+
+html.dark .roadmap-filter-btn.active *,
+body.dark .roadmap-filter-btn.active * {
+  color: #ffffff !important;
+  fill: #ffffff !important;
 }
 
 .roadmap-view-mode-toggle {
@@ -20027,8 +20071,12 @@ html.dark .roadmap-filter-btn.active {
   gap: 4px;
 }
 
-html.light .roadmap-view-mode-toggle {
-  background: #e2e8f0;
+html.light .roadmap-view-mode-toggle,
+html.light-mode .roadmap-view-mode-toggle,
+body.light .roadmap-view-mode-toggle,
+body.light-mode .roadmap-view-mode-toggle {
+  background: #e2e8f0 !important;
+  border: 2px solid #0f172a !important;
 }
 
 html.dark .roadmap-view-mode-toggle {
@@ -20051,10 +20099,52 @@ html.dark .roadmap-view-mode-toggle {
   transition: all 0.2s ease;
 }
 
-.roadmap-view-toggle-btn.active {
-  background: #3b82f6;
-  color: #ffffff;
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+/* Light Mode: Inactive view toggle button with high contrast */
+html.light .roadmap-view-toggle-btn,
+html.light-mode .roadmap-view-toggle-btn,
+body.light .roadmap-view-toggle-btn,
+body.light-mode .roadmap-view-toggle-btn {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+html.light .roadmap-view-toggle-btn *,
+html.light-mode .roadmap-view-toggle-btn *,
+body.light .roadmap-view-toggle-btn *,
+body.light-mode .roadmap-view-toggle-btn * {
+  color: #0f172a !important;
+}
+
+/* Light Mode: ACTIVE view toggle button */
+html.light .roadmap-view-toggle-btn.active,
+html.light-mode .roadmap-view-toggle-btn.active,
+body.light .roadmap-view-toggle-btn.active,
+body.light-mode .roadmap-view-toggle-btn.active {
+  background: #2563eb !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4) !important;
+}
+
+html.light .roadmap-view-toggle-btn.active *,
+html.light-mode .roadmap-view-toggle-btn.active *,
+body.light .roadmap-view-toggle-btn.active *,
+body.light-mode .roadmap-view-toggle-btn.active * {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+}
+
+/* Dark Mode: ACTIVE view toggle button */
+html.dark .roadmap-view-toggle-btn.active,
+body.dark .roadmap-view-toggle-btn.active {
+  background: #3b82f6 !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4) !important;
+}
+
+html.dark .roadmap-view-toggle-btn.active *,
+body.dark .roadmap-view-toggle-btn.active * {
+  color: #ffffff !important;
+  fill: #ffffff !important;
 }
 
 /* Shelf Container */
@@ -20123,6 +20213,13 @@ html.dark .bookshelf-mascot-badge {
   line-height: 1.25;
 }
 
+html.light .bookshelf-shelf-title,
+html.light-mode .bookshelf-shelf-title,
+body.light .bookshelf-shelf-title,
+body.light-mode .bookshelf-shelf-title {
+  color: #0f172a !important;
+}
+
 html.dark .bookshelf-shelf-title {
   color: #f8fafc;
 }
@@ -20132,6 +20229,14 @@ html.dark .bookshelf-shelf-title {
   font-weight: 600;
   color: #64748b;
   margin: 3px 0 0 0;
+}
+
+html.light .bookshelf-shelf-subtitle,
+html.light-mode .bookshelf-shelf-subtitle,
+body.light .bookshelf-shelf-subtitle,
+body.light-mode .bookshelf-shelf-subtitle {
+  color: #334155 !important;
+  font-weight: 700 !important;
 }
 
 html.dark .bookshelf-shelf-subtitle {
@@ -20295,6 +20400,11 @@ html.dark .comic-book-card:hover {
   color: #ffffff !important;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
   opacity: 1;
+  padding-right: 52px;
+  box-sizing: border-box;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .styled-vol-card .vol-name {
@@ -20444,6 +20554,7 @@ html.dark .comic-book-card:hover {
 
   .styled-vol-card .vol-sub {
     font-size: 0.5rem;
+    padding-right: 36px;
   }
 
   .styled-vol-card .vol-name {

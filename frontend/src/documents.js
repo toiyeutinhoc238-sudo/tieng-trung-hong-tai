@@ -415,7 +415,7 @@ if (window.pdfjsLib) {
       {
         id: 'shelf-hsk2',
         accentColor: '#0284c7',
-        mascotImg: '/assets/hongtai_dragon_mascot.png',
+        mascotImg: '/assets/logo.png',
         title: 'Giáo Trình Chuẩn HSK 2.0',
         subtitle: 'Bộ giáo trình 6 cấp độ (HSK 1 - HSK 6)',
         books: [
@@ -466,7 +466,7 @@ if (window.pdfjsLib) {
       {
         id: 'shelf-hsk3',
         accentColor: '#10b981',
-        mascotImg: '/assets/dragon_award_mascot.png',
+        mascotImg: '/assets/logo.png',
         title: 'Giáo Trình HSK 3.0 Mới',
         subtitle: 'Bộ giáo trình tiêu chuẩn quốc tế mới nhất (Cấp 1 - Cấp 4)',
         books: [

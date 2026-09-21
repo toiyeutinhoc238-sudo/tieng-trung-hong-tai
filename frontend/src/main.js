@@ -5034,7 +5034,7 @@ function renderRoadmapBookshelf() {
       title: 'Giáo Trình HSK 3.0 Mới Nhất',
       subtitle: 'Bộ giáo trình tiêu chuẩn quốc tế mới nhất (Cấp 1 - Cấp 7-9)',
       accentColor: '#10b981',
-      mascotImg: '/assets/dragon_award_mascot.png',
+      mascotImg: '/assets/logo.png',
       books: [
         {
           ver: '3.0',
@@ -5099,7 +5099,7 @@ function renderRoadmapBookshelf() {
       title: 'Giáo Trình Chuẩn HSK 2.0',
       subtitle: 'Bộ giáo trình 6 cấp độ chuẩn hóa kinh điển (HSK 1 - HSK 6)',
       accentColor: '#3b82f6',
-      mascotImg: '/assets/hongtai_dragon_mascot.png',
+      mascotImg: '/assets/logo.png',
       books: [
         {
           ver: '2.0',
@@ -5213,7 +5213,7 @@ function renderRoadmapBookshelf() {
       title: 'Giáo Trình Thiếu Nhi YCT',
       subtitle: 'Chương trình chuẩn hóa dành cho học sinh tiểu học & thiếu nhi (Cấp 1 - 4)',
       accentColor: '#f43f5e',
-      mascotImg: '/assets/dragon_award_mascot.png',
+      mascotImg: '/assets/logo.png',
       books: [
         {
           ver: 'yct',
