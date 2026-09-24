@@ -368,11 +368,16 @@
 
     <!-- Header Block -->
     <div class="rules-header">
-      <div class="rules-title-group">
-        <h1><i class="fa-solid fa-language"></i> Quy Tắc Chuyển Âm & Phát Âm Tiếng Trung</h1>
-        <p style="color: #94a3b8; margin: 0; font-size: 0.95rem;">
-          Hệ thống suy đoán âm đọc Tiếng Trung từ âm Hán-Việt & Bảng phát âm Pinyin chuẩn giọng Bắc Kinh
-        </p>
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <button class="header-icon-btn global-hamburger-btn" onclick="window.toggleGlobalSidebar && window.toggleGlobalSidebar()" title="Mở danh mục menu" aria-label="Mở danh mục menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="rules-title-group">
+          <h1><i class="fa-solid fa-language"></i> Quy Tắc Chuyển Âm & Phát Âm Tiếng Trung</h1>
+          <p style="color: #94a3b8; margin: 0; font-size: 0.95rem;">
+            Hệ thống suy đoán âm đọc Tiếng Trung từ âm Hán-Việt & Bảng phát âm Pinyin chuẩn giọng Bắc Kinh
+          </p>
+        </div>
       </div>
       <div style="display: flex; gap: 8px; align-items: center;">
         <button id="particle-toggle-btn" class="particle-toggle-btn" onclick="window.toggleSeasonalParticles()" title="Bật/Tắt hiệu ứng mùa">

@@ -4039,16 +4039,21 @@
 
     <!-- Top Navigation Header -->
     <header class="dict-top-nav">
-      <a href="/" class="dict-brand">
-        <img src="/assets/logo.png" alt="HongTai Logo">
-        <div>
-          <div class="dict-brand-title">
-            <span>Tiếng Trung HongTai</span>
-            <span class="dict-hot-badge" id="dict-top-nav-video-count-badge" style="background: linear-gradient(135deg, #ef4444, #f97316); color: #fff; box-shadow: 0 2px 8px rgba(239,68,68,0.4);"><i class="fa-solid fa-fire"></i> 23 Video Mới</span>
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <button class="header-icon-btn global-hamburger-btn" onclick="window.toggleGlobalSidebar && window.toggleGlobalSidebar()" title="Mở danh mục menu" aria-label="Mở danh mục menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <a href="/" class="dict-brand">
+          <img src="/assets/logo.png" alt="HongTai Logo">
+          <div>
+            <div class="dict-brand-title">
+              <span>Tiếng Trung HongTai</span>
+              <span class="dict-hot-badge" id="dict-top-nav-video-count-badge" style="background: linear-gradient(135deg, #ef4444, #f97316); color: #fff; box-shadow: 0 2px 8px rgba(239,68,68,0.4);"><i class="fa-solid fa-fire"></i> 23 Video Mới</span>
+            </div>
+            <small style="color: var(--text-muted); font-size: 0.78rem;">Nghe - Nhận diện - Nhớ chữ Hán theo mốc video</small>
           </div>
-          <small style="color: var(--text-muted); font-size: 0.78rem;">Nghe - Nhận diện - Nhớ chữ Hán theo mốc video</small>
-        </div>
-      </a>
+        </a>
+      </div>
 
       <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
         <!-- User Status Badge -->

@@ -119,11 +119,11 @@
     window.openSurveyModal = window.openSurveyModal || function () { const m = document.getElementById('student-survey-modal'); if (m) { m.style.display = 'flex'; document.body.style.overflow = 'hidden'; } else { window.open('https://forms.gle/WaqZsrYrCZfAN5xn6', '_blank'); } };
     window.closeSurveyModal = window.closeSurveyModal || function () { const m = document.getElementById('student-survey-modal'); if (m) { m.style.display = 'none'; document.body.style.overflow = ''; } };
   </script>
-  <script type="module" crossorigin src="/assets/global_sidebar-3oHWi1vG.js"></script>
+  <script type="module" crossorigin src="/assets/global_sidebar-ChPOoBAv.js"></script>
   <script type="module" crossorigin src="/assets/grammar_hsk3_v2-DLPb-ska.js"></script>
   <script type="module" crossorigin src="/assets/screen_drawing-BS_xmQo7.js"></script>
   <script type="module" crossorigin src="/assets/main-CaiioYNM.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/style-BUJz0I3y.css">
+  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-pqMkeLNU.css">
 </head>
 
 <body>
@@ -131,8 +131,8 @@
   <!-- Navigation Bar -->
   <nav class="navbar">
     <div class="nav-container">
-      <button id="mobile-nav-toggle-btn" class="menu-toggle-btn global-hamburger-btn mobile-nav-hamburger" onclick="window.toggleSidebarCollapse()" title="Mở menu điều hướng" aria-label="Mở menu điều hướng">
-        <i class="fa-solid fa-bars"></i> <span class="btn-text">Menu</span>
+      <button id="mobile-nav-toggle-btn" class="header-icon-btn global-hamburger-btn mobile-nav-hamburger" onclick="window.toggleGlobalSidebar && window.toggleGlobalSidebar()" title="Mở menu điều hướng" aria-label="Mở menu điều hướng">
+        <i class="fa-solid fa-bars"></i>
       </button>
       <div class="nav-brand" style="cursor: pointer;" onclick="window.openAboutModal()"
         title="Bấm để xem giới thiệu tổng quan về Tiếng Trung Hongtai">

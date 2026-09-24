@@ -65,10 +65,15 @@
 <body class="rank-page-body">
   <!-- Top Navigation Header -->
   <header class="rank-header-nav">
-    <a href="/index.html" class="rank-brand-logo">
-      <img src="/assets/logo.png" alt="Hongtai Logo">
-      <span>Hongtai Chinese</span>
-    </a>
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <button class="header-icon-btn global-hamburger-btn" onclick="window.toggleGlobalSidebar && window.toggleGlobalSidebar()" title="Mở danh mục menu" aria-label="Mở danh mục menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <a href="/index.html" class="rank-brand-logo">
+        <img src="/assets/logo.png" alt="Hongtai Logo">
+        <span>Hongtai Chinese</span>
+      </a>
+    </div>
 
     <div class="rank-nav-right">
       <a href="/index.html" class="rank-nav-btn" title="Trang Chủ"><i class="fa-solid fa-house"></i></a>

@@ -494,19 +494,24 @@
       if (floatTheme) floatTheme.remove();
     }
 
-    // 7. Connect all existing and new hamburger / menu toggle buttons
+    // 7. Inject top menu button if missing on the page
+    injectTopMenuButtonIfMissing();
+    setTimeout(injectTopMenuButtonIfMissing, 300);
+
+    // 8. Connect all existing and new hamburger / menu toggle buttons
     const bindMenuButtons = () => {
-      document.querySelectorAll('.menu-toggle-btn, .global-hamburger-btn, .sidebar-open-btn, .top-menu-btn, #top-sidebar-toggle-btn, #sidebar-expand-float-btn, .sidebar-expand-float-btn, #mobile-nav-toggle-btn').forEach(btn => {
+      document.querySelectorAll('.menu-toggle-btn, .global-hamburger-btn, .sidebar-open-btn, .top-menu-btn, #top-sidebar-toggle-btn, #sidebar-expand-float-btn, .sidebar-expand-float-btn, #mobile-nav-toggle-btn, .header-icon-btn, .sidebar-toggle-btn, .topbar-comic-menu-btn, #mobile-sidebar-toggle-btn').forEach(btn => {
         btn.onclick = window.toggleGlobalSidebar;
       });
     };
     bindMenuButtons();
     setTimeout(bindMenuButtons, 500);
+    setTimeout(bindMenuButtons, 1200);
   }
 
   function injectTopMenuButtonIfMissing() {
-    // Keep navbar insertion only for pages that have standard nav-container or top-bar
-    const alreadyHasBtn = document.querySelector('.global-hamburger-btn, #mobile-nav-toggle-btn, #top-sidebar-toggle-btn');
+    // Check if page already has a hamburger button
+    const alreadyHasBtn = document.querySelector('.global-hamburger-btn, #mobile-nav-toggle-btn, #top-sidebar-toggle-btn, #mobile-sidebar-toggle-btn');
     if (alreadyHasBtn) {
       alreadyHasBtn.onclick = window.toggleGlobalSidebar;
       return;
@@ -514,20 +519,32 @@
 
     const headerConfigs = [
       { container: '.navbar .nav-container', insertBefore: '.nav-brand' },
+      { container: '.app-top-nav-inner > div:first-child', insertBefore: ':first-child' },
+      { container: '.reorder-header-inner > div:first-child', insertBefore: ':first-child' },
+      { container: '.diag-header-inner > div:first-child', insertBefore: ':first-child' },
       { container: '.top-bar', insertBefore: ':first-child' },
-      { container: '.rd-header-left', insertBefore: ':first-child' },
-      { container: '.dict-top-nav', insertBefore: '.dict-brand' }
+      { container: '.rd-header-left', insertBefore: '.rd-back-btn' },
+      { container: '.dict-top-nav', insertBefore: '.dict-brand' },
+      { container: '.rank-header-nav', insertBefore: '.rank-brand-logo' },
+      { container: '.header-title-wrap', insertBefore: '.back-btn' },
+      { container: '.phonetics-header .brand-box', insertBefore: ':first-child' },
+      { container: '.hanzi-header .brand-box', insertBefore: ':first-child' },
+      { container: '.grammar-header .brand-box', insertBefore: ':first-child' },
+      { container: '.header-card > div:first-child', insertBefore: ':first-child' },
+      { container: '.header-panel .logo', insertBefore: ':first-child' },
+      { container: '.rules-header .rules-title-group', insertBefore: ':first-child' },
+      { container: '.topbar-left-cluster', insertBefore: ':first-child' }
     ];
 
     for (const cfg of headerConfigs) {
       const parent = document.querySelector(cfg.container);
       if (parent) {
-        if (parent.querySelector('.global-hamburger-btn, .menu-toggle-btn, #sidebar-expand-float-btn')) {
+        if (parent.querySelector('.global-hamburger-btn, .menu-toggle-btn, #sidebar-expand-float-btn, #mobile-sidebar-toggle-btn')) {
           break;
         }
 
         const menuBtn = document.createElement('button');
-        menuBtn.className = 'menu-toggle-btn global-hamburger-btn';
+        menuBtn.className = 'header-icon-btn global-hamburger-btn';
         menuBtn.id = 'global-hamburger-btn';
         menuBtn.title = 'Mở Menu Danh Mục';
         menuBtn.setAttribute('aria-label', 'Mở Menu Danh Mục');

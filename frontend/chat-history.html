@@ -597,8 +597,13 @@
   <!-- Navbar -->
   <nav class="navbar">
     <div class="nav-container">
-      <div class="nav-brand" onclick="window.location.href='/'">
-        <img class="brand-logo-img" src="/src/assets/logo.png" alt="Tiếng Trung Hongtai Logo">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <button class="header-icon-btn global-hamburger-btn" onclick="window.toggleGlobalSidebar && window.toggleGlobalSidebar()" title="Mở danh mục menu" aria-label="Mở danh mục menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="nav-brand" onclick="window.location.href='/'">
+          <img class="brand-logo-img" src="/src/assets/logo.png" alt="Tiếng Trung Hongtai Logo">
+        </div>
       </div>
       <ul class="nav-links">
         <li><a href="/" class="nav-link"><i class="fa-solid fa-house"></i> Trang chủ học tập</a></li>
