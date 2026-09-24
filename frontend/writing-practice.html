@@ -111,6 +111,70 @@
   </script>
 
   <style>
+    /* Responsive Defensive Layout */
+    html, body {
+      display: flex !important;
+      flex-direction: column !important;
+      min-height: 100vh !important;
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow-x: hidden !important;
+    }
+
+    /* Top Navigation Bar */
+    .app-top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      width: 100% !important;
+      flex-shrink: 0 !important;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: rgba(15, 23, 42, 0.92);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 12px 20px;
+      box-sizing: border-box !important;
+    }
+
+    .app-top-nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    /* Light Mode Navigation */
+    html.light-mode .app-top-nav,
+    html.light .app-top-nav {
+      background: rgba(255, 255, 255, 0.94) !important;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.9) !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+    }
+
+    html.light-mode .app-top-nav .nav-brand-title {
+      color: #0f172a !important;
+    }
+
+    html.light-mode .app-top-nav .sidebar-toggle-btn {
+      color: #0f172a !important;
+    }
+
+    html.light-mode .app-top-nav .btn-home {
+      background: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+      color: #334155 !important;
+    }
+
+    html.light-mode .app-top-nav .theme-toggle-btn {
+      background: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+      color: #f59e0b !important;
+    }
+
     /* Scope Styles for Writing Practice */
     :root {
       --writing-primary: #8b5cf6;
@@ -122,9 +186,12 @@
     }
 
     .writing-main-container {
-      max-width: 1140px;
-      margin: 0 auto;
-      padding: 20px 16px 80px 16px;
+      width: 100% !important;
+      max-width: 1140px !important;
+      margin: 0 auto !important;
+      padding: 24px 16px 80px 16px !important;
+      flex: 1 0 auto !important;
+      box-sizing: border-box !important;
     }
 
     /* Hero Banner */
@@ -521,35 +588,36 @@
 
 <body>
   <!-- Top App Navigation -->
-  <header class="app-top-nav"
-    style="position: sticky; top: 0; z-index: 100; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); background: rgba(15, 23, 42, 0.88); border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding: 12px 20px;">
-    <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+  <header class="app-top-nav">
+    <div class="app-top-nav-inner">
       <div style="display: flex; align-items: center; gap: 14px;">
         <button onclick="window.toggleGlobalSidebar && window.toggleGlobalSidebar()" class="sidebar-toggle-btn"
-          style="background: transparent; border: none; color: #ffffff; font-size: 1.25rem; cursor: pointer; padding: 4px 8px;">
+          style="background: transparent; border: none; font-size: 1.25rem; cursor: pointer; padding: 4px 8px;"
+          title="Mở menu điều hướng" aria-label="Mở menu điều hướng">
           <i class="fa-solid fa-bars"></i>
         </button>
         <a href="/" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
           <img src="./src/assets/logo.png" alt="HongTai Logo" style="width: 36px; height: 36px; border-radius: 10px;">
           <div>
-            <span style="font-weight: 800; font-size: 1.15rem; color: #ffffff; display: block; line-height: 1.1;">Luyện Viết Tiếng Trung</span>
-            <span style="font-size: 0.72rem; color: #a855f7; font-weight: 700;">HSKK Writing &amp; AI Grader</span>
+            <span class="nav-brand-title" style="font-weight: 800; font-size: 1.15rem; display: block; line-height: 1.1;">Luyện Viết Tiếng Trung</span>
+            <span class="nav-subtitle-text" style="font-size: 0.72rem; color: #a855f7; font-weight: 700;">HSKK Writing &amp; AI Grader</span>
           </div>
         </a>
       </div>
 
-      <div style="display: flex; align-items: center; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0;">
         <!-- Switch to Speaking Skill Button -->
         <a href="/speaking-practice.html" class="btn"
-          style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(217, 119, 6, 0.22)); border: 1.5px solid #f59e0b; color: #fbbf24; padding: 7px 14px; border-radius: 10px; font-weight: 800; font-size: 0.88rem; text-decoration: none; display: flex; align-items: center; gap: 6px;">
+          style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(217, 119, 6, 0.22)); border: 1.5px solid #f59e0b; color: #fbbf24; padding: 7px 14px; border-radius: 10px; font-weight: 800; font-size: 0.88rem; text-decoration: none; display: flex; align-items: center; gap: 6px; white-space: nowrap;">
           <i class="fa-solid fa-microphone-lines"></i> <span>Luyện Nói HSKK (3p-2p)</span>
         </a>
-        <a href="/" class="btn hide-mobile"
-          style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #cbd5e1; padding: 7px 12px; border-radius: 10px; font-weight: 700; font-size: 0.88rem; text-decoration: none; display: flex; align-items: center; gap: 6px;">
+        <a href="/" class="btn btn-home hide-mobile"
+          style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #cbd5e1; padding: 7px 12px; border-radius: 10px; font-weight: 700; font-size: 0.88rem; text-decoration: none; display: flex; align-items: center; gap: 6px; white-space: nowrap;">
           <i class="fa-solid fa-house"></i> <span>Trang chủ</span>
         </a>
         <button class="btn theme-toggle-btn" onclick="window.toggleTheme()"
-          style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #f59e0b; width: 38px; height: 38px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+          style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #f59e0b; width: 38px; height: 38px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center;"
+          title="Chuyển chế độ Sáng / Tối">
           <i class="fa-solid fa-sun"></i>
         </button>
       </div>

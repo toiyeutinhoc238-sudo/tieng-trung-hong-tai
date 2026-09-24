@@ -18,9 +18,105 @@
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/src/style.css">
+
+  <script>
+    (function () {
+      var t = localStorage.getItem('theme') || 'dark';
+      var bgUrl = t === 'light' ? "url('/assets/app_bg_day_v3.png')" : "url('/assets/app_bg_night_v3.png')";
+      document.documentElement.style.setProperty('background-image', bgUrl, 'important');
+      document.documentElement.style.setProperty('background-size', 'cover', 'important');
+      document.documentElement.style.setProperty('background-position', 'center center', 'important');
+      document.documentElement.style.setProperty('background-attachment', 'fixed', 'important');
+      document.documentElement.style.setProperty('background-repeat', 'no-repeat', 'important');
+
+      if (t === 'light') {
+        document.documentElement.classList.add('light-mode', 'light');
+        document.documentElement.classList.remove('dark');
+        if (document.body) {
+          document.body.classList.add('light-mode');
+          document.body.style.setProperty('background-image', bgUrl, 'important');
+        } else {
+          document.addEventListener('DOMContentLoaded', function () {
+            document.body.classList.add('light-mode');
+            document.body.style.setProperty('background-image', bgUrl, 'important');
+          });
+        }
+      } else {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light', 'light-mode');
+        if (document.body) {
+          document.body.classList.remove('light-mode', 'light');
+          document.body.classList.add('dark');
+        } else {
+          document.addEventListener('DOMContentLoaded', function () {
+            document.body.classList.add('dark');
+            document.body.style.setProperty('background-image', bgUrl, 'important');
+          });
+        }
+      }
+    })();
+
+    window.toggleTheme = function () {
+      var isLight = document.documentElement.classList.contains('light-mode') || document.documentElement.classList.contains('light');
+      var nextDark = isLight;
+      var bgUrl = nextDark ? "url('/assets/app_bg_night_v3.png')" : "url('/assets/app_bg_day_v3.png')";
+
+      document.documentElement.style.setProperty('background-image', bgUrl, 'important');
+      document.documentElement.style.setProperty('background-size', 'cover', 'important');
+      document.documentElement.style.setProperty('background-position', 'center center', 'important');
+      document.documentElement.style.setProperty('background-attachment', 'fixed', 'important');
+      document.documentElement.style.setProperty('background-repeat', 'no-repeat', 'important');
+
+      if (document.body) {
+        document.body.style.setProperty('background-image', bgUrl, 'important');
+        document.body.style.setProperty('background-size', 'cover', 'important');
+        document.body.style.setProperty('background-position', 'center center', 'important');
+        document.body.style.setProperty('background-attachment', 'fixed', 'important');
+        document.body.style.setProperty('background-repeat', 'no-repeat', 'important');
+      }
+
+      if (nextDark) {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light', 'light-mode');
+        if (document.body) {
+          document.body.classList.remove('light-mode', 'light');
+          document.body.classList.add('dark');
+        }
+        localStorage.setItem('theme', 'dark');
+        updateToggleBtns(false);
+      } else {
+        document.documentElement.classList.add('light', 'light-mode');
+        document.documentElement.classList.remove('dark');
+        if (document.body) {
+          document.body.classList.remove('dark');
+          document.body.classList.add('light-mode');
+        }
+        localStorage.setItem('theme', 'light');
+        updateToggleBtns(true);
+      }
+    };
+
+    function updateToggleBtns(isLight) {
+      document.querySelectorAll('.theme-toggle-btn').forEach(function (btn) {
+        btn.innerHTML = isLight ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
+        btn.setAttribute('title', isLight ? 'Chuyển sang Chế độ Tối' : 'Chuyển sang Chế độ Sáng');
+      });
+    }
+  </script>
 
   <style>
+    /* Responsive Defensive Layout */
+    html, body {
+      display: flex !important;
+      flex-direction: column !important;
+      min-height: 100vh !important;
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow-x: hidden !important;
+    }
+
     :root {
       --diag-primary: #a855f7;
       --diag-accent: #38bdf8;
@@ -28,18 +124,8 @@
       --diag-card-border: rgba(255, 255, 255, 0.12);
     }
 
-    body {
-      font-family: 'Inter', 'Noto Sans SC', sans-serif;
-      background: #090d16;
-      color: #f8fafc;
-      min-height: 100vh;
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-    }
-
     .diag-header {
-      background: rgba(15, 23, 42, 0.85);
+      background: rgba(15, 23, 42, 0.9);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--diag-card-border);
@@ -47,6 +133,100 @@
       top: 0;
       z-index: 1000;
       padding: 12px 24px;
+      width: 100% !important;
+      flex-shrink: 0 !important;
+      box-sizing: border-box !important;
+    }
+
+    .diag-container {
+      width: 100% !important;
+      max-width: 1100px !important;
+      margin: 24px auto 60px !important;
+      padding: 0 20px !important;
+      flex: 1 0 auto !important;
+      box-sizing: border-box !important;
+    }
+
+    /* Light Mode Overrides */
+    html.light-mode body {
+      background: url('/assets/app_bg_day_v3.png') no-repeat center center fixed / cover !important;
+      color: #0f172a !important;
+    }
+
+    html.light-mode .diag-header {
+      background: rgba(255, 255, 255, 0.94) !important;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.9) !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+    }
+
+    html.light-mode .diag-header .header-brand-title {
+      color: #0f172a !important;
+    }
+
+    html.light-mode .header-icon-btn,
+    html.light-mode .theme-toggle-btn {
+      background: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+
+    html.light-mode .theme-toggle-btn {
+      color: #f59e0b !important;
+    }
+
+    html.light-mode .scenario-card {
+      background: rgba(255, 255, 255, 0.92) !important;
+      border-color: #e2e8f0 !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+    }
+
+    html.light-mode .scenario-card div:nth-child(2) {
+      color: #0f172a !important;
+    }
+
+    html.light-mode .chat-window {
+      background: rgba(255, 255, 255, 0.92) !important;
+      border-color: #e2e8f0 !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06) !important;
+    }
+
+    html.light-mode #chat-messages-area {
+      background: #f8fafc !important;
+    }
+
+    html.light-mode .msg-bubble-ai {
+      background: #ffffff !important;
+      border-color: #e2e8f0 !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+    }
+
+    html.light-mode .msg-bubble-ai .bubble-text {
+      color: #0f172a !important;
+    }
+
+    html.light-mode .msg-bubble-ai .bubble-trans {
+      color: #475569 !important;
+    }
+
+    html.light-mode .diag-input-box {
+      background: #ffffff !important;
+      border-color: #cbd5e1 !important;
+    }
+
+    html.light-mode .diag-input-box input {
+      color: #0f172a !important;
+    }
+
+    html.light-mode .sugg-btn {
+      background: #ffffff !important;
+      border-color: #cbd5e1 !important;
+      color: #0f172a !important;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04) !important;
+    }
+
+    html.light-mode .sugg-btn:hover {
+      background: #f0fdf4 !important;
+      border-color: #10b981 !important;
     }
 
     .diag-header-inner {

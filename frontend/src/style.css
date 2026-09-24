@@ -6342,7 +6342,9 @@ html:not(.dark) .exam-lib-pill.active { background: #ff2a5f; color: white; }
    ========================================================================== */
 body {
   display: flex;
+  flex-direction: column;
   min-height: 100vh;
+  width: 100%;
   padding-bottom: 0 !important;
 }
 
