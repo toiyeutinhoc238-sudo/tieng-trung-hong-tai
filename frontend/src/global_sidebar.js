@@ -239,7 +239,7 @@
           </li>
           <li class="sidebar-item ${activeKey === 'documents' ? 'active' : ''}" onclick="window.location.href = '/documents.html'">
             <i class="fa-solid fa-book-bookmark" style="color: #06b6d4;"></i> <span>Kho Sách &amp; Tài Liệu</span>
-            <span style="font-size:0.65rem; background:linear-gradient(135deg, rgba(6,182,212,0.25), rgba(59,130,246,0.3)); color:#22d3ee; border:1px solid rgba(6,182,212,0.4); padding:2px 7px; border-radius:6px; font-weight:800; margin-left:auto;">66 Sách 📚</span>
+            <span style="font-size:0.65rem; background:linear-gradient(135deg, #0284c7, #06b6d4); color:#ffffff; border:1px solid rgba(255,255,255,0.25); padding:2px 8px; border-radius:6px; font-weight:800; margin-left:auto; white-space:nowrap; box-shadow:0 2px 8px rgba(2,132,199,0.35); text-shadow:0 1px 2px rgba(0,0,0,0.25);">66 Sách 📚</span>
           </li>
         </ul>
 
