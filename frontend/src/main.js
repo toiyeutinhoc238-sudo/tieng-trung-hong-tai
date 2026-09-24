@@ -1896,20 +1896,44 @@ function updateStats() {
   }
 }
 
+let activeNotebookGamesHubInstance = null;
+
+function isNotebookGameActive() {
+  const gamePlayView = document.getElementById('game-play-view');
+  if (gamePlayView && (gamePlayView.style.display === 'block' || gamePlayView.style.display === 'flex')) {
+    return true;
+  }
+  if (activeNotebookGamesHubInstance) {
+    return true;
+  }
+  if (document.querySelector('.notebook-games-hub-wrapper') || document.querySelector('#game-active-viewport')) {
+    return true;
+  }
+  return false;
+}
+window.isNotebookGameActive = isNotebookGameActive;
+
 function renderDeckSelectionView() {
-  // Check if there is an active study or quiz session currently displayed
+  // Check if there is an active study, quiz, or arcade mini-game session currently displayed
   const studyView = document.getElementById('flashcard-study-view');
   const lessonVocabView = document.getElementById('lesson-vocab-study-view');
   const quizView = document.getElementById('quiz-study-view');
+  const isPlayingGame = isNotebookGameActive();
   const isStudying = (studyView && studyView.style.display === 'block') ||
     (lessonVocabView && lessonVocabView.style.display === 'block') ||
-    (quizView && quizView.style.display === 'block');
+    (quizView && quizView.style.display === 'block') ||
+    isPlayingGame;
 
   if (isStudying) {
     // Refresh the notebook data/statistics in the background without changing active view
     if (activeNotebook) {
-      openNotebookDashboard(activeNotebook, true);
-    } else if (activeSmartTopic) {
+      if (typeof updateNotebookDashboardStatsOnly === 'function') {
+        updateNotebookDashboardStatsOnly(activeNotebook);
+      }
+      if (!isPlayingGame) {
+        openNotebookDashboard(activeNotebook, true);
+      }
+    } else if (activeSmartTopic && !isPlayingGame) {
       renderSubdecksList();
     }
     return;
@@ -1924,6 +1948,7 @@ function renderDeckSelectionView() {
     showTopicsView();
   }
 }
+
 
 function selectSmartSubDeck(subDeckId) {
   smartSelectedSubDeck = subDeckId;
@@ -4364,9 +4389,11 @@ function setupEventListeners() {
     }
     if (event.data && event.data.type === 'VOCAB_STATE_UPDATED') {
       console.log('Real-time sync: Vocab state updated in game, refreshing data...');
-      await fetchVocabulary();
-      if (activeNotebook) {
-        showNotebookDashboardView(activeNotebook, true);
+      if (!isNotebookGameActive()) {
+        await fetchVocabulary();
+        if (activeNotebook) {
+          showNotebookDashboardView(activeNotebook, true);
+        }
       }
     }
   });
@@ -5072,6 +5099,15 @@ function switchTab(tabId, skipShowTopics = false) {
     if (gamePlaySec) {
       gamePlaySec.style.display = 'none';
     }
+    if (activeNotebookGamesHubInstance) {
+      const hub = activeNotebookGamesHubInstance;
+      activeNotebookGamesHubInstance = null;
+      if (hub.currentGameEngine && hub.currentGameEngine.stopAndExit) {
+        try { hub.currentGameEngine.stopAndExit(); } catch { }
+      }
+    }
+    const hubMount = document.getElementById('notebook-games-hub-mount');
+    if (hubMount) hubMount.innerHTML = '';
   }
 
   // 3. Sync top navbar & left sidebar active state
@@ -13558,7 +13594,9 @@ function renderHubCustomNotebooks() {
 // --- SMART FLASHCARD TOPICS & QUIZ LOGIC ---
 
 // 1. Navigation functions
-function showTopicsView() {
+function showTopicsView(forceShow = false) {
+  if (!forceShow && isNotebookGameActive()) return;
+
   const selectionView = document.getElementById('deck-selection-view');
   const topicsView = document.getElementById('flashcard-topics-view');
   const subdecksView = document.getElementById('flashcard-subdecks-view');
@@ -13591,7 +13629,9 @@ function showTopicsView() {
   renderHubCustomNotebooks();
 }
 
-function showSubdecksView() {
+function showSubdecksView(forceShow = false) {
+  if (!forceShow && isNotebookGameActive()) return;
+
   const selectionView = document.getElementById('deck-selection-view');
   const topicsView = document.getElementById('flashcard-topics-view');
   const subdecksView = document.getElementById('flashcard-subdecks-view');
@@ -13620,7 +13660,16 @@ function showSubdecksView() {
   renderSubdecksList();
 }
 
-function showNotebookDashboardView(notebookId, preserveLessons = false) {
+function showNotebookDashboardView(notebookId, preserveLessons = false, forceShow = false) {
+  if (!forceShow && isNotebookGameActive()) {
+    activeNotebook = notebookId;
+    studyNotebookId = notebookId;
+    if (typeof updateNotebookDashboardStatsOnly === 'function') {
+      updateNotebookDashboardStatsOnly(notebookId);
+    }
+    return;
+  }
+
   const selectionView = document.getElementById('deck-selection-view');
   const topicsView = document.getElementById('flashcard-topics-view');
   const subdecksView = document.getElementById('flashcard-subdecks-view');
@@ -14904,11 +14953,13 @@ function recordWordLearningResult(wordObjOrId, isCorrect, notifyServer = true) {
     if (typeof updateNotebookDashboardStatsOnly === 'function' && activeNotebook) {
       updateNotebookDashboardStatsOnly(activeNotebook);
     }
-    if (typeof renderNotebookWordsTable === 'function' && document.getElementById('nb-words-table-rows')) {
-      renderNotebookWordsTable();
-    }
-    if (typeof renderSubdecksList === 'function' && document.getElementById('subdecks-list-grid')) {
-      renderSubdecksList();
+    if (!isNotebookGameActive()) {
+      if (typeof renderNotebookWordsTable === 'function' && document.getElementById('nb-words-table-rows')) {
+        renderNotebookWordsTable();
+      }
+      if (typeof renderSubdecksList === 'function' && document.getElementById('subdecks-list-grid')) {
+        renderSubdecksList();
+      }
     }
   } catch (eUI) {}
 
@@ -15017,22 +15068,9 @@ function updateExamsVersionUI() {
   }
 }
 
-let activeNotebookGamesHubInstance = null;
-
 window.exitNotebookGamesHub = function () {
   const gamePlayView = document.getElementById('game-play-view');
   if (gamePlayView) gamePlayView.style.display = 'none';
-
-  const deckSelectionView = document.getElementById('deck-selection-view');
-  if (deckSelectionView) deckSelectionView.style.display = 'block';
-
-  if (activeNotebook) {
-    showNotebookDashboardView(activeNotebook, true);
-  } else if (activeSmartTopic) {
-    showSubdecksView();
-  } else {
-    showTopicsView();
-  }
 
   if (activeNotebookGamesHubInstance) {
     const hub = activeNotebookGamesHubInstance;
@@ -15044,6 +15082,17 @@ window.exitNotebookGamesHub = function () {
 
   const hubMount = document.getElementById('notebook-games-hub-mount');
   if (hubMount) hubMount.innerHTML = '';
+
+  const deckSelectionView = document.getElementById('deck-selection-view');
+  if (deckSelectionView) deckSelectionView.style.display = 'block';
+
+  if (activeNotebook) {
+    showNotebookDashboardView(activeNotebook, true, true);
+  } else if (activeSmartTopic) {
+    showSubdecksView(true);
+  } else {
+    showTopicsView(true);
+  }
 };
 
 function startGameArenaFromNotebook() {
