@@ -32,7 +32,9 @@ export default defineConfig({
         dictation: resolve(__dirname, 'video-dictation.html'),
         writing: resolve(__dirname, 'writing-practice.html'),
         speaking: resolve(__dirname, 'speaking-practice.html'),
-        documents: resolve(__dirname, 'documents.html')
+        documents: resolve(__dirname, 'documents.html'),
+        sentenceReorder: resolve(__dirname, 'sentence-reorder.html'),
+        aiDialogue: resolve(__dirname, 'ai-dialogue.html')
       }
     }
   }

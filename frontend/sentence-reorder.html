@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luyện Tập Sắp Xếp Câu Tiếng Trung HSK 1-6 (790 Đề) | Tiếng Trung HongTai</title>
+  <meta name="description"
+    content="Luyện tập sắp xếp câu tiếng Trung từ HSK 1 đến HSK 6 với 790 bài tập chuẩn format đề thi thực tế. Tương tác kéo thả, bấm chọn thông minh, kiểm tra đáp án tức thì và phát âm chuẩn bản xứ.">
+  <link rel="icon" type="image/png" href="/assets/logo.png">
+  <link rel="canonical" href="https://tiengtrunghongtai.online/sentence-reorder.html" />
+
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link rel="stylesheet" href="/style.css">
+
+  <style>
+    :root {
+      --reorder-primary: #38bdf8;
+      --reorder-primary-glow: rgba(56, 189, 248, 0.35);
+      --reorder-accent: #f59e0b;
+      --reorder-success: #10b981;
+      --reorder-danger: #ef4444;
+      --card-bg-glass: rgba(15, 23, 42, 0.78);
+      --card-border-glass: rgba(255, 255, 255, 0.12);
+    }
+
+    body {
+      font-family: 'Inter', 'Noto Sans SC', sans-serif;
+      background: #090d16;
+      color: #f8fafc;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    .reorder-header {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--card-border-glass);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      padding: 12px 24px;
+    }
+
+    .reorder-header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .reorder-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #ffffff;
+    }
+
+    .reorder-brand img {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    .reorder-container {
+      max-width: 1080px;
+      margin: 28px auto 60px;
+      padding: 0 20px;
+    }
+
+    /* Hero / Stat Bar */
+    .reorder-hero {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.75), rgba(15, 23, 42, 0.9));
+      border: 1px solid var(--card-border-glass);
+      border-radius: 20px;
+      padding: 24px 28px;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+    }
+
+    .reorder-hero::before {
+      content: "";
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Level Tabs */
+    .level-tabs-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .lvl-tab-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #94a3b8;
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .lvl-tab-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .lvl-tab-btn.active {
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      border-color: #38bdf8;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(56, 189, 248, 0.35);
+    }
+
+    /* Main Workspace Card */
+    .reorder-card {
+      background: var(--card-bg-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border-glass);
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+
+    /* Target Answer Drop Zone */
+    .answer-zone {
+      min-height: 80px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 2px dashed rgba(56, 189, 248, 0.35);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .answer-zone.has-items {
+      border-style: solid;
+      border-color: rgba(56, 189, 248, 0.6);
+      background: rgba(30, 41, 59, 0.5);
+    }
+
+    .answer-zone.correct-glow {
+      border-color: var(--reorder-success) !important;
+      background: rgba(16, 185, 129, 0.12) !important;
+      box-shadow: 0 0 24px rgba(16, 185, 129, 0.3) !important;
+    }
+
+    .answer-zone.incorrect-shake {
+      border-color: var(--reorder-danger) !important;
+      background: rgba(239, 68, 68, 0.12) !important;
+      animation: shakeAnim 0.5s ease;
+    }
+
+    @keyframes shakeAnim {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+
+    .answer-placeholder {
+      width: 100%;
+      text-align: center;
+      color: #64748b;
+      font-size: 0.95rem;
+      font-weight: 500;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* Word Chips */
+    .word-chip {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(51, 65, 85, 0.9));
+      border: 1.5px solid rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 14px;
+      font-size: 1.25rem;
+      font-weight: 700;
+      font-family: 'Noto Sans SC', sans-serif;
+      cursor: pointer;
+      user-select: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .word-chip:hover {
+      transform: translateY(-3px) scale(1.03);
+      border-color: #38bdf8;
+      box-shadow: 0 8px 20px rgba(56, 189, 248, 0.3);
+      color: #38bdf8;
+    }
+
+    .word-chip:active {
+      transform: translateY(0) scale(0.97);
+    }
+
+    .word-chip.in-answer {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      border-color: #38bdf8;
+      color: #ffffff;
+      box-shadow: 0 4px 16px rgba(2, 132, 199, 0.4);
+    }
+
+    .word-chip.in-answer:hover {
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      border-color: #ef4444;
+      box-shadow: 0 4px 16px rgba(239, 68, 68, 0.4);
+    }
+
+    .word-chip.in-answer:hover::after {
+      content: " ✕";
+      font-size: 0.85rem;
+      opacity: 0.9;
+    }
+
+    .word-chip.used-placeholder {
+      opacity: 0.25;
+      cursor: not-allowed;
+      border-style: dashed;
+      transform: none !important;
+      box-shadow: none !important;
+      pointer-events: none;
+    }
+
+    /* Scrambled Pool Zone */
+    .scrambled-pool {
+      background: rgba(15, 23, 42, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 28px;
+      min-height: 80px;
+    }
+
+    /* Action Buttons */
+    .reorder-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 22px;
+    }
+
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      border: none;
+    }
+
+    .btn-check {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #ffffff;
+      box-shadow: 0 4px 16px rgba(2, 132, 199, 0.35);
+    }
+
+    .btn-check:hover:not(:disabled) {
+      background: linear-gradient(135deg, #0369a1, #1d4ed8);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(2, 132, 199, 0.45);
+    }
+
+    .btn-reset {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #cbd5e1;
+    }
+
+    .btn-reset:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+    }
+
+    .btn-hint {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: #fbbf24;
+    }
+
+    .btn-hint:hover {
+      background: rgba(245, 158, 11, 0.25);
+    }
+
+    .btn-next {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #ffffff;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
+    }
+
+    .btn-next:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+    }
+
+    /* Explanation & Answer Reveal Panel */
+    .answer-reveal-card {
+      margin-top: 24px;
+      background: rgba(16, 185, 129, 0.08);
+      border: 1.5px solid rgba(16, 185, 129, 0.3);
+      border-radius: 18px;
+      padding: 20px 24px;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      .reorder-container {
+        padding: 0 14px;
+        margin-top: 16px;
+      }
+      .reorder-card {
+        padding: 20px 16px;
+      }
+      .word-chip {
+        font-size: 1.1rem;
+        padding: 8px 14px;
+      }
+      .reorder-actions {
+        flex-direction: column;
+        width: 100%;
+      }
+      .reorder-actions > div {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+      }
+      .reorder-actions button {
+        flex: 1;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Top Sticky Header -->
+  <header class="reorder-header">
+    <div class="reorder-header-inner">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <button id="header-sidebar-toggle-btn" class="header-icon-btn" onclick="window.toggleGlobalSidebar && window.toggleGlobalSidebar()" title="Mở danh mục menu" style="display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: #fff; cursor: pointer;">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <a href="/" class="reorder-brand">
+          <img src="/assets/logo.png" alt="Hongtai Logo">
+          <div>
+            <div style="font-weight: 800; font-size: 1.1rem; line-height: 1.2;">Tiếng Trung HongTai</div>
+            <div style="font-size: 0.72rem; color: #38bdf8; font-weight: 700;">Bài Tập Sắp Xếp Câu HSK 1 - 6</div>
+          </div>
+        </a>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <a href="/ai-dialogue.html" class="btn hide-mobile"
+          style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(139, 92, 246, 0.25)); border: 1px solid #a855f7; color: #d8b4fe; padding: 7px 14px; border-radius: 10px; font-weight: 700; font-size: 0.85rem; text-decoration: none; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-comments"></i> <span>Hội Thoại AI</span>
+        </a>
+        <a href="/" class="btn hide-mobile"
+          style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #cbd5e1; padding: 7px 12px; border-radius: 10px; font-weight: 700; font-size: 0.85rem; text-decoration: none; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-house"></i> <span>Trang chủ</span>
+        </a>
+        <button class="btn theme-toggle-btn" onclick="window.toggleTheme()"
+          style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #f59e0b; width: 38px; height: 38px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+          <i class="fa-solid fa-sun"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="reorder-container">
+
+    <!-- Hero / Stat Banner -->
+    <section class="reorder-hero">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
+        <div style="max-width: 680px;">
+          <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(56, 189, 248, 0.18); border: 1px solid rgba(56, 189, 248, 0.35); padding: 4px 12px; border-radius: 99px; font-size: 0.8rem; font-weight: 800; color: #38bdf8; margin-bottom: 10px;">
+            <span>🧩 Bộ Đề Sắp Xếp Câu Thực Chiến</span>
+            <span>&bull;</span>
+            <span id="hero-total-badge">790 Đề Chuẩn HSK 1 - 6</span>
+          </div>
+          <h1 style="font-size: 1.85rem; font-weight: 900; margin: 0 0 8px 0; color: #ffffff; line-height: 1.25;">
+            Luyện Sắp Xếp Câu Tiếng Trung Chuẩn Ngữ Pháp
+          </h1>
+          <p style="font-size: 0.92rem; color: #94a3b8; margin: 0; line-height: 1.6;">
+            Bấm chọn các khối từ để xếp thành câu hoàn chỉnh theo chuẩn ngữ pháp tiếng Trung. Tích hợp tra cứu phiên âm Pinyin, bản dịch tiếng Việt và giọng đọc chuẩn bản xứ.
+          </p>
+        </div>
+
+        <!-- Quick Stats Widget -->
+        <div style="display: flex; gap: 12px;">
+          <div style="background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; padding: 10px 16px; text-align: center; min-width: 78px;">
+            <div style="font-size: 1.3rem; font-weight: 900; color: #f59e0b;" id="stat-streak">🔥 0</div>
+            <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 700;">Chuỗi đúng</div>
+          </div>
+          <div style="background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; padding: 10px 16px; text-align: center; min-width: 78px;">
+            <div style="font-size: 1.3rem; font-weight: 900; color: #10b981;" id="stat-correct">0</div>
+            <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 700;">Đã đúng</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Level Filter Tabs -->
+      <div class="level-tabs-row" id="level-tabs-container">
+        <button class="lvl-tab-btn" data-level="all" onclick="switchLevel('all', this)">
+          <span>Tất cả</span> <span style="font-size: 0.75rem; opacity: 0.8;">(790)</span>
+        </button>
+        <button class="lvl-tab-btn active" data-level="1" onclick="switchLevel(1, this)">
+          <span>HSK 1</span> <span style="font-size: 0.75rem; opacity: 0.8;">(92)</span>
+        </button>
+        <button class="lvl-tab-btn" data-level="2" onclick="switchLevel(2, this)">
+          <span>HSK 2</span> <span style="font-size: 0.75rem; opacity: 0.8;">(198)</span>
+        </button>
+        <button class="lvl-tab-btn" data-level="3" onclick="switchLevel(3, this)">
+          <span>HSK 3</span> <span style="font-size: 0.75rem; opacity: 0.8;">(100)</span>
+        </button>
+        <button class="lvl-tab-btn" data-level="4" onclick="switchLevel(4, this)">
+          <span>HSK 4</span> <span style="font-size: 0.75rem; opacity: 0.8;">(100)</span>
+        </button>
+        <button class="lvl-tab-btn" data-level="5" onclick="switchLevel(5, this)">
+          <span>HSK 5</span> <span style="font-size: 0.75rem; opacity: 0.8;">(200)</span>
+        </button>
+        <button class="lvl-tab-btn" data-level="6" onclick="switchLevel(6, this)">
+          <span>HSK 6</span> <span style="font-size: 0.75rem; opacity: 0.8;">(100)</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Main Workspace Card -->
+    <section class="reorder-card">
+      <!-- Question Meta Bar -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 0.8rem; background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); padding: 3px 10px; border-radius: 8px; font-weight: 800;" id="q-level-badge">HSK 1</span>
+          <span style="font-size: 0.95rem; font-weight: 800; color: #ffffff;" id="q-index-badge">Câu 1 / 92</span>
+        </div>
+
+        <!-- Mode & Options -->
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button class="btn btn-sm" id="toggle-order-mode-btn" onclick="toggleOrderMode()" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #cbd5e1; font-size: 0.8rem; padding: 5px 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">
+            <i class="fa-solid fa-arrow-down-1-9"></i> <span id="mode-text">Theo thứ tự</span>
+          </button>
+          <button class="btn btn-sm" id="toggle-pinyin-btn" onclick="togglePinyinHint()" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #cbd5e1; font-size: 0.8rem; padding: 5px 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">
+            <i class="fa-solid fa-font"></i> <span>Gợi ý Pinyin</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Question Meaning / Vietnamese Prompt -->
+      <div style="background: rgba(255, 255, 255, 0.04); border-left: 4px solid #38bdf8; padding: 14px 18px; border-radius: 10px; margin-bottom: 24px;">
+        <div style="font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; font-weight: 800; letter-spacing: 0.05em; margin-bottom: 4px;">Nghĩa tiếng Việt gợi ý:</div>
+        <div style="font-size: 1.15rem; font-weight: 700; color: #ffffff;" id="q-translation-text">Tôi tên là Lý Văn.</div>
+        <div style="font-size: 0.9rem; color: #38bdf8; font-weight: 600; margin-top: 6px; display: none;" id="q-pinyin-hint-text">Wǒ jiào Lǐ Wén.</div>
+      </div>
+
+      <!-- Label 1: Answer Slot -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <label style="font-size: 0.85rem; font-weight: 800; color: #cbd5e1; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-list-ol" style="color: #38bdf8;"></i> <span>Câu trả lời của bạn (Bấm từ để bỏ chọn):</span>
+        </label>
+        <span style="font-size: 0.78rem; color: #94a3b8;" id="answer-count-label">0 từ</span>
+      </div>
+
+      <!-- 1. The Answer Drop/Display Zone -->
+      <div class="answer-zone" id="answer-zone">
+        <div class="answer-placeholder" id="answer-placeholder">
+          <i class="fa-solid fa-hand-pointer" style="margin-right: 6px;"></i> Bấm các khối từ bên dưới để đưa vào câu này...
+        </div>
+      </div>
+
+      <!-- Label 2: Scrambled Pool -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <label style="font-size: 0.85rem; font-weight: 800; color: #cbd5e1; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-puzzle-piece" style="color: #f59e0b;"></i> <span>Khối từ cần sắp xếp (Bấm để chọn):</span>
+        </label>
+        <button onclick="shuffleCurrentPool()" style="background: none; border: none; color: #38bdf8; font-size: 0.8rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+          <i class="fa-solid fa-shuffle"></i> Xáo trộn
+        </button>
+      </div>
+
+      <!-- 2. Scrambled Words Pool -->
+      <div class="scrambled-pool" id="scrambled-pool">
+        <!-- Word chips rendered dynamically -->
+      </div>
+
+      <!-- 3. Actions Toolbar -->
+      <div class="reorder-actions">
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <button class="btn-action btn-reset" onclick="resetCurrentSentence()">
+            <i class="fa-solid fa-rotate-left"></i> Làm lại
+          </button>
+          <button class="btn-action btn-hint" onclick="revealAnswer()">
+            <i class="fa-solid fa-lightbulb"></i> Xem đáp án
+          </button>
+        </div>
+
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <button class="btn-action btn-reset" id="btn-prev" onclick="prevQuestion()" title="Câu trước">
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
+          <button class="btn-action btn-check" id="btn-check" onclick="checkAnswer()">
+            <i class="fa-solid fa-check"></i> Kiểm tra
+          </button>
+          <button class="btn-action btn-next" id="btn-next" onclick="nextQuestion()">
+            <span>Tiếp theo</span> <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- 4. Answer Reveal / Feedback Panel -->
+      <div class="answer-reveal-card" id="answer-reveal-card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;">
+          <div style="flex: 1;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+              <span style="font-size: 0.82rem; font-weight: 800; color: #10b981;" id="reveal-status-text">
+                <i class="fa-solid fa-circle-check"></i> ĐÁP ÁN CHÍNH XÁC:
+              </span>
+            </div>
+            <div style="font-size: 1.5rem; font-weight: 900; color: #ffffff; font-family: 'Noto Sans SC', sans-serif; line-height: 1.3;" id="reveal-hanzi-text">
+              我叫李文。
+            </div>
+            <div style="font-size: 1.05rem; color: #38bdf8; font-weight: 600; margin: 4px 0 8px;" id="reveal-pinyin-text">
+              Wǒ jiào Lǐ Wén.
+            </div>
+            <div style="font-size: 0.95rem; color: #cbd5e1; font-weight: 500;" id="reveal-trans-text">
+              Tôi tên là Lý Văn.
+            </div>
+          </div>
+
+          <button onclick="speakTargetAnswer()" style="background: rgba(56, 189, 248, 0.2); border: 1.5px solid #38bdf8; color: #38bdf8; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: all 0.2s;" title="Phát âm tiếng Trung">
+            <i class="fa-solid fa-volume-high"></i>
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script type="module" src="/src/global_sidebar.js"></script>
+  <script type="module" src="/src/sentence_reorder.js"></script>
+</body>
+
+</html>

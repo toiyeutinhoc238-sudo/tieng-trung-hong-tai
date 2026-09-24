@@ -3544,6 +3544,270 @@ Trả về ĐÚNG 1 JSON object:
 });
 
 // ==========================================================================
+// SENTENCE REORDER QUESTIONS API (790 CÂU TỪ HSK 1 ĐẾN HSK 6)
+// ==========================================================================
+
+let cachedSentenceReorderData = null;
+function loadSentenceReorderData() {
+  if (cachedSentenceReorderData) return cachedSentenceReorderData;
+  try {
+    const jsonPath = path.join(__dirname, 'data', 'sentence_reorder_questions.json');
+    if (fsSync.existsSync(jsonPath)) {
+      const raw = fsSync.readFileSync(jsonPath, 'utf-8');
+      cachedSentenceReorderData = JSON.parse(raw);
+      return cachedSentenceReorderData;
+    }
+  } catch (e) {
+    console.error('Lỗi nạp sentence_reorder_questions.json:', e);
+  }
+  return { meta: { total: 0 }, questions: [], byLevel: {} };
+}
+
+app.get('/api/sentence-reorder', (req, res) => {
+  const data = loadSentenceReorderData();
+  const level = req.query.level;
+  if (level && data.byLevel && data.byLevel[level]) {
+    return res.json({
+      meta: { total: data.byLevel[level].length, level: parseInt(level, 10) },
+      questions: data.byLevel[level]
+    });
+  }
+  return res.json(data);
+});
+
+// ==========================================================================
+// AI INTERACTIVE DIALOGUE / ROLEPLAY CONVERSATION APIS
+// ==========================================================================
+
+// 1. Khởi tạo cuộc hội thoại (Start Dialogue Scene)
+app.post('/api/ai/dialogue/start', async (req, res) => {
+  const { topic = 'restaurant', level = 'hsk2', userRole = 'Khách hàng', aiRole = 'Nhân viên phục vụ', customTopic = '' } = req.body;
+
+  const prompt = `Bạn là chuyên gia giảng dạy tiếng Trung giao tiếp thực tế và đóng vai nhân vật bản xứ.
+Hãy tạo tình huống mở đầu cho một cuộc hội thoại roleplay tương tác theo thông tin sau:
+- Chủ đề: ${customTopic || topic}
+- Trình độ người học: ${level.toUpperCase()}
+- Vai trò người học: ${userRole}
+- Vai trò của bạn (AI): ${aiRole}
+
+Yêu cầu định dạng đầu ra DUY NHẤT một JSON hợp lệ (không kèm markdown \`\`\`json):
+{
+  "scenario": "Tóm tắt bối cảnh tình huống ngắn gọn bằng tiếng Việt (1-2 câu)",
+  "aiMessage": {
+    "zh": "Câu mở đầu bằng tiếng Trung tự nhiên phù hợp vai trò",
+    "pinyin": "Pinyin đầy đủ có dấu thanh điệu",
+    "vi": "Bản dịch nghĩa tiếng Việt tương ứng"
+  },
+  "suggestions": [
+    {
+      "zh": "Gợi ý câu người học có thể trả lời 1 (tiếng Trung)",
+      "pinyin": "Pinyin câu 1",
+      "vi": "Bản dịch câu 1"
+    },
+    {
+      "zh": "Gợi ý câu người học có thể trả lời 2 (tiếng Trung)",
+      "pinyin": "Pinyin câu 2",
+      "vi": "Bản dịch câu 2"
+    },
+    {
+      "zh": "Gợi ý câu người học có thể trả lời 3 (tiếng Trung)",
+      "pinyin": "Pinyin câu 3",
+      "vi": "Bản dịch câu 3"
+    }
+  ]
+}`;
+
+  try {
+    let reply = '';
+    const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || '';
+
+    if (groqClient) {
+      try {
+        const completion = await groqClient.chat.completions.create({
+          model: 'openai/gpt-oss-120b',
+          messages: [{ role: 'user', content: prompt }],
+          temperature: 0.7,
+          max_tokens: 1200
+        });
+        reply = completion.choices[0]?.message?.content || '';
+      } catch (eGroq) {
+        console.warn('Groq dialogue start failed, trying Gemini...', eGroq.message);
+      }
+    }
+
+    if (!reply && GEMINI_API_KEY) {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+      });
+      if (response.ok) {
+        const data = await response.json();
+        reply = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      }
+    }
+
+    let result = null;
+    const jsonMatch = reply.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      try { result = JSON.parse(jsonMatch[0]); } catch (e) { }
+    }
+
+    if (!result) {
+      result = {
+        scenario: "Bạn vừa bước vào nhà hàng Trung Hoa, người phục vụ tươi cười tiến đến chào đón bạn.",
+        aiMessage: {
+          zh: "你好！欢迎光临，请问您一共几位？",
+          pinyin: "Nǐ hǎo! Huānyíng guānglín, qǐngwèn nín yígòng jǐ wèi?",
+          vi: "Xin chào! Hoan nghênh quý khách, xin hỏi quý khách đi tất cả mấy người?"
+        },
+        suggestions: [
+          { zh: "我们有两位。", pinyin: "Wǒmen yǒu liǎng wèi.", vi: "Chúng tôi có hai người." },
+          { zh: "就我一个人。", pinyin: "Jiù wǒ yí gè rén.", vi: "Chỉ có một mình tôi thôi." },
+          { zh: "请问有靠窗的座位吗？", pinyin: "Qǐngwèn yǒu kào chuāng de zuòwèi ma?", vi: "Xin hỏi có chỗ ngồi cạnh cửa sổ không?" }
+        ]
+      };
+    }
+
+    return res.json(result);
+  } catch (error) {
+    console.error('Lỗi khởi tạo hội thoại AI:', error);
+    return res.status(500).json({
+      error: 'Không thể tạo hội thoại lúc này',
+      scenario: "Tình huống giao tiếp cơ bản",
+      aiMessage: { zh: "你好！很高兴见到你。", pinyin: "Nǐ hǎo! Hěn gāoxìng jiàn dào nǐ.", vi: "Xin chào! Rất vui được gặp bạn." },
+      suggestions: [{ zh: "你好！", pinyin: "Nǐ hǎo!", vi: "Chào bạn!" }]
+    });
+  }
+});
+
+// 2. Tiếp tục hội thoại & Nhận xét câu trả lời (Reply & Feedback)
+app.post('/api/ai/dialogue/reply', async (req, res) => {
+  const { topic = 'restaurant', level = 'hsk2', userRole = 'Khách hàng', aiRole = 'Nhân viên phục vụ', history = [], userMessage = '' } = req.body;
+
+  if (!userMessage || !userMessage.trim()) {
+    return res.status(400).json({ error: 'Nội dung trả lời không được để trống' });
+  }
+
+  const prompt = `Bạn là đối tác đàm thoại bản xứ tiếng Trung và là giáo viên hướng dẫn giao tiếp thực tế.
+Tình huống roleplay:
+- Chủ đề: ${topic}
+- Cấp độ người học: ${level.toUpperCase()}
+- Vai trò người học: ${userRole}
+- Vai trò của bạn (AI): ${aiRole}
+
+Lịch sử trò chuyện gần nhất:
+${history.slice(-6).map(h => `${h.role === 'ai' ? aiRole : userRole}: ${h.zh}`).join('\n')}
+
+Người học vừa nói: "${userMessage}"
+
+Nhiệm vụ:
+1. Đánh giá câu trả lời của người học: Độ tự nhiên (thang 100), lời khen ngợi ngắn gọn, sửa lỗi ngữ pháp/từ vựng (nếu có lỗi, để trống nếu đã chuẩn), và mẹo nhỏ diễn đạt hay hơn.
+2. Tiếp tục cuộc trò chuyện tự nhiên theo đúng vai diễn của bạn bằng tiếng Trung, kèm Pinyin chuẩn và bản dịch tiếng Việt.
+3. Đề xuất 3 phương án trả lời tiếp theo phù hợp ngữ cảnh để người học dễ phản xạ.
+
+Xuất ra DUY NHẤT một JSON hợp lệ (không kèm markdown \`\`\`json):
+{
+  "feedback": {
+    "score": 90,
+    "praise": "Lời khen ngợi ngắn gọn bằng tiếng Việt",
+    "correction": "Bản sửa câu chính xác hơn nếu có lỗi (hoặc để trống nếu đã tốt)",
+    "tip": "Mẹo dùng từ tự nhiên hơn của người bản xứ (tiếng Việt)"
+  },
+  "aiMessage": {
+    "zh": "Câu đối đáp tiếp theo của AI",
+    "pinyin": "Pinyin đầy đủ có dấu thanh điệu",
+    "vi": "Bản dịch nghĩa tiếng Việt tương ứng"
+  },
+  "suggestions": [
+    {
+      "zh": "Gợi ý câu trả lời tiếp theo 1 (tiếng Trung)",
+      "pinyin": "Pinyin câu 1",
+      "vi": "Bản dịch câu 1"
+    },
+    {
+      "zh": "Gợi ý câu trả lời tiếp theo 2 (tiếng Trung)",
+      "pinyin": "Pinyin câu 2",
+      "vi": "Bản dịch câu 2"
+    },
+    {
+      "zh": "Gợi ý câu trả lời tiếp theo 3 (tiếng Trung)",
+      "pinyin": "Pinyin câu 3",
+      "vi": "Bản dịch câu 3"
+    }
+  ]
+}`;
+
+  try {
+    let reply = '';
+    const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || '';
+
+    if (groqClient) {
+      try {
+        const completion = await groqClient.chat.completions.create({
+          model: 'openai/gpt-oss-120b',
+          messages: [{ role: 'user', content: prompt }],
+          temperature: 0.7,
+          max_tokens: 1500
+        });
+        reply = completion.choices[0]?.message?.content || '';
+      } catch (eGroq) {
+        console.warn('Groq dialogue reply failed, trying Gemini...', eGroq.message);
+      }
+    }
+
+    if (!reply && GEMINI_API_KEY) {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+      });
+      if (response.ok) {
+        const data = await response.json();
+        reply = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      }
+    }
+
+    let result = null;
+    const jsonMatch = reply.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      try { result = JSON.parse(jsonMatch[0]); } catch (e) { }
+    }
+
+    if (!result) {
+      result = {
+        feedback: {
+          score: 88,
+          praise: "Bạn diễn đạt rõ ràng và dễ hiểu!",
+          correction: "",
+          tip: "Bạn có thể kết hợp thêm các hư từ ngữ khí như 吧, 呢 để câu tự nhiên hơn."
+        },
+        aiMessage: {
+          zh: "好的，我明白了！请问您还有什么需要吗？",
+          pinyin: "Hǎo de, wǒ míngbai le! Qǐngwèn nín hái yǒu shénme xūyào ma?",
+          vi: "Dạ vâng, tôi hiểu rồi! Xin hỏi quý khách còn cần gì nữa không ạ?"
+        },
+        suggestions: [
+          { zh: "暂时没有了，谢谢。", pinyin: "Zànshí méiyǒu le, xièxie.", vi: "Tạm thời không còn gì, cảm ơn bạn." },
+          { zh: "请给我拿点纸巾。", pinyin: "Qǐng gěi wǒ ná diǎn zhǐjīn.", vi: "Làm ơn lấy cho tôi ít khăn giấy." },
+          { zh: "请问洗手间在哪里？", pinyin: "Qǐngwèn xǐshǒujiān zài nǎlǐ?", vi: "Xin hỏi nhà vệ sinh ở đâu ạ?" }
+        ]
+      };
+    }
+
+    return res.json(result);
+  } catch (error) {
+    console.error('Lỗi phản hồi hội thoại AI:', error);
+    return res.status(500).json({
+      error: 'Không thể xử lý phản hồi lúc này',
+      feedback: { score: 80, praise: "Tiếp tục phát huy nhé!", correction: "", tip: "" },
+      aiMessage: { zh: "好的，我们继续吧。", pinyin: "Hǎo de, wǒmen jìxù ba.", vi: "Được rồi, chúng ta tiếp tục nhé." },
+      suggestions: [{ zh: "好的。", pinyin: "Hǎo de.", vi: "Được thôi." }]
+    });
+  }
+});
+
+// ==========================================================================
 // COMMUNITY DISCUSSIONS & FEEDBACK API ENDPOINTS
 // ==========================================================================
 

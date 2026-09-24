@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luyện Hội Thoại Tiếng Trung Thực Tế Cùng AI | Tiếng Trung HongTai</title>
+  <meta name="description"
+    content="Phòng luyện hội thoại tiếng Trung thông minh tương tác cùng AI. Chọn chủ đề nhập vai đa dạng: gọi món, mua sắm, hỏi đường, phỏng vấn, kèm gợi ý câu trả lời, nhận xét phát âm và sửa lỗi ngữ pháp tức thì.">
+  <link rel="icon" type="image/png" href="/assets/logo.png">
+  <link rel="canonical" href="https://tiengtrunghongtai.online/ai-dialogue.html" />
+
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link rel="stylesheet" href="/style.css">
+
+  <style>
+    :root {
+      --diag-primary: #a855f7;
+      --diag-accent: #38bdf8;
+      --diag-card-bg: rgba(15, 23, 42, 0.78);
+      --diag-card-border: rgba(255, 255, 255, 0.12);
+    }
+
+    body {
+      font-family: 'Inter', 'Noto Sans SC', sans-serif;
+      background: #090d16;
+      color: #f8fafc;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    .diag-header {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--diag-card-border);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      padding: 12px 24px;
+    }
+
+    .diag-header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .diag-container {
+      max-width: 1100px;
+      margin: 24px auto 60px;
+      padding: 0 20px;
+    }
+
+    /* Scenario Selection Card */
+    .scenario-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .scenario-card {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .scenario-card:hover {
+      background: rgba(40, 53, 76, 0.8);
+      border-color: #a855f7;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(168, 85, 247, 0.2);
+    }
+
+    .scenario-card.active {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(124, 58, 237, 0.3));
+      border-color: #c084fc;
+      box-shadow: 0 8px 24px rgba(168, 85, 247, 0.3);
+    }
+
+    /* Dialogue Chat Workspace */
+    .chat-workspace {
+      background: var(--diag-card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--diag-card-border);
+      border-radius: 24px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      height: 680px;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+
+    /* Chat Messages Scroll Area */
+    .chat-messages-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .chat-bubble {
+      display: flex;
+      gap: 12px;
+      max-width: 85%;
+      animation: popIn 0.3s ease;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .chat-bubble.ai {
+      align-self: flex-start;
+    }
+
+    .chat-bubble.user {
+      align-self: flex-end;
+      flex-direction: row-reverse;
+    }
+
+    .bubble-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .bubble-avatar.ai {
+      background: linear-gradient(135deg, #a855f7, #6366f1);
+      color: #fff;
+    }
+
+    .bubble-avatar.user {
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      color: #fff;
+    }
+
+    .bubble-content {
+      background: rgba(30, 41, 59, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      padding: 14px 18px;
+      position: relative;
+    }
+
+    .chat-bubble.ai .bubble-content {
+      border-top-left-radius: 4px;
+      border-color: rgba(168, 85, 247, 0.3);
+    }
+
+    .chat-bubble.user .bubble-content {
+      border-top-right-radius: 4px;
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.8), rgba(37, 99, 235, 0.8));
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+
+    .bubble-zh {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #ffffff;
+      font-family: 'Noto Sans SC', sans-serif;
+      line-height: 1.4;
+    }
+
+    .bubble-pinyin {
+      font-size: 0.88rem;
+      color: #38bdf8;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .bubble-vi {
+      font-size: 0.88rem;
+      color: #cbd5e1;
+      margin-top: 4px;
+      line-height: 1.35;
+    }
+
+    /* AI Feedback pill on user message */
+    .bubble-feedback {
+      margin-top: 8px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 0.8rem;
+      color: #34d399;
+    }
+
+    /* Suggestions Bar */
+    .suggestions-strip {
+      background: rgba(15, 23, 42, 0.9);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow-x: auto;
+    }
+
+    .suggestion-pill {
+      background: rgba(168, 85, 247, 0.15);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      color: #d8b4fe;
+      padding: 6px 14px;
+      border-radius: 99px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .suggestion-pill:hover {
+      background: rgba(168, 85, 247, 0.3);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    /* Chat Input Bar */
+    .chat-input-bar {
+      background: rgba(15, 23, 42, 0.95);
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .chat-text-input {
+      flex: 1;
+      background: rgba(30, 41, 59, 0.8);
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      border-radius: 14px;
+      padding: 12px 18px;
+      color: #ffffff;
+      font-size: 1rem;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .chat-text-input:focus {
+      border-color: #a855f7;
+      box-shadow: 0 0 16px rgba(168, 85, 247, 0.3);
+    }
+
+    .btn-send {
+      background: linear-gradient(135deg, #a855f7, #7c3aed);
+      border: none;
+      color: #ffffff;
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .btn-send:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4);
+    }
+
+    .btn-mic {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #cbd5e1;
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .btn-mic:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+    }
+
+    .btn-mic.recording {
+      background: #ef4444 !important;
+      color: #fff !important;
+      animation: pulseMic 1.5s infinite;
+    }
+
+    @keyframes pulseMic {
+      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+      70% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="diag-header">
+    <div class="diag-header-inner">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <button id="header-sidebar-toggle-btn" class="header-icon-btn" onclick="window.toggleGlobalSidebar && window.toggleGlobalSidebar()" title="Mở danh mục menu" style="display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: #fff; cursor: pointer;">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <a href="/" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff;">
+          <img src="/assets/logo.png" alt="Hongtai Logo" style="width: 40px; height: 40px; border-radius: 10px;">
+          <div>
+            <div style="font-weight: 800; font-size: 1.1rem; line-height: 1.2;">Tiếng Trung HongTai</div>
+            <div style="font-size: 0.72rem; color: #a855f7; font-weight: 700;">Luyện Hội Thoại Thực Tế & AI</div>
+          </div>
+        </a>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <a href="/sentence-reorder.html" class="btn hide-mobile"
+          style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(2, 132, 199, 0.25)); border: 1px solid #38bdf8; color: #7dd3fc; padding: 7px 14px; border-radius: 10px; font-weight: 700; font-size: 0.85rem; text-decoration: none; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-arrow-down-short-wide"></i> <span>Sắp Xếp Câu</span>
+        </a>
+        <a href="/" class="btn hide-mobile"
+          style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #cbd5e1; padding: 7px 12px; border-radius: 10px; font-weight: 700; font-size: 0.85rem; text-decoration: none; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-house"></i> <span>Trang chủ</span>
+        </a>
+        <button class="btn theme-toggle-btn" onclick="window.toggleTheme()"
+          style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #f59e0b; width: 38px; height: 38px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+          <i class="fa-solid fa-sun"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="diag-container">
+
+    <!-- Hero / Setup Banner -->
+    <section style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.95)); border: 1px solid var(--diag-card-border); border-radius: 20px; padding: 24px 28px; box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+        <div>
+          <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(168, 85, 247, 0.2); border: 1px solid rgba(168, 85, 247, 0.35); padding: 4px 12px; border-radius: 99px; font-size: 0.8rem; font-weight: 800; color: #d8b4fe; margin-bottom: 8px;">
+            <span>💬 Phòng Luyện Phản Xạ Đàm Thoại AI</span>
+            <span>&bull;</span>
+            <span>Nhập Vai Thực Tế</span>
+          </div>
+          <h1 style="font-size: 1.8rem; font-weight: 900; margin: 0 0 6px 0; color: #ffffff;">
+            Tạo Cuộc Hội Thoại &amp; Đàm Thoại Thông Minh
+          </h1>
+          <p style="font-size: 0.92rem; color: #94a3b8; margin: 0;">
+            Chọn bối cảnh giao tiếp, trò chuyện tương tác 1:1 cùng AI, nhận ngay gợi ý câu trả lời và phản hồi sửa lỗi phát âm tức thì.
+          </p>
+        </div>
+
+        <button onclick="toggleScenarioSelector()" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; padding: 8px 16px; border-radius: 12px; font-weight: 700; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-sliders"></i> <span id="btn-toggle-scenario-text">Đổi tình huống</span>
+        </button>
+      </div>
+
+      <!-- Scenarios Selector Box -->
+      <div id="scenario-selector-box" style="margin-top: 20px; padding-top: 18px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+          <label style="font-size: 0.9rem; font-weight: 800; color: #cbd5e1;">Chọn bối cảnh giao tiếp:</label>
+
+          <!-- Level pills -->
+          <div style="display: flex; gap: 6px;">
+            <button class="level-pill active" data-level="hsk2" onclick="switchDiagLevel('hsk2', this)" style="background: linear-gradient(135deg, #a855f7, #7c3aed); border: 1px solid #c084fc; color: #fff; padding: 4px 12px; border-radius: 8px; font-size: 0.78rem; font-weight: 800; cursor: pointer;">Sơ cấp (HSK 1-2)</button>
+            <button class="level-pill" data-level="hsk4" onclick="switchDiagLevel('hsk4', this)" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #94a3b8; padding: 4px 12px; border-radius: 8px; font-size: 0.78rem; font-weight: 800; cursor: pointer;">Trung cấp (HSK 3-4)</button>
+            <button class="level-pill" data-level="hsk6" onclick="switchDiagLevel('hsk6', this)" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #94a3b8; padding: 4px 12px; border-radius: 8px; font-size: 0.78rem; font-weight: 800; cursor: pointer;">Cao cấp (HSK 5-6)</button>
+          </div>
+        </div>
+
+        <div class="scenario-grid" id="scenario-grid">
+          <!-- Scenarios rendered dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Chat Workspace -->
+    <section class="chat-workspace">
+      <!-- Active Scene Header -->
+      <div style="background: rgba(15, 23, 42, 0.95); border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="font-size: 1.5rem;" id="active-scenario-icon">🍜</div>
+          <div>
+            <div style="font-weight: 800; font-size: 1.05rem; color: #ffffff;" id="active-scenario-title">Gọi món tại nhà hàng</div>
+            <div style="font-size: 0.78rem; color: #94a3b8;" id="active-scenario-desc">Bối cảnh: Bạn là Khách hàng &bull; AI là Phục vụ</div>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button onclick="togglePinyinDisplay()" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #cbd5e1; font-size: 0.8rem; padding: 5px 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">
+            <i class="fa-solid fa-font"></i> <span>Pinyin</span>
+          </button>
+          <button onclick="toggleViDisplay()" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #cbd5e1; font-size: 0.8rem; padding: 5px 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">
+            <i class="fa-solid fa-language"></i> <span>Tiếng Việt</span>
+          </button>
+          <button onclick="restartDialogue()" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; font-size: 0.8rem; padding: 5px 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">
+            <i class="fa-solid fa-rotate-right"></i> <span>Bắt đầu lại</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Messages Area -->
+      <div class="chat-messages-area" id="chat-messages-area">
+        <!-- Messages rendered dynamically -->
+      </div>
+
+      <!-- Suggestions Strip -->
+      <div class="suggestions-strip" id="suggestions-strip">
+        <span style="font-size: 0.78rem; color: #94a3b8; font-weight: 800; display: flex; align-items: center; gap: 4px; white-space: nowrap;">
+          <i class="fa-solid fa-wand-magic-sparkles" style="color: #a855f7;"></i> Gợi ý trả lời:
+        </span>
+        <div id="suggestions-list" style="display: flex; gap: 8px; overflow-x: auto;">
+          <!-- Suggestions chips rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- Input Bar -->
+      <div class="chat-input-bar">
+        <button class="btn-mic" id="btn-mic" onclick="toggleVoiceRecording()" title="Bấm để nói tiếng Trung (Speech Recognition)">
+          <i class="fa-solid fa-microphone"></i>
+        </button>
+        <input type="text" class="chat-text-input" id="dialogue-input" placeholder="Gõ câu trả lời tiếng Trung (hoặc bấm gợi ý bên trên)..." onkeydown="handleInputKeyDown(event)">
+        <button class="btn-send" onclick="sendUserMessage()" title="Gửi tin nhắn (Enter)">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <script type="module" src="/src/global_sidebar.js"></script>
+  <script type="module" src="/src/ai_dialogue.js"></script>
+</body>
+
+</html>
