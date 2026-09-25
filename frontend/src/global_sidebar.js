@@ -414,8 +414,32 @@
     }
   });
 
+  // Announcement Ticker Bar Controller
+  window.closeAnnouncementTicker = function () {
+    const ticker = document.getElementById('home-announcement-ticker') || document.querySelector('.announcement-ticker-bar');
+    if (ticker) {
+      ticker.classList.add('dismissed');
+      setTimeout(() => {
+        ticker.style.display = 'none';
+      }, 350);
+      try {
+        sessionStorage.setItem('hongtai_ticker_dismissed', 'true');
+      } catch (e) {}
+    }
+  };
+
+  function initAnnouncementTicker() {
+    try {
+      if (sessionStorage.getItem('hongtai_ticker_dismissed') === 'true') {
+        const ticker = document.getElementById('home-announcement-ticker') || document.querySelector('.announcement-ticker-bar');
+        if (ticker) ticker.style.display = 'none';
+      }
+    } catch (e) {}
+  }
+
   // Inject or setup on DOM Ready
   function initGlobalSidebar() {
+    initAnnouncementTicker();
     const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html');
 
     // On desktop and tablet index page (>= 768px), default to expanded sidebar

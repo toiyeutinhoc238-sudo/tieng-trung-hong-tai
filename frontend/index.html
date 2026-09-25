@@ -717,6 +717,38 @@
     <div id="home-view-section" class="home-dashboard-redesign"
       style="display: flex; flex-direction: column; gap: 24px; margin-bottom: 40px; width: 100%;">
 
+      <!-- TOP ANNOUNCEMENT MARQUEE TICKER BAR -->
+      <div id="home-announcement-ticker" class="announcement-ticker-bar" role="region" aria-label="Thông báo nổi bật">
+        <div class="ticker-badge">
+          <i class="fa-solid fa-bullhorn ticker-icon-pulse"></i>
+          <span class="ticker-badge-text">THÔNG BÁO</span>
+        </div>
+
+        <div class="ticker-content-track">
+          <div class="ticker-track-inner">
+            <div class="ticker-content-loop">
+              <span class="ticker-item"><span class="ticker-tag hot">🔥 HOT</span> <strong>Chào mừng đến với Tiếng Trung HongTai:</strong> Nền tảng học HSK 1 - 6 trực quan, toàn diện &amp; chuẩn Sư Phạm!</span>
+              <span class="ticker-item"><span class="ticker-tag new">✨ MỚI</span> <strong>Luyện Hội Thoại AI:</strong> Trò chuyện thực tế nhập vai với AI theo 12 chủ đề đời sống &amp; du lịch <a href="/ai-dialogue.html" class="ticker-action-link">Trải nghiệm ngay &rarr;</a></span>
+              <span class="ticker-item"><span class="ticker-tag feat">🧩 790 CÂU</span> <strong>Bài tập Sắp Xếp Câu:</strong> Luyện phản xạ cấu trúc câu ngữ pháp chuẩn từ HSK 1 - 6 <a href="/sentence-reorder.html" class="ticker-action-link">Luyện tập ngay &rarr;</a></span>
+              <span class="ticker-item"><span class="ticker-tag book">📚 66 SÁCH</span> <strong>Kho Sách &amp; Tài Liệu:</strong> Toàn bộ giáo trình HSK, Boya, Ngữ pháp tải PDF miễn phí <a href="/documents.html" class="ticker-action-link">Xem kho sách &rarr;</a></span>
+              <span class="ticker-item"><span class="ticker-tag trophy">🏆 THI ĐUA</span> <strong>Bảng Xếp Hạng Học Viên:</strong> Tích lũy điểm khi ôn tập từ vựng &amp; trò chơi để ghi danh Top 1 <a href="/rank.html" class="ticker-action-link">Bảng xếp hạng &rarr;</a></span>
+            </div>
+            <!-- Duplicate loop for continuous 100% seamless marquee scrolling -->
+            <div class="ticker-content-loop" aria-hidden="true">
+              <span class="ticker-item"><span class="ticker-tag hot">🔥 HOT</span> <strong>Chào mừng đến với Tiếng Trung HongTai:</strong> Nền tảng học HSK 1 - 6 trực quan, toàn diện &amp; chuẩn Sư Phạm!</span>
+              <span class="ticker-item"><span class="ticker-tag new">✨ MỚI</span> <strong>Luyện Hội Thoại AI:</strong> Trò chuyện thực tế nhập vai với AI theo 12 chủ đề đời sống &amp; du lịch <a href="/ai-dialogue.html" class="ticker-action-link">Trải nghiệm ngay &rarr;</a></span>
+              <span class="ticker-item"><span class="ticker-tag feat">🧩 790 CÂU</span> <strong>Bài tập Sắp Xếp Câu:</strong> Luyện phản xạ cấu trúc câu ngữ pháp chuẩn từ HSK 1 - 6 <a href="/sentence-reorder.html" class="ticker-action-link">Luyện tập ngay &rarr;</a></span>
+              <span class="ticker-item"><span class="ticker-tag book">📚 66 SÁCH</span> <strong>Kho Sách &amp; Tài Liệu:</strong> Toàn bộ giáo trình HSK, Boya, Ngữ pháp tải PDF miễn phí <a href="/documents.html" class="ticker-action-link">Xem kho sách &rarr;</a></span>
+              <span class="ticker-item"><span class="ticker-tag trophy">🏆 THI ĐUA</span> <strong>Bảng Xếp Hạng Học Viên:</strong> Tích lũy điểm khi ôn tập từ vựng &amp; trò chơi để ghi danh Top 1 <a href="/rank.html" class="ticker-action-link">Bảng xếp hạng &rarr;</a></span>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="ticker-close-btn" onclick="window.closeAnnouncementTicker && window.closeAnnouncementTicker()" title="Đóng thông báo" aria-label="Đóng thông báo">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
       <!-- TOP BANNER (Hero Banner with Clean Centered Title Blocks) -->
       <div class="home-hero-banner"
         style="background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(20px); border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 28px; padding: 22px 32px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center; position: relative; overflow: hidden; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);">
