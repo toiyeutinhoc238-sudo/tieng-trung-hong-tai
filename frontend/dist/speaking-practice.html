@@ -132,8 +132,9 @@
       -webkit-backdrop-filter: blur(16px);
       background: rgba(15, 23, 42, 0.92);
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 12px 20px;
+      padding: 10px 16px;
       box-sizing: border-box !important;
+      transition: background 0.3s, border-color 0.3s;
     }
 
     .app-top-nav-inner {
@@ -142,36 +143,185 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       width: 100%;
     }
 
-    /* Light Mode Navigation */
+    .nav-left-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .nav-brand-anchor {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      min-width: 0;
+    }
+
+    .nav-app-logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    }
+
+    .nav-brand-text-col {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .nav-brand-title {
+      font-weight: 800;
+      font-size: 1.05rem;
+      line-height: 1.15;
+      color: #ffffff;
+      white-space: nowrap;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-subtitle-text {
+      font-size: 0.7rem;
+      color: #fbbf24;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .nav-right-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    /* Common header icon button */
+    .header-icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #cbd5e1;
+      cursor: pointer;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .header-icon-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .theme-toggle-btn {
+      color: #f59e0b !important;
+    }
+
+    /* Skill Switch Pill Button */
+    .nav-switch-skill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 99px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      flex-shrink: 0;
+    }
+
+    .nav-switch-skill-btn.switch-purple {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(124, 58, 237, 0.25));
+      border: 1.5px solid #a855f7;
+      color: #e9d5ff;
+    }
+
+    .nav-switch-skill-btn.switch-purple i {
+      color: #c084fc;
+    }
+
+    .nav-switch-skill-btn.switch-purple:hover {
+      background: rgba(139, 92, 246, 0.32);
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(139, 92, 246, 0.35);
+    }
+
+    .switch-text-short {
+      display: none;
+    }
+    .switch-text-full {
+      display: inline;
+    }
+
+    /* Light Mode Navigation Overrides */
     html.light-mode .app-top-nav,
     html.light .app-top-nav {
-      background: rgba(255, 255, 255, 0.94) !important;
-      border-bottom: 1px solid rgba(226, 232, 240, 0.9) !important;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+      background: rgba(255, 255, 255, 0.95) !important;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.95) !important;
+      box-shadow: 0 2px 14px rgba(0, 0, 0, 0.05) !important;
     }
 
-    html.light-mode .app-top-nav .nav-brand-title {
+    html.light-mode .nav-brand-title,
+    html.light .nav-brand-title {
       color: #0f172a !important;
     }
 
-    html.light-mode .app-top-nav .sidebar-toggle-btn {
-      color: #0f172a !important;
+    html.light-mode .nav-subtitle-text,
+    html.light .nav-subtitle-text {
+      color: #d97706 !important;
     }
 
-    html.light-mode .app-top-nav .btn-home {
+    html.light-mode .header-icon-btn,
+    html.light .header-icon-btn {
       background: #f1f5f9 !important;
       border-color: #cbd5e1 !important;
       color: #334155 !important;
     }
 
-    html.light-mode .app-top-nav .theme-toggle-btn {
-      background: #f1f5f9 !important;
-      border-color: #cbd5e1 !important;
-      color: #f59e0b !important;
+    html.light-mode .header-icon-btn:hover,
+    html.light .header-icon-btn:hover {
+      background: #e2e8f0 !important;
+      color: #0f172a !important;
+    }
+
+    html.light-mode .theme-toggle-btn,
+    html.light .theme-toggle-btn {
+      color: #d97706 !important;
+    }
+
+    /* Light Mode Switch Purple Button */
+    html.light-mode .nav-switch-skill-btn.switch-purple,
+    html.light .nav-switch-skill-btn.switch-purple {
+      background: linear-gradient(135deg, #f5f3ff, #ede9fe) !important;
+      border: 1.5px solid #8b5cf6 !important;
+      color: #6b21a8 !important; /* Deep readable purple */
+      box-shadow: 0 2px 8px rgba(139, 92, 246, 0.15) !important;
+    }
+
+    html.light-mode .nav-switch-skill-btn.switch-purple i,
+    html.light .nav-switch-skill-btn.switch-purple i {
+      color: #7c3aed !important;
+    }
+
+    html.light-mode .nav-switch-skill-btn.switch-purple:hover,
+    html.light .nav-switch-skill-btn.switch-purple:hover {
+      background: #ddd6fe !important;
+      color: #581c87 !important;
+      box-shadow: 0 4px 14px rgba(139, 92, 246, 0.25) !important;
     }
 
     :root {
@@ -186,7 +336,7 @@
       width: 100% !important;
       max-width: 1140px !important;
       margin: 0 auto !important;
-      padding: 24px 16px 80px 16px !important;
+      padding: 20px 16px 80px 16px !important;
       flex: 1 0 auto !important;
       box-sizing: border-box !important;
     }
@@ -196,17 +346,122 @@
       background: linear-gradient(135deg, rgba(245, 158, 11, 0.22), rgba(239, 68, 68, 0.16));
       border: 1.5px solid rgba(245, 158, 11, 0.4);
       border-radius: 24px;
-      padding: 24px;
+      padding: 22px 24px;
       margin-bottom: 24px;
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
     }
 
-    html.light-mode .speaking-hero-banner {
-      background: linear-gradient(135deg, #fffbeb, #fee2e2);
-      border: 1.5px solid #fcd34d;
-      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.12);
+    html.light-mode .speaking-hero-banner,
+    html.light .speaking-hero-banner {
+      background: linear-gradient(135deg, #fffbeb, #fee2e2) !important;
+      border: 1.5px solid #fcd34d !important;
+      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.12) !important;
+    }
+
+    /* Hero Pill Badge */
+    .hero-pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 14px;
+      border-radius: 99px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      transition: all 0.25s ease;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    .hero-pill-badge.badge-amber {
+      background: rgba(245, 158, 11, 0.2);
+      border: 1.5px solid rgba(245, 158, 11, 0.45);
+      color: #fef08a;
+    }
+
+    .hero-pill-badge .badge-dot {
+      opacity: 0.7;
+    }
+
+    /* Light Mode Pill Badge: deep amber text with crisp contrast */
+    html.light-mode .hero-pill-badge.badge-amber,
+    html.light .hero-pill-badge.badge-amber {
+      background: linear-gradient(135deg, #fffbeb, #fef3c7) !important;
+      border: 1.5px solid #fcd34d !important;
+      color: #92400e !important; /* Deep, vivid, readable amber */
+      box-shadow: 0 2px 10px rgba(245, 158, 11, 0.1) !important;
+    }
+
+    html.light-mode .hero-pill-badge.badge-amber .badge-dot,
+    html.light .hero-pill-badge.badge-amber .badge-dot {
+      color: #d97706 !important;
+      opacity: 1;
+    }
+
+    /* Hero Stat Cards */
+    .hero-stats-wrapper {
+      display: flex;
+      gap: 10px;
+    }
+
+    .hero-stat-card {
+      text-align: center;
+      background: rgba(15, 23, 42, 0.65);
+      border: 1.5px solid rgba(255, 255, 255, 0.14);
+      border-radius: 16px;
+      padding: 10px 18px;
+      min-width: 96px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: all 0.25s ease;
+    }
+
+    .hero-stat-card .stat-number {
+      font-size: 1.35rem;
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 3px;
+    }
+
+    .hero-stat-card .stat-number.stat-amber {
+      color: #fbbf24;
+    }
+
+    .hero-stat-card .stat-number.stat-red {
+      color: #f87171;
+    }
+
+    .hero-stat-card .stat-label {
+      font-size: 0.72rem;
+      color: #94a3b8;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* Light Mode Stat Cards */
+    html.light-mode .hero-stat-card,
+    html.light .hero-stat-card {
+      background: #ffffff !important;
+      border: 1.5px solid #e2e8f0 !important;
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.08) !important;
+    }
+
+    html.light-mode .hero-stat-card .stat-number.stat-amber,
+    html.light .hero-stat-card .stat-number.stat-amber {
+      color: #d97706 !important; /* Deep rich amber */
+    }
+
+    html.light-mode .hero-stat-card .stat-number.stat-red,
+    html.light .hero-stat-card .stat-number.stat-red {
+      color: #dc2626 !important; /* Deep rich red */
+    }
+
+    html.light-mode .hero-stat-card .stat-label,
+    html.light .hero-stat-card .stat-label {
+      color: #475569 !important; /* Dark legible slate */
     }
 
     /* Main Workspace Panel */
@@ -529,6 +784,75 @@
       0% { height: 8px; }
       100% { height: 42px; }
     }
+
+    /* Mobile Responsive Polish */
+    @media (max-width: 640px) {
+      .app-top-nav {
+        padding: 8px 12px !important;
+      }
+      .app-top-nav-inner {
+        gap: 8px !important;
+      }
+      .nav-brand-title {
+        font-size: 0.95rem !important;
+      }
+      .nav-subtitle-text {
+        display: none !important;
+      }
+      .switch-text-full {
+        display: none !important;
+      }
+      .switch-text-short {
+        display: inline !important;
+      }
+      .nav-switch-skill-btn {
+        padding: 5px 10px !important;
+        font-size: 0.78rem !important;
+      }
+      .header-icon-btn {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 0.88rem !important;
+      }
+      .nav-app-logo {
+        width: 30px !important;
+        height: 30px !important;
+      }
+      .speaking-hero-banner {
+        padding: 16px 14px !important;
+        border-radius: 18px !important;
+        margin-bottom: 16px !important;
+      }
+      .speaking-hero-banner h1 {
+        font-size: 1.35rem !important;
+        line-height: 1.3 !important;
+      }
+      .speaking-hero-banner p {
+        font-size: 0.84rem !important;
+        line-height: 1.5 !important;
+      }
+      .hero-pill-badge {
+        font-size: 0.74rem !important;
+        padding: 4px 10px !important;
+        gap: 6px !important;
+      }
+      .hero-stats-wrapper {
+        width: 100% !important;
+        margin-top: 12px !important;
+        gap: 8px !important;
+      }
+      .hero-stat-card {
+        flex: 1 !important;
+        min-width: 0 !important;
+        padding: 8px 10px !important;
+      }
+      .hero-stat-card .stat-number {
+        font-size: 1.15rem !important;
+      }
+      .hero-stat-card .stat-label {
+        font-size: 0.68rem !important;
+      }
+    }
   </style>
   <script type="module" crossorigin src="/assets/speaking-B0tKdhhO.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/global_sidebar-DTWKDxY6.js">
@@ -539,32 +863,30 @@
   <!-- Top App Navigation -->
   <header class="app-top-nav">
     <div class="app-top-nav-inner">
-      <div style="display: flex; align-items: center; gap: 14px;">
+      <div class="nav-left-box">
         <button class="header-icon-btn global-hamburger-btn" onclick="window.toggleGlobalSidebar && window.toggleGlobalSidebar()" title="Mở danh mục menu" aria-label="Mở danh mục menu">
           <i class="fa-solid fa-bars"></i>
         </button>
-        <a href="/" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
-          <img src="/assets/logo-CnsJJgQP.png" alt="HongTai Logo" style="width: 36px; height: 36px; border-radius: 10px;">
-          <div>
-            <span class="nav-brand-title" style="font-weight: 800; font-size: 1.15rem; display: block; line-height: 1.1;">Luyện Nói Tiếng Trung HSKK</span>
-            <span class="nav-subtitle-text" style="font-size: 0.72rem; color: #fbbf24; font-weight: 700;">HSKK Speaking (3p - 2p) &amp; AI Grader</span>
+        <a href="/" class="nav-brand-anchor" title="Về trang chủ Tiếng Trung Hongtai">
+          <img src="/assets/logo-CnsJJgQP.png" alt="HongTai Logo" class="nav-app-logo">
+          <div class="nav-brand-text-col">
+            <span class="nav-brand-title">Luyện Nói HSKK</span>
+            <span class="nav-subtitle-text">HSKK Speaking (3p - 2p) &amp; AI Grader</span>
           </div>
         </a>
       </div>
 
-      <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0;">
+      <div class="nav-right-box">
         <!-- Switch to Writing Skill Button -->
-        <a href="/writing-practice.html" class="btn"
-          style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(124, 58, 237, 0.25)); border: 1.5px solid #a855f7; color: #d8b4fe; padding: 7px 14px; border-radius: 10px; font-weight: 800; font-size: 0.88rem; text-decoration: none; display: flex; align-items: center; gap: 6px; white-space: nowrap;">
-          <i class="fa-solid fa-feather-pointed"></i> <span>Luyện Viết HSKK</span>
+        <a href="/writing-practice.html" class="nav-switch-skill-btn switch-purple" title="Chuyển sang Luyện Viết HSKK">
+          <i class="fa-solid fa-feather-pointed"></i>
+          <span class="switch-text-full">Luyện Viết HSKK</span>
+          <span class="switch-text-short">Luyện Viết</span>
         </a>
-        <a href="/" class="btn btn-home hide-mobile"
-          style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #cbd5e1; padding: 7px 12px; border-radius: 10px; font-weight: 700; font-size: 0.88rem; text-decoration: none; display: flex; align-items: center; gap: 6px; white-space: nowrap;">
-          <i class="fa-solid fa-house"></i> <span>Trang chủ</span>
+        <a href="/" class="header-icon-btn btn-home hide-mobile" title="Trang chủ">
+          <i class="fa-solid fa-house"></i>
         </a>
-        <button class="btn theme-toggle-btn" onclick="window.toggleTheme()"
-          style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #f59e0b; width: 38px; height: 38px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center;"
-          title="Chuyển chế độ Sáng / Tối">
+        <button class="header-icon-btn theme-toggle-btn" onclick="window.toggleTheme()" title="Chuyển chế độ Sáng / Tối">
           <i class="fa-solid fa-sun"></i>
         </button>
       </div>
@@ -578,11 +900,10 @@
     <section class="speaking-hero-banner">
       <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
         <div style="max-width: 780px;">
-          <div
-            style="display: inline-flex; align-items: center; gap: 8px; background: rgba(245, 158, 11, 0.22); border: 1px solid rgba(245, 158, 11, 0.4); padding: 4px 14px; border-radius: 99px; font-size: 0.82rem; font-weight: 800; color: #fbbf24; margin-bottom: 10px;">
+          <div class="hero-pill-badge badge-amber">
             <span>🎙️ Phòng Thi Khẩu Ngữ HSKK Thực Chiến</span>
-            <span>&bull;</span>
-            <span>Chuẩn Format: 3 Phút Chuẩn Bị &bull; 2 Phút Trả Lời</span>
+            <span class="badge-dot">&bull;</span>
+            <span>3 Phút Chuẩn Bị &bull; 2 Phút Trả Lời</span>
           </div>
           <h1 style="font-size: 1.85rem; font-weight: 900; margin: 0 0 8px 0; color: var(--text-primary, #ffffff); line-height: 1.25;">
             Luyện Nói HSKK &amp; AI Tự Động Đề Xuất Dàn Ý Chấm Điểm
@@ -592,14 +913,14 @@
           </p>
         </div>
 
-        <div style="display: flex; gap: 10px;">
-          <div style="text-align: center; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; padding: 8px 14px;">
-            <div style="font-size: 1.35rem; font-weight: 900; color: #fbbf24;" id="total-speaking-stat">1,045</div>
-            <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 700;">Đề Khẩu Ngữ</div>
+        <div class="hero-stats-wrapper">
+          <div class="hero-stat-card">
+            <div class="stat-number stat-amber" id="total-speaking-stat">1,045</div>
+            <div class="stat-label">Đề Khẩu Ngữ</div>
           </div>
-          <div style="text-align: center; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; padding: 8px 14px;">
-            <div style="font-size: 1.35rem; font-weight: 900; color: #ef4444;">3p &amp; 2p</div>
-            <div style="font-size: 0.72rem; color: #94a3b8; font-weight: 700;">Chuẩn thi HSKK</div>
+          <div class="hero-stat-card">
+            <div class="stat-number stat-red">3p &amp; 2p</div>
+            <div class="stat-label">Chuẩn thi HSKK</div>
           </div>
         </div>
       </div>
