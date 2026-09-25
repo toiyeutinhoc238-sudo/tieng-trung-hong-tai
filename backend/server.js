@@ -51,7 +51,7 @@ const genAI = geminiApiKey ? new GoogleGenerativeAI(geminiApiKey) : null;
 // Resend Email Client
 const resendApiKey = process.env.RESEND_API_KEY;
 const resendClient = resendApiKey ? new Resend(resendApiKey) : null;
-const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'Tiếng Trung Hồng Thái <onboarding@resend.dev>';
+const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'Tiếng Trung Hồng Thái <thongbao@tiengtrunghongtai.online>';
 
 // Ensure audio cache directory exists
 fs.mkdir(AUDIO_CACHE_DIR, { recursive: true }).catch(err => {
@@ -1366,7 +1366,7 @@ app.get('/api/admin/broadcast-email/status', async (req, res) => {
     senderEmail: RESEND_FROM_EMAIL,
     defaultTestRecipient: isSuperAdmin(currentEmail) ? currentEmail : 'toiyeutinhoc238@gmail.com',
     totalLearners,
-    isSandbox: !process.env.RESEND_FROM_EMAIL || process.env.RESEND_FROM_EMAIL.includes('onboarding@resend.dev')
+    isSandbox: RESEND_FROM_EMAIL.includes('onboarding@resend.dev')
   });
 });
 
