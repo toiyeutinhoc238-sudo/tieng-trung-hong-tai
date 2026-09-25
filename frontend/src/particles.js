@@ -1,53 +1,80 @@
 /**
- * Tiếng Trung HongTai - High-Performance Seasonal Particles Engine (Xuân - Hạ - Thu - Đông)
- * Optimized for 60Hz/120Hz displays with delta-time normalization, zero jitter, and hardware acceleration.
+ * Tiếng Trung HongTai - Ultra-Smooth Seasonal Particles Engine (Xuân - Hạ - Thu - Đông)
+ * Optimized for Mobile 60Hz/120Hz Displays:
+ * - Singleton Loop: Eliminates double RAF loops and clearing collisions (No more flickering / chớp nháy).
+ * - Mobile Scroll Guard: Ignores address bar height resizing during touch scrolls.
+ * - Retina/Hi-DPI Crispness: Clamped DPR (max 2) prevents subpixel shimmering.
+ * - Natural Autumn Leaf Physics: Smooth horizontal sway + gentle 3D flutter without teleport jumps.
  */
 
-let canvas = null;
-let ctx = null;
-let width = 0;
-let height = 0;
-let particles = [];
-let animFrameId = null;
-let lastTime = 0;
-let isInitialized = false;
+// Global singleton instance on window to guarantee only 1 engine & 1 RAF loop ever exists
+const GLOBAL_ENGINE_KEY = '__hongtai_seasonal_particles__';
+
+function getGlobalEngine() {
+  if (!window[GLOBAL_ENGINE_KEY]) {
+    window[GLOBAL_ENGINE_KEY] = {
+      canvas: null,
+      ctx: null,
+      width: 0,
+      height: 0,
+      dpr: 1,
+      particles: [],
+      animFrameId: null,
+      lastTime: 0,
+      season: 'autumn',
+      isInitialized: false,
+      resizeTimer: null,
+      lastWidth: 0,
+      lastHeight: 0
+    };
+  }
+  return window[GLOBAL_ENGINE_KEY];
+}
 
 export function initSeasonalParticles() {
-  if (isInitialized && animFrameId) return;
+  const engine = getGlobalEngine();
 
-  canvas = document.getElementById('seasonal-particle-canvas');
+  // If already initialized and running, do nothing
+  if (engine.isInitialized && engine.animFrameId) {
+    return;
+  }
+
+  // 1. Get or create single canvas
+  let canvas = document.getElementById('seasonal-particle-canvas');
   if (!canvas) {
     canvas = document.createElement('canvas');
     canvas.id = 'seasonal-particle-canvas';
-    canvas.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 1; will-change: transform; transform: translateZ(0);';
+    // Clean fixed positioning without 3D transforms that cause layer flashing on mobile WebKit/Chromium
+    canvas.style.cssText = 'position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; -webkit-backface-visibility: hidden; backface-visibility: hidden;';
     if (document.body) {
       document.body.insertBefore(canvas, document.body.firstChild);
     } else {
       document.addEventListener('DOMContentLoaded', () => {
-        document.body.insertBefore(canvas, document.body.firstChild);
+        if (!document.getElementById('seasonal-particle-canvas')) {
+          document.body.insertBefore(canvas, document.body.firstChild);
+        }
       });
     }
   } else {
-    // Ensure proper z-index and hardware layer
+    canvas.style.position = 'fixed';
+    canvas.style.inset = '0';
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.style.pointerEvents = 'none';
     canvas.style.zIndex = '1';
-    canvas.style.willChange = 'transform';
-    canvas.style.transform = 'translateZ(0)';
+    canvas.style.webkitBackfaceVisibility = 'hidden';
+    canvas.style.backfaceVisibility = 'hidden';
   }
 
-  ctx = canvas.getContext('2d', { alpha: true });
+  engine.canvas = canvas;
+  const ctx = canvas.getContext('2d', { alpha: true });
   if (!ctx) return;
+  engine.ctx = ctx;
 
-  const updateDimensions = () => {
-    if (!canvas) return;
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-  };
-  updateDimensions();
-
-  window.addEventListener('resize', updateDimensions, { passive: true });
-
-  const month = new Date().getMonth() + 1; // 1 to 12
-  let season = 'spring';
+  // 2. Determine Season based on current month
+  // Month is 1-indexed (1 to 12). September = 9 (Autumn / Lá vàng mùa thu)
+  const month = new Date().getMonth() + 1;
+  let season = 'autumn';
   if (month >= 1 && month <= 3) season = 'spring';       // Hoa đào xuân
   else if (month >= 4 && month <= 6) season = 'summer';  // Lá xanh mùa hạ
   else if (month >= 7 && month <= 9) season = 'autumn';  // Lá vàng phong mùa thu
@@ -56,118 +83,243 @@ export function initSeasonalParticles() {
   if (window.location.pathname.includes('documents')) {
     season = 'winter';
   }
+  engine.season = season;
 
-  // Smooth, subtle particle count for optimal FPS on phones & tablets
-  const isMobile = window.innerWidth < 768;
+  // 3. Set Dimensions with DPR scaling (prevents blurry subpixel shimmering)
+  const updateDimensions = (force = false) => {
+    if (!engine.canvas) return;
+    const winW = window.innerWidth || document.documentElement.clientWidth || 360;
+    const winH = window.innerHeight || document.documentElement.clientHeight || 640;
+
+    // Mobile Scroll Protection:
+    // If not forced and on mobile, ignore minor height changes (< 140px) caused by address bar collapsing/expanding
+    const isMobile = winW < 768;
+    if (!force && isMobile && engine.lastWidth > 0) {
+      const widthDiff = Math.abs(winW - engine.lastWidth);
+      const heightDiff = Math.abs(winH - engine.lastHeight);
+      if (widthDiff < 10 && heightDiff < 140) {
+        return; // Skip canvas reset to prevent flashing while scrolling!
+      }
+    }
+
+    engine.lastWidth = winW;
+    engine.lastHeight = winH;
+    engine.width = winW;
+    engine.height = winH;
+
+    // Clamp devicePixelRatio to max 2 for smooth mobile GPU performance
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    engine.dpr = dpr;
+
+    engine.canvas.width = Math.floor(winW * dpr);
+    engine.canvas.height = Math.floor(winH * dpr);
+    engine.canvas.style.width = winW + 'px';
+    engine.canvas.style.height = winH + 'px';
+
+    engine.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  };
+
+  updateDimensions(true);
+
+  // Debounced resize handler so mobile rotation or window resize doesn't spam canvas clears
+  window.addEventListener('resize', () => {
+    if (engine.resizeTimer) clearTimeout(engine.resizeTimer);
+    engine.resizeTimer = setTimeout(() => {
+      updateDimensions(false);
+    }, 150);
+  }, { passive: true });
+
+  // 4. Initialize Smooth Particles
+  const isMobile = engine.width < 768;
   const particleCount = isMobile ? 12 : 20;
 
-  particles = [];
+  engine.particles = [];
   for (let i = 0; i < particleCount; i++) {
-    particles.push({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      size: season === 'winter' ? (Math.random() * 3.5 + 2) : (Math.random() * 5 + 4),
-      speedY: season === 'winter' ? (Math.random() * 0.7 + 0.35) : (Math.random() * 0.8 + 0.4),
-      speedX: Math.random() * 0.6 + 0.2,
+    const isSpecial = i % 3 === 0;
+    engine.particles.push({
+      baseX: Math.random() * engine.width,
+      x: 0,
+      y: Math.random() * (engine.height + 60) - 30,
+      size: season === 'winter'
+        ? (Math.random() * 3.2 + 2.0)
+        : (isMobile ? Math.random() * 4.5 + 4.0 : Math.random() * 5.5 + 5.0),
+      speedY: season === 'winter'
+        ? (Math.random() * 0.5 + 0.3)
+        : (Math.random() * 0.55 + 0.35),
+      swayAmp: Math.random() * 25 + 15,       // Max sway distance in pixels
+      swayFreq: Math.random() * 0.012 + 0.008, // Smooth horizontal frequency
       phase: Math.random() * Math.PI * 2,
-      rotation: Math.random() * 360,
-      rotSpeed: (Math.random() - 0.5) * 0.8,
-      opacity: isMobile ? (Math.random() * 0.35 + 0.25) : (Math.random() * 0.4 + 0.3),
-      shape: i % 3 === 0 ? 'crystal' : 'glow'
+      baseRotation: Math.random() * 360,
+      rotSpeed: (Math.random() - 0.5) * 0.4,   // Gentle flutter rotation
+      opacity: isMobile
+        ? (Math.random() * 0.3 + 0.35)
+        : (Math.random() * 0.35 + 0.4),
+      // Autumn leaf color shades (warm golden amber, soft sunset orange, autumn red)
+      colorType: i % 4,
+      shape: isSpecial ? 'leaf_maple' : 'leaf_petal'
     });
   }
 
-  isInitialized = true;
-
+  // 5. Render Loop (Single RequestAnimationFrame)
   function render(currentTime) {
     if (localStorage.getItem('particles_enabled') === 'false' || document.hidden) {
-      if (ctx) ctx.clearRect(0, 0, width, height);
-      animFrameId = null;
+      if (engine.ctx) engine.ctx.clearRect(0, 0, engine.width, engine.height);
+      engine.animFrameId = null;
       return;
     }
 
-    if (!lastTime) lastTime = currentTime;
-    // Delta-time normalization: 1.0 at 60fps, 0.5 at 120fps, clamped to prevent jumpy lag
-    const elapsed = currentTime - lastTime;
-    lastTime = currentTime;
-    const dt = Math.min(Math.max(elapsed / 16.667, 0.2), 2.0);
+    if (!engine.lastTime) engine.lastTime = currentTime;
+    const elapsed = currentTime - engine.lastTime;
+    engine.lastTime = currentTime;
 
-    ctx.clearRect(0, 0, width, height);
+    // Normalizing delta time against 60fps (16.67ms)
+    // Clamped strictly between 0.3 and 1.8 to prevent jumpy lag or sudden frame leaps
+    const dt = Math.min(Math.max(elapsed / 16.667, 0.3), 1.8);
 
-    for (let i = 0; i < particles.length; i++) {
-      const p = particles[i];
+    const w = engine.width;
+    const h = engine.height;
+    const currentSeason = engine.season;
+    const c = engine.ctx;
+
+    c.clearRect(0, 0, w, h);
+
+    const count = engine.particles.length;
+    for (let i = 0; i < count; i++) {
+      const p = engine.particles[i];
+
+      // Vertical fall
       p.y += p.speedY * dt;
-      p.x += Math.sin(p.y * 0.012 + p.phase) * p.speedX * dt;
-      p.rotation += p.rotSpeed * dt;
 
-      if (p.y > height + 25) {
-        p.y = -25;
-        p.x = Math.random() * width;
+      // Natural horizontal wave oscillation centered on baseX
+      const swayOffset = Math.sin(p.y * p.swayFreq + p.phase) * p.swayAmp;
+      p.x = p.baseX + swayOffset;
+
+      // Gentle wobble rotation
+      p.baseRotation += p.rotSpeed * dt;
+
+      // Reset when particle falls past bottom of screen
+      if (p.y > h + 35) {
+        p.y = -35;
+        p.baseX = Math.random() * w;
+        p.phase = Math.random() * Math.PI * 2;
       }
-      if (p.x > width + 25) p.x = -25;
-      if (p.x < -25) p.x = width + 25;
+      // Wrap smoothly horizontally if it drifted past edges
+      if (p.baseX > w + 40) p.baseX = -30;
+      if (p.baseX < -40) p.baseX = w + 30;
 
-      ctx.save();
-      ctx.translate(p.x, p.y);
-      ctx.rotate((p.rotation * Math.PI) / 180);
-      ctx.globalAlpha = p.opacity;
+      c.save();
+      c.translate(p.x, p.y);
 
-      if (season === 'winter') {
-        if (p.shape === 'crystal') {
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
-          ctx.lineWidth = Math.max(1, p.size * 0.2);
-          ctx.lineCap = 'round';
-          ctx.beginPath();
-          for (let k = 0; k < 6; k++) {
-            ctx.moveTo(0, 0);
-            ctx.lineTo(0, p.size);
-            ctx.moveTo(0, p.size * 0.55);
-            ctx.lineTo(p.size * 0.25, p.size * 0.75);
-            ctx.moveTo(0, p.size * 0.55);
-            ctx.lineTo(-p.size * 0.25, p.size * 0.75);
-            ctx.rotate(Math.PI / 3);
-          }
-          ctx.stroke();
+      if (currentSeason === 'autumn') {
+        // --- 🍁 MÙA THU: HIỆU ỨNG LÁ RƠI TỰ NHIÊN, KHÔNG CHỚP NHÁY ---
+        // Natural 3D flutter: leaf tilts and gently flips side-to-side as it falls
+        const flutterAngle = (p.baseRotation * Math.PI) / 180 + Math.sin(p.y * 0.015 + p.phase) * 0.35;
+        const scaleX = Math.cos(p.y * 0.018 + p.phase); // 3D flip ratio (-1 to 1)
+
+        c.rotate(flutterAngle);
+        c.scale(scaleX, 1);
+        c.globalAlpha = p.opacity;
+
+        // Rich Autumn Color Palette
+        let leafColor = '#f59e0b'; // Vàng ấm
+        if (p.colorType === 1) leafColor = '#ea580c'; // Cam hổ phách
+        else if (p.colorType === 2) leafColor = '#e11d48'; // Đỏ phong
+        else if (p.colorType === 3) leafColor = '#d97706'; // Nâu mật ong
+
+        c.fillStyle = leafColor;
+        c.beginPath();
+
+        if (p.shape === 'leaf_maple') {
+          // Delicate 3-point maple leaf silhouette
+          const s = p.size;
+          c.moveTo(0, -s);
+          c.quadraticCurveTo(s * 0.45, -s * 0.3, s * 0.7, -s * 0.1);
+          c.quadraticCurveTo(s * 0.35, s * 0.2, s * 0.4, s * 0.7);
+          c.quadraticCurveTo(0, s * 0.4, -s * 0.4, s * 0.7);
+          c.quadraticCurveTo(-s * 0.35, s * 0.2, -s * 0.7, -s * 0.1);
+          c.quadraticCurveTo(-s * 0.45, -s * 0.3, 0, -s);
         } else {
-          const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, p.size);
+          // Smooth, aerodynamic leaf petal with tapered stem & tip
+          const s = p.size;
+          c.moveTo(0, -s);
+          c.bezierCurveTo(s * 0.55, -s * 0.4, s * 0.55, s * 0.4, 0, s);
+          c.bezierCurveTo(-s * 0.55, s * 0.4, -s * 0.55, -s * 0.4, 0, -s);
+        }
+        c.fill();
+
+      } else if (currentSeason === 'winter') {
+        // --- ❄️ MÙA ĐÔNG: BÔNG TUYẾT ---
+        c.rotate((p.baseRotation * Math.PI) / 180);
+        c.globalAlpha = p.opacity;
+
+        if (p.shape === 'leaf_maple') {
+          c.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+          c.lineWidth = Math.max(1, p.size * 0.2);
+          c.lineCap = 'round';
+          c.beginPath();
+          for (let k = 0; k < 6; k++) {
+            c.moveTo(0, 0);
+            c.lineTo(0, p.size);
+            c.moveTo(0, p.size * 0.55);
+            c.lineTo(p.size * 0.25, p.size * 0.75);
+            c.moveTo(0, p.size * 0.55);
+            c.lineTo(-p.size * 0.25, p.size * 0.75);
+            c.rotate(Math.PI / 3);
+          }
+          c.stroke();
+        } else {
+          const grad = c.createRadialGradient(0, 0, 0, 0, 0, p.size);
           grad.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
           grad.addColorStop(0.4, 'rgba(224, 242, 254, 0.75)');
           grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
-          ctx.fillStyle = grad;
-          ctx.beginPath();
-          ctx.arc(0, 0, p.size, 0, Math.PI * 2);
-          ctx.fill();
+          c.fillStyle = grad;
+          c.beginPath();
+          c.arc(0, 0, p.size, 0, Math.PI * 2);
+          c.fill();
         }
-      } else if (season === 'spring') {
-        ctx.fillStyle = 'rgba(255, 183, 197, 0.75)';
-        ctx.beginPath();
-        ctx.ellipse(0, 0, p.size, p.size * 0.5, 0, 0, Math.PI * 2);
-        ctx.fill();
-      } else if (season === 'summer') {
-        ctx.fillStyle = 'rgba(74, 222, 128, 0.7)';
-        ctx.beginPath();
-        ctx.ellipse(0, 0, p.size, p.size * 0.4, 0.4, 0, Math.PI * 2);
-        ctx.fill();
-      } else if (season === 'autumn') {
-        // Delicate golden maple leaf petal with smooth gradient
-        ctx.fillStyle = 'rgba(245, 158, 11, 0.75)';
-        ctx.beginPath();
-        ctx.ellipse(0, 0, p.size, p.size * 0.5, 0.5, 0, Math.PI * 2);
-        ctx.fill();
+
+      } else if (currentSeason === 'spring') {
+        // --- 🌸 MÙA XUÂN: CÁNH HOA ĐÀO ---
+        const flutterAngle = (p.baseRotation * Math.PI) / 180;
+        c.rotate(flutterAngle);
+        c.scale(Math.cos(p.y * 0.02 + p.phase), 1);
+        c.globalAlpha = p.opacity;
+        c.fillStyle = 'rgba(255, 183, 197, 0.85)';
+        c.beginPath();
+        c.ellipse(0, 0, p.size, p.size * 0.55, 0, 0, Math.PI * 2);
+        c.fill();
+
+      } else if (currentSeason === 'summer') {
+        // --- 🍃 MÙA HẠ: LÁ XANH BIẾC ---
+        const flutterAngle = (p.baseRotation * Math.PI) / 180;
+        c.rotate(flutterAngle);
+        c.scale(Math.cos(p.y * 0.02 + p.phase), 1);
+        c.globalAlpha = p.opacity;
+        c.fillStyle = 'rgba(74, 222, 128, 0.8)';
+        c.beginPath();
+        c.ellipse(0, 0, p.size, p.size * 0.45, 0.3, 0, Math.PI * 2);
+        c.fill();
       }
 
-      ctx.restore();
+      c.restore();
     }
 
-    animFrameId = requestAnimationFrame(render);
+    engine.animFrameId = requestAnimationFrame(render);
   }
 
   function startLoop() {
-    if (!animFrameId && localStorage.getItem('particles_enabled') !== 'false' && !document.hidden) {
-      lastTime = performance.now();
-      animFrameId = requestAnimationFrame(render);
+    if (engine.animFrameId) {
+      cancelAnimationFrame(engine.animFrameId);
+      engine.animFrameId = null;
+    }
+    if (localStorage.getItem('particles_enabled') !== 'false' && !document.hidden) {
+      engine.lastTime = performance.now();
+      engine.animFrameId = requestAnimationFrame(render);
     }
   }
+
+  engine.startLoop = startLoop;
+  engine.isInitialized = true;
 
   const enabled = localStorage.getItem('particles_enabled') !== 'false';
   if (canvas) canvas.style.display = enabled ? 'block' : 'none';
@@ -175,11 +327,12 @@ export function initSeasonalParticles() {
     startLoop();
   }
 
+  // Handle visibility changes cleanly
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
-      if (animFrameId) {
-        cancelAnimationFrame(animFrameId);
-        animFrameId = null;
+      if (engine.animFrameId) {
+        cancelAnimationFrame(engine.animFrameId);
+        engine.animFrameId = null;
       }
     } else {
       startLoop();
@@ -215,17 +368,21 @@ window.toggleSeasonalParticles = function () {
   }
   const cv = document.getElementById('seasonal-particle-canvas');
   if (cv) cv.style.display = next ? 'block' : 'none';
+
+  const engine = getGlobalEngine();
   if (next) {
-    if (typeof window.startParticleLoop === 'function') {
+    if (typeof engine.startLoop === 'function') {
+      engine.startLoop();
+    } else if (typeof window.startParticleLoop === 'function') {
       window.startParticleLoop();
     }
   } else {
-    if (animFrameId) {
-      cancelAnimationFrame(animFrameId);
-      animFrameId = null;
+    if (engine.animFrameId) {
+      cancelAnimationFrame(engine.animFrameId);
+      engine.animFrameId = null;
     }
-    if (ctx && width && height) {
-      ctx.clearRect(0, 0, width, height);
+    if (engine.ctx && engine.width && engine.height) {
+      engine.ctx.clearRect(0, 0, engine.width, engine.height);
     }
   }
   if (typeof window.showToast === 'function') {
