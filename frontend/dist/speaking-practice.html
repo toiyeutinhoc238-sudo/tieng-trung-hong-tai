@@ -324,7 +324,42 @@
       box-shadow: 0 4px 14px rgba(139, 92, 246, 0.25) !important;
     }
 
+    html.light-mode,
+    html.light {
+      --text-primary: #0f172a !important;
+      --text-secondary: #334155 !important;
+    }
+
+    html.dark {
+      --text-primary: #ffffff !important;
+      --text-secondary: #94a3b8 !important;
+    }
+
+    html.light-mode h1,
+    html.light-mode h2,
+    html.light-mode h3,
+    html.light h1,
+    html.light h2,
+    html.light h3 {
+      color: #0f172a !important;
+    }
+
+    html.light-mode .speaking-card-panel {
+      background: #ffffff !important;
+      border: 1.5px solid #e2e8f0 !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+    }
+
+    html.light-mode .speaking-card-panel h2,
+    html.light-mode .speaking-card-panel span,
+    html.light .speaking-card-panel h2,
+    html.light .speaking-card-panel span {
+      color: #0f172a !important;
+    }
+
     :root {
+      --text-primary: #ffffff;
+      --text-secondary: #94a3b8;
       --speaking-primary: #f59e0b;
       --speaking-primary-hover: #d97706;
       --speaking-accent: #38bdf8;
@@ -957,9 +992,9 @@
       }
     }
   </style>
-  <script type="module" crossorigin src="/assets/speaking-26dQId2c.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/global_sidebar-CtGHYNg-.js">
-  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-Dc-RKD0I.css">
+  <script type="module" crossorigin src="/assets/speaking-BzEKtsuh.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/global_sidebar-CEaKX9h5.js">
+  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-B4pDLmqs.css">
 </head>
 
 <body>
@@ -989,6 +1024,9 @@
         <a href="/" class="header-icon-btn btn-home hide-mobile" title="Trang chủ">
           <i class="fa-solid fa-house"></i>
         </a>
+        <button id="particle-toggle-btn" class="header-icon-btn particle-toggle-btn" onclick="window.toggleSeasonalParticles && window.toggleSeasonalParticles()" title="Bật/Tắt hiệu ứng mùa (Bông tuyết)">
+          <i class="fa-solid fa-snowflake" style="color: #38bdf8;"></i>
+        </button>
         <button class="header-icon-btn theme-toggle-btn" onclick="window.toggleTheme()" title="Chuyển chế độ Sáng / Tối">
           <i class="fa-solid fa-sun"></i>
         </button>

@@ -245,6 +245,30 @@
       box-shadow: 0 2px 8px rgba(139, 92, 246, 0.15) !important;
     }
 
+    html.light-mode,
+    html.light {
+      --text-primary: #0f172a !important;
+      --text-secondary: #334155 !important;
+    }
+
+    html.dark {
+      --text-primary: #ffffff !important;
+      --text-secondary: #94a3b8 !important;
+    }
+
+    html.light-mode h1,
+    html.light-mode h2,
+    html.light-mode h3,
+    html.light h1,
+    html.light h2,
+    html.light h3 {
+      color: #0f172a !important;
+    }
+
+    html.light-mode .para-hero-banner p {
+      color: #334155 !important;
+    }
+
     /* Main Container */
     .para-main-container {
       width: 100% !important;
@@ -791,9 +815,9 @@
       }
     }
   </style>
-  <script type="module" crossorigin src="/assets/translation-BChblZsr.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/global_sidebar-CtGHYNg-.js">
-  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-Dc-RKD0I.css">
+  <script type="module" crossorigin src="/assets/translation-B6gLDPts.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/global_sidebar-CEaKX9h5.js">
+  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-B4pDLmqs.css">
 </head>
 
 <body>
@@ -823,6 +847,9 @@
         <a href="/" class="header-icon-btn btn-home hide-mobile" title="Trang chủ">
           <i class="fa-solid fa-house"></i>
         </a>
+        <button id="particle-toggle-btn" class="header-icon-btn particle-toggle-btn" onclick="window.toggleSeasonalParticles && window.toggleSeasonalParticles()" title="Bật/Tắt hiệu ứng mùa (Bông tuyết)">
+          <i class="fa-solid fa-snowflake" style="color: #38bdf8;"></i>
+        </button>
         <button class="header-icon-btn theme-toggle-btn" onclick="window.toggleTheme()" title="Chuyển chế độ Sáng / Tối">
           <i class="fa-solid fa-sun"></i>
         </button>

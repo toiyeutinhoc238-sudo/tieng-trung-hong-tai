@@ -1,3 +1,5 @@
+import './particles.js';
+
 /**
  * Tiếng Trung HongTai - Global Navigation Sidebar & Mobile Drawer Coordinator
  * Cung cấp thanh menu điều hướng thống nhất xuyên suốt tất cả các trang.

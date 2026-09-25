@@ -849,6 +849,17 @@
       color: #b91c1c;
     }
 
+    html.light-mode,
+    body.light-mode {
+      --text-primary: #0f172a !important;
+      --text-secondary: #334155 !important;
+    }
+
+    html.dark {
+      --text-primary: #ffffff !important;
+      --text-secondary: #94a3b8 !important;
+    }
+
     /* AI Card styles */
     .ai-result-card {
       background: rgba(15, 23, 42, 0.85);
@@ -930,6 +941,10 @@
         </div>
       </div>
       <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+        <button id="particle-toggle-btn" class="btn-close particle-toggle-btn" onclick="window.toggleSeasonalParticles && window.toggleSeasonalParticles()"
+          title="Bật/Tắt hiệu ứng mùa (Bông tuyết)">
+          <i class="fa-solid fa-snowflake" style="color:#38bdf8;"></i>
+        </button>
         <button id="theme-toggle-btn" class="btn-close theme-toggle-btn" onclick="window.toggleTheme()"
           title="Chuyển đổi Giao diện Sáng/Tối">
           <i class="fa-solid fa-moon" style="color:#60a5fa;"></i>

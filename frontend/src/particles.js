@@ -149,6 +149,8 @@ export function initSeasonalParticles() {
   };
 }
 
+window.initSeasonalParticles = initSeasonalParticles;
+
 window.updateParticleToggleBtns = function(enabled) {
   const btns = document.querySelectorAll('#particle-toggle-btn, .particle-toggle-btn');
   btns.forEach(btn => {

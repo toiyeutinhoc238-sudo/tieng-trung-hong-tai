@@ -103,6 +103,28 @@ html.dark {
   --scrollbar-track: #131f24;
 }
 
+html.light-mode,
+html.light,
+body.light-mode {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-glass: #ffffff;
+  
+  --border-glass: #e2e8f0;
+  --border-glass-hover: #0284c7;
+  
+  --text-primary: #0f172a !important;
+  --text-secondary: #334155 !important;
+  --text-muted: #64748b !important;
+  
+  --card-bg-front: #ffffff;
+  --card-bg-back: #f8fafc;
+  
+  --scrollbar-thumb: #cbd5e1;
+  --scrollbar-track: #f1f5f9;
+}
+
 /* Global Reset & Zero-Delay Touch Responsiveness */
 * {
   margin: 0;

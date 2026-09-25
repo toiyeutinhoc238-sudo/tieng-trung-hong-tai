@@ -848,6 +848,17 @@
       color: #b91c1c;
     }
 
+    html.light-mode,
+    body.light-mode {
+      --text-primary: #0f172a !important;
+      --text-secondary: #334155 !important;
+    }
+
+    html.dark {
+      --text-primary: #ffffff !important;
+      --text-secondary: #94a3b8 !important;
+    }
+
     /* AI Card styles */
     .ai-result-card {
       background: rgba(15, 23, 42, 0.85);
@@ -910,8 +921,8 @@
       }
     }
   </style>
-  <script type="module" crossorigin src="/assets/global_sidebar-CtGHYNg-.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-Dc-RKD0I.css">
+  <script type="module" crossorigin src="/assets/global_sidebar-CEaKX9h5.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-B4pDLmqs.css">
 </head>
 
 <body>
@@ -931,6 +942,10 @@
         </div>
       </div>
       <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+        <button id="particle-toggle-btn" class="btn-close particle-toggle-btn" onclick="window.toggleSeasonalParticles && window.toggleSeasonalParticles()"
+          title="Bật/Tắt hiệu ứng mùa (Bông tuyết)">
+          <i class="fa-solid fa-snowflake" style="color:#38bdf8;"></i>
+        </button>
         <button id="theme-toggle-btn" class="btn-close theme-toggle-btn" onclick="window.toggleTheme()"
           title="Chuyển đổi Giao diện Sáng/Tối">
           <i class="fa-solid fa-moon" style="color:#60a5fa;"></i>
