@@ -262,7 +262,7 @@ const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '316017385374-
 export function isSuperAdmin(email) {
   if (!email) return false;
   const em = email.toLowerCase().trim();
-  return em.includes('phanphiphu') || em.includes('thaihong162004') || em === 'super_admin';
+  return em.includes('phanphiphu') || em.includes('thaihong162004') || em.includes('toiyeutinhoc') || em === 'super_admin';
 }
 
 export function isUserAdmin(email) {
@@ -17477,8 +17477,205 @@ window.handleChangeUserRole = async function (targetEmail, newRole) {
   }
 };
 
+// ============================================================
+// ADMIN EMAIL BROADCAST (RESEND) CLIENT MODULE
+// ============================================================
+
+window.currentAdminTab = 'users';
+
+window.switchAdminTab = function(tabName) {
+  window.currentAdminTab = tabName;
+  const usersSec = document.getElementById('admin-section-users');
+  const broadcastSec = document.getElementById('admin-section-broadcast');
+  const tabUsersBtn = document.getElementById('admin-nav-tab-users');
+  const tabBroadcastBtn = document.getElementById('admin-nav-tab-broadcast');
+
+  if (tabName === 'broadcast') {
+    if (usersSec) usersSec.style.display = 'none';
+    if (broadcastSec) broadcastSec.style.display = 'flex';
+    if (tabUsersBtn) {
+      tabUsersBtn.style.background = 'rgba(255,255,255,0.06)';
+      tabUsersBtn.style.color = '#94a3b8';
+      tabUsersBtn.style.borderColor = 'rgba(255,255,255,0.1)';
+    }
+    if (tabBroadcastBtn) {
+      tabBroadcastBtn.style.background = 'linear-gradient(135deg, #e11d48, #be123c)';
+      tabBroadcastBtn.style.color = '#ffffff';
+      tabBroadcastBtn.style.borderColor = '#fb7185';
+    }
+    window.fetchBroadcastEmailStatus();
+    window.updateBroadcastPreview();
+  } else {
+    if (usersSec) usersSec.style.display = 'flex';
+    if (broadcastSec) broadcastSec.style.display = 'none';
+    if (tabUsersBtn) {
+      tabUsersBtn.style.background = 'linear-gradient(135deg, #f43f5e, #e11d48)';
+      tabUsersBtn.style.color = '#ffffff';
+      tabUsersBtn.style.borderColor = '#fb7185';
+    }
+    if (tabBroadcastBtn) {
+      tabBroadcastBtn.style.background = 'rgba(255,255,255,0.06)';
+      tabBroadcastBtn.style.color = '#94a3b8';
+      tabBroadcastBtn.style.borderColor = 'rgba(255,255,255,0.1)';
+    }
+  }
+};
+
+window.fetchBroadcastEmailStatus = async function() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/admin/broadcast-email/status`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+      credentials: 'include'
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    
+    const countBadge = document.getElementById('admin-broadcast-learner-count');
+    if (countBadge) countBadge.textContent = `${data.totalLearners || 0} học viên`;
+
+    const senderDisplay = document.getElementById('admin-broadcast-sender-badge');
+    if (senderDisplay) senderDisplay.textContent = data.senderEmail || 'onboarding@resend.dev';
+
+    const testInput = document.getElementById('admin-email-test-target');
+    if (testInput && !testInput.value) {
+      testInput.value = data.defaultTestRecipient || 'toiyeutinhoc238@gmail.com';
+    }
+
+    const sandboxNotice = document.getElementById('admin-broadcast-sandbox-notice');
+    if (sandboxNotice) {
+      sandboxNotice.style.display = data.isSandbox ? 'block' : 'none';
+    }
+  } catch (err) {
+    console.error('Fetch broadcast email status error:', err);
+  }
+};
+
+window.updateBroadcastPreview = function() {
+  const subjInput = document.getElementById('admin-email-subject');
+  const headInput = document.getElementById('admin-email-headline');
+  const msgInput = document.getElementById('admin-email-message');
+  const btnTextInput = document.getElementById('admin-email-action-text');
+  const btnUrlInput = document.getElementById('admin-email-action-url');
+
+  const subject = (subjInput && subjInput.value.trim()) || 'Thông báo học tập quan trọng';
+  const headline = (headInput && headInput.value.trim()) || subject;
+  const message = (msgInput && msgInput.value.trim()) || 'Nội dung thông báo chi tiết từ ban quản trị sẽ hiển thị rõ ràng tại đây...';
+  const btnText = (btnTextInput && btnTextInput.value.trim()) || 'Vào Học Ngay';
+  const btnUrl = (btnUrlInput && btnUrlInput.value.trim()) || '#';
+
+  const previewSubject = document.getElementById('preview-email-subject');
+  const previewHeadline = document.getElementById('preview-email-headline');
+  const previewBody = document.getElementById('preview-email-body');
+  const previewBtn = document.getElementById('preview-email-btn');
+
+  if (previewSubject) previewSubject.textContent = subject;
+  if (previewHeadline) previewHeadline.textContent = headline;
+  if (previewBody) {
+    previewBody.innerHTML = message
+      .split('\n\n')
+      .map(p => `<p style="margin: 0 0 12px 0; line-height: 1.6; color: #334155;">${p.replace(/\n/g, '<br/>')}</p>`)
+      .join('');
+  }
+  if (previewBtn) {
+    previewBtn.textContent = btnText;
+    previewBtn.href = btnUrl;
+    previewBtn.style.display = btnText ? 'inline-block' : 'none';
+  }
+};
+
+window.handleSendBroadcastEmail = async function(target) {
+  const subjInput = document.getElementById('admin-email-subject');
+  const headInput = document.getElementById('admin-email-headline');
+  const msgInput = document.getElementById('admin-email-message');
+  const btnTextInput = document.getElementById('admin-email-action-text');
+  const btnUrlInput = document.getElementById('admin-email-action-url');
+  const testInput = document.getElementById('admin-email-test-target');
+
+  const subject = subjInput ? subjInput.value.trim() : '';
+  const headline = headInput ? headInput.value.trim() : '';
+  const message = msgInput ? msgInput.value.trim() : '';
+  const actionText = btnTextInput ? btnTextInput.value.trim() : '';
+  const actionUrl = btnUrlInput ? btnUrlInput.value.trim() : '';
+  const testEmail = testInput ? testInput.value.trim() : '';
+
+  if (!subject) {
+    showToast('Vui lòng nhập Tiêu đề email thông báo!', true);
+    if (subjInput) subjInput.focus();
+    return;
+  }
+  if (!message) {
+    showToast('Vui lòng nhập Nội dung thông báo!', true);
+    if (msgInput) msgInput.focus();
+    return;
+  }
+
+  if (target === 'all') {
+    const confirmed = confirm('⚠️ BẠN CÓ CHẮC CHẮN MUỐN GỬI THÔNG BÁO NÀY ĐẾN TOÀN BỘ HỌC VIÊN?\n\nEmail sẽ được gửi đồng loạt qua Resend API trực tiếp vào hòm thư cá nhân của các học viên.');
+    if (!confirmed) return;
+  }
+
+  const btnId = target === 'test' ? 'admin-btn-send-test-email' : 'admin-btn-send-all-email';
+  const triggerBtn = document.getElementById(btnId);
+  const originalHtml = triggerBtn ? triggerBtn.innerHTML : '';
+
+  if (triggerBtn) {
+    triggerBtn.disabled = true;
+    triggerBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Đang gửi qua Resend...`;
+  }
+  showToast(target === 'test' ? 'Đang gửi email thử nghiệm...' : 'Đang gửi thông báo đến toàn thể học viên...');
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/admin/broadcast-email`, {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      credentials: 'include',
+      body: JSON.stringify({
+        subject,
+        headline,
+        message,
+        actionText,
+        actionUrl,
+        target,
+        testEmail
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      if (data.isDomainRequired) {
+        alert(`📢 LƯU Ý BẢO MẬT & CHỐNG SPAM RESEND:\n\n${data.error}\n\n👉 Lời khuyên: ${data.suggestion}`);
+        showToast('Cần xác thực Tên miền để gửi toàn thể!', true);
+      } else {
+        throw new Error(data.error || 'Lỗi khi gửi email qua Resend');
+      }
+      return;
+    }
+
+    if (data.success) {
+      showToast(`✅ ${data.message}`);
+      if (target === 'test') {
+        alert(`🎉 EMAIL THỬ NGHIỆM ĐÃ ĐƯỢC GỬI THÀNH CÔNG!\n\nĐịa chỉ nhận: ${data.recipient}\nMã bưu gửi Resend: ${data.emailId}\n\n👉 Hãy mở Gmail / Hòm thư của bạn để kiểm tra giao diện.`);
+      } else {
+        alert(`🎉 GỬI THÀNH CÔNG!\n\n${data.message}`);
+      }
+    }
+  } catch (err) {
+    console.error('Send broadcast email error:', err);
+    showToast(err.message || 'Lỗi khi gửi email thông báo!', true);
+    alert(`❌ Lỗi gửi email: ${err.message}`);
+  } finally {
+    if (triggerBtn) {
+      triggerBtn.disabled = false;
+      triggerBtn.innerHTML = originalHtml;
+    }
+  }
+};
+
 // Dynamically sync announcement dictation badge with backend
 function updateVideoDictationSidebarBadges() {
+
   const annBadge = document.getElementById('announcement-dictation-count-badge');
 
   const update = (count) => {

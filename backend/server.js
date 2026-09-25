@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import fs from 'fs/promises';
+import * as fsSync from 'fs';
 import { existsSync, createWriteStream, createReadStream } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -18,6 +19,7 @@ import { YoutubeTranscript } from 'youtube-transcript';
 import os from 'os';
 import * as XLSX from 'xlsx';
 import { processYouTubeVideo } from './services/youtube_transcriber.js';
+import { Resend } from 'resend';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -45,6 +47,11 @@ const groqClient = groqApiKey ? new Groq({ apiKey: groqApiKey }) : null;
 
 const geminiApiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
 const genAI = geminiApiKey ? new GoogleGenerativeAI(geminiApiKey) : null;
+
+// Resend Email Client
+const resendApiKey = process.env.RESEND_API_KEY;
+const resendClient = resendApiKey ? new Resend(resendApiKey) : null;
+const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'Tiếng Trung Hồng Thái <onboarding@resend.dev>';
 
 // Ensure audio cache directory exists
 fs.mkdir(AUDIO_CACHE_DIR, { recursive: true }).catch(err => {
@@ -522,12 +529,12 @@ app.get('/api/exams/catalog', async (req, res) => {
 
 
 // Helper functions for Admin & Super Admin resolution
-const SUPER_ADMINS = ['phanphiphu04@gmail.com', 'thaihong162004@gmail.com'];
+const SUPER_ADMINS = ['phanphiphu04@gmail.com', 'thaihong162004@gmail.com', 'toiyeutinhoc238@gmail.com'];
 
 function isSuperAdmin(email) {
   if (!email) return false;
   const em = email.toLowerCase().trim();
-  return SUPER_ADMINS.some(admin => em === admin || em.includes('phanphiphu') || em.includes('thaihong162004'));
+  return SUPER_ADMINS.some(admin => em === admin || em.includes('phanphiphu') || em.includes('thaihong162004') || em.includes('toiyeutinhoc'));
 }
 
 function isUserAdmin(email, userData = null) {
@@ -1222,6 +1229,313 @@ app.post('/api/admin/users/role', async (req, res) => {
       : `Đã cấp quyền ${roleLabel} cho ${normalizedTarget} thành công!`
   });
 });
+
+// ============================================================
+// RESEND EMAIL BROADCAST & LEARNER NOTIFICATIONS
+// ============================================================
+
+// Helper: Generate anti-spam responsive HTML email
+function generateAnnouncementEmailHtml({
+  subject,
+  headline,
+  message,
+  actionText,
+  actionUrl,
+  recipientEmail = ''
+}) {
+  const safeHeadline = headline || subject || 'Thông Báo Học Tập';
+  const formattedMessage = (message || '')
+    .split('\n\n')
+    .map(para => `<p style="margin: 0 0 16px 0; line-height: 1.7; color: #334155; font-size: 15px;">${para.replace(/\n/g, '<br/>')}</p>`)
+    .join('');
+
+  const ctaBtn = (actionUrl && actionText) ? `
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 28px auto 12px auto;">
+      <tr>
+        <td align="center" style="border-radius: 8px; background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);">
+          <a href="${actionUrl}" target="_blank" style="display: inline-block; padding: 14px 34px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 700; color: #ffffff; text-decoration: none; border-radius: 8px; letter-spacing: 0.3px;">
+            ${actionText} &rarr;
+          </a>
+        </td>
+      </tr>
+    </table>
+  ` : '';
+
+  return `<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${subject || 'Thông Báo Từ Tiếng Trung Hồng Thái'}</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased;">
+  <div style="display: none; max-height: 0px; overflow: hidden; mso-hide: all;">
+    ${headline || subject || 'Thông báo mới từ Tiếng Trung Hồng Thái'} - Cập nhật nội dung học tập và bài tập mới nhất.
+  </div>
+
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color: #f1f5f9; padding: 32px 12px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width: 600px; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.06); border: 1px solid #e2e8f0;">
+          
+          <!-- Header Banner -->
+          <tr>
+            <td style="background: linear-gradient(135deg, #be123c 0%, #e11d48 50%, #f43f5e 100%); padding: 32px 28px; text-align: center;">
+              <div style="display: inline-block; width: 48px; height: 48px; line-height: 48px; border-radius: 12px; background: rgba(255, 255, 255, 0.2); color: #ffffff; font-size: 24px; font-weight: 900; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.35);">
+                泰
+              </div>
+              <h1 style="margin: 0; color: #ffffff; font-size: 22px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase;">
+                TIẾNG TRUNG HỒNG THÁI
+              </h1>
+              <p style="margin: 6px 0 0 0; color: rgba(255, 255, 255, 0.9); font-size: 13px; font-weight: 500;">
+                Hệ Thống Luyện Thi HSK & Giao Tiếp Thông Minh
+              </p>
+            </td>
+          </tr>
+
+          <!-- Content Body -->
+          <tr>
+            <td style="padding: 36px 32px 28px 32px;">
+              <div style="border-left: 4px solid #e11d48; background-color: #fff1f2; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 24px;">
+                <h2 style="margin: 0; color: #9f1239; font-size: 18px; font-weight: 700; line-height: 1.4;">
+                  ${safeHeadline}
+                </h2>
+              </div>
+
+              <div style="font-size: 15px; color: #334155; line-height: 1.7;">
+                ${formattedMessage}
+              </div>
+
+              ${ctaBtn}
+            </td>
+          </tr>
+
+          <!-- Divider -->
+          <tr>
+            <td style="padding: 0 32px;">
+              <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 0;" />
+            </td>
+          </tr>
+
+          <!-- Footer (Anti-Spam & Deliverability Compliance) -->
+          <tr>
+            <td style="padding: 24px 32px 32px 32px; background-color: #f8fafc; text-align: center; color: #64748b; font-size: 12px; line-height: 1.6;">
+              <p style="margin: 0 0 8px 0; font-weight: 600; color: #475569;">
+                Tiếng Trung Hồng Thái &bull; Học Thông Minh, Nhớ Dài Lâu
+              </p>
+              <p style="margin: 0 0 10px 0;">
+                Bạn nhận được thông báo này vì đã đăng ký tài khoản học tập với email <strong style="color: #334155;">${recipientEmail || 'học viên'}</strong>.
+              </p>
+              <p style="margin: 0; color: #94a3b8;">
+                &copy; 2026 Tiếng Trung Hồng Thái. Toàn bộ bản quyền được bảo lưu.<br/>
+                Nếu bạn không muốn nhận thông báo qua email, bạn có thể thay đổi trong cài đặt tài khoản.
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+}
+
+// GET /api/admin/broadcast-email/status - Check Resend status and recipient count
+app.get('/api/admin/broadcast-email/status', async (req, res) => {
+  const currentEmail = getLoggedInUserEmail(req);
+  if (!currentEmail || !isUserAdmin(currentEmail)) {
+    return res.status(403).json({ error: 'Chỉ Quản trị viên mới có quyền kiểm tra trạng thái gửi email.' });
+  }
+
+  let totalLearners = 0;
+  try {
+    if (mongoose.connection.readyState === 1) {
+      totalLearners = await User.countDocuments({});
+    } else {
+      const uData = await readUserData();
+      totalLearners = Object.keys(uData.users || {}).length;
+    }
+  } catch (e) {
+    totalLearners = 0;
+  }
+
+  res.json({
+    success: true,
+    configured: !!resendApiKey,
+    senderEmail: RESEND_FROM_EMAIL,
+    defaultTestRecipient: isSuperAdmin(currentEmail) ? currentEmail : 'toiyeutinhoc238@gmail.com',
+    totalLearners,
+    isSandbox: !process.env.RESEND_FROM_EMAIL || process.env.RESEND_FROM_EMAIL.includes('onboarding@resend.dev')
+  });
+});
+
+// POST /api/admin/broadcast-email - Send broadcast announcement email via Resend
+app.post('/api/admin/broadcast-email', async (req, res) => {
+  const currentEmail = getLoggedInUserEmail(req);
+  if (!currentEmail || !isUserAdmin(currentEmail)) {
+    return res.status(403).json({ error: 'Chỉ Quản trị viên mới có quyền gửi email thông báo.' });
+  }
+
+  if (!resendClient) {
+    return res.status(500).json({
+      error: 'Chưa cấu hình RESEND_API_KEY trong hệ thống. Vui lòng kiểm tra lại file backend/.env.'
+    });
+  }
+
+  const {
+    subject,
+    headline,
+    message,
+    actionText,
+    actionUrl,
+    target = 'test',
+    testEmail
+  } = req.body;
+
+  if (!subject || !subject.trim()) {
+    return res.status(400).json({ error: 'Vui lòng nhập Tiêu đề email (Subject).' });
+  }
+  if (!message || !message.trim()) {
+    return res.status(400).json({ error: 'Vui lòng nhập Nội dung thông báo.' });
+  }
+
+  const sender = RESEND_FROM_EMAIL;
+
+  // 1. Chế độ gửi thử nghiệm (Target: test)
+  if (target === 'test') {
+    const recipient = (testEmail && testEmail.includes('@'))
+      ? testEmail.toLowerCase().trim()
+      : (currentEmail || 'toiyeutinhoc238@gmail.com');
+
+    try {
+      const emailHtml = generateAnnouncementEmailHtml({
+        subject,
+        headline,
+        message,
+        actionText,
+        actionUrl,
+        recipientEmail: recipient
+      });
+
+      const response = await resendClient.emails.send({
+        from: sender,
+        to: recipient,
+        subject: subject.trim(),
+        html: emailHtml
+      });
+
+      if (response.error) {
+        let errorMsg = response.error.message || 'Lỗi gửi email từ Resend';
+        if (response.error.statusCode === 403 && response.error.message?.includes('only send testing emails')) {
+          errorMsg = `Tài khoản Resend ở chế độ dùng thử (Sandbox) chỉ gửi được đến email chủ (${recipient}). Để gửi tới mọi người học khác, bạn cần xác thực Tên miền (Domain) tại resend.com/domains.`;
+        }
+        return res.status(400).json({
+          success: false,
+          error: errorMsg,
+          resendError: response.error
+        });
+      }
+
+      return res.json({
+        success: true,
+        target: 'test',
+        recipient,
+        emailId: response.data?.id,
+        message: `Đã gửi email thử nghiệm thành công tới ${recipient}!`
+      });
+    } catch (err) {
+      console.error('Send test email error:', err);
+      return res.status(500).json({
+        success: false,
+        error: err.message || 'Lỗi hệ thống khi gửi email.'
+      });
+    }
+  }
+
+  // 2. Chế độ gửi toàn bộ học viên (Target: all)
+  let recipientEmails = [];
+  try {
+    const emailSet = new Set();
+    if (mongoose.connection.readyState === 1) {
+      const users = await User.find({}, '_id').lean();
+      users.forEach(u => {
+        if (u._id && u._id.includes('@')) emailSet.add(u._id.toLowerCase().trim());
+      });
+    }
+    const userData = await readUserData();
+    if (userData && userData.users) {
+      Object.keys(userData.users).forEach(em => {
+        if (em && em.includes('@')) emailSet.add(em.toLowerCase().trim());
+      });
+    }
+    recipientEmails = Array.from(emailSet).filter(em => !em.includes('example.com') && !em.includes('test.com'));
+  } catch (e) {
+    console.error('Error fetching learner emails:', e);
+  }
+
+  if (recipientEmails.length === 0) {
+    return res.status(400).json({ error: 'Không tìm thấy địa chỉ email học viên nào trong cơ sở dữ liệu.' });
+  }
+
+  const isDefaultSandbox = sender.includes('onboarding@resend.dev');
+  if (isDefaultSandbox) {
+    return res.status(400).json({
+      success: false,
+      isDomainRequired: true,
+      error: 'Tài khoản Resend hiện đang dùng địa chỉ thử nghiệm (onboarding@resend.dev). Theo chính sách bảo mật chống SPAM của Resend, bạn cần thêm Tên miền riêng tại https://resend.com/domains để gửi tới tất cả học viên.',
+      recipientCount: recipientEmails.length,
+      suggestion: 'Bạn có thể bấm "Gửi Thử Nghiệm" để nhận email ngay tại toiyeutinhoc238@gmail.com. Khi xác thực xong tên miền, bạn chỉ cần cấu hình RESEND_FROM_EMAIL trong backend/.env.'
+    });
+  }
+
+  // Gửi hàng loạt
+  let sentCount = 0;
+  let failedCount = 0;
+  const errors = [];
+
+  for (const recipient of recipientEmails) {
+    try {
+      const emailHtml = generateAnnouncementEmailHtml({
+        subject,
+        headline,
+        message,
+        actionText,
+        actionUrl,
+        recipientEmail: recipient
+      });
+
+      const response = await resendClient.emails.send({
+        from: sender,
+        to: recipient,
+        subject: subject.trim(),
+        html: emailHtml
+      });
+
+      if (response.error) {
+        failedCount++;
+        errors.push(`${recipient}: ${response.error.message}`);
+      } else {
+        sentCount++;
+      }
+      await new Promise(r => setTimeout(r, 200));
+    } catch (sendErr) {
+      failedCount++;
+      errors.push(`${recipient}: ${sendErr.message}`);
+    }
+  }
+
+  return res.json({
+    success: true,
+    target: 'all',
+    totalRecipients: recipientEmails.length,
+    sentCount,
+    failedCount,
+    errors: errors.slice(0, 5),
+    message: `Đã gửi thông báo thành công tới ${sentCount}/${recipientEmails.length} học viên!`
+  });
+});
+
 
 // Safe date stepping (handles leap years, month & year boundaries cleanly in UTC)
 function getPreviousDateStr(dateStr) {

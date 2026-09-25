@@ -122,7 +122,7 @@
   <script type="module" crossorigin src="/assets/global_sidebar-DTWKDxY6.js"></script>
   <script type="module" crossorigin src="/assets/grammar_hsk3_v2-DLPb-ska.js"></script>
   <script type="module" crossorigin src="/assets/screen_drawing-BS_xmQo7.js"></script>
-  <script type="module" crossorigin src="/assets/main-CaiioYNM.js"></script>
+  <script type="module" crossorigin src="/assets/main-Bpl38Ajj.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/global_sidebar-Dc-RKD0I.css">
 </head>
 
@@ -4550,8 +4550,23 @@
         </div>
       </div>
 
-      <!-- Top KPI Stats Row -->
-      <div class="admin-kpi-row"
+      <!-- Navigation Tabs: Quản Lý Học Viên vs Gửi Email Thông Báo -->
+      <div style="display: flex; gap: 8px; padding: 10px 24px; background: rgba(15, 23, 42, 0.4); border-bottom: 1px solid rgba(255, 255, 255, 0.06);">
+        <button type="button" id="admin-nav-tab-users" onclick="window.switchAdminTab('users')"
+          style="padding: 7px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; border: 1px solid #fb7185; background: linear-gradient(135deg, #f43f5e, #e11d48); color: #ffffff; transition: all 0.2s;">
+          <i class="fa-solid fa-users"></i> Học Viên &amp; Thống Kê
+        </button>
+        <button type="button" id="admin-nav-tab-broadcast" onclick="window.switchAdminTab('broadcast')"
+          style="padding: 7px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.06); color: #94a3b8; transition: all 0.2s;">
+          <i class="fa-solid fa-paper-plane"></i> Gửi Email Thông Báo <span style="font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; background: rgba(244,63,94,0.25); color: #fda4af; font-weight: 800;">Resend</span>
+        </button>
+      </div>
+
+      <!-- SECTION 1: QUẢN LÝ HỌC VIÊN -->
+      <div id="admin-section-users" style="display: flex; flex-direction: column; flex: 1; overflow: hidden;">
+
+        <!-- Top KPI Stats Row -->
+        <div class="admin-kpi-row"
         style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; padding: 18px 24px; background: rgba(10, 15, 29, 0.4); border-bottom: 1px solid rgba(255, 255, 255, 0.06);">
         <!-- KPI 1 -->
         <div
@@ -4674,6 +4689,202 @@
         style="flex: 1; overflow-y: auto; overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 16px 24px; min-height: 320px;">
         <!-- Rendered by JS -->
       </div>
+
+    </div> <!-- /#admin-section-users -->
+
+    <!-- SECTION 2: GỬI EMAIL THÔNG BÁO (RESEND) -->
+    <div id="admin-section-broadcast" class="custom-scrollbar"
+      style="display: none; flex-direction: column; flex: 1; overflow-y: auto; padding: 20px 24px; gap: 20px;">
+      
+      <!-- Status & Delivery Guarantee Card -->
+      <div style="background: rgba(30, 41, 59, 0.45); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(225, 29, 72, 0.15); color: #f43f5e; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; border: 1px solid rgba(244, 63, 94, 0.3);">
+            <i class="fa-solid fa-envelope-circle-check"></i>
+          </div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 0.95rem; font-weight: 700; color: #ffffff;">Resend Email Cloud</span>
+              <span style="font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 6px; background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3);">🟢 Đã Kết Nối API</span>
+            </div>
+            <div style="font-size: 0.8rem; color: #94a3b8; margin-top: 3px;">
+              Người gửi: <span id="admin-broadcast-sender-badge" style="color: #cbd5e1; font-weight: 600;">Tiếng Trung Hồng Thái &lt;onboarding@resend.dev&gt;</span> &bull; 
+              Học viên trong hệ thống: <strong id="admin-broadcast-learner-count" style="color: #38bdf8;">Đang tải...</strong>
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <span style="font-size: 0.75rem; color: #10b981; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; background: rgba(16, 185, 129, 0.1); padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.2);">
+            <i class="fa-solid fa-shield-halved"></i> Chuẩn SPF / DKIM Chống Spam
+          </span>
+        </div>
+      </div>
+
+      <!-- Sandbox Warning Note (Visible if default onboarding@resend.dev is used) -->
+      <div id="admin-broadcast-sandbox-notice" style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: #fde68a; display: flex; align-items: flex-start; gap: 10px;">
+        <i class="fa-solid fa-circle-info" style="color: #f59e0b; margin-top: 2px; font-size: 1rem;"></i>
+        <div>
+          <strong>Chế độ thử nghiệm Resend (Sandbox):</strong> Bạn có thể bấm <strong>"Gửi Thử Nghiệm Ngay"</strong> để nhận email thử về hòm thư chủ <strong>toiyeutinhoc238@gmail.com</strong> ngay lập tức. Để gửi thư đồng loạt tới toàn bộ học viên không bị rơi vào thư rác, bạn chỉ cần liên kết Tên miền riêng (Domain) tại <a href="https://resend.com/domains" target="_blank" style="color: #38bdf8; text-decoration: underline; font-weight: 700;">resend.com/domains</a>.
+        </div>
+      </div>
+
+      <!-- 2-Column Layout: Composer + Live Preview -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 20px;">
+        
+        <!-- LEFT: Composer Form -->
+        <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 18px 20px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="font-size: 0.95rem; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-pen-to-square" style="color: #f43f5e;"></i> Soạn Thảo Thông Báo
+          </div>
+
+          <!-- Subject -->
+          <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #cbd5e1; margin-bottom: 6px;">
+              Tiêu đề Email (Subject) <span style="color: #f43f5e;">*</span>
+            </label>
+            <input type="text" id="admin-email-subject" placeholder="vd: 🎉 Thông báo khai giảng &amp; cập nhật bài học mới"
+              value="🎉 Thông báo từ Tiếng Trung Hồng Thái"
+              oninput="window.updateBroadcastPreview()"
+              style="width: 100%; padding: 9px 12px; font-size: 0.85rem; border-radius: 8px; background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.15); color: #ffffff; outline: none; box-sizing: border-box;">
+          </div>
+
+          <!-- Headline -->
+          <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #cbd5e1; margin-bottom: 6px;">
+              Tiêu đề nổi bật trong thư (Headline)
+            </label>
+            <input type="text" id="admin-email-headline" placeholder="vd: Khóa học Luyện Thi HSK 3 - 4 đã được cập nhật!"
+              value="Chào mừng bạn đến với khóa học mới!"
+              oninput="window.updateBroadcastPreview()"
+              style="width: 100%; padding: 9px 12px; font-size: 0.85rem; border-radius: 8px; background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.15); color: #ffffff; outline: none; box-sizing: border-box;">
+          </div>
+
+          <!-- Message Body -->
+          <div>
+            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #cbd5e1; margin-bottom: 6px;">
+              Nội dung chi tiết (Hỗ trợ cách dòng / đoạn văn) <span style="color: #f43f5e;">*</span>
+            </label>
+            <textarea id="admin-email-message" rows="5" placeholder="Nhập nội dung thông báo gửi đến học viên..."
+              oninput="window.updateBroadcastPreview()"
+              style="width: 100%; padding: 10px 12px; font-size: 0.85rem; border-radius: 8px; background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.15); color: #ffffff; outline: none; resize: vertical; box-sizing: border-box; line-height: 1.5;">Xin chào các bạn học viên,
+
+Hệ thống vừa cập nhật thêm 117 đề thi thử HSK và video khẩu ngữ thực tế.
+
+Chúc các bạn có những giờ học tập hiệu quả và chinh phục mục tiêu tiếng Trung!</textarea>
+          </div>
+
+          <!-- CTA Button Options -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div>
+              <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #cbd5e1; margin-bottom: 5px;">
+                Chữ trên nút bấm
+              </label>
+              <input type="text" id="admin-email-action-text" value="Vào Học Ngay"
+                oninput="window.updateBroadcastPreview()"
+                style="width: 100%; padding: 8px 10px; font-size: 0.82rem; border-radius: 8px; background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.15); color: #ffffff; outline: none; box-sizing: border-box;">
+            </div>
+            <div>
+              <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #cbd5e1; margin-bottom: 5px;">
+                Đường dẫn liên kết (Link)
+              </label>
+              <input type="url" id="admin-email-action-url" value="https://toiyeutinhoc238-sudo.github.io/tieng-trung-hong-tai/"
+                oninput="window.updateBroadcastPreview()"
+                style="width: 100%; padding: 8px 10px; font-size: 0.82rem; border-radius: 8px; background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.15); color: #ffffff; outline: none; box-sizing: border-box;">
+            </div>
+          </div>
+
+          <!-- Test Recipient Input -->
+          <div style="padding-top: 6px; border-top: 1px dashed rgba(255, 255, 255, 0.1);">
+            <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #38bdf8; margin-bottom: 5px;">
+              <i class="fa-solid fa-flask"></i> Email nhận thử nghiệm (Test):
+            </label>
+            <input type="email" id="admin-email-test-target" value="toiyeutinhoc238@gmail.com"
+              style="width: 100%; padding: 8px 10px; font-size: 0.82rem; border-radius: 8px; background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(56, 189, 248, 0.3); color: #38bdf8; outline: none; box-sizing: border-box;">
+          </div>
+
+          <!-- Action Buttons -->
+          <div style="display: flex; gap: 10px; margin-top: 6px; flex-wrap: wrap;">
+            <button type="button" id="admin-btn-send-test-email" onclick="window.handleSendBroadcastEmail('test')"
+              style="flex: 1; min-width: 150px; padding: 10px 14px; border-radius: 10px; font-size: 0.85rem; font-weight: 700; background: linear-gradient(135deg, #0284c7, #0369a1); color: #ffffff; border: 1px solid #38bdf8; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s; box-shadow: 0 4px 12px rgba(2,132,199,0.3);">
+              <i class="fa-solid fa-flask-vial"></i> Gửi Thử Nghiệm
+            </button>
+            <button type="button" id="admin-btn-send-all-email" onclick="window.handleSendBroadcastEmail('all')"
+              style="flex: 1.2; min-width: 170px; padding: 10px 14px; border-radius: 10px; font-size: 0.85rem; font-weight: 800; background: linear-gradient(135deg, #e11d48, #be123c); color: #ffffff; border: 1px solid #fb7185; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s; box-shadow: 0 4px 15px rgba(225,29,72,0.35);">
+              <i class="fa-solid fa-paper-plane"></i> Gửi Đến Tất Cả Học Viên
+            </button>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: Live Email Preview -->
+        <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.95rem; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 8px;">
+              <i class="fa-solid fa-eye" style="color: #38bdf8;"></i> Bản Xem Trước Trực Quan
+            </span>
+            <span style="font-size: 0.72rem; color: #94a3b8; background: rgba(255,255,255,0.06); padding: 3px 8px; border-radius: 6px;">
+              Giao diện hiển thị trong Gmail / Outlook
+            </span>
+          </div>
+
+          <!-- Email Mockup Frame -->
+          <div style="background: #f1f5f9; border-radius: 12px; padding: 16px; border: 1px solid #cbd5e1; color: #1e293b; max-height: 480px; overflow-y: auto;">
+            
+            <!-- Mock Header info -->
+            <div style="font-size: 0.75rem; color: #64748b; padding-bottom: 10px; margin-bottom: 12px; border-bottom: 1px solid #e2e8f0; line-height: 1.4;">
+              <div><strong>Từ:</strong> Tiếng Trung Hồng Thái &lt;onboarding@resend.dev&gt;</div>
+              <div><strong>Tới:</strong> hocvien@gmail.com</div>
+              <div><strong>Tiêu đề:</strong> <span id="preview-email-subject" style="color: #0f172a; font-weight: 700;">🎉 Thông báo từ Tiếng Trung Hồng Thái</span></div>
+            </div>
+
+            <!-- Inner Card -->
+            <div style="background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.06); border: 1px solid #e2e8f0;">
+              
+              <!-- Email Banner -->
+              <div style="background: linear-gradient(135deg, #be123c 0%, #e11d48 50%, #f43f5e 100%); padding: 22px 18px; text-align: center; color: #ffffff;">
+                <div style="display: inline-block; width: 36px; height: 36px; line-height: 36px; border-radius: 10px; background: rgba(255,255,255,0.2); font-size: 18px; font-weight: 900; margin-bottom: 6px;">
+                  泰
+                </div>
+                <h3 style="margin: 0; font-size: 16px; font-weight: 800; letter-spacing: 0.5px;">TIẾNG TRUNG HỒNG THÁI</h3>
+                <div style="font-size: 11px; opacity: 0.9; margin-top: 2px;">Hệ Thống Luyện Thi HSK &amp; Giao Tiếp Thông Minh</div>
+              </div>
+
+              <!-- Email Body -->
+              <div style="padding: 20px 18px;">
+                <div style="border-left: 3px solid #e11d48; background: #fff1f2; padding: 10px 12px; border-radius: 0 6px 6px 0; margin-bottom: 14px;">
+                  <div id="preview-email-headline" style="font-weight: 700; color: #9f1239; font-size: 14px;">
+                    Chào mừng bạn đến với khóa học mới!
+                  </div>
+                </div>
+                <div id="preview-email-body" style="font-size: 13px; line-height: 1.6; color: #334155;">
+                  <p style="margin: 0 0 10px 0;">Xin chào các bạn học viên,</p>
+                  <p style="margin: 0 0 10px 0;">Hệ thống vừa cập nhật thêm 117 đề thi thử HSK và video khẩu ngữ thực tế.</p>
+                </div>
+                <div style="text-align: center; margin: 20px 0 8px 0;">
+                  <a id="preview-email-btn" href="#" target="_blank"
+                    style="display: inline-block; padding: 10px 24px; background: linear-gradient(135deg, #e11d48, #be123c); color: #ffffff; text-decoration: none; border-radius: 6px; font-size: 13px; font-weight: 700;">
+                    Vào Học Ngay &rarr;
+                  </a>
+                </div>
+              </div>
+
+              <!-- Email Footer -->
+              <div style="background: #f8fafc; padding: 14px 16px; text-align: center; font-size: 10px; color: #94a3b8; border-top: 1px solid #f1f5f9; line-height: 1.5;">
+                <strong style="color: #64748b;">Tiếng Trung Hồng Thái</strong> &bull; Học Thông Minh, Nhớ Dài Lâu<br/>
+                Bạn nhận được email này vì đã đăng ký tài khoản học tập.<br/>
+                &copy; 2026 Tiếng Trung Hồng Thái.
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div> <!-- /#admin-section-broadcast -->
+
 
     </div>
   </div>
